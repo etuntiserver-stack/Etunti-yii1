@@ -61,7 +61,7 @@
 	elseif($_POST['select_type'] == 'asiakas_ryhma') $selType = 'Toimialue';
 	elseif($_POST['select_type'] == 'asiakas_ryhma_real') $selType = 'Asiakasryhmä';
 	elseif($_POST['select_type'] == 'laskutus_tuotteet_ryhma') $selType = 'Laskutuksen tuoteryhmä';
-	elseif($_POST['select_type'] == 'laskutus_yksikko') $selType = 'Laskutusyksikkö';
+	elseif($_POST['select_type'] == 'laskutus_yksikko') $selType = 'Yksikööt';
 	elseif($_POST['select_type'] == 'YLITYÖTUNNIT') $selType = 'YLITYÖTUNNIT';
 	elseif($_POST['select_type'] == 'tyo_toimialue') $selType = 'Työntekijä toimialue';
 	elseif($_POST['select_type'] == 'tyonkuvaus_tilat') $selType = 'Työnkuvaus tilat';

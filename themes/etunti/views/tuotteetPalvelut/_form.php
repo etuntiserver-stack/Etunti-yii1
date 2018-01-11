@@ -1,6 +1,6 @@
 <?php
-/* @var $this OnlinevarausTuotteetController */
-/* @var $model OnlinevarausTuotteet */
+/* @var $this TuotteetPalvelutController */
+/* @var $model TuotteetPalvelut */
 /* @var $form CActiveForm */
 
 $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
@@ -20,8 +20,8 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 	<?php echo $form->errorSummary($model); ?>
 
 <div class="row">
- <div class="col-sm-4">
-	<legend><?php echo Yii::t('main', 'Perustiedot'); ?></legend>
+ <div class="col-sm-3">
+	<legend><h3><?php echo Yii::t('main', 'Perustiedot'); ?></h3></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'nimike'); ?>
 		<?php echo $form->textField($model,'nimike',array('size'=>60,'maxlength'=>255, 'class'=>'form-control')); ?>
@@ -29,9 +29,16 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'selitysteksti'); ?>
-		<?php echo $form->textArea($model,'selitysteksti',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'selitysteksti'); ?>
+		<?php echo $form->labelEx($model,'kategoria'); ?>
+		<?php
+		$list = array(
+			'onlinevaraus' =>'Onlinevaraus',
+			'laskutus' =>'Laskutus',
+		);
+        	echo $form->dropDownList($model, 'kategoria', $list,
+		array('empty' => 'Valitse kategoria', 'class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'kategoria'); ?>
 	</div>
 
 	<div class="section fill mb5">
@@ -40,31 +47,118 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 		<?php echo $form->error($model,'kotitalousvahennys'); ?>
 	</div>
 
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta'); ?>
-		<?php echo $form->numberField($model,'hinta',array('size'=>20,'maxlength'=>20, 'class'=>'form-control', 'step'=>'any')); ?>
-		<?php echo $form->error($model,'hinta'); ?>
+	<br><br>
 
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'hinta_alv_0'); ?>
+		<?php echo $form->numberField($model,'hinta_alv_0',array('size'=>20,'maxlength'=>20,'class'=>'form-control', 'step'=>'0.01')); ?>
+		<?php echo $form->error($model,'hinta_alv_0'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'hinta_alv_sis'); ?>
+		<?php echo $form->numberField($model,'hinta_alv_sis',array('size'=>20,'maxlength'=>20,'class'=>'form-control', 'step'=>'0.01')); ?>
+		<?php echo $form->error($model,'hinta_alv_sis'); ?>
 	</div>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alv'); ?>
-		<?php
-		$list = array();
-		for ($i = 1; $i <= 24; $i++) {
-		    $list[$i] = $i;
-		}
-
+		<?php 
 		if(isset($model->id) and $model->alv != 0)
 			$alv = $model->alv;
 		else
 			$alv = 24;
 
-        	echo $form->dropDownList($model,'alv',$list, 
-		array('class'=>'form-control','options' => array($alv=>array('selected'=>true))));
-	
-        	?>
+        	$l = array(0=>0,10=>10,14=>14,24=>24);
+		echo $form->dropDownList($model,'alv',$l, 
+			array('class'=>'form-control','options' => array('24'=>array('selected'=>true)))
+		);
+
+		?>
+
 		<?php echo $form->error($model,'alv'); ?>
+	</div>
+
+
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+/* valikot */
+$(".muokaValiko").click(function() {
+    var thisFor = $(this).attr("for");
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
+	   type:'POST',
+	   data: { "select_type" : thisFor },
+           success: function(data){
+		//console.log(data);
+		$('#showres').modal().html(JSON.parse(data));
+           }
+        });
+});
+/* valikot */
+
+ $('#TuotteetPalvelut_hinta_alv_0').keyup(function(){
+	lasketa();
+ });
+
+ $('#TuotteetPalvelut_alv').change(function(){
+	lasketa();
+ });
+
+ function lasketa(){
+	var hinta_alv_0 = parseFloat($('#TuotteetPalvelut_hinta_alv_0').val());
+	var alv = parseFloat($('#TuotteetPalvelut_alv option:selected').val());
+
+	var result = ((hinta_alv_0*alv)/100)+hinta_alv_0;
+	var result = Math.round(result * 100) / 100;
+	$('#TuotteetPalvelut_hinta_alv_sis').val(result);
+ }
+
+});
+</script>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'yksikko'); ?>
+
+	   <div class="input-group">
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='laskutus_yksikko' ",array('order' => "select_type"));
+		foreach($l as $v)
+		$list[$v->value] = $v->value;
+
+		if(count($list) > 0)
+		{
+        	echo $form->dropDownList($model, 'yksikko', $list,
+		array('empty'=>'Valitse Laskutusyksikkö','class'=>'form-control'));
+		} else {
+		echo 'Tyhjä';
+		}		
+        	?>
+		<span class="input-group-btn">
+			<span class="btn btn-primary myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
+	   </div>
+
+		<?php echo $form->error($model,'yksikko'); ?>
+	</div>
+
+
+ </div>
+
+ <div id="for_onlinevaraus" style="display:none">
+ <div class="col-sm-3">
+	<legend><h3><?php echo Yii::t('main', 'Onlinevaraus'); ?></h3></legend>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'selitysteksti'); ?>
+		<?php echo $form->textArea($model,'selitysteksti',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'selitysteksti'); ?>
 	</div>
 
 	<div class="section fill mb5">
@@ -72,9 +166,6 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 		<?php echo $form->numberField($model,'kesto',array('maxlength'=>20, 'class'=>'form-control', 'placeholder'=>'Esimerkiksi.. 0.5', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'kesto'); ?>
 	</div>
-
-
-
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'nayta_sivuilla'); ?>
@@ -89,17 +180,22 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 		<?php echo $form->error($model,'nayta_sivuilla'); ?>
 	</div>
 
- </div><div class="col-sm-8">
-	<legend><?php echo Yii::t('main', 'Toinen alasvetovalikko rakenne'); ?></legend>
+ </div>
+ <div class="col-sm-6">
+
+	<legend><h3><?php echo Yii::t('main', 'Onlinevaraus'); ?></h3></legend>
+
 	<div class="section fill mb5">
 		<?php
 			$rakenne = json_decode($model->toinen_valikko_rakenne, true);
 		?>
 
+
 		<label><?php echo Yii::t('main', 'Alasvetovalikon nimike'); ?></label>
 		<input type="text" class="form-control" name="toinen_valiko[otsikko]" placeholder="<?php echo Yii::t('main', 'Esim.: Huoneisten koko m²'); ?>" value="<?php if( is_array($rakenne) and isset($rakenne['otsikko'])) echo $rakenne['otsikko']; ?>">
 
 		<br>
+		<span class="btn btn-success btn-sm uusiRivi"><i class="fa fa-plus" aria-hidden="true"></i></span>
 		<div id="toinenRakenne">
 		<?php if( !is_array($rakenne) or !isset($rakenne['values']) ): ?>
 		 <div class="row" id="rivi_1">
@@ -108,7 +204,7 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 			<input type="text" class="form-control" name="toinen_valiko[values][nimike][]">
 		  </div>
 		  <div class="col-sm-2">
-			<label><?php echo Yii::t('main', 'Hinta (ALV 0)'); ?></label>
+			<label><?php echo Yii::t('main', 'ALV 0'); ?></label>
 			<input type="number" class="form-control hinta_veroton" for="rivi_1" name="toinen_valiko[values][hinta_veroton][]" step="any">
 		  </div>
 		  <div class="col-sm-3">
@@ -167,7 +263,7 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 					<input type="text" class="form-control" name="toinen_valiko[values][nimike][]" value="'.$nimike_value.'">
 				  </div>
 				  <div class="col-sm-2">
-					<label>'.Yii::t('main', 'Hinta (ALV 0)').'</label>
+					<label>'.Yii::t('main', 'ALV 0').'</label>
 					<input type="number" class="form-control hinta_veroton" for="rivi_'.$i.'" name="toinen_valiko[values][hinta_veroton][]" value="'.$hinta_veroton_value.'" step="any">
 				  </div>
 				  <div class="col-sm-3">
@@ -190,72 +286,11 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 		 ?>
 		<?php endif; ?>
 		</div><!--toinenRakenne-->
-		<p><span class="btn btn-success btn-sm uusiRivi"><i class="fa fa-plus" aria-hidden="true"></i></span></p>
 
 	</div>
 
- </div>
-</div>
-<hr>
+	<br><br>
 
-<div class="row">
-
-	<div class="col-sm-4">
-
-	<div class="section fill mb5">
-	        <?php echo $form->labelEx($model,'image'); ?>
-         	<input type="file" class="form-control" name="image" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;" accept=".jpg">
-         	<input type="hidden" class="gui-input" name="uploaded_image" id="tiedostoUP" placeholder="Valitse tiedosto..">
-	        <?php echo $form->error($model,'image'); ?>
-	</div>
-	<?php
-	 $path = Yii::app()->basePath."/../tiedostot/onlinevaraus_tuote/".Yii::app()->user->domain;
-	 if($model->isNewRecord!='1' and file_exists($path."/".$model->id.".jpg")): 
-	?>
-	<div class="section fill mb5" id="kuva_<?php echo $model->id; ?>">
-		<img src="../../tiedostot/onlinevaraus_tuote/<?php echo Yii::app()->user->domain.'/'.$model->id; ?>.jpg" class="img-thumbnail">
-		<small class="poistaKuva link pull-right" this="tiedostot/onlinevaraus_tuote/<?php echo Yii::app()->user->domain.'/'.$model->id; ?>.jpg" model="<?php echo $model->id; ?>" for="kuva_<?php echo $model->id; ?>"><?php echo Yii::t('main', 'Poista valokuva'); ?></small>	
-
-
-
-		<?php
-		if(isset($_POST['poistaTamaTiedosto'])){
-			unlink($_POST['poistaTamaTiedosto']);
-			exit;
-		}
-		?>
-		<script type="text/javascript">
-		$(document).ready(function(){
-		
-		  $(".poistaKuva").click(function(){
-
-			if(!confirm('Haluatko varmaasti poista?'))
-			return false;
-
-			var forThis = $(this).attr("this");
-			var model = $(this).attr("model");
-			var forID = $(this).attr("for");
-
-		        $.ajax({
-		           url: "update?id="+model,
-			   type:'POST',
-			   data: { "poistaTamaTiedosto" : forThis },
-		           success: function(data){
-				console.log(data);
-				$("#"+forID).remove();
-		           }
-		        });
-		  });
-		
-		});
-		</script>
-	</div>
-
-	<?php endif; ?>
-
-	</div>
-
-	<div class="col-sm-8">
 	<legend><?php echo Yii::t('main', 'Lisäpalvelut rakenne'); ?></legend>
 
 	<div class="section fill mb5">
@@ -263,6 +298,7 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 			$lisapalvelut = json_decode($model->lisapalvelut, true);
 		?>
 
+		<span class="btn btn-success btn-sm uusiLisapalvelutRivi"><i class="fa fa-plus" aria-hidden="true"></i></span>
 		<div id="lisapalveluRakenne">
 		<?php if(!is_array($lisapalvelut) or !isset($lisapalvelut['values'])): ?>
 		 <div class="row" id="lisapalvelut_rivi_1">
@@ -279,7 +315,7 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 			<input type="number" class="form-control hinta_veroton" for="lisapalvelut_rivi_1" name="lisapalvelut[values][hinta_veroton][]" step="any">
 		  </div>
 		  <div class="col-sm-4">
-			<label><?php echo Yii::t('main', 'Hinta (ALV 0)'); ?></label>
+			<label><?php echo Yii::t('main', 'ALV 0'); ?></label>
 			<input type="number" class="form-control hinta" for="lisapalvelut_rivi_1" name="lisapalvelut[values][hinta][]" step="any">
 		  </div>
 		  <div class="col-sm-3">
@@ -345,7 +381,7 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 					<textarea class="form-control" name="lisapalvelut[values][kuvaus][]">'.$kuvaus_value.'</textarea>
 				  </div>
 				  <div class="col-sm-4">
-					<label>'.Yii::t('main', 'Hinta (ALV 0)').'</label>
+					<label>'.Yii::t('main', 'ALV 0').'</label>
 					<input type="number" class="form-control hinta_veroton" for="lisapalvelut_rivi_'.$i.'" name="lisapalvelut[values][hinta_veroton][]" value="'.$hinta[$key].'" step="any">
 				  </div>
 				  <div class="col-sm-4">
@@ -370,14 +406,73 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 		 ?>
 		<?php endif; ?>
 		</div><!--toinenRakenne-->
-		<p><span class="btn btn-success btn-sm uusiLisapalvelutRivi"><i class="fa fa-plus" aria-hidden="true"></i></span></p>
+	</div>
 
+ </div>
+ </div><!--for_onlinevaraus-->
+
+</div>
+<hr>
+
+<div class="row">
+
+	<div class="col-sm-4">
+
+	<div class="section fill mb5">
+	        <?php echo $form->labelEx($model,'image'); ?>
+         	<input type="file" class="form-control" name="image" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;" accept=".jpg">
+         	<input type="hidden" class="gui-input" name="uploaded_image" id="tiedostoUP" placeholder="Valitse tiedosto..">
+	        <?php echo $form->error($model,'image'); ?>
+	</div>
+	<?php
+	 $path = Yii::app()->basePath."/../tiedostot/onlinevaraus_tuote/".Yii::app()->user->domain;
+	 if($model->isNewRecord!='1' and file_exists($path."/".$model->id.".jpg")): 
+	?>
+	<div class="section fill mb5" id="kuva_<?php echo $model->id; ?>">
+		<img src="../../tiedostot/onlinevaraus_tuote/<?php echo Yii::app()->user->domain.'/'.$model->id; ?>.jpg" class="img-thumbnail">
+		<small class="poistaKuva link pull-right" this="tiedostot/onlinevaraus_tuote/<?php echo Yii::app()->user->domain.'/'.$model->id; ?>.jpg" model="<?php echo $model->id; ?>" for="kuva_<?php echo $model->id; ?>"><?php echo Yii::t('main', 'Poista valokuva'); ?></small>	
+
+
+
+		<?php
+		if(isset($_POST['poistaTamaTiedosto'])){
+			unlink($_POST['poistaTamaTiedosto']);
+			exit;
+		}
+		?>
+		<script type="text/javascript">
+		$(document).ready(function(){
+		
+		  $(".poistaKuva").click(function(){
+
+			if(!confirm('Haluatko varmaasti poista?'))
+			return false;
+
+			var forThis = $(this).attr("this");
+			var model = $(this).attr("model");
+			var forID = $(this).attr("for");
+
+		        $.ajax({
+		           url: "update?id="+model,
+			   type:'POST',
+			   data: { "poistaTamaTiedosto" : forThis },
+		           success: function(data){
+				console.log(data);
+				$("#"+forID).remove();
+		           }
+		        });
+		  });
+		
+		});
+		</script>
+	</div>
+	<?php endif; ?>
 	</div>
 
  </div>
 </div><!-- form -->
 
-	<div class="buttons">
+	<div class="row">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna', array('class'=>'btn btn-primary myBgColors')); ?>
 	</div>
 
@@ -388,6 +483,19 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+   if( $("#TuotteetPalvelut_kategoria option:selected").val() == 'onlinevaraus' ){
+		$("#for_onlinevaraus").show();
+   }
+
+   $("#TuotteetPalvelut_kategoria").change(function(){
+	var thisVal = $("#TuotteetPalvelut_kategoria option:selected").val();
+	if( thisVal == 'onlinevaraus' ){
+		$("#for_onlinevaraus").show();
+	} else {
+		$("#for_onlinevaraus").hide();
+	}
+   });
 
 
   var rivi = parseInt($('#lastRivi').val());
@@ -402,11 +510,11 @@ $(document).ready(function(){
 			'<input type="text" class="form-control" name="toinen_valiko[values][nimike][]">'+
 		  '</div>'+
 		  '<div class="col-sm-2">'+
-			'<label><?php echo Yii::t("main", "Hinta (ALV 0)"); ?></label>'+
+			'<label><?php echo Yii::t("main", "ALV 0"); ?></label>'+
 			'<input type="number" class="form-control hinta_veroton" for="rivi_'+rivi+'" name="toinen_valiko[values][hinta_veroton][]" step="any">'+
 		  '</div>'+
 		  '<div class="col-sm-3">'+
-			'<label><?php echo Yii::t("main", "Hinta (ALV '+$('#OnlinevarausTuotteet_alv').val()+'%)"); ?></label>'+
+			'<label><?php echo Yii::t("main", "Hinta (ALV '+$('#TuotteetPalvelut_alv').val()+'%)"); ?></label>'+
 			'<input type="number" class="form-control hinta" for="rivi_'+rivi+'" name="toinen_valiko[values][hinta][]" step="any">'+
 		  '</div>'+
 		  '<div class="col-sm-3">'+
@@ -437,11 +545,11 @@ $(document).ready(function(){
 			'<textarea class="form-control" name="lisapalvelut[values][kuvaus][]"></textarea>'+
 		  '</div>'+
 		  '<div class="col-sm-4">'+
-			'<label><?php echo Yii::t("main", "Hinta (ALV 0)"); ?></label>'+
+			'<label><?php echo Yii::t("main", "ALV 0"); ?></label>'+
 			'<input type="number" class="form-control hinta_veroton" for="lisapalvelut_rivi_'+Lisapalvelutrivi+'" name="lisapalvelut[values][hinta_veroton][]" step="any">'+
 		  '</div>'+
 		  '<div class="col-sm-4">'+
-			'<label><?php echo Yii::t("main", "Hinta (ALV '+$('#OnlinevarausTuotteet_alv').val()+'%)"); ?></label>'+
+			'<label><?php echo Yii::t("main", "Hinta (ALV '+$('#TuotteetPalvelut_alv').val()+'%)"); ?></label>'+
 			'<input type="number" class="form-control hinta" for="lisapalvelut_rivi_'+Lisapalvelutrivi+'" name="lisapalvelut[values][hinta][]" step="any">'+
 		  '</div>'+
 		  '<div class="col-sm-3">'+
@@ -482,7 +590,7 @@ $(document).ready(function(){
    });
 
    function laskuriPlus(forID){
-	var alv = parseFloat( $('#OnlinevarausTuotteet_alv').val() );
+	var alv = parseFloat( $('#TuotteetPalvelut_alv').val() );
 	var hinta_veroton = parseFloat( $('#'+forID).find('.hinta_veroton').val() );
 	var hinta = $('#'+forID).find('.hinta');
 	if(hinta_veroton > 0){
@@ -493,7 +601,7 @@ $(document).ready(function(){
    }
 
    function laskuriMiinus(forID){
-	var alv = parseFloat( $('#OnlinevarausTuotteet_alv').val() );
+	var alv = parseFloat( $('#TuotteetPalvelut_alv').val() );
 	var hinta = parseFloat( $('#'+forID).find('.hinta').val() );
 	var hinta_veroton = $('#'+forID).find('.hinta_veroton');
 	if(hinta > 0){

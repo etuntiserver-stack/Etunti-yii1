@@ -527,7 +527,7 @@ class OnlinevarausController extends Controller
 	   {
 
 		// <-- Data
-		$data = OnlinevarausTuotteet::model()->findByPk($_POST['id']);
+		$data = TuotteetPalvelut::model()->findByPk($_POST['id']);
 		if(isset($data->id))
 		$_SESSION['onlinevaraus']['paapalvelu'] = $data->id;
 
@@ -559,7 +559,7 @@ class OnlinevarausController extends Controller
 
 		if(isset($_SESSION['onlinevaraus']['paapalvelu']))
 		{
-			$model = OnlinevarausTuotteet::model()->findByPk($_SESSION['onlinevaraus']['paapalvelu']);
+			$model = TuotteetPalvelut::model()->findByPk($_SESSION['onlinevaraus']['paapalvelu']);
 
 			$this->renderPartial('palvelu_save_ajax',array(
 				'model'=>$model,

@@ -1110,14 +1110,8 @@ $('.tvchange').change(function(){
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/kaikki">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Kaikki varaukset'); ?></a>
               </li>
-              <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevarausTuotteet/index">
-                  <span class="fa fa-paper-plane"></span> <?php echo Yii::t('main', 'Onlinevaraus tuotteet'); ?></a>
-              </li>
             </ul>
           </li>
-
-
 
 	<?php if(in_array('5',$tas)) : ?>
           <li>
@@ -1236,6 +1230,14 @@ $('.tvchange').change(function(){
             </ul>
           </li>
 	<?php endif; ?>
+
+
+          <li>
+            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tuotteetPalvelut/index">
+              <span class="fa fa-shopping-cart"></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Tuotteet ja Palvelut'); ?></span>
+            </a>
+          </li>
 
 
           <li>
@@ -1580,7 +1582,6 @@ nyt ne ovat etusivu.php ssa
     ){  $('.laskutuksenHallinta').addClass('menu-open');  $('.raportit').addClass('menu-open'); }
     else if(
 	curpage === 'onlinevaraus/kaikki'
-	|| curpage === 'onlinevarausTuotteet/index'
     ){  $('.onlinevaraus').addClass('menu-open'); }
     else if(
 	curpage === 'yhteystiedot/index'

@@ -564,7 +564,6 @@ echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
     ){  $('.laskutuksenHallinta').addClass('menu-open');  $('.raportit').addClass('menu-open'); }
     else if(
 	curpage === 'onlinevaraus/kaikki'
-	|| curpage === 'onlinevarausTuotteet/index'
     ){  $('.onlinevaraus').addClass('menu-open'); }
     else if(
 	curpage === 'yhteystiedot/index'

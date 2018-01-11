@@ -1,6 +1,6 @@
 <?php
 
-class OnlinevarausTuotteetController extends Controller
+class TuotteetPalvelutController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -104,12 +104,12 @@ class OnlinevarausTuotteetController extends Controller
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
 
-		$model=new OnlinevarausTuotteet;
+		$model=new TuotteetPalvelut;
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 
-		if(isset($_POST['OnlinevarausTuotteet']))
+		if(isset($_POST['TuotteetPalvelut']))
 		{
 
 			//echo '<pre>';
@@ -117,7 +117,7 @@ class OnlinevarausTuotteetController extends Controller
 			//echo '</pre>';
 			//exit;
 
-			$model->attributes=$_POST['OnlinevarausTuotteet'];
+			$model->attributes=$_POST['TuotteetPalvelut'];
 
 			if(isset($_POST['toinen_valiko']))
 				$model->toinen_valikko_rakenne=json_encode($_POST['toinen_valiko']);
@@ -157,9 +157,9 @@ class OnlinevarausTuotteetController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 
-		if(isset($_POST['OnlinevarausTuotteet']))
+		if(isset($_POST['TuotteetPalvelut']))
 		{
-			$model->attributes=$_POST['OnlinevarausTuotteet'];
+			$model->attributes=$_POST['TuotteetPalvelut'];
 
 			if(isset($_POST['toinen_valiko']))
 				$model->toinen_valikko_rakenne=json_encode($_POST['toinen_valiko']);
@@ -246,7 +246,7 @@ class OnlinevarausTuotteetController extends Controller
 		if(isset($_POST['nimike']) and !empty(trim($_POST['nimike'])))
 	        $criteria->addCondition (" nimike LIKE '%".$_POST['nimike']."%' ");
 
-		$dataProvider=new CActiveDataProvider('OnlinevarausTuotteet', array(
+		$dataProvider=new CActiveDataProvider('TuotteetPalvelut', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false
 		));
@@ -260,10 +260,10 @@ class OnlinevarausTuotteetController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new OnlinevarausTuotteet('search');
+		$model=new TuotteetPalvelut('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['OnlinevarausTuotteet']))
-			$model->attributes=$_GET['OnlinevarausTuotteet'];
+		if(isset($_GET['TuotteetPalvelut']))
+			$model->attributes=$_GET['TuotteetPalvelut'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -274,12 +274,12 @@ class OnlinevarausTuotteetController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return OnlinevarausTuotteet the loaded model
+	 * @return TuotteetPalvelut the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=OnlinevarausTuotteet::model()->findByPk($id);
+		$model=TuotteetPalvelut::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -287,7 +287,7 @@ class OnlinevarausTuotteetController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param OnlinevarausTuotteet $model the model to be validated
+	 * @param TuotteetPalvelut $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{

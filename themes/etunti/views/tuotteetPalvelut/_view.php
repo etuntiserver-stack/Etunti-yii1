@@ -2,7 +2,7 @@
 /* @var $this KohteetController */
 /* @var $data Kohteet */
 
-
+/*
 			$rakenne = json_decode($data->toinen_valikko_rakenne, true);
 			$alasvetovaliko = '';
 
@@ -139,6 +139,7 @@
 			 	</table>
 			   ';
 			}
+*/
 ?>
 
 <tr>
@@ -159,13 +160,15 @@
 		<h3><?php echo $data->nimike; ?></h3>
 	</td>
 	<td>
-		<?php echo $data->selitysteksti; ?>
+		<?php echo $data->kategoria; ?>
 	</td>
+<?php /*
 	<td>
 		<?php echo $alasvetovaliko; ?>
 	</td>
 	<td>
 		<?php echo $lisapalvelut; ?>
 	</td>
+*/ ?>
 </tr>
 

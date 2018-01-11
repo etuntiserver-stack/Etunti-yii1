@@ -9,8 +9,8 @@
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Online-Varaus tuotteet'); ?> 
-		<?php echo CHtml::link('','/index.php/onlinevarausTuotteet/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
+              <h2 class="myBgColors p10"> <i class="fa fa-shopping-cart"></i> <?php echo Yii::t('main', 'Tuotteet ja Palvelut'); ?> 
+		<?php echo CHtml::link('','/index.php/tuotteetPalvelut/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
 
 
 
@@ -85,9 +85,7 @@
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'Nimike'); ?></th>
-  <th><?php echo Yii::t('main', 'Selitysteksti'); ?></th>
-  <th><?php echo Yii::t('main', 'Alasvetovalikon rakenne'); ?></th>
-  <th><?php echo Yii::t('main', 'Lisäpalvelut rakenne'); ?></th>
+  <th><?php echo Yii::t('main', 'Kategoria'); ?></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

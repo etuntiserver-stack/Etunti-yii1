@@ -263,7 +263,7 @@ $(document).ready(function(){
 	       	$criteria = new CDbCriteria();
 	       	$criteria->condition = " nayta_sivuilla=1 ";
 	       	$criteria->order = " nimike ";
-		$onlineTuotteet = OnlinevarausTuotteet::model()->findAll($criteria);
+		$onlineTuotteet = TuotteetPalvelut::model()->findAll($criteria);
 
 		echo '<select class="mult" name="Tyontekijat[onlinevaraus_tuotteet][]" multiple>';
 		foreach($onlineTuotteet as $item){

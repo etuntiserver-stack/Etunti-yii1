@@ -149,9 +149,9 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 
 		<?php
 	       	$criteria = new CDbCriteria();
-	       	$criteria->condition = " nayta_sivuilla=1 ";
+	       	$criteria->condition = " nayta_sivuilla=1 AND kategoria='onlinevaraus' ";
 	       	$criteria->order = " nimike ";
-		$onlineTuotteet = OnlinevarausTuotteet::model()->findAll($criteria);
+		$onlineTuotteet = TuotteetPalvelut::model()->findAll($criteria);
 		foreach($onlineTuotteet as $data)
 		{
 		  echo 

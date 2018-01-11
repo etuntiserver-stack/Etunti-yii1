@@ -11,7 +11,7 @@
  * @property integer $palvelu
  * @property string $kesto
  */
-class OnlinevarausTuotteet extends DB2ActiveRecord
+class TuotteetPalvelut extends DB2ActiveRecord
 {
 
 public $image;
@@ -19,7 +19,7 @@ public $image;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return OnlinevarausTuotteet the static model class
+	 * @return TuotteetPalvelut the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -32,7 +32,7 @@ public $image;
 	public function tableName()
 	{
 		$tb_name = 'onlinevaraus_tuotteet';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -54,7 +54,7 @@ public $image;
 		$table_structure = array(
 
                      'nimike' => 'varchar(255) ',
-                     'hinta' => 'varchar(20) ',
+                     'kategoria' => 'varchar(255) ',
                      'selitysteksti' => 'text ',
                      'palvelu' => 'int(1) ',
                      'kesto' => 'varchar(20) ',
@@ -64,10 +64,13 @@ public $image;
                      'paa_palvelu' => 'int(11) ',
                      'toinen_valikko_rakenne' => 'text ',
                      'lisapalvelut' => 'text ',
-                     'alv' => 'int(3) ',
 
-
-
+                     'hinta_alv_0' => 'float DEFAULT 0',
+                     'hinta_alv_sis' => 'float DEFAULT 0',
+                     'alv' => 'int(3) DEFAULT 24',
+                     'yksikko' => 'varchar(20) ',
+                     'netvisorkey' => 'int(11) ',
+                     'aktiivinen' => 'int(1) DEFAULT 1',
 
 		);
 
@@ -90,11 +93,12 @@ public $image;
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nimike', 'required'),
+			array('nimike, kategoria', 'required'),
 			array('image', 'file','types'=>'jpg', 'allowEmpty'=>true, 'on'=>'update'),
-			array('palvelu, nayta_sivuilla, paa_palvelu, alv', 'numerical', 'integerOnly'=>true),
+			array('palvelu, nayta_sivuilla, paa_palvelu, alv, aktiivinen', 'numerical', 'integerOnly'=>true),
 			array('nimike, selitysteksti', 'length', 'max'=>255),
-			array('hinta, kesto, nelio, kotitalousvahennys', 'length', 'max'=>20),
+			array('hinta_alv_0, hinta_alv_sis, yksikko', 'length', 'max'=>20),
+			array('hinta, kesto, nelio, kotitalousvahennys, netvisorkey', 'length', 'max'=>20),
 			array('toinen_valikko_rakenne, lisapalvelut', 'length', 'max'=>10000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -120,14 +124,14 @@ public $image;
 	{
 		return array(
 			'id' => Yii::t('main', 'ID'),
-			'nimike' => Yii::t('main', 'Nimike'),
+			'nimike' => Yii::t('main', 'Tuotenimi'),
 			'hinta' => Yii::t('main', 'Hinta'),
 			'selitysteksti' => Yii::t('main', 'Selitysteksti'),
 			'palvelu' => Yii::t('main', 'Palvelu'),
 			'kesto' => Yii::t('main', 'Kesto (tunnilla)'),
 			'nelio' => Yii::t('main', 'Neliömetri m²'),
 			'kotitalousvahennys' => Yii::t('main', 'Kotitalousvähennys %'),
-			'nayta_sivuilla' => Yii::t('main', 'Aktiivinen'),
+			'nayta_sivuilla' => Yii::t('main', 'Näytä sivulla'),
 			'paa_palvelu'=> Yii::t('main', 'Pääpalvelu'),
 			'image'=> Yii::t('main', 'Valokuva'),
 		);

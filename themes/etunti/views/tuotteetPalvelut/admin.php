@@ -1,6 +1,6 @@
 <?php
-/* @var $this OnlinevarausTuotteetController */
-/* @var $model OnlinevarausTuotteet */
+/* @var $this TuotteetPalvelutController */
+/* @var $model TuotteetPalvelut */
 
 $this->breadcrumbs=array(
 	'Onlinevaraus Tuotteets'=>array('index'),
@@ -8,8 +8,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List OnlinevarausTuotteet', 'url'=>array('index')),
-	array('label'=>'Create OnlinevarausTuotteet', 'url'=>array('create')),
+	array('label'=>'List TuotteetPalvelut', 'url'=>array('index')),
+	array('label'=>'Create TuotteetPalvelut', 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "

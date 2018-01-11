@@ -1,7 +1,7 @@
 <?php
 
   if(isset($_SESSION['onlinevaraus']['paapalvelu']))
-	$model = OnlinevarausTuotteet::model()->findbypk($_SESSION['onlinevaraus']['paapalvelu']);
+	$model = TuotteetPalvelut::model()->findbypk($_SESSION['onlinevaraus']['paapalvelu']);
 
   // <-- Kupongi
   $blockKupongi = '';

@@ -1,6 +1,6 @@
 <?php
-/* @var $this OnlinevarausTuotteetController */
-/* @var $model OnlinevarausTuotteet */
+/* @var $this TuotteetPalvelutController */
+/* @var $model TuotteetPalvelut */
 /* @var $form CActiveForm */
 ?>
 
