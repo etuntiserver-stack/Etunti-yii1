@@ -1240,7 +1240,12 @@ $('.tvchange').change(function(){
               <span class="sidebar-title"><?php echo Yii::t('main', 'Tuotteet ja Palvelut'); ?></span>
             </a>
           </li>
-
+          <li>
+            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/hinnastot/index">
+              <span class="fa fa-money"></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Hinnastot'); ?></span>
+            </a>
+          </li>
 
           <li>
             <a class="accordion-toggle" href="#">

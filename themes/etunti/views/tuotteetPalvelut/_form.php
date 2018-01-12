@@ -134,7 +134,7 @@ $(".muokaValiko").click(function() {
 		if(count($list) > 0)
 		{
         	echo $form->dropDownList($model, 'yksikko', $list,
-		array('empty'=>'Valitse Laskutusyksikkö','class'=>'form-control'));
+		array('class'=>'form-control'));
 		} else {
 		echo 'Tyhjä';
 		}		
