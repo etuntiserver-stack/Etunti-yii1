@@ -96,6 +96,11 @@ class HinnastotController extends Controller
 	 */
 	public function actionCreate()
 	{
+		$criteria = new CDbCriteria();
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
+		$tp = TuotteetPalvelut::model()->findAll($criteria);
+      		$yksikkot = Valikkoot::model()->findAll(" select_type='laskutus_yksikko' ",array('order' => "select_type"));
+
 		$model=new Hinnastot;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -105,11 +110,36 @@ class HinnastotController extends Controller
 		{
 			$model->attributes=$_POST['Hinnastot'];
 			if($model->save())
+			{
+
+				// <-- Riville
+				HinnastotRivi::model()->deleteAll(" hinnastot_id = '".$model->id."' ");
+				foreach($_POST['Rivi']['tuote']['tuote'] as $k => $itm)
+				{
+
+					$rivit = new HinnastotRivi;
+					$rivit->hinnastot_id = $model->id;
+					$rivit->tuote_palvelu_id = $itm;
+					$rivit->hinnasto_hinta = $_POST['Rivi']['tuote']['hinnasto_hinta'][$k];
+					$rivit->hinta_tuote = $_POST['Rivi']['tuote']['hinta_tuote'][$k];
+					$rivit->hinnasto_alv = $_POST['Rivi']['tuote']['hinnasto_alv'][$k];
+					$rivit->hinnasto_yksikko = $_POST['Rivi']['tuote']['yksikko'][$k];
+					$rivit->hinnasto_yht = $_POST['Rivi']['tuote']['hinnasto_yht'][$k];
+					if(!$rivit->save()){
+						var_dump($rivit->getErrors());
+						exit;
+					}
+				}
+				//     Riville -->
+
 				$this->redirect(array('index'));
+			}
 		}
 
 		$this->render('create',array(
 			'model'=>$model,
+			'tp'=>$tp,
+			'yksikkot'=>$yksikkot,
 		));
 	}
 
@@ -133,8 +163,6 @@ class HinnastotController extends Controller
 		if(isset($_POST['Hinnastot']))
 		{
 			$model->attributes=$_POST['Hinnastot'];
-
-
 			if($model->save())
 			{
 
@@ -180,7 +208,7 @@ class HinnastotController extends Controller
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
 	}
 
 	/**
