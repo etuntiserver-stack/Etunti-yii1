@@ -416,22 +416,6 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 	</div>
 
 
-<script type="text/javascript">
-$(document).ready(function(){
-
-  $(".sw").bootstrapSwitch({
-	//size: "large",
-	onColor: "success",
-	offColor: "danger",
-	onText: "Kyllä",
-	offText: "Ei"
-  });
-
-});
-</script>
-
-
-
   </div>
 <!-- Laskutus loppu -->
 
@@ -477,6 +461,15 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  $(".sw").bootstrapSwitch({
+	//size: "large",
+	onColor: "success",
+	offColor: "danger",
+	onText: "Kyllä",
+	offText: "Ei"
+  });
+
 
 /* valikot */
 $(".muokaValiko").click(function() {
