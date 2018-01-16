@@ -430,21 +430,6 @@ $(document).ready(function(){
 });
 </script>
 
-<?php /* if(in_array('5',$tas)) : ?>
-	<legend><h3><?php echo Yii::t('main', 'Allennukset'); ?></h3></legend>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'vinkki_tunnit'); ?>
-		<?php echo $form->numberField($model,'vinkki_tunnit',array('size'=>10,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'vinkki_tunnit'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'vinkki_prosentti'); ?>
-		<?php echo $form->numberField($model,'vinkki_prosentti',array('size'=>10,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'vinkki_prosentti'); ?>
-	</div>
-<?php endif; */ ?>
 
 
   </div>
