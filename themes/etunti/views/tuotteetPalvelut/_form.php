@@ -33,7 +33,7 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 		<?php
 		$list = array(
 			'onlinevaraus' =>'Onlinevaraus',
-			'laskutus' =>'Laskutus',
+			'kaikki' =>'Kaikki',
 		);
         	echo $form->dropDownList($model, 'kategoria', $list,
 		array('empty' => 'Valitse kategoria', 'class'=>'form-control'));	

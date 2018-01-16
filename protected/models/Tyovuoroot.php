@@ -93,8 +93,6 @@ public $tilausviesti;
                      'peruutettu' => 'int(1) ',
                      'peruutettu' => 'int(1) ',
 		     'apuaika' => 'int(1) ',
-
-
 		);
 
 		foreach($table_structure as $key=>$value)

@@ -160,7 +160,13 @@
 		<h3><?php echo $data->nimike; ?></h3>
 	</td>
 	<td>
-		<?php echo $data->kategoria; ?>
+		<?php echo $data->hinta_alv_0; ?>
+	</td>
+	<td>
+		<?php echo $data->alv; ?>
+	</td>
+	<td>
+		<?php echo $data->hinta_alv_sis; ?>
 	</td>
 <?php /*
 	<td>

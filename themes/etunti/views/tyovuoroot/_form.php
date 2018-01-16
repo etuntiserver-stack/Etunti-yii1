@@ -233,8 +233,8 @@ $(".muokaValiko").click(function() {
 		<?php echo $form->labelEx($model,'tuoteID'); ?>
 		<?php
 		$criteria = new CDbCriteria();
-       		$criteria->condition = " is_active=1 ";
-		echo $form->dropDownList($model,'tuoteID', CHtml::listData(LaskutusTuotteet::model()->findAll($criteria), 'id', 'tuotenimi'), 
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
+		echo $form->dropDownList($model,'tuoteID', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 		array('empty'=>'Valitse','class'=>'form-control'));
 		?>
   </div>

@@ -53,7 +53,7 @@ public $verot;
 	public function tableName()
 	{
 		$tb_name = 'sivex_kohdet';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -101,16 +101,16 @@ public $verot;
                      'maksuehto_paiva' => 'int(2) ',
                      'viivastyskorko' => 'varchar(10) ',
                      'lasku_tiedot' => 'varchar(255) ',
-                     'hinta_tyyppi' => 'varchar(50) ',
-                     'hinta' => 'varchar(10) ',
                      'avaimen_sijainti' => 'int(1) ',
                      'tarvittavien_tyontekijoiden_maara' => 'int(3) ',
                      'arvioitu_kesto' => 'varchar(100) ',
                      'uusi_tilaus' => 'int(1) ',
-                     'alv' => 'int(2) ',
-                     'hinta_sis_alv' => 'float ',
+		     'hinnasto_id' => 'int(11) DEFAULT 0',
 
-
+                     //'alv' => 'int(2) ',
+                     //'hinta_sis_alv' => 'float ',
+                     //'hinta_tyyppi' => 'varchar(50) ',
+                     //'hinta' => 'varchar(10) ',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -133,17 +133,15 @@ public $verot;
 		// will receive user inputs.
 		return array(
 			array('asiakas_id,etu_suku_nimet,osoite', 'required'),
-			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara, uusi_tilaus, alv', 'numerical', 'integerOnly'=>true),
+			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara, uusi_tilaus, hinnasto_id', 'numerical', 'integerOnly'=>true),
 			array('tag_id, kaupunki, toimipaikka, tyoryhma', 'length', 'max'=>20),
-			array('gps_sijainti, osoite, katuosoite, kenella_on_avain, puh_nro, hinta_sis_alv', 'length', 'max'=>50),
+			array('gps_sijainti, osoite, katuosoite, kenella_on_avain, puh_nro', 'length', 'max'=>50),
 			array('lyhenne', 'length', 'max'=>46),
 			array('pnumero', 'length', 'max'=>7),
 			array('email', 'length', 'max'=>72),
 			array('ryhma, viivastyskorko', 'length', 'max'=>10),
 			array('avain, lasku_tiedot', 'length', 'max'=>255),
 			array('siivous, etu_suku_nimet, arvioitu_kesto', 'length', 'max'=>100),
-			array('hinta_tyyppi', 'length', 'max'=>50),
-			array('hinta', 'length', 'max'=>10),
 			array('aikataulu, hinnoittelu, muut, toimenpiteet, tietoja', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -196,14 +194,10 @@ public $verot;
 			'maksuehto_paiva' => Yii::t('main', 'Maksuehto Paiva'),
 			'viivastyskorko' => Yii::t('main', 'Viivästyskorko'),
 			'lasku_tiedot' => Yii::t('main', 'Lasku Tiedot'),
-			'hinta_tyyppi'=> Yii::t('main', 'Hinta tyyppi'),
-			'hinta'=> Yii::t('main', 'Hinta'),
 			'avaimen_sijainti'=>Yii::t('main', 'Avaimen sijainti'),
 			'tarvittavien_tyontekijoiden_maara'=>Yii::t('main', 'Tarvittavien työntekijöiden määrä'),
 			'arvioitu_kesto'=>Yii::t('main', 'Arvioitu kesto'),
-			'alv'=> Yii::t('main', 'ALV %'),
-			'hinta'=> Yii::t('main', 'Hinta (ALV0)'),
-			'hinta_sis_alv' => Yii::t('main', 'Hinta (sis. ALV)'),
+			'hinnasto_id'=> Yii::t('main', 'Hinnasto'),
 		);
 	}
 

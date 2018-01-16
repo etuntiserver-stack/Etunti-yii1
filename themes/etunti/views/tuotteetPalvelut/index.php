@@ -85,7 +85,9 @@
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'Nimike'); ?></th>
-  <th><?php echo Yii::t('main', 'Kategoria'); ?></th>
+  <th><?php echo Yii::t('main', 'Hinta (ALV 0)'); ?></th>
+  <th><?php echo Yii::t('main', 'ALV'); ?></th>
+  <th><?php echo Yii::t('main', 'Hinta (ALV sis)'); ?></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
