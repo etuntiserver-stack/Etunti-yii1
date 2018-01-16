@@ -95,13 +95,13 @@ public $image;
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nimike, kategoria', 'required'),
+			array('nimike', 'required'),
 			array('image', 'file','types'=>'jpg', 'allowEmpty'=>true, 'on'=>'update'),
 			array('palvelu, nayta_sivuilla, paa_palvelu, alv, aktiivinen, varastoitava, myyntituote', 'numerical', 'integerOnly'=>true),
 			array('nimike, selitysteksti', 'length', 'max'=>255),
 			array('hinta_alv_0, hinta_alv_sis, yksikko', 'length', 'max'=>20),
 			array('hinta, kesto, nelio, kotitalousvahennys, netvisorkey', 'length', 'max'=>20),
-			array('toinen_valikko_rakenne, lisapalvelut', 'length', 'max'=>10000),
+			array('toinen_valikko_rakenne, lisapalvelut, kategoria', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, nimike, hinta, selitysteksti, palvelu, kesto, nelio', 'safe', 'on'=>'search'),

@@ -129,6 +129,11 @@ class TuotteetPalvelutController extends Controller
 			else
 				$model->lisapalvelut='';
 
+			if(isset($_POST['TuotteetPalvelut']['kategoria']))
+				$model->kategoria=json_encode($_POST['TuotteetPalvelut']['kategoria']);
+			else
+				$model->kategoria='';
+
 			if($model->save())
 			{
 			   // <-- Netvisor
@@ -183,6 +188,11 @@ class TuotteetPalvelutController extends Controller
 				$model->lisapalvelut=json_encode($_POST['lisapalvelut']);
 			else
 				$model->lisapalvelut='';
+
+			if(isset($_POST['TuotteetPalvelut']['kategoria']))
+				$model->kategoria=json_encode($_POST['TuotteetPalvelut']['kategoria']);
+			else
+				$model->kategoria='';
 
 
 			if(isset($_POST['uploaded_image']) and !empty($_POST['uploaded_image']))

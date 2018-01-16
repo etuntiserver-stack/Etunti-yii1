@@ -4,6 +4,8 @@
 /* @var $form CActiveForm */
 
 $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
+if(is_array(json_decode($model->kategoria, true)))
+$model->kategoria = json_decode($model->kategoria, true);
 ?>
 
 
@@ -33,10 +35,10 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 		<?php
 		$list = array(
 			'onlinevaraus' =>'Onlinevaraus',
-			'kaikki' =>'Kaikki',
+			'eDico' =>'eDico',
 		);
         	echo $form->dropDownList($model, 'kategoria', $list,
-		array('empty' => 'Valitse kategoria', 'class'=>'form-control'));	
+		array('class'=>'form-control selectpicker', 'multiple' => 'yes'));	
         	?>
 		<?php echo $form->error($model,'kategoria'); ?>
 	</div>
