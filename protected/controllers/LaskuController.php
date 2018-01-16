@@ -380,6 +380,7 @@ class LaskuController extends Controller
 	public function actionValitsetuote()
 	{
 		$tuote = TuotteetPalvelut::model()->findbypk($_POST['tuoteID']);
+		$asiakas = Asiakkaat::model()->find(" asiakasnumero='".$_POST['asiakas_nro']."' ");
 		if(isset($tuote->id)) $tuoteID = $tuote->id; else $tuoteID = '';
 		{
 			$arr = array(
@@ -390,6 +391,17 @@ class LaskuController extends Controller
 				'yksikko' => $tuote->yksikko,
 				'hinta_alv_sis' => $tuote->hinta_alv_sis,
 			);
+			if(isset($asiakas->id) and $asiakas->hinnasto_id != 0)
+			{
+				$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$tuote->id."' AND hinnastot_id='".$asiakas->hinnasto_id."' ");
+				if(isset($hinnasto->id))
+				{
+					$arr['hinta_alv_0'] = $hinnasto->hinnasto_hinta;
+					$arr['alv'] = $hinnasto->hinnasto_alv;
+					$arr['yksikko'] = $hinnasto->hinnasto_yksikko;
+					$arr['hinta_alv_sis'] = $hinnasto->hinnasto_yht;
+				}
+			}
 			echo json_encode($arr);
 
 		}

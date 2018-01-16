@@ -1084,11 +1084,12 @@ $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 
     var tuoteID = $(this).val();
     var num = $(this).attr("num");
+    var asiakas_nro = $("#Lasku_as_nro option:selected").val();
 
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/lasku/valitsetuote',
            type: "POST",
-           data: { tuoteID : tuoteID },
+           data: { tuoteID : tuoteID, asiakas_nro : asiakas_nro },
            success: function(data){
 		var sp = JSON.parse(data);
 

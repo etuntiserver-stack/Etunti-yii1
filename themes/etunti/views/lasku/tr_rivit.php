@@ -24,11 +24,6 @@
 		$free_text = $k->osoite;
 	}
 
-	if(isset($k->id) and $k->alv != 0)
-		$alv = $k->alv;
-	else
-		$alv = $a->alv;
-
 	$free_text = $free_text.', '.date('d.m.Y',strtotime($_POST['from'])).'-'.date('d.m.Y',strtotime($_POST['to']));
 	//     Free text -->
 
