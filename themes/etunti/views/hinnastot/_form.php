@@ -4,8 +4,6 @@
 /* @var $form CActiveForm */
 ?>
 
-
-
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'hinnastot-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
