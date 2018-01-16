@@ -58,6 +58,7 @@
      <th><?=Yii::t('main', 'HINNASTON ALV %')?></th>
      <th><?=Yii::t('main', 'HINNASTON YHTEENSÄ')?></th>
      <th><?=Yii::t('main', 'YKSIKKÖ')?></th>
+     <th></th>
     </tr>
 
     <?php if(isset($model->id) and count($rivit) > 0) : ?>
@@ -89,6 +90,9 @@
 	 <option value=<?=$itm->value?> <?php echo ($itm->value == $r->hinnasto_yksikko)? 'selected':''; ?>><?=$itm->value?></option>
 	 <?php endforeach; ?>
 	</select>
+     </td>
+     <td>
+	<i class="fa fa-trash-o fa-2x link poistarivi" aria-hidden="true"></i>
      </td>
     </tr>
     <?php endforeach; ?>
@@ -139,6 +143,9 @@
 	 <?php endforeach; ?>
 	</select>
      </td>
+     <td>
+	<i class="fa fa-trash-o fa-2x link poistarivi" aria-hidden="true"></i>
+     </td>
     </tr>
 </textarea>
 <!-- uusiRiviKontentti -->
@@ -176,6 +183,11 @@ $(document).ready(function(){
 	var summ = hinnasto_hinta+yht;
 	$(this).closest('tr').find('.hinnasto_yht').val(summ.toFixed(2));
   });
+
+  $(document).delegate(".poistarivi","click",function(){
+	$(this).closest('tr').remove();
+  });
+
 
 });
 </script>
