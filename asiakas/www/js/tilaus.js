@@ -15,6 +15,7 @@ $(document).ready(function(){
 	   type:'POST',
  	   data: sendData,
            success: function(data){
+        	console.log('data: '+ data);
 		var d = JSON.parse(data);
 		if(d['alennuskoodit'])
 		{
@@ -24,11 +25,40 @@ $(document).ready(function(){
 				'</select>'
 			);
 		}
+		if(d['tp_kontenti'])
+		{
+			$('#tuotteetPalvelut').replaceWith(d['tp_kontenti']);
+		}
+		if(d['kohteet'])
+		{
+			$('#kohteet').replaceWith(d['kohteet']);
+		}
+		if(d['viesti'])
+		{
+			$('#viesti').replaceWith(d['viesti']);
+		}
     	   },
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
     	   }
         });
+
+
+	$(document).delegate('.valiko', 'click', function(e) {
+	   if( $( this ).hasClass( "btn-default" ) ){
+		$( this ).removeClass('btn-default').addClass('btn-success');
+		return false;
+	   }
+	   if( $( this ).hasClass( "btn-success" ) ){
+		$( this ).removeClass('btn-success').addClass('btn-default');
+		return false;
+	   }
+	});
+
+	$(document).delegate('.to-tilaus', 'click', function(e) {
+		alert()
+	});
+
 
   }
     

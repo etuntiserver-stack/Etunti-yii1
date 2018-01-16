@@ -105,46 +105,6 @@
 
 $(document).ready(function(){
 
-	
-
-
-  $(".to-tilaus").click(function(e){
-   if(asiakasID)
-   {
-
-	var alennuskoodi = $("#alennuskoodi_valiko option:selected").val();
-	var ak = '';
-	if(alennuskoodi !== '')
-		ak = "&alennuskoodi="+alennuskoodi;
-
-
-	if ( !window.cordova ) {
-		window.open(encodeURI(server+'index.php/onlinevaraus/index?domain='+domain+'&aid='+asiakasID+''+ak), '_blank', 'location=yes');
-		return false;
-	}
-
-	document.addEventListener("deviceready", onInAPPDeviceReady, false);
-	event.preventDefault();
-	function onInAPPDeviceReady() {
-	    var ref = cordova.InAppBrowser.open(encodeURI(server+'index.php/onlinevaraus/index?domain='+domain+'&aid='+asiakasID+''+ak), '_blank', 'location=yes');
-
-		/*
-		ref.addEventListener(
-		    'loadstop',
-		    function(event) {
-		        ref.executeScript({
-		            code: "document.getElementById('palvelu').onclick = function() {alert('button was clicked');}"
-		        });
-		    }
-		);
-		*/
-	}
-
-   }
-  });
-
-
-
 
    $("#eHeader").replaceWith(''+
 

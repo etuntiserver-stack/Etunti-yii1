@@ -339,6 +339,11 @@ public function actionLogin($domain)
 	{
 
 		$return = '';
+		$alennuskoodit = '';
+		$tp_kontenti = '';
+		$kohteet = '';
+		$viesti = '';
+
 		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{
 
@@ -346,7 +351,7 @@ public function actionLogin($domain)
 		   if(isset($model->id) and is_array(json_decode($model->alennuskoodit, true)))
 		   {
 			$ak_arr = json_decode($model->alennuskoodit, true);
-			$alennuskoodit = '<option value=>Valitse alennuskoodi</option>';
+			$alennuskoodit .= '<option value=>Valitse alennuskoodi</option>';
 			foreach($ak_arr as $k => $v)
 			{
 				$ak = Kupongit::model()->findByPk($k);
@@ -359,9 +364,66 @@ public function actionLogin($domain)
 					$alennuskoodit .= '<option value="'.$ak->kupongin_id.'">'.$ak->kupongin_id.'</option>';
 				}
 			}
-
-			$this->_sendResponse(200, CJSON::encode(array('alennuskoodit'=>$alennuskoodit)));
 		   }
+
+		   if(isset($model->id))
+		   {
+			// <-- Tuotteet Palvelut
+			$tp_kontenti = '';
+			$criteria = new CDbCriteria();
+	       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND kategoria LIKE '%eDico%' ";
+			$tuoteet = TuotteetPalvelut::model()->findAll($criteria);
+
+			$tp_kontenti .= '<table class="table table-bordered table-striped">';
+			foreach($tuoteet as $item)
+			{
+
+			  // <-- Check hinnasto By Asiakas
+			  if($model->hinnasto_id != 0)
+			  {
+				$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$item->id."' AND hinnastot_id='".$model->hinnasto_id."' ");
+				if(isset($hinnasto->id))
+				{
+					$item->yksikko = $hinnasto->hinnasto_yksikko;
+					$item->hinta_alv_sis = $hinnasto->hinnasto_yht;
+				}
+			  }
+			  //     Check hinnasto By Asiakas -->
+
+			$tp_kontenti .= '<tr class="tr_rivi">';
+			$tp_kontenti .= '<td>'.$item->nimike.'</td>';
+			$tp_kontenti .= '<td>'.$item->hinta_alv_sis.'</td>';
+			$tp_kontenti .= '<td>'.$item->yksikko.'</td>';
+			$tp_kontenti .= '<td width="1"><button class="btn btn-default valiko"><i class="fa fa-check fa-2x" aria-hidden="true"></i></button></td>';
+			$tp_kontenti .= '</tr>';
+			}
+			$tp_kontenti .= '</table>';
+			//     Tuotteet Palvelut -->
+
+
+			// <-- Kohteet
+			$criteria=new CDbCriteria;
+			$criteria->condition = " 
+				aktiivinen='1' 
+				AND asiakas_id='".$model->id."'
+			";
+			$k = Kohteet::model()->findAll($criteria);
+			$kohteet = CHtml::dropDownList('Tilaus[osoite]', '', CHtml::listData($k, 'id', 'osoite'), 
+			array('empty'=>'Valitse kohde', 'class'=>'form-control'));
+			//     Kohteet -->
+
+			// <-- Viesti kenta
+			$viesti = CHtml::textarea('Tilaus[viesti]', '', array('rows' => 6, 'class'=>'form-control', 'placeholder' => 'Viesti...'));
+			//     Viesti kenta -->
+		   }
+
+
+			$this->_sendResponse(200, CJSON::encode(array(
+				'alennuskoodit' => $alennuskoodit,
+				'tp_kontenti' => $tp_kontenti,
+				'kohteet' => $kohteet,
+				'viesti' => $viesti,
+			)));
 
 		}
 
