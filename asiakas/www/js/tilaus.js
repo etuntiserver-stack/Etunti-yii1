@@ -47,15 +47,21 @@ $(document).ready(function(){
 	$(document).delegate('.valiko', 'click', function(e) {
 	   if( $( this ).hasClass( "btn-default" ) ){
 		$( this ).removeClass('btn-default').addClass('btn-success');
+		$( this ).find('i').addClass('fa-check');
 		return false;
 	   }
 	   if( $( this ).hasClass( "btn-success" ) ){
 		$( this ).removeClass('btn-success').addClass('btn-default');
+		$( this ).find('i').removeClass('fa-check');
 		return false;
 	   }
 	});
 
 	$(document).delegate('.to-tilaus', 'click', function(e) {
+		alert()
+	});
+
+	$(document).delegate('#Tilaus_kohde', 'change', function(e) {
 		alert()
 	});
 

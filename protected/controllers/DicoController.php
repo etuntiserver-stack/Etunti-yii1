@@ -378,23 +378,11 @@ public function actionLogin($domain)
 			foreach($tuoteet as $item)
 			{
 
-			  // <-- Check hinnasto By Asiakas
-			  if($model->hinnasto_id != 0)
-			  {
-				$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$item->id."' AND hinnastot_id='".$model->hinnasto_id."' ");
-				if(isset($hinnasto->id))
-				{
-					$item->yksikko = $hinnasto->hinnasto_yksikko;
-					$item->hinta_alv_sis = $hinnasto->hinnasto_yht;
-				}
-			  }
-			  //     Check hinnasto By Asiakas -->
-
 			$tp_kontenti .= '<tr class="tr_rivi">';
 			$tp_kontenti .= '<td>'.$item->nimike.'</td>';
 			$tp_kontenti .= '<td>'.$item->hinta_alv_sis.'</td>';
 			$tp_kontenti .= '<td>'.$item->yksikko.'</td>';
-			$tp_kontenti .= '<td width="1"><button class="btn btn-default valiko"><i class="fa fa-check fa-2x" aria-hidden="true"></i></button></td>';
+			$tp_kontenti .= '<td width="1"><button class="btn btn-default valiko"><i class="fa fa-2x" aria-hidden="true" style="width:25px;height:21px"></i></button></td>';
 			$tp_kontenti .= '</tr>';
 			}
 			$tp_kontenti .= '</table>';
@@ -408,8 +396,8 @@ public function actionLogin($domain)
 				AND asiakas_id='".$model->id."'
 			";
 			$k = Kohteet::model()->findAll($criteria);
-			$kohteet = CHtml::dropDownList('Tilaus[osoite]', '', CHtml::listData($k, 'id', 'osoite'), 
-			array('empty'=>'Valitse kohde', 'class'=>'form-control'));
+			$kohteet = CHtml::dropDownList('Tilaus[kohde]', '', CHtml::listData($k, 'id', 'osoite'), 
+			array('empty'=>'Valitse kohde', 'class'=>'form-control input-lg'));
 			//     Kohteet -->
 
 			// <-- Viesti kenta
@@ -429,6 +417,21 @@ public function actionLogin($domain)
 
 				exit;
 	}
+
+
+	/*
+			  // <-- Check hinnasto By Asiakas
+			  if($model->hinnasto_id != 0)
+			  {
+				$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$item->id."' AND hinnastot_id='".$model->hinnasto_id."' ");
+				if(isset($hinnasto->id))
+				{
+					$item->yksikko = $hinnasto->hinnasto_yksikko;
+					$item->hinta_alv_sis = $hinnasto->hinnasto_yht;
+				}
+			  }
+			  //     Check hinnasto By Asiakas -->
+	*/
 
 	public function actionInfo($domain)
 	{
