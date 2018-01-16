@@ -162,17 +162,19 @@ $(document).ready(function(){
   });
 
   $(document).delegate(".hinnasto_hinta","keyup",function(){
-	var hinnasto_hinta = $(this).val();
+	var hinnasto_hinta = parseFloat($(this).val());
 	var alv = $(this).closest('tr').find('.hinnasto_alv').val();
 	var yht = parseFloat((hinnasto_hinta/100*alv), 10);
-	$(this).closest('tr').find('.hinnasto_yht').val(yht.toFixed(2));
+	var summ = hinnasto_hinta+yht;
+	$(this).closest('tr').find('.hinnasto_yht').val(summ.toFixed(2));
   });
 
   $(document).delegate(".hinnasto_alv","change",function(){
-	var hinnasto_hinta = $(this).closest('tr').find('.hinnasto_hinta').val();
+	var hinnasto_hinta = parseFloat($(this).closest('tr').find('.hinnasto_hinta').val());
 	var alv = $('option:selected', this).val();
 	var yht = parseFloat((hinnasto_hinta/100*alv), 10);
-	$(this).closest('tr').find('.hinnasto_yht').val(yht.toFixed(2));
+	var summ = hinnasto_hinta+yht;
+	$(this).closest('tr').find('.hinnasto_yht').val(summ.toFixed(2));
   });
 
 });
