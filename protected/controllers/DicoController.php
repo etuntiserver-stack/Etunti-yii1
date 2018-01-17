@@ -343,6 +343,7 @@ public function actionLogin($domain)
 		$tp_kontenti = '';
 		$kohteet = '';
 		$viesti = '';
+		$aikaa = '';
 
 		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{
@@ -368,24 +369,78 @@ public function actionLogin($domain)
 
 		   if(isset($model->id))
 		   {
+
+			if(isset($_POST['Tilaus']))
+			{
+
+				//$this->_sendResponse(200, CJSON::encode($_POST['Tilaus']));
+				//exit;
+
+				$tilaus = new EdicoTilaukset;
+				$tilaus->attributes = $_POST['Tilaus'];
+				$kohteet = Kohteet::model()->findByPk($tilaus->kohde_id);
+
+				$tilaus->asiakas_id = $model->id;
+				$tilaus->osoite = $kohteet->osoite;
+				$tilaus->postinumero = $kohteet->pnumero;
+				$tilaus->postitoimipaikka = $kohteet->kaupunki;
+				$tilaus->asiakas_puhelinnumero = $model->puhelin;
+
+				if(!$tilaus->save()){
+				$this->_sendResponse(200, CJSON::encode(array(
+					'lahetyksen_tulos' => var_dump($tilaus->getErrors())
+				)));
+				exit;
+				} else {
+				$this->_sendResponse(200, CJSON::encode(array(
+					'lahetyksen_tulos' => 'ok',
+					'kiitos_lause' => 'Kiitos tilausta.'
+				)));
+				}
+				exit;
+			}
+
+
 			// <-- Tuotteet Palvelut
+			if(isset($_POST['kohdeID']))
+			{
+
 			$tp_kontenti = '';
 			$criteria = new CDbCriteria();
 	       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND kategoria LIKE '%eDico%' ";
 			$tuoteet = TuotteetPalvelut::model()->findAll($criteria);
+			
+			$kohteet = Kohteet::model()->findByPk($_POST['kohdeID']);
+
 
 			$tp_kontenti .= '<table class="table table-bordered table-striped">';
 			foreach($tuoteet as $item)
 			{
 
-			$tp_kontenti .= '<tr class="tr_rivi">';
-			$tp_kontenti .= '<td>'.$item->nimike.'</td>';
-			$tp_kontenti .= '<td>'.$item->hinta_alv_sis.'</td>';
-			$tp_kontenti .= '<td>'.$item->yksikko.'</td>';
+			  // <-- Check hinnasto By Kohde
+			  $hinnasto_id = 0;
+			  if(isset($kohteet->id) and $kohteet->hinnasto_id != 0)
+			  {
+				$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$item->id."' AND hinnastot_id='".$kohteet->hinnasto_id."' ");
+				if(isset($hinnasto->id))
+				{
+					$hinnasto_id = $hinnasto->id;
+					$item->yksikko = $hinnasto->hinnasto_yksikko;
+					$item->hinta_alv_sis = $hinnasto->hinnasto_yht;
+				}
+			  }
+			  //     Check hinnasto By Kohde -->
+	
+
+			$tp_kontenti .= '<tr class="tr_rivi" tuote_id="'.$item->id.'" hinnasto_id="'.$hinnasto_id.'">';
+			$tp_kontenti .= '<td><span class="nimike">'.$item->nimike.'</span></td>';
+			$tp_kontenti .= '<td><span class="hinta_alv_sis" hinta="'.$item->hinta_alv_sis.'">'.number_format($item->hinta_alv_sis, 2, ',', ' ').'</span> &euro;</td>';
+			$tp_kontenti .= '<td><span class="yksikko">'.$item->yksikko.'</span></td>';
 			$tp_kontenti .= '<td width="1"><button class="btn btn-default valiko"><i class="fa fa-2x" aria-hidden="true" style="width:25px;height:21px"></i></button></td>';
 			$tp_kontenti .= '</tr>';
 			}
 			$tp_kontenti .= '</table>';
+			} // kohdeID
 			//     Tuotteet Palvelut -->
 
 
@@ -396,13 +451,28 @@ public function actionLogin($domain)
 				AND asiakas_id='".$model->id."'
 			";
 			$k = Kohteet::model()->findAll($criteria);
-			$kohteet = CHtml::dropDownList('Tilaus[kohde]', '', CHtml::listData($k, 'id', 'osoite'), 
+			$kohteet = CHtml::dropDownList('Tilaus[kohde_id]', '', CHtml::listData($k, 'id', 'osoite'), 
 			array('empty'=>'Valitse kohde', 'class'=>'form-control input-lg'));
 			//     Kohteet -->
 
 			// <-- Viesti kenta
-			$viesti = CHtml::textarea('Tilaus[viesti]', '', array('rows' => 6, 'class'=>'form-control', 'placeholder' => 'Viesti...'));
+			$viesti .= '<label>'.Yii::t('main', 'Viesti').'</label>';
+			$viesti .= CHtml::textarea('Tilaus[viesti]', '', array('rows' => 6, 'class'=>'form-control', 'placeholder' => 'Viesti...'));
 			//     Viesti kenta -->
+
+			// <-- Aikaa kenta
+			$aikaa .= '<label>'.Yii::t('main', 'Toivottu päivämäärä').'</label>';
+			$aikaa .= CHtml::dateField('Tilaus[toivottu_pvm]', '', array('class'=>'form-control input-lg'));
+
+			$aikaa .= '<div class="row">';
+			$aikaa .= '<div class="col-xs-6">';
+			$aikaa .= '<label>'.Yii::t('main', 'Toivottu aloitus aikaa').'</label>';
+			$aikaa .= CHtml::textField('Tilaus[toivottu_aloitus]', '09:00', array('class'=>'form-control input-lg', 'placeholder' => 'Esim. 09:00'));
+			$aikaa .= '</div><div class="col-xs-6">';
+			$aikaa .= '<label>'.Yii::t('main', 'Toivottu lopetus aikaa').'</label>';
+			$aikaa .= CHtml::textField('Tilaus[toivottu_lopetus]', '12:00', array('class'=>'form-control input-lg', 'placeholder' => 'Esim. 12:00'));
+			$aikaa .= '</div></div>';
+			//     Aikaa kenta -->
 		   }
 
 
@@ -411,27 +481,13 @@ public function actionLogin($domain)
 				'tp_kontenti' => $tp_kontenti,
 				'kohteet' => $kohteet,
 				'viesti' => $viesti,
+				'aikaa' => $aikaa,
 			)));
 
 		}
 
 				exit;
 	}
-
-
-	/*
-			  // <-- Check hinnasto By Asiakas
-			  if($model->hinnasto_id != 0)
-			  {
-				$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$item->id."' AND hinnastot_id='".$model->hinnasto_id."' ");
-				if(isset($hinnasto->id))
-				{
-					$item->yksikko = $hinnasto->hinnasto_yksikko;
-					$item->hinta_alv_sis = $hinnasto->hinnasto_yht;
-				}
-			  }
-			  //     Check hinnasto By Asiakas -->
-	*/
 
 	public function actionInfo($domain)
 	{

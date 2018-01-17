@@ -277,18 +277,20 @@ class TuotteetPalvelutController extends Controller
 	        $criteria->order = " palvelu=0 DESC,nimike ASC ";
 
 
-		if(isset($_POST['nayta_sivuilla']) and $_POST['nayta_sivuilla'] == 0 and $_POST['nayta_sivuilla'] != 'kaikki')
+		if(isset($_GET['nayta_sivuilla']) and $_GET['nayta_sivuilla'] == 0 and $_GET['nayta_sivuilla'] != 'kaikki')
 	        	$criteria->addCondition (" nayta_sivuilla=0 ");
-		elseif(isset($_POST['nayta_sivuilla']) and $_POST['nayta_sivuilla'] == 1 and $_POST['nayta_sivuilla'] != 'kaikki')
+		elseif(isset($_GET['nayta_sivuilla']) and $_GET['nayta_sivuilla'] == 1 and $_GET['nayta_sivuilla'] != 'kaikki')
 	        	$criteria->addCondition (" nayta_sivuilla=1 ");
-		elseif(isset($_POST['nayta_sivuilla']) and $_POST['nayta_sivuilla'] == 'kaikki')
+		elseif(isset($_GET['nayta_sivuilla']) and $_GET['nayta_sivuilla'] == 'kaikki')
 	        	$criteria->addCondition (" nayta_sivuilla=1 OR nayta_sivuilla=0 ");
-		elseif(!isset($_POST['nayta_sivuilla']))
+		elseif(!isset($_GET['nayta_sivuilla']))
 	        	$criteria->addCondition (" nayta_sivuilla=1 ");
 
+		if(isset($_GET['nimike']) and !empty(trim($_GET['nimike'])))
+	        $criteria->addCondition (" nimike LIKE '%".$_GET['nimike']."%' ");
 
-		if(isset($_POST['nimike']) and !empty(trim($_POST['nimike'])))
-	        $criteria->addCondition (" nimike LIKE '%".$_POST['nimike']."%' ");
+		if(isset($_GET['kategoria']) and !empty(trim($_GET['kategoria'])))
+	        $criteria->addCondition (" kategoria LIKE '%".$_GET['kategoria']."%' ");
 
 		$dataProvider=new CActiveDataProvider('TuotteetPalvelut', array(
 			'criteria'=>$criteria,

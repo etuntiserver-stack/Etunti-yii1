@@ -1140,7 +1140,7 @@ $('.tvchange').change(function(){
               </li>
 -->
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/kaikkiedico">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/edicoTilaukset/index">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Kaikki tilaukset'); ?></a>
               </li>
               <li>

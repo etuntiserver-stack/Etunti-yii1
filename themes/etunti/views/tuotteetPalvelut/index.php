@@ -14,7 +14,7 @@
 
 
 
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <form id="mobForm" action="#" class="form-inline" method="GET">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
@@ -24,7 +24,33 @@
                     <!-- Input Icons -->
                     <div class="row">
 
-		      <?php if(isset($_POST['nayta_sivuilla'])) echo '<input type="hidden" id="akt" value="'.$_POST['nayta_sivuilla'].'">'; ?>
+
+                      <div class="col-md-3">
+                        <div class="section">
+                          <label class="field select">
+
+			   <select name="kategoria" class="gui-input">
+			   <option value=>Kategoriat</option>
+			    <?php
+				$kat_arr = array('onlinevaraus', 'edico');
+				foreach($kat_arr as $itm)
+				{
+				    $is_selected = '';
+				    if(isset($_GET['kategoria']) and $_GET['kategoria'] == $itm)
+				    $is_selected = 'selected';
+
+				    echo '<option value="'.$itm.'" '.$is_selected.'>'.$itm.'</option>';
+				}
+			    ?>
+			   </select>
+
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+		      <?php if(isset($_GET['nayta_sivuilla'])) echo '<input type="hidden" id="akt" value="'.$_GET['nayta_sivuilla'].'">'; ?>
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
@@ -85,6 +111,7 @@
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'Nimike'); ?></th>
+  <th><?php echo Yii::t('main', 'Kategoria'); ?></th>
   <th><?php echo Yii::t('main', 'Hinta (ALV 0)'); ?></th>
   <th><?php echo Yii::t('main', 'ALV'); ?></th>
   <th><?php echo Yii::t('main', 'Hinta (ALV sis)'); ?></th>
