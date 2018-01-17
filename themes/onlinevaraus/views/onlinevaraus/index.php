@@ -24,14 +24,14 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_ver2.css">
 
-<div class="container-fluid">
+<div class="container-fluid ">
   
-<div class="row">
+<div class="row ">
     <div class="col-sm-6 col-sm-offset-3 select-service">
         <center>
 
 	<div class="row">
-	  <div class="col-sm-4 col-sm-offset-4">
+	  <div class="col-sm-6 col-sm-offset-3">
 
 		<h4>Valitse palvelu</h4>
 
@@ -59,7 +59,7 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 
 
 	<div class="row" id="toimialueRow">
-	  <div class="col-sm-4 col-sm-offset-4">
+	  <div class="col-sm-6 col-sm-offset-3">
 		<h4><?php echo Yii::t('main', 'Valitse toimialue'); ?></h4>
 		<?php
 		$exists = Valikkoot::model()->find(" select_type='tyo_toimialue' ");
@@ -82,7 +82,12 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 	      </div>
 	    </div>
   </div>
+
 </div>
+
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3 order-summary">Order Summary</div>
+  </div>
 
     <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/rekisteriseloste" target="_blank"><?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> </a>
 
@@ -113,7 +118,9 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 	
    }
    ?>
-   <br>
+   
+   
+   
 </div>
 
 
