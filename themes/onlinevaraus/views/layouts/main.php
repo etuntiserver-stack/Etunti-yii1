@@ -41,45 +41,20 @@ if( isset(Yii::app()->user->domain) )
 
         
         <meta charset="utf-8">
-        <title>Etunti - Liikkuva työ hallussa</title>
-        <meta name="keywords" content="HTML5 Template" />
+        <title>Onlinevaraus</title>
+        <meta name="keywords" content="Onlinevaraus" />
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 
-<?php
-/*
-    if (isset($_SERVER['HTTP_USER_AGENT'])) {
-    	$agent = $_SERVER['HTTP_USER_AGENT'];
-    }
-
-    if (strlen(strstr($agent, 'Firefox')) > 0) {
-    echo "<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'>";
-    } else {
-    echo "<link href='https://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'>";
-    }
-*/
-?>
 	<link href='https://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'>
-
-        <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/css/style.css?v=2.13"/>
-        <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/css/theme-responsive.css"/>
-        <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/css/skins/blue/blue.css?v=2" />
-        <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/inc/lomake/lomake.css?v=2" />
-        <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/modernizr.js"></script>
+  
+  <!-- Haetaan Onlinevarauksen ihan oma CSS -->
+  <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets/css/onlinevaraus.css"/>
+        
 
 	<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/img/favicon.ico">
 
-        <!-- styles for IE -->
-        <!--[if lte IE 8]>
-            <link rel="stylesheet" href="../css/ie/ie.css" type="text/css" media="screen" />
-        <![endif]-->
-
-
-        <!--[if lte IE 8]>
-            <script src="../js/responsive/html5shiv.js"></script>
-            <script src="../js/responsive/respond.js"></script>
-        <![endif]-->
     </head>
     <body>
 
@@ -184,26 +159,7 @@ Yii::app()->clientScript->registerPackage('jquery');
     <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/main.js?v=1.13"></script>
     <!-- ======================= End JQuery libs =========================== -->
 
-    <!--Slider Function-->
-    <script type="text/javascript">
-        var revapi;
-        jQuery(document).ready(function() {
-           revapi = jQuery('.tp-banner').revolution(
-            {
-                delay:9000,
-                startwidth:1170,
-                startheight:580,
-                spinner:"spinner4",
-                hideThumbs:10,
-                fullWidth:"on",
-                navigationType:"none",
-                navigationArrows:"solo",
-                navigationStyle:"preview4",
-                forceFullWidth:"on"
-            });
-        });
-    </script>
-    <!--End Slider Function-->
+  
 
 
     </body>
