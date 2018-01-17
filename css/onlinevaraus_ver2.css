@@ -1,14 +1,12 @@
 /*Etunti Onlinevaraus Styles*/
 
 body{
-  
   background: url('../etusivuimg/online_bg_01.jpg') no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
   
-
 	font-size: 12px;
 	font-family: "Ubuntu", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	line-height: 1.6;
@@ -17,7 +15,9 @@ body{
 	font-weight: normal;
 }
 
-
+header{
+  background-color: rgba(255, 255, 255, 0.75);
+}
 
 .header {
 	width: 100%;
@@ -42,20 +42,24 @@ body{
 }
 
 .time-remaining {
-	width: 182px;
+	width: 320px;
 	height: 24px;
 	font-family: OpenSans;
 	font-size: 18px;
 	font-weight: 600;
 	letter-spacing: 0;
-	text-align: left;
+	text-align: right;
+  float: right;
 	color: #90a6b1;
 }
 
 .select-service {
-	width: 620px;
-	height: 409px;
-	background-color: rgba(255, 255, 255, 0.97);
+  margin-top: 80px;
+	max-width: 620px;
+	height: auto;
+  padding-top: 40px;
+  padding-bottom: 40px;
+	background-color: rgba(255, 255, 255, 0.85);
 	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
 }
 

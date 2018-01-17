@@ -20,8 +20,8 @@
                     <!-- End Logo-->
 
                     <!-- Nav-->
-                    <div class="col-md-9 slogan">
-                        Liikkuva työ hallussa
+                    <div class="col-md-9 time-remaining">
+                       Time remaining: 12:01 min.
                     </div>
                     <!-- End Nav-->
                 </div>
