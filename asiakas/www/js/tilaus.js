@@ -106,8 +106,10 @@ $(document).ready(function(){
               success: function(data){
         	console.log('data: '+ data);
 		var d = JSON.parse(data);
-		if(d['lahetyksen_tulos'] == 'ok')
-		{
+		if(d['lahetyksen_error']){
+			$('.to-tilaus').after('<div class="alert alert-danger">'+ JSON.stringify(d['lahetyksen_error']) +'</div>');
+		}
+		if(d['lahetyksen_tulos'] == 'ok'){
 			$('#tilaus_lomake').html(d['kiitos_lause']);
 		}
     	      },

@@ -388,7 +388,7 @@ public function actionLogin($domain)
 
 				if(!$tilaus->save()){
 				$this->_sendResponse(200, CJSON::encode(array(
-					'lahetyksen_tulos' => var_dump($tilaus->getErrors())
+					'lahetyksen_error' => json_encode($tilaus->getErrors())
 				)));
 				exit;
 				} else {
