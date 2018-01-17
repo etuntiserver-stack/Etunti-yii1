@@ -49,8 +49,13 @@ if( isset(Yii::app()->user->domain) )
 
 	<link href='https://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'>
   
+  <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/css/style.css?v=2.13"/>
+  <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/css/theme-responsive.css"/>
+
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/modernizr.js"></script>
+  
   <!-- Haetaan Onlinevarauksen ihan oma CSS -->
-  <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_onlinevaraus/css/onlinevaraus.css"/>
+  <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_ver2.css"/>
         
 
 	<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/img/favicon.ico">
@@ -79,31 +84,14 @@ if( isset(Yii::app()->user->domain) )
 	<?php endif; ?>
 
 
-<?php
-/*
-$sub = explode(".",$_SERVER['HTTP_HOST']);
-if (
-		(! isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off') 
-		and ($_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1')
-		and $sub[0] != 'staging'
-) {
+  <?php 
+    //Yii::app()->clientScript->registerPackage('bootstrapCSS');
+    Yii::app()->clientScript->registerPackage('jquery');
+  ?>
 
-    if (strlen(strstr($agent, 'Firefox')) > 0) {
-
-    } else {
-    $redirect_url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-    header("Location: $redirect_url");
-    exit();
-    }
-
-}
-*/
-?>
-
-<?php 
-//Yii::app()->clientScript->registerPackage('bootstrapCSS');
-Yii::app()->clientScript->registerPackage('jquery');
-?>
+	<?php if(isset($curpage_controller)): ?>
+	  <?php $this->renderPartial('/onlinevaraus/header'); ?>
+	<?php endif; ?>
 
 	<?php
 	foreach(Yii::app()->user->getFlashes() as $key => $message) {

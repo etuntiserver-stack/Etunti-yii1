@@ -1,26 +1,5 @@
 <?php
 
-  if(!isset($_SESSION['domain']))
-  {
-    echo '  <link rel="stylesheet" type="text/css" href="'.Yii::app()->request->baseUrl.'/css/bootstrap.min.css">';
-
-    echo '
-    <div class="container-fluid">
-     <div class="col-sm-4 col-sm-offset-4">
-      <form action="#" class="form-signin" method="GET">
-        <h2 class="form-signin-heading">DOMAIN</h2>
-        <label for="domain" class="sr-only">'.Yii::t('main', 'Domain').'</label>
-        <input type="text" id="domain" name="domain" class="form-control input-lg" placeholder="" required autofocus>
-	<br>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">'.Yii::t('main', 'Jatka').'</button>
-      </form>
-     </div>
-    </div> <!-- /container -->
-    ';
-
-
-    exit;
-  }
 
 $asetukset = Asetukset::model()->findbypk(1);
 
@@ -47,25 +26,8 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 
 
 
-<!-- ><div class="container-fluid">
-<br>
+<div class="container-fluid">
 
-<div class="row">
- <div class="form-inline col-sm-12">
-   <div class="form-group">
-
-	<?php $site = Yii::app()->createController('Site'); echo $site[0]->logoShower(null); ?>
-
-	&nbsp;<span data-toggle="modal" data-target=".kysymys" class="link"><img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/kysymys.png" height="30"></span>
-
-   </div><div class="form-group col-sm-offset-4">
-	<h3><?php echo Yii::t('main', 'Online-Varaus'); ?><br>
-           <p class="small link text-sininen" data-toggle="modal" data-target=".mikaOnOnlinevaraus"><?php echo Yii::t('main', 'Mikä on online-varaus'); ?></p>
-	</h3>
-   </div>
- </div>
-</div>
--->
 
   
 <div class="container">

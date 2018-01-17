@@ -68,7 +68,7 @@ class OnlinevarausController extends Controller
 
         public function init()
         {
-                Yii::app()->theme = 'classic';
+                Yii::app()->theme = 'onlinevaraus';
 		if(isset($_GET['domain']))
 		{
 
