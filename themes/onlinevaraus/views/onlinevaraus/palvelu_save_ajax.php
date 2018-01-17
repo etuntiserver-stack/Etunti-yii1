@@ -1,0 +1,343 @@
+<?php
+
+  if(isset($_SESSION['onlinevaraus']['paapalvelu']))
+	$model = OnlinevarausTuotteet::model()->findbypk($_SESSION['onlinevaraus']['paapalvelu']);
+
+  // <-- Kupongi
+  $blockKupongi = '';
+  if(isset(Yii::app()->user->alennuskoodi) and !empty($this->Kupongi_checker(Yii::app()->user->alennuskoodi)))
+  {
+	$_SESSION['onlinevaraus']['kupongi'] = $this->Kupongi_checker(Yii::app()->user->alennuskoodi);
+  }
+
+  if(isset($_SESSION['onlinevaraus']['kupongi']))
+  {
+	$kup = Kupongit::model()->findbypk($_SESSION['onlinevaraus']['kupongi']);
+
+        if(isset($kup->id))
+	{
+
+	if($kup->maara_tyyppi == 'euro')
+	$kup_maara = '-'.$kup->euro_maara.' &euro;';
+	if($kup->maara_tyyppi == 'prosentti')
+	$kup_maara = '-'.$kup->prosentti_maara.'%';
+
+	$blockKupongi .= '
+	<div class="row">
+	 <div class="col-xs-2">
+		<i class="fa fa-star" aria-hidden="true"></i>
+	 </div><div class="col-xs-10">
+		'.Yii::t('main', 'Alennuskoodi').': '.$kup_maara.'
+	 </div>
+	</div>
+ 	';
+	}
+  }
+  //     Kupongi -->
+
+  $blockAika = '';
+  $vkolisa = 0;
+
+  if(isset($_SESSION['onlinevaraus']['modelTV']))
+  {
+	$tv = Tyovuoroot::model()->findbypk($_SESSION['onlinevaraus']['modelTV']);
+	if(isset($tv->id))
+	{
+
+	   $pyhat = $this->pyhatCheck($tv->pvm);
+	   if($pyhat == 'pyhat')
+	   $vkolisa = 2;
+	   elseif($pyhat == 'lauantai')
+	   $vkolisa = 1.5;
+	   
+	   $filename = "../../img/tekijat/".$_SESSION['domain']."/".$tv->tid.".jpg";
+	   if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$tv->tid.".jpg"))
+	   $kuva = '<img src="'.$filename.'" class="img-thumbnail">';
+	   else
+	   $kuva = '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
+
+
+	$blockAika .= '
+	<hr>
+     	<label>Varattu aika </label><br>
+	<div class="row">
+	 <div class="col-xs-4">
+		'.$kuva.'		
+	 </div><div class="col-xs-8">
+		'.$tv->pvm.'<br>
+		'.$tv->alku.'-'.$tv->loppu.'
+	 </div>
+	</div>
+ 	';
+	}
+  }
+
+  $blockKohde = '';
+  if(isset($_SESSION['onlinevaraus']['modelKohde']))
+  {
+	$k = Kohteet::model()->findbypk($_SESSION['onlinevaraus']['modelKohde']);
+	if(isset($tv->id))
+	{
+	$blockKohde = '
+	<hr>
+     	<label>Osoite </label><br>
+	<div class="row">
+	 <div class="col-xs-4">
+		Asiakas: '.$k->asiakas_id.'		
+	 </div><div class="col-xs-8">
+		'.$k->osoite.'
+	 </div>
+	</div>
+ 	';
+	}
+  }
+
+
+
+
+  if(isset($model->id))
+  {
+	$tilauksenKuvaus = array();
+	$perusAlv	= 0;
+	$perusHinta	= 0;
+	$perusKesto	= 0;
+	$lisaHinta 	= 0;
+	$lisaTunti 	= 0;
+	$lisapalvelut 	= '';
+	$nimike 	= '';
+	$otsikko 	= '';
+	$tyo_toimialue	= '';
+	$kotitalousvahennys = '';
+
+	if(!empty($model->alv) and $model->alv != 0)		$perusAlv	= $model->alv;
+	$_SESSION['onlinevaraus']['alv'] 					= $perusAlv;
+
+	if(!empty($model->hinta) and $model->hinta != 0)	$perusHinta	= $model->hinta;
+	if(!empty($model->kesto) and $model->kesto != 0)	$perusKesto	= $model->kesto;
+	if(isset($_SESSION['onlinevaraus']['paa_otsikko'])) 	$otsikko 	= $_SESSION['onlinevaraus']['paa_otsikko']; 
+	if(isset($_SESSION['onlinevaraus']['paa_nimike'])) 	$nimike 	= ': '.$_SESSION['onlinevaraus']['paa_nimike']; 
+	if(isset($_SESSION['onlinevaraus']['tyo_toimialue'])) 	$tyo_toimialue 	= $_SESSION['onlinevaraus']['tyo_toimialue'];
+	$tilauksenKuvaus['paa'][$model->nimike] 		= $otsikko.$nimike;
+	$tilauksenKuvaus['alv']			 		= $perusAlv;
+
+	if(isset($_SESSION['onlinevaraus']['lisapalvelut']) and !empty($_SESSION['onlinevaraus']['lisapalvelut']))
+	{
+		foreach($_SESSION['onlinevaraus']['lisapalvelut'] as $p)
+		{
+		    	if(isset($p[0]) and isset($p[1]) and isset($p[2]))
+		    	{
+				$lisaHinta += $p[1];
+				$lisaTunti += $p[2];
+				$lisapalvelut .= '
+				'.$p[0].' <span style="opacity:0.6">'.$p[2].'</span>
+				<span style="opacity:0.6">h</span></span><br>
+				';
+				$tilauksenKuvaus['lisa'][$p[0]] = $p[2];
+		    	}
+		}
+	}
+
+
+
+	if(isset($_SESSION['onlinevaraus']['paa_hinta'])) $paa_hinta = $_SESSION['onlinevaraus']['paa_hinta']; else $paa_hinta = 0;
+	if(isset($_SESSION['onlinevaraus']['paa_kesto'])) $paa_kesto = $_SESSION['onlinevaraus']['paa_kesto']; else $paa_kesto = 0;
+
+	$sumTunti = $perusKesto+$lisaTunti+$paa_kesto;
+
+	$_SESSION['onlinevaraus']['sumTunti'] 	= $sumTunti;
+	$tilauksenKuvaus['sumTunti'] 		= $sumTunti;
+
+
+	$paa_hinta = $perusHinta+$paa_hinta;
+	if($vkolisa > 0)
+		$sum = ((float)$lisaHinta+$paa_hinta)*$vkolisa;
+	else
+		$sum = (float)$lisaHinta+$paa_hinta;
+
+	// <-- kupongi
+	if(isset($kup->id) and $kup->maara_tyyppi == 'euro' and $sum > $kup->euro_maara)
+	{
+		$sum -= $kup->euro_maara;
+	}
+	if(isset($kup->id) and $kup->maara_tyyppi == 'prosentti' and $sum > 0)
+	{
+		$sum -= ($sum*$kup->prosentti_maara)/100;
+	}
+	//     kupongi -->
+
+	$_SESSION['onlinevaraus']['amount'] 	= $sum;
+	$tilauksenKuvaus['sum'] 		= $sum;
+
+
+	if(isset($model->kotitalousvahennys) and !empty($model->kotitalousvahennys))
+	{
+		$s = $sum-(($sum*(int)$model->kotitalousvahennys)/100);
+		$kotitalousvahennys = '<br><span>Kotitalousvähennys: '.number_format($s, 2, ',', '').'</span> &euro;';
+		$tilauksenKuvaus['KotitalousVahennys'] = number_format($s, 2, ',', '');
+	}
+
+
+	$_SESSION['onlinevaraus']['tilauksenKuvaus'] = $tilauksenKuvaus;
+
+
+
+	$body = 
+	'
+	<div class="panel panel-success">
+	 <div class="panel-heading"><b>'.Yii::t('main', 'Yhteenveto').'</b></div>
+	 <div class="panel-body">';
+
+
+	$body .= '
+	<div class="row">
+	 <div class="col-xs-2">
+	   	<i class="fa fa-home"></i> 
+	 </div><div class="col-xs-10">
+		<span>'.$model->nimike.'</span>
+	 </div>
+	</div>';
+
+	if( !empty($otsikko) and !empty($nimike) )
+	{
+	$body .= '
+	<div class="row">
+	 <div class="col-xs-2">
+	   <i class="fa fa-plus"></i> 
+	 </div><div class="col-xs-10">
+		<span>'.$otsikko.$nimike.'</span>
+	 </div>
+	</div>';
+	}
+
+	if(!empty($lisapalvelut))
+	{
+	$body .= '
+	<div class="row">
+	 <div class="col-xs-2">
+	   	<i class="fa fa-plus"></i> 
+	 </div><div class="col-xs-10">
+		'.$lisapalvelut.'
+	 </div>
+	</div>';
+	}
+
+	if(!empty($tyo_toimialue))
+	{
+	$body .= '
+	<div class="row">
+	 <div class="col-xs-2">
+	   	<i class="fa fa-map-marker"></i> 
+	 </div><div class="col-xs-10">
+		'.$tyo_toimialue.'
+	 </div>
+	</div>';
+	}
+
+	$body .= '
+	<div class="row">
+	 <div class="col-xs-2">
+	   	<i class="fa fa-clock-o"></i> 
+	 </div><div class="col-xs-10">
+		<span id="clock" val="'.$sumTunti.'">'.number_format($sumTunti, 1, ',', '').'</span> tuntia
+	 </div>
+	</div>';
+
+	$body .= $blockKupongi;
+
+	$body .= '
+	<div class="row">
+	 <div class="col-xs-2">
+	   	<i class="fa fa-eur"></i> 
+	 </div><div class="col-xs-10">
+		<span id="hinta">'.number_format($sum, 2, ',', '').'</span> &euro;
+		'.$kotitalousvahennys.'
+	 </div>
+	</div>';
+
+	if(!isset($kup->id) and isset($sivu) and $sivu == 'index')
+	{
+	$body .= '
+	<div class="row">
+	 <div class="col-xs-2">
+	   	<i class="fa fa-gift"></i> 
+	 </div>
+	 <div class="col-xs-10">
+	    <div class="input-group">
+	      <input type="text" id="kupongi_id" class="form-control" placeholder="Alennuskoodi">
+	      <span class="input-group-btn">
+	        <button class="btn btn-warning" id="kupongi_add" type="button">'.Yii::t('main', 'Käytä').'</button>
+	      </span>
+	    </div>
+	    <div id="kupongi_result"></div>
+	 </div>
+	</div>';
+	}
+
+	$path = Yii::app()->basePath."/../tiedostot/onlinevaraus_tuote/".Yii::app()->user->domain;
+	if(file_exists($path."/".$model->id.".jpg"))
+	{
+	$body .= '
+	<div class="row">
+	 <div class="col-xs-12">
+		<br><p><img src="../../tiedostot/onlinevaraus_tuote/'.Yii::app()->user->domain.'/'.$model->id.'.jpg" class="img-thumbnail"></p>
+	 </div>
+	</div>';
+	}
+
+	$body .= $blockAika;
+	$body .= $blockKohde;
+
+
+	$body .= '
+	 </div>
+	</div>';
+
+	if(isset($sivu) and $sivu == 'index'){
+
+	$body .= CHtml::link('Valitse aika','aika', array('class'=>'btn btn-lg seuraava disabled')).'<br>';
+
+	} elseif(isset($sivu) and $sivu == 'aika' and isset($_SESSION['onlinevaraus']['modelTV'])){
+	$body .= '
+	<div class="row">
+	  <div class="col-xs-6">
+			'.CHtml::link('Edellinen','index', array('class'=>'btn btn-lg edellinen')).'
+	  </div><div class="col-xs-6">
+			'.CHtml::link('Valitse osoite','osoite', array('class'=>'btn btn-lg seuraava')).'
+	  </div>
+	</div>';
+
+/*
+	} elseif(isset($sivu) and $sivu == 'osoite' and isset($_SESSION['onlinevaraus']['modelTV'])){
+	$body .= '
+	<div class="row">
+	  <div class="col-xs-6">
+			'.CHtml::link('Edellinen','aika', array('class'=>'btn btn-lg edellinen')).'
+
+	  </div><div class="col-xs-6">
+			'.CHtml::link('Maksu','maksu', array('class'=>'btn btn-lg seuraava tallennaUusi')).'
+	  </div>
+	</div>';
+
+
+	} elseif(isset($sivu) and $sivu == 'osoite' and isset($_SESSION['onlinevaraus']['modelKohde'])){
+	$body .= '
+	<div class="row">
+	  <div class="col-xs-6">
+			'.CHtml::link('Edellinen','aika', array('class'=>'btn btn-lg edellinen')).'
+	  </div><div class="col-xs-6">
+			'.CHtml::link('Maksu','maksu', array('class'=>'btn btn-lg seuraava')).'
+	  </div>
+	</div>';
+*/
+
+	} elseif(isset($sivu) and $sivu == 'maksu'){
+	$body .= CHtml::link('Kassalle','kassalle', array('class'=>'btn btn-lg edellinen'));
+	}
+
+	//$body .= CHtml::link('Keskeytä','index?keskeyta=true', array('class'=>'btn btn-warning btn-lg'));
+	$body .= '<br>';
+
+	echo json_encode($body);
+
+  } 
+?>
