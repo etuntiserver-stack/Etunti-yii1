@@ -1,0 +1,65 @@
+/*Etunti Onlinevaraus Styles*/
+
+body{
+  background: url('../../etusivuimg/Etunti-tausta-2.jpg');
+	background-size:     cover;             
+  background-repeat:   no-repeat;
+  background-position: center center;  
+	font-size: 18px;
+	font-family: "Ubuntu", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	line-height: 1.6;
+	color: #777;
+	-webkit-font-smoothing: antialiased;
+	font-weight: normal;
+}
+
+
+.background {
+  img();
+	width: 1440px;
+	height: 1085px;
+}
+
+.header {
+	width: 1440px;
+	height: 67.6px;
+	background-color: #ffffff;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+	width: 165.5px;
+	height: 39.8px;
+}
+
+.time-remaining {
+	width: 182px;
+	height: 24px;
+	font-family: OpenSans;
+	font-size: 18px;
+	font-weight: 600;
+	letter-spacing: 0;
+	text-align: left;
+	color: #90a6b1;
+}
+
+.select-service {
+	width: 620px;
+	height: 409px;
+	background-color: rgba(255, 255, 255, 0.97);
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.order-summary {
+	width: 620px;
+	height: 409px;
+	background-color: rgba(255, 255, 255, 0.97);
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.order-summary .show {
+	width: 171.6px;
+	height: 50px;
+	background-color: #515e6a;
+}
+

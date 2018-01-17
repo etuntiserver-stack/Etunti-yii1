@@ -1,16 +1,4 @@
 <?php
-//echo 'huoltokatko';
-//exit;
-/* @var $this OnlinevarausController */
-/* @var $dataProvider CActiveDataProvider */
-
-/*
-  if( $_SERVER['REMOTE_ADDR'] !== '::1' and $_SERVER['REMOTE_ADDR'] !== '127.0.0.1' )
-  {
-	echo 'Huoltokatko';
-	exit;
-  }
-*/
 
   if(!isset($_SESSION['domain']))
   {
@@ -34,7 +22,6 @@
     exit;
   }
 
-
 $asetukset = Asetukset::model()->findbypk(1);
 
 if($asetukset->onlinevaraus_alku == 0){
@@ -56,9 +43,11 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 
 //
 ?>
-<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_2.css">
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_ver2.css">
 
-<div class="container-fluid">
+
+
+<!-- ><div class="container-fluid">
 <br>
 
 <div class="row">
@@ -76,7 +65,16 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
    </div>
  </div>
 </div>
+-->
 
+  
+<div class="container">
+  <div class="row">
+   <div class="col-sm-offset-3 col-sm-6">
+    <div class="panel panel-default">
+      <div class="panel-heading"><?=Yii::t('main', 'Onlinevaraus')?></div>
+      <div class="panel-body">
+       <div class="row">
 
 <ul class="steps expanded even-4">
     <li class="active"><?php echo CHtml::link('PALVELU','index'); ?></li>
