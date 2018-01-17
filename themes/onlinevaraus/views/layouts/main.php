@@ -50,7 +50,7 @@ if( isset(Yii::app()->user->domain) )
 	<link href='https://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'>
   
   <!-- Haetaan Onlinevarauksen ihan oma CSS -->
-  <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets/css/onlinevaraus.css"/>
+  <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_onlinevaraus/css/onlinevaraus.css"/>
         
 
 	<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/img/favicon.ico">
@@ -124,43 +124,9 @@ Yii::app()->clientScript->registerPackage('jquery');
 
 	<?php echo $content; ?>
 
-
-
     <!-- ======================= JQuery libs =========================== -->
-<?php
-/*
+
     <!-- jQuery local-->
     <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/jquery.js"></script>
-*/
-?>
-    <!--Nav-->
-     <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/nav/tinynav.js"></script>
-
-    <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/nav/jquery.sticky.js" type="text/javascript"></script>
-    <!--Totop-->
-    <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/totop/jquery.ui.totop.js" ></script>
-    <!--Slide Revolution-->
-    <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/rs-plugin/js/jquery.themepunch.tools.min.js" ></script>
-    <script type='text/javascript' src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
-    <!--Ligbox-->
-    <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/fancybox/jquery.fancybox.js"></script>
-    <!-- carousel.js-->
-    <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/carousel/carousel.js"></script>
-    <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/inc/lomake/lomake.js"></script>
-    <!-- Parallax-->
-    <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/parallax/jquery.inview.js"></script>
-    <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/parallax/nbw-parallax.js"></script>
-    <!--Theme Options-->
-<!--     <script type="text/javascript" src="js/theme-options/theme-options.js"></script>
-    <script type="text/javascript" src="js/theme-options/jquery.cookies.js"></script> -->
-    <!-- Bootstrap.js-->
-    <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/bootstrap/bootstrap.js"></script>
-    <!--MAIN FUNCTIONS-->
-    <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/main.js?v=1.13"></script>
-    <!-- ======================= End JQuery libs =========================== -->
-
-  
-
-
     </body>
 </html>
