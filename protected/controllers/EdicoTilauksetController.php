@@ -157,6 +157,7 @@ class EdicoTilauksetController extends Controller
 	{
 
        		$criteria = new CDbCriteria();
+       		$criteria->order = " id DESC ";
 
 		if(isset($_GET['asiakas_id']))
 	        $criteria->addCondition (" asiakas_id='".$_GET['asiakas_id']."' ");
