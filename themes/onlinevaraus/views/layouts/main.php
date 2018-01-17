@@ -89,9 +89,8 @@ if( isset(Yii::app()->user->domain) )
     Yii::app()->clientScript->registerPackage('jquery');
   ?>
 
-	<?php if(isset($curpage_controller)): ?>
-	  <?php $this->renderPartial('/onlinevaraus/header'); ?>
-	<?php endif; ?>
+	<?php $this->renderPartial('/onlinevaraus/header'); ?>
+
 
 	<?php
 	foreach(Yii::app()->user->getFlashes() as $key => $message) {

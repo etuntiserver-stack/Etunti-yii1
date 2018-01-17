@@ -24,80 +24,11 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_ver2.css">
 
-
-
 <div class="container-fluid">
-
-
   
-<div class="container">
-  <div class="row">
-   <div class="col-sm-offset-3 col-sm-6">
-    <div class="panel panel-default">
-      <div class="panel-heading"><?=Yii::t('main', 'Onlinevaraus')?></div>
-      <div class="panel-body">
-       <div class="row">
-
-<ul class="steps expanded even-4">
-    <li class="active"><?php echo CHtml::link('PALVELU','index'); ?></li>
-    <li class="disabled"><?php echo Yii::t('main','AIKA'); ?></li>
-    <li class="disabled"><?php echo Yii::t('main','OSOITE'); ?></li>
-    <?php if(isset(Yii::app()->user->aid)): ?>
-    <li class="disabled"><?php echo Yii::t('main','VALMIS'); ?></li>
-    <?php else: ?>
-    <li class="disabled"><?php echo Yii::t('main','MAKSU'); ?></li>
-    <?php endif; ?>
-</ul>
-
-<br><br>
-
-
-
-
-                            <!-- Modal -->
-                            <div class="modal fade kysymys">
-                              <div class="modal-dialog">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4>Palvelun varaaminen</h4>
-                                  </div>
-                                  <div class="modal-body" style="text-align: left">
-                                  <p>
-
-1.       Valitse alasvetovalikosta pääpalvelu.<br>
-2.       Valitse huoneiston koko.<br>
-3.       Valitse haluamasi lisäpalvelut.<br>
-4.       Siirry eteenpäin valitsemaan palvelulle ajankohtaa.<br>
-
-<br><br> 
-
-<p>Jokaiselle palvelulle on määritelty palvelusisältö ja ne näkyvät palvelun yhteydessä. Lisäpalveluja voidaan valita rajaton määrä. Pääpalvelun ja lisäpalveluiden kesto ja kokonaishinta tulevat näkyviin yhteenvetoon. Asiakaspalvelun yhteystiedot ovat näkyvillä sivustolla. Ole yhteydessä asiakaspalveluun, mikäli sinulla on jotain kysyttävää.</p>
-
-				  </p>
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
-                                  </div>
-                                </div><!-- /.modal-content -->
-                              </div><!-- /.modal-dialog -->
-                            </div><!-- /.modal -->
-
-
-<?php 
-$asetukset = Asetukset::model()->findbypk(1);
-if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty($asetukset->checkout_salasana))
-{
-
-} else {
-		echo '<h3 class="alert alert-danger"><center>Checkout tunnukset puuttuu!</center></h3>';
-}
-?>
-
 <div class="row">
- <div class="col-sm-8">
-  <div class="well">
-   <center>
+    <div class="col-sm-6 col-sm-offset-3 select-service">
+        <center>
 
 	<div class="row">
 	  <div class="col-sm-4 col-sm-offset-4">
@@ -148,95 +79,10 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
         	echo CHtml::dropDownList('tyo_toimialue', 'tyo_toimialue', $list,
 		array('class'=>'form-control input-lg'));
         	?>
-	  </div>
-	</div>
-<?php /*
-	<div class="row" id="toimialueRow">
-	  <div class="col-sm-4 col-sm-offset-4">
-		<h4><?php echo Yii::t('main', 'Alennuskoodi'); ?></h4>
-		<?=CHtml::textField('kupongi', '', array('class'=>'form-control input-lg'))?>
-		<div id="kupongi_result"></div>
-	  </div>
-	</div>
-*/ ?>
-
-<br>
-	<div class="row" id="lispalvimg">
-	  <div class="col-sm-4 col-sm-offset-4">
-		<h4>Haluaisitko lisäpalveluita?</h4>
-	   	<img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/haluan.png">
-	  </div>
-	</div>
-<br>
-
-	<div id="lisapalvelulista"></div>
-
-   </center>
-  </div>
- </div>
- <div class="col-sm-4">
- 
-	      <div id="panGetContent"></div>
-
-<!--
-	      <div id="alennuskoodi">
-		<div class="well">
-		  <center><h4><?php echo Yii::t('main', 'Alennuskoodi'); ?></h4>
-			<form class="input-group">
-			<input type="text" class="form-control form-group input-lg">
-			<span class="input-group-btn">
-			  <input type="submit" class="btn btn-lg btn-group btn-warning" value="<?php echo Yii::t('main', 'Aktivoi'); ?>">
-			</span>	
-			</form>
-		  </center>
-		</div>
 	      </div>
--->
-
-	     <?php if(!empty($asetukset->onlinevaraus_laatu_luotettavuus)) : ?>
-	      <div>
-		<div class="well sininen">
-		  <center><h4><?php echo Yii::t('main', 'Laatu ja luotettavuus'); ?></h4></center>
-		  <p class="small"><?php echo str_replace("\n", "<br>", $asetukset->onlinevaraus_laatu_luotettavuus); ?></p>
-		</div>
-	      </div>
-	     <?php endif; ?>
-
-	     <?php if(!empty($asetukset->onlinevaraus_takuu_turvallisuus)) : ?>
-	      <div>
-		<div class="well sininen">
-		  <center><h4><?php echo Yii::t('main', 'Takuu ja turvallisuus'); ?></h4></center>
-		  <p class="small"><?php echo str_replace("\n", "<br>", $asetukset->onlinevaraus_takuu_turvallisuus); ?></p>
-		</div>
-	      </div>
-	     <?php endif; ?>
-
-	     <?php if(!empty($asetukset->onlinevaraus_asiakaspalvelu)) : ?>
-	      <div>
-		<div class="well sininen">
-		  <center><h4><?php echo Yii::t('main', 'Asiakaspalvelu'); ?></h4></center>
-		  <p class="small"><?php echo str_replace("\n", "<br>", $asetukset->onlinevaraus_asiakaspalvelu); ?></p>
-		</div>
-	      </div>
-	     <?php endif; ?>
-
-<?php if(!empty($asetukset->onlinevaraus_arvio_siivouksesta)) : ?>
-<div class="">
-  <div class="well sininen">
-	<center><h4><?php echo Yii::t('main', 'Arvio palvelusta'); ?></h4></center>
-        <p class="small"><?php echo str_replace("\n", "<br>", $asetukset->onlinevaraus_arvio_siivouksesta); ?></p>	
+	    </div>
   </div>
 </div>
-<?php endif; ?>
-
-
- </div>
-</div>
-
-<br>
-
-
-
 
     <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/rekisteriseloste" target="_blank"><?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> </a>
 
