@@ -529,7 +529,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
   <div class="panel heading-border">
    <div class="panel-body">
 
-    <legend><?php echo Yii::t('main', 'TUNTI / KPL'); ?></legend>
+    <legend><?php echo Yii::t('main', 'TUNNIT'); ?></legend>
       <div class="section fill mb5">
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
@@ -589,7 +589,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<br>
 	<?php
 	$criteria = new CDbCriteria();
-       	$criteria->condition = " aktiivinen=1 AND kategoria='laskutus' ";
+       	$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
 	echo CHtml::dropdownList('','', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
 	?>
@@ -1352,8 +1352,8 @@ $("#Lasku_as_nro").change(function() {
 		if(spdata['is_true'] == true)
 		{
 
-			$("#getkohdeT").html(spdata['body_t']);
-			$("#getkohdeKK").html(spdata['body_kk']);
+			$("#getkohdeT").html(spdata['kohteet']);
+			$("#getkohdeKK").html(spdata['kohteet']);
 			$("#tuntiKalut").show();
 
 
