@@ -547,11 +547,11 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<br>
 	<?php
 	$criteria = new CDbCriteria();
-       	$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND yksikko='h' ";
+       	$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND (yksikko='h' OR yksikko='kpl') ";
 	echo CHtml::dropdownList('palvelu','palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
 	?>
-	<span class="text-danger">Tuotteet jolla yksikkö "h"</span>
+	<span class="text-danger">Tuotteet jolla yksikkö "h" tai "kpl"</span>
 	</div>
       </div>
       
