@@ -22,10 +22,12 @@
 		<h3><?php echo $data->nimike; ?></h3>
 	</td>
 	<td>
+		<?php if(is_array(json_decode($data->kategoria, true))) : ?>
 		<?php $kat = json_decode($data->kategoria, true); ?>
 		<?php foreach($kat as $itm): ?>
 		 <div class="row"><div class="col-sm-12"><?=$itm?></div></div>
 		<?php endforeach; ?>
+		<?php endif; ?>
 	</td>
 	<td>
 		<?php echo $data->hinta_alv_0; ?>

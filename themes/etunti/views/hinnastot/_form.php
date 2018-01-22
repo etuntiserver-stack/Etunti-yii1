@@ -53,9 +53,9 @@
      <th><?=Yii::t('main', 'TUOTE')?></th>
      <th><?=Yii::t('main', 'HINTA TUOTTEISTA JA PALVELUISTA')?></th>
      <th><?=Yii::t('main', 'HINNASTON HINTA')?></th>
-     <th><?=Yii::t('main', 'HINNASTON ALV %')?></th>
-     <th><?=Yii::t('main', 'HINNASTON YHTEENSÄ')?></th>
-     <th><?=Yii::t('main', 'YKSIKKÖ')?></th>
+     <th><?=Yii::t('main', 'HINNASTON ALV%')?></th>
+     <th width="1"><?=Yii::t('main', 'YHTEENSÄ')?></th>
+     <th width="1"><?=Yii::t('main', 'YKSIKKÖ')?></th>
      <th></th>
     </tr>
 

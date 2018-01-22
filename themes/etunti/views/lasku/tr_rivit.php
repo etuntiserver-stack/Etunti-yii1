@@ -1,30 +1,34 @@
 <?php
-	$alv = 0;
-
+	$k = Kohteet::model()->findbypk($kohde_id);
+/*
 	if($onkokohde == 'onkohde')
 	{
 		$k = Kohteet::model()->findbypk($id);
-	}
 
-	if($onkokohde == 'eikohde')
-	{
-		$a = Asiakkaat::model()->findbypk($id);
+		if(isset($asiakas->id) and $asiakas->hinnasto_id != 0)
+		{
+			$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$tuote->id."' AND hinnastot_id='".$asiakas->hinnasto_id."' ");
+			if(isset($hinnasto->id))
+			{
+				$arr['hinta_alv_0'] = $hinnasto->hinnasto_hinta;
+				$arr['alv'] = $hinnasto->hinnasto_alv;
+				$arr['yksikko'] = $hinnasto->hinnasto_yksikko;
+				$arr['hinta_alv_sis'] = $hinnasto->hinnasto_yht;
+			}
+		}
+
 	}
+*/
 
 
 	// <-- Free text
 	$free_text = '';
 	if(isset($k->id))
 	{
-		$free_text = $k->osoite;
-		$a = Asiakkaat::model()->findbypk($k->asiakas_id);
-	}
-	if(isset($k->id))
-	{
-		$free_text = $k->osoite;
+		$free_text = $k->osoite.', ';
 	}
 
-	$free_text = $free_text.', '.date('d.m.Y',strtotime($_POST['from'])).'-'.date('d.m.Y',strtotime($_POST['to']));
+	$free_text = $free_text.date('d.m.Y',strtotime($_POST['from'])).'-'.date('d.m.Y',strtotime($_POST['to']));
 	//     Free text -->
 
 	$tuotePalvelu = '';

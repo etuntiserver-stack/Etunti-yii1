@@ -149,16 +149,13 @@ class LaskuController extends Controller
 	}
 
 
-	public function actionKohteen_tieto()
+	public function actionKohteen_tieto($id)
 	{
 		$return = '';
-		if(isset($_POST['id']))
+		$k=Kohteet::model()->findbypk($id);
+		if(isset($k->id) and $k->hinnoittelu != '')
 		{
-			$k=Kohteet::model()->findbypk($_POST['id']);
-			if(isset($k->id) and $k->hinnoittelu != '')
-			{
-				$return = 'Hinnoittelu: '.$k->hinnoittelu;
-			}	
+			$return = 'Hinnoittelu: '.$k->hinnoittelu;
 		}
 
 		echo json_encode($return);
@@ -354,7 +351,7 @@ class LaskuController extends Controller
 	}
 */
 
-	public function actionTr_rivit($id)
+	public function actionTr_rivit()
 	{
 
 		$num 		= $_POST['num'];
@@ -362,18 +359,19 @@ class LaskuController extends Controller
 		$from 		= $_POST['from'];
 		$to 		= $_POST['to'];
 		$hinta 		= $_POST['hinta'];
+		$alv 		= $_POST['alv'];
 		$yksikko 	= $_POST['yksikko'];
-		$onkokohde 	= $_POST['onkokohde'];
+		$kohde_id 	= $_POST['kohde_id'];
 
 		$this->renderPartial('tr_rivit',array(
 			'from'=>$from,
 			'to'=>$to,
 			'num'=>$num,
-			'id'=>$id,
 			'kpl'=>$kpl,
 			'hinta'=>$hinta,
+			'alv'=>$alv,
 			'yksikko'=>$yksikko,
-			'onkokohde'=>$onkokohde,
+			'kohde_id'=>$kohde_id,
 		));
 	}
 
@@ -417,27 +415,16 @@ class LaskuController extends Controller
 	public function actionLuoKohteista($id)
 	{
 
-		if( $_POST['yksikko'] == 'kk' )
+		if(isset($_POST['from']) and isset($_POST['to']))
 		{
-			$_POST['from'] = date("Y-m-d",strtotime($_POST['from'].' first day of this month'));
-			$_POST['to'] = date("Y-m-d",strtotime($_POST['to'].' last day of this month'));
+			$from 	= $_POST['from'];
+			$to 	= $_POST['to'];
 		}
 
-
-
-		$kohdet = "kohdenID!=''"; 
-		if(!empty($id))
-		$kohdet = "kohdenID=$id";
-
-		if($_POST['mistaLuo'] == 'luoAsiakaasta')
+		if( $_POST['jakso'] == 'kk' )
 		{
-			$as = Asiakkaat::model()->findByPk($id);
-			$k = Kohteet::model()->findAll(" asiakas_id='".$as->id."' AND aktiivinen=1 ");
-			$koh = array(); 
-			foreach($k as $item)
-				$koh[] = $item->id;
-			if(count($koh) > 0)
-			$kohdet = "kohdenID=".implode(" OR kohdenID=", array_values($koh));
+			$from = date("Y-m-d",strtotime($_POST['kuukausi'].' first day of this month'));
+			$to = date("Y-m-d",strtotime($from.' last day of this month'));
 		}
 
 
@@ -445,10 +432,10 @@ class LaskuController extends Controller
 		$criteria->select = "
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as t_tunnit, COUNT(*) as count ";
 		$criteria->condition = " 
-		($kohdet)
+		kohdenID=$id
 		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 		BETWEEN 
-		'".date("Y-m-d",strtotime($_POST['from']))."' AND '".date("Y-m-d",strtotime($_POST['to']))."'
+		'".date("Y-m-d",strtotime($from))."' AND '".date("Y-m-d",strtotime($to))."'
 		AND status='3'
 		AND sairaus!=1
 		AND laskutetaan=1
@@ -460,44 +447,150 @@ class LaskuController extends Controller
 		$criteria->select = "
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, COUNT(*) as count ";
 		$criteria->condition = "
-		($kohdet)
+		kohdenID=$id
 		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 		BETWEEN 
-		'".date("Y-m-d",strtotime($_POST['from']))."' AND '".date("Y-m-d",strtotime($_POST['to']))."'
+		'".date("Y-m-d",strtotime($from))."' AND '".date("Y-m-d",strtotime($to))."'
 		AND status='3'
 		AND sairaus!=1
 		AND laskutetaan=1
 		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";	
 		$lu = Mobile::model()->find($criteria); 
 	
+/*
 		$kk_kpl = 0;
-		if( $_POST['mistaLuo'] == 'luoKohteista' )
+		$date1 = new DateTime(date("Y-m-d", strtotime($_POST['from'])));
+		$date2 = new DateTime(date("Y-m-d", strtotime($_POST['to'])));
+		$interval = date_diff($date1, $date2);
+		$kk_kpl =  $interval->m + ($interval->y * 12);
+*/
+
+		$tunnit = 0;
+		$rivi_kpl = 0;
+
+		if(isset($lu->l_tunnit) or isset($tot->t_tunnit))
 		{
-			$date1 = new DateTime(date("Y-m-d", strtotime($_POST['from'])));
-			$date2 = new DateTime(date("Y-m-d", strtotime($_POST['to'])));
-			$interval = date_diff($date1, $date2);
-			$kk_kpl =  $interval->m + ($interval->y * 12);
+			$tunnit = $this->num($lu->l_tunnit+$tot->t_tunnit);
+			$rivi_kpl = $lu->count+$tot->count;
 		}
 
 		$return = array(
-			'tunnit'=>$this->num($lu->l_tunnit+$tot->t_tunnit),
-			'rivi_kpl'=>$lu->count+$tot->count,
-			'mistaLuo' => $_POST['mistaLuo'],
-			'kohdet' => $kohdet,
-			'kk_kpl' => $kk_kpl,
-			'fromto' => $_POST['from'].' - '.$_POST['to'],
+			'from' => $from,
+			'to' => $to,
+			'tunnit' => $tunnit,
+			'rivi_kpl' =>$rivi_kpl,
+			'fromto' => $from.' - '.$to,
+			'kohde_id' => $id,
 		);
+
+		// <-- Hinnastot
+		$kohteet = Kohteet::model()->findByPk($id);
+
+
+		$return['hinta'] 	= 0;
+		$return['alv'] 		= 0;
+		$return['kpl'] 		= 0;
+		$return['yksikko'] 	= 'kpl';
+
+		// <-- 1. TuotteetPalvelut
+		$tp = TuotteetPalvelut::model()->findbypk($_POST['tuotePalvelu']);
+		if(isset($tp->id))
+		{
+			if($tp->yksikko == 'h')
+			{
+				$return['kpl'] = $tunnit;
+			}
+			if($tp->yksikko == 'kpl')
+			{
+				$return['kpl'] = $rivi_kpl;
+			}
+			if($tp->yksikko == 'kk')
+			{
+				$return['kpl'] = 1;
+			}
+
+			$return['hinta'] 	= $tp->hinta_alv_0;
+			$return['alv'] 		= $tp->alv;
+			$return['yksikko']	= $tp->yksikko;
+		}
+		//     TuotteetPalvelut -->
+
+		// <-- 2. Asiakas
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " asiakasnumero='".$_POST['asiakasnumero']."' ";
+		$asiakas = Asiakkaat::model()->find($criteria);
+		if(isset($tp->id) and isset($asiakas->id) and $asiakas->hinnasto_id != 0)
+		{
+			$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$tp->id."' AND hinnastot_id='".$asiakas->hinnasto_id."' ");
+			if(isset($hinnasto->id))
+			{
+
+				if($tp->yksikko == 'h')
+				{
+					$return['kpl'] = $tunnit;
+				}
+				if($tp->yksikko == 'kpl')
+				{
+					$return['kpl'] = $rivi_kpl;
+				}
+				if($tp->yksikko == 'kk')
+				{
+					$return['kpl'] = 1;
+				}
+
+				$return['hinta'] 	= $hinnasto->hinnasto_hinta;
+				$return['alv'] 		= $hinnasto->hinnasto_alv;
+				$return['yksikko']	= $hinnasto->hinnasto_yksikko;
+			}
+		}
+		//     Asiakas -->
+
+		// <-- 3. Kohteet
+		if(isset($tp->id) and isset($kohteet->id) and $kohteet->hinnasto_id != 0)
+		{
+			$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$tp->id."' AND hinnastot_id='".$kohteet->hinnasto_id."' ");
+			if(isset($hinnasto->id))
+			{
+
+				if($tp->yksikko == 'h')
+				{
+					$return['kpl'] = $tunnit;
+				}
+				if($tp->yksikko == 'kpl')
+				{
+					$return['kpl'] = $rivi_kpl;
+				}
+				if($tp->yksikko == 'kk')
+				{
+					$return['kpl'] = 1;
+				}
+
+				$return['hinta'] 	= $hinnasto->hinnasto_hinta;
+				$return['alv'] 		= $hinnasto->hinnasto_alv;
+				$return['yksikko']	= $hinnasto->hinnasto_yksikko;
+			}
+		}
+		//     Kohteet -->
+
+		//     Hinnastot -->
+
+
+		if(isset($kohteet->id))
+		{
+			$return['osoite'] = $kohteet->osoite;
+		}
+
 		echo json_encode($return);
 
 	}
 
-	public function actionEtsikohde($id)
+	public function actionEtsikohde($asiakasnumero)
 	{
 
 		$is_true = false;
        		$criteria = new CDbCriteria();
-       		$criteria->condition = " asiakasnumero='".$id."' ";
-		$as = Asiakkaat::model()->find($criteria);
+       		$criteria->condition = " asiakasnumero='".$asiakasnumero."' ";
+		$asiakas = Asiakkaat::model()->find($criteria);
 
 		$kohteet = '';
 		$kohteet .= '<br><select class="selectpicker kohteet etsikohde_alasvetovaliko" multiple title="Valitse kohteet">';
@@ -505,20 +598,21 @@ class LaskuController extends Controller
 		// <-- Kohteet
        		$criteria = new CDbCriteria();
        		$criteria->condition = " 
-			asiakas_id='".$as->id."' 
+			asiakas_id='".$asiakas->id."' 
 			AND aktiivinen=1
 		";
 		$k = Kohteet::model()->findAll($criteria);
-		foreach($k as $a)
+		foreach($k as $item)
 		{
 			$is_true = true;
-			$kohteet .= '<option value="'.$a->id.'">Kohde: '.$a->osoite.'</option>';
+			$kohteet .= '<option value="'.$item->id.'">Kohde: '.$item->osoite.'</option>';
 		}
 		//     Kohteet -->
 
 		$return = array(
 			'kohteet'=>$kohteet,
 			'is_true' => $is_true,
+			'asiakas_id' => $asiakas->id
 		);
 
 		echo json_encode($return);
@@ -534,7 +628,7 @@ class LaskuController extends Controller
 	public function actionEtsiasiakas($id)
 	{
 
-		$a = Asiakkaat::model()->find(" asiakasnumero='".$id."' ");
+		$a = Asiakkaat::model()->findByPk($id);
 		$k = Kohteet::model()->findAll(" asiakas_id='".$id."' AND aktiivinen=1 ");
 
 		$tyyppi = '';

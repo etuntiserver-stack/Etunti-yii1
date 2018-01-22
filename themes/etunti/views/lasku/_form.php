@@ -530,7 +530,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
    <div class="panel-body">
 
     <legend><?php echo Yii::t('main', 'TUNNIT'); ?></legend>
-      <div class="section fill mb5">
+      <div class="row section fill mb5">
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
    		<input type="text" id="from" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y',strtotime('first day of last month', time())); ?>">
@@ -540,27 +540,28 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div>
       </div>
 
-      <div class="section fill mb5">
+      <div class="row section fill mb5">
 	<div class="col-sm-6">
 		<div id="getkohdeT" class="form-group"></div>
 	</div><div class="col-sm-6">
 	<br>
 	<?php
 	$criteria = new CDbCriteria();
-       	$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
+       	$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND yksikko='h' ";
 	echo CHtml::dropdownList('palvelu','palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
 	?>
+	<span class="text-danger">Tuotteet jolla yksikkö "h"</span>
 	</div>
       </div>
       
-      <div class="section fill mb5">
+      <div class="row section fill mb5">
       <div class="col-sm-6">
 
       </div>
       <div class="col-sm-6">
 	<br>
-        	<b class="btn btn-success pull-right luoRiviTunti"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
+        	<b class="btn btn-success pull-right luoRiviTunti" jakso="tunti"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
       </div>
       </div>
 
@@ -572,37 +573,38 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
    <div class="panel-body">
 
     <legend><?php echo Yii::t('main', 'KK'); ?></legend>
-      <div class="section fill mb5">
+      <div class="row section fill mb5">
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="from" class="form-control form-group datepickerMY" value="<?php echo date('Y-m'); ?>">
+   		<input type="text" id="kuukausi" class="form-control form-group datepickerMY" value="<?php echo date('Y-m'); ?>">
 	</div><div class="col-sm-6">
-		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="to" class="form-control form-group datepickerMY" value="<?php echo date('Y-m'); ?>">
+		<!--<b class="glyphicon glyphicon-calendar"></b> 
+   		<input type="text" id="to" class="form-control form-group datepickerMY" value="<?php echo date('Y-m'); ?>">-->
 	</div>
       </div>
 
-      <div class="section fill mb5">
+      <div class="row section fill mb5">
 	<div class="col-sm-6">
 		<div id="getkohdeKK" class="form-group"></div>
 	</div><div class="col-sm-6">
 	<br>
 	<?php
 	$criteria = new CDbCriteria();
-       	$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
+       	$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND yksikko='kk' ";
 	echo CHtml::dropdownList('','', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
 	?>
+	<span class="text-danger">Tuotteet jolla yksikkö "kk"</span>
 	</div>
       </div>
       
-      <div class="section fill mb5">
+      <div class="row section fill mb5">
       <div class="col-sm-6">
 
       </div>
       <div class="col-sm-6">
 	<br>
-        	<b class="btn btn-success pull-right luoRiviTunti"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
+        	<b class="btn btn-success pull-right luoRiviTunti" jakso="kk"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
       </div>
       </div>
 
@@ -1194,21 +1196,33 @@ function yhteensaTotal(){
 
 $(".luoRiviTunti").click(function() {
 
+	var jakso = $(this).attr("jakso");
+	var kuukausi = $(this).closest('.panel-body').find("#kuukausi").val();
 	var from = $(this).closest('.panel-body').find("#from").val();
 	var to = $(this).closest('.panel-body').find("#to").val();
 	var kohteet = $(this).closest('.panel-body').find('.etsikohde_alasvetovaliko').val();
-	var tuotePalvelu = $(this).closest(".panel-body").find('.valitseTuote').val();
+	var tuotePalvelu = $(this).closest(".panel-body").find('.valitseTuote option:selected').val();
 
-	console.log(kohteet);
+	console.log(tuotePalvelu);
 
-	if (from  === '') 
+	if (from  === '' && jakso == 'tunti') 
 	{
-	     $('#from').css({"border" : "2px #f14010 solid"}).focus();
+	     $(this).closest('.panel-body').find("#from").css({"border" : "2px #f14010 solid"}).focus();
 	     return false;
 	}
-	if (to  === '') 
+	if (to  === '' && jakso == 'tunti') 
 	{
-	     $('#to').css({"border" : "2px #f14010 solid"}).focus();
+	     $(this).closest('.panel-body').find("#to").css({"border" : "2px #f14010 solid"}).focus();
+	     return false;
+	}
+	if (kuukausi  === '' && jakso == 'kk') 
+	{
+	     $(this).closest('.panel-body').find("#kuukausi").css({"border" : "2px #f14010 solid"}).focus();
+	     return false;
+	}
+	if (tuotePalvelu  === '') 
+	{
+	     $(this).closest(".panel-body").find('.valitseTuote').css({"border" : "2px #f14010 solid"}).focus();
 	     return false;
 	}
 	if (!kohteet) 
@@ -1218,85 +1232,72 @@ $(".luoRiviTunti").click(function() {
 
 	} 
 
-	    pyyntoRiville(kohteet,from,to,tuotePalvelu);
+	    pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu);
 });
 
 
 
 
-function pyyntoRiville(kohteet,from,to,tuotePalvelu){
+function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu){
 
+/*
 	    if($('#tkoodi_1').val() === '')
 	    $("#trRivi_1").remove();
+*/
+	$("#tuntienTulos").removeClass("alert bg-danger").html('');
+	var asiakasnumero = $("#Lasku_as_nro option:selected").val();
+	var kpl = 1;
+	var yksikko = 'kpl';
+	var hinta = 0;
 
 	    $.each(kohteet, function( index, value ) {
 
-	    var spH = value.split("//");
-	    if(spH[3] == 'onkohde')
-	    var mistaLuo = 'luoKohteista';
-
-	    if(spH[3] == 'eikohde')
-	    var mistaLuo = 'luoAsiakaasta';
-
-	    console.log(mistaLuo);
-
 	        $.ajax({
-	           url: 'luoKohteista?id='+spH[0],
+	           url: 'luoKohteista?id='+value,
 		   type: 'POST',
-		   data: { from : from, to : to, mistaLuo : mistaLuo, yksikko : spH[2] },
+		   data: { jakso : jakso, kuukausi : kuukausi, asiakasnumero : asiakasnumero, from : from, to : to, tuotePalvelu : tuotePalvelu },
 	           success: function(data){
-	               	console.log(data);
-
+	               	//console.log(data);
 			data = JSON.parse(data);
 
-			var num = 0;
-			if((data['tunnit'] == 0) && (spH[2] == "h"))
+			if(parseInt(data['rivi_kpl']) == 0)
 			{
-				$("#tuntienTulos").addClass("alert alert-danger").html('<b>Ei löydy tuntia</b>');
-				//$("#rivit").hide('slow');
+				$("#tuntienTulos").addClass("alert bg-danger").append('<p><b>Ei löydy tuntia osoitteesta: </b>' + data['osoite'] + '</p>');
+				return true;
 			}
 
-			if((data['tunnit'] > 0) || (data['rivi_kpl'] > 0) || (spH[2] == "kk"))
-			{
-			num = $("table#TableRivit tbody tr").length+index;
-			
-			var kpl = 0;
-			var yksikko = spH[2];
+			   var num = 0;
+			   num = $("table#TableRivit tbody tr").length+index;
+			   var sendData = { 
+					kohde_id : value,
+					num : num,
+					from : data['from'],
+					to : data['to'],
+					kpl : data['kpl'],
+					hinta : data['hinta'],
+					alv : data['alv'],
+					yksikko : data['yksikko'],
+					tuotePalvelu : tuotePalvelu
+			   };
 
-			if((mistaLuo == 'luoAsiakaasta') && (yksikko == "kk")){
-			  kpl = '1';
-			}
-			if((mistaLuo == 'luoKohteista') && (yksikko == "kk") && (data['kk_kpl'] > 0)){
-			  kpl = data['kk_kpl'];
-			}
-			if(yksikko == "h"){
-			  kpl = data['tunnit'];
-			}
-			if(yksikko == "kpl"){
-			  kpl = data['rivi_kpl'];
-			}
-
-	        	$.ajax({
-		           url: 'tr_rivit?id='+spH[0],
-			   type: 'POST',
-			   data: { num : num, from : from, to : to, kpl : kpl, hinta : spH[1], yksikko : yksikko, onkokohde : spH[3], tuotePalvelu : tuotePalvelu },
-		           success: function(data){
+	        	   $.ajax({
+		              url: 'tr_rivit',
+			      type: 'POST',
+			      data: sendData,
+		              success: function(data){
 				console.log(value);
 				$("table#TableRivit tbody tr").last().after(data);
+				$("#rivit").show('slow');
+				$(".subm").show('slow');
 
 				Rivi();
 				eachLaskenta();
-
-				$("#tuntienTulos").removeClass("alert alert-danger").html('');
-				$("#rivit").show('slow');
-				$(".subm").show('slow');
-		           },
-		           error: function(XMLHttpRequest, textStatus, errorThrown){
+	
+		              },
+		              error: function(XMLHttpRequest, textStatus, errorThrown){
 		               	console.log(XMLHttpRequest);
-			   }
-		        });
-
-			}
+			      }
+		           });
 	
 
 	           },
@@ -1306,7 +1307,6 @@ function pyyntoRiville(kohteet,from,to,tuotePalvelu){
 	        });
 	    });
 
-	    
 	    jumpToPageBottom();
 
 }
@@ -1335,6 +1335,7 @@ $("#Lasku_yid").change(function() {
 $("#Lasku_as_nro").change(function() {
 
     var asiakas = $("#Lasku_as_nro option:selected").val();
+    var asiakas_id = 0;
     if(!asiakas)
     {
 	alert("Asiakasnumero puuttuu");
@@ -1344,14 +1345,16 @@ $("#Lasku_as_nro").change(function() {
 	$("#kalut").show('slow');
 
         $.ajax({
-           url: 'etsikohde?id='+asiakas,
+           url: 'etsikohde?asiakasnumero='+asiakas,
+	   async : false,
            success: function(data){
 		var spdata = JSON.parse(data);
-               	console.log(spdata);
+               	//console.log(spdata);
 
 		if(spdata['is_true'] == true)
 		{
 
+			asiakas_id = spdata['asiakas_id'];
 			$("#getkohdeT").html(spdata['kohteet']);
 			$("#getkohdeKK").html(spdata['kohteet']);
 			$("#tuntiKalut").show();
@@ -1373,24 +1376,10 @@ $("#Lasku_as_nro").change(function() {
 			});
 			//    multiselect -->
 
-			//$('.selectpicker').selectpicker();
-
 		} else {
 			$("#tuntiKalut").hide();
 			$("#kkKalut").hide();
 		}
-
-		/*
-		if(spdata['vinkki'] !== ''){
-
-			var allennus = JSON.parse(spdata['vinkki']);
-			if(allennus['vinkki_tunnit'] && allennus['vinkki_prosentti'])
-			{
-				$('#ilmoitusAllennusta').addClass('text-success').html('<h1>Asiakas ALE: <span id="aleAsiakkaasta">'+ allennus['vinkki_tunnit'] +'</span> tunti, ' + allennus['vinkki_prosentti'] + '%</h1>');
-				$('#ale_1').val(parseInt(allennus['vinkki_prosentti']));
-			}
-		}
-		*/
 
            },
            error: function(XMLHttpRequest, textStatus, errorThrown){
@@ -1398,9 +1387,8 @@ $("#Lasku_as_nro").change(function() {
 	   }
         });
 
-
         $.ajax({
-           url: 'etsiasiakas?id='+asiakas,
+           url: 'etsiasiakas?id='+asiakas_id,
            success: function(data){
                	//console.log(data);
 		var sp = JSON.parse(data).split("//");
@@ -1524,14 +1512,12 @@ $(document).delegate(".etsikohde_alasvetovaliko","change",function(){
 
   if($(this).val())
   {
-	var thisVal = $(this).val()[0].split("//");
-	if(thisVal[3] == 'onkohde')
-	{
+	var thisVal = $(this).val()[0];
        	console.log(thisVal);
         $.ajax({
            url: 'kohteen_tieto',
-	   type: 'POST',
-	   data: { id : thisVal[0] },
+	   type: 'GET',
+	   data: { id : thisVal },
            success: function(data){
 		var sp = JSON.parse(data);
 		if(sp !== '')
@@ -1542,7 +1528,6 @@ $(document).delegate(".etsikohde_alasvetovaliko","change",function(){
                	console.log(XMLHttpRequest);
 	   }
         });
-	}
 
    } else {
 		$('#hinnoitelu').html('');
