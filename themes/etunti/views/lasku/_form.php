@@ -1104,6 +1104,7 @@ $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 			$("#kpl_"+num).val(1);
 			$("#tkoodi_"+num).val(sp['tuotenimi']);
 			$("#hinta_"+num).val(parseFloat(sp['hinta_alv_0']));
+			$("#hinnasto_rivi_id_"+num).val(sp['hinnasto_rivi_id']);
 			$("#hinta_"+num).closest('tr').find('.hinnaston_otsikko').attr("title", sp['hinnaston_otsikko']);
 			$("#yksikko_"+num+" option[value="+sp['yksikko']+"]").attr('selected','selected');
 			$("#alv_"+num+" option[value="+sp['alv']+"]").attr('selected','selected');

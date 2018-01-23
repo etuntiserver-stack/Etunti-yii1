@@ -37,15 +37,7 @@ class LaskunRivit extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'laskun_rivit';
-		$check_this_table = false;
-		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
-		if(!isset(Yii::app()->session[$tb_name]))
-		{
-			Yii::app()->session[$tb_name] = true;
-			$check_this_table = true;
-		}
-
-
+		$check_this_table = true;
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
@@ -59,8 +51,8 @@ class LaskunRivit extends DB2ActiveRecord
 		$table_structure = array(
 
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'lid' => 'int(11) ',
-                     'rivi' => 'int(11) ',
+                     'lid' => 'int(11)',
+                     'rivi' => 'int(11)',
                      'tkoodi' => 'varchar(255) ',
                      'nimike' => 'varchar(100) ',
                      'kpl' => 'varchar(20) ',
@@ -73,10 +65,7 @@ class LaskunRivit extends DB2ActiveRecord
                      'yhteensa_alv' => 'varchar(20) ',
                      'tuoteID' => 'int(11) ',
                      'free_text' => 'varchar(250) ',
-
-
-
-
+		     'hinnasto_rivi_id' => 'int(11)',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -99,7 +88,7 @@ class LaskunRivit extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('lid, rivi, tkoodi, kpl, alv', 'required'),
-			array('lid, rivi, tuoteID', 'numerical', 'integerOnly'=>true),
+			array('lid, rivi, tuoteID, hinnasto_rivi_id', 'numerical', 'integerOnly'=>true),
 			array('nimike,kpl', 'length', 'max'=>100),
 			array('tkoodi, nimike, free_text', 'length', 'max'=>255),
 			array('yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv', 'length', 'max'=>20),

@@ -390,6 +390,7 @@ class LaskuController extends Controller
 				'hinta_alv_sis' => $tuote->hinta_alv_sis,
 			);
 			$arr['hinnaston_otsikko'] = Yii::t('main', 'Hinnastoa ei määritetty');
+			$arr['hinnasto_rivi_id'] = 0;
 
 			if(isset($asiakas->id) and $asiakas->hinnasto_id != 0)
 			{
@@ -403,6 +404,7 @@ class LaskuController extends Controller
 
 					$hn = Hinnastot::model()->findByPk($hinnasto->hinnastot_id);
 					$arr['hinnaston_otsikko'] = Yii::t('main', 'Hinnasto: '). ' ' .$hn->hinnaston_otsikko;
+					$arr['hinnasto_rivi_id'] = $hinnasto->id;
 				}
 			}
 			echo json_encode($arr);
@@ -795,7 +797,9 @@ class LaskuController extends Controller
 				$lr->ale	=$_POST['ale'][$key];
 
 				if(isset($_POST['tuoteID']))
-					$lr->tuoteID	=$_POST['tuoteID'][$key];
+					$lr->tuoteID = $_POST['tuoteID'][$key];
+				if(isset($_POST['hinnasto_rivi_id']))
+					$lr->hinnasto_rivi_id = $_POST['hinnasto_rivi_id'][$key];
 
 				/*
 				if(	isset($as->id) 
@@ -910,7 +914,9 @@ class LaskuController extends Controller
 				$lr->ale	=$_POST['ale'][$key];
 
 				if(isset($_POST['tuoteID']))
-					$lr->tuoteID	=$_POST['tuoteID'][$key];
+					$lr->tuoteID = $_POST['tuoteID'][$key];
+				if(isset($_POST['hinnasto_rivi_id']))
+					$lr->hinnasto_rivi_id = $_POST['hinnasto_rivi_id'][$key];
 
 				$lr->veroton	=$_POST['veroton'][$key];
 				$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
