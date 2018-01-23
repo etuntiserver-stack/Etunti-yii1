@@ -618,7 +618,6 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 
 	<input type="hidden" class="form-control" id="kohteistaRivit" readonly><br>
 	<div id="tuntienTulos"></div>
-	<div id="hinnoitelu"></div>
 
 	<?php if(!isset($model->id)) : ?> 
 	<div id="ilmoitusAllennusta"></div>
@@ -691,7 +690,8 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 </TABLE>
 </div>
 
-  
+<br>
+	<div id="hinnoitelu"></div>
 
 <br><br><br><br><br><br>
 
@@ -1338,7 +1338,6 @@ $("#Lasku_yid").change(function() {
         });
 });
 
-
 $("#Lasku_as_nro").change(function() {
 
     var asiakas = $("#Lasku_as_nro option:selected").val();
@@ -1516,19 +1515,25 @@ $("#Lasku_toimitusosoite").change(function() {
 // hinnoitelu
 $(document).delegate(".etsikohde_alasvetovaliko","change",function(){
 
+  var jakso = $(this).closest('.panel-body').find(".luoRiviTunti").attr("jakso");
+  var kuukausi = $(this).closest('.panel-body').find("#kuukausi").val();
+  var from = $(this).closest('.panel-body').find("#from").val();
+  var to = $(this).closest('.panel-body').find("#to").val();
 
-  if($(this).val())
-  {
-	var thisVal = $(this).val()[0];
-       	console.log(thisVal);
+  $('#hinnoitelu').hide('370').html('');
+  console.log($(this, 'option:selected').val());
+  $.each($(this, 'option:selected').val(), function( index, value ) {
+
+	var thisVal = value;
         $.ajax({
-           url: 'kohteen_tieto',
-	   type: 'GET',
-	   data: { id : thisVal },
+           url: 'kohteen_tieto?id='+ thisVal,
+	   type: 'POST',
+	   data: { jakso : jakso, kuukausi : kuukausi, from : from, to : to },
            success: function(data){
-		var sp = JSON.parse(data);
-		if(sp !== '')
-		$('#hinnoitelu').html('<div class="alert alert-success">'+data+'</div>');
+		var d = JSON.parse(data);
+		if(d['return']){
+		 $('#hinnoitelu').append(d['return']).show('370');
+		}
 
            },
            error: function(XMLHttpRequest, textStatus, errorThrown){
@@ -1536,9 +1541,7 @@ $(document).delegate(".etsikohde_alasvetovaliko","change",function(){
 	   }
         });
 
-   } else {
-		$('#hinnoitelu').html('');
-   }
+   });
 
 });
 

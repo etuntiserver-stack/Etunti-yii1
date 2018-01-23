@@ -151,14 +151,99 @@ class LaskuController extends Controller
 
 	public function actionKohteen_tieto($id)
 	{
+
+		if(isset($_POST['from']) and isset($_POST['to']))
+		{
+			$from 	= $_POST['from'];
+			$to 	= $_POST['to'];
+		}
+
+		if( $_POST['jakso'] == 'kk' )
+		{
+			$from = date("Y-m-d",strtotime($_POST['kuukausi'].' first day of this month'));
+			$to = date("Y-m-d",strtotime($from.' last day of this month'));
+		}
+
+		$crit = $this->criteriaKohdeLasku($id, $from, $to);
+		$luetut = $crit['lu'];
+		$toteutuneet = $crit['tot'];
+
+       		$criteria = new CDbCriteria();
+		$criteria->condition = $toteutuneet;
+		$tot = Toteutuneet::model()->findAll($criteria); 
+	
+	       	$criteria = new CDbCriteria();
+		$criteria->condition = $luetut;	
+		$lu = Mobile::model()->findAll($criteria); 
+
+		$hyvaksytyt = array_merge($lu, $tot);
+
+
+
 		$return = '';
+		$hinnoittelu = '';
 		$k=Kohteet::model()->findbypk($id);
 		if(isset($k->id) and $k->hinnoittelu != '')
 		{
-			$return = 'Hinnoittelu: '.$k->hinnoittelu;
+			$hinnoittelu = '<h3>Hinnoittelu: '.$k->hinnoittelu.'</h3><br>';
 		}
 
-		echo json_encode($return);
+		$h = Hinnastot::model()->findByPk($k->hinnasto_id);
+		if(isset($h->id))
+		{
+
+			$return .= '<div class="panel heading-border"><div class="panel-body">';
+			$return .= $hinnoittelu;
+			$return .= '<h2>'.Yii::t('main', 'Hinnasto: '). ' ' .$h->hinnaston_otsikko.'</h2>';
+			$hr = HinnastotRivi::model()->findAll(" hinnastot_id='".$h->id."' ");
+			$return .= '<table class="table table-bordered">';
+			$return .= '<tr>';
+			$return .= '<th>TUOTE</th>';
+			$return .= '<th>HINTA TUOTTEISTA JA PALVELUISTA</th>';
+			$return .= '<th>HINNASTON HINTA</th>';
+			$return .= '<th>HINNASTON ALV%</th>';
+			$return .= '<th>YHTEENSÄ</th>';
+			$return .= '<th>YKSIKKÖ</th>';
+			$return .= '</tr>';
+			foreach($hr as $item)
+			{
+			  $tuote = TuotteetPalvelut::model()->findbypk($item->tuote_palvelu_id);
+			  if(isset($tuote->id))
+			  {
+				$return .= '<tr>';
+				$return .= '<td>'.$tuote->nimike.'</td>';
+				$return .= '<td>'.$tuote->hinta_alv_0.'</td>';
+				$return .= '<td>'.$item->hinnasto_hinta.'</td>';
+				$return .= '<td>'.$item->hinnasto_alv.'</td>';
+				$return .= '<td>'.$item->hinnasto_yht.'</td>';
+				$return .= '<td>'.$item->hinnasto_yksikko.'</td>';
+				$return .= '</tr>';
+			  }
+			}
+			$return .= '</table>';
+
+			$return .= '<h2>'.Yii::t('main', 'Hyväksytyt tunnit').' '.$k->osoite.'</h2>';
+			$return .= '<table class="table table-bordered">';
+				$return .= '<tr>';
+				$return .= '<th>Päivämäärä</td>';
+				$return .= '<td>Aloitus</td>';
+				$return .= '<td>Lopetus</td>';
+				$return .= '</tr>';
+			foreach($hyvaksytyt as $item)
+			{
+				$return .= '<tr>';
+				$return .= '<td>'.date("d.m.Y", strtotime($item->aloitan)).'</td>';
+				$return .= '<td>'.date("H:i", strtotime($item->aloitan)).'</td>';
+				$return .= '<td>'.date("H:i", strtotime($item->loppui)).'</td>';
+				$return .= '</tr>';
+			}
+			$return .= '</table>';
+
+
+			$return .= '</div></div>';
+		}
+
+		echo json_encode(array('return' => $return));
 	}
 
 	public function actionHyvityslasku($id)
@@ -434,35 +519,25 @@ class LaskuController extends Controller
 			$to = date("Y-m-d",strtotime($from.' last day of this month'));
 		}
 
+		$crit = $this->criteriaKohdeLasku($id, $from, $to);
+		$luluetut= $crit['lu'];
+		$toteutuneet = $crit['tot'];
 
        		$criteria = new CDbCriteria();
 		$criteria->select = "
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as t_tunnit, COUNT(*) as count ";
-		$criteria->condition = " 
-		kohdenID=$id
-		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-		BETWEEN 
-		'".date("Y-m-d",strtotime($from))."' AND '".date("Y-m-d",strtotime($to))."'
-		AND status='3'
-		AND sairaus!=1
-		AND laskutetaan=1
-		";
+		$criteria->condition = $toteutuneet;
 		$tot = Toteutuneet::model()->find($criteria); 
 	
 	
 	       	$criteria = new CDbCriteria();
 		$criteria->select = "
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, COUNT(*) as count ";
-		$criteria->condition = "
-		kohdenID=$id
-		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-		BETWEEN 
-		'".date("Y-m-d",strtotime($from))."' AND '".date("Y-m-d",strtotime($to))."'
-		AND status='3'
-		AND sairaus!=1
-		AND laskutetaan=1
-		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";	
+		$criteria->condition = $luetut;	
 		$lu = Mobile::model()->find($criteria); 
+
+
+
 	
 /*
 		$kk_kpl = 0;
@@ -592,6 +667,32 @@ class LaskuController extends Controller
 
 		echo json_encode($return);
 
+	}
+
+	protected function criteriaKohdeLasku($id, $from, $to)
+	{
+
+		$tot = " 
+		kohdenID=$id
+		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+		BETWEEN 
+		'".date("Y-m-d",strtotime($from))."' AND '".date("Y-m-d",strtotime($to))."'
+		AND status='3'
+		AND sairaus!=1
+		AND laskutetaan=1
+		";
+
+		$lu = "
+		kohdenID=$id
+		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+		BETWEEN 
+		'".date("Y-m-d",strtotime($from))."' AND '".date("Y-m-d",strtotime($to))."'
+		AND status='3'
+		AND sairaus!=1
+		AND laskutetaan=1
+		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";	
+
+		return array('lu' => $lu, 'tot' => $tot );
 	}
 
 	public function actionEtsikohde($asiakasnumero)
