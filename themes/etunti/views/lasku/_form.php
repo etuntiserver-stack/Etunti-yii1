@@ -1087,6 +1087,10 @@ $(document).delegate("table#TableRivit .valitseTuote","change",function(){
     var tuoteID = $(this).val();
     var num = $(this).attr("num");
     var asiakas_nro = $("#Lasku_as_nro option:selected").val();
+    if(!asiakas_nro && '<?=$model->as_nro?>' !== '')
+    {
+	asiakas_nro = '<?=$model->as_nro?>';
+    }
 
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/lasku/valitsetuote',
