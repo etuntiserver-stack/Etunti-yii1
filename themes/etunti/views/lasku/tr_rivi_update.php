@@ -1,5 +1,13 @@
 <?php
-
+	$hinnaston_otsikko = Yii::t('main', 'Hinnastoa ei määritetty');
+	$hr = HinnastotRivi::model()->findByPk($rivi['hinnasto_rivi_id']);
+	if(isset($hr->id))
+	{
+		$hn = Hinnastot::model()->findByPk($hr->hinnastot_id);
+		if(isset($hn->id)) {
+			$hinnaston_otsikko = '<span class="btn btn-default fa fa-money" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hinnasto: '). ' ' .$hn->hinnaston_otsikko.'"></span>';
+		}
+	}
 ?>
 
      <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
@@ -21,7 +29,7 @@
 	  <div class="input-group">
 	   <input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $rivi['hinta']; ?>" step="0.01"> 
 	   <span class="input-group-btn">
-		<span class="btn btn-default fa fa-money hinnaston_otsikko" data-toggle="tooltip" data-placement="bottom" title="<?=Yii::t('main', 'Hinnastoa ei määritetty')?>"></span>
+		<?=$hinnaston_otsikko?>
 	   </span>
 	  </div>
 	  <span class="errmsg"></span>
