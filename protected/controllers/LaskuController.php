@@ -520,7 +520,7 @@ class LaskuController extends Controller
 		}
 
 		$crit = $this->criteriaKohdeLasku($id, $from, $to);
-		$luluetut= $crit['lu'];
+		$luetut= $crit['lu'];
 		$toteutuneet = $crit['tot'];
 
        		$criteria = new CDbCriteria();
