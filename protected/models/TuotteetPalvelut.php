@@ -33,13 +33,6 @@ public $image;
 	{
 		$tb_name = 'onlinevaraus_tuotteet';
 		$check_this_table = true;
-		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
-		if(!isset(Yii::app()->session[$tb_name]))
-		{
-			Yii::app()->session[$tb_name] = true;
-			$check_this_table = true;
-		}
-
 
 		if($check_this_table)
 		{
