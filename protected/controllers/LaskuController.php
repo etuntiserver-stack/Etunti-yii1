@@ -389,6 +389,8 @@ class LaskuController extends Controller
 				'yksikko' => $tuote->yksikko,
 				'hinta_alv_sis' => $tuote->hinta_alv_sis,
 			);
+			$arr['hinnaston_otsikko'] = Yii::t('main', 'Hinnastoa ei määritetty');
+
 			if(isset($asiakas->id) and $asiakas->hinnasto_id != 0)
 			{
 				$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$tuote->id."' AND hinnastot_id='".$asiakas->hinnasto_id."' ");
@@ -398,6 +400,9 @@ class LaskuController extends Controller
 					$arr['alv'] = $hinnasto->hinnasto_alv;
 					$arr['yksikko'] = $hinnasto->hinnasto_yksikko;
 					$arr['hinta_alv_sis'] = $hinnasto->hinnasto_yht;
+
+					$hn = Hinnastot::model()->findByPk($hinnasto->hinnastot_id);
+					$arr['hinnaston_otsikko'] = Yii::t('main', 'Hinnasto: '). ' ' .$hn->hinnaston_otsikko;
 				}
 			}
 			echo json_encode($arr);
@@ -487,6 +492,7 @@ class LaskuController extends Controller
 		$kohteet = Kohteet::model()->findByPk($id);
 
 
+		$return['hinnasto_rivi_id'] 	= 0;
 		$return['hinta'] 	= 0;
 		$return['alv'] 		= 0;
 		$return['kpl'] 		= 0;
@@ -538,6 +544,7 @@ class LaskuController extends Controller
 					$return['kpl'] = 1;
 				}
 
+				$return['hinnasto_rivi_id'] 	= $hinnasto->id;
 				$return['hinta'] 	= $hinnasto->hinnasto_hinta;
 				$return['alv'] 		= $hinnasto->hinnasto_alv;
 				$return['yksikko']	= $hinnasto->hinnasto_yksikko;
@@ -565,6 +572,7 @@ class LaskuController extends Controller
 					$return['kpl'] = 1;
 				}
 
+				$return['hinnasto_rivi_id'] 	= $hinnasto->id;
 				$return['hinta'] 	= $hinnasto->hinnasto_hinta;
 				$return['alv'] 		= $hinnasto->hinnasto_alv;
 				$return['yksikko']	= $hinnasto->hinnasto_yksikko;

@@ -42,7 +42,17 @@
 		$tuotePalvelu 	= '';
 	}
 
-
+	$hinnasto_rivi_id = '';
+	$hinnaston_otsikko = Yii::t('main', 'Hinnastoa ei määritetty');
+	$hr = HinnastotRivi::model()->findByPk($_POST['hinnasto_rivi_id']);
+	if(isset($hr->id))
+	{
+		$hinnasto_rivi_id = $hr->id;
+		$hn = Hinnastot::model()->findByPk($hr->hinnastot_id);
+		if(isset($hn->id)) {
+			$hinnaston_otsikko = '<span class="btn btn-default fa fa-money" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hinnasto: '). ' ' .$hn->hinnaston_otsikko.'"></span>';
+		}
+	}
 ?>
 
      <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
@@ -58,7 +68,15 @@
 		<?php echo $this->yksikkot(null); ?>
 		</select>
 	</TD>
-	<TD><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $hinta; ?>" step="0.01"><span class="errmsg"></span></TD>
+	<TD>
+	  <div class="input-group">
+	   <input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $hinta; ?>" step="0.01"> 
+	   <span class="input-group-btn">
+		<?=$hinnaston_otsikko?>
+	   </span>
+	  </div>
+	  <span class="errmsg"></span>
+	</TD>
 	<TD>
 		<select type="text" name="alv[<?php echo $num; ?>]" id="alv_<?php echo $num; ?>" class="form-control">
 		<option value="<?php echo $alv; ?>"><?php echo $alv; ?></option>

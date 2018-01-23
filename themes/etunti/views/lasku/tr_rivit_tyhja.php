@@ -50,7 +50,15 @@
 		<?php echo $yksikkot; ?>
 		</select>
 	</TD>
-	<TD><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?=$hinta?>" step="0.01"><span class="errmsg"></span></TD>
+	<TD>
+	  <div class="input-group">
+	   <input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $hinta; ?>" step="0.01"> 
+	   <span class="input-group-btn">
+		<span class="btn btn-default fa fa-money hinnaston_otsikko" data-toggle="tooltip" data-placement="bottom" title="<?=Yii::t('main', 'Hinnastoa ei määritetty')?>"></span>
+	   </span>
+	  </div>
+	  <span class="errmsg"></span>
+	</TD>
 	<TD>
 		<select type="text" name="alv[<?php echo $num; ?>]" id="alv_<?php echo $num; ?>" class="form-control">
 		<?php echo $this->alv(null); ?>

@@ -1100,6 +1100,7 @@ $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 			$("#kpl_"+num).val(1);
 			$("#tkoodi_"+num).val(sp['tuotenimi']);
 			$("#hinta_"+num).val(parseFloat(sp['hinta_alv_0']));
+			$("#hinta_"+num).closest('tr').find('.hinnaston_otsikko').attr("title", sp['hinnaston_otsikko']);
 			$("#yksikko_"+num+" option[value="+sp['yksikko']+"]").attr('selected','selected');
 			$("#alv_"+num+" option[value="+sp['alv']+"]").attr('selected','selected');
 			$("#tuoteID_"+num).val(sp['id']);
@@ -1260,7 +1261,7 @@ function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu){
 	               	//console.log(data);
 			data = JSON.parse(data);
 
-			if(parseInt(data['rivi_kpl']) == 0)
+			if(parseInt(data['rivi_kpl']) == 0 && data['yksikko'] !== 'kk')
 			{
 				$("#tuntienTulos").addClass("alert bg-danger").append('<p><b>Ei löydy tuntia osoitteesta: </b>' + data['osoite'] + '</p>');
 				return true;
@@ -1276,6 +1277,7 @@ function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu){
 					kpl : data['kpl'],
 					hinta : data['hinta'],
 					alv : data['alv'],
+					hinnasto_rivi_id : data['hinnasto_rivi_id'],
 					yksikko : data['yksikko'],
 					tuotePalvelu : tuotePalvelu
 			   };
