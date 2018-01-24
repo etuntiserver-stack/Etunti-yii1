@@ -195,7 +195,7 @@ class LaskuController extends Controller
 			$return .= '<div class="panel heading-border"><div class="panel-body">';
 			$return .= '<h1>'.$k->osoite.'</h1>';
 			$return .= $hinnoittelu;
-			$return .= '<h4>'.Yii::t('main', 'Hinnasto: '). ' ' .$h->hinnaston_otsikko.'</h4>';
+			$return .= '<h2>'.Yii::t('main', 'Hinnasto: '). ' ' .$h->hinnaston_otsikko.'</h2>';
 			$hr = HinnastotRivi::model()->findAll(" hinnastot_id='".$h->id."' ");
 			$return .= '<table class="table table-bordered">';
 			$return .= '<tr>';
@@ -225,7 +225,7 @@ class LaskuController extends Controller
 
 			if(count($hyvaksytyt) > 0)
 			{
-			   $return .= '<h4>'.Yii::t('main', 'Hyväksytyt tunnit').'</h4>';
+			   $return .= '<h2>'.Yii::t('main', 'Hyväksytyt tunnit').'</h2>';
 			   $return .= '<table class="table table-bordered">';
 				$return .= '<tr>';
 				$return .= '<th>Päivämäärä</td>';
