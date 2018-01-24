@@ -191,6 +191,7 @@ class LaskuController extends Controller
 		$h = Hinnastot::model()->findByPk($k->hinnasto_id);
 		if(isset($h->id))
 		{
+			$return .= '<h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> '.Yii::t('main', 'Tietoja: '). ' </h2>';
 
 			$return .= '<div class="panel heading-border"><div class="panel-body">';
 			$return .= '<h1>'.$k->osoite.'</h1>';
