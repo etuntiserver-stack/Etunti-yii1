@@ -112,13 +112,10 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 	
    }
    ?>
-   
-   
-   
+      
 </div>
 
-
-
+<!-- Order summary footer-->
 <div class="onlinevaraus-order-summary">
   <div class="col-sm-6 col-sm-offset-3 order-summary">Order Summary</div>
 </div>
