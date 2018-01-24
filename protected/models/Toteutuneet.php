@@ -54,14 +54,7 @@ public $count;
 	public function tableName()
 	{
 		$tb_name = 'sivexkuitti_repaired';
-		$check_this_table = false;
-		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
-		if(!isset(Yii::app()->session[$tb_name]))
-		{
-			Yii::app()->session[$tb_name] = true;
-			$check_this_table = true;
-		}
-
+		$check_this_table = true;
 
 		if($check_this_table)
 		{
@@ -104,7 +97,7 @@ public $count;
                      'sairaus' => 'int(1) ',
                      'laskutettu' => 'int(1) ',
                      'laskutetaan' => 'int(1) DEFAULT 1 ',
-
+                     'tuoteID' => 'int(11)',
 
 		);
 
@@ -128,7 +121,7 @@ public $count;
 		// will receive user inputs.
 		return array(
 			//array('kid, asiakas_num, time, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, tyoajanlaatu, tyoajanmerkinta', 'required'),
-			array('kid, requests, kohdenID, tid, status, admin, sairaus, laskutetaan', 'numerical', 'integerOnly'=>true),
+			array('kid, requests, kohdenID, tid, status, admin, sairaus, laskutetaan, tuoteID', 'numerical', 'integerOnly'=>true),
 			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id, tekijan_nimi', 'length', 'max'=>50),
 			array('imei, asiakas_hyvaksy, sim_serial_number, kohde_kannasta, hyvaksytty, tyoajanlaatu, tyoajanmerkinta', 'length', 'max'=>100),
 			array('my_location, tietoja', 'length', 'max'=>1000),
@@ -185,6 +178,7 @@ public $count;
 			'tyoajanlaatu' => Yii::t('main', 'Tyoajanlaatu'),
 			'tyoajanmerkinta' => Yii::t('main', 'Tyoajanmerkinta'),
 			'sairaus'=> Yii::t('main', 'Sairaus'),
+			'tuoteID' => Yii::t('main', 'Tuote/Palvelu'),
 		);
 	}
 

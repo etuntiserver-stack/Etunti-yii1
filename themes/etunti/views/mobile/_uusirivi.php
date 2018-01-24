@@ -65,6 +65,16 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 		<?php echo $form->error($model,'tekijan_nimi'); ?>
 	</div>
 
+	<div class="section">
+		<?php echo $form->labelEx($model,'tuoteID'); ?>
+		<?php
+		$criteria = new CDbCriteria();
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
+		echo $form->dropDownList($model,'tuoteID', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
+		array('empty'=>'Valitse tuote/palvelu','class'=>'form-control'));
+		?>
+	</div>
+
     </div><div class="col-sm-3">
 
 	<div class="section fill mb5">

@@ -6,6 +6,7 @@
 if(isset($_POST['forid'])){
   $s= Mobile::model()->findbypk($_POST['forid']);
   $model->kohde_kannasta = $s->kohde_kannasta;
+  $model->tuoteID = $s->tuoteID;
 }
 
 	  $s->loppui = date("d.m.Y H:i",strtotime($s->loppui));
@@ -56,19 +57,30 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
   <div class="col-sm-12">
 	<div class="section">
 		<?php echo $form->labelEx($model,'viesti'); ?>
-		<?php echo $form->textarea($model,'viesti',array('value'=>$s->viesti, 'rows'=>4,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->textarea($model,'viesti',array('value'=>$s->viesti, 'rows'=>4,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'viesti'); ?>
 	</div>
 
 	<div class="section">
 		<?php echo $form->labelEx($model,'tietoja'); ?>
-		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tietoja'); ?>
 	</div>
+  <br>
   </div>
 
-
   <div class="col-sm-4">
+
+	<div class="section">
+		<?php echo $form->labelEx($model,'tuoteID'); ?>
+		<?php
+		$criteria = new CDbCriteria();
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
+		echo $form->dropDownList($model,'tuoteID', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
+		array('empty'=>'Valitse tuote/palvelu','class'=>'form-control'));
+		?>
+	</div>
+
 	<div class="section">
 		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
 		<?php 

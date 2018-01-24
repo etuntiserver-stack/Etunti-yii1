@@ -272,7 +272,12 @@ $(document).ready(function(){
     var Mobile_loppui = $("#Mobile_loppui").val();
     var Mobile_kohde_kannasta = $("#Mobile_kohde_kannasta").val();
     var Mobile_status = $("#Mobile_status").val();
+    var Mobile_tuoteID = $("#Mobile_tuoteID option:selected").val();
 
+    if (Mobile_tuoteID  === '') {
+        $('#Mobile_tuoteID').css({"border" : "2px #f14010 solid"}).focus();
+        return false;
+    }
     if (Mobile_aloitan  === '__:__') {
         $('#Mobile_aloitan').css({"border" : "2px #f14010 solid"}).focus();
         return false;
