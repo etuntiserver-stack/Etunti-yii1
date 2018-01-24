@@ -121,7 +121,7 @@ session_start();
   $db = 'etuntifw';
   $db_host = 'localhost';
   $etuntifw_user = 'root';
-  $etuntifw_pass = '';
+  $etuntifw_pass = '111111';
 
   $db2 = '';
   if(isset($_SESSION['domain']))
