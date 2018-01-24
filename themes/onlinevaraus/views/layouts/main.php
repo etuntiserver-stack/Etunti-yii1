@@ -54,6 +54,8 @@ if( isset(Yii::app()->user->domain) )
 
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/modernizr.js"></script>
   
+   <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/onlinevaraus.js"></script>
+  
   <!-- Haetaan Onlinevarauksen ihan oma CSS -->
   <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_ver2.css"/>
         
