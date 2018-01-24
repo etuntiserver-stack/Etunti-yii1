@@ -129,7 +129,7 @@ session_start();
 
   $db2_host = 'localhost';
   $db2_user = 'root';
-  $db2_pass = '';
+  $db2_pass = '111111';
 
   } else {
 
