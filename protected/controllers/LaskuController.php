@@ -222,28 +222,38 @@ class LaskuController extends Controller
 			}
 			$return .= '</table>';
 
-			$return .= '<h2>'.Yii::t('main', 'Hyväksytyt tunnit').' '.$k->osoite.'</h2>';
-			$return .= '<table class="table table-bordered">';
+			if(count($hyvaksytyt) > 0)
+			{
+			   $return .= '<h2>'.Yii::t('main', 'Hyväksytyt tunnit').' '.$k->osoite.'</h2>';
+			   $return .= '<table class="table table-bordered">';
 				$return .= '<tr>';
 				$return .= '<th>Päivämäärä</td>';
 				$return .= '<td>Aloitus</td>';
 				$return .= '<td>Lopetus</td>';
+				$return .= '<td>Kesto</td>';
 				$return .= '</tr>';
-			foreach($hyvaksytyt as $item)
-			{
+			   foreach($hyvaksytyt as $item)
+			   {
 				$return .= '<tr>';
 				$return .= '<td>'.date("d.m.Y", strtotime($item->aloitan)).'</td>';
 				$return .= '<td>'.date("H:i", strtotime($item->aloitan)).'</td>';
 				$return .= '<td>'.date("H:i", strtotime($item->loppui)).'</td>';
+				$return .= '<td>'.$this->sprint((strtotime($item->loppui)-strtotime($item->aloitan))).'</td>';
 				$return .= '</tr>';
+			   }
+			   $return .= '</table>';
 			}
-			$return .= '</table>';
 
 
 			$return .= '</div></div>';
 		}
 
 		echo json_encode(array('return' => $return));
+	}
+
+	protected function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
 	public function actionHyvityslasku($id)

@@ -1522,6 +1522,9 @@ $(document).delegate(".etsikohde_alasvetovaliko","change",function(){
 
   $('#hinnoitelu').hide('370').html('');
   console.log($(this, 'option:selected').val());
+
+  if( $(this, 'option:selected').val() )
+  {
   $.each($(this, 'option:selected').val(), function( index, value ) {
 
 	var thisVal = value;
@@ -1542,7 +1545,7 @@ $(document).delegate(".etsikohde_alasvetovaliko","change",function(){
         });
 
    });
-
+   }
 });
 
 
