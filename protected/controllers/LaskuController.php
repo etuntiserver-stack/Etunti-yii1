@@ -229,6 +229,7 @@ class LaskuController extends Controller
 			   $return .= '<h2>'.Yii::t('main', 'Hyväksytyt tunnit').'</h2>';
 			   $return .= '<table class="table table-bordered">';
 				$return .= '<tr>';
+				$return .= '<th>Tuote</td>';
 				$return .= '<th>Päivämäärä</td>';
 				$return .= '<td>Aloitus</td>';
 				$return .= '<td>Lopetus</td>';
@@ -236,7 +237,10 @@ class LaskuController extends Controller
 				$return .= '</tr>';
 			   foreach($hyvaksytyt as $item)
 			   {
+			  	$tuote = TuotteetPalvelut::model()->findbypk($item->tuoteID);
+				if(isset($tuote->nimike)) { $tuote = $tuote->nimike; } else { $tuote = ''; }
 				$return .= '<tr>';
+				$return .= '<td>'.$tuote.'</td>';
 				$return .= '<td>'.date("d.m.Y", strtotime($item->aloitan)).'</td>';
 				$return .= '<td>'.date("H:i", strtotime($item->aloitan)).'</td>';
 				$return .= '<td>'.date("H:i", strtotime($item->loppui)).'</td>';
