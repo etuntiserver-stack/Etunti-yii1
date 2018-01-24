@@ -25,17 +25,9 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_ver2.css">
 
 <div class="container-fluid ">
-<<<<<<< HEAD
 <div class="row ">
     <div class="col-sm-6 col-sm-offset-3 select-service">
         <center>
-=======
-  
-<div class="row ">
-    <div class="col-sm-6 col-sm-offset-3 select-service">
-        <center>
-
->>>>>>> 1a6efd9be3634d4f9ad5102ad92e8e10f429201f
 	<div class="row">
 	  <div class="col-sm-6 col-sm-offset-3">
 
@@ -48,11 +40,7 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 	       	$criteria = new CDbCriteria();
 	       	$criteria->condition = " nayta_sivuilla=1 ";
 	       	$criteria->order = " nimike ";
-<<<<<<< HEAD
 		$onlineTuotteet = TuotteetPalvelut::model()->findAll($criteria);
-=======
-		$onlineTuotteet = OnlinevarausTuotteet::model()->findAll($criteria);
->>>>>>> 1a6efd9be3634d4f9ad5102ad92e8e10f429201f
 		foreach($onlineTuotteet as $data)
 		{
 		  echo 
@@ -95,13 +83,6 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 
 </div>
 
-<<<<<<< HEAD
-=======
-  <div class="row">
-    <div class="col-sm-6 col-sm-offset-3 order-summary">Order Summary</div>
-  </div>
-
->>>>>>> 1a6efd9be3634d4f9ad5102ad92e8e10f429201f
     <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/rekisteriseloste" target="_blank"><?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> </a>
 
    <?php
@@ -137,15 +118,10 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 </div>
 
 
-<<<<<<< HEAD
 
 <div class="onlinevaraus-order-summary">
   <div class="col-sm-6 col-sm-offset-3 order-summary">Order Summary</div>
 </div>
-=======
-<?php echo $this->renderPartial('_footer'); ?>
-
->>>>>>> 1a6efd9be3634d4f9ad5102ad92e8e10f429201f
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -348,10 +324,6 @@ $(document).delegate(".lisat","click",function(){
 		console.log(data);
     	}
     });
-<<<<<<< HEAD
-=======
-
->>>>>>> 1a6efd9be3634d4f9ad5102ad92e8e10f429201f
   }
 
   function tuntienTarkistus(){
