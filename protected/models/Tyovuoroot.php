@@ -138,6 +138,7 @@ public $tilausviesti;
 		return array(
 		        'kohteet' => array(self::BELONGS_TO, 'Kohteet', 'kohde'),
 		        'tt' => array(self::BELONGS_TO, 'Tyontekijat', 'tid'),
+		        'tp' => array(self::BELONGS_TO, 'TuotteetPalvelut', 'tuoteID'),
 		);
 	}
 

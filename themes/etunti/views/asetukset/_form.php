@@ -157,6 +157,18 @@
     <legend><h2><?php echo Yii::t('main','Työvuorot asetukset'); ?></h2></legend>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tuote_tyovuorossa'); ?>
+		<?php 
+        	$l = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'tuote_tyovuorossa', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'tuote_tyovuorossa'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_tyovuorossa'); ?>
 		<?php 
         	$l = array(
