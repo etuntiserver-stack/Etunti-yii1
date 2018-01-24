@@ -102,6 +102,10 @@ header{
 }
 
 .order-summary .show {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1a6efd9be3634d4f9ad5102ad92e8e10f429201f
 	background-color: #515e6a;
 }
 
@@ -112,6 +116,7 @@ header{
 
 }
 
+<<<<<<< HEAD
 .onlinevaraus-order-summary{
  
   position: fixed;
@@ -128,3 +133,5 @@ header{
   width: 100%;
   
 }
+=======
+>>>>>>> 1a6efd9be3634d4f9ad5102ad92e8e10f429201f
