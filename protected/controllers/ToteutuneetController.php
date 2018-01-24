@@ -105,6 +105,7 @@ class ToteutuneetController extends Controller
 			(isset($k->id))? $osoite = $k->osoite:$osoite = '';
 
 				$mobiili = new Mobile;
+				$mobiili->tuoteID = $tv->tuoteID;
 				$mobiili->tid = $tv->tid;
 				$mobiili->kohdenID = $tv->kohde;
 				$mobiili->kohde_kannasta = $osoite;
