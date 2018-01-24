@@ -104,6 +104,9 @@ class TuotteetPalvelutController extends Controller
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
 
+		$asetukset=Asetukset::model()->findbypk(1);
+		if($asetukset->netvisor_kaytto == 1){ $netvisor = true; } else { $netvisor = false; }
+
 		$model=new TuotteetPalvelut;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -153,6 +156,7 @@ class TuotteetPalvelutController extends Controller
 
 		$this->render('create',array(
 			'model'=>$model,
+			'netvisor' => $netvisor
 		));
 	}
 
@@ -169,6 +173,9 @@ class TuotteetPalvelutController extends Controller
 	   $site = Yii::app()->createController('Site');
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
+
+		$asetukset=Asetukset::model()->findbypk(1);
+		if($asetukset->netvisor_kaytto == 1){ $netvisor = true; } else { $netvisor = false; }
 
 		$model=$this->loadModel($id);
 
@@ -236,7 +243,8 @@ class TuotteetPalvelutController extends Controller
 		}
 
 		$this->render('update',array(
-			'model'=>$model,
+			'model' => $model,
+			'netvisor' => $netvisor
 		));
 	}
 

@@ -149,7 +149,7 @@ $(".muokaValiko").click(function() {
 		<?php echo $form->error($model,'yksikko'); ?>
 	</div>
 
-
+	<?php if($netvisor) : ?>
 	<legend><h3><?php echo Yii::t('main', 'Netvisor'); ?></h3></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'varastoitava'); ?>
@@ -176,7 +176,7 @@ $(".muokaValiko").click(function() {
 
 		<?php echo $form->error($model,'myyntituote'); ?>
 	</div>
-
+	<?php endif; ?>
 
  </div>
 
