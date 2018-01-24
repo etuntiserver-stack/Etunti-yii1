@@ -3,6 +3,8 @@
   if(isset($_SESSION['onlinevaraus']['paapalvelu']))
 	$model = OnlinevarausTuotteet::model()->findbypk($_SESSION['onlinevaraus']['paapalvelu']);
 
+  echo "PÄÄPALVELU";
+
   // <-- Kupongi
   $blockKupongi = '';
   if(isset(Yii::app()->user->alennuskoodi) and !empty($this->Kupongi_checker(Yii::app()->user->alennuskoodi)))

@@ -24,6 +24,7 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_ver2.css">
 
+
 <div class="container-fluid ">
 <div class="row ">
     <div class="col-sm-6 col-sm-offset-3 select-service">
@@ -99,7 +100,7 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 	
    }
 
-   foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/Konevuokraus_toimitusehdot.*')) as $file) 
+/*   foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/Konevuokraus_toimitusehdot.*')) as $file) 
    {
 		$explNimi = explode("/",$file);
 		// <-- file_safe_opener
@@ -111,6 +112,7 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 		//     file_safe_opener -->
 	
    }
+   */
    ?>
       
 </div>
@@ -119,7 +121,4 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 <div class="onlinevaraus-order-summary">
   <div class="col-sm-6 col-sm-offset-3 order-summary">Order Summary</div>
 </div>
-
-
-
 

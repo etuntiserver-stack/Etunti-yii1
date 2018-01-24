@@ -4,7 +4,7 @@ $(document).ready(function(){
   localStorage.clear();
 
 
-$("#lispalvimg").click(function(){
+$("#lispalvelut").click(function(){
 	$('#lisapalvelulista').show('slow');
 });
 
@@ -36,6 +36,8 @@ $(document).delegate("#kupongi_add","click",function(){
 
 $("#palvelu").change(function(){
 
+  window.alert("Palvelut!");
+  
    clearAll();
    var id = $(this).val();
 
