@@ -38,13 +38,10 @@
 	<td>
 		<?php echo $data->hinta_alv_sis; ?>
 	</td>
-<?php /*
+	<?php if($netvisor) : ?>
 	<td>
-		<?php echo $alasvetovaliko; ?>
+		<?=$data->netvisorkey?>
 	</td>
-	<td>
-		<?php echo $lisapalvelut; ?>
-	</td>
-*/ ?>
+	<?php endif; ?>
 </tr>
 

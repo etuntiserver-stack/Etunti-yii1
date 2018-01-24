@@ -273,6 +273,9 @@ class TuotteetPalvelutController extends Controller
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
 
+		$asetukset=Asetukset::model()->findbypk(1);
+		if($asetukset->netvisor_kaytto == 1){ $netvisor = true; } else { $netvisor = false; }
+
        		$criteria = new CDbCriteria();
 	        $criteria->order = " palvelu=0 DESC,nimike ASC ";
 
@@ -298,7 +301,7 @@ class TuotteetPalvelutController extends Controller
 		));
 
 		$dataProvider->pagination->pageSize = 50;
-		$this->render('index', array('dataProvider' => $dataProvider));
+		$this->render('index', array('dataProvider' => $dataProvider, 'netvisor' => $netvisor));
 	}
 
 	/**

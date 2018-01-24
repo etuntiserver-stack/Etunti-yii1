@@ -115,11 +115,16 @@
   <th><?php echo Yii::t('main', 'Hinta (ALV 0)'); ?></th>
   <th><?php echo Yii::t('main', 'ALV'); ?></th>
   <th><?php echo Yii::t('main', 'Hinta (ALV sis)'); ?></th>
+  <?php if($netvisor) : ?>
+  <th><?php echo Yii::t('main', 'Netvisor key'); ?></th>
+  <?php endif; ?>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
+	'viewData' => array( 'netvisor' => $netvisor ),
+
   	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
 
 
