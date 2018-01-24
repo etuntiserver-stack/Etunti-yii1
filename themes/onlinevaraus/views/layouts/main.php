@@ -101,7 +101,7 @@ if( isset(Yii::app()->user->domain) )
 
 	<?php echo $content; ?>
 
-<?php $this->renderPartial('/onlinevaraus/footer'); ?>
+<?php // $this->renderPartial('/onlinevaraus/footer'); ?>
 
     <!-- ======================= JQuery libs =========================== -->
 

@@ -102,7 +102,6 @@ header{
 }
 
 .order-summary .show {
-
 	background-color: #515e6a;
 }
 
@@ -113,3 +112,19 @@ header{
 
 }
 
+.onlinevaraus-order-summary{
+ 
+  position: fixed;
+  height: 100px;
+  bottom: 0;
+  width: 100%;
+  
+}
+
+.footer{
+  position: fixed;
+  height: 100px;
+  bottom: 0;
+  width: 100%;
+  
+}
