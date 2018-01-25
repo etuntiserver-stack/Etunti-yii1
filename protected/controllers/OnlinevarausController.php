@@ -752,7 +752,59 @@ class OnlinevarausController extends Controller
 		if(!isset(Yii::app()->user->domain))
 		die('Error: domain');
 
-		$this->render('osoite');
+		$asetukset = Asetukset::model()->findbypk(1);
+
+		if(isset($_POST['poistaTamaTiedosto'])){
+			unlink($_POST['poistaTamaTiedosto']);
+			exit;
+		}
+		if(isset($_POST['getMyPictures']))
+		{
+
+			$i = 0;
+		  	$kuvat = '';
+
+		    	if(isset($_SESSION['onlinevaraus']['kuvat']))
+		    	{
+				foreach(array_reverse(glob('tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/'.$_SESSION['onlinevaraus']['kuvat'].'_*.*')) as $file) {
+				$i++;
+				$explNimi = explode("/",$file);
+			 	$kuvat .= '
+					<div class="form-inline" id="t_'.$_SESSION['onlinevaraus']['kuvat'].$i.'">
+				  		<div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" for="t_'.$_SESSION['onlinevaraus']['kuvat'].$i.'">X</div>
+				  		&nbsp;&nbsp;&nbsp;<a href="../../'.$file.'">'.end($explNimi).'</a>
+					</div>
+				';
+			 	}
+		    	}
+			echo json_encode($kuvat);
+			exit;
+		}
+
+		if(isset($_POST['kuvanLisaaminen']))
+		{
+			function rand_string( $length ) {
+				$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+				return substr(str_shuffle($chars),0,$length);
+			}
+			if(!isset($_SESSION['onlinevaraus']['kuvat']))
+				$_SESSION['onlinevaraus']['kuvat'] = rand_string(8);
+
+			if (!file_exists(Yii::app()->basePath."/../tiedostot/onlinevaraus_temp/".Yii::app()->user->domain)) {
+			  	mkdir(Yii::app()->basePath."/../tiedostot/onlinevaraus_temp/".Yii::app()->user->domain, 0777, true);
+			}
+
+			$uploaddir = Yii::app()->basePath.'/../tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/';
+			$uploadfile = $uploaddir . basename($_SESSION['onlinevaraus']['kuvat'].'_'.$_FILES['file']['name']);
+			if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+				//echo "";
+			}
+			exit;
+		}
+
+		$this->render('osoite', array(
+			'asetukset' => $asetukset
+		));
 	}
 
 	public function actionMaksu()
@@ -905,11 +957,11 @@ $months=array(
  	  }
 
 	  $tila = '';
-	  if($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] != date("Y-m-d", strtotime($date)))
+	  if($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] != date("d.m.Y", strtotime($date)))
 		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
 	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and !isset($_SESSION['onlinevaraus']['valittuPVM']))
 		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
-	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] == date("Y-m-d", strtotime($date)))
+	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] == date("d.m.Y", strtotime($date)))
 		 $tila .= '<td class="day link orangeColor cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
 	  elseif($date < date("Y-m-d"))
 		 $tila .= '<td class="day kiinni" >'.$currentDay.'</td>';
