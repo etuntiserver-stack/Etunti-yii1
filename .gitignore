@@ -23,8 +23,6 @@ ohjevideot
 !tiedostot/templates/mallit/*
 !tiedostot/etusivu/*
 !tiedostot/trust/*
-img/*
-img
 protected/views/domainit/sql/*
 protected/runtime/*
 protected/runtime/application.log
