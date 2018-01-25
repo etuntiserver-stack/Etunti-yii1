@@ -198,7 +198,7 @@ if(isset(Yii::app()->user->aid)){
 
 
                             <!-- Modal -->
-                            <div class="modal fade kysymys">
+                            <div class="modal fade kysymys mikaOnOnlinevaraus">
                               <div class="modal-dialog">
                                 <div class="modal-content">
                                   <div class="modal-header">
