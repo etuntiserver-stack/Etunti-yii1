@@ -3,7 +3,7 @@
    $asetukset = Asetukset::model()->findbypk(1);
    $body = '
 
-	      <h4>'.date("d.m.Y", strtotime($_POST['pvm'])).'</h4>
+	      <h3>'.date("d.m.Y", strtotime($_POST['pvm'])).'</h3>
 
    ';
    $body .= '<input type="hidden" value="'.date("d.m.Y", strtotime($_POST['pvm'])).'" id="valinnuPvm">';

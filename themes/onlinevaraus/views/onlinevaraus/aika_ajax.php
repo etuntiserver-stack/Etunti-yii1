@@ -15,6 +15,10 @@
      $month = date('m',strtotime("last day of +1 month"));
      $year = date('Y',strtotime("last day of +1 month"));
 
+     $body .= $this->build_calendar($month, $year, $dateArray, $asetukset->onlinevaraus_aikaisintaan_paivamaara, $numOfWeek);
+
+     $month = date('m',strtotime("last day of +2 month"));
+     $year = date('Y',strtotime("last day of +2 month"));
 
      $body .= $this->build_calendar($month, $year, $dateArray, $asetukset->onlinevaraus_aikaisintaan_paivamaara, $numOfWeek);
 

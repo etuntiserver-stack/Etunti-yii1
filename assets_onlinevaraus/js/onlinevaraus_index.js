@@ -36,7 +36,6 @@ $(document).delegate("#kupongi_add","click",function(){
 
 $("#palvelu").change(function(){
 
-  window.alert("Palvelut!");
   
    clearAll();
    var id = $(this).val();
@@ -57,10 +56,10 @@ var t = setTimeout( function() {
 		}
 			//checker();
 		if(data[1] != ''){
-			$("#lispalvimg").show('slow');
 			$('#lisapalvelulista').html(data[1]);
+			$('.lisapalvelulista').show('370');
 		} else {
-			$("#lispalvimg").hide('slow');
+			$('.lisapalvelulista').hide('370');
 		}
 
 		ajaaPalveluSave();
@@ -116,6 +115,7 @@ $(document).delegate("#toinen_valiko_values","change",function(){
 		if(data)
 		{
 			$('#panGetContent').html(JSON.parse(data));
+			$('.panGetContent').show('370');
 		}
 		tuntienTarkistus();
 
@@ -140,6 +140,7 @@ $("#tyo_toimialue").change(function(){
 		if(data)
 		{
 			$('#panGetContent').html(JSON.parse(data));
+			$('.panGetContent').show('370');
 		}
 		tuntienTarkistus();
    	},
@@ -190,10 +191,12 @@ $(document).delegate(".lisat","click",function(){
 	data:{ toinen_valiko : "true" },
 	type:'POST',
 	success:function(data){
+		data = JSON.parse(data);
 		//console.log(data);
 		if(data)
 		{
-			$('#panGetContent').html(JSON.parse(data));
+			$('#panGetContent').html(data);
+			$('.panGetContent').show('370');
 		}
 		tuntienTarkistus();
    	},

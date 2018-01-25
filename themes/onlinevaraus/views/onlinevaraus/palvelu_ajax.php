@@ -9,15 +9,12 @@
 	{
 
 		if(isset($data->selitysteksti))
-		$body .= '<p class="small">'.$data->selitysteksti.'</p>';
+		$body .= $data->selitysteksti.'<br>';
 
-		$body .='<div class="col-sm-4 col-sm-offset-4">';
-
-		if(isset($toinen_valikko_rakenne['otsikko']))
-		$body .='<h4>'.$toinen_valikko_rakenne['otsikko'].'</h4>';
 
 	 	$body .='<select class="form-control input-lg" id="toinen_valiko_values">';
-		$body .= '<option value="">'.Yii::t('main', 'Valitse').'</option>';
+		if(isset($toinen_valikko_rakenne['otsikko']))
+		$body .= '<option value="">Valitse '.$toinen_valikko_rakenne['otsikko'].'</option>';
 
 		$nimike = array();
 		foreach($toinen_valikko_rakenne['values']['nimike'] as $key=>$item)
@@ -37,7 +34,6 @@
 
 		$body .= ' </select>';
 
-		$body .= '</div>';
 
 	}
 
@@ -51,7 +47,7 @@
 	$lisat = '';
 	if( isset($lisapalvelut['values']['otsikko'][0]) and is_array($lisapalvelut['values']) and !empty($lisapalvelut['values']['otsikko'][0]) )
 	{
-	$lisat .= '<p><h4>Valitse lisäpalvelu</h4></p>
+	$lisat .= '<h3>'.Yii::t('main', 'Lisäpalvelut').'</h3>
 	<div class="row">';
 
 
@@ -79,10 +75,10 @@
 			   $i++;
 	  			$lisat .= 
 				  '
-				  <div class="col-sm-6">
+				  <div class="col-sm-12">
 				   <table class="tblisat">
 				    <tr>
-				     <td width=1>
+				     <td width=20>
 					<input class="checkbox lisat" fordata="'.$data->id.$i.'" for="'.$otsikko[$key].'//'.$hinta[$key].'//'.$kesto[$key].'" type="checkbox">
 				     </td><td>
 				        <a href="#" data-toggle="modal" data-target="#myModal_'.$data->id.$i.'">'.$otsikko[$key].'</a>

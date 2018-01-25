@@ -174,8 +174,8 @@ background-size: contain;
 
 
 .well{
-    background: rgba(255, 255, 255, 1);
-    border:3px rgba(0, 157, 218, 1) solid;
+
+	opacity: 0.9;
 }
 .boxes-info{
 	height: auto;

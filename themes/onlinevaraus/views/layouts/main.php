@@ -53,7 +53,8 @@ if( isset(Yii::app()->user->domain) )
   <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/css/theme-responsive.css"/>
 
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/modernizr.js"></script>
-  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_onlinevaraus/js/onlinevaraus.js"></script>
+  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+
    
   
   <!-- Haetaan Onlinevarauksen ihan oma CSS -->
@@ -100,15 +101,56 @@ if( isset(Yii::app()->user->domain) )
     	}
 	?>
 
-
+	<div class="container">
 	<?php echo $content; ?>
+	</div>
 
-<?php // $this->renderPartial('/onlinevaraus/footer'); ?>
+	<?php // $this->renderPartial('/onlinevaraus/footer'); ?>
 
+<style>
+.footer {
+	background-color: rgba(255, 255, 255, 0.90);
+	height: 30px;
+	Z-index: 9999;
+}
+</style>
+	<br><br><br>
+	<footer class="footer">
+	 <div class="container">
 
-    <!-- ======================= JQuery libs =========================== -->
+	   <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/rekisteriseloste" target="_blank">
+		<?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> 
+	   </a>
 
-    <!-- jQuery local-->
-    <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/jquery.js"></script>
+	   <?php
+	   foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/onlinevarausehdot.*')) as $file) 
+	   {
+		$explNimi = explode("/",$file);
+		// <-- file_safe_opener
+		$filepath = 'tiedostot/firma/'.Yii::app()->user->domain.'/'.end($explNimi);
+		echo '<br>'.CHtml::link(Yii::t('main', 'Onlinevarausehdot'),
+			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
+			array('target'=>'_blank','class'=>'text-danger'
+		));
+		//     file_safe_opener -->
+	
+	   }
+
+	   foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/Konevuokraus_toimitusehdot.*')) as $file) 
+	   {
+		$explNimi = explode("/",$file);
+		// <-- file_safe_opener
+		$filepath = 'tiedostot/firma/'.Yii::app()->user->domain.'/'.end($explNimi);
+		echo '<br>'.CHtml::link(Yii::t('main', 'Konevuokraus toimitusehdot'),
+			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
+			array('target'=>'_blank','class'=>'text-danger'
+		));
+		//     file_safe_opener -->
+	
+	   }
+	   ?>
+	 </div>
+	</footer>
+
     </body>
 </html>

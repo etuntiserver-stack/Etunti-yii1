@@ -1,9 +1,8 @@
 <?php
 
   if(isset($_SESSION['onlinevaraus']['paapalvelu']))
-	$model = OnlinevarausTuotteet::model()->findbypk($_SESSION['onlinevaraus']['paapalvelu']);
+	$model = TuotteetPalvelut::model()->findbypk($_SESSION['onlinevaraus']['paapalvelu']);
 
-  echo "PÄÄPALVELU";
 
   // <-- Kupongi
   $blockKupongi = '';
@@ -27,7 +26,7 @@
 	$blockKupongi .= '
 	<div class="row">
 	 <div class="col-xs-2">
-		<i class="fa fa-star" aria-hidden="true"></i>
+		<i class="fa fa-star fa-2x" aria-hidden="true"></i>
 	 </div><div class="col-xs-10">
 		'.Yii::t('main', 'Alennuskoodi').': '.$kup_maara.'
 	 </div>
@@ -61,10 +60,11 @@
 
 	$blockAika .= '
 	<hr>
-     	<label>Varattu aika </label><br>
+     	<h3>Varattu aika</h3>
 	<div class="row">
 	 <div class="col-xs-4">
 		'.$kuva.'		
+		'.$this->etuSukunimi($tv->tid).'
 	 </div><div class="col-xs-8">
 		'.$tv->pvm.'<br>
 		'.$tv->alku.'-'.$tv->loppu.'
@@ -185,15 +185,13 @@
 
 	$body = 
 	'
-	<div class="panel panel-success">
-	 <div class="panel-heading"><b>'.Yii::t('main', 'Yhteenveto').'</b></div>
-	 <div class="panel-body">';
+	<h3>'.Yii::t('main', 'Yhteenveto').'</h3>';
 
 
 	$body .= '
 	<div class="row">
 	 <div class="col-xs-2">
-	   	<i class="fa fa-home"></i> 
+	   	<i class="fa fa-home fa-2x"></i> 
 	 </div><div class="col-xs-10">
 		<span>'.$model->nimike.'</span>
 	 </div>
@@ -204,7 +202,7 @@
 	$body .= '
 	<div class="row">
 	 <div class="col-xs-2">
-	   <i class="fa fa-plus"></i> 
+	   <i class="fa fa-plus fa-2x"></i> 
 	 </div><div class="col-xs-10">
 		<span>'.$otsikko.$nimike.'</span>
 	 </div>
@@ -216,7 +214,7 @@
 	$body .= '
 	<div class="row">
 	 <div class="col-xs-2">
-	   	<i class="fa fa-plus"></i> 
+	   	<i class="fa fa-plus fa-2x"></i> 
 	 </div><div class="col-xs-10">
 		'.$lisapalvelut.'
 	 </div>
@@ -228,7 +226,7 @@
 	$body .= '
 	<div class="row">
 	 <div class="col-xs-2">
-	   	<i class="fa fa-map-marker"></i> 
+	   	<i class="fa fa-map-marker fa-2x"></i> 
 	 </div><div class="col-xs-10">
 		'.$tyo_toimialue.'
 	 </div>
@@ -238,7 +236,7 @@
 	$body .= '
 	<div class="row">
 	 <div class="col-xs-2">
-	   	<i class="fa fa-clock-o"></i> 
+	   	<i class="fa fa-clock-o fa-2x"></i> 
 	 </div><div class="col-xs-10">
 		<span id="clock" val="'.$sumTunti.'">'.number_format($sumTunti, 1, ',', '').'</span> tuntia
 	 </div>
@@ -249,7 +247,7 @@
 	$body .= '
 	<div class="row">
 	 <div class="col-xs-2">
-	   	<i class="fa fa-eur"></i> 
+	   	<i class="fa fa-eur fa-2x"></i> 
 	 </div><div class="col-xs-10">
 		<span id="hinta">'.number_format($sum, 2, ',', '').'</span> &euro;
 		'.$kotitalousvahennys.'
@@ -261,7 +259,7 @@
 	$body .= '
 	<div class="row">
 	 <div class="col-xs-2">
-	   	<i class="fa fa-gift"></i> 
+	   	<i class="fa fa-gift fa-2x"></i> 
 	 </div>
 	 <div class="col-xs-10">
 	    <div class="input-group">
@@ -289,14 +287,11 @@
 	$body .= $blockAika;
 	$body .= $blockKohde;
 
-
-	$body .= '
-	 </div>
-	</div>';
+	$body .= '<br>';
 
 	if(isset($sivu) and $sivu == 'index'){
 
-	$body .= CHtml::link('Valitse aika','aika', array('class'=>'btn btn-lg seuraava disabled')).'<br>';
+	$body .= CHtml::link('Valitse aika','aika', array('class'=>'btn btn-success btn-lg seuraava disabled')).'<br>';
 
 	} elseif(isset($sivu) and $sivu == 'aika' and isset($_SESSION['onlinevaraus']['modelTV'])){
 	$body .= '

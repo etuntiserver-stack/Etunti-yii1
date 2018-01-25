@@ -1,45 +1,25 @@
 <?php
-
-
-$asetukset = Asetukset::model()->findbypk(1);
-
-if($asetukset->onlinevaraus_alku == 0){
-Asetukset::model()->updatebypk(1, array('onlinevaraus_alku'=>8));
-}
-
-if($asetukset->onlinevaraus_loppu == 0){
-Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
-}
-
-// clear
-  if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
-	Onlinevaraus::model()->deletebypk($_SESSION['onlinevaraus']['onlinevarausID']);
-
-  if(isset($_SESSION['onlinevaraus']['modelTV']))
-	Tyovuoroot::model()->deletebypk($_SESSION['onlinevaraus']['modelTV']);
-
-  unset($_SESSION['onlinevaraus']);
-
-//
+/* index
+*/
 ?>
-<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_ver2.css">
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_onlinevaraus/js/onlinevaraus_index.js"></script>
 
 
-<div class="container-fluid ">
-<div class="row ">
-    <div class="col-sm-6 col-sm-offset-3 select-service">
-        <center>
+<div class="container">
+
+ <div class="row">
+  <div class="col-sm-6 col-sm-offset-3 select-service">
+
 	<div class="row">
-	  <div class="col-sm-6 col-sm-offset-3">
-
-		<h4>Valitse palvelu</h4>
+	  <div class="col-sm-8 col-sm-offset-2">
+	  	<h3><?=Yii::t('main', 'Palvelut')?></h3>
 
 		<select class="form-control input-lg" id="palvelu">
 		<option value="">Valitse palvelu</option>
 
 		<?php
 	       	$criteria = new CDbCriteria();
-	       	$criteria->condition = " nayta_sivuilla=1 ";
+	       	$criteria->condition = " nayta_sivuilla=1 AND kategoria LIKE '%onlinevaraus%' ";
 	       	$criteria->order = " nimike ";
 		$onlineTuotteet = TuotteetPalvelut::model()->findAll($criteria);
 		foreach($onlineTuotteet as $data)
@@ -54,12 +34,15 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 	  </div>
 	</div>
 
-	<div class="row" id="toinen_valiko"></div>
-
-
+	<!-- Toinen valikko -->
+	<div class="row">
+	  <div class="col-sm-8 col-sm-offset-2">
+		<div id="toinen_valiko"></div>
+	  </div>
+	</div>
+	<br>
 	<div class="row" id="toimialueRow">
-	  <div class="col-sm-6 col-sm-offset-3">
-		<h4><?php echo Yii::t('main', 'Valitse toimialue'); ?></h4>
+	  <div class="col-sm-8 col-sm-offset-2">
 		<?php
 		$exists = Valikkoot::model()->find(" select_type='tyo_toimialue' ");
 		if(!isset($exists->id))
@@ -78,47 +61,31 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
         	echo CHtml::dropDownList('tyo_toimialue', 'tyo_toimialue', $list,
 		array('class'=>'form-control input-lg'));
         	?>
-	      </div>
-	    </div>
+	  </div>
+	</div>
+
   </div>
-
-</div>
-
-    <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/rekisteriseloste" target="_blank"><?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> </a>
-
-   <?php
-   foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/onlinevarausehdot.*')) as $file) 
-   {
-		$explNimi = explode("/",$file);
-		// <-- file_safe_opener
-		$filepath = 'tiedostot/firma/'.Yii::app()->user->domain.'/'.end($explNimi);
-		echo '<br>'.CHtml::link(Yii::t('main', 'Onlinevarausehdot'),
-			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
-			array('target'=>'_blank','class'=>'text-danger'
-		));
-		//     file_safe_opener -->
-	
-   }
-
-/*   foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/Konevuokraus_toimitusehdot.*')) as $file) 
-   {
-		$explNimi = explode("/",$file);
-		// <-- file_safe_opener
-		$filepath = 'tiedostot/firma/'.Yii::app()->user->domain.'/'.end($explNimi);
-		echo '<br>'.CHtml::link(Yii::t('main', 'Konevuokraus toimitusehdot'),
-			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
-			array('target'=>'_blank','class'=>'text-danger'
-		));
-		//     file_safe_opener -->
-	
-   }
-   */
-   ?>
+ </div>
       
-</div>
+ <div class="row lisapalvelulista" style="display:none">
+  <div class="col-sm-6 col-sm-offset-3 select-service">
+	<div class="row">
+	  <div class="col-sm-8 col-sm-offset-2">
+	    <div id="lisapalvelulista"></div>
+	  </div>
+	</div>
+  </div>
+ </div>
 
-<!-- Order summary footer-->
-<div class="onlinevaraus-order-summary">
-  <div class="col-sm-6 col-sm-offset-3 order-summary">Order Summary</div>
-</div>
+ <!-- Order summary footer-->
+ <div class="row panGetContent" style="display:none">
+  <div class="col-sm-6 col-sm-offset-3 select-service">
+	<div class="row">
+	  <div class="col-sm-8 col-sm-offset-2">
+	    <div id="panGetContent"></div>
+	  </div>
+	</div>
+  </div>
+ </div>
 
+</div><!--container-->

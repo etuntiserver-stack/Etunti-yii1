@@ -19,6 +19,10 @@ header{
   background-color: rgba(255, 255, 255, 0.90);
 }
 
+.day:hover{ background: #F76900; color: white; }
+.vapaa{ background: #78BE14; color: white;  }
+.orangeColor{ background: #F76900; color: white; }
+.kiinni{ background: #B8B8B8; color: white; } 
 
 .logo {
 	width: 165.5px;
@@ -49,10 +53,9 @@ header{
 
 .select-service {
   margin-top: 80px;
-	max-width: 620px;
 	height: auto;
-  padding-top: 40px;
-  padding-bottom: 40px;
+	padding-top: 40px;
+	padding-bottom: 40px;
 	background-color: rgba(255, 255, 255, 0.85);
 	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
   

@@ -699,6 +699,28 @@ class OnlinevarausController extends Controller
 		if(!isset(Yii::app()->user->domain))
 		die('Error: domain');
 
+
+		$asetukset = Asetukset::model()->findbypk(1);
+
+		if($asetukset->onlinevaraus_alku == 0){
+			Asetukset::model()->updatebypk(1, array('onlinevaraus_alku'=>8));
+		}
+
+		if($asetukset->onlinevaraus_loppu == 0){
+			Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
+		}
+
+		// clear
+		if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
+			Onlinevaraus::model()->deletebypk($_SESSION['onlinevaraus']['onlinevarausID']);
+
+		if(isset($_SESSION['onlinevaraus']['modelTV']))
+			Tyovuoroot::model()->deletebypk($_SESSION['onlinevaraus']['modelTV']);
+
+		if(isset($_SESSION['onlinevaraus']))
+		  unset($_SESSION['onlinevaraus']);
+
+
 		if(isset($_GET['keskeyta']))
 		{
 			if(isset($_SESSION['onlinevaraus']['modelTV']))
@@ -712,7 +734,9 @@ class OnlinevarausController extends Controller
 			$this->redirect('index');
 		}
 	
-		$this->render('index');
+		$this->render('index', array(
+			'asetukset' => $asetukset
+		));
 	}
 
 	public function actionAika()
@@ -825,7 +849,7 @@ $months=array(
      // Create the table tag opener and day headers
 
      $calendar = "";
-     $calendar .= "<h4>".$months[$month]." $year</h4>";
+     $calendar .= "<h3>".$months[$month]." $year</h3>";
      $calendar .= "<table class='table table-bordered'>";
      $calendar .= "<tr>";
 

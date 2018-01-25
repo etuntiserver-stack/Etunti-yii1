@@ -20,7 +20,7 @@
                     <!-- End Logo-->
 
                     <!-- Nav-->
-                    <div class="col-md-9 time-remaining">
+                    <div class="col-md-9 time-remaining" id="countTimer">
                        Time remaining: 12:01 min.
                     </div>
                     <!-- End Nav-->
