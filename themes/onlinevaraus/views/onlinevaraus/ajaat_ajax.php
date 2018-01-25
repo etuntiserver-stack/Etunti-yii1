@@ -35,7 +35,7 @@
 		}
 	   	$kuva = '<img src="'.$filename.'" class="img-thumbnail">';
 	   } else {
-	   	$kuva = '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
+	   	$kuva = '<img src="../../lib/img/noname.jpg" class="img-thumbnail">';
 	   }
    	return $kuva;
    }
