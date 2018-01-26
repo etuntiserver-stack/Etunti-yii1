@@ -322,7 +322,14 @@
 	</div>';
 
 	} elseif(isset($sivu) and $sivu == 'maksu'){
-	$body .= CHtml::link('Kassalle','kassalle', array('class'=>'btn btn-lg edellinen'));
+		//$body .= CHtml::link('Kassalle','kassalle', array('class'=>'btn btn-lg edellinen'));
+	$body .= '
+	<div class="row">
+	  <div class="col-xs-6">
+			'.CHtml::link('<i class="fa fa-arrow-left" aria-hidden="true"></i> Edellinen','osoite', array('class'=>'btn btn-warning btn-block btn-lg edellinen')).'
+	  </div><div class="col-xs-6">
+	  </div>
+	</div>';
 	}
 
 	//$body .= CHtml::link('Keskeytä','index?keskeyta=true', array('class'=>'btn btn-warning btn-lg'));

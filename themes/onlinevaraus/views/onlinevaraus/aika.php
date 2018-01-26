@@ -13,17 +13,12 @@ $asetukset = Asetukset::model()->findbypk(1);
 	<div class="row">
 	  <div class="col-sm-8 col-sm-offset-2">
 
-		<div class="form-inline">
-		 <div class="form-group">
-		  <?=CHtml::link('<h2><i class="fa fa-arrow-left" aria-hidden="true"></i></h2>','index')?>
-		 </div>
-		 <div class="form-group pull-right">
+		<div class="pull-right">
 		  <h2 class="link" data-toggle="modal" data-target=".mikaOnOnlinevaraus"><i class="fa fa-info-circle" aria-hidden="true"></i></h2>
-		 </div>
 		</div>
-
-		
-
+		<div class="form-group">
+		  <?=CHtml::link('<h2><i class="fa fa-arrow-left" aria-hidden="true"></i></h2>','index')?>
+		</div>
 
 		<div id="kalenterit"></div>
 

@@ -11,16 +11,12 @@
 	<div class="row">
 	  <div class="col-sm-8 col-sm-offset-2">
 
-		<div class="form-inline">
-		 <div class="form-group">
-		  <?=CHtml::link('<h2><i class="fa fa-arrow-left" aria-hidden="true"></i></h2>','aika')?>
-		 </div>
-		 <div class="form-group pull-right">
+		<div class="pull-right">
 		  <h2 class="link" data-toggle="modal" data-target=".mikaOnOnlinevaraus"><i class="fa fa-info-circle" aria-hidden="true"></i></h2>
-		 </div>
 		</div>
-
-		
+		<div class="form-group">
+		  <?=CHtml::link('<h2><i class="fa fa-arrow-left" aria-hidden="true"></i></h2>','aika')?>
+		</div>	
 
 		<div id="fullLomake">
 		   <h4 class="title-subtitle text-center"><?php echo Yii::t('main', 'Osoite'); ?></h4>

@@ -809,11 +809,13 @@ class OnlinevarausController extends Controller
 
 	public function actionMaksu()
 	{
-
 		if(!isset(Yii::app()->user->domain))
 		die('Error: domain');
+		$asetukset = Asetukset::model()->findbypk(1);
 
-		$this->render('maksu');
+		$this->render('maksu', array(
+			'asetukset' => $asetukset
+		));
 	}
 	/**
 	 * Manages all models.
@@ -957,11 +959,11 @@ $months=array(
  	  }
 
 	  $tila = '';
-	  if($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] != date("d.m.Y", strtotime($date)))
+	  if($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and date("Y-m-d", strtotime($_SESSION['onlinevaraus']['valittuPVM'])) != date("Y-m-d", strtotime($date)))
 		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
 	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and !isset($_SESSION['onlinevaraus']['valittuPVM']))
 		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
-	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] == date("d.m.Y", strtotime($date)))
+	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and date("Y-m-d", strtotime($_SESSION['onlinevaraus']['valittuPVM'])) == date("Y-m-d", strtotime($date)))
 		 $tila .= '<td class="day link orangeColor cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
 	  elseif($date < date("Y-m-d"))
 		 $tila .= '<td class="day kiinni" >'.$currentDay.'</td>';
