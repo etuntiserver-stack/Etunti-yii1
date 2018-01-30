@@ -609,6 +609,11 @@ $(".tallennaUusi").click(function(){
 
 });
 
+$("#show_yhteenveto").click(function(){
+	$('html,body').animate({
+	   scrollTop: $("#show_yhteenveto").offset().top
+	});
+});
 
 
 });

@@ -102,7 +102,7 @@ if( isset(Yii::app()->user->domain) )
     	}
 	?>
 
-	<div class="container">
+	<div class="container" id="paa_container">
 	<?php echo $content; ?>
 	</div>
 
@@ -148,7 +148,7 @@ if( isset(Yii::app()->user->domain) )
 	  ?>
 	  </div>
 
-	  <button class="form-group" data-toggle="collapse" data-target="#order_summary">SHOW</button>
+	  <button class="form-group" data-toggle="collapse" data-target="#order_summary" id="show_yhteenveto">SHOW</button>
 	  </div>
 
 	 </div>
