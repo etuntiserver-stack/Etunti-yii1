@@ -297,8 +297,9 @@ $(document).delegate(".ajaanClick","click",function(){
 	data:{ "pvm" : pvm },
 	type:'POST',
 	success:function(data){
-		//console.log(JSON.parse(data));
-		$('#aikoja').html(JSON.parse(data));
+		data = JSON.parse(data);
+		//console.log(data);
+		$('#aikoja').html(data);
 		return false;
    	},
 	error:function(data){

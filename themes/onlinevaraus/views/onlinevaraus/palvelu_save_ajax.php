@@ -287,54 +287,6 @@
 	$body .= $blockAika;
 	$body .= $blockKohde;
 
-	$body .= '<br>';
-
-	if(isset($sivu) and $sivu == 'index'){
-
-	$body .= '
-	<div class="row">
-	  <div class="col-xs-6">
-
-	  </div><div class="col-xs-6">
-			'.CHtml::link('Seuraava <i class="fa fa-arrow-right" aria-hidden="true"></i>','aika', array('class'=>'btn btn-success btn-block btn-lg seuraava')).'
-	  </div>
-	</div>';
-
-
-	} elseif(isset($sivu) and $sivu == 'aika' and isset($_SESSION['onlinevaraus']['modelTV'])){
-	$body .= '
-	<div class="row">
-	  <div class="col-xs-6">
-			'.CHtml::link('<i class="fa fa-arrow-left" aria-hidden="true"></i> Edellinen','index', array('class'=>'btn btn-warning btn-block btn-lg edellinen')).'
-	  </div><div class="col-xs-6">
-			'.CHtml::link('Seuraava <i class="fa fa-arrow-right" aria-hidden="true"></i>','osoite', array('class'=>'btn btn-success btn-block btn-lg seuraava')).'
-	  </div>
-	</div>';
-
-	} elseif(isset($sivu) and $sivu == 'osoite' and isset($_SESSION['onlinevaraus']['modelTV'])){
-	$body .= '
-	<div class="row">
-	  <div class="col-xs-6">
-			'.CHtml::link('<i class="fa fa-arrow-left" aria-hidden="true"></i> Edellinen','aika', array('class'=>'btn btn-warning btn-block btn-lg edellinen')).'
-	  </div><div class="col-xs-6">
-			'.CHtml::link('Maksu <i class="fa fa-arrow-right" aria-hidden="true"></i>','maksu', array('class'=>'btn btn-success btn-block btn-lg seuraava tallennaUusi')).'
-	  </div>
-	</div>';
-
-	} elseif(isset($sivu) and $sivu == 'maksu'){
-		//$body .= CHtml::link('Kassalle','kassalle', array('class'=>'btn btn-lg edellinen'));
-	$body .= '
-	<div class="row">
-	  <div class="col-xs-6">
-			'.CHtml::link('<i class="fa fa-arrow-left" aria-hidden="true"></i> Edellinen','osoite', array('class'=>'btn btn-warning btn-block btn-lg edellinen')).'
-	  </div><div class="col-xs-6">
-	  </div>
-	</div>';
-	}
-
-	//$body .= CHtml::link('Keskeytä','index?keskeyta=true', array('class'=>'btn btn-warning btn-lg'));
-	$body .= '<br>';
-
 	echo json_encode($body);
 
   } 

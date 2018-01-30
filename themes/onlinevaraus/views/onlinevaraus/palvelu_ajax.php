@@ -82,21 +82,24 @@
 			   foreach($otsikko as $key=>$rivi)
 			   {
 			   $i++;
-/*
-				if(isset($_SESSION['onlinevaraus']['lisapalvelut'][$otsikko[$key]]))
-				{ 
-					$checked = 'checked'; 
-				} else { 
-					$checked = ''; 
+
+				$checked = ''; 
+				foreach($_SESSION['onlinevaraus']['lisapalvelut'] as $p)
+				{
+				    	if(isset($p[0]) and isset($p[1]) and isset($p[2]) and $p[0] == $otsikko[$key])
+				    	{
+						$checked = 'checked';
+						break;
+				    	}
 				}
-*/
+
 	  			$lisat .= 
 				  '
 				  <div class="col-sm-12">
 				   <table class="tblisat">
 				    <tr>
 				     <td width=20>
-					<input class="checkbox lisat" fordata="'.$data->id.$i.'" for="'.$otsikko[$key].'//'.$hinta[$key].'//'.$kesto[$key].'" type="checkbox">
+					<input class="checkbox lisat" fordata="'.$data->id.$i.'" for="'.$otsikko[$key].'//'.$hinta[$key].'//'.$kesto[$key].'" type="checkbox" '.$checked.'>
 				     </td><td>
 				        <a href="#" data-toggle="modal" data-target="#myModal_'.$data->id.$i.'">'.$otsikko[$key].'</a>
 			
