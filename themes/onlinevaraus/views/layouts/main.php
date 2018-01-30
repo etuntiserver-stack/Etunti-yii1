@@ -107,15 +107,9 @@ if( isset(Yii::app()->user->domain) )
 
 	<?php // $this->renderPartial('/onlinevaraus/footer'); ?>
 
-<style>
-.footer {
-	background-color: rgba(255, 255, 255, 0.90);
-	height: 30px;
-	Z-index: 9999;
-}
-</style>
-	<br><br><br>
-	<footer class="footer">
+
+
+	<footer class="footer online-footer">
 	 <div class="container">
 
 	   <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/rekisteriseloste" target="_blank">

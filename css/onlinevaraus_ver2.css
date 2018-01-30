@@ -61,11 +61,11 @@ header{
   
 }
 
-.select-service h4{
+.select-service h3{
   font-family: OpenSans;
   font-size: 24px;
   font-weight: 600;
-  text-align: left;
+  text-align: center;
   color: #5e7484;
   color: var(--blue-grey);
   margin-top: 5px;
@@ -82,6 +82,7 @@ header{
   box-shadow: inset 0 1px 0 0 #ececec;
   border: solid 2px #b6d5e7;
   line-height: 24px;
+  text-align: center;
 }
 
 .select-service select option {
@@ -105,10 +106,7 @@ header{
 }
 
 .order-summary .show {
-<<<<<<< HEAD
-=======
 
->>>>>>> 1a6efd9be3634d4f9ad5102ad92e8e10f429201f
 	background-color: #515e6a;
 }
 
@@ -119,7 +117,19 @@ header{
 
 }
 
-<<<<<<< HEAD
+.additional-products{
+  font-family: OpenSans;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #5e7484;
+  color: var(--blue-grey);
+}
+
 .onlinevaraus-order-summary{
  
   position: fixed;
@@ -129,12 +139,13 @@ header{
   
 }
 
-.footer{
-  position: fixed;
-  height: 100px;
+.online-footer{
   bottom: 0;
-  width: 100%;
-  
+    background-color: rgba(0, 0, 0, 0.25);
+  /*background-color: rgba(255, 255, 255, 0.90);*/
+  height: 50px;
+  /*background-color: #5e7486;*/
+ /* background-color: var(--blue-grey-two);*/
+  Z-index: 9999;
 }
-=======
->>>>>>> 1a6efd9be3634d4f9ad5102ad92e8e10f429201f
+
