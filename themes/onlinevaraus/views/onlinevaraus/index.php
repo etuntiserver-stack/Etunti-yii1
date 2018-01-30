@@ -253,9 +253,9 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 	</div>
   </div>
  </div>
-
+<button data-toggle="collapse" data-target="#order_summary">SHOW</button>
  <!-- Order summary footer-->
- <div class="row panGetContent" style="display:none">
+ <div class="row panGetContent collapse" id="order_summary">
   <div class="col-sm-6 col-sm-offset-3 select-service">
 	<div class="row">
 	  <div class="col-sm-8 col-sm-offset-2">
