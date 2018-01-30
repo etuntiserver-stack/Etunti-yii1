@@ -9,7 +9,6 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 
 
 <div class="container">
-<button data-toggle="collapse" data-target="#order_summary">SHOW</button>
  <div class="row">
   <div class="col-sm-6 col-sm-offset-3 select-service">
 
@@ -255,7 +254,7 @@ echo $_SESSION['onlinevaraus']['modelTV'];
  </div>
 
  <!-- Order summary footer-->
- <div class="row panGetContent collapse" id="order_summary">
+ <div class="row collapse" id="order_summary">
   <div class="col-sm-6 col-sm-offset-3 select-service">
 	<div class="row">
 	  <div class="col-sm-8 col-sm-offset-2">

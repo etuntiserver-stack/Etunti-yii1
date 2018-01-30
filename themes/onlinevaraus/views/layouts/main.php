@@ -54,7 +54,7 @@ if( isset(Yii::app()->user->domain) )
 
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/modernizr.js"></script>
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
-   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.js"></script>
+   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.min.js"></script>
 
    
   
@@ -113,11 +113,13 @@ if( isset(Yii::app()->user->domain) )
 	<footer class="footer online-footer">
 	 <div class="container">
 
-	   <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/rekisteriseloste" target="_blank">
+	  <div class="form-inline">
+	   <a class="form-group" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/rekisteriseloste" target="_blank">
 		<?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> 
 	   </a>
 
-	   <?php
+	  <div class="form-group">
+	  <?php
 	   foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/onlinevarausehdot.*')) as $file) 
 	   {
 		$explNimi = explode("/",$file);
@@ -143,7 +145,12 @@ if( isset(Yii::app()->user->domain) )
 		//     file_safe_opener -->
 	
 	   }
-	   ?>
+	  ?>
+	  </div>
+
+	  <button class="form-group" data-toggle="collapse" data-target="#order_summary">SHOW</button>
+	  </div>
+
 	 </div>
 	</footer>
 
