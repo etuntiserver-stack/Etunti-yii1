@@ -84,15 +84,17 @@
 			   $i++;
 
 				$checked = ''; 
-				foreach($_SESSION['onlinevaraus']['lisapalvelut'] as $p)
+				if(isset($_SESSION['onlinevaraus']['lisapalvelut']))
 				{
+				   foreach($_SESSION['onlinevaraus']['lisapalvelut'] as $p)
+				   {
 				    	if(isset($p[0]) and isset($p[1]) and isset($p[2]) and $p[0] == $otsikko[$key])
 				    	{
 						$checked = 'checked';
 						break;
 				    	}
+				   }
 				}
-
 	  			$lisat .= 
 				  '
 				  <div class="col-sm-12">

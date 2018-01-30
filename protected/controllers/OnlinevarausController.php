@@ -562,7 +562,9 @@ class OnlinevarausController extends Controller
 			exit;
 		}
 
-	   } elseif(isset($_POST['tid']) and isset($_POST['pvm'])) {
+	   }
+
+	   if(isset($_POST['tid']) and isset($_POST['pvm'])) {
 
 		if(isset($_SESSION['onlinevaraus']['modelTV']))
 		{
@@ -595,8 +597,9 @@ class OnlinevarausController extends Controller
 			'sivu'=>'aika',
 		));
 
-	   } elseif(isset($_POST['kohde'])) {
+	   }
 
+	   if(isset($_POST['kohde'])) {
 
 		$k = Kohteet::model()->findbypk($_POST['kohde']);
 		if(isset($k->id))
@@ -689,9 +692,55 @@ class OnlinevarausController extends Controller
 
 		if(!isset(Yii::app()->user->domain))
 		die('Error: domain');
-
-
 		$asetukset = Asetukset::model()->findbypk(1);
+
+		if(isset($_POST['poistaTamaTiedosto'])){
+			unlink($_POST['poistaTamaTiedosto']);
+			exit;
+		}
+		if(isset($_POST['getMyPictures']))
+		{
+
+			$i = 0;
+		  	$kuvat = '';
+
+		    	if(isset($_SESSION['onlinevaraus']['kuvat']))
+		    	{
+				foreach(array_reverse(glob('tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/'.$_SESSION['onlinevaraus']['kuvat'].'_*.*')) as $file) {
+				$i++;
+				$explNimi = explode("/",$file);
+			 	$kuvat .= '
+					<div class="form-inline" id="t_'.$_SESSION['onlinevaraus']['kuvat'].$i.'">
+				  		<div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" for="t_'.$_SESSION['onlinevaraus']['kuvat'].$i.'">X</div>
+				  		&nbsp;&nbsp;&nbsp;<a href="../../'.$file.'">'.end($explNimi).'</a>
+					</div>
+				';
+			 	}
+		    	}
+			echo json_encode($kuvat);
+			exit;
+		}
+
+		if(isset($_POST['kuvanLisaaminen']))
+		{
+			function rand_string( $length ) {
+				$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+				return substr(str_shuffle($chars),0,$length);
+			}
+			if(!isset($_SESSION['onlinevaraus']['kuvat']))
+				$_SESSION['onlinevaraus']['kuvat'] = rand_string(8);
+
+			if (!file_exists(Yii::app()->basePath."/../tiedostot/onlinevaraus_temp/".Yii::app()->user->domain)) {
+			  	mkdir(Yii::app()->basePath."/../tiedostot/onlinevaraus_temp/".Yii::app()->user->domain, 0777, true);
+			}
+
+			$uploaddir = Yii::app()->basePath.'/../tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/';
+			$uploadfile = $uploaddir . basename($_SESSION['onlinevaraus']['kuvat'].'_'.$_FILES['file']['name']);
+			if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+				//echo "";
+			}
+			exit;
+		}
 
 		if($asetukset->onlinevaraus_alku == 0){
 			Asetukset::model()->updatebypk(1, array('onlinevaraus_alku'=>8));
@@ -722,14 +771,17 @@ class OnlinevarausController extends Controller
 
 	public function actionAika()
 	{
+/*
 		if(!isset(Yii::app()->user->domain))
 		die('Error: domain');
 
 		$this->render('aika');
+*/
 	}
 
 	public function actionOsoite()
 	{
+/*
 		if(!isset(Yii::app()->user->domain))
 		die('Error: domain');
 
@@ -786,17 +838,19 @@ class OnlinevarausController extends Controller
 		$this->render('osoite', array(
 			'asetukset' => $asetukset
 		));
+*/
 	}
 
-	public function actionMaksu()
+	public function actionMaksu($json)
 	{
+
 		if(!isset(Yii::app()->user->domain))
 		die('Error: domain');
-		$asetukset = Asetukset::model()->findbypk(1);
 
-		$this->render('maksu', array(
-			'asetukset' => $asetukset
+		$this->renderPartial('maksu', array(
+			'json' => true
 		));
+
 	}
 	/**
 	 * Manages all models.
