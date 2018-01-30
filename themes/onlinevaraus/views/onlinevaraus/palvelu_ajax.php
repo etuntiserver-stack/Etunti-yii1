@@ -30,8 +30,17 @@
 
 
 		foreach($nimike as $key=>$rivi)
-			$body .= '<option value="'.$toinen_valikko_rakenne['otsikko'].'//'.$nimike[$key].'//'.$hinta[$key].'//'.$kesto[$key].'">'.$nimike[$key].'</option>';
+		{
 
+		  if(isset($_SESSION['onlinevaraus']['paa_nimike']) and $_SESSION['onlinevaraus']['paa_nimike'] == $nimike[$key])
+		  { 
+			$selected = 'selected'; 
+		  } else { 
+			$selected = ''; 
+		  }
+
+		  $body .= '<option value="'.$nimike[$key].'" otsikko="'.$toinen_valikko_rakenne['otsikko'].'" hinta="'.$hinta[$key].'" kesto="'.$kesto[$key].'" '.$selected.'>'.$nimike[$key].'</option>';
+		}
 		$body .= ' </select>';
 
 
@@ -73,6 +82,14 @@
 			   foreach($otsikko as $key=>$rivi)
 			   {
 			   $i++;
+/*
+				if(isset($_SESSION['onlinevaraus']['lisapalvelut'][$otsikko[$key]]))
+				{ 
+					$checked = 'checked'; 
+				} else { 
+					$checked = ''; 
+				}
+*/
 	  			$lisat .= 
 				  '
 				  <div class="col-sm-12">

@@ -1,7 +1,9 @@
 <?php
     
-     $asetukset = Asetukset::model()->findByPk(1);
-     $body = '';
+ $asetukset = Asetukset::model()->findByPk(1);
+ $body = '';
+
+ if(isset($_SESSION['onlinevaraus']['sumTunti']) and $_SESSION['onlinevaraus']['sumTunti'] > 0){
 
      ($asetukset->onlinevaraus_viikonlopput == 0)? $numOfWeek = 7 : $numOfWeek = 5; 
      $dateArray = array();
@@ -21,7 +23,7 @@
      $year = date('Y',strtotime("last day of +2 month"));
 
      $body .= $this->build_calendar($month, $year, $dateArray, $asetukset->onlinevaraus_aikaisintaan_paivamaara, $numOfWeek);
-
+ }
 
      echo json_encode($body);
 ?>

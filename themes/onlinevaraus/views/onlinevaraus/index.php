@@ -1,9 +1,9 @@
 <?php
 /* index
 */
+//unset($_SESSION['onlinevaraus']);
 ?>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_onlinevaraus/js/onlinevaraus_index.js"></script>
-
 
 <div class="container">
 
@@ -12,6 +12,7 @@
 
 	<div class="row">
 	  <div class="col-sm-8 col-sm-offset-2">
+		<?=CHtml::link('Keskeytä', array('index', 'keskeyta' =>'true'))?>
 	  	<h3><?=Yii::t('main', 'Palvelut')?></h3>
 
 		<select class="form-control input-lg" id="palvelu">
@@ -24,10 +25,13 @@
 		$onlineTuotteet = TuotteetPalvelut::model()->findAll($criteria);
 		foreach($onlineTuotteet as $data)
 		{
-		  echo 
-		  '
-			<option value="'.$data->id.'">'.$data->nimike.'</option>
-		  ';
+		  if(isset($_SESSION['onlinevaraus']['paapalvelu']) and $_SESSION['onlinevaraus']['paapalvelu'] == $data->id)
+		  { 
+			$selected = 'selected'; 
+		  } else { 
+			$selected = ''; 
+		  }
+		  echo '<option value="'.$data->id.'" '.$selected.'>'.$data->nimike.'</option>';
 		}
 		?>
 		</select>
@@ -58,22 +62,36 @@
 		foreach($l as $v)
 		$list[$v->value] = $v->value;
 
-        	echo CHtml::dropDownList('tyo_toimialue', 'tyo_toimialue', $list,
-		array('class'=>'form-control input-lg'));
+		if(isset($_SESSION['onlinevaraus']['tyo_toimialue']))
+		$options = array('class'=>'form-control input-lg', 'options' => array($_SESSION['onlinevaraus']['tyo_toimialue']=>array('selected'=>true)));
+		else
+		$options = array('class'=>'form-control input-lg');
+
+        	echo CHtml::dropDownList('tyo_toimialue', 'tyo_toimialue', $list, $options);
         	?>
+
+	    	<div id="lisapalvelulista"></div>
+
 	  </div>
 	</div>
 
   </div>
  </div>
-      
- <div class="row lisapalvelulista" style="display:none">
+
+ <div class="row kaksiKalenteria" style="display:none">
   <div class="col-sm-6 col-sm-offset-3 select-service">
+
 	<div class="row">
 	  <div class="col-sm-8 col-sm-offset-2">
-	    <div id="lisapalvelulista"></div>
+
+		<div id="kalenterit"></div>
+		<br>
+		<div id="aikoja"></div>
+		<div id="tidTietoja"></div>
+
 	  </div>
 	</div>
+
   </div>
  </div>
 

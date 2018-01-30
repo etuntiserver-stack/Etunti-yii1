@@ -88,36 +88,9 @@ $(document).delegate(".ajaanClick","click",function(){
     	}
     });
 
-/*
-  $.ajax({
-	url: 'tidtietoja',
-	data:{ "tid" : tid },
-	type:'POST',
-	success:function(data){
-		//console.log(data);
-		if(data)
-		{
-			$('#tidTietoja').html(JSON.parse(data));
-
-		}
-   	},
-	error:function(data){
-		console.log(data);
-    	}
-    });
-*/
-
 });
 
-/*
-$(document).delegate(".cal","click",function(){
 
-  localStorage.setItem('valinnuPvm', $(this).attr("pvm"));
-  aikoja();
-  setInterval(aikoja, "15000");
-  count1 = step;
-});
-*/
 
   clearInterval(aikoja);
   $('#valinnuPvm').val('');

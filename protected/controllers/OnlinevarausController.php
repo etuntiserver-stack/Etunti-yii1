@@ -514,15 +514,6 @@ class OnlinevarausController extends Controller
 	public function actionPalvelu_ajax()
 	{
 
-	   if(isset($_POST['clear']) and $_POST['clear'] == 'all')
-	   {
-  		if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
-			Onlinevaraus::model()->deletebypk($_SESSION['onlinevaraus']['onlinevarausID']);
-
-		unset($_SESSION['onlinevaraus']);
-		echo 'cleared';
-	   }
-
 	   if(isset($_POST['id']))
 	   {
 
@@ -710,30 +701,20 @@ class OnlinevarausController extends Controller
 			Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 		}
 
-		// clear
-		if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
-			Onlinevaraus::model()->deletebypk($_SESSION['onlinevaraus']['onlinevarausID']);
-
-		if(isset($_SESSION['onlinevaraus']['modelTV']))
-			Tyovuoroot::model()->deletebypk($_SESSION['onlinevaraus']['modelTV']);
-
-		if(isset($_SESSION['onlinevaraus']))
-		  unset($_SESSION['onlinevaraus']);
-
-
+		// <-- Clear
 		if(isset($_GET['keskeyta']))
 		{
+			if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
+			Onlinevaraus::model()->deletebypk($_SESSION['onlinevaraus']['onlinevarausID']);
+
 			if(isset($_SESSION['onlinevaraus']['modelTV']))
-			{
-			$tv = Tyovuoroot::model()->findbypk($_SESSION['onlinevaraus']['modelTV']);
-			if(isset($tv->id))
-			Tyovuoroot::model()->deletebypk($tv->id);
-			}
+			Tyovuoroot::model()->deletebypk($_SESSION['onlinevaraus']['modelTV']);
 
 			unset($_SESSION['onlinevaraus']);
 			$this->redirect('index');
 		}
-	
+		//     Clear -->
+
 		$this->render('index', array(
 			'asetukset' => $asetukset
 		));
