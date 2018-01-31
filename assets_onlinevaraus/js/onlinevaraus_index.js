@@ -617,9 +617,15 @@ $("#show_yhteenveto").click(function(){
 });
 
 
-$(document).delegate('.sulje-yhteenveto', "click", function() {
-	$( '#order_summary' ).collapse('hide');
-	$( "#show_yhteenveto" ).show();
+$(document).delegate('#show_yhteenveto', "click", function() {
+
+	var expanded = $( '#order_summary' ).attr('aria-expanded')
+	if(expanded == 'true'){
+		$('#show_yhteenveto').text('HIDE');
+	}
+	if(expanded == 'false'){
+		$('#show_yhteenveto').text('SHOW');
+	}
 });
 
 

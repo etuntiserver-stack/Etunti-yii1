@@ -186,15 +186,15 @@
 	$body = 
 	'
 <div class = "row panel panel-default select-service-panel">
-   <div class = "panel-heading">
-      <button class="pull-right btn btn-lg btn-warning sulje-yhteenveto">'.Yii::t('main', 'Sulje').'</button>
+   <div class="panel-heading">
+      <button class="pull-right btn btn-lg btn-warning" data-toggle="collapse" data-target="#order_summary" id="show_yhteenveto">'.Yii::t('main', 'SHOW').'</button>
       <h3>
          '.Yii::t('main', 'Yhteenveto').'
       </h3>
    </div>
    <div class="row">
    <div class="col-sm-8 col-sm-offset-2">   
-   <div class = "panel-body">
+   <div class = "panel-body collapse" id="order_summary">
 
 	';
 
