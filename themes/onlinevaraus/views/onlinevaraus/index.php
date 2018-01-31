@@ -7,6 +7,17 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_onlinevaraus/js/onlinevaraus_index.js"></script>
 <input type="hidden" id="valinnuPvm">
 
+<div class = "panel panel-default">
+   <div class = "panel-heading">
+      <h3 class = "panel-title">
+         Panel With title
+      </h3>
+   </div>
+   
+   <div class = "panel-body">
+      Panel content
+   </div>
+</div>
 
 <div class="container">
  <div class="row">
@@ -255,12 +266,10 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 
  <!-- Order summary footer-->
  <div class="row collapse" id="order_summary">
-  <div class="col-sm-6 col-sm-offset-3 select-service">
-	<div class="row">
-	  <div class="col-sm-8 col-sm-offset-2">
+  <div class="col-sm-6 col-sm-offset-3">
+
 	    <div id="panGetContent"></div>
-	  </div>
-	</div>
+
   </div>
  </div>
 

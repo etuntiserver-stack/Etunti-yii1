@@ -148,7 +148,7 @@ if( isset(Yii::app()->user->domain) )
 	  ?>
 	  </div>
 
-	  <button class="form-group" data-toggle="collapse" data-target="#order_summary" id="show_yhteenveto">SHOW</button>
+	  <button class="form-group btn btn-warning" data-toggle="collapse" data-target="#order_summary" id="show_yhteenveto">Yhteenveto</button>
 	  </div>
 
 	 </div>

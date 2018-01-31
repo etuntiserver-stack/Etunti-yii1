@@ -185,7 +185,18 @@
 
 	$body = 
 	'
-	<h3>'.Yii::t('main', 'Yhteenveto').'</h3>';
+<div class = "row panel panel-default select-service-panel">
+   <div class = "panel-heading">
+      <button class="pull-right btn btn-lg btn-warning sulje-yhteenveto">'.Yii::t('main', 'Sulje').'</button>
+      <h3>
+         '.Yii::t('main', 'Yhteenveto').'
+      </h3>
+   </div>
+   <div class="row">
+   <div class="col-sm-8 col-sm-offset-2">   
+   <div class = "panel-body">
+
+	';
 
 
 	$body .= '
@@ -286,6 +297,12 @@
 
 	$body .= $blockAika;
 	$body .= $blockKohde;
+
+	$body .= '
+   </div>
+   </div>
+   </div>
+</div>'; //panel
 
 	echo json_encode($body);
 

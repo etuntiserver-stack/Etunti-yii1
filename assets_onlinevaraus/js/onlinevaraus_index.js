@@ -613,7 +613,15 @@ $("#show_yhteenveto").click(function(){
 	$('html,body').animate({
 	   scrollTop: $("#show_yhteenveto").offset().top
 	});
+	$(this).hide();
 });
+
+
+$(document).delegate('.sulje-yhteenveto', "click", function() {
+	$( '#order_summary' ).collapse('hide');
+	$( "#show_yhteenveto" ).show();
+});
+
 
 
 });
