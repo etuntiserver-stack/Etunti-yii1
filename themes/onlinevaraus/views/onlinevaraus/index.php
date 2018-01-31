@@ -7,17 +7,6 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_onlinevaraus/js/onlinevaraus_index.js"></script>
 <input type="hidden" id="valinnuPvm">
 
-<div class = "panel panel-default">
-   <div class = "panel-heading">
-      <h3 class = "panel-title">
-         Panel With title
-      </h3>
-   </div>
-   
-   <div class = "panel-body">
-      Panel content
-   </div>
-</div>
 
 <div class="container">
  <div class="row">
