@@ -10,12 +10,15 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 
 <div class="container">
  <div class="row">
-  <div class="col-sm-6 col-sm-offset-3 select-service">
+  <div class="col-sm-6 col-sm-offset-3">
 
-	<div class="row">
-	  <div class="col-sm-8 col-sm-offset-2">
-		<?=CHtml::link('Keskeytä', array('index', 'keskeyta' =>'true'))?>
-	  	<h3><?=Yii::t('main', 'Palvelut')?></h3>
+	<div class = "row panel panel-default select-service-panel">
+	 <div class="panel-heading">
+           <h3><?=CHtml::link('<span class="text-default">Keskeytä</span>', array('index', 'keskeyta' =>'true'), array('class' => 'pull-right'))?> Palvelut</h3>
+	 </div>
+	 <div class="row">
+   	  <div class="col-sm-8 col-sm-offset-2">   
+   	   <div class="panel-body">
 
 		<select class="form-control input-lg" id="palvelu">
 		<option value="">Valitse palvelu</option>
@@ -37,18 +40,11 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 		}
 		?>
 		</select>
-	  </div>
-	</div>
 
-	<!-- Toinen valikko -->
-	<div class="row">
-	  <div class="col-sm-8 col-sm-offset-2">
+		<!-- Toinen valikko -->
 		<div id="toinen_valiko"></div>
-	  </div>
-	</div>
-	<br>
-	<div class="row" id="toimialueRow">
-	  <div class="col-sm-8 col-sm-offset-2">
+		<br>
+		<div id="toimialueRow">
 		<?php
 		$exists = Valikkoot::model()->find(" select_type='tyo_toimialue' ");
 		if(!isset($exists->id))
@@ -71,10 +67,12 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 
         	echo CHtml::dropDownList('tyo_toimialue', 'tyo_toimialue', $list, $options);
         	?>
-
+		</div>
 	    	<div id="lisapalvelulista"></div>
 
+	   </div>
 	  </div>
+	 </div>
 	</div>
 
   </div>
@@ -86,7 +84,7 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 
 	<div class = "row panel panel-default select-service-panel">
 	 <div class="panel-heading">
-           <h3>Valitse päivä.</h3>
+           <h3>Valitse päivä</h3>
 	 </div>
 	 <div class="row">
    	  <div class="col-sm-8 col-sm-offset-2">   
@@ -111,9 +109,16 @@ echo $_SESSION['onlinevaraus']['modelTV'];
  <?php $osoite_style = 'style="display:none"'; ?>
  <?php endif; ?>
  <div class="row osoitelaatikko" <?=$osoite_style?>>
-  <div class="col-sm-6 col-sm-offset-3 select-service">
-	<div class="row">
-	  <div class="col-sm-8 col-sm-offset-2">
+  <div class="col-sm-6 col-sm-offset-3">
+
+	<div class = "row panel panel-default select-service-panel">
+	 <div class="panel-heading">
+           <h3>Osoite</h3>
+	 </div>
+	 <div class="row">
+   	  <div class="col-sm-8 col-sm-offset-2">   
+   	   <div class="panel-body">
+
 
 		<div id="fullLomake">
 		   <h4 class="title-subtitle text-center"><?php echo Yii::t('main', 'Osoite'); ?></h4>
@@ -234,8 +239,11 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 
 		<p><button class="tallennaUusi btn btn-lg btn-block btn-success">Sirry maksamaan <i class="caret"></i></button></p>
 
+	   </div>
 	  </div>
+	 </div>
 	</div>
+
   </div>
  </div>
 
