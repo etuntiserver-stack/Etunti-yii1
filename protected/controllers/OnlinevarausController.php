@@ -468,6 +468,11 @@ class OnlinevarausController extends Controller
 		if(!isset(Yii::app()->user->domain))
 		die('Error: domain');
 
+		if(isset($_POST['kalenteri_year_month'])){
+			$_SESSION['onlinevaraus']['kalenteri_year_month'] = $_POST['kalenteri_year_month'];
+			exit;
+		}
+
 		$this->renderPartial('aika_ajax');
 	}
 

@@ -552,6 +552,7 @@ $(".tallennaUusi").click(function(){
       return false;
    }
 
+   $(this).remove();
 
    $.ajax({
 	url: 'luouusi',
@@ -633,12 +634,38 @@ $(document).delegate('#show_yhteenveto', "click", function() {
 $(document).delegate('.next_kk', "click", function() {
 	$(this).closest('div').addClass('hidden');
 	$('#toinen_kk').removeClass('hidden');
-	clearInterval(interval);
+	var kalenteri_year_month = $(this).attr('kalenteri_year_month');
+
+	   $.ajax({
+		url: 'aika_ajax',
+		data:{ kalenteri_year_month : kalenteri_year_month },
+		type:'POST',
+		success:function(data){
+			data = JSON.parse(data);
+	   	},
+		error:function(data){
+			console.log(data);
+	    	}
+	   });
+
 });
 
 $(document).delegate('.prev_kk', "click", function() {
 	$(this).closest('div').addClass('hidden');
 	$('#ensimmainen_kk').removeClass('hidden');
+	var kalenteri_year_month = $(this).attr('kalenteri_year_month');
+
+	   $.ajax({
+		url: 'aika_ajax',
+		data:{ kalenteri_year_month : kalenteri_year_month },
+		type:'POST',
+		success:function(data){
+			data = JSON.parse(data);
+	   	},
+		error:function(data){
+			console.log(data);
+	    	}
+	   });
 });
 
 });

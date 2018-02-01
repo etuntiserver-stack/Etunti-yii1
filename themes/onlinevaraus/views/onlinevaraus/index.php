@@ -15,7 +15,7 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 	<div class = "row panel panel-default select-service-panel">
 	 <div class="panel-heading">
            <h3>
-		<?=CHtml::link('<span class="text-default">Keskeytä</span>', array('index', 'keskeyta' =>'true'), array('class' => 'pull-right'))?>
+		<?=CHtml::link('<span class="text-default fa fa-repeat" style="color:white"></span>', array('index', 'keskeyta' =>'true'), array('class' => 'pull-right'))?>
 		Palvelut
 	   </h3>
 	 </div>
@@ -256,17 +256,27 @@ echo $_SESSION['onlinevaraus']['modelTV'];
  <?php $maksu_style = 'style="display:none"'; ?>
  <?php endif; ?>
  <div class="row maksulaatikko" <?=$maksu_style?>>
-  <div class="col-sm-6 col-sm-offset-3 select-service">
+  <div class="col-sm-6 col-sm-offset-3">
 
-	<div class="row">
-	  <div class="col-sm-12" id="maksu_content">
+	<div class = "row panel panel-default select-service-panel">
+	 <div class="panel-heading">
+           <h3>
+		Maksu
+	   </h3>
+	 </div>
+	 <div class="row">
+   	  <div class="col-sm-10 col-sm-offset-1">   
+   	   <div class="panel-body">
+
 		<?php 
 		if(isset($_SESSION['onlinevaraus']['paapalvelu']) and isset($_SESSION['onlinevaraus']['onlinevarausID']))
 		{
 			echo $this->renderPartial('maksu', array('json' => false));
 		}
 		?>
+	   </div>
 	  </div>
+	 </div>
 	</div>
   </div>
  </div>

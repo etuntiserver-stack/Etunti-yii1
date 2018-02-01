@@ -27,16 +27,28 @@
 
      $month = date('m');
      $year = date('Y');
-     $body .= "<div id='ensimmainen_kk' class='text-center'>";
-     $body .= "<h3><i class='fa fa-angle-double-right pull-right link next_kk'></i> ".$months[$month]." $year</h3>";
+
+     $month_next = date('m',strtotime("last day of +1 month"));
+     $year_next = date('Y',strtotime("last day of +1 month"));
+
+     $hidden_first = '';
+     $hidden_second = 'hidden';
+
+     if(isset($_SESSION['onlinevaraus']['kalenteri_year_month']) and $_SESSION['onlinevaraus']['kalenteri_year_month'] == $year_next."_".$month_next)
+     {
+	$hidden_first = 'hidden';
+	$hidden_second = '';
+     }
+
+     $body .= "<div id='ensimmainen_kk' class='text-center $hidden_first'>";
+     $body .= "<h3><i class='fa fa-angle-double-right pull-right link next_kk' kalenteri_year_month='".$year_next."_".$month_next."'></i> ".$months[$month]." $year</h3>";
      $body .= $this->build_calendar($month, $year, $dateArray, $asetukset->onlinevaraus_aikaisintaan_paivamaara, $numOfWeek);
      $body .= "</div>";
 
-     $month = date('m',strtotime("last day of +1 month"));
-     $year = date('Y',strtotime("last day of +1 month"));
-     $body .= "<div id='toinen_kk' class='text-center hidden'>";
-     $body .= "<h3><i class='fa fa-angle-double-left pull-left link prev_kk'></i> ".$months[$month]." $year</h3>";
-     $body .= $this->build_calendar($month, $year, $dateArray, $asetukset->onlinevaraus_aikaisintaan_paivamaara, $numOfWeek);
+
+     $body .= "<div id='toinen_kk' class='text-center $hidden_second'>";
+     $body .= "<h3><i class='fa fa-angle-double-left pull-left link prev_kk' kalenteri_year_month='".$year."_".$month."'></i> ".$months[$month_next]." $year_next</h3>";
+     $body .= $this->build_calendar($month_next, $year_next, $dateArray, $asetukset->onlinevaraus_aikaisintaan_paivamaara, $numOfWeek);
      $body .= "</div>";
 
  }
