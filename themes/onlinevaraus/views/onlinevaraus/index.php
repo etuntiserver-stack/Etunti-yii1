@@ -82,17 +82,24 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 
  <!-- Kalenterit-->
  <div class="row kaksiKalenteria" style="display:none">
-  <div class="col-sm-6 col-sm-offset-3 select-service">
+  <div class="col-sm-6 col-sm-offset-3">
 
-	<div class="row">
-	  <div class="col-sm-8 col-sm-offset-2">
+	<div class = "row panel panel-default select-service-panel">
+	 <div class="panel-heading">
+           <h3>Valitse päivä.</h3>
+	 </div>
+	 <div class="row">
+   	  <div class="col-sm-8 col-sm-offset-2">   
+   	   <div class="panel-body">
 
 		<div id="kalenterit"></div>
 		<br>
 		<div id="aikoja"></div>
 		<div id="tidTietoja"></div>
 
+	   </div>
 	  </div>
+	 </div>
 	</div>
 
   </div>
@@ -100,7 +107,7 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 
  <!-- Osoite-->
  <?php $osoite_style = ''; ?>
- <?php if(!isset($_SESSION['onlinevaraus']['sahkoposti'])) : ?>
+ <?php if(!isset($_SESSION['onlinevaraus']['modelTV'])) : ?>
  <?php $osoite_style = 'style="display:none"'; ?>
  <?php endif; ?>
  <div class="row osoitelaatikko" <?=$osoite_style?>>

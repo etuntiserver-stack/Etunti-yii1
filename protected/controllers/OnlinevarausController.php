@@ -898,23 +898,6 @@ class OnlinevarausController extends Controller
 
 protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWeek) {
 
-
-$months=array(
-	'01'=>'Tammikuu',
-	'02'=>'Helmikuu',
-	'03'=>'Maaliskuu',
-	'04'=>'Huhtikuu',
-	'05'=>'Toukokuu',
-	'06'=>'Kesäkuu',
-	'07'=>'Heinäkuu',
-	'08'=>'Elokuu',
-	'09'=>'Syyskuu',
-	10=>'Lokakuu',
-	11=>'Marraskuu',
-	12=>'Joulukuu'
-	);
-
-
      // Create array containing abbreviations of days of week.
      $daysOfWeek = array('Ma','Ti','Ke','To','Pe','La','Su');
 
@@ -938,7 +921,6 @@ $months=array(
      // Create the table tag opener and day headers
 
      $calendar = "";
-     $calendar .= "<h3>".$months[$month]." $year</h3>";
      $calendar .= "<table class='table table-bordered'>";
      $calendar .= "<tr>";
 

@@ -187,9 +187,9 @@
 	'
 <div class = "row panel panel-default select-service-panel">
    <div class="panel-heading">
-      <button class="pull-right btn btn-lg btn-warning" data-toggle="collapse" data-target="#order_summary" id="show_yhteenveto">'.Yii::t('main', 'SHOW').'</button>
       <h3>
-         '.Yii::t('main', 'Yhteenveto').'
+       <button class="pull-right btn btn-lg btn-warning" data-toggle="collapse" data-target="#order_summary" id="show_yhteenveto">'.Yii::t('main', 'SHOW').'</button>
+       '.Yii::t('main', 'Yhteenveto').'
       </h3>
    </div>
    <div class="row">

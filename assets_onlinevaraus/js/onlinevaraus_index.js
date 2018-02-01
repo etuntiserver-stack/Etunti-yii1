@@ -89,7 +89,7 @@ $(document).delegate("#toinen_valiko_values","change",function(){
 		if(data)
 		{
 			$('#panGetContent').html(JSON.parse(data));
-			$('.panGetContent').show('370');
+			$('.panGetContent').show();
 		}
 		tuntienTarkistus();
 		kaksiKalenteria();
@@ -232,7 +232,7 @@ function kaksiKalenteria()
 
 		if(data !== ''){
 		  //console.log(data);
-		  $('.kaksiKalenteria').show('');
+		  $('.kaksiKalenteria').show();
 		  $('#kalenterit').html(data);
 	          $(".toolt").tooltip();
 		}
@@ -245,7 +245,9 @@ function kaksiKalenteria()
     	}
     });
 }
-setInterval(kaksiKalenteria, "15000");
+
+var interval = null;
+interval = setInterval(kaksiKalenteria, "15000");
 
 
 $(document).delegate(".ajaanClick","click",function(){
@@ -628,6 +630,15 @@ $(document).delegate('#show_yhteenveto', "click", function() {
 	}
 });
 
+$(document).delegate('.next_kk', "click", function() {
+	$(this).closest('div').addClass('hidden');
+	$('#toinen_kk').removeClass('hidden');
+	clearInterval(interval);
+});
 
+$(document).delegate('.prev_kk', "click", function() {
+	$(this).closest('div').addClass('hidden');
+	$('#ensimmainen_kk').removeClass('hidden');
+});
 
 });
