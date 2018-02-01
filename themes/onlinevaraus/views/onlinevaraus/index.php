@@ -14,7 +14,10 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 
 	<div class = "row panel panel-default select-service-panel">
 	 <div class="panel-heading">
-           <h3><?=CHtml::link('<span class="text-default">Keskeytä</span>', array('index', 'keskeyta' =>'true'), array('class' => 'pull-right'))?> Palvelut</h3>
+           <h3>
+		<?=CHtml::link('<span class="text-default">Keskeytä</span>', array('index', 'keskeyta' =>'true'), array('class' => 'pull-right'))?>
+		Palvelut
+	   </h3>
 	 </div>
 	 <div class="row">
    	  <div class="col-sm-8 col-sm-offset-2">   
