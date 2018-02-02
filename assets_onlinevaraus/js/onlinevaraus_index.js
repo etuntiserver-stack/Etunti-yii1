@@ -43,8 +43,8 @@ function paapalveluAjax(id){
 	data:{ "id" : id },
 	type:'POST',
 	success:function(data){
-		data = JSON.parse(data);
 		//console.log(data);
+		data = JSON.parse(data);
 
 		if(data[0] != ''){
 			$("#toinen_valiko").html(data[0]).show('slow');

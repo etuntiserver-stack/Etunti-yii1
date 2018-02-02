@@ -524,8 +524,13 @@ class OnlinevarausController extends Controller
 
 		// <-- Data
 		$data = TuotteetPalvelut::model()->findByPk($_POST['id']);
-		if(isset($data->id))
-		$_SESSION['onlinevaraus']['paapalvelu'] = $data->id;
+		if(isset($data->id)){
+			unset($_SESSION['onlinevaraus']);
+			if(!isset($_SESSION['onlinevaraus'])) { $_SESSION['onlinevaraus'] = array(); }
+			$_SESSION['onlinevaraus']['paapalvelu'] = $data->id;
+			//echo $data->id;
+			//exit;
+		}
 
 		$this->renderPartial('palvelu_ajax',array(
 			'data'=>$data,
