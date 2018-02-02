@@ -31,9 +31,11 @@ $("#palvelu").change(function(){
    var id = $(this).val();
    var t = setTimeout( function() {
 	paapalveluAjax(id);
+	aika_summary('show');
    }, 100 );
 
 });
+
 
 if( $("#palvelu").val() !== '' ){ paapalveluAjax($("#palvelu").val()); }
 
@@ -90,6 +92,7 @@ $(document).delegate("#toinen_valiko_values","change",function(){
 		{
 			$('#panGetContent').html(JSON.parse(data));
 			$('.panGetContent').show();
+			aika_summary('show');
 		}
 		tuntienTarkistus();
 		kaksiKalenteria();
@@ -171,6 +174,14 @@ $(document).delegate(".lisat","click",function(){
 		{
 			$('#panGetContent').html(data);
 			$('.panGetContent').show('370');
+			if( parseInt($( '#clock' ).text()) > 0 ){
+
+			  if( parseInt($('#varattu_aika').attr('for')) > 0 ){
+				aika_summary('hide');
+			  } else {
+				aika_summary('show');
+			  }
+			}
 		}
 		tuntienTarkistus();
    	},
@@ -271,7 +282,7 @@ $(document).delegate(".ajaanClick","click",function(){
 			$('#panGetContent').html(JSON.parse(data));
 			$('#aikoja').hide(370);
 			$('.osoitelaatikko').show();
-			//aikoja();
+			aika_summary('hide');
 
 			$('html,body').animate({
 			   scrollTop: $(".osoitelaatikko").offset().bottom
@@ -518,7 +529,65 @@ $(document).delegate('#sahkoposti', "keyup", function() {
 
 $(".tallennaUusi").click(function(){
 
+   var senddata = osoite_validator();
+   $(this).remove();
 
+   $.ajax({
+	url: 'luouusi',
+	data: senddata,
+	type:'POST',
+	success:function(data){
+		console.log(data);
+		data = JSON.parse(data);
+
+		localStorage.setItem('tyyppi', $('#tyyppi').val());
+		localStorage.setItem('yrityksen_nimi', $('#yrityksen_nimi').val());
+		localStorage.setItem('y_tunnus', $('#y_tunnus').val());
+
+		localStorage.setItem('yhteyshenkilo', $('#yhteyshenkilo').val());
+		localStorage.setItem('puhelin', $('#puhelin').val());
+		localStorage.setItem('osoite', $('#osoite').val());
+		localStorage.setItem('postinumero', $('#postinumero').val());
+		localStorage.setItem('kaupunki', $('#kaupunki').val());
+		localStorage.setItem('lisatietoja', $('#lisatietoja').val());
+
+
+		if(data == 'nytRedirectMaksulle')
+		{
+
+
+		   $.ajax({
+			url: 'maksu',
+			data:{ "json" : true },
+			type:'GET',
+			success:function(data){
+				//console.log(data);
+				data = JSON.parse(data);
+				if(data !== '')
+				{
+					$( '#osoite_summary' ).collapse('hide');
+					$('.maksulaatikko').show();
+					$('#maksu_content').html(data);
+					$('html,body').animate({scrollBottom: $('.maksulaatikko').offset().top +100 }, 'slow');
+				}
+		   	},
+			error:function(data){
+				console.log(data);
+		    	}
+		    });
+
+		} else {
+			alert(data);
+		}
+
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+});
+
+function osoite_validator(){
    var tyyppi 		= $('#tyyppi').val();
    var yrityksen_nimi 	= $('#yrityksen_nimi').val();
    var y_tunnus 	= $('#y_tunnus').val();
@@ -552,65 +621,10 @@ $(".tallennaUusi").click(function(){
       return false;
    }
 
-   $(this).remove();
+   var senddata = { sahkoposti : sahkoposti, osoite : osoite, postinumero : postinumero, kaupunki : kaupunki, puhelin : puhelin, yhteyshenkilo : yhteyshenkilo, lisatietoja : lisatietoja, tyyppi : tyyppi, yrityksen_nimi : yrityksen_nimi, y_tunnus : y_tunnus };
 
-   $.ajax({
-	url: 'luouusi',
-	data:{ "sahkoposti" : sahkoposti, osoite : osoite, postinumero : postinumero, kaupunki : kaupunki, puhelin : puhelin, yhteyshenkilo : yhteyshenkilo, lisatietoja : lisatietoja, tyyppi : tyyppi, yrityksen_nimi : yrityksen_nimi, y_tunnus : y_tunnus },
-	type:'POST',
-	success:function(data){
-		console.log(data);
-		data = JSON.parse(data);
-
-		localStorage.setItem('tyyppi', $('#tyyppi').val());
-		localStorage.setItem('yrityksen_nimi', $('#yrityksen_nimi').val());
-		localStorage.setItem('y_tunnus', $('#y_tunnus').val());
-
-		localStorage.setItem('yhteyshenkilo', $('#yhteyshenkilo').val());
-		localStorage.setItem('puhelin', $('#puhelin').val());
-		localStorage.setItem('osoite', $('#osoite').val());
-		localStorage.setItem('postinumero', $('#postinumero').val());
-		localStorage.setItem('kaupunki', $('#kaupunki').val());
-		localStorage.setItem('lisatietoja', $('#lisatietoja').val());
-
-
-		if(data == 'nytRedirectMaksulle')
-		{
-
-
-		   $.ajax({
-			url: 'maksu',
-			data:{ "json" : true },
-			type:'GET',
-			success:function(data){
-				data = JSON.parse(data);
-				if(data !== '')
-				{
-					$('.maksulaatikko').show();
-					$('#maksu_content').html(data);
-					$('html,body').animate({
-					   scrollTop: $(".maksulaatikko").offset().top
-					});
-				}
-		   	},
-			error:function(data){
-				console.log(data);
-		    	}
-		    });
-
-		} else {
-			alert(data);
-		}
-
-   	},
-	error:function(data){
-		console.log(data);
-    	}
-    });
-
-  
-
-});
+   return senddata;
+}
 
 $("#show_yhteenveto").click(function(){
 	$('html,body').animate({
@@ -621,15 +635,54 @@ $("#show_yhteenveto").click(function(){
 
 
 $(document).delegate('#show_yhteenveto', "click", function() {
-
 	var expanded = $( '#order_summary' ).attr('aria-expanded')
 	if(expanded == 'true'){
-		$('#show_yhteenveto').text('HIDE');
+		$('#show_yhteenveto').text('Sulje');
 	}
 	if(expanded == 'false'){
-		$('#show_yhteenveto').text('SHOW');
+		$('#show_yhteenveto').text('Näytä lisää');
 	}
 });
+
+$(document).delegate('#show_osoite', "click", function() {
+	var expanded = $( '#osoite_summary' ).attr('aria-expanded')
+	if(expanded == 'true'){
+		$('#show_osoite').text('Sulje');
+	}
+	if(expanded == 'false'){
+		$('#show_osoite').text('Näytä lisää');
+	}
+});
+
+
+$(document).delegate('#show_aika', "click", function() { aika_summary(null); });
+
+/* aika_summary */
+function aika_summary(show_hide){
+  if( parseInt($('#varattu_aika').attr('for')) > 0 ){
+	$('#aika_title').html( $('#varattu_aika').attr('pvm') + ', ' + $('#varattu_aika').attr('klo') );
+	if(osoite_validator() == false){
+	   $( '#osoite_summary' ).collapse('show');
+	}
+	if(osoite_validator().osoite){
+	   $('#osoite_title').html( osoite_validator().osoite );
+	}
+  }
+  if(show_hide == 'show'){
+	$( '#aika_summary' ).collapse('show');
+  }
+  if(show_hide == 'hide'){
+	$( '#aika_summary' ).collapse('hide');
+  }
+  var expanded = $( '#aika_summary' ).attr('aria-expanded')
+  if(expanded == 'true'){
+ 	$('#show_aika').text('Sulje');
+  }
+  if(expanded == 'false'){
+	$('#show_aika').text('Näytä lisää');
+  }
+}
+/* aika_summary */
 
 $(document).delegate('.next_kk', "click", function() {
 	$(this).closest('div').addClass('hidden');

@@ -470,7 +470,6 @@ class OnlinevarausController extends Controller
 
 		if(isset($_POST['kalenteri_year_month'])){
 			$_SESSION['onlinevaraus']['kalenteri_year_month'] = $_POST['kalenteri_year_month'];
-			exit;
 		}
 
 		$this->renderPartial('aika_ajax');
@@ -525,11 +524,8 @@ class OnlinevarausController extends Controller
 		// <-- Data
 		$data = TuotteetPalvelut::model()->findByPk($_POST['id']);
 		if(isset($data->id)){
-			unset($_SESSION['onlinevaraus']);
 			if(!isset($_SESSION['onlinevaraus'])) { $_SESSION['onlinevaraus'] = array(); }
 			$_SESSION['onlinevaraus']['paapalvelu'] = $data->id;
-			//echo $data->id;
-			//exit;
 		}
 
 		$this->renderPartial('palvelu_ajax',array(
@@ -858,7 +854,7 @@ class OnlinevarausController extends Controller
 		die('Error: domain');
 
 		$this->renderPartial('maksu', array(
-			'json' => true
+			'json' => $json
 		));
 
 	}

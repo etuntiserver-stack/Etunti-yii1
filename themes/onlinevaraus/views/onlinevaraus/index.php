@@ -87,11 +87,14 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 
 	<div class = "row panel panel-default select-service-panel">
 	 <div class="panel-heading">
-           <h3>Valitse päivä</h3>
+           <h3>
+       		<button class="pull-right btn btn-lg btn-warning" data-toggle="collapse" data-target="#aika_summary" id="show_aika"><?=Yii::t('main', 'Näytä lisää')?></button>
+		<span id="aika_title">Aika</span>
+	   </h3>
 	 </div>
 	 <div class="row">
    	  <div class="col-sm-8 col-sm-offset-2">   
-   	   <div class="panel-body">
+   	   <div class="panel-body collapse" id="aika_summary">
 
 		<div id="kalenterit"></div>
 		<br>
@@ -116,11 +119,14 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 
 	<div class = "row panel panel-default select-service-panel">
 	 <div class="panel-heading">
-           <h3>Osoite</h3>
+           <h3>
+       		<button class="pull-right btn btn-lg btn-warning" data-toggle="collapse" data-target="#osoite_summary" id="show_osoite"><?=Yii::t('main', 'Näytä lisää')?></button>
+		<span id="osoite_title">Osoite</span>
+	   </h3>
 	 </div>
 	 <div class="row">
    	  <div class="col-sm-8 col-sm-offset-2">   
-   	   <div class="panel-body">
+   	   <div class="panel-body collapse" id="osoite_summary">
 
 
 		<div id="fullLomake">
@@ -266,7 +272,7 @@ echo $_SESSION['onlinevaraus']['modelTV'];
 	 </div>
 	 <div class="row">
    	  <div class="col-sm-10 col-sm-offset-1">   
-   	   <div class="panel-body">
+   	   <div class="panel-body" id="maksu_content">
 
 		<?php 
 		if(isset($_SESSION['onlinevaraus']['paapalvelu']) and isset($_SESSION['onlinevaraus']['onlinevarausID']))

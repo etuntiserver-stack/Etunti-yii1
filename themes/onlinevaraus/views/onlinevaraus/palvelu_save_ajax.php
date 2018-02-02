@@ -60,7 +60,7 @@
 
 	$blockAika .= '
 	<hr>
-     	<h3>Varattu aika</h3>
+     	<h3 id="varattu_aika" for="'.strtotime($tv->alku).'" pvm="'.$tv->pvm.'" klo="'.$tv->alku.'-'.$tv->loppu.'">Varattu aika</h3>
 	<div class="row">
 	 <div class="col-xs-4">
 		'.$kuva.'		
@@ -188,7 +188,7 @@
 <div class = "row panel panel-default select-service-panel">
    <div class="panel-heading">
       <h3>
-       <button class="pull-right btn btn-lg btn-warning" data-toggle="collapse" data-target="#order_summary" id="show_yhteenveto">'.Yii::t('main', 'SHOW').'</button>
+       <button class="pull-right btn btn-lg btn-warning" data-toggle="collapse" data-target="#order_summary" id="show_yhteenveto">'.Yii::t('main', 'Näytä lisää').'</button>
        '.Yii::t('main', 'Yhteenveto').'
       </h3>
    </div>
