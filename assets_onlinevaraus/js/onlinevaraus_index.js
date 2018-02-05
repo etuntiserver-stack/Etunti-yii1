@@ -555,6 +555,7 @@ $(".tallennaUusi").click(function(){
 		if(data == 'nytRedirectMaksulle')
 		{
 
+		   $('#osoite_title').text($('#osoite').val());
 
 		   $.ajax({
 			url: 'maksu',

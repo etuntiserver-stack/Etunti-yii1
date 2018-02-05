@@ -700,6 +700,12 @@ class OnlinevarausController extends Controller
 		die('Error: domain');
 		$asetukset = Asetukset::model()->findbypk(1);
 
+		if(isset($_SESSION['onlinevaraus']) and !is_array($_SESSION['onlinevaraus'])) 
+		{ 
+			unset($_SESSION['onlinevaraus']);
+			$this->redirect('index');
+		}
+
 		if(isset($_POST['poistaTamaTiedosto'])){
 			unlink($_POST['poistaTamaTiedosto']);
 			exit;

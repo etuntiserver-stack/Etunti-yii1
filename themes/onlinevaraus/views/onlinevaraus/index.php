@@ -1,8 +1,6 @@
 <?php
 /* index
 */
-if(isset($_SESSION['onlinevaraus']['modelTV']))
-echo $_SESSION['onlinevaraus']['modelTV'];
 ?>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_onlinevaraus/js/onlinevaraus_index.js"></script>
 <input type="hidden" id="valinnuPvm">
