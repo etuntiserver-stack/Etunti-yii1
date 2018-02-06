@@ -197,7 +197,19 @@ h4 {
   width: 100%;
   
 }
-
+.yhteenveto-bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    Z-index: 99999;
+    left: 2%;
+}
+.yhteenveto-bottom .panel-heading {
+    height: 50px;
+}
+#show_yhteenveto{
+  margin-top: -5px;
+}
 .online-footer{
   width:100%;
   position: fixed;

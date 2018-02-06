@@ -627,16 +627,21 @@ function osoite_validator(){
    return senddata;
 }
 
+$("#show_yhteenveto").click(function(){
+	$('html,body').animate({
+	   scrollTop: $("#show_yhteenveto").offset().top
+	});
+	$(this).hide();
+});
+
+
 $(document).delegate('#show_yhteenveto', "click", function() {
 	var expanded = $( '#order_summary' ).attr('aria-expanded')
 	if(expanded == 'true'){
-		$('#show_yhteenveto').text('Sulje yhteenveto');
-		$('html,body').animate({
-		   scrollTop: $("#order_summary").offset().top
-		});
+		$('#show_yhteenveto').text('Sulje');
 	}
 	if(expanded == 'false'){
-		$('#show_yhteenveto').text('Näytä yhteenveto');
+		$('#show_yhteenveto').text('Näytä lisää');
 	}
 });
 
