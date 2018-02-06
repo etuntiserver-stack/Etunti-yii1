@@ -147,8 +147,9 @@ if( isset(Yii::app()->user->domain) )
 	   }
 	  ?>
 	  </div>
+	  <div class="form-group">
+		<button class="pull-right btn btn-lg btn-warning" data-toggle="collapse" data-target="#order_summary" id="show_yhteenveto"><?=Yii::t('main', 'Näytä yhteenveto')?></button>
 	  </div>
-
 	 </div>
 	</footer>
 

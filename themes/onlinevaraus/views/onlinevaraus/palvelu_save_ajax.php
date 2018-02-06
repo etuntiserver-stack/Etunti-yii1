@@ -185,16 +185,13 @@
 
 	$body = 
 	'
-<div class = "row panel panel-default select-service-panel">
+<div class = "row panel panel-default select-service-panel collapse" id="order_summary">
    <div class="panel-heading">
-      <h3>
-       <button class="pull-right btn btn-lg btn-warning" data-toggle="collapse" data-target="#order_summary" id="show_yhteenveto">'.Yii::t('main', 'Näytä lisää').'</button>
-       '.Yii::t('main', 'Yhteenveto').'
-      </h3>
+      <h3>'.Yii::t('main', 'Yhteenveto').'</h3>
    </div>
    <div class="row">
    <div class="col-sm-8 col-sm-offset-2">   
-   <div class = "panel-body collapse" id="order_summary">
+   <div class = "panel-body">
 
 	';
 
