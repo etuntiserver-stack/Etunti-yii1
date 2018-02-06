@@ -70,9 +70,9 @@ h3{
 }
 
 .select-service {
-	margin-top: 30px;
+	margin-top: 0px;
 	height: auto;
-	padding-top: 40px;
+	padding-top: 10px;
 	padding-bottom: 40px;
 	background-color: rgba(255, 255, 255, 0.85);
 	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
@@ -87,11 +87,12 @@ h3{
 }
 .select-service-panel>.panel-heading{
 	background: none;
-  text-align: center;
   border: none;
 }
 .select-service-panel>.panel-heading h3{
-	color: #5e7484;;
+	color: #5e7484;
+  text-align: center;
+  
 }
 .select-service h3{
   font-family: OpenSans;
@@ -217,10 +218,15 @@ h3{
 .yhteenveto-bottom .panel-heading {
     height: 50px;
     background-color: #5e7484;
+    padding: 5px 5px 5px 20px;
+    border-top-left-radius: 0px; 
+    border-top-right-radius: 0px; 
 }
 
 .yhteenveto-bottom .panel-heading h3{
     color: white;
+    text-align: left;
+    margin-bottom: 10px;
 }
 
 

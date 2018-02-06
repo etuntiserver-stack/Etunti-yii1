@@ -83,7 +83,7 @@
 
 	<div class = "row panel panel-default select-service-panel">
 	 <div class="panel-heading">
-         <button class="pull-right btn btn-lg btn-warning" data-toggle="collapse" data-target="#aika_summary" id="show_aika"><?=Yii::t('main', 'Näytä lisää')?></button>
+         <button class="pull-right btn btn-lg" data-toggle="collapse" data-target="#aika_summary" id="show_aika"> <i class="fas fa-eye"></i>></button>
            <h3><span id="aika_title">Aika</span></h3>
 	 </div>
 	 <div class="row">
@@ -240,7 +240,7 @@
 
 		</div><!-- Full lomake -->
 
-		<p><button class="tallennaUusi btn btn-lg btn-block btn-success">Sirry maksamaan <i class="caret"></i></button></p>
+		<p><button class="tallennaUusi btn btn-lg btn-block btn-success">Siirry maksamaan <i class="caret"></i></button></p>
 
 	   </div>
 	  </div>
