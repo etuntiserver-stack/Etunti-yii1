@@ -79,12 +79,6 @@ h4 {
 .select-service-panel>.panel-heading{
 	background: orange;
 }
-.select-service-panel>.panel-footer{
-	background: orange;
-}
-.select-service-panel>.panel-footer h3{
-	color: white;
-}
 .select-service-panel>.panel-heading h3{
 	color: white;
 }
