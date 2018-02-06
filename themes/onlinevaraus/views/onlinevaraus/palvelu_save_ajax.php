@@ -186,16 +186,9 @@
 	$body = 
 	'
 <div class = "row panel panel-default select-service-panel">
-   <div class="panel-heading">
-      <h3>
-       <button class="pull-right btn btn-lg btn-warning" data-toggle="collapse" data-target="#order_summary" id="show_yhteenveto">'.Yii::t('main', 'Näytä lisää').'</button>
-       '.Yii::t('main', 'Yhteenveto').'
-      </h3>
-   </div>
-   <div class="row">
-   <div class="col-sm-8 col-sm-offset-2">   
-   <div class = "panel-body collapse" id="order_summary">
-
+ <div class = "panel-body collapse" id="order_summary">
+  <div class="row">
+   <div class="col-sm-8 col-sm-offset-2"> 
 	';
 
 
@@ -300,8 +293,14 @@
 
 	$body .= '
    </div>
-   </div>
-   </div>
+  </div>
+ </div>
+   <div class="panel-footer">
+      <h3>
+       <button class="pull-right btn btn-lg btn-warning" data-toggle="collapse" data-target="#order_summary" id="show_yhteenveto">'.Yii::t('main', 'Näytä lisää').'</button>
+       '.Yii::t('main', 'Yhteenveto').'
+      </h3>
+   </div><!--footer-->
 </div>'; //panel
 
 	echo json_encode($body);
