@@ -13,7 +13,7 @@
 	<div class = "row panel panel-default select-service-panel">
 	 <div class="panel-heading">
            <h3>
-		<?=CHtml::link('<span class="text-default fa fa-repeat" style="color:white"></span>', array('index', 'keskeyta' =>'true'), array('class' => 'pull-right'))?>
+		<?=CHtml::link('<span class="text-default fa fa-repeat" id="online_reset"</span>', array('index', 'keskeyta' =>'true'), array('class' => 'pull-right'))?>
 		Palvelut
 	   </h3>
 	 </div>
@@ -290,7 +290,7 @@
   <div class="col-sm-6 col-sm-offset-3">
 
    <div class="row">
-    <div class="col-sm-8 col-sm-offset-2">  
+    <div class="col-sm-8 col-sm-offset-2">
 	    <div id="panGetContent"></div>
    </div>
    </div>
