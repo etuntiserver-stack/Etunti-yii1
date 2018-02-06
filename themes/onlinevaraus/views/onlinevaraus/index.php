@@ -12,10 +12,8 @@
 
 	<div class = "row panel panel-default select-service-panel">
 	 <div class="panel-heading">
-           <h3>
-		<?=CHtml::link('<span class="text-default fa fa-repeat" id="online_reset"</span>', array('index', 'keskeyta' =>'true'), array('class' => 'pull-right'))?>
-		Palvelut
-	   </h3>
+     <?=CHtml::link('<span class="text-default fa fa-repeat" id="online_reset"</span>', array('index', 'keskeyta' =>'true'), array('class' => 'pull-right'))?>
+           <h3>Palvelut</h3>
 	 </div>
 	 <div class="row">
    	  <div class="col-sm-8 col-sm-offset-2">   
@@ -44,7 +42,7 @@
 
 		<!-- Toinen valikko -->
 		<div id="toinen_valiko"></div>
-		<br>
+		<h3>Alue</h3>
 		<div id="toimialueRow">
 		<?php
 		$exists = Valikkoot::model()->find(" select_type='tyo_toimialue' ");
@@ -85,10 +83,8 @@
 
 	<div class = "row panel panel-default select-service-panel">
 	 <div class="panel-heading">
-           <h3>
-       		<button class="pull-right btn btn-lg btn-warning" data-toggle="collapse" data-target="#aika_summary" id="show_aika"><?=Yii::t('main', 'Näytä lisää')?></button>
-		<span id="aika_title">Aika</span>
-	   </h3>
+         <button class="pull-right btn btn-lg btn-warning" data-toggle="collapse" data-target="#aika_summary" id="show_aika"><?=Yii::t('main', 'Näytä lisää')?></button>
+           <h3><span id="aika_title">Aika</span></h3>
 	 </div>
 	 <div class="row">
    	  <div class="col-sm-8 col-sm-offset-2">   

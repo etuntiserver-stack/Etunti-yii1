@@ -176,6 +176,7 @@ h3{
     letter-spacing: 0px;
     text-align: left;
     color: #5e7486;
+    background-color: white;
     /*color: var(--blue-grey-two);*/
 }
 
@@ -215,7 +216,14 @@ h3{
 }
 .yhteenveto-bottom .panel-heading {
     height: 50px;
+    background-color: #5e7484;
 }
+
+.yhteenveto-bottom .panel-heading h3{
+    color: white;
+}
+
+
 #show_yhteenveto{
   margin-top: -5px;
 }
@@ -237,4 +245,5 @@ h3{
 
 #online_reset{
  color: #5e7484;
+ font-size: 1.5rem;
 }
