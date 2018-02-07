@@ -1,43 +1,27 @@
 <?php
-/* @var $this AvaimetController */
-/* @var $data Avaimet */
+/* @var $this ViestintaController */
+/* @var $data Viestinta */
 ?>
 
-<div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('time')); ?>:</b>
-	<?php echo CHtml::encode($data->time); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('avainnumero')); ?>:</b>
-	<?php echo CHtml::encode($data->avainnumero); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('kohde_id')); ?>:</b>
-	<?php echo CHtml::encode($data->kohde_id); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('tid')); ?>:</b>
-	<?php echo CHtml::encode($data->tid); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('sijainti')); ?>:</b>
-	<?php echo CHtml::encode($data->sijainti); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('lisatiedot')); ?>:</b>
-	<?php echo CHtml::encode($data->lisatiedot); ?>
-	<br />
-
-	<?php /*
-	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
-	<?php echo CHtml::encode($data->status); ?>
-	<br />
-
-	*/ ?>
-
-</div>
+<tr>
+	<td>
+		<?php echo CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
+				array('update', 'id'=>$data->id), 
+				array(
+					'class'=>'btn btn-primary myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Muokkaa') 
+				)
+			); 
+		?>
+	</td>
+	<td>
+		<?php echo date("d.m.Y  H:i",strtotime($data->time)); ?>
+	</td>
+	<td>
+		<?php echo $data->tid; ?>
+	</td>
+</tr>

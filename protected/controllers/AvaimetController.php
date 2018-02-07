@@ -29,21 +29,48 @@ class AvaimetController extends Controller
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
-				'users'=>array('*'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
-				'users'=>array('@'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
 	}
+
+	public function isEtuntiAdmin() {
+
+		if(isset(Yii::app()->user->adminID))
+		{
+		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	        if($m->id == Yii::app()->user->adminID)
+	            return true;
+		} else {
+	            return false;
+		}
+	}
+
+        public function init()
+        {
+
+                if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = 'etunti';
+                } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = Yii::app()->user->user_theme;
+                } elseif (isset(Yii::app()->user->asiakas)) {
+                        Yii::app()->theme = 'customer';
+                } else {
+                        Yii::app()->theme = 'classic';
+                }
+                parent::init();
+        }
 
 	/**
 	 * Displays a particular model.
@@ -71,7 +98,7 @@ class AvaimetController extends Controller
 		{
 			$model->attributes=$_POST['Avaimet'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('create',array(
@@ -95,7 +122,7 @@ class AvaimetController extends Controller
 		{
 			$model->attributes=$_POST['Avaimet'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('update',array(

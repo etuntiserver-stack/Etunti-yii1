@@ -63,7 +63,7 @@ class Avaimet extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('time, avainnumero, kohde_id, tid, sijainti, lisatiedot, status', 'required'),
+			array('avainnumero, kohde_id, status', 'required'),
 			array('kohde_id, tid, status', 'numerical', 'integerOnly'=>true),
 			array('avainnumero, sijainti', 'length', 'max'=>255),
 			// The following rule is used by search().
@@ -92,10 +92,10 @@ class Avaimet extends CActiveRecord
 			'id' => 'ID',
 			'time' => 'Time',
 			'avainnumero' => 'Avainnumero',
-			'kohde_id' => 'Kohde',
-			'tid' => 'Tid',
+			'kohde_id' => Yii::t('main', 'Osoite'),
+			'tid' => Yii::t('main', 'Työntekijä'),
 			'sijainti' => 'Sijainti',
-			'lisatiedot' => 'Lisatiedot',
+			'lisatiedot' => Yii::t('main', 'Lisätiedot'),
 			'status' => 'Status',
 		);
 	}
