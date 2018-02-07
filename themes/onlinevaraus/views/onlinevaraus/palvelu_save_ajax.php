@@ -189,7 +189,7 @@
    <div class="panel-heading">
       <h3>
        <button class="pull-right btn btn-warning" data-toggle="collapse" data-target="#order_summary" id="show_yhteenveto">'.Yii::t('main', 'Näytä lisää').'</button>
-       '.Yii::t('main', 'Yhteenveto').'
+       '.$model->nimike.' '.$tv->alku.' - '.$tv->loppu.'
       </h3>
    </div>
    <div class = "panel-body collapse" id="order_summary">

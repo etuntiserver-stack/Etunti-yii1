@@ -69,178 +69,149 @@
 		</div>
 	    	<div id="lisapalvelulista"></div>
 
-	   </div>
+	   </div>         
+    	    <div class="panel-body " id="aika_summary">
+ 		        <div id="kalenterit"></div>
+ 		        <div id="aikoja"></div>
+ 		        <div id="tidTietoja"></div>
+ 	        </div>
 	  </div>
 	 </div>
-	</div>
+   
+   <!-- Osoite-->
+   <?php $osoite_style = ''; ?>
+   <?php if(!isset($_SESSION['onlinevaraus']['modelTV'])) : ?>
+   <?php $osoite_style = 'style="display:none"'; ?>
+   <?php endif; ?>
+   <div class="row osoitelaatikko" <?=$osoite_style?>>
+    <div class="col-sm-8 col-sm-offset-2">
 
+
+  	 <div class="row">
+
+     	   <div class="panel-body collapse" id="osoite_summary">
+  		<div id="fullLomake">
+  		   <h4 class="title-subtitle text-center"><?php echo Yii::t('main', 'Osoite'); ?></h4>
+  		   <span class="text-sininen"><?php echo Yii::t('main', 'Tunnistaudu sähköpostilla'); ?></span>
+	
+  		      <!--<span class="small"><?php echo Yii::t('main', 'sähköpostillaTeksti'); ?></span>-->
+  		      <br>
+
+  		   <div class="row">
+  		      <div class="col-sm-12">
+	
+  		     	<div class="sahkoposti">
+  			<label><?php echo Yii::t('main', 'Sähköposti'); ?></label>
+  			<input type="text" id="sahkoposti" class="form-control input-lg" placeholder="Sähköposti" value="<?php if(isset($_SESSION['onlinevaraus']['sahkoposti'])) echo $_SESSION['onlinevaraus']['sahkoposti'] ;?>">
+  		     	</div>
+
+  		      </div><div class="col-sm-12">
+  		       	<div id="loytynytOsoitteet"></div>
+  		      </div>
+  		   </div>
+
+  		     <br>
+
+  		     <span class="text-sininen"><?php echo Yii::t('main', 'Tai täytä yhteystietokentät'); ?></span>
+  		     <!--<span class="small"><?php echo Yii::t('main', 'taitaytateksti'); ?></span>-->
+  		     <br>
+
+  		     <div id="lomake">
+	
+  		      <div class="row">
+  		       <div class="col-sm-6">
+  			<label><?php echo Yii::t('main', 'Asiakastyyppi '); ?></label>
+  			  <select id="tyyppi" class="form-control input-lg">
+  			  <option value="henkilo">Yksityishenkilö</option>
+  			  <option value="yritys">Yritys</option>
+  			  </select>
+
+  		       </div>
+  		      </div>
+
+  		      <div class="row">
+  		       <div class="col-sm-6">
+		
+  			<label><?php echo Yii::t('main', 'Yhteyshenkilö'); ?></label>
+  			  <input type="text" id="yhteyshenkilo" class="form-control input-lg">
+	
+  			<label><?php echo Yii::t('main', 'Puhelin'); ?></label>
+  			  <input type="text" id="puhelin" class="form-control input-lg">
+	
+  		       </div><div class="col-sm-6">
+
+  		        <div class="yritys">
+  			<label><?php echo Yii::t('main', 'Yrityksen Nimi'); ?></label>
+  			  <input type="text" id="yrityksen_nimi" class="form-control input-lg">
+  			</div>
+
+  		        <div class="yritys">
+  			<label><?php echo Yii::t('main', 'Y-tunnus'); ?></label>
+  			  <input type="text" id="y_tunnus" class="form-control input-lg">
+  			</div>
+	
+  		       </div>
+  		      </div>
+
+  		      <br>
+  		      <center><h4><?php echo Yii::t('main', 'Osoite'); ?></h4></center>
+
+  		      <div class="row">
+  		       <div class="col-sm-12">
+  			<label><?php echo Yii::t('main', 'Osoite'); ?></label>
+  			  <input type="text" id="osoite" class="form-control input-lg">
+  		       </div>
+  		      </div>
+
+
+  		      <div class="row">
+  		       <div class="col-sm-6">
+  			<label><?php echo Yii::t('main', 'Postinumero'); ?></label>
+  			  <input type="text" id="postinumero" class="form-control input-lg">
+  		       </div><div class="col-sm-6">
+  			<label><?php echo Yii::t('main', 'Postitoimipaikka'); ?></label>
+  			  <input type="text" id="kaupunki" class="form-control input-lg">
+  		       </div>
+  		      </div>
+
+  		      <br>
+  		      <center><h4><?php echo Yii::t('main', 'Lisätietoja'); ?></h4></center>
+
+  		      <div class="row">
+  		       <div class="col-sm-12">
+  			<label><?php echo Yii::t('main', 'Lisätietoja'); ?></label>
+  			  <textarea id="lisatietoja" class="form-control input-lg" placeholder="<?php echo Yii::t('main', 'Lemmikkejä, ovikoodi ja muuta lisätietoa'); ?>" rows="5"></textarea>
+  		       </div>
+  		      </div>
+
+  		      <br>
+  		      <div id="getMyPictures"></div>
+  		      <br>
+		
+  		      <div class="row">
+  		       <div class="col-sm-12">
+  			<label><?php echo Yii::t('main', 'Kuvien lisääminen'); ?></label>
+  			<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap-filestyle.js"> </script>
+  		  	<form id="uploadKuva" action="#" method="post" enctype="multipart/form-data">
+  		     	  <div class="input-group">
+  				<input type="hidden" name="kuvanLisaaminen">
+  				<input type="file" name="file" class="filestyle" data-icon="false" data-size="lg" data-buttonName="btn-primary" data-buttonText="<?php echo Yii::t('main', 'Lisää kuva'); ?>">
+  				<span class="input-group-btn">
+  		          		<input type="submit" value="Lataa" class="btn btn-primary btn-lg btn-group myBgColors" />
+  				</span>
+  		    	  </div>
+  			</form>
+  		       </div>
+  		</div><!-- Full lomake -->
+
+  		<p><button class="tallennaUusi btn btn-lg btn-block btn-success">Siirry maksamaan <i class="caret"></i></button></p>
+   
+	</div>
+ 
   </div>
  </div>
 
- <!-- Kalenterit-->
- <div class="row kaksiKalenteria" style="display:none">
-  <div class="col-sm-6 col-sm-offset-3">
 
-	<div class = "row panel panel-default select-service-panel">
-	 <div class="panel-heading">
-         <button class="pull-right btn btn-lg" data-toggle="collapse" data-target="#aika_summary" id="show_aika"> <i class="fas fa-eye"></i>></button>
-           <h3><span id="aika_title">Aika</span></h3>
-	 </div>
-	 <div class="row">
-   	  <div class="col-sm-8 col-sm-offset-2">   
-   	   <div class="panel-body collapse" id="aika_summary">
-
-		<div id="kalenterit"></div>
-		<br>
-		<div id="aikoja"></div>
-		<div id="tidTietoja"></div>
-
-	   </div>
-	  </div>
-	 </div>
-	</div>
-
-  </div>
- </div>
-
- <!-- Osoite-->
- <?php $osoite_style = ''; ?>
- <?php if(!isset($_SESSION['onlinevaraus']['modelTV'])) : ?>
- <?php $osoite_style = 'style="display:none"'; ?>
- <?php endif; ?>
- <div class="row osoitelaatikko" <?=$osoite_style?>>
-  <div class="col-sm-6 col-sm-offset-3">
-
-	<div class = "row panel panel-default select-service-panel">
-	 <div class="panel-heading">
-           <h3>
-       		<button class="pull-right btn btn-lg btn-warning" data-toggle="collapse" data-target="#osoite_summary" id="show_osoite"><?=Yii::t('main', 'Näytä lisää')?></button>
-		<span id="osoite_title">Osoite</span>
-	   </h3>
-	 </div>
-	 <div class="row">
-   	  <div class="col-sm-8 col-sm-offset-2">   
-   	   <div class="panel-body collapse" id="osoite_summary">
-
-
-		<div id="fullLomake">
-		   <h4 class="title-subtitle text-center"><?php echo Yii::t('main', 'Osoite'); ?></h4>
-		   <span class="text-sininen"><?php echo Yii::t('main', 'Tunnistaudu sähköpostilla'); ?></span>
-	
-		      <!--<span class="small"><?php echo Yii::t('main', 'sähköpostillaTeksti'); ?></span>-->
-		      <br>
-
-		   <div class="row">
-		      <div class="col-sm-12">
-	
-		     	<div class="sahkoposti">
-			<label><?php echo Yii::t('main', 'Sähköposti'); ?></label>
-			<input type="text" id="sahkoposti" class="form-control input-lg" placeholder="Sähköposti" value="<?php if(isset($_SESSION['onlinevaraus']['sahkoposti'])) echo $_SESSION['onlinevaraus']['sahkoposti'] ;?>">
-		     	</div>
-
-		      </div><div class="col-sm-12">
-		       	<div id="loytynytOsoitteet"></div>
-		      </div>
-		   </div>
-
-		     <br>
-
-		     <span class="text-sininen"><?php echo Yii::t('main', 'Tai täytä yhteystietokentät'); ?></span>
-		     <!--<span class="small"><?php echo Yii::t('main', 'taitaytateksti'); ?></span>-->
-		     <br>
-
-		     <div id="lomake">
-	
-		      <div class="row">
-		       <div class="col-sm-6">
-			<label><?php echo Yii::t('main', 'Asiakastyyppi '); ?></label>
-			  <select id="tyyppi" class="form-control input-lg">
-			  <option value="henkilo">Yksityishenkilö</option>
-			  <option value="yritys">Yritys</option>
-			  </select>
-
-		       </div>
-		      </div>
-
-		      <div class="row">
-		       <div class="col-sm-6">
-		
-			<label><?php echo Yii::t('main', 'Yhteyshenkilö'); ?></label>
-			  <input type="text" id="yhteyshenkilo" class="form-control input-lg">
-	
-			<label><?php echo Yii::t('main', 'Puhelin'); ?></label>
-			  <input type="text" id="puhelin" class="form-control input-lg">
-	
-		       </div><div class="col-sm-6">
-
-		        <div class="yritys">
-			<label><?php echo Yii::t('main', 'Yrityksen Nimi'); ?></label>
-			  <input type="text" id="yrityksen_nimi" class="form-control input-lg">
-			</div>
-
-		        <div class="yritys">
-			<label><?php echo Yii::t('main', 'Y-tunnus'); ?></label>
-			  <input type="text" id="y_tunnus" class="form-control input-lg">
-			</div>
-	
-		       </div>
-		      </div>
-
-		      <br>
-		      <center><h4><?php echo Yii::t('main', 'Osoite'); ?></h4></center>
-
-		      <div class="row">
-		       <div class="col-sm-12">
-			<label><?php echo Yii::t('main', 'Osoite'); ?></label>
-			  <input type="text" id="osoite" class="form-control input-lg">
-		       </div>
-		      </div>
-
-
-		      <div class="row">
-		       <div class="col-sm-6">
-			<label><?php echo Yii::t('main', 'Postinumero'); ?></label>
-			  <input type="text" id="postinumero" class="form-control input-lg">
-		       </div><div class="col-sm-6">
-			<label><?php echo Yii::t('main', 'Postitoimipaikka'); ?></label>
-			  <input type="text" id="kaupunki" class="form-control input-lg">
-		       </div>
-		      </div>
-
-		      <br>
-		      <center><h4><?php echo Yii::t('main', 'Lisätietoja'); ?></h4></center>
-
-		      <div class="row">
-		       <div class="col-sm-12">
-			<label><?php echo Yii::t('main', 'Lisätietoja'); ?></label>
-			  <textarea id="lisatietoja" class="form-control input-lg" placeholder="<?php echo Yii::t('main', 'Lemmikkejä, ovikoodi ja muuta lisätietoa'); ?>" rows="5"></textarea>
-		       </div>
-		      </div>
-
-		      <br>
-		      <div id="getMyPictures"></div>
-		      <br>
-		
-		      <div class="row">
-		       <div class="col-sm-12">
-			<label><?php echo Yii::t('main', 'Kuvien lisääminen'); ?></label>
-			<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap-filestyle.js"> </script>
-		  	<form id="uploadKuva" action="#" method="post" enctype="multipart/form-data">
-		     	  <div class="input-group">
-				<input type="hidden" name="kuvanLisaaminen">
-				<input type="file" name="file" class="filestyle" data-icon="false" data-size="lg" data-buttonName="btn-primary" data-buttonText="<?php echo Yii::t('main', 'Lisää kuva'); ?>">
-				<span class="input-group-btn">
-		          		<input type="submit" value="Lataa" class="btn btn-primary btn-lg btn-group myBgColors" />
-				</span>
-		    	  </div>
-			</form>
-		       </div>
-		      </div>
-		     </div>
-
-		</div><!-- Full lomake -->
-
-		<p><button class="tallennaUusi btn btn-lg btn-block btn-success">Siirry maksamaan <i class="caret"></i></button></p>
 
 	   </div>
 	  </div>
@@ -260,9 +231,7 @@
 
 	<div class = "row panel panel-default select-service-panel">
 	 <div class="panel-heading">
-           <h3>
-		Maksu
-	   </h3>
+           <h3> Maksu </h3>
 	 </div>
 	 <div class="row">
    	  <div class="col-sm-10 col-sm-offset-1">   
