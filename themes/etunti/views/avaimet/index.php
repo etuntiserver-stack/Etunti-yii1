@@ -9,12 +9,26 @@
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?php echo Yii::t('main', 'AVAIMET'); ?> 
-		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/avaimet/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
+	<h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?php echo Yii::t('main', 'AVAIMET'); ?> 
+		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/avaimet/create',array('class'=>'btn btn-default fa fa-plus')); ?>
+
+	 <div class="pull-right montakoRiviaSivulle">
+	   <?php
+	   ($perSivu == 10) ? $defcl10 = 'btn-success' : $defcl10 = 'btn-default';
+	   ($perSivu == 50) ? $defcl50 = 'btn-success' : $defcl50 = 'btn-default';
+	   ($perSivu == 100) ? $defcl00 = 'btn-success' : $defcl00 = 'btn-default';
+
+	   echo '<button class="btn '.$defcl10.' kpl" kpl="10" data-toggle="tooltip" title="'.Yii::t('main', 'Näytä').' 10 '.Yii::t('main', 'asiakasta sivulla').'">10</button>';
+	   echo '<button class="btn '.$defcl50.' kpl" kpl="50" data-toggle="tooltip" title="'.Yii::t('main', 'Näytä').' 50 '.Yii::t('main', 'asiakasta sivulla').'">50</button>';
+	   echo '<button class="btn '.$defcl00.' kpl" kpl="100" data-toggle="tooltip" title="'.Yii::t('main', 'Näytä').' 100 '.Yii::t('main', 'asiakasta sivulla').'">100</button>';
+	   echo '<button class="btn '.$defcl00.' kpl" kpl="2000" data-toggle="tooltip" title="'.Yii::t('main', 'Näytä').' 2000 '.Yii::t('main', 'asiakasta sivulla').'">2000</button>';
+	   ?>
+	 </div>
+	</h2>
 
 
 
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <form id="mobForm" action="#" class="form-inline" method="GET">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
@@ -29,7 +43,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input datepicker" name="pvm" value="<?php if(isset($_POST['pvm'])) echo $_POST['pvm']; ?>" placeholder="<?php echo Yii::t('main', 'Päivämäärä'); ?>...">
+   			    <input type="text" class="gui-input datepicker" name="pvm" value="<?php if(isset($_GET['pvm'])) echo $_GET['pvm']; ?>" placeholder="<?php echo Yii::t('main', 'Päivämäärä'); ?>...">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -42,19 +56,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="id"  class="gui-input" value="<?php if(isset($_POST['id'])) echo $_POST['id']; ?>" placeholder="<?php echo Yii::t('main', 'Keskustelu nro..'); ?>..">
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-file-text-o"></i>
-                            </label>
-                          </label>
-                        </div>
-                      </div>
-
-                      <div class="col-md-6">
-                        <div class="section">
-                          <label class="field prepend-icon">
-
-   			    <input type="text" name="sisalto"  class="gui-input" value="<?php if(isset($_POST['sisalto'])) echo $_POST['sisalto']; ?>" placeholder="<?php echo Yii::t('main', 'Viestin sisältö'); ?>..">
+   			    <input type="text" name="avainnumero"  class="gui-input" value="<?php if(isset($_GET['avainnumero'])) echo $_GET['avainnumero']; ?>" placeholder="<?php echo Yii::t('main', 'Avain nro..'); ?>..">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-file-text-o"></i>
                             </label>
@@ -63,7 +65,8 @@
                       </div>
 
 
-                      <div class="col-md-2">
+
+                      <div class="col-md-2 col-sm-offset-5">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
@@ -134,6 +137,7 @@
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
+  <th><?php echo Yii::t('main', 'Avainnumero'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   </tr>
   </thead>
@@ -172,21 +176,19 @@ $(".haemob").click(function(){
 	$("#mobForm").submit();
 });
 
-
-$(document).delegate(".vastaanotettu","click",function(){
-
-	var thisVid = $(this).attr("for");
-	var id = $(this).attr("for").split("_");
-
+ $(".kpl").click(function(){
+	var asiakkaatPerSivu = $(this).attr('kpl');
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/viestinta/vastaanotettu?id='+id[1],
+           url: 'index',
+           type: "POST",
+           data: { "asiakkaatPerSivu" : asiakkaatPerSivu },
            success: function(data){
-		console.log(data);
-		$("#"+thisVid).hide('slow');
+		var d = JSON.parse(data);
+		window.location.reload();
+
            }
         });
-
-});
+ });
 
 });
 </script>

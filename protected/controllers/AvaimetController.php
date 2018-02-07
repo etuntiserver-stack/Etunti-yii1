@@ -149,9 +149,32 @@ class AvaimetController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Avaimet');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+
+		if(isset($_POST['asiakkaatPerSivu']))
+		{
+			Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);
+			echo json_encode($_POST['asiakkaatPerSivu']);
+			exit;
+		}
+
+       		$criteria = new CDbCriteria();
+		if(isset($_GET['avainnumero']) and !empty($_GET['avainnumero']))
+	        $criteria->addCondition (" avainnumero LIKE '%".$_GET['avainnumero']."%' ");
+
+		$dataProvider=new CActiveDataProvider('Avaimet', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$perSivu = 50;
+		if(isset(Yii::app()->user->asiakkaatPerSivu))
+		$perSivu = Yii::app()->user->asiakkaatPerSivu;
+
+		$dataProvider->pagination->pageSize = $perSivu;
+
+		$this->render('index', array(
+			'dataProvider' => $dataProvider, 
+			'perSivu' => $perSivu,
 		));
 	}
 

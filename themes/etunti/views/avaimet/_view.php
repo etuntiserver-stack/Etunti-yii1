@@ -22,6 +22,9 @@
 		<?php echo date("d.m.Y  H:i",strtotime($data->time)); ?>
 	</td>
 	<td>
+		<?php echo $data->avainnumero; ?>
+	</td>
+	<td>
 		<?php echo $data->tid; ?>
 	</td>
 </tr>
