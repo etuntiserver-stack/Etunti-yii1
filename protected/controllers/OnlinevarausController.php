@@ -705,7 +705,10 @@ class OnlinevarausController extends Controller
 			unset($_SESSION['onlinevaraus']);
 			$this->redirect('index');
 		}
-
+		if(isset($_POST['kalenteriin'])){
+			$_SESSION['onlinevaraus']['palvelut_summary'] = true;
+			exit;
+		}
 		if(isset($_POST['poistaTamaTiedosto'])){
 			unlink($_POST['poistaTamaTiedosto']);
 			exit;

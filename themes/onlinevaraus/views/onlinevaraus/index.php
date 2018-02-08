@@ -13,12 +13,19 @@
 	<div class = "row panel panel-default select-service-panel">
 	 <div class="panel-heading">
      <?=CHtml::link('<span class="text-default fa fa-repeat" id="online_reset"</span>', array('index', 'keskeyta' =>'true'), array('class' => 'pull-right'))?>
-           <h3>Palvelut</h3>
 	 </div>
 	 <div class="row">
    	  <div class="col-sm-8 col-sm-offset-2">   
    	   <div class="panel-body">
 
+	   <!-- Palvelut -->
+	   <?php $palvelu_style = ''; ?>
+	   <?php if(isset($_SESSION['onlinevaraus']['palvelut_summary'])) : ?>
+	   <?php $palvelu_style = 'style="display:none"'; ?>
+	   <?php endif; ?>
+
+	   <div class="palvelutlaatikko" <?=$palvelu_style?>>
+           <h3>Palvelut</h3>
 		<select class="form-control input-lg" id="palvelu">
 		<option value="">Valitse palvelu</option>
 
@@ -39,9 +46,10 @@
 		}
 		?>
 		</select>
+	   <!-- Palvelut -->
 
-		<!-- Toinen valikko -->
-		<div id="toinen_valiko"></div>
+	   <!-- Toinen valikko -->
+	   <div id="toinen_valiko"></div>
 		<h3>Alue</h3>
 		<div id="toimialueRow">
 		<?php
@@ -69,27 +77,35 @@
 		</div>
 	    	<div id="lisapalvelulista"></div>
 
-	   </div>         
-    	    <div class="panel-body " id="aika_summary">
- 		        <div id="kalenterit"></div>
- 		        <div id="aikoja"></div>
- 		        <div id="tidTietoja"></div>
- 	        </div>
-	  </div>
-	 </div>
-   
-   <!-- Osoite-->
-   <?php $osoite_style = ''; ?>
-   <?php if(!isset($_SESSION['onlinevaraus']['modelTV'])) : ?>
-   <?php $osoite_style = 'style="display:none"'; ?>
-   <?php endif; ?>
-   <div class="row osoitelaatikko" <?=$osoite_style?>>
-    <div class="col-sm-8 col-sm-offset-2">
+		<br>
+  		<p><button class="kalenteriin btn btn-lg btn-block btn-success">Siirry kalenteriin <i class="caret"></i></button></p>
+		<br>
+	   </div>
+	   <!-- Toinen valikko -->
+	   </div><!--palvelutlaatikko-->
+
+	   <!-- Aika-->
+	   <?php $palvelu_style = 'style="display:none"'; ?>
+	   <?php if(isset($_SESSION['onlinevaraus']['palvelut_summary'])) : ?>
+	   <?php $palvelu_style = ''; ?>
+	   <?php endif; ?>
+
+	   <div class="row" id="aika_summary" <?=$palvelu_style?>>
+  	    <h4 class="title-subtitle text-center"><?php echo Yii::t('main', 'Aika'); ?></h4>
+ 		<div id="kalenterit"></div>
+ 		<div id="aikoja"></div>
+ 		<div id="tidTietoja"></div>
+	   </div>
+	   <!-- Aika-->
 
 
-  	 <div class="row">
+	   <!-- Osoite-->
+	   <?php $osoite_style = ''; ?>
+	   <?php if(!isset($_SESSION['onlinevaraus']['modelTV'])) : ?>
+	   <?php $osoite_style = 'style="display:none"'; ?>
+	   <?php endif; ?>
 
-     	   <div class="panel-body collapse" id="osoite_summary">
+  	   <div class="row osoitelaatikko" <?=$osoite_style?>">
   		<div id="fullLomake">
   		   <h4 class="title-subtitle text-center"><?php echo Yii::t('main', 'Osoite'); ?></h4>
   		   <span class="text-sininen"><?php echo Yii::t('main', 'Tunnistaudu sähköpostilla'); ?></span>
@@ -125,7 +141,6 @@
   			  <option value="henkilo">Yksityishenkilö</option>
   			  <option value="yritys">Yritys</option>
   			  </select>
-
   		       </div>
   		      </div>
 
@@ -202,53 +217,43 @@
   		    	  </div>
   			</form>
   		       </div>
+  		      </div>
+
+  		     </div><!--lomake-->
   		</div><!-- Full lomake -->
-
+		<br>
   		<p><button class="tallennaUusi btn btn-lg btn-block btn-success">Siirry maksamaan <i class="caret"></i></button></p>
-   
-	</div>
- 
-  </div>
- </div>
+		<br>
+  	   </div><!--osoitelaatikko-->
 
+	   <!-- Maksu -->
+	   <?php $maksu_style = ''; ?>
+	   <?php if(!isset($_SESSION['onlinevaraus']['onlinevarausID'])) : ?>
+	   <?php $maksu_style = 'style="display:none"'; ?>
+	   <?php endif; ?>
 
-
-	   </div>
-	  </div>
-	 </div>
-	</div>
-
-  </div>
- </div>
-
- <!-- Maksu -->
- <?php $maksu_style = ''; ?>
- <?php if(!isset($_SESSION['onlinevaraus']['onlinevarausID'])) : ?>
- <?php $maksu_style = 'style="display:none"'; ?>
- <?php endif; ?>
- <div class="row maksulaatikko" <?=$maksu_style?>>
-  <div class="col-sm-6 col-sm-offset-3">
-
-	<div class = "row panel panel-default select-service-panel">
-	 <div class="panel-heading">
-           <h3> Maksu </h3>
-	 </div>
-	 <div class="row">
-   	  <div class="col-sm-10 col-sm-offset-1">   
-   	   <div class="panel-body" id="maksu_content">
-
+	   <div class = "row maksulaatikko" <?=$maksu_style?>>
+            <h3> Maksu </h3>
+   	    <div id="maksu_content">
 		<?php 
 		if(isset($_SESSION['onlinevaraus']['paapalvelu']) and isset($_SESSION['onlinevaraus']['onlinevarausID']))
 		{
 			echo $this->renderPartial('maksu', array('json' => false));
 		}
 		?>
+	    </div>
 	   </div>
+	   <!-- Maksu -->
+
+
 	  </div>
 	 </div>
 	</div>
+
   </div>
  </div>
+
+
 
  <!-- Order summary footer-->
  <div class="row yhteenveto-bottom">

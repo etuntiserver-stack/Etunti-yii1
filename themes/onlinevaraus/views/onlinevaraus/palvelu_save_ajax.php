@@ -66,8 +66,9 @@
 		'.$kuva.'		
 		'.$this->etuSukunimi($tv->tid).'
 	 </div><div class="col-xs-8">
+		<span id="varattu_osoite"></span>
 		'.$tv->pvm.'<br>
-		'.$tv->alku.'-'.$tv->loppu.'
+		Klo.: '.$tv->alku.'-'.$tv->loppu.'
 	 </div>
 	</div>
  	';
@@ -78,7 +79,7 @@
   if(isset($_SESSION['onlinevaraus']['modelKohde']))
   {
 	$k = Kohteet::model()->findbypk($_SESSION['onlinevaraus']['modelKohde']);
-	if(isset($tv->id))
+	if(isset($k->id))
 	{
 	$blockKohde = '
 	<hr>
@@ -189,7 +190,7 @@
    <div class="panel-heading">
       <h3>
        <button class="pull-right btn btn-warning" data-toggle="collapse" data-target="#order_summary" id="show_yhteenveto">'.Yii::t('main', 'Näytä lisää').'</button>
-       '.$model->nimike.' '.$tv->alku.' - '.$tv->loppu.'
+	'.Yii::t('main', 'Yhteenveto').'
       </h3>
    </div>
    <div class = "panel-body collapse" id="order_summary">

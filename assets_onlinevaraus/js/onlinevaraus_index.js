@@ -3,8 +3,6 @@ $(document).ready(function(){
 
 
 $(document).delegate("#kupongi_add","click",function(){
-
-
    $.ajax({
 	url: 'kupongi_checker?kupongi='+$('#kupongi_id').val(),
 	//data:{ kupongi : $('#kupongi_id').val() },
@@ -24,14 +22,38 @@ $(document).delegate("#kupongi_add","click",function(){
 		console.log(data);
     	}
     });
-   
+});
+
+$(".kalenteriin").click(function(){
+
+   var palvelu 	= $('#palvelu option:selected').val();
+   if( palvelu === '' ){
+	$('#palvelu').focus();
+	return false;
+   }
+   if( parseInt($('#clock').attr('val')) == 0 ){
+	alert('Ei valinnut riittävä tietoja');
+	return false;
+   }
+
+	   $.ajax({
+		url: 'index',
+		data:{ kalenteriin : true },
+		type:'POST',
+		success:function(data){
+			$('.palvelutlaatikko').hide(370);
+			aika_summary('show');
+	   	},
+		error:function(data){
+			console.log(data);
+	    	}
+	   });
 });
 
 $("#palvelu").change(function(){
    var id = $(this).val();
    var t = setTimeout( function() {
 	paapalveluAjax(id);
-	aika_summary('show');
    }, 100 );
 
 });
@@ -92,7 +114,6 @@ $(document).delegate("#toinen_valiko_values","change",function(){
 		{
 			$('#panGetContent').html(JSON.parse(data));
 			$('.panGetContent').show();
-			aika_summary('show');
 		}
 		tuntienTarkistus();
 		kaksiKalenteria();
@@ -174,14 +195,6 @@ $(document).delegate(".lisat","click",function(){
 		{
 			$('#panGetContent').html(data);
 			$('.panGetContent').show('370');
-			if( parseInt($( '#clock' ).text()) > 0 ){
-
-			  if( parseInt($('#varattu_aika').attr('for')) > 0 ){
-				aika_summary('hide');
-			  } else {
-				aika_summary('show');
-			  }
-			}
 		}
 		tuntienTarkistus();
    	},
@@ -280,9 +293,9 @@ $(document).delegate(".ajaanClick","click",function(){
 		if(data)
 		{
 			$('#panGetContent').html(JSON.parse(data));
+			aika_summary('hide');
 			$('#aikoja').hide(370);
 			$('.osoitelaatikko').show();
-			aika_summary('hide');
 
 			$('html,body').animate({
 			   scrollTop: $(".osoitelaatikko").offset().bottom
@@ -530,7 +543,7 @@ $(document).delegate('#sahkoposti', "keyup", function() {
 $(".tallennaUusi").click(function(){
 
    var senddata = osoite_validator();
-   $(this).remove();
+   if( osoite_validator() ){ $(this).remove(); }
 
    $.ajax({
 	url: 'luouusi',
@@ -554,9 +567,6 @@ $(".tallennaUusi").click(function(){
 
 		if(data == 'nytRedirectMaksulle')
 		{
-
-		   $('#osoite_title').text($('#osoite').val());
-
 		   $.ajax({
 			url: 'maksu',
 			data:{ "json" : true },
@@ -566,10 +576,10 @@ $(".tallennaUusi").click(function(){
 				data = JSON.parse(data);
 				if(data !== '')
 				{
-					$( '#osoite_summary' ).collapse('hide');
-					$('.maksulaatikko').show();
+					$('.osoitelaatikko').hide(370);
+					$('.maksulaatikko').show(370);
 					$('#maksu_content').html(data);
-					$('html,body').animate({scrollBottom: $('.maksulaatikko').offset().top +100 }, 'slow');
+					$('html,body').animate({scrollBottom: $('.maksulaatikko').offset().bottom +100 }, 'slow');
 				}
 		   	},
 			error:function(data){
@@ -622,6 +632,8 @@ function osoite_validator(){
       return false;
    }
 
+   $('#varattu_osoite').html( '<b>' + $('#osoite').val() + ', ' + $('#postinumero').val() + ', ' + $('#kaupunki').val() + '</b><br>' );
+
    var senddata = { sahkoposti : sahkoposti, osoite : osoite, postinumero : postinumero, kaupunki : kaupunki, puhelin : puhelin, yhteyshenkilo : yhteyshenkilo, lisatietoja : lisatietoja, tyyppi : tyyppi, yrityksen_nimi : yrityksen_nimi, y_tunnus : y_tunnus };
 
    return senddata;
@@ -645,42 +657,22 @@ $(document).delegate('#show_yhteenveto', "click", function() {
 	}
 });
 
-$(document).delegate('#show_osoite', "click", function() {
-	var expanded = $( '#osoite_summary' ).attr('aria-expanded')
-	if(expanded == 'true'){
-		$('#show_osoite').text('Sulje');
-	}
-	if(expanded == 'false'){
-		$('#show_osoite').text('Näytä lisää');
-	}
-});
-
-
-$(document).delegate('#show_aika', "click", function() { aika_summary(null); });
 
 /* aika_summary */
 function aika_summary(show_hide){
   if( parseInt($('#varattu_aika').attr('for')) > 0 ){
 	$('#aika_title').html( $('#varattu_aika').attr('pvm') + ', ' + $('#varattu_aika').attr('klo') );
 	if(osoite_validator() == false){
-	   $( '#osoite_summary' ).collapse('show');
-	}
-	if(osoite_validator().osoite){
-	   $('#osoite_title').html( osoite_validator().osoite );
+	   $( '.osoitelaatikko' ).show(370);
+	} else {
+	   $( '.osoitelaatikko' ).hide(370);
 	}
   }
   if(show_hide == 'show'){
-	$( '#aika_summary' ).collapse('show');
+	$( '#aika_summary' ).show(370);
   }
   if(show_hide == 'hide'){
-	$( '#aika_summary' ).collapse('hide');
-  }
-  var expanded = $( '#aika_summary' ).attr('aria-expanded')
-  if(expanded == 'true'){
- 	$('#show_aika').text('Sulje');
-  }
-  if(expanded == 'false'){
-	$('#show_aika').text('Näytä lisää');
+	$( '#aika_summary' ).hide(370);
   }
 }
 /* aika_summary */
