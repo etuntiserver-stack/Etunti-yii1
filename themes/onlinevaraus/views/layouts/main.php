@@ -49,20 +49,31 @@ if( isset(Yii::app()->user->domain) )
 
 	<link href='https://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'>
   
-  <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/css/style.css?v=2.13"/>
-  <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/css/theme-responsive.css"/>
+	<link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/css/style.css?v=2.13"/>
+	<link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/css/theme-responsive.css"/>
 
-  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/modernizr.js"></script>
-  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
-   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.min.js"></script>
-
-   
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/modernizr.js"></script>
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.min.js"></script>
   
-  <!-- Haetaan Onlinevarauksen ihan oma CSS -->
-  <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_ver2.css"/>
-        
-
+	<!-- Haetaan Onlinevarauksen ihan oma CSS -->
+	<link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_ver2.css"/>
 	<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/img/favicon.ico">
+
+	<!-- Firman oma taustekuva -->
+	<?php if (isset(Yii::app()->user->domain) and file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain."/ov_tauste.jpg")) : ?>
+	<style>
+	body {
+	  background: url(<?='../../tiedostot/firma/'.Yii::app()->user->domain.'/ov_tauste.jpg'?>) no-repeat center center fixed; 
+	  -webkit-background-size: cover;
+	  -moz-background-size: cover;
+	  -o-background-size: cover;
+	  background-size: cover;       
+	  min-height: 1000px; 
+	}
+	</style>
+	<?php endif; ?>
+	<!-- Firman oma taustekuva -->
 
     </head>
     <body>
