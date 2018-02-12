@@ -138,6 +138,7 @@ if(empty($model->position) and isset($model->id))
 	</div>
 	<?php endif; ?>
 
+	<?php if($laaja == 1) : ?>
 	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'tekijan_katuosoite'); ?>
 		<?php echo $form->textField($model,'tekijan_katuosoite',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
@@ -155,6 +156,7 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->textField($model,'tekijan_ptoimipaikka',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tekijan_ptoimipaikka'); ?>
 	</div>
+	<?php endif; ?>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'ammattinimike'); ?>
@@ -228,21 +230,10 @@ $(document).ready(function(){
 		<?php echo $form->error($model,'tekijan_puh'); ?>
 	</div>
 
+	<?php if($laaja == 1) : ?>
 	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'tekijan_henkilotunnus'); ?>
-		<?php 
-
-	// <-- Oikeudet
-	   $checkOikeus = "henkilotunnukset_2_".Yii::app()->user->adminStatus;
-	   $site = Yii::app()->createController('Site');
-	   $vastaus = $site[0]->checkOikeusFields($checkOikeus);
-	//  Oikeudet -->
-
-		if($vastaus == 0)
-		echo $form->passwordField($model,'tekijan_henkilotunnus',array('size'=>20,'maxlength'=>20,'class'=>'form-control', 'readonly'=>'yes')); 
-		else
-		echo $form->textField($model,'tekijan_henkilotunnus',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); 
-		?>
+		<?php echo $form->textField($model,'tekijan_henkilotunnus',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); 	?>
 		<?php echo $form->error($model,'tekijan_henkilotunnus'); ?>
 	</div>
 
@@ -276,6 +267,7 @@ $(document).ready(function(){
         	?>
 		<?php echo $form->error($model,'onlinevaraus_tuotteet'); ?>
 	</div>
+	<?php endif; ?><!--Laaja-->
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tyo_toimialue'); ?>
@@ -376,6 +368,7 @@ $(document).ready(function(){
 	</div>
 -->
 
+	<?php if($laaja == 1) : ?>
 	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'tekijan_pankkitili'); ?>
 		<?php echo $form->textField($model,'tekijan_pankkitili',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
@@ -419,7 +412,7 @@ $(document).ready(function(){
 
 		<?php echo $form->error($model,'kortit'); ?>
 	</div>
-
+	<?php endif; ?><!--Laaja-->
 
 	<?php 
 	if(!empty($model->kortit_voimassaolo))
