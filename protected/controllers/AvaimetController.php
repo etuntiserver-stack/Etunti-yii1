@@ -98,7 +98,21 @@ class AvaimetController extends Controller
 		{
 			$model->attributes=$_POST['Avaimet'];
 			if($model->save())
+			{
+
+				// <-- LOG
+				$model_log 	= 'Avaimet';
+				$name_log 	= 'Avaimet';
+				$status_log 	= 'Create';
+	
+					$old_values = null;
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//
+
 				$this->redirect(array('index'));
+			}
 		}
 
 		$this->render('create',array(
@@ -120,9 +134,24 @@ class AvaimetController extends Controller
 
 		if(isset($_POST['Avaimet']))
 		{
+			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Avaimet'];
 			if($model->save())
+			{
+
+				// <-- LOG
+				$model_log 	= 'Avaimet';
+				$name_log 	= 'Avaimet';
+				$status_log 	= 'Update';
+	
+					$old_values = json_encode($vanha_attr);
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+
 				$this->redirect(array('index'));
+			}
 		}
 
 		$this->render('update',array(
@@ -137,11 +166,26 @@ class AvaimetController extends Controller
 	 */
 	public function actionDelete($id)
 	{
+
+		$del_model = Avaimet::model()->findbypk($id);
+		if(isset($del_model->id))
+		{
+			// <-- LOG
+			$model_log 	= 'Avaimet';
+			$name_log 	= 'Avaimet';
+			$status_log 	= 'Delete';
+				$old_values = json_encode($del_model->attributes);
+				$new_values = null;
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			//     LOG -->
+		}
+
 		$this->loadModel($id)->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
 	}
 
 	/**

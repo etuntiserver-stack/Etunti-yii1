@@ -37,7 +37,7 @@ class Avaimet extends CActiveRecord
 
 		  'time' => 'timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		  'avainnumero' => 'varchar(255) NOT NULL',
-		  'kohde_id' => 'int(11) NOT NULL',
+		  'kohde' => 'int(11) NOT NULL',
 		  'tid' => 'int(11) NOT NULL',
 		  'sijainti' => 'varchar(255) NOT NULL',
 		  'lisatiedot' => 'text NOT NULL',
@@ -63,9 +63,10 @@ class Avaimet extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('avainnumero, kohde_id, status', 'required'),
-			array('kohde_id, tid, status', 'numerical', 'integerOnly'=>true),
+			array('avainnumero, kohde, status', 'required'),
+			array('kohde, tid, status', 'numerical', 'integerOnly'=>true),
 			array('avainnumero, sijainti', 'length', 'max'=>255),
+			array('lisatiedot', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, avainnumero, kohde_id, tid, sijainti, lisatiedot, status', 'safe', 'on'=>'search'),

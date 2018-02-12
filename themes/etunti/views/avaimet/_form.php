@@ -24,17 +24,17 @@
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'kohde_id'); ?>
+		<?php echo $form->labelEx($model,'kohde'); ?>
 		<?php
 	       	$criteria = new CDbCriteria();
 	       	$criteria->condition = " aktiivinen=1 ";
 	       	$criteria->order = " osoite ";
 		$kohteet = Kohteet::model()->findAll($criteria);
-        	echo $form->dropDownList($model, 'kohde_id', CHtml::listData($kohteet, 'id', 'osoite'),
+        	echo $form->dropDownList($model, 'kohde', CHtml::listData($kohteet, 'id', 'osoite'),
 		array('empty' => 'Valitse', 'class'=>'form-control'
 		));
 		?>
-		<?php echo $form->error($model,'kohde_id'); ?>
+		<?php echo $form->error($model,'kohde'); ?>
 	</div>
 
 	<div class="section fill mb5">
@@ -44,7 +44,7 @@
 	       	$criteria->condition = " aktiivinen=1 ";
 	       	$criteria->order = " tekijan_nimi ";
 		$tt = Tyontekijat::model()->findAll($criteria);
-        	echo $form->dropDownList($model, 'status', CHtml::listData($tt, 'id', 'tekijan_nimi'),
+        	echo $form->dropDownList($model, 'tid', CHtml::listData($tt, 'id', 'tekijan_nimi'),
 		array('empty' => 'Valitse', 'class'=>'form-control'
 		));
 		?>
