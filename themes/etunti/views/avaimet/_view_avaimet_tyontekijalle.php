@@ -55,7 +55,7 @@
 		if(isset($data->avaimet)){
 			foreach($data->avaimet as $avain){
 			   if( isset($data->kohteet->id) and $avain->kohde == $data->kohteet->id ){
-			     echo '<b>Avain: </b>'.$this->etuSukunimi($avain->tid).'<br>';
+			     echo '<b>Työntekijä: </b>'.$this->etuSukunimi($avain->tid).'<br>';
 			     echo '<b>Sijainti: </b>'. $avain->sijainti;
 			     break;
 			   }
