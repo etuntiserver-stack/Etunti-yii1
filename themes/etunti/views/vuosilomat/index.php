@@ -169,10 +169,10 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
      if($this->pyhat($thisDate))
      {
-       echo '<td id="riv_'.$thisDate.$v->id.'" class="muokaTaulunLatiko '.$myBgColors.'" '.$style.' method="'.$id.'" thisdate='.$thisDate.' thistid='.$v->id.'>
+       echo '<td id="riv_'.date("ymd", strtotime($thisDate)).$v->id.'" class="muokaTaulunLatiko '.$myBgColors.'" '.$style.' method="'.$id.'" thisdate='.$thisDate.' thistid='.$v->id.'>
 	<div class="link laatikot">'.$st0.'</div></td>';
      } else {
-       echo '<td id="riv_'.$thisDate.$v->id.'" '.$style.' class="muokaTaulunLatiko" method="'.$id.'" thisdate='.$thisDate.' thistid='.$v->id.'><div class="link laatikot">'.$st0.'</div></td>';
+       echo '<td id="riv_'.date("ymd", strtotime($thisDate)).$v->id.'" '.$style.' class="muokaTaulunLatiko" method="'.$id.'" thisdate='.$thisDate.' thistid='.$v->id.'><div class="link laatikot">'.$st0.'</div></td>';
      }
    }
 
@@ -275,6 +275,8 @@ $('input[type="radio"]').change(function() {
     var lat = '('+lat1[0]+') '+lat1[2]+'/'+lat1[1];
     var vapaateksti = $('.vapaateksti').val();
 
+//alert(thisID)
+//return false;
 
     var postdata = {
 	tid 	: thisTid,
@@ -310,7 +312,7 @@ $('input[type="radio"]').change(function() {
            },
 	   error:function(data){
 		console.log(data);
-		window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";
+		/*window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";*/
 	   }
         });
 
