@@ -140,7 +140,7 @@
   <th><?php echo Yii::t('main', 'Kohde'); ?></th>
   <th><?php echo Yii::t('main', 'Työvuoro'); ?></th>
   <th><?php echo Yii::t('main', 'Avain'); ?></th>
-  <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'Avain työntekijällä'); ?></th>
   <th><?php echo Yii::t('main', 'Sijainti'); ?></th>
   </tr>
   </thead>

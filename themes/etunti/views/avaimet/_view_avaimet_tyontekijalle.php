@@ -37,8 +37,9 @@
 		?>
 	</td>
 	<td>
-		<?php echo $data->pvm; ?><br>
-		<?php echo $data->alku; ?> - <?php echo $data->loppu; ?>
+		<p><?php echo $data->pvm; ?></p>
+		<p><?php echo $data->alku; ?> - <?php echo $data->loppu; ?></p>
+		<p><?php echo $this->etuSukunimi($data->tt->id); ?></p>
 	</td>
 	<td>
 		<?php
@@ -51,8 +52,13 @@
 	</td>
 	<td>
 		<?php
-		if(isset($data->tt->id)){
-			echo $this->etuSukunimi($data->tt->id); 
+		if(isset($data->avaimet)){
+			foreach($data->avaimet as $avain){
+			   if( isset($data->kohteet->id) and $avain->kohde == $data->kohteet->id ){
+			     echo $this->etuSukunimi($avain->tid);
+			     break;
+			   }
+			}
 		}
 		?>
 	</td>
