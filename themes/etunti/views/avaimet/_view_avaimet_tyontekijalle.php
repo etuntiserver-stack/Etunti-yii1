@@ -1,6 +1,19 @@
 <?php
 /* @var $this ViestintaController */
 /* @var $data Viestinta */
+
+  $avain_tyontekijalla = '';
+  $avain_sijainti = '';
+
+  if(isset($data->avaimet)){
+	foreach($data->avaimet as $avain){
+	   if( isset($data->kohteet->id) and $avain->kohde == $data->kohteet->id ){
+  		$avain_tyontekijalla = $this->etuSukunimi($avain->tid);
+		$avain_sijainti = $avain->sijainti;
+	     break;
+	   }
+	}
+  }
 ?>
 
 
@@ -51,19 +64,9 @@
 		?>
 	</td>
 	<td>
-		<?php
-		if(isset($data->avaimet)){
-			foreach($data->avaimet as $avain){
-			   if( isset($data->kohteet->id) and $avain->kohde == $data->kohteet->id ){
-			     echo '<b>Työntekijä: </b>'.$this->etuSukunimi($avain->tid).'<br>';
-			     echo '<b>Sijainti: </b>'. $avain->sijainti;
-			     break;
-			   }
-			}
-		}
-		?>
+		<?=$avain_tyontekijalla?>
 	</td>
 	<td>
-
+		<?=$avain_sijainti?>
 	</td>
 </tr>
