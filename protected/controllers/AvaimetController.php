@@ -28,7 +28,7 @@ class AvaimetController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view', 'avaimet_tyontekijalle'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -222,6 +222,40 @@ class AvaimetController extends Controller
 		));
 	}
 
+
+	public function actionAvaimet_tyontekijalle()
+	{
+
+		if(isset($_POST['asiakkaatPerSivu']))
+		{
+			Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);
+			echo json_encode($_POST['asiakkaatPerSivu']);
+			exit;
+		}
+
+       		$criteria = new CDbCriteria();
+       		$criteria->order = " id DESC "; //DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC
+
+		if(isset($_GET['avainnumero']) and !empty($_GET['avainnumero']))
+	        $criteria->addCondition (" avainnumero LIKE '%".$_GET['avainnumero']."%' ");
+
+		$dataProvider=new CActiveDataProvider('Tyovuoroot', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$perSivu = 50;
+		if(isset(Yii::app()->user->asiakkaatPerSivu))
+		$perSivu = Yii::app()->user->asiakkaatPerSivu;
+
+		$dataProvider->pagination->pageSize = $perSivu;
+
+		$this->render('avaimet_tyontekijalle', array(
+			'dataProvider' => $dataProvider, 
+			'perSivu' => $perSivu,
+		));
+	}
+
 	/**
 	 * Manages all models.
 	 */
@@ -263,5 +297,11 @@ class AvaimetController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+
+	protected function etuSukunimi($tid)
+	{
+	   $site = Yii::app()->createController('Site');
+	   return $site[0]->etuSukunimi($tid);
 	}
 }
