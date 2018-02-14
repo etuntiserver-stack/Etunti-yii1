@@ -146,7 +146,7 @@ setTimeout(function() {
     function onServerReady2() {
 
 
-	if(device.platform == 'Android'){
+	if(device.platform == 'Android' || device.platform == 'iOS'){
 	// <-- GET FCM Token
 	FCMPlugin.getToken(
 	  function(token){
