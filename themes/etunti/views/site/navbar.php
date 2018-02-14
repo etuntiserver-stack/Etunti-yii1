@@ -814,7 +814,7 @@ $('.tvchange').change(function(){
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/avaimet/avaimet_tyontekijalle">
-                  <span class="fa fa-key"></span> <?php echo Yii::t('main', 'Avaimet työntekijälle'); ?></a>
+                  <span class="fa fa-key"></span> <?php echo Yii::t('main', 'Avaimet työvuoroittain'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/kartta">

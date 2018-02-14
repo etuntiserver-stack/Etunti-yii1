@@ -9,7 +9,7 @@
         <div class="tray-center">
 
 
-	<h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?php echo Yii::t('main', 'AVAIMET TYÖNTEKIJÄLLE'); ?> 
+	<h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?php echo Yii::t('main', 'Avaimet työvuoroittain'); ?> 
 		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/avaimet/create',array('class'=>'btn btn-default fa fa-plus')); ?>
 
 	 <div class="pull-right montakoRiviaSivulle">
