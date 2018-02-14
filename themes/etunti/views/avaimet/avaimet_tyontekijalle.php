@@ -42,9 +42,7 @@
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
-
-   			    <input type="text" class="gui-input datepicker" name="from" value="<?php if(isset($_GET['from'])) echo $_GET['from']; ?>" placeholder="<?php echo Yii::t('main', 'Mistä'); ?>...">
-
+   			    <input type="text" class="gui-input datepicker" name="from" value="<?=$from?>" placeholder="<?php echo Yii::t('main', 'Mistä'); ?>...">
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
                             </label>
@@ -55,9 +53,7 @@
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
-
-   			    <input type="text" class="gui-input datepicker" name="to" value="<?php if(isset($_GET['to'])) echo $_GET['to']; ?>" placeholder="<?php echo Yii::t('main', 'Mihin'); ?>...">
-
+   			    <input type="text" class="gui-input datepicker" name="to" value="<?=$to?>" placeholder="<?php echo Yii::t('main', 'Mihin'); ?>...">
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
                             </label>

@@ -25,6 +25,6 @@
 		<?php echo $data->avainnumero; ?>
 	</td>
 	<td>
-		<?php echo $data->tid; ?>
+		<?php echo $this->etuSukunimi($data->tid); ?>
 	</td>
 </tr>
