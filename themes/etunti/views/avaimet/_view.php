@@ -45,4 +45,7 @@
 	<td>
 		<?php echo $this->etuSukunimi($data->tid); ?>
 	</td>
+	<td>
+		<?=$data->sijainti ?>
+	</td>
 </tr>

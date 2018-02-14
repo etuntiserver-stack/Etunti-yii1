@@ -101,7 +101,7 @@
 
 
 
-                      <div class="col-md-2 col-sm-offset-1">
+                      <div class="col-md-2 col-sm-offset-4">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
@@ -208,6 +208,7 @@ $(document).ready(function(){
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Kohde'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'Sijainti'); ?></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
