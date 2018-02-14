@@ -231,6 +231,14 @@ class AvaimetController extends Controller
 	public function actionAvaimet_tyontekijalle()
 	{
 
+		if(isset($_POST['avaimet']) and !empty($_POST['tyontekija']))
+		{
+			foreach($_POST['avaimet'] as $avain_id)
+			{
+				Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti'], 'tid' => $_POST['tyontekija']));
+			}
+		}
+
 		if(isset($_POST['asiakkaatPerSivu']))
 		{
 			Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);
@@ -255,9 +263,6 @@ class AvaimetController extends Controller
 			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')
 			BETWEEN '".$from."' and '".$to."'
 		");
-
-		if(isset($_GET['avainnumero']) and !empty($_GET['avainnumero']))
-	        $criteria->addCondition (" avainnumero LIKE '%".$_GET['avainnumero']."%' ");
 
 		$dataProvider=new CActiveDataProvider('Tyovuoroot', array(
 			'criteria'=>$criteria,

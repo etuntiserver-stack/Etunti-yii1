@@ -25,6 +25,13 @@
 		<?php echo $data->avainnumero; ?>
 	</td>
 	<td>
+		<?php
+		if(isset($data->kohteet->osoite)){
+			echo $data->kohteet->osoite; 
+		}
+		?>
+	</td>
+	<td>
 		<?php echo $this->etuSukunimi($data->tid); ?>
 	</td>
 </tr>

@@ -2,15 +2,14 @@
 /* @var $this ViestintaController */
 /* @var $data Viestinta */
 
-  $avain_tyontekijalla = '';
-  $avain_sijainti = '';
+  $avain_tyontekijalla = [];
+  $avain_sijainti = [];
 
   if(isset($data->avaimet)){
 	foreach($data->avaimet as $avain){
 	   if( isset($data->kohteet->id) and $avain->kohde == $data->kohteet->id ){
-  		$avain_tyontekijalla = $this->etuSukunimi($avain->tid);
-		$avain_sijainti = $avain->sijainti;
-	     break;
+  		$avain_tyontekijalla[] = $this->etuSukunimi($avain->tid);
+		$avain_sijainti[] = $avain->sijainti;
 	   }
 	}
   }
@@ -19,7 +18,7 @@
 
 <tr>
 	<td>
-		<input type="checkbox">
+		
 	</td>
 	<td>
 		<?php
@@ -48,15 +47,19 @@
 		<?php
 		if(isset($data->avaimet)){
 			foreach($data->avaimet as $avain){
-			   echo '<p>'.$avain->avainnumero.'</p>';
+			   echo '<p><input type="checkbox" class="avainnumero" value="'.$avain->id.'"> '.$avain->avainnumero.'</p>';
 			}
 		}
 		?>
 	</td>
 	<td>
-		<input type="text" class="form-control" value="<?=$avain_tyontekijalla?>">
+		<?php foreach($avain_tyontekijalla as $item) : ?>
+		  <p><?=$item?></p>
+		<?php endforeach; ?>
 	</td>
 	<td>
-		<input type="text" class="form-control" value="<?=$avain_sijainti?>">
+		<?php foreach($avain_sijainti as $item) : ?>
+		  <p><?=$item?></p>
+		<?php endforeach; ?>
 	</td>
 </tr>
