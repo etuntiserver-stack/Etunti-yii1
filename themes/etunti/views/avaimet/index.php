@@ -77,9 +77,7 @@
                 </div>
               </div>
             </div>
-
 	    </form>
-
 
         <!-- loppu: .tray-center -->
         </div>
@@ -138,6 +136,7 @@
   <th></th>
   <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
   <th><?php echo Yii::t('main', 'Avainnumero'); ?></th>
+  <th><?php echo Yii::t('main', 'Kohde'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   </tr>
   </thead>
