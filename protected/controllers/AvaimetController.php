@@ -202,8 +202,13 @@ class AvaimetController extends Controller
 		}
 
        		$criteria = new CDbCriteria();
-		if(isset($_GET['avainnumero']) and !empty($_GET['avainnumero']))
-	        $criteria->addCondition (" avainnumero LIKE '%".$_GET['avainnumero']."%' ");
+		if(isset($_GET['from']) and isset($_GET['to']))
+		{
+	           $criteria->addCondition (" 
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')
+			BETWEEN '".date("Y-m-d", strtotime($_GET['from']))."' and '".date("Y-m-d", strtotime($_GET['to']))."'
+		   ");
+		}
 
 		$dataProvider=new CActiveDataProvider('Avaimet', array(
 			'criteria'=>$criteria,
@@ -233,8 +238,23 @@ class AvaimetController extends Controller
 			exit;
 		}
 
+		$from = date("Y-m-d");
+		$to = date("Y-m-d", strtotime($from.' +1 month'));
+
        		$criteria = new CDbCriteria();
        		$criteria->order = " id DESC "; //DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC
+
+       		$criteria = new CDbCriteria();
+		if(isset($_GET['from']) and isset($_GET['to']))
+		{
+			$from = date("Y-m-d", strtotime($_GET['from']));
+			$to = date("Y-m-d", strtotime($_GET['to']));
+		}
+
+	        $criteria->addCondition (" 
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')
+			BETWEEN '".$from."' and '".$to."'
+		");
 
 		if(isset($_GET['avainnumero']) and !empty($_GET['avainnumero']))
 	        $criteria->addCondition (" avainnumero LIKE '%".$_GET['avainnumero']."%' ");
@@ -253,6 +273,8 @@ class AvaimetController extends Controller
 		$this->render('avaimet_tyontekijalle', array(
 			'dataProvider' => $dataProvider, 
 			'perSivu' => $perSivu,
+			'from' => $from,
+			'to' => $to,
 		));
 	}
 

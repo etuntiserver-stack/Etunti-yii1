@@ -42,7 +42,7 @@
 	<td>
 		<p><?php echo $data->pvm; ?></p>
 		<p><?php echo $data->alku; ?> - <?php echo $data->loppu; ?></p>
-		<p><?php echo $this->etuSukunimi($data->tt->id); ?></p>
+		<p><?php if(isset($data->tt->id)) { echo $this->etuSukunimi($data->tt->id); } ?></p>
 	</td>
 	<td>
 		<?php
