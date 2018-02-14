@@ -22,7 +22,7 @@
 		<?php echo date("d.m.Y  H:i",strtotime($data->time)); ?>
 	</td>
 	<td>
-		<?php echo $data->avainnumero; ?>
+		<input type="checkbox" class="avainnumero" value="<?=$data->id?>"> <?php echo $data->avainnumero; ?>
 	</td>
 	<td>
 		<?php

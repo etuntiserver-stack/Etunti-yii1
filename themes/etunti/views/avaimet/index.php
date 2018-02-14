@@ -79,10 +79,44 @@
             </div>
 	    </form>
 
+	    <h3>Avaimien siirto</h3>
+   	    <form id="mobForm2" action="#" class="form-inline" method="POST">
+	     <div class="form-group">
+		<?php
+		$criteria = new CDbCriteria();
+		$criteria->condition = " aktiivinen=1 ";
+		$tt = Tyontekijat::model()->findAll($criteria);
+		?>
+		<?php echo CHtml::dropDownList('tyontekija', 'tyontekija', CHtml::listData($tt, 'id', 'FullName'), 
+		array('empty'=>'Valitse työntekijä', 'class'=>'form-control')); 
+		?>
+	     </div>
+	     <div class="form-group">
+		<input type="text" name="sijainti" class="form-control" placeholder="Sijainti">
+	     </div>
+	     <div class="form-group">
+		<input type="submit" class="btn btn-primary btn-block submitFormTwo myBgColors" value="<?php echo Yii::t('main', 'Tallenna'); ?>">
+	     </div>
+
+	    </form>
+	    <br>
         <!-- loppu: .tray-center -->
         </div>
 
 
+<script type="text/javascript">
+$(document).ready(function(){
+ $(".submitFormTwo").click(function(e){
+	e.preventDefault();
+	$( ".avainnumero" ).each(function( ) {
+		if ($(this).is(':checked')){
+	   	  $('form#mobForm2').append('<input type="text" name="avaimet[]" value="' + $(this).val() + '" />');
+		}
+	});
+	$('#mobForm2').submit();	
+ });
+});
+</script>
 
 <?php
        	$criteria = new CDbCriteria();

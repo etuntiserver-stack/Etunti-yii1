@@ -193,7 +193,13 @@ class AvaimetController extends Controller
 	 */
 	public function actionIndex()
 	{
-
+		if(isset($_POST['avaimet']) and !empty($_POST['tyontekija']))
+		{
+			foreach($_POST['avaimet'] as $avain_id)
+			{
+				Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti'], 'tid' => $_POST['tyontekija']));
+			}
+		}
 		if(isset($_POST['asiakkaatPerSivu']))
 		{
 			Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);

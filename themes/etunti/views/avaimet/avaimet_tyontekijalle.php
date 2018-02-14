@@ -122,8 +122,8 @@
             </div>
 	    </form>
 
+	    <h3>Avaimien siirto</h3>
    	    <form id="mobForm2" action="#" class="form-inline" method="POST">
-
 	     <div class="form-group">
 		<?php
 		$criteria = new CDbCriteria();
@@ -149,20 +149,15 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-
-
  $(".submitFormTwo").click(function(e){
 	e.preventDefault();
-
 	$( ".avainnumero" ).each(function( ) {
 		if ($(this).is(':checked')){
 	   	  $('form#mobForm2').append('<input type="text" name="avaimet[]" value="' + $(this).val() + '" />');
 		}
 	});
-
 	$('#mobForm2').submit();	
  });
-
 });
 </script>
 
