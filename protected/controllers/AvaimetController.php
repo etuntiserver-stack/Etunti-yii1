@@ -264,6 +264,26 @@ class AvaimetController extends Controller
 			BETWEEN '".$from."' and '".$to."'
 		");
 
+		if(isset($_GET['yrityksen_nimi']))
+		{
+	        $criteria->addCondition (" 
+			kohde IN ( SELECT id FROM sivex_kohdet
+				WHERE asiakas_id IN ( SELECT id FROM asiakkaat
+					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'
+				)
+			)
+		");
+		}
+
+		if(isset($_GET['osoite']))
+		{
+	        $criteria->addCondition (" 
+			kohde IN ( SELECT id FROM sivex_kohdet
+				WHERE osoite LIKE '%".$_GET['osoite']."%'
+			)
+		");
+		}
+
 		$dataProvider=new CActiveDataProvider('Tyovuoroot', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false
