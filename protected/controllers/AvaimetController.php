@@ -208,12 +208,30 @@ class AvaimetController extends Controller
 		}
 
        		$criteria = new CDbCriteria();
-		if(isset($_GET['from']) and isset($_GET['to']))
+
+		if(isset($_GET['yrityksen_nimi']))
 		{
-	           $criteria->addCondition (" 
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')
-			BETWEEN '".date("Y-m-d", strtotime($_GET['from']))."' and '".date("Y-m-d", strtotime($_GET['to']))."'
-		   ");
+	        $criteria->addCondition (" 
+			kohde IN ( SELECT id FROM sivex_kohdet
+				WHERE asiakas_id IN ( SELECT id FROM asiakkaat
+					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'
+				)
+			)
+		");
+		}
+
+		if(isset($_GET['osoite']))
+		{
+	        $criteria->addCondition (" 
+			kohde IN ( SELECT id FROM sivex_kohdet
+				WHERE osoite LIKE '%".$_GET['osoite']."%'
+			)
+		");
+		}
+
+		if(isset($_GET['avainnumero']))
+		{
+	        $criteria->addCondition (" avainnumero LIKE '%".$_GET['avainnumero']."%' ");
 		}
 
 		$dataProvider=new CActiveDataProvider('Avaimet', array(

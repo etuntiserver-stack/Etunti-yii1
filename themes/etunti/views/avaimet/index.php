@@ -43,10 +43,45 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input datepicker" name="pvm" value="<?php if(isset($_GET['pvm'])) echo $_GET['pvm']; ?>" placeholder="<?php echo Yii::t('main', 'Päivämäärä'); ?>...">
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Asiakkaat';
+				$sarake = 'yrityksen_nimi';
+				$placeholder = 'Asiakas';
+				if(isset($_GET[$sarake])) 			
+				$postvalue = $_GET[$sarake]; 
+				else $postvalue='';				
+		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
 
                             <label for="firstname" class="field-icon">
-                              <i class="glyphicon glyphicon-calendar"></i>
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Kohteet';
+				$sarake = 'osoite';
+				$placeholder = 'Kohde';
+				if(isset($_GET[$sarake])) 			
+				$postvalue = $_GET[$sarake]; 
+				else $postvalue='';				
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
                             </label>
                           </label>
                         </div>
@@ -66,7 +101,7 @@
 
 
 
-                      <div class="col-md-2 col-sm-offset-5">
+                      <div class="col-md-2 col-sm-offset-1">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
@@ -170,6 +205,7 @@ $(document).ready(function(){
   <th></th>
   <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
   <th><?php echo Yii::t('main', 'Avainnumero'); ?></th>
+  <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Kohde'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   </tr>
