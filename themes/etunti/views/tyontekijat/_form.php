@@ -611,6 +611,7 @@ $(document).ready(function(){
       function initMap() {
 	var Mypos = document.getElementById("position").value.split("/");
 	console.log(Mypos)
+	if(!Mypos[0]){ return false; }
         var uluru = {lat: parseFloat(Mypos[0]), lng: parseFloat(Mypos[1])};
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 14,
