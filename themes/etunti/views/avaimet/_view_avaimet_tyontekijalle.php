@@ -59,7 +59,11 @@
 	</td>
 	<td>
 		<?php foreach($avain_sijainti as $item) : ?>
+		  <?php if(empty($item)) : ?>
+		  <p>---</p>
+		  <?php else: ?>
 		  <p><?=$item?></p>
+		  <?php endif; ?>
 		<?php endforeach; ?>
 	</td>
 </tr>

@@ -46,6 +46,11 @@
 		<?php echo $this->etuSukunimi($data->tid); ?>
 	</td>
 	<td>
-		<?=$data->sijainti ?>
+		  <?php if(empty($data->sijainti)) : ?>
+		  	---
+		  <?php else: ?>
+		  	<?=$data->sijainti ?>
+		  <?php endif; ?>
+
 	</td>
 </tr>
