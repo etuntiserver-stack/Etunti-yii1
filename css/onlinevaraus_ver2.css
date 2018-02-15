@@ -80,10 +80,14 @@ h3{
 }
 .select-service-panel {
 	margin-top: 30px;
-  padding-bottom: 30px;
+	padding-bottom: 30px;
 	height: auto;
 	background-color: rgba(255, 255, 255, 0.85);
 	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+}
+.select-service-panel.bottom {
+	margin-top: 0px;
+	padding-bottom: 0px;
 }
 .select-service-panel .panel-heading{
 	background: none;

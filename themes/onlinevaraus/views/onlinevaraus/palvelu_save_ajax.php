@@ -186,7 +186,7 @@
 
 	$body = 
 	'
-<div class="row select-service-panel">
+<div class="row select-service-panel bottom">
    <div class="panel-heading">
       <h3>
        <button class="pull-right btn btn-warning" data-toggle="collapse" data-target="#order_summary" id="show_yhteenveto">'.Yii::t('main', 'Näytä lisää').'</button>
