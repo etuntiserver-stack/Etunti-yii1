@@ -253,14 +253,20 @@ function row(tilanne,st){
  	   data: postData,
            success: function(data){
 
-		// <-- log
-        	//console.log(data);
-		/*
-		if(server == 'http://staging.etunti.fi'){
-			$("#result2").append('<br>'+data).show();
+		try {
+			var d = JSON.parse(data);
+		       	if(d.error){
+				$("#all").html("");
+				$("#virheTila").html('<div class="alert alert-danger"><h1>' + d.error + '</h1></div>').show();
+				setTimeout(function() { 
+					window.location.href="index.html"; 
+				}, 3000)
+				return false;
+			}
+		} catch (e) {
+		
 		}
-		*/
-		// log -->
+
 
 		var sp = data.split("//");
 
