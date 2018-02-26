@@ -1,46 +1,46 @@
 {
-  "name": "fi.etunti.local",
-  "version": "0.0.601",
-  "displayName": "Etunti.fi",
-  "cordova": {
-    "platforms": [
-      "android",
-      "ubuntu"
-    ],
-    "plugins": {
-      "cordova-plugin-app-event": {},
-      "cordova-plugin-app-version": {},
-      "cordova-plugin-camera": {},
-      "cordova-plugin-compat": {},
-      "cordova-plugin-device": {},
-      "cordova-plugin-dialogs": {},
-      "cordova-plugin-file": {},
-      "cordova-plugin-file-transfer": {},
-      "cordova-plugin-media": {},
-      "cordova-plugin-whitelist": {},
-      "de.appplant.cordova.plugin.local-notification": {},
-      "phonegap-nfc": {},
-      "cordova-plugin-geolocation": {},
-      "cordova-plugin-fcm": {}
+    "name": "fi.etunti.local",
+    "version": "0.0.601",
+    "displayName": "Etunti.fi",
+    "cordova": {
+        "platforms": [
+            "android",
+            "ubuntu"
+        ],
+        "plugins": {
+            "cordova-plugin-app-event": {},
+            "cordova-plugin-app-version": {},
+            "cordova-plugin-camera": {},
+            "cordova-plugin-compat": {},
+            "cordova-plugin-device": {},
+            "cordova-plugin-dialogs": {},
+            "cordova-plugin-file": {},
+            "cordova-plugin-file-transfer": {},
+            "cordova-plugin-media": {},
+            "cordova-plugin-whitelist": {},
+            "de.appplant.cordova.plugin.local-notification": {},
+            "phonegap-nfc": {},
+            "cordova-plugin-geolocation": {},
+            "cordova-plugin-fcm": {}
+        }
+    },
+    "dependencies": {
+        "cordova-android": "^6.2.3",
+        "cordova-plugin-app-event": "~1.2.0",
+        "cordova-plugin-app-version": "~0.1.9",
+        "cordova-plugin-camera": "~2.4.1",
+        "cordova-plugin-compat": "~1.1.0",
+        "cordova-plugin-device": "~1.1.6",
+        "cordova-plugin-dialogs": "~1.3.3",
+        "cordova-plugin-fcm": "^2.1.2",
+        "cordova-plugin-file": "~4.3.3",
+        "cordova-plugin-file-transfer": "~1.6.3",
+        "cordova-plugin-geolocation": "^2.4.3",
+        "cordova-plugin-media": "~3.0.1",
+        "cordova-plugin-whitelist": "~1.3.2",
+        "cordova-ubuntu": "^4.3.4",
+        "de.appplant.cordova.plugin.local-notification": "~0.8.5",
+        "phonegap-nfc": "~0.6.6",
+        "ubuntu": "^4.3.4"
     }
-  },
-  "dependencies": {
-    "cordova-android": "^6.2.3",
-    "cordova-plugin-app-event": "~1.2.0",
-    "cordova-plugin-app-version": "~0.1.9",
-    "cordova-plugin-camera": "~2.4.1",
-    "cordova-plugin-compat": "~1.1.0",
-    "cordova-plugin-device": "~1.1.6",
-    "cordova-plugin-dialogs": "~1.3.3",
-    "cordova-plugin-fcm": "^2.1.2",
-    "cordova-plugin-file": "~4.3.3",
-    "cordova-plugin-file-transfer": "~1.6.3",
-    "cordova-plugin-geolocation": "^2.4.3",
-    "cordova-plugin-media": "~3.0.1",
-    "cordova-plugin-whitelist": "~1.3.2",
-    "cordova-ubuntu": "^4.3.4",
-    "de.appplant.cordova.plugin.local-notification": "~0.8.5",
-    "phonegap-nfc": "~0.6.6",
-    "ubuntu": "^4.3.4"
-  }
 }

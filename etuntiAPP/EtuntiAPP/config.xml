@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="fi.etunti.local" version="0.0.604" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="fi.etunti.local" version="0.0.605" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Etunti.fi</name>
     <description>
         Etunnin perus- ja lisätyökalut ovat suunniteltu ratkaisemaan puhdistusalan tyypilliset ongelmat. Yhden ohjelman avulla pyörität yritystoimintaasi ennen näkemättömän helposti.
@@ -67,20 +67,20 @@
         <icon height="173" platform="wp8" src="res/wp8/icon-173-tile.png" width="173" />
         <splash height="800" src="res/wp8/SplashScreenImage.jpg" width="480" />
     </platform>
+    <engine name="android" spec="^6.2.3" />
+    <engine name="ubuntu" spec="^4.3.4" />
     <plugin name="cordova-plugin-app-event" spec="~1.2.0" />
     <plugin name="cordova-plugin-app-version" spec="~0.1.9" />
     <plugin name="cordova-plugin-camera" spec="~2.4.1" />
     <plugin name="cordova-plugin-compat" spec="~1.1.0" />
     <plugin name="cordova-plugin-device" spec="~1.1.6" />
     <plugin name="cordova-plugin-dialogs" spec="~1.3.3" />
+    <plugin name="cordova-plugin-fcm" spec="^2.1.2" />
     <plugin name="cordova-plugin-file" spec="~4.3.3" />
     <plugin name="cordova-plugin-file-transfer" spec="~1.6.3" />
+    <plugin name="cordova-plugin-geolocation" spec="^2.4.3" />
     <plugin name="cordova-plugin-media" spec="~3.0.1" />
     <plugin name="cordova-plugin-whitelist" spec="~1.3.2" />
     <plugin name="de.appplant.cordova.plugin.local-notification" spec="~0.8.5" />
     <plugin name="phonegap-nfc" spec="~0.6.6" />
-    <plugin name="cordova-plugin-geolocation" spec="^2.4.3" />
-    <plugin name="cordova-plugin-fcm" spec="^2.1.2" />
-    <engine name="android" spec="^6.2.3" />
-    <engine name="ubuntu" spec="^4.3.4" />
 </widget>
