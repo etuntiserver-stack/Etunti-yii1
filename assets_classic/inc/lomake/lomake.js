@@ -43,7 +43,7 @@ jQuery(document).ready(function(){
             cont = lomake_validointi(form);
             if(cont == true && form.hasClass('ajax')){
 		$('.button_submit').remove();
-		$('#odottaus').html('<img src="etusivuimg/odottaus.gif" height="50">').show();
+		$('#odottaus').html('<img src="lib/img/odottaus.gif" height="50">').show();
                 event.preventDefault();
                 $.ajax({
                   type: form.attr('method'),
