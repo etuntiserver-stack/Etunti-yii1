@@ -520,11 +520,11 @@ class TyontekijatController extends Controller
 				$token = sha1(uniqid(time().$id, true));
 				Tyontekijat::model()->updateByPk($id, array('token' => $token));
 
-				$subject = 'Tervetuloa Etunnin käyttäjäksi.';
-				$message = 'Hei '.$model->tekijan_nimi.'!<br>
+				$subject = 'Tervetuloa Etunnin käyttäjäksi. / Welcome to Etunti mobile APP.';
+				$message = 'Hei / Hi '.$model->tekijan_nimi.'!<br>
 				<b>Domain:</b> '.Yii::app()->user->domain.'<br>
 				<b>Käyttäjätunnus:</b> '.$model->tekijan_email.'<br>
-				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('tyontekijat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'id' => $model->id)).'>tästä</a><br>';
+				<b>Luo oma salasana / Create password:</b> <a href='.Yii::app()->createAbsoluteUrl('tyontekijat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'id' => $model->id)).'>tästä / here</a><br>';
 
 				//echo $message;
 				//exit;
