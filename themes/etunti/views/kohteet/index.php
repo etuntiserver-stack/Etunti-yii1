@@ -142,27 +142,6 @@
                           </label>
                         </div>
                       </div>
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field prepend-icon">
-
-			    <!-- Autocomplete -->
-			    <?php
-	   			$site = Yii::app()->createController('Site');
-				$mod = 'Kohteet';
-				$sarake = 'avain';
-				$placeholder = 'Avain';
-				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
-		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
-			    ?>
-			    <!-- Autocomplete -->
-
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-key"></i>
-                            </label>
-                          </label>
-                        </div>
-                      </div>
 
                       <div class="col-md-2">
                         <div class="section">
@@ -186,7 +165,7 @@
                         </div>
                       </div>
 
-                      <div class="col-md-2">
+                      <div class="col-md-2 col-sm-offset-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
