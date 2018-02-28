@@ -64,7 +64,7 @@ class Avaimet extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('avainnumero, kohde, status', 'required'),
+			array('avainnumero, kohde', 'required'),
 			array('kohde, tid, status, asiakas_id', 'numerical', 'integerOnly'=>true),
 			array('avainnumero, sijainti', 'length', 'max'=>255),
 			array('lisatiedot', 'safe'),

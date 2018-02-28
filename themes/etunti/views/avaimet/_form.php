@@ -75,7 +75,7 @@
 		<?php echo $form->textArea($model,'lisatiedot',array('rows'=>6, 'cols'=>50, 'class' => 'form-control')); ?>
 		<?php echo $form->error($model,'lisatiedot'); ?>
 	</div>
-
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'status'); ?>
 		<?php
@@ -87,6 +87,7 @@
         	?>
 		<?php echo $form->error($model,'status'); ?>
 	</div>
+*/ ?>
  </div>
 </div><!-- form -->
 
