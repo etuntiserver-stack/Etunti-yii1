@@ -57,7 +57,7 @@
 	       	$criteria->condition = " aktiivinen=1 ";
 	       	$criteria->order = " tekijan_nimi ";
 		$tt = Tyontekijat::model()->findAll($criteria);
-        	echo $form->dropDownList($model, 'tid', CHtml::listData($tt, 'id', 'tekijan_nimi'),
+        	echo $form->dropDownList($model, 'tid', CHtml::listData($tt, 'id', 'FullName'),
 		array('empty' => 'Valitse', 'class'=>'form-control'
 		));
 		?>
