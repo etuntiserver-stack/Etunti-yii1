@@ -37,6 +37,7 @@ class Avaimet extends CActiveRecord
 
 		  'time' => 'timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		  'avainnumero' => 'varchar(255) NOT NULL',
+		  'asiakas_id' => 'int(11) NOT NULL',
 		  'kohde' => 'int(11) NOT NULL',
 		  'tid' => 'int(11) NOT NULL',
 		  'sijainti' => 'varchar(255) NOT NULL',
@@ -64,7 +65,7 @@ class Avaimet extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('avainnumero, kohde, status', 'required'),
-			array('kohde, tid, status', 'numerical', 'integerOnly'=>true),
+			array('kohde, tid, status, asiakas_id', 'numerical', 'integerOnly'=>true),
 			array('avainnumero, sijainti', 'length', 'max'=>255),
 			array('lisatiedot', 'safe'),
 			// The following rule is used by search().
@@ -94,6 +95,7 @@ class Avaimet extends CActiveRecord
 			'id' => 'ID',
 			'time' => 'Time',
 			'avainnumero' => 'Avainnumero',
+			'asiakas_id' => Yii::t('main', 'Asiakas'),
 			'kohde_id' => Yii::t('main', 'Osoite'),
 			'tid' => Yii::t('main', 'Työntekijä'),
 			'sijainti' => 'Sijainti',

@@ -24,6 +24,19 @@
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'asiakas_id'); ?>
+		<?php
+			$a_controller = Yii::app()->createController('Asiakkaat');
+			$list = $a_controller[0]->asiakkaatArrHelper(true);
+
+        		echo $form->dropDownList($model, 'asiakas_id', $list,
+			array('empty'=>'Valitse','class'=>'form-control'));
+		
+        	?>
+		<?php echo $form->error($model,'asiakas_id'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kohde'); ?>
 		<?php
 	       	$criteria = new CDbCriteria();
@@ -91,4 +104,40 @@
 
 <?php $this->endWidget(); ?>
 
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+ $('#Avaimet_asiakas_id').change(function(){
+
+	var thisVal = $(this).val();
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/crmSopimukset/get_kohde?id=' + thisVal,
+           //type: "POST",
+           //data: { },
+           success: function(data){
+		var data = JSON.parse(data);
+		console.log(data);
+		if(data['options'])
+		{
+			$('#Avaimet_kohde').html(data['options']);
+		}
+		if(data['asiakas_sahkoposti'])
+		{
+			$('#Avaimet_asiakkaan_sahkoposti').val(data['asiakas_sahkoposti']);
+		}
+		if(data['asiakas_tiedot'])
+		{
+			$('#Avaimet_tiedot').html(data['asiakas_tiedot']);
+		}
+
+           }
+        });
+
+ });
+
+
+});
+</script>
 
