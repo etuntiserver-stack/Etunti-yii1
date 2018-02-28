@@ -274,8 +274,8 @@ class Asetukset extends DB2ActiveRecord
 			'apuaika_meneeko_laskutukseen' => Yii::t('main', 'Meneeko laskutukseen'),
 			'apuaika_palkkalaji' => Yii::t('main', 'Palkkalaji'),
 			'edico_tehdyt_tyot' => Yii::t('main', 'Edico tehdyt työt'),
-			'app_matka_osoite' => Yii::t('main', 'Matka + Osoite'),
-			'app_lounastauko_osoite' => Yii::t('main', 'Lounastauko + Osoite'),
+			'app_matka_osoite' => Yii::t('main', 'Matka voidaan kirjata osoitteelle'),
+			'app_lounastauko_osoite' => Yii::t('main', 'Lounastauko voidaan kirjata osoitteelle'),
 		);
 	}
 
