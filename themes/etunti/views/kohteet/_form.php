@@ -282,6 +282,8 @@ $(document).ready(function(){
 
 	<?php 
 	if(isset($model->id)){
+	$a = Avaimet::model()->find("kohde='".$model->id."'");
+	if(isset($a->id))
 	echo CHtml::link('Avaimet',Yii::app()->request->baseUrl.'/index.php/avaimet/index?osoite='.$model->osoite,array('class'=>'btn btn-default btn-block')); 
 	}
 	?>
