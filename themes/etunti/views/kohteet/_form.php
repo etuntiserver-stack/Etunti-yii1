@@ -555,7 +555,12 @@ $(".poistaKuva").click(function(){
 window.initialize = function() {
     var lat = parseFloat(document.getElementById('lat').value);
     var lng = parseFloat(document.getElementById('lng').value);
-
+    if(!lat){
+	return false;
+    }
+    if(!lng){
+	return false;
+    }
     var myLatlng = new google.maps.LatLng(lat, lng);
     var mapCanvas = document.getElementById('map-canvas');
     var mapOptions = {
