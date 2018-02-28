@@ -197,9 +197,7 @@ class AvaimetController extends Controller
 		{
 			foreach($_POST['avaimet'] as $avain_id)
 			{
-				Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti']));
-				if(!empty($_POST['tyontekija']))
-				Avaimet::model()->updateByPk($avain_id, array('tid' => $_POST['tyontekija']));
+				Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti'], 'tid' => $_POST['tyontekija']));
 			}
 		}
 		if(isset($_POST['asiakkaatPerSivu']))
@@ -261,12 +259,9 @@ class AvaimetController extends Controller
 		{
 			foreach($_POST['avaimet'] as $avain_id)
 			{
-				Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti']));
-				if(!empty($_POST['tyontekija']))
-				Avaimet::model()->updateByPk($avain_id, array('tid' => $_POST['tyontekija']));
+				Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti'], 'tid' => $_POST['tyontekija']));
 			}
 		}
-
 		if(isset($_POST['asiakkaatPerSivu']))
 		{
 			Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);
