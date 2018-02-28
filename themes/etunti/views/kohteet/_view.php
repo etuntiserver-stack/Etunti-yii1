@@ -42,7 +42,9 @@
 		<?php echo $data->puh_nro; ?>
 	</td>
 	<td>
-		<?php echo $data->avain; ?>
+		<?php if(isset($data->id) and isset($data->avaimet) and count($data->avaimet) > 0) : ?>
+		<?=CHtml::link('',Yii::app()->request->baseUrl.'/index.php/avaimet/index?osoite='.$data->osoite,array('class'=>'btn btn-default btn-block fa fa-key'))?>
+		<?php endif; ?>
 	</td>
 	<td>
 		<?php echo ($data->aktiivinen == 1)? Yii::t('main', 'Kyllä'):'<span class="text-danger">'.Yii::t('main', 'Ei').'</span>'; ?>
