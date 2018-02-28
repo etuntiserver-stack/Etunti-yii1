@@ -174,7 +174,7 @@ $(document).ready(function(){
 	var tyontekija = $('#tyontekija option:selected').val();
 	$( ".avainnumero" ).each(function( ) {
 		if ($(this).is(':checked')){
-	   	  $('form#mobForm2').append('<input type="text" name="avaimet[]" value="' + $(this).val() + '" />');
+	   	  $('form#mobForm2').append('<input type="hidden" name="avaimet[]" value="' + $(this).val() + '" />');
 		  checked = true;
 		}
 	});
