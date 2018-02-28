@@ -549,7 +549,7 @@ $(".poistaKuva").click(function(){
         height: 400px;
       }
     </style>
-    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCq7M2XrDo8cr43lu1wohJ4rZAEGIyAdsw&callback=initMap"></script>
     <script>
 
 window.initialize = function() {
