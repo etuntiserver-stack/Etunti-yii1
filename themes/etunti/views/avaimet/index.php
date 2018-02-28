@@ -171,17 +171,12 @@ $(document).ready(function(){
  $(".submitFormTwo").click(function(e){
 	e.preventDefault();
 	var checked = false;
-	var tyontekija = $('#tyontekija option:selected').val();
 	$( ".avainnumero" ).each(function( ) {
 		if ($(this).is(':checked')){
 	   	  $('form#mobForm2').append('<input type="hidden" name="avaimet[]" value="' + $(this).val() + '" />');
 		  checked = true;
 		}
 	});
-	if(!tyontekija){
-		$('#tyontekija').css({'border' : '1px red solid'}).focus();
-		return false;
-	}
 	if(!checked){
 		alert('Valitse avain');
 		return false;

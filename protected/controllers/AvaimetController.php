@@ -193,11 +193,13 @@ class AvaimetController extends Controller
 	 */
 	public function actionIndex()
 	{
-		if(isset($_POST['avaimet']) and !empty($_POST['tyontekija']))
+		if(isset($_POST['avaimet']))
 		{
 			foreach($_POST['avaimet'] as $avain_id)
 			{
-				Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti'], 'tid' => $_POST['tyontekija']));
+				Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti']));
+				if(!empty($_POST['tyontekija']))
+				Avaimet::model()->updateByPk($avain_id, array('tid' => $_POST['tyontekija']));
 			}
 		}
 		if(isset($_POST['asiakkaatPerSivu']))
@@ -255,11 +257,13 @@ class AvaimetController extends Controller
 	public function actionAvaimet_tyontekijalle()
 	{
 
-		if(isset($_POST['avaimet']) and !empty($_POST['tyontekija']))
+		if(isset($_POST['avaimet']))
 		{
 			foreach($_POST['avaimet'] as $avain_id)
 			{
-				Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti'], 'tid' => $_POST['tyontekija']));
+				Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti']));
+				if(!empty($_POST['tyontekija']))
+				Avaimet::model()->updateByPk($avain_id, array('tid' => $_POST['tyontekija']));
 			}
 		}
 
