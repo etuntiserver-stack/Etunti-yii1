@@ -2,6 +2,31 @@
 /* @var $this KohteetController */
 /* @var $dataProvider CActiveDataProvider */
 
+// <--Konvertointi pois käytöstä 1.04.2018 jälkeen
+$k = Kohteet::model()->findAll("avain!=''");
+foreach($k as $item){
+	$tid = 0;
+	$kenella = explode("//", $item->kenella_on_avain);
+	if(isset($kenella[0])) $tid = $kenella[0];
+	//echo $item->id.' - '.$item->avain.' <b>'.$item->kenella_on_avain.'</b><br>';
+	$a = new Avaimet;
+	$a->avainnumero = $item->avain;
+	$a->kohde = $item->id;
+	$a->tid = $tid;
+	$a->status = 0;
+	if(isset($kenella[0])){
+	$a->sijainti = 'Työntekijällä';
+	}
+	if(!$a->save()){
+		print_r($a->getErrors());
+	} else {
+		Kohteet::model()->updateByPk($item->id, array("avain" => "", "kenella_on_avain" => ""));
+	}
+}
+if(count($k) > 0){
+	Yii::app()->user->setFlash('success', "Avaimet on konvertoitu");
+}
+// <--Konvertointi -->
 ?>
 
 
