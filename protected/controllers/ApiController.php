@@ -503,22 +503,6 @@ public function actionImei($dom)
 	if(isset($_POST['lang']))
 	$_SESSION['lang'] = $_POST['lang'];
 
-	/*
-	    if(isset($_POST['imei']) and !isset($_POST['salasana']))
-	    {
-	    $criteria = new CDbCriteria();
-	    $criteria->condition = " imei!='' AND imei = '".$_POST['imei']."' ";
-            $ttekija = Tyontekijat::model()->find($criteria);
-
-	     	if(empty($ttekija->id))
-	     	{
-                  $this->_sendResponse(200, "imeiError//Virhellinen imei koodi//".$_POST['imei']);
-	         exit;
-	     	}
-
-	    }
-	*/
-
 	// <-- Check Tyontekija
 	if(isset($_POST['email']) and isset($_POST['salasana']))
 	{
@@ -1008,40 +992,8 @@ public function actionImei($dom)
 
 	            $viestinta->viesti = $viestinta->viesti."\n".date("d.m H:i").", ".$this->etuSukunimi($ttekija->id).": ".$_POST['vastText'];
 	            $viestinta->save();
-		    // lahetta sahkopostiin
-		    /*
-		    $admin = '';
-		    $sending = '';
-		      $exAdmin = explode(",",$viestinta->admin);
-		      if(isset($exAdmin[0]))
-  			$admin = $exAdmin[0];
-
-	            $adm = Administrators::model()->findbypk($admin);
-		      if(isset($adm->adm_email) and !empty($adm->adm_email))
-		      {
-
-			
-				$name='=?UTF-8?B?'.base64_encode($viestinta->id).'?=';
-				$subject='=?UTF-8?B?'.base64_encode("Työntekijä ".$this->etuSukunimi($ttekija->id)." vastaa").'?=';
-				$headers="From: ".$this->etuSukunimi($ttekija->id)." <no-reply@etunti.fi>\r\n".
-					"Reply-To: no-reply@etunti.fi\r\n".
-					"MIME-Version: 1.0\r\n".
-					"Content-type: text/html; charset=UTF-8";
-
-
-				$message = '<h2>Keskustelun ID: '.$_POST['viestinID']."</h2><br>";
-				$message .= str_replace("\n","<br>",$viestinta->viesti);
-
-				if(mail($adm->adm_email,$subject,$message,$headers)){
-				   $sending = 'ok';
-				} else {
-				   $this->_sendResponse(200, 'Mail send ERROR '.$headers);
-				}
-		      }
-		    */
-
 		    $this->_sendResponse(200, $viestinta->viesti);
-		exit;
+		    exit;
 	        }
 
 
@@ -1073,45 +1025,6 @@ public function actionImei($dom)
 		exit;
 	        }
 
-
-
-
-		/*
-		$loc = explode("/",$_POST['my_location']);
- 		if(isset($loc[0]) and isset($loc[1]) and !empty($loc[0]) and !empty($loc[1]))
-		{
-		  $gps = $loc[0].",".$loc[1]; 
- 
-		  try {
-		   $json_url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$gps.'&language=fi&sensor=true';
-		   	if($json = file_get_contents($json_url))
-		   	{
-
-
-
-
-
-
-
-
-			  $obj = json_decode($json);
-			  if(isset($obj->results[0]))
-			  {
-				$go = $obj->results[0]->formatted_address;
-
-		  		$go = explode(",", $go);
-		  		if(isset($go[0]))
-		  		$get_osoite = $go[0];
-			  }
-			}
-
-		   } catch(Exception $e) {
-
-
-		   }
-		   
-		}
-		*/
 
 		if(isset($_POST['tag']) and $_POST['tag'] != '000000')
 		{
@@ -1290,7 +1203,6 @@ public function actionImei($dom)
 			// <-- Check TAG
 			$explAsNum = explode("_",$mobupdate->asiakas_num);
 			$explAsNumPost = explode("_",$_POST['asiakas_num']);
-		    	$asetukset = Asetukset::model()->findbypk(1);
 			if( 
 				isset($asetukset->app_lopettaa_vain_tagilla) 
 				and $asetukset->app_lopettaa_vain_tagilla == 1
@@ -1346,6 +1258,20 @@ public function actionImei($dom)
 	    // <-- uusi rivi
 	    if(isset($ttekija->id) and !empty($_POST['aloitan']) and empty($_POST['loppui'])){
 
+		// <-- Matka, Lounastauko ja Osoite mukaan
+		if($_POST['status'] == 2 and $asetukset->app_matka_osoite != 1 and (!empty($_POST['kohdenID']) or !empty($_POST['kohde_kannasta'])))
+		{
+			$return = array('error' => 'Matkan merkinnässä ei saa käyttää osoitetta.');
+			$this->_sendResponse(200, CJSON::encode($return));
+			exit;
+		}
+		if($_POST['status'] == 10 and $asetukset->app_lounastauko_osoite != 1 and (!empty($_POST['kohdenID']) or !empty($_POST['kohde_kannasta'])))
+		{
+			$return = array('error' => 'Lounastaukon merkinnässä ei saa käyttää osoitetta.');
+			$this->_sendResponse(200, CJSON::encode($return));
+			exit;
+		}
+		//     Matka, Lounastauko ja Osoite mukaan -->
 
                 $mobinsert = new Mob;
                 $mobinsert->attributes = $_POST;

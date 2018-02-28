@@ -37,7 +37,7 @@ class SiteController extends Controller
                 		'expression'=>"Yii::app()->controller->isDigisten()",
 			),
 			array('allow', 
-				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout', 'salasanan_palauttaminen', 'change_password', 'otakaytoon'),
+				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout', 'salasanan_palauttaminen', 'change_password', 'otakaytoon'),
 				'users'=>array('*'),
 			),
 			array('allow', 
@@ -1352,16 +1352,6 @@ class SiteController extends Controller
 	public function actionAsiakkaat()
 	{
 		//$this->render('asiakkaat');
-	}
-	public function actionYritys()
-	{
-		//Yii::app()->theme = 'classic';
-		//$this->render('yritys');
-	}
-	public function actionYhteystiedot()
-	{
-		//Yii::app()->theme = 'classic';
-		//$this->render('yhteystiedot');
 	}
 	public function actionLomake_lataailmainen()
 	{
