@@ -293,7 +293,7 @@ class AvaimetController extends Controller
 			BETWEEN '".$from."' and '".$to."'
 		");
 
-		if(isset($_GET['yrityksen_nimi']))
+		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
 		{
 	        $criteria->addCondition (" 
 			kohde IN ( SELECT id FROM sivex_kohdet
@@ -303,8 +303,7 @@ class AvaimetController extends Controller
 			)
 		");
 		}
-
-		if(isset($_GET['osoite']))
+		if(isset($_GET['osoite']) and !empty($_GET['osoite']))
 		{
 	        $criteria->addCondition (" 
 			kohde IN ( SELECT id FROM sivex_kohdet
@@ -312,7 +311,14 @@ class AvaimetController extends Controller
 			)
 		");
 		}
-
+		if(isset($_GET['tekijan_nimi']) and !empty($_GET['tekijan_nimi']))
+		{
+	        $criteria->addCondition (" tid IN 
+			(
+			SELECT id FROM sivex_ttekijat WHERE CONCAT(tekijan_nimi, ' ', sukunimi)  LIKE '%".$_GET['tekijan_nimi']."%' 
+			)"
+		);
+		}
 		$dataProvider=new CActiveDataProvider('Tyovuoroot', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false

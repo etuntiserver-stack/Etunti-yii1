@@ -109,7 +109,30 @@
                         </div>
                       </div>
 
-                      <div class="col-md-2 col-sm-offset-2">
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Tyontekijat';
+				$sarake = 'tekijan_nimi';
+				$placeholder = 'Nimi';
+				if(isset(Yii::app()->session['tekijan_nimi']))  $postvalue = Yii::app()->session['tekijan_nimi']; 
+				else $postvalue='';
+		 	        $site[0]->autocompleteFor($mod, array('tekijan_nimi', 'sukunimi'), $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
