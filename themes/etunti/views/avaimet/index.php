@@ -118,52 +118,21 @@ if(count($k) > 0){
                         <div class="section">
                           <label class="field prepend-icon">
 
-			    	<?php
-				$asetukset = Asetukset::model()->findByPk(1);
-	       			$criteria = new CDbCriteria();
-			       	$criteria->condition = " aktiivinen=1 ";
-				if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
-	       			$criteria->order = " tekijan_nimi ";
-				} else {
-	       			$criteria->order = " sukunimi ";
-				}
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Tyontekijat';
+				$sarake = 'tekijan_nimi';
+				$placeholder = 'Nimi';
+				if(isset(Yii::app()->session['tekijan_nimi']))  $postvalue = Yii::app()->session['tekijan_nimi']; 
+				else $postvalue='';
+		 	        $site[0]->autocompleteFor($mod, array('tekijan_nimi', 'sukunimi'), $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
 
-				$tt = Tyontekijat::model()->findAll($criteria);
-				$selected = 0;
-				if(isset($_GET['tid_a']) and !empty($_GET['tid_a'])) { $selected = $_GET['tid_a']; }
-				echo CHtml::dropDownList('tid_a', 'tid_a', CHtml::listData($tt, 'id', 'FullName'), array(
-				    'empty'=>'Aktiiviset työntekijät',
-				    'class'=>'gui-input',
-				    'options'=>array($selected => array('selected'=>true))             
-				));
-				?>
-
-                          </label>
-                        </div>
-
-                        <div class="section">
-                          <label class="field prepend-icon">
-
-			    	<?php
-				$asetukset = Asetukset::model()->findByPk(1);
-	       			$criteria = new CDbCriteria();
-			       	$criteria->condition = " aktiivinen!=1 ";
-				if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
-	       			$criteria->order = " tekijan_nimi ";
-				} else {
-	       			$criteria->order = " sukunimi ";
-				}
-
-				$tt = Tyontekijat::model()->findAll($criteria);
-				$selected = 0;
-				if(isset($_GET['tid_p']) and !empty($_GET['tid_p'])) { $selected = $_GET['tid_p']; }
-				echo CHtml::dropDownList('tid_p', 'tid_p', CHtml::listData($tt, 'id', 'FullName'), array(
-				    'empty'=>'Passiviset työntekijät',
-				    'class'=>'gui-input',
-				    'options'=>array($selected => array('selected'=>true))             
-				));
-				?>
-
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
                           </label>
                         </div>
                       </div>
@@ -199,6 +168,7 @@ if(count($k) > 0){
    	    <form id="mobForm2" action="#" class="form-inline" method="POST">
 	     <div class="form-group">
 		<?php
+		$asetukset = Asetukset::model()->findByPk(1);
 		$criteria = new CDbCriteria();
 		$criteria->condition = " aktiivinen=1 ";
 		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){

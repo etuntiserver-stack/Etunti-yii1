@@ -232,13 +232,13 @@ class AvaimetController extends Controller
 		{
 	        $criteria->addCondition (" avainnumero LIKE '%".$_GET['avainnumero']."%' ");
 		}
-		if(isset($_GET['tid_a']) and !empty($_GET['tid_a']))
+		if(isset($_GET['tekijan_nimi']) and !empty($_GET['tekijan_nimi']))
 		{
-	        $criteria->addCondition (" tid='".$_GET['tid_a']."' ");
-		}
-		if(isset($_GET['tid_p']) and !empty($_GET['tid_p']))
-		{
-	        $criteria->addCondition (" tid='".$_GET['tid_p']."' ");
+	        $criteria->addCondition (" tid IN 
+			(
+			SELECT id FROM sivex_ttekijat WHERE CONCAT(tekijan_nimi, ' ', sukunimi)  LIKE '%".$_GET['tekijan_nimi']."%' 
+			)"
+		);
 		}
 		$dataProvider=new CActiveDataProvider('Avaimet', array(
 			'criteria'=>$criteria,

@@ -2281,6 +2281,13 @@ $(document).ready(function(){
 		        'value'=>$data->yhteyshenkilo,    
 		        'id'=>$data->id,
         	    );
+		    } else if($model == 'Tyontekijat' and is_array(json_decode($sarake, true)))
+		    {
+		    $arr[] = array(
+		        'label'=>$data->tekijan_nimi.' '.$data->sukunimi,
+		        'value'=>$data->tekijan_nimi.' '.$data->sukunimi,    
+		        'id'=>$data->id,
+        	    );
 		    } else if($model == 'Domainit')
 		    {
 		    $arr[] = array(
