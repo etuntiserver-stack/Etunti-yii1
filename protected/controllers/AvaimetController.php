@@ -209,7 +209,7 @@ class AvaimetController extends Controller
 
        		$criteria = new CDbCriteria();
 
-		if(isset($_GET['yrityksen_nimi']))
+		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
 		{
 	        $criteria->addCondition (" 
 			kohde IN ( SELECT id FROM sivex_kohdet
@@ -220,7 +220,7 @@ class AvaimetController extends Controller
 		");
 		}
 
-		if(isset($_GET['osoite']))
+		if(isset($_GET['osoite']) and !empty($_GET['osoite']))
 		{
 	        $criteria->addCondition (" 
 			kohde IN ( SELECT id FROM sivex_kohdet
@@ -228,12 +228,18 @@ class AvaimetController extends Controller
 			)
 		");
 		}
-
-		if(isset($_GET['avainnumero']))
+		if(isset($_GET['avainnumero']) and !empty($_GET['avainnumero']))
 		{
 	        $criteria->addCondition (" avainnumero LIKE '%".$_GET['avainnumero']."%' ");
 		}
-
+		if(isset($_GET['tid_a']) and !empty($_GET['tid_a']))
+		{
+	        $criteria->addCondition (" tid='".$_GET['tid_a']."' ");
+		}
+		if(isset($_GET['tid_p']) and !empty($_GET['tid_p']))
+		{
+	        $criteria->addCondition (" tid='".$_GET['tid_p']."' ");
+		}
 		$dataProvider=new CActiveDataProvider('Avaimet', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false

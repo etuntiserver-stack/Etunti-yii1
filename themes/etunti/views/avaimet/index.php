@@ -114,6 +114,60 @@ if(count($k) > 0){
                         </div>
                       </div>
 
+                      <div class="col-md-3">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			    	<?php
+				$asetukset = Asetukset::model()->findByPk(1);
+	       			$criteria = new CDbCriteria();
+			       	$criteria->condition = " aktiivinen=1 ";
+				if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+	       			$criteria->order = " tekijan_nimi ";
+				} else {
+	       			$criteria->order = " sukunimi ";
+				}
+
+				$tt = Tyontekijat::model()->findAll($criteria);
+				$selected = 0;
+				if(isset($_GET['tid_a']) and !empty($_GET['tid_a'])) { $selected = $_GET['tid_a']; }
+				echo CHtml::dropDownList('tid_a', 'tid_a', CHtml::listData($tt, 'id', 'FullName'), array(
+				    'empty'=>'Aktiiviset työntekijät',
+				    'class'=>'gui-input',
+				    'options'=>array($selected => array('selected'=>true))             
+				));
+				?>
+
+                          </label>
+                        </div>
+
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			    	<?php
+				$asetukset = Asetukset::model()->findByPk(1);
+	       			$criteria = new CDbCriteria();
+			       	$criteria->condition = " aktiivinen!=1 ";
+				if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+	       			$criteria->order = " tekijan_nimi ";
+				} else {
+	       			$criteria->order = " sukunimi ";
+				}
+
+				$tt = Tyontekijat::model()->findAll($criteria);
+				$selected = 0;
+				if(isset($_GET['tid_p']) and !empty($_GET['tid_p'])) { $selected = $_GET['tid_p']; }
+				echo CHtml::dropDownList('tid_p', 'tid_p', CHtml::listData($tt, 'id', 'FullName'), array(
+				    'empty'=>'Passiviset työntekijät',
+				    'class'=>'gui-input',
+				    'options'=>array($selected => array('selected'=>true))             
+				));
+				?>
+
+                          </label>
+                        </div>
+                      </div>
+
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
@@ -128,7 +182,7 @@ if(count($k) > 0){
 
 
 
-                      <div class="col-md-2 col-sm-offset-4">
+                      <div class="col-md-2 col-sm-offset-1">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
@@ -147,6 +201,11 @@ if(count($k) > 0){
 		<?php
 		$criteria = new CDbCriteria();
 		$criteria->condition = " aktiivinen=1 ";
+		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+	       	$criteria->order = " tekijan_nimi ";
+		} else {
+	       	$criteria->order = " sukunimi ";
+		}
 		$tt = Tyontekijat::model()->findAll($criteria);
 		?>
 		<?php echo CHtml::dropDownList('tyontekija', 'tyontekija', CHtml::listData($tt, 'id', 'FullName'), 
