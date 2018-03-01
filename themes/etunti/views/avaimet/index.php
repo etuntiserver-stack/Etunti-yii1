@@ -123,7 +123,7 @@ if(count($k) > 0){
 	   			$site = Yii::app()->createController('Site');
 				$mod = 'Tyontekijat';
 				$sarake = 'tekijan_nimi';
-				$placeholder = 'Nimi';
+				$placeholder = 'Työntekijät';
 				if(isset(Yii::app()->session['tekijan_nimi']))  $postvalue = Yii::app()->session['tekijan_nimi']; 
 				else $postvalue='';
 		 	        $site[0]->autocompleteFor($mod, array('tekijan_nimi', 'sukunimi'), $placeholder, $postvalue);
