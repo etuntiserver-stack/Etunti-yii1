@@ -1,4 +1,0 @@
-#AuthType Basic
-#AuthName "Dokumentaatio"
-#AuthUserFile "/home/estromfi/.htpasswds/public_html/production/etuntifw/dokumentaatio/passwd"
-#require valid-user

@@ -648,6 +648,30 @@
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_matka_osoite'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'app_matka_osoite', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'app_matka_osoite'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_lounastauko_osoite'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'app_lounastauko_osoite', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'app_lounastauko_osoite'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'ilmoitus_uudesta_kuvasta_saajat'); ?>
 		<?php echo $form->textarea($model,'ilmoitus_uudesta_kuvasta_saajat',array('rows'=>8,'maxlength'=>3000,'class'=>'form-control', 'placeholder' => "sähköposti1@testi.fi\nsähköposti2@testi.fi")); ?>
 		<?php echo $form->error($model,'ilmoitus_uudesta_kuvasta_saajat'); ?>
