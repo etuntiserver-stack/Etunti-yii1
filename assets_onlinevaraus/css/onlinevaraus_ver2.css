@@ -1,7 +1,7 @@
 /*Etunti Onlinevaraus Styles*/
 
 body{
-  background: url('../etusivuimg/online_bg_01.jpg') no-repeat center center fixed; 
+  background: url('../../lib/img/etusivu/online_bg_01.jpg') no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
