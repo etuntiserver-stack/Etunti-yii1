@@ -1763,6 +1763,8 @@ class TyovuorootController extends Controller
 			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
 			// Tyontekijan vaihto -->
 
+			$toistuva_id = $model->toistuva_id;
+
 			$model->attributes=$_POST['Tyovuoroot'];
 
 			// <-- Apuaika
@@ -1826,16 +1828,16 @@ class TyovuorootController extends Controller
 					{
 
 						// <-- Poistetaan tyovuoro henkilosta joka oli toistuvissa
+						if( $toistuva_id != 0 )
+						{
 						$criteria = new CDBcriteria;
 						$criteria->condition = " 
 							pvm='".$m->pvm."' 
 							AND tid='".$m->tid."'
-							AND alku='".$m->alku."'
-							AND loppu='".$m->loppu."'
-							AND toistuva_id!=0
-							AND tyopaari='".$model->tyopaari."'
+							AND toistuva_id='".$toistuva_id."'
 						";
 						Tyovuoroot::model()->deleteAll($criteria);
+						}
 						//  Poistetaan tyovuoro henkilosta joka oli toistuvissa -->
 
 						$luotu[$m->id] = $m->tid;
