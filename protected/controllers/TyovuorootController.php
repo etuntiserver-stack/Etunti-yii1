@@ -1828,9 +1828,11 @@ class TyovuorootController extends Controller
 						$criteria->condition = " 
 							pvm='".$m->pvm."' 
 							AND tid='".$m->tid."'
+							AND alku='".$m->alku."'
+							AND loppu='".$m->loppu."'
 							AND toistuva_id!=0
+							AND tyopaari='".$model->tyopaari."'
 						";
-//							AND tyopaari='".json_encode($_POST['tyopaari'])."'
 						Tyovuoroot::model()->deleteAll($criteria);
 
 						$luotu[$m->id] = $m->tid;
