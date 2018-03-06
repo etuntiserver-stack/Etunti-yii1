@@ -1824,6 +1824,8 @@ class TyovuorootController extends Controller
 					$m->tid=$tid;
 					if($m->save())
 					{
+
+						// <-- Poistetaan tyovuoro henkilosta joka oli toistuvissa
 						$criteria = new CDBcriteria;
 						$criteria->condition = " 
 							pvm='".$m->pvm."' 
@@ -1834,6 +1836,7 @@ class TyovuorootController extends Controller
 							AND tyopaari='".$model->tyopaari."'
 						";
 						Tyovuoroot::model()->deleteAll($criteria);
+						//  Poistetaan tyovuoro henkilosta joka oli toistuvissa -->
 
 						$luotu[$m->id] = $m->tid;
 				    		$arr[$m->id] = array($m->tid,$m->pvm);
