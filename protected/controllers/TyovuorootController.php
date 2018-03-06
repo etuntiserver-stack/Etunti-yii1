@@ -996,8 +996,8 @@ class TyovuorootController extends Controller
 			$poistettu_pvm = array();
 			$poistettu_pvm = json_decode($toistuva->poistettu_pvm, true);
 
-				$poistettu_pvm[] = $pvm;
-				ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('poistettu_pvm'=>json_encode($poistettu_pvm)));
+			$poistettu_pvm[] = $pvm;
+			ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('poistettu_pvm'=>json_encode($poistettu_pvm)));
 
 		}
 	}
@@ -1824,6 +1824,15 @@ class TyovuorootController extends Controller
 					$m->tid=$tid;
 					if($m->save())
 					{
+						$criteria = new CDBcriteria;
+						$criteria->condition = " 
+							pvm='".$m->pvm."' 
+							AND tid='".$m->tid."'
+							AND toistuva_id!=0
+						";
+//							AND tyopaari='".json_encode($_POST['tyopaari'])."'
+						Tyovuoroot::model()->deleteAll($criteria);
+
 						$luotu[$m->id] = $m->tid;
 				    		$arr[$m->id] = array($m->tid,$m->pvm);
 					}
