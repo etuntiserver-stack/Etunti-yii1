@@ -70,13 +70,6 @@ public $digisten_tunnit_id, $edico_tilaus_id;
 	{
 		$tb_name = 'laskut';
 		$check_this_table = true;
-		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
-		if(!isset(Yii::app()->session[$tb_name]))
-		{
-			Yii::app()->session[$tb_name] = true;
-			$check_this_table = true;
-		}
-
 
 		if($check_this_table)
 		{
@@ -147,10 +140,7 @@ public $digisten_tunnit_id, $edico_tilaus_id;
                      'deliveryterm' => 'varchar(255) ',
                      'vatperiod' => 'varchar(50) ',
                      'netvisorkey' => 'int(11) ',
-
-
-
-
+		     'tuotteet_palvelut_muoto' => 'int(1) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -174,7 +164,7 @@ public $digisten_tunnit_id, $edico_tilaus_id;
 		return array(
                         //array('laskunumero','unique', 'message'=>'Tämä laskunumero on jo olemassa!'),
 			array('yid, tyyppi, as_nro, osoite, postinumero, toimipaikka, laskutus, paivays, erapaiva, maksuehto, toimitusosoite', 'required'),
-			array('kirjeenluokka, muistutuslasku_auto, lid, yid, as_nro, laskunumero, netvisorkey', 'numerical', 'integerOnly'=>true),
+			array('kirjeenluokka, muistutuslasku_auto, lid, yid, as_nro, laskunumero, netvisorkey, tuotteet_palvelut_muoto', 'numerical', 'integerOnly'=>true),
 			array('tyyppi, yritys, nimi, sahkoposti, v_tunnus, yhteyshenkilo, nimitarkenne, t_yritys, t_nimi, t_osoite, t_toimipaikka, t_sahkoposti, toimitusosoite, viitenumero, saaja_iban, maksettu_euro, laskun_nimetys, postita_jobid, trust_jobid', 'length', 'max'=>100),
 			array('vatperiod, y_tunnus, toimipaikka, laskutus, puhelin, t_y_tunnus, t_puhelin, viivastyskorko, tilanne, tapahtumapvm', 'length', 'max'=>50),
 			array('deliverymethod, deliveryterm, freetext, viitenne, viitemme, osoite, verkkolaskuosoite, saaja_virtualkoodi', 'length', 'max'=>255),

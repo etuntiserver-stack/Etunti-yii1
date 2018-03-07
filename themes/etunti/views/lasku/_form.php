@@ -338,6 +338,18 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php echo $form->error($model,'deliveryterm'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tuotteet_palvelut_muoto'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Hinnasto muoto',
+			1=>'Asiakkaan hintaat'
+		);
+		echo $form->dropDownList($model,'tuotteet_palvelut_muoto', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'tuotteet_palvelut_muoto'); ?>
+	</div>
+
   </div><div class="col-sm-3">
   <legend><?php echo Yii::t('main', 'LASKUN TIEDOT'); ?></legend>
 	<div class="section fill mb5">
@@ -1047,6 +1059,20 @@ if($("#modelID").val() != '1'){
 
 }
 
+
+
+
+$("#Lasku_tuotteet_palvelut_muoto").change(function() {
+	if( $(this).val() == '1' ){
+		$("#kalut").find(".valitseTuote").hide();
+		$("#kalut").find(".valitseTuote").next("span").hide();
+	}
+	if( $(this).val() == '0' ){
+		$("#kalut").find(".valitseTuote").show();
+		$("#kalut").find(".valitseTuote").next("span").show();
+	}
+});
+
 $("#uusiRivi").click(function() {
     var rivi = $("#samaRivi").html();
     var rowCount = makeid();
@@ -1226,7 +1252,7 @@ $(".luoRiviTunti").click(function() {
 	     $(this).closest('.panel-body').find("#kuukausi").css({"border" : "2px #f14010 solid"}).focus();
 	     return false;
 	}
-	if (tuotePalvelu  === '') 
+	if (tuotePalvelu  === '' && $("#Lasku_tuotteet_palvelut_muoto").val() == '0' ) 
 	{
 	     $(this).closest(".panel-body").find('.valitseTuote').css({"border" : "2px #f14010 solid"}).focus();
 	     return false;
@@ -1252,6 +1278,7 @@ function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu){
 */
 	$("#tuntienTulos").removeClass("alert bg-danger").html('');
 	var asiakasnumero = $("#Lasku_as_nro option:selected").val();
+	var tuotteet_palvelut_muoto = parseInt($("#Lasku_tuotteet_palvelut_muoto").val());
 	var kpl = 1;
 	var yksikko = 'kpl';
 	var hinta = 0;
@@ -1261,7 +1288,7 @@ function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu){
 	        $.ajax({
 	           url: 'luoKohteista?id='+value,
 		   type: 'POST',
-		   data: { jakso : jakso, kuukausi : kuukausi, asiakasnumero : asiakasnumero, from : from, to : to, tuotePalvelu : tuotePalvelu },
+		   data: { jakso : jakso, kuukausi : kuukausi, asiakasnumero : asiakasnumero, from : from, to : to, tuotePalvelu : tuotePalvelu, tuotteet_palvelut_muoto : tuotteet_palvelut_muoto },
 	           success: function(data){
 	               	//console.log(data);
 			data = JSON.parse(data);

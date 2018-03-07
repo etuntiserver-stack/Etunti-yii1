@@ -676,6 +676,30 @@ class LaskuController extends Controller
 		//     Hinnastot -->
 
 
+		// <-- Asiakkaan muoto
+		if( isset($kohteet->id) and isset($_POST['tuotteet_palvelut_muoto']) and $_POST['tuotteet_palvelut_muoto'] == 1){
+	
+				$return['hinta'] 	= $kohteet->hinta;
+				$return['alv'] 		= $kohteet->alv;
+
+				if($kohteet->hinta_tyyppi == '1')
+				{
+					$return['kpl'] = $tunnit;
+					$return['yksikko'] = 'h';
+				}
+				if($kohteet->hinta_tyyppi == '2')
+				{
+					$return['kpl'] = 1;
+					$return['yksikko'] = 'kk';
+				}
+				if($kohteet->hinta_tyyppi == '3')
+				{
+					$return['kpl'] = $rivi_kpl;
+					$return['yksikko'] = 'kpl';
+				}
+		}
+		// Asiakkaan muoto -->
+
 		if(isset($kohteet->id))
 		{
 			$return['osoite'] = $kohteet->osoite;

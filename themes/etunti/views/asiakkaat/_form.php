@@ -408,19 +408,7 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 		<?php echo $form->error($model,'maksuehto'); ?>
 	</div>
 
-	<?php if( $asetukset->tuotteet_palvelut_muoto == 0 ) : ?>
-	<!-- Tuotteet palvelut muoto 0 -->
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinnasto_id'); ?>
-		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
-		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
-		<?php echo $form->error($model,'hinnasto_id'); ?>
-	</div>
-	<!-- Tuotteet palvelut muoto 0 -->
-	<?php endif; ?>
-
-	<?php if( $asetukset->tuotteet_palvelut_muoto == 1 ) : ?>
-	<!-- Tuotteet palvelut muoto 1 -->
+	<!-- Tuotteet palvelut -->
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alv'); ?>
 		<?php
@@ -502,8 +490,14 @@ $(document).ready(function(){
 });
 </script>
 
-	<!-- Tuotteet palvelut muoto 1 -->
-	<?php endif; ?>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'hinnasto_id'); ?>
+		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
+		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
+		<?php echo $form->error($model,'hinnasto_id'); ?>
+	</div>
+	<!-- Tuotteet palvelut -->
+
 
   </div>
 <!-- Laskutus loppu -->
