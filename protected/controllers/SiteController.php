@@ -37,7 +37,7 @@ class SiteController extends Controller
                 		'expression'=>"Yii::app()->controller->isDigisten()",
 			),
 			array('allow', 
-				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout', 'salasanan_palauttaminen', 'change_password', 'otakaytoon'),
+				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout', 'salasanan_palauttaminen', 'change_password', 'otakaytoon'),
 				'users'=>array('*'),
 			),
 			array('allow', 
@@ -617,6 +617,7 @@ class SiteController extends Controller
 				$new_domain->domain = $kirjautumistunnus;
 				$new_domain->kirjautumistunnus = $kirjautumistunnus;
 				$new_domain->yritys = $_POST['yrityksen_nimi'];
+				$new_domain->y_tunnus = $_POST['yritys_tunnus'];
 				$new_domain->paketti = $paketti;
 				$new_domain->sahkoposti = $_POST['sahkoposti'];
 				$new_domain->aktiivinen = 1;
@@ -1353,16 +1354,6 @@ class SiteController extends Controller
 	{
 		//$this->render('asiakkaat');
 	}
-	public function actionYritys()
-	{
-		//Yii::app()->theme = 'classic';
-		//$this->render('yritys');
-	}
-	public function actionYhteystiedot()
-	{
-		//Yii::app()->theme = 'classic';
-		//$this->render('yhteystiedot');
-	}
 	public function actionLomake_lataailmainen()
 	{
 		//Yii::app()->theme = 'classic';
@@ -1691,6 +1682,19 @@ $(document).ready(function(){
 
 	public function actionIndex()
 	{
+		// <-- Check aloita lomake
+		if( isset($_POST['check_lomake']) and $_POST['check_lomake'] == 'ytunnus' ){
+			$ft = Domainit::model()->find(" y_tunnus='".$_POST['yritys_tunnus']."' ");
+			if( isset($ft->id) )
+			echo 'on_olemassa';
+			exit;
+		}
+		if( isset($_POST['check_lomake']) and $_POST['check_lomake'] == 'sahkoposti' ){
+			$ft = Domainit::model()->find(" sahkoposti='".$_POST['sahkoposti']."' ");
+			if( isset($ft->id) )
+			echo 'on_olemassa';
+			exit;
+		}
 
 		if(isset($_GET['soittaa']) and isset($_GET['otsikko']) and isset($_GET['viesti']))
 		{

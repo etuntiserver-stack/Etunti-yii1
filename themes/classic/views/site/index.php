@@ -209,22 +209,77 @@ $(document).ready(function(){
 
 	e.preventDefault();
 
+	if( $('#yrityksen_nimi').val() === ''){
+		$('#yrityksen_nimi').css({"border" : "1px red solid"}).focus();
+		return false;
+	}
+	if( $('#yritys_tunnus').val() === ''){
+		$('#yritys_tunnus').css({"border" : "1px red solid"}).focus();
+		return false;
+	}
+	if( $('#sahkoposti').val() === ''){
+		$('#sahkoposti').css({"border" : "1px red solid"}).focus();
+		return false;
+	}
+	if( $('#sahkoposti2').val() === ''){
+		$('#sahkoposti2').css({"border" : "1px red solid"}).focus();
+		return false;
+	}
+	if( $('#puhelinnumero').val() === ''){
+		$('#puhelinnumero').css({"border" : "1px red solid"}).focus();
+		return false;
+	}
 	if (grecaptcha.getResponse() == "" && location.hostname !== "etunti.local"){
 		alert("Varmistaa, ettet ole robotti");
 		return false;
 	}
-
 	if( $('#sahkoposti').val() !== $('#sahkoposti2').val() ){
 		alert('Tarkasta sähköpostiosoite.');
 		return false;
 	}
-
 	if(!localStorage.getItem('kayttoehdot_luettu')){
 		alert('Lue ensin käyttöehdot.');
 		return false;
 	}
 
-	$('#aloita-lomake').submit();
+
+	/* y-tunnus tsekkaus */
+	var yritys_tunnus = false;
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/site/index',
+           type: "POST",
+	   async: false,
+	   data: { check_lomake : "ytunnus", yritys_tunnus : $("#yritys_tunnus").val() },
+           success: function(data){
+		console.log(data);
+		if( data != 'on_olemassa' ){
+			yritys_tunnus = true;
+		} else {
+			alert('Tämä y-tunnus on jo olemassa');
+		}
+           }
+        });
+
+	/* sahkoposti tsekkaus */
+	var sahkoposti = false;
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/site/index',
+           type: "POST",
+	   async: false,
+	   data: { check_lomake : "sahkoposti", sahkoposti : $("#sahkoposti").val() },
+           success: function(data){
+		console.log(data);
+		if( data != 'on_olemassa' ){
+			sahkoposti = true;
+		} else {
+			alert('Tämä sähköposti on jo olemassa');
+		}
+           }
+        });
+
+	if(yritys_tunnus && sahkoposti){
+	   $('#aloita-lomake').submit();
+	}
   });
 
 

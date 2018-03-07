@@ -12,7 +12,7 @@
 
 <style>
 body {
-    background: url(../../etusivuimg/Etunti-tausta-2.jpg);
+    background: url(../../lib/img/Etunti-tausta-2.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
