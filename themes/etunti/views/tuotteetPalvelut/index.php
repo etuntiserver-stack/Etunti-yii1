@@ -115,9 +115,9 @@
   <th><?php echo Yii::t('main', 'Hinta (ALV 0)'); ?></th>
   <th><?php echo Yii::t('main', 'ALV'); ?></th>
   <th><?php echo Yii::t('main', 'Hinta (ALV sis)'); ?></th>
-  <?php if($netvisor) : ?>
+  <?php /* if($netvisor) : ?>
   <th><?php echo Yii::t('main', 'Netvisor key'); ?></th>
-  <?php endif; ?>
+  <?php endif; */?>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

@@ -125,6 +125,18 @@
 		<?php echo $form->error($model,'tyontekijan_etunimi_sukunimi_jarjestys'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tuotteet_palvelut_muoto'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Hinnasto muoto',
+			1=>'Asiakkaan hintaat'
+		);
+		echo $form->dropDownList($model,'tuotteet_palvelut_muoto', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'tuotteet_palvelut_muoto'); ?>
+	</div>
+
 <!--
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'merkkipaivailmoitukset_sahkoposti'); ?>

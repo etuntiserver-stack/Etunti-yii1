@@ -92,13 +92,15 @@ class Asiakkaat extends DB2ActiveRecord
                      'token' => 'varchar(255)',
                      'app_kayttoehdot' => 'int(1)',
 		     'hinnasto_id' => 'int(11) DEFAULT 0',
+                     'alv' => 'int(3)',
+                     'hinta_tyyppi' => 'varchar(50)',
+                     'hinta' => 'varchar(10)',
+		     'verot' => 'varchar(100)',
+                     'hinta_sis_alv' => 'float',
 
                      //'vinkki_tunnit' => 'varchar(10)',
                      //'vinkki_prosentti' => 'varchar(10)',
-                     //'alv' => 'int(3)',
-                     //'hinta_tyyppi' => 'varchar(50)',
-                     //'hinta' => 'varchar(10)',
-                     //'hinta_sis_alv' => 'float',
+
 
 		);
 
@@ -123,11 +125,11 @@ class Asiakkaat extends DB2ActiveRecord
 			array('tyyppi, osoite, postinumero, kaupunki', 'required'),
                         array('asiakasnumero','unique', 'message'=>'Tämä asiakasnumero on jo olemassa!'),
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
-			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot, hinnasto_id', 'numerical', 'integerOnly'=>true),
+			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot, hinnasto_id, alv', 'numerical', 'integerOnly'=>true),
 			array('myyja, postinumero, k_postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, k_kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
 			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma, sahkopostilaskuosoite, token', 'length', 'max'=>255),
-			array('maksuehto, viivastyskorko', 'length', 'max'=>20),
-			array('asiakasnumero, ovt_tunnus, valittajan_tunnus', 'length', 'max'=>100),
+			array('maksuehto, viivastyskorko, hinta, hinta_sis_alv', 'length', 'max'=>20),
+			array('asiakasnumero, ovt_tunnus, valittajan_tunnus, hinta_tyyppi, verot', 'length', 'max'=>100),
 			array('alennuskoodit', 'safe'),
 			array('sahkoposti','unique', 'message'=>'Tämä sähköposti on jo rekisteröity asiakkaalle.'),
 			// The following rule is used by search().
@@ -184,10 +186,10 @@ class Asiakkaat extends DB2ActiveRecord
 			'app_kayttoehdot' => Yii::t('main', 'eDico käytöehdot hyväksytty'),
 			'hinnasto_id'=> Yii::t('main', 'Hinnasto'),
 
-			//'alv'=> Yii::t('main', 'ALV %'),
-			//'hinta_tyyppi'=> Yii::t('main', 'Hinta tyyppi'),
-			//'hinta'=> Yii::t('main', 'Hinta (ALV0)'),
-			//'hinta_sis_alv' => Yii::t('main', 'Hinta (sis. ALV)'),
+			'alv'=> Yii::t('main', 'ALV %'),
+			'hinta_tyyppi'=> Yii::t('main', 'Hinta tyyppi'),
+			'hinta'=> Yii::t('main', 'Hinta (ALV0)'),
+			'hinta_sis_alv' => Yii::t('main', 'Hinta (sis. ALV)'),
 		);
 	}
 

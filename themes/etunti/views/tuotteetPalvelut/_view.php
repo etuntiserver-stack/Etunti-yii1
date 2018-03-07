@@ -38,10 +38,10 @@
 	<td>
 		<?php echo $data->hinta_alv_sis; ?>
 	</td>
-	<?php if($netvisor) : ?>
+	<?php /* if($netvisor) : ?>
 	<td>
 		<?=$data->netvisorkey?>
 	</td>
-	<?php endif; ?>
+	<?php endif; */ ?>
 </tr>
 
