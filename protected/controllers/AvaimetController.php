@@ -197,7 +197,21 @@ class AvaimetController extends Controller
 		{
 			foreach($_POST['avaimet'] as $avain_id)
 			{
+
+				$avaimet_old = Avaimet::model()->findByPk($avain_id);
 				Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti'], 'tid' => $_POST['tyontekija']));
+				$avaimet_new = Avaimet::model()->findByPk($avain_id);
+
+				// <-- LOG
+				$model_log 	= 'Avaimet';
+				$name_log 	= 'Avaimet';
+				$status_log 	= 'Move';
+	
+					$old_values = json_encode($avaimet_old->attributes);
+					$new_values = json_encode($avaimet_new->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
 			}
 		}
 		if(isset($_POST['asiakkaatPerSivu']))
@@ -265,7 +279,20 @@ class AvaimetController extends Controller
 		{
 			foreach($_POST['avaimet'] as $avain_id)
 			{
+				$avaimet_old = Avaimet::model()->findByPk($avain_id);
 				Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti'], 'tid' => $_POST['tyontekija']));
+				$avaimet_new = Avaimet::model()->findByPk($avain_id);
+
+				// <-- LOG
+				$model_log 	= 'Avaimet';
+				$name_log 	= 'Avaimet';
+				$status_log 	= 'Move';
+	
+					$old_values = json_encode($avaimet_old->attributes);
+					$new_values = json_encode($avaimet_new->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
 			}
 		}
 		if(isset($_POST['asiakkaatPerSivu']))
