@@ -188,7 +188,9 @@ class LaskuController extends Controller
 			$hinnoittelu = '<h3>Hinnoittelu: '.$k->hinnoittelu.'</h3><br>';
 		}
 
-		$h = Hinnastot::model()->findByPk($k->hinnasto_id);
+		if(isset($k->hinnasto_id)){
+		   $h = Hinnastot::model()->findByPk($k->hinnasto_id);
+		}
 		if(isset($h->id))
 		{
 			$return .= '<h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> '.Yii::t('main', 'Tietoja: '). ' </h2>';
@@ -463,6 +465,7 @@ class LaskuController extends Controller
 		$alv 		= $_POST['alv'];
 		$yksikko 	= $_POST['yksikko'];
 		$kohde_id 	= $_POST['kohde_id'];
+		$free_text 	= $_POST['free_text'];
 
 		$this->renderPartial('tr_rivit',array(
 			'from'=>$from,
@@ -473,6 +476,7 @@ class LaskuController extends Controller
 			'alv'=>$alv,
 			'yksikko'=>$yksikko,
 			'kohde_id'=>$kohde_id,
+			'free_text'=>$free_text,
 		));
 	}
 
@@ -520,7 +524,7 @@ class LaskuController extends Controller
 		echo 1;
 	}
 
-	public function actionLuoKohteista($id)
+	public function actionLuoKohteista($id, $for)
 	{
 
 		if(isset($_POST['from']) and isset($_POST['to']))
@@ -577,9 +581,29 @@ class LaskuController extends Controller
 			'to' => $to,
 			'tunnit' => $tunnit,
 			'rivi_kpl' =>$rivi_kpl,
-			'fromto' => $from.' - '.$to,
-			'kohde_id' => $id,
+			'fromto' => date("d.m.Y", strtotime($from)).' - '.date("d.m.Y", strtotime($to)),
+			'kohde_id' => 0,
+			'asiakas_id' => 0,
+			'free_text' => ''
 		);
+		if( $for == 'kohde'){ $return['kohde_id'] = $id; }
+		if( $for == 'asiakas'){ $return['asiakas_id'] = $id; }
+
+		// <-- Palvelu Muoto 1 / Asiakas
+		if( $for == 'asiakas' and isset($_POST['tuotteet_palvelut_muoto']) and $_POST['tuotteet_palvelut_muoto'] == 1){
+			$asiakas = Asiakkaat::model()->findByPk($id);
+			if( isset($asiakas->id) and $_POST['jakso'] == 'kk' and $asiakas->hinta_tyyppi == 2 )
+			{
+			$return['hinta'] 	= $asiakas->hinta;
+			$return['alv'] 		= $asiakas->alv;
+			$return['kpl'] 		= 1;
+			$return['yksikko'] 	= 'kk';
+			$return['free_text'] 	= $return['fromto'].' '.$asiakas->osoite.', '.$asiakas->kaupunki.' '.$asiakas->postinumero;
+			}
+			echo json_encode($return);
+			exit;
+		}
+		//     Palvelu Muoto 1 / Asiakas -->
 
 		// <-- Hinnastot
 		$kohteet = Kohteet::model()->findByPk($id);
@@ -703,6 +727,7 @@ class LaskuController extends Controller
 		if(isset($kohteet->id))
 		{
 			$return['osoite'] = $kohteet->osoite;
+			$return['free_text'] 	= $return['fromto'].' '.$kohteet->osoite.', '.$kohteet->kaupunki.' '.$kohteet->pnumero;
 		}
 
 		echo json_encode($return);
@@ -756,7 +781,7 @@ class LaskuController extends Controller
 		foreach($k as $item)
 		{
 			$is_true = true;
-			$kohteet .= '<option value="'.$item->id.'">'.$item->osoite.'</option>';
+			$kohteet .= '<option value="'.$item->id.'" for="kohde">Kohde: '.$item->osoite.'</option>';
 		}
 		//     Kohteet -->
 
@@ -780,6 +805,24 @@ class LaskuController extends Controller
 		$kohteet = '';
 		$kohteet .= '<br><select class="selectpicker kohteet etsikohde_alasvetovaliko" multiple title="Valitse kohteet">';
 
+		// <-- Asiakas
+		if( $hinta_tyyppi == 2 )
+		{
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " 
+			id='".$asiakas->id."' 
+			AND aktiivinen=1
+			AND hinta_tyyppi='".$hinta_tyyppi."'
+		";
+		$a = Asiakkaat::model()->find($criteria);
+		if( isset($a->id))
+		{
+			$is_true = true;
+			$kohteet .= '<option value="'.$a->id.'" for="asiakas">Asiakas: '.$a->osoite.'</option>';
+		}
+		}
+		//     Asiakas -->
+
 		// <-- Kohteet
        		$criteria = new CDbCriteria();
        		$criteria->condition = " 
@@ -791,7 +834,7 @@ class LaskuController extends Controller
 		foreach($k as $item)
 		{
 			$is_true = true;
-			$kohteet .= '<option value="'.$item->id.'">'.$item->osoite.'</option>';
+			$kohteet .= '<option value="'.$item->id.'" for="kohde">Kohde: '.$item->osoite.'</option>';
 		}
 		//     Kohteet -->
 

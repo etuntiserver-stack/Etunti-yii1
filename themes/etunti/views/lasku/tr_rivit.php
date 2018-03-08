@@ -1,36 +1,4 @@
 <?php
-	$k = Kohteet::model()->findbypk($kohde_id);
-/*
-	if($onkokohde == 'onkohde')
-	{
-		$k = Kohteet::model()->findbypk($id);
-
-		if(isset($asiakas->id) and $asiakas->hinnasto_id != 0)
-		{
-			$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$tuote->id."' AND hinnastot_id='".$asiakas->hinnasto_id."' ");
-			if(isset($hinnasto->id))
-			{
-				$arr['hinta_alv_0'] = $hinnasto->hinnasto_hinta;
-				$arr['alv'] = $hinnasto->hinnasto_alv;
-				$arr['yksikko'] = $hinnasto->hinnasto_yksikko;
-				$arr['hinta_alv_sis'] = $hinnasto->hinnasto_yht;
-			}
-		}
-
-	}
-*/
-
-
-	// <-- Free text
-	$free_text = '';
-	if(isset($k->id))
-	{
-		$free_text = $k->osoite.', ';
-	}
-
-	$free_text = $free_text.date('d.m.Y',strtotime($_POST['from'])).'-'.date('d.m.Y',strtotime($_POST['to']));
-	//     Free text -->
-
 	$tuotePalvelu = '';
 	$tuote = TuotteetPalvelut::model()->findbypk($_POST['tuotePalvelu']);
 	if(isset($tuote->id))
@@ -44,7 +12,10 @@
 
 	$hinnasto_rivi_id = '';
 	$hinnaston_otsikko = Yii::t('main', 'Hinnastoa ei määritetty');
-	$hr = HinnastotRivi::model()->findByPk($_POST['hinnasto_rivi_id']);
+
+	if( isset($_POST['hinnasto_rivi_id']) and $_POST['hinnasto_rivi_id'] > 0 ){
+	   $hr = HinnastotRivi::model()->findByPk($_POST['hinnasto_rivi_id']);
+	}
 	if(isset($hr->id))
 	{
 		$hinnasto_rivi_id = $hr->id;

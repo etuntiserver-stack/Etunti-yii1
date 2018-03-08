@@ -338,18 +338,6 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php echo $form->error($model,'deliveryterm'); ?>
 	</div>
 
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tuotteet_palvelut_muoto'); ?>
-		<?php 
-        	$tal = array(
-			0=>'Hinnasto muoto',
-			1=>'Asiakkaan hintaat'
-		);
-		echo $form->dropDownList($model,'tuotteet_palvelut_muoto', $tal, 
-		array('class'=>'form-control')) ?>
-		<?php echo $form->error($model,'tuotteet_palvelut_muoto'); ?>
-	</div>
-
   </div><div class="col-sm-3">
   <legend><?php echo Yii::t('main', 'LASKUN TIEDOT'); ?></legend>
 	<div class="section fill mb5">
@@ -535,6 +523,20 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 <br>
 -->
 <br>
+<div class="row" id="tuotteet_palvelut_muoto" style="display:none">
+	<div class="col-sm-offset-4 col-sm-4 section fill mb5">
+		<?php echo $form->labelEx($model,'tuotteet_palvelut_muoto'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Hinnasto muoto',
+			1=>'Asiakkaan hintaat'
+		);
+		echo $form->dropDownList($model,'tuotteet_palvelut_muoto', $tal, 
+		array('class'=>'form-control input-lg bg-success')) ?>
+		<?php echo $form->error($model,'tuotteet_palvelut_muoto'); ?>
+		<br>
+	</div>
+</div>
 
 <div class="row form kht" id="kalut">
  <div class="col-sm-6" id="tuntiKalut">
@@ -1120,7 +1122,7 @@ $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 		}
 
 		eachLaskenta();
-		console.log(data)
+		//console.log(data)
            }
         });
 
@@ -1212,6 +1214,7 @@ $("#Lasku_as_nro").change(function() {
     }
 	
 	$("#kalut").show('slow');
+	$("#tuotteet_palvelut_muoto").show('slow');
 
         $.ajax({
            url: 'etsikohde?asiakasnumero='+asiakas,
@@ -1311,7 +1314,8 @@ $("#Lasku_tuotteet_palvelut_muoto").change(function() {
 		$("#palvelu").html(t_palvelut_hinnastosta).removeClass('for-muoto-1');
 		$("#kk_palvelu").html(kk_palvelut_hinnastosta);
 		if( getkohdeT !== '' ){	
-			$("#getkohdeT").html(getkohdeT); 
+			$("#getkohdeT").html(getkohdeT);
+			$("#getkohdeKK").html(getkohdeT);
 			multiselectLaatikko();
 		}
 	}
@@ -1331,13 +1335,18 @@ function etsiKohteetByYksikkoPalveluMuoto1(hinta_tyyppi){
 	   //data : {}
            success: function(data){
 		var spdata = JSON.parse(data);
-               	console.log(spdata);
+               	//console.log(spdata);
 		if(spdata['is_true'] == true)
 		{
 			$("#getkohdeT").html(spdata['kohteet']);
 			//$("#getkohdeKK").html(spdata['kohteet']);
 			multiselectLaatikko();
+
 			$("#getkohdeT").find(".multiselect").removeClass('btn-default').addClass('btn-success').text('Kohteet päivitetty');
+			setTimeout(function() { 
+			$("#getkohdeT").find(".multiselect").removeClass('btn-success').addClass('btn-default').text('Valitse kohde');
+			}, 3000);
+
 		} else {
 			$("#getkohdeT").html('<br><p><span class="btn btn-danger btn-block">Ei kohteitta.</span></p>');
 		}
@@ -1353,12 +1362,18 @@ function etsiKohteetByYksikkoPalveluMuoto1(hinta_tyyppi){
 	   //data : {}
            success: function(data){
 		var spdata = JSON.parse(data);
-               	console.log(spdata);
+               	//console.log(spdata);
 		if(spdata['is_true'] == true)
 		{
 			$("#getkohdeKK").html(spdata['kohteet']);
 			multiselectLaatikko();
+
 			$("#getkohdeKK").find(".multiselect").removeClass('btn-default').addClass('btn-success').text('Kohteet päivitetty');
+			setTimeout(function() { 
+			$("#getkohdeKK").find(".multiselect").removeClass('btn-success').addClass('btn-default').text('Valitse kohde');
+			}, 3000);
+
+
 		} else {
 			$("#getkohdeKK").html('<br><p><span class="btn btn-danger btn-block">Ei kohteitta.</span></p>');
 		}
@@ -1375,7 +1390,7 @@ function multiselectLaatikko(){
 				//inheritClass: true,
 				//enableFiltering: true,
 			        includeSelectAllOption: true,
-				nonSelectedText: '<?php echo Yii::t("main", "Kohteet"); ?>',
+				nonSelectedText: '<?php echo Yii::t("main", "Valitse kohde"); ?>',
 				selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
 				allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
 				nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
@@ -1394,9 +1409,10 @@ $(".luoRiviTunti").click(function() {
 	var to = $(this).closest('.panel-body').find("#to").val();
 	var kohteet = $(this).closest('.panel-body').find('.etsikohde_alasvetovaliko').val();
 	var tuotePalvelu = $(this).closest(".panel-body").find('.valitseTuote option:selected').val();
+	var tuotePalveluFor = $(this).closest(".panel-body").find('.etsikohde_alasvetovaliko option:selected').attr('for');
 	var tuotteet_palvelut_muoto = parseInt($("#Lasku_tuotteet_palvelut_muoto").val());
 
-	console.log(tuotePalvelu);
+	//console.log(tuotePalvelu);
 
 	if (from  === '' && jakso == 'tunti') 
 	{
@@ -1425,15 +1441,12 @@ $(".luoRiviTunti").click(function() {
 
 	} 
 
-	    pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palvelut_muoto);
+	    pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palvelut_muoto,tuotePalveluFor);
 });
 
-function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palvelut_muoto){
+function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palvelut_muoto,tuotePalveluFor){
 
-/*
-	    if($('#tkoodi_1').val() === '')
-	    $("#trRivi_1").remove();
-*/
+
 	$("#tuntienTulos").removeClass("alert bg-danger").html('');
 	var asiakasnumero = $("#Lasku_as_nro option:selected").val();
 	var kpl = 1;
@@ -1442,15 +1455,23 @@ function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palv
 
 	    $.each(kohteet, function( index, value ) {
 
+		var postdata = { 
+			jakso : jakso, 
+			kuukausi : kuukausi, 
+			asiakasnumero : asiakasnumero, 
+			from : from, to : to, 
+			tuotePalvelu : tuotePalvelu, 
+			tuotteet_palvelut_muoto : tuotteet_palvelut_muoto
+		};
 	        $.ajax({
-	           url: 'luoKohteista?id='+value,
+	           url: 'luoKohteista?id='+value+'&for='+tuotePalveluFor,
 		   type: 'POST',
-		   data: { jakso : jakso, kuukausi : kuukausi, asiakasnumero : asiakasnumero, from : from, to : to, tuotePalvelu : tuotePalvelu, tuotteet_palvelut_muoto : tuotteet_palvelut_muoto },
+		   data: postdata,
 	           success: function(data){
 	               	//console.log(data);
 			data = JSON.parse(data);
 
-			if(parseInt(data['rivi_kpl']) == 0 && data['yksikko'] !== 'kk')
+			if(tuotteet_palvelut_muoto == 0 && parseInt(data['rivi_kpl']) == 0 && data['yksikko'] !== 'kk')
 			{
 				$("#tuntienTulos").addClass("alert bg-danger").append('<p><b>Ei löydy tuntia osoitteesta: </b>' + data['osoite'] + '</p>');
 				return true;
@@ -1468,6 +1489,7 @@ function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palv
 					alv : data['alv'],
 					hinnasto_rivi_id : data['hinnasto_rivi_id'],
 					yksikko : data['yksikko'],
+					free_text : data['free_text'],
 					tuotePalvelu : tuotePalvelu
 			   };
 
