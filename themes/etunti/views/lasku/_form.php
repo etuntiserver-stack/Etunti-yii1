@@ -528,8 +528,8 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php echo $form->labelEx($model,'tuotteet_palvelut_muoto'); ?>
 		<?php 
         	$tal = array(
-			0=>'Hinnasto muoto',
-			1=>'Asiakkaan hintaat'
+			0=>'Hinnaston mukaan',
+			1=>'Asiakaskohteen hinta'
 		);
 		echo $form->dropDownList($model,'tuotteet_palvelut_muoto', $tal, 
 		array('class'=>'form-control input-lg bg-success')) ?>
