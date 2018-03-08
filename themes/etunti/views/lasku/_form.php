@@ -603,7 +603,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<?php
 	$criteria = new CDbCriteria();
        	$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND yksikko='kk' ";
-	echo CHtml::dropdownList('','', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
+	echo CHtml::dropdownList('kk_palvelu','kk_palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
 	?>
 	<span class="text-danger">Tuotteet jolla yksikkö "kk"</span>
@@ -1059,20 +1059,6 @@ if($("#modelID").val() != '1'){
 
 }
 
-
-
-
-$("#Lasku_tuotteet_palvelut_muoto").change(function() {
-	if( $(this).val() == '1' ){
-		$("#kalut").find(".valitseTuote").hide();
-		$("#kalut").find(".valitseTuote").next("span").hide();
-	}
-	if( $(this).val() == '0' ){
-		$("#kalut").find(".valitseTuote").show();
-		$("#kalut").find(".valitseTuote").next("span").show();
-	}
-});
-
 $("#uusiRivi").click(function() {
     var rivi = $("#samaRivi").html();
     var rowCount = makeid();
@@ -1087,7 +1073,6 @@ $("#uusiRivi").click(function() {
            }
         });
 });
-
 
 function makeid()
 {
@@ -1104,9 +1089,6 @@ function jumpToPageBottom() {
     $('html, body').animate({scrollTop:1000}, 'slow');
     return false;
 }
-
-
-
 
 $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 
@@ -1144,17 +1126,10 @@ $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 
 });
 
-
-
-
-
-
-  $(document).delegate(".poista","click",function(){
+$(document).delegate(".poista","click",function(){
 	$(this).closest('tr').remove();
 	yhteensaTotal();
-  });
-
-
+});
 
 Rivi();
 function Rivi(){
@@ -1220,11 +1195,196 @@ function yhteensaTotal(){
 }
 
 
-  $(document).delegate('#rivit input[type="number"]','keyup',function(){
+$(document).delegate('#rivit input[type="number"]','keyup',function(){
   	eachLaskenta();
     	yhteensaTotal();
-  });
+});
 
+var getkohdeT = '';
+$("#Lasku_as_nro").change(function() {
+
+    var asiakas = $("#Lasku_as_nro option:selected").val();
+    var asiakas_id = 0;
+    if(!asiakas)
+    {
+	alert("Asiakasnumero puuttuu");
+	return false;
+    }
+	
+	$("#kalut").show('slow');
+
+        $.ajax({
+           url: 'etsikohde?asiakasnumero='+asiakas,
+	   async : false,
+           success: function(data){
+		var spdata = JSON.parse(data);
+               	//console.log(spdata);
+
+		if(spdata['is_true'] == true)
+		{
+
+			asiakas_id = spdata['asiakas_id'];
+			$("#getkohdeT").html(spdata['kohteet']);
+			getkohdeT = spdata['kohteet'];
+			$("#getkohdeKK").html(spdata['kohteet']);
+			$("#tuntiKalut").show();
+
+			multiselectLaatikko();
+
+		} else {
+			$("#tuntiKalut").hide();
+			$("#kkKalut").hide();
+		}
+
+           },
+           error: function(XMLHttpRequest, textStatus, errorThrown){
+               	console.log(XMLHttpRequest);
+	   }
+        });
+
+        $.ajax({
+           url: 'etsiasiakas?id='+asiakas_id,
+           success: function(data){
+               	//console.log(data);
+		var sp = JSON.parse(data).split("//");
+		$(".tyyppi").show('slow');
+
+
+		laskutus(sp[0]);
+		if(sp[0]){
+		  $("#Lasku_laskutus option[value="+sp[0]+"]").attr('selected','selected');
+		}
+		if(sp[1]){
+		  $("#Lasku_maksuehto").val(sp[1]);
+		}
+
+
+		if(sp[2]){
+		  var spR = sp[2].split("**");
+		  $("#Lasku_tyyppi option[value="+spR[0]+"]").attr('selected','selected');
+		  laskutusTyyppi(spR[0]);
+		
+		  if(spR[0] =='yritys')
+		  {
+		    $("#Lasku_yritys").val(spR[1])
+		    $("#Lasku_y_tunnus").val(spR[2])
+		  }
+
+		  if(spR[0] =='henkilo')
+		  {
+		    $("#Lasku_nimi").val(spR[1])
+		  }
+		}
+
+
+		    $("#Lasku_osoite").val(sp[3])
+		    $("#Lasku_postinumero").val(sp[4])
+		    $("#Lasku_toimipaikka").val(sp[5])
+		    $("#Lasku_yhteyshenkilo").val(sp[6])
+		    $("#Lasku_puhelin").val(sp[7])
+		    $("#Lasku_erapaiva").val(sp[9])
+		    $("#Lasku_v_tunnus").val(sp[10])
+		    $("#Lasku_verkkolaskuosoite").val(sp[11])
+		    $("#Lasku_muistutuslasku_auto option[value="+sp[12]+"]").attr('selected','selected');
+		    $("#Lasku_kirjeenluokka option[value="+sp[13]+"]").attr('selected','selected');
+		    $("#Lasku_sahkoposti").val(sp[14])
+		    $("#Lasku_viivastyskorko").val(sp[15])
+
+           },
+           error: function(XMLHttpRequest, textStatus, errorThrown){
+               	console.log(XMLHttpRequest);
+	   }
+        });
+
+});
+
+
+var t_palvelut_hinnastosta = $("#palvelu").html();
+var kk_palvelut_hinnastosta = $("#kk_palvelu").html();
+$("#Lasku_tuotteet_palvelut_muoto").change(function() {
+	if( $(this).val() == '1' ){
+		$("#palvelu").html('<option value="1">h</option><option value="3">kpl</option>').addClass('for-muoto-1');
+		$("#kk_palvelu").html('<option value="2">kk</option>');
+		etsiKohteetByYksikkoPalveluMuoto1(1);
+	}
+	if( $(this).val() == '0' ){
+		$("#palvelu").html(t_palvelut_hinnastosta).removeClass('for-muoto-1');
+		$("#kk_palvelu").html(kk_palvelut_hinnastosta);
+		if( getkohdeT !== '' ){	
+			$("#getkohdeT").html(getkohdeT); 
+			multiselectLaatikko();
+		}
+	}
+});
+
+$(document).delegate(".for-muoto-1","change",function(){
+	etsiKohteetByYksikkoPalveluMuoto1($(this).val());
+});
+
+function etsiKohteetByYksikkoPalveluMuoto1(hinta_tyyppi){
+
+	var asiakas = $("#Lasku_as_nro option:selected").val();
+	if(!asiakas){ alert('Valitse asiakas'); return false; }
+        $.ajax({
+           url: 'etsikohde_by_yksikko?asiakasnumero='+ asiakas +'&hinta_tyyppi='+ hinta_tyyppi,
+	   type : 'POST',
+	   //data : {}
+           success: function(data){
+		var spdata = JSON.parse(data);
+               	console.log(spdata);
+		if(spdata['is_true'] == true)
+		{
+			$("#getkohdeT").html(spdata['kohteet']);
+			//$("#getkohdeKK").html(spdata['kohteet']);
+			multiselectLaatikko();
+			$("#getkohdeT").find(".multiselect").removeClass('btn-default').addClass('btn-success').text('Kohteet päivitetty');
+		} else {
+			$("#getkohdeT").html('<br><p><span class="btn btn-danger btn-block">Ei kohteitta.</span></p>');
+		}
+           },
+           error: function(XMLHttpRequest, textStatus, errorThrown){
+               	console.log(XMLHttpRequest);
+	   }
+        });
+
+        $.ajax({
+           url: 'etsikohde_by_yksikko?asiakasnumero='+ asiakas +'&hinta_tyyppi=2',
+	   type : 'POST',
+	   //data : {}
+           success: function(data){
+		var spdata = JSON.parse(data);
+               	console.log(spdata);
+		if(spdata['is_true'] == true)
+		{
+			$("#getkohdeKK").html(spdata['kohteet']);
+			multiselectLaatikko();
+			$("#getkohdeKK").find(".multiselect").removeClass('btn-default').addClass('btn-success').text('Kohteet päivitetty');
+		} else {
+			$("#getkohdeKK").html('<br><p><span class="btn btn-danger btn-block">Ei kohteitta.</span></p>');
+		}
+           },
+           error: function(XMLHttpRequest, textStatus, errorThrown){
+               	console.log(XMLHttpRequest);
+	   }
+        });
+}
+
+function multiselectLaatikko(){
+			// <--multiselect
+			$('.etsikohde_alasvetovaliko').multiselect({
+				//inheritClass: true,
+				//enableFiltering: true,
+			        includeSelectAllOption: true,
+				nonSelectedText: '<?php echo Yii::t("main", "Kohteet"); ?>',
+				selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+				allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+				nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+				numberDisplayed: 0,
+				buttonWidth: '100%',
+			        maxHeight: 300,
+			});
+			//    multiselect -->
+}
 
 $(".luoRiviTunti").click(function() {
 
@@ -1234,6 +1394,7 @@ $(".luoRiviTunti").click(function() {
 	var to = $(this).closest('.panel-body').find("#to").val();
 	var kohteet = $(this).closest('.panel-body').find('.etsikohde_alasvetovaliko').val();
 	var tuotePalvelu = $(this).closest(".panel-body").find('.valitseTuote option:selected').val();
+	var tuotteet_palvelut_muoto = parseInt($("#Lasku_tuotteet_palvelut_muoto").val());
 
 	console.log(tuotePalvelu);
 
@@ -1264,13 +1425,10 @@ $(".luoRiviTunti").click(function() {
 
 	} 
 
-	    pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu);
+	    pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palvelut_muoto);
 });
 
-
-
-
-function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu){
+function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palvelut_muoto){
 
 /*
 	    if($('#tkoodi_1').val() === '')
@@ -1278,7 +1436,6 @@ function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu){
 */
 	$("#tuntienTulos").removeClass("alert bg-danger").html('');
 	var asiakasnumero = $("#Lasku_as_nro option:selected").val();
-	var tuotteet_palvelut_muoto = parseInt($("#Lasku_tuotteet_palvelut_muoto").val());
 	var kpl = 1;
 	var yksikko = 'kpl';
 	var hinta = 0;
@@ -1365,116 +1522,7 @@ $("#Lasku_yid").change(function() {
         });
 });
 
-$("#Lasku_as_nro").change(function() {
 
-    var asiakas = $("#Lasku_as_nro option:selected").val();
-    var asiakas_id = 0;
-    if(!asiakas)
-    {
-	alert("Asiakasnumero puuttuu");
-	return false;
-    }
-	
-	$("#kalut").show('slow');
-
-        $.ajax({
-           url: 'etsikohde?asiakasnumero='+asiakas,
-	   async : false,
-           success: function(data){
-		var spdata = JSON.parse(data);
-               	//console.log(spdata);
-
-		if(spdata['is_true'] == true)
-		{
-
-			asiakas_id = spdata['asiakas_id'];
-			$("#getkohdeT").html(spdata['kohteet']);
-			$("#getkohdeKK").html(spdata['kohteet']);
-			$("#tuntiKalut").show();
-
-
-
-			// <--multiselect
-			$('.etsikohde_alasvetovaliko').multiselect({
-				//inheritClass: true,
-				//enableFiltering: true,
-			        includeSelectAllOption: true,
-				nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
-				selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
-				allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
-				nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
-				numberDisplayed: 0,
-				buttonWidth: '100%',
-			        maxHeight: 300,
-			});
-			//    multiselect -->
-
-		} else {
-			$("#tuntiKalut").hide();
-			$("#kkKalut").hide();
-		}
-
-           },
-           error: function(XMLHttpRequest, textStatus, errorThrown){
-               	console.log(XMLHttpRequest);
-	   }
-        });
-
-        $.ajax({
-           url: 'etsiasiakas?id='+asiakas_id,
-           success: function(data){
-               	//console.log(data);
-		var sp = JSON.parse(data).split("//");
-		$(".tyyppi").show('slow');
-
-
-		laskutus(sp[0]);
-		if(sp[0]){
-		  $("#Lasku_laskutus option[value="+sp[0]+"]").attr('selected','selected');
-		}
-		if(sp[1]){
-		  $("#Lasku_maksuehto").val(sp[1]);
-		}
-
-
-		if(sp[2]){
-		  var spR = sp[2].split("**");
-		  $("#Lasku_tyyppi option[value="+spR[0]+"]").attr('selected','selected');
-		  laskutusTyyppi(spR[0]);
-		
-		  if(spR[0] =='yritys')
-		  {
-		    $("#Lasku_yritys").val(spR[1])
-		    $("#Lasku_y_tunnus").val(spR[2])
-		  }
-
-		  if(spR[0] =='henkilo')
-		  {
-		    $("#Lasku_nimi").val(spR[1])
-		  }
-		}
-
-
-		    $("#Lasku_osoite").val(sp[3])
-		    $("#Lasku_postinumero").val(sp[4])
-		    $("#Lasku_toimipaikka").val(sp[5])
-		    $("#Lasku_yhteyshenkilo").val(sp[6])
-		    $("#Lasku_puhelin").val(sp[7])
-		    $("#Lasku_erapaiva").val(sp[9])
-		    $("#Lasku_v_tunnus").val(sp[10])
-		    $("#Lasku_verkkolaskuosoite").val(sp[11])
-		    $("#Lasku_muistutuslasku_auto option[value="+sp[12]+"]").attr('selected','selected');
-		    $("#Lasku_kirjeenluokka option[value="+sp[13]+"]").attr('selected','selected');
-		    $("#Lasku_sahkoposti").val(sp[14])
-		    $("#Lasku_viivastyskorko").val(sp[15])
-
-           },
-           error: function(XMLHttpRequest, textStatus, errorThrown){
-               	console.log(XMLHttpRequest);
-	   }
-        });
-
-});
 
 
 $("#Lasku_tyyppi").change(function() {
@@ -1527,7 +1575,6 @@ function laskutus(value){
 
 }
 
-
 $("#Lasku_toimitusosoite").change(function() {
     var toimitusosoite = $(this).val();
     if(toimitusosoite == 1){
@@ -1574,7 +1621,6 @@ $(document).delegate(".etsikohde_alasvetovaliko","change",function(){
    });
    }
 });
-
 
 $("#osoiteHaku").keyup(function() {
     var thisVal = $(this).val();

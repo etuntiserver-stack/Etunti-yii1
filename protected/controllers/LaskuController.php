@@ -27,7 +27,7 @@ class LaskuController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -756,7 +756,7 @@ class LaskuController extends Controller
 		foreach($k as $item)
 		{
 			$is_true = true;
-			$kohteet .= '<option value="'.$item->id.'">Kohde: '.$item->osoite.'</option>';
+			$kohteet .= '<option value="'.$item->id.'">'.$item->osoite.'</option>';
 		}
 		//     Kohteet -->
 
@@ -769,7 +769,40 @@ class LaskuController extends Controller
 		echo json_encode($return);
 	}
 
+	public function actionEtsikohde_by_yksikko($asiakasnumero, $hinta_tyyppi)
+	{
 
+		$is_true = false;
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " asiakasnumero='".$asiakasnumero."' ";
+		$asiakas = Asiakkaat::model()->find($criteria);
+
+		$kohteet = '';
+		$kohteet .= '<br><select class="selectpicker kohteet etsikohde_alasvetovaliko" multiple title="Valitse kohteet">';
+
+		// <-- Kohteet
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " 
+			asiakas_id='".$asiakas->id."' 
+			AND aktiivinen=1
+			AND hinta_tyyppi='".$hinta_tyyppi."'
+		";
+		$k = Kohteet::model()->findAll($criteria);
+		foreach($k as $item)
+		{
+			$is_true = true;
+			$kohteet .= '<option value="'.$item->id.'">'.$item->osoite.'</option>';
+		}
+		//     Kohteet -->
+
+		$return = array(
+			'kohteet'=>$kohteet,
+			'is_true' => $is_true,
+			'asiakas_id' => $asiakas->id
+		);
+
+		echo json_encode($return);
+	}
 	public function actionEtsisaaja($id)
 	{
 		$a = Asetukset::model()->findbypk($id);

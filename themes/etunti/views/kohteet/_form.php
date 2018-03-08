@@ -14,6 +14,7 @@ $ismobile = $site[0]->check_user_agent();
 if($ismobile and !empty($model->puh_nro)) {
 
 }
+if(!isset($model->id)){ $model->alv = 24; }
 ?>
 <div class="row">
 
@@ -136,8 +137,8 @@ if($ismobile and !empty($model->puh_nro)) {
         	$l = array(0=>0,10=>10,14=>14,24=>24);
 
         	echo $form->dropDownList($model, 'alv', $l,
-		array('empty'=>'Valitse','class'=>'form-control'
-		));
+		array('empty'=>'Valitse','class'=>'form-control')
+		);
         	?>
 		<?php echo $form->error($model,'alv'); ?>
 	</div>
