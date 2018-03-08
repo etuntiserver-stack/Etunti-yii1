@@ -531,6 +531,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 			0=>'Hinnaston mukaan',
 			1=>'Asiakaskohteen hinta'
 		);
+		$model->tuotteet_palvelut_muoto = $asetukset->tuotteet_palvelut_muoto;
 		echo $form->dropDownList($model,'tuotteet_palvelut_muoto', $tal, 
 		array('class'=>'form-control input-lg bg-success')) ?>
 		<?php echo $form->error($model,'tuotteet_palvelut_muoto'); ?>
@@ -1215,6 +1216,7 @@ $("#Lasku_as_nro").change(function() {
 	
 	$("#kalut").show('slow');
 	$("#tuotteet_palvelut_muoto").show('slow');
+	palvelu_muoto();
 
         $.ajax({
            url: 'etsikohde?asiakasnumero='+asiakas,
@@ -1305,12 +1307,17 @@ $("#Lasku_as_nro").change(function() {
 var t_palvelut_hinnastosta = $("#palvelu").html();
 var kk_palvelut_hinnastosta = $("#kk_palvelu").html();
 $("#Lasku_tuotteet_palvelut_muoto").change(function() {
-	if( $(this).val() == '1' ){
+	palvelu_muoto();
+});
+
+
+function palvelu_muoto(){
+	if( $("#Lasku_tuotteet_palvelut_muoto").val() == '1' ){
 		$("#palvelu").html('<option value="1">h</option><option value="3">kpl</option>').addClass('for-muoto-1');
 		$("#kk_palvelu").html('<option value="2">kk</option>');
 		etsiKohteetByYksikkoPalveluMuoto1(1);
 	}
-	if( $(this).val() == '0' ){
+	if( $("#Lasku_tuotteet_palvelut_muoto").val() == '0' ){
 		$("#palvelu").html(t_palvelut_hinnastosta).removeClass('for-muoto-1');
 		$("#kk_palvelu").html(kk_palvelut_hinnastosta);
 		if( getkohdeT !== '' ){	
@@ -1319,7 +1326,7 @@ $("#Lasku_tuotteet_palvelut_muoto").change(function() {
 			multiselectLaatikko();
 		}
 	}
-});
+}
 
 $(document).delegate(".for-muoto-1","change",function(){
 	etsiKohteetByYksikkoPalveluMuoto1($(this).val());
