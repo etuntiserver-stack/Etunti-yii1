@@ -63,7 +63,7 @@
 				$placeholder = 'Nimi';
 				if(isset(Yii::app()->session['tekijan_nimi']))  $postvalue = Yii::app()->session['tekijan_nimi']; 
 				else $postvalue='';
-		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+		 	        $site[0]->autocompleteFor($mod, array('tekijan_nimi', 'sukunimi'), $placeholder, $postvalue);
 			    ?>
 			    <!-- Autocomplete -->
 

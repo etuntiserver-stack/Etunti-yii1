@@ -24,7 +24,7 @@ class SiteController extends Controller
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
+			//'accessControl', // perform access control for CRUD operations
 			//'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
@@ -2281,18 +2281,25 @@ $(document).ready(function(){
 		foreach($m as $data)
 		{
 
-		    if($model == 'Asiakkaat' and $sarake == 'yrityksen_nimi' and $data->tyyppi == 'yritys')
+		    if($model == 'Asiakkaat' and $data->tyyppi == 'yritys')
 		    {
 		    $arr[] = array(
 		        'label'=>$data->yrityksen_nimi,
 		        'value'=>$data->yrityksen_nimi,    
 		        'id'=>$data->id,
         	    );
-		    } else if($model == 'Asiakkaat' and $sarake == 'yrityksen_nimi' and $data->tyyppi == 'henkilo')
+		    } else if($model == 'Asiakkaat' and $data->tyyppi == 'henkilo')
 		    {
 		    $arr[] = array(
 		        'label'=>$data->yhteyshenkilo,
 		        'value'=>$data->yhteyshenkilo,    
+		        'id'=>$data->id,
+        	    );
+		    } else if($model == 'Tyontekijat' and is_array(json_decode($sarake, true)))
+		    {
+		    $arr[] = array(
+		        'label'=>$data->tekijan_nimi.' '.$data->sukunimi,
+		        'value'=>$data->tekijan_nimi.' '.$data->sukunimi,    
 		        'id'=>$data->id,
         	    );
 		    } else if($model == 'Domainit')
