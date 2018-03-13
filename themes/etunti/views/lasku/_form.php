@@ -524,7 +524,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 -->
 <br>
 <div class="row" id="tuotteet_palvelut_muoto" style="display:none">
-	<div class="col-sm-offset-4 col-sm-4 section fill mb5">
+	<div class="col-sm-4 section fill mb5">
 		<?php echo $form->labelEx($model,'tuotteet_palvelut_muoto'); ?>
 		<?php 
         	$tal = array(
@@ -533,7 +533,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		);
 		$model->tuotteet_palvelut_muoto = $asetukset->tuotteet_palvelut_muoto;
 		echo $form->dropDownList($model,'tuotteet_palvelut_muoto', $tal, 
-		array('class'=>'form-control input-lg bg-success')) ?>
+		array('class'=>'form-control input-lg')) ?>
 		<?php echo $form->error($model,'tuotteet_palvelut_muoto'); ?>
 		<br>
 	</div>
@@ -576,7 +576,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
       </div>
       <div class="col-sm-6">
 	<br>
-        	<b class="btn btn-success pull-right luoRiviTunti" jakso="tunti"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
+        	<b class="btn btn-default btn-lg pull-right luoRiviTunti" jakso="tunti"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
       </div>
       </div>
 
@@ -619,7 +619,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
       </div>
       <div class="col-sm-6">
 	<br>
-        	<b class="btn btn-success pull-right luoRiviTunti" jakso="kk"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
+        	<b class="btn btn-default btn-lg pull-right luoRiviTunti" jakso="kk"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
       </div>
       </div>
 
