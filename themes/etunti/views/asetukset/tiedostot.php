@@ -23,6 +23,30 @@
 	<?php
 	$i = 0;
 	foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/*')) as $file) {
+	if( $file  == 'tiedostot/firma/'.Yii::app()->user->domain.'/pub' ) continue;
+	$i++;
+	$ext = pathinfo(basename($file), PATHINFO_EXTENSION);
+ 	echo '
+	<div class="form-inline" id="t_'.$model->id.$i.'">
+	  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$model->id.'" for="t_'.$model->id.$i.'">X</div> ';
+
+				// <-- file_safe_opener
+				$filepath = Yii::getPathOfAlias('application').'/../'.$file;
+				echo CHtml::link(basename($file),
+					array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
+					array(
+						'target'=>'_blank',
+						'class'=>'link'
+				));
+				//     file_safe_opener// -->
+
+	echo '</div>';
+	$kuvat[$i] = $file;
+	}
+	?>
+	<?php
+	$i = 0;
+	foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/pub/*')) as $file) {
 	$i++;
 	$ext = pathinfo(basename($file), PATHINFO_EXTENSION);
  	echo '
@@ -199,7 +223,7 @@ $(document).ready(function(){
 	var forThis = $(this).attr("this");
 	var model = $(this).attr("model");
 	var forID = $(this).attr("for");
-	if(confirm('Oletko varmaa?'))
+	if(confirm('Oletko varma?'))
 	{
         $.ajax({
            url: "tiedostot?id="+model,
