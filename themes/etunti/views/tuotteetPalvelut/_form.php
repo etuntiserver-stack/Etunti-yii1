@@ -38,7 +38,7 @@ $model->kategoria = json_decode($model->kategoria, true);
 			'eDico' =>'eDico',
 		);
         	echo $form->dropDownList($model, 'kategoria', $list,
-		array('class'=>'form-control selectpicker', 'multiple' => 'yes'));	
+		array('class'=>'form-control multiselect', 'multiple' => 'yes'));	
         	?>
 		<?php echo $form->error($model,'kategoria'); ?>
 	</div>
@@ -119,6 +119,22 @@ $(".muokaValiko").click(function() {
 	var result = Math.round(result * 100) / 100;
 	$('#TuotteetPalvelut_hinta_alv_sis').val(result);
  }
+
+
+			// <--multiselect
+			$('.multiselect').multiselect({
+				//inheritClass: true,
+				//enableFiltering: true,
+			        includeSelectAllOption: true,
+				nonSelectedText: '<?php echo Yii::t("main", "Valitse kategoria"); ?>',
+				selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+				allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+				nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+				numberDisplayed: 0,
+				buttonWidth: '100%',
+			        maxHeight: 300,
+			});
+			//    multiselect -->
 
 });
 </script>
