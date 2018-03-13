@@ -286,7 +286,7 @@
 	{
 	$body .= '
 	<div class="row">
-	 <div class="col-xs-12">
+	 <div class="col-xs-4">
 		<br><p><img src="../../tiedostot/onlinevaraus_tuote/'.Yii::app()->user->domain.'/'.$model->id.'.jpg" class="img-thumbnail"></p>
 	 </div>
 	</div>';
