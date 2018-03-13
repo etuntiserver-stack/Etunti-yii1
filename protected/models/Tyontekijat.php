@@ -214,6 +214,21 @@ public $tunnus;
 		);
 	}
 
+        public function getFullName(){
+		$return = '';
+		$asetukset = Asetukset::model()->findByPk(1);
+		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+			$return .= $this->tekijan_nimi;
+			if(!empty($this->sukunimi))
+				$return .= ' '.$this->sukunimi;
+		} else {
+			if(!empty($this->sukunimi))
+				$return .= $this->sukunimi.' ';
+				$return .= $this->tekijan_nimi;
+		}
+                return $return;
+        }
+
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.

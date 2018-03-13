@@ -721,8 +721,9 @@ class TyontekijatController extends Controller
 		if(isset(Yii::app()->session['tekijan_katuosoite']) and !empty(Yii::app()->session['tekijan_katuosoite']))
 	        $criteria->addCondition (" tekijan_katuosoite LIKE '%".Yii::app()->session['tekijan_katuosoite']."%' ");
 
-		if(isset(Yii::app()->session['tekijan_nimi']) and !empty(trim(Yii::app()->session['tekijan_nimi'])))
-	        $criteria->addCondition (" tekijan_nimi LIKE '%".Yii::app()->session['tekijan_nimi']."%' OR sukunimi LIKE '%".Yii::app()->session['tekijan_nimi']."%' ");
+		if(isset(Yii::app()->session['tekijan_nimi']) and !empty(trim(Yii::app()->session['tekijan_nimi']))){
+	        $criteria->addCondition ("  CONCAT(tekijan_nimi, ' ', sukunimi)  LIKE '%".trim(Yii::app()->session['tekijan_nimi'])."%' ");
+		}
 
 		if(isset(Yii::app()->session['tekijan_puh']) and !empty(trim(Yii::app()->session['tekijan_puh'])))
 	        $criteria->addCondition (" laiten_puh LIKE '%".Yii::app()->session['tekijan_puh']."%' OR tekijan_puh LIKE '%".Yii::app()->session['tekijan_puh']."%' ");

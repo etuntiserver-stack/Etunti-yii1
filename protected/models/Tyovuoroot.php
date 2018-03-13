@@ -137,6 +137,7 @@ public $tilausviesti;
 		// class name for the relations automatically generated below.
 		return array(
 		        'kohteet' => array(self::BELONGS_TO, 'Kohteet', 'kohde'),
+		        'avaimet' => array(self::HAS_MANY, 'Avaimet', array('kohde'=>'kohde')),
 		        'tt' => array(self::BELONGS_TO, 'Tyontekijat', 'tid'),
 		        'tp' => array(self::BELONGS_TO, 'TuotteetPalvelut', 'tuoteID'),
 		);

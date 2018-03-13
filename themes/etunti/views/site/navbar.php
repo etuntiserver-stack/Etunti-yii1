@@ -809,8 +809,12 @@ $('.tvchange').change(function(){
                   <span class="glyphicon glyphicon-home"></span> <?php echo Yii::t('main', 'Kohteet'); ?></a>
               </li>
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/avaimet">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/avaimet/index">
                   <span class="fa fa-key"></span> <?php echo Yii::t('main', 'Avaimet'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/avaimet/avaimet_tyontekijalle">
+                  <span class="fa fa-key"></span> <?php echo Yii::t('main', 'Avaimet työvuoroittain'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/kartta">

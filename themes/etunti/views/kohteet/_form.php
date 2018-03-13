@@ -245,43 +245,6 @@ $(document).ready(function(){
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'avain'); ?>
-		<?php echo $form->textField($model,'avain',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'avain'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'avaimen_sijainti'); ?>
-
-		<?php
-		$list = array(
-			1=>Yii::t('main', 'Asiakas'),
-			2=>Yii::t('main', 'Toimisto'),
-			3=>Yii::t('main', 'Työntekijä')
-		);
-        	echo $form->dropDownList($model, 'avaimen_sijainti', $list,
-		array('empty'=>'','class'=>'form-control'));
-        	?>
-
-		<?php echo $form->error($model,'avaimen_sijainti'); ?>
-	</div>
-
-	<div class="section fill mb5 kenella_on_avain">
-		<?php echo $form->labelEx($model,'kenella_on_avain'); ?>
-
-		<?php
-      		$l = Tyontekijat::model()->findAll(array('order' => "tekijan_nimi"));
-		foreach($l as $v)
-		$listt[$v->id."//".$this->etuSukunimi($v->id)] = $this->etuSukunimi($v->id);
-
-        	echo $form->dropDownList($model, 'kenella_on_avain', $listt,
-		array('empty'=>'','class'=>'form-control'));
-        	?>
-
-		<?php echo $form->error($model,'kenella_on_avain'); ?>
-	</div>
-
-	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'ryhma'); ?>
 	   <div class="input-group">
 
@@ -321,16 +284,11 @@ $(document).ready(function(){
 		<?php echo $form->error($model,'arvioitu_kesto'); ?>
 	</div>
 
-<?php /*
-	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
-	<script type="text/javascript">
-	$(document).ready(function(){
-	  $('#Kohteet_arvioitu_kesto').mask('00:00',{
-	        placeholder: "__:__"
-	  });
-	});
-	</script>
-*/ ?>
+	<?php 
+	if(isset($model->id) and isset($model->avaimet) and count($model->avaimet) > 0){
+	echo CHtml::link('Avaimet',Yii::app()->request->baseUrl.'/index.php/avaimet/index?osoite='.$model->osoite,array('class'=>'btn btn-default btn-block')); 
+	}
+	?>
 
   </div><div class="col-sm-6">
 
@@ -616,25 +574,6 @@ $(".muokaValiko").click(function() {
         });
 });
 /* valikot */
-
-
-
-	var avainOn = $( "#Kohteet_avaimen_sijainti option:selected" ).val();
-	if(avainOn !== '3')
-	$('.kenella_on_avain').hide();
-
-
-$("#Kohteet_avaimen_sijainti").change(function() {
-    var thisVal = $(this).val();
-	if(thisVal !== '3')
-	{
-		$('.kenella_on_avain').hide('slow');
-		$('#Kohteet_kenella_on_avain').val('');
-	} else {
-		$('.kenella_on_avain').show('slow');
-	}
-});
-
 
 });
 </script>

@@ -38,11 +38,13 @@ if(isset($model->id))
 	if(isset($m->id))
 	{
 
-		$k = explode("//",$m->kenella_on_avain);
-
 		  $ohje = '';
-		if(isset($k[1]))
-		  $ohje .= Yii::t('main', 'Avain on: ')." ".$k[1]."\n";
+		if(isset($m->avaimet) and count($m->avaimet) > 0){
+		  $ohje .= Yii::t('main', 'Avain on: ')."<br>";
+		  foreach($m->avaimet as $avain)
+			$ohje .= $avain->avainnumero."<br>";
+
+		}
 		if(!empty($m->avain))
 		  $ohje .= Yii::t('main', 'Avain: ')." ".$m->avain."\n\n";
 		if(!empty($m->aikataulu))

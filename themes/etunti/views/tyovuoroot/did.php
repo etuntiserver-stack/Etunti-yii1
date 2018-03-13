@@ -284,10 +284,7 @@ if(!isset($_POST['tulosta']))
 	   $bod .=  '<span class="link text-danger fa fa-pencil-square-o muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></span>';
 	   $bod .=  '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'" style="'.$uusi_tilaus.'">'.$al.' '.$osoite.'</span>';
 
-	   if( isset($asetukset->id) and $asetukset->tuote_tyovuorossa == 1 and isset($tvVal->tp->nimike))
-	   $bod .= '<br><b class="text-success">'.$tvVal->tp->nimike.'</b>';
-
-	   if(!empty($tvVal->kohteet->avain))
+	   if(isset($tvVal->avaimet) and count($tvVal->avaimet) > 0)
 	   $bod .=  ' <b class="fa fa-key text-warning"></b>';
 
 	   if(!empty($tvVal->tietoja))
