@@ -60,10 +60,10 @@ if( isset(Yii::app()->user->domain) )
 	<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/img/favicon.ico">
 
 	<!-- Firman oma taustekuva -->
-	<?php if (isset(Yii::app()->user->domain) and file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain."/ov_tauste.jpg")) : ?>
+	<?php if (isset(Yii::app()->user->domain) and file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain."/pub/ov_tauste.jpg")) : ?>
 	<style>
 	body {
-	  background: url(<?='../../tiedostot/firma/'.Yii::app()->user->domain.'/ov_tauste.jpg'?>) no-repeat center center fixed; 
+	  background: url(<?='../../tiedostot/firma/'.Yii::app()->user->domain.'/pub/ov_tauste.jpg'?>) no-repeat center center fixed; 
 	  -webkit-background-size: cover;
 	  -moz-background-size: cover;
 	  -o-background-size: cover;

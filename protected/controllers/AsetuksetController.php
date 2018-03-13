@@ -222,11 +222,11 @@ class AsetuksetController extends Controller
 		if(isset($_POST['uploaded_ov_tauste']))
 		{
 
-		  if (!file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain)) {
-		  	mkdir(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain, 0777, true);
+		  if (!file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain.'/pub')) {
+		  	mkdir(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain.'/pub', 0777, true);
 		  }
 
-		  $uploaddir = Yii::app()->basePath.'/../tiedostot/firma/'.Yii::app()->user->domain.'/';
+		  $uploaddir = Yii::app()->basePath.'/../tiedostot/firma/'.Yii::app()->user->domain.'/pub/';
 		  $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
 		  $uploadfile = $uploaddir . basename('ov_tauste.'.$ext);
 		  if($ext != 'jpg')
@@ -237,7 +237,8 @@ class AsetuksetController extends Controller
 		  }
 
 		  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-		     $this->redirect(array('tiedostot', 'id' => 1));
+		  	file_put_contents(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain.'/pub/.htaccess', 'allow from all');  
+		  	$this->redirect(array('tiedostot', 'id' => 1));
 		  } 
 		}
 
