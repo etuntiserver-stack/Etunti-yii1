@@ -295,6 +295,38 @@
 	$body .= $blockAika;
 	$body .= $blockKohde;
 
+	// <-- Tiedostot
+	$body .= '<br>';
+	$body .= CHtml::link(Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'),
+			array('/onlinevaraus/rekisteriseloste')
+		);
+
+	foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/onlinevarausehdot.*')) as $file) 
+	{
+		$explNimi = explode("/",$file);
+		// <-- file_safe_opener
+		$filepath = 'tiedostot/firma/'.Yii::app()->user->domain.'/'.end($explNimi);
+		$body .= '<br>'.CHtml::link(Yii::t('main', 'Onlinevarausehdot'),
+			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
+			array('target'=>'_blank','class'=>'text-danger'
+		));
+		//     file_safe_opener -->
+	}
+
+	foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/Konevuokraus_toimitusehdot.*')) as $file) 
+	{
+		$explNimi = explode("/",$file);
+		// <-- file_safe_opener
+		$filepath = 'tiedostot/firma/'.Yii::app()->user->domain.'/'.end($explNimi);
+		$body .= '<br>'.CHtml::link(Yii::t('main', 'Konevuokraus toimitusehdot'),
+			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
+			array('target'=>'_blank','class'=>'text-danger'
+		));
+		//     file_safe_opener -->
+	
+	}
+	// <-- Tiedostot -->
+
 	$body .= '
    </div>
 </div>'; //panel

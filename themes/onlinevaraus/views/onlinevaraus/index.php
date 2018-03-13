@@ -258,11 +258,10 @@
  <!-- Order summary footer-->
  <div class="row yhteenveto-bottom">
   <div class="col-sm-6 col-sm-offset-3">
-
    <div class="row">
     <div class="col-sm-10 col-sm-offset-1" >
 	    <div id="panGetContent"></div>
-   </div>
+    </div>
    </div>
   </div>
  </div>
