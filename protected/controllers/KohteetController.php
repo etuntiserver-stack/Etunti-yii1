@@ -32,7 +32,7 @@ class KohteetController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index', 'view','osoite','autotaytaminen','createfromasiakas', 'googlemap','googlemap_k', 'avaimet'),
+				'actions'=>array('admin','delete','create','update','index', 'view','osoite','autotaytaminen','createfromasiakas', 'googlemap','googlemap_k'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -120,48 +120,6 @@ class KohteetController extends Controller
 	        	return false;
 		}
 
-
-	}
-
-	public function actionAvaimet()
-	{
-
-	       	$criteria = new CDbCriteria();
-		$criteria->condition = "
-			id IN (SELECT SUBSTRING_INDEX(kenella_on_avain, '//', 1) FROM sivex_kohdet)
-		";
-
-		if(isset($_POST['Tekija'])){
-		  if(count($_POST['Tekija']) > 1)
-		    $ids = implode(",",$_POST['Tekija']);
-		  else
-		    $ids = $_POST['Tekija'][0];
-
-	        $criteria->addCondition ('id IN ('.$ids.') ');
-		}
-
-		if(isset($_POST['avain']) and !empty($_POST['avain'])){
-	        $criteria->addCondition (' id IN (SELECT SUBSTRING_INDEX(kenella_on_avain, "//", 1) FROM sivex_kohdet
-			WHERE avain LIKE "%'.$_POST['avain'].'%"
-		) ');
-		}
-
-
-		$model = Tyontekijat::model()->findAll($criteria);
-
-		/*
-		if(Yii::app()->request->getPost('tulosta'))
-		{
-	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('avaimet', array('model' => $model),true));
-	          $html2pdf->Output();
-		} else {
-		*/
-		$this->render('avaimet',array(
-			'model'=>$model,
-		));
-		
 
 	}
 

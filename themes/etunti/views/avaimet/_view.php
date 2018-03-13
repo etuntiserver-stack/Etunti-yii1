@@ -1,0 +1,56 @@
+<?php
+/* @var $this ViestintaController */
+/* @var $data Viestinta */
+?>
+
+
+<tr>
+	<td>
+		<?php echo CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
+				array('update', 'id'=>$data->id), 
+				array(
+					'class'=>'btn btn-primary myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Muokkaa') 
+				)
+			); 
+		?>
+	</td>
+	<td>
+		<?php echo date("d.m.Y  H:i",strtotime($data->time)); ?>
+	</td>
+	<td>
+		<input type="checkbox" class="avainnumero" value="<?=$data->id?>"> <?php echo $data->avainnumero; ?>
+	</td>
+	<td>
+		<?php
+		if(isset($data->kohteet->id)){
+			$as = Asiakkaat::model()->findByPk($data->kohteet->asiakas_id);
+			if(isset($as->id) and $as->tyyppi == 'yritys')
+				echo $as->yrityksen_nimi;
+			if(isset($as->id) and $as->tyyppi == 'henkilo')
+				echo $as->yhteyshenkilo;
+		}
+		?>
+	</td>
+	<td>
+		<?php
+		if(isset($data->kohteet->osoite)){
+			echo $data->kohteet->osoite; 
+		}
+		?>
+	</td>
+	<td>
+		<?php echo $this->etuSukunimi($data->tid); ?>
+	</td>
+	<td>
+		  <?php if(empty($data->sijainti)) : ?>
+		  	---
+		  <?php else: ?>
+		  	<?=$data->sijainti ?>
+		  <?php endif; ?>
+
+	</td>
+</tr>
