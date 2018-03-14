@@ -2,6 +2,11 @@
 /* @var $this AvaimetController */
 /* @var $model Avaimet */
 /* @var $form CActiveForm */
+
+if( !isset($model->id) and isset($_GET['asiakas_id']) and isset($_GET['kohde_id']) and !empty($_GET['asiakas_id']) and !empty($_GET['kohde_id']) ){
+	$model->asiakas_id = $_GET['asiakas_id'];
+	$model->kohde = $_GET['kohde_id'];
+}
 ?>
 
 <?php $form=$this->beginWidget('CActiveForm', array(
