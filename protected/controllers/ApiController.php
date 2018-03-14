@@ -796,14 +796,15 @@ public function actionImei($dom)
 				  $avaimet .= '<th>'.Yii::t('main', 'Työntekijä').'</th>';
 				  $avaimet .= '<th>'.Yii::t('main', 'Sijainti').'</th>';
 				  $avaimet .= '</tr>';
-				  foreach($kohde->avaimet as $avain)
+				  foreach($kohde->avaimet as $avain){
 					$avaimet .= '
 					<tr>
 					  <td>'.$avain->avainnumero.'</td>
 					  <td>'.$this->etuSukunimi($avain->tid).'</td>
 					  <td>'.$avain->sijainti.'</td>
 					</tr>';
-				  $avaimet .= '</p>';
+				  }
+				  $avaimet .= '</table>';
 				}
 		      }
 		      // Nayta kohteen avaimet -->
