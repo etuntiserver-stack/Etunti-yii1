@@ -282,7 +282,10 @@ $(document).ready(function(){
 
 	<?php 
 	if(isset($model->id) and isset($model->avaimet) and count($model->avaimet) > 0){
-	echo CHtml::link('Avaimet',Yii::app()->request->baseUrl.'/index.php/avaimet/index?osoite='.$model->osoite,array('class'=>'btn btn-default btn-block')); 
+	echo CHtml::link('Avaimet', array('/avaimet/index', 'osoite' => $model->osoite), array('class'=>'btn btn-default btn-block')); 
+	}
+	if(isset($model->id) and isset($model->avaimet) and count($model->avaimet) == 0){
+	echo CHtml::link('Luo avain', array('/avaimet/create', 'asiakas_id' => $model->asiakas_id, 'kohde_id' => $model->id), array('class'=>'btn btn-default btn-block')); 
 	}
 	?>
 
