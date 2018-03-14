@@ -789,7 +789,7 @@ public function actionImei($dom)
 		      if(isset($kohde->id) and isset($asetukset->app_naytta_avain) and $asetukset->app_naytta_avain == 1 ){
 
 				if(isset($kohde->avaimet) and count($kohde->avaimet) > 0){
-				  $avaimet .= '<br><p><center><h3>'.Yii::t('main', 'Avaimet').' '.$kohde->osoite.'</h3></center><br>';
+				  $avaimet .= '<br><p><center><h4>'.Yii::t('main', 'Avaimet').' '.$kohde->osoite.'</h4></center><br>';
 				  $avaimet .= '<table class="table table-bordered table-striped">';
 				  $avaimet .= '<tr>';
 				  $avaimet .= '<th>'.Yii::t('main', 'Avain').'</th>';
