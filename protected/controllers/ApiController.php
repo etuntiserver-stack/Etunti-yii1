@@ -789,9 +789,20 @@ public function actionImei($dom)
 		      if(isset($kohde->id) and isset($asetukset->app_naytta_avain) and $asetukset->app_naytta_avain == 1 ){
 
 				if(isset($kohde->avaimet) and count($kohde->avaimet) > 0){
-				  $avaimet .= '<br><p><label>'.Yii::t('main', 'Avaimet').' '.$kohde->osoite.'</label><br>';
+				  $avaimet .= '<br><p><center><h3>'.Yii::t('main', 'Avaimet').' '.$kohde->osoite.'</h3></center><br>';
+				  $avaimet .= '<table class="table table-bordered table-striped">';
+				  $avaimet .= '<tr>';
+				  $avaimet .= '<th>'.Yii::t('main', 'Avain').'</th>';
+				  $avaimet .= '<th>'.Yii::t('main', 'Työntekijä').'</th>';
+				  $avaimet .= '<th>'.Yii::t('main', 'Sijainti').'</th>';
+				  $avaimet .= '</tr>';
 				  foreach($kohde->avaimet as $avain)
-					$avaimet .= Yii::t('main', 'Avain').': <b>'.$avain->avainnumero.'</b>, '.Yii::t('main', 'Sijainti').': <b>'.$avain->sijainti.'</b><br>';
+					$avaimet .= '
+					<tr>
+					  <td>'.$avain->avainnumero.'</td>
+					  <td>'.$this->etuSukunimi($avain->tid).'</td>
+					  <td>'.$avain->sijainti.'</td>
+					</tr>';
 				  $avaimet .= '</p>';
 				}
 		      }
