@@ -1116,10 +1116,11 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 		$criteria->condition = "
 			pvm='".date("d.m.Y", strtotime($date))."'
 			AND tid IN ( SELECT id FROM sivex_ttekijat WHERE aktiivinen=1 AND online_varauksen_valmina=1 )
-			AND UNIX_TIMESTAMP(STR_TO_DATE(alku, '%H:%i')) >='".strtotime($onlinevaraus_alku.":00")."'
-			AND UNIX_TIMESTAMP(STR_TO_DATE(loppu, '%H:%i')) <='".strtotime($onlinevaraus_loppu.":00")."'
 		";
-//			AND alku!='00:00' AND loppu!='00:00'
+			/* otetu pois 16.03.2018 */
+			//AND UNIX_TIMESTAMP(STR_TO_DATE(alku, '%H:%i')) >='".strtotime($onlinevaraus_alku.":00")."'
+			//AND UNIX_TIMESTAMP(STR_TO_DATE(loppu, '%H:%i')) <='".strtotime($onlinevaraus_loppu.":00")."'
+
 		if(!empty($tyo_toimialue))
 		{
 			$criteria->addCondition ("
@@ -1136,6 +1137,14 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 
 
 		$tv = Tyovuoroot::model()->findAll($criteria);
+
+/*
+if( $date == '2018-03-19'){
+echo json_encode( $onlinevaraus_loppu );
+exit;
+}
+*/
+
 		$i = 0;
 		$allTyontekijat = array();
 		foreach($tv as $t)
