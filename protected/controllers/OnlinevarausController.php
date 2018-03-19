@@ -1061,16 +1061,6 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 
 		$alkuAstetuksesta = strtotime($onlinevaraus_alku.":00");
 		$loppuAstetuksesta = strtotime($onlinevaraus_loppu.":00");
-		$aikavali_1t = 3600;
-		$aikavali_2t = 7200;
-
-/*
-		// <-- Ei lasketa
-		$site = Yii::app()->createController('Site');
-		$eilasketa = $site[0]->eiLasketa();
-		// Ei lasketa -->
-		//AND $eilasketa
-*/
 
 		// <-- Täysin vapaana
    		$sumTunti = (float)$_SESSION['onlinevaraus']['sumTunti'];
@@ -1112,7 +1102,7 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 
 		// <-- Reika vuoron välillä
 		$criteria=new CDbCriteria;
-		$criteria->order = " tid,UNIX_TIMESTAMP(STR_TO_DATE(loppu, '%H:%i'))  ";
+		$criteria->order = " tid, UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'))  ";
 		$criteria->condition = "
 			pvm='".date("d.m.Y", strtotime($date))."'
 			AND tid IN ( SELECT id FROM sivex_ttekijat WHERE aktiivinen=1 AND online_varauksen_valmina=1 )
@@ -1136,89 +1126,72 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 		}
 
 
+		$aikavali = 7200;
 		$tv = Tyovuoroot::model()->findAll($criteria);
-
-/*
-if( $date == '2018-03-19'){
-echo json_encode( $onlinevaraus_loppu );
-exit;
-}
-*/
-
 		$i = 0;
-		$allTyontekijat = array();
 		foreach($tv as $t)
 		{
 		$i++;
 
 			// <-- Ihan ensimmäinen vuoro tietynä päivänä
-			if(!isset($ihanEnsimmainenAlku[$t->tid]))
+			if(!isset($ihanEnsimmainenAlkuByTid[$t->tid]))
 			{
-				$ihanEnsimmainenAlku = array();
-				$ihanEnsimmainenAlku[$t->tid] = strtotime($t->alku);
 
-				if( $ihanEnsimmainenAlku[$t->tid]-$alkuAstetuksesta > $sumTuntiSec+$aikavali_1t )
-				{
+				$ihanEnsimmainenAlkuByTid = array();
+				$ihanEnsimmainenAlkuByTid[$t->tid] = strtotime($t->alku);
+
 			   		$on = 'vapaa';
-					$alku = '';
-					$loppu = '';
 					$alku = $alkuAstetuksesta;
 					$loppu = $alku+$sumTuntiSec;
-					$countStop = strtotime($t->alku)-3600;
-					$tekija = $this->loopForAjaat($t->tid, date("H:i",$alku), date("H:i",$loppu), $date, $sumTuntiMin, $countStop, $tekija);
-					//$tekija[] = array($t->tid, $date, date("H:i",$ihanEnsimmainenAlku[$t->tid]), $t->loppu); // for test
-				}
+					$countStop = strtotime($t->alku)-$aikavali;
+					$tekija = $this->loopForAjaat(
+							$t->tid, 
+							date("H:i",$alku), 
+							date("H:i",$loppu), 
+							$date,
+							$sumTuntiMin,
+							$countStop,
+							$tekija
+							);
+
+					// <-- Seuraava tyovuoro
+					$criteria=new CDbCriteria;
+					$criteria->select = " id, loppu  ";
+					$criteria->order = " UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'))  ";
+					$criteria->condition = "
+						pvm='".date("d.m.Y", strtotime($date))."'
+						AND tid='".$t->tid."'
+						AND UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i')) > '".strtotime($date." ".$t->loppu)."'
+					";
+					$tv_next = Tyovuoroot::model()->find($criteria);
+					//     Seuraava tyovuoro -->
+
+					$alku = strtotime($t->loppu)+$aikavali;
+					$loppu = $alku+$sumTuntiSec;
+					if(isset($tv_next->id)){
+						$countStop = strtotime($tv_next->alku)-$aikavali;
+					} else {
+						$countStop = strtotime($onlinevaraus_loppu.":00");
+					}
+					$tekija = $this->loopForAjaat(
+							$t->tid, 
+							date("H:i",$alku), 
+							date("H:i",$loppu), 
+							$date,
+							$sumTuntiMin,
+							$countStop,
+							$tekija
+							);
+
+					//if(isset($tv_next->id))
+					//$tekija[] = array($t->tid, $date, '', $tv_next->loppu); // for test
+
 			}
 			// Ihan ensimmäinen vuoro tietynä päivänä -->
 
 
-			// <-- Reika vuoron välillä
-			if(isset($edellinenLoppu[$t->tid]) and $edellinenLoppu[$t->tid] > 0
-			and ( strtotime($t->alku)-$edellinenLoppu[$t->tid] > $sumTuntiSec+$aikavali_2t )
-			)
-			{
-		   		$on = 'vapaa';
-				$alku = '';
-				$loppu = '';
-				$alku = $edellinenLoppu[$t->tid]+3600;
-				$loppu = $alku+$sumTuntiSec;
-				$countStop = strtotime($t->alku)-3600;
-				$tekija = $this->loopForAjaat($t->tid, date("H:i",$alku), date("H:i",$loppu), $date, $sumTuntiMin, $countStop, $tekija);
-
-				//$tekija[] = array($t->tid, $date, date("H:i",$edellinenLoppu[$t->tid]), $t->loppu); // for test
-			}
-			// Reika vuoron välillä -->
-
-
-
-			$edellinenAlku = array();
-			$edellinenLoppu = array();
-			$edellinenAlku[$t->tid] = strtotime($t->alku);
-			$edellinenLoppu[$t->tid] = strtotime($t->loppu);
-			$allTyontekijat[$t->tid] = strtotime($t->loppu);
-
 		}
 		// Reika vuoron välillä -->
-
-
-		// <-- Ihan viimeinen vuoro tietynä päivänä
-		$countStop = strtotime($onlinevaraus_loppu.":00");
-		foreach($allTyontekijat as $k=>$t)
-		{
-				$alku = '';
-				$loppu = '';
-				$alku = $t+3600;
-				$loppu = $alku+$sumTuntiSec;
-
-				if($loppu < $countStop)
-				{
-		   			$on = 'vapaa';
-					$tekija = $this->loopForAjaat($k, date("H:i",$alku), date("H:i",$loppu), $date, $sumTuntiMin, $countStop, $tekija);
-				}
-				//$tekija[] = array($k, $date, date("H:i",$t), $t); // for test
-		}
-		// Ihan viimeinen vuoro tietynä päivänä -->
-
 
 
 		ksort($tekija);
@@ -1255,98 +1228,6 @@ exit;
 		   return $tekija;
 
 	}
-
-/*
-	protected function pmvCal($date)
-	{
-		$asetukset = Asetukset::model()->findbypk(1);
-
-		$lp = array();
-		$ajaanReika = array();
-		$on = 'vapaa';
-		$aamuOn = 'kiinni';
-		$vuorot = '';
-		$criteria=new CDbCriteria;
-		$criteria->condition = "online_varauksen_valmina=1 ";
-		$tyontekijat = Tyontekijat::model()->findAll($criteria);
-
-		$ti = 0;
-		foreach($tyontekijat as $t)
-		{
-		$ti++;
-		$on = 'vapaa';
-
-		$criteria=new CDbCriteria;
-		$criteria->order = " alku ASC";
-		$criteria->condition = " 
-			pvm='".date("d.m.Y", strtotime($date))."' 
-			AND tid='".$t->id."'
-			AND SUBSTRING_INDEX(alku,':',1) <= '".$asetukset->onlinevaraus_loppu."'
-			AND SUBSTRING_INDEX(alku,':',1) >= '".$asetukset->onlinevaraus_alku."'
-		";
-
-		$tyovuorot = Tyovuoroot::model()->findAll($criteria);
-
-		$a = 0;
-		$l = 0;
-		$l2 = 0;
-
-		$sumTunti = ((float)$_SESSION['onlinevaraus']['sumTunti']*3600)+7199;
-		$sumAamuIlta = ((float)$_SESSION['onlinevaraus']['sumTunti']*3600)+3599;
-		//$realSumMin = (float)$_SESSION['onlinevaraus']['sumTunti']*60;
-		$realSumMin = 24*60;
-
-		    foreach($tyovuorot as $tv)
-		    {
-
-			$on = 'vapaa';
-			$aamuOn = 'kiinni';
-
-			if($a == 0 and strtotime($tv->alku)-strtotime($asetukset->onlinevaraus_alku.":00") >= $sumAamuIlta)
-			{
-			  $on = 'vapaa';
-			  $aamuOn = 'vapaa';
-			  $ajaanReika[$asetukset->onlinevaraus_alku."//".date("H:i",strtotime($asetukset->onlinevaraus_alku.":00 +".$realSumMin." minutes")).'//'.$t->id] = $t->id;
-			}
-
-			if($l > 0 and (strtotime($tv->alku.":00")-$l) <= $sumTunti and $aamuOn == 'kiinni'){
-			  $on = 'kiinni';
-			} elseif($l > 0 and (strtotime($tv->alku.":00")-$l) >= $sumTunti){
-			  $on = 'vapaa';
-			  $l2zapas = date("H:i",strtotime($l2." +1 hour"));
-			  $ajaanReika[$l2zapas."//".date("H:i",strtotime($l2zapas." +".$realSumMin." minutes")).'//'.$t->id] = $t->id;
-			} elseif(strtotime($asetukset->onlinevaraus_loppu.":00")-strtotime($tv->loppu) <= $sumTunti and $aamuOn == 'kiinni'){
-			  $on = 'kiinni';
-			}
-			  $a = strtotime($tv->alku);
-			  $l = strtotime($tv->loppu);
-			  $l2 = $tv->loppu;
-			  $l2zapas = date("H:i",strtotime($l2." +1 hour"));
-
-			  //$vuorot .= $tv->alku.' '.$tv->loppu.' '.$on.'<br>';
-		    }
-
-			// loppuilta
-			if($l > 0 and strtotime($asetukset->onlinevaraus_loppu.":00")-$l >= $sumAamuIlta)
-			{
-			  $on = 'vapaa';
-			  $ajaanReika[$l2zapas."//".date("H:i",strtotime($l2zapas." +".$realSumMin." minutes"))."//".$t->id] = $t->id;
-			}
-
-
-			if($on == 'vapaa')
-			$lp[$t->id] = 'vapaa';
-
-
-		}
-
-	  	if(in_array('vapaa', $lp, true))
-		$on = 'vapaa';
-
-		$return = array($on,$ajaanReika);
-		return $return;
-	}
-*/
 
 
 	protected function pyhatCheck($date){
