@@ -412,6 +412,13 @@ $(document).ready(function(){
 
 		<?php echo $form->error($model,'kortit'); ?>
 	</div>
+
+	<br>
+	<div class="section fill mb5 piilotetaan">
+		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
+		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
+		<?php echo $form->error($model,'ayjasenyys'); ?>
+	</div>
 	<?php endif; ?><!--Laaja-->
 
 	<?php 
@@ -535,14 +542,6 @@ $(document).ready(function(){
 		<?php echo $form->labelEx($model,'position'); ?>
 		<?php echo $form->textField($model,'position',array('size'=>60,'maxlength'=>500,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'position'); ?>
-	</div>
-
-
-	<br>
-	<div class="section fill mb5 piilotetaan">
-		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
-		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
-		<?php echo $form->error($model,'ayjasenyys'); ?>
 	</div>
 
    </div>
