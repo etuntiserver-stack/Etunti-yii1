@@ -54,6 +54,10 @@ if(isset($_POST['poistaTamaTiedosto'])){
 	unlink($_POST['poistaTamaTiedosto']);
 exit;
 }
+
+$site = Yii::app()->createController('Site');
+$checkLaaja = "tyontekijat_4_".Yii::app()->user->adminStatus;
+$laaja = $site[0]->checkOikeusFields($checkLaaja);
 ?>
 
 
@@ -86,7 +90,7 @@ exit;
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
                  <div class="row">
-		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+		  <?php echo $this->renderPartial('_form', array('model'=>$model, 'laaja' =>$laaja)); ?>
                  </div>
                 </div>
               </div>
@@ -125,36 +129,30 @@ exit;
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-
+	<?php if($laaja == 1) : ?>
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
-
-<div class="row">
-  <div class="col-sm-12">
-	<?php 
-		$ts = Tyosuhdet::model()->find(" tid='".$model->id."' ");
-		if(isset($ts->id))
-		{
-			echo $this->renderPartial('//tyosuhdet/_form',array('model'=>$ts));
-		} else {
-			$ts = new Tyosuhdet;
-			echo $this->renderPartial('//tyosuhdet/_form',array('model'=>$ts));
-		}
-	?>
-  </div>
-</div>
-
+		<div class="row">
+		  <div class="col-sm-12">
+			<?php 
+			$ts = Tyosuhdet::model()->find(" tid='".$model->id."' ");
+			if(isset($ts->id))
+			{
+				echo $this->renderPartial('//tyosuhdet/_form',array('model'=>$ts));
+			} else {
+				$ts = new Tyosuhdet;
+				echo $this->renderPartial('//tyosuhdet/_form',array('model'=>$ts));
+			}
+			?>
+		  </div>
+		</div>
 
                 </div>
               </div>
             </div>
-
-
-
-
-
+	<?php endif; ?>
 
 
 
