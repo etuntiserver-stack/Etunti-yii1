@@ -28,13 +28,13 @@
 	<TD>
 
 	<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control">
-
+	<input type="hidden" size="1" name="hinnasto_rivi_id[<?php echo $num; ?>]" id="hinnasto_rivi_id_<?php echo $num; ?>" class="form-control">
 	<div class="row">
 	  <div class="col-lg-4">
 		<?php
 		$criteria = new CDbCriteria();
-       		$criteria->condition = " is_active=1 ";
-		echo CHtml::dropdownList('','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll($criteria), 'id', 'tuotenimi'), 
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
+		echo CHtml::dropdownList('','palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 		array('empty'=>'','class'=>'form-control valitseTuote','id'=>'lt_'.$num,'num'=>$num));
 		?>
 	  </div><div class="col-lg-8">
@@ -50,7 +50,15 @@
 		<?php echo $yksikkot; ?>
 		</select>
 	</TD>
-	<TD><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?=$hinta?>" step="0.01"><span class="errmsg"></span></TD>
+	<TD>
+	  <div class="input-group">
+	   <input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $hinta; ?>" step="0.01"> 
+	   <span class="input-group-btn">
+		<span class="btn btn-default fa fa-money hinnaston_otsikko" data-toggle="tooltip" data-placement="bottom" title="<?=Yii::t('main', 'Hinnastoa ei määritetty')?>"></span>
+	   </span>
+	  </div>
+	  <span class="errmsg"></span>
+	</TD>
 	<TD>
 		<select type="text" name="alv[<?php echo $num; ?>]" id="alv_<?php echo $num; ?>" class="form-control">
 		<?php echo $this->alv(null); ?>

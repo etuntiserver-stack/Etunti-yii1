@@ -1,11 +1,20 @@
 <?php
-
+	$hinnaston_otsikko = Yii::t('main', 'Hinnastoa ei määritetty');
+	$hr = HinnastotRivi::model()->findByPk($rivi['hinnasto_rivi_id']);
+	if(isset($hr->id))
+	{
+		$hn = Hinnastot::model()->findByPk($hr->hinnastot_id);
+		if(isset($hn->id)) {
+			$hinnaston_otsikko = '<span class="btn btn-default fa fa-money" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hinnasto: '). ' ' .$hn->hinnaston_otsikko.'"></span>';
+		}
+	}
 ?>
 
      <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
 	<TD><b class="link text-danger poista" for="poista_<?php echo $num; ?>" style="font-size:150%"><i class="fa fa-times"></i></b></TD>
 	<TD>
 		<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" value="<?php echo $rivi['tuoteID']; ?>">
+		<input type="hidden" size="1" name="hinnasto_rivi_id[<?php echo $num; ?>]" id="hinnasto_rivi_id_<?php echo $num; ?>" value="<?php echo $rivi['hinnasto_rivi_id']; ?>">
 		<input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control" value="<?php echo $rivi['tkoodi']; ?>">
 	</TD>
 
@@ -16,7 +25,15 @@
 		<?php echo $this->yksikkot(null); ?>
 		</select>
 	</TD>
-	<TD><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $rivi['hinta']; ?>" step="0.01"><span class="errmsg"></span></TD>
+	<TD>
+	  <div class="input-group">
+	   <input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $rivi['hinta']; ?>" step="0.01"> 
+	   <span class="input-group-btn">
+		<?=$hinnaston_otsikko?>
+	   </span>
+	  </div>
+	  <span class="errmsg"></span>
+	</TD>
 	<TD>
 		<select type="text" name="alv[<?php echo $num; ?>]" id="alv_<?php echo $num; ?>" class="form-control">
 		<option value="<?php echo $rivi['alv']; ?>"><?php echo $rivi['alv']; ?></option>

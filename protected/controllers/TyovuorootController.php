@@ -2006,6 +2006,7 @@ class TyovuorootController extends Controller
 
 			$kohteet = new Kohteet;
 			$kohteet->asiakas_id = $asiakkaat->id;
+			$kohteet->hinnasto_id = $asiakkaat->hinnasto_id;
 			$kohteet->uusi_tilaus = 1;
 			$kohteet->aktiivinen = 1;
 

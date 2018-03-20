@@ -1,5 +1,6 @@
 <?php
-
+echo 'suljettu';
+exit;
 class LaskutusTuotteetController extends Controller
 {
 	/**

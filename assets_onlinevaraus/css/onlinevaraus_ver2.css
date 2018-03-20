@@ -1,0 +1,266 @@
+/*Etunti Onlinevaraus Styles*/
+
+body{
+  background: url('../../lib/img/etusivu/online_bg_01.jpg') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  
+	font-size: 12px;
+	font-family: "Ubuntu", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	line-height: 1.6;
+	color: #777;
+	-webkit-font-smoothing: antialiased;
+	font-weight: normal;
+}
+
+header{
+  background-color: rgba(255, 255, 255, 0.90);
+}
+
+h4 {
+  font-family: OpenSans;
+  font-weight: 600;
+  text-align: center;
+  color: #5e7484;
+  /*color: var(--blue-grey);*/
+  margin-top: 5px;
+}
+
+h3{
+  font-family: OpenSans;
+  font-size: 24px;
+  text-align: center;
+  color: #5e7484;
+  /*color: var(--blue-grey);*/
+  margin-top: 5px;
+}
+
+.day:hover{ background: #F76900; color: white; }
+.vapaa{ background: #78BE14; color: white;  }
+.orangeColor{ background: #F76900; color: white; }
+.kiinni{ background: #B8B8B8; color: white; } 
+
+.logo {
+	width: 165.5px;
+	height: 39.8px;
+}
+
+.input_text {
+	width: 470.6px;
+	height: 48px;
+	border-radius: 5px;
+	background-color: #ffffff;
+	background-color: var(--white);
+	box-shadow: inset 0 1px 0 0 #ececec;
+	border: solid 2px #a4a6cf;
+}
+
+.time-remaining {
+	width: 320px;
+	height: 24px;
+	font-family: OpenSans;
+	font-size: 18px;
+	font-weight: 600;
+	letter-spacing: 0;
+	text-align: right;
+  float: right;
+	color: #90a6b1;
+}
+
+.select-service {
+	margin-top: 0px;
+	height: auto;
+	padding-top: 10px;
+	padding-bottom: 40px;
+	background-color: rgba(255, 255, 255, 0.85);
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  
+}
+.select-service-panel {
+	margin-top: 30px;
+	padding-bottom: 30px;
+	height: auto;
+	background-color: rgba(255, 255, 255, 0.85);
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+}
+.select-service-panel.bottom {
+	margin-top: 0px;
+	padding-bottom: 0px;
+}
+.select-service-panel .panel-heading{
+	background: none;
+  border-bottom: 0px solid #5e7484;
+}
+.select-service-panel .panel-heading h3{
+	color: #5e7484;
+  text-align: center;
+  
+}
+.select-service h3{
+  font-family: OpenSans;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  color: #5e7484;
+  /*color: var(--blue-grey);*/
+  margin-top: 5px;
+}
+
+.select-service select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: inset 0 1px 0 0 #ececec;
+  border: solid 2px #b6d5e7;
+  line-height: 24px;
+  text-align: center;
+}
+
+.select-service select option {
+	font-family: OpenSans;
+	font-size: 18px;
+	font-weight: 600;
+	text-align: left;
+	color: #94a6b1;
+	/*color: var(--bluey-grey);*/
+}
+
+.tblisat a {
+  font-family: OpenSans;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #5e7484;
+  /*color: var(--blue-grey);*/
+}
+
+.ajaanClick{
+  font-family: OpenSans;
+    font-size: 16px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #5e7484;
+    /*color: var(--blue-grey);*/
+}
+
+.order-summary {
+	background-color: #5e7486;
+  font-family: OpenSans;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-align: left;
+  color: #ffffff;
+  /*color: var(--white)*/
+}
+
+.order-summary .show {
+	background-color: #515e6a;
+}
+
+#order_summary {
+    font-family: OpenSans;
+    font-size: 1rem;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    /*line-height: 1.56;*/
+    letter-spacing: 0px;
+    text-align: left;
+    color: #5e7486;
+    background-color: white;
+    /*color: var(--blue-grey-two);*/
+}
+
+#order_summary .col-xs-2 {
+}
+
+#order_summary .col-xs-2 i{
+font-size: 0.9rem;
+}
+
+
+.footer{
+	/*background-color: #5e7486;*/
+	/*background-color: var(--blue-grey-two);*/
+
+}
+
+.additional-products{
+  font-family: OpenSans;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #5e7484;
+  /*color: var(--blue-grey);*/
+}
+
+.onlinevaraus-order-summary{
+  position: fixed;
+  height: 50px;
+  bottom: 0;
+  width: 100%;
+}
+
+.yhteenveto-bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    Z-index: 99999;
+    left: 2%;
+}
+.yhteenveto-bottom .panel-heading {
+    height: 50px;
+    background-color: #5e7484;
+    padding: 5px 5px 5px 20px;
+    border-top-left-radius: 0px; 
+    border-top-right-radius: 0px; 
+}
+
+.yhteenveto-bottom .panel-heading h3{
+    color: white;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+
+#show_yhteenveto{
+  margin-top: -5px;
+}
+.online-footer{
+  width:100%;
+  position: fixed;
+  bottom: 0px;
+  background-color: rgba(0, 0, 0, 0.25);
+  /*background-color: rgba(255, 255, 255, 0.90);*/
+  height: 50px;
+  /*background-color: #5e7486;*/
+ /* background-color: var(--blue-grey-two);*/
+  Z-index: 9999;
+}
+
+#paa_container{
+  margin-bottom: 100px;
+}
+
+#online_reset{
+ color: #5e7484;
+ font-size: 1.5rem;
+}

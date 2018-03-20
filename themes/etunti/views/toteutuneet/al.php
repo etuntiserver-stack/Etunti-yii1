@@ -16,6 +16,10 @@
   $tietoja = $explStr['10'];
   $sairaus = $explStr['11'];
   $status = $explStr['12'];
+  $tuoteID = $explStr['13'];
+
+  $tp = TuotteetPalvelut::model()->findbypk($tuoteID);
+  if(isset($tp->nimike)) { $tuote = '<br><b class="text-success">'.$tp->nimike.'</b>'; } else { $tuote = ''; }
 
      $riviTietoja = '';
   if(!empty($tietoja) and isset($_POST['tulosta']))
@@ -104,6 +108,7 @@
 			<input type="checkbox" class="chckbxHyvaksynta" id="hyv_'.$rivi.'" '.$chk[$rivi].' kuka="'.Yii::app()->user->username.'///'.date('d.m.Y').'" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hyväksy').'">&nbsp; 
 		</span><span class="form-group">
 			'.$isEripaivat.'<i class="form-group link totRivi '.$admin.'" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.$spl.'<br>'.$kohde.'</i>
+			'.$tuote.'
 		</span>
 		'.$asiakas_hyvaksy.'
 		'.$riviTietoja.'

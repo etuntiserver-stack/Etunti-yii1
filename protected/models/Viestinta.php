@@ -59,10 +59,6 @@ public $edellinen_viesti;
                      'viesti' => 'text ',
                      'admin' => 'varchar(50) ',
                      'status' => 'int(1) 0 ',
-
-
-
-
 		);
 
 		foreach($table_structure as $key=>$value)

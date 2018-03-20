@@ -523,14 +523,29 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 <br>
 -->
 <br>
+<div class="row" id="tuotteet_palvelut_muoto" style="display:none">
+	<div class="col-sm-4 section fill mb5">
+		<?php echo $form->labelEx($model,'tuotteet_palvelut_muoto'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Hinnaston mukaan',
+			1=>'Asiakkaan / kohteen hinta'
+		);
+		$model->tuotteet_palvelut_muoto = $asetukset->tuotteet_palvelut_muoto;
+		echo $form->dropDownList($model,'tuotteet_palvelut_muoto', $tal, 
+		array('class'=>'form-control input-lg')) ?>
+		<?php echo $form->error($model,'tuotteet_palvelut_muoto'); ?>
+		<br>
+	</div>
+</div>
 
 <div class="row form kht" id="kalut">
  <div class="col-sm-6" id="tuntiKalut">
   <div class="panel heading-border">
    <div class="panel-body">
 
-    <legend><?php echo Yii::t('main', 'TUNTI / KPL'); ?></legend>
-      <div class="section fill mb5">
+    <legend><?php echo Yii::t('main', 'TUNNIT'); ?></legend>
+      <div class="row section fill mb5">
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
    		<input type="text" id="from" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y',strtotime('first day of last month', time())); ?>">
@@ -540,25 +555,28 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div>
       </div>
 
-      <div class="section fill mb5">
+      <div class="row section fill mb5">
 	<div class="col-sm-6">
 		<div id="getkohdeT" class="form-group"></div>
 	</div><div class="col-sm-6">
 	<br>
 	<?php
-	echo CHtml::dropdownList('palvelu','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), 
+	$criteria = new CDbCriteria();
+       	$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND (yksikko='h' OR yksikko='kpl') ";
+	echo CHtml::dropdownList('palvelu','palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
 	?>
+	<span class="text-danger">Tuotteet jolla yksikkö "h" tai "kpl"</span>
 	</div>
       </div>
       
-      <div class="section fill mb5">
+      <div class="row section fill mb5">
       <div class="col-sm-6">
 
       </div>
       <div class="col-sm-6">
 	<br>
-        	<b class="btn btn-success pull-right luoRiviTunti"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
+        	<b class="btn btn-default btn-lg pull-right luoRiviTunti" jakso="tunti"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
       </div>
       </div>
 
@@ -570,35 +588,38 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
    <div class="panel-body">
 
     <legend><?php echo Yii::t('main', 'KK'); ?></legend>
-      <div class="section fill mb5">
+      <div class="row section fill mb5">
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="from" class="form-control form-group datepickerMY" value="<?php echo date('Y-m'); ?>">
+   		<input type="text" id="kuukausi" class="form-control form-group datepickerMY" value="<?php echo date('Y-m'); ?>">
 	</div><div class="col-sm-6">
-		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="to" class="form-control form-group datepickerMY" value="<?php echo date('Y-m'); ?>">
+		<!--<b class="glyphicon glyphicon-calendar"></b> 
+   		<input type="text" id="to" class="form-control form-group datepickerMY" value="<?php echo date('Y-m'); ?>">-->
 	</div>
       </div>
 
-      <div class="section fill mb5">
+      <div class="row section fill mb5">
 	<div class="col-sm-6">
 		<div id="getkohdeKK" class="form-group"></div>
 	</div><div class="col-sm-6">
 	<br>
 	<?php
-	echo CHtml::dropdownList('','', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), 
+	$criteria = new CDbCriteria();
+       	$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND yksikko='kk' ";
+	echo CHtml::dropdownList('kk_palvelu','kk_palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
 	?>
+	<span class="text-danger">Tuotteet jolla yksikkö "kk"</span>
 	</div>
       </div>
       
-      <div class="section fill mb5">
+      <div class="row section fill mb5">
       <div class="col-sm-6">
 
       </div>
       <div class="col-sm-6">
 	<br>
-        	<b class="btn btn-success pull-right luoRiviTunti"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
+        	<b class="btn btn-default btn-lg pull-right luoRiviTunti" jakso="kk"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
       </div>
       </div>
 
@@ -612,7 +633,6 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 
 	<input type="hidden" class="form-control" id="kohteistaRivit" readonly><br>
 	<div id="tuntienTulos"></div>
-	<div id="hinnoitelu"></div>
 
 	<?php if(!isset($model->id)) : ?> 
 	<div id="ilmoitusAllennusta"></div>
@@ -639,7 +659,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
      <thead class="myBgColors">
 	<TH style="width:1%"><span id="uusiRivi" class="link" style="font-size: 150%;"><i class="fa fa-plus-square"></i></span></TH>
 	<TH class="col-sm-2">Tuote/Palvelu</TH>
-	<TH class="col-sm-1">Kpl</TH>
+	<TH class="col-sm-1">Määrä</TH>
 	<TH class="col-sm-1">Yksikkö <span class="btn btn-primary btn-xs myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span></TH>
 	<TH class="col-sm-1">Hinta</TH>
 	<TH class="col-sm-1">ALV %</TH>
@@ -685,7 +705,8 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 </TABLE>
 </div>
 
-  
+<br>
+	<div id="hinnoitelu"></div>
 
 <br><br><br><br><br><br>
 
@@ -1056,7 +1077,6 @@ $("#uusiRivi").click(function() {
         });
 });
 
-
 function makeid()
 {
     var text = "";
@@ -1073,18 +1093,20 @@ function jumpToPageBottom() {
     return false;
 }
 
-
-
-
 $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 
     var tuoteID = $(this).val();
     var num = $(this).attr("num");
+    var asiakas_nro = $("#Lasku_as_nro option:selected").val();
+    if(!asiakas_nro && '<?=$model->as_nro?>' !== '')
+    {
+	asiakas_nro = '<?=$model->as_nro?>';
+    }
 
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/lasku/valitsetuote',
            type: "POST",
-           data: { tuoteID : tuoteID },
+           data: { tuoteID : tuoteID, asiakas_nro : asiakas_nro },
            success: function(data){
 		var sp = JSON.parse(data);
 
@@ -1093,29 +1115,24 @@ $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 			$("#kpl_"+num).val(1);
 			$("#tkoodi_"+num).val(sp['tuotenimi']);
 			$("#hinta_"+num).val(parseFloat(sp['hinta_alv_0']));
+			$("#hinnasto_rivi_id_"+num).val(sp['hinnasto_rivi_id']);
+			$("#hinta_"+num).closest('tr').find('.hinnaston_otsikko').attr("title", sp['hinnaston_otsikko']);
 			$("#yksikko_"+num+" option[value="+sp['yksikko']+"]").attr('selected','selected');
 			$("#alv_"+num+" option[value="+sp['alv']+"]").attr('selected','selected');
 			$("#tuoteID_"+num).val(sp['id']);
 		}
 
 		eachLaskenta();
-		console.log(data)
+		//console.log(data)
            }
         });
 
 });
 
-
-
-
-
-
-  $(document).delegate(".poista","click",function(){
+$(document).delegate(".poista","click",function(){
 	$(this).closest('tr').remove();
 	yhteensaTotal();
-  });
-
-
+});
 
 Rivi();
 function Rivi(){
@@ -1181,155 +1198,16 @@ function yhteensaTotal(){
 }
 
 
-  $(document).delegate('#rivit input[type="number"]','keyup',function(){
+$(document).delegate('#rivit input[type="number"]','keyup',function(){
   	eachLaskenta();
     	yhteensaTotal();
-  });
-
-
-$(".luoRiviTunti").click(function() {
-
-	var from = $(this).closest('.panel-body').find("#from").val();
-	var to = $(this).closest('.panel-body').find("#to").val();
-	var kohteet = $(this).closest('.panel-body').find('.etsikohde_alasvetovaliko').val();
-	var tuotePalvelu = $(this).closest(".panel-body").find('.valitseTuote').val();
-
-	console.log(kohteet);
-
-	if (from  === '') 
-	{
-	     $('#from').css({"border" : "2px #f14010 solid"}).focus();
-	     return false;
-	}
-	if (to  === '') 
-	{
-	     $('#to').css({"border" : "2px #f14010 solid"}).focus();
-	     return false;
-	}
-	if (!kohteet) 
-	{ 
-	    alert('Valitse kohde')
-	    return false;
-
-	} 
-
-	    pyyntoRiville(kohteet,from,to,tuotePalvelu);
 });
 
-
-
-
-function pyyntoRiville(kohteet,from,to,tuotePalvelu){
-
-	    if($('#tkoodi_1').val() === '')
-	    $("#trRivi_1").remove();
-
-	    $.each(kohteet, function( index, value ) {
-
-	    var spH = value.split("//");
-	    if(spH[3] == 'onkohde')
-	    var mistaLuo = 'luoKohteista';
-
-	    if(spH[3] == 'eikohde')
-	    var mistaLuo = 'luoAsiakaasta';
-
-	    console.log(mistaLuo);
-
-	        $.ajax({
-	           url: 'luoKohteista?id='+spH[0],
-		   type: 'POST',
-		   data: { from : from, to : to, mistaLuo : mistaLuo, yksikko : spH[2] },
-	           success: function(data){
-	               	console.log(data);
-
-			data = JSON.parse(data);
-
-			var num = 0;
-			if((data['tunnit'] == 0) && (spH[2] == "h"))
-			{
-				$("#tuntienTulos").addClass("alert alert-danger").html('<b>Ei löydy tuntia</b>');
-				//$("#rivit").hide('slow');
-			}
-
-			if((data['tunnit'] > 0) || (data['rivi_kpl'] > 0) || (spH[2] == "kk"))
-			{
-			num = $("table#TableRivit tbody tr").length+index;
-			
-			var kpl = 0;
-			var yksikko = spH[2];
-
-			if((mistaLuo == 'luoAsiakaasta') && (yksikko == "kk")){
-			  kpl = '1';
-			}
-			if((mistaLuo == 'luoKohteista') && (yksikko == "kk") && (data['kk_kpl'] > 0)){
-			  kpl = data['kk_kpl'];
-			}
-			if(yksikko == "h"){
-			  kpl = data['tunnit'];
-			}
-			if(yksikko == "kpl"){
-			  kpl = data['rivi_kpl'];
-			}
-
-	        	$.ajax({
-		           url: 'tr_rivit?id='+spH[0],
-			   type: 'POST',
-			   data: { num : num, from : from, to : to, kpl : kpl, hinta : spH[1], yksikko : yksikko, onkokohde : spH[3], tuotePalvelu : tuotePalvelu },
-		           success: function(data){
-				console.log(value);
-				$("table#TableRivit tbody tr").last().after(data);
-
-				Rivi();
-				eachLaskenta();
-
-				$("#tuntienTulos").removeClass("alert alert-danger").html('');
-				$("#rivit").show('slow');
-				$(".subm").show('slow');
-		           },
-		           error: function(XMLHttpRequest, textStatus, errorThrown){
-		               	console.log(XMLHttpRequest);
-			   }
-		        });
-
-			}
-	
-
-	           },
-	           error: function(XMLHttpRequest, textStatus, errorThrown){
-	               	console.log(XMLHttpRequest);
-		   }
-	        });
-	    });
-
-	    
-	    jumpToPageBottom();
-
-}
-
-$("#Lasku_yid").change(function() {
-
-    var saaja = $(this).val();
-
-        $.ajax({
-           url: 'etsisaaja?id='+saaja,
-           success: function(data){
-               	console.log(data);
-
-		if(data)
-		$("#Lasku_saaja_iban").val(data);
-		
-
-           },
-           error: function(XMLHttpRequest, textStatus, errorThrown){
-               	console.log(XMLHttpRequest);
-	   }
-        });
-});
-
-
+var getkohdeT = '';
 $("#Lasku_as_nro").change(function() {
 
     var asiakas = $("#Lasku_as_nro option:selected").val();
+    var asiakas_id = 0;
     if(!asiakas)
     {
 	alert("Asiakasnumero puuttuu");
@@ -1337,55 +1215,31 @@ $("#Lasku_as_nro").change(function() {
     }
 	
 	$("#kalut").show('slow');
+	$("#tuotteet_palvelut_muoto").show('slow');
+	palvelu_muoto();
 
         $.ajax({
-           url: 'etsikohde?id='+asiakas,
+           url: 'etsikohde?asiakasnumero='+asiakas,
+	   async : false,
            success: function(data){
 		var spdata = JSON.parse(data);
-               	console.log(spdata);
+               	//console.log(spdata);
 
 		if(spdata['is_true'] == true)
 		{
 
-			$("#getkohdeT").html(spdata['body_t']);
-			$("#getkohdeKK").html(spdata['body_kk']);
+			asiakas_id = spdata['asiakas_id'];
+			$("#getkohdeT").html(spdata['kohteet']);
+			getkohdeT = spdata['kohteet'];
+			$("#getkohdeKK").html(spdata['kohteet']);
 			$("#tuntiKalut").show();
 
-
-
-			// <--multiselect
-			$('.etsikohde_alasvetovaliko').multiselect({
-				//inheritClass: true,
-				//enableFiltering: true,
-			        includeSelectAllOption: true,
-				nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
-				selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
-				allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
-				nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
-				numberDisplayed: 0,
-				buttonWidth: '100%',
-			        maxHeight: 300,
-			});
-			//    multiselect -->
-
-			//$('.selectpicker').selectpicker();
+			multiselectLaatikko();
 
 		} else {
 			$("#tuntiKalut").hide();
 			$("#kkKalut").hide();
 		}
-
-		/*
-		if(spdata['vinkki'] !== ''){
-
-			var allennus = JSON.parse(spdata['vinkki']);
-			if(allennus['vinkki_tunnit'] && allennus['vinkki_prosentti'])
-			{
-				$('#ilmoitusAllennusta').addClass('text-success').html('<h1>Asiakas ALE: <span id="aleAsiakkaasta">'+ allennus['vinkki_tunnit'] +'</span> tunti, ' + allennus['vinkki_prosentti'] + '%</h1>');
-				$('#ale_1').val(parseInt(allennus['vinkki_prosentti']));
-			}
-		}
-		*/
 
            },
            error: function(XMLHttpRequest, textStatus, errorThrown){
@@ -1393,9 +1247,8 @@ $("#Lasku_as_nro").change(function() {
 	   }
         });
 
-
         $.ajax({
-           url: 'etsiasiakas?id='+asiakas,
+           url: 'etsiasiakas?id='+asiakas_id,
            success: function(data){
                	//console.log(data);
 		var sp = JSON.parse(data).split("//");
@@ -1451,6 +1304,256 @@ $("#Lasku_as_nro").change(function() {
 });
 
 
+var t_palvelut_hinnastosta = $("#palvelu").html();
+var kk_palvelut_hinnastosta = $("#kk_palvelu").html();
+$("#Lasku_tuotteet_palvelut_muoto").change(function() {
+	palvelu_muoto();
+});
+
+
+function palvelu_muoto(){
+	if( $("#Lasku_tuotteet_palvelut_muoto").val() == '1' ){
+		$("#palvelu").html('<option value="1">h</option><option value="3">kpl</option>').addClass('for-muoto-1');
+		$("#kk_palvelu").html('<option value="2">kk</option>');
+		etsiKohteetByYksikkoPalveluMuoto1(1);
+	}
+	if( $("#Lasku_tuotteet_palvelut_muoto").val() == '0' ){
+		$("#palvelu").html(t_palvelut_hinnastosta).removeClass('for-muoto-1');
+		$("#kk_palvelu").html(kk_palvelut_hinnastosta);
+		if( getkohdeT !== '' ){	
+			$("#getkohdeT").html(getkohdeT);
+			$("#getkohdeKK").html(getkohdeT);
+			multiselectLaatikko();
+		}
+	}
+}
+
+$(document).delegate(".for-muoto-1","change",function(){
+	etsiKohteetByYksikkoPalveluMuoto1($(this).val());
+});
+
+function etsiKohteetByYksikkoPalveluMuoto1(hinta_tyyppi){
+
+	var asiakas = $("#Lasku_as_nro option:selected").val();
+	if(!asiakas){ alert('Valitse asiakas'); return false; }
+        $.ajax({
+           url: 'etsikohde_by_yksikko?asiakasnumero='+ asiakas +'&hinta_tyyppi='+ hinta_tyyppi,
+	   type : 'POST',
+	   //data : {}
+           success: function(data){
+		var spdata = JSON.parse(data);
+               	//console.log(spdata);
+		if(spdata['is_true'] == true)
+		{
+			$("#getkohdeT").html(spdata['kohteet']);
+			//$("#getkohdeKK").html(spdata['kohteet']);
+			multiselectLaatikko();
+
+			$("#getkohdeT").find(".multiselect").removeClass('btn-default').addClass('btn-success').text('Kohteet päivitetty');
+			setTimeout(function() { 
+			$("#getkohdeT").find(".multiselect").removeClass('btn-success').addClass('btn-default').text('Valitse kohde');
+			}, 3000);
+
+		} else {
+			$("#getkohdeT").html('<br><p><span class="btn btn-danger btn-block">Ei kohteitta.</span></p>');
+		}
+           },
+           error: function(XMLHttpRequest, textStatus, errorThrown){
+               	console.log(XMLHttpRequest);
+	   }
+        });
+
+        $.ajax({
+           url: 'etsikohde_by_yksikko?asiakasnumero='+ asiakas +'&hinta_tyyppi=2',
+	   type : 'POST',
+	   //data : {}
+           success: function(data){
+		var spdata = JSON.parse(data);
+               	//console.log(spdata);
+		if(spdata['is_true'] == true)
+		{
+			$("#getkohdeKK").html(spdata['kohteet']);
+			multiselectLaatikko();
+
+			$("#getkohdeKK").find(".multiselect").removeClass('btn-default').addClass('btn-success').text('Kohteet päivitetty');
+			setTimeout(function() { 
+			$("#getkohdeKK").find(".multiselect").removeClass('btn-success').addClass('btn-default').text('Valitse kohde');
+			}, 3000);
+
+
+		} else {
+			$("#getkohdeKK").html('<br><p><span class="btn btn-danger btn-block">Ei kohteitta.</span></p>');
+		}
+           },
+           error: function(XMLHttpRequest, textStatus, errorThrown){
+               	console.log(XMLHttpRequest);
+	   }
+        });
+}
+
+function multiselectLaatikko(){
+			// <--multiselect
+			$('.etsikohde_alasvetovaliko').multiselect({
+				//inheritClass: true,
+				//enableFiltering: true,
+			        includeSelectAllOption: true,
+				nonSelectedText: '<?php echo Yii::t("main", "Valitse kohde"); ?>',
+				selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+				allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+				nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+				numberDisplayed: 0,
+				buttonWidth: '100%',
+			        maxHeight: 300,
+			});
+			//    multiselect -->
+}
+
+$(".luoRiviTunti").click(function() {
+
+	var jakso = $(this).attr("jakso");
+	var kuukausi = $(this).closest('.panel-body').find("#kuukausi").val();
+	var from = $(this).closest('.panel-body').find("#from").val();
+	var to = $(this).closest('.panel-body').find("#to").val();
+	var kohteet = $(this).closest('.panel-body').find('.etsikohde_alasvetovaliko').val();
+	var tuotePalvelu = $(this).closest(".panel-body").find('.valitseTuote option:selected').val();
+	var tuotePalveluFor = $(this).closest(".panel-body").find('.etsikohde_alasvetovaliko option:selected').attr('for');
+	var tuotteet_palvelut_muoto = parseInt($("#Lasku_tuotteet_palvelut_muoto").val());
+
+	//console.log(tuotePalvelu);
+
+	if (from  === '' && jakso == 'tunti') 
+	{
+	     $(this).closest('.panel-body').find("#from").css({"border" : "2px #f14010 solid"}).focus();
+	     return false;
+	}
+	if (to  === '' && jakso == 'tunti') 
+	{
+	     $(this).closest('.panel-body').find("#to").css({"border" : "2px #f14010 solid"}).focus();
+	     return false;
+	}
+	if (kuukausi  === '' && jakso == 'kk') 
+	{
+	     $(this).closest('.panel-body').find("#kuukausi").css({"border" : "2px #f14010 solid"}).focus();
+	     return false;
+	}
+	if (tuotePalvelu  === '' && $("#Lasku_tuotteet_palvelut_muoto").val() == '0' ) 
+	{
+	     $(this).closest(".panel-body").find('.valitseTuote').css({"border" : "2px #f14010 solid"}).focus();
+	     return false;
+	}
+	if (!kohteet) 
+	{ 
+	    alert('Valitse kohde')
+	    return false;
+
+	} 
+
+	    pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palvelut_muoto,tuotePalveluFor);
+});
+
+function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palvelut_muoto,tuotePalveluFor){
+
+
+	$("#tuntienTulos").removeClass("alert bg-danger").html('');
+	var asiakasnumero = $("#Lasku_as_nro option:selected").val();
+	var kpl = 1;
+	var yksikko = 'kpl';
+	var hinta = 0;
+
+	    $.each(kohteet, function( index, value ) {
+
+		var postdata = { 
+			jakso : jakso, 
+			kuukausi : kuukausi, 
+			asiakasnumero : asiakasnumero, 
+			from : from, to : to, 
+			tuotePalvelu : tuotePalvelu, 
+			tuotteet_palvelut_muoto : tuotteet_palvelut_muoto
+		};
+	        $.ajax({
+	           url: 'luoKohteista?id='+value+'&for='+tuotePalveluFor,
+		   type: 'POST',
+		   data: postdata,
+	           success: function(data){
+	               	//console.log(data);
+			data = JSON.parse(data);
+
+			if(tuotteet_palvelut_muoto == 0 && parseInt(data['rivi_kpl']) == 0 && data['yksikko'] !== 'kk')
+			{
+				$("#tuntienTulos").addClass("alert bg-danger").append('<p><b>Ei löydy tuntia osoitteesta: </b>' + data['osoite'] + '</p>');
+				return true;
+			}
+
+			   var num = 0;
+			   num = $("table#TableRivit tbody tr").length+index;
+			   var sendData = { 
+					kohde_id : value,
+					num : num,
+					from : data['from'],
+					to : data['to'],
+					kpl : data['kpl'],
+					hinta : data['hinta'],
+					alv : data['alv'],
+					hinnasto_rivi_id : data['hinnasto_rivi_id'],
+					yksikko : data['yksikko'],
+					free_text : data['free_text'],
+					tuotePalvelu : tuotePalvelu
+			   };
+
+	        	   $.ajax({
+		              url: 'tr_rivit',
+			      type: 'POST',
+			      data: sendData,
+		              success: function(data){
+				console.log(value);
+				$("table#TableRivit tbody tr").last().after(data);
+				$("#rivit").show('slow');
+				$(".subm").show('slow');
+
+				Rivi();
+				eachLaskenta();
+	
+		              },
+		              error: function(XMLHttpRequest, textStatus, errorThrown){
+		               	console.log(XMLHttpRequest);
+			      }
+		           });
+	
+
+	           },
+	           error: function(XMLHttpRequest, textStatus, errorThrown){
+	               	console.log(XMLHttpRequest);
+		   }
+	        });
+	    });
+
+	    jumpToPageBottom();
+
+}
+
+$("#Lasku_yid").change(function() {
+
+    var saaja = $(this).val();
+
+        $.ajax({
+           url: 'etsisaaja?id='+saaja,
+           success: function(data){
+               	console.log(data);
+
+		if(data)
+		$("#Lasku_saaja_iban").val(data);
+		
+
+           },
+           error: function(XMLHttpRequest, textStatus, errorThrown){
+               	console.log(XMLHttpRequest);
+	   }
+        });
+});
+
+
+
+
 $("#Lasku_tyyppi").change(function() {
     var value = $(this).val();
     laskutusTyyppi(value);
@@ -1501,7 +1604,6 @@ function laskutus(value){
 
 }
 
-
 $("#Lasku_toimitusosoite").change(function() {
     var toimitusosoite = $(this).val();
     if(toimitusosoite == 1){
@@ -1516,35 +1618,38 @@ $("#Lasku_toimitusosoite").change(function() {
 // hinnoitelu
 $(document).delegate(".etsikohde_alasvetovaliko","change",function(){
 
+  var jakso = $(this).closest('.panel-body').find(".luoRiviTunti").attr("jakso");
+  var kuukausi = $(this).closest('.panel-body').find("#kuukausi").val();
+  var from = $(this).closest('.panel-body').find("#from").val();
+  var to = $(this).closest('.panel-body').find("#to").val();
 
-  if($(this).val())
+  $('#hinnoitelu').hide('370').html('');
+  console.log($(this, 'option:selected').val());
+
+  if( $(this, 'option:selected').val() )
   {
-	var thisVal = $(this).val()[0].split("//");
-	if(thisVal[3] == 'onkohde')
-	{
-       	console.log(thisVal);
+  $.each($(this, 'option:selected').val(), function( index, value ) {
+
+	var thisVal = value;
         $.ajax({
-           url: 'kohteen_tieto',
+           url: 'kohteen_tieto?id='+ thisVal,
 	   type: 'POST',
-	   data: { id : thisVal[0] },
+	   data: { jakso : jakso, kuukausi : kuukausi, from : from, to : to },
            success: function(data){
-		var sp = JSON.parse(data);
-		if(sp !== '')
-		$('#hinnoitelu').html('<div class="alert alert-success">'+data+'</div>');
+		var d = JSON.parse(data);
+		if(d['return']){
+		 $('#hinnoitelu').append(d['return']).show('370');
+		}
 
            },
            error: function(XMLHttpRequest, textStatus, errorThrown){
                	console.log(XMLHttpRequest);
 	   }
         });
-	}
 
-   } else {
-		$('#hinnoitelu').html('');
+   });
    }
-
 });
-
 
 $("#osoiteHaku").keyup(function() {
     var thisVal = $(this).val();

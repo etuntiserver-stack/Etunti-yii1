@@ -250,67 +250,24 @@ $(document).ready(function(){
 		<label><?php echo Yii::t('main', 'Maksuehto'); ?> </label>
 		<input type="number" name="Asiakkaat[maksuehto]" class="form-control">
     </div>
-    <div class="sectionfill mb5">
-		<label><?php echo Yii::t('main', 'Hinta tyyppi'); ?> </label>
+    <div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tuoteID'); ?>
 		<?php
-		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
-        	echo CHtml::dropDownList('Asiakkaat[hinta_tyyppi]', 'hinta_tyyppi', $list,
-		array('class'=>'form-control'));
-        	?>
+		$criteria = new CDbCriteria();
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
+		?>
+		<?php echo $form->dropDownList($model, 'tuoteID', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
+		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
+		<?php echo $form->error($model,'tuoteID'); ?>
     </div>
     <div class="section fill mb5">
-		<label><?php echo Yii::t('main', 'Alv %'); ?> </label>
-		<?php
-        	$l = array(0=>0,10=>10,14=>14,24=>24);
-        	echo CHtml::dropDownList('Asiakkaat[alv]', 'alv', $l,
-		array('class'=>'form-control', 'options' => array('24'=>array('selected'=>true))));
-        	?>
-		<?php echo $form->error($model,'alv'); ?>
-    </div>
-    <div class="section fill mb5">
-		<label><?php echo Yii::t('main', 'Hinta'); ?></label>
-		<input type="number" name="Asiakkaat[hinta]" class="form-control" id="hinta">
-    </div>
-    <div class="section fill mb5">
-		<label><?php echo Yii::t('main', 'Vero'); ?></label>
-		<input type="number" class="form-control" id="vero">
-    </div>
-    <div class="section fill mb5">
-		<label><?php echo Yii::t('main', 'Hinta (sis. ALV)'); ?></label>
-		<input type="number" name="Asiakkaat[hinta_sis_alv]" class="form-control" id="hinta_sis_alv" step="any">
+		<label><?php echo Yii::t('main', 'Hinnasto'); ?></label>
+		<?php echo Chtml::dropDownList('Asiakkaat[hinnasto_id]', 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
+		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
     </div>
   </div>
 </div>
 
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-  $("#Asiakkaat_alv").change(function() {
-	laskurin();
-  });
-  $("#hinta").keyup(function() {
-	laskurin();
-  });
-  $("#hinta_sis_alv").keyup(function() {
-	var hinta_sis_alv = parseFloat($(this).val());
-	var alv = parseFloat($("#Asiakkaat_alv").val());
-	var result = hinta_sis_alv/(1+(alv/100));
-	$("#hinta").val(result.toFixed(2));
-	$("#vero").val((hinta_sis_alv-result).toFixed(2));
-  });
-
-  function laskurin()
-  {
-	var alv = parseFloat($("#Asiakkaat_alv").val());
-	var hinta = parseFloat($("#hinta").val());
-	var hinta_sis_alv = ((alv/100)*hinta)+hinta;
-	$("#hinta_sis_alv").val(hinta_sis_alv.toFixed(2));
-	$("#vero").val((hinta_sis_alv-hinta).toFixed(2));
-  }
-
-});
-</script>
 
 
 

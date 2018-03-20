@@ -157,6 +157,18 @@
     <legend><h2><?php echo Yii::t('main','Työvuorot asetukset'); ?></h2></legend>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tuote_tyovuorossa'); ?>
+		<?php 
+        	$l = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'tuote_tyovuorossa', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'tuote_tyovuorossa'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_tyovuorossa'); ?>
 		<?php 
         	$l = array(
@@ -288,6 +300,19 @@
   <div class="row form collapse" id="laskutuksenAsetukset">
     <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','Laskutuksen asetukset'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tuotteet_palvelut_muoto'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Hinnaston mukaan',
+			1=>'Asiakkaan / kohteen hinta'
+		);
+		echo $form->dropDownList($model,'tuotteet_palvelut_muoto', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'tuotteet_palvelut_muoto'); ?>
+	</div>
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tilinumero'); ?>
 		<?php echo $form->textField($model,'tilinumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
@@ -469,6 +494,20 @@
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'onlinevaraus_aikavali'); ?>
+
+
+		<?php 
+        	$l = array();
+		for ($i = 1; $i <= 4; $i++) {
+        		$l[$i] = $i;
+		}
+		echo $form->dropDownList($model,'onlinevaraus_aikavali', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'onlinevaraus_aikavali'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'onlinevaraus_alku'); ?>
 
 
@@ -481,7 +520,6 @@
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'onlinevaraus_alku'); ?>
 	</div>
-
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'onlinevaraus_loppu'); ?>

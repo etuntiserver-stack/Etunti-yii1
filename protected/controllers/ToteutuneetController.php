@@ -105,6 +105,7 @@ class ToteutuneetController extends Controller
 			(isset($k->id))? $osoite = $k->osoite:$osoite = '';
 
 				$mobiili = new Mobile;
+				$mobiili->tuoteID = $tv->tuoteID;
 				$mobiili->tid = $tv->tid;
 				$mobiili->kohdenID = $tv->kohde;
 				$mobiili->kohde_kannasta = $osoite;
@@ -580,7 +581,7 @@ $xml = '
 		   if($tvVal->id){
 		   $muutos = true;
 
-	   	$get[strtotime($tvVal->aloitan).'_'.$tvVal->id] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->kid."//".$tvVal->asiakas_hyvaksy."//".$tvVal->tietoja."//".$tvVal->sairaus."//".$tvVal->status;
+	   	$get[strtotime($tvVal->aloitan).'_'.$tvVal->id] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->kid."//".$tvVal->asiakas_hyvaksy."//".$tvVal->tietoja."//".$tvVal->sairaus."//".$tvVal->status."//".$tvVal->tuoteID;
 	
 		  $tvVal->loppui = date("Y-m-d H:i",strtotime($tvVal->loppui));
 		  $tvVal->aloitan = date("Y-m-d H:i",strtotime($tvVal->aloitan));
@@ -609,7 +610,7 @@ $xml = '
 		   if($tvVal->id){
 		   $muutos = false;
 
-		   $get[strtotime($tvVal->aloitan).'_'.$tvVal->id] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->id."//".$tvVal->asiakas_hyvaksy."////".$tvVal->sairaus."//".$tvVal->status;
+		   $get[strtotime($tvVal->aloitan).'_'.$tvVal->id] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->id."//".$tvVal->asiakas_hyvaksy."////".$tvVal->sairaus."//".$tvVal->status."//".$tvVal->tuoteID;
 	
 	
 		  $tvVal->loppui = date("Y-m-d H:i",strtotime($tvVal->loppui));

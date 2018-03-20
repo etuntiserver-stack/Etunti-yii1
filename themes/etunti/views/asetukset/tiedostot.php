@@ -23,6 +23,30 @@
 	<?php
 	$i = 0;
 	foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/*')) as $file) {
+	if( $file  == 'tiedostot/firma/'.Yii::app()->user->domain.'/pub' ) continue;
+	$i++;
+	$ext = pathinfo(basename($file), PATHINFO_EXTENSION);
+ 	echo '
+	<div class="form-inline" id="t_'.$model->id.$i.'">
+	  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$model->id.'" for="t_'.$model->id.$i.'">X</div> ';
+
+				// <-- file_safe_opener
+				$filepath = Yii::getPathOfAlias('application').'/../'.$file;
+				echo CHtml::link(basename($file),
+					array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
+					array(
+						'target'=>'_blank',
+						'class'=>'link'
+				));
+				//     file_safe_opener// -->
+
+	echo '</div>';
+	$kuvat[$i] = $file;
+	}
+	?>
+	<?php
+	$i = 0;
+	foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/pub/*')) as $file) {
 	$i++;
 	$ext = pathinfo(basename($file), PATHINFO_EXTENSION);
  	echo '
@@ -161,6 +185,24 @@
   </form>
  </div>
 
+ <div class="admin-form col-sm-6">
+  <form id="uploadimage" action="#" class="form-input" method="post" enctype="multipart/form-data">
+     <div class="section input-group">
+       <label class="field prepend-icon append-button file">
+         <span class="button"><?php echo Yii::t('main', 'Onlinevaraus taustekuva'); ?></span>
+         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP_ov_tauste').value = this.value;">
+         <input type="text" class="gui-input" name="uploaded_ov_tauste" id="tiedostoUP_ov_tauste" placeholder="Valitse tiedosto..">
+         <label class="field-icon">
+          <i class="fa fa-upload"></i>
+         </label>
+       </label>
+	<span class="input-group-btn">
+          <input type="submit" value="Lataa" class="btn btn-primary btn-group myBgColors" />
+	</span>
+    </div>
+  </form>
+ </div>
+
  </div>
 </div>
 
@@ -181,10 +223,10 @@ $(document).ready(function(){
 	var forThis = $(this).attr("this");
 	var model = $(this).attr("model");
 	var forID = $(this).attr("for");
-	if(confirm('Oletko varmaa?'))
+	if(confirm('Oletko varma?'))
 	{
         $.ajax({
-           url: "update?id="+model,
+           url: "tiedostot?id="+model,
 	   type:'POST',
 	   data: { "poistaTamaTiedosto" : forThis },
            success: function(data){

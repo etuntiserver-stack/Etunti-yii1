@@ -93,8 +93,6 @@ public $tilausviesti;
                      'peruutettu' => 'int(1) ',
                      'peruutettu' => 'int(1) ',
 		     'apuaika' => 'int(1) ',
-
-
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -141,6 +139,7 @@ public $tilausviesti;
 		        'kohteet' => array(self::BELONGS_TO, 'Kohteet', 'kohde'),
 		        'avaimet' => array(self::HAS_MANY, 'Avaimet', array('kohde'=>'kohde')),
 		        'tt' => array(self::BELONGS_TO, 'Tyontekijat', 'tid'),
+		        'tp' => array(self::BELONGS_TO, 'TuotteetPalvelut', 'tuoteID'),
 		);
 	}
 

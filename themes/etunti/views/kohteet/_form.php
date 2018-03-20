@@ -8,16 +8,13 @@
      $tas = explode(",",Yii::app()->user->adminPaketti);
 
 
-if(isset($model->id))
-$model->hinta = str_replace(",",".",$model->hinta);
-
-
 $site = Yii::app()->createController('Site');
 $ismobile = $site[0]->check_user_agent();
 
 if($ismobile and !empty($model->puh_nro)) {
 
 }
+if(!isset($model->id)){ $model->alv = 24; }
 ?>
 <div class="row">
 
@@ -123,6 +120,7 @@ if($ismobile and !empty($model->puh_nro)) {
 	<legend><?php echo Yii::t('main','Laskutus'); ?></legend>
 	</div>
 
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
 		<?php
@@ -139,8 +137,8 @@ if($ismobile and !empty($model->puh_nro)) {
         	$l = array(0=>0,10=>10,14=>14,24=>24);
 
         	echo $form->dropDownList($model, 'alv', $l,
-		array('empty'=>'Valitse','class'=>'form-control'
-		));
+		array('empty'=>'Valitse','class'=>'form-control')
+		);
         	?>
 		<?php echo $form->error($model,'alv'); ?>
 	</div>
@@ -194,6 +192,12 @@ $(document).ready(function(){
 });
 </script>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'hinnasto_id'); ?>
+		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
+		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
+		<?php echo $form->error($model,'hinnasto_id'); ?>
+	</div>
 	<?php endif; ?>
 
 

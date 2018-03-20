@@ -19,7 +19,6 @@
 class Asiakkaat extends DB2ActiveRecord
 {
 
-public $verot;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -76,16 +75,11 @@ public $verot;
                      'ovt_tunnus' => 'varchar(100)',
                      'valittajan_tunnus' => 'varchar(100)',
                      'verkkolaskuosoite' => 'varchar(255)',
-                     'alv' => 'int(3)',
-                     'hinta_tyyppi' => 'varchar(50)',
-                     'hinta' => 'varchar(10)',
                      'muistutuslasku_auto' => 'int(1)',
                      'kirjeenluokka' => 'int(1)',
                      'myyja' => 'varchar(100)',
                      'viivastyskorko' => 'varchar(20)',
                      'salasana' => 'varchar(255)',
-                     'vinkki_tunnit' => 'varchar(10)',
-                     'vinkki_prosentti' => 'varchar(10)',
                      'netvisorkey' => 'int(11)',
                      'k_osoite' => 'varchar(255)',
                      'k_postinumero' => 'varchar(100)',
@@ -94,10 +88,19 @@ public $verot;
                      'asiakastila' => 'int(11)',
                      'sahkopostilaskuosoite' => 'varchar(255)',
                      'vinkki_id' => 'int(11)',
-                     'hinta_sis_alv' => 'float',
                      'alennuskoodit' => 'text',
                      'token' => 'varchar(255)',
                      'app_kayttoehdot' => 'int(1)',
+		     'hinnasto_id' => 'int(11) DEFAULT 0',
+                     'alv' => 'int(3)',
+                     'hinta_tyyppi' => 'varchar(50)',
+                     'hinta' => 'varchar(10)',
+		     'verot' => 'varchar(100)',
+                     'hinta_sis_alv' => 'float',
+
+                     //'vinkki_tunnit' => 'varchar(10)',
+                     //'vinkki_prosentti' => 'varchar(10)',
+
 
 		);
 
@@ -122,15 +125,11 @@ public $verot;
 			array('tyyppi, osoite, postinumero, kaupunki', 'required'),
                         array('asiakasnumero','unique', 'message'=>'Tämä asiakasnumero on jo olemassa!'),
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
-			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot', 'numerical', 'integerOnly'=>true),
+			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot, hinnasto_id, alv', 'numerical', 'integerOnly'=>true),
 			array('myyja, postinumero, k_postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, k_kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
 			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma, sahkopostilaskuosoite, token', 'length', 'max'=>255),
-			array('hinta_sis_alv', 'numerical', 'integerOnly'=>false),
-			array('maksuehto, viivastyskorko', 'length', 'max'=>20),
-			array('alv', 'length', 'max'=>3),
-			array('hinta_tyyppi', 'length', 'max'=>50),
-			array('hinta, vinkki_tunnit, vinkki_prosentti', 'length', 'max'=>10),
-			array('asiakasnumero, ovt_tunnus, valittajan_tunnus', 'length', 'max'=>100),
+			array('maksuehto, viivastyskorko, hinta, hinta_sis_alv', 'length', 'max'=>20),
+			array('asiakasnumero, ovt_tunnus, valittajan_tunnus, hinta_tyyppi, verot', 'length', 'max'=>100),
 			array('alennuskoodit', 'safe'),
 			array('sahkoposti','unique', 'message'=>'Tämä sähköposti on jo rekisteröity asiakkaalle.'),
 			// The following rule is used by search().
@@ -179,16 +178,18 @@ public $verot;
 			'ovt_tunnus' => Yii::t('main', 'Yrityksen OVT-tunnus'),
 			'valittajan_tunnus' => Yii::t('main', 'Operaattorin välittäjän tunnus'),
 			'verkkolaskuosoite' => Yii::t('main', 'Verkkolaskuosoite'),
-			'alv'=> Yii::t('main', 'ALV %'),
-			'hinta_tyyppi'=> Yii::t('main', 'Hinta tyyppi'),
-			'hinta'=> Yii::t('main', 'Hinta (ALV0)'),
 			'muistutuslasku_auto'=> Yii::t('main', 'Muistutuslasku automaatiseesti'),
 			'kirjeenluokka'=> Yii::t('main', 'Kirjeenluokka'),
 			'myyja'=> Yii::t('main', 'Myyjä'),
 			'salasana'=> Yii::t('main', 'Extranet-salasana'),
 			'sahkopostilaskuosoite'=> Yii::t('main', 'Sähköpostilaskuosoite'),
-			'hinta_sis_alv' => Yii::t('main', 'Hinta (sis. ALV)'),
 			'app_kayttoehdot' => Yii::t('main', 'eDico käytöehdot hyväksytty'),
+			'hinnasto_id'=> Yii::t('main', 'Hinnasto'),
+
+			'alv'=> Yii::t('main', 'ALV %'),
+			'hinta_tyyppi'=> Yii::t('main', 'Hinta tyyppi'),
+			'hinta'=> Yii::t('main', 'Hinta (ALV0)'),
+			'hinta_sis_alv' => Yii::t('main', 'Hinta (sis. ALV)'),
 		);
 	}
 

@@ -68,7 +68,7 @@ class OnlinevarausController extends Controller
 
         public function init()
         {
-                Yii::app()->theme = 'classic';
+                Yii::app()->theme = 'onlinevaraus';
 		if(isset($_GET['domain']))
 		{
 
@@ -468,6 +468,10 @@ class OnlinevarausController extends Controller
 		if(!isset(Yii::app()->user->domain))
 		die('Error: domain');
 
+		if(isset($_POST['kalenteri_year_month'])){
+			$_SESSION['onlinevaraus']['kalenteri_year_month'] = $_POST['kalenteri_year_month'];
+		}
+
 		$this->renderPartial('aika_ajax');
 	}
 
@@ -514,22 +518,15 @@ class OnlinevarausController extends Controller
 	public function actionPalvelu_ajax()
 	{
 
-	   if(isset($_POST['clear']) and $_POST['clear'] == 'all')
-	   {
-  		if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
-			Onlinevaraus::model()->deletebypk($_SESSION['onlinevaraus']['onlinevarausID']);
-
-		unset($_SESSION['onlinevaraus']);
-		echo 'cleared';
-	   }
-
 	   if(isset($_POST['id']))
 	   {
 
 		// <-- Data
-		$data = OnlinevarausTuotteet::model()->findByPk($_POST['id']);
-		if(isset($data->id))
-		$_SESSION['onlinevaraus']['paapalvelu'] = $data->id;
+		$data = TuotteetPalvelut::model()->findByPk($_POST['id']);
+		if(isset($data->id)){
+			if(!isset($_SESSION['onlinevaraus'])) { $_SESSION['onlinevaraus'] = array(); }
+			$_SESSION['onlinevaraus']['paapalvelu'] = $data->id;
+		}
 
 		$this->renderPartial('palvelu_ajax',array(
 			'data'=>$data,
@@ -559,7 +556,7 @@ class OnlinevarausController extends Controller
 
 		if(isset($_SESSION['onlinevaraus']['paapalvelu']))
 		{
-			$model = OnlinevarausTuotteet::model()->findByPk($_SESSION['onlinevaraus']['paapalvelu']);
+			$model = TuotteetPalvelut::model()->findByPk($_SESSION['onlinevaraus']['paapalvelu']);
 
 			$this->renderPartial('palvelu_save_ajax',array(
 				'model'=>$model,
@@ -571,7 +568,9 @@ class OnlinevarausController extends Controller
 			exit;
 		}
 
-	   } elseif(isset($_POST['tid']) and isset($_POST['pvm'])) {
+	   }
+
+	   if(isset($_POST['tid']) and isset($_POST['pvm'])) {
 
 		if(isset($_SESSION['onlinevaraus']['modelTV']))
 		{
@@ -604,8 +603,9 @@ class OnlinevarausController extends Controller
 			'sivu'=>'aika',
 		));
 
-	   } elseif(isset($_POST['kohde'])) {
+	   }
 
+	   if(isset($_POST['kohde'])) {
 
 		$k = Kohteet::model()->findbypk($_POST['kohde']);
 		if(isset($k->id))
@@ -698,46 +698,174 @@ class OnlinevarausController extends Controller
 
 		if(!isset(Yii::app()->user->domain))
 		die('Error: domain');
+		$asetukset = Asetukset::model()->findbypk(1);
 
+		if(isset($_SESSION['onlinevaraus']) and !is_array($_SESSION['onlinevaraus'])) 
+		{ 
+			unset($_SESSION['onlinevaraus']);
+			$this->redirect('index');
+		}
+		if(isset($_POST['kalenteriin'])){
+			$_SESSION['onlinevaraus']['palvelut_summary'] = true;
+			exit;
+		}
+		if(isset($_POST['poistaTamaTiedosto'])){
+			unlink($_POST['poistaTamaTiedosto']);
+			exit;
+		}
+		if(isset($_POST['getMyPictures']))
+		{
+
+			$i = 0;
+		  	$kuvat = '';
+
+		    	if(isset($_SESSION['onlinevaraus']['kuvat']))
+		    	{
+				foreach(array_reverse(glob('tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/'.$_SESSION['onlinevaraus']['kuvat'].'_*.*')) as $file) {
+				$i++;
+				$explNimi = explode("/",$file);
+			 	$kuvat .= '
+					<div class="form-inline" id="t_'.$_SESSION['onlinevaraus']['kuvat'].$i.'">
+				  		<div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" for="t_'.$_SESSION['onlinevaraus']['kuvat'].$i.'">X</div>
+				  		&nbsp;&nbsp;&nbsp;<a href="../../'.$file.'">'.end($explNimi).'</a>
+					</div>
+				';
+			 	}
+		    	}
+			echo json_encode($kuvat);
+			exit;
+		}
+
+		if(isset($_POST['kuvanLisaaminen']))
+		{
+			function rand_string( $length ) {
+				$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+				return substr(str_shuffle($chars),0,$length);
+			}
+			if(!isset($_SESSION['onlinevaraus']['kuvat']))
+				$_SESSION['onlinevaraus']['kuvat'] = rand_string(8);
+
+			if (!file_exists(Yii::app()->basePath."/../tiedostot/onlinevaraus_temp/".Yii::app()->user->domain)) {
+			  	mkdir(Yii::app()->basePath."/../tiedostot/onlinevaraus_temp/".Yii::app()->user->domain, 0777, true);
+			}
+
+			$uploaddir = Yii::app()->basePath.'/../tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/';
+			$uploadfile = $uploaddir . basename($_SESSION['onlinevaraus']['kuvat'].'_'.$_FILES['file']['name']);
+			if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+				//echo "";
+			}
+			exit;
+		}
+
+		if($asetukset->onlinevaraus_alku == 0){
+			Asetukset::model()->updatebypk(1, array('onlinevaraus_alku'=>8));
+		}
+
+		if($asetukset->onlinevaraus_loppu == 0){
+			Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
+		}
+
+		// <-- Clear
 		if(isset($_GET['keskeyta']))
 		{
+			if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
+			Onlinevaraus::model()->deletebypk($_SESSION['onlinevaraus']['onlinevarausID']);
+
 			if(isset($_SESSION['onlinevaraus']['modelTV']))
-			{
-			$tv = Tyovuoroot::model()->findbypk($_SESSION['onlinevaraus']['modelTV']);
-			if(isset($tv->id))
-			Tyovuoroot::model()->deletebypk($tv->id);
-			}
+			Tyovuoroot::model()->deletebypk($_SESSION['onlinevaraus']['modelTV']);
 
 			unset($_SESSION['onlinevaraus']);
 			$this->redirect('index');
 		}
-	
-		$this->render('index');
+		//     Clear -->
+
+		$this->render('index', array(
+			'asetukset' => $asetukset
+		));
 	}
 
 	public function actionAika()
 	{
+/*
 		if(!isset(Yii::app()->user->domain))
 		die('Error: domain');
 
 		$this->render('aika');
+*/
 	}
 
 	public function actionOsoite()
 	{
+/*
 		if(!isset(Yii::app()->user->domain))
 		die('Error: domain');
 
-		$this->render('osoite');
+		$asetukset = Asetukset::model()->findbypk(1);
+
+		if(isset($_POST['poistaTamaTiedosto'])){
+			unlink($_POST['poistaTamaTiedosto']);
+			exit;
+		}
+		if(isset($_POST['getMyPictures']))
+		{
+
+			$i = 0;
+		  	$kuvat = '';
+
+		    	if(isset($_SESSION['onlinevaraus']['kuvat']))
+		    	{
+				foreach(array_reverse(glob('tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/'.$_SESSION['onlinevaraus']['kuvat'].'_*.*')) as $file) {
+				$i++;
+				$explNimi = explode("/",$file);
+			 	$kuvat .= '
+					<div class="form-inline" id="t_'.$_SESSION['onlinevaraus']['kuvat'].$i.'">
+				  		<div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" for="t_'.$_SESSION['onlinevaraus']['kuvat'].$i.'">X</div>
+				  		&nbsp;&nbsp;&nbsp;<a href="../../'.$file.'">'.end($explNimi).'</a>
+					</div>
+				';
+			 	}
+		    	}
+			echo json_encode($kuvat);
+			exit;
+		}
+
+		if(isset($_POST['kuvanLisaaminen']))
+		{
+			function rand_string( $length ) {
+				$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+				return substr(str_shuffle($chars),0,$length);
+			}
+			if(!isset($_SESSION['onlinevaraus']['kuvat']))
+				$_SESSION['onlinevaraus']['kuvat'] = rand_string(8);
+
+			if (!file_exists(Yii::app()->basePath."/../tiedostot/onlinevaraus_temp/".Yii::app()->user->domain)) {
+			  	mkdir(Yii::app()->basePath."/../tiedostot/onlinevaraus_temp/".Yii::app()->user->domain, 0777, true);
+			}
+
+			$uploaddir = Yii::app()->basePath.'/../tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/';
+			$uploadfile = $uploaddir . basename($_SESSION['onlinevaraus']['kuvat'].'_'.$_FILES['file']['name']);
+			if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+				//echo "";
+			}
+			exit;
+		}
+
+		$this->render('osoite', array(
+			'asetukset' => $asetukset
+		));
+*/
 	}
 
-	public function actionMaksu()
+	public function actionMaksu($json)
 	{
 
 		if(!isset(Yii::app()->user->domain))
 		die('Error: domain');
 
-		$this->render('maksu');
+		$this->renderPartial('maksu', array(
+			'json' => $json
+		));
+
 	}
 	/**
 	 * Manages all models.
@@ -785,23 +913,6 @@ class OnlinevarausController extends Controller
 
 protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWeek) {
 
-
-$months=array(
-	'01'=>'Tammikuu',
-	'02'=>'Helmikuu',
-	'03'=>'Maaliskuu',
-	'04'=>'Huhtikuu',
-	'05'=>'Toukokuu',
-	'06'=>'Kesäkuu',
-	'07'=>'Heinäkuu',
-	'08'=>'Elokuu',
-	'09'=>'Syyskuu',
-	10=>'Lokakuu',
-	11=>'Marraskuu',
-	12=>'Joulukuu'
-	);
-
-
      // Create array containing abbreviations of days of week.
      $daysOfWeek = array('Ma','Ti','Ke','To','Pe','La','Su');
 
@@ -825,7 +936,6 @@ $months=array(
      // Create the table tag opener and day headers
 
      $calendar = "";
-     $calendar .= "<h4>".$months[$month]." $year</h4>";
      $calendar .= "<table class='table table-bordered'>";
      $calendar .= "<tr>";
 
@@ -881,11 +991,11 @@ $months=array(
  	  }
 
 	  $tila = '';
-	  if($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] != date("Y-m-d", strtotime($date)))
+	  if($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and date("Y-m-d", strtotime($_SESSION['onlinevaraus']['valittuPVM'])) != date("Y-m-d", strtotime($date)))
 		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
 	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and !isset($_SESSION['onlinevaraus']['valittuPVM']))
 		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
-	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] == date("Y-m-d", strtotime($date)))
+	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and date("Y-m-d", strtotime($_SESSION['onlinevaraus']['valittuPVM'])) == date("Y-m-d", strtotime($date)))
 		 $tila .= '<td class="day link orangeColor cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
 	  elseif($date < date("Y-m-d"))
 		 $tila .= '<td class="day kiinni" >'.$currentDay.'</td>';
@@ -951,16 +1061,6 @@ $months=array(
 
 		$alkuAstetuksesta = strtotime($onlinevaraus_alku.":00");
 		$loppuAstetuksesta = strtotime($onlinevaraus_loppu.":00");
-		$aikavali_1t = 3600;
-		$aikavali_2t = 7200;
-
-/*
-		// <-- Ei lasketa
-		$site = Yii::app()->createController('Site');
-		$eilasketa = $site[0]->eiLasketa();
-		// Ei lasketa -->
-		//AND $eilasketa
-*/
 
 		// <-- Täysin vapaana
    		$sumTunti = (float)$_SESSION['onlinevaraus']['sumTunti'];
@@ -1000,106 +1100,6 @@ $months=array(
 
 
 
-		// <-- Reika vuoron välillä
-		$criteria=new CDbCriteria;
-		$criteria->order = " tid,UNIX_TIMESTAMP(STR_TO_DATE(loppu, '%H:%i'))  ";
-		$criteria->condition = "
-			pvm='".date("d.m.Y", strtotime($date))."'
-			AND tid IN ( SELECT id FROM sivex_ttekijat WHERE aktiivinen=1 AND online_varauksen_valmina=1 )
-			AND UNIX_TIMESTAMP(STR_TO_DATE(alku, '%H:%i')) >='".strtotime($onlinevaraus_alku.":00")."'
-			AND UNIX_TIMESTAMP(STR_TO_DATE(loppu, '%H:%i')) <='".strtotime($onlinevaraus_loppu.":00")."'
-		";
-//			AND alku!='00:00' AND loppu!='00:00'
-		if(!empty($tyo_toimialue))
-		{
-			$criteria->addCondition ("
-				tid IN ( SELECT id FROM sivex_ttekijat WHERE tyo_toimialue LIKE '%".$tyo_toimialue."%' )
-			");
-		}
-
-		if(!empty($sopiiva_tuotteet))
-		{
-			$criteria->addCondition ("
-				tid IN ( SELECT id FROM sivex_ttekijat WHERE onlinevaraus_tuotteet LIKE '%\"".$_SESSION['onlinevaraus']['paapalvelu']."\"%' )
-			");
-		}
-
-
-		$tv = Tyovuoroot::model()->findAll($criteria);
-		$i = 0;
-		$allTyontekijat = array();
-		foreach($tv as $t)
-		{
-		$i++;
-
-			// <-- Ihan ensimmäinen vuoro tietynä päivänä
-			if(!isset($ihanEnsimmainenAlku[$t->tid]))
-			{
-				$ihanEnsimmainenAlku = array();
-				$ihanEnsimmainenAlku[$t->tid] = strtotime($t->alku);
-
-				if( $ihanEnsimmainenAlku[$t->tid]-$alkuAstetuksesta > $sumTuntiSec+$aikavali_1t )
-				{
-			   		$on = 'vapaa';
-					$alku = '';
-					$loppu = '';
-					$alku = $alkuAstetuksesta;
-					$loppu = $alku+$sumTuntiSec;
-					$countStop = strtotime($t->alku)-3600;
-					$tekija = $this->loopForAjaat($t->tid, date("H:i",$alku), date("H:i",$loppu), $date, $sumTuntiMin, $countStop, $tekija);
-					//$tekija[] = array($t->tid, $date, date("H:i",$ihanEnsimmainenAlku[$t->tid]), $t->loppu); // for test
-				}
-			}
-			// Ihan ensimmäinen vuoro tietynä päivänä -->
-
-
-			// <-- Reika vuoron välillä
-			if(isset($edellinenLoppu[$t->tid]) and $edellinenLoppu[$t->tid] > 0
-			and ( strtotime($t->alku)-$edellinenLoppu[$t->tid] > $sumTuntiSec+$aikavali_2t )
-			)
-			{
-		   		$on = 'vapaa';
-				$alku = '';
-				$loppu = '';
-				$alku = $edellinenLoppu[$t->tid]+3600;
-				$loppu = $alku+$sumTuntiSec;
-				$countStop = strtotime($t->alku)-3600;
-				$tekija = $this->loopForAjaat($t->tid, date("H:i",$alku), date("H:i",$loppu), $date, $sumTuntiMin, $countStop, $tekija);
-
-				//$tekija[] = array($t->tid, $date, date("H:i",$edellinenLoppu[$t->tid]), $t->loppu); // for test
-			}
-			// Reika vuoron välillä -->
-
-
-
-			$edellinenAlku = array();
-			$edellinenLoppu = array();
-			$edellinenAlku[$t->tid] = strtotime($t->alku);
-			$edellinenLoppu[$t->tid] = strtotime($t->loppu);
-			$allTyontekijat[$t->tid] = strtotime($t->loppu);
-
-		}
-		// Reika vuoron välillä -->
-
-
-		// <-- Ihan viimeinen vuoro tietynä päivänä
-		$countStop = strtotime($onlinevaraus_loppu.":00");
-		foreach($allTyontekijat as $k=>$t)
-		{
-				$alku = '';
-				$loppu = '';
-				$alku = $t+3600;
-				$loppu = $alku+$sumTuntiSec;
-
-				if($loppu < $countStop)
-				{
-		   			$on = 'vapaa';
-					$tekija = $this->loopForAjaat($k, date("H:i",$alku), date("H:i",$loppu), $date, $sumTuntiMin, $countStop, $tekija);
-				}
-				//$tekija[] = array($k, $date, date("H:i",$t), $t); // for test
-		}
-		// Ihan viimeinen vuoro tietynä päivänä -->
-
 
 
 		ksort($tekija);
@@ -1136,98 +1136,6 @@ $months=array(
 		   return $tekija;
 
 	}
-
-/*
-	protected function pmvCal($date)
-	{
-		$asetukset = Asetukset::model()->findbypk(1);
-
-		$lp = array();
-		$ajaanReika = array();
-		$on = 'vapaa';
-		$aamuOn = 'kiinni';
-		$vuorot = '';
-		$criteria=new CDbCriteria;
-		$criteria->condition = "online_varauksen_valmina=1 ";
-		$tyontekijat = Tyontekijat::model()->findAll($criteria);
-
-		$ti = 0;
-		foreach($tyontekijat as $t)
-		{
-		$ti++;
-		$on = 'vapaa';
-
-		$criteria=new CDbCriteria;
-		$criteria->order = " alku ASC";
-		$criteria->condition = " 
-			pvm='".date("d.m.Y", strtotime($date))."' 
-			AND tid='".$t->id."'
-			AND SUBSTRING_INDEX(alku,':',1) <= '".$asetukset->onlinevaraus_loppu."'
-			AND SUBSTRING_INDEX(alku,':',1) >= '".$asetukset->onlinevaraus_alku."'
-		";
-
-		$tyovuorot = Tyovuoroot::model()->findAll($criteria);
-
-		$a = 0;
-		$l = 0;
-		$l2 = 0;
-
-		$sumTunti = ((float)$_SESSION['onlinevaraus']['sumTunti']*3600)+7199;
-		$sumAamuIlta = ((float)$_SESSION['onlinevaraus']['sumTunti']*3600)+3599;
-		//$realSumMin = (float)$_SESSION['onlinevaraus']['sumTunti']*60;
-		$realSumMin = 24*60;
-
-		    foreach($tyovuorot as $tv)
-		    {
-
-			$on = 'vapaa';
-			$aamuOn = 'kiinni';
-
-			if($a == 0 and strtotime($tv->alku)-strtotime($asetukset->onlinevaraus_alku.":00") >= $sumAamuIlta)
-			{
-			  $on = 'vapaa';
-			  $aamuOn = 'vapaa';
-			  $ajaanReika[$asetukset->onlinevaraus_alku."//".date("H:i",strtotime($asetukset->onlinevaraus_alku.":00 +".$realSumMin." minutes")).'//'.$t->id] = $t->id;
-			}
-
-			if($l > 0 and (strtotime($tv->alku.":00")-$l) <= $sumTunti and $aamuOn == 'kiinni'){
-			  $on = 'kiinni';
-			} elseif($l > 0 and (strtotime($tv->alku.":00")-$l) >= $sumTunti){
-			  $on = 'vapaa';
-			  $l2zapas = date("H:i",strtotime($l2." +1 hour"));
-			  $ajaanReika[$l2zapas."//".date("H:i",strtotime($l2zapas." +".$realSumMin." minutes")).'//'.$t->id] = $t->id;
-			} elseif(strtotime($asetukset->onlinevaraus_loppu.":00")-strtotime($tv->loppu) <= $sumTunti and $aamuOn == 'kiinni'){
-			  $on = 'kiinni';
-			}
-			  $a = strtotime($tv->alku);
-			  $l = strtotime($tv->loppu);
-			  $l2 = $tv->loppu;
-			  $l2zapas = date("H:i",strtotime($l2." +1 hour"));
-
-			  //$vuorot .= $tv->alku.' '.$tv->loppu.' '.$on.'<br>';
-		    }
-
-			// loppuilta
-			if($l > 0 and strtotime($asetukset->onlinevaraus_loppu.":00")-$l >= $sumAamuIlta)
-			{
-			  $on = 'vapaa';
-			  $ajaanReika[$l2zapas."//".date("H:i",strtotime($l2zapas." +".$realSumMin." minutes"))."//".$t->id] = $t->id;
-			}
-
-
-			if($on == 'vapaa')
-			$lp[$t->id] = 'vapaa';
-
-
-		}
-
-	  	if(in_array('vapaa', $lp, true))
-		$on = 'vapaa';
-
-		$return = array($on,$ajaanReika);
-		return $return;
-	}
-*/
 
 
 	protected function pyhatCheck($date){
