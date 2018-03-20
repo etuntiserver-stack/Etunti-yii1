@@ -1131,14 +1131,12 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 		foreach($tv as $t)
 		{
 		$i++;
-
-			$alku = 0;
-			$loppu = 0;
+			$alku 	= 0;
+			$loppu 	= 0;
 			$countStop = strtotime($onlinevaraus_loppu.":00");
 
 			// <-- Edellinen tyovuoro
 			$criteria=new CDbCriteria;
-			//$criteria->select = " id, alku, loppu  ";
 			$criteria->order = " UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'))  ";
 			$criteria->condition = "
 				pvm='".date("d.m.Y", strtotime($date))."'
@@ -1150,7 +1148,6 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 
 			// <-- Seuraava tyovuoro
 			$criteria=new CDbCriteria;
-			//$criteria->select = " id, alku, loppu  ";
 			$criteria->order = " UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'))  ";
 			$criteria->condition = "
 				pvm='".date("d.m.Y", strtotime($date))."'
@@ -1165,12 +1162,21 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 				!isset($tv_prev->id)
 				and ((strtotime($t->alku)-$aikavali-$sumTuntiSec) - $alkuAstetuksesta) >= 0
 			){
-	   		$on = 'vapaa';
-			$alku = $alkuAstetuksesta;
-			$loppu = $alku+$sumTuntiSec;
-			$countStop = strtotime($t->alku)-$aikavali;
+	   		   $on 		= 'vapaa';
+			   $alku 	= $alkuAstetuksesta;
+			   $loppu 	= $alku+$sumTuntiSec;
+			   $countStop 	= strtotime($t->alku)-$aikavali;
 			}
 
+			if(
+				!isset($tv_next->id)
+				and ((strtotime($onlinevaraus_loppu.":00")-strtotime($t->loppu)) - $aikavali+$sumTuntiSec) >= 0
+				and (strtotime($onlinevaraus_loppu.":00")-strtotime($t->loppu)) >= $aikavali+$sumTuntiSec
+			){
+	   		//$on = 'vapaa';
+			//$alku = strtotime($t->loppu)+$aikavali;
+			//$loppu = $alku+$sumTuntiSec;
+			}
 
 			// <-- Suoritus
 			if( $alku != 0 and $loppu != 0 and $countStop != 0 ) {
@@ -1185,11 +1191,13 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 					);
 			}
 			//     Suoritus -->
+	
 
-			//if(isset($tv_next->id))
-			//$tekija[] = array($t->tid, '', $countStop, $tv_next->id); // for test
-
-			//if($i == 1) break;
+			if(isset($tv_prev->id)){
+	   		   $on 		= 'vapaa';
+			   $tekija[] = array($t->tid, '', $countStop, $tv_prev->id); // for test
+			   break;
+			}
 			//break;
 		}
 		// Reika vuoron välillä -->
