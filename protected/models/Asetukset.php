@@ -279,6 +279,7 @@ class Asetukset extends DB2ActiveRecord
 			'edico_tehdyt_tyot' => Yii::t('main', 'Edico tehdyt työt'),
 			'app_matka_osoite' => Yii::t('main', 'Matka voidaan kirjata osoitteelle'),
 			'app_lounastauko_osoite' => Yii::t('main', 'Lounastauko voidaan kirjata osoitteelle'),
+			'tuotteet_palvelut_muoto' => Yii::t('main', 'Laskutuksen hinta. Hinnasto / Asiakas'),
 		);
 	}
 

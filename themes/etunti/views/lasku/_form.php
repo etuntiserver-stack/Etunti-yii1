@@ -529,7 +529,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php 
         	$tal = array(
 			0=>'Hinnaston mukaan',
-			1=>'Asiakaskohteen hinta'
+			1=>'Asiakkaan / kohteen hinta'
 		);
 		$model->tuotteet_palvelut_muoto = $asetukset->tuotteet_palvelut_muoto;
 		echo $form->dropDownList($model,'tuotteet_palvelut_muoto', $tal, 

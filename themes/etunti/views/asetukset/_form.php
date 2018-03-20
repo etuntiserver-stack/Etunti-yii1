@@ -125,18 +125,6 @@
 		<?php echo $form->error($model,'tyontekijan_etunimi_sukunimi_jarjestys'); ?>
 	</div>
 
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tuotteet_palvelut_muoto'); ?>
-		<?php 
-        	$tal = array(
-			0=>'Hinnaston mukaan',
-			1=>'Asiakaskohteen hinta'
-		);
-		echo $form->dropDownList($model,'tuotteet_palvelut_muoto', $tal, 
-		array('class'=>'form-control')) ?>
-		<?php echo $form->error($model,'tuotteet_palvelut_muoto'); ?>
-	</div>
-
 <!--
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'merkkipaivailmoitukset_sahkoposti'); ?>
@@ -312,6 +300,19 @@
   <div class="row form collapse" id="laskutuksenAsetukset">
     <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','Laskutuksen asetukset'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tuotteet_palvelut_muoto'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Hinnaston mukaan',
+			1=>'Asiakkaan / kohteen hinta'
+		);
+		echo $form->dropDownList($model,'tuotteet_palvelut_muoto', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'tuotteet_palvelut_muoto'); ?>
+	</div>
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tilinumero'); ?>
 		<?php echo $form->textField($model,'tilinumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
