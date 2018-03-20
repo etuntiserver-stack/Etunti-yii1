@@ -493,6 +493,20 @@
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'onlinevaraus_aikavali'); ?>
+
+
+		<?php 
+        	$l = array();
+		for ($i = 1; $i <= 4; $i++) {
+        		$l[$i] = $i;
+		}
+		echo $form->dropDownList($model,'onlinevaraus_aikavali', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'onlinevaraus_aikavali'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'onlinevaraus_alku'); ?>
 
 
@@ -505,7 +519,6 @@
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'onlinevaraus_alku'); ?>
 	</div>
-
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'onlinevaraus_loppu'); ?>
