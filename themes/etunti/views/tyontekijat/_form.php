@@ -252,7 +252,7 @@ $(document).ready(function(){
 		<?php
 		$list = array();
 	       	$criteria = new CDbCriteria();
-	       	$criteria->condition = " nayta_sivuilla=1 ";
+	       	$criteria->condition = " nayta_sivuilla=1 and kategoria LIKE '%onlinevaraus%' ";
 	       	$criteria->order = " nimike ";
 		$onlineTuotteet = TuotteetPalvelut::model()->findAll($criteria);
 
