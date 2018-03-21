@@ -1214,17 +1214,15 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 
 			}
 			//     Viimeinen ja sen ennen reikoja -->
-
-
 	
-/*
+			/*
 			if(isset($el)){
 	   		   $on 		= 'vapaa';
 			   $tekija[] = array($t->tid, '', '', $el); // for test
 			   break;
 			}
-*/
-			//break;
+			*/
+
 		}
 		// Reika vuoron välillä -->
 
