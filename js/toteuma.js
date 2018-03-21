@@ -288,10 +288,12 @@ $(document).ready(function(){
         $('#Mobile_loppui').css({"border" : "2px #f14010 solid"}).focus();
         return false;
     }
+/*
     if (Mobile_kohde_kannasta  === '') {
         $('#Mobile_kohde_kannasta').css({"border" : "2px #f14010 solid"}).focus();
         return false;
     }
+*/
     if (Mobile_status  === '') {
         $('#Mobile_status').css({"border" : "2px #f14010 solid"}).focus();
         return false;

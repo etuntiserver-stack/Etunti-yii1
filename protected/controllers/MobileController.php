@@ -962,7 +962,7 @@ function num($val){
 			$k = Kohteet::model()->findbypk($_POST['Mobile']['kohdenID']);
 			$model->attributes=$_POST['Mobile'];
 			$model->time = date("Y-m-d H:i:s",strtotime($_POST['Mobile']['aloitan']));
-			$model->kohde_kannasta=$k->osoite;
+			if( isset($k->id) ) { $model->kohde_kannasta=$k->osoite; } 
 			$model->admin=1;
 
 			if($model->save()){
