@@ -1127,6 +1127,39 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 			$tv_first = Tyovuoroot::model()->find($criteria);
 			//     Ensimmainen tyovuoro -->
 
+			// <-- Reika valilla
+			$criteria=new CDbCriteria;
+			$criteria->order = " UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i')) ASC ";
+			$criteria->condition = "
+				pvm='".$t->pvm."'
+				AND tid='".$t->tid."'
+			";
+			$tv_all = Tyovuoroot::model()->findAll($criteria);
+			foreach($tv_all as $item){
+				if( 
+					isset($edellinen_loppu) 
+					and (strtotime($item->alku)-strtotime($edellinen_loppu)) > $sumTuntiSec+($aikavali*2)
+				){
+					$on = 'vapaa';
+					$alku 	= strtotime($edellinen_loppu)+$aikavali;
+					$loppu 	= $alku+$sumTuntiSec;
+					$countStop = strtotime($item->alku)-$aikavali;
+
+			   		$tekija = $this->loopForAjaat(
+						$t->tid, 
+						date("H:i",$alku), 
+						date("H:i",$loppu), 
+						$date,
+						$sumTuntiMin,
+						$countStop,
+						$tekija
+						);
+				}
+				$edellinen_alku = $item->alku;
+				$edellinen_loppu = $item->loppu;
+			}
+			//     Reika valilla -->
+
 			// <-- Viimeinen tyovuoro
 			$criteria=new CDbCriteria;
 			$criteria->order = " UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i')) DESC ";
@@ -1185,9 +1218,9 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 
 	
 /*
-			if(isset($tv_last->id)){
+			if(isset($el)){
 	   		   $on 		= 'vapaa';
-			   $tekija[] = array($t->tid, '', $countStop, $tv_last->id); // for test
+			   $tekija[] = array($t->tid, '', '', $el); // for test
 			   break;
 			}
 */
