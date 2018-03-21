@@ -1101,29 +1101,11 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 
 		// <-- Reika vuoron välillä
 		$criteria=new CDbCriteria;
-		$criteria->order = " tid, UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'))  ";
+		$criteria->group = " tid  ";
 		$criteria->condition = "
 			pvm='".date("d.m.Y", strtotime($date))."'
 			AND tid IN ( SELECT id FROM sivex_ttekijat WHERE aktiivinen=1 AND online_varauksen_valmina=1 )
 		";
-			/* otetu pois 16.03.2018 */
-			//AND UNIX_TIMESTAMP(STR_TO_DATE(alku, '%H:%i')) >='".strtotime($onlinevaraus_alku.":00")."'
-			//AND UNIX_TIMESTAMP(STR_TO_DATE(loppu, '%H:%i')) <='".strtotime($onlinevaraus_loppu.":00")."'
-
-		if(!empty($tyo_toimialue))
-		{
-			$criteria->addCondition ("
-				tid IN ( SELECT id FROM sivex_ttekijat WHERE tyo_toimialue LIKE '%".$tyo_toimialue."%' )
-			");
-		}
-
-		if(!empty($sopiiva_tuotteet))
-		{
-			$criteria->addCondition ("
-				tid IN ( SELECT id FROM sivex_ttekijat WHERE onlinevaraus_tuotteet LIKE '%\"".$_SESSION['onlinevaraus']['paapalvelu']."\"%' )
-			");
-		}
-
 
 		$aikavali = $asetukset->onlinevaraus_aikavali*3600;
 		$tv = Tyovuoroot::model()->findAll($criteria);
@@ -1135,49 +1117,35 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 			$loppu 	= 0;
 			$countStop = strtotime($onlinevaraus_loppu.":00");
 
-			// <-- Edellinen tyovuoro
+			// <-- Ensimmainen tyovuoro
 			$criteria=new CDbCriteria;
-			$criteria->order = " UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'))  ";
+			$criteria->order = " UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i')) ASC ";
 			$criteria->condition = "
-				pvm='".date("d.m.Y", strtotime($date))."'
+				pvm='".$t->pvm."'
 				AND tid='".$t->tid."'
-				AND UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i')) < '".strtotime($date." ".$t->alku)."'
 			";
-			$tv_prev = Tyovuoroot::model()->find($criteria);
-			//     Edellinen tyovuoro -->
+			$tv_first = Tyovuoroot::model()->find($criteria);
+			//     Ensimmainen tyovuoro -->
 
-			// <-- Seuraava tyovuoro
+			// <-- Viimeinen tyovuoro
 			$criteria=new CDbCriteria;
-			$criteria->order = " UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'))  ";
+			$criteria->order = " UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i')) DESC ";
 			$criteria->condition = "
-				pvm='".date("d.m.Y", strtotime($date))."'
+				pvm='".$t->pvm."'
 				AND tid='".$t->tid."'
-				AND UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i')) > '".strtotime($date." ".$t->loppu)."'
 			";
-			$tv_next = Tyovuoroot::model()->find($criteria);
-			//     Seuraava tyovuoro -->
+			$tv_last = Tyovuoroot::model()->find($criteria);
+			//     Viimeinen tyovuoro -->
 
-
+			// <-- Ensimmainen ja sen ennen reikoja
 			if(
-				!isset($tv_prev->id)
-				and ((strtotime($t->alku)-$aikavali-$sumTuntiSec) - $alkuAstetuksesta) >= 0
+				isset($tv_first->id)
+				and ((strtotime($tv_first->alku)-$aikavali-$sumTuntiSec) - $alkuAstetuksesta) >= 0
 			){
 	   		   $on 		= 'vapaa';
 			   $alku 	= $alkuAstetuksesta;
 			   $loppu 	= $alku+$sumTuntiSec;
-			   $countStop 	= strtotime($t->alku)-$aikavali;
-			}
-
-			if(
-				!isset($tv_next->id)
-				and ((strtotime($onlinevaraus_loppu.":00")-strtotime($t->loppu)) - $aikavali+$sumTuntiSec) >= 0
-				and (strtotime($onlinevaraus_loppu.":00")-strtotime($t->loppu)) >= $aikavali+$sumTuntiSec
-			){
-	   		//$on = 'vapaa';
-			//$alku = strtotime($t->loppu)+$aikavali;
-			//$loppu = $alku+$sumTuntiSec;
-			}
-
+			   $countStop 	= strtotime($tv_first->alku)-$aikavali;
 			// <-- Suoritus
 			if( $alku != 0 and $loppu != 0 and $countStop != 0 ) {
 			$tekija = $this->loopForAjaat(
@@ -1191,13 +1159,43 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 					);
 			}
 			//     Suoritus -->
-	
+			}
+			//     Ensimmainen ja sen ennen reikoja -->
 
-			if(isset($tv_prev->id)){
+			// <-- Viimeinen ja sen ennen reikoja
+			if(
+				isset($tv_last->id)
+				and (strtotime($onlinevaraus_loppu.":00") - (strtotime($tv_last->loppu)+$aikavali+$sumTuntiSec)) >= 0
+			){
 	   		   $on 		= 'vapaa';
-			   $tekija[] = array($t->tid, '', $countStop, $tv_prev->id); // for test
+			   $alku 	= strtotime($tv_last->loppu)+$aikavali;
+			   $loppu 	= $alku+$sumTuntiSec;
+			   $countStop 	= strtotime($onlinevaraus_loppu.":00");
+			// <-- Suoritus
+			if( $alku != 0 and $loppu != 0 and $countStop != 0 ) {
+			$tekija = $this->loopForAjaat(
+					$t->tid, 
+					date("H:i",$alku), 
+					date("H:i",$loppu), 
+					$date,
+					$sumTuntiMin,
+					$countStop,
+					$tekija
+					);
+			}
+			//     Suoritus -->
+			}
+			//     Viimeinen ja sen ennen reikoja -->
+
+
+	
+/*
+			if(isset($tv_last->id)){
+	   		   $on 		= 'vapaa';
+			   $tekija[] = array($t->tid, '', $countStop, $tv_last->id); // for test
 			   break;
 			}
+*/
 			//break;
 		}
 		// Reika vuoron välillä -->
