@@ -1146,9 +1146,8 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 			   $alku 	= $alkuAstetuksesta;
 			   $loppu 	= $alku+$sumTuntiSec;
 			   $countStop 	= strtotime($tv_first->alku)-$aikavali;
-			// <-- Suoritus
-			if( $alku != 0 and $loppu != 0 and $countStop != 0 ) {
-			$tekija = $this->loopForAjaat(
+
+			   $tekija = $this->loopForAjaat(
 					$t->tid, 
 					date("H:i",$alku), 
 					date("H:i",$loppu), 
@@ -1157,8 +1156,6 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 					$countStop,
 					$tekija
 					);
-			}
-			//     Suoritus -->
 			}
 			//     Ensimmainen ja sen ennen reikoja -->
 
@@ -1171,9 +1168,8 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 			   $alku 	= strtotime($tv_last->loppu)+$aikavali;
 			   $loppu 	= $alku+$sumTuntiSec;
 			   $countStop 	= strtotime($onlinevaraus_loppu.":00");
-			// <-- Suoritus
-			if( $alku != 0 and $loppu != 0 and $countStop != 0 ) {
-			$tekija = $this->loopForAjaat(
+
+			   $tekija = $this->loopForAjaat(
 					$t->tid, 
 					date("H:i",$alku), 
 					date("H:i",$loppu), 
@@ -1182,8 +1178,7 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 					$countStop,
 					$tekija
 					);
-			}
-			//     Suoritus -->
+
 			}
 			//     Viimeinen ja sen ennen reikoja -->
 
