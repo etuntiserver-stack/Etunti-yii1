@@ -551,7 +551,7 @@
 
 
 		<?php 
-        	$l = array(10,20,30,40,50,60,70,80,90);
+        	$l = array(10=>10,20=>20,30=>30,40=>40,50=>50,60=>60,70=>70,80=>80,90=>90);
 		echo $form->dropDownList($model,'onlinevaraus_autoremove', $l, 
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'onlinevaraus_autoremove'); ?>
