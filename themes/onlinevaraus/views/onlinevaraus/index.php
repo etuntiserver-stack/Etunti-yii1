@@ -90,7 +90,7 @@
 	   <?php $palvelu_style = ''; ?>
 	   <?php endif; ?>
 
-	   <div class="row" id="aika_summary" <?=$palvelu_style?>>
+	   <div class="container-fluid" id="aika_summary" <?=$palvelu_style?>>
   	    <h4 class="title-subtitle text-center"><?php echo Yii::t('main', 'Aika'); ?></h4>
  		<div id="kalenterit"></div>
  		<div id="aikoja"></div>
@@ -105,7 +105,7 @@
 	   <?php $osoite_style = 'style="display:none"'; ?>
 	   <?php endif; ?>
 
-  	   <div class="row osoitelaatikko" <?=$osoite_style?>">
+  	   <div class="container-fluid osoitelaatikko" <?=$osoite_style?>">
   		<div id="fullLomake">
   		   <h4 class="title-subtitle text-center"><?php echo Yii::t('main', 'Osoite'); ?></h4>
   		   <span class="text-sininen"><?php echo Yii::t('main', 'Tunnistaudu sähköpostilla'); ?></span>
@@ -195,7 +195,7 @@
   		      <div class="row">
   		       <div class="col-sm-12">
   			<label><?php echo Yii::t('main', 'Lisätietoja'); ?></label>
-  			  <textarea id="lisatietoja" class="form-control input-lg" placeholder="<?php echo Yii::t('main', 'Lemmikkejä, ovikoodi ja muuta lisätietoa'); ?>" rows="5"></textarea>
+  			  <textarea id="lisatietoja" class="form-control input-lg" placeholder="<?php echo Yii::t('main', 'Lemmikkejä, ovikoodi ja muuta lisätietoa'); ?>" rows="3"></textarea>
   		       </div>
   		      </div>
 
@@ -222,6 +222,53 @@
   		     </div><!--lomake-->
   		</div><!-- Full lomake -->
 		<br>
+
+		<?php
+		  // <-- Kupongi
+		  if(isset($_SESSION['onlinevaraus']['kupongi']))
+		  {
+			$kup = Kupongit::model()->findbypk($_SESSION['onlinevaraus']['kupongi']);
+
+		        if(isset($kup->id))
+			{
+	
+			if($kup->maara_tyyppi == 'euro')
+			$kup_maara = '-'.$kup->euro_maara.' &euro;';
+			if($kup->maara_tyyppi == 'prosentti')
+			$kup_maara = '-'.$kup->prosentti_maara.'%';
+
+			echo '
+			<div class="row">
+			 <div class="col-xs-2">
+				<i class="fa fa-star fa-2x" aria-hidden="true"></i>
+			 </div><div class="col-xs-10">
+				'.Yii::t('main', 'Alennuskoodi').': '.$kup_maara.'
+			 </div>
+			</div>
+		 	';
+			}
+		  }
+		?>
+
+		<?php if(!isset($_SESSION['onlinevaraus']['kupongi'])) : ?>
+		<div class="row">
+		 <div class="col-xs-2">
+		   	<i class="fa fa-gift fa-2x"></i> 
+		 </div>
+		 <div class="col-xs-10">
+		    <div class="input-group">
+		      <input type="text" class="form-control kupongi_id" placeholder="Alennuskoodi">
+		      <span class="input-group-btn">
+		        <button class="btn btn-warning kupongi_add" type="button"><?=Yii::t('main', 'Käytä')?></button>
+		      </span>
+		    </div>
+		    <div class="kupongi_result"></div>
+		 </div>
+		</div>
+		<?php endif; ?>
+		<!-- /Kupongi -->
+
+		<br>
   		<p><button class="tallennaUusi btn btn-lg btn-block btn-success">Siirry maksamaan <i class="caret"></i></button></p>
 		<br>
   	   </div><!--osoitelaatikko-->
@@ -232,7 +279,7 @@
 	   <?php $maksu_style = 'style="display:none"'; ?>
 	   <?php endif; ?>
 
-	   <div class = "row maksulaatikko" <?=$maksu_style?>>
+	   <div class="container-fluid maksulaatikko" <?=$maksu_style?>>
             <h3> Maksu </h3>
    	    <div id="maksu_content">
 		<?php 

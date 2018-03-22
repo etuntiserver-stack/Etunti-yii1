@@ -271,12 +271,12 @@
 	 </div>
 	 <div class="col-xs-10">
 	    <div class="input-group">
-	      <input type="text" id="kupongi_id" class="form-control" placeholder="Alennuskoodi">
+	      <input type="text" class="form-control kupongi_id" placeholder="Alennuskoodi">
 	      <span class="input-group-btn">
-	        <button class="btn btn-warning" id="kupongi_add" type="button">'.Yii::t('main', 'Käytä').'</button>
+	        <button class="btn btn-warning kupongi_add" type="button">'.Yii::t('main', 'Käytä').'</button>
 	      </span>
 	    </div>
-	    <div id="kupongi_result"></div>
+	    <div class="kupongi_result"></div>
 	 </div>
 	</div>';
 	}
