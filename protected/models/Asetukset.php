@@ -235,7 +235,7 @@ class Asetukset extends DB2ActiveRecord
 			'onlinevaraus_takuu_turvallisuus' => Yii::t('main', 'Takuu ja turvallisuus'),
 			'onlinevaraus_asiakaspalvelu' => Yii::t('main', 'Asiakaspalvelu'),
 			'onlinevaraus_arvio_siivouksesta' => Yii::t('main', 'Arvio palvelusta'),
-			'onlinevaraus_aikavali' => Yii::t('main', 'Varauksessa matka-aika yht. (h)'),
+			'onlinevaraus_aikavali' => Yii::t('main', 'Varauksessa matka-aika, ennen ja jälkeen'),
 			'aikavali_halytys' => Yii::t('main', 'Aikaväli hälytys (min)'),
 			'ilmoitus_avoimista_kohteesta_sahkopostiin' => Yii::t('main', 'Ilmoitus määräajan ylittäneistä kohteista sähköpostiin'),
 			'ilmoitus_myohastyneista_kohteesta_sahkopostiin' => Yii::t('main', 'Ilmoitus myöhästyneistä kohteesta sähköpostiin'),

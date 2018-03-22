@@ -2,20 +2,20 @@ $(document).ready(function(){
 
 
 
-$(document).delegate("#kupongi_add","click",function(){
+$(document).delegate(".kupongi_add","click",function(){
    $.ajax({
-	url: 'kupongi_checker?kupongi='+$('#kupongi_id').val(),
+	url: 'kupongi_checker?kupongi='+$('.kupongi_id').val(),
 	//data:{ kupongi : $('#kupongi_id').val() },
 	type:'GET',
 	success:function(data){
 		console.log(data);
 		if(data !== '')
 		{
-			$("#kupongi_result").html('<span class="text-success">Alennuskoodi on voimassa.</span>');
+			$(".kupongi_result").html('<span class="text-success">Alennuskoodi on voimassa.</span>');
 			ajaaPalveluSave();
 
 		} else {
-			$("#kupongi_result").html('<span class="text-danger">Alennuskoodi ei ole voimassa.</span>');
+			$(".kupongi_result").html('<span class="text-danger">Alennuskoodi ei ole voimassa.</span>');
 		}
    	},
 	error:function(data){

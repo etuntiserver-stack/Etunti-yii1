@@ -10,8 +10,7 @@
 
 ?>
 <style>
-body{ margin: 40px; }
-table{ background: white; }
+body{ background: white; }
 </style>
 
 <div id="rekisteriteloste">
