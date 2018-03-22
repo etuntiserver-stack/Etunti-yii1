@@ -214,12 +214,13 @@ class OnlinevarausController extends Controller
 	public function actionRekisteriseloste()
 	{
 
+	   if( isset(Yii::app()->user->domain) ){
 		$rt = Asetukset::model()->findbypk(1);
 		$rekisteriseloste = json_decode($rt->rekisteriseloste);
 		$this->render('rekisteriseloste',array(
 			'rekisteriseloste'=>$rekisteriseloste
 		));
-
+	   }
 	}
 
 	public function actionKaikki()
