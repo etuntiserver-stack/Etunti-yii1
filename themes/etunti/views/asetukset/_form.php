@@ -545,6 +545,18 @@
 		<?php echo $form->error($model,'onlinevaraus_viikonlopput'); ?>
 	</div>
 
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'onlinevaraus_autoremove'); ?>
+
+
+		<?php 
+        	$l = array(10,20,30,40,50,60,70,80,90);
+		echo $form->dropDownList($model,'onlinevaraus_autoremove', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'onlinevaraus_autoremove'); ?>
+	</div>
+
     </div><div class="col-sm-5">
 
     <legend><h2><?php echo Yii::t('main','Muut'); ?></h2></legend>

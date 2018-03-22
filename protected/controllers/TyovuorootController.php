@@ -2755,11 +2755,12 @@ class TyovuorootController extends Controller
 	protected function poistaminenOnlineVarauksetJokaMeniOhi()
 	{
 
+		$asetukset = Asetukset::model()->findByPk(1);
 		// <-- Poistaminen
 		$criteria=new CDbCriteria;
 		$criteria->order= " id DESC "; 
 		$criteria->condition= " 
-			(time + INTERVAL 1 DAY) < NOW()
+			(time + INTERVAL ".$asetukset->onlinevaraus_autoremove." MINUTE) < NOW()
 			AND osoiteOnline=1
 		";
 		$poistaminen = Tyovuoroot::model()->deleteAll($criteria);
