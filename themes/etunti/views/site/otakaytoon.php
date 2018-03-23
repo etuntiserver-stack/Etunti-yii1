@@ -1,5 +1,5 @@
 <?php
-
+$body = '';
 if($tila == 'onlinevaraus'){
    $asiasta = 'onlinevarauksesta';
    $body = '<p>Haluan, että Etunti on minuun yhteydessä online-varaukseen liittyen.</p>';
@@ -11,7 +11,9 @@ if($tila == 'lasku'){
 	<p>Välittäjän tunnukset syötetään asetuksissa. Välittäjätunnukset saat helposti kauttamme.</p>
 	<p><b>Haluan että soitatte minulle ja kerrotte tarkemmin: </b></p>';
 }
-
+if( empty($body) ){
+	die('Error: empty body');
+}
 			echo '
 			<div class="modal show" id="myModalIlmoitus" role="dialog">
 			  <div class="modal-dialog" role="document">
