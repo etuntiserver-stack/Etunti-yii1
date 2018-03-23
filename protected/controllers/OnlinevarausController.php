@@ -69,6 +69,11 @@ class OnlinevarausController extends Controller
         public function init()
         {
                 Yii::app()->theme = 'onlinevaraus';
+		if(!isset(Yii::app()->user->domain))
+		{
+			Yii::app()->user->setState('domain', 'sivex');
+			$this->redirect(array('index', 'domain' => 'sivex'));
+		}
 		if(isset($_GET['domain']))
 		{
 
