@@ -411,6 +411,8 @@ class OnlinevarausController extends Controller
 				$ov = new Onlinevaraus;
 			}
 
+			if( isset($_POST['yhteyshenkilo']) )
+			{
 				if(isset($_SESSION['onlinevaraus']['kohde_id']))
 				$ov->kohde_id 		= $_SESSION['onlinevaraus']['kohde_id'];
 
@@ -458,9 +460,10 @@ class OnlinevarausController extends Controller
 					var_dump($ov->errors);
 				}
 
-
+			}
 	
-
+			echo json_encode('errorLuoUusi');
+			exit;
 	}
 
 
