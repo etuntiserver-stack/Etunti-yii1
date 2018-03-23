@@ -1047,6 +1047,11 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 
 	protected function pmvCal($date)
 	{
+		if( !isset($_SESSION['onlinevaraus']['sumTunti']) ){
+			echo json_encode('sumTunti Error');
+			exit;
+		}
+
 		$tyo_toimialue = '';
 		if(isset($_SESSION['onlinevaraus']['tyo_toimialue']) and !empty($_SESSION['onlinevaraus']['tyo_toimialue']))
 		$tyo_toimialue 	= $_SESSION['onlinevaraus']['tyo_toimialue'];
