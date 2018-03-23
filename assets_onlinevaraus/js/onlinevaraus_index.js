@@ -12,10 +12,34 @@ $(document).delegate(".kupongi_add","click",function(){
 		if(data !== '')
 		{
 			$(".kupongi_result").html('<span class="text-success">Alennuskoodi on voimassa.</span>');
-			ajaaPalveluSave();
+			//ajaaPalveluSave();
+			window.location.reload();
 
 		} else {
 			$(".kupongi_result").html('<span class="text-danger">Alennuskoodi ei ole voimassa.</span>');
+		}
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+});
+
+$(document).delegate(".kupongi_add_p","click",function(){
+   $.ajax({
+	url: 'kupongi_checker?kupongi='+$('.kupongi_id_p').val(),
+	//data:{ kupongi : $('#kupongi_id').val() },
+	type:'GET',
+	success:function(data){
+		console.log(data);
+		if(data !== '')
+		{
+			$(".kupongi_result_p").html('<span class="text-success">Alennuskoodi on voimassa.</span>');
+			//ajaaPalveluSave();
+			window.location.reload();
+
+		} else {
+			$(".kupongi_result_p").html('<span class="text-danger">Alennuskoodi ei ole voimassa.</span>');
 		}
    	},
 	error:function(data){
