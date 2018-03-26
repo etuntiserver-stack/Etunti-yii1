@@ -672,7 +672,7 @@ Etunti
 
 'ilmainen_maksulliseksi' => 'Perusversio muutettu Laajaksi',
 'new_domain' => 'Yritys on rekisteröinyt Perusversion',
-
+'errorLuoUusiOnlinevaraus' => 'Virhe! Osoite lomake.',
 
 	);
 

@@ -468,7 +468,7 @@ class OnlinevarausController extends Controller
 
 			}
 	
-			echo json_encode('errorLuoUusi');
+			echo json_encode(Yii::t('main', 'errorLuoUusiOnlinevaraus'));
 			exit;
 	}
 
