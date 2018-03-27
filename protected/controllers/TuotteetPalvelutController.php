@@ -51,18 +51,18 @@ class TuotteetPalvelutController extends Controller
 		if(isset(Yii::app()->user->adminPaketti))
 		$tas = explode(",",Yii::app()->user->adminPaketti);
 
-		if(isset(Yii::app()->user->adminID) and in_array('5',$tas))
+		if(isset(Yii::app()->user->adminID) and in_array('4',$tas))
 		{
 		   $m = Administrators::model()->findbypk(Yii::app()->user->adminID);
 	       	   if($m->id == Yii::app()->user->adminID)
 		   {
 			return true;
 		   } else {
-			$this->redirect(array('/site/otakaytoon', 'tila' => 'edico'));
+			$this->redirect(array('/site/otakaytoon', 'tila' => 'lasku'));
 		   }		
 
 		} else {
-			$this->redirect(array('/site/otakaytoon', 'tila' => 'edico'));
+			$this->redirect(array('/site/otakaytoon', 'tila' => 'lasku'));
 		}
 	}
 
