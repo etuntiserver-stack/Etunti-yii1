@@ -1093,6 +1093,7 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 			aktiivinen=1
 			AND online_varauksen_valmina=1 
 			AND id NOT IN ( SELECT tid FROM sivex_tvuoro WHERE pvm='".date("d.m.Y", strtotime($date))."' )
+			AND id NOT IN ( SELECT tid FROM vuosilomat WHERE pvm='".date("Y-n-j", strtotime($date))."' )
 		";
 		if(!empty($tyo_toimialue))
 		{
@@ -1123,6 +1124,7 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 		$criteria->condition = "
 			pvm='".date("d.m.Y", strtotime($date))."'
 			AND tid IN ( SELECT id FROM sivex_ttekijat WHERE aktiivinen=1 AND online_varauksen_valmina=1 )
+			AND tid NOT IN ( SELECT tid FROM vuosilomat WHERE pvm='".date("Y-n-j", strtotime($date))."' )
 		";
 
 		$aikavali = $asetukset->onlinevaraus_aikavali*3600;
