@@ -28,7 +28,7 @@ class OnlinevarausController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'valmis', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'luouusi', 'checkout', 'maksettu', 'rekisteriseloste', 'tidtietoja', 'get_lomake_ajax', 'kupongi_checker', 'otakaytoon'),
+				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'valmis', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'luouusi', 'checkout', 'maksettu', 'rekisteriseloste', 'tidtietoja', 'get_lomake_ajax', 'kupongi_checker', 'otakaytoon', 'index_temp'),
                 		'users'=>array("*"),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -103,10 +103,13 @@ class OnlinevarausController extends Controller
 			$this->redirect(array('index'));
 		}
 
-		if(!isset(Yii::app()->user->domain))
+		if( !isset(Yii::app()->user->domain) )
 		{
-			Yii::app()->user->setState('domain', 'sivex');
-			$this->redirect(array('index', 'domain' => 'sivex'));
+			$domainit = Domainit::model()->findAll(" yritys!='' ");
+			$this->renderPartial('index_temp',array(
+				'domainit'=>$domainit
+			));
+			exit;
 		}
 
 		parent::init();
