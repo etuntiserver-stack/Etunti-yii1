@@ -45,9 +45,9 @@
 		$tyovuorot = array(0=>null,1=>'Luo työvuoro',2=>'Muokaa työvuoro',3=>'Poista työvuoro');
 		$array['tyovuorot'] = $tyovuorot;
 	}
-	if(isset(Yii::app()->user->adminID) and in_array('4',$tas))
+	if(isset(Yii::app()->user->adminID) and in_array('3',$tas))
 	{
-		$tuotteet = array(0=>'Onlinevaraus tuotteet taulu',1=>'Luo tuote',2=>'Muoka tuote',3=>'Poista tuote');
+		$tuotteet = array(0=>'Tuotteet ja palvelut',1=>'Luo tuote',2=>'Muoka tuote',3=>'Poista tuote');
 		$array['onlineTuotteet'] = $tuotteet;
 	}
 	if(isset(Yii::app()->user->adminID) and in_array('5',$tas))
