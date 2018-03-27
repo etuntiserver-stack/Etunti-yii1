@@ -105,7 +105,7 @@ class OnlinevarausController extends Controller
 
 		if( !isset(Yii::app()->user->domain) )
 		{
-			$domainit = Domainit::model()->findAll(" yritys!='' ");
+			$domainit = Domainit::model()->findAll(" yritys!='' AND paketti LIKE '%4%' ");
 			$this->renderPartial('index_temp',array(
 				'domainit'=>$domainit
 			));
