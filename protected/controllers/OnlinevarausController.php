@@ -253,7 +253,7 @@ class OnlinevarausController extends Controller
 		if(isset($_GET['tila']) and !empty($_GET['tila']))
 	        	$criteria->addCondition (" tila='".$_GET['tila']."' ");
 
-		if(isset($_GET['tulosta']))
+		if(isset($_POST['tulosta']))
 		{
 
 			$model = Onlinevaraus::model()->findAll($criteria);
