@@ -46,6 +46,12 @@ class Tietosuoja extends DB2ActiveRecord
                      'onlinevaraus_viesti' => 'TEXT',
                      'onlinevaraus_sailytysajan_tyyppi' => 'int(1)',
                      'onlinevaraus_sailytysaika_lukumaara' => 'int(3)',
+
+                     'edico_vinkki_oikeusperuste' => 'varchar(255)',
+                     'edico_vinkki_kayttotarkoitus' => 'TEXT',
+                     'edico_vinkki_viesti' => 'TEXT',
+                     'edico_vinkki_sailytysajan_tyyppi' => 'int(1)',
+                     'edico_vinkki_sailytysaika_lukumaara' => 'int(3)',
 		);
 		$is_added_somthing = false;
 		foreach($table_structure as $key=>$value)
@@ -76,13 +82,20 @@ class Tietosuoja extends DB2ActiveRecord
 			array('
 				asiakas_sailytysajan_tyyppi, asiakas_sailytysaika_lukumaara, 
 				tyontekija_sailytysajan_tyyppi, tyontekija_sailytysaika_lukumaara,
-				onlinevaraus_sailytysajan_tyyppi, onlinevaraus_sailytysaika_lukumaara
+				onlinevaraus_sailytysajan_tyyppi, onlinevaraus_sailytysaika_lukumaara,
+				edico_vinkki_sailytysajan_tyyppi, edico_vinkki_sailytysaika_lukumaara
 			', 'numerical', 'integerOnly'=>true),
-			array('asiakas_oikeusperuste, tyontekija_oikeusperuste, onlinevaraus_oikeusperuste', 'length', 'max'=>255),
+			array('
+				asiakas_oikeusperuste, 
+				tyontekija_oikeusperuste, 
+				onlinevaraus_oikeusperuste,
+				edico_vinkki_oikeusperuste
+			', 'length', 'max'=>255),
 			array('
 				asiakas_kayttotarkoitus, asiakas_viesti,
 				tyontekija_kayttotarkoitus, tyontekija_viesti,
-				onlinevaraus_kayttotarkoitus, onlinevaraus_viesti
+				onlinevaraus_kayttotarkoitus, onlinevaraus_viesti,
+				edico_vinkki_kayttotarkoitus, edico_vinkki_viesti
 			', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -125,6 +138,12 @@ class Tietosuoja extends DB2ActiveRecord
 			'onlinevaraus_sailytysajan_tyyppi' => Yii::t('main', 'Säilytysajan tyyppi'),
 			'onlinevaraus_sailytysaika_lukumaara' => Yii::t('main', 'Säilytysaika'),
 			'onlinevaraus_viesti' => Yii::t('main', 'Viesti'),
+
+			'edico_vinkki_oikeusperuste' => Yii::t('main', 'Oikeusperuste'),
+			'edico_vinkki_kayttotarkoitus' => Yii::t('main', 'Käyttotarkoitus'),
+			'edico_vinkki_sailytysajan_tyyppi' => Yii::t('main', 'Säilytysajan tyyppi'),
+			'edico_vinkki_sailytysaika_lukumaara' => Yii::t('main', 'Säilytysaika'),
+			'edico_vinkki_viesti' => Yii::t('main', 'Viesti'),
 		);
 	}
 

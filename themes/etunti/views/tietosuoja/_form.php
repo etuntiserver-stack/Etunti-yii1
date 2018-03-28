@@ -136,6 +136,45 @@
 		<?php echo $form->error($model,'onlinevaraus_viesti'); ?>
 	</div>
 
+	<hr>
+	<h4><?= Yii::t('main', 'eDico vinkki säilyttämisen'); ?></h4>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'edico_vinkki_oikeusperuste'); ?>
+		<?php echo $form->textField($model,'edico_vinkki_oikeusperuste', array('class' => 'form-control')); ?>
+		<?php echo $form->error($model,'edico_vinkki_oikeusperuste'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'edico_vinkki_kayttotarkoitus'); ?>
+		<?php echo $form->textarea($model,'edico_vinkki_kayttotarkoitus', array('class' => 'form-control')); ?>
+		<?php echo $form->error($model,'edico_vinkki_kayttotarkoitus'); ?>
+	</div>
+
+	<div class="section fill mb5 row">
+	   <div class="col-sm-6">
+		<?php echo $form->labelEx($model,'edico_vinkki_sailytysajan_tyyppi'); ?>
+		<?php
+		$list = array(0=>'Päivä',1=>'kk',2=>'Vuosi');
+        	echo $form->dropDownList($model, 'edico_vinkki_sailytysajan_tyyppi', $list,
+		array('class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'edico_vinkki_sailytysajan_tyyppi'); ?>
+	   </div>
+
+	   <div class="col-sm-6">
+		<?php echo $form->labelEx($model,'edico_vinkki_sailytysaika_lukumaara'); ?>
+		<?php echo $form->numberField($model,'edico_vinkki_sailytysaika_lukumaara', array('class' => 'form-control')); ?>
+		<?php echo $form->error($model,'edico_vinkki_sailytysaika_lukumaara'); ?>
+	   </div>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'edico_vinkki_viesti'); ?>
+		<?php echo $form->textarea($model,'edico_vinkki_viesti', array('class' => 'form-control')); ?>
+		<?php echo $form->error($model,'edico_vinkki_viesti'); ?>
+	</div>
+
 	<div class="section">
 		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('main', 'Luo') : Yii::t('main', 'Tallenna'),array('class'=>'btn btn-primary myBgColors')); ?>
 	</div>
