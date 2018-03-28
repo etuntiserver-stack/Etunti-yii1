@@ -212,4 +212,32 @@ class TietosuojaController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	protected function AsiakasMobileLaskin()
+	{
+		$last_pvm = '';
+		$ts=Tietosuoja::model()->findByPk(1);
+		if( $ts->asiakas_sailytysajan_tyyppi == 0 ){
+			$last_pvm = date("Y-m-d", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." day"));
+		}
+		if( $ts->asiakas_sailytysajan_tyyppi == 1 ){
+			$last_pvm = date("Y-m-d", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." month"));
+		}
+		if( $ts->asiakas_sailytysajan_tyyppi == 2 ){
+			$last_pvm = date("Y-m-d", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." year"));
+		}
+
+		$data = array();
+	       	$criteria = new CDbCriteria();
+	       	//$criteria->select = " id,kohdenID, DATE(time) as time"; 
+	       	$criteria->order = " DATE(time) DESC"; 
+	       	$criteria->group = " kohdenID DESC"; 
+	       	$criteria->condition = " 
+			kohdenID!=0
+		";
+//			AND DATE(time) > $last_pvm
+		$data = Mobile::model()->findAll($criteria);
+
+		return array($last_pvm, $data);
+	}
 }

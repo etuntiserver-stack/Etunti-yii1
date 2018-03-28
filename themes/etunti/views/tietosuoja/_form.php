@@ -58,6 +58,40 @@
 		<?php echo $form->error($model,'asiakas_viesti'); ?>
 	</div>
 
+ </div>
+ <div class="col-sm-4">
+
+	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?></h3></legend>
+	<h4><?= Yii::t('main', 'Asiakkaat joille pitää soittaa'); ?></h4>
+
+	<div class="section fill mb5" style="height:280px;overflow: auto">
+	<label>Mobile taulussa rivit ennen kun <?= date("d.m.Y", strtotime($this->AsiakasMobileLaskin()[0]))?> </label>
+	<table class="table table-bordered table-striped">
+	<tr>
+	<th>#</th>
+	<th>Kohde</th>
+	<th>Puhelin</th>
+	</tr>
+	<?php foreach($this->AsiakasMobileLaskin()[1] as $t) : ?>
+	<?php 
+		//if( strtotime($t->time) > strtotime($this->AsiakasMobileLaskin()[0]) ){ continue; }
+		$nimi = ''; 
+		//if($asiakas->tyyppi == 'yritys'){$nimi = $asiakas->yrityksen_nimi;}
+		//if($asiakas->tyyppi == 'henkilo'){$nimi = $asiakas->yhteyshenkilo;}
+	?>
+	<tr>
+	 <td><?=$t->id?></td>
+	 <td><?=$t->kohdenID?></td>
+	 <td><?=date("d.m.Y", strtotime($t->time))?></td>
+	</tr>
+	<?php endforeach; ?>
+	</table>
+	</div>
+
+ </div>
+</div>
+<div class="row">
+ <div class="col-sm-3">
 	<hr>
 	<h4><?= Yii::t('main', 'Työntekijän henkilötietojen säilyttämisen'); ?></h4>
 
@@ -137,7 +171,7 @@
 	</div>
 
 	<hr>
-	<h4><?= Yii::t('main', 'eDico vinkki säilyttämisen'); ?></h4>
+	<h4><?= Yii::t('main', 'eDico vinkki henkilötietojen säilyttämisen'); ?></h4>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'edico_vinkki_oikeusperuste'); ?>
