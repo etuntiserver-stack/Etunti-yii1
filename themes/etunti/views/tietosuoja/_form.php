@@ -62,7 +62,7 @@
  <div class="col-sm-6">
 
 	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?></h3></legend>
-	<h4><?= Yii::t('main', 'Asiakkaat joille pitää soittaa'); ?></h4>
+	<h4><?= Yii::t('main', 'Asiakkaat jotka vanhentunut'); ?></h4>
 
 	<div class="section fill mb5" style="height:280px;overflow: auto">
 	<label>Mobile taulussa rivit ennen kun <?= date("d.m.Y", strtotime($this->AsiakasMobileLaskin()[0]))?> </label>
@@ -100,6 +100,7 @@
 </div>
 <div class="row">
  <div class="col-sm-3">
+
 	<hr>
 	<h4><?= Yii::t('main', 'Työntekijän henkilötietojen säilyttämisen'); ?></h4>
 
@@ -138,6 +139,48 @@
 		<?php echo $form->textarea($model,'tyontekija_viesti', array('class' => 'form-control')); ?>
 		<?php echo $form->error($model,'tyontekija_viesti'); ?>
 	</div>
+
+ </div>
+ <div class="col-sm-6">
+	<hr>
+	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?></h3></legend>
+	<h4><?= Yii::t('main', 'Työntekijät jotka vanhentunut'); ?></h4>
+
+	<div class="section fill mb5" style="height:280px;overflow: auto">
+	<table class="table table-bordered table-striped">
+	<tr>
+	<th>Viimeinen käynti</th>
+	<th>Asiakas</th>
+	<th>Puhelin</th>
+	<th>Kohde</th>
+	</tr>
+	<?php foreach($this->AsiakasMobileLaskin()[1] as $t) : ?>
+	<?php 
+		if( strtotime($t->time) > strtotime($this->AsiakasMobileLaskin()[0]) ){ continue; }
+
+		$nimi = '';
+		$puhelin = '';
+		$osoite = '';
+		$k = Kohteet::model()->findByPk($t->kohdenID);
+		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'yritys'){$nimi = $k->asiakkaat->yrityksen_nimi;}
+		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'henkilo'){$nimi = $k->asiakkaat->yhteyshenkilo;}
+		if(isset($k->asiakkaat)){$puhelin = $k->asiakkaat->puhelin;}
+		if(isset($k->id)){$osoite = '#'.$k->id.' '.$k->osoite;}
+	?>
+	<tr>
+	 <td><?=date("d.m.Y", strtotime($t->time))?></td>
+	 <td><?=$nimi?></td>
+	 <td><?=$puhelin?></td>
+	 <td><?=$osoite?></td>
+	</tr>
+	<?php endforeach; ?>
+	</table>
+	</div>
+
+ </div>
+</div>
+<div class="row">
+ <div class="col-sm-3">
 
 	<hr>
 	<h4><?= Yii::t('main', 'Onlinevarauksen henkilötietojen säilyttämisen'); ?></h4>
