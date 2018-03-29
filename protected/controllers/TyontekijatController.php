@@ -944,7 +944,6 @@ $xml = '
 
 	}
 
-
 	protected function etuSukunimi($tid)
 	{
 	   $site = Yii::app()->createController('Site');

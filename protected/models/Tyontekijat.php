@@ -174,6 +174,7 @@ public $tunnus;
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+		        'tyosuhteet' => array(self::HAS_ONE, 'Tyosuhdet', 'tid'),
 		);
 	}
 

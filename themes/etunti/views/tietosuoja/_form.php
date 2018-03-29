@@ -149,29 +149,23 @@
 	<div class="section fill mb5" style="height:280px;overflow: auto">
 	<table class="table table-bordered table-striped">
 	<tr>
-	<th>Viimeinen käynti</th>
-	<th>Asiakas</th>
+	<th>Työsyhteet loppu pvm.</th>
+	<th>Nimi</th>
 	<th>Puhelin</th>
-	<th>Kohde</th>
 	</tr>
-	<?php foreach($this->AsiakasMobileLaskin()[1] as $t) : ?>
+	<?php foreach($this->TyontekijaTyosuhdetLaskin()[1] as $t) : ?>
 	<?php 
-		if( strtotime($t->time) > strtotime($this->AsiakasMobileLaskin()[0]) ){ continue; }
-
-		$nimi = '';
 		$puhelin = '';
-		$osoite = '';
-		$k = Kohteet::model()->findByPk($t->kohdenID);
-		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'yritys'){$nimi = $k->asiakkaat->yrityksen_nimi;}
-		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'henkilo'){$nimi = $k->asiakkaat->yhteyshenkilo;}
-		if(isset($k->asiakkaat)){$puhelin = $k->asiakkaat->puhelin;}
-		if(isset($k->id)){$osoite = '#'.$k->id.' '.$k->osoite;}
+		$loppu_pvm = '';
+		if(isset($t->tyosuhteet->id)){
+		   $loppu_pvm = $t->tyosuhteet->loppu;
+		   if( strtotime($t->tyosuhteet->loppu) > strtotime($this->TyontekijaTyosuhdetLaskin()[0]) ){ continue; }
+		}
 	?>
 	<tr>
-	 <td><?=date("d.m.Y", strtotime($t->time))?></td>
-	 <td><?=$nimi?></td>
+	 <td><?=$loppu_pvm?></td>
+	 <td><?=$this->etuSukunimi($t->id);?></td>
 	 <td><?=$puhelin?></td>
-	 <td><?=$osoite?></td>
 	</tr>
 	<?php endforeach; ?>
 	</table>

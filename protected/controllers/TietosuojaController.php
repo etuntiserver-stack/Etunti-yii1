@@ -229,7 +229,6 @@ class TietosuojaController extends Controller
 
 		$data = array();
 	       	$criteria = new CDbCriteria();
-	       	//$criteria->select = " id,kohdenID, DATE(time) as time"; 
 	       	$criteria->order = " DATE(time) DESC"; 
 	       	$criteria->group = " kohdenID DESC"; 
 	       	$criteria->condition = " 
@@ -240,5 +239,42 @@ class TietosuojaController extends Controller
 		$data = Mobile::model()->findAll($criteria);
 
 		return array($last_pvm, $data);
+	}
+
+	protected function TyontekijaTyosuhdetLaskin()
+	{
+		$last_pvm = '';
+		$ts=Tietosuoja::model()->findByPk(1);
+		if( $ts->tyontekija_sailytysajan_tyyppi == 0 ){
+			$last_pvm = date("Y-m-d", strtotime(" -".$ts->tyontekija_sailytysaika_lukumaara." day"));
+		}
+		if( $ts->tyontekija_sailytysajan_tyyppi == 1 ){
+			$last_pvm = date("Y-m-d", strtotime(" -".$ts->tyontekija_sailytysaika_lukumaara." month"));
+		}
+		if( $ts->tyontekija_sailytysajan_tyyppi == 2 ){
+			$last_pvm = date("Y-m-d", strtotime(" -".$ts->tyontekija_sailytysaika_lukumaara." year"));
+		}
+
+		$data = array();
+	       	$criteria = new CDbCriteria();
+
+		// <-- Return order etu ja sukunimella
+		$site = Yii::app()->createController('Site');
+		$criteria = $site[0]->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
+
+	       	$criteria->condition = " 
+			id IN (SELECT tid FROM sivex_tyosuhdet WHERE loppu!='')
+		";
+//			AND DATE(time) > $last_pvm
+		$data = Tyontekijat::model()->findAll($criteria);
+
+		return array($last_pvm, $data);
+	}
+
+	protected function etuSukunimi($tid)
+	{
+	   $site = Yii::app()->createController('Site');
+	   return $site[0]->etuSukunimi($tid);
 	}
 }
