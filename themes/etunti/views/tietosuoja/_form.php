@@ -59,7 +59,7 @@
 	</div>
 
  </div>
- <div class="col-sm-4">
+ <div class="col-sm-6">
 
 	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?></h3></legend>
 	<h4><?= Yii::t('main', 'Asiakkaat joille pitää soittaa'); ?></h4>
@@ -68,21 +68,25 @@
 	<label>Mobile taulussa rivit ennen kun <?= date("d.m.Y", strtotime($this->AsiakasMobileLaskin()[0]))?> </label>
 	<table class="table table-bordered table-striped">
 	<tr>
-	<th>#</th>
-	<th>Kohde</th>
+	<th>Viimeinen käynti</th>
+	<th>Asiakas</th>
 	<th>Puhelin</th>
 	</tr>
 	<?php foreach($this->AsiakasMobileLaskin()[1] as $t) : ?>
 	<?php 
-		//if( strtotime($t->time) > strtotime($this->AsiakasMobileLaskin()[0]) ){ continue; }
-		$nimi = ''; 
-		//if($asiakas->tyyppi == 'yritys'){$nimi = $asiakas->yrityksen_nimi;}
-		//if($asiakas->tyyppi == 'henkilo'){$nimi = $asiakas->yhteyshenkilo;}
+		if( strtotime($t->time) > strtotime($this->AsiakasMobileLaskin()[0]) ){ continue; }
+
+		$nimi = '';
+		$puhelin = '';
+		$k = Kohteet::model()->findByPk($t->kohdenID);
+		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'yritys'){$nimi = $k->asiakkaat->yrityksen_nimi;}
+		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'henkilo'){$nimi = $k->asiakkaat->yhteyshenkilo;}
+		if(isset($k->asiakkaat)){$puhelin = $k->asiakkaat->puhelin;}
 	?>
 	<tr>
-	 <td><?=$t->id?></td>
-	 <td><?=$t->kohdenID?></td>
 	 <td><?=date("d.m.Y", strtotime($t->time))?></td>
+	 <td><?=$nimi?></td>
+	 <td><?=$puhelin?></td>
 	</tr>
 	<?php endforeach; ?>
 	</table>
