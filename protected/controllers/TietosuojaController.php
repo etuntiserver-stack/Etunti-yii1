@@ -234,6 +234,7 @@ class TietosuojaController extends Controller
 	       	$criteria->group = " kohdenID DESC"; 
 	       	$criteria->condition = " 
 			kohdenID!=0
+			AND kohdenID IN (SELECT id FROM sivex_kohdet)
 		";
 //			AND DATE(time) > $last_pvm
 		$data = Mobile::model()->findAll($criteria);

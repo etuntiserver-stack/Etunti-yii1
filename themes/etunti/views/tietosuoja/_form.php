@@ -71,6 +71,7 @@
 	<th>Viimeinen käynti</th>
 	<th>Asiakas</th>
 	<th>Puhelin</th>
+	<th>Kohde</th>
 	</tr>
 	<?php foreach($this->AsiakasMobileLaskin()[1] as $t) : ?>
 	<?php 
@@ -78,15 +79,18 @@
 
 		$nimi = '';
 		$puhelin = '';
+		$osoite = '';
 		$k = Kohteet::model()->findByPk($t->kohdenID);
 		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'yritys'){$nimi = $k->asiakkaat->yrityksen_nimi;}
 		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'henkilo'){$nimi = $k->asiakkaat->yhteyshenkilo;}
 		if(isset($k->asiakkaat)){$puhelin = $k->asiakkaat->puhelin;}
+		if(isset($k->id)){$osoite = '#'.$k->id.' '.$k->osoite;}
 	?>
 	<tr>
 	 <td><?=date("d.m.Y", strtotime($t->time))?></td>
 	 <td><?=$nimi?></td>
 	 <td><?=$puhelin?></td>
+	 <td><?=$osoite?></td>
 	</tr>
 	<?php endforeach; ?>
 	</table>
