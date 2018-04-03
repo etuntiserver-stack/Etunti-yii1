@@ -923,9 +923,10 @@ $xml = '
 
        		$criteria = new CDbCriteria();
 
-		if(isset($_GET['sort']))
-		{
+		if(isset($_GET['sort']) and $_GET['sort'] != 'asiakasnumero'){
 	        $criteria->order = " $_GET[sort]!='' DESC, $_GET[sort] $_GET[s] ";
+		} elseif(isset($_GET['sort']) and $_GET['sort'] == 'asiakasnumero'){
+	        $criteria->order = " $_GET[sort]!='' DESC, cast(asiakasnumero as unsigned) $_GET[s] ";
 		} else {
 	        $criteria->order = " id DESC ";
 		}
