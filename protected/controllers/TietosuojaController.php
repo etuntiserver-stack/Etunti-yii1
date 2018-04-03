@@ -217,13 +217,13 @@ class TietosuojaController extends Controller
 	{
 		$last_pvm = '';
 		$ts=Tietosuoja::model()->findByPk(1);
-		if( $ts->asiakas_sailytysajan_tyyppi == 0 ){
+		if( $ts->asiakas_sailytysajan_tyyppi == 0 and $ts->asiakas_sailytysaika_lukumaara > 0 ){
 			$last_pvm = date("Y-m-d", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." day"));
 		}
-		if( $ts->asiakas_sailytysajan_tyyppi == 1 ){
+		if( $ts->asiakas_sailytysajan_tyyppi == 1 and $ts->asiakas_sailytysaika_lukumaara > 0 ){
 			$last_pvm = date("Y-m-d", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." month"));
 		}
-		if( $ts->asiakas_sailytysajan_tyyppi == 2 ){
+		if( $ts->asiakas_sailytysajan_tyyppi == 2 and $ts->asiakas_sailytysaika_lukumaara > 0 ){
 			$last_pvm = date("Y-m-d", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." year"));
 		}
 
@@ -245,13 +245,13 @@ class TietosuojaController extends Controller
 	{
 		$last_pvm = '';
 		$ts=Tietosuoja::model()->findByPk(1);
-		if( $ts->tyontekija_sailytysajan_tyyppi == 0 ){
+		if( $ts->tyontekija_sailytysajan_tyyppi == 0 and $ts->tyontekija_sailytysaika_lukumaara > 0){
 			$last_pvm = date("Y-m-d", strtotime(" -".$ts->tyontekija_sailytysaika_lukumaara." day"));
 		}
-		if( $ts->tyontekija_sailytysajan_tyyppi == 1 ){
+		if( $ts->tyontekija_sailytysajan_tyyppi == 1 and $ts->tyontekija_sailytysaika_lukumaara > 0){
 			$last_pvm = date("Y-m-d", strtotime(" -".$ts->tyontekija_sailytysaika_lukumaara." month"));
 		}
-		if( $ts->tyontekija_sailytysajan_tyyppi == 2 ){
+		if( $ts->tyontekija_sailytysajan_tyyppi == 2 and $ts->tyontekija_sailytysaika_lukumaara > 0){
 			$last_pvm = date("Y-m-d", strtotime(" -".$ts->tyontekija_sailytysaika_lukumaara." year"));
 		}
 

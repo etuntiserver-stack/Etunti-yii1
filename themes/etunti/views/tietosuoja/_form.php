@@ -59,8 +59,9 @@
 	</div>
 
  </div>
- <div class="col-sm-6">
 
+ <?php if( !empty($this->AsiakasMobileLaskin()[0]) and count($this->AsiakasMobileLaskin()[1]) > 0 ) : ?>
+ <div class="col-sm-6">
 	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?></h3></legend>
 	<h4><?= Yii::t('main', 'Asiakkaat jotka vanhentunut'); ?></h4>
 
@@ -95,8 +96,9 @@
 	<?php endforeach; ?>
 	</table>
 	</div>
-
  </div>
+ <?php endif; ?>
+
 </div>
 <div class="row">
  <div class="col-sm-3">
@@ -141,6 +143,8 @@
 	</div>
 
  </div>
+
+ <?php if( !empty($this->TyontekijaTyosuhdetLaskin()[0]) and count($this->TyontekijaTyosuhdetLaskin()[1]) > 0 ) : ?>
  <div class="col-sm-6">
 	<hr>
 	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?></h3></legend>
@@ -172,6 +176,8 @@
 	</div>
 
  </div>
+ <?php endif; ?>
+
 </div>
 <div class="row">
  <div class="col-sm-3">
