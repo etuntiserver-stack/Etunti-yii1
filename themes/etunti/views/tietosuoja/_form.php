@@ -179,9 +179,11 @@
  <?php endif; ?>
 
 </div>
+
 <div class="row">
  <div class="col-sm-3">
 
+<?php /*
 	<hr>
 	<h4><?= Yii::t('main', 'Onlinevarauksen henkilötietojen säilyttämisen'); ?></h4>
 
@@ -220,6 +222,7 @@
 		<?php echo $form->textarea($model,'onlinevaraus_viesti', array('class' => 'form-control')); ?>
 		<?php echo $form->error($model,'onlinevaraus_viesti'); ?>
 	</div>
+*/ ?>
 
 	<hr>
 	<h4><?= Yii::t('main', 'eDico vinkki henkilötietojen säilyttämisen'); ?></h4>
@@ -264,7 +267,8 @@
 		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('main', 'Luo') : Yii::t('main', 'Tallenna'),array('class'=>'btn btn-primary myBgColors')); ?>
 	</div>
  </div>
-</div><!-- form -->
+</div>
+
 
 <?php $this->endWidget(); ?>
 
