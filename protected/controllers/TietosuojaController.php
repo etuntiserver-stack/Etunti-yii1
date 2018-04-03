@@ -275,24 +275,26 @@ class TietosuojaController extends Controller
 	{
 		$last_pvm = '';
 		$ts=Tietosuoja::model()->findByPk(1);
-		if( $ts->tyontekija_sailytysajan_tyyppi == 0 and $ts->tyontekija_sailytysaika_lukumaara > 0){
-			$last_pvm = date("Y-m-d", strtotime(" -".$ts->tyontekija_sailytysaika_lukumaara." day"));
+		if( $ts->edico_vinkki_sailytysajan_tyyppi == 0 and $ts->edico_vinkki_sailytysaika_lukumaara > 0){
+			$last_pvm = date("Y-m-d", strtotime(" -".$ts->edico_vinkki_sailytysaika_lukumaara." day"));
 		}
-		if( $ts->tyontekija_sailytysajan_tyyppi == 1 and $ts->tyontekija_sailytysaika_lukumaara > 0){
-			$last_pvm = date("Y-m-d", strtotime(" -".$ts->tyontekija_sailytysaika_lukumaara." month"));
+		if( $ts->edico_vinkki_sailytysajan_tyyppi == 1 and $ts->edico_vinkki_sailytysaika_lukumaara > 0){
+			$last_pvm = date("Y-m-d", strtotime(" -".$ts->edico_vinkki_sailytysaika_lukumaara." month"));
 		}
-		if( $ts->tyontekija_sailytysajan_tyyppi == 2 and $ts->tyontekija_sailytysaika_lukumaara > 0){
-			$last_pvm = date("Y-m-d", strtotime(" -".$ts->tyontekija_sailytysaika_lukumaara." year"));
+		if( $ts->edico_vinkki_sailytysajan_tyyppi == 2 and $ts->edico_vinkki_sailytysaika_lukumaara > 0){
+			$last_pvm = date("Y-m-d", strtotime(" -".$ts->edico_vinkki_sailytysaika_lukumaara." year"));
 		}
 
 		$data = array();
-		/*
 	       	$criteria = new CDbCriteria();
+	       	$criteria->order = " DATE(time) DESC"; 
+	       	$criteria->group = " sahkoposti DESC"; 
+/*
 	       	$criteria->condition = " 
 			id IN (SELECT tid FROM sivex_tyosuhdet WHERE loppu!='')
 		";
-		$data = Tyontekijat::model()->findAll($criteria);
-		*/
+*/
+		$data = VinkkiExtranet::model()->findAll($criteria);
 		return array($last_pvm, $data);
 	}
 

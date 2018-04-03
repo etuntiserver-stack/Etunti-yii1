@@ -61,7 +61,7 @@
  </div>
 
  <?php if( !empty($this->AsiakasMobileLaskin()[0]) and count($this->AsiakasMobileLaskin()[1]) > 0 ) : ?>
- <div class="col-sm-6">
+ <div class="col-sm-9">
 	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?></h3></legend>
 	<h4><?= Yii::t('main', 'Asiakkaat jotka vanhentunut'); ?></h4>
 
@@ -145,7 +145,7 @@
  </div>
 
  <?php if( !empty($this->TyontekijaTyosuhdetLaskin()[0]) and count($this->TyontekijaTyosuhdetLaskin()[1]) > 0 ) : ?>
- <div class="col-sm-6">
+ <div class="col-sm-9">
 	<hr>
 	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?></h3></legend>
 	<h4><?= Yii::t('main', 'Työntekijät jotka vanhentunut'); ?></h4>
@@ -265,37 +265,34 @@
 	</div>
  </div>
  <?php if( !empty($this->VinkkiLaskin()[0]) and count($this->VinkkiLaskin()[1]) > 0 ) : ?>
- <div class="col-sm-6">
+ <div class="col-sm-9">
 	<hr>
 	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?></h3></legend>
- 	<?php /*
 	<h4><?= Yii::t('main', 'Vinkit vanhentunut'); ?></h4>
 
 	<div class="section fill mb5" style="height:280px;overflow: auto">
 	<table class="table table-bordered table-striped">
 	<tr>
-	<th>Työsyhteet loppu pvm.</th>
+	<th>Vinkin pvm.</th>
 	<th>Nimi</th>
 	<th>Puhelin</th>
+	<th>Sähköposti</th>
 	</tr>
-	<?php foreach($this->TyontekijaTyosuhdetLaskin()[1] as $t) : ?>
+	<?php foreach($this->VinkkiLaskin()[1] as $t) : ?>
 	<?php 
 		$puhelin = '';
 		$loppu_pvm = '';
-		if(isset($t->tyosuhteet->id)){
-		   $loppu_pvm = $t->tyosuhteet->loppu;
-		   if( strtotime($t->tyosuhteet->loppu) > strtotime($this->TyontekijaTyosuhdetLaskin()[0]) ){ continue; }
-		}
+		if( strtotime($t->time) > strtotime($this->VinkkiLaskin()[0]) ){ continue; }
 	?>
 	<tr>
-	 <td><?=$loppu_pvm?></td>
-	 <td><?=$this->etuSukunimi($t->id);?></td>
-	 <td><?=$puhelin?></td>
+	 <td><?=date("d.m.Y", strtotime($t->time))?></td>
+	 <td><?=$t->nimi;?></td>
+	 <td><?=$t->puhelin?></td>
+	 <td><?=$t->sahkoposti?></td>
 	</tr>
 	<?php endforeach; ?>
 	</table>
 	</div>
-	*/ ?>
  </div>
  <?php endif; ?>
 </div>
