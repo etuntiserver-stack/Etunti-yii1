@@ -2001,7 +2001,11 @@ class TyovuorootController extends Controller
 
 		  if($asiakkaat->save())
 		  {
-			Asiakkaat::model()->updateByPk($asiakkaat->id, array( 'asiakasnumero' => $asiakkaat->id ));
+	       		$criteria = new CDbCriteria();
+	       		$criteria->order = " cast(asiakasnumero as unsigned) DESC  ";
+			$anum = Asiakkaat::model()->find($criteria);
+			if( isset($anum->id) ){ $nextnum = $anum->asiakasnumero+1; } else { $nextnum = $anum->id; }		
+			Asiakkaat::model()->updateByPk($asiakkaat->id, array( 'asiakasnumero' => $nextnum ));
 
 
 			$kohteet = new Kohteet;
