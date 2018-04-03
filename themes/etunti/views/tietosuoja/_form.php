@@ -180,8 +180,7 @@
 
 </div>
 
-<div class="row">
- <div class="col-sm-3">
+
 
 <?php /*
 	<hr>
@@ -224,6 +223,8 @@
 	</div>
 */ ?>
 
+<div class="row">
+ <div class="col-sm-3">
 	<hr>
 	<h4><?= Yii::t('main', 'eDico vinkki henkilötietojen säilyttämisen'); ?></h4>
 
@@ -262,12 +263,47 @@
 		<?php echo $form->textarea($model,'edico_vinkki_viesti', array('class' => 'form-control')); ?>
 		<?php echo $form->error($model,'edico_vinkki_viesti'); ?>
 	</div>
+ </div>
+ <?php if( !empty($this->VinkkiLaskin()[0]) and count($this->VinkkiLaskin()[1]) > 0 ) : ?>
+ <div class="col-sm-6">
+	<hr>
+	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?></h3></legend>
+ 	<?php /*
+	<h4><?= Yii::t('main', 'Vinkit vanhentunut'); ?></h4>
 
+	<div class="section fill mb5" style="height:280px;overflow: auto">
+	<table class="table table-bordered table-striped">
+	<tr>
+	<th>Työsyhteet loppu pvm.</th>
+	<th>Nimi</th>
+	<th>Puhelin</th>
+	</tr>
+	<?php foreach($this->TyontekijaTyosuhdetLaskin()[1] as $t) : ?>
+	<?php 
+		$puhelin = '';
+		$loppu_pvm = '';
+		if(isset($t->tyosuhteet->id)){
+		   $loppu_pvm = $t->tyosuhteet->loppu;
+		   if( strtotime($t->tyosuhteet->loppu) > strtotime($this->TyontekijaTyosuhdetLaskin()[0]) ){ continue; }
+		}
+	?>
+	<tr>
+	 <td><?=$loppu_pvm?></td>
+	 <td><?=$this->etuSukunimi($t->id);?></td>
+	 <td><?=$puhelin?></td>
+	</tr>
+	<?php endforeach; ?>
+	</table>
+	</div>
+	*/ ?>
+ </div>
+ <?php endif; ?>
+</div>
 	<div class="section">
 		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('main', 'Luo') : Yii::t('main', 'Tallenna'),array('class'=>'btn btn-primary myBgColors')); ?>
 	</div>
- </div>
-</div>
+
+
 
 
 <?php $this->endWidget(); ?>
