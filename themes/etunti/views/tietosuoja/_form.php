@@ -89,9 +89,15 @@
 	?>
 	<tr>
 	 <td><?=date("d.m.Y", strtotime($t->time))?></td>
-	 <td><?=$nimi?></td>
+	 <td>
+		<i class="pull-right link text-danger asiakas_pois fa fa-trash"></i>
+		<?=$nimi?>
+	 </td>
 	 <td><?=$puhelin?></td>
-	 <td><?=$osoite?></td>
+	 <td>
+		<i class="pull-right link text-danger kohde_pois fa fa-trash"></i>
+		<?=$osoite?>
+	 </td>
 	</tr>
 	<?php endforeach; ?>
 	</table>
@@ -304,5 +310,70 @@
 
 
 <?php $this->endWidget(); ?>
+
+
+
+
+
+
+
+
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
+
+
+     <div id="showres" class="modal fade" tabindex="-1" role="dialog">
+        <!-- Admin Form Popup -->
+        <div id="modal-form" class=" popup-basic popup-lg admin-form mfp-with-anim mfp-hide">
+          <div class="panel">
+            <div class="panel-heading">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">
+				<span aria-hidden="true">&times;</span>
+			</button>
+              <span class="panel-title"></span>
+            </div>
+            <!-- end .panel-heading section -->
+
+            <form method="post" action="/" id="comment">
+              <div class="panel-body p25">
+
+
+              </div>
+              <!-- end .form-body section -->
+
+              <div class="panel-footer">
+		<button type="button" class="button btn-default" data-dismiss="modal" aria-label="Close">Sulje</button>
+                <!--<button type="submit" class="button btn-primary">Post Comment</button>-->
+              </div>
+              <!-- end .form-footer section -->
+            </form>
+          </div>
+          <!-- end: .panel -->
+        </div>
+        <!-- end: .admin-form -->
+     </div>
+
+
+
+
+<script>
+$(document).ready(function(){
+  $(".asiakas_pois").click(function(){
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tietosuoja/poisto',
+           type: "GET",
+           //data: {"tarjousPainike" : "true"},
+           success: function(html){
+		$('#showres').modal().html(html);
+           },
+	   error:function(data){
+		alert('Kohdetta ei löydy! Päivitä sivu!');
+	   }
+        });
+  });
+});
+</script>
 
 

@@ -28,7 +28,7 @@ class TietosuojaController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view', 'poisto'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -303,5 +303,12 @@ class TietosuojaController extends Controller
 	{
 	   $site = Yii::app()->createController('Site');
 	   return $site[0]->etuSukunimi($tid);
+	}
+
+	public function actionPoisto()
+	{
+		$this->render('poisto',array(
+			//'model'=>$model,
+		));
 	}
 }
