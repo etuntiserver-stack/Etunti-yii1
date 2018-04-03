@@ -941,36 +941,33 @@ exit;
 */
 
 
-		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
-	        $criteria->addCondition (" osoite LIKE '%".$_POST['osoite']."%' ");
+		if(isset($_GET['osoite']) and !empty($_GET['osoite']))
+	        $criteria->addCondition (" osoite LIKE '%".$_GET['osoite']."%' ");
 
-		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] != 'kaikki')
-	        $criteria->addCondition (" aktiivinen ='".(int)$_POST['aktiivinen']."' ");
-		elseif(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 'kaikki')
+		if(isset($_GET['aktiivinen']) and $_GET['aktiivinen'] != 'kaikki')
+	        $criteria->addCondition (" aktiivinen ='".(int)$_GET['aktiivinen']."' ");
+		elseif(isset($_GET['aktiivinen']) and $_GET['aktiivinen'] == 'kaikki')
 	        $criteria->addCondition (" (aktiivinen=1 OR aktiivinen=0) ");
 		else
 	        $criteria->addCondition (" aktiivinen=1 ");
 
-		if(isset($_POST['yrityksen_nimi']) and !empty(trim($_POST['yrityksen_nimi'])))
-	        $criteria->addCondition (" yrityksen_nimi LIKE '%".$_POST['yrityksen_nimi']."%' ");
+		if(isset($_GET['yrityksen_nimi']) and !empty(trim($_GET['yrityksen_nimi'])))
+	        $criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%' ");
 
-		if(isset($_POST['yhteyshenkilo']) and !empty(trim($_POST['yhteyshenkilo'])))
-	        $criteria->addCondition (" yhteyshenkilo LIKE '%".$_POST['yhteyshenkilo']."%' ");
+		if(isset($_GET['ryhma']) and !empty(trim($_GET['ryhma'])))
+	        $criteria->addCondition (" ryhma LIKE '%".$_GET['ryhma']."%' ");
 
-		if(isset($_POST['ryhma']) and !empty(trim($_POST['ryhma'])))
-	        $criteria->addCondition (" ryhma LIKE '%".$_POST['ryhma']."%' ");
+		if(isset($_GET['tyyppi']) and !empty(trim($_GET['tyyppi'])))
+	        $criteria->addCondition (" tyyppi='".$_GET['tyyppi']."' ");
 
-		if(isset($_POST['tyyppi']) and !empty(trim($_POST['tyyppi'])))
-	        $criteria->addCondition (" tyyppi='".$_POST['tyyppi']."' ");
+		if(isset($_GET['puhelin']) and !empty(trim($_GET['puhelin'])))
+	        $criteria->addCondition (" puhelin LIKE '%".$_GET['puhelin']."%' ");
 
-		if(isset($_POST['puhelin']) and !empty(trim($_POST['puhelin'])))
-	        $criteria->addCondition (" puhelin LIKE '%".$_POST['puhelin']."%' ");
+		if(isset($_GET['sahkoposti']) and !empty(trim($_GET['sahkoposti'])))
+	        $criteria->addCondition (" sahkoposti LIKE '%".$_GET['sahkoposti']."%' ");
 
-		if(isset($_POST['sahkoposti']) and !empty(trim($_POST['sahkoposti'])))
-	        $criteria->addCondition (" sahkoposti LIKE '%".$_POST['sahkoposti']."%' ");
-
-		if(isset($_POST['asiakasnumero']) and !empty(trim($_POST['asiakasnumero'])))
-	        $criteria->addCondition (" asiakasnumero LIKE '%".$_POST['asiakasnumero']."%' ");
+		if(isset($_GET['asiakasnumero']) and !empty(trim($_GET['asiakasnumero'])))
+	        $criteria->addCondition (" asiakasnumero LIKE '%".$_GET['asiakasnumero']."%' ");
 
 		$dataProvider=new CActiveDataProvider('Asiakkaat', array(
 			'criteria'=>$criteria,

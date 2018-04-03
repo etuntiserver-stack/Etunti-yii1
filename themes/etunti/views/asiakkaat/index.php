@@ -47,7 +47,7 @@ $(document).ready(function() {
 
 
 
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <form id="mobForm" action="#" class="form-inline" method="GET">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
@@ -68,7 +68,7 @@ $(document).ready(function() {
 				$mod = 'Asiakkaat';
 				$sarake = 'osoite';
 				$placeholder = 'Osoite';
-				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
+				if(isset($_GET[$sarake])) $postvalue = $_GET[$sarake]; else $postvalue='';
 		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
 			    ?>
 			    <!-- Autocomplete -->
@@ -87,9 +87,12 @@ $(document).ready(function() {
 	   			$site = Yii::app()->createController('Site');
 				$mod = 'Asiakkaat';
 				$sarake = 'yrityksen_nimi';
-				$placeholder = 'Yritys';
-				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
-		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+				$placeholder = 'Asiakas';
+				if(isset($_GET[$sarake])) 			
+					$postvalue = $_GET[$sarake]; 
+				else 
+					$postvalue = '';				
+		 	        $site[0]->autocompleteFor($mod, array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
 			    ?>
 			    <!-- Autocomplete -->
 
@@ -102,7 +105,7 @@ $(document).ready(function() {
 
                       </div>
 
-		      <?php if(isset($_POST['aktiivinen'])) echo '<input type="hidden" id="akt" value="'.$_POST['aktiivinen'].'">'; ?>
+		      <?php if(isset($_GET['aktiivinen'])) echo '<input type="hidden" id="akt" value="'.$_GET['aktiivinen'].'">'; ?>
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
@@ -119,7 +122,7 @@ $(document).ready(function() {
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="asiakasnumero" class="gui-input" value="<?php if(isset($_POST['asiakasnumero'])) echo $_POST['asiakasnumero']; ?>" placeholder="<?php echo Yii::t('main','Asiakasnumero'); ?>">
+   			    <input type="text" name="asiakasnumero" class="gui-input" value="<?php if(isset($_GET['asiakasnumero'])) echo $_GET['asiakasnumero']; ?>" placeholder="<?php echo Yii::t('main','Asiakasnumero'); ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-at"></i>
                             </label>
@@ -129,27 +132,8 @@ $(document).ready(function() {
                       </div>
 
                       <div class="col-md-2">
-                        <div class="section">
-                          <label class="field prepend-icon">
 
-			    <!-- Autocomplete -->
-			    <?php
-	   			$site = Yii::app()->createController('Site');
-				$mod = 'Asiakkaat';
-				$sarake = 'yhteyshenkilo';
-				$placeholder = 'Yhteyshenkilö';
-				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
-		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
-			    ?>
-			    <!-- Autocomplete -->
-
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-user"></i>
-                            </label>
-                          </label>
-                        </div>
-
-		      <?php if(isset($_POST['tyyppi'])) echo '<input type="hidden" id="as_tyyppi" value="'.$_POST['tyyppi'].'">'; ?>
+		      <?php if(isset($_GET['tyyppi'])) echo '<input type="hidden" id="as_tyyppi" value="'.$_GET['tyyppi'].'">'; ?>
                         <div class="section">
                           <label class="field select">
 			<?php
@@ -179,7 +163,7 @@ $(document).ready(function() {
 				$mod = 'Asiakkaat';
 				$sarake = 'puhelin';
 				$placeholder = 'Puhelin';
-				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
+				if(isset($_GET[$sarake])) $postvalue = $_GET[$sarake]; else $postvalue='';
 		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
 			    ?>
 			    <!-- Autocomplete -->
@@ -191,7 +175,7 @@ $(document).ready(function() {
                         </div>
 
 
-		      <?php if(isset($_POST['ryhma'])) echo '<input type="hidden" id="ryhma" value="'.$_POST['ryhma'].'">'; ?>
+		      <?php if(isset($_GET['ryhma'])) echo '<input type="hidden" id="ryhma" value="'.$_GET['ryhma'].'">'; ?>
                         <div class="section">
                           <label class="field select">
 			<?php
@@ -217,7 +201,7 @@ $(document).ready(function() {
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="sahkoposti" class="gui-input" value="<?php if(isset($_POST['sahkoposti'])) echo $_POST['sahkoposti']; ?>" placeholder="<?php echo Yii::t('main','Sähköposti'); ?>">
+   			    <input type="text" name="sahkoposti" class="gui-input" value="<?php if(isset($_GET['sahkoposti'])) echo $_GET['sahkoposti']; ?>" placeholder="<?php echo Yii::t('main','Sähköposti'); ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-at"></i>
                             </label>
