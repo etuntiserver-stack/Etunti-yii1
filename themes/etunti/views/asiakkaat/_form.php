@@ -16,10 +16,12 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
      $tas = explode(",",Yii::app()->user->adminPaketti);
 
    $asetukset = Asetukset::model()->findbypk(1);
-   $as = Asiakkaat::model()->find(array("order"=>"id DESC"));
+   $criteria = new CDbCriteria();
+   $criteria->order = " cast(asiakasnumero as unsigned) DESC  ";
+   $anum = Asiakkaat::model()->find($criteria);
 
-   if(isset($as->id) and !isset($model->id) and $asetukset->lasku_asiakasnumero == 0)
-   $asnum = array('value'=>($as->asiakasnumero+1),'class'=>'form-control');
+   if(isset($anum->id) and !isset($model->id) and $asetukset->lasku_asiakasnumero == 0)
+   $asnum = array('value'=>($anum->asiakasnumero+1),'class'=>'form-control');
    else
    $asnum = array('class'=>'form-control');
 
