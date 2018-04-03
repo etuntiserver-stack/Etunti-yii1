@@ -2281,14 +2281,14 @@ $(document).ready(function(){
 		foreach($m as $data)
 		{
 
-		    if($model == 'Asiakkaat' and $data->tyyppi == 'yritys')
+		    if($model == 'Asiakkaat' and $data->tyyppi == 'yritys' and $sarake != 'osoite')
 		    {
 		    $arr[] = array(
 		        'label'=>$data->yrityksen_nimi,
 		        'value'=>$data->yrityksen_nimi,    
 		        'id'=>$data->id,
         	    );
-		    } else if($model == 'Asiakkaat' and $data->tyyppi == 'henkilo')
+		    } else if($model == 'Asiakkaat' and $data->tyyppi == 'henkilo' and $sarake != 'osoite')
 		    {
 		    $arr[] = array(
 		        'label'=>$data->yhteyshenkilo,
