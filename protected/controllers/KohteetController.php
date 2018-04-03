@@ -230,7 +230,8 @@ class KohteetController extends Controller
 				}
 				//     LOG -->
 
-				$this->redirect(array('view','id'=>$model->id));
+				Yii::app()->user->setFlash('success', "Tallennettu.");
+				$this->redirect(array('index'));
 			}
 		}
 
@@ -289,7 +290,8 @@ class KohteetController extends Controller
 					Kohteet::model()->updateBypk($model->id, array('gps_sijainti' => $latAuto.$lngAuto));
 				// Koordinatiit -->
 
-				$this->redirect(array('view','id'=>$model->id));
+				Yii::app()->user->setFlash('success', "Tallennettu.");
+				$this->redirect(array('index'));
 			}
 		}
 
