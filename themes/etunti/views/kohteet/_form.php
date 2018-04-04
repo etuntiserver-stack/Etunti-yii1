@@ -411,8 +411,8 @@ $(document).ready(function(){
 	  <label>'.$data->tekijan_nimi.'<br><b>'.date("d.m.Y H:i", strtotime($data->time)).'</b></label><br>';
 
 		// <-- file_safe_opener
-		$filepath = 'img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto;
-		echo CHtml::link('<img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" class="img-responsive thumbnail" style="height:200px">',
+		$filepath = '/var/www/html/app.etunti.fi/img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto;
+		echo CHtml::link('<img src="/var/www/html/app.etunti.fi/img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" class="img-responsive thumbnail" style="height:200px">',
 			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
 			array('target'=>'_blank','class'=>'text-danger'
 		));
