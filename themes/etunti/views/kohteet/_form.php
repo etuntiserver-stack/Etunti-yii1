@@ -408,10 +408,15 @@ $(document).ready(function(){
  	 echo '
 	 <div class="col-sm-3">
 	  <div class="link poistaKuva" this="'.Yii::app()->request->baseUrl.'img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" kuva_id="'.$data->id.'">'.Yii::t('main','poista').'</div>
-	  <label>'.$data->tekijan_nimi.'<br><b>'.date("d.m.Y H:i", strtotime($data->time)).'</b></label><br>
-	  <a href="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" target="_blank">
-	  <img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" class="img-responsive thumbnail" style="height:200px">
-	  </a>';
+	  <label>'.$data->tekijan_nimi.'<br><b>'.date("d.m.Y H:i", strtotime($data->time)).'</b></label><br>';
+
+		// <-- file_safe_opener
+		$filepath = 'img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto;
+		echo '<br>'.CHtml::link('<img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" class="img-responsive thumbnail" style="height:200px">',
+			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
+			array('target'=>'_blank','class'=>'text-danger'
+		));
+		//     file_safe_opener -->
 
 	   if(!empty($data->kuvaus))
 	   {
