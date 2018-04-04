@@ -63,10 +63,9 @@
  <?php if( !empty($this->AsiakasMobileLaskin()[0]) and count($this->AsiakasMobileLaskin()[1]) > 0 ) : ?>
  <div class="col-sm-9">
 	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?></h3></legend>
-	<h4><?= Yii::t('main', 'Asiakkaat jotka vanhentunut'); ?></h4>
+	<h4><?= Yii::t('main', 'Asiakkaat joille ei ole kirjattu töitä säilytysaika huomioiden'); ?></h4>
 
 	<div class="section fill mb5" style="height:280px;overflow: auto">
-	<label>Mobile taulussa rivit ennen kun <?= date("d.m.Y", strtotime($this->AsiakasMobileLaskin()[0]))?> </label>
 	<table class="table table-bordered table-striped">
 	<tr>
 	<th>Viimeinen käynti</th>
