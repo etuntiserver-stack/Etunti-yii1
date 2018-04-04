@@ -325,6 +325,8 @@ public function actionTiedosto($dom)
 		}
 		// check domain is not empty -->
 
+		$dom = strtolower($dom);
+
 	  	if (!file_exists(Yii::app()->basePath."/../img/uploadedfromphone/".$dom)) {
 		  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".$dom, 0777, true);
 		}

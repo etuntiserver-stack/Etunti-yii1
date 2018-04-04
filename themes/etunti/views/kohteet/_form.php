@@ -399,7 +399,7 @@ $(document).ready(function(){
 	$kuvk = KuviaKohteesta::model()->findAll($criteria);
 
 	$i = 0;
-
+	Yii::app()->user->domain = strtolower(Yii::app()->user->domain);
 	foreach($kuvk as $data) {
 	$i++;
 
