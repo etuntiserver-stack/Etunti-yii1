@@ -11,8 +11,8 @@
 	<th><?=Yii::t('main', 'Puhelin')?></th>
 </tr>
 <?php foreach($kohteet as $k) : ?>
-<tr class="text-danger">
-	<td><?=$k->osoite?></td>
+<tr>
+	<td class="text-danger"><?=$k->osoite?></td>
 	<td><?=$k->email?></td>
 	<td><?=$k->puh_nro?></td>
 </tr>
@@ -29,6 +29,8 @@
    $sum_lh	= 0;
    $laskut = Lasku::model()->findAll(" as_nro='".$asiakas->asiakasnumero."' ");
    $sum_laskut = count($laskut);
+   $palautteet = Palautteet::model()->findAll(" asiakas_id='".$asiakas->id."' ");
+   $sum_palautteet = count($palautteet);
    foreach($laskut as $l){
    	$lh = LaskuHistoria::model()->findAll(" lid='".$l->id."' ");
 	$sum_lh += count($lh);
@@ -45,9 +47,12 @@
 	$sum_onlinevaraus += count($ov);
    }
 ?>
-<h3 class="text-danger">Mobiili taulusta <?=$sum_mobiili?> riveja.</h3>
-<h3 class="text-danger">Avaimet taulusta <?=$sum_avaimet?> riveja.</h3>
-<h3 class="text-danger">Onlinevaraus taulusta <?=$sum_onlinevaraus?> riveja.</h3>
-<h3 class="text-danger">Laskut taulusta <?=$sum_laskut?> riveja.</h3>
-<h3 class="text-danger">Laskut historia taulusta <?=$sum_lh?> riveja.</h3>
+<table class="table table-bordered">
+<tr><td>Mobiili</td><td class="text-danger"><?=$sum_mobiili?> riveja.</td></tr>
+<tr><td>Avaimet</td><td class="text-danger"><?=$sum_avaimet?> riveja.</td></tr>
+<tr><td>Onlinevaraus</td><td class="text-danger"><?=$sum_onlinevaraus?> riveja.</td></tr>
+<tr><td>Laskut</td><td class="text-danger"><?=$sum_laskut?> riveja.</td></tr>
+<tr><td>Laskut historia</td><td class="text-danger"><?=$sum_lh?> riveja.</td></tr>
+<tr><td>Palautteet</td><td class="text-danger"><?=$sum_palautteet?> riveja.</td></tr>
+</table>
 <!--/Kohteista-->
