@@ -94,7 +94,7 @@
 	<tr>
 	 <td><?=date("d.m.Y", strtotime($t->time))?></td>
 	 <td>
-		<i class="pull-right link text-danger asiakas_pois fa fa-trash" asiakas_id="<?=$asiakas_id?>"></i>
+		<i class="pull-right link text-danger asiakas_pois fa fa-trash" asiakas_id="<?=$asiakas_id?>" nimi="<?=$nimi?>"></i>
 		<?=$nimi?>
 	 </td>
 	 <td><?=$puhelin?></td>
@@ -361,13 +361,14 @@
 $(document).ready(function(){
   $(".asiakas_pois").click(function(){
 
+	var nimi = $(this).attr('nimi');
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tietosuoja/asiakas_poisto?asiakas_id='+$(this).attr('asiakas_id'),
            type: "GET",
            //data: {"tarjousPainike" : "true"},
            success: function(html){
 		$('#showres').modal();
-		$('#showres .panel-title').html('Asiakas poistaminen');
+		$('#showres .panel-title').html( '<b>' + nimi + '</b> poistaminen');
 		$('#showres .panel-body').html(html);
            },
 	   error:function(data){
