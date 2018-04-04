@@ -141,11 +141,11 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		{
         	  $aon = Asiakkaat::model()->findbypk($model->asiakas_id);
 		  if(!empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yrityksen_nimi.'</option>';
+		    echo '<option value="'.$aon->asiakasnumero.'" asiakas_id="'.$aon->id.'">'.$aon->yrityksen_nimi.'</option>';
 		  elseif(empty($aon->yhteyshenkilo) and empty($aon->yrityksen_nimi))
-		    echo '<option value="'.$aon->asiakasnumero.'">nimet puutuu '.$aon->id.'</option>';
+		    echo '<option value="'.$aon->asiakasnumero.'" asiakas_id="'.$aon->id.'">nimet puutuu '.$aon->id.'</option>';
 		  else
-		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yhteyshenkilo.'</option>';
+		    echo '<option value="'.$aon->asiakasnumero.'" asiakas_id="'.$aon->id.'">'.$aon->yhteyshenkilo.'</option>';
 		} else {
 	        echo '<option></option>';
 		}
@@ -153,11 +153,11 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		foreach($a as $aa)
 		{
 		  if(!empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->yrityksen_nimi.'</option>';
+		    echo '<option value="'.$aa->asiakasnumero.'" asiakas_id="'.$aa->id.'">'.$aa->yrityksen_nimi.'</option>';
 		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->asiakasnumero.'">nimet puutuu '.$aa->id.'</option>';
+		    echo '<option value="'.$aa->asiakasnumero.'" asiakas_id="'.$aa->id.'">nimet puutuu '.$aa->id.'</option>';
 		  else
-		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->yhteyshenkilo.'</option>';
+		    echo '<option value="'.$aa->asiakasnumero.'" asiakas_id="'.$aa->id.'">'.$aa->yhteyshenkilo.'</option>';
 		}
 		echo '</select>';
 		?>
@@ -1207,7 +1207,7 @@ var getkohdeT = '';
 $("#Lasku_as_nro").change(function() {
 
     var asiakas = $("#Lasku_as_nro option:selected").val();
-    var asiakas_id = 0;
+    var asiakas_id = $("#Lasku_as_nro option:selected").attr('asiakas_id');
     if(!asiakas)
     {
 	alert("Asiakasnumero puuttuu");
