@@ -28,6 +28,7 @@
    $sum_onlinevaraus = 0;
    $sum_laskut 	= 0;
    $sum_lh	= 0;
+   $sum_toistuvatv = 0;
    $laskut = Lasku::model()->findAll(" as_nro='".$asiakas->asiakasnumero."' ");
    $sum_laskut = count($laskut);
    $palautteet = Palautteet::model()->findAll(" asiakas_id='".$asiakas->id."' ");
@@ -54,10 +55,13 @@
 	$sum_onlinevaraus += count($ov);
 	$tv = Tyovuoroot::model()->findAll(" kohde='".$k->id."' ");
 	$sum_tv += count($tv);
+	$toistuvatv = ToistuvatTyovuorot::model()->findAll(" kohde='".$k->id."' ");
+	$sum_toistuvatv += count($toistuvatv);
    }
 ?>
 <table class="table table-bordered">
 <tr><td>Työvuorot</td><td class="text-danger"><?=$sum_tv?> riveja.</td></tr>
+<tr><td>Toistuva työvuorot</td><td class="text-danger"><?=$sum_toistuvatv?> riveja.</td></tr>
 <tr><td>Mobiili</td><td class="text-danger"><?=$sum_mobiili?> riveja.</td></tr>
 <tr><td>Avaimet</td><td class="text-danger"><?=$sum_avaimet?> riveja.</td></tr>
 <tr><td>Onlinevaraus</td><td class="text-danger"><?=$sum_onlinevaraus?> riveja.</td></tr>
