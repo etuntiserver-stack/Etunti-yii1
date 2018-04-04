@@ -28,7 +28,7 @@ class TietosuojaController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'poisto'),
+				'actions'=>array('index','view', 'asiakas_poisto'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -305,10 +305,17 @@ class TietosuojaController extends Controller
 	   return $site[0]->etuSukunimi($tid);
 	}
 
-	public function actionPoisto()
+	public function actionAsiakas_poisto($asiakas_id)
 	{
-		$this->render('poisto',array(
-			//'model'=>$model,
+		$asiakas = Asiakkaat::model()->findByPk($asiakas_id);
+		$kohteet = Kohteet::model()->findAll(" asiakas_id='".$asiakas_id."' ");
+		if( !isset($asiakas->id) ){
+			echo 'Ei löyty';
+		}
+		$this->renderPartial('asiakas_poisto',array(
+			'asiakas'=>$asiakas,
+			'kohteet'=>$kohteet,
 		));
+		exit;
 	}
 }

@@ -81,16 +81,20 @@
 		$nimi = '';
 		$puhelin = '';
 		$osoite = '';
+		$asiakas_id = '';
 		$k = Kohteet::model()->findByPk($t->kohdenID);
 		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'yritys'){$nimi = $k->asiakkaat->yrityksen_nimi;}
 		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'henkilo'){$nimi = $k->asiakkaat->yhteyshenkilo;}
-		if(isset($k->asiakkaat)){$puhelin = $k->asiakkaat->puhelin;}
+		if(isset($k->asiakkaat)){
+			$puhelin = $k->asiakkaat->puhelin;
+			$asiakas_id = $k->asiakkaat->id;
+		}
 		if(isset($k->id)){$osoite = '#'.$k->id.' '.$k->osoite;}
 	?>
 	<tr>
 	 <td><?=date("d.m.Y", strtotime($t->time))?></td>
 	 <td>
-		<i class="pull-right link text-danger asiakas_pois fa fa-trash"></i>
+		<i class="pull-right link text-danger asiakas_pois fa fa-trash" asiakas_id="<?=$asiakas_id?>"></i>
 		<?=$nimi?>
 	 </td>
 	 <td><?=$puhelin?></td>
@@ -318,10 +322,7 @@
 
 
 
-	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
-	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
-
-
+     <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 
      <div id="showres" class="modal fade" tabindex="-1" role="dialog">
         <!-- Admin Form Popup -->
@@ -338,13 +339,12 @@
             <form method="post" action="/" id="comment">
               <div class="panel-body p25">
 
-
               </div>
               <!-- end .form-body section -->
 
               <div class="panel-footer">
 		<button type="button" class="button btn-default" data-dismiss="modal" aria-label="Close">Sulje</button>
-                <!--<button type="submit" class="button btn-primary">Post Comment</button>-->
+                <button type="button" class="button btn-danger">Poista</button>
               </div>
               <!-- end .form-footer section -->
             </form>
@@ -362,11 +362,13 @@ $(document).ready(function(){
   $(".asiakas_pois").click(function(){
 
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tietosuoja/poisto',
+           url: location.protocol + "//" + location.host + '/index.php/tietosuoja/asiakas_poisto?asiakas_id='+$(this).attr('asiakas_id'),
            type: "GET",
            //data: {"tarjousPainike" : "true"},
            success: function(html){
-		$('#showres').modal().html(html);
+		$('#showres').modal();
+		$('#showres .panel-title').html('Asiakas poistaminen');
+		$('#showres .panel-body').html(html);
            },
 	   error:function(data){
 		alert('Kohdetta ei löydy! Päivitä sivu!');
