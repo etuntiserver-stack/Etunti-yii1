@@ -24,6 +24,7 @@
 <?php 
    $sum_mobiili = 0;
    $sum_avaimet = 0;
+   $sum_tv	= 0;
    $sum_onlinevaraus = 0;
    $sum_laskut 	= 0;
    $sum_lh	= 0;
@@ -31,6 +32,12 @@
    $sum_laskut = count($laskut);
    $palautteet = Palautteet::model()->findAll(" asiakas_id='".$asiakas->id."' ");
    $sum_palautteet = count($palautteet);
+   $vinkit = VinkkiExtranet::model()->findAll(" asiakas_id='".$asiakas->id."' ");
+   $sum_vinkit = count($vinkit);
+   $tarjoukset = CrmTarjoukset::model()->findAll(" asiakas_id='".$asiakas->id."' ");
+   $sum_tarjoukset = count($tarjoukset);
+   $sopimukset = CrmSopimukset::model()->findAll(" asiakas_id='".$asiakas->id."' ");
+   $sum_sopimukset = count($sopimukset);
    foreach($laskut as $l){
    	$lh = LaskuHistoria::model()->findAll(" lid='".$l->id."' ");
 	$sum_lh += count($lh);
@@ -45,14 +52,20 @@
 	$sum_avaimet += count($avaimet);
 	$ov = Onlinevaraus::model()->findAll(" kohde_id='".$k->id."' ");
 	$sum_onlinevaraus += count($ov);
+	$tv = Tyovuoroot::model()->findAll(" kohde='".$k->id."' ");
+	$sum_tv += count($tv);
    }
 ?>
 <table class="table table-bordered">
+<tr><td>Työvuorot</td><td class="text-danger"><?=$sum_tv?> riveja.</td></tr>
 <tr><td>Mobiili</td><td class="text-danger"><?=$sum_mobiili?> riveja.</td></tr>
 <tr><td>Avaimet</td><td class="text-danger"><?=$sum_avaimet?> riveja.</td></tr>
 <tr><td>Onlinevaraus</td><td class="text-danger"><?=$sum_onlinevaraus?> riveja.</td></tr>
 <tr><td>Laskut</td><td class="text-danger"><?=$sum_laskut?> riveja.</td></tr>
 <tr><td>Laskut historia</td><td class="text-danger"><?=$sum_lh?> riveja.</td></tr>
 <tr><td>Palautteet</td><td class="text-danger"><?=$sum_palautteet?> riveja.</td></tr>
+<tr><td>Vinkit</td><td class="text-danger"><?=$sum_vinkit?> riveja.</td></tr>
+<tr><td>Tarjoukset</td><td class="text-danger"><?=$sum_tarjoukset?> riveja.</td></tr>
+<tr><td>Sopimukset</td><td class="text-danger"><?=$sum_sopimukset?> riveja.</td></tr>
 </table>
 <!--/Kohteista-->
