@@ -412,7 +412,7 @@ $(document).ready(function(){
 
 		// <-- file_safe_opener
 		$filepath = 'img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto;
-		echo '<br>'.CHtml::link('<img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" class="img-responsive thumbnail" style="height:200px">',
+		echo CHtml::link('<img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" class="img-responsive thumbnail" style="height:200px">',
 			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
 			array('target'=>'_blank','class'=>'text-danger'
 		));
