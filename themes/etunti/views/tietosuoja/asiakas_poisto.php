@@ -29,6 +29,9 @@
    $sum_laskut 	= 0;
    $sum_lh	= 0;
    $sum_toistuvatv = 0;
+   $sum_tk	= 0;
+   $sum_tk_rivi = 0;
+
    $laskut = Lasku::model()->findAll(" as_nro='".$asiakas->asiakasnumero."' ");
    $sum_laskut = count($laskut);
    $palautteet = Palautteet::model()->findAll(" asiakas_id='".$asiakas->id."' ");
@@ -57,6 +60,12 @@
 	$sum_tv += count($tv);
 	$toistuvatv = ToistuvatTyovuorot::model()->findAll(" kohde='".$k->id."' ");
 	$sum_toistuvatv += count($toistuvatv);
+	$tk = Tyonkuvaus::model()->findAll(" kohde_id='".$k->id."' ");
+	foreach($tk as $rivi){
+	  $tkrivi = TyonkuvausRivit::model()->findAll(" tyonkuvaus_id='".$rivi->id."' ");
+	  $sum_tk_rivi += count($tkrivi);
+	}
+	$sum_tk += count($tk);
    }
 ?>
 <table class="table table-bordered">
@@ -69,6 +78,7 @@
 <tr><td>Laskut historia</td><td class="text-danger"><?=$sum_lh?> riveja.</td></tr>
 <tr><td>Palautteet</td><td class="text-danger"><?=$sum_palautteet?> riveja.</td></tr>
 <tr><td>Vinkit</td><td class="text-danger"><?=$sum_vinkit?> riveja.</td></tr>
+<tr><td>Työnkuvaukset</td><td class="text-danger"><?=$sum_tk?> riveja. (Sub riveja: <?=$sum_tk_rivi?>.)</td></tr>
 <tr><td>Tarjoukset</td><td class="text-danger"><?=$sum_tarjoukset?> riveja.</td></tr>
 <tr><td>Sopimukset</td><td class="text-danger"><?=$sum_sopimukset?> riveja.</td></tr>
 </table>
