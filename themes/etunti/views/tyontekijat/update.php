@@ -2,6 +2,7 @@
 
 if(isset($_POST['uploaded']))
 {
+  Yii::app()->user->domain = strtolower(Yii::app()->user->domain);
 
   if (!file_exists(Yii::app()->basePath."/../img/tekijat/".Yii::app()->user->domain)) {
   	mkdir(Yii::app()->basePath."/../img/tekijat/".Yii::app()->user->domain, 0777, true);
