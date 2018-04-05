@@ -512,9 +512,11 @@ $(document).ready(function(){
 	<?php if(isset($model->id)): ?>
 	<div class="section fill mb5">
 		<?php
-		$filename = Yii::app()->request->baseUrl."/img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg";
-		if (file_exists(Yii::app()->basePath."/../img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg")){
-		   echo '<img src="'.$filename.'" class="img-thumbnail"><br>
+		$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg";
+		if (file_exists($filepath)){
+		   $imageData = base64_encode(file_get_contents($filepath));
+		   $src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+		   echo '<img src="'.$src.'" class="img-thumbnail"><br>
 			<p><span class="link poistaKuva text-warning" link="'.Yii::app()->basePath.'/../img/tekijat/'.Yii::app()->user->domain.'/'.$model->id.'.jpg" request="update?id='.$model->id.'">'.Yii::t("main", "poista kuva").'</span></p>';
 		} else {
 		   echo '<img src="'.Yii::app()->request->baseUrl.'/img/tekijat/noname.jpg" class="img-thumbnail">';

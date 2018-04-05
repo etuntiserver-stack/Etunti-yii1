@@ -4,7 +4,7 @@
 
 if(isset($_POST['uploaded']))
 {
-
+  Yii::app()->user->domain = strtolower(Yii::app()->user->domain);
   if (!file_exists(Yii::app()->basePath."/../img/admins/".Yii::app()->user->domain)) {
   	mkdir(Yii::app()->basePath."/../img/admins/".Yii::app()->user->domain, 0777, true);
   }
@@ -45,7 +45,16 @@ if(isset($_POST['uploaded']))
 		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
 		  </div><div class="col-sm-4">
     		  <br>
-    		  <img src="<?php echo Yii::app()->baseUrl.'/img/admins/'.Yii::app()->user->domain.'/'.$model->id; ?>.jpg" class="img-thumbnail">
+
+		<?php
+		$filepath = dirname(Yii::app()->getBasePath()).'/img/admins/'.Yii::app()->user->domain.'/'.$model->id.'.jpg';
+		if (file_exists($filepath)){
+		   $imageData = base64_encode(file_get_contents($filepath));
+		   $src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+		   echo '<img src="'.$src.'" class="img-thumbnail">';
+		}
+		?>
+
   		  </div>
 
 
