@@ -334,6 +334,9 @@ $(document).ready(function(){
 
   $('#tyosuhdet-form').on('submit',function(e) {
 
+     if( '<?=$model->loppu?>' == '' && $('#Tyosuhdet_loppu').val() !== '' ){
+	alert('Olet merkinnyt työsuhteen päättyväksi. Viimeisen palkanmaksun jälkeen tulisi poistaa kaikki työntekijän tiedot, joita ei lain mukaan tarvitse säilyttää. Näitä tietoja ovat muun muassa palkka- ja verotiedot.');
+     }
      if( $('#modelID').val() )
      {
 	  $.ajax({
