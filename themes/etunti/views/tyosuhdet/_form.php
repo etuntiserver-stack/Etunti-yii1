@@ -160,7 +160,7 @@ $model->tid = $_GET['id'];
 	<?php echo $form->errorSummary($model); ?>
 
 		<?php echo $form->hiddenField($model,'tid'); ?>
-
+<?php if($laaja == 1) : ?>
 <div class="row">
   <div class="col-sm-3">
   <legend>
@@ -310,7 +310,7 @@ $model->tid = $_GET['id'];
 
   </div>
 </div><!-- form -->
-
+<?php endif; ?>
 	<br>
 	<div class="section buttons">
 		<?php echo CHtml::submitButton('Tallenna',array('class'=>'btn btn-primary myBgColors tallennaKaksiLomaketta')); ?>
