@@ -81,6 +81,7 @@
 		$puhelin = '';
 		$osoite = '';
 		$asiakas_id = '';
+		$kohde_id = '';
 		$k = Kohteet::model()->findByPk($t->kohdenID);
 		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'yritys'){$nimi = $k->asiakkaat->yrityksen_nimi;}
 		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'henkilo'){$nimi = $k->asiakkaat->yhteyshenkilo;}
@@ -88,7 +89,10 @@
 			$puhelin = $k->asiakkaat->puhelin;
 			$asiakas_id = $k->asiakkaat->id;
 		}
-		if(isset($k->id)){$osoite = '#'.$k->id.' '.$k->osoite;}
+		if(isset($k->id)){
+			$kohde_id = $k->id;
+			$osoite = '#'.$k->id.' '.$k->osoite;
+		}
 	?>
 	<tr>
 	 <td><?=date("d.m.Y", strtotime($t->time))?></td>
@@ -98,7 +102,7 @@
 	 </td>
 	 <td><?=$puhelin?></td>
 	 <td>
-		<i class="pull-right link text-danger kohde_pois fa fa-trash"></i>
+		<i class="pull-right link text-danger kohde_pois fa fa-trash" kohde_id="<?=$kohde_id?>" nimi="<?=$osoite?>"></i>
 		<?=$osoite?>
 	 </td>
 	</tr>
@@ -343,7 +347,7 @@
 
               <div class="panel-footer">
 		<button type="button" class="button btn-default" data-dismiss="modal" aria-label="Close">Sulje</button>
-                <button type="button" class="button btn-danger">Poista</button>
+                <button type="button" class="button btn-danger poisto-painike">Poista</button>
               </div>
               <!-- end .form-footer section -->
             </form>
@@ -358,17 +362,74 @@
 
 <script>
 $(document).ready(function(){
+
   $(".asiakas_pois").click(function(){
 
 	var nimi = $(this).attr('nimi');
+	var asiakas_id = $(this).attr('asiakas_id');
+
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tietosuoja/asiakas_poisto?asiakas_id='+$(this).attr('asiakas_id'),
+           url: location.protocol + "//" + location.host + '/index.php/tietosuoja/asiakas_poisto?asiakas_id='+ asiakas_id,
            type: "GET",
            //data: {"tarjousPainike" : "true"},
            success: function(html){
 		$('#showres').modal();
 		$('#showres .panel-title').html( '<b>' + nimi + '</b> poistaminen');
+		$('#showres .poisto-painike').attr('asiakas_id', asiakas_id).addClass('asiakas');
 		$('#showres .panel-body').html(html);
+           },
+	   error:function(data){
+		alert('Kohdetta ei löydy! Päivitä sivu!');
+	   }
+        });
+  });
+
+  $(document).delegate(".poisto-painike.asiakas","click",function(){
+	var asiakas_id = $(this).attr('asiakas_id');
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tietosuoja/asiakas_poisto?asiakas_id='+ asiakas_id,
+           type: "POST",
+           data: {"action" : "delete"},
+           success: function(html){
+		//console.log(html);
+		window.location.href="index?id=1";
+           },
+	   error:function(data){
+		alert('Kohdetta ei löydy! Päivitä sivu!');
+	   }
+        });
+  });
+
+  $(".kohde_pois").click(function(){
+
+	var nimi = $(this).attr('nimi');
+	var kohde_id = $(this).attr('kohde_id');
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tietosuoja/kohde_poisto?kohde_id='+ kohde_id,
+           type: "GET",
+           //data: {"tarjousPainike" : "true"},
+           success: function(html){
+		$('#showres').modal();
+		$('#showres .panel-title').html( '<b>' + nimi + '</b> poistaminen');
+		$('#showres .poisto-painike').attr('kohde_id', kohde_id).addClass('kohde');
+		$('#showres .panel-body').html(html);
+           },
+	   error:function(data){
+		alert('Kohdetta ei löydy! Päivitä sivu!');
+	   }
+        });
+  });
+
+  $(document).delegate(".poisto-painike.kohde","click",function(){
+	var kohde_id = $(this).attr('kohde_id');
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tietosuoja/kohde_poisto?kohde_id='+ kohde_id,
+           type: "POST",
+           data: {"action" : "delete"},
+           success: function(html){
+		//console.log(html);
+		window.location.href="index?id=1";
            },
 	   error:function(data){
 		alert('Kohdetta ei löydy! Päivitä sivu!');

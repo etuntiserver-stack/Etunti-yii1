@@ -28,7 +28,7 @@ class TietosuojaController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'asiakas_poisto'),
+				'actions'=>array('index','view', 'asiakas_poisto', 'kohde_poisto'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -315,6 +315,18 @@ class TietosuojaController extends Controller
 		$this->renderPartial('asiakas_poisto',array(
 			'asiakas'=>$asiakas,
 			'kohteet'=>$kohteet,
+		));
+		exit;
+	}
+
+	public function actionKohde_poisto($kohde_id)
+	{
+		$kohde = Kohteet::model()->findByPk($kohde_id);
+		if( !isset($kohde->id) ){
+			echo 'Ei löyty';
+		}
+		$this->renderPartial('kohde_poisto',array(
+			'kohde'=>$kohde,
 		));
 		exit;
 	}
