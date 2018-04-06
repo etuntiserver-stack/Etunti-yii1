@@ -176,12 +176,15 @@
 		$loppu_pvm = '';
 		if(isset($t->tyosuhteet->id)){
 		   $loppu_pvm = $t->tyosuhteet->loppu;
-		   if( strtotime($t->tyosuhteet->loppu) > strtotime($this->TyontekijaTyosuhdetLaskin()[0]) ){ continue; }
+		   //if( strtotime($t->tyosuhteet->loppu) > strtotime($this->TyontekijaTyosuhdetLaskin()[0]) ){ continue; }
 		}
 	?>
 	<tr>
 	 <td><?=$loppu_pvm?></td>
-	 <td><?=$this->etuSukunimi($t->id);?></td>
+	 <td>
+		<i class="pull-right link text-danger tid_pois fa fa-trash" tid="<?=$t->id?>" nimi="<?=$this->etuSukunimi($t->id);?>"></i>
+		<?=$this->etuSukunimi($t->id);?>
+	 </td>
 	 <td><?=$puhelin?></td>
 	</tr>
 	<?php endforeach; ?>
@@ -277,11 +280,11 @@
 		<?php echo $form->error($model,'edico_vinkki_viesti'); ?>
 	</div>
  </div>
- <?php if( !empty($this->VinkkiLaskin()[0]) and count($this->VinkkiLaskin()[1]) > 0 ) : ?>
+ <?php if( !empty($this->VinkkiLaskin(null)[0]) and count($this->VinkkiLaskin(null)[1]) > 0 ) : ?>
  <div class="col-sm-9">
 	<hr>
-	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?></h3></legend>
-	<h4><?= Yii::t('main', 'Vinkit vanhentunut'); ?></h4>
+	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?> <i class="link text-danger vinkit_pois fa fa-trash"></i> </h3></legend>
+	<h4><?= Yii::t('main', 'Vinkit vanhentunut'); ?> <?=date("d.m.Y", strtotime($this->VinkkiLaskin(null)[0]))?></h4>
 
 	<div class="section fill mb5" style="height:280px;overflow: auto">
 	<table class="table table-bordered table-striped">
@@ -291,11 +294,11 @@
 	<th>Puhelin</th>
 	<th>Sähköposti</th>
 	</tr>
-	<?php foreach($this->VinkkiLaskin()[1] as $t) : ?>
+	<?php foreach($this->VinkkiLaskin(null)[1] as $t) : ?>
 	<?php 
 		$puhelin = '';
 		$loppu_pvm = '';
-		if( strtotime($t->time) > strtotime($this->VinkkiLaskin()[0]) ){ continue; }
+		//if( strtotime($t->time) > strtotime($this->VinkkiLaskin(null)[0]) ){ continue; }
 	?>
 	<tr>
 	 <td><?=date("d.m.Y", strtotime($t->time))?></td>
@@ -421,10 +424,10 @@ $(document).ready(function(){
         });
   });
 
-  $(document).delegate(".poisto-painike.kohde","click",function(){
-	var kohde_id = $(this).attr('kohde_id');
+  $(document).delegate(".poisto-painike.asiakas","click",function(){
+	var asiakas_id = $(this).attr('asiakas_id');
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tietosuoja/kohde_poisto?kohde_id='+ kohde_id,
+           url: location.protocol + "//" + location.host + '/index.php/tietosuoja/asiakas_poisto?asiakas_id='+ asiakas_id,
            type: "POST",
            data: {"action" : "delete"},
            success: function(html){
@@ -436,6 +439,57 @@ $(document).ready(function(){
 	   }
         });
   });
+
+  $(".tid_pois").click(function(){
+
+	var nimi = $(this).attr('nimi');
+	var tid = $(this).attr('tid');
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tietosuoja/tid_poisto?tid='+ tid,
+           type: "GET",
+           //data: {"tarjousPainike" : "true"},
+           success: function(html){
+		$('#showres').modal();
+		$('#showres .panel-title').html( '<b>' + nimi + '</b> poistaminen');
+		$('#showres .poisto-painike').attr('tid', tid).addClass('tid');
+		$('#showres .panel-body').html(html);
+           },
+	   error:function(data){
+		alert('Kohdetta ei löydy! Päivitä sivu!');
+	   }
+        });
+  });
+
+  $(document).delegate(".poisto-painike.tid","click",function(){
+	var tid = $(this).attr('tid');
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tietosuoja/tid_poisto?tid='+ tid,
+           type: "POST",
+           data: {"action" : "delete"},
+           success: function(html){
+		//console.log(html);
+		window.location.href="index?id=1";
+           },
+	   error:function(data){
+		alert('Kohdetta ei löydy! Päivitä sivu!');
+	   }
+        });
+  });
+
+  $(document).delegate(".vinkit_pois","click",function(){
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tietosuoja/vinkit_poisto',
+           success: function(html){
+		//console.log(html);
+		window.location.href="index?id=1";
+           },
+	   error:function(data){
+		alert('Kohdetta ei löydy! Päivitä sivu!');
+	   }
+        });
+  });
+
 });
 </script>
 

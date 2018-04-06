@@ -28,7 +28,7 @@ class TietosuojaController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'asiakas_poisto', 'kohde_poisto'),
+				'actions'=>array('index','view', 'asiakas_poisto', 'kohde_poisto', 'vinkit_poisto', 'tid_poisto'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -264,14 +264,14 @@ class TietosuojaController extends Controller
 		//     Return order etu ja sukunimella -->
 
 	       	$criteria->condition = " 
-			id IN (SELECT tid FROM sivex_tyosuhdet WHERE loppu!='')
+			id IN (SELECT tid FROM sivex_tyosuhdet WHERE loppu!='' AND UNIX_TIMESTAMP(DATE_FORMAT(STR_TO_DATE(loppu, '%d.%m.%Y'), '%Y-%m-%d')) < ".strtotime($last_pvm).")
 		";
 		$data = Tyontekijat::model()->findAll($criteria);
 
 		return array($last_pvm, $data);
 	}
 
-	protected function VinkkiLaskin()
+	protected function VinkkiLaskin($action)
 	{
 		$last_pvm = '';
 		$ts=Tietosuoja::model()->findByPk(1);
@@ -288,13 +288,14 @@ class TietosuojaController extends Controller
 		$data = array();
 	       	$criteria = new CDbCriteria();
 	       	$criteria->order = " DATE(time) DESC"; 
-	       	$criteria->group = " sahkoposti DESC"; 
-/*
 	       	$criteria->condition = " 
-			id IN (SELECT tid FROM sivex_tyosuhdet WHERE loppu!='')
+			UNIX_TIMESTAMP(time) < ".strtotime($last_pvm)."
 		";
-*/
+
 		$data = VinkkiExtranet::model()->findAll($criteria);
+		if($action == 'delete'){
+			VinkkiExtranet::model()->deleteAll($criteria);
+		}
 		return array($last_pvm, $data);
 	}
 
@@ -330,4 +331,23 @@ class TietosuojaController extends Controller
 		));
 		exit;
 	}
+
+	public function actionTid_poisto($tid)
+	{
+		$tt = Tyontekijat::model()->findByPk($tid);
+		if( !isset($tt->id) ){
+			echo 'Ei löyty';
+		}
+		$this->renderPartial('tid_poisto',array(
+			'tt'=>$tt,
+		));
+		exit;
+	}
+
+	public function actionVinkit_poisto()
+	{
+		$this->VinkkiLaskin('delete');
+		exit;
+	}
+
 }
