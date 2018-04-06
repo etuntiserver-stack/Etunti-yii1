@@ -19,7 +19,7 @@ if(isset($_GET['mail'])){
 	}
 }
 
-
+echo dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain);
 phpinfo();
 
 $this->breadcrumbs=array(
