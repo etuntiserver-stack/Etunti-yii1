@@ -130,7 +130,7 @@ $laaja = $site[0]->checkOikeusFields($checkLaaja);
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-	<?php if($laaja == 1) : ?>
+	
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
@@ -141,10 +141,10 @@ $laaja = $site[0]->checkOikeusFields($checkLaaja);
 			$ts = Tyosuhdet::model()->find(" tid='".$model->id."' ");
 			if(isset($ts->id))
 			{
-				echo $this->renderPartial('//tyosuhdet/_form',array('model'=>$ts));
+				echo $this->renderPartial('//tyosuhdet/_form',array('model'=>$ts, 'laaja' =>$laaja));
 			} else {
 				$ts = new Tyosuhdet;
-				echo $this->renderPartial('//tyosuhdet/_form',array('model'=>$ts));
+				echo $this->renderPartial('//tyosuhdet/_form',array('model'=>$ts, 'laaja' =>$laaja));
 			}
 			?>
 		  </div>
@@ -153,7 +153,7 @@ $laaja = $site[0]->checkOikeusFields($checkLaaja);
                 </div>
               </div>
             </div>
-	<?php endif; ?>
+
 
 
 
