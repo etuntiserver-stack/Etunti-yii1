@@ -179,11 +179,11 @@
 		)
 		$cl = 'class="btn btn-xs btn-danger"';
 
-		$filepath = Yii::app()->getBasePath()."/img/tekijat/noname.jpg";
+		$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/noname.jpg";
 		if(isset(Yii::app()->user->domain) and file_exists('img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.".jpg") and isset(Yii::app()->user->id))
 		{
 
-		  //$filepath = dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.'.jpg';
+		  $filepath = dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.'.jpg';
 		}
 		$imageData = base64_encode(file_get_contents($filepath));
 		$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
