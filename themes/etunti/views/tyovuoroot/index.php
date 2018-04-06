@@ -179,17 +179,20 @@
 		)
 		$cl = 'class="btn btn-xs btn-danger"';
 
-		$img = Yii::app()->baseUrl.'/img/tekijat/noname.jpg';
+		$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/noname.jpg";
 		if(isset(Yii::app()->user->domain) and file_exists('img/tekijat/'.Yii::app()->user->domain.'/'.$t->id.".jpg") 
 			and isset(Yii::app()->user->id))
 		{
-		  $img = Yii::app()->baseUrl.'/img/tekijat/'.Yii::app()->user->domain.'/'.$t->id.".jpg";
+
+		  $filepath = dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.'.jpg';
 		}
+		$imageData = base64_encode(file_get_contents($filepath));
+		$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
 
 		echo '
 		<div class="row">
 		  <div class="col-sm-12">
-		    	<a href="#" class="getTekijanTiedot" for="'.$t->id.'"><img src="'.$img.'" alt="avatar" class="mw50 br64 mr15"><br> '.$this->etuSukunimi($t->id).'</a>
+		    	<a href="#" class="getTekijanTiedot" for="'.$t->id.'"><img src="'.$src.'" alt="avatar" class="mw50 br64 mr15"><br> '.$this->etuSukunimi($t->id).'</a>
 			<br>
 			<span '.$cl.'><b id="vk_'.$week.'_'.$t->id.'">'.$kokoViikko. '</b> ('.$vktyoaika.')</span>
 		  </div>
