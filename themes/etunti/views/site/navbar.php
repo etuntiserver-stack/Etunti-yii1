@@ -5,7 +5,6 @@
      $tas = explode(",",Yii::app()->user->adminPaketti);
 
   Yii::app()->user->domain = strtolower(Yii::app()->user->domain);
-  $user_img = Yii::app()->baseUrl.'/img/noname.jpg';
   $filepath = dirname(Yii::app()->getBasePath())."/img/noname.jpg";
   if(isset(Yii::app()->user->domain) and file_exists('img/admins/'.Yii::app()->user->domain.'/'.Yii::app()->user->id.".jpg") 
 	and isset(Yii::app()->user->id))
