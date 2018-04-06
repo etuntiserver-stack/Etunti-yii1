@@ -179,7 +179,7 @@
 		)
 		$cl = 'class="btn btn-xs btn-danger"';
 
-		$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/noname.jpg";
+		$filepath = Yii::app()->getBasePath()."/img/tekijat/noname.jpg";
 		if(isset(Yii::app()->user->domain) and file_exists('img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.".jpg") and isset(Yii::app()->user->id))
 		{
 
