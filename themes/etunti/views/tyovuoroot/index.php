@@ -184,7 +184,7 @@
 			and isset(Yii::app()->user->id))
 		{
 
-		  $filepath = dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.'.jpg';
+		  //$filepath = dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.'.jpg';
 		}
 		$imageData = base64_encode(file_get_contents($filepath));
 		$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
