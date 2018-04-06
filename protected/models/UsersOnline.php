@@ -29,7 +29,7 @@ class UsersOnline extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'users_online';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
