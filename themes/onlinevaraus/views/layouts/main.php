@@ -57,7 +57,7 @@ if( isset(Yii::app()->user->domain) )
   
 	<!-- Haetaan Onlinevarauksen ihan oma CSS -->
 	<link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_onlinevaraus/css/onlinevaraus_ver2.css"/>
-	<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/img/favicon.ico">
+	<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/lib/img/favicon.ico">
 
 	<!-- Firman oma taustekuva -->
 	<?php if (isset(Yii::app()->user->domain) and file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain."/pub/ov_tauste.jpg")) : ?>

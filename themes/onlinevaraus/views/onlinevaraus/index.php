@@ -78,7 +78,7 @@
 	    	<div id="lisapalvelulista"></div>
 
 		<br>
-  		<p><button class="kalenteriin btn btn-lg btn-block btn-success">Siirry kalenteriin <i class="caret"></i></button></p>
+  		<p><button class="kalenteriin btn btn-lg btn-block mybtn">Siirry kalenteriin <i class="caret"></i></button></p>
 		<br>
 	   </div>
 	   <!-- Toinen valikko -->
@@ -108,11 +108,7 @@
   	   <div class="container-fluid osoitelaatikko" <?=$osoite_style?>">
   		<div id="fullLomake">
   		   <h4 class="title-subtitle text-center"><?php echo Yii::t('main', 'Osoite'); ?></h4>
-  		   <span class="text-sininen"><?php echo Yii::t('main', 'Tunnistaudu sähköpostilla'); ?></span>
-	
-  		      <!--<span class="small"><?php echo Yii::t('main', 'sähköpostillaTeksti'); ?></span>-->
-  		      <br>
-
+  		   <h6 class="text-center"><?php echo Yii::t('main', 'Tunnistaudu sähköpostilla'); ?></h6>
   		   <div class="row">
   		      <div class="col-sm-12">
 	
@@ -125,16 +121,13 @@
   		       	<div id="loytynytOsoitteet"></div>
   		      </div>
   		   </div>
-
-  		     <br>
-
-  		     <span class="text-sininen"><?php echo Yii::t('main', 'Tai täytä yhteystietokentät'); ?></span>
-  		     <!--<span class="small"><?php echo Yii::t('main', 'taitaytateksti'); ?></span>-->
-  		     <br>
+		   <br>
+  		   <h6 class="text-center"><?php echo Yii::t('main', 'Tai täytä yhteystietokentät'); ?></h6>
 
   		     <div id="lomake">
 	
-  		      <div class="row">
+		      <!-- Poistettu käytöstä -->
+  		      <div class="row" style="display:none">
   		       <div class="col-sm-6">
   			<label><?php echo Yii::t('main', 'Asiakastyyppi '); ?></label>
   			  <select id="tyyppi" class="form-control input-lg">
@@ -143,18 +136,19 @@
   			  </select>
   		       </div>
   		      </div>
+		      <!-- /Poistettu käytöstä -->
 
   		      <div class="row">
   		       <div class="col-sm-6">
-		
-  			<label><?php echo Yii::t('main', 'Yhteyshenkilö'); ?></label>
+  			<label><?php echo Yii::t('main', 'Asiakkaan nimi'); ?></label>
   			  <input type="text" id="yhteyshenkilo" class="form-control input-lg">
-	
+  		       </div><div class="col-sm-6">
   			<label><?php echo Yii::t('main', 'Puhelin'); ?></label>
   			  <input type="text" id="puhelin" class="form-control input-lg">
-	
-  		       </div><div class="col-sm-6">
+  		       </div>
+  		      </div>
 
+			<!--
   		        <div class="yritys">
   			<label><?php echo Yii::t('main', 'Yrityksen Nimi'); ?></label>
   			  <input type="text" id="yrityksen_nimi" class="form-control input-lg">
@@ -164,12 +158,9 @@
   			<label><?php echo Yii::t('main', 'Y-tunnus'); ?></label>
   			  <input type="text" id="y_tunnus" class="form-control input-lg">
   			</div>
+			-->
 	
-  		       </div>
-  		      </div>
 
-  		      <br>
-  		      <center><h4><?php echo Yii::t('main', 'Osoite'); ?></h4></center>
 
   		      <div class="row">
   		       <div class="col-sm-12">
@@ -189,9 +180,6 @@
   		       </div>
   		      </div>
 
-  		      <br>
-  		      <center><h4><?php echo Yii::t('main', 'Lisätietoja'); ?></h4></center>
-
   		      <div class="row">
   		       <div class="col-sm-12">
   			<label><?php echo Yii::t('main', 'Lisätietoja'); ?></label>
@@ -210,9 +198,9 @@
   		  	<form id="uploadKuva" action="#" method="post" enctype="multipart/form-data">
   		     	  <div class="input-group">
   				<input type="hidden" name="kuvanLisaaminen">
-  				<input type="file" name="file" class="filestyle" data-icon="false" data-size="lg" data-buttonName="btn-primary" data-buttonText="<?php echo Yii::t('main', 'Lisää kuva'); ?>">
+  				<input type="file" name="file" class="filestyle" data-icon="false" data-size="lg" data-buttonName="btn-primary mybtn" data-buttonText="<?php echo Yii::t('main', 'Lisää kuva'); ?>">
   				<span class="input-group-btn">
-  		          		<input type="submit" value="Lataa" class="btn btn-primary btn-lg btn-group myBgColors" />
+  		          		<input type="submit" value="Lataa" class="btn btn-primary btn-lg btn-group mybtn" />
   				</span>
   		    	  </div>
   			</form>
@@ -252,14 +240,11 @@
 
 		<?php if(!isset($_SESSION['onlinevaraus']['kupongi'])) : ?>
 		<div class="row">
-		 <div class="col-xs-2">
-		   	<i class="fa fa-gift fa-2x"></i> 
-		 </div>
-		 <div class="col-xs-10">
+		 <div class="col-xs-12">
 		    <div class="input-group">
-		      <input type="text" class="form-control kupongi_id" placeholder="Alennuskoodi">
+		      <input type="text" class="form-control input-lg kupongi_id" placeholder="Alennuskoodi">
 		      <span class="input-group-btn">
-		        <button class="btn btn-warning kupongi_add" type="button"><?=Yii::t('main', 'Käytä')?></button>
+		        <button class="btn btn-warning btn-lg kupongi_add mybtn" type="button"><?=Yii::t('main', 'Käytä')?></button>
 		      </span>
 		    </div>
 		    <div class="kupongi_result"></div>
@@ -269,7 +254,7 @@
 		<!-- /Kupongi -->
 
 		<br>
-  		<p><button class="tallennaUusi btn btn-lg btn-block btn-success">Siirry maksamaan <i class="caret"></i></button></p>
+  		<p><button class="tallennaUusi btn btn-lg btn-block mybtn">Siirry maksamaan <i class="caret"></i></button></p>
 		<br>
   	   </div><!--osoitelaatikko-->
 

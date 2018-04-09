@@ -55,7 +55,7 @@
 	   if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$tv->tid.".jpg"))
 	   $kuva = '<img src="'.$filename.'" class="img-thumbnail">';
 	   else
-	   $kuva = '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
+	   $kuva = '<img src="../../lib/img/noname.jpg" class="img-thumbnail">';
 
 
 	$blockAika .= '
