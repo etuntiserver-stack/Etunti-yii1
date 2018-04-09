@@ -1636,6 +1636,7 @@ $(document).delegate(".etsikohde_alasvetovaliko","change",function(){
 	   type: 'POST',
 	   data: { jakso : jakso, kuukausi : kuukausi, from : from, to : to },
            success: function(data){
+               	console.log(data);
 		var d = JSON.parse(data);
 		if(d['return']){
 		 $('#hinnoitelu').append(d['return']).show('370');

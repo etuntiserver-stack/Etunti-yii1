@@ -411,7 +411,9 @@ $(document).ready(function(){
 	  <label>'.$data->tekijan_nimi.'<br><b>'.date("d.m.Y H:i", strtotime($data->time)).'</b></label><br>';
 
 		// <-- file_safe_opener
-		$filepath = '/var/www/html/app.etunti.fi/img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto;
+		$filepath = dirname(Yii::app()->getBasePath()).'/img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto;
+
+		if( file_exists($filepath) ){
 		$imageData = base64_encode(file_get_contents($filepath));
 		$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
 
@@ -419,6 +421,7 @@ $(document).ready(function(){
 			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
 			array('target'=>'_blank','class'=>'text-danger'
 		));
+		}
 		//     file_safe_opener -->
 
 	   if(!empty($data->kuvaus))
