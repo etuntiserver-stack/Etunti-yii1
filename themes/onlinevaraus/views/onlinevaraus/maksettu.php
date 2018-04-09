@@ -117,6 +117,7 @@ if(isset($ov->id) and isset($tv->id))
 			$kohteet->email = $asiakkaat->sahkoposti;
 			$kohteet->muut = "Onlinevaraus ".date("d.m.Y");
 			$kohteet->tietoja = $ov->lisatietoja;
+			$kohteet->aktiivinen = 1;
 
 			if(!$kohteet->save()) {
 				echo json_encode(var_dump($kohteet->errors));
