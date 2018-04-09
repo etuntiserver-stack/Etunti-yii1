@@ -1318,7 +1318,7 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 	$('#sopivatPaivatInput').val(1);
 	$('#toistuvaAll').hide('slow');
 	$('#submitButton').val('Tallenna').removeAttr( "pvmTarkistus" );
-	$('#toistuvaAllsijaan').html('<h3 class="alert alert-success">Toistuvien työvuorojen päivät tallennettu.<br>Paina Luo-painikketta lisätäksesi työvuorot työvuorolistaan.</h3>').show('slow');
+	$('#toistuvaAllsijaan').html('<h3 class="alert alert-success">Toistuvien työvuorojen päivät tallennettu.<br>Paina Tallenna-painikketta lisätäksesi työvuorot työvuorolistaan.</h3>').show('slow');
   });
 
   $('#pto').blur(function(){
