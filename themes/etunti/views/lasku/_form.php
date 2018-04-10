@@ -562,7 +562,10 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<br>
 	<?php
 	$criteria = new CDbCriteria();
-       	$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND (yksikko='h' OR yksikko='kpl') ";
+       	$criteria->condition = " 
+		hinta_alv_0!=0 AND (yksikko='h' OR yksikko='kpl') 
+		AND kategoria NOT LIKE '%eDico%' AND kategoria NOT LIKE '%onlinevaraus%'
+	";
 	echo CHtml::dropdownList('palvelu','palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
 	?>
@@ -605,7 +608,10 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<br>
 	<?php
 	$criteria = new CDbCriteria();
-       	$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND yksikko='kk' ";
+       	$criteria->condition = " 
+		hinta_alv_0!=0 AND yksikko='kk' 
+		AND kategoria NOT LIKE '%eDico%' AND kategoria NOT LIKE '%onlinevaraus%'
+	";
 	echo CHtml::dropdownList('kk_palvelu','kk_palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
 	?>
