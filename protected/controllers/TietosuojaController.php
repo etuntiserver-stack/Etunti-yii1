@@ -255,6 +255,10 @@ class TietosuojaController extends Controller
 			$last_pvm = date("Y-m-d", strtotime(" -".$ts->tyontekija_sailytysaika_lukumaara." year"));
 		}
 
+		if( empty($last_pvm) ){
+			return false;	
+		}
+
 		$data = array();
 	       	$criteria = new CDbCriteria();
 
@@ -283,6 +287,10 @@ class TietosuojaController extends Controller
 		}
 		if( $ts->edico_vinkki_sailytysajan_tyyppi == 2 and $ts->edico_vinkki_sailytysaika_lukumaara > 0){
 			$last_pvm = date("Y-m-d", strtotime(" -".$ts->edico_vinkki_sailytysaika_lukumaara." year"));
+		}
+
+		if( empty($last_pvm) ){
+			return false;	
 		}
 
 		$data = array();
