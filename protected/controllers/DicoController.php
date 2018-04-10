@@ -695,7 +695,7 @@ public function actionLogin($domain)
 		<body>';
 
 		$message .= '<br>
-'.$asiakas.' on antanut meille vinkin, että voisit olla kiinnostunut yrityksemme '.$firma->tyonantaja.' palveluista. Mikäli hyväksyt tämän viestin, annat yritys '.$firma->tyonantaja.' oikeuden nähdä syötetyt henkilötiedot ja annat luvan yhteydenottoon. Yritys '.$firma->tyonantaja.' poistaa tietosi järjestelmästä, mikäli asiakkuutta ei synny 30 päivän sisällä, siitä kun olet hyväksynyt tämän viestin. Mikäli et hyväksy tietojen näyttämistä, tiedot poistetaan välittömästi. Tämä viesti vanhenee 14 päivän kuluessa.';
+'.$asiakas.' on antanut meille vinkin, että voisit olla kiinnostunut yrityksemme '.$firma->tyonantaja.' palveluista. Mikäli hyväksyt tämän viestin, annat yritykselle '.$firma->tyonantaja.' oikeuden nähdä syötetyt henkilötiedot ja annat luvan yhteydenottoon. Yritys '.$firma->tyonantaja.' poistaa tietosi järjestelmästä, mikäli asiakkuutta ei synny 30 päivän sisällä, siitä kun olet hyväksynyt tämän viestin. Mikäli et hyväksy tietojen näyttämistä, tiedot poistetaan välittömästi. Tämä viesti vanhenee 14 päivän kuluessa.';
 
 
 		$message .= '<br>
