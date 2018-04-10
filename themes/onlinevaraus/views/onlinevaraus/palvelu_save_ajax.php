@@ -51,11 +51,14 @@
 	   elseif($pyhat == 'lauantai')
 	   $vkolisa = 1.5;
 	   
-	   $filename = "../../img/tekijat/".$_SESSION['domain']."/".$tv->tid.".jpg";
-	   if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$tv->tid.".jpg"))
-	   $kuva = '<img src="'.$filename.'" class="img-thumbnail">';
-	   else
-	   $kuva = '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
+	   $filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/".$_SESSION['domain']."/".$tv->tid.".jpg";
+	   if (file_exists($filepath)){
+		$imageData = base64_encode(file_get_contents($filepath));
+		$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+		$kuva = '<img src="'.$src.'" class="img-thumbnail">';
+	   } else {
+	   	$kuva = '<img src="../../lib/img/noname.jpg" class="img-thumbnail">';
+	   }
 
 
 	$blockAika .= '

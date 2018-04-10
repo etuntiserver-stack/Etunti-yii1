@@ -167,8 +167,8 @@ class OnlinevarausController extends Controller
 				$_SESSION['onlinevaraus']['asiakas_id']	= $modelAsiakas->id;
 				$m['asiakas_id']	= $modelAsiakas->id;
 				$m['tyyppi'] 		= $modelAsiakas->tyyppi;
-				$m['yrityksen_nimi'] 	= $modelAsiakas->yrityksen_nimi;
-				$m['y_tunnus'] 		= $modelAsiakas->y_tunnus;
+				//$m['yrityksen_nimi'] 	= $modelAsiakas->yrityksen_nimi;
+				//$m['y_tunnus'] 		= $modelAsiakas->y_tunnus;
 				$m['yhteyshenkilo']	= $modelAsiakas->yhteyshenkilo;
 				$m['puhelin']		= $modelAsiakas->puhelin;
 			}
@@ -438,8 +438,8 @@ class OnlinevarausController extends Controller
 				$ov->lisatietoja 	= $_POST['lisatietoja'];
 
 				$ov->tyyppi 		= $_POST['tyyppi'];
-				$ov->yrityksen_nimi 	= $_POST['yrityksen_nimi'];
-				$ov->y_tunnus 		= $_POST['y_tunnus'];
+				//$ov->yrityksen_nimi 	= $_POST['yrityksen_nimi'];
+				//$ov->y_tunnus 		= $_POST['y_tunnus'];
 
 
 				if($ov->save())

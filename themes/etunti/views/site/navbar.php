@@ -4,13 +4,16 @@
    if(isset(Yii::app()->user->adminPaketti)) 
      $tas = explode(",",Yii::app()->user->adminPaketti);
 
-
-  $img = Yii::app()->baseUrl.'/img/noname.jpg';
+  Yii::app()->user->domain = strtolower(Yii::app()->user->domain);
+  $filepath = dirname(Yii::app()->getBasePath())."/img/noname.jpg";
   if(isset(Yii::app()->user->domain) and file_exists('img/admins/'.Yii::app()->user->domain.'/'.Yii::app()->user->id.".jpg") 
 	and isset(Yii::app()->user->id))
   {
-  $img = Yii::app()->baseUrl.'/img/admins/'.Yii::app()->user->domain.'/'.Yii::app()->user->id.".jpg";
+	  $filepath = dirname(Yii::app()->getBasePath()).'/img/admins/'.Yii::app()->user->domain.'/'.Yii::app()->user->id.".jpg";
   }
+  $imageData = base64_encode(file_get_contents($filepath));
+  $user_img = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+
 
 
 $curpage = Yii::app()->getController()->getAction()->controller->id;
@@ -747,7 +750,7 @@ $('.tvchange').change(function(){
         <li class="dropdown menu-merge" id="etuSukuNimi">
           <a href="#" class="dropdown-toggle fw600 p15" data-toggle="dropdown"> 
 	     <etuSukuNimi>
-		<img src="<?php echo $img; ?>" alt="avatar" class="mw30 br64 mr15"> 
+		<img src="<?php echo $user_img; ?>" alt="avatar" class="mw30 br64 mr15"> 
 		<?php if(isset(Yii::app()->user->nimi)) echo Yii::app()->user->nimi; ?>
                 <span class="caret caret-tp hidden-xs"></span>
 	     </etuSukuNimi>

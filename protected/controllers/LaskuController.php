@@ -186,6 +186,11 @@ class LaskuController extends Controller
 		if(isset($k->id) and $k->hinnoittelu != '')
 		{
 			$hinnoittelu = '<h3>Hinnoittelu: '.$k->hinnoittelu.'</h3><br>';
+			$return .= '<h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> '.Yii::t('main', 'Tietoja: '). ' </h2>';
+
+			$return .= '<div class="panel heading-border"><div class="panel-body">';
+			$return .= '<h1>'.$k->osoite.'</h1>';
+			$return .= $hinnoittelu;
 		}
 
 		if(isset($k->hinnasto_id)){
@@ -193,11 +198,6 @@ class LaskuController extends Controller
 		}
 		if(isset($h->id))
 		{
-			$return .= '<h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> '.Yii::t('main', 'Tietoja: '). ' </h2>';
-
-			$return .= '<div class="panel heading-border"><div class="panel-body">';
-			$return .= '<h1>'.$k->osoite.'</h1>';
-			$return .= $hinnoittelu;
 			$return .= '<h2>'.Yii::t('main', 'Hinnasto: '). ' ' .$h->hinnaston_otsikko.'</h2>';
 			$hr = HinnastotRivi::model()->findAll(" hinnastot_id='".$h->id."' ");
 			$return .= '<table class="table table-bordered">';

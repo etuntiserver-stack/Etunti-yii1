@@ -264,3 +264,8 @@ font-size: 0.9rem;
  color: #5e7484;
  font-size: 1.5rem;
 }
+.mybtn, .mybtn:hover{
+ background: #5e7484;
+ color: #fff;
+ border-radius: 0px;
+}
