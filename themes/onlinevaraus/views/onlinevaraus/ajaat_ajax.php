@@ -10,8 +10,8 @@
 
   // kuva
    function kuva($vapaaTid){
-	$filename = "../../img/tekijat/".Yii::app()->user->domain."/".$vapaaTid.".jpg";
-	   if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$vapaaTid.".jpg"))
+	   $filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/".Yii::app()->user->domain."/".$vapaaTid.".jpg";
+	   if (file_exists($filepath))
 	   {
 		$url = Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$vapaaTid.".jpg";
 		$size = getimagesize($url);
@@ -33,7 +33,9 @@
 			imagejpeg($new_image, $url);
 			//     Image resize -->
 		}
-	   	$kuva = '<img src="'.$filename.'" class="img-thumbnail">';
+		$imageData = base64_encode(file_get_contents($filepath));
+		$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+	   	$kuva = '<img src="'.$src.'" class="img-thumbnail">';
 	   } else {
 	   	$kuva = '<img src="../../lib/img/noname.jpg" class="img-thumbnail">';
 	   }
