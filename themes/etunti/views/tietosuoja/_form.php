@@ -382,7 +382,7 @@ $(document).ready(function(){
 		$('#showres .panel-body').html(html);
            },
 	   error:function(data){
-		alert('Kohdetta ei löydy! Päivitä sivu!');
+		//alert('Kohdetta ei löydy! Päivitä sivu!');
 	   }
         });
   });
@@ -398,7 +398,7 @@ $(document).ready(function(){
 		window.location.href="index?id=1";
            },
 	   error:function(data){
-		alert('Kohdetta ei löydy! Päivitä sivu!');
+		//alert('Kohdetta ei löydy! Päivitä sivu!');
 	   }
         });
   });
@@ -419,15 +419,15 @@ $(document).ready(function(){
 		$('#showres .panel-body').html(html);
            },
 	   error:function(data){
-		alert('Kohdetta ei löydy! Päivitä sivu!');
+		//alert('Kohdetta ei löydy! Päivitä sivu!');
 	   }
         });
   });
 
-  $(document).delegate(".poisto-painike.asiakas","click",function(){
-	var asiakas_id = $(this).attr('asiakas_id');
+  $(document).delegate(".poisto-painike.kohde","click",function(){
+	var kohde_id = $(this).attr('kohde_id');
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tietosuoja/asiakas_poisto?asiakas_id='+ asiakas_id,
+           url: location.protocol + "//" + location.host + '/index.php/tietosuoja/kohde_poisto?kohde_id='+ kohde_id,
            type: "POST",
            data: {"action" : "delete"},
            success: function(html){
