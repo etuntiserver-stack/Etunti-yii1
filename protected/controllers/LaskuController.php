@@ -1772,7 +1772,7 @@ foreach($laskunRivit as $rivit)
 {
 
 	$ProductIdentifier = '';
-	$tuotteet = LaskutusTuotteet::model()->findByPk($rivit->tuoteID);
+	$tuotteet = TuotteetPalvelut::model()->findByPk($rivit->tuoteID);
 	if(isset($tuotteet->id) and $tuotteet->netvisorkey != 0){
 		$ProductIdentifier = $tuotteet->netvisorkey;
 	} elseif( $this->netvisorProductDefault() != 0 and !isset($tuotteet->id) or (isset($tuotteet->id) and $tuotteet->netvisorkey == 0) ){
