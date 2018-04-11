@@ -967,7 +967,7 @@ $xml = '
 		$listData = Valikkoot::model()->findAll($criteria);
 		$arr = array();
 		foreach($listData as $item){
-			$arr[] = $item->value;
+			$arr[] = $item->id;
 		}
 
 		$condition = "tyoryhma LIKE '%\"".implode("\"%' OR tyoryhma LIKE '%\"", $arr)."\"%'";
