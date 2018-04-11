@@ -2341,10 +2341,12 @@ class TyovuorootController extends Controller
 				$tt = Yii::app()->createController('Tyontekijat');
 				$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
 				$ids = implode(",", $tt_arr);
-				if( count($tt_arr) > 0 )
+				if( count($tt_arr) > 0 ){
 		        		$criteria->condition = ' id IN ('.$ids.') ';
-				else
+				} else {
 					die('Ei oikeuksia');
+					exit;
+				}
 			} else {
 		        	$criteria->condition = ' aktiivinen=1 ';
 			}
@@ -2618,10 +2620,12 @@ class TyovuorootController extends Controller
 				$tt = Yii::app()->createController('Tyontekijat');
 				$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
 				$ids = implode(",", $tt_arr);
-				if( count($tt_arr) > 0 )
+				if( count($tt_arr) > 0 ){
 		        		$criteria->condition = ' id IN ('.$ids.') ';
-				else
+				} else {
 					die('Ei oikeuksia');
+					exit;
+				}
 			} else {
 		        	$criteria->condition = ' aktiivinen=1 ';
 			}
