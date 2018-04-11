@@ -318,14 +318,14 @@ $(document).ready(function(){
 		<?php echo $form->labelEx($model,'tyoryhma'); ?>
 
 		<?php
-		$list = array();
-	
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
 	       	$criteria = new CDbCriteria();
 		$criteria->order = " value ";
-		$criteria->condition = " 
-			select_type='tyoryhma' 
-			AND value2 LIKE '%\"".Yii::app()->user->adminID."\"%'
-		";
+		$criteria->condition = "select_type='tyoryhma'";
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+		$criteria->addCondition ("value2 LIKE '%\"".Yii::app()->user->adminID."\"%'");
+		}
 		$l = Valikkoot::model()->findAll($criteria);
 		
 
