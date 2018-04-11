@@ -90,7 +90,7 @@ public $verot;
                      'muut' => 'text YES ',
                      'toimenpiteet' => 'longtext YES ',
                      'tietoja' => 'text YES ',
-                     'tyoryhma' => 'varchar(20) YES ',
+                     'tyoryhma' => 'int(11)',
                      'ryhma' => 'varchar(10) YES ',
                      'aktiivinen' => 'int(1) YES ',
                      'avain' => 'varchar(255) MUL ',
@@ -134,8 +134,8 @@ public $verot;
 		// will receive user inputs.
 		return array(
 			array('asiakas_id,etu_suku_nimet,osoite', 'required'),
-			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara, uusi_tilaus, hinnasto_id, alv', 'numerical', 'integerOnly'=>true),
-			array('tag_id, kaupunki, toimipaikka, tyoryhma', 'length', 'max'=>20),
+			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara, uusi_tilaus, hinnasto_id, alv, tyoryhma', 'numerical', 'integerOnly'=>true),
+			array('tag_id, kaupunki, toimipaikka', 'length', 'max'=>20),
 			array('gps_sijainti, osoite, katuosoite, kenella_on_avain, puh_nro, hinta_sis_alv, hinta_tyyppi', 'length', 'max'=>50),
 			array('lyhenne', 'length', 'max'=>46),
 			array('pnumero', 'length', 'max'=>7),

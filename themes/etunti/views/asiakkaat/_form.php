@@ -70,6 +70,23 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyoryhma'); ?>
+		<?php
+	       	$criteria = new CDbCriteria();
+		$criteria->order = " value ";
+		$criteria->condition = " 
+			select_type='tyoryhma' 
+			AND value2 LIKE '%\"".Yii::app()->user->adminID."\"%'
+		";
+		$listData = Valikkoot::model()->findAll($criteria);
+		?>
+		<?php echo $form->dropDownList($model, 'tyoryhma', CHtml::listData($listData, 'id', 'value'), 
+		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		?>
+		<?php echo $form->error($model,'tyoryhma'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakasnumero'); ?>
 		<?php echo $form->numberField($model,'asiakasnumero',$asnum); ?>
 		<?php echo $form->error($model,'asiakasnumero'); ?>

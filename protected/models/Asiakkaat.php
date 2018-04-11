@@ -97,6 +97,7 @@ class Asiakkaat extends DB2ActiveRecord
                      'hinta' => 'varchar(10)',
 		     'verot' => 'varchar(100)',
                      'hinta_sis_alv' => 'float',
+		     'tyoryhma' => 'int(11)',
 
                      //'vinkki_tunnit' => 'varchar(10)',
                      //'vinkki_prosentti' => 'varchar(10)',
@@ -125,7 +126,7 @@ class Asiakkaat extends DB2ActiveRecord
 			array('tyyppi, osoite, postinumero, kaupunki', 'required'),
                         array('asiakasnumero','unique', 'message'=>'Tämä asiakasnumero on jo olemassa!'),
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
-			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot, hinnasto_id, alv', 'numerical', 'integerOnly'=>true),
+			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot, hinnasto_id, alv, tyoryhma', 'numerical', 'integerOnly'=>true),
 			array('myyja, postinumero, k_postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, k_kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
 			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma, sahkopostilaskuosoite, token', 'length', 'max'=>255),
 			array('maksuehto, viivastyskorko, hinta, hinta_sis_alv', 'length', 'max'=>20),
@@ -190,6 +191,7 @@ class Asiakkaat extends DB2ActiveRecord
 			'hinta_tyyppi'=> Yii::t('main', 'Hinta tyyppi'),
 			'hinta'=> Yii::t('main', 'Hinta (ALV0)'),
 			'hinta_sis_alv' => Yii::t('main', 'Hinta (sis. ALV)'),
+			'tyoryhma'=> Yii::t('main', ' Työryhmä'),
 		);
 	}
 

@@ -319,11 +319,15 @@ $(document).ready(function(){
 
 		<?php
 		$list = array();
-
-		$criteria=new CDbCriteria;
+	
+	       	$criteria = new CDbCriteria();
 		$criteria->order = " value ";
-		$criteria->condition = " select_type='tyoryhma' ";
-      		$l = Valikkoot::model()->findAll($criteria);
+		$criteria->condition = " 
+			select_type='tyoryhma' 
+			AND value2 LIKE '%\"".Yii::app()->user->adminID."\"%'
+		";
+		$l = Valikkoot::model()->findAll($criteria);
+		
 
 		$ryhmat = array();
 		if(is_array(json_decode($model->tyoryhma)))
