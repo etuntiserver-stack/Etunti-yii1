@@ -3,6 +3,15 @@
 /* @var $model Domainit */
 /* @var $form CActiveForm */
 $model->time = date("d.m.Y", strtotime($model->time));
+if( $model->puhelin == '' ){
+
+	Yii::app()->db1->setActive(false);
+	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$model->domain;
+	Yii::app()->db1->setActive(true);
+
+	$ft = FirmanTiedot::model()->find(" y_tunnus='". $model->y_tunnus."' ");
+	if( isset($ft->id) ){ $model->puhelin = $ft->puhelin; }
+}
 ?>
 
 <div class="row">
@@ -57,6 +66,13 @@ $model->time = date("d.m.Y", strtotime($model->time));
 		<?php echo $form->textField($model,'yritys',array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'yritys'); ?>
 	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'y_tunnus'); ?>
+		<?php echo $form->textField($model,'y_tunnus',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'y_tunnus'); ?>
+	</div>
+
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'puhelin'); ?>
