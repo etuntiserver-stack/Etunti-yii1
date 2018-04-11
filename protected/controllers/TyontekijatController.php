@@ -123,6 +123,12 @@ class TyontekijatController extends Controller
 	public function actionTyoryhmat_hallinta()
 	{
 
+	// <-- Oikeudet
+	   $checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$criteria = new CDbCriteria();
 	        $criteria->order = " tekijan_nimi ";
 	        $criteria->condition = " aktiivinen=1 ";
