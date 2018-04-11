@@ -950,10 +950,34 @@ $xml = '
 
 	}
 
-
 	protected function etuSukunimi($tid)
 	{
 	   $site = Yii::app()->createController('Site');
 	   return $site[0]->etuSukunimi($tid);
+	}
+
+	public function TyoryhmatTyontekijatHelper()
+	{
+		$criteria = new CDbCriteria();
+		$criteria->condition = "
+			select_type='tyoryhma'
+			AND value2 LIKE '%\"".Yii::app()->user->adminID."\"%'
+		";
+
+		$listData = Valikkoot::model()->findAll($criteria);
+		$arr = array();
+		foreach($listData as $item){
+			$arr[] = $item->value;
+		}
+
+		$condition = "tyoryhma LIKE '%\"".implode("\"%' OR tyoryhma LIKE '%\"", $arr)."\"%'";
+		$criteria = new CDbCriteria();
+		$criteria->condition = " aktiivinen = '1' AND ($condition) ";
+		$tt = Tyontekijat::model()->findAll($criteria);
+		$arr = array();
+		foreach($tt as $item){
+			$arr[$item->id] = $item->id;
+		}
+	   return $arr;
 	}
 }

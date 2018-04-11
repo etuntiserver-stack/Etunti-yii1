@@ -24,7 +24,7 @@ class SiteController extends Controller
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
+			//'accessControl', // perform access control for CRUD operations
 			//'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
@@ -2363,8 +2363,17 @@ $(document).ready(function(){
 		$criteria = $this->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
 
-		$criteria->condition = " aktiivinen='".$aktiivinen."' ";
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
 
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			$criteria->condition = " aktiivinen='".$aktiivinen."' AND id IN ($ids) ";
+		} else {
+			$criteria->condition = " aktiivinen='".$aktiivinen."' ";
+		}
 
 		if($class != null) $cl = ' class="'.$class.'" '; else $cl = '';
 		if($id != null)	$i = ' id="'.$id.'" '; else $i = '';

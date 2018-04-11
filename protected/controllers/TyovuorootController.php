@@ -2327,9 +2327,17 @@ class TyovuorootController extends Controller
 		// <-- Oletus arvot
 		if(!isset(Yii::app()->session['tyontekijat']))
 		{
-        		$criteria->order = "id DESC LIMIT 5";
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+
+			// <-- Return order etu ja sukunimella
+			$site = Yii::app()->createController('Site');
+			$criteria = $site[0]->etuSukunimiCriteria($criteria);
+			//     Return order etu ja sukunimella -->
+
 	        	$criteria->select = "id,tekijan_nimi";
-	        	$criteria->condition = " aktiivinen = '1' ";
+			$ids = implode(",", $tt_arr);
+	        	$criteria->condition = ' id IN ('.$ids.') ';
 			$tt = Tyontekijat::model()->findAll($criteria);
 			$tekijatOletuksena = array();
 			foreach($tt as $t)
@@ -2344,10 +2352,11 @@ class TyovuorootController extends Controller
 		if(Yii::app()->session['tyontekijat'])
 		{
 
-		// <-- Return order etu ja sukunimella
-		$site = Yii::app()->createController('Site');
-		$criteria = $site[0]->etuSukunimiCriteria($criteria);
-		//     Return order etu ja sukunimella -->
+			// <-- Return order etu ja sukunimella
+			$site = Yii::app()->createController('Site');
+			$criteria = $site[0]->etuSukunimiCriteria($criteria);
+			//     Return order etu ja sukunimella -->
+
 
         		$criteria->select = "id,tekijan_nimi, tyoryhma";
         		$criteria->condition = " aktiivinen = '1' ";
@@ -2585,15 +2594,17 @@ class TyovuorootController extends Controller
 		// <-- Oletus arvot
 		if(!isset(Yii::app()->session['tyontekijat']))
 		{
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
 
-			if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0)
-				$criteria->order = " tekijan_nimi,id DESC LIMIT 5 ";
-			else
-				$criteria->order = " sukunimi,id DESC LIMIT 5 ";
-
+			// <-- Return order etu ja sukunimella
+			$site = Yii::app()->createController('Site');
+			$criteria = $site[0]->etuSukunimiCriteria($criteria);
+			//     Return order etu ja sukunimella -->
 
 	        	$criteria->select = "id,tekijan_nimi";
-	        	$criteria->condition = " aktiivinen = '1' ";
+			$ids = implode(",", $tt_arr);
+	        	$criteria->condition = ' id IN ('.$ids.') ';
 			$tt = Tyontekijat::model()->findAll($criteria);
 			$tekijatOletuksena = array();
 			foreach($tt as $t)
