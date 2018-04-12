@@ -43,6 +43,16 @@
 </div>
 <?php endif; ?>
 
+<?php if($tilanne == 3) : ?>
+<div class="container">
+<div class="row">
+<div class="col-sm-12">
+<p class="text-center"><h1>Lataa nyt ohjelma puhelimeesi ja syötä tunnuksesi. Tervetuloa eDicon käyttäjien joukkoon.</h1></p>
+</div><!--/col-sm-6-->
+</div><!--/row-->
+</div>
+<?php endif; ?>
+
 <script>
 $(document).ready(function(){
 
