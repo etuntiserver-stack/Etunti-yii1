@@ -438,7 +438,7 @@ Yritys '.$yr.'
 <p>
 <a href="https://play.google.com/store/apps/details?id=fi.etunti.dico&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="'.Yii::app()->request->hostInfo.'/lib/app/google-play.jpg" style="height:100px" /></a>
 
-<a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="'.Yii::app()->request->hostInfo.'/lib/app/app-ios.jpg" style="height:100px" ></a>
+<a href="https://itunes.apple.com/fi/app/edico/id1267192864?mt=8"><img src="'.Yii::app()->request->hostInfo.'/lib/app/app-ios.jpg" style="height:100px" ></a>
 </p>
 				';
 
