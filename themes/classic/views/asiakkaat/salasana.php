@@ -47,7 +47,7 @@
 <div class="container">
 <div class="row">
 <div class="col-sm-12">
-<p class="text-center"><h1>Lataa nyt ohjelma puhelimeesi ja syötä tunnuksesi. Tervetuloa eDicon käyttäjien joukkoon.</h1></p>
+<p class="text-center"><h1>Lataa nyt ohjelma puhelimeesi ja syötä tunnuksesi. <br>Tervetuloa eDicon käyttäjien joukkoon.</h1></p>
 </div><!--/col-sm-6-->
 </div><!--/row-->
 </div>
