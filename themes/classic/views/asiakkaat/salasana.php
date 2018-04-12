@@ -47,7 +47,15 @@
 <div class="container">
 <div class="row">
 <div class="col-sm-12">
+<center>
 <p class="text-center"><h1>Lataa nyt ohjelma puhelimeesi ja syötä tunnuksesi. <br>Tervetuloa eDicon käyttäjien joukkoon.</h1></p>
+<br>
+<p>
+<a href="https://play.google.com/store/apps/details?id=fi.etunti.dico&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="<?=Yii::app()->request->hostInfo?>/lib/app/google-play.jpg" style="height:100px" /></a>
+
+<a href="https://itunes.apple.com/fi/app/edico/id1267192864?mt=8"><img src="<?=Yii::app()->request->hostInfo?>/lib/app/app-ios.jpg" style="height:100px" ></a>
+</p>
+</center>
 </div><!--/col-sm-6-->
 </div><!--/row-->
 </div>
