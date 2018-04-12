@@ -2370,7 +2370,11 @@ $(document).ready(function(){
 			$tt = Yii::app()->createController('Tyontekijat');
 			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
 			$ids = implode(",", $tt_arr);
-			$criteria->condition = " aktiivinen='".$aktiivinen."' AND id IN ($ids) ";
+			if( count($tt_arr) > 0 ){
+				$criteria->condition = " aktiivinen='".$aktiivinen."' AND id IN ($ids) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
 		} else {
 			$criteria->condition = " aktiivinen='".$aktiivinen."' ";
 		}

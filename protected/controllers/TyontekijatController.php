@@ -965,19 +965,24 @@ $xml = '
 		";
 
 		$listData = Valikkoot::model()->findAll($criteria);
-		$arr = array();
-		foreach($listData as $item){
-			$arr[] = $item->id;
+
+		$criteria = new CDbCriteria();
+		$criteria->condition = " aktiivinen = '1' ";
+		$tt = Tyontekijat::model()->findAll($criteria);
+		$tt_arr = array();
+		foreach($tt as $tekija){
+			$arr = array();
+			foreach($listData as $item){
+				if( 
+					is_array(json_decode($tekija->tyoryhma)) 
+					and in_array($item->value, json_decode($tekija->tyoryhma)) 
+				){
+					$tt_arr[$tekija->id] = $tekija->id;
+				}
+			}
+
 		}
 
-		$condition = "tyoryhma LIKE '%\"".implode("\"%' OR tyoryhma LIKE '%\"", $arr)."\"%'";
-		$criteria = new CDbCriteria();
-		$criteria->condition = " aktiivinen = '1' AND ($condition) ";
-		$tt = Tyontekijat::model()->findAll($criteria);
-		$arr = array();
-		foreach($tt as $item){
-			$arr[$item->id] = $item->id;
-		}
-	   return $arr;
+	   	return $tt_arr;
 	}
 }

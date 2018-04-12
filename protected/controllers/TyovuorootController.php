@@ -2439,20 +2439,20 @@ class TyovuorootController extends Controller
 		// <-- tyoryhma
 		if(isset(Yii::app()->session['tyoryhma']))
 		{
+	   	   $tyoryhma_cond = '';
+		   $tt = Yii::app()->createController('Tyontekijat');
+		   $tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+		   $ids = implode(",", $tt_arr);
+		   if( count($tt_arr) > 0 ){
+		   	$tyoryhma_cond = ' AND id IN ('.$ids.') ';
+		   } 
 
-		   $arr = array();
-		   foreach(Yii::app()->session['tyoryhma'] as $it)
-		   {
-			$arr[] = str_replace("\\", "\\\\\\\\", json_encode($it));
-		   }
-
-		   $tyoryhma_like = " tyoryhma LIKE '%".implode("%' OR tyoryhma LIKE '%", $arr)."%'";
 	           $criteria->addCondition ("
 		   id IN (  
 		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
 		   )
-		   AND ($tyoryhma_like)
+		   $tyoryhma_cond
 		   ");
 
 		}
@@ -2633,7 +2633,7 @@ class TyovuorootController extends Controller
 			$tekijatOletuksena = array();
 			foreach($tt as $t)
 			$tekijatOletuksena[] = $t->id;
-	
+
 			Yii::app()->session['tyontekijat'] = $tekijatOletuksena;
 		}
 		// Oletus arvot -->
@@ -2713,18 +2713,22 @@ class TyovuorootController extends Controller
 		// <-- tyoryhma
 		if(isset(Yii::app()->session['tyoryhma']))
 		{
+	   	   $tyoryhma_cond = '';
+		   $tt = Yii::app()->createController('Tyontekijat');
+		   $tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+		   $ids = implode(",", $tt_arr);
+		   if( count($tt_arr) > 0 ){
+		   	$tyoryhma_cond = ' AND id IN ('.$ids.') ';
+		   } 
 
-		   $tyoryhma_like = "tyoryhma LIKE '%".implode("%' OR tyoryhma LIKE '%", Yii::app()->session['tyoryhma'])."%'";
 	           $criteria->addCondition ("
 		   id IN (  
 		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-		       AND tid IN 
-		       (
-			    SELECT id FROM sivex_ttekijat WHERE $tyoryhma_like
-		       )
 		   )
+		   $tyoryhma_cond
 		   ");
+
 		}
 		//   tyoryhma -->
 
