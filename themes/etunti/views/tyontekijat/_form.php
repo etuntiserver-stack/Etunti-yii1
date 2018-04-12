@@ -314,20 +314,21 @@ $(document).ready(function(){
 		<?php echo $form->error($model,'tyo_toimialue'); ?>
 	</div>
 
+	<?php
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+	?>
+
+	<?php if( $site[0]->checkOikeusFields($checkOikeus) == 1 ) : ?>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tyoryhma'); ?>
 
 		<?php
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-		$site = Yii::app()->createController('Site');
+
 	       	$criteria = new CDbCriteria();
 		$criteria->order = " value ";
 		$criteria->condition = "select_type='tyoryhma'";
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-		$criteria->addCondition ("value2 LIKE '%\"".Yii::app()->user->adminID."\"%'");
-		}
 		$l = Valikkoot::model()->findAll($criteria);
-		
 
 		$ryhmat = array();
 		if(is_array(json_decode($model->tyoryhma)))
@@ -350,7 +351,7 @@ $(document).ready(function(){
         	?>
 		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
-
+	<?php endif; ?>
 
 
    </div>

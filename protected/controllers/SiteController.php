@@ -2585,4 +2585,22 @@ $(document).ready(function(){
 
 		return '<img src="'.$logo.'" style="height:'.$korkeus.'px;">';
 	}
+
+	public function TyoryhmatHelper()
+	{
+		$criteria = new CDbCriteria();
+		$criteria->condition = "
+			select_type='tyoryhma'
+			AND value2 LIKE '%\"".Yii::app()->user->adminID."\"%'
+		";
+
+		$listData = Valikkoot::model()->findAll($criteria);
+		$arr = array();
+		foreach($listData as $item){
+			$arr[$item->id] = $item->id;
+		}
+
+	   	return $arr;
+	}
+
 }

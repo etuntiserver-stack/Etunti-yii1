@@ -34,7 +34,7 @@ $tek = '';
 	<td class="col-sm-3">
 		<input type="text" class="form-control m2" value="<?php echo $data->value; ?>" id="a2_<?php echo $data->id; ?>" for="<?php echo $data->id; ?>">
 	</td>
-
+<?php /*
 	<td class="col-sm-3">
 		<?php
 			// <-- tyontekijat
@@ -56,7 +56,7 @@ $tek = '';
 			// tyontekijat -->
 		?>
 	</td>
-
+*/ ?>
 	<td class="col-sm-3">
 		<?php
 			// <-- Työryhmä

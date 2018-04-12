@@ -67,14 +67,14 @@
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'Työryhmä'); ?></th>
-  <th><?php echo Yii::t('main', 'Työntekijät'); ?></th>
+  <!--<th><?php echo Yii::t('main', 'Työntekijät'); ?></th>-->
   <th><?php echo Yii::t('main', 'Vastuuhenkilö'); ?></th>
   </tr>
   </thead>
   <?php
 	$admins = Administrators::model()->findAll(array('order' => 'adm_nimi'));
 	foreach($model as $data){
-		echo $this->renderPartial('_tyoryhmat_hallinta', array('data'=>$data, 'admins'=>$admins, 'tyontekijat'=>$tyontekijat));
+		echo $this->renderPartial('_tyoryhmat_hallinta', array('data'=>$data, 'admins'=>$admins)); //'tyontekijat'=>$tyontekijat
 	}
   ?>
   </table>
@@ -121,10 +121,12 @@ $(document).ready(function(){
 	var thisFor = $(this).attr('for');
 	updateValiko(thisFor);
  });
+/*
  $(".m4").change(function(){
 	var thisFor = $(this).attr('for');
 	updateValiko(thisFor);
  });
+*/
  $(".m2").keyup(function(){
 	var thisFor = $(this).attr('for');
 	updateValiko(thisFor);
@@ -139,14 +141,14 @@ $(document).ready(function(){
 	var thisID = $(this).attr('id');
 	var a2 = $('#a2_'+thisID).val();
 	var a3 = $('#a3_'+thisID+' :selected').map(function(){return $(this).val();}).get();
-	var a4 = $('#a4_'+thisID+' :selected').map(function(){return $(this).val();}).get();
+	/*var a4 = $('#a4_'+thisID+' :selected').map(function(){return $(this).val();}).get();*/
 
 		console.log(a3)
 
         $.ajax({
            url: 'tyoryhmat_hallinta',
            type: "POST",
-           data: { update : "true", id : thisID, value : a2, value2 : a3, selected_tyontekijat : a4 },
+           data: { update : "true", id : thisID, value : a2, value2 : a3 }, /* selected_tyontekijat : a4 */
            success: function(html){
 
 		console.log(html);

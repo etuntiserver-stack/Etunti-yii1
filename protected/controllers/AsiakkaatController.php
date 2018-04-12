@@ -923,6 +923,19 @@ $xml = '
 
        		$criteria = new CDbCriteria();
 
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+
 		if(isset($_GET['sort']) and $_GET['sort'] != 'asiakasnumero'){
 	        $criteria->order = " $_GET[sort]!='' DESC, $_GET[sort] $_GET[s] ";
 		} elseif(isset($_GET['sort']) and $_GET['sort'] == 'asiakasnumero'){
@@ -930,16 +943,6 @@ $xml = '
 		} else {
 	        $criteria->order = " id DESC ";
 		}
-
-/*
-if(isset($_POST['osoite']))
-{
-$osoite = filter_var($_POST['osoite'], FILTER_SANITIZE_SPECIAL_CHARS);
-echo $osoite;
-exit;
-}
-*/
-
 
 		if(isset($_GET['osoite']) and !empty($_GET['osoite']))
 	        $criteria->addCondition (" osoite LIKE '%".$_GET['osoite']."%' ");
