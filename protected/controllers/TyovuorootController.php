@@ -3055,10 +3055,25 @@ class TyovuorootController extends Controller
 
 		$criteria=new CDbCriteria;
 		$criteria->order =" yrityksen_nimi!='' DESC,yhteyshenkilo!='' DESC";
-		$criteria->condition =" 
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
+
+		$criteria->addCondition (" 
 			aktiivinen=1 
 			AND (yrityksen_nimi LIKE '%".$key."%' OR yhteyshenkilo LIKE '%".$key."%' OR osoite LIKE '%".$key."%' )	
-		";
+		");
 
  		$as = Asiakkaat::model()->findAll($criteria);
 		$nm = array();
@@ -3084,10 +3099,26 @@ class TyovuorootController extends Controller
 
 		$criteria=new CDbCriteria;
 		$criteria->order =" etu_suku_nimet!='' DESC,etu_suku_nimet!='' DESC";
-		$criteria->condition =" 
+
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
+
+		$criteria->addCondition (" 
 			aktiivinen=1 
 			AND etu_suku_nimet LIKE '%".$key."%'	
-		";
+		");
 
  		$k = Kohteet::model()->findAll($criteria);
 		if( count($k) > 0 )
@@ -3113,9 +3144,24 @@ class TyovuorootController extends Controller
 
 		$criteria=new CDbCriteria;
 		$criteria->order =" osoite!='' DESC, osoite ASC";
-		$criteria->condition =" 
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
+
+		$criteria->addCondition (" 
 			osoite LIKE '%".$key."%'	
-		";
+		");
 
  		$as = Kohteet::model()->findAll($criteria);
 		$nm = array();

@@ -2252,6 +2252,22 @@ $(document).ready(function(){
 		$term = trim($term);
 		$criteria = new CDBcriteria;
 
+		// <-- Tyoryhmat
+		if( $model == 'Asiakkaat' or $model == 'Kohteet' ){
+			$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+			$site = Yii::app()->createController('Site');
+			if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+				$arr = $site[0]->TyoryhmatHelper();
+				$ids = implode(",", $arr);
+				if( count($arr) > 0 ){
+					$criteria->condition = " tyoryhma IN ($ids) ";
+				} else {
+					$criteria->condition = " 1!=1 ";
+				}
+			}
+		}
+		//    Tyoryhmat -->
+
 		if(is_array(json_decode($sarake, true)))
 		{
 			$sarake_nimi = json_decode($sarake, true)[0];
