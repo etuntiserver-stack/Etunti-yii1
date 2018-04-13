@@ -922,6 +922,7 @@ $xml = '
 
        		$criteria = new CDbCriteria();
 
+		// <-- Tyoryhmat
 		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
 
@@ -934,6 +935,7 @@ $xml = '
 				$criteria->condition = " 1!=1 ";
 			}
 		}
+		//    Tyoryhmat -->
 
 		if(isset($_GET['sort']) and $_GET['sort'] != 'asiakasnumero'){
 	        $criteria->order = " $_GET[sort]!='' DESC, $_GET[sort] $_GET[s] ";
@@ -1810,8 +1812,25 @@ $xml = '
 
 		$list = array();
 		$criteria=new CDbCriteria;
+
 		if($aktiivinen == true)
 			$criteria->condition=" aktiivinen=1 ";
+
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
 
       		$l = Asiakkaat::model()->findAll($criteria);
 		$as_arr = array();

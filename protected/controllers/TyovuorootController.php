@@ -2335,6 +2335,7 @@ class TyovuorootController extends Controller
 
 	        	$criteria->select = "id,tekijan_nimi";
 
+			// <-- Tyoryhmat
 			$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 			$site = Yii::app()->createController('Site');
 			if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
@@ -2344,12 +2345,13 @@ class TyovuorootController extends Controller
 				if( count($tt_arr) > 0 ){
 		        		$criteria->condition = ' id IN ('.$ids.') ';
 				} else {
-					die('Ei oikeuksia');
-					exit;
+		        		$criteria->condition = ' 1!=1 ';
 				}
 			} else {
 		        	$criteria->condition = ' aktiivinen=1 ';
 			}
+			//    Tyoryhmat -->
+
 			$tt = Tyontekijat::model()->findAll($criteria);
 			$tekijatOletuksena = array();
 			foreach($tt as $t)

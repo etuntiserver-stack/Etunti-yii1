@@ -171,6 +171,24 @@ if(count($k) > 0){
 		$asetukset = Asetukset::model()->findByPk(1);
 		$criteria = new CDbCriteria();
 		$criteria->condition = " aktiivinen=1 ";
+
+			// <-- Tyoryhmat
+			$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+			$site = Yii::app()->createController('Site');
+			if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+				$tt = Yii::app()->createController('Tyontekijat');
+				$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+				$ids = implode(",", $tt_arr);
+				if( count($tt_arr) > 0 ){
+		        		$criteria->condition = ' id IN ('.$ids.') ';
+				} else {
+		        		$criteria->condition = ' 1!=1 ';
+				}
+			} else {
+		        	$criteria->condition = ' aktiivinen=1 ';
+			}
+			//    Tyoryhmat -->
+
 		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
 	       	$criteria->order = " tekijan_nimi ";
 		} else {

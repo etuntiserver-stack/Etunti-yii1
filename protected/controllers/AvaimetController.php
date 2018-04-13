@@ -223,6 +223,22 @@ class AvaimetController extends Controller
 
        		$criteria = new CDbCriteria();
 
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " kohde IN ( SELECT id FROM sivex_kohdet WHERE tyoryhma IN ($ids)) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
+
+
 		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
 		{
 	        $criteria->addCondition (" 
