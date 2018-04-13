@@ -126,7 +126,26 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
    }
      echo '<TH>Yht.</TH>';
   echo '</TR>';
-  $t = Tyontekijat::model()->findAll(" aktiivinen = '1' ");
+
+		$criteria=new CDbCriteria;
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+		       		$criteria->condition = " id IN ($ids) ";
+			} else {
+				$criteria->condition =" 1!=1 ";
+			}
+		} else {
+			$criteria->condition =" aktiivinen=1  ";
+		}
+		//     Tyoryhmat -->
+
+  $t = Tyontekijat::model()->findAll($criteria);
   foreach($t as $v)
   {
   $yht = 0;
