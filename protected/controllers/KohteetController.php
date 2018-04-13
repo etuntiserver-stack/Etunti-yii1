@@ -444,9 +444,9 @@ class KohteetController extends Controller
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
 
+		// <-- Tyoryhmat
 		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
-
 		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
 			$arr = $site[0]->TyoryhmatHelper();
 			$ids = implode(",", $arr);
@@ -456,6 +456,7 @@ class KohteetController extends Controller
 				$criteria->condition = " 1!=1 ";
 			}
 		}
+		//    Tyoryhmat -->
 
 		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
 	        $criteria->addCondition (" osoite LIKE '%".$_POST['osoite']."%' ");
