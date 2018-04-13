@@ -103,8 +103,7 @@ class AsiakkaatController extends Controller
 		{
 			$new_password = password_hash($_POST['password1'], PASSWORD_BCRYPT);
 			Asiakkaat::model()->updateByPk($model->id, array('salasana' => $new_password, 'token' => ''));
-			$tilanne = 2;
-			$this->redirect(array('/site/index'));
+			$tilanne = 3;
 		}
 
 		$this->render('salasana', array('tilanne' => $tilanne));
