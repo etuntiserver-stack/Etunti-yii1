@@ -2343,7 +2343,7 @@ class TyovuorootController extends Controller
 				$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
 				$ids = implode(",", $tt_arr);
 				if( count($tt_arr) > 0 ){
-		        		$criteria->condition = ' id IN ('.$ids.') ';
+		        		$criteria->condition = " id IN ($ids) ";
 				} else {
 		        		$criteria->condition = ' 1!=1 ';
 				}

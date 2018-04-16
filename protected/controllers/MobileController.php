@@ -1234,6 +1234,20 @@ function num($val){
 
 	        $criteria->condition = " admin!=1 AND status=3 ";
 
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE tyoryhma IN ($ids) ) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
+
 		if(isset(Yii::app()->session['tekijaPaaSivulla']))
 	        $criteria->addCondition (" tid = '".Yii::app()->session['tekijaPaaSivulla']."' ");
 
@@ -1346,6 +1360,20 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		time DESC ";
 
 	        $criteria->condition = " admin!=1 ";
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE tyoryhma IN ($ids) ) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
 
 		if(Yii::app()->session['tekijaPaaSivulla'])
 	        $criteria->addCondition (" tid = '".Yii::app()->session['tekijaPaaSivulla']."' ");
@@ -2307,8 +2335,22 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
        		$criteria = new CDbCriteria();
         	$criteria->order = "tekijan_nimi"; //"SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))"
-
         	$criteria->condition = " aktiivinen=1 ";
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+	        		$criteria->addCondition (" id IN ($ids)");
+			} else {
+		        	$criteria->condition = ' 1!=1 ';
+			}
+		}
+		//    Tyoryhmat -->
 
 		if(Yii::app()->session['Tekija']){
 		  if(count(Yii::app()->session['Tekija']) > 1)
@@ -2720,6 +2762,20 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date('Y-m-d', strtotime($from))."' AND '".date('Y-m-d', strtotime($to))."' 			
 		";
 
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+	        		$criteria->addCondition (" tid IN ($ids)");
+			} else {
+		        	$criteria->condition = ' 1!=1 ';
+			}
+		}
+		//    Tyoryhmat -->
 
 		$model = Mobile::model()->findAll($criteria);
 
@@ -2769,6 +2825,21 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND kohdenID!=''
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date('Y-m-d', strtotime($from))."' AND '".date('Y-m-d', strtotime($to))."' 
 		";
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE tyoryhma IN ($ids) ) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
+
 
 		if(isset($_POST['osoite']) and !empty($_POST['osoite'])){
 		$criteria->addCondition  (" kohde_kannasta LIKE '%".$_POST['osoite']."%' ");
@@ -2854,6 +2925,20 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND kohdenID!=''
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date('Y-m-d', strtotime($from))."' AND '".date('Y-m-d', strtotime($to))."' 
 		";
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE tyoryhma IN ($ids) ) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
 
 		if(isset($_POST['osoite']) and !empty($_POST['osoite'])){
 		$criteria->addCondition  (" kohde_kannasta LIKE '%".$_POST['osoite']."%' ");

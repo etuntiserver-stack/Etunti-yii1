@@ -309,6 +309,8 @@ $(".muokaValiko").click(function() {
 		$criteria = $site[0]->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
 
+		$criteria->condition =" aktiivinen=1 and id!='".$model->tid."' ";
+
 		// <-- Tyoryhmat
 		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
@@ -321,8 +323,6 @@ $(".muokaValiko").click(function() {
 			} else {
 				$criteria->condition =" 1!=1 ";
 			}
-		} else {
-			$criteria->condition =" aktiivinen=1 and id!='".$model->tid."' ";
 		}
 		//     Tyoryhmat -->
 

@@ -82,8 +82,8 @@
 			    <!-- Autocomplete -->
 			    <?php
 	   			$site = Yii::app()->createController('Site');
-				$mod = 'Mobile';
-				$sarake = 'kohde_kannasta';
+				$mod = 'Kohteet';
+				$sarake = 'osoite';
 				$placeholder = 'Osoite';
 				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
 				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
