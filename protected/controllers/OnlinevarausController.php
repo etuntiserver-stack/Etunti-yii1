@@ -71,7 +71,7 @@ class OnlinevarausController extends Controller
                 Yii::app()->theme = 'onlinevaraus';
 		if(isset($_GET['domain']))
 		{
-
+			if( isset($_SESSION['onlinevaraus']) ){ unset($_SESSION['onlinevaraus']); }
 			$domainit = Domainit::model()->find(" domain='".$_GET['domain']."' ");
 			if(isset($domainit->paketti))
 			{
