@@ -1087,6 +1087,29 @@ jQuery(function(){
 		<?php echo $form->error($model,'tyoryhmat'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyoryhmat_tyontekijat'); ?>
+		<?php 
+        	$l = array(
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'tyoryhmat_tyontekijat', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'tyoryhmat_tyontekijat'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyoryhmat_kohde'); ?>
+		<?php 
+        	$l = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'tyoryhmat_kohde', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'tyoryhmat_kohde'); ?>
+	</div>
+
    </div>
   </div>
 

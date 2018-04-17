@@ -647,19 +647,37 @@ class TyovuorootController extends Controller
 				AND tid='".$_POST['tid']."'
 			";
 			$tv = Tyovuoroot::model()->findAll($criteria);
+			$asetukset = Asetukset::model()->findByPk(1);
 			$for = '';
 			if(isset($tv[0]))
 			{
 			  foreach($tv as $data)
 			  {
+
+			   	// <-- Tyoryhmat
+				$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+				$site = Yii::app()->createController('Site');
+				if( 
+				   isset($data->kohteet) 
+				   and isset($asetukset) 
+				   and $asetukset->tyoryhmat_kohde == 1 
+				   and $site[0]->checkOikeusFields($checkOikeus) == 0 
+				){
+					$arr = $site[0]->TyoryhmatHelper();
+					if( count($arr) > 0 and !in_array($data->kohteet->tyoryhma, $arr)){
+			   			continue;
+					}
+				}
+			   	//    Tyoryhmat -->
+
 				$id = $data->id."_".date("Ymd", strtotime($data->pvm))."_".$data->tid;
 				$for = date("Ymd", strtotime($data->pvm))."_".$data->tid;
 				$_SESSION['muistin'][$id] = $id;
-				//print_r($_SESSION['muistin']);
 			  }
 			}
-				echo $for;
+				print_r($_SESSION['muistin']);
 		}
+		exit;
 
 	}
 

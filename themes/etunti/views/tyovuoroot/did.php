@@ -155,13 +155,11 @@ if(!isset($_POST['tulosta']))
 	   // Asiakas nakyvissa
 	   $asiakasNakyvissa = '';
 	   if(isset($asetukset) and $asetukset->asiakas_tyovuorossa == 1){
-		if(isset($tvVal->kohteet->asiakas_id))
-		$as = Asiakkaat::model()->findbypk($tvVal->kohteet->asiakas_id);
 		$name = '';
-		if(isset($as->id) and !empty($as->yrityksen_nimi))
-		$name = $as->yrityksen_nimi;
-		elseif(isset($as->id) and empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo))
-		$name = $as->yhteyshenkilo;
+		if(isset($tvVal->kohteet->asiakkaat) and $tvVal->kohteet->asiakkaat->tyyppi == 'yritys')
+		$name = $tvVal->kohteet->asiakkaat->yrityksen_nimi;
+		if(isset($tvVal->kohteet->asiakkaat) and $tvVal->kohteet->asiakkaat->tyyppi == 'henkilo')
+		$name = $tvVal->kohteet->asiakkaat->yhteyshenkilo;
 
 		if(!empty($name))
 		$asiakasNakyvissa = $name.'<br>';
@@ -276,16 +274,39 @@ if(!isset($_POST['tulosta']))
 	    $osoite = (isset($expl1[0])) ? $expl1[0] : '';
   	   } 
 
-	   if(!empty($osoite))
-	   $osoite = '<br>'.$asiakasNakyvissa.$paikkakuntaNakyvissa.$osoite;
+	   $tv_edit 	= 'tv_edit';
+	   $fullRivi 	= 'fullRivi';
+	   $muistin	= 'muistin';
 
-	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="did fullRivi" style="color:'.$color.'">';
-	   if( $from != 'mobiili' )
-	   $bod .=  '<span class="link text-danger fa fa-pencil-square-o muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></span>';
-	   $bod .=  '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'" style="'.$uusi_tilaus.'">'.$al.' '.$osoite.'</span>';
+	   	// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( 
+		   isset($tvVal->kohteet) 
+		   and isset($asetukset) 
+		   and $asetukset->tyoryhmat_kohde == 1 
+		   and $site[0]->checkOikeusFields($checkOikeus) == 0 
+		){
+			$arr = $site[0]->TyoryhmatHelper();
+			if( count($arr) > 0 and !in_array($tvVal->kohteet->tyoryhma, $arr)){
+	   			$tv_edit 	= '';
+	   			$fullRivi 	= 'fullRivi bg-danger ei_saa_muokata';
+				$muistin	= '';
+			}
+		}
+	   	//    Tyoryhmat -->
 
-	   if(isset($tvVal->avaimet) and count($tvVal->avaimet) > 0)
-	   $bod .=  ' <b class="fa fa-key text-warning"></b>';
+	   if(!empty($osoite)){ $osoite = '<br>'.$asiakasNakyvissa.$paikkakuntaNakyvissa.$osoite; }
+	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="did '.$fullRivi.'" style="color:'.$color.'">';
+	   if( $from != 'mobiili' ){
+	       $bod .=  '<span class="link text-danger fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></span>';
+	   }
+
+	   $bod .=  '&nbsp;<span class="link '.$tv_edit.'" id="tv_'.$tvVal->id.'" style="'.$uusi_tilaus.'">'.$al.' '.$osoite.'</span>';
+
+	   if(isset($tvVal->avaimet) and count($tvVal->avaimet) > 0){
+	      $bod .=  ' <b class="fa fa-key text-warning"></b>';
+	   }
 
 	   if(!empty($tvVal->tietoja))
 	   $bod .=  ' <b class="fa fa-file-text-o text-warning" title="Tietoja"></b>';

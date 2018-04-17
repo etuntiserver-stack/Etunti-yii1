@@ -159,6 +159,7 @@ public $verot;
 		// class name for the relations automatically generated below.
 		return array(
 		        'avaimet' => array(self::HAS_MANY, 'Avaimet', array('kohde'=>'id')),
+		        'asiakkaat' => array(self::BELONGS_TO, 'Asiakkaat', 'asiakas_id'),
 		);
 	}
 

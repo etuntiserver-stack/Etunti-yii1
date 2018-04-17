@@ -217,6 +217,8 @@ function muisti(){
 		parseData = data.split(',');
 		$(parseData).each(function(index, value) {
 
+			if( $('#'+value).hasClass('ei_saa_muokata') ){ return true; }
+
      			$('#'+value).css({"opacity":"0.4"});
      			$('#'+value).removeClass("muistin").addClass("muistissa");
 		});
