@@ -648,6 +648,15 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
 
+  $('#Tyosuhdet_loppu').blur(function() {
+	alert('Olet merkinnyt työsuhteen päättyväksi. Viimeisen palkanmaksun jälkeen tulisi poistaa kaikki työntekijän tiedot, joita ei lain mukaan tarvitse säilyttää. Näitä tietoja ovat muun muassa palkka- ja verotiedot.');
+  });
+
+  $('#Tyontekijat_aktiivinen').change(function() {
+	alert('Muista täyttää työsuhteen päättymispäivämäärä.');
+  });
+
+
 /* valikot */
 $(".muokaValiko").click(function() {
     var thisFor = $(this).attr("for");
