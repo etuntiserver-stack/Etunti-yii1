@@ -297,7 +297,8 @@ class TietosuojaController extends Controller
 	       	$criteria = new CDbCriteria();
 	       	$criteria->order = " DATE(time) DESC"; 
 	       	$criteria->condition = " 
-			UNIX_TIMESTAMP(time) < ".strtotime($last_pvm)."
+			token=''
+			AND UNIX_TIMESTAMP(time) < ".strtotime($last_pvm)."
 		";
 
 		$data = VinkkiExtranet::model()->findAll($criteria);
