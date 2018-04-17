@@ -160,6 +160,7 @@ public $verot;
 		return array(
 		        'avaimet' => array(self::HAS_MANY, 'Avaimet', array('kohde'=>'id')),
 		        'asiakkaat' => array(self::BELONGS_TO, 'Asiakkaat', 'asiakas_id'),
+		        'tyovuoroot' => array(self::HAS_MANY, 'Tyovuoroot', array('kohde'=>'id')),
 		);
 	}
 

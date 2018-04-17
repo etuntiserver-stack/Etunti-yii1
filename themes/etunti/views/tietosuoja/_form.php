@@ -75,14 +75,24 @@
 	</tr>
 	<?php foreach($this->AsiakasMobileLaskin()[1] as $t) : ?>
 	<?php 
+		$k = Kohteet::model()->findByPk($t->kohdenID);
 		if( strtotime($t->time) > strtotime($this->AsiakasMobileLaskin()[0]) ){ continue; }
+		if(isset($k->tyovuoroot)){
+			$search = false;
+			foreach($k->tyovuoroot as $itm){
+				if( strtotime($itm->pvm) > time()){
+					$search = true;
+					break;
+				}
+			}
+			if( $search == true ){ continue; }
+		}
 
 		$nimi = '';
 		$puhelin = '';
 		$osoite = '';
 		$asiakas_id = '';
 		$kohde_id = '';
-		$k = Kohteet::model()->findByPk($t->kohdenID);
 		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'yritys'){$nimi = $k->asiakkaat->yrityksen_nimi;}
 		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'henkilo'){$nimi = $k->asiakkaat->yhteyshenkilo;}
 		if(isset($k->asiakkaat)){
