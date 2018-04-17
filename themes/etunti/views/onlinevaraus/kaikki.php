@@ -45,6 +45,19 @@
                             </label>
                           </label>
                         </div>
+
+                        <div class="section">
+                          <label class="field select">
+
+			    <select name="tyoryhma_tyyppi" id="tyoryhma_tyyppi" class="gui-input">
+			     <option value="">Työryhmä tyyppi</option>
+			     <option value="kohde" <?php if ( isset($_GET['tyoryhma_tyyppi']) and $_GET['tyoryhma_tyyppi'] == 'kohde' ) echo 'selected'; ?>><?php echo Yii::t('main', 'Työryhmä kohteiden mukaan'); ?></option>
+			     <option value="tyontekija" <?php if ( isset($_GET['tyoryhma_tyyppi']) and $_GET['tyoryhma_tyyppi'] == 'tyontekija' ) echo 'selected'; ?>><?php echo Yii::t('main', 'Työryhmä työntekijöiden mukaan'); ?></option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
                       </div>
 
                       <div class="col-md-2">
@@ -55,6 +68,30 @@
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+
+                        <div class="section">
+                          <label class="field select">
+
+		<?php
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+	       	$criteria = new CDbCriteria();
+		$criteria->order = " value ";
+		$criteria->condition = "select_type='tyoryhma'";
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+		$criteria->addCondition ("value2 LIKE '%\"".Yii::app()->user->adminID."\"%'");
+		}
+
+		$listData = Valikkoot::model()->findAll($criteria);
+		?>
+		<?php echo CHtml::dropDownList('tyoryhma', 'tyoryhma', CHtml::listData($listData, 'id', 'value'), 
+		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		?>
+
+                            <i class="arrow double"></i>
                             </label>
                           </label>
                         </div>
