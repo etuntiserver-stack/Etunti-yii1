@@ -620,6 +620,7 @@ class SiteController extends Controller
 				$new_domain->y_tunnus = $_POST['yritys_tunnus'];
 				$new_domain->paketti = $paketti;
 				$new_domain->sahkoposti = $_POST['sahkoposti'];
+				$new_domain->puhelin = $_POST['puhelinnumero'];
 				$new_domain->aktiivinen = 1;
 				$new_domain->maksullinen = 0;
 				if($new_domain->save())

@@ -1127,6 +1127,20 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 			AND tid NOT IN ( SELECT tid FROM vuosilomat WHERE pvm='".date("Y-n-j", strtotime($date))."' )
 		";
 
+		if(!empty($tyo_toimialue))
+		{
+			$criteria->addCondition ("
+				tid IN ( SELECT id FROM sivex_ttekijat WHERE tyo_toimialue LIKE '%".$tyo_toimialue."%' )
+			");
+		}
+
+		if(!empty($sopiiva_tuotteet))
+		{
+			$criteria->addCondition ("
+				tid IN ( SELECT id FROM sivex_ttekijat WHERE onlinevaraus_tuotteet LIKE '%\"".$sopiiva_tuotteet."\"%' )
+			");
+		}
+
 		$aikavali = $asetukset->onlinevaraus_aikavali*3600;
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$i = 0;
