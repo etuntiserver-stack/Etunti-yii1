@@ -1571,7 +1571,25 @@ $(document).ready(function(){
 		  Yii::app()->user->setState('user_theme',$_GET['theme']);
 		  $this->redirect('/index.php/site/etusivu');
 		}
-		$this->render('etusivu');
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$this->render('etusivu_tyoryhma');
+			} else {
+				$this->render('etusivu');
+			}
+		} else {
+			$this->render('etusivu');
+		}
+		//    Tyoryhmat -->
+
+
 
 	}
 
