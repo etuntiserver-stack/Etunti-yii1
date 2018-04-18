@@ -86,9 +86,10 @@
 		}
 
 		$listData = Valikkoot::model()->findAll($criteria);
+		$selectedValues = array(Yii::app()->getRequest()->getParam('tyoryhma') => Array('selected' => 'selected'));
 		?>
 		<?php echo CHtml::dropDownList('tyoryhma', 'tyoryhma', CHtml::listData($listData, 'id', 'value'), 
-		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		array('empty'=>'Valitse', 'class'=>'form-control', 'options' => $selectedValues)); 
 		?>
 
                             <i class="arrow double"></i>

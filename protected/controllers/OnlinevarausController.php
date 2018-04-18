@@ -248,6 +248,41 @@ class OnlinevarausController extends Controller
 		$to 	= date("Y-m-d",strtotime($_GET['to']));
 		}
 
+		if(isset($_GET['tyoryhma_tyyppi']) and $_GET['tyoryhma_tyyppi'] == 'kohde' and !empty($_GET['tyoryhma'])){
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->addCondition (" kohde_id IN(SELECT id FROM sivex_kohdet WHERE tyoryhma IN ($ids)) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
+		}
+
+		if(isset($_GET['tyoryhma_tyyppi']) and $_GET['tyoryhma_tyyppi'] == 'tyontekija' and !empty($_GET['tyoryhma'])){
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+	        		$criteria->addCondition (" id IN(SELECT onlinevaraus_id FROM sivex_tvuoro WHERE tid IN ($ids)) ");
+			} else {
+	        		$criteria->condition = ' 1!=1 ';
+			}
+		}
+		//    Tyoryhmat -->
+		}
+
+
 	        $criteria->addCondition (" 
 			tila!=3
 			AND DATE(time) BETWEEN '".$from."' AND '".$to."' 
