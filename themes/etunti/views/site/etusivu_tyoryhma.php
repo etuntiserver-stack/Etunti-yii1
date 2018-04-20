@@ -518,17 +518,6 @@ $( document ).ready(function() {
               </div>
 	      <?php endif; ?>
 
-              <!-- Text List -->
-              <div class="panel" id="p21">
-                <div class="panel-heading">
-                  <span class="panel-title"><?php echo Yii::t('main', 'Käyttäjää online'); ?></span>
-                </div>
-                <div class="panel-body pn">
-			<div id="kayttajaonline"></div>
-                </div>
-              </div>
-
-
 
               <!-- Country List -->
               <div class="panel" id="p16">
