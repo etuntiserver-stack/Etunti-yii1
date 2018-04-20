@@ -1594,7 +1594,6 @@ $(document).ready(function(){
 
 		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
 			$arr = $site[0]->TyoryhmatHelper();
-			$ids = implode(",", $arr);
 			if( count($arr) > 0 ){
 				$this->render('etusivu_tyoryhma');
 			} else {

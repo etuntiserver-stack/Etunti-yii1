@@ -28,10 +28,11 @@ $months=array(
 	);
 
 ?>
-<h1>Tämä on etusivu työryhmälle</h1>
 
       <!-- Begin: Content -->
       <section id="content" class="animated fadeIn">
+
+<h1>Tämä on etusivu työryhmälle</h1>
 
         <!-- Dashboard Tiles -->
         <div class="row mb10">
