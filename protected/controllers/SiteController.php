@@ -2014,6 +2014,21 @@ $(document).ready(function(){
 			AND kohdenID!=0
 		";
 
+		// <-- Tyoryhma
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+				$criteria->addCondition (" tid IN ($ids) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//     Tyoryhma -->
+
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $l)
 		{
