@@ -463,6 +463,22 @@ class SiteController extends Controller
 			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 			AND alku!='00:00'
 		    ";
+
+		// <-- Tyoryhma
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+				$criteria->addCondition (" tid IN ($ids) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//     Tyoryhma -->
+
 		    $m = Tyovuoroot::model()->findAll($criteria);
 		    if(isset($m[0]))
 		    {
@@ -1826,6 +1842,22 @@ $(document).ready(function(){
 			AND ".$this->eiLasketa()."
 			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 		";
+
+		// <-- Tyoryhma
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+				$criteria->addCondition (" tid IN ($ids) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//     Tyoryhma -->
+
 	  	$su = Tyovuoroot::model()->find($criteria);
 		  $suunniteltu = '00:00';
 		if(isset($su->l_tunnit) and $su->l_tunnit > 0)
@@ -1860,6 +1892,22 @@ $(document).ready(function(){
 		$criteria->condition=" 
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3
 		";
+
+		// <-- Tyoryhma
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+				$criteria->addCondition (" tid IN ($ids) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//     Tyoryhma -->
+
 		$a = Mobile::model()->find($criteria);
 		  $tehdyht = '00:00';
 		if(isset($a->l_tunnit) and $a->l_tunnit > 0)
@@ -1885,6 +1933,21 @@ $(document).ready(function(){
 			AND id NOT IN(select kid from sivexkuitti_repaired)
 		";
 
+		// <-- Tyoryhma
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+				$criteria->addCondition (" tid IN ($ids) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//     Tyoryhma -->
+
 		$lu = Mobile::model()->find($criteria);
 		$total_l = $lu->l_tunnit;
 
@@ -1899,6 +1962,21 @@ $(document).ready(function(){
 			aloitan !='' and loppui !='' and status ='3'
 			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
 		";
+
+		// <-- Tyoryhma
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+				$criteria->addCondition (" tid IN ($ids) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//     Tyoryhma -->
 
 		$tot = Toteutuneet::model()->find($criteria);
 		$total_t = $tot->l_tunnit;
@@ -2030,6 +2108,21 @@ $(document).ready(function(){
 			AND t.id NOT IN(select kid from sivexkuitti_repaired)
 		";
 
+		// <-- Tyoryhma
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+				$criteria->addCondition (" tid IN ($ids) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//     Tyoryhma -->
+
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $l)
 		{
@@ -2044,6 +2137,21 @@ $(document).ready(function(){
 			aloitan !='' and loppui !='' and (status=2 OR status=3 OR status=10)
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
 		";
+
+		// <-- Tyoryhma
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+				$criteria->addCondition (" tid IN ($ids) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//     Tyoryhma -->
 
 		$tot = Toteutuneet::model()->findAll($criteria);
 		foreach($tot as $l)
@@ -2067,6 +2175,21 @@ $(document).ready(function(){
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
 			AND t.id NOT IN(select kid from sivexkuitti_repaired)
 		";
+
+		// <-- Tyoryhma
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+				$criteria->addCondition (" tid IN ($ids) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//     Tyoryhma -->
 
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $l)
