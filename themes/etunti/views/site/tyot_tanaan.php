@@ -1,24 +1,72 @@
 <?php 
-	$crsun = new CDbCriteria();
-	$crsun->select = "  COUNT(*) as count ";
-	$crsun->condition = " 
+	$criteria = new CDbCriteria();
+	$criteria->select = "  COUNT(*) as count ";
+	$criteria->condition = " 
 		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 		AND kohde!=''
 		AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
 	";
-	$s = Tyovuoroot::model()->find($crsun);
 
-	$crsun = new CDbCriteria();
-	$crsun->select = "  COUNT(*) as count ";
-	$crsun->condition = " status=1	";
-	$a = Mobile::model()->find($crsun);	
+		// <-- Tyoryhma
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+				$criteria->addCondition (" tid IN ($ids) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//     Tyoryhma -->
 
-	$crsun = new CDbCriteria();
-	$crsun->select = "  COUNT(*) as count ";
-	$crsun->condition = " 
+	$s = Tyovuoroot::model()->find($criteria);
+
+	$criteria = new CDbCriteria();
+	$criteria->select = "  COUNT(*) as count ";
+	$criteria->condition = " status=1 ";
+
+		// <-- Tyoryhma
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+				$criteria->addCondition (" tid IN ($ids) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//     Tyoryhma -->
+
+	$a = Mobile::model()->find($criteria);	
+
+	$criteria = new CDbCriteria();
+	$criteria->select = "  COUNT(*) as count ";
+	$criteria->condition = " 
 		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3
 	";
-	$t = Mobile::model()->find($crsun);
+
+		// <-- Tyoryhma
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+				$criteria->addCondition (" tid IN ($ids) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//     Tyoryhma -->
+
+	$t = Mobile::model()->find($criteria);
 
 
 	$ss = 0;
