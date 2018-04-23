@@ -69,53 +69,49 @@
 	<div class="section fill mb5" style="height:280px;overflow: auto">
 	<table class="table table-bordered table-striped">
 	<tr>
-	<th>Viimeinen käynti</th>
 	<th>Asiakas</th>
-	<th>Puhelin</th>
 	<th>Kohde</th>
+	<th>Puhelin</th>
 	</tr>
-	<?php foreach($this->AsiakasMobileLaskin()[1] as $t) : ?>
+	<?php foreach($this->AsiakasMobileLaskin()[1] as $k) : ?>
 	<?php 
-		$k = Kohteet::model()->findByPk($t->kohdenID);
-		if( strtotime($t->time) > strtotime($this->AsiakasMobileLaskin()[0]) ){ continue; }
-		if(isset($k->tyovuoroot)){
-			$search = false;
-			foreach($k->tyovuoroot as $itm){
-				if( strtotime($itm->pvm) > time()){
-					$search = true;
-					break;
-				}
-			}
-			if( $search == true ){ continue; }
-		}
-
+		$last_time = '';
 		$nimi = '';
 		$puhelin = '';
-		$osoite = '';
+		$osoite = '#'.$k->id.' '.$k->osoite;
 		$asiakas_id = '';
-		$kohde_id = '';
+		$kohde_id = $k->id;
+
 		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'yritys'){$nimi = $k->asiakkaat->yrityksen_nimi;}
 		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'henkilo'){$nimi = $k->asiakkaat->yhteyshenkilo;}
 		if(isset($k->asiakkaat)){
 			$puhelin = $k->asiakkaat->puhelin;
 			$asiakas_id = $k->asiakkaat->id;
 		}
-		if(isset($k->id)){
-			$kohde_id = $k->id;
-			$osoite = '#'.$k->id.' '.$k->osoite;
-		}
+
+	       	$criteria = new CDbCriteria();
+	       	$criteria->order = " osoite ";
+	       	$criteria->condition = " 
+			id!='".$k->id."' and asiakas_id='".$k->asiakas_id."' 
+			AND 
+			(id IN ( SELECT kohdenID FROM sivexkuitti WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y%m%d') BETWEEN ".$this->AsiakasMobileLaskin()[0]." AND CURDATE() )
+			OR id IN ( SELECT kohde FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m%d') > CURDATE() )
+			)
+		";
+		$k_all = Kohteet::model()->findAll($criteria);
 	?>
 	<tr>
-	 <td><?=date("d.m.Y", strtotime($t->time))?></td>
 	 <td>
+		<?php if( count($k_all) == 0): ?>
 		<i class="pull-right link text-danger asiakas_pois fa fa-trash" asiakas_id="<?=$asiakas_id?>" nimi="<?=$nimi?>"></i>
+		<?php endif; ?>
 		<?=$nimi?>
 	 </td>
-	 <td><?=$puhelin?></td>
 	 <td>
 		<i class="pull-right link text-danger kohde_pois fa fa-trash" kohde_id="<?=$kohde_id?>" nimi="<?=$osoite?>"></i>
 		<?=$osoite?>
 	 </td>
+	 <td><?=$puhelin?></td>
 	</tr>
 	<?php endforeach; ?>
 	</table>

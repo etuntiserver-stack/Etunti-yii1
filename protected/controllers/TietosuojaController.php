@@ -215,28 +215,27 @@ class TietosuojaController extends Controller
 
 	protected function AsiakasMobileLaskin()
 	{
-		$last_pvm = '';
+		$last_pvm = date("Ymd");
 		$ts=Tietosuoja::model()->findByPk(1);
 		if( $ts->asiakas_sailytysajan_tyyppi == 0 and $ts->asiakas_sailytysaika_lukumaara > 0 ){
-			$last_pvm = date("Y-m-d", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." day"));
+			$last_pvm = date("Ymd", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." day"));
 		}
 		if( $ts->asiakas_sailytysajan_tyyppi == 1 and $ts->asiakas_sailytysaika_lukumaara > 0 ){
-			$last_pvm = date("Y-m-d", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." month"));
+			$last_pvm = date("Ymd", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." month"));
 		}
 		if( $ts->asiakas_sailytysajan_tyyppi == 2 and $ts->asiakas_sailytysaika_lukumaara > 0 ){
-			$last_pvm = date("Y-m-d", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." year"));
+			$last_pvm = date("Ymd", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." year"));
 		}
 
 		$data = array();
 	       	$criteria = new CDbCriteria();
-	       	$criteria->order = " DATE(time) DESC"; 
-	       	$criteria->group = " kohdenID DESC"; 
+	       	$criteria->order = " osoite ";
 	       	$criteria->condition = " 
-			kohdenID!=0
-			AND kohdenID IN (SELECT id FROM sivex_kohdet)
+			id NOT IN ( SELECT kohdenID FROM sivexkuitti WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y%m%d') BETWEEN $last_pvm AND CURDATE() )
+			AND id NOT IN ( SELECT kohde FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m%d') > CURDATE() )
 		";
 //			AND DATE(time) > $last_pvm
-		$data = Mobile::model()->findAll($criteria);
+		$data = Kohteet::model()->findAll($criteria);
 
 		return array($last_pvm, $data);
 	}
