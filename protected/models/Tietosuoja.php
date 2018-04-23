@@ -121,25 +121,25 @@ class Tietosuoja extends DB2ActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'asiakas_oikeusperuste' => Yii::t('main', 'Oikeusperuste'),
+			'asiakas_oikeusperuste' => Yii::t('main', 'Käsittelyperuste'),
 			'asiakas_kayttotarkoitus' => Yii::t('main', 'Käyttotarkoitus'),
 			'asiakas_sailytysajan_tyyppi' => Yii::t('main', 'Säilytysajan tyyppi'),
 			'asiakas_sailytysaika_lukumaara' => Yii::t('main', 'Säilytysaika'),
 			'asiakas_viesti' => Yii::t('main', 'Viesti'),
 
-			'tyontekija_oikeusperuste' => Yii::t('main', 'Oikeusperuste'),
+			'tyontekija_oikeusperuste' => Yii::t('main', 'Käsittelyperuste'),
 			'tyontekija_kayttotarkoitus' => Yii::t('main', 'Käyttotarkoitus'),
 			'tyontekija_sailytysajan_tyyppi' => Yii::t('main', 'Säilytysajan tyyppi'),
 			'tyontekija_sailytysaika_lukumaara' => Yii::t('main', 'Säilytysaika'),
 			'tyontekija_viesti' => Yii::t('main', 'Viesti'),
 
-			'onlinevaraus_oikeusperuste' => Yii::t('main', 'Oikeusperuste'),
+			'onlinevaraus_oikeusperuste' => Yii::t('main', 'Käsittelyperuste'),
 			'onlinevaraus_kayttotarkoitus' => Yii::t('main', 'Käyttotarkoitus'),
 			'onlinevaraus_sailytysajan_tyyppi' => Yii::t('main', 'Säilytysajan tyyppi'),
 			'onlinevaraus_sailytysaika_lukumaara' => Yii::t('main', 'Säilytysaika'),
 			'onlinevaraus_viesti' => Yii::t('main', 'Viesti'),
 
-			'edico_vinkki_oikeusperuste' => Yii::t('main', 'Oikeusperuste'),
+			'edico_vinkki_oikeusperuste' => Yii::t('main', 'Käsittelyperuste'),
 			'edico_vinkki_kayttotarkoitus' => Yii::t('main', 'Käyttotarkoitus'),
 			'edico_vinkki_sailytysajan_tyyppi' => Yii::t('main', 'Säilytysajan tyyppi'),
 			'edico_vinkki_sailytysaika_lukumaara' => Yii::t('main', 'Säilytysaika'),

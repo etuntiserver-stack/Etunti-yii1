@@ -51,12 +51,13 @@
 		<?php echo $form->error($model,'asiakas_sailytysaika_lukumaara'); ?>
 	   </div>
 	</div>
-
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_viesti'); ?>
 		<?php echo $form->textarea($model,'asiakas_viesti', array('class' => 'form-control')); ?>
 		<?php echo $form->error($model,'asiakas_viesti'); ?>
 	</div>
+*/ ?>
 
  </div>
 
@@ -158,13 +159,13 @@
 		<?php echo $form->error($model,'tyontekija_sailytysaika_lukumaara'); ?>
 	   </div>
 	</div>
-
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tyontekija_viesti'); ?>
 		<?php echo $form->textarea($model,'tyontekija_viesti', array('class' => 'form-control')); ?>
 		<?php echo $form->error($model,'tyontekija_viesti'); ?>
 	</div>
-
+*/ ?>
  </div>
 
  <?php if( !empty($this->TyontekijaTyosuhdetLaskin()[0]) and count($this->TyontekijaTyosuhdetLaskin()[1]) > 0 ) : ?>
@@ -283,12 +284,13 @@
 		<?php echo $form->error($model,'edico_vinkki_sailytysaika_lukumaara'); ?>
 	   </div>
 	</div>
-
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'edico_vinkki_viesti'); ?>
 		<?php echo $form->textarea($model,'edico_vinkki_viesti', array('class' => 'form-control')); ?>
 		<?php echo $form->error($model,'edico_vinkki_viesti'); ?>
 	</div>
+*/ ?>
  </div>
  <?php if( !empty($this->VinkkiLaskin(null)[0]) and count($this->VinkkiLaskin(null)[1]) > 0 ) : ?>
  <div class="col-sm-9">
