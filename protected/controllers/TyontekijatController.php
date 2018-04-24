@@ -375,55 +375,6 @@ class TyontekijatController extends Controller
 				//     LOG -->
 
 
-				$d = Domainit::model()->find("domain='".Yii::app()->user->domain."'");
-				$yr =  '';
-				if(isset($d->yritys))
-				$yr =  $d->yritys;
-
-				$token = sha1(uniqid(time().$model->id, true));
-				Tyontekijat::model()->updateByPk($model->id, array('token' => $token));
-
-				$subject = 'Tervetuloa Etunnin käyttäjäksi.';
-				$message = 'Hei '.$model->tekijan_nimi.'!<br>
-				<b>Domain:</b> '.Yii::app()->user->domain.'<br>
-				<b>Käyttäjätunnus:</b> '.$model->tekijan_email.'<br>
-				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('tyontekijat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'id' => $model->id)).'>tästä</a><br>';
-
-				$message .= '
-<p>
-				Tervetuloa Etunnin käyttäjäksi. '.$yr.' on lisännyt sinulle profiilin Etuntiin. Lataa sovellus puhelimeesi alla olevien linkkien kautta.
-</p><br>
-				<br>
-				<p>Ystävällisin terveisin</p>
-				Etunti<br>
-
-<p>
-<a href="https://www.microsoft.com/store/apps/9nblggh4nd0w?ocid=badge"><img src="https://assets.windowsphone.com/85864462-9c82-451e-9355-a3d5f874397a/English_get-it-from-MS_InvariantCulture_Default.png" alt="Get it from Microsoft" height="70" /></a>
-
-<a href="https://play.google.com/store/apps/details?id=fi.etunti.local&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="70" /></a>
-
-<a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="http://app.etunti.fi/lib/app/app-ios.jpg" height="70" ></a>
-</p>
-				';
-
-				$ft = FirmanTiedot::model()->findByPk(1);
-				$mail = new YiiMailer();
-				$mail->setFrom('no-reply@etunti.fi');
-				$mail->setTo($model->tekijan_email);
-				$mail->setSubject($subject);
-				$mail->setBody($message);
-				$mail->send();
-
-							// <-- LOG
-							$log=new Log;
-							$log->log_category 	= 1; // 1-email
-							$log->email_to 		= $model->tekijan_email;
-							$log->email_subject	= $subject;
-							$log->email_message	= json_encode($message);
-							$log->save();
-							//     LOG -->
-
-
 				// <-- Netvisor updater
 				$asetukset = Asetukset::model()->findByPk(1);
 				if($asetukset->netvisor_kaytto == 1 and $asetukset->netvisor_lahetetaanko_tyontekija == 1)
