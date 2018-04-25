@@ -200,6 +200,26 @@ $(document).ready(function(){
 	$(this).closest('tr').remove();
   });
 
+  $('input[name=alvsis]').change(function(){
+	var alvsis = $('input[name=alvsis]:checked').val();
+	if( alvsis == 'nolla'){
+		$('.hinnasto_yht').attr('readonly', 'yes');
+	}
+	if( alvsis == 'sis'){
+		$('.hinnasto_yht').removeAttr('readonly');
+	}
+  });
+
+  $(document).delegate(".hinnasto_yht","keyup",function(){
+	var alvsis = $('input[name=alvsis]:checked').val();
+	if( alvsis == 'sis'){
+		var hinnasto_yht = parseFloat($(this).closest('tr').find('.hinnasto_yht').val());
+		var alv = $(this).closest('tr').find('.hinnasto_alv').val();
+		var laske = (hinnasto_yht*100)/(100+alv);
+		var summ = hinnasto_yht-laske;
+		$(this).closest('tr').find('.hinnasto_hinta').val(summ.toFixed(2));
+	}
+  });
 
 });
 </script>
