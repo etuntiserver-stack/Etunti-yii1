@@ -805,7 +805,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php if(isset($model->id) 
 			and $model->laskun_nimetys == "Hyvityslasku"
 			and $asetukset->palvelu_tyyppi == 2
-			and $model->tilanne != 98
+			//and $model->tilanne != 98
 			and $model->trust_jobid != ''
 			and $model->tilanne != 999
 			) 
