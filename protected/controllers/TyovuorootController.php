@@ -2767,7 +2767,24 @@ class TyovuorootController extends Controller
 			(time + INTERVAL ".$asetukset->onlinevaraus_autoremove." MINUTE) < NOW()
 			AND osoiteOnline=1
 		";
-		$poistaminen = Tyovuoroot::model()->deleteAll($criteria);
+		$poistaminen = Tyovuoroot::model()->findAll($criteria);
+
+		foreach($poistaminen as $item){
+
+				$tv = Tyovuoroot::model()->findByPk($item->id);
+				// <-- LOG
+				$model_log 	= 'Tyovuoroot';
+				$name_log 	= 'Työvuorot';
+				$status_log 	= 'Delete';
+	
+					$old_values = json_encode($tv->attributes);
+					$new_values = null;
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+		}
+
+		Tyovuoroot::model()->deleteAll($criteria);
 		// Poistaminen -->
 
 	}
