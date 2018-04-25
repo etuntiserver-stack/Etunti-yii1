@@ -178,7 +178,7 @@ $(document).ready(function(){
 	var alvsis = $('input[name=alvsis]:checked').val();
 	if( alvsis == 'nolla'){
 		var hinnasto_hinta = parseFloat($(this).closest('tr').find('.hinnasto_hinta').val());
-		var alv = $(this).closest('tr').find('.hinnasto_alv').val();
+		var alv = $(this).closest('tr').find('.hinnasto_alv option:selected').val();
 		var yht = hinnasto_hinta/100*alv;
 		var summ = hinnasto_hinta+yht;
 		$(this).closest('tr').find('.hinnasto_yht').val(summ.toFixed(2));
@@ -189,7 +189,7 @@ $(document).ready(function(){
 	var alvsis = $('input[name=alvsis]:checked').val();
 	if( alvsis == 'nolla'){
 		var hinnasto_hinta = parseFloat($(this).closest('tr').find('.hinnasto_hinta').val());
-		var alv = $(this).closest('tr').find('.hinnasto_alv').val();
+		var alv = $(this).closest('tr').find('.hinnasto_alv option:selected').val();
 		var yht = hinnasto_hinta/100*alv;
 		var summ = hinnasto_hinta+yht;
 		$(this).closest('tr').find('.hinnasto_yht').val(summ.toFixed(2));
@@ -214,7 +214,7 @@ $(document).ready(function(){
 	var alvsis = $('input[name=alvsis]:checked').val();
 	if( alvsis == 'sis'){
 		var hinnasto_yht = parseFloat($(this).closest('tr').find('.hinnasto_yht').val());
-		var alv = $(this).closest('tr').find('.hinnasto_alv').val();
+		var alv = $(this).closest('tr').find('.hinnasto_alv option:selected').val();
 		var laske = (hinnasto_yht*100)/(100+alv);
 		var summ = hinnasto_yht-laske;
 		$(this).closest('tr').find('.hinnasto_hinta').val(summ.toFixed(2));
