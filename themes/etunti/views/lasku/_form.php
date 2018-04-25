@@ -652,6 +652,9 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<!-- Digisten -->
 
 
+		Alv sis. <input type="radio" name="alvsis" value="sis"> 
+		Alv 0 <input type="radio" name="alvsis" value="nolla" checked>
+
 <div id="rivit" class="table-responsive">
 <TABLE class="table well" id="TableRivit">
 
@@ -1146,17 +1149,24 @@ function Rivi(){
 
 }
 
+ $('input[name=alvsis]').change(function(){
+  eachLaskenta();
+ });
+
   eachLaskenta();
 
 var aleAsiakkaasta = '';
 function eachLaskenta(){
 
+  var alvsis = $('input[name=alvsis]:checked').val();
   $("#rivit input").each(function() {
 
 	var hinta_alv_0 = 0;
 	var alv = 0;
 	var kpl = 0;
 	var ale = 0;
+	var veroton = 0;
+	var laske = 0;
 
 	var inputKenta = $(this).attr("id").split("_");
 	if($("#hinta_"+inputKenta[1]).val()) { hinta_alv_0 = parseFloat($("#hinta_"+inputKenta[1]).val()) };
@@ -1170,9 +1180,16 @@ function eachLaskenta(){
 	if(ale > 0)
 	hinta_alv_0 = hinta_alv_0-((hinta_alv_0/100)*ale);
 
-	var laske = parseFloat(((hinta_alv_0*kpl)/100*alv), 10);
-	var veroton = parseFloat(hinta_alv_0, 10)*kpl;
-	yhteensa = laske+veroton;
+	if( alvsis == 'nolla'){
+		laske = parseFloat(((hinta_alv_0*kpl)/100*alv), 10);
+		veroton = parseFloat(hinta_alv_0, 10)*kpl;
+		yhteensa = laske+veroton;
+	}
+	if( alvsis == 'sis'){
+		laske = (yhteensa/100)*alv;
+		yhteensa = hinta_alv_0*kpl;
+		veroton = yhteensa-laske;
+	}
 
 	$("#hinta_alv_"+inputKenta[1]).val((laske).toFixed(2));
 	$("#veroton_"+inputKenta[1]).val(veroton.toFixed(2));
