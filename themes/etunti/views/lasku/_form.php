@@ -781,7 +781,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php endif; ?>
 
 		<?php if(isset($model->id) and $model->tilanne == '0') : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&hyvaksyminen=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Hyväksy'); ?></a>
+		<a href="finvoice?id=<?php echo $model->id; ?>&hyvaksyminen=true" class="btn btn-success btn-group myBgColors" id="hyvaksytaan_lasku"><?php echo Yii::t('main','Hyväksy'); ?></a>
 		<?php endif; ?>
 
 		<?php if(
@@ -1092,6 +1092,11 @@ function jumpToPageBottom() {
     $('html, body').animate({scrollTop:1000}, 'slow');
     return false;
 }
+
+
+$(document).delegate("input, select","change keyup paste",function(){
+    $("#hyvaksytaan_lasku").addClass('disabled');
+});
 
 $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 
