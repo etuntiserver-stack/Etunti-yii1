@@ -88,7 +88,7 @@
 	 <?php endforeach; ?>
 	</select>
      </td>
-     <td><input type="number" class="form-control hinnasto_yht" name="Rivi[tuote][hinnasto_yht][]" step="any" value="<?=$r->hinnasto_yht?>"></td>
+     <td><input type="number" class="form-control hinnasto_yht" name="Rivi[tuote][hinnasto_yht][]" step="any" value="<?=$r->hinnasto_yht?>" readonly></td>
      <td>
 	<select name="Rivi[tuote][yksikko][]" class="form-control yksikkovalikko">
 	 <option value=>Valitse</option>
@@ -140,7 +140,7 @@
 	 <?php endforeach; ?>
 	</select>
      </td>
-     <td><input type="number" class="form-control hinnasto_yht" name="Rivi[tuote][hinnasto_yht][]" step="any"></td>
+     <td><input type="number" class="form-control hinnasto_yht" name="Rivi[tuote][hinnasto_yht][]" step="any" readonly></td>
      <td>
 	<select name="Rivi[tuote][yksikko][]" class="form-control yksikkovalikko">
 	 <option value=>Valitse</option>
