@@ -1189,8 +1189,8 @@ function eachLaskenta(){
 		yhteensa = laske+veroton;
 	}
 	if( alvsis == 'sis'){
-		laske = (yhteensa/100)*alv;
 		yhteensa = hinta_alv_0*kpl;
+		laske = (yhteensa*100)/(100+alv);
 		veroton = yhteensa-laske;
 	}
 
