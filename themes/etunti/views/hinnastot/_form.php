@@ -226,8 +226,7 @@ $(document).ready(function(){
 		var alv = $(this).closest('tr').find('.hinnasto_alv option:selected').val();
 		var jakaa = '1.'+alv;
 		var laske = hinnasto_yht/parseFloat(jakaa);
-		var summ = laske;
-		$(this).closest('tr').find('.hinnasto_hinta').val(summ.toFixed(2));
+		$(this).closest('tr').find('.hinnasto_hinta').val(laske.toFixed(2));
 	}
   });
 
