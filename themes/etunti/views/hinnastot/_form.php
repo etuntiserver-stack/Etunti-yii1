@@ -60,9 +60,9 @@
     <tr>
      <th><?=Yii::t('main', 'TUOTE')?></th>
      <th><?=Yii::t('main', 'HINTA TUOTTEISTA JA PALVELUISTA')?></th>
-     <th><?=Yii::t('main', 'HINNASTON HINTA')?></th>
+     <th><?=Yii::t('main', 'Hinta ALV0')?></th>
      <th><?=Yii::t('main', 'HINNASTON ALV%')?></th>
-     <th width="150"><?=Yii::t('main', 'YHTEENSÄ')?></th>
+     <th width="150"><?=Yii::t('main', 'Hinta sis. ALV')?></th>
      <th width="100"><?=Yii::t('main', 'YKSIKKÖ')?></th>
      <th></th>
     </tr>
@@ -211,9 +211,11 @@ $(document).ready(function(){
 	var alvsis = $('input[name=alvsis]:checked').val();
 	if( alvsis == 'nolla'){
 		$('.hinnasto_yht').attr('readonly', 'yes');
+		$('.hinnasto_hinta').removeAttr('readonly');
 	}
 	if( alvsis == 'sis'){
 		$('.hinnasto_yht').removeAttr('readonly');
+		$('.hinnasto_hinta').attr('readonly', 'yes');
 	}
   });
 
