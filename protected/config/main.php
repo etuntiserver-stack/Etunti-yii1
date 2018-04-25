@@ -7,7 +7,9 @@ session_start();
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 
-
+  if ( isset($_SERVER['REQUEST_URI']) and strpos($_SERVER['REQUEST_URI'], "WHERE") !== false){
+	die("Hello world");
+  }
 
 
   if(
