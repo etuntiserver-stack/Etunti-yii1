@@ -194,6 +194,13 @@ $(document).ready(function(){
 		var summ = hinnasto_hinta+yht;
 		$(this).closest('tr').find('.hinnasto_yht').val(summ.toFixed(2));
 	}
+	if( alvsis == 'sis'){
+		var hinnasto_yht = parseFloat($(this).closest('tr').find('.hinnasto_yht').val());
+		var alv = $(this).closest('tr').find('.hinnasto_alv option:selected').val();
+		var laske = hinnasto_yht/100*alv;
+		var summ = hinnasto_yht-laske;
+		$(this).closest('tr').find('.hinnasto_hinta').val(summ.toFixed(2));
+	}
   });
 
   $(document).delegate(".poistarivi","click",function(){
