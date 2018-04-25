@@ -1184,8 +1184,8 @@ function eachLaskenta(){
 	hinta_alv_0 = hinta_alv_0-((hinta_alv_0/100)*ale);
 
 	if( alvsis == 'nolla'){
-		laske = parseFloat(((hinta_alv_0*kpl)/100*alv), 10);
-		veroton = parseFloat(hinta_alv_0, 10)*kpl;
+		laske = (hinta_alv_0*kpl)/100*alv;
+		veroton = hinta_alv_0*kpl;
 		yhteensa = laske+veroton;
 	}
 	if( alvsis == 'sis'){
