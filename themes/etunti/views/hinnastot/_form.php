@@ -222,9 +222,9 @@ $(document).ready(function(){
   $(document).delegate(".hinnasto_yht","keyup",function(){
 	var alvsis = $('input[name=alvsis]:checked').val();
 	if( alvsis == 'sis'){
-		var hinnasto_yht = parseFloat($(this).closest('tr').find('.hinnasto_yht').val());
+		var hinnasto_yht = $(this).closest('tr').find('.hinnasto_yht').val();
 		var alv = $(this).closest('tr').find('.hinnasto_alv option:selected').val();
-		var laske = hinnasto_yht/100*alv;
+		var laske = (hinnasto_yht*100)/(100+alv);
 		var summ = hinnasto_yht-laske;
 		$(this).closest('tr').find('.hinnasto_hinta').val(summ.toFixed(2));
 	}
