@@ -224,8 +224,9 @@ $(document).ready(function(){
 	if( alvsis == 'sis'){
 		var hinnasto_yht = $(this).closest('tr').find('.hinnasto_yht').val();
 		var alv = $(this).closest('tr').find('.hinnasto_alv option:selected').val();
-		var laske = (hinnasto_yht*100)/(100+alv);
-		var summ = hinnasto_yht-laske;
+		var jakaa = '1.'+alv;
+		var laske = hinnasto_yht/parseFloat(jakaa);
+		var summ = laske;
 		$(this).closest('tr').find('.hinnasto_hinta').val(summ.toFixed(2));
 	}
   });
