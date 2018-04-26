@@ -32,7 +32,7 @@ Laatimispäivä<br>
 <input type="text" id="laatimispaiva" class="form-control datepicker" value="<?php if(isset($r['laatimispaiva'])) echo $r['laatimispaiva']; ?>">
 </div>
 
-<p class="small">Lue <a href="<?php echo Yii::app()->request->baseUrl.'/tiedostot/tayttoohjeet.pdf'; ?>" target="_blank">täyttöohjeet</a> ennen rekisteriselosteen<br>
+<p class="small">Lue <a href="<?php echo Yii::app()->request->baseUrl.'/lib/pdf/tayttoohjeet.pdf'; ?>" target="_blank">täyttöohjeet</a> ennen rekisteriselosteen<br>
 täyttämistä. Käytä tarvittaessa liitettä.</p>
 
 <br>
