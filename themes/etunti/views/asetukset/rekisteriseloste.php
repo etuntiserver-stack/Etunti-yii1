@@ -137,7 +137,7 @@ table{ background: white; }
 $(document).ready(function(){
 
 
-$(".tallennaTaulun").click(function(){
+$(".tallennaTaulun").click(function(event){
 
     event.preventDefault();
     var searchIDs = $("#rekisteriteloste input, #rekisteriteloste textarea").map(function(){
@@ -152,7 +152,7 @@ $(".tallennaTaulun").click(function(){
 	   type:'POST',
 	   data: { "rekisteriseloste" : searchIDs },
            success: function(data){
-		console.log(data);
+		//console.log(data);
 		window.location.reload();
 
            }
