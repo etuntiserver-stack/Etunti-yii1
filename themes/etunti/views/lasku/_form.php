@@ -1168,8 +1168,6 @@ function eachLaskenta(){
 	var alv = 0;
 	var kpl = 0;
 	var ale = 0;
-	var veroton = 0;
-	var laske = 0;
 
 	var inputKenta = $(this).attr("id").split("_");
 	if($("#hinta_"+inputKenta[1]).val()) { hinta_alv_0 = parseFloat($("#hinta_"+inputKenta[1]).val()) };
@@ -1184,17 +1182,19 @@ function eachLaskenta(){
 	hinta_alv_0 = hinta_alv_0-((hinta_alv_0/100)*ale);
 
 	if( alvsis == 'nolla'){
-		laske = (hinta_alv_0*kpl)/100*alv;
-		veroton = hinta_alv_0*kpl;
-		yhteensa = laske+veroton;
+		var laske = (hinta_alv_0*kpl)/100*alv;
+		var veroton = hinta_alv_0*kpl;
+		var yhteensa = laske+veroton;
 	}
 	if( alvsis == 'sis'){
-		yhteensa = hinta_alv_0*kpl;
-		laske = (yhteensa*100)/(100+alv);
-		veroton = yhteensa-laske;
+		var yhteensa = hinta_alv_0*kpl;
+		var jakaa = '1.'+alv;
+		var l = yhteensa/parseFloat(jakaa);
+		var veroton = l;
+		var laske = yhteensa-veroton;
 	}
 
-	$("#hinta_alv_"+inputKenta[1]).val((laske).toFixed(2));
+	$("#hinta_alv_"+inputKenta[1]).val(laske.toFixed(2));
 	$("#veroton_"+inputKenta[1]).val(veroton.toFixed(2));
 	$("#yhteensa_alv_"+inputKenta[1]).val(yhteensa.toFixed(2));
 
