@@ -19,8 +19,7 @@ $demo_merchant_id       = $asetukset->checkout_id;
 $demo_merchant_secret   = $asetukset->checkout_salasana;
 
 
-$return_url             = 'http://' .$_SERVER['SERVER_NAME'] .str_replace('maksu', 'maksettu', $_SERVER['REQUEST_URI']);
-
+$return_url = Yii::app()->createAbsoluteUrl('onlinevaraus/maksettu', array(), 'http');
 $payment = new  Payment($demo_merchant_id, $demo_merchant_secret);
 $payment->setUrls($return_url);
 
