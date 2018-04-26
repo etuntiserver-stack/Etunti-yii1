@@ -226,6 +226,9 @@ class OnlinevarausController extends Controller
 	   if( isset(Yii::app()->user->domain) ){
 		$rt = Asetukset::model()->findbypk(1);
 		$rekisteriseloste = json_decode($rt->rekisteriseloste);
+		if(!is_array($rekisteriseloste)){
+			die('Rekisteriteloste puutuu.');
+		}
 		$this->render('rekisteriseloste',array(
 			'rekisteriseloste'=>$rekisteriseloste
 		));
