@@ -17,6 +17,7 @@ return array(
 'Mob' => 'Sovellus',
 'Mobile' => 'Työtunnit',
 'Toteutuneet' => 'Työtunnit',
+'Auto Delete' => 'Automaattinen poisto',
 );
 
 

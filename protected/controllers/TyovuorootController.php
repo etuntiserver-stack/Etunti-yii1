@@ -2775,7 +2775,7 @@ class TyovuorootController extends Controller
 				// <-- LOG
 				$model_log 	= 'Tyovuoroot';
 				$name_log 	= 'Työvuorot';
-				$status_log 	= 'Delete';
+				$status_log 	= 'Auto Delete';
 	
 					$old_values = json_encode($tv->attributes);
 					$new_values = null;
