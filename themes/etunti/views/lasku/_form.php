@@ -1140,6 +1140,36 @@ $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 
 });
 
+$(document).delegate("table#TableRivit .valitseTuote_tuoteonly","change",function(){
+
+    var tuoteID = $(this).val();
+    var num = $(this).attr("num");
+    var asiakas_nro = $("#Lasku_as_nro option:selected").val();
+    if(!asiakas_nro && '<?=$model->as_nro?>' !== '')
+    {
+	asiakas_nro = '<?=$model->as_nro?>';
+    }
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/lasku/valitsetuote',
+           type: "POST",
+           data: { tuoteID : tuoteID, asiakas_nro : asiakas_nro },
+           success: function(data){
+		var sp = JSON.parse(data);
+
+		if(sp['id'])
+		{
+			$("#tkoodi_"+num).val(sp['tuotenimi']);
+			$("#tuoteID_"+num).val(sp['id']);
+		}
+
+		eachLaskenta();
+		//console.log(data)
+           }
+        });
+
+});
+
 $(document).delegate(".poista","click",function(){
 	$(this).closest('tr').remove();
 	yhteensaTotal();
@@ -1522,7 +1552,8 @@ function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palv
 					hinnasto_rivi_id : data['hinnasto_rivi_id'],
 					yksikko : data['yksikko'],
 					free_text : data['free_text'],
-					tuotePalvelu : tuotePalvelu
+					tuotePalvelu : tuotePalvelu,
+					tuotteet_palvelut_muoto : tuotteet_palvelut_muoto
 			   };
 
 	        	   $.ajax({
