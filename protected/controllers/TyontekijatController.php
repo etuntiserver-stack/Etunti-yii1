@@ -938,15 +938,12 @@ $xml = '
 			AND value2 LIKE '%\"".Yii::app()->user->adminID."\"%'
 		";
 		}
-		if( $site[0]->checkOikeusFields($checkOikeus) == 1 ){
-		$criteria->condition = "
-			select_type='tyoryhma'
-		";
-		}
-
-		if( is_array($tr_array) ){
+		if( $site[0]->checkOikeusFields($checkOikeus) == 1 and is_array($tr_array)){
 			$impl = "value='".implode("' OR value='", $tr_array)."'";
-			$criteria->addCondition ($impl);
+			$criteria->condition = "
+				select_type='tyoryhma'
+				AND ($impl)
+			";
 		}
 
 		$listData = Valikkoot::model()->findAll($criteria);
@@ -956,7 +953,10 @@ $xml = '
 		$tt = Tyontekijat::model()->findAll($criteria);
 		$tt_arr = array();
 		foreach($tt as $tekija){
-			$arr = array();
+			if( $site[0]->checkOikeusFields($checkOikeus) == 1 and $tr_array == null){
+				$tt_arr[$tekija->id] = $tekija->id;
+				continue;
+			}
 			foreach($listData as $item){
 				if( 
 					is_array(json_decode($tekija->tyoryhma)) 
