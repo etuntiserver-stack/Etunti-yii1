@@ -29,9 +29,10 @@
      <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
 	<TD><b class="link text-danger poista" for="poista_<?php echo $num; ?>" style="font-size:150%"><i class="fa fa-times"></i></b></TD>
 	<TD>
-	<?php if( isset($_POST['tuotteet_palvelut_muoto']) and $_POST['tuotteet_palvelut_muoto'] == 0 ): ?>
 	<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control" value="<?php echo $tuoteID; ?>">
 	<input type="hidden" size="1" name="hinnasto_rivi_id[<?php echo $num; ?>]" id="hinnasto_rivi_id_<?php echo $num; ?>" class="form-control" value="<?php echo $hinnasto_rivi_id; ?>">
+
+	<?php if( isset($_POST['tuotteet_palvelut_muoto']) and $_POST['tuotteet_palvelut_muoto'] == 0 ): ?>
 	<input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control" value="<?php echo $tuotePalvelu; ?>">
 	<?php endif; ?>
 
