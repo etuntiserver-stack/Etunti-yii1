@@ -926,6 +926,8 @@ $xml = '
 
 	public function TyoryhmatTyontekijatHelper($tr_array)
 	{
+		//print_r($tr_array);
+		//exit;
 
 		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
@@ -938,7 +940,7 @@ $xml = '
 			AND value2 LIKE '%\"".Yii::app()->user->adminID."\"%'
 		";
 		}
-		if( $site[0]->checkOikeusFields($checkOikeus) == 1 and is_array($tr_array)){
+		if( is_array($tr_array)){
 			$impl = "value='".implode("' OR value='", $tr_array)."'";
 			$criteria->condition = "
 				select_type='tyoryhma'
