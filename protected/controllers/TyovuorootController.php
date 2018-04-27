@@ -2464,14 +2464,15 @@ class TyovuorootController extends Controller
 		   $tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
 		   $ids = implode(",", $tt_arr);
 		   if( count($tt_arr) > 0 ){
-		   	$tyoryhma_cond = ' AND id IN ('.$ids.') ';
+		   	$tyoryhma_cond = ' id IN ('.$ids.') ';
 		   } 
-
-	           $criteria->addCondition ("
+/*
 		   id IN (  
 		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
 		   )
+*/
+	           $criteria->addCondition ("
 		   $tyoryhma_cond
 		   ");
 
