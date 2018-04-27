@@ -2352,22 +2352,15 @@ class TyovuorootController extends Controller
 			//     Return order etu ja sukunimella -->
 
 	        	$criteria->select = "id,tekijan_nimi";
+	        	$criteria->condition = ' aktiivinen=1 ';
 
 			// <-- Tyoryhmat
-			$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-			$site = Yii::app()->createController('Site');
-			if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-				$tt = Yii::app()->createController('Tyontekijat');
-				$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
-				$ids = implode(",", $tt_arr);
-				if( count($tt_arr) > 0 ){
-		        		$criteria->condition = " id IN ($ids) ";
-				} else {
-		        		$criteria->condition = ' 1!=1 ';
-				}
-			} else {
-		        	$criteria->condition = ' aktiivinen=1 ';
-			}
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+		        	$criteria->addCondition (" id IN ($ids) ");
+			} 
 			//    Tyoryhmat -->
 
 			$tt = Tyontekijat::model()->findAll($criteria);
@@ -2459,25 +2452,12 @@ class TyovuorootController extends Controller
 		// <-- tyoryhma
 		if(isset(Yii::app()->session['tyoryhma']))
 		{
-	   	   $tyoryhma_cond = '';
-		   $tt = Yii::app()->createController('Tyontekijat');
-		   $tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
-		   $ids = implode(",", $tt_arr);
-		   if( count($tt_arr) > 0 ){
-		   	$tyoryhma_cond = ' id IN ('.$ids.') ';
-		   } 
-/*
-		   id IN (  
-		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-		   )
-*/
-		   if( !empty($tyoryhma_cond) ){
-	           	$criteria->addCondition ("
-		   		$tyoryhma_cond
-		   	");
-		   }
-
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(Yii::app()->session['tyoryhma']);
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+		        	$criteria->addCondition (" id IN ($ids) ");
+			}
 		}
 		//   tyoryhma -->
 
@@ -2636,27 +2616,22 @@ class TyovuorootController extends Controller
 			//     Return order etu ja sukunimella -->
 
 	        	$criteria->select = "id,tekijan_nimi";
+	        	$criteria->condition = ' aktiivinen=1 ';
 
-			$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-			$site = Yii::app()->createController('Site');
-			if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-				$tt = Yii::app()->createController('Tyontekijat');
-				$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
-				$ids = implode(",", $tt_arr);
-				if( count($tt_arr) > 0 ){
-		        		$criteria->condition = ' id IN ('.$ids.') ';
-				} else {
-					die('Ei oikeuksia');
-					exit;
-				}
-			} else {
-		        	$criteria->condition = ' aktiivinen=1 ';
-			}
+			// <-- Tyoryhmat
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+		        	$criteria->addCondition (" id IN ($ids) ");
+			} 
+			//    Tyoryhmat -->
+
 			$tt = Tyontekijat::model()->findAll($criteria);
 			$tekijatOletuksena = array();
 			foreach($tt as $t)
 			$tekijatOletuksena[] = $t->id;
-
+	
 			Yii::app()->session['tyontekijat'] = $tekijatOletuksena;
 		}
 		// Oletus arvot -->
@@ -2736,22 +2711,12 @@ class TyovuorootController extends Controller
 		// <-- tyoryhma
 		if(isset(Yii::app()->session['tyoryhma']))
 		{
-	   	   $tyoryhma_cond = '';
-		   $tt = Yii::app()->createController('Tyontekijat');
-		   $tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
-		   $ids = implode(",", $tt_arr);
-		   if( count($tt_arr) > 0 ){
-		   	$tyoryhma_cond = ' AND id IN ('.$ids.') ';
-		   } 
-
-	           $criteria->addCondition ("
-		   id IN (  
-		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-		   )
-		   $tyoryhma_cond
-		   ");
-
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(Yii::app()->session['tyoryhma']);
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+		        	$criteria->addCondition (" id IN ($ids) ");
+			}
 		}
 		//   tyoryhma -->
 

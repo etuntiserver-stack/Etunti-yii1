@@ -7,20 +7,14 @@
 		AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
 	";
 
-		// <-- Tyoryhma
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-		$site = Yii::app()->createController('Site');
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$tt = Yii::app()->createController('Tyontekijat');
-			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
-			$ids = implode(",", $tt_arr);
-			if( count($tt_arr) > 0 ){
-				$criteria->addCondition (" tid IN ($ids) ");
-			} else {
-				$criteria->condition = " 1!=1 ";
-			}
+		// <-- Tyoryhmat
+		$tt = Yii::app()->createController('Tyontekijat');
+		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+		$ids = implode(",", $tt_arr);
+		if( count($tt_arr) > 0 ){
+        		$criteria->addCondition (" tid IN ($ids)");
 		}
-		//     Tyoryhma -->
+		//    Tyoryhmat -->
 
 	$s = Tyovuoroot::model()->find($criteria);
 
@@ -28,20 +22,14 @@
 	$criteria->select = "  COUNT(*) as count ";
 	$criteria->condition = " status=1 ";
 
-		// <-- Tyoryhma
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-		$site = Yii::app()->createController('Site');
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$tt = Yii::app()->createController('Tyontekijat');
-			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
-			$ids = implode(",", $tt_arr);
-			if( count($tt_arr) > 0 ){
-				$criteria->addCondition (" tid IN ($ids) ");
-			} else {
-				$criteria->condition = " 1!=1 ";
-			}
+		// <-- Tyoryhmat
+		$tt = Yii::app()->createController('Tyontekijat');
+		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+		$ids = implode(",", $tt_arr);
+		if( count($tt_arr) > 0 ){
+        		$criteria->addCondition (" tid IN ($ids)");
 		}
-		//     Tyoryhma -->
+		//    Tyoryhmat -->
 
 	$a = Mobile::model()->find($criteria);	
 
@@ -51,20 +39,14 @@
 		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3
 	";
 
-		// <-- Tyoryhma
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-		$site = Yii::app()->createController('Site');
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$tt = Yii::app()->createController('Tyontekijat');
-			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
-			$ids = implode(",", $tt_arr);
-			if( count($tt_arr) > 0 ){
-				$criteria->addCondition (" tid IN ($ids) ");
-			} else {
-				$criteria->condition = " 1!=1 ";
-			}
+		// <-- Tyoryhmat
+		$tt = Yii::app()->createController('Tyontekijat');
+		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+		$ids = implode(",", $tt_arr);
+		if( count($tt_arr) > 0 ){
+        		$criteria->addCondition (" tid IN ($ids)");
 		}
-		//     Tyoryhma -->
+		//    Tyoryhmat -->
 
 	$t = Mobile::model()->find($criteria);
 

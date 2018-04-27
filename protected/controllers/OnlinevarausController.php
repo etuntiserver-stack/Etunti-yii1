@@ -270,17 +270,11 @@ class OnlinevarausController extends Controller
 
 		if(isset($_GET['tyoryhma_tyyppi']) and $_GET['tyoryhma_tyyppi'] == 'tyontekija' and !empty($_GET['tyoryhma'])){
 		// <-- Tyoryhmat
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-		$site = Yii::app()->createController('Site');
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$tt = Yii::app()->createController('Tyontekijat');
-			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
-			$ids = implode(",", $tt_arr);
-			if( count($tt_arr) > 0 ){
-	        		$criteria->addCondition (" id IN(SELECT onlinevaraus_id FROM sivex_tvuoro WHERE tid IN ($ids)) ");
-			} else {
-	        		$criteria->condition = ' 1!=1 ';
-			}
+		$tt = Yii::app()->createController('Tyontekijat');
+		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+		$ids = implode(",", $tt_arr);
+		if( count($tt_arr) > 0 ){
+	        	$criteria->addCondition (" id IN(SELECT onlinevaraus_id FROM sivex_tvuoro WHERE tid IN ($ids)) ");
 		}
 		//    Tyoryhmat -->
 		}
