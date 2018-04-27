@@ -2472,9 +2472,11 @@ class TyovuorootController extends Controller
 		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
 		   )
 */
-	           $criteria->addCondition ("
-		   $tyoryhma_cond
-		   ");
+		   if( !empty($tyoryhma_cond) ){
+	           	$criteria->addCondition ("
+		   		$tyoryhma_cond
+		   	");
+		   }
 
 		}
 		//   tyoryhma -->
