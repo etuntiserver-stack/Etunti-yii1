@@ -2784,6 +2784,12 @@ class TyovuorootController extends Controller
 				//     LOG -->
 		}
 
+		$criteria=new CDbCriteria;
+		$criteria->order= " id DESC "; 
+		$criteria->condition= " 
+			(time + INTERVAL ".$asetukset->onlinevaraus_autoremove." MINUTE) < NOW()
+			AND osoiteOnline=1
+		";
 		Tyovuoroot::model()->deleteAll($criteria);
 		// Poistaminen -->
 
