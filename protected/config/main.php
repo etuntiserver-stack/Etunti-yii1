@@ -159,7 +159,7 @@ session_start();
   $db2 = $_SESSION['domain'];
   $db2_host = 'localhost';
   $db2_user = 'root';
-  $db2_pass = 'Etunti2017!';
+  $db2_pass = 'Mulgikapsas';
   }
 
 
