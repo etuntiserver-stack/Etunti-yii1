@@ -18,10 +18,6 @@ session_start();
 	die("Hello world");
   }
 
-  if(   isset($_SERVER['REMOTE_ADDR']) and $_SERVER['REMOTE_ADDR'] == '5.8.8.200'){
-	die("Может успокоишся уже?");
-  }
-
 
   if(
 	!isset($_SESSION['domain']) 
