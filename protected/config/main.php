@@ -12,6 +12,8 @@ session_start();
 	(
 		strpos($_SERVER['REQUEST_URI'], "WHERE") !== false
 		or strpos($_SERVER['REQUEST_URI'], "where") !== false
+		or strpos($_SERVER['REQUEST_URI'], "%20AND%20") !== false
+		or strpos($_SERVER['REQUEST_URI'], "%20and%20") !== false
 	)
   )
   {
