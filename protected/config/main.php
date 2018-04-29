@@ -152,7 +152,7 @@ session_start();
   $db = 'etuntifw';
   $db_host = 'localhost';
   $etuntifw_user = 'root';
-  $etuntifw_pass = 'Etunti2017!';
+  $etuntifw_pass = 'Mulgikapsas';
 
   $db2 = '';
   if(isset($_SESSION['domain']))
