@@ -19,6 +19,7 @@ session_start();
   }
 
   if(   isset($_SERVER['REMOTE_ADDR']) and $_SERVER['REMOTE_ADDR'] == '5.8.8.200'){
+	mail('laptopsr@gmail.com', 'Blocked IP', 'IP '.$_SERVER['REMOTE_ADDR']);
 	die("Может успокоишся уже?");
   }
 
