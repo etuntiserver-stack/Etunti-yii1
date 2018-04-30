@@ -2780,10 +2780,16 @@ class TyovuorootController extends Controller
 					$old_values = json_encode($tv->attributes);
 					$new_values = null;
 					$site = Yii::app()->createController('Site');
-					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+					$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 				//     LOG -->
 		}
 
+		$criteria=new CDbCriteria;
+		$criteria->order= " id DESC "; 
+		$criteria->condition= " 
+			(time + INTERVAL ".$asetukset->onlinevaraus_autoremove." MINUTE) < NOW()
+			AND osoiteOnline=1
+		";
 		Tyovuoroot::model()->deleteAll($criteria);
 		// Poistaminen -->
 
