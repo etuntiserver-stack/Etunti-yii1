@@ -654,7 +654,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<div class="row">
 	 <div class="col-sm-4">
 		<b>Hinnat sis. ALV</b> <input type="radio" name="alvsis" value="sis"> <br>
-		<b>Hinnat ALV0</b> <input type="radio" name="alvsis" value="nolla" checked>
+		<b>Hinnat ALV 0%</b> <input type="radio" name="alvsis" value="nolla" checked>
 	 </div>
 	</div>
 
