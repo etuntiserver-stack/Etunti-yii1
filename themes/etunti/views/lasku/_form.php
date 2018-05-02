@@ -678,10 +678,11 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
      </TR>
 
      <tbody>
-     <?php if(!isset($model->id)) : ?> 
+     <?php if(isset($model->id)) : ?> 
+<?php /*
      	<div class="tr_rivit"></div>
      <?php else : ?>
-
+*/ ?>
      <?php 
 	$num = 0;
 	foreach($laskunRivit as $rivi){ 
@@ -1003,7 +1004,7 @@ if($("#modelID").val() != '1'){
     if( $('#Lasku_digisten_tunnit_id').length ){
 	digisten_tunnit_id = parseInt($('#Lasku_digisten_tunnit_id').val());
     }
-
+/*
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_tyhja',
            type: "POST",
@@ -1014,7 +1015,7 @@ if($("#modelID").val() != '1'){
 		eachLaskenta();
            }
         });
-
+*/
 
     if( $('#tr_rivit_jarjestelmavalvojat').length )
     {
