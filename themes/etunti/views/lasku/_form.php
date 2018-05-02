@@ -999,12 +999,10 @@ if(parseInt($("#forTilanne").val()) !== 0){
 if($("#modelID").val() != '1'){
     var rivi = $("#samaRivi").html();
     var rowCount = $('table#TableRivit tbody tr').length;
-    var digisten_tunnit_id = 0;
 
     if( $('#Lasku_digisten_tunnit_id').length ){
+	var digisten_tunnit_id = 0;
 	digisten_tunnit_id = parseInt($('#Lasku_digisten_tunnit_id').val());
-    }
-/*
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_tyhja',
            type: "POST",
@@ -1015,7 +1013,7 @@ if($("#modelID").val() != '1'){
 		eachLaskenta();
            }
         });
-*/
+    }
 
     if( $('#tr_rivit_jarjestelmavalvojat').length )
     {
