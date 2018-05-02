@@ -862,10 +862,10 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<a href="finvoice?id=<?php echo $model->id; ?>&kopio=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Kopio'); ?></a>
 		<?php endif; ?>
 
-
+		<?php /*
 		<hr>
 		<p><b>Laskun tila: </b><?php echo $this->tilanneCheck($model,null); ?></p>
-		<br>
+		<br> */ ?>
 
 		<?php if(
 			isset($model->id) 
