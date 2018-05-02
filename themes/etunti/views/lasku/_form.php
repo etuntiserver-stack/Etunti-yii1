@@ -667,8 +667,8 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<TH class="col-sm-2">Tuote/Palvelu</TH>
 	<TH class="col-sm-1">Määrä</TH>
 	<TH class="col-sm-1">Yksikkö <span class="btn btn-primary btn-xs myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span></TH>
-	<TH class="col-sm-1">Hinta</TH>
-	<TH class="col-sm-1">ALV %</TH>
+	<TH class="col-sm-2">Hinta</TH>
+	<TH>ALV %</TH>
 	<TH class="col-sm-1">ALV</TH>
 	<TH class="col-sm-1">Ale %</TH>
 	<TH class="col-sm-1">Veroton</TH>
