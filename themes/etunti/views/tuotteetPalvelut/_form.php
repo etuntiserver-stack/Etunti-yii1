@@ -50,16 +50,19 @@ $model->kategoria = json_decode($model->kategoria, true);
 	</div>
 
 	<legend><h3><?php echo Yii::t('main', 'Hinta'); ?></h3></legend>
+
+	<div class="row">
+	 <div class="col-sm-12">
+		<b>Hinnat sis. ALV</b> <input type="radio" name="alvsis" value="sis"> <br>
+		<b>Hinnat ALV0</b> <input type="radio" name="alvsis" value="nolla" checked>
+	 </div>
+	</div>
+	<br>
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta_alv_0'); ?>
 		<?php echo $form->numberField($model,'hinta_alv_0',array('size'=>20,'maxlength'=>20,'class'=>'form-control', 'step'=>'0.01')); ?>
 		<?php echo $form->error($model,'hinta_alv_0'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_alv_sis'); ?>
-		<?php echo $form->numberField($model,'hinta_alv_sis',array('size'=>20,'maxlength'=>20,'class'=>'form-control', 'step'=>'0.01')); ?>
-		<?php echo $form->error($model,'hinta_alv_sis'); ?>
 	</div>
 
 	<div class="section fill mb5">
@@ -78,6 +81,12 @@ $model->kategoria = json_decode($model->kategoria, true);
 		?>
 
 		<?php echo $form->error($model,'alv'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'hinta_alv_sis'); ?>
+		<?php echo $form->numberField($model,'hinta_alv_sis',array('size'=>20,'maxlength'=>20,'class'=>'form-control', 'step'=>'0.01', 'readonly' => 'yes')); ?>
+		<?php echo $form->error($model,'hinta_alv_sis'); ?>
 	</div>
 
 
@@ -103,21 +112,34 @@ $(".muokaValiko").click(function() {
 });
 /* valikot */
 
- $('#TuotteetPalvelut_hinta_alv_0').keyup(function(){
-	lasketa();
- });
-
- $('#TuotteetPalvelut_alv').change(function(){
+ $('input[name=alvsis], #TuotteetPalvelut_alv, #TuotteetPalvelut_hinta_alv_0, #TuotteetPalvelut_hinta_alv_sis').on("change keyup paste", function(){
+	var alvsis = $('input[name=alvsis]:checked').val();
+	if( alvsis == 'nolla'){
+		$('#TuotteetPalvelut_hinta_alv_sis').attr('readonly', 'yes');
+		$('#TuotteetPalvelut_hinta_alv_0').removeAttr('readonly');
+	}
+	if( alvsis == 'sis'){
+		$('#TuotteetPalvelut_hinta_alv_sis').removeAttr('readonly');
+		$('#TuotteetPalvelut_hinta_alv_0').attr('readonly', 'yes');
+	}
 	lasketa();
  });
 
  function lasketa(){
-	var hinta_alv_0 = parseFloat($('#TuotteetPalvelut_hinta_alv_0').val());
-	var alv = parseFloat($('#TuotteetPalvelut_alv option:selected').val());
-
-	var result = ((hinta_alv_0*alv)/100)+hinta_alv_0;
-	var result = Math.round(result * 100) / 100;
-	$('#TuotteetPalvelut_hinta_alv_sis').val(result);
+	var alvsis = $('input[name=alvsis]:checked').val();
+	if( alvsis == 'nolla'){
+		var hinta_alv_0 = parseFloat($('#TuotteetPalvelut_hinta_alv_0').val());
+		var alv = parseFloat($('#TuotteetPalvelut_alv option:selected').val());
+		var result = ((hinta_alv_0*alv)/100)+hinta_alv_0;
+		$('#TuotteetPalvelut_hinta_alv_sis').val(result.toFixed(2));
+	}
+	if( alvsis == 'sis'){
+		var hinta_alv_sis = $('#TuotteetPalvelut_hinta_alv_sis').val();
+		var alv = parseFloat($('#TuotteetPalvelut_alv option:selected').val());
+		var jakaa = '1.'+alv;
+		var laske = hinta_alv_sis/parseFloat(jakaa);
+		$('#TuotteetPalvelut_hinta_alv_0').val(laske.toFixed(2));
+	}
  }
 
 
