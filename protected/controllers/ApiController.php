@@ -711,7 +711,7 @@ public function actionImei($dom)
 				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 				BETWEEN CURDATE() AND '".$aikaVali."'
 				AND piilota_mobiilista!=1
-				AND (peruutettu=0 OR peruutettu=NULL)
+				AND (peruutettu=0 OR peruutettu='')
 		    ";
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
 
