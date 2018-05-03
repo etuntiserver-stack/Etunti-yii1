@@ -4,7 +4,7 @@
  if($pass == 'Estrom2016!')
  {
 
-   mail('laptopsr@gmail.com', 'Crontab toimii', 'Time '.date("d.m.Y H:i"));
+
 
 
    $koodi_aktiivinen = 1;
