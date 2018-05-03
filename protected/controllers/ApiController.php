@@ -711,6 +711,7 @@ public function actionImei($dom)
 				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 				BETWEEN CURDATE() AND '".$aikaVali."'
 				AND piilota_mobiilista!=1
+				AND peruutettu!=1 AND peruutettu!=2
 		    ";
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
 
@@ -724,7 +725,7 @@ public function actionImei($dom)
 
 		    foreach($tvuoro as $val)
 		    {
-		      $osoite = ''. $val->peruutettu;
+		      $osoite = '';
 		      $kohde = Kohteet::model()->findbypk($val->kohde);
 		      if(isset($kohde->osoite))
 		      {
