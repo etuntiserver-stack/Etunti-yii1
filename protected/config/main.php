@@ -6,7 +6,7 @@ session_start();
 
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
-/*
+
   if ( isset($_SERVER['REQUEST_URI']) 
 	and 
 	(
@@ -25,7 +25,6 @@ session_start();
 	mail('laptopsr@gmail.com', 'Blocked IP', 'IP '.$_SERVER['REMOTE_ADDR']);
 	die("Может успокоишся уже?");
   }
-*/
 
   if(
 	!isset($_SESSION['domain']) 
