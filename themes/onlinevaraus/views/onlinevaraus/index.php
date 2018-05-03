@@ -62,10 +62,24 @@
 		    $valiko->save();
 		}
 
+      		$etsi_tt = Tyontekijat::model()->findAll(" online_varauksen_valmina=1 ");
+		$list_tt_toimialue = array();
+		foreach($etsi_tt as $item){
+		   $dec = json_decode($item->tyo_toimialue, true);
+		     if(is_array($dec)){
+		     foreach($dec as $item2)
+			$list_tt_toimialue[$item2] = $item2;
+		     }
+		}
+
 		$list = array();
-      		$l = Valikkoot::model()->findAll(" select_type='tyo_toimialue' ",array('order' => "select_type"));
-		foreach($l as $v)
-		$list[$v->value] = $v->value;
+		$impl = "value='".implode("' OR value='", $list_tt_toimialue)."'";
+		if( count($list_tt_toimialue) > 0 ){
+      		  $l = Valikkoot::model()->findAll(" select_type='tyo_toimialue' AND ($impl)",array('order' => "select_type"));
+		  foreach($l as $v){
+			$list[$v->value] = $v->value;
+		  }
+		}
 
 		if(isset($_SESSION['onlinevaraus']['tyo_toimialue']))
 		$options = array('class'=>'form-control input-lg', 'options' => array($_SESSION['onlinevaraus']['tyo_toimialue']=>array('selected'=>true)));
