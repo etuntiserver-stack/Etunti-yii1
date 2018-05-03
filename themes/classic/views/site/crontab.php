@@ -614,6 +614,18 @@
 	}
 	// lmoitus toistuvien työvuorojen päättymisestä -->
 
+	// <-- Vinkkit autopoistaminen
+	if(isset($asetukset->tietosuoja_vinkki_sailyttaminen) )
+	{
+		$criteria=new CDbCriteria;
+		//$criteria->select = "";
+		$criteria->condition = " 
+			DATE(time) < '".date("Y-m-d", strtotime('-'.$asetukset->tietosuoja_vinkki_sailyttaminen.' day'))."'
+			AND token!=''
+		";
+		VinkkiExtranet::model()->deleteAll($criteria);
+	}
+	//     Vinkkit autopoistaminen -->
 
 
 	// <-- Lasku Netvisor
