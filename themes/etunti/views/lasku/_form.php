@@ -657,6 +657,12 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
         <?php endif; ?>
 	<!-- Digisten -->
 
+	<div class="row">
+	 <div class="col-sm-4">
+		<b>Hinnat sis. ALV</b> <input type="radio" name="alvsis" value="sis"> <br>
+		<b>Hinnat ALV 0%</b> <input type="radio" name="alvsis" value="nolla" checked>
+	 </div>
+	</div>
 
 <div id="rivit" class="table-responsive">
 <TABLE class="table well" id="TableRivit">
@@ -667,7 +673,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<TH class="col-sm-2">Tuote/Palvelu</TH>
 	<TH class="col-sm-1">Määrä</TH>
 	<TH class="col-sm-1">Yksikkö <span class="btn btn-primary btn-xs myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span></TH>
-	<TH class="col-sm-1">Hinta</TH>
+	<TH class="col-sm-2">Hinta</TH>
 	<TH class="col-sm-1">ALV %</TH>
 	<TH class="col-sm-1">ALV</TH>
 	<TH class="col-sm-1">Ale %</TH>
@@ -678,10 +684,11 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
      </TR>
 
      <tbody>
-     <?php if(!isset($model->id)) : ?> 
+     <?php if(isset($model->id)) : ?> 
+<?php /*
      	<div class="tr_rivit"></div>
      <?php else : ?>
-
+*/ ?>
      <?php 
 	$num = 0;
 	foreach($laskunRivit as $rivi){ 
@@ -787,7 +794,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php endif; ?>
 
 		<?php if(isset($model->id) and $model->tilanne == '0') : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&hyvaksyminen=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Hyväksy'); ?></a>
+		<a href="finvoice?id=<?php echo $model->id; ?>&hyvaksyminen=true" class="btn btn-success btn-group myBgColors" id="hyvaksytaan_lasku"><?php echo Yii::t('main','Hyväksy'); ?></a>
 		<?php endif; ?>
 
 		<?php if(
@@ -811,12 +818,12 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php if(isset($model->id) 
 			and $model->laskun_nimetys == "Hyvityslasku"
 			and $asetukset->palvelu_tyyppi == 2
-			and $model->tilanne != 98
+			//and $model->tilanne != 98
 			and $model->trust_jobid != ''
 			and $model->tilanne != 999
 			) 
 		: ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&hyvityslasku=true&refundtojobid=<?php echo $model->trust_jobid; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä Hyvityslasku (TRUST.FI)'); ?></a>
+		<a href="finvoice?id=<?php echo $model->id; ?>&hyvityslasku=true&refundtojobid=<?php echo $model->trust_jobid; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä Hyvityslasku'); ?></a>
 		<?php endif; ?>
 
 		<?php /* if(
@@ -861,10 +868,10 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<a href="finvoice?id=<?php echo $model->id; ?>&kopio=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Kopio'); ?></a>
 		<?php endif; ?>
 
-
+		<?php /*
 		<hr>
 		<p><b>Laskun tila: </b><?php echo $this->tilanneCheck($model,null); ?></p>
-		<br>
+		<br> */ ?>
 
 		<?php if(
 			isset($model->id) 
@@ -998,12 +1005,10 @@ if(parseInt($("#forTilanne").val()) !== 0){
 if($("#modelID").val() != '1'){
     var rivi = $("#samaRivi").html();
     var rowCount = $('table#TableRivit tbody tr').length;
-    var digisten_tunnit_id = 0;
 
     if( $('#Lasku_digisten_tunnit_id').length ){
+	var digisten_tunnit_id = 0;
 	digisten_tunnit_id = parseInt($('#Lasku_digisten_tunnit_id').val());
-    }
-
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_tyhja',
            type: "POST",
@@ -1014,7 +1019,7 @@ if($("#modelID").val() != '1'){
 		eachLaskenta();
            }
         });
-
+    }
 
     if( $('#tr_rivit_jarjestelmavalvojat').length )
     {
@@ -1099,6 +1104,11 @@ function jumpToPageBottom() {
     return false;
 }
 
+
+$(document).delegate("input, select","change keyup paste",function(){
+    $("#hyvaksytaan_lasku").addClass('disabled');
+});
+
 $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 
     var tuoteID = $(this).val();
@@ -1135,6 +1145,36 @@ $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 
 });
 
+$(document).delegate("table#TableRivit .valitseTuote_tuoteonly","change",function(){
+
+    var tuoteID = $(this).val();
+    var num = $(this).attr("num");
+    var asiakas_nro = $("#Lasku_as_nro option:selected").val();
+    if(!asiakas_nro && '<?=$model->as_nro?>' !== '')
+    {
+	asiakas_nro = '<?=$model->as_nro?>';
+    }
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/lasku/valitsetuote',
+           type: "POST",
+           data: { tuoteID : tuoteID, asiakas_nro : asiakas_nro },
+           success: function(data){
+		var sp = JSON.parse(data);
+
+		if(sp['id'])
+		{
+			$("#tkoodi_"+num).val(sp['tuotenimi']);
+			$("#tuoteID_"+num).val(sp['id']);
+		}
+
+		eachLaskenta();
+		//console.log(data)
+           }
+        });
+
+});
+
 $(document).delegate(".poista","click",function(){
 	$(this).closest('tr').remove();
 	yhteensaTotal();
@@ -1147,11 +1187,16 @@ function Rivi(){
 
 }
 
+ $('input[name=alvsis]').change(function(){
+  eachLaskenta();
+ });
+
   eachLaskenta();
 
 var aleAsiakkaasta = '';
 function eachLaskenta(){
 
+  var alvsis = $('input[name=alvsis]:checked').val();
   $("#rivit input").each(function() {
 
 	var hinta_alv_0 = 0;
@@ -1171,11 +1216,20 @@ function eachLaskenta(){
 	if(ale > 0)
 	hinta_alv_0 = hinta_alv_0-((hinta_alv_0/100)*ale);
 
-	var laske = parseFloat(((hinta_alv_0*kpl)/100*alv), 10);
-	var veroton = parseFloat(hinta_alv_0, 10)*kpl;
-	yhteensa = laske+veroton;
+	if( alvsis == 'nolla'){
+		var laske = (hinta_alv_0*kpl)/100*alv;
+		var veroton = hinta_alv_0*kpl;
+		var yhteensa = laske+veroton;
+	}
+	if( alvsis == 'sis'){
+		var yhteensa = hinta_alv_0*kpl;
+		var jakaa = '1.'+alv;
+		var l = yhteensa/parseFloat(jakaa);
+		var veroton = l;
+		var laske = yhteensa-veroton;
+	}
 
-	$("#hinta_alv_"+inputKenta[1]).val((laske).toFixed(2));
+	$("#hinta_alv_"+inputKenta[1]).val(laske.toFixed(2));
 	$("#veroton_"+inputKenta[1]).val(veroton.toFixed(2));
 	$("#yhteensa_alv_"+inputKenta[1]).val(yhteensa.toFixed(2));
 
@@ -1503,7 +1557,8 @@ function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palv
 					hinnasto_rivi_id : data['hinnasto_rivi_id'],
 					yksikko : data['yksikko'],
 					free_text : data['free_text'],
-					tuotePalvelu : tuotePalvelu
+					tuotePalvelu : tuotePalvelu,
+					tuotteet_palvelut_muoto : tuotteet_palvelut_muoto
 			   };
 
 	        	   $.ajax({

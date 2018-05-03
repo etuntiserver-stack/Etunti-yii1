@@ -32,7 +32,7 @@ Laatimispäivä<br>
 <input type="text" id="laatimispaiva" class="form-control datepicker" value="<?php if(isset($r['laatimispaiva'])) echo $r['laatimispaiva']; ?>">
 </div>
 
-<p class="small">Lue <a href="<?php echo Yii::app()->request->baseUrl.'/tiedostot/tayttoohjeet.pdf'; ?>" target="_blank">täyttöohjeet</a> ennen rekisteriselosteen<br>
+<p class="small">Lue <a href="<?php echo Yii::app()->request->baseUrl.'/lib/pdf/tayttoohjeet.pdf'; ?>" target="_blank">täyttöohjeet</a> ennen rekisteriselosteen<br>
 täyttämistä. Käytä tarvittaessa liitettä.</p>
 
 <br>
@@ -137,7 +137,7 @@ table{ background: white; }
 $(document).ready(function(){
 
 
-$(".tallennaTaulun").click(function(){
+$(".tallennaTaulun").click(function(event){
 
     event.preventDefault();
     var searchIDs = $("#rekisteriteloste input, #rekisteriteloste textarea").map(function(){
@@ -152,7 +152,7 @@ $(".tallennaTaulun").click(function(){
 	   type:'POST',
 	   data: { "rekisteriseloste" : searchIDs },
            success: function(data){
-		console.log(data);
+		//console.log(data);
 		window.location.reload();
 
            }

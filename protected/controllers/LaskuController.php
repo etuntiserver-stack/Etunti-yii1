@@ -1013,9 +1013,9 @@ class LaskuController extends Controller
 				$lr->hinta_alv	=$_POST['hinta_alv'][$key];
 				$lr->ale	=$_POST['ale'][$key];
 
-				if(isset($_POST['tuoteID']))
+				if(isset($_POST['tuoteID'][$key]))
 					$lr->tuoteID = $_POST['tuoteID'][$key];
-				if(isset($_POST['hinnasto_rivi_id']))
+				if(isset($_POST['hinnasto_rivi_id'][$key]))
 					$lr->hinnasto_rivi_id = $_POST['hinnasto_rivi_id'][$key];
 
 				/*
