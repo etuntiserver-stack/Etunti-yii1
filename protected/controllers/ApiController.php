@@ -1,5 +1,5 @@
 <?php
-if(isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1')){
+if(isset($_SERVER['REMOTE_ADDR']) and $_SERVER['REMOTE_ADDR'] == '89.27.116.62'){
 header("Access-Control-Allow-Origin: *");
 }
 
@@ -629,7 +629,7 @@ public function actionImei($dom)
 				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
 				AND $eilasketa
 				AND piilota_mobiilista!=1
-				AND peruutettu!=1 AND peruutettu!=2
+				AND (peruutettu=0 OR peruutettu IS NULL)
 		    ";
 
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
@@ -711,7 +711,7 @@ public function actionImei($dom)
 				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 				BETWEEN CURDATE() AND '".$aikaVali."'
 				AND piilota_mobiilista!=1
-				AND peruutettu!=1 AND peruutettu!=2
+				AND (peruutettu=0 OR peruutettu IS NULL)
 		    ";
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
 

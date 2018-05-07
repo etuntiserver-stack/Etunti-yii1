@@ -276,7 +276,7 @@ function kaksiKalenteria()
 		var minutes = "0" + Math.floor(time / 60);
 		var seconds = "0" + (time - minutes * 60);
 		jaljella =  minutes.substr(-2) + ":" + seconds.substr(-2);
-		$('#countTimer').text('Aikajäljellä: '+jaljella);
+		$('#countTimer').text('Aikaa jäljellä: '+jaljella);
 
 		if(data !== ''){
 		  //console.log(data);

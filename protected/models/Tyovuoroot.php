@@ -48,14 +48,6 @@ public $tilausviesti;
 	{
 		$tb_name = 'sivex_tvuoro';
 		$check_this_table = true;
-		unset(Yii::app()->session[$tb_name]); // this use if want many times play
-		if(!isset(Yii::app()->session[$tb_name]))
-		{
-			Yii::app()->session[$tb_name] = true;
-			$check_this_table = true;
-		}
-
-
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
@@ -81,18 +73,17 @@ public $tilausviesti;
                      'tyoajanlaatu' => 'varchar(50) ',
                      'tyoajanmerkinta' => 'varchar(50) ',
                      'tietoja' => 'text ',
-                     'osoiteOnline' => 'varchar(100) ',
-                     'onlinevaraus_id' => 'int(11) ',
-                     'status' => 'int(2) ',
-                     'toistuva_id' => 'int(11) ',
+                     'osoiteOnline' => 'varchar(100)',
+                     'onlinevaraus_id' => 'int(11) DEFAULT 0',
+                     'status' => 'int(2) DEFAULT 0',
+                     'toistuva_id' => 'int(11) DEFAULT 0',
                      'tyopaari' => 'text ',
-                     'ilmoitus_avoimista_kohteesta' => 'int(1) ',
-                     'ilmoitus_myohastyneista_kohteesta' => 'int(1) ',
-                     'piilota_mobiilista' => 'int(1) ',
-                     'tuoteID' => 'int(11) ',
-                     'peruutettu' => 'int(1) ',
-                     'peruutettu' => 'int(1) ',
-		     'apuaika' => 'int(1) ',
+                     'ilmoitus_avoimista_kohteesta' => 'int(1) DEFAULT 0',
+                     'ilmoitus_myohastyneista_kohteesta' => 'int(1) DEFAULT 0',
+                     'piilota_mobiilista' => 'int(1) DEFAULT 0',
+                     'tuoteID' => 'int(11) DEFAULT 0',
+                     'peruutettu' => 'int(1) DEFAULT 0',
+		     'apuaika' => 'int(1) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)
