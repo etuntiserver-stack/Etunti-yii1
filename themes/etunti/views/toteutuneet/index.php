@@ -349,6 +349,7 @@ function dateDiff($start, $end) {
 	  if($pyhat == 'su' or $pyhat == 'pyhapaiva' or $pyhat == 'erikoislauantai')
 	  {
 		$clPyhat = 'style="background:#ddd"';
+		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>';
 	  }
 
 	  if($pyhat == 'pyhapaiva')
