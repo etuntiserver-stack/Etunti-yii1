@@ -148,91 +148,12 @@ $months=array(
                 </div>
               </div>
 
-
-
-
-
-              <!-- Bar Graph -->
-              <div class="panel" id="p12">
-                <div class="panel-heading">
-                  <span class="panel-title"><?php echo Yii::t('main', 'Toimipaikat'); ?></span>
-		  <?php 
-		    $month1 = $months[date("m")];
-		    $month2 = $months[date("m",strtotime("-1 month"))];
-
-		    $m1 = date("Y-m-d");
-		    $m2 = date("Y-m-d", strtotime($m1.'first day of this month -1 month'));
-		  ?>
-                  <input type="hidden" id="month1" value="<?php echo $month1; ?>" month="<?php echo $m1; ?>" m="<?php echo date('m'); ?>">
-                  <input type="hidden" id="month2" value="<?php echo $month2; ?>" month="<?php echo $m2; ?>" m="<?php echo date('m',strtotime('-1 month')); ?>">
-                </div>
-                <div class="panel-menu">
-
-                  <div class="chart-legend" data-chart-id="#high-bars">
-		    <div id="toimipakat_bars"></div>
-                  </div>
-                </div>
-                <div class="panel-body pn">
-                  <div id="high-bars" style="width: 100%; height: 140px; margin: 0 auto"></div>
-                </div>
-              </div>
-
-
-
-              <!-- Country List -->
-              <div class="panel" id="p216">
-                <div class="panel-heading">
-                  <span class="panel-title"><?php echo Yii::t('main', 'Suunniteltu'); ?></span>
-                </div>
-                <div class="panel-body panel-scroller scroller-md scroller-overlay pn">
-                  <div id="suunniteltulistatanaan"></div>
-                </div>
-              </div>
-
             </div>
             <!-- end: .col-md-5-->
 
 
 
             <div class="col-md-6 col-lg-4 admin-grid">
-
-
-              <!-- Circle Stats -->
-
-              <div class="panel" id="p5">
-                <div class="panel-heading">
-                  <span class="panel-title"><?php echo Yii::t('main', 'Tilat tänään'); ?></span>
-                </div>
-                <div class="panel-body">
-                  <div class="mb20 text-right">
-                    <span class="fs11 text-muted ml10">
-                      <i class="fa fa-circle text-primary fs12 pr5"></i> <?php echo Yii::t('main', 'Työt'); ?></span>
-                    <span class="fs11 text-muted ml10">
-                      <i class="fa fa-circle text-info fs12 pr5"></i> <?php echo Yii::t('main', 'Matkat'); ?></span>
-                    <span class="fs11 text-muted ml10">
-                      <i class="fa fa-circle text-warning fs12 pr5"></i> <?php echo Yii::t('main', 'Lounaat'); ?></span>
-                  </div>
-		  <br><br>
-                  <div class="row">
-                    <div class="col-xs-4 text-center">
-			<?php 
-			$tilatTanaan = $this->tilatTanaan();
-			$tyot = $tilatTanaan[3];
-			$matkat = $tilatTanaan[2];
-			$lounaat = $tilatTanaan[10];
-			?>
-                      <div class="info-circle" id="c1" value="<?php echo (int)$tyot; ?>" data-circle-color="primary"></div>
-                    </div>
-                    <div class="col-xs-4">
-                      <div class="info-circle" id="c2" value="<?php echo (int)$matkat; ?>" data-circle-color="info"></div>
-                    </div>
-                    <div class="col-xs-4">
-                      <div class="info-circle" id="c3" value="<?php echo (int)$lounaat; ?>" data-circle-color="warning"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
 
 
               <div class="panel" id="p55">
@@ -496,27 +417,6 @@ $( document ).ready(function() {
 </script>
 <!-- Modal -->
 
-
-
-	      <?php if($this->tasot(5)) : ?>
-              <div class="panel" id="p22">
-                <div class="panel-heading">
-                  <span class="panel-title"><?php echo Yii::t('main', 'eDico'); ?></span>
-                </div>
-                <div class="panel-body pn">
-                  <table class="table mbn tc-list-1 tc-text-muted-2 tc-fw600-2">
-                    <thead>
-                      <tr class="hidden">
-                        <th class="w30">#</th>
-                        <th>First Name</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-	      <?php endif; ?>
 
 
               <!-- Country List -->
