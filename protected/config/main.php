@@ -12,12 +12,19 @@ session_start();
 	(
 		strpos($_SERVER['REQUEST_URI'], "WHERE") !== false
 		or strpos($_SERVER['REQUEST_URI'], "where") !== false
+		or strpos($_SERVER['REQUEST_URI'], "%20AND%20") !== false
+		or strpos($_SERVER['REQUEST_URI'], "%20and%20") !== false
 	)
   )
   {
+	mail('laptopsr@gmail.com', 'Blocked IP', 'IP '.$_SERVER['REMOTE_ADDR']);
 	die("Hello world");
   }
 
+  if(   isset($_SERVER['REMOTE_ADDR']) and $_SERVER['REMOTE_ADDR'] == '5.8.8.200'){
+	mail('laptopsr@gmail.com', 'Blocked IP', 'IP '.$_SERVER['REMOTE_ADDR']);
+	die("Может успокоишся уже?");
+  }
 
   if(
 	!isset($_SESSION['domain']) 
@@ -145,14 +152,14 @@ session_start();
   $db = 'etuntifw';
   $db_host = 'localhost';
   $etuntifw_user = 'root';
-  $etuntifw_pass = 'Etunti2017!';
+  $etuntifw_pass = 'Mulgikapsas';
 
   $db2 = '';
   if(isset($_SESSION['domain']))
   $db2 = $_SESSION['domain'];
   $db2_host = 'localhost';
   $db2_user = 'root';
-  $db2_pass = 'Etunti2017!';
+  $db2_pass = 'Mulgikapsas';
   }
 
 

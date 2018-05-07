@@ -47,15 +47,23 @@
 
 <div class="row">
  <div class="col-sm-12">
+
+	<div class="row">
+	 <div class="col-sm-4">
+		<b>Hinnat sis. ALV</b> <input type="radio" name="alvsis" value="sis"> <br>
+		<b>Hinnat ALV 0%</b> <input type="radio" name="alvsis" value="nolla" checked>
+	 </div>
+	</div>
+
   <div class="table-responsive">
    <table class="table table-bordered bg-white" id="TableHinnasto">
     <tr>
      <th><?=Yii::t('main', 'TUOTE')?></th>
      <th><?=Yii::t('main', 'HINTA TUOTTEISTA JA PALVELUISTA')?></th>
-     <th><?=Yii::t('main', 'HINNASTON HINTA')?></th>
+     <th><?=Yii::t('main', 'Hinta ALV0')?></th>
      <th><?=Yii::t('main', 'HINNASTON ALV%')?></th>
-     <th width="1"><?=Yii::t('main', 'YHTEENSÄ')?></th>
-     <th width="1"><?=Yii::t('main', 'YKSIKKÖ')?></th>
+     <th width="150"><?=Yii::t('main', 'Hinta sis. ALV')?></th>
+     <th width="100"><?=Yii::t('main', 'YKSIKKÖ')?></th>
      <th></th>
     </tr>
 
@@ -80,7 +88,7 @@
 	 <?php endforeach; ?>
 	</select>
      </td>
-     <td><input type="number" class="form-control hinnasto_yht" name="Rivi[tuote][hinnasto_yht][]" readonly step="any" value="<?=$r->hinnasto_yht?>"></td>
+     <td><input type="number" class="form-control hinnasto_yht" name="Rivi[tuote][hinnasto_yht][]" step="any" value="<?=$r->hinnasto_yht?>" readonly></td>
      <td>
 	<select name="Rivi[tuote][yksikko][]" class="form-control yksikkovalikko">
 	 <option value=>Valitse</option>
@@ -132,7 +140,7 @@
 	 <?php endforeach; ?>
 	</select>
      </td>
-     <td><input type="number" class="form-control hinnasto_yht" name="Rivi[tuote][hinnasto_yht][]" readonly step="any"></td>
+     <td><input type="number" class="form-control hinnasto_yht" name="Rivi[tuote][hinnasto_yht][]" step="any" readonly></td>
      <td>
 	<select name="Rivi[tuote][yksikko][]" class="form-control yksikkovalikko">
 	 <option value=>Valitse</option>
@@ -167,25 +175,60 @@ $(document).ready(function(){
   });
 
   $(document).delegate(".hinnasto_hinta","keyup",function(){
-	var hinnasto_hinta = parseFloat($(this).val());
-	var alv = $(this).closest('tr').find('.hinnasto_alv').val();
-	var yht = parseFloat((hinnasto_hinta/100*alv), 10);
-	var summ = hinnasto_hinta+yht;
-	$(this).closest('tr').find('.hinnasto_yht').val(summ.toFixed(2));
+	var alvsis = $('input[name=alvsis]:checked').val();
+	if( alvsis == 'nolla'){
+		var hinnasto_hinta = parseFloat($(this).closest('tr').find('.hinnasto_hinta').val());
+		var alv = $(this).closest('tr').find('.hinnasto_alv option:selected').val();
+		var yht = hinnasto_hinta/100*alv;
+		var summ = hinnasto_hinta+yht;
+		$(this).closest('tr').find('.hinnasto_yht').val(summ.toFixed(2));
+	}
   });
 
   $(document).delegate(".hinnasto_alv","change",function(){
-	var hinnasto_hinta = parseFloat($(this).closest('tr').find('.hinnasto_hinta').val());
-	var alv = $('option:selected', this).val();
-	var yht = parseFloat((hinnasto_hinta/100*alv), 10);
-	var summ = hinnasto_hinta+yht;
-	$(this).closest('tr').find('.hinnasto_yht').val(summ.toFixed(2));
+	var alvsis = $('input[name=alvsis]:checked').val();
+	if( alvsis == 'nolla'){
+		var hinnasto_hinta = parseFloat($(this).closest('tr').find('.hinnasto_hinta').val());
+		var alv = $(this).closest('tr').find('.hinnasto_alv option:selected').val();
+		var yht = hinnasto_hinta/100*alv;
+		var summ = hinnasto_hinta+yht;
+		$(this).closest('tr').find('.hinnasto_yht').val(summ.toFixed(2));
+	}
+	if( alvsis == 'sis'){
+		var hinnasto_yht = parseFloat($(this).closest('tr').find('.hinnasto_yht').val());
+		var alv = $(this).closest('tr').find('.hinnasto_alv option:selected').val();
+		var laske = hinnasto_yht/100*alv;
+		var summ = hinnasto_yht-laske;
+		$(this).closest('tr').find('.hinnasto_hinta').val(summ.toFixed(2));
+	}
   });
 
   $(document).delegate(".poistarivi","click",function(){
 	$(this).closest('tr').remove();
   });
 
+  $('input[name=alvsis]').change(function(){
+	var alvsis = $('input[name=alvsis]:checked').val();
+	if( alvsis == 'nolla'){
+		$('.hinnasto_yht').attr('readonly', 'yes');
+		$('.hinnasto_hinta').removeAttr('readonly');
+	}
+	if( alvsis == 'sis'){
+		$('.hinnasto_yht').removeAttr('readonly');
+		$('.hinnasto_hinta').attr('readonly', 'yes');
+	}
+  });
+
+  $(document).delegate(".hinnasto_yht","keyup",function(){
+	var alvsis = $('input[name=alvsis]:checked').val();
+	if( alvsis == 'sis'){
+		var hinnasto_yht = $(this).closest('tr').find('.hinnasto_yht').val();
+		var alv = $(this).closest('tr').find('.hinnasto_alv option:selected').val();
+		var jakaa = '1.'+alv;
+		var laske = hinnasto_yht/parseFloat(jakaa);
+		$(this).closest('tr').find('.hinnasto_hinta').val(laske.toFixed(2));
+	}
+  });
 
 });
 </script>
