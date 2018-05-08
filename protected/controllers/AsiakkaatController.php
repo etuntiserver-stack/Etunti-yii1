@@ -1850,4 +1850,13 @@ $xml = '
 		return $list;
 	}
 
+        protected function TyoryhmaName($id){
+		$return = '';
+		if( !empty($id) ){
+		   $v = Valikkoot::model()->findByPk($id);
+		   if( isset($v->value) ){ $return = $v->value; }
+		}
+                return $return;
+        }
+
 }

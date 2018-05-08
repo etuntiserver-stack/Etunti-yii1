@@ -52,6 +52,9 @@
 		<?php echo $data->sahkoposti; ?>
 	</td>
 	<td>
+		<?php echo $this->TyoryhmaName($data->tyoryhma); ?>
+	</td>
+	<td>
 		<?php echo $this->ryhmaMuutos($data->ryhma); ?>
 	</td>
 	<td class="<?php echo $tauste; ?>" align="center">
