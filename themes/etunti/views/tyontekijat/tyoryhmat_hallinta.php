@@ -61,7 +61,7 @@
    <div class="panel-body">
 
 <div class="row">
- <div class="table-responsive">
+ <div class="">
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
