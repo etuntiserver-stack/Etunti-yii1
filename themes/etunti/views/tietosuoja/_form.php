@@ -17,7 +17,7 @@
 
 <div class="row">
  <div class="col-sm-3">
-	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
+	<legend><h3><?php echo Yii::t('main', 'Asiakkuus'); ?></h3></legend>
 	<h4><?= Yii::t('main', 'Asiakkaan henkilötietojen säilyttämisen'); ?></h4>
 
 	<?php echo $form->errorSummary($model); ?>
@@ -123,7 +123,7 @@
 <div class="row">
  <div class="col-sm-3">
 
-	<hr>
+	<legend><h3><?php echo Yii::t('main', 'Työntekijät'); ?></h3></legend>
 	<h4><?= Yii::t('main', 'Työntekijän henkilötietojen säilyttämisen'); ?></h4>
 
 	<div class="section fill mb5">
@@ -166,7 +166,6 @@
 
  <?php if( !empty($this->TyontekijaTyosuhdetLaskin()[0]) and count($this->TyontekijaTyosuhdetLaskin()[1]) > 0 ) : ?>
  <div class="col-sm-9">
-	<hr>
 	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?></h3></legend>
 	<h4><?= Yii::t('main', 'Työntekijät jotka vanhentunut'); ?></h4>
 
@@ -248,7 +247,8 @@
 
 <div class="row">
  <div class="col-sm-3">
-	<hr>
+
+	<legend><h3><?php echo Yii::t('main', 'eDico'); ?></h3></legend>
 	<h4><?= Yii::t('main', 'eDico vinkki henkilötietojen säilyttämisen'); ?></h4>
 
 	<div class="section fill mb5">
@@ -290,8 +290,8 @@
  </div>
  <?php if( !empty($this->VinkkiLaskin(null)[0]) and count($this->VinkkiLaskin(null)[1]) > 0 ) : ?>
  <div class="col-sm-9">
-	<hr>
-	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?> <i class="link text-danger vinkit_pois fa fa-trash"></i> </h3></legend>
+
+	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?> <!--<i class="link text-danger vinkit_pois fa fa-trash"></i>--> </h3></legend>
 	<h4><?= Yii::t('main', 'Vinkit vanhentunut'); ?> <?=date("d.m.Y", strtotime($this->VinkkiLaskin(null)[0]))?></h4>
 
 	<div class="section fill mb5" style="height:280px;overflow: auto">
