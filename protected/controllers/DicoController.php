@@ -695,11 +695,8 @@ public function actionLogin($domain)
 		<body>';
 
 		$message .= '<br>
-		Hei,
-		<p>Olen '.$firma->tyonantaja.':n tyytyväinen asiakas ja haluan suositella heidän palvelujaan sinulle.
-		<br>Hyväksymällä tämän suosituksen, nimesi, puhelinnumerosi ja sähköpostiosoitteesi siirtyvät heidän asiakaskantaansa ja he ovat sinuun yhteydessä mahdollisista palveluista.
-		<br>Hylkäämällä tämän suosituksen, tietosi eivät näy heillä. Mikäli et hyväksy/hylkää suositustani 14 vrk sisällä, tietojasi ei siirretä heille.</p>
-		Terveisin, '.$asiakas;
+'.$asiakas.' on antanut meille vinkin, että voisit olla kiinnostunut yrityksemme '.$firma->tyonantaja.' palveluista. Mikäli hyväksyt tämän viestin, annat yritykselle '.$firma->tyonantaja.' oikeuden nähdä syötetyt henkilötiedot ja annat luvan yhteydenottoon. Yritys '.$firma->tyonantaja.' poistaa tietosi järjestelmästä, mikäli asiakkuutta ei synny 30 päivän sisällä, siitä kun olet hyväksynyt tämän viestin. Mikäli et hyväksy tietojen näyttämistä, tiedot poistetaan välittömästi. Tämä viesti vanhenee 14 päivän kuluessa.';
+
 
 		$message .= '<br>
 		<center>
@@ -715,11 +712,12 @@ public function actionLogin($domain)
 		';
 		$message .= '
 		</center>
+		 <p style="font-size:80%">Tämä on EU:n tietosuoja-asetuksen mukainen ilmoitus.</p>
 		</body>
 		</html>';
 
 
-							$subject='=?UTF-8?B?'.base64_encode($asiakas ." suosittele").'?=';
+							$subject='=?UTF-8?B?'.base64_encode($asiakas ." on antanut meille vinkin").'?=';
 							$headers="From: ".$asiakas." <no-reply@etunti.fi>\r\n".
 								"Reply-To: no-reply@etunti.fi\r\n".
 								"MIME-Version: 1.0\r\n".
