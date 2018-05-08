@@ -235,9 +235,15 @@ if( $curpage == 'tyovuoroot/tv2' )
 		       	$criteria = new CDbCriteria();
 			$criteria->order = " value ";
 			$criteria->condition = "select_type='tyoryhma'";
-			if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$criteria->addCondition ("value2 LIKE '%\"".Yii::app()->user->adminID."\"%'");
+
+			// <-- Tyoryhmat
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->addCondition (" id IN ($ids) ");	
 			}
+			//     Tyoryhmat -->
+
 			$l = Valikkoot::model()->findAll($criteria);
 			foreach($l as $v)
 			$list[$v->value] = $v->value;
