@@ -381,16 +381,11 @@ class PalautteetController extends Controller
 		";
 
 		// <-- Tyoryhmat
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$arr = $site[0]->TyoryhmatHelper();
-			$ids = implode(",", $arr);
-			if( count($arr) > 0 ){
-				$criteria->addCondition (" asiakas_id IN ( SELECT id FROM asiakkaat WHERE tyoryhma IN ($ids) ) ");
-			} else {
-				$criteria->condition = " 1!=1 ";
-			}
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$criteria->addCondition (" asiakas_id IN ( SELECT id FROM asiakkaat WHERE tyoryhma IN ($ids) ) ");
 		}
 		//    Tyoryhmat -->
 

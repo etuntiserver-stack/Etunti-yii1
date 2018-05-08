@@ -975,6 +975,7 @@
    </div>
   </div>
 
+<br>
 <div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#tietosuoja"><h3><?php echo Yii::t('main','Tietosuoja'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
 
   <div class="row form collapse" id="tietosuoja">

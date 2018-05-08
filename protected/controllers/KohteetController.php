@@ -138,17 +138,11 @@ class KohteetController extends Controller
        		$criteria = new CDbCriteria();
 
 		// <-- Tyoryhmat
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
-
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$arr = $site[0]->TyoryhmatHelper();
-			$ids = implode(",", $arr);
-			if( count($arr) > 0 ){
-				$criteria->condition = " tyoryhma IN ($ids) ";
-			} else {
-				$criteria->condition = " 1!=1 ";
-			}
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$criteria->condition = " tyoryhma IN ($ids) ";
 		}
 		//    Tyoryhmat -->
 
@@ -460,16 +454,11 @@ class KohteetController extends Controller
 	        $criteria->order = " id DESC ";
 
 		// <-- Tyoryhmat
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$arr = $site[0]->TyoryhmatHelper();
-			$ids = implode(",", $arr);
-			if( count($arr) > 0 ){
-				$criteria->condition = " tyoryhma IN ($ids) ";
-			} else {
-				$criteria->condition = " 1!=1 ";
-			}
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$criteria->condition = " tyoryhma IN ($ids) ";
 		}
 		//    Tyoryhmat -->
 

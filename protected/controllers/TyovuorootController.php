@@ -655,14 +655,12 @@ class TyovuorootController extends Controller
 			  {
 
 			   	// <-- Tyoryhmat
-				$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-				$site = Yii::app()->createController('Site');
 				if( 
 				   isset($data->kohteet) 
 				   and isset($asetukset) 
 				   and $asetukset->tyoryhmat_kohde == 1 
-				   and $site[0]->checkOikeusFields($checkOikeus) == 0 
 				){
+					$site = Yii::app()->createController('Site');
 					$arr = $site[0]->TyoryhmatHelper();
 					if( count($arr) > 0 and !in_array($data->kohteet->tyoryhma, $arr)){
 			   			continue;
@@ -3068,16 +3066,11 @@ class TyovuorootController extends Controller
 		$criteria->order =" yrityksen_nimi!='' DESC,yhteyshenkilo!='' DESC";
 
 		// <-- Tyoryhmat
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$arr = $site[0]->TyoryhmatHelper();
-			$ids = implode(",", $arr);
-			if( count($arr) > 0 ){
-				$criteria->condition = " tyoryhma IN ($ids) ";
-			} else {
-				$criteria->condition = " 1!=1 ";
-			}
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$criteria->condition = " tyoryhma IN ($ids) ";
 		}
 		//    Tyoryhmat -->
 
@@ -3113,16 +3106,11 @@ class TyovuorootController extends Controller
 
 
 		// <-- Tyoryhmat
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$arr = $site[0]->TyoryhmatHelper();
-			$ids = implode(",", $arr);
-			if( count($arr) > 0 ){
-				$criteria->condition = " tyoryhma IN ($ids) ";
-			} else {
-				$criteria->condition = " 1!=1 ";
-			}
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$criteria->condition = " tyoryhma IN ($ids) ";
 		}
 		//    Tyoryhmat -->
 
@@ -3157,16 +3145,11 @@ class TyovuorootController extends Controller
 		$criteria->order =" osoite!='' DESC, osoite ASC";
 
 		// <-- Tyoryhmat
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$arr = $site[0]->TyoryhmatHelper();
-			$ids = implode(",", $arr);
-			if( count($arr) > 0 ){
-				$criteria->condition = " tyoryhma IN ($ids) ";
-			} else {
-				$criteria->condition = " 1!=1 ";
-			}
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$criteria->condition = " tyoryhma IN ($ids) ";
 		}
 		//    Tyoryhmat -->
 
