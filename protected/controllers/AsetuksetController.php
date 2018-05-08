@@ -148,6 +148,27 @@ class AsetuksetController extends Controller
 		  }
 		}
 
+		if(isset($_POST['uploaded_tietosuojaseloste']))
+		{
+
+		  if (!file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain)) {
+		  	mkdir(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain, 0777, true);
+		  }
+
+		  $uploaddir = Yii::app()->basePath.'/../tiedostot/firma/'.Yii::app()->user->domain.'/';
+		  $temp = explode(".", $_FILES["file"]["name"]);
+		  if(end($temp) == 'pdf')
+		  {
+			$uploadfile = $uploaddir . basename('Tietosuojaseloste.'.end($temp));
+			if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile))
+		     $this->redirect(array('tiedostot', 'id' => 1));
+
+		  } else {
+	
+			Yii::app()->user->setFlash('danger', "Lataaminen ei onnistunut, odottelaan PDF");
+		     $this->redirect(array('tiedostot', 'id' => 1));
+		  }
+		}
 
 		if(isset($_POST['uploaded_edico_kayttoehdot']))
 		{

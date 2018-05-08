@@ -34,23 +34,27 @@ td {
 }
 
 .hyvaksy_button {
+    margin-top: 15px;
+    margin-bottom: 15px;
     background-color: #4CAF50; /* Green */
     border: none;
     color: white;
-    padding: 15px 32px;
+    padding: 10px 28px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .hylkaa_button {
+    margin-top: 15px;
+    margin-bottom: 15px;
     background-color: red; /* Green */
     border: none;
     color: white;
-    padding: 15px 32px;
+    padding: 10px 28px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 14px;
 }

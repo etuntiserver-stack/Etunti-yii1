@@ -331,10 +331,6 @@ $(document).ready(function(){
         placeholder: "__:__"
   });
 
-  $('#Tyosuhdet_loppu').blur(function() {
-	alert('Olet merkinnyt työsuhteen päättyväksi. Viimeisen palkanmaksun jälkeen tulisi poistaa kaikki työntekijän tiedot, joita ei lain mukaan tarvitse säilyttää. Näitä tietoja ovat muun muassa palkka- ja verotiedot.');
-  });
-
   $('#tyosuhdet-form').on('submit',function(e) {
 
      if( $('#modelID').val() )
