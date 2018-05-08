@@ -53,9 +53,10 @@ echo Yii::app()->request->getPost('laskutettu');
 				$mod = 'Asiakkaat';
 				$sarake = 'yrityksen_nimi';
 				$placeholder = 'Asiakas';
-				if(isset(Yii::app()->session[$sarake]))	$postvalue = Yii::app()->session[$sarake]; 
+				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
+				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
 				else $postvalue='';				
-		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
 			    ?>
 			    <!-- Autocomplete -->
 
@@ -71,7 +72,18 @@ echo Yii::app()->request->getPost('laskutettu');
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="etsi_kohteet" value="<?php if(isset(Yii::app()->session['etsi_kohteet'])) echo Yii::app()->session['etsi_kohteet']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>">
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Kohteet';
+				$sarake = 'osoite';
+				$placeholder = 'Osoite';
+				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
+				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
+				else $postvalue='';				
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>

@@ -199,6 +199,7 @@
   <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
   <th><?php echo Yii::t('main', 'Puhelin'); ?></th>
   <th><?php echo Yii::t('main', 'Avain'); ?></th>
+  <th><?php echo Yii::t('main', 'Työryhmä'); ?></th>
   <th><?php echo Yii::t('main', 'Aktiivinen'); ?></th>
   </tr>
   </thead>

@@ -325,7 +325,21 @@ $(document).ready(function() {
 	<table>
 	 <tr>
 	  <td>
-		<span class="p10">'.Yii::t('main', 'Ryhmä').'</span>
+		<span class="p10">'.Yii::t('main', 'Työryhmä').'</span>
+	  </td><td>
+		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=tyoryhma&s=asc').'
+	  </td><td>
+		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=tyoryhma&s=desc').'
+	  </td>
+	 </tr>
+	</table>';
+      ?>
+  </th>
+  <th><?php echo '
+	<table>
+	 <tr>
+	  <td>
+		<span class="p10">'.Yii::t('main', 'Toimialue').'</span>
 	  </td><td>
 		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=ryhma&s=asc').'
 	  </td><td>

@@ -186,11 +186,7 @@ $(document).ready(function(){
 		<?php echo $form->error($model,'tag_id'); ?>
 	</div>
 
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'gps_sijainti'); ?>
-		<?php echo $form->textField($model,'gps_sijainti',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'gps_sijainti'); ?>
-	</div>
+		<?php echo $form->hiddenField($model,'gps_sijainti',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'siivous'); ?>
@@ -217,48 +213,32 @@ $(document).ready(function(){
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
-
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'avain'); ?>
-		<?php echo $form->textField($model,'avain',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'avain'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'avaimen_sijainti'); ?>
-
+		<?php echo $form->labelEx($model,'tyoryhma'); ?>
 		<?php
-		$list = array(
-			1=>Yii::t('main', 'Asiakas'),
-			2=>Yii::t('main', 'Toimisto'),
-			3=>Yii::t('main', 'Työntekijä')
-		);
-        	echo $form->dropDownList($model, 'avaimen_sijainti', $list,
-		array('empty'=>'','class'=>'form-control'));
-        	?>
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+	       	$criteria = new CDbCriteria();
+		$criteria->order = " value ";
+		$criteria->condition = "select_type='tyoryhma'";
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+		$criteria->addCondition ("value2 LIKE '%\"".Yii::app()->user->adminID."\"%'");
+		}
 
-		<?php echo $form->error($model,'avaimen_sijainti'); ?>
-	</div>
-
-	<div class="section fill mb5 kenella_on_avain">
-		<?php echo $form->labelEx($model,'kenella_on_avain'); ?>
-
-		<?php
-      		$l = Tyontekijat::model()->findAll(array('order' => "tekijan_nimi"));
-		foreach($l as $v)
-		$listt[$v->id."//".$this->etuSukunimi($v->id)] = $this->etuSukunimi($v->id);
-
-        	echo $form->dropDownList($model, 'kenella_on_avain', $listt,
-		array('empty'=>'','class'=>'form-control'));
-        	?>
-
-		<?php echo $form->error($model,'kenella_on_avain'); ?>
+		$listData = Valikkoot::model()->findAll($criteria);
+		?>
+		<?php echo $form->dropDownList($model, 'tyoryhma', CHtml::listData($listData, 'id', 'value'), 
+		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		?>
+		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'ryhma'); ?>
-	   <div class="form-inline">
+	   <div class="input-group">
+
 		<?php
+
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
 		foreach($l as $v)
@@ -267,16 +247,19 @@ $(document).ready(function(){
 		if(count($list) > 0)
 		{
         	echo $form->dropDownList($model, 'ryhma', $list,
-		array('empty'=>'Valitse toimialue','class'=>'form-control'));
+		array('empty'=>Yii::t('main', 'Valitse'),'class'=>'form-control'));
 		} else {
 		echo 'Luo Valikko tietokannassa "Select Type = asiakas_ryhma"';
 		}		
         	?>
-		<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma"><i class="fa fa-pencil-square-o"></i></span>
+		<span class="input-group-btn">
+			<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
 	   </div>
 
 		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
+
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tarvittavien_tyontekijoiden_maara'); ?>
@@ -289,6 +272,15 @@ $(document).ready(function(){
 		<?php echo $form->textField($model,'arvioitu_kesto',array('maxlength'=>5,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'arvioitu_kesto'); ?>
 	</div>
+
+	<?php 
+	if(isset($model->id) and isset($model->avaimet) and count($model->avaimet) > 0){
+	echo CHtml::link('Avaimet', array('/avaimet/index', 'osoite' => $model->osoite), array('class'=>'btn btn-default btn-block')); 
+	}
+	if(isset($model->id) and isset($model->avaimet) and count($model->avaimet) == 0){
+	echo CHtml::link('Luo avain', array('/avaimet/create', 'asiakas_id' => $model->asiakas_id, 'kohde_id' => $model->id), array('class'=>'btn btn-default btn-block')); 
+	}
+	?>
 
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
 	<script type="text/javascript">

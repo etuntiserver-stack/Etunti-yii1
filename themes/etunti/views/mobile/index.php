@@ -82,8 +82,8 @@
 			    <!-- Autocomplete -->
 			    <?php
 	   			$site = Yii::app()->createController('Site');
-				$mod = 'Mobile';
-				$sarake = 'kohde_kannasta';
+				$mod = 'Kohteet';
+				$sarake = 'osoite';
 				$placeholder = 'Osoite';
 				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
 				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
@@ -148,7 +148,17 @@
 
    <?php
    $list = array();
-   $l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
+
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+	       	$criteria = new CDbCriteria();
+		$criteria->order = " value ";
+		$criteria->condition = "select_type='tyoryhma'";
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+		$criteria->addCondition ("value2 LIKE '%\"".Yii::app()->user->adminID."\"%'");
+		}
+
+   $l = Valikkoot::model()->findAll($criteria);
 
     echo '<select class="gui-input" name="tyontekijanRyhma">';
     if(isset(Yii::app()->session['tyontekijanRyhma']))

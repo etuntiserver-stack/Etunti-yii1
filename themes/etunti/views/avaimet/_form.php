@@ -46,6 +46,22 @@ if( !isset($model->id) and isset($_GET['asiakas_id']) and isset($_GET['kohde_id'
 		<?php
 	       	$criteria = new CDbCriteria();
 	       	$criteria->condition = " aktiivinen=1 ";
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
+
 	       	$criteria->order = " osoite ";
 		$kohteet = Kohteet::model()->findAll($criteria);
         	echo $form->dropDownList($model, 'kohde', CHtml::listData($kohteet, 'id', 'osoite'),
@@ -60,7 +76,25 @@ if( !isset($model->id) and isset($_GET['asiakas_id']) and isset($_GET['kohde_id'
 		<?php
 	       	$criteria = new CDbCriteria();
 	       	$criteria->condition = " aktiivinen=1 ";
-	       	$criteria->order = " tekijan_nimi ";
+
+			// <-- Tyoryhmat
+			$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+			$site = Yii::app()->createController('Site');
+			if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+				$tt = Yii::app()->createController('Tyontekijat');
+				$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+				$ids = implode(",", $tt_arr);
+				if( count($tt_arr) > 0 ){
+		        		$criteria->condition = ' id IN ('.$ids.') ';
+				} else {
+					die('Ei oikeuksia');
+					exit;
+				}
+			} else {
+		        	$criteria->condition = ' aktiivinen=1 ';
+			}
+			//    Tyoryhmat -->
+
 		$tt = Tyontekijat::model()->findAll($criteria);
         	echo $form->dropDownList($model, 'tid', CHtml::listData($tt, 'id', 'FullName'),
 		array('empty' => 'Valitse', 'class'=>'form-control'

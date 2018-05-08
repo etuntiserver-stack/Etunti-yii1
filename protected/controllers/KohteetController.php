@@ -137,6 +137,21 @@ class KohteetController extends Controller
 
        		$criteria = new CDbCriteria();
 
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
+
 		if(isset($_GET['tila']) and $_GET['tila'] == 'avoimet')
 		{
 		$criteria->addCondition("
@@ -444,6 +459,19 @@ class KohteetController extends Controller
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
 
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
 
 		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
 	        $criteria->addCondition (" osoite LIKE '%".$_POST['osoite']."%' ");
@@ -594,5 +622,14 @@ class KohteetController extends Controller
 	   $site = Yii::app()->createController('Site');
 	   return $site[0]->etuSukunimi($tid);
 	}
+
+        protected function TyoryhmaName($id){
+		$return = '';
+		if( !empty($id) ){
+		   $v = Valikkoot::model()->findByPk($id);
+		   if( isset($v->value) ){ $return = $v->value; }
+		}
+                return $return;
+        }
 
 }

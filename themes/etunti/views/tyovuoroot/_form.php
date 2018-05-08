@@ -120,7 +120,21 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'kohde'); ?>
 		<?php
-        		$list = CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite')), 'id', 'osoite');
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " osoite ";
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+
+        		$list = CHtml::listData(Kohteet::model()->findAll($criteria), 'id', 'osoite');
         		echo $form->dropDownList($model, 'kohde', $list,array('empty'=>'Valitse','class'=>'form-control kohde'));
         	?>
   </div>
@@ -294,7 +308,24 @@ $(".muokaValiko").click(function() {
 		$site = Yii::app()->createController('Site');
 		$criteria = $site[0]->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
+
 		$criteria->condition =" aktiivinen=1 and id!='".$model->tid."' ";
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+		       		$criteria->condition = " id IN ($ids) and id!='".$model->tid."' ";
+			} else {
+				$criteria->condition =" 1!=1 ";
+			}
+		}
+		//     Tyoryhmat -->
+
 
  		$tt = Tyontekijat::model()->findAll($criteria);
 		if(isset($tt[0]))

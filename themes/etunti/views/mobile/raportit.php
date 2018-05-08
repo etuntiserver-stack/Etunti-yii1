@@ -139,16 +139,33 @@ $(document).ready(function(){
       <div class="row">
        <div class="col-sm-6">
       	<?php
-	   $criteriaT = new CDbCriteria();
+	   $criteria = new CDbCriteria();
 
 		// <-- Return order etu ja sukunimella
 		$site = Yii::app()->createController('Site');
-		$criteriaT = $site[0]->etuSukunimiCriteria($criteriaT);
+		$criteria = $site[0]->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
 
-	   if( Yii::app()->request->getParam('aktiivinen') and Yii::app()->request->getParam('aktiivinen') != 'kaikki')
-	   $criteriaT->condition = " aktiivinen='".$selectedAktiivinen."' ";
-	   $tlist = Tyontekijat::model()->findAll($criteriaT);
+	   if( Yii::app()->request->getParam('aktiivinen') and Yii::app()->request->getParam('aktiivinen') != 'kaikki'){
+	       $criteria->condition = " aktiivinen='".$selectedAktiivinen."' ";
+	   }
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+	        		$criteria->addCondition (" id IN ($ids)");
+			} else {
+		        	$criteria->condition = ' 1!=1 ';
+			}
+		}
+		//    Tyoryhmat -->
+
+	   $tlist = Tyontekijat::model()->findAll($criteria);
 
 	   echo '<select name="tekija[]" multiple class="mult">';
 	   foreach($tlist as $val){
@@ -164,7 +181,24 @@ $(document).ready(function(){
        </div>
        <div class="col-sm-6">
    	<?php
-    	   $k = CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite')), 'id', 'osoite');
+	   $criteria = new CDbCriteria();
+	   $criteria->order = " osoite ";
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->addCondition (" tyoryhma IN ($ids) ");
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
+
+    	   $k = CHtml::listData(Kohteet::model()->findAll($criteria), 'id', 'osoite');
     	   echo '<select name="kohteet" class="form-control" id="kohteet" title="Kohteet">';
 	       echo '<option value="kaikki">'.Yii::t('main', 'Kaikki kohteet').'</option>';
     	   foreach($k as $key=>$val){

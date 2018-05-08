@@ -931,6 +931,50 @@
 <?php endif; ?>
 
 <br>
+<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#tyoryhmatAsetukset"><h3><?php echo Yii::t('main','Työryhmät'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
+
+  <div class="row form collapse" id="tyoryhmatAsetukset">
+   <div class="col-sm-3">
+    <legend><h2><?php echo Yii::t('main','Työryhmät'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyoryhmat'); ?>
+		<?php 
+        	$l = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'tyoryhmat', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'tyoryhmat'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyoryhmat_tyontekijat'); ?>
+		<?php 
+        	$l = array(
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'tyoryhmat_tyontekijat', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'tyoryhmat_tyontekijat'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyoryhmat_kohde'); ?>
+		<?php 
+        	$l = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'tyoryhmat_kohde', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'tyoryhmat_kohde'); ?>
+	</div>
+
+   </div>
+  </div>
+
 <div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#tietosuoja"><h3><?php echo Yii::t('main','Tietosuoja'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
 
   <div class="row form collapse" id="tietosuoja">

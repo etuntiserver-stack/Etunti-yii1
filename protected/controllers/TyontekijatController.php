@@ -123,11 +123,18 @@ class TyontekijatController extends Controller
 	public function actionTyoryhmat_hallinta()
 	{
 
+	// <-- Oikeudet
+	   $checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
+/*
 		$criteria = new CDbCriteria();
 	        $criteria->order = " tekijan_nimi ";
 	        $criteria->condition = " aktiivinen=1 ";
 		$tyontekijat = Tyontekijat::model()->findAll($criteria);
-	
+*/	
 
 	       	$criteria = new CDbCriteria();
 		$criteria->order = " value ";
@@ -136,7 +143,7 @@ class TyontekijatController extends Controller
 
 		if(isset($_POST['update']))
 		{
-
+/*
 		       	$criteria = new CDbCriteria();
 			$criteria->condition = " tyoryhma LIKE '%\"".$_POST['value']."\"%' ";
 			$tyontekijat_jolla_oli_tamaryhma = Tyontekijat::model()->findAll($criteria);
@@ -190,7 +197,7 @@ class TyontekijatController extends Controller
 
 
 			}
-
+*/
 
 
 
@@ -225,7 +232,7 @@ class TyontekijatController extends Controller
 
 		$this->render('tyoryhmat_hallinta',array(
 			'model'=>$model,
-			'tyontekijat'=>$tyontekijat,
+			//'tyontekijat'=>$tyontekijat,
 		));
 	}
 
@@ -256,6 +263,14 @@ class TyontekijatController extends Controller
 		$criteria = $site[0]->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
 
+		// <-- Tyoryhmat
+		$tt = Yii::app()->createController('Tyontekijat');
+		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+		$ids = implode(",", $tt_arr);
+		if( count($tt_arr) > 0 ){
+        		$criteria->addCondition (" id IN ($ids)");
+		}
+		//    Tyoryhmat -->
 
 		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] != 'kaikki' and !empty($_POST['aktiivinen']))
 	        $criteria->addCondition (" aktiivinen ='".(int)$_POST['aktiivinen']."' ");
@@ -660,9 +675,17 @@ class TyontekijatController extends Controller
        		$criteria = new CDbCriteria();
 
 		// <-- Return order etu ja sukunimella
-		$site = Yii::app()->createController('Site');
 		$criteria = $site[0]->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
+
+		// <-- Tyoryhmat
+		$tt = Yii::app()->createController('Tyontekijat');
+		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+		$ids = implode(",", $tt_arr);
+		if( count($tt_arr) > 0 ){
+        		$criteria->addCondition (" id IN ($ids)");
+		}
+		//    Tyoryhmat -->
 
 		if(isset(Yii::app()->session['aktiivinen']) and Yii::app()->session['aktiivinen'] != 'kaikki')
 	        $criteria->addCondition (" aktiivinen ='".(int)Yii::app()->session['aktiivinen']."' ");
@@ -900,4 +923,55 @@ $xml = '
 	   $site = Yii::app()->createController('Site');
 	   return $site[0]->etuSukunimi($tid);
 	}
+
+	public function TyoryhmatTyontekijatHelper($tr_array)
+	{
+		//print_r($tr_array);
+		//exit;
+
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+
+		$criteria = new CDbCriteria();
+
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+		$criteria->condition = "
+			select_type='tyoryhma'
+			AND value2 LIKE '%\"".Yii::app()->user->adminID."\"%'
+		";
+		}
+		if( is_array($tr_array)){
+			$impl = "value='".implode("' OR value='", $tr_array)."'";
+			$criteria->condition = "
+				select_type='tyoryhma'
+				AND ($impl)
+			";
+		}
+
+		$listData = Valikkoot::model()->findAll($criteria);
+
+		$criteria = new CDbCriteria();
+		$criteria->condition = " aktiivinen = '1' ";
+		$tt = Tyontekijat::model()->findAll($criteria);
+		$tt_arr = array();
+		foreach($tt as $tekija){
+			if( $site[0]->checkOikeusFields($checkOikeus) == 1 and $tr_array == null){
+				$tt_arr[$tekija->id] = $tekija->id;
+				continue;
+			}
+			foreach($listData as $item){
+				if( 
+					is_array(json_decode($tekija->tyoryhma)) 
+					and in_array($item->value, json_decode($tekija->tyoryhma)) 
+				){
+					$tt_arr[$tekija->id] = $tekija->id;
+				}
+			}
+
+		}
+
+	   	return $tt_arr;
+	}
+
+
 }

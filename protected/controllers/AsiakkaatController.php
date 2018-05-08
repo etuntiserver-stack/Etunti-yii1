@@ -922,6 +922,21 @@ $xml = '
 
        		$criteria = new CDbCriteria();
 
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
+
 		if(isset($_GET['sort']) and $_GET['sort'] != 'asiakasnumero'){
 	        $criteria->order = " $_GET[sort]!='' DESC, $_GET[sort] $_GET[s] ";
 		} elseif(isset($_GET['sort']) and $_GET['sort'] == 'asiakasnumero'){
@@ -929,16 +944,6 @@ $xml = '
 		} else {
 	        $criteria->order = " id DESC ";
 		}
-
-/*
-if(isset($_POST['osoite']))
-{
-$osoite = filter_var($_POST['osoite'], FILTER_SANITIZE_SPECIAL_CHARS);
-echo $osoite;
-exit;
-}
-*/
-
 
 		if(isset($_GET['osoite']) and !empty($_GET['osoite']))
 	        $criteria->addCondition (" osoite LIKE '%".$_GET['osoite']."%' ");
@@ -1807,8 +1812,25 @@ exit;
 
 		$list = array();
 		$criteria=new CDbCriteria;
+
 		if($aktiivinen == true)
 			$criteria->condition=" aktiivinen=1 ";
+
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
 
       		$l = Asiakkaat::model()->findAll($criteria);
 		$as_arr = array();
@@ -1827,5 +1849,14 @@ exit;
 		
 		return $list;
 	}
+
+        protected function TyoryhmaName($id){
+		$return = '';
+		if( !empty($id) ){
+		   $v = Valikkoot::model()->findByPk($id);
+		   if( isset($v->value) ){ $return = $v->value; }
+		}
+                return $return;
+        }
 
 }

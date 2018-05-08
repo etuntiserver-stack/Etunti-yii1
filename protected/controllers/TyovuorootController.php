@@ -647,19 +647,37 @@ class TyovuorootController extends Controller
 				AND tid='".$_POST['tid']."'
 			";
 			$tv = Tyovuoroot::model()->findAll($criteria);
+			$asetukset = Asetukset::model()->findByPk(1);
 			$for = '';
 			if(isset($tv[0]))
 			{
 			  foreach($tv as $data)
 			  {
+
+			   	// <-- Tyoryhmat
+				$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+				$site = Yii::app()->createController('Site');
+				if( 
+				   isset($data->kohteet) 
+				   and isset($asetukset) 
+				   and $asetukset->tyoryhmat_kohde == 1 
+				   and $site[0]->checkOikeusFields($checkOikeus) == 0 
+				){
+					$arr = $site[0]->TyoryhmatHelper();
+					if( count($arr) > 0 and !in_array($data->kohteet->tyoryhma, $arr)){
+			   			continue;
+					}
+				}
+			   	//    Tyoryhmat -->
+
 				$id = $data->id."_".date("Ymd", strtotime($data->pvm))."_".$data->tid;
 				$for = date("Ymd", strtotime($data->pvm))."_".$data->tid;
 				$_SESSION['muistin'][$id] = $id;
-				//print_r($_SESSION['muistin']);
 			  }
 			}
-				echo $for;
+				print_r($_SESSION['muistin']);
 		}
+		exit;
 
 	}
 
@@ -2327,9 +2345,24 @@ class TyovuorootController extends Controller
 		// <-- Oletus arvot
 		if(!isset(Yii::app()->session['tyontekijat']))
 		{
-        		$criteria->order = "id DESC LIMIT 5";
+
+			// <-- Return order etu ja sukunimella
+			$site = Yii::app()->createController('Site');
+			$criteria = $site[0]->etuSukunimiCriteria($criteria);
+			//     Return order etu ja sukunimella -->
+
 	        	$criteria->select = "id,tekijan_nimi";
-	        	$criteria->condition = " aktiivinen = '1' ";
+	        	$criteria->condition = ' aktiivinen=1 ';
+
+			// <-- Tyoryhmat
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+		        	$criteria->addCondition (" id IN ($ids) ");
+			} 
+			//    Tyoryhmat -->
+
 			$tt = Tyontekijat::model()->findAll($criteria);
 			$tekijatOletuksena = array();
 			foreach($tt as $t)
@@ -2344,10 +2377,11 @@ class TyovuorootController extends Controller
 		if(Yii::app()->session['tyontekijat'])
 		{
 
-		// <-- Return order etu ja sukunimella
-		$site = Yii::app()->createController('Site');
-		$criteria = $site[0]->etuSukunimiCriteria($criteria);
-		//     Return order etu ja sukunimella -->
+			// <-- Return order etu ja sukunimella
+			$site = Yii::app()->createController('Site');
+			$criteria = $site[0]->etuSukunimiCriteria($criteria);
+			//     Return order etu ja sukunimella -->
+
 
         		$criteria->select = "id,tekijan_nimi, tyoryhma";
         		$criteria->condition = " aktiivinen = '1' ";
@@ -2418,22 +2452,12 @@ class TyovuorootController extends Controller
 		// <-- tyoryhma
 		if(isset(Yii::app()->session['tyoryhma']))
 		{
-
-		   $arr = array();
-		   foreach(Yii::app()->session['tyoryhma'] as $it)
-		   {
-			$arr[] = str_replace("\\", "\\\\\\\\", json_encode($it));
-		   }
-
-		   $tyoryhma_like = " tyoryhma LIKE '%".implode("%' OR tyoryhma LIKE '%", $arr)."%'";
-	           $criteria->addCondition ("
-		   id IN (  
-		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-		   )
-		   AND ($tyoryhma_like)
-		   ");
-
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(Yii::app()->session['tyoryhma']);
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+		        	$criteria->addCondition (" id IN ($ids) ");
+			}
 		}
 		//   tyoryhma -->
 
@@ -2586,14 +2610,23 @@ class TyovuorootController extends Controller
 		if(!isset(Yii::app()->session['tyontekijat']))
 		{
 
-			if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0)
-				$criteria->order = " tekijan_nimi,id DESC LIMIT 5 ";
-			else
-				$criteria->order = " sukunimi,id DESC LIMIT 5 ";
-
+			// <-- Return order etu ja sukunimella
+			$site = Yii::app()->createController('Site');
+			$criteria = $site[0]->etuSukunimiCriteria($criteria);
+			//     Return order etu ja sukunimella -->
 
 	        	$criteria->select = "id,tekijan_nimi";
-	        	$criteria->condition = " aktiivinen = '1' ";
+	        	$criteria->condition = ' aktiivinen=1 ';
+
+			// <-- Tyoryhmat
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+		        	$criteria->addCondition (" id IN ($ids) ");
+			} 
+			//    Tyoryhmat -->
+
 			$tt = Tyontekijat::model()->findAll($criteria);
 			$tekijatOletuksena = array();
 			foreach($tt as $t)
@@ -2678,18 +2711,12 @@ class TyovuorootController extends Controller
 		// <-- tyoryhma
 		if(isset(Yii::app()->session['tyoryhma']))
 		{
-
-		   $tyoryhma_like = "tyoryhma LIKE '%".implode("%' OR tyoryhma LIKE '%", Yii::app()->session['tyoryhma'])."%'";
-	           $criteria->addCondition ("
-		   id IN (  
-		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-		       AND tid IN 
-		       (
-			    SELECT id FROM sivex_ttekijat WHERE $tyoryhma_like
-		       )
-		   )
-		   ");
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(Yii::app()->session['tyoryhma']);
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+		        	$criteria->addCondition (" id IN ($ids) ");
+			}
 		}
 		//   tyoryhma -->
 
@@ -3039,10 +3066,25 @@ class TyovuorootController extends Controller
 
 		$criteria=new CDbCriteria;
 		$criteria->order =" yrityksen_nimi!='' DESC,yhteyshenkilo!='' DESC";
-		$criteria->condition =" 
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
+
+		$criteria->addCondition (" 
 			aktiivinen=1 
 			AND (yrityksen_nimi LIKE '%".$key."%' OR yhteyshenkilo LIKE '%".$key."%' OR osoite LIKE '%".$key."%' )	
-		";
+		");
 
  		$as = Asiakkaat::model()->findAll($criteria);
 		$nm = array();
@@ -3068,10 +3110,26 @@ class TyovuorootController extends Controller
 
 		$criteria=new CDbCriteria;
 		$criteria->order =" etu_suku_nimet!='' DESC,etu_suku_nimet!='' DESC";
-		$criteria->condition =" 
+
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
+
+		$criteria->addCondition (" 
 			aktiivinen=1 
 			AND etu_suku_nimet LIKE '%".$key."%'	
-		";
+		");
 
  		$k = Kohteet::model()->findAll($criteria);
 		if( count($k) > 0 )
@@ -3097,9 +3155,24 @@ class TyovuorootController extends Controller
 
 		$criteria=new CDbCriteria;
 		$criteria->order =" osoite!='' DESC, osoite ASC";
-		$criteria->condition =" 
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			} else {
+				$criteria->condition = " 1!=1 ";
+			}
+		}
+		//    Tyoryhmat -->
+
+		$criteria->addCondition (" 
 			osoite LIKE '%".$key."%'	
-		";
+		");
 
  		$as = Kohteet::model()->findAll($criteria);
 		$nm = array();

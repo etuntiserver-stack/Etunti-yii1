@@ -47,7 +47,25 @@ $this->breadcrumbs=array(
 
 
    <?php
-    $list = Mobile::model()->findAll(array('order' => 'tid','group'=>'tid'));
+		$criteria = new CDbCriteria;
+		$criteria->group = "tid";
+
+		// <-- Tyoryhmat
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+		       		$criteria->condition = " id IN ($ids)  ";
+			} else {
+				$criteria->condition =" 1!=1 ";
+			}
+		}
+		//     Tyoryhmat -->
+
+    $list = Mobile::model()->findAll($criteria);
 
     echo '<select name="Tekija[]" class="mult" id="tyontekijat" class="mult" multiple title="Työntekijät">';
     foreach($list as $data){
