@@ -70,26 +70,6 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tyoryhma'); ?>
-		<?php
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-		$site = Yii::app()->createController('Site');
-	       	$criteria = new CDbCriteria();
-		$criteria->order = " value ";
-		$criteria->condition = "select_type='tyoryhma'";
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-		$criteria->addCondition ("value2 LIKE '%\"".Yii::app()->user->adminID."\"%'");
-		}
-
-		$listData = Valikkoot::model()->findAll($criteria);
-		?>
-		<?php echo $form->dropDownList($model, 'tyoryhma', CHtml::listData($listData, 'id', 'value'), 
-		array('empty'=>'Valitse', 'class'=>'form-control')); 
-		?>
-		<?php echo $form->error($model,'tyoryhma'); ?>
-	</div>
-
-	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakasnumero'); ?>
 		<?php echo $form->numberField($model,'asiakasnumero',$asnum); ?>
 		<?php echo $form->error($model,'asiakasnumero'); ?>
@@ -178,6 +158,26 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 		array('empty'=>'Valitse', 'class'=>'form-control')); 
 		?>
 		<?php echo $form->error($model,'myyja'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyoryhma'); ?>
+		<?php
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+	       	$criteria = new CDbCriteria();
+		$criteria->order = " value ";
+		$criteria->condition = "select_type='tyoryhma'";
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+		$criteria->addCondition ("value2 LIKE '%\"".Yii::app()->user->adminID."\"%'");
+		}
+
+		$listData = Valikkoot::model()->findAll($criteria);
+		?>
+		<?php echo $form->dropDownList($model, 'tyoryhma', CHtml::listData($listData, 'id', 'value'), 
+		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		?>
+		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
 
 <?php if(in_array('5',$tas)) : ?>
