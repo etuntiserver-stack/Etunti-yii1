@@ -316,7 +316,7 @@ $(".muokaValiko").click(function() {
 		$site = Yii::app()->createController('Site');
 		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
 			$tt = Yii::app()->createController('Tyontekijat');
-			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
 			$ids = implode(",", $tt_arr);
 			if( count($tt_arr) > 0 ){
 		       		$criteria->condition = " id IN ($ids) and id!='".$model->tid."' ";
