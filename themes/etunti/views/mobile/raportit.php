@@ -151,17 +151,11 @@ $(document).ready(function(){
 	   }
 
 		// <-- Tyoryhmat
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-		$site = Yii::app()->createController('Site');
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$tt = Yii::app()->createController('Tyontekijat');
-			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
-			$ids = implode(",", $tt_arr);
-			if( count($tt_arr) > 0 ){
-	        		$criteria->addCondition (" id IN ($ids)");
-			} else {
-		        	$criteria->condition = ' 1!=1 ';
-			}
+		$tt = Yii::app()->createController('Tyontekijat');
+		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+		$ids = implode(",", $tt_arr);
+		if( count($tt_arr) > 0 ){
+        		$criteria->addCondition (" id IN ($ids)");
 		}
 		//    Tyoryhmat -->
 
