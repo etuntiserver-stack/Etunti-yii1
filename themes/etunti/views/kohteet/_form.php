@@ -32,26 +32,6 @@ if(!isset($model->id)){ $model->alv = 24; }
 		<?php echo $form->hiddenField($model,'gps_sijainti',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tyoryhma'); ?>
-		<?php
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-		$site = Yii::app()->createController('Site');
-	       	$criteria = new CDbCriteria();
-		$criteria->order = " value ";
-		$criteria->condition = "select_type='tyoryhma'";
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-		$criteria->addCondition ("value2 LIKE '%\"".Yii::app()->user->adminID."\"%'");
-		}
-
-		$listData = Valikkoot::model()->findAll($criteria);
-		?>
-		<?php echo $form->dropDownList($model, 'tyoryhma', CHtml::listData($listData, 'id', 'value'), 
-		array('empty'=>'Valitse', 'class'=>'form-control')); 
-		?>
-		<?php echo $form->error($model,'tyoryhma'); ?>
-	</div>
-
-	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
     		<?php 
        		$criteria = new CDbCriteria();
@@ -262,6 +242,26 @@ $(document).ready(function(){
 		array('class'=>'form-control'));
         	?>
 		<?php echo $form->error($model,'aktiivinen'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyoryhma'); ?>
+		<?php
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+	       	$criteria = new CDbCriteria();
+		$criteria->order = " value ";
+		$criteria->condition = "select_type='tyoryhma'";
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+		$criteria->addCondition ("value2 LIKE '%\"".Yii::app()->user->adminID."\"%'");
+		}
+
+		$listData = Valikkoot::model()->findAll($criteria);
+		?>
+		<?php echo $form->dropDownList($model, 'tyoryhma', CHtml::listData($listData, 'id', 'value'), 
+		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		?>
+		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
 
 	<div class="section fill mb5">
