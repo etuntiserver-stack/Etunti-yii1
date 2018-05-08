@@ -2715,6 +2715,7 @@ $(document).ready(function(){
 		$arr = array();
 		$asetukset = Asetukset::model()->findbypk(1);
 		if( isset($asetukset->tyoryhmat) and $asetukset->tyoryhmat == 0 ){ return $arr; }
+		if( isset($asetukset->tyoryhmat_kohde) and $asetukset->tyoryhmat_kohde == 0 ){ return $arr; }
 
 		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		if( $this->checkOikeusFields($checkOikeus) == 0 ){
