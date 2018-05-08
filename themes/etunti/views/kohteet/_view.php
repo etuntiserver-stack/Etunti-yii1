@@ -47,6 +47,9 @@
 		<?php endif; ?>
 	</td>
 	<td>
+		<?php echo $this->TyoryhmaName($data->tyoryhma); ?>
+	</td>
+	<td>
 		<?php echo ($data->aktiivinen == 1)? Yii::t('main', 'Kyllä'):'<span class="text-danger">'.Yii::t('main', 'Ei').'</span>'; ?>
 	</td>
 </tr>

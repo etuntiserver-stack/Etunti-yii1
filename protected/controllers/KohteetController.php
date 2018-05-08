@@ -623,4 +623,13 @@ class KohteetController extends Controller
 	   return $site[0]->etuSukunimi($tid);
 	}
 
+        protected function TyoryhmaName($id){
+		$return = '';
+		if( !empty($id) ){
+		   $v = Valikkoot::model()->findByPk($id);
+		   if( isset($v->value) ){ $return = $v->value; }
+		}
+                return $return;
+        }
+
 }
