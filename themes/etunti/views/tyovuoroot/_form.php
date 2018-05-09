@@ -312,17 +312,11 @@ $(".muokaValiko").click(function() {
 		$criteria->condition =" aktiivinen=1 and id!='".$model->tid."' ";
 
 		// <-- Tyoryhmat
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-		$site = Yii::app()->createController('Site');
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$tt = Yii::app()->createController('Tyontekijat');
-			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-			$ids = implode(",", $tt_arr);
-			if( count($tt_arr) > 0 ){
-		       		$criteria->condition = " id IN ($ids) and id!='".$model->tid."' ";
-			} else {
-				$criteria->condition =" 1!=1 ";
-			}
+		$tt = Yii::app()->createController('Tyontekijat');
+		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+		$ids = implode(",", $tt_arr);
+		if( count($tt_arr) > 0 ){
+	       		$criteria->addCondition (" id IN ($ids) and id!='".$model->tid."' ");
 		}
 		//     Tyoryhmat -->
 
