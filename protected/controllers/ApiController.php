@@ -1,5 +1,5 @@
 <?php
-if(isset($_SERVER['REMOTE_ADDR']) and $_SERVER['REMOTE_ADDR'] == '89.27.116.62'){
+if(isset($_SERVER['REMOTE_ADDR']) and $_SERVER['REMOTE_ADDR'] == '82.203.157.16'){
 header("Access-Control-Allow-Origin: *");
 }
 
