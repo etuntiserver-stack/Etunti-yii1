@@ -508,7 +508,7 @@ public function actionImei($dom)
 	$_SESSION['lang'] = $_POST['lang'];
 
 	// <-- Check Tyontekija
-	if(isset($_POST['email']) and isset($_POST['salasana']) and !isset($_SESSION['tid']))
+	if(isset($_POST['email']) and isset($_POST['salasana']) )
 	{
 		$criteria = new CDbCriteria();
 		$criteria->condition = " 
