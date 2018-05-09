@@ -113,11 +113,6 @@ session_start();
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
 					'enabled'=>YII_DEBUG,
                     			//'categories'=>'system.*',
-				), 
-				array(
-				        'class'=>'CWebLogRoute',
-                			'levels'=>'error', //'trace, info, error, warning, vardump'
-
 				),
 			        array(
 				        'class'=>'CEmailLogRoute',
