@@ -510,7 +510,7 @@ public function actionImei($dom)
 	// <-- Check Tyontekija
 	if(isset($_POST['email']) and isset($_POST['salasana']) )
 	{
-/*
+
 	    if(
 		isset($_SESSION['tid']) and isset($_SESSION['email']) and isset($_SESSION['salasana']) 
 		and $_SESSION['email'] == $_POST['email'] and $_SESSION['salasana'] == $_POST['salasana'])
@@ -525,9 +525,9 @@ public function actionImei($dom)
 		unset($_SESSION['tid'], $_SESSION['email'], $_SESSION['salasana']);
 	    }
 
-	    if(!isset($_SESSION['tid']))
+	    if(!isset($_SESSION['tid']) and !isset($_SESSION['email']) and !isset($_SESSION['salasana']))
 	    {
-*/
+
 		$criteria = new CDbCriteria();
 		$criteria->condition = " 
 			aktiivinen=1 AND mobiili=1
@@ -541,7 +541,7 @@ public function actionImei($dom)
 			$_SESSION['salasana'] = $_POST['salasana'];
 		}
 
-	    //}
+	    }
 
 	}
 
