@@ -24,7 +24,7 @@ class SiteController extends Controller
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
+			//'accessControl', // perform access control for CRUD operations
 			//'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
@@ -1747,6 +1747,7 @@ $(document).ready(function(){
 	 */
 	public function actionError()
 	{
+		/*
 		if($error=Yii::app()->errorHandler->error)
 		{
 			if(Yii::app()->request->isAjaxRequest)
@@ -1754,6 +1755,9 @@ $(document).ready(function(){
 			else
 				$this->render('error', $error);
 		}
+		*/
+		$this->renderPartial('error_custom');
+
 	}
 
 	/**
