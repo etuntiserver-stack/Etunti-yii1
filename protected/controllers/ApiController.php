@@ -1,5 +1,5 @@
 <?php
-if(isset($_SERVER['REMOTE_ADDR']) and $_SERVER['REMOTE_ADDR'] == '89.27.116.62'){
+if(isset($_SERVER['REMOTE_ADDR']) and $_SERVER['REMOTE_ADDR'] == '82.203.157.16'){
 header("Access-Control-Allow-Origin: *");
 }
 
@@ -508,8 +508,26 @@ public function actionImei($dom)
 	$_SESSION['lang'] = $_POST['lang'];
 
 	// <-- Check Tyontekija
-	if(isset($_POST['email']) and isset($_POST['salasana']))
+	if(isset($_POST['email']) and isset($_POST['salasana']) )
 	{
+
+	    if(
+		isset($_SESSION['tid']) and isset($_SESSION['email']) and isset($_SESSION['salasana']) 
+		and $_SESSION['email'] == $_POST['email'] and $_SESSION['salasana'] == $_POST['salasana'])
+	    {
+		$ttekija = Tyontekijat::model()->findByPk($_SESSION['tid']);
+	    }
+
+	    if(
+		isset($_SESSION['tid']) and isset($_SESSION['email']) and isset($_SESSION['salasana']) 
+		and ($_SESSION['email'] != $_POST['email'] or $_SESSION['salasana'] != $_POST['salasana']))
+	    {
+		unset($_SESSION['tid'], $_SESSION['email'], $_SESSION['salasana']);
+	    }
+
+	    if(!isset($_SESSION['tid']) and !isset($_SESSION['email']) and !isset($_SESSION['salasana']))
+	    {
+
 		$criteria = new CDbCriteria();
 		$criteria->condition = " 
 			aktiivinen=1 AND mobiili=1
@@ -517,6 +535,14 @@ public function actionImei($dom)
 			AND salasana = '".$_POST['salasana']."' 
 		";
 		$ttekija = Tyontekijat::model()->find($criteria);
+		if(isset($ttekija->id)){ 
+			$_SESSION['tid'] = $ttekija->id;
+			$_SESSION['email'] = $_POST['email'];
+			$_SESSION['salasana'] = $_POST['salasana'];
+		}
+
+	    }
+
 	}
 
     	if(!isset($ttekija->id))
