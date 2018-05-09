@@ -48,17 +48,11 @@ if( !isset($model->id) and isset($_GET['asiakas_id']) and isset($_GET['kohde_id'
 	       	$criteria->condition = " aktiivinen=1 ";
 
 		// <-- Tyoryhmat
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
-
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$arr = $site[0]->TyoryhmatHelper();
-			$ids = implode(",", $arr);
-			if( count($arr) > 0 ){
-				$criteria->condition = " tyoryhma IN ($ids) ";
-			} else {
-				$criteria->condition = " 1!=1 ";
-			}
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$criteria->condition = " tyoryhma IN ($ids) ";
 		}
 		//    Tyoryhmat -->
 
@@ -78,20 +72,11 @@ if( !isset($model->id) and isset($_GET['asiakas_id']) and isset($_GET['kohde_id'
 	       	$criteria->condition = " aktiivinen=1 ";
 
 			// <-- Tyoryhmat
-			$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-			$site = Yii::app()->createController('Site');
-			if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-				$tt = Yii::app()->createController('Tyontekijat');
-				$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper();
-				$ids = implode(",", $tt_arr);
-				if( count($tt_arr) > 0 ){
-		        		$criteria->condition = ' id IN ('.$ids.') ';
-				} else {
-					die('Ei oikeuksia');
-					exit;
-				}
-			} else {
-		        	$criteria->condition = ' aktiivinen=1 ';
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+	        		$criteria->addCondition (' id IN ('.$ids.') ');
 			}
 			//    Tyoryhmat -->
 

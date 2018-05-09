@@ -24,7 +24,7 @@ class SiteController extends Controller
 	public function filters()
 	{
 		return array(
-			//'accessControl', // perform access control for CRUD operations
+			'accessControl', // perform access control for CRUD operations
 			//'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
@@ -1583,16 +1583,11 @@ $(document).ready(function(){
 		}
 
 		// <-- Tyoryhmat
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
-
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$arr = $site[0]->TyoryhmatHelper();
-			if( count($arr) > 0 ){
-				$this->render('etusivu_tyoryhma');
-			} else {
-				$this->render('etusivu');
-			}
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$this->render('etusivu_tyoryhma');
 		} else {
 			$this->render('etusivu');
 		}
@@ -2379,17 +2374,12 @@ $(document).ready(function(){
 
 		// <-- Tyoryhmat
 		if( $model == 'Asiakkaat' or $model == 'Kohteet' ){
-			$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-			$site = Yii::app()->createController('Site');
-			if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-				$arr = $site[0]->TyoryhmatHelper();
-				$ids = implode(",", $arr);
-				if( count($arr) > 0 ){
-					$criteria->addCondition (" tyoryhma IN ($ids) ");
-				} else {
-					$criteria->condition = " 1!=1 ";
-				}
-			}
+		$site = Yii::app()->createController('Site');
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$criteria->condition = " tyoryhma IN ($ids) ";
+		}
 		}
 		//    Tyoryhmat -->
 
@@ -2722,18 +2712,24 @@ $(document).ready(function(){
 
 	public function TyoryhmatHelper()
 	{
-		$criteria = new CDbCriteria();
-		$criteria->condition = "
-			select_type='tyoryhma'
-			AND value2 LIKE '%\"".Yii::app()->user->adminID."\"%'
-		";
-
-		$listData = Valikkoot::model()->findAll($criteria);
 		$arr = array();
-		foreach($listData as $item){
-			$arr[$item->id] = $item->id;
-		}
+		$asetukset = Asetukset::model()->findbypk(1);
+		if( isset($asetukset->tyoryhmat) and $asetukset->tyoryhmat == 0 ){ return $arr; }
+		if( isset($asetukset->tyoryhmat_kohde) and $asetukset->tyoryhmat_kohde == 0 ){ return $arr; }
 
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		if( $this->checkOikeusFields($checkOikeus) == 0 ){
+			$criteria = new CDbCriteria();
+			$criteria->condition = "
+				select_type='tyoryhma'
+				AND value2 LIKE '%\"".Yii::app()->user->adminID."\"%'
+			";
+
+			$listData = Valikkoot::model()->findAll($criteria);
+			foreach($listData as $item){
+				$arr[$item->id] = $item->id;
+			}
+		}
 	   	return $arr;
 	}
 

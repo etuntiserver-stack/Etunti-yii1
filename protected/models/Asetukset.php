@@ -288,8 +288,8 @@ class Asetukset extends DB2ActiveRecord
 			'app_lounastauko_osoite' => Yii::t('main', 'Lounastauko voidaan kirjata osoitteelle'),
 			'tuotteet_palvelut_muoto' => Yii::t('main', 'Laskutuksen hinta. Hinnasto / Asiakas'),
 			'tyoryhmat' => Yii::t('main', 'Ota työryhmät käyttöön'),
-			'tyoryhmat_kohde' => Yii::t('main', 'Työryhmien sisällön rajaus kohteiden mukaan'),
-			'tyoryhmat_tyontekijat' => Yii::t('main', 'Työryhmien sisällön rajaus työntekijöiden mukaan'),
+			'tyoryhmat_kohde' => Yii::t('main', 'Työryhmien sisällön rajaus asiakkaiden ja kohteiden mukaan'),
+			//'tyoryhmat_tyontekijat' => Yii::t('main', 'Työryhmien sisällön rajaus työntekijöiden mukaan'),
 			'tietosuoja_vinkki_sailyttaminen' => Yii::t('main', ' Vinkki henkilötietojen säilyttämisen (pvm määrä)'),
 
 		);

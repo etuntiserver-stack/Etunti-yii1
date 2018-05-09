@@ -950,17 +950,6 @@
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tyoryhmat_tyontekijat'); ?>
-		<?php 
-        	$l = array(
-			1=>'Kyllä'
-		);
-		echo $form->dropDownList($model,'tyoryhmat_tyontekijat', $l, 
-		array('class'=>'form-control')) ?>
-		<?php echo $form->error($model,'tyoryhmat_tyontekijat'); ?>
-	</div>
-
-	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tyoryhmat_kohde'); ?>
 		<?php 
         	$l = array(
@@ -975,6 +964,7 @@
    </div>
   </div>
 
+<br>
 <div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#tietosuoja"><h3><?php echo Yii::t('main','Tietosuoja'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
 
   <div class="row form collapse" id="tietosuoja">

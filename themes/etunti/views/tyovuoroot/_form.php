@@ -122,17 +122,15 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 		<?php
        		$criteria = new CDbCriteria();
 	        $criteria->order = " osoite ";
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+
+		// <-- TyoryhmatHelper
 		$site = Yii::app()->createController('Site');
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$arr = $site[0]->TyoryhmatHelper();
-			$ids = implode(",", $arr);
-			if( count($arr) > 0 ){
-				$criteria->condition = " tyoryhma IN ($ids) ";
-			} else {
-				$criteria->condition = " 1!=1 ";
-			}
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$criteria->condition = " tyoryhma IN ($ids) ";
 		}
+		//     TyoryhmatHelper -->
 
         		$list = CHtml::listData(Kohteet::model()->findAll($criteria), 'id', 'osoite');
         		echo $form->dropDownList($model, 'kohde', $list,array('empty'=>'Valitse','class'=>'form-control kohde'));

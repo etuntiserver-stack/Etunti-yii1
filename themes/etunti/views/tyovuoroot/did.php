@@ -279,13 +279,11 @@ if(!isset($_POST['tulosta']))
 	   $muistin	= 'muistin';
 
 	   	// <-- Tyoryhmat
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
 		if( 
 		   isset($tvVal->kohteet) 
 		   and isset($asetukset) 
 		   and $asetukset->tyoryhmat_kohde == 1 
-		   and $site[0]->checkOikeusFields($checkOikeus) == 0 
 		){
 			$arr = $site[0]->TyoryhmatHelper();
 			if( count($arr) > 0 and !in_array($tvVal->kohteet->tyoryhma, $arr)){
