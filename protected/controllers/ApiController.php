@@ -508,7 +508,7 @@ public function actionImei($dom)
 	$_SESSION['lang'] = $_POST['lang'];
 
 	// <-- Check Tyontekija
-	if(isset($_POST['email']) and isset($_POST['salasana']))
+	if(isset($_POST['email']) and isset($_POST['salasana']) and !isset($_SESSION['tid']))
 	{
 		$criteria = new CDbCriteria();
 		$criteria->condition = " 
@@ -517,6 +517,12 @@ public function actionImei($dom)
 			AND salasana = '".$_POST['salasana']."' 
 		";
 		$ttekija = Tyontekijat::model()->find($criteria);
+		if(isset($ttekija->id)){ $_SESSION['tid'] = $ttekija->id; }
+	}
+
+    	if(isset($_SESSION['tid']))
+	{
+		$ttekija = Tyontekijat::model()->findByPk($_SESSION['tid']);
 	}
 
     	if(!isset($ttekija->id))
