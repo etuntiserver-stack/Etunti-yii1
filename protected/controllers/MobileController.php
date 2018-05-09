@@ -1235,16 +1235,11 @@ function num($val){
 	        $criteria->condition = " admin!=1 AND status=3 ";
 
 		// <-- Tyoryhmat
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$arr = $site[0]->TyoryhmatHelper();
-			$ids = implode(",", $arr);
-			if( count($arr) > 0 ){
-				$criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE tyoryhma IN ($ids) ) ");
-			} else {
-				$criteria->condition = " 1!=1 ";
-			}
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE tyoryhma IN ($ids) ) ");
 		}
 		//    Tyoryhmat -->
 
@@ -2810,16 +2805,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		";
 
 		// <-- Tyoryhmat
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$arr = $site[0]->TyoryhmatHelper();
-			$ids = implode(",", $arr);
-			if( count($arr) > 0 ){
-				$criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE tyoryhma IN ($ids) ) ");
-			} else {
-				$criteria->condition = " 1!=1 ";
-			}
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE tyoryhma IN ($ids) ) ");
 		}
 		//    Tyoryhmat -->
 
@@ -2910,16 +2900,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		";
 
 		// <-- Tyoryhmat
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-			$arr = $site[0]->TyoryhmatHelper();
-			$ids = implode(",", $arr);
-			if( count($arr) > 0 ){
-				$criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE tyoryhma IN ($ids) ) ");
-			} else {
-				$criteria->condition = " 1!=1 ";
-			}
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE tyoryhma IN ($ids) ) ");
 		}
 		//    Tyoryhmat -->
 

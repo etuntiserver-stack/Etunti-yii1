@@ -926,8 +926,9 @@ $xml = '
 
 	public function TyoryhmatTyontekijatHelper($tr_array)
 	{
-		//print_r($tr_array);
-		//exit;
+		$tt_arr = array();
+		$asetukset = Asetukset::model()->findbypk(1);
+		if( isset($asetukset->tyoryhmat) and $asetukset->tyoryhmat == 0){ return $tt_arr; }
 
 		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
@@ -953,7 +954,6 @@ $xml = '
 		$criteria = new CDbCriteria();
 		$criteria->condition = " aktiivinen = '1' ";
 		$tt = Tyontekijat::model()->findAll($criteria);
-		$tt_arr = array();
 		foreach($tt as $tekija){
 			if( $site[0]->checkOikeusFields($checkOikeus) == 1 and $tr_array == null){
 				$tt_arr[$tekija->id] = $tekija->id;
