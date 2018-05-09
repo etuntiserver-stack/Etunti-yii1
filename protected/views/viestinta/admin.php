@@ -4,7 +4,7 @@
 
 //print_r(Yii::app()->getSession()->getSessionId());
 //phpinfo();
-echo $dd;
+
 if(isset($_GET['mail'])){
 	$m = $_GET['mail'];
 	$ft = FirmanTiedot::model()->findByPk(1);
