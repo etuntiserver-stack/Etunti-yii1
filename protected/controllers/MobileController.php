@@ -1325,6 +1325,10 @@ function num($val){
 		else if(isset($_POST['tyontekijanRyhma']) and !empty($_POST['tyontekijanRyhma']))
 			Yii::app()->session['tyontekijanRyhma'] = Yii::app()->request->getPost('tyontekijanRyhma');
 
+		if(isset($_POST['osoite']) and empty($_POST['osoite']))
+			unset(Yii::app()->session['osoite']);
+		else if(isset($_POST['osoite']) and !empty($_POST['osoite']))
+			Yii::app()->session['osoite'] = Yii::app()->request->getPost('osoite');
 
 
 		if(Yii::app()->request->getPost('fromP'))
@@ -1390,7 +1394,6 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(isset(Yii::app()->session['siivousPaaSivulla']))
 	        $criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE siivous LIKE '%".Yii::app()->session['siivousPaaSivulla']."%' ) ");
 
-
 		if(isset(Yii::app()->session['tyontekijanRyhma']))
 		{
 	        $criteria->addCondition ("  
@@ -1400,8 +1403,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		");
 		}
 
-
-
+		if(isset(Yii::app()->session['osoite']))
+	        $criteria->addCondition (" kohde_kannasta LIKE '%".Yii::app()->session['osoite']."%' ");
 
 
 		$dataProvider=new CActiveDataProvider('Mobile', array(
