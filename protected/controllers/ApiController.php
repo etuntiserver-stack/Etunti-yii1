@@ -510,6 +510,7 @@ public function actionImei($dom)
 	// <-- Check Tyontekija
 	if(isset($_POST['email']) and isset($_POST['salasana']) )
 	{
+	    if(!isset($_SESSION['tid']))
 		$criteria = new CDbCriteria();
 		$criteria->condition = " 
 			aktiivinen=1 AND mobiili=1
@@ -518,11 +519,9 @@ public function actionImei($dom)
 		";
 		$ttekija = Tyontekijat::model()->find($criteria);
 		if(isset($ttekija->id)){ $_SESSION['tid'] = $ttekija->id; }
-	}
-
-    	if(isset($_SESSION['tid']))
-	{
-		//$ttekija = Tyontekijat::model()->findByPk($_SESSION['tid']);
+	    } else {
+		$ttekija = Tyontekijat::model()->findByPk($_SESSION['tid']);
+	    }
 	}
 
     	if(!isset($ttekija->id))
