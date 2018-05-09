@@ -522,7 +522,7 @@ public function actionImei($dom)
 
     	if(isset($_SESSION['tid']))
 	{
-		$ttekija = Tyontekijat::model()->findByPk($_SESSION['tid']);
+		//$ttekija = Tyontekijat::model()->findByPk($_SESSION['tid']);
 	}
 
     	if(!isset($ttekija->id))
