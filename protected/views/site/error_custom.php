@@ -23,7 +23,7 @@
           </h2>
         </div>
         <div class="panel-body">
-          <p><h3>Vaihtoehdot:</h3></p>
+          <p><h3>Toimi näin:</h3></p>
 
             <ul class="list-group">
               <li class="list-group-item">Siirry jatkamaan palvelun käyttö tästä <a href="https://app.etunti.fi">https://app.etunti.fi</a></li>
