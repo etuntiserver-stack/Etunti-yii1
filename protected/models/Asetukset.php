@@ -33,19 +33,19 @@ class Asetukset extends DB2ActiveRecord
 	{
 
 		$tb_name = 'asetukset';
-		$check_this_table = true;
+		$check_this_table = false;
 
 		if($check_this_table)
 		{
-		$table = Yii::app()->db1->schema->getTable($tb_name);
-		if(!isset($table->columns['id'])) {
+		    $table = Yii::app()->db1->schema->getTable($tb_name);
+		    if(!isset($table->columns['id'])) {
 
 			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
 			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
 			")->execute();
-		}
+		    }
 
-		$table_structure = array(
+		    $table_structure = array(
 
                      'syntyrin_emails' => 'text ',
                      'paivan_uutinen' => 'varchar(500) ',
@@ -153,18 +153,14 @@ class Asetukset extends DB2ActiveRecord
                      //'edico_laatutaso_3' => 'text ',
                      //'edico_muut_kulut' => 'text ',
 
-		);
-		$is_added_somthing = false;
-		foreach($table_structure as $key=>$value)
-		{
+		    );
+
+		    foreach($table_structure as $key=>$value)
+		    {
 			if (!isset($table->columns[$key])) {
 				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
-				$is_added_somthing = true;
 			}
-		}
-		if($is_added_somthing)
-		Yii::app()->controller->refresh();
-
+		    }
 
 		} // if($check_this_table)	
 
