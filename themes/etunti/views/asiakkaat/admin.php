@@ -13,7 +13,7 @@ $('.search-form form').submit(function(){
 	return false;
 });
 ");
-
+/*
 $a = Asiakkaat::model()->findAll(" tyyppi='henkilo' AND yrityksen_nimi!='' AND yhteyshenkilo='' ");
 echo count($a).'<br>';
 foreach($a as $item){
@@ -21,6 +21,7 @@ echo $item->id.'<br>';
 Asiakkaat::model()->updateByPk($item->id, array('yrityksen_nimi' => '', 'yhteyshenkilo' => $item->yrityksen_nimi));
 }
 exit;
+*/
 ?>
 
 
