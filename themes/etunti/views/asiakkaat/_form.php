@@ -110,7 +110,7 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 	<div class="section fill mb5 tyyppi">
 		<?php echo $form->labelEx($model,'tyyppi'); ?>
 		<?php
-		$list = array('yritys'=>Yii::t('main', 'Yritys'),'henkilo'=>Yii::t('main', 'Yksityishenkilö'));
+		$list = array('henkilo'=>Yii::t('main', 'Yksityishenkilö'), 'yritys'=>Yii::t('main', 'Yritys'));
         	echo $form->dropDownList($model, 'tyyppi', $list,
 		array('class'=>'form-control'));	
         	?>
@@ -573,6 +573,23 @@ $(document).ready(function(){
 	offColor: "danger",
 	onText: "Kyllä",
 	offText: "Ei"
+  });
+
+
+  $(".luoTallennaAsiakas").click(function(e) {
+    e.preventDefault()
+    var tyyppi = $('#Asiakkaat_tyyppi option:selected').val();
+    if( tyyppi == 'henkilo' && $('#Asiakkaat_yhteyshenkilo').val() == '' ){
+	$('#Asiakkaat_yhteyshenkilo').focus();
+	alert('Yksityisasiakkaalle yhteyshenkilö on pakollinen tieto.');
+	return false;
+    }
+    if( tyyppi == 'yritys' && $('#Asiakkaat_yrityksen_nimi').val() == '' ){
+	$('#Asiakkaat_yrityksen_nimi').focus();
+	alert('Yrityksen nimi ei saa olla tyhjänä!');
+	return false;
+    }
+    $('#asiakkaat-form').submit();
   });
 
 
