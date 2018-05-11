@@ -581,7 +581,7 @@ $(document).ready(function(){
     var tyyppi = $('#Asiakkaat_tyyppi option:selected').val();
     if( tyyppi == 'henkilo' && $('#Asiakkaat_yhteyshenkilo').val() == '' ){
 	$('#Asiakkaat_yhteyshenkilo').focus();
-	alert('Yhteyshenkilö ei saa olla tyhjänä!');
+	alert('Yksityisasiakkaalle yhteyshenkilö on pakollinen tieto.');
 	return false;
     }
     if( tyyppi == 'yritys' && $('#Asiakkaat_yrityksen_nimi').val() == '' ){
