@@ -14,6 +14,12 @@ $('.search-form form').submit(function(){
 });
 ");
 
+$a = Asiakkaat::model()->findAll(" tyyppi='henkilo' AND yrityksen_nimi!='' AND yhteyshenkilo='' ");
+echo count($a).'<br>';
+foreach($a as $item){
+echo $item->id.'<br>';
+}
+exit;
 ?>
 
 
