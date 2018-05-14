@@ -1582,6 +1582,8 @@ $(document).ready(function(){
 		  $this->redirect('/index.php/site/etusivu');
 		}
 
+		if( !$this->isEtuntiAdmin() ){ 	$this->redirect('index'); }
+
 		// <-- Tyoryhmat
 		$site = Yii::app()->createController('Site');
 		$arr = $site[0]->TyoryhmatHelper();
@@ -2716,6 +2718,7 @@ $(document).ready(function(){
 
 	public function TyoryhmatHelper()
 	{
+		if( !$this->isEtuntiAdmin() ){ return false; }
 		$arr = array();
 		$asetukset = Asetukset::model()->findbypk(1);
 		if( isset($asetukset->tyoryhmat) and $asetukset->tyoryhmat == 0 ){ return $arr; }
