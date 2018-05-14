@@ -156,7 +156,7 @@ public $tilausviesti;
 			'kesto' => Yii::t('main', 'Kesto'),
 			'tyoajanlaatu' => Yii::t('main', 'Tyoajanlaatu'),
 			'tyoajanmerkinta' => Yii::t('main', 'Työajanmerkintä'),
-			'tietoja' => Yii::t('main', 'Tietoja mobiilisovelukseen'),
+			'tietoja' => Yii::t('main', 'Tietoja mobiilisovellukseen'),
 			'osoiteOnline' => Yii::t('main', 'Osoite Online'),
 			'status' => Yii::t('main', 'Tilanne'),
 			'piilota_mobiilista'=>Yii::t('main', 'Näytetäänkö työntekijälle mobiilissa'),
