@@ -316,14 +316,17 @@ $(document).ready(function(){
  });
 
  $(".laheta").click(function(){
-	$(this).replaceWith('<center><h2>Odota..</h2></center>');
 	var arr = [];
 	$( '.valitse_asiakas:checkbox:checked' ).each(function( ) {
 	    if( $(this).attr('asiakas_id').length > 0 ){
   		arr.push($(this).attr('asiakas_id'));
 	    }
 	});
+	if( arr.length == 0 ){
+		alert('Valitse asiakas');
+	}
 	if( arr.length > 0 ){
+	$(this).text('Odota..').removeClass('laheta');
         	$.ajax({
         	   url: 'lahetatunnukset',
         	   type: "POST",
