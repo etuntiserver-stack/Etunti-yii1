@@ -239,7 +239,7 @@ $(document).ready(function() {
   <table class="table table-hovered" id="mobileTable">
   <thead class="myBgColors">
   <tr>
-  <th><center><input type="checkbox" class="valitse_kaikki"></center></th>
+  <th><center>Valitse kaikki <input type="checkbox" class="valitse_kaikki"></center></th>
   <th><?=Yii::t('main', 'Yritys/Yhteyshenkilö')?></th>
   <th><?=Yii::t('main', 'Osoite')?></th>
   <th><?=Yii::t('main', 'Puhelin')?></th>
@@ -316,6 +316,9 @@ $(document).ready(function(){
  });
 
  $(".laheta").click(function(){
+	if(!confirm('Olet lähettämässä eDico-tunnuksia valituille asiakkaille.')){
+		return false;
+	}
 	var arr = [];
 	$( '.valitse_asiakas:checkbox:checked' ).each(function( ) {
 	    if( $(this).attr('asiakas_id').length > 0 ){
