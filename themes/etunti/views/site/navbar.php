@@ -1262,18 +1262,18 @@ $('.tvchange').change(function(){
 
           <li>
             <a class="accordion-toggle crm" href="#">
-              <span class="fa fa-users"></span>
+              <span class="fa fa-money"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Tuotteet ja Palvelut'); ?></span>
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tuotteetPalvelut/index">
-                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Tuotteet ja Palvelut'); ?></a>
+                  <span class="fa fa-money"></span> <?php echo Yii::t('main', 'Tuotteet ja Palvelut'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/hinnastot/index">
-                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Hinnastot'); ?></a>
+                  <span class="fa fa-money"></span> <?php echo Yii::t('main', 'Hinnastot'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kupongit/index">
