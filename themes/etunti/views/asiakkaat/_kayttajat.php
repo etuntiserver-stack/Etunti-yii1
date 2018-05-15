@@ -27,22 +27,19 @@
 	<?php if(!empty($data->sahkoposti)): ?>
 		<?php 
 		$str = 'Lähetä eDico tunnukset asiakkaalle';
-		$cl = 'btn btn-primary btn-block';
 		if(empty($data->salasana) and empty($data->token))
 			$str = Yii::t('main', 'Lähetä eDico<br> tunnukset asiakkaalle');
 		if(empty($data->salasana) and !empty($data->token)){
-			$cl = 'btn btn-warning btn-block';
 			$str = Yii::t('main', 'Tunnukset on lähetetty.<br> Lähetä uudelleen');
 		}
 		if(!empty($data->salasana) and empty($data->token)){
-			$cl = 'btn btn-success btn-block';
 			$str = Yii::t('main', 'Tunnus on aktiivinen.<br> Lähetä uudelleen');
 		}
 		?>
 
-		<span class="<?=$cl?>"><input type="checkbox" class="valitse_asiakas pull-right"> <?=$str?></span>
+		<span class="btn btn-primary myBgColors btn-block"><input type="checkbox" class="valitse_asiakas pull-right"> <?=$str?></span>
 	<?php else: ?>
-		<span class="btn btn-danger btn-block"><?=Yii::t('main', 'Sähköposti puutuu.')?></span>
+		<span class="btn btn-primary myBgColors btn-block"><?=Yii::t('main', 'Sähköposti puutuu.')?></span>
 	<?php endif; ?>
 	</td>
 	<td>

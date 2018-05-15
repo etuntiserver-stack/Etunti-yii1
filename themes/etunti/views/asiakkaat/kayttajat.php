@@ -224,6 +224,8 @@ $(document).ready(function() {
 
 	    </form>
 
+		<button class="btn btn-primary myBgColors btn-lg haemob btn-block"><?=Yii::t('main', 'LÄHETÄ'); ?></button>
+
 
         <!-- loppu: .tray-center -->
         </div>
