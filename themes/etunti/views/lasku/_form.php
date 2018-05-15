@@ -270,6 +270,16 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php echo $form->error($model,'t_sahkoposti'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'alv_muoto'); ?>
+		<?php
+		$list = array(0=>'Hinnat ALV 0%',1=>'Hinnat sis. ALV');
+        	echo $form->dropDownList($model, 'alv_muoto', $list,
+		array('class'=>'form-control'));
+        	?>
+		<?php echo $form->error($model,'alv_muoto'); ?>
+	</div>
+
   </div><div class="col-sm-3">
   <legend><?php echo Yii::t('main', 'LASKUTUS'); ?></legend>
 
@@ -410,6 +420,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php echo $form->error($model,'tilanne'); ?>
 	</div>
 
+
   </div><div class="col-sm-3">
   <legend><?php echo Yii::t('main', 'YRITYS'); ?></legend>
 
@@ -460,10 +471,10 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
   </div>
 </div>
 
-<br>
 
 <div class="row form tosoite" style="display:none">
   <div class="col-sm-3">
+  <br>
   <legend><?php echo Yii::t('main', 'TOIMITUS OSOITE'); ?></legend>
 
 
@@ -515,18 +526,6 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php echo $form->error($model,'t_sahkoposti'); ?>
 	</div>
   </div>
-</div>
-
-
-<div class="row">
-	<div class="col-sm-3 section fill mb5">
-		<?php
-		$list = array(0=>'Hinnat ALV 0%',1=>'Hinnat sis. ALV');
-        	echo $form->dropDownList($model, 'alv_muoto', $list,
-		array('class'=>'form-control'));
-        	?>
-		<?php echo $form->error($model,'alv_muoto'); ?>
-	</div>
 </div>
 
 <!--<span class="pull-right  btn btn-info" data-toggle="collapse"  data-target="#kalut"><?php echo Yii::t('main', 'Työkalut'); ?> <b class="caret"></b></span>

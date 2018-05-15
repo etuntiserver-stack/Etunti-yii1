@@ -251,6 +251,7 @@ public $digisten_tunnit_id, $edico_tilaus_id;
 			'deliveryterm'=> Yii::t('main', 'Toimitusehto'),
 			'vatperiod'=> Yii::t('main', 'Päivämäärä johon ALV kohdistuu'),
 			'tuotteet_palvelut_muoto' => Yii::t('main', 'Asiakas vai Hinnasto'),
+			'alv_muoto' => Yii::t('main', 'ALV muoto'),
 		);
 	}
 
