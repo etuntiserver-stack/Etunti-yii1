@@ -40,7 +40,7 @@ class AsiakkaatController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -990,6 +990,98 @@ $xml = '
 		$netvisor = false;
 
 		$this->render('index', array(
+			'dataProvider' => $dataProvider, 
+			'perSivu' => $perSivu,
+			'netvisor' => $netvisor,
+		));
+	}
+
+
+	public function actionKayttajat()
+	{
+
+		if(isset($_POST['asiakkaatPerSivu']))
+		{
+			Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);
+			echo json_encode($_POST['asiakkaatPerSivu']);
+			exit;
+		}
+
+
+
+
+	// <-- Oikeudet
+	   $checkOikeus = "asiakkaat_0_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
+       		$criteria = new CDbCriteria();
+
+		// <-- Tyoryhmat
+		$site = Yii::app()->createController('Site');
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$criteria->condition = " tyoryhma IN ($ids) ";
+		}
+		//    Tyoryhmat -->
+
+		if(isset($_GET['sort']) and $_GET['sort'] != 'asiakasnumero'){
+	        $criteria->order = " $_GET[sort]!='' DESC, $_GET[sort] $_GET[s] ";
+		} elseif(isset($_GET['sort']) and $_GET['sort'] == 'asiakasnumero'){
+	        $criteria->order = " $_GET[sort]!='' DESC, cast(asiakasnumero as unsigned) $_GET[s] ";
+		} else {
+	        $criteria->order = " id DESC ";
+		}
+
+		if(isset($_GET['osoite']) and !empty($_GET['osoite']))
+	        $criteria->addCondition (" osoite LIKE '%".$_GET['osoite']."%' ");
+
+		if(isset($_GET['aktiivinen']) and $_GET['aktiivinen'] != 'kaikki')
+	        $criteria->addCondition (" aktiivinen ='".(int)$_GET['aktiivinen']."' ");
+		elseif(isset($_GET['aktiivinen']) and $_GET['aktiivinen'] == 'kaikki')
+	        $criteria->addCondition (" (aktiivinen=1 OR aktiivinen=0) ");
+		else
+	        $criteria->addCondition (" aktiivinen=1 ");
+
+		if(isset($_GET['yrityksen_nimi']) and !empty(trim($_GET['yrityksen_nimi'])))
+	        $criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%' ");
+
+		if(isset($_GET['ryhma']) and !empty(trim($_GET['ryhma'])))
+	        $criteria->addCondition (" ryhma LIKE '%".$_GET['ryhma']."%' ");
+
+		if(isset($_GET['tyyppi']) and !empty(trim($_GET['tyyppi'])))
+	        $criteria->addCondition (" tyyppi='".$_GET['tyyppi']."' ");
+
+		if(isset($_GET['puhelin']) and !empty(trim($_GET['puhelin'])))
+	        $criteria->addCondition (" puhelin LIKE '%".$_GET['puhelin']."%' ");
+
+		if(isset($_GET['sahkoposti']) and !empty(trim($_GET['sahkoposti'])))
+	        $criteria->addCondition (" sahkoposti LIKE '%".$_GET['sahkoposti']."%' ");
+
+		if(isset($_GET['asiakasnumero']) and !empty(trim($_GET['asiakasnumero'])))
+	        $criteria->addCondition (" asiakasnumero LIKE '%".$_GET['asiakasnumero']."%' ");
+
+		$dataProvider=new CActiveDataProvider('Asiakkaat', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+
+		$perSivu = 50;
+		if(isset(Yii::app()->user->asiakkaatPerSivu))
+		$perSivu = Yii::app()->user->asiakkaatPerSivu;
+
+		$dataProvider->pagination->pageSize = $perSivu;
+
+		$a = Asetukset::model()->findbypk(1);
+		if($a->netvisor_kaytto == 1)
+		$netvisor = true;
+		else
+		$netvisor = false;
+
+		$this->render('kayttajat', array(
 			'dataProvider' => $dataProvider, 
 			'perSivu' => $perSivu,
 			'netvisor' => $netvisor,
