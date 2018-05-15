@@ -270,6 +270,16 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php echo $form->error($model,'t_sahkoposti'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'alv_muoto'); ?>
+		<?php
+		$list = array(0=>'Hinnat ALV 0%',1=>'Hinnat sis. ALV');
+        	echo $form->dropDownList($model, 'alv_muoto', $list,
+		array('class'=>'form-control'));
+        	?>
+		<?php echo $form->error($model,'alv_muoto'); ?>
+	</div>
+
   </div><div class="col-sm-3">
   <legend><?php echo Yii::t('main', 'LASKUTUS'); ?></legend>
 
@@ -410,6 +420,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php echo $form->error($model,'tilanne'); ?>
 	</div>
 
+
   </div><div class="col-sm-3">
   <legend><?php echo Yii::t('main', 'YRITYS'); ?></legend>
 
@@ -460,10 +471,10 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
   </div>
 </div>
 
-<br>
 
 <div class="row form tosoite" style="display:none">
   <div class="col-sm-3">
+  <br>
   <legend><?php echo Yii::t('main', 'TOIMITUS OSOITE'); ?></legend>
 
 
@@ -517,14 +528,12 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
   </div>
 </div>
 
-<br>
-
 <!--<span class="pull-right  btn btn-info" data-toggle="collapse"  data-target="#kalut"><?php echo Yii::t('main', 'Työkalut'); ?> <b class="caret"></b></span>
 <br>
 -->
-<br>
 <div class="row" id="tuotteet_palvelut_muoto" style="display:none">
-	<div class="col-sm-4 section fill mb5">
+	<div class="col-sm-3 section fill mb5">
+		<br>
 		<?php echo $form->labelEx($model,'tuotteet_palvelut_muoto'); ?>
 		<?php 
         	$tal = array(
@@ -657,12 +666,6 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
         <?php endif; ?>
 	<!-- Digisten -->
 
-	<div class="row">
-	 <div class="col-sm-4">
-		<b>Hinnat sis. ALV</b> <input type="radio" name="alvsis" value="sis"> <br>
-		<b>Hinnat ALV 0%</b> <input type="radio" name="alvsis" value="nolla" checked>
-	 </div>
-	</div>
 
 <div id="rivit" class="table-responsive">
 <TABLE class="table well" id="TableRivit">
@@ -1187,7 +1190,7 @@ function Rivi(){
 
 }
 
- $('input[name=alvsis]').change(function(){
+ $('#Lasku_alv_muoto').change(function(){
   eachLaskenta();
  });
 
@@ -1196,7 +1199,7 @@ function Rivi(){
 var aleAsiakkaasta = '';
 function eachLaskenta(){
 
-  var alvsis = $('input[name=alvsis]:checked').val();
+  var alvsis = $('#Lasku_alv_muoto').val();
   $("#rivit input").each(function() {
 
 	var hinta_alv_0 = 0;
@@ -1216,12 +1219,12 @@ function eachLaskenta(){
 	if(ale > 0)
 	hinta_alv_0 = hinta_alv_0-((hinta_alv_0/100)*ale);
 
-	if( alvsis == 'nolla'){
+	if( alvsis == '0'){
 		var laske = (hinta_alv_0*kpl)/100*alv;
 		var veroton = hinta_alv_0*kpl;
 		var yhteensa = laske+veroton;
 	}
-	if( alvsis == 'sis'){
+	if( alvsis == '1'){
 		var yhteensa = hinta_alv_0*kpl;
 		var jakaa = '1.'+alv;
 		var l = yhteensa/parseFloat(jakaa);
