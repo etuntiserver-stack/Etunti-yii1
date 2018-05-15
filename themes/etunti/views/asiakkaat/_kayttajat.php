@@ -37,7 +37,7 @@
 		}
 		?>
 
-		<span class="btn btn-primary myBgColors btn-block"><input type="checkbox" class="valitse_asiakas pull-right"> <?=$str?></span>
+		<span class="btn btn-primary myBgColors btn-block"><input type="checkbox" class="valitse_asiakas pull-right" asiakas_id="<?=$data->id?>"> <?=$str?></span>
 	<?php else: ?>
 		<span class="btn btn-primary myBgColors btn-block"><?=Yii::t('main', 'Sähköposti puutuu.')?></span>
 	<?php endif; ?>

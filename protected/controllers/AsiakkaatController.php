@@ -40,7 +40,7 @@ class AsiakkaatController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -405,6 +405,15 @@ class AsiakkaatController extends Controller
 		));
 	}
 
+	public function actionLahetatunnukset()
+	{
+		foreach($_POST['arr'] as $id){
+			$this->LahetaTunnukset($id);
+			//echo $id.' ok';
+		}
+		echo 'ok';
+		exit;
+	}
 
 	public function LahetaTunnukset($id)
 	{
@@ -999,6 +1008,13 @@ $xml = '
 
 	public function actionKayttajat()
 	{
+
+		if(isset($_GET['valmis']))
+		{
+			Yii::app()->user->setFlash('success', "Tunnukset lähetetty.");
+			$this->redirect(array('kayttajat'));
+			exit;
+		}
 
 		if(isset($_POST['asiakkaatPerSivu']))
 		{

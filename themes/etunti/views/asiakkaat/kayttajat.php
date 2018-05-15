@@ -224,7 +224,7 @@ $(document).ready(function() {
 
 	    </form>
 
-		<button class="btn btn-primary myBgColors btn-lg haemob btn-block"><?=Yii::t('main', 'LÄHETÄ'); ?></button>
+		<button class="btn btn-primary myBgColors btn-lg btn-block laheta"><?=Yii::t('main', 'LÄHETÄ'); ?></button>
 
 
         <!-- loppu: .tray-center -->
@@ -314,6 +314,30 @@ $(document).ready(function(){
 	else
 	$('input:checkbox').prop("checked", false);
  });
+
+ $(".laheta").click(function(){
+	$(this).replaceWith('<center><h2>Odota..</h2></center>');
+	var arr = [];
+	$( '.valitse_asiakas:checkbox:checked' ).each(function( ) {
+	    if( $(this).attr('asiakas_id').length > 0 ){
+  		arr.push($(this).attr('asiakas_id'));
+	    }
+	});
+	if( arr.length > 0 ){
+        	$.ajax({
+        	   url: 'lahetatunnukset',
+        	   type: "POST",
+        	   data: { "arr" : arr },
+        	   success: function(data){
+			console.log(data);
+			if( data == 'ok' ){
+			   window.location.href="kayttajat?valmis";
+			}
+        	   }
+	        });
+	}
+ });
+
 
 });
 </script>
