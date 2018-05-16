@@ -29,21 +29,60 @@ class EdicoViestintaController extends Controller
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
-				'users'=>array('*'),
+                		'expression'=>"Yii::app()->controller->isAsiakas() || Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
-				'users'=>array('@'),
+                		'expression'=>"Yii::app()->controller->isAsiakas() || Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
 	}
+
+	public function isAsiakas() 
+	{
+		if(isset(Yii::app()->user->asiakas))
+		{
+		$m = Asiakkaat::model()->findbypk(Yii::app()->user->asiakas);
+	        if($m->id == Yii::app()->user->asiakas)
+	            return true;
+		} else {
+	            return false;
+		}
+	}
+
+	public function isEtuntiAdmin() {
+
+		if(isset(Yii::app()->user->adminID))
+		{
+		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	        if($m->id == Yii::app()->user->adminID)
+	            return true;
+		} else {
+	            return false;
+		}
+	}
+
+        public function init()
+        {
+
+                if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = 'etunti';
+                } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = Yii::app()->user->user_theme;
+                } elseif (isset(Yii::app()->user->asiakas)) {
+                        Yii::app()->theme = 'customer';
+                } else {
+                        Yii::app()->theme = 'classic';
+                }
+                parent::init();
+        }
 
 	/**
 	 * Displays a particular model.
@@ -122,10 +161,40 @@ class EdicoViestintaController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('EdicoViestinta');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+
+		if(isset($_POST['asiakkaatPerSivu']))
+		{
+			Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);
+			echo json_encode($_POST['asiakkaatPerSivu']);
+			exit;
+		}
+
+       		$criteria = new CDbCriteria();
+
+		$dataProvider=new CActiveDataProvider('EdicoViestinta', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
 		));
+
+
+		$perSivu = 50;
+		if(isset(Yii::app()->user->asiakkaatPerSivu))
+		$perSivu = Yii::app()->user->asiakkaatPerSivu;
+
+		$dataProvider->pagination->pageSize = $perSivu;
+
+		$a = Asetukset::model()->findbypk(1);
+		if($a->netvisor_kaytto == 1)
+		$netvisor = true;
+		else
+		$netvisor = false;
+
+		$this->render('index', array(
+			'dataProvider' => $dataProvider, 
+			'perSivu' => $perSivu
+		));
+
+
 	}
 
 	/**

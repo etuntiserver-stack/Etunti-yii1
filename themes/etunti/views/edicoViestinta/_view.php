@@ -1,29 +1,33 @@
 <?php
-/* @var $this EdicoViestintaController */
-/* @var $data EdicoViestinta */
+/* @var $this KohteetController */
+/* @var $data Kohteet */
+
+	$asiakas='';
+	$a = Asiakkaat::model()->findbypk($data->asiakas_id);
+	if(isset($a->id) and !empty($a->yrityksen_nimi))
+	$asiakas = $a->yrityksen_nimi;
+	elseif(isset($a->id) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
+	$asiakas = $a->yhteyshenkilo;
+
 ?>
 
-<div class="view">
+<tr>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
-	<br />
+	<td>
+		<?php echo CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
+				array('update', 'id'=>$data->id), 
+				array(
+					'class'=>'btn btn-primary myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Muokkaa') 
+				)
+			); 
+		?>
+	</td>
+	<td>
+		<?php echo $asiakas; ?>
+	</td>
+</tr>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('time')); ?>:</b>
-	<?php echo CHtml::encode($data->time); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('asiakas_id')); ?>:</b>
-	<?php echo CHtml::encode($data->asiakas_id); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('otsikko')); ?>:</b>
-	<?php echo CHtml::encode($data->otsikko); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
-	<?php echo CHtml::encode($data->status); ?>
-	<br />
-
-
-</div>
