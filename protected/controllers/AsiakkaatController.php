@@ -110,7 +110,7 @@ class AsiakkaatController extends Controller
 			$tilanne = 3;
 		}
 
-		$this->render('salasana', array('tilanne' => $tilanne));
+		$this->render('salasana', array('tilanne' => $tilanne, 'model' => $model));
 	}
 
 	public function actionKartta()
@@ -427,7 +427,7 @@ class AsiakkaatController extends Controller
 
 				$subject = $yr.' toivottaa sinut tervetulleeksi käyttämään eDicoa';
 				$message = 'Hei '.$asiakas.'!<br>
-				<b>Domain:</b> '.Yii::app()->user->domain.'<br>
+				<b>Yritystunnus:</b> '.Yii::app()->user->domain.'<br>
 				<b>Käyttäjätunnus:</b> '.$model->sahkoposti.'<br>
 				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('asiakkaat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'asiakasid' => $model->id)).'>tästä</a><br>
 <p>
