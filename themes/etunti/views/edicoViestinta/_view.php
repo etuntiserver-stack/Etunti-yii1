@@ -12,10 +12,15 @@
 ?>
 
 <tr>
-
 	<td>
-		<?php echo CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
-				array('update', 'id'=>$data->id), 
+		<?php echo date("d.m.Y H:i", strtotime($data->time)); ?>
+	</td>
+	<td>
+		<?php echo $asiakas; ?>
+	</td>
+	<td>
+		<?php echo CHtml::link('<i class="fa fa-trash-o" aria-hidden="true" style="font-size: 110%"></i>', 
+				array('delete', 'id'=>$data->id), 
 				array(
 					'class'=>'btn btn-primary myBgColors', 
 					'style'=>'color:white', 
@@ -25,9 +30,6 @@
 				)
 			); 
 		?>
-	</td>
-	<td>
-		<?php echo $asiakas; ?>
 	</td>
 </tr>
 

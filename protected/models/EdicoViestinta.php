@@ -35,7 +35,8 @@ class EdicoViestinta extends DB2ActiveRecord
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
                      'asiakas_id' => 'int(11)',
                      'otsikko' => 'varchar(255)',
-                     'status' => 'int(1) DEFAULT 1'
+                     'status' => 'int(1) DEFAULT 1',
+                     'luoja' => 'varchar(50)'
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -58,7 +59,7 @@ class EdicoViestinta extends DB2ActiveRecord
 		return array(
 			array('asiakas_id, otsikko', 'required'),
 			array('asiakas_id, status', 'numerical', 'integerOnly'=>true),
-			array('otsikko', 'length', 'max'=>255),
+			array('otsikko, luoja', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, asiakas_id, otsikko, status', 'safe', 'on'=>'search'),

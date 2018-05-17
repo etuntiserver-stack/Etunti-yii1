@@ -1308,6 +1308,7 @@ public function actionLogin($domain)
 				$v = new EdicoViestinta;
 				$v->asiakas_id = $model->id;
 				$v->otsikko = $_POST['otsikko'];
+				$v->luoja = 'asiakas';
 				if( $v->save() ){
 					$vr = new EdicoViestintaRivit;
 					$vr->viestinta_id = $v->id;
@@ -1315,7 +1316,7 @@ public function actionLogin($domain)
 					$vr->teksti = $_POST['teksti'];
 					$vr->luoja = 'asiakas';
 					if( $vr->save() ){
-						$lahetys_status = '<div class="alert alert-success">Viestisi lähetetty.</div>';
+						$lahetys_status = '<div class="alert alert-success">Viestisi lähetetty. Paina <a href="viestinta.html">tästä</a> jotta palaa takaisiin.</div>';
 						$return = array('lahetys_status'=>$lahetys_status);
 						$this->_sendResponse(200, CJSON::encode($return));
 						exit;
