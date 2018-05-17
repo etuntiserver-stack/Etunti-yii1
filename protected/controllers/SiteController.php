@@ -1758,6 +1758,12 @@ $(document).ready(function(){
 				$this->render('error', $error);
 		}
 		*/
+		if( $error=Yii::app()->errorHandler->error and isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )){
+			if(Yii::app()->request->isAjaxRequest)
+				echo $error['message'];
+			else
+				$this->render('error', $error);
+		}
 		$this->renderPartial('error_custom');
 
 	}

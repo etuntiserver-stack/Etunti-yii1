@@ -1315,7 +1315,7 @@ public function actionLogin($domain)
 					$vr->teksti = $_POST['teksti'];
 					$vr->luoja = 'asiakas';
 					if( $vr->save() ){
-						$lahetys_status = 'ok';
+						$lahetys_status = '<div class="alert alert-success">Viestisi lähetetty.</div>';
 						$return = array('lahetys_status'=>$lahetys_status);
 						$this->_sendResponse(200, CJSON::encode($return));
 						exit;
@@ -1332,17 +1332,18 @@ public function actionLogin($domain)
 		   	$v = EdicoViestinta::model()->findAll(" asiakas_id='".$model->id."' ");
 			$lista = '<h2>Viestintä</h2>';
 			$lista .= '<br>
-			<fieldset id="lahetys_status">
+			<fieldset id="lahetys_lomake">
 			<legend><h4>Uusi viesti</h4></legend>
 			<p><input type="text" id="otsikko" class="form-control" placeholder="Otsikko.."></p>
 			<p><textarea id="teksti" class="form-control" placeholder="Teksti.."></textarea></p>
 			<p><button class="btn btn-success" id="laheta_viesti">Lähetä</button></p>
 			</fieldset>
+			<div id="lahetys_status"></div>
 			';
 			$lista .= '<br><div class="lista">';
 			foreach($v as $item) 
 			{
-				$lista .= '<div class="alert bg-warning text-center"><h2>'.end($item->id).'</div>';
+				$lista .= '<div class="alert bg-warning text-center"><h2>'.$item->id.'</div>';
 			}
 			$lista .= '</div>';
 

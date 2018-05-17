@@ -57,7 +57,7 @@ class EdicoViestintaRivit extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('viestinta_id, teksti, luoja', 'required'),
-			array('admin_id, asiakas_id', 'integerOnly'=>true),
+			array('admin_id, asiakas_id', 'numerical', 'integerOnly'=>true),
 			array('luoja', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

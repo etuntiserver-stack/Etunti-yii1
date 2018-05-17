@@ -5,12 +5,13 @@ $(document).ready(function(){
   {
 	var sendData = loginArr;
 	sendData['asiakasID'] = asiakasID;
-
+	console.log(sendData);
         $.ajax({
            url: url+'/viestinta?domain='+domain,
 	   type:'POST',
  	   data: sendData,
            success: function(data){
+        	//console.log(data);
 		var d = JSON.parse(data);
 		if(d['lista'])
 		{
@@ -51,7 +52,8 @@ $(document).ready(function(){
 		var d = JSON.parse(data);
 		if(d['lahetys_status'])
 		{
-			$('#lahetys_status').html(d['lahetys_status']);
+			$('#lahetys_lomake').hide(370);
+			$('#lahetys_status').html(d['lahetys_status']).show(370);
 		}
     	   },
     		error:function (xhr, ajaxOptions, thrownError){
