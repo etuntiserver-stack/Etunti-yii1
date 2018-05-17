@@ -6,8 +6,6 @@ $(document).ready(function(){
 	var sendData = loginArr;
 	sendData['asiakasID'] = asiakasID;
 
-	//console.log(sendData);
-
         $.ajax({
            url: url+'/viestinta?domain='+domain,
 	   type:'POST',
@@ -29,6 +27,39 @@ $(document).ready(function(){
    }
 
 
+    $(document).delegate('#laheta_viesti', 'click', function() {
+	var otsikko = $( "#otsikko" ).val();
+	var teksti = $( "#teksti" ).val();
+	if( otsikko.length == 0 ){
+		$( "#otsikko" ).css({"border" : "1px red solid"}).focus();
+		return false;
+	}
+	if( teksti.length == 0 ){
+		$( "#teksti" ).css({"border" : "1px red solid"}).focus();
+		return false;
+	}
+
+	sendData['uusi_viesti'] = true;
+	sendData['otsikko'] = otsikko;
+	sendData['teksti'] = teksti;
+
+        $.ajax({
+           url: url+'/viestinta?domain='+domain,
+	   type:'POST',
+ 	   data: sendData,
+           success: function(data){
+		var d = JSON.parse(data);
+		if(d['lahetys_status'])
+		{
+			$('#lahetys_status').html(d['lahetys_status']);
+		}
+    	   },
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+    	   }
+        });
+    });
+ 
 
     function reloadSkin()
     {

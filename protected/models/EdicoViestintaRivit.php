@@ -30,9 +30,10 @@ class EdicoViestintaRivit extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'viestinta_id' => 'int(11)',
                      'asiakas_id' => 'int(11)',
+                     'admin_id' => 'int(11)',
                      'teksti' => 'TEXT',
                      'luoja' => 'varchar(50)'
 		);
@@ -55,7 +56,8 @@ class EdicoViestintaRivit extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('teksti, luoja', 'required'),
+			array('viestinta_id, teksti, luoja', 'required'),
+			array('admin_id, asiakas_id', 'integerOnly'=>true),
 			array('luoja', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

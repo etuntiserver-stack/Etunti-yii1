@@ -1303,8 +1303,42 @@ public function actionLogin($domain)
 		   $model = Asiakkaat::model()->findByPk($_POST['asiakasID']);
 		   if(isset($model->id))
 		   {
+			// <-- Uusi viesti
+			if( isset($_POST['uusi_viesti']) ){
+				$v = new EdicoViestinta;
+				$v->asiakas_id = $model->id;
+				$v->otsikko = $_POST['otsikko'];
+				if( $v->save() ){
+					$vr = new EdicoViestintaRivit;
+					$vr->viestinta_id = $v->id;
+					$vr->asiakas_id = $model->id;
+					$vr->teksti = $_POST['teksti'];
+					$vr->luoja = 'asiakas';
+					if( $vr->save() ){
+						$lahetys_status = 'ok';
+						$return = array('lahetys_status'=>$lahetys_status);
+						$this->_sendResponse(200, CJSON::encode($return));
+						exit;
+					} else {
+						$this->_sendResponse(200, CJSON::encode($vr->getErrors()));
+						exit;
+					}
+				}
+				$this->_sendResponse(200, CJSON::encode('Error: Lähetys'));
+				exit;
+			}
+			// Uusi viesti -->
+
 		   	$v = EdicoViestinta::model()->findAll(" asiakas_id='".$model->id."' ");
 			$lista = '<h2>Viestintä</h2>';
+			$lista .= '<br>
+			<fieldset id="lahetys_status">
+			<legend><h4>Uusi viesti</h4></legend>
+			<p><input type="text" id="otsikko" class="form-control" placeholder="Otsikko.."></p>
+			<p><textarea id="teksti" class="form-control" placeholder="Teksti.."></textarea></p>
+			<p><button class="btn btn-success" id="laheta_viesti">Lähetä</button></p>
+			</fieldset>
+			';
 			$lista .= '<br><div class="lista">';
 			foreach($v as $item) 
 			{
