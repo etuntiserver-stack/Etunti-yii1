@@ -308,7 +308,7 @@ return array(
         array('dico/kayttoehdot', 'pattern'=>'dico/<model:\w+>/kayttoehdot', 'verb'=>'POST'),
         array('dico/omat', 'pattern'=>'dico/<model:\w+>/omat', 'verb'=>'POST'),
         array('dico/tilaus', 'pattern'=>'dico/<model:\w+>/tilaus', 'verb'=>'POST'),
-
+        array('dico/viestinta', 'pattern'=>'dico/<model:\w+>/viestinta', 'verb'=>'POST'),
 
 	//     DICO -->
 

@@ -1293,7 +1293,33 @@ public function actionLogin($domain)
 				exit;
 	}
 
+	public function actionViestinta($domain)
+	{
 
+		$return = '';
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
+		{
+
+		   $model = Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   if(isset($model->id))
+		   {
+		   	$v = EdicoViestinta::model()->findAll(" asiakas_id='".$model->id."' ");
+			$lista = '<h2>Viestintä</h2>';
+			$lista .= '<br><div class="lista">';
+			foreach($v as $item) 
+			{
+				$lista .= '<div class="alert bg-warning text-center"><h2>'.end($item->id).'</div>';
+			}
+			$lista .= '</div>';
+
+			$return = array('lista'=>$lista);
+			$this->_sendResponse(200, CJSON::encode($return));
+			exit;
+		   } // $model->id
+		}
+		$this->_sendResponse(200, CJSON::encode('Ei tuloksia'));
+		exit;
+	}
 
 	protected function valmistaTMP($domain, $liite, $ext)
 	{
