@@ -187,7 +187,7 @@ public $viesti;
 	{
 		$t = Asiakkaat::model()->findbypk($aid);
 		$a = FirmanTiedot::model()->findbypk(1);
-		$ApiKey = 'AIzaSyA2aq_bRsCU0ae591HBQZaeRaByhHz3dPM';
+		$ApiKey = 'AAAAdW_OCt8:APA91bHW3yItK76c9kcziRUWpFdgDH2VE8cnuaPK0OhD7Aa0KrxsL94mTKbe4MFQVX0MroDk0oT5Qy9XQSfDmjezyuOe0ToiHFUKM0l7dpdWy1zithlV_5NARTwLGJMRmsqc9bpjm4Ps';
 
 		if(!isset($t->gcm_reg_id) or empty($t->gcm_reg_id))
 		{
