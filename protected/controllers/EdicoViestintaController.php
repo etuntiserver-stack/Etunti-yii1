@@ -169,8 +169,20 @@ class EdicoViestintaController extends Controller
 			exit;
 		}
 
-       		$criteria = new CDbCriteria();
+		if(isset($_POST['vastaus']))
+		{
+			$vr = new EdicoViestintaRivit;
+			$vr->viestinta_id = $_POST['id'];
+			$vr->admin_id = Yii::app()->user->adminID;
+			$vr->teksti = $_POST['vastaus'];
+			$vr->luoja = 'admin';
+			if( $vr->save() ){
+				Yii::app()->user->setFlash('success', "Vastaus lähetetty.");
+				$this->redirect(array('index'));
+			}
+		}
 
+       		$criteria = new CDbCriteria();
 		$dataProvider=new CActiveDataProvider('EdicoViestinta', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false

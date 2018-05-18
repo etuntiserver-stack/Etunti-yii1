@@ -1345,14 +1345,15 @@ public function actionLogin($domain)
 			foreach($v as $item) 
 			{
 				$lista .= '<div class="well">';
-				$lista .= '<button class="pull-right btn btn-success" data-toggle="collapse" data-target="#ava_'.$item->id.'">Näytä viestit <i class="caret"></i></button>
-				<h4><center>'.$item->otsikko.'</center></h4>';
+				$lista .= '<button class="pull-right btn btn-success" data-toggle="collapse" data-target="#ava_'.$item->id.'">Näytä kaikki viestit <i class="caret"></i></button>
+				<h4><center>'.date("d.m.Y H:i", strtotime($item->time)).' - '.$item->otsikko.'</center></h4>';
+				$lista .= '<b>Viimeinen viesti:</b> '.max($item->rivit)->teksti;
 
-				$lista .= '<div id="ava_'.$item->id.'" class="collapse">';
+				$lista .= '<div id="ava_'.$item->id.'" class="collapse"><p>';
 				foreach($item->rivit as $rivi){
-					$lista .= '<p><b>'.date("d.m.Y H:i", strtotime($item->time)).'</b>: '.$rivi->teksti.'</p>';
+					$lista .= '<p><b>'.date("d.m.Y H:i", strtotime($rivi->time)).'</b>: '.$rivi->teksti.'</p>';
 				}
-				$lista .= '</div>';
+				$lista .= '</p></div>';
 
 				$lista .= '</div>';
 			}
