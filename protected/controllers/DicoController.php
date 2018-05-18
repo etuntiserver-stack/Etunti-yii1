@@ -1344,7 +1344,17 @@ public function actionLogin($domain)
 			$lista .= '<br><div class="lista">';
 			foreach($v as $item) 
 			{
-				$lista .= '<div class="alert bg-warning text-center"><h2>'.$item->id.'</div>';
+				$lista .= '<div class="well">';
+				$lista .= '<button class="pull-right btn btn-success" data-toggle="collapse" data-target="#ava_'.$item->id.'">Näytä viestit <i class="caret"></i></button>
+				<h4><center>'.$item->otsikko.'</center></h4>';
+
+				$lista .= '<div id="ava_'.$item->id.'" class="collapse">';
+				foreach($item->rivit as $rivi){
+					$lista .= '<p><b>'.date("d.m.Y H:i", strtotime($item->time)).'</b>: '.$rivi->teksti.'</p>';
+				}
+				$lista .= '</div>';
+
+				$lista .= '</div>';
 			}
 			$lista .= '</div>';
 

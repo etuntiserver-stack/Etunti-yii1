@@ -74,6 +74,7 @@ class EdicoViestinta extends DB2ActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+		        'rivit' => array(self::HAS_MANY, 'EdicoViestintaRivit', array('viestinta_id'=>'id')),
 		);
 	}
 

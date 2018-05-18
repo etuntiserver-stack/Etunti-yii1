@@ -19,6 +19,22 @@
 		<?php echo $asiakas; ?>
 	</td>
 	<td>
+		<?=$data->otsikko?>
+	</td>
+	<td>
+		<?php 
+		$lista = '<button class="pull-right btn btn-success" data-toggle="collapse" data-target="#ava_'.$data->id.'">
+				Näytä viestit <i class="caret"></i>
+		</button>';
+		$lista .= '<div id="ava_'.$data->id.'" class="collapse">';
+		foreach($data->rivit as $rivi){
+			$lista .= '<p><b>'.date("d.m.Y H:i", strtotime($rivi->time)).'</b>: '.$rivi->teksti.'</p>';
+		}
+		$lista .= '</div>';
+		?>
+		<?=$lista?>
+	</td>
+	<td>
 		<?php echo CHtml::link('<i class="fa fa-trash-o" aria-hidden="true" style="font-size: 110%"></i>', 
 				array('delete', 'id'=>$data->id), 
 				array(
