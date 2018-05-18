@@ -2,7 +2,7 @@
 /* @var $this KohteetController */
 /* @var $dataProvider CActiveDataProvider */
 
-Domainit::sendGCMeDico(9, Yii::t('main', 'Uusi viesti'), 'testi teksti', null);
+//Domainit::sendGCMeDico(9, Yii::t('main', 'Uusi viesti'), 'testi teksti', null);
 ?>
 
 
