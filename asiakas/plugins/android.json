@@ -16,6 +16,9 @@
     "cordova-plugin-dialogs": {
       "PACKAGE_NAME": "fi.etunti.dico"
     },
+    "cordova-plugin-fcm": {
+      "PACKAGE_NAME": "fi.etunti.dico"
+    },
     "cordova-plugin-file": {
       "PACKAGE_NAME": "fi.etunti.dico"
     },
@@ -25,10 +28,10 @@
     "cordova-plugin-file-transfer": {
       "PACKAGE_NAME": "fi.etunti.dico"
     },
-    "cordova-plugin-whitelist": {
+    "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "fi.etunti.dico"
     },
-    "cordova-plugin-inappbrowser": {
+    "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "fi.etunti.dico"
     }
   },

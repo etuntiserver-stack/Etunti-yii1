@@ -42,6 +42,6 @@
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.0" />
     <plugin name="cordova-plugin-file-opener2" spec="^2.0.19" />
     <plugin name="cordova-plugin-inappbrowser" spec="^1.7.2" />
-    <engine name="android" spec="^6.4.0" />
     <plugin name="cordova-plugin-fcm" spec="^2.1.2" />
+    <engine name="android" spec="^6.4.0" />
 </widget>
