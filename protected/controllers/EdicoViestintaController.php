@@ -184,6 +184,8 @@ class EdicoViestintaController extends Controller
 		}
 
        		$criteria = new CDbCriteria();
+       		$criteria->order = " id DESC ";
+
 		$dataProvider=new CActiveDataProvider('EdicoViestinta', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false

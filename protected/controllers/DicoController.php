@@ -1337,6 +1337,30 @@ public function actionLogin($domain)
 			}
 			// Uusi viesti -->
 
+
+			// <-- Vastaus viesti
+			if( isset($_POST['vastaus']) ){
+
+					$vr = new EdicoViestintaRivit;
+					$vr->viestinta_id = $_POST['id'];
+					$vr->asiakas_id = $model->id;
+					$vr->teksti = $_POST['vastaus'];
+					$vr->luoja = 'asiakas';
+					if( $vr->save() ){
+						$lahetys_status = '<div class="alert alert-success">Viestisi lähetetty. Paina <a href="viestinta.html">tästä</a> jotta palaa takaisiin.</div>';
+						$return = array('lahetys_status'=>$lahetys_status);
+						$this->_sendResponse(200, CJSON::encode($return));
+						exit;
+					} else {
+						$this->_sendResponse(200, CJSON::encode($vr->getErrors()));
+						exit;
+					}
+
+				$this->_sendResponse(200, CJSON::encode('Error: Lähetys'));
+				exit;
+			}
+			// Vastaus viesti -->
+
 		   	$v = EdicoViestinta::model()->findAll(" asiakas_id='".$model->id."' ");
 			$lista = '<h2>Viestintä</h2>';
 			$lista .= '<br>
@@ -1360,9 +1384,15 @@ public function actionLogin($domain)
 				foreach($item->rivit as $rivi){
 					$lista .= '<p><b>'.date("d.m.Y H:i", strtotime($rivi->time)).'</b>: '.$rivi->teksti.'</p>';
 				}
-				$lista .= '</p></div>';
-
 				$lista .= '</div>';
+				$lista .= '<br><br>
+				<div class="vastaus">
+					<input type="hidden" id="id" value="'.$item->id.'">
+					<textarea id="vastaus" class="form-control" placeholder="Vasta tähään keskusteluun.."></textarea>
+					<button class="btn btn-primary btn-block myBgColors laheta_vastaus">Lähetä</button>
+				</div>';
+
+				$lista .= '</p></div>';
 			}
 			$lista .= '</div>';
 

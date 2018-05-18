@@ -63,6 +63,35 @@ $(document).ready(function(){
     });
  
 
+    $(document).delegate('.laheta_vastaus', 'click', function() {
+	var id = $( this ).closest('.vastaus').find('#id').val();
+	var vastaus = $( this ).closest('.vastaus').find('#vastaus').val();
+	if( vastaus.length == 0 ){
+		$( "#vastaus" ).css({"border" : "1px red solid"}).focus();
+		return false;
+	}
+	sendData['id'] = id;
+	sendData['vastaus'] = vastaus;
+
+        $.ajax({
+           url: url+'/viestinta?domain='+domain,
+	   type:'POST',
+ 	   data: sendData,
+           success: function(data){
+		var d = JSON.parse(data);
+		if(d['lahetys_status'])
+		{
+			$('#lahetys_lomake').hide(370);
+			$('#lahetys_status').html(d['lahetys_status']).show(370);
+		}
+    	   },
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+    	   }
+        });
+    });
+ 
+
     function reloadSkin()
     {
 	if( localStorage.getItem('headerSkin') ){

@@ -2746,4 +2746,23 @@ $(document).ready(function(){
 	   	return $arr;
 	}
 
+	public function checkEdicoViestit()
+	{
+		if( !$this->isEtuntiAdmin() ){ return false; }
+
+		$criteria = new CDbCriteria();
+		$criteria->order = " id DESC";
+		$criteria->condition = "
+			status=1
+		";
+		$listData = EdicoViestinta::model()->findAll($criteria);
+		foreach($listData as $item){
+		    if( isset(max($item->rivit)->luoja) and max($item->rivit)->luoja == 'asiakas'){
+			//echo max($item->rivit)->luoja;
+		   	return true;
+		    }
+		}
+		return false;
+	}
+
 }

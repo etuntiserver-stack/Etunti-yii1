@@ -8,7 +8,7 @@
     var loginFull = [];
 
 
-    var developer = false; // true false kun pelaat localhostissa
+    var developer = true; // true false kun pelaat localhostissa
 
     if(localStorage.getItem('loginOK'))
     {
@@ -99,7 +99,7 @@
     function onServerReady2() {
 
 
-	if(device.platform == 'Android'){
+	//if(device.platform == 'Android'){
 	// <-- GET FCM Token
 	FCMPlugin.getToken(
 	  function(token){
@@ -164,7 +164,7 @@
 	  }
 	);
 	//    GET FCM message -->
-	}
+	//} // android
     }
     // On device Reay -->
 
