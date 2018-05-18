@@ -177,6 +177,7 @@ class EdicoViestintaController extends Controller
 			$vr->teksti = $_POST['vastaus'];
 			$vr->luoja = 'admin';
 			if( $vr->save() ){
+				Domainit::sendGCMeDico($_POST['asiakas_id'], Yii::t('main', 'Uusi viesti'), $vr->teksti, null);
 				Yii::app()->user->setFlash('success', "Vastaus lähetetty.");
 				$this->redirect(array('index'));
 			}

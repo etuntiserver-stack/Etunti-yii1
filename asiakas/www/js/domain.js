@@ -79,7 +79,6 @@
     }
 
 
-
     // <-- On device Ready
     document.addEventListener("deviceready", onServerReady1, false);
     function onServerReady1() {
@@ -93,6 +92,83 @@
 
     }
     // On device Ready -->
+
+
+    // <-- On device Reay
+    document.addEventListener("deviceready", onServerReady2, false);
+    function onServerReady2() {
+
+
+	if(device.platform == 'Android'){
+	// <-- GET FCM Token
+	FCMPlugin.getToken(
+	  function(token){
+
+        	$.ajax({
+	           url: url+'/viestinta?domain='+domain,
+		   type:'POST',
+	 	   data: { asiakasID : asiakasID, token : token },
+	           success: function(data){
+			console.log(data);
+	    	},
+	    		error:function (xhr, ajaxOptions, thrownError){
+	        	console.log(xhr.responseText);
+	    	}
+	        });
+
+	  },
+	  function(err){
+	    console.log('error retrieving token: ' + err);
+	  }
+	);
+	//    GET FCM Token -->
+
+
+	// <-- GET FCM message
+	FCMPlugin.onNotification(
+	  function(data){
+	    if(data.wasTapped){
+	      //Notification was received on device tray and tapped by the user.
+	        //alert( JSON.stringify(data) );
+		//data = JSON.stringify(data);
+
+		function alertDismissed() {
+		    // do something
+		}
+		navigator.notification.alert(
+		    data['Viesti']+' \nOlen katsonut',
+		    alertDismissed,
+		    'Viesti',
+		    'OK'
+		);
+
+	    }else{
+	      //Notification was received in foreground. Maybe the user needs to be notified.
+		//data = JSON.stringify(data);
+		function alertDismissed() {
+		    // do something
+		}
+		navigator.notification.alert(
+		    data['Viesti'],
+		    alertDismissed,
+		    'Viesti',
+		    'OK'
+		);
+	    }
+	  },
+	  function(msg){
+	    console.log('onNotification callback successfully registered: ' + msg);
+	  },
+	  function(err){
+	    console.log('Error registering onNotification callback: ' + err);
+	  }
+	);
+	//    GET FCM message -->
+	}
+    }
+    // On device Reay -->
+
+
 
     function exitFromApp()
     {

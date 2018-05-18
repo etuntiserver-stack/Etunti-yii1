@@ -43,6 +43,7 @@
 	<td>
 		<form action="index" method="POST">
 		<input type="hidden" name="id" value="<?=$data->id?>">
+		<input type="hidden" name="asiakas_id" value="<?=$data->asiakas_id?>">
 		<textarea name="vastaus" class="form-control" placeholder="Vasta tähään keskusteluun.."></textarea>
 		<button type="submit" class="btn btn-primary btn-block myBgColors">Lähetä</button>
 		</form>

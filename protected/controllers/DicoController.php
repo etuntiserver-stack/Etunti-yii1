@@ -1296,6 +1296,13 @@ public function actionLogin($domain)
 	public function actionViestinta($domain)
 	{
 
+		if(isset($_POST['token']) and !empty($_POST['token']) and isset($_POST['asiakasID']) and !empty($_POST['asiakasID']))
+		{
+			Asiakkaat::model()->updateByPk($_POST['asiakasID'], array('gcm_reg_id' => $_POST['token']));
+			$this->_sendResponse(200, CJSON::encode('token update ok'));
+			exit;
+		}
+
 		$return = '';
 		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{

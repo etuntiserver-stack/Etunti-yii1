@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "504386947807",
+    "firebase_url": "https://edico-deea3.firebaseio.com",
+    "project_id": "edico-deea3",
+    "storage_bucket": "edico-deea3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:504386947807:android:7f53b06c79e5fa31",
+        "android_client_info": {
+          "package_name": "fi.etunti.dico"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "504386947807-r2iu768vin4si8op6hmfosn64ll7u5r8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrbOZsI6AjfOec90OS-WsuRMQOBGJ9uhI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

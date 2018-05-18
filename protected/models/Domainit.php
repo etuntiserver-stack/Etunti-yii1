@@ -183,6 +183,52 @@ public $viesti;
 		//exit;
 	}
 
+	public static function sendGCMeDico($aid, $subject, $message, $sound) 
+	{
+		$t = Asiakkaat::model()->findbypk($aid);
+		$a = FirmanTiedot::model()->findbypk(1);
+		$ApiKey = 'AAAANdUAxyU:APA91bFuKiRWqW-EyzEHr_JuPfnEfJRf6vx8tuxjt8Wn1E3B_OOH9CYENG5jEb7yHcDfpVI3d8KjTuTuOCW6YmahViMivFzGDy8shvhKW5cMKWP1Lu28ajDQQte9Ue6ogqYQKuowskyGzptOX69WEiZnfl8N1lQB1g';
+
+		if(!isset($t->gcm_reg_id) or empty($t->gcm_reg_id))
+		{
+			//echo 'Push nitification error';
+			return false;
+		}
+	
+		$json_data = '{ 
+			"data": { 
+			  "Viesti": "'.$message.'"
+	                },
+	                "notification": {
+	                  "title": "'.$a->tyonantaja.': '.$subject.'",
+	                  "body": "'.$message.'",
+	                  "sound": "default",
+	                  "click_action": "FCM_PLUGIN_ACTIVITY",
+	                  "icon": "icon_name"
+	                },
+	                "to": "'.$t->gcm_reg_id.'",
+	                "priority": "high"
+	              }';
+
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
+                                            'Content-Type: application/json',                                                                                
+                                            'Content-Length: '.strlen($json_data),
+                                            'Authorization:key='.$ApiKey  
+                                          ));           
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		$output = curl_exec($ch);
+		curl_close($ch);
+		echo $output;
+		exit;
+	}
+
 	/**
 	 * @return array validation rules for model attributes.
 	 */

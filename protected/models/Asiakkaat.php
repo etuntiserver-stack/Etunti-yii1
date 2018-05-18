@@ -98,7 +98,7 @@ class Asiakkaat extends DB2ActiveRecord
 		     'verot' => 'varchar(100)',
                      'hinta_sis_alv' => 'float',
 		     'tyoryhma' => 'int(11)',
-
+                     'gcm_reg_id' => 'varchar(500) '
                      //'vinkki_tunnit' => 'varchar(10)',
                      //'vinkki_prosentti' => 'varchar(10)',
 
@@ -131,7 +131,7 @@ class Asiakkaat extends DB2ActiveRecord
 			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma, sahkopostilaskuosoite, token', 'length', 'max'=>255),
 			array('maksuehto, viivastyskorko, hinta, hinta_sis_alv', 'length', 'max'=>20),
 			array('asiakasnumero, ovt_tunnus, valittajan_tunnus, hinta_tyyppi, verot', 'length', 'max'=>100),
-			array('alennuskoodit', 'safe'),
+			array('alennuskoodit, gcm_reg_id', 'safe'),
 			array('sahkoposti','unique', 'message'=>'Tämä sähköposti on jo rekisteröity asiakkaalle.'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
