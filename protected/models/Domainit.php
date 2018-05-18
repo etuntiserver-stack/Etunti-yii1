@@ -187,8 +187,8 @@ public $viesti;
 	{
 		$t = Asiakkaat::model()->findbypk($aid);
 		$a = FirmanTiedot::model()->findbypk(1);
-		$ApiKey = 'AAAANdUAxyU:APA91bFuKiRWqW-EyzEHr_JuPfnEfJRf6vx8tuxjt8Wn1E3B_OOH9CYENG5jEb7yHcDfpVI3d8KjTuTuOCW6YmahViMivFzGDy8shvhKW5cMKWP1Lu28ajDQQte9Ue6ogqYQKuowskyGzptOX69WEiZnfl8N1lQB1g';
-echo $t->gcm_reg_id;
+		$ApiKey = 'AIzaSyA2aq_bRsCU0ae591HBQZaeRaByhHz3dPM';
+
 		if(!isset($t->gcm_reg_id) or empty($t->gcm_reg_id))
 		{
 			//echo 'Push nitification error';
