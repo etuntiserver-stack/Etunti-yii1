@@ -30,15 +30,15 @@ $nimi = '';
 	</td>
 
 	<td>
-	<?php echo number_format($data->yhteensa_total_veroton, 2, ',', ' '); ?>
+	<?php echo number_format((float)$data->yhteensa_total_veroton, 2, ',', ' '); ?>
 	</td>
 
 	<td>
-	<?php echo number_format($data->yhteensa_total_verot, 2, ',', ' '); ?>
+	<?php echo number_format((float)$data->yhteensa_total_verot, 2, ',', ' '); ?>
 	</td>
 
 	<td>
-	<?php echo number_format($data->yhteensa_total, 2, ',', ' '); ?>
+	<?php echo number_format((float)$data->yhteensa_total, 2, ',', ' '); ?>
 	</td>
 
 
