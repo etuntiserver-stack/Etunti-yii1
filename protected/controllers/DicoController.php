@@ -1398,7 +1398,7 @@ public function actionLogin($domain)
 			foreach($v as $item) 
 			{
 				$lista .= '<div class="well">';
-				$lista .= '<h4><center>'.date("d.m.Y H:i", strtotime($item->time)).' - '.$item->otsikko.'</center></h4>';
+				$lista .= '<h4>'.date("d.m.Y H:i", strtotime($item->time)).' - '.$item->otsikko.'</h4>';
 				$lista .= '<p><b>Viimeinen viesti:</b> '.max($item->rivit)->teksti.'</p>';
 
 				$lista .= '<button class="btn btn-success btn-block" data-toggle="collapse" data-target="#ava_'.$item->id.'">Näytä kaikki viestit <i class="caret"></i></button>';
