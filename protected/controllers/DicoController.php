@@ -190,7 +190,11 @@ public function actionLogin($domain)
 			$tar=CrmTarjoukset::model()->find($criteria);
 			if(isset($tar->id))
 			{
-				$return['uusi_tarjous'] = $tar->id;
+				$f = "tiedostot/tarjoukset/".$domain."/".$tar->liite.".pdf";
+   				if(file_exists(Yii::app()->basePath."/../".$f))
+   				{
+					$return['uusi_tarjous'] = $tar->id;
+				}
 			}
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 
@@ -202,9 +206,9 @@ public function actionLogin($domain)
 			{
 				$return['uusi_sopimus'] = $sop->id;
 			}
-			if( $this->checkEdicoViestit() )
+			if( $this->checkEdicoViestit($model->id) )
 			{
-				$return['uusi_viesti'] = $this->checkEdicoViestit();
+				$return['uusi_viesti'] = $this->checkEdicoViestit($model->id);
 			}
 			$this->_sendResponse(200, CJSON::encode($return));
 			exit;
@@ -215,20 +219,16 @@ public function actionLogin($domain)
 		exit;
 	}
 
-	public function checkEdicoViestit()
+	public function checkEdicoViestit($asiakas_id)
 	{
 		$criteria = new CDbCriteria();
 		$criteria->order = " id DESC";
 		$criteria->condition = "
-			status=1
+			asiakas_id='".$asiakas_id."'
+			AND katsottu=0
 		";
-		$listData = EdicoViestinta::model()->findAll($criteria);
-		foreach($listData as $item){
-		    if( isset(max($item->rivit)->luoja) and max($item->rivit)->luoja == 'admin'){
-			//echo max($item->rivit)->luoja;
-		   	return max($item->rivit)->id;
-		    }
-		}
+		$listData = EdicoViestintaRivit::model()->find($criteria);
+		if( isset($listData->id) ){ return $listData->id; }
 		return false;
 	}
 
@@ -1379,6 +1379,10 @@ public function actionLogin($domain)
 			}
 			// Vastaus viesti -->
 
+			if( isset($_POST['katsottu_id']) ){
+				EdicoViestintaRivit::model()->updateByPk($_POST['katsottu_id'], array('katsottu' => 1));
+			}
+
 		   	$v = EdicoViestinta::model()->findAll(" asiakas_id='".$model->id."' ");
 			$lista = '<h2>Viestintä</h2>';
 			$lista .= '<br>
@@ -1400,7 +1404,7 @@ public function actionLogin($domain)
 
 				$lista .= '<div id="ava_'.$item->id.'" class="collapse"><p>';
 				foreach($item->rivit as $rivi){
-					$lista .= '<p><b>'.date("d.m.Y H:i", strtotime($rivi->time)).'</b>: '.$rivi->teksti.'</p>';
+					$lista .= '<p id="rivi_'.$rivi->id.'"><b>'.date("d.m.Y H:i", strtotime($rivi->time)).'</b>: '.$rivi->teksti.'</p>';
 				}
 				$lista .= '</div>';
 				$lista .= '<br><br>

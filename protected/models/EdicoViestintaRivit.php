@@ -35,6 +35,7 @@ class EdicoViestintaRivit extends DB2ActiveRecord
                      'asiakas_id' => 'int(11)',
                      'admin_id' => 'int(11)',
                      'teksti' => 'TEXT',
+                     'katsottu' => 'int(1) DEFAULT 0',
                      'luoja' => 'varchar(50)'
 		);
 

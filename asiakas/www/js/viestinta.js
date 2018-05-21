@@ -16,9 +16,9 @@ function getUrlVars() {
 	sendData['asiakasID'] = asiakasID;
 
 	var katsottu_id = '';
-	if(getUrlVars()["id"])
-		katsottu_id = getUrlVars()["id"];
-alert(katsottu_id)
+	if(getUrlVars()["id"]){
+		sendData['katsottu_id'] = getUrlVars()["id"];
+	}
 
 	console.log(sendData);
         $.ajax({
@@ -31,6 +31,13 @@ alert(katsottu_id)
 		if(d['lista'])
 		{
 			$('#resultLaatiko').html(d['lista']);
+			if(getUrlVars()["id"]){
+				if( $( "#rivi_" + getUrlVars()["id"] ).text().length > 0 ){
+					$( "#rivi_" + getUrlVars()["id"] ).addClass('alert alert-warning');
+					$( "#rivi_" + getUrlVars()["id"] ).closest('.collapse').addClass('in');
+				}
+			}
+
 			reloadSkin();
 			reloadDatepicker();
 		}

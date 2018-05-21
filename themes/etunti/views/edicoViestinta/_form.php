@@ -18,6 +18,7 @@
 
 
 	<?php echo $form->errorSummary($model); ?>
+	<?php echo $form->hiddenField($model, 'luoja', array('value' => 'admin')); ?>
 
 <div class="row">
   <div class="col-sm-4">

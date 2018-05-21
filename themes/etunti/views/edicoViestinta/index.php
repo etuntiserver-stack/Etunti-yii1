@@ -95,6 +95,7 @@
   <tr>
   <th>#</th>
   <th><?php echo Yii::t('main', 'Keskustelun luonti'); ?></th>
+  <th><?php echo Yii::t('main', 'Luoja'); ?></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Otsikko'); ?></th>
   <th><?php echo Yii::t('main', 'Viimeinen viesti'); ?></th>

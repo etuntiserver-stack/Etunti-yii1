@@ -19,6 +19,9 @@
 		<?php echo date("d.m.Y H:i", strtotime($data->time)); ?>
 	</td>
 	<td>
+		<?php echo $data->luoja; ?>
+	</td>
+	<td>
 		<?php echo $asiakas; ?>
 	</td>
 	<td>
