@@ -109,8 +109,17 @@ class EdicoViestintaController extends Controller
 		if(isset($_POST['EdicoViestinta']))
 		{
 			$model->attributes=$_POST['EdicoViestinta'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				$vr = new EdicoViestintaRivit;
+				$vr->viestinta_id = $model->id;
+				$vr->asiakas_id = $model->asiakas_id;
+				$vr->teksti = $_POST['EdicoViestinta']['teksti'];
+				$vr->luoja = 'admin';
+				if( $vr->save() ){
+					Yii::app()->user->setFlash('success', "Viesti lähetetty.");
+					$this->redirect(array('index'));
+				}
+			}
 		}
 
 		$this->render('create',array(
@@ -123,6 +132,7 @@ class EdicoViestintaController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
+/*
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
@@ -141,7 +151,7 @@ class EdicoViestintaController extends Controller
 			'model'=>$model,
 		));
 	}
-
+*/
 	/**
 	 * Deletes a particular model.
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.

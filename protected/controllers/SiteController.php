@@ -2757,7 +2757,7 @@ $(document).ready(function(){
 		";
 		$listData = EdicoViestinta::model()->findAll($criteria);
 		foreach($listData as $item){
-		    if( isset(max($item->rivit)->luoja) and max($item->rivit)->luoja == 'asiakas'){
+		    if( count($item->rivit) > 0 and isset(max($item->rivit)->luoja) and max($item->rivit)->luoja == 'asiakas'){
 			//echo max($item->rivit)->luoja;
 		   	return true;
 		    }

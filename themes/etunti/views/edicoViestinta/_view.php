@@ -25,7 +25,7 @@
 		<?=$data->otsikko?>
 	</td>
 	<td>
-		<?=max($data->rivit)->teksti?>
+		<?php if( count($data->rivit) > 0 and isset(max($data->rivit)->teksti) ){ echo max($data->rivit)->teksti; } ?>
 	</td>
 	<td>
 		<?php 

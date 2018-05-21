@@ -192,7 +192,6 @@ public function actionLogin($domain)
 			{
 				$return['uusi_tarjous'] = $tar->id;
 			}
-
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 
 				asiakas_id='".$model->id."' 
@@ -203,7 +202,10 @@ public function actionLogin($domain)
 			{
 				$return['uusi_sopimus'] = $sop->id;
 			}
-
+			if( $this->checkEdicoViestit() )
+			{
+				$return['uusi_viesti'] = $this->checkEdicoViestit();
+			}
 			$this->_sendResponse(200, CJSON::encode($return));
 			exit;
 		   }
@@ -213,6 +215,22 @@ public function actionLogin($domain)
 		exit;
 	}
 
+	public function checkEdicoViestit()
+	{
+		$criteria = new CDbCriteria();
+		$criteria->order = " id DESC";
+		$criteria->condition = "
+			status=1
+		";
+		$listData = EdicoViestinta::model()->findAll($criteria);
+		foreach($listData as $item){
+		    if( isset(max($item->rivit)->luoja) and max($item->rivit)->luoja == 'admin'){
+			//echo max($item->rivit)->luoja;
+		   	return max($item->rivit)->id;
+		    }
+		}
+		return false;
+	}
 
 	protected function dateDifference($date_1 , $date_2 , $differenceFormat = '%a' )
 	{

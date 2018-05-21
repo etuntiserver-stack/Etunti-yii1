@@ -12,6 +12,9 @@
  */
 class EdicoViestinta extends DB2ActiveRecord
 {
+
+	public $teksti;
+
 	/**
 	 * @return string the associated database table name
 	 */

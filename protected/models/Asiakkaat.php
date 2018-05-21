@@ -195,6 +195,17 @@ class Asiakkaat extends DB2ActiveRecord
 		);
 	}
 
+        public function getFullname(){
+		$return = '';
+		if( !empty($this->yrityksen_nimi) and !empty($this->tyyppi) and $this->tyyppi == 'yritys' ){
+			$return = $this->yrityksen_nimi;
+		}
+		if( !empty($this->yhteyshenkilo) and !empty($this->tyyppi) and $this->tyyppi == 'henkilo' ){
+			$return = $this->yhteyshenkilo;
+		}
+                return $return;
+        }
+
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.

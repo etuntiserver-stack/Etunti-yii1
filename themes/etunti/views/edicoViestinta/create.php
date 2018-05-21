@@ -1,18 +1,28 @@
 <?php
-/* @var $this EdicoViestintaController */
-/* @var $model EdicoViestinta */
 
-$this->breadcrumbs=array(
-	'Edico Viestintas'=>array('index'),
-	'Create',
-);
-
-$this->menu=array(
-	array('label'=>'List EdicoViestinta', 'url'=>array('index')),
-	array('label'=>'Manage EdicoViestinta', 'url'=>array('admin')),
-);
 ?>
 
-<h1>Create EdicoViestinta</h1>
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
 
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+	   <?php     
+		$site = Yii::app()->createController('Site');
+		$site[0]->oikeudet($model->id,'noDelete');
+	   ?>
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main', 'Luo uusi viesti'); ?> </h2>
+
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+                 </div>
+                </div>
+              </div>
+            </div>
+
+        <!-- loppu: .tray-center -->
+        </div>
+
+

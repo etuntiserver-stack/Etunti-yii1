@@ -486,6 +486,13 @@
 		                '<h4 class="text-muted-new-tapahtumat"><i class="fa fa-caret-right" aria-hidden="true"></i> Olet saanut uuden sopimuksen.</h4>' +
 			   '</a>';
 		}
+		if(d['uusi_viesti'])
+		{
+			body += '' +
+			   '<a href="viestinta.html?id='+d['uusi_viesti']+'" class="link">' +
+		                '<h4 class="text-muted-new-tapahtumat"><i class="fa fa-caret-right" aria-hidden="true"></i> Olet saanut uusi viesti.</h4>' +
+			   '</a>';
+		}
 		body += '' +
 		              '</div>' +
 		            '</div>' +

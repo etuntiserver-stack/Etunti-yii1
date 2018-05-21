@@ -1,10 +1,25 @@
 $(document).ready(function(){
 
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+  }
+
 
   if(localStorage.getItem('loginOK'))
   {
 	var sendData = loginArr;
 	sendData['asiakasID'] = asiakasID;
+
+	var katsottu_id = '';
+	if(getUrlVars()["id"])
+		katsottu_id = getUrlVars()["id"];
+alert(katsottu_id)
+
 	console.log(sendData);
         $.ajax({
            url: url+'/viestinta?domain='+domain,
