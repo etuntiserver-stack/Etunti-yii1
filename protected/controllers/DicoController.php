@@ -1398,9 +1398,11 @@ public function actionLogin($domain)
 			foreach($v as $item) 
 			{
 				$lista .= '<div class="well">';
-				$lista .= '<button class="pull-right btn btn-success" data-toggle="collapse" data-target="#ava_'.$item->id.'">Näytä kaikki viestit <i class="caret"></i></button>
-				<h4><center>'.date("d.m.Y H:i", strtotime($item->time)).' - '.$item->otsikko.'</center></h4>';
-				$lista .= '<b>Viimeinen viesti:</b> '.max($item->rivit)->teksti;
+				$lista .= '<h4><center>'.date("d.m.Y H:i", strtotime($item->time)).' - '.$item->otsikko.'</center></h4>';
+				$lista .= '<p><b>Viimeinen viesti:</b> '.max($item->rivit)->teksti.'</p>';
+
+				$lista .= '<button class="btn btn-success btn-block" data-toggle="collapse" data-target="#ava_'.$item->id.'">Näytä kaikki viestit <i class="caret"></i></button>';
+
 
 				$lista .= '<div id="ava_'.$item->id.'" class="collapse"><p>';
 				foreach($item->rivit as $rivi){

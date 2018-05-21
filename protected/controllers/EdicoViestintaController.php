@@ -184,6 +184,7 @@ class EdicoViestintaController extends Controller
 		{
 			$vr = new EdicoViestintaRivit;
 			$vr->viestinta_id = $_POST['id'];
+			$vr->asiakas_id = $_POST['asiakas_id'];
 			$vr->admin_id = Yii::app()->user->adminID;
 			$vr->teksti = $_POST['vastaus'];
 			$vr->luoja = 'admin';

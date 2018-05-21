@@ -35,6 +35,7 @@ function getUrlVars() {
 				if( $( "#rivi_" + getUrlVars()["id"] ).text().length > 0 ){
 					$( "#rivi_" + getUrlVars()["id"] ).addClass('alert alert-warning');
 					$( "#rivi_" + getUrlVars()["id"] ).closest('.collapse').addClass('in');
+					$("html, body").animate({scrollTop: $("#rivi_" + getUrlVars()["id"]).offset().top }, 500);
 				}
 			}
 
