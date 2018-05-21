@@ -1401,7 +1401,7 @@ public function actionLogin($domain)
 				$lista .= '<h4>'.date("d.m.Y H:i", strtotime($item->time)).' - '.$item->otsikko.'</h4>';
 				$lista .= '<p><b>Viimeinen viesti:</b> '.max($item->rivit)->teksti.'</p>';
 
-				$lista .= '<button class="btn btn-success btn-block" data-toggle="collapse" data-target="#ava_'.$item->id.'">Näytä kaikki viestit <i class="caret"></i></button>';
+				$lista .= '<button class="btn btn-default btn-block" data-toggle="collapse" data-target="#ava_'.$item->id.'">Näytä kaikki viestit <i class="caret"></i></button>';
 
 
 				$lista .= '<div id="ava_'.$item->id.'" class="collapse"><p>';
@@ -1413,7 +1413,7 @@ public function actionLogin($domain)
 				<div class="vastaus">
 					<input type="hidden" id="id" value="'.$item->id.'">
 					<textarea id="vastaus" class="form-control" placeholder="Vasta tähään keskusteluun.."></textarea>
-					<button class="btn btn-primary btn-block myBgColors laheta_vastaus">Lähetä</button>
+					<button class="btn btn-success btn-block laheta_vastaus">Lähetä</button>
 				</div>';
 
 				$lista .= '</p></div>';
