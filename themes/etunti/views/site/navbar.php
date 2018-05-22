@@ -1196,16 +1196,16 @@ if($site[0]->checkEdicoViestit()){ $bell = '<i class="fa fa-bell text-danger"></
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Vinkit'); ?></a>
               </li>
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kupongit/index">
-                  <span class="fa fa-map"></span> <?php echo Yii::t('main', 'Alennuskoodit'); ?></a>
-              </li>
-              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/palautteet/index">
                   <span class="fa fa-map"></span> <?php echo Yii::t('main', 'Palautteet'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/edicoViestinta/index">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'eDico Viestintä'); ?> <?=$bell?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/kayttajat">
+                  <span class="fa fa-user"></span> <?php echo Yii::t('main', 'Käyttäjät'); ?></a>
               </li>
             </ul>
           </li>
