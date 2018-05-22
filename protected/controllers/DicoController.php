@@ -1397,7 +1397,7 @@ public function actionLogin($domain)
 			$lista .= '<br><div class="lista">';
 			foreach($v as $item) 
 			{
-				$lista .= '<div class="well">';
+				$lista .= '<div class="well" '.(($item->status == 99)? 'style="border: 2px #fec121 solid"' : '').'>';
 				$lista .= '<h4>'.date("d.m.Y H:i", strtotime($item->time)).' - '.$item->otsikko.'</h4>';
 				$lista .= '<p><b>Viimeinen viesti:</b> '.max($item->rivit)->teksti.'</p>';
 
