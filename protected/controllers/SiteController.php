@@ -133,7 +133,7 @@ class SiteController extends Controller
 
 	public function actionSite_error()
 	{
-		die('Error: virhe');
+		$this->renderPartial('error_custom');
 	}
 
 	public function actionOpentmp($domain, $file)
