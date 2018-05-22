@@ -27,19 +27,22 @@
 	<?php if(!empty($data->sahkoposti)): ?>
 		<?php 
 		$str = 'Lähetä eDico tunnukset asiakkaalle';
+		$style = '';
 		if(empty($data->salasana) and empty($data->token))
 			$str = Yii::t('main', 'Lähetä eDico<br> tunnukset asiakkaalle');
 		if(empty($data->salasana) and !empty($data->token)){
 			$str = Yii::t('main', 'Tunnukset on lähetetty.<br> Lähetä uudelleen');
+			$style = 'style="border-right: 5px #fec121 solid"';
 		}
 		if(!empty($data->salasana) and empty($data->token)){
 			$str = Yii::t('main', 'Tunnus on aktiivinen.<br> Lähetä uudelleen');
+			$style = 'style="border-right: 5px #2cda5e solid"';
 		}
 		?>
 
-		<span class="btn btn-primary myBgColors btn-block"><input type="checkbox" class="valitse_asiakas pull-right" asiakas_id="<?=$data->id?>"> <?=$str?></span>
+		<span class="btn btn-primary myBgColors btn-block" <?=$style?>><input type="checkbox" class="valitse_asiakas pull-right" asiakas_id="<?=$data->id?>"> <?=$str?></span>
 	<?php else: ?>
-		<span class="btn btn-primary myBgColors btn-block"><?=Yii::t('main', 'Sähköposti puutuu.')?></span>
+		<span class="btn btn-primary myBgColors btn-block" style="border-right: 5px #ff5f4e solid"><?=Yii::t('main', 'Sähköposti puutuu.')?></span>
 	<?php endif; ?>
 	</td>
 	<td>
