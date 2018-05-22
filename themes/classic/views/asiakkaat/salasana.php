@@ -43,12 +43,16 @@
 </div>
 <?php endif; ?>
 
-<?php if($tilanne == 3) : ?>
+<?php if($tilanne == 3 and isset($model->sahkoposti)) : ?>
 <div class="container">
 <div class="row">
 <div class="col-sm-12">
 <center>
-<p class="text-center"><h1>Lataa nyt ohjelma puhelimeesi ja syötä tunnuksesi. <br>Tervetuloa eDicon käyttäjien joukkoon.</h1></p>
+<p class="text-center"><h1>Olet luonut salasanan käyttäjätunnukselle <?=$model->sahkoposti?>.</h1><br>
+Lataa eDico-sovellus puhelimeesi.<br>
+Avaa sovellus ja kohdassa Omat Asetukset syötäYritystunnus, sähköpostiosoitteesi ja juuri luomasi salasana.<br>
+Kun painat Talleta, ohjelma kirjautuu järjestelmään ja voit aloittaa eDicon käytön.
+</p>
 <br>
 <p>
 <a href="https://play.google.com/store/apps/details?id=fi.etunti.dico&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="<?=Yii::app()->request->hostInfo?>/lib/app/google-play.jpg" style="height:100px" /></a>
