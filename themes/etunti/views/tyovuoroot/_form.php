@@ -1103,12 +1103,12 @@ function laatikonPaivays(thisDataReturn){
 		$(thisDataReturn).each(function( iarr, arr ) {
 		 $(arr).each(function( i, d ) {
 
-		    //console.log(d);
+		    console.log(d);
 
 	  	    $.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',
-			data: { "pvm" : d['pvm'], "tid" : d['tid'], "kohde" : d['kohde'], "from" : "ajax" },
+			data: { "pvm" : d['pvm'], "tid" : d['tid'], "kohde" : d['kohde'], "asiakas" : d['asiakas'], "from" : "ajax" },
 			  success:function(data){
 			  //console.log(data);
 

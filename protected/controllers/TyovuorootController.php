@@ -1545,6 +1545,11 @@ class TyovuorootController extends Controller
 			{
 				$kohde = Yii::app()->session['kohde'];
 			}
+			$asiakas = '';
+			if(isset(Yii::app()->session['asiakas']))
+			{
+				$asiakas = Yii::app()->session['asiakas'];
+			}
 
 			$return = array();
 			if(isset(Yii::app()->session['from']) and isset(Yii::app()->session['to']))
@@ -1560,7 +1565,8 @@ class TyovuorootController extends Controller
 						'tid'=>$tid, 
 						'pvm'=>date("d.m.Y", strtotime($start_date)), 
 						'ymd'=>date("Ymd",strtotime($start_date)),
-						'kohde' => $kohde
+						'kohde' => $kohde,
+						'asiakas' => $asiakas
 					);
 
 					$start_date = date ("Y-m-d", strtotime("+1 days", strtotime($start_date)));
