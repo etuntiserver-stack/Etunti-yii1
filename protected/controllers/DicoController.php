@@ -1383,7 +1383,12 @@ public function actionLogin($domain)
 				EdicoViestintaRivit::model()->updateByPk($_POST['katsottu_id'], array('katsottu' => 1));
 			}
 
-		   	$v = EdicoViestinta::model()->findAll(" asiakas_id='".$model->id."' ");
+			$criteria=new CDbCriteria;
+			$criteria->order = " id DESC  ";
+			$criteria->condition = " 
+				 asiakas_id='".$model->id."'
+			";
+		   	$v = EdicoViestinta::model()->findAll($criteria);
 			$lista = '<h2>Viestintä</h2>';
 			$lista .= '<br>
 			<fieldset id="lahetys_lomake">
