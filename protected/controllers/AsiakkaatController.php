@@ -436,10 +436,8 @@ class AsiakkaatController extends Controller
 
 				$subject = $yr.' toivottaa sinut tervetulleeksi käyttämään eDicoa';
 				$message = 'Hei '.$asiakas.'!<br>
-
 Olemme tehneet sinulle profiilin eDico-sovellukseen, jolla voit olla kätevästi yhteydessä meihin, antaa palautetta, tarkastella tilauksiasi ja vahvistaa sopimukset ja tarjoukset. <br>
 Lataa eDico-sovellus älylaitteeseesi alla olevan linkin kautta.<br>
-
 				<b>Yritystunnus:</b> '.Yii::app()->user->domain.'<br>
 				<b>Käyttäjätunnus:</b> '.$model->sahkoposti.'<br>
 				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('asiakkaat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'asiakasid' => $model->id)).'>tästä</a><br>
