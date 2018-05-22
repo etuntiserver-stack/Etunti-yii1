@@ -91,7 +91,9 @@
 	  	$bod .= '</td>';
 		echo $bod;
 ?>
-
+	<td>
+		<?php echo $data->viimeinen_tyo; ?>
+	</td>
 
 </tr>
 

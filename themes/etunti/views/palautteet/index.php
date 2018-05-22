@@ -161,6 +161,7 @@ $(".muokaValiko").click(function() {
   <th><?php echo Yii::t('main', 'Kategoria'); ?></th>
   <th><?php echo Yii::t('main', 'Palaute'); ?></th>
   <th><?php echo Yii::t('main', 'Tila'); ?></th>
+  <th><?php echo Yii::t('main', 'Työvuoro'); ?></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
