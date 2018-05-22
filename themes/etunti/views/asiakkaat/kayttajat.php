@@ -137,7 +137,7 @@ $(document).ready(function() {
 		      <?php if(isset($_GET['tyyppi'])) echo '<input type="hidden" id="as_tyyppi" value="'.$_GET['tyyppi'].'">'; ?>
                         <div class="section">
                           <label class="field select">
-			<?php
+			    <?php
 					$list = array(
 						'yritys'=>Yii::t('main', 'Yritys'),
 						 'henkilo'=>Yii::t('main', 'Henkilö') 
@@ -147,7 +147,28 @@ $(document).ready(function() {
 			        	echo CHtml::dropDownList('tyyppi', 'tyyppi', $list,
 					array('empty'=>'Asiakas tyyppi','class'=>'form-control form-group'));
 					}
-			?>
+			    ?>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+
+		      <?php if(isset($_GET['tilanne'])) echo '<input type="hidden" id="as_tilanne" value="'.$_GET['tilanne'].'">'; ?>
+                        <div class="section">
+                          <label class="field select">
+			    <?php
+					$list = array(
+						'1'=>Yii::t('main', 'Tunnuksia ei vielä lähetetty'),
+						'2'=>Yii::t('main', 'Käyttöehtoja ei vielä hyväksytty'),
+						'3'=>Yii::t('main', 'Palvelu on käyttössä'),
+						'4'=>Yii::t('main', 'Sähköposti puuttuu'),
+					);		
+					if(count($list) > 0)
+					{
+			        	echo CHtml::dropDownList('tilanne', 'tilanne', $list,
+					array('empty'=>'Tilanne','class'=>'form-control form-group'));
+					}
+			    ?>
                             <i class="arrow double"></i>
                             </label>
                           </label>
@@ -289,6 +310,8 @@ $(document).ready(function(){
  if($("#as_tyyppi").val())
  $("#tyyppi").val($("#as_tyyppi").val());
 
+ if($("#as_tilanne").val())
+ $("#tilanne").val($("#as_tilanne").val());
 
  $(".haemob").click(function(){
 	$("#mobForm").submit();

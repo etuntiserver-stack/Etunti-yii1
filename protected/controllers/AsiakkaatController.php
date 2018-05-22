@@ -1078,6 +1078,18 @@ $xml = '
 		if(isset($_GET['asiakasnumero']) and !empty(trim($_GET['asiakasnumero'])))
 	        $criteria->addCondition (" asiakasnumero LIKE '%".$_GET['asiakasnumero']."%' ");
 
+		if( isset($_GET['tilanne']) and $_GET['tilanne'] == 1 )
+	        $criteria->addCondition (" salasana='' AND token='' AND sahkoposti!=''  ");
+
+		if( isset($_GET['tilanne']) and $_GET['tilanne'] == 2 )
+	        $criteria->addCondition (" salasana!='' AND sahkoposti!='' AND app_kayttoehdot IS NULL ");
+
+		if( isset($_GET['tilanne']) and $_GET['tilanne'] == 3 )
+	        $criteria->addCondition (" salasana!='' AND sahkoposti!='' AND app_kayttoehdot=1 ");
+
+		if( isset($_GET['tilanne']) and $_GET['tilanne'] == 4 )
+	        $criteria->addCondition (" sahkoposti='' ");
+
 		$dataProvider=new CActiveDataProvider('Asiakkaat', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false

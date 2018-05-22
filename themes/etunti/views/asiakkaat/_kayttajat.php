@@ -26,17 +26,21 @@
 	<td>
 	<?php if(!empty($data->sahkoposti)): ?>
 		<?php 
-		$str = 'Lähetä eDico tunnukset asiakkaalle';
+		$str = 'Lähetä eDico<br> tunnukset asiakkaalle';
 		$style = '';
-		if(empty($data->salasana) and empty($data->token))
+		if(empty($data->salasana) and empty($data->token) and $data->app_kayttoehdot != 1)
 			$str = Yii::t('main', 'Lähetä eDico<br> tunnukset asiakkaalle');
-		if(empty($data->salasana) and !empty($data->token)){
+		if(empty($data->salasana) and !empty($data->token) and $data->app_kayttoehdot != 1){
 			$str = Yii::t('main', 'Tunnukset on lähetetty.<br> Lähetä uudelleen');
 			$style = 'style="border-right: 5px #fec121 solid"';
 		}
-		if(!empty($data->salasana) and empty($data->token)){
+		if(!empty($data->salasana) and $data->app_kayttoehdot == 1){
 			$str = Yii::t('main', 'Tunnus on aktiivinen.<br> Lähetä uudelleen');
 			$style = 'style="border-right: 5px #2cda5e solid"';
+		}
+		if(!empty($data->salasana) and $data->app_kayttoehdot != 1){
+			$str = Yii::t('main', 'Käyttöehtoja<br> ei vielä hyväksytty');
+			$style = 'style="border-right: 5px #fec121 solid"';
 		}
 		?>
 
