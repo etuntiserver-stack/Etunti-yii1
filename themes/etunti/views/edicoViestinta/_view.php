@@ -51,17 +51,38 @@
 		<?=$lista?>
 	</td>
 	<td>
+		<?php if($data->status != 99) : ?>
 		<form action="index" method="POST">
 		<input type="hidden" name="id" value="<?=$data->id?>">
 		<input type="hidden" name="asiakas_id" value="<?=$data->asiakas_id?>">
 		<textarea name="vastaus" class="form-control" placeholder="Vasta tähään keskusteluun.."></textarea>
 		<button type="submit" class="btn btn-primary btn-block myBgColors">Lähetä</button>
 		</form>
+		<?php endif; ?>
+	</td>
+	<td>
+		<?php if($data->status != 99) : ?>
+		<?php echo CHtml::link(Yii::t('main', 'Sulje keskustelu'), 
+				array('index', 'id'=>$data->id, 'suljetaan' => true), 
+				array(
+					'confirm' => 'Oletko varma?',
+					'class'=>'btn btn-primary myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Sulje') 
+				)
+			); 
+		?>
+		<?php else : ?>
+		<?=Yii::t('main', 'Suljettu')?>
+		<?php endif; ?>
 	</td>
 	<td>
 		<?php echo CHtml::link('<i class="fa fa-trash-o" aria-hidden="true" style="font-size: 110%"></i>', 
-				array('delete', 'id'=>$data->id), 
+				array('delete', 'id'=>$data->id),
 				array(
+					'confirm' => 'Oletko varma?',
 					'class'=>'btn btn-primary myBgColors', 
 					'style'=>'color:white', 
 					'data-toggle'=>'tooltip', 

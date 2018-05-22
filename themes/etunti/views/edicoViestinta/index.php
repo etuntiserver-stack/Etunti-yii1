@@ -102,6 +102,7 @@
   <th></th>
   <th><?php echo Yii::t('main', 'Vastaus'); ?></th>
   <th></th>
+  <th></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

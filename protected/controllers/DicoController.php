@@ -1416,12 +1416,15 @@ public function actionLogin($domain)
 					$lista .= '<p id="rivi_'.$rivi->id.'"><b>'.date("d.m.Y H:i", strtotime($rivi->time)).' '.$kirjoittaja.'</b>: '.$rivi->teksti.'</p>';
 				}
 				$lista .= '</div>';
+
+				if($item->status != 99){
 				$lista .= '<br><br>
 				<div class="vastaus">
 					<input type="hidden" id="id" value="'.$item->id.'">
 					<textarea id="vastaus" class="form-control" placeholder="Vasta tähään keskusteluun.."></textarea>
 					<button class="btn btn-success btn-block laheta_vastaus">Lähetä</button>
 				</div>';
+				}
 
 				$lista .= '</p></div>';
 			}

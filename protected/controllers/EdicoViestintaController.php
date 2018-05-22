@@ -181,6 +181,13 @@ class EdicoViestintaController extends Controller
 			exit;
 		}
 
+		if(isset($_GET['suljetaan']))
+		{
+				EdicoViestinta::model()->updateByPk($_GET['id'], array('status' => 99));
+				Yii::app()->user->setFlash('success', "Keskustelu suljettu.");
+				$this->redirect(array('index'));
+		}
+
 		if(isset($_POST['vastaus']))
 		{
 			$vr = new EdicoViestintaRivit;
