@@ -37,7 +37,14 @@
 		</button>';
 		$lista .= '<div id="ava_'.$data->id.'" class="collapse"><p>';
 		foreach($data->rivit as $rivi){
-			$lista .= '<p><b>'.date("d.m.Y H:i", strtotime($rivi->time)).'</b>: '.$rivi->teksti.'</p>';
+			$kirjoittaja = '';
+			if( $rivi->luoja == 'admin' and !empty($rivi->admin_id) ){
+				$kirjoittaja = $rivi->adminname;
+			}
+			if( $rivi->luoja == 'asiakas' and !empty($rivi->asiakas_id) ){
+				$kirjoittaja = $rivi->asiakasname;
+			}
+			$lista .= '<p><b>'.date("d.m.Y H:i", strtotime($rivi->time)).', '.$kirjoittaja.'</b>: '.$rivi->teksti.'</p><hr>';
 		}
 		$lista .= '</p></div>';
 		?>

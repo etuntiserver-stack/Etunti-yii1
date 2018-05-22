@@ -1406,7 +1406,14 @@ public function actionLogin($domain)
 
 				$lista .= '<div id="ava_'.$item->id.'" class="collapse"><p>';
 				foreach($item->rivit as $rivi){
-					$lista .= '<p id="rivi_'.$rivi->id.'"><b>'.date("d.m.Y H:i", strtotime($rivi->time)).'</b>: '.$rivi->teksti.'</p>';
+					$kirjoittaja = '';
+					if( $rivi->luoja == 'admin' and !empty($rivi->admin_id) ){
+						$kirjoittaja = $rivi->adminname;
+					}
+					if( $rivi->luoja == 'asiakas' and !empty($rivi->asiakas_id) ){
+						$kirjoittaja = $rivi->asiakasname;
+					}
+					$lista .= '<p id="rivi_'.$rivi->id.'"><b>'.date("d.m.Y H:i", strtotime($rivi->time)).' '.$kirjoittaja.'</b>: '.$rivi->teksti.'</p>';
 				}
 				$lista .= '</div>';
 				$lista .= '<br><br>

@@ -114,6 +114,7 @@ class EdicoViestintaController extends Controller
 				$vr->viestinta_id = $model->id;
 				$vr->asiakas_id = $model->asiakas_id;
 				$vr->teksti = $_POST['EdicoViestinta']['teksti'];
+				$vr->admin_id = Yii::app()->user->adminID;
 				$vr->luoja = 'admin';
 				if( $vr->save() ){
 					Domainit::sendGCMeDico($vr->asiakas_id, Yii::t('main', 'Uusi viesti'), $vr->teksti, null);

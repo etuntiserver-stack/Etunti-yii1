@@ -90,6 +90,28 @@ class EdicoViestintaRivit extends DB2ActiveRecord
 		);
 	}
 
+
+        public function getAdminname(){
+		$return = '';
+		if( !empty($this->admin_id) ){
+			$a = Administrators::model()->findbypk($this->admin_id);
+			if( isset($a->id) )
+			$return = $a->adm_nimi;
+		}
+                return $return;
+        }
+        public function getAsiakasname(){
+		$return = '';
+		if( !empty($this->asiakas_id) ){
+			$a = Asiakkaat::model()->findbypk($this->asiakas_id);
+			if( isset($a->id) and $a->tyyppi == 'yritys' )
+			$return = $a->yrityksen_nimi;
+			if( isset($a->id) and $a->tyyppi == 'henkilo' )
+			$return = $a->yhteyshenkilo;
+		}
+                return $return;
+        }
+
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *
