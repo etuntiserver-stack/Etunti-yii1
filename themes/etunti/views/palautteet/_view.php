@@ -35,6 +35,9 @@
 			); 
 		?>
 	</td>
+	<td style="width: 20%">
+		<?php echo $data->viimeinen_tyo; ?>
+	</td>
 	<td>
 		<?php if(file_exists( Yii::app()->basePath.'/../lib/img/emoji/'.$data->emoji_tila.'.png' )) : ?>
 		<p><img src="<?php echo '../../lib/img/emoji/'.$data->emoji_tila.'.png'; ?>" height="100"></p>
@@ -91,9 +94,7 @@
 	  	$bod .= '</td>';
 		echo $bod;
 ?>
-	<td>
-		<?php echo $data->viimeinen_tyo; ?>
-	</td>
+
 
 </tr>
 
