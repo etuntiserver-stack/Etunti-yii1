@@ -190,9 +190,12 @@ public function actionLogin($domain)
 			$tar=CrmTarjoukset::model()->find($criteria);
 			if(isset($tar->id))
 			{
-				$return['uusi_tarjous'] = $tar->id;
+				$f = "tiedostot/tarjoukset/".$domain."/".$tar->liite.".pdf";
+   				if(file_exists(Yii::app()->basePath."/../".$f))
+   				{
+					$return['uusi_tarjous'] = $tar->id;
+				}
 			}
-
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 
 				asiakas_id='".$model->id."' 
@@ -203,7 +206,10 @@ public function actionLogin($domain)
 			{
 				$return['uusi_sopimus'] = $sop->id;
 			}
-
+			if( $this->checkEdicoViestit($model->id) )
+			{
+				$return['uusi_viesti'] = $this->checkEdicoViestit($model->id);
+			}
 			$this->_sendResponse(200, CJSON::encode($return));
 			exit;
 		   }
@@ -213,6 +219,18 @@ public function actionLogin($domain)
 		exit;
 	}
 
+	public function checkEdicoViestit($asiakas_id)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->order = " id DESC";
+		$criteria->condition = "
+			asiakas_id='".$asiakas_id."'
+			AND katsottu=0
+		";
+		$listData = EdicoViestintaRivit::model()->find($criteria);
+		if( isset($listData->id) ){ return $listData->id; }
+		return false;
+	}
 
 	protected function dateDifference($date_1 , $date_2 , $differenceFormat = '%a' )
 	{
@@ -1293,7 +1311,138 @@ public function actionLogin($domain)
 				exit;
 	}
 
+	public function actionViestinta($domain)
+	{
 
+		if(isset($_POST['token']) and !empty($_POST['token']) and isset($_POST['asiakasID']) and !empty($_POST['asiakasID']))
+		{
+			Asiakkaat::model()->updateByPk($_POST['asiakasID'], array('gcm_reg_id' => $_POST['token']));
+			$this->_sendResponse(200, CJSON::encode('token update ok'));
+			exit;
+		}
+
+		$return = '';
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
+		{
+
+		   $model = Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   if(isset($model->id))
+		   {
+			// <-- Uusi viesti
+			if( isset($_POST['uusi_viesti']) ){
+				$v = new EdicoViestinta;
+				$v->asiakas_id = $model->id;
+				$v->otsikko = $_POST['otsikko'];
+				$v->luoja = 'asiakas';
+				if( $v->save() ){
+					$vr = new EdicoViestintaRivit;
+					$vr->viestinta_id = $v->id;
+					$vr->asiakas_id = $model->id;
+					$vr->teksti = $_POST['teksti'];
+					$vr->luoja = 'asiakas';
+					if( $vr->save() ){
+						$lahetys_status = '<div class="alert alert-success">Viestisi lähetetty. Paina <a href="viestinta.html">tästä</a> jotta palaa takaisiin.</div>';
+						$return = array('lahetys_status'=>$lahetys_status);
+						$this->_sendResponse(200, CJSON::encode($return));
+						exit;
+					} else {
+						$this->_sendResponse(200, CJSON::encode($vr->getErrors()));
+						exit;
+					}
+				}
+				$this->_sendResponse(200, CJSON::encode('Error: Lähetys'));
+				exit;
+			}
+			// Uusi viesti -->
+
+
+			// <-- Vastaus viesti
+			if( isset($_POST['vastaus']) ){
+
+					$vr = new EdicoViestintaRivit;
+					$vr->viestinta_id = $_POST['id'];
+					$vr->asiakas_id = $model->id;
+					$vr->teksti = $_POST['vastaus'];
+					$vr->luoja = 'asiakas';
+					if( $vr->save() ){
+						$lahetys_status = '<div class="alert alert-success">Viestisi lähetetty. Paina <a href="viestinta.html">tästä</a> jotta palaa takaisiin.</div>';
+						$return = array('lahetys_status'=>$lahetys_status);
+						$this->_sendResponse(200, CJSON::encode($return));
+						exit;
+					} else {
+						$this->_sendResponse(200, CJSON::encode($vr->getErrors()));
+						exit;
+					}
+
+				$this->_sendResponse(200, CJSON::encode('Error: Lähetys'));
+				exit;
+			}
+			// Vastaus viesti -->
+
+			if( isset($_POST['katsottu_id']) ){
+				EdicoViestintaRivit::model()->updateByPk($_POST['katsottu_id'], array('katsottu' => 1));
+			}
+
+			$criteria=new CDbCriteria;
+			$criteria->order = " id DESC  ";
+			$criteria->condition = " 
+				 asiakas_id='".$model->id."'
+			";
+		   	$v = EdicoViestinta::model()->findAll($criteria);
+			$lista = '<h2>Viestintä</h2>';
+			$lista .= '<br>
+			<fieldset id="lahetys_lomake">
+			<legend><h4>Uusi viesti</h4></legend>
+			<p><input type="text" id="otsikko" class="form-control" placeholder="Otsikko.."></p>
+			<p><textarea id="teksti" class="form-control" placeholder="Teksti.."></textarea></p>
+			<p><button class="btn btn-success" id="laheta_viesti">Lähetä</button></p>
+			</fieldset>
+			<div id="lahetys_status"></div>
+			';
+			$lista .= '<br><div class="lista">';
+			foreach($v as $item) 
+			{
+				$lista .= '<div class="well" '.(($item->status == 99)? 'style="border: 2px #fec121 solid"' : '').'>';
+				$lista .= '<h4>'.date("d.m.Y H:i", strtotime($item->time)).' - '.$item->otsikko.'</h4>';
+				$lista .= '<p><b>Viimeinen viesti:</b> '.max($item->rivit)->teksti.'</p>';
+
+				$lista .= '<button class="btn btn-default btn-block" data-toggle="collapse" data-target="#ava_'.$item->id.'">Näytä kaikki viestit <i class="caret"></i></button>';
+
+
+				$lista .= '<div id="ava_'.$item->id.'" class="collapse"><p>';
+				foreach($item->rivit as $rivi){
+					$kirjoittaja = '';
+					if( $rivi->luoja == 'admin' and !empty($rivi->admin_id) ){
+						$kirjoittaja = $rivi->adminname;
+					}
+					if( $rivi->luoja == 'asiakas' and !empty($rivi->asiakas_id) ){
+						$kirjoittaja = $rivi->asiakasname;
+					}
+					$lista .= '<p id="rivi_'.$rivi->id.'"><b>'.date("d.m.Y H:i", strtotime($rivi->time)).' '.$kirjoittaja.'</b>: '.$rivi->teksti.'</p>';
+				}
+				$lista .= '</div>';
+
+				if($item->status != 99){
+				$lista .= '<br><br>
+				<div class="vastaus">
+					<input type="hidden" id="id" value="'.$item->id.'">
+					<textarea id="vastaus" class="form-control" placeholder="Vasta tähään keskusteluun.."></textarea>
+					<button class="btn btn-success btn-block laheta_vastaus">Lähetä</button>
+				</div>';
+				}
+
+				$lista .= '</p></div>';
+			}
+			$lista .= '</div>';
+
+			$return = array('lista'=>$lista);
+			$this->_sendResponse(200, CJSON::encode($return));
+			exit;
+		   } // $model->id
+		}
+		$this->_sendResponse(200, CJSON::encode('Ei tuloksia'));
+		exit;
+	}
 
 	protected function valmistaTMP($domain, $liite, $ext)
 	{

@@ -287,6 +287,21 @@
             </div>
 	   </a>
           </div>
+          <div class="col-md-12">
+	   <a href="viestinta.html" class="link">
+            <div class="panel bg-warning light of-h mb10">
+              <div class="pn pl20 p5">
+                <div class="icon-bg">
+                  <i class="fa fa-file-text-o"></i>
+                </div>
+                <h2 class="mt15 lh15">
+                  <b>Viestintä</b>
+                </h2>
+                <h5 class="text-muted-new">Tästä lähetät viestiä</h5>
+              </div>
+            </div>
+	   </a>
+          </div>
         </div>
     </div> 
     <!-- Kirjautuminen jalkeen -->
@@ -437,7 +452,7 @@
            success: function(data){
 	    var d = JSON.parse(data);
 	    console.log(d);
-	    if(d['uusi_palaute'] || d['uusi_tarjous'] || d['uusi_sopimus'])
+	    if(d['uusi_palaute'] || d['uusi_tarjous'] || d['uusi_sopimus'] || d['uusi_viesti'])
 	    {
 
 		var body = '' +
@@ -469,6 +484,13 @@
 			body += '' +
 			   '<a href="sopimukset.html?id='+d['uusi_sopimus']+'" class="link">' +
 		                '<h4 class="text-muted-new-tapahtumat"><i class="fa fa-caret-right" aria-hidden="true"></i> Olet saanut uuden sopimuksen.</h4>' +
+			   '</a>';
+		}
+		if(d['uusi_viesti'])
+		{
+			body += '' +
+			   '<a href="viestinta.html?id='+d['uusi_viesti']+'" class="link">' +
+		                '<h4 class="text-muted-new-tapahtumat"><i class="fa fa-caret-right" aria-hidden="true"></i> Olet saanut uusi viesti.</h4>' +
 			   '</a>';
 		}
 		body += '' +

@@ -1758,6 +1758,12 @@ $(document).ready(function(){
 				$this->render('error', $error);
 		}
 		*/
+		if( $error=Yii::app()->errorHandler->error and isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )){
+			if(Yii::app()->request->isAjaxRequest)
+				echo $error['message'];
+			else
+				$this->render('error', $error);
+		}
 		$this->renderPartial('error_custom');
 
 	}
@@ -2738,6 +2744,25 @@ $(document).ready(function(){
 			}
 		}
 	   	return $arr;
+	}
+
+	public function checkEdicoViestit()
+	{
+		if( !$this->isEtuntiAdmin() ){ return false; }
+
+		$criteria = new CDbCriteria();
+		$criteria->order = " id DESC";
+		$criteria->condition = "
+			status=1
+		";
+		$listData = EdicoViestinta::model()->findAll($criteria);
+		foreach($listData as $item){
+		    if( count($item->rivit) > 0 and isset(max($item->rivit)->luoja) and max($item->rivit)->luoja == 'asiakas'){
+			//echo max($item->rivit)->luoja;
+		   	return true;
+		    }
+		}
+		return false;
 	}
 
 }

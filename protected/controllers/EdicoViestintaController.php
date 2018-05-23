@@ -1,0 +1,277 @@
+<?php
+
+class EdicoViestintaController extends Controller
+{
+	/**
+	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
+	 * using two-column layout. See 'protected/views/layouts/column2.php'.
+	 */
+	public $layout='//layouts/column2';
+
+	/**
+	 * @return array action filters
+	 */
+	public function filters()
+	{
+		return array(
+			'accessControl', // perform access control for CRUD operations
+			//'postOnly + delete', // we only allow deletion via POST request
+		);
+	}
+
+	/**
+	 * Specifies the access control rules.
+	 * This method is used by the 'accessControl' filter.
+	 * @return array access control rules
+	 */
+	public function accessRules()
+	{
+		return array(
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('index','view'),
+                		'expression'=>"Yii::app()->controller->isAsiakas() || Yii::app()->controller->isEtuntiAdmin()",
+			),
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('create','update'),
+                		'expression'=>"Yii::app()->controller->isAsiakas() || Yii::app()->controller->isEtuntiAdmin()",
+			),
+			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin','delete'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
+			),
+			array('deny',  // deny all users
+				'users'=>array('*'),
+			),
+		);
+	}
+
+	public function isAsiakas() 
+	{
+		if(isset(Yii::app()->user->asiakas))
+		{
+		$m = Asiakkaat::model()->findbypk(Yii::app()->user->asiakas);
+	        if($m->id == Yii::app()->user->asiakas)
+	            return true;
+		} else {
+	            return false;
+		}
+	}
+
+	public function isEtuntiAdmin() {
+
+		if(isset(Yii::app()->user->adminID))
+		{
+		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	        if($m->id == Yii::app()->user->adminID)
+	            return true;
+		} else {
+	            return false;
+		}
+	}
+
+        public function init()
+        {
+
+                if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = 'etunti';
+                } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = Yii::app()->user->user_theme;
+                } elseif (isset(Yii::app()->user->asiakas)) {
+                        Yii::app()->theme = 'customer';
+                } else {
+                        Yii::app()->theme = 'classic';
+                }
+                parent::init();
+        }
+
+	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionView($id)
+	{
+		$this->render('view',array(
+			'model'=>$this->loadModel($id),
+		));
+	}
+
+	/**
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
+	public function actionCreate()
+	{
+		$model=new EdicoViestinta;
+
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['EdicoViestinta']))
+		{
+			$model->attributes=$_POST['EdicoViestinta'];
+			if($model->save()){
+				$vr = new EdicoViestintaRivit;
+				$vr->viestinta_id = $model->id;
+				$vr->asiakas_id = $model->asiakas_id;
+				$vr->teksti = $_POST['EdicoViestinta']['teksti'];
+				$vr->admin_id = Yii::app()->user->adminID;
+				$vr->luoja = 'admin';
+				if( $vr->save() ){
+					Domainit::sendGCMeDico($vr->asiakas_id, Yii::t('main', 'Uusi viesti'), $vr->teksti, null);
+					Yii::app()->user->setFlash('success', "Viesti lähetetty.");
+					$this->redirect(array('index'));
+				}
+			}
+		}
+
+		$this->render('create',array(
+			'model'=>$model,
+		));
+	}
+
+	/**
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+	 */
+/*
+	public function actionUpdate($id)
+	{
+		$model=$this->loadModel($id);
+
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['EdicoViestinta']))
+		{
+			$model->attributes=$_POST['EdicoViestinta'];
+			if($model->save())
+				$this->redirect(array('view','id'=>$model->id));
+		}
+
+		$this->render('update',array(
+			'model'=>$model,
+		));
+	}
+*/
+	/**
+	 * Deletes a particular model.
+	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * @param integer $id the ID of the model to be deleted
+	 */
+	public function actionDelete($id)
+	{
+		$this->loadModel($id)->delete();
+		EdicoViestintaRivit::model()->deleteAll(" viestinta_id='".$id."' ");
+		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+		if(!isset($_GET['ajax']))
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+	}
+
+	/**
+	 * Lists all models.
+	 */
+	public function actionIndex()
+	{
+
+		if(isset($_POST['asiakkaatPerSivu']))
+		{
+			Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);
+			echo json_encode($_POST['asiakkaatPerSivu']);
+			exit;
+		}
+
+		if(isset($_GET['suljetaan']))
+		{
+				EdicoViestinta::model()->updateByPk($_GET['id'], array('status' => 99));
+				Yii::app()->user->setFlash('success', "Keskustelu suljettu.");
+				$this->redirect(array('index'));
+		}
+
+		if(isset($_POST['vastaus']))
+		{
+			$vr = new EdicoViestintaRivit;
+			$vr->viestinta_id = $_POST['id'];
+			$vr->asiakas_id = $_POST['asiakas_id'];
+			$vr->admin_id = Yii::app()->user->adminID;
+			$vr->teksti = $_POST['vastaus'];
+			$vr->luoja = 'admin';
+			if( $vr->save() ){
+				Domainit::sendGCMeDico($_POST['asiakas_id'], Yii::t('main', 'Uusi viesti'), $vr->teksti, null);
+				Yii::app()->user->setFlash('success', "Vastaus lähetetty.");
+				$this->redirect(array('index'));
+			}
+		}
+
+       		$criteria = new CDbCriteria();
+       		$criteria->order = " id DESC ";
+
+		$dataProvider=new CActiveDataProvider('EdicoViestinta', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+
+		$perSivu = 50;
+		if(isset(Yii::app()->user->asiakkaatPerSivu))
+		$perSivu = Yii::app()->user->asiakkaatPerSivu;
+
+		$dataProvider->pagination->pageSize = $perSivu;
+
+		$a = Asetukset::model()->findbypk(1);
+		if($a->netvisor_kaytto == 1)
+		$netvisor = true;
+		else
+		$netvisor = false;
+
+		$this->render('index', array(
+			'dataProvider' => $dataProvider, 
+			'perSivu' => $perSivu
+		));
+
+
+	}
+
+	/**
+	 * Manages all models.
+	 */
+	public function actionAdmin()
+	{
+		$model=new EdicoViestinta('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['EdicoViestinta']))
+			$model->attributes=$_GET['EdicoViestinta'];
+
+		$this->render('admin',array(
+			'model'=>$model,
+		));
+	}
+
+	/**
+	 * Returns the data model based on the primary key given in the GET variable.
+	 * If the data model is not found, an HTTP exception will be raised.
+	 * @param integer $id the ID of the model to be loaded
+	 * @return EdicoViestinta the loaded model
+	 * @throws CHttpException
+	 */
+	public function loadModel($id)
+	{
+		$model=EdicoViestinta::model()->findByPk($id);
+		if($model===null)
+			throw new CHttpException(404,'The requested page does not exist.');
+		return $model;
+	}
+
+	/**
+	 * Performs the AJAX validation.
+	 * @param EdicoViestinta $model the model to be validated
+	 */
+	protected function performAjaxValidation($model)
+	{
+		if(isset($_POST['ajax']) && $_POST['ajax']==='edico-viestinta-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+	}
+}

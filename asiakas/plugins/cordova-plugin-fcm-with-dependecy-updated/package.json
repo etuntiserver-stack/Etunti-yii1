@@ -1,0 +1,93 @@
+{
+  "_args": [
+    [
+      "cordova-plugin-fcm-with-dependecy-updated",
+      "/var/www/html/etunti/asiakas"
+    ]
+  ],
+  "_from": "cordova-plugin-fcm-with-dependecy-updated@latest",
+  "_id": "cordova-plugin-fcm-with-dependecy-updated@2.2.4",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/cordova-plugin-fcm-with-dependecy-updated",
+  "_nodeVersion": "9.3.0",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/cordova-plugin-fcm-with-dependecy-updated-2.2.4.tgz_1515192011119_0.6134807420894504"
+  },
+  "_npmUser": {
+    "email": "andre_a_tissot@yahoo.com.br",
+    "name": "andretissot"
+  },
+  "_npmVersion": "5.6.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "cordova-plugin-fcm-with-dependecy-updated",
+    "raw": "cordova-plugin-fcm-with-dependecy-updated",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-fcm-with-dependecy-updated/-/cordova-plugin-fcm-with-dependecy-updated-2.2.4.tgz",
+  "_shasum": "dd49bfa1b94f7fa7e1b2a3612cef021ea14e783e",
+  "_shrinkwrap": null,
+  "_spec": "cordova-plugin-fcm-with-dependecy-updated",
+  "_where": "/var/www/html/etunti/asiakas",
+  "author": {
+    "name": "André Augusto Tissot"
+  },
+  "bugs": {
+    "url": "https://github.com/andrehtissot/cordova-plugin-fcm-with-dependecy-updated/issues"
+  },
+  "cordova_name": "Cordova FCM Push Plugin",
+  "dependencies": {},
+  "description": "Google Firebase Cloud Messaging Cordova Push Plugin fork with dependecy updated",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "integrity": "sha512-uMA/k16e49otxFF4e8S9v+4RI98EjA+eceEJVK6k0UND24hWbyDDKHeRwAPJjgyB0iY60J5aHBZjEDrGF6RUBg==",
+    "shasum": "dd49bfa1b94f7fa7e1b2a3612cef021ea14e783e",
+    "tarball": "https://registry.npmjs.org/cordova-plugin-fcm-with-dependecy-updated/-/cordova-plugin-fcm-with-dependecy-updated-2.2.4.tgz"
+  },
+  "engines": [],
+  "englishdoc": "",
+  "gitHead": "7b6c3f9289c05909331a0c61542bf6065873da85",
+  "homepage": "https://github.com/andrehtissot/cordova-plugin-fcm-with-dependecy-updated#readme",
+  "issue": "",
+  "keywords": [
+    "android",
+    "cordova",
+    "cordova-android",
+    "cordova-ios",
+    "ecosystem:cordova",
+    "fcm",
+    "firebase",
+    "ios",
+    "notifications",
+    "push"
+  ],
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "andretissot",
+      "email": "andre_a_tissot@yahoo.com.br"
+    }
+  ],
+  "name": "cordova-plugin-fcm-with-dependecy-updated",
+  "optionalDependencies": {},
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "readme": "ERROR: No README data found!",
+  "repo": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrehtissot/cordova-plugin-fcm-with-dependecy-updated.git"
+  },
+  "version": "2.2.4"
+}

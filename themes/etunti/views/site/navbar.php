@@ -1141,11 +1141,15 @@ $('.tvchange').change(function(){
             </ul>
           </li>
 
+<?php
+$site = Yii::app()->createController('Site');
+if($site[0]->checkEdicoViestit()){ $bell = '<i class="fa fa-bell text-danger"></i>'; } else { $bell = ''; }
+?>
 	<?php if(in_array('5',$tas)) : ?>
           <li>
             <a class="accordion-toggle crm" href="#">
               <span class="fa fa-users"></span>
-              <span class="sidebar-title"><?php echo Yii::t('main', 'eDico'); ?></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'eDico'); ?> <?=$bell?></span>
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
@@ -1194,6 +1198,10 @@ $('.tvchange').change(function(){
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/palautteet/index">
                   <span class="fa fa-map"></span> <?php echo Yii::t('main', 'Palautteet'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/edicoViestinta/index">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'eDico Viestintä'); ?> <?=$bell?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/kayttajat">
