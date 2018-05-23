@@ -130,13 +130,26 @@ $laaja = $site[0]->checkOikeusFields($checkLaaja);
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-	
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
 		<div class="row">
 		  <div class="col-sm-12">
+
+			<?php echo CHtml::link(Yii::t('main', 'Merkitse työsuhde päättyneeksi'), 
+				array('update', 'id'=>$model->id, 'tyosuhteet_talteen' => true), 
+				array(
+					'confirm' => 'Oletko varma?',
+					'class'=>'btn btn-primary myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Merkitse työsuhde päättyneeksi') 
+				)
+				); 
+			?>
+
 			<?php 
 			$ts = Tyosuhdet::model()->find(" tid='".$model->id."' ");
 			if(isset($ts->id))
