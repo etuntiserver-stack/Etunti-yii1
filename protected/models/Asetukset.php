@@ -33,7 +33,7 @@ class Asetukset extends DB2ActiveRecord
 	{
 
 		$tb_name = 'asetukset';
-		$check_this_table = false;
+		$check_this_table = true;
 
 		if($check_this_table)
 		{
@@ -144,6 +144,8 @@ class Asetukset extends DB2ActiveRecord
 		     'tyoryhmat_kohde' => 'int(1) DEFAULT 0',
 		     'tyoryhmat_tyontekijat' => 'int(1) DEFAULT 1',
 		     'tietosuoja_vinkki_sailyttaminen' => 'int(3) DEFAULT 14',
+		     'palautteet_autovastaus_hyva' => 'TEXT',
+		     'palautteet_autovastaus_huono' => 'TEXT',
 
                      //'vinkki_tunnit' => 'varchar(10) ',
                      //'vinkki_prosentti' => 'varchar(10) ',
@@ -184,7 +186,7 @@ class Asetukset extends DB2ActiveRecord
 			array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier, merkkipaivailmoitukset_sahkoposti, netvisor_mita_lahetetaan, gtm, apuaika_palkkalaji', 'length', 'max'=>255),
 			array('viikonloppulisa_la, viikonloppulisa_su', 'length', 'max'=>10),
 			array('aikavali_halytys', 'length', 'max'=>3),
-			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat, ilmoitus_uudesta_kuvasta_saajat, peruutusehdot', 'safe'),
+			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat, ilmoitus_uudesta_kuvasta_saajat, peruutusehdot, palautteet_autovastaus_hyva, palautteet_autovastaus_huono', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic, trust_cid, trust_api, palvelu_tyyppi, trust_url, pyhapaivat, erikoislauantai, sovellus_tyovuorot', 'safe', 'on'=>'search'),
@@ -287,6 +289,8 @@ class Asetukset extends DB2ActiveRecord
 			'tyoryhmat_kohde' => Yii::t('main', 'Työryhmien sisällön rajaus asiakkaiden ja kohteiden mukaan'),
 			//'tyoryhmat_tyontekijat' => Yii::t('main', 'Työryhmien sisällön rajaus työntekijöiden mukaan'),
 			'tietosuoja_vinkki_sailyttaminen' => Yii::t('main', ' Vinkki henkilötietojen säilyttämisen (pvm määrä)'),
+			'palautteet_autovastaus_hyva' => Yii::t('main', ' Palautteet autovastaus HYVÄ'),
+			'palautteet_autovastaus_huono' => Yii::t('main', ' Palautteet autovastaus HUONO'),
 
 		);
 	}

@@ -198,53 +198,58 @@ class PalautteetController extends Controller
 	public function UusiPalaute($mod, $post)
 	{
 
-						$as = Asiakkaat::model()->findbypk(Yii::app()->user->asiakas);
-						$ft = FirmanTiedot::model()->findbypk(1);
+		$as = Asiakkaat::model()->findbypk(Yii::app()->user->asiakas);
+		$ft = FirmanTiedot::model()->findbypk(1);
 							
-						$nimi = '';
-						if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi))
-						$nimi = $as->yrityksen_nimi;
-						elseif(isset($as->yhteyshenkilo) and !empty($as->yhteyshenkilo))
-						$nimi = $as->yhteyshenkilo;
+		$nimi = '';
+		if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi))
+		$nimi = $as->yrityksen_nimi;
+		elseif(isset($as->yhteyshenkilo) and !empty($as->yhteyshenkilo))
+		$nimi = $as->yhteyshenkilo;
 
-						$mod->attributes=$post['Palautteet'];
-						$mod->teksti = '<div><b>'.$nimi.'</b>: '.$mod->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div></div>';
-						if($mod->save())
-						{
+		$mod->attributes=$post['Palautteet'];
+		$mod->teksti = '<div><b>'.$nimi.'</b>: '.$mod->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div></div>';
+		if($mod->save())
+		{
+			Palautteet::model()->updatebypk($mod->id, array('keskustelu_id'=>$mod->id));
 
-							Palautteet::model()->updatebypk($mod->id, array('keskustelu_id'=>$mod->id));
-			
+			// <-- push notify
+			$asetukset = Asetukset::model()->findbypk(1);
+			$push_teksti = '';
+			if( $mod->emoji_tila == 1 ){ $push_teksti = $asetukset->palautteet_autovastaus_hyva; }
+			if( $mod->emoji_tila == 3 ){ $push_teksti = $asetukset->palautteet_autovastaus_huono; }
+			Domainit::sendGCMeDico($as->id, Yii::t('main', 'Palautteen vastaus'), "", null);
+			//     push notify -->
 
-							$message = Yii::t('main', 'Asiakas').': '.$nimi.'<br>';
-							$message .= Yii::t('main', 'Keskustelu ID').': '.$mod->id.'<br>';
-							$message .= Yii::t('main', 'Kohde').': '.$mod->viimeinen_tyo.'<br>';
-							$message .= Yii::t('main', 'Palaute').': '.$mod->teksti;
-			
-							if(isset($ft->sahkoposti) and !empty($ft->sahkoposti))
-							{
-							$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
-							$mail = new YiiMailer();
-							$mail->setFrom('no-reply@etunti.fi');
-							$mail->setTo($ft->sahkoposti);
-							$mail->setSubject($subject);
-							$mail->setBody($message);
-							$mail->send();
+			$message = Yii::t('main', 'Asiakas').': '.$nimi.'<br>';
+			$message .= Yii::t('main', 'Keskustelu ID').': '.$mod->id.'<br>';
+			$message .= Yii::t('main', 'Kohde').': '.$mod->viimeinen_tyo.'<br>';
+			$message .= Yii::t('main', 'Palaute').': '.$mod->teksti;
+		
+			if(isset($ft->sahkoposti) and !empty($ft->sahkoposti))
+			{
+			$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
+			$mail = new YiiMailer();
+			$mail->setFrom('no-reply@etunti.fi');
+			$mail->setTo($ft->sahkoposti);
+			$mail->setSubject($subject);
+			$mail->setBody($message);
+			$mail->send();
 
-								// <-- LOG
-								$log=new Log;
-								$log->log_category 	= 1; // 1-email
-								$log->email_to 		= $ft->sahkoposti;
-								$log->email_subject	= $subject;
-								$log->email_message	= json_encode($message);
-								$log->save();
-								//     LOG -->
+				// <-- LOG
+				$log=new Log;
+				$log->log_category 	= 1; // 1-email
+				$log->email_to 		= $ft->sahkoposti;
+				$log->email_subject	= $subject;
+				$log->email_message	= json_encode($message);
+				$log->save();
+				//     LOG -->
 
-							}
-
-							return true;
-						} else {
-							return $mod->getErrors();
-						}
+			}
+				return true;
+		} else {
+			return $mod->getErrors();
+		}
 	}
 
 

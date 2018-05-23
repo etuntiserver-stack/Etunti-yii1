@@ -878,38 +878,31 @@
   <div class="row form collapse" id="eDico">
 
    <div class="col-sm-4">
-
 	<legend><h2><?php echo Yii::t('main','Peruutusehdot'); ?></h2></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'peruutusehdot'); ?>
 		<?php echo $form->textarea($model,'peruutusehdot',array('rows'=>4,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'peruutusehdot'); ?>
 	</div>
-
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'peruutta_paiva_ennen'); ?>
 		<?php echo $form->numberField($model,'peruutta_paiva_ennen',array('maxlength'=>10,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'peruutta_paiva_ennen'); ?>
 	</div>
-
-
    </div>
 
    <div class="col-sm-4">
-
 	<legend><h2><?php echo Yii::t('main','Alennuskoodit'); ?></h2></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alennus_max_euro'); ?>
 		<?php echo $form->numberField($model,'alennus_max_euro',array('maxlength'=>10,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'alennus_max_euro'); ?>
 	</div>
-
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alennus_max_prosentti'); ?>
 		<?php echo $form->numberField($model,'alennus_max_prosentti',array('maxlength'=>10,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'alennus_max_prosentti'); ?>
 	</div>
-
 	<legend><h2><?php echo Yii::t('main','Toteutuneet tunnit'); ?></h2></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'edico_tehdyt_tyot'); ?>
@@ -924,9 +917,21 @@
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'edico_tehdyt_tyot'); ?>
 	</div>
-
-
    </div>
+   <div class="col-sm-4">
+	<legend><h2><?php echo Yii::t('main','Palautteet'); ?></h2></legend>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'palautteet_autovastaus_hyva'); ?>
+		<?php echo $form->textarea($model,'palautteet_autovastaus_hyva',array('rows'=>4,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'palautteet_autovastaus_hyva'); ?>
+	</div>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'palautteet_autovastaus_huono'); ?>
+		<?php echo $form->textarea($model,'palautteet_autovastaus_huono',array('rows'=>4,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'palautteet_autovastaus_huono'); ?>
+	</div>
+   </div>
+
   </div>
 <?php endif; ?>
 
