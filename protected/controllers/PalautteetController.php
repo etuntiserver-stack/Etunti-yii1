@@ -218,7 +218,7 @@ class PalautteetController extends Controller
 			$push_teksti = '';
 			if( $mod->emoji_tila == 1 ){ $push_teksti = $asetukset->palautteet_autovastaus_hyva; }
 			if( $mod->emoji_tila == 3 ){ $push_teksti = $asetukset->palautteet_autovastaus_huono; }
-			Domainit::sendGCMeDico($as->id, Yii::t('main', 'Palautteen vastaus'), "", null);
+			Domainit::sendGCMeDico($as->id, Yii::t('main', 'Palautteen vastaus'), $push_teksti, null);
 			//     push notify -->
 
 			$message = Yii::t('main', 'Asiakas').': '.$nimi.'<br>';
