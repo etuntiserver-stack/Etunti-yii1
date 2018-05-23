@@ -156,6 +156,7 @@ $(".muokaValiko").click(function() {
   <thead class="myBgColors">
   <tr>
   <th></th>
+  <th><?php echo Yii::t('main', 'Työvuoro'); ?></th>
   <th><?php echo Yii::t('main', 'Aika'); ?></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Kategoria'); ?></th>

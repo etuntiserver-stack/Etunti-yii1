@@ -1239,11 +1239,13 @@ class TyovuorootController extends Controller
 	public function actionDid($pvm,$tid,$kohde,$from)
 	{
 		if(isset($tietoja)) $tietoja = 1; else $tietoja = 0;
+		if(isset($_GET['asiakas'])) $asiakas = $_GET['asiakas']; else $asiakas = '';
 		$asetukset = Asetukset::model()->findByPk(1);
 		$this->renderPartial('did',array(
 			'pvm'=>$pvm,
 			'tid'=>$tid,
 			'kohde'=>$kohde,
+			'asiakas'=>$asiakas,
 			'from'=>$from,
 			'tietoja'=>$tietoja,
 			'asetukset'=>$asetukset
@@ -1545,6 +1547,11 @@ class TyovuorootController extends Controller
 			{
 				$kohde = Yii::app()->session['kohde'];
 			}
+			$asiakas = '';
+			if(isset(Yii::app()->session['asiakas']))
+			{
+				$asiakas = Yii::app()->session['asiakas'];
+			}
 
 			$return = array();
 			if(isset(Yii::app()->session['from']) and isset(Yii::app()->session['to']))
@@ -1560,7 +1567,8 @@ class TyovuorootController extends Controller
 						'tid'=>$tid, 
 						'pvm'=>date("d.m.Y", strtotime($start_date)), 
 						'ymd'=>date("Ymd",strtotime($start_date)),
-						'kohde' => $kohde
+						'kohde' => $kohde,
+						'asiakas' => $asiakas
 					);
 
 					$start_date = date ("Y-m-d", strtotime("+1 days", strtotime($start_date)));
