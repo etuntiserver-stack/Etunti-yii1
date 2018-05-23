@@ -307,8 +307,28 @@ $model->tid = $_GET['id'];
 		<?php echo $form->textField($model,'yksi_tuloraja',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'yksi_tuloraja'); ?>
 	</div>
-
+  </div><div class="col-sm-4">
+  <legend>
+    <h2><?php echo Yii::t('main', 'Työsuhteet historia'); ?></h2>
+  </legend>
+	
+	<div class="section fill mb5">
+		<?php 
+		$th = TyosuhdeHistoria::model()->findAll(" tid='".$model->tid."' ");
+		foreach($th as $item){
+			$arr = json_decode($item->arr);
+			echo '<span data-toggle="collapse" data-target="#demo_'.$item->id.'" class="btn btn-block btn-primary myBgColors">Työsuhde #'.$item->id.' <i class="caret"></i></span>
+			<div id="demo_'.$item->id.'" class="collapse"><br><p>';
+			foreach($arr as $k => $ar){
+				echo $form->labelEx($model, $k).' '.$ar.'<br>';
+			}
+			echo '</p></div>';
+		echo '<hr>';
+		}
+		?>
+	</div>
   </div>
+
 </div><!-- form -->
 <?php endif; ?>
 	<br>

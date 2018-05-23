@@ -440,11 +440,28 @@ class TyontekijatController extends Controller
 	public function actionUpdate($id)
 	{
 
+		$netvisorResponse = '';
+		$model=$this->loadModel($id);
+
 	// <-- Oikeudet
 	   $checkOikeus = "tyontekijat_2_".Yii::app()->user->adminStatus;
 	   $site = Yii::app()->createController('Site');
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
+
+		// <-- Tyosuhteet talteen
+		if(isset($_GET['tyosuhteet_talteen']))
+		{
+			$modelTyosuhteet = Tyosuhdet::model()->find(" tid='".$model->id."' ");
+
+			$th = new TyosuhdeHistoria;
+			$th->tid = $model->id;
+			$th->arr = json_encode( $modelTyosuhteet->attributes );
+			$th->save();
+			Yii::app()->user->setFlash('success', "Työsuhteet tallennettu.");
+			$this->redirect(array('update', 'id' => $model->id));
+		}
+		//     Tyosuhteet talteen -->
 
 
 		// <-- Kuvan poistaminen
@@ -455,9 +472,6 @@ class TyontekijatController extends Controller
 		}
 		//     Kuvan poistaminen -->
 
-
-		$netvisorResponse = '';
-		$model=$this->loadModel($id);
 
 
 		// <-- Sulje mobiili
