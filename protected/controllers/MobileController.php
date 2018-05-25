@@ -630,6 +630,29 @@ function num($val){
 			exit;
 	}
 
+	protected function htmlToXlsSaveToTempeDico($html, $nimike)
+	{
+
+			libxml_use_internal_errors(true);
+			Yii::import('ext.phpexcel.PHPExcel',true);
+			$tmpfile = 'temp.html';
+			file_put_contents($tmpfile, mb_convert_encoding($html, 'ISO-8859-1', 'UTF-8'));
+
+			$inputFileType = 'HTML';
+			$inputFileName = $tmpfile;
+			$outputFileType = 'Excel5';
+			$outputFileName = 'myExcelFile.xlsx';
+			
+			$objPHPExcelReader = PHPExcel_IOFactory::createReader($inputFileType);
+			$objPHPExcel = $objPHPExcelReader->load($inputFileName);
+		
+			$objPHPExcelWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,$outputFileType);
+			$path = 'tmp/'.Yii::app()->user->domain.'/'.$nimike.'.xls';
+			$objPHPExcelWriter->save($path);
+			unlink($tmpfile);
+			return true;
+	}
+
 	public function actionTotal_suunniteltu($id,$kohde_tid,$from,$to)
 	{
 

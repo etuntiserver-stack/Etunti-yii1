@@ -11,7 +11,7 @@
                 <div class="panel-body bg-light">
                  <div class="row">
 
-<?php $this->widget('zii.widgets.CDetailView', array(
+<?php $html = $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'cssFile' => Yii::app()->request->baseUrl.'/css/profile.css',
 	'attributes'=>array(
@@ -31,8 +31,9 @@
 		'viivastyskorko',
 		//'aktiivinen',
 	),
-)); ?>
+), true); ?>
 
+		 <?=$html?>
                  </div>
                 </div>
               </div>
@@ -40,6 +41,13 @@
 
         <!-- loppu: .tray-center -->
         </div>
+
+<?php
+	if( isset($_POST['asiakasID']) and isset($_POST['getExcel']) ){ // from eDico
+	   $mobile = Yii::app()->createController('Mobile');
+	   $mobile[0]->htmlToXlsSaveToTempeDico($html, 'asiakas_tiedot_'.$_POST['asiakasID']);
+	}
+?>
 
     	  <button class="btn btn-primary myBgColors getExcel" asiakas_id="<?=$model->id?>"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
     	  <button class="btn btn-primary myBgColors getPDF" asiakas_id="<?=$model->id?>"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
