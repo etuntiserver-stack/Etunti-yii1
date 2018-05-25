@@ -346,12 +346,22 @@ public function actionLogin($domain)
 				Yii::app()->theme = 'etunti';
 				$return = $this->renderPartial('/asiakkaat/view', array('model' => $model), true);
 				// <-- tiedosto
-				$tiedosto = 'asiakas_tiedot_'.$model->id.'.xls';
+				$tiedosto = 'asiakas_tiedot_'.$model->id;
 				$path = 'tmp/'.$domain;
-				if (file_exists( Yii::app()->basePath.'/../'.$path.'/'.$tiedosto ) 
+				if (file_exists( Yii::app()->basePath.'/../'.$path.'/'.$tiedosto.'.xls' ) 
 					and isset($_POST['asiakasID']) and isset($_POST['getExcel'])) 
 				{
-					$link = Yii::app()->request->hostInfo .'/'.$path.'/'.$tiedosto;
+					$link = Yii::app()->request->hostInfo .'/'.$path.'/'.$tiedosto.'.xls';
+					$filename = basename($link);
+					$ext = pathinfo($filename, PATHINFO_EXTENSION);
+					$this->_sendResponse(200, CJSON::encode(array('link'=>$link, 'filename'=>$filename, 'ext'=>$ext)));
+					exit;
+				}
+
+				if (file_exists( Yii::app()->basePath.'/../'.$path.'/'.$tiedosto.'.pdf' ) 
+					and isset($_POST['asiakasID']) and isset($_POST['getPDF'])) 
+				{
+					$link = Yii::app()->request->hostInfo .'/'.$path.'/'.$tiedosto.'.pdf';
 					$filename = basename($link);
 					$ext = pathinfo($filename, PATHINFO_EXTENSION);
 					$this->_sendResponse(200, CJSON::encode(array('link'=>$link, 'filename'=>$filename, 'ext'=>$ext)));

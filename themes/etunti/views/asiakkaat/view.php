@@ -47,6 +47,10 @@
 	   $mobile = Yii::app()->createController('Mobile');
 	   $mobile[0]->htmlToXlsSaveToTempeDico($html, 'asiakas_tiedot_'.$_POST['asiakasID']);
 	}
+	if( isset($_POST['asiakasID']) and isset($_POST['getPDF']) ){ // from eDico
+	   $mobile = Yii::app()->createController('Mobile');
+	   $mobile[0]->htmlToPDFSaveToTempeDico($html, 'asiakas_tiedot_'.$_POST['asiakasID']);
+	}
 ?>
 
     	  <button class="btn btn-primary myBgColors getExcel" asiakas_id="<?=$model->id?>"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
