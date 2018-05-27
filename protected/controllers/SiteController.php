@@ -2699,27 +2699,34 @@ $(document).ready(function(){
 	public function logoShower($height)
 	{
 
+		$logo 	= Yii::app()->user->domain;
 		$asetukset = Asetukset::model()->findbypk(1);
 		if( $height === null )
 			$korkeus = $asetukset->logon_korkeus;
 		else
 			$korkeus = $height;
 
-		$logo 	= $asetukset->logon_polkku;
+		if (file_exists($asetukset->logon_polkku)) {
+			$logo 	= $asetukset->logon_polkku;
+			return '<img src="'.$logo.'" style="height:'.$korkeus.'px;">';
+		}
+
 		$polkku = Yii::app()->basePath.'/../tiedostot/firma/'.Yii::app()->user->domain;
 		$polkku2 = 'tiedostot/firma/'.Yii::app()->user->domain;
 		if (file_exists($polkku.'/systemlogo.jpg')) {
 			$image = $polkku2.'/systemlogo.jpg';
 			$imageData = base64_encode(file_get_contents($image));
 			$logo = 'data: '.mime_content_type($image).';base64,'.$imageData;
+			return '<img src="'.$logo.'" style="height:'.$korkeus.'px;">';
 		}
 		if (file_exists($polkku.'/systemlogo.png')) {
 			$image = $polkku2.'/systemlogo.png';
 			$imageData = base64_encode(file_get_contents($image));
 			$logo = 'data: '.mime_content_type($image).';base64,'.$imageData;
+			return '<img src="'.$logo.'" style="height:'.$korkeus.'px;">';
 		}
 
-		return '<img src="'.$logo.'" style="height:'.$korkeus.'px;">';
+		return $logo;
 	}
 
 	public function TyoryhmatHelper()

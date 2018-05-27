@@ -134,7 +134,10 @@ embed {height:100%;width:100%}
 
 	$html .= '<TABLE style="border-collapse: collapse; width:740px; height:30px;">';
 	$html .= '<TR>';
-	$html .= '<TD  style="width:320px; height:30px;"><img src="'.$asetukset->logon_polkku.'" height="30"></TD>';
+	$html .= '<TD  style="width:320px; height:30px;">';
+		$site = Yii::app()->createController('Site'); 
+		$html .= $site[0]->logoShower(null);
+	$html .= '</TD>';
 	$html .= '<TD  style="height:30px;"><b>'.$laskunNimetus.'</b></TD>';
 	$html .= '</TR>';
 	$html .= '</TABLE>';
