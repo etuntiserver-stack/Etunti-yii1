@@ -2706,7 +2706,7 @@ $(document).ready(function(){
 		else
 			$korkeus = $height;
 
-		if (file_exists($asetukset->logon_polkku)) {
+		if (@getimagesize($asetukset->logon_polkku)) {
 			$logo 	= $asetukset->logon_polkku;
 			return '<img src="'.$logo.'" style="height:'.$korkeus.'px;">';
 		}
