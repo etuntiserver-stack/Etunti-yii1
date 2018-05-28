@@ -109,9 +109,15 @@ function saveFileToStorage(link, filename, ext){
 	function openThisFile(fileForOpener, ext){
 
 		document.addEventListener('deviceready', function () {
+		if( ext == 'pdf' ){
+			var application = 'application/pdf';
+		}
+		if( ext == 'xls' ){
+			var application = 'application/xls';
+		}
 		cordova.plugins.fileOpener2.open(
 		    fileForOpener,
-		    'application/pdf', 
+		    application, 
 		    { 
 		        error : function(e) { 
 		            console.log('Error status: ' + e.status + ' - Error message: ' + e.message);
@@ -128,7 +134,7 @@ function saveFileToStorage(link, filename, ext){
    }
 
    function notReady(){
-	//window.location.href=link;
+	window.location.href=link;
    }
 
 }

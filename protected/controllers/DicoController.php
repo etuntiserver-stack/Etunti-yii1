@@ -348,10 +348,10 @@ public function actionLogin($domain)
 				// <-- tiedosto
 				$path = 'tmp/'.$domain;
 				$tiedosto = 'asiakas_tiedot_xls_'.$model->id;
-				if (file_exists( Yii::app()->basePath.'/../'.$path.'/'.$tiedosto.'.xls' ) 
+				if (file_exists( Yii::app()->basePath.'/../'.$path.'/'.$tiedosto.'.xlsx' ) 
 					and isset($_POST['asiakasID']) and isset($_POST['getExcel'])) 
 				{
-					$link = Yii::app()->request->hostInfo .'/'.$path.'/'.$tiedosto.'.xls';
+					$link = Yii::app()->request->hostInfo .'/'.$path.'/'.$tiedosto.'.xlsx';
 					$filename = basename($link);
 					$ext = pathinfo($filename, PATHINFO_EXTENSION);
 					$this->_sendResponse(200, CJSON::encode(array('link'=>$link, 'filename'=>$filename, 'ext'=>$ext)));

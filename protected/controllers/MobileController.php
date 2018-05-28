@@ -647,7 +647,7 @@ function num($val){
 			$objPHPExcel = $objPHPExcelReader->load($inputFileName);
 		
 			$objPHPExcelWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,$outputFileType);
-			$path = 'tmp/'.Yii::app()->user->domain.'/'.$nimike.'.xls';
+			$path = 'tmp/'.Yii::app()->user->domain.'/'.$nimike.'.xlsx';
 			$objPHPExcelWriter->save($path);
 			unlink($tmpfile);
 			return true;
