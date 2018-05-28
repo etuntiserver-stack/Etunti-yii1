@@ -26,8 +26,7 @@
 
 <table id="ylataulu">
  <tr><td style="width:80%">
-  <?php $asetukset=Asetukset::model()->find("id=1"); ?>
-  <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
+  <p><?php $site = Yii::app()->createController('Site'); echo $site[0]->logoShower(null); ?></p>
  </td><td valign="right" style="width:20%">
   <?php echo Yii::t('main', 'Palkkataulukko'); ?>
   <?php if(isset($from) and isset($to)) : ?>

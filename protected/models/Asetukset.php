@@ -178,7 +178,7 @@ class Asetukset extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id,logon_polkku, logon_korkeus, johtaja', 'required'),
+			array('id, johtaja', 'required'),
 			array('id, show_name, app_show_phone, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero, ilmoitus_avoimista_kohteesta_sahkopostiin, ilmoitus_myohastyneista_kohteesta_sahkopostiin, netvisor_kaytto, asiakas_tyovuorossa, onlinevaraus_aikaisintaan_paivamaara, onlinevaraus_alku, onlinevaraus_loppu, paikkakunta_tyovuorossa, app_lopettaa_vain_tagilla, ilmoitus_toistuvien_tyovuorojen_paattymisesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen, tyovuorolahetys_naytetaanko_asiakas, tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka, ilmoitus_merkkipaivasta, tyontekijan_etunimi_sukunimi_jarjestys, app_hyvaksytyt_tyot_vkomaara, app_naytetaanko_hyvaksyttyt_tunnit, app_naytta_avain, tapaturmavakuutus, ryhmahenkivakuutus, tyottomyysvakuutusmaksu, sosiaaliturvamaksu, tyel_maksun_osuus_palkkansummasta, app_naytetaanko_kohteen_yhteyshenkilo, onlinevaraus_viikonlopput, maksullinen, ilmainen_versio_kayttotunnit, alennus_max_euro, alennus_max_prosentti, peruutta_paiva_ennen, lasketaanko_lounastauko, apuaika_meneeko_laskutukseen, netvisor_lahetetaanko_tyontekija, tuote_tyovuorossa, app_matka_osoite, app_lounastauko_osoite, tuotteet_palvelut_muoto, onlinevaraus_aikavali, onlinevaraus_autoremove, tyoryhmat, tyoryhmat_kohde, tyoryhmat_tyontekijat, tietosuoja_vinkki_sailyttaminen', 'numerical', 'integerOnly'=>true),
 
 			array('paivan_uutinen, logon_polkku, netvisor_host', 'length', 'max'=>500),
