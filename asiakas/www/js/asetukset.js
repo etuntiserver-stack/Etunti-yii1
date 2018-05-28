@@ -120,6 +120,10 @@ function saveFileToStorage(link, filename, ext){
 		    application, 
 		    { 
 		        error : function(e) { 
+			    if( ext == 'xls' ){
+
+				//return false;
+			    }
 		            console.log('Error status: ' + e.status + ' - Error message: ' + e.message);
 		        },
 		        success : function () {
@@ -134,7 +138,7 @@ function saveFileToStorage(link, filename, ext){
    }
 
    function notReady(){
-	window.location.href=link;
+	//not ready ei toimi window.location.href=link;
    }
 
 }

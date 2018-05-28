@@ -45,11 +45,11 @@
 <?php
 	if( isset($_POST['asiakasID']) and isset($_POST['getExcel']) ){ // from eDico
 	   $mobile = Yii::app()->createController('Mobile');
-	   $mobile[0]->htmlToXlsSaveToTempeDico($html, 'asiakas_tiedot_'.$_POST['asiakasID']);
+	   $mobile[0]->htmlToXlsSaveToTempeDico($html, 'asiakas_tiedot_xls_'.$_POST['asiakasID']);
 	}
 	if( isset($_POST['asiakasID']) and isset($_POST['getPDF']) ){ // from eDico
 	   $mobile = Yii::app()->createController('Mobile');
-	   $mobile[0]->htmlToPDFSaveToTempeDico($html, 'asiakas_tiedot_'.$_POST['asiakasID']);
+	   $mobile[0]->htmlToPDFSaveToTempeDico($html, 'asiakas_tiedot_pdf_'.$_POST['asiakasID']);
 	}
 ?>
 
