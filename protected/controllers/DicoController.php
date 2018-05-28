@@ -344,7 +344,7 @@ public function actionLogin($domain)
 		   if(isset($model->id))
 		   {
 				Yii::app()->theme = 'etunti';
-				$return = $this->renderPartial('/asiakkaat/view', array('model' => $model), true);
+				$return = $this->renderPartial('/asiakkaat/view_edico', array('model' => $model), true);
 				// <-- tiedosto
 				$tiedosto = 'asiakas_tiedot_'.$model->id;
 				$path = 'tmp/'.$domain;

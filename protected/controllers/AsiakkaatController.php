@@ -40,7 +40,7 @@ class AsiakkaatController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -320,6 +320,13 @@ class AsiakkaatController extends Controller
 		echo $check;
 	}
 */
+
+	public function actionView_edico($id)
+	{
+		$this->render('view_edico',array(
+			'model'=>$this->loadModel($id),
+		));
+	}
 
 	public function actionView($id)
 	{
