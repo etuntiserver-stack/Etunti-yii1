@@ -346,11 +346,11 @@ public function actionLogin($domain)
 				Yii::app()->theme = 'etunti';
 				$return = $this->renderPartial('/asiakkaat/view_edico', array('model' => $model), true);
 				// <-- tiedosto
-				$tiedosto = 'asiakas_tiedot_'.$model->id;
 				$path = 'tmp/'.$domain;
 				if (file_exists( Yii::app()->basePath.'/../'.$path.'/'.$tiedosto.'.xls' ) 
 					and isset($_POST['asiakasID']) and isset($_POST['getExcel'])) 
 				{
+					$tiedosto = 'asiakas_tiedot_xls_'.$model->id;
 					$link = Yii::app()->request->hostInfo .'/'.$path.'/'.$tiedosto.'.xls';
 					$filename = basename($link);
 					$ext = pathinfo($filename, PATHINFO_EXTENSION);
@@ -361,6 +361,7 @@ public function actionLogin($domain)
 				if (file_exists( Yii::app()->basePath.'/../'.$path.'/'.$tiedosto.'.pdf' ) 
 					and isset($_POST['asiakasID']) and isset($_POST['getPDF'])) 
 				{
+					$tiedosto = 'asiakas_tiedot_pdf_'.$model->id;
 					$link = Yii::app()->request->hostInfo .'/'.$path.'/'.$tiedosto.'.pdf';
 					$filename = basename($link);
 					$ext = pathinfo($filename, PATHINFO_EXTENSION);

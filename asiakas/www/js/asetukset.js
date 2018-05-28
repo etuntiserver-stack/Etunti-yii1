@@ -88,8 +88,12 @@ function saveFileToStorage(link, filename, ext){
 		    uri,
 		    fileSystem.root.toURL() + filename,
 		    function(entry) {
-		        console.log("download complete: " + entry.fullPath);
-			openThisFile(fileSystem.root.toURL() + filename, ext)
+		        alert("download complete: " + entry.fullPath);
+			if( ext == 'pdf' ){
+				openThisFile(fileSystem.root.toURL() + filename, ext)
+			} else {
+				window.location.href=entry.fullPath;
+			}
 		    },
 		    function(error) {
 		        console.log("download error source " + error.source);
@@ -107,23 +111,12 @@ function saveFileToStorage(link, filename, ext){
 	});
 
 	function openThisFile(fileForOpener, ext){
-
 		document.addEventListener('deviceready', function () {
-		if( ext == 'pdf' ){
-			var application = 'application/pdf';
-		}
-		if( ext == 'xls' ){
-			var application = 'application/xls';
-		}
 		cordova.plugins.fileOpener2.open(
 		    fileForOpener,
-		    application, 
+		    'application/pdf', 
 		    { 
 		        error : function(e) { 
-			    if( ext == 'xls' ){
-
-				//return false;
-			    }
 		            console.log('Error status: ' + e.status + ' - Error message: ' + e.message);
 		        },
 		        success : function () {
@@ -138,7 +131,7 @@ function saveFileToStorage(link, filename, ext){
    }
 
    function notReady(){
-	//not ready ei toimi window.location.href=link;
+	//window.location.href=link;
    }
 
 }
