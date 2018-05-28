@@ -88,12 +88,8 @@ function saveFileToStorage(link, filename, ext){
 		    uri,
 		    fileSystem.root.toURL() + filename,
 		    function(entry) {
-		        alert("download complete: " + entry.fullPath);
-			if( ext == 'pdf' ){
-				openThisFile(fileSystem.root.toURL() + filename, ext)
-			} else {
-				window.location.href=entry.fullPath;
-			}
+		        console.log("download complete: " + entry.fullPath);
+			openThisFile(fileSystem.root.toURL() + filename, ext)
 		    },
 		    function(error) {
 		        console.log("download error source " + error.source);
@@ -111,6 +107,7 @@ function saveFileToStorage(link, filename, ext){
 	});
 
 	function openThisFile(fileForOpener, ext){
+
 		document.addEventListener('deviceready', function () {
 		cordova.plugins.fileOpener2.open(
 		    fileForOpener,
