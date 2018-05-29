@@ -630,6 +630,54 @@ function num($val){
 			exit;
 	}
 
+	protected function htmlToXlsSaveToTempeDico($html, $nimike)
+	{
+
+			libxml_use_internal_errors(true);
+			Yii::import('ext.phpexcel.PHPExcel',true);
+			$tmpfile = 'temp.html';
+			file_put_contents($tmpfile, mb_convert_encoding($html, 'ISO-8859-1', 'UTF-8'));
+
+			$inputFileType = 'HTML';
+			$inputFileName = $tmpfile;
+			$outputFileType = 'Excel5';
+			$outputFileName = 'myExcelFile.xlsx';
+			
+			$objPHPExcelReader = PHPExcel_IOFactory::createReader($inputFileType);
+			$objPHPExcel = $objPHPExcelReader->load($inputFileName);
+		
+			$objPHPExcelWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,$outputFileType);
+			$path = 'tmp/'.Yii::app()->user->domain.'/'.$nimike.'.xls';
+			$objPHPExcelWriter->save($path);
+			unlink($tmpfile);
+			return true;
+	}
+
+	protected function htmlToPDFSaveToTempeDico($html, $nimike)
+	{
+			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
+			spl_autoload_unregister(array('YiiBase','autoload'));
+			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
+			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDocAdv.inc';
+			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
+			spl_autoload_register(array('AutoLoader','load'));
+			spl_autoload_register(array('YiiBase', 'autoload'));
+
+			$path = 'tmp/'.Yii::app()->user->domain.'/'.$nimike;
+			$html = file_put_contents($path.'.html', $html);
+
+			$transform = new TransformDocAdvLibreOffice();
+			$transform->transformDocument($path.'.html', $path.'.pdf');
+
+
+    			$filename = $path.'.'.$ext;
+
+			$fileinfo = pathinfo($filename);
+			$sendname = $fileinfo['filename'] . '.' . strtoupper($fileinfo['extension']);
+			unlink($path.'.html');
+			return true;
+	}
+
 	public function actionTotal_suunniteltu($id,$kohde_tid,$from,$to)
 	{
 

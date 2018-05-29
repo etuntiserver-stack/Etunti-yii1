@@ -275,7 +275,7 @@ $(document).ready(function(){
           '<ul class="dropdown-menu list-group dropdown-persist w250" role="menu">' +
             '<li class="list-group-item">' +
               '<a href="#" class="animated animated-short fadeInUp" id="asetukset">' +
-                '<span class="fa fa-gear"></span> Omat asetukset </a>' +
+                '<span class="fa fa-gear"></span> Omat tiedot </a>' +
             '</li>' +
             
             '<li class="list-group-item">' +
