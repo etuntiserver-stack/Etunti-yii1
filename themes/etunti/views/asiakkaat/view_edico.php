@@ -53,6 +53,5 @@
 	}
 ?>
 
-    	  <button class="btn btn-primary myBgColors getExcel" asiakas_id="<?=$model->id?>"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
     	  <button class="btn btn-primary myBgColors getPDF" asiakas_id="<?=$model->id?>"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
-
+    	  <button class="btn btn-primary myBgColors getExcel" asiakas_id="<?=$model->id?>"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
