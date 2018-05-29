@@ -248,7 +248,7 @@ class SiteController extends Controller
 				';
 				$mail = new YiiMailer();
 				$mail->setFrom('no-reply@etunti.fi');
-				$mail->setTo('etuntimarkkinointi@etunti.fi');
+				$mail->setTo('info@etunti.fi');
 				$mail->setSubject($subject);
 				$mail->setBody($message);
 				$mail->send();
