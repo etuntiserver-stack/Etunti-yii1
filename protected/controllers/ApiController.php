@@ -1,8 +1,7 @@
 <?php
-if(isset($_SERVER['REMOTE_ADDR']) and $_SERVER['REMOTE_ADDR'] == '82.203.157.16'){
-header("Access-Control-Allow-Origin: *");
+if( isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )){
+	header("Access-Control-Allow-Origin: *");
 }
-
 
 
 //echo $_SERVER['HTTP_X_USERNAME'];
@@ -667,7 +666,7 @@ public function actionImei($dom)
 		    }
 
 		    $sel = '';
-		    $sel .= '<select id="list" class="form-control input-lg">';
+		    $sel .= '<select id="list_tyovuorosta" class="form-control input-lg">';
 		    $sel .= '<option>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
 		    foreach($tvuoro as $val){
 			$k = Kohteet::model()->findbypk($val->kohde);
@@ -694,7 +693,7 @@ public function actionImei($dom)
 					$osoite .= '. '.$nm;
 				}
 
-		      		$sel .= '<option value="'.$k->id.'">'.$osoite.'</option>';
+		      		$sel .= '<option value="'.$k->id.'" tv_id="'.$val->id.'">'.$osoite.'</option>';
 			}
 		    }
 		    $sel .= '</select>';
