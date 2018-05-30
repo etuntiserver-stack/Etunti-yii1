@@ -1276,20 +1276,23 @@ public function actionImei($dom)
 		$save = '';
 		if($mobupdate->save())
 		{
+			// <-- Auto hyvaksynta
+			$this->autoHyvaksynta($mobupdate->id);
+			//     Auto hyvaksynta -->
 
-				// <-- LOG
-				if( isset($mobupdate->id) )
-				{
-				$model_log 	= 'Mob';
-				$name_log 	= 'Tunnit';
-				$status_log 	= 'Update by APP';
+			// <-- LOG
+			if( isset($mobupdate->id) )
+			{
+			$model_log 	= 'Mob';
+			$name_log 	= 'Tunnit';
+			$status_log 	= 'Update by APP';
 	
-					$old_values = json_encode($log_old);
-					$new_values = json_encode($mobupdate->attributes);
-					$site = Yii::app()->createController('Site');
-					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-				}
-				//     LOG -->
+				$old_values = json_encode($log_old);
+				$new_values = json_encode($mobupdate->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			//     LOG -->
 
 			$save = 'ok';
 		} else {
@@ -1406,14 +1409,47 @@ public function actionImei($dom)
 
 
 
+	protected function autoHyvaksynta($id)
+	{
+		$mob = Mobile::model()->findByPk($id);
+		if( 
+			isset($mob->id) 
+			and isset($mob->tv_id) 
+			and $mob->tv_id != 0 
+			and $mob->status == 3 
+		){
+			$tv = Tyovuoroot::model()->findByPk($mob->tv_id);
+			if( isset($tv->id) ){
+				$asetukset = Asetukset::model()->findByPk(1);
+				$aikavali = 0;
+				$mobile_aloitus = strtotime($mob->aloitan);
+				$mobile_lopetus = strtotime($mob->loppui);
+				$tyovuoro_aloitus = strtotime($tv->pvm.' '.$tv->alku);
+				$tyovuoro_lopetus = strtotime($tv->pvm.' '.$tv->loppu);
+
+				if( isset($asetukset->app_auto_hyvaksyminen_aikavali )){
+					$aikavali = $asetukset->app_auto_hyvaksyminen_aikavali*60;
+				}
+
+				if(
+					$aikavali > 0 and
+					(
+						(($mobile_aloitus+$aikavali) >= $tyovuoro_aloitus and $mobile_aloitus < $tyovuoro_lopetus) 
+						and ($mobile_aloitus <= ($tyovuoro_aloitus+$aikavali) and $mobile_aloitus <= $tyovuoro_lopetus)
+					)
+					and (($mobile_lopetus-$aikavali) <= $tyovuoro_lopetus and $mobile_lopetus >= ($tyovuoro_lopetus-$aikavali))
+				){
+					Mobile::model()->updateByPk($id, array('hyvaksytty' => 'auto//'.date("d.m.Y")));
+				}
+			}
+		}
+	}
 
 	protected function etuSukunimi($tid)
 	{
-	   $site = Yii::app()->createController('Site');
-	   return $site[0]->etuSukunimi($tid);
+	   	$site = Yii::app()->createController('Site');
+	   	return $site[0]->etuSukunimi($tid);
 	}
-
-
 	protected function checkDBexists($db)
 	{
 		$connection=Yii::app()->db;
