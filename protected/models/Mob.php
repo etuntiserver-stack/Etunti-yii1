@@ -97,8 +97,7 @@ public $tekijan_nimi, $domain, $appVersio, $email, $salasana, $avoinID;
                      'sairaus' => 'int(1) ',
                      'laskutettu' => 'int(1) ',
                      'laskutetaan' => 'int(1) DEFAULT 1 ',
-
-
+                     'tv_id' => 'int(11)',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -121,7 +120,7 @@ public $tekijan_nimi, $domain, $appVersio, $email, $salasana, $avoinID;
 		// will receive user inputs.
 		return array(
 			array('kohde_kannasta', 'required'),
-			array('requests, kohdenID, tid, status, admin', 'numerical', 'integerOnly'=>true),
+			array('requests, kohdenID, tid, status, admin, tv_id', 'numerical', 'integerOnly'=>true),
 			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id, tekijan_nimi', 'length', 'max'=>50),
 			array('domain, imei, sim_serial_number, kohde_kannasta, hyvaksytty', 'length', 'max'=>100),
 			array('my_location', 'length', 'max'=>1000),
