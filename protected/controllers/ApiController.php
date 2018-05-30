@@ -666,7 +666,7 @@ public function actionImei($dom)
 		    }
 
 		    $sel = '';
-		    $sel .= '<select id="list_tyovuorosta" class="form-control input-lg">';
+		    $sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
 		    $sel .= '<option>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
 		    foreach($tvuoro as $val){
 			$k = Kohteet::model()->findbypk($val->kohde);
@@ -1051,7 +1051,7 @@ public function actionImei($dom)
 		    $criteria->condition = " osoite like '%".$_POST['thisKey']."%' ";
 	            $kohteet = Kohteet::model()->findAll($criteria);
 
-		    $sel = '<select id="list" class="form-control">';
+		    $sel = '<select id="list" class="form-control input-lg list_osoitevaihto">';
 		    $sel .= '<option id="valitseOsoite">'.Yii::t('app', 'Valitse osoite').'</option>';
 		    foreach($kohteet as $kohde)
 		    {
