@@ -50,8 +50,8 @@
 
 	<div class="row">
 	 <div class="col-sm-4">
-		<b>Hinnat sis. ALV</b> <input type="radio" name="alvsis" value="sis"> <br>
-		<b>Hinnat ALV 0%</b> <input type="radio" name="alvsis" value="nolla" checked>
+		<b>Hinnat sis. ALV</b> <input type="radio" name="alvsis" value="sis" <?php echo (isset($model->id) and $model->alvsis == 'sis')? 'checked':''; ?>> <br>
+		<b>Hinnat ALV 0%</b> <input type="radio" name="alvsis" value="nolla" <?php echo (!isset($model->id) or isset($model->id) and $model->alvsis == 'nolla')? 'checked':''; ?>>
 	 </div>
 	</div>
 
@@ -73,11 +73,21 @@
      <td>
 	<select name="Rivi[tuote][tuote][]" class="form-control tuotevalikko">
 	 <?php foreach($tp as $itm) : ?>
-	 <option value=<?=$itm->id?> hinta_alv_0="<?=$itm->hinta_alv_0?>" yksikko="<?=$itm->yksikko?>" alv="<?=$itm->alv?>" <?php echo ($itm->id == $r->tuote_palvelu_id)? 'selected':''; ?>><?=$itm->nimike?></option>
+	 <option value=<?=$itm->id?> hinta_alv_0="<?=$itm->hinta_alv_0?>" hinta_alv_sis="<?=$itm->hinta_alv_sis?>" yksikko="<?=$itm->yksikko?>" alv="<?=$itm->alv?>" <?php echo ($itm->id == $r->tuote_palvelu_id)? 'selected':''; ?>><?=$itm->nimike?></option>
 	 <?php endforeach; ?>
 	</select>
      </td>
-     <td><input type="number" class="form-control hinta_tuote" name="Rivi[tuote][hinta_tuote][]" step="any" value="<?=$r->hinta_tuote?>"></td>
+     <td>
+	   <input type="hidden" class="form-control hinta_alv_0" name="Rivi[tuote][hinta_tuote][]" step="any" value="<?=$r->hinta_tuote?>">
+	   <input type="hidden" class="form-control hinta_alv_sis" name="Rivi[tuote][hinta_tuote_sis][]" step="any" value="<?=$r->hinta_tuote_sis?>">
+	<div class="form-inline">
+	   <div class="form-group">
+	   	<span class="hinta_alv_0_txt">ALV0% <?=$r->hinta_tuote?>&euro;  |</span>
+	   </div>
+	   <div class="form-group">
+		<span class="hinta_alv_sis_txt">ALV sis. <?=$r->hinta_tuote_sis?>&euro;</span>
+	   </div>
+	</div>
      <td><input type="number" class="form-control hinnasto_hinta" name="Rivi[tuote][hinnasto_hinta][]" step="any" value="<?=$r->hinnasto_hinta?>"></td>
      <td>
 	<?php $l = array(0=>0,10=>10,14=>14,24=>24); ?>
@@ -113,7 +123,7 @@
 <br>
 
 	<div class="buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna', array('class' => 'btn btn-primary myBgColors')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna', array('class' => 'btn btn-primary myBgColors submitthis')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
@@ -125,11 +135,23 @@
 	<select name="Rivi[tuote][tuote][]" class="form-control tuotevalikko">
 	 <option value=>Valitse</option>
 	 <?php foreach($tp as $itm) : ?>
-	 <option value=<?=$itm->id?> hinta_alv_0="<?=$itm->hinta_alv_0?>" yksikko="<?=$itm->yksikko?>" alv="<?=$itm->alv?>"><?=$itm->nimike?></option>
+	 <option value=<?=$itm->id?> hinta_alv_0="<?=$itm->hinta_alv_0?>" hinta_alv_sis="<?=$itm->hinta_alv_sis?>" yksikko="<?=$itm->yksikko?>" alv="<?=$itm->alv?>"><?=$itm->nimike?></option>
 	 <?php endforeach; ?>
 	</select>
      </td>
-     <td><input type="number" class="form-control hinta_tuote" name="Rivi[tuote][hinta_tuote][]" step="any" value="0"></td>
+     <td>
+	   <input type="hidden" class="form-control hinta_alv_0" name="Rivi[tuote][hinta_tuote][]" step="any" value="0">
+	   <input type="hidden" class="form-control hinta_alv_sis" name="Rivi[tuote][hinta_tuote_sis][]" step="any" value="0">
+
+	<div class="form-inline">
+	   <div class="form-group">
+	   	<span class="hinta_alv_0_txt"></span>
+	   </div>
+	   <div class="form-group">
+		<span class="hinta_alv_sis_txt"></span>
+	   </div>
+	</div>
+     </td>
      <td><input type="number" class="form-control hinnasto_hinta" name="Rivi[tuote][hinnasto_hinta][]" step="any" value="0"></td>
      <td>
 	<?php $l = array(0=>0,10=>10,14=>14,24=>24); ?>
@@ -160,16 +182,43 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
+  $(".submitthis").click(function(e){
+	e.preventDefault();
+	var tuotteet = 0;
+	$( ".tuotevalikko" ).each(function() {
+	  	tuotteet += 1;
+		if( $(this, 'option:selected').val() == '' ){
+			alert('Valitse tuote.');
+			return false;
+		}
+	});
+	if( ! $('input[name=alvsis]').is(':checked')  ){
+		alert('Valitse ALV-muoto.');
+		return false;
+	}
+	if( tuotteet == 0 ){ 
+		alert('Hinnastossa pitää olla vähintään yksi tuote.');
+		return false;
+	}
+
+	//return false;
+	$(this).closest('form').submit();
+  });
+
   $(".uusiRivi").click(function(){
 	var kontenti = $("#uusiRiviKontentti").val();
 	$("table#TableHinnasto tr").last().after( kontenti );
   });
 
-  $(document).delegate(".tuotevalikko","change",function(){hinnasto_alv
+  $(document).delegate(".tuotevalikko","change",function(){
 	var hinta_alv_0 = $('option:selected', this).attr('hinta_alv_0');
+	var hinta_alv_sis = $('option:selected', this).attr('hinta_alv_sis');
 	var hinnasto_alv = $('option:selected', this).attr('alv');
 	var yksikko = $('option:selected', this).attr('yksikko');
-	$(this).closest('tr').find('.hinta_tuote').val(hinta_alv_0);
+	$(this).closest('tr').find('.hinta_alv_0').val(hinta_alv_0);
+	$(this).closest('tr').find('.hinta_alv_0_txt').html('ALV0% ' + hinta_alv_0 + '&euro; | ');
+	$(this).closest('tr').find('.hinta_alv_sis').val(hinta_alv_sis);
+	$(this).closest('tr').find('.hinta_alv_sis_txt').html('ALV sis. ' +hinta_alv_sis + '&euro;');
 	$(this).closest('tr').find('.yksikkovalikko').val(yksikko);
 	$(this).closest('tr').find('.hinnasto_alv').val(hinnasto_alv);
   });
@@ -208,6 +257,12 @@ $(document).ready(function(){
   });
 
   $('input[name=alvsis]').change(function(){
+	alvchecked();
+  });
+
+	alvchecked();
+
+  function alvchecked(){
 	var alvsis = $('input[name=alvsis]:checked').val();
 	if( alvsis == 'nolla'){
 		$('.hinnasto_yht').attr('readonly', 'yes');
@@ -217,7 +272,7 @@ $(document).ready(function(){
 		$('.hinnasto_yht').removeAttr('readonly');
 		$('.hinnasto_hinta').attr('readonly', 'yes');
 	}
-  });
+  }
 
   $(document).delegate(".hinnasto_yht","keyup",function(){
 	var alvsis = $('input[name=alvsis]:checked').val();

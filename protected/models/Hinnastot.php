@@ -34,6 +34,7 @@ class Hinnastot extends DB2ActiveRecord
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
                      'hinnaston_otsikko' => 'varchar(255)',
                      'aktiivinen' => 'int(1) DEFAULT 1',
+                     'alvsis' => 'varchar(100) NULL',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -55,7 +56,7 @@ class Hinnastot extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('hinnaston_otsikko', 'required'),
+			array('hinnaston_otsikko, alvsis', 'required'),
 			array('aktiivinen', 'numerical', 'integerOnly'=>true),
 			array('hinnaston_otsikko', 'length', 'max'=>255),
 			// The following rule is used by search().
