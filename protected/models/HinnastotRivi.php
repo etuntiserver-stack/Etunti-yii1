@@ -38,6 +38,7 @@ class HinnastotRivi extends DB2ActiveRecord
                      'hinnasto_alv' => 'int(3)',
                      'hinnasto_yksikko' => 'varchar(100)',
 		     'hinta_tuote' => 'float',
+		     'hinta_tuote_sis' => 'float',
 		     'hinnasto_yht' => 'float',
 		);
 
@@ -63,7 +64,7 @@ class HinnastotRivi extends DB2ActiveRecord
 		return array(
 			array('hinnastot_id, tuote_palvelu_id, hinnasto_hinta, hinnasto_alv', 'required'),
 			array('hinnastot_id, tuote_palvelu_id, hinnasto_alv', 'numerical', 'integerOnly'=>true),
-			array('hinnasto_hinta, hinta_tuote, hinnasto_yht', 'numerical'),
+			array('hinnasto_hinta, hinta_tuote, hinta_tuote_sis, hinnasto_yht', 'numerical'),
 			array('hinnasto_yksikko', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
