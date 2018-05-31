@@ -739,6 +739,19 @@
 	</div>
 
 	<legend><h4><?=Yii::t('main', 'Hyväksy tunnit automaattisesti.')?></h4></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_auto_hyvaksyminen'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'app_auto_hyvaksyminen', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'app_auto_hyvaksyminen'); ?>
+	</div>
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'app_auto_hyvaksyminen_aikavali'); ?>
 		<?php 
