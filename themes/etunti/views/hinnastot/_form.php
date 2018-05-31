@@ -73,7 +73,7 @@
      <td>
 	<select name="Rivi[tuote][tuote][]" class="form-control tuotevalikko">
 	 <?php foreach($tp as $itm) : ?>
-	 <option value=<?=$itm->id?> hinta_alv_0="<?=$itm->hinta_alv_0?>" yksikko="<?=$itm->yksikko?>" alv="<?=$itm->alv?>" <?php echo ($itm->id == $r->tuote_palvelu_id)? 'selected':''; ?>><?=$itm->nimike?></option>
+	 <option value=<?=$itm->id?> hinta_alv_0="<?=$itm->hinta_alv_0?>" hinta_alv_sis="<?=$itm->hinta_alv_sis?>" yksikko="<?=$itm->yksikko?>" alv="<?=$itm->alv?>" <?php echo ($itm->id == $r->tuote_palvelu_id)? 'selected':''; ?>><?=$itm->nimike?></option>
 	 <?php endforeach; ?>
 	</select>
      </td>
@@ -82,10 +82,10 @@
 	   <input type="hidden" class="form-control hinta_alv_sis" name="Rivi[tuote][hinta_tuote_sis][]" step="any" value="<?=$r->hinta_tuote_sis?>">
 	<div class="form-inline">
 	   <div class="form-group">
-	   	ALV0% <?=$r->hinta_tuote?>&euro;  |
+	   	<span class="hinta_alv_0_txt">ALV0% <?=$r->hinta_tuote?>&euro;  |</span>
 	   </div>
 	   <div class="form-group">
-		ALV sis. <?=$r->hinta_tuote_sis?>&euro;
+		<span class="hinta_alv_sis_txt">ALV sis. <?=$r->hinta_tuote_sis?>&euro;</span>
 	   </div>
 	</div>
      <td><input type="number" class="form-control hinnasto_hinta" name="Rivi[tuote][hinnasto_hinta][]" step="any" value="<?=$r->hinnasto_hinta?>"></td>
@@ -214,7 +214,7 @@ $(document).ready(function(){
 	$(this).closest('tr').find('.hinta_alv_0').val(hinta_alv_0);
 	$(this).closest('tr').find('.hinta_alv_0_txt').html('ALV0% ' + hinta_alv_0 + '&euro; | ');
 	$(this).closest('tr').find('.hinta_alv_sis').val(hinta_alv_sis);
-	$(this).closest('tr').find('.hinta_alv_sis_txt').html(hinta_alv_sis + '&euro;');
+	$(this).closest('tr').find('.hinta_alv_sis_txt').html('ALV sis. ' +hinta_alv_sis + '&euro;');
 	$(this).closest('tr').find('.yksikkovalikko').val(yksikko);
 	$(this).closest('tr').find('.hinnasto_alv').val(hinnasto_alv);
   });
