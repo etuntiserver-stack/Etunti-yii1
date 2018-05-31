@@ -1320,7 +1320,7 @@ $("#Lasku_as_nro").change(function() {
 
 		laskutus(sp[0]);
 		if(sp[0]){
-		  $("#Lasku_laskutus option[value="+sp[0]+"]").attr('selected','selected');
+		  $("#Lasku_laskutus").val(sp[0]);
 		}
 		if(sp[1]){
 		  $("#Lasku_maksuehto").val(sp[1]);
@@ -1352,8 +1352,8 @@ $("#Lasku_as_nro").change(function() {
 		    $("#Lasku_erapaiva").val(sp[9])
 		    $("#Lasku_v_tunnus").val(sp[10])
 		    $("#Lasku_verkkolaskuosoite").val(sp[11])
-		    $("#Lasku_muistutuslasku_auto option[value="+sp[12]+"]").attr('selected','selected');
-		    $("#Lasku_kirjeenluokka option[value="+sp[13]+"]").attr('selected','selected');
+		    $("#Lasku_muistutuslasku_auto").val(sp[12]);
+		    $("#Lasku_kirjeenluokka").val(sp[13]);
 		    $("#Lasku_sahkoposti").val(sp[14])
 		    $("#Lasku_viivastyskorko").val(sp[15])
 
