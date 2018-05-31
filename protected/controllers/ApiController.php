@@ -1277,7 +1277,7 @@ public function actionImei($dom)
 		if($mobupdate->save())
 		{
 			// <-- Auto hyvaksynta
-			//$this->autoHyvaksynta($mobupdate->id);
+			$this->autoHyvaksynta($mobupdate->id);
 			//     Auto hyvaksynta -->
 
 			// <-- LOG
@@ -1421,7 +1421,40 @@ public function actionImei($dom)
 			$tv = Tyovuoroot::model()->findByPk($mob->tv_id);
 			if( isset($tv->id) ){
 				$asetukset = Asetukset::model()->findByPk(1);
-				if( isset($asetukset->app_auto_hyvaksyminen) and $asetukset->app_auto_hyvaksyminen == 1 ){
+
+				// <-- Totetuneen ajan mukaan
+				if( 
+					isset($asetukset->app_auto_hyvaksyminen) and $asetukset->app_auto_hyvaksyminen == 1 
+					and isset($asetukset->app_hyvaksynnan_peruste) and $asetukset->app_hyvaksynnan_peruste == 0
+				){
+				    $aikavali = 0;
+				    $mobile_kesto = strtotime($mob->loppui)-strtotime($mob->aloitan);
+				    $tyovuoro_kesto = strtotime($tv->pvm.' '.$tv->loppu)-strtotime($tv->pvm.' '.$tv->alku);
+
+				    if( isset($asetukset->app_auto_hyvaksyminen_aikavali) ){
+					$aikavali = $asetukset->app_auto_hyvaksyminen_aikavali*60;
+				    }
+
+				    if(
+					$aikavali > 0 and
+					($tyovuoro_kesto == $mobile_kesto)
+					or ( ($mobile_kesto > $tyovuoro_kesto) and ($mobile_kesto-$tyovuoro_kesto) <= $aikavali )
+					or ( ($mobile_kesto < $tyovuoro_kesto) and ($tyovuoro_kesto-$mobile_kesto) <= $aikavali )
+				    ){
+					Mobile::model()->updateByPk($id, array('hyvaksytty' => 'auto//'.date("d.m.Y")));
+				    	if( isset($asetukset->app_auto_hyvaksyminen_tvmukaan) and $asetukset->app_auto_hyvaksyminen_tvmukaan == 1 ){
+						$this->uusiToteutuneetRiviTehdysta($mob->id, $tv->id);
+					}
+				    }
+
+				}
+				//     Totetuneen ajan mukaan -->
+
+				// <-- Työvuoron aloitus ja lopetus mukaan
+				if( 
+					isset($asetukset->app_auto_hyvaksyminen) and $asetukset->app_auto_hyvaksyminen == 1 
+					and isset($asetukset->app_hyvaksynnan_peruste) and $asetukset->app_hyvaksynnan_peruste == 1
+				){
 				    $aikavali = 0;
 				    $mobile_aloitus = strtotime($mob->aloitan);
 				    $mobile_lopetus = strtotime($mob->loppui);
@@ -1441,11 +1474,27 @@ public function actionImei($dom)
 					and (($mobile_lopetus-$aikavali) <= $tyovuoro_lopetus and $mobile_lopetus >= ($tyovuoro_lopetus-$aikavali))
 				    ){
 					Mobile::model()->updateByPk($id, array('hyvaksytty' => 'auto//'.date("d.m.Y")));
+				    	if( isset($asetukset->app_auto_hyvaksyminen_tvmukaan) and $asetukset->app_auto_hyvaksyminen_tvmukaan == 1 ){
+						$this->uusiToteutuneetRiviTehdysta($mob->id, $tv->id);
+					}
 				    }
 
 				}
+				//     Työvuoron aloitus ja lopetus mukaan -->
 			}
 		}
+	}
+
+	protected function uusiToteutuneetRiviTehdysta($id, $tv_id)
+	{
+		$mob = Mobile::model()->findByPk($id);
+		$tv = Tyovuoroot::model()->findByPk($tv_id);
+		$model=new Toteutuneet;
+		$model->attributes = $mob->attributes;
+		$model->kid = $id;
+		$model->aloitan = $tv->pvm.' '.$tv->alku.':00 ';
+		$model->loppui = $tv->pvm.' '.$tv->loppu.':00 ';
+		$model->save();
 	}
 
 	protected function etuSukunimi($tid)

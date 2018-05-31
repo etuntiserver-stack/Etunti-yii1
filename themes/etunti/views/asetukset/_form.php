@@ -737,39 +737,7 @@
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'app_naytetaanko_hyvaksyttyt_tunnit'); ?>
 	</div>
-
-	<legend><h4><?=Yii::t('main', 'Hyväksy tunnit automaattisesti.')?></h4></legend>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'app_auto_hyvaksyminen'); ?>
-		<?php 
-        	$tal = array(
-			0=>'Ei',
-			1=>'Kyllä'
-		);
-		echo $form->dropDownList($model,'app_auto_hyvaksyminen', $tal, 
-		array('class'=>'form-control')) ?>
-		<?php echo $form->error($model,'app_auto_hyvaksyminen'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'app_auto_hyvaksyminen_aikavali'); ?>
-		<?php 
-        	$tal = array(
-			5=>'5',
-			10=>'10',
-			15=>'15',
-			20=>'20',
-			25=>'25',
-			30=>'30',
-		);
-		echo $form->dropDownList($model,'app_auto_hyvaksyminen_aikavali', $tal, 
-		array('class'=>'form-control')) ?>
-		<?php echo $form->error($model,'app_auto_hyvaksyminen_aikavali'); ?>
-	</div>
-
    </div>
-
   </div>
 
 
@@ -994,6 +962,69 @@
 		echo $form->dropDownList($model,'tyoryhmat_kohde', $l, 
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'tyoryhmat_kohde'); ?>
+	</div>
+
+   </div>
+  </div>
+
+<br>
+<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#autohyvaksynta"><h3><?php echo Yii::t('main','Tuntien hyväksyntä'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
+
+  <div class="row form collapse" id="autohyvaksynta">
+   <div class="col-sm-3">
+
+	<legend><h4><?=Yii::t('main', 'Hyväksy tunnit automaattisesti.')?></h4></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_auto_hyvaksyminen'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'app_auto_hyvaksyminen', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'app_auto_hyvaksyminen'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_hyvaksynnan_peruste'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Totetuneen ajan mukaan',
+			1=>'Työvuoron aloitus ja lopetus mukaan'
+		);
+		echo $form->dropDownList($model,'app_hyvaksynnan_peruste', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'app_hyvaksynnan_peruste'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_auto_hyvaksyminen_aikavali'); ?>
+		<?php 
+        	$tal = array(
+			5=>'5',
+			10=>'10',
+			15=>'15',
+			20=>'20',
+			25=>'25',
+			30=>'30',
+		);
+		echo $form->dropDownList($model,'app_auto_hyvaksyminen_aikavali', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'app_auto_hyvaksyminen_aikavali'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_auto_hyvaksyminen_tvmukaan'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'app_auto_hyvaksyminen_tvmukaan', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'app_auto_hyvaksyminen_tvmukaan'); ?>
 	</div>
 
    </div>
