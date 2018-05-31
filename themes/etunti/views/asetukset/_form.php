@@ -1014,6 +1014,19 @@
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'app_auto_hyvaksyminen_aikavali'); ?>
 	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_auto_hyvaksyminen_tvmukaan'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'app_auto_hyvaksyminen_tvmukaan', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'app_auto_hyvaksyminen_tvmukaan'); ?>
+	</div>
+
    </div>
   </div>
 
