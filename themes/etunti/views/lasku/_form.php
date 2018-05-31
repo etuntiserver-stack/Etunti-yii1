@@ -1329,8 +1329,7 @@ $("#Lasku_as_nro").change(function() {
 
 		if(sp[2]){
 		  var spR = sp[2].split("**");
-		  $("#Lasku_tyyppi option[value="+spR[0]+"]").attr('selected','selected');
-		  laskutusTyyppi(spR[0]);
+		  $("#Lasku_tyyppi").val(spR[0]);
 		
 		  if(spR[0] =='yritys')
 		  {
