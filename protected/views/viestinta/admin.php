@@ -5,6 +5,24 @@
 //print_r(Yii::app()->getSession()->getSessionId());
 //phpinfo();
 
+				    $aikavali = 0;
+				    $mobile_kesto = strtotime("2018-05-30 08:19")-strtotime("2018-05-30 07:30");
+				    $tyovuoro_kesto = strtotime("2018-05-30 10:00")-strtotime("2018-05-30 09:00");
+
+
+					$aikavali = 10*60;
+
+
+				    if(
+					$aikavali > 0 and
+					($tyovuoro_kesto == $mobile_kesto)
+					or ( ($mobile_kesto > $tyovuoro_kesto) and ($mobile_kesto-$tyovuoro_kesto) <= $aikavali )
+					or ( ($mobile_kesto < $tyovuoro_kesto) and ($tyovuoro_kesto-$mobile_kesto) <= $aikavali )
+				    ){
+					echo 'ok';
+				    }
+exit;
+
 if(isset($_GET['mail'])){
 	$m = $_GET['mail'];
 	$ft = FirmanTiedot::model()->findByPk(1);

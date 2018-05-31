@@ -1277,7 +1277,7 @@ public function actionImei($dom)
 		if($mobupdate->save())
 		{
 			// <-- Auto hyvaksynta
-			//$this->autoHyvaksynta($mobupdate->id);
+			$this->autoHyvaksynta($mobupdate->id);
 			//     Auto hyvaksynta -->
 
 			// <-- LOG
@@ -1421,7 +1421,37 @@ public function actionImei($dom)
 			$tv = Tyovuoroot::model()->findByPk($mob->tv_id);
 			if( isset($tv->id) ){
 				$asetukset = Asetukset::model()->findByPk(1);
-				if( isset($asetukset->app_auto_hyvaksyminen) and $asetukset->app_auto_hyvaksyminen == 1 ){
+
+				// <-- Totetuneen ajan mukaan
+				if( 
+					isset($asetukset->app_auto_hyvaksyminen) and $asetukset->app_auto_hyvaksyminen == 1 
+					and isset($asetukset->app_hyvaksynnan_peruste) and $asetukset->app_hyvaksynnan_peruste == 0
+				){
+				    $aikavali = 0;
+				    $mobile_kesto = strtotime($mob->loppui)-strtotime($mob->aloitan);
+				    $tyovuoro_kesto = strtotime($tv->pvm.' '.$tv->loppu)-strtotime($tv->pvm.' '.$tv->alku);
+
+				    if( isset($asetukset->app_auto_hyvaksyminen_aikavali )){
+					$aikavali = $asetukset->app_auto_hyvaksyminen_aikavali*60;
+				    }
+
+				    if(
+					$aikavali > 0 and
+					($tyovuoro_kesto == $mobile_kesto)
+					or ( ($mobile_kesto > $tyovuoro_kesto) and ($mobile_kesto-$tyovuoro_kesto) <= $aikavali )
+					or ( ($mobile_kesto < $tyovuoro_kesto) and ($tyovuoro_kesto-$mobile_kesto) <= $aikavali )
+				    ){
+					Mobile::model()->updateByPk($id, array('hyvaksytty' => 'auto//'.date("d.m.Y")));
+				    }
+
+				}
+				//     Totetuneen ajan mukaan -->
+
+				// <-- Työvuoron aloitus ja lopetus mukaan
+				if( 
+					isset($asetukset->app_auto_hyvaksyminen) and $asetukset->app_auto_hyvaksyminen == 1 
+					and isset($asetukset->app_hyvaksynnan_peruste) and $asetukset->app_hyvaksynnan_peruste == 1
+				){
 				    $aikavali = 0;
 				    $mobile_aloitus = strtotime($mob->aloitan);
 				    $mobile_lopetus = strtotime($mob->loppui);
@@ -1444,6 +1474,7 @@ public function actionImei($dom)
 				    }
 
 				}
+				//     Työvuoron aloitus ja lopetus mukaan -->
 			}
 		}
 	}
