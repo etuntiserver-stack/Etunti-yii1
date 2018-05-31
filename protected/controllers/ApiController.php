@@ -1443,7 +1443,7 @@ public function actionImei($dom)
 				    ){
 					Mobile::model()->updateByPk($id, array('hyvaksytty' => 'auto//'.date("d.m.Y")));
 				    	if( isset($asetukset->app_auto_hyvaksyminen_tvmukaan) and $asetukset->app_auto_hyvaksyminen_tvmukaan == 1 ){
-						$this->uusiToteutuneetRiviTehdysta($mob->id);
+						$this->uusiToteutuneetRiviTehdysta($mob->id, $tv->id);
 					}
 				    }
 
@@ -1475,7 +1475,7 @@ public function actionImei($dom)
 				    ){
 					Mobile::model()->updateByPk($id, array('hyvaksytty' => 'auto//'.date("d.m.Y")));
 				    	if( isset($asetukset->app_auto_hyvaksyminen_tvmukaan) and $asetukset->app_auto_hyvaksyminen_tvmukaan == 1 ){
-						$this->uusiToteutuneetRiviTehdysta($mob->id);
+						$this->uusiToteutuneetRiviTehdysta($mob->id, $tv->id);
 					}
 				    }
 
@@ -1485,12 +1485,15 @@ public function actionImei($dom)
 		}
 	}
 
-	protected function uusiToteutuneetRiviTehdysta($id)
+	protected function uusiToteutuneetRiviTehdysta($id, $tv_id)
 	{
 		$mob = Mobile::model()->findByPk($id);
+		$tv = Tyovuoroot::model()->findByPk($tv_id);
 		$model=new Toteutuneet;
 		$model->attributes = $mob->attributes;
 		$model->kid = $id;
+		$model->aloitan = $tv->pvm.' '.$tv->alku.':00 ';
+		$model->loppui = $tv->pvm.' '.$tv->loppu.':00 ';
 		$model->save();
 	}
 
