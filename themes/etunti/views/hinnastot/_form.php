@@ -192,6 +192,10 @@ $(document).ready(function(){
 			return false;
 		}
 	});
+	if( ! $('input[name=alvsis]').is(':checked')  ){
+		alert('Valitse ALV-muoto.');
+		return false;
+	}
 	if( tuotteet == 0 ){ 
 		alert('Hinnastossa pitää olla vähintään yksi tuote.');
 		return false;
