@@ -599,7 +599,8 @@ class SiteController extends Controller
 
 			unset($_SESSION['domain']);
 
-			$str = str_replace(array('ä','ö','ü','Ä','Ö','Ü'),array('a','o','u','A','O','U'), $_POST['yrityksen_nimi']);
+			$str = trim($_POST['yrityksen_nimi']);
+			$str = str_replace(array('ä','ö','ü','Ä','Ö','Ü'),array('a','o','u','A','O','U'), $str);
 			$kirjautumistunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $str);
 			$kirjautumistunnus = str_replace(' ', '_', $kirjautumistunnus);
 			$kirjautumistunnus = strtolower($kirjautumistunnus);
