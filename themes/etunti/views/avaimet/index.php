@@ -172,6 +172,10 @@ if(count($k) > 0){
 		$criteria = new CDbCriteria();
 		$criteria->condition = " aktiivinen=1 ";
 
+			// <-- Return order etu ja sukunimella
+			$criteria = $site[0]->etuSukunimiCriteria($criteria);
+			//     Return order etu ja sukunimella -->
+
 			// <-- Tyoryhmat
 			$site = Yii::app()->createController('Site');
 			$tt = Yii::app()->createController('Tyontekijat');
@@ -182,11 +186,6 @@ if(count($k) > 0){
 			}
 			//    Tyoryhmat -->
 
-		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
-	       	$criteria->order = " tekijan_nimi ";
-		} else {
-	       	$criteria->order = " sukunimi ";
-		}
 		$tt = Tyontekijat::model()->findAll($criteria);
 		?>
 		<?php echo CHtml::dropDownList('tyontekija', 'tyontekija', CHtml::listData($tt, 'id', 'FullName'), 

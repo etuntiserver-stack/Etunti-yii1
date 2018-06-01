@@ -152,6 +152,10 @@
 		$criteria = new CDbCriteria();
 		$criteria->condition = " aktiivinen=1 ";
 
+			// <-- Return order etu ja sukunimella
+			$criteria = $site[0]->etuSukunimiCriteria($criteria);
+			//     Return order etu ja sukunimella -->
+
 			// <-- Tyoryhmat
 			$site = Yii::app()->createController('Site');
 			$tt = Yii::app()->createController('Tyontekijat');
