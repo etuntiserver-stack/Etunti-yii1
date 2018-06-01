@@ -152,7 +152,25 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
    }
      echo '<TH>Yht.</TH>';
   echo '</TR></thead>';
-  $t = Tyontekijat::model()->findAll(" aktiivinen = '1' ");
+
+       		$criteria = new CDbCriteria();
+		$criteria->condition = " aktiivinen=1 ";
+		// <-- Return order etu ja sukunimella
+		$site = Yii::app()->createController('Site');
+		$criteria = $site[0]->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
+		// <-- Tyoryhmat
+		$tt = Yii::app()->createController('Tyontekijat');
+		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+		$ids = implode(",", $tt_arr);
+		if( count($tt_arr) > 0 ){
+        		$criteria->addCondition (" id IN ($ids)");
+		}
+		//    Tyoryhmat -->
+
+  		$t = Tyontekijat::model()->findAll($criteria);
+
+
   foreach($t as $v)
   {
   $yht = 0;
