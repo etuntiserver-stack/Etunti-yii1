@@ -493,7 +493,7 @@ $(document).ready(function(){
 		var r = confirm('Olet myös luomassa uuden asiakkaan ja kohteen.\n Haluatko jatkaa?');
 		if(r)
 		{
-			$(this).remove();
+			//$(this).remove();
 			$('#tyovuoroot-form').submit();
 		} else {
 			return false;
@@ -515,6 +515,10 @@ $(document).ready(function(){
 			thisDataReturn = JSON.parse(data);
 			console.log(data);
 			laatikonPaivays(thisDataReturn);
+			if( thisDataReturn['sahkoposti'] ){
+				alert(thisDataReturn['sahkoposti']);
+				return false;
+			}
 			$('#showres').modal('hide');
 
 	   	},
