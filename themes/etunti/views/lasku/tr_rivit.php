@@ -46,7 +46,7 @@
 		array('empty'=>'','class'=>'form-control valitseTuote_tuoteonly','id'=>'lt_'.$num,'num'=>$num));
 		?>
 	  </div><div class="col-lg-8">
-	  <input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control" value="<?php echo $tuotePalvelu; ?>">
+	  <input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control">
 	  </div>
 	</div>
 	<?php endif; ?>
