@@ -287,7 +287,9 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 		<?php echo $form->labelEx($model,'alennuskoodit'); ?>
 		<?php
 			$alennuskoodit = json_decode($model->alennuskoodit, true);
-			echo '<textarea class="form-control" name="Asiakkaat[alennuskoodit]">'.implode("\n", $alennuskoodit).'</textarea>';
+			if( is_array($alennuskoodit) ){
+			  echo '<textarea class="form-control" name="Asiakkaat[alennuskoodit]">'.implode("\n", $alennuskoodit).'</textarea>';
+			}
 		?>
 	</div>
 	<?php endif; ?>
