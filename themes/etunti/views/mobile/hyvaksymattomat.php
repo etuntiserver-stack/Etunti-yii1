@@ -6,13 +6,11 @@
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-        <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'LASKU'); ?> 
-		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/lasku/create',array('class'=>'btn btn-default fa fa-plus')); ?>
-	</h2>
+        <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'HYVÄKSYMÄTTÖMÄT TUNNIT'); ?></h2>
 
 
 
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <form id="mobForm" action="#" class="form-inline" method="GET">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
@@ -22,7 +20,69 @@
                     <!-- Input Icons -->
                     <div class="row">
 
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
+						'tid', // name
+						'gui-input', //class
+						null, // id
+						(( isset($_GET['tid']) )? $_GET['tid']:''), //selected
+						1 // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
 
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Asiakkaat';
+				$sarake = 'yrityksen_nimi';
+				$placeholder = 'Asiakas';
+				if(isset($_GET[$sarake])) 			$postvalue = $_GET[$sarake]; 
+				else $postvalue='';				
+		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Kohteet';
+				$sarake = 'osoite';
+				$placeholder = 'Osoite';
+				if(isset($_GET[$sarake])) 			$postvalue = $_GET[$sarake]; 
+				else $postvalue='';				
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
 
                       <div class="col-md-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">

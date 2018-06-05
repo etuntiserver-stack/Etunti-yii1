@@ -864,6 +864,7 @@ function num($val){
 		$to = date("Y-m-d");
 
        		$criteria = new CDbCriteria();
+	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
@@ -873,12 +874,30 @@ function num($val){
 			AND hyvaksytty=''
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 		";
+		if( isset($_GET['osoite']) and !empty($_GET['osoite']) ){
+		        $criteria->addCondition(" kohde_kannasta LIKE '%".$_GET['osoite']."%' "); 
+		}
+		if( isset($_GET['tid']) and !empty($_GET['tid']) and $_GET['tid'] != 'kaikki' ){
+		        $criteria->addCondition(" tid='".$_GET['tid']."' "); 
+		}
+		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
+		{
+	        $criteria->addCondition ("  
+			kohdenID IN ( 
+			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
+				( SELECT id FROM asiakkaat 
+					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'
+				)
+			)
+		");
+		}
 		$dataProviderLu=new CActiveDataProvider('Mobile', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false
 		));
 
        		$criteria = new CDbCriteria();
+	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
@@ -887,6 +906,23 @@ function num($val){
 			AND sairaus!=1
 			AND hyvaksytty=''
 		";
+		if( isset($_GET['osoite']) and !empty($_GET['osoite']) ){
+		        $criteria->addCondition(" kohde_kannasta LIKE '%".$_GET['osoite']."%' "); 
+		}
+		if( isset($_GET['tid']) and !empty($_GET['tid']) and $_GET['tid'] != 'kaikki' ){
+		        $criteria->addCondition(" tid='".$_GET['tid']."' "); 
+		}
+		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
+		{
+	        $criteria->addCondition ("  
+			kohdenID IN ( 
+			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
+				( SELECT id FROM asiakkaat 
+					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'
+				)
+			)
+		");
+		}
 		$dataProviderTot=new CActiveDataProvider('Toteutuneet', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false
