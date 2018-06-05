@@ -874,7 +874,11 @@ $('.tvchange').change(function(){
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/toteutuneet/index">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Tuntien hyväksyntä'); ?></a>
-              </li>       
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/hyvaksymattomat">
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Hyväksymättömät tunnit'); ?></a>
+              </li>    
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/lahetys_asiakkaalle">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Lähetä hyväksyttäväksi'); ?></a>

@@ -33,7 +33,7 @@ class MobileController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa', 'luetut_toteutuneet_ero_pdf', 'vuosilomat_pdf', 'check_paallekkainMobile', 'tyoajan_seuranta', 'raportit_taulu', 'tulostus'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa', 'luetut_toteutuneet_ero_pdf', 'vuosilomat_pdf', 'check_paallekkainMobile', 'tyoajan_seuranta', 'raportit_taulu', 'tulostus', 'hyvaksymattomat'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -853,6 +853,53 @@ function num($val){
 		$this->renderPartial('total_luettu',array(
 			'tid'=>$tid,
 		));
+
+	}
+
+	public function actionHyvaksymattomat()
+	{
+		$lista = array();
+
+		$from = date("Y-m-d", strtotime("first day of January " . date('Y')));
+		$to = date("Y-m-d");
+
+       		$criteria = new CDbCriteria();
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."'
+			AND status='3'
+			AND sairaus!=1
+			AND hyvaksytty=''
+			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+		";
+		$dataProviderLu=new CActiveDataProvider('Mobile', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+       		$criteria = new CDbCriteria();
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."'
+			AND status='3'
+			AND sairaus!=1
+			AND hyvaksytty=''
+		";
+		$dataProviderTot=new CActiveDataProvider('Toteutuneet', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$lista = $dataProviderLu;
+		if( is_array($dataProviderTot) and count($dataProviderTot) > 0 ){ $lista = array_merge($dataProviderLu, $dataProviderTot); }
+
+
+
+		$lista->pagination->pageSize = 50;
+
+		$this->render('hyvaksymattomat', array('dataProvider' => $lista));
 
 	}
 
