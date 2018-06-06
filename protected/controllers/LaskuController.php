@@ -27,7 +27,7 @@ class LaskuController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -101,6 +101,42 @@ class LaskuController extends Controller
 
 		echo json_encode($return);
 		exit;
+	}
+
+	public function actionLuolaskut($from, $to)
+	{
+
+		exit;
+	}
+
+	public function actionAuto()
+	{
+
+		$from = date("Y-m-d", strtotime("first day of last month"));
+		$to = date("Y-m-d");
+		if( isset($_GET['from']) and !empty($_GET['from']) and isset($_GET['to']) and !empty($_GET['to']) ){
+		        $from = date("Y-m-d", strtotime($_GET['from']));
+			$to = date("Y-m-d", strtotime($_GET['to'])); 
+		}
+
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = "
+			valmistettu_automaattiseesti='1'
+			AND DATE(time) 
+			BETWEEN '".$from."' AND '".$to."'
+		";
+
+		$dataProvider=new CActiveDataProvider('Lasku', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$dataProvider->pagination->pageSize = 200;
+		$this->render('auto', array(
+				'dataProvider' => $dataProvider, 
+				'from'=>$from, 
+				'to'=>$to
+		));
 	}
 
 	public function actionTr_rivit_jarjestelmavalvojat()

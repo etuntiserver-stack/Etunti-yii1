@@ -1068,6 +1068,10 @@ $('.tvchange').change(function(){
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/index">
                   <span class="glyphicon glyphicon-barcode"></span> <?php echo Yii::t('main', 'Laskut'); ?></a>
               </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/auto">
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Lasku automaattio'); ?></a>
+              </li>
 <!--
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/LaskutusTuotteet/index">
