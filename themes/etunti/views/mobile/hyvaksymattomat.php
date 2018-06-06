@@ -83,7 +83,28 @@
                           </label>
                         </div>
                       </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
 
+   			    <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php if(isset($_GET['from'])) echo date('d.m.Y', strtotime($_GET['from'])); ?>" placeholder="Mistä">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php if(isset($_GET['to'])) echo date('d.m.Y', strtotime($_GET['to'])); ?>" placeholder="Mihin">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
                       <div class="col-md-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
@@ -113,6 +134,7 @@
   <th><?=Yii::t('main', 'Klo. ajaat')?></th>
   <th><?=Yii::t('main', 'Työntekijä')?></th>
   <th><?=Yii::t('main', 'Kohde')?></th>
+  <th></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

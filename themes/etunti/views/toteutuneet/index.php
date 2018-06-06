@@ -152,6 +152,8 @@ table { width: 100%; }
                     </div>
 
 
+		<?php echo CHtml::link('<span class="btn btn-primary myBgColors">'.Yii::t('main', 'HYVÄKSYMÄTTÖMÄT TUNNIT').'</span>', array('//mobile/hyvaksymattomat')); ?>
+
 
                 </div>
               </div>

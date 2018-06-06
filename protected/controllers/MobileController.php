@@ -860,8 +860,12 @@ function num($val){
 	{
 		$lista = array();
 
-		$from = date("Y-m-d", strtotime("first day of January " . date('Y')));
+		$from = date("Y-m-d", strtotime("-1 year"));
 		$to = date("Y-m-d");
+		if( isset($_GET['from']) and !empty($_GET['from']) and isset($_GET['to']) and !empty($_GET['to']) ){
+		        $from = date("Y-m-d", strtotime($_GET['from']));
+			$to = date("Y-m-d", strtotime($_GET['to'])); 
+		}
 
        		$criteria = new CDbCriteria();
 	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') DESC ";

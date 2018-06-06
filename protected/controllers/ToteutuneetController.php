@@ -1062,6 +1062,14 @@ $xml = '
 		if(isset(Yii::app()->session['to']))
 		$to = Yii::app()->session['to'];
 
+		if( isset($_GET['from']) and isset($_GET['to']) and isset($_GET['tid']) ){
+			$from = date("Y-m-d", strtotime($_GET['from']));
+			$to = date("Y-m-d", strtotime($_GET['to']));
+			Yii::app()->session['from'] = $from;
+			Yii::app()->session['to'] = $to;
+			Yii::app()->session['tekija'] = $_GET['tid'];
+		}
+
 		if(isset($_POST['tulosta']))
 		{
 
