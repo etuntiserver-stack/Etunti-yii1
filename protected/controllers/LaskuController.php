@@ -105,7 +105,22 @@ class LaskuController extends Controller
 
 	public function actionLuolaskut($from, $to)
 	{
-
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = "
+			laskutettu='0' AND tuoteID!='0'
+			AND tuoteID IN (
+				SELECT id FROM onlinevaraus_tuotteet WHERE yksikko='h'
+			)
+			AND id IN (
+				SELECT tv_id FROM sivexkuitti WHERE status='3' AND hyvaksytty!=''
+			)
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+		";
+		$tv = Tyovuoroot::model()->findAll($criteria);
+		foreach($tv as $item){
+			echo $item->pvm.', '.$item->alku.'-'.$item->loppu.',  Tuote:'.$item->tuoteID.'<br>';
+		}
 		exit;
 	}
 
