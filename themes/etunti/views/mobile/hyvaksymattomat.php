@@ -1,0 +1,252 @@
+<?php
+	//$asetukset=Asetukset::model()->findbypk(1);
+
+?>
+
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
+
+        <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'HYVÄKSYMÄTTÖMÄT TUNNIT'); ?></h2>
+
+
+
+   	    <form id="mobForm" action="#" class="form-inline" method="GET">
+   	    <input type="hidden" name="mob_hae">
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body">
+
+                    <!-- Input Icons -->
+                    <div class="row">
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
+						'tid', // name
+						'gui-input', //class
+						null, // id
+						(( isset($_GET['tid']) )? $_GET['tid']:''), //selected
+						1 // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Asiakkaat';
+				$sarake = 'yrityksen_nimi';
+				$placeholder = 'Asiakas';
+				if(isset($_GET[$sarake])) 			$postvalue = $_GET[$sarake]; 
+				else $postvalue='';				
+		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Kohteet';
+				$sarake = 'osoite';
+				$placeholder = 'Osoite';
+				if(isset($_GET[$sarake])) 			$postvalue = $_GET[$sarake]; 
+				else $postvalue='';				
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php if(isset($_GET['from'])) echo date('d.m.Y', strtotime($_GET['from'])); ?>" placeholder="Mistä">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php if(isset($_GET['to'])) echo date('d.m.Y', strtotime($_GET['to'])); ?>" placeholder="Mihin">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
+		      </div>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+
+	    </form>
+
+
+        <!-- loppu: .tray-center -->
+        </div>
+
+
+
+
+  <div class="panel heading-border">
+   <div class="panel-body">
+
+<div class="table-responsive">
+  <table class="table table-striped" id="mobileTable">
+  <thead class="myBgColors">
+  <tr>
+  <th><?=Yii::t('main', 'Päivämäärä')?></th>
+  <th><?=Yii::t('main', 'Klo. ajaat')?></th>
+  <th><?=Yii::t('main', 'Työntekijä')?></th>
+  <th><?=Yii::t('main', 'Kohde')?></th>
+  <th></th>
+  </tr>
+  </thead>
+  <?php $this->widget('zii.widgets.CListView', array(
+	'dataProvider'=>$dataProvider,
+	'itemView'=>'_hyvaksymattomat',
+  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
+
+	'pager' => array(
+           'firstPageLabel'=>'<<',
+           'prevPageLabel'=>'< Edellinen',
+           'nextPageLabel'=>'Seuraava >',
+           'lastPageLabel'=>'>>',
+           //'maxButtonCount'=>'10',
+           'header'=>'<h3>Siirry sivulle:</h3>',
+           'cssFile'=>false,
+       ), 
+
+  )); ?>
+  </table>
+</div>
+
+   </div>
+  </div>
+
+
+
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+$('#asiakaatLista').val($('#asiakasSelected').val());
+
+$(".valitseKaikki").click(function(){
+	var $chk=$('#mobileTable input:checkbox');
+	$chk.prop('checked',$chk.is(':checked') ? null:'checked');
+	if($chk.is(':checked'))
+	{
+		$('#lahetaValitsemmat').html('<button class="btn btn-sm btn-default btn-group lahetaNamat">Lähetä</button>');
+	} else {
+		$('#lahetaValitsemmat').html('');
+	}
+});
+
+$(".valitseLahetettavaksi").click(function(){
+	var onkoChecked = false;
+	$('#mobileTable input:checkbox').each(function () {
+           if (this.checked) {
+		onkoChecked = true;
+	   }
+	});
+	if(onkoChecked)
+	{
+		$('#lahetaValitsemmat').html('<button class="btn btn-sm btn-default btn-group lahetaNamat">Lähetä</button>');
+	} else {
+		$('#lahetaValitsemmat').html('');
+	}
+});
+
+
+
+$(document).delegate(".lahetaNamat","click",function(){
+	$('#mobileTable input:checkbox').each(function () {
+           if (this.checked) {
+
+		var thisFor = $(this).attr('for');
+
+	        $.ajax({
+	           url: 'laheta_valitsemmat?id='+thisFor,
+	           /*type: "POST",
+	           data: { id : thisFor },*/
+	           success: function(data){
+			console.log(data);
+	           }
+	        });
+
+           }
+	});
+	window.location.reload();
+});
+
+
+
+if($('#getTila').val())
+{
+   $("#tilaLaskulle option[value="+$('#getTila').val()+"]").prop('selected', true);
+}
+
+$(".haemob").click(function(){
+	$("#mobForm").submit();
+});
+
+
+$(".fa-history").click(function(){
+
+	var thisid = $(this).attr("for");
+
+
+        $.ajax({
+
+           url: 'get_historia',
+	   type: 'POST',
+	   data: { id : thisid },
+           success: function(data){
+		//console.log(data);
+		$("#showres").modal().html(JSON.parse(data));
+           }
+        });
+
+});
+
+});
+</script>
