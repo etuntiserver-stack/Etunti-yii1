@@ -181,7 +181,7 @@ if(isset($model->tietoja))
 			BETWEEN '".date("Y-m-d", strtotime($model->aloitan))."' AND '".date("Y-m-d", strtotime($model->aloitan))."'
 		";
 		?>
-		<?php echo $form->dropDownList($model, 'tv_id', CHtml::listData(Tyovuoroot::model()->findAll($criteria), 'id', 'kohde'), array('empty'=>'Valitse', 'class'=>'form-control')); ?>
+		<?php echo $form->dropDownList($model, 'tv_id', CHtml::listData(Tyovuoroot::model()->findAll($criteria), 'id', 'osoiteAndAika'), array('empty'=>'Valitse', 'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tv_id'); ?>
 	</div>
 	<?php endif; ?>

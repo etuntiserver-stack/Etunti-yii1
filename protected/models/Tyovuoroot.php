@@ -165,6 +165,18 @@ public $tilausviesti;
 		);
 	}
 
+        public function getosoiteAndAika(){
+		$return = '';
+		if(!empty($this->kohde)){
+			$k = Kohteet::model()->findByPk($this->kohde);
+			if( isset($k->id) ){
+				$return = $k->osoite.' '.$this->pvm.', '.$this->alku.'-'.$this->loppu;
+			}
+		}
+                return $return;
+        }
+
+
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
