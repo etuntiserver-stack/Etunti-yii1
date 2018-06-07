@@ -1394,6 +1394,7 @@ class TyovuorootController extends Controller
 		{
 
 			$model->attributes=$_POST['Tyovuoroot'];
+			$model->tuoteID = json_encode($model->tuoteID);
 
 			// <-- Apuaika
 			if(isset($_POST['Tyovuoroot']['apuaika']) and $_POST['Tyovuoroot']['apuaika'] == 1)
@@ -1789,7 +1790,8 @@ class TyovuorootController extends Controller
 
 			$toistuva_id = $model->toistuva_id;
 
-			$model->attributes=$_POST['Tyovuoroot'];
+			$model->attributes = $_POST['Tyovuoroot'];
+			$model->tuoteID = json_encode($model->tuoteID);
 
 			// <-- Apuaika
 			if(isset($_POST['Tyovuoroot']['apuaika']) and $_POST['Tyovuoroot']['apuaika'] == 1)

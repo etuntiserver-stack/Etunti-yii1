@@ -116,7 +116,7 @@ class LaskuController extends Controller
 			AND hyvaksytty!=''
 			AND tv_id IS NOT NULL AND tv_id > 0
 			AND tv_id IN (
-				SELECT id FROM sivex_tvuoro WHERE tuoteID > 0 AND kohde > 0 AND laskutettu=0
+				SELECT id FROM sivex_tvuoro WHERE tuoteID!='' AND kohde > 0 AND laskutettu=0
 			)
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 		";
@@ -133,7 +133,7 @@ class LaskuController extends Controller
 			AND hyvaksytty!=''
 			AND tv_id IS NOT NULL AND tv_id > 0
 			AND tv_id IN (
-				SELECT id FROM sivex_tvuoro WHERE tuoteID > 0 AND kohde > 0 AND laskutettu=0
+				SELECT id FROM sivex_tvuoro WHERE tuoteID='' AND kohde > 0 AND laskutettu=0
 			)
 		";
 		$tot = Toteutuneet::model()->findAll($criteria);
@@ -173,6 +173,14 @@ class LaskuController extends Controller
 				'from'=>$from, 
 				'to'=>$to
 		));
+	}
+
+	protected function asiakasmuutos($asiakas)
+	{
+		if($asiakas->tyyppi == 'yritys')
+		return $asiakas->yrityksen_nimi;
+		if($asiakas->tyyppi == 'henkilo')
+		return $asiakas->yhteyshenkilo;
 	}
 
 	public function actionTr_rivit_jarjestelmavalvojat()

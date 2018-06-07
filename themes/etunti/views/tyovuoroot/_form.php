@@ -250,7 +250,7 @@ $(".muokaValiko").click(function() {
        		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
 		$tp = TuotteetPalvelut::model()->findAll($criteria);
 
-			echo '<select name="Tyovuoroot[tuoteID]" id="tuoteID" class="mult" multiple>';
+			echo '<select name="Tyovuoroot[tuoteID][]" id="tuoteID" class="mult" multiple>';
 			foreach($tp as $item)
 			{
 			  if(is_array(json_decode($model->tuoteID)) and in_array($item->id, json_decode($model->tuoteID), true))
