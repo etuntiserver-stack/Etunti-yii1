@@ -106,20 +106,36 @@ class LaskuController extends Controller
 	public function actionLuolaskut($from, $to)
 	{
        		$criteria = new CDbCriteria();
-       		$criteria->condition = "
-			laskutettu='0' AND tuoteID!='0'
-			AND tuoteID IN (
-				SELECT id FROM onlinevaraus_tuotteet WHERE yksikko='h'
-			)
-			AND id IN (
-				SELECT tv_id FROM sivexkuitti WHERE status='3' AND hyvaksytty!=''
-			)
-			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND status='3'
+			AND sairaus!=1
+			AND hyvaksytty!=''
+			AND tv_id IS NOT NULL AND tv_id > 0
+			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 		";
-		$tv = Tyovuoroot::model()->findAll($criteria);
-		foreach($tv as $item){
-			echo $item->pvm.', '.$item->alku.'-'.$item->loppu.',  Tuote:'.$item->tuoteID.'<br>';
+		$lu = Mobile::model()->findAll($criteria);
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND status='3'
+			AND sairaus!=1
+			AND hyvaksytty!=''
+			AND tv_id IS NOT NULL AND tv_id > 0
+		";
+		$tot = Toteutuneet::model()->findAll($criteria);
+
+		$lista = $lu;
+		if( is_array($tot) and count($tot) > 0 ){ $lista = array_merge($lu, $tot); }
+		foreach($lista as $item){
+			echo 'Tv: '.$item->tv_id.'<br>';
 		}
 		exit;
 	}

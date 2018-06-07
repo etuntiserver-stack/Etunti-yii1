@@ -331,9 +331,25 @@ if(!empty($data->loppui) and !empty($data->aloitan)){
 	<td><center>
 		<?php 
 		if( empty($data->hyvaksytty) ){ 
-			echo '<span class="text-danger">Ei</span>'; 
+			echo CHtml::link('<span class="text-danger">Ei</span>', 
+				array('//toteutuneet/index', 'from' => date("d.m.Y", strtotime($data->aloitan)), 'to' => date("d.m.Y", strtotime($data->aloitan)), 'tid' => $data->tid), 
+				array(
+					//'target' => '_blank',
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Siirä minut hyväksyntään') 
+				)
+			); 
 		} else {
-			echo '<span class="text-success">Kyllä</span>'; 
+			echo CHtml::link('<span class="text-success">Kyllä</span>', 
+				array('//toteutuneet/index', 'from' => date("d.m.Y", strtotime($data->aloitan)), 'to' => date("d.m.Y", strtotime($data->aloitan)), 'tid' => $data->tid), 
+				array(
+					//'target' => '_blank',
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Siirä minut hyväksyntään') 
+				)
+			);
 		}
 		?>
 	</center></td>
