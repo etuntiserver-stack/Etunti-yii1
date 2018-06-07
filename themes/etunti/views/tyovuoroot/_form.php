@@ -248,8 +248,17 @@ $(".muokaValiko").click(function() {
 		<?php
 		$criteria = new CDbCriteria();
        		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
-		echo $form->dropDownList($model,'tuoteID', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
-		array('empty'=>'Valitse','class'=>'form-control'));
+		$tp = TuotteetPalvelut::model()->findAll($criteria);
+
+			echo '<select name="Tyovuoroot[tuoteID]" id="tuoteID" class="mult" multiple>';
+			foreach($tp as $item)
+			{
+			  if(is_array(json_decode($model->tuoteID)) and in_array($item->id, json_decode($model->tuoteID), true))
+			    echo '<option value="'.$item->id.'" selected>'.$item->nimike.'</option>';
+			  else
+			    echo '<option value="'.$item->id.'">'.$item->nimike.'</option>';
+			}
+			echo '</select>';
 		?>
   </div>
 

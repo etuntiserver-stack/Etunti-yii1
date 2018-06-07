@@ -143,6 +143,7 @@ public $count;
 		// class name for the relations automatically generated below.
 		return array(
 		        'kohteet' => array(self::BELONGS_TO, 'Kohteet', 'kohdenID'),
+		        'tyovuoroot' => array(self::BELONGS_TO, 'Tyovuoroot', 'tv_id'),
 		);
 	}
 

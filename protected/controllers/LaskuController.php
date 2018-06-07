@@ -115,6 +115,9 @@ class LaskuController extends Controller
 			AND sairaus!=1
 			AND hyvaksytty!=''
 			AND tv_id IS NOT NULL AND tv_id > 0
+			AND tv_id IN (
+				SELECT id FROM sivex_tvuoro WHERE tuoteID > 0 AND kohde > 0 AND laskutettu=0
+			)
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 		";
 		$lu = Mobile::model()->findAll($criteria);
@@ -129,15 +132,17 @@ class LaskuController extends Controller
 			AND sairaus!=1
 			AND hyvaksytty!=''
 			AND tv_id IS NOT NULL AND tv_id > 0
+			AND tv_id IN (
+				SELECT id FROM sivex_tvuoro WHERE tuoteID > 0 AND kohde > 0 AND laskutettu=0
+			)
 		";
 		$tot = Toteutuneet::model()->findAll($criteria);
 
 		$lista = $lu;
 		if( is_array($tot) and count($tot) > 0 ){ $lista = array_merge($lu, $tot); }
-		foreach($lista as $item){
-			echo 'Tv: '.$item->tv_id.'<br>';
-		}
-		exit;
+		$this->render('luolaskut', array(
+				'lista' => $lista
+		));
 	}
 
 	public function actionAuto()
