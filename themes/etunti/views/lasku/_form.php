@@ -1537,7 +1537,7 @@ function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palv
 		   type: 'POST',
 		   data: postdata,
 	           success: function(data){
-	               	//console.log(data);
+	               	console.log(data);
 			data = JSON.parse(data);
 
 			if(tuotteet_palvelut_muoto == 0 && parseInt(data['rivi_kpl']) == 0 && data['yksikko'] !== 'kk')

@@ -695,10 +695,54 @@ class LaskuController extends Controller
 		$return['kpl'] 		= 0;
 		$return['yksikko'] 	= 'kpl';
 
+		$r = $this->hinnastoHintaat($_POST['tuotePalvelu'], $_POST['asiakasnumero'], $kohteet, $tunnit, $rivi_kpl);
+		$return['kpl'] 		= $r['kpl'];
+		$return['hinta'] 	= $r['hinta'];
+		$return['alv'] 		= $r['alv'];
+		$return['yksikko']	= $r['yksikko'];
+
+		// <-- Asiakkaan muoto
+		if( isset($kohteet->id) and isset($_POST['tuotteet_palvelut_muoto']) and $_POST['tuotteet_palvelut_muoto'] == 1){
+	
+				$return['hinta'] 	= $kohteet->hinta;
+				$return['alv'] 		= $kohteet->alv;
+
+				if($kohteet->hinta_tyyppi == '1')
+				{
+					$return['kpl'] = $tunnit;
+					$return['yksikko'] = 'h';
+				}
+				if($kohteet->hinta_tyyppi == '2')
+				{
+					$return['kpl'] = 1;
+					$return['yksikko'] = 'kk';
+				}
+				if($kohteet->hinta_tyyppi == '3')
+				{
+					$return['kpl'] = $rivi_kpl;
+					$return['yksikko'] = 'kpl';
+				}
+		}
+		// Asiakkaan muoto -->
+
+		if(isset($kohteet->id))
+		{
+			$return['osoite'] = $kohteet->osoite;
+			$return['free_text'] 	= $return['fromto'].' '.$kohteet->osoite.', '.$kohteet->kaupunki.' '.$kohteet->pnumero;
+		}
+
+		echo json_encode($return);
+
+	}
+
+	protected function hinnastoHintaat($id, $asiakasnumero, $kohteet, $tunnit, $rivi_kpl)
+	{
+		$return = [];
 		// <-- 1. TuotteetPalvelut
-		$tp = TuotteetPalvelut::model()->findbypk($_POST['tuotePalvelu']);
+		$tp = TuotteetPalvelut::model()->findbypk($id);
 		if(isset($tp->id))
 		{
+			$return['tp_nimike'] = $tp->nimike;
 			if($tp->yksikko == 'h')
 			{
 				$return['kpl'] = $tunnit;
@@ -720,7 +764,7 @@ class LaskuController extends Controller
 
 		// <-- 2. Asiakas
        		$criteria = new CDbCriteria();
-       		$criteria->condition = " asiakasnumero='".$_POST['asiakasnumero']."' ";
+       		$criteria->condition = " asiakasnumero='".$asiakasnumero."' ";
 		$asiakas = Asiakkaat::model()->find($criteria);
 		if(isset($tp->id) and isset($asiakas->id) and $asiakas->hinnasto_id != 0)
 		{
@@ -777,41 +821,7 @@ class LaskuController extends Controller
 		}
 		//     Kohteet -->
 
-		//     Hinnastot -->
-
-
-		// <-- Asiakkaan muoto
-		if( isset($kohteet->id) and isset($_POST['tuotteet_palvelut_muoto']) and $_POST['tuotteet_palvelut_muoto'] == 1){
-	
-				$return['hinta'] 	= $kohteet->hinta;
-				$return['alv'] 		= $kohteet->alv;
-
-				if($kohteet->hinta_tyyppi == '1')
-				{
-					$return['kpl'] = $tunnit;
-					$return['yksikko'] = 'h';
-				}
-				if($kohteet->hinta_tyyppi == '2')
-				{
-					$return['kpl'] = 1;
-					$return['yksikko'] = 'kk';
-				}
-				if($kohteet->hinta_tyyppi == '3')
-				{
-					$return['kpl'] = $rivi_kpl;
-					$return['yksikko'] = 'kpl';
-				}
-		}
-		// Asiakkaan muoto -->
-
-		if(isset($kohteet->id))
-		{
-			$return['osoite'] = $kohteet->osoite;
-			$return['free_text'] 	= $return['fromto'].' '.$kohteet->osoite.', '.$kohteet->kaupunki.' '.$kohteet->pnumero;
-		}
-
-		echo json_encode($return);
-
+		return $return; 
 	}
 
 	protected function criteriaKohdeLasku($id, $from, $to)
