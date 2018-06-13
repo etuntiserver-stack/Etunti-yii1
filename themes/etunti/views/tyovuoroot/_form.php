@@ -267,7 +267,7 @@ $(".muokaValiko").click(function() {
 		$criteria = new CDbCriteria();
        		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND yksikko='h' ";
 		$tp = TuotteetPalvelut::model()->findAll($criteria);
-		echo $form->dropDownList($model,'tuoteID[]', CHtml::listData($tp, 'id', 'nimike'), 
+		echo $form->dropDownList($model,'tuoteID', CHtml::listData($tp, 'id', 'nimike'), 
 		array('empty'=>'Valitse','class'=>'form-control'));
 		?>
   </div>
@@ -361,7 +361,31 @@ $(".muokaValiko").click(function() {
 		<?php endif; ?>
   </div>
 </div>
-<div id="lisapalvelu_lista"></div>
+
+<div id="lisapalvelu_lista">
+	<?php if( is_array(json_decode($model->lisa_tuotteet, true)['tuote']) ) : ?>
+	<?php foreach(json_decode($model->lisa_tuotteet, true)['tuote'] as $k => $v) : ?>
+	<?php 
+		$t_nimike = '';
+		$tp = TuotteetPalvelut::model()->findByPK($v);
+		if( isset($tp->id) ){ $t_nimike = $tp->nimike; }
+	?>
+	<p>
+	<div class="row">
+	 <div class="col-sm-3">
+		<div class="pull-right"><?=$t_nimike?></div>
+		<input type="hidden" name="Tyovuoroot[lisa_tuotteet][tuote][]" value="<?=$v?>">
+	 </div>
+	 <div class="col-sm-3">
+		<div class="pull-left"><?=json_decode($model->lisa_tuotteet, true)['maara'][$k]?> kpl</div>
+		<input type="hidden" name="Tyovuoroot[lisa_tuotteet][maara][]" value="<?=json_decode($model->lisa_tuotteet, true)['maara'][$k]?>">
+	 </div>
+	</div>
+	</p>
+	<?php endforeach; ?>
+	<?php endif; ?>
+</div>
+
 <script type="text/javascript">
 $(document).ready(function(){
   $('.plus_lisapalvelu').click(function(){
@@ -377,15 +401,15 @@ $(document).ready(function(){
 	}
 		
 	$('#lisapalvelu_lista').append('' +
-	'<p><div class="lisapalvelut_valmis_rivi" lisapalvelu_tuote="'+ $('#lisapalvelu_tuote option:selected').val() +'" lisapalvelu_maara="'+ $('#lisapalvelu_maara').val() +'">' +
+	'<p>' +
 	'<div class="row">' +
 	 '<div class="col-sm-3">' +
 		'<center>' + $('#lisapalvelu_tuote option:selected').text() + '</center>' +
-		'<input type="text" name="Tyovuoroot[lisa_tuotteet][tuote][]" value="'+ $('#lisapalvelu_tuote option:selected').val() +'">' +
+		'<input type="hidden" name="Tyovuoroot[lisa_tuotteet][tuote][]" value="'+ $('#lisapalvelu_tuote option:selected').val() +'">' +
 	 '</div>' +
 	 '<div class="col-sm-3">' +
 		'<center>' + $('#lisapalvelu_maara').val() + ' kpl' + '</center>' +
-		'<input type="text" name="Tyovuoroot[lisa_tuotteet][maara][]" value="'+ $('#lisapalvelu_maara').val() +'">' +
+		'<input type="hidden" name="Tyovuoroot[lisa_tuotteet][maara][]" value="'+ $('#lisapalvelu_maara').val() +'">' +
 	 '</div>' +
 	'</div></p>' );
 
@@ -901,8 +925,6 @@ $('#tyovuoroot-form').on('submit',function(e) {
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-console.log(data);
-return false;
 			PaivaysLoogikka(data, 'update');
 	   	  },
 		  error: function(xhr, status, error) {
