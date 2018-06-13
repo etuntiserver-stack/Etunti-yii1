@@ -22,7 +22,7 @@
 <?php
  $array = array
  (
-	'asetukset'=>array(0=>null,1=>null,2=>'Muokaa asetukset',3=>null),
+	'asetukset'=>array(0=>null,1=>null,2=>'Asetukset ja käyttöoikeudet',3=>null),
 	'tyoryhmat'=>array(4=>'Työryhmät järjestelmänvalvoja'), //0=>'Näytä työryhmät',1=>'Luo työryhmät',2=>'Muokaa työryhmät',3=>'Poista työryhmät',
 	'yrityksentiedot'=>array(0=>null,1=>null,2=>'Muokaa yrityksentiedot',3=>null),
 	'henkilotunnukset'=>array(0=>null,1=>null,2=>'Henkilötunnukset',3=>null),
@@ -60,7 +60,7 @@
 
 ?>
 
-<?php echo CHtml::link('Muokka ryhmät', array('oikeusRyhmat/index'), array('class' => 'btn btn-primary myBgColors')); ?>
+<?php echo CHtml::link('Muokkaa ryhmät', array('oikeusRyhmat/index'), array('class' => 'btn btn-primary myBgColors')); ?>
 
 <table class="table table-bordered table-striped oikeudet">
 

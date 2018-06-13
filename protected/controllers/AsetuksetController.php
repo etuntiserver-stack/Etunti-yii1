@@ -66,6 +66,11 @@ class AsetuksetController extends Controller
 
 	public function actionOikeudet()
 	{
+	// <-- Oikeudet
+	   $checkOikeus = "asetukset_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
 		if(isset($_POST['oikeudet']))
 		{
 			$as = Asetukset::model()->updatebypk(1,array('oikeudet' => json_encode($_POST['oikeudet'])));
