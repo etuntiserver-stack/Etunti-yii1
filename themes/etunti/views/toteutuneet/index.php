@@ -608,21 +608,7 @@ function dateDiff($start, $end) {
     $yhtLSWeek 		+= $ls;
     $yhtVLWeek 		+= $vl;
     $yhtVKLWeek 	+= $vkl;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    		$tid = $tid;
+    $tid 		= $tid;
 
 	    if(date('N', strtotime($date)) == 7)
 	    {

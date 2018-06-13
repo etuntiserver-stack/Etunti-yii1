@@ -90,10 +90,10 @@
 		$kohde .= ' <i class="p3 fa fa-hourglass text-info"></i>';
 
 	   if($status == 2)
-		$kohde .= ' <i class="p3 fa fa-bus text-warning"></i>';
+		$kohde = 'MATKA <i class="p3 fa fa-bus text-warning"></i>';
 
 	   if($status == 10)
-		$kohde .= ' <i class="p3 fa fa-cutlery text-danger"></i>';
+		$kohde = 'LOUNASTAUKO <i class="p3 fa fa-cutlery text-danger"></i>';
 
 
 	   echo '<div id="'.$rivi.'_'.$did.'_'.$tid.'" class="fullRivi form-inline">';
