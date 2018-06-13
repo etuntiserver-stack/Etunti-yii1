@@ -265,7 +265,7 @@ $(".muokaValiko").click(function() {
 		<?php echo $form->labelEx($model,'tuoteID'); ?>
 		<?php
 		$criteria = new CDbCriteria();
-       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND yksikko='h' ";
 		$tp = TuotteetPalvelut::model()->findAll($criteria);
 		echo $form->dropDownList($model,'tuoteID[]', CHtml::listData($tp, 'id', 'nimike'), 
 		array('empty'=>'Valitse','class'=>'form-control'));
@@ -325,7 +325,31 @@ $(".muokaValiko").click(function() {
         	$l = array(0=>'Kyllä',1=>'Ei');
 		echo $form->dropDownList($model,'piilota_mobiilista', $l, 
 		array('class'=>'form-control')) ?>
-
+  </div>
+</div>
+<br>
+<label><?=Yii::t('main','Valitse tuotteet ja lisäpalvelut')?></label>
+<div class="row" id="lisapalvelut_valinta">
+  <div class="col-sm-3">
+		<?php
+		$criteria = new CDbCriteria();
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
+		$tp = TuotteetPalvelut::model()->findAll($criteria);
+		echo Chtml::dropDownList('lisapalvelu_tuote','lisapalvelu_tuote', CHtml::listData($tp, 'id', 'nimike'), 
+		array('empty'=>'Valitse','class'=>'form-control'));
+		?>
+  </div>
+  <div class="col-sm-3">
+	<div class="row">
+	 <div class="col-sm-10">
+		<?php echo Chtml::numberField('lisapalvelu_maara','lisapalvelu_maara',array('class'=>'form-control', 'placeholder' => 'määrä')); ?>
+	 </div>
+	 <div class="col-sm-2">
+        	<button class="btn btn-primary plus_lisapalvelu myBgColors pull-right" type="button"><i class="fa fa-plus"></i></button>
+	 </div>
+	</div>
+  </div>
+  <div class="col-sm-3 col-sm-offset-3">
 		<?php 
 		$t = Tyontekijat::model()->findbypk($model->tid);
 		if(!empty($t->gcm_reg_id)) :
@@ -335,11 +359,32 @@ $(".muokaValiko").click(function() {
 			<input type="checkbox" name="Tyovuoroot[PushNotify]" class="sw" id="Tyovuoroot_PushNotify">
 	    	</div>
 		<?php endif; ?>
-
   </div>
 </div>
-<br>
+<div id="lisapalvelu_lista"></div>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.plus_lisapalvelu').click(function(){
+	var lisapalvelu_tuote = $('#lisapalvelu_tuote option:selected').val();
+	var lisapalvelu_maara = $('#lisapalvelu_maara').val();
+	if( lisapalvelu_tuote === '' ){
+		$('#lisapalvelu_tuote').css({'border' : '1px red solid'}).focus();
+		return false;
+	}
+	if( lisapalvelu_maara === '' ){
+		$('#lisapalvelu_maara').css({'border' : '1px red solid'}).focus();
+		return false;
+	}
+		
+	$('#lisapalvelu_lista').append('<p><div class="lisapalvelut_valmis_rivi" lisapalvelu_tuote="'+ $('#lisapalvelu_tuote option:selected').val() +'" lisapalvelu_maara="'+ $('#lisapalvelu_maara').val() +'">' + $('#lisapalvelu_tuote option:selected').text() + ' ' + $('#lisapalvelu_maara').val() + ' kpl</div></p>' );
 
+	$('#lisapalvelu_tuote').css({'border' : '1px green solid'}).val('');
+	$('#lisapalvelu_maara').css({'border' : '1px green solid'}).val('');
+  });
+});
+</script>
+
+<br>
 <?php
     $pfrom = '';
     $pto = '';
@@ -374,7 +419,7 @@ $(".muokaValiko").click(function() {
  <div class="col-sm-12">
 
 
-  	<a href="#" class="btn btn-sm btn-primary" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> <?php echo Yii::t('main','Toistuva työvuoro'); ?></a>
+  	<a href="#" class="btn btn-lg btn-primary" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> <?php echo Yii::t('main','Toistuva työvuoro'); ?></a>
 
 
 	<div class="<?php echo $classCol; ?>" id="collapseExample">
