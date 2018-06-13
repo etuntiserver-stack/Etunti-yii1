@@ -65,6 +65,7 @@ class Avaimet extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('avainnumero, kohde', 'required'),
+                        array('avainnumero','unique', 'message'=>'Tämä avainnumero on jo olemassa!'),
 			array('kohde, tid, status, asiakas_id', 'numerical', 'integerOnly'=>true),
 			array('avainnumero, sijainti', 'length', 'max'=>255),
 			array('lisatiedot', 'safe'),
