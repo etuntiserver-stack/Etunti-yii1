@@ -335,14 +335,14 @@ $(".muokaValiko").click(function() {
 		$criteria = new CDbCriteria();
        		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
 		$tp = TuotteetPalvelut::model()->findAll($criteria);
-		echo Chtml::dropDownList('lisapalvelu_tuote','lisapalvelu_tuote', CHtml::listData($tp, 'id', 'nimike'), 
+		echo CHtml::dropDownList('lisapalvelu_tuote','lisapalvelu_tuote', CHtml::listData($tp, 'id', 'nimike'), 
 		array('empty'=>'Valitse','class'=>'form-control'));
 		?>
   </div>
   <div class="col-sm-3">
 	<div class="row">
 	 <div class="col-sm-10">
-		<?php echo Chtml::numberField('lisapalvelu_maara','lisapalvelu_maara',array('class'=>'form-control', 'placeholder' => 'määrä')); ?>
+		<?php echo CHtml::numberField('lisapalvelu_maara','lisapalvelu_maara',array('class'=>'form-control', 'placeholder' => 'määrä')); ?>
 	 </div>
 	 <div class="col-sm-2">
         	<button class="btn btn-primary plus_lisapalvelu myBgColors pull-right" type="button"><i class="fa fa-plus"></i></button>
@@ -376,7 +376,18 @@ $(document).ready(function(){
 		return false;
 	}
 		
-	$('#lisapalvelu_lista').append('<p><div class="lisapalvelut_valmis_rivi" lisapalvelu_tuote="'+ $('#lisapalvelu_tuote option:selected').val() +'" lisapalvelu_maara="'+ $('#lisapalvelu_maara').val() +'">' + $('#lisapalvelu_tuote option:selected').text() + ' ' + $('#lisapalvelu_maara').val() + ' kpl</div></p>' );
+	$('#lisapalvelu_lista').append('' +
+	'<p><div class="lisapalvelut_valmis_rivi" lisapalvelu_tuote="'+ $('#lisapalvelu_tuote option:selected').val() +'" lisapalvelu_maara="'+ $('#lisapalvelu_maara').val() +'">' +
+	'<div class="row">' +
+	 '<div class="col-sm-3">' +
+		'<center>' + $('#lisapalvelu_tuote option:selected').text() + '</center>' +
+		'<input type="text" name="Tyovuoroot[lisa_tuotteet][tuote][]" value="'+ $('#lisapalvelu_tuote option:selected').val() +'">' +
+	 '</div>' +
+	 '<div class="col-sm-3">' +
+		'<center>' + $('#lisapalvelu_maara').val() + ' kpl' + '</center>' +
+		'<input type="text" name="Tyovuoroot[lisa_tuotteet][maara][]" value="'+ $('#lisapalvelu_maara').val() +'">' +
+	 '</div>' +
+	'</div></p>' );
 
 	$('#lisapalvelu_tuote').css({'border' : '1px green solid'}).val('');
 	$('#lisapalvelu_maara').css({'border' : '1px green solid'}).val('');
@@ -890,6 +901,8 @@ $('#tyovuoroot-form').on('submit',function(e) {
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
+console.log(data);
+return false;
 			PaivaysLoogikka(data, 'update');
 	   	  },
 		  error: function(xhr, status, error) {
