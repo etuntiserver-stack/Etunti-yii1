@@ -166,7 +166,7 @@ public $tilausviesti;
 			'tietoja' => Yii::t('main', 'Tietoja mobiilisovellukseen'),
 			'osoiteOnline' => Yii::t('main', 'Osoite Online'),
 			'status' => Yii::t('main', 'Tilanne'),
-			'piilota_mobiilista'=>Yii::t('main', 'Näytetäänkö työntekijälle mobiilissa'),
+			'piilota_mobiilista'=>Yii::t('main', 'Näytä mobiilissa'),
 			'tuoteID' => Yii::t('main', 'Tuote/palvelu'),
 		);
 	}

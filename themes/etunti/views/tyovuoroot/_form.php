@@ -242,51 +242,6 @@ $(".muokaValiko").click(function() {
 </script>
 
 <div class="row">
-
-  <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'tuoteID'); ?>
-		<?php
-		$criteria = new CDbCriteria();
-       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
-		$tp = TuotteetPalvelut::model()->findAll($criteria);
-
-			echo '<select name="Tyovuoroot[tuoteID][]" id="tuoteID" class="mult" multiple>';
-			foreach($tp as $item)
-			{
-			  if(is_array(json_decode($model->tuoteID)) and in_array($item->id, json_decode($model->tuoteID), true))
-			    echo '<option value="'.$item->id.'" selected>'.$item->nimike.'</option>';
-			  else
-			    echo '<option value="'.$item->id.'">'.$item->nimike.'</option>';
-			}
-			echo '</select>';
-		?>
-  </div>
-
-  <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'peruutettu'); ?>
-		<?php
-		$list = $this->peruutettuArray();
-		echo $form->dropDownList($model,'peruutettu', $list, 
-		array('empty'=>'Valitse','class'=>'form-control'));
-		?>
-  </div>
-
-  <div class="col-sm-3">
-		<br><p><div id="kohde_url"></div></p>
-  </div>
-<?php /*
-  <div class="col-sm-3">
-	<div id="apuaika_div" style="margin-top:5px">
-		<?php echo $form->labelEx($model,'apuaika'); ?>
-		<?php
-		echo $form->checkbox($model,'apuaika', $list, array('class'=>'form-control'));
-		?>
-	</div>
-  </div>
-*/ ?>
-</div>
-
-<div class="row">
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'tietoja'); ?>
 		<?php 
@@ -295,6 +250,7 @@ $(".muokaValiko").click(function() {
 		<?php echo $form->error($model,'tietoja'); ?>
   </div>
   <div class="col-sm-6">
+		<p><div id="kohde_url"></div></p>
 		<?php echo $form->labelEx($model,'ohje'); ?>
 		<div style="height:100px; overflow: scroll; overflow-x:hidden;">
 		<div class="ohje"><?php echo $ohje; ?></div>
@@ -305,7 +261,17 @@ $(".muokaValiko").click(function() {
 
 
 <div class="row">
-  <div class="col-sm-6">
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'tuoteID'); ?>
+		<?php
+		$criteria = new CDbCriteria();
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
+		$tp = TuotteetPalvelut::model()->findAll($criteria);
+		echo $form->dropDownList($model,'tuoteID[]', CHtml::listData($tp, 'id', 'nimike'), 
+		array('empty'=>'Valitse','class'=>'form-control'));
+		?>
+  </div>
+  <div class="col-sm-3">
 		<label><?php echo Yii::t('main', 'Työpari'); ?></label><br>
 		<?php 
 		$tyopaari = json_decode($model->tyopaari, true);
@@ -345,42 +311,33 @@ $(".muokaValiko").click(function() {
 
 
   </div>
-  <div class="col-sm-6">
-
-
-
-    <div class="pull-right">
-    <br>
-  	<div class="section">
-
-
-
-
-
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'peruutettu'); ?>
+		<?php
+		$list = $this->peruutettuArray();
+		echo $form->dropDownList($model,'peruutettu', $list, 
+		array('empty'=>'Valitse','class'=>'form-control'));
+		?>
+  </div>
+  <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'piilota_mobiilista'); ?>
 		<?php 
         	$l = array(0=>'Kyllä',1=>'Ei');
 		echo $form->dropDownList($model,'piilota_mobiilista', $l, 
 		array('class'=>'form-control')) ?>
 
-	</div>
-	<?php 
-	$t = Tyontekijat::model()->findbypk($model->tid);
-	if(!empty($t->gcm_reg_id)) :
-	?>
-	<br>
-  	<div class="section">
+		<?php 
+		$t = Tyontekijat::model()->findbypk($model->tid);
+		if(!empty($t->gcm_reg_id)) :
+		?>
+  		<div class="section">
 		<label><?php echo Yii::t('main','Ilmoita työntekijää viestillä'); ?></label><br>
-		<input type="checkbox" name="Tyovuoroot[PushNotify]" class="sw" id="Tyovuoroot_PushNotify">
-	</div>
-	<?php endif; ?>
-    </div>
-
-
+			<input type="checkbox" name="Tyovuoroot[PushNotify]" class="sw" id="Tyovuoroot_PushNotify">
+	    	</div>
+		<?php endif; ?>
 
   </div>
 </div>
-
 <br>
 
 <?php
