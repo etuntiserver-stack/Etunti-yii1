@@ -27,7 +27,7 @@ class LaskuController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -103,8 +103,10 @@ class LaskuController extends Controller
 		exit;
 	}
 
-	public function actionLuolaskut($from, $to, $asiakas_id=null, $luominen=null)
+	public function actionLuolaskut($from, $to, $asiakas_id=null, $asiakkaat_all=null, $laheta=null)
 	{
+		$asetukset = Asetukset::model()->findByPk(1);
+
        		$criteria = new CDbCriteria();
 	        //$criteria->order = " id DESC ";
 	        $criteria->condition = " 
@@ -123,11 +125,18 @@ class LaskuController extends Controller
 			)
 		    )
 		";
+		if( $asiakas_id !== null ){
+	        $criteria->addCondition ("  id='".$asiakas_id."' ");
+		}
+
 		$lista = Asiakkaat::model()->findAll($criteria);
 		$this->render('luolaskut', array(
+			'asetukset' => $asetukset,
 			'lista' => $lista,
 			'from' => $from,
-			'to' => $to
+			'to' => $to,
+			'asiakas_id' => $asiakas_id,
+			'laheta' => $laheta
 		));
 	}
 

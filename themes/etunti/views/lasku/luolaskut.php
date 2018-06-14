@@ -4,14 +4,15 @@
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-        <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'LASKU AUTOMAATTIO ESIKATSELLU'); ?></h2>
+        <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'LASKU AUTOMAATTIO ESIKATSELU'); ?></h2>
 
 	</div>
 
-
+	<center><button class="btn btn-lg btn-success"><?=Yii::t('main', 'LÄHETÄ KAIKKI LASKUT')?></button></center>
+	<br>
 <p>
 <div class="container-fluid">
-	<table class="table">
+	<table class="table table-bordered">
 	<tr>
 	<th>Asiakas</th>
 	<th>Laskutuksen tiedot</th>
@@ -22,6 +23,7 @@
 	<td><h3><?=$item->Fullname?></h3></td>
 	<td>
 	<?php
+	$yhteensa_total	= 0;
 	$is_ok_lasku 	= true;
 	$l_class	= 'class="bg-default"';
 	if( 
@@ -63,6 +65,7 @@
 			$alv 		= $r['alv'];
 			$yksikko	= $r['yksikko'];
 			$yht		= ($r['kpl']*$r['hinta']);
+			$yhteensa_total += $yht;
 	        ?>
 		<tr>
 		<td><?=$nimike?></td>
@@ -86,6 +89,7 @@
 			$alv 		= $r['alv'];
 			$yksikko	= $r['yksikko'];
 			$yht		= ($r['kpl']*$r['hinta']);
+			$yhteensa_total += $yht;
 	        ?>
 		<tr>
 		<td><?=$nimike?></td>
@@ -102,13 +106,58 @@
 		</table>
 	</td>
 	</tr>
+
+	<!-- Lahetys -->
+	<?php if($is_ok_lasku and $laheta and $asiakas_id == $item->id){
+		$lasku = new Lasku;
+		$lasku->yid = 1;
+		$lasku->tyyppi = $item->tyyppi;
+		$lasku->yritys = $item->yrityksen_nimi;
+		$lasku->y_tunnus = $item->y_tunnus;
+		$lasku->nimi = $item->yhteyshenkilo;
+		$lasku->as_nro = $item->asiakasnumero;
+		$lasku->osoite = $item->osoite;
+		$lasku->toimitusosoite = $item->osoite;
+		$lasku->postinumero = $item->postinumero;
+		$lasku->toimipaikka = $item->kaupunki;
+		$lasku->laskutus = $item->laskutus_kanava;
+		$lasku->verkkolaskuosoite = $item->verkkolaskuosoite;
+		$lasku->v_tunnus = $item->valittajan_tunnus;
+		$lasku->yhteyshenkilo = $item->yhteyshenkilo;
+		$lasku->puhelin = $item->puhelin;
+		$lasku->paivays = date("Y-m-d");
+		$lasku->erapaiva = date("Y-m-d",strtotime("+$item->maksuehto day"));
+		$lasku->maksuehto = $item->maksuehto;
+		$lasku->viitenumero = $this->Viite($item->asiakasnumero."00".$item->id);
+		$lasku->yhteensa_total = $yhteensa_total;
+		$lasku->saaja_iban = $asetukset->iban;
+		$lasku->laskun_nimetys = 'Lasku';
+		if(!$lasku->save()){
+			print_r($lasku->getErrors());
+		}
+	} ?>
+	<!-- / Lahetys -->
+
+	<!-- Painikkeet -->
 	<?php if($is_ok_lasku): ?>
-		<tr><th><button class="btn btn-block btn-success">Luo lasku</button></th></tr>
+		<tr><th>
+		<?php
+			echo CHtml::link(Yii::t('main', 'Lähetä lasku'), 
+				array('lasku/luolaskut', 'from' => $from, 'to' => $to, 'asiakas_id' => $item->id, 'laheta' => true), 
+				array(
+					'class' => 'btn btn-block btn-success',
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Lähetä')
+				)
+			); 
+		?>
+		</th></tr>
 	<?php else: ?>
 		<tr><th><button class="btn btn-block btn-danger">Lasku ei mennyt läpi</button></th></tr>
 	<?php endif; ?>
+	<!-- / Painikkeet -->
 	<?php endforeach; ?>
 	</table>
-	<center><button class="btn btn-lg btn-primary myBgColors"><?=Yii::t('main', 'LUO KAIKKI LASKUT')?></button></center>
 </div>
 </p>
