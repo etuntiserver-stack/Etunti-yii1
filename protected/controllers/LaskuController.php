@@ -103,8 +103,36 @@ class LaskuController extends Controller
 		exit;
 	}
 
-	public function actionLuolaskut($from, $to)
+	public function actionLuolaskut($from, $to, $asiakas_id=null, $luominen=null)
 	{
+       		$criteria = new CDbCriteria();
+	        //$criteria->order = " id DESC ";
+	        $criteria->condition = " 
+		  aktiivinen='1'
+		  AND id IN 
+		    ( SELECT asiakas_id FROM sivex_kohdet 
+		      WHERE id IN 
+			( SELECT kohdenID FROM sivexkuitti 
+			  WHERE status='3' 
+			  AND hyvaksytty!=''
+			  AND sairaus!=1
+			  AND tv_id IS NOT NULL AND tv_id > 0
+			  AND tv_id IN (
+				SELECT id FROM sivex_tvuoro
+			  )
+			)
+		    )
+		";
+		$lista = Asiakkaat::model()->findAll($criteria);
+		$this->render('luolaskut', array(
+			'lista' => $lista,
+			'from' => $from,
+			'to' => $to
+		));
+	}
+
+	protected function hyvaksyttyListaByAsiakas($id, $from, $to){
+
        		$criteria = new CDbCriteria();
 	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
 	        $criteria->condition = " 
@@ -116,7 +144,10 @@ class LaskuController extends Controller
 			AND hyvaksytty!=''
 			AND tv_id IS NOT NULL AND tv_id > 0
 			AND tv_id IN (
-				SELECT id FROM sivex_tvuoro WHERE tuoteID!='' AND kohde > 0 AND laskutettu=0
+				SELECT id FROM sivex_tvuoro WHERE tuoteID > 0 AND laskutettu='0'
+			)
+			AND kohdenID IN (
+				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$id."'
 			)
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 		";
@@ -133,16 +164,17 @@ class LaskuController extends Controller
 			AND hyvaksytty!=''
 			AND tv_id IS NOT NULL AND tv_id > 0
 			AND tv_id IN (
-				SELECT id FROM sivex_tvuoro WHERE tuoteID='' AND kohde > 0 AND laskutettu=0
+				SELECT id FROM sivex_tvuoro WHERE tuoteID > 0 AND laskutettu='0'
+			)
+			AND kohdenID IN (
+				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$id."'
 			)
 		";
 		$tot = Toteutuneet::model()->findAll($criteria);
-
 		$lista = $lu;
 		if( is_array($tot) and count($tot) > 0 ){ $lista = array_merge($lu, $tot); }
-		$this->render('luolaskut', array(
-				'lista' => $lista
-		));
+
+		return $lista;
 	}
 
 	public function actionAuto()
