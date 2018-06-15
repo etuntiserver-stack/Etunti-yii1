@@ -363,8 +363,9 @@ $(".muokaValiko").click(function() {
 </div>
 
 <div id="lisapalvelu_lista">
-	<?php if( is_array(json_decode($model->lisa_tuotteet, true)['tuote']) ) : ?>
-	<?php foreach(json_decode($model->lisa_tuotteet, true)['tuote'] as $k => $v) : ?>
+	<?php $lisa_tuotteet = json_decode($model->lisa_tuotteet, true); ?>
+	<?php if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote'])  ) : ?>
+	<?php foreach($lisa_tuotteet['tuote'] as $k => $v) : ?>
 	<?php 
 		$t_nimike = '';
 		$tp = TuotteetPalvelut::model()->findByPK($v);
