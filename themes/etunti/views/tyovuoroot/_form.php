@@ -349,7 +349,15 @@ $(".muokaValiko").click(function() {
 	 </div>
 	</div>
   </div>
-  <div class="col-sm-3 col-sm-offset-3">
+  <div class="col-sm-3">
+
+		<?php 
+        	$l = array(0 => 'Ei laskutettu', 1 => 'Laskutettu');
+		echo $form->dropDownList($model,'laskutettu', $l, 
+		array('class'=>'form-control')) ?>
+
+  </div>
+  <div class="col-sm-3">
 		<?php 
 		$t = Tyontekijat::model()->findbypk($model->tid);
 		if(!empty($t->gcm_reg_id)) :
