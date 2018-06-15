@@ -103,7 +103,7 @@ class LaskuController extends Controller
 		exit;
 	}
 
-	public function actionLuolaskut($from, $to, $asiakas_id=null, $asiakkaat_all=null, $laheta=null)
+	public function actionLuolaskut($from, $to, $asiakas_id=null, $asiakkaat_all=null, $laheta=null, $alvsis=null)
 	{
 		$asetukset = Asetukset::model()->findByPk(1);
 
@@ -120,7 +120,7 @@ class LaskuController extends Controller
 			  AND sairaus!=1
 			  AND tv_id IS NOT NULL AND tv_id > 0
 			  AND tv_id IN (
-				SELECT id FROM sivex_tvuoro
+				SELECT id FROM sivex_tvuoro WHERE laskutettu='0'
 			  )
 			)
 		    )
@@ -136,7 +136,8 @@ class LaskuController extends Controller
 			'from' => $from,
 			'to' => $to,
 			'asiakas_id' => $asiakas_id,
-			'laheta' => $laheta
+			'laheta' => $laheta,
+			'alvsis' => $alvsis
 		));
 	}
 
@@ -784,6 +785,8 @@ class LaskuController extends Controller
 		if(isset($tp->id))
 		{
 			$return['tp_nimike'] = $tp->nimike;
+			$return['tp_id'] = $tp->id;
+
 			if($tp->yksikko == 'h')
 			{
 				$return['kpl'] = $tunnit;

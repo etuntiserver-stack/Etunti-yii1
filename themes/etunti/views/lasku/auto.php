@@ -100,6 +100,20 @@
                           </label>
                         </div>
                       </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			    <select name="alvsis" id="alvsis" class="gui-input">
+			     <option value="0"><?php echo Yii::t('main', 'Hinnat ALV 0%'); ?></option>
+			     <option value="1"><?php echo Yii::t('main', 'Hinnat sis. ALV'); ?></option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
                       <div class="col-md-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo laskut'); ?>">
 		      </div>
