@@ -172,7 +172,7 @@
 		<td><?=$freetext?></td>
 		</tr>
 		<!-- Lisatuote -->
-		<?php $lisa_tuotteet = json_decode($model->lisa_tuotteet, true); ?>
+		<?php $lisa_tuotteet = json_decode($mob->tyovuoroot->lisa_tuotteet, true); ?>
 		<?php if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote']) ) : ?>
 		<?php foreach($lisa_tuotteet['tuote'] as $k => $v) : ?>
 		<?php $key++; ?>
