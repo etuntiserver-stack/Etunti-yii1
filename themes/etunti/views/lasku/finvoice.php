@@ -405,24 +405,18 @@ $xml = encodeXml (array(
 
 
 /* Lähetä lasku palvelimelle */
-echo "------ send ------\n";
-echo $xml;
 $res = commitTransfer ($xml);
-
 /* Tulosta vastausviesti */
-echo '<textarea class="form-control" rows="20">'.$res.'</textarea>';
-echo "\n";
+echo '<textarea class="form-control" rows="20" cols="40">'.$res.'</textarea>';
+echo "<br>";
 
 /* Tulkitse palvelimen vastausviesti */
 $doc = parseXml ($res);
-echo "------ parse ------\n";
 
 /* Tulosta hyväksytyt ja hylätyt laskut */
 for ($i = 0; $i < count ($doc->row); $i++) {
 
     if ($doc->row[$i]->accepted == '1') {
-        echo 'accept billnum ' . $doc->row[$i]->billnum
-            . ' jobid ' . $doc->row[$i]->jobid . "<br>";
 
      	Lasku::model()->updatebypk($id, array('tilanne'=>2,'trust_jobid'=>$doc->row[$i]->jobid,'viitenumero'=>$doc->row[$i]->reference));
 
@@ -435,13 +429,20 @@ for ($i = 0; $i < count ($doc->row); $i++) {
 		    $historia->yht_euro = $l->yhteensa_total;
 		    $historia->save();
 
-	if(!isset($no_redirect)){ $this->redirect(array('index')); }
+	if(!isset($autolaskutus)){ $this->redirect(array('index')); }
 
 	break;
 
     } else {
         echo 'reject billnum ' . $doc->row[$i]->billnum
             . '<br> error ' . utf8_decode ($doc->row[$i]->error) . "<br>";
+
+	if(isset($autolaskutus)){
+		$criteria=new CDbCriteria;
+		$criteria->condition = " lasku_id='".$id."' ";
+		Tyovuoroot::model()->updateAll(array('laskutettu' => '0'), $criteria);
+	}
+
 	exit;
     }
 }

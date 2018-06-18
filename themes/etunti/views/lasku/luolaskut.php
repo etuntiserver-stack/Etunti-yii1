@@ -43,6 +43,7 @@
 		empty($item->laskutus_kanava)
 		or empty($item->maksuehto)
 		or empty($item->viivastyskorko)
+		or ($item->laskutus_kanava == 'sahkoposti' and empty($item->sahkoposti))
 	){ 
 		$is_ok_lasku 	= false; 
 		$l_class	= 'class="alert bg-danger"';
@@ -53,6 +54,7 @@
 	<p><b><?=Yii::t('main', 'Eräpäivä')?></b>-<?=(!empty($item->maksuehto))? date("d.m.Y",strtotime("+$item->maksuehto day")):''?></p>
 	<p><b><?=Yii::t('main', 'Maksuehto')?></b>-<?=(!empty($item->maksuehto))? $item->maksuehto:''?></p>
 	<p><b><?=Yii::t('main', 'Viivästyskorko')?></b>-<?=(!empty($item->viivastyskorko))? $item->viivastyskorko:''?></p>
+	<?=($item->laskutus_kanava == 'sahkoposti' and empty($item->sahkoposti))? '<p>'.Yii::t('main', 'Sähköpostiosoite ei saisi olla tyhjä tässä laskutus kanavassa.').'</p>':''?>
 	</div>
 	</td>
 	<td>
@@ -82,6 +84,7 @@
 		$lasku->postinumero = $item->postinumero;
 		$lasku->toimipaikka = $item->kaupunki;
 		$lasku->laskutus = $item->laskutus_kanava;
+		$lasku->sahkoposti = $item->sahkoposti;
 		$lasku->verkkolaskuosoite = $item->verkkolaskuosoite;
 		$lasku->v_tunnus = $item->valittajan_tunnus;
 		$lasku->yhteyshenkilo = $item->yhteyshenkilo;
@@ -242,7 +245,7 @@
 		<?php if( $is_ok_lasku and $laheta and isset($lasku->id) and $mob->tv_id > 0 ){
 			$tl = Tyovuoroot::model()->findByPk($mob->tv_id);
 			if( isset($tl->id) ){
-			   Tyovuoroot::model()->updateByPk($tl->id, array('laskutettu' => 1));
+			   Tyovuoroot::model()->updateByPk($tl->id, array('laskutettu' => 1, 'lasku_id' => $lasku->id));
 			}
 		} ?>
 		<!-- / Update tyovuoro laskutettu -->

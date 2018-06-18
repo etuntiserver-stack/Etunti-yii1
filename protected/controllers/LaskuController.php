@@ -505,7 +505,7 @@ class LaskuController extends Controller
 			'laskunRivit'=>$laskunRivit,
 			'yritys'=>$firmanTiedot,
 			'finvoiceTrust' => true,
-			'no_redirect' => true
+			'autolaskutus' => true
 			));
 	}
 
