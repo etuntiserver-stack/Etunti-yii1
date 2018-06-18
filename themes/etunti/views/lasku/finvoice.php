@@ -169,7 +169,7 @@ if(isset($_GET['lahetaNetvisor']))
 
 
 // <-- Trust Hyvityslasku
-if(isset($_GET['finvoiceTrust']) or isset($_GET['hyvityslasku'])){
+if(isset($_GET['finvoiceTrust']) or isset($_GET['hyvityslasku']) or isset($finvoiceTrust)){
 
  $cid = $asetukset['trust_cid'];
  $api = $asetukset['trust_api'];
@@ -435,12 +435,14 @@ for ($i = 0; $i < count ($doc->row); $i++) {
 		    $historia->yht_euro = $l->yhteensa_total;
 		    $historia->save();
 
-	$this->redirect(array('index'));
+	if(!isset($no_redirect)){ $this->redirect(array('index')); }
+
 	break;
 
     } else {
         echo 'reject billnum ' . $doc->row[$i]->billnum
             . '<br> error ' . utf8_decode ($doc->row[$i]->error) . "<br>";
+	exit;
     }
 }
 

@@ -115,7 +115,10 @@ class LaskuController extends Controller
 		    ( SELECT asiakas_id FROM sivex_kohdet 
 		      WHERE id IN 
 			( SELECT kohdenID FROM sivexkuitti 
-			  WHERE status='3' 
+			  WHERE 
+			  DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			  BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			  AND status='3' 
 			  AND hyvaksytty!=''
 			  AND sairaus!=1
 			  AND tv_id IS NOT NULL AND tv_id > 0
@@ -481,9 +484,29 @@ class LaskuController extends Controller
 			'asetukset'=>$asetukset,
 			'laskunRivit'=>$laskunRivit,
 			'yritys'=>$firmanTiedot,
-
 			));
 
+	}
+
+	protected function finvoiceAuto($id)
+	{
+
+		$lasku=$this->loadModel($id);
+		$laskunRivit=LaskunRivit::model()->findAll("lid='".$id."'");
+		$asetukset=Asetukset::model()->find("id=1");
+		$firmanTiedot=FirmanTiedot::model()->find("id=1");
+
+
+		$this->renderPartial('finvoice', 
+			array(
+			'id'=>$id,
+			'lasku'=>$lasku,
+			'asetukset'=>$asetukset,
+			'laskunRivit'=>$laskunRivit,
+			'yritys'=>$firmanTiedot,
+			'finvoiceTrust' => true,
+			'no_redirect' => true
+			));
 	}
 
 	public function Lasku_pdf($id)

@@ -69,6 +69,7 @@
 
 		$lasku = new Lasku;
 		$lasku->yid = 1;
+		$lasku->tilanne = 1;
 		$lasku->laskunumero = $laskunumero;
 		$lasku->tapahtumapvm = date("Y-m-d H:i:s");
 		$lasku->tyyppi = $item->tyyppi;
@@ -257,6 +258,17 @@
 			'yhteensa_total_veroton' => round($yhteensa_total_veroton, 2), 
 			'yhteensa_total' => $yhteensa_total
 		));
+
+		// <<- Lahetys Trust
+		if(isset($lasku->id) 
+			and $lasku->tilanne == 1 
+			and empty($lasku->trust_jobid) 
+			and $asetukset->palvelu_tyyppi == 2 
+		){
+			$l = Lasku::model()->findByPk($lasku->id); 
+			$this->finvoiceAuto($l->id);
+		}
+		// Lahetys Trust -->
 	} ?>
 
 	<tr>
