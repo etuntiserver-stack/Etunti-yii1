@@ -123,7 +123,7 @@ class LaskuController extends Controller
 			  AND sairaus!=1
 			  AND tv_id IS NOT NULL AND tv_id > 0
 			  AND tv_id IN (
-				SELECT id FROM sivex_tvuoro WHERE laskutettu='0'
+				SELECT id FROM sivex_tvuoro WHERE (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
 			  )
 			)
 		    )
@@ -157,7 +157,7 @@ class LaskuController extends Controller
 			AND hyvaksytty!=''
 			AND tv_id IS NOT NULL AND tv_id > 0
 			AND tv_id IN (
-				SELECT id FROM sivex_tvuoro WHERE tuoteID > 0 AND laskutettu='0'
+				SELECT id FROM sivex_tvuoro WHERE (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
 			)
 			AND kohdenID IN (
 				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$id."'
