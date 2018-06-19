@@ -130,7 +130,6 @@
 			$alv 		= (( isset($r['alv']) )? $r['alv']:0);
 			$yksikko	= (( isset($r['yksikko']) )? $r['yksikko']:'');
 			$freetext	= $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan)).', '.date("H:i", strtotime($mob->aloitan)).'-'.date("H:i", strtotime($mob->loppui));
-			if( $tp_id == 0 ){ continue; }
 
 			// <-- ALV laskin
 			$veroton 	= 0;
@@ -151,7 +150,7 @@
 			$yhteensa_total += $yht;
 			$yhteensa_total_veroton += $veroton;
 
-			if( isset($lasku->id) ){
+			if( isset($lasku->id) and $tp_id != 0){
 			   $lr = new LaskunRivit;
 			   $lr->lid	= $lasku->id;
 			   $lr->rivi	= $key;
@@ -160,12 +159,14 @@
 			   $lr->yksikko	= $yksikko;
 			   $lr->hinta	= $hinta;
 			   $lr->alv	= $alv;
+			   $lr->tuoteID = $tp_id;
 			   $lr->free_text= $freetext;
 			   if(!$lr->save()){
 				print_r($lr->getErrors());
 			   }
 			}
 	        ?>
+		<?php if( $tp_id != 0 ) : ?>
 		<tr>
 		<td><?=$nimike?></td>
 		<td><?=number_format($hinta, 2, ',', ' ')?></td>
@@ -176,6 +177,8 @@
 		<td><?=number_format($yht, 2, ',', ' ')?></td>
 		<td><?=$freetext?></td>
 		</tr>
+		<?php endif; ?>
+
 		<!-- Lisatuote -->
 		<?php $lisa_tuotteet = json_decode($mob->tyovuoroot->lisa_tuotteet, true); ?>
 		<?php if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote']) ) : ?>
@@ -193,7 +196,6 @@
 			$alv 		= (( isset($r['alv']) )? $r['alv']:0);
 			$yksikko	= (( isset($r['yksikko']) )? $r['yksikko']:'');
 			$freetext	= $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan)).', '.date("H:i", strtotime($mob->aloitan)).'-'.date("H:i", strtotime($mob->loppui));
-			if( $tp_id == 0 ){ continue; }
 
 			// <-- ALV laskin
 			$veroton 	= 0;
@@ -214,7 +216,7 @@
 			$yhteensa_total += $yht;
 			$yhteensa_total_veroton += $veroton;
 
-			if( isset($lasku->id) ){
+			if( isset($lasku->id) and $tp_id != 0){
 			   $lr = new LaskunRivit;
 			   $lr->lid	= $lasku->id;
 			   $lr->rivi	= $key;
@@ -223,12 +225,14 @@
 			   $lr->yksikko	= $yksikko;
 			   $lr->hinta	= $hinta;
 			   $lr->alv	= $alv;
+			   $lr->tuoteID = $tp_id;
 			   $lr->free_text= $freetext;
 			   if(!$lr->save()){
 				print_r($lr->getErrors());
 			   }
 			}
 	        ?>
+		<?php if( $tp_id != 0 ) : ?>
 		<tr>
 		<td><?=$nimike?></td>
 		<td><?=number_format($hinta, 2, ',', ' ')?></td>
@@ -239,6 +243,8 @@
 		<td><?=number_format($yht, 2, ',', ' ')?></td>
 		<td><?=$freetext?></td>
 		</tr>
+		<?php endif; ?>
+
 		<?php endforeach; ?>
 		<?php endif; ?>
 		<!-- / Lisatuote -->
