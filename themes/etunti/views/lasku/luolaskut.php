@@ -130,6 +130,7 @@
 			$alv 		= (( isset($r['alv']) )? $r['alv']:0);
 			$yksikko	= (( isset($r['yksikko']) )? $r['yksikko']:'');
 			$freetext	= $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan)).', '.date("H:i", strtotime($mob->aloitan)).'-'.date("H:i", strtotime($mob->loppui));
+			if( $tp_id == 0 ){ continue; }
 
 			// <-- ALV laskin
 			$veroton 	= 0;
@@ -192,6 +193,7 @@
 			$alv 		= (( isset($r['alv']) )? $r['alv']:0);
 			$yksikko	= (( isset($r['yksikko']) )? $r['yksikko']:'');
 			$freetext	= $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan)).', '.date("H:i", strtotime($mob->aloitan)).'-'.date("H:i", strtotime($mob->loppui));
+			if( $tp_id == 0 ){ continue; }
 
 			// <-- ALV laskin
 			$veroton 	= 0;
