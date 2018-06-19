@@ -53,6 +53,7 @@ $('.search-form form').submit(function(){
 		'tekijan_nimi',
 		'tid',
 		'kohdenID',
+		'tv_id',
 		'viesti',
 		/*
 		'bluetooth_name',
