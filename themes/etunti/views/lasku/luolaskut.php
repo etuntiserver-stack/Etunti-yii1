@@ -123,12 +123,12 @@
 			$rivi_kpl 	= 0;
 			$r		= [];
 			$r 		= $this->hinnastoHintaat($mob->tyovuoroot->tuoteID, $item->asiakasnumero, $mob->kohteet, $t, $rivi_kpl);
-			$tp_id		= $r['tp_id'];
-			$nimike		= $r['tp_nimike'];
-			$kpl 		= $r['kpl'];
-			$hinta 		= $r['hinta'];
-			$alv 		= $r['alv'];
-			$yksikko	= $r['yksikko'];
+			$tp_id		= (( isset($r['tp_id']) )? $r['tp_id']:0);
+			$nimike		= (( isset($r['tp_nimike']) )? $r['tp_nimike']:'');
+			$kpl 		= (( isset($r['kpl']) )? $r['kpl']:0);
+			$hinta 		= (( isset($r['hinta']) )? $r['hinta']:0);
+			$alv 		= (( isset($r['alv']) )? $r['alv']:0);
+			$yksikko	= (( isset($r['yksikko']) )? $r['yksikko']:'');
 			$freetext	= $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan)).', '.date("H:i", strtotime($mob->aloitan)).'-'.date("H:i", strtotime($mob->loppui));
 
 			// <-- ALV laskin
@@ -185,12 +185,12 @@
 			$rivi_kpl 	= json_decode($mob->tyovuoroot->lisa_tuotteet, true)['maara'][$k];
 			$r		= [];
 			$r 		= $this->hinnastoHintaat($v, $item->asiakasnumero, $mob->kohteet, $t, $rivi_kpl);
-			$tp_id		= $r['tp_id'];
-			$nimike		= $r['tp_nimike'];
-			$kpl 		= $r['kpl'];
-			$hinta 		= $r['hinta'];
-			$alv 		= $r['alv'];
-			$yksikko	= $r['yksikko'];
+			$tp_id		= (( isset($r['tp_id']) )? $r['tp_id']:0);
+			$nimike		= (( isset($r['tp_nimike']) )? $r['tp_nimike']:'');
+			$kpl 		= (( isset($r['kpl']) )? $r['kpl']:0);
+			$hinta 		= (( isset($r['hinta']) )? $r['hinta']:0);
+			$alv 		= (( isset($r['alv']) )? $r['alv']:0);
+			$yksikko	= (( isset($r['yksikko']) )? $r['yksikko']:'');
 			$freetext	= $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan)).', '.date("H:i", strtotime($mob->aloitan)).'-'.date("H:i", strtotime($mob->loppui));
 
 			// <-- ALV laskin
