@@ -807,7 +807,7 @@ class LaskuController extends Controller
 		$tp = TuotteetPalvelut::model()->findbypk($id);
 		if(!isset($tp->id))
 		{
-			return 'Asiakasnumerolla: '.$asiakasnumero.' tuote ID: '.$id.' ei ole olemassa';
+			die 'Asiakasnumerolla: '.$asiakasnumero.' tuote ID: '.$id.' ei ole enää voimassa';
 		}
 
 		if(isset($tp->id))
