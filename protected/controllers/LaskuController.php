@@ -805,6 +805,11 @@ class LaskuController extends Controller
 		$return = [];
 		// <-- 1. TuotteetPalvelut
 		$tp = TuotteetPalvelut::model()->findbypk($id);
+		if(!isset($tp->id))
+		{
+			return 'Asiakasnumerolla: '.$asiakasnumero.' tuote ID: '.$id.' ei ole olemassa';
+		}
+
 		if(isset($tp->id))
 		{
 			$return['tp_nimike'] = $tp->nimike;
