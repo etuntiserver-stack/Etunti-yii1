@@ -177,11 +177,13 @@ if(isset($_GET['finvoiceTrust']) or isset($_GET['hyvityslasku']) or isset($finvo
 
  require_once ('lib/trust/inc.trust.php');
 
-
-   $rowsArray = array();
-     foreach($laskunRivit as $rivi){
-
-
+ $rowsArray 	= array();
+ $taxrow_arr 	= array();
+ $arr 		= array();
+ $netamount_yht	= 0;
+ $vatamount_yht	= 0;
+ $totalamount_yht = 0;
+ foreach($laskunRivit as $rivi){
         $rowsArray[] =  array(
                         "productid" => $rivi->id, # tuotenro
                         "desc" => $rivi->tkoodi,
@@ -200,9 +202,31 @@ if(isset($_GET['finvoiceTrust']) or isset($_GET['hyvityslasku']) or isset($finvo
                         //"enddate" => "2015-12-31",
                         //"eancode" => "" # EAN-viivakoodi
                     );
-      }
+
+		    $arr[$rivi->alv]['netamount'][] 	= $rivi->veroton;
+		    $arr[$rivi->alv]['vatamount'][] 	= $rivi->hinta_alv;
+		    $arr[$rivi->alv]['totalamount'][] 	= $rivi->yhteensa_alv;
 
 
+		    $netamount_yht += $rivi->veroton;
+		    $vatamount_yht += $rivi->hinta_alv;
+		    $totalamount_yht += $rivi->yhteensa_alv;
+  }
+
+  foreach($arr as $key => $itm){
+		    $taxrow_arr[] = array(
+                        "taxpr" => $key,
+                        "netamount" 	=> array_sum($arr[$key]['netamount']),
+                        "vatamount" 	=> array_sum($arr[$key]['vatamount']),
+                        "totalamount" 	=> array_sum($arr[$key]['totalamount'])
+                    );
+  }
+  /*
+  echo '<pre>';
+  print_r( $taxrow_arr );
+  echo '</pre>';
+  exit;
+  */
 
 if($lasku['tyyppi'] == 'yritys')
 $BuyerOrganisationName = $lasku['yritys'];
@@ -320,22 +344,16 @@ $xml = encodeXml (array(
                 "printoperator" => "enfo", # tulostusoperaattori
                 "billtemplate" => "CUSTOM", # laskupohja
                 "collectionprocess" => "AUTO", # saatavan laji
-                "netamount" => $lasku['yhteensa_total_veroton'], # veroton hinta yhteensä
-                "vatamount" => $lasku['yhteensa_total_verot'], # veron määrä yhteensä
-                "totalamount" => $lasku['yhteensa_total'], # verollinen loppusumma
 
                 # Myytävät tuotteet
                 "payrow" => $rowsArray,
 
                 # alv-erittely (tässä vain yksi rivi)
-                "taxrow" => array(
-                    array(
-                        "taxpr" => 24.0,
-                        "netamount" => $lasku['yhteensa_total_veroton'],
-                        "vatamount" => $lasku['yhteensa_total_verot'],
-                        "totalamount" => $lasku['yhteensa_total']
-                    )
-                ),
+                "taxrow" => $taxrow_arr,
+
+                "netamount" => $netamount_yht, # veroton hinta yhteensä
+                "vatamount" => $vatamount_yht, # veron määrä yhteensä
+                "totalamount" => $totalamount_yht, # verollinen loppusumma
 
                 # Kassa-alennus
                 "cashdiscountrow" => $cashdiscountrow,
@@ -343,8 +361,13 @@ $xml = encodeXml (array(
         )
     )
 ));
+	/*
+	echo '<pre>';
+	print_r( parseXml($xml) );
+	echo '</pre>';
+	exit;
+	*/
 }
-
 
 
 if($jobtype == 2)
