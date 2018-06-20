@@ -185,7 +185,7 @@
 		<?php foreach($lisa_tuotteet['tuote'] as $k => $v) : ?>
 		<?php $key++; ?>
 		<?php
-			$t 		= 0;
+			$t 		= json_decode($mob->tyovuoroot->lisa_tuotteet, true)['maara'][$k];
 			$rivi_kpl 	= json_decode($mob->tyovuoroot->lisa_tuotteet, true)['maara'][$k];
 			$r		= [];
 			$r 		= $this->hinnastoHintaat($v, $item->asiakasnumero, $mob->kohteet, $t, $rivi_kpl);
