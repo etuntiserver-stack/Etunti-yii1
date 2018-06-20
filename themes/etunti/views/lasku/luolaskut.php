@@ -158,7 +158,11 @@
 			   $lr->kpl	= $kpl;
 			   $lr->yksikko	= $yksikko;
 			   $lr->hinta	= $hinta;
+			   $lr->hinta_alv= $yht-$veroton;
+			   $lr->veroton	= $veroton;
+			   $lr->yhteensa_alv= $yht;
 			   $lr->alv	= $alv;
+			   $lr->ale	= 0;
 			   $lr->tuoteID = $tp_id;
 			   $lr->free_text= $freetext;
 			   if(!$lr->save()){
@@ -224,7 +228,11 @@
 			   $lr->kpl	= $kpl;
 			   $lr->yksikko	= $yksikko;
 			   $lr->hinta	= $hinta;
+			   $lr->hinta_alv= $yht-$veroton;
+			   $lr->veroton	= $veroton;
+			   $lr->yhteensa_alv= $yht;
 			   $lr->alv	= $alv;
+			   $lr->ale	= 0;
 			   $lr->tuoteID = $tp_id;
 			   $lr->free_text= $freetext;
 			   if(!$lr->save()){
