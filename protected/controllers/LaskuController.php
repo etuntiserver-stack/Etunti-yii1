@@ -1074,6 +1074,7 @@ class LaskuController extends Controller
 		$body .= '<option value="24">24</option>';
 		$body .= '<option value="14">14</option>';
 		$body .= '<option value="10">10</option>';
+		$body .= '<option value="0">0</option>';
 		return $body;
 	}
 
