@@ -156,11 +156,20 @@ if(isset($_GET['mitatointi'])){
 
 
 // <-- laheta Netvisor
-if(isset($_GET['lahetaNetvisor']))
+if(isset($_GET['lahetaNetvisor']) or isset($lahetaNetvisor))
 {
 	$return = $this->lahetaNetvisoriin($id);
-	if($return != false)
+
+	if(isset($autolaskutus)){
+		$criteria=new CDbCriteria;
+		$criteria->condition = " lasku_id='".$id."' ";
+		Tyovuoroot::model()->updateAll(array('laskutettu' => '0'), $criteria);
+	}
+
+	if($return != false and !isset($autolaskutus))
 		$this->redirect(array('index'));
+
+	return true;
 }
 //  laheta Netvisor -->
 

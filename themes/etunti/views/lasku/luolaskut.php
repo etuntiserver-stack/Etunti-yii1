@@ -281,13 +281,23 @@
 		// <<- Lahetys Trust
 		if(isset($lasku->id) 
 			and $lasku->tilanne == 1 
-			and empty($lasku->trust_jobid) 
 			and $asetukset->palvelu_tyyppi == 2 
 		){
 			$l = Lasku::model()->findByPk($lasku->id); 
-			$this->finvoiceAuto($l->id);
+			$this->finvoiceAuto($l->id, 'finvoiceTrust');
 		}
 		// Lahetys Trust -->
+
+		// <<- Lahetys Netvisor
+		if(isset($lasku->id) 
+			and $lasku->tilanne == 1 
+			and $asetukset->palvelu_tyyppi == 4
+			and $asetukset->netvisor_kaytto == 1
+		){
+			$l = Lasku::model()->findByPk($lasku->id); 
+			$this->finvoiceAuto($l->id, 'lahetaNetvisor');
+		}
+		// Lahetys Netvisor -->
 	} ?>
 
 	<tr>

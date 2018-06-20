@@ -103,7 +103,7 @@ class LaskuController extends Controller
 		exit;
 	}
 
-	public function actionLuolaskut($from, $to, $asiakas_id=null, $asiakkaat_all=null, $laheta=null, $alvsis=null)
+	public function actionLuolaskut($from, $to, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null)
 	{
 		$asetukset = Asetukset::model()->findByPk(1);
 
@@ -140,6 +140,7 @@ class LaskuController extends Controller
 			'to' => $to,
 			'asiakas_id' => $asiakas_id,
 			'laheta' => $laheta,
+			'luo' => $luo,
 			'alvsis' => $alvsis
 		));
 	}
@@ -488,7 +489,7 @@ class LaskuController extends Controller
 
 	}
 
-	protected function finvoiceAuto($id)
+	protected function finvoiceAuto($id, $lahetys_tyyppi)
 	{
 
 		$lasku=$this->loadModel($id);
@@ -504,7 +505,7 @@ class LaskuController extends Controller
 			'asetukset'=>$asetukset,
 			'laskunRivit'=>$laskunRivit,
 			'yritys'=>$firmanTiedot,
-			'finvoiceTrust' => true,
+			$lahetys_tyyppi => true,
 			'autolaskutus' => true
 			));
 	}
