@@ -386,7 +386,10 @@ $(".muokaValiko").click(function() {
 		<input type="hidden" name="Tyovuoroot[lisa_tuotteet][tuote][]" value="<?=$v?>">
 	 </div>
 	 <div class="col-sm-3">
-		<div class="pull-left"><?=json_decode($model->lisa_tuotteet, true)['maara'][$k]?> kpl</div>
+		<div class="text-center">
+			<i class="link pull-right text-danger fa fa-trash poista_lisa"></i>
+			<b><?=json_decode($model->lisa_tuotteet, true)['maara'][$k]?> kpl</b>
+		</div>
 		<input type="hidden" name="Tyovuoroot[lisa_tuotteet][maara][]" value="<?=json_decode($model->lisa_tuotteet, true)['maara'][$k]?>">
 	 </div>
 	</div>
@@ -410,21 +413,28 @@ $(document).ready(function(){
 	}
 		
 	$('#lisapalvelu_lista').append('' +
-	'<p>' +
 	'<div class="row">' +
 	 '<div class="col-sm-3">' +
-		'<center>' + $('#lisapalvelu_tuote option:selected').text() + '</center>' +
+		'<div class="pull-right">' + $('#lisapalvelu_tuote option:selected').text() + '</div>' +
 		'<input type="hidden" name="Tyovuoroot[lisa_tuotteet][tuote][]" value="'+ $('#lisapalvelu_tuote option:selected').val() +'">' +
 	 '</div>' +
 	 '<div class="col-sm-3">' +
-		'<center>' + $('#lisapalvelu_maara').val() + ' kpl' + '</center>' +
+		'<div class="text-center">' + 
+			'<i class="link pull-right text-danger fa fa-trash poista_lisa"></i>' +
+			'<b>' + $('#lisapalvelu_maara').val() + ' kpl</b>' + 
+		'</div>' +
 		'<input type="hidden" name="Tyovuoroot[lisa_tuotteet][maara][]" value="'+ $('#lisapalvelu_maara').val() +'">' +
 	 '</div>' +
-	'</div></p>' );
+	'</div>' );
 
 	$('#lisapalvelu_tuote').css({'border' : '1px green solid'}).val('');
 	$('#lisapalvelu_maara').css({'border' : '1px green solid'}).val('');
   });
+
+  $(document).delegate(".poista_lisa","click",function(){
+	$(this).closest('.row').remove();
+  });
+
 });
 </script>
 
