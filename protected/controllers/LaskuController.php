@@ -1891,7 +1891,11 @@ class LaskuController extends Controller
 	if(isset($asiakas->id) and $asiakas->netvisorkey != 0)
 	{
 		$InvoicingCustomerIdentifier = $asiakas->netvisorkey;
-	} else {
+	} elseif(isset($asiakas->id) and $asiakas->netvisorkey == 0) {
+
+		Yii::app()->user->setFlash('danger', "Asiakasnumero: <b>".$asiakas->asiakasnumero."</b> ei saanut netvisorkey viellä, päivittä sen tallentamalla asiakas lomake uudestaan.");
+		$this->redirect(Yii::app()->request->urlReferrer);
+
 		die('ERROR: Tämä asiakas ei saanut netvisorkey viellä');
 	}
 

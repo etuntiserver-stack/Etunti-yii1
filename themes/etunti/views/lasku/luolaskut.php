@@ -261,7 +261,7 @@
 		<?php if( $is_ok_lasku and $laheta and isset($lasku->id) and $mob->tv_id > 0 ){
 			$tl = Tyovuoroot::model()->findByPk($mob->tv_id);
 			if( isset($tl->id) ){
-			   Tyovuoroot::model()->updateByPk($tl->id, array('laskutettu' => 1, 'lasku_id' => $lasku->id));
+			   Tyovuoroot::model()->updateByPk($tl->id, array('lasku_id' => $lasku->id));
 			}
 		} ?>
 		<!-- / Update tyovuoro laskutettu -->
@@ -285,6 +285,7 @@
 		){
 			$l = Lasku::model()->findByPk($lasku->id); 
 			$this->finvoiceAuto($l->id, 'finvoiceTrust');
+			continue;
 		}
 		// Lahetys Trust -->
 
@@ -295,7 +296,9 @@
 			and $asetukset->netvisor_kaytto == 1
 		){
 			$l = Lasku::model()->findByPk($lasku->id); 
-			$this->finvoiceAuto($l->id, 'lahetaNetvisor');
+			$resp = $this->finvoiceAuto($l->id, 'lahetaNetvisor');
+			echo $resp;
+			continue;
 		}
 		// Lahetys Netvisor -->
 	} ?>

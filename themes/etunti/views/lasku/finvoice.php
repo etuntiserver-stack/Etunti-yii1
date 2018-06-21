@@ -159,17 +159,13 @@ if(isset($_GET['mitatointi'])){
 if(isset($_GET['lahetaNetvisor']) or isset($lahetaNetvisor))
 {
 	$return = $this->lahetaNetvisoriin($id);
-
-	if(isset($autolaskutus)){
+	if( $return != false and !isset($autolaskutus) ){ $this->redirect(array('index')); }
+	if( $return != false and isset($autolaskutus) ){
 		$criteria=new CDbCriteria;
 		$criteria->condition = " lasku_id='".$id."' ";
-		Tyovuoroot::model()->updateAll(array('laskutettu' => '0'), $criteria);
+		Tyovuoroot::model()->updateAll(array('laskutettu' => '1'), $criteria);
 	}
 
-	if($return != false and !isset($autolaskutus))
-		$this->redirect(array('index'));
-
-	return true;
 }
 //  laheta Netvisor -->
 
@@ -462,19 +458,16 @@ for ($i = 0; $i < count ($doc->row); $i++) {
 		    $historia->save();
 
 	if(!isset($autolaskutus)){ $this->redirect(array('index')); }
-
+	if(isset($autolaskutus)){
+		$criteria=new CDbCriteria;
+		$criteria->condition = " lasku_id='".$id."' ";
+		Tyovuoroot::model()->updateAll(array('laskutettu' => '1'), $criteria);
+	}
 	break;
 
     } else {
         echo 'reject billnum ' . $doc->row[$i]->billnum
             . '<br> error ' . utf8_decode ($doc->row[$i]->error) . "<br>";
-
-	if(isset($autolaskutus)){
-		$criteria=new CDbCriteria;
-		$criteria->condition = " lasku_id='".$id."' ";
-		Tyovuoroot::model()->updateAll(array('laskutettu' => '0'), $criteria);
-	}
-
 	exit;
     }
 }
