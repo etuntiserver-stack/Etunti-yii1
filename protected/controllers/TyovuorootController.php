@@ -1394,7 +1394,11 @@ class TyovuorootController extends Controller
 		{
 
 			$model->attributes=$_POST['Tyovuoroot'];
-			$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
+			if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
+				$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
+			} else {
+				$model->lisa_tuotteet = '';
+			}
 
 			// <-- Apuaika
 			if(isset($_POST['Tyovuoroot']['apuaika']) and $_POST['Tyovuoroot']['apuaika'] == 1)
@@ -1791,7 +1795,11 @@ class TyovuorootController extends Controller
 			$toistuva_id = $model->toistuva_id;
 
 			$model->attributes = $_POST['Tyovuoroot'];
-			$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
+			if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
+				$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
+			} else {
+				$model->lisa_tuotteet = '';
+			}
 
 			// <-- Apuaika
 			if(isset($_POST['Tyovuoroot']['apuaika']) and $_POST['Tyovuoroot']['apuaika'] == 1)

@@ -40,10 +40,11 @@
 	$is_ok_lasku 	= true;
 	$l_class	= 'class="bg-default"';
 	if( 
-		empty($item->laskutus_kanava)
-		or empty($item->maksuehto)
-		or empty($item->viivastyskorko)
-		or ($item->laskutus_kanava == 'sahkoposti' and empty($item->sahkoposti))
+		empty( $item->laskutus_kanava )
+		or empty( $item->maksuehto )
+		or empty( $item->viivastyskorko )
+		or ( $item->laskutus_kanava == 'sahkoposti' and empty($item->sahkoposti) )
+		or ( $asetukset->palvelu_tyyppi == 4 and $asetukset->netvisor_kaytto == 1 and $item->netvisorkey == 0 )
 	){ 
 		$is_ok_lasku 	= false; 
 		$l_class	= 'class="alert bg-danger"';
@@ -55,6 +56,7 @@
 	<p><b><?=Yii::t('main', 'Maksuehto')?></b>-<?=(!empty($item->maksuehto))? $item->maksuehto:''?></p>
 	<p><b><?=Yii::t('main', 'Viivästyskorko')?></b>-<?=(!empty($item->viivastyskorko))? $item->viivastyskorko:''?></p>
 	<?=($item->laskutus_kanava == 'sahkoposti' and empty($item->sahkoposti))? '<p>'.Yii::t('main', 'Sähköpostiosoite ei saisi olla tyhjä tässä laskutus kanavassa.').'</p>':''?>
+	<?=( $asetukset->palvelu_tyyppi == 4 and $asetukset->netvisor_kaytto == 1 and $item->netvisorkey == 0 )? '<p>'.Yii::t('main', 'Asiakas ei vielä saanut netvisorkey. Päivittä tämän asiakkaan tiedot.').'</p>':''?>
 	</div>
 	</td>
 	<td>
@@ -257,14 +259,14 @@
 		<?php endif; ?>
 		<!-- / Lisatuote -->
 
-		<!-- Update tyovuoro laskutettu -->
+		<!-- Update tyovuoro -->
 		<?php if( $is_ok_lasku and $laheta and isset($lasku->id) and $mob->tv_id > 0 ){
 			$tl = Tyovuoroot::model()->findByPk($mob->tv_id);
 			if( isset($tl->id) ){
 			   Tyovuoroot::model()->updateByPk($tl->id, array('lasku_id' => $lasku->id));
 			}
 		} ?>
-		<!-- / Update tyovuoro laskutettu -->
+		<!-- / Update tyovuoro -->
 		<?php endforeach; ?>
 		</table>
 	</td>
