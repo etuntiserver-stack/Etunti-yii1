@@ -221,6 +221,10 @@ class LaskuController extends Controller
 		));
 	}
 
+	protected function base64url_encode($input) {
+	    return strtr(base64_encode($input), '+/', '-_');
+	}
+
 	protected function asiakasmuutos($asiakas)
 	{
 		if($asiakas->tyyppi == 'yritys')
@@ -498,7 +502,7 @@ class LaskuController extends Controller
 		$firmanTiedot=FirmanTiedot::model()->find("id=1");
 
 
-		$this->renderPartial('finvoice', 
+		$lah = $this->renderPartial('finvoice', 
 			array(
 			'id'=>$id,
 			'lasku'=>$lasku,
@@ -507,7 +511,9 @@ class LaskuController extends Controller
 			'yritys'=>$firmanTiedot,
 			$lahetys_tyyppi => true,
 			'autolaskutus' => true
-			));
+			), true);
+
+		return $lah;
 	}
 
 	public function Lasku_pdf($id)

@@ -63,7 +63,7 @@
 
 
 	<!-- Lahetys Pää lasku -->
-	<?php if( $is_ok_lasku and $laheta ){
+	<?php if( $is_ok_lasku and $laheta !== null ){
 
 		$laskunumero = 1;
 		$criteria = new CDbCriteria();
@@ -172,7 +172,7 @@
 			   }
 			}
 	        ?>
-		<?php if( $tp_id != 0 ) : ?>
+		<?php if( $tp_id != 0 and $laheta == null ) : ?>
 		<tr>
 		<td><?=$nimike?></td>
 		<td><?=number_format($hinta, 2, ',', ' ')?></td>
@@ -242,7 +242,7 @@
 			   }
 			}
 	        ?>
-		<?php if( $tp_id != 0 ) : ?>
+		<?php if( $tp_id != 0 and $laheta == null ) : ?>
 		<tr>
 		<td><?=$nimike?></td>
 		<td><?=number_format($hinta, 2, ',', ' ')?></td>
@@ -260,7 +260,7 @@
 		<!-- / Lisatuote -->
 
 		<!-- Update tyovuoro -->
-		<?php if( $is_ok_lasku and $laheta and isset($lasku->id) and $mob->tv_id > 0 ){
+		<?php if( $is_ok_lasku and $laheta !== null and isset($lasku->id) and $mob->tv_id > 0 ){
 			$tl = Tyovuoroot::model()->findByPk($mob->tv_id);
 			if( isset($tl->id) ){
 			   Tyovuoroot::model()->updateByPk($tl->id, array('lasku_id' => $lasku->id));
@@ -272,7 +272,7 @@
 	</td>
 	</tr>
 
-	<?php if( $is_ok_lasku and $laheta and isset($lasku->id) ){
+	<?php if( $is_ok_lasku and $laheta !== null and isset($lasku->id) ){
 		Lasku::model()->updateByPk($lasku->id, 
 			array(
 			'yhteensa_total_verot' => round(($yhteensa_total-$yhteensa_total_veroton), 2), 
@@ -286,8 +286,8 @@
 			and $asetukset->palvelu_tyyppi == 2 
 		){
 			$l = Lasku::model()->findByPk($lasku->id); 
-			$this->finvoiceAuto($l->id, 'finvoiceTrust');
-			continue;
+			$resp = $this->finvoiceAuto($l->id, 'finvoiceTrust');
+			echo $resp;
 		}
 		// Lahetys Trust -->
 
@@ -297,10 +297,12 @@
 			and $asetukset->palvelu_tyyppi == 4
 			and $asetukset->netvisor_kaytto == 1
 		){
-			$l = Lasku::model()->findByPk($lasku->id); 
-			$resp = $this->finvoiceAuto($l->id, 'lahetaNetvisor');
-			echo $resp;
-			continue;
+			$return = $this->lahetaNetvisoriin($lasku->id);
+			if( $return != false ){
+				$criteria=new CDbCriteria;
+				$criteria->condition = " lasku_id='".$lasku->id."' ";
+				Tyovuoroot::model()->updateAll(array('laskutettu' => '1'), $criteria);
+			}
 		}
 		// Lahetys Netvisor -->
 	} ?>
