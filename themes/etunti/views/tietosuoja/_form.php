@@ -57,11 +57,14 @@
 		<?php echo $form->textarea($model,'asiakas_viesti', array('class' => 'form-control')); ?>
 		<?php echo $form->error($model,'asiakas_viesti'); ?>
 	</div>
-*/ ?>
+*/ 
+  echo count($this->AsiakasMobileLaskin()[1]);
+  //exit;
+?>
 
  </div>
-
- <?php if( !empty($this->AsiakasMobileLaskin()[0]) and count($this->AsiakasMobileLaskin()[1]) > 0 ) : ?>
+ <?php $a_arr = $this->AsiakasMobileLaskin(); ?>
+ <?php if( !empty($a_arr[0]) and count($a_arr[1]) > 0 ) : ?>
  <div class="col-sm-9">
 	<legend><h3><?php echo Yii::t('main', 'Taulu'); ?></h3></legend>
 	<h4><?= Yii::t('main', 'Asiakkaat joille ei ole kirjattu töitä säilytysaika huomioiden'); ?></h4>
@@ -73,7 +76,7 @@
 	<th>Kohde</th>
 	<th>Puhelin</th>
 	</tr>
-	<?php foreach($this->AsiakasMobileLaskin()[1] as $k) : ?>
+	<?php foreach($a_arr[1] as $k) : ?>
 	<?php 
 		$last_time = '';
 		$nimi = '';
@@ -88,14 +91,13 @@
 			$puhelin = $k->asiakkaat->puhelin;
 			$asiakas_id = $k->asiakkaat->id;
 		}
-
+		if(empty($k->asiakas_id)){ continue; }
 	       	$criteria = new CDbCriteria();
 	       	$criteria->order = " osoite ";
 	       	$criteria->condition = " 
-			id!='".$k->id."' and asiakas_id='".$k->asiakas_id."' 
-			AND 
-			(id IN ( SELECT kohdenID FROM sivexkuitti WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y%m%d') BETWEEN ".$this->AsiakasMobileLaskin()[0]." AND CURDATE() )
-			OR id IN ( SELECT kohde FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m%d') > CURDATE() )
+			id!='".$k->id."' AND asiakas_id='".$k->asiakas_id."' 
+			AND ( id IN ( SELECT kohdenID FROM sivexkuitti WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN ".$a_arr[0]." AND CURDATE() )
+				OR id IN ( SELECT kohde REGEXP '^[[:digit:]]+$' FROM sivex_tvuoro WHERE kohde REGEXP '^[[:digit:]]+$' AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') > ".date('Y-m-d')." )
 			)
 		";
 		$k_all = Kohteet::model()->findAll($criteria);
@@ -105,7 +107,7 @@
 		<?php if( count($k_all) == 0): ?>
 		<i class="pull-right link text-danger asiakas_pois fa fa-trash" asiakas_id="<?=$asiakas_id?>" nimi="<?=$nimi?>"></i>
 		<?php endif; ?>
-		<?=$nimi?>
+		 <?=$nimi?>
 	 </td>
 	 <td>
 		<i class="pull-right link text-danger kohde_pois fa fa-trash" kohde_id="<?=$kohde_id?>" nimi="<?=$osoite?>"></i>
