@@ -94,6 +94,7 @@
 		if(empty($k->asiakas_id)){ continue; }
 	       	$criteria = new CDbCriteria();
 	       	$criteria->order = " osoite ";
+		// HUOMIO - kohde sarake on VARCHAR niin pakko suodata vain numerona  - kohde REGEXP '^[[:digit:]]+$'
 	       	$criteria->condition = " 
 			id!='".$k->id."' AND asiakas_id='".$k->asiakas_id."' 
 			AND ( id IN ( SELECT kohdenID FROM sivexkuitti WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN ".$a_arr[0]." AND CURDATE() )
