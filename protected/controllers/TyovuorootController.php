@@ -1312,6 +1312,12 @@ class TyovuorootController extends Controller
 			$toistuva->attributes=$_POST['Tyovuoroot'];
 			$toistuva->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 
+			if( is_array($toistuva->lisa_tuotteet) and count($toistuva->lisa_tuotteet) > 0 ){
+				$toistuva->lisa_tuotteet = json_encode($toistuva->lisa_tuotteet);
+			} else {
+				$toistuva->lisa_tuotteet = '';
+			}
+
 			if(isset($_POST['P']))
 			$toistuva->viikko_paivat=json_encode($_POST['P']);
 
@@ -1394,6 +1400,11 @@ class TyovuorootController extends Controller
 		{
 
 			$model->attributes=$_POST['Tyovuoroot'];
+			if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
+				$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
+			} else {
+				$model->lisa_tuotteet = '';
+			}
 
 			// <-- Apuaika
 			if(isset($_POST['Tyovuoroot']['apuaika']) and $_POST['Tyovuoroot']['apuaika'] == 1)
@@ -1609,6 +1620,12 @@ class TyovuorootController extends Controller
 			$toistuva->attributes = $_POST['Tyovuoroot'];
 			$toistuva->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 
+			if( is_array($toistuva->lisa_tuotteet) and count($toistuva->lisa_tuotteet) > 0 ){
+				$toistuva->lisa_tuotteet = json_encode($toistuva->lisa_tuotteet);
+			} else {
+				$toistuva->lisa_tuotteet = '';
+			}
+
 			if(isset($_POST['P']))
 			$toistuva->viikko_paivat=json_encode($_POST['P']);
 
@@ -1789,15 +1806,12 @@ class TyovuorootController extends Controller
 
 			$toistuva_id = $model->toistuva_id;
 
-			$model->attributes=$_POST['Tyovuoroot'];
-
-			// <-- Apuaika
-			if(isset($_POST['Tyovuoroot']['apuaika']) and $_POST['Tyovuoroot']['apuaika'] == 1)
-				$model->apuaika = 1;
-			else if(isset($_POST['Tyovuoroot']['apuaika']) and $_POST['Tyovuoroot']['apuaika'] != 1)
-				$model->apuaika = 0;
-			//     Apuaika -->
-
+			$model->attributes = $_POST['Tyovuoroot'];
+			if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
+				$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
+			} else {
+				$model->lisa_tuotteet = '';
+			}
 
 			if($model->save()){
 
@@ -1883,24 +1897,21 @@ class TyovuorootController extends Controller
 	
 				}
 				// jos on tyopaari -->
-	
-	
-
 
 				if(count($post_tyopaari) == 0 and $model->toistuva_id == 0)
 				{
-	
 					// <-- PushNotify
 					if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
 					$this->pushNotifySending($model->id);
 					// PushNotify -->
-
 				}
 
 			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
 			echo json_encode($return);
 
-			} // model save 
+			} else { // model save 
+				echo json_encode($model->getErrors());
+			}
 
 			exit;
 		}

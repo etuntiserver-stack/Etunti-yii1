@@ -81,13 +81,24 @@ public $tilausviesti;
                      'ilmoitus_avoimista_kohteesta' => 'int(1) DEFAULT 0',
                      'ilmoitus_myohastyneista_kohteesta' => 'int(1) DEFAULT 0',
                      'piilota_mobiilista' => 'int(1) DEFAULT 0',
-                     'tuoteID' => 'int(11) DEFAULT 0',
+                     'tuoteID' => 'int(1) DEFAULT 0',
+                     'lisa_tuotteet' => 'text',
                      'peruutettu' => 'int(1) DEFAULT 0',
 		     'apuaika' => 'int(1) DEFAULT 0',
+		     'laskutettu' => 'int(1) DEFAULT 0',
+		     'lasku_id' => 'int(1) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)
 		{
+			// <-- Change column type
+			/*
+			if($key == 'tuoteID' and $table->columns[$key]->dbType == 'int(11)'){
+				Yii::app()->db1->createCommand()->alterColumn($tb_name, $key, 'TEXT' );
+			}
+			*/
+			//     Change column type -->
+
 			if (!isset($table->columns[$key])) {
 				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
 			}
@@ -106,13 +117,13 @@ public $tilausviesti;
 		// will receive user inputs.
 		return array(
 			//array('kohde, pvm, alku, loppu, pituus, tyoajanlaatu, tyoajanmerkinta', 'required'),
-			array('tid, onlinevaraus_id, status, toistuva_id, ilmoitus_avoimista_kohteesta, ilmoitus_myohastyneista_kohteesta, piilota_mobiilista, tuoteID, peruutettu, apuaika', 'numerical', 'integerOnly'=>true),
+			array('tid, onlinevaraus_id, status, toistuva_id, ilmoitus_avoimista_kohteesta, ilmoitus_myohastyneista_kohteesta, piilota_mobiilista, peruutettu, apuaika, laskutettu, tuoteID, lasku_id', 'numerical', 'integerOnly'=>true),
 			array('kohde', 'length', 'max'=>255),
 			array('pvm', 'length', 'max'=>20),
 			array('alku, loppu, pituus, alku_r, kesto', 'length', 'max'=>10),
 			array('ruokatauko, tyoajanlaatu, tyoajanmerkinta', 'length', 'max'=>50),
 			array('osoiteOnline', 'length', 'max'=>100),
-			array('tyopaari, tietoja', 'safe'),
+			array('tyopaari, tietoja, lisa_tuotteet', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, tid, time, kohde, pvm, alku, loppu, pituus, ruokatauko, alku_r, kesto, tyoajanlaatu, tyoajanmerkinta, tietoja, osoiteOnline, tekijan_nimi, toimenpiteet, osoite', 'safe', 'on'=>'search'),
@@ -159,10 +170,22 @@ public $tilausviesti;
 			'tietoja' => Yii::t('main', 'Tietoja mobiilisovellukseen'),
 			'osoiteOnline' => Yii::t('main', 'Osoite Online'),
 			'status' => Yii::t('main', 'Tilanne'),
-			'piilota_mobiilista'=>Yii::t('main', 'Näytetäänkö työntekijälle mobiilissa'),
+			'piilota_mobiilista'=>Yii::t('main', 'Näytä mobiilissa'),
 			'tuoteID' => Yii::t('main', 'Tuote/palvelu'),
 		);
 	}
+
+        public function getosoiteAndAika(){
+		$return = '';
+		if(!empty($this->kohde)){
+			$k = Kohteet::model()->findByPk($this->kohde);
+			if( isset($k->id) ){
+				$return = $k->osoite.' '.$this->pvm.', '.$this->alku.'-'.$this->loppu;
+			}
+		}
+                return $return;
+        }
+
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.

@@ -68,6 +68,8 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
                      'tietoja' => 'text ',
                      'tyopaari' => 'text ',
 		     'piilota_mobiilista' => 'int(1)',
+                     'tuoteID' => 'int(1) DEFAULT 0',
+                     'lisa_tuotteet' => 'text',
                      'ilmoitus_paattymisesta' => 'int(1) ',
                      'tvuoro_ids' => 'text ',
                      'poistettu_pvm' => 'text',
@@ -94,12 +96,12 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('time, pfrom, pto, viikkoja, viikko_paivat, tid, kohde, pvm, alku, loppu, kesto, tyoajanmerkinta, status, tietoja, tyopaari', 'required'),
-			array('viikkoja, tid, kohde, status, ilmoitus_paattymisesta, piilota_mobiilista', 'numerical', 'integerOnly'=>true),
+			array('viikkoja, tid, kohde, status, ilmoitus_paattymisesta, piilota_mobiilista, tuoteID', 'numerical', 'integerOnly'=>true),
 			array('pfrom, pto, pvm', 'length', 'max'=>50),
 			array('alku, loppu, pituus, kesto', 'length', 'max'=>10),
 			array('tyoajanmerkinta', 'length', 'max'=>100),
 			array('tietoja', 'length', 'max'=>10000),
-			array('tyopaari, tvuoro_ids, poistettu_pvm', 'safe'),
+			array('tyopaari, tvuoro_ids, poistettu_pvm, lisa_tuotteet', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, pfrom, pto, viikkoja, viikko_paivat, tid, kohde, pvm, alku, loppu, kesto, tyoajanmerkinta, status, tietoja, tyopaari', 'safe', 'on'=>'search'),
