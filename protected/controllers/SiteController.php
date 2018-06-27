@@ -380,6 +380,7 @@ class SiteController extends Controller
 					alku!='' AND loppu!=''
 					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
 					AND status=3
+					AND peruutettu='0'
 				";
 				$tv = Tyovuoroot::model()->find($criteria);
 	
