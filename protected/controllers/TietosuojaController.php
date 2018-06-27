@@ -215,26 +215,31 @@ class TietosuojaController extends Controller
 
 	protected function AsiakasMobileLaskin()
 	{
-		$last_pvm = date("Ymd");
+		$last_pvm = '';
 		$ts=Tietosuoja::model()->findByPk(1);
 		if( $ts->asiakas_sailytysajan_tyyppi == 0 and $ts->asiakas_sailytysaika_lukumaara > 0 ){
-			$last_pvm = date("Ymd", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." day"));
+			$last_pvm = date("Y-m-d", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." day"));
 		}
 		if( $ts->asiakas_sailytysajan_tyyppi == 1 and $ts->asiakas_sailytysaika_lukumaara > 0 ){
-			$last_pvm = date("Ymd", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." month"));
+			$last_pvm = date("Y-m-d", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." month"));
 		}
 		if( $ts->asiakas_sailytysajan_tyyppi == 2 and $ts->asiakas_sailytysaika_lukumaara > 0 ){
-			$last_pvm = date("Ymd", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." year"));
+			$last_pvm = date("Y-m-d", strtotime(" -".$ts->asiakas_sailytysaika_lukumaara." year"));
+		}
+
+		if( empty($last_pvm) ){
+			return false;	
 		}
 
 		$data = array();
 	       	$criteria = new CDbCriteria();
 	       	$criteria->order = " osoite ";
 	       	$criteria->condition = " 
-			id NOT IN ( SELECT kohdenID FROM sivexkuitti WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y%m%d') BETWEEN $last_pvm AND CURDATE() )
-			AND id NOT IN ( SELECT kohde FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m%d') > CURDATE() )
+			id NOT IN ( SELECT kohdenID FROM sivexkuitti WHERE aloitan!='' AND loppui!='' AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$last_pvm."' AND CURDATE() )
+			AND id NOT IN ( SELECT kohde REGEXP '^[[:digit:]]+$' FROM sivex_tvuoro WHERE kohde REGEXP '^[[:digit:]]+$' AND pvm!='' AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m%d') > ".date('Ymd')." )
+
 		";
-//			AND DATE(time) > $last_pvm
+//			AND id NOT IN ( SELECT kohde FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m%d') > CURDATE() )
 		$data = Kohteet::model()->findAll($criteria);
 
 		return array($last_pvm, $data);
