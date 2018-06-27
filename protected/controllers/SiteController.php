@@ -381,6 +381,7 @@ class SiteController extends Controller
 					alku!='' AND loppu!=''
 					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
 					AND status=3
+					AND peruutettu='0'
 				";
 				$tv = Tyovuoroot::model()->find($criteria);
 	
@@ -2581,11 +2582,9 @@ $(document).ready(function(){
 
 		$asetukset = Asetukset::model()->findByPk(1);
 		$criteria = new CDbCriteria();
-		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0)
-			$criteria->order = " tekijan_nimi ";
-		else
-			$criteria->order = " sukunimi ";
-
+		// <-- Return order etu ja sukunimella
+		$criteria = $this->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
 		$criteria->condition = " aktiivinen=1 ";
 
 		$tt = Tyontekijat::model()->findAll($criteria);
