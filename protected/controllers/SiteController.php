@@ -2581,11 +2581,9 @@ $(document).ready(function(){
 
 		$asetukset = Asetukset::model()->findByPk(1);
 		$criteria = new CDbCriteria();
-		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0)
-			$criteria->order = " tekijan_nimi ";
-		else
-			$criteria->order = " sukunimi ";
-
+		// <-- Return order etu ja sukunimella
+		$criteria = $this->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
 		$criteria->condition = " aktiivinen=1 ";
 
 		$tt = Tyontekijat::model()->findAll($criteria);
