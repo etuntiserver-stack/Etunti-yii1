@@ -1312,6 +1312,12 @@ class TyovuorootController extends Controller
 			$toistuva->attributes=$_POST['Tyovuoroot'];
 			$toistuva->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 
+			if( is_array($toistuva->lisa_tuotteet) and count($toistuva->lisa_tuotteet) > 0 ){
+				$toistuva->lisa_tuotteet = json_encode($toistuva->lisa_tuotteet);
+			} else {
+				$toistuva->lisa_tuotteet = '';
+			}
+
 			if(isset($_POST['P']))
 			$toistuva->viikko_paivat=json_encode($_POST['P']);
 
