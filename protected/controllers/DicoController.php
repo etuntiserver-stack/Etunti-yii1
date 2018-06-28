@@ -436,7 +436,7 @@ public function actionLogin($domain)
 				} else {
 				$this->_sendResponse(200, CJSON::encode(array(
 					'lahetyksen_tulos' => 'ok',
-					'kiitos_lause' => '<div class="alert alert-success">Kiitos tilausta.</div>'
+					'kiitos_lause' => '<div class="alert alert-success">Kiitos tilauksesta.</div>'
 				)));
 				}
 				exit;
