@@ -2523,7 +2523,7 @@ class TyovuorootController extends Controller
 
 		(isset(Yii::app()->session['asiakas'])) ? 	$asiakas = Yii::app()->session['asiakas'] : $asiakas ='';
 		(isset(Yii::app()->session['kohde'])) ? 	$kohde = Yii::app()->session['kohde'] : $kohde ='';
-
+echo 'test';
 		$this->render('index', array(
 			'tyontekijat_model'	=>$tyontekijat_model,
 			'tyontekijat'		=>Yii::app()->session['tyontekijat'],

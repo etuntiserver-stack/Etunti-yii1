@@ -4,7 +4,7 @@
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot.css">
-test
+
 <?php
 
   $paivat=array(
