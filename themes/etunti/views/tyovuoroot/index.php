@@ -4,7 +4,7 @@
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot.css">
-
+test
 <?php
 
   $paivat=array(
@@ -69,7 +69,7 @@
 
 
 
-test <?=$year?>
+
 <?php if( !empty($year) and !empty($week) and count($tyontekijat_model) > 0 ) : ?>
 <div class="row">
             <div class="admin-form">
