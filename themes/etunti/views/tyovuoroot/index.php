@@ -69,7 +69,7 @@
 
 
 
-
+test <?=$year?>
 <?php if( !empty($year) and !empty($week) and count($tyontekijat_model) > 0 ) : ?>
 <div class="row">
             <div class="admin-form">
