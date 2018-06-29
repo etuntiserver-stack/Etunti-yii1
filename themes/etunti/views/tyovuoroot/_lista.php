@@ -3,14 +3,17 @@
 /* @var $data Viestinta */
 
 	$asiakas = '';
+	$call = '';
 	$get_kohde = Kohteet::model()->findByPk($data->kohde);
-	if(isset($get_kohde->id))
+	if(isset($get_kohde->asiakkaat))
 	{
-		$get_asiakas = Asiakkaat::model()->findByPk($get_kohde->asiakas_id);
-		if(isset($get_asiakas->id) and $get_asiakas->tyyppi == 'yritys'){
-			$asiakas = $get_asiakas->yrityksen_nimi;
-		} elseif(isset($get_asiakas->id) and $get_asiakas->tyyppi == 'henkilo'){
-			$asiakas = $get_asiakas->yhteyshenkilo;
+		if( $get_kohde->asiakkaat->tyyppi == 'yritys' ){
+			$asiakas = $get_kohde->asiakkaat->yrityksen_nimi;
+		} elseif( $get_kohde->asiakkaat->tyyppi == 'henkilo' ){
+			$asiakas = $get_kohde->asiakkaat->yhteyshenkilo;
+		}
+		if( $get_kohde->asiakkaat->puhelin != '' ){
+			$call = '&nbsp;&nbsp;<a href="tel:'.$get_kohde->asiakkaat->puhelin.'"><i class="fa fa-2x fa-phone"></i></a>';
 		}
 	}
 ?>
@@ -25,7 +28,7 @@
 	</td>
 	<td><?=$data->pvm?></td>
 	<td><?=$data->alku?>-<?=$data->loppu?></td>
-	<td><?=$asiakas?></td>
+	<td><?=$asiakas?> <?=$call?></td>
 	<td><?=(isset($this->getKohde($data->kohde)->osoite))?$this->getKohde($data->kohde)->osoite:''?></td>
 	<td><?=($data->status != 0)?$this->tilanteet()[$data->status]:''?></td>
 </tr>
