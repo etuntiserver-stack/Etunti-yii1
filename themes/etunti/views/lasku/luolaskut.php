@@ -10,6 +10,7 @@
 
 	<center>
 		<?php
+		if( count($lista) > 0 ){
 			echo CHtml::link(Yii::t('main', 'LÄHETÄ KAIKKI LASKUT'), 
 				array('lasku/luolaskut', 'from' => $from, 'to' => $to, 'alvsis' => $alvsis, 'laheta' => true), 
 				array(
@@ -18,12 +19,14 @@
 					'data-placement'=>'top', 
 					'title'=>Yii::t('main', 'Lähetä')
 				)
-			); 
+			);
+		}
 		?>
 	</center>
 	<br>
 <p>
 <div class="container-fluid">
+	<?php if( count($lista) > 0 ): ?>
 	<table class="table table-bordered">
 	<tr>
 	<th>Asiakas</th>
@@ -332,6 +335,7 @@
 	</tr>
 	<?php endforeach; ?>
 	</table>
+	<?php endif; // count($lista) > 0 ?>
 
 	<?php if( $laheta ){
 		$this->redirect(array('luolaskut', 'from' => $from, 'to' => $to));
