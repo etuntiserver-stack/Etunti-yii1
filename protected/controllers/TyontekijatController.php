@@ -966,7 +966,7 @@ $xml = '
 		$listData = Valikkoot::model()->findAll($criteria);
 
 		$criteria = new CDbCriteria();
-		$criteria->condition = " aktiivinen = '1' ";
+		//$criteria->condition = " aktiivinen = '1' ";
 		$tt = Tyontekijat::model()->findAll($criteria);
 		foreach($tt as $tekija){
 			if( $site[0]->checkOikeusFields($checkOikeus) == 1 and $tr_array == null){
