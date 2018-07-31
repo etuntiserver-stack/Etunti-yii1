@@ -6,7 +6,7 @@
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-        <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'LASKU AUTOMAATTIO'); ?></h2>
+        <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo strtoupper(Yii::t('main', 'Laskutuksen automaatio')); ?></h2>
 
 
 

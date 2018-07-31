@@ -1070,7 +1070,7 @@ $('.tvchange').change(function(){
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/auto">
-                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Lasku automaattio'); ?></a>
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Laskutuksen automaatio'); ?></a>
               </li>
 <!--
               <li>
