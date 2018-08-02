@@ -349,6 +349,7 @@ class AsiakkaatController extends Controller
 		{
 		   foreach($as_all as $model){
 
+			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Asiakkaat'];
 			if(isset($_POST['Asiakkaat']['ryhma']))
 				$model->ryhma=json_encode($_POST['Asiakkaat']['ryhma']);
@@ -359,17 +360,14 @@ class AsiakkaatController extends Controller
 			{
 
 				// <-- LOG
-				if( isset($model->id) )
-				{
 				$model_log 	= 'Asiakkaat';
 				$name_log 	= 'Asiakas';
 				$status_log 	= 'Massamuokkaus';
 	
-					$old_values = null;
+					$old_values = json_encode($vanha_attr);
 					$new_values = json_encode($model->attributes);
 					$site = Yii::app()->createController('Site');
 					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-				}
 				//     LOG -->
 			}
 		    }
