@@ -309,17 +309,6 @@ class AsiakkaatController extends Controller
 
 		}
 	}
-/*
-	public function actionCheckLastAsiakasID()
-	{
-		$check = 0;
-		$model=Asiakkaat::model()->find(" asiakasnumero='".$_POST['checkLastAsiakasID']."' ");
-		if(isset($model->id))
-		$check = 1;
-
-		echo $check;
-	}
-*/
 
 	public function actionView_edico($id)
 	{
@@ -347,10 +336,14 @@ class AsiakkaatController extends Controller
 
 		if(isset($_POST['Asiakkaat']))
 		{
+		   $post = array();
+		   foreach($_POST['Kohteet'] as $k => $v){
+			if(!empty($v)){ $post[$k] = $v; }
+		   }
 		   foreach($as_all as $model){
 
 			$vanha_attr = $model->attributes;
-			$model->attributes=$_POST['Asiakkaat'];
+			$model->attributes=$post;
 			if(isset($_POST['Asiakkaat']['ryhma']))
 				$model->ryhma=json_encode($_POST['Asiakkaat']['ryhma']);
 			else
