@@ -52,6 +52,8 @@ $('.search-form form').submit(function(){
 		'imei',
 		'tekijan_nimi',
 		'tid',
+		'kohdenID',
+		'tv_id',
 		'viesti',
 		/*
 		'bluetooth_name',
@@ -60,7 +62,6 @@ $('.search-form form').submit(function(){
 		'my_location',
 		'osoite',
 		'kohde_kannasta',
-		'kohdenID',
 		'aloitan',
 		'loppui',
 		'viesti',

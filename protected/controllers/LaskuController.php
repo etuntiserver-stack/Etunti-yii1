@@ -27,7 +27,7 @@ class LaskuController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -101,6 +101,136 @@ class LaskuController extends Controller
 
 		echo json_encode($return);
 		exit;
+	}
+
+	public function actionLuolaskut($from, $to, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null)
+	{
+		$asetukset = Asetukset::model()->findByPk(1);
+
+       		$criteria = new CDbCriteria();
+	        //$criteria->order = " id DESC ";
+	        $criteria->condition = " 
+		  aktiivinen='1'
+		  AND id IN 
+		    ( SELECT asiakas_id FROM sivex_kohdet 
+		      WHERE id IN 
+			( SELECT kohdenID FROM sivexkuitti 
+			  WHERE 
+			  DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			  BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			  AND status='3' 
+			  AND hyvaksytty!=''
+			  AND sairaus!=1
+			  AND tv_id IS NOT NULL AND tv_id > 0
+			  AND tv_id IN (
+				SELECT id FROM sivex_tvuoro WHERE (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
+			  )
+			)
+		    )
+		";
+		if( $asiakas_id !== null ){
+	        $criteria->addCondition ("  id='".$asiakas_id."' ");
+		}
+
+		$lista = Asiakkaat::model()->findAll($criteria);
+		$this->render('luolaskut', array(
+			'asetukset' => $asetukset,
+			'lista' => $lista,
+			'from' => $from,
+			'to' => $to,
+			'asiakas_id' => $asiakas_id,
+			'laheta' => $laheta,
+			'luo' => $luo,
+			'alvsis' => $alvsis
+		));
+	}
+
+	protected function hyvaksyttyListaByAsiakas($id, $from, $to){
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND status='3'
+			AND sairaus!=1
+			AND hyvaksytty!=''
+			AND tv_id IS NOT NULL AND tv_id > 0
+			AND tv_id IN (
+				SELECT id FROM sivex_tvuoro WHERE (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
+			)
+			AND kohdenID IN (
+				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$id."'
+			)
+			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+		";
+		$lu = Mobile::model()->findAll($criteria);
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND status='3'
+			AND sairaus!=1
+			AND hyvaksytty!=''
+			AND tv_id IS NOT NULL AND tv_id > 0
+			AND tv_id IN (
+				SELECT id FROM sivex_tvuoro WHERE tuoteID > 0 AND laskutettu='0'
+			)
+			AND kohdenID IN (
+				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$id."'
+			)
+		";
+		$tot = Toteutuneet::model()->findAll($criteria);
+		$lista = $lu;
+		if( is_array($tot) and count($tot) > 0 ){ $lista = array_merge($lu, $tot); }
+
+		return $lista;
+	}
+
+	public function actionAuto()
+	{
+
+		$from = date("Y-m-d", strtotime("first day of last month"));
+		$to = date("Y-m-d");
+		if( isset($_GET['from']) and !empty($_GET['from']) and isset($_GET['to']) and !empty($_GET['to']) ){
+		        $from = date("Y-m-d", strtotime($_GET['from']));
+			$to = date("Y-m-d", strtotime($_GET['to'])); 
+		}
+
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = "
+			valmistettu_automaattiseesti='1'
+			AND DATE(time) 
+			BETWEEN '".$from."' AND '".$to."'
+		";
+
+		$dataProvider=new CActiveDataProvider('Lasku', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$dataProvider->pagination->pageSize = 200;
+		$this->render('auto', array(
+				'dataProvider' => $dataProvider, 
+				'from'=>$from, 
+				'to'=>$to
+		));
+	}
+
+	protected function base64url_encode($input) {
+	    return strtr(base64_encode($input), '+/', '-_');
+	}
+
+	protected function asiakasmuutos($asiakas)
+	{
+		if($asiakas->tyyppi == 'yritys')
+		return $asiakas->yrityksen_nimi;
+		if($asiakas->tyyppi == 'henkilo')
+		return $asiakas->yhteyshenkilo;
 	}
 
 	public function actionTr_rivit_jarjestelmavalvojat()
@@ -359,9 +489,31 @@ class LaskuController extends Controller
 			'asetukset'=>$asetukset,
 			'laskunRivit'=>$laskunRivit,
 			'yritys'=>$firmanTiedot,
-
 			));
 
+	}
+
+	protected function finvoiceAuto($id, $lahetys_tyyppi)
+	{
+
+		$lasku=$this->loadModel($id);
+		$laskunRivit=LaskunRivit::model()->findAll("lid='".$id."'");
+		$asetukset=Asetukset::model()->find("id=1");
+		$firmanTiedot=FirmanTiedot::model()->find("id=1");
+
+
+		$lah = $this->renderPartial('finvoice', 
+			array(
+			'id'=>$id,
+			'lasku'=>$lasku,
+			'asetukset'=>$asetukset,
+			'laskunRivit'=>$laskunRivit,
+			'yritys'=>$firmanTiedot,
+			$lahetys_tyyppi => true,
+			'autolaskutus' => true
+			), true);
+
+		return $lah;
 	}
 
 	public function Lasku_pdf($id)
@@ -615,10 +767,56 @@ class LaskuController extends Controller
 		$return['kpl'] 		= 0;
 		$return['yksikko'] 	= 'kpl';
 
+		$r = $this->hinnastoHintaat($_POST['tuotePalvelu'], $_POST['asiakasnumero'], $kohteet, $tunnit, $rivi_kpl);
+		$return['kpl'] 		= $r['kpl'];
+		$return['hinta'] 	= $r['hinta'];
+		$return['alv'] 		= $r['alv'];
+		$return['yksikko']	= $r['yksikko'];
+
+		// <-- Asiakkaan muoto
+		if( isset($kohteet->id) and isset($_POST['tuotteet_palvelut_muoto']) and $_POST['tuotteet_palvelut_muoto'] == 1){
+	
+				$return['hinta'] 	= $kohteet->hinta;
+				$return['alv'] 		= $kohteet->alv;
+
+				if($kohteet->hinta_tyyppi == '1')
+				{
+					$return['kpl'] = $tunnit;
+					$return['yksikko'] = 'h';
+				}
+				if($kohteet->hinta_tyyppi == '2')
+				{
+					$return['kpl'] = 1;
+					$return['yksikko'] = 'kk';
+				}
+				if($kohteet->hinta_tyyppi == '3')
+				{
+					$return['kpl'] = $rivi_kpl;
+					$return['yksikko'] = 'kpl';
+				}
+		}
+		// Asiakkaan muoto -->
+
+		if(isset($kohteet->id))
+		{
+			$return['osoite'] = $kohteet->osoite;
+			$return['free_text'] 	= $return['fromto'].' '.$kohteet->osoite.', '.$kohteet->kaupunki.' '.$kohteet->pnumero;
+		}
+
+		echo json_encode($return);
+
+	}
+
+	protected function hinnastoHintaat($id, $asiakasnumero, $kohteet, $tunnit, $rivi_kpl)
+	{
+		$return = [];
 		// <-- 1. TuotteetPalvelut
-		$tp = TuotteetPalvelut::model()->findbypk($_POST['tuotePalvelu']);
+		$tp = TuotteetPalvelut::model()->findbypk($id);
 		if(isset($tp->id))
 		{
+			$return['tp_nimike'] = $tp->nimike;
+			$return['tp_id'] = $tp->id;
+
 			if($tp->yksikko == 'h')
 			{
 				$return['kpl'] = $tunnit;
@@ -640,7 +838,7 @@ class LaskuController extends Controller
 
 		// <-- 2. Asiakas
        		$criteria = new CDbCriteria();
-       		$criteria->condition = " asiakasnumero='".$_POST['asiakasnumero']."' ";
+       		$criteria->condition = " asiakasnumero='".$asiakasnumero."' ";
 		$asiakas = Asiakkaat::model()->find($criteria);
 		if(isset($tp->id) and isset($asiakas->id) and $asiakas->hinnasto_id != 0)
 		{
@@ -697,41 +895,7 @@ class LaskuController extends Controller
 		}
 		//     Kohteet -->
 
-		//     Hinnastot -->
-
-
-		// <-- Asiakkaan muoto
-		if( isset($kohteet->id) and isset($_POST['tuotteet_palvelut_muoto']) and $_POST['tuotteet_palvelut_muoto'] == 1){
-	
-				$return['hinta'] 	= $kohteet->hinta;
-				$return['alv'] 		= $kohteet->alv;
-
-				if($kohteet->hinta_tyyppi == '1')
-				{
-					$return['kpl'] = $tunnit;
-					$return['yksikko'] = 'h';
-				}
-				if($kohteet->hinta_tyyppi == '2')
-				{
-					$return['kpl'] = 1;
-					$return['yksikko'] = 'kk';
-				}
-				if($kohteet->hinta_tyyppi == '3')
-				{
-					$return['kpl'] = $rivi_kpl;
-					$return['yksikko'] = 'kpl';
-				}
-		}
-		// Asiakkaan muoto -->
-
-		if(isset($kohteet->id))
-		{
-			$return['osoite'] = $kohteet->osoite;
-			$return['free_text'] 	= $return['fromto'].' '.$kohteet->osoite.', '.$kohteet->kaupunki.' '.$kohteet->pnumero;
-		}
-
-		echo json_encode($return);
-
+		return $return; 
 	}
 
 	protected function criteriaKohdeLasku($id, $from, $to)
@@ -915,9 +1079,9 @@ class LaskuController extends Controller
 		if($row)
 		$body .= '<option value="'.$row.'">'.$row.'</option>';
 		$body .= '<option value="24">24</option>';
-		for ($i = 0; $i <= 100 ; $i++) {
-		    $body .= '<option value='.$i.'>'.$i.'</option>';
-		}
+		$body .= '<option value="14">14</option>';
+		$body .= '<option value="10">10</option>';
+		$body .= '<option value="0">0</option>';
 		return $body;
 	}
 
@@ -1733,7 +1897,11 @@ class LaskuController extends Controller
 	if(isset($asiakas->id) and $asiakas->netvisorkey != 0)
 	{
 		$InvoicingCustomerIdentifier = $asiakas->netvisorkey;
-	} else {
+	} elseif(isset($asiakas->id) and $asiakas->netvisorkey == 0) {
+
+		Yii::app()->user->setFlash('danger', "Asiakasnumero: <b>".$asiakas->asiakasnumero."</b> ei saanut netvisorkey viellä, päivittä sen tallentamalla asiakas lomake uudestaan.");
+		$this->redirect(Yii::app()->request->urlReferrer);
+
 		die('ERROR: Tämä asiakas ei saanut netvisorkey viellä');
 	}
 

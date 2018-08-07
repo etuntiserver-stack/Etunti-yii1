@@ -22,7 +22,7 @@
   <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
   <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
-  <th><center><?php echo Yii::t('main', 'M'); ?></center></th>
+  <th><center><?php echo Yii::t('main', 'Hyväksytty'); ?></center></th>
   <th><center><?php echo Yii::t('main', 'P'); ?></center></th>
   </tr>
   </thead>

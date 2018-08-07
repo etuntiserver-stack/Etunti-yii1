@@ -159,8 +159,7 @@ if(isset($_GET['mitatointi'])){
 if(isset($_GET['lahetaNetvisor']))
 {
 	$return = $this->lahetaNetvisoriin($id);
-	if($return != false)
-		$this->redirect(array('index'));
+	if( $return != false ){ $this->redirect(array('index')); }
 }
 //  laheta Netvisor -->
 
@@ -430,8 +429,8 @@ $xml = encodeXml (array(
 /* Lähetä lasku palvelimelle */
 $res = commitTransfer ($xml);
 /* Tulosta vastausviesti */
-echo '<textarea class="form-control" rows="20" cols="40">'.$res.'</textarea>';
-echo "<br>";
+//echo '<textarea class="form-control" rows="20" cols="40">'.$res.'</textarea>';
+//echo "<br>";
 
 /* Tulkitse palvelimen vastausviesti */
 $doc = parseXml ($res);
@@ -453,19 +452,15 @@ for ($i = 0; $i < count ($doc->row); $i++) {
 		    $historia->save();
 
 	if(!isset($autolaskutus)){ $this->redirect(array('index')); }
-
-	break;
+	if(isset($autolaskutus)){
+		$criteria=new CDbCriteria;
+		$criteria->condition = " lasku_id='".$id."' ";
+		Tyovuoroot::model()->updateAll(array('laskutettu' => '1'), $criteria);
+	}
 
     } else {
         echo 'reject billnum ' . $doc->row[$i]->billnum
             . '<br> error ' . utf8_decode ($doc->row[$i]->error) . "<br>";
-
-	if(isset($autolaskutus)){
-		$criteria=new CDbCriteria;
-		$criteria->condition = " lasku_id='".$id."' ";
-		Tyovuoroot::model()->updateAll(array('laskutettu' => '0'), $criteria);
-	}
-
 	exit;
     }
 }
@@ -477,19 +472,6 @@ for ($i = 0; $i < count ($doc->row); $i++) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-function base64url_encode($input) {
-    return strtr(base64_encode($input), '+/', '-_');
-}
 
 
 
@@ -533,7 +515,7 @@ $account_info = json_decode($account_info, true);
 
 
 $pdf = trim($xml);
-$pdf_b64 = base64url_encode($pdf);
+$pdf_b64 = $this->base64url_encode($pdf);
 
 $data = array('job_name' => 'Verkkolasku', 'confirm' => false, 'finvoice' => $pdf_b64);
 curl_setopt($ch, CURLOPT_URL, $send_finvoice_url);

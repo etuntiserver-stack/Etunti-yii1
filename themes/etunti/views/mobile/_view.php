@@ -108,11 +108,6 @@ if(!empty($data->loppui) and !empty($data->aloitan)){
   $kesto[$data->id] =  '';
 }
 
-if(!empty($data->tietoja) and !empty($data->tietoja))
-  $muokattu[$data->id] =  '<span class="fa fa-check-square-o" title="'.Yii::t('main', 'Riviä on muokattu').'"></span>';
-else
-  $muokattu[$data->id] =  '<span class="fa fa-sign-in" title="'.Yii::t('main', 'Riviä ei ole muokattu').'"></span>';
-
 
 	if($data->status == '1')
 	$door = '<b><i class="fa fa-hourglass-start text-info"></i></b>';
@@ -333,7 +328,31 @@ else
 	<?php endif; ?>
 
 	<?php if( isset($sivu) and $sivu == 'index' ) : ?>
-	<td><center><?php echo $muokattu[$data->id]; ?></center></td>
+	<td><center>
+		<?php 
+		if( empty($data->hyvaksytty) ){ 
+			echo CHtml::link('<span class="text-danger">Ei</span>', 
+				array('//toteutuneet/index', 'from' => date("d.m.Y", strtotime($data->aloitan)), 'to' => date("d.m.Y", strtotime($data->aloitan)), 'tid' => $data->tid), 
+				array(
+					//'target' => '_blank',
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Siirä minut hyväksyntään') 
+				)
+			); 
+		} else {
+			echo CHtml::link('<span class="text-success">Kyllä</span>', 
+				array('//toteutuneet/index', 'from' => date("d.m.Y", strtotime($data->aloitan)), 'to' => date("d.m.Y", strtotime($data->aloitan)), 'tid' => $data->tid), 
+				array(
+					//'target' => '_blank',
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Siirä minut hyväksyntään') 
+				)
+			);
+		}
+		?>
+	</center></td>
 	<td><center><span class="link glyphicon glyphicon-trash text-danger poistaKohde" for="rivi_<?php echo $data->id; ?>"></span></center></td>
 	<?php endif; ?>
 

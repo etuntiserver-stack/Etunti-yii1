@@ -171,6 +171,20 @@ if(isset($model->tietoja))
 		<?php echo $form->error($model,'loppui'); ?>
 	</div>
 
+	<?php if( isset($model->id) ): ?>
+	<div class="section">
+		<?php echo $form->labelEx($model,'tv_id'); ?>
+		<?php
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " 
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".date("Y-m-d", strtotime($model->aloitan))."' AND '".date("Y-m-d", strtotime($model->aloitan))."'
+		";
+		?>
+		<?php echo $form->dropDownList($model, 'tv_id', CHtml::listData(Tyovuoroot::model()->findAll($criteria), 'id', 'osoiteAndAika'), array('empty'=>'Valitse', 'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tv_id'); ?>
+	</div>
+	<?php endif; ?>
 <br>
 
 	<div class="section">

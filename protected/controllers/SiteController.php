@@ -121,6 +121,7 @@ class SiteController extends Controller
 	public function actionOtakaytoon($tila)
 	{
                 Yii::app()->theme = 'etunti';
+		if( !isset(Yii::app()->user->domain) ){ $this->redirect(array('index')); }
 		$this->render('otakaytoon', array(
 			'tila' => $tila
 		));

@@ -1068,6 +1068,15 @@ $('.tvchange').change(function(){
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/index">
                   <span class="glyphicon glyphicon-barcode"></span> <?php echo Yii::t('main', 'Laskut'); ?></a>
               </li>
+	      <?php if( 
+			Yii::app()->user->domain == 'demo' 
+			|| Yii::app()->user->domain == 'sivex' 
+	      ): ?>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/auto">
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Laskutuksen automaatio'); ?></a>
+              </li>
+	      <?php endif; ?>
 <!--
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/LaskutusTuotteet/index">
