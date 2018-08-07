@@ -768,10 +768,10 @@ class LaskuController extends Controller
 		$return['yksikko'] 	= 'kpl';
 
 		$r = $this->hinnastoHintaat($_POST['tuotePalvelu'], $_POST['asiakasnumero'], $kohteet, $tunnit, $rivi_kpl);
-		$return['kpl'] 		= $r['kpl'];
-		$return['hinta'] 	= $r['hinta'];
-		$return['alv'] 		= $r['alv'];
-		$return['yksikko']	= $r['yksikko'];
+		$return['kpl'] 		= (isset($r['kpl']))? $r['kpl'] : '';
+		$return['hinta'] 	= (isset($r['hinta']))? $r['hinta'] : '';
+		$return['alv'] 		= (isset($r['alv']))? $r['alv'] : '';
+		$return['yksikko']	= (isset($r['yksikko']))? $r['yksikko'] : '';
 
 		// <-- Asiakkaan muoto
 		if( isset($kohteet->id) and isset($_POST['tuotteet_palvelut_muoto']) and $_POST['tuotteet_palvelut_muoto'] == 1){
