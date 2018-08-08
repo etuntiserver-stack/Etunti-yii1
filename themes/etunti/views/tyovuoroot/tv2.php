@@ -276,6 +276,17 @@ $( ".luolaatiko" ).each(function( index ) {
 	var asiakas = $(this).attr("asiakas");
 	var kohde = $(this).attr("kohde");
 
+var xhr = new XMLHttpRequest();
+xhr.open("POST", 'didnew', true);
+xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+xhr.onload = function () {
+	d = JSON.parse(xhr.responseText);
+	//console.log(xhr.responseText)
+	$("#"+forThis).html(d);
+};
+xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
+
+/*
         $.ajax({
            url: "didnew",
            type: "POST",
@@ -289,6 +300,7 @@ $( ".luolaatiko" ).each(function( index ) {
 	    	//console.log(XMLHttpRequest);
  	   }
         });
+*/
 });
 </script>
 <?php endif; ?>
