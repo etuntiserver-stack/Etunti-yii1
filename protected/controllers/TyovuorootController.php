@@ -1275,7 +1275,10 @@ class TyovuorootController extends Controller
 
 	public function actionTv3()
 	{
-		$this->poistaminenOnlineVarauksetJokaMeniOhi();
+		if( !isset(Yii::app()->session['ov_poisto']) ){
+			$this->poistaminenOnlineVarauksetJokaMeniOhi();
+			Yii::app()->session['ov_poisto'] = 'suorittu';
+		}
 		$kohteet_siivous = array();
 
 		// <-- Reset

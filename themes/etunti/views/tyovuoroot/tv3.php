@@ -233,11 +233,12 @@ function isScrolledIntoView(el) {
 }
 
 
-$("td").hover(function(){
+$("tr").hover(function(){
   eachlaatikot();
 });
-
-eachlaatikot();
+$("body").ready(function(){
+  eachlaatikot();
+});
 
 function eachlaatikot(){
    $( ".luolaatiko" ).each(function( index ) {

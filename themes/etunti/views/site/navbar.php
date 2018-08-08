@@ -27,6 +27,8 @@ elseif( $curpage == 'tyovuoroot/index' )
    $tyovuorot_sivut = Yii::t('main','Työvuorot viikkoittain');
 if( $curpage == 'tyovuoroot/tv2' )
    $tyovuorot_sivut = Yii::t('main','Työvuorot työntekijöiden mukaan');
+if( $curpage == 'tyovuoroot/tv3' )
+   $tyovuorot_sivut = Yii::t('main','Työvuorot v3');
 ?>
   
 
@@ -75,7 +77,7 @@ if( $curpage == 'tyovuoroot/tv2' )
 
 
 	<!-- Haku -->
-	<?php if($curpage == 'tyovuoroot/tv2' or $curpage == 'tyovuoroot/index') : ?>
+	<?php if($curpage == 'tyovuoroot/tv2' or $curpage == 'tyovuoroot/index' or $curpage == 'tyovuoroot/tv3') : ?>
 	<?php 
 		$year           = Yii::app()->session['year'];
 		$week           = Yii::app()->session['week'];
@@ -130,7 +132,7 @@ if( $curpage == 'tyovuoroot/tv2' )
 			</div>
 		<?php endif; ?>
 
-		<?php if($curpage == 'tyovuoroot/index') : ?>
+		<?php if($curpage == 'tyovuoroot/index' or $curpage == 'tyovuoroot/tv3') : ?>
 			<div class="row">
 			 <div class="col-sm-5">
 		    	  <label><?php echo Yii::t('main','Vuosi'); ?></label>
@@ -309,6 +311,7 @@ if( $curpage == 'tyovuoroot/tv2' )
 	<select class="form-control tvchange" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Valitse näkymä'); ?>">
  	  <option value="index" <?php if($curpage == 'tyovuoroot/index') echo 'selected'; ?>><?php echo Yii::t('main', 'Viikko'); ?></option>
  	  <option value="tv2" <?php if($curpage == 'tyovuoroot/tv2') echo 'selected'; ?>><?php echo Yii::t('main', 'Työntekijä'); ?></option>
+ 	  <option value="tv3" <?php if($curpage == 'tyovuoroot/tv3') echo 'selected'; ?>><?php echo Yii::t('main', 'V3'); ?></option>
  	  <!--<option value="tv_kohteet"><?php echo Yii::t('main', 'Kohde'); ?></option>-->
 	</select>
         </li>
