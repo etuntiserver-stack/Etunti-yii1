@@ -180,19 +180,32 @@ ini_set('memory_limit', '256M');
 		)
 		$cl = 'class="btn btn-xs btn-danger"';
 
-		$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/noname.jpg";
-		if(isset(Yii::app()->user->domain) and file_exists(dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.".jpg") and isset(Yii::app()->user->id))
-		{
-
-		  $filepath = dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.'.jpg';
-		}
-		$imageData = base64_encode(file_get_contents($filepath));
-		$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
-
 		echo '
 		<div class="row">
 		  <div class="col-sm-12">
-		    	<a href="#" class="getTekijanTiedot" for="'.$t->id.'"><img src="'.$src.'" alt="avatar" class="mw50 br64 mr15"><br> '.$this->etuSukunimi($t->id).'</a>
+		    	<a href="#" class="getTekijanTiedot" for="'.$t->id.'">';
+
+		// <-- Kuva
+		if(
+			isset(Yii::app()->user->domain) 
+			and file_exists(dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.".jpg") 
+		)
+		{
+
+		  	$filepath = dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.'.jpg';
+			$imageData = base64_encode(file_get_contents($filepath));
+			$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+			echo '<img src="'.$src.'" alt="avatar" class="mw50 br64 mr15">';
+		} else {
+			$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/noname.jpg";
+			$imageData = base64_encode(file_get_contents($filepath));
+			$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+			echo '<img src="'.$src.'" alt="avatar" class="mw50 br64 mr15">';
+		}
+		//     Kuva -->
+
+		echo '
+				<br> '.$this->etuSukunimi($t->id).'</a>
 			<br>
 			<span '.$cl.'><b id="vk_'.$week.'_'.$t->id.'">'.$kokoViikko. '</b> ('.$vktyoaika.')</span>
 		  </div>
@@ -266,10 +279,10 @@ xhr.open("POST", 'didnew', true);
 xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 xhr.onload = function () {
 	d = JSON.parse(xhr.responseText);
-	//console.log(xhr.responseText)
+	//console.log(d);
 	$("#"+forThis).html(d);
 };
-xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
+xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde+'&from_ajax=true');
 
 
 /*
@@ -287,7 +300,6 @@ xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivou
  	   }
         });
 */
-
 
 });
 </script>
