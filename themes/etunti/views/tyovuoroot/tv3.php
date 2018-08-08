@@ -231,15 +231,45 @@ function isScrolledIntoView(el) {
     //isVisible = elemTop < window.innerHeight && elemBottom >= 0;
     return isVisible;
 }
+/*
+$(document).delegate("#parent","scroll",function(){
 
-
-$("tr").hover(function(){
-  eachlaatikot();
 });
-$("body").ready(function(){
-  eachlaatikot();
-});
+*/
 
+eachTR();
+function eachTR(){
+    $('#fixTable > tbody  > tr').each(function(){
+	$(this).addClass('opened');
+   	$(this).find(".luolaatiko" ).not('.opened').each(function( index ) {
+		trlaatikkot(this);
+	});
+	if(!isScrolledIntoView(this)){ return false; }
+    });
+}
+
+function trlaatikkot(lt){
+	var forThis = $(lt).attr("for");
+	$("#"+forThis).html('odota..');
+	var pvm = $(lt).attr("pvm");
+	var tid = $(lt).attr("tid");
+	var from = $(lt).attr("from");
+	var kohteet_siivous = $(lt).attr("kohteet_siivous");
+	var asiakas = $(lt).attr("asiakas");
+	var kohde = $(lt).attr("kohde");
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", 'didnew3', true);
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xhr.onload = function () {
+		d = JSON.parse(xhr.responseText);
+		//console.log(xhr.responseText)
+		$("#"+forThis).html(d);
+	};
+	xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
+}
+
+/*
 function eachlaatikot(){
    $( ".luolaatiko" ).each(function( index ) {
 	if(!isScrolledIntoView(this)){ return false; }
@@ -263,6 +293,10 @@ function eachlaatikot(){
 		$("#"+forThis).html(d);
 	};
 	xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
+   });
+}
+*/
+
 
 	/*
         $.ajax({
@@ -280,8 +314,6 @@ function eachlaatikot(){
  	   }
         });
 	*/
-   });
-}
 </script>
 <?php endif; ?>
 
