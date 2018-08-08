@@ -220,8 +220,30 @@ ini_set('memory_limit', '256M');
 
 
 <script>
-$( ".luolaatiko" ).each(function( index ) {
+function isScrolledIntoView(el) {
+    var rect = el.getBoundingClientRect();
+    var elemTop = rect.top;
+    var elemBottom = rect.bottom;
 
+    // Only completely visible elements return true:
+    var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+    // Partially visible elements return true:
+    //isVisible = elemTop < window.innerHeight && elemBottom >= 0;
+    return isVisible;
+}
+
+
+$("td").hover(function(){
+  eachlaatikot();
+});
+
+eachlaatikot();
+
+function eachlaatikot(){
+   $( ".luolaatiko" ).each(function( index ) {
+	if(!isScrolledIntoView(this)){ return false; }
+
+	//console.log('latikot');
 	var forThis = $(this).attr("for");
 	$("#"+forThis).html('odota..');
 	var pvm = $(this).attr("pvm");
@@ -231,16 +253,17 @@ $( ".luolaatiko" ).each(function( index ) {
 	var asiakas = $(this).attr("asiakas");
 	var kohde = $(this).attr("kohde");
 
-var xhr = new XMLHttpRequest();
-xhr.open("POST", 'didnew3', true);
-xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-xhr.onload = function () {
-	d = JSON.parse(xhr.responseText);
-	//console.log(xhr.responseText)
-	$("#"+forThis).html(d);
-};
-xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
-/*
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", 'didnew3', true);
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xhr.onload = function () {
+		d = JSON.parse(xhr.responseText);
+		//console.log(xhr.responseText)
+		$("#"+forThis).html(d);
+	};
+	xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
+
+	/*
         $.ajax({
            url: "didnew3",
            type: "POST",
@@ -255,8 +278,9 @@ xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivou
 	    	//console.log(XMLHttpRequest);
  	   }
         });
-*/
-});
+	*/
+   });
+}
 </script>
 <?php endif; ?>
 
@@ -326,20 +350,3 @@ $(document).ready(function(){
 
 });
 </script>
-
-
-
-<?php /* jos joku avasi samantien sama ikkuna
-<script>
-$(document).on('show.bs.modal','#showres', function () {
-  console.log(this)
-});
-$(document).on('hidden.bs.modal','#showres', function () {
-
-});
-</script>
-*/ ?>
-
-
-
-
