@@ -2579,7 +2579,10 @@ class TyovuorootController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$this->poistaminenOnlineVarauksetJokaMeniOhi();
+		if( !isset(Yii::app()->session['ov_poisto']) ){
+			$this->poistaminenOnlineVarauksetJokaMeniOhi();
+			Yii::app()->session['ov_poisto'] = 'suorittu';
+		}
 		$kohteet_siivous = array();
 
 		// <-- Reset
@@ -2880,7 +2883,10 @@ class TyovuorootController extends Controller
 
 	public function actionTv2()
 	{
-		$this->poistaminenOnlineVarauksetJokaMeniOhi();
+		if( !isset(Yii::app()->session['ov_poisto']) ){
+			$this->poistaminenOnlineVarauksetJokaMeniOhi();
+			Yii::app()->session['ov_poisto'] = 'suorittu';
+		}
 
 		$kohteet_siivous = array();
 
