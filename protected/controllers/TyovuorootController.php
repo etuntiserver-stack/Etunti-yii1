@@ -1270,7 +1270,7 @@ class TyovuorootController extends Controller
 					'asiakas'=>$_POST['asiakas'],
 					'kohde'=>$_POST['kohde'],
 	     ));
-
+	     exit;
 	}
 
 	public function actionViikko($tid,$viikko,$year)
