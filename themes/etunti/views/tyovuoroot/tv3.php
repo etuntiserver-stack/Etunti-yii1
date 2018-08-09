@@ -44,7 +44,7 @@ ini_set('memory_limit', '256M');
 
 		<!-- Fixed Table -->
 		<!-- http://www.jqueryscript.net/table/jQuery-Plugin-For-Fixed-Table-Header-Footer-Columns-TableHeadFixer.html -->
-		<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/tableHeadFixer.js"></script>
+		<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/tableHeadFixer_v3.js"></script>
 		<script>
 			$(document).ready(function() {
 				window.onload = function(event) { resizeDiv(); }
@@ -163,7 +163,7 @@ ini_set('memory_limit', '256M');
 
 	foreach($tyontekijat_model as $t)
 	{
-	  echo '<tr>';
+	  echo '<tr id="'.$t->id.'">';
 	  echo '<td width=1 id="first_'.$t->id.'" style="z-index: 999">';
 		echo '
 		<div class="row">
@@ -232,19 +232,28 @@ function isScrolledIntoView(el) {
     return isVisible;
 }
 /*
-$(document).delegate("#parent","scroll",function(){
-
+$(document).delegate("tr","hover",function(){
+		console.log('hh');
 });
+
+  $("#scrp").next().scroll(function(){
+   	console.log( this );
+  });
 */
+
 
 eachTR();
 function eachTR(){
     $('#fixTable > tbody  > tr').each(function(){
 	$(this).addClass('opened');
-   	$(this).find(".luolaatiko" ).not('.opened').each(function( index ) {
+   	$(this).find(".luolaatiko").each(function( index ) {
 		trlaatikkot(this);
 	});
-	if(!isScrolledIntoView(this)){ return false; }
+	if(!isScrolledIntoView(this)){ 
+		var nextAllTR = $(this).nextAll('tr');
+		//console.log( laastTR );
+		return false; 
+	}
     });
 }
 
