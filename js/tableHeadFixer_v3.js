@@ -113,20 +113,21 @@ function trlaatikkot(lt){
 					settings.rightColumns.css("right", scrollWidth - clientWidth - left);
 
 
-
-
-   	$( $(this).find(".luolaatiko") ).not(".opened").each(function( index ) {
-	   if( isScrolledIntoView( $(this).closest('tr') ) ){
-		var thisID = $(this).closest('tr').attr('id');
-		ajettuid[thisID] = thisID;
-		$(this).closest('tr').addClass('opened');
-		trlaatikkot(this);
-		console.log( 'id: ' +thisID );
-	   }
-	});
-
+				ajaaLt (this, ajettuid);
 
 			}.bind(table));
+		}
+
+		function ajaaLt (th, ajettuid) {
+		   	$( $(th).find(".luolaatiko") ).not(".opened").each(function( index ) {
+			   if( isScrolledIntoView( $(this).closest('tr') ) ){
+				var thisID = $(this).closest('tr').attr('id');
+				ajettuid[thisID] = thisID;
+				$(this).closest('tr').addClass('opened');
+				trlaatikkot(this);
+				//console.log( 'ajettu id: ' +thisID );
+			   }
+			});
 		}
 
 		function fixHead () {
