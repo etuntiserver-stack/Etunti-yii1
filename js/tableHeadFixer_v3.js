@@ -112,8 +112,9 @@ function trlaatikkot(lt){
 				if(settings.right > 0)
 					settings.rightColumns.css("right", scrollWidth - clientWidth - left);
 
+				var thisparent = this;
+				ajaaLt (thisparent, ajettuid);
 
-				ajaaLt (this, ajettuid);
 
 			}.bind(table));
 		}
