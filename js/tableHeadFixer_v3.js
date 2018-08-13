@@ -71,12 +71,30 @@ function trlaatikkot(lt){
 	   	$( d ).each(function( index, value ) {
 			string += '' +
 			'<div class="link did fullRivi tv_edit" id="tv_'+ value['id'] + '">' + 
-				//value['alku'] +'-'+value['loppu'] + '<br>' +  
+				'<b>' +value['alku'] +'-'+value['loppu'] + '</b><br>' +  
 				value['osoite'] + 
 			'</div>' +
 			'';
 		});
-		$("#"+forThis).html('<div class="small laatikko latikkoAsetukset">' + string + '</div>');
+
+		var laatikko = '' +
+		'<div class="small laatikko latikkoAsetukset">' +
+		'<div class="row">' +
+		'<div class="pull-right oikeallaPlusV">' +
+		 '<div class="form-inline">' +
+		  '<div class="kokopaiva form-group">' +
+		   '<span class="valitseKokopaiva link glyphicon glyphicon-th-large" pvm="'+ pvm +'" tid="'+ tid +'"></span>' +
+		  '</div>' +
+		  '<div class="plussamerkki form-group">' +
+		   '<span class="plussa link glyphicon glyphicon-plus luominen" pvm="'+ pvm +'" tid="'+ tid +'"></span>' +
+		  '</div>' +
+		 '</div>' +
+		'</div>' +
+		'</div>' +
+			string +
+		'</div>';
+
+		$("#"+forThis).html( laatikko );
 	};
 	xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
 }

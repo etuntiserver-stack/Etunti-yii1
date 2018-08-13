@@ -22,18 +22,17 @@ if(!isset($_POST['tulosta']))
 	{
 	$bod .=  '
 	<div class="pull-right oikeallaPlusV">
-	  <div class="form-inline">
-	<div class="form-group">
-	   <span class="text-center" id="sum_tunnit_'.$did.'_'.$tid.'" style="text-align:center;opacity:0.6"></span>
-	</div>
-	<div class="kokopaiva form-group">
-	   <span class="valitseKokopaiva link glyphicon glyphicon-th-large" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
-	</div>
-	<div class="plussamerkki form-group">
-	<span class="plussa link glyphicon glyphicon-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
-	</div>
-
+	 <div class="form-inline">
+	  <div class="form-group">
+	    <span class="text-center" id="sum_tunnit_'.$did.'_'.$tid.'" style="text-align:center;opacity:0.6"></span>
 	  </div>
+	  <div class="kokopaiva form-group">
+	   <span class="valitseKokopaiva link glyphicon glyphicon-th-large" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
+	  </div>
+	  <div class="plussamerkki form-group">
+	   <span class="plussa link glyphicon glyphicon-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
+	  </div>
+	 </div>
 	</div>';
 	}
 

@@ -30,6 +30,9 @@ td .tp{
 	padding:3px 7px;
 	background: white;
 }
+.fullRivi:hover{
+	background: #ccc;
+}
 .luominen, .valitseKokopaiva{
 	display: none;
 }
