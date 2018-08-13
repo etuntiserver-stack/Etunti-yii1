@@ -114,10 +114,7 @@ ini_set('memory_limit', '256M');
      </thead>
      <tbody>
         <?php
-		if(count($kohteet_siivous) > 0)
-		$ks = json_encode($kohteet_siivous);
-		else
-		$ks = "0";
+
 
 	// VARAUS
 	  echo '<tr>';
@@ -140,9 +137,13 @@ ini_set('memory_limit', '256M');
 	     $date = date('d.m.Y',$d);
 	     $did = date('Ymd',$d);
 
+	     $clPyhat = '';
+	     $pyhat = $this->pyhat($date);
+	     if($pyhat == 'su' or $pyhat == 'pyhapaiva' or $pyhat == 'erikoislauantai')
+	     $clPyhat = 'style="background:#ddd"';
 
-	     echo '<td id="'.$did.'_0" valign="top">';
- 	     $did = $this->renderPartial('//tyovuoroot/did3',array(
+	     echo '<td '.$clPyhat.' id="'.$did.'_0" valign="top">';
+ 	     $did = $this->renderPartial('//tyovuoroot/did',array(
 					'pvm'=>$date,
 					'tid'=>0,
 					'from'=>'tvuoro', 
@@ -163,14 +164,50 @@ ini_set('memory_limit', '256M');
 
 	foreach($tyontekijat_model as $t)
 	{
-	  echo '<tr id="'.$t->id.'">';
+	  echo '<tr id="tr_'.$t->id.'">';
 	  echo '<td width=1 id="first_'.$t->id.'" style="z-index: 999">';
+
+	     $vktyoaika = '';
+	     $ts = Tyosuhdet::model()->find(" tid = '".$t->id."' ");
+	     if(isset($ts->id) and !empty($ts['vktyoaika']))
+	     $vktyoaika = $ts['vktyoaika'];
+	     $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>$week,'year'=>$year),true);
+ 	  
+		$cl = '';
+		if((int)str_replace(":","",$kokoViikko) > (int)str_replace(":","",$vktyoaika)
+			and (int)str_replace(":","",$kokoViikko) > 0
+			and (int)str_replace(":","",$vktyoaika) > 0
+		)
+		$cl = 'class="btn btn-xs btn-danger"';
+
 		echo '
 		<div class="row">
 		  <div class="col-sm-12">
-		    	<a href="#" class="getTekijanTiedot" for="'.$t->id.'">'.$this->etuSukunimi($t->id).'</a>
+		    	<a href="#" class="getTekijanTiedot" for="'.$t->id.'">';
+
+		// <-- Kuva
+		if(
+			isset(Yii::app()->user->domain) 
+			and file_exists(dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.".jpg") 
+		)
+		{
+
+		  	$filepath = dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.'.jpg';
+			$imageData = base64_encode(file_get_contents($filepath));
+			$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+			echo '<img src="'.$src.'" alt="avatar" class="mw50 br64 mr15">';
+		} else {
+			$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/noname.jpg";
+			$imageData = base64_encode(file_get_contents($filepath));
+			$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+			echo '<img src="'.$src.'" alt="avatar" class="mw50 br64 mr15">';
+		}
+		//     Kuva -->
+
+		echo '
+				<br> '.$this->etuSukunimi($t->id).'</a>
 			<br>
-			<span id="vk_'.$week.'_'.$t->id.'"></span>
+			<span '.$cl.'><b id="vk_'.$week.'_'.$t->id.'">'.$kokoViikko. '</b> ('.$vktyoaika.')</span>
 		  </div>
 		</div>';
 
@@ -187,6 +224,12 @@ ini_set('memory_limit', '256M');
 	     $pyhat = $this->pyhat($date);
 	     if($pyhat == true)
 	     $clPyhat = 'style="background:#ddd"';
+
+		if(count($kohteet_siivous) > 0)
+		$ks = json_encode($kohteet_siivous);
+		else
+		$ks = "0";
+
 
 	     echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'" valign="top">';
 	     echo '<div class="luolaatiko" for="'.$did.'_'.$t->id.'" pvm="'.$date.'" tid="'.$t->id.'" from="tvuoro" kohteet_siivous="'.$ks.'" asiakas="'.$asiakas.'" kohde="'.$kohde.'"></div>';
@@ -231,27 +274,16 @@ function isScrolledIntoView(el) {
     //isVisible = elemTop < window.innerHeight && elemBottom >= 0;
     return isVisible;
 }
-/*
-$(document).delegate("tr","hover",function(){
-		console.log('hh');
-});
-
-  $("#scrp").next().scroll(function(){
-   	console.log( this );
-  });
-*/
-
 
 eachTR();
+var nextAllTR = [];
 function eachTR(){
     $('#fixTable > tbody  > tr').each(function(){
 	$(this).addClass('opened');
-   	$(this).find(".luolaatiko").each(function( index ) {
+   	$(this).find(".luolaatiko").not('opened').each(function( index ) {
 		trlaatikkot(this);
 	});
 	if(!isScrolledIntoView(this)){ 
-		var nextAllTR = $(this).nextAll('tr');
-		//console.log( laastTR );
 		return false; 
 	}
     });
@@ -268,7 +300,7 @@ function trlaatikkot(lt){
 	var kohde = $(lt).attr("kohde");
 
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", 'didnew3', true);
+	xhr.open("POST", 'didnew', true);
 	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	xhr.onload = function () {
 		d = JSON.parse(xhr.responseText);
@@ -277,52 +309,6 @@ function trlaatikkot(lt){
 	};
 	xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
 }
-
-/*
-function eachlaatikot(){
-   $( ".luolaatiko" ).each(function( index ) {
-	if(!isScrolledIntoView(this)){ return false; }
-
-	//console.log('latikot');
-	var forThis = $(this).attr("for");
-	$("#"+forThis).html('odota..');
-	var pvm = $(this).attr("pvm");
-	var tid = $(this).attr("tid");
-	var from = $(this).attr("from");
-	var kohteet_siivous = $(this).attr("kohteet_siivous");
-	var asiakas = $(this).attr("asiakas");
-	var kohde = $(this).attr("kohde");
-
-	var xhr = new XMLHttpRequest();
-	xhr.open("POST", 'didnew3', true);
-	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	xhr.onload = function () {
-		d = JSON.parse(xhr.responseText);
-		//console.log(xhr.responseText)
-		$("#"+forThis).html(d);
-	};
-	xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
-   });
-}
-*/
-
-
-	/*
-        $.ajax({
-           url: "didnew3",
-           type: "POST",
-	   cache: true,
-	   data: { pvm : pvm, tid : tid, from : from, kohteet_siivous : kohteet_siivous, asiakas : asiakas, kohde : kohde, ajax_pyynto : "true" },
-           success: function(data){
-		d = JSON.parse(data);
-		console.log(d)
-		$("#"+forThis).html(d);
-           },
-    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
-	    	//console.log(XMLHttpRequest);
- 	   }
-        });
-	*/
 </script>
 <?php endif; ?>
 
@@ -392,3 +378,20 @@ $(document).ready(function(){
 
 });
 </script>
+
+
+
+<?php /* jos joku avasi samantien sama ikkuna
+<script>
+$(document).on('show.bs.modal','#showres', function () {
+  console.log(this)
+});
+$(document).on('hidden.bs.modal','#showres', function () {
+
+});
+</script>
+*/ ?>
+
+
+
+
