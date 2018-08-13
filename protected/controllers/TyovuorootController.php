@@ -1588,6 +1588,30 @@ class TyovuorootController extends Controller
 
 	public function actionDidnew3()
 	{
+		$return = array();
+		if( isset($_POST['pvm']) ){
+	       		$criteria = new CDbCriteria();
+			$criteria->order = " alku ASC";
+			$criteria->condition = " tid = '".$_POST['tid']."' and pvm = '".date("d.m.Y",strtotime($_POST['pvm']))."' ";
+			$tv = Tyovuoroot::model()->findAll($criteria); 
+			foreach($tv as $tvVal){
+				$osoite = '';
+				if(isset($tvVal->kohteet->osoite)){ $osoite = substr($tvVal->kohteet->osoite,0,27); }
+				$return[] = array(
+					'id' => $tvVal->id,
+					'alku' => $tvVal->alku,
+					'loppu' => $tvVal->loppu,
+					'osoite' => $osoite,
+					'status' => $tvVal->status
+				);
+			}
+		}
+		echo json_encode($return);
+		exit;
+	}
+/*
+	public function actionDidnew3()
+	{
 	     if( isset($_POST['pvm']) ){
 	     if(is_array(json_decode($_POST['kohteet_siivous'], true)))
 	     $ks = json_decode($_POST['kohteet_siivous'], true);
@@ -1609,6 +1633,7 @@ class TyovuorootController extends Controller
 	     }
 	     exit;
 	}
+*/
 
 	public function actionViikko($tid,$viikko,$year)
 	{

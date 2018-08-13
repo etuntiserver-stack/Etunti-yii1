@@ -66,8 +66,17 @@ function trlaatikkot(lt){
 	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	xhr.onload = function () {
 		d = JSON.parse(xhr.responseText);
-		//console.log(xhr.responseText)
-		$("#"+forThis).html(d);
+		//console.log(d);
+		var string = '';
+	   	$( d ).each(function( index, value ) {
+			string += '' +
+			'<div class="link did fullRivi tv_edit" id="tv_'+ value['id'] + '">' + 
+				//value['alku'] +'-'+value['loppu'] + '<br>' +  
+				value['osoite'] + 
+			'</div>' +
+			'';
+		});
+		$("#"+forThis).html('<div class="small laatikko latikkoAsetukset">' + string + '</div>');
 	};
 	xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
 }
