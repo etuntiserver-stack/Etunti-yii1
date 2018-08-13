@@ -1363,11 +1363,6 @@ class TyovuorootController extends Controller
 			
 			if(isset($_POST['week']) and !empty($_POST['week']))
 				Yii::app()->session['week'] = $_POST['week'];
-
-
-
-
-
 			$this->redirect(array('tv3'));
 		}		
 		//  Post haku -->
@@ -1389,7 +1384,6 @@ class TyovuorootController extends Controller
 			$numDays = 5;
 		else
 			$numDays = 7;
-
 
 		Yii::app()->session['from'] = date("Y-m-d", strtotime($year ."W". $week.'1'));
 		Yii::app()->session['to'] = date("Y-m-d", strtotime($year ."W". $week . $numDays));

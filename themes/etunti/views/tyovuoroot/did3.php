@@ -52,6 +52,7 @@ if(!isset($_POST['tulosta']))
 
        	$criteria = new CDbCriteria();
 	$criteria->order = " alku ASC";
+	$criteria->with=array('kohteet');
 	$criteria->condition = " tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' ";
 
 	// <-- Asiakas
@@ -142,6 +143,39 @@ if(!isset($_POST['tulosta']))
 
 	   } 
 
+	   // <-- uusi_tilaus
+	   $uusi_tilaus = '';
+	   /*
+	   if( isset($tvVal->kohteet->uusi_tilaus) and $tvVal->kohteet->uusi_tilaus == 1 ){
+	   	$uusi_tilaus = 'color:#ff1aff';
+	   }
+	   */
+	   // uusi_tilaus -->
+
+	   // Asiakas nakyvissa
+	   $asiakasNakyvissa = '';
+	   if(isset($asetukset) and $asetukset->asiakas_tyovuorossa == 1){
+		$name = '';
+		if(isset($tvVal->kohteet->asiakkaat) and $tvVal->kohteet->asiakkaat->tyyppi == 'yritys')
+		$name = $tvVal->kohteet->asiakkaat->yrityksen_nimi;
+		if(isset($tvVal->kohteet->asiakkaat) and $tvVal->kohteet->asiakkaat->tyyppi == 'henkilo')
+		$name = $tvVal->kohteet->asiakkaat->yhteyshenkilo;
+
+		if(!empty($name))
+		$asiakasNakyvissa = $name.'<br>';
+	   }
+
+	   // paikkakunta nakyvissa
+	   $paikkakuntaNakyvissa = '';
+	   if(isset($asetukset) and $asetukset->paikkakunta_tyovuorossa == 1){
+		$paikkakunta = '';
+		if(isset($tvVal->kohteet->kaupunki) and !empty($tvVal->kohteet->kaupunki))
+		$paikkakunta = $tvVal->kohteet->kaupunki;
+
+		if(!empty($paikkakunta))
+		$paikkakuntaNakyvissa = $paikkakunta.'<br>';
+	   }
+
 	   // toistuva
 	   $toistuva = '';
 	   if($tvVal->toistuva_id != 0){
@@ -218,6 +252,10 @@ if(!isset($_POST['tulosta']))
 		}
 
 		$al = '<span class="pull-right tv_kesto hidden">'.$this->num(strtotime($tvVal->loppu)-strtotime($tvVal->alku)).'</span>';
+	   	$al .= '<b>'
+			.$tvVal->alku.'-'.$tvVal->loppu
+			.$toistuva.$tyopari.$status.$tarvittavien_tyontekijoiden_maara
+			.'</b>';
 
 	   } else {
 	   	$al = '';
@@ -256,13 +294,23 @@ if(!isset($_POST['tulosta']))
 		}
 	   	//    Tyoryhmat -->
 
-	   if(!empty($osoite)){ $osoite = '<br>'.$osoite; }
+	   if(!empty($osoite)){ $osoite = '<br>'.$asiakasNakyvissa.$paikkakuntaNakyvissa.$osoite; }
 	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="did '.$fullRivi.'" style="color:'.$color.'">';
 	   if( $from != 'mobiili' ){
 	       $bod .=  '<span class="link text-danger fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></span>';
 	   }
 
-	   $bod .=  '&nbsp;<span class="link '.$tv_edit.'" id="tv_'.$tvVal->id.'">'.$al.' '.$osoite.'</span>';
+	   $bod .=  '&nbsp;<span class="link '.$tv_edit.'" id="tv_'.$tvVal->id.'" style="'.$uusi_tilaus.'">'.$al.' '.$osoite.'</span>';
+
+	   if(isset($tvVal->avaimet) and count($tvVal->avaimet) > 0){
+	      $bod .=  ' <b class="fa fa-key text-warning"></b>';
+	   }
+
+	   if(!empty($tvVal->tietoja))
+	   $bod .=  ' <b class="fa fa-file-text-o text-warning" title="Tietoja"></b>';
+
+	   if(!empty($tvVal->tietoja) and isset($tietoja) and $tietoja == 1)
+	   $bod .=  '<p><span style="color: blue; border: 1px #333 solid">'.str_replace("\n","<br>",$tvVal->tietoja).'</span></p>';
 
 	   $bod .= $peruutettu;
 	   //if($tvVal->toistuva_id != 0) // piilotetaan
@@ -273,7 +321,7 @@ if(!isset($_POST['tulosta']))
 
 	}
 	$bod .=  '</div>';
-/*
+
 	if($sum > 0){
 	$bod .= '
 	<script type="text/javascript">
@@ -282,7 +330,7 @@ if(!isset($_POST['tulosta']))
 	});
 	</script>';
 	}
-*/
+
 
 
 	if(isset($yhteensa) and $yhteensa == true){

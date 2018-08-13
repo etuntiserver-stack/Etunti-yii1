@@ -1,6 +1,5 @@
 <?php
 ini_set('memory_limit', '256M');
-	//echo $week.' '.$year.'<br>';
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot.css">
@@ -10,7 +9,6 @@ ini_set('memory_limit', '256M');
   $paivat=array(
 	1=>Yii::t('main', 'Ma'),
 	2=>Yii::t('main', 'Ti'),
-
 	3=>Yii::t('main', 'Ke'),
 	4=>Yii::t('main', 'To'),
 	5=>Yii::t('main', 'Pe'),

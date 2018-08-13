@@ -62,7 +62,7 @@ function trlaatikkot(lt){
 	var kohde = $(lt).attr("kohde");
 
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", 'didnew', true);
+	xhr.open("POST", 'didnew3', true);
 	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	xhr.onload = function () {
 		d = JSON.parse(xhr.responseText);
