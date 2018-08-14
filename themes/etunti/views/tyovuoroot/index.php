@@ -185,7 +185,21 @@ ini_set('memory_limit', '256M');
 		  <div class="col-sm-12">
 		    	<a href="#" class="getTekijanTiedot" for="'.$t->id.'">';
 
+		// <-- Kuva
+		if(
+			isset(Yii::app()->user->domain) 
+			and file_exists(dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.".jpg") 
+		)
+		{
 
+			echo '<img src="'.dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.".jpg".'" alt="avatar" class="mw50 br64 mr15">';
+		} else {
+			$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/noname.jpg";
+			$imageData = base64_encode(file_get_contents($filepath));
+			$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+			echo '<img src="'.$src.'" alt="avatar" class="mw50 br64 mr15">';
+		}
+		//     Kuva -->
 
 		echo '
 				<br> '.$this->etuSukunimi($t->id).'</a>
