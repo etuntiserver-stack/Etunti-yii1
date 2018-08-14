@@ -4,7 +4,7 @@
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-        <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'LASKU AUTOMAATTIO ESIKATSELU'); ?></h2>
+        <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'LASKUTUKSEN AUTOMAATIO ESIKATSELU'); ?></h2>
 
 	</div>
 
