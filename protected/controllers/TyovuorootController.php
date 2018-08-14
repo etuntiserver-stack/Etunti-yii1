@@ -178,6 +178,7 @@ class TyovuorootController extends Controller
 				AND kohde='".$kohde."'
 				AND alku='".$alku."'
 				AND loppu='".$loppu."'
+				AND peruutettu=0
 			";
 			if(!empty($id))
 			$criteria->addCondition(" id!='".$id."' ");
@@ -226,6 +227,7 @@ class TyovuorootController extends Controller
 				DATE_FORMAT(STR_TO_DATE(alku, '%H:%i'), '%Y-%m-%d %H:%i:%s') BETWEEN '".$alku."' AND '".$loppu."'
 				OR DATE_FORMAT(STR_TO_DATE(loppu, '%H:%i'), '%Y-%m-%d %H:%i:%s') BETWEEN '".$alku."' AND '".$loppu."'
 			)
+			AND peruutettu=0
 		";
 		$model = Tyovuoroot::model()->findAll($criteria);
 		$count = count($model);
@@ -320,7 +322,14 @@ class TyovuorootController extends Controller
 		   	   return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 		}
 
-		$dataProvider=new CActiveDataProvider('Tyovuoroot');
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			peruutettu=0
+		";
+		$dataProvider=new CActiveDataProvider('Tyovuoroot', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
 		$this->render('kk',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -425,8 +434,6 @@ class TyovuorootController extends Controller
 
 	public function actionLaheta_k($week,$year,$tulosta) {
 
-
-
 		if(Yii::app()->request->getPost('pdf'))
 		{
 		  $tt = Tyontekijat::model()->findbypk($_POST['kuka']);
@@ -452,6 +459,7 @@ class TyovuorootController extends Controller
 		$criteria->condition = " 
 			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
 			AND $tids
+			AND peruutettu=0
 		";
 
 		if(isset($_POST['P']))
@@ -3633,7 +3641,8 @@ class TyovuorootController extends Controller
         	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
         	$criteria->condition = " 				
 			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."' 
+			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND peruutettu=0 
 		";
 
 		if(isset($_GET['tekijaPaaSivulla']))
