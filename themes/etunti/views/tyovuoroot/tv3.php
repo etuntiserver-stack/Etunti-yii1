@@ -1,17 +1,5 @@
 <?php
 ini_set('memory_limit', '256M');
-
-		// <-- osoite, postinumero, potitoimipaikka
-		$criteria=new CDbCriteria;
-		$criteria->condition= " 
-			YEAR(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')) >= 2018 and kohde!='' and osoite IS NULL
-		";
-		$tvall = Tyovuoroot::model()->findAll($criteria);
-		foreach($tvall as $item){
-			if( isset($item->kohteet) )
-			Tyovuoroot::model()->updateByPk($item->id, array('osoite' => $item->kohteet->osoite, 'postinumero' => $item->kohteet->pnumero, 'postitoimipaikka' => $item->kohteet->kaupunki));
-		}
-		//     osoite, postinumero, potitoimipaikka -->
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v3.css">

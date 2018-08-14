@@ -1,6 +1,5 @@
 <?php
 ini_set('memory_limit', '256M');
-
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot.css">

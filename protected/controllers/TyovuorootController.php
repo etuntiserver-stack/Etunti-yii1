@@ -1604,12 +1604,18 @@ class TyovuorootController extends Controller
 			$tv = Tyovuoroot::model()->findAll($criteria); 
 			foreach($tv as $tvVal){
 				$osoite = '';
-				if(isset($tvVal->kohteet->osoite)){ $osoite = substr($tvVal->kohteet->osoite,0,27); }
+				// <-- poistetaan se 2019 vuodessa
+				if( empty($tvVal->osoite) and isset($tvVal->kohteet->osoite) ){ 
+					Tyovuoroot::model()->updateByPk($tvVal->id, array('osoite' => $tvVal->kohteet->osoite, 'postinumero' => $tvVal->kohteet->pnumero, 'postitoimipaikka' => $tvVal->kohteet->kaupunki));
+					$tvVal->osoite = $tvVal->kohteet->osoite;
+				}
+				//     poistetaan se 2019 vuodessa -->
+
 				$return[] = array(
 					'id' => $tvVal->id,
 					'alku' => $tvVal->alku,
 					'loppu' => $tvVal->loppu,
-					'osoite' => $osoite,
+					'osoite' => substr($tvVal->osoite,0,27),
 					'status' => $tvVal->status
 				);
 			}
