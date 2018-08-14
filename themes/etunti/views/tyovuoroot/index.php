@@ -192,7 +192,7 @@ ini_set('memory_limit', '256M');
 		)
 		{
 
-			echo '<img src="img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.".jpg".'" alt="avatar" class="mw50 br64 mr15">';
+			echo '<img src="../../img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.".jpg".'" alt="avatar" class="mw50 br64 mr15">';
 		} else {
 			$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/noname.jpg";
 			$imageData = base64_encode(file_get_contents($filepath));
