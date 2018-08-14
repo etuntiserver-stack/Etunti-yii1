@@ -303,7 +303,7 @@
 			$return = $this->lahetaNetvisoriin($lasku->id);
 			if( $return != false ){
 				$criteria=new CDbCriteria;
-				$criteria->condition = " lasku_id='".$lasku->id."' ";
+				$criteria->condition = " lasku_id='".$lasku->id."' AND peruutettu=0 ";
 				Tyovuoroot::model()->updateAll(array('laskutettu' => '1'), $criteria);
 			}
 		}
