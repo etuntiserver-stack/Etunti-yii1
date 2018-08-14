@@ -1,16 +1,14 @@
 <?php
 ini_set('memory_limit', '256M');
-	//echo $week.' '.$year.'<br>';
 ?>
 
-<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot.css">
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v3.css">
 
 <?php
 
   $paivat=array(
 	1=>Yii::t('main', 'Ma'),
 	2=>Yii::t('main', 'Ti'),
-
 	3=>Yii::t('main', 'Ke'),
 	4=>Yii::t('main', 'To'),
 	5=>Yii::t('main', 'Pe'),
@@ -44,7 +42,7 @@ ini_set('memory_limit', '256M');
 
 		<!-- Fixed Table -->
 		<!-- http://www.jqueryscript.net/table/jQuery-Plugin-For-Fixed-Table-Header-Footer-Columns-TableHeadFixer.html -->
-		<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/tableHeadFixer_vko.js"></script>
+		<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/tableHeadFixer_v3.js"></script>
 		<script>
 			$(document).ready(function() {
 				window.onload = function(event) { resizeDiv(); }
@@ -114,7 +112,10 @@ ini_set('memory_limit', '256M');
      </thead>
      <tbody>
         <?php
-
+		if(count($kohteet_siivous) > 0)
+		$ks = json_encode($kohteet_siivous);
+		else
+		$ks = "0";
 
 	// VARAUS
 	  echo '<tr>';
@@ -137,13 +138,9 @@ ini_set('memory_limit', '256M');
 	     $date = date('d.m.Y',$d);
 	     $did = date('Ymd',$d);
 
-	     $clPyhat = '';
-	     $pyhat = $this->pyhat($date);
-	     if($pyhat == 'su' or $pyhat == 'pyhapaiva' or $pyhat == 'erikoislauantai')
-	     $clPyhat = 'style="background:#ddd"';
 
-	     echo '<td '.$clPyhat.' id="'.$did.'_0" valign="top">';
- 	     $did = $this->renderPartial('//tyovuoroot/did',array(
+	     echo '<td id="'.$did.'_0" valign="top">';
+ 	     $did = $this->renderPartial('//tyovuoroot/did3',array(
 					'pvm'=>$date,
 					'tid'=>0,
 					'from'=>'tvuoro', 
@@ -166,42 +163,12 @@ ini_set('memory_limit', '256M');
 	{
 	  echo '<tr id="tr_'.$t->id.'">';
 	  echo '<td width=1 id="first_'.$t->id.'" style="z-index: 999">';
-
-	     $vktyoaika = '';
-	     $ts = Tyosuhdet::model()->find(" tid = '".$t->id."' ");
-	     if(isset($ts->id) and !empty($ts['vktyoaika']))
-	     $vktyoaika = $ts['vktyoaika'];
-	     $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>$week,'year'=>$year),true);
- 	  
-		$cl = '';
-		if((int)str_replace(":","",$kokoViikko) > (int)str_replace(":","",$vktyoaika)
-			and (int)str_replace(":","",$kokoViikko) > 0
-			and (int)str_replace(":","",$vktyoaika) > 0
-		)
-		$cl = 'class="btn btn-xs btn-danger"';
-
 		echo '
 		<div class="row">
 		  <div class="col-sm-12">
-		    	<a href="#" class="getTekijanTiedot" for="'.$t->id.'">';
-
-		// <-- Kuva
-		if(
-			isset(Yii::app()->user->domain) 
-			and file_exists(dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.".jpg") 
-		)
-		{
-
-			echo '<img src="../../img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$t->id.".jpg".'" alt="avatar" class="mw50 br64 mr15">';
-		} else {
-			echo '<img src="../../img/tekijat/noname.jpg" alt="avatar" class="mw50 br64 mr15">';
-		}
-		//     Kuva -->
-
-		echo '
-				<br> '.$this->etuSukunimi($t->id).'</a>
+		    	<a href="#" class="getTekijanTiedot" for="'.$t->id.'">'.$this->etuSukunimi($t->id).'</a>
 			<br>
-			<span '.$cl.'><b id="vk_'.$week.'_'.$t->id.'">'.$kokoViikko. '</b> ('.$vktyoaika.')</span>
+			<span id="vk_'.$week.'_'.$t->id.'"></span>
 		  </div>
 		</div>';
 
@@ -218,12 +185,6 @@ ini_set('memory_limit', '256M');
 	     $pyhat = $this->pyhat($date);
 	     if($pyhat == true)
 	     $clPyhat = 'style="background:#ddd"';
-
-		if(count($kohteet_siivous) > 0)
-		$ks = json_encode($kohteet_siivous);
-		else
-		$ks = "0";
-
 
 	     echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'" valign="top">';
 	     echo '<div class="luolaatiko" for="'.$did.'_'.$t->id.'" pvm="'.$date.'" tid="'.$t->id.'" from="tvuoro" kohteet_siivous="'.$ks.'" asiakas="'.$asiakas.'" kohde="'.$kohde.'"></div>';
@@ -248,7 +209,7 @@ ini_set('memory_limit', '256M');
 
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
-	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot.js"></script>
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot_v3.js"></script>
 
 
 
@@ -310,20 +271,3 @@ $(document).ready(function(){
 
 });
 </script>
-
-
-
-<?php /* jos joku avasi samantien sama ikkuna
-<script>
-$(document).on('show.bs.modal','#showres', function () {
-  console.log(this)
-});
-$(document).on('hidden.bs.modal','#showres', function () {
-
-});
-</script>
-*/ ?>
-
-
-
-
