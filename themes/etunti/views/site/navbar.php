@@ -1074,6 +1074,7 @@ $('.tvchange').change(function(){
 	      <?php if( 
 			Yii::app()->user->domain == 'demo' 
 			|| Yii::app()->user->domain == 'sivex' 
+			|| Yii::app()->user->domain == 'kotipuhtaaksi' 
 	      ): ?>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/auto">

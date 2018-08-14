@@ -187,7 +187,7 @@ ini_set('memory_limit', '256M');
 	     $clPyhat = 'style="background:#ddd"';
 
 	     echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'" valign="top">';
-	     echo '<div class="luolaatiko" for="'.$did.'_'.$t->id.'" pvm="'.$date.'" tid="'.$t->id.'" from="tvuoro" kohteet_siivous="'.$ks.'" asiakas="'.$asiakas.'" kohde="'.$kohde.'"></div>';
+	     echo '<div class="luolaatiko" for="'.$did.'_'.$t->id.'" pvm="'.$date.'" tid="'.$t->id.'" did="'.$did.'" from="tvuoro" kohteet_siivous="'.$ks.'" asiakas="'.$asiakas.'" kohde="'.$kohde.'"></div>';
 	     echo '</td>';
 	  }
 	  echo '</tr>';

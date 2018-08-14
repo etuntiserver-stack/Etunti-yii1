@@ -1598,6 +1598,7 @@ class TyovuorootController extends Controller
 	{
 		$return = array();
 		if( isset($_POST['pvm']) ){
+			$asetukset = Asetukset::model()->findByPk(1);
 	       		$criteria = new CDbCriteria();
 			$criteria->order = " alku ASC";
 			$criteria->condition = " tid = '".$_POST['tid']."' and pvm = '".date("d.m.Y",strtotime($_POST['pvm']))."' ";
@@ -1615,8 +1616,8 @@ class TyovuorootController extends Controller
 					'id' => $tvVal->id,
 					'alku' => $tvVal->alku,
 					'loppu' => $tvVal->loppu,
-					'osoite' => substr($tvVal->osoite,0,27),
-					'status' => $tvVal->status
+					'osoite' => $tvVal->osoite.(($asetukset->paikkakunta_tyovuorossa == 1)? ', '.$tvVal->postinumero.' '.$tvVal->postitoimipaikka:''),
+					'status' => $tvVal->status,
 				);
 			}
 		}

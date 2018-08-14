@@ -56,6 +56,7 @@ function trlaatikkot(lt){
 	$("#"+forThis).html('odota..');
 	var pvm = $(lt).attr("pvm");
 	var tid = $(lt).attr("tid");
+	var did = $(lt).attr("did");
 	var from = $(lt).attr("from");
 	var kohteet_siivous = $(lt).attr("kohteet_siivous");
 	var asiakas = $(lt).attr("asiakas");
@@ -70,27 +71,51 @@ function trlaatikkot(lt){
 		var string = '';
 	   	$( d ).each(function( index, value ) {
 			string += '' +
-			'<div class="link did fullRivi tv_edit" id="tv_'+ value['id'] + '">' + 
+			'<div class="row">' + 
+			 '<div class="col-sm-10">' + 
+			  '<div class="link did fullRivi tv_edit" id="tv_'+ value['id'] + '">' + 
 				'<b>' +value['alku'] +'-'+value['loppu'] + '</b><br>' +  
 				value['osoite'] + 
-			'</div>' +
+			  '</div>' +
+			 '</div><div class="col-sm-1">' + 
+			'<span class="link text-danger fa fa-2x fa-pencil-square-o muistin" for="'+value['id']+'_'+did+'_'+tid+'" data-toggle="tooltip" data-placement="top" title="Valinta kopiontia tai siirtämistä varten"></span>' +
+			 '</div>' + 
+			'</div>' + 
 			'';
 		});
 
 		var laatikko = '' +
 		'<div class="small laatikko latikkoAsetukset">' +
+
 		'<div class="row">' +
-		'<div class="pull-right oikeallaPlusV">' +
+		 '<div class="col-sm-12">' +
+
+		 '<div class="pull-right">' +
+		 '<div class="oikeallaPlusV">' +
 		 '<div class="form-inline">' +
 		  '<div class="kokopaiva form-group">' +
-		   '<span class="valitseKokopaiva link glyphicon glyphicon-th-large" pvm="'+ pvm +'" tid="'+ tid +'"></span>' +
+		   '<span class="valitseKokopaiva text-danger link fa fa-2x fa-th-large" pvm="'+ pvm +'" tid="'+ tid +'" style="margin-right: 5px"></span>' +
 		  '</div>' +
 		  '<div class="plussamerkki form-group">' +
-		   '<span class="plussa link glyphicon glyphicon-plus luominen" pvm="'+ pvm +'" tid="'+ tid +'"></span>' +
+		   '<span class="plussa link text-danger fa fa-2x fa-plus luominen" pvm="'+ pvm +'" tid="'+ tid +'"></span>' +
 		  '</div>' +
 		 '</div>' +
+		 '</div>' +
+		 '</div>' +
+
+		 '<div class="tp">' +
+		   '<div class="form-inline">' +
+		      '<div class="form-group">' +
+		   	'<i class="forCut fa-2x text-danger" id="forCut_'+did+'_'+tid+'" style="margin-right: 5px"></i>' +
+		      '</div><div class="form-group">' +
+		   	'<i class="forCopy fa-2x text-danger" id="forCopy_'+did+'_'+tid+'"></i>' +
+		     '</div>' +
+		   '</div>' +
+		 '</div>' +
+
+		 '</div>' +
 		'</div>' +
-		'</div>' +
+		'<br>' +
 			string +
 		'</div>';
 
