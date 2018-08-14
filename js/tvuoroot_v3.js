@@ -224,8 +224,8 @@ function muisti(){
 		});
 
 			$(".muokkausLi").show();
-			$(".forCopy").removeClass("forCopy").addClass("mplus glyphicon glyphicon-plus text-success link");
-			$(".forCut").removeClass("forCut").addClass("mcut glyphicon glyphicon-transfer text-success link");
+			$(".forCopy").removeClass("forCopy").addClass("mplus fa fa-plus text-success link");
+			$(".forCut").removeClass("forCut").addClass("mcut fa fa-exchange text-success link");
 		
 		}
 		return false;
