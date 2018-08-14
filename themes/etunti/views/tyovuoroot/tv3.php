@@ -161,7 +161,7 @@ ini_set('memory_limit', '256M');
 
 	foreach($tyontekijat_model as $t)
 	{
-	  echo '<tr id="'.$t->id.'">';
+	  echo '<tr id="tr_'.$t->id.'">';
 	  echo '<td width=1 id="first_'.$t->id.'" style="z-index: 999">';
 		echo '
 		<div class="row">
@@ -188,7 +188,6 @@ ini_set('memory_limit', '256M');
 
 	     echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'" valign="top">';
 	     echo '<div class="luolaatiko" for="'.$did.'_'.$t->id.'" pvm="'.$date.'" tid="'.$t->id.'" from="tvuoro" kohteet_siivous="'.$ks.'" asiakas="'.$asiakas.'" kohde="'.$kohde.'"></div>';
-
 	     echo '</td>';
 	  }
 	  echo '</tr>';

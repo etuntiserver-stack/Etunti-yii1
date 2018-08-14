@@ -44,7 +44,7 @@ ini_set('memory_limit', '256M');
 
 		<!-- Fixed Table -->
 		<!-- http://www.jqueryscript.net/table/jQuery-Plugin-For-Fixed-Table-Header-Footer-Columns-TableHeadFixer.html -->
-		<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/tableHeadFixer.js"></script>
+		<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/tableHeadFixer_vko.js"></script>
 		<script>
 			$(document).ready(function() {
 				window.onload = function(event) { resizeDiv(); }
@@ -164,7 +164,7 @@ ini_set('memory_limit', '256M');
 
 	foreach($tyontekijat_model as $t)
 	{
-	  echo '<tr>';
+	  echo '<tr id="tr_'.$t->id.'">';
 	  echo '<td width=1 id="first_'.$t->id.'" style="z-index: 999">';
 
 	     $vktyoaika = '';
@@ -233,18 +233,6 @@ ini_set('memory_limit', '256M');
 
 	     echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'" valign="top">';
 	     echo '<div class="luolaatiko" for="'.$did.'_'.$t->id.'" pvm="'.$date.'" tid="'.$t->id.'" from="tvuoro" kohteet_siivous="'.$ks.'" asiakas="'.$asiakas.'" kohde="'.$kohde.'"></div>';
-/*
- 	     $did = $this->renderPartial('//tyovuoroot/did',array(
-					'pvm'=>$date,
-					'tid'=>$t->id,
-					'from'=>'tvuoro', 
-					'kohteet_siivous'=>$kohteet_siivous, 
-					'asetukset'=>$asetukset,
-					'asiakas'=>$asiakas,
-					'kohde'=>$kohde,
-	     ), true);
-	     echo json_decode($did, true);
-*/
 	     echo '</td>';
 	  }
 	  echo '</tr>';
@@ -260,49 +248,6 @@ ini_set('memory_limit', '256M');
               </div>
             </div>
 </div>
-
-
-<script>
-$( ".luolaatiko" ).each(function( index ) {
-
-	var forThis = $(this).attr("for");
-	$("#"+forThis).html('odota..');
-	var pvm = $(this).attr("pvm");
-	var tid = $(this).attr("tid");
-	var from = $(this).attr("from");
-	var kohteet_siivous = $(this).attr("kohteet_siivous");
-	var asiakas = $(this).attr("asiakas");
-	var kohde = $(this).attr("kohde");
-
-var xhr = new XMLHttpRequest();
-xhr.open("POST", 'didnew', true);
-xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-xhr.onload = function () {
-	d = JSON.parse(xhr.responseText);
-	//console.log(d);
-	$("#"+forThis).html(d);
-};
-xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde+'&from_ajax=true');
-
-
-/*
-        $.ajax({
-           url: "didnew",
-           type: "POST",
-	   data: { pvm : pvm, tid : tid, from : from, kohteet_siivous : kohteet_siivous, asiakas : asiakas, kohde : kohde },
-           success: function(data){
-		d = JSON.parse(data);
-		//console.log(d)
-		$("#"+forThis).html(d);
-           },
-    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
-	    	//console.log(XMLHttpRequest);
- 	   }
-        });
-*/
-
-});
-</script>
 <?php endif; ?>
 
 
