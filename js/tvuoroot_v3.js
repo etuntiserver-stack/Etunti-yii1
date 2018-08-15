@@ -3,77 +3,21 @@ $(document).ready(function(){
 
 $('td').hover(function()
 {
-     $(this).find('.plussa, .valitseKokopaiva').show();
+     $(this).find('.showhing').show();
 }, function()
 { 
-     $(this).find('.plussa, .valitseKokopaiva').hide();
+     $(this).find('.showhing').hide();
 });
 
-
-
-
-
-/*
-$(document).delegate("#from","blur",function(){
-   	tekijanValikkoMuutetaan();
+$(document).delegate(".hidecollapse","click",function(){
+     $(this).removeClass('fa-arrow-up hidecollapse').addClass('fa-arrow-down naytacollapse');
+     $(this).closest('td').find('.collapse').removeClass('in');
 });
 
-$(document).delegate("#to","blur",function(){
-   	tekijanValikkoMuutetaan();
+$(document).delegate(".naytacollapse","click",function(){
+     $(this).removeClass('fa-arrow-down naytacollapse').addClass('fa-arrow-up hidecollapse');
+     $(this).closest('td').find('.collapse').addClass('in');
 });
-
-$(document).delegate("#tekijanToimialue","change",function(){
-   	tekijanValikkoMuutetaan();
-});
-
-$(document).delegate("#siivousTyonimike","change",function(){
-   	tekijanValikkoMuutetaan();
-});
-
-function tekijanValikkoMuutetaan(){
-
-	var fromTV = '';
-	var toTV = '';
-
-	if($('#fromTV').val())
-	 fromTV = $('#fromTV').val();
-	if($('#toTV').val())
-	 toTV = $('#toTV').val();
-	if($('#from').val())
-	 fromTV = $('#from').val();
-	if($('#to').val())
-	 toTV = $('#to').val();
-
-
-	var tekijanToimialue = $("#tekijanToimialue option:selected").val();
-	var siivousTyonimike = $("#siivousTyonimike option:selected").val();
-
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/siivous_tyonimike',
-           type: "POST",
-           data: { "tekijanToimialue" : tekijanToimialue, "siivousTyonimike" : siivousTyonimike, "fromTV" : fromTV, "toTV" : toTV },
-           success: function(data){
-		var d = JSON.parse(data);
-		console.log(d);
-
-		$("#tyontekijat").val(d);
-		// Then refresh
-		$("#tyontekijat").multiselect("refresh");
-
-           }
-        });
-
-}
-*/
-
-
-
-
-
-
-
-
-
 
 $("#autoInsert").click(function(){
 
@@ -224,8 +168,8 @@ function muisti(){
 		});
 
 			$(".muokkausLi").show();
-			$(".forCopy").removeClass("forCopy").addClass("mplus fa fa-plus text-success link");
-			$(".forCut").removeClass("forCut").addClass("mcut fa fa-exchange text-success link");
+			$(".forCopy").removeClass("forCopy").addClass("mplus fa fa-plus text-danger link");
+			$(".forCut").removeClass("forCut").addClass("mcut fa fa-exchange text-danger link");
 		
 		}
 		return false;
@@ -289,7 +233,7 @@ window.addEventListener('message', function(e) {
   }
 
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio',
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio_v3',
 	   type:'POST',
 	   data: doWhat,
            success: function(data){

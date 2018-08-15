@@ -30,15 +30,18 @@ td .tp{
 	padding:3px 7px;
 	background: white;
 }
-.fullRivi:hover{
-	background: #ccc;
-}
-.luominen, .valitseKokopaiva{
-	display: none;
+.tv_edit:hover{
+	color: #000;
 }
 .table tbody>tr>td{
     	vertical-align: top;
 }
 .table{
-    height: 100%;
+	height: 100%;
+}
+.ylapalkki{
+	height: 15px;
+}
+.icon{
+	font-size: 17px;
 }
