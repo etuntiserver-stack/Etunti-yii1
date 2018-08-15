@@ -33,9 +33,6 @@ td .tp{
 .fullRivi:hover{
 	background: #ddd;
 }
-.luominen, .valitseKokopaiva{
-	display: none;
-}
 .table tbody>tr>td{
     	vertical-align: top;
 }
