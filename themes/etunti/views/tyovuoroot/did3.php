@@ -96,6 +96,13 @@ if(!isset($_POST['tulosta']))
 	$tv = Tyovuoroot::model()->findAll($criteria); 
 	foreach($tv as $tvVal)
 	{
+		// <-- poistetaan se 2019 vuodessa
+		if( empty($tvVal->osoite) and isset($tvVal->kohteet->osoite) ){ 
+			Tyovuoroot::model()->updateByPk($tvVal->id, array('osoite' => $tvVal->kohteet->osoite, 'postinumero' => $tvVal->kohteet->pnumero, 'postitoimipaikka' => $tvVal->kohteet->kaupunki));
+			$tvVal->osoite = $tvVal->kohteet->osoite;
+		}
+		//     poistetaan se 2019 vuodessa -->
+
 
 	   $osoite = '';
 	   if(isset($tvVal->kohteet->osoite) and empty($tvVal->osoiteOnline) and $tvVal->onlinevaraus_id == 0)
@@ -108,7 +115,7 @@ if(!isset($_POST['tulosta']))
 	   	if($strlen > $scount)
 	    	$osoite = substr($osoite,0,$scount).'..';
 
-	   	$osoite = str_replace('/', '', $tvVal->kohteet->osoite);
+	   	$osoite = str_replace('/', '', $tvVal->osoite);
 
 	   } elseif(!empty($tvVal->osoiteOnline) and $tvVal->osoiteOnline == 1 and $tvVal->onlinevaraus_id == 0){
 

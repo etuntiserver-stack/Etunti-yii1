@@ -68,58 +68,7 @@ function trlaatikkot(lt){
 	xhr.onload = function () {
 		d = JSON.parse(xhr.responseText);
 		//console.log(d);
-		var string = '';
-	   	$( d ).each(function( index, value ) {
-			string += '' +
-			'<div class="row">' + 
-			 '<div class="col-sm-10">' + 
-			  '<div class="link did fullRivi tv_edit small" id="'+ value['id'] + '">' + 
-				'<b>' +value['alku'] +'-'+value['loppu'] + '</b><br>' +  
-				value['osoite'] + 
-			  '</div>' +
-			 '</div><div class="col-sm-1">' + 
-			 	'<span class="link text-danger fa fa-2x fa-pencil-square-o muistin" for="'+value['id']+'_'+did+'_'+tid+'"></span>' +
-			 '</div>' + 
-			'</div>' + 
-			'';
-		});
-
-		var laatikko = '' +
-		'<div class="laatikko latikkoAsetukset" pvm="'+ pvm +'" tid="'+ tid +'">' +
-
-		'<div class="row">' +
-		 '<div class="col-sm-12">' +
-
-		 '<div class="pull-right">' +
-		 '<div class="oikeallaPlusV">' +
-		 '<div class="form-inline">' +
-		  '<div class="kokopaiva form-group">' +
-		   '<span class="valitseKokopaiva text-danger link fa fa-th-large" pvm="'+ pvm +'" tid="'+ tid +'" style="margin-right: 5px"></span>' +
-		  '</div>' +
-		  '<div class="plussamerkki form-group">' +
-		   '<span class="plussa link text-danger fa fa-plus luominen" pvm="'+ pvm +'" tid="'+ tid +'"></span>' +
-		  '</div>' +
-		 '</div>' +
-		 '</div>' +
-		 '</div>' +
-
-		 '<div class="tp">' +
-		   '<div class="form-inline">' +
-		      '<div class="form-group">' +
-		   	'<i class="forCut text-danger" id="forCut_'+did+'_'+tid+'" style="margin-right: 5px"></i>' +
-		      '</div><div class="form-group">' +
-		   	'<i class="forCopy text-danger" id="forCopy_'+did+'_'+tid+'"></i>' +
-		     '</div>' +
-		   '</div>' +
-		 '</div>' +
-
-		 '</div>' +
-		'</div>' +
-		'<br>' +
-			string +
-		'</div>';
-
-		$("#"+forThis).html( laatikko );
+		$("#"+forThis).html(d);
 	};
 	xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
 }

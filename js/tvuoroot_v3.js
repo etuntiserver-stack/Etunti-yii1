@@ -289,7 +289,7 @@ window.addEventListener('message', function(e) {
   }
 
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio',
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio_v3',
 	   type:'POST',
 	   data: doWhat,
            success: function(data){
