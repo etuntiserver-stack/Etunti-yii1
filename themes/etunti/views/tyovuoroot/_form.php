@@ -104,19 +104,29 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 	<?php echo $form->error($model,'tid'); ?>
 
 <div class="row">
-
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'pvm'); ?>
 		<?php echo $form->textField($model,'pvm',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepickerFI'));//,'readonly'=>'yes' ?>
 		<?php echo $form->error($model,'pvm'); ?>
   </div>
-
   <div class="col-sm-3">
 		<label><?php echo Yii::t('main', 'Asiakas tai kohteen yhteyshenkilö'); ?></label><br>
 		<input type="text" id="asiakas" class="form-control" AUTOCOMPLETE="off">
 		<div id="asiakasAutocompleteResult"></div>
   </div>
+  <div class="col-sm-3">
 
+  </div>
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'status'); ?>
+		<?php 
+        	$l = $this->tilanteet();
+		echo $form->dropDownList($model,'status', $l, 
+		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
+  </div>
+</div>
+
+<div class="row">
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'kohde'); ?>
 		<?php
@@ -136,20 +146,24 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
         		echo $form->dropDownList($model, 'kohde', $list,array('empty'=>'Valitse','class'=>'form-control kohde'));
         	?>
   </div>
-
   <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'status'); ?>
-		<?php 
-        	$l = $this->tilanteet();
-		echo $form->dropDownList($model,'status', $l, 
-		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
-
+		<?php echo $form->labelEx($model,'osoite'); ?>
+		<?php echo $form->textField($model,'osoite',array('size'=>20,'maxlength'=>255,'class'=>'form-control ')); ?>
+		<?php echo $form->error($model,'osoite'); ?>
   </div>
-
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'postinumero'); ?>
+		<?php echo $form->textField($model,'postinumero',array('size'=>20,'maxlength'=>255,'class'=>'form-control ')); ?>
+		<?php echo $form->error($model,'postinumero'); ?>
+  </div>
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'postitoimipaikka'); ?>
+		<?php echo $form->textField($model,'postitoimipaikka',array('size'=>20,'maxlength'=>255,'class'=>'form-control ')); ?>
+		<?php echo $form->error($model,'postitoimipaikka'); ?>
+  </div>
 </div>
 
 <div class="row">
-
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'alku'); ?> <span style="color:red">*</span>
 		<input type="text" name="Tyovuoroot[alku]" class="form-control laske timeVuorot" id="alku" value="<?php echo $model->alku; ?>" autofocus>
@@ -206,7 +220,6 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 		</span>
 		</div>
   </div>
-
 </div>
 
 
@@ -1309,7 +1322,6 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
   });
 
   $('#alku').change(function(){
-
 	laskePituus();
   });
 
@@ -1369,9 +1381,11 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 			//console.log(data);
 			var d = JSON.parse(data);
 
-
 			$('.ohje').html(d[0]);
 			$('#Tyovuoroot_tietoja').val(d[1]);
+			$('#Tyovuoroot_osoite').val(d[3]);
+			$('#Tyovuoroot_postinumero').val(d[4]);
+			$('#Tyovuoroot_postitoimipaikka').val(d[5]);
 
 			if(d[2] !== '')
 				$('#arvioitu_kesto').html(d[2]);

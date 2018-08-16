@@ -1398,7 +1398,7 @@ class TyovuorootController extends Controller
 		  $ohje .= "<br>Tietoja: ".$m->tietoja;
 		if(!empty($m->muut))
 		  $ohje .= "<br>Muut: ".$m->muut;
-		echo json_encode(array($ohje,$m->tietoja,$m->arvioitu_kesto));
+		echo json_encode(array($ohje,$m->tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki));
 	
 	}
 

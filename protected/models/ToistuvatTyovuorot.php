@@ -58,6 +58,9 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
                      'viikko_paivat' => 'text ',
                      'tid' => 'int(11) ',
                      'kohde' => 'int(11) ',
+                     'osoite' => 'varchar(255) DEFAULT NULL',
+                     'postinumero' => 'varchar(255) DEFAULT NULL',
+                     'postitoimipaikka' => 'varchar(255) DEFAULT NULL',
                      'pvm' => 'varchar(50) ',
                      'alku' => 'varchar(10) ',
                      'loppu' => 'varchar(10) ',
@@ -97,6 +100,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 		return array(
 			//array('time, pfrom, pto, viikkoja, viikko_paivat, tid, kohde, pvm, alku, loppu, kesto, tyoajanmerkinta, status, tietoja, tyopaari', 'required'),
 			array('viikkoja, tid, kohde, status, ilmoitus_paattymisesta, piilota_mobiilista, tuoteID', 'numerical', 'integerOnly'=>true),
+			array('osoite, postinumero, postitoimipaikka', 'length', 'max'=>255),
 			array('pfrom, pto, pvm', 'length', 'max'=>50),
 			array('alku, loppu, pituus, kesto', 'length', 'max'=>10),
 			array('tyoajanmerkinta', 'length', 'max'=>100),

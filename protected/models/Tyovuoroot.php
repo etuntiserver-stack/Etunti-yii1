@@ -121,7 +121,7 @@ public $tilausviesti;
 		return array(
 			//array('kohde, pvm, alku, loppu, pituus, tyoajanlaatu, tyoajanmerkinta', 'required'),
 			array('tid, onlinevaraus_id, status, toistuva_id, ilmoitus_avoimista_kohteesta, ilmoitus_myohastyneista_kohteesta, piilota_mobiilista, peruutettu, apuaika, laskutettu, tuoteID, lasku_id', 'numerical', 'integerOnly'=>true),
-			array('kohde', 'length', 'max'=>255),
+			array('kohde, osoite, postinumero, postitoimipaikka', 'length', 'max'=>255),
 			array('pvm', 'length', 'max'=>20),
 			array('alku, loppu, pituus, alku_r, kesto', 'length', 'max'=>10),
 			array('ruokatauko, tyoajanlaatu, tyoajanmerkinta', 'length', 'max'=>50),
