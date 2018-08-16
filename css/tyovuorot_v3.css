@@ -3,7 +3,7 @@
 }
 td .latikkoAsetukset{
 	min-width: 40px;
-	white-space: nowrap;
+	white-space: normal;
 }
 .forCut, .forCopy{ 
 	display: none;

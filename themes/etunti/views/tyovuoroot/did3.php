@@ -19,21 +19,19 @@ if(!isset($_POST['tulosta']))
 	{
 	$bod .=  '
 	<div class="ylapalkki">
-	<div class="pull-right">
+	 <div class="pull-right">
 	    <span class="text-center text-danger" id="sum_tunnit_'.$did.'_'.$tid.'"></span>
-	</div>
+	 </div>
 
-	<div class="showhing oikeallaPlusV"  style="display:none">
-	 <div class="form-inline">
-	  <div class="kokopaiva form-group">
+	 <div class="row showhing oikeallaPlusV"  style="display:none">
+	  <div class="col-sm-2 kokopaiva">
 	   <i class="valitseKokopaiva link text-danger fa fa-th-large icon" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></i>
-	  </div>
-	  <div class="plussamerkki form-group">
-	   <i class="plussa link text-danger fa fa-plus luominen icon" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></i>
 	   <i class="showhing link text-danger fa fa-arrow-down naytacollapse icon" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></i>
 	  </div>
+	  <div class="col-sm-1 col-sm-offset-2 plussamerkki">
+	   <i class="plussa link text-danger luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">Luo uusi</i>
+	  </div>
 	 </div>
-	</div>
 	</div>';
 	}
 
@@ -105,20 +103,8 @@ if(!isset($_POST['tulosta']))
 		//     poistetaan se 2019 vuodessa -->
 
 
-	   $osoite = '';
-	   if(isset($tvVal->kohteet->osoite) and empty($tvVal->osoiteOnline) and $tvVal->onlinevaraus_id == 0)
-	   {
-
-	   	$strlen = strlen($osoite);
-	   	$scount = 30;
-	   	if(isset($tietoja) and $tietoja == 1) $scount = 27;
-
-	   	if($strlen > $scount)
-	    	$osoite = substr($osoite,0,$scount).'..';
-
-	   	$osoite = str_replace('/', '', $tvVal->osoite);
-
-	   } elseif(!empty($tvVal->osoiteOnline) and $tvVal->osoiteOnline == 1 and $tvVal->onlinevaraus_id == 0){
+	   $osoite = $tvVal->osoite;
+	   if(!empty($tvVal->osoiteOnline) and $tvVal->osoiteOnline == 1 and $tvVal->onlinevaraus_id == 0){
 
 	   	$osoite = '<span style="color: red">Vuoroa varataan..</span>';
 

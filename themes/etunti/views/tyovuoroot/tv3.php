@@ -162,7 +162,7 @@ ini_set('memory_limit', '256M');
 	foreach($tyontekijat_model as $t)
 	{
 	  echo '<tr id="tr_'.$t->id.'">';
-	  echo '<td width=1 id="first_'.$t->id.'" style="z-index: 999">';
+	  echo '<td id="first_'.$t->id.'" style="z-index: 999">';
 		echo '
 		<div class="row">
 		  <div class="col-sm-12">
@@ -249,6 +249,7 @@ ini_set('memory_limit', '256M');
 <script type="text/javascript">
 $(document).ready(function(){
 
+  $(".onload-check").addClass("sb-l-m sb-l-disable-animation");
   $(".getTekijanTiedot").click(function(e){
 	e.preventDefault();
 	var id = $(this).attr('for');
