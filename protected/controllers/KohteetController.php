@@ -32,7 +32,7 @@ class KohteetController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index', 'view','osoite','autotaytaminen','createfromasiakas', 'googlemap','googlemap_k'),
+				'actions'=>array('admin','delete','create','update','index', 'view','osoite', 'autotaytaminen', 'createfromasiakas', 'googlemap', 'googlemap_k', 'massamuokkaus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -247,6 +247,47 @@ class KohteetController extends Controller
 		$this->render('createfromasiakas',array(
 			'model'=>$model,
 			'asiakas'=>$asiakas,
+		));
+	}
+
+	public function actionMassamuokkaus()
+	{
+
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			aktiivinen=1
+		";
+		$k_all = Kohteet::model()->findAll($criteria);
+
+		if(isset($_POST['Kohteet']))
+		{
+		   $post = array();
+		   foreach($_POST['Kohteet'] as $k => $v){
+			if(!empty($v)){ $post[$k] = $v; }
+		   }
+
+		   foreach($k_all as $model){
+			$vanha_attr = $model->attributes;
+			$model->attributes=$post;
+			if($model->save())
+			{
+				// <-- LOG
+				$model_log 	= 'Kohteet';
+				$name_log 	= 'Kohde';
+				$status_log 	= 'Massamuokkaus';
+	
+					$old_values = json_encode($vanha_attr);
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+			}
+		    }
+		    Yii::app()->user->setFlash('success', "Valmis.");
+		}
+		$model = new Kohteet;
+		$this->render('massamuokkaus',array(
+			'model'=>$model,
 		));
 	}
 

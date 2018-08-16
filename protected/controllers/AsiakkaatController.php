@@ -40,7 +40,7 @@ class AsiakkaatController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -309,17 +309,6 @@ class AsiakkaatController extends Controller
 
 		}
 	}
-/*
-	public function actionCheckLastAsiakasID()
-	{
-		$check = 0;
-		$model=Asiakkaat::model()->find(" asiakasnumero='".$_POST['checkLastAsiakasID']."' ");
-		if(isset($model->id))
-		$check = 1;
-
-		echo $check;
-	}
-*/
 
 	public function actionView_edico($id)
 	{
@@ -332,6 +321,54 @@ class AsiakkaatController extends Controller
 	{
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
+		));
+	}
+
+	public function actionMassamuokkaus()
+	{
+
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			aktiivinen=1
+		";
+		$as_all = Asiakkaat::model()->findAll($criteria);
+		$asetukset = Asetukset::model()->findbypk(1);
+
+		if(isset($_POST['Asiakkaat']))
+		{
+		   $post = array();
+		   foreach($_POST['Kohteet'] as $k => $v){
+			if(!empty($v)){ $post[$k] = $v; }
+		   }
+		   foreach($as_all as $model){
+
+			$vanha_attr = $model->attributes;
+			$model->attributes=$post;
+			if(isset($_POST['Asiakkaat']['ryhma']))
+				$model->ryhma=json_encode($_POST['Asiakkaat']['ryhma']);
+			else
+				$model->ryhma="";
+
+			if($model->save())
+			{
+
+				// <-- LOG
+				$model_log 	= 'Asiakkaat';
+				$name_log 	= 'Asiakas';
+				$status_log 	= 'Massamuokkaus';
+	
+					$old_values = json_encode($vanha_attr);
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+			}
+		    }
+		    Yii::app()->user->setFlash('success', "Valmis.");
+		}
+		$model = new Asiakkaat;
+		$this->render('massamuokkaus',array(
+			'model'=>$model,
 		));
 	}
 
