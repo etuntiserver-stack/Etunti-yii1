@@ -111,6 +111,7 @@
 			AND tid=t.tid
 			)
 			AND kohde!=0
+			AND peruutettu=0
 		";
 		$m = Tyovuoroot::model()->findAll($criteria);
 
@@ -257,6 +258,7 @@
 			)
 			AND kohde!=0 AND tyoajanmerkinta='Normaali/'
 			AND kohde IN (SELECT id FROM sivex_kohdet WHERE osoite NOT LIKE '%matka%' AND osoite NOT LIKE '%lounastauko%' )
+			AND peruutettu=0
 		";
 		$m = Tyovuoroot::model()->findAll($criteria);
 

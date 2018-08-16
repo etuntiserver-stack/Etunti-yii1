@@ -121,6 +121,7 @@ class SiteController extends Controller
 	public function actionOtakaytoon($tila)
 	{
                 Yii::app()->theme = 'etunti';
+		if( !isset(Yii::app()->user->domain) ){ $this->redirect(array('index')); }
 		$this->render('otakaytoon', array(
 			'tila' => $tila
 		));
@@ -463,6 +464,7 @@ class SiteController extends Controller
        		    $criteria->condition = " 
 			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 			AND alku!='00:00'
+			AND peruutettu=0
 		    ";
 
 		// <-- Tyoryhmat
@@ -1843,6 +1845,7 @@ $(document).ready(function(){
 			loppu!='' and alku!='' 
 			AND ".$this->eiLasketa()."
 			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+			AND peruutettu=0
 		";
 
 		// <-- Tyoryhmat

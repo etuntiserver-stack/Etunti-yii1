@@ -284,6 +284,34 @@ $(document).ready(function() {
 	<table>
 	 <tr>
 	  <td>
+		<span class="p10">'.Yii::t('main', 'Postinumero').'</span>
+	  </td><td>
+		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=postinumero&s=asc').'
+	  </td><td>
+		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=postinumero&s=desc').'
+	  </td>
+	 </tr>
+	</table>';
+      ?>
+  </th>
+  <th><?php echo '
+	<table>
+	 <tr>
+	  <td>
+		<span class="p10">'.Yii::t('main', 'Postitoimipaikka').'</span>
+	  </td><td>
+		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=kaupunki&s=asc').'
+	  </td><td>
+		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=kaupunki&s=desc').'
+	  </td>
+	 </tr>
+	</table>';
+      ?>
+  </th>
+  <th><?php echo '
+	<table>
+	 <tr>
+	  <td>
 		<span class="p10">'.Yii::t('main', 'Yhteyshenkilo').'</span>
 	  </td><td>
 		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=yhteyshenkilo&s=asc').'

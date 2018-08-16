@@ -1,13 +1,6 @@
 <?php
 /* @var $this AsiakkaatController */
 /* @var $data Asiakkaat */
-
-  $osoite = $data->osoite;
-  if(!empty($data->postinumero))
-  $osoite .= ', '.$data->postinumero;
-  if(!empty($data->kaupunki))
-  $osoite .= ', '.$data->kaupunki;
-
   $tyyppi = '';
   $tauste = 'bg-default';
   if($data->tyyppi == 'yritys'){
@@ -40,7 +33,13 @@
 		<?php echo $data->asiakasnumero; ?>
 	</td>
 	<td>
-		<?php echo $osoite; ?>
+		<?php echo $data->osoite; ?>
+	</td>
+	<td>
+		<?php echo $data->postinumero; ?>
+	</td>
+	<td>
+		<?php echo $data->kaupunki; ?>
 	</td>
 	<td>
 		<?php echo $data->yhteyshenkilo; ?>

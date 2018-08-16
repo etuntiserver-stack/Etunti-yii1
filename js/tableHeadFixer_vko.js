@@ -12,7 +12,7 @@
 
 		return this.each(function() {
 			settings.table = this;
-			settings.parent = $("<div></div>");
+			settings.parent = $("<div id='scrp'></div>");
 			setParent();
 
 			if(settings.head == true)
@@ -40,11 +40,44 @@
 
 		}
 
+function isScrolledIntoView(elem){
+    var $elem = $(elem);
+    var $window = $(window);
+    var docViewTop = $window.scrollTop();
+    var docViewBottom = docViewTop + $window.height();
+    var elemTop = $elem.offset().top;
+    var elemBottom = elemTop + $elem.height();
+
+    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+}
+
+function trlaatikkot(lt){
+	var forThis = $(lt).attr("for");
+	$("#"+forThis).html('odota..');
+	var pvm = $(lt).attr("pvm");
+	var tid = $(lt).attr("tid");
+	var from = $(lt).attr("from");
+	var kohteet_siivous = $(lt).attr("kohteet_siivous");
+	var asiakas = $(lt).attr("asiakas");
+	var kohde = $(lt).attr("kohde");
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", 'didnew', true);
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xhr.onload = function () {
+		d = JSON.parse(xhr.responseText);
+		//console.log(d);
+		$("#"+forThis).html(d);
+	};
+	xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
+}
+
 
 		function setParent() {
 			var container = $(settings.table).parent();
 			var parent = $(settings.parent);
 			var table = $(settings.table);
+			var ajettuid = [];
 
 			table.before(parent);
 			parent.append(table);
@@ -78,7 +111,24 @@
 
 				if(settings.right > 0)
 					settings.rightColumns.css("right", scrollWidth - clientWidth - left);
+
+				var thisparent = this;
+				ajaaLt (thisparent, ajettuid);
+
+
 			}.bind(table));
+		}
+
+		function ajaaLt (th, ajettuid) {
+		   	$( $(th).find(".luolaatiko") ).not(".opened").each(function( index ) {
+			   if( isScrolledIntoView( $(this).closest('tr') ) ){
+				var thisID = $(this).closest('tr').attr('id');
+				ajettuid[thisID] = thisID;
+				$(this).closest('tr').addClass('opened');
+				trlaatikkot(this);
+				//console.log( 'ajettu id: ' +thisID );
+			   }
+			});
 		}
 
 		function fixHead () {

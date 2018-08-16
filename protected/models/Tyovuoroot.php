@@ -62,7 +62,10 @@ public $tilausviesti;
 
                      'tid' => 'int(7) ',
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'kohde' => 'varchar(255) ',
+                     'kohde' => 'varchar(255)',
+                     'osoite' => 'varchar(255) DEFAULT NULL',
+                     'postinumero' => 'varchar(255) DEFAULT NULL',
+                     'postitoimipaikka' => 'varchar(255) DEFAULT NULL',
                      'pvm' => 'varchar(20)  ',
                      'alku' => 'varchar(10)  ',
                      'loppu' => 'varchar(10)  ',
