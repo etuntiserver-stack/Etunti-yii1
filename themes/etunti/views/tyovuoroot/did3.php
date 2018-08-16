@@ -26,7 +26,6 @@ if(!isset($_POST['tulosta']))
 	 <div class="row showhing oikeallaPlusV"  style="display:none">
 	  <div class="col-sm-3 kokopaiva">
 	   <i class="valitseKokopaiva link text-danger fa fa-th-large icon" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></i>
-	   <i class="showhing link text-danger fa fa-arrow-down naytacollapse icon" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></i>
 	  </div>
 	  <div class="col-sm-4 col-sm-offset-1 plussamerkki">
 	   <i class="plussa link text-danger luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">Luo uusi</i>
@@ -296,7 +295,7 @@ if(!isset($_POST['tulosta']))
 	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="did '.$fullRivi.'" style="color:'.$color.'">';
 
 	   $bod .=  '
-	   <div class="row">
+	   <div class="row laatikon_rivi link">
 	    <div class="col-sm-12">
 		<div class="collapse">'.$siirto.$toistuva.$tyopari.$tarvittavien_tyontekijoiden_maara.$avaimet.$tietoja_ic.'<br></div>
 		<span class="link '.$tv_edit.'" id="tv_'.$tvVal->id.'" style="'.$uusi_tilaus.'">

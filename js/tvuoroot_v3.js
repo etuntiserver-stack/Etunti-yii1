@@ -9,14 +9,9 @@ $('td').hover(function()
      $(this).find('.showhing').hide();
 });
 
-$(document).delegate(".hidecollapse","click",function(){
-     $(this).removeClass('fa-arrow-up hidecollapse').addClass('fa-arrow-down naytacollapse');
-     $(this).closest('td').find('.collapse').removeClass('in');
-});
 
-$(document).delegate(".naytacollapse","click",function(){
-     $(this).removeClass('fa-arrow-down naytacollapse').addClass('fa-arrow-up hidecollapse');
-     $(this).closest('td').find('.collapse').addClass('in');
+$(document).delegate(".laatikon_rivi","click",function(){
+     $(this).find('.collapse').addClass('in');
 });
 
 $("#autoInsert").click(function(){
@@ -46,7 +41,8 @@ $("#autoRemove").click(function(){
 });
 
 
-$(document).delegate(".tv_edit","click",function(){
+$(document).delegate(".tv_edit","dblclick",function(){
+	document.body.onselectstart = function() { return false; }
 	var thisVal = $(this).attr("id").split("_");
 
         $.ajax({
