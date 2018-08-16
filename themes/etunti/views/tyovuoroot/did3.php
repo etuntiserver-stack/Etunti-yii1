@@ -24,11 +24,11 @@ if(!isset($_POST['tulosta']))
 	 </div>
 
 	 <div class="row showhing oikeallaPlusV"  style="display:none">
-	  <div class="col-sm-2 kokopaiva">
+	  <div class="col-sm-3 kokopaiva">
 	   <i class="valitseKokopaiva link text-danger fa fa-th-large icon" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></i>
 	   <i class="showhing link text-danger fa fa-arrow-down naytacollapse icon" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></i>
 	  </div>
-	  <div class="col-sm-1 col-sm-offset-2 plussamerkki">
+	  <div class="col-sm-4 col-sm-offset-1 plussamerkki">
 	   <i class="plussa link text-danger luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">Luo uusi</i>
 	  </div>
 	 </div>
