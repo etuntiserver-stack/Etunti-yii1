@@ -115,19 +115,6 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 		<div id="asiakasAutocompleteResult"></div>
   </div>
   <div class="col-sm-3">
-
-  </div>
-  <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'status'); ?>
-		<?php 
-        	$l = $this->tilanteet();
-		echo $form->dropDownList($model,'status', $l, 
-		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'kohde'); ?>
 		<?php
        		$criteria = new CDbCriteria();
@@ -146,6 +133,16 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
         		echo $form->dropDownList($model, 'kohde', $list,array('empty'=>'Valitse','class'=>'form-control kohde'));
         	?>
   </div>
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'status'); ?>
+		<?php 
+        	$l = $this->tilanteet();
+		echo $form->dropDownList($model,'status', $l, 
+		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
+  </div>
+</div>
+
+<div class="row">
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'osoite'); ?>
 		<?php echo $form->textField($model,'osoite',array('size'=>20,'maxlength'=>255,'class'=>'form-control ')); ?>
