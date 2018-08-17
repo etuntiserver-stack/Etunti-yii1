@@ -669,6 +669,7 @@ class TyontekijatController extends Controller
 	   $site = Yii::app()->createController('Site');
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
+
           //To Keep the session data in the SearchForm
                 if(isset($_GET['tekijan_nimi']))
                 Yii::app()->session['tekijan_nimi']=$_GET['tekijan_nimi'];
@@ -724,8 +725,22 @@ class TyontekijatController extends Controller
 			//'pagination'=>false
 		));
 
+		// <-- Check curent version from playmarket
+		if( !isset(Yii::app()->session['play_version_check']) ){
+			$fg = file_get_contents('https://play.google.com/store/apps/details?id=fi.etunti.local&hl=en');
+			preg_match("'Current Version(.*?)</span>'si", $fg, $match);
+			if($match) {
+				Asetukset::model()->updatebypk(1, array('app_version_playmarket' => $match[1]));
+			}
+			Yii::app()->session['play_version_check'] = true;
+		}
+		//     Check curent version from playmarket -->
+
+		$asetukset = Asetukset::model()->findByPk(1);
+		$current_app_versio = $asetukset->app_version_playmarket;
+
 		$dataProvider->pagination->pageSize = 50;
-		$this->render('index', array('dataProvider' => $dataProvider));
+		$this->render('index', array('dataProvider' => $dataProvider, 'current_app_versio' => $current_app_versio));
 	}
 
 	/**

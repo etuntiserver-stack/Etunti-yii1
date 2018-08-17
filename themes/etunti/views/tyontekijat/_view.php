@@ -7,6 +7,21 @@
 <?php
 /* @var $this AsiakkaatController */
 /* @var $data Asiakkaat */
+	$versio = '<span class="text-danger">ei käytössä</span>';
+	$criteria = new CDbCriteria();
+	$criteria->order = "id DESC";
+	$criteria->condition = "
+		tid='".$data->id."'
+	";
+	$mb = Mobile::model()->find($criteria);
+	if( isset($mb->id) ){
+		$expl = explode("_", $mb->asiakas_num);
+		if( isset($expl[0]) and !empty($expl[0]) and strval($expl[0]) != strval($current_app_versio) ){
+			$versio = $expl[0].'<i class="text-danger fa fa-arrow-down fa-2x"></i>'. $current_app_versio;
+		} elseif( isset($expl[0]) and !empty($expl[0]) and strval($expl[0]) == strval($current_app_versio) ){
+			$versio = $expl[0].'<i class="text-success fa fa-check fa-2x"></i>';
+		}
+	}
 ?>
 
 <tr>
@@ -45,6 +60,9 @@
 			else
 				echo $data->tyoryhma; 
 		?>
+	</td>
+	<td>
+		<?php echo $versio; ?>
 	</td>
 	<td>
 		<?php echo CHtml::link(Yii::t('main', 'Lähetä tunnukset työntekijälle'), 
