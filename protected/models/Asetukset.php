@@ -150,6 +150,7 @@ class Asetukset extends DB2ActiveRecord
 		     'tietosuoja_vinkki_sailyttaminen' => 'int(3) DEFAULT 14',
 		     'palautteet_autovastaus_hyva' => 'TEXT',
 		     'palautteet_autovastaus_huono' => 'TEXT',
+                     'app_version_playmarket' => 'varchar(255) ',
 
                      //'vinkki_tunnit' => 'varchar(10) ',
                      //'vinkki_prosentti' => 'varchar(10) ',
@@ -187,7 +188,7 @@ class Asetukset extends DB2ActiveRecord
 
 			array('paivan_uutinen, logon_polkku, netvisor_host', 'length', 'max'=>500),
 			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id, trust_ws_cid, trust_ws_salasana, netvisor_acceptancestatus, edico_tehdyt_tyot', 'length', 'max'=>100),
-			array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier, merkkipaivailmoitukset_sahkoposti, netvisor_mita_lahetetaan, gtm, apuaika_palkkalaji', 'length', 'max'=>255),
+			array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier, merkkipaivailmoitukset_sahkoposti, netvisor_mita_lahetetaan, gtm, apuaika_palkkalaji, app_version_playmarket', 'length', 'max'=>255),
 			array('viikonloppulisa_la, viikonloppulisa_su', 'length', 'max'=>10),
 			array('aikavali_halytys', 'length', 'max'=>3),
 			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat, ilmoitus_uudesta_kuvasta_saajat, peruutusehdot, palautteet_autovastaus_hyva, palautteet_autovastaus_huono', 'safe'),

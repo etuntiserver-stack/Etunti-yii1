@@ -177,6 +177,7 @@
   <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
   <th><?php echo Yii::t('main', 'Osoite'); ?></th>
   <th><?php echo Yii::t('main', 'Työryhmä'); ?></th>
+  <th><?php echo Yii::t('main', 'Sovelluksen versio'); ?></th>
   <th></th>
   </tr>
   </thead>
@@ -184,7 +185,7 @@
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
   	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
-
+	'viewData' => array( 'current_app_versio' => $current_app_versio ), 
 
 	'pager' => array(
            'firstPageLabel'=>'<<',
