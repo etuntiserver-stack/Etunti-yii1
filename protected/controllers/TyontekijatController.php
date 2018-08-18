@@ -730,7 +730,7 @@ class TyontekijatController extends Controller
 			$fg = file_get_contents('https://play.google.com/store/apps/details?id=fi.etunti.local&hl=en');
 			preg_match("'Current Version(.*?)</span>'si", $fg, $match);
 			if($match) {
-				Asetukset::model()->updatebypk(1, array('app_version_playmarket' => $match[1]));
+				Asetukset::model()->updatebypk(1, array('app_version_playmarket' => strip_tags($match[1])));
 			}
 			Yii::app()->session['play_version_check'] = true;
 		}
