@@ -48,7 +48,7 @@ $this->breadcrumbs=array(
 
    <?php
 		$criteria = new CDbCriteria;
-		$criteria->group = "tid";
+
 
 		// <-- Tyoryhmat
 		$tt = Yii::app()->createController('Tyontekijat');
@@ -59,11 +59,11 @@ $this->breadcrumbs=array(
 		}
 		//     Tyoryhmat -->
 
-    $list = Mobile::model()->findAll($criteria);
+    $list = Tyontekijat::model()->findAll($criteria);
 
     echo '<select name="Tekija[]" class="mult" id="tyontekijat" class="mult" multiple title="Työntekijät">';
     foreach($list as $data){
-     $t = Tyontekijat::model()->findbypk($data->tid);
+     $t = Tyontekijat::model()->findbypk($data->id);
      if(isset($t->id))
      {
        if(isset(Yii::app()->session['Tekija']) and in_array($t->id,Yii::app()->session['Tekija']))
