@@ -521,6 +521,7 @@ class TyovuorootController extends Controller
 							// <-- LOG
 							$log=new Log;
 							$log->log_category 	= 1; // 1-email
+							$log->kuka 		= Yii::app()->user->nimi;
 							$log->email_to 		= $tt->tekijan_email;
 							$log->email_subject	= $subject;
 							$log->email_message	= json_encode($message);
