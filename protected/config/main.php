@@ -15,8 +15,13 @@ session_start();
 		or strpos($_SERVER['REQUEST_URI'], "%20AND%20") !== false
 		or strpos($_SERVER['REQUEST_URI'], "%20and%20") !== false
 		or strpos($_SERVER['REQUEST_URI'], "%20union%20all") !== false
-		or strpos($_SERVER['REQUEST_URI'], "%20when%20") !== false
+		or strpos($_SERVER['REQUEST_URI'], "UNION%20") !== false
+		or strpos($_SERVER['REQUEST_URI'], "when%20") !== false
+		or strpos($_SERVER['REQUEST_URI'], "WHEN%20") !== false
 		or strpos($_SERVER['REQUEST_URI'], "select%20") !== false
+		or strpos($_SERVER['REQUEST_URI'], "SELECT%20") !== false
+		or strpos($_SERVER['REQUEST_URI'], "BOOLEAN%20") !== false
+		or strpos($_SERVER['REQUEST_URI'], "CASE%20") !== false
 	)
   )
   {
