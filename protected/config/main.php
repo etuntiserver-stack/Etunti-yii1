@@ -14,11 +14,14 @@ session_start();
 		or strpos($_SERVER['REQUEST_URI'], "where") !== false
 		or strpos($_SERVER['REQUEST_URI'], "%20AND%20") !== false
 		or strpos($_SERVER['REQUEST_URI'], "%20and%20") !== false
+		or strpos($_SERVER['REQUEST_URI'], "%20union%20all") !== false
+		or strpos($_SERVER['REQUEST_URI'], "%20when%20") !== false
+		or strpos($_SERVER['REQUEST_URI'], "select%20") !== false
 	)
   )
   {
 	mail('laptopsr@gmail.com', 'Blocked IP', 'IP '.$_SERVER['REMOTE_ADDR']);
-	die("Hello world");
+	die("IP: ".$_SERVER['REMOTE_ADDR']);
   }
 
   if(   isset($_SERVER['REMOTE_ADDR']) and $_SERVER['REMOTE_ADDR'] == '5.8.8.200'){
