@@ -1175,13 +1175,16 @@ function laatikonPaivays(thisDataReturn){
 		var splDID = [];
 		var did = '';
 		var ilmoitus = '';
+		var didlink = 'did';
+		if(parent.location.href.match(/tv3/)){ didlink = 'did3'; }
+
 		$(thisDataReturn).each(function( iarr, arr ) {
 		 $(arr).each(function( i, d ) {
 
 		    console.log(d);
 
 	  	    $.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/' + didlink,
 			type:'GET',
 			data: { "pvm" : d['pvm'], "tid" : d['tid'], "kohde" : d['kohde'], "asiakas" : d['asiakas'], "from" : "ajax" },
 			  success:function(data){

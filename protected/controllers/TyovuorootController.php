@@ -1425,6 +1425,22 @@ class TyovuorootController extends Controller
 		));
 	}
 
+	public function actionDid3($pvm,$tid,$kohde,$from)
+	{
+		if(isset($tietoja)) $tietoja = 1; else $tietoja = 0;
+		if(isset($_GET['asiakas'])) $asiakas = $_GET['asiakas']; else $asiakas = '';
+		$asetukset = Asetukset::model()->findByPk(1);
+		$this->renderPartial('did3',array(
+			'pvm'=>$pvm,
+			'tid'=>$tid,
+			'kohde'=>$kohde,
+			'asiakas'=>$asiakas,
+			'from'=>$from,
+			'tietoja'=>$tietoja,
+			'asetukset'=>$asetukset
+		));
+	}
+
 	public function actionDidnew()
 	{
 	     if(is_array(json_decode($_POST['kohteet_siivous'], true)))

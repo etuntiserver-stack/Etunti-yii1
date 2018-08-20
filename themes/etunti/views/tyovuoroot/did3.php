@@ -14,37 +14,21 @@
 
 if(!isset($_POST['tulosta']))
 {
-
 	if( $from != 'mobiili' )
 	{
 	$bod .=  '
 	<div class="ylapalkki">
 	 <div class="pull-right">
-	    <span class="text-center text-danger" id="sum_tunnit_'.$did.'_'.$tid.'"></span>
+	   <i class="form-group forCut icon" id="forCut_'.$did.'_'.$tid.'" style="display:none"></i>
+	   <i class="form-group forCopy icon" id="forCopy_'.$did.'_'.$tid.'" style="display:none"></i>
+	   <span class="form-group text-danger" id="sum_tunnit_'.$did.'_'.$tid.'"></span>
 	 </div>
-
-	 <div class="row showhing oikeallaPlusV"  style="display:none">
-	  <div class="col-sm-3 kokopaiva">
+	 <div class="showhing oikeallaPlusV form-inline" style="display:none">
 	   <i class="valitseKokopaiva link text-danger fa fa-th-large icon" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></i>
-	  </div>
-	  <div class="col-sm-4 col-sm-offset-1 plussamerkki">
 	   <i class="plussa link text-danger luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">Luo uusi</i>
-	  </div>
 	 </div>
 	</div>';
 	}
-
-
-	$bod .=  '
-	   <div class="tp">
-	     <div class="form-inline">
-	      <div class="form-group">
-	   	<i class="forCut icon" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
-	      </div><div class="form-group">
-	   	<i class="forCopy icon" id="forCopy_'.$did.'_'.$tid.'"></i> 
-	      </div>
-	     </div>
-	   </div>';
 }
 
        	$criteria = new CDbCriteria();
@@ -292,21 +276,21 @@ if(!isset($_POST['tulosta']))
 	   $siirto = '<i class="link text-danger fa fa-exchange '.$muistin.' icon" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></i>';
 
 	   if(!empty($osoite)){ $osoite = $asiakasNakyvissa.$paikkakuntaNakyvissa.$osoite; }
-	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="did '.$fullRivi.'" style="color:'.$color.'">';
 
-	   $bod .=  '
+	   $bod .= '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="did '.$fullRivi.'" style="color:'.$color.'">
 	   <div class="row laatikon_rivi link">
 	    <div class="col-sm-12">
 		<div class="collapse">'.$siirto.$toistuva.$tyopari.$tarvittavien_tyontekijoiden_maara.$avaimet.$tietoja_ic.'<br></div>
-		<span class="link '.$tv_edit.'" id="tv_'.$tvVal->id.'" style="'.$uusi_tilaus.'">
-		<span class="collapse">'.$al.'<br></span>'.$osoite.'<span class="pull-right">'.$status.'</span></span>
+		<span class="osoiterivi" id="tv_'.$tvVal->id.'" style="'.$uusi_tilaus.'">
+		   <span class="collapse">'.$al.'<br></span>'.$osoite.' <span class="pull-right">'.$status.'</span>
+		</span>
 	    </div>
 	   </div>
 	   ';
 
-	   if(!empty($tvVal->tietoja) and isset($tietoja) and $tietoja == 1)
+	   if(!empty($tvVal->tietoja) and isset($tietoja) and $tietoja == 1){
 	   $bod .=  '<p><span style="color: blue; border: 1px #333 solid">'.str_replace("\n","<br>",$tvVal->tietoja).'</span></p>';
-
+	   }
 	   $bod .= $peruutettu;
 	   $bod .=  '</div>';
 	}

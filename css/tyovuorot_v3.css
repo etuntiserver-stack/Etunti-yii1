@@ -16,12 +16,6 @@ td .latikkoAsetukset{
 	font-size: 150%;
 	margin-left:5px;
 }
-td:hover .mplus, td:hover .mcut{
-	display : block;
-}
-td .tp{
-	margin-bottom: 5px;
-}
 .fullRivi{
 	height: 100%;
 	margin-bottom: 2px;
@@ -40,7 +34,8 @@ td .tp{
 	height: 100%;
 }
 .ylapalkki{
-	height: 15px;
+	height: 17px;
+	margin-bottom: 5px;
 }
 .icon{
 	font-size: 17px;

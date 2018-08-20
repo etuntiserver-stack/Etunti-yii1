@@ -4,15 +4,21 @@ $(document).ready(function(){
 $('td').hover(function()
 {
      $(this).find('.showhing').show();
+     $(this).find('.mplus').show();
+     $(this).find('.mcut').show();
 }, function()
 { 
      $(this).find('.showhing').hide();
+     $(this).find('.mplus').hide();
+     $(this).find('.mcut').hide();
 });
 
 
 $(document).delegate(".laatikon_rivi","click",function(){
+     $(this).find('.osoiterivi').addClass('tv_edit');
      $(this).find('.collapse').addClass('in');
 });
+
 
 $("#autoInsert").click(function(){
 
@@ -41,7 +47,7 @@ $("#autoRemove").click(function(){
 });
 
 
-$(document).delegate(".tv_edit","dblclick",function(){
+$(document).delegate(".tv_edit","click",function(){
 	document.body.onselectstart = function() { return false; }
 	var thisVal = $(this).attr("id").split("_");
 
