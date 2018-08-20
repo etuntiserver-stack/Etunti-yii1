@@ -444,8 +444,12 @@ $xml = '
 				//     LOG -->
 			}
 
-			Mobile::model()->deletebypk($_POST['id']);
-			Toteutuneet::model()->deleteAll(" kid='".$_POST['id']."' ");
+			Mobile::model()->updateByPk($_POST['id'], array('deleted' => 1, 'hyvaksytty' => ''));
+		       	$criteria = new CDbCriteria();
+			$criteria->condition = " 
+				kid='".$_POST['id']."'
+			";
+			Toteutuneet::model()->updateAll(array('deleted' => 1,'hyvaksytty' => ''), $criteria);
 			echo json_encode('poistettu ID '.$_POST['id']);
 		}
 
@@ -570,6 +574,7 @@ $xml = '
 			tid = '".$tid."' 
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
 			AND aloitan!='' AND loppui!=''
+			AND deleted=0
 		 ";
 		if(Yii::app()->session['Lounastauko'])
 		$criteria->addCondition (" status != '10' ");
@@ -599,6 +604,7 @@ $xml = '
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) 
 			AND aloitan!='' AND loppui!=''
+			AND deleted=0
 		";
 		if(Yii::app()->session['Lounastauko'])
 		$criteria->addCondition (" status != '10' ");
