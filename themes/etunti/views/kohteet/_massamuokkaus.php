@@ -273,7 +273,7 @@ $(document).ready(function(){
 <br>
 
 	<div class="section">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Muoka kaikki' : 'Tallenna',array('class'=>'btn btn-primary myBgColors luoTallennaKohde')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Muokkaa kaikkia' : 'Muokkaa kaikkia',array('class'=>'btn btn-primary myBgColors luoTallennaKohde')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
