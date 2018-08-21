@@ -2373,6 +2373,13 @@ class TyovuorootController extends Controller
 					$m->attributes=$_POST['Tyovuoroot'];
 					$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 					$m->tid=$tid;
+
+					if( is_array($m->lisa_tuotteet) and count($m->lisa_tuotteet) > 0 ){
+						$m->lisa_tuotteet = json_encode($m->lisa_tuotteet);
+					} else {
+						$m->lisa_tuotteet = '';
+					}
+
 					if($m->save())
 					{
 
