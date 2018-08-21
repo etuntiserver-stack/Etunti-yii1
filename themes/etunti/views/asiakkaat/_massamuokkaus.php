@@ -280,7 +280,7 @@ $(document).ready(function(){
 <br>
 
 	<div class="section">
-		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('main', 'Muoka kaikki') : Yii::t('main', 'Muoka kaikki'),array('class'=>'btn btn-primary myBgColors luoTallennaAsiakas')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('main', 'Muokkaa kaikkia') : Yii::t('main', 'Muokkaa kaikkia'),array('class'=>'btn btn-primary myBgColors luoTallennaAsiakas')); ?>
 	</div>
 
 

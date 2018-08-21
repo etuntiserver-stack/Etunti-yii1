@@ -337,7 +337,7 @@ class AsiakkaatController extends Controller
 		if(isset($_POST['Asiakkaat']))
 		{
 		   $post = array();
-		   foreach($_POST['Kohteet'] as $k => $v){
+		   foreach($_POST['Asiakkaat'] as $k => $v){
 			if(!empty($v)){ $post[$k] = $v; }
 		   }
 		   foreach($as_all as $model){
