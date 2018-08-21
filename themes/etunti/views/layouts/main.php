@@ -127,7 +127,7 @@ if(isset(Yii::app()->user->nimi))
 {
   /* online */
   $criteria = new CDbCriteria();
-  $criteria->condition = " time < '".(time()-600)."' ";
+  $criteria->condition = " time < '".(time()-900)."' ";
   UsersOnline::model()->deleteAll($criteria);
 
   $criteria = new CDbCriteria();
