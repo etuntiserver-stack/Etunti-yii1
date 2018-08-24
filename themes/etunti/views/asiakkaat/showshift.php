@@ -116,6 +116,7 @@
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
+  <th><?php echo Yii::t('main', 'Muoka'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Aika'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
@@ -147,6 +148,19 @@
 	$kesto = strtotime($data->loppu)-strtotime($data->alku);
 
 	echo '<tr>';
+	echo '<td>
+	'.CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
+				array('/tyovuoroot/index?year='.date("Y", strtotime($data->pvm)).'&week='.date("W", strtotime($data->pvm)).'&tv_id='.$data->id), 
+				array(
+					'class'=>'btn btn-primary myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Muokkaa'),
+					'target' => '_blank'
+				)
+			).
+	'</td>';
 	echo '<td class="col1">'.$data->pvm.'</td>';
 	echo '<td class="col2">'.$data->alku.'-'.$data->loppu.'</td>';
 	echo '<td class="col1">'.$this->sprint($kesto).'</td>';

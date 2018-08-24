@@ -101,6 +101,30 @@ $("#autoRemove").click(function(){
 
 });
 
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+  }
+
+if(getUrlVars()["tv_id"]){
+	var thisVal = getUrlVars()["tv_id"];
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update?id='+thisVal,
+           type: "GET",
+           //data: {"tarjousPainike" : "true"},
+           success: function(html){
+		$('#showres').modal().html(html);
+           },
+	   error:function(data){
+		alert('Kohdetta ei löydy! Päivitä sivu!');
+	   }
+        });
+}
 
 $(document).delegate(".tv_edit","click",function(){
 	var thisVal = $(this).attr("id").split("_");

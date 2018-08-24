@@ -2794,7 +2794,7 @@ class TyovuorootController extends Controller
 			if(isset($_GET['tid']) and !empty($_GET['tid']))
 				Yii::app()->session['tyontekijat'] = array($_GET['tid']);
 
-
+			if(isset($_GET['tv_id'])){ $this->redirect(array('index', 'tv_id' => $_GET['tv_id'])); } 
 			$this->redirect(array('index'));
 		}		
 		//  GET haku -->
