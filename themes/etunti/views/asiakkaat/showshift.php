@@ -116,7 +116,7 @@
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
-  <th><?php echo Yii::t('main', 'Muoka'); ?></th>
+  <th><?php echo Yii::t('main', 'Muokkaa'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Aika'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
