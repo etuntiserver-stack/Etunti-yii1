@@ -1071,6 +1071,10 @@ $('.tvchange').change(function(){
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/index">
                   <span class="glyphicon glyphicon-barcode"></span> <?php echo Yii::t('main', 'Laskut'); ?></a>
               </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/lista?laskutettu=0">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Laskuttamattomat työvuorot'); ?></a>
+              </li>
 	      <?php if( 
 			Yii::app()->user->domain == 'demo' 
 			|| Yii::app()->user->domain == 'sivex' 

@@ -147,6 +147,17 @@
                             </label>
                           </label>
                         </div>
+
+                        <div class="section">
+                          <label class="field select">
+				<select class="" id="laskutettu" name="laskutettu">
+				<option value="0" <?=((isset($_GET['laskutettu']) and $_GET['laskutettu'] == 0)? 'selected':'') ?>>Laskuttamattomat</option>
+				<option value="1" <?=((isset($_GET['laskutettu']) and $_GET['laskutettu'] == 1)? 'selected':'') ?>>Laskutettu</option>
+				</select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
                       </div>
 
                       <div class="col-md-2">

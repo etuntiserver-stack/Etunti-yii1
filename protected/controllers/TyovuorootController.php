@@ -3779,9 +3779,9 @@ class TyovuorootController extends Controller
 
 		$from = date("d.m.Y", strtotime('first day of this month'));
 		$to = date("d.m.Y");
-		if(isset($_GET['from']))
+		if(isset($_GET['from']) and !empty($_GET['from']))
 		$from = date("d.m.Y", strtotime($_GET['from']));
-		if(isset($_GET['to']))
+		if(isset($_GET['to']) and !empty($_GET['to']))
 		$to = date("d.m.Y", strtotime($_GET['to']));
 
 
@@ -3797,6 +3797,10 @@ class TyovuorootController extends Controller
 		{
 			$impl = implode(",", $_GET['tekijaPaaSivulla']);
 	        	$criteria->addCondition (" tid IN ($impl) ");
+		}
+		if(isset($_GET['laskutettu']))
+		{
+	        	$criteria->addCondition (" laskutettu='".$_GET['laskutettu']."' ");
 		}
 		if(isset($_GET['status']))
 		{
