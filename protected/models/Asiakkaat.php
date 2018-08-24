@@ -19,6 +19,7 @@
 class Asiakkaat extends DB2ActiveRecord
 {
 
+	public $filter_postitoimipaikka, $filter_tyoryhma, $filter_asiakasryhma;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -192,6 +193,9 @@ class Asiakkaat extends DB2ActiveRecord
 			'hinta'=> Yii::t('main', 'Hinta (ALV0)'),
 			'hinta_sis_alv' => Yii::t('main', 'Hinta (sis. ALV)'),
 			'tyoryhma'=> Yii::t('main', ' Työryhmä'),
+			'filter_postitoimipaikka' => Yii::t('main', ' Filter postitoimipaikka'),
+			'filter_tyoryhma' => Yii::t('main', ' Filter työryhmä'),
+			'filter_asiakasryhma' => Yii::t('main', ' Filter asiakasryhmä'),
 		);
 	}
 
@@ -202,6 +206,15 @@ class Asiakkaat extends DB2ActiveRecord
 		}
 		if( !empty($this->yhteyshenkilo) and !empty($this->tyyppi) and $this->tyyppi == 'henkilo' ){
 			$return = $this->yhteyshenkilo;
+		}
+                return $return;
+        }
+
+        public function getValikkotyoryhma(){
+		$return = $this->tyoryhma;
+		if( !empty($this->tyoryhma)){
+			$vlk = Valikkoot::model()->findByPk($this->tyoryhma);
+			if( isset($vlk->id)){ $return = $vlk->value; }
 		}
                 return $return;
         }

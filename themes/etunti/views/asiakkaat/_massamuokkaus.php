@@ -25,14 +25,66 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 }
 </style>
 
-
-
-
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'asiakkaat-form',
 	'enableAjaxValidation'=>false, // ala laita true, saat monta asiakaita update aikana netvisorissa
 )); ?>
 
+<h2>Suodattimet</h2>
+
+<div class="row">
+  <div class="col-sm-3">
+	<div class="section fill mb5">
+		<?php
+		$criteria=new CDbCriteria;
+		$criteria->group = "kaupunki";
+		$criteria->condition = " 
+			kaupunki!=''
+		";
+		?>
+		<?php echo $form->labelEx($model,'filter_postitoimipaikka'); ?>
+		<?php echo $form->dropDownList($model, 'filter_postitoimipaikka', CHtml::listData(Asiakkaat::model()->findAll($criteria), 'kaupunki', 'kaupunki'), 
+		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		?>
+		<?php echo $form->error($model,'filter_postitoimipaikka'); ?>
+	</div>
+  </div>
+  <div class="col-sm-3">
+	<div class="section fill mb5">
+		<?php
+		$criteria=new CDbCriteria;
+		$criteria->group = "tyoryhma";
+		$criteria->condition = " 
+			tyoryhma!='' and tyoryhma IS NOT NULL
+		";
+		?>
+		<?php echo $form->labelEx($model,'filter_tyoryhma'); ?>
+		<?php echo $form->dropDownList($model, 'filter_tyoryhma', CHtml::listData(Asiakkaat::model()->findAll($criteria), 'tyoryhma', 'valikkotyoryhma'), 
+		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		?>
+		<?php echo $form->error($model,'filter_tyoryhma'); ?>
+	</div>
+  </div>
+  <div class="col-sm-3">
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'filter_asiakasryhma'); ?>
+		<?php
+		$criteria=new CDbCriteria;
+		$criteria->order = "value";
+		$criteria->condition = " 
+			select_type='asiakas_ryhma_real'
+		";
+		?>
+		<?php echo $form->labelEx($model,'filter_asiakasryhma'); ?>
+		<?php echo $form->dropDownList($model, 'filter_asiakasryhma', CHtml::listData(Valikkoot::model()->findAll($criteria), 'id', 'value'), 
+		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		?>
+		<?php echo $form->error($model,'filter_asiakasryhma'); ?>
+	</div>
+  </div>
+</div>
+
+<hr>
 
 <div class="row">
   <div class="col-sm-3">
@@ -71,15 +123,9 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tyoryhma'); ?>
 		<?php
-		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-		$site = Yii::app()->createController('Site');
 	       	$criteria = new CDbCriteria();
 		$criteria->order = " value ";
 		$criteria->condition = "select_type='tyoryhma'";
-		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
-		$criteria->addCondition ("value2 LIKE '%\"".Yii::app()->user->adminID."\"%'");
-		}
-
 		$listData = Valikkoot::model()->findAll($criteria);
 		?>
 		<?php echo $form->dropDownList($model, 'tyoryhma', CHtml::listData($listData, 'id', 'value'), 
@@ -95,16 +141,27 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	   <div class="input-group">
 		<?php
 		$list = array();
-      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma_real' ",array('order' => "select_type"));
+		$criteria=new CDbCriteria;
+		$criteria->order = "value";
+		$criteria->condition = " 
+			select_type='asiakas_ryhma_real'
+		";
+      		$l = Valikkoot::model()->findAll($criteria);
 		if(count($l) == 0)
       		{
 			$new_val = new Valikkoot;
 			$new_val->select_type = "asiakas_ryhma_real";
 			$new_val->value = "Testi ryhmä";
-			if($new_val->save())
-	      			$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma_real' ",array('order' => "select_type"));
-			else
+			if($new_val->save()){
+				$criteria=new CDbCriteria;
+				$criteria->order = "value";
+				$criteria->condition = " 
+					select_type='asiakas_ryhma_real'
+				";
+	      			$l = Valikkoot::model()->findAll($criteria);
+			} else {
 				var_dump($new_val->getErrors());
+			}
 		}
 
 			$arr = json_decode($model->ryhma);

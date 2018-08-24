@@ -331,12 +331,24 @@ class AsiakkaatController extends Controller
 		$criteria->condition = " 
 			aktiivinen=1
 		";
+		if(isset($_POST['Asiakkaat']['filter_postitoimipaikka']) and !empty($_POST['Asiakkaat']['filter_postitoimipaikka'])){
+			$criteria->addCondition(" kaupunki='".$_POST['Asiakkaat']['filter_postitoimipaikka']."' "); 
+		}
+		if(isset($_POST['Asiakkaat']['filter_tyoryhma']) and !empty($_POST['Asiakkaat']['filter_tyoryhma'])){
+			$criteria->addCondition(" tyoryhma='".$_POST['Asiakkaat']['filter_tyoryhma']."' "); 
+		}
+		if(isset($_POST['Asiakkaat']['filter_asiakasryhma']) and !empty($_POST['Asiakkaat']['filter_asiakasryhma'])){
+			$criteria->addCondition(" ryhma LIKE '%\"".$_POST['Asiakkaat']['filter_asiakasryhma']."\"%' "); 
+		}
 		$as_all = Asiakkaat::model()->findAll($criteria);
 		$asetukset = Asetukset::model()->findbypk(1);
 
 		if(isset($_POST['Asiakkaat']))
 		{
 		   $post = array();
+		   //echo count($as_all);
+		   //exit;
+
 		   foreach($_POST['Asiakkaat'] as $k => $v){
 			if(!empty($v)){ $post[$k] = $v; }
 		   }
