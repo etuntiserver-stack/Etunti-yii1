@@ -669,7 +669,8 @@ public function actionImei($dom)
 		    $sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
 		    $sel .= '<option>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
 		    foreach($tvuoro as $val){
-			if((int)$val->kohde > 0 and $k = Kohteet::model()->findbypk((int)$val->kohde) and isset($k->osoite))
+			$k = Kohteet::model()->findbypk($val->kohde);
+			if(isset($k->osoite))
 			{
 				$osoite = '';
 				if(!empty($k->osoite))
@@ -692,7 +693,7 @@ public function actionImei($dom)
 					$osoite .= '. '.$nm;
 				}
 
-		      		$sel .= '<option value="'.$k->id.'" tv_id="'.$val->id.'">'.$osoite.'</option>';
+		      		$sel .= '<option value="'.$k->id.'">'.$osoite.'</option>';
 			}
 		    }
 		    $sel .= '</select>';
