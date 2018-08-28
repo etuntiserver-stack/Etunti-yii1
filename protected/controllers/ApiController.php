@@ -693,7 +693,7 @@ public function actionImei($dom)
 					$osoite .= '. '.$nm;
 				}
 
-		      		$sel .= '<option value="'.$k->id.'" for="'.$val->id.'">'.$osoite.'</option>';
+		      		$sel .= '<option value="'.$k->id.'" tv_id="test">'.$osoite.'</option>';
 			}
 		    }
 		    $sel .= '</select>';
