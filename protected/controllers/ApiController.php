@@ -667,10 +667,8 @@ public function actionImei($dom)
 
 		    $sel = '';
 		    $sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
-		    $sel .= '<option value="">'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
-		    foreach($tvuoro as $val){
-		      		$sel .= '<option value="'.$val->kohde.'" tv_id="'.$val->id.'">'.$val->osoite.'</option>';
-		    }
+		    $sel .= '<option>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
+
 		    $sel .= '</select>';
 
 		    $this->_sendResponse(200, $sel);
