@@ -680,18 +680,6 @@ public function actionImei($dom)
 				if(!empty($k->kaupunki))
 				$osoite .= ', '.$k->kaupunki;
 
-				if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $k->asiakas_id != 0)
-				{
-					$asiakas = Asiakkaat::model()->findbypk($k->asiakas_id);
-					$nm = '';
-					if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
-			      			$nm = $asiakas->yrityksen_nimi;
-					} elseif(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and !empty($asiakas->yhteyshenkilo)){
-			      			$nm = $asiakas->yhteyshenkilo;
-					}
-					if(!empty($nm))
-					$osoite .= '. '.$nm;
-				}
 
 		      		$sel .= '<option value="'.$k->id.'" tv_id="'.$val->id.'">'.$osoite.'</option>';
 			}
