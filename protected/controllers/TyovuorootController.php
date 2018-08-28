@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -3843,6 +3843,81 @@ class TyovuorootController extends Controller
 
 	}
 
+	public function actionSiirto()
+	{
+
+		if(isset($_POST['asiakkaatPerSivu']))
+		{
+			Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);
+			echo json_encode($_POST['asiakkaatPerSivu']);
+			exit;
+		}
+
+		$from = date("d.m.Y", strtotime('first day of this month'));
+		$to = date("d.m.Y");
+		if(isset($_GET['from']) and !empty($_GET['from']))
+		$from = date("d.m.Y", strtotime($_GET['from']));
+		if(isset($_GET['to']) and !empty($_GET['to']))
+		$to = date("d.m.Y", strtotime($_GET['to']));
+
+
+		$criteria = new CDBCriteria;
+        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+        	$criteria->condition = " 				
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND peruutettu=0 
+		";
+
+		if(isset($_GET['tekijaPaaSivulla']))
+		{
+			$impl = implode(",", $_GET['tekijaPaaSivulla']);
+	        	$criteria->addCondition (" tid IN ($impl) ");
+		}
+		if(isset($_GET['laskutettu']))
+		{
+	        	$criteria->addCondition (" laskutettu='".$_GET['laskutettu']."' ");
+		}
+		if(isset($_GET['status']))
+		{
+			$impl_status = implode(",", $_GET['status']);
+	        	$criteria->addCondition (" status IN ($impl_status) ");
+		}
+		if(isset($_GET['yrityksen_nimi']))
+		{
+	        	$criteria->addCondition (" kohde IN (SELECT id FROM sivex_kohdet WHERE 
+				asiakas_id IN (
+					SELECT id FROM asiakkaat WHERE
+					yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'
+				)
+			) ");
+		}
+		if(isset($_GET['osoite']))
+		{
+	        	$criteria->addCondition (" kohde IN (SELECT id FROM sivex_kohdet WHERE osoite LIKE '%".$_GET['osoite']."%') ");
+		}
+
+
+		$dataProvider=new CActiveDataProvider('Tyovuoroot', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$perSivu = 50;
+		if(isset(Yii::app()->user->asiakkaatPerSivu))
+		$perSivu = Yii::app()->user->asiakkaatPerSivu;
+
+		$dataProvider->pagination->pageSize = $perSivu;
+
+
+		$this->render('siirto', array(
+			'dataProvider' => $dataProvider,
+			'perSivu' => $perSivu,
+			'from' => $from,
+			'to' => $to,
+		));
+
+	}
 
 	protected function getKohde($id)
 	{
