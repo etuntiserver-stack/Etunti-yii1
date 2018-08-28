@@ -693,7 +693,13 @@ public function actionImei($dom)
 					$osoite .= '. '.$nm;
 				}
 
+				if( isset($_POST['tv_option_byid']) ){
 		      		$sel .= '<option value="'.$k->id.'" id="'.$val->id.'">'.$osoite.'</option>';
+				} else {
+		      		$sel .= '<option value="'.$k->id.'" tv_id="'.$val->id.'">'.$osoite.'</option>';
+				}
+
+
 			}
 		    }
 		    $sel .= '</select>';
