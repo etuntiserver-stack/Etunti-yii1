@@ -80,7 +80,7 @@
                       <div class="col-md-2">
                         <div class="section">
 			<br>
-			<?php if( isset($_GET['mob_hae'])) : ?>
+			<?php if( isset($_GET['selecter'])) : ?>
         	        <?php echo CHtml::link(Yii::t('main', 'Keskeytä'), array('siirto'),array('class'=>'btn btn-primary btn-lg siirra btn-block myBgColors')); ?>
 			<?php else : ?>
         	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors"><?php echo Yii::t('main', 'Esikatselu'); ?></button>
