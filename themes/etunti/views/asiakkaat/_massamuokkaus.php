@@ -36,6 +36,18 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
   <div class="col-sm-3">
 	<div class="section fill mb5">
 		<?php
+		$arr = array('henkilo' => 'Yksityishenkilö', 'yritys' => 'Yritys', 'kaikki' => 'Kaikkki');
+		?>
+		<?php echo $form->labelEx($model,'filter_tyyppi'); ?>
+		<?php echo $form->dropDownList($model, 'filter_tyyppi', $arr, 
+		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		?>
+		<?php echo $form->error($model,'filter_tyyppi'); ?>
+	</div>
+  </div>
+  <div class="col-sm-3">
+	<div class="section fill mb5">
+		<?php
 		$criteria=new CDbCriteria;
 		$criteria->group = "kaupunki";
 		$criteria->condition = " 

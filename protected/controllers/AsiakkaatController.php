@@ -328,9 +328,15 @@ class AsiakkaatController extends Controller
 	{
 
 		$criteria=new CDbCriteria;
-		$criteria->condition = " 
-			aktiivinen=1
-		";
+		if(isset($_POST['Asiakkaat']['filter_tyyppi']) and !empty($_POST['Asiakkaat']['filter_tyyppi']) and $_POST['Asiakkaat']['filter_tyyppi'] == 'henkilo'){
+			$criteria->addCondition(" tyyppi='".$_POST['Asiakkaat']['filter_tyyppi']."' "); 
+		}
+		if(isset($_POST['Asiakkaat']['filter_tyyppi']) and !empty($_POST['Asiakkaat']['filter_tyyppi']) and $_POST['Asiakkaat']['filter_tyyppi'] == 'yritys'){
+			$criteria->addCondition(" tyyppi='".$_POST['Asiakkaat']['filter_tyyppi']."' "); 
+		}
+		if(isset($_POST['Asiakkaat']['filter_tyyppi']) and !empty($_POST['Asiakkaat']['filter_tyyppi']) and $_POST['Asiakkaat']['filter_tyyppi'] == 'kaikki'){
+			$criteria->addCondition(" tyyppi='henkilo' OR tyyppi='yritys' "); 
+		}
 		if(isset($_POST['Asiakkaat']['filter_postitoimipaikka']) and !empty($_POST['Asiakkaat']['filter_postitoimipaikka'])){
 			$criteria->addCondition(" kaupunki='".$_POST['Asiakkaat']['filter_postitoimipaikka']."' "); 
 		}
