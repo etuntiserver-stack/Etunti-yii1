@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -3843,6 +3843,45 @@ class TyovuorootController extends Controller
 
 	}
 
+	public function actionSiirto($kenelta=null, $kenelle=null, $selecter=null)
+	{
+
+		$from = date("d.m.Y", strtotime('first day of this month'));
+		$to = date("d.m.Y");
+		if(isset($_GET['from']) and !empty($_GET['from']))
+		$from = date("d.m.Y", strtotime($_GET['from']));
+		if(isset($_GET['to']) and !empty($_GET['to']))
+		$to = date("d.m.Y", strtotime($_GET['to']));
+
+		$criteria = new CDBCriteria;
+        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+        	$criteria->condition = " 				
+			tid='".$kenelta."'
+			AND peruutettu=0 
+		";
+		if( $selecter == 'tulevaisuudet' ){
+			$criteria->addCondition(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE() ");
+		}
+		$data_kenelta = Tyovuoroot::model()->findAll($criteria);
+
+		$criteria = new CDBCriteria;
+        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+        	$criteria->condition = " 				
+			tid='".$kenelle."'
+		";
+		if( $selecter == 'tulevaisuudet' ){
+			$criteria->addCondition(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE() ");
+		}
+		$data_kenelle = Tyovuoroot::model()->findAll($criteria);
+
+		$this->render('siirto', array(
+			'from' => $from,
+			'to' => $to,
+			'data_kenelta' => $data_kenelta,
+			'data_kenelle' => $data_kenelle,
+		));
+
+	}
 
 	protected function getKohde($id)
 	{
