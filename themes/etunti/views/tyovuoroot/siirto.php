@@ -8,24 +8,7 @@
         <div class="tray-center">
 
 
-        <h2 class="myBgColors p10"> 
-
-	 <span class="pull-right montakoRiviaSivulle" style="margin-top:-7px">
-	   <?php
-	   ($perSivu == 10) ? $defcl10 = 'btn-success' : $defcl10 = 'btn-default';
-	   ($perSivu == 50) ? $defcl50 = 'btn-success' : $defcl50 = 'btn-default';
-	   ($perSivu == 100) ? $defcl00 = 'btn-success' : $defcl00 = 'btn-default';
-
-	   echo '<button class="btn '.$defcl10.' kpl" kpl="10" data-toggle="tooltip" title="'.Yii::t('main', 'Näytä').' 10 '.Yii::t('main', 'asiakasta sivulla').'">10</button>';
-	   echo '<button class="btn '.$defcl50.' kpl" kpl="50" data-toggle="tooltip" title="'.Yii::t('main', 'Näytä').' 50 '.Yii::t('main', 'asiakasta sivulla').'">50</button>';
-	   echo '<button class="btn '.$defcl00.' kpl" kpl="100" data-toggle="tooltip" title="'.Yii::t('main', 'Näytä').' 100 '.Yii::t('main', 'asiakasta sivulla').'">100</button>';
-
-	   ?>
-	 </span>
-
-	 <i class="fa fa-calendar-check-o"></i> <?=Yii::t('main', 'Työvuorojen siirto')?> 
-
-	</h2>
+        <h2 class="myBgColors p10"><i class="fa fa-calendar-check-o"></i> <?=Yii::t('main', 'Työvuorojen siirto')?></h2>
 
 
 
@@ -40,34 +23,71 @@
                     <div class="row">
 
                       <div class="col-md-2">
+			<label>Keneltä</label>
                         <div class="section">
-                          <label class="field">
-                            <div id="tekijat_result"> 
+                          <label class="field select">
 				<?php
 				$name_tyontekijat = 'tekijaPaaSivulla';
 				(isset($_GET['aktiivinen']))? $aktiivinen = $_GET['aktiivinen'] : $aktiivinen = 1;
 		   		$site = Yii::app()->createController('Site');
-		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
-						$name_tyontekijat, // name
-						'null', //class
-						'tyontekijat', // id
-						(isset($_GET['tekijaPaaSivulla']))? $_GET['tekijaPaaSivulla']: array(), //selected
+		   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
+						'kenelta', // name
+						'gui-input', //class
+						'kenelta', // id
+						(isset($_GET['kenelta']))? $_GET['kenelta']: '', //selected
 						$aktiivinen// aktiivinen
 				);
 				echo $tyontekiatLista;
 				?>
-                            </div> 
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+
+			
+                        <div class="section">
+				<input type="radio" class="selecter" name="selecter" value="kaikki" <?= (((isset($_GET['selecter']) and $_GET['selecter'] == 'kaikki') or (!isset($_GET['selecter'])) )? 'checked': '')?>> <label>Kaikki</label><br>
+				<input type="radio" class="selecter" name="selecter" value="tulevaisuudet" <?= ((isset($_GET['selecter']) and $_GET['selecter'] == 'tulevaisuudet')? 'checked': '')?>> <label>Vain tulevaisuudet</label>
+                          </label>
+                        </div>
+
+                      </div>
+
+                      <div class="col-md-2">
+			<label>Kenelle</label>
+                        <div class="section">
+                          <label class="field select">
+				<?php
+				(isset($_GET['aktiivinen']))? $aktiivinen = $_GET['aktiivinen'] : $aktiivinen = 1;
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
+						'kenelle', // name
+						'gui-input', //class
+						'kenelle', // id
+						(isset($_GET['kenelle']))? $_GET['kenelle']: '', //selected
+						$aktiivinen// aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
                             <i class="arrow double"></i>
                             </label>
                           </label>
                         </div>
                       </div>
 
-		      <?php /*
+
+
                       <div class="col-md-2">
-        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
+                        <div class="section">
+			<br>
+			<?php if( isset($_GET['mob_hae'])) : ?>
+        	        <?php echo CHtml::link(Yii::t('main', 'Keskeytä'), array('siirto'),array('class'=>'btn btn-primary btn-lg siirra btn-block myBgColors')); ?>
+			<?php else : ?>
+        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors"><?php echo Yii::t('main', 'Esikatselu'); ?></button>
+			<?php endif; ?>
+                        </div>
 		      </div>
-		      */ ?>
+
 
                     </div>
 
@@ -83,183 +103,113 @@
         <!-- loppu: .tray-center -->
         </div>
 
-	<div id="odota"></div>
 
-<div class="admin-form">
-  <div class="panel-header">
+	<?php if( isset($_GET['kenelta']) and isset($_GET['kenelle'])) : ?>
+        <!-- begin: .tray-center -->
+        <div class="tray-center row">
+            <div class="admin-form col-sm-5">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+		<h4 class="text-center"><?=$this->etuSukunimi($_GET['kenelta'])?></h4>
+		<table class="table table-striped">
+		<tr>
+		<th><?=Yii::t('main', 'Pvm')?></th>
+		<th><?=Yii::t('main', 'Aika')?></th>
+		<th><?=Yii::t('main', 'Osoite')?></th>
+		</tr>
+		<?php $suorittu = 0; ?>
+		<?php foreach($data_kenelta as $item) : ?>
+		<?php if( isset($_GET['siirra_now']) ): ?>
+		<?php
+			$suorittu++;
+			unset($item->id);
+			unset($item->time);
+			$model=new Tyovuoroot;
+			$model->attributes=$item->attributes;
+			$model->tid=$_GET['kenelle'];
+			$model->toistuva_id=0;
+			$model->tyopaari='';
+			$model->save();
+		?>
+		<?php endif; ?>
+		<tr>
+		<td><?=$item->pvm?></td>
+		<td><?=$item->alku?>-<?=$item->loppu?></td>
+		<td><?=isset($item->kohteet->osoite)?$item->kohteet->osoite:$item->osoite?></td>
+		</tr>
+		<?php endforeach; ?>
+		</table>
+                </div>
+              </div>
+            </div>
 
-<?php /*
-      <div class="row">
-       <div class="col-sm-12">
-        <div class="pull-right">
-         <div class="form-inline">
-    	  <!--<button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>-->
-	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="GET">
-	    <input type="hidden" name="ext" value="doc">
-	    <input type="hidden" name="fileName" value="Tyovuorot">
-	    <input type="hidden" name="from" value="<?=$from?>">
-	    <input type="hidden" name="to" value="<?=$to?>">
-	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
-    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
-	  </form>
-	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="GET">
-	    <input type="hidden" name="ext" value="xls">
-	    <input type="hidden" name="fileName" value="Tyovuorot">
-	    <input type="hidden" name="from" value="<?=$from?>">
-	    <input type="hidden" name="to" value="<?=$to?>">
-	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
-    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
-	  </form>
-	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="GET">
-	    <input type="hidden" name="ext" value="pdf">
-	    <input type="hidden" name="fileName" value="Tyovuorot">
-	    <input type="hidden" name="from" value="<?=$from?>">
-	    <input type="hidden" name="to" value="<?=$to?>">
-	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
-    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
-	  </form>
-         </div>
+	    <?php if( $suorittu > 0 ){ 
+		Yii::app()->user->setFlash('success', "Onnistui!");
+		$this->redirect(array('siirto'));
+	    } ?>
+
+            <div class="col-sm-2 text-center">
+		<form action="#" method="GET">
+		<input type="hidden" name="kenelta" value="<?=$_GET['kenelta']?>">
+		<input type="hidden" name="kenelle" value="<?=$_GET['kenelle']?>">
+		<input type="hidden" name="selecter" value="<?=$_GET['selecter']?>">
+		<input type="hidden" name="siirra_now" value="true">
+		<button type="submit" class="btn btn-primary btn-lg siirra myBgColors"><i class="fa fa-2x fa-arrow-right"></i></button>
+		</form>
+            </div>
+            <div class="admin-form col-sm-5">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+		<h4 class="text-center"><?=$this->etuSukunimi($_GET['kenelle'])?></h4>
+		<table class="table table-striped">
+		<tr>
+		<th><?=Yii::t('main', 'Pvm')?></th>
+		<th><?=Yii::t('main', 'Aika')?></th>
+		<th><?=Yii::t('main', 'Osoite')?></th>
+		</tr>
+		<?php foreach($data_kenelle as $item) : ?>
+		<tr>
+		<td><?=$item->pvm?></td>
+		<td><?=$item->alku?>-<?=$item->loppu?></td>
+		<td><?=isset($item->kohteet->osoite)?$item->kohteet->osoite:$item->osoite?></td>
+		</tr>
+		<?php endforeach; ?>
+		</table>
+                </div>
+              </div>
+            </div>
         </div>
-       </div>
-      </div>
-      <br>
-  </div>
-*/ ?>
+        <!-- loppu: .tray-center -->
+	<?php endif; ?>
 
 
-  <div class="panel heading-border">
 
-   <div class="panel-body">
-
-<div class="row">
- <div class="table-responsive raporti_taulu" id="tableContent">
-
-  <table class="table table-striped" id="mobileTable">
-  <thead>
-  <tr>
-  <th><?=Yii::t('main', 'Työntekijä')?></th>
-  <th><?=Yii::t('main', 'Päivämäärä')?></th>
-  <th><?=Yii::t('main', 'Klo')?></th>
-  <th><?=Yii::t('main', 'Asiakas')?></th>
-  <th><?=Yii::t('main', 'Kohde')?></th>
-  <th><?=Yii::t('main', 'Tilanne')?></th>
-  </tr>
-  </thead>
-  <tbody>
-  <?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_siirto',
-	//'viewData' => array( 'netvisor' => $netvisor ),
-  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
-
-
-	'pager' => array(
-           'firstPageLabel'=>'<<',
-           'prevPageLabel'=>'< Edellinen',
-           'nextPageLabel'=>'Seuraava >',
-           'lastPageLabel'=>'>>',
-           //'maxButtonCount'=>'10',
-           'header'=>'<h3>Siirry sivulle:</h3>',
-           'cssFile'=>false,
-       ), 
-
-  )); ?>
-  </tbody>
-  </table>
-
-
- </div>
-</div>
-
-
-   </div>
-  </div>
-</div>
-
-<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css" />
-<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-$(document).ready(function() {
-    $('#mobileTable').DataTable({
-        "bPaginate": false,
-        "bFilter": false,
-        "bInfo": false
-    });
-});
-
 $(document).ready(function(){
 
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+  }
 
-  $(".submitForm").on('click', function(e){
-	$('.mobileTable').addClass('table-bordered');
-	$(this).prev('textarea').val(JSON.stringify($('#tableContent').html()));
-	$(this).closest('form').submit();
-	e.preventDefault();
-  });
+  if(getUrlVars()["selecter"]){ $(".selecter").attr("disabled", "yes") }
 
-
-  $(".haemob").click(function(){
+  $(".haemob").click(function(e){
+	e.preventDefault(); 
+	if( $("#kenelta option:selected").val() === 'kaikki' ){
+		$("#kenelta").css({"border" : "1px red solid"});
+		return false;
+	}
+	if( $("#kenelle option:selected").val() === 'kaikki' ){
+		$("#kenelle").css({"border" : "1px red solid"});
+		return false;
+	}
 	$("#mobForm").submit();
   });
-
-multi();
-function multi(){
-  $('#tyontekijat').multiselect({
-	//inheritClass: true,
-	//enableFiltering: true,
-        includeSelectAllOption: true,
-	nonSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
-	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
-	allSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
-	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
-	numberDisplayed: 0,
-	buttonWidth: '100%',
-        maxHeight: 300,
-  });
-}
-
-  $('#status').multiselect({
-	//inheritClass: true,
-	//enableFiltering: true,
-        includeSelectAllOption: true,
-	nonSelectedText: '<?php echo Yii::t("main", "Tilanteet"); ?>',
-	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
-	allSelectedText: '<?php echo Yii::t("main", "Tilanteet"); ?>',
-	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
-	numberDisplayed: 0,
-	buttonWidth: '100%',
-        maxHeight: 300,
-  });
-
-  $(".aktiivinen").change(function(){
-	var thisVal = parseInt($(this).val());
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyontekijat/is_aktiivinen_multiple',
-           type: "GET",
-	   data: { name_tyontekijat : '<?=$name_tyontekijat?>', value : thisVal, selected : null },
-           success: function(data){
-		data = JSON.parse(data);
-		console.log(data);
-		$('#tekijat_result').html(data);
-		multi();
-           }
-        });
-  });
-
-
- $(".kpl").click(function(){
-	var asiakkaatPerSivu = $(this).attr('kpl');
-        $.ajax({
-           url: 'lista',
-           type: "POST",
-           data: { "asiakkaatPerSivu" : asiakkaatPerSivu },
-           success: function(data){
-		var d = JSON.parse(data);
-		window.location.reload();
-
-           }
-        });
- });
 
 });
 </script>

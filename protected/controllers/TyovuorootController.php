@@ -3843,15 +3843,8 @@ class TyovuorootController extends Controller
 
 	}
 
-	public function actionSiirto()
+	public function actionSiirto($kenelta=null, $kenelle=null, $selecter=null)
 	{
-
-		if(isset($_POST['asiakkaatPerSivu']))
-		{
-			Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);
-			echo json_encode($_POST['asiakkaatPerSivu']);
-			exit;
-		}
 
 		$from = date("d.m.Y", strtotime('first day of this month'));
 		$to = date("d.m.Y");
@@ -3860,61 +3853,32 @@ class TyovuorootController extends Controller
 		if(isset($_GET['to']) and !empty($_GET['to']))
 		$to = date("d.m.Y", strtotime($_GET['to']));
 
+		$criteria = new CDBCriteria;
+        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+        	$criteria->condition = " 				
+			tid='".$kenelta."'
+			AND peruutettu=0 
+		";
+		if( $selecter == 'tulevaisuudet' ){
+			$criteria->addCondition(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE() ");
+		}
+		$data_kenelta = Tyovuoroot::model()->findAll($criteria);
 
 		$criteria = new CDBCriteria;
         	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
         	$criteria->condition = " 				
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-			AND peruutettu=0 
+			tid='".$kenelle."'
 		";
-
-		if(isset($_GET['tekijaPaaSivulla']))
-		{
-			$impl = implode(",", $_GET['tekijaPaaSivulla']);
-	        	$criteria->addCondition (" tid IN ($impl) ");
+		if( $selecter == 'tulevaisuudet' ){
+			$criteria->addCondition(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE() ");
 		}
-		if(isset($_GET['laskutettu']))
-		{
-	        	$criteria->addCondition (" laskutettu='".$_GET['laskutettu']."' ");
-		}
-		if(isset($_GET['status']))
-		{
-			$impl_status = implode(",", $_GET['status']);
-	        	$criteria->addCondition (" status IN ($impl_status) ");
-		}
-		if(isset($_GET['yrityksen_nimi']))
-		{
-	        	$criteria->addCondition (" kohde IN (SELECT id FROM sivex_kohdet WHERE 
-				asiakas_id IN (
-					SELECT id FROM asiakkaat WHERE
-					yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'
-				)
-			) ");
-		}
-		if(isset($_GET['osoite']))
-		{
-	        	$criteria->addCondition (" kohde IN (SELECT id FROM sivex_kohdet WHERE osoite LIKE '%".$_GET['osoite']."%') ");
-		}
-
-
-		$dataProvider=new CActiveDataProvider('Tyovuoroot', array(
-			'criteria'=>$criteria,
-			//'pagination'=>false
-		));
-
-		$perSivu = 50;
-		if(isset(Yii::app()->user->asiakkaatPerSivu))
-		$perSivu = Yii::app()->user->asiakkaatPerSivu;
-
-		$dataProvider->pagination->pageSize = $perSivu;
-
+		$data_kenelle = Tyovuoroot::model()->findAll($criteria);
 
 		$this->render('siirto', array(
-			'dataProvider' => $dataProvider,
-			'perSivu' => $perSivu,
 			'from' => $from,
 			'to' => $to,
+			'data_kenelta' => $data_kenelta,
+			'data_kenelle' => $data_kenelle,
 		));
 
 	}
