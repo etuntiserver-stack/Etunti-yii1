@@ -104,7 +104,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 
 
 	<div class="section fill mb5 tyyppi">
-		<?php echo $form->labelEx($model,'tyyppi'); ?>
+		<?php echo $form->labelEx($model,'tyyppi'); ?> <input type="checkbox" name="Check[tyyppi]">
 		<?php
 		$list = array('henkilo'=>Yii::t('main', 'Yksityishenkilö'), 'yritys'=>Yii::t('main', 'Yritys'));
         	echo $form->dropDownList($model, 'tyyppi', $list,
@@ -114,7 +114,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	</div>
 
 	<div class="section fill mb5 ashidd_a">
-		<?php echo $form->labelEx($model,'aktiivinen'); ?>
+		<?php echo $form->labelEx($model,'aktiivinen'); ?> <input type="checkbox" name="Check[aktiivinen]">
 		<?php
 		$list = array(1=>Yii::t('main', 'Kyllä'),0=>Yii::t('main', 'Ei'));
         	echo $form->dropDownList($model, 'aktiivinen', $list,
@@ -125,7 +125,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 
 	<div class="section fill mb5 ashidd_a">
 
-		<?php echo $form->labelEx($model,'myyja'); ?>
+		<?php echo $form->labelEx($model,'myyja'); ?> <input type="checkbox" name="Check[myyja]">
 		<?php echo $form->dropDownList($model, 'myyja', CHtml::listData(Administrators::model()->findAll(), 'id', 'adm_nimi'), 
 		array('empty'=>'Valitse', 'class'=>'form-control')); 
 		?>
@@ -133,7 +133,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tyoryhma'); ?>
+		<?php echo $form->labelEx($model,'tyoryhma'); ?> <input type="checkbox" name="Check[tyoryhma]">
 		<?php
 	       	$criteria = new CDbCriteria();
 		$criteria->order = " value ";
@@ -148,7 +148,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 
 <?php if(in_array('5',$tas)) : ?>
 	<div class="section fill mb5 ashidd_a">
-		<?php echo $form->labelEx($model,'ryhma'); ?>
+		<?php echo $form->labelEx($model,'ryhma'); ?> <input type="checkbox" name="Check[ryhma]">
 
 	   <div class="input-group">
 		<?php
@@ -204,7 +204,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	<legend><h3><?php echo Yii::t('main', 'Laskutus tiedot'); ?></h3></legend>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'laskutus_kanava'); ?>
+		<?php echo $form->labelEx($model,'laskutus_kanava'); ?> <input type="checkbox" name="Check[laskutus_kanava]">
 		<?php
 		$list = array(	'posti'=>Yii::t('main','Posti'),
 				'verkkolasku'=>Yii::t('main','Verkkolasku'),
@@ -217,7 +217,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'kirjeenluokka'); ?>
+		<?php echo $form->labelEx($model,'kirjeenluokka'); ?> <input type="checkbox" name="Check[kirjeenluokka]">
 		<?php
 		$list = array(	'1'=>Yii::t('main','Luokka 1'),
 				'2'=>Yii::t('main','Luokka 2')
@@ -229,7 +229,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'muistutuslasku_auto'); ?>
+		<?php echo $form->labelEx($model,'muistutuslasku_auto'); ?> <input type="checkbox" name="Check[muistutuslasku_auto]">
 		<?php
 		$list = array(	'0'=>Yii::t('main','Kyllä'),
 				'1'=>Yii::t('main','Ei')
@@ -241,20 +241,20 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'viivastyskorko'); ?>
+		<?php echo $form->labelEx($model,'viivastyskorko'); ?> <input type="checkbox" name="Check[viivastyskorko]">
 		<?php echo $form->numberField($model,'viivastyskorko',array('size'=>60,'maxlength'=>20,'class'=>'form-control', 'step'=>'0.01')); ?>
 		<?php echo $form->error($model,'viivastyskorko'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'maksuehto'); ?>
+		<?php echo $form->labelEx($model,'maksuehto'); ?> <input type="checkbox" name="Check[maksuehto]">
 		<?php echo $form->numberField($model,'maksuehto',array('size'=>60,'maxlength'=>3,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'maksuehto'); ?>
 	</div>
 
 	<!-- Tuotteet palvelut -->
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'alv'); ?>
+		<?php echo $form->labelEx($model,'alv'); ?> <input type="checkbox" name="Check[alv]">
 		<?php
 		$model->alv = 24;
         	$l = array(0=>0,10=>10,14=>14,24=>24);
@@ -267,7 +267,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
+		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?> <input type="checkbox" name="Check[hinta_tyyppi]">
 		<?php
 		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
         	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
@@ -277,19 +277,19 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta'); ?>
+		<?php echo $form->labelEx($model,'hinta'); ?> <input type="checkbox" name="Check[hinta]">
 		<?php echo $form->numberField($model,'hinta',array('value' => 0, 'size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'hinta'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'verot'); ?>
+		<?php echo $form->labelEx($model,'verot'); ?> <input type="checkbox" name="Check[verot]">
 		<?php echo $form->numberField($model,'verot',array('value' => 0, 'size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'verot'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_sis_alv'); ?>
+		<?php echo $form->labelEx($model,'hinta_sis_alv'); ?> <input type="checkbox" name="Check[hinta_sis_alv]">
 		<?php echo $form->numberField($model,'hinta_sis_alv',array('value' => 0, 'size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'hinta_sis_alv'); ?>
 	</div>
@@ -334,7 +334,7 @@ $(document).ready(function(){
 </script>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinnasto_id'); ?>
+		<?php echo $form->labelEx($model,'hinnasto_id'); ?> <input type="checkbox" name="Check[hinnasto_id]">
 		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
 		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'hinnasto_id'); ?>
@@ -373,7 +373,17 @@ $(document).ready(function(){
 
 
   $(".luoTallennaAsiakas").click(function(e) {
-    e.preventDefault()
+    e.preventDefault();
+
+    var countChecked = function() {
+	var n = $( "#asiakkaat-form input:checked" ).length;
+	if( n > 0){ return true; } else { return false; }
+    };
+    if(!countChecked()){ 
+	alert('Valitse kentä.');	
+	return false; 
+    }
+
     var tyyppi = $('#Asiakkaat_tyyppi option:selected').val();
     if( tyyppi == 'henkilo' && $('#Asiakkaat_yhteyshenkilo').val() == '' ){
 	$('#Asiakkaat_yhteyshenkilo').focus();

@@ -356,16 +356,15 @@ class AsiakkaatController extends Controller
 		   //exit;
 
 		   foreach($_POST['Asiakkaat'] as $k => $v){
-			if(!empty($v)){ $post[$k] = $v; }
+			if(!empty($v) and isset($_POST['Check'][$k])){ $post[$k] = $v; }
 		   }
+
 		   foreach($as_all as $model){
 
 			$vanha_attr = $model->attributes;
 			$model->attributes=$post;
-			if(isset($_POST['Asiakkaat']['ryhma']))
-				$model->ryhma=json_encode($_POST['Asiakkaat']['ryhma']);
-			else
-				$model->ryhma="";
+
+			if(isset($post['ryhma'])){ $model->ryhma=json_encode($post['ryhma']); } else { $model->ryhma=""; }
 
 			if($model->save())
 			{
@@ -383,6 +382,7 @@ class AsiakkaatController extends Controller
 			}
 		    }
 		    Yii::app()->user->setFlash('success', "Valmis.");
+		    $this->redirect(array('index'));
 		}
 		$model = new Asiakkaat;
 		$this->render('massamuokkaus',array(
