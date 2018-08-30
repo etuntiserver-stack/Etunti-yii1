@@ -327,6 +327,12 @@ class AsiakkaatController extends Controller
 	public function actionMassamuokkaus()
 	{
 
+	// <-- Oikeudet
+	   $checkOikeus = "asiakkaat_4_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$criteria=new CDbCriteria;
 		if(isset($_POST['Asiakkaat']['filter_tyyppi']) and !empty($_POST['Asiakkaat']['filter_tyyppi']) and $_POST['Asiakkaat']['filter_tyyppi'] == 'henkilo'){
 			$criteria->addCondition(" tyyppi='".$_POST['Asiakkaat']['filter_tyyppi']."' "); 
