@@ -252,6 +252,11 @@ class KohteetController extends Controller
 
 	public function actionMassamuokkaus()
 	{
+	// <-- Oikeudet
+	   $checkOikeus = "kohteet_4_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
@@ -263,7 +268,7 @@ class KohteetController extends Controller
 		{
 		   $post = array();
 		   foreach($_POST['Kohteet'] as $k => $v){
-			if(!empty($v)){ $post[$k] = $v; }
+			if(!empty($v) and isset($_POST['Check'][$k])){ $post[$k] = $v; }
 		   }
 
 		   foreach($k_all as $model){
@@ -284,6 +289,7 @@ class KohteetController extends Controller
 			}
 		    }
 		    Yii::app()->user->setFlash('success', "Valmis.");
+		    $this->redirect(array('index'));
 		}
 		$model = new Kohteet;
 		$this->render('massamuokkaus',array(

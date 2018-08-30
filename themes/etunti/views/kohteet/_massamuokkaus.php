@@ -30,7 +30,7 @@ if(!isset($model->id)){ $model->alv = 24; }
   <div class="col-sm-3">
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'toimipaikka'); ?>
+		<?php echo $form->labelEx($model,'toimipaikka'); ?> <input type="checkbox" name="Check[toimipaikka]">
 		<?php echo $form->textField($model,'toimipaikka',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'toimipaikka'); ?>
 	</div>
@@ -43,7 +43,7 @@ if(!isset($model->id)){ $model->alv = 24; }
 
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
+		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?> <input type="checkbox" name="Check[hinta_tyyppi]">
 		<?php
 		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
         	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
@@ -53,7 +53,7 @@ if(!isset($model->id)){ $model->alv = 24; }
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'alv'); ?>
+		<?php echo $form->labelEx($model,'alv'); ?> <input type="checkbox" name="Check[alv]">
 		<?php
         	$l = array(0=>0,10=>10,14=>14,24=>24);
 
@@ -65,19 +65,19 @@ if(!isset($model->id)){ $model->alv = 24; }
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta'); ?>
+		<?php echo $form->labelEx($model,'hinta'); ?> <input type="checkbox" name="Check[hinta]">
 		<?php echo $form->numberField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'hinta'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'verot'); ?>
+		<?php echo $form->labelEx($model,'verot'); ?> <input type="checkbox" name="Check[verot]">
 		<?php echo $form->numberField($model,'verot',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'verot'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_sis_alv'); ?>
+		<?php echo $form->labelEx($model,'hinta_sis_alv'); ?> <input type="checkbox" name="Check[hinta_sis_alv]">
 		<?php echo $form->numberField($model,'hinta_sis_alv',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'hinta_sis_alv'); ?>
 	</div>
@@ -114,7 +114,7 @@ $(document).ready(function(){
 </script>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinnasto_id'); ?>
+		<?php echo $form->labelEx($model,'hinnasto_id'); ?> <input type="checkbox" name="Check[hinnasto_id]">
 		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
 		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'hinnasto_id'); ?>
@@ -126,13 +126,13 @@ $(document).ready(function(){
   </div><div class="col-sm-3">
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tag_id'); ?>
+		<?php echo $form->labelEx($model,'tag_id'); ?> <input type="checkbox" name="Check[tag_id]">
 		<?php echo $form->textField($model,'tag_id',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tag_id'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'siivous'); ?>
+		<?php echo $form->labelEx($model,'siivous'); ?> <input type="checkbox" name="Check[siivous]">
 
 	   <div class="input-group">
 		<?php
@@ -153,7 +153,7 @@ $(document).ready(function(){
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'aktiivinen'); ?>
+		<?php echo $form->labelEx($model,'aktiivinen'); ?> <input type="checkbox" name="Check[aktiivinen]">
 		<?php
 		if(!isset($model->id)) $model->aktiivinen = 1;
 		if(empty($model->aktiivinen)) $model->aktiivinen = 0;
@@ -166,7 +166,7 @@ $(document).ready(function(){
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tyoryhma'); ?>
+		<?php echo $form->labelEx($model,'tyoryhma'); ?> <input type="checkbox" name="Check[tyoryhma]">
 		<?php
 		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
 		$site = Yii::app()->createController('Site');
@@ -186,7 +186,7 @@ $(document).ready(function(){
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'ryhma'); ?>
+		<?php echo $form->labelEx($model,'ryhma'); ?> <input type="checkbox" name="Check[ryhma]">
 	   <div class="input-group">
 
 		<?php
@@ -214,13 +214,13 @@ $(document).ready(function(){
 
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tarvittavien_tyontekijoiden_maara'); ?>
+		<?php echo $form->labelEx($model,'tarvittavien_tyontekijoiden_maara'); ?> <input type="checkbox" name="Check[tarvittavien_tyontekijoiden_maara]">
 		<?php echo $form->numberField($model,'tarvittavien_tyontekijoiden_maara',array('maxlength'=>3,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tarvittavien_tyontekijoiden_maara'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'arvioitu_kesto'); ?>
+		<?php echo $form->labelEx($model,'arvioitu_kesto'); ?> <input type="checkbox" name="Check[arvioitu_kesto]">
 		<?php echo $form->numberField($model,'arvioitu_kesto',array('maxlength'=>5,'class'=>'form-control', 'step' => "any")); ?>
 		<?php echo $form->error($model,'arvioitu_kesto'); ?>
 	</div>
@@ -237,32 +237,32 @@ $(document).ready(function(){
   </div><div class="col-sm-6">
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'aikataulu'); ?>
+		<?php echo $form->labelEx($model,'aikataulu'); ?> <input type="checkbox" name="Check[aikataulu]">
 		<?php echo $form->textArea($model,'aikataulu',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'aikataulu'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinnoittelu'); ?>
+		<?php echo $form->labelEx($model,'hinnoittelu'); ?> <input type="checkbox" name="Check[hinnoittelu]">
 		<?php echo $form->textArea($model,'hinnoittelu',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
 
 		<?php echo $form->error($model,'hinnoittelu'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'muut'); ?>
+		<?php echo $form->labelEx($model,'muut'); ?> <input type="checkbox" name="Check[muut]">
 		<?php echo $form->textArea($model,'muut',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'muut'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'toimenpiteet'); ?>
+		<?php echo $form->labelEx($model,'toimenpiteet'); ?> <input type="checkbox" name="Check[toimenpiteet]">
 		<?php echo $form->textArea($model,'toimenpiteet',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'toimenpiteet'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tietoja'); ?>
+		<?php echo $form->labelEx($model,'tietoja'); ?> <input type="checkbox" name="Check[tietoja]">
 		<?php echo $form->textArea($model,'tietoja',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tietoja'); ?>
 	</div>
@@ -285,6 +285,21 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+
+  $(".luoTallennaKohde").click(function(e) {
+    e.preventDefault();
+
+    var countChecked = function() {
+	var n = $( "#kohteet-form input:checked" ).length;
+	if( n > 0){ return true; } else { return false; }
+    };
+    if(!countChecked()){ 
+	alert('Valitse kentä.');	
+	return false; 
+    }
+    $('#kohteet-form').submit();
+  });
 
 
 // Send form by ajax
