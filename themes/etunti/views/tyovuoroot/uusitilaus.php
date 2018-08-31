@@ -560,6 +560,15 @@ $(document).ready(function(){
 
   });
 
+  $('#uusi_asiakas').on('show.bs.collapse', function (e) {
+	$("#asiakas").val("").hide();
+	$("#Tyovuoroot_kohde").val("").hide();
+  });
+
+  $('#uusi_asiakas').on('hidden.bs.collapse', function (e) {
+	$("#asiakas").val("").show();
+	$("#Tyovuoroot_kohde").val("").show();
+  });
 
   // <-- Yritys vai henkilo
   $("#Asiakkaat_tyyppi").change(function() {
@@ -623,6 +632,21 @@ $(document).ready(function(){
 			$('#Asiakas_kaupunki').css({"border":"2px red solid"}).focus();
 			return false;
 		}
+		if( $('#Tyovuoroot_alku').val() === '' )
+		{
+			$('#Tyovuoroot_alku').css({"border":"2px red solid"}).focus();
+			return false;
+		}
+		if( $('#Tyovuoroot_loppu').val() === '' )
+		{
+			$('#Tyovuoroot_loppu').css({"border":"2px red solid"}).focus();
+			return false;
+		}
+		if( $('#Tyovuoroot_tid option:selected').val() === '' )
+		{
+			$('#Tyovuoroot_tid').css({"border":"2px red solid"}).focus();
+			return false;
+		}
 
 		var r = confirm('Olet myös luomassa uuden asiakkaan ja kohteen.\n Haluatko jatkaa?');
 		if(r)
@@ -632,9 +656,30 @@ $(document).ready(function(){
 		} else {
 			return false;
 		}
+
 	   } else {
 
-		alert('oleva');
+		if( $('#Tyovuoroot_kohde').val() === '' )
+		{
+			$('#Tyovuoroot_kohde').css({"border":"2px red solid"}).focus();
+			return false;
+		}
+		if( $('#Tyovuoroot_alku').val() === '' )
+		{
+			$('#Tyovuoroot_alku').css({"border":"2px red solid"}).focus();
+			return false;
+		}
+		if( $('#Tyovuoroot_loppu').val() === '' )
+		{
+			$('#Tyovuoroot_loppu').css({"border":"2px red solid"}).focus();
+			return false;
+		}
+		if( $('#Tyovuoroot_tid option:selected').val() === '' )
+		{
+			$('#Tyovuoroot_tid').css({"border":"2px red solid"}).focus();
+			return false;
+		}
+			$('#tyovuoroot-form').submit();
 	   }
 	});
 
