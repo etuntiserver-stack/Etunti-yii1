@@ -384,6 +384,20 @@ $(document).ready(function(){
 	return false; 
     }
 
+    var sList = "";
+    $('#asiakkaat-form input[type=checkbox]').each(function () {
+	if( this.checked && $( this ).next('input').val() === '' || this.checked && $( this, 'option:selected' ).next('select').val() === '' ){
+		sList += "Täytä: " + $( this ).prev('label').text() + "\n";
+ 	}
+    });
+
+    if( sList !== '' ){
+	alert(sList);
+	return false;
+    }
+
+    if(!confirm('Oletko varma?')){ return false; }
+
     var tyyppi = $('#Asiakkaat_tyyppi option:selected').val();
     if( tyyppi == 'henkilo' && $('#Asiakkaat_yhteyshenkilo').val() == '' ){
 	$('#Asiakkaat_yhteyshenkilo').focus();

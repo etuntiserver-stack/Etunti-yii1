@@ -298,6 +298,17 @@ $(document).ready(function(){
 	alert('Valitse kentä.');	
 	return false; 
     }
+    var sList = "";
+    $('#kohteet-form input[type=checkbox]').each(function () {
+	if( this.checked && $( this ).next('input').val() === '' || this.checked && $( this, 'option:selected' ).next('select').val() === '' ){
+		sList += "Täytä: " + $( this ).prev('label').text() + "\n";
+ 	}
+    });
+    if( sList !== '' ){
+	alert(sList);
+	return false;
+    }
+    if(!confirm('Oletko varma?')){ return false; }
     $('#kohteet-form').submit();
   });
 
