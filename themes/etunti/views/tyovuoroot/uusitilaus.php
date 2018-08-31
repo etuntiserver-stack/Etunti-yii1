@@ -22,7 +22,14 @@
 	<?php echo $form->errorSummary($model); ?>
 
 
-<legend><h2><?php echo Yii::t('main', 'Asiakas'); ?></h2></legend>
+
+	<span class="btn btn-default myBgColors" data-toggle="collapse" data-target="#olemassa">
+	  <?php echo Yii::t('main', 'Olemassa oleva asiakas'); ?> <i class="caret"></i>
+	</span>
+ 	
+<hr>
+
+<div class="collapse" id="olemassa">
 <div class="row">
   <div class="col-sm-3">
     <div class="sectionfill mb5">
@@ -267,7 +274,7 @@ $(document).ready(function(){
     </div>
   </div>
 </div>
-
+</div><!--olemassa-->
 
 
 
