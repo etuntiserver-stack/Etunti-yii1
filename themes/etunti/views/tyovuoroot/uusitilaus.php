@@ -23,13 +23,42 @@
 
 
 
-	<span class="btn btn-default myBgColors" data-toggle="collapse" data-target="#olemassa">
-	  <?php echo Yii::t('main', 'Olemassa oleva asiakas'); ?> <i class="caret"></i>
+<div class="row">
+  <div class="col-sm-3">
+	<br>
+	<span class="btn btn-default myBgColors" data-toggle="collapse" data-target="#uusi_asiakas">
+	  <?php echo Yii::t('main', 'Uusi asiakas'); ?> <i class="caret"></i>
 	</span>
+  </div>
+  <div class="col-sm-3">
+	<label><?php echo Yii::t('main', 'Asiakas tai kohteen yhteyshenkilö'); ?></label><br>
+	<input type="text" id="asiakas" class="form-control" AUTOCOMPLETE="off">
+	<div id="asiakasAutocompleteResult"></div>
+  </div>
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'kohde'); ?>
+		<?php
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " osoite ";
+
+		// <-- TyoryhmatHelper
+		$site = Yii::app()->createController('Site');
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$criteria->condition = " tyoryhma IN ($ids) ";
+		}
+		//     TyoryhmatHelper -->
+
+        		$list = CHtml::listData(Kohteet::model()->findAll($criteria), 'id', 'osoite');
+        		echo $form->dropDownList($model, 'kohde', $list,array('empty'=>'Valitse','class'=>'form-control kohde'));
+        	?>
+  </div>
+</div>
  	
 <hr>
 
-<div class="collapse" id="olemassa">
+<div class="collapse" id="uusi_asiakas">
 <div class="row">
   <div class="col-sm-3">
     <div class="sectionfill mb5">
@@ -433,6 +462,105 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
 
+
+  if($('#Tyovuoroot_kohde').val() !== '')
+  {
+	var kohdeOn = $('#Tyovuoroot_kohde option:selected').val();
+	  	 $.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/getAsiakasByKohde',
+			type:'GET',
+			data: { "id" : kohdeOn },
+			  success:function(data){
+			     if(data)
+			     {
+				data = JSON.parse(data);
+			  	console.log(data);
+				$('#asiakas').val(data);
+			     } else {
+			  	console.log('ei ole asiakas id');
+			     }
+
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+  }
+
+  $('#asiakas').keyup(function(){
+	var thisVal = $(this).val();
+
+	if( thisVal.length >= 2 )
+	{
+
+	  	 $.ajax({
+			url: 'asiakas_autocomplete',
+			type:'GET',
+			async : false,
+			data: { "key" : thisVal },
+			  success:function(data){
+				data = JSON.parse(data);
+			  	//console.log(data);
+				if(data !== '')
+					$('#asiakasAutocompleteResult').html(data).show();
+				else
+					$('#asiakasAutocompleteResult').html('').show();
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+
+	} else {
+					$('#asiakasAutocompleteResult').html('');
+	}
+
+
+     $('.asiakasSelecter').click(function(){
+	var thisVal = $(this).attr('for');
+	var thisAsiakas = $(this).text();
+	  	 $.ajax({
+			url: 'getKohdeByAsiakas',
+			type:'GET',
+			data: { "id" : thisVal },
+			  success:function(data){
+				data = JSON.parse(data);
+			  	//console.log(data);
+				$('#Tyovuoroot_kohde').html(data);
+				$('#asiakasAutocompleteResult').html('').hide();
+				$('#asiakas').val(thisAsiakas);
+
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+     });
+
+     $('.kohteenSelecter').click(function(){
+	var thisVal = $(this).attr('for');
+	var thisAsiakas = $(this).text();
+	  	 $.ajax({
+			url: 'getKohdeById',
+			type:'GET',
+			data: { "id" : thisVal },
+			  success:function(data){
+				data = JSON.parse(data);
+			  	//console.log(data);
+				$('#Tyovuoroot_kohde').html(data);
+				$('#asiakasAutocompleteResult').html('').hide();
+				$('#asiakas').val(thisAsiakas);
+
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+     });
+
+  });
+
+
   // <-- Yritys vai henkilo
   $("#Asiakkaat_tyyppi").change(function() {
     var value = $(this).val();
@@ -474,8 +602,7 @@ $(document).ready(function(){
   });
 
 	$('#submitButton').click(function(){
-
-
+	   if( $("#uusi_asiakas").hasClass("in") ){
 		if( $('#Asiakas_yhteyshenkilo').val() === '' )
 		{
 			$('#Asiakas_yhteyshenkilo').css({"border":"2px red solid"}).focus();
@@ -505,6 +632,10 @@ $(document).ready(function(){
 		} else {
 			return false;
 		}
+	   } else {
+
+		alert('oleva');
+	   }
 	});
 
 	$('#tyovuoroot-form').on('submit',function(e) {
