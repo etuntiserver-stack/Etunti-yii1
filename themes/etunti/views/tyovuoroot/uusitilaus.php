@@ -416,6 +416,7 @@ $(document).ready(function(){
        		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
 		$tp = TuotteetPalvelut::model()->findAll($criteria);
 		echo '<select name="lisapalvelu_tuote" id="lisapalvelu_tuote" class="form-control">';
+		echo '<option value=>Valitse</option>';
 		foreach($tp as $item){
 			echo '<option value="'.$item->id.'" yksikko="'.$item->yksikko.'">'.$item->nimike.'</option>';
 		}
@@ -456,7 +457,7 @@ $(document).ready(function(){
 	$('#lisapalvelu_lista').append('' +
 	'<div class="row">' +
 	 '<div class="col-sm-3">' +
-		'<div class="pull-right">' + $('#lisapalvelu_tuote option:selected').text() + '</div>' +
+		$('#lisapalvelu_tuote option:selected').text() +
 		'<input type="hidden" name="Tyovuoroot[lisa_tuotteet][tuote][]" value="'+ $('#lisapalvelu_tuote option:selected').val() +'">' +
 	 '</div>' +
 	 '<div class="col-sm-3">' +
