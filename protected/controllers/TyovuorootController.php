@@ -2513,6 +2513,51 @@ class TyovuorootController extends Controller
 		}
 	}
 
+	protected function hinnastoHintaat($tp, $asiakkaat, $kohteet)
+	{
+		$return = [];
+		// <-- 1. TuotteetPalvelut
+		if(isset($tp->id))
+		{
+			$return['tp_nimike'] 	= $tp->nimike;
+			$return['tp_id'] 	= $tp->id;
+			$return['hinta'] 	= $tp->hinta_alv_0;
+			$return['alv'] 		= $tp->alv;
+			$return['yksikko']	= $tp->yksikko;
+		}
+		//     TuotteetPalvelut -->
+
+		// <-- 2. Asiakas
+		if(isset($tp->id) and isset($asiakkaat->id) and $asiakkaat->hinnasto_id != 0)
+		{
+			$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$tp->id."' AND hinnastot_id='".$asiakkaat->hinnasto_id."' ");
+			if(isset($hinnasto->id))
+			{
+				$return['hinnasto_rivi_id'] 	= $hinnasto->id;
+				$return['hinta'] 	= $hinnasto->hinnasto_hinta;
+				$return['alv'] 		= $hinnasto->hinnasto_alv;
+				$return['yksikko']	= $hinnasto->hinnasto_yksikko;
+			}
+		}
+		//     Asiakas -->
+
+		// <-- 3. Kohteet
+		if(isset($tp->id) and isset($kohteet->id) and $kohteet->hinnasto_id != 0)
+		{
+			$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$tp->id."' AND hinnastot_id='".$kohteet->hinnasto_id."' ");
+			if(isset($hinnasto->id))
+			{
+				$return['hinnasto_rivi_id'] 	= $hinnasto->id;
+				$return['hinta'] 	= $hinnasto->hinnasto_hinta;
+				$return['alv'] 		= $hinnasto->hinnasto_alv;
+				$return['yksikko']	= $hinnasto->hinnasto_yksikko;
+			}
+		}
+		//     Kohteet -->
+
+		return $return; 
+	}
+
 	public function actionUusitilaus()
 	{
 
@@ -2558,6 +2603,12 @@ class TyovuorootController extends Controller
 		}
 
 		$model->attributes=$_POST['Tyovuoroot'];
+		if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
+			$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
+		} else {
+			$model->lisa_tuotteet = '';
+		}
+
 		$model->kohde = $kohteet->id;
 		$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 		if($model->save())
@@ -2597,7 +2648,7 @@ class TyovuorootController extends Controller
 				$sum = 0;
 				$alv_0 = 0;
 				$alv_sum = 0;
-				   if(isset($_POST['vieposti']) and isset($asiakkaat->sahkoposti) and !empty($asiakkaat->sahkoposti) and $asiakkaat->hinta > 0)
+				   if(isset($_POST['vieposti']) and isset($asiakkaat->sahkoposti) and !empty($asiakkaat->sahkoposti))
 				   {
 					$message = '
 					Asiakas: '.$asiakkaat->yhteyshenkilo.'<br>
@@ -2618,8 +2669,26 @@ class TyovuorootController extends Controller
 						$message .= 'Hinta: '.number_format($sum, 2, ',', ' ').' &euro;<br>';
 					}
 
+					// <-- Lisatuotteet
+					$lisa_tuotteet = json_decode($model->lisa_tuotteet, true);
+					if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote'])  ){
+					   foreach($lisa_tuotteet['tuote'] as $k => $v){
+						$tp = TuotteetPalvelut::model()->findByPK($v);
+						if( isset($tp->id) ){
+							$return_hinnaasto = $this->hinnastoHintaat($tp, $asiakkaat, $kohteet);
+							(isset($return_hinnaasto['tp_nimike']))? $message .= '<b>'.$return_hinnaasto['tp_nimike']. '</b>':'';
+							$message .= ', Määrä: '. json_decode($model->lisa_tuotteet, true)['maara'][$k];
+ 							(isset($return_hinnaasto['yksikko']))? $message .= $return_hinnaasto['yksikko']:'';
+ 							(isset($return_hinnaasto['hinta']))? $message .= ', Hinta: '.$return_hinnaasto['hinta'].'&euro;':'';
+ 							(isset($return_hinnaasto['hinta']))? $message .= ', Alv: '.$return_hinnaasto['alv'].'%':'';
+							$message .= '<br>';
+						}
+					   }
+					}
+					//     Lisatuotteet -->
+
 					if(!empty($kohteet->toimenpiteet))
-					$message .= str_replace("\n", "<br>",$kohteet->toimenpiteet);
+					$message .= str_replace("\n", "<hr><br>",$kohteet->toimenpiteet);
 
 					if(isset($_POST['Tyovuoroot']['tilausviesti']) and !empty($_POST['Tyovuoroot']['tilausviesti']))
 					$message .= str_replace("\n", "<br>", $_POST['Tyovuoroot']['tilausviesti']);
@@ -2657,7 +2726,7 @@ class TyovuorootController extends Controller
 				   }
 
 
-			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)), 'alv'=>$alv_sum, 'alv_0' => $alv_0, 'sum' => $sum);
+			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)), 'alv'=>$alv_sum, 'alv_0' => $alv_0, 'sum' => $sum, 'message' => $message);
 		}
 
 		echo json_encode($return);
@@ -2728,6 +2797,11 @@ class TyovuorootController extends Controller
 		  	   if($kohteet->save())
 		  	   {
 				$model->attributes=$_POST['Tyovuoroot'];
+				if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
+					$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
+				} else {
+					$model->lisa_tuotteet = '';
+				}
 				$model->kohde = $kohteet->id;
 				$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				if($model->save())
@@ -2787,6 +2861,24 @@ class TyovuorootController extends Controller
 						$message .= 'ALV: '.number_format($alv_sum, 2, ',', ' ').' &euro;<br>';
 						$message .= 'Hinta: '.number_format($sum, 2, ',', ' ').' &euro;<br>';
 					}
+
+					// <-- Lisatuotteet
+					$lisa_tuotteet = json_decode($model->lisa_tuotteet, true);
+					if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote'])  ){
+					   foreach($lisa_tuotteet['tuote'] as $k => $v){
+						$tp = TuotteetPalvelut::model()->findByPK($v);
+						if( isset($tp->id) ){
+							$return_hinnaasto = $this->hinnastoHintaat($tp, $asiakkaat, $kohteet);
+							(isset($return_hinnaasto['tp_nimike']))? $message .= '<b>'.$return_hinnaasto['tp_nimike']. '</b>':'';
+							$message .= ', Määrä: '. json_decode($model->lisa_tuotteet, true)['maara'][$k];
+ 							(isset($return_hinnaasto['yksikko']))? $message .= $return_hinnaasto['yksikko']:'';
+ 							(isset($return_hinnaasto['hinta']))? $message .= ', Hinta: '.$return_hinnaasto['hinta'].'&euro;':'';
+ 							(isset($return_hinnaasto['hinta']))? $message .= ', Alv: '.$return_hinnaasto['alv'].'%':'';
+							$message .= '<br>';
+						}
+					   }
+					}
+					//     Lisatuotteet -->
 
 					if(!empty($kohteet->toimenpiteet))
 					$message .= str_replace("\n", "<br>",$kohteet->toimenpiteet);

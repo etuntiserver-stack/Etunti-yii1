@@ -407,8 +407,92 @@ $(document).ready(function(){
 		array('class'=>'form-control')) ?>
 
   </div>
-
 </div>
+
+<div class="row">
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'tuoteID'); ?>
+		<?php
+		$criteria = new CDbCriteria();
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND yksikko='h' ";
+		$tp = TuotteetPalvelut::model()->findAll($criteria);
+		echo $form->dropDownList($model,'tuoteID', CHtml::listData($tp, 'id', 'nimike'), 
+		array('empty'=>'Valitse','class'=>'form-control'));
+		?>
+  </div>
+</div>
+
+<br>
+<label><?=Yii::t('main','Valitse tuotteet ja lisäpalvelut')?></label>
+<div class="row" id="lisapalvelut_valinta">
+  <div class="col-sm-3">
+		<?php
+		$criteria = new CDbCriteria();
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
+		$tp = TuotteetPalvelut::model()->findAll($criteria);
+		echo '<select name="lisapalvelu_tuote" id="lisapalvelu_tuote" class="form-control">';
+		foreach($tp as $item){
+			echo '<option value="'.$item->id.'" yksikko="'.$item->yksikko.'">'.$item->nimike.'</option>';
+		}
+		echo '</select>';
+		?>
+  </div>
+  <div class="col-sm-3">
+	<div class="row">
+	 <div class="col-sm-10">
+		<?php echo CHtml::numberField('lisapalvelu_maara','lisapalvelu_maara',array('class'=>'form-control', 'placeholder' => 'määrä')); ?>
+	 </div>
+	 <div class="col-sm-2">
+        	<button class="btn btn-primary plus_lisapalvelu myBgColors pull-right" type="button"><i class="fa fa-plus"></i></button>
+	 </div>
+	</div>
+  </div>
+</div>
+
+<br>
+<p id="lisapalvelu_lista"></p>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.plus_lisapalvelu').click(function(){
+	var lisapalvelu_tuote = $('#lisapalvelu_tuote option:selected').val();
+	var lisapalvelu_yksikko = $('#lisapalvelu_tuote option:selected').attr('yksikko');
+	var lisapalvelu_maara = $('#lisapalvelu_maara').val();
+	if( lisapalvelu_tuote === '' ){
+		$('#lisapalvelu_tuote').css({'border' : '1px red solid'}).focus();
+		return false;
+	}
+	if( lisapalvelu_maara === '' ){
+		$('#lisapalvelu_maara').css({'border' : '1px red solid'}).focus();
+		return false;
+	}
+		
+	$('#lisapalvelu_lista').append('' +
+	'<div class="row">' +
+	 '<div class="col-sm-3">' +
+		'<div class="pull-right">' + $('#lisapalvelu_tuote option:selected').text() + '</div>' +
+		'<input type="hidden" name="Tyovuoroot[lisa_tuotteet][tuote][]" value="'+ $('#lisapalvelu_tuote option:selected').val() +'">' +
+	 '</div>' +
+	 '<div class="col-sm-3">' +
+		'<div class="text-center">' + 
+			'<i class="link pull-right text-danger fa fa-trash poista_lisa"></i>' +
+			'<b>' + $('#lisapalvelu_maara').val() + ' '+ lisapalvelu_yksikko +'</b>' + 
+		'</div>' +
+		'<input type="hidden" name="Tyovuoroot[lisa_tuotteet][maara][]" value="'+ $('#lisapalvelu_maara').val() +'">' +
+	 '</div>' +
+	'</div>' );
+
+	$('#lisapalvelu_tuote').css({'border' : '1px green solid'}).val('');
+	$('#lisapalvelu_maara').css({'border' : '1px green solid'}).val('');
+  });
+
+  $(document).delegate(".poista_lisa","click",function(){
+	$(this).closest('.row').remove();
+  });
+
+});
+</script>
 
 <div class="row">
   <div class="col-sm-6">
@@ -702,7 +786,7 @@ $(document).ready(function(){
 				alert(thisDataReturn['sahkoposti']);
 				return false;
 			}
-			$('#showres').modal('hide');
+			//$('#showres').modal('hide');
 
 	   	},
 		error:function(data){

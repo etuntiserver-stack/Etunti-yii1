@@ -345,8 +345,11 @@ $(".muokaValiko").click(function() {
 		$criteria = new CDbCriteria();
        		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
 		$tp = TuotteetPalvelut::model()->findAll($criteria);
-		echo CHtml::dropDownList('lisapalvelu_tuote','lisapalvelu_tuote', CHtml::listData($tp, 'id', 'nimike'), 
-		array('empty'=>'Valitse','class'=>'form-control'));
+		echo '<select name="lisapalvelu_tuote" id="lisapalvelu_tuote" class="form-control">';
+		foreach($tp as $item){
+			echo '<option value="'.$item->id.'" yksikko="'.$item->yksikko.'">'.$item->nimike.'</option>';
+		}
+		echo '</select>';
 		?>
   </div>
   <div class="col-sm-3">
@@ -379,15 +382,19 @@ $(".muokaValiko").click(function() {
 		<?php endif; ?>
   </div>
 </div>
-
-<div id="lisapalvelu_lista">
+<br>
+<p id="lisapalvelu_lista">
 	<?php $lisa_tuotteet = json_decode($model->lisa_tuotteet, true); ?>
 	<?php if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote'])  ) : ?>
 	<?php foreach($lisa_tuotteet['tuote'] as $k => $v) : ?>
 	<?php 
 		$t_nimike = '';
+		$t_yksikko = '';
 		$tp = TuotteetPalvelut::model()->findByPK($v);
-		if( isset($tp->id) ){ $t_nimike = $tp->nimike; }
+		if( isset($tp->id) ){ 
+			$t_nimike = $tp->nimike;
+			$t_yksikko = $tp->yksikko;
+		}
 	?>
 	<p>
 	<div class="row">
@@ -398,7 +405,7 @@ $(".muokaValiko").click(function() {
 	 <div class="col-sm-3">
 		<div class="text-center">
 			<i class="link pull-right text-danger fa fa-trash poista_lisa"></i>
-			<b><?=json_decode($model->lisa_tuotteet, true)['maara'][$k]?> kpl</b>
+			<b><?=json_decode($model->lisa_tuotteet, true)['maara'][$k]?> <?=$t_yksikko?></b>
 		</div>
 		<input type="hidden" name="Tyovuoroot[lisa_tuotteet][maara][]" value="<?=json_decode($model->lisa_tuotteet, true)['maara'][$k]?>">
 	 </div>
@@ -406,12 +413,13 @@ $(".muokaValiko").click(function() {
 	</p>
 	<?php endforeach; ?>
 	<?php endif; ?>
-</div>
+</p>
 
 <script type="text/javascript">
 $(document).ready(function(){
   $('.plus_lisapalvelu').click(function(){
 	var lisapalvelu_tuote = $('#lisapalvelu_tuote option:selected').val();
+	var lisapalvelu_yksikko = $('#lisapalvelu_tuote option:selected').attr('yksikko');
 	var lisapalvelu_maara = $('#lisapalvelu_maara').val();
 	if( lisapalvelu_tuote === '' ){
 		$('#lisapalvelu_tuote').css({'border' : '1px red solid'}).focus();
@@ -431,7 +439,7 @@ $(document).ready(function(){
 	 '<div class="col-sm-3">' +
 		'<div class="text-center">' + 
 			'<i class="link pull-right text-danger fa fa-trash poista_lisa"></i>' +
-			'<b>' + $('#lisapalvelu_maara').val() + ' kpl</b>' + 
+			'<b>' + $('#lisapalvelu_maara').val() + ' '+ lisapalvelu_yksikko +'</b>' + 
 		'</div>' +
 		'<input type="hidden" name="Tyovuoroot[lisa_tuotteet][maara][]" value="'+ $('#lisapalvelu_maara').val() +'">' +
 	 '</div>' +
