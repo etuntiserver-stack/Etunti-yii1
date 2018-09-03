@@ -26,7 +26,7 @@
 <div class="row">
   <div class="col-sm-3">
 	<br>
-	<span class="btn btn-default myBgColors" data-toggle="collapse" data-target="#uusi_asiakas">
+	<span class="btn btn-primary myBgColors" data-toggle="collapse" data-target="#uusi_asiakas">
 	  <?php echo Yii::t('main', 'Uusi asiakas'); ?> <i class="caret"></i>
 	</span>
   </div>
