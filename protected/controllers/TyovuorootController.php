@@ -2608,6 +2608,11 @@ class TyovuorootController extends Controller
 		} else {
 			$model->lisa_tuotteet = '';
 		}
+		if( is_array($model->tyopaari) and count($model->tyopaari) > 0 ){
+			$model->tyopaari = json_encode($model->tyopaari);
+		} else {
+			$model->tyopaari = '';
+		}
 
 		$model->kohde = $kohteet->id;
 		$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
@@ -2625,15 +2630,19 @@ class TyovuorootController extends Controller
 			    {
 				$m=new Tyovuoroot;
 				$m->attributes=$_POST['Tyovuoroot'];
+				$m->tyopaari = $model->tyopaari;
+				$m->lisa_tuotteet = $model->lisa_tuotteet;
 				$m->kohde = $kohteet->id;
 				$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				$m->tid=$tid;
 				$m->status=3;
-				if($m->save())
+				if(!$m->save())
 				{
+					echo json_encode($m->getErrors());
+					exit;
+				} else {
 					$luotu[$m->id] = $m->tid;
 					$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
-
 				}
 
 			    }
@@ -2817,6 +2826,11 @@ class TyovuorootController extends Controller
 				} else {
 					$model->lisa_tuotteet = '';
 				}
+				if( is_array($model->tyopaari) and count($model->tyopaari) > 0 ){
+					$model->tyopaari = json_encode($model->tyopaari);
+				} else {
+					$model->tyopaari = '';
+				}
 				$model->kohde = $kohteet->id;
 				$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				if($model->save())
@@ -2834,6 +2848,8 @@ class TyovuorootController extends Controller
 			    {
 				$m=new Tyovuoroot;
 				$m->attributes=$_POST['Tyovuoroot'];
+				$m->tyopaari = $model->tyopaari;
+				$m->lisa_tuotteet = $model->lisa_tuotteet;
 				$m->kohde = $kohteet->id;
 				$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				$m->tid=$tid;

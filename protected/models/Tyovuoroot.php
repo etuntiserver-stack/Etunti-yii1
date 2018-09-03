@@ -25,11 +25,9 @@ class Tyovuoroot extends DB2ActiveRecord
 public $osoite;
 public $kaupunki;
 public $tekijan_nimi;
-public $toimenpiteet;
 public $l_tunnit;
 public $count;
 public $suunnittellut;
-public $tilausviesti;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -90,6 +88,8 @@ public $tilausviesti;
 		     'apuaika' => 'int(1) DEFAULT 0',
 		     'laskutettu' => 'int(1) DEFAULT 0',
 		     'lasku_id' => 'int(1) DEFAULT 0',
+		     'tilausviesti' => 'TEXT',
+		     'toimenpiteet' => 'TEXT',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -126,7 +126,7 @@ public $tilausviesti;
 			array('alku, loppu, pituus, alku_r, kesto', 'length', 'max'=>10),
 			array('ruokatauko, tyoajanlaatu, tyoajanmerkinta', 'length', 'max'=>50),
 			array('osoiteOnline', 'length', 'max'=>100),
-			array('tyopaari, tietoja, lisa_tuotteet', 'safe'),
+			array('tyopaari, tietoja, lisa_tuotteet, tilausviesti, toimenpiteet', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, tid, time, kohde, pvm, alku, loppu, pituus, ruokatauko, alku_r, kesto, tyoajanlaatu, tyoajanmerkinta, tietoja, osoiteOnline, tekijan_nimi, toimenpiteet, osoite', 'safe', 'on'=>'search'),
