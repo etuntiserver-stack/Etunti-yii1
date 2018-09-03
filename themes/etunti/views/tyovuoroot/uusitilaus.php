@@ -786,7 +786,7 @@ $(document).ready(function(){
 				alert(thisDataReturn['sahkoposti']);
 				return false;
 			}
-			//$('#showres').modal('hide');
+			$('#showres').modal('hide');
 
 	   	},
 		error:function(data){
