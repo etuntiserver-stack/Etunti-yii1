@@ -2654,6 +2654,20 @@ class TyovuorootController extends Controller
 					Asiakas: '.$asiakkaat->yhteyshenkilo.'<br>
 					Työvuorot:  '.$model->pvm.', '.$model->alku.'-'.$model->loppu.'<br>';
 
+					// <-- Paatuote
+					$tp = TuotteetPalvelut::model()->findByPK($model->tuoteID);
+					if( isset($tp->id) ){
+						$return_hinnaasto = $this->hinnastoHintaat($tp, $asiakkaat, $kohteet);
+						$maara = $this->num( strtotime($model->loppu)-strtotime($model->alku) );
+						(isset($return_hinnaasto['tp_nimike']))? $message .= '<b>'.$return_hinnaasto['tp_nimike']. '</b>':'';
+						$message .= ', Määrä: '. $maara;
+						(isset($return_hinnaasto['yksikko']))? $message .= $return_hinnaasto['yksikko']:'';
+						(isset($return_hinnaasto['hinta']))? $message .= ', Hinta: '.($return_hinnaasto['hinta']*$maara).'&euro;':'';
+						(isset($return_hinnaasto['alv']))? $message .= ', Alv: '.$return_hinnaasto['alv'].'%':'';
+						$message .= '<br>';
+					}
+					//     Paatuote -->
+
 					if(!empty($asiakkaat->hinta) and $asiakkaat->hinta_tyyppi == 1)
 					{
 						$tuntia = ((strtotime($model->loppu)-strtotime($model->alku))/3600);
@@ -2676,10 +2690,11 @@ class TyovuorootController extends Controller
 						$tp = TuotteetPalvelut::model()->findByPK($v);
 						if( isset($tp->id) ){
 							$return_hinnaasto = $this->hinnastoHintaat($tp, $asiakkaat, $kohteet);
+							$maara = json_decode($model->lisa_tuotteet, true)['maara'][$k];
 							(isset($return_hinnaasto['tp_nimike']))? $message .= '<b>'.$return_hinnaasto['tp_nimike']. '</b>':'';
-							$message .= ', Määrä: '. json_decode($model->lisa_tuotteet, true)['maara'][$k];
+							$message .= ', Määrä: '. $maara;
  							(isset($return_hinnaasto['yksikko']))? $message .= $return_hinnaasto['yksikko']:'';
- 							(isset($return_hinnaasto['hinta']))? $message .= ', Hinta: '.$return_hinnaasto['hinta'].'&euro;':'';
+ 							(isset($return_hinnaasto['hinta']))? $message .= ', Hinta: '.($return_hinnaasto['hinta']*$maara).'&euro;':'';
  							(isset($return_hinnaasto['hinta']))? $message .= ', Alv: '.$return_hinnaasto['alv'].'%':'';
 							$message .= '<br>';
 						}
@@ -2847,6 +2862,20 @@ class TyovuorootController extends Controller
 					Asiakas: '.$asiakkaat->yhteyshenkilo.'<br>
 					Työvuorot:  '.$model->pvm.', '.$model->alku.'-'.$model->loppu.'<br>';
 
+					// <-- Paatuote
+					$tp = TuotteetPalvelut::model()->findByPK($model->tuoteID);
+					if( isset($tp->id) ){
+						$return_hinnaasto = $this->hinnastoHintaat($tp, $asiakkaat, $kohteet);
+						$maara = $this->num( strtotime($model->loppu)-strtotime($model->alku) );
+						(isset($return_hinnaasto['tp_nimike']))? $message .= '<b>'.$return_hinnaasto['tp_nimike']. '</b>':'';
+						$message .= ', Määrä: '. $maara;
+						(isset($return_hinnaasto['yksikko']))? $message .= $return_hinnaasto['yksikko']:'';
+						(isset($return_hinnaasto['hinta']))? $message .= ', Hinta: '.($return_hinnaasto['hinta']*$maara).'&euro;':'';
+						(isset($return_hinnaasto['alv']))? $message .= ', Alv: '.$return_hinnaasto['alv'].'%':'';
+						$message .= '<br>';
+					}
+					//     Paatuote -->
+
 					if(!empty($asiakkaat->hinta) and $asiakkaat->hinta_tyyppi == 1)
 					{
 						$tuntia = ((strtotime($model->loppu)-strtotime($model->alku))/3600);
@@ -2869,10 +2898,11 @@ class TyovuorootController extends Controller
 						$tp = TuotteetPalvelut::model()->findByPK($v);
 						if( isset($tp->id) ){
 							$return_hinnaasto = $this->hinnastoHintaat($tp, $asiakkaat, $kohteet);
+							$maara = json_decode($model->lisa_tuotteet, true)['maara'][$k];
 							(isset($return_hinnaasto['tp_nimike']))? $message .= '<b>'.$return_hinnaasto['tp_nimike']. '</b>':'';
-							$message .= ', Määrä: '. json_decode($model->lisa_tuotteet, true)['maara'][$k];
+							$message .= ', Määrä: '. $maara;
  							(isset($return_hinnaasto['yksikko']))? $message .= $return_hinnaasto['yksikko']:'';
- 							(isset($return_hinnaasto['hinta']))? $message .= ', Hinta: '.$return_hinnaasto['hinta'].'&euro;':'';
+ 							(isset($return_hinnaasto['hinta']))? $message .= ', Hinta: '.($return_hinnaasto['hinta']*$maara).'&euro;':'';
  							(isset($return_hinnaasto['hinta']))? $message .= ', Alv: '.$return_hinnaasto['alv'].'%':'';
 							$message .= '<br>';
 						}

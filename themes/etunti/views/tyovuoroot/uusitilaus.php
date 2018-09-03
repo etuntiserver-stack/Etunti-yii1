@@ -286,21 +286,6 @@ $(document).ready(function(){
 		<label><?php echo Yii::t('main', 'Maksuehto'); ?> </label>
 		<input type="number" name="Asiakkaat[maksuehto]" class="form-control">
     </div>
-    <div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tuoteID'); ?>
-		<?php
-		$criteria = new CDbCriteria();
-       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
-		?>
-		<?php echo $form->dropDownList($model, 'tuoteID', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
-		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
-		<?php echo $form->error($model,'tuoteID'); ?>
-    </div>
-    <div class="section fill mb5">
-		<label><?php echo Yii::t('main', 'Hinnasto'); ?></label>
-		<?php echo Chtml::dropDownList('Asiakkaat[hinnasto_id]', 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
-		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
-    </div>
   </div>
 </div>
 </div><!--olemassa-->
@@ -731,6 +716,11 @@ $(document).ready(function(){
 			$('#Tyovuoroot_tid').css({"border":"2px red solid"}).focus();
 			return false;
 		}
+		if( $('#Tyovuoroot_tuoteID option:selected').val() === '' )
+		{
+			$('#Tyovuoroot_tuoteID').css({"border":"2px red solid"}).focus();
+			return false;
+		}
 
 		var r = confirm('Olet myös luomassa uuden asiakkaan ja kohteen.\n Haluatko jatkaa?');
 		if(r)
@@ -761,6 +751,11 @@ $(document).ready(function(){
 		if( $('#Tyovuoroot_tid option:selected').val() === '' )
 		{
 			$('#Tyovuoroot_tid').css({"border":"2px red solid"}).focus();
+			return false;
+		}
+		if( $('#Tyovuoroot_tuoteID option:selected').val() === '' )
+		{
+			$('#Tyovuoroot_tuoteID').css({"border":"2px red solid"}).focus();
 			return false;
 		}
 			$('#tyovuoroot-form').submit();
