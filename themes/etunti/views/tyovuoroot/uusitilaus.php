@@ -32,7 +32,7 @@
   </div>
   <div class="col-sm-3">
 	<label><?php echo Yii::t('main', 'Asiakas tai kohteen yhteyshenkilö'); ?></label><br>
-	<input type="text" id="asiakas" class="form-control" AUTOCOMPLETE="off">
+	<input type="text" name="oleva_asiakas" id="asiakas" class="form-control" AUTOCOMPLETE="off">
 	<div id="asiakasAutocompleteResult"></div>
   </div>
   <div class="col-sm-3">

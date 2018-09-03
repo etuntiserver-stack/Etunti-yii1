@@ -2544,9 +2544,130 @@ class TyovuorootController extends Controller
 		// $this->performAjaxValidation($model);
 		$return = array();
 
-		if(isset($_POST['Tyovuoroot']))
+		// <-- Oleva asiakas
+		if(isset($_POST['Tyovuoroot']['kohde']) and $_POST['Tyovuoroot']['kohde'] > 0)
 		{
 
+		$kohteet = Kohteet::model()->findByPk($_POST['Tyovuoroot']['kohde']);
+		$asiakkaat = Asiakkaat::model()->findByPk($kohteet->asiakas_id);
+
+		if(!isset($kohteet->id) and !isset($asiakkaat->id))
+		{
+			echo json_encode($return);
+			exit;
+		}
+
+		$model->attributes=$_POST['Tyovuoroot'];
+		$model->kohde = $kohteet->id;
+		$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+		if($model->save())
+		{
+
+			// <-- jos on tyopaari
+			$luotu = array();
+			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
+			{
+
+			    $luotu[$model->id] = $model->tid;
+
+			    foreach($_POST['tyopaari'] as $tid)
+			    {
+				$m=new Tyovuoroot;
+				$m->attributes=$_POST['Tyovuoroot'];
+				$m->kohde = $kohteet->id;
+				$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+				$m->tid=$tid;
+				$m->status=3;
+				if($m->save())
+				{
+					$luotu[$m->id] = $m->tid;
+					$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
+
+				}
+
+			    }
+			    foreach($luotu as $k=>$v)
+					Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode($luotu)));
+
+
+			}
+			// jos on tyopaari -->
+
+
+				$sum = 0;
+				$alv_0 = 0;
+				$alv_sum = 0;
+				   if(isset($_POST['vieposti']) and isset($asiakkaat->sahkoposti) and !empty($asiakkaat->sahkoposti) and $asiakkaat->hinta > 0)
+				   {
+					$message = '
+					Asiakas: '.$asiakkaat->yhteyshenkilo.'<br>
+					Työvuorot:  '.$model->pvm.', '.$model->alku.'-'.$model->loppu.'<br>';
+
+					if(!empty($asiakkaat->hinta) and $asiakkaat->hinta_tyyppi == 1)
+					{
+						$tuntia = ((strtotime($model->loppu)-strtotime($model->alku))/3600);
+						if( count($luotu) > 0 )
+						$tuntia = $tuntia * count($luotu);
+
+						$sum = ($asiakkaat->hinta*$tuntia) + ((($asiakkaat->hinta*$asiakkaat->alv)/100)*$tuntia);
+						$alv_0 = $asiakkaat->hinta*$tuntia;
+						$alv_sum = $sum-$alv_0;
+
+						$message .= 'Hinta ALV 0: '.number_format($alv_0, 2, ',', ' ').' &euro;<br>';
+						$message .= 'ALV: '.number_format($alv_sum, 2, ',', ' ').' &euro;<br>';
+						$message .= 'Hinta: '.number_format($sum, 2, ',', ' ').' &euro;<br>';
+					}
+
+					if(!empty($kohteet->toimenpiteet))
+					$message .= str_replace("\n", "<br>",$kohteet->toimenpiteet);
+
+					if(isset($_POST['Tyovuoroot']['tilausviesti']) and !empty($_POST['Tyovuoroot']['tilausviesti']))
+					$message .= str_replace("\n", "<br>", $_POST['Tyovuoroot']['tilausviesti']);
+
+					$message .= '<h2>Kiitos tilauksesta.</h2>';
+					$subject = Yii::t('main', 'Kiitos tilauksesta');
+
+					$ft = FirmanTiedot::model()->findByPk(1);
+					$mail = new YiiMailer();
+					//$mail->clearLayout();//if layout is already set in config
+					$mail->setFrom('no-reply@etunti.fi');
+					$mail->setTo($asiakkaat->sahkoposti);
+					$mail->setSubject($subject);
+					$mail->setBody($message);
+
+					foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/toimitusehdot*')) as $file) {
+						$mail->setAttachment($file);
+						//break;
+					}
+
+					if($mail->send())
+					{
+
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $asiakkaat->sahkoposti;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->log_nimike	= 'uusi_tilaus';
+							$log->save();
+							//     LOG -->
+					}
+				   }
+
+
+			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)), 'alv'=>$alv_sum, 'alv_0' => $alv_0, 'sum' => $sum);
+		}
+
+		echo json_encode($return);
+		exit;
+
+		}
+		//  Oleva asiakas -->
+
+		if(isset($_POST['Tyovuoroot']))
+		{
 
 		$asiakkaat = new Asiakkaat;
 		$asiakkaat->attributes = $_POST['Asiakkaat'];
