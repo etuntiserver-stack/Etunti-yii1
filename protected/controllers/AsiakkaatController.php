@@ -40,7 +40,7 @@ class AsiakkaatController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus', 'kaikki_netvisoriin'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -394,6 +394,20 @@ class AsiakkaatController extends Controller
 		$this->render('massamuokkaus',array(
 			'model'=>$model,
 		));
+	}
+
+	public function actionKaikki_netvisoriin()
+	{
+		$asetukset = Asetukset::model()->findbypk(1);
+		if($asetukset->netvisor_kaytto == 1)
+		{
+		   $asiakkaat = Asiakkaat::model()->findAll("netvisorkey=0 AND aktiivinen=1");
+		   foreach($asiakkaat as $model){
+			$this->netvisorCustomer("add", $model);
+		   }
+		   Yii::app()->user->setFlash('success', "Valmis.");
+		}
+		$this->redirect(array('index'));
 	}
 
 	/**
