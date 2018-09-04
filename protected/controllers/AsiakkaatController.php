@@ -402,11 +402,27 @@ class AsiakkaatController extends Controller
 		if($asetukset->netvisor_kaytto == 1)
 		{
 		   $asiakkaat = Asiakkaat::model()->findAll("netvisorkey=0 AND aktiivinen=1");
+		   $virhe_response = [];
 		   foreach($asiakkaat as $model){
-			echo 'Asiakas '.$model->id.'<br>';
-			$this->netvisorCustomer("add", $model);
+			if($model->tyyppi == 'yritys'){
+				$nimi = $model->yrityksen_nimi;
+			}
+			if($model->tyyppi == 'henkilo'){
+				$nimi = $model->yhteyshenkilo;
+			}
+
+			if($this->netvisorCustomer("add", $model) !== true){
+				$virhe_response[] = '<h3>Asiakas: '.$nimi.'</h3>'.$this->netvisorCustomer("add", $model);
+			}
 		   }
 		   Yii::app()->user->setFlash('success', "Valmis.");
+		   if( count($virhe_response) > 0 ){ 
+			$lista = '';
+			foreach($virhe_response as $itm){
+				$lista .= $itm.'<br>';
+			}
+			Yii::app()->user->setFlash('danger', "<h1>Ei mennyt läpi:</h1><p>". $lista . "</p>" ); 
+		   }
 		}
 		$this->redirect(array('index'));
 	}
@@ -972,18 +988,13 @@ $xml = '
 
 	  if($result->ResponseStatus->Status == 'OK')
 	  {
-
 		if( $tila == 'add' )
 		Asiakkaat::model()->updateByPk($model->id, array('netvisorkey'=>(int)$result->Replies->InsertedDataIdentifier));
 
-		return 'OK';
+		return true;
 
 	  } else {
-
-		echo '<pre>';
-		print_r( $response );
-		echo '</pre>';
-		exit;
+		return $response;
 
 	  }
 
