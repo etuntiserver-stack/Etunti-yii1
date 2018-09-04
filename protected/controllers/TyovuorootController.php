@@ -2666,8 +2666,8 @@ class TyovuorootController extends Controller
 					Asiakas: '.$asiakkaat->yhteyshenkilo.'<br>
 					Työvuorot:  '.$model->pvm.', '.$model->alku.'-'.$model->loppu.'<br>';
 
-					$message .= '<style>table {border-collapse: collapse; border: 1px solid grey;} th, td{border: 1px solid grey; padding: 3px 10px;}</style>';
-					$message .= '<table>';
+					$message .= '<style>#lahetys_taulu table {border-collapse: collapse; border: 1px solid grey;} lahetys_taulu th, lahetys_taulu td{border: 1px solid grey; padding: 3px 10px;}</style>';
+					$message .= '<table id="lahetys_taulu">';
 					$message .= '<tr>';
 					$message .= '<th>Tuote/Palvelu</th>';
 					$message .= '<th>Määrä</th>';
@@ -2907,7 +2907,7 @@ class TyovuorootController extends Controller
 					Asiakas: '.$asiakkaat->yhteyshenkilo.'<br>
 					Työvuorot:  '.$model->pvm.', '.$model->alku.'-'.$model->loppu.'<br>';
 
-					$message .= '<style>table {border-collapse: collapse; border: 1px solid grey;} th, td{border: 1px solid grey; padding: 3px 10px;}</style>';
+					$message .= '<style>#lahetys_taulu table {border-collapse: collapse; border: 1px solid grey;} lahetys_taulu th, lahetys_taulu td{border: 1px solid grey; padding: 3px 10px;}</style>';
 					$message .= '<table>';
 					$message .= '<tr>';
 					$message .= '<th>Tuote/Palvelu</th>';

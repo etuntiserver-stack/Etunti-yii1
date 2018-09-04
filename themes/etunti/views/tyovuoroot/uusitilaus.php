@@ -408,9 +408,9 @@ $(document).ready(function(){
 </div>
 
 <br>
-<label><?=Yii::t('main','Valitse tuotteet ja lisäpalvelut')?></label>
 <div class="row" id="lisapalvelut_valinta">
   <div class="col-sm-3">
+  <label><?=Yii::t('main','Valitse tuotteet ja lisäpalvelut')?></label>
 		<?php
 		$criteria = new CDbCriteria();
        		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
@@ -424,6 +424,7 @@ $(document).ready(function(){
 		?>
   </div>
   <div class="col-sm-3">
+	<label><?=Yii::t('main','Lisää painamalla plussa')?></label>
 	<div class="row">
 	 <div class="col-sm-10">
 		<?php echo CHtml::numberField('lisapalvelu_maara','lisapalvelu_maara',array('class'=>'form-control', 'placeholder' => 'määrä')); ?>
