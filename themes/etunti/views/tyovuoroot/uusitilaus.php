@@ -320,29 +320,18 @@ $(document).ready(function(){
 
 <div class="row">
   <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'tyoajanmerkinta'); ?>
-		<?php
-        	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
-		echo '<select name="Tyovuoroot[tyoajanmerkinta]" class="form-control">';
+		<?php echo $form->labelEx($model,'tid'); ?>
 
-		 if(!empty($model->tyoajanmerkinta)){
-		   $expl = explode("/",$model->tyoajanmerkinta);
-		   $value = (isset($expl[0])) ? $expl[0] : '';
-		   echo '<option value="'.$model->tyoajanmerkinta.'">'.$value.'</option>';
-		 }
 
-		 foreach($tal as $v)
-		 {
-		   $expl = explode("/",$v->value);
-		   $color = (isset($expl[1])) ? $expl[1] : '';
-		   $value = (isset($expl[0])) ? $expl[0] : '';
-		   echo '<option style="color:'.$color.'" value="'.$v->value.'">'.$value.'</option>';
-		 }
-		echo '</select>';
-        	?>
+				<?php
+				$list = array(0=>Yii::t('main', 'VARAUS'));
+		   		$site = Yii::app()->createController('Site');
+		   		$returnList = $site[0]->tyontekiatArrayList(1);
+				array_push($list, $returnList);
+				?>
 
+        	<?php echo $form->dropDownList($model, 'tid', $list,array('empty'=>'Valitse','class'=>'form-control'));	?>
   </div>
-
   <div class="col-sm-3">
 		<label><?php echo Yii::t('main', 'Työpari'); ?></label><br>
 		<?php 
@@ -372,27 +361,35 @@ $(document).ready(function(){
 
 
   </div>
-
-  <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'tid'); ?>
-
-
-				<?php
-				$list = array(0=>Yii::t('main', 'VARAUS'));
-		   		$site = Yii::app()->createController('Site');
-		   		$returnList = $site[0]->tyontekiatArrayList(1);
-				array_push($list, $returnList);
-				?>
-
-        	<?php echo $form->dropDownList($model, 'tid', $list,array('empty'=>'Valitse','class'=>'form-control'));	?>
-  </div>
-
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'status'); ?>
 		<?php 
         	$l = $this->tilanteet();
 		echo $form->dropDownList($model,'status', $l, 
 		array('class'=>'form-control')) ?>
+
+  </div>
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'tyoajanmerkinta'); ?>
+		<?php
+        	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
+		echo '<select name="Tyovuoroot[tyoajanmerkinta]" class="form-control">';
+
+		 if(!empty($model->tyoajanmerkinta)){
+		   $expl = explode("/",$model->tyoajanmerkinta);
+		   $value = (isset($expl[0])) ? $expl[0] : '';
+		   echo '<option value="'.$model->tyoajanmerkinta.'">'.$value.'</option>';
+		 }
+
+		 foreach($tal as $v)
+		 {
+		   $expl = explode("/",$v->value);
+		   $color = (isset($expl[1])) ? $expl[1] : '';
+		   $value = (isset($expl[0])) ? $expl[0] : '';
+		   echo '<option style="color:'.$color.'" value="'.$v->value.'">'.$value.'</option>';
+		 }
+		echo '</select>';
+        	?>
 
   </div>
 </div>
