@@ -403,6 +403,7 @@ class AsiakkaatController extends Controller
 		{
 		   $asiakkaat = Asiakkaat::model()->findAll("netvisorkey=0 AND aktiivinen=1");
 		   foreach($asiakkaat as $model){
+			echo 'Asiakas '.$model->id.'<br>';
 			$this->netvisorCustomer("add", $model);
 		   }
 		   Yii::app()->user->setFlash('success', "Valmis.");
