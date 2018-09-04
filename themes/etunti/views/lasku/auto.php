@@ -162,7 +162,7 @@
 					select_type='asiakas_ryhma_real'
 				";
 				?>
-				<?php echo CHtml::dropDownList('filter_tyoryhma', 'filter_tyoryhma', CHtml::listData(Valikkoot::model()->findAll($criteria), 'id', 'value'), 
+				<?php echo CHtml::dropDownList('filter_asiakasryhma', 'filter_asiakasryhma', CHtml::listData(Valikkoot::model()->findAll($criteria), 'id', 'value'), 
 				array('empty'=>'Valitse asiakasryhmä', 'class'=>'gui-input')); ?>
                             <i class="arrow double"></i>
                             </label>
