@@ -21,8 +21,6 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
-
-
 <div class="row">
   <div class="col-sm-3">
 	<br>
@@ -293,6 +291,8 @@ $(document).ready(function(){
 
 
 <legend><h2><?php echo Yii::t('main', 'Työvuoro'); ?></h2></legend>
+<?php echo $form->hiddenField($model,'uusi_tilaus', array('value' => 1)); ?>
+
 <div class="row">
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'pvm'); ?>
