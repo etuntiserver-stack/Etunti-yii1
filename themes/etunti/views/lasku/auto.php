@@ -82,6 +82,14 @@
                     <div class="row">
                       <div class="col-md-2">
                         <div class="section">
+                          <label class="field select">
+				<?php $arr = array('henkilo' => 'Yksityishenkilö', 'yritys' => 'Yritys', 'kaikki' => 'Kaikkki'); ?>
+				<?php echo CHtml::dropDownList('filter_tyyppi', 'filter_tyyppi', $arr, array('empty'=>'Valitse tyyppi', 'class'=>'gui-input')); ?>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                        <div class="section">
                           <label class="field prepend-icon">
    			    <input type="text" name="from" class="gui-input datepickerFI" placeholder="Mistä">
                             <label for="firstname" class="field-icon">
@@ -91,6 +99,21 @@
                         </div>
                       </div>
                       <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+				<?php
+				$criteria=new CDbCriteria;
+				$criteria->group = "kaupunki";
+				$criteria->condition = " 
+					kaupunki!=''
+				";
+				?>
+				<?php echo CHtml::dropDownList('filter_postitoimipaikka', 'filter_postitoimipaikka', CHtml::listData(Asiakkaat::model()->findAll($criteria), 'kaupunki', 'kaupunki'), 
+				array('empty'=>'Valitse postitoimipaika', 'class'=>'gui-input')); ?>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
                         <div class="section">
                           <label class="field prepend-icon">
    			    <input type="text" name="to" class="gui-input datepickerFI" placeholder="Mihin">
@@ -104,6 +127,21 @@
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
+				<?php
+				$criteria=new CDbCriteria;
+				$criteria->group = "tyoryhma";
+				$criteria->condition = " 
+					tyoryhma!='' and tyoryhma IS NOT NULL
+				";
+				?>
+				<?php echo CHtml::dropDownList('filter_tyoryhma', 'filter_tyoryhma', CHtml::listData(Asiakkaat::model()->findAll($criteria), 'tyoryhma', 'valikkotyoryhma'), 
+				array('empty'=>'Valitse työryhmä', 'class'=>'gui-input')); ?>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                        <div class="section">
+                          <label class="field select">
 			    <select name="alvsis" id="alvsis" class="gui-input">
 			     <option value="0"><?php echo Yii::t('main', 'Hinnat ALV 0%'); ?></option>
 			     <option value="1"><?php echo Yii::t('main', 'Hinnat sis. ALV'); ?></option>
@@ -114,6 +152,23 @@
                         </div>
                       </div>
 
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+				<?php
+				$criteria=new CDbCriteria;
+				$criteria->order = "value";
+				$criteria->condition = " 
+					select_type='asiakas_ryhma_real'
+				";
+				?>
+				<?php echo CHtml::dropDownList('filter_tyoryhma', 'filter_tyoryhma', CHtml::listData(Valikkoot::model()->findAll($criteria), 'id', 'value'), 
+				array('empty'=>'Valitse asiakasryhmä', 'class'=>'gui-input')); ?>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
                       <div class="col-md-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo laskut'); ?>">
 		      </div>

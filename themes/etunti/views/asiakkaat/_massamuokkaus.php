@@ -79,7 +79,6 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
   </div>
   <div class="col-sm-3">
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'filter_asiakasryhma'); ?>
 		<?php
 		$criteria=new CDbCriteria;
 		$criteria->order = "value";

@@ -131,6 +131,24 @@ class LaskuController extends Controller
 		if( $asiakas_id !== null ){
 	        $criteria->addCondition ("  id='".$asiakas_id."' ");
 		}
+		if(isset($_GET['filter_tyyppi']) and !empty($_GET['filter_tyyppi']) and $_GET['filter_tyyppi'] == 'henkilo'){
+			$criteria->addCondition(" tyyppi='".$_GET['filter_tyyppi']."' "); 
+		}
+		if(isset($_GET['filter_tyyppi']) and !empty($_GET['filter_tyyppi']) and $_GET['filter_tyyppi'] == 'yritys'){
+			$criteria->addCondition(" tyyppi='".$_GET['filter_tyyppi']."' "); 
+		}
+		if(isset($_GET['filter_tyyppi']) and !empty($_GET['filter_tyyppi']) and $_GET['filter_tyyppi'] == 'kaikki'){
+			$criteria->addCondition(" tyyppi='henkilo' OR tyyppi='yritys' "); 
+		}
+		if(isset($_GET['filter_postitoimipaikka']) and !empty($_GET['filter_postitoimipaikka'])){
+			$criteria->addCondition(" kaupunki='".$_GET['filter_postitoimipaikka']."' "); 
+		}
+		if(isset($_GET['filter_tyoryhma']) and !empty($_GET['filter_tyoryhma'])){
+			$criteria->addCondition(" tyoryhma='".$_GET['filter_tyoryhma']."' "); 
+		}
+		if(isset($_GET['filter_asiakasryhma']) and !empty($_GET['filter_asiakasryhma'])){
+			$criteria->addCondition(" ryhma LIKE '%\"".$_GET['filter_asiakasryhma']."\"%' "); 
+		}
 
 		$lista = Asiakkaat::model()->findAll($criteria);
 		$this->render('luolaskut', array(
