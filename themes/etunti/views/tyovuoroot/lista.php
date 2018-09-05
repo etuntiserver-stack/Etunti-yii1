@@ -163,11 +163,19 @@
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
-
    			    <input type="text" class="gui-input datepickerFI" name="from" value="<?=$from?>" placeholder="<?php echo Yii::t('main', 'Mistä'); ?>...">
-
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                        <div class="section">
+                          <label class="field select">
+				<select class="" id="uusi_tilaus" name="uusi_tilaus">
+				<option value="0" <?=((isset($_GET['uusi_tilaus']) and $_GET['uusi_tilaus'] == 0)? 'selected':'') ?>><?=Yii::t('main', 'Työvuorot')?></option>
+				<option value="1" <?=((isset($_GET['uusi_tilaus']) and $_GET['uusi_tilaus'] == 1)? 'selected':'') ?>><?=Yii::t('main', 'Tilaukset')?></option>
+				</select>
+                            <i class="arrow double"></i>
                             </label>
                           </label>
                         </div>

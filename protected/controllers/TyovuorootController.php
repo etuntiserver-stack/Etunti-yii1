@@ -4111,11 +4111,19 @@ class TyovuorootController extends Controller
 			$impl = implode(",", $_GET['tekijaPaaSivulla']);
 	        	$criteria->addCondition (" tid IN ($impl) ");
 		}
-		if(isset($_GET['laskutettu']))
+		if(isset($_GET['laskutettu']) and !empty($_GET['laskutettu']))
 		{
 	        	$criteria->addCondition (" laskutettu='".$_GET['laskutettu']."' ");
+		} else {
+	        	$criteria->addCondition (" laskutettu='0' ");
 		}
-		if(isset($_GET['status']))
+		if(isset($_GET['uusi_tilaus']) and !empty($_GET['uusi_tilaus']))
+		{
+	        	$criteria->addCondition (" uusi_tilaus='".$_GET['uusi_tilaus']."' ");
+		} else {
+	        	$criteria->addCondition (" uusi_tilaus='0' ");
+		}
+		if(isset($_GET['status']) and !empty($_GET['status']))
 		{
 			$impl_status = implode(",", $_GET['status']);
 	        	$criteria->addCondition (" status IN ($impl_status) ");

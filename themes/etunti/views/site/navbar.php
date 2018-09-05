@@ -1038,6 +1038,10 @@ $('.tvchange').change(function(){
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Työvuorot'); ?></a>
               </li>
               <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/lista?uusi_tilaus=1">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Tilaukset'); ?></a>
+              </li>
+              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/siirto">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Siirto'); ?></a>
               </li>
