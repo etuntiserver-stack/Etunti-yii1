@@ -105,12 +105,20 @@ exit;
 	$i = 0;
 	foreach(array_reverse(glob('tiedostot/kohteet/'.Yii::app()->user->domain.'/'.$model->id.'_*.*')) as $file) {
 	$i++;
-	$explNimi = explode("/",$file);
+	$ext = pathinfo(basename($file), PATHINFO_EXTENSION);
  	echo '
-	<div class="form-inline" id="t_'.$model->id.$i.'">
-	  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$model->id.'" for="t_'.$model->id.$i.'">X</div>
-	  &nbsp;&nbsp;&nbsp;<a href="../../'.$file.'">'.end($explNimi).'</a>
-	</div>
+	<div class="form-inline" id="t_'.$i.'">
+	  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$model->id.'" for="t_'.$i.'">X </div> ';
+				// <-- file_safe_opener
+				$filepath = Yii::getPathOfAlias('application').'/../'.$file;
+				echo CHtml::link(basename($file),
+					array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
+					array(
+						'target'=>'_blank',
+						'class'=>'link'
+				));
+				//     file_safe_opener// -->
+	echo '</div>
 	';
 	$kuvat[$i] = $file;
 	}
