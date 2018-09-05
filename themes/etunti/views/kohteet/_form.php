@@ -342,26 +342,35 @@ $(document).ready(function(){
 
 
 	<div class="section fill mb5">
-    <?php
+        <?php
 	$i = 0;
 	foreach(array_reverse(glob('tiedostot/kohteet/'.Yii::app()->user->domain.'/tyonkuvaukset/'.$model->id.'_*.*')) as $file) {
 	$i++;
-	$explNimi = explode("/",$file);
+	$ext = pathinfo(basename($file), PATHINFO_EXTENSION);
  	echo '
 	<div class="row">
- 	  <div class="col-sm-4">
-	<label>'. Yii::t('main', 'Työnkuvaus').'</label>
-	<div class="form-inline" id="t_'.$model->id.$i.'">
-	  <div class="btn btn-xs btn-danger poistaTyonkuvaus" this="'.$file.'" model="'.$model->id.'" for="t_'.$model->id.$i.'">X</div>
-	  &nbsp;&nbsp;&nbsp;<a href="../../'.$file.'">'.end($explNimi).'</a>
-	</div>
+ 	  <div class="col-sm-2">
+	  <label>'. Yii::t('main', 'Työnkuvaus').': </label>
+	  </div>
+	  <div class="col-sm-8" id="t_'.$model->id.$i.'">
+	  <div class="btn btn-xs btn-danger poistaTyonkuvaus" this="'.$file.'" model="'.$model->id.'" for="t_'.$model->id.$i.'">X </div> ';
+				// <-- file_safe_opener
+				$filepath = Yii::getPathOfAlias('application').'/../'.$file;
+				echo CHtml::link(basename($file),
+					array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
+					array(
+						'target'=>'_blank',
+						'class'=>'link'
+				));
+				//     file_safe_opener// -->
+	echo '
 	 </div>
 	</div>
 	<br>
 	';
 	$kuvat[$i] = $file;
 	}
-   ?>
+        ?>
 	</div>
 
 
