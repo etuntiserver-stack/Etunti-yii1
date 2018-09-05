@@ -172,7 +172,8 @@ class ViestintaController extends Controller
 		if(isset($_POST['Viestinta']))
 		{
 
-		    if(is_array($_POST['Viestinta']['tekija']))
+
+		    if(isset($_POST['Viestinta']['tekija']) and count($_POST['Viestinta']['tekija']) > 0)
 		    {
 			foreach($_POST['Viestinta']['tekija'] as $tekija)
 			{
@@ -185,12 +186,7 @@ class ViestintaController extends Controller
 			Domainit::sendGCM($model->tekija,Yii::t('main', 'Uusi viesti'),$model->viesti, null);
 			}
 		    } else {
-			$model=new Viestinta;
-			$model->attributes=$_POST['Viestinta'];
-			$model->viesti=date("d.m H:i").", ".Yii::app()->user->nimi.": ".$_POST['Viestinta']['viesti'];
-			$model->save();
-			if($model->tekija != 'toimisto')
-			Domainit::sendGCM($model->tekija,Yii::t('main', 'Uusi viesti'),$model->viesti, null);
+			Yii::app()->user->setFlash('danger', "Valitse vastaanottaja");
 		    }
 
 			$this->redirect(array('index'));
