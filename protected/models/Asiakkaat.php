@@ -99,7 +99,10 @@ class Asiakkaat extends DB2ActiveRecord
 		     'verot' => 'varchar(100)',
                      'hinta_sis_alv' => 'float',
 		     'tyoryhma' => 'int(11)',
-                     'gcm_reg_id' => 'varchar(500) '
+                     'gcm_reg_id' => 'varchar(500) ',
+                     'lopetuksen_pvm' => 'varchar(50)',
+                     'lopetuksen_syy' => 'TEXT'
+
                      //'vinkki_tunnit' => 'varchar(10)',
                      //'vinkki_prosentti' => 'varchar(10)',
 
@@ -131,8 +134,8 @@ class Asiakkaat extends DB2ActiveRecord
 			array('myyja, postinumero, k_postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, k_kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
 			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma, sahkopostilaskuosoite, token', 'length', 'max'=>255),
 			array('maksuehto, viivastyskorko, hinta, hinta_sis_alv', 'length', 'max'=>20),
-			array('asiakasnumero, ovt_tunnus, valittajan_tunnus, hinta_tyyppi, verot', 'length', 'max'=>100),
-			array('alennuskoodit, gcm_reg_id', 'safe'),
+			array('asiakasnumero, ovt_tunnus, valittajan_tunnus, hinta_tyyppi, verot, lopetuksen_pvm', 'length', 'max'=>100),
+			array('alennuskoodit, gcm_reg_id, lopetuksen_syy', 'safe'),
 			array('sahkoposti','unique', 'message'=>'Tämä sähköposti on jo rekisteröity asiakkaalle.'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -197,6 +200,8 @@ class Asiakkaat extends DB2ActiveRecord
 			'filter_tyoryhma' => Yii::t('main', 'Työryhmä'),
 			'filter_asiakasryhma' => Yii::t('main', 'Asiakasryhmä'),
 			'filter_tyyppi' => Yii::t('main', 'Tyyppi'),
+			'lopetuksen_pvm' => Yii::t('main', 'Päivämäärä jolloin asiakas menee passiviksi'),
+			'lopetuksen_syy' => Yii::t('main', 'Syy'),
 		);
 	}
 

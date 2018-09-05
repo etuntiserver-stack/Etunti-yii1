@@ -151,6 +151,20 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
+	<div id="lopetus_laatikko" style="display:none">
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'lopetuksen_pvm'); ?>
+		<?php echo $form->textField($model,'lopetuksen_pvm',array('size'=>60,'maxlength'=>100,'class'=>'form-control datepickerFI')); ?>
+		<?php echo $form->error($model,'lopetuksen_pvm'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'lopetuksen_syy'); ?>
+		<?php echo $form->textarea($model,'lopetuksen_syy',array('rows'=>8,'cols'=>6,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'lopetuksen_syy'); ?>
+	</div>
+	</div>
+
 	<div class="section fill mb5 ashidd_a">
 
 		<?php echo $form->labelEx($model,'myyja'); ?>
@@ -477,6 +491,18 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  passiviksesi();
+  $("#Asiakkaat_aktiivinen").change(function() {
+	passiviksesi();
+  });
+  function passiviksesi(){
+	if( $('#Asiakkaat_aktiivinen option:selected').val() == '0' ){
+		$("#lopetus_laatikko").show('370');
+	} else {
+		$("#lopetus_laatikko").hide('370');
+	}
+  }
 
   $(".sw").bootstrapSwitch({
 	//size: "large",
