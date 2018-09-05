@@ -295,7 +295,7 @@ if(!isset($_POST['tulosta']))
 	   	//    Tyoryhmat -->
 
 	   if(!empty($osoite)){ $osoite = '<br>'.$asiakasNakyvissa.$paikkakuntaNakyvissa.$osoite; }
-	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="did '.$fullRivi.'" style="color:'.$color.'">';
+	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="did '.$fullRivi.' '.(($tvVal->laskutettu == 1)? 'laskutettu':'').'" style="color:'.$color.'">';
 	   if( $from != 'mobiili' ){
 	       $bod .=  '<span class="link text-danger fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></span>';
 	   }

@@ -39,3 +39,6 @@ td .tp{
 .table{
     height: 100%;
 }
+.laskutettu{
+	border:1px blue solid;
+}
