@@ -348,7 +348,8 @@ $(document).ready(function(){
 <br>
 
 	<div class="section">
-		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('main', 'Muokkaa kaikkia') : Yii::t('main', 'Muokkaa kaikkia'),array('class'=>'btn btn-primary myBgColors luoTallennaAsiakas')); ?>
+		<?php echo CHtml::submitButton( Yii::t('main', 'Esikatselu') , array('class'=>'btn btn-primary myBgColors esikatselu')); ?>
+		<?php echo CHtml::link(Yii::t('main', 'Keskeytä'), array('massamuokkaus'), array('class'=>'btn btn-primary myBgColors keskeyta')); ?>
 	</div>
 
 
@@ -370,8 +371,7 @@ $(document).ready(function(){
 	offText: "Ei"
   });
 
-
-  $(".luoTallennaAsiakas").click(function(e) {
+  $(".esikatselu").click(function(e) {
     e.preventDefault();
 
     var countChecked = function() {
@@ -382,33 +382,31 @@ $(document).ready(function(){
 	alert('Valitse kentä.');	
 	return false; 
     }
-
     var sList = "";
     $('#asiakkaat-form input[type=checkbox]').each(function () {
 	if( this.checked && $( this ).next('input').val() === '' || this.checked && $( this, 'option:selected' ).next('select').val() === '' ){
 		sList += "Täytä: " + $( this ).prev('label').text() + "\n";
  	}
     });
-
     if( sList !== '' ){
 	alert(sList);
 	return false;
     }
+    $('#asiakkaat-form input[type=checkbox]').each(function () {
+	if( !this.checked ){
+		$( 'legend' ).remove();
+		$( this ).closest('.section').remove();
+ 	} else {
+		$( this ).closest('.section').find('input').attr('disabled', 'yes');
+		$( this ).closest('.section').find('select').attr('disabled', 'yes');
+	}
+    });
+    $(this).removeClass('esikatselu').addClass('tallenna_lomake').val('Muokka kaikkia');
+    $(".tallenna_lomake").click(function(){
+	   if(!confirm('Oletko varma?')){ return false; }
+	   $('#asiakkaat-form').submit();
+    });
 
-    if(!confirm('Oletko varma?')){ return false; }
-
-    var tyyppi = $('#Asiakkaat_tyyppi option:selected').val();
-    if( tyyppi == 'henkilo' && $('#Asiakkaat_yhteyshenkilo').val() == '' ){
-	$('#Asiakkaat_yhteyshenkilo').focus();
-	alert('Yksityisasiakkaalle yhteyshenkilö on pakollinen tieto.');
-	return false;
-    }
-    if( tyyppi == 'yritys' && $('#Asiakkaat_yrityksen_nimi').val() == '' ){
-	$('#Asiakkaat_yrityksen_nimi').focus();
-	alert('Yrityksen nimi ei saa olla tyhjänä!');
-	return false;
-    }
-    $('#asiakkaat-form').submit();
   });
 
 
