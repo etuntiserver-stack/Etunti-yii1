@@ -119,13 +119,14 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 		<?php
        		$criteria = new CDbCriteria();
 	        $criteria->order = " osoite ";
+		$criteria->condition = " aktiivinen=1 ";
 
 		// <-- TyoryhmatHelper
 		$site = Yii::app()->createController('Site');
 		$arr = $site[0]->TyoryhmatHelper();
 		$ids = implode(",", $arr);
 		if( count($arr) > 0 ){
-			$criteria->condition = " tyoryhma IN ($ids) ";
+			$criteria->addCondition(" tyoryhma IN ($ids) ");
 		}
 		//     TyoryhmatHelper -->
 

@@ -640,7 +640,7 @@ Yritys '.$yr.'
 			// <-- Kaikki kohteet passiviseksi jos asiakas passivinen
 			if($_POST['Asiakkaat']['aktiivinen'] == 0 and $vanha_attr['aktiivinen'] == 1)
 			{
-
+				
 				$criteria=new CDbCriteria;
 				$criteria->condition = " 
 					asiakas_id='".$id."'
@@ -652,17 +652,15 @@ Yritys '.$yr.'
 
 				if(count($kohteet) > 0)
 				{
-					Yii::app()->user->setFlash('danger', "Asiakkaalla on suunniteltuja työvuoroja. Poista ensin kaikki tulevat työvuorot ja vasta sitten muuta asiakas Ei Aktiiviseksi.");
-
-					$this->redirect(array('update', 'id' => $id));
-				} else {
+					Yii::app()->user->setFlash('danger', "Asiakkaalla on suunniteltuja työvuoroja.");
+				} 
 
 					$criteria=new CDbCriteria;
 					$criteria->condition = " 
 						asiakas_id='".$id."'
 					";
 					Kohteet::model()->updateAll(array('aktiivinen'=>'0'), $criteria);
-				}
+				
 
 			}
 			//     Kaikki kohteet passiviseksi jos asiakas passivinen -->
