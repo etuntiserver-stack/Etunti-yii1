@@ -1158,6 +1158,7 @@ $xml = '
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND id NOT IN(select kid from sivexkuitti_repaired)
 			AND (status = '3' OR status = '2')
+			AND deleted=0
 		";
 
 
@@ -1190,6 +1191,7 @@ $xml = '
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND (status = '3' OR status = '2')
+			AND deleted=0
 		";
 
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."' ");
@@ -1231,6 +1233,7 @@ $xml = '
 			loppui!='' and aloitan!='' 
 			AND tid='".$tid."'
 			AND YEARWEEK(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')) = '".$year.$week."'
+			AND deleted=0
 		";
 
 		if($tila == 'luetut')
@@ -1386,6 +1389,7 @@ $xml = '
 			AND (status='2' OR status='3')
 			AND DAYOFWEEK(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))!=1
 			$pvmSTR
+			AND deleted=0
 		";
 
 
@@ -1407,6 +1411,7 @@ $xml = '
 			AND (status='2' OR status='3')
 			AND DAYOFWEEK(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))!=1
 			$pvmSTR
+			AND deleted=0
 		";
 
 
@@ -1438,6 +1443,7 @@ $xml = '
 			$status
 			AND sairaus!=1
 			AND id NOT IN(select kid from sivexkuitti_repaired)
+			AND deleted=0
 		";
 		$luetut = Mobile::model()->find($criteria);
 
@@ -1451,6 +1457,7 @@ $xml = '
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".$pvm."'
 			$status
 			AND sairaus!=1
+			AND deleted=0
 		";
 		$toteutuneet = Toteutuneet::model()->find($criteria);
 

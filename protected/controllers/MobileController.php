@@ -313,6 +313,7 @@ function num($val){
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " 
 				aloitan!='' and loppui!='' 
+				AND deleted=0
 			";
 
 			allCrit($criteria);
@@ -365,7 +366,11 @@ function num($val){
 		       	$criteria = new CDbCriteria();
 			$criteria->select = " time,aloitan,loppui,tid,tekijan_nimi,kohde_kannasta,viesti,sairaus,status ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
-			$criteria->condition = " aloitan!='' and loppui!='' AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";
+			$criteria->condition = " 
+				aloitan!='' and loppui!='' 
+				AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) 
+				AND deleted=0
+			";
 
 			allCrit($criteria);
 
@@ -378,7 +383,10 @@ function num($val){
 		       	$criteria = new CDbCriteria();
 			$criteria->select = " time,aloitan,loppui,tekijan_nimi,kohde_kannasta,sairaus ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
-			$criteria->condition = " aloitan!='' and loppui!='' ";
+			$criteria->condition = " 
+				aloitan!='' and loppui!='' 
+				AND deleted=0
+			";
 
 			allCrit($criteria);
 			$tot = array();
@@ -808,6 +816,7 @@ function num($val){
 				AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) 
 				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+				AND deleted=0
 			";
 
 			if(!empty($osoite))
@@ -829,6 +838,7 @@ function num($val){
 				AND tid='".$tid."'
 				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+				AND deleted=0
 			";
 
 			if(!empty($osoite))
@@ -877,6 +887,7 @@ function num($val){
 			AND sairaus!=1
 			AND hyvaksytty=''
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+			AND deleted=0
 		";
 		if( isset($_GET['osoite']) and !empty($_GET['osoite']) ){
 		        $criteria->addCondition(" kohde_kannasta LIKE '%".$_GET['osoite']."%' "); 
@@ -1129,6 +1140,7 @@ function num($val){
 				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')='".date("Y-m-d H:i", strtotime($model->aloitan))."'
 				AND DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')='".date("Y-m-d H:i", strtotime($model->loppui))."'
 				AND tid='".$model->tid."'
+				AND deleted=0
 			";
 			$check = Mobile::model()->find($criteria);
 
@@ -1168,6 +1180,7 @@ function num($val){
 				AND tid='".$model->tid."'
 				AND kohdenID='".$model->kohdenID."'
 				AND status='".$model->status."'
+				AND deleted=0
 			";
 			$check = Mobile::model()->find($criteria);
 			if(isset($check->id))
@@ -1367,7 +1380,10 @@ function num($val){
 		time and status IN (1,2,10) AND loppui='' DESC, 
 		time DESC ";
 
-	        $criteria->condition = " admin!=1 AND status=3 ";
+	        $criteria->condition = " 
+			admin!=1 AND status=3 
+			AND deleted=0
+		";
 
 		// <-- Tyoryhmat
 		$site = Yii::app()->createController('Site');
@@ -1493,7 +1509,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		time and status IN (1,2,10) AND loppui='' DESC, 
 		time DESC ";
 
-	        $criteria->condition = " admin!=1 ";
+	        $criteria->condition = " 
+			admin!=1 
+			AND deleted=0
+		";
 
 		// <-- Tyoryhmat
 		$tt = Yii::app()->createController('Tyontekijat');
@@ -1834,6 +1853,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND status='".$status."'
 			AND sairaus!=1
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+			AND deleted=0
 		";
 
 
@@ -1853,6 +1873,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			BETWEEN '".$from."' AND '".$to."'
 			AND status='".$status."'
 			AND sairaus!=1
+			AND deleted=0
 		";
 
 
@@ -1895,7 +1916,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			BETWEEN '".$from."' AND '".$to."'
 			AND sairaus='".$sairaus."'
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
-
+			AND deleted=0
 		";
 
 
@@ -1914,6 +1935,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."'
 			AND sairaus='".$sairaus."'
+			AND deleted=0
 		";
 
 
@@ -1955,7 +1977,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
 			AND sairaus='".$sairaus."'
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
-
+			AND deleted=0
 		";
 
 
@@ -1974,6 +1996,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
 			AND sairaus='".$sairaus."'
+			AND deleted=0
 		";
 
 
@@ -1987,168 +2010,6 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		return count($lu_r)+count($tot_r);
 	}
-
-
-
-/*
-	protected function TidfromtoSL($from,$to,$tid)
-	{
-
-		$from = date("Y-m-d", strtotime($from));
-		$to = date("Y-m-d", strtotime($to));
-
-		$result = '';
-
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-		";
-
-	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND tid='".$tid."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".$from."' AND '".$to."'
-			AND sairaus='2'
-			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
-		";
-
-
-		$lu = Mobile::model()->find($criteria);
-
-
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-		";
-
-	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND tid='".$tid."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".$from."' AND '".$to."'
-			AND sairaus='2'
-		";
-
-
-		$tot = Toteutuneet::model()->find($criteria);
-
-		if(isset($lu->l_tunnit))
-		$result = $lu->l_tunnit;
-
-		if(isset($tot->l_tunnit))
-		$result = $result+$tot->l_tunnit;
-
-
-		return $result;
-	}
-
-
-	protected function TidfromtoLS($from,$to,$tid)
-	{
-
-		$from = date("Y-m-d", strtotime($from));
-		$to = date("Y-m-d", strtotime($to));
-
-		$result = '';
-
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-		";
-
-	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND tid='".$tid."'
-
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".$from."' AND '".$to."'
-			AND sairaus='3'
-			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
-
-		";
-
-
-		$lu = Mobile::model()->find($criteria);
-
-
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "
-
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-		";
-
-	        $criteria->condition = " 
-
-			aloitan!='' AND loppui!=''
-			AND tid='".$tid."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".$from."' AND '".$to."'
-
-			AND sairaus='3'
-		";
-
-
-		$tot = Toteutuneet::model()->find($criteria);
-
-		if(isset($lu->l_tunnit))
-		$result = $lu->l_tunnit;
-
-		if(isset($tot->l_tunnit))
-		$result = $result+$tot->l_tunnit;
-
-
-		return $result;
-	}
-
-
-
-	protected function TidfromtoSPL($from,$to,$tid)
-	{
-
-		$from = date("Y-m-d", strtotime($from));
-		$to = date("Y-m-d", strtotime($to));
-
-		$result = '';
-
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "COUNT(*) as count";
-
-	        $criteria->condition = "
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".$from."' AND '".$to."' 
-			AND tid='".$tid."'
-			AND sairaus='1'
-			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
-		";
-
-		$lu = Mobile::model()->find($criteria);
-
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "COUNT(*) as count";
-
-	        $criteria->condition = "
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".$from."' AND '".$to."' 
-			AND tid='".$tid."'
-			AND sairaus='1'
-		";
-
-		$tot = Toteutuneet::model()->find($criteria);
-
-		if(isset($lu->count))
-		$result = $lu->count;
-
-		if(isset($tot->count))
-		$result = $result+$tot->count;
-
-		return $result;
-	}
-*/
 
 	protected function TidfromtoVuosilomaPalkkatauluko($from,$to,$tid,$tila)
 	{
@@ -2276,6 +2137,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND tid='".$tid."'
 			AND sairaus!=1
 			AND aloitan!=loppui
+			AND deleted=0
 		";
 
 		$model = Mobile::model()->findAll($criteria);
@@ -2336,6 +2198,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
         	$criteria->condition = " 
 			aloitan !='' and loppui !='' 
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date('Y-m-d',strtotime($from))."' AND '".date('Y-m-d',strtotime($to))."' 
+			AND deleted=0
 		";
 
 
@@ -2599,6 +2462,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND status=2
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."' 
+			AND deleted=0
 		";
 
 		$lu = Mobile::model()->find($criteria);
@@ -2733,6 +2597,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND sairaus!=1
 			AND kohdenID='".$kohdenID."'
 			AND $fromTo
+			AND deleted=0
 		";
 
 		$model = Mobile::model()->findAll($criteria);
@@ -2754,6 +2619,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND sairaus!=1
 			AND kohdenID='".$kohdenID."'
 			AND $fromTo
+			AND deleted=0
 		";
 
 		$model = Toteutuneet::model()->findAll($criteria);
@@ -2940,6 +2806,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND sairaus!=1
 			AND kohdenID!=''
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date('Y-m-d', strtotime($from))."' AND '".date('Y-m-d', strtotime($to))."' 
+			AND deleted=0
 		";
 
 		// <-- Tyoryhmat
@@ -2975,6 +2842,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND sairaus!=1
 			AND kohdenID!=''
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' 
+			AND deleted=0
 		";
 
 		if(isset($_POST['osoite']) and !empty($_POST['osoite'])){
@@ -3035,6 +2903,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND sairaus!=1
 			AND kohdenID!=''
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date('Y-m-d', strtotime($from))."' AND '".date('Y-m-d', strtotime($to))."' 
+			AND deleted=0
 		";
 
 		// <-- Tyoryhmat
@@ -3074,6 +2943,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND sairaus!=1
 			AND kohdenID!=''
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date('Y-m-d', strtotime($from))."' AND '".date('Y-m-d', strtotime($to))."' 
+			AND deleted=0
 		";
 
 		if(isset($_POST['osoite']) and !empty($_POST['osoite'])){
@@ -3221,6 +3091,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			$status $kohdenID 
 			AND sairaus!=1
 			AND id NOT IN(select kid from sivexkuitti_repaired)
+			AND deleted=0
 		";
 		$luetut = Mobile::model()->find($criteria);
 
@@ -3234,6 +3105,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".$pvm."'
 			$status $kohdenID 
 			AND sairaus!=1
+			AND deleted=0
 		";
 		$toteutuneet = Toteutuneet::model()->find($criteria);
 
@@ -3267,6 +3139,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND sairaus!=1
 			AND id NOT IN(select kid from sivexkuitti_repaired)
+			AND deleted=0
 		";
 
 		if($sivu == 'palkkataulukko')
@@ -3311,6 +3184,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND sairaus!=1
+			AND deleted=0
 		";
 
 		if($sivu == 'palkkataulukko')
@@ -3373,6 +3247,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND status = '2'
 			AND sairaus!=1
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+			AND deleted=0
 		";
 
 
@@ -3404,6 +3279,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND status = '2'
 			AND sairaus!=1
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+			AND deleted=0
 		";
 
 
@@ -3449,6 +3325,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND status = '10'
 			AND sairaus!=1
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+			AND deleted=0
 		";
 
 
@@ -3472,7 +3349,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND status = '10'
 			AND sairaus!=1
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
-
+			AND deleted=0
 		";
 
 
@@ -3506,6 +3383,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan!='' and loppui!=''
 			AND id NOT IN(select kid from sivexkuitti_repaired)
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+			AND deleted=0
 		";
         	$criteria->group = "kohde_kannasta";
 
@@ -3547,6 +3425,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan!='' and loppui!=''
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+			AND deleted=0
 		";
         	$criteria->group = "kohde_kannasta";
 
@@ -3663,6 +3542,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 			AND DAYOFWEEK(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))!=1
 			$pvmSTR
+			AND deleted=0
 		";
 
 
@@ -3685,6 +3565,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 			AND DAYOFWEEK(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))!=1
 			$pvmSTR
+			AND deleted=0
 		";
 
 
@@ -3715,6 +3596,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i:%s') BETWEEN '".$alku."' AND '".$loppu."'
 				OR DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i:%s') BETWEEN '".$alku."' AND '".$loppu."'
 			)
+			AND deleted=0
 		";
 		$model = Mobile::model()->findAll($criteria);
 		$count = count($model);
@@ -3804,6 +3686,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND id='".$id."'
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 			AND hyvaksytty!=''
+			AND deleted=0
 		";
 
 
@@ -3819,6 +3702,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	        $criteria->condition = " 
 			kid='".$id."'
 			AND hyvaksytty!=''
+			AND deleted=0
 		";
 		$tot = Toteutuneet::model()->find($criteria);
 

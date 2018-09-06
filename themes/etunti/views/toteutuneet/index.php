@@ -300,43 +300,6 @@ function dateDiff($start, $end) {
 			'.$korv.
 		'</div>';
     }
-/*
-    $lisatt = $this->lisatyotunnitPvmTid(date("Y-m-d",strtotime($date)),$tid);
-    if(!empty($lisatt))
-    {
-	$lisatt = '
-		<div class="col-sm-4">
-			<h3>'.Yii::t('main', 'Ylityötunnit').'</h3>
-			'.$lisatt.
-		'</div>';
-    }
-    $ennakko = $this->ennakkoPvmTid(date("Y-m-d",strtotime($date)),$tid);
-    if(!empty($ennakko))
-    {
-	$ennakko = '
-		<div class="col-sm-4">
-			<h3>'.Yii::t('main', 'Ennakko').'</h3>
-			'.$ennakko.
-		'</div>';
-    }
-*/
-
-/*
-			'.CHtml::button(Yii::t('main', 'Ylityötunnit'), 
-				array(
-					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
-					'taulu'=>'lisatyotunnit',
-					'pvm'=>date("Y-m-d",strtotime($date)),
-					'tid'=>$tid,
-			)).'
-			'.CHtml::button(Yii::t('main', 'Ennakko'), 
-				array(
-					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
-					'taulu'=>'ennakko',
-					'pvm'=>date("Y-m-d",strtotime($date)),
-					'tid'=>$tid,
-			)).'
-*/
 
     $vlChecker = '';
     if($this->vuosilomaChecker($tid, $date))
