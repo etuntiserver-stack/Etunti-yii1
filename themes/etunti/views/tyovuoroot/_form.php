@@ -159,6 +159,17 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 		<?php echo $form->textField($model,'postitoimipaikka',array('size'=>20,'maxlength'=>255,'class'=>'form-control ')); ?>
 		<?php echo $form->error($model,'postitoimipaikka'); ?>
   </div>
+  <div class="col-sm-3">
+	<br>
+	<?php 
+	if(isset($model->kohteet->id) and isset($model->kohteet->avaimet) and count($model->kohteet->avaimet) > 0){
+	echo CHtml::link('Avaimet', array('/avaimet/index', 'osoite' => $model->kohteet->osoite), array('class'=>'btn btn-primary btn-block myBgColors')); 
+	}
+	if(isset($model->kohteet->id) and isset($model->kohteet->avaimet) and count($model->kohteet->avaimet) == 0 and $model->kohteet->asiakas_id > 0){
+	echo CHtml::link('Luo avain', array('/avaimet/create', 'asiakas_id' => $model->kohteet->asiakas_id, 'kohde_id' => $model->kohteet->id), array('class'=>'btn btn-primary btn-block myBgColors')); 
+	}
+	?>
+  </div>
 </div>
 
 <div class="row">
