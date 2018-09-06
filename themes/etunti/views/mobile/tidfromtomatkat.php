@@ -10,7 +10,9 @@
 	AND aloitan!='' AND loppui!=''
 	AND status=2
 	AND sairaus!=1
-	AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";
+	AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) 
+	AND deleted=0
+	";
 
 	$lu = Mobile::model()->find($criteria); 
 
@@ -25,6 +27,7 @@
 	AND aloitan!='' AND loppui!=''
 	AND status=2
 	AND sairaus!=1
+	AND deleted=0
 	";
 
 	$tot = Toteutuneet::model()->find($criteria); 
