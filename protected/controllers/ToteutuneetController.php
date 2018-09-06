@@ -1158,6 +1158,7 @@ $xml = '
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND id NOT IN(select kid from sivexkuitti_repaired)
 			AND (status = '3' OR status = '2')
+			AND sairaus!=1
 			AND deleted=0
 		";
 
@@ -1191,6 +1192,7 @@ $xml = '
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND (status = '3' OR status = '2')
+			AND sairaus!=1
 			AND deleted=0
 		";
 

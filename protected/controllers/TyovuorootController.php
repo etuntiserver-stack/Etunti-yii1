@@ -1444,7 +1444,7 @@ class TyovuorootController extends Controller
 
 	public function actionDidnew()
 	{
-	     if(is_array(json_decode($_POST['kohteet_siivous'], true)))
+	     if(isset($_POST['kohteet_siivous']) and is_array(json_decode($_POST['kohteet_siivous'], true)))
 	     $ks = json_decode($_POST['kohteet_siivous'], true);
 	     else
 	     $ks = array();

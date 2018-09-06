@@ -39,10 +39,11 @@
 		<i class="glyphicon glyphicon-th-list"></i> <?php echo Yii::t('main', 'Raportit'); ?>
 	 </div><div class="form-group col-sm-offset-1">
 		<?php
-		( Yii::app()->request->getParam('aktiivinen') ) ? $selectedAktiivinen = Yii::app()->request->getParam('aktiivinen') : $selectedAktiivinen = 'kaikki';
+		( Yii::app()->request->getParam('aktiivinen') ) ? $selectedAktiivinen = Yii::app()->request->getParam('aktiivinen') : $selectedAktiivinen = '';
 
 		$a = Valikkoot::model()->findAll(" select_type='aktiivinen' ");
 		   $tal = array();
+		   $tal[] = 'Valitse';
 		   $tal['kaikki'] = 'Kaikki';
 		foreach($a as $v){
 		$exV = explode("/",$v->value);
@@ -69,33 +70,7 @@ $(document).ready(function(){
 });
 </script>
 
-<?php /*
-          <div class="row">
-           <div class="col-sm-12">
-		<?php echo $ryhmaBody; ?>
-           </div>
-	  </div>	
-	  <br>
-*/ ?>
-
-<!--
-          <div class="row">
-           <div class="col-sm-12">
-		<table class="table table-striped table-bordered">
-		 <tr>
-		  <th>blaa</th>
-		  <th>blaa 2</th>
-		 </tr>
-		 <tr>
-		  <th>45</th>
-		  <th>78</th>
-		 </tr>
-		</table>
-           </div>
-	  </div>
-	  <br>
--->
-
+<?php if( isset($_GET['aktiivinen']) ) : ?>
           <div class="row">
 
 
@@ -721,6 +696,7 @@ $('.eilasketa').multiselect({
 });
 </script>
 
+<?php endif; ?><!--aktiivinen-->
 
 
 
