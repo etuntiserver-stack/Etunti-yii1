@@ -1635,23 +1635,19 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	  	if( $al_day == $lop_day	and $lop_hours > $al_hours) {
 	  		if( $al_hours <= strtotime("18:00") and $lop_hours > strtotime("18:00") ) {
-
 				$str_al = strtotime("18:00");
   				$str_lop = $lop_hours;
 				$sum = ($str_lop-$str_al);
 				if( $sum > 18000 ){ $sum = 18000; } // 5h
  				$totalIlta += $sum;
-
 			}
 	  		if( $al_hours > strtotime("18:00") and $al_hours < strtotime("23:00") and $lop_hours <= strtotime("23:00")) {
-
 				$str_al = $al_hours;
   				$str_lop = $lop_hours;
 				$sum = ($str_lop-$str_al);
  				$totalIlta += $sum;
 			}
 	  		if( $al_hours > strtotime("18:00") and $al_hours < strtotime("23:00") and $lop_hours > strtotime("23:00")) {
-
 				$str_al = $al_hours;
   				$str_lop = strtotime("23:00");
 				$sum = ($str_lop-$str_al);
