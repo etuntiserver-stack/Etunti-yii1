@@ -1628,85 +1628,35 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	public function ilta($al,$lop){
 
 		$totalIlta = 0;
+		$al_day =  date("d", strtotime($al[0]));
+		$al_hours =  strtotime($al[1]);
+		$lop_day =  date("d", strtotime($lop[0]));
+		$lop_hours =  strtotime($lop[1]);
 
+	  	if( $al_day == $lop_day	and $lop_hours > $al_hours) {
+	  		if( $al_hours <= strtotime("18:00") and $lop_hours > strtotime("18:00") ) {
 
-	  	if(
-			strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 18:00")
-			and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00")
-			and $al[0] == $lop[0]
-		)
-		{
-	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
-	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
+				$str_al = strtotime("18:00");
+  				$str_lop = $lop_hours;
+				$sum = ($str_lop-$str_al);
+				if( $sum > 18000 ){ $sum = 18000; } // 5h
+ 				$totalIlta += $sum;
 
-	 	  $str = ($strLop0-$strAl0);
-	      	  $totalIlta += $str;
-		}
+			}
+	  		if( $al_hours > strtotime("18:00") and $al_hours < strtotime("23:00") and $lop_hours <= strtotime("23:00")) {
 
-	  	if(
-			strtotime($al[0]." ".$al[1]) < strtotime($al[0]." 18:00")
-			and strtotime($lop[0]." ".$lop[1]) < strtotime($lop[0]." 23:00")
-			and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 18:00")
-			and $al[0] == $lop[0]
-		)
-		{
-	   	  $strAl0 = strtotime($al[0]." 18:00");
-	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
+				$str_al = $al_hours;
+  				$str_lop = $lop_hours;
+				$sum = ($str_lop-$str_al);
+ 				$totalIlta += $sum;
+			}
+	  		if( $al_hours > strtotime("18:00") and $al_hours < strtotime("23:00") and $lop_hours > strtotime("23:00")) {
 
-	 	  $str = ($strLop0-$strAl0);
-	      	  $totalIlta += $str;
-		}
-
-	  	if(
-		  	strtotime($al[0]." ".$al[1]) < strtotime($al[0]." 18:00")
-			and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00")
-			and $al[0] == $lop[0]
-		)
-		{
-	   	  $strAl0 = strtotime($al[0]." 18:00");
-	   	  $strLop0 = strtotime($lop[0]." 23:00");
-
-	 	  $str = ($strLop0-$strAl0);
-	      	  $totalIlta += $str;
-		}
-
-	  	if(
-			strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 18:00")
-			and strtotime($lop[0]." ".$lop[1]) > strtotime($lop[0]." 23:00") // 10.03.2017
-			and $al[0] == $lop[0]
-		)
-		{
-	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
-	   	  $strLop0 = strtotime($lop[0]." 23:00");
-
-	 	  $str = ($strLop0-$strAl0);
-	      	  $totalIlta += $str;
-		}
-
-	  	if(
-			strtotime($al[0]." ".$al[1]) > strtotime($al[0]." 18:00")
-			and strtotime($al[0]." ".$al[1]) < strtotime($al[0]." 23:00")
-			and $al[0] != $lop[0]
-		)
-		{
-	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
-	   	  $strLop0 = strtotime($al[0]." 23:00");
-
-	 	  $str = ($strLop0-$strAl0);
-	      	  $totalIlta += $str;
-
-		}
-
-	  	if(
-			strtotime($al[0]." ".$al[1]) < strtotime($al[0]." 18:00")
-			and $al[0] != $lop[0]
-		)
-		{
-	   	  $strAl0 = strtotime($al[0]." 18:00");
-	   	  $strLop0 = strtotime($al[0]." 23:00");
-
-	 	  $str = ($strLop0-$strAl0);
-	      	  $totalIlta += $str;
+				$str_al = $al_hours;
+  				$str_lop = strtotime("23:00");
+				$sum = ($str_lop-$str_al);
+ 				$totalIlta += $sum;
+			}
 		}
 
 
@@ -1717,8 +1667,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	public function yo($al,$lop){
 
 		$totalYo = 0;
-		$al_day =  date("d", strtotime($lop[0]." ".$lop[1]));
-		$lop_day =  date("d", strtotime($al[0]." ".$al[1]));
+		$al_day =  date("d", strtotime($al[0]." ".$al[1]));
+		$lop_day =  date("d", strtotime($lop[0]." ".$lop[1]));
 
 		//echo $al[0].' '.$al[1].' - '.$lop[0].' '.$lop[1].'<br>';
 
