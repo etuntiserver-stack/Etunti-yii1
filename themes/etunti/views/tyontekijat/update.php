@@ -111,13 +111,20 @@ $laaja = $site[0]->checkOikeusFields($checkLaaja);
 	$i = 0;
 	foreach(array_reverse(glob('tiedostot/tekijat/'.Yii::app()->user->domain.'/'.$model->id.'_*.*')) as $file) {
 	$i++;
-	$explNimi = explode("/",$file);
+	$ext = pathinfo(basename($file), PATHINFO_EXTENSION);
  	echo '
 	<div class="form-inline" id="t_'.$model->id.$i.'">
-	  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$model->id.'" for="t_'.$model->id.$i.'">X</div>
-	  <a href="../../'.$file.'">'.end($explNimi).'</a>
-	</div>
-	';
+	  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$model->id.'" for="t_'.$model->id.$i.'">X</div>';
+				// <-- file_safe_opener
+				$filepath = Yii::getPathOfAlias('application').'/../'.$file;
+				echo CHtml::link(basename($file),
+					array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
+					array(
+						'target'=>'_blank',
+						'class'=>'link'
+				));
+				//     file_safe_opener// -->
+	echo '</div>';
 	$kuvat[$i] = $file;
 	}
 ?>
