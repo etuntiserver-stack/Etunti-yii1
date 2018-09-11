@@ -1333,47 +1333,6 @@ function num($val){
 			  exit;
 		}
 
-		if(isset($_POST['submit']))
-		{
-
-		if(Yii::app()->request->getPost('etsi_kohteet'))
-		Yii::app()->session['etsi_kohteet'] = Yii::app()->request->getPost('etsi_kohteet');
-
-		if(Yii::app()->request->getPost('fromP'))
-		Yii::app()->session['fromP'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('fromP')));
-	
-		if(Yii::app()->request->getPost('toP'))
-		Yii::app()->session['toP'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('toP')));
-
-		if(Yii::app()->request->getPost('tekijaPaaSivulla'))
-		Yii::app()->session['tekijaPaaSivulla'] = Yii::app()->request->getPost('tekijaPaaSivulla');
-
-		if(Yii::app()->request->getPost('siivousPaaSivulla'))
-		Yii::app()->session['siivousPaaSivulla'] = Yii::app()->request->getPost('siivousPaaSivulla');
-
-		if(Yii::app()->request->getPost('yrityksen_nimi'))
-		Yii::app()->session['yrityksen_nimi'] = Yii::app()->request->getPost('yrityksen_nimi');
-
-		if(Yii::app()->request->getPost('laskutettu'))
-		Yii::app()->session['laskutettu'] = Yii::app()->request->getPost('laskutettu');
-
-
-
-		if(Yii::app()->request->getPost('etsi_kohteet') == '') unset(Yii::app()->session['etsi_kohteet']);
-		if(Yii::app()->request->getPost('fromP') == '') unset(Yii::app()->session['fromP']);
-		if(Yii::app()->request->getPost('toP') == '') unset(Yii::app()->session['toP']);
-
-		if(Yii::app()->request->getPost('tekijaPaaSivulla') == '' or Yii::app()->request->getPost('tekijaPaaSivulla') == 'kaikki') 
-			unset(Yii::app()->session['tekijaPaaSivulla']);
-
-		if(Yii::app()->request->getPost('siivousPaaSivulla') == '') unset(Yii::app()->session['siivousPaaSivulla']);
-		if(Yii::app()->request->getPost('yrityksen_nimi') == '') unset(Yii::app()->session['yrityksen_nimi']);
-		if(Yii::app()->request->getPost('laskutettu') == '') unset(Yii::app()->session['laskutettu']);
-	
-		}
-
-
-
        		$criteria = new CDbCriteria();
         	$criteria->order = " 
 		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') < DATE_ADD(NOW(), interval 4 hour) AND status IN (1,2,10) AND loppui='' DESC, 
@@ -1394,35 +1353,37 @@ function num($val){
 		}
 		//    Tyoryhmat -->
 
-		if(isset(Yii::app()->session['tekijaPaaSivulla']))
-	        $criteria->addCondition (" tid = '".Yii::app()->session['tekijaPaaSivulla']."' ");
+		if(isset($_GET['tekijaPaaSivulla']) and !empty($_GET['tekijaPaaSivulla']) and $_GET['tekijaPaaSivulla'] != 'kaikki')
+	        $criteria->addCondition (" tid = '".$_GET['tekijaPaaSivulla']."' ");
 
-		if(isset(Yii::app()->session['siivousPaaSivulla']))
-	        $criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE siivous LIKE '%".Yii::app()->session['siivousPaaSivulla']."%' ) ");
+		if(isset($_GET['siivousPaaSivulla']) and !empty($_GET['siivousPaaSivulla']))
+	        $criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE siivous LIKE '%".$_GET['siivousPaaSivulla']."%' ) ");
 
 
-		if(isset(Yii::app()->session['yrityksen_nimi']) and !empty(Yii::app()->session['yrityksen_nimi']))
+		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
 		{
 	        $criteria->addCondition ("  
 			kohdenID IN ( 
 			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
 				( SELECT id FROM asiakkaat 
-					WHERE yrityksen_nimi LIKE '%".Yii::app()->session['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".Yii::app()->session['yrityksen_nimi']."%'
+					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'
 				)
 			)
 		");
 		}
 
-		if(isset(Yii::app()->session['etsi_kohteet']))
-	        $criteria->addCondition (" kohde_kannasta LIKE '%".Yii::app()->session['etsi_kohteet']."%' ");
+		if(isset($_GET['etsi_kohteet']) and !empty($_GET['etsi_kohteet'])){
+	        $criteria->addCondition (" kohde_kannasta LIKE '%".$_GET['etsi_kohteet']."%' ");
+		}
 
-		if(isset(Yii::app()->session['fromP']) and isset(Yii::app()->session['toP']))
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date("Y-m-d", strtotime(Yii::app()->session['fromP']))."' AND '".date("Y-m-d", strtotime(Yii::app()->session['toP']))."' ");
+		if(isset($_GET['fromP']) and !empty($_GET['fromP']) and isset($_GET['toP']) and !empty($_GET['toP'])){
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date("Y-m-d", strtotime($_GET['fromP']))."' AND '".date("Y-m-d", strtotime($_GET['toP']))."' ");
+		}
 
-		if(isset(Yii::app()->session['laskutettu']) and Yii::app()->session['laskutettu'] == '1')
+		if(isset($_GET['laskutettu']) and $_GET['laskutettu'] == '1')
 	        $criteria->addCondition (" laskutettu = '1' ");
 
-		if(isset(Yii::app()->session['laskutettu']) and Yii::app()->session['laskutettu'] == '3')
+		if(isset($_GET['laskutettu']) and $_GET['laskutettu'] == '3')
 	        $criteria->addCondition (" laskutettu = '0' ");
 
 

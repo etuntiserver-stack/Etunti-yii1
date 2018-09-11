@@ -12,7 +12,7 @@ echo Yii::app()->request->getPost('laskutettu');
 
 
 
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <form id="mobForm" action="#" class="form-inline" method="GET">
 
             <div class="admin-form">
               <div class="panel heading-border">
@@ -32,7 +32,7 @@ echo Yii::app()->request->getPost('laskutettu');
 						'tekijaPaaSivulla', // name
 						'gui-input', //class
 						null, // id
-						Yii::app()->session['tekijaPaaSivulla'], //selected
+						$_GET['tekijaPaaSivulla'], //selected
 						1 // aktiivinen
 				);
 				echo $tyontekiatLista;
@@ -53,7 +53,7 @@ echo Yii::app()->request->getPost('laskutettu');
 				$mod = 'Asiakkaat';
 				$sarake = 'yrityksen_nimi';
 				$placeholder = 'Asiakas';
-				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
+				if(isset($_GET[$sarake])) 			$postvalue = $_GET[$sarake]; 
 				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
 				else $postvalue='';				
 		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
@@ -78,7 +78,7 @@ echo Yii::app()->request->getPost('laskutettu');
 				$mod = 'Kohteet';
 				$sarake = 'osoite';
 				$placeholder = 'Osoite';
-				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
+				if(isset($_GET[$sarake])) 			$postvalue = $_GET[$sarake]; 
 				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
 				else $postvalue='';				
 		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
@@ -100,9 +100,9 @@ echo Yii::app()->request->getPost('laskutettu');
    $l = Valikkoot::model()->findAll(" select_type='siivous' ",array('order' => "select_type"));
 
     echo '<select class="gui-input" name="siivousPaaSivulla">';
-    if(isset(Yii::app()->session['siivousPaaSivulla']))
+    if(isset($_GET['siivousPaaSivulla']))
     {
-       echo '<option value="'.Yii::app()->session['siivousPaaSivulla'].'">'.Yii::app()->session['siivousPaaSivulla'].'</option>';
+       echo '<option value="'.$_GET['siivousPaaSivulla'].'">'.$_GET['siivousPaaSivulla'].'</option>';
 
     } else {
        echo '<option value="">'.Yii::t('main', 'Kohteen työnimike').'</option>';
@@ -128,7 +128,7 @@ echo Yii::app()->request->getPost('laskutettu');
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="fromP" id="from" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['fromP'])) echo date('d.m.Y', strtotime(Yii::app()->session['fromP'])); ?>">
+   			    <input type="text" name="fromP" id="from" class="gui-input datepickerFI" value="<?php if(isset($_GET['fromP']) and !empty($_GET['fromP'])) echo date('d.m.Y', strtotime($_GET['fromP'])); ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -139,7 +139,7 @@ echo Yii::app()->request->getPost('laskutettu');
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="toP" id="to" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['toP'])) echo date('d.m.Y', strtotime(Yii::app()->session['toP'])); ?>">
+   			    <input type="text" name="toP" id="to" class="gui-input datepickerFI" value="<?php if(isset($_GET['toP']) and !empty($_GET['toP'])) echo date('d.m.Y', strtotime($_GET['toP'])); ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -151,9 +151,9 @@ echo Yii::app()->request->getPost('laskutettu');
                           <label class="field select">
 			    <select name="laskutettu" class="gui-input">
 			     <?php 
-			     if(isset(Yii::app()->session['laskutettu']) and Yii::app()->session['laskutettu'] == '1')
+			     if(isset($_GET['laskutettu']) and $_GET['laskutettu'] == '1')
 			     echo '<option value="1">Laskutettu</option>';
-			     if(isset(Yii::app()->session['laskutettu']) and Yii::app()->session['laskutettu'] == '3')
+			     if(isset($_GET['laskutettu']) and $_GET['laskutettu'] == '3')
 			     echo '<option value="0">Laskuttamatta</option>';
 			     ?>
 			     <option value=""><?php echo Yii::t('main', 'Tilanne'); ?></option>
@@ -209,7 +209,7 @@ echo Yii::app()->request->getPost('laskutettu');
   <th class="col-sm-2"><?php echo Yii::t('main', 'Aloitus'); ?></th>
   <th class="col-sm-2"><?php echo Yii::t('main', 'Lopetus'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
-  <th><?php echo Yii::t('main', 'Laskutettu'); ?></th>
+  <th><center><?php echo Yii::t('main', 'Laskutettu'); ?> <input type="checkbox" id="valitsekaikki"></center></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
@@ -250,6 +250,18 @@ echo Yii::app()->request->getPost('laskutettu');
 <script type="text/javascript">
 $(document).ready(function(){
 
+$("#valitsekaikki").click(function(){
+  if( $(this).prop("checked") == true ){
+     $(".chckbxHyvaksynta").each(function() {
+	if( $(this).prop("checked", false) ){ $(this).trigger('click'); }
+     });
+  }
+  if( $(this).prop("checked") == false ){
+     $(".chckbxHyvaksynta").each(function() {
+	if( $(this).prop("checked", true) ){ $(this).trigger('click'); }
+     });
+  }
+});
 
 $(".haemob").click(function(){
 	$("#mobForm").submit();
