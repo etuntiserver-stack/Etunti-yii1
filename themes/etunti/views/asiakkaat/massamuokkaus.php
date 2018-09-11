@@ -19,7 +19,7 @@
 		  <p>
 			Suodattimella valitaan asiakasryhmä, jolle muokkaukset tehdään. <br>
 			Asiakas- ja laskutustiedoista valitaan muokattavat kentät valintalaatikolla (checkbox) sekä syötetään haluttu tieto. <br>
-			Esikatselutilassa näytetään lista asiakkaista, joilla muutokset tehdään. </p><br>
+			Esikatselutilassa näytetään lista asiakkaista, joille muutokset tehdään. </p><br>
 
 		  <?php echo $this->renderPartial('_massamuokkaus', array('model'=>$model)); ?>
                  </div>
