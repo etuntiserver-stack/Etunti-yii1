@@ -414,7 +414,7 @@ $(document).ready(function(){
 		$.each(d['lista'], function( index, value ) {
 		  $("#lista").append( "<div class=\"col-sm-2 bg-default\">" + value['nimi'] + "</div>" );
 		});
-    		$(".esikatselu").removeClass('esikatselu').addClass('tallenna_lomake').val('Muokkaa '+ d['countlista'] +' asiakasta.');
+    		$(".esikatselu").removeClass('esikatselu').addClass('tallenna_lomake').val('Muokkaa '+ d['countlista'] +' asiakasta');
 
 	        $(".tallenna_lomake").click(function(){
 		   $(this).remove();
