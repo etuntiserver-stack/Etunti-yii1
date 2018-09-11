@@ -378,8 +378,8 @@ class AsiakkaatController extends Controller
 			if(!empty($v) and isset($_POST['Check'][$k])){ $post[$k] = $v; }
 		   }
 
-		   if( isset($_POST['updatethisnow']) ){
-		     foreach($as_all as $model){
+		   $kiere = '';
+		   foreach($as_all as $model){
 
 			$vanha_attr = $model->attributes;
 			$model->attributes=$post;
@@ -398,11 +398,19 @@ class AsiakkaatController extends Controller
 					$site = Yii::app()->createController('Site');
 					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 				//     LOG -->
+			} else {
+				if($model->tyyppi == 'henkilo'){ $nimi = $model->yhteyshenkilo; }
+				if($model->tyyppi == 'yritys'){ $nimi = $model->yrityksen_nimi; }
+				$kiere .= '<h3>ID: '.$model->id.',  Nimi: '.$nimi.'</h3>';
+				foreach($model->getErrors() as $err){
+					$kiere .= $err[0].'<br>';
+				}
 			}
-		      }
-		      Yii::app()->user->setFlash('success', "Valmis.");
-		      $this->redirect(array('index'));
-		    }
+		   }
+		   if( !empty($kiere) ){  Yii::app()->user->setFlash('danger', $kiere); }
+		   Yii::app()->user->setFlash('success', "Valmis.");
+		   $this->redirect(array('index'));
+
 		}
 		$model = new Asiakkaat;
 		$this->render('massamuokkaus',array(

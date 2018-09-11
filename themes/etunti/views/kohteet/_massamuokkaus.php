@@ -314,8 +314,8 @@ $(document).ready(function(){
 		$( 'legend' ).remove();
 		$( this ).closest('.section').remove();
  	} else {
-		$( this ).closest('.section').find('input').attr('disabled', 'yes');
-		$( this ).closest('.section').find('select').attr('disabled', 'yes');
+		$( this ).closest('.section').find('input').attr('readonly', 'yes');
+		$( this ).closest('.section').find('select').attr('readonly', 'yes');
 	}
     });
     $(this).removeClass('esikatselu').addClass('tallenna_lomake').val('Muokka kaikkia');

@@ -398,8 +398,8 @@ $(document).ready(function(){
 		$( 'legend' ).remove();
 		$( this ).closest('.section').remove();
  	} else {
-		$( this ).closest('.section').find('input').attr('disabled', 'yes');
-		$( this ).closest('.section').find('select').attr('disabled', 'yes');
+		$( this ).closest('.section').find('input').attr('readonly', 'yes');
+		$( this ).closest('.section').find('select').attr('readonly', 'yes');
 	}
     });
 
@@ -408,7 +408,7 @@ $(document).ready(function(){
 	   type:'POST',
 	   data: $("#asiakkaat-form").serialize(),
            success: function(data){
-		//console.log(data);
+		console.log(data);
 		var d = JSON.parse(data);
 		if( d['lista'] ){
 		$.each(d['lista'], function( index, value ) {
@@ -419,7 +419,6 @@ $(document).ready(function(){
 	        $(".tallenna_lomake").click(function(){
 		   $(this).remove();
 		   $("#lista").remove();
-		   $('#asiakkaat-form').append('<input type="hidden" name="updatethisnow" value="true" />');
 		   if(!confirm('Oletko varma?')){ return false; }
 		   $('#asiakkaat-form').submit();
 		});
