@@ -122,6 +122,7 @@
 		<?php if( isset($_GET['siirra_now']) ): ?>
 		<?php
 			$suorittu++;
+			$alkuperainen_id = $item->id;
 			unset($item->id);
 			unset($item->time);
 			$model=new Tyovuoroot;
@@ -129,7 +130,9 @@
 			$model->tid=$_GET['kenelle'];
 			$model->toistuva_id=0;
 			$model->tyopaari='';
-			$model->save();
+			if($model->save()){
+				Tyovuoroot::model()->deleteByPk($alkuperainen_id);
+			}
 		?>
 		<?php endif; ?>
 		<tr>
