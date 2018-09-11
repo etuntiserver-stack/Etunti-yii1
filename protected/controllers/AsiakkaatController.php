@@ -354,6 +354,18 @@ class AsiakkaatController extends Controller
 		}
 		$as_all = Asiakkaat::model()->findAll($criteria);
 		$asetukset = Asetukset::model()->findbypk(1);
+		if( isset($_GET['esikatselu'])){
+			$lista = array();
+			foreach($as_all as $model){
+				$nimi = '';
+				if($model->tyyppi == 'henkilo'){ $nimi = $model->yhteyshenkilo; }
+				if($model->tyyppi == 'yritys'){ $nimi = $model->yrityksen_nimi; }
+				if( empty($nimi) ){ continue; }
+				$lista[] = array('nimi' => $nimi);
+			}
+			echo json_encode($lista);
+			exit;
+		}
 
 		if(isset($_POST['Asiakkaat']))
 		{
@@ -365,7 +377,8 @@ class AsiakkaatController extends Controller
 			if(!empty($v) and isset($_POST['Check'][$k])){ $post[$k] = $v; }
 		   }
 
-		   foreach($as_all as $model){
+		   if( isset($_POST['updatethisnow']) ){
+		     foreach($as_all as $model){
 
 			$vanha_attr = $model->attributes;
 			$model->attributes=$post;
@@ -374,7 +387,6 @@ class AsiakkaatController extends Controller
 
 			if($model->save())
 			{
-
 				// <-- LOG
 				$model_log 	= 'Asiakkaat';
 				$name_log 	= 'Asiakas';
@@ -386,13 +398,15 @@ class AsiakkaatController extends Controller
 					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 				//     LOG -->
 			}
+		      }
+		      Yii::app()->user->setFlash('success', "Valmis.");
+		      $this->redirect(array('index'));
 		    }
-		    Yii::app()->user->setFlash('success', "Valmis.");
-		    $this->redirect(array('index'));
 		}
 		$model = new Asiakkaat;
 		$this->render('massamuokkaus',array(
-			'model'=>$model,
+			'model' => $model,
+			'as_all' => $as_all
 		));
 	}
 

@@ -36,11 +36,11 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
   <div class="col-sm-3">
 	<div class="section fill mb5">
 		<?php
-		$arr = array('henkilo' => 'Yksityishenkilö', 'yritys' => 'Yritys', 'kaikki' => 'Kaikkki');
+		$arr = array('kaikki' => 'Kaikki', 'henkilo' => 'Yksityishenkilö', 'yritys' => 'Yritys');
 		?>
 		<?php echo $form->labelEx($model,'filter_tyyppi'); ?>
 		<?php echo $form->dropDownList($model, 'filter_tyyppi', $arr, 
-		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		array('class'=>'form-control')); 
 		?>
 		<?php echo $form->error($model,'filter_tyyppi'); ?>
 	</div>
@@ -346,6 +346,7 @@ $(document).ready(function(){
 
 </div><!-- form -->
 <br>
+	<p><div class="row" id="lista"></div><br></p>
 
 	<div class="section">
 		<?php echo CHtml::submitButton( Yii::t('main', 'Esikatselu') , array('class'=>'btn btn-primary myBgColors esikatselu')); ?>
@@ -401,10 +402,28 @@ $(document).ready(function(){
 		$( this ).closest('.section').find('select').attr('disabled', 'yes');
 	}
     });
-    $(this).removeClass('esikatselu').addClass('tallenna_lomake').val('Muokka kaikkia');
-    $(".tallenna_lomake").click(function(){
-	   if(!confirm('Oletko varma?')){ return false; }
-	   $('#asiakkaat-form').submit();
+
+    $.ajax({
+           url: "massamuokkaus?esikatselu",
+	   type:'POST',
+	   data: $("#asiakkaat-form").serialize(),
+           success: function(data){
+		//console.log(data);
+		var lista = JSON.parse(data);
+		$.each(lista, function( index, value ) {
+		  $("#lista").append( "<div class=\"col-sm-2 bg-default\">" + value['nimi'] + "</div>" );
+		});
+    		$(".esikatselu").removeClass('esikatselu').addClass('tallenna_lomake').val('Muokkaa asiakasta.');
+
+	        $(".tallenna_lomake").click(function(){
+		   $(this).remove();
+		   $("#lista").remove();
+		   $('#asiakkaat-form').append('<input type="hidden" name="updatethisnow" value="true" />');
+		   if(!confirm('Oletko varma?')){ return false; }
+		   $('#asiakkaat-form').submit();
+		});
+		return false;
+           }
     });
 
   });
