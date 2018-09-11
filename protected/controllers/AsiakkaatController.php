@@ -363,7 +363,8 @@ class AsiakkaatController extends Controller
 				if( empty($nimi) ){ continue; }
 				$lista[] = array('nimi' => $nimi);
 			}
-			echo json_encode($lista);
+			$return = array('lista' => $lista, 'countlista' => count($lista));
+			echo json_encode($return);
 			exit;
 		}
 
