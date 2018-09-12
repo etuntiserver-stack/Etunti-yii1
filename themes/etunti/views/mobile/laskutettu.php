@@ -32,7 +32,7 @@ echo Yii::app()->request->getPost('laskutettu');
 						'tekijaPaaSivulla', // name
 						'gui-input', //class
 						null, // id
-						$_GET['tekijaPaaSivulla'], //selected
+						(isset($_GET['tekijaPaaSivulla']))? $_GET['tekijaPaaSivulla']: '', //selected
 						1 // aktiivinen
 				);
 				echo $tyontekiatLista;
