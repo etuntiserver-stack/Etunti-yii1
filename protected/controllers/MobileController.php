@@ -1372,8 +1372,8 @@ function num($val){
 		");
 		}
 
-		if(isset($_GET['etsi_kohteet']) and !empty($_GET['etsi_kohteet'])){
-	        $criteria->addCondition (" kohde_kannasta LIKE '%".$_GET['etsi_kohteet']."%' ");
+		if(isset($_GET['osoite']) and !empty($_GET['osoite'])){
+	        $criteria->addCondition (" kohde_kannasta LIKE '%".$_GET['osoite']."%' ");
 		}
 
 		if(isset($_GET['fromP']) and !empty($_GET['fromP']) and isset($_GET['toP']) and !empty($_GET['toP'])){
