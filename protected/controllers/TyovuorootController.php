@@ -2747,7 +2747,7 @@ class TyovuorootController extends Controller
 
 
 					if(!empty($model->toimenpiteet))
-					$message .= str_replace("\n", "<hr><br>",$model->toimenpiteet);
+					$message .= str_replace("\n", "<hr><br>",$model->toimenpiteet)."<br>";
 
 					if(isset($_POST['Tyovuoroot']['tilausviesti']) and !empty($_POST['Tyovuoroot']['tilausviesti']))
 					$message .= str_replace("\n", "<br>", $_POST['Tyovuoroot']['tilausviesti']);
@@ -2993,7 +2993,7 @@ class TyovuorootController extends Controller
 					$message .= '</table>';
 
 					if(!empty($model->toimenpiteet))
-					$message .= str_replace("\n", "<br>",$model->toimenpiteet);
+					$message .= str_replace("\n", "<br>",$model->toimenpiteet)."<br>";
 
 					if(isset($_POST['Tyovuoroot']['tilausviesti']) and !empty($_POST['Tyovuoroot']['tilausviesti']))
 					$message .= str_replace("\n", "<br>", $_POST['Tyovuoroot']['tilausviesti']);
