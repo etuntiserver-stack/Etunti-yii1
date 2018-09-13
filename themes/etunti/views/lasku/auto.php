@@ -195,7 +195,7 @@
   <thead class="myBgColors">
   <tr>
   <th><?=Yii::t('main', 'Päivämäärä')?></th>
-  <th><?=Yii::t('main', 'Klo. ajaat')?></th>
+  <th><?=Yii::t('main', 'Kellon ajat')?></th>
   <th><?=Yii::t('main', 'Työntekijä')?></th>
   <th><?=Yii::t('main', 'Kohde')?></th>
   <th></th>
