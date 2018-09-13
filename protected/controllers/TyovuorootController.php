@@ -2701,7 +2701,7 @@ class TyovuorootController extends Controller
 					}
 					//     Paatuote -->
 
-					if(!empty($asiakkaat->hinta) and $asiakkaat->hinta_tyyppi == 1)
+					if(isset($_POST['vie_hintatietoja']) and !empty($asiakkaat->hinta) and $asiakkaat->hinta_tyyppi == 1)
 					{
 						$tuntia = ((strtotime($model->loppu)-strtotime($model->alku))/3600);
 						if( count($luotu) > 0 )
@@ -2746,8 +2746,8 @@ class TyovuorootController extends Controller
 					$message .= '</table>';
 
 
-					if(!empty($kohteet->toimenpiteet))
-					$message .= str_replace("\n", "<hr><br>",$kohteet->toimenpiteet);
+					if(!empty($model->toimenpiteet))
+					$message .= str_replace("\n", "<hr><br>",$model->toimenpiteet);
 
 					if(isset($_POST['Tyovuoroot']['tilausviesti']) and !empty($_POST['Tyovuoroot']['tilausviesti']))
 					$message .= str_replace("\n", "<br>", $_POST['Tyovuoroot']['tilausviesti']);
@@ -2948,7 +2948,7 @@ class TyovuorootController extends Controller
 					}
 					//     Paatuote -->
 
-					if(!empty($asiakkaat->hinta) and $asiakkaat->hinta_tyyppi == 1)
+					if(isset($_POST['vie_hintatietoja']) and !empty($asiakkaat->hinta) and $asiakkaat->hinta_tyyppi == 1)
 					{
 						$tuntia = ((strtotime($model->loppu)-strtotime($model->alku))/3600);
 						if( count($luotu) > 0 )
@@ -2992,8 +2992,8 @@ class TyovuorootController extends Controller
 					//     Lisatuotteet -->
 					$message .= '</table>';
 
-					if(!empty($kohteet->toimenpiteet))
-					$message .= str_replace("\n", "<br>",$kohteet->toimenpiteet);
+					if(!empty($model->toimenpiteet))
+					$message .= str_replace("\n", "<br>",$model->toimenpiteet);
 
 					if(isset($_POST['Tyovuoroot']['tilausviesti']) and !empty($_POST['Tyovuoroot']['tilausviesti']))
 					$message .= str_replace("\n", "<br>", $_POST['Tyovuoroot']['tilausviesti']);
