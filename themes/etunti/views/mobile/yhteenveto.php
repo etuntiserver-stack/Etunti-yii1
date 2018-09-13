@@ -24,10 +24,36 @@ $this->breadcrumbs=array(
    </div>
    <!-- tulostus -->
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-time"></i> <?php echo Yii::t('main', 'Tuntiyhtenveto työntekijät'); ?> 
+        <h2 class="myBgColors p10"> 
+	<div class="form-inline">
+	 <div class="form-group">
+		<i class="glyphicon glyphicon-th-list"></i> <?php echo Yii::t('main', 'Tuntiyhtenveto työntekijät'); ?>
+	 </div><div class="form-group col-sm-offset-1">
+		<?php
+		( Yii::app()->request->getParam('aktiivinen') ) ? $selectedAktiivinen = Yii::app()->request->getParam('aktiivinen') : $selectedAktiivinen = '';
 
-		</h2>
+		$a = Valikkoot::model()->findAll(" select_type='aktiivinen' ");
+		   $tal = array();
+		foreach($a as $v){
+		$exV = explode("/",$v->value);
+		   if(isset($exV[0]) and isset($exV[1]))
+		   $tal[$exV[1]] = $exV[0];
+		}
+		//ksort($tal);
+		echo CHtml::dropDownList('aktiivinen','aktiivinen', $tal, array('class'=>'form-control', 'options' => array( $selectedAktiivinen => array('selected'=>true))));
+		?>
+	 </div>
+	</div>
+	</h2>
 
+<script>
+$(document).ready(function(){
+  $('#aktiivinen').change(function(){
+	var thisVal = $(this).val();
+	window.location.href="yhteenveto?aktiivinen=" + thisVal;
+  });
+});
+</script>
 
 
    	    <form id="yhtveto" action="#" class="form-inline" method="POST">
@@ -43,40 +69,18 @@ $this->breadcrumbs=array(
 
                       <div class="col-md-2">
                         <div class="section">
-                          <label class="field">
-
-
-   <?php
-		$criteria = new CDbCriteria;
-
-
-		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-	       		$criteria->condition = " id IN ($ids)  ";
-		}
-		//     Tyoryhmat -->
-
-    $list = Tyontekijat::model()->findAll($criteria);
-
-    echo '<select name="Tekija[]" class="mult" id="tyontekijat" class="mult" multiple title="Työntekijät">';
-    foreach($list as $data){
-     $t = Tyontekijat::model()->findbypk($data->id);
-     if(isset($t->id))
-     {
-       if(isset(Yii::app()->session['Tekija']) and in_array($t->id,Yii::app()->session['Tekija']))
-       	 echo '<option value="'.$t->id.'" selected>'.$this->etuSukunimi($t->id).'</option>';
-       else
-       	 echo '<option value="'.$t->id.'">'.$this->etuSukunimi($t->id).'</option>';
-     }
-    }
-    echo '</select>';
-   ?>
-
-
-
+                          <label class="field prepend-icon">
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
+					'Tekija', // name
+					'mult', // class
+					'tyontekijat', // id
+					Yii::app()->session['Tekija'], //selected
+					Yii::app()->request->getParam('aktiivinen') // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
                           </label>
                         </div>
                       </div>
@@ -85,9 +89,6 @@ $this->breadcrumbs=array(
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field">
-
-
-
    <?php
     $lounas = '';
     $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
@@ -100,8 +101,6 @@ $this->breadcrumbs=array(
     echo '</select>';
    ?>
 
-
-
                           </label>
                         </div>
                       </div>
@@ -109,9 +108,7 @@ $this->breadcrumbs=array(
                       <div class="col-md-2 admin-form">
                         <div class="section">
                           <label class="field prepend-icon">
-
-	   <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php echo $from; ?>">
-
+	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php echo $from; ?>">
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
                             </label>
@@ -122,9 +119,7 @@ $this->breadcrumbs=array(
                       <div class="col-md-2 admin-form">
                         <div class="section">
                           <label class="field prepend-icon">
-
-   	   <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php echo $to; ?>">
-
+   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php echo $to; ?>">
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
                             </label>
@@ -135,7 +130,6 @@ $this->breadcrumbs=array(
                       <div class="col-md-2 col-md-offset-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
-
                     </div>
 
 

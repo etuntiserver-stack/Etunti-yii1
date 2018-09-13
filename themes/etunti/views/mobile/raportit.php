@@ -60,13 +60,10 @@
 
 <script>
 $(document).ready(function(){
-
   $('#aktiivinen').change(function(){
 	var thisVal = $(this).val();
 	window.location.href="raportit?aktiivinen=" + thisVal;
   });
-
-
 });
 </script>
 

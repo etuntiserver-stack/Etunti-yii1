@@ -27,11 +27,8 @@
                     <div class="row">
 
                       <div class="col-md-2">
-
                         <div class="section">
                           <label class="field select">
-
-
 				<?php
 		   		$site = Yii::app()->createController('Site');
 		   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
@@ -43,8 +40,6 @@
 				);
 				echo $tyontekiatLista;
 				?>
-
-
                             <i class="arrow double"></i>
                             </label>
                           </label>

@@ -29,7 +29,12 @@ $this->breadcrumbs=array(
      <form action="#" target="_blank" class="form-group" method="POST">
       <input type="hidden" name="from" value="<?php echo $from; ?>">
       <input type="hidden" name="to" value="<?php echo $to; ?>">
-      <input type="submit" name="tulosta" class="btn btn-primary btn-sm myBgColors" value="PDF">
+      <input type="submit" name="tulosta_xls" class="btn btn-primary btn-sm myBgColors" value="XLS">
+     </form>
+     <form action="#" target="_blank" class="form-group" method="POST">
+      <input type="hidden" name="from" value="<?php echo $from; ?>">
+      <input type="hidden" name="to" value="<?php echo $to; ?>">
+      <input type="submit" name="tulosta_pdf" class="btn btn-primary btn-sm myBgColors" value="PDF">
      </form>
      <button class="btn btn-primary btn-sm btn-group myBgColors" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Ekstrat'); ?> <b class="caret"></b></button>
     </div>
