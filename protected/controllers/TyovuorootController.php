@@ -2671,9 +2671,11 @@ class TyovuorootController extends Controller
 					$message .= '<tr>';
 					$message .= '<th>Tuote/Palvelu</th>';
 					$message .= '<th>Määrä</th>';
+					if(isset($_POST['vie_hintatietoja'])){
 					$message .= '<th>Hinta</th>';
 					$message .= '<th>ALV</th>';
 					$message .= '<th>Yhteensä</th>';
+					}
 					$message .= '</tr>';
 
 					// <-- Paatuote
@@ -2689,9 +2691,11 @@ class TyovuorootController extends Controller
 						$message .= '<tr>';
 						$message .= '<td>'.$return_hinnaasto['tp_nimike'].'</td>';
 						$message .= '<td>'.$maara.'</td>';
+						if(isset($_POST['vie_hintatietoja'])){
 						$message .= '<td>'.number_format($hinta_alv_0, 2, ',', ' ').'</td>';
 						$message .= '<td>'.number_format($alv, 2, ',', ' ').'</td>';
 						$message .= '<td>'.number_format($hinta_alv_sis, 2, ',', ' ').'</td>';
+						}
 						$message .= '</tr>';
 						}
 					}
@@ -2728,9 +2732,11 @@ class TyovuorootController extends Controller
 							$message .= '<tr>';
 							$message .= '<td>'.$return_hinnaasto['tp_nimike'].'</td>';
 							$message .= '<td>'.$maara.'</td>';
+							if(isset($_POST['vie_hintatietoja'])){
 							$message .= '<td>'.number_format($hinta_alv_0, 2, ',', ' ').'</td>';
 							$message .= '<td>'.number_format($alv, 2, ',', ' ').'</td>';
 							$message .= '<td>'.number_format($hinta_alv_sis, 2, ',', ' ').'</td>';
+							}
 							$message .= '</tr>';
 							}
 						}
@@ -2912,9 +2918,11 @@ class TyovuorootController extends Controller
 					$message .= '<tr>';
 					$message .= '<th>Tuote/Palvelu</th>';
 					$message .= '<th>Määrä</th>';
+					if(isset($_POST['vie_hintatietoja'])){
 					$message .= '<th>Hinta</th>';
 					$message .= '<th>ALV</th>';
 					$message .= '<th>Yhteensä</th>';
+					}
 					$message .= '</tr>';
 
 					// <-- Paatuote
@@ -2930,9 +2938,11 @@ class TyovuorootController extends Controller
 						$message .= '<tr>';
 						$message .= '<td>'.$return_hinnaasto['tp_nimike'].'</td>';
 						$message .= '<td>'.$maara.'</td>';
+						if(isset($_POST['vie_hintatietoja'])){
 						$message .= '<td>'.number_format($hinta_alv_0, 2, ',', ' ').'</td>';
 						$message .= '<td>'.number_format($alv, 2, ',', ' ').'</td>';
 						$message .= '<td>'.number_format($hinta_alv_sis, 2, ',', ' ').'</td>';
+						}
 						$message .= '</tr>';
 						}
 					}
@@ -2969,9 +2979,11 @@ class TyovuorootController extends Controller
 							$message .= '<tr>';
 							$message .= '<td>'.$return_hinnaasto['tp_nimike'].'</td>';
 							$message .= '<td>'.$maara.'</td>';
+							if(isset($_POST['vie_hintatietoja'])){
 							$message .= '<td>'.number_format($hinta_alv_0, 2, ',', ' ').'</td>';
 							$message .= '<td>'.number_format($alv, 2, ',', ' ').'</td>';
 							$message .= '<td>'.number_format($hinta_alv_sis, 2, ',', ' ').'</td>';
+							}
 							$message .= '</tr>';
 							}
 						}

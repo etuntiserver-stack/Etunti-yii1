@@ -504,7 +504,8 @@ $(document).ready(function(){
 </div>
 
 		<br>
-		<input type="checkbox" name="vieposti"> <?php echo Yii::t('main','Ilmoita asiakkaalle sähköpostilla'); ?>
+		<input type="checkbox" name="vieposti"> <?php echo Yii::t('main','Ilmoita asiakkaalle sähköpostilla'); ?> <br>
+		<input type="checkbox" name="vie_hintatietoja" checked> <?php echo Yii::t('main','Näyttä asiakkaalle hintatietoja'); ?>
 
 </div>
 
@@ -727,7 +728,7 @@ $(document).ready(function(){
 		var r = confirm('Olet myös luomassa uuden asiakkaan ja kohteen.\n Haluatko jatkaa?');
 		if(r)
 		{
-			//$(this).remove();
+			$(this).remove();
 			$('#tyovuoroot-form').submit();
 		} else {
 			return false;
@@ -760,6 +761,7 @@ $(document).ready(function(){
 			$('#Tyovuoroot_tuoteID').css({"border":"2px red solid"}).focus();
 			return false;
 		}
+			$(this).remove();
 			$('#tyovuoroot-form').submit();
 	   }
 	});
