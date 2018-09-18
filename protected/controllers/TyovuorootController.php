@@ -2335,20 +2335,24 @@ class TyovuorootController extends Controller
 
 				// <-- Vanhat
 				$vanhat = json_decode($model->tyopaari, true);
+				$vanhat_arr = array();
 				if(is_array($vanhat))
 				{
 
 				   foreach($vanhat as $tyovuoroID=>$tid)
 				   {
+					$vanhat_arr[$tid] = $tyovuoroID;
+/*
 					if(isset($tyovuoroID) and !empty($tyovuoroID) and $tyovuoroID!=$model->id )
 					{
 						$m = Tyovuoroot::model()->findByPk($tyovuoroID);
 						if(isset($m->id))
 						{
 							$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
-							Tyovuoroot::model()->deleteByPk($m->id);
+							//Tyovuoroot::model()->deleteByPk($m->id);
 						}
-					}	
+					}
+*/
 				   }
 				}
 				// Vanhat -->
@@ -2369,7 +2373,11 @@ class TyovuorootController extends Controller
 	
 				    foreach($_POST['tyopaari'] as $tid)
 				    {
-					$m=new Tyovuoroot;
+					if( isset($vanhat_arr[$tid]) ){
+						$m = Tyovuoroot::model()->findByPk($vanhat_arr[$tid]);
+					} else {
+						$m = new Tyovuoroot;
+					}
 					$m->attributes=$_POST['Tyovuoroot'];
 					$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 					$m->tid=$tid;
@@ -2401,8 +2409,23 @@ class TyovuorootController extends Controller
 					}
 				    }
 	
-	
-				    foreach($arr as $k=>$v)
+				    if(is_array($vanhat)){
+				    	$diff = array_diff($vanhat, $_POST['tyopaari']);
+				    	foreach($diff as $k => $v)
+				    	{
+						if($k!=$model->id){
+							$m = Tyovuoroot::model()->findByPk($k);
+							if( isset($m->id) ){
+							$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
+							}
+
+							Tyovuoroot::model()->deleteByPk($k);
+							if(isset($luotu[$k])){	unset($luotu[$k]); }	
+						}
+				    	}
+				    }
+
+				    foreach($arr as $k => $v)
 				    {
 					Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode($luotu)));
 					$return[] = array('tid'=>$v[0], 'pvm'=>$v[1], 'ymd'=>date("Ymd",strtotime($v[1])));
