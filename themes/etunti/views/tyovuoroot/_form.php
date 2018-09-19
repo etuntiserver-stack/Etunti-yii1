@@ -1145,31 +1145,15 @@ function getAllTids(){
 		});
 	}
 	if( ('<?=$model->tyopaari?>') !== '' ){
-		var edelliset_tyoparit = JSON.parse('<?=$model->tyopaari?>');
-
-		var edelliset_values = $.map(edelliset_tyoparit, function () {
-		    return this.name;
-		});
-
-		console.log('Edelliset työparit: ' + edelliset_values);
-		$(edelliset_values).each(function( index, val ) {
-			tids.push(val);
-		});
+		var edelliset_tyoparit = JSON.parse('<?=json_encode(array_values(json_decode($model->tyopaari, true)))?>');
+		console.log('Edelliset työparit: ' + edelliset_tyoparit);
+		var c = tids.concat(edelliset_tyoparit);
+		var tids = c.filter(function (item, pos) {return c.indexOf(item) == pos});
 	}
 	/* Työpari */
 
-	var clearArr = remove_duplicates_es6(tids);
-
-
-
-	console.log('Tids joille päivitetään laatikko: ' + clearArr);
-	return clearArr;
-}
-
-function remove_duplicates_es6(arr) {
-    let s = new Set(arr);
-    let it = s.values();
-    return Array.from(it);
+	console.log('Tids joille päivitetään laatikko: ' + tids);
+	return tids;
 }
 
 function laatikonPaivaysData(tids){
@@ -1202,7 +1186,7 @@ function laatikonPaivays(thisDataReturn){
 		$(thisDataReturn).each(function( iarr, arr ) {
 		 $(arr).each(function( i, d ) {
 
-		    console.log(d);
+		    //console.log(d);
 
 	  	    $.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/' + didlink,
