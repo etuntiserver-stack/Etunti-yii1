@@ -1144,8 +1144,8 @@ function getAllTids(){
 			tids.push(val);
 		});
 	}
-	if( ('<?=$model->tyopaari?>') !== '' ){
-		var edelliset_tyoparit = JSON.parse('<?=json_encode(array_values(json_decode($model->tyopaari, true)))?>');
+	if( '<?=$model->tyopaari?>' !== '' ){
+		var edelliset_tyoparit = JSON.parse('<?=(is_array(json_decode($model->tyopaari, true)))?json_encode(array_values(json_decode($model->tyopaari, true))):""?>');
 		console.log('Edelliset työparit: ' + edelliset_tyoparit);
 		var c = tids.concat(edelliset_tyoparit);
 		var tids = c.filter(function (item, pos) {return c.indexOf(item) == pos});
