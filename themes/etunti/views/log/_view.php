@@ -101,6 +101,8 @@
 			    $item = $item.' ('.$this->kohdeOsoite($item).')';
 			    if(isset($k) and !empty($item) and $k == 'time')
 			    $item = date("d.m.Y H:i", strtotime($item));
+			    if(is_array($item))
+			    $item = '<textarea class="form-control">'.json_encode($item).'</textarea>';
 			    if(is_array(json_decode($item, true)))
 			    $item = '<textarea class="form-control">'.$item.'</textarea>';
 
