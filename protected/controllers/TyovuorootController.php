@@ -2154,7 +2154,7 @@ class TyovuorootController extends Controller
 				// <-- Pois valittuna Työvuoro
 				if(!isset($edellinenToistuva->id))
 				{
-					Tyovuoroot::model()->deleteByPk($id);
+					//Tyovuoroot::model()->deleteByPk($id);
 				}
 				//     Pois valittuna Työvuoro -->
 
@@ -2162,12 +2162,14 @@ class TyovuorootController extends Controller
 
 
 				// <-- Pois kaikki Aloitus pvm alkaen
+/*
 				$pois_criteria = new CDBcriteria;
 				$pois_criteria->condition=" 
 					toistuva_id='".$toistuva->id."'
 					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= '".date("Y-m-d",strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
 				";
 				Tyovuoroot::model()->deleteAll($pois_criteria);
+*/
 				//    Pois kaikki Aloitus pvm alkaen -->
 
 				// <-- Poistetaanko vai säilytetäänkö vanhan ja uuden aloituspäivämäärän väliin jäävät työvuorot
@@ -2189,12 +2191,32 @@ class TyovuorootController extends Controller
 				}
 				//     Poistetaanko vai säilytetäänkö vanhan ja uuden aloituspäivämäärän väliin jäävät työvuorot -->
 
+
+				if(
+					!isset($_POST['poisto_alkaen_taaksepain'])
+					and isset($edellinenToistuva->id)
+					and strtotime($_POST['ToistuvatTyovuorot']['pfrom']) > strtotime($edellinenToistuva->pfrom)
+				)
+				{
+					$upd_valipavm = new CDBcriteria;
+					$upd_valipavm->condition=" 
+						toistuva_id='".$toistuva->id."'
+						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+						BETWEEN '".date("Y-m-d",strtotime($edellinenToistuva->pfrom))."'
+						AND '".date("Y-m-d",strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
+						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
+					";
+					Tyovuoroot::model()->updateAll(array('toistuva_id'=>0), $upd_valipavm);
+				}
+
 				// <-- Otetaan pois tyovuoro_id noista jotka on jaanyt
+/*
 				$upd_criteria = new CDBcriteria;
 				$upd_criteria->condition=" 
 					toistuva_id='".$toistuva->id."'
 				";
 				Tyovuoroot::model()->updateAll(array('toistuva_id'=>0), $upd_criteria);
+*/
 				//    Otetaan pois tyovuoro_id noista jotka on jaanyt -->
 
 			}
@@ -2338,21 +2360,9 @@ class TyovuorootController extends Controller
 				$vanhat_arr = array();
 				if(is_array($vanhat))
 				{
-
 				   foreach($vanhat as $tyovuoroID=>$tid)
 				   {
 					$vanhat_arr[$tid] = $tyovuoroID;
-/*
-					if(isset($tyovuoroID) and !empty($tyovuoroID) and $tyovuoroID!=$model->id )
-					{
-						$m = Tyovuoroot::model()->findByPk($tyovuoroID);
-						if(isset($m->id))
-						{
-							$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
-							//Tyovuoroot::model()->deleteByPk($m->id);
-						}
-					}
-*/
 				   }
 				}
 				// Vanhat -->
@@ -3888,7 +3898,12 @@ class TyovuorootController extends Controller
 							);
 				} else {
 
-					$t = new Tyovuoroot;
+					$chk_tv = Tyovuoroot::model()->find(" tid='".$tid."' AND pvm='".$pvm."' AND toistuva_id='".$attr->id."' ");
+					if( isset($chk_tv->id) ){
+						$t = $chk_tv;
+					} else {
+						$t = new Tyovuoroot;
+					}
 					$t->attributes = $attr->attributes;
 					$t->tid = $tid;
 					$t->pvm = $pvm;
