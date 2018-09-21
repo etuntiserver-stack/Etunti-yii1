@@ -1845,6 +1845,7 @@ class TyovuorootController extends Controller
 			if(!isset($_POST['tyopaari']))
 			{
 			  	$return[] = $this->toistuvaInsert(
+					null,
 					$toistuva,
 					$toistuva->tid,  
 					json_decode($toistuva->viikko_paivat, true),
@@ -1865,6 +1866,7 @@ class TyovuorootController extends Controller
 			    foreach($_POST['tyopaari'] as $tid)
 			    {
 				$return[] = $this->toistuvaInsert(
+					null,
 					$toistuva,
 					$tid,  
 					json_decode($toistuva->viikko_paivat, true),
@@ -2151,27 +2153,6 @@ class TyovuorootController extends Controller
 					$return[] = array('ERROR'=>json_encode(var_dump($toistuva->getErrors())));
 				}
 
-				// <-- Pois valittuna Työvuoro
-				if(!isset($edellinenToistuva->id))
-				{
-					//Tyovuoroot::model()->deleteByPk($id);
-				}
-				//     Pois valittuna Työvuoro -->
-
-				//date("Y-m-d",strtotime($_POST['ToistuvatTyovuorot']['pfrom']))
-
-
-				// <-- Pois kaikki Aloitus pvm alkaen
-/*
-				$pois_criteria = new CDBcriteria;
-				$pois_criteria->condition=" 
-					toistuva_id='".$toistuva->id."'
-					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= '".date("Y-m-d",strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
-				";
-				Tyovuoroot::model()->deleteAll($pois_criteria);
-*/
-				//    Pois kaikki Aloitus pvm alkaen -->
-
 				// <-- Poistetaanko vai säilytetäänkö vanhan ja uuden aloituspäivämäärän väliin jäävät työvuorot
 				if(
 					isset($_POST['poisto_alkaen_taaksepain'])
@@ -2209,19 +2190,7 @@ class TyovuorootController extends Controller
 					Tyovuoroot::model()->updateAll(array('toistuva_id'=>0), $upd_valipavm);
 				}
 
-				// <-- Otetaan pois tyovuoro_id noista jotka on jaanyt
-/*
-				$upd_criteria = new CDBcriteria;
-				$upd_criteria->condition=" 
-					toistuva_id='".$toistuva->id."'
-				";
-				Tyovuoroot::model()->updateAll(array('toistuva_id'=>0), $upd_criteria);
-*/
-				//    Otetaan pois tyovuoro_id noista jotka on jaanyt -->
-
 			}
-
-
 
 			// <-- jos on tyopaari
 			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
@@ -2233,6 +2202,7 @@ class TyovuorootController extends Controller
 			    foreach($_POST['tyopaari'] as $tid)
 			    {
 				$return[] = $this->toistuvaInsert(
+					$id,
 					$toistuva, 
 					$tid, 
 					json_decode($toistuva->viikko_paivat, true),
@@ -2243,11 +2213,11 @@ class TyovuorootController extends Controller
 
 				if($saankoSuoritta == 1)
 				ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('tyopaari' => json_encode($_POST['tyopaari'])));
-			} else
-			// jos on tyopaari -->
-			{
+
+			} else { // jos on tyopaari -->
 
 				$return[] = $this->toistuvaInsert(
+					$id,
 					$toistuva,
 					$toistuva->tid, 
 					json_decode($toistuva->viikko_paivat, true),
@@ -2505,7 +2475,7 @@ class TyovuorootController extends Controller
 				<span aria-hidden="true">&times;</span>
 			</button>
               <span class="panel-title"><i class="fa fa-clock-o"></i> 
-		<?php echo Yii::t('main', 'Työvuoron suunnittelu').': '.$tekijan_nimi; ?>
+		<?php echo Yii::t('main', 'Työvuoron suunnittelu').' #'.$model->id.': '.$tekijan_nimi; ?>
 	      </span>
             </div>
             <!-- end .panel-heading section -->
@@ -3815,7 +3785,7 @@ class TyovuorootController extends Controller
 	}
 
 
-	protected function toistuvaInsert($attr, $tid, $viikko_paivat, $tyopaari, $saankoSuoritta)
+	protected function toistuvaInsert($id, $attr, $tid, $viikko_paivat, $tyopaari, $saankoSuoritta)
 	{
 
 
@@ -3898,9 +3868,12 @@ class TyovuorootController extends Controller
 							);
 				} else {
 
-					$chk_tv = Tyovuoroot::model()->find(" tid='".$tid."' AND pvm='".$pvm."' AND toistuva_id='".$attr->id."' ");
-					if( isset($chk_tv->id) ){
-						$t = $chk_tv;
+					$chk_toistuvat_tv = Tyovuoroot::model()->find(" tid='".$tid."' AND pvm='".$pvm."' AND toistuva_id='".$attr->id."' ");
+					$chk_oleva_tv = Tyovuoroot::model()->find(" tid='".$tid."' AND pvm='".$pvm."' AND id='".$id."' ");
+					if( isset($chk_toistuvat_tv->id) ){
+						$t = $chk_toistuvat_tv;
+					} elseif( isset($chk_oleva_tv->id) ){
+						$t = $chk_oleva_tv;
 					} else {
 						$t = new Tyovuoroot;
 					}
