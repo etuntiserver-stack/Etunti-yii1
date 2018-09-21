@@ -2190,7 +2190,24 @@ class TyovuorootController extends Controller
 					Tyovuoroot::model()->updateAll(array('toistuva_id'=>0), $upd_valipavm);
 				}
 
+				if(
+					isset($edellinenToistuva->id)
+					and strtotime($_POST['ToistuvatTyovuorot']['pto']) < strtotime($edellinenToistuva->pto)
+				)
+				{
+
+					$del_valipavm = new CDBcriteria;
+					$del_valipavm->condition=" 
+						toistuva_id='".$toistuva->id."'
+						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+						BETWEEN '".date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pto']))."' 
+						AND '".date("Y-m-d",strtotime($edellinenToistuva->pto))."'
+					";
+					Tyovuoroot::model()->deleteAll($del_valipavm);
+				}
+
 			}
+
 
 			// <-- jos on tyopaari
 			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
