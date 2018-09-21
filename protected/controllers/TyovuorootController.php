@@ -2230,6 +2230,24 @@ class TyovuorootController extends Controller
 
 			if($saankoSuoritta == 1)
 			{
+					// <-- Poistetaan tyopaari
+					$tp_post = (isset($_POST['tyopaari']))? $_POST['tyopaari']:array();
+				    	if(is_array(json_decode($edellinenToistuva->tyopaari, true))){
+				    	   $diff = array_diff(json_decode($edellinenToistuva->tyopaari, true), $tp_post);
+				    	   foreach($diff as $v)
+				    	   {
+						if( $model->tid != $v ){
+							$criteria = new CDBcriteria;
+							$criteria->condition = " 
+								tid='".$v."'
+								AND toistuva_id='".$toistuva->id."'
+							";
+							Tyovuoroot::model()->deleteAll($criteria);
+						}
+				    	   }
+				    	}
+					//     Poistetaan tyopaari -->
+
 					$nt = ToistuvatTyovuorot::model()->findbypk($toistuva->id);
 					if(isset($edellinenToistuva->id))
 					{
@@ -2324,7 +2342,6 @@ class TyovuorootController extends Controller
 				$post_tyopaari = $_POST['tyopaari'];
 				// Onko tyopari esitetty -->
 	
-
 				// <-- Vanhat
 				$vanhat = json_decode($model->tyopaari, true);
 				$vanhat_arr = array();
@@ -2336,7 +2353,6 @@ class TyovuorootController extends Controller
 				   }
 				}
 				// Vanhat -->
-
 
 				if(count($post_tyopaari) == 0)
 				Tyovuoroot::model()->updatebypk($model->id, array('tyopaari' => ''));
