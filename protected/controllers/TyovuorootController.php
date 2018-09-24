@@ -2188,33 +2188,6 @@ class TyovuorootController extends Controller
 					Tyovuoroot::model()->updateAll(array('toistuva_id'=>0), $upd_valipavm);
 				}
 
-				if(
-					isset($edellinenToistuva->id)
-					and strtotime($_POST['ToistuvatTyovuorot']['pto']) < strtotime($edellinenToistuva->pto)
-				)
-				{
-					$del_valipavm = new CDBcriteria;
-					$del_valipavm->condition=" 
-						toistuva_id='".$toistuva->id."'
-						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-						BETWEEN '".date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pto']))."' 
-						AND '".date("Y-m-d",strtotime($edellinenToistuva->pto))."'
-					";
-					Tyovuoroot::model()->deleteAll($del_valipavm);
-				}
-
-				// <-- Postetaan viikko_paivat jos edelliset olisi muut
-				if( isset($_POST['P']) and $diff_P = array_diff(json_decode($edellinenToistuva->viikko_paivat, true), $_POST['P'])){
-				   foreach($diff_P as $day_of_week){
-					$pois_vkopvm = new CDBcriteria;
-					$pois_vkopvm->condition=" 
-						toistuva_id='".$toistuva->id."'
-						AND (WEEKDAY(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')) + 1) =  $day_of_week
-					";
-					$poistetaan = Tyovuoroot::model()->deleteAll($pois_vkopvm);
-				   }
-				}
-				//     Postetaan viikko_paivat jos edelliset olisi muut -->
 
 			}
 
@@ -3831,7 +3804,7 @@ class TyovuorootController extends Controller
 	protected function toistuvaInsert($id, $attr, $tid, $viikko_paivat, $tyopaari, $saankoSuoritta)
 	{
 
-
+		$suoritettu_ids = array(); // TUORE
 		$fi = $this->vkoPaivat();
 		$tt = Tyontekijat::model()->findByPk($tid);
 		
@@ -3927,6 +3900,7 @@ class TyovuorootController extends Controller
 					{
 						if($t->save())
 						{
+							$suoritettu_ids[] = $t->id;
 							$return[] = array(
 								'tid'=>$t->tid, 
 								'pvm'=>$t->pvm, 
@@ -3959,6 +3933,17 @@ class TyovuorootController extends Controller
 			}
 			//$return[] = array('tid'=>$tid, 'pvm'=>$date, 'ymd'=>date("Ymd",strtotime($date)));
 	                $date = date ("d.m.Y", strtotime("+1 day", strtotime($date)));
+		}
+
+		if( $saankoSuoritta == 1 and count($suoritettu_ids) > 0){
+			$ids = implode(",", $suoritettu_ids);
+			$pois = new CDBcriteria;
+			$pois->condition=" 
+				tid='".$tid."'
+				AND toistuva_id='".$attr->id."'
+				AND id NOT IN ($ids)
+			";
+			$pois = Tyovuoroot::model()->deleteAll($pois);
 		}
 
 		return $return;
