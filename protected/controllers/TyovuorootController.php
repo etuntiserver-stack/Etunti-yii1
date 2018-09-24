@@ -2182,15 +2182,13 @@ class TyovuorootController extends Controller
 						toistuva_id='".$toistuva->id."'
 						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 						BETWEEN '".date("Y-m-d",strtotime($edellinenToistuva->pfrom))."'
-						AND '".date("Y-m-d",strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
-						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
+						AND '".date("Y-m-d",strtotime($_POST['ToistuvatTyovuorot']['pfrom']." -1 day"))."'
 					";
 					Tyovuoroot::model()->updateAll(array('toistuva_id'=>0), $upd_valipavm);
 				}
 
 
 			}
-
 
 			// <-- jos on tyopaari
 			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
