@@ -2139,19 +2139,17 @@ class TyovuorootController extends Controller
 				$toistuva->lisa_tuotteet = '';
 			}
 
-			if(isset($_POST['P']))
-			$toistuva->viikko_paivat=json_encode($_POST['P']);
+			// <-- viikko_paivat
+			if(isset($_POST['P'])){	
+				$toistuva->viikko_paivat=json_encode($_POST['P']);
+			}
+			//     viikko_paivat -->
 
-			//$return[] = array('ERROR'=>json_encode($toistuva->attributes));
 
-
+			// <-- SUORITTAMINEN
 			if($saankoSuoritta == 1)
 			{
-
-				if(!$toistuva->save())
-				{
-					$return[] = array('ERROR'=>json_encode(var_dump($toistuva->getErrors())));
-				}
+				if(!$toistuva->save()){	$return[] = array('ERROR'=>json_encode(var_dump($toistuva->getErrors()))); }
 
 				// <-- Poistetaanko vai säilytetäänkö vanhan ja uuden aloituspäivämäärän väliin jäävät työvuorot
 				if(
@@ -2195,7 +2193,6 @@ class TyovuorootController extends Controller
 					and strtotime($_POST['ToistuvatTyovuorot']['pto']) < strtotime($edellinenToistuva->pto)
 				)
 				{
-
 					$del_valipavm = new CDBcriteria;
 					$del_valipavm->condition=" 
 						toistuva_id='".$toistuva->id."'
@@ -2205,6 +2202,19 @@ class TyovuorootController extends Controller
 					";
 					Tyovuoroot::model()->deleteAll($del_valipavm);
 				}
+
+				// <-- Postetaan viikko_paivat jos edelliset olisi muut
+				if( isset($_POST['P']) and $diff_P = array_diff(json_decode($edellinenToistuva->viikko_paivat, true), $_POST['P'])){
+				   foreach($diff_P as $day_of_week){
+					$pois_vkopvm = new CDBcriteria;
+					$pois_vkopvm->condition=" 
+						toistuva_id='".$toistuva->id."'
+						AND (WEEKDAY(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')) + 1) =  $day_of_week
+					";
+					$poistetaan = Tyovuoroot::model()->deleteAll($pois_vkopvm);
+				   }
+				}
+				//     Postetaan viikko_paivat jos edelliset olisi muut -->
 
 			}
 
@@ -3878,8 +3888,6 @@ class TyovuorootController extends Controller
 			{
 				$pvm = $date;
 				//$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)));
-				//$onkosama = $this->onko_sama(null, $pvm, $tid, $kohde, $alku, $loppu);
-
 
 				$tekijan_nimi='';
 				if(isset($tt->tekijan_nimi) and $tid!=0)
