@@ -1059,13 +1059,13 @@ function paivaysTarkistus(thisDataReturn){
 				   else if(d['poistetaan']){
 				   	$('#sopivatPaivat').append('<div class="row"><b class="text-warning"><div class="col-sm-3">Kaikki</div><div class="col-sm-3">Kaikki</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Pois taulusta</div></b></div>');
 				   }
-				   else if(d['uusi']) {
+				   else if(d['tilanne'] && d['tilanne'] == 'uusi') {
 				   	$('#sopivatPaivat').append('<div class="row"><b class="text-success"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Uusi</div></b></div>');
 				   }
-				   else if(d['muokkaus']) {
+				   else if(d['tilanne'] && d['tilanne'] == 'muokkaus') {
 				   	$('#sopivatPaivat').append('<div class="row"><b class="text-warning"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Muokkaus</div></b></div>');
 				   }
-				   else if(d['poistaminen']) {
+				   else if(d['tilanne'] && d['tilanne'] == 'poistetaan') {
 				   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Poistetaan</div></b></div>');
 				   }
 				   else if(d['poistaminenVkoPvm']) {

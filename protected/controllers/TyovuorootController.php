@@ -3880,12 +3880,15 @@ class TyovuorootController extends Controller
 							);
 				} else {
 
+					$tilanne = 'uusi';
 					$chk_toistuvat_tv = Tyovuoroot::model()->find(" tid='".$tid."' AND pvm='".$pvm."' AND toistuva_id='".$attr->id."' ");
 					$chk_oleva_tv = Tyovuoroot::model()->find(" tid='".$tid."' AND pvm='".$pvm."' AND id='".$id."' ");
 					if( isset($chk_toistuvat_tv->id) ){
 						$t = $chk_toistuvat_tv;
+						$tilanne = 'muokkaus';
 					} elseif( isset($chk_oleva_tv->id) ){
 						$t = $chk_oleva_tv;
+						$tilanne = 'muokkaus';
 					} else {
 						$t = new Tyovuoroot;
 					}
@@ -3898,14 +3901,12 @@ class TyovuorootController extends Controller
 					{
 						if($t->save())
 						{
-							$suoritettu_ids[] = $t->id;
 							$return[] = array(
 								'tid'=>$t->tid, 
 								'pvm'=>$t->pvm, 
 								'ymd'=>date("Ymd",strtotime($t->pvm)), 
 								'isSaved'=>true, 
-								'tvuoro_id'=>$t->id, 
-								'uusi'=>true
+								'tvuoro_id'=>$t->id
 							);
 
 						} else {
@@ -3913,7 +3914,6 @@ class TyovuorootController extends Controller
 						}
 
 					} else {
-
 							$return[] = array(
 								'tid'=>$tid, 
 								'pvm'=>$pvm, 
@@ -3921,10 +3921,12 @@ class TyovuorootController extends Controller
 								'isSaved'=>false, 
 								'tekijan_nimi'=>$tekijan_nimi, 
 								'vkopvm' => $fi[date("N",strtotime($pvm))], 
-								'uusi'=>true 
+								'tilanne' => $tilanne 
 							);
 
 					}
+
+					if( isset($t->id) ){	$suoritettu_ids[] = $t->id; }
 
 				} // if otettu pois
 
@@ -3933,15 +3935,29 @@ class TyovuorootController extends Controller
 	                $date = date ("d.m.Y", strtotime("+1 day", strtotime($date)));
 		}
 
-		if( $saankoSuoritta == 1 and count($suoritettu_ids) > 0){
+		if( count($suoritettu_ids) > 0){
 			$ids = implode(",", $suoritettu_ids);
-			$pois = new CDBcriteria;
-			$pois->condition=" 
+			$criteria = new CDBcriteria;
+			$criteria->condition=" 
 				tid='".$tid."'
 				AND toistuva_id='".$attr->id."'
 				AND id NOT IN ($ids)
 			";
-			$pois = Tyovuoroot::model()->deleteAll($pois);
+			$pois = Tyovuoroot::model()->findAll($criteria);
+			foreach($pois as $item){
+				$return[] = array(
+					'tid'=>$item->tid, 
+					'pvm'=>$item->pvm, 
+					'ymd'=>date("Ymd",strtotime($item->pvm)), 
+					'isSaved'=>false, 
+					'tekijan_nimi' => $this->etuSukunimi($item->tid), 
+					'vkopvm' => $fi[date("N",strtotime($item->pvm))], 
+					'tilanne' => 'poistetaan'
+				);
+			}
+			if($saankoSuoritta == 1){
+			Tyovuoroot::model()->deleteAll($criteria);
+			}
 		}
 
 		return $return;
