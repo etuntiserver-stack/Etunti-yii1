@@ -2466,7 +2466,7 @@ class TyovuorootController extends Controller
 		//     Return order etu ja sukunimella -->
 		$criteria->condition="aktiivinen=1";
 	  	$t = Tyontekijat::model()->findAll($criteria);
-		$tekijan_nimi = '<select id="tekijanVaihdo" class="form-control">';
+		$tekijan_nimi = '<select id="tekijanVaihdo" class="form-control" '.((!empty($model->tyopaari))?'disabled':'').'>';
 		if(count($t) > 0)
 		{
 		   if($model->tid == 0)
