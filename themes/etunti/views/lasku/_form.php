@@ -131,8 +131,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php echo $form->labelEx($model,'as_nro'); ?>
     		<?php 
        		$criteria = new CDbCriteria();
-		//$criteria->select = " COALESCE(NULLIF(yhteyshenkilo,yhteyshenkilo),'gg') AS yht ";
-		$criteria->order = " yhteyshenkilo ";
+		$criteria->condition = " asiakasnumero!='' ";
 
         	$a = Asiakkaat::model()->findAll($criteria);
 		echo '<select name="Lasku[as_nro]" class="form-control" id="Lasku_as_nro">';
@@ -140,24 +139,22 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		if(isset($model->asiakas_id) and !empty($model->asiakas_id))
 		{
         	  $aon = Asiakkaat::model()->findbypk($model->asiakas_id);
-		  if(!empty($aa->yrityksen_nimi))
+		  if(isset($aon->id) and !empty($aon->asiakasnumero) and !empty($aon->yrityksen_nimi) and $aon->tyyppi == 'yritys'){
 		    echo '<option value="'.$aon->asiakasnumero.'" asiakas_id="'.$aon->id.'">'.$aon->yrityksen_nimi.'</option>';
-		  elseif(empty($aon->yhteyshenkilo) and empty($aon->yrityksen_nimi))
-		    echo '<option value="'.$aon->asiakasnumero.'" asiakas_id="'.$aon->id.'">nimet puutuu '.$aon->id.'</option>';
-		  else
+		  }
+		  if(isset($aon->id) and !empty($aon->asiakasnumero) and !empty($aon->yhteyshenkilo) and $aon->tyyppi == 'henkilo'){
 		    echo '<option value="'.$aon->asiakasnumero.'" asiakas_id="'.$aon->id.'">'.$aon->yhteyshenkilo.'</option>';
-		} else {
-	        echo '<option></option>';
+		  }
 		}
 
 		foreach($a as $aa)
 		{
-		  if(!empty($aa->yrityksen_nimi))
+		  if(!empty($aa->yrityksen_nimi) and $aa->tyyppi == 'yritys'){
 		    echo '<option value="'.$aa->asiakasnumero.'" asiakas_id="'.$aa->id.'">'.$aa->yrityksen_nimi.'</option>';
-		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->asiakasnumero.'" asiakas_id="'.$aa->id.'">nimet puutuu '.$aa->id.'</option>';
-		  else
+		  }
+		  if(!empty($aa->yhteyshenkilo) and $aa->tyyppi == 'henkilo'){
 		    echo '<option value="'.$aa->asiakasnumero.'" asiakas_id="'.$aa->id.'">'.$aa->yhteyshenkilo.'</option>';
+		  }
 		}
 		echo '</select>';
 		?>
