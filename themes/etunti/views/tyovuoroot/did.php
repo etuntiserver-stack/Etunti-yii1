@@ -42,9 +42,9 @@ if(!isset($_POST['tulosta']))
 	   <div class="tp">
 	     <div class="form-inline">
 	      <div class="form-group">
-	   	<i class="forCut" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
+	   	<i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mcut glyphicon glyphicon-transfer text-success link':'forCut').'"" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
 	      </div><div class="form-group">
-	   	<i class="forCopy" id="forCopy_'.$did.'_'.$tid.'"></i> 
+	   	<i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mplus glyphicon glyphicon-plus text-success link':'forCopy').'" id="forCopy_'.$did.'_'.$tid.'"></i> 
 	      </div>
 	     </div>
 	   </div>';
