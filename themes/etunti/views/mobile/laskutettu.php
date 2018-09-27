@@ -154,7 +154,7 @@ echo Yii::app()->request->getPost('laskutettu');
 			     if(isset($_GET['laskutettu']) and $_GET['laskutettu'] == '1')
 			     echo '<option value="1">Laskutettu</option>';
 			     if(isset($_GET['laskutettu']) and $_GET['laskutettu'] == '3')
-			     echo '<option value="0">Laskuttamatta</option>';
+			     echo '<option value="3">Laskuttamatta</option>';
 			     ?>
 			     <option value=""><?php echo Yii::t('main', 'Tilanne'); ?></option>
 			     <option value="1"><?php echo Yii::t('main', 'Laskutettu'); ?></option>
