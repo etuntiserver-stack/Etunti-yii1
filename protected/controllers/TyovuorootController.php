@@ -2234,7 +2234,7 @@ class TyovuorootController extends Controller
 			{
 					// <-- Poistetaan tyopaari
 					$tp_post = (isset($_POST['tyopaari']))? $_POST['tyopaari']:array();
-				    	if(is_array(json_decode($edellinenToistuva->tyopaari, true))){
+				    	if(!empty($edellinenToistuva->tyopaari) and is_array(json_decode($edellinenToistuva->tyopaari, true))){
 				    	   $diff = array_diff(json_decode($edellinenToistuva->tyopaari, true), $tp_post);
 				    	   foreach($diff as $v)
 				    	   {
