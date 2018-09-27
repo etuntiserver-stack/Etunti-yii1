@@ -2418,14 +2418,14 @@ $(document).ready(function(){
 		foreach($m as $data)
 		{
 
-		    if($model == 'Asiakkaat' and $data->tyyppi == 'yritys' and $sarake != 'osoite')
+		    if($model == 'Asiakkaat' and $data->tyyppi == 'yritys' and $sarake == 'yrityksen_nimi')
 		    {
 		    $arr[] = array(
 		        'label'=>$data->yrityksen_nimi,
 		        'value'=>$data->yrityksen_nimi,    
 		        'id'=>$data->id,
         	    );
-		    } else if($model == 'Asiakkaat' and $data->tyyppi == 'henkilo' and $sarake != 'osoite')
+		    } else if($model == 'Asiakkaat' and $data->tyyppi == 'henkilo' and $sarake == 'yhteyshenkilo')
 		    {
 		    $arr[] = array(
 		        'label'=>$data->yhteyshenkilo,

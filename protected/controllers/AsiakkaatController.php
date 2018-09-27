@@ -1082,6 +1082,9 @@ $xml = '
 		if(isset($_GET['ryhma']) and !empty(trim($_GET['ryhma'])))
 	        $criteria->addCondition (" ryhma LIKE '%".$_GET['ryhma']."%' ");
 
+		if(isset($_GET['tyoryhma']) and !empty(trim($_GET['tyoryhma'])))
+	        $criteria->addCondition (" tyoryhma LIKE '%".$_GET['tyoryhma']."%' ");
+
 		if(isset($_GET['tyyppi']) and !empty(trim($_GET['tyyppi'])))
 	        $criteria->addCondition (" tyyppi='".$_GET['tyyppi']."' ");
 
@@ -1093,6 +1096,9 @@ $xml = '
 
 		if(isset($_GET['asiakasnumero']) and !empty(trim($_GET['asiakasnumero'])))
 	        $criteria->addCondition (" asiakasnumero LIKE '%".$_GET['asiakasnumero']."%' ");
+
+		if(isset($_GET['kaupunki']) and !empty(trim($_GET['kaupunki'])))
+	        $criteria->addCondition (" kaupunki LIKE '%".$_GET['kaupunki']."%' ");
 
 		$dataProvider=new CActiveDataProvider('Asiakkaat', array(
 			'criteria'=>$criteria,
