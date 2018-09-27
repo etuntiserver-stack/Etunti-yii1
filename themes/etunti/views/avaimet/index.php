@@ -271,8 +271,18 @@ $(document).ready(function(){
 </div>
 
 
+<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.dataTables.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
+$(document).ready(function() {
+    $('#mobileTable').DataTable({
+        "bPaginate": false,
+        "bFilter": false,
+        "bInfo": false
+    });
+});
+
 $(document).ready(function(){
 
 $(".haemob").click(function(){
