@@ -156,6 +156,26 @@ $(document).ready(function() {
                           </label>
                         </div>
 
+		        <?php if(isset($_GET['tyoryhma'])) echo '<input type="hidden" id="tyoryhma" value="'.$_GET['tyoryhma'].'">'; ?>
+                        <div class="section">
+                          <label class="field select">
+			  <?php
+					$list = array();
+			      		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
+					foreach($l as $v)
+					$list[$v->id] = $v->value;
+			
+					if(count($list) > 0)
+					{
+			        	echo CHtml::dropDownList('tyoryhma', 'tyoryhma', $list,
+					array('empty'=>'Valitse työryhmä','class'=>'form-control form-group', 'id'=>'tyoryhmaSelect'));
+					}
+			  ?>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+
                       </div>
                       <div class="col-md-2">
                         <div class="section">
@@ -179,10 +199,10 @@ $(document).ready(function() {
                         </div>
 
 
-		      <?php if(isset($_GET['ryhma'])) echo '<input type="hidden" id="ryhma" value="'.$_GET['ryhma'].'">'; ?>
+		        <?php if(isset($_GET['ryhma'])) echo '<input type="hidden" id="ryhma" value="'.$_GET['ryhma'].'">'; ?>
                         <div class="section">
                           <label class="field select">
-			<?php
+			  <?php
 					$list = array();
 			      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma_real' ",array('order' => "select_type"));
 					foreach($l as $v)
@@ -193,7 +213,7 @@ $(document).ready(function() {
 			        	echo CHtml::dropDownList('ryhma', 'ryhma', $list,
 					array('empty'=>'Valitse ryhmä','class'=>'form-control form-group', 'id'=>'ryhmaSelect'));
 					}
-			?>
+			  ?>
                             <i class="arrow double"></i>
                             </label>
                           </label>
@@ -208,6 +228,30 @@ $(document).ready(function() {
    			    <input type="text" name="sahkoposti" class="gui-input" value="<?php if(isset($_GET['sahkoposti'])) echo $_GET['sahkoposti']; ?>" placeholder="<?php echo Yii::t('main','Sähköposti'); ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-at"></i>
+                            </label>
+                          </label>
+                        </div>
+
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Asiakkaat';
+				$sarake = 'kaupunki';
+				$placeholder = 'Postitoimipaikka';
+				if(isset($_GET[$sarake])) 			
+					$postvalue = $_GET[$sarake]; 
+				else 
+					$postvalue = '';				
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
                             </label>
                           </label>
                         </div>
@@ -427,6 +471,9 @@ $(document).ready(function(){
 
  if($("#ryhma").val())
  $("#ryhmaSelect").val($("#ryhma").val());
+
+ if($("#tyoryhma").val())
+ $("#tyoryhmaSelect").val($("#tyoryhma").val());
 
  if($("#as_tyyppi").val())
  $("#tyyppi").val($("#as_tyyppi").val());
