@@ -134,8 +134,21 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		$criteria->condition = " asiakasnumero!='' ";
 
         	$a = Asiakkaat::model()->findAll($criteria);
-		echo '<select name="Lasku[as_nro]" class="form-control" id="Lasku_as_nro">';
+		$a_sort = array();
+		foreach($a as $aa)
+		{
+		  if(!empty($aa->yrityksen_nimi) and $aa->tyyppi == 'yritys'){
+		    $a_sort[$aa->yrityksen_nimi] = array('asiakasnumero' => $aa->asiakasnumero, 'asiakas_id' => $aa->id);
+		  }
+		  if(!empty($aa->yhteyshenkilo) and $aa->tyyppi == 'henkilo'){
+		    $a_sort[$aa->yhteyshenkilo] = array('asiakasnumero' => $aa->asiakasnumero, 'asiakas_id' => $aa->id);
+		  }
+		}
+		ksort($a_sort);
 
+
+		echo '<select name="Lasku[as_nro]" class="form-control" id="Lasku_as_nro">';
+		echo '<option value=>'.Yii::t('main', 'Valitse asiakas').'</option>';
 		if(isset($model->asiakas_id) and !empty($model->asiakas_id))
 		{
         	  $aon = Asiakkaat::model()->findbypk($model->asiakas_id);
@@ -147,14 +160,9 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		  }
 		}
 
-		foreach($a as $aa)
+		foreach($a_sort as $k => $v)
 		{
-		  if(!empty($aa->yrityksen_nimi) and $aa->tyyppi == 'yritys'){
-		    echo '<option value="'.$aa->asiakasnumero.'" asiakas_id="'.$aa->id.'">'.$aa->yrityksen_nimi.'</option>';
-		  }
-		  if(!empty($aa->yhteyshenkilo) and $aa->tyyppi == 'henkilo'){
-		    echo '<option value="'.$aa->asiakasnumero.'" asiakas_id="'.$aa->id.'">'.$aa->yhteyshenkilo.'</option>';
-		  }
+		    echo '<option value="'.$v['asiakasnumero'].'" asiakas_id="'.$v['asiakas_id'].'">'.$k.'</option>';
 		}
 		echo '</select>';
 		?>
