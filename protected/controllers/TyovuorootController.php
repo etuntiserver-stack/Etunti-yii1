@@ -2440,6 +2440,21 @@ class TyovuorootController extends Controller
 				    }
 	
 				}
+
+				if(is_array($vanhat) and !isset($_POST['tyopaari'])){
+				    	foreach($vanhat as $k => $v)
+				    	{
+						if($k!=$model->id){
+							$m = Tyovuoroot::model()->findByPk($k);
+							if( isset($m->id) ){
+							$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
+							}
+
+							Tyovuoroot::model()->deleteByPk($k);
+							if(isset($luotu[$k])){	unset($luotu[$k]); }	
+						}
+				    	}
+				}
 				// jos on tyopaari -->
 
 				if(count($post_tyopaari) == 0 and $model->toistuva_id == 0)
