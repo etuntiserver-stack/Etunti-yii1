@@ -3964,6 +3964,7 @@ class TyovuorootController extends Controller
 			$criteria_1 = new CDBcriteria;
 			$criteria_1->condition=" 
 				tid='".$tid."'
+				AND toistuva_id != 0
 				AND toistuva_id='".$attr->id."'
 				AND id NOT IN ($ids)
 			";
@@ -3988,6 +3989,7 @@ class TyovuorootController extends Controller
 			$criteria_2 = new CDBcriteria;
 			$criteria_2->condition=" 
 				tid='".$edellinenToistuva->tid."'
+				AND toistuva_id != 0
 				AND toistuva_id='".$attr->id."'
 			";
 			$pois_2 = Tyovuoroot::model()->findAll($criteria_2);
