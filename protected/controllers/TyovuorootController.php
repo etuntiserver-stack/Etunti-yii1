@@ -2376,6 +2376,8 @@ class TyovuorootController extends Controller
 					} else {
 						$m = new Tyovuoroot;
 					}
+					if( count($m) == 0 ){ $m = new Tyovuoroot; }
+
 					$m->attributes=$_POST['Tyovuoroot'];
 					$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 					$m->tid=$tid;
@@ -2404,6 +2406,9 @@ class TyovuorootController extends Controller
 
 						$luotu[$m->id] = $m->tid;
 				    		$arr[$m->id] = array($m->tid,$m->pvm);
+					} else {
+						echo json_encode($m->getErrors());
+						exit;
 					}
 				    }
 	
