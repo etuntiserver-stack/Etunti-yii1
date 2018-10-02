@@ -42,9 +42,9 @@ if(!isset($_POST['tulosta']))
 	   <div class="tp">
 	     <div class="form-inline">
 	      <div class="form-group">
-	   	<i class="forCut" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
+	   	<i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mcut glyphicon glyphicon-transfer text-success link':'forCut').'"" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
 	      </div><div class="form-group">
-	   	<i class="forCopy" id="forCopy_'.$did.'_'.$tid.'"></i> 
+	   	<i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mplus glyphicon glyphicon-plus text-success link':'forCopy').'" id="forCopy_'.$did.'_'.$tid.'"></i> 
 	      </div>
 	     </div>
 	   </div>';
@@ -296,6 +296,7 @@ if(!isset($_POST['tulosta']))
 
 	   if(!empty($osoite)){ $osoite = '<br>'.$asiakasNakyvissa.$paikkakuntaNakyvissa.$osoite; }
 	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="did '.$fullRivi.' '.(($tvVal->laskutettu == 1)? 'laskutettu':'').'" style="color:'.$color.'">';
+	   //$bod .= '<h5>#'.$tvVal->id.'</h5>';
 	   if( $from != 'mobiili' ){
 	       $bod .=  '<span class="link text-danger fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></span>';
 	   }
