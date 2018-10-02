@@ -505,7 +505,7 @@ $(document).ready(function(){
 
 		<br>
 		<input type="checkbox" name="vieposti"> <?php echo Yii::t('main','Ilmoita asiakkaalle sähköpostilla'); ?> <br>
-		<input type="checkbox" name="vie_hintatietoja" checked> <?php echo Yii::t('main','Näyttä asiakkaalle hintatietoja'); ?>
+		<input type="checkbox" name="vie_hintatietoja" checked> <?php echo Yii::t('main','Näytä asiakkaalle hintatietoja'); ?>
 
 </div>
 
