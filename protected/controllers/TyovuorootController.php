@@ -881,6 +881,27 @@ class TyovuorootController extends Controller
 			}
 			//     Jos toistuva, otetaan sen Päivämäärä pois ketjusta -->
 
+
+			if( is_array(json_decode($t->tyopaari, true)) ){
+				$uusi_tp_arr = array();
+				foreach(json_decode($t->tyopaari, true) as  $id => $tp_id){
+					$tv = Tyovuoroot::model()->findByPk($id);
+					if( isset($tv->id) and $tv->tid == $t->tid ){
+						// ei mitaan koska pois
+					} else {
+						$uusi_tp_arr[$id] = $tp_id;
+					}
+				}
+				foreach( $uusi_tp_arr as $k => $v ){
+					if( count($uusi_tp_arr) == 1 ){
+					Tyovuoroot::model()->updateByPk($k, array('tyopaari' => ''));
+					break;
+					}
+					Tyovuoroot::model()->updateByPk($k, array('tyopaari' => json_encode($uusi_tp_arr)));
+				}
+			}
+			
+
 			// <-- LOG
 			if( isset($t->id) )
 			{
@@ -958,7 +979,7 @@ class TyovuorootController extends Controller
 			$t = Tyovuoroot::model()->findbypk($ex[0]);
 			if(isset($t->id))
 			{
-	
+			$vanha_pvm = $t->pvm;
 			// <-- Jos toistuva, otetaan sen Päivämäärä pois ketjusta
 			if( isset($t->pvm) and $t->toistuva_id != 0)
 			{
@@ -966,20 +987,34 @@ class TyovuorootController extends Controller
 			}
 			//     Jos toistuva, otetaan sen Päivämäärä pois ketjusta -->
 
-			$model=new Tyovuoroot;
-			$model->attributes=$t->attributes;
+			$model=$t;
 			$model->pvm=date("d.m.Y",strtotime($_POST['newPvm']));
 			$model->tid=$_POST['newTid'];
-			$model->alku=$t->alku;
-			$model->loppu=$t->loppu;
-			$model->pituus=$t->pituus;
-			$model->kohde=$t->kohde;
 			$model->toistuva_id=0;
-			$model->tyopaari='';
-			$model->save();
-
-			Tyovuoroot::model()->deletebypk($ex[0]);	
-
+			if($model->save()){
+			    if( is_array(json_decode($t->tyopaari, true)) ){
+				$uusi_tp_arr = array();
+				foreach(json_decode($t->tyopaari, true) as  $id => $tp_id){
+					$tv = Tyovuoroot::model()->findByPk($id);
+					if( isset($tv->id) and $tv->tid == $t->tid ){
+						$uusi_tp_arr[$model->id] = $model->tid;
+					} else {
+						$uusi_tp_arr[$id] = $tp_id;
+					}
+				}
+				if( $vanha_pvm != $model->pvm and isset($uusi_tp_arr[$model->id])){
+					unset($uusi_tp_arr[$model->id]);
+					Tyovuoroot::model()->updateByPk($model->id, array('tyopaari' => ''));
+				}
+				foreach( $uusi_tp_arr as $k => $v ){
+					if( count($uusi_tp_arr) == 1 ){
+					Tyovuoroot::model()->updateByPk($k, array('tyopaari' => ''));
+					break;
+					}
+					Tyovuoroot::model()->updateByPk($k, array('tyopaari' => json_encode($uusi_tp_arr)));
+				}
+			    }
+			}
 
 			// <-- LOG
 			if( isset($t->id) and isset($model->id) )
@@ -1142,9 +1177,7 @@ class TyovuorootController extends Controller
 			$model->toistuva_id=0;
 			$model->tyopaari='';
 			$model->save();
-
 			Tyovuoroot::model()->deletebypk($ex[0]);	
-
 
 			// <-- LOG
 			if( isset($t->id) and isset($model->id) )
@@ -2731,7 +2764,7 @@ class TyovuorootController extends Controller
 						$tp_maara = (isset($_POST['tyopaari']))?(count($_POST['tyopaari'])+1):1;
 						$return_hinnaasto = $this->hinnastoHintaat($tp, $asiakkaat, $kohteet);
 						$maara 	= $this->num( strtotime($model->loppu)-strtotime($model->alku) );
-						$tunti_hinta = $return_hinnaasto['hinta_alv_0']*$maara;
+						$tunti_hinta = $return_hinnaasto['hinta_alv_0'];
 						$hinta_alv_0 = ($return_hinnaasto['hinta_alv_0']*($maara*$tp_maara));
 						$hinta_alv_sis = ($return_hinnaasto['hinta_alv_sis']*($maara*$tp_maara));
 						$alv = ($hinta_alv_sis-$hinta_alv_0);
@@ -3016,7 +3049,7 @@ class TyovuorootController extends Controller
 						$tp_maara = (isset($_POST['tyopaari']))?(count($_POST['tyopaari'])+1):1;
 						$return_hinnaasto = $this->hinnastoHintaat($tp, $asiakkaat, $kohteet);
 						$maara 	= $this->num( strtotime($model->loppu)-strtotime($model->alku) );
-						$tunti_hinta = $return_hinnaasto['hinta_alv_0']*$maara;
+						$tunti_hinta = $return_hinnaasto['hinta_alv_0'];
 						$hinta_alv_0 = ($return_hinnaasto['hinta_alv_0']*($maara*$tp_maara));
 						$hinta_alv_sis = ($return_hinnaasto['hinta_alv_sis']*($maara*$tp_maara));
 						$alv = ($hinta_alv_sis-$hinta_alv_0);
