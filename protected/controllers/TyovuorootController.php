@@ -2701,14 +2701,85 @@ class TyovuorootController extends Controller
 				$sum = 0;
 				$alv_0 = 0;
 				$alv_sum = 0;
+				$yht_alv_nolla = 0;
+				$yht_alv = 0;
+				$yht_alv_sis = 0;
 				   if(isset($_POST['vieposti']) and isset($asiakkaat->sahkoposti) and !empty($asiakkaat->sahkoposti))
 				   {
-					$message = '
+					$message = '<div>';
+					$message .= '
 					Asiakas: '.$asiakkaat->yhteyshenkilo.'<br>
 					Työvuorot:  '.$model->pvm.', '.$model->alku.'-'.$model->loppu.'<br>';
+					$message .= '<style>.lahetys_taulu table {border-collapse: collapse; border: 1px solid grey;} .lahetys_taulu th, .lahetys_taulu td{border: 1px solid grey; padding: 7px 15px;}</style>';
 
-					$message .= '<style>#lahetys_taulu table {border-collapse: collapse; border: 1px solid grey;} lahetys_taulu th, lahetys_taulu td{border: 1px solid grey; padding: 3px 10px;}</style>';
-					$message .= '<table id="lahetys_taulu">';
+					// <-- Paatuote
+					$tp = TuotteetPalvelut::model()->findByPK($model->tuoteID);
+					if( isset($tp->id) ){
+					$message .= '<table class="lahetys_taulu">';
+					$message .= '<tr>';
+					$message .= '<th>Tuote/Palvelu</th>';
+					$message .= '<th>Työntekijät</th>';
+					$message .= '<th>Tunnit</th>';
+					if(isset($_POST['vie_hintatietoja'])){
+					$message .= '<th>Tuntihinta</th>';
+					$message .= '<th>Hinta</th>';
+					$message .= '<th>ALV</th>';
+					$message .= '<th>Yhteensä</th>';
+					}
+					$message .= '</tr>';
+
+						$tp_maara = (isset($_POST['tyopaari']))?(count($_POST['tyopaari'])+1):1;
+						$return_hinnaasto = $this->hinnastoHintaat($tp, $asiakkaat, $kohteet);
+						$maara 	= $this->num( strtotime($model->loppu)-strtotime($model->alku) );
+						$tunti_hinta = $return_hinnaasto['hinta_alv_0']*$maara;
+						$hinta_alv_0 = ($return_hinnaasto['hinta_alv_0']*($maara*$tp_maara));
+						$hinta_alv_sis = ($return_hinnaasto['hinta_alv_sis']*($maara*$tp_maara));
+						$alv = ($hinta_alv_sis-$hinta_alv_0);
+						$yht_alv_nolla += $hinta_alv_0;
+						$yht_alv += $alv;
+						$yht_alv_sis += $hinta_alv_sis;
+
+						if(isset($return_hinnaasto['tp_nimike']) and isset($return_hinnaasto['hinta_alv_0'])){
+						$message .= '<tr>';
+						$message .= '<td>'.$return_hinnaasto['tp_nimike'].'</td>';
+						$message .= '<td>'.$tp_maara.'</td>';
+						$message .= '<td>'.$maara.'</td>';
+						if(isset($_POST['vie_hintatietoja'])){
+						$message .= '<td>'.number_format($tunti_hinta, 2, ',', ' ').'</td>';
+						$message .= '<td>'.number_format($hinta_alv_0, 2, ',', ' ').'</td>';
+						$message .= '<td>'.number_format($alv, 2, ',', ' ').'</td>';
+						$message .= '<td>'.number_format($hinta_alv_sis, 2, ',', ' ').'</td>';
+						}
+						$message .= '</tr>';
+						}
+					$message .= '</table>';
+					}
+					//     Paatuote -->
+
+					if(isset($_POST['vie_hintatietoja']) and !empty($asiakkaat->hinta) and $asiakkaat->hinta_tyyppi == 1)
+					{
+						$tp_maara = (isset($_POST['tyopaari']))?(count($_POST['tyopaari'])+1):1;
+						$tuntia = ((strtotime($model->loppu)-strtotime($model->alku))/3600);
+						if( count($luotu) > 0 )
+						$tuntia = $tuntia * count($luotu);
+
+						$sum = (($asiakkaat->hinta*$tuntia) + ((($asiakkaat->hinta*$asiakkaat->alv)/100)*$tuntia))*$tp_maara;
+						$alv_0 = ($asiakkaat->hinta*$tuntia)*$tp_maara;
+						$alv_sum = $sum-$alv_0;
+
+						$message .= 'Työntekijät: '.$tp_maara.'<br>';
+						$message .= 'Hinta ALV 0: '.number_format($alv_0, 2, ',', ' ').' &euro;<br>';
+						$message .= 'ALV: '.number_format($alv_sum, 2, ',', ' ').' &euro;<br>';
+						$message .= 'Hinta: '.number_format($sum, 2, ',', ' ').' &euro;<br>';
+						$yht_alv_nolla += $alv_0;
+						$yht_alv += $alv_sum;
+						$yht_alv_sis += $sum;
+					}
+
+					// <-- Lisatuotteet
+					$lisa_tuotteet = json_decode($model->lisa_tuotteet, true);
+					if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote'])  ){
+					$message .= '<table class="lahetys_taulu">';
 					$message .= '<tr>';
 					$message .= '<th>Tuote/Palvelu</th>';
 					$message .= '<th>Määrä</th>';
@@ -2718,48 +2789,6 @@ class TyovuorootController extends Controller
 					$message .= '<th>Yhteensä</th>';
 					}
 					$message .= '</tr>';
-
-					// <-- Paatuote
-					$tp = TuotteetPalvelut::model()->findByPK($model->tuoteID);
-					if( isset($tp->id) ){
-						$return_hinnaasto = $this->hinnastoHintaat($tp, $asiakkaat, $kohteet);
-						$maara 	= $this->num( strtotime($model->loppu)-strtotime($model->alku) );
-						$hinta_alv_0 = $return_hinnaasto['hinta_alv_0']*$maara;
-						$hinta_alv_sis = $return_hinnaasto['hinta_alv_sis']*$maara;
-						$alv	= ($hinta_alv_sis-$hinta_alv_0);
-
-						if(isset($return_hinnaasto['tp_nimike']) and isset($return_hinnaasto['hinta_alv_0'])){
-						$message .= '<tr>';
-						$message .= '<td>'.$return_hinnaasto['tp_nimike'].'</td>';
-						$message .= '<td>'.$maara.'</td>';
-						if(isset($_POST['vie_hintatietoja'])){
-						$message .= '<td>'.number_format($hinta_alv_0, 2, ',', ' ').'</td>';
-						$message .= '<td>'.number_format($alv, 2, ',', ' ').'</td>';
-						$message .= '<td>'.number_format($hinta_alv_sis, 2, ',', ' ').'</td>';
-						}
-						$message .= '</tr>';
-						}
-					}
-					//     Paatuote -->
-
-					if(isset($_POST['vie_hintatietoja']) and !empty($asiakkaat->hinta) and $asiakkaat->hinta_tyyppi == 1)
-					{
-						$tuntia = ((strtotime($model->loppu)-strtotime($model->alku))/3600);
-						if( count($luotu) > 0 )
-						$tuntia = $tuntia * count($luotu);
-
-						$sum = ($asiakkaat->hinta*$tuntia) + ((($asiakkaat->hinta*$asiakkaat->alv)/100)*$tuntia);
-						$alv_0 = $asiakkaat->hinta*$tuntia;
-						$alv_sum = $sum-$alv_0;
-
-						$message .= 'Hinta ALV 0: '.number_format($alv_0, 2, ',', ' ').' &euro;<br>';
-						$message .= 'ALV: '.number_format($alv_sum, 2, ',', ' ').' &euro;<br>';
-						$message .= 'Hinta: '.number_format($sum, 2, ',', ' ').' &euro;<br>';
-					}
-
-					// <-- Lisatuotteet
-					$lisa_tuotteet = json_decode($model->lisa_tuotteet, true);
-					if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote'])  ){
 					   foreach($lisa_tuotteet['tuote'] as $k => $v){
 						$tp = TuotteetPalvelut::model()->findByPK($v);
 						if( isset($tp->id) ){
@@ -2768,6 +2797,9 @@ class TyovuorootController extends Controller
 							$hinta_alv_0 = $return_hinnaasto['hinta_alv_0']*$maara;
 							$hinta_alv_sis = $return_hinnaasto['hinta_alv_sis']*$maara;
 							$alv	= ($hinta_alv_sis-$hinta_alv_0);
+							$yht_alv_nolla += $hinta_alv_0;
+							$yht_alv += $alv;
+							$yht_alv_sis += $hinta_alv_sis;
 
 							if(isset($return_hinnaasto['tp_nimike']) and isset($return_hinnaasto['hinta_alv_0'])){
 							$message .= '<tr>';
@@ -2782,9 +2814,17 @@ class TyovuorootController extends Controller
 							}
 						}
 					   }
+					$message .= '</table>';
 					}
 					//     Lisatuotteet -->
-					$message .= '</table>';
+
+					if(isset($_POST['vie_hintatietoja'])){
+					$message .= '<br>';
+					$message .= '<h3>Veroton hinta '.number_format($yht_alv_nolla, 2, ',', ' ').'&euro;<br>';
+					$message .= 'ALV '.number_format($yht_alv, 2, ',', ' ').'&euro;<br>';
+					$message .= 'Hinta ALV sis. '.number_format($yht_alv_sis, 2, ',', ' ').'&euro;<br>';
+					$message .= '</h3><br>';
+					}
 
 
 					if(!empty($model->toimenpiteet))
@@ -2794,6 +2834,7 @@ class TyovuorootController extends Controller
 					$message .= str_replace("\n", "<br>", $_POST['Tyovuoroot']['tilausviesti']);
 
 					$message .= '<h2>Kiitos tilauksesta.</h2>';
+					$message .= '</div>';
 					$subject = Yii::t('main', 'Kiitos tilauksesta');
 
 					$ft = FirmanTiedot::model()->findByPk(1);
@@ -2950,12 +2991,80 @@ class TyovuorootController extends Controller
 				$alv_sum = 0;
 				   if(isset($_POST['vieposti']) and isset($asiakkaat->sahkoposti) and !empty($asiakkaat->sahkoposti))
 				   {
-					$message = '
+					$message = '<div>';
+					$message .= '
 					Asiakas: '.$asiakkaat->yhteyshenkilo.'<br>
 					Työvuorot:  '.$model->pvm.', '.$model->alku.'-'.$model->loppu.'<br>';
+					$message .= '<style>.lahetys_taulu table {border-collapse: collapse; border: 1px solid grey;} .lahetys_taulu th, .lahetys_taulu td{border: 1px solid grey; padding: 7px 15px;}</style>';
 
-					$message .= '<style>#lahetys_taulu table {border-collapse: collapse; border: 1px solid grey;} lahetys_taulu th, lahetys_taulu td{border: 1px solid grey; padding: 3px 10px;}</style>';
-					$message .= '<table>';
+					// <-- Paatuote
+					$tp = TuotteetPalvelut::model()->findByPK($model->tuoteID);
+					if( isset($tp->id) ){
+					$message .= '<table class="lahetys_taulu">';
+					$message .= '<tr>';
+					$message .= '<th>Tuote/Palvelu</th>';
+					$message .= '<th>Työntekijät</th>';
+					$message .= '<th>Tunnit</th>';
+					if(isset($_POST['vie_hintatietoja'])){
+					$message .= '<th>Tuntihinta</th>';
+					$message .= '<th>Hinta</th>';
+					$message .= '<th>ALV</th>';
+					$message .= '<th>Yhteensä</th>';
+					}
+					$message .= '</tr>';
+
+						$tp_maara = (isset($_POST['tyopaari']))?(count($_POST['tyopaari'])+1):1;
+						$return_hinnaasto = $this->hinnastoHintaat($tp, $asiakkaat, $kohteet);
+						$maara 	= $this->num( strtotime($model->loppu)-strtotime($model->alku) );
+						$tunti_hinta = $return_hinnaasto['hinta_alv_0']*$maara;
+						$hinta_alv_0 = ($return_hinnaasto['hinta_alv_0']*($maara*$tp_maara));
+						$hinta_alv_sis = ($return_hinnaasto['hinta_alv_sis']*($maara*$tp_maara));
+						$alv = ($hinta_alv_sis-$hinta_alv_0);
+						$yht_alv_nolla += $hinta_alv_0;
+						$yht_alv += $alv;
+						$yht_alv_sis += $hinta_alv_sis;
+
+						if(isset($return_hinnaasto['tp_nimike']) and isset($return_hinnaasto['hinta_alv_0'])){
+						$message .= '<tr>';
+						$message .= '<td>'.$return_hinnaasto['tp_nimike'].'</td>';
+						$message .= '<td>'.$tp_maara.'</td>';
+						$message .= '<td>'.$maara.'</td>';
+						if(isset($_POST['vie_hintatietoja'])){
+						$message .= '<td>'.number_format($tunti_hinta, 2, ',', ' ').'</td>';
+						$message .= '<td>'.number_format($hinta_alv_0, 2, ',', ' ').'</td>';
+						$message .= '<td>'.number_format($alv, 2, ',', ' ').'</td>';
+						$message .= '<td>'.number_format($hinta_alv_sis, 2, ',', ' ').'</td>';
+						}
+						$message .= '</tr>';
+						}
+					$message .= '</table>';
+					}
+					//     Paatuote -->
+
+					if(isset($_POST['vie_hintatietoja']) and !empty($asiakkaat->hinta) and $asiakkaat->hinta_tyyppi == 1)
+					{
+						$tp_maara = (isset($_POST['tyopaari']))?(count($_POST['tyopaari'])+1):1;
+						$tuntia = ((strtotime($model->loppu)-strtotime($model->alku))/3600);
+						if( count($luotu) > 0 )
+						$tuntia = $tuntia * count($luotu);
+
+						$sum = (($asiakkaat->hinta*$tuntia) + ((($asiakkaat->hinta*$asiakkaat->alv)/100)*$tuntia))*$tp_maara;
+						$alv_0 = ($asiakkaat->hinta*$tuntia)*$tp_maara;
+						$alv_sum = $sum-$alv_0;
+
+						$message .= 'Työntekijät: '.$tp_maara.'<br>';
+						$message .= 'Hinta ALV 0: '.number_format($alv_0, 2, ',', ' ').' &euro;<br>';
+						$message .= 'ALV: '.number_format($alv_sum, 2, ',', ' ').' &euro;<br>';
+						$message .= 'Hinta: '.number_format($sum, 2, ',', ' ').' &euro;<br>';
+						$yht_alv_nolla += $alv_0;
+						$yht_alv += $alv_sum;
+						$yht_alv_sis += $sum;
+					}
+
+					// <-- Lisatuotteet
+					$lisa_tuotteet = json_decode($model->lisa_tuotteet, true);
+					if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote'])  ){
+					$message .= '<table class="lahetys_taulu">';
 					$message .= '<tr>';
 					$message .= '<th>Tuote/Palvelu</th>';
 					$message .= '<th>Määrä</th>';
@@ -2965,48 +3074,6 @@ class TyovuorootController extends Controller
 					$message .= '<th>Yhteensä</th>';
 					}
 					$message .= '</tr>';
-
-					// <-- Paatuote
-					$tp = TuotteetPalvelut::model()->findByPK($model->tuoteID);
-					if( isset($tp->id) ){
-						$return_hinnaasto = $this->hinnastoHintaat($tp, $asiakkaat, $kohteet);
-						$maara 	= $this->num( strtotime($model->loppu)-strtotime($model->alku) );
-						$hinta_alv_0 = $return_hinnaasto['hinta_alv_0']*$maara;
-						$hinta_alv_sis = $return_hinnaasto['hinta_alv_sis']*$maara;
-						$alv	= ($hinta_alv_sis-$hinta_alv_0);
-
-						if(isset($return_hinnaasto['tp_nimike']) and isset($return_hinnaasto['hinta_alv_0'])){
-						$message .= '<tr>';
-						$message .= '<td>'.$return_hinnaasto['tp_nimike'].'</td>';
-						$message .= '<td>'.$maara.'</td>';
-						if(isset($_POST['vie_hintatietoja'])){
-						$message .= '<td>'.number_format($hinta_alv_0, 2, ',', ' ').'</td>';
-						$message .= '<td>'.number_format($alv, 2, ',', ' ').'</td>';
-						$message .= '<td>'.number_format($hinta_alv_sis, 2, ',', ' ').'</td>';
-						}
-						$message .= '</tr>';
-						}
-					}
-					//     Paatuote -->
-
-					if(isset($_POST['vie_hintatietoja']) and !empty($asiakkaat->hinta) and $asiakkaat->hinta_tyyppi == 1)
-					{
-						$tuntia = ((strtotime($model->loppu)-strtotime($model->alku))/3600);
-						if( count($luotu) > 0 )
-						$tuntia = $tuntia * count($luotu);
-
-						$sum = ($asiakkaat->hinta*$tuntia) + ((($asiakkaat->hinta*$asiakkaat->alv)/100)*$tuntia);
-						$alv_0 = $asiakkaat->hinta*$tuntia;
-						$alv_sum = $sum-$alv_0;
-
-						$message .= 'Hinta ALV 0: '.number_format($alv_0, 2, ',', ' ').' &euro;<br>';
-						$message .= 'ALV: '.number_format($alv_sum, 2, ',', ' ').' &euro;<br>';
-						$message .= 'Hinta: '.number_format($sum, 2, ',', ' ').' &euro;<br>';
-					}
-
-					// <-- Lisatuotteet
-					$lisa_tuotteet = json_decode($model->lisa_tuotteet, true);
-					if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote'])  ){
 					   foreach($lisa_tuotteet['tuote'] as $k => $v){
 						$tp = TuotteetPalvelut::model()->findByPK($v);
 						if( isset($tp->id) ){
@@ -3015,6 +3082,9 @@ class TyovuorootController extends Controller
 							$hinta_alv_0 = $return_hinnaasto['hinta_alv_0']*$maara;
 							$hinta_alv_sis = $return_hinnaasto['hinta_alv_sis']*$maara;
 							$alv	= ($hinta_alv_sis-$hinta_alv_0);
+							$yht_alv_nolla += $hinta_alv_0;
+							$yht_alv += $alv;
+							$yht_alv_sis += $hinta_alv_sis;
 
 							if(isset($return_hinnaasto['tp_nimike']) and isset($return_hinnaasto['hinta_alv_0'])){
 							$message .= '<tr>';
@@ -3029,17 +3099,27 @@ class TyovuorootController extends Controller
 							}
 						}
 					   }
+					$message .= '</table>';
 					}
 					//     Lisatuotteet -->
-					$message .= '</table>';
+
+					if(isset($_POST['vie_hintatietoja'])){
+					$message .= '<br>';
+					$message .= '<h3>Veroton hinta '.number_format($yht_alv_nolla, 2, ',', ' ').'&euro;<br>';
+					$message .= 'ALV '.number_format($yht_alv, 2, ',', ' ').'&euro;<br>';
+					$message .= 'Hinta ALV sis. '.number_format($yht_alv_sis, 2, ',', ' ').'&euro;<br>';
+					$message .= '</h3><br>';
+					}
+
 
 					if(!empty($model->toimenpiteet))
-					$message .= str_replace("\n", "<br>",$model->toimenpiteet)."<br>";
+					$message .= str_replace("\n", "<hr><br>",$model->toimenpiteet)."<br>";
 
 					if(isset($_POST['Tyovuoroot']['tilausviesti']) and !empty($_POST['Tyovuoroot']['tilausviesti']))
 					$message .= str_replace("\n", "<br>", $_POST['Tyovuoroot']['tilausviesti']);
 
 					$message .= '<h2>Kiitos tilauksesta.</h2>';
+					$message .= '</div>';
 					$subject = Yii::t('main', 'Kiitos tilauksesta');
 
 					$ft = FirmanTiedot::model()->findByPk(1);
