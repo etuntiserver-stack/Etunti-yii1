@@ -944,7 +944,7 @@ class TyovuorootController extends Controller
 			}
 			$model->toistuva_id=0;
 			if($model->save()){
-			    if( is_array(json_decode($t->tyopaari, true)) ){
+			    if( $t->toistuva_id == 0 and  is_array(json_decode($t->tyopaari, true)) ){
 				$uusi_tp_arr = array();
 				$uusi_tp_arr[$model->id] = $model->tid;
 				foreach(json_decode($t->tyopaari, true) as  $id => $tp_id){
