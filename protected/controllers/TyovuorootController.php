@@ -932,17 +932,37 @@ class TyovuorootController extends Controller
 		{
 			$ex = explode("_",$cp);
 			$t = Tyovuoroot::model()->findbypk($ex[0]);
+			$vanha_pvm = $t->pvm;
+
 			$model=new Tyovuoroot;
 			$model->attributes=$t->attributes;
 			$model->pvm=date("d.m.Y",strtotime($_POST['newPvm']));
 			$model->tid=$_POST['newTid'];
-			$model->alku=$t->alku;
-			$model->loppu=$t->loppu;
-			$model->pituus=$t->pituus;
-			$model->kohde=$t->kohde;
+			if( $t->toistuva_id != 0 )
+			{
+				$model->tyopaari='';
+			}
 			$model->toistuva_id=0;
-			$model->tyopaari='';
-			$model->save();
+			if($model->save()){
+			    if( is_array(json_decode($t->tyopaari, true)) ){
+				$uusi_tp_arr = array();
+				$uusi_tp_arr[$model->id] = $model->tid;
+				foreach(json_decode($t->tyopaari, true) as  $id => $tp_id){
+					$uusi_tp_arr[$id] = $tp_id;
+				}
+				if( $vanha_pvm != $model->pvm and isset($uusi_tp_arr[$model->id])){
+					unset($uusi_tp_arr[$model->id]);
+					Tyovuoroot::model()->updateByPk($model->id, array('tyopaari' => ''));
+				}
+				foreach( $uusi_tp_arr as $k => $v ){
+					if( count($uusi_tp_arr) == 1 ){
+					Tyovuoroot::model()->updateByPk($k, array('tyopaari' => ''));
+					break;
+					}
+					Tyovuoroot::model()->updateByPk($k, array('tyopaari' => json_encode($uusi_tp_arr)));
+				}
+			    }
+			}
 
 			// <-- LOG
 			if( isset($t->id) and isset($model->id) )
@@ -980,12 +1000,19 @@ class TyovuorootController extends Controller
 			if(isset($t->id))
 			{
 			$vanha_pvm = $t->pvm;
+			if( $t->toistuva_id != 0)
+			{
+				echo json_encode('Error//Et voi siirtää toistuva työvuoro.');
+				exit;
+			}
+/*
 			// <-- Jos toistuva, otetaan sen Päivämäärä pois ketjusta
 			if( isset($t->pvm) and $t->toistuva_id != 0)
 			{
 				$this->toistuvaDeletePvm($t->toistuva_id, $t->pvm);
 			}
 			//     Jos toistuva, otetaan sen Päivämäärä pois ketjusta -->
+*/
 
 			$model=$t;
 			$model->pvm=date("d.m.Y",strtotime($_POST['newPvm']));

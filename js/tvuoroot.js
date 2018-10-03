@@ -324,7 +324,10 @@ window.addEventListener('message', function(e) {
 			var sp = JSON.parse(data).split('//');
 			if(sp[0])
 			{
-
+				if(sp[0] == 'Error'){
+					alert(sp[1]);
+					return false;
+				}
 				$('#'+newPvm+'_'+newTid).html(JSON.parse(sp[0]));
 				
 				if(thisID[0] == 'forCopy' && parent.location.href.match(/index/))
