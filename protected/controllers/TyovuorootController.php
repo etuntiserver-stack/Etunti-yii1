@@ -3049,6 +3049,7 @@ class TyovuorootController extends Controller
 				$sum = 0;
 				$alv_0 = 0;
 				$alv_sum = 0;
+				$yht_alv_nolla = 0;
 				   if(isset($_POST['vieposti']) and isset($asiakkaat->sahkoposti) and !empty($asiakkaat->sahkoposti))
 				   {
 					$message = '<div>';
