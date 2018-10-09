@@ -1381,10 +1381,10 @@ function num($val){
 		}
 
 		if(isset($_GET['laskutettu']) and $_GET['laskutettu'] == '1')
-	        $criteria->addCondition (" laskutettu = '1' ");
+	        $criteria->addCondition (" laskutettu=1 ");
 
 		if(isset($_GET['laskutettu']) and $_GET['laskutettu'] == '3')
-	        $criteria->addCondition (" laskutettu = '0' ");
+	        $criteria->addCondition (" laskutettu=0 ");
 
 
 		$dataProvider=new CActiveDataProvider('Mobile', array(

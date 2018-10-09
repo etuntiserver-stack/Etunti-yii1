@@ -155,7 +155,20 @@
 			    //     Tyopaari tavallisessa tyovuorossa -->
 
 			    // <-- ToistuvatTyovuorot ja tyopaarit
-
+			    if( $t->toistuva_id != 0 and is_array(json_decode($t->tyopaari, true)) ){
+				$uusi_tp_arr = array();
+				$uusi_tp_arr[] = $model->tid;
+				foreach(json_decode($t->tyopaari, true) as $tp_id){
+					$uusi_tp_arr[] = $tp_id;
+				}
+				if( isset($uusi_tp_arr[$item->tid]) ){ unset($uusi_tp_arr[$item->tid]); }
+				$criteria = new CDBCriteria;
+        			$criteria->condition = " 
+					pvm='".$t->pvm."'			
+					AND toistuva_id='".$t->toistuva_id."' 
+				";
+				Tyovuoroot::model()->updateAll(array('tyopaari' => json_encode($uusi_tp_arr)), $criteria);
+			    }
 			    //     ToistuvatTyovuorot ja tyopaarit -->
 			}
 		?>

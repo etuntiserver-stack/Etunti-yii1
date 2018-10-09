@@ -53,6 +53,7 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		<?php echo $form->hiddenField($model,'asiakas_hyvaksy',array('value'=>$s->asiakas_hyvaksy)); ?>
 		<?php echo $form->hiddenField($model,'hyvaksytty',array('value'=>$s->hyvaksytty)); ?>
 		<?php echo $form->hiddenField($model,'tv_id',array('value'=>$s->tv_id)); ?>
+		<?php echo $form->hiddenField($model,'laskutettu',array('value'=>$s->laskutettu)); ?>
 
 
   <div class="col-sm-12">

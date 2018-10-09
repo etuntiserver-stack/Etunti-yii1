@@ -19,10 +19,10 @@ if( isset($sivu) and $sivu == 'laskutettu' )
       		$data = $tot;
    	}
 
-	if($data->laskutettu == '1')
-	  $laskutettu =  'checked';
+	if($data->laskutettu == 1)
+	  $checked =  'checked';
 	else
-	  $laskutettu =  '';
+	  $checked =  '';
 
 
   	if($toteutuneet)
@@ -322,7 +322,7 @@ if(!empty($data->loppui) and !empty($data->aloitan)){
 
 	<?php if( isset($sivu) and $sivu == 'laskutettu' ) : ?>
 	<td><center>
-	    <input type="checkbox" class="chckbxHyvaksynta" id="laskutettu_<?php echo $data->id; ?>" <?php echo $laskutettu; ?> tot="<?php echo $toteutuneet; ?>"> 
+	    <input type="checkbox" class="chckbxHyvaksynta" id="laskutettu_<?php echo $data->id; ?>" tot="<?php echo $toteutuneet; ?>" <?php echo $checked; ?>> 
 	    </center>
 	</td>
 	<?php endif; ?>

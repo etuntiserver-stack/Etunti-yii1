@@ -1,6 +1,5 @@
 <?php
 
-echo Yii::app()->request->getPost('laskutettu');
 ?>
 
         <!-- begin: .tray-center -->
