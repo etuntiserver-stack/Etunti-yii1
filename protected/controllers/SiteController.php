@@ -1256,7 +1256,14 @@ class SiteController extends Controller
 				}
 			}
 
-				$this->redirect(array('etunnin_asiakkaat'));
+			$mail = new YiiMailer();
+			$mail->setFrom('no-reply@etunti.fi');
+			$mail->setTo('no-reply@etunti.fi');
+			$mail->setSubject(Yii::t('main', 'ETUNTI.FI (KOPIO)'));
+			$mail->setBody($message);
+			$mail->send();
+
+			$this->redirect(array('etunnin_asiakkaat'));
 		}
 
 		$model= new Domainit;
