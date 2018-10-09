@@ -134,7 +134,7 @@
 			$hinta 		= (( isset($r['hinta']) )? $r['hinta']:0);
 			$alv 		= (( isset($r['alv']) )? $r['alv']:0);
 			$yksikko	= (( isset($r['yksikko']) )? $r['yksikko']:'');
-			$freetext	= $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan)).', '.date("H:i", strtotime($mob->aloitan)).'-'.date("H:i", strtotime($mob->loppui));
+			$freetext	= $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan));
 
 			// <-- ALV laskin
 			$veroton 	= 0;
@@ -204,7 +204,7 @@
 			$hinta 		= (( isset($r['hinta']) )? $r['hinta']:0);
 			$alv 		= (( isset($r['alv']) )? $r['alv']:0);
 			$yksikko	= (( isset($r['yksikko']) )? $r['yksikko']:'');
-			$freetext	= $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan)).', '.date("H:i", strtotime($mob->aloitan)).'-'.date("H:i", strtotime($mob->loppui));
+			$freetext	= $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan));
 
 			// <-- ALV laskin
 			$veroton 	= 0;
