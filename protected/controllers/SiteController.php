@@ -1242,7 +1242,8 @@ class SiteController extends Controller
 			$mail->setTo($sahkoposti);
 			$mail->setSubject(Yii::t('main', 'ETUNTI.FI'));
 			$mail->setBody($message);
-
+				if($mail->send())
+				{
 
 							// <-- LOG
 							$log=new Log;
@@ -1252,6 +1253,7 @@ class SiteController extends Controller
 							$log->email_message	= json_encode($message);
 							$log->save();
 							//     LOG -->
+				}
 			}
 
 				$this->redirect(array('etunnin_asiakkaat'));
