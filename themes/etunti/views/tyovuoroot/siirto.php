@@ -121,6 +121,7 @@
 		<th><?=Yii::t('main', 'Osoite')?></th>
 		</tr>
 		<?php $suorittu = 0; ?>
+		<?php $toistuvat = array(); ?>
 		<?php foreach($data_kenelta as $item) : ?>
 		<?php if( isset($_GET['siirra_now']) ): ?>
 		<?php
@@ -155,19 +156,17 @@
 			    //     Tyopaari tavallisessa tyovuorossa -->
 
 			    // <-- ToistuvatTyovuorot ja tyopaarit
-			    if( $t->toistuva_id != 0 and is_array(json_decode($t->tyopaari, true)) ){
+			    if( $t->toistuva_id != 0 ){
 				$uusi_tp_arr = array();
 				$uusi_tp_arr[] = $model->tid;
 				foreach(json_decode($t->tyopaari, true) as $tp_id){
-					$uusi_tp_arr[] = $tp_id;
+					if( $tp_id != $t->tid ){
+						$uusi_tp_arr[] = $tp_id;
+					}
 				}
-				if( isset($uusi_tp_arr[$item->tid]) ){ unset($uusi_tp_arr[$item->tid]); }
-				$criteria = new CDBCriteria;
-        			$criteria->condition = " 
-					pvm='".$t->pvm."'			
-					AND toistuva_id='".$t->toistuva_id."' 
-				";
-				Tyovuoroot::model()->updateAll(array('tyopaari' => json_encode($uusi_tp_arr)), $criteria);
+				if(!isset($toistuvat[$t->toistuva_id])){
+					$toistuvat[$t->toistuva_id] = $uusi_tp_arr; 
+				}
 			    }
 			    //     ToistuvatTyovuorot ja tyopaarit -->
 			}
@@ -180,6 +179,20 @@
 		</tr>
 		<?php endforeach; ?>
 		</table>
+
+		<!-- // <-- ToistuvatTyovuorot ja tyopaarit -->
+		<?php foreach($toistuvat as $id => $uusi_tp_arr) : ?>
+		<?php if( isset($_GET['siirra_now']) ): ?>
+		<?php
+				$criteria = new CDBCriteria;
+        			$criteria->condition = " 
+					toistuva_id='".$model->toistuva_id."' 
+				";
+				Tyovuoroot::model()->updateAll(array('tyopaari' => json_encode($uusi_tp_arr)), $criteria);
+		?>
+		<?php endif; ?>
+		<?php endforeach; ?>
+		<!-- //     ToistuvatTyovuorot ja tyopaarit --> -->
                 </div>
               </div>
             </div>
