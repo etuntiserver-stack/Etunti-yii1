@@ -4420,40 +4420,32 @@ class TyovuorootController extends Controller
 
 	}
 
-	public function actionSiirto($kenelta=null, $kenelle=null, $selecter=null)
+	public function actionSiirto($kenelta=null, $kenelle=null, $alkaen=null)
 	{
-
-		$from = date("d.m.Y", strtotime('first day of this month'));
-		$to = date("d.m.Y");
-		if(isset($_GET['from']) and !empty($_GET['from']))
-		$from = date("d.m.Y", strtotime($_GET['from']));
-		if(isset($_GET['to']) and !empty($_GET['to']))
-		$to = date("d.m.Y", strtotime($_GET['to']));
+		if( $alkaen !== null and date('Ymd', strtotime($alkaen)) < date('Ymd') ){
+			Yii::app()->user->setFlash('danger','Työvuoroja menneisyydestä ei voida siirtää.');
+				$this->redirect(array('siirto'));
+		}
 
 		$criteria = new CDBCriteria;
-        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
         	$criteria->condition = " 				
 			tid='".$kenelta."'
 			AND peruutettu=0 
 		";
-		if( $selecter == 'tulevaisuudet' ){
-			$criteria->addCondition(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE() ");
+		if( $alkaen !== null ){
+			$criteria->addCondition(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m%d') >= ".date('Ymd', strtotime($alkaen))." ");
 		}
 		$data_kenelta = Tyovuoroot::model()->findAll($criteria);
 
 		$criteria = new CDBCriteria;
-        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
         	$criteria->condition = " 				
 			tid='".$kenelle."'
 		";
-		if( $selecter == 'tulevaisuudet' ){
-			$criteria->addCondition(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE() ");
-		}
 		$data_kenelle = Tyovuoroot::model()->findAll($criteria);
 
 		$this->render('siirto', array(
-			'from' => $from,
-			'to' => $to,
 			'data_kenelta' => $data_kenelta,
 			'data_kenelle' => $data_kenelle,
 		));

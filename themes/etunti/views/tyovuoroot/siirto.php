@@ -43,14 +43,6 @@
                             </label>
                           </label>
                         </div>
-
-			
-                        <div class="section">
-				<input type="radio" class="selecter" name="selecter" value="kaikki" <?= (((isset($_GET['selecter']) and $_GET['selecter'] == 'kaikki') or (!isset($_GET['selecter'])) )? 'checked': '')?>> <label>Kaikki</label><br>
-				<input type="radio" class="selecter" name="selecter" value="tulevaisuudet" <?= ((isset($_GET['selecter']) and $_GET['selecter'] == 'tulevaisuudet')? 'checked': '')?>> <label>Vain tulevaisuudet</label>
-                          </label>
-                        </div>
-
                       </div>
 
                       <div class="col-md-2">
@@ -75,12 +67,23 @@
                         </div>
                       </div>
 
+                      <div class="col-md-2">
+			<label>Alkaen</label>
+                        <div class="section">
+                          <label class="field prepend-icon">
 
+   			    <input type="text" name="alkaen" class="gui-input datepickerFI" value="<?php if(isset($_GET['alkaen'])) echo date('d.m.Y', strtotime($_GET['alkaen'])); ?>">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
 
                       <div class="col-md-2">
                         <div class="section">
 			<br>
-			<?php if( isset($_GET['selecter'])) : ?>
+			<?php if( isset($_GET['alkaen'])) : ?>
         	        <?php echo CHtml::link(Yii::t('main', 'Keskeytä'), array('siirto'),array('class'=>'btn btn-primary btn-lg siirra btn-block myBgColors')); ?>
 			<?php else : ?>
         	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors"><?php echo Yii::t('main', 'Esikatselu'); ?></button>
@@ -122,16 +125,38 @@
 		<?php if( isset($_GET['siirra_now']) ): ?>
 		<?php
 			$suorittu++;
-			$alkuperainen_id = $item->id;
-			unset($item->id);
-			unset($item->time);
-			$model=new Tyovuoroot;
-			$model->attributes=$item->attributes;
+			$t=Tyovuoroot::model()->findByPk($item->id);
+			if(!isset($t->id)){ continue; }
+			$model=$t;
+			$model->attributes=$t->attributes;
 			$model->tid=$_GET['kenelle'];
-			$model->toistuva_id=0;
-			$model->tyopaari='';
+			//$model->toistuva_id=0;
+			//$model->tyopaari='';
 			if($model->save()){
-				Tyovuoroot::model()->deleteByPk($alkuperainen_id);
+			    // <-- Tyopaari tavallisessa tyovuorossa
+			    if( $t->toistuva_id == 0 and is_array(json_decode($t->tyopaari, true)) ){
+				$uusi_tp_arr = array();
+				foreach(json_decode($t->tyopaari, true) as  $id => $tp_id){
+					$tv = Tyovuoroot::model()->findByPk($id);
+					if( isset($tv->id) and $tv->tid == $t->tid ){
+						$uusi_tp_arr[$model->id] = $model->tid;
+					} else {
+						$uusi_tp_arr[$id] = $tp_id;
+					}
+				}
+				foreach( $uusi_tp_arr as $k => $v ){
+					if( count($uusi_tp_arr) == 1 ){
+					Tyovuoroot::model()->updateByPk($k, array('tyopaari' => ''));
+					break;
+					}
+					Tyovuoroot::model()->updateByPk($k, array('tyopaari' => json_encode($uusi_tp_arr)));
+				}
+			    }
+			    //     Tyopaari tavallisessa tyovuorossa -->
+
+			    // <-- ToistuvatTyovuorot ja tyopaarit
+
+			    //     ToistuvatTyovuorot ja tyopaarit -->
 			}
 		?>
 		<?php endif; ?>
@@ -155,7 +180,7 @@
 		<form action="#" method="GET">
 		<input type="hidden" name="kenelta" value="<?=$_GET['kenelta']?>">
 		<input type="hidden" name="kenelle" value="<?=$_GET['kenelle']?>">
-		<input type="hidden" name="selecter" value="<?=$_GET['selecter']?>">
+		<input type="hidden" name="alkaen" value="<?=$_GET['alkaen']?>">
 		<input type="hidden" name="siirra_now" value="true">
 		<button type="submit" class="btn btn-primary btn-lg siirra myBgColors"><i class="fa fa-2x fa-arrow-right"></i></button>
 		</form>
