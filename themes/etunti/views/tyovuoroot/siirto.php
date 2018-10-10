@@ -194,6 +194,7 @@
 			$new_toistuva->attributes = $toistuva_tv->attributes;
 			$new_toistuva->pfrom = date("d.m.Y", strtotime($alkaen));
 			$new_toistuva->pto = $pto_old;
+			$new_toistuva->viikko_paivat = $toistuva_tv->viikko_paivat;
 			$new_toistuva->tyopaari = json_encode($tp_arr);
 			if($new_toistuva->save()){
 
