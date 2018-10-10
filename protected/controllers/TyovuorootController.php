@@ -4422,7 +4422,7 @@ class TyovuorootController extends Controller
 
 	public function actionSiirto($kenelta=null, $kenelle=null, $alkaen=null)
 	{
-die('Suljettu 11.10.2018 asti');
+//die('Suljettu 11.10.2018 asti');
 		if( $alkaen !== null and date('Ymd', strtotime($alkaen)) < date('Ymd') ){
 			Yii::app()->user->setFlash('danger','Työvuoroja menneisyydestä ei voida siirtää.');
 				$this->redirect(array('siirto'));
@@ -4449,6 +4449,7 @@ die('Suljettu 11.10.2018 asti');
 		$this->render('siirto', array(
 			'data_kenelta' => $data_kenelta,
 			'data_kenelle' => $data_kenelle,
+			'alkaen' => $alkaen
 		));
 
 	}
