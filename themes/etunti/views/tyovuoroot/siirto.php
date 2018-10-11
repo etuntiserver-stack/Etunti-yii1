@@ -119,6 +119,7 @@
 		<th><?=Yii::t('main', 'Pvm')?></th>
 		<th><?=Yii::t('main', 'Aika')?></th>
 		<th><?=Yii::t('main', 'Osoite')?></th>
+		<th><?=Yii::t('main', 'Toistuva')?></th>
 		</tr>
 		<?php $suorittu = 0; ?>
 		<?php $toistuvat = array(); ?>
@@ -156,16 +157,15 @@
 			    //     Tyopaari tavallisessa tyovuorossa -->
 
 			    // <-- ToistuvatTyovuorot ja tyopaarit
-			    if( $t->toistuva_id != 0 ){
+			    if( $t->toistuva_id != 0 and is_array(json_decode($t->tyopaari, true))){
 				$uusi_tp_arr = array();
 				$uusi_tp_arr[] = $model->tid;
 				foreach(json_decode($t->tyopaari, true) as $tp_id){
-					if( $tp_id != $t->tid ){
-						$uusi_tp_arr[] = $tp_id;
-					}
+					if( $tp_id == $item->tid ){ continue; }
+					$uusi_tp_arr[] = $tp_id;
 				}
 				if(!isset($toistuvat[$t->toistuva_id])){
-					$toistuvat[$t->toistuva_id] = $uusi_tp_arr; 
+					$toistuvat[$t->toistuva_id] = $uusi_tp_arr;
 				}
 			    }
 			    //     ToistuvatTyovuorot ja tyopaarit -->
@@ -176,23 +176,53 @@
 		<td><?=$item->pvm?></td>
 		<td><?=$item->alku?>-<?=$item->loppu?></td>
 		<td><?=isset($item->kohteet->osoite)?$item->kohteet->osoite:$item->osoite?></td>
+		<td><?=$item->toistuva_id?></td>
 		</tr>
 		<?php endforeach; ?>
 		</table>
 
 		<!-- // <-- ToistuvatTyovuorot ja tyopaarit -->
-		<?php foreach($toistuvat as $id => $uusi_tp_arr) : ?>
-		<?php if( isset($_GET['siirra_now']) ): ?>
+		<?php foreach($toistuvat as $id => $tp_arr) : ?>
+		<?php if( isset($_GET['siirra_now']) and $alkaen !== null): ?>
 		<?php
+			$toistuva_tv = ToistuvatTyovuorot::model()->findByPk($id);
+			$pto_old = $toistuva_tv->pto;
+			$toistuva_tv->pto = date("d.m.Y", strtotime($alkaen." -1 day"));
+			$toistuva_tv->save();
+
+			$new_toistuva = new ToistuvatTyovuorot;
+			$new_toistuva->attributes = $toistuva_tv->attributes;
+			$new_toistuva->pfrom = date("d.m.Y", strtotime($alkaen));
+			$new_toistuva->pto = $pto_old;
+			$new_toistuva->viikko_paivat = $toistuva_tv->viikko_paivat;
+			$new_toistuva->tyopaari = json_encode($tp_arr);
+			if($new_toistuva->save()){
+
 				$criteria = new CDBCriteria;
-        			$criteria->condition = " 
-					toistuva_id='".$model->toistuva_id."' 
+	        		$criteria->condition = " 
+					DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m%d') >= ".date("Ymd", strtotime($alkaen))."
+					AND toistuva_id='".$id."' 
 				";
-				Tyovuoroot::model()->updateAll(array('tyopaari' => json_encode($uusi_tp_arr)), $criteria);
+				Tyovuoroot::model()->updateAll(array('toistuva_id' => $new_toistuva->id, 'tyopaari' => json_encode($tp_arr)), $criteria);
+
+				// <-- Check jaanos
+				$criteria = new CDBCriteria;
+	        		$criteria->condition = " 
+					toistuva_id='".$id."' 
+				";
+				$check_tv = Tyovuoroot::model()->find($criteria);
+				if( !isset($check_tv->id) ){
+					ToistuvatTyovuorot::model()->deleteByPk($id);
+				}
+				//     Check jaanos -->
+			} else {
+				var_dump($new_toistuva->getErrors());
+				exit;
+			}
 		?>
 		<?php endif; ?>
 		<?php endforeach; ?>
-		<!-- //     ToistuvatTyovuorot ja tyopaarit --> -->
+		<!-- //     ToistuvatTyovuorot ja tyopaarit -->
                 </div>
               </div>
             </div>
