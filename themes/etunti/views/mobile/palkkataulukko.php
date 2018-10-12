@@ -246,7 +246,7 @@ $this->breadcrumbs=array(
 	$matkaIltaYht += $matkaIlta;
 
 	$iltaMatkaPlusIltatunnit = 0;
-	$iltaMatkaPlusIltatunnit = $return[1]+$return[2]+$matkaIlta;
+	$iltaMatkaPlusIltatunnit = $return[1]+$matkaIlta; // +$return[2]
 	$iltaMatkaPlusIltatunnitYht += $iltaMatkaPlusIltatunnit;
 
 	$yht[0] += $return[0];
