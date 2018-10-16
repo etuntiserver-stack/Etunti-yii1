@@ -9,7 +9,7 @@
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?=Yii::t('main', 'Raporti')?> (<?=$raporti_tyyppi?>)</h2>
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?=Yii::t('main', 'Tuntiraportti')?> (<?=$raporti_tyyppi?>)</h2>
 
 
 
