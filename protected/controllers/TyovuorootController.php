@@ -2013,6 +2013,16 @@ class TyovuorootController extends Controller
 				$m->attributes=$_POST['Tyovuoroot'];
 				$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				$m->tid=$tid;
+				if( is_array($model->tyopaari) and count($m->tyopaari) > 0 ){
+					$m->tyopaari = json_encode($m->tyopaari);
+				} else {
+					$m->tyopaari = '';
+				}
+				if( isset($_POST['Tyovuoroot']['lisa_tuotteet']) and is_array($_POST['Tyovuoroot']['lisa_tuotteet']) ){
+					$m->lisa_tuotteet = json_encode($_POST['Tyovuoroot']['lisa_tuotteet']);
+				} else {
+					$m->lisa_tuotteet = '';
+				}
 				if($m->save())
 				{
 					$luotu[$m->id] = $m->tid;
