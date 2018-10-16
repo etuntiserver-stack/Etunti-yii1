@@ -258,7 +258,9 @@
 		<td><?=$freetext?></td>
 		</tr>
 		<?php endif; ?>
-		<?php if( isset($mob->tyovuoroot)){ $tp_lisatuotteet[$mob->tyovuoroot->tyopaari][$mob->tyovuoroot->pvm] = $item->id; } ?>
+		<?php if( isset($mob->tyovuoroot) and is_array(json_decode($mob->tyovuoroot->tyopaari, true))){
+			$tp_lisatuotteet[$mob->tyovuoroot->tyopaari][$mob->tyovuoroot->pvm] = $item->id; 
+		} ?>
 		<?php endforeach; ?>
 		<?php endif; ?>
 		<!-- / Lisatuote -->
