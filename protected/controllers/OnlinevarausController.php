@@ -71,6 +71,8 @@ class OnlinevarausController extends Controller
                 Yii::app()->theme = 'onlinevaraus';
 		if(isset($_GET['domain']))
 		{
+			Yii::app()->user->setState('domain', $_GET['domain']);
+
 			if( isset($_SESSION['onlinevaraus']) ){ unset($_SESSION['onlinevaraus']); }
 			$domainit = Domainit::model()->find(" domain='".$_GET['domain']."' ");
 			if(isset($domainit->paketti))
@@ -87,8 +89,8 @@ class OnlinevarausController extends Controller
 				    }
 				}
 			}
+		}
 
-			Yii::app()->user->setState('domain', $_GET['domain']);
 			if(isset($_GET['aid']))
 			{
 				Yii::app()->user->setState('aid', $_GET['aid']);
@@ -100,8 +102,8 @@ class OnlinevarausController extends Controller
 			} else {
 				Yii::app()->user->setState('alennuskoodi',null);
 			}
-			$this->redirect(array('index'));
-		}
+			//$this->redirect(array('index'));
+
 
 		if( !isset(Yii::app()->user->domain) )
 		{
