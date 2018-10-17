@@ -12,7 +12,7 @@
                     <!-- Logo-->
                     <div class="col-md-3">
                         <div class="logo">
-                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php" title="Return Home">
+                            <!--<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php" title="Return Home">-->
 
 	<!-- Firman oma logo -->
 	<?php if (isset(Yii::app()->user->domain)) : ?>
@@ -22,7 +22,7 @@
 
 
 
-                            </a>
+                            <!--</a>-->
                         </div>
                     </div>
                     <!-- End Logo-->
