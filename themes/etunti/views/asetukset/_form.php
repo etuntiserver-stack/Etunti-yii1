@@ -761,6 +761,19 @@
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_mita_onkayttossa'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Laskutus',
+			1=>'Tunnit',
+			2=>'Kaikki',
+		);
+		echo $form->dropDownList($model,'netvisor_mita_onkayttossa', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'netvisor_mita_onkayttossa'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'netvisor_host'); ?>
 		<?php echo $form->textField($model,'netvisor_host',array('maxlength'=>500,'class'=>'form-control', 'placeholder'=>'integration.netvisor.fi')); ?>
 		<?php echo $form->error($model,'netvisor_host'); ?>

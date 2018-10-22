@@ -520,7 +520,7 @@ function dateDiff($start, $end) {
 		   <td><span class="allaVL" total="'.(int)$vl.'">'.$vl.'</span></td>
 		   <td><span class="allaVKL" total="'.(int)$vkl.'">'.$vkl.'</span></td>
 		  </tr>';
-		 if($asetukset->netvisor_kaytto == 1) { 
+		 if($asetukset->netvisor_kaytto == 1 and ($asetukset->netvisor_mita_onkayttossa == 1 or $asetukset->netvisor_mita_onkayttossa == 2)) { 
 		  echo ' 
 		  <tr>
 		   <td colspan="13">			
