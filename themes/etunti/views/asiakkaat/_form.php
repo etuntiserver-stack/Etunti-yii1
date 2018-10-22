@@ -194,7 +194,7 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
 
-<?php if(in_array('5',$tas)) : ?>
+
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'ryhma'); ?>
 
@@ -234,6 +234,8 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 
 		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
+
+<?php if(in_array('5',$tas)) : ?>
 
 	<?php if($asetukset->netvisor_kaytto == 1) : ?>
 	<div class="section fill mb5">
