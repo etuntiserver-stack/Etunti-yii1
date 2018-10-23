@@ -1,11 +1,6 @@
 <?php
 /* @var $this ViestintaController */
 /* @var $data Viestinta */
-
-	if($raporti_tyyppi == 'Luetut')
-	$m = $this->tidFromTo_luetut($data->id, $from, $to, $osoite);
-	if($raporti_tyyppi == 'Toteutuneet')
-	$m = $this->tidFromTo_toteutuneet($data->id, $from, $to, $osoite);
 ?>
 
 <?php if(isset($m) 

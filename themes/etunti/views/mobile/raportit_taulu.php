@@ -216,14 +216,35 @@
   </thead>
   <tbody>
   <?php
+  $yhteensa = 0;
   foreach($model as $data)
   {
+
+	if($raporti_tyyppi == 'Luetut')
+	$m = $this->tidFromTo_luetut($data->id, $from, $to, $osoite);
+	if($raporti_tyyppi == 'Toteutuneet')
+	$m = $this->tidFromTo_toteutuneet($data->id, $from, $to, $osoite);
+
 	echo $this->renderPartial('_raportit_taulu', array( 
-			'data' => $data, 'from' => $from, 'to' => $to, 'raporti_tyyppi' => $raporti_tyyppi, 'osoite' => $osoite 
+			'data' => $data, 'from' => $from, 'to' => $to, 'raporti_tyyppi' => $raporti_tyyppi, 'osoite' => $osoite, 'm' => $m
 	), true);
+	foreach($m as $k=>$val){
+		$yhteensa += strtotime($val->loppui)-strtotime($val->aloitan);
+	}
   }
   ?>
   </tbody>
+  <tfoot>
+   <tr>
+	<th><?=Yii::t('main', 'Yhteensä')?></th>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<th><?=$this->sprint($yhteensa);?>&nbsp;|&nbsp;<?=$this->num($yhteensa);?></th>
+	<td></td>
+   </tr>
+  </tfoot>
   </table>
 
 
