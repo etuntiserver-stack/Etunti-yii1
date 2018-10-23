@@ -1,48 +1,70 @@
 <?php
-ini_set('memory_limit', '256M');
+
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v3.css">
 
 <?php
-
-  $paivat=array(
-	1=>Yii::t('main', 'Ma'),
-	2=>Yii::t('main', 'Ti'),
-	3=>Yii::t('main', 'Ke'),
-	4=>Yii::t('main', 'To'),
-	5=>Yii::t('main', 'Pe'),
-	6=>Yii::t('main', 'La'),
-	7=>Yii::t('main', 'Su'),
-	);
+/* @var $this TyovuorootController */
+/* @var $dataProvider CActiveDataProvider */
 
 
+   $pvmtid = Yii::app()->request->getParam('pvmtid', 0);
+   if(!empty($pvmtid)){
+	$expl = explode("_",$pvmtid);
+	Yii::app()->session['from'] = date("Y-m-d",strtotime($expl['0']));
+	Yii::app()->session['to'] = date("Y-m-d",strtotime($expl['0']." +1 week"));
+	Yii::app()->session['Tekija'] = array($expl['1']);
+	?>
+	<script type="text/javascript">
+	$(document).ready(function(){
+	
+	  $('#<?php echo $pvmtid; ?>').addClass("alert alert-info");
+	
+	});
+	</script>
+	<?php
+   }
 
-   $dTVfrom = date("Y-m-d",strtotime($year ."W". $week. '1'));
-   echo '<input type="hidden" id="fromTV" value="'.$dTVfrom.'">';
-   $dTVto = date("Y-m-d",strtotime($year ."W". $week. '7'));
-   echo '<input type="hidden" id="toTV" value="'.$dTVto.'">';
+
+
+ // <-- tyovuorot.js tyovuoroot/siivous_tyonimike
+ echo '<input type="hidden" id="fromTV" value="'.Yii::app()->session['from'].'">';
+ echo '<input type="hidden" id="toTV" value="'.Yii::app()->session['to'].'">';
+ //     tyovuorot.js tyovuoroot/siivous_tyonimike -->
+
+
+ function dateDiff($start, $end) {
+	$start_ts = strtotime($start);
+	$end_ts = strtotime($end);
+	$diff = $end_ts - $start_ts;
+	return round($diff / 86400);
+ }
+	$dateDiff = dateDiff($from, $to);
 
 ?>
 
 
 
+
 <?php if(!isset($_GET['fullscreen'])) : ?>
-	<input type="hidden" id="taulunKorko" value="160">
+	<input type="hidden" id="taulunKorko" value="190">
 <?php else: ?>
 	<input type="hidden" id="taulunKorko" value="140">
 <?php endif; ?>
 
 <?php if( count($tyontekijat_model) == 0 ) : ?>
-	<h2 class="alert bg-danger"><?php echo Yii::t('main', 'Ei tuloksia, tarkasta haku.'); ?></h2>
+	<div class="alert alert-danger"><?php echo Yii::t('main', 'Ei tuloksia, tarkasta haku.'); ?></div>
 <?php endif; ?>
+
+
 
 
 
 
 		<!-- Fixed Table -->
 		<!-- http://www.jqueryscript.net/table/jQuery-Plugin-For-Fixed-Table-Header-Footer-Columns-TableHeadFixer.html -->
-		<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/tableHeadFixer_v3.js"></script>
+		<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/tableHeadFixer.js"></script>
 		<script>
 			$(document).ready(function() {
 				window.onload = function(event) { resizeDiv(); }
@@ -56,6 +78,7 @@ ini_set('memory_limit', '256M');
 
 				    $("#fixTable").tableHeadFixer({
 					"left" : 1,
+					"foot" : 1,
 					'z-index': 0
 				    }); 
 				}
@@ -67,8 +90,7 @@ ini_set('memory_limit', '256M');
 
 
 
-
-<?php if( !empty($year) and !empty($week) and count($tyontekijat_model) > 0 ) : ?>
+<?php if( !empty($from) and !empty($to) and count($tyontekijat_model) > 0 ) : ?>
 <div class="row">
             <div class="admin-form">
               <div class="panel heading-border myBgColors">
@@ -76,19 +98,47 @@ ini_set('memory_limit', '256M');
                  <div class="row">
 
 
-
 <div class="table-responsive" id="parent">
   <table class="table table-bordered" id="fixTable">
-     <thead>
+     <thead class="">
      <tr>
-	<th><?php echo Yii::t('main', 'Nimi'); ?></th>
+     <th width="100"></th>
+        <?php 
+	  echo '<th width="100">';
+ 	  echo '<b>'.Yii::t('main', 'Aika').'</b>';	
+	  echo '</th>';
+
+	// VARAUS
+	  echo '<th style="z-index: 999" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Keskeneräinen varaus').'">';
+ 	  echo '<b class="text-warning">'.Yii::t('main', 'VARAUS').'</b>';	
+	  echo '</th>';
+	// VARAUS
+
+	$asetukset = Asetukset::model()->findByPk(1);
+
+	foreach($tyontekijat_model as $t){
+	  echo '<th style="z-index: 999">';
+ 	  echo '<a href="#" class="getTekijanTiedot" for="'.$t->id.'">'.$this->etuSukunimi($t->id).'</a>';	
+	  echo '</th>';
+	}
+        ?>
+     </tr>
+     </thead>
+     <tbody>
         <?php
-	for($day= 1; $day <= $numDays; $day++)
-	{
-  	  $d = strtotime($year ."W". $week . $day);
-	  $date = date('d.m.Y',$d);
-	  $ispyha = '';
+	$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
+    	for ($i = 0; $i <= $dateDiff; $i++) {
+	  $plus = "+$i day";
+	  $date = '';
+	  $date = date("d.m.Y",strtotime($from." ".$plus));
+	  $did = date("Ymd",strtotime($from." ".$plus));
+
+	  $columnDate = date("N/d.m",strtotime($date));
+	  $explColDate = explode("/",$columnDate);
+
+	  $clPyhat = '';
 	  $pyhat = $this->pyhat($date);
+	  $ispyha = '';
 	  if($pyhat == 'su' or $pyhat == 'pyhapaiva' or $pyhat == 'erikoislauantai')
 	  {
 		$clPyhat = 'style="background:#ddd"';
@@ -104,43 +154,26 @@ ini_set('memory_limit', '256M');
 	  {
 		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Erikoislauantai').'"></i>';
 	  }
- 
-	  echo '<th>'.$paivat[date('N',$d)].', '.$date.$ispyha.'</th>';
-	}
-        ?>
-     </tr>
-     </thead>
-     <tbody>
-        <?php
-		if(count($kohteet_siivous) > 0)
-		$ks = json_encode($kohteet_siivous);
-		else
-		$ks = "0";
 
-	// VARAUS
-	  echo '<tr>';
-	  echo '<td width=1 id="first_0" data-toggle="tooltip" data-placement="right" title="'.Yii::t('main', 'Keskeneräinen varaus').'">';
+  	    echo '<tr>';
+  		echo '<td '.$clPyhat.' class="fixed-column" id="first_'.$did.'"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].$ispyha.'</b></td>';
 
-		echo '
-		<div class="row">
-		  <div class="col-sm-12">
-		    	<b class="text-warning">'.Yii::t('main', 'VARAUS').'</b>
-		  </div>
-		</div>';
+		echo '<td>';
+		echo '<div class="kloajaat text-right">';
+		echo '6 - 8<br>';
+		echo '8 - 10<br>';
+		echo '10 - 12<br>';
+		echo '12 - 14<br>';
+		echo '14 - 16<br>';
+		echo '16 - 18<br>';
+		echo '18 - 20<br>';
+		echo '20 - 22<br>';
+		echo '</div>';
+		echo '</td>';
 
-
-	  echo '</td>';
-
-	  $asetukset = Asetukset::model()->findByPk(1);
-	  for($day= 1; $day <= $numDays; $day++)
-	  {
-  	     $d = strtotime($year ."W". $week . $day);
-	     $date = date('d.m.Y',$d);
-	     $did = date('Ymd',$d);
-
-
-	     echo '<td id="'.$did.'_0" valign="top">';
- 	     $did = $this->renderPartial('//tyovuoroot/did3',array(
+		// VARAUS
+		  echo '<td '.$clPyhat.' id="'.$did.'_0">';
+		  $tv = $this->renderPartial('//tyovuoroot/did3',array(
 					'pvm'=>$date,
 					'tid'=>0,
 					'from'=>'tvuoro', 
@@ -148,52 +181,94 @@ ini_set('memory_limit', '256M');
 					'asetukset'=>$asetukset,
 					'asiakas'=>$asiakas,
 					'kohde'=>$kohde,
-	     ), true);
-	     echo json_decode($did, true);
-	     echo '</td>';
-	  }
-	  echo '</tr>';
-	// VARAUS
+		  ), true);
+		  echo json_decode($tv, true);
+		  echo '</td>';
+		// VARAUS
+
+
+		if(count($kohteet_siivous) > 0)
+		$ks = json_encode($kohteet_siivous);
+		else
+		$ks = "0";
+
+
+		foreach($tyontekijat_model as $t){
+		  echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'">';
+	     	  echo '<div class="luolaatiko" for="'.$did.'_'.$t->id.'" pvm="'.$date.'" tid="'.$t->id.'" from="tvuoro" kohteet_siivous="'.$ks.'" asiakas="'.$asiakas.'" kohde="'.$kohde.'"></div>';
+		  echo '</td>';
+		}
+	    echo '</tr>';
+
+	    if(date('N', strtotime($date)) == 7)
+	    {
+  	    echo '<tr>';
+  		echo '<td class="text-center myBgColors viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).' <i class="fa fa-arrow-up" aria-hidden="true"></i>
+</b></td>';
 
 
 
+		// VARAUS
+		  echo '<td class="viikkoRivi myBgColors text-center" id="vk_'.date("W",strtotime($date)).'_0">';
+		  $kokoViikko = '';
+		  $vko = '';
+		  $vko = date("W",strtotime($date));
+		  $year = date("Y",strtotime($date));
+		  $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>0,'viikko'=>$vko,'year'=>$year),true);
+
+		  echo '<span>'.$kokoViikko.'</span>';
+		  echo '</td>';
+		// VARAUS
 
 
-	foreach($tyontekijat_model as $t)
-	{
-	  echo '<tr id="tr_'.$t->id.'">';
-	  echo '<td id="first_'.$t->id.'" style="z-index: 999">';
-		echo '
-		<div class="row">
-		  <div class="col-sm-12">
-		    	<a href="#" class="getTekijanTiedot" for="'.$t->id.'">'.$this->etuSukunimi($t->id).'</a>
-			<br>
-			<span id="vk_'.$week.'_'.$t->id.'"></span>
-		  </div>
-		</div>';
 
+		foreach($tyontekijat_model as $t){
+		 $vktyoaika = '';
+		 $ts = Tyosuhdet::model()->find(" tid = '".$t->id."' ");
+		 if(isset($ts->id) and !empty($ts['vktyoaika']))
+		  $vktyoaika = $ts['vktyoaika'];
 
-	  echo '</td>';
+		  echo '<td class="viikkoRivi myBgColors text-center" id="vk_'.date("W",strtotime($date)).'_'.$t->id.'">';
+		  $kokoViikko = '';
+		  $vko = '';
+		  $vko = date("W",strtotime($date));
+		  $year = date("Y",strtotime($date));
+		  $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>$vko,'year'=>$year),true);
 
-	  for($day= 1; $day <= $numDays; $day++)
-	  {
-  	     $d = strtotime($year ."W". $week . $day);
-	     $date = date('d.m.Y',$d);
-	     $did = date('Ymd',$d);
+		  $cl = '';
+		  if(	(int)str_replace(":","",$kokoViikko) > (int)str_replace(":","",$vktyoaika)
+			and (int)str_replace(":","",$kokoViikko) > 0
+			and (int)str_replace(":","",$vktyoaika) > 0
+		  )
+		  $cl = 'class="btn btn-xs btn-danger"';
 
-	     $clPyhat = '';
-	     $pyhat = $this->pyhat($date);
-	     if($pyhat == true)
-	     $clPyhat = 'style="background:#ddd"';
+		  echo '<span '.$cl.'>'.$kokoViikko. '('.$vktyoaika.')</span>';
 
-	     echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'" valign="top">';
-	     echo '<div class="luolaatiko" for="'.$did.'_'.$t->id.'" pvm="'.$date.'" tid="'.$t->id.'" did="'.$did.'" from="tvuoro" kohteet_siivous="'.$ks.'" asiakas="'.$asiakas.'" kohde="'.$kohde.'"></div>';
-	     echo '</td>';
-	  }
-	  echo '</tr>';
-	}
+		  echo '</td>';
+		}
+	    echo '</tr>';
+	    }
+
+  	}
         ?>
      </tbody>
+     <tfoot>
+        <?php
+  	    echo '<tr class="myBgColors">';
+  		echo '<td class="text-center viikkoRivi fixed-column"></td>';
+
+		  echo '<td class="text-center viikkoRivi myBgColors fromto_0" />';
+		  $this->renderPartial('//tyovuoroot/fromto',array('tid'=>0));
+		  echo '</td>';
+
+		foreach($tyontekijat_model as $t){
+		  echo '<td class="text-center viikkoRivi myBgColors fromto_'.$t->id.'" />';
+		  $this->renderPartial('//tyovuoroot/fromto',array('tid'=>$t->id));
+		  echo '</td>';
+		}
+	    echo '</tr>';
+        ?>
+     </tfoot>
   </table>
 </div>
 
@@ -203,13 +278,40 @@ ini_set('memory_limit', '256M');
               </div>
             </div>
 </div>
+
+
+<script>
+$( ".luolaatiko" ).each(function( index ) {
+
+	var forThis = $(this).attr("for");
+	$("#"+forThis).html('odota..');
+	var pvm = $(this).attr("pvm");
+	var tid = $(this).attr("tid");
+	var from = $(this).attr("from");
+	var kohteet_siivous = $(this).attr("kohteet_siivous");
+	var asiakas = $(this).attr("asiakas");
+	var kohde = $(this).attr("kohde");
+
+var xhr = new XMLHttpRequest();
+xhr.open("POST", 'didnew3', true);
+xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+xhr.onload = function () {
+	d = JSON.parse(xhr.responseText);
+	//console.log(xhr.responseText)
+	$("#"+forThis).html(d);
+};
+xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
+});
+</script>
 <?php endif; ?>
 
 
 
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
-	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot_v3.js"></script>
+	<?php Yii::app()->clientScript->registerPackage('tyovuoroot'); ?>
+
 
 
 
@@ -249,7 +351,6 @@ ini_set('memory_limit', '256M');
 <script type="text/javascript">
 $(document).ready(function(){
 
-  $(".onload-check").addClass("sb-l-m sb-l-disable-animation");
   $(".getTekijanTiedot").click(function(e){
 	e.preventDefault();
 	var id = $(this).attr('for');

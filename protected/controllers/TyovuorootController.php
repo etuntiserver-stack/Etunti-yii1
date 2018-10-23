@@ -1529,14 +1529,14 @@ class TyovuorootController extends Controller
 			$this->poistaminenOnlineVarauksetJokaMeniOhi();
 			Yii::app()->session['ov_poisto'] = 'suorittu';
 		}
+
 		$kohteet_siivous = array();
 
 		// <-- Reset
 		if(isset($_GET['reset']))
 		{
-			unset(Yii::app()->session['year']);
-			unset(Yii::app()->session['week']);
-			unset(Yii::app()->session['vkolopput']);
+			unset(Yii::app()->session['from']);
+			unset(Yii::app()->session['to']);
 			unset(Yii::app()->session['asiakas']);
 			unset(Yii::app()->session['kohde']);
 			unset(Yii::app()->session['tyontekijat']);
@@ -1547,26 +1547,6 @@ class TyovuorootController extends Controller
 			$this->redirect(array('tv3'));
 		}
 		//     Reset -->
-
-
-		// <-- GET haku
-		if(isset($_GET['year']) or isset($_GET['week']))
-		{
-
-			if(isset($_GET['year']) and !empty($_GET['year']))
-				Yii::app()->session['year'] = $_GET['year'];
-			
-			if(isset($_GET['week']) and !empty($_GET['week']))
-				Yii::app()->session['week'] = $_GET['week'];
-
-			if(isset($_GET['tid']) and !empty($_GET['tid']))
-				Yii::app()->session['tyontekijat'] = array($_GET['tid']);
-
-
-			$this->redirect(array('tv3'));
-		}		
-		//  GET haku -->
-
 
 		// <-- Post haku
 		if(isset($_POST['haku']))
@@ -1589,6 +1569,7 @@ class TyovuorootController extends Controller
 
 			// <-- Asiakas
 			if(isset($_POST['asiakas']) and !empty($_POST['asiakas']))
+
 				Yii::app()->session['asiakas'] = $_POST['asiakas'];
 			if(isset($_POST['asiakas']) and empty($_POST['asiakas']))
 				unset(Yii::app()->session['asiakas']);
@@ -1608,37 +1589,26 @@ class TyovuorootController extends Controller
 				unset(Yii::app()->session['tyontekijat']);
 			//  tyontekijat -->
 
-			if(isset($_POST['year']) and !empty($_POST['year']))
-				Yii::app()->session['year'] = $_POST['year'];
-			
-			if(isset($_POST['week']) and !empty($_POST['week']))
-				Yii::app()->session['week'] = $_POST['week'];
+			if(isset($_POST['from']) and !empty($_POST['from']))
+				Yii::app()->session['from'] = date("Y-m-d",strtotime($_POST['from']));
+	
+			if(isset($_POST['to']) and !empty($_POST['to']))
+				Yii::app()->session['to'] = date("Y-m-d",strtotime($_POST['to']));
+
+
 			$this->redirect(array('tv3'));
 		}		
 		//  Post haku -->
 
-		// <-- Year Week
-		if(!isset(Yii::app()->session['year']))
-			Yii::app()->session['year'] = date("Y");
 
-		if(!isset(Yii::app()->session['week']))
-			Yii::app()->session['week'] = date("W");
-
-		$year = Yii::app()->session['year'];
-		$week = sprintf("%02d", Yii::app()->session['week']);
-		Yii::app()->session['week'] = $week;
-		//    Year Week -->
+		if(!isset(Yii::app()->session['from']))
+			Yii::app()->session['from'] = date("Y-m-d");
+		if(!isset(Yii::app()->session['to']))
+			Yii::app()->session['to'] = date("Y-m-d",strtotime("+1 month", time()));
 
 
-		if(!isset(Yii::app()->session['vkolopput']))
-			$numDays = 5;
-		else
-			$numDays = 7;
 
-		Yii::app()->session['from'] = date("Y-m-d", strtotime($year ."W". $week.'1'));
-		Yii::app()->session['to'] = date("Y-m-d", strtotime($year ."W". $week . $numDays));
-
-
+		$asetukset = Asetukset::model()->findByPk(1);
        		$criteria = new CDbCriteria();
 
 		// <-- Oletus arvot
@@ -1672,17 +1642,16 @@ class TyovuorootController extends Controller
 		// Oletus arvot -->
 
 
-
 		if(Yii::app()->session['tyontekijat'])
 		{
 
-			// <-- Return order etu ja sukunimella
-			$site = Yii::app()->createController('Site');
-			$criteria = $site[0]->etuSukunimiCriteria($criteria);
-			//     Return order etu ja sukunimella -->
+			if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0)
+				$criteria->order = " tekijan_nimi ";
+			else
+				$criteria->order = " sukunimi ";
 
 
-        		$criteria->select = "id,tekijan_nimi, tyoryhma";
+        		$criteria->select = "id,tekijan_nimi";
         		$criteria->condition = " aktiivinen = '1' ";
 
 		    	if(count(Yii::app()->session['tyontekijat'] > 1))
@@ -1690,9 +1659,9 @@ class TyovuorootController extends Controller
 		    	else
 		      	$ids = Yii::app()->session['tyontekijat'][0];
 
-
 	        	$criteria->addCondition ('id IN ('.$ids.') ');
 		}
+
 
 
 		// <-- kohteiden_tyonimike
@@ -1726,24 +1695,20 @@ class TyovuorootController extends Controller
 		}
 		//   kohteiden_tyonimike -->
 
-
 		// <-- tyo_toimialue
 		if(isset(Yii::app()->session['tyo_toimialue']))
 		{
 
-		   $arr = array();
-		   foreach(Yii::app()->session['tyo_toimialue'] as $it)
-		   {
-			$arr[] = str_replace("\\", "\\\\\\\\", json_encode($it));
-		   }
-
-		   $tyo_toimialue_like = "tyo_toimialue LIKE '%".implode("%' OR tyo_toimialue LIKE '%", $arr)."%'";
+		   $tyo_toimialue_like = "tyo_toimialue LIKE '%".implode("%' OR tyo_toimialue LIKE '%", Yii::app()->session['tyo_toimialue'])."%'";
 	           $criteria->addCondition ("
 		   id IN (  
 		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
+		       AND tid IN 
+		       (
+			    SELECT id FROM sivex_ttekijat WHERE $tyo_toimialue_like
+		       )
 		   )
-		   AND ($tyo_toimialue_like)
 		   ");
 		}
 		//   tyo_toimialue -->
@@ -1762,7 +1727,6 @@ class TyovuorootController extends Controller
 
 		// <-- Asiakas
 		if(isset(Yii::app()->session['asiakas']))
-
 		{
 	           $criteria->addCondition ("
 		   id IN (  
@@ -1803,27 +1767,29 @@ class TyovuorootController extends Controller
 
 		$tyontekijat_model = Tyontekijat::model()->findAll($criteria);
 
+
 		(isset(Yii::app()->session['asiakas'])) ? 	$asiakas = Yii::app()->session['asiakas'] : $asiakas ='';
 		(isset(Yii::app()->session['kohde'])) ? 	$kohde = Yii::app()->session['kohde'] : $kohde ='';
 
 		$this->render('tv3', array(
 			'tyontekijat_model'	=>$tyontekijat_model,
+			'from'			=>Yii::app()->session['from'],
+			'to'			=>Yii::app()->session['to'],
 			'tyontekijat'		=>Yii::app()->session['tyontekijat'],
-			'year'			=>$year,
-			'week'			=>$week,
-			'numDays'		=>$numDays,
 			'kohteet_siivous'	=>$kohteet_siivous,
 			'asiakas'		=>$asiakas,
 			'kohde'			=>$kohde,
-			//'wkMaara'		=>$wkMaara,
 		));
+	}
 
+	protected function time_to_float($time) {
+	    $timeArr = explode(":", $time);
+	    return $timeArr[0] + ($timeArr[1] / 60);
 	}
 
 	public function actionDidnew3()
 	{
-	     if( isset($_POST['pvm']) ){
-	     if(is_array(json_decode($_POST['kohteet_siivous'], true)))
+	     if(isset($_POST['kohteet_siivous']) and is_array(json_decode($_POST['kohteet_siivous'], true)))
 	     $ks = json_decode($_POST['kohteet_siivous'], true);
 	     else
 	     $ks = array();
@@ -1838,9 +1804,7 @@ class TyovuorootController extends Controller
 					'asetukset'=>$asetukset,
 					'asiakas'=>$_POST['asiakas'],
 					'kohde'=>$_POST['kohde'],
-					'ajax_pyynto' => true
 	     ));
-	     }
 	     exit;
 	}
 
