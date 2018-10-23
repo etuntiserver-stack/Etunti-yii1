@@ -241,7 +241,7 @@
 	<td></td>
 	<td></td>
 	<td></td>
-	<th><?=$this->sprint($yhteensa);?>&nbsp;|&nbsp;<?=$this->num($yhteensa);?></th>
+	<th><?=($yhteensa > 0)?$this->sprint($yhteensa).'&nbsp;|&nbsp'.$this->num($yhteensa):''?></th>
 	<td></td>
    </tr>
   </tfoot>
