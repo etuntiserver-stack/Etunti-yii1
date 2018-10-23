@@ -236,12 +236,12 @@
   </tbody>
   <tfoot>
    <tr>
-	<th><?=Yii::t('main', 'Yhteensä')?></th>
+	<td><?=Yii::t('main', 'Yhteensä')?></td>
 	<td></td>
 	<td></td>
 	<td></td>
 	<td></td>
-	<th><?=($yhteensa > 0)?$this->sprint($yhteensa).'&nbsp;|&nbsp'.$this->num($yhteensa):''?></th>
+	<td><?=($yhteensa > 0)?$this->sprint($yhteensa).'&nbsp;|&nbsp'.$this->num($yhteensa):''?></td>
 	<td></td>
    </tr>
   </tfoot>
