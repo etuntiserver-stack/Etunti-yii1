@@ -27,7 +27,7 @@ $this->breadcrumbs=array(
         <h2 class="myBgColors p10"> 
 	<div class="form-inline">
 	 <div class="form-group">
-		<i class="glyphicon glyphicon-th-list"></i> <?php echo Yii::t('main', 'Tuntiyhtenveto työntekijät'); ?>
+		<i class="glyphicon glyphicon-th-list"></i> <?php echo Yii::t('main', 'Tuntiyhteenveto työntekijät'); ?>
 	 </div><div class="form-group col-sm-offset-1">
 		<?php
 		( Yii::app()->request->getParam('aktiivinen') ) ? $selectedAktiivinen = Yii::app()->request->getParam('aktiivinen') : $selectedAktiivinen = '';
