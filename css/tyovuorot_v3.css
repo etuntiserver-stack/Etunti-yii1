@@ -1,13 +1,26 @@
 .mennytPaivat{
 	opacity: 0.4;
 }
+#fixTable td,th{
+	margin:0;
+	padding:0;
+}
+.tvline{
+	position:absolute;
+	width: 100%;
+}
+.fixed-column{
+	min-width:150px;
+	width:150px;
+	z-index: 999999;
+}
 td .kloajaat{
-	width: 50px;
-	font-size: 75%;
+	background: #fff;
+	font-size: 14px;
 	line-height: 12px;
 }
 td .latikkoAsetukset{
-	width: 60px;
+	width: 100%;
 	height: 80px;
 	max-height: 80px;
 	font-size: 90%;
@@ -27,9 +40,6 @@ td .latikkoAsetukset{
 td:hover .mplus, td:hover .mcut{
 	display : block;
 }
-td .tp{
-	margin-bottom: 5px;
-}
 .luominen, .valitseKokopaiva{
 	display: none;
 }
@@ -38,7 +48,4 @@ td .tp{
 }
 .table{
     height: 100%;
-}
-.laskutettu{
-	border:1px blue solid;
 }

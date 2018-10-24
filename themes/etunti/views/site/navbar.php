@@ -121,7 +121,7 @@ if( $curpage == 'tyovuoroot/tv3' )
 	     <legend><?php echo Yii::t('main','Haku'); ?></legend>
 
               <div class="form-group">
-		<?php if($curpage == 'tyovuoroot/tv2') : ?>
+		<?php if($curpage == 'tyovuoroot/tv2' or $curpage == 'tyovuoroot/tv3') : ?>
 		    <label><?php echo Yii::t('main','Aikaväli'); ?></label>
 			<div class="row">
 			 <div class="col-sm-6">

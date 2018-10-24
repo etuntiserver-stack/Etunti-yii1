@@ -102,12 +102,8 @@
   <table class="table table-bordered" id="fixTable">
      <thead class="">
      <tr>
-     <th width="100"></th>
+     <th></th>
         <?php 
-	  echo '<th width="100">';
- 	  echo '<b>'.Yii::t('main', 'Aika').'</b>';	
-	  echo '</th>';
-
 	// VARAUS
 	  echo '<th style="z-index: 999" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Keskeneräinen varaus').'">';
  	  echo '<b class="text-warning">'.Yii::t('main', 'VARAUS').'</b>';	
@@ -156,19 +152,21 @@
 	  }
 
   	    echo '<tr>';
-  		echo '<td '.$clPyhat.' class="fixed-column" id="first_'.$did.'"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].$ispyha.'</b></td>';
-
-		echo '<td>';
-		echo '<div class="kloajaat text-right">';
-		echo '6 - 8<br>';
-		echo '8 - 10<br>';
-		echo '10 - 12<br>';
-		echo '12 - 14<br>';
-		echo '14 - 16<br>';
-		echo '16 - 18<br>';
-		echo '18 - 20<br>';
-		echo '20 - 22<br>';
-		echo '</div>';
+  		echo '<td '.$clPyhat.' class="fixed-column" id="first_'.$did.'">';
+		echo $arrDate[$explColDate[0]].", ".$explColDate[1].$ispyha;
+		echo '
+		<div class="pull-right">
+		<div class="kloajaat text-right">
+		06:00 - 08:00<br>
+		08:00 - 10:00<br>
+		10:00 - 12:00<br>
+		12:00 - 14:00<br>
+		14:00 - 16:00<br>
+		16:00 - 18:00<br>
+		18:00 - 20:00<br>
+		20:00 - 22:00
+		</div>
+		</div>';
 		echo '</td>';
 
 		// VARAUS

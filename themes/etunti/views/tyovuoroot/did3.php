@@ -12,8 +12,7 @@
 	$onkoMennyt = 'mennytPaivat';
 
 	$bod = ''; 
-	$bod .=  '<div class="latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
-
+	$bod .=  '<div style="position:relative" class="latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 
        	$criteria = new CDbCriteria();
 	$criteria->order = " alku ASC";
@@ -69,9 +68,9 @@
 		}
 		$top = sprintf("%0.2f", $this->time_to_float($tvVal->alku));
 		$height = $this->num(strtotime($tvVal->loppu)-strtotime($tvVal->alku));
-		$kerta = 3;
+		$kerta = 2;
 	   	$bod .=  '
-		<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" style="margin-top:'.($top*$kerta).'px;width:60px;height:'.($height*$kerta).'px;background:'.$color.'">
+		<div class="tvline" id="'.$tvVal->id.'_'.$did.'_'.$tid.'" style="top:'.(($top*6)-36).'px;height:'.($height*6).'px;background:'.$color.'">
 		</div>';
 
 	}
