@@ -11,10 +11,36 @@
 	if($did < date("Ymd"))
 	$onkoMennyt = 'mennytPaivat';
 
-	$bod = ''; 
+	$bod = '';
+	$bod .=  '
+	<div class="latikkolisatiedot">
+		<div class="pull-right oikeallaPlusV">
+		 <div class="form-inline">
+			<div class="form-group">
+			   <span class="text-center" id="sum_tunnit_'.$did.'_'.$tid.'" style="text-align:center;opacity:0.6"></span>
+			</div>
+			<div class="kokopaiva form-group">
+			   <span class="valitseKokopaiva link glyphicon glyphicon-th-large" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
+			</div>
+			<div class="plussamerkki form-group">
+			   <span class="plussa link fa fa-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
+			</div>
+			<div class="form-group">
+			   <span class="link fa fa-eye katsokaikki" for="'.$did.'_'.$tid.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'" from="tvuoro" kohteet_siivous="'.json_encode($kohteet_siivous).'" asiakas="'.$asiakas.'" kohde="'.$kohde.'"></span>
+			</div>
+			<div class="form-group">
+		   	   <i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mcut glyphicon glyphicon-transfer text-success link':'forCut').'"" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
+		 	</div><div class="form-group">
+		   	   <i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mplus glyphicon glyphicon-plus text-success link':'forCopy').'" id="forCopy_'.$did.'_'.$tid.'"></i> 
+			</div>
+		 </div>
+		</div>
+	</div>
+	';
 	$bod .=  '<div style="position:relative" class="latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 
        	$criteria = new CDbCriteria();
+	$criteria->select = "tyoajanmerkinta, alku, loppu";
 	$criteria->order = " alku ASC";
 	$criteria->condition = " tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' ";
 

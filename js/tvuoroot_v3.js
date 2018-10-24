@@ -1,25 +1,49 @@
-/*
 $(document).ready(function(){
 
 
-$('td').hover(function()
+$('#fixTable td').hover(function()
 {
-     $(this).find('.showhing').show();
-     $(this).find('.mplus').show();
-     $(this).find('.mcut').show();
+     $(this).find('.latikkolisatiedot').show();
 }, function()
 { 
-     $(this).find('.showhing').hide();
-     $(this).find('.mplus').hide();
-     $(this).find('.mcut').hide();
+     $(this).find('.latikkolisatiedot').hide();
 });
 
+$(document).delegate(".katsokaikki","click",function(){
 
-$(document).delegate(".laatikon_rivi","click",function(){
-     $(this).find('.osoiterivi').addClass('tv_edit');
-     $(this).find('.collapse').addClass('in');
+	var forThis = $(this).attr("for");
+	var pvm = $(this).attr("pvm");
+	var tid = $(this).attr("tid");
+	var from = $(this).attr("from");
+	var kohteet_siivous = $(this).attr("kohteet_siivous");
+	var asiakas = $(this).attr("asiakas");
+	var kohde = $(this).attr("kohde");
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", location.protocol + "//" + location.host + '/index.php/tyovuoroot/didnew', true);
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xhr.onload = function () {
+		d = JSON.parse(xhr.responseText);
+		//console.log(xhr.responseText)
+		$("#showall").modal().html('' +
+		'<div id="modal-form" class="popup-basic-left popup-basic popup-md admin-form mfp-with-anim mfp-hide">' +
+		'<div class="panel">' +
+            	'<div class="panel-heading">' +
+			'<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">' +
+				'<span aria-hidden="true">&times;</span>' +
+			'</button>' +
+              	'<span class="panel-title"><i class="fa fa-clock-o"></i>' +
+		pvm +
+		'</span>' +
+            	'</div>' +
+              	'<div class="panel-body p25">' +
+		d+
+              	'</div>' +
+		'</div>' +
+		'</div>');
+	};
+	xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
 });
-
 
 $("#autoInsert").click(function(){
 
@@ -47,9 +71,32 @@ $("#autoRemove").click(function(){
 
 });
 
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+  }
+
+if(getUrlVars()["tv_id"]){
+	var thisVal = getUrlVars()["tv_id"];
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update?id='+thisVal,
+           type: "GET",
+           //data: {"tarjousPainike" : "true"},
+           success: function(html){
+		$('#showres').modal().html(html);
+           },
+	   error:function(data){
+		alert('Kohdetta ei löydy! Päivitä sivu!');
+	   }
+        });
+}
 
 $(document).delegate(".tv_edit","click",function(){
-	document.body.onselectstart = function() { return false; }
 	var thisVal = $(this).attr("id").split("_");
 
         $.ajax({
@@ -171,8 +218,8 @@ function muisti(){
 		});
 
 			$(".muokkausLi").show();
-			$(".forCopy").removeClass("forCopy").addClass("mplus fa fa-plus text-danger link");
-			$(".forCut").removeClass("forCut").addClass("mcut fa fa-exchange text-danger link");
+			$(".forCopy").removeClass("forCopy").addClass("mplus glyphicon glyphicon-plus text-success link");
+			$(".forCut").removeClass("forCut").addClass("mcut glyphicon glyphicon-transfer text-success link");
 		
 		}
 		return false;
@@ -236,7 +283,7 @@ window.addEventListener('message', function(e) {
   }
 
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio_v3',
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio',
 	   type:'POST',
 	   data: doWhat,
            success: function(data){
@@ -247,7 +294,10 @@ window.addEventListener('message', function(e) {
 			var sp = JSON.parse(data).split('//');
 			if(sp[0])
 			{
-
+				if(sp[0] == 'Error'){
+					alert(sp[1]);
+					return false;
+				}
 				$('#'+newPvm+'_'+newTid).html(JSON.parse(sp[0]));
 				
 				if(thisID[0] == 'forCopy' && parent.location.href.match(/index/))
@@ -367,4 +417,3 @@ $("#yhtveto").on('submit',function(e){
 
 
 });
-*/
