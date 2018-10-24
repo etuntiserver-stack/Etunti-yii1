@@ -1,3 +1,4 @@
+/*
 $(document).ready(function(){
 
 
@@ -366,3 +367,4 @@ $("#yhtveto").on('submit',function(e){
 
 
 });
+*/

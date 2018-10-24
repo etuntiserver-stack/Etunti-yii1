@@ -1,3 +1,4 @@
+/*
 (function($) {
 
 	$.fn.tableHeadFixer = function(param) {
@@ -223,3 +224,4 @@ function trlaatikkot(lt){
 	};
 
 })(jQuery);
+*/

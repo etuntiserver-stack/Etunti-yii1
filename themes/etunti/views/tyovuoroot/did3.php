@@ -1,4 +1,6 @@
 <?php
+
+
     	$color = '';
 	$height = '';
 	$yht = 0;
@@ -10,30 +12,11 @@
 	$onkoMennyt = 'mennytPaivat';
 
 	$bod = ''; 
-	$bod .=  '<div class="laatikko latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
+	$bod .=  '<div class="latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 
-if(!isset($_POST['tulosta']))
-{
-	if( $from != 'mobiili' )
-	{
-	$bod .=  '
-	<div class="ylapalkki">
-	 <div class="pull-right">
-	   <i class="form-group forCut icon" id="forCut_'.$did.'_'.$tid.'" style="display:none"></i>
-	   <i class="form-group forCopy icon" id="forCopy_'.$did.'_'.$tid.'" style="display:none"></i>
-	   <span class="form-group text-danger" id="sum_tunnit_'.$did.'_'.$tid.'"></span>
-	 </div>
-	 <div class="showhing oikeallaPlusV form-inline" style="display:none">
-	   <i class="valitseKokopaiva link text-danger fa fa-th-large icon" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></i>
-	   <i class="plussa link text-danger luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">Luo uusi</i>
-	 </div>
-	</div>';
-	}
-}
 
        	$criteria = new CDbCriteria();
 	$criteria->order = " alku ASC";
-	$criteria->with=array('kohteet');
 	$criteria->condition = " tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' ";
 
 	// <-- Asiakas
@@ -78,221 +61,19 @@ if(!isset($_POST['tulosta']))
 	$tv = Tyovuoroot::model()->findAll($criteria); 
 	foreach($tv as $tvVal)
 	{
-		// <-- poistetaan se 2019 vuodessa
-		if( empty($tvVal->osoite) and isset($tvVal->kohteet->osoite) ){ 
-			Tyovuoroot::model()->updateByPk($tvVal->id, array('osoite' => $tvVal->kohteet->osoite, 'postinumero' => $tvVal->kohteet->pnumero, 'postitoimipaikka' => $tvVal->kohteet->kaupunki));
-			$tvVal->osoite = $tvVal->kohteet->osoite;
+
+		$color = '#333';
+		if(!empty($tvVal->tyoajanmerkinta)){
+		$expl = explode("/",$tvVal->tyoajanmerkinta);
+		if(isset($expl[1]) and !empty($expl[1])) $color = $expl[1];
 		}
-		//     poistetaan se 2019 vuodessa -->
+		$top = sprintf("%0.2f", $this->time_to_float($tvVal->alku));
+		$height = $this->num(strtotime($tvVal->loppu)-strtotime($tvVal->alku));
+		$kerta = 3;
+	   	$bod .=  '
+		<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" style="margin-top:'.($top*$kerta).'px;width:60px;height:'.($height*$kerta).'px;background:'.$color.'">
+		</div>';
 
-
-	   $osoite = $tvVal->osoite;
-	   if(!empty($tvVal->osoiteOnline) and $tvVal->osoiteOnline == 1 and $tvVal->onlinevaraus_id == 0){
-
-	   	$osoite = '<span style="color: red">Vuoroa varataan..</span>';
-
-	   } elseif(!empty($tvVal->osoiteOnline) and $tvVal->onlinevaraus_id != 0){
-
-		$ov = Onlinevaraus::model()->findbypk($tvVal->onlinevaraus_id);
-
-		if(isset($ov->id))
-		{
-
-			$osoite = $ov->osoite;
-	   		$strlen = strlen($osoite);
-		   	$scount = 30;
-		   	if(!empty($ov->lisatietoja)) $scount = 27;
-	
-		   	if($strlen > $scount)
-		    	$osoite = substr($osoite,0,$scount).'..';
-	
-		   	$osoite = str_replace('/', '', $ov->osoite);
-
-			if($tvVal->osoiteOnline == 1)
-		   	$osoite = '<span style="color: red">Vuoroa varataan..<br>'.$osoite.'</span>';
-			elseif($tvVal->osoiteOnline == 2)
-	   		$osoite = $osoite.'<br><span style="color: green">Onlinevaraus maksettu</span>';
-			elseif($tvVal->osoiteOnline == 3)
-	   		$osoite = $osoite.'<br><span style="color: green">Tilaus eDicosta</span>';
-
-		}
-
-	   } 
-
-	   // <-- uusi_tilaus
-	   $uusi_tilaus = '';
-	   /*
-	   if( isset($tvVal->kohteet->uusi_tilaus) and $tvVal->kohteet->uusi_tilaus == 1 ){
-	   	$uusi_tilaus = 'color:#ff1aff';
-	   }
-	   */
-	   // uusi_tilaus -->
-
-	   // Asiakas nakyvissa
-	   $asiakasNakyvissa = '';
-	   if(isset($asetukset) and $asetukset->asiakas_tyovuorossa == 1){
-		$name = '';
-		if(isset($tvVal->kohteet->asiakkaat) and $tvVal->kohteet->asiakkaat->tyyppi == 'yritys')
-		$name = $tvVal->kohteet->asiakkaat->yrityksen_nimi;
-		if(isset($tvVal->kohteet->asiakkaat) and $tvVal->kohteet->asiakkaat->tyyppi == 'henkilo')
-		$name = $tvVal->kohteet->asiakkaat->yhteyshenkilo;
-
-		if(!empty($name))
-		$asiakasNakyvissa = $name.'<br>';
-	   }
-
-	   // paikkakunta nakyvissa
-	   $paikkakuntaNakyvissa = '';
-	   if(isset($asetukset) and $asetukset->paikkakunta_tyovuorossa == 1){
-		$paikkakunta = '';
-		if(isset($tvVal->kohteet->kaupunki) and !empty($tvVal->kohteet->kaupunki))
-		$paikkakunta = $tvVal->kohteet->kaupunki;
-
-		if(!empty($paikkakunta))
-		$paikkakuntaNakyvissa = $paikkakunta.'<br>';
-	   }
-
-	   // toistuva
-	   $toistuva = '';
-	   if($tvVal->toistuva_id != 0){
-		$toistuva = '<i class="p5 fa fa-repeat text-danger icon" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Toistuva työvuoro').'"></i>';
-	   }
-
-	   // peruutettu
-	   $peruutettu = '';
-
-	   if($tvVal->peruutettu != 0){
-		   $tv_controller = Yii::app()->createController('Tyovuoroot');
-	   }	
-
-	   if($tvVal->peruutettu == 1 and isset($tv_controller)){
-		$peruutettu = '<p><span class="text-danger">'. $tv_controller[0]->peruutettuArray()[1] .'</span></p>';
-	   }
-	   if($tvVal->peruutettu == 2 and isset($tv_controller)){
-		$peruutettu = '<p><span class="text-danger">'. $tv_controller[0]->peruutettuArray()[2] .'</span></p>';
-	   }
-
-	   // Tyopari
-	   $tyopari = '';
-	   if($tvVal->tyopaari != '' and $tvVal->tyopaari != "[\"$tvVal->tid\"]"){
-		$tyopari = '<i class="p5 fa fa-male text-danger icon" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i>';
-	   }
-
-	   // <-- Tarvittavien työntekijöiden määrä
-	   $tarvittavien_tyontekijoiden_maara = '';
-	   if(isset($tvVal->kohteet->tarvittavien_tyontekijoiden_maara) and $tvVal->kohteet->tarvittavien_tyontekijoiden_maara > 0)
-	   $tarvittavien_tyontekijoiden_maara = '<i class="p3 pull-right text-danger icon">'.$tvVal->kohteet->tarvittavien_tyontekijoiden_maara.'</i>';
-	   // Tarvittavien työntekijöiden määrä -->
-
-	   // status
-	   $status = '';
-	   if($tvVal->status != 0){
-
-		$tvController = Yii::app()->createController('Tyovuoroot');
-
-        	$l = $tvController[0]->tilanteet();
-		if($tvVal->status == 10){
-			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-danger' : $teksti_vari = 'text-danger';
-			$status = ' <i class="p3 fa fa-cutlery '.$teksti_vari.' icon"></i>';
-		} elseif($tvVal->status == 2) {
-			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-danger' : $teksti_vari = 'text-danger';
-			$status = ' <i class="p3 fa fa-bus '.$teksti_vari.' icon"></i>';
-		} elseif($tvVal->status == 3) {
-			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-danger' : $teksti_vari = 'text-danger';
-			$status = ' <i class="p3 fa fa-hourglass '.$teksti_vari.' icon"></i>';
-		} elseif($tvVal->status == 11) {
-			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-danger' : $teksti_vari = 'text-danger';
-			$status = ' <i class="p3 fa fa-clock-o '.$teksti_vari.' icon"></i>';
-		} else {
-	   		$status = ' ('.$l[$tvVal['status']].') ';
-		}
-	   }
-
-
-	   if($tvVal->alku != '' and $tvVal->loppu != '')
-	   {
-
-		$eilasketa = $this->eiLasketaSubStr($tvVal->tyoajanmerkinta);
-
-		if(isset($asetukset) and $tvVal->status == 10 and $asetukset->lasketaanko_lounastauko == 0)
-		{
-		} else {
-			if($eilasketa != true)
-    			$sum += strtotime($tvVal->loppu)-strtotime($tvVal->alku);
-		}
-
-		if(isset($yhteensa) and $yhteensa == true)
-		{
-			if($eilasketa != true)
-	    		$yht += strtotime($tvVal->loppu)-strtotime($tvVal->alku);
-		}
-
-		$al = '<span class="pull-right tv_kesto hidden">'.$this->num(strtotime($tvVal->loppu)-strtotime($tvVal->alku)).'</span>';
-	   	$al .= '<b>'
-			.$tvVal->alku.'-'.$tvVal->loppu.'</b>';
-
-	   } else {
-	   	$al = '';
-	   }
-
-	   $color = '';
-	   if(!empty($tvVal->tyoajanmerkinta))
-	   {
-	    $expl = explode("/",$tvVal->tyoajanmerkinta);
-	    if(isset($expl[1]) and !empty($expl[1])) $color = $expl[1];
-
-	   } 
-	   if(!empty($tvVal->tyoajanlaatu) and empty($osoite)){
-	    $expl1 = explode("/",$tvVal->tyoajanlaatu);
-	    if(isset($expl1[1]) and !empty($expl1[1])) $color = $expl1[1];
-	    $osoite = (isset($expl1[0])) ? $expl1[0] : '';
-  	   } 
-
-	   $avaimet = '';
-	   if(isset($tvVal->avaimet) and count($tvVal->avaimet) > 0){$avaimet =  ' <i class="fa fa-key text-danger icon"></i>';}
-	   $tietoja_ic = '';
-	   if(!empty($tvVal->tietoja)){$tietoja_ic =  ' <i class="fa fa-file-text-o text-danger icon" title="Tietoja"></i>';}
-
-	   $tv_edit 	= 'tv_edit';
-	   $fullRivi 	= 'fullRivi';
-	   $muistin	= 'muistin';
-
-	// <-- Tyoryhmat
-	$site = Yii::app()->createController('Site');
-	if( 
-	   isset($tvVal->kohteet) 
-	   and isset($asetukset) 
-	   and $asetukset->tyoryhmat_kohde == 1 
-	){
-		$arr = $site[0]->TyoryhmatHelper();
-		if( count($arr) > 0 and !in_array($tvVal->kohteet->tyoryhma, $arr)){
-   			$tv_edit 	= '';
-   			$fullRivi 	= 'fullRivi bg-danger ei_saa_muokata';
-			$muistin	= '';
-		}
-	}
-   	//    Tyoryhmat -->
-
-	   $siirto = '<i class="link text-danger fa fa-exchange '.$muistin.' icon" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></i>';
-
-	   if(!empty($osoite)){ $osoite = $asiakasNakyvissa.$paikkakuntaNakyvissa.$osoite; }
-
-	   $bod .= '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="did '.$fullRivi.'" style="color:'.$color.'">
-	   <div class="row laatikon_rivi link">
-	    <div class="col-sm-12">
-		<div class="collapse">'.$siirto.$toistuva.$tyopari.$tarvittavien_tyontekijoiden_maara.$avaimet.$tietoja_ic.'<br></div>
-		<span class="osoiterivi" id="tv_'.$tvVal->id.'" style="'.$uusi_tilaus.'">
-		   <span class="collapse">'.$al.'<br></span>'.$osoite.' <span class="pull-right">'.$status.'</span>
-		</span>
-	    </div>
-	   </div>
-	   ';
-
-	   if(!empty($tvVal->tietoja) and isset($tietoja) and $tietoja == 1){
-	   $bod .=  '<p><span style="color: blue; border: 1px #333 solid">'.str_replace("\n","<br>",$tvVal->tietoja).'</span></p>';
-	   }
-	   $bod .= $peruutettu;
-	   $bod .=  '</div>';
 	}
 	$bod .=  '</div>';
 
