@@ -26,7 +26,7 @@
 			   <span class="plussa link fa fa-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
 			</div>
 			<div class="form-group">
-			   <span class="link fa fa-eye katsokaikki" for="'.$did.'_'.$tid.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'" from="tvuoro" kohteet_siivous="'.json_encode($kohteet_siivous).'" asiakas="'.$asiakas.'" kohde="'.$kohde.'"></span>
+			   <span class="link fa fa-eye katsokaikki" for="'.$did.'_'.$tid.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'" from="tvuoro" kohteet_siivous="'.json_encode($kohteet_siivous).'" asiakas="'.$asiakas.'" kohde="'.$kohde.'" etusukunimi="'.$this->etuSukunimi($tid).'"></span>
 			</div>
 			<div class="form-group">
 		   	   <i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mcut glyphicon glyphicon-transfer text-success link':'forCut').'"" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>

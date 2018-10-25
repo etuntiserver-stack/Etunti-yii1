@@ -18,6 +18,7 @@ $(document).delegate(".katsokaikki","click",function(){
 	var kohteet_siivous = $(this).attr("kohteet_siivous");
 	var asiakas = $(this).attr("asiakas");
 	var kohde = $(this).attr("kohde");
+	var etusukunimi = $(this).attr("etusukunimi");
 
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", location.protocol + "//" + location.host + '/index.php/tyovuoroot/didnew', true);
@@ -26,14 +27,14 @@ $(document).delegate(".katsokaikki","click",function(){
 		d = JSON.parse(xhr.responseText);
 		//console.log(xhr.responseText)
 		$("#showall").modal().html('' +
-		'<div id="modal-form" class="popup-basic-left popup-basic popup-md admin-form mfp-with-anim mfp-hide">' +
+		'<div id="modal-form-all" class="popup-basic-left popup-basic popup-lg admin-form mfp-with-anim mfp-hide">' +
 		'<div class="panel">' +
             	'<div class="panel-heading">' +
 			'<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">' +
 				'<span aria-hidden="true">&times;</span>' +
 			'</button>' +
               	'<span class="panel-title"><i class="fa fa-clock-o"></i>' +
-		pvm +
+		pvm + ' ' + etusukunimi + ' &nbsp;' +
 		'</span>' +
             	'</div>' +
               	'<div class="panel-body p25">' +
