@@ -808,12 +808,6 @@
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'netvisor_partner_id'); ?>
-		<?php echo $form->textField($model,'netvisor_partner_id',array('maxlength'=>255,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'netvisor_partner_id'); ?>
-	</div>
-
-	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'netvisor_mita_lahetetaan'); ?>
 		<?php 
         	$l = array(
@@ -872,12 +866,18 @@
 		<?php echo $form->textField($model,'netvisor_userkey',array('maxlength'=>255,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'netvisor_userkey'); ?>
 	</div>
+	<?php if(Yii::app()->user->username == 'etunti'): ?>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_partner_id'); ?>
+		<?php echo $form->textField($model,'netvisor_partner_id',array('maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'netvisor_partner_id'); ?>
+	</div>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'netvisor_partnerkey'); ?>
 		<?php echo $form->textField($model,'netvisor_partnerkey',array('maxlength'=>255,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'netvisor_partnerkey'); ?>
 	</div>
-
+	<?php endif; ?>
    </div>
   </div>
 
