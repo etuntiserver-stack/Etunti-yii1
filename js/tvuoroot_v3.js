@@ -24,7 +24,12 @@ $(document).delegate(".katsokaikki","click",function(){
 	xhr.open("POST", location.protocol + "//" + location.host + '/index.php/tyovuoroot/didnew', true);
 	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	xhr.onload = function () {
-		d = JSON.parse(xhr.responseText);
+		try {
+			d = JSON.parse(xhr.responseText);
+		} catch (e) {
+			alert('Kohdetta ei löydy! Päivitä sivu!');
+			return false;
+		}
 		//console.log(xhr.responseText)
 		$("#showall").modal().html('' +
 		'<div id="modal-form-all" class="popup-basic-left popup-basic popup-lg admin-form mfp-with-anim mfp-hide">' +
@@ -42,6 +47,9 @@ $(document).delegate(".katsokaikki","click",function(){
               	'</div>' +
 		'</div>' +
 		'</div>');
+	};
+	xhr.onerror = function () {
+		alert('Kohdetta ei löydy! Päivitä sivu!');
 	};
 	xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
 });
