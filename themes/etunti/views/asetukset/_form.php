@@ -347,6 +347,15 @@
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'lasku_laskunumero'); ?>
+		<?php 
+        	$tal = array(1=>'Itse',2=>'Automaattisesti');
+		echo $form->dropDownList($model,'lasku_laskunumero', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'lasku_laskunumero'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'lasku_asiakasnumero'); ?>
 		<?php 
         	$tal = array(0=>'Automaattisesti',1=>'Itse');

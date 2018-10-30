@@ -73,6 +73,7 @@ class Asetukset extends DB2ActiveRecord
                      'oikeudet' => 'text ',
                      'rekisteriseloste' => 'text ',
                      'lasku_asiakasnumero' => 'int(1) ',
+                     'lasku_laskunumero' => 'int(1) DEFAULT 1',
                      'show_name' => 'int(1) ',
                      'trust_ws_api_url' => 'varchar(255) ',
                      'trust_ws_cid' => 'varchar(100) ',
@@ -185,7 +186,7 @@ class Asetukset extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id, johtaja', 'required'),
-			array('id, show_name, app_show_phone, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero, ilmoitus_avoimista_kohteesta_sahkopostiin, ilmoitus_myohastyneista_kohteesta_sahkopostiin, netvisor_kaytto, asiakas_tyovuorossa, onlinevaraus_aikaisintaan_paivamaara, onlinevaraus_alku, onlinevaraus_loppu, paikkakunta_tyovuorossa, app_lopettaa_vain_tagilla, ilmoitus_toistuvien_tyovuorojen_paattymisesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen, tyovuorolahetys_naytetaanko_asiakas, tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka, ilmoitus_merkkipaivasta, tyontekijan_etunimi_sukunimi_jarjestys, app_hyvaksytyt_tyot_vkomaara, app_naytetaanko_hyvaksyttyt_tunnit, app_naytta_avain, tapaturmavakuutus, ryhmahenkivakuutus, tyottomyysvakuutusmaksu, sosiaaliturvamaksu, tyel_maksun_osuus_palkkansummasta, app_naytetaanko_kohteen_yhteyshenkilo, onlinevaraus_viikonlopput, maksullinen, ilmainen_versio_kayttotunnit, alennus_max_euro, alennus_max_prosentti, peruutta_paiva_ennen, lasketaanko_lounastauko, apuaika_meneeko_laskutukseen, netvisor_lahetetaanko_tyontekija, tuote_tyovuorossa, app_matka_osoite, app_lounastauko_osoite, tuotteet_palvelut_muoto, onlinevaraus_aikavali, onlinevaraus_autoremove, tyoryhmat, tyoryhmat_kohde, tyoryhmat_tyontekijat, tietosuoja_vinkki_sailyttaminen, app_auto_hyvaksyminen, app_hyvaksynnan_peruste, app_auto_hyvaksyminen_aikavali, app_auto_hyvaksyminen_tvmukaan, netvisor_mita_onkayttossa', 'numerical', 'integerOnly'=>true),
+			array('id, show_name, app_show_phone, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero, ilmoitus_avoimista_kohteesta_sahkopostiin, ilmoitus_myohastyneista_kohteesta_sahkopostiin, netvisor_kaytto, asiakas_tyovuorossa, onlinevaraus_aikaisintaan_paivamaara, onlinevaraus_alku, onlinevaraus_loppu, paikkakunta_tyovuorossa, app_lopettaa_vain_tagilla, ilmoitus_toistuvien_tyovuorojen_paattymisesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen, tyovuorolahetys_naytetaanko_asiakas, tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka, ilmoitus_merkkipaivasta, tyontekijan_etunimi_sukunimi_jarjestys, app_hyvaksytyt_tyot_vkomaara, app_naytetaanko_hyvaksyttyt_tunnit, app_naytta_avain, tapaturmavakuutus, ryhmahenkivakuutus, tyottomyysvakuutusmaksu, sosiaaliturvamaksu, tyel_maksun_osuus_palkkansummasta, app_naytetaanko_kohteen_yhteyshenkilo, onlinevaraus_viikonlopput, maksullinen, ilmainen_versio_kayttotunnit, alennus_max_euro, alennus_max_prosentti, peruutta_paiva_ennen, lasketaanko_lounastauko, apuaika_meneeko_laskutukseen, netvisor_lahetetaanko_tyontekija, tuote_tyovuorossa, app_matka_osoite, app_lounastauko_osoite, tuotteet_palvelut_muoto, onlinevaraus_aikavali, onlinevaraus_autoremove, tyoryhmat, tyoryhmat_kohde, tyoryhmat_tyontekijat, tietosuoja_vinkki_sailyttaminen, app_auto_hyvaksyminen, app_hyvaksynnan_peruste, app_auto_hyvaksyminen_aikavali, app_auto_hyvaksyminen_tvmukaan, netvisor_mita_onkayttossa, lasku_laskunumero', 'numerical', 'integerOnly'=>true),
 
 			array('paivan_uutinen, logon_polkku, netvisor_host', 'length', 'max'=>500),
 			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id, trust_ws_cid, trust_ws_salasana, netvisor_acceptancestatus, edico_tehdyt_tyot', 'length', 'max'=>100),
@@ -237,6 +238,7 @@ class Asetukset extends DB2ActiveRecord
 			'checkout_salasana'=> Yii::t('main', 'Turva-avain'),
 			'viikonloppulisa_la'=> Yii::t('main', 'Lauantai %'),
 			'viikonloppulisa_su'=> Yii::t('main', 'Sunnuntai %'),
+			'lasku_laskunumero'=> Yii::t('main', 'Syöttääkö itse laskutusnumeron vai automaattisesti'),
 			'lasku_asiakasnumero'=> Yii::t('main', 'Syöttääkö itse asiakasnumeron vai lasketaan edellisestä automaattisesti'),
 			'show_name' => Yii::t('main', 'Näytä asiakas nimi'),
 			'app_show_phone' => Yii::t('main', 'Näytä kohteen puhelinnumero'),

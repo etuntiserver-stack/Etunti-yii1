@@ -99,7 +99,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div>
 	<?php endif; ?> 
 
-
+	<?php if($asetukset->lasku_laskunumero == 1): ?>
 	<?php
 		$ln = 0;
 		$criteria = new CDbCriteria();
@@ -117,7 +117,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php echo $form->textField($model,'laskunumero',array('value'=>$ln,'size'=>60,'maxlength'=>11,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'laskunumero'); ?>
 	</div>
-
+	<?php endif; ?> 
 
 	<?php if(!isset($model->id)) : ?>
 	<div class="section fill mb5">

@@ -1856,9 +1856,7 @@ class LaskuController extends Controller
 
 	protected function netvisorLasku($tila, $model)
 	{
-
-
-
+		$asetukset=Asetukset::model()->findbypk(1);
 		$return = '';
 		$site = Yii::app()->createController('Site');
 		$n = $site[0]->netvisorYhteys();
@@ -1932,7 +1930,7 @@ class LaskuController extends Controller
 $xml = '
 <root>
   <SalesInvoice>
-    <SalesInvoiceNumber>'.$model->laskunumero.'</SalesInvoiceNumber>
+    '.(($asetukset->lasku_laskunumero == 1)?'<SalesInvoiceNumber>'.$model->laskunumero.'</SalesInvoiceNumber>':'').'
     <SalesInvoiceDate format="ansi">'.date("Y-m-d", strtotime($model->paivays)).'</SalesInvoiceDate>
     <SalesInvoiceDeliveryDate format="ansi">'.date("Y-m-d", strtotime($model->paivays)).'</SalesInvoiceDeliveryDate>
     <SalesInvoiceReferenceNumber>'.$model->viitenumero.'</SalesInvoiceReferenceNumber>
