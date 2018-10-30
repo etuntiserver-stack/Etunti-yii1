@@ -4077,6 +4077,7 @@ class TyovuorootController extends Controller
 
 		//$return[] = array('ERROR' => json_encode($tid." ".$toistuva->tid));
 		if( count($suoritettu_ids) > 0){
+			$tilanne = 'poistetaan';
 			$ids = implode(",", $suoritettu_ids);
 			$criteria_1 = new CDBcriteria;
 			$criteria_1->condition=" 
@@ -4086,6 +4087,10 @@ class TyovuorootController extends Controller
 				AND id NOT IN ($ids)
 			";
 			$pois_1 = Tyovuoroot::model()->findAll($criteria_1);
+			if( strtotime($attr->pfrom) > strtotime($edellinenToistuva->pfrom) and !isset($_POST['poisto_alkaen_taaksepain']) ){
+				$tilanne = 'pois_ketjusta';
+			}
+
 			foreach($pois_1 as $item){
 				$return[] = array(
 					'tid'=>$item->tid, 
@@ -4094,7 +4099,7 @@ class TyovuorootController extends Controller
 					'isSaved'=>false, 
 					'tekijan_nimi' => $this->etuSukunimi($item->tid), 
 					'vkopvm' => $fi[date("N",strtotime($item->pvm))], 
-					'tilanne' => 'poistetaan'
+					'tilanne' => $tilanne
 				);
 			}
 			if($saankoSuoritta == 1){

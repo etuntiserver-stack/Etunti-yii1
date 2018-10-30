@@ -1068,6 +1068,9 @@ function paivaysTarkistus(thisDataReturn){
 				   else if(d['tilanne'] && d['tilanne'] == 'poistetaan') {
 				   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Poistetaan</div></b></div>');
 				   }
+				   else if(d['tilanne'] && d['tilanne'] == 'pois_ketjusta'){
+				   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Pois ketjusta</div></b></div>');
+				   }
 				   else if(d['poistaminenVkoPvm']) {
 				   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Poistetaan viikkon pvm</div></b></div>');
 				   }
