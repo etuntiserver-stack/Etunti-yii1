@@ -68,11 +68,13 @@
 	<!-- Lahetys Pää lasku -->
 	<?php if( $is_ok_lasku and $laheta !== null ){
 
-		$laskunumero = 1;
-		$criteria = new CDbCriteria();
-       		$criteria->select = " id, MAX(ABS(laskunumero)) as laskunumero ";
-		$vm = Lasku::model()->find($criteria);
-		if( isset($vm->id) ){ $laskunumero = $vm->laskunumero+1; }
+		$laskunumero = '';
+		if($asetukset->lasku_laskunumero == 1){
+			$criteria = new CDbCriteria();
+       			$criteria->select = " id, MAX(ABS(laskunumero)) as laskunumero ";
+			$vm = Lasku::model()->find($criteria);
+			if( isset($vm->id) ){ $laskunumero = $vm->laskunumero+1; }
+		}
 
 		$lasku = new Lasku;
 		$lasku->yid = 1;
