@@ -70,9 +70,9 @@
 
 		$laskunumero = 1;
 		$criteria = new CDbCriteria();
-       		$criteria->order = " laskunumero!='' DESC,id DESC ";
+       		$criteria->select = " id, MAX(ABS(laskunumero)) as laskunumero ";
 		$vm = Lasku::model()->find($criteria);
-		if( isset($vm->id) ){ $laskunumero = $vm->laskunumero+1; }
+		if( isset($vm->id) ){ echo $laskunumero = $vm->laskunumero+1; }
 
 		$lasku = new Lasku;
 		$lasku->yid = 1;
