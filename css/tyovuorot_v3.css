@@ -10,6 +10,9 @@
 	top: -40px;
 	left: 0px;
 }
+.latikkolisatiedot_paa{
+	position: relative;
+}
 .latikkolisatiedot{
 	padding: 2px 5px;
 	background: #fff;
@@ -30,6 +33,7 @@
 .tvline{
 	position:absolute;
 	width: 100%;
+	border-bottom:1px #ddd dashed;
 }
 .dropdown-menu{
 	z-index: 999;
@@ -45,8 +49,9 @@ td .kloajaat{
 	line-height: 12px;
 }
 td .latikkoAsetukset{
-	min-width: 150px;
-	width: 100%;
+	min-width: 100px;
+	width: 100px;
+	max-width: 100px;
 	height: 100%;
 	font-size: 90%;
 	line-height: 0.9em;
@@ -62,7 +67,7 @@ td .latikkoAsetukset{
 	font-size: 150%;
 	margin-left:5px;
 }
-td:hover .mplus, td:hover .mcut{
+td:hover .mplus, td:hover .mcut, td:hover .latikkolisatiedot{
 	display : block;
 }
 .luominen, .valitseKokopaiva{

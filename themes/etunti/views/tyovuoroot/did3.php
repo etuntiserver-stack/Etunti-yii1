@@ -13,8 +13,8 @@
 
 	$bod = '';
 	$bod .=  '
-	<div class="latikkolisatiedot">
-		<div class="pull-right oikeallaPlusV">
+	<div class="latikkolisatiedot_paa">
+		<div class="latikkolisatiedot">
 		 <div class="form-inline">
 			<div class="form-group">
 			   <span class="text-center" id="sum_tunnit_'.$did.'_'.$tid.'" style="text-align:center;opacity:0.6"></span>
@@ -87,7 +87,7 @@
 	foreach($tv as $tvVal)
 	{
 
-		$color = '#333';
+		$color = '#888';
 		if(!empty($tvVal->tyoajanmerkinta)){
 		$expl = explode("/",$tvVal->tyoajanmerkinta);
 		if(isset($expl[1]) and !empty($expl[1])) $color = $expl[1];

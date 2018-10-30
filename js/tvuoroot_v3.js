@@ -1,12 +1,16 @@
 $(document).ready(function(){
 
-
+/*
 $('#fixTable td').hover(function()
 {
      $(this).find('.latikkolisatiedot').show();
 }, function()
 { 
      $(this).find('.latikkolisatiedot').hide();
+});
+*/
+$(document).delegate("#fixTable td","dblclick",function(){
+	$(this).find('.katsokaikki').click();
 });
 
 $(document).delegate(".katsokaikki","click",function(){
