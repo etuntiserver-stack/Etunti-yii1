@@ -101,14 +101,15 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 
 
 	<?php
-       		$criteria = new CDbCriteria();
-       		$criteria->order = " laskunumero!='' DESC,id DESC ";
 		$ln = 0;
+		$criteria = new CDbCriteria();
+       		$criteria->select = " id, MAX(ABS(laskunumero)) as laskunumero ";
 		$vm = Lasku::model()->find($criteria);
-		if(isset($vm->id) and empty($model->laskunumero))
-		$ln = $vm->laskunumero+1;
-		elseif(isset($model->laskunumero) and !empty($model->laskunumero))
-		$ln = $model->laskunumero;
+		if( isset($vm->id) ){ 
+			$ln = $vm->laskunumero+1; 
+		} elseif(isset($model->laskunumero) and !empty($model->laskunumero)){
+			$ln = $model->laskunumero;
+		}
 
 	?>
 	<div class="section fill mb5">
