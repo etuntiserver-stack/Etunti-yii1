@@ -43,7 +43,7 @@
 
 		$a = Valikkoot::model()->findAll(" select_type='aktiivinen' ");
 		   $tal = array();
-		   $tal[] = 'Valitse';
+		   $tal[] = 'ALOITA TÄSTA';
 		   $tal['kaikki'] = 'Kaikki';
 		foreach($a as $v){
 		$exV = explode("/",$v->value);
