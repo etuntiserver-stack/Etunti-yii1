@@ -237,6 +237,7 @@ $this->breadcrumbs=array(
 	$matkaYht += $m;
 
 	$return = $this->toteutu($data->id,"palkkataulukko",$from,$to);
+echo $from.' '.$to.' '.$return[2].'<br>';
 	$mPlusTYht += $return[0]+$m;
 
 	$loun = $this->TidfromtoStatus($from,$to,$data->id,10);
