@@ -182,7 +182,8 @@ $this->breadcrumbs=array(
   </tr>
   </thead>
 
-  <?php 
+  <?php
+  $toteutuneet = Yii::app()->createController('Toteutuneet');
   $tids = array();
   $totalTp	= 0;
   $tot_sun	= 0;
@@ -208,6 +209,14 @@ $this->breadcrumbs=array(
   $iltaMatkaPlusIltatunnitYht = 0;
   $loun		= 0;
   $lounYht	= 0;
+  $yotunnit	= 0;
+  $iltatunnit	= 0;
+  $sutunnit	= 0;
+
+  $begin = new DateTime(date("Y-m-d", strtotime($from)));
+  $end = new DateTime(date("Y-m-d", strtotime($to)));
+  $interval = DateInterval::createFromDateString('1 day');
+  $period = new DatePeriod($begin, $interval, $end);
 
   foreach($model as $data)
   {
@@ -236,9 +245,17 @@ $this->breadcrumbs=array(
 		),true);
 	$matkaYht += $m;
 
+	// Yo 
+	foreach ($period as $dt) {
+		$IltaYoSu = $toteutuneet[0]->IltaYoSu($data->id, $dt->format("Y-m-d"));
+		$iltatunnit += $IltaYoSu[0];
+		$yotunnit += $IltaYoSu[1];
+		$sutunnit += $IltaYoSu[2];
+	}
+
 	$matkaIlta = $this->matkaIlta($data->id,$from,$to);
 	$return = $this->toteutu($data->id,"palkkataulukko",$from,$to);
-	$return[2] = $return[2]+$matkaIlta;
+
 	$mPlusTYht += $return[0]+$m;
 
 	$loun = $this->TidfromtoStatus($from,$to,$data->id,10);
@@ -246,13 +263,13 @@ $this->breadcrumbs=array(
 	$matkaIltaYht += $matkaIlta;
 
 	$iltaMatkaPlusIltatunnit = 0;
-	$iltaMatkaPlusIltatunnit = $return[1]+$matkaIlta; // +$return[2]
+	$iltaMatkaPlusIltatunnit = $iltatunnit+$matkaIlta; // +$return[2]
 	$iltaMatkaPlusIltatunnitYht += $iltaMatkaPlusIltatunnit;
 
 	$yht[0] += $return[0];
-	$yht[1] += $return[1];
-	$yht[2] += $return[2];
-	$yht[3] += $return[3];
+	$yht[1] += $iltatunnit;
+	$yht[2] += $yotunnit;
+	$yht[3] += $sutunnit;
 
 
 	$this->renderPartial('_palkkataulukko',array(
@@ -272,6 +289,9 @@ $this->breadcrumbs=array(
 			'pyhat'=>$pyhat,
 			'el'=>$el,
 			'loun'=>$loun,
+			'yotunnit' => $yotunnit,
+			'iltatunnit' => $iltatunnit,
+			'sutunnit' => $sutunnit
 	));
   }
 

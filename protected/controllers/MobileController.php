@@ -3130,11 +3130,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
 		    $al = explode(" ",$l->aloitan);
 		    $lop = explode(" ",$l->loppui);
-		    $totalIlta += $this->ilta($al,$lop);
-		    $totalYo += $this->yo($al,$lop);
+		    //$totalIlta += $this->ilta($al,$lop);
+		    //$totalYo += $this->yo($al,$lop);
 		    $total_l += $l->l_tunnit;
-		    if(date('N', strtotime($al[0])) == 7)
-		    $totalSu += (strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1]));
+		    //if(date('N', strtotime($al[0])) == 7)
+		    //$totalSu += (strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1]));
 		}
 		/* ////////////////////////// */
 
@@ -3174,11 +3174,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
 		    $al = explode(" ",$l->aloitan);
 		    $lop = explode(" ",$l->loppui);
-		    $totalIlta += $this->ilta($al,$lop);
-		    $totalYo += $this->yo($al,$lop);
+		    //$totalIlta += $this->ilta($al,$lop);
+		    //$totalYo += $this->yo($al,$lop);
 		    $total_l += $l->l_tunnit;
-		    if(date('N', strtotime($al[0])) == 7)
-		    $totalSu += (strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1]));
+		    //if(date('N', strtotime($al[0])) == 7)
+		    //$totalSu += (strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1]));
 		}
 
 		$kaikki = array($total_l,$totalIlta,$totalYo,$totalSu);

@@ -12,13 +12,10 @@
 
 		$sum = $return[0];
 
-		if($return[1] != 0)
-		$return[1] = '<b>Työt</b>:<br>'.$this->num($return[1]);
+		if($iltatunnit != 0)
+		$iltatunnit = '<b>Työt</b>:<br>'.$this->num($iltatunnit);
 	        else
-		$return[1] = '';
-
-		if($return[2] != 0)
-		$return[2] = $this->num($return[2]);
+		$iltatunnit = '';
 
 		if($return[3] != 0)
 		$return[3] = $this->num($return[3]);
@@ -61,10 +58,10 @@
 	<td class="col3"><?php if($this->num($matka) != 0) echo $this->num($matka); ?></td>
 	<td class="col4"><?php if($return[0] != 0) echo $this->num($return[0]); ?></td>
 	<td class="col5"><?php echo $sum; ?></td>
-	<td class="col6"><?php echo $return[1].$matkaIlta; ?></td>
+	<td class="col6"><?php echo $iltatunnit.$matkaIlta; ?></td>
 	<td class="col7"><?php echo $this->num($iltaMatkaPlusIltatunnit); ?></td>
 	<td class="col8"><?php echo $this->num($loun); ?></td>
-	<td class="col8"><?php if($return[2] != 0) echo $return[2]; ?></td>
+	<td class="col8"><?=$this->num($yotunnit)?></td>
 	<td class="col9"><?php if($return[3] != 0) echo $return[3]; ?></td>
 	<td class="col10"><?php echo $this->num($pyhat); ?></td>
 	<td class="col10"><?php echo $this->num($el); ?></td>
