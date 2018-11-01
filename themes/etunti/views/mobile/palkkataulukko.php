@@ -236,14 +236,13 @@ $this->breadcrumbs=array(
 		),true);
 	$matkaYht += $m;
 
+	$matkaIlta = $this->matkaIlta($data->id,$from,$to);
 	$return = $this->toteutu($data->id,"palkkataulukko",$from,$to);
-echo $from.' '.$to.' '.$return[2].'<br>';
+	$return[2] = $return[2]+$matkaIlta;
 	$mPlusTYht += $return[0]+$m;
 
 	$loun = $this->TidfromtoStatus($from,$to,$data->id,10);
 	$lounYht += $loun;
-
-	$matkaIlta = $this->matkaIlta($data->id,$from,$to);
 	$matkaIltaYht += $matkaIlta;
 
 	$iltaMatkaPlusIltatunnit = 0;

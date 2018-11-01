@@ -1137,7 +1137,6 @@ $xml = '
 		}
 	}
 
-
 	protected function IltaYoSu($tid,$pvm)
 	{
 
@@ -1219,9 +1218,6 @@ $xml = '
 		return $total;
 
 	}
-
-
-
 
 	protected function totLuYhteensa($criteria,$tid,$week,$year,$tila){
 
