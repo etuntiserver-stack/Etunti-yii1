@@ -261,13 +261,10 @@ $this->breadcrumbs=array(
 	$loun = $this->TidfromtoStatus($from,$to,$data->id,10);
 	$lounYht += $loun;
 	$matkaIltaYht += $matkaIlta;
-
-	$iltaMatkaPlusIltatunnit = 0;
-	$iltaMatkaPlusIltatunnit = $iltatunnit+$matkaIlta; // +$return[2]
-	$iltaMatkaPlusIltatunnitYht += $iltaMatkaPlusIltatunnit;
+	$iltaMatkaPlusIltatunnitYht += $iltatunnit;
 
 	$yht[0] += $return[0];
-	$yht[1] += $iltatunnit;
+	$yht[1] += $iltatunnit-$matkaIlta;
 	$yht[2] += $yotunnit;
 	$yht[3] += $sutunnit;
 
@@ -277,7 +274,6 @@ $this->breadcrumbs=array(
 			'return'=>$return,
 			'matka'=>$m,
 			'matkaIlta'=>$matkaIlta,
-			'iltaMatkaPlusIltatunnit'=>$iltaMatkaPlusIltatunnit,
 			'tp'=>$tp,
 			'sl'=>$sl,
 			'spl'=>$spl,

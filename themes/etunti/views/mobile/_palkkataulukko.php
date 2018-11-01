@@ -7,13 +7,13 @@
 		$korv 	= '';
 		$lisatt	= '';
 		$ennakko= '';
-
+		$iltatunnit_tyotjamatkat = 0;
 
 
 		$sum = $return[0];
 
 		if($iltatunnit != 0)
-		$iltatunnit = '<b>Työt</b>:<br>'.$this->num($iltatunnit);
+		$iltatunnit_tyotjamatkat = '<b>Työt</b>:<br>'.$this->num($iltatunnit-$matkaIlta);
 	        else
 		$iltatunnit = '';
 
@@ -58,8 +58,8 @@
 	<td class="col3"><?php if($this->num($matka) != 0) echo $this->num($matka); ?></td>
 	<td class="col4"><?php if($return[0] != 0) echo $this->num($return[0]); ?></td>
 	<td class="col5"><?php echo $sum; ?></td>
-	<td class="col6"><?php echo $iltatunnit.$matkaIlta; ?></td>
-	<td class="col7"><?php echo $this->num($iltaMatkaPlusIltatunnit); ?></td>
+	<td class="col6"><?php echo $iltatunnit_tyotjamatkat.$matkaIlta; ?></td>
+	<td class="col7"><?php if($iltatunnit != 0) echo $this->num($iltatunnit); ?></td>
 	<td class="col8"><?php echo $this->num($loun); ?></td>
 	<td class="col8"><?=$this->num($yotunnit)?></td>
 	<td class="col9"><?php if($sutunnit != 0) echo $sutunnit; ?></td>
