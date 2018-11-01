@@ -17,8 +17,8 @@
 	        else
 		$iltatunnit = '';
 
-		if($return[3] != 0)
-		$return[3] = $this->num($return[3]);
+		if($sutunnit != 0)
+		$sutunnit = $this->num($return[3]);
 
 		if($matkaIlta != 0)
 		$matkaIlta = '<br><b>Matkat</b>:<br>'.$this->num($matkaIlta);
@@ -62,7 +62,7 @@
 	<td class="col7"><?php echo $this->num($iltaMatkaPlusIltatunnit); ?></td>
 	<td class="col8"><?php echo $this->num($loun); ?></td>
 	<td class="col8"><?=$this->num($yotunnit)?></td>
-	<td class="col9"><?php if($return[3] != 0) echo $return[3]; ?></td>
+	<td class="col9"><?php if($sutunnit != 0) echo $sutunnit; ?></td>
 	<td class="col10"><?php echo $this->num($pyhat); ?></td>
 	<td class="col10"><?php echo $this->num($el); ?></td>
 	<td class="col10"><?php echo $this->num($sl); ?></td>
