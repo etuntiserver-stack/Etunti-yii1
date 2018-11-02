@@ -4087,7 +4087,7 @@ class TyovuorootController extends Controller
 				AND id NOT IN ($ids)
 			";
 			$pois_1 = Tyovuoroot::model()->findAll($criteria_1);
-			if( strtotime($attr->pfrom) > strtotime($edellinenToistuva->pfrom) and !isset($_POST['poisto_alkaen_taaksepain']) ){
+			if( isset($edellinenToistuva->pfrom) and strtotime($attr->pfrom) > strtotime($edellinenToistuva->pfrom) and !isset($_POST['poisto_alkaen_taaksepain']) ){
 				$tilanne = 'pois_ketjusta';
 			}
 
