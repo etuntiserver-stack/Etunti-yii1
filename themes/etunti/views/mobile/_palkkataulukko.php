@@ -18,7 +18,7 @@
 		$iltatunnit = '';
 
 		if($sutunnit != 0)
-		$sutunnit = $this->num($return[3]);
+		$sutunnit = $this->num($sutunnit);
 
 		if($matkaIlta != 0)
 		$matkaIlta = '<br><b>Matkat</b>:<br>'.$this->num($matkaIlta);
