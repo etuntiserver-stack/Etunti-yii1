@@ -66,7 +66,8 @@
   </tr>
   </thead>
 
-  <?php 
+  <?php
+  $toteutuneet = Yii::app()->createController('Toteutuneet');
   $tids = array();
   $totalTp	= 0;
   $tot_sun	= 0;
@@ -93,8 +94,18 @@
   $loun		= 0;
   $lounYht	= 0;
 
+
+  $begin = new DateTime(date("Y-m-d", strtotime($from)));
+  $end = new DateTime(date("Y-m-d", strtotime($to)));
+  $interval = DateInterval::createFromDateString('1 day');
+  $period = new DatePeriod($begin, $interval, $end);
+
   foreach($model as $data)
   {
+	$yotunnit	= 0;
+	$iltatunnit	= 0;
+	$sutunnit	= 0;
+
 	$tids[] = $data->id;
 	$tp = $this->Tp($data->id,$from,$to);
   	$sl = $this->TidfromtoSairaus($from,$to,$data->id,'SL');
@@ -120,23 +131,28 @@
 		),true);
 	$matkaYht += $m;
 
-	$return = $this->toteutu($data->id,"palkkataulukko",$from,$to);
-	$mPlusTYht += $return[0]+$m;
-
-	$loun = $this->lounaat($data->id,$from,$to);
-	$lounYht += $loun;
+	// Yo 
+	foreach ($period as $dt) {
+		$IltaYoSu = $toteutuneet[0]->IltaYoSu($data->id, $dt->format("Y-m-d"));
+		$iltatunnit += $IltaYoSu[0];
+		$yotunnit += $IltaYoSu[1];
+		$sutunnit += $IltaYoSu[2];
+	}
 
 	$matkaIlta = $this->matkaIlta($data->id,$from,$to);
-	$matkaIltaYht += $matkaIlta;
+	$return = $this->toteutu($data->id,"palkkataulukko",$from,$to);
 
-	$iltaMatkaPlusIltatunnit = 0;
-	$iltaMatkaPlusIltatunnit = $return[1]+$return[2]+$matkaIlta;
-	$iltaMatkaPlusIltatunnitYht += $iltaMatkaPlusIltatunnit;
+	$mPlusTYht += $return[0]+$m;
+
+	$loun = $this->TidfromtoStatus($from,$to,$data->id,10);
+	$lounYht += $loun;
+	$matkaIltaYht += $matkaIlta;
+	$iltaMatkaPlusIltatunnitYht += $iltatunnit;
 
 	$yht[0] += $return[0];
-	$yht[1] += $return[1];
-	$yht[2] += $return[2];
-	$yht[3] += $return[3];
+	$yht[1] += $iltatunnit-$matkaIlta;
+	$yht[2] += $yotunnit;
+	$yht[3] += $sutunnit;
 
 
 	$this->renderPartial('_palkkataulukko',array(
@@ -144,7 +160,6 @@
 			'return'=>$return,
 			'matka'=>$m,
 			'matkaIlta'=>$matkaIlta,
-			'iltaMatkaPlusIltatunnit'=>$iltaMatkaPlusIltatunnit,
 			'tp'=>$tp,
 			'sl'=>$sl,
 			'spl'=>$spl,
@@ -156,6 +171,9 @@
 			'pyhat'=>$pyhat,
 			'el'=>$el,
 			'loun'=>$loun,
+			'yotunnit' => $yotunnit,
+			'iltatunnit' => $iltatunnit,
+			'sutunnit' => $sutunnit
 	));
   }
 
@@ -171,11 +189,11 @@
   <tfoot>
   <tr>
   	<th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
-	<td><?php echo $totalTp; ?></td>
+	<td><?php if($totalTp != 0) echo $totalTp; ?></td>
 	<td><?php echo $this->num($matkaYht); ?></td>
 	<td><?php echo $this->num($yht[0]); ?></td>
 	<td><?php echo $this->num($mPlusTYht); ?></td>
-	<td><?php echo '<b>Työt</b>:<br>'.$this->num($yht[1]).$matkaIltaYht; ?></td>
+	<td><?php if($matkaIltaYht != 0 or $this->num($yht[1]) != 0) echo '<b>Työt</b>:<br>'.$this->num($yht[1]).$matkaIltaYht; ?></td>
 	<td><?php echo $this->num($iltaMatkaPlusIltatunnitYht); ?></td>
 	<td><?php echo $this->num($lounYht); ?></td>
 	<td><?php echo $this->num($yht[2]); ?></td>
@@ -183,10 +201,10 @@
 	<td><?php echo $this->num($pyhatYht); ?></td>
 	<td><?php echo $this->num($elYht); ?></td>
 	<td><?php echo $this->num($slYht); ?></td>
-	<td><?php echo $splYht; ?></td>
+	<td><?php if($splYht != 0) echo $this->num($splYht); ?></td>
 	<td><?php echo $this->num($lsYht); ?></td>
-	<td><?php echo $vlYht; ?></td>
-	<td><?php echo $vklYht; ?></td>
+	<td><?php if($vlYht != 0) echo $vlYht; ?></td>
+	<td><?php if($vklYht != 0) echo $vklYht; ?></td>
 	<td></td>
 	<td></td>
 	<td></td>

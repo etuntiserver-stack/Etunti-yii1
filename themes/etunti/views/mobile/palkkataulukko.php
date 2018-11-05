@@ -209,9 +209,7 @@ $this->breadcrumbs=array(
   $iltaMatkaPlusIltatunnitYht = 0;
   $loun		= 0;
   $lounYht	= 0;
-  $yotunnit	= 0;
-  $iltatunnit	= 0;
-  $sutunnit	= 0;
+
 
   $begin = new DateTime(date("Y-m-d", strtotime($from)));
   $end = new DateTime(date("Y-m-d", strtotime($to)));
@@ -220,6 +218,10 @@ $this->breadcrumbs=array(
 
   foreach($model as $data)
   {
+	$yotunnit	= 0;
+	$iltatunnit	= 0;
+	$sutunnit	= 0;
+
 	$tids[] = $data->id;
 	$tp = $this->Tp($data->id,$from,$to);
   	$sl = $this->TidfromtoSairaus($from,$to,$data->id,'SL');
