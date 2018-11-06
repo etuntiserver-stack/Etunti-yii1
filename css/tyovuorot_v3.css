@@ -22,13 +22,19 @@
 	border-bottom: 1px #ddd solid;
 	z-index: 999;
 }
+.muistin{
+	float: left;
+	margin-right: 5px;
+}
 .fullRivi{
+/*
 	height: 100%;
 	margin-bottom: 2px;
 	border:1px #ccc solid;
 	padding:3px 7px;
 	background: white;
 	border-radius:5px;
+*/
 }
 .dropdown-menu{
 	z-index: 999;
@@ -55,9 +61,9 @@ td .latikkoAsetukset{
 */
 }
 .tv_edit{
+	white-space: nowrap;
 	padding:0 7px;
 	width: 100%;
-	white-space: nowrap;
 	cursor: pointer;
 }
 .forCut, .forCopy{ 

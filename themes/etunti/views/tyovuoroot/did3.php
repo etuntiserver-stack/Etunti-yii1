@@ -98,10 +98,32 @@
 				$bgcol = 'color:'.$color;
 			}
 		}
-	   	$bod .=  '
-		<div class="tvline tv_edit" id="tv_'.$tvVal->id.'" style="'.$bgcol.'">
-		<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.((isset($tvVal->kohteet->osoite))?$tvVal->kohteet->osoite:'').'
-		</div>';
+
+		$tv_edit 	= 'tv_edit';
+		$fullRivi 	= 'fullRivi';
+	   	$muistin	= 'muistin';
+	   	// <-- Tyoryhmat
+		$site = Yii::app()->createController('Site');
+		if( 
+		   isset($tvVal->kohteet) 
+		   and isset($asetukset) 
+		   and $asetukset->tyoryhmat_kohde == 1 
+		){
+			$arr = $site[0]->TyoryhmatHelper();
+			if( count($arr) > 0 and !in_array($tvVal->kohteet->tyoryhma, $arr)){
+	   			$tv_edit 	= '';
+	   			$fullRivi 	= 'fullRivi bg-danger ei_saa_muokata';
+				$muistin	= '';
+			}
+		}
+	   	//    Tyoryhmat -->
+
+	   	$bod .=  '<div class="'.$fullRivi.'" style="'.$bgcol.'">';
+	        $bod .=  '<div class="link text-danger fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></div>';
+		$bod .= '<div class="'.$tv_edit.'" id="tv_'.$tvVal->id.'">';
+		$bod .= '<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.((isset($tvVal->kohteet->osoite))?$tvVal->kohteet->osoite:'');
+	   	$bod .=  '</div>';
+	   	$bod .=  '</div>';
 		$loppu = $tvVal->loppu;
 	}
 	$bod .=  '</div>';
