@@ -54,12 +54,11 @@ td .latikkoAsetukset{
 	line-height: 20px;
 */
 }
-.tvline{
+.tv_edit{
 	padding:0 7px;
-	/*position:absolute;*/
 	width: 100%;
 	white-space: nowrap;
-	/*border-bottom:1px #ddd dashed;*/
+	cursor: pointer;
 }
 .forCut, .forCopy{ 
 	display: none;

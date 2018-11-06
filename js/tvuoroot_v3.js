@@ -9,54 +9,6 @@ $('#fixTable td').hover(function()
      $(this).find('.latikkolisatiedot').hide();
 });
 */
-$(document).delegate("#fixTable td","dblclick",function(){
-	$(this).find('.katsokaikki').click();
-});
-
-$(document).delegate(".katsokaikki","click",function(){
-
-	var forThis = $(this).attr("for");
-	var pvm = $(this).attr("pvm");
-	var tid = $(this).attr("tid");
-	var from = $(this).attr("from");
-	var kohteet_siivous = $(this).attr("kohteet_siivous");
-	var asiakas = $(this).attr("asiakas");
-	var kohde = $(this).attr("kohde");
-	var etusukunimi = $(this).attr("etusukunimi");
-
-	var xhr = new XMLHttpRequest();
-	xhr.open("POST", location.protocol + "//" + location.host + '/index.php/tyovuoroot/didnew', true);
-	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	xhr.onload = function () {
-		try {
-			d = JSON.parse(xhr.responseText);
-		} catch (e) {
-			alert('Kohdetta ei löydy! Päivitä sivu!');
-			return false;
-		}
-		//console.log(xhr.responseText)
-		$("#showall").modal().html('' +
-		'<div id="modal-form-all" class="popup-basic-left popup-basic popup-lg admin-form mfp-with-anim mfp-hide">' +
-		'<div class="panel">' +
-            	'<div class="panel-heading">' +
-			'<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">' +
-				'<span aria-hidden="true">&times;</span>' +
-			'</button>' +
-              	'<span class="panel-title"><i class="fa fa-clock-o"></i>' +
-		pvm + ' ' + etusukunimi + ' &nbsp;' +
-		'</span>' +
-            	'</div>' +
-              	'<div class="panel-body p25">' +
-		d+
-              	'</div>' +
-		'</div>' +
-		'</div>');
-	};
-	xhr.onerror = function () {
-		alert('Kohdetta ei löydy! Päivitä sivu!');
-	};
-	xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
-});
 
 $("#autoInsert").click(function(){
 

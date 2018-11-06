@@ -40,7 +40,6 @@
 	$bod .=  '<div style="position:relative" class="latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 
        	$criteria = new CDbCriteria();
-	$criteria->select = "tyoajanmerkinta, alku, loppu, osoite, kohde";
 	$criteria->order = " alku ASC";
 	$criteria->condition = " tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' ";
 
@@ -100,7 +99,7 @@
 			}
 		}
 	   	$bod .=  '
-		<div class="tvline" id="'.$tvVal->id.'_'.$did.'_'.$tid.'" style="'.$bgcol.'">
+		<div class="tvline tv_edit" id="tv_'.$tvVal->id.'" style="'.$bgcol.'">
 		<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.((isset($tvVal->kohteet->osoite))?$tvVal->kohteet->osoite:'').'
 		</div>';
 		$loppu = $tvVal->loppu;
