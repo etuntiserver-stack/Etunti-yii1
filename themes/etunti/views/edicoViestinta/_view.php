@@ -83,7 +83,7 @@
 		?>
 	</td>
 	<tr>
-	<td colspan="5">
+	<td colspan="9">
 		<?php if($data->status != 99) : ?>
 		<form action="index" method="POST">
 		<input type="hidden" name="id" value="<?=$data->id?>">
