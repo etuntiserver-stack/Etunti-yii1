@@ -12,7 +12,16 @@
 		<?php
 		if( count($lista) > 0 ){
 			echo CHtml::link(Yii::t('main', 'LÄHETÄ KAIKKI LASKUT'), 
-				array('lasku/luolaskut', 'from' => $from, 'to' => $to, 'alvsis' => $alvsis, 'laheta' => true), 
+				array('lasku/luolaskut', 
+					'filter_tyyppi' => (isset($_GET['filter_tyyppi']))?$_GET['filter_tyyppi']:'',
+					'filter_postitoimipaikka' => (isset($_GET['filter_postitoimipaikka']))?$_GET['filter_postitoimipaikka']:'',
+					'filter_tyoryhma' => (isset($_GET['filter_tyoryhma']))?$_GET['filter_tyoryhma']:'',
+					'filter_asiakasryhma' => (isset($_GET['filter_asiakasryhma']))?$_GET['filter_asiakasryhma']:'',
+					'from' => $from, 
+					'to' => $to, 
+					'alvsis' => $alvsis, 
+					'laheta' => true
+				), 
 				array(
 					'class' => 'btn btn-block btn-success',
 					'data-toggle'=>'tooltip', 
@@ -343,7 +352,7 @@
 	<?php endif; // count($lista) > 0 ?>
 
 	<?php if( $laheta ){
-		$this->redirect(array('luolaskut', 'from' => $from, 'to' => $to));
+		$this->redirect(array('/lasku/auto'));
 	} ?>
 
 
