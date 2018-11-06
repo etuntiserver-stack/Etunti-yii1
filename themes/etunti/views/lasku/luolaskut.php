@@ -23,7 +23,7 @@
 					'laheta' => true
 				), 
 				array(
-					'class' => 'btn btn-block btn-success',
+					'class' => 'btn btn-block btn-success lahetakaikki',
 					'data-toggle'=>'tooltip', 
 					'data-placement'=>'top', 
 					'title'=>Yii::t('main', 'Lähetä')
@@ -358,3 +358,18 @@
 
 </div>
 </p>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $(".lahetakaikki").click(function(e){
+	e.preventDefault();
+	if(!confirm('Oletko varma')){
+		return false;
+	} else {
+		window.location.href=$(this).attr('href');
+	}
+  });
+
+});
+</script>

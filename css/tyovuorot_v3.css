@@ -77,11 +77,9 @@ td .latikkoAsetukset{
 	font-size: 150%;
 	margin-left:5px;
 }
-/*
-td:hover .mplus, td:hover .mcut, td:hover .latikkolisatiedot{
+td:hover .mplus, td:hover .mcut{
 	display : block;
 }
-*/
 .luominen, .valitseKokopaiva{
 	display: none;
 }
