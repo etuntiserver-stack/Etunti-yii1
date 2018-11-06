@@ -212,7 +212,7 @@ $this->breadcrumbs=array(
 
 
   $begin = new DateTime(date("Y-m-d", strtotime($from)));
-  $end = new DateTime(date("Y-m-d", strtotime($to)));
+  $end = new DateTime(date("Y-m-d", strtotime($to." +1 day")));
   $interval = DateInterval::createFromDateString('1 day');
   $period = new DatePeriod($begin, $interval, $end);
 
