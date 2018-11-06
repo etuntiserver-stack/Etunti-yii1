@@ -30,11 +30,6 @@
 	background: white;
 	border-radius:5px;
 }
-.tvline{
-	position:absolute;
-	width: 100%;
-	border-bottom:1px #ddd dashed;
-}
 .dropdown-menu{
 	z-index: 999;
 }
@@ -46,15 +41,25 @@
 td .kloajaat{
 	background: #fff;
 	font-size: 14px;
-	line-height: 12px;
+	line-height: 20px;
 }
 td .latikkoAsetukset{
 	min-width: 100px;
-	width: 100px;
-	max-width: 100px;
+	/*width: 100px;
+	max-width: 100px;*/
 	height: 100%;
-	font-size: 90%;
-	line-height: 0.9em;
+	line-height: 16px;
+/*
+	font-size: 14px;
+	line-height: 20px;
+*/
+}
+.tvline{
+	padding:0 7px;
+	/*position:absolute;*/
+	width: 100%;
+	white-space: nowrap;
+	/*border-bottom:1px #ddd dashed;*/
 }
 .forCut, .forCopy{ 
 	display: none;
@@ -67,9 +72,11 @@ td .latikkoAsetukset{
 	font-size: 150%;
 	margin-left:5px;
 }
+/*
 td:hover .mplus, td:hover .mcut, td:hover .latikkolisatiedot{
 	display : block;
 }
+*/
 .luominen, .valitseKokopaiva{
 	display: none;
 }

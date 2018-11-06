@@ -155,14 +155,6 @@
   		echo '<td '.$clPyhat.' class="fixed-column" id="first_'.$did.'">';
 		echo '
 		<div class="kloajaat text-center">
-		06:00 - 08:00<br>
-		08:00 - 10:00<br>
-		10:00 - 12:00<br>
-		12:00 - 14:00<br>
-		14:00 - 16:00<br>
-		16:00 - 18:00<br>
-		18:00 - 20:00<br>
-		20:00 - 22:00
 		<p><h4>'.$arrDate[$explColDate[0]].", ".$explColDate[1].$ispyha.'</h4></p>
 		</div>';
 		echo '</td>';

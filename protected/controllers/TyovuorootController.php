@@ -93,6 +93,12 @@ class TyovuorootController extends Controller
 		return  number_format((float)$val/3600, 2, '.', '');
 	}
 
+	protected function TimeToSec($time) {
+	    $sec = 0;
+	    foreach (array_reverse(explode(':', $time)) as $k => $v) $sec += pow(60, $k) * $v;
+	    return $sec;
+	}
+
 	public function actionIs_yhteyshenkilo()
 	{
 		$bd = '';

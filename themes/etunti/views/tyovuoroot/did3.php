@@ -40,7 +40,7 @@
 	$bod .=  '<div style="position:relative" class="latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 
        	$criteria = new CDbCriteria();
-	$criteria->select = "tyoajanmerkinta, alku, loppu";
+	$criteria->select = "tyoajanmerkinta, alku, loppu, osoite, kohde";
 	$criteria->order = " alku ASC";
 	$criteria->condition = " tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' ";
 
@@ -86,19 +86,24 @@
 	$tv = Tyovuoroot::model()->findAll($criteria); 
 	foreach($tv as $tvVal)
 	{
-
-		$color = '#888';
-		if(!empty($tvVal->tyoajanmerkinta)){
-		$expl = explode("/",$tvVal->tyoajanmerkinta);
-		if(isset($expl[1]) and !empty($expl[1])) $color = $expl[1];
+		if(isset($loppu) and strtotime($tvVal->alku) > $loppu){
+			$valilyonti = $this->num(strtotime($tvVal->alku)-strtotime($loppu));
+			$bod .= '<div style="cursor: pointer;background:orange;height:'.($valilyonti*17).'px" title="Aika: '.$this->sprint(strtotime($tvVal->alku)-strtotime($loppu)).'"></div>';
 		}
-		$top = sprintf("%0.2f", $this->time_to_float($tvVal->alku));
-		$height = $this->num(strtotime($tvVal->loppu)-strtotime($tvVal->alku));
-		$kerta = 2;
+		$color = '#888';
+		$bgcol = 'color:#333';
+		if(!empty($tvVal->tyoajanmerkinta)){
+			$expl = explode("/",$tvVal->tyoajanmerkinta);
+			if(isset($expl[1]) and !empty($expl[1])){
+				$color = $expl[1];
+				$bgcol = 'color:'.$color;
+			}
+		}
 	   	$bod .=  '
-		<div class="tvline" id="'.$tvVal->id.'_'.$did.'_'.$tid.'" style="top:'.(($top*6)-36).'px;height:'.($height*6).'px;background:'.$color.'">
+		<div class="tvline" id="'.$tvVal->id.'_'.$did.'_'.$tid.'" style="'.$bgcol.'">
+		<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.((isset($tvVal->kohteet->osoite))?$tvVal->kohteet->osoite:'').'
 		</div>';
-
+		$loppu = $tvVal->loppu;
 	}
 	$bod .=  '</div>';
 
