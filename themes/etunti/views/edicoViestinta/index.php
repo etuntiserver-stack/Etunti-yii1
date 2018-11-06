@@ -100,7 +100,6 @@
   <th><?php echo Yii::t('main', 'Otsikko'); ?></th>
   <th><?php echo Yii::t('main', 'Viimeinen viesti'); ?></th>
   <th></th>
-  <th><?php echo Yii::t('main', 'Vastaus'); ?></th>
   <th></th>
   <th></th>
   </tr>

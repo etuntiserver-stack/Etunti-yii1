@@ -52,16 +52,6 @@
 	</td>
 	<td>
 		<?php if($data->status != 99) : ?>
-		<form action="index" method="POST">
-		<input type="hidden" name="id" value="<?=$data->id?>">
-		<input type="hidden" name="asiakas_id" value="<?=$data->asiakas_id?>">
-		<textarea name="vastaus" class="form-control" placeholder="Vasta tähään keskusteluun.."></textarea>
-		<button type="submit" class="btn btn-primary btn-block myBgColors">Lähetä</button>
-		</form>
-		<?php endif; ?>
-	</td>
-	<td>
-		<?php if($data->status != 99) : ?>
 		<?php echo CHtml::link(Yii::t('main', 'Sulje keskustelu'), 
 				array('index', 'id'=>$data->id, 'suljetaan' => true), 
 				array(
@@ -92,5 +82,17 @@
 			); 
 		?>
 	</td>
+	<tr>
+	<td colspan="5">
+		<?php if($data->status != 99) : ?>
+		<form action="index" method="POST">
+		<input type="hidden" name="id" value="<?=$data->id?>">
+		<input type="hidden" name="asiakas_id" value="<?=$data->asiakas_id?>">
+		<textarea name="vastaus" class="form-control" placeholder="Vasta tähään keskusteluun.."></textarea>
+		<button type="submit" class="btn btn-primary btn-block myBgColors">Lähetä</button>
+		</form>
+		<?php endif; ?>
+	</td>
+	</tr>
 </tr>
 
