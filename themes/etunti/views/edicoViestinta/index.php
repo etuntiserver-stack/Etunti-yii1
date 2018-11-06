@@ -98,7 +98,6 @@
   <th><?php echo Yii::t('main', 'Luoja'); ?></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Otsikko'); ?></th>
-  <th><?php echo Yii::t('main', 'Viimeinen viesti'); ?></th>
   <th></th>
   <th></th>
   <th></th>

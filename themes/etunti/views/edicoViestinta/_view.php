@@ -31,26 +31,6 @@
 		<?php if( count($data->rivit) > 0 and isset(max($data->rivit)->teksti) ){ echo max($data->rivit)->teksti; } ?>
 	</td>
 	<td>
-		<?php 
-		$lista = '<button class="btn btn-primary myBgColors" data-toggle="collapse" data-target="#ava_'.$data->id.'">
-				Näytä kaikki viestit <i class="caret"></i>
-		</button>';
-		$lista .= '<div id="ava_'.$data->id.'" class="collapse"><p>';
-		foreach($data->rivit as $rivi){
-			$kirjoittaja = '';
-			if( $rivi->luoja == 'admin' and !empty($rivi->admin_id) ){
-				$kirjoittaja = $rivi->adminname;
-			}
-			if( $rivi->luoja == 'asiakas' and !empty($rivi->asiakas_id) ){
-				$kirjoittaja = $rivi->asiakasname;
-			}
-			$lista .= '<p><b>'.date("d.m.Y H:i", strtotime($rivi->time)).', '.$kirjoittaja.'</b>: '.$rivi->teksti.'</p><hr>';
-		}
-		$lista .= '</p></div>';
-		?>
-		<?=$lista?>
-	</td>
-	<td>
 		<?php if($data->status != 99) : ?>
 		<?php echo CHtml::link(Yii::t('main', 'Sulje keskustelu'), 
 				array('index', 'id'=>$data->id, 'suljetaan' => true), 
@@ -84,6 +64,28 @@
 	</td>
 	<tr>
 	<td colspan="9">
+		<p>
+		<?php 
+		$lista = '<button class="btn btn-primary myBgColors" data-toggle="collapse" data-target="#ava_'.$data->id.'">
+				Näytä kaikki viestit <i class="caret"></i>
+		</button>';
+		$lista .= '<div id="ava_'.$data->id.'" class="collapse"><p>';
+		foreach($data->rivit as $rivi){
+			$kirjoittaja = '';
+			if( $rivi->luoja == 'admin' and !empty($rivi->admin_id) ){
+				$kirjoittaja = $rivi->adminname;
+			}
+			if( $rivi->luoja == 'asiakas' and !empty($rivi->asiakas_id) ){
+				$kirjoittaja = $rivi->asiakasname;
+			}
+			$lista .= '<p><b>'.date("d.m.Y H:i", strtotime($rivi->time)).', '.$kirjoittaja.'</b>: '.$rivi->teksti.'</p><hr>';
+		}
+		$lista .= '</p></div>';
+		?>
+		<?=$lista?>
+		</p>
+		<br>
+		<!-- /// -->
 		<?php if($data->status != 99) : ?>
 		<form action="index" method="POST">
 		<input type="hidden" name="id" value="<?=$data->id?>">
