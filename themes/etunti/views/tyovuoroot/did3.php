@@ -92,7 +92,7 @@
 
 		if(isset($loppu) and strtotime($tvVal->alku) > $loppu){
 			$valilyonti = $this->num(strtotime($tvVal->alku)-strtotime($loppu));
-			$bod .= '<div style="cursor: pointer;background:orange;height:'.($valilyonti*17).'px" title="Aika: '.$this->sprint(strtotime($tvVal->alku)-strtotime($loppu)).'"></div>';
+			$bod .= '<div class="ajanreika" style="height:'.($valilyonti*17).'px" title="Aika: '.$this->sprint(strtotime($tvVal->alku)-strtotime($loppu)).'"></div>';
 		}
 		$color = '#888';
 		$bgcol = 'color:#333';
