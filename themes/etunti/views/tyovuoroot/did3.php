@@ -83,12 +83,41 @@
 	$tv = Tyovuoroot::model()->findAll($criteria); 
 	foreach($tv as $tvVal)
 	{
+		// <-- Osoite
 		$osoite = '';
 		if(!empty($tvVal->osoite)){
 			$osoite = $tvVal->osoite;
 		} else if(empty($tvVal->osoite) and isset($tvVal->kohteet->osoite)){
 			$osoite = $tvVal->kohteet->osoite;
 		}
+		// Osoite -->
+
+		// <-- Status
+		$status = '';
+		if($tvVal->status == 10){
+			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-success' : $teksti_vari = 'text-danger';
+			$status = ' <i class="fa fa-cutlery '.$teksti_vari.'"></i>';
+		}
+		if($tvVal->status == 2) {
+			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-warning' : $teksti_vari = 'text-danger';
+			$status = ' <i class="fa fa-bus '.$teksti_vari.'"></i>';
+		}
+		if($tvVal->status == 3) {
+			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-info' : $teksti_vari = 'text-danger';
+			$status = ' <i class="fa fa-hourglass '.$teksti_vari.'"></i>';
+		}
+		if($tvVal->status == 11) {
+			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-info' : $teksti_vari = 'text-danger';
+			$status = ' <i class="fa fa-clock-o '.$teksti_vari.'"></i>';
+		}
+		// Status -->
+
+		// <-- Toistuva
+		$toistuva = '&nbsp;';
+		if($tvVal->toistuva_id != 0){
+			$toistuva = ' <i class="fa fa-repeat text-orange" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Toistuva työvuoro').'"></i>';
+		}
+		// Toistuva -->
 
 		if(isset($loppu) and strtotime($tvVal->alku) > $loppu){
 			$valilyonti = $this->num(strtotime($tvVal->alku)-strtotime($loppu));
@@ -122,12 +151,13 @@
 			}
 		}
 	   	//    Tyoryhmat -->
+	        $muokkaus =  '<i class="link fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></i>';
 
 	   	$bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="'.$fullRivi.'" style="'.$bgcol.'">';
-	        $bod .=  '<div class="link pull-left text-danger fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></div>';
-		$bod .= '<div class="'.$tv_edit.'" id="tv_'.$tvVal->id.'">';
+		$bod .= $muokkaus.$status.$toistuva;
+		$bod .= '<span class="'.$tv_edit.'" id="tv_'.$tvVal->id.'">';
 		$bod .= '<b class="kellot">'.$tvVal->alku.'-'.$tvVal->loppu.': </b>'.$osoite;
-	   	$bod .=  '</div>';
+	   	$bod .=  '</span>';
 	   	$bod .=  '</div>';
 		$loppu = $tvVal->loppu;
 	}
