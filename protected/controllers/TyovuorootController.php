@@ -854,14 +854,14 @@ class TyovuorootController extends Controller
 		}
 	}
 
-	public function actionOperatio()
+	public function actionOperatio($did_versio='did')
 	{
-
+		if( isset($_GET['did']) ){ $did_versio = $_GET['did']; }
 		$asetukset = Asetukset::model()->findByPk(1);
 
 		if(isset($_POST['checkThis']))
 		{
-			$did = $this->renderPartial('did',array(
+			$did = $this->renderPartial($did_versio,array(
 				'pvm'=>$_POST['newPvm'],
 				'tid'=>$_POST['newTid'],
 				'from'=>'ajax',
@@ -933,7 +933,6 @@ class TyovuorootController extends Controller
 		// copy
 		if(isset($_POST['copy']) and isset($_SESSION['muistin']))
 		{
-
 		foreach($_SESSION['muistin'] as $cp)
 		{
 			$ex = explode("_",$cp);
@@ -986,7 +985,7 @@ class TyovuorootController extends Controller
 			
 		}
 
-			$did = $this->renderPartial('did',array(
+			$did = $this->renderPartial($did_versio,array(
 					'pvm'=>$_POST['newPvm'],
 					'tid'=>$_POST['newTid'],
 					'from'=>'ajax',
@@ -1070,170 +1069,7 @@ class TyovuorootController extends Controller
 		}
 
 
-			$did = $this->renderPartial('did',array(
-				'pvm'=>$_POST['newPvm'],
-				'tid'=>$_POST['newTid'],
-				'from'=>'ajax',
-				'asetukset'=>$asetukset
-			), true);
-			echo json_encode($did.'//'.implode(",",$_SESSION['muistin']));
-			exit;
-		}
-	}
-
-	public function actionOperatio_v3()
-	{
-
-		$asetukset = Asetukset::model()->findByPk(1);
-
-		if(isset($_POST['checkThis']))
-		{
-			$did = $this->renderPartial('did3',array(
-				'pvm'=>$_POST['newPvm'],
-				'tid'=>$_POST['newTid'],
-				'from'=>'ajax',
-				'asetukset'=>$asetukset
-			), true);
-			echo json_encode($did.'//');
-			exit;
-		}
-
-		// remove
-		if(isset($_POST['remove']) and isset($_SESSION['muistin']))
-		{
-		foreach($_SESSION['muistin'] as $cp)
-		{
-			$ex = explode("_",$cp);
-
-			$t = Tyovuoroot::model()->findbypk($ex[0]);
-
-			// <-- Jos toistuva, otetaan sen Päivämäärä pois ketjusta
-			if( isset($t->pvm) and $t->toistuva_id != 0)
-			{
-				$this->toistuvaDeletePvm($t->toistuva_id, $t->pvm);
-			}
-			//     Jos toistuva, otetaan sen Päivämäärä pois ketjusta -->
-
-			// <-- LOG
-			if( isset($t->id) )
-			{
-			$model_log 	= 'Tyovuoroot';
-			$name_log 	= 'Työvuorot';
-			$status_log 	= 'Delete';
-
-				$old_values = json_encode($t->attributes);
-				$new_values = null;
-				$site = Yii::app()->createController('Site');
-				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-			}
-			//     LOG -->
-
-
-			Tyovuoroot::model()->deletebypk($ex[0]);
-		}
-
-			echo json_encode('//'.implode(",",$_SESSION['muistin']));
-			exit;
-		}
-
-		// copy
-		if(isset($_POST['copy']) and isset($_SESSION['muistin']))
-		{
-
-		foreach($_SESSION['muistin'] as $cp)
-		{
-			$ex = explode("_",$cp);
-			$t = Tyovuoroot::model()->findbypk($ex[0]);
-			$model=new Tyovuoroot;
-			$model->attributes=$t->attributes;
-			$model->pvm=date("d.m.Y",strtotime($_POST['newPvm']));
-			$model->tid=$_POST['newTid'];
-			$model->alku=$t->alku;
-			$model->loppu=$t->loppu;
-			$model->pituus=$t->pituus;
-			$model->kohde=$t->kohde;
-			$model->toistuva_id=0;
-			$model->tyopaari='';
-			$model->save();
-
-			// <-- LOG
-			if( isset($t->id) and isset($model->id) )
-			{
-			$model_log 	= 'Tyovuoroot';
-			$name_log 	= 'Työvuorot';
-			$status_log 	= 'Copy';
-
-				$old_values = json_encode($t->attributes);
-				$new_values = json_encode($model->attributes);
-				$site = Yii::app()->createController('Site');
-				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-			}
-			//     LOG -->
-			
-		}
-
-			$did = $this->renderPartial('did3',array(
-					'pvm'=>$_POST['newPvm'],
-					'tid'=>$_POST['newTid'],
-					'from'=>'ajax',
-					'asetukset'=>$asetukset
-			), true);
-			echo json_encode($did.'//');
-			exit;
-
-		}
-		// cut
-		if(isset($_POST['cut']) and isset($_SESSION['muistin']))
-		{
-		foreach($_SESSION['muistin'] as $cp)
-		{
-			$ex = explode("_",$cp);
-			$t = Tyovuoroot::model()->findbypk($ex[0]);
-			if(isset($t->id))
-			{
-	
-			// <-- Jos toistuva, otetaan sen Päivämäärä pois ketjusta
-			if( isset($t->pvm) and $t->toistuva_id != 0)
-			{
-				$this->toistuvaDeletePvm($t->toistuva_id, $t->pvm);
-			}
-			//     Jos toistuva, otetaan sen Päivämäärä pois ketjusta -->
-
-			$model=new Tyovuoroot;
-			$model->attributes=$t->attributes;
-			$model->pvm=date("d.m.Y",strtotime($_POST['newPvm']));
-			$model->tid=$_POST['newTid'];
-			$model->alku=$t->alku;
-			$model->loppu=$t->loppu;
-			$model->pituus=$t->pituus;
-			$model->kohde=$t->kohde;
-			$model->toistuva_id=0;
-			$model->tyopaari='';
-			$model->save();
-			Tyovuoroot::model()->deletebypk($ex[0]);	
-
-			// <-- LOG
-			if( isset($t->id) and isset($model->id) )
-			{
-			$model_log 	= 'Tyovuoroot';
-			$name_log 	= 'Työvuorot';
-			$status_log 	= 'Move';
-
-				$old_values = json_encode($t->attributes);
-				$new_values = json_encode($model->attributes);
-				$site = Yii::app()->createController('Site');
-				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-			}
-			//     LOG -->
-
-			} else {
-			echo json_encode('id puuttuu');
-			break;
-			}		
-		}
-
-
-			$did = $this->renderPartial('did3',array(
+			$did = $this->renderPartial($did_versio,array(
 				'pvm'=>$_POST['newPvm'],
 				'tid'=>$_POST['newTid'],
 				'from'=>'ajax',

@@ -297,9 +297,7 @@ xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivou
 
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot_v3.js"></script>
-	<div id="showall" class="modal fade" tabindex="-1" role="dialog"></div>
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
-	<?php Yii::app()->clientScript->registerPackage('tyovuoroot'); ?>
 
      <div id="temaus-modal" class="modal fade" tabindex="-1" role="dialog">
         <!-- Admin Form Popup -->

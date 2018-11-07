@@ -1,14 +1,12 @@
 $(document).ready(function(){
 
-/*
-$('#fixTable td').hover(function()
+$('td').hover(function()
 {
-     $(this).find('.latikkolisatiedot').show();
+     $(this).find('.plussa, .valitseKokopaiva').show();
 }, function()
 { 
-     $(this).find('.latikkolisatiedot').hide();
+     $(this).find('.plussa, .valitseKokopaiva').hide();
 });
-*/
 
 $("#autoInsert").click(function(){
 
@@ -183,9 +181,8 @@ function muisti(){
 		});
 
 			$(".muokkausLi").show();
-			$(".forCopy").removeClass("forCopy").addClass("mplus glyphicon glyphicon-plus text-success link");
-			$(".forCut").removeClass("forCut").addClass("mcut glyphicon glyphicon-transfer text-success link");
-		
+			$(".forCut").removeClass("forCut").addClass("mcut fa fa-exchange link");
+			$(".forCopy").removeClass("forCopy").addClass("mplus fa fa-copy link");		
 		}
 		return false;
     	   },
@@ -248,7 +245,7 @@ window.addEventListener('message', function(e) {
   }
 
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio',
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio?did=did3',
 	   type:'POST',
 	   data: doWhat,
            success: function(data){
@@ -272,6 +269,12 @@ window.addEventListener('message', function(e) {
 				}
 
 				if(thisID[0] == 'forCopy' && parent.location.href.match(/tv2/))
+				{
+					var ThisHeight = $('#'+newPvm+'_'+newTid).height();
+					var FirstHeight = $('#first_'+newPvm).height(ThisHeight);
+				}
+
+				if(thisID[0] == 'forCopy' && parent.location.href.match(/tv3/))
 				{
 					var ThisHeight = $('#'+newPvm+'_'+newTid).height();
 					var FirstHeight = $('#first_'+newPvm).height(ThisHeight);

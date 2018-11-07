@@ -12,31 +12,6 @@
 	$onkoMennyt = 'mennytPaivat';
 
 	$bod = '';
-	$bod .=  '
-	<div class="latikkolisatiedot_paa">
-		<div class="latikkolisatiedot">
-		 <div class="form-inline">
-			<div class="form-group">
-			   <span class="text-center" id="sum_tunnit_'.$did.'_'.$tid.'" style="text-align:center;opacity:0.6"></span>
-			</div>
-			<div class="kokopaiva form-group">
-			   <span class="valitseKokopaiva link glyphicon glyphicon-th-large" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
-			</div>
-			<div class="plussamerkki form-group">
-			   <span class="plussa link fa fa-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
-			</div>
-			<div class="form-group">
-			   <span class="link fa fa-eye katsokaikki" for="'.$did.'_'.$tid.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'" from="tvuoro" kohteet_siivous="'.json_encode($kohteet_siivous).'" asiakas="'.$asiakas.'" kohde="'.$kohde.'" etusukunimi="'.$this->etuSukunimi($tid).'"></span>
-			</div>
-			<div class="form-group">
-		   	   <i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mcut glyphicon glyphicon-transfer text-success link':'forCut').'"" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
-		 	</div><div class="form-group">
-		   	   <i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mplus glyphicon glyphicon-plus text-success link':'forCopy').'" id="forCopy_'.$did.'_'.$tid.'"></i> 
-			</div>
-		 </div>
-		</div>
-	</div>
-	';
 	$bod .=  '<div style="position:relative" class="latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 
        	$criteria = new CDbCriteria();
@@ -85,6 +60,13 @@
 	$tv = Tyovuoroot::model()->findAll($criteria); 
 	foreach($tv as $tvVal)
 	{
+		$osoite = '';
+		if(!empty($tvVal->osoite)){
+			$osoite = $tvVal->osoite;
+		} else if(empty($tvVal->osoite) and isset($tvVal->kohteet->osoite)){
+			$osoite = $tvVal->kohteet->osoite;
+		}
+
 		if(isset($loppu) and strtotime($tvVal->alku) > $loppu){
 			$valilyonti = $this->num(strtotime($tvVal->alku)-strtotime($loppu));
 			$bod .= '<div style="cursor: pointer;background:orange;height:'.($valilyonti*17).'px" title="Aika: '.$this->sprint(strtotime($tvVal->alku)-strtotime($loppu)).'"></div>';
@@ -118,15 +100,37 @@
 		}
 	   	//    Tyoryhmat -->
 
-	   	$bod .=  '<div class="'.$fullRivi.'" style="'.$bgcol.'">';
-	        $bod .=  '<div class="link text-danger fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></div>';
+	   	$bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="'.$fullRivi.'" style="'.$bgcol.'">';
+	        $bod .=  '<div class="link pull-left text-danger fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></div>';
 		$bod .= '<div class="'.$tv_edit.'" id="tv_'.$tvVal->id.'">';
-		$bod .= '<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.((isset($tvVal->kohteet->osoite))?$tvVal->kohteet->osoite:'');
+		$bod .= '<b class="kellot">'.$tvVal->alku.'-'.$tvVal->loppu.': </b>'.$osoite;
 	   	$bod .=  '</div>';
 	   	$bod .=  '</div>';
 		$loppu = $tvVal->loppu;
 	}
 	$bod .=  '</div>';
+	$bod .=  '
+	<div class="latikkolisatiedot_paa">
+		<div class="latikkolisatiedot">
+		 <div class="form-inline">
+			<div class="form-group">
+			   <span class="text-center" id="sum_tunnit_'.$did.'_'.$tid.'" style="text-align:center;opacity:0.6"></span>
+			</div>
+			<div class="kokopaiva form-group">
+			   <span class="valitseKokopaiva link glyphicon glyphicon-th-large" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
+			</div>
+			<div class="plussamerkki form-group">
+			   <span class="plussa link fa fa-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
+			</div>
+			<div class="form-group">
+		   	   <i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mcut fa fa-exchange link':'forCut').'"" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
+		 	</div><div class="form-group">
+		   	   <i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mplus fa fa-copy link':'forCopy').'" id="forCopy_'.$did.'_'.$tid.'"></i> 
+			</div>
+		 </div>
+		</div>
+	</div>
+	';
 
 	if($sum > 0){
 	$bod .= '
