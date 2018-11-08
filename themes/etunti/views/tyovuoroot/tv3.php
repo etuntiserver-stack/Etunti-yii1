@@ -1,31 +1,9 @@
-<?php
-
-?>
-
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v3.css">
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 
 <?php
 /* @var $this TyovuorootController */
 /* @var $dataProvider CActiveDataProvider */
-
-
-   $pvmtid = Yii::app()->request->getParam('pvmtid', 0);
-   if(!empty($pvmtid)){
-	$expl = explode("_",$pvmtid);
-	Yii::app()->session['from'] = date("Y-m-d",strtotime($expl['0']));
-	Yii::app()->session['to'] = date("Y-m-d",strtotime($expl['0']." +1 week"));
-	Yii::app()->session['Tekija'] = array($expl['1']);
-	?>
-	<script type="text/javascript">
-	$(document).ready(function(){
-	
-	  $('#<?php echo $pvmtid; ?>').addClass("alert alert-info");
-	
-	});
-	</script>
-	<?php
-   }
-
 
 
  // <-- tyovuorot.js tyovuoroot/siivous_tyonimike
@@ -58,10 +36,6 @@
 <?php endif; ?>
 
 
-
-
-
-
 		<!-- Fixed Table -->
 		<!-- http://www.jqueryscript.net/table/jQuery-Plugin-For-Fixed-Table-Header-Footer-Columns-TableHeadFixer.html -->
 		<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/tableHeadFixer.js"></script>
@@ -86,9 +60,6 @@
 			});
 		</script>
 		<!-- Fixed Table -->
-
-
-
 
 <?php if( !empty($from) and !empty($to) and count($tyontekijat_model) > 0 ) : ?>
 <div class="row">
@@ -183,7 +154,7 @@
 
 		foreach($tyontekijat_model as $t){
 		  echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'">';
-	     	  echo '<div class="luolaatiko" for="'.$did.'_'.$t->id.'" pvm="'.$date.'" tid="'.$t->id.'" from="tvuoro" kohteet_siivous="'.$ks.'" asiakas="'.$asiakas.'" kohde="'.$kohde.'"></div>';
+	     	  echo '<div class="luolaatiko" for="'.$did.'_'.$t->id.'" pvm="'.$date.'" tid="'.$t->id.'" from="tvuoro" kohteet_siivous="'.$ks.'" asiakas="'.$asiakas.'" kohde="'.$kohde.'" ></div>';
 		  echo '</td>';
 		}
 	    echo '</tr>';
@@ -193,8 +164,6 @@
   	    echo '<tr>';
   		echo '<td class="text-center myBgColors viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).' <i class="fa fa-arrow-up" aria-hidden="true"></i>
 </b></td>';
-
-
 
 		// VARAUS
 		  echo '<td class="viikkoRivi myBgColors text-center" id="vk_'.date("W",strtotime($date)).'_0">';
@@ -207,8 +176,6 @@
 		  echo '<span>'.$kokoViikko.'</span>';
 		  echo '</td>';
 		// VARAUS
-
-
 
 		foreach($tyontekijat_model as $t){
 		 $vktyoaika = '';
@@ -260,44 +227,18 @@
   </table>
 </div>
 
-
                  </div>
                 </div>
               </div>
             </div>
 </div>
 
-
-<script>
-$( ".luolaatiko" ).each(function( index ) {
-
-	var forThis = $(this).attr("for");
-	$("#"+forThis).html('odota..');
-	var pvm = $(this).attr("pvm");
-	var tid = $(this).attr("tid");
-	var from = $(this).attr("from");
-	var kohteet_siivous = $(this).attr("kohteet_siivous");
-	var asiakas = $(this).attr("asiakas");
-	var kohde = $(this).attr("kohde");
-
-var xhr = new XMLHttpRequest();
-xhr.open("POST", 'didnew3', true);
-xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-xhr.onload = function () {
-	d = JSON.parse(xhr.responseText);
-	//console.log(xhr.responseText)
-	$("#"+forThis).html(d);
-};
-xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
-});
-</script>
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot_v3.js"></script>
 <?php endif; ?>
 
-
-
-	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
-	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot_v3.js"></script>
-	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+     <!-- TV laatiko -->
+     <div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+     <!-- TV laatiko -->
 
      <div id="temaus-modal" class="modal fade" tabindex="-1" role="dialog">
         <!-- Admin Form Popup -->

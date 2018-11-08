@@ -1,6 +1,4 @@
 <?php
-
-
     	$color = '';
 	$height = '';
 	$yht = 0;
@@ -73,7 +71,6 @@
 	}
 	// Kohde -->
 
-
 	if(isset($kohteet_siivous) and count($kohteet_siivous) > 0)
 	{
 		$impl = implode(',',$kohteet_siivous);
@@ -112,8 +109,37 @@
 		}
 		// Status -->
 
+		// <-- Asiakas nakyvissa
+		$asiakasNakyvissa = '';
+		if(isset($asetukset) and $asetukset->asiakas_tyovuorossa == 1){
+		$name = '';
+		if(isset($tvVal->kohteet->asiakkaat) and $tvVal->kohteet->asiakkaat->tyyppi == 'yritys')
+		$name = $tvVal->kohteet->asiakkaat->yrityksen_nimi;
+		if(isset($tvVal->kohteet->asiakkaat) and $tvVal->kohteet->asiakkaat->tyyppi == 'henkilo')
+		$name = $tvVal->kohteet->asiakkaat->yhteyshenkilo;
+		if(!empty($name)){ $asiakasNakyvissa = $name; }
+		}
+		//  Asiakas nakyvissa -->
+
+		// <-- Paikkakunta nakyvissa
+		$paikkakuntaNakyvissa = '';
+		if(isset($asetukset) and $asetukset->paikkakunta_tyovuorossa == 1){
+		$paikkakunta = '';
+		if(isset($tvVal->kohteet->kaupunki) and !empty($tvVal->kohteet->kaupunki))
+		$paikkakunta = $tvVal->kohteet->kaupunki;
+		if(!empty($paikkakunta)){ $paikkakuntaNakyvissa = $paikkakunta; }
+		}
+		//  Paikkakunta nakyvissa -->
+
+		// <-- Title generoi
+		$title = '';
+		$title .= $asiakasNakyvissa;
+		if(!empty($asiakasNakyvissa)){ $title .= ', '; }
+		$title .= $paikkakuntaNakyvissa;
+		//    Title generoi -->
+
 		// <-- Toistuva
-		$toistuva = '&nbsp;';
+		$toistuva = '';
 		if($tvVal->toistuva_id != 0){
 			$toistuva = ' <i class="fa fa-repeat text-orange" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Toistuva työvuoro').'"></i>';
 		}
@@ -155,7 +181,7 @@
 
 	   	$bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="'.$fullRivi.'" style="'.$bgcol.'">';
 		$bod .= $muokkaus.$status.$toistuva;
-		$bod .= '<span class="'.$tv_edit.'" id="tv_'.$tvVal->id.'">';
+		$bod .= '<span class="'.$tv_edit.'" id="tv_'.$tvVal->id.'" title="'.$title.'">';
 		$bod .= '<b class="kellot">'.$tvVal->alku.'-'.$tvVal->loppu.': </b>'.$osoite;
 	   	$bod .=  '</span>';
 	   	$bod .=  '</div>';
@@ -163,22 +189,9 @@
 	}
 	$bod .=  '</div>';
 
-	if($sum > 0){
-	$bod .= '
-	<script type="text/javascript">
-	$(document).ready(function(){
-		setTimeout(function(){ $("#sum_tunnit_'.$did.'_'.$tid.'").html("'.$this->sprint($sum).'"); }, 500);
-	});
-	</script>';
-	}
-
-
-
 	if(isset($yhteensa) and $yhteensa == true){
 		echo json_encode($bod.'//'.$yht);
 	} else {
 		echo json_encode($bod);
 	}
-
-
 ?>

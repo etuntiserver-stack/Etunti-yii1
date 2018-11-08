@@ -1,5 +1,41 @@
 $(document).ready(function(){
 
+  $( ".luolaatiko" ).each(function( index ) {
+
+	var forThis = $(this).attr("for");
+	$("#"+forThis).html('odota..');
+	var pvm = $(this).attr("pvm");
+	var tid = $(this).attr("tid");
+	var from = $(this).attr("from");
+	var kohteet_siivous = $(this).attr("kohteet_siivous");
+	var asiakas = $(this).attr("asiakas");
+	var kohde = $(this).attr("kohde");
+	/*
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", 'didnew3', true);
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xhr.onload = function () {
+		d = JSON.parse(xhr.responseText);
+		//console.log(xhr.responseText)
+		$("#"+forThis).html(d);
+	};
+	xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
+	*/
+
+	
+        $.ajax({
+           url: 'didnew3',
+           type: "POST",
+	   data: { pvm : pvm, tid: tid, from : from, kohteet_siivous : kohteet_siivous, asiakas : asiakas, kohde : kohde },
+           success: function(data){
+		d = JSON.parse(data);
+		//console.log(data)
+		$("#"+forThis).html(d);
+           }
+        });
+
+  });
+
 $('td').hover(function()
 {
      $(this).find('.plussa, .valitseKokopaiva').show();
@@ -155,8 +191,6 @@ $(document).delegate(".muistin","click",function(){
         });
 
 });
-
-
 
 muisti();
 function muisti(){
