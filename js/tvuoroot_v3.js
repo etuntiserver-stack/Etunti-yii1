@@ -10,7 +10,7 @@ $(document).ready(function(){
 	var kohteet_siivous = $(this).attr("kohteet_siivous");
 	var asiakas = $(this).attr("asiakas");
 	var kohde = $(this).attr("kohde");
-	/*
+	
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", 'didnew3', true);
 	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -20,9 +20,9 @@ $(document).ready(function(){
 		$("#"+forThis).html(d);
 	};
 	xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
-	*/
-
 	
+
+	/*
         $.ajax({
            url: 'didnew3',
            type: "POST",
@@ -33,7 +33,7 @@ $(document).ready(function(){
 		$("#"+forThis).html(d);
            }
         });
-
+	*/
   });
 
 $('td').hover(function()

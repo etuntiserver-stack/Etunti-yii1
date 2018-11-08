@@ -145,9 +145,12 @@
 		}
 		// Toistuva -->
 
-		if(isset($loppu) and strtotime($tvVal->alku) > $loppu){
-			$valilyonti = $this->num(strtotime($tvVal->alku)-strtotime($loppu));
-			$bod .= '<div class="ajanreika" style="height:'.($valilyonti*17).'px" title="Aika: '.$this->sprint(strtotime($tvVal->alku)-strtotime($loppu)).'"></div>';
+		if( isset($loppu) and ($this->num(strtotime($tvVal->alku)-strtotime($loppu)) > 0) ){
+			$valilyonti = strtotime($tvVal->alku)-strtotime($loppu);
+			//$bod .= '<div class="ajanreika" style="height:'.($this->num($valilyonti)*17).'px" data-toggle="tooltip" data-placement="top" title="Aika: '.$this->sprint(strtotime($tvVal->alku)-strtotime($loppu)).'"></div>';
+			$reikatyyppi = 'reika-warning';
+			if( $this->num($valilyonti) > 1 ){ $reikatyyppi = 'reika-danger'; }
+			$bod .= '<div class="row reika '.$reikatyyppi.' text-center"><i class="glyphicon glyphicon-time"></i> Aika: '.$this->sprint($valilyonti).'</div>';
 		}
 		$color = '#888';
 		$bgcol = 'color:#333';

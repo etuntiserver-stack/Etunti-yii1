@@ -42,6 +42,17 @@ td:hover{
 	border-radius:5px;
 */
 }
+.reika{
+	color: #fff;
+	padding: 7px;
+	font-weight: bold;
+}
+.reika-warning{
+	background: orange;
+}
+.reika-danger{
+	background: #dc3545;
+}
 .dropdown-menu{
 	z-index: 999;
 }
