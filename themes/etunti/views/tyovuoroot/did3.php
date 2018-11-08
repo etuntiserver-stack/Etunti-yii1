@@ -117,7 +117,7 @@
 		$name = $tvVal->kohteet->asiakkaat->yrityksen_nimi;
 		if(isset($tvVal->kohteet->asiakkaat) and $tvVal->kohteet->asiakkaat->tyyppi == 'henkilo')
 		$name = $tvVal->kohteet->asiakkaat->yhteyshenkilo;
-		if(!empty($name)){ $asiakasNakyvissa = $name; }
+		if(!empty($name)){ $asiakasNakyvissa = '<b>Asiakas:</b> '.$name.'<br>'; }
 		}
 		//  Asiakas nakyvissa -->
 
@@ -127,15 +127,16 @@
 		$paikkakunta = '';
 		if(isset($tvVal->kohteet->kaupunki) and !empty($tvVal->kohteet->kaupunki))
 		$paikkakunta = $tvVal->kohteet->kaupunki;
-		if(!empty($paikkakunta)){ $paikkakuntaNakyvissa = $paikkakunta; }
+		if(!empty($paikkakunta)){ $paikkakuntaNakyvissa = '<b>Paikkakunta:</b> '.$paikkakunta.'<br>'; }
 		}
 		//  Paikkakunta nakyvissa -->
 
 		// <-- Title generoi
 		$title = '';
 		$title .= $asiakasNakyvissa;
-		if(!empty($asiakasNakyvissa)){ $title .= ', '; }
+		//if(!empty($asiakasNakyvissa)){ $title .= ', '; }
 		$title .= $paikkakuntaNakyvissa;
+		if( !empty($tvVal->tietoja) ){ $title .= '<p><b>Tietoja:</b> '.$tvVal->tietoja.'<p>'; }
 		//    Title generoi -->
 
 		// <-- Toistuva
@@ -148,8 +149,8 @@
 		if( isset($loppu) and ($this->num(strtotime($tvVal->alku)-strtotime($loppu)) > 0) ){
 			$valilyonti = strtotime($tvVal->alku)-strtotime($loppu);
 			//$bod .= '<div class="ajanreika" style="height:'.($this->num($valilyonti)*17).'px" data-toggle="tooltip" data-placement="top" title="Aika: '.$this->sprint(strtotime($tvVal->alku)-strtotime($loppu)).'"></div>';
-			$reikatyyppi = 'reika-warning';
-			if( $this->num($valilyonti) > 1 ){ $reikatyyppi = 'reika-danger'; }
+			$reikatyyppi = 'reika-success';
+			if( $this->num($valilyonti) > 1 ){ $reikatyyppi = 'reika-warning'; }
 			$bod .= '<div class="row reika '.$reikatyyppi.' text-center"><i class="glyphicon glyphicon-time"></i> Aika: '.$this->sprint($valilyonti).'</div>';
 		}
 		$color = '#888';
@@ -184,7 +185,7 @@
 
 	   	$bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="'.$fullRivi.'" style="'.$bgcol.'">';
 		$bod .= $muokkaus.$status.$toistuva;
-		$bod .= '<span class="'.$tv_edit.'" id="tv_'.$tvVal->id.'" title="'.$title.'">';
+		$bod .= '<span class="'.$tv_edit.'" id="tv_'.$tvVal->id.'" hovertietoja="'.$title.'">';
 		$bod .= '<b class="kellot">'.$tvVal->alku.'-'.$tvVal->loppu.': </b>'.$osoite;
 	   	$bod .=  '</span>';
 	   	$bod .=  '</div>';

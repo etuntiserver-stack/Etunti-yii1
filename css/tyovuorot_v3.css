@@ -47,11 +47,11 @@ td:hover{
 	padding: 7px;
 	font-weight: bold;
 }
-.reika-warning{
-	background: orange;
+.reika-success{
+	background: #28a745;
 }
-.reika-danger{
-	background: #dc3545;
+.reika-warning{
+	background: #ffc107;
 }
 .dropdown-menu{
 	z-index: 999;
@@ -74,6 +74,17 @@ td .latikkoAsetukset{
 	max-height: 200px; overflow-y: auto;
 	line-height: 16px;
 }
+#hovertietoja{
+	width: 100%;
+	position: absolute;
+	font-family: ibm-plex-sans, sans-serif;
+	font-size: 90%;
+	line-height: 16px;
+	border:1px #ccc solid;
+	background: white;
+	border-radius:5px;
+	z-index: 999999;
+}
 .kellot{
 	
 }
@@ -85,7 +96,7 @@ td .latikkoAsetukset{
 .tv_edit:hover{
 	background: #ededed;
 }
-.forCut, .forCopy, .mplus, .mcut{ 
+.forCut, .forCopy, .mplus, .mcut, #hovertietoja{ 
 	display: none;
 }
 .clear, .trash{ 

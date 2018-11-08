@@ -39,9 +39,15 @@ $(document).ready(function(){
 $('td').hover(function()
 {
      $(this).find('.plussa, .valitseKokopaiva').show();
+     var hovertietoja = $(this).attr('hovertietoja');
+     $(this).find('.tv_edit').hover(function(){
+     	$('#hovertietoja').html(hovertietoja+ '<br>'+ $(this).attr('hovertietoja')).show();
+     });
+
 }, function()
 { 
      $(this).find('.plussa, .valitseKokopaiva').hide();
+     $('#hovertietoja').hide();
 });
 
 $("#autoInsert").click(function(){

@@ -1,6 +1,5 @@
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v3.css">
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
-
 <?php
 /* @var $this TyovuorootController */
 /* @var $dataProvider CActiveDataProvider */
@@ -153,7 +152,7 @@
 
 
 		foreach($tyontekijat_model as $t){
-		  echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'">';
+		  echo '<td '.$clPyhat.' class="laatiko_td" id="'.$did.'_'.$t->id.'" hovertietoja="<h5>'.$arrDate[$explColDate[0]].', '.$explColDate[1].$ispyha.' '.$this->etuSukunimi($t->id).'</h5>">';
 	     	  echo '<div class="luolaatiko" for="'.$did.'_'.$t->id.'" pvm="'.$date.'" tid="'.$t->id.'" from="tvuoro" kohteet_siivous="'.$ks.'" asiakas="'.$asiakas.'" kohde="'.$kohde.'" ></div>';
 		  echo '</td>';
 		}
