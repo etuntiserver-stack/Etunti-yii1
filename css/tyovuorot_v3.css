@@ -83,6 +83,7 @@ td .latikkoAsetukset{
 	line-height: 16px;
 	border-bottom:1px #ccc solid;
 	background: #ededed;
+	color: #333;
 	z-index: 999999;
 }
 .kellot{
