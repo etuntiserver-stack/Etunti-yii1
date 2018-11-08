@@ -76,13 +76,13 @@ td .latikkoAsetukset{
 }
 #hovertietoja{
 	width: 100%;
+	padding: 5px 10px;
 	position: absolute;
 	font-family: ibm-plex-sans, sans-serif;
 	font-size: 90%;
 	line-height: 16px;
-	border:1px #ccc solid;
-	background: white;
-	border-radius:5px;
+	border-bottom:1px #ccc solid;
+	background: #ededed;
 	z-index: 999999;
 }
 .kellot{
