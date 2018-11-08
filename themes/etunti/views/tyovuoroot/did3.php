@@ -149,8 +149,8 @@
 		if( isset($loppu) and ($this->num(strtotime($tvVal->alku)-strtotime($loppu)) > 0) ){
 			$valilyonti = strtotime($tvVal->alku)-strtotime($loppu);
 			//$bod .= '<div class="ajanreika" style="height:'.($this->num($valilyonti)*17).'px" data-toggle="tooltip" data-placement="top" title="Aika: '.$this->sprint(strtotime($tvVal->alku)-strtotime($loppu)).'"></div>';
-			$reikatyyppi = 'reika-success';
-			if( $this->num($valilyonti) > 1 ){ $reikatyyppi = 'reika-warning'; }
+			$reikatyyppi = 'reika-warning';
+			//if( $this->num($valilyonti) > 1 ){ $reikatyyppi = 'reika-warning'; }
 			$bod .= '<div class="row reika '.$reikatyyppi.' text-center"><i class="glyphicon glyphicon-time"></i> Aika: '.$this->sprint($valilyonti).'</div>';
 		}
 		$color = '#888';
