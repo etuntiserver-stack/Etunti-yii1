@@ -39,7 +39,7 @@ $(document).ready(function(){
 $('td').hover(function()
 {
      $(this).find('.plussa, .valitseKokopaiva').show();
-     var hovertietoja = $(this).attr('hovertietoja');
+     var hovertietoja = $(this).find('.td_hovertietoja').html();
      $(this).find('.tv_edit').hover(function(){
      	$('#hovertietoja').html(hovertietoja + $(this).find('.hovertietoja').html()).show();
      });

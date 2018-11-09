@@ -71,7 +71,7 @@ td .latikkoAsetukset{
 	line-height: 16px;
 }
 #hovertietoja{
-	position: absolute; left: 0;
+	position: absolute; left: 0; bottom: 0;
 	width: 300px;
 	padding: 10px 20px;
 	position: absolute;
