@@ -9,7 +9,7 @@
 	white-space: nowrap;
 }
 #fixTable td:hover{
-	background: #ffffe6;
+	background: #fff;
 }
 .ajanreika{
 	background: orange;
@@ -27,20 +27,8 @@
 	border-bottom: 1px #ddd solid;
 	z-index: 999;
 }
-/*
-.latikkolisatiedot .form-group{
-	margin-right: 2px;
-}
-*/
 .fullRivi{
-/*
-	height: 100%;
-	margin-bottom: 2px;
-	border:1px #ccc solid;
-	padding:3px 7px;
-	background: white;
-	border-radius:5px;
-*/
+
 }
 .reika{
 	color: #fff;
@@ -103,7 +91,7 @@ td .latikkoAsetukset{
 	cursor: pointer;
 }
 .fullRivi:hover{
-	background: #ffff4d;
+	background: #ededed;
 }
 .forCut,
 .forCopy,
