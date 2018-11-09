@@ -43,11 +43,13 @@ $('td').hover(function()
      $(this).find('.tv_edit').hover(function(){
      	$('#hovertietoja').html(hovertietoja + $(this).find('.hovertietoja').html()).show();
      });
+     $(this).find('.ikoonintila').show();
 
 }, function()
 { 
      $(this).find('.plussa, .valitseKokopaiva').hide();
      $('#hovertietoja').hide();
+     $(this).find('.ikoonintila').hide();
 });
 
 $("#autoInsert").click(function(){

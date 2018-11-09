@@ -19,7 +19,7 @@
 }
 .latikkolisatiedot{
 	padding: 2px 5px;
-	background: #ccc;
+	background: orange;
 	color: #fff;
 	display: none; 
 	position: absolute; top: 0; right: 0;
@@ -93,7 +93,6 @@ td .latikkoAsetukset{
 	
 }
 .tv_edit{
-	padding:0 7px;
 	width: 100%;
 	cursor: pointer;
 }

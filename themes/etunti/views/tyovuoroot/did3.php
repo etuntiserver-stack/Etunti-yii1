@@ -185,7 +185,7 @@
 	        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></i>';
 
 	   	$bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="'.$fullRivi.'" style="'.$bgcol.'">';
-		$bod .= '<div class="pull-left ikoonintila">'.$muokkaus.$status.$toistuva.'</div>';
+		$bod .= '<div class="pull-left ikoonintila" style="display:none">'.$muokkaus.$status.$toistuva.'</div>';
 		$bod .= '<span class="'.$tv_edit.'" id="tv_'.$tvVal->id.'">';
 		$bod .= '<div class="hovertietoja" style="display:none">'.$hovertietoja.'</div>';
 		$bod .= '<b class="kellot">'.$tvVal->alku.'-'.$tvVal->loppu.': </b>'.$osoite;
