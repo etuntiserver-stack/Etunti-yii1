@@ -44,14 +44,15 @@ td:hover{
 }
 .reika{
 	color: #fff;
-	padding: 7px;
+	padding: 3px;
+	font-size: 90%;
 	font-weight: bold;
 }
 .reika-success{
 	background: #28a745;
 }
 .reika-warning{
-	background: #ffc107;
+	background: orange;
 }
 .dropdown-menu{
 	z-index: 999;

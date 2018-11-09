@@ -136,7 +136,7 @@
 		$hovertietoja .= $asiakasNakyvissa;
 		//if(!empty($asiakasNakyvissa)){ $title .= ', '; }
 		$hovertietoja .= $paikkakuntaNakyvissa;
-		$hovertietoja .= '<br><span class="didstatus">'.$status.'</span> <b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.$osoite.'<br>';
+		$hovertietoja .= '<br><p><span class="didstatus">'.$status.'</span> <b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.$osoite.'</p>';
 		if( !empty($tvVal->tietoja) ){ $hovertietoja .= '<p><b>Tietoja:</b> '.$tvVal->tietoja.'<p>'; }
 		//    Title generoi -->
 
