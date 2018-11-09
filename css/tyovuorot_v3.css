@@ -8,8 +8,8 @@
 #fixTable td{
 	white-space: nowrap;
 }
-td:hover{
-	background: #fff;
+#fixTable td:hover{
+	background: #ffffe6;
 }
 .ajanreika{
 	background: orange;
@@ -102,8 +102,8 @@ td .latikkoAsetukset{
 	width: 100%;
 	cursor: pointer;
 }
-.tv_edit:hover{
-	background: #ededed;
+.fullRivi:hover{
+	background: #ffff4d;
 }
 .forCut,
 .forCopy,
