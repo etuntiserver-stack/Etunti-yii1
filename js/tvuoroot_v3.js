@@ -41,7 +41,7 @@ $('td').hover(function()
      $(this).find('.plussa, .valitseKokopaiva').show();
      var hovertietoja = $(this).attr('hovertietoja');
      $(this).find('.tv_edit').hover(function(){
-     	$('#hovertietoja').html(hovertietoja+ '<br>'+ $(this).find('.hovertietoja').html()).show();
+     	$('#hovertietoja').html(hovertietoja + $(this).find('.hovertietoja').html()).show();
      });
 
 }, function()

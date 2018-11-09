@@ -136,6 +136,7 @@
 		$hovertietoja .= $asiakasNakyvissa;
 		//if(!empty($asiakasNakyvissa)){ $title .= ', '; }
 		$hovertietoja .= $paikkakuntaNakyvissa;
+		$hovertietoja .= '<br><span class="didstatus">'.$status.'</span> <b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.$osoite.'<br>';
 		if( !empty($tvVal->tietoja) ){ $hovertietoja .= '<p><b>Tietoja:</b> '.$tvVal->tietoja.'<p>'; }
 		//    Title generoi -->
 
@@ -186,7 +187,7 @@
 	   	$bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="'.$fullRivi.'" style="'.$bgcol.'">';
 		$bod .= $muokkaus.$status.$toistuva;
 		$bod .= '<span class="'.$tv_edit.'" id="tv_'.$tvVal->id.'">';
-		$bod .= '<div class="hovertietoja">'.$hovertietoja.'</div>';
+		$bod .= '<div class="hovertietoja" style="display:none">'.$hovertietoja.'</div>';
 		$bod .= '<b class="kellot">'.$tvVal->alku.'-'.$tvVal->loppu.': </b>'.$osoite;
 	   	$bod .=  '</span>';
 	   	$bod .=  '</div>';
