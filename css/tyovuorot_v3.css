@@ -27,6 +27,13 @@
 	border-bottom: 1px #ddd solid;
 	z-index: 999;
 }
+.tvikooni{
+
+}
+.ikoonintila{
+	min-width: 45px;
+	width: 45px;
+}
 .fullRivi{
 
 }
