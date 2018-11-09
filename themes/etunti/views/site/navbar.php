@@ -813,7 +813,6 @@ $('.tvchange').change(function(){
 
       <!-- Start: Sidebar Left Content -->
       <div class="sidebar-left-content nano-content">
-	<div id="hovertietoja"></div>
         <!-- Start: Sidebar Menu -->
         <ul class="nav sidebar-menu">
 

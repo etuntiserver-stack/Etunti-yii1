@@ -175,6 +175,7 @@ $(document).ready(function(){
 </head>
 
 <body class="<?php if(isset(Yii::app()->user->currentBody)) echo Yii::app()->user->currentBody; ?>">
+<div id="hovertietoja"></div>
 
 <?php  if($curpage == 'tyovuoroot/index' and isset($_GET['fullscreen']) and $_GET['fullscreen'] == true) : ?>
 	<?php echo ''; ?>
@@ -203,7 +204,6 @@ $(document).ready(function(){
 
 
 <div class="">
-
 	<?php echo $content; ?>
 
 <?php if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' ) : ?>
