@@ -108,25 +108,22 @@
 	  if($pyhat == 'su' or $pyhat == 'pyhapaiva' or $pyhat == 'erikoislauantai')
 	  {
 		$clPyhat = 'style="background:#ddd"';
-		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>';
+		$ispyha = '<br><i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>';
 	  }
 
 	  if($pyhat == 'pyhapaiva')
 	  {
-		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>';
+		$ispyha = '<br><i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>';
 	  }
 
 	  if($pyhat == 'erikoislauantai')
 	  {
-		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Erikoislauantai').'"></i>';
+		$ispyha = '<br><i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Erikoislauantai').'"></i>';
 	  }
 
   	    echo '<tr>';
-  		echo '<td '.$clPyhat.' class="fixed-column" id="first_'.$did.'">';
-		echo '
-		<div class="kloajaat text-center">
-		<p><h4>'.$arrDate[$explColDate[0]].", ".$explColDate[1].$ispyha.'</h4></p>
-		</div>';
+  		echo '<td '.$clPyhat.' class="fixed-column text-center" id="first_'.$did.'">';
+		echo '<b>'.$arrDate[$explColDate[0]].'</b><br>'.$explColDate[1].$ispyha;
 		echo '</td>';
 
 		// VARAUS

@@ -49,8 +49,8 @@
 	color: orange;
 }
 .fixed-column{
-	min-width:90px;
-	width:90px;
+	max-width:50px;
+	width:50px;
 	z-index: 99;
 }
 td .latikkoAsetukset{
