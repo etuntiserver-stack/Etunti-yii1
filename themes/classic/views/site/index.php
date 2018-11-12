@@ -118,6 +118,19 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+/* Y-tunnus */
+function validateNumber(event) {
+    var key = window.event ? event.keyCode : event.which;
+    if (event.keyCode === 8 || event.keyCode === 46 || key === 45) {
+        return true;
+    } else if ( key < 48 || key > 57 ) {
+        return false;
+    } else {
+        return true;
+    }
+};
+$('[id^=yritys_tunnus]').keypress(validateNumber);
+/* Y-tunnus */
 
   localStorage.clear();
 
@@ -138,7 +151,7 @@ $(document).ready(function(){
 		$('#yrityksen_nimi').css({"border" : "1px red solid"}).focus();
 		return false;
 	}
-	if( $('#yritys_tunnus').val() === ''){
+	if( $('#yritys_tunnus').val().length !== 9){
 		$('#yritys_tunnus').css({"border" : "1px red solid"}).focus();
 		return false;
 	}
