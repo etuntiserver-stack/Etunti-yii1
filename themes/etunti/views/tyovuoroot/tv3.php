@@ -72,18 +72,21 @@
   <table class="table table-bordered" id="fixTable">
      <thead class="">
      <tr>
-     <th></th>
+     <th><div data-toggle="collapse" data-target=".td_varaus"><div class="text-center btn btn-block btn-primary myBgColors" data-toggle="tooltip" data-placement="bottom" title="<?=Yii::t('main', 'Keskeneräinen varaus')?>">V</div></div></th>
         <?php 
 	// VARAUS
-	  echo '<th style="z-index: 999" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Keskeneräinen varaus').'">';
- 	  echo '<b class="text-warning">'.Yii::t('main', 'VARAUS').'</b>';	
+	  echo '<th>';
+ 	  echo '<div class="td_varaus collapse text-center">
+		<span>'.Yii::t('main', 'VARAUS').'</span>
+		</div>
+	  ';	
 	  echo '</th>';
 	// VARAUS
 
 	$asetukset = Asetukset::model()->findByPk(1);
 
 	foreach($tyontekijat_model as $t){
-	  echo '<th style="z-index: 999">';
+	  echo '<th class="text-center" style="z-index: 999">';
  	  echo '<a href="#" class="getTekijanTiedot" for="'.$t->id.'">'.$this->etuSukunimi($t->id).'</a>';	
 	  echo '</th>';
 	}
@@ -128,6 +131,7 @@
 
 		// VARAUS
 		  echo '<td '.$clPyhat.' id="'.$did.'_0">';
+		  echo '<div class="collapse td_varaus varaus_l">';
 		  $tv = $this->renderPartial('//tyovuoroot/did3',array(
 					'pvm'=>$date,
 					'tid'=>0,
@@ -138,6 +142,7 @@
 					'kohde'=>$kohde,
 		  ), true);
 		  echo json_decode($tv, true);
+		  echo '</div>';
 		  echo '</td>';
 		// VARAUS
 

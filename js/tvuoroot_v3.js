@@ -1,5 +1,13 @@
 $(document).ready(function(){
 
+  var varaus_l = 0;
+  $( ".td_varaus.varaus_l" ).each(function( index ) {
+	if( $(this).find('.tv_edit').text() !== '' ){
+		varaus_l += 1;
+	}
+  });
+  if( varaus_l > 0 ){ $('.td_varaus').addClass('in'); }
+
   $( ".luolaatiko" ).each(function( index ) {
 
 	var forThis = $(this).attr("for");
