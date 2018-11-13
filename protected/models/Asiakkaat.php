@@ -100,8 +100,8 @@ class Asiakkaat extends DB2ActiveRecord
                      'hinta_sis_alv' => 'float',
 		     'tyoryhma' => 'int(11)',
                      'gcm_reg_id' => 'varchar(500) ',
-                     'lopetuksen_pvm' => 'varchar(50) DEFAULT NULL',
-                     'lopetuksen_syy' => 'TEXT DEFAULT NULL'
+                     'lopetuksen_pvm' => 'varchar(50)',
+                     'lopetuksen_syy' => 'TEXT'
 
                      //'vinkki_tunnit' => 'varchar(10)',
                      //'vinkki_prosentti' => 'varchar(10)',
