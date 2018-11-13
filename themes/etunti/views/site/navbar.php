@@ -310,7 +310,7 @@ if( $curpage == 'tyovuoroot/tv3' )
         <li class="p10" data-toggle="tooltip">
 	<select class="form-control tvchange" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Valitse näkymä'); ?>">
  	  <option value="index" <?php if($curpage == 'tyovuoroot/index') echo 'selected'; ?>><?php echo Yii::t('main', 'Viikko'); ?></option>
- 	  <option value="tv2" <?php if($curpage == 'tyovuoroot/tv2') echo 'selected'; ?>><?php echo Yii::t('main', 'Työntekijä'); ?></option>
+ 	  <option value="tv3" <?php if($curpage == 'tyovuoroot/tv3') echo 'selected'; ?>><?php echo Yii::t('main', 'Työntekijä'); ?></option>
  	  <!--<option value="tv3" <?php if($curpage == 'tyovuoroot/tv3') echo 'selected'; ?>><?php echo Yii::t('main', 'V3 taulu'); ?></option>-->
  	  <!--<option value="tv_kohteet"><?php echo Yii::t('main', 'Kohde'); ?></option>-->
 	</select>
