@@ -4,9 +4,6 @@
  if($pass == 'Estrom2016!')
  {
 
-
-
-
    $koodi_aktiivinen = 1;
    if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
    	$list = Domainit::model()->findAll(" domain!='defdb' AND domain='demo' ");
@@ -633,6 +630,15 @@
 	// <-- Lasku Netvisor
 
 	//    Lasku Netvisor -->
+
+	// <-- Asiakas passiviseksi paivamaaran mukaan
+	$criteria=new CDbCriteria;
+	$criteria->condition = " 
+		DATE_FORMAT(STR_TO_DATE(lopetuksen_pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+		AND aktiivinen=1
+	";
+	Asiakkaat::model()->updateAll(array('aktiivinen'=>'0'), $criteria);
+	//     Asiakas passiviseksi paivamaaran mukaan -->
 
 
 	unset($_SESSION['domain']);
