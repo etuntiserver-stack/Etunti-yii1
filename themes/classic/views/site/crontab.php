@@ -632,14 +632,12 @@
 	//    Lasku Netvisor -->
 
 	// <-- Asiakas passiviseksi paivamaaran mukaan
-/*
 	$criteria=new CDbCriteria;
 	$criteria->condition = " 
 		DATE_FORMAT(STR_TO_DATE(lopetuksen_pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 		AND aktiivinen=1
 	";
 	Asiakkaat::model()->updateAll(array('aktiivinen'=>'0'), $criteria);
-*/
 	//     Asiakas passiviseksi paivamaaran mukaan -->
 
 
