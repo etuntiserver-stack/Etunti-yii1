@@ -305,19 +305,6 @@ if( $curpage == 'tyovuoroot/tv3' )
         </li>
 	<!-- Haku -->
 
-
-	<!-- Nakyma -->
-        <li class="p10" data-toggle="tooltip">
-	<select class="form-control tvchange" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Valitse näkymä'); ?>">
- 	  <option value="index" <?php if($curpage == 'tyovuoroot/index') echo 'selected'; ?>><?php echo Yii::t('main', 'Viikko'); ?></option>
- 	  <option value="tv3" <?php if($curpage == 'tyovuoroot/tv3') echo 'selected'; ?>><?php echo Yii::t('main', 'Työntekijä'); ?></option>
- 	  <!--<option value="tv3" <?php if($curpage == 'tyovuoroot/tv3') echo 'selected'; ?>><?php echo Yii::t('main', 'V3 taulu'); ?></option>-->
- 	  <!--<option value="tv_kohteet"><?php echo Yii::t('main', 'Kohde'); ?></option>-->
-	</select>
-        </li>
-	<!-- Nakyma -->
-
-
 	<!-- Viikonloput -->
 	<?php if($curpage == 'tyovuoroot/index') : ?>
         <li class="p10" data-toggle="tooltip">
@@ -506,12 +493,6 @@ $('.multTyoryhma').multiselect({
 	numberDisplayed: 0,
 	buttonWidth: '100%',
         maxHeight: 300,
-});
-
-
-$('.tvchange').change(function(){
-	var thisVal = $(this).val();
-	window.location.href=thisVal;
 });
 
 });
@@ -1038,10 +1019,18 @@ $('.tvchange').change(function(){
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
-              <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/index">
-                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Työvuorot'); ?></a>
+
+	      <!-- Nakyma -->
+              <li class="p10" data-toggle="tooltip">
+	      <select class="form-control tvchange" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Valitse näkymä'); ?>">
+ 	        <?php if($curpage != 'tyovuoroot/index' and $curpage != 'tyovuoroot/tv3'): ?>
+		<option value=><?php echo Yii::t('main', 'Työvuoro näkymä'); ?></option>
+		<?php endif; ?>
+ 	        <option value="index" <?php if($curpage == 'tyovuoroot/index') echo 'selected'; ?>><?php echo Yii::t('main', 'Viikko'); ?></option>
+ 	        <option value="tv3" <?php if($curpage == 'tyovuoroot/tv3') echo 'selected'; ?>><?php echo Yii::t('main', 'Työntekijä'); ?></option>
+	      </select>
               </li>
+	      <!-- Nakyma -->
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/lista?uusi_tilaus=1">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Tilaukset'); ?></a>
@@ -1604,6 +1593,11 @@ nyt ne ovat etusivu.php ssa
   <script type="text/javascript">
   jQuery(document).ready(function() {
 
+    $('.tvchange').change(function(){
+	var thisVal = $(this).val();
+	window.location.href= location.protocol + "//" + location.host + '/index.php/tyovuoroot/' + thisVal;
+    });
+
     var curpage = $('#curpage').val();
 
     if(
@@ -1646,6 +1640,7 @@ nyt ne ovat etusivu.php ssa
     else if(
 	curpage === 'tyovuoroot/index'
 	|| curpage === 'tyovuoroot/tv2'
+	|| curpage === 'tyovuoroot/tv3'
 	|| curpage === 'tyovuoroot/tv_kohteet'
 	|| curpage === 'tyovuoroot/viikkottain'
 	|| curpage === 'tyovuoroot/kk'
