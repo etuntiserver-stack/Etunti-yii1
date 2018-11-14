@@ -131,25 +131,39 @@
 		}
 		//  Paikkakunta nakyvissa -->
 
-		// <-- Title generoi
+		// <-- Toistuva
+		$toistuva = '';
+		if($tvVal->toistuva_id != 0){
+			$toistuva = ' <i class="tvikooni fa fa-repeat" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Toistuva työvuoro').'"></i>';
+		}
+		// Toistuva -->
+
+		// <-- Avaimet
+		$avaimet = '';
+		if(isset($tvVal->avaimet) and count($tvVal->avaimet) > 0){
+			$avaimet =  ' <i class="tvikooni fa fa-key"></i>';
+		}
+		// Avaimet -->
+
+		// <-- Hovertietoja generoi
 		$hovertietoja = '';
 		$hovertietoja .= $asiakasNakyvissa;
 		//if(!empty($asiakasNakyvissa)){ $title .= ', '; }
 		$hovertietoja .= $paikkakuntaNakyvissa;
-		$hovertietoja .= '<br><p><span class="didstatus">'.$status.'</span> <b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.$osoite.'</p>';
-		if( !empty($tvVal->tietoja) ){ $hovertietoja .= '<p><b>Tietoja:</b> '.$tvVal->tietoja.'<p>'; }
-		//    Title generoi -->
-
-		// <-- Toistuva
-		$toistuva = '';
-		if($tvVal->toistuva_id != 0){
-			$toistuva = ' <i class="tvikooni fa fa-repeat text-orange" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Toistuva työvuoro').'"></i>';
+		$hovertietoja .= '<br><p><span class="didstatus">'.$status.$toistuva.$avaimet.'</span> <b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.$osoite.'</p>';
+		if( $tvVal->tyopaari != '' and $tvVal->tyopaari != "[\"$tvVal->tid\"]" ){
+		$hovertietoja .= '<div class="hover_well"><h5>Työparit</h5>';
+		   foreach(json_decode($tvVal->tyopaari, true) as $tyopaari){
+			if( $tvVal->tid != $tyopaari )
+			$hovertietoja .=  $this->etuSukunimi($tyopaari).'<br>';
+		   }
+		$hovertietoja .= '</div>';
 		}
-		// Toistuva -->
+		if( !empty($tvVal->tietoja) ){ $hovertietoja .= '<div class="hover_well"><h5>Tietoja:</h5> '.$tvVal->tietoja.'</div>'; }
+		//    Hovertietoja generoi -->
 
 		if( isset($loppu) and ($this->num(strtotime($tvVal->alku)-strtotime($loppu)) > 0) ){
 			$valilyonti = strtotime($tvVal->alku)-strtotime($loppu);
-			//$bod .= '<div class="ajanreika" style="height:'.($this->num($valilyonti)*17).'px" data-toggle="tooltip" data-placement="top" title="Aika: '.$this->sprint(strtotime($tvVal->alku)-strtotime($loppu)).'"></div>';
 			$reikatyyppi = 'reika-warning';
 			//if( $this->num($valilyonti) > 1 ){ $reikatyyppi = 'reika-warning'; }
 			$bod .= '<div class="row reika '.$reikatyyppi.' text-center"><i class="glyphicon glyphicon-time"></i> Aika: '.$this->sprint($valilyonti).'</div>';
@@ -184,13 +198,13 @@
 	   	//    Tyoryhmat -->
 	        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></i>';
 
-	   	$bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="'.$fullRivi.'" style="'.$bgcol.'">';
-		$bod .= '<div class="pull-left ikoonintila" style="display:none">'.$muokkaus.$status.$toistuva.'</div>';
+	   	$bod .= '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="'.$fullRivi.'" style="'.$bgcol.'">';
+		$bod .= '<div class="pull-left ikoonintila" style="display:none">'.$muokkaus.$status.$toistuva.$avaimet.' </div>';
 		$bod .= '<span class="'.$tv_edit.'" id="tv_'.$tvVal->id.'">';
 		$bod .= '<div class="hovertietoja" style="display:none">'.$hovertietoja.'</div>';
 		$bod .= '<b class="kellot">'.$tvVal->alku.'-'.$tvVal->loppu.': </b>'.$osoite;
-	   	$bod .=  '</span>';
-	   	$bod .=  '</div>';
+	   	$bod .= '</span>';
+	   	$bod .= '</div>';
 		$loppu = $tvVal->loppu;
 	}
 	$bod .=  '</div>';

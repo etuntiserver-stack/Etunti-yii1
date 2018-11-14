@@ -17,6 +17,12 @@
 .latikkolisatiedot_paa{
 	position: relative;
 }
+.hover_well{
+	padding: 7px;
+	background: #ededed;
+	border: 1px #ddd solid;
+	margin-bottom: 5px;
+}
 .latikkolisatiedot{
 	padding: 2px 5px;
 	background: orange;
@@ -31,8 +37,8 @@
 
 }
 .ikoonintila{
-	min-width: 45px;
-	width: 45px;
+	min-width: 65px;
+	width: 65px;
 }
 .fullRivi{
 

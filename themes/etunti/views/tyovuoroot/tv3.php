@@ -155,7 +155,7 @@
 
 		foreach($tyontekijat_model as $t){
 		  echo '<td '.$clPyhat.' class="laatiko_td">';
-		  echo '<div class="td_hovertietoja" style="display:none"><b>'.$arrDate[$explColDate[0]].', '.$explColDate[1].$ispyha.' '.$this->etuSukunimi($t->id).'</b><br></div>';
+		  echo '<div class="td_hovertietoja" style="display:none"><h4>'.$arrDate[$explColDate[0]].', '.$explColDate[1].$ispyha.' '.$this->etuSukunimi($t->id).'</h4></div>';
 		  echo '<div id="'.$did.'_'.$t->id.'">';
 	     	  echo '<div class="luolaatiko" for="'.$did.'_'.$t->id.'" pvm="'.$date.'" tid="'.$t->id.'" from="tvuoro" kohteet_siivous="'.$ks.'" asiakas="'.$asiakas.'" kohde="'.$kohde.'" ></div>';
 		  echo '</div>';
