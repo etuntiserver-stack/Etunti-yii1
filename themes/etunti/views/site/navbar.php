@@ -1026,8 +1026,8 @@ $('.multTyoryhma').multiselect({
  	        <?php if($curpage != 'tyovuoroot/index' and $curpage != 'tyovuoroot/tv3'): ?>
 		<option value=><?php echo Yii::t('main', 'Työvuoro näkymä'); ?></option>
 		<?php endif; ?>
- 	        <option value="index" <?php if($curpage == 'tyovuoroot/index') echo 'selected'; ?>><?php echo Yii::t('main', 'Viikko'); ?></option>
- 	        <option value="tv3" <?php if($curpage == 'tyovuoroot/tv3') echo 'selected'; ?>><?php echo Yii::t('main', 'Työntekijä'); ?></option>
+ 	        <option value="index" <?php if($curpage == 'tyovuoroot/index') echo 'selected'; ?>><?php echo Yii::t('main', 'Työvuoro / Viikko'); ?></option>
+ 	        <option value="tv3" <?php if($curpage == 'tyovuoroot/tv3') echo 'selected'; ?>><?php echo Yii::t('main', 'Työvuoro / Työntekijä'); ?></option>
 	      </select>
               </li>
 	      <!-- Nakyma -->
