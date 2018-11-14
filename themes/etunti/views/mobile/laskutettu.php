@@ -281,6 +281,7 @@ $('.chckbxHyvaksynta').on('click', function(event, state) {
       var label = $(this).prop("checked");
       var tot = $(this).attr("tot");
       var thisID = $(this).attr("id").split("_");
+      var this_tr = $(this).closest("tr");
 
       if(label)
       {
@@ -290,12 +291,13 @@ $('.chckbxHyvaksynta').on('click', function(event, state) {
 	   data: { id : thisID[1], ajax : "true", las : "1", tot : tot },
            success: function(data){
 		console.log(data);
-
+		this_tr.hide(370);
+/*
 		   $('#ilmoitusMerkkitysta').html('<div class="alert bg-success">Kohde merkitty laskutetuksi.</div>').show();
 		setTimeout(function() { 
 			$('#ilmoitusMerkkitysta').hide('slow');
 		}, 5000);
-
+*/
 
            }
         });
@@ -306,12 +308,12 @@ $('.chckbxHyvaksynta').on('click', function(event, state) {
 	   data: { id : thisID[1], ajax : "true", las : "0", tot : tot },
            success: function(data){
 		console.log(data);
-
+/*
 		   $('#ilmoitusMerkkitysta').html('<div class="alert bg-warning">Kohteen laskutusmerkintä poistettu.</div>').show();
 		setTimeout(function() { 
 			$('#ilmoitusMerkkitysta').hide('slow');
 		}, 5000);
-
+*/
 		
            }
         });
