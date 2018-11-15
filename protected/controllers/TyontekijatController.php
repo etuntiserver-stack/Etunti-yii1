@@ -707,18 +707,21 @@ class TyontekijatController extends Controller
 		else
 	        $criteria->addCondition (" aktiivinen=1 ");
 
-		if(isset(Yii::app()->session['tekijan_katuosoite']) and !empty(Yii::app()->session['tekijan_katuosoite']))
-	        $criteria->addCondition (" tekijan_katuosoite LIKE '%".Yii::app()->session['tekijan_katuosoite']."%' ");
-
-		if(isset(Yii::app()->session['tekijan_nimi']) and !empty(trim(Yii::app()->session['tekijan_nimi']))){
-	        $criteria->addCondition ("  CONCAT(tekijan_nimi, ' ', sukunimi)  LIKE '%".trim(Yii::app()->session['tekijan_nimi'])."%' ");
+		if(isset(Yii::app()->session['tekijan_katuosoite']) and !empty(Yii::app()->session['tekijan_katuosoite'])){
+	        	$criteria->addCondition (" tekijan_katuosoite LIKE '%".Yii::app()->session['tekijan_katuosoite']."%' ");
 		}
-
-		if(isset(Yii::app()->session['tekijan_puh']) and !empty(trim(Yii::app()->session['tekijan_puh'])))
-	        $criteria->addCondition (" laiten_puh LIKE '%".Yii::app()->session['tekijan_puh']."%' OR tekijan_puh LIKE '%".Yii::app()->session['tekijan_puh']."%' ");
-
-		if(isset(Yii::app()->session['tekijan_email']) and !empty(trim(Yii::app()->session['tekijan_email'])))
-	        $criteria->addCondition (" tekijan_email LIKE '%".Yii::app()->session['tekijan_email']."%' ");
+		if(isset(Yii::app()->session['tekijan_nimi']) and !empty(trim(Yii::app()->session['tekijan_nimi']))){
+	        	$criteria->addCondition ("  CONCAT(tekijan_nimi, ' ', sukunimi)  LIKE '%".trim(Yii::app()->session['tekijan_nimi'])."%' ");
+		}
+		if(isset(Yii::app()->session['tekijan_puh']) and !empty(trim(Yii::app()->session['tekijan_puh']))){
+	        	$criteria->addCondition (" laiten_puh LIKE '%".Yii::app()->session['tekijan_puh']."%' OR tekijan_puh LIKE '%".Yii::app()->session['tekijan_puh']."%' ");
+		}
+		if(isset(Yii::app()->session['tekijan_email']) and !empty(trim(Yii::app()->session['tekijan_email']))){
+	        	$criteria->addCondition (" tekijan_email LIKE '%".Yii::app()->session['tekijan_email']."%' ");
+		}
+		if(isset($_GET['tyoryhma']) and !empty($_GET['tyoryhma'])){
+	        	$criteria->addCondition (" tyoryhma LIKE '%".$_GET['tyoryhma']."%' ");
+		}
 
 		$dataProvider=new CActiveDataProvider('Tyontekijat', array(
 			'criteria'=>$criteria,

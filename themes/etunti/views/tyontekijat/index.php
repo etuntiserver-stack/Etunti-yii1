@@ -60,7 +60,7 @@
 				<select class="gui-input" name="tyoryhma">
 				<option value=""><?php echo Yii::t('main', 'Valitse työryhmä'); ?></option>
 				<?php foreach($vm as $tyoryhma): ?>
-				<option value="<?=(is_array(json_decode($tyoryhma->value2, true)))? implode(",", json_decode($tyoryhma->value2, true)): '' ?>"><?=$tyoryhma->value?></option>
+				<option value="<?=$tyoryhma->value?>"><?=$tyoryhma->value?></option>
 				<?php endforeach; ?>
 				</select>
                             <i class="arrow double"></i>
