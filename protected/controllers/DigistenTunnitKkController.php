@@ -273,6 +273,9 @@ class DigistenTunnitKkController extends Controller
 	{
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
+	        $criteria->condition = "  
+			domain IN (SELECT domain FROM domainit WHERE aktiivinen=1)
+		";
 
 		$dataProvider=new CActiveDataProvider('DigistenTunnitKk', array(
 			'criteria'=>$criteria,

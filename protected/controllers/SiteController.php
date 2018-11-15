@@ -305,7 +305,7 @@ class SiteController extends Controller
 	public function laskuriForCron($domain)
 	{
 
-		$domainit = Domainit::model()->find(" domain='".$domain."' AND maksullinen=1 ");
+		$domainit = Domainit::model()->find(" domain='".$domain."' AND aktiivinen=1 AND maksullinen=1 ");
 		if( isset($domainit->id) )
 		{
 	

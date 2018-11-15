@@ -28,29 +28,46 @@
                         <div class="section">
                           <label class="field select">
 
-		<?php 
-		$a = Valikkoot::model()->findAll(" select_type='aktiivinen' ");
-        	$tal = '';
-		foreach($a as $v){
-		$exV = explode("/",$v->value);
-		   if(isset($exV[0]) and isset($exV[1]))
-		   $tal[$exV[1]] = $exV[0];
-		}
-		$selectedValues = 1;
-		if(isset( Yii::app()->session['aktiivinen']))
-		$selectedValues = array( Yii::app()->session['aktiivinen']=> Array('selected' => 'selected'));
+				<?php 
+				$a = Valikkoot::model()->findAll(" select_type='aktiivinen' ");
+		        	$tal = '';
+				foreach($a as $v){
+				$exV = explode("/",$v->value);
+				   if(isset($exV[0]) and isset($exV[1]))
+				   $tal[$exV[1]] = $exV[0];
+				}
+				$selectedValues = 1;
+				if(isset( Yii::app()->session['aktiivinen']))
+				$selectedValues = array( Yii::app()->session['aktiivinen']=> Array('selected' => 'selected'));
 
-		echo CHtml::dropDownList('aktiivinen','aktiivinen', $tal, 
-		array('class'=>'gui-input','options' => $selectedValues)) 
-		?>
+				echo CHtml::dropDownList('aktiivinen','aktiivinen', $tal, 
+				array('class'=>'gui-input','options' => $selectedValues)) 
+				?>
 
                             <i class="arrow double"></i>
                             </label>
                           </label>
                         </div>
-                      </div>
+                        <div class="section">
+                          <label class="field select">
 
-
+			        <?php
+			       	$criteria = new CDbCriteria();
+				$criteria->order = " value, value2 ";
+				$criteria->condition = " select_type='tyoryhma' ";
+				$vm=Valikkoot::model()->findAll($criteria);
+			        ?>
+				<select class="gui-input" name="tyoryhma">
+				<option value=""><?php echo Yii::t('main', 'Valitse työryhmä'); ?></option>
+				<?php foreach($vm as $tyoryhma): ?>
+				<option value="<?=$tyoryhma->value2?>"><?=$tyoryhma->value?></option>
+				<?php endforeach; ?>
+				</select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+		      </div>
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
