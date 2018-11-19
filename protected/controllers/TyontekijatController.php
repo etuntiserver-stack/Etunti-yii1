@@ -688,7 +688,7 @@ class TyontekijatController extends Controller
 
 
        		$criteria = new CDbCriteria();
-
+		//$criteria->select = " t.*, REPLACE(REPLACE(tyoryhma,'\\\u00f6','ö'), '\\\u00e4', 'ä') as tyoryhma ";
 		// <-- Return order etu ja sukunimella
 		$criteria = $site[0]->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
@@ -720,7 +720,7 @@ class TyontekijatController extends Controller
 	        	$criteria->addCondition (" tekijan_email LIKE '%".Yii::app()->session['tekijan_email']."%' ");
 		}
 		if(isset($_GET['tyoryhma']) and !empty($_GET['tyoryhma'])){
-	        	$criteria->addCondition (" tyoryhma LIKE '%".$_GET['tyoryhma']."%' ");
+	        	$criteria->addCondition (" REPLACE(REPLACE(tyoryhma,'\\\u00f6','ö'), '\\\u00e4', 'ä') LIKE '%".$_GET['tyoryhma']."%' ");
 		}
 
 		$dataProvider=new CActiveDataProvider('Tyontekijat', array(

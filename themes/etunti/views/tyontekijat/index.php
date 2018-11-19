@@ -60,7 +60,7 @@
 				<select class="gui-input" name="tyoryhma">
 				<option value=""><?php echo Yii::t('main', 'Valitse työryhmä'); ?></option>
 				<?php foreach($vm as $tyoryhma): ?>
-				<option value="<?=$tyoryhma->value?>"><?=$tyoryhma->value?></option>
+				<option value="<?=$tyoryhma->value?>" <?=(isset($_GET['tyoryhma']) and $_GET['tyoryhma'] == $tyoryhma->value)?'selected':''?>><?=$tyoryhma->value?></option>
 				<?php endforeach; ?>
 				</select>
                             <i class="arrow double"></i>
