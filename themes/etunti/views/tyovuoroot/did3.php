@@ -134,7 +134,7 @@
 		// <-- Toistuva
 		$toistuva = '';
 		if($tvVal->toistuva_id != 0){
-			$toistuva = ' <i class="tvikooni fa fa-repeat" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Toistuva työvuoro').'"></i>';
+			$toistuva = ' <i class="tvikooni fa fa-repeat text-success" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Toistuva työvuoro').'"></i>';
 		}
 		// Toistuva -->
 
@@ -150,7 +150,7 @@
 		$hovertietoja .= $asiakasNakyvissa;
 		//if(!empty($asiakasNakyvissa)){ $title .= ', '; }
 		$hovertietoja .= $paikkakuntaNakyvissa;
-		$hovertietoja .= '<br><p><span class="didstatus">'.$status.$toistuva.$avaimet.'</span> <b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.$osoite.'</p>';
+		$hovertietoja .= '<br><p><span class="didstatus">'.$status.$toistuva.$avaimet.'</span>&nbsp; &nbsp;<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.$osoite.'</p>';
 		if( $tvVal->tyopaari != '' and $tvVal->tyopaari != "[\"$tvVal->tid\"]" ){
 		$hovertietoja .= '<div class="hover_well"><h5>Työparit</h5>';
 		   foreach(json_decode($tvVal->tyopaari, true) as $tyopaari){
