@@ -55,6 +55,7 @@ $('.search-form form').submit(function(){
 		'kohdenID',
 		'tv_id',
 		'viesti',
+		'my_location',
 		/*
 		'bluetooth_name',
 		'sim_serial_number',
