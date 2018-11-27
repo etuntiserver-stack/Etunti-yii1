@@ -4249,23 +4249,27 @@ class TyovuorootController extends Controller
 				$this->redirect(array('siirto'));
 		}
 
-		$criteria = new CDBCriteria;
-        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
-        	$criteria->condition = " 				
-			tid='".$kenelta."'
-			AND peruutettu=0 
-		";
-		if( $alkaen !== null ){
-			$criteria->addCondition(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m%d') >= ".date('Ymd', strtotime($alkaen))." ");
-		}
-		$data_kenelta = Tyovuoroot::model()->findAll($criteria);
+		$data_kenelta = array();
+		$data_kenelle = array();
+		if( $kenelta !== null and $kenelle !== null ){
+			$criteria = new CDBCriteria;
+	        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
+	        	$criteria->condition = " 				
+				tid='".$kenelta."'
+				AND peruutettu=0 
+			";
+			if( $alkaen !== null ){
+				$criteria->addCondition(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m%d') >= ".date('Ymd', strtotime($alkaen))." ");
+			}
+			$data_kenelta = Tyovuoroot::model()->findAll($criteria);
 
-		$criteria = new CDBCriteria;
-        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
-        	$criteria->condition = " 				
-			tid='".$kenelle."'
-		";
-		$data_kenelle = Tyovuoroot::model()->findAll($criteria);
+			$criteria = new CDBCriteria;
+	        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
+	        	$criteria->condition = " 				
+				tid='".$kenelle."'
+			";
+			$data_kenelle = Tyovuoroot::model()->findAll($criteria);
+		}
 
 		$this->render('siirto', array(
 			'data_kenelta' => $data_kenelta,

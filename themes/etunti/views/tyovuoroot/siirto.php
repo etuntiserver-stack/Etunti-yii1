@@ -1,6 +1,7 @@
 <?php
 /* @var $this KohteetController */
 /* @var $dataProvider CActiveDataProvider */
+$site = Yii::app()->createController('Site');
 ?>
 
 
@@ -29,7 +30,6 @@
 				<?php
 				$name_tyontekijat = 'tekijaPaaSivulla';
 				(isset($_GET['aktiivinen']))? $aktiivinen = $_GET['aktiivinen'] : $aktiivinen = 1;
-		   		$site = Yii::app()->createController('Site');
 		   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
 						'kenelta', // name
 						'gui-input', //class
@@ -51,7 +51,6 @@
                           <label class="field select">
 				<?php
 				(isset($_GET['aktiivinen']))? $aktiivinen = $_GET['aktiivinen'] : $aktiivinen = 1;
-		   		$site = Yii::app()->createController('Site');
 		   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
 						'kenelle', // name
 						'gui-input', //class
@@ -107,7 +106,7 @@
         </div>
 
 
-	<?php if( isset($_GET['kenelta']) and isset($_GET['kenelle'])) : ?>
+	<?php if( count($data_kenelta) > 0 and count($data_kenelle) > 0) : ?>
         <!-- begin: .tray-center -->
         <div class="tray-center row">
             <div class="admin-form col-sm-5">
