@@ -140,7 +140,7 @@ if(isset(Yii::app()->user->nimi))
   } else {
   $online = new UsersOnline();
   $online->time = time();
-  $online->ip = CHttpRequest::getUserHostAddress();;
+  $online->ip = (isset($_SERVER['REMOTE_ADDR']))?$_SERVER['REMOTE_ADDR']:'';
   $online->session = Yii::app()->getSession()->getSessionId();
   $online->user = Yii::app()->user->nimi;
   $online->save();
