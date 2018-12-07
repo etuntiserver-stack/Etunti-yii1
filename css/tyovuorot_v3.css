@@ -98,6 +98,10 @@ td .latikkoAsetukset{
 .kellot{
 	
 }
+.tyoajanlaatu_laatiko{
+	padding: 3px;
+	color: #fff;
+}
 .tv_edit{
 	width: 100%;
 	cursor: pointer;

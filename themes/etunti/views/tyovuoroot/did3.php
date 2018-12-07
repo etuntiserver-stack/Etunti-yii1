@@ -37,7 +37,7 @@
 
        	$criteria = new CDbCriteria();
 	$criteria->order = " alku ASC";
-	$criteria->condition = " tid = '".$tid."' AND pvm = '".date("d.m.Y",strtotime($pvm))."' AND tyoajanlaatu='' ";
+	$criteria->condition = " tid = '".$tid."' AND pvm = '".date("d.m.Y",strtotime($pvm))."' ";
 
 	// <-- Asiakas
 	if(isset($asiakas) and !empty($asiakas))
@@ -84,7 +84,7 @@
 		$osoite = '';
 		if(!empty($tvVal->osoite)){
 			$osoite = $tvVal->osoite;
-		} else if(empty($tvVal->osoite) and isset($tvVal->kohteet->osoite)){
+		} elseif(empty($tvVal->osoite) and isset($tvVal->kohteet->osoite)){
 			$osoite = $tvVal->kohteet->osoite;
 		}
 		// Osoite -->
@@ -162,12 +162,19 @@
 		if( !empty($tvVal->tietoja) ){ $hovertietoja .= '<div class="hover_well"><h5>Tietoja:</h5> '.$tvVal->tietoja.'</div>'; }
 		//    Hovertietoja generoi -->
 
-		if( isset($loppu) and ($this->num(strtotime($tvVal->alku)-strtotime($loppu)) > 0) ){
-			$valilyonti = strtotime($tvVal->alku)-strtotime($loppu);
+		if( isset($loppu[0]) and empty($loppu[0]) and isset($loppu[1]) and ($this->num(strtotime($tvVal->alku)-strtotime($loppu[1])) > 0) ){
+			$valilyonti = strtotime($tvVal->alku)-strtotime($loppu[1]);
 			$reikatyyppi = 'reika-warning';
-			//if( $this->num($valilyonti) > 1 ){ $reikatyyppi = 'reika-warning'; }
 			$bod .= '<div class="row reika '.$reikatyyppi.' text-center"><i class="glyphicon glyphicon-time"></i> Aika: '.$this->sprint($valilyonti).'</div>';
 		}
+
+		$tv_edit 	= 'tv_edit';
+		$fullRivi 	= 'fullRivi';
+	   	$muistin	= 'muistin';
+
+		$kellot = '<b class="kellot">'.$tvVal->alku.'-'.$tvVal->loppu.': </b>';
+	        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></i>';
+
 		$color = '#888';
 		$bgcol = 'color:#333';
 		if(!empty($tvVal->tyoajanmerkinta)){
@@ -177,10 +184,14 @@
 				$bgcol = 'color:'.$color;
 			}
 		}
+		if(!empty($tvVal->tyoajanlaatu) and empty($osoite)){
+			$expl1 = explode("/",$tvVal->tyoajanlaatu);
+			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
+			$osoite = (isset($expl1[0])) ? '<div class="row text-center tyoajanlaatu_laatiko" style="background:'.$color.'">'.$expl1[0].'</div>' : '';
+			$kellot = '';
+			$muokkaus = '';
+		}
 
-		$tv_edit 	= 'tv_edit';
-		$fullRivi 	= 'fullRivi';
-	   	$muistin	= 'muistin';
 	   	// <-- Tyoryhmat
 		$site = Yii::app()->createController('Site');
 		if( 
@@ -196,16 +207,15 @@
 			}
 		}
 	   	//    Tyoryhmat -->
-	        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></i>';
 
 	   	$bod .= '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="'.$fullRivi.'" style="'.$bgcol.'">';
 		$bod .= '<div class="pull-left ikoonintila" style="display:none">'.$muokkaus.$status.$toistuva.$avaimet.' </div>';
 		$bod .= '<span class="'.$tv_edit.'" id="tv_'.$tvVal->id.'">';
 		$bod .= '<div class="hovertietoja" style="display:none">'.$hovertietoja.'</div>';
-		$bod .= '<b class="kellot">'.$tvVal->alku.'-'.$tvVal->loppu.': </b>'.$osoite;
+		$bod .= $kellot.$osoite;
 	   	$bod .= '</span>';
 	   	$bod .= '</div>';
-		$loppu = $tvVal->loppu;
+		$loppu = array($tvVal->tyoajanlaatu, $tvVal->loppu);
 	}
 	$bod .=  '</div>';
 
