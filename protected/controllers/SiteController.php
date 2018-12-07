@@ -1984,7 +1984,7 @@ $(document).ready(function(){
 
 
 		$result = $total_l+$total_t;
-		if($result == 0)
+		if($result <= 0)
 		$return = '00:00'; 
 		else
 		$return = $this->sprint($result);
