@@ -1935,9 +1935,12 @@ $(document).ready(function(){
 		";
 
         	$criteria->condition = "  
-			aloitan !='' and loppui !='' and status ='3'
+			loppui > aloitan
+			AND aloitan !='' and loppui !='' and status ='3'
 			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
 			AND id NOT IN(select kid from sivexkuitti_repaired)
+			AND sairaus!=1
+			AND deleted=0
 		";
 
 		// <-- Tyoryhmat
@@ -1960,8 +1963,11 @@ $(document).ready(function(){
 		";
 
         	$criteria->condition = "  
-			aloitan !='' and loppui !='' and status ='3'
+			loppui > aloitan
+			AND aloitan !='' and loppui !='' and status ='3'
 			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
+			AND sairaus!=1
+			AND deleted=0
 		";
 
 		// <-- Tyoryhmat
