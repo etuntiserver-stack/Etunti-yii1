@@ -205,7 +205,7 @@
 		<?php foreach($lisa_tuotteet['tuote'] as $k => $v) : ?>
 		<?php $key++; ?>
 		<?php
-			if( isset($tp_lisatuotteet[$mob->tyovuoroot->tyopaari][$mob->tyovuoroot->pvm]) ){ continue; }
+			if( isset($tp_lisatuotteet[$mob->tyovuoroot->tyopaari][$mob->tyovuoroot->pvm][$v]) ){ continue; }
 			$t 		= json_decode($mob->tyovuoroot->lisa_tuotteet, true)['maara'][$k];
 			$rivi_kpl 	= json_decode($mob->tyovuoroot->lisa_tuotteet, true)['maara'][$k];
 			$r		= [];
@@ -270,7 +270,7 @@
 		</tr>
 		<?php endif; ?>
 		<?php if( isset($mob->tyovuoroot) and is_array(json_decode($mob->tyovuoroot->tyopaari, true))){
-			$tp_lisatuotteet[$mob->tyovuoroot->tyopaari][$mob->tyovuoroot->pvm] = $item->id; 
+			$tp_lisatuotteet[$mob->tyovuoroot->tyopaari][$mob->tyovuoroot->pvm][$v] = $item->id; 
 		} ?>
 		<?php endforeach; ?>
 		<?php endif; ?>
