@@ -37,7 +37,7 @@
 
        	$criteria = new CDbCriteria();
 	$criteria->order = " alku ASC";
-	$criteria->condition = " tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' ";
+	$criteria->condition = " tid = '".$tid."' AND pvm = '".date("d.m.Y",strtotime($pvm))."' AND tyoajanlaatu='' ";
 
 	// <-- Asiakas
 	if(isset($asiakas) and !empty($asiakas))
