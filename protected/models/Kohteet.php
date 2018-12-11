@@ -78,22 +78,22 @@ public $verot;
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
                      'tag_id' => 'varchar(20) ',
                      'gps_sijainti' => 'varchar(50) ',
-                     'lyhenne' => 'varchar(46) YES ',
-                     'osoite' => 'varchar(50) MUL YES ',
-                     'katuosoite' => 'varchar(50) YES ',
-                     'kaupunki' => 'varchar(20) YES ',
-                     'toimipaikka' => 'varchar(20) YES ',
-                     'pnumero' => 'varchar(7) YES ',
-                     'email' => 'varchar(72) YES ',
-                     'aikataulu' => 'text YES ',
-                     'hinnoittelu' => 'text YES ',
-                     'muut' => 'text YES ',
-                     'toimenpiteet' => 'longtext YES ',
-                     'tietoja' => 'text YES ',
+                     'lyhenne' => 'varchar(46) DEFAULT NULL',
+                     'osoite' => 'varchar(50) DEFAULT NULL',
+                     'katuosoite' => 'varchar(50) DEFAULT NULL',
+                     'kaupunki' => 'varchar(20) DEFAULT NULL',
+                     'toimipaikka' => 'varchar(20) DEFAULT NULL',
+                     'pnumero' => 'varchar(7) DEFAULT NULL',
+                     'email' => 'varchar(72) DEFAULT NULL',
+                     'aikataulu' => 'text DEFAULT NULL',
+                     'hinnoittelu' => 'text DEFAULT NULL',
+                     'muut' => 'text DEFAULT NULL',
+                     'toimenpiteet' => 'longtext DEFAULT NULL',
+                     'tietoja' => 'text DEFAULT NULL',
                      'tyoryhma' => 'int(11)',
-                     'ryhma' => 'varchar(10) YES ',
-                     'aktiivinen' => 'int(1) YES ',
-                     'avain' => 'varchar(255) MUL ',
+                     'ryhma' => 'varchar(10) DEFAULT NULL',
+                     'aktiivinen' => 'int(1) DEFAULT NULL',
+                     'avain' => 'varchar(255) DEFAULT NULL',
                      'kenella_on_avain' => 'varchar(50) ',
                      'puh_nro' => 'varchar(50) ',
                      'siivous' => 'varchar(100) ',
@@ -112,6 +112,7 @@ public $verot;
                      'hinta_tyyppi' => 'varchar(50)',
                      'hinta' => 'varchar(10)',
                      'verot' => 'varchar(100)',
+		     'tyo_erittelyt' => 'text DEFAULT NULL'
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -143,7 +144,7 @@ public $verot;
 			array('ryhma, viivastyskorko, hinta', 'length', 'max'=>10),
 			array('avain, lasku_tiedot', 'length', 'max'=>255),
 			array('siivous, etu_suku_nimet, arvioitu_kesto, verot', 'length', 'max'=>100),
-			array('aikataulu, hinnoittelu, muut, toimenpiteet, tietoja', 'safe'),
+			array('aikataulu, hinnoittelu, muut, toimenpiteet, tietoja, tyo_erittelyt', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, time, tag_id, gps_sijainti, lyhenne, osoite, katuosoite, kaupunki, toimipaikka, pnumero, email, aikataulu, hinnoittelu, muut, toimenpiteet, tietoja, tyoryhma, ryhma, aktiivinen, avain, kenella_on_avain, puh_nro, siivous, etu_suku_nimet, maksuehto_paiva, viivastyskorko, lasku_tiedot, asiakas_id', 'safe', 'on'=>'search'),
@@ -203,6 +204,7 @@ public $verot;
 			'tarvittavien_tyontekijoiden_maara'=>Yii::t('main', 'Tarvittavien työntekijöiden määrä'),
 			'arvioitu_kesto'=>Yii::t('main', 'Arvioitu kesto'),
 			'hinnasto_id'=> Yii::t('main', 'Hinnasto'),
+			'tyo_erittelyt' => Yii::t('main', 'Työ-erittelyt'),
 		);
 	}
 

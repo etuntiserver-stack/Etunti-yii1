@@ -380,6 +380,13 @@ $(document).ready(function(){
 		<?php echo $form->error($model,'tietoja'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->textArea($model,'tyo_erittelyt',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->labelEx($model,'tyo_erittelyt'); ?>
+		<div class="row"><div class="col-sm-11"><input type="text" class="form-control"></div><div class="col-sm-1"><span class="btn btn-success fa fa-plus"></span></div></div>
+		<?php echo $form->error($model,'tyo_erittelyt'); ?>
+	</div>
+
   </div>
 </div><!-- form -->
 
