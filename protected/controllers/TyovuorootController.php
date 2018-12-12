@@ -1277,7 +1277,7 @@ class TyovuorootController extends Controller
 
 
 
-	public function actionShowohje($id)
+	public function actionShowohje($id, $tv_id=null)
 	{
 		$m = Kohteet::model()->findbypk($id);
 		if($m === null){
@@ -1287,6 +1287,14 @@ class TyovuorootController extends Controller
 		}
 
 		$k = explode("//",$m->kenella_on_avain);
+
+		$tyo_erittelyt = json_decode($m->tyo_erittelyt, true);
+		if($tv_id !== null){
+			$tv = Tyovuoroot::model()->find(" id='".$tv_id."' AND kohde='".$id."' ");
+			if(isset($tv->id)){
+				$tyo_erittelyt = json_decode($tv->tyo_erittelyt, true);
+			}
+		}
 
 		  $ohje = '';
 		if(isset($k[1]))
@@ -1301,7 +1309,7 @@ class TyovuorootController extends Controller
 		  $ohje .= "<br>Tietoja: ".$m->tietoja;
 		if(!empty($m->muut))
 		  $ohje .= "<br>Muut: ".$m->muut;
-		echo json_encode(array($ohje,$m->tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,json_decode($m->tyo_erittelyt, true)));
+		echo json_encode(array($ohje,$m->tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt));
 	
 	}
 
@@ -1694,6 +1702,11 @@ class TyovuorootController extends Controller
 			} else {
 				$toistuva->lisa_tuotteet = '';
 			}
+			if( is_array($toistuva->tyo_erittelyt) and count($toistuva->tyo_erittelyt) > 0 ){
+				$toistuva->tyo_erittelyt = json_encode($toistuva->tyo_erittelyt, JSON_FORCE_OBJECT);
+			} else {
+				$toistuva->tyo_erittelyt = '';
+			}
 
 			if(isset($_POST['P']))
 			$toistuva->viikko_paivat=json_encode($_POST['P']);
@@ -1786,7 +1799,11 @@ class TyovuorootController extends Controller
 			} else {
 				$model->lisa_tuotteet = '';
 			}
-
+			if( is_array($model->tyo_erittelyt) and count($model->tyo_erittelyt) > 0 ){
+				$model->tyo_erittelyt = json_encode($model->tyo_erittelyt, JSON_FORCE_OBJECT);
+			} else {
+				$model->tyo_erittelyt = '';
+			}
 			// <-- Apuaika
 			if(isset($_POST['Tyovuoroot']['apuaika']) and $_POST['Tyovuoroot']['apuaika'] == 1)
 				$model->apuaika = 1;
@@ -2016,6 +2033,11 @@ class TyovuorootController extends Controller
 			} else {
 				$toistuva->lisa_tuotteet = '';
 			}
+			if( is_array($toistuva->tyo_erittelyt) and count($toistuva->tyo_erittelyt) > 0 ){
+				$toistuva->tyo_erittelyt = json_encode($toistuva->tyo_erittelyt, JSON_FORCE_OBJECT);
+			} else {
+				$toistuva->tyo_erittelyt = '';
+			}
 
 			// <-- viikko_paivat
 			if(isset($_POST['P'])){	
@@ -2211,7 +2233,11 @@ class TyovuorootController extends Controller
 			} else {
 				$model->lisa_tuotteet = '';
 			}
-
+			if( is_array($model->tyo_erittelyt) and count($model->tyo_erittelyt) > 0 ){
+				$model->tyo_erittelyt = json_encode($model->tyo_erittelyt, JSON_FORCE_OBJECT);
+			} else {
+				$model->tyo_erittelyt = '';
+			}
 			if($model->save()){
 
 				// <-- Onko tyopari esitetty

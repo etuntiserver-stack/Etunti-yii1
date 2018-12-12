@@ -143,8 +143,6 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
   </div>
 </div>
 
-<div id="tyo_erittelyt"></div>
-
 <div class="row">
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'osoite'); ?>
@@ -397,7 +395,29 @@ $(".muokaValiko").click(function() {
 		<?php endif; ?>
   </div>
 </div>
-<br>
+
+<div class="row">
+  <div class="col-sm-3">
+	 <span class="btn btn-success uusierittely">Työ-erittely <span class="fa fa-plus"></span></span>
+  </div>
+  <div class="col-sm-9">
+	<div id="erittelynlista">
+	 <?php if(is_array(json_decode($model->tyo_erittelyt, true))): ?>
+	 <?php foreach(json_decode($model->tyo_erittelyt, true) as $k => $v): ?>
+	 <div class="row">
+	  <div class="col-sm-11">
+	   <input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control" value="<?=$v?>">
+	  </div>
+	  <div class="col-sm-1 text-right">
+	   <span class="btn btn-danger fa fa-trash poislistasta"></span>
+	  </div>
+	 </div>
+	 <?php endforeach; ?>
+	 <?php endif; ?>
+	</div>
+  </div>
+</div>
+
 <p id="lisapalvelu_lista">
 	<?php $lisa_tuotteet = json_decode($model->lisa_tuotteet, true); ?>
 	<?php if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote'])  ) : ?>
@@ -1383,10 +1403,12 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 
 	$(this).removeClass('bg-danger');
 	var thisID = $(this).val();
+	var tyo_erittelyt = '';
+	var tv_id = '<?php if(isset($model->id)){ echo $model->id; } ?>';
 	linkkiKohteeseen();
 
 	  $.ajax({
-		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+thisID,
+		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+ thisID +'&tv_id='+ tv_id,
 		  success:function(data){
 			//console.log(data);
 			var d = JSON.parse(data);
@@ -1396,8 +1418,23 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 			$('#Tyovuoroot_osoite').val(d[3]);
 			$('#Tyovuoroot_postinumero').val(d[4]);
 			$('#Tyovuoroot_postitoimipaikka').val(d[5]);
-			$('#tyo_erittelyt').html(d[6]);
 
+			// <-- tyo_erittelyt 
+			if($.isArray(d[6])){
+			$.each(d[6], function( index, value ) {
+			  tyo_erittelyt += '' +
+				 '<div class="row">' +
+				  '<div class="col-sm-11">' +
+				   '<input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control" value="'+ value +'">' +
+				  '</div>' +
+				  '<div class="col-sm-1 text-right">' +
+				   '<span class="btn btn-danger fa fa-trash poislistasta"></span>' +
+				  '</div>' +
+		 		 '</div>';
+			});
+			}
+			$("#erittelynlista").html(tyo_erittelyt);
+			//    tyo_erittelyt -->
 
 			if(d[2] !== '')
 				$('#arvioitu_kesto').html(d[2]);
@@ -1409,6 +1446,21 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 		console.log(data);
 	    	}
 	  });
+  });
+  $(".uusierittely").click(function(){
+    $("#erittelynlista").append('' +
+		 '<div class="row">' +
+		  '<div class="col-sm-11">' +
+		   '<input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control">' +
+		  '</div>' +
+		  '<div class="col-sm-1 text-right">' +
+		   '<span class="btn btn-danger fa fa-trash poislistasta"></span>' +
+		  '</div>' +
+ 		 '</div>'
+   );
+  });
+  $(document).delegate(".poislistasta","click",function(){
+   $(this).closest(".row").remove();
   });
 
   linkkiKohteeseen();
