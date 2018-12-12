@@ -314,6 +314,11 @@ class KohteetController extends Controller
 		if(isset($_POST['Kohteet']))
 		{
 			$model->attributes=$_POST['Kohteet'];
+			if( is_array($model->tyo_erittelyt) and count($model->tyo_erittelyt) > 0 ){
+				$model->tyo_erittelyt = json_encode($model->tyo_erittelyt);
+			} else {
+				$model->tyo_erittelyt = '';
+			}
 			if($model->save())
 			{
 
@@ -396,6 +401,11 @@ class KohteetController extends Controller
 
 			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Kohteet'];
+			if( is_array($model->tyo_erittelyt) and count($model->tyo_erittelyt) > 0 ){
+				$model->tyo_erittelyt = json_encode($model->tyo_erittelyt, JSON_FORCE_OBJECT);
+			} else {
+				$model->tyo_erittelyt = '';
+			}
 			if($model->save())
 			{
 

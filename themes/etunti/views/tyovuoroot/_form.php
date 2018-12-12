@@ -143,6 +143,8 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
   </div>
 </div>
 
+<div id="tyo_erittelyt"></div>
+
 <div class="row">
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'osoite'); ?>
@@ -1394,6 +1396,8 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 			$('#Tyovuoroot_osoite').val(d[3]);
 			$('#Tyovuoroot_postinumero').val(d[4]);
 			$('#Tyovuoroot_postitoimipaikka').val(d[5]);
+			$('#tyo_erittelyt').html(d[6]);
+
 
 			if(d[2] !== '')
 				$('#arvioitu_kesto').html(d[2]);

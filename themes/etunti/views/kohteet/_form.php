@@ -388,10 +388,10 @@ $(document).ready(function(){
 		 <?php foreach(json_decode($model->tyo_erittelyt, true) as $k => $v): ?>
 		 <div class="row">
 		  <div class="col-sm-8 col-sm-offset-3">
-		   <input type="text" name="Kohteet[tyo_erittelyt][]" class="form-control">
+		   <input type="text" name="Kohteet[tyo_erittelyt][]" class="form-control" value="<?=$v?>">
 		  </div>
 		  <div class="col-sm-1 text-right">
-		   <span class="btn btn-danger fa fa-trash"></span>
+		   <span class="btn btn-danger fa fa-trash poislistasta"></span>
 		  </div>
  		 </div>
 		 <?php endforeach; ?>
