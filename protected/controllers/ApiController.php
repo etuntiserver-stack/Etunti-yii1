@@ -1130,7 +1130,23 @@ public function actionImei($dom)
 					$nykyinenKesto = sprint($nykyinenKesto);
 				}
 
-				$this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>".$nykyinenKesto."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//uusi versio");
+				$tyo_erittelyt = '';
+		           	$tv = Tyovuoroot::model()->findByPk($mobCheck->tv_id);
+				if(isset($tv->id) and is_array(json_decode($tv->tyo_erittelyt, true))){
+					$tyo_erittelyt = '<div class="text-left"><label>Työ-erittelyt:</label>';
+					 foreach(json_decode($tv->tyo_erittelyt, true) as $k => $v){
+					 $tyo_erittelyt .= '
+					 <div class="row">
+					  <div class="col-sm-12">
+					   <input class="tyo_erittelyt" type="checkbox" value="'.$k.'"> '.$v.'
+					  </div>
+			 		 </div>';
+					 }
+					 $tyo_erittelyt .= '</div>';
+				}
+				$sp1 = '<h4>'.$mobCheck->kohde_kannasta.'<br>Kesto: <b>'.$nykyinenKesto.'</b></h4>'.$tyo_erittelyt;
+
+				$this->_sendResponse(200, $mobCheck->status."//".$sp1."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//uusi versio");
 
 			} else {
                      		$this->_sendResponse(200, "3//null//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//uusi versio");
@@ -1231,6 +1247,12 @@ public function actionImei($dom)
                 $mobupdate = Mob::model()->findbypk($mob->id);
 		$log_old = $mobupdate->attributes;
                 $mobupdate->loppui = date("d.m.Y H:i:s");
+
+		if( is_array($_POST['tyo_erittelyt']) and count($_POST['tyo_erittelyt']) > 0 ){
+			$mobupdate->tyo_erittelyt = json_encode($_POST['tyo_erittelyt']);
+		} else {
+			$mobupdate->tyo_erittelyt = '';
+		}
 
 		$vanhaViesti = '';
 		if($mobupdate->viesti != '')
