@@ -396,9 +396,18 @@ $(".muokaValiko").click(function() {
   </div>
 </div>
 
+
+<?php
+	$criteria = new CDbCriteria();
+        $criteria->order = " id DESC ";
+	$criteria->condition = " tv_id='".$model->id."' AND tid='".$model->tid."' ";
+	$mobile = Mobile::model()->find($criteria);
+?>
 <div class="row">
   <div class="col-sm-3">
+	<?php if( !isset($mobile->id) ) : ?>
 	 <span class="btn btn-success uusierittely">Työ-erittely <span class="fa fa-plus"></span></span>
+	<?php endif; ?>
   </div>
   <div class="col-sm-9">
 	<div id="erittelynlista">
@@ -406,10 +415,19 @@ $(".muokaValiko").click(function() {
 	 <?php foreach(json_decode($model->tyo_erittelyt, true) as $k => $v): ?>
 	 <div class="row">
 	  <div class="col-sm-11">
-	   <input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control" value="<?=$v?>">
+	   <?php if( isset($mobile->id) ) : ?>
+	    <input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control" value="<?=$v?>" readonly>
+	   <?php else: ?>
+	    <input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control" value="<?=$v?>">
+	   <?php endif; ?>
 	  </div>
 	  <div class="col-sm-1 text-right">
-	   <span class="btn btn-danger fa fa-trash poislistasta"></span>
+	   <?php if( isset($mobile->id) and is_array(json_decode($mobile->tyo_erittelyt, true)) and isset(json_decode($mobile->tyo_erittelyt, true)[$k])){
+		echo '<span class="text-success fa fa-check fa-2x"></span>';
+	   } ?>
+	   <?php if( !isset($mobile->id) ){
+		echo '<span class="btn btn-danger fa fa-trash poislistasta"></span>';
+	   } ?>
 	  </div>
 	 </div>
 	 <?php endforeach; ?>
