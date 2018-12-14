@@ -422,7 +422,7 @@ $(".muokaValiko").click(function() {
 	   <?php endif; ?>
 	  </div>
 	  <div class="col-sm-1 text-right">
-	   <?php if( isset($mobile->id) and is_array(json_decode($mobile->tyo_erittelyt, true)) and isset(json_decode($mobile->tyo_erittelyt, true)[$k])){
+	   <?php if( isset($mobile->id) and is_array(json_decode($mobile->tyo_erittelyt, true)) and in_array($k, json_decode($mobile->tyo_erittelyt, true)) ){
 		echo '<span class="text-success fa fa-check fa-2x"></span>';
 	   } ?>
 	   <?php if( !isset($mobile->id) ){
