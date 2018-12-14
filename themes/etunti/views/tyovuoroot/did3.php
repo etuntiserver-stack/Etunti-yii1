@@ -80,6 +80,16 @@
 	$tv = Tyovuoroot::model()->findAll($criteria); 
 	foreach($tv as $tvVal)
 	{
+	   	if($tvVal->alku != '' and $tvVal->loppu != '')
+	   	{
+			$eilasketa = $this->eiLasketaSubStr($tvVal->tyoajanmerkinta);
+			if(isset($asetukset) and $tvVal->status == 10 and $asetukset->lasketaanko_lounastauko == 0)
+			{
+			} else {
+				if($eilasketa != true)
+	    			$sum += strtotime($tvVal->loppu)-strtotime($tvVal->alku);
+			}
+		}
 		// <-- Osoite
 		$osoite = '';
 		if(!empty($tvVal->osoite)){
@@ -218,6 +228,15 @@
 		$loppu = array($tvVal->tyoajanlaatu, $tvVal->loppu);
 	}
 	$bod .=  '</div>';
+
+	if($sum > 0){
+	$bod .= '
+	<script type="text/javascript">
+	$(document).ready(function(){
+		setTimeout(function(){ $("#sum_tunnit_'.$did.'_'.$tid.'").html("'.$this->sprint($sum).'"); }, 500);
+	});
+	</script>';
+	}
 
 	if(isset($yhteensa) and $yhteensa == true){
 		echo json_encode($bod.'//'.$yht);
