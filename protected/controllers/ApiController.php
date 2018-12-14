@@ -1218,7 +1218,7 @@ public function actionImei($dom)
 		$log_old = $mobupdate->attributes;
                 $mobupdate->loppui = date("d.m.Y H:i:s");
 
-		if( is_array($_POST['tyo_erittelyt']) and count($_POST['tyo_erittelyt']) > 0 ){
+		if( isset($_POST['tyo_erittelyt']) and is_array($_POST['tyo_erittelyt']) and count($_POST['tyo_erittelyt']) > 0 ){
 			$mobupdate->tyo_erittelyt = json_encode($_POST['tyo_erittelyt']);
 		} else {
 			$mobupdate->tyo_erittelyt = '';
