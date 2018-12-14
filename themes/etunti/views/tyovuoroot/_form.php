@@ -405,9 +405,7 @@ $(".muokaValiko").click(function() {
 ?>
 <div class="row">
   <div class="col-sm-3">
-	<?php if( !isset($mobile->id) ) : ?>
 	 <span class="btn btn-success uusierittely">Työ-erittely <span class="fa fa-plus"></span></span>
-	<?php endif; ?>
   </div>
   <div class="col-sm-9">
 	<div id="erittelynlista">
