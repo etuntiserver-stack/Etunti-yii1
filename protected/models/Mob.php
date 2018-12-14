@@ -97,7 +97,9 @@ public $tekijan_nimi, $domain, $appVersio, $email, $salasana, $avoinID;
                      'sairaus' => 'int(1) ',
                      'laskutettu' => 'int(1) ',
                      'laskutetaan' => 'int(1) DEFAULT 1 ',
-                     'tv_id' => 'int(11)',
+                     'tv_id' => 'int(11) DEFAULT 0',
+		     'deleted' => 'int(11) DEFAULT 0',
+		     'tyo_erittelyt' => 'text DEFAULT NULL'
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -120,14 +122,14 @@ public $tekijan_nimi, $domain, $appVersio, $email, $salasana, $avoinID;
 		// will receive user inputs.
 		return array(
 			array('kohde_kannasta', 'required'),
-			array('requests, kohdenID, tid, status, admin, tv_id', 'numerical', 'integerOnly'=>true),
+			array('requests, kohdenID, tid, status, admin, tv_id, deleted', 'numerical', 'integerOnly'=>true),
 			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id, tekijan_nimi', 'length', 'max'=>50),
 			array('domain, imei, sim_serial_number, kohde_kannasta, hyvaksytty', 'length', 'max'=>100),
 			array('my_location', 'length', 'max'=>1000),
 			array('osoite', 'length', 'max'=>255),
 			array('aloitan, loppui, etaisyys', 'length', 'max'=>20),
 			array('viesti', 'length', 'max'=>250),
-			array('tietoja', 'length', 'max'=>10000),
+			array('tietoja, tyo_erittelyt', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, asiakas_num, time, requests, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, admin, hyvaksytty, tekijan_nimi, domain', 'safe', 'on'=>'search'),

@@ -1123,14 +1123,7 @@ public function actionImei($dom)
 				if($mobCheck->status == 10 and $mobCheck->loppui == '')
 					$mobCheck->status = 10.1;
 
-				$nykyinenKesto = 0;
-				if(strtotime($mobCheck->aloitan) > 0)
-				{
-					$nykyinenKesto = time()-strtotime($mobCheck->aloitan);
-					$nykyinenKesto = sprint($nykyinenKesto);
-				}
-
-				$this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>".$nykyinenKesto."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//uusi versio");
+				$this->_sendResponse(200, $mobCheck->status."//".$this->sp_1($mobCheck)."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//uusi versio");
 
 			} else {
                      		$this->_sendResponse(200, "3//null//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//uusi versio");
@@ -1165,14 +1158,7 @@ public function actionImei($dom)
 			if($mobCheck->status == 10 and $mobCheck->loppui == '')
 				$mobCheck->status = 10.1;
 
-			$nykyinenKesto = 0;
-			if(strtotime($mobCheck->aloitan) > 0)
-			{
-				$nykyinenKesto = time()-strtotime($mobCheck->aloitan);
-				$nykyinenKesto = sprint($nykyinenKesto);
-			}
-
-                       	$this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>".$nykyinenKesto."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//vanha versio");
+                       	$this->_sendResponse(200, $mobCheck->status."//".$this->sp_1($mobCheck)."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//vanha versio");
 
 		  } else {
                      	$this->_sendResponse(200, "3//null//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//vanha versio");
@@ -1231,6 +1217,15 @@ public function actionImei($dom)
                 $mobupdate = Mob::model()->findbypk($mob->id);
 		$log_old = $mobupdate->attributes;
                 $mobupdate->loppui = date("d.m.Y H:i:s");
+
+		if( isset($_POST['tyo_erittelyt']) and is_array($_POST['tyo_erittelyt']) and count($_POST['tyo_erittelyt']) > 0 ){
+			$mobupdate->tyo_erittelyt = json_encode($_POST['tyo_erittelyt']);
+		} else {
+			$mobupdate->tyo_erittelyt = '';
+		}
+
+                //$this->_sendResponse(200, json_encode($_POST['tyo_erittelyt']));
+	        //exit;
 
 		$vanhaViesti = '';
 		if($mobupdate->viesti != '')
@@ -1413,7 +1408,37 @@ public function actionImei($dom)
 
 }
 
+	protected function sp_1($mobCheck)
+	{
+		if(!isset($mobCheck->id)){
+			$this->_sendResponse(200, "sp_1 function error");
+			exit;
+		}
+		$nykyinenKesto = 0;
+		if(strtotime($mobCheck->aloitan) > 0)
+		{
+			$nykyinenKesto = time()-strtotime($mobCheck->aloitan);
+			$nykyinenKesto = sprint($nykyinenKesto);
+		}
+		$sp1 = 'Kesto: <b>'.$nykyinenKesto.'</b>';
+		$sp1 .= '<div class="text-left">';
+		$sp1 .= '<p>'.$mobCheck->kohde_kannasta.'</p><br>';
 
+           	$tv = Tyovuoroot::model()->findByPk($mobCheck->tv_id);
+		if(isset($tv->id) and is_array(json_decode($tv->tyo_erittelyt, true))){
+			$sp1 .= '<label>Työ-erittelyt:</label>';
+			 foreach(json_decode($tv->tyo_erittelyt, true) as $k => $v){
+			 $sp1 .= '
+			 <div class="row">
+			  <div class="col-sm-12">
+			   <input class="tyo_erittelyt" type="checkbox" value="'.$k.'"> '.$v.'
+			  </div>
+	 		 </div>';
+			 }
+		}
+		$sp1 .= '</div>';
+		return $sp1;
+	}
 
 	protected function autoHyvaksynta($id)
 	{

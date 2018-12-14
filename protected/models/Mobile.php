@@ -98,8 +98,9 @@ public $tkohde_kannasta;
                      'laskutettu' => 'int(1) ',
                      'laskutetaan' => 'int(1) DEFAULT 1 ',
                      'tuoteID' => 'int(11)',
-                     'tv_id' => 'int(11)',
+                     'tv_id' => 'int(11) DEFAULT 0',
 		     'deleted' => 'int(11) DEFAULT 0',
+		     'tyo_erittelyt' => 'text DEFAULT NULL'
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -125,7 +126,7 @@ public $tkohde_kannasta;
 			array('requests, kohdenID, tid, status, admin, sairaus, laskutetaan, tuoteID, tv_id, deleted', 'numerical', 'integerOnly'=>true),
 			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id, tekijan_nimi', 'length', 'max'=>50),
 			array('domain, asiakas_hyvaksy, imei, sim_serial_number, kohde_kannasta, hyvaksytty', 'length', 'max'=>100),
-			array('my_location, tietoja', 'length', 'max'=>20000),
+			array('my_location, tietoja, tyo_erittelyt', 'safe'),
 			array('osoite', 'length', 'max'=>255),
 			array('aloitan, loppui, etaisyys', 'length', 'max'=>20),
 			array('viesti', 'length', 'max'=>250),

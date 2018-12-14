@@ -380,6 +380,47 @@ $(document).ready(function(){
 		<?php echo $form->error($model,'tietoja'); ?>
 	</div>
 
+	<div class="section">
+		<?php echo $form->labelEx($model,'tyo_erittelyt'); ?>:&nbsp;<span class="btn btn-success fa fa-plus uusierittely"></span>
+		<p>
+		<div id="erittelynlista">
+		 <?php if(is_array(json_decode($model->tyo_erittelyt, true))): ?>
+		 <?php foreach(json_decode($model->tyo_erittelyt, true) as $k => $v): ?>
+		 <div class="row">
+		  <div class="col-sm-8 col-sm-offset-3">
+		   <input type="text" name="Kohteet[tyo_erittelyt][]" class="form-control" value="<?=$v?>">
+		  </div>
+		  <div class="col-sm-1 text-right">
+		   <span class="btn btn-danger fa fa-trash poislistasta"></span>
+		  </div>
+ 		 </div>
+		 <?php endforeach; ?>
+		 <?php endif; ?>
+ 		</div>
+		</p>
+		<?php echo $form->error($model,'tyo_erittelyt'); ?>
+	</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+ $(".uusierittely").click(function(){
+  $("#erittelynlista").append('' +
+		 '<div class="row">' +
+		  '<div class="col-sm-8 col-sm-offset-3">' +
+		   '<input type="text" name="Kohteet[tyo_erittelyt][]" class="form-control">' +
+		  '</div>' +
+		  '<div class="col-sm-1 text-right">' +
+		   '<span class="btn btn-danger fa fa-trash poislistasta"></span>' +
+		  '</div>' +
+ 		 '</div>'
+  );
+ });
+ $(document).delegate(".poislistasta","click",function(){
+  $(this).closest(".row").remove();
+ });
+});
+</script>
+
   </div>
 </div><!-- form -->
 
