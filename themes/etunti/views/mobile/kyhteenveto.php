@@ -123,7 +123,7 @@ $this->breadcrumbs=array(
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas)) : 
   ?>
-  <th><?php echo Yii::t('main', 'Suunniteltu tunnit'); ?></th>
+  <th><?php echo Yii::t('main', 'Suunniteltut tunnit'); ?></th>
   <?php endif; ?>
 
   <th><?php echo Yii::t('main', 'Luetut tunnit'); ?></th>
