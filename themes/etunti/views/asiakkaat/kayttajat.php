@@ -245,7 +245,7 @@ $(document).ready(function() {
 
 	    </form>
 
-		<button class="btn btn-primary myBgColors btn-lg btn-block laheta"><?=Yii::t('main', 'LÄHETÄ'); ?></button>
+		<p><button class="btn btn-success btn-lg btn-block laheta"><?=Yii::t('main', 'LÄHETÄ'); ?></button></p>
 
 
         <!-- loppu: .tray-center -->
