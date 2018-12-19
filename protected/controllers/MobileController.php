@@ -1382,9 +1382,15 @@ function num($val){
 	        $criteria->addCondition (" kohde_kannasta LIKE '%".$_GET['osoite']."%' ");
 		}
 
+		// <-- From to HAKU
 		if(isset($_GET['fromP']) and !empty($_GET['fromP']) and isset($_GET['toP']) and !empty($_GET['toP'])){
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date("Y-m-d", strtotime($_GET['fromP']))."' AND '".date("Y-m-d", strtotime($_GET['toP']))."' ");
+		} elseif(isset($_GET['fromP']) and empty($_GET['fromP']) and isset($_GET['toP']) and !empty($_GET['toP'])){
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') <= '".date("Y-m-d", strtotime($_GET['toP']))."' ");
+		} elseif(isset($_GET['fromP']) and !empty($_GET['fromP']) and isset($_GET['toP']) and empty($_GET['toP'])){
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') >= '".date("Y-m-d", strtotime($_GET['fromP']))."' ");
 		}
+		//    From to HAKU -->
 
 		if(isset($_GET['laskutettu']) and $_GET['laskutettu'] == '1')
 	        $criteria->addCondition (" laskutettu=1 ");
