@@ -106,7 +106,7 @@ $site = Yii::app()->createController('Site');
         </div>
 
 
-	<?php if( count($data_kenelta) > 0 and count($data_kenelle) > 0) : ?>
+	<?php if( count($data_kenelta) > 0 ) : ?>
         <!-- begin: .tray-center -->
         <div class="tray-center row">
             <div class="admin-form col-sm-5">
