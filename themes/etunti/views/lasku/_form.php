@@ -277,6 +277,24 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_dimension_name'); ?>
+		<?php 
+		echo '<select class="form-control" name="Lasku[netvisor_dimension_name]">';
+	 	echo '<option>Valitse</option>';
+		foreach($this->netvisorLaskentaKohteetLista() as $k => $v){
+		 foreach($v->DimensionName as $k1 => $v1){
+		 	echo '<optgroup label="'.$v1->Name.'">';
+			foreach($v1->DimensionDetails->DimensionDetail as $k2 => $v2){
+			 	echo '<option value="'.$v1->Name.'//'.$v2->Name.'" '.(( isset($model->netvisor_dimension_name) and !empty($model->netvisor_dimension_name) and isset($model->netvisor_dimension_item) and !empty($model->netvisor_dimension_item) and $model->netvisor_dimension_name.'//'.$model->netvisor_dimension_item == $v1->Name.'//'.$v2->Name )? 'selected':'').'>'.$v2->Name.'</option>';
+			}
+		 }
+		}
+		echo '</select>';
+		?>
+	</div>
+
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alv_muoto'); ?>
 		<?php
 		$list = array(0=>'Hinnat ALV 0%',1=>'Hinnat sis. ALV');

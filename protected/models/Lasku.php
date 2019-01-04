@@ -140,6 +140,8 @@ public $digisten_tunnit_id, $edico_tilaus_id;
                      'deliveryterm' => 'varchar(255) ',
                      'vatperiod' => 'varchar(50) ',
                      'netvisorkey' => 'int(11) ',
+                     'netvisor_dimension_name' => 'varchar(100) DEFAULT NULL',
+                     'netvisor_dimension_item' => 'varchar(100) DEFAULT NULL',
 		     'tuotteet_palvelut_muoto' => 'int(1) DEFAULT 0',
                      'alv_muoto' => 'int(1)',
                      'valmistettu_automaattiseesti' => 'int(1) DEFAULT 0',
@@ -167,7 +169,7 @@ public $digisten_tunnit_id, $edico_tilaus_id;
                         //array('laskunumero','unique', 'message'=>'Tämä laskunumero on jo olemassa!'),
 			array('yid, tyyppi, as_nro, osoite, postinumero, toimipaikka, laskutus, paivays, erapaiva, maksuehto, toimitusosoite', 'required'),
 			array('kirjeenluokka, muistutuslasku_auto, lid, yid, as_nro, laskunumero, netvisorkey, tuotteet_palvelut_muoto, alv_muoto, valmistettu_automaattiseesti', 'numerical', 'integerOnly'=>true),
-			array('tyyppi, yritys, nimi, sahkoposti, v_tunnus, yhteyshenkilo, nimitarkenne, t_yritys, t_nimi, t_osoite, t_toimipaikka, t_sahkoposti, toimitusosoite, viitenumero, saaja_iban, maksettu_euro, laskun_nimetys, postita_jobid, trust_jobid', 'length', 'max'=>100),
+			array('tyyppi, yritys, nimi, sahkoposti, v_tunnus, yhteyshenkilo, nimitarkenne, t_yritys, t_nimi, t_osoite, t_toimipaikka, t_sahkoposti, toimitusosoite, viitenumero, saaja_iban, maksettu_euro, laskun_nimetys, postita_jobid, trust_jobid, netvisor_dimension_name, netvisor_dimension_item', 'length', 'max'=>100),
 			array('vatperiod, y_tunnus, toimipaikka, laskutus, puhelin, t_y_tunnus, t_puhelin, viivastyskorko, tilanne, tapahtumapvm', 'length', 'max'=>50),
 			array('deliverymethod, deliveryterm, freetext, viitenne, viitemme, osoite, verkkolaskuosoite, saaja_virtualkoodi', 'length', 'max'=>255),
 			array('postinumero, t_postinumero', 'length', 'max'=>10),
@@ -253,6 +255,7 @@ public $digisten_tunnit_id, $edico_tilaus_id;
 			'vatperiod'=> Yii::t('main', 'Päivämäärä johon ALV kohdistuu'),
 			'tuotteet_palvelut_muoto' => Yii::t('main', 'Asiakas vai Hinnasto'),
 			'alv_muoto' => Yii::t('main', 'ALV-muoto'),
+			'netvisor_dimension_name' => Yii::t('main', 'Kustannuspaikka'),
 		);
 	}
 
