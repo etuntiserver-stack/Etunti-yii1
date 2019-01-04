@@ -119,6 +119,11 @@ if(isset(Yii::app()->user->domain))
 	';
 	exit;
   }
+  $asetukset_forall = AsetuksetForAll::model()->findByPk(1);
+  if(isset($asetukset_forall->session_aikamaara) and $asetukset_forall->session_aikamaara > 0)
+  {
+
+  }
 }
 // Aktiivinen -->
 

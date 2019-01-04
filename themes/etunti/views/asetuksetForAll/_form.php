@@ -23,6 +23,20 @@
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'session_aikamaara'); ?>
+		<?php
+		$list = array();
+		for ($i = 0; $i <= 24; $i++) {
+			$list[] = $i;
+		}
+		unset($list[0]);
+        	echo $form->dropDownList($model, 'session_aikamaara', $list,
+		array('class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'session_aikamaara'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'api_access_key'); ?>
 		<?php echo $form->textField($model,'api_access_key',array('size'=>60,'maxlength'=>500,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'api_access_key'); ?>
