@@ -48,7 +48,8 @@ class AsetuksetForAll extends CActiveRecord
                      'viralliset_pyhapaivat' => 'text',
                      'erikoislauantai' => 'text',
                      'app_info_sivu' => 'text',
-		     'email' => 'varchar(255)'
+		     'email' => 'varchar(255)',
+                     'session_aikamaara' => 'int(2) DEFAULT 8',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -75,7 +76,7 @@ class AsetuksetForAll extends CActiveRecord
 			array('api_access_key', 'required'),
 			array('asetus, email', 'length', 'max'=>255),
 			array('api_access_key, googlemaps_apikey', 'length', 'max'=>500),
-			array('ohjesivu, viralliset_pyhapaivat, erikoislauantai, app_info_sivu', 'safe'),
+			array('ohjesivu, viralliset_pyhapaivat, erikoislauantai, app_info_sivu, session_aikamaara', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, asetus, api_access_key, ohjesivu', 'safe', 'on'=>'search'),
@@ -104,6 +105,7 @@ class AsetuksetForAll extends CActiveRecord
 			'email' => Yii::t('main', 'Sähköposti'),
 			'api_access_key' => Yii::t('main', 'Api Access Key'),
 			'ohjesivu' => Yii::t('main', 'Ohjesivu'),
+			'session_aikamaara' => Yii::t('main', 'Automaatinen kirjaudu ulos (tunti määrä)'),
 		);
 	}
 
