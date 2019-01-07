@@ -122,7 +122,16 @@ if(isset(Yii::app()->user->domain))
   $asetukset_forall = AsetuksetForAll::model()->findByPk(1);
   if(isset($asetukset_forall->session_aikamaara) and $asetukset_forall->session_aikamaara > 0)
   {
-
+// '.$asetukset_forall->session_aikamaara.'
+echo '<script type="text/javascript">
+$(document).ready(function(){
+   var lukumaara = 3600 * 1000 * parseInt(1);
+   setTimeout(function () {
+       window.location.href = location.protocol + "//" + location.host + "/index.php/user/";
+    }, lukumaara);
+   console.log("Sivu päivitetään "+ lukumaara +" sekunnin kuluttua");
+});
+</script>';
   }
 }
 // Aktiivinen -->
