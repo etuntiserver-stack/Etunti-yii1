@@ -1402,6 +1402,12 @@ class LaskuController extends Controller
 	 */
 	public function actionIndex()
 	{
+
+	//echo '<pre>';
+	//print_r($this->netvisorLaskentaKohteetLista());
+	//echo '</pre>';
+	//exit;
+	
 	// <-- Oikeudet
 	   $checkOikeus = "lasku_0_".Yii::app()->user->adminStatus;
 	   $site = Yii::app()->createController('Site');
@@ -1934,10 +1940,10 @@ class LaskuController extends Controller
 
 		die('ERROR: Tämä asiakas ei saanut netvisorkey viellä');
 	}
-	$Dimension = '';
+	$dimension = '';
 	if( !empty($model->netvisor_dimension_name) and !empty($model->netvisor_dimension_item)){
-	$Dimension =
-	     '<Dimension>
+	$dimension = '
+	     <Dimension>
             	<DimensionName>'.$model->netvisor_dimension_name.'</DimensionName>
             	<DimensionItem>'.$model->netvisor_dimension_item.'</DimensionItem>
              </Dimension>';
@@ -1988,9 +1994,9 @@ foreach($laskunRivit as $rivit)
 //      <SalesInvoiceProductLineFreeText>'.$rivit->free_text.'</SalesInvoiceProductLineFreeText>
 //      <AccountingAccountSuggestion>3000</AccountingAccountSuggestion> 
 
-	$Comment = '';
+	$comment = '';
 	if(!empty($rivit->free_text)){
-	$Comment = '
+	$comment = '
 	<InvoiceLine>
 		<SalesInvoiceCommentLine>
 			<Comment>'.$rivit->free_text.'</Comment>
@@ -2008,14 +2014,13 @@ $xml .= '
              <ProductVatPercentage vatcode="KOMY">'.$rivit->alv.'</ProductVatPercentage>
              <SalesInvoiceProductLineQuantity>'.$rivit->kpl.'</SalesInvoiceProductLineQuantity>
              <SalesInvoiceProductLineDiscountPercentage>'.$rivit->ale.'</SalesInvoiceProductLineDiscountPercentage>
-	     '.$Dimension.'
+	     '.$dimension.'
          </SalesInvoiceProductLine>
        </InvoiceLine>
-       '.$Comment;
+       '.$comment;
 }
 
 if(count($laskunRivit) > 0){ $xml .= '</InvoiceLines>'; }
-
 
 $xml .= '
   </SalesInvoice>

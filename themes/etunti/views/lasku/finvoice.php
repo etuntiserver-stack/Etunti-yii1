@@ -26,6 +26,7 @@ if(isset($_GET['kopio'])){
      $uusi->tilanne = '0';
      $uusi->laskunumero = $ln;
      $uusi->viitenumero = '';
+     $uusi->netvisorkey = 0;
      $uusi->trust_jobid = '';
      if($uusi->save())
      {
