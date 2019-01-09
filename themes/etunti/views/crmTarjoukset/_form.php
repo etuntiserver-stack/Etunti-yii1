@@ -43,21 +43,6 @@
 		<?php echo $form->error($model,'voimassa'); ?>
 	</div>
 
-     </div><div class="col-sm-3">
-
-	<div class="section fill mb5">
-
-		<?php echo $form->labelEx($model,'tuote_palvelu'); ?>
-		<?php
-		$criteria = new CDbCriteria();
-       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
-		?>
-		<?php echo $form->dropDownList($model, 'tuote_palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll(), 'id', 'nimike'), 
-		array('empty'=>'Valitse', 'class'=>'form-control')); 
-		?>
-		<?php echo $form->error($model,'tuote_palvelu'); ?>
-	</div>
-
      </div>
 </div>
 <hr>
@@ -333,17 +318,20 @@ function jumpToPageBottom() {
     return false;
 }
 
-
-
 $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 
     var tuoteID = $(this).val();
     var num = $(this).attr("num");
+    var asiakas_nro = $("#CrmTarjoukset_as_nro option:selected").val();
+    if(!asiakas_nro && '<?=$model->as_nro?>' !== '')
+    {
+	asiakas_nro = '<?=$model->as_nro?>';
+    }
 
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/lasku/valitsetuote',
            type: "POST",
-           data: { tuoteID : tuoteID },
+           data: { tuoteID : tuoteID, asiakas_nro : asiakas_nro },
            success: function(data){
 		var sp = JSON.parse(data);
 
@@ -352,20 +340,19 @@ $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 			$("#kpl_"+num).val(1);
 			$("#tkoodi_"+num).val(sp['tuotenimi']);
 			$("#hinta_"+num).val(parseFloat(sp['hinta_alv_0']));
+			$("#hinnasto_rivi_id_"+num).val(sp['hinnasto_rivi_id']);
+			$("#hinta_"+num).closest('tr').find('.hinnaston_otsikko').attr("title", sp['hinnaston_otsikko']);
 			$("#yksikko_"+num+" option[value="+sp['yksikko']+"]").attr('selected','selected');
 			$("#alv_"+num+" option[value="+sp['alv']+"]").attr('selected','selected');
 			$("#tuoteID_"+num).val(sp['id']);
 		}
+
 		eachLaskenta();
-		console.log(data)
+		//console.log(data)
            }
         });
 
 });
-
-
-
-
 
 
   $(document).delegate(".poista","click",function(){

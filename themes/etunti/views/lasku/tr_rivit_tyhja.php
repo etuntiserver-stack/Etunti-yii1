@@ -34,7 +34,7 @@
 		<?php
 		$criteria = new CDbCriteria();
        		$criteria->condition = " 
-			hinta_alv_0!=0 
+			hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0
 		";
 		echo CHtml::dropdownList('','palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 		array('empty'=>'','class'=>'form-control valitseTuote','id'=>'lt_'.$num,'num'=>$num));

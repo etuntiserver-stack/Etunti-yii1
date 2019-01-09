@@ -97,7 +97,7 @@ class HinnastotController extends Controller
 	public function actionCreate()
 	{
 		$criteria = new CDbCriteria();
-       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0";
 		$tp = TuotteetPalvelut::model()->findAll($criteria);
       		$yksikkot = Valikkoot::model()->findAll(" select_type='laskutus_yksikko' ",array('order' => "select_type"));
 
@@ -153,7 +153,7 @@ class HinnastotController extends Controller
 	public function actionUpdate($id)
 	{
 		$criteria = new CDbCriteria();
-       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0";
 		$tp = TuotteetPalvelut::model()->findAll($criteria);
       		$yksikkot = Valikkoot::model()->findAll(" select_type='laskutus_yksikko' ",array('order' => "select_type"));
 

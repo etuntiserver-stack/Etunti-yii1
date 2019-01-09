@@ -54,6 +54,7 @@ public $image;
                      'nelio' => 'varchar(20) ',
                      'kotitalousvahennys' => 'varchar(20) ',
                      'nayta_sivuilla' => 'int(1) DEFAULT 1 ',
+                     'nayta_vain_onlinevarauksessa' => 'int(1) DEFAULT 0',
                      'paa_palvelu' => 'int(11) ',
                      'toinen_valikko_rakenne' => 'text ',
                      'lisapalvelut' => 'text ',
@@ -90,7 +91,7 @@ public $image;
 		return array(
 			array('nimike', 'required'),
 			array('image', 'file','types'=>'jpg', 'allowEmpty'=>true, 'on'=>'update'),
-			array('palvelu, nayta_sivuilla, paa_palvelu, alv, aktiivinen, varastoitava, myyntituote', 'numerical', 'integerOnly'=>true),
+			array('palvelu, nayta_sivuilla, nayta_vain_onlinevarauksessa, paa_palvelu, alv, aktiivinen, varastoitava, myyntituote', 'numerical', 'integerOnly'=>true),
 			array('nimike, selitysteksti', 'length', 'max'=>255),
 			array('hinta_alv_0, hinta_alv_sis, yksikko', 'length', 'max'=>20),
 			array('hinta, kesto, nelio, kotitalousvahennys, netvisorkey', 'length', 'max'=>20),
@@ -127,6 +128,7 @@ public $image;
 			'nelio' => Yii::t('main', 'Neliömetri m²'),
 			'kotitalousvahennys' => Yii::t('main', 'Kotitalousvähennys %'),
 			'nayta_sivuilla' => Yii::t('main', 'Näytä sivulla'),
+			'nayta_vain_onlinevarauksessa' => Yii::t('main', 'Näytä vain onlinevarauksessa'),
 			'paa_palvelu'=> Yii::t('main', 'Pääpalvelu'),
 			'image'=> Yii::t('main', 'Valokuva'),
 		);
