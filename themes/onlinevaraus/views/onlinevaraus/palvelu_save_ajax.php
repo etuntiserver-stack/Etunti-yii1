@@ -148,7 +148,7 @@
 	if(isset($_SESSION['onlinevaraus']['paa_hinta'])) $paa_hinta = $_SESSION['onlinevaraus']['paa_hinta']; else $paa_hinta = 0;
 	if(isset($_SESSION['onlinevaraus']['paa_kesto'])) $paa_kesto = $_SESSION['onlinevaraus']['paa_kesto']; else $paa_kesto = 0;
 
-	$sumTunti = $perusKesto+$lisaTunti+$paa_kesto;
+	$sumTunti = $lisaTunti+$paa_kesto; //$perusKesto+
 
 	$_SESSION['onlinevaraus']['sumTunti'] 	= $sumTunti;
 	$tilauksenKuvaus['sumTunti'] 		= $sumTunti;

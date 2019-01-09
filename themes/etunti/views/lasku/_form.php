@@ -276,6 +276,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php echo $form->error($model,'t_sahkoposti'); ?>
 	</div>
 
+	<?php if( $asetukset->netvisor_kaytto == 1 ): ?>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'netvisor_dimension_name'); ?>
 		<?php 
@@ -292,7 +293,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		echo '</select>';
 		?>
 	</div>
-
+	<?php endif; ?>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alv_muoto'); ?>
