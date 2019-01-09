@@ -2022,6 +2022,22 @@ $xml .= '
 
 if(count($laskunRivit) > 0){ $xml .= '</InvoiceLines>'; }
 
+	if( !empty($model->netvisor_dimension_name) and !empty($model->netvisor_dimension_item)){
+	$xml .= '
+	<invoicevoucherlines>
+	 <voucherline>
+	  <lineSum type="gross">'.$model->yhteensa_total.'</lineSum>
+	  <description>Description</description>
+	  <accountNumber>3000</accountNumber>
+	  <VatPercent vatcode="KOMY">24</VatPercent>
+	  <dimension>
+	   <dimensionName>'.$model->netvisor_dimension_name.'</dimensionName>
+	   <dimensionItem>'.$model->netvisor_dimension_item.'</dimensionItem>
+	  </dimension>
+	 </voucherline>
+	</invoicevoucherlines>';
+	}
+
 $xml .= '
   </SalesInvoice>
 </root>';
