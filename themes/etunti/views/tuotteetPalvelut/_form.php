@@ -24,6 +24,7 @@ $model->kategoria = json_decode($model->kategoria, true);
 <div class="row">
  <div class="col-sm-3">
 	<legend><h3><?php echo Yii::t('main', 'Perustiedot'); ?></h3></legend>
+	<p><b>Tuotteen ja palvelun perustietoja käytetään laskutuksessa ja työvuorosuunnittelussa sekä tilausta tehtäessä.</b></p>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'nimike'); ?>
 		<?php echo $form->textField($model,'nimike',array('size'=>60,'maxlength'=>255, 'class'=>'form-control')); ?>
@@ -49,6 +50,7 @@ $model->kategoria = json_decode($model->kategoria, true);
 		<?php echo $form->error($model,'kotitalousvahennys'); ?>
 	</div>
 
+	<div id="vain_onlinevarauksessa">
 	<legend><h3><?php echo Yii::t('main', 'Hinta'); ?></h3></legend>
 
 	<div class="row">
@@ -186,6 +188,7 @@ $(".muokaValiko").click(function() {
 
 		<?php echo $form->error($model,'yksikko'); ?>
 	</div>
+	</div><!-- vain_onlinevarauksessa -->
 
 	<?php if($netvisor) : ?>
 	<legend><h3><?php echo Yii::t('main', 'Netvisor'); ?></h3></legend>
@@ -219,20 +222,35 @@ $(".muokaValiko").click(function() {
  </div>
 
  <div id="for_onlinevaraus" style="display:none">
- <div class="col-sm-3">
+ <div class="col-sm-9">
+
 	<legend><h3><?php echo Yii::t('main', 'Onlinevaraus'); ?></h3></legend>
+	<p><b>Onlinevarauksessa ensin valitaan tuotteen nimi perustiedoista ja tämän jälkeen käytetään alla olevia tuote ja palvelutietoja.</b></p>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'nayta_vain_onlinevarauksessa'); ?>
+		<?php
+		$list = array(
+			0=>'Ei',
+			1=>'Kyllä',
+		);
+        	echo $form->dropDownList($model, 'nayta_vain_onlinevarauksessa', $list,
+		array('class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'nayta_vain_onlinevarauksessa'); ?>
+	</div>
+	<p>Tämä valinta mahdollistaa tuotteen käyttämisen vain Onlinevarauksessa, eli tuote tai palvelu on mahdollista piilottaa muista käyttökohteista.</p>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'selitysteksti'); ?>
-		<?php echo $form->textArea($model,'selitysteksti',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
+		<?php echo $form->textArea($model,'selitysteksti',array('rows'=>3, 'cols'=>50, 'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'selitysteksti'); ?>
 	</div>
-
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kesto'); ?>
 		<?php echo $form->numberField($model,'kesto',array('maxlength'=>20, 'class'=>'form-control', 'placeholder'=>'Esimerkiksi.. 0.5', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'kesto'); ?>
 	</div>
-
+*/ ?>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'nayta_sivuilla'); ?>
 		<?php
@@ -245,11 +263,7 @@ $(".muokaValiko").click(function() {
         	?>
 		<?php echo $form->error($model,'nayta_sivuilla'); ?>
 	</div>
-
- </div>
- <div class="col-sm-6">
-
-	<legend><h3><?php echo Yii::t('main', 'Onlinevaraus'); ?></h3></legend>
+	<hr>
 
 	<div class="section fill mb5">
 		<?php
@@ -563,6 +577,18 @@ $(document).ready(function(){
 	}
    });
 
+   if( $("#TuotteetPalvelut_nayta_vain_onlinevarauksessa option:selected").val() == 1 ){
+		$("#vain_onlinevarauksessa").hide();
+   }
+
+   $("#TuotteetPalvelut_nayta_vain_onlinevarauksessa").change(function(){
+	var thisVal = $("#TuotteetPalvelut_nayta_vain_onlinevarauksessa option:selected").val();
+	if( thisVal == 0 ){
+		$("#vain_onlinevarauksessa").show();
+	} else {
+		$("#vain_onlinevarauksessa").hide();
+	}
+   });
 
   var rivi = parseInt($('#lastRivi').val());
   $('.uusiRivi').click(function(){

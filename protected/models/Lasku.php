@@ -90,7 +90,7 @@ public $digisten_tunnit_id, $edico_tilaus_id;
                      'yritys' => 'varchar(100) ',
                      'y_tunnus' => 'varchar(50) ',
                      'nimi' => 'varchar(100) ',
-                     'as_nro' => 'int(11) ',
+                     'as_nro' => 'int(11) DEFAULT 0',
                      'osoite' => 'varchar(255) ',
                      'postinumero' => 'varchar(10) ',
                      'toimipaikka' => 'varchar(50) ',

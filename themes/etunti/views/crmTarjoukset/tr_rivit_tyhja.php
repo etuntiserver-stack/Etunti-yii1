@@ -20,23 +20,20 @@
 	<TD>
 
 	<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control">
-
+	<input type="hidden" size="1" name="hinnasto_rivi_id[<?php echo $num; ?>]" id="hinnasto_rivi_id_<?php echo $num; ?>" class="form-control">
 	<div class="row">
-	  <div class="col-lg-12">
-	    <div class="input-group">
-	      <span class="input-group-btn">
-
+	  <div class="col-lg-4">
 		<?php
 		$criteria = new CDbCriteria();
-       		$criteria->condition = " is_active=1 ";
-		echo CHtml::dropdownList('','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll($criteria), 'id', 'tuotenimi'), 
+       		$criteria->condition = " 
+			hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0
+		";
+		echo CHtml::dropdownList('','palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 		array('empty'=>'','class'=>'form-control valitseTuote','id'=>'lt_'.$num,'num'=>$num));
 		?>
-
-	      </span>
+	  </div><div class="col-lg-8">
 	      <input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control form-group" value="<?=$tuote?>">
-	    </div><!-- /input-group -->
-	  </div><!-- /.col-lg-12 -->
+	  </div>
 	</div>
 
 	</TD>

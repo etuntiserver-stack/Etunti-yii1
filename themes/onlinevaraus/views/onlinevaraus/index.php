@@ -122,7 +122,7 @@
   	   <div class="container-fluid osoitelaatikko" <?=$osoite_style?>">
   		<div id="fullLomake">
   		   <h4 class="title-subtitle text-center"><?php echo Yii::t('main', 'Osoite'); ?></h4>
-  		   <h6 class="text-center"><?php echo Yii::t('main', 'Tunnistaudu sähköpostilla'); ?></h6>
+  		   <h6 class="text-center"><?php echo Yii::t('main', 'Tunnistaudu sähköpostilla.'); ?></h6>
   		   <div class="row">
   		      <div class="col-sm-12">
 	
@@ -136,7 +136,7 @@
   		      </div>
   		   </div>
 		   <br>
-  		   <h6 class="text-center"><?php echo Yii::t('main', 'Tai täytä yhteystietokentät'); ?></h6>
+  		   <h6 class="text-center"><?php echo Yii::t('main', 'Oletko uusi tilaaja?<br> Täytä yhteystietokentät.'); ?></h6>
 
   		     <div id="lomake">
 	

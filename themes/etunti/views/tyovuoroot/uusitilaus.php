@@ -399,7 +399,7 @@ $(document).ready(function(){
 		<?php echo $form->labelEx($model,'tuoteID'); ?>
 		<?php
 		$criteria = new CDbCriteria();
-       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND yksikko='h' ";
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND yksikko='h' AND nayta_vain_onlinevarauksessa=0";
 		$tp = TuotteetPalvelut::model()->findAll($criteria);
 		echo $form->dropDownList($model,'tuoteID', CHtml::listData($tp, 'id', 'nimike'), 
 		array('empty'=>'Valitse','class'=>'form-control'));
@@ -413,7 +413,7 @@ $(document).ready(function(){
   <label><?=Yii::t('main','Valitse tuotteet ja lisäpalvelut')?></label>
 		<?php
 		$criteria = new CDbCriteria();
-       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 ";
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0";
 		$tp = TuotteetPalvelut::model()->findAll($criteria);
 		echo '<select name="lisapalvelu_tuote" id="lisapalvelu_tuote" class="form-control">';
 		echo '<option value=>Valitse</option>';

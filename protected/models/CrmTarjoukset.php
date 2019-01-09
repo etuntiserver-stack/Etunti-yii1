@@ -47,6 +47,7 @@ class CrmTarjoukset extends DB2ActiveRecord
 
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
                      'asiakas_id' => 'int(11) ',
+                     'as_nro' => 'int(11) DEFAULT 0',
                      'tarjous' => 'text ',
                      'hyvaksyn_koodi' => 'varchar(255) ',
                      'asiakkaan_sahkoposti' => 'varchar(100) ',
@@ -90,7 +91,7 @@ class CrmTarjoukset extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('template, asiakas_id, kohde_id, kohteen_osoite, asiakkaan_sahkoposti, voimassa', 'required'),
-			array('asiakas_id, yhteystiedot_id, status, kohde_id, tyonkuvaus_id, alv, hinta', 'numerical', 'integerOnly'=>true),
+			array('asiakas_id, as_nro, yhteystiedot_id, status, kohde_id, tyonkuvaus_id, alv, hinta', 'numerical', 'integerOnly'=>true),
 			array('yhteensa_total_verot, yhteensa_total_veroton, yhteensa_total', 'type', 'type'=>'float'),
 			array('hyvaksyn_koodi, liite, kohteen_osoite, kohteen_postitoimipaikka, tuote_palvelu', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti, kohteen_postinumero', 'length', 'max'=>100),
