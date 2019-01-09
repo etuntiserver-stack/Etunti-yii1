@@ -715,9 +715,15 @@ Yritys '.$yr.'
 			   {
 				if($model->netvisorkey == 0)
 				{
-					$this->netvisorCustomer("add", $model);
+					if($this->netvisorCustomer("add", $model) !== true){
+						print_r($this->netvisorCustomer("add", $model));
+						exit;
+					}
 				} else {
-					$this->netvisorCustomer("edit", $model);
+					if($this->netvisorCustomer("edit", $model) !== true){
+						print_r($this->netvisorCustomer("edit", $model));
+						exit;
+					}
 				}
 			    }
 			   //  Netvisor -->

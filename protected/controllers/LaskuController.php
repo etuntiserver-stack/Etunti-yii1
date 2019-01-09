@@ -1139,15 +1139,23 @@ class LaskuController extends Controller
 
 		if(isset($_POST['Lasku']))
 		{
-
 			//$vm = Lasku::model()->find(array('order'=>'id DESC'));
 
-			$model->attributes=$_POST['Lasku'];
-			$model->tilanne=0;
-			$model->tapahtumapvm=date("Y-m-d H:i:s");
-			$model->paivays=date("Y-m-d", strtotime($_POST['Lasku']['paivays']));
-			$model->erapaiva=date("Y-m-d", strtotime($_POST['Lasku']['erapaiva']));
-			$model->laskun_nimetys="Lasku";
+			$model->attributes = $_POST['Lasku'];
+			$model->tilanne = 0;
+			$model->tapahtumapvm = date("Y-m-d H:i:s");
+			$model->paivays = date("Y-m-d", strtotime($_POST['Lasku']['paivays']));
+			$model->erapaiva = date("Y-m-d", strtotime($_POST['Lasku']['erapaiva']));
+			$model->laskun_nimetys = "Lasku";
+			// <-- Dimension
+			if( isset($_POST['Lasku']['netvisor_dimension_name']) ){
+			   $dimension = explode("//", $_POST['Lasku']['netvisor_dimension_name']);
+			   if( isset($dimension[0]) and isset($dimension[1]) ){
+				$model->netvisor_dimension_name = $dimension[0];
+				$model->netvisor_dimension_item = $dimension[1];
+			   }
+			}
+			//     Dimension -->
 			if($model->save()){
 
 
@@ -1270,16 +1278,19 @@ class LaskuController extends Controller
 
 		if(isset($_POST['Lasku']))
 		{
-		/*
-		echo '<pre>';
-		print_r($_POST['tkoodi']);
-		echo '</pre>';
-		exit;
-		*/
 			$vanha_attr 	= $model->attributes;
 			$model->attributes=$_POST['Lasku'];
 			$model->paivays=date("Y-m-d", strtotime($_POST['Lasku']['paivays']));
 			$model->erapaiva=date("Y-m-d", strtotime($_POST['Lasku']['erapaiva']));
+			// <-- Dimension
+			if( isset($_POST['Lasku']['netvisor_dimension_name']) ){
+			   $dimension = explode("//", $_POST['Lasku']['netvisor_dimension_name']);
+			   if( isset($dimension[0]) and isset($dimension[1]) ){
+				$model->netvisor_dimension_name = $dimension[0];
+				$model->netvisor_dimension_item = $dimension[1];
+			   }
+			}
+			//     Dimension -->
 			if($model->save()){
 
 
@@ -1392,6 +1403,11 @@ class LaskuController extends Controller
 	public function actionIndex()
 	{
 
+	//echo '<pre>';
+	//print_r($this->netvisorLaskentaKohteetLista());
+	//echo '</pre>';
+	//exit;
+	
 	// <-- Oikeudet
 	   $checkOikeus = "lasku_0_".Yii::app()->user->adminStatus;
 	   $site = Yii::app()->createController('Site');
@@ -1869,7 +1885,6 @@ class LaskuController extends Controller
 		$url		= $n[0].'/salesinvoice.nv?id='.$model->netvisorkey.'&method=edit';
 
 		$host 		= $n[1];
-
 		$sender 	= $n[2];
 		$customerId	= $n[3];
 		$partnerId	= $n[4];
@@ -1925,7 +1940,14 @@ class LaskuController extends Controller
 
 		die('ERROR: Tämä asiakas ei saanut netvisorkey viellä');
 	}
-
+	$dimension = '';
+	if( !empty($model->netvisor_dimension_name) and !empty($model->netvisor_dimension_item)){
+	$dimension = '
+	     <Dimension>
+            	<DimensionName>'.$model->netvisor_dimension_name.'</DimensionName>
+            	<DimensionItem>'.$model->netvisor_dimension_item.'</DimensionItem>
+             </Dimension>';
+	}
 
 $xml = '
 <root>
@@ -1954,8 +1976,7 @@ $xml = '
 
 $laskunRivit=LaskunRivit::model()->findAll("lid='".$model->id."'");
 
-if(count($laskunRivit) > 0)
-$xml .= '<InvoiceLines>';
+if(count($laskunRivit) > 0){ $xml .= '<InvoiceLines>'; }
 
 foreach($laskunRivit as $rivit)
 {
@@ -1970,27 +1991,19 @@ foreach($laskunRivit as $rivit)
 		die('ERROR: ProductIdentifier');
 	}
 
-//             <SalesInvoiceProductLineFreeText>'.$rivit->free_text.'</SalesInvoiceProductLineFreeText>
-/*
-             <AccountingAccountSuggestion>3000</AccountingAccountSuggestion> 
-             <Dimension>
-                <DimensionName>Liiketoimintayksikkö laskentakohteena</DimensionName>
-                <DimensionItem>Yleishallinto</DimensionItem>
-             </Dimension>
-             <Dimension>
-                <DimensionName>Severan "työ" laskentakohteena</DimensionName>
-                <DimensionItem>Makkaran paisto</DimensionItem>
-             </Dimension>
-*/
-	$Comment = '';
+//      <SalesInvoiceProductLineFreeText>'.$rivit->free_text.'</SalesInvoiceProductLineFreeText>
+//      <AccountingAccountSuggestion>3000</AccountingAccountSuggestion> 
+
+	$comment = '';
 	if(!empty($rivit->free_text)){
-	$Comment = '
+	$comment = '
 	<InvoiceLine>
 		<SalesInvoiceCommentLine>
 			<Comment>'.$rivit->free_text.'</Comment>
-		    </SalesInvoiceCommentLine>
+		</SalesInvoiceCommentLine>
 	</InvoiceLine>';
 	}
+
 
 $xml .= '
        <InvoiceLine>
@@ -2001,14 +2014,13 @@ $xml .= '
              <ProductVatPercentage vatcode="KOMY">'.$rivit->alv.'</ProductVatPercentage>
              <SalesInvoiceProductLineQuantity>'.$rivit->kpl.'</SalesInvoiceProductLineQuantity>
              <SalesInvoiceProductLineDiscountPercentage>'.$rivit->ale.'</SalesInvoiceProductLineDiscountPercentage>
+	     '.$dimension.'
          </SalesInvoiceProductLine>
        </InvoiceLine>
-            '.$Comment.'
-       ';
+       '.$comment;
 }
 
-if(count($laskunRivit) > 0)
-$xml .= '</InvoiceLines>';
+if(count($laskunRivit) > 0){ $xml .= '</InvoiceLines>'; }
 
 $xml .= '
   </SalesInvoice>
@@ -2134,8 +2146,6 @@ $xml .= '
 	  {
 		$url		= $n[0].'/salesinvoicelist.nv?lastmodifiedstart='.$lastmodifiedstart.'&lastmodifiedend='.$lastmodifiedend;
 		$host 		= $n[1];
-
-
 		$sender 	= $n[2];
 		$customerId	= $n[3];
 		$partnerId	= $n[4];
@@ -2188,6 +2198,70 @@ $xml .= '
 		$return = new SimpleXMLElement($response);
 
 	   }
+
+		return $return;
+	}
+
+	protected function netvisorLaskentaKohteetLista()
+	{
+		$return = '';
+		$site = Yii::app()->createController('Site');
+		$n = $site[0]->netvisorYhteys();
+
+	  	if(isset($n[0]))
+	  	{
+		$url		= $n[0].'/dimensionlist.nv';
+		$host 		= $n[1];
+
+		$sender 	= $n[2];
+		$customerId	= $n[3];
+		$partnerId	= $n[4];
+		$timestamp	= $n[5];
+		$language	= $n[6];
+		$organisationIdentifier	= $n[7];
+		$transactionIdentifier	= $n[8];
+		$userKey 	= $n[9];
+		$partnerKey	= $n[10];
+
+		$getMAC = md5(
+			$url.'&'.
+			$sender.'&'.
+			$customerId.'&'.
+			$timestamp.'&'.
+			$language.'&'.
+			$organisationIdentifier.'&'.
+			$transactionIdentifier.'&'.
+			$userKey.'&'.
+			$partnerKey
+		 	);
+	
+		$auth_data = 
+		    "Host: $host\r\n".  
+		    "X-Netvisor-Authentication-Sender: $sender\r\n".  
+		    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
+		    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
+		    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
+		    "X-Netvisor-Interface-Language: $language\r\n".
+		    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
+		    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
+		    "X-Netvisor-Authentication-MAC: $getMAC\r\n"; 
+		
+	
+		$optsGET = array(
+		  'http'=>array(
+		    'method'=>"GET",
+		    'header'=>"Accept: text/plain\r\n" .
+		              "Content-Type: application/x-www-form-urlencoded\r\n".
+			      $auth_data,
+		    'content'=> ''
+		  )
+		);
+	
+		$context = stream_context_create($optsGET);
+		
+		$response = file_get_contents($url, false, $context);
+		$return = new SimpleXMLElement($response);
+	   	}
 
 		return $return;
 	}
