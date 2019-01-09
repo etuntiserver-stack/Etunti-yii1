@@ -419,7 +419,7 @@ class TyontekijatController extends Controller
 		elseif(isset($model->id) and empty($model->token)) 
 			$tilanne = 2;  
 		else 
-			die('Error');
+			die('Tämä linkki on käytetty tai vanhentunut!');
 
 		if(isset($model->id) and isset($_POST['password1']) and $_POST['password1'] == $_POST['password2'])
 		{
