@@ -462,7 +462,7 @@ $(".muokaValiko").click(function() {
 				  </div>
 				  <div class="col-sm-4">
 					<label>'.Yii::t('main', 'ALV 0').'</label>
-					<input type="number" class="form-control hinta_veroton" for="lisapalvelut_rivi_'.$i.'" name="lisapalvelut[values][hinta_veroton][]" value="'.$hinta[$key].'" step="any">
+					<input type="number" class="form-control hinta_veroton" for="lisapalvelut_rivi_'.$i.'" name="lisapalvelut[values][hinta_veroton][]" value="'.$hinta_veroton[$key].'" step="any">
 				  </div>
 				  <div class="col-sm-4">
 					<label>'.Yii::t('main', 'Hinta (ALV '.$alv.'%)').'</label>
