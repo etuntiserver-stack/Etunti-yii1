@@ -3871,7 +3871,7 @@ class TyovuorootController extends Controller
 
 				$tekijan_nimi='';
 				if(isset($tt->tekijan_nimi) and $tid!=0)
-					$tekijan_nimi=$tt->tekijan_nimi;
+					$tekijan_nimi=$this->etuSukunimi($tid);
 				elseif(!isset($tt->tekijan_nimi) and $tid==0)
 					$tekijan_nimi='VARAUS';
 
@@ -3944,7 +3944,7 @@ class TyovuorootController extends Controller
 		}
 
 		//$return[] = array('ERROR' => json_encode($tid." ".$toistuva->tid));
-		if( count($suoritettu_ids) > 0){
+		if( count($suoritettu_ids) > 0 ){
 			$tilanne = 'poistetaan';
 			$ids = implode(",", $suoritettu_ids);
 			$criteria_1 = new CDBcriteria;
@@ -3953,6 +3953,7 @@ class TyovuorootController extends Controller
 				AND toistuva_id!=0
 				AND toistuva_id='".$attr->id."'
 				AND id NOT IN ($ids)
+				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
 			";
 			$pois_1 = Tyovuoroot::model()->findAll($criteria_1);
 			if( isset($edellinenToistuva->pfrom) and strtotime($attr->pfrom) > strtotime($edellinenToistuva->pfrom) and !isset($_POST['poisto_alkaen_taaksepain']) ){
@@ -3981,6 +3982,7 @@ class TyovuorootController extends Controller
 				tid='".$edellinenToistuva->tid."'
 				AND toistuva_id!=0
 				AND toistuva_id='".$attr->id."'
+				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
 			";
 			$pois_2 = Tyovuoroot::model()->findAll($criteria_2);
 			foreach($pois_2 as $item){
