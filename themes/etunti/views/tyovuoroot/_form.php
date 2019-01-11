@@ -284,16 +284,6 @@ $(".muokaValiko").click(function() {
 
 <div class="row">
   <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'tuoteID'); ?>
-		<?php
-		$criteria = new CDbCriteria();
-       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND yksikko='h' AND nayta_vain_onlinevarauksessa=0";
-		$tp = TuotteetPalvelut::model()->findAll($criteria);
-		echo $form->dropDownList($model,'tuoteID', CHtml::listData($tp, 'id', 'nimike'), 
-		array('empty'=>'Valitse','class'=>'form-control'));
-		?>
-  </div>
-  <div class="col-sm-3">
 		<label><?php echo Yii::t('main', 'Työpari'); ?></label><br>
 		<?php 
 		$tyopaari = json_decode($model->tyopaari, true);
@@ -348,11 +338,29 @@ $(".muokaValiko").click(function() {
 		echo $form->dropDownList($model,'piilota_mobiilista', $l, 
 		array('class'=>'form-control')) ?>
   </div>
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'laskutettu'); ?>
+		<?php 
+        	$l = array(0 => 'Ei laskutettu', 1 => 'Laskutettu');
+		echo $form->dropDownList($model,'laskutettu', $l, 
+		array('class'=>'form-control')) ?>
+  </div>
 </div>
 <br>
-<label><?=Yii::t('main','Valitse tuotteet ja lisäpalvelut')?></label>
+
 <div class="row" id="lisapalvelut_valinta">
   <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'tuoteID'); ?>
+		<?php
+		$criteria = new CDbCriteria();
+       		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND yksikko='h' AND nayta_vain_onlinevarauksessa=0";
+		$tp = TuotteetPalvelut::model()->findAll($criteria);
+		echo $form->dropDownList($model,'tuoteID', CHtml::listData($tp, 'id', 'nimike'), 
+		array('empty'=>'Valitse','class'=>'form-control'));
+		?>
+  </div>
+  <div class="col-sm-3">
+		<label><?=Yii::t('main','Valitse tuotteet ja lisäpalvelut')?></label>
 		<?php
 		$criteria = new CDbCriteria();
        		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0";
@@ -366,6 +374,7 @@ $(".muokaValiko").click(function() {
 		?>
   </div>
   <div class="col-sm-3">
+		<label><?=Yii::t('main','Lisäpalvelun määrä')?></label>
 	<div class="row">
 	 <div class="col-sm-10">
 		<?php echo CHtml::numberField('lisapalvelu_maara','lisapalvelu_maara',array('class'=>'form-control', 'placeholder' => 'määrä')); ?>
@@ -374,14 +383,6 @@ $(".muokaValiko").click(function() {
         	<button class="btn btn-primary plus_lisapalvelu myBgColors pull-right" type="button"><i class="fa fa-plus"></i></button>
 	 </div>
 	</div>
-  </div>
-  <div class="col-sm-3">
-
-		<?php 
-        	$l = array(0 => 'Ei laskutettu', 1 => 'Laskutettu');
-		echo $form->dropDownList($model,'laskutettu', $l, 
-		array('class'=>'form-control')) ?>
-
   </div>
   <div class="col-sm-3">
 		<?php 
@@ -395,80 +396,6 @@ $(".muokaValiko").click(function() {
 		<?php endif; ?>
   </div>
 </div>
-
-<p id="lisapalvelu_lista">
-	<?php $lisa_tuotteet = json_decode($model->lisa_tuotteet, true); ?>
-	<?php if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote'])  ) : ?>
-	<?php foreach($lisa_tuotteet['tuote'] as $k => $v) : ?>
-	<?php 
-		$t_nimike = '';
-		$t_yksikko = '';
-		$tp = TuotteetPalvelut::model()->findByPK($v);
-		if( isset($tp->id) ){ 
-			$t_nimike = $tp->nimike;
-			$t_yksikko = $tp->yksikko;
-		}
-	?>
-	<p>
-	<div class="row">
-	 <div class="col-sm-3">
-		<?=$t_nimike?>
-		<input type="hidden" name="Tyovuoroot[lisa_tuotteet][tuote][]" value="<?=$v?>">
-	 </div>
-	 <div class="col-sm-3">
-		<div class="text-center">
-			<i class="link pull-right text-danger fa fa-trash poista_lisa"></i>
-			<b><?=json_decode($model->lisa_tuotteet, true)['maara'][$k]?> <?=$t_yksikko?></b>
-		</div>
-		<input type="hidden" name="Tyovuoroot[lisa_tuotteet][maara][]" value="<?=json_decode($model->lisa_tuotteet, true)['maara'][$k]?>">
-	 </div>
-	</div>
-	</p>
-	<?php endforeach; ?>
-	<?php endif; ?>
-</p>
-
-<script type="text/javascript">
-$(document).ready(function(){
-  $('.plus_lisapalvelu').click(function(){
-	var lisapalvelu_tuote = $('#lisapalvelu_tuote option:selected').val();
-	var lisapalvelu_yksikko = $('#lisapalvelu_tuote option:selected').attr('yksikko');
-	var lisapalvelu_maara = $('#lisapalvelu_maara').val();
-	if( lisapalvelu_tuote === '' ){
-		$('#lisapalvelu_tuote').css({'border' : '1px red solid'}).focus();
-		return false;
-	}
-	if( lisapalvelu_maara === '' ){
-		$('#lisapalvelu_maara').css({'border' : '1px red solid'}).focus();
-		return false;
-	}
-		
-	$('#lisapalvelu_lista').append('' +
-	'<div class="row">' +
-	 '<div class="col-sm-3">' +
-		$('#lisapalvelu_tuote option:selected').text() +
-		'<input type="hidden" name="Tyovuoroot[lisa_tuotteet][tuote][]" value="'+ $('#lisapalvelu_tuote option:selected').val() +'">' +
-	 '</div>' +
-	 '<div class="col-sm-3">' +
-		'<div class="text-center">' + 
-			'<i class="link pull-right text-danger fa fa-trash poista_lisa"></i>' +
-			'<b>' + $('#lisapalvelu_maara').val() + ' '+ lisapalvelu_yksikko +'</b>' + 
-		'</div>' +
-		'<input type="hidden" name="Tyovuoroot[lisa_tuotteet][maara][]" value="'+ $('#lisapalvelu_maara').val() +'">' +
-	 '</div>' +
-	'</div>' );
-
-	$('#lisapalvelu_tuote').css({'border' : '1px green solid'}).val('');
-	$('#lisapalvelu_maara').css({'border' : '1px green solid'}).val('');
-  });
-
-  $(document).delegate(".poista_lisa","click",function(){
-	$(this).closest('.row').remove();
-  });
-
-});
-</script>
-
 
 <?php
 	$criteria = new CDbCriteria();
@@ -496,7 +423,7 @@ $(document).ready(function(){
   </div>
   <div class="col-sm-3">
     <div class="input-group">
-      <span class="form-control"><?php echo Yii::t('main','Muistinpanno'); ?></span>
+      <span class="form-control"><?php echo Yii::t('main','Muistiinpano'); ?></span>
       <span class="input-group-btn">
         <button class="btn btn-primary uusimuistinpanno" type="button"><i class="fa fa-plus"></i></button>
       </span>
@@ -505,19 +432,92 @@ $(document).ready(function(){
 </div>
 </p>
 
-<p>
+<div id="lisapalvelu_lista">
+	<?php $lisa_tuotteet = json_decode($model->lisa_tuotteet, true); ?>
+	<?php if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote'])  ) : ?>
+	<br>
+	<p>
+	<legend><?php echo Yii::t('main','Lisäpalvelut'); ?></legend>
+	<?php foreach($lisa_tuotteet['tuote'] as $k => $v) : ?>
+	<?php 
+		$t_nimike = '';
+		$t_yksikko = '';
+		$tp = TuotteetPalvelut::model()->findByPK($v);
+		if( isset($tp->id) ){ 
+			$t_nimike = $tp->nimike;
+			$t_yksikko = $tp->yksikko;
+		}
+	?>
+	<div class="row">
+	 <div class="col-sm-11">
+		<?=$t_nimike?>: <b><?=json_decode($model->lisa_tuotteet, true)['maara'][$k]?> <?=$t_yksikko?></b>
+		<input type="hidden" name="Tyovuoroot[lisa_tuotteet][tuote][]" value="<?=$v?>">
+	 </div>
+	 <div class="col-sm-1">
+		<div class="pull-right">
+			<span class="link fa fa-2x fa-trash text-danger poista_lisa"></span>
+		</div>
+		<input type="hidden" name="Tyovuoroot[lisa_tuotteet][maara][]" value="<?=json_decode($model->lisa_tuotteet, true)['maara'][$k]?>">
+	 </div>
+	</div>
+	<?php endforeach; ?>
+	</p>
+	<?php endif; ?>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.plus_lisapalvelu').click(function(){
+	var lisapalvelu_tuote = $('#lisapalvelu_tuote option:selected').val();
+	var lisapalvelu_yksikko = $('#lisapalvelu_tuote option:selected').attr('yksikko');
+	var lisapalvelu_maara = $('#lisapalvelu_maara').val();
+	if( lisapalvelu_tuote === '' ){
+		$('#lisapalvelu_tuote').css({'border' : '1px red solid'}).focus();
+		return false;
+	}
+	if( lisapalvelu_maara === '' ){
+		$('#lisapalvelu_maara').css({'border' : '1px red solid'}).focus();
+		return false;
+	}
+		
+	$('#lisapalvelu_lista').append('' +
+	'<div class="row">' +
+	 '<div class="col-sm-11">' +
+		$('#lisapalvelu_tuote option:selected').text() + ': <b>' + $('#lisapalvelu_maara').val() + ' '+ lisapalvelu_yksikko +'</b>' +
+		'<input type="hidden" name="Tyovuoroot[lisa_tuotteet][tuote][]" value="'+ $('#lisapalvelu_tuote option:selected').val() +'">' +
+	 '</div>' +
+	 '<div class="col-sm-1">' +
+		'<div class="pull-right">' + 
+			'<span class="link fa fa-2x fa-trash text-danger poista_lisa"></span>' +
+		'</div>' +
+		'<input type="hidden" name="Tyovuoroot[lisa_tuotteet][maara][]" value="'+ $('#lisapalvelu_maara').val() +'">' +
+	 '</div>' +
+	'</div>' );
+
+	$('#lisapalvelu_tuote').css({'border' : '1px green solid'}).val('');
+	$('#lisapalvelu_maara').css({'border' : '1px green solid'}).val('');
+  });
+
+  $(document).delegate(".poista_lisa","click",function(){
+	$(this).closest('.row').remove();
+  });
+
+});
+</script>
+
 <div class="row">
   <div class="col-sm-12">
 	<div id="erittelynlista">
-	<legend><?php echo Yii::t('main','Työerittelyt'); ?></legend>
+	<p>
 	 <?php if(is_array(json_decode($model->tyo_erittelyt, true))): ?>
+	 <legend><?php echo Yii::t('main','Työerittelyt'); ?></legend>
 	 <?php foreach(json_decode($model->tyo_erittelyt, true) as $k => $v): ?>
 	 <div class="row">
 	  <div class="col-sm-11">
 	   <?php if( isset($mobile->id) ) : ?>
-	    <input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control" value="<?=$v?>" readonly>
+	    <input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control input-sm" value="<?=$v?>" readonly>
 	   <?php else: ?>
-	    <input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control" value="<?=$v?>">
+	    <input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control input-sm" value="<?=$v?>">
 	   <?php endif; ?>
 	  </div>
 	  <div class="col-sm-1 text-right">
@@ -525,16 +525,42 @@ $(document).ready(function(){
 		echo '<span class="text-success fa fa-check fa-2x"></span>';
 	   } ?>
 	   <?php if( !isset($mobile->id) ){
-		echo '<span class="btn btn-danger fa fa-trash poislistasta"></span>';
+		echo '<span class="link fa-2x text-danger fa fa-trash poislistasta"></span>';
 	   } ?>
 	  </div>
 	 </div>
 	 <?php endforeach; ?>
 	 <?php endif; ?>
+	</p>
 	</div>
   </div>
 </div>
-</p>
+
+<div class="row">
+  <div class="col-sm-12">
+	<div id="muistiinpanolista">
+	<p>
+	 <?php if(is_array(json_decode($model->muistiinpano, true))): ?>
+	 <legend><?php echo Yii::t('main','Muistiinpanot'); ?></legend>
+	 <?php foreach(json_decode($model->muistiinpano, true) as $k => $v): ?>
+	 <div class="row">
+	  <div class="col-sm-11">
+	   <?php if( isset($mobile->id) ) : ?>
+	    <input type="text" name="Tyovuoroot[muistiinpano][]" class="form-control input-sm" value="<?=$v?>" readonly>
+	   <?php else: ?>
+	    <input type="text" name="Tyovuoroot[muistiinpano][]" class="form-control input-sm" value="<?=$v?>">
+	   <?php endif; ?>
+	  </div>
+	  <div class="col-sm-1 text-right">
+		<span class="link fa-2x text-danger fa fa-trash poislistasta"></span>
+	  </div>
+	 </div>
+	 <?php endforeach; ?>
+	 <?php endif; ?>
+	</p>
+	</div>
+  </div>
+</div>
 
 
 <?php
@@ -1487,18 +1513,43 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 	  });
   });
   $(".uusierittely").click(function(){
+    if( $("#erittelynlista").text().trim() == '' ){
+    $("#erittelynlista").append('<legend>Työerittelyt</legend>');
+    }
     $("#erittelynlista").append('' +
 		 '<div class="row">' +
 		  '<div class="col-sm-11">' +
-		   '<input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control">' +
+		   '<input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control input-sm">' +
 		  '</div>' +
 		  '<div class="col-sm-1 text-right">' +
-		   '<span class="btn btn-danger fa fa-trash poislistasta"></span>' +
+		   '<span class="link fa-2x text-danger fa fa-trash poislistasta"></span>' +
 		  '</div>' +
  		 '</div>'
    );
+   $("#erittelynlista input:last").focus();
   });
   $(document).delegate(".poislistasta","click",function(){
+   $(this).closest(".row").remove();
+  });
+
+  $(".uusimuistinpanno").click(function(){
+    if( $("#muistiinpanolista").text().trim() == '' ){
+    $("#muistiinpanolista").append('<legend>Muistiinpanot</legend>');
+    }
+
+    $("#muistiinpanolista").append('' +
+		 '<div class="row">' +
+		  '<div class="col-sm-11">' +
+		   '<input type="text" name="Tyovuoroot[muistiinpano][]" class="form-control input-sm">' +
+		  '</div>' +
+		  '<div class="col-sm-1 text-right">' +
+		   '<span class="link fa-2x text-danger fa fa-trash pois_muistiinpano"></span>' +
+		  '</div>' +
+ 		 '</div>'
+   );
+   $("#muistiinpanolista input:last").focus();
+  });
+  $(document).delegate(".pois_muistiinpano","click",function(){
    $(this).closest(".row").remove();
   });
 

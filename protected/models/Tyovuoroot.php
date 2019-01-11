@@ -91,7 +91,8 @@ public $suunnittellut;
 		     'tilausviesti' => 'TEXT',
 		     'toimenpiteet' => 'TEXT',
 		     'uusi_tilaus' => 'int(1) DEFAULT 0',
-		     'tyo_erittelyt' => 'text DEFAULT NULL'
+		     'tyo_erittelyt' => 'text DEFAULT NULL',
+		     'muistiinpano' => 'text DEFAULT NULL'
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -128,7 +129,7 @@ public $suunnittellut;
 			array('alku, loppu, pituus, alku_r, kesto', 'length', 'max'=>10),
 			array('ruokatauko, tyoajanlaatu, tyoajanmerkinta', 'length', 'max'=>50),
 			array('osoiteOnline', 'length', 'max'=>100),
-			array('tyopaari, tietoja, lisa_tuotteet, tilausviesti, toimenpiteet, tyo_erittelyt', 'safe'),
+			array('tyopaari, tietoja, lisa_tuotteet, tilausviesti, toimenpiteet, tyo_erittelyt, muistiinpano', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, tid, time, kohde, pvm, alku, loppu, pituus, ruokatauko, alku_r, kesto, tyoajanlaatu, tyoajanmerkinta, tietoja, osoiteOnline, tekijan_nimi, toimenpiteet, osoite', 'safe', 'on'=>'search'),
