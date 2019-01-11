@@ -2048,6 +2048,11 @@ class TyovuorootController extends Controller
 			} else {
 				$toistuva->tyo_erittelyt = '';
 			}
+			if( is_array($toistuva->muistiinpano) and count($toistuva->muistiinpano) > 0 ){
+				$toistuva->muistiinpano = json_encode($toistuva->muistiinpano, JSON_FORCE_OBJECT);
+			} else {
+				$toistuva->muistiinpano = '';
+			}
 
 			// <-- viikko_paivat
 			if(isset($_POST['P'])){	

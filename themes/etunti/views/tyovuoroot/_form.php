@@ -267,7 +267,7 @@ $(".muokaValiko").click(function() {
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'tietoja'); ?>
 		<?php 
-		echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control', 'placeholder'=>'Esim. Avainten tiedot tai kohteesa olevat rajoitukset.')); 
+		echo $form->textarea($model,'tietoja',array('rows'=>5,'class'=>'form-control', 'placeholder'=>'Esim. Avainten tiedot tai kohteesa olevat rajoitukset.')); 
 		?>
 		<?php echo $form->error($model,'tietoja'); ?>
   </div>
