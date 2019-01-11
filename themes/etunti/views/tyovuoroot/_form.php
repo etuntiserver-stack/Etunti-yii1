@@ -1495,15 +1495,15 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 			  tyo_erittelyt += '' +
 				 '<div class="row">' +
 				  '<div class="col-sm-11">' +
-				   '<input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control" value="'+ value +'">' +
+				   '<input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control input-sm" value="'+ value +'">' +
 				  '</div>' +
 				  '<div class="col-sm-1 text-right">' +
-				   '<span class="btn btn-danger fa fa-trash poislistasta"></span>' +
+				   '<span class="link text-danger fa fa-trash poislistasta"></span>' +
 				  '</div>' +
 		 		 '</div>';
 			});
 			}
-			$("#erittelynlista").html(tyo_erittelyt);
+			$("#erittelynlista").html('<div class="col-sm-4 erittelynlista_laatiko"><legend>Työerittelyt</legend>' + tyo_erittelyt + '</div>');
 			//    tyo_erittelyt -->
 
 			if(d[2] !== '')
