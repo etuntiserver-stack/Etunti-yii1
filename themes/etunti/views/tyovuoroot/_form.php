@@ -396,44 +396,6 @@ $(".muokaValiko").click(function() {
   </div>
 </div>
 
-
-<?php
-	$criteria = new CDbCriteria();
-        $criteria->order = " id DESC ";
-	$criteria->condition = " tv_id='".$model->id."' AND tid='".$model->tid."' ";
-	$mobile = Mobile::model()->find($criteria);
-?>
-<div class="row">
-  <div class="col-sm-3">
-	 <span class="btn btn-success uusierittely">Työ-erittely <span class="fa fa-plus"></span></span>
-  </div>
-  <div class="col-sm-9">
-	<div id="erittelynlista">
-	 <?php if(is_array(json_decode($model->tyo_erittelyt, true))): ?>
-	 <?php foreach(json_decode($model->tyo_erittelyt, true) as $k => $v): ?>
-	 <div class="row">
-	  <div class="col-sm-11">
-	   <?php if( isset($mobile->id) ) : ?>
-	    <input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control" value="<?=$v?>" readonly>
-	   <?php else: ?>
-	    <input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control" value="<?=$v?>">
-	   <?php endif; ?>
-	  </div>
-	  <div class="col-sm-1 text-right">
-	   <?php if( isset($mobile->id) and is_array(json_decode($mobile->tyo_erittelyt, true)) and in_array($k, json_decode($mobile->tyo_erittelyt, true)) ){
-		echo '<span class="text-success fa fa-check fa-2x"></span>';
-	   } ?>
-	   <?php if( !isset($mobile->id) ){
-		echo '<span class="btn btn-danger fa fa-trash poislistasta"></span>';
-	   } ?>
-	  </div>
-	 </div>
-	 <?php endforeach; ?>
-	 <?php endif; ?>
-	</div>
-  </div>
-</div>
-
 <p id="lisapalvelu_lista">
 	<?php $lisa_tuotteet = json_decode($model->lisa_tuotteet, true); ?>
 	<?php if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote'])  ) : ?>
@@ -507,7 +469,74 @@ $(document).ready(function(){
 });
 </script>
 
-<br>
+
+<?php
+	$criteria = new CDbCriteria();
+        $criteria->order = " id DESC ";
+	$criteria->condition = " tv_id='".$model->id."' AND tid='".$model->tid."' ";
+	$mobile = Mobile::model()->find($criteria);
+?>
+<p>
+<div class="row">
+  <div class="col-sm-3">
+    <div class="input-group">
+      <span class="form-control"><?php echo Yii::t('main','Toistuva työvuoro'); ?></span>
+      <span class="input-group-btn">
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-eye"></i></button>
+      </span>
+    </div>  
+  </div>
+  <div class="col-sm-3">
+    <div class="input-group">
+      <span class="form-control"><?php echo Yii::t('main','Työerittely'); ?></span>
+      <span class="input-group-btn">
+        <button class="btn btn-primary uusierittely" type="button"><i class="fa fa-plus"></i></button>
+      </span>
+    </div>  
+  </div>
+  <div class="col-sm-3">
+    <div class="input-group">
+      <span class="form-control"><?php echo Yii::t('main','Muistinpanno'); ?></span>
+      <span class="input-group-btn">
+        <button class="btn btn-primary uusimuistinpanno" type="button"><i class="fa fa-plus"></i></button>
+      </span>
+    </div>  
+  </div>
+</div>
+</p>
+
+<p>
+<div class="row">
+  <div class="col-sm-12">
+	<div id="erittelynlista">
+	<legend><?php echo Yii::t('main','Työerittelyt'); ?></legend>
+	 <?php if(is_array(json_decode($model->tyo_erittelyt, true))): ?>
+	 <?php foreach(json_decode($model->tyo_erittelyt, true) as $k => $v): ?>
+	 <div class="row">
+	  <div class="col-sm-11">
+	   <?php if( isset($mobile->id) ) : ?>
+	    <input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control" value="<?=$v?>" readonly>
+	   <?php else: ?>
+	    <input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control" value="<?=$v?>">
+	   <?php endif; ?>
+	  </div>
+	  <div class="col-sm-1 text-right">
+	   <?php if( isset($mobile->id) and is_array(json_decode($mobile->tyo_erittelyt, true)) and in_array($k, json_decode($mobile->tyo_erittelyt, true)) ){
+		echo '<span class="text-success fa fa-check fa-2x"></span>';
+	   } ?>
+	   <?php if( !isset($mobile->id) ){
+		echo '<span class="btn btn-danger fa fa-trash poislistasta"></span>';
+	   } ?>
+	  </div>
+	 </div>
+	 <?php endforeach; ?>
+	 <?php endif; ?>
+	</div>
+  </div>
+</div>
+</p>
+
+
 <?php
     $pfrom = '';
     $pto = '';
@@ -533,20 +562,14 @@ $(document).ready(function(){
     $pfrom = $model->pvm;
   }
 ?>
-<hr>
 
 <div id="toistuvaAllsijaan"></div>
-
 <div id="toistuvaAll">
 <div class="row">
  <div class="col-sm-12">
 
-
-  	<a href="#" class="btn btn-lg btn-primary" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> <?php echo Yii::t('main','Toistuva työvuoro'); ?></a>
-
-
 	<div class="<?php echo $classCol; ?>" id="collapseExample">
-	<br>
+	<legend><?php echo Yii::t('main','Toistuva työvuoro'); ?></legend>
 	<p>
 	<b><?php echo Yii::t('main','Muokkaa toistuvaa työvuoroa. Jos valintaa ei ole tehtynä, muokataan vain kyseisen päivän työvuoroa.'); ?></b> <br> 
 	<input type="checkbox" class="sw" name="ToistuvatTyovuorot[toistuva_aktiivinen]" id="toistuva_aktiivinen"><br>
