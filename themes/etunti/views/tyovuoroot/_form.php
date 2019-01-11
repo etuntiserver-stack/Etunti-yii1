@@ -546,9 +546,9 @@ $(document).ready(function(){
 	 <div class="row">
 	  <div class="col-sm-11">
 	   <?php if( isset($mobile->id) ) : ?>
-	    <input type="text" name="Tyovuoroot[muistiinpano][]" class="form-control input-sm" value="<?=$v?>" readonly>
+	    <textarea name="Tyovuoroot[muistiinpano][]" class="form-control" readonly><?=$v?></textarea>
 	   <?php else: ?>
-	    <input type="text" name="Tyovuoroot[muistiinpano][]" class="form-control input-sm" value="<?=$v?>">
+	    <textarea name="Tyovuoroot[muistiinpano][]" class="form-control"><?=$v?></textarea>
 	   <?php endif; ?>
 	  </div>
 	  <div class="col-sm-1 text-right">
@@ -1540,14 +1540,14 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
     $("#muistiinpanolista").append('' +
 		 '<div class="row">' +
 		  '<div class="col-sm-11">' +
-		   '<input type="text" name="Tyovuoroot[muistiinpano][]" class="form-control input-sm">' +
+		   '<textarea name="Tyovuoroot[muistiinpano][]" class="form-control"></textarea>' +
 		  '</div>' +
 		  '<div class="col-sm-1 text-right">' +
 		   '<span class="link fa-2x text-danger fa fa-trash pois_muistiinpano"></span>' +
 		  '</div>' +
  		 '</div>'
    );
-   $("#muistiinpanolista input:last").focus();
+   $("#muistiinpanolista textarea:last").val('<?=date("d.m.Y H:i")?> - <?=Yii::app()->user->nimi?>:\n').focus();
   });
   $(document).delegate(".pois_muistiinpano","click",function(){
    $(this).closest(".row").remove();
