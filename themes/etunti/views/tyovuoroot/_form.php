@@ -432,11 +432,13 @@ $(".muokaValiko").click(function() {
 </div>
 </p>
 
-<div id="lisapalvelu_lista">
+<hr>
+
+<div class="row">
+	<div id="lisapalvelu_lista">
 	<?php $lisa_tuotteet = json_decode($model->lisa_tuotteet, true); ?>
 	<?php if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote'])  ) : ?>
-	<br>
-	<p>
+	<div class="col-sm-4 lisapalvelu_laatiko">
 	<legend><?php echo Yii::t('main','Lisäpalvelut'); ?></legend>
 	<?php foreach($lisa_tuotteet['tuote'] as $k => $v) : ?>
 	<?php 
@@ -455,15 +457,15 @@ $(".muokaValiko").click(function() {
 	 </div>
 	 <div class="col-sm-1">
 		<div class="pull-right">
-			<span class="link fa fa-2x fa-trash text-danger poista_lisa"></span>
+			<span class="link fa fa-trash text-danger poista_lisa"></span>
 		</div>
 		<input type="hidden" name="Tyovuoroot[lisa_tuotteet][maara][]" value="<?=json_decode($model->lisa_tuotteet, true)['maara'][$k]?>">
 	 </div>
 	</div>
 	<?php endforeach; ?>
-	</p>
+	</div>
 	<?php endif; ?>
-</div>
+	</div>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -480,11 +482,12 @@ $(document).ready(function(){
 		return false;
 	}
 
-	if( $("#lisapalvelu_lista").text().trim() == '' ){
-		$("#lisapalvelu_lista").append('<legend>Lisäpalvelut</legend>');
+	var lp_lista = $("#lisapalvelu_lista").text().trim();
+	if( lp_lista == '' ){
+		$("#lisapalvelu_lista").append('<div class="col-sm-4 lisapalvelu_laatiko"><legend>Lisäpalvelut</legend>');
 	}
 
-	$('#lisapalvelu_lista').append('' +
+	$('.lisapalvelu_laatiko').append('' +
 	'<div class="row">' +
 	 '<div class="col-sm-11">' +
 		$('#lisapalvelu_tuote option:selected').text() + ': <b>' + $('#lisapalvelu_maara').val() + ' '+ lisapalvelu_yksikko +'</b>' +
@@ -492,11 +495,16 @@ $(document).ready(function(){
 	 '</div>' +
 	 '<div class="col-sm-1">' +
 		'<div class="pull-right">' + 
-			'<span class="link fa fa-2x fa-trash text-danger poista_lisa"></span>' +
+			'<span class="link fa fa-trash text-danger poista_lisa"></span>' +
 		'</div>' +
 		'<input type="hidden" name="Tyovuoroot[lisa_tuotteet][maara][]" value="'+ $('#lisapalvelu_maara').val() +'">' +
 	 '</div>' +
 	'</div>' );
+
+	if( lp_lista == '' ){
+		$(".lisapalvelu_laatiko").append('</div>');
+	}
+
 
 	$('#lisapalvelu_tuote').css({'border' : '1px green solid'}).val('');
 	$('#lisapalvelu_maara').css({'border' : '1px green solid'}).val('');
@@ -509,11 +517,9 @@ $(document).ready(function(){
 });
 </script>
 
-<div class="row">
-  <div class="col-sm-12">
 	<div id="erittelynlista">
-	<p>
 	 <?php if(is_array(json_decode($model->tyo_erittelyt, true))): ?>
+	 <div class="col-sm-4 erittelynlista_laatiko">
 	 <legend><?php echo Yii::t('main','Työerittelyt'); ?></legend>
 	 <?php foreach(json_decode($model->tyo_erittelyt, true) as $k => $v): ?>
 	 <div class="row">
@@ -526,25 +532,21 @@ $(document).ready(function(){
 	  </div>
 	  <div class="col-sm-1 text-right">
 	   <?php if( isset($mobile->id) and is_array(json_decode($mobile->tyo_erittelyt, true)) and in_array($k, json_decode($mobile->tyo_erittelyt, true)) ){
-		echo '<span class="text-success fa fa-check fa-2x"></span>';
+		echo '<span class="text-success fa fa-check"></span>';
 	   } ?>
 	   <?php if( !isset($mobile->id) ){
-		echo '<span class="link fa-2x text-danger fa fa-trash poislistasta"></span>';
+		echo '<span class="link text-danger fa fa-trash poislistasta"></span>';
 	   } ?>
 	  </div>
 	 </div>
 	 <?php endforeach; ?>
+	 </div>
 	 <?php endif; ?>
-	</p>
 	</div>
-  </div>
-</div>
 
-<div class="row">
-  <div class="col-sm-12">
 	<div id="muistiinpanolista">
-	<p>
 	 <?php if(is_array(json_decode($model->muistiinpano, true))): ?>
+	 <div class="col-sm-4 muistiinpanolista_laatiko">
 	 <legend><?php echo Yii::t('main','Muistiinpanot'); ?></legend>
 	 <?php foreach(json_decode($model->muistiinpano, true) as $k => $v): ?>
 	 <div class="row">
@@ -556,15 +558,14 @@ $(document).ready(function(){
 	   <?php endif; ?>
 	  </div>
 	  <div class="col-sm-1 text-right">
-		<span class="link fa-2x text-danger fa fa-trash poislistasta"></span>
+		<span class="link text-danger fa fa-trash poislistasta"></span>
 	  </div>
 	 </div>
 	 <?php endforeach; ?>
+	 </div>
 	 <?php endif; ?>
-	</p>
 	</div>
-  </div>
-</div>
+</div><!-- row -->
 
 
 <?php
@@ -1517,41 +1518,49 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 	  });
   });
   $(".uusierittely").click(function(){
-    if( $("#erittelynlista").text().trim() == '' ){
-    $("#erittelynlista").append('<legend>Työerittelyt</legend>');
+    var er_lista = $("#erittelynlista").text().trim();
+    if( er_lista == '' ){
+    $("#erittelynlista").append('<div class="col-sm-4 erittelynlista_laatiko"><legend>Työerittelyt</legend>');
     }
-    $("#erittelynlista").append('' +
+    $(".erittelynlista_laatiko").append('' +
 		 '<div class="row">' +
 		  '<div class="col-sm-11">' +
 		   '<input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control input-sm">' +
 		  '</div>' +
 		  '<div class="col-sm-1 text-right">' +
-		   '<span class="link fa-2x text-danger fa fa-trash poislistasta"></span>' +
+		   '<span class="link text-danger fa fa-trash poislistasta"></span>' +
 		  '</div>' +
  		 '</div>'
-   );
-   $("#erittelynlista input:last").focus();
+    );
+    if( er_lista == '' ){
+    $(".erittelynlista_laatiko").append('</div>');
+    }
+    $(".erittelynlista_laatiko input:last").focus();
   });
   $(document).delegate(".poislistasta","click",function(){
    $(this).closest(".row").remove();
   });
 
   $(".uusimuistinpanno").click(function(){
-    if( $("#muistiinpanolista").text().trim() == '' ){
-    $("#muistiinpanolista").append('<legend>Muistiinpanot</legend>');
+    var mp_lista = $("#muistiinpanolista").text().trim();
+    if( mp_lista == '' ){
+    $("#muistiinpanolista").append('<div class="col-sm-4 muistiinpanolista_laatiko"><legend>Muistiinpanot</legend>');
     }
 
-    $("#muistiinpanolista").append('' +
+    $(".muistiinpanolista_laatiko").append('' +
 		 '<div class="row">' +
 		  '<div class="col-sm-11">' +
 		   '<textarea name="Tyovuoroot[muistiinpano][]" class="form-control"></textarea>' +
 		  '</div>' +
 		  '<div class="col-sm-1 text-right">' +
-		   '<span class="link fa-2x text-danger fa fa-trash pois_muistiinpano"></span>' +
+		   '<span class="link text-danger fa fa-trash pois_muistiinpano"></span>' +
 		  '</div>' +
  		 '</div>'
-   );
-   $("#muistiinpanolista textarea:last").val('<?=date("d.m.Y H:i")?> - <?=Yii::app()->user->nimi?>:\n').focus();
+    );
+    if( mp_lista == '' ){
+    $(".muistiinpanolista_laatiko").append('</div>');
+    }
+    $(".muistiinpanolista_laatiko textarea:last").val('<?=date("d.m.Y H:i")?> - <?=Yii::app()->user->nimi?>:\n').focus();
   });
   $(document).delegate(".pois_muistiinpano","click",function(){
    $(this).closest(".row").remove();
