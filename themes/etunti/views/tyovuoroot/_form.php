@@ -479,7 +479,11 @@ $(document).ready(function(){
 		$('#lisapalvelu_maara').css({'border' : '1px red solid'}).focus();
 		return false;
 	}
-		
+
+	if( $("#lisapalvelu_lista").text().trim() == '' ){
+		$("#lisapalvelu_lista").append('<legend>Lisäpalvelut</legend>');
+	}
+
 	$('#lisapalvelu_lista').append('' +
 	'<div class="row">' +
 	 '<div class="col-sm-11">' +
