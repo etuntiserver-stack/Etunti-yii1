@@ -165,10 +165,15 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 	if(isset($model->kohteet->id) and isset($model->kohteet->avaimet) and count($model->kohteet->avaimet) > 0){
 	echo CHtml::link('Avaimet', array('/avaimet/index', 'osoite' => $model->kohteet->osoite), array('class'=>'btn btn-primary btn-block myBgColors')); 
 	}
-	if(isset($model->kohteet->id) and isset($model->kohteet->avaimet) and count($model->kohteet->avaimet) == 0 and $model->kohteet->asiakas_id > 0){
-	echo CHtml::link('Luo avain', array('/avaimet/create', 'asiakas_id' => $model->kohteet->asiakas_id, 'kohde_id' => $model->kohteet->id), array('class'=>'btn btn-primary btn-block myBgColors')); 
-	}
 	?>
+	<?php if(isset($model->kohteet->id) and isset($model->kohteet->avaimet) and count($model->kohteet->avaimet) == 0 and $model->kohteet->asiakas_id > 0): ?>
+	    <div class="input-group">
+	      <span class="form-control"><?php echo Yii::t('main','Luo avain'); ?></span>
+	      <span class="input-group-btn">
+		<?=CHtml::link('<i class="fa fa-plus"></i>', array('/avaimet/create', 'asiakas_id' => $model->kohteet->asiakas_id, 'kohde_id' => $model->kohteet->id), array('class'=>'btn btn-primary'))?>
+	      </span>
+	    </div>  
+	<?php endif; ?>
   </div>
 </div>
 
@@ -375,14 +380,12 @@ $(".muokaValiko").click(function() {
   </div>
   <div class="col-sm-3">
 		<label><?=Yii::t('main','Lisäpalvelun määrä')?></label>
-	<div class="row">
-	 <div class="col-sm-10">
-		<?php echo CHtml::numberField('lisapalvelu_maara','lisapalvelu_maara',array('class'=>'form-control', 'placeholder' => 'määrä')); ?>
-	 </div>
-	 <div class="col-sm-2">
-        	<button class="btn btn-primary plus_lisapalvelu myBgColors pull-right" type="button"><i class="fa fa-plus"></i></button>
-	 </div>
-	</div>
+    		<div class="input-group">
+		      <?php echo CHtml::numberField('lisapalvelu_maara','lisapalvelu_maara',array('class'=>'form-control', 'placeholder' => 'määrä')); ?>
+		      <span class="input-group-btn">
+		        <button class="btn btn-primary plus_lisapalvelu" type="button"><i class="fa fa-plus"></i></button>
+		      </span>
+		</div>
   </div>
   <div class="col-sm-3">
 		<?php 
@@ -513,7 +516,9 @@ $(document).ready(function(){
   $(document).delegate(".poista_lisa","click",function(){
 	$(this).closest('.row').remove();
   });
-
+  $("#lisapalvelu_tuote").change(function(){
+	$("#lisapalvelu_maara").css({'border' : '1px red solid'}).focus();
+  });
 });
 </script>
 
@@ -595,11 +600,12 @@ $(document).ready(function(){
 ?>
 
 <div id="toistuvaAllsijaan"></div>
+<br>
 <div id="toistuvaAll">
 <div class="row">
  <div class="col-sm-12">
 
-	<div class="<?php echo $classCol; ?>" id="collapseExample">
+	<div class="<?php echo $classCol; ?> panel-footer" id="collapseExample">
 	<legend><?php echo Yii::t('main','Toistuva työvuoro'); ?></legend>
 	<p>
 	<b><?php echo Yii::t('main','Muokkaa toistuvaa työvuoroa. Jos valintaa ei ole tehtynä, muokataan vain kyseisen päivän työvuoroa.'); ?></b> <br> 
