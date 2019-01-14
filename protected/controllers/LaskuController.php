@@ -422,6 +422,10 @@ class LaskuController extends Controller
 		$lasku = $this->loadModel($id);
 
 		$asetukset=Asetukset::model()->findbypk(1);
+		$asiakas=Asiakkaat::model()->find(" asiakasnumero='".$lasku->as_nro."' ");
+		$erapaiva = date("Y-m-d", strtotime("+14 day"));
+		if(!empty($asiakas->maksuehto))
+		$erapaiva = date("Y-m-d",strtotime("+$asiakas->maksuehto day"));
 
 		// <-- Jos netvisor niin laskunumero on seurava
 		if($asetukset->palvelu_tyyppi == 4)
@@ -441,6 +445,9 @@ class LaskuController extends Controller
 		$model->laskun_nimetys="Hyvityslasku";
 		$model->yhteensa_total='-'.$lasku->yhteensa_total;
 		$model->netvisorkey='';
+		$model->paivays=date("Y-m-d");
+		$model->erapaiva=$erapaiva;
+		$model->tilanne=0;
 		if($model->save()){
 
 		$laskunRivit=LaskunRivit::model()->findAll("lid='".$lasku->id."'");
