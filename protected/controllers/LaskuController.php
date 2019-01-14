@@ -287,7 +287,9 @@ class LaskuController extends Controller
 				foreach($k as $data)
 				{
 					$a=Asiakkaat::model()->findbypk($data->asiakas_id);
+					if( isset($a->id) and isset($data->osoite)){
 					$result .= '<option value="'.$a->asiakasnumero.'">'.$data->osoite.'</option>';
+					}
 				}
 				$result .= '</select>';
 
