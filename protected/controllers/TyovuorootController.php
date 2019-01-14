@@ -1707,6 +1707,11 @@ class TyovuorootController extends Controller
 			} else {
 				$toistuva->tyo_erittelyt = '';
 			}
+			if( is_array($toistuva->muistiinpano) and count($toistuva->muistiinpano) > 0 ){
+				$toistuva->muistiinpano = json_encode($toistuva->muistiinpano, JSON_FORCE_OBJECT);
+			} else {
+				$toistuva->muistiinpano = '';
+			}
 
 			if(isset($_POST['P']))
 			$toistuva->viikko_paivat=json_encode($_POST['P']);
@@ -1803,6 +1808,11 @@ class TyovuorootController extends Controller
 				$model->tyo_erittelyt = json_encode($model->tyo_erittelyt, JSON_FORCE_OBJECT);
 			} else {
 				$model->tyo_erittelyt = '';
+			}
+			if( is_array($model->muistiinpano) and count($model->muistiinpano) > 0 ){
+				$model->muistiinpano = json_encode($model->muistiinpano, JSON_FORCE_OBJECT);
+			} else {
+				$model->muistiinpano = '';
 			}
 			// <-- Apuaika
 			if(isset($_POST['Tyovuoroot']['apuaika']) and $_POST['Tyovuoroot']['apuaika'] == 1)
@@ -2038,6 +2048,11 @@ class TyovuorootController extends Controller
 			} else {
 				$toistuva->tyo_erittelyt = '';
 			}
+			if( is_array($toistuva->muistiinpano) and count($toistuva->muistiinpano) > 0 ){
+				$toistuva->muistiinpano = json_encode($toistuva->muistiinpano, JSON_FORCE_OBJECT);
+			} else {
+				$toistuva->muistiinpano = '';
+			}
 
 			// <-- viikko_paivat
 			if(isset($_POST['P'])){	
@@ -2237,6 +2252,11 @@ class TyovuorootController extends Controller
 				$model->tyo_erittelyt = json_encode($model->tyo_erittelyt, JSON_FORCE_OBJECT);
 			} else {
 				$model->tyo_erittelyt = '';
+			}
+			if( is_array($model->muistiinpano) and count($model->muistiinpano) > 0 ){
+				$model->muistiinpano = json_encode($model->muistiinpano, JSON_FORCE_OBJECT);
+			} else {
+				$model->muistiinpano = '';
 			}
 			if($model->save()){
 
