@@ -2804,6 +2804,11 @@ class TyovuorootController extends Controller
 		$asiakkaat = new Asiakkaat;
 		$asiakkaat->attributes = $_POST['Asiakkaat'];
 		$asiakkaat->aktiivinen = 1;
+		if(isset($_POST['Asiakkaat']['ryhma'])){
+			$asiakkaat->ryhma=json_encode($_POST['Asiakkaat']['ryhma']);
+		} else {
+			$asiakkaat->ryhma="";
+		}
 
 		  if($asiakkaat->save())
 		  {

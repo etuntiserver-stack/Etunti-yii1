@@ -3,6 +3,7 @@
 /* @var $model Tyovuoroot */
 /* @var $form CActiveForm */
 
+$asiakkaat_model = new Asiakkaat;
 ?>
 
 <style>
@@ -80,10 +81,70 @@
 		<label><?php echo Yii::t('main', 'Lahjakortin numero'); ?> </label>
 		<input type="text" name="LahjakortinNumero" id="LahjakortinNumero" class="form-control">
     </div>
+    <div class="sectionfill mb5">
+		<label><?php echo Yii::t('main', 'Työryhmä'); ?> </label>
+		<?php
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+	       	$criteria = new CDbCriteria();
+		$criteria->order = " value ";
+		$criteria->condition = "select_type='tyoryhma'";
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+		$criteria->addCondition ("value2 LIKE '%\"".Yii::app()->user->adminID."\"%'");
+		}
+
+		$listData = Valikkoot::model()->findAll($criteria);
+		?>
+		<?php echo $form->dropDownList($asiakkaat_model, 'tyoryhma', CHtml::listData($listData, 'id', 'value'), 
+		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		?>
+    </div>
+    <div class="sectionfill mb5">
+		<label><?php echo Yii::t('main', 'Asiakasryhmä'); ?> </label>
+
+	   <div class="input-group">
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma_real' ",array('order' => "select_type"));
+		if(count($l) == 0)
+      		{
+			$new_val = new Valikkoot;
+			$new_val->select_type = "asiakas_ryhma_real";
+			$new_val->value = "Testi ryhmä";
+			if($new_val->save())
+	      			$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma_real' ",array('order' => "select_type"));
+			else
+				var_dump($new_val->getErrors());
+		}
+			echo '<select name="Asiakkaat[ryhma][]" class="ryhmat form-control" multiple title="Valitse">';
+			foreach($l as $data)
+			{
+		    		echo '<option value="'.$data->id.'">'.$data->value.'</option>';
+			}
+			echo '</select>';
+		
+        	?>
+		<span class="input-group-btn">
+			<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma_real"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
+	   </div>
+    </div>
   </div>
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+$('.ryhmat').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Ryhmät"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+});
 
   // <-- onkoAsOsoiteSamaKunKohde
   $(".onkoLahjakortti").change(function() {
