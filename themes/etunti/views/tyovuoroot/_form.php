@@ -441,7 +441,7 @@ $(".muokaValiko").click(function() {
 	<div id="lisapalvelu_lista">
 	<?php $lisa_tuotteet = json_decode($model->lisa_tuotteet, true); ?>
 	<?php if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote'])  ) : ?>
-	<div class="col-sm-4 lisapalvelu_laatiko">
+	<div class="col-sm-6 lisapalvelu_laatiko">
 	<legend><?php echo Yii::t('main','Lisäpalvelut'); ?></legend>
 	<?php foreach($lisa_tuotteet['tuote'] as $k => $v) : ?>
 	<?php 
@@ -524,7 +524,7 @@ $(document).ready(function(){
 
 	<div id="erittelynlista">
 	 <?php if(is_array(json_decode($model->tyo_erittelyt, true))): ?>
-	 <div class="col-sm-4 erittelynlista_laatiko">
+	 <div class="col-sm-6 erittelynlista_laatiko">
 	 <legend><?php echo Yii::t('main','Työerittelyt'); ?></legend>
 	 <?php foreach(json_decode($model->tyo_erittelyt, true) as $k => $v): ?>
 	 <div class="row">
@@ -548,10 +548,11 @@ $(document).ready(function(){
 	 </div>
 	 <?php endif; ?>
 	</div>
+</div><!-- row -->
 
 	<div id="muistiinpanolista">
 	 <?php if(is_array(json_decode($model->muistiinpano, true))): ?>
-	 <div class="col-sm-4 muistiinpanolista_laatiko">
+	 <p><div class="row panel-footer"><div class="col-sm-12 muistiinpanolista_laatiko">
 	 <legend><?php echo Yii::t('main','Muistiinpanot'); ?></legend>
 	 <?php foreach(json_decode($model->muistiinpano, true) as $k => $v): ?>
 	 <div class="row">
@@ -567,10 +568,10 @@ $(document).ready(function(){
 	  </div>
 	 </div>
 	 <?php endforeach; ?>
-	 </div>
+	 </div></div></p><!--row-->
 	 <?php endif; ?>
 	</div>
-</div><!-- row -->
+
 
 
 <?php
@@ -1509,7 +1510,7 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 		 		 '</div>';
 			});
 			}
-			$("#erittelynlista").html('<div class="col-sm-4 erittelynlista_laatiko"><legend>Työerittelyt</legend>' + tyo_erittelyt + '</div>');
+			$("#erittelynlista").html('<div class="col-sm-6 erittelynlista_laatiko"><legend>Työerittelyt</legend>' + tyo_erittelyt + '</div>');
 			//    tyo_erittelyt -->
 
 			if(d[2] !== '')
@@ -1526,7 +1527,7 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
   $(".uusierittely").click(function(){
     var er_lista = $("#erittelynlista").text().trim();
     if( er_lista == '' ){
-    $("#erittelynlista").append('<div class="col-sm-4 erittelynlista_laatiko"><legend>Työerittelyt</legend>');
+    $("#erittelynlista").append('<div class="col-sm-6 erittelynlista_laatiko"><legend>Työerittelyt</legend>');
     }
     $(".erittelynlista_laatiko").append('' +
 		 '<div class="row">' +
@@ -1550,7 +1551,7 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
   $(".uusimuistinpanno").click(function(){
     var mp_lista = $("#muistiinpanolista").text().trim();
     if( mp_lista == '' ){
-    $("#muistiinpanolista").append('<div class="col-sm-4 muistiinpanolista_laatiko"><legend>Muistiinpanot</legend>');
+    $("#muistiinpanolista").append('<p><div class="row panel-footer"><div class="col-sm-12 muistiinpanolista_laatiko"><legend>Muistiinpanot</legend>');
     }
 
     $(".muistiinpanolista_laatiko").append('' +
@@ -1564,7 +1565,7 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
  		 '</div>'
     );
     if( mp_lista == '' ){
-    $(".muistiinpanolista_laatiko").append('</div>');
+    $(".muistiinpanolista_laatiko").append('</div></div></p>');
     }
     $(".muistiinpanolista_laatiko textarea:last").val('<?=date("d.m.Y H:i")?> - <?=Yii::app()->user->nimi?>:\n').focus();
   });
