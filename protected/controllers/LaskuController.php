@@ -1966,7 +1966,7 @@ $xml = '
     <SalesInvoiceDeliveryDate format="ansi">'.date("Y-m-d", strtotime($model->paivays)).'</SalesInvoiceDeliveryDate>
     <SalesInvoiceReferenceNumber>'.$model->viitenumero.'</SalesInvoiceReferenceNumber>
     <SalesInvoiceAmount>'.$model->yhteensa_total.'</SalesInvoiceAmount>
-    <SellerIdentifier type="netvisor">32</SellerIdentifier> 
+    <!--<SellerIdentifier type="netvisor">32</SellerIdentifier>-->
     <SalesInvoiceStatus type="netvisor">unsent</SalesInvoiceStatus>
     <InvoicingCustomerIdentifier type="netvisor">'.$InvoicingCustomerIdentifier.'</InvoicingCustomerIdentifier>
     <InvoicingCustomerName>'.$name.'</InvoicingCustomerName>
