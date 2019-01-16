@@ -63,6 +63,7 @@
 	}
 	?>
 	<div <?=$l_class?>>
+	<p><b><?=Yii::t('main', 'Kustannuspaikka')?></b>-<?=(!empty($item->netvisor_dimension_item))? $item->netvisor_dimension_item:''?></p>
 	<p><b><?=Yii::t('main', 'Laskutus kanava')?></b>-<?=(!empty($item->laskutus_kanava))? Yii::t('main', $item->laskutus_kanava):''?></p>
 	<p><b><?=Yii::t('main', 'Eräpäivä')?></b>-<?=(!empty($item->maksuehto))? date("d.m.Y",strtotime("+$item->maksuehto day")):''?></p>
 	<p><b><?=Yii::t('main', 'Maksuehto')?></b>-<?=(!empty($item->maksuehto))? $item->maksuehto:''?></p>
@@ -90,6 +91,8 @@
 		$lasku->tilanne = 1;
 		$lasku->laskunumero = $laskunumero;
 		$lasku->tapahtumapvm = date("Y-m-d H:i:s");
+		$lasku->netvisor_dimension_name = $item->netvisor_dimension_name;
+		$lasku->netvisor_dimension_item = $item->netvisor_dimension_item;
 		$lasku->tyyppi = $item->tyyppi;
 		$lasku->yritys = $item->yrityksen_nimi;
 		$lasku->y_tunnus = $item->y_tunnus;
