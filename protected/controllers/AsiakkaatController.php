@@ -474,6 +474,16 @@ class AsiakkaatController extends Controller
 			$asetukset = Asetukset::model()->findbypk(1);
 			$model->attributes=$_POST['Asiakkaat'];
 
+			// <-- Dimension
+			if( isset($_POST['Asiakkaat']['netvisor_dimension_name']) ){
+			   $dimension = explode("//", $_POST['Asiakkaat']['netvisor_dimension_name']);
+			   if( isset($dimension[0]) and isset($dimension[1]) ){
+				$model->netvisor_dimension_name = $dimension[0];
+				$model->netvisor_dimension_item = $dimension[1];
+			   }
+			}
+			//     Dimension -->
+
 			if(isset($_POST['Asiakkaat']['ryhma']))
 				$model->ryhma=json_encode($_POST['Asiakkaat']['ryhma']);
 			else
@@ -658,7 +668,15 @@ Yritys '.$yr.'
 			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Asiakkaat'];
 
-
+			// <-- Dimension
+			if( isset($_POST['Asiakkaat']['netvisor_dimension_name']) ){
+			   $dimension = explode("//", $_POST['Asiakkaat']['netvisor_dimension_name']);
+			   if( isset($dimension[0]) and isset($dimension[1]) ){
+				$model->netvisor_dimension_name = $dimension[0];
+				$model->netvisor_dimension_item = $dimension[1];
+			   }
+			}
+			//     Dimension -->
 
 			// <-- Kaikki kohteet passiviseksi jos asiakas passivinen
 			if($_POST['Asiakkaat']['aktiivinen'] == 0 and $vanha_attr['aktiivinen'] == 1)

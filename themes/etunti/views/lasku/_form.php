@@ -280,7 +280,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'netvisor_dimension_name'); ?>
 		<?php 
-		echo '<select class="form-control" name="Lasku[netvisor_dimension_name]">';
+		echo '<select class="form-control" name="Lasku[netvisor_dimension_name]" id="Lasku_netvisor_dimension_name">';
 	 	echo '<option>Valitse</option>';
 		foreach($this->netvisorLaskentaKohteetLista() as $k => $v){
 		 foreach($v->DimensionName as $k1 => $v1){
@@ -1381,6 +1381,7 @@ $("#Lasku_as_nro").change(function() {
 		    $("#Lasku_kirjeenluokka").val(sp[13]);
 		    $("#Lasku_sahkoposti").val(sp[14])
 		    $("#Lasku_viivastyskorko").val(sp[15])
+		    $("#Lasku_netvisor_dimension_name").val(sp[16] + '//' + sp[17])
 
            },
            error: function(XMLHttpRequest, textStatus, errorThrown){

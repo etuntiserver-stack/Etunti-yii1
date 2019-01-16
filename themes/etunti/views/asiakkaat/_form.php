@@ -375,6 +375,26 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 	
 	<legend><h3><?php echo Yii::t('main', 'Laskutus tiedot'); ?></h3></legend>
 
+	<?php if( $asetukset->netvisor_kaytto == 1 ): ?>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_dimension_name'); ?>
+		<?php 
+		echo '<select class="form-control" name="Asiakkaat[netvisor_dimension_name]">';
+	 	echo '<option>Valitse</option>';
+		$l_controller = Yii::app()->createController('Lasku');
+		foreach($l_controller[0]->netvisorLaskentaKohteetLista() as $k => $v){
+		 foreach($v->DimensionName as $k1 => $v1){
+		 	echo '<optgroup label="'.$v1->Name.'">';
+			foreach($v1->DimensionDetails->DimensionDetail as $k2 => $v2){
+			 	echo '<option value="'.$v1->Name.'//'.$v2->Name.'" '.(( isset($model->netvisor_dimension_name) and !empty($model->netvisor_dimension_name) and isset($model->netvisor_dimension_item) and !empty($model->netvisor_dimension_item) and $model->netvisor_dimension_name.'//'.$model->netvisor_dimension_item == $v1->Name.'//'.$v2->Name )? 'selected':'').'>'.$v2->Name.'</option>';
+			}
+		 }
+		}
+		echo '</select>';
+		?>
+	</div>
+	<?php endif; ?>
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'laskutus_kanava'); ?>
 		<?php
