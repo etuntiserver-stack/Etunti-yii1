@@ -384,6 +384,16 @@ class AsiakkaatController extends Controller
 			$vanha_attr = $model->attributes;
 			$model->attributes=$post;
 
+			// <-- Dimension
+			if( isset($_POST['Asiakkaat']['netvisor_dimension_name']) ){
+			   $dimension = explode("//", $_POST['Asiakkaat']['netvisor_dimension_name']);
+			   if( isset($dimension[0]) and isset($dimension[1]) ){
+				$model->netvisor_dimension_name = $dimension[0];
+				$model->netvisor_dimension_item = $dimension[1];
+			   }
+			}
+			//     Dimension -->
+
 			if(isset($post['ryhma'])){ $model->ryhma=json_encode($post['ryhma']); } else { $model->ryhma=""; }
 
 			if($model->save())
