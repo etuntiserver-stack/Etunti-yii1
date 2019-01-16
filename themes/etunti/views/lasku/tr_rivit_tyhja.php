@@ -33,6 +33,7 @@
 	  <div class="col-lg-4">
 		<?php
 		$criteria = new CDbCriteria();
+       		$criteria->order = " nimike ";
        		$criteria->condition = " 
 			hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0
 		";
