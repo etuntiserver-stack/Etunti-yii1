@@ -90,6 +90,12 @@ class OikeusRyhmatController extends Controller
 	 */
 	public function actionCreate()
 	{
+	// <-- Oikeudet
+	   $checkOikeus = "ryhmat_1_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$model=new OikeusRyhmat;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -114,6 +120,13 @@ class OikeusRyhmatController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "ryhmat_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
@@ -150,6 +163,12 @@ class OikeusRyhmatController extends Controller
 	 */
 	public function actionIndex()
 	{
+	// <-- Oikeudet
+	   $checkOikeus = "ryhmat_0_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$dataProvider=new CActiveDataProvider('OikeusRyhmat');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,

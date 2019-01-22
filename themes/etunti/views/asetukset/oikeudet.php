@@ -26,7 +26,7 @@
 	'tyoryhmat'=>array(4=>'Työryhmät järjestelmänvalvoja'), //0=>'Näytä työryhmät',1=>'Luo työryhmät',2=>'Muokaa työryhmät',3=>'Poista työryhmät',
 	'yrityksentiedot'=>array(0=>null,1=>null,2=>'Muokaa yrityksentiedot',3=>null),
 	'henkilotunnukset'=>array(0=>null,1=>null,2=>'Henkilötunnukset',3=>null),
-	'ryhmat'=>array(0=>null,1=>null,2=>'Ryhmät',3=>null),
+	'ryhmat'=>array(0=>'Käyttöoikeusryhmät taulu',1=>'Luo käyttöoikeusryhmä',2=>'Muokaa käyttöoikeusryhmiä',3=>null),
 	'asiakkaat'=>array(0=>'Asiakkaat taulu',1=>'Luo asiakas',2=>'Muokaa asiakas',3=>'Poista asiakas',4=>'Massamuokkaus asiakas'),
 	'kohteet'=>array(0=>'Kohteet taulu',1=>'Luo kohde',2=>'Muokaa kohde',3=>'Poista kohde',4=>'Massamuokkaus kohde'),
 	'tyontekijat'=>array(0=>'Työntekijät taulu',1=>'Luo työntekijä',2=>'Muokaa työntekijä',3=>'Poista työntekijä',4=>'Työntekijät laaja'),

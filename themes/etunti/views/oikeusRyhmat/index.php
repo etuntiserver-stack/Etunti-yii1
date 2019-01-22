@@ -10,7 +10,7 @@
 
 
         <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Oikeus ryhmät'); ?> 
-		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/oikeusryhmat/create',array('class'=>'btn btn-default fa fa-plus')); ?>
+		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/oikeusRyhmat/create',array('class'=>'btn btn-default fa fa-plus')); ?>
 	</h2>
 
 	</div>
