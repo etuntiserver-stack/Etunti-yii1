@@ -1991,19 +1991,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	public function actionPalkkataulukko()
 	{
 
-
-		//unset(Yii::app()->session['Tekija']);
-		if(Yii::app()->request->getPost('Tekija'))
-		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
-
 		$from = date("d.m.Y",strtotime("first day of this month"));
 		$to = date("d.m.Y");
 
-		if(isset($_POST['from']) and isset($_POST['to'])){
-		$from 	= $_POST['from'];
-		$to 	= $_POST['to'];
-		}
-		
+		if(isset($_GET['from']) and !empty($_GET['from'])){ $from = $_GET['from']; }
+		if(isset($_GET['to']) and !empty($_GET['to'])){ $to = $_GET['to']; }
 
        		$criteria = new CDbCriteria();
 		$criteria->select = " id,tekijan_nimi ";
@@ -2015,13 +2007,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
         	$criteria->condition = " aktiivinen=1 "; 
 
-		if(Yii::app()->session['Tekija']){
-		  if(count(Yii::app()->session['Tekija']) > 1)
-		    $ids = implode(",",Yii::app()->session['Tekija']);
-		  else
-		    $ids = Yii::app()->session['Tekija'][0];
-
-	        $criteria->addCondition ('id IN ('.$ids.') ');
+		if( isset($_GET['Tekija']) ){
+			$ids = implode(",",$_GET['Tekija']);
+	        	$criteria->addCondition ('id IN ('.$ids.') ');
 		}
 
 /*
@@ -3106,13 +3094,14 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND sairaus!=1
-			AND id NOT IN(select kid from sivexkuitti_repaired)
 			AND deleted=0
 		";
 
-		if($sivu == 'palkkataulukko')
-	        	$criteria->addCondition (" status = '3' ");
+		if( !isset($_GET['lu_tai_tot']) or (isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1) ){
+		$criteria->addCondition (" id NOT IN(select kid from sivexkuitti_repaired) ");
+		}
 
+		if($sivu == 'palkkataulukko'){ 	$criteria->addCondition (" status = '3' "); }
 
 		if($sivu == 'yhteenveto')
 		{
@@ -3170,21 +3159,18 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ");
 
-		$tot = Toteutuneet::model()->findAll($criteria);
-		foreach($tot as $l)
-		{
+		if( !isset($_GET['lu_tai_tot']) or (isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1) ){
+			$tot = Toteutuneet::model()->findAll($criteria);
+			foreach($tot as $l)
+			{
 
-		  $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
-		  $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
-
-		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
-		    $al = explode(" ",$l->aloitan);
-		    $lop = explode(" ",$l->loppui);
-		    //$totalIlta += $this->ilta($al,$lop);
-		    //$totalYo += $this->yo($al,$lop);
-		    $total_l += $l->l_tunnit;
-		    //if(date('N', strtotime($al[0])) == 7)
-		    //$totalSu += (strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1]));
+				$l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
+				$l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
+				$l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
+				$al = explode(" ",$l->aloitan);
+				$lop = explode(" ",$l->loppui);
+				$total_l += $l->l_tunnit;
+			}
 		}
 
 		$kaikki = array($total_l,$totalIlta,$totalYo,$totalSu);

@@ -26,14 +26,40 @@ $this->breadcrumbs=array(
    <!-- tulostus -->
    <div class="pull-right">
     <div class="form-inline">
-     <form action="#" target="_blank" class="form-group" method="POST">
+     <form action="#" target="_blank" class="form-group" method="GET">
       <input type="hidden" name="from" value="<?php echo $from; ?>">
       <input type="hidden" name="to" value="<?php echo $to; ?>">
+      <div style="display:none">
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
+					'Tekija', // name
+					null, // class
+					'tyontekijat2', // id
+					(isset($_GET['Tekija']))?$_GET['Tekija']:array(), //selected
+					1 // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
+      </div>
       <input type="submit" name="tulosta_xls" class="btn btn-primary btn-sm myBgColors" value="XLS">
      </form>
-     <form action="#" target="_blank" class="form-group" method="POST">
+     <form action="#" target="_blank" class="form-group" method="GET">
       <input type="hidden" name="from" value="<?php echo $from; ?>">
       <input type="hidden" name="to" value="<?php echo $to; ?>">
+      <div style="display:none">
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
+					'Tekija', // name
+					null, // class
+					'tyontekijat2', // id
+					(isset($_GET['Tekija']))?$_GET['Tekija']:array(), //selected
+					1 // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
+      </div>
       <input type="submit" name="tulosta_pdf" class="btn btn-primary btn-sm myBgColors" value="PDF">
      </form>
      <button class="btn btn-primary btn-sm btn-group myBgColors" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Ekstrat'); ?> <b class="caret"></b></button>
@@ -44,7 +70,7 @@ $this->breadcrumbs=array(
 
 
 
-   	    <form id="yhtveto" action="#" class="form-inline" method="POST">
+   	    <form id="yhtveto" action="#" class="form-inline" method="GET">
    	    <input type="hidden" name="yhtvetoform">
 
             <div class="admin-form">
@@ -80,31 +106,39 @@ $this->breadcrumbs=array(
                         </div>
                       </div>
 
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+				<select class="gui-input" name="lu_tai_tot">
+				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
+				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
+				</select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+		      </div>
 
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field">
-
-
 				<?php
 		   		$site = Yii::app()->createController('Site');
 		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
 					'Tekija', // name
 					null, // class
 					'tyontekijat', // id
-					Yii::app()->session['Tekija'], //selected
+					(isset($_GET['Tekija']))?$_GET['Tekija']:array(), //selected
 					1 // aktiivinen
 				);
 				echo $tyontekiatLista;
 				?>
-
-
                           </label>
                         </div>
                       </div>
 
 
-                      <div class="col-md-2  col-md-offset-3">
+                      <div class="col-md-2  col-md-offset-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
@@ -147,7 +181,7 @@ $this->breadcrumbs=array(
   </div>
 </div>
 
-<?php if(isset(Yii::app()->session['Tekija']) and $from and $to) : ?>
+<?php if(isset($_GET['Tekija']) and $from and $to) : ?>
 
             <div class="admin-form">
               <div class="panel heading-border">

@@ -1520,6 +1520,7 @@ public function actionImei($dom)
 	{
 		$mob = Mobile::model()->findByPk($id);
 		$tv = Tyovuoroot::model()->findByPk($tv_id);
+		if( !isset($mob->id) or !isset($tv->id) ){ return false; }
 		$model=new Toteutuneet;
 		$model->attributes = $mob->attributes;
 		$model->kid = $id;
