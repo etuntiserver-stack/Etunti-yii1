@@ -26,10 +26,14 @@ $this->breadcrumbs=array(
    <!-- tulostus -->
    <div class="pull-right">
     <div class="form-inline">
-     <form action="#" target="_blank" class="form-group" method="GET">
+     <form action="#" class="form-group" method="GET">
       <input type="hidden" name="from" value="<?php echo $from; ?>">
       <input type="hidden" name="to" value="<?php echo $to; ?>">
       <div style="display:none">
+				<select class="gui-input" name="lu_tai_tot">
+				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
+				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
+				</select>
 				<?php
 		   		$site = Yii::app()->createController('Site');
 		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
@@ -44,10 +48,14 @@ $this->breadcrumbs=array(
       </div>
       <input type="submit" name="tulosta_xls" class="btn btn-primary btn-sm myBgColors" value="XLS">
      </form>
-     <form action="#" target="_blank" class="form-group" method="GET">
+     <form action="#" class="form-group" method="GET">
       <input type="hidden" name="from" value="<?php echo $from; ?>">
       <input type="hidden" name="to" value="<?php echo $to; ?>">
       <div style="display:none">
+				<select class="gui-input" name="lu_tai_tot">
+				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
+				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
+				</select>
 				<?php
 		   		$site = Yii::app()->createController('Site');
 		   		$tyontekiatLista = $site[0]->tyontekiatLista( 

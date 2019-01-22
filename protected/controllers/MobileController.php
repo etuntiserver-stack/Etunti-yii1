@@ -2023,7 +2023,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 
-		if(Yii::app()->request->getPost('tulosta_pdf'))
+		if(isset($_GET['tulosta_pdf']))
 		{
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
@@ -2033,7 +2033,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			'to' => $to
 		  ),true));
 	          $html2pdf->Output();
-		} elseif(Yii::app()->request->getPost('tulosta_xls'))
+		} elseif(isset($_GET['tulosta_xls']))
 		{
 
 			if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
