@@ -1656,15 +1656,42 @@ $xml = '
 		foreach($m as $data)
 		{
 		$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
-	  	$dataArr[strtotime($data->aloitan)] = '
+	  	$bod = '
 		<table class="table table-bordered">
-		  <tr><td colspan="2"><h3>'.date("d.m.Y", strtotime($data->aloitan)).', '.$data->kohde_kannasta.'</h3></td></tr>
-		  <tr><td width="50%">'.Yii::t('main', 'Aloitus').'</td> <td>'.date("H:i", strtotime($data->aloitan)).'</td></tr>
-		  <tr><td width="50%">'.Yii::t('main', 'Lopetus').'</td> <td>'.date("H:i", strtotime($data->loppui)).'</td></tr>
-		  <tr><td width="50%">'.Yii::t('main', 'Kesto').'</td> <td>'.$this->sprint($kesto).'</td></tr>
+		  <tr><td colspan="2"><h3 style="white-space: normal">'.date("d.m.Y", strtotime($data->aloitan)).', '.$data->kohde_kannasta.'</h3></td></tr>
+		  <tr><td style="width:10%">'.Yii::t('main', 'Aloitus').'</td> <td>'.date("H:i", strtotime($data->aloitan)).'</td></tr>
+		  <tr><td>'.Yii::t('main', 'Lopetus').'</td> <td>'.date("H:i", strtotime($data->loppui)).'</td></tr>
+		  <tr><td>'.Yii::t('main', 'Kesto').'</td> <td>'.$this->sprint($kesto).'</td></tr>';
+
+
+				// <-- Tyoerittelyt
+				$tv = Tyovuoroot::model()->findByPk($data->tv_id);
+				if(isset($tv->id) and is_array(json_decode($tv->tyo_erittelyt, true))){
+				$bod .=	'<tr><td style="width:10%">'.Yii::t('main', '<b>Työerittelyt</b>').'</td><td>';
+
+					$bod .= '<table class="table">';
+					$bod .= '<tr><th>Työtehtävä</th><th>Tilanne</th></tr>';
+					foreach(json_decode($tv->tyo_erittelyt, true) as $k => $v){
+					$bod .= '<tr><td>'.$v.'</td><td style="width:10%">';
+				   	if( isset($data->id) and is_array(json_decode($data->tyo_erittelyt, true)) 
+						and in_array($k, json_decode($data->tyo_erittelyt, true)) ){
+						$bod .= '<span class="text-success fa fa-check-circle fa-2x"></span>';
+				   	} else {
+						$bod .= '<span class="text-danger fa fa-times-circle fa-2x"></span>';
+					}
+				 	$bod .= '</td></tr>';
+					}
+					$bod .= '</table>';
+				$bod .= '</td></tr>';
+				}
+				//  Tyoerittelyt -->
+
+	  	$bod .= '
 		</table>
 		<br>
 		';
+		$dataArr[strtotime($data->aloitan)] = $bod;
+		$bod = '';
 	  	}
 		//  toteutuneet -->
 
