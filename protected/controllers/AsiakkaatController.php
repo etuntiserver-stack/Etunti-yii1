@@ -1603,7 +1603,7 @@ $xml = '
 				// <-- Tyoerittelyt
 				$tv = Tyovuoroot::model()->findByPk($data->tv_id);
 				if(isset($tv->id) and is_array(json_decode($tv->tyo_erittelyt, true))){
-				$bod .=	'<tr><td style="width:10%">'.Yii::t('main', '<b>Työerittelyt</b>').'</td><td>';
+				$bod .=	'<tr><td colspan="2">';
 
 					$bod .= '<table class="table">';
 					$bod .= '<tr><th>Työtehtävä</th><th>Tilanne</th></tr>';
@@ -1667,7 +1667,7 @@ $xml = '
 				// <-- Tyoerittelyt
 				$tv = Tyovuoroot::model()->findByPk($data->tv_id);
 				if(isset($tv->id) and is_array(json_decode($tv->tyo_erittelyt, true))){
-				$bod .=	'<tr><td style="width:10%">'.Yii::t('main', '<b>Työerittelyt</b>').'</td><td>';
+				$bod .=	'<tr><td colspan="2">';
 
 					$bod .= '<table class="table">';
 					$bod .= '<tr><th>Työtehtävä</th><th>Tilanne</th></tr>';
