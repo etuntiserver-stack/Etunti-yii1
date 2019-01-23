@@ -17,9 +17,10 @@
 					'filter_postitoimipaikka' => (isset($_GET['filter_postitoimipaikka']))?$_GET['filter_postitoimipaikka']:'',
 					'filter_tyoryhma' => (isset($_GET['filter_tyoryhma']))?$_GET['filter_tyoryhma']:'',
 					'filter_asiakasryhma' => (isset($_GET['filter_asiakasryhma']))?$_GET['filter_asiakasryhma']:'',
-					'from' => $from, 
-					'to' => $to, 
-					'alvsis' => $alvsis, 
+					'from' => $from,
+					'to' => $to,
+					'paivays' => $paivays,
+					'alvsis' => $alvsis,
 					'laheta' => true
 				), 
 				array(
@@ -65,7 +66,8 @@
 	<div <?=$l_class?>>
 	<p><b><?=Yii::t('main', 'Kustannuspaikka')?></b>-<?=(!empty($item->netvisor_dimension_item))? $item->netvisor_dimension_item:''?></p>
 	<p><b><?=Yii::t('main', 'Laskutus kanava')?></b>-<?=(!empty($item->laskutus_kanava))? Yii::t('main', $item->laskutus_kanava):''?></p>
-	<p><b><?=Yii::t('main', 'Eräpäivä')?></b>-<?=(!empty($item->maksuehto))? date("d.m.Y",strtotime("+$item->maksuehto day")):''?></p>
+	<p><b><?=Yii::t('main', 'Päiväys')?></b>-<?=date("d.m.Y",strtotime($paivays))?></p>
+	<p><b><?=Yii::t('main', 'Eräpäivä')?></b>-<?=(!empty($item->maksuehto))? date("d.m.Y",strtotime($paivays ." +$item->maksuehto day")):''?></p>
 	<p><b><?=Yii::t('main', 'Maksuehto')?></b>-<?=(!empty($item->maksuehto))? $item->maksuehto:''?></p>
 	<p><b><?=Yii::t('main', 'Viivästyskorko')?></b>-<?=(!empty($item->viivastyskorko))? $item->viivastyskorko:''?></p>
 	<?=($item->laskutus_kanava == 'sahkoposti' and empty($item->sahkoposti))? '<p>'.Yii::t('main', 'Sähköpostiosoite ei saisi olla tyhjä tässä laskutus kanavassa.').'</p>':''?>
@@ -108,8 +110,8 @@
 		$lasku->v_tunnus = $item->valittajan_tunnus;
 		$lasku->yhteyshenkilo = $item->yhteyshenkilo;
 		$lasku->puhelin = $item->puhelin;
-		$lasku->paivays = date("Y-m-d");
-		$lasku->erapaiva = date("Y-m-d",strtotime("+$item->maksuehto day"));
+		$lasku->paivays = $paivays;
+		$lasku->erapaiva = date("Y-m-d",strtotime($paivays." +$item->maksuehto day"));
 		$lasku->maksuehto = $item->maksuehto;
 		$lasku->viitenumero = $this->Viite($item->asiakasnumero."00".$item->id);
 		$lasku->yhteensa_total = $yhteensa_total;
@@ -333,7 +335,7 @@
 		<th>
 		<?php
 			echo CHtml::link(Yii::t('main', 'Lähetä lasku'), 
-				array('lasku/luolaskut', 'from' => $from, 'to' => $to, 'alvsis' => $alvsis, 'asiakas_id' => $item->id, 'laheta' => true), 
+				array('lasku/luolaskut', 'from' => $from, 'to' => $to, 'alvsis' => $alvsis, 'asiakas_id' => $item->id, 'paivays' => $paivays, 'laheta' => true), 
 				array(
 					'class' => 'btn btn-block btn-success',
 					'data-toggle'=>'tooltip', 

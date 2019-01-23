@@ -103,10 +103,10 @@ class LaskuController extends Controller
 		exit;
 	}
 
-	public function actionLuolaskut($from, $to, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null)
+	public function actionLuolaskut($from, $to, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null)
 	{
 		$asetukset = Asetukset::model()->findByPk(1);
-
+		$paivays = date("Y-m-d", strtotime($paivays));
        		$criteria = new CDbCriteria();
 	        //$criteria->order = " id DESC ";
 	        $criteria->condition = " 
@@ -156,6 +156,7 @@ class LaskuController extends Controller
 			'lista' => $lista,
 			'from' => $from,
 			'to' => $to,
+			'paivays' => $paivays,
 			'asiakas_id' => $asiakas_id,
 			'laheta' => $laheta,
 			'luo' => $luo,
