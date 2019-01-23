@@ -1753,7 +1753,7 @@ $xml = '
 
 				// <-- Tyoerittelyt
 				if(is_array(json_decode($data->tyo_erittelyt, true))){
-				$bod .=	'<tr><td style="width:10%">'.Yii::t('main', 'Työerittelyt').'</td><td>';
+				$bod .=	'<tr><td colspan="2">';
 
 					$bod .= '<table class="table">';
 					$bod .= '<tr><th>Työtehtävä</th></tr>';
