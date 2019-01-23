@@ -1692,14 +1692,14 @@ $xml = '
 			  	$bod .= '
 				<table class="table table-bordered">
 					<tr><td colspan="2"><h3>'.date("d.m.Y", strtotime($data->pvm)).', '.$osoite.'</h3></td></tr>
-					<td>'.Yii::t('main', 'Työntekijä').'</td><td>'.$tekijan_nimi.'</td></tr>
-					<td>'.Yii::t('main', 'Aloitus').'</td><td>'.$data->alku.'</td></tr>
-					<td>'.Yii::t('main', 'Lopetus').'</td><td>'.$data->loppu.'</td></tr>
-					<td>'.Yii::t('main', 'Kesto').'</td><td>'.$this->sprint($kesto).'</td></tr>
-					<td>'.Yii::t('main', 'Tietoja').'</td><td>'.$data->tietoja.'</td></tr>';
+					<tr><td>'.Yii::t('main', 'Työntekijä').'</td><td>'.$tekijan_nimi.'</td></tr>
+					<tr><td>'.Yii::t('main', 'Aloitus').'</td><td>'.$data->alku.'</td></tr>
+					<tr><td>'.Yii::t('main', 'Lopetus').'</td><td>'.$data->loppu.'</td></tr>
+					<tr><td>'.Yii::t('main', 'Kesto').'</td><td>'.$this->sprint($kesto).'</td></tr>
+					<tr><td>'.Yii::t('main', 'Tietoja').'</td><td>'.$data->tietoja.'</td></tr>';
 
 				if(is_array(json_decode($data->tyo_erittelyt, true))){
-				$bod .=	'<td style="width:10%">'.Yii::t('main', 'Työerittelyt').'</td><td>';
+				$bod .=	'<tr><td style="width:10%">'.Yii::t('main', 'Työerittelyt').'</td><td>';
 
 				$criteria = new CDbCriteria();
 			        $criteria->order = " id DESC ";
@@ -1719,9 +1719,9 @@ $xml = '
 				 	$bod .= '</td></tr>';
 					}
 					$bod .= '</table>';
+				$bod .= '</td></tr>';
 				}
 
-				$bod .= '</td></tr>';
 
 				// <-- peruutus 
 				$peruutettu = 0;
