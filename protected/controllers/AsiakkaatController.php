@@ -1698,6 +1698,31 @@ $xml = '
 					<td>'.Yii::t('main', 'Kesto').'</td><td>'.$this->sprint($kesto).'</td></tr>
 					<td>'.Yii::t('main', 'Tietoja').'</td><td>'.$data->tietoja.'</td></tr>';
 
+				if(is_array(json_decode($data->tyo_erittelyt, true))){
+				$bod .=	'<td style="width:10%">'.Yii::t('main', 'Työerittelyt').'</td><td>';
+
+				$criteria = new CDbCriteria();
+			        $criteria->order = " id DESC ";
+				$criteria->condition = " tv_id='".$data->id."' AND tid='".$data->tid."' ";
+				$mobile = Mobile::model()->find($criteria);
+
+					$bod .= '<table class="table">';
+					$bod .= '<tr><th>Työtehtävä</th><th>Tilanne</th></tr>';
+					foreach(json_decode($data->tyo_erittelyt, true) as $k => $v){
+					$bod .= '<tr><td>'.$v.'</td><td style="width:10%">';
+				   	if( isset($mobile->id) and is_array(json_decode($mobile->tyo_erittelyt, true)) 
+						and in_array($k, json_decode($mobile->tyo_erittelyt, true)) ){
+						$bod .= '<span class="text-success fa fa-check-circle fa-2x"></span>';
+				   	} else {
+						$bod .= '<span class="text-danger fa fa-times-circle fa-2x"></span>';
+					}
+				 	$bod .= '</td></tr>';
+					}
+					$bod .= '</table>';
+				}
+
+				$bod .= '</td></tr>';
+
 				// <-- peruutus 
 				$peruutettu = 0;
 				$r = $this->dateDifference(date("Y-m-d", strtotime($data->pvm)), date("Y-m-d") );
