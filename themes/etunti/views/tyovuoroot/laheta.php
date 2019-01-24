@@ -15,12 +15,11 @@ $paivat=array(
 
 <style>
 .LahetettyTable table{
-	width: 290px;
-	font-size: 80%;
+	width: 100%;
 }
 .LahetettyTable td, .LahetettyTable th{
 	padding:3px 7px;
-	border:1px #333 solid;
+	border-top:1px #ccc solid;
 }
 </style>
 
@@ -40,7 +39,6 @@ $paivat=array(
 	$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
 	if (file_exists($path.'/'.$file))
 	echo CHtml::link(Yii::t('main', 'Lähetetty'),'../../emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file,array('class'=>'btn btn-sm btn-danger'));
-
   ?>
 </div>
 
@@ -105,8 +103,6 @@ $paivat=array(
 
 <?php
   $site = Yii::app()->createController('Site');
-  
-
 
   $criteria = new CDbCriteria();
   $criteria->order = " alku ASC "; 
@@ -123,11 +119,6 @@ $paivat=array(
 
 <br>
 <table class="table table-bordered LahetettyTable" cellspacing="0" cellpadding="0">
-<tr>
-<th><?php echo Yii::t('main', 'Viikonpäivä'); ?></th>
-<th><?php echo Yii::t('main', 'Aika/Kohde'); ?></th>
-<th><?php echo Yii::t('main', 'Tietoja'); ?></th>
-</tr>
 <?php
 $asetukset = Asetukset::model()->findByPk(1);
 for($day= 1; $day <= 7; $day++) {
@@ -135,9 +126,8 @@ for($day= 1; $day <= 7; $day++) {
   $d = strtotime($year ."W". $week . $day);
   $date = date('d.m.Y',$d);
 
-  echo '<tr>';
-  echo '<td width="50">'.$paivat[date('N',$d)].'<br>'.$date.'</td>';
-  echo '<td width="300">';
+  echo '<tr><td colspan="2"><h2><b>'.$paivat[date('N',$d)].' '.$date.'</b></h2></td></tr>';
+  echo '<tr><td valign="top" width="30%"><h5>Aika/Kohde</h5><br>';
 
   $yht = 0;
   foreach($tv as $t)
@@ -169,24 +159,14 @@ for($day= 1; $day <= 7; $day++) {
 	if($t->alku > 0 and $t->loppu > 0)
 	{
 	  $al = $t->alku.'-'.$t->loppu;
-
-	  if($site[0]->eiLasketaSubStr($t->tyoajanmerkinta) === false)
-	  $yht += strtotime($t->loppu)-strtotime($t->alku);
-
+	  if($site[0]->eiLasketaSubStr($t->tyoajanmerkinta) === false){ $yht += strtotime($t->loppu)-strtotime($t->alku); }
 	} else {
 	  $al = '';
  	}
 
-/*
-	$expl = explode("/",$t->tyoajanlaatu);
-	if(empty($k['osoite']) and isset($expl[0]))
-		$k['osoite'] = $expl[0];
-*/
-
 	$expl2 = explode("/",$t->tyoajanmerkinta);
 		$cl = '';
-	if(isset($expl2[1]) and !empty($expl2[1]))
-		$cl = 'style="color:'.$expl2[1].'"';
+	if(isset($expl2[1]) and !empty($expl2[1])){ $cl = 'style="color:'.$expl2[1].'"'; }
 	
 	// <-- osoite
 	$osoite = '';
@@ -208,37 +188,27 @@ for($day= 1; $day <= 7; $day++) {
 
   if($yht > 0)
   echo '<h4>'.Yii::t('main','Yhteensä: ').$this->sprint($yht).'</h4>';
-
-  echo '</td>';
-
-  echo '<td width="300">';
+  echo '</td><td valign="top" style="border-left: 1px #ccc solid"><h5>Tietoja</h5><br>';
   foreach($tv as $t)
   {
 	$k = Kohteet::model()->findbypk($t->kohde,array("select"=>"osoite,avain"));
 
     if($t->pvm == $date and (!empty($t->tietoja) or !empty($k['avain'])))
     {
-
-	echo '<b>'.$k['osoite'].':</b> <br>'.$t->tietoja;	
+	echo '<div class="tietoja"><b>'.$k->osoite.':</b> <br>'.str_replace("\n", "<br>", $t->tietoja).'</div>';
 	echo '<p style="padding:0;margin:0">------</p>';
     }
   }
-  echo '</td>';
-
-  echo '</tr>';
-
+  echo '</td></tr>';
 }
 
 $totalWeek = '';
 $totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tid,'viikko'=>$week,'year'=>$year),true);
 ?>
-<tfoot>
  <tr>
- <th></th>
- <th><?php echo Yii::t('','Yhteensä').' '. $totalWeek; ?></th>
+ <th align="left"><?php echo Yii::t('','Yhteensä').' '. $totalWeek; ?></th>
  <th></th>
  </tr>
-</tfoot>
 </table>
 
 
