@@ -442,13 +442,27 @@ class TyovuorootController extends Controller
 
 		if(Yii::app()->request->getPost('pdf'))
 		{
-		  $tt = Tyontekijat::model()->findbypk($_POST['kuka']);
+			$tt = Tyontekijat::model()->findbypk($_POST['kuka']);
 
-	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-		  $html2pdf->setDefaultFont('Arial');
-		  $html2pdf->setTestTdInOnePage(false);
-	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$_POST['kuka'],'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true));
-	          $html2pdf->Output();
+			$basePath = Yii::app()->basePath.'/../tmp/'.Yii::app()->user->domain.'/';
+			$path = 'tmp/'.Yii::app()->user->domain.'/';
+
+			if (!file_exists( $basePath )) {
+			 	mkdir( $basePath, 0777, true );
+			}
+			$tiedosto = 'tyovuoro_'.date("d.m.Y");
+			$html = '<meta charset="UTF-8">';
+			$html .= $this->renderPartial('laheta',array('tid'=>$_POST['kuka'],'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true);
+
+			file_put_contents($path.'/'.$tiedosto.'.html', $html);
+			$output = exec('xvfb-run -a wkhtmltopdf --margin-bottom 10 --margin-top 10 '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf 2>&1'); //-O landscape
+			header("Content-Length: " . filesize ( $path.$tiedosto.'.pdf' ) ); 
+		        header("Content-type: application/pdf"); 
+		        header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.pdf'));
+		        readfile($path.$tiedosto.'.pdf');
+			unlink($path.$tiedosto.'.html');
+			unlink($path.$tiedosto.'.pdf');
+			exit;
 
 		} elseif(Yii::app()->request->getPost('pdf_email'))
 		{
@@ -486,42 +500,35 @@ class TyovuorootController extends Controller
 		{
 		 if(!empty($key))
 		 {
-		$tt = Tyontekijat::model()->findbypk($key);
+			$tt = Tyontekijat::model()->findbypk($key);
 
-	        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-		$html2pdf->setDefaultFont('Arial');
-		$html2pdf->setTestTdInOnePage(false);
-		$thisHtml = $this->renderPartial('laheta',array('tid'=>$tt->id,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true);
-	        $html2pdf->WriteHTML($thisHtml);
-         	$content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+			$html = '<meta charset="UTF-8">';
+			$html .= $this->renderPartial('laheta',array('tid'=>$tt->id,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true);
 
+			$basePath = Yii::app()->basePath.'/../emails/tyovuorot/'.Yii::app()->user->domain.'/';
+			$path = 'emails/tyovuorot/'.Yii::app()->user->domain.'/';
+			if (!file_exists( $basePath )) {
+			 	mkdir( $basePath, 0777, true );
+			}
+			$tiedosto = $week.'_'.$year.'_'.$key;
+			file_put_contents($path.'/'.$tiedosto.'.html', $html);
+			$output = exec('xvfb-run -a wkhtmltopdf --margin-bottom 10 --margin-top 10 '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf 2>&1'); //-O landscape
 
-
-
-		// file 
-		$file = $week.'_'.$year.'_'.$key.'.pdf';
-		$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
-
-  		if (!file_exists($path))
-		 	mkdir($path, 0777, true);
-
-		file_put_contents($path.'/'.$file, $content_PDF);
-		// file 
-		$message = Yii::t('main', 'VIIKKO').'-'.$week.'<br>'.Yii::t('main', ' Liitteenä uusi PDF-tiedosto');
-		if(isset($_POST['kirjenBody']) and !empty($_POST['kirjenBody']))
-		$message .= '<br>'.str_replace("\n", "<br>", $_POST['kirjenBody']);
+			$message = Yii::t('main', 'VIIKKO').'-'.$week.'<br>'.Yii::t('main', ' Liitteenä uusi PDF-tiedosto');
+			if(isset($_POST['kirjenBody']) and !empty($_POST['kirjenBody']))
+			$message .= '<br>'.str_replace("\n", "<br>", $_POST['kirjenBody']);
 		
-		$subject = Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi;
+			$subject = Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi;
 
-		  $ft = FirmanTiedot::model()->findbypk(1);
-		  $mail = new YiiMailer();
-		  //$mail->clearLayout();//if layout is already set in config
-		  $mail->setFrom('no-reply@etunti.fi');
-		  $mail->setTo($tt->tekijan_email);
-		  $mail->setSubject($subject);
-		  $mail->setBody($message);
-		  $mail->setAttachment($path.'/'.$file);
-		  	if($mail->send()){
+			$ft = FirmanTiedot::model()->findbypk(1);
+			$mail = new YiiMailer();
+			//$mail->clearLayout();//if layout is already set in config
+			$mail->setFrom('no-reply@etunti.fi');
+			$mail->setTo($tt->tekijan_email);
+			$mail->setSubject($subject);
+			$mail->setBody($message);
+			$mail->setAttachment($path.'/'.$tiedosto.'.pdf');
+			if($mail->send()){
 
  
 							// <-- LOG
@@ -531,59 +538,53 @@ class TyovuorootController extends Controller
 							$log->email_to 		= $tt->tekijan_email;
 							$log->email_subject	= $subject;
 							$log->email_message	= json_encode($message);
-							$log->email_attachment	= $path.'/'.$file;
-							$log->email_attachment_sisalto	= json_encode($thisHtml);
+							$log->email_attachment	= $path.'/'.$tiedosto.'.pdf';
+							$log->email_attachment_sisalto	= json_encode($html);
 							$log->log_nimike	= 'tyovuoro_lahetys';
 							$log->save();
 							//     LOG -->
+							if (file_exists( $path.$tiedosto.'.html' )) {
+								unlink($path.$tiedosto.'.html');
+							}
+
 			}
 
 		 }
 		}
 
 
-
-
-
 		// firmalle kaikki
 		$ft = FirmanTiedot::model()->findbypk(1);
 		if(isset($ft->sahkoposti) and !empty($ft->sahkoposti))
 		{
-		$saaja = $ft->sahkoposti;
+			$saaja = $ft->sahkoposti;
 
+			$html = '<meta charset="UTF-8">';
+			$html .= $this->renderPartial('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>'lista'),true);
 
+			$basePath = Yii::app()->basePath.'/../emails/tyovuorot/'.Yii::app()->user->domain.'/';
+			$path = 'emails/tyovuorot/'.Yii::app()->user->domain.'/';
+			if (!file_exists( $basePath )) {
+			 	mkdir( $basePath, 0777, true );
+			}
+			$tiedosto = $week.'_'.$year.'_'.$key.'_toimisto.pdf';
+			file_put_contents($path.'/'.$tiedosto.'.html', $html);
+			$output = exec('xvfb-run -a wkhtmltopdf --margin-bottom 10 --margin-top 10 '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf 2>&1'); //-O landscape
 
-	        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-		$html2pdf->setDefaultFont('Arial');
-		$html2pdf->setTestTdInOnePage(false);
-		$thisHtml = $this->renderPartial('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>'lista'),true);
-	        $html2pdf->WriteHTML($thisHtml);
-         	$content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+			$message = Yii::t('main', 'VIIKKO').'-'.$week.'<br>'.Yii::t('main', ' Liitteenä uusi PDF-tiedosto');
+			if(isset($_POST['kirjenBody']) and !empty($_POST['kirjenBody']))
+			$message .= '<br>'.str_replace("\n", "<br>", $_POST['kirjenBody']);
 
-		// file 
-		$file = $week.'_'.$year.'_'.$key.'_toimisto.pdf';
-		$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
-
-  		if (!file_exists($path))
-		 	mkdir($path, 0777, true);
-
-		file_put_contents($path.'/'.$file, $content_PDF);
-
-
-		$message = Yii::t('main', 'VIIKKO').'-'.$week.'<br>'.Yii::t('main', ' Liitteenä uusi PDF-tiedosto');
-		if(isset($_POST['kirjenBody']) and !empty($_POST['kirjenBody']))
-		$message .= '<br>'.str_replace("\n", "<br>", $_POST['kirjenBody']);
-
-		$subject = Yii::t('main', 'TYÖVUOROT ').$week.'-'.$year;
-
-		  $mail = new YiiMailer();
-		  //$mail->clearLayout();//if layout is already set in config
-		  $mail->setFrom('no-reply@etunti.fi');
-		  $mail->setTo($saaja);
-		  $mail->setSubject($subject);
-		  $mail->setBody($message);
-		  $mail->setAttachment($path.'/'.$file);
-		  	if($mail->send()){
+			$subject = Yii::t('main', 'TYÖVUOROT ').$week.'-'.$year;
+	
+			$mail = new YiiMailer();
+			//$mail->clearLayout();//if layout is already set in config
+			$mail->setFrom('no-reply@etunti.fi');
+			$mail->setTo($saaja);
+			$mail->setSubject($subject);
+			$mail->setBody($message);
+			$mail->setAttachment($path.'/'.$tiedosto.'.pdf');
+			if($mail->send()){
 
 							// <-- LOG
 							$log=new Log;
@@ -591,28 +592,22 @@ class TyovuorootController extends Controller
 							$log->email_to 		= $saaja;
 							$log->email_subject	= $subject;
 							$log->email_message	= json_encode($message);
-							$log->email_attachment	= $path.'/'.$file;
-							$log->email_attachment_sisalto	= json_encode($thisHtml);
+							$log->email_attachment	= $path.'/'.$tiedosto.'.pdf';
+							$log->email_attachment_sisalto	= json_encode($html);
 							$log->log_nimike	= 'tyovuoro_lahetys';
 							$log->save();
 							//     LOG -->
+							if (file_exists( $path.$tiedosto.'.html' )) {
+								unlink($path.$tiedosto.'.html');
+							}
 			}
 
 		}
 		//
 
-
-
-
-
-
 		  $this->redirect('viikkottain');
 
 		} else {
-
-
-
-
 		  $this->render('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>false));
 		}
 
