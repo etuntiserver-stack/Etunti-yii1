@@ -1345,6 +1345,12 @@ public function actionImei($dom)
                 //$mobinsert->tietoja = $_POST['tietoja'];
                 $mobinsert->aloitan = date("d.m.Y H:i:s");
 
+		if( isset($_POST['tyo_erittelyt']) and is_array($_POST['tyo_erittelyt']) and count($_POST['tyo_erittelyt']) > 0 ){
+			$mobinsert->tyo_erittelyt = json_encode($_POST['tyo_erittelyt']);
+		} else {
+			$mobinsert->tyo_erittelyt = '';
+		}
+
                 if($mobinsert->save())
 		{
 
