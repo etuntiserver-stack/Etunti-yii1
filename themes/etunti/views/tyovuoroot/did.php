@@ -98,20 +98,16 @@ if(!isset($_POST['tulosta']))
 	foreach($tv as $tvVal)
 	{
 
-	   $osoite = '';
-	   if(isset($tvVal->kohteet->osoite) and empty($tvVal->osoiteOnline) and $tvVal->onlinevaraus_id == 0)
-	   {
+		// <-- Osoite
+		$osoite = '';
+		if(!empty($tvVal->osoite)){
+			$osoite = $tvVal->osoite;
+		} elseif(empty($tvVal->osoite) and isset($tvVal->kohteet->osoite)){
+			$osoite = $tvVal->kohteet->osoite;
+		}
+		// Osoite -->
 
-	   	$strlen = strlen($osoite);
-	   	$scount = 30;
-	   	if(isset($tietoja) and $tietoja == 1) $scount = 27;
-
-	   	if($strlen > $scount)
-	    	$osoite = substr($osoite,0,$scount).'..';
-
-	   	$osoite = str_replace('/', '', $tvVal->kohteet->osoite);
-
-	   } elseif(!empty($tvVal->osoiteOnline) and $tvVal->osoiteOnline == 1 and $tvVal->onlinevaraus_id == 0){
+	   if(!empty($tvVal->osoiteOnline) and $tvVal->osoiteOnline == 1 and $tvVal->onlinevaraus_id == 0){
 
 	   	$osoite = '<span style="color: red">Vuoroa varataan..</span>';
 

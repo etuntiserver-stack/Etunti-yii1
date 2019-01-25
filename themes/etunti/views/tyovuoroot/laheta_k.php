@@ -174,10 +174,13 @@ for($day= 1; $day <= 7; $day++) {
 
 	// <-- osoite
 	$osoite = '';
-	if(isset($k->id))
+	if(!empty($t->osoite)){
+		$osoite = $t->osoite;
+	} elseif(isset($k->id) and empty($t->osoite)){
 		$osoite = $k->osoite;
-	elseif(!isset($k->id) and $t->status != 0 and $t->status != 3)
+	} elseif(!isset($k->id) and $t->status != 0 and $t->status != 3){
 		$osoite = $this->tilanteet()[$t->status];
+	}
 	//     osoite -->
 
 	echo '<span '.$cl.'>'.$al.' '.$osoite.'</span>';
@@ -193,15 +196,21 @@ for($day= 1; $day <= 7; $day++) {
   if($yht > 0)
   echo '<h4>'.Yii::t('main','Yhteensä: ').$this->sprint($yht).'</h4>';
   echo '</td><td valign="top" style="border-left: 1px #ccc solid"><h5>Tietoja</h5><br>';
-  foreach($tv as $t)
+  foreach($tv as $tvVal)
   {
-	$k = Kohteet::model()->findbypk($t->kohde,array("select"=>"osoite,avain"));
+	// <-- Osoite
+	$osoite = '';
+	if(!empty($tvVal->osoite)){
+		$osoite = $tvVal->osoite;
+	} elseif(empty($tvVal->osoite) and isset($tvVal->kohteet->osoite)){
+		$osoite = $tvVal->kohteet->osoite;
+	}
+	// Osoite -->
 
-    if(isset($k->osoite) and $t->pvm == $date and (!empty($t->tietoja) or !empty($k->avain)))
-    {
-	echo '<div class="tietoja"><b>'.$k->osoite.':</b> <br>'.str_replace("\n", "<br>", $t->tietoja).'</div>';
-	echo '<p style="padding:0;margin:0">------</p>';
-    }
+	if( $tvVal->pvm == $date and !empty($tvVal->tietoja) ){
+		echo '<div class="tietoja"><b>'.$osoite.':</b> <br>'.str_replace("\n", "<br>", $tvVal->tietoja).'</div>';
+		echo '<p style="padding:0;margin:0">------</p>';
+	}
   }
   echo '</td></tr>';
 }
