@@ -405,7 +405,7 @@ $(".muokaValiko").click(function() {
 <?php
 	$criteria = new CDbCriteria();
         $criteria->order = " id DESC ";
-	$criteria->condition = " tv_id='".$model->id."' AND tid='".$model->tid."' ";
+	$criteria->condition = " tv_id!=0 AND tv_id='".$model->id."' AND tid='".$model->tid."' ";
 	$mobile = Mobile::model()->find($criteria);
 ?>
 <p>
