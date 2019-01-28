@@ -857,13 +857,19 @@ public function actionImei($dom)
 
 		      $tvController = Yii::app()->createController('Tyovuoroot');
 	   	      $tilanteet = $tvController[0]->tilanteet();
-		      if( isset($tilanteet[$val->status]) and $tilanteet[$val->status] != "0" )
-		      $sel .= '<h3 class="text-center">'. $tilanteet[$val->status].'</h3>';
+		      if( isset($tilanteet[$val->status]) and $tilanteet[$val->status] != "0" ){
+			      $sel .= '<h3 class="text-center">'. $tilanteet[$val->status].'</h3>';
+		      }
 
-		      $sel .= '
-				  <b>'.$val->pvm.'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'<br>
-				  <b><span class="text" style="color:'.$color.'">'.$osoite.'</span></b>';
+		      $sel .= '<h3 class="text" style="color:'.$color.'">'.$osoite.'</h3><p><b>'.$val->pvm.'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'</p>';
 
+		      if( isset($val->tyo_erittelyt) and is_array(json_decode($val->tyo_erittelyt, true))){
+				$sel .= '<p><label>Työ-erittelyt:</label><ul>';
+				 foreach(json_decode($val->tyo_erittelyt, true) as $k => $v){
+				 $sel .= '<li>'.$v.'</li>';
+				 }
+				$sel .= '</ul></p><hr>';
+		      }
 
 		      if(!empty($nm) or !empty($puh_nro) or !empty($avaimet) or !empty($kohteen_yhteyshenkilo)){
 		      $sel .= '
