@@ -106,7 +106,6 @@ public $verot;
                      'arvioitu_kesto' => 'varchar(100) ',
                      'uusi_tilaus' => 'int(1) ',
 		     'hinnasto_id' => 'int(11) DEFAULT 0',
-
                      'alv' => 'int(2) ',
                      'hinta_sis_alv' => 'float',
                      'hinta_tyyppi' => 'varchar(50)',
@@ -204,7 +203,7 @@ public $verot;
 			'tarvittavien_tyontekijoiden_maara'=>Yii::t('main', 'Tarvittavien työntekijöiden määrä'),
 			'arvioitu_kesto'=>Yii::t('main', 'Arvioitu kesto'),
 			'hinnasto_id'=> Yii::t('main', 'Hinnasto'),
-			'tyo_erittelyt' => Yii::t('main', 'Työ-erittelyt'),
+			'tyo_erittelyt' => Yii::t('main', 'Työerittelyt'),
 		);
 	}
 
