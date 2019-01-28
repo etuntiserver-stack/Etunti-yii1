@@ -422,7 +422,7 @@ $(".muokaValiko").click(function() {
     <div class="input-group">
       <span class="form-control"><?php echo Yii::t('main','Työerittely'); ?></span>
       <span class="input-group-btn">
-        <button class="btn btn-primary uusierittely" type="button"><i class="fa fa-plus"></i></button>
+        <button class="btn btn-primary uusierittely <?=(isset($mobile->id))?'disabled':''?>" type="button"><i class="fa fa-plus"></i></button>
       </span>
     </div>  
   </div>
