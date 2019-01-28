@@ -169,6 +169,30 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 
 	<div class="section">
 		<div id="kesto"><?php echo $kesto; ?></div>
+
+		<!-- Tyoerittelyt-->
+		<div id="erittelynlista">
+		 <?php if(isset($model->tyovuoroot->id) and is_array(json_decode($model->tyovuoroot->tyo_erittelyt, true))): ?>
+		 <div class="erittelynlista_laatiko">
+		 <legend><?php echo Yii::t('main','Työerittelyt'); ?></legend>
+		 <?php foreach(json_decode($model->tyovuoroot->tyo_erittelyt, true) as $k => $v): ?>
+		 <div class="row">
+		  <div class="col-sm-11">
+			<?=$v?>
+		  </div>
+		  <div class="col-sm-1">
+			<?php if( is_array(json_decode($model->tyo_erittelyt, true)) and in_array($k, json_decode($model->tyo_erittelyt, true)) ): ?>
+			<input class="tyo_erittelyt pull-right" name="Toteutuneet[tyo_erittelyt][]" type="checkbox" value="<?=$k?>" checked>
+			<?php else: ?>
+			<input class="tyo_erittelyt pull-right" name="Toteutuneet[tyo_erittelyt][]" type="checkbox" value="<?=$k?>">
+			<?php endif; ?>
+		  </div>
+		 </div>
+		 <?php endforeach; ?>
+		 </div>
+		 <?php endif; ?>
+		</div>
+		<!-- Tyoerittelyt //-->
 	</div>
 
   </div>
@@ -186,11 +210,6 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 		<span class="btn btn-default" data-dismiss="modal">Sulje</span>
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary updTot')); ?>
 	</div>
-
-
-
-
-
 
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
 

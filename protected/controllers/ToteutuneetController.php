@@ -816,6 +816,12 @@ $xml = '
 			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['aloitan']));
 			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['loppui']));
 
+			if( is_array($model->tyo_erittelyt) and count($model->tyo_erittelyt) > 0 ){
+				$model->tyo_erittelyt = json_encode($model->tyo_erittelyt);
+			} else {
+				$model->tyo_erittelyt = '';
+			}
+
 			if(isset($k->id))
 			{
 				$model->kohdenID=$k->id;			
@@ -892,6 +898,12 @@ $xml = '
 			$model->attributes=$_POST['Toteutuneet'];
 			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['aloitan']));
 			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['loppui']));
+
+			if( is_array($model->tyo_erittelyt) and count($model->tyo_erittelyt) > 0 ){
+				$model->tyo_erittelyt = json_encode($model->tyo_erittelyt);
+			} else {
+				$model->tyo_erittelyt = '';
+			}
 
 			if(isset($k->id))
 			{

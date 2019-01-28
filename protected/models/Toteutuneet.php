@@ -100,6 +100,7 @@ public $count;
                      'tuoteID' => 'int(11)',
                      'tv_id' => 'int(11)',
 		     'deleted' => 'int(11) DEFAULT 0',
+		     'tyo_erittelyt' => 'text DEFAULT NULL'
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -125,7 +126,7 @@ public $count;
 			array('kid, requests, kohdenID, tid, status, admin, sairaus, laskutetaan, tuoteID, tv_id, deleted', 'numerical', 'integerOnly'=>true),
 			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id, tekijan_nimi', 'length', 'max'=>50),
 			array('imei, asiakas_hyvaksy, sim_serial_number, kohde_kannasta, hyvaksytty, tyoajanlaatu, tyoajanmerkinta', 'length', 'max'=>100),
-			array('my_location, tietoja', 'length', 'max'=>1000),
+			array('my_location, tietoja, tyo_erittelyt', 'safe'),
 			array('osoite', 'length', 'max'=>255),
 			array('aloitan, loppui, etaisyys', 'length', 'max'=>20),
 			array('viesti', 'length', 'max'=>250),
@@ -181,6 +182,7 @@ public $count;
 			'tyoajanmerkinta' => Yii::t('main', 'Tyoajanmerkinta'),
 			'sairaus'=> Yii::t('main', 'Sairaus'),
 			'tuoteID' => Yii::t('main', 'Tuote/Palvelu'),
+			'tyo_erittelyt' => Yii::t('main', 'Työerittelyt'),
 		);
 	}
 
