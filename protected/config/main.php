@@ -26,6 +26,7 @@ session_start();
   )
   {
 	mail('laptopsr@gmail.com', 'Blocked IP', 'IP '.$_SERVER['REMOTE_ADDR']);
+	header('Location: https://www.google.com/');
 	die("IP: ".$_SERVER['REMOTE_ADDR']);
   }
 
