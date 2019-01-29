@@ -178,7 +178,6 @@ $(document).ready(function(){
     	   <option value="MATKA"><?php echo Yii::t('main', 'Matka'); ?></option>
     	   </select>
        </div>
-
        <div class="col-sm-6">
        <?php
    	$kohdenTnimike = Valikkoot::model()->findAll(" select_type='siivous' ",array('order' => "select_type"));
@@ -190,7 +189,15 @@ $(document).ready(function(){
    	echo '</select>';
    	?>
        </div>
-
+      </div>
+      <br>
+      <div class="row">
+       <div class="col-sm-6">
+    	   <select name="pvm_or_tid" class="form-control">
+    	   <option value="pvm"><?php echo Yii::t('main', 'Päivämäärän mukaan'); ?></option>
+    	   <option value="tid"><?php echo Yii::t('main', 'Työntekijöiden mukaan'); ?></option>
+    	   </select>
+       </div>
       </div>
       <br>
     </form>
@@ -317,7 +324,6 @@ $(document).ready(function(){
     	   <option value="MATKA"><?php echo Yii::t('main', 'Matka'); ?></option>
     	   </select>
        </div>
-
        <div class="col-sm-6">
        <?php
     	echo '<select class="form-control" name="siivousPaaSivulla">';
@@ -329,7 +335,15 @@ $(document).ready(function(){
 
    	?>
        </div>
-
+      </div>
+      <br>
+      <div class="row">
+       <div class="col-sm-6">
+    	   <select name="pvm_or_tid" class="form-control">
+    	   <option value="pvm"><?php echo Yii::t('main', 'Päivämäärän mukaan'); ?></option>
+    	   <option value="tid"><?php echo Yii::t('main', 'Työntekijöiden mukaan'); ?></option>
+    	   </select>
+       </div>
       </div>
       <br>
     </form>
@@ -385,6 +399,7 @@ $(document).ready(function(){
 
 });
 </script>
+
 
 
 <?php if(in_array('2',$tas)) : ?>

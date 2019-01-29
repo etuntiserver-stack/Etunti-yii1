@@ -374,7 +374,11 @@ function num($val){
 
 			$lu = Mobile::model()->findAll($criteria);
   			foreach($lu as $data){
-				$model[strtotime($data->aloitan)] = $data;
+				if( isset($_POST['pvm_or_tid']) and $_POST['pvm_or_tid'] == 'tid' ){
+					$model[$data->tekijan_nimi.strtotime($data->aloitan)] = $data;
+				} else {
+					$model[strtotime($data->aloitan)] = $data;
+				}
 			}
 
 			/* tot */
@@ -390,11 +394,17 @@ function num($val){
 			$tot = Toteutuneet::model()->findAll($criteria); 
 
   			foreach($tot as $data){
-				$model[strtotime($data->aloitan)] = $data;
+				if( isset($_POST['pvm_or_tid']) and $_POST['pvm_or_tid'] == 'tid' ){
+					$model[$data->tekijan_nimi.strtotime($data->aloitan)] = $data;
+				} else {
+					$model[strtotime($data->aloitan)] = $data;
+				}
 			}
 
-			if(count($model) > 0)
-			ksort($model);
+			if(count($model) > 0){
+				ksort($model);
+				//asort($model);
+			}
 
 
 			if(isset($_POST['luoPDF']))
@@ -3571,7 +3581,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	$r .= '<td style="width:10%">'.date("H:i",strtotime($data->aloitan)).'</td>';
 	$r .= '<td style="width:10%">'.date("H:i",strtotime($data->loppui)).'</td>';
 	$r .= '<td style="width:10%">'.sprint($kesto).'</td>'; //<br><b>('.num($kesto).')</b>
-	$r .= '<td style="width:25%">'.$viesti.'</td>';
+	$r .= '<td style="width:10%">'.num($kesto).'</td>'; //<br><b>('.num($kesto).')</b>
 	$r .= '<td style="width:10%">'.$this->statusMuutosNimeksi($data->status).'</td>';
 	$r .= '</tr>';
 	return $r;
