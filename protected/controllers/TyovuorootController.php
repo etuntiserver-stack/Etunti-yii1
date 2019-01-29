@@ -1851,6 +1851,11 @@ class TyovuorootController extends Controller
 				} else {
 					$m->lisa_tuotteet = '';
 				}
+				if( is_array($m->tyo_erittelyt) and count($m->tyo_erittelyt) > 0 ){
+					$m->tyo_erittelyt = json_encode($m->tyo_erittelyt, JSON_FORCE_OBJECT);
+				} else {
+					$m->tyo_erittelyt = '';
+				}
 				if($m->save())
 				{
 					$luotu[$m->id] = $m->tid;

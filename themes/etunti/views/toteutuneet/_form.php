@@ -162,34 +162,8 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
   </div><div class="col-sm-8">
 
 	<div class="section">
-	<label><?php echo Yii::t('main','Kohteen tiedot'); ?></label>
-	<?php
-	$ohje = '';
-	if($s->status != 2 and $s->status != 10)
-	{
-	$m = Kohteet::model()->findbypk($s->kohdenID);
-	if(isset($m->id))
-	{
-
-		$k = explode("//",$m->kenella_on_avain);
-
-		if(isset($k[1]))
-		  $ohje .= Yii::t('main', 'Avain on: ')." ".$k[1]."\n";
-		if(!empty($m->avain))
-		  $ohje .= Yii::t('main', 'Avain: ')." ".$m->avain."\n\n";
-		if(!empty($m->aikataulu))
-		  $ohje .= "\nAikataulu: ".$m->aikataulu;
-		if(!empty($m->toimenpiteet))
-		  $ohje .= "\nToimenpiteet: ".$m->toimenpiteet;
-		if(!empty($m->tietoja))
-		  $ohje .= "\nTietoja: ".$m->tietoja;
-		if(!empty($m->muut))
-		  $ohje .= "\nMuut: ".$m->muut;
-
-	}
-	}
-	?>
-	<textarea class="form-control input-sm" rows="12" ><?php echo $ohje; ?></textarea>
+	<label><?php echo Yii::t('main','Tietoja mobiilisovellukseen'); ?></label>
+	<p class="panel-footer"><?php if(isset($s->tyovuoroot->id)){ echo str_replace("\n", "<br>", $s->tyovuoroot->tietoja); } ?></p>
 	</div>
 
 	<div class="section">
