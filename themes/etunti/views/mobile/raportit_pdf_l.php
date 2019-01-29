@@ -12,9 +12,11 @@
 <?php if(isset($_POST['luoPrintSivu'])) : ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap.min.css">
 <script>
+/*
 window.onload = function () {
     window.print();
 }
+*/
 </script>
 <?php endif; ?>
 <!-- Style -->

@@ -309,7 +309,6 @@ function num($val){
 			allSess();
 
 		       	$criteria = new CDbCriteria();
-			$criteria->select = " aloitan,loppui,tid,tekijan_nimi,kohde_kannasta,viesti,sairaus,status ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " 
 				aloitan!='' and loppui!='' 
@@ -364,7 +363,6 @@ function num($val){
 
 			/* lu */
 		       	$criteria = new CDbCriteria();
-			$criteria->select = " time,aloitan,loppui,tid,tekijan_nimi,kohde_kannasta,viesti,sairaus,status ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " 
 				aloitan!='' and loppui!='' 
@@ -381,7 +379,6 @@ function num($val){
 
 			/* tot */
 		       	$criteria = new CDbCriteria();
-			$criteria->select = " time,aloitan,loppui,tekijan_nimi,kohde_kannasta,sairaus ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " 
 				aloitan!='' and loppui!='' 
@@ -3570,7 +3567,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	$r .=  '<tr>';
 	$r .= '<td style="width:11%">'.date("d.m.Y",strtotime($data->aloitan)).'</td>';
 	$r .= '<td style="width:10%">'.$this->etuSukunimi($data->tid).$spl.'</td>';
-	$r .= '<td style="width:18%">'.$data->kohde_kannasta.'</td>';
+	$r .= '<td style="width:18%">'.(($data->status == 3)?$data->kohde_kannasta:'').(($data->status == 10)?'LOUNASTAUKO':'').(($data->status == 2)?'MATKA':'').'</td>';
 	$r .= '<td style="width:10%">'.date("H:i",strtotime($data->aloitan)).'</td>';
 	$r .= '<td style="width:10%">'.date("H:i",strtotime($data->loppui)).'</td>';
 	$r .= '<td style="width:10%">'.sprint($kesto).'</td>'; //<br><b>('.num($kesto).')</b>
