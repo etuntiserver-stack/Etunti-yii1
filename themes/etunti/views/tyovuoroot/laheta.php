@@ -1,6 +1,4 @@
 <?php
-
-
 $paivat=array(
 	1=>'Maanantai',
 	2=>'Tiistai',
@@ -156,17 +154,11 @@ for($day= 1; $day <= 7; $day++) {
 	}
 	// Asiakas Tiedot -->
 
-	if($t->alku > 0 and $t->loppu > 0)
-	{
+	$al = '';
+	if($t->alku > 0 and $t->loppu > 0){
 	  $al = $t->alku.'-'.$t->loppu;
 	  if($site[0]->eiLasketaSubStr($t->tyoajanmerkinta) === false){ $yht += strtotime($t->loppu)-strtotime($t->alku); }
-	} else {
-	  $al = '';
- 	}
-
-	$expl2 = explode("/",$t->tyoajanmerkinta);
-		$cl = '';
-	if(isset($expl2[1]) and !empty($expl2[1])){ $cl = 'style="color:'.$expl2[1].'"'; }
+	}
 	
 	// <-- osoite
 	$osoite = '';
@@ -177,9 +169,24 @@ for($day= 1; $day <= 7; $day++) {
 	} elseif(!isset($k->id) and $t->status != 0 and $t->status != 3){
 		$osoite = $this->tilanteet()[$t->status];
 	}
+
+	$color = '#888';
+	$bgcol = 'color:#333';
+	if(!empty($t->tyoajanmerkinta)){
+		$expl = explode("/",$t->tyoajanmerkinta);
+		if(isset($expl[1]) and !empty($expl[1])){
+			$color = $expl[1];
+			$bgcol = 'color:'.$color;
+		}
+	}
+	if(!empty($t->tyoajanlaatu) and empty($osoite)){
+		$expl1 = explode("/",$t->tyoajanlaatu);
+		if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
+		$osoite = (isset($expl1[0])) ? '<div class="text-center tyoajanlaatu_laatiko" style="background:'.$color.';color:#fff;text-align:center">'.$expl1[0].'</div>' : '';
+	}
 	//     osoite -->
 
-	echo '<span '.$cl.'>'.$al.' '.$osoite.'</span>';
+	echo '<span>'.$al.' '.$osoite.'</span>';
 	if(isset($k->id) and !empty($k->avain) and !$tulosta)
 	echo ' &nbsp;<b class="fa fa-key text-warning"></b>';
 	elseif(isset($k->id) and !empty($k->avain) and $tulosta)

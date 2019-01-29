@@ -197,7 +197,7 @@
 		if(!empty($tvVal->tyoajanlaatu) and empty($osoite)){
 			$expl1 = explode("/",$tvVal->tyoajanlaatu);
 			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
-			$osoite = (isset($expl1[0])) ? '<div class="row text-center tyoajanlaatu_laatiko" style="background:'.$color.'">'.$expl1[0].'</div>' : '';
+			$osoite = (isset($expl1[0])) ? '<div class="text-center tyoajanlaatu_laatiko" style="background:'.$color.'">'.$expl1[0].'</div>' : '';
 			$kellot = '';
 			$muokkaus = '';
 		}
