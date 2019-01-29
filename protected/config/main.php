@@ -463,6 +463,7 @@ return array(
 		        'tablePrefix' => 'tbl_',
 			'enableProfiling'=>true,
 			'enableParamLogging'=>true,
+			//'useStrictParsing'=>true,
 		),
         	'db1'=>array(
 	            	'connectionString' => 'mysql:host='.$db2_host.';dbname='.$db2,
@@ -474,6 +475,7 @@ return array(
 		    	'class'=> 'CDbConnection',
 			'enableProfiling'=>true,
 			'enableParamLogging'=>true,
+			//'useStrictParsing'=>true,
         	),
 		
 		'errorHandler'=>array(
