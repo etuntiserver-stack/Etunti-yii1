@@ -22,6 +22,7 @@ session_start();
 		or strpos($_SERVER['REQUEST_URI'], "SELECT%20") !== false
 		or strpos($_SERVER['REQUEST_URI'], "BOOLEAN%20") !== false
 		or strpos($_SERVER['REQUEST_URI'], "CASE%20") !== false
+		or strpos($_SERVER['REQUEST_URI'], "%20or%20") !== false
 	)
   )
   {
