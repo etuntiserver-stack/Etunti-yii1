@@ -424,6 +424,12 @@ class AsetuksetController extends Controller
 			else
 				$model->edico_muut_kulut='';
 
+			if(isset($_POST['Asetukset']['asiakas_ryhma'])){
+				$model->asiakas_ryhma = json_encode($_POST['Asetukset']['asiakas_ryhma']);
+			} else {
+				$model->asiakas_ryhma="";
+			}
+
 			if($model->save())
 			{
 

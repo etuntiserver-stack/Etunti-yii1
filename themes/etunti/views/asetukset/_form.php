@@ -160,7 +160,102 @@
 		?>
 		<?php echo $form->error($model,'asiakas_myyja'); ?>
 	</div>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'asiakas_tyoryhma'); ?>
+		<?php
+		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+	       	$criteria = new CDbCriteria();
+		$criteria->order = " value ";
+		$criteria->condition = "select_type='tyoryhma'";
+		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
+		$criteria->addCondition ("value2 LIKE '%\"".Yii::app()->user->adminID."\"%'");
+		}
+
+		$listData = Valikkoot::model()->findAll($criteria);
+		?>
+		<?php echo $form->dropDownList($model, 'asiakas_tyoryhma', CHtml::listData($listData, 'id', 'value'), 
+		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		?>
+		<?php echo $form->error($model,'asiakas_tyoryhma'); ?>
+	</div>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'asiakas_ryhma'); ?>
+
+	   <div class="input-group">
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma_real' ",array('order' => "select_type"));
+		if(count($l) == 0)
+      		{
+			$new_val = new Valikkoot;
+			$new_val->select_type = "asiakas_ryhma_real";
+			$new_val->value = "Testi ryhmä";
+			if($new_val->save())
+	      			$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma_real' ",array('order' => "select_type"));
+			else
+				var_dump($new_val->getErrors());
+		}
+
+			$arr = json_decode($model->asiakas_ryhma);
+			echo '<select name="Asetukset[asiakas_ryhma][]" class="ryhmat form-control" multiple title="Valitse">';
+			foreach($l as $data)
+			{
+				if(is_array($arr) and in_array($data->id, $arr))
+			    		echo '<option value="'.$data->id.'" selected>'.$data->value.'</option>';
+				elseif(!is_array($arr) and $model->asiakas_ryhma == $data->id)
+			    		echo '<option value="'.$data->id.'" selected>'.$data->value.'</option>';
+				else
+			    		echo '<option value="'.$data->id.'">'.$data->value.'</option>';
+			}
+			echo '</select>';
+		
+        	?>
+		<span class="input-group-btn">
+			<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma_real"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
+	   </div>
+
+		<?php echo $form->error($model,'asiakas_ryhma'); ?>
+	</div>
    </div>
+
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+/* valikot */
+$(".muokaValiko").click(function() {
+    var thisFor = $(this).attr("for");
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
+	   type:'POST',
+	   data: { "select_type" : thisFor },
+           success: function(data){
+		console.log(data);
+		$('#showres').modal().html(JSON.parse(data));
+           }
+        });
+});
+/* valikot */
+
+$('.ryhmat').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Ryhmät"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+});
+
+});
+</script>
    <div class="col-sm-3">
     <legend><h2><?php echo Yii::t('main','Oletus laskutus tiedot'); ?></h2></legend>
 
@@ -196,6 +291,27 @@
 		<?php echo $form->labelEx($model,'asiakas_maksuehto'); ?>
 		<?php echo $form->numberField($model,'asiakas_maksuehto',array('size'=>60,'maxlength'=>3,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'asiakas_maksuehto'); ?>
+	</div>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'asiakas_alv'); ?>
+		<?php
+        	$l = array(0=>0,10=>10,14=>14,24=>24);
+
+        	echo $form->dropDownList($model, 'asiakas_alv', $l,
+		array('empty'=>'Valitse','class'=>'form-control'
+		));
+        	?>
+		<?php echo $form->error($model,'asiakas_alv'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'asiakas_hinta_tyyppi'); ?>
+		<?php
+		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
+        	echo $form->dropDownList($model, 'asiakas_hinta_tyyppi', $list,
+		array('empty'=>'Valitse tyyppi','class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'asiakas_hinta_tyyppi'); ?>
 	</div>
    </div>
   </div>

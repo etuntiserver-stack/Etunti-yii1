@@ -53,6 +53,10 @@ if(!isset($model->id) and isset($asetukset->id)){
 	$model->viivastyskorko = $asetukset->asiakas_viivastyskorko;
 	$model->maksuehto = $asetukset->asiakas_maksuehto;
 	$model->myyja = $asetukset->asiakas_myyja;
+	$model->hinta_tyyppi = $asetukset->asiakas_hinta_tyyppi;
+	$model->alv = $asetukset->asiakas_alv;
+	$model->tyoryhma = $asetukset->asiakas_tyoryhma;
+	$model->ryhma = $asetukset->asiakas_ryhma;
 }
 ?>
 

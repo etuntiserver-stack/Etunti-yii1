@@ -717,10 +717,11 @@ Yritys '.$yr.'
 			//     Kaikki kohteet passiviseksi jos asiakas passivinen -->
 
 
-			if(isset($_POST['Asiakkaat']['ryhma']))
+			if(isset($_POST['Asiakkaat']['ryhma'])){
 				$model->ryhma=json_encode($_POST['Asiakkaat']['ryhma']);
-			else
+			} else {
 				$model->ryhma="";
+			}
 
 			if($model->save())
 			{
