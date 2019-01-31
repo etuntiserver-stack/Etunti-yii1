@@ -874,6 +874,7 @@ class TyovuorootController extends Controller
 			$ex = explode("_",$cp);
 
 			$t = Tyovuoroot::model()->findbypk($ex[0]);
+			if( !isset($t->id) ){ exit; }
 
 			// <-- Jos toistuva, otetaan sen Päivämäärä pois ketjusta
 			if( isset($t->pvm) and $t->toistuva_id != 0)
