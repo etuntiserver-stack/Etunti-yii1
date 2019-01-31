@@ -145,7 +145,61 @@
   </div>
 </div><!-- form -->
 
+<!-- Asiakas -->
+<br>
+<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#asiakasAsetukset"><h3><?php echo Yii::t('main','Asiakas'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
 
+  <div class="row form collapse" id="asiakasAsetukset">
+   <div class="col-sm-3">
+    <legend><h2><?php echo Yii::t('main','Asiakkaan tiedot'); ?></h2></legend>
+	<div class="section fill mb5 ">
+
+		<?php echo $form->labelEx($model,'asiakas_myyja'); ?>
+		<?php echo $form->dropDownList($model, 'asiakas_myyja', CHtml::listData(Administrators::model()->findAll(), 'id', 'adm_nimi'), 
+		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		?>
+		<?php echo $form->error($model,'asiakas_myyja'); ?>
+	</div>
+   </div>
+   <div class="col-sm-3">
+    <legend><h2><?php echo Yii::t('main','Oletus laskutus tiedot'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'asiakas_laskutus_kanava'); ?>
+		<?php 
+        	$l = array(
+			'posti' => 'Posti',
+			'verkkolasku' => 'Verkkolasku',
+			'sahkoposti' => 'Sähköposti'
+		);
+		echo $form->dropDownList($model,'asiakas_laskutus_kanava', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'asiakas_laskutus_kanava'); ?>
+	</div>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'asiakas_kirjeenluokka'); ?>
+		<?php
+		$list = array(	'1'=>Yii::t('main','Luokka 1'),
+				'2'=>Yii::t('main','Luokka 2')
+				);
+        	echo $form->dropDownList($model, 'asiakas_kirjeenluokka', $list,
+		array('empty'=>'Valitse','class'=>'form-control'));
+        	?>
+		<?php echo $form->error($model,'asiakas_kirjeenluokka'); ?>
+	</div>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'asiakas_viivastyskorko'); ?>
+		<?php echo $form->numberField($model,'asiakas_viivastyskorko',array('size'=>60,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'asiakas_viivastyskorko'); ?>
+	</div>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'asiakas_maksuehto'); ?>
+		<?php echo $form->numberField($model,'asiakas_maksuehto',array('size'=>60,'maxlength'=>3,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'asiakas_maksuehto'); ?>
+	</div>
+   </div>
+  </div>
+<!-- Asiakas -->
 
 <!-- Työvuorot -->
 <?php if(in_array('2',$tas)) : ?>

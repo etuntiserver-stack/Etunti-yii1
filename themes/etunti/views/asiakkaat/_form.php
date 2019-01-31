@@ -46,6 +46,14 @@ if(isset($_GET['vinkki_id']))
 
 $model->hinta = round($model->hinta, 2);
 $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
+
+if(!isset($model->id) and isset($asetukset->id)){
+	$model->laskutus_kanava = $asetukset->asiakas_laskutus_kanava;
+	$model->kirjeenluokka = $asetukset->asiakas_kirjeenluokka;
+	$model->viivastyskorko = $asetukset->asiakas_viivastyskorko;
+	$model->maksuehto = $asetukset->asiakas_maksuehto;
+	$model->myyja = $asetukset->asiakas_myyja;
+}
 ?>
 
 <style>

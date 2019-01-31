@@ -2,6 +2,7 @@
 /* @var $this LaskuController */
 /* @var $model Lasku */
 /* @var $form CActiveForm */
+$asetukset = Asetukset::model()->findbypk(1);
 
 if(isset($model->id))
 {
@@ -12,6 +13,17 @@ if(isset($model->id))
   	$laskuHistoria = LaskuHistoria::model()->find($criteria);
 /* POSTITA */
 }
+
+if(!isset($model->id) and isset($asetukset->id)){
+	$model->laskutus = $asetukset->asiakas_laskutus_kanava;
+	$model->kirjeenluokka = $asetukset->asiakas_kirjeenluokka;
+	$model->viivastyskorko = $asetukset->asiakas_viivastyskorko;
+	$model->maksuehto = $asetukset->asiakas_maksuehto;
+
+	$model->paivays = date("d.m.Y");
+	$model->erapaiva = date("d.m.Y", strtotime($model->paivays." +$model->maksuehto day"));
+}
+
 ?>
 
 
@@ -42,7 +54,6 @@ if(isset($model->id))
 <?php endif; ?> 
 
 <?php
-$asetukset = Asetukset::model()->findbypk(1);
 $model->yid = $asetukset->id;
 $model->saaja_iban = $asetukset->iban;
 if(empty($model->viivastyskorko))
@@ -59,7 +70,6 @@ echo '<input type="hidden" id="forTilanne" value="'.$model->tilanne.'">';
 echo '<input type="hidden" id="trust_jobid" value="'.$model->trust_jobid.'">';
 echo '<input type="hidden" id="postita_jobid" value="'.$model->postita_jobid.'">';
 } else {
-$model->paivays = date("d.m.Y");
 echo '<input type="hidden" id="forTilanne" value="0">';
 }
 

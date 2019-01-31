@@ -52,26 +52,39 @@
 	$yhteensa_total	= 0;
 	$is_ok_lasku 	= true;
 	$l_class	= 'class="bg-default"';
+
+	if(isset($asetukset->id) and empty( $item->laskutus_kanava ) and !empty( $asetukset->asiakas_laskutus_kanava )){
+		$item->laskutus_kanava = $asetukset->asiakas_laskutus_kanava;
+	}
+	if(isset($asetukset->id) and empty( $item->kirjeenluokka ) and !empty( $asetukset->asiakas_kirjeenluokka )){
+		$item->kirjeenluokka = $asetukset->asiakas_kirjeenluokka;
+	}
+	if(isset($asetukset->id) and empty( $item->viivastyskorko ) and !empty( $asetukset->asiakas_viivastyskorko )){
+		$item->viivastyskorko = $asetukset->asiakas_viivastyskorko;
+	}
+	if(isset($asetukset->id) and empty( $item->maksuehto ) and !empty( $asetukset->asiakas_maksuehto )){
+		$item->maksuehto = $asetukset->asiakas_maksuehto;
+	}
+
+
 	if( 
-		empty( $item->laskutus_kanava )
-		or empty( $item->maksuehto )
-		or empty( $item->viivastyskorko )
-		or ( $item->laskutus_kanava == 'sahkoposti' and empty($item->sahkoposti) )
+		( $item->laskutus_kanava == 'sahkoposti' and empty($item->sahkoposti) )
 		or ( $asetukset->palvelu_tyyppi == 4 and $asetukset->netvisor_kaytto == 1 and $item->netvisorkey == 0 )
 	){ 
 		$is_ok_lasku 	= false; 
 		$l_class	= 'class="alert bg-danger"';
 	}
 	?>
-	<div <?=$l_class?>>
-	<p><b><?=Yii::t('main', 'Kustannuspaikka')?></b>-<?=(!empty($item->netvisor_dimension_item))? $item->netvisor_dimension_item:''?></p>
+	<div>
 	<p><b><?=Yii::t('main', 'Laskutus kanava')?></b>-<?=(!empty($item->laskutus_kanava))? Yii::t('main', $item->laskutus_kanava):''?></p>
 	<p><b><?=Yii::t('main', 'Päiväys')?></b>-<?=date("d.m.Y",strtotime($paivays))?></p>
 	<p><b><?=Yii::t('main', 'Eräpäivä')?></b>-<?=(!empty($item->maksuehto))? date("d.m.Y",strtotime($paivays ." +$item->maksuehto day")):''?></p>
 	<p><b><?=Yii::t('main', 'Maksuehto')?></b>-<?=(!empty($item->maksuehto))? $item->maksuehto:''?></p>
 	<p><b><?=Yii::t('main', 'Viivästyskorko')?></b>-<?=(!empty($item->viivastyskorko))? $item->viivastyskorko:''?></p>
-	<?=($item->laskutus_kanava == 'sahkoposti' and empty($item->sahkoposti))? '<p>'.Yii::t('main', 'Sähköpostiosoite ei saisi olla tyhjä tässä laskutus kanavassa.').'</p>':''?>
-	<?=( $asetukset->palvelu_tyyppi == 4 and $asetukset->netvisor_kaytto == 1 and $item->netvisorkey == 0 )? '<p>'.Yii::t('main', 'Asiakas ei vielä saanut netvisorkey. Päivittä tämän asiakkaan tiedot.').'</p>':''?>
+	 <div <?=$l_class?>>
+	 <?=($item->laskutus_kanava == 'sahkoposti' and empty($item->sahkoposti))? '<p>'.Yii::t('main', 'Sähköpostiosoite ei saisi olla tyhjä tässä laskutus kanavassa.').'</p>':''?>
+	 <?=( $asetukset->palvelu_tyyppi == 4 and $asetukset->netvisor_kaytto == 1 and $item->netvisorkey == 0 )? '<p>'.Yii::t('main', 'Asiakas ei vielä saanut netvisorkey. Päivittä tämän asiakkaan tiedot.').'</p>':''?>
+	 </div>
 	</div>
 	</td>
 	<td>
