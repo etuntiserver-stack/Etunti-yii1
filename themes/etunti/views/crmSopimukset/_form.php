@@ -648,7 +648,10 @@ $('.tarvikkeet').multiselect({
 			$('#asiakas_tiedot').html(data['asiakas_tiedot']);
 		}
 
-           }
+           },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	window.location.href=location.protocol + "//" + location.host + '/index.php/user/logout';
+ 	   }
         });
 
  });
