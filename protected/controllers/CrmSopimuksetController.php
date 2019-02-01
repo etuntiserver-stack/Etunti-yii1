@@ -42,22 +42,19 @@ class CrmSopimuksetController extends Controller
 	}
 
 	public function isEtuntiAdmin() {
-
-	$tas = '';
-	if(isset(Yii::app()->user->adminPaketti))
-	$tas = explode(",",Yii::app()->user->adminPaketti);
-
-		if(isset(Yii::app()->user->adminID) and in_array('5',$tas))
-		{
-		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	       	if($m->id == Yii::app()->user->adminID)
-	       	  return true;
-		else
-	       	   return false;		
-
-		} else {
-	            return false;
+		if(!isset(Yii::app()->user->adminID)){
+			echo json_encode(array('error'=>'Kirjautuminen vaaditaan!'));
+			exit;
 		}
+		$tas = array();
+		if(isset(Yii::app()->user->adminPaketti)){ $tas = explode(",",Yii::app()->user->adminPaketti); }
+		if(isset(Yii::app()->user->adminID) and in_array('5',$tas)){
+			$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	       		if(isset($m->id) and $m->id == Yii::app()->user->adminID){
+				return true;
+			}
+		}
+		return false;
 	}
 
         public function init()
@@ -67,8 +64,6 @@ class CrmSopimuksetController extends Controller
                         Yii::app()->theme = 'etunti';
                 } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
                         Yii::app()->theme = Yii::app()->user->user_theme;
-                } else {
-                        Yii::app()->theme = 'classic';
                 }
                 parent::init();
         }

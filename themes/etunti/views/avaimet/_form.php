@@ -144,16 +144,16 @@ $(document).ready(function(){
            success: function(data){
 		var data = JSON.parse(data);
 		console.log(data);
-		if(data['options'])
-		{
+		if(data['error']){
+	    		window.location.href=location.protocol + "//" + location.host + '/index.php/user/logout';
+		}
+		if(data['options']){
 			$('#Avaimet_kohde').html(data['options']);
 		}
-		if(data['asiakas_sahkoposti'])
-		{
+		if(data['asiakas_sahkoposti']){
 			$('#Avaimet_asiakkaan_sahkoposti').val(data['asiakas_sahkoposti']);
 		}
-		if(data['asiakas_tiedot'])
-		{
+		if(data['asiakas_tiedot']){
 			$('#Avaimet_tiedot').html(data['asiakas_tiedot']);
 		}
 
