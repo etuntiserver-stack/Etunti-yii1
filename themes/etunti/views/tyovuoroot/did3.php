@@ -80,6 +80,9 @@
 	$tv = Tyovuoroot::model()->findAll($criteria); 
 	foreach($tv as $tvVal)
 	{
+		$color = '#888';
+		$bgcol = 'color:#333';
+
 	   	if($tvVal->alku != '' and $tvVal->loppu != '')
 	   	{
 			$eilasketa = $this->eiLasketaSubStr($tvVal->tyoajanmerkinta);
@@ -157,6 +160,19 @@
 
 		// <-- Hovertietoja generoi
 		$hovertietoja = '';
+		// <-- peruutettu
+		if($tvVal->peruutettu != 0){
+			$tv_controller = Yii::app()->createController('Tyovuoroot');
+		}
+		if($tvVal->peruutettu == 1 and isset($tv_controller)){
+			$hovertietoja .= '<h3 class="text-danger">'. $tv_controller[0]->peruutettuArray()[1] .'</h3>';
+			$bgcol = 'color:red';
+		}
+		if($tvVal->peruutettu == 2 and isset($tv_controller)){
+			$hovertietoja .= '<h3 class="text-danger">'. $tv_controller[0]->peruutettuArray()[2] .'</h3>';
+			$bgcol = 'color:red';
+		}
+		//    peruutettu -->
 		$hovertietoja .= $asiakasNakyvissa;
 		//if(!empty($asiakasNakyvissa)){ $title .= ', '; }
 		$hovertietoja .= $paikkakuntaNakyvissa;
@@ -175,7 +191,7 @@
 		if( isset($loppu[0]) and empty($loppu[0]) and isset($loppu[1]) and ($this->num(strtotime($tvVal->alku)-strtotime($loppu[1])) > 0) ){
 			$valilyonti = strtotime($tvVal->alku)-strtotime($loppu[1]);
 			$reikatyyppi = 'reika-warning';
-			$bod .= '<div class="row reika '.$reikatyyppi.' text-center"><i class="glyphicon glyphicon-time"></i> Aika: '.$this->sprint($valilyonti).'</div>';
+			$bod .= '<div class="reika '.$reikatyyppi.' text-center"><i class="glyphicon glyphicon-time"></i> Aika: '.$this->sprint($valilyonti).'</div>';
 		}
 
 		$tv_edit 	= 'tv_edit';
@@ -185,8 +201,6 @@
 		$kellot = '<b class="kellot">'.$tvVal->alku.'-'.$tvVal->loppu.': </b>';
 	        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></i>';
 
-		$color = '#888';
-		$bgcol = 'color:#333';
 		if(!empty($tvVal->tyoajanmerkinta)){
 			$expl = explode("/",$tvVal->tyoajanmerkinta);
 			if(isset($expl[1]) and !empty($expl[1])){
