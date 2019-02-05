@@ -32,8 +32,12 @@ class CrmSopimuksetController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id', 'get_tyonkuvaus', 'get_kohteentiedot', 'get_asiakastilat', 'view_tyonkuvaus', 'get_kohde', 'tr_rivit_tyhja'),
+				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id', 'get_tyonkuvaus', 'get_kohteentiedot', 'get_asiakastilat', 'view_tyonkuvaus', 'tr_rivit_tyhja'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
+			),
+			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array( 'get_kohde'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdminNoTas()",
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -49,6 +53,20 @@ class CrmSopimuksetController extends Controller
 		$tas = array();
 		if(isset(Yii::app()->user->adminPaketti)){ $tas = explode(",",Yii::app()->user->adminPaketti); }
 		if(isset(Yii::app()->user->adminID) and in_array('5',$tas)){
+			$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	       		if(isset($m->id) and $m->id == Yii::app()->user->adminID){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function isEtuntiAdminNoTas() {
+		if(!isset(Yii::app()->user->adminID)){
+			echo json_encode(array('error'=>'Kirjautuminen vaaditaan!'));
+			exit;
+		}
+		if(isset(Yii::app()->user->adminID)){
 			$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
 	       		if(isset($m->id) and $m->id == Yii::app()->user->adminID){
 				return true;
