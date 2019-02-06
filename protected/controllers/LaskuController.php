@@ -184,6 +184,7 @@ class LaskuController extends Controller
 			)
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 			AND deleted=0
+			AND laskutetaan=1
 		";
 		$lu = Mobile::model()->findAll($criteria);
 
@@ -204,6 +205,7 @@ class LaskuController extends Controller
 				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$id."'
 			)
 			AND deleted=0
+			AND laskutetaan=1
 		";
 		$tot = Toteutuneet::model()->findAll($criteria);
 		$lista = $lu;
