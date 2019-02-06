@@ -45,8 +45,8 @@
 	</tr>
 	<?php foreach($lista as $item) : ?>
 	<tr>
-	<td><h3><?=$item->Fullname?></h3></td>
-	<td>
+	<td width="10%"><h3><?=$item->Fullname?></h3></td>
+	<td width="15%">
 	<?php
 	$yhteensa_total_veroton	= 0;
 	$yhteensa_total	= 0;
@@ -138,15 +138,16 @@
 	<!-- / Lahetys -->
 
 		<?php $hyv_lista = $this->hyvaksyttyListaByAsiakas($item->id, $from, $to); ?>
-		<table class="table table-striped">
+		<p class="m_icons"><i class="link fa fa-2x fa-edit"></i></p>
+		<table class="table table-striped rivintaulu">
 		<tr>
-		<th width="100">Tuote</th>
-		<th width="10">Hinta</th>
-		<th width="10">Yksikkö</th>
-		<th width="10">Määrä</th>
-		<th width="10">ALV</th>
-		<th width="10">Veroton</th>
-		<th width="10">Yhteensä</th>
+		<th>Tuote</th>
+		<th>Hinta</th>
+		<th>Yksikkö</th>
+		<th>Määrä</th>
+		<th>ALV</th>
+		<th>Veroton</th>
+		<th>Yhteensä</th>
 		<th>Free text</th>
 		</tr>
 		<?php $key = 0; ?>
@@ -206,14 +207,14 @@
 	        ?>
 		<?php if( $tp_id != 0 and $laheta == null ) : ?>
 		<tr>
-		<td><?=$nimike?></td>
-		<td><?=number_format($hinta, 2, ',', ' ')?></td>
-		<td><?=$yksikko?></td>
-		<td><?=$kpl?></td>
-		<td><?=$alv?></td>
-		<td><?=number_format($veroton, 2, ',', ' ')?></td>
-		<td><?=number_format($yht, 2, ',', ' ')?></td>
-		<td><?=$freetext?></td>
+		<td class="input_text"><?=$nimike?></td>
+		<td class="input_number"><?=number_format($hinta, 2, ',', ' ')?></td>
+		<td class="input_yksikko"><?=$yksikko?></td>
+		<td class="input_number"><?=$kpl?></td>
+		<td class="input_number"><?=$alv?></td>
+		<td class="input_number"><?=number_format($veroton, 2, ',', ' ')?></td>
+		<td class="input_number"><?=number_format($yht, 2, ',', ' ')?></td>
+		<td class="input_text"><?=$freetext?></td>
 		</tr>
 		<?php endif; ?>
 
@@ -277,14 +278,14 @@
 	        ?>
 		<?php if( $tp_id != 0 and $laheta == null ) : ?>
 		<tr>
-		<td><?=$nimike?></td>
-		<td><?=number_format($hinta, 2, ',', ' ')?></td>
-		<td><?=$yksikko?></td>
-		<td><?=$kpl?></td>
-		<td><?=$alv?></td>
-		<td><?=number_format($veroton, 2, ',', ' ')?></td>
-		<td><?=number_format($yht, 2, ',', ' ')?></td>
-		<td><?=$freetext?></td>
+		<td class="input_text"><?=$nimike?></td>
+		<td class="input_number"><?=number_format($hinta, 2, ',', ' ')?></td>
+		<td class="input_yksikko"><?=$yksikko?></td>
+		<td class="input_number"><?=$kpl?></td>
+		<td class="input_number"><?=$alv?></td>
+		<td class="input_number"><?=number_format($veroton, 2, ',', ' ')?></td>
+		<td class="input_number"><?=number_format($yht, 2, ',', ' ')?></td>
+		<td class="input_text"><?=$freetext?></td>
 		</tr>
 		<?php endif; ?>
 		<?php if( isset($mob->tyovuoroot) and is_array(json_decode($mob->tyovuoroot->tyopaari, true))){
@@ -388,6 +389,46 @@ $(document).ready(function(){
 		window.location.href=$(this).attr('href');
 	}
   });
+  // <-- muokkaus
+  $(document).delegate(".fa-edit","click",function(){
+    $(this).removeClass('fa-edit').addClass('fa-save');
+    $(this).closest('.m_icons').append('<i class="link fa fa-2x fa-plus uusirivi" style="margin-left:10px"></i>');
+    $( $(this).closest('table').find('.rivintaulu td.input_text') ).each(function( index ) {
+	$(this).replaceWith('<td class="input_text"><input type="text" class="form-control" value="'+ $(this).text() +'"></td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_number') ).each(function( index ) {
+	todigit = $(this).text().replace(/\,/g, '.');
+	$(this).replaceWith('<td class="input_number"><input type="number" class="form-control" value="'+ todigit +'"></td>');
+    });
+  });
+
+  $(document).delegate(".fa-save","click",function(){
+    $(this).removeClass('fa-save').addClass('fa-edit');
+    $(this).next('.uusirivi').remove();
+    $( $(this).closest('table').find('.rivintaulu td.input_text') ).find('input').each(function( index ) {
+	$(this).replaceWith('<td class="input_text">'+ $(this).val() +'</td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_number') ).find('input').each(function( index ) {
+	todigit = $(this).val().replace(/\./g, ',');
+	$(this).replaceWith('<td class="input_number">'+ todigit +'</td>');
+    });
+  });
+
+  $(document).delegate(".uusirivi","click",function(){
+	$(this).closest('td').find('.rivintaulu').append(''+
+		'<tr>' +
+		'<td class="input_text"><input type="text" class="form-control" placeholder="Tuotenimi"></td>' +
+		'<td class="input_number"><input type="number" class="form-control" placeholder="Hinta"></td>' +
+		'<td></td>' +
+		'<td class="input_number"><input type="number" class="form-control"></td>' +
+		'<td class="input_number"><input type="number" class="form-control"></td>' +
+		'<td class="input_number"><input type="number" class="form-control"></td>' +
+		'<td class="input_number"><input type="number" class="form-control"></td>' +
+		'<td class="input_text"><input type="text" class="form-control" placeholder="Teksti"></td>' +
+		'</tr>'
+	);
+  });
+  //     muokkaus -->
 
 });
 </script>
