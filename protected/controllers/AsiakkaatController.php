@@ -1142,9 +1142,9 @@ $xml = '
 
 
 		$perSivu = 50;
-		if(isset(Yii::app()->user->asiakkaatPerSivu))
-		$perSivu = Yii::app()->user->asiakkaatPerSivu;
-
+		if(isset(Yii::app()->user->asiakkaatPerSivu)){
+			$perSivu = Yii::app()->user->asiakkaatPerSivu;
+		}
 		$dataProvider->pagination->pageSize = $perSivu;
 
 		$a = Asetukset::model()->findbypk(1);
