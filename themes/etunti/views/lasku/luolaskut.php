@@ -37,7 +37,7 @@
 <p>
 <div class="container-fluid">
 	<?php if( count($lista) > 0 ): ?>
-	<table class="table table-bordered">
+	<table class="table table-bordered paa_taulu">
 	<tr>
 	<th>Asiakas</th>
 	<th>Laskutuksen tiedot</th>
@@ -87,8 +87,7 @@
 	 </div>
 	</div>
 	</td>
-	<td>
-
+	<td class="lahetys_laatikko">
 
 	<!-- Lahetys Pää lasku -->
 	<?php if( $is_ok_lasku and $laheta !== null ){
@@ -141,7 +140,7 @@
 		<p class="m_icons"><i class="link fa fa-2x fa-edit"></i></p>
 		<div class="row alv_valinta" style="display:none">
 		 <div class="col-sm-3">
-			<p><select class="form-control" class="lasku_alv_muoto">
+			<p><select class="form-control lasku_alv_muoto">
 			<option value="0">Hinnat ALV 0%</option>
 			<option value="1">Hinnat sis. ALV</option>
 			</select></p>
@@ -216,13 +215,13 @@
 		<?php if( $tp_id != 0 and $laheta == null ) : ?>
 		<tr>
 		<td class="input_nimike"><?=$nimike?></td>
-		<td class="input_number"><?=number_format($hinta, 2, ',', ' ')?></td>
+		<td class="input_hinta"><?=number_format($hinta, 2, ',', ' ')?></td>
 		<td class="input_yksikko"><?=$yksikko?></td>
-		<td class="input_number"><?=$kpl?></td>
-		<td class="input_number"><?=$alv?></td>
-		<td class="input_number"><?=number_format($veroton, 2, ',', ' ')?></td>
-		<td class="input_number"><?=number_format($yht, 2, ',', ' ')?></td>
-		<td class="input_text"><?=$freetext?></td>
+		<td class="input_kpl"><?=$kpl?></td>
+		<td class="input_alv"><?=$alv?></td>
+		<td class="input_veroton"><?=number_format($veroton, 2, ',', ' ')?></td>
+		<td class="input_yhteensa"><?=number_format($yht, 2, ',', ' ')?></td>
+		<td class="input_freetext"><?=$freetext?></td>
 		</tr>
 		<?php endif; ?>
 
@@ -287,13 +286,13 @@
 		<?php if( $tp_id != 0 and $laheta == null ) : ?>
 		<tr>
 		<td class="input_nimike"><?=$nimike?></td>
-		<td class="input_number"><?=number_format($hinta, 2, ',', ' ')?></td>
+		<td class="input_hinta"><?=number_format($hinta, 2, ',', ' ')?></td>
 		<td class="input_yksikko"><?=$yksikko?></td>
-		<td class="input_number"><?=$kpl?></td>
-		<td class="input_number"><?=$alv?></td>
-		<td class="input_number"><?=number_format($veroton, 2, ',', ' ')?></td>
-		<td class="input_number"><?=number_format($yht, 2, ',', ' ')?></td>
-		<td class="input_text"><?=$freetext?></td>
+		<td class="input_kpl"><?=$kpl?></td>
+		<td class="input_alv"><?=$alv?></td>
+		<td class="input_veroton"><?=number_format($veroton, 2, ',', ' ')?></td>
+		<td class="input_yhteensa"><?=number_format($yht, 2, ',', ' ')?></td>
+		<td class="input_freetext"><?=$freetext?></td>
 		</tr>
 		<?php endif; ?>
 		<?php if( isset($mob->tyovuoroot) and is_array(json_decode($mob->tyovuoroot->tyopaari, true))){
@@ -368,7 +367,7 @@
 		?>
 		</th>
 		<th><div class="text-right"><h3><?=Yii::t('main', 'Yhteensä')?></h3></div></th>
-		<th><div class="text-left"><h3><?=number_format($yhteensa_total, 2, ',', ' ')?>&euro;</h3></div></th>
+		<th><div class="text-left"><h3><span class="yhteensa_last"><?=number_format($yhteensa_total, 2, ',', ' ')?></span>&euro;</h3></div></th>
 	<?php else: ?>
 		<tr><th><button class="btn btn-block btn-danger">Lasku ei mennyt läpi</button></th></tr>
 	<?php endif; ?>
@@ -407,12 +406,28 @@ $(document).ready(function(){
     $( $(this).closest('table').find('.rivintaulu td.input_nimike') ).each(function( index ) {
 	$(this).replaceWith('<td class="poisto_td"><i class="link fa fa-2x fa-trash"></i></td><td class="input_nimike"><input type="text" class="form-control" value="'+ $(this).text() +'"></td>');
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_text') ).each(function( index ) {
-	$(this).replaceWith('<td class="input_text"><input type="text" class="form-control" value="'+ $(this).text() +'"></td>');
-    });
-    $( $(this).closest('table').find('.rivintaulu td.input_number') ).each(function( index ) {
+    $( $(this).closest('table').find('.rivintaulu td.input_hinta') ).each(function( index ) {
 	todigit = $(this).text().replace(/\,/g, '.');
-	$(this).replaceWith('<td class="input_number"><input type="number" class="form-control" value="'+ todigit +'"></td>');
+	$(this).replaceWith('<td class="input_hinta"><input type="number" class="form-control" value="'+ todigit +'"></td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_kpl') ).each(function( index ) {
+	todigit = $(this).text().replace(/\,/g, '.');
+	$(this).replaceWith('<td class="input_kpl"><input type="number" class="form-control" value="'+ todigit +'"></td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_alv') ).each(function( index ) {
+	todigit = $(this).text().replace(/\,/g, '.');
+	$(this).replaceWith('<td class="input_alv"><input type="number" class="form-control" value="'+ todigit +'"></td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_veroton') ).each(function( index ) {
+	todigit = $(this).text().replace(/\,/g, '.');
+	$(this).replaceWith('<td class="input_veroton"><input type="number" class="form-control" value="'+ todigit +'" readonly></td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_yhteensa') ).each(function( index ) {
+	todigit = $(this).text().replace(/\,/g, '.');
+	$(this).replaceWith('<td class="input_yhteensa"><input type="number" class="form-control" value="'+ todigit +'" readonly></td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_freetext') ).each(function( index ) {
+	$(this).replaceWith('<td class="input_freetext"><input type="text" class="form-control" value="'+ $(this).text() +'"></td>');
     });
   });
 
@@ -425,12 +440,28 @@ $(document).ready(function(){
 	$(this).closest('tr').find('.poisto_td').remove();
 	$(this).replaceWith('<td class="input_nimike">'+ $(this).val() +'</td>');
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_text') ).find('input').each(function( index ) {
-	$(this).replaceWith('<td class="input_text">'+ $(this).val() +'</td>');
-    });
-    $( $(this).closest('table').find('.rivintaulu td.input_number') ).find('input').each(function( index ) {
+    $( $(this).closest('table').find('.rivintaulu td.input_hinta') ).find('input').each(function( index ) {
 	todigit = $(this).val().replace(/\./g, ',');
-	$(this).replaceWith('<td class="input_number">'+ todigit +'</td>');
+	$(this).replaceWith('<td class="input_hinta">'+ todigit +'</td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_kpl') ).find('input').each(function( index ) {
+	todigit = $(this).val().replace(/\./g, ',');
+	$(this).replaceWith('<td class="input_kpl">'+ todigit +'</td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_alv') ).find('input').each(function( index ) {
+	todigit = $(this).val().replace(/\./g, ',');
+	$(this).replaceWith('<td class="input_alv">'+ todigit +'</td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_veroton') ).find('input').each(function( index ) {
+	todigit = $(this).val().replace(/\./g, ',');
+	$(this).replaceWith('<td class="input_veroton">'+ todigit +'</td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_yhteensa') ).find('input').each(function( index ) {
+	todigit = $(this).val().replace(/\./g, ',');
+	$(this).replaceWith('<td class="input_yhteensa">'+ todigit +'</td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_freetext') ).find('input').each(function( index ) {
+	$(this).replaceWith('<td class="input_freetext">'+ $(this).val() +'</td>');
     });
   });
 
@@ -438,14 +469,14 @@ $(document).ready(function(){
 	$(this).closest('td').find('.rivintaulu').append(''+
 		'<tr>' +
 		'<td class="poisto_td"><i class="link fa fa-2x fa-trash"></i></td>' +
-		'<td class="input_text"><input type="text" class="form-control" placeholder="Tuotenimi"></td>' +
-		'<td class="input_number"><input type="number" class="form-control" placeholder="Hinta"></td>' +
+		'<td class="input_nimike"><input type="text" class="form-control" placeholder="Tuotenimi"></td>' +
+		'<td class="input_hinta"><input type="number" class="form-control" placeholder="Hinta"></td>' +
 		'<td></td>' +
-		'<td class="input_number"><input type="number" class="form-control"></td>' +
-		'<td class="input_number"><input type="number" class="form-control"></td>' +
-		'<td class="input_number"><input type="number" class="form-control"></td>' +
-		'<td class="input_number"><input type="number" class="form-control"></td>' +
-		'<td class="input_text"><input type="text" class="form-control" placeholder="Teksti"></td>' +
+		'<td class="input_kpl"><input type="number" class="form-control"></td>' +
+		'<td class="input_alv"><input type="number" class="form-control"></td>' +
+		'<td class="input_veroton"><input type="number" class="form-control"></td>' +
+		'<td class="input_yhteensa"><input type="number" class="form-control"></td>' +
+		'<td class="input_freetext"><input type="text" class="form-control" placeholder="Teksti"></td>' +
 		'</tr>'
 	);
   });
@@ -454,49 +485,46 @@ $(document).ready(function(){
 	$(this).closest('tr').remove();
   });
 
-  function eachLaskenta(){
-
-  var alvsis = $('.lasku_alv_muoto').val();
-  $("#rivit input").each(function() {
-
+  $(document).delegate("input[type=number]","keyup change paste",function(){
+  	var alvsis = parseInt($(this).closest('.lahetys_laatikko').find('.lasku_alv_muoto').val());
 	var hinta_alv_0 = 0;
 	var alv = 0;
 	var kpl = 0;
-	var ale = 0;
+	var laske = 0;
+	var veroton = 0;
+	var yhteensa = 0;
+	var yhteensa_last = 0;
 
-	var inputKenta = $(this).attr("id").split("_");
-	if($("#hinta_"+inputKenta[1]).val()) { hinta_alv_0 = parseFloat($("#hinta_"+inputKenta[1]).val()) };
-	if($("#alv_"+inputKenta[1]).val()) { alv = parseFloat($("#alv_"+inputKenta[1]).val()) };
-	if($("#kpl_"+inputKenta[1]).val()) { kpl = parseFloat($("#kpl_"+inputKenta[1]).val()) };
-	if($("#ale_"+inputKenta[1]).val()) { ale = parseFloat($("#ale_"+inputKenta[1]).val()) };
+	if(isNaN(parseFloat($(this).closest('tr').find('.input_hinta input').val())) || isNaN(parseFloat($(this).closest('tr').find('.input_alv input').val())) || isNaN(parseFloat($(this).closest('tr').find('.input_kpl input').val()))){
+		return false;
+	}
 
-
-	inputKenta[1] = parseFloat(inputKenta[1], 10);
-
-	if(ale > 0)
-	hinta_alv_0 = hinta_alv_0-((hinta_alv_0/100)*ale);
+	hinta_alv_0 = parseFloat($(this).closest('tr').find('.input_hinta input').val());
+	alv = parseFloat($(this).closest('tr').find('.input_alv input').val());
+	kpl = parseFloat($(this).closest('tr').find('.input_kpl input').val());
 
 	if( alvsis == '0'){
-		var laske = (hinta_alv_0*kpl)/100*alv;
-		var veroton = hinta_alv_0*kpl;
-		var yhteensa = laske+veroton;
+		laske = (hinta_alv_0*kpl)/100*alv;
+		veroton = hinta_alv_0*kpl;
+		yhteensa = laske+veroton;
 	}
 	if( alvsis == '1'){
-		var yhteensa = hinta_alv_0*kpl;
+		yhteensa = hinta_alv_0*kpl;
 		var jakaa = '1.'+alv;
 		var l = yhteensa/parseFloat(jakaa);
-		var veroton = l;
-		var laske = yhteensa-veroton;
+		veroton = l;
+		laske = yhteensa-veroton;
 	}
 
-	$("#hinta_alv_"+inputKenta[1]).val(laske.toFixed(2));
-	$("#veroton_"+inputKenta[1]).val(veroton.toFixed(2));
-	$("#yhteensa_alv_"+inputKenta[1]).val(yhteensa.toFixed(2));
+	parseFloat($(this).closest('tr').find('.input_veroton input').val(veroton.toFixed(2)));
+	parseFloat($(this).closest('tr').find('.input_yhteensa input').val(yhteensa.toFixed(2)));
 
+	$(this).closest('table').find('.input_yhteensa input').each(function( index ) {
+		yhteensa_last += parseFloat($(this).val());
+	});
+	parseFloat($(this).closest('.paa_taulu').find('.yhteensa_last').text(yhteensa_last.toFixed(2).replace(/\./g, ',')));
+	return false;
   });
-    	yhteensaTotal();
-
-  }
   //     muokkaus -->
 
 });
