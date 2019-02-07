@@ -65,7 +65,9 @@ $paivat=array(
   $criteria->condition = "  
   DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')  
   BETWEEN  '".date('Y-m-d',strtotime($year ."W". $week .'1'))."' AND '".date('Y-m-d',strtotime($year ."W". $week .'7'))."' 
-  AND pvm!='' ";
+  AND pvm!='' 
+  AND peruutettu=0
+  ";
 
   if(isset($_GET['check']) and !empty($_GET['check']))
   {
@@ -123,7 +125,9 @@ for($day= 1; $day <= 7; $day++) {
   tid = '".$tt->id."'
   AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')  
   BETWEEN  '".date('Y-m-d',strtotime($year ."W". $week .'1'))."' AND '".date('Y-m-d',strtotime($year ."W". $week .'7'))."' 
-  AND pvm!='' ";
+  AND pvm!='' 
+  AND peruutettu=0
+  ";
 
   if(isset($_POST['P'])){
   $criteria->Addcondition ( " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%w') IN (".implode(",",$_POST['P']).") ");
