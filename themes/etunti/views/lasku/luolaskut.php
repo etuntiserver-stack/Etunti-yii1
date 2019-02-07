@@ -39,14 +39,13 @@
 	<?php if( count($lista) > 0 ): ?>
 	<table class="table table-bordered paa_taulu">
 	<tr>
-	<th>Asiakas</th>
 	<th>Laskutuksen tiedot</th>
 	<th>Laskutuksen rivit</th>
 	</tr>
 	<?php foreach($lista as $item) : ?>
 	<tr>
-	<td width="10%"><h3><?=$item->Fullname?></h3></td>
-	<td width="15%">
+	<td width="17%">
+	<h3><?=$item->Fullname?></h3>
 	<?php
 	$yhteensa_total_veroton	= 0;
 	$yhteensa_total	= 0;
@@ -87,7 +86,7 @@
 	 </div>
 	</div>
 	</td>
-	<td class="lahetys_laatikko">
+	<td class="lahetys_laatikko" aid="<?=$item->id?>">
 
 	<!-- Lahetys Pää lasku -->
 	<?php if( $is_ok_lasku and $laheta !== null ){
@@ -150,13 +149,14 @@
 		<tr>
 		<th class="th_tuote">Tuote</th>
 		<th>Hinta</th>
-		<th>Yksikkö</th>
+		<th width="90">Yksikkö</th>
 		<th>Määrä</th>
 		<th>ALV</th>
 		<th>Veroton</th>
 		<th>Yhteensä</th>
 		<th>Free text</th>
 		</tr>
+		<tbody>
 		<?php $key = 0; ?>
 		<?php foreach($hyv_lista as $mob) : ?>
 		<?php $key++; ?>
@@ -311,6 +311,7 @@
 		} ?>
 		<!-- / Update tyovuoro -->
 		<?php endforeach; ?>
+		</tbody>
 		</table>
 	</td>
 	</tr>
@@ -356,7 +357,7 @@
 		<th>
 		<?php
 			echo CHtml::link(Yii::t('main', 'Lähetä lasku'), 
-				array('lasku/luolaskut', 'from' => $from, 'to' => $to, 'alvsis' => $alvsis, 'asiakas_id' => $item->id, 'paivays' => $paivays, 'laheta' => true), 
+				array('lasku/luolaskut', 'lahete' => $lahete, 'from' => $from, 'to' => $to, 'alvsis' => $alvsis, 'asiakas_id' => $item->id, 'paivays' => $paivays, 'laheta' => true), 
 				array(
 					'class' => 'btn btn-block btn-success',
 					'data-toggle'=>'tooltip', 
@@ -366,8 +367,9 @@
 			); 
 		?>
 		</th>
-		<th><div class="text-right"><h3><?=Yii::t('main', 'Yhteensä')?></h3></div></th>
-		<th><div class="text-left"><h3><span class="yhteensa_last"><?=number_format($yhteensa_total, 2, ',', ' ')?></span>&euro;</h3></div></th>
+		<th>
+		    <h3><?=Yii::t('main', 'Yhteensä')?>: <span class="yhteensa_last"><?=number_format($yhteensa_total, 2, ',', ' ')?></span>&euro;</h3>
+		</th>
 	<?php else: ?>
 		<tr><th><button class="btn btn-block btn-danger">Lasku ei mennyt läpi</button></th></tr>
 	<?php endif; ?>
@@ -410,6 +412,10 @@ $(document).ready(function(){
 	todigit = $(this).text().replace(/\,/g, '.');
 	$(this).replaceWith('<td class="input_hinta"><input type="number" class="form-control" value="'+ todigit +'"></td>');
     });
+    $( $(this).closest('table').find('.rivintaulu td.input_yksikko') ).each(function( index ) {
+	lista = '<select class="form-control lista"><?=$this->yksikkot("'+ $(this).text() +'")?></select>';
+	$(this).replaceWith('<td class="input_yksikko">'+ lista +'</td>');
+    });
     $( $(this).closest('table').find('.rivintaulu td.input_kpl') ).each(function( index ) {
 	todigit = $(this).text().replace(/\,/g, '.');
 	$(this).replaceWith('<td class="input_kpl"><input type="number" class="form-control" value="'+ todigit +'"></td>');
@@ -432,6 +438,34 @@ $(document).ready(function(){
   });
 
   $(document).delegate(".fa-save","click",function(){
+
+    var tab_array = [];
+    $(this).closest('td').find('.rivintaulu tbody>tr').each(function (i, row) {
+	var tableTds = [];
+        $(this).find("td input,td select").each(function(i, cell){
+            tableTds.push($(cell).val());
+        });
+	if( tableTds.length > 0 ){
+            tab_array.push(tableTds);
+	}
+    });
+    //console.log(tab_array);
+    var aid = $(this).closest('.lahetys_laatikko').attr('aid');
+    $.ajax({
+           url: 'insert_lahete',
+	   type:'POST',
+	   data: { lahete : '<?=$lahete?>', aid : aid, tab_array : tab_array },
+           success: function(data){
+        	console.log(data);
+		if(data['error']){
+	    		window.location.href=location.protocol + "//" + location.host + '/index.php/user/logout';
+		}
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
+    });
+
     $(this).removeClass('fa-save').addClass('fa-edit');
     $(this).closest('td').find('.th_poisto').remove();
     $(this).closest('td').find('.alv_valinta').hide(370);
@@ -443,6 +477,10 @@ $(document).ready(function(){
     $( $(this).closest('table').find('.rivintaulu td.input_hinta') ).find('input').each(function( index ) {
 	todigit = $(this).val().replace(/\./g, ',');
 	$(this).replaceWith('<td class="input_hinta">'+ todigit +'</td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_yksikko') ).find('select').each(function( index ) {
+	todigit = $(this).val();
+	$(this).replaceWith('<td class="input_yksikko">'+ todigit +'</td>');
     });
     $( $(this).closest('table').find('.rivintaulu td.input_kpl') ).find('input').each(function( index ) {
 	todigit = $(this).val().replace(/\./g, ',');
@@ -466,16 +504,17 @@ $(document).ready(function(){
   });
 
   $(document).delegate(".uusirivi","click",function(){
-	$(this).closest('td').find('.rivintaulu').append(''+
+	lista = '<select class="form-control lista"><?=$this->yksikkot(null)?></select>';
+	$(this).closest('td').find('.rivintaulu tbody tr').last().after(''+
 		'<tr>' +
 		'<td class="poisto_td"><i class="link fa fa-2x fa-trash"></i></td>' +
 		'<td class="input_nimike"><input type="text" class="form-control" placeholder="Tuotenimi"></td>' +
 		'<td class="input_hinta"><input type="number" class="form-control" placeholder="Hinta"></td>' +
-		'<td></td>' +
+		'<td class="input_yksikko">'+ lista +'</td>' +
 		'<td class="input_kpl"><input type="number" class="form-control"></td>' +
 		'<td class="input_alv"><input type="number" class="form-control"></td>' +
-		'<td class="input_veroton"><input type="number" class="form-control"></td>' +
-		'<td class="input_yhteensa"><input type="number" class="form-control"></td>' +
+		'<td class="input_veroton"><input type="number" class="form-control" readonly></td>' +
+		'<td class="input_yhteensa"><input type="number" class="form-control" readonly></td>' +
 		'<td class="input_freetext"><input type="text" class="form-control" placeholder="Teksti"></td>' +
 		'</tr>'
 	);
