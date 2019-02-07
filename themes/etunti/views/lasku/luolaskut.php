@@ -139,9 +139,17 @@
 
 		<?php $hyv_lista = $this->hyvaksyttyListaByAsiakas($item->id, $from, $to); ?>
 		<p class="m_icons"><i class="link fa fa-2x fa-edit"></i></p>
+		<div class="row alv_valinta" style="display:none">
+		 <div class="col-sm-3">
+			<p><select class="form-control" class="lasku_alv_muoto">
+			<option value="0">Hinnat ALV 0%</option>
+			<option value="1">Hinnat sis. ALV</option>
+			</select></p>
+		 </div>
+		</div>
 		<table class="table table-striped rivintaulu">
 		<tr>
-		<th>Tuote</th>
+		<th class="th_tuote">Tuote</th>
 		<th>Hinta</th>
 		<th>Yksikkö</th>
 		<th>Määrä</th>
@@ -207,7 +215,7 @@
 	        ?>
 		<?php if( $tp_id != 0 and $laheta == null ) : ?>
 		<tr>
-		<td class="input_text"><?=$nimike?></td>
+		<td class="input_nimike"><?=$nimike?></td>
 		<td class="input_number"><?=number_format($hinta, 2, ',', ' ')?></td>
 		<td class="input_yksikko"><?=$yksikko?></td>
 		<td class="input_number"><?=$kpl?></td>
@@ -278,7 +286,7 @@
 	        ?>
 		<?php if( $tp_id != 0 and $laheta == null ) : ?>
 		<tr>
-		<td class="input_text"><?=$nimike?></td>
+		<td class="input_nimike"><?=$nimike?></td>
 		<td class="input_number"><?=number_format($hinta, 2, ',', ' ')?></td>
 		<td class="input_yksikko"><?=$yksikko?></td>
 		<td class="input_number"><?=$kpl?></td>
@@ -389,10 +397,16 @@ $(document).ready(function(){
 		window.location.href=$(this).attr('href');
 	}
   });
+
   // <-- muokkaus
   $(document).delegate(".fa-edit","click",function(){
     $(this).removeClass('fa-edit').addClass('fa-save');
     $(this).closest('.m_icons').append('<i class="link fa fa-2x fa-plus uusirivi" style="margin-left:10px"></i>');
+    $(this).closest('td').find('.th_tuote').before('<th class="th_poisto"></th>');
+    $(this).closest('td').find('.alv_valinta').show(370);
+    $( $(this).closest('table').find('.rivintaulu td.input_nimike') ).each(function( index ) {
+	$(this).replaceWith('<td class="poisto_td"><i class="link fa fa-2x fa-trash"></i></td><td class="input_nimike"><input type="text" class="form-control" value="'+ $(this).text() +'"></td>');
+    });
     $( $(this).closest('table').find('.rivintaulu td.input_text') ).each(function( index ) {
 	$(this).replaceWith('<td class="input_text"><input type="text" class="form-control" value="'+ $(this).text() +'"></td>');
     });
@@ -404,7 +418,13 @@ $(document).ready(function(){
 
   $(document).delegate(".fa-save","click",function(){
     $(this).removeClass('fa-save').addClass('fa-edit');
+    $(this).closest('td').find('.th_poisto').remove();
+    $(this).closest('td').find('.alv_valinta').hide(370);
     $(this).next('.uusirivi').remove();
+    $( $(this).closest('table').find('.rivintaulu td.input_nimike') ).find('input').each(function( index ) {
+	$(this).closest('tr').find('.poisto_td').remove();
+	$(this).replaceWith('<td class="input_nimike">'+ $(this).val() +'</td>');
+    });
     $( $(this).closest('table').find('.rivintaulu td.input_text') ).find('input').each(function( index ) {
 	$(this).replaceWith('<td class="input_text">'+ $(this).val() +'</td>');
     });
@@ -417,6 +437,7 @@ $(document).ready(function(){
   $(document).delegate(".uusirivi","click",function(){
 	$(this).closest('td').find('.rivintaulu').append(''+
 		'<tr>' +
+		'<td class="poisto_td"><i class="link fa fa-2x fa-trash"></i></td>' +
 		'<td class="input_text"><input type="text" class="form-control" placeholder="Tuotenimi"></td>' +
 		'<td class="input_number"><input type="number" class="form-control" placeholder="Hinta"></td>' +
 		'<td></td>' +
@@ -428,6 +449,54 @@ $(document).ready(function(){
 		'</tr>'
 	);
   });
+
+  $(document).delegate(".fa-trash","click",function(){
+	$(this).closest('tr').remove();
+  });
+
+  function eachLaskenta(){
+
+  var alvsis = $('.lasku_alv_muoto').val();
+  $("#rivit input").each(function() {
+
+	var hinta_alv_0 = 0;
+	var alv = 0;
+	var kpl = 0;
+	var ale = 0;
+
+	var inputKenta = $(this).attr("id").split("_");
+	if($("#hinta_"+inputKenta[1]).val()) { hinta_alv_0 = parseFloat($("#hinta_"+inputKenta[1]).val()) };
+	if($("#alv_"+inputKenta[1]).val()) { alv = parseFloat($("#alv_"+inputKenta[1]).val()) };
+	if($("#kpl_"+inputKenta[1]).val()) { kpl = parseFloat($("#kpl_"+inputKenta[1]).val()) };
+	if($("#ale_"+inputKenta[1]).val()) { ale = parseFloat($("#ale_"+inputKenta[1]).val()) };
+
+
+	inputKenta[1] = parseFloat(inputKenta[1], 10);
+
+	if(ale > 0)
+	hinta_alv_0 = hinta_alv_0-((hinta_alv_0/100)*ale);
+
+	if( alvsis == '0'){
+		var laske = (hinta_alv_0*kpl)/100*alv;
+		var veroton = hinta_alv_0*kpl;
+		var yhteensa = laske+veroton;
+	}
+	if( alvsis == '1'){
+		var yhteensa = hinta_alv_0*kpl;
+		var jakaa = '1.'+alv;
+		var l = yhteensa/parseFloat(jakaa);
+		var veroton = l;
+		var laske = yhteensa-veroton;
+	}
+
+	$("#hinta_alv_"+inputKenta[1]).val(laske.toFixed(2));
+	$("#veroton_"+inputKenta[1]).val(veroton.toFixed(2));
+	$("#yhteensa_alv_"+inputKenta[1]).val(yhteensa.toFixed(2));
+
+  });
+    	yhteensaTotal();
+
+  }
   //     muokkaus -->
 
 });
