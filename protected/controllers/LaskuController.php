@@ -2936,7 +2936,30 @@ $xml .= '
 
 	public function actionInsert_lahete()
 	{
-		print_r($_POST);
+		//echo json_encode(array('ok' => $_POST));
+		//exit;
+
+       		$criteria = new CDbCriteria();
+	        $criteria->condition = " lahete='".$_POST['lahete']."' AND aid='".$_POST['aid']."' ";
+		$m = Autolahetteet::model()->find($criteria);
+		if( isset($m->id) ){
+			$model = $m;
+			$model->tab_array = json_encode($_POST['tab_array']);
+			if(!$model->save()){
+				echo json_encode(array('error' => $model->getErrors()));
+				exit;
+			}
+		} else {
+			$model = new Autolahetteet;
+			$model->lahete = $_POST['lahete'];
+			$model->aid = $_POST['aid'];
+			$model->tab_array = json_encode($_POST['tab_array']);
+			if(!$model->save()){
+				echo json_encode(array('error' => $model->getErrors()));
+				exit;
+			}
+		}
+		echo json_encode(array('ok' => 'ok'));
 		exit;
 	}
 
@@ -3065,14 +3088,23 @@ $xml = '
 
 	  }
 
-	
-
-
 	} // if isset $n[0]
-
-
 
 	}
 
-
+	protected function tuotteetLista($id, $text)
+	{
+		$bod = '';
+		if($id){ $bod .= '<option value="'.$id.'">'.$text.'</option>'; }
+		$criteria = new CDbCriteria();
+       		$criteria->order = " nimike ";
+       		$criteria->condition = " 
+			hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0
+		";
+		$tp = TuotteetPalvelut::model()->findAll($criteria);
+		foreach( $tp as $item){
+			$bod .= '<option value="'.$item->id.'">'.$item->nimike.'</option>';
+		}
+		return $bod;
+	}
 }
