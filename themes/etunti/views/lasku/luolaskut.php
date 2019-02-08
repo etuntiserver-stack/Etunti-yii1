@@ -170,15 +170,18 @@
 		<?php foreach($hyv_lista as $mob) : ?>
 		<?php $key++; ?>
 		<?php
+			$tv_id		= 0;
 			$rivi_kpl 	= 0;
 			$r		= [];
 
 			if( isset($mob->id) ){
+				$tv_id		= $mob->tv_id;
 				$t 		= $this->num(strtotime($mob->loppui)-strtotime($mob->aloitan));
 				$r 		= $this->hinnastoHintaat($mob->tyovuoroot->tuoteID, $item->asiakasnumero, $mob->kohteet, $t, $rivi_kpl);
 			}
 			if( isset($r['tp_id']) ){ $tp_id = $r['tp_id'];	}
 			if( isset($mob['tp_id']) ){ $tp_id = $mob['tp_id']; }
+			if( isset($mob['tv_id']) ){ $tv_id = $mob['tv_id']; }
 			if( isset($r['tp_nimike']) ){ $nimike = $r['tp_nimike']; }
 			if( isset($mob['nimike']) ){ $nimike = $mob['nimike']; }
 			if( isset($r['kpl']) ){ $kpl = $r['kpl']; }
@@ -233,7 +236,7 @@
 	        ?>
 		<?php if( $tp_id != 0 and $laheta == null ) : ?>
 		<tr>
-		<td class="input_nimike" tp_id="<?=$tp_id?>"><?=$nimike?></td>
+		<td class="input_nimike" tp_id="<?=$tp_id?>" tv_id="<?=$tv_id?>"><?=$nimike?></td>
 		<td class="input_hinta"><?=number_format($hinta, 2, ',', ' ')?></td>
 		<td class="input_yksikko"><?=$yksikko?></td>
 		<td class="input_kpl"><?=$kpl?></td>
@@ -305,7 +308,7 @@
 	        ?>
 		<?php if( $tp_id != 0 and $laheta == null ) : ?>
 		<tr>
-		<td class="input_nimike" tp_id="<?=$tp_id?>"><?=$nimike?></td>
+		<td class="input_nimike" tp_id="<?=$tp_id?>" tv_id="<?=$tv_id?>"><?=$nimike?></td>
 		<td class="input_hinta"><?=number_format($hinta, 2, ',', ' ')?></td>
 		<td class="input_yksikko"><?=$yksikko?></td>
 		<td class="input_kpl"><?=$kpl?></td>
@@ -324,8 +327,8 @@
 		<!-- / Lisatuote -->
 
 		<!-- Update tyovuoro -->
-		<?php if( $is_ok_lasku and $laheta !== null and isset($lasku->id) and $mob->tv_id > 0 ){
-			$tl = Tyovuoroot::model()->findByPk($mob->tv_id);
+		<?php if( $is_ok_lasku and $laheta !== null and isset($lasku->id) and $tv_id > 0 ){
+			$tl = Tyovuoroot::model()->findByPk($tv_id);
 			if( isset($tl->id) ){
 			   Tyovuoroot::model()->updateByPk($tl->id, array('lasku_id' => $lasku->id));
 			}
@@ -427,11 +430,15 @@ $(document).ready(function(){
 		'<tr>' +
 		'<td class="poisto_td"><i class="link fa fa-2x fa-trash"></i></td>' +
 		'<td class="input_nimike">' +
-		'<select class="form-control tuotelista"><?=$this->tuotteetLista("", "")?></select>' +
+		'<div class="row"><div class="col-sm-2">' +
+		'<select class="form-control tuotelista"><option value=></option><?=$this->tuotteetLista("", "")?></select>' +
+		'</div><div class="col-sm-10">' +
+		'<input type="text" name="nimike" class="form-control">' +
+		'</div>' +
 		'</td>' +
 		'<td class="input_hinta"><input type="number" name="hinta" class="form-control" placeholder="Hinta"></td>' +
 		'<td class="input_yksikko">'+ lista +'</td>' +
-		'<td class="input_kpl"><input type="number" name="kpl" class="form-control"></td>' +
+		'<td class="input_kpl"><input type="number" name="kpl" class="form-control" value="1"></td>' +
 		'<td class="input_alv"><input type="number" name="alv" class="form-control"></td>' +
 		'<td class="input_veroton"><input type="number" name="veroton"  class="form-control" readonly></td>' +
 		'<td class="input_yhteensa"><input type="number" name="yhteensa" class="form-control" readonly></td>' +
@@ -453,6 +460,7 @@ $(document).ready(function(){
 		//console.log(data)
 		if(sp['id'])
 		{
+			thisTD.attr('tp_id', sp['id']);
 			thisTD.find('input').val(sp['tuotenimi']);
 			thisTR.find('input[name=hinta]').val(sp['hinta_alv_0']);
 			thisTR.find('input[name=yksikko]').val(sp['yksikko']);
@@ -471,7 +479,7 @@ $(document).ready(function(){
     $( $(this).closest('table').find('.rivintaulu td.input_nimike') ).each(function( index ) {
 	$(this).replaceWith('' +
 		'<td class="poisto_td"><i class="link fa fa-2x fa-trash"></i></td>' +
-		'<td class="input_nimike" tp_id="'+ $(this).attr('tp_id') +'">' + 
+		'<td class="input_nimike" tp_id="'+ $(this).attr('tp_id') +'" tv_id="'+ $(this).attr('tv_id') +'">' + 
 		'<div class="row"><div class="col-sm-2">' +
 		'<select class="form-control tuotelista"><?=$this->tuotteetLista("'+ $(this).attr('tp_id') +'", "'+ $(this).text() +'")?></select>' +
 		'</div><div class="col-sm-10">' +
@@ -517,7 +525,8 @@ $(document).ready(function(){
         $(this).find("td input,td select").each(function(i, cell){
 	    if( $(cell).hasClass('tuotelista') ){
            	tableTds['tp_id'] = $('option:selected', cell).val();
-           	tableTds['nimike'] = $('option:selected', cell).text();
+           	tableTds['tv_id'] = $(cell).closest('td').attr('tv_id');
+           	tableTds['nimike'] = $(cell).closest('td').find('input[name=nimike]').val();
 	    } else {
 		cell_name = $(cell).attr('name');
            	tableTds[cell_name] = $(cell).val();
@@ -532,6 +541,7 @@ $(document).ready(function(){
     var asiakas_id = $(this).closest('.lahetys_laatikko').attr('asiakas_id');
     var from = $(this).closest('.lahetys_laatikko').attr('from');
     var to = $(this).closest('.lahetys_laatikko').attr('to');
+
     $.ajax({
            url: 'insert_lahete',
 	   type:'POST',
@@ -551,9 +561,10 @@ $(document).ready(function(){
     $(this).closest('td').find('.th_poisto').remove();
     $(this).closest('td').find('.alv_valinta').hide(370);
     $(this).next('.uusirivi').remove();
-    $( $(this).closest('table').find('.rivintaulu td.input_nimike') ).find('select').each(function( index ) {
+    $( $(this).closest('table').find('.rivintaulu td.input_nimike') ).find('input').each(function( index ) {
 	$(this).closest('tr').find('.poisto_td').remove();
-	$(this).replaceWith($('option:selected', this).text());
+	$(this).closest('td').find('select').remove();
+	$(this).closest('td').replaceWith('<td class="input_nimike" tp_id="'+ $(this).closest('td').attr('tp_id') +'" tv_id="'+ $(this).closest('td').attr('tv_id') +'">'+ $(this).val()+ '</td>');
     });
     $( $(this).closest('table').find('.rivintaulu td.input_hinta') ).find('input').each(function( index ) {
 	todigit = $(this).val().replace(/\./g, ',');
@@ -627,6 +638,8 @@ $(document).ready(function(){
 
   $(document).delegate(".fa-trash","click",function(){
 	$(this).closest('tr').remove();
+	$('.input_alv input').change();
+	return false;
   });
   //     muokkaus -->
 
