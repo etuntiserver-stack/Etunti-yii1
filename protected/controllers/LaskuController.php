@@ -121,11 +121,10 @@ class LaskuController extends Controller
 		exit;
 	}
 
-	public function actionLuolaskut($lahete=null, $from, $to, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null)
+	public function actionLuolaskut($from, $to, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null)
 	{
 		$asetukset = Asetukset::model()->findByPk(1);
 		$paivays = date("Y-m-d", strtotime($paivays));
-		if(isset($_GET['lahete'])){ $lahete = $_GET['lahete']; }
        		$criteria = new CDbCriteria();
 	        //$criteria->order = " id DESC ";
 	        $criteria->condition = " 
@@ -173,7 +172,6 @@ class LaskuController extends Controller
 		$this->render('luolaskut', array(
 			'asetukset' => $asetukset,
 			'lista' => $lista,
-			'lahete' => $lahete,
 			'from' => $from,
 			'to' => $to,
 			'paivays' => $paivays,
@@ -2940,7 +2938,7 @@ $xml .= '
 		//exit;
 
        		$criteria = new CDbCriteria();
-	        $criteria->condition = " lahete='".$_POST['lahete']."' AND aid='".$_POST['aid']."' ";
+	        $criteria->condition = " from_date='".$_POST['from']."' AND to_date='".$_POST['to']."' AND asiakas_id='".$_POST['asiakas_id']."' ";
 		$m = Autolahetteet::model()->find($criteria);
 		if( isset($m->id) ){
 			$model = $m;
@@ -2951,8 +2949,10 @@ $xml .= '
 			}
 		} else {
 			$model = new Autolahetteet;
-			$model->lahete = $_POST['lahete'];
-			$model->aid = $_POST['aid'];
+			$model->asiakas_id = $_POST['asiakas_id'];
+			$model->adm_id = Yii::app()->user->id;
+			$model->from_date = $_POST['from'];
+			$model->to_date = $_POST['to'];
 			$model->tab_array = json_encode($_POST['tab_array']);
 			if(!$model->save()){
 				echo json_encode(array('error' => $model->getErrors()));

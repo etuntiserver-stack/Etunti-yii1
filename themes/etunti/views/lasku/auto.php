@@ -74,7 +74,6 @@
 	    </form>
 
    	    <form id="mobForm" action="luolaskut" class="form-inline" method="GET">
-	    <input type="hidden" name="lahete" value="<?=Yii::app()->user->id.'_'.time()?>">
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body">
