@@ -142,7 +142,7 @@
 		if( isset($al->id) and is_array(json_decode($al->tab_array, true)) ){
 			$hyv_lista = json_decode($al->tab_array, true);
 		} else {
-			$hyv_lista = $this->hyvaksyttyListaByAsiakas($item->id, $from, $to);
+			$hyv_lista = $this->hyvaksyttyListaByAsiakas($item->id, $from, $to, $tunnit);
 		}
 		?>
 		<p class="m_icons"><i class="link fa fa-2x fa-edit"></i></p>
@@ -174,13 +174,20 @@
 			$rivi_kpl 	= 0;
 			$r		= [];
 
-			if( isset($mob->id) ){
+			if( isset($mob->tv_id) ){
 				$tv_id		= $mob->tv_id;
 				$t 		= $this->num(strtotime($mob->loppui)-strtotime($mob->aloitan));
 				$r 		= $this->hinnastoHintaat($mob->tyovuoroot->tuoteID, $item->asiakasnumero, $mob->kohteet, $t, $rivi_kpl);
 			}
+			if( isset($mob->kohde) ){
+				$tv_id		= $mob->id;
+				$t 		= $this->num(strtotime($mob->loppu)-strtotime($mob->alku));
+				$r 		= $this->hinnastoHintaat($mob->tuoteID, $item->asiakasnumero, $mob->kohteet, $t, $rivi_kpl);
+			}
+
 			if( isset($r['tp_id']) ){ $tp_id = $r['tp_id'];	}
-			if( isset($mob['tp_id']) ){ $tp_id = $mob['tp_id']; }
+			if( isset($mob['tp_id']) ){ $tp_id = $mob['tp_id']; } // jos autolahetteet
+			if( isset($mob->tuoteID) ){ $tp_id = $mob->tuoteID; }
 			if( isset($mob['tv_id']) ){ $tv_id = $mob['tv_id']; }
 			if( isset($r['tp_nimike']) ){ $nimike = $r['tp_nimike']; }
 			if( isset($mob['nimike']) ){ $nimike = $mob['nimike']; }
@@ -194,6 +201,7 @@
 			if( isset($mob['yksikko']) ){ $yksikko = $mob['yksikko']; }
 			if( isset($mob->kohde_kannasta) ){ $freetext = $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan)); }
 			if( isset($mob['freetext']) ){ $freetext = $mob['freetext']; }
+			if( isset($mob->kohde) and isset($mob->kohteet->osoite) ){ $freetext = $mob->kohteet->osoite.' - '.$mob->pvm; } //TV
 
 			// <-- ALV laskin
 			$veroton 	= 0;
@@ -249,14 +257,29 @@
 
 		<!-- Lisatuote -->
 		<?php if( isset($mob->id) ) : ?>
-		<?php $lisa_tuotteet = json_decode($mob->tyovuoroot->lisa_tuotteet, true); ?>
+		<?php 
+			if( isset($mob->tv_id)){
+				$lisa_tuotteet = json_decode($mob->tyovuoroot->lisa_tuotteet, true); //MOB
+			}
+			if( isset($mob->kohde)){
+				$lisa_tuotteet = json_decode($mob->lisa_tuotteet, true); //TV
+			}
+		?>
 		<?php if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote']) ) : ?>
 		<?php foreach($lisa_tuotteet['tuote'] as $k => $v) : ?>
 		<?php $key++; ?>
 		<?php
-			if( isset($tp_lisatuotteet[$mob->tyovuoroot->tyopaari][$mob->tyovuoroot->pvm][$v]) ){ continue; }
-			$t 		= json_decode($mob->tyovuoroot->lisa_tuotteet, true)['maara'][$k];
-			$rivi_kpl 	= json_decode($mob->tyovuoroot->lisa_tuotteet, true)['maara'][$k];
+			if( isset($mob->tv_id) and isset($tp_lisatuotteet[$mob->tyovuoroot->tyopaari][$mob->tyovuoroot->pvm][$v]) ){ continue; }
+			if( isset($mob->kohde) and isset($tp_lisatuotteet[$mob->tyopaari][$mob->pvm][$v]) ){ continue; }
+
+			if( isset($mob->tv_id)){
+				$t 		= json_decode($mob->tyovuoroot->lisa_tuotteet, true)['maara'][$k];
+				$rivi_kpl 	= json_decode($mob->tyovuoroot->lisa_tuotteet, true)['maara'][$k]; //MOB
+			}
+			if( isset($mob->tv_id)){
+				$t 		= json_decode($mob->lisa_tuotteet, true)['maara'][$k];
+				$rivi_kpl 	= json_decode($mob->lisa_tuotteet, true)['maara'][$k]; // TV
+			}
 			$r		= [];
 			$r 		= $this->hinnastoHintaat($v, $item->asiakasnumero, $mob->kohteet, $t, $rivi_kpl);
 			$tp_id		= (( isset($r['tp_id']) )? $r['tp_id']:0);
@@ -265,7 +288,8 @@
 			$hinta 		= (( isset($r['hinta']) )? $r['hinta']:0);
 			$alv 		= (( isset($r['alv']) )? $r['alv']:0);
 			$yksikko	= (( isset($r['yksikko']) )? $r['yksikko']:'');
-			$freetext	= $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan));
+			if( isset($mob->kohde_kannasta) ){ $freetext = $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan)); }
+			if( isset($mob->kohde) and isset($mob->kohteet->osoite) ){ $freetext = $mob->kohteet->osoite.' - '.$mob->pvm; } //TV
 
 			// <-- ALV laskin
 			$veroton 	= 0;
