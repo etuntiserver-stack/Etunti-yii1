@@ -30,6 +30,10 @@ class LaskuController extends Controller
 				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('insert_lahete'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdminNoTas()",
+			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote', 'hyvityslasku'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
@@ -59,6 +63,20 @@ class LaskuController extends Controller
 		} else {
 			$this->redirect(array('/site/otakaytoon', 'tila' => 'lasku'));
 		}
+	}
+
+	public function isEtuntiAdminNoTas() {
+		if(!isset(Yii::app()->user->adminID)){
+			echo json_encode(array('error'=>'Kirjautuminen vaaditaan!'));
+			exit;
+		}
+		if(isset(Yii::app()->user->adminID)){
+			$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	       		if(isset($m->id) and $m->id == Yii::app()->user->adminID){
+				return true;
+			}
+		}
+		return false;
 	}
 
         public function init()
@@ -1091,10 +1109,8 @@ class LaskuController extends Controller
 
 	public function yksikkot($row){
 		$body = '';
-		if($row)
-		$body .= '<option value="'.$row.'">'.$row.' kpl</option>';
+		if($row){ $body .= '<option value="'.$row.'">'.$row.'</option>'; }
 	
-
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='laskutus_yksikko' ",array('order' => "select_type"));
 
@@ -2916,6 +2932,36 @@ $xml .= '
 		return $bod;
 	}
 
+	public function actionInsert_lahete()
+	{
+		//echo json_encode(array('ok' => $_POST));
+		//exit;
+
+       		$criteria = new CDbCriteria();
+	        $criteria->condition = " from_date='".$_POST['from']."' AND to_date='".$_POST['to']."' AND asiakas_id='".$_POST['asiakas_id']."' ";
+		$m = Autolahetteet::model()->find($criteria);
+		if( isset($m->id) ){
+			$model = $m;
+			$model->tab_array = json_encode($_POST['tab_array']);
+			if(!$model->save()){
+				echo json_encode(array('error' => $model->getErrors()));
+				exit;
+			}
+		} else {
+			$model = new Autolahetteet;
+			$model->asiakas_id = $_POST['asiakas_id'];
+			$model->adm_id = Yii::app()->user->id;
+			$model->from_date = $_POST['from'];
+			$model->to_date = $_POST['to'];
+			$model->tab_array = json_encode($_POST['tab_array']);
+			if(!$model->save()){
+				echo json_encode(array('error' => $model->getErrors()));
+				exit;
+			}
+		}
+		echo json_encode(array('ok' => 'ok'));
+		exit;
+	}
 
 	protected function netvisorProductDefault()
 	{
@@ -3042,14 +3088,23 @@ $xml = '
 
 	  }
 
-	
-
-
 	} // if isset $n[0]
-
-
 
 	}
 
-
+	protected function tuotteetLista($id, $text)
+	{
+		$bod = '';
+		if($id){ $bod .= '<option value="'.$id.'">'.$text.'</option>'; }
+		$criteria = new CDbCriteria();
+       		$criteria->order = " nimike ";
+       		$criteria->condition = " 
+			hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0
+		";
+		$tp = TuotteetPalvelut::model()->findAll($criteria);
+		foreach( $tp as $item){
+			$bod .= '<option value="'.$item->id.'">'.$item->nimike.'</option>';
+		}
+		return $bod;
+	}
 }

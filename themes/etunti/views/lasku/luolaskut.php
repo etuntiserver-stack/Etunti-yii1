@@ -37,16 +37,15 @@
 <p>
 <div class="container-fluid">
 	<?php if( count($lista) > 0 ): ?>
-	<table class="table table-bordered">
+	<table class="table table-bordered paa_taulu">
 	<tr>
-	<th>Asiakas</th>
 	<th>Laskutuksen tiedot</th>
 	<th>Laskutuksen rivit</th>
 	</tr>
 	<?php foreach($lista as $item) : ?>
 	<tr>
-	<td><h3><?=$item->Fullname?></h3></td>
-	<td>
+	<td width="17%">
+	<h3><?=$item->Fullname?></h3>
 	<?php
 	$yhteensa_total_veroton	= 0;
 	$yhteensa_total	= 0;
@@ -87,8 +86,7 @@
 	 </div>
 	</div>
 	</td>
-	<td>
-
+	<td class="lahetys_laatikko" asiakas_id="<?=$item->id?>" asiakasnumero="<?=$item->asiakasnumero?>" from="<?=$from?>" to="<?=$to?>">
 
 	<!-- Lahetys Pää lasku -->
 	<?php if( $is_ok_lasku and $laheta !== null ){
@@ -137,33 +135,65 @@
 	} ?>
 	<!-- / Lahetys -->
 
-		<?php $hyv_lista = $this->hyvaksyttyListaByAsiakas($item->id, $from, $to); ?>
-		<table class="table table-striped">
+		<?php
+		$criteria = new CDbCriteria();
+		$criteria->condition = " from_date='".$from."' AND to_date='".$to."' AND asiakas_id='".$item->id."' ";
+		$al = Autolahetteet::model()->find($criteria);
+		if( isset($al->id) and is_array(json_decode($al->tab_array, true)) ){
+			$hyv_lista = json_decode($al->tab_array, true);
+		} else {
+			$hyv_lista = $this->hyvaksyttyListaByAsiakas($item->id, $from, $to);
+		}
+		?>
+		<p class="m_icons"><i class="link fa fa-2x fa-edit"></i></p>
+		<div class="row alv_valinta" style="display:none">
+		 <div class="col-sm-3">
+			<p><select class="form-control lasku_alv_muoto">
+			<option value="0">Hinnat ALV 0%</option>
+			<option value="1">Hinnat sis. ALV</option>
+			</select></p>
+		 </div>
+		</div>
+		<table class="table table-striped rivintaulu">
 		<tr>
-		<th width="100">Tuote</th>
-		<th width="10">Hinta</th>
-		<th width="10">Yksikkö</th>
-		<th width="10">Määrä</th>
-		<th width="10">ALV</th>
-		<th width="10">Veroton</th>
-		<th width="10">Yhteensä</th>
+		<th class="th_tuote">Tuote</th>
+		<th>Hinta</th>
+		<th width="90">Yksikkö</th>
+		<th>Määrä</th>
+		<th>ALV</th>
+		<th>Veroton</th>
+		<th>Yhteensä</th>
 		<th>Free text</th>
 		</tr>
+		<tbody>
 		<?php $key = 0; ?>
 		<?php foreach($hyv_lista as $mob) : ?>
 		<?php $key++; ?>
 		<?php
-			$t 		= $this->num(strtotime($mob->loppui)-strtotime($mob->aloitan));
+			$tv_id		= 0;
 			$rivi_kpl 	= 0;
 			$r		= [];
-			$r 		= $this->hinnastoHintaat($mob->tyovuoroot->tuoteID, $item->asiakasnumero, $mob->kohteet, $t, $rivi_kpl);
-			$tp_id		= (( isset($r['tp_id']) )? $r['tp_id']:0);
-			$nimike		= (( isset($r['tp_nimike']) )? $r['tp_nimike']:'');
-			$kpl 		= (( isset($r['kpl']) )? $r['kpl']:0);
-			$hinta 		= (( isset($r['hinta']) )? $r['hinta']:0);
-			$alv 		= (( isset($r['alv']) )? $r['alv']:0);
-			$yksikko	= (( isset($r['yksikko']) )? $r['yksikko']:'');
-			$freetext	= $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan));
+
+			if( isset($mob->id) ){
+				$tv_id		= $mob->tv_id;
+				$t 		= $this->num(strtotime($mob->loppui)-strtotime($mob->aloitan));
+				$r 		= $this->hinnastoHintaat($mob->tyovuoroot->tuoteID, $item->asiakasnumero, $mob->kohteet, $t, $rivi_kpl);
+			}
+			if( isset($r['tp_id']) ){ $tp_id = $r['tp_id'];	}
+			if( isset($mob['tp_id']) ){ $tp_id = $mob['tp_id']; }
+			if( isset($mob['tv_id']) ){ $tv_id = $mob['tv_id']; }
+			if( isset($r['tp_nimike']) ){ $nimike = $r['tp_nimike']; }
+			if( isset($mob['nimike']) ){ $nimike = $mob['nimike']; }
+			if( isset($r['kpl']) ){ $kpl = $r['kpl']; }
+			if( isset($mob['kpl']) ){ $kpl = $mob['kpl']; }
+			if( isset($r['hinta']) ){ $hinta = $r['hinta']; }
+			if( isset($mob['hinta']) ){ $hinta = $mob['hinta']; }
+			if( isset($r['alv']) ){ $alv = $r['alv']; }
+			if( isset($mob['alv']) ){ $alv = $mob['alv']; }
+			if( isset($r['yksikko']) ){ $yksikko = $r['yksikko']; }
+			if( isset($mob['yksikko']) ){ $yksikko = $mob['yksikko']; }
+			if( isset($mob->kohde_kannasta) ){ $freetext = $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan)); }
+			if( isset($mob['freetext']) ){ $freetext = $mob['freetext']; }
 
 			// <-- ALV laskin
 			$veroton 	= 0;
@@ -206,18 +236,19 @@
 	        ?>
 		<?php if( $tp_id != 0 and $laheta == null ) : ?>
 		<tr>
-		<td><?=$nimike?></td>
-		<td><?=number_format($hinta, 2, ',', ' ')?></td>
-		<td><?=$yksikko?></td>
-		<td><?=$kpl?></td>
-		<td><?=$alv?></td>
-		<td><?=number_format($veroton, 2, ',', ' ')?></td>
-		<td><?=number_format($yht, 2, ',', ' ')?></td>
-		<td><?=$freetext?></td>
+		<td class="input_nimike" tp_id="<?=$tp_id?>" tv_id="<?=$tv_id?>"><?=$nimike?></td>
+		<td class="input_hinta"><?=number_format($hinta, 2, ',', ' ')?></td>
+		<td class="input_yksikko"><?=$yksikko?></td>
+		<td class="input_kpl"><?=$kpl?></td>
+		<td class="input_alv"><?=$alv?></td>
+		<td class="input_veroton"><?=number_format($veroton, 2, ',', ' ')?></td>
+		<td class="input_yhteensa"><?=number_format($yht, 2, ',', ' ')?></td>
+		<td class="input_freetext"><?=$freetext?></td>
 		</tr>
 		<?php endif; ?>
 
 		<!-- Lisatuote -->
+		<?php if( isset($mob->id) ) : ?>
 		<?php $lisa_tuotteet = json_decode($mob->tyovuoroot->lisa_tuotteet, true); ?>
 		<?php if( isset($lisa_tuotteet['tuote']) and is_array($lisa_tuotteet['tuote']) ) : ?>
 		<?php foreach($lisa_tuotteet['tuote'] as $k => $v) : ?>
@@ -277,14 +308,14 @@
 	        ?>
 		<?php if( $tp_id != 0 and $laheta == null ) : ?>
 		<tr>
-		<td><?=$nimike?></td>
-		<td><?=number_format($hinta, 2, ',', ' ')?></td>
-		<td><?=$yksikko?></td>
-		<td><?=$kpl?></td>
-		<td><?=$alv?></td>
-		<td><?=number_format($veroton, 2, ',', ' ')?></td>
-		<td><?=number_format($yht, 2, ',', ' ')?></td>
-		<td><?=$freetext?></td>
+		<td class="input_nimike" tp_id="<?=$tp_id?>" tv_id="<?=$tv_id?>"><?=$nimike?></td>
+		<td class="input_hinta"><?=number_format($hinta, 2, ',', ' ')?></td>
+		<td class="input_yksikko"><?=$yksikko?></td>
+		<td class="input_kpl"><?=$kpl?></td>
+		<td class="input_alv"><?=$alv?></td>
+		<td class="input_veroton"><?=number_format($veroton, 2, ',', ' ')?></td>
+		<td class="input_yhteensa"><?=number_format($yht, 2, ',', ' ')?></td>
+		<td class="input_freetext"><?=$freetext?></td>
 		</tr>
 		<?php endif; ?>
 		<?php if( isset($mob->tyovuoroot) and is_array(json_decode($mob->tyovuoroot->tyopaari, true))){
@@ -292,17 +323,19 @@
 		} ?>
 		<?php endforeach; ?>
 		<?php endif; ?>
+		<?php endif; ?>
 		<!-- / Lisatuote -->
 
 		<!-- Update tyovuoro -->
-		<?php if( $is_ok_lasku and $laheta !== null and isset($lasku->id) and $mob->tv_id > 0 ){
-			$tl = Tyovuoroot::model()->findByPk($mob->tv_id);
+		<?php if( $is_ok_lasku and $laheta !== null and isset($lasku->id) and $tv_id > 0 ){
+			$tl = Tyovuoroot::model()->findByPk($tv_id);
 			if( isset($tl->id) ){
 			   Tyovuoroot::model()->updateByPk($tl->id, array('lasku_id' => $lasku->id));
 			}
 		} ?>
 		<!-- / Update tyovuoro -->
 		<?php endforeach; ?>
+		</tbody>
 		</table>
 	</td>
 	</tr>
@@ -358,8 +391,9 @@
 			); 
 		?>
 		</th>
-		<th><div class="text-right"><h3><?=Yii::t('main', 'Yhteensä')?></h3></div></th>
-		<th><div class="text-left"><h3><?=number_format($yhteensa_total, 2, ',', ' ')?>&euro;</h3></div></th>
+		<th>
+		    <h3><?=Yii::t('main', 'Yhteensä')?>: <span class="yhteensa_last"><?=number_format($yhteensa_total, 2, ',', ' ')?></span>&euro;</h3>
+		</th>
 	<?php else: ?>
 		<tr><th><button class="btn btn-block btn-danger">Lasku ei mennyt läpi</button></th></tr>
 	<?php endif; ?>
@@ -388,6 +422,226 @@ $(document).ready(function(){
 		window.location.href=$(this).attr('href');
 	}
   });
+
+  // <-- muokkaus
+  $(document).delegate(".uusirivi","click",function(){
+	lista = '<select class="form-control lista" name="yksikko" ><?=$this->yksikkot(null)?></select>';
+	$(this).closest('td').find('.rivintaulu tbody tr').last().after(''+
+		'<tr>' +
+		'<td class="poisto_td"><i class="link fa fa-2x fa-trash"></i></td>' +
+		'<td class="input_nimike">' +
+		'<div class="row"><div class="col-sm-2">' +
+		'<select class="form-control tuotelista"><option value=></option><?=$this->tuotteetLista("", "")?></select>' +
+		'</div><div class="col-sm-10">' +
+		'<input type="text" name="nimike" class="form-control">' +
+		'</div>' +
+		'</td>' +
+		'<td class="input_hinta"><input type="number" name="hinta" class="form-control" placeholder="Hinta"></td>' +
+		'<td class="input_yksikko">'+ lista +'</td>' +
+		'<td class="input_kpl"><input type="number" name="kpl" class="form-control" value="1"></td>' +
+		'<td class="input_alv"><input type="number" name="alv" class="form-control"></td>' +
+		'<td class="input_veroton"><input type="number" name="veroton"  class="form-control" readonly></td>' +
+		'<td class="input_yhteensa"><input type="number" name="yhteensa" class="form-control" readonly></td>' +
+		'<td class="input_freetext"><input type="text" name="freetext" class="form-control" placeholder="Teksti"></td>' +
+		'</tr>'
+	);
+  });
+
+  $(document).delegate(".tuotelista","change",function(){
+    var thisTR = $(this).closest('tr');
+    var thisTD = $(this).closest('td');
+    var asiakasnumero = $(this).closest('.lahetys_laatikko').attr('asiakasnumero');
+    $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/lasku/valitsetuote',
+           type: "POST",
+           data: { tuoteID : $('option:selected', this).val(), asiakas_nro : asiakasnumero },
+           success: function(data){
+		var sp = JSON.parse(data);
+		//console.log(data)
+		if(sp['id'])
+		{
+			thisTD.attr('tp_id', sp['id']);
+			thisTD.find('input').val(sp['tuotenimi']);
+			thisTR.find('input[name=hinta]').val(sp['hinta_alv_0']);
+			thisTR.find('input[name=yksikko]').val(sp['yksikko']);
+			thisTR.find('input[name=alv]').val(sp['alv']).change();
+		}
+
+           }
+    });
+  });
+
+  $(document).delegate(".fa-edit","click",function(){
+    $(this).removeClass('fa-edit').addClass('fa-save');
+    $(this).closest('.m_icons').append('<i class="link fa fa-2x fa-plus uusirivi" style="margin-left:10px"></i>');
+    $(this).closest('td').find('.th_tuote').before('<th class="th_poisto"></th>');
+    $(this).closest('td').find('.alv_valinta').show(370);
+    $( $(this).closest('table').find('.rivintaulu td.input_nimike') ).each(function( index ) {
+	$(this).replaceWith('' +
+		'<td class="poisto_td"><i class="link fa fa-2x fa-trash"></i></td>' +
+		'<td class="input_nimike" tp_id="'+ $(this).attr('tp_id') +'" tv_id="'+ $(this).attr('tv_id') +'">' + 
+		'<div class="row"><div class="col-sm-2">' +
+		'<select class="form-control tuotelista"><?=$this->tuotteetLista("'+ $(this).attr('tp_id') +'", "'+ $(this).text() +'")?></select>' +
+		'</div><div class="col-sm-10">' +
+		'<input type="text" name="nimike" class="form-control" value="'+ $(this).text() +'">' +
+		'</div>' +
+		'</td>'
+	);
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_hinta') ).each(function( index ) {
+	todigit = $(this).text().replace(/\,/g, '.');
+	$(this).replaceWith('<td class="input_hinta" width="110"><input type="number" name="hinta" class="form-control" value="'+ todigit +'"></td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_yksikko') ).each(function( index ) {
+	lista = '<select class="form-control lista" name="yksikko"><?=$this->yksikkot("'+ $(this).text() +'")?></select>';
+	$(this).replaceWith('<td class="input_yksikko">'+ lista +'</td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_kpl') ).each(function( index ) {
+	todigit = $(this).text().replace(/\,/g, '.');
+	$(this).replaceWith('<td class="input_kpl" width="100"><input type="number" name="kpl" class="form-control" value="'+ todigit +'"></td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_alv') ).each(function( index ) {
+	todigit = $(this).text().replace(/\,/g, '.');
+	$(this).replaceWith('<td class="input_alv" width="100"><input type="number" name="alv" class="form-control" value="'+ todigit +'"></td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_veroton') ).each(function( index ) {
+	todigit = $(this).text().replace(/\,/g, '.');
+	$(this).replaceWith('<td class="input_veroton" width="100"><input type="number" name="veroton" class="form-control" value="'+ todigit +'" readonly></td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_yhteensa') ).each(function( index ) {
+	todigit = $(this).text().replace(/\,/g, '.');
+	$(this).replaceWith('<td class="input_yhteensa" width="100"><input type="number" name="yhteensa" class="form-control" value="'+ todigit +'" readonly></td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_freetext') ).each(function( index ) {
+	$(this).replaceWith('<td class="input_freetext"><input type="text" name="freetext" class="form-control" value="'+ $(this).text() +'"></td>');
+    });
+  });
+
+  $(document).delegate(".fa-save","click",function(){
+
+    var tab_array = [];
+    $(this).closest('td').find('.rivintaulu tbody>tr').each(function (i, row) {
+	var tableTds = {};
+        $(this).find("td input,td select").each(function(i, cell){
+	    if( $(cell).hasClass('tuotelista') ){
+           	tableTds['tp_id'] = $('option:selected', cell).val();
+           	tableTds['tv_id'] = $(cell).closest('td').attr('tv_id');
+           	tableTds['nimike'] = $(cell).closest('td').find('input[name=nimike]').val();
+	    } else {
+		cell_name = $(cell).attr('name');
+           	tableTds[cell_name] = $(cell).val();
+	    }
+        });
+	if( tableTds['tp_id'] ){
+            tab_array.push(tableTds);
+	}
+    });
+    console.log(tab_array);
+
+    var asiakas_id = $(this).closest('.lahetys_laatikko').attr('asiakas_id');
+    var from = $(this).closest('.lahetys_laatikko').attr('from');
+    var to = $(this).closest('.lahetys_laatikko').attr('to');
+
+    $.ajax({
+           url: 'insert_lahete',
+	   type:'POST',
+	   data: { asiakas_id : asiakas_id, from : from, to : to, tab_array : tab_array },
+           success: function(data){
+        	console.log(data);
+		if(data['error']){
+	    		window.location.href=location.protocol + "//" + location.host + '/index.php/user/logout';
+		}
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
+    });
+
+    $(this).removeClass('fa-save').addClass('fa-edit');
+    $(this).closest('td').find('.th_poisto').remove();
+    $(this).closest('td').find('.alv_valinta').hide(370);
+    $(this).next('.uusirivi').remove();
+    $( $(this).closest('table').find('.rivintaulu td.input_nimike') ).find('input').each(function( index ) {
+	$(this).closest('tr').find('.poisto_td').remove();
+	$(this).closest('td').find('select').remove();
+	$(this).closest('td').replaceWith('<td class="input_nimike" tp_id="'+ $(this).closest('td').attr('tp_id') +'" tv_id="'+ $(this).closest('td').attr('tv_id') +'">'+ $(this).val()+ '</td>');
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_hinta') ).find('input').each(function( index ) {
+	todigit = $(this).val().replace(/\./g, ',');
+	$(this).replaceWith(todigit);
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_yksikko') ).find('select').each(function( index ) {
+	todigit = $(this).val();
+	$(this).replaceWith(todigit);
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_kpl') ).find('input').each(function( index ) {
+	todigit = $(this).val().replace(/\./g, ',');
+	$(this).replaceWith(todigit);
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_alv') ).find('input').each(function( index ) {
+	todigit = $(this).val().replace(/\./g, ',');
+	$(this).replaceWith(todigit);
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_veroton') ).find('input').each(function( index ) {
+	todigit = $(this).val().replace(/\./g, ',');
+	$(this).replaceWith(todigit);
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_yhteensa') ).find('input').each(function( index ) {
+	todigit = $(this).val().replace(/\./g, ',');
+	$(this).replaceWith(todigit);
+    });
+    $( $(this).closest('table').find('.rivintaulu td.input_freetext') ).find('input').each(function( index ) {
+	$(this).replaceWith($(this).val());
+    });
+  });
+
+  $(document).delegate("input[type=number]","keyup change paste",function(){
+  	var alvsis = parseInt($(this).closest('.lahetys_laatikko').find('.lasku_alv_muoto').val());
+	var hinta_alv_0 = 0;
+	var alv = 0;
+	var kpl = 0;
+	var laske = 0;
+	var veroton = 0;
+	var yhteensa = 0;
+	var yhteensa_last = 0;
+
+	if(isNaN(parseFloat($(this).closest('tr').find('.input_hinta input').val())) || isNaN(parseFloat($(this).closest('tr').find('.input_alv input').val())) || isNaN(parseFloat($(this).closest('tr').find('.input_kpl input').val()))){
+		return false;
+	}
+
+	hinta_alv_0 = parseFloat($(this).closest('tr').find('.input_hinta input').val());
+	alv = parseFloat($(this).closest('tr').find('.input_alv input').val());
+	kpl = parseFloat($(this).closest('tr').find('.input_kpl input').val());
+
+	if( alvsis == '0'){
+		laske = (hinta_alv_0*kpl)/100*alv;
+		veroton = hinta_alv_0*kpl;
+		yhteensa = laske+veroton;
+	}
+	if( alvsis == '1'){
+		yhteensa = hinta_alv_0*kpl;
+		var jakaa = '1.'+alv;
+		var l = yhteensa/parseFloat(jakaa);
+		veroton = l;
+		laske = yhteensa-veroton;
+	}
+
+	parseFloat($(this).closest('tr').find('.input_veroton input').val(veroton.toFixed(2)));
+	parseFloat($(this).closest('tr').find('.input_yhteensa input').val(yhteensa.toFixed(2)));
+
+	$(this).closest('table').find('.input_yhteensa input').each(function( index ) {
+		yhteensa_last += parseFloat($(this).val());
+	});
+	parseFloat($(this).closest('.paa_taulu').find('.yhteensa_last').text(yhteensa_last.toFixed(2).replace(/\./g, ',')));
+	return false;
+  });
+
+  $(document).delegate(".fa-trash","click",function(){
+	$(this).closest('tr').remove();
+	$('.input_alv input').change();
+	return false;
+  });
+  //     muokkaus -->
 
 });
 </script>
