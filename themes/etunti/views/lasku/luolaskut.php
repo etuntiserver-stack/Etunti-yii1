@@ -342,9 +342,14 @@
 		<td class="input_freetext"><?=$freetext?></td>
 		</tr>
 		<?php endif; ?>
-		<?php if( isset($mob->tyovuoroot) and is_array(json_decode($mob->tyovuoroot->tyopaari, true))){
-			$tp_lisatuotteet[$mob->tyovuoroot->tyopaari][$mob->tyovuoroot->pvm][$v] = $item->id; 
-		} ?>
+		<?php 
+			if( isset($mob->kohde_kannasta) and isset($mob->tyovuoroot) and is_array(json_decode($mob->tyovuoroot->tyopaari, true))){
+				$tp_lisatuotteet[$mob->tyovuoroot->tyopaari][$mob->tyovuoroot->pvm][$v] = $item->id; //MOB
+			}
+			if( isset($mob->kohde) and is_array(json_decode($mob->tyopaari, true))){
+				$tp_lisatuotteet[$mob->tyopaari][$mob->pvm][$v] = $item->id; //TV
+			}
+		?>
 		<?php endforeach; ?>
 		<?php endif; ?>
 		<?php endif; ?>
