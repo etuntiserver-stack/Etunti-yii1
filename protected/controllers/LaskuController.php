@@ -121,7 +121,7 @@ class LaskuController extends Controller
 		exit;
 	}
 
-	public function actionLuolaskut($from, $to, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null)
+	public function actionLuolaskut($from, $to, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null, $tunnit=null)
 	{
 		$asetukset = Asetukset::model()->findByPk(1);
 		$paivays = date("Y-m-d", strtotime($paivays));
@@ -178,12 +178,15 @@ class LaskuController extends Controller
 			'asiakas_id' => $asiakas_id,
 			'laheta' => $laheta,
 			'luo' => $luo,
-			'alvsis' => $alvsis
+			'alvsis' => $alvsis,
+			'tunnit' => $tunnit
 		));
 	}
 
-	protected function hyvaksyttyListaByAsiakas($id, $from, $to){
+	protected function hyvaksyttyListaByAsiakas($id, $from, $to, $tunnit){
 
+	    $lista = array();
+	    if( $tunnit == 'mob' ){
        		$criteria = new CDbCriteria();
 	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
 	        $criteria->condition = " 
@@ -228,8 +231,26 @@ class LaskuController extends Controller
 		$tot = Toteutuneet::model()->findAll($criteria);
 		$lista = $lu;
 		if( is_array($tot) and count($tot) > 0 ){ $lista = array_merge($lu, $tot); }
+	    }
 
-		return $lista;
+	    // TV
+	    if( $tunnit == 'tv' ){
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(alku, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+	        $criteria->condition = " 
+			alku!='' AND loppu!='' AND kohde!=0
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND kohde IN (
+				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$id."'
+			)
+			AND status='3'
+			AND peruutettu=0
+			AND laskutettu=0
+		";
+		$lista = Tyovuoroot::model()->findAll($criteria);
+	    }
+	    return $lista;
 	}
 
 	public function actionAuto()
