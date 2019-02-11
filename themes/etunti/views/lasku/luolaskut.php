@@ -276,7 +276,7 @@
 				$t 		= json_decode($mob->tyovuoroot->lisa_tuotteet, true)['maara'][$k];
 				$rivi_kpl 	= json_decode($mob->tyovuoroot->lisa_tuotteet, true)['maara'][$k]; //MOB
 			}
-			if( isset($mob->tv_id)){
+			if( isset($mob->kohde)){
 				$t 		= json_decode($mob->lisa_tuotteet, true)['maara'][$k];
 				$rivi_kpl 	= json_decode($mob->lisa_tuotteet, true)['maara'][$k]; // TV
 			}
