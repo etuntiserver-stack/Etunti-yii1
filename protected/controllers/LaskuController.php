@@ -2065,6 +2065,7 @@ $xml .= '
              <ProductVatPercentage vatcode="KOMY">'.$rivit->alv.'</ProductVatPercentage>
              <SalesInvoiceProductLineQuantity>'.$rivit->kpl.'</SalesInvoiceProductLineQuantity>
              <SalesInvoiceProductLineDiscountPercentage>'.$rivit->ale.'</SalesInvoiceProductLineDiscountPercentage>
+	     <accountingAccountSuggestion>'.$asetukset->netvisor_accountingaccountsuggestion.'</accountingAccountSuggestion>
 	     '.$dimension.'
          </SalesInvoiceProductLine>
        </InvoiceLine>

@@ -97,6 +97,7 @@ class Asetukset extends DB2ActiveRecord
                      'netvisor_partnerkey' => 'varchar(255) ',
                      'netvisor_kaytto' => 'int(1) ',
                      'netvisor_organisation_identifier' => 'varchar(255) ',
+		     'netvisor_accountingaccountsuggestion' => 'varchar(255) DEFAULT 3000',
                      'merkkipaivailmoitukset_sahkoposti' => 'varchar(255) ',
                      'asiakas_tyovuorossa' => 'int(1)',
                      'tuote_tyovuorossa' => 'int(1) DEFAULT 0',
@@ -200,7 +201,7 @@ class Asetukset extends DB2ActiveRecord
 
 			array('paivan_uutinen, logon_polkku, netvisor_host', 'length', 'max'=>500),
 			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id, trust_ws_cid, trust_ws_salasana, netvisor_acceptancestatus, edico_tehdyt_tyot, asiakas_hinta_tyyppi', 'length', 'max'=>100),
-			array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier, merkkipaivailmoitukset_sahkoposti, netvisor_mita_lahetetaan, gtm, apuaika_palkkalaji, app_version_playmarket, asiakas_laskutus_kanava, asiakas_ryhma', 'length', 'max'=>255),
+			array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier, merkkipaivailmoitukset_sahkoposti, netvisor_mita_lahetetaan, gtm, apuaika_palkkalaji, app_version_playmarket, asiakas_laskutus_kanava, asiakas_ryhma, netvisor_accountingaccountsuggestion', 'length', 'max'=>255),
 			array('viikonloppulisa_la, viikonloppulisa_su', 'length', 'max'=>10),
 			array('aikavali_halytys', 'length', 'max'=>3),
 			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat, ilmoitus_uudesta_kuvasta_saajat, peruutusehdot, palautteet_autovastaus_hyva, palautteet_autovastaus_huono', 'safe'),
@@ -323,6 +324,7 @@ class Asetukset extends DB2ActiveRecord
 			'asiakas_ryhma' => Yii::t('main', 'Asiakasryhmä'),
 			'asiakas_alv' => Yii::t('main', 'ALV %'),
 			'asiakas_hinta_tyyppi' => Yii::t('main', 'Hinta tyyppi'),
+			'netvisor_accountingaccountsuggestion' => Yii::t('main', 'Myyntilaskut kirjanpidon oletustili'),
 		);
 	}
 

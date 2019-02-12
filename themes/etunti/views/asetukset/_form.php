@@ -940,6 +940,12 @@ $('.ryhmat').multiselect({
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_accountingaccountsuggestion'); ?>
+		<?php echo $form->textField($model,'netvisor_accountingaccountsuggestion',array('maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'netvisor_accountingaccountsuggestion'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'netvisor_mita_onkayttossa'); ?>
 		<?php 
         	$tal = array(
@@ -1012,14 +1018,7 @@ $('.ryhmat').multiselect({
 				$selected[$item] = array('selected' => 'selected');
 			}
 		}
-/*
-		$selected   = array(
-		      '2' => array('selected' => 'selected'),
-		      '3' => array('selected' => 'selected'),
-		);
-*/
 		$htmlOptions = array('class'=>'form-control selectpicker', 'multiple' => 'true', 'options' => $selected);
-
 		echo $form->dropDownList( $model,'netvisor_mita_lahetetaan', $l, $htmlOptions ); ?>
 		<?php echo $form->error($model,'netvisor_mita_lahetetaan'); ?>
 	</div>
