@@ -189,6 +189,14 @@
                             </label>
                           </label>
                         </div>
+                        <div class="section">
+                          <label class="field prepend-icon">
+   			    <input type="text" name="erapaiva" class="gui-input datepickerFI" placeholder="Eräpäivä" required>
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
 		      </div>
                       <div class="col-md-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo laskut'); ?>">
