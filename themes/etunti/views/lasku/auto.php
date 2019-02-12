@@ -191,7 +191,7 @@
                         </div>
                         <div class="section">
                           <label class="field prepend-icon">
-   			    <input type="text" name="erapaiva" class="gui-input datepickerFI" placeholder="Eräpäivä" required>
+   			    <input type="text" name="erapaiva" class="gui-input datepickerFI" placeholder="Eräpäivä">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
