@@ -101,122 +101,26 @@ $paivat=array(
 
 <?php
   $site = Yii::app()->createController('Site');
-
-  $criteria = new CDbCriteria();
-  $criteria->order = " alku ASC "; 
-  $criteria->condition = " tid='".$tid."' AND 
-  DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')  
-  BETWEEN  '".date('Y-m-d',strtotime($year ."W". $week .'1'))."' AND '".date('Y-m-d',strtotime($year ."W". $week .'7'))."' 
-  AND pvm!='' 
-  AND peruutettu=0
-  ";
-  if(isset($_POST['P']))
-  $criteria->Addcondition ( " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%w') IN (".implode(",",$_POST['P']).") ");
-
-  $tv = Tyovuoroot::model()->findAll($criteria);
+  $asetukset = Asetukset::model()->findByPk(1);
 ?>
 
 <br>
 <table class="table table-bordered LahetettyTable" cellspacing="0" cellpadding="0">
 <?php
-$asetukset = Asetukset::model()->findByPk(1);
-for($day= 1; $day <= 7; $day++) {
 
+for($day= 1; $day <= 7; $day++) {
   $d = strtotime($year ."W". $week . $day);
   $date = date('d.m.Y',$d);
-
-  echo '<tr><td colspan="2"><h2><b>'.$paivat[date('N',$d)].' '.$date.'</b></h2></td></tr>';
-  echo '<tr><td valign="top" width="30%"><h5>Aika/Kohde</h5><br>';
-
-  $yht = 0;
-  foreach($tv as $t)
-  {
-    if($t->pvm == $date)
-    {
-	$k = Kohteet::model()->findbypk($t->kohde);
-
-	// <-- Asiakas Tiedot
-	$asiakasTiedot = '';
-	if(isset($k->asiakas_id)){
-
-	$as = Asiakkaat::model()->findbypk($k->asiakas_id);
-		
-		if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi) and $asetukset->tyovuorolahetys_naytetaanko_asiakas == 1){
-			$asiakasTiedot = '<br><b>'.Yii::t('main', 'Asiakas').':</b> '.$as->yrityksen_nimi;
-		} else if(isset($as->yhteyshenkilo) and empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo) and $asetukset->tyovuorolahetys_naytetaanko_asiakas == 1){
-			$asiakasTiedot = '<br><b>'.Yii::t('main', 'Asiakas').':</b> '.$as->yhteyshenkilo;
-		}
-
-		if($asetukset->tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka == 1)
-			$asiakasTiedot .= '<br><b>'.Yii::t('main', 'Kohteen postitoimipaikka').':</b> '.$k->kaupunki;
-
-		if($asetukset->tyovuorolahetys_naytetaanko_asiakas == 1 or $asetukset->tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka == 1)
-			$asiakasTiedot .= '<p style="padding:0;margin:0">------</p>';
-	}
-	// Asiakas Tiedot -->
-
-	$al = '';
-	if($t->alku > 0 and $t->loppu > 0){
-	  $al = $t->alku.'-'.$t->loppu;
-	  if($site[0]->eiLasketaSubStr($t->tyoajanmerkinta) === false){ $yht += strtotime($t->loppu)-strtotime($t->alku); }
-	}
-	
-	// <-- osoite
-	$osoite = '';
-	if(!empty($t->osoite)){
-		$osoite = $t->osoite;
-	} elseif(isset($k->id) and empty($t->osoite)){
-		$osoite = $k->osoite;
-	} elseif(!isset($k->id) and $t->status != 0 and $t->status != 3){
-		$osoite = $this->tilanteet()[$t->status];
-	}
-
-	$color = '#888';
-	$bgcol = 'color:#333';
-	if(!empty($t->tyoajanmerkinta)){
-		$expl = explode("/",$t->tyoajanmerkinta);
-		if(isset($expl[1]) and !empty($expl[1])){
-			$color = $expl[1];
-			$bgcol = 'color:'.$color;
-		}
-	}
-	if(!empty($t->tyoajanlaatu) and empty($osoite)){
-		$expl1 = explode("/",$t->tyoajanlaatu);
-		if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
-		$osoite = (isset($expl1[0])) ? '<div class="text-center tyoajanlaatu_laatiko" style="background:'.$color.';color:#fff;text-align:center">'.$expl1[0].'</div>' : '';
-	}
-	//     osoite -->
-
-	echo '<span>'.$al.' '.$osoite.'</span>';
-	if(isset($k->id) and !empty($k->avain) and !$tulosta)
-	echo ' &nbsp;<b class="fa fa-key text-warning"></b>';
-	elseif(isset($k->id) and !empty($k->avain) and $tulosta)
-	echo ' &nbsp;(avain on)';
-	echo $asiakasTiedot;
-	echo '<br>';
-    }
-  }
-
-  if($yht > 0)
-  echo '<h4>'.Yii::t('main','Yhteensä: ').$this->sprint($yht).'</h4>';
-  echo '</td><td valign="top" style="border-left: 1px #ccc solid"><h5>Tietoja</h5><br>';
-  foreach($tv as $tvVal)
-  {
-	// <-- Osoite
-	$osoite = '';
-	if(!empty($tvVal->osoite)){
-		$osoite = $tvVal->osoite;
-	} elseif(empty($tvVal->osoite) and isset($tvVal->kohteet->osoite)){
-		$osoite = $tvVal->kohteet->osoite;
-	}
-	// Osoite -->
-
-	if( $tvVal->pvm == $date and !empty($tvVal->tietoja) ){
-		echo '<div class="tietoja"><b>'.$osoite.':</b> <br>'.str_replace("\n", "<br>", $tvVal->tietoja).'</div>';
-		echo '<p style="padding:0;margin:0">------</p>';
-	}
-  }
-  echo '</td></tr>';
+  $this->renderPartial('_laheta_date', array(
+		'site' => $site,
+		'asetukset' => $asetukset,
+		'tt' => $tt,
+		'd' => $d,	
+		'date' => $date,
+		'paivat' => $paivat,
+		'year' => $year,
+		'week' => $week
+  ));
 }
 
 $totalWeek = '';
