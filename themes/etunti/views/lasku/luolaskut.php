@@ -20,6 +20,7 @@
 					'from' => $from,
 					'to' => $to,
 					'paivays' => $paivays,
+					'erapaiva' => $erapaiva,
 					'alvsis' => $alvsis,
 					'laheta' => true
 				), 
@@ -51,7 +52,13 @@
 	$yhteensa_total	= 0;
 	$is_ok_lasku 	= true;
 	$l_class	= 'class="bg-default"';
+	$ep		= '';
 
+	if(!empty($item->maksuehto) and empty($erapaiva)){
+		$ep = date("d.m.Y",strtotime($paivays ." +$item->maksuehto day"));
+	} elseif(!empty($erapaiva)){
+		$ep = $erapaiva;
+	}
 	if(isset($asetukset->id) and empty( $item->laskutus_kanava ) and !empty( $asetukset->asiakas_laskutus_kanava )){
 		$item->laskutus_kanava = $asetukset->asiakas_laskutus_kanava;
 	}
@@ -77,7 +84,7 @@
 	<div>
 	<p><b><?=Yii::t('main', 'Laskutus kanava')?></b>-<?=(!empty($item->laskutus_kanava))? Yii::t('main', $item->laskutus_kanava):''?></p>
 	<p><b><?=Yii::t('main', 'Päiväys')?></b>-<?=date("d.m.Y",strtotime($paivays))?></p>
-	<p><b><?=Yii::t('main', 'Eräpäivä')?></b>-<?=(!empty($item->maksuehto))? date("d.m.Y",strtotime($paivays ." +$item->maksuehto day")):''?></p>
+	<p><b><?=Yii::t('main', 'Eräpäivä')?></b>-<?=date("d.m.Y",strtotime($ep))?></p>
 	<p><b><?=Yii::t('main', 'Maksuehto')?></b>-<?=(!empty($item->maksuehto))? $item->maksuehto:''?></p>
 	<p><b><?=Yii::t('main', 'Viivästyskorko')?></b>-<?=(!empty($item->viivastyskorko))? $item->viivastyskorko:''?></p>
 	 <div <?=$l_class?>>
@@ -122,7 +129,7 @@
 		$lasku->yhteyshenkilo = $item->yhteyshenkilo;
 		$lasku->puhelin = $item->puhelin;
 		$lasku->paivays = $paivays;
-		$lasku->erapaiva = date("Y-m-d",strtotime($paivays." +$item->maksuehto day"));
+		$lasku->erapaiva = $ep;
 		$lasku->maksuehto = $item->maksuehto;
 		$lasku->viitenumero = $this->Viite($item->asiakasnumero."00".$item->id);
 		$lasku->yhteensa_total = $yhteensa_total;
@@ -410,7 +417,7 @@
 		<th>
 		<?php
 			echo CHtml::link(Yii::t('main', 'Lähetä lasku'), 
-				array('lasku/luolaskut', 'from' => $from, 'to' => $to, 'alvsis' => $alvsis, 'asiakas_id' => $item->id, 'paivays' => $paivays, 'laheta' => true), 
+				array('lasku/luolaskut', 'from' => $from, 'to' => $to, 'alvsis' => $alvsis, 'asiakas_id' => $item->id, 'paivays' => $paivays, 'erapaiva' => $erapaiva, 'laheta' => true), 
 				array(
 					'class' => 'btn btn-block btn-success',
 					'data-toggle'=>'tooltip', 

@@ -182,10 +182,18 @@
                         <div class="section">
                           <label class="field select">
 			    <select name="tunnit" id="tunnit" class="gui-input">
-			     <option value="mob"><?php echo Yii::t('main', 'Mobiili'); ?></option>
+			     <option value="mob"><?php echo Yii::t('main', 'Tunnit'); ?></option>
 			     <option value="tv"><?php echo Yii::t('main', 'Työvuorot'); ?></option>
 			    </select>
                             <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                        <div class="section">
+                          <label class="field prepend-icon">
+   			    <input type="text" name="erapaiva" class="gui-input datepickerFI" placeholder="Eräpäivä">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
                             </label>
                           </label>
                         </div>
