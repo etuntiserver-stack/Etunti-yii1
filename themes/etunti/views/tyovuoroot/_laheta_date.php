@@ -17,7 +17,7 @@
   $tv = Tyovuoroot::model()->findAll($criteria);
   if( count($tv) > 0 ){
   echo '<tr><td colspan="2"><h2><b>'.$paivat[date('N',$d)].' '.$date.'</b></h2></td></tr>';
-  echo '<tr><td valign="top" width="30%"><h5>Aika/Kohde</h5><br>';
+  echo '<tr><td valign="top" style="width:390px; vertical-align: top"><h3>Aika/Kohde</h3>';
 
   $yht = 0;
   foreach($tv as $t)
@@ -27,9 +27,9 @@
 	if(isset($t->kohteet->asiakas_id)){
 		$as = Asiakkaat::model()->findbypk($t->kohteet->asiakas_id);
 		if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi) and $asetukset->tyovuorolahetys_naytetaanko_asiakas == 1){
-			$asiakasTiedot = '<br><b>'.Yii::t('main', 'Asiakas').':</b> '.$as->yrityksen_nimi;
+			$asiakasTiedot = '<b>'.Yii::t('main', 'Asiakas').':</b> '.$as->yrityksen_nimi;
 		} else if(isset($as->yhteyshenkilo) and empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo) and $asetukset->tyovuorolahetys_naytetaanko_asiakas == 1){
-			$asiakasTiedot = '<br><b>'.Yii::t('main', 'Asiakas').':</b> '.$as->yhteyshenkilo;
+			$asiakasTiedot = '<b>'.Yii::t('main', 'Asiakas').':</b> '.$as->yhteyshenkilo;
 		}
 		if($asetukset->tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka == 1){
 			$asiakasTiedot .= '<br><b>'.Yii::t('main', 'Kohteen postitoimipaikka').':</b> '.$t->kohteet->kaupunki;
@@ -69,22 +69,31 @@
 	}
 	//     osoite -->
 
-	echo '<span>'.$al.' '.$osoite.'</span>';
+	echo '<h4 style="margin:0; padding:0">'.$al.' '.$osoite.'</h4>';
 	echo $asiakasTiedot;
 	// <-- Avain
-	if( isset($t->avaimet) ){
-		echo '<br>';
+	if( isset($t->avaimet) and count($t->avaimet) > 0 ){
+		echo '<p><b>Avaimet: </b><br>';
 		foreach($t->avaimet as $avain){
-			echo '<b>Avain</b> - '.$avain->avainnumero.':'.$this->etuSukunimi($avain->tid).':'.$avain->sijainti.'<br>';
+			echo '&nbsp;&nbsp;&nbsp;'.$avain->avainnumero.':'.$this->etuSukunimi($avain->tid).':'.$avain->sijainti.'<br>';
 		}
+		echo '</p>';
 	}
 	//     Avain -->
-	echo '<p style="padding:0;margin:0">------</p>';
+	// <-- Tyoparit
+	if( is_array(json_decode($t->tyopaari, true)) ){
+		echo '<p><b>Työparit: </b><br>';
+		foreach(json_decode($t->tyopaari, true) as  $id => $tp_id){
+			if($tp_id != $t->tid){ echo '&nbsp;&nbsp;&nbsp;'.$this->etuSukunimi($tp_id).'<br>'; }
+		}
+		echo '</p>';
+	}
+	//     Tyoparit -->
 
   }
   if($yht > 0)
   echo '<h4>'.Yii::t('main','Yhteensä: ').$this->sprint($yht).'</h4>';
-  echo '</td><td valign="top" style="border-left: 1px #ccc solid"><h5>Tietoja</h5><br>';
+  echo '</td><td valign="top" style="width:400px;border-left: 1px #ccc solid; vertical-align: top"><h3>Tietoja</h3>';
 
   foreach($tv as $tvPvm)
   {
@@ -99,10 +108,7 @@
 
 	// <-- Tietoja
 	if( !empty($tvPvm->tietoja) ){
-		echo '<div class="tietoja">';
-		echo '<b>'.$osoite.':</b> <br>'.str_replace("\n", "<br>", $tvPvm->tietoja);
-		echo '</div>';
-		echo '<p style="padding:0;margin:0">------</p>';
+		echo '<p><b>'.$osoite.':</b> <br>'.str_replace("\n", "<br>", $tvPvm->tietoja).'</p>';
 	}
 	// Tietoja -->
   }

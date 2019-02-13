@@ -13,7 +13,7 @@ $paivat=array(
 
 <style>
 .LahetettyTable table{
-	width: 100%;
+	width: 790px;
 }
 .LahetettyTable td, .LahetettyTable th{
 	padding:3px 7px;
