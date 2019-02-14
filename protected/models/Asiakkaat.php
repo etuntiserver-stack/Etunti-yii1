@@ -126,10 +126,11 @@ class Asiakkaat extends DB2ActiveRecord
 	 */
 	public function rules()
 	{
+		$asetukset = Asetukset::model()->findByPk(1);
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
-		return array(
-			array('osoite, postinumero, kaupunki', 'required'),
+		//	array('osoite, postinumero, kaupunki', 'required'),
+		$arr = array(
                         array('asiakasnumero','unique', 'message'=>'Tämä asiakasnumero on jo olemassa!'),
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
 			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot, hinnasto_id, alv, tyoryhma', 'numerical', 'integerOnly'=>true),
@@ -143,6 +144,11 @@ class Asiakkaat extends DB2ActiveRecord
 			// Please remove those attributes that should not be searched.
 			array('id, time, etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen, laskutus_kanava,maksuehto, tyyppi, asiakasnumero, ovt_tunnus, valittajan_tunnus, myyja, kirjeenluokka, muistutuslasku_auto', 'safe', 'on'=>'search'),
 		);
+		if( isset($asetukset->asiakas_pakkoliset) and is_array(json_decode($asetukset->asiakas_pakkoliset, true)) ){
+			$impl = implode(", ", json_decode($asetukset->asiakas_pakkoliset, true));
+			array_push($arr, array($impl, 'required'));
+		}
+		return $arr;
 	}
 
 	/**

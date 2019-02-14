@@ -164,6 +164,7 @@ class Asetukset extends DB2ActiveRecord
 		     'asiakas_ryhma' => 'varchar(255) DEFAULT NULL',
                      'asiakas_alv' => 'int(3) DEFAULT 24',
                      'asiakas_hinta_tyyppi' => 'varchar(50) DEFAULT NULL',
+                     'asiakas_pakkoliset' => 'varchar(2000) DEFAULT "[\"osoite\",\"kaupunki\",\"postinumero\"]"',
 
                      //'vinkki_tunnit' => 'varchar(10) ',
                      //'vinkki_prosentti' => 'varchar(10) ',
@@ -204,7 +205,7 @@ class Asetukset extends DB2ActiveRecord
 			array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier, merkkipaivailmoitukset_sahkoposti, netvisor_mita_lahetetaan, gtm, apuaika_palkkalaji, app_version_playmarket, asiakas_laskutus_kanava, asiakas_ryhma, netvisor_accountingaccountsuggestion', 'length', 'max'=>255),
 			array('viikonloppulisa_la, viikonloppulisa_su', 'length', 'max'=>10),
 			array('aikavali_halytys', 'length', 'max'=>3),
-			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat, ilmoitus_uudesta_kuvasta_saajat, peruutusehdot, palautteet_autovastaus_hyva, palautteet_autovastaus_huono', 'safe'),
+			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat, ilmoitus_uudesta_kuvasta_saajat, peruutusehdot, palautteet_autovastaus_hyva, palautteet_autovastaus_huono, asiakas_pakkoliset', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic, trust_cid, trust_api, palvelu_tyyppi, trust_url, pyhapaivat, erikoislauantai, sovellus_tyovuorot', 'safe', 'on'=>'search'),
@@ -324,6 +325,7 @@ class Asetukset extends DB2ActiveRecord
 			'asiakas_ryhma' => Yii::t('main', 'Asiakasryhmä'),
 			'asiakas_alv' => Yii::t('main', 'ALV %'),
 			'asiakas_hinta_tyyppi' => Yii::t('main', 'Hinta tyyppi'),
+			'asiakas_pakkoliset' => Yii::t('main', 'Pakolliset kentät'),
 			'netvisor_accountingaccountsuggestion' => Yii::t('main', 'Myyntilaskut kirjanpidon oletustili'),
 		);
 	}

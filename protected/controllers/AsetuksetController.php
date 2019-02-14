@@ -416,20 +416,24 @@ class AsetuksetController extends Controller
 
 			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Asetukset'];
-			if(isset($_POST['Asetukset']['netvisor_mita_lahetetaan']))
-			$model->netvisor_mita_lahetetaan=json_encode($_POST['Asetukset']['netvisor_mita_lahetetaan']);
-
-			if(isset($_POST['Asetukset']['edico_muut_kulut']))
+			if(isset($_POST['Asetukset']['netvisor_mita_lahetetaan'])){
+				$model->netvisor_mita_lahetetaan=json_encode($_POST['Asetukset']['netvisor_mita_lahetetaan']);
+			}
+			if(isset($_POST['Asetukset']['edico_muut_kulut'])){
 				$model->edico_muut_kulut=json_encode($_POST['Asetukset']['edico_muut_kulut']);
-			else
+			} else {
 				$model->edico_muut_kulut='';
-
+ 			}
 			if(isset($_POST['Asetukset']['asiakas_ryhma'])){
 				$model->asiakas_ryhma = json_encode($_POST['Asetukset']['asiakas_ryhma']);
 			} else {
 				$model->asiakas_ryhma="";
 			}
-
+			if(isset($_POST['Asetukset']['asiakas_pakkoliset'])){
+				$model->asiakas_pakkoliset = json_encode($_POST['Asetukset']['asiakas_pakkoliset']);
+			} else {
+				$model->asiakas_pakkoliset="";
+			}
 			if($model->save())
 			{
 
