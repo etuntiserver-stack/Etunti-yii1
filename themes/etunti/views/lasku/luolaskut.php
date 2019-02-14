@@ -191,12 +191,12 @@
 			if( isset($mob->tv_id) ){
 				$tv_id		= $mob->tv_id;
 				$t 		= $this->num(strtotime($mob->loppui)-strtotime($mob->aloitan));
-				$r 		= $this->hinnastoHintaat($mob->tyovuoroot->tuoteID, $item, $mob->kohteet, $t, $rivi_kpl);
+				$r 		= $this->hinnastoHintaat($mob->tyovuoroot->tuoteID, $item, $mob->kohteet, $t, $rivi_kpl); // MOB
 			}
 			if( isset($mob->kohde) ){
 				$tv_id		= $mob->id;
 				$t 		= $this->num(strtotime($mob->loppu)-strtotime($mob->alku));
-				$r 		= $this->hinnastoHintaat($mob->tuoteID, $item, $mob->kohteet, $t, $rivi_kpl);
+				$r 		= $this->hinnastoHintaat($mob->tuoteID, $item, $mob->kohteet, $t, $rivi_kpl); // TV
 			}
 
 			if( isset($r['tp_id']) ){ $tp_id = $r['tp_id'];	}
