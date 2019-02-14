@@ -125,7 +125,7 @@ class LaskuController extends Controller
 	{
 		$asetukset = Asetukset::model()->findByPk(1);
 		$paivays = date("Y-m-d", strtotime($paivays));
-		$erapaiva = date("Y-m-d", strtotime($erapaiva));
+		//$erapaiva = date("Y-m-d", strtotime($erapaiva));
        		$criteria = new CDbCriteria();
 	        //$criteria->order = " id DESC ";
 	        $criteria->condition = " 

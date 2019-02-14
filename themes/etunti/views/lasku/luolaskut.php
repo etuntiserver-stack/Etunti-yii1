@@ -54,11 +54,16 @@
 	$l_class	= 'class="bg-default"';
 	$ep		= '';
 
+	if(isset($asetukset->id) and empty( $item->maksuehto ) and !empty( $asetukset->asiakas_maksuehto )){
+		$item->maksuehto = $asetukset->asiakas_maksuehto;
+	}
+
 	if(!empty($item->maksuehto) and empty($erapaiva)){
 		$ep = date("d.m.Y",strtotime($paivays ." +$item->maksuehto day"));
 	} elseif(!empty($erapaiva)){
 		$ep = $erapaiva;
 	}
+
 	if(isset($asetukset->id) and empty( $item->laskutus_kanava ) and !empty( $asetukset->asiakas_laskutus_kanava )){
 		$item->laskutus_kanava = $asetukset->asiakas_laskutus_kanava;
 	}
@@ -67,9 +72,6 @@
 	}
 	if(isset($asetukset->id) and empty( $item->viivastyskorko ) and !empty( $asetukset->asiakas_viivastyskorko )){
 		$item->viivastyskorko = $asetukset->asiakas_viivastyskorko;
-	}
-	if(isset($asetukset->id) and empty( $item->maksuehto ) and !empty( $asetukset->asiakas_maksuehto )){
-		$item->maksuehto = $asetukset->asiakas_maksuehto;
 	}
 
 
