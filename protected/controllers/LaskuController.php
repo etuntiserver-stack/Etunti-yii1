@@ -733,8 +733,10 @@ class LaskuController extends Controller
 					$arr['hinta_alv_sis'] = $hinnasto->hinnasto_yht;
 
 					$hn = Hinnastot::model()->findByPk($hinnasto->hinnastot_id);
-					$arr['hinnaston_otsikko'] = Yii::t('main', 'Hinnasto: '). ' ' .$hn->hinnaston_otsikko;
-					$arr['hinnasto_rivi_id'] = $hinnasto->id;
+					if( isset($hn->id) ){
+						$arr['hinnaston_otsikko'] = Yii::t('main', 'Hinnasto: '). ' ' .$hn->hinnaston_otsikko;
+						$arr['hinnasto_rivi_id'] = $hinnasto->id;
+					}
 				}
 			}
 			echo json_encode($arr);
@@ -880,7 +882,7 @@ class LaskuController extends Controller
 
 	}
 
-	protected function hinnastoHintaat($id, $asiakasnumero, $kohteet, $tunnit, $rivi_kpl)
+	protected function hinnastoHintaat($id, $asiakas, $kohteet, $tunnit, $rivi_kpl)
 	{
 		$return = [];
 		// <-- 1. TuotteetPalvelut
@@ -910,9 +912,6 @@ class LaskuController extends Controller
 		//     TuotteetPalvelut -->
 
 		// <-- 2. Asiakas
-       		$criteria = new CDbCriteria();
-       		$criteria->condition = " asiakasnumero='".$asiakasnumero."' ";
-		$asiakas = Asiakkaat::model()->find($criteria);
 		if(isset($tp->id) and isset($asiakas->id) and $asiakas->hinnasto_id != 0)
 		{
 			$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$tp->id."' AND hinnastot_id='".$asiakas->hinnasto_id."' ");
