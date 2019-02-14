@@ -314,6 +314,18 @@ $('.ryhmat').multiselect({
 		<?php echo $form->error($model,'asiakas_hinta_tyyppi'); ?>
 	</div>
    </div>
+   <div class="col-sm-3">
+    <legend><h2><?php echo Yii::t('main','Muu asiakkaan asetukset'); ?></h2></legend>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'asiakas_hinta_tyyppi'); ?>
+		<?php
+		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
+        	echo $form->dropDownList($model, 'asiakas_hinta_tyyppi', $list,
+		array('empty'=>'Valitse tyyppi','class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'asiakas_hinta_tyyppi'); ?>
+	</div>
+   </div>
   </div>
 <!-- Asiakas -->
 
