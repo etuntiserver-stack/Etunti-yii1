@@ -179,6 +179,10 @@
 		<?php $key++; ?>
 		<?php
 			$tv_id		= 0;
+			$tp_id		= 0;
+			$hinta 		= 0;
+			$kpl 		= 0;
+			$alv 		= 0;
 			$rivi_kpl 	= 0;
 			$r		= [];
 
