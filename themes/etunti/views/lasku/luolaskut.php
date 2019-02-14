@@ -289,7 +289,7 @@
 				$rivi_kpl 	= json_decode($mob->lisa_tuotteet, true)['maara'][$k]; // TV
 			}
 			$r		= [];
-			$r 		= $this->hinnastoHintaat($v, $item->asiakasnumero, $mob->kohteet, $t, $rivi_kpl);
+			$r 		= $this->hinnastoHintaat($v, $item, $mob->kohteet, $t, $rivi_kpl);
 			$tp_id		= (( isset($r['tp_id']) )? $r['tp_id']:0);
 			$nimike		= (( isset($r['tp_nimike']) )? $r['tp_nimike']:'');
 			$kpl 		= (( isset($r['kpl']) )? $r['kpl']:0);
