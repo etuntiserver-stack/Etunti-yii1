@@ -164,7 +164,7 @@ class Asetukset extends DB2ActiveRecord
 		     'asiakas_ryhma' => 'varchar(255) DEFAULT NULL',
                      'asiakas_alv' => 'int(3) DEFAULT 24',
                      'asiakas_hinta_tyyppi' => 'varchar(50) DEFAULT NULL',
-                     'asiakas_pakkoliset' => 'text DEFAULT NULL',
+                     'asiakas_pakkoliset' => 'varchar(2000) DEFAULT "[\"osoite\",\"kaupunki\",\"postinumero\"]"',
 
                      //'vinkki_tunnit' => 'varchar(10) ',
                      //'vinkki_prosentti' => 'varchar(10) ',
@@ -325,7 +325,7 @@ class Asetukset extends DB2ActiveRecord
 			'asiakas_ryhma' => Yii::t('main', 'Asiakasryhmä'),
 			'asiakas_alv' => Yii::t('main', 'ALV %'),
 			'asiakas_hinta_tyyppi' => Yii::t('main', 'Hinta tyyppi'),
-			'asiakas_pakkoliset' => Yii::t('main', 'Hinta tyyppi'),
+			'asiakas_pakkoliset' => Yii::t('main', 'Pakolliset kentät'),
 			'netvisor_accountingaccountsuggestion' => Yii::t('main', 'Myyntilaskut kirjanpidon oletustili'),
 		);
 	}

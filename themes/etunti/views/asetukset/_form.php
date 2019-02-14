@@ -317,13 +317,25 @@ $('.ryhmat').multiselect({
    <div class="col-sm-3">
     <legend><h2><?php echo Yii::t('main','Muu asiakkaan asetukset'); ?></h2></legend>
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'asiakas_hinta_tyyppi'); ?>
+		<?php echo $form->labelEx($model,'asiakas_pakkoliset'); ?>
 		<?php
-		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
-        	echo $form->dropDownList($model, 'asiakas_hinta_tyyppi', $list,
-		array('empty'=>'Valitse tyyppi','class'=>'form-control'));	
+		$as = new Asiakkaat;
+		$list = array();
+		foreach($as->attributes as $k=>$v){
+			$list[$k] = $as->getAttributeLabel($k);
+		}
+		$selected   = array();
+		if( is_array(json_decode($model->asiakas_pakkoliset, true)) ){
+			foreach(json_decode($model->asiakas_pakkoliset, true) as $item)
+			{
+				$selected[$item] = array('selected' => 'selected');
+			}
+		}
+		unset($list['id'], $list['time'], $list['yrityksen_nimi'], $list['y_tunnus'], $list['yhteyshenkilo'], $list['aktiivinen'], $list['vinkki_tunnit'], $list['vinkki_prosentti'], $list['netvisorkey'], $list['k_osoite'], $list['k_postinumero'], $list['k_kaupunki'], $list['onlinevarauksen_asiakas'], $list['asiakastila'], $list['vinkki_id'], $list['alennuskoodit'], $list['app_kayttoehdot'], $list['gcm_reg_id'], $list['lopetuksen_pvm'], $list['lopetuksen_syy'], $list['netvisor_dimension_name'], $list['netvisor_dimension_item']);
+        	echo $form->dropDownList($model, 'asiakas_pakkoliset', $list,
+		array('empty'=>'Valitse kentät','class'=>'form-control selectpicker', 'multiple' => 'true', 'options' => $selected));	
         	?>
-		<?php echo $form->error($model,'asiakas_hinta_tyyppi'); ?>
+		<?php echo $form->error($model,'asiakas_pakkoliset'); ?>
 	</div>
    </div>
   </div>
@@ -1022,9 +1034,7 @@ $('.ryhmat').multiselect({
 		);
 
 		$selected   = array();
-
-		if( is_array(json_decode($model->netvisor_mita_lahetetaan, true)) )
-		{
+		if( is_array(json_decode($model->netvisor_mita_lahetetaan, true)) ){
 			foreach(json_decode($model->netvisor_mita_lahetetaan, true) as $item)
 			{
 				$selected[$item] = array('selected' => 'selected');
