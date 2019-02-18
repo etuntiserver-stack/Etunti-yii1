@@ -2089,7 +2089,21 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
        		$criteria = new CDbCriteria();
         	$criteria->select = "id";
         	$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))";
+	        $criteria->condition = "
+			id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."' 
+			AND tid='".$tid."'
+			AND sairaus!=1
+			AND aloitan!=loppui
+			AND deleted=0
+			AND palkanlaskentaan=1
+		";
+		$lu = Mobile::model()->findAll($criteria);
 
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "id";
+        	$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))";
 	        $criteria->condition = "
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."' 
@@ -2097,10 +2111,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND sairaus!=1
 			AND aloitan!=loppui
 			AND deleted=0
+			AND palkanlaskentaan=1
 		";
-
-		$model = Mobile::model()->findAll($criteria);
-		return count($model);
+		$tot = Toteutuneet::model()->findAll($criteria);
+		$lista = array_merge($lu, $tot);
+		return count($lista);
 
 	}
 
@@ -3108,7 +3123,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$criteria->addCondition (" id NOT IN(select kid from sivexkuitti_repaired) ");
 		}
 
-		if($sivu == 'palkkataulukko'){ 	$criteria->addCondition (" status = '3' "); }
+		if($sivu == 'palkkataulukko'){ 	$criteria->addCondition (" status = '3' AND palkanlaskentaan=1 "); }
 
 		if($sivu == 'yhteenveto')
 		{
@@ -3150,11 +3165,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND sairaus!=1
 			AND deleted=0
 		";
-
-		if($sivu == 'palkkataulukko')
-	        	$criteria->addCondition (" status = '3' ");
-
-
+		if($sivu == 'palkkataulukko'){ $criteria->addCondition (" status = '3' AND palkanlaskentaan=1 "); }
 		if($sivu == 'yhteenveto')
 		{
 			if(Yii::app()->session['Lounastauko'])

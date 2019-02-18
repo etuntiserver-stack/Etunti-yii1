@@ -106,12 +106,10 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 		<?php echo $form->labelEx($model,'aloitan'); ?>
 		<?php echo $form->textField($model,'aloitan',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm al', 'autofocus'=>'yes')); ?>
 	</div>
-
 	<div class="section">
 		<?php echo $form->labelEx($model,'loppui'); ?>
 		<?php echo $form->textField($model,'loppui',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm lp')); ?>
 	</div>
-
 	<div class="section">
 		<?php echo $form->labelEx($model,'sairaus'); ?>
 		<?php 
@@ -120,20 +118,23 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 		array('empty'=>'Valitse','class'=>'form-control input-sm')) ?>
 		<?php echo $form->error($model,'sairaus'); ?>
 	</div>
-
 	<div class="section">
 		<?php echo $form->labelEx($model,'laskutetaan'); ?>
 		<?php 
         	$tal = array(1=>'Kyllä',0=>'Ei');
-
 		echo $form->dropDownList($model,'laskutetaan', $tal, 
 		array('class'=>'form-control input-sm')) ?>
 		<?php echo $form->error($model,'laskutetaan'); ?>
 	</div>
-
+	<div class="section">
+		<?php echo $form->labelEx($model,'palkanlaskentaan'); ?>
+		<?php 
+        	$tal = array(1=>'Kyllä',0=>'Ei');
+		echo $form->dropDownList($model,'palkanlaskentaan', $tal, 
+		array('class'=>'form-control input-sm')) ?>
+		<?php echo $form->error($model,'palkanlaskentaan'); ?>
+	</div>
 		<input type="hidden" name="forPVM" value="<?php echo $forPVM; ?>">
-
-
   </div><div class="col-sm-8">
 
 	<div class="section">

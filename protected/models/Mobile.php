@@ -100,7 +100,8 @@ public $tkohde_kannasta;
                      'tuoteID' => 'int(11)',
                      'tv_id' => 'int(11) DEFAULT 0',
 		     'deleted' => 'int(11) DEFAULT 0',
-		     'tyo_erittelyt' => 'text DEFAULT NULL'
+		     'tyo_erittelyt' => 'text DEFAULT NULL',
+		     'palkanlaskentaan' => 'int(1) DEFAULT 1',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -123,7 +124,7 @@ public $tkohde_kannasta;
 		// will receive user inputs.
 		return array(
 			//array('asiakas_num, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, hyvaksytty', 'required'),
-			array('requests, kohdenID, tid, status, admin, sairaus, laskutetaan, tuoteID, tv_id, deleted', 'numerical', 'integerOnly'=>true),
+			array('requests, kohdenID, tid, status, admin, sairaus, laskutetaan, tuoteID, tv_id, deleted, palkanlaskentaan', 'numerical', 'integerOnly'=>true),
 			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id, tekijan_nimi', 'length', 'max'=>50),
 			array('domain, asiakas_hyvaksy, imei, sim_serial_number, kohde_kannasta, hyvaksytty', 'length', 'max'=>100),
 			array('my_location, tietoja, tyo_erittelyt', 'safe'),
@@ -180,6 +181,7 @@ public $tkohde_kannasta;
 			'hyvaksytty' => Yii::t('main', 'Hyvaksytty'),
 			'sairaus'=> Yii::t('main', 'Sairaus'),
 			'tuoteID' => Yii::t('main', 'Tuote/Palvelu'),
+			'palkanlaskentaan' => Yii::t('main', 'Palkanlaskentaan'),
 		);
 	}
 
