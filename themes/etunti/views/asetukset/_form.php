@@ -257,7 +257,7 @@ $('.ryhmat').multiselect({
 });
 </script>
    <div class="col-sm-3">
-    <legend><h2><?php echo Yii::t('main','Oletus laskutus tiedot'); ?></h2></legend>
+    <legend><h2><?php echo Yii::t('main','Laskutuksen oletustiedot'); ?></h2></legend>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_laskutus_kanava'); ?>
@@ -315,7 +315,7 @@ $('.ryhmat').multiselect({
 	</div>
    </div>
    <div class="col-sm-3">
-    <legend><h2><?php echo Yii::t('main','Muu asiakkaan asetukset'); ?></h2></legend>
+    <legend><h2><?php echo Yii::t('main','Muut asiakkaan asetukset'); ?></h2></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_pakkoliset'); ?>
 		<?php
