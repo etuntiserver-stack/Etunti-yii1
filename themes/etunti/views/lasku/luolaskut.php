@@ -17,6 +17,7 @@
 					'filter_postitoimipaikka' => (isset($_GET['filter_postitoimipaikka']))?$_GET['filter_postitoimipaikka']:'',
 					'filter_tyoryhma' => (isset($_GET['filter_tyoryhma']))?$_GET['filter_tyoryhma']:'',
 					'filter_asiakasryhma' => (isset($_GET['filter_asiakasryhma']))?$_GET['filter_asiakasryhma']:'',
+					'tunnit' => $tunnit,
 					'from' => $from,
 					'to' => $to,
 					'paivays' => $paivays,
@@ -424,7 +425,16 @@
 		<th>
 		<?php
 			echo CHtml::link(Yii::t('main', 'Lähetä lasku'), 
-				array('lasku/luolaskut', 'from' => $from, 'to' => $to, 'alvsis' => $alvsis, 'asiakas_id' => $item->id, 'paivays' => $paivays, 'erapaiva' => $erapaiva, 'laheta' => true), 
+				array('lasku/luolaskut', 
+					'tunnit' => $tunnit, 
+					'from' => $from, 
+					'to' => $to, 
+					'alvsis' => $alvsis, 
+					'asiakas_id' => $item->id, 
+					'paivays' => $paivays, 
+					'erapaiva' => $erapaiva, 
+					'laheta' => true
+				), 
 				array(
 					'class' => 'btn btn-block btn-success',
 					'data-toggle'=>'tooltip', 
