@@ -2071,7 +2071,7 @@ $xml .= '
 }
 
 if(count($laskunRivit) > 0){ $xml .= '</InvoiceLines>'; }
-
+/*
 	if( !empty($model->netvisor_dimension_name) and !empty($model->netvisor_dimension_item)){
 	$xml .= '
 	<invoicevoucherlines>
@@ -2087,6 +2087,7 @@ if(count($laskunRivit) > 0){ $xml .= '</InvoiceLines>'; }
 	 </voucherline>
 	</invoicevoucherlines>';
 	}
+*/
 
 $xml .= '
   </SalesInvoice>
