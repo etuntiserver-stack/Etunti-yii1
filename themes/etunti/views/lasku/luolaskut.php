@@ -594,7 +594,10 @@ $(document).ready(function(){
     var asiakas_id = $(this).closest('.lahetys_laatikko').attr('asiakas_id');
     var from = $(this).closest('.lahetys_laatikko').attr('from');
     var to = $(this).closest('.lahetys_laatikko').attr('to');
-
+    if(tab_array.length == 0){ 
+	alert('Virhe. Ei löytyy yhtään riveja.');
+	return false;
+    }
     $.ajax({
            url: 'insert_lahete',
 	   type:'POST',
