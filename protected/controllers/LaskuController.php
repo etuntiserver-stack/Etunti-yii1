@@ -2093,6 +2093,8 @@ $xml .= '
   </SalesInvoice>
 </root>';
 	
+//echo $xml;
+//exit;
 	$optsPOST = array(
 	  'http'=>array(
 	    'method'=>"POST",
