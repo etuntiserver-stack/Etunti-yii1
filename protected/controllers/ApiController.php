@@ -226,8 +226,8 @@ public function actionAsetukset($dom)
     switch($_GET['model'])
     {
         case 'mob':
-	$asetukset = Asetukset::model()->findbypk(1);
        	$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
+	$asetukset = Asetukset::model()->findbypk(1);
 	$app_naytta_osoitekenta = 'no';
 	if( $asetukset->app_auto_hyvaksyminen == 0 and $ttekija->app_naytta_osoitekenta == 1 and $asetukset->app_naytta_osoitekenta == 1 ){
 	$app_naytta_osoitekenta = 'yes';
