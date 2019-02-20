@@ -529,7 +529,7 @@ $(document).ready(function(){
     $(this).closest('.m_icons').append('<i class="link fa fa-2x fa-plus uusirivi" style="margin-left:10px"></i>');
     $(this).closest('td').find('.th_tuote').before('<th class="th_poisto"></th>');
     $(this).closest('td').find('.alv_valinta').show(370);
-    $( $(this).closest('table').find('.rivintaulu td.input_nimike') ).each(function( index ) {
+    $( $(this).closest('tr').find('.rivintaulu td.input_nimike') ).each(function( index ) {
 	$(this).replaceWith('' +
 		'<td class="poisto_td"><i class="link fa fa-2x fa-trash"></i></td>' +
 		'<td class="input_nimike" tp_id="'+ $(this).attr('tp_id') +'" tv_id="'+ $(this).attr('tv_id') +'">' + 
@@ -541,31 +541,31 @@ $(document).ready(function(){
 		'</td>'
 	);
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_hinta') ).each(function( index ) {
+    $( $(this).closest('td').find('.rivintaulu td.input_hinta') ).each(function( index ) {
 	todigit = $(this).text().replace(/\,/g, '.');
 	$(this).replaceWith('<td class="input_hinta" width="110"><input type="number" name="hinta" class="form-control" value="'+ todigit +'"></td>');
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_yksikko') ).each(function( index ) {
+    $( $(this).closest('td').find('.rivintaulu td.input_yksikko') ).each(function( index ) {
 	lista = '<select class="form-control lista" name="yksikko"><?=$this->yksikkot("'+ $(this).text() +'")?></select>';
 	$(this).replaceWith('<td class="input_yksikko">'+ lista +'</td>');
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_kpl') ).each(function( index ) {
+    $( $(this).closest('td').find('.rivintaulu td.input_kpl') ).each(function( index ) {
 	todigit = $(this).text().replace(/\,/g, '.');
 	$(this).replaceWith('<td class="input_kpl" width="100"><input type="number" name="kpl" class="form-control" value="'+ todigit +'"></td>');
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_alv') ).each(function( index ) {
+    $( $(this).closest('td').find('.rivintaulu td.input_alv') ).each(function( index ) {
 	todigit = $(this).text().replace(/\,/g, '.');
 	$(this).replaceWith('<td class="input_alv" width="100"><input type="number" name="alv" class="form-control" value="'+ todigit +'"></td>');
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_veroton') ).each(function( index ) {
+    $( $(this).closest('td').find('.rivintaulu td.input_veroton') ).each(function( index ) {
 	todigit = $(this).text().replace(/\,/g, '.');
 	$(this).replaceWith('<td class="input_veroton" width="100"><input type="number" name="veroton" class="form-control" value="'+ todigit +'" readonly></td>');
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_yhteensa') ).each(function( index ) {
+    $( $(this).closest('td').find('.rivintaulu td.input_yhteensa') ).each(function( index ) {
 	todigit = $(this).text().replace(/\,/g, '.');
 	$(this).replaceWith('<td class="input_yhteensa" width="100"><input type="number" name="yhteensa" class="form-control" value="'+ todigit +'" readonly></td>');
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_freetext') ).each(function( index ) {
+    $( $(this).closest('td').find('.rivintaulu td.input_freetext') ).each(function( index ) {
 	$(this).replaceWith('<td class="input_freetext"><input type="text" name="freetext" class="form-control" value="'+ $(this).text() +'"></td>');
     });
   });
@@ -622,31 +622,31 @@ $(document).ready(function(){
 	$(this).closest('td').find('select').remove();
 	$(this).closest('td').replaceWith('<td class="input_nimike" tp_id="'+ $(this).closest('td').attr('tp_id') +'" tv_id="'+ $(this).closest('td').attr('tv_id') +'">'+ $(this).val()+ '</td>');
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_hinta') ).find('input').each(function( index ) {
+    $( $(this).closest('td').find('.rivintaulu td.input_hinta') ).find('input').each(function( index ) {
 	todigit = $(this).val().replace(/\./g, ',');
 	$(this).replaceWith(todigit);
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_yksikko') ).find('select').each(function( index ) {
+    $( $(this).closest('td').find('.rivintaulu td.input_yksikko') ).find('select').each(function( index ) {
 	todigit = $(this).val();
 	$(this).replaceWith(todigit);
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_kpl') ).find('input').each(function( index ) {
+    $( $(this).closest('td').find('.rivintaulu td.input_kpl') ).find('input').each(function( index ) {
 	todigit = $(this).val().replace(/\./g, ',');
 	$(this).replaceWith(todigit);
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_alv') ).find('input').each(function( index ) {
+    $( $(this).closest('td').find('.rivintaulu td.input_alv') ).find('input').each(function( index ) {
 	todigit = $(this).val().replace(/\./g, ',');
 	$(this).replaceWith(todigit);
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_veroton') ).find('input').each(function( index ) {
+    $( $(this).closest('td').find('.rivintaulu td.input_veroton') ).find('input').each(function( index ) {
 	todigit = $(this).val().replace(/\./g, ',');
 	$(this).replaceWith(todigit);
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_yhteensa') ).find('input').each(function( index ) {
+    $( $(this).closest('td').find('.rivintaulu td.input_yhteensa') ).find('input').each(function( index ) {
 	todigit = $(this).val().replace(/\./g, ',');
 	$(this).replaceWith(todigit);
     });
-    $( $(this).closest('table').find('.rivintaulu td.input_freetext') ).find('input').each(function( index ) {
+    $( $(this).closest('td').find('.rivintaulu td.input_freetext') ).find('input').each(function( index ) {
 	$(this).replaceWith($(this).val());
     });
   });
