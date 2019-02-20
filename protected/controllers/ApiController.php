@@ -76,11 +76,8 @@ public function actionCheck_admin($dom)
 
 }
 
-
-
 public function actionAdminkalut($dom)
-
-    {
+{
 
 	    Yii::app()->user->setState('domain', $dom);
 
@@ -154,17 +151,12 @@ public function actionAdminkalut($dom)
 
 }
 
-
-
-
 public function actionPaivita_tiedot($dom)
-    {
+{
 
     switch($_GET['model'])
     {
         case 'mob':
-
-		$this->checkDBexists($dom);
 
 		// <-- check domain is not empty
 		if(!isset($dom) or empty($dom))
@@ -174,14 +166,7 @@ public function actionPaivita_tiedot($dom)
 		}
 		// check domain is not empty -->
 
-		$criteria = new CDbCriteria();
-		$criteria->condition = "
-			aktiivinen=1 AND mobiili=1 
-			AND salasana!='' 
-			AND tekijan_email = '".$_POST['email']."' 
-			AND salasana = '".$_POST['salasana']."' 
-		";
-		$ttekija = Tyontekijat::model()->find($criteria);
+		$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
 		if( isset($_POST['token']) and !empty($_POST['token']) and isset($ttekija->id) and $ttekija->gcm_reg_id != $_POST['token'] )
 		{
 			$token = $_POST['token'];
@@ -218,12 +203,66 @@ public function actionPaivita_tiedot($dom)
 
 }
 
+protected function kirjautuminen($domain, $email, $salasana){
+	$domain = strtolower($domain);
+	$this->checkDBexists($domain);
+	$criteria = new CDbCriteria();
+	$criteria->condition = "
+		aktiivinen=1 AND mobiili=1 
+		AND salasana!='' 
+		AND tekijan_email = '".$_POST['email']."' 
+		AND salasana = '".$_POST['salasana']."' 
+	";
+        $ttekija = Tyontekijat::model()->find($criteria);
+	if(!isset($ttekija->id)){
+		$this->_sendResponse(200, CJSON::encode(array('error' => 'Työntekijää ei löydy.')));
+		die(json_encode("Työntekijää ei löydy."));
+	}
+	return $ttekija;
+}
 
+public function actionAsetukset($dom)
+{
+    switch($_GET['model'])
+    {
+        case 'mob':
+	$asetukset = Asetukset::model()->findbypk(1);
+       	$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
+	$app_naytta_osoitekenta = 'no';
+	if( $asetukset->app_auto_hyvaksyminen == 0 and $ttekija->app_naytta_osoitekenta == 1 and $asetukset->app_naytta_osoitekenta == 1 ){
+	$app_naytta_osoitekenta = 'yes';
+	}
+	$app_asetukset = array(
+		'app_naytta_osoitekenta' => $app_naytta_osoitekenta,
+	);
+        $this->_sendResponse(200, CJSON::encode($app_asetukset));
+	exit;
+        break;
+        default:
+            // Model not implemented error
+            $this->_sendResponse(501, sprintf(
+                'Error: Mode <b>list</b> is not implemented for model <b>%s</b>',
+                $_GET['model']) );
+            Yii::app()->end();
+    }
+    // Did we get some results?
+    if(empty($models)) {
+        // No
+        $this->_sendResponse(200, 
+                sprintf('No items where found for model <b>%s</b>', $_GET['model']) );
+    } else {
+        // Prepare response
+        $rows = array();
+        foreach($models as $model)
+            $rows[] = $model->attributes;
+        // Send the response
+        $this->_sendResponse(200, CJSON::encode($rows));
+    }
+}
 
 
 public function actionLang($dom)
-
-    {
+{
 
     switch($_GET['model'])
     {
@@ -303,12 +342,7 @@ public function actionLang($dom)
         // Send the response
         $this->_sendResponse(200, CJSON::encode($rows));
     }
-
-
 }
-
-
-
 
 public function actionTiedosto($dom)
 
@@ -332,15 +366,7 @@ public function actionTiedosto($dom)
 		  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".$dom, 0777, true);
 		}
 
-
-	   	$criteria = new CDbCriteria();
-	    	$criteria->condition = "
-			aktiivinen=1 AND mobiili=1 
-			AND salasana!='' 
-			AND tekijan_email = '".$_POST['email']."' 
-			AND salasana = '".$_POST['salasana']."' 
-	    	";
-            	$ttekija = Tyontekijat::model()->find($criteria);
+		$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
 
 	  	if(isset($ttekija->id)){
 
@@ -475,9 +501,6 @@ public function actionImei($dom)
     {
         // Get an instance of the respective model
         case 'mob':
-
-		$this->checkDBexists($dom);
-
 		// <-- kokeiluversion
 		if(!$this->checkKokeiluversion($dom))
 		{
@@ -527,13 +550,7 @@ public function actionImei($dom)
 	    if(!isset($_SESSION['tid']) and !isset($_SESSION['email']) and !isset($_SESSION['salasana']))
 	    {
 
-		$criteria = new CDbCriteria();
-		$criteria->condition = " 
-			aktiivinen=1 AND mobiili=1
-			AND tekijan_email = '".$_POST['email']."' 
-			AND salasana = '".$_POST['salasana']."' 
-		";
-		$ttekija = Tyontekijat::model()->find($criteria);
+		$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
 		if(isset($ttekija->id)){ 
 			$_SESSION['tid'] = $ttekija->id;
 			$_SESSION['email'] = $_POST['email'];
@@ -1552,9 +1569,7 @@ public function actionImei($dom)
 		$sql = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '".trim(strtolower($db))."'";
 		$command=$connection->createCommand($sql);
 		if($command->execute() != true){
-
 			die(json_encode("Yritystunnus on virheellinen."));
-
 		}
         		return true;
 	}

@@ -302,6 +302,7 @@ return array(
         array('api/imei', 'pattern'=>'api/<model:\w+>/imei', 'verb'=>'POST'),
         array('api/tiedosto', 'pattern'=>'api/<model:\w+>/tiedosto', 'verb'=>'POST'),
         array('api/lang', 'pattern'=>'api/<model:\w+>/lang', 'verb'=>'POST'),
+        array('api/asetukset', 'pattern'=>'api/<model:\w+>/asetukset', 'verb'=>'POST'),
         array('api/paivita_tiedot', 'pattern'=>'api/<model:\w+>/paivita_tiedot', 'verb'=>'POST'),
         array('api/check_admin', 'pattern'=>'api/<model:\w+>/check_admin', 'verb'=>'POST'),
         array('api/adminkalut', 'pattern'=>'api/<model:\w+>/adminkalut', 'verb'=>'POST'),
