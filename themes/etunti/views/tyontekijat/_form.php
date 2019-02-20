@@ -106,22 +106,6 @@ if(empty($model->position) and isset($model->id))
 	</div>
 	<?php endif; ?>
 
-	<?php if(isset($model->id) and $model->mobiili == 1) : ?>
-	<div class="section fill mb5 ashidd_a">
-		<?php echo CHtml::link(Yii::t('main', 'Sulje mobiilisovellus'), 
-				array('update', 'id'=>$model->id, 'sulje_mobiili'=>true), 
-				array(
-					'class' => 'btn btn-primary btn-block myBgColors',
-					'data-toggle'=>'tooltip', 
-					'data-placement'=>'top', 
-					'title'=>Yii::t('main', 'Lähetä'),
-					//'target' => '_blank'
-				)
-			); 
-		?>
-	</div>
-	<?php endif; ?>
-
 	<?php if(isset($model->id) and $model->mobiili == 0) : ?>
 	<div class="section fill mb5 ashidd_a">
 		<?php echo CHtml::link(Yii::t('main', 'Avaa mobiilisovellus'), 
@@ -353,7 +337,33 @@ $(document).ready(function(){
 	</div>
 	<?php endif; ?>
 
-
+	<?php if(isset($model->id) and $model->mobiili == 1) : ?>
+	<legend><?=Yii::t('main', 'APP mobiilisovellus')?></legend>
+	<div class="section fill mb5 ashidd_a">
+		<?php echo CHtml::link(Yii::t('main', 'Sulje mobiilisovellus'), 
+				array('update', 'id'=>$model->id, 'sulje_mobiili'=>true), 
+				array(
+					'class' => 'btn btn-primary btn-block myBgColors',
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Lähetä'),
+					//'target' => '_blank'
+				)
+			); 
+		?>
+	</div>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_naytta_osoitekenta'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'app_naytta_osoitekenta', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'app_naytta_osoitekenta'); ?>
+	</div>
+	<?php endif; ?>
    </div>
    <div class="col-sm-3">
 

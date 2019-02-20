@@ -117,7 +117,8 @@ class Asetukset extends DB2ActiveRecord
                      'netvisor_mita_lahetetaan' => 'varchar(255) ',
                      'app_hyvaksytyt_tyot_vkomaara' => 'int(3) DEFAULT 4 ',
                      'app_naytetaanko_hyvaksyttyt_tunnit' => 'int(1) ',
-                     'app_naytta_avain' => 'int(1) ',
+                     'app_naytta_avain' => 'int(1) DEFAULT 0',
+                     'app_naytta_osoitekenta' => 'int(1) DEFAULT 1',
                      'app_matka_osoite' => 'int(1) DEFAULT 1',
                      'app_lounastauko_osoite' => 'int(1) DEFAULT 1',
                      'app_auto_hyvaksyminen' => 'int(1) DEFAULT 0',
@@ -198,7 +199,7 @@ class Asetukset extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id, johtaja', 'required'),
-			array('id, show_name, app_show_phone, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero, ilmoitus_avoimista_kohteesta_sahkopostiin, ilmoitus_myohastyneista_kohteesta_sahkopostiin, netvisor_kaytto, asiakas_tyovuorossa, onlinevaraus_aikaisintaan_paivamaara, onlinevaraus_alku, onlinevaraus_loppu, paikkakunta_tyovuorossa, app_lopettaa_vain_tagilla, ilmoitus_toistuvien_tyovuorojen_paattymisesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen, tyovuorolahetys_naytetaanko_asiakas, tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka, ilmoitus_merkkipaivasta, tyontekijan_etunimi_sukunimi_jarjestys, app_hyvaksytyt_tyot_vkomaara, app_naytetaanko_hyvaksyttyt_tunnit, app_naytta_avain, tapaturmavakuutus, ryhmahenkivakuutus, tyottomyysvakuutusmaksu, sosiaaliturvamaksu, tyel_maksun_osuus_palkkansummasta, app_naytetaanko_kohteen_yhteyshenkilo, onlinevaraus_viikonlopput, maksullinen, ilmainen_versio_kayttotunnit, alennus_max_euro, alennus_max_prosentti, peruutta_paiva_ennen, lasketaanko_lounastauko, apuaika_meneeko_laskutukseen, netvisor_lahetetaanko_tyontekija, tuote_tyovuorossa, app_matka_osoite, app_lounastauko_osoite, tuotteet_palvelut_muoto, onlinevaraus_aikavali, onlinevaraus_autoremove, tyoryhmat, tyoryhmat_kohde, tyoryhmat_tyontekijat, tietosuoja_vinkki_sailyttaminen, app_auto_hyvaksyminen, app_hyvaksynnan_peruste, app_auto_hyvaksyminen_aikavali, app_auto_hyvaksyminen_tvmukaan, netvisor_mita_onkayttossa, lasku_laskunumero, asiakas_kirjeenluokka, asiakas_viivastyskorko, asiakas_maksuehto, asiakas_myyja, asiakas_tyoryhma, asiakas_alv', 'numerical', 'integerOnly'=>true),
+			array('id, show_name, app_show_phone, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero, ilmoitus_avoimista_kohteesta_sahkopostiin, ilmoitus_myohastyneista_kohteesta_sahkopostiin, netvisor_kaytto, asiakas_tyovuorossa, onlinevaraus_aikaisintaan_paivamaara, onlinevaraus_alku, onlinevaraus_loppu, paikkakunta_tyovuorossa, app_lopettaa_vain_tagilla, ilmoitus_toistuvien_tyovuorojen_paattymisesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen, tyovuorolahetys_naytetaanko_asiakas, tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka, ilmoitus_merkkipaivasta, tyontekijan_etunimi_sukunimi_jarjestys, app_hyvaksytyt_tyot_vkomaara, app_naytetaanko_hyvaksyttyt_tunnit, app_naytta_avain, tapaturmavakuutus, ryhmahenkivakuutus, tyottomyysvakuutusmaksu, sosiaaliturvamaksu, tyel_maksun_osuus_palkkansummasta, app_naytetaanko_kohteen_yhteyshenkilo, onlinevaraus_viikonlopput, maksullinen, ilmainen_versio_kayttotunnit, alennus_max_euro, alennus_max_prosentti, peruutta_paiva_ennen, lasketaanko_lounastauko, apuaika_meneeko_laskutukseen, netvisor_lahetetaanko_tyontekija, tuote_tyovuorossa, app_matka_osoite, app_lounastauko_osoite, tuotteet_palvelut_muoto, onlinevaraus_aikavali, onlinevaraus_autoremove, tyoryhmat, tyoryhmat_kohde, tyoryhmat_tyontekijat, tietosuoja_vinkki_sailyttaminen, app_auto_hyvaksyminen, app_hyvaksynnan_peruste, app_auto_hyvaksyminen_aikavali, app_auto_hyvaksyminen_tvmukaan, netvisor_mita_onkayttossa, lasku_laskunumero, asiakas_kirjeenluokka, asiakas_viivastyskorko, asiakas_maksuehto, asiakas_myyja, asiakas_tyoryhma, asiakas_alv, app_naytta_osoitekenta', 'numerical', 'integerOnly'=>true),
 
 			array('paivan_uutinen, logon_polkku, netvisor_host', 'length', 'max'=>500),
 			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id, trust_ws_cid, trust_ws_salasana, netvisor_acceptancestatus, edico_tehdyt_tyot, asiakas_hinta_tyyppi', 'length', 'max'=>100),
@@ -285,6 +286,7 @@ class Asetukset extends DB2ActiveRecord
 			'app_hyvaksytyt_tyot_vkomaara'=>Yii::t('main', 'Hyväksytyt työt vko määrä'),
 			'app_naytetaanko_hyvaksyttyt_tunnit'=>Yii::t('main', 'Näytetäänkö hyväksytyt tunnit'),
 			'app_naytta_avain'=>Yii::t('main', 'Näytetäänkö avaimet'),
+			'app_naytta_osoitekenta'=>Yii::t('main', 'Näytä osoite sovelluksessa'),
 			'edico_laatutaso_1' => Yii::t('main', 'Laatutaso 1'),
 			'edico_laatutaso_2' => Yii::t('main', 'Laatutaso 2'),
 			'edico_laatutaso_3' => Yii::t('main', 'Laatutaso 3'),
