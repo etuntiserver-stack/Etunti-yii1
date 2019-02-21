@@ -685,10 +685,10 @@ $(document).ready(function(){
 	parseFloat($(this).closest('tr').find('.input_veroton input').val(veroton.toFixed(2)));
 	parseFloat($(this).closest('tr').find('.input_yhteensa input').val(yhteensa.toFixed(2)));
 
-	$(this).closest('table').find('.input_yhteensa input').each(function( index ) {
+	$(this).closest('tr').find('.input_yhteensa input').each(function( index ) {
 		yhteensa_last += parseFloat($(this).val());
 	});
-	parseFloat($(this).closest('.paa_taulu').find('.yhteensa_last').text(yhteensa_last.toFixed(2).replace(/\./g, ',')));
+	parseFloat($(this).parents('tr').next('tr').find('.yhteensa_last').text(yhteensa_last.toFixed(2).replace(/\./g, ',')));
 	return false;
   });
 
