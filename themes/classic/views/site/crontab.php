@@ -92,157 +92,94 @@
 	//     maksullinen versio -->
 
 	// <-- Ilmoitus määräajan ylittäneistä kohteista
-		$message 	= '';
-		$arr 		= array();
-		$forMessage	= array();
-
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
 			DATE_FORMAT(STR_TO_DATE(CONCAT(pvm,loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') < (NOW() - INTERVAL $aikavali_halytys MINUTE)
 			AND ilmoitus_avoimista_kohteesta=0
-			AND kohde IN
-			(
-			SELECT kohdenID FROM sivexkuitti
+			AND id IN 
+			(SELECT tv_id FROM sivexkuitti 
 			WHERE status=1 
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = DATE_FORMAT(STR_TO_DATE(t.pvm, '%d.%m.%Y'), '%Y-%m-%d')
 			AND tid=t.tid
 			)
-			AND kohde!=0
 			AND peruutettu=0
 		";
 		$m = Tyovuoroot::model()->findAll($criteria);
 
-		if(isset($m[0]))
+		if( count($m) > 0 )
 		{
 			echo '<h2>'.strtoupper($ft->tyonantaja).'</h2>';
-			echo '<h2>'.Yii::t('main', 'Avoimet kohteet').' '.date("d.m.Y H:i").'</h2>';
-
+			echo '<h2>'.Yii::t('main', 'Avoimet kohteet').' '.date("d.m.Y H:i").'</h2><br>';
 
 		  foreach($m as $data)
 		  {
-
 			$bod 		= '';
 			$osoite 	= '';
 			$tekijan_nimi 	= '';
 			$tyoryhmaForArr = '';
-
-			$k = Kohteet::model()->findbypk($data->kohde);
-			$tt = Tyontekijat::model()->findbypk($data->tid);
-
-			if(isset($tt->id) and $tt->aktiivinen == 0){
-			continue;
-			}
-
-			if(isset($k->osoite))
-				$osoite = Yii::t('main', 'Osoite').': <b>'. $k->osoite.'</b><br>';
-
-
-			if(isset($tt->id)){
-				$tekijan_nimi = Yii::t('main', 'Työntekijä').':  <b>'.$this->etuSukunimi($tt->id).'</b><br>';
-				$tyoryhmaForArr = $tt->tyoryhma;
-			}
-
+			$osoite = Yii::t('main', 'Osoite').': <b>'. $data->osoite.'</b><br>';
+			$tekijan_nimi = Yii::t('main', 'Työntekijä').':  <b>'.$this->etuSukunimi($data->tid).'</b><br>';
 
 			$bod 	.= $tekijan_nimi.$osoite;
-			$bod 	.= Yii::t('main', 'Lopetusajaksi oli määritelty').': <b>'.$data->pvm.' '.$data->loppu.'</b>';
+			$bod 	.= Yii::t('main', 'Lopetusajaksi oli määritelty').': '.$data->pvm.', '.$data->alku;
 			$bod 	.= '<br>';
 
+			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' ){
+				Tyovuoroot::model()->updatebypk($data->id,array('ilmoitus_avoimista_kohteesta'=>1));
+			}
+			// <-- Sahkopostin lahetys
+			$tekija = Tyontekijat::model()->findByPk($data->tid);
+			if( isset($tekija->id) and $asetukset->ilmoitus_myohastyneista_kohteesta_sahkopostiin == 1 ){
+			   if(is_array(json_decode($tekija->tyoryhma, true))){
+				foreach(json_decode($tekija->tyoryhma, true) as $tyoryhma){
+					$mailMessage 	= '';
+					$mailMessage 	.= '<h3>'.Yii::t('main', 'Työryhmä').' '.$tyoryhma.'</h3><br>';
+					$mailMessage 	.= $bod;
+					$criteria = new CDbCriteria();
+					$criteria->order = " value ";
+					$criteria->condition = " 
+						select_type='tyoryhma'	
+						AND value='$tyoryhma'
+					";
+					$valikot = Valikkoot::model()->find($criteria);
+					if( isset($valikot->value2) and is_array(json_decode($valikot->value2, true)) ){
+						foreach(json_decode($valikot->value2, true) as $adm_id){
+							$administrators = Administrators::model()->findByPk($adm_id);
+							if(isset($administrators->adm_email) and !empty($administrators->adm_email)){
+								if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+								{
+									$subject = Yii::t('main', 'Ilmoitus avoimista kohteesta '.date("d.m.Y H:i"));
+									$mail = new YiiMailer();
+									$mail->setFrom('no-reply@etunti.fi');
+									$mail->setTo($administrators->adm_email);
+									$mail->setSubject();
+									$mail->setBody($mailMessage);
+									$mail->send();
 
-			$arr[$tyoryhmaForArr] 	= $tyoryhmaForArr;
-			array_push($forMessage, array(
-						'tyoryhma'=>$tyoryhmaForArr, 
-						'message'=>$bod) 
-			);
-
-			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
-			Tyovuoroot::model()->updatebypk($data->id,array('ilmoitus_avoimista_kohteesta'=>1));
-
-		
-		  }
-		}
-
-
-
-		if(count($arr) > 0 and $asetukset->ilmoitus_avoimista_kohteesta_sahkopostiin == 1)
-		{
-
-			// <-- Järjestelmanvalvojan kuluvia ryhmiä
-			$criteria = new CDbCriteria();
-			$criteria->order = " value ";
-			$criteria->condition = " 
-				select_type='tyoryhma'	
-				AND value2!=''
-			";
-			$valikot = Valikkoot::model()->findAll($criteria);
-		  	$ft = FirmanTiedot::model()->findbypk(1);
-			foreach($arr as $ryhma){
-				
-				foreach($valikot as $data){
-
-					if($data->value == $ryhma){
-
-						$sahkopostiArray	= array();
-						$mailMessage 	= '';
-						$mailMessage 	.= '<h3>'.Yii::t('main', 'Työryhmä').' '.$ryhma.'</h3>';
-
-						foreach($forMessage as $key=>$value){
-							if($value['tyoryhma'] == $data->value)
-							$mailMessage .= $value['message'].'<br>';
-						}
-
-						$admin_ids = json_decode($data->value2);
-						if(is_array($admin_ids)){
-							foreach($admin_ids as $adm_id){
-								$administrators = Administrators::model()->findByPk($adm_id);
-								if(isset($administrators->adm_email) and !empty($administrators->adm_email))
-								array_push($sahkopostiArray, $administrators->adm_email);
+									// <-- LOG
+									$log=new Log;
+									$log->log_category 	= 1; // 1-email
+									$log->email_to 		= $administrators->adm_email;
+									$log->email_subject	= $subject;
+									$log->email_message	= json_encode($mailMessage);
+									$log->save();
+									//     LOG -->
+								}
+								echo '<h4>'.$administrators->adm_email.'</h4>'.$mailMessage;
 							}
 						}
-
-						if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
-						{
-							$subject = Yii::t('main', 'Ilmoitus avoimista kohteesta '.date("d.m.Y H:i"));
-							$mail = new YiiMailer();
-							$mail->setFrom('no-reply@etunti.fi');
-							$mail->setTo($sahkopostiArray);
-							$mail->setSubject($subject);
-							$mail->setBody($mailMessage);
-							$mail->send();
-
-							// <-- LOG
-							$log=new Log;
-							$log->log_category 	= 1; // 1-email
-							$log->email_to 		= implode(",", $sahkopostiArray);
-							$log->email_subject	= $subject;
-							$log->email_message	= json_encode($message);
-							$log->save();
-							//     LOG -->
-						}
-
-						//print_r($sahkopostiArray);
-						echo $mailMessage;
-
 					}
-
 				}
-
+			   }
 			}
-
-
-
-
-			echo '<hr>';
-
+			//     Sahkopostin lahetys -->
+		  }
 		}
 	// Ilmoitus määräajan ylittäneistä kohteista -->
 
 
 
 	// <-- ilmoitus_myohastyneista_kohteesta
-		$message 	= '';
-		$arr 		= array();
-		$forMessage	= array();
-
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
 			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
