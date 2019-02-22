@@ -152,7 +152,7 @@
 									$mail = new YiiMailer();
 									$mail->setFrom('no-reply@etunti.fi');
 									$mail->setTo($administrators->adm_email);
-									$mail->setSubject();
+									$mail->setSubject($subject);
 									$mail->setBody($mailMessage);
 									$mail->send();
 
@@ -242,7 +242,7 @@
 									$mail = new YiiMailer();
 									$mail->setFrom('no-reply@etunti.fi');
 									$mail->setTo($administrators->adm_email);
-									$mail->setSubject();
+									$mail->setSubject($subject);
 									$mail->setBody($mailMessage);
 									$mail->send();
 
