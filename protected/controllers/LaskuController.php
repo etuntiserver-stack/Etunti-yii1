@@ -2071,23 +2071,6 @@ $xml .= '
 }
 
 if(count($laskunRivit) > 0){ $xml .= '</InvoiceLines>'; }
-/*
-	if( !empty($model->netvisor_dimension_name) and !empty($model->netvisor_dimension_item)){
-	$xml .= '
-	<invoicevoucherlines>
-	 <voucherline>
-	  <lineSum type="gross">'.$model->yhteensa_total.'</lineSum>
-	  <description>Description</description>
-	  <accountNumber>3000</accountNumber>
-	  <VatPercent vatcode="KOMY">24</VatPercent>
-	  <dimension>
-	   <dimensionName>'.$model->netvisor_dimension_name.'</dimensionName>
-	   <dimensionItem>'.$model->netvisor_dimension_item.'</dimensionItem>
-	  </dimension>
-	 </voucherline>
-	</invoicevoucherlines>';
-	}
-*/
 
 $xml .= '
   </SalesInvoice>
@@ -2124,6 +2107,12 @@ $xml .= '
 		echo '<pre>';
 		print_r( $response );
 		echo '</pre>';
+		if( $tila == 'add' ){
+			$lasku = Lasku::model()->deletebypk($model->id);
+	       		$criteria = new CDbCriteria();
+	       		$criteria->condition = " lid='".$model->id."' ";
+			LaskunRivit::model()->deleteAll($criteria);
+		}
 		exit;
 
 	  }
@@ -2271,6 +2260,72 @@ $xml .= '
 		return $return;
 	}
 
+	protected function netvisorListByDay($from, $to)
+	{
+
+		$return = '';
+		$site = Yii::app()->createController('Site');
+		$n = $site[0]->netvisorYhteys();
+
+	  if(isset($n[0]))
+	  {
+		$url		= $n[0].'/salesinvoicelist.nv?BeginInvoiceDate='.$from.'&EndInvoiceDate='.$to;
+		$host 		= $n[1];
+		$sender 	= $n[2];
+		$customerId	= $n[3];
+		$partnerId	= $n[4];
+		$timestamp	= $n[5];
+		$language	= $n[6];
+		$organisationIdentifier	= $n[7];
+		$transactionIdentifier	= $n[8];
+		$userKey 	= $n[9];
+		$partnerKey	= $n[10];
+
+
+
+		$getMAC = md5(
+			$url.'&'.
+			$sender.'&'.
+			$customerId.'&'.
+			$timestamp.'&'.
+			$language.'&'.
+			$organisationIdentifier.'&'.
+			$transactionIdentifier.'&'.
+			$userKey.'&'.
+			$partnerKey
+		 	);
+	
+		$auth_data = 
+		    "Host: $host\r\n".  
+		    "X-Netvisor-Authentication-Sender: $sender\r\n".  
+		    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
+		    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
+		    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
+		    "X-Netvisor-Interface-Language: $language\r\n".
+		    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
+		    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
+		    "X-Netvisor-Authentication-MAC: $getMAC\r\n"; 
+		
+	
+		$optsGET = array(
+		  'http'=>array(
+		    'method'=>"GET",
+		    'header'=>"Accept: text/plain\r\n" .
+		              "Content-Type: application/x-www-form-urlencoded\r\n".
+			      $auth_data,
+		    'content'=> ''
+		  )
+		);
+	
+		$context = stream_context_create($optsGET);
+		
+		$response = file_get_contents($url, false, $context);
+		$return = new SimpleXMLElement($response);
+
+	   }
+
+		return $return;
+	}
 	protected function netvisorLaskentaKohteetLista()
 	{
 		$return = '';
@@ -3131,5 +3186,31 @@ $xml = '
 			$bod .= '<option value="'.$item->id.'">'.$item->nimike.'</option>';
 		}
 		return $bod;
+	}
+
+	protected function lastLaskunumero()
+	{
+		$last_laskunumero = 1;
+		$criteria = new CDbCriteria();
+		$criteria->select = " id, MAX(ABS(laskunumero)) as laskunumero ";
+		$vm = Lasku::model()->find($criteria);
+		if( isset($vm->id) ){
+			$last_laskunumero = $vm->laskunumero+1;
+		}
+
+		$netvisorList = $this->netvisorListByDay(date("Y-m-d", strtotime("first day of last month")), date("Y-m-d"));
+		if($netvisorList->ResponseStatus->Status == 'OK'){
+		  foreach($netvisorList->SalesInvoiceList->SalesInvoice as $list){
+			$last_laskunumero = $list->InvoiceNumber;
+		  }
+
+		}
+		/*
+			echo '<pre>';
+			print_r($netvisorList->SalesInvoiceList);
+			echo '</pre>';
+			exit;
+		*/
+		return $last_laskunumero;
 	}
 }

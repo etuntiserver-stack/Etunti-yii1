@@ -36,6 +36,16 @@
 		?>
 	</center>
 	<br>
+	<?php 
+	// <-- Laskunumero netvisorista
+	$laskunumero = 1;
+	if( $laheta !== null ){
+	   if( $this->lastLaskunumero() > 0 ){
+		$laskunumero = $this->lastLaskunumero()+0;
+	   }
+	} 
+	//  Laskunumero netvisorista -->
+	?>
 <p>
 <div class="container-fluid">
 	<?php if( count($lista) > 0 ): ?>
@@ -101,13 +111,7 @@
 	<!-- Lahetys Pää lasku -->
 	<?php if( $is_ok_lasku and $laheta !== null ){
 
-		$laskunumero = '';
-		if($asetukset->lasku_laskunumero == 1){
-			$criteria = new CDbCriteria();
-       			$criteria->select = " id, MAX(ABS(laskunumero)) as laskunumero ";
-			$vm = Lasku::model()->find($criteria);
-			if( isset($vm->id) ){ $laskunumero = $vm->laskunumero+1; }
-		}
+		$laskunumero++;
 
 		$lasku = new Lasku;
 		$lasku->yid = 1;
