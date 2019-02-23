@@ -23,6 +23,7 @@
 					'paivays' => $paivays,
 					'erapaiva' => $erapaiva,
 					'alvsis' => $alvsis,
+					'yrityksen_nimi' => $yrityksen_nimi,
 					'laheta' => true
 				), 
 				array(

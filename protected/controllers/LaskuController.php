@@ -121,7 +121,7 @@ class LaskuController extends Controller
 		exit;
 	}
 
-	public function actionLuolaskut($from, $to, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null, $erapaiva=null, $tunnit=null)
+	public function actionLuolaskut($from, $to, $yrityksen_nimi=null, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null, $erapaiva=null, $tunnit=null)
 	{
 		$asetukset = Asetukset::model()->findByPk(1);
 		$paivays = date("Y-m-d", strtotime($paivays));
@@ -146,6 +146,9 @@ class LaskuController extends Controller
 			)
 		    )
 		";
+		if( $yrityksen_nimi !== null and !empty($yrityksen_nimi) ){
+	        $criteria->addCondition ("  yrityksen_nimi='".$yrityksen_nimi."' OR yhteyshenkilo='".$yrityksen_nimi."' ");
+		}
 		if( $asiakas_id !== null ){
 	        $criteria->addCondition ("  id='".$asiakas_id."' ");
 		}
@@ -180,7 +183,8 @@ class LaskuController extends Controller
 			'laheta' => $laheta,
 			'luo' => $luo,
 			'alvsis' => $alvsis,
-			'tunnit' => $tunnit
+			'tunnit' => $tunnit,
+			'yrityksen_nimi' => $yrityksen_nimi,
 		));
 	}
 

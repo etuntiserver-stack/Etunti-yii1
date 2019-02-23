@@ -8,7 +8,7 @@
 
         <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo strtoupper(Yii::t('main', 'Laskutuksen automaatio')); ?></h2>
 
-
+<?php /*
 
    	    <form id="mobForm" action="#" class="form-inline" method="GET">
             <div class="admin-form">
@@ -72,6 +72,7 @@
             </div>
 
 	    </form>
+*/ ?>
 
    	    <form id="mobForm" action="luolaskut" class="form-inline" method="GET">
             <div class="admin-form">
@@ -94,6 +95,26 @@
    			    <input type="text" name="from" class="gui-input datepickerFI" placeholder="Mistä">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Asiakkaat';
+				$sarake = 'yrityksen_nimi';
+				$placeholder = 'Asiakas';
+				if(isset($_GET[$sarake])) 			$postvalue = $_GET[$sarake]; 
+				else $postvalue='';				
+		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
                             </label>
                           </label>
                         </div>
