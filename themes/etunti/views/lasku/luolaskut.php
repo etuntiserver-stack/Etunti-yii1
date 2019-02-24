@@ -146,6 +146,7 @@
 		$lasku->alv_muoto = $alvsis;
 		if(!$lasku->save()){
 			print_r($lasku->getErrors());
+			exit;
 		}
 	} ?>
 	<!-- / Lahetys -->
@@ -259,6 +260,7 @@
 			   $lr->free_text= $freetext;
 			   if(!$lr->save()){
 				print_r($lr->getErrors());
+				exit;
 			   }
 			}
 	        ?>
@@ -347,6 +349,7 @@
 			   $lr->free_text= $freetext;
 			   if(!$lr->save()){
 				print_r($lr->getErrors());
+				exit;
 			   }
 			}
 	        ?>
