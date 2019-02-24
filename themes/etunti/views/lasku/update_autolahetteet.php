@@ -54,7 +54,10 @@
 		<th>Free text</th>
 		</tr>
 		<tbody>
-		<?php $key = 0; ?>
+		<?php 
+		$key = 0; 
+		$yhteensa_total = 0;
+		?>
 		<?php foreach(json_decode($model->tab_array, true) as $mob) : ?>
 		<?php
 			if( isset($mob['nimike']) ){ $nimike = $mob['nimike']; }
@@ -67,10 +70,19 @@
 			// <-- ALV laskin
 			$veroton 	= 0;
 			$yht 		= 0;
-			$laske = ($hinta*$kpl)/100*$alv;
-			$veroton = round(($hinta*$kpl), 2);
-			$yht = $laske+$veroton;
+			if( $model->alvsis == 0 ){
+				$laske = ($hinta*$kpl)/100*$alv;
+				$veroton = round(($hinta*$kpl), 2);
+				$yht = $laske+$veroton;
+			}
+			if( $model->alvsis == 1 ){
+				$yht = $hinta*$kpl;
+				$jakaa = '1.'.$alv;
+				$l = $yht/$jakaa;
+				$veroton = round($l, 2);
+			}
 			//     ALV laskin -->
+			$yhteensa_total += $yht;
 		?>
 		<tr>
 		<td class="input_nimike"><?=$nimike?></td>
@@ -83,3 +95,7 @@
 		<td class="input_freetext"><?=$freetext?></td>
 		</tr>
 		<?php endforeach; ?>
+		<tr>
+		    <th><h3><?=Yii::t('main', 'Yhteensä')?>: <?=number_format($yhteensa_total, 2, ',', ' ')?>&euro;</h3></th>
+		</tr>
+		</table>

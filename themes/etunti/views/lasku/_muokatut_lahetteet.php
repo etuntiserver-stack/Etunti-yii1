@@ -15,6 +15,7 @@
 			); 
 		?>
 	</td>
+	<td><?=date("d.m.Y H:i", strtotime($data->time))?></td>
 	<td>
 	<?php
 	if(isset($data->asiakkaat->id) and $data->asiakkaat->tyyppi == 'yritys'){
@@ -26,9 +27,6 @@
 	?>
 	</td>
 
-	<td>
-		<p><?=date("d.m.Y H:i", strtotime($data->time))?></p>
-		<b><?=date("d.m.Y", strtotime($data->from_date))?> - <?=date("d.m.Y", strtotime($data->to_date))?></b>
-	</td>
+	<td><b><?=date("d.m.Y", strtotime($data->from_date))?> - <?=date("d.m.Y", strtotime($data->to_date))?></b></td>
 	<td><?=($data->laskutettu == 1)? 'Laskutettu':'Ei laskutettu' ?></td>
 </tr>

@@ -165,8 +165,8 @@
 		<div class="row alv_valinta" style="display:none">
 		 <div class="col-sm-3">
 			<p><select class="form-control lasku_alv_muoto">
-			<option value="0">Hinnat ALV 0%</option>
-			<option value="1">Hinnat sis. ALV</option>
+			<option value="0" <?=($alvsis == 0)?'selected':''?>>Hinnat ALV 0%</option>
+			<option value="1" <?=($alvsis == 1)?'selected':''?>>Hinnat sis. ALV</option>
 			</select></p>
 		 </div>
 		</div>
@@ -612,7 +612,7 @@ $(document).ready(function(){
     $.ajax({
            url: 'insert_lahete',
 	   type:'POST',
-	   data: { asiakas_id : asiakas_id, from : from, to : to, tab_array : tab_array },
+	   data: { asiakas_id : asiakas_id, from : from, to : to, tab_array : tab_array, alvsis : '<?=$alvsis?>' },
            success: function(data){
         	console.log(data);
 		if(data['error']){

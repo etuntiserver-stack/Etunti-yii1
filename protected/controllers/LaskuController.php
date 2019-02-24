@@ -3041,6 +3041,7 @@ $xml .= '
 		$m = Autolahetteet::model()->find($criteria);
 		if( isset($m->id) ){
 			$model = $m;
+			$model->alvsis = $_POST['alvsis'];
 			$model->tab_array = json_encode($_POST['tab_array']);
 			if(!$model->save()){
 				echo json_encode(array('error' => $model->getErrors()));
@@ -3050,6 +3051,7 @@ $xml .= '
 			$model = new Autolahetteet;
 			$model->asiakas_id = $_POST['asiakas_id'];
 			$model->adm_id = Yii::app()->user->id;
+			$model->alvsis = $_POST['alvsis'];
 			$model->from_date = $_POST['from'];
 			$model->to_date = $_POST['to'];
 			$model->tab_array = json_encode($_POST['tab_array']);
