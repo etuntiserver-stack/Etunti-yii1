@@ -350,7 +350,7 @@ if(!isset($model->id) and isset($asetukset->id)){
 
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'puhelin'); ?> <?php if(!empty($model->puhelin)): ?><a href="tel:<?php echo $model->puhelin; ?>">***soita***</a><?php endif; ?>
-		<?php echo $form->textField($model,'puhelin',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'puhelin',array('size'=>60,'maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'puhelin'); ?>
 	</div>
 
