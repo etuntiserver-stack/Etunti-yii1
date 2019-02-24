@@ -241,19 +241,20 @@
    <div class="panel-body">
 
 <div class="table-responsive">
+  <legend>Muokatut lähetteet</legend>
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
-  <th><?=Yii::t('main', 'Päivämäärä')?></th>
-  <th><?=Yii::t('main', 'Kellon ajat')?></th>
-  <th><?=Yii::t('main', 'Työntekijä')?></th>
-  <th><?=Yii::t('main', 'Kohde')?></th>
   <th></th>
+  <th><?=Yii::t('main', 'Päivämäärä')?></th>
+  <th><?=Yii::t('main', 'Aikaväli')?></th>
+  <th><?=Yii::t('main', 'Asiakas')?></th>
+  <th><?=Yii::t('main', 'Tilanne')?></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
-	'itemView'=>'_hyvaksymattomat',
+	'itemView'=>'_muokatut_lahetteet',
   	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
 
 	'pager' => array(
@@ -266,7 +267,7 @@
            'cssFile'=>false,
        ), 
 
-  )); ?>
+  ));  ?>
   </table>
 </div>
 

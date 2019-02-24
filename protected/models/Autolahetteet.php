@@ -62,4 +62,12 @@ class Autolahetteet extends DB2ActiveRecord
 		);
 	}
 
+	public function relations()
+	{
+		// NOTE: you may need to adjust the relation name and the related
+		// class name for the relations automatically generated below.
+		return array(
+		        'asiakkaat' => array(self::BELONGS_TO, 'Asiakkaat', 'asiakas_id'),
+		);
+	}
 }
