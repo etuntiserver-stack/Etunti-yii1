@@ -28,7 +28,7 @@
 
 	<td>
 		<p><?=date("d.m.Y H:i", strtotime($data->time))?></p>
-		<?=date("d.m.Y", strtotime($data->from_date))?>-<?=date("d.m.Y", strtotime($data->to_date))?>
+		<b><?=date("d.m.Y", strtotime($data->from_date))?> - <?=date("d.m.Y", strtotime($data->to_date))?></b>
 	</td>
 	<td><?=($data->laskutettu == 1)? 'Laskutettu':'Ei laskutettu' ?></td>
 </tr>
