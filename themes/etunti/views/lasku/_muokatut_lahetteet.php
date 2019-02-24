@@ -29,4 +29,17 @@
 
 	<td><b><?=date("d.m.Y", strtotime($data->from_date))?> - <?=date("d.m.Y", strtotime($data->to_date))?></b></td>
 	<td><?=($data->laskutettu == 1)? 'Laskutettu':'Ei laskutettu' ?></td>
+	<td>
+		<?php echo CHtml::link('<i class="fa fa-trash" aria-hidden="true" style="font-size: 110%"></i>', 
+				array('delete_autolahetteet', 'id'=>$data->id), 
+				array(
+					'class'=>'pull-right btn btn-primary myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Muokkaa') 
+				)
+			); 
+		?>
+	</td>
 </tr>
