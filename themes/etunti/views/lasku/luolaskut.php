@@ -153,7 +153,7 @@
 		<?php
 		$hyv_lista = array();
 		$criteria = new CDbCriteria();
-		$criteria->condition = " from_date='".$from."' AND to_date='".$to."' AND asiakas_id='".$item->id."' ";
+		$criteria->condition = " from_date='".$from."' AND to_date='".$to."' AND asiakas_id='".$item->id."' AND laskutettu=0 ";
 		$al = Autolahetteet::model()->find($criteria);
 		if( isset($al->id) and is_array(json_decode($al->tab_array, true)) ){
 			$hyv_lista = json_decode($al->tab_array, true);
@@ -407,6 +407,12 @@
 			echo $resp;
 		}
 		// Lahetys Trust -->
+
+		// <-- Update autolahetteet
+		if( $is_ok_lasku and $laheta !== null and isset($lasku->id) and isset($al->id) ){
+			Autolahetteet::model()->updateByPk($al->id, array('lasku_id' => $lasku->id, 'laskutettu' => 1));
+		}
+		// Update autolahetteet -->
 
 		// <<- Lahetys Netvisor
 		if(isset($lasku->id) 

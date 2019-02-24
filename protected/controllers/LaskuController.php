@@ -145,6 +145,8 @@ class LaskuController extends Controller
 			  )
 			)
 		    )
+		  AND id NOT IN
+		    ( SELECT asiakas_id FROM autolahetteet WHERE from_date='".$from."' AND to_date='".$to."' AND laskutettu=1 )
 		";
 		if( $yrityksen_nimi !== null and !empty($yrityksen_nimi) ){
 	        $criteria->addCondition ("  yrityksen_nimi='".$yrityksen_nimi."' OR yhteyshenkilo='".$yrityksen_nimi."' ");

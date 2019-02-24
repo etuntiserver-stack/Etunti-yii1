@@ -35,7 +35,9 @@ class Autolahetteet extends DB2ActiveRecord
                      'to_date' => 'varchar(50) DEFAULT NULL',
                      'asiakas_id' => 'int(11) DEFAULT NULL',
                      'adm_id' => 'int(11) DEFAULT NULL',
-		     'tab_array' => 'text DEFAULT NULL'
+		     'tab_array' => 'text DEFAULT NULL',
+		     'lasku_id' => 'int(11) DEFAULT 0',
+		     'laskutettu' => 'int(1) DEFAULT 0',
 		);
 		foreach($table_structure as $key=>$value)
 		{
@@ -55,7 +57,7 @@ class Autolahetteet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('from_date, to_date', 'length', 'max'=>50),
-			array('asiakas_id, adm_id', 'numerical', 'integerOnly'=>true),
+			array('asiakas_id, adm_id, lasku_id, laskutettu', 'numerical', 'integerOnly'=>true),
 			array('tab_array', 'safe'),
 		);
 	}
