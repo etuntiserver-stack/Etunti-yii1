@@ -286,6 +286,7 @@ class LaskuController extends Controller
 		}
 	*/
        		$criteria = new CDbCriteria();
+       		$criteria->order = " id DESC ";
 		/*
        		$criteria->condition = "
 

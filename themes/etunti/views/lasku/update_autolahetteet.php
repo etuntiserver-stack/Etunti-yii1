@@ -40,3 +40,46 @@
 </div>
 
 <?php $this->endWidget(); ?>
+
+<br>
+		<table class="table table-striped rivintaulu">
+		<tr>
+		<th class="th_tuote">Tuote</th>
+		<th>Hinta</th>
+		<th width="90">Yksikkö</th>
+		<th>Määrä</th>
+		<th>ALV</th>
+		<th>Veroton</th>
+		<th>Yhteensä</th>
+		<th>Free text</th>
+		</tr>
+		<tbody>
+		<?php $key = 0; ?>
+		<?php foreach(json_decode($model->tab_array, true) as $mob) : ?>
+		<?php
+			if( isset($mob['nimike']) ){ $nimike = $mob['nimike']; }
+			if( isset($mob['kpl']) ){ $kpl = $mob['kpl']; }
+			if( isset($mob['hinta']) ){ $hinta = $mob['hinta']; }
+			if( isset($mob['alv']) ){ $alv = $mob['alv']; }
+			if( isset($mob['yksikko']) ){ $yksikko = $mob['yksikko']; }
+			if( isset($mob['freetext']) ){ $freetext = $mob['freetext']; }
+
+			// <-- ALV laskin
+			$veroton 	= 0;
+			$yht 		= 0;
+			$laske = ($hinta*$kpl)/100*$alv;
+			$veroton = round(($hinta*$kpl), 2);
+			$yht = $laske+$veroton;
+			//     ALV laskin -->
+		?>
+		<tr>
+		<td class="input_nimike"><?=$nimike?></td>
+		<td class="input_hinta"><?=number_format($hinta, 2, ',', ' ')?></td>
+		<td class="input_yksikko"><?=$yksikko?></td>
+		<td class="input_kpl"><?=$kpl?></td>
+		<td class="input_alv"><?=$alv?></td>
+		<td class="input_veroton"><?=number_format($veroton, 2, ',', ' ')?></td>
+		<td class="input_yhteensa"><?=number_format($yht, 2, ',', ' ')?></td>
+		<td class="input_freetext"><?=$freetext?></td>
+		</tr>
+		<?php endforeach; ?>
