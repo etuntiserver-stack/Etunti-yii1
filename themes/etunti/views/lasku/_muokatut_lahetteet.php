@@ -15,8 +15,6 @@
 			); 
 		?>
 	</td>
-	<td><?=date("d.m.Y H:i", strtotime($data->time))?></td>
-	<td><?=date("d.m.Y", strtotime($data->from_date))?>-<?=date("d.m.Y", strtotime($data->to_date))?></td>
 	<td>
 	<?php
 	if(isset($data->asiakkaat->id) and $data->asiakkaat->tyyppi == 'yritys'){
@@ -26,6 +24,11 @@
 		echo $data->asiakkaat->yhteyshenkilo;
 	}
 	?>
+	</td>
+
+	<td>
+		<p><?=date("d.m.Y H:i", strtotime($data->time))?></p>
+		<?=date("d.m.Y", strtotime($data->from_date))?>-<?=date("d.m.Y", strtotime($data->to_date))?>
 	</td>
 	<td><?=($data->laskutettu == 1)? 'Laskutettu':'Ei laskutettu' ?></td>
 </tr>

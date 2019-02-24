@@ -246,9 +246,8 @@
   <thead class="myBgColors">
   <tr>
   <th></th>
-  <th><?=Yii::t('main', 'Päivämäärä')?></th>
-  <th><?=Yii::t('main', 'Aikaväli')?></th>
   <th><?=Yii::t('main', 'Asiakas')?></th>
+  <th><?=Yii::t('main', 'Päivämäärä')?>/<?=Yii::t('main', 'Aikaväli')?></th>
   <th><?=Yii::t('main', 'Tilanne')?></th>
   </tr>
   </thead>
