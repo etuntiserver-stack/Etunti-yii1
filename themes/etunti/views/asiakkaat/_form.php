@@ -354,6 +354,12 @@ if(!isset($model->id) and isset($asetukset->id)){
 		<?php echo $form->error($model,'puhelin'); ?>
 	</div>
 
+	<div class="section fill mb5 ashidd_a">
+		<?php echo $form->labelEx($model,'toissijainen_puhelinnumero'); ?>
+		<?php echo $form->textarea($model,'toissijainen_puhelinnumero',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'toissijainen_puhelinnumero'); ?>
+	</div>
+
 	<br>
 	<legend><?php echo Yii::t('main', 'Käyntiosoite'); ?> <input type="checkbox" data-toggle="collapse" data-target="#kosoiteet"></legend>
 

@@ -66,6 +66,7 @@ class Asiakkaat extends DB2ActiveRecord
                      'kaupunki' => 'varchar(100)',
                      'postinumero' => 'varchar(100)',
                      'puhelin' => 'varchar(100)',
+		     'toissijainen_puhelinnumero' => 'text DEFAULT NULL',
                      'sahkoposti' => 'varchar(100)',
                      'ryhma' => 'varchar(255)',
                      'aktiivinen' => 'int(1)',
@@ -138,7 +139,7 @@ class Asiakkaat extends DB2ActiveRecord
 			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma, sahkopostilaskuosoite, token', 'length', 'max'=>255),
 			array('maksuehto, viivastyskorko, hinta, hinta_sis_alv', 'length', 'max'=>20),
 			array('asiakasnumero, ovt_tunnus, valittajan_tunnus, hinta_tyyppi, verot, lopetuksen_pvm', 'length', 'max'=>100),
-			array('alennuskoodit, gcm_reg_id, lopetuksen_syy, netvisor_dimension_name, netvisor_dimension_item', 'safe'),
+			array('alennuskoodit, gcm_reg_id, lopetuksen_syy, netvisor_dimension_name, netvisor_dimension_item, toissijainen_puhelinnumero', 'safe'),
 			array('sahkoposti','unique', 'message'=>'Tämä sähköposti on jo rekisteröity asiakkaalle.'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
