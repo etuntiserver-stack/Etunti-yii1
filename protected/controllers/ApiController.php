@@ -731,16 +731,12 @@ public function actionImei($dom)
 
 		    $tas = Domainit::model()->find(" domain='".$dom."' ");
 		    $p = array();
-		    if(isset($tas->paketti)) 
-		     	$p = explode(",",$tas->paketti);
+		    if(isset($tas->paketti)){ $p = explode(",",$tas->paketti); }
 
-		    if(!in_array('2',$p))
-		    {
+		    if(in_array('2',$p, false)){
 		    $this->_sendResponse(200, 'Osta lisäosa työvuorojenhallinta');
 		    exit;
 		    } 
-
-
 
 		    if(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '1')
 		    $aikaVali = date('Y-m-d',strtotime('sunday this week'));
