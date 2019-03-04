@@ -733,7 +733,7 @@ public function actionImei($dom)
 		    $p = array();
 		    if(isset($tas->paketti)){ $p = explode(",",$tas->paketti); }
 
-		    if(in_array('2',$p, false)){
+		    if(!in_array('2',$p, true)){
 		    $this->_sendResponse(200, 'Osta lisäosa työvuorojenhallinta');
 		    exit;
 		    } 
