@@ -2087,7 +2087,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$to = date("Y-m-d", strtotime($to));
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "id";
+        	$criteria->select = "id, aloitan";
         	$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))";
 	        $criteria->condition = "
 			id NOT IN (SELECT kid FROM sivexkuitti_repaired)
@@ -2102,7 +2102,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$lu = Mobile::model()->findAll($criteria);
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "id";
+        	$criteria->select = "id, aloitan";
         	$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))";
 	        $criteria->condition = "
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
@@ -2115,7 +2115,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		";
 		$tot = Toteutuneet::model()->findAll($criteria);
 		$lista = array_merge($lu, $tot);
-		return count($lista);
+		$arr = array();
+		foreach($lista as $item){
+			$arr[date("Ymd", strtotime($item->aloitan))] = $item->id;
+		}
+		return count($arr);
 
 	}
 
