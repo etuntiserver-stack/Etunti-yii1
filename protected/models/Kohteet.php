@@ -111,7 +111,8 @@ public $verot;
                      'hinta_tyyppi' => 'varchar(50)',
                      'hinta' => 'varchar(10)',
                      'verot' => 'varchar(100)',
-		     'tyo_erittelyt' => 'text DEFAULT NULL'
+		     'tyo_erittelyt' => 'text DEFAULT NULL',
+                     'kohteen_neliot' => 'float(11) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -135,7 +136,7 @@ public $verot;
 		return array(
 			array('asiakas_id,etu_suku_nimet,osoite', 'required'),
 			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara, uusi_tilaus, hinnasto_id, alv, tyoryhma', 'numerical', 'integerOnly'=>true),
-			array('tag_id, kaupunki, toimipaikka', 'length', 'max'=>20),
+			array('tag_id, kaupunki, toimipaikka, kohteen_neliot', 'length', 'max'=>20),
 			array('gps_sijainti, osoite, katuosoite, kenella_on_avain, puh_nro, hinta_sis_alv, hinta_tyyppi', 'length', 'max'=>50),
 			array('lyhenne', 'length', 'max'=>46),
 			array('pnumero', 'length', 'max'=>7),
@@ -204,6 +205,7 @@ public $verot;
 			'arvioitu_kesto'=>Yii::t('main', 'Arvioitu kesto'),
 			'hinnasto_id'=> Yii::t('main', 'Hinnasto'),
 			'tyo_erittelyt' => Yii::t('main', 'Työerittelyt'),
+			'kohteen_neliot' => Yii::t('main', 'Kohteen neliöt'),
 		);
 	}
 

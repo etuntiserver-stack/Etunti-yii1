@@ -304,6 +304,12 @@ $(document).ready(function(){
 		<?php echo $form->error($model,'arvioitu_kesto'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'kohteen_neliot'); ?>
+		<?php echo $form->numberField($model,'kohteen_neliot',array('maxlength'=>5,'class'=>'form-control', 'step' => "any")); ?>
+		<?php echo $form->error($model,'kohteen_neliot'); ?>
+	</div>
+
 	<?php 
 	if(isset($model->id) and isset($model->avaimet) and count($model->avaimet) > 0){
 	echo CHtml::link('Avaimet', array('/avaimet/index', 'osoite' => $model->osoite), array('class'=>'btn btn-default btn-block')); 
