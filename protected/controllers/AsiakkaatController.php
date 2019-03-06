@@ -1101,40 +1101,42 @@ $xml = '
 	        $criteria->order = " id DESC ";
 		}
 
-		if(isset($_GET['osoite']) and !empty($_GET['osoite']))
-	        $criteria->addCondition (" osoite LIKE '%".$_GET['osoite']."%' ");
+		if(isset($_GET['osoite']) and !empty($_GET['osoite'])){ $criteria->addCondition (" osoite LIKE '%".$_GET['osoite']."%' "); }
+		if(isset($_GET['aktiivinen']) and $_GET['aktiivinen'] != 'kaikki'){
+	        	$criteria->addCondition (" aktiivinen ='".(int)$_GET['aktiivinen']."' ");
+		} elseif(isset($_GET['aktiivinen']) and $_GET['aktiivinen'] == 'kaikki'){
+		        $criteria->addCondition (" (aktiivinen=1 OR aktiivinen=0) ");
+		} else {
+		        $criteria->addCondition (" aktiivinen=1 ");
+		}
 
-		if(isset($_GET['aktiivinen']) and $_GET['aktiivinen'] != 'kaikki')
-	        $criteria->addCondition (" aktiivinen ='".(int)$_GET['aktiivinen']."' ");
-		elseif(isset($_GET['aktiivinen']) and $_GET['aktiivinen'] == 'kaikki')
-	        $criteria->addCondition (" (aktiivinen=1 OR aktiivinen=0) ");
-		else
-	        $criteria->addCondition (" aktiivinen=1 ");
-
-		if(isset($_GET['yrityksen_nimi']) and !empty(trim($_GET['yrityksen_nimi'])))
-	        $criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%' ");
-
-		if(isset($_GET['ryhma']) and !empty(trim($_GET['ryhma'])))
-	        $criteria->addCondition (" ryhma LIKE '%".$_GET['ryhma']."%' ");
-
-		if(isset($_GET['tyoryhma']) and !empty(trim($_GET['tyoryhma'])))
-	        $criteria->addCondition (" tyoryhma LIKE '%".$_GET['tyoryhma']."%' ");
-
-		if(isset($_GET['tyyppi']) and !empty(trim($_GET['tyyppi'])))
-	        $criteria->addCondition (" tyyppi='".$_GET['tyyppi']."' ");
-
-		if(isset($_GET['puhelin']) and !empty(trim($_GET['puhelin'])))
-	        $criteria->addCondition (" puhelin LIKE '%".$_GET['puhelin']."%' ");
-
-		if(isset($_GET['sahkoposti']) and !empty(trim($_GET['sahkoposti'])))
-	        $criteria->addCondition (" sahkoposti LIKE '%".$_GET['sahkoposti']."%' ");
-
-		if(isset($_GET['asiakasnumero']) and !empty(trim($_GET['asiakasnumero'])))
-	        $criteria->addCondition (" asiakasnumero LIKE '%".$_GET['asiakasnumero']."%' ");
-
-		if(isset($_GET['kaupunki']) and !empty(trim($_GET['kaupunki'])))
-	        $criteria->addCondition (" kaupunki LIKE '%".$_GET['kaupunki']."%' ");
-
+		if(isset($_GET['yrityksen_nimi']) and !empty(trim($_GET['yrityksen_nimi']))){
+	        	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%' ");
+		}
+		if(isset($_GET['ryhma']) and !empty(trim($_GET['ryhma']))){
+		        $criteria->addCondition (" ryhma LIKE '%".$_GET['ryhma']."%' ");
+		}
+		if(isset($_GET['tyoryhma']) and !empty(trim($_GET['tyoryhma']))){
+		        $criteria->addCondition (" tyoryhma LIKE '%".$_GET['tyoryhma']."%' ");
+		}
+		if(isset($_GET['tyyppi']) and !empty(trim($_GET['tyyppi']))){
+		        $criteria->addCondition (" tyyppi='".$_GET['tyyppi']."' ");
+		}
+		if(isset($_GET['puhelin']) and !empty(trim($_GET['puhelin']))){
+		        $criteria->addCondition (" puhelin LIKE '%".$_GET['puhelin']."%' ");
+		}
+		if(isset($_GET['sahkoposti']) and !empty(trim($_GET['sahkoposti']))){
+		        $criteria->addCondition (" sahkoposti LIKE '%".$_GET['sahkoposti']."%' ");
+		}
+		if(isset($_GET['asiakasnumero']) and !empty(trim($_GET['asiakasnumero']))){
+		        $criteria->addCondition (" asiakasnumero LIKE '%".$_GET['asiakasnumero']."%' ");
+		}
+		if(isset($_GET['kaupunki']) and !empty(trim($_GET['kaupunki']))){
+		        $criteria->addCondition (" kaupunki LIKE '%".$_GET['kaupunki']."%' ");
+		}
+		if(isset($_GET['myyja']) and !empty(trim($_GET['myyja']))){
+		        $criteria->addCondition (" myyja='".$_GET['myyja']."' ");
+		}
 		$dataProvider=new CActiveDataProvider('Asiakkaat', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false
