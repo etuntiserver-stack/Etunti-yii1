@@ -146,7 +146,9 @@ class Asiakkaat extends DB2ActiveRecord
 			// Please remove those attributes that should not be searched.
 			array('id, time, etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen, laskutus_kanava,maksuehto, tyyppi, asiakasnumero, ovt_tunnus, valittajan_tunnus, myyja, kirjeenluokka, muistutuslasku_auto', 'safe', 'on'=>'search'),
 		);
-		if( isset($asetukset->asiakas_pakkoliset) and is_array(json_decode($asetukset->asiakas_pakkoliset, true)) ){
+
+		$controller = Yii::app()->getController()->getAction()->controller->id;
+		if( $controller == 'asiakkaat' and isset($asetukset->asiakas_pakkoliset) and is_array(json_decode($asetukset->asiakas_pakkoliset, true)) ){
 			$impl = implode(", ", json_decode($asetukset->asiakas_pakkoliset, true));
 			array_push($arr, array($impl, 'required'));
 		}
