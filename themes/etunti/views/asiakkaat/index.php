@@ -113,11 +113,10 @@ $(document).ready(function() {
                         <div class="section">
                           <label class="field select">
 			   <select class="gui-input" name="myyja" id="myyja">
-       				<option><?php echo Yii::t('main', 'Myyjä'); ?></option>
+       				<option value=><?php echo Yii::t('main', 'Myyjä'); ?></option>
 				<?php foreach(Administrators::model()->findAll() as $item): ?>
        				<option value="<?=$item->id?>" <?=(isset($_GET['myyja']) and $_GET['myyja'] == $item->id)?'selected':''?>><?=$item->adm_nimi?></option>
 				<?php endforeach; ?>
-       				<option value="0"><?php echo Yii::t('main', 'Passiviset'); ?></option>
 			   </select>
                             <i class="arrow double"></i>
                             </label>
