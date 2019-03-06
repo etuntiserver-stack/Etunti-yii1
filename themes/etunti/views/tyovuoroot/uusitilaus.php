@@ -189,12 +189,12 @@ $('.ryhmat').multiselect({
 		<input type="text" name="Asiakkaat[kaupunki]" id="Asiakas_kaupunki" class="form-control" required>
     </div>
     <div class="sectionfill mb5">
-		<label><?php echo Yii::t('main', 'Asiakkaan puhelin'); ?></label>
-		<input type="text" name="Asiakkaat[puhelin]" class="form-control">
+		<label><?php echo Yii::t('main', 'Asiakkaan puhelin'); ?> <span class="required">*</span></label>
+		<input type="text" name="Asiakkaat[puhelin]" class="form-control" required>
     </div>
     <div class="sectionfill mb5">
-		<label><?php echo Yii::t('main', 'Asiakkaan sähköposti'); ?></label>
-		<input type="text" name="Asiakkaat[sahkoposti]" class="form-control">
+		<label><?php echo Yii::t('main', 'Asiakkaan sähköposti'); ?> <span class="required">*</span></label>
+		<input type="text" name="Asiakkaat[sahkoposti]" class="form-control" required>
     </div>
   </div>
 
@@ -322,7 +322,7 @@ $(document).ready(function(){
 				'sahkoposti'=>Yii::t('main','Sähköposti')
 				);
         	echo CHtml::dropDownList('Asiakkaat[laskutus_kanava]', 'laskutus_kanava', $list,
-		array('empty'=>'Valitse','class'=>'form-control'));
+		array('class'=>'form-control'));
         	?>
     </div>
     <div class="sectionfill mb5">
