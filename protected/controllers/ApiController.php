@@ -725,9 +725,9 @@ public function actionImei($dom)
 				}
 
 				if( isset($_POST['tv_option_byid']) ){
-		      		$sel .= '<option value="'.$k->id.'" id="'.$val->id.'">'.$osoite.'</option>';
+		      		$sel .= '<option value="'.$k->id.'" id="'.$val->id.'">'.$val->alku.'-'.$val->loppu.': '.$osoite.'</option>';
 				} else {
-		      		$sel .= '<option value="'.$k->id.'" tv_id="'.$val->id.'">'.$osoite.'</option>';
+		      		$sel .= '<option value="'.$k->id.'" tv_id="'.$val->id.'">'.$val->alku.'-'.$val->loppu.': '.$osoite.'</option>';
 				}
 
 
