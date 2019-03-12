@@ -579,24 +579,38 @@ public function actionImei($dom)
 			exit;
 	        }
 
-		$get_osoite = '';
-		$kohdenID = 0;
+		$get_osoite 		= '';
+		$kohdenID 		= 0;
+		$list_tyovuorosta 	= '';
 	        if($_POST['check'] == 'getObjbyTag'){
-
-		  if(isset($_POST['tag']) and $_POST['tag'] != '000000')
-		  {
+		  if(isset($_POST['tag']) and $_POST['tag'] != '000000'){
 		    $kohteet = Kohteet::model()->find(" tag_id='".$_POST['tag']."' ");
+		    if(isset($kohteet->osoite) and !empty($kohteet->osoite)){
+		      $get_osoite = $kohteet->osoite;
+		      $kohdenID = $kohteet->id;
 
-		    if(isset($kohteet['osoite']) and !empty($kohteet['osoite']))
-		    {
-		      $get_osoite = $kohteet['osoite'];
-		      $kohdenID = $kohteet['id'];
+		      $tv_id = 0;
+		      $site = Yii::app()->createController('Site');
+		      $eilasketa = $site[0]->eiLasketa();
+		      $criteria = new CDbCriteria();
+		      $criteria->condition = " 
+				tid = '".$ttekija->id."' AND kohde='".$kohteet->id."'
+				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+				AND $eilasketa
+				AND piilota_mobiilista!=1
+				AND (peruutettu=0 OR peruutettu IS NULL)
+		      ";
+	              $tv = Tyovuoroot::model()->find($criteria);
+		      if( isset($tv->id) ){ $tv_id = $tv->id; }
+
+		      $this->_sendResponse(200, $get_osoite."//".$kohdenID."//ok//".$tv_id);
+		      exit;
 		    } else {
 		      $this->_sendResponse(200, "Tuntematon TAG//".$_POST['tag']."//error");
+		      exit;
 		    }
 		  } 
-		      $this->_sendResponse(200, $get_osoite."//".$kohdenID."//ok");
-		exit;
+		  exit;
 	        }
 
 	        if($_POST['check'] == 'tehty'){
@@ -684,7 +698,7 @@ public function actionImei($dom)
 
 		    $sel = '';
 		    $sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
-		    $sel .= '<option>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
+		    $sel .= '<option value=>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
 		    foreach($tvuoro as $val){
 			$k = Kohteet::model()->findbypk($val->kohde);
 			if(isset($k->osoite))
