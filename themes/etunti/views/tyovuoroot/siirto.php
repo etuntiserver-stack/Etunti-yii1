@@ -1,4 +1,5 @@
 <?php
+ini_set('memory_limit', '256M');
 /* @var $this KohteetController */
 /* @var $dataProvider CActiveDataProvider */
 $site = Yii::app()->createController('Site');
