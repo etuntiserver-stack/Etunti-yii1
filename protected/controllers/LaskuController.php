@@ -2055,10 +2055,12 @@ if(count($laskunRivit) > 0){ $xml .= '<InvoiceLines>'; }
 foreach($laskunRivit as $rivit)
 {
 
-	$ProductIdentifier = '';
+	$ProductIdentifier 	= '';
+	$myyntitili		= '3000';
 	$tuotteet = TuotteetPalvelut::model()->findByPk($rivit->tuoteID);
 	if(isset($tuotteet->id) and $tuotteet->netvisorkey != 0){
-		$ProductIdentifier = $tuotteet->netvisorkey;
+		$ProductIdentifier 	= $tuotteet->netvisorkey;
+		$myyntitili		= $tuotteet->myyntitili;
 	} elseif( $this->netvisorProductDefault() != 0 and !isset($tuotteet->id) or (isset($tuotteet->id) and $tuotteet->netvisorkey == 0) ){
 		$ProductIdentifier = $this->netvisorProductDefault();
 	} else {
@@ -2088,7 +2090,7 @@ $xml .= '
              <ProductVatPercentage vatcode="KOMY">'.$rivit->alv.'</ProductVatPercentage>
              <SalesInvoiceProductLineQuantity>'.$rivit->kpl.'</SalesInvoiceProductLineQuantity>
              <SalesInvoiceProductLineDiscountPercentage>'.$rivit->ale.'</SalesInvoiceProductLineDiscountPercentage>
-	     <accountingAccountSuggestion>'.$asetukset->netvisor_accountingaccountsuggestion.'</accountingAccountSuggestion>
+	     <accountingAccountSuggestion>'.$myyntitili.'</accountingAccountSuggestion>
 	     '.$dimension.'
          </SalesInvoiceProductLine>
        </InvoiceLine>

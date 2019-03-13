@@ -217,11 +217,15 @@ $(".muokaValiko").click(function() {
 
 		<?php echo $form->error($model,'myyntituote'); ?>
 	</div>
-
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'netvisorkey'); ?>
 		<?php echo $form->numberField($model,'netvisorkey',array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'netvisorkey'); ?>
+	</div>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'myyntitili'); ?>
+		<?php echo $form->textField($model,'myyntitili',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'myyntitili'); ?>
 	</div>
 	<?php endif; ?>
 
