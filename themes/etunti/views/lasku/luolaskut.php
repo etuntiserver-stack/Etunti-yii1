@@ -24,6 +24,7 @@
 					'erapaiva' => $erapaiva,
 					'alvsis' => $alvsis,
 					'yrityksen_nimi' => $yrityksen_nimi,
+					'viestikenta' => (isset($_GET['viestikenta']))?$_GET['viestikenta']:'',
 					'laheta' => true
 				), 
 				array(
@@ -220,9 +221,27 @@
 			if( isset($mob['alv']) ){ $alv = $mob['alv']; }
 			if( isset($r['yksikko']) ){ $yksikko = $r['yksikko']; }
 			if( isset($mob['yksikko']) ){ $yksikko = $mob['yksikko']; }
-			if( isset($mob->kohde_kannasta) ){ $freetext = $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan)); }
 			if( isset($mob['freetext']) ){ $freetext = $mob['freetext']; }
-			if( isset($mob->kohde) and isset($mob->kohteet->osoite) ){ $freetext = $mob->kohteet->osoite.' - '.$mob->pvm; } //TV
+			if( isset($mob->kohde_kannasta) ){
+				$freetext = '';
+				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
+					$freetext .= date("d.m.Y", strtotime($mob->aloitan));
+				}
+				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
+					if(!empty($freetext)){ $freetext .= ', '; }
+					$freetext .= $mob->kohde_kannasta;
+				}
+			}
+			if( isset($mob->kohde) and isset($mob->kohteet->osoite) ){
+				$freetext = '';
+				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
+					$freetext .= $mob->pvm;
+				}
+				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
+					if(!empty($freetext)){ $freetext .= ', '; }
+					$freetext .= $mob->kohteet->osoite;
+				}
+			} //TV
 
 			// <-- ALV laskin
 			$veroton 	= 0;
@@ -310,8 +329,26 @@
 			$hinta 		= (( isset($r['hinta']) )? $r['hinta']:0);
 			$alv 		= (( isset($r['alv']) )? $r['alv']:0);
 			$yksikko	= (( isset($r['yksikko']) )? $r['yksikko']:'');
-			if( isset($mob->kohde_kannasta) ){ $freetext = $mob->kohde_kannasta.' - '.date("d.m.Y", strtotime($mob->aloitan)); }
-			if( isset($mob->kohde) and isset($mob->kohteet->osoite) ){ $freetext = $mob->kohteet->osoite.' - '.$mob->pvm; } //TV
+			if( isset($mob->kohde_kannasta) ){
+				$freetext = '';
+				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
+					$freetext .= date("d.m.Y", strtotime($mob->aloitan));
+				}
+				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
+					if(!empty($freetext)){ $freetext .= ', '; }
+					$freetext .= $mob->kohde_kannasta;
+				}
+			}
+			if( isset($mob->kohde) and isset($mob->kohteet->osoite) ){
+				$freetext = '';
+				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
+					$freetext .= $mob->pvm;
+				}
+				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
+					if(!empty($freetext)){ $freetext .= ', '; }
+					$freetext .= $mob->kohteet->osoite;
+				}
+			} //TV
 
 			// <-- ALV laskin
 			$veroton 	= 0;
@@ -447,6 +484,7 @@
 					'asiakas_id' => $item->id, 
 					'paivays' => $paivays, 
 					'erapaiva' => $erapaiva, 
+					'viestikenta' => (isset($_GET['viestikenta']))?$_GET['viestikenta']:'',
 					'laheta' => true
 				), 
 				array(

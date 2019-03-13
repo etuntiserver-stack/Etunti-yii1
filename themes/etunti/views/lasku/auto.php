@@ -143,6 +143,16 @@
                             </label>
                           </label>
                         </div>
+                        <div class="section">
+                          <label class="field select">
+			    <select name="viestikenta[]" id="viestikenta" class="gui-input mult" multiple>
+			     <option value="pvm" selected><?php echo Yii::t('main', 'Päivämäärä'); ?></option>
+			     <option value="osoite" selected><?php echo Yii::t('main', 'Osoite'); ?></option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
                       </div>
 
                       <div class="col-md-2">
@@ -284,6 +294,17 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
+$('.mult').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Viestikentän sisältö"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+});
 
 });
 </script>
