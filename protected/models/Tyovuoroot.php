@@ -71,7 +71,7 @@ public $suunnittellut;
                      'ruokatauko' => 'varchar(50) ',
                      'alku_r' => 'varchar(10) ',
                      'kesto' => 'varchar(10) ',
-                     'tyoajanlaatu' => 'varchar(50) ',
+                     'tyoajanlaatu' => 'varchar(50) DEFAULT NULL',
                      'tyoajanmerkinta' => 'varchar(50) ',
                      'tietoja' => 'text ',
                      'osoiteOnline' => 'varchar(100)',

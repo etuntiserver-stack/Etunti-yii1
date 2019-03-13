@@ -295,7 +295,9 @@ $(".muokaValiko").click(function() {
 		$('#Tyovuoroot_postitoimipaikka').val('');
 		$('#luoavain').hide();
 		$("#tyoajanlaatu_laatikko").show();
-		$("#Tyovuoroot_tyoajanlaatu").val('').removeAttr('disabled').focus();
+		$("#Tyovuoroot_tyoajanlaatu").val('').removeAttr('readonly').focus();
+		$("#pfrom").val('').removeAttr('readonly').focus();
+		$("#pto").val('').removeAttr('readonly').focus();
 	}
  });
 
