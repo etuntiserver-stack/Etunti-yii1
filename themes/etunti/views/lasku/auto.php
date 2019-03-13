@@ -300,7 +300,7 @@ $('.mult').multiselect({
         includeSelectAllOption: true,
 	nonSelectedText: '<?php echo Yii::t("main", "Viestikentän sisältö"); ?>',
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
-	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Viestikentä, Kaikki"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 	numberDisplayed: 0,
 	buttonWidth: '100%',
