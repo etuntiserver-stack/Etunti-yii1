@@ -209,7 +209,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 	<input type=radio name="valikko" class="valikko" value="VKL//blue//Viikkolomapäivä"> 
 	<span class="col-sm-1 btn btn-xs btn-group btn-primary btn-group-justified" style="background: blue">VKL</span>  Viikkolomapäivä
     </div>
-
+<?php /*
     <br><br>
     <legend><?php echo Yii::t('main', 'Ekstrat'); ?></legend>
 
@@ -233,7 +233,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
  <div class="row"></div>
  <br>
  <p><span class="btn btn-primary myBgColors muokaValiko" for="vuosilomat"><i class="fa fa-pencil-square-o"></i></span></p>
-
+ */ ?>
  </div>
 </div>
 

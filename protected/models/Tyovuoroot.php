@@ -178,6 +178,7 @@ public $suunnittellut;
 			'status' => Yii::t('main', 'Tilanne'),
 			'piilota_mobiilista'=>Yii::t('main', 'Näytä mobiilissa'),
 			'tuoteID' => Yii::t('main', 'Tuote/palvelu'),
+			'tyoajanlaatu' => Yii::t('main', 'Lomat'),
 		);
 	}
 

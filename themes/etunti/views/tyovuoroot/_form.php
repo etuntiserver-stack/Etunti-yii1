@@ -139,7 +139,7 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 		<?php 
         	$l = $this->tilanteet();
 		echo $form->dropDownList($model,'status', $l, 
-		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
+		array('class'=>'form-control')) ?>
   </div>
 </div>
 
@@ -160,20 +160,30 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 		<?php echo $form->error($model,'postitoimipaikka'); ?>
   </div>
   <div class="col-sm-3">
-	<br>
 	<?php 
 	if(isset($model->kohteet->id) and isset($model->kohteet->avaimet) and count($model->kohteet->avaimet) > 0){
 	echo CHtml::link('Avaimet', array('/avaimet/index', 'osoite' => $model->kohteet->osoite), array('class'=>'btn btn-primary btn-block myBgColors')); 
 	}
 	?>
 	<?php if(isset($model->kohteet->id) and isset($model->kohteet->avaimet) and count($model->kohteet->avaimet) == 0 and $model->kohteet->asiakas_id > 0): ?>
-	    <div class="input-group">
+	    <div class="input-group" id="luoavain">
+	    <br>
 	      <span class="form-control"><?php echo Yii::t('main','Luo avain'); ?></span>
 	      <span class="input-group-btn">
 		<?=CHtml::link('<i class="fa fa-plus"></i>', array('/avaimet/create', 'asiakas_id' => $model->kohteet->asiakas_id, 'kohde_id' => $model->kohteet->id), array('class'=>'btn btn-primary'))?>
 	      </span>
 	    </div>  
 	<?php endif; ?>
+
+  	<div id="tyoajanlaatu_laatikko" style="<?=(($model->status != 11)?'display:none':'')?>">
+		<?php echo $form->labelEx($model,'tyoajanlaatu'); ?>
+		<?php 
+			$list = array('(VL) Vuosiloma/green' => '(VL) Vuosiloma', '(VKL) Viikkolomapäivä/blue' => '(VKL) Viikkolomapäivä');
+			echo $form->dropDownList($model, 'tyoajanlaatu', $list, 
+			array('empty'=>'Valitse','class'=>'form-control')); 
+		?>
+		<?php echo $form->error($model,'tyoajanlaatu'); ?>
+  	</div>
   </div>
 </div>
 
@@ -256,12 +266,36 @@ $(".muokaValiko").click(function() {
 });
 /* valikot */
 
- $('#Tyovuoroot_status').change(function(){
+ $('#Tyovuoroot_tyoajanlaatu').change(function(){
+	if($(this).val() !== ''){
+		$('#Tyovuoroot_kohde').val('');
+		$('#Tyovuoroot_osoite').val('');
+		$('#Tyovuoroot_postinumero').val('');
+		$('#Tyovuoroot_postitoimipaikka').val('');
+		$('#alku').val('00:00');
+		$('#loppu').val('00:00');
+	}
+ });
 
+ $(document).delegate("#Tyovuoroot_status","change",function(){
 	if($(this).val() == '10'){
 		$('#Tyovuoroot_tyoajanmerkinta').val('Ei lasketa/red');
 	} else {
 		$('#Tyovuoroot_tyoajanmerkinta').val('Normaali/');
+	}
+
+	if($(this).val() == 11){
+		$("#tyovuoroot-form input, #tyovuoroot-form select").attr('readonly', true);
+		$("#alku, #loppu").val('00:00').attr('readonly', true);
+		$('#Tyovuoroot_tyoajanmerkinta').val('Normaali/');
+		$('#Tyovuoroot_status').val('11').removeAttr('readonly');
+		$('#Tyovuoroot_osoite').val('');
+		$('#Tyovuoroot_kohde').val('');
+		$('#Tyovuoroot_postinumero').val('');
+		$('#Tyovuoroot_postitoimipaikka').val('');
+		$('#luoavain').hide();
+		$("#tyoajanlaatu_laatikko").show();
+		$("#Tyovuoroot_tyoajanlaatu").val('').removeAttr('disabled').focus();
 	}
  });
 
@@ -1478,8 +1512,9 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 	  });
   }
 
-  $('#Tyovuoroot_kohde').change(function(){
+  $(document).delegate("#Tyovuoroot_kohde","change",function(){
 
+	$('#Tyovuoroot_tyoajanlaatu').val('');
 	$(this).removeClass('bg-danger');
 	var thisID = $(this).val();
 	var tyo_erittelyt = '';
