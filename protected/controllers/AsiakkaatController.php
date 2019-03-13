@@ -1744,15 +1744,14 @@ $xml = '
 				$k = Kohteet::model()->findbypk($data->kohde);
 				if(isset($k->id)) $osoite = $k->osoite; else $osoite = '';
 				$tt = Tyontekijat::model()->findbypk($data->tid);
-				if(isset($tt->id)) $tekijan_nimi = $this->etuSukunimi($tt->id); else $tekijan_nimi = '';
+				if(isset($tt->id)) $tekijan_nimi = $tt->tekijan_nimi; else $tekijan_nimi = '';
 			  	$bod .= '
 				<table class="table table-bordered">
 					<tr><td colspan="2"><h3>'.date("d.m.Y", strtotime($data->pvm)).', '.$osoite.'</h3></td></tr>
 					<tr><td>'.Yii::t('main', 'Työntekijä').'</td><td>'.$tekijan_nimi.'</td></tr>
 					<tr><td>'.Yii::t('main', 'Aloitus').'</td><td>'.$data->alku.'</td></tr>
 					<tr><td>'.Yii::t('main', 'Lopetus').'</td><td>'.$data->loppu.'</td></tr>
-					<tr><td>'.Yii::t('main', 'Kesto').'</td><td>'.$this->sprint($kesto).'</td></tr>
-					<tr><td>'.Yii::t('main', 'Tietoja').'</td><td>'.$data->tietoja.'</td></tr>';
+					<tr><td>'.Yii::t('main', 'Kesto').'</td><td>'.$this->sprint($kesto).'</td></tr>';
 
 				// <-- Tyoerittelyt
 				if(is_array(json_decode($data->tyo_erittelyt, true))){
