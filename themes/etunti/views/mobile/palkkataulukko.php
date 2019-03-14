@@ -266,11 +266,11 @@ $this->breadcrumbs=array(
 
 	$tids[] = $data->id;
 	$tp = $this->Tp($data->id,$from,$to);
-  	$sl = $this->TidfromtoSairaus($from,$to,$data->id,'SL');
+  	$sl = $this->TidfromtoSairausTP($from,$to,$data->id,'SL');
 	$slYht += $sl;
-  	$ls = $this->TidfromtoSairaus($from,$to,$data->id,'LS');
+  	$ls = $this->TidfromtoSairausTP($from,$to,$data->id,'LS');
 	$lsYht += $ls;
-  	$spl = $this->TidfromtoSairaus($from,$to,$data->id,'SPL');
+  	$spl = $this->TidfromtoSairausTP($from,$to,$data->id,'SPL');
 	$splYht += $spl;
   	$vl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id, 'VL');
 	$vlYht += $vl;
@@ -335,12 +335,6 @@ $this->breadcrumbs=array(
 	));
   }
 
-
-
-
-
-
-
   if($matkaIltaYht != 0)
   $matkaIltaYht = '<br><b>Matkat</b>:<br>'.$this->num($matkaIltaYht);
   ?>
@@ -358,11 +352,11 @@ $this->breadcrumbs=array(
 	<td><?php echo $this->num($yht[3]); ?></td>
 	<td><?php echo $this->num($pyhatYht); ?></td>
 	<td><?php echo $this->num($elYht); ?></td>
-	<td><?php echo $this->num($slYht); ?></td>
-	<td><?php if($splYht != 0) echo $this->num($splYht); ?></td>
-	<td><?php echo $this->num($lsYht); ?></td>
-	<td><?php if($vlYht != 0) echo $vlYht; ?></td>
-	<td><?php if($vklYht != 0) echo $vklYht; ?></td>
+	<td><?=($slYht > 0)?$slYht:''?></td>
+	<td><?=($splYht > 0)?$splYht:''?></td>
+	<td><?=($lsYht > 0)?$lsYht:''?></td>
+	<td><?=($vlYht > 0)?$vlYht:''?></td>
+	<td><?=($vklYht > 0)?$vklYht:''?></td>
 	<td></td>
 	<td></td>
 	<td></td>

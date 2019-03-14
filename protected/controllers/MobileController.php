@@ -1892,61 +1892,20 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	public function TidfromtoSairausTP($from,$to,$tid,$sairaus)
 	{
-
-		if($sairaus == 'SPL') 	$sairaus = 1; // Palkaton
-		if($sairaus == 'SL') 	$sairaus = 2; // Palkallinen
-		if($sairaus == 'LS') 	$sairaus = 3; // Lapsen sairaus
-
-
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 
-		$result = '';
-		$result_lu = 0;
-		$result_tot = 0;
-		$lu_r = [];
-		$tot_r = [];
-
        		$criteria = new CDbCriteria();
+		$criteria->group = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ";
 	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND tid='".$tid."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			tid='".$tid."'
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-			AND sairaus='".$sairaus."'
-			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
-			AND deleted=0
+			AND tyoajanlaatu LIKE '%(".$sairaus.")%'
 		";
+		$vl = Tyovuoroot::model()->findAll($criteria);
 
-
-		$lu = Mobile::model()->findAll($criteria);
-		$i = 0;
-		foreach($lu as $item)
-		{
-			$i++;
-			$lu_r[date("Y-m-d", strtotime($item->aloitan))] = $i;
-		}
-
-       		$criteria = new CDbCriteria();
-	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND tid='".$tid."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-			AND sairaus='".$sairaus."'
-			AND deleted=0
-		";
-
-
-		$tot = Toteutuneet::model()->findAll($criteria);
-		$i = 0;
-		foreach($tot as $item)
-		{
-			$i++;
-			$tot_r[date("Y-m-d", strtotime($item->aloitan))] = $i;
-		}
-
-		return count($lu_r)+count($tot_r);
+		return count($vl);
 	}
 
 	protected function TidfromtoVuosilomaPalkkatauluko($from,$to,$tid,$tila)

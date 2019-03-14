@@ -136,16 +136,6 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		<?php echo $form->textField($model,'loppui',array('value'=>$s->loppui,'size'=>60,'maxlength'=>100,'class'=>'form-control input-sm lp')); ?>
 	</div>
 	<div class="section">
-		<?php echo $form->labelEx($model,'sairaus'); ?>
-		<?php 
-        	$tal = array(1=>'Palkaton',2=>'Palkallinen',3=>'Lapsen sairaus');
-		$optS = array($s->sairaus=>array('selected'=>true));
-
-		echo $form->dropDownList($model,'sairaus', $tal, 
-		array('empty'=>'Valitse','class'=>'form-control input-sm','options'=>$optS)) ?>
-		<?php echo $form->error($model,'sairaus'); ?>
-	</div>
-	<div class="section">
 		<?php echo $form->labelEx($model,'laskutetaan'); ?>
 		<?php 
         	$tal = array(1=>'Kyllä',0=>'Ei');
