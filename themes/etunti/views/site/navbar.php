@@ -1053,7 +1053,7 @@ $('.multTyoryhma').multiselect({
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/vuosilomat/index">
-                  <span class="fa fa-table"></span> <?php echo Yii::t('main', 'Lomat ja poissaolot'); ?></a>
+                  <span class="fa fa-calendar-o"></span> <?php echo Yii::t('main', 'Lomat ja poissaolot'); ?></a>
               </li>
             </ul>
           </li>

@@ -29,7 +29,7 @@ class ToteutuneetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index', 'view','luetutpvmtid', 'totpvmtid','al', 'yhteensapvm', 'deletebyajax', 'kk','hyvaksy', 'poista_luetut_toteutuneet', 'vuosiloma_hyvaksy', 'hyvaksy_pvm_tid', 'korvaus_ylitunnit_ennakko', 'siirra_toteutuun'),
+				'actions'=>array('admin','delete','create','update','index', 'view','luetutpvmtid', 'totpvmtid','al', 'yhteensapvm', 'deletebyajax', 'kk','hyvaksy', 'poista_luetut_toteutuneet', 'hyvaksy_pvm_tid', 'korvaus_ylitunnit_ennakko', 'siirra_toteutuun'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -456,38 +456,6 @@ $xml = '
 		exit;
 	}
 
-
-	public function actionVuosiloma_hyvaksy()
-	{
-	
-		$pvm 	= date("Y-m-d", strtotime($_POST['pvm']));
-		$tid 	= $_POST['tid'];
-		$tila 	= $_POST['tila'];
-
-		//echo $pvm.' '.$tid.' '.$tila;
-
-	       	$criteria = new CDbCriteria();
-		$criteria->condition = " 
-			DATE(pvm)='".$pvm."' AND tid='".(int)$tid."' 
-			AND status LIKE '%".$tila."//%' 
-		";
-		$vl = Vuosilomat::model()->find($criteria);
-
-		if(isset($vl->id) and $_POST['hyvaksy'] == 'kylla')
-		{
-			Vuosilomat::model()->updatebypk($vl->id,array('hyvaksytty'=>1));
-			echo 'kylla';
-		}
-
-		if(isset($vl->id) and $_POST['hyvaksy'] == 'ei')
-		{
-			Vuosilomat::model()->updatebypk($vl->id,array('hyvaksytty'=>0));
-			echo 'ei';
-		}
-
-	}
-
-
 	public function actionHyvaksy($id){
 
 		$mob=Mobile::model()->findbypk($id);
@@ -628,40 +596,10 @@ $xml = '
 		   }
 		}
 	
-	
-			   ksort($get);
-			   foreach($get as $v){
-			      $laatikot .= $this->renderPartial('al',array('str'=>$v), true);
-			   }
-	
-	
-		// <-- check Vuosilomat
-	       	$criteria = new CDbCriteria();
-		$criteria->condition = " 
-			tid = '".$tid."' 
-			AND DATE(pvm) = '".date("Y-m-d",strtotime($pvm))."'
-			AND (status LIKE '%VL//%' OR status LIKE '%VKL//%')
-		";
-		$vuosilomat = Vuosilomat::model()->find($criteria);
-		if(isset($vuosilomat->id))
-		{
-			$checked = '';
-			if($vuosilomat->hyvaksytty == 1) $checked = 'checked';
-
-			$exVl = explode("//", $vuosilomat->status);
-		   	$laatikot .= '
-			   <div class="fullRivi form-inline">
-				<span class="form-group">
-					<input type="checkbox" class="vuosilomaHyvaksynta" tila="'.$exVl[0].'" pvm="'.date("Y-m-d",strtotime($pvm)).'" tid="'.$tid.'" '.$checked.' did="'.date("Ymd",strtotime($pvm)).'_'.$tid.'" week="'.date("W",strtotime($pvm)).'" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hyväksy').'">&nbsp; 
-				</span><span class="form-group">
-					<i class="form-group link" style="color:'.$exVl[1].'">'.$exVl[2].'</i>
-				</span>
-			   </div>';
-
+		ksort($get);
+		foreach($get as $v){
+		      $laatikot .= $this->renderPartial('al',array('str'=>$v), true);
 		}
-		//     check Vuosilomat -->
-
-
 		
 		$laatikot .= '&nbsp;&nbsp;<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
 		$laatikot .= '</div>';
@@ -1601,13 +1539,13 @@ $xml = '
 	       	$criteria = new CDbCriteria();
 		$criteria->condition = " 
 			tid = '".$tid."' 
-			AND DATE(pvm) = '".date("Y-m-d",strtotime($pvm))."'
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."'
 		";
-		$vuosilomat = Vuosilomat::model()->find($criteria);
-		if(isset($vuosilomat->status))
+		$tv = Tyovuoroot::model()->find($criteria);
+		if(isset($tv->status))
 		{
 			$vl = array();
-			$vl = explode("//", $vuosilomat->status);
+			$vl = explode("/", $tv->tyoajanlaatu);
 			return $vl;
 		}
 

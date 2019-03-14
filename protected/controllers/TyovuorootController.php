@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto', 'vlupdater'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -2017,9 +2017,7 @@ class TyovuorootController extends Controller
 
 		$model=$this->loadModel($id);
 		$edellinenToistuva = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
-
 		$return = array();
-
 
 		// <-- Toistuva tyovuorot ja tyoparit
 		if(
@@ -3838,7 +3836,8 @@ class TyovuorootController extends Controller
         	$l = array(
 			3=>Yii::t('main', 'Työ'),
 			2=>Yii::t('main', 'Matka'),
-			10=>Yii::t('main', 'Lounastauko')
+			10=>Yii::t('main', 'Lounastauko'),
+			11=>Yii::t('main', 'Lomat tai poissaolot')
 		);
 		return $l;
 	}
@@ -4358,5 +4357,44 @@ class TyovuorootController extends Controller
 		    $return = true;
 		}
 		return $return;
+	}
+
+	public function actionVlupdater($id,$txt)
+	{
+
+	
+	   if($id == 'new' and $txt == '')
+	   {
+		$model=new Vuosilomat;
+		if(isset($_POST['Vuosilomat']))
+		{
+			$model->attributes=$_POST['Vuosilomat'];
+			if($model->save()){
+				echo $model->id.'//'.$model->tid.'//'.$model->pvm.'//'.$model->status;
+
+			//$valikkoot = Valikkoot::model()->find(" select_type='tyoajanlaatu' and value like '%".$lat."%' ");
+			$tv = new Tyovuoroot;
+			$tv->tid=$model->tid;
+			$tv->pvm=date("d.m.Y",strtotime($model->pvm));
+			$tv->tyoajanlaatu=$_POST['Vuosilomat']['tyoajanlaatu'];
+			$tv->alku='00:00';
+			$tv->loppu='00:00';
+			$tv->pituus='00:00';
+			$tv->tietoja=$_POST['Vuosilomat']['tietoja'];
+			$tv->save();
+			} else {
+				print_r($_POST);
+			}
+		}
+
+	   } else {
+		Tyovuoroot::model()->deleteAll(" tid = '".$_POST['Vuosilomat']['tid']."' and pvm='".date("d.m.Y",strtotime($_POST['Vuosilomat']['pvm']))."' and tyoajanlaatu like '%".$txt."%' ");
+		$this->loadModel($id)->delete();
+				echo 'removed';
+	   }
+
+
+		//$this->renderPartial('vlupdater');
+
 	}
 }

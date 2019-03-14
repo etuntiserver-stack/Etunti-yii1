@@ -28,6 +28,7 @@ public $tekijan_nimi;
 public $l_tunnit;
 public $count;
 public $suunnittellut;
+public $kpl;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -71,7 +72,7 @@ public $suunnittellut;
                      'ruokatauko' => 'varchar(50) ',
                      'alku_r' => 'varchar(10) ',
                      'kesto' => 'varchar(10) ',
-                     'tyoajanlaatu' => 'varchar(50) ',
+                     'tyoajanlaatu' => 'varchar(50) DEFAULT NULL',
                      'tyoajanmerkinta' => 'varchar(50) ',
                      'tietoja' => 'text ',
                      'osoiteOnline' => 'varchar(100)',
@@ -178,6 +179,7 @@ public $suunnittellut;
 			'status' => Yii::t('main', 'Tilanne'),
 			'piilota_mobiilista'=>Yii::t('main', 'Näytä mobiilissa'),
 			'tuoteID' => Yii::t('main', 'Tuote/palvelu'),
+			'tyoajanlaatu' => Yii::t('main', 'Lomat ja poissaolot'),
 		);
 	}
 

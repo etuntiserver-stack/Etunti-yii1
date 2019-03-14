@@ -523,15 +523,13 @@ function num($val){
 		  if(Yii::app()->request->getPost('method') == 'lomatJaPoissaolot')
 		  {
 		       	$criteria = new CDbCriteria();
-			$criteria->order = "(SELECT tekijan_nimi FROM sivex_ttekijat WHERE t.tid=id),status";
-			$criteria->group = "tid,status";
-		       	$criteria->select = " COUNT(status) as kpl, (SELECT tekijan_nimi FROM sivex_ttekijat WHERE t.tid=id) as tekijan_nimi, t.*";
-
+			$criteria->group = " tid, tyoajanlaatu ";
+			$criteria->select = "COUNT(tyoajanlaatu) as kpl, t.*";
 			if(isset($_POST['from']) and isset($_POST['to']))
 			{
 
 	        		$criteria->addCondition ("
-					DATE_FORMAT(STR_TO_DATE(pvm, '%Y-%m-%d'), '%Y-%m-%d') 
+					DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 					BETWEEN '".date("Y-m-d", strtotime($_POST['from']))."' AND '".date("Y-m-d", strtotime($_POST['to']))."' 
 				");
 
@@ -543,11 +541,11 @@ function num($val){
 
 			if(isset($_POST['status']) and !empty($_POST['status']))
 			{
-				$impl = "status LIKE '%". implode("/%' OR status LIKE '%", $_POST['status'])."/%'";
+				$impl = "tyoajanlaatu LIKE '%(". implode(")%' OR tyoajanlaatu LIKE '%(", $_POST['status']).")%'";
 	        		$criteria->addCondition ($impl);
 			}
 
-			$model = Vuosilomat::model()->findAll($criteria); 
+			$model = Tyovuoroot::model()->findAll($criteria); 
 
 
 			if(isset($_POST['luoPDF']))
@@ -1959,38 +1957,33 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		$result = 0;
        		$criteria = new CDbCriteria();
+	        $criteria->group = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ";
 	        $criteria->condition = "
-			DATE(pvm) 
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."' 
 			AND tid='".$tid."'
-			AND status LIKE '%".$tila."//%'
-			AND hyvaksytty=1
+			AND tyoajanlaatu LIKE '%(".$tila.")%'
 		";
 
-		$tv = Vuosilomat::model()->findAll($criteria);
+		$tv = Tyovuoroot::model()->findAll($criteria);
 
 		return count($tv);
 	}
 
 	protected function TidPvmVuosiloma($pvm,$tid,$tila)
 	{
-
 		$pvm 	= date("Y-m-d", strtotime($pvm));
-
 		$result = 0;
        		$criteria = new CDbCriteria();
 	        $criteria->condition = "
-			DATE(pvm) = '".$pvm."' 
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."' 
 			AND tid='".$tid."'
-			AND status LIKE '%".$tila."//%'
-			AND hyvaksytty=1
+			AND tyoajanlaatu LIKE '%(".$tila.")%'
 		";
-		$vl = Vuosilomat::model()->find($criteria);
+		$vl = Tyovuoroot::model()->find($criteria);
 
 		$arr = array('count'=>0);
-		if(isset($vl->id))
-			$arr = array('id'=>$vl->id,'hyvaksytty'=>$vl->hyvaksytty,'count'=>1);
-
+		if(isset($vl->id)){ $arr = array('count'=>1); }
 		return $arr;
 	}
 

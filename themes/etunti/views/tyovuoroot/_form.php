@@ -69,7 +69,9 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 	Tyovuoroot::model()->updatebypk($model->id, array('kohde'=>$ov->kohde_id));
 	$model->kohde = $ov->kohde_id;
 }
-
+if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
+	$model->status = 11;
+}
 ?>
 
 	<?php if(isset($ov->id) and $model->osoiteOnline == 2) : ?>
@@ -103,6 +105,7 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 	<?php echo $form->hiddenField($model,'toistuva_id'); ?>
 	<?php echo $form->error($model,'tid'); ?>
 
+<div id="1_tila">
 <div class="row">
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'pvm'); ?>
@@ -139,7 +142,7 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 		<?php 
         	$l = $this->tilanteet();
 		echo $form->dropDownList($model,'status', $l, 
-		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
+		array('class'=>'form-control')) ?>
   </div>
 </div>
 
@@ -160,7 +163,7 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 		<?php echo $form->error($model,'postitoimipaikka'); ?>
   </div>
   <div class="col-sm-3">
-	<br>
+	<div id="luoavain"><br>
 	<?php 
 	if(isset($model->kohteet->id) and isset($model->kohteet->avaimet) and count($model->kohteet->avaimet) > 0){
 	echo CHtml::link('Avaimet', array('/avaimet/index', 'osoite' => $model->kohteet->osoite), array('class'=>'btn btn-primary btn-block myBgColors')); 
@@ -172,8 +175,31 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 	      <span class="input-group-btn">
 		<?=CHtml::link('<i class="fa fa-plus"></i>', array('/avaimet/create', 'asiakas_id' => $model->kohteet->asiakas_id, 'kohde_id' => $model->kohteet->id), array('class'=>'btn btn-primary'))?>
 	      </span>
-	    </div>  
+	    </div> 
 	<?php endif; ?>
+	</div> 
+
+  	<div id="tyoajanlaatu_laatikko" style="<?=(($model->status != 11)?'display:none':'')?>">
+		<?php echo $form->labelEx($model,'tyoajanlaatu'); ?>
+		<div class="input-group">
+		<?php 
+			$list = array('(VL) Vuosiloma/green' => '(VL) Vuosiloma', '(VKL) Viikkolomapäivä/blue' => '(VKL) Viikkolomapäivä');
+			$valikkoot = Valikkoot::model()->findAll("select_type = 'vuosilomat'");
+			foreach($valikkoot as $vl){
+    				$expl = explode("/",$vl->value);
+				if(isset($expl[0]) and isset($expl[1]) and isset($expl[2])){
+					$list['('.$expl[0].') '.$expl[1].'/'.$expl[2]] = '('.$expl[0].') '.$expl[1];
+				}
+			}
+
+			echo $form->dropDownList($model, 'tyoajanlaatu', $list, 
+			array('empty'=>'Valitse','class'=>'form-control')); 
+		?>
+		<span class="input-group-btn">
+		  <span class="btn btn-primary myBgColors muokaValiko" for="vuosilomat"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
+		</div>
+  	</div>
   </div>
 </div>
 
@@ -254,17 +280,104 @@ $(".muokaValiko").click(function() {
            }
         });
 });
+
+  $(document).delegate(".muokaTaulunLatiko","click",function(){
+
+    $(this).css({"background" : "#ccc"});
+
+    var thisID = $(this).attr("id");
+    var thisDate = $(this).attr("thisdate");
+    var thisTid = parseInt($(this).attr("thistid"));
+    var thisTXT = $(this).text();
+    var id = $(this).attr("method");
+    var thisStatus = $(".valikot input:radio:checked").val();
+    var lat1 = thisStatus.split("//");
+    var lat = '('+lat1[0]+') '+lat1[2]+'/'+lat1[1];
+    var vapaateksti = $('.vapaateksti').val();
+
+    var postdata = {
+	tid 	: thisTid,
+	pvm 	: thisDate,
+	status 	: thisStatus,
+	tietoja	: vapaateksti,
+	tyoajanlaatu : lat,
+    }
+
+        $.ajax({
+           url: 'vlupdater?id='+id+'&txt='+thisTXT,
+	   type: 'POST',
+	   data: { Vuosilomat : postdata },
+           success: function(data){
+		console.log(data);
+
+		var spData  = data.split("//");
+
+		if(spData[3] != '' && data != 'removed'){
+		   $("#"+thisID).attr("method",spData[0]);
+		   $("#"+thisID).removeClass("myBgColors bg-info");
+		   $("#"+thisID).attr("style","background:"+spData[4]+";color:white;");
+		   $("#"+thisID).html('<div class="link laatikot">'+ spData[3] +'</div>');
+		}
+
+		if(data == 'removed')
+		{
+		   $("#"+thisID).attr("method", "new");
+		   $("#"+thisID).html('<div class="link laatikot"></div>');
+		}
+    
+
+           },
+	   error:function(data){
+		console.log(data);
+		/*window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";*/
+	   }
+        });
+
+
+  });
 /* valikot */
 
- $('#Tyovuoroot_status').change(function(){
+ $('#Tyovuoroot_tyoajanlaatu').change(function(){
+	if($(this).val() !== ''){
+		$('#Tyovuoroot_kohde').val('');
+		$('#Tyovuoroot_osoite').val('');
+		$('#Tyovuoroot_postinumero').val('');
+		$('#Tyovuoroot_postitoimipaikka').val('');
+		$('#alku').val('00:00');
+		$('#loppu').val('00:00');
+	}
+ });
 
+ $(document).delegate("#Tyovuoroot_status","change",function(){
 	if($(this).val() == '10'){
 		$('#Tyovuoroot_tyoajanmerkinta').val('Ei lasketa/red');
 	} else {
 		$('#Tyovuoroot_tyoajanmerkinta').val('Normaali/');
 	}
+	vuosilomat($(this).val());
  });
 
+ vuosilomat($('#Tyovuoroot_status').val());
+ function vuosilomat(val){
+	if(val == 11){
+		$("#1_tila input, #1_tila select").attr('readonly', true);
+		$("#alku, #loppu").val('00:00').attr('readonly', true);
+		$('#Tyovuoroot_tyoajanmerkinta').val('Normaali/');
+		$('#Tyovuoroot_status').val('11').removeAttr('readonly');
+		$('#Tyovuoroot_osoite').val('');
+		$('#Tyovuoroot_kohde').val('');
+		$('#Tyovuoroot_postinumero').val('');
+		$('#Tyovuoroot_postitoimipaikka').val('');
+		$('#luoavain').hide('slow');
+		$("#tyoajanlaatu_laatikko").show('slow');
+		$("#Tyovuoroot_tyoajanlaatu").removeAttr('readonly').css({"border" : "2px green solid"}).focus();
+	} else {
+		$("#tyovuoroot-form input, #tyovuoroot-form select").removeAttr('readonly');
+		$('#luoavain').show('slow');
+		$("#Tyovuoroot_tyoajanlaatu").val('');
+		$("#tyoajanlaatu_laatikko").hide('slow');
+	}
+ }
 });
 </script>
 
@@ -284,7 +397,7 @@ $(".muokaValiko").click(function() {
 		</div>
   </div>
 </div>
-
+</div><!-- 1 tila -->
 
 
 <div class="row">
@@ -1478,8 +1591,10 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 	  });
   }
 
-  $('#Tyovuoroot_kohde').change(function(){
+  $(document).delegate("#Tyovuoroot_kohde","change",function(){
 
+	$('#Tyovuoroot_status').val('3').css({"border" : "1px green solid"});
+	$('#Tyovuoroot_tyoajanlaatu').val('');
 	$(this).removeClass('bg-danger');
 	var thisID = $(this).val();
 	var tyo_erittelyt = '';
