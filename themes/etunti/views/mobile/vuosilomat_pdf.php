@@ -7,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap.min.css">
 <script>
 window.onload = function () {
-    window.print();
+    //window.print();
 }
 </script>
 <?php else : ?>
@@ -52,13 +52,12 @@ window.onload = function () {
   <?php foreach($model as $data) : ?>
 
   <?php
-	$expl = explode("/",$data->status);
-	$back = " style='background:".$expl[2].";color: white; text-align:left'";
+	$expl = explode("/",$data->tyoajanlaatu);
   	$kplYht	+= $data->kpl;
   ?>
   <tr>
-    <td style="text-align:left"><?php echo $data->tekijan_nimi; ?></td>
-    <td style="text-align:left"><?php echo $expl[4]; ?></td>
+    <td style="text-align:left"><?php echo $this->etuSukunimi($data->tid); ?></td>
+    <td style="text-align:left; color:<?=$expl[1]?>"><?php echo $expl[0]; ?></td>
     <td><?php echo $data->kpl; ?></td>
   </tr>
 

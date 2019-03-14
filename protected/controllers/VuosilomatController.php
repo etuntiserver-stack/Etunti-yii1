@@ -185,7 +185,7 @@ class VuosilomatController extends Controller
 	 */
 	public function actionIndex()
 	{
-
+		die('Suljettu');
 
 		$dataProvider=new CActiveDataProvider('Vuosilomat');
 		$this->render('index',array(

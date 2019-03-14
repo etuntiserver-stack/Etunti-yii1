@@ -305,8 +305,8 @@ function dateDiff($start, $end) {
     if($this->vuosilomaChecker($tid, $date))
     {
 	$returnChecker = $this->vuosilomaChecker($tid, $date);
-	if(is_array($returnChecker) and isset($returnChecker[1]) and isset($returnChecker[2]))
-    	$vlChecker = '  <span style="color:'.$returnChecker[1].'"> ( '.$returnChecker[2].' )</span>';
+	if(is_array($returnChecker) and isset($returnChecker[1]))
+    	$vlChecker = '  <span style="color:'.$returnChecker[1].'"> '.$returnChecker[0].' </span>';
     }
 
 	  $ispyha = '';

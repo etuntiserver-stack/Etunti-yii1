@@ -2017,9 +2017,7 @@ class TyovuorootController extends Controller
 
 		$model=$this->loadModel($id);
 		$edellinenToistuva = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
-
 		$return = array();
-
 
 		// <-- Toistuva tyovuorot ja tyoparit
 		if(

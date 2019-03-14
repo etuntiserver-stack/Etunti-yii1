@@ -593,14 +593,10 @@ $(document).ready(function(){
        </div>
        <div class="col-sm-6">
        <?php
-   	$lomat = Valikkoot::model()->findAll(" select_type='vuosilomat' ",array('order' => "select_type"));
     	echo '<select class="form-control selectpicker" multiple name="status[]" title="Lomat">';
         echo '<option value=""></option>';
-    	foreach($lomat as $key=>$val){
-		$expl = explode("/",$val->value);
-		if(isset($expl[0]) and isset($expl[1]))
-    		echo '<option value="'.$expl[0].'">'.$expl[1].'</option>';
-    	}
+        echo '<option value="VL" selected>Vuosiloma</option>';
+        echo '<option value="VKL" selected>Viikkolomapäivä</option>';
    	echo '</select>';
    	?>
        </div>

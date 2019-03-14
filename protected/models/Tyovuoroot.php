@@ -28,6 +28,7 @@ public $tekijan_nimi;
 public $l_tunnit;
 public $count;
 public $suunnittellut;
+public $kpl;
 
 	/**
 	 * Returns the static model of the specified AR class.

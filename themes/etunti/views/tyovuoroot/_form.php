@@ -103,6 +103,7 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 	<?php echo $form->hiddenField($model,'toistuva_id'); ?>
 	<?php echo $form->error($model,'tid'); ?>
 
+<div id="1_tila">
 <div class="row">
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'pvm'); ?>
@@ -166,13 +167,14 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 	}
 	?>
 	<?php if(isset($model->kohteet->id) and isset($model->kohteet->avaimet) and count($model->kohteet->avaimet) == 0 and $model->kohteet->asiakas_id > 0): ?>
-	    <div class="input-group" id="luoavain">
-	    <br>
+	<div id="luoavain"><br>
+	    <div class="input-group">
 	      <span class="form-control"><?php echo Yii::t('main','Luo avain'); ?></span>
 	      <span class="input-group-btn">
 		<?=CHtml::link('<i class="fa fa-plus"></i>', array('/avaimet/create', 'asiakas_id' => $model->kohteet->asiakas_id, 'kohde_id' => $model->kohteet->id), array('class'=>'btn btn-primary'))?>
 	      </span>
-	    </div>  
+	    </div> 
+	</div> 
 	<?php endif; ?>
 
   	<div id="tyoajanlaatu_laatikko" style="<?=(($model->status != 11)?'display:none':'')?>">
@@ -283,9 +285,13 @@ $(".muokaValiko").click(function() {
 	} else {
 		$('#Tyovuoroot_tyoajanmerkinta').val('Normaali/');
 	}
+	vuosilomat($(this).val());
+ });
 
-	if($(this).val() == 11){
-		$("#tyovuoroot-form input, #tyovuoroot-form select").attr('readonly', true);
+ vuosilomat($('#Tyovuoroot_status').val());
+ function vuosilomat(val){
+	if(val == 11){
+		$("#1_tila input, #1_tila select").attr('readonly', true);
 		$("#alku, #loppu").val('00:00').attr('readonly', true);
 		$('#Tyovuoroot_tyoajanmerkinta').val('Normaali/');
 		$('#Tyovuoroot_status').val('11').removeAttr('readonly');
@@ -293,14 +299,16 @@ $(".muokaValiko").click(function() {
 		$('#Tyovuoroot_kohde').val('');
 		$('#Tyovuoroot_postinumero').val('');
 		$('#Tyovuoroot_postitoimipaikka').val('');
-		$('#luoavain').hide();
-		$("#tyoajanlaatu_laatikko").show();
-		$("#Tyovuoroot_tyoajanlaatu").val('').removeAttr('readonly').focus();
-		$("#pfrom").val('').removeAttr('readonly').focus();
-		$("#pto").val('').removeAttr('readonly').focus();
+		$('#luoavain').hide('slow');
+		$("#tyoajanlaatu_laatikko").show('slow');
+		$("#Tyovuoroot_tyoajanlaatu").removeAttr('readonly').css({"border" : "2px green solid"}).focus();
+	} else {
+		$("#tyovuoroot-form input, #tyovuoroot-form select").removeAttr('readonly');
+		$('#luoavain').show('slow');
+		$("#Tyovuoroot_tyoajanlaatu").val('');
+		$("#tyoajanlaatu_laatikko").hide('slow');
 	}
- });
-
+ }
 });
 </script>
 
@@ -320,7 +328,7 @@ $(".muokaValiko").click(function() {
 		</div>
   </div>
 </div>
-
+</div><!-- 1 tila -->
 
 
 <div class="row">
@@ -1516,6 +1524,7 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 
   $(document).delegate("#Tyovuoroot_kohde","change",function(){
 
+	$('#Tyovuoroot_status').val('3').css({"border" : "1px green solid"});
 	$('#Tyovuoroot_tyoajanlaatu').val('');
 	$(this).removeClass('bg-danger');
 	var thisID = $(this).val();
