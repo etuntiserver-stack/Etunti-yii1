@@ -1827,69 +1827,6 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		return $result;
 	}
 
-
-	public function TidfromtoSairaus($from,$to,$tid,$sairaus)
-	{
-
-		if($sairaus == 'SPL') 	$sairaus = 1; // Palkaton
-		if($sairaus == 'SL') 	$sairaus = 2; // Palkallinen
-		if($sairaus == 'LS') 	$sairaus = 3; // Lapsen sairaus
-
-
-		$from = date("Y-m-d", strtotime($from));
-		$to = date("Y-m-d", strtotime($to));
-
-		$result = '';
-
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-		";
-
-	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND tid='".$tid."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".$from."' AND '".$to."'
-			AND sairaus='".$sairaus."'
-			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
-			AND deleted=0
-		";
-
-
-		$lu = Mobile::model()->find($criteria);
-
-
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-		";
-
-	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND tid='".$tid."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".$from."' AND '".$to."'
-			AND sairaus='".$sairaus."'
-			AND deleted=0
-		";
-
-
-		$tot = Toteutuneet::model()->find($criteria);
-
-		if(isset($lu->l_tunnit))
-		$result = $lu->l_tunnit;
-
-		if(isset($tot->l_tunnit))
-		$result = $result+$tot->l_tunnit;
-
-
-		return $result;
-	}
-
-
 	public function TidfromtoSairausTP($from,$to,$tid,$sairaus)
 	{
 		$from = date("Y-m-d", strtotime($from));

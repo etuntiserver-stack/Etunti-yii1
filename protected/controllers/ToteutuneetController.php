@@ -641,9 +641,9 @@ $xml = '
 		//     Ilta, Yo, Sunnuntai -->
 
 		// <-- SPL, SL, LS
-		$spl 	= $mobile[0]->TidfromtoSairaus($pvm,$pvm,$tid,'SPL'); // Palkaton
-		$sl 	= $mobile[0]->TidfromtoSairaus($pvm,$pvm,$tid,'SL'); // Palkallinen
-		$ls 	= $mobile[0]->TidfromtoSairaus($pvm,$pvm,$tid,'LS'); // Lapsen sairaus
+		$spl 	= $mobile[0]->TidfromtoSairausTP($pvm,$pvm,$tid,'SPL'); // Palkaton
+		$sl 	= $mobile[0]->TidfromtoSairausTP($pvm,$pvm,$tid,'SL'); // Palkallinen
+		$ls 	= $mobile[0]->TidfromtoSairausTP($pvm,$pvm,$tid,'LS'); // Lapsen sairaus
 		//     SPL, SL, LS -->
 
 
