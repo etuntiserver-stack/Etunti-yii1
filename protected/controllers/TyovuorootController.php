@@ -3837,7 +3837,7 @@ class TyovuorootController extends Controller
 			3=>Yii::t('main', 'Työ'),
 			2=>Yii::t('main', 'Matka'),
 			10=>Yii::t('main', 'Lounastauko'),
-			11=>Yii::t('main', 'Lomat tai poissaolot')
+			11=>Yii::t('main', 'Lomat/Poissaolot/Sairaukset')
 		);
 		return $l;
 	}
