@@ -69,7 +69,9 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 	Tyovuoroot::model()->updatebypk($model->id, array('kohde'=>$ov->kohde_id));
 	$model->kohde = $ov->kohde_id;
 }
-
+if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
+	$model->status = 11;
+}
 ?>
 
 	<?php if(isset($ov->id) and $model->osoiteOnline == 2) : ?>
