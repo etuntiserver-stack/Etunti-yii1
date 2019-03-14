@@ -179,12 +179,24 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 
   	<div id="tyoajanlaatu_laatikko" style="<?=(($model->status != 11)?'display:none':'')?>">
 		<?php echo $form->labelEx($model,'tyoajanlaatu'); ?>
+		<div class="input-group">
 		<?php 
 			$list = array('(VL) Vuosiloma/green' => '(VL) Vuosiloma', '(VKL) Viikkolomapäivä/blue' => '(VKL) Viikkolomapäivä');
+			$valikkoot = Valikkoot::model()->findAll("select_type = 'vuosilomat'");
+			foreach($valikkoot as $vl){
+    				$expl = explode("/",$vl->value);
+				if(isset($expl[0]) and isset($expl[1]) and isset($expl[2])){
+					$list['('.$expl[0].') '.$expl[1].'/'.$expl[2]] = '('.$expl[0].') '.$expl[1];
+				}
+			}
+
 			echo $form->dropDownList($model, 'tyoajanlaatu', $list, 
 			array('empty'=>'Valitse','class'=>'form-control')); 
 		?>
-		<?php echo $form->error($model,'tyoajanlaatu'); ?>
+		<span class="input-group-btn">
+		  <span class="btn btn-primary myBgColors muokaValiko" for="vuosilomat"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
+		</div>
   	</div>
   </div>
 </div>
@@ -266,6 +278,61 @@ $(".muokaValiko").click(function() {
            }
         });
 });
+
+  $(document).delegate(".muokaTaulunLatiko","click",function(){
+
+    $(this).css({"background" : "#ccc"});
+
+    var thisID = $(this).attr("id");
+    var thisDate = $(this).attr("thisdate");
+    var thisTid = parseInt($(this).attr("thistid"));
+    var thisTXT = $(this).text();
+    var id = $(this).attr("method");
+    var thisStatus = $(".valikot input:radio:checked").val();
+    var lat1 = thisStatus.split("//");
+    var lat = '('+lat1[0]+') '+lat1[2]+'/'+lat1[1];
+    var vapaateksti = $('.vapaateksti').val();
+
+    var postdata = {
+	tid 	: thisTid,
+	pvm 	: thisDate,
+	status 	: thisStatus,
+	tietoja	: vapaateksti,
+	tyoajanlaatu : lat,
+    }
+
+        $.ajax({
+           url: 'vlupdater?id='+id+'&txt='+thisTXT,
+	   type: 'POST',
+	   data: { Vuosilomat : postdata },
+           success: function(data){
+		console.log(data);
+
+		var spData  = data.split("//");
+
+		if(spData[3] != '' && data != 'removed'){
+		   $("#"+thisID).attr("method",spData[0]);
+		   $("#"+thisID).removeClass("myBgColors bg-info");
+		   $("#"+thisID).attr("style","background:"+spData[4]+";color:white;");
+		   $("#"+thisID).html('<div class="link laatikot">'+ spData[3] +'</div>');
+		}
+
+		if(data == 'removed')
+		{
+		   $("#"+thisID).attr("method", "new");
+		   $("#"+thisID).html('<div class="link laatikot"></div>');
+		}
+    
+
+           },
+	   error:function(data){
+		console.log(data);
+		/*window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";*/
+	   }
+        });
+
+
+  });
 /* valikot */
 
  $('#Tyovuoroot_tyoajanlaatu').change(function(){

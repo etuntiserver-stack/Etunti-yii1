@@ -179,7 +179,7 @@ public $kpl;
 			'status' => Yii::t('main', 'Tilanne'),
 			'piilota_mobiilista'=>Yii::t('main', 'Näytä mobiilissa'),
 			'tuoteID' => Yii::t('main', 'Tuote/palvelu'),
-			'tyoajanlaatu' => Yii::t('main', 'Lomat'),
+			'tyoajanlaatu' => Yii::t('main', 'Lomat ja poissaolot'),
 		);
 	}
 
