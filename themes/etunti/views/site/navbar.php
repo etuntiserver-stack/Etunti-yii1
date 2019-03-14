@@ -1051,6 +1051,10 @@ $('.multTyoryhma').multiselect({
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/kk">
                   <span class="fa fa-calendar-o"></span> <?php echo Yii::t('main', 'Kuukausinäkymä'); ?></a>
               </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/vuosilomat/index">
+                  <span class="fa fa-calendar-o"></span> <?php echo Yii::t('main', 'Lomat ja poissaolot'); ?></a>
+              </li>
             </ul>
           </li>
 	<?php endif; ?>
