@@ -332,7 +332,7 @@ function dateDiff($start, $end) {
 		<table class="" cellspacing="0" cellpadding="0">
 		  <tr>
 
-		   <td><h3>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$vlChecker.$ispyha.'</h3></td>
+		   <td><h3>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$ispyha.'</h3> <h1 class="text-center">'.$vlChecker.'</h1></td>
 		  </tr>
 		  <tr>	
 		   <td>';
