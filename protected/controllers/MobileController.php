@@ -970,19 +970,22 @@ function num($val){
 
 	public function actionIndex_ajax()
 	{
-
 		if(!isset($_SESSION['domain']))
 		{
 			die('Error domain');
 			exit;
 		}
 
-		$model = Mobile::model()->find("id!='' order by id DESC");
-		if(isset($_POST['setRivi']))
-		$this->renderPartial('_view', array('data' => $model));
-		else
-		echo $model->id;
-
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " id DESC ";
+	        //$criteria->condition = " ";
+		$model = Mobile::model()->find($criteria);
+		if(isset($model->id) and isset($_POST['setRivi'])){
+			$this->renderPartial('_view', array('data' => $model));
+		} elseif(isset($model->id) and !isset($_POST['setRivi'])) {
+			echo $model->id;
+		}
+		exit;
 	}
 
 	public function actionKesto($id)
