@@ -202,11 +202,11 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 			
 			echo '<select name="Tyovuoroot[tyoajanlaatu]" class="form-control" id="Tyovuoroot_tyoajanlaatu">';
 			foreach($list as $key => $val){
-				$bg = '#fff';
-				if(in_array($val, $l1)){
-					$bg = '#ccc';
-				}
-				echo '<option value="'.$key.'" style="background: '.$bg.'">'.$val.'</option>';
+				$bg 		= '#fff';
+				$selected 	= ''; 
+				if(in_array($val, $l1)){ $bg = '#ccc'; }
+				if($model->tyoajanlaatu == $key){ $selected = 'selected'; }
+				echo '<option value="'.$key.'" style="background: '.$bg.'" '.$selected.'>'.$val.'</option>';
 			}
 			echo '</select>';
 		?>
