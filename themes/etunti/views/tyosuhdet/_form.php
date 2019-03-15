@@ -138,11 +138,15 @@ $result2 = (int)abs((strtotime($d3) - strtotime($d4))/(60*60*24*30));
 	<hr>';
 
 }
-
-if(!empty($model->alku))
-$model->alku = date("d.m.Y",strtotime($model->alku));
-if(!empty($model->loppu))
-$model->loppu = date("d.m.Y",strtotime($model->loppu));
+if(!isset($model->id)){
+	$model->alku = date("d.m.Y");
+}
+if(!empty($model->alku)){
+	$model->alku = date("d.m.Y",strtotime($model->alku));
+}
+if(!empty($model->loppu)){
+	$model->loppu = date("d.m.Y",strtotime($model->loppu));
+}
 
 if(isset($model->id))
 echo '<input type="hidden" id="modelID" value="'.$model->id.'">';
