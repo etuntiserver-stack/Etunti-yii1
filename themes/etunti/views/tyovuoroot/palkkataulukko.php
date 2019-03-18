@@ -115,19 +115,6 @@ $this->breadcrumbs=array(
 
                       <div class="col-md-2">
                         <div class="section">
-                          <label class="field select">
-				<select class="gui-input" name="lu_tai_tot">
-				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
-				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
-				</select>
-                            <i class="arrow double"></i>
-                            </label>
-                          </label>
-                        </div>
-		      </div>
-
-                      <div class="col-md-2">
-                        <div class="section">
                           <label class="field">
 				<?php
 		   		$site = Yii::app()->createController('Site');
