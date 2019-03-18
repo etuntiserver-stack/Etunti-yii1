@@ -139,14 +139,16 @@ $this->breadcrumbs=array(
                     </div>
 
 
-
+		SL  - Sairaus Palkallinen<br>
+		SPL - Sairaus Palkaton<br>
+		LS  - Lapsen sairaus<br>
+		VL  - Vuosiloma<br>
+		VKL - Viikkolomapäivä
                 </div>
               </div>
+
             </div>
-
-	    </form>
-
-
+	    </form> 
         <!-- loppu: .tray-center -->
         </div>
 
