@@ -1,0 +1,416 @@
+<div class="row">
+<?php
+/* @var $this MobileController */
+/* @var $dataProvider CActiveDataProvider */
+
+$this->breadcrumbs=array(
+	Yii::t('main', 'Tunnit'),
+);
+
+?>
+
+
+
+
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
+
+
+        <h2 class="myBgColors p10"> <i class="fa fa-eur"></i> <?php echo Yii::t('main', 'Palkkataulukko (Työvuoroista)'); ?> 
+
+	<?php if(!isset($_GET['kaikki_tyontekijat'])): ?>
+	<?php echo ', '.Yii::t('main', 'aktiiviset työntekijät'); ?>
+	<?php echo CHtml::link(Yii::t('main', 'Näytä kaikki'),'palkkataulukko?kaikki_tyontekijat', array('class'=>'btn btn-primary')); ?>
+	<?php endif; ?>
+
+   <!-- tulostus -->
+   <div class="pull-right">
+    <div class="form-inline">
+     <form action="#" class="form-group" method="GET">
+      <input type="hidden" name="from" value="<?php echo $from; ?>">
+      <input type="hidden" name="to" value="<?php echo $to; ?>">
+      <div style="display:none">
+				<select class="gui-input" name="lu_tai_tot">
+				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
+				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
+				</select>
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
+					'Tekija', // name
+					null, // class
+					'tyontekijat2', // id
+					(isset($_GET['Tekija']))?$_GET['Tekija']:array(), //selected
+					1 // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
+      </div>
+      <input type="submit" name="tulosta_xls" class="btn btn-primary btn-sm myBgColors" value="XLS">
+     </form>
+     <form action="#" class="form-group" method="GET">
+      <input type="hidden" name="from" value="<?php echo $from; ?>">
+      <input type="hidden" name="to" value="<?php echo $to; ?>">
+      <div style="display:none">
+				<select class="gui-input" name="lu_tai_tot">
+				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
+				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
+				</select>
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
+					'Tekija', // name
+					null, // class
+					'tyontekijat2', // id
+					(isset($_GET['Tekija']))?$_GET['Tekija']:array(), //selected
+					1 // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
+      </div>
+      <input type="submit" name="tulosta_pdf" class="btn btn-primary btn-sm myBgColors" value="PDF">
+     </form>
+    </div>
+   </div>
+   <!-- tulostus -->
+	</h2>
+
+
+
+   	    <form id="yhtveto" action="#" class="form-inline" method="GET">
+   	    <input type="hidden" name="yhtvetoform">
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+                    <!-- Input Icons -->
+                    <div class="row">
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+	   <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php echo date('d.m.Y', strtotime($from)); ?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   	   <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php echo date('d.m.Y', strtotime($to)); ?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+				<select class="gui-input" name="lu_tai_tot">
+				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
+				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
+				</select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+		      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field">
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
+					'Tekija', // name
+					null, // class
+					'tyontekijat', // id
+					(isset($_GET['Tekija']))?$_GET['Tekija']:array(), //selected
+					1 // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
+                          </label>
+                        </div>
+                      </div>
+
+
+                      <div class="col-md-2  col-md-offset-2">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
+		      </div>
+
+                    </div>
+
+
+
+                </div>
+              </div>
+            </div>
+
+	    </form>
+
+
+        <!-- loppu: .tray-center -->
+        </div>
+
+
+<br>
+
+
+
+<?php if(isset($_GET['Tekija']) and $from and $to) : ?>
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+
+<div class="table-responsive">
+
+  <table class="table table-bordered small" id="palkkatauluTaulu">
+  <thead class="myBgColors">
+  <tr>
+  <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'Tp'); ?></th>
+  <th><?php echo Yii::t('main', 'M'); ?></th>
+  <th><?php echo Yii::t('main', 'Työtunnit'); ?></th>
+  <th><?php echo Yii::t('main', 'matka+<br>tunnit yht'); ?></th>
+  <th><?php echo Yii::t('main', 'Ilta'); ?></th>
+  <th><?php echo Yii::t('main', 'Iltamatka+<br>Iltatunnit yht'); ?></th>
+  <th><?php echo Yii::t('main', 'Lounas'); ?></th>
+  <th><?php echo Yii::t('main', 'Yö'); ?></th>
+  <th><?php echo Yii::t('main', 'Su'); ?></th>
+  <th><?php echo Yii::t('main', 'PY'); ?></th>
+  <th><?php echo Yii::t('main', 'EL'); ?></th>
+  <th><?php echo Yii::t('main', 'SL'); ?></th>
+  <th><?php echo Yii::t('main', 'SPL'); ?></th>
+  <th><?php echo Yii::t('main', 'LS'); ?></th>
+  <th><?php echo Yii::t('main', 'VL'); ?></th>
+  <th><?php echo Yii::t('main', 'VKL'); ?></th>
+  </tr>
+  </thead>
+
+  <?php
+  $toteutuneet = Yii::app()->createController('Toteutuneet');
+  $tids = array();
+  $totalTp	= 0;
+  $tot_sun	= 0;
+  $tp		= 0;
+  $sl 		= 0;
+  $ls 		= 0;
+  $spl 		= 0;
+  $vl 		= 0;
+  $vlYht	= 0;
+  $vklYht	= 0;
+  $slYht	= 0;
+  $splYht	= 0;
+  $lsYht	= 0;
+  $pyhatYht	= 0;
+  $elYht	= 0;
+  $matkaYht	= 0;
+  $yht[0] 	= 0;
+  $yht[1] 	= 0;
+  $yht[2] 	= 0;
+  $yht[3] 	= 0;
+  $mPlusTYht	= 0;
+  $matkaIltaYht = 0;
+  $iltaMatkaPlusIltatunnitYht = 0;
+  $loun		= 0;
+  $lounYht	= 0;
+
+
+  $begin = new DateTime(date("Y-m-d", strtotime($from)));
+  $end = new DateTime(date("Y-m-d", strtotime($to." +1 day")));
+  $interval = DateInterval::createFromDateString('1 day');
+  $period = new DatePeriod($begin, $interval, $end);
+
+  foreach($model as $data)
+  {
+	$yotunnit	= 0;
+	$iltatunnit	= 0;
+	$sutunnit	= 0;
+
+	$tids[] = $data->id;
+	$tp = $this->Tp($data->id,$from,$to);
+  	$sl = $this->poissaolot($from,$to,$data->id,'SL');
+	$slYht += $sl;
+  	$ls = $this->poissaolot($from,$to,$data->id,'LS');
+	$lsYht += $ls;
+  	$spl = $this->poissaolot($from,$to,$data->id,'SPL');
+	$splYht += $spl;
+  	$vl = $this->poissaolot($from,$to,$data->id, 'VL');
+	$vlYht += $vl;
+  	$vkl = $this->poissaolot($from,$to,$data->id, 'VKL');
+	$vklYht += $vkl;
+	$totalTp += $tp;
+  	$pyhat = $this->pyhapaivat($data->id,$from,$to,"pyhat");
+	$pyhatYht += $pyhat;
+  	$el = $this->pyhapaivat($data->id,$from,$to,"el");
+	$elYht += $el;
+
+	$m = $this->TidfromtoStatus($from,$to,$data->id, 2);
+	$matkaYht += $m;
+
+	// Yo 
+	foreach ($period as $dt) {
+		$IltaYoSu = $toteutuneet[0]->IltaYoSuTyovuorosta($data->id, $dt->format("Y-m-d"));
+		$iltatunnit += $IltaYoSu[0];
+		$yotunnit += $IltaYoSu[1];
+		$sutunnit += $IltaYoSu[2];
+	}
+
+	$toteutu = $this->toteutu($data->id,"palkkataulukko",$from,$to);
+	$matkaIlta = $this->matkaIlta($data->id,$from,$to);
+	$mPlusTYht += $toteutu+$m;
+
+	$loun = $this->TidfromtoStatus($from,$to,$data->id, 10);
+	$lounYht += $loun;
+	$matkaIltaYht += $matkaIlta;
+	$iltaMatkaPlusIltatunnitYht += $iltatunnit;
+
+	$yht[0] += $toteutu;
+	$yht[1] += $iltatunnit-$matkaIlta;
+	$yht[2] += $yotunnit;
+	$yht[3] += $sutunnit;
+
+
+	$this->renderPartial('_palkkataulukko',array(
+			'data'=>$data,
+			'toteutu'=>$toteutu,
+			'matka'=>$m,
+			'matkaIlta'=>$matkaIlta,
+			'tp'=>$tp,
+			'sl'=>$sl,
+			'spl'=>$spl,
+			'ls'=>$ls,
+			'vl'=>$vl,
+			'vkl'=>$vkl,
+			'from'=>$from,
+			'to'=>$to,
+			'pyhat'=>$pyhat,
+			'el'=>$el,
+			'loun'=>$loun,
+			'yotunnit' => $yotunnit,
+			'iltatunnit' => $iltatunnit,
+			'sutunnit' => $sutunnit
+	));
+  }
+
+  $matkaIltaYhtfooter = '';
+  if($matkaIltaYht > 0){  $matkaIltaYhtfooter = '<br><b>Matkat</b>:<br>'.$this->num($matkaIltaYht); }
+  ?>
+  <tfoot>
+  <tr>
+  	<th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
+	<td><?php if($totalTp != 0) echo $totalTp; ?></td>
+	<td><?php echo $this->num($matkaYht); ?></td>
+	<td><?php echo $this->num($yht[0]); ?></td>
+	<td><?php echo $this->num($mPlusTYht); ?></td>
+	<td><?php if(!empty($matkaIltaYhtfooter) or $this->num($yht[1]) != 0) echo '<b>Työt</b>:<br>'.$this->num($yht[1]).$matkaIltaYhtfooter; ?></td>
+	<td><?php echo $this->num($iltaMatkaPlusIltatunnitYht); ?></td>
+	<td><?php echo $this->num($lounYht); ?></td>
+	<td><?php echo $this->num($yht[2]); ?></td>
+	<td><?php echo $this->num($yht[3]); ?></td>
+	<td><?php echo $this->num($pyhatYht); ?></td>
+	<td><?php echo $this->num($elYht); ?></td>
+	<td><?=($slYht > 0)?$slYht:''?></td>
+	<td><?=($splYht > 0)?$splYht:''?></td>
+	<td><?=($lsYht > 0)?$lsYht:''?></td>
+	<td><?=($vlYht > 0)?$vlYht:''?></td>
+	<td><?=($vklYht > 0)?$vklYht:''?></td>
+  </tr>
+  </tfoot>
+  </table>
+</div>
+
+
+                 </div>
+                </div>
+              </div>
+            </div>
+
+
+<?php endif; ?>
+</div>
+
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+$(".haemob").click(function(){
+	$("#yhtveto").submit();
+});
+
+$('#deselAll').click(function(){
+   $('#tyontekijat').selectpicker('deselectAll');
+});
+
+
+$('#selAll').click(function(){
+   $('#tyontekijat').selectpicker('selectAll');
+});
+
+
+
+
+$("#yhtveto").on('submit',function(e){
+
+  var from = $("#from").val();
+  var to = $("#to").val();
+
+    if (from  === '') {
+        $('#from').css({"border" : "2px #f14010 solid"}).focus();
+        return false;
+    }
+    if (to  === '') {
+        $('#to').css({"border" : "2px #f14010 solid"}).focus();
+        return false;
+    }
+
+});
+
+
+$('#tyontekijat').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
+});
+
+
+// <-- Tulostus
+$(document).delegate(".palkkatauluTaulu","click",function(){
+	
+	$('#palkkatauluTaulu td,#palkkatauluTaulu th').css({"border":"1px #333 solid", "padding":"3px 5px"});
+
+	var divToPrint = document.getElementById('palkkatauluTaulu');
+	newWin = window.open("");
+	newWin.document.write(divToPrint.outerHTML);
+	newWin.print();
+	newWin.close();
+});
+//    Tulostus -->
+
+
+});
+</script>

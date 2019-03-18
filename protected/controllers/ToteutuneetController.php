@@ -1169,6 +1169,47 @@ $xml = '
 
 	}
 
+	protected function IltaYoSuTyovuorosta($tid,$pvm)
+	{
+
+		$pvm = date("Y-m-d", strtotime($pvm));
+		$mobile = Yii::app()->createController('Mobile');
+		$ilta 	= 0;
+		$yo 	= 0;
+		$su 	= 0;
+
+       		$criteria = new CDbCriteria();
+        	$criteria->condition = "  
+			tid = '".$tid."'
+			AND (status = '3' OR status = '2')
+			AND peruutettu=0
+		";
+
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."' ");
+
+		$lu = Tyovuoroot::model()->findAll($criteria);
+		foreach($lu as $l)
+		{
+
+		    $loppu = date("d.m.Y H:i",strtotime($l->pvm.' '.$l->loppu));
+		    $alku = date("d.m.Y H:i",strtotime($l->pvm.' '.$l->alku));
+
+		    $l->l_tunnit = (strtotime($loppu)-strtotime($alku));
+		    $al = explode(" ",$alku);
+		    $lop = explode(" ",$loppu);
+
+		    $ilta += $mobile[0]->ilta($al,$lop);
+		    $yo += $mobile[0]->yo($al,$lop);
+		    if(date('N', strtotime($al[0])) == 7)
+		    $su += $l->l_tunnit;
+
+		}
+ 
+		$total = array($ilta,$yo,$su);
+		return $total;
+
+	}
+
 	protected function totLuYhteensa($criteria,$tid,$week,$year,$tila){
 
 

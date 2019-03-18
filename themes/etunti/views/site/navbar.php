@@ -887,7 +887,11 @@ $('.multTyoryhma').multiselect({
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/palkkataulukko">
-                  <span class="fa fa-eur"></span> <?php echo Yii::t('main', 'Tiedot palkanlaskentaan'); ?></a>
+                  <span class="fa fa-eur"></span> <?php echo Yii::t('main', 'Tiedot palkanlaskentaan mobiilista'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/palkkataulukko">
+                  <span class="fa fa-eur"></span> <?php echo Yii::t('main', 'Tiedot palkanlaskentaan työvuorosta'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/raportit">
