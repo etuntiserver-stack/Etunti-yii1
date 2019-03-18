@@ -147,11 +147,11 @@ $this->breadcrumbs=array(
 			<b>LS</b>  - Lapsen sairaus<br>
 			<b>VL</b>  - Vuosiloma<br>
 			<b>VKL</b> - Viikkolomapäivä
+		 </div>
 		</div>
 
                 </div>
               </div>
-
             </div>
 	    </form> 
         <!-- loppu: .tray-center -->

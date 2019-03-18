@@ -152,12 +152,20 @@ $this->breadcrumbs=array(
 
                     </div>
 
-
+		<div class="row">
+		 <div class="col-sm-4">
+			<h4>Määritellään työvuorosuunnittelussa:</h4>
+			<b>SL</b>  - Sairaus Palkallinen<br>
+			<b>SPL</b> - Sairaus Palkaton<br>
+			<b>LS</b>  - Lapsen sairaus<br>
+			<b>VL</b>  - Vuosiloma<br>
+			<b>VKL</b> - Viikkolomapäivä
+		 </div>
+		</div>
 
                 </div>
               </div>
             </div>
-
 	    </form>
 
 
