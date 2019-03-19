@@ -991,24 +991,6 @@ $xml = '
 			$tekija = $this->etuSukunimi(Yii::app()->session['tekija']);
 		}
 
-/*
-       		$criteria = new CDbCriteria();
-
-        	//$criteria->condition = " aloitan !='' and loppui !='' ";
-
-        	$criteria->order = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y-%m-%d'))";
-        	$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y-%m-%d'))";
-
-
-		if(isset($explTekija[0]))
-	        $criteria->addCondition (" tid = '".$explTekija[0]."'");
-
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
-
-
-		//$model = Mobile::model()->findAll($criteria);
-*/
 
 		$from = '';
 		$to = '';
