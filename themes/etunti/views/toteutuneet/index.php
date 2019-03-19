@@ -322,7 +322,7 @@ function dateDiff($start, $end) {
 
     echo '
 	<tr><td colspan="4">
-		<table class="" cellspacing="0" cellpadding="0">
+		<table class="table-striped" cellspacing="0" cellpadding="0">
 		  <tr>
 		   <td class="text-center">
 			<h2>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$ispyha.'</h2> 
