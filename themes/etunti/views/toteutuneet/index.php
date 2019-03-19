@@ -212,7 +212,7 @@ function dateDiff($start, $end) {
    <div class="panel-heading"><?php echo Yii::t('main', 'Lista'); ?></div>
    <div class="panel-body">
 
-  <table class="table" cellspacing="0" cellpadding="0" id="tuntienHyvaksyntaTaulu">
+  <table class="table table-bordered" cellspacing="0" cellpadding="0" id="tuntienHyvaksyntaTaulu">
   <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Suunnitellut'); ?></th>
