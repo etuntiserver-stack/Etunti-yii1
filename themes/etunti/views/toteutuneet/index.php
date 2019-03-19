@@ -16,7 +16,7 @@ $this->breadcrumbs=array(
 	padding:3px 7px;
 	background: white;
 	border-radius:5px;
-	width: 230px;
+	width: 100%;
 }
 .oikeallaPlusV, .tp{
 	display:none;
@@ -25,6 +25,9 @@ $this->breadcrumbs=array(
     	vertical-align: top;
 }
 table { width: 100%; }
+.tdw{
+	width: 25%;
+}
 </style>
 
         <!-- begin: .tray-center -->
@@ -209,16 +212,15 @@ function dateDiff($start, $end) {
 
 
   <div class="panel heading-border">
-   <div class="panel-heading"><?php echo Yii::t('main', 'Lista'); ?></div>
    <div class="panel-body">
 
   <table class="table table-bordered" cellspacing="0" cellpadding="0" id="tuntienHyvaksyntaTaulu">
   <thead class="myBgColors">
   <tr>
-  <th><?php echo Yii::t('main', 'Suunnitellut'); ?></th>
-  <th><?php echo Yii::t('main', 'Luettu'); ?></th>
-  <th><?php echo Yii::t('main', 'Hyväksytyt'); ?></th>
-  <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
+  <th class="tdw"><?php echo Yii::t('main', 'Suunnitellut'); ?></th>
+  <th class="tdw"><?php echo Yii::t('main', 'Luettu'); ?></th>
+  <th class="tdw"><?php echo Yii::t('main', 'Hyväksytyt'); ?></th>
+  <th class="tdw"><?php echo Yii::t('main', 'Yhteensä'); ?></th>
   </tr>
   </thead>
   <tbody>
@@ -320,21 +322,12 @@ function dateDiff($start, $end) {
 		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Erikoislauantai').'"></i>';
 	  }
 
-    echo '
-	<tr><td colspan="4">
-		<table class="table-striped" cellspacing="0" cellpadding="0">
-		  <tr>
-		   <td class="text-center">
-			<h2>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$ispyha.'</h2> 
-			<h3>'.$this->vuosilomaChecker($tid, $date).'</h3>
-		   </td>
-		  </tr>
-		  <tr>	
-		   <td>';
+    echo '<tr><td class="text-left" colspan="4"><h4>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$ispyha.'</h4></td></tr>';
 
-    if($asetukset->netvisor_kaytto == 1)
-    {
-    echo 
+    if($asetukset->netvisor_kaytto == 1){
+    echo '<tr>';
+    echo '<td>';
+    echo '<div class="row">'.
 			CHtml::button(Yii::t('main', 'Korvaukset ja ennakot'.$asetukset->netvisor_kaytto), 
 				array(
 					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
@@ -343,17 +336,17 @@ function dateDiff($start, $end) {
 					'tid'=>$tid,
 			)).'
 			<br>
-			<div class="row">
 			  '.$korv.' 
 			</div>';
-     }
+    echo '</td><td></td><td></td><td></td></tr>';
+    }
 
-     echo '
-		   </td>
-		  </tr>
-		</table>
-	</td></tr>';
-
+    $vlcheck = $this->vuosilomaChecker($tid, $date);
+    if(!empty($vlcheck)){
+    echo '<tr>';
+    echo '<td></td><td></td><td><h3>'.$vlcheck.'</h3></td><td></td>';
+    echo '</tr>';
+    }
     echo '<tr class="su_lu_tot">';
   
 
@@ -482,7 +475,7 @@ function dateDiff($start, $end) {
 
     echo '
 	<tr><td colspan="4">
-		<table class="yhteensaPvmAllaTaulu_'.date("W",strtotime($date)).' forFooterAlla table table-bordered" cellspacing="0" cellpadding="0" id="yhteensaPvmAllaTaulu_'.$did.'_'.$tid.'">
+		<table class="yhteensaPvmAllaTaulu_'.date("W",strtotime($date)).' forFooterAlla table table-bordered" cellspacing="0" cellpadding="0" id="yhteensaPvmAllaTaulu_'.$did.'_'.$tid.'" style="width:100%">
 		 <thead>
 		  <tr>
 		   <th>'.Yii::t('main', 'Työtunnit').'</th>
@@ -584,7 +577,7 @@ function dateDiff($start, $end) {
     echo '
 	<tr><td colspan="4">
 		<table class="table" cellspacing="0" cellpadding="0">
-		 <thead class="myBgColors">
+		 <thead>
 		  <tr>
 		   <th>'.Yii::t('main', 'Suunn.').'</th>
 		   <th>'.Yii::t('main', 'Luetut').'</th>

@@ -19,6 +19,9 @@ $(document).delegate(".tuntienHyvaksyntaTaulu","click",function(){
         'border:1px solid #333;' +
         'padding:3px 5px;' +
         '}' +
+	'.tdw{' +
+	'width: 25%;' +
+	'}' +
         '</style>';
     htmlToPrint += $('#forTulostus').html();
     htmlToPrint += divToPrint.outerHTML;
