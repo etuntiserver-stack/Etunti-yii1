@@ -325,7 +325,7 @@ function dateDiff($start, $end) {
 		<table class="" cellspacing="0" cellpadding="0">
 		  <tr>
 		   <td class="text-center">
-			<h3>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$ispyha.'</h3> 
+			<h2>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$ispyha.'</h2> 
 			<h3>'.$this->vuosilomaChecker($tid, $date).'</h3>
 		   </td>
 		  </tr>
