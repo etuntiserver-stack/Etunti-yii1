@@ -641,9 +641,9 @@ $xml = '
 		//     Ilta, Yo, Sunnuntai -->
 
 		// <-- SPL, SL, LS
-		$spl 	= $mobile[0]->TidfromtoSairaus($pvm,$pvm,$tid,'SPL'); // Palkaton
-		$sl 	= $mobile[0]->TidfromtoSairaus($pvm,$pvm,$tid,'SL'); // Palkallinen
-		$ls 	= $mobile[0]->TidfromtoSairaus($pvm,$pvm,$tid,'LS'); // Lapsen sairaus
+		$spl 	= $mobile[0]->TidfromtoSairausTP($pvm,$pvm,$tid,'SPL'); // Palkaton
+		$sl 	= $mobile[0]->TidfromtoSairausTP($pvm,$pvm,$tid,'SL'); // Palkallinen
+		$ls 	= $mobile[0]->TidfromtoSairausTP($pvm,$pvm,$tid,'LS'); // Lapsen sairaus
 		//     SPL, SL, LS -->
 
 
@@ -991,24 +991,6 @@ $xml = '
 			$tekija = $this->etuSukunimi(Yii::app()->session['tekija']);
 		}
 
-/*
-       		$criteria = new CDbCriteria();
-
-        	//$criteria->condition = " aloitan !='' and loppui !='' ";
-
-        	$criteria->order = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y-%m-%d'))";
-        	$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y-%m-%d'))";
-
-
-		if(isset($explTekija[0]))
-	        $criteria->addCondition (" tid = '".$explTekija[0]."'");
-
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
-
-
-		//$model = Mobile::model()->findAll($criteria);
-*/
 
 		$from = '';
 		$to = '';
@@ -1164,6 +1146,47 @@ $xml = '
 		    $su += $l->l_tunnit;
 		}
 
+		$total = array($ilta,$yo,$su);
+		return $total;
+
+	}
+
+	protected function IltaYoSuTyovuorosta($tid,$pvm)
+	{
+
+		$pvm = date("Y-m-d", strtotime($pvm));
+		$mobile = Yii::app()->createController('Mobile');
+		$ilta 	= 0;
+		$yo 	= 0;
+		$su 	= 0;
+
+       		$criteria = new CDbCriteria();
+        	$criteria->condition = "  
+			tid = '".$tid."'
+			AND (status = '3' OR status = '2')
+			AND peruutettu=0
+		";
+
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."' ");
+
+		$lu = Tyovuoroot::model()->findAll($criteria);
+		foreach($lu as $l)
+		{
+
+		    $loppu = date("d.m.Y H:i",strtotime($l->pvm.' '.$l->loppu));
+		    $alku = date("d.m.Y H:i",strtotime($l->pvm.' '.$l->alku));
+
+		    $l->l_tunnit = (strtotime($loppu)-strtotime($alku));
+		    $al = explode(" ",$alku);
+		    $lop = explode(" ",$loppu);
+
+		    $ilta += $mobile[0]->ilta($al,$lop);
+		    $yo += $mobile[0]->yo($al,$lop);
+		    if(date('N', strtotime($al[0])) == 7)
+		    $su += $l->l_tunnit;
+
+		}
+ 
 		$total = array($ilta,$yo,$su);
 		return $total;
 
@@ -1535,21 +1558,21 @@ $xml = '
 
 	protected function vuosilomaChecker($tid, $pvm)
 	{
-
+		$vl = '';
 	       	$criteria = new CDbCriteria();
 		$criteria->condition = " 
 			tid = '".$tid."' 
 			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."'
+			AND status=11
+			AND tyoajanlaatu!=''
 		";
-		$tv = Tyovuoroot::model()->find($criteria);
-		if(isset($tv->status))
-		{
-			$vl = array();
-			$vl = explode("/", $tv->tyoajanlaatu);
-			return $vl;
+		$tv = Tyovuoroot::model()->findAll($criteria);
+		foreach($tv as $item){
+			$arr = explode("/", $item->tyoajanlaatu);
+			if(isset($arr[1])){ $vl .= '<span style="color:'.$arr[1].'">'.$arr[0].'<br>'; }
 		}
 
-		return null;
+		return $vl;
 
 	}
 

@@ -183,17 +183,32 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 		<?php echo $form->labelEx($model,'tyoajanlaatu'); ?>
 		<div class="input-group">
 		<?php 
-			$list = array('(VL) Vuosiloma/green' => '(VL) Vuosiloma', '(VKL) Viikkolomapäivä/blue' => '(VKL) Viikkolomapäivä');
+			$l1 = array(
+				'(VL) Vuosiloma/green' => '(VL) Vuosiloma', 
+				'(VKL) Viikkolomapäivä/blue' => '(VKL) Viikkolomapäivä',
+				'(SL) Sairaus Palkallinen/#FFAC33' => '(SL) Sairaus Palkallinen',
+				'(SPL) Sairaus Palkaton/#FFAC33' => '(SPL) Sairaus Palkaton',
+				'(LS) Lapsen sairaus/#FFAC33' => '(LS) Lapsen sairaus',
+			);
 			$valikkoot = Valikkoot::model()->findAll("select_type = 'vuosilomat'");
+			$l2 = array();
 			foreach($valikkoot as $vl){
     				$expl = explode("/",$vl->value);
 				if(isset($expl[0]) and isset($expl[1]) and isset($expl[2])){
-					$list['('.$expl[0].') '.$expl[1].'/'.$expl[2]] = '('.$expl[0].') '.$expl[1];
+					$l2['('.$expl[0].') '.$expl[1].'/'.$expl[2]] = '('.$expl[0].') '.$expl[1];
 				}
 			}
-
-			echo $form->dropDownList($model, 'tyoajanlaatu', $list, 
-			array('empty'=>'Valitse','class'=>'form-control')); 
+			$list = array_merge($l1, $l2);
+			
+			echo '<select name="Tyovuoroot[tyoajanlaatu]" class="form-control" id="Tyovuoroot_tyoajanlaatu">';
+			foreach($list as $key => $val){
+				$bg 		= '#fff';
+				$selected 	= ''; 
+				if(in_array($val, $l1)){ $bg = '#ccc'; }
+				if($model->tyoajanlaatu == $key){ $selected = 'selected'; }
+				echo '<option value="'.$key.'" style="background: '.$bg.'" '.$selected.'>'.$val.'</option>';
+			}
+			echo '</select>';
 		?>
 		<span class="input-group-btn">
 		  <span class="btn btn-primary myBgColors muokaValiko" for="vuosilomat"><i class="fa fa-pencil-square-o"></i></span>

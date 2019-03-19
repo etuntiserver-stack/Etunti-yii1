@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto', 'vlupdater'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -97,6 +97,271 @@ class TyovuorootController extends Controller
 	    $sec = 0;
 	    foreach (array_reverse(explode(':', $time)) as $k => $v) $sec += pow(60, $k) * $v;
 	    return $sec;
+	}
+
+	public function actionPalkkataulukko()
+	{
+
+		$from = date("d.m.Y",strtotime("first day of this month"));
+		$to = date("d.m.Y");
+
+		if(isset($_GET['from']) and !empty($_GET['from'])){ $from = $_GET['from']; }
+		if(isset($_GET['to']) and !empty($_GET['to'])){ $to = $_GET['to']; }
+
+       		$criteria = new CDbCriteria();
+		$criteria->select = " id,tekijan_nimi ";
+
+		// <-- Return order etu ja sukunimella
+		$site = Yii::app()->createController('Site');
+		$criteria = $site[0]->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
+
+        	$criteria->condition = " aktiivinen=1 "; 
+
+		if( isset($_GET['Tekija']) ){
+			$ids = implode(",",$_GET['Tekija']);
+	        	$criteria->addCondition ('id IN ('.$ids.') ');
+		}
+
+/*
+		$dataProvider=new CActiveDataProvider('Mobile', array(
+			'criteria'=>$criteria,
+			'pagination'=>false
+		));
+*/
+		$model = Tyontekijat::model()->findAll($criteria);
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+		if(isset($_GET['tulosta_pdf']))
+		{
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('tulosta_palkkataulukko', array(
+			'model' => $model,
+			'from' => $from,
+			'to' => $to
+		  ),true));
+	          $html2pdf->Output();
+		} elseif(isset($_GET['tulosta_xls']))
+		{
+
+			if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
+			 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
+			}
+
+		        $html = $this->renderPartial('tulosta_palkkataulukko', array(
+				'model' => $model,
+				'from' => $from,
+				'to' => $to
+			),true);
+
+			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
+			$tiedosto = 'palkkatauluko';
+			file_put_contents($path.$tiedosto.'.html', $html);
+
+			exec('pandoc -s '.$path.$tiedosto.'.html -o '.$path.$tiedosto.'.xls', $output, $return);
+		        if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xls' ))
+			{
+				header("Content-Length: " . filesize ( $path.$tiedosto.'.xls' ) ); 
+		                header("Content-type: application/vnd.ms-excel;"); 
+		                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.xls'));
+		                header('Expires: 0');
+		                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		                readfile($path.$tiedosto.'.xls');
+				unlink($path.$tiedosto.'.html');
+				unlink($path.$tiedosto.'.xls');
+				exit;
+			}
+
+		} else {
+		  //$dataProvider->pagination->pageSize = 50;
+		  $this->render('palkkataulukko', array(
+			'model' => $model,
+			'from' => $from,
+			'to' => $to
+		  ));
+		}
+	}
+
+	protected function TP($tid,$from,$to){
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+		$result = 0;
+       		$criteria = new CDbCriteria();
+        	$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'))";
+	        $criteria->condition = "
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."' 
+			AND tid='".$tid."'
+			AND peruutettu=0
+			AND status=3
+		";
+		$tv = Tyovuoroot::model()->findAll($criteria);
+		return count($tv);
+
+	}
+
+	public function poissaolot($from,$to,$tid,$sairaus)
+	{
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+       		$criteria = new CDbCriteria();
+		$criteria->group = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ";
+	        $criteria->condition = " 
+			tid='".$tid."'
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND tyoajanlaatu LIKE '%(".$sairaus.")%'
+		";
+		$vl = Tyovuoroot::model()->findAll($criteria);
+
+		return count($vl);
+	}
+
+	public function pyhapaivat($tid,$from,$to,$m)
+	{
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+		$result 	= 0;
+		$pvmSTR = '';
+
+		$asetukset = AsetuksetForAll::model()->findbypk(1);
+		if($m == "pyhat")
+		$pvms = explode("\n",$asetukset->viralliset_pyhapaivat);
+		elseif($m == "el")
+		$pvms = explode("\n",$asetukset->erikoislauantai);
+
+		$pget = array(0);
+		if(isset($pvms[0]))
+		{
+		  foreach($pvms as $p)
+		  {
+		    if(date("Y-m-d",strtotime($p)) >= $from and date("Y-m-d",strtotime($p)) <= $to)
+		    {
+		      $prepair = date("Y-m-d",strtotime($p));
+		      $pget[$prepair] = $prepair;
+		    }
+		  }
+		}
+		if(isset($pget[0]))
+		{
+		unset($pget[0]);
+		$pvmSTR = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')='".implode("' OR DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')='",$pget)."'";
+		}
+
+		if(!empty($pvmSTR))
+		$pvmSTR = " AND ($pvmSTR) ";
+
+		$return 	= 0;
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit
+		";
+
+        	$criteria->condition = "  
+			tid = '".$tid."'
+			AND (status='2' OR status='3')
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+			AND DAYOFWEEK(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'))!=1
+			$pvmSTR
+			AND peruutettu=0
+		";
+		$tv = Tyovuoroot::model()->find($criteria);
+		if(isset($tv->l_tunnit)){ $result = $tv->l_tunnit; }
+		return $result;
+	}
+
+	public function matkaIlta($tid,$from,$to)
+	{
+		$mobile = Yii::app()->createController('Mobile');
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+		$totalIlta = 0;
+
+       		$criteria = new CDbCriteria();
+        	$criteria->condition = "  
+			tid = '".$tid."'
+			AND status = '2'
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+			AND peruutettu=0
+		";
+
+		$tv = Tyovuoroot::model()->findAll($criteria);
+		foreach($tv as $l)
+		{
+		    $loppui = date("d.m.Y H:i",strtotime($l->pvm.' '.$l->loppu));
+		    $aloitan = date("d.m.Y H:i",strtotime($l->pvm.' '.$l->alku));
+
+		    $l->l_tunnit = (strtotime($loppui)-strtotime($aloitan));
+		    $al = explode(" ",$aloitan);
+		    $lop = explode(" ",$loppui);
+		    $totalIlta += $mobile[0]->ilta($al,$lop);
+
+		}
+
+		return $totalIlta;
+
+	}
+
+	public function toteutu($tid,$sivu,$from,$to)
+	{
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+		$result 	= 0;
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit
+		";
+        	$criteria->condition = "  
+			tid = '".$tid."'
+			AND peruutettu=0
+		";
+		if($sivu == 'palkkataulukko'){ $criteria->addCondition (" status = '3' "); }
+		if($sivu == 'yhteenveto')
+		{
+			if(Yii::app()->session['Lounastauko'])
+		        $criteria->addCondition (" status != '10' ");
+	
+			if(Yii::app()->session['MATKA'])
+		        $criteria->addCondition (" status != '2' ");
+		}
+
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ");
+
+		$tv = Tyovuoroot::model()->find($criteria);
+		if(isset($tv->l_tunnit)){ $result = $tv->l_tunnit; }
+		return $result;
+
+	}
+
+	public function TidfromtoStatus($from,$to,$tid,$status)
+	{
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+		$result = 0;
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit
+		";
+	        $criteria->condition = " 
+			tid='".$tid."'
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."'
+			AND status='".$status."'
+			AND peruutettu=0
+		";
+		$tv = Tyovuoroot::model()->find($criteria);
+		if(isset($tv->l_tunnit)){ $result = $tv->l_tunnit; }
+		return $result;
 	}
 
 	public function actionIs_yhteyshenkilo()
@@ -3837,7 +4102,7 @@ class TyovuorootController extends Controller
 			3=>Yii::t('main', 'Työ'),
 			2=>Yii::t('main', 'Matka'),
 			10=>Yii::t('main', 'Lounastauko'),
-			11=>Yii::t('main', 'Lomat tai poissaolot')
+			11=>Yii::t('main', 'Lomat ja poissaolot')
 		);
 		return $l;
 	}

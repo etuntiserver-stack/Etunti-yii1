@@ -16,7 +16,7 @@ $this->breadcrumbs=array(
 	padding:3px 7px;
 	background: white;
 	border-radius:5px;
-	width: 230px;
+	width: 100%;
 }
 .oikeallaPlusV, .tp{
 	display:none;
@@ -25,6 +25,9 @@ $this->breadcrumbs=array(
     	vertical-align: top;
 }
 table { width: 100%; }
+.tdw{
+	width: 25%;
+}
 </style>
 
         <!-- begin: .tray-center -->
@@ -209,16 +212,15 @@ function dateDiff($start, $end) {
 
 
   <div class="panel heading-border">
-   <div class="panel-heading"><?php echo Yii::t('main', 'Lista'); ?></div>
    <div class="panel-body">
 
-  <table class="table" cellspacing="0" cellpadding="0" id="tuntienHyvaksyntaTaulu">
+  <table class="table table-bordered" cellspacing="0" cellpadding="0" id="tuntienHyvaksyntaTaulu">
   <thead class="myBgColors">
   <tr>
-  <th><?php echo Yii::t('main', 'Suunnitellut'); ?></th>
-  <th><?php echo Yii::t('main', 'Luettu'); ?></th>
-  <th><?php echo Yii::t('main', 'Hyväksytyt'); ?></th>
-  <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
+  <th class="tdw"><?php echo Yii::t('main', 'Suunnitellut'); ?></th>
+  <th class="tdw"><?php echo Yii::t('main', 'Luettu'); ?></th>
+  <th class="tdw"><?php echo Yii::t('main', 'Hyväksytyt'); ?></th>
+  <th class="tdw"><?php echo Yii::t('main', 'Yhteensä'); ?></th>
   </tr>
   </thead>
   <tbody>
@@ -301,13 +303,6 @@ function dateDiff($start, $end) {
 		'</div>';
     }
 
-    $vlChecker = '';
-    if($this->vuosilomaChecker($tid, $date))
-    {
-	$returnChecker = $this->vuosilomaChecker($tid, $date);
-	if(is_array($returnChecker) and isset($returnChecker[1]))
-    	$vlChecker = '  <span style="color:'.$returnChecker[1].'"> '.$returnChecker[0].' </span>';
-    }
 
 	  $ispyha = '';
 	  $pyhat = $this->pyhat($date);
@@ -327,19 +322,12 @@ function dateDiff($start, $end) {
 		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Erikoislauantai').'"></i>';
 	  }
 
-    echo '
-	<tr><td colspan="4">
-		<table class="" cellspacing="0" cellpadding="0">
-		  <tr>
+    echo '<tr><td class="text-left" colspan="4"><h4>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$ispyha.'</h4></td></tr>';
 
-		   <td><h3>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$vlChecker.$ispyha.'</h3></td>
-		  </tr>
-		  <tr>	
-		   <td>';
-
-    if($asetukset->netvisor_kaytto == 1)
-    {
-    echo 
+    if($asetukset->netvisor_kaytto == 1){
+    echo '<tr>';
+    echo '<td>';
+    echo '<div class="row">'.
 			CHtml::button(Yii::t('main', 'Korvaukset ja ennakot'.$asetukset->netvisor_kaytto), 
 				array(
 					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
@@ -348,17 +336,17 @@ function dateDiff($start, $end) {
 					'tid'=>$tid,
 			)).'
 			<br>
-			<div class="row">
 			  '.$korv.' 
 			</div>';
-     }
+    echo '</td><td></td><td></td><td></td></tr>';
+    }
 
-     echo '
-		   </td>
-		  </tr>
-		</table>
-	</td></tr>';
-
+    $vlcheck = $this->vuosilomaChecker($tid, $date);
+    if(!empty($vlcheck)){
+    echo '<tr>';
+    echo '<td></td><td></td><td><h3>'.$vlcheck.'</h3></td><td></td>';
+    echo '</tr>';
+    }
     echo '<tr class="su_lu_tot">';
   
 
@@ -487,7 +475,7 @@ function dateDiff($start, $end) {
 
     echo '
 	<tr><td colspan="4">
-		<table class="yhteensaPvmAllaTaulu_'.date("W",strtotime($date)).' forFooterAlla table table-bordered" cellspacing="0" cellpadding="0" id="yhteensaPvmAllaTaulu_'.$did.'_'.$tid.'">
+		<table class="yhteensaPvmAllaTaulu_'.date("W",strtotime($date)).' forFooterAlla table table-bordered" cellspacing="0" cellpadding="0" id="yhteensaPvmAllaTaulu_'.$did.'_'.$tid.'" style="width:100%">
 		 <thead>
 		  <tr>
 		   <th>'.Yii::t('main', 'Työtunnit').'</th>
@@ -514,9 +502,9 @@ function dateDiff($start, $end) {
 		   <td><span class="allaSu" total="'.(int)$tyoSu.'">'.$this->sprint($tyoSu).'</span></td>
 		   <td>'.$this->sprint($tyoPy).'</td>
 		   <td>'.$this->sprint($tyoEl).'</td>
-		   <td><span class="allaSL" total="'.(int)$sl.'">'.$this->sprint($sl).'</span></td>
-		   <td><span class="allaSPL" total="'.(int)$spl.'">'.$this->sprint($spl).'</span></td>
-		   <td><span class="allaLS" total="'.(int)$ls.'">'.$this->sprint($ls).'</span></td>
+		   <td><span class="allaSL" total="'.(int)$sl.'">'.$sl.'</span></td>
+		   <td><span class="allaSPL" total="'.(int)$spl.'">'.$spl.'</span></td>
+		   <td><span class="allaLS" total="'.(int)$ls.'">'.$ls.'</span></td>
 		   <td><span class="allaVL" total="'.(int)$vl.'">'.$vl.'</span></td>
 		   <td><span class="allaVKL" total="'.(int)$vkl.'">'.$vkl.'</span></td>
 		  </tr>';
@@ -589,7 +577,7 @@ function dateDiff($start, $end) {
     echo '
 	<tr><td colspan="4">
 		<table class="table" cellspacing="0" cellpadding="0">
-		 <thead class="myBgColors">
+		 <thead>
 		  <tr>
 		   <th>'.Yii::t('main', 'Suunn.').'</th>
 		   <th>'.Yii::t('main', 'Luetut').'</th>
@@ -622,9 +610,9 @@ function dateDiff($start, $end) {
 		   <td>'.$this->sprint($yhtPyWeek).'<br>'.$this->num($yhtPyWeek).'</td>
 		   <td>'.$this->sprint($yhtElWeek).'<br>'.$this->num($yhtElWeek).'</td>
 
-		   <td class="SLWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtSLWeek).'<br>'.$this->num($yhtSLWeek).'</td>
-		   <td class="SPLWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtSPLWeek).'<br>'.$this->num($yhtSPLWeek).'</td>
-		   <td class="LSWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtLSWeek).'<br>'.$this->num($yhtLSWeek).'</td>
+		   <td class="SLWeek_'.date("W",strtotime($date)).'">'.$yhtSLWeek.'</td>
+		   <td class="SPLWeek_'.date("W",strtotime($date)).'">'.$yhtSPLWeek.'</td>
+		   <td class="LSWeek_'.date("W",strtotime($date)).'">'.$yhtLSWeek.'</td>
 		   <td class="VLWeek_'.date("W",strtotime($date)).'">'.$yhtVLWeek.'</td>
 		   <td class="VKLWeek_'.date("W",strtotime($date)).'">'.$yhtVKLWeek.'</td>
 		  </tr>
@@ -696,9 +684,9 @@ function dateDiff($start, $end) {
 		   <td><span class="suFoot"><?php echo $this->sprint($yhtSu); ?><br><?php echo $this->num($yhtSu); ?></span></td>
 		   <td><?php echo $this->sprint($yhtPy); ?></td>
 		   <td><?php echo $this->sprint($yhtEl); ?></td>
-		   <td><span class="SLFoot"><?php echo $this->sprint($yhtSL); ?><br><?php echo $this->num($yhtSL); ?></span></td>
-		   <td><span class="SPLFoot"><?php echo $this->sprint($yhtSPL); ?><br><?php echo $this->num($yhtSPL); ?></span></td>
-		   <td><span class="LSFoot"><?php echo $this->sprint($yhtLS); ?><br><?php echo $this->num($yhtLS); ?></span></td>
+		   <td><span class="SLFoot"><?php echo $yhtSL; ?></span></td>
+		   <td><span class="SPLFoot"><?php echo $yhtSPL; ?></span></td>
+		   <td><span class="LSFoot"><?php echo $yhtLS; ?></span></td>
 		   <td><span class="VLFoot"><?php echo $yhtVL; ?></span></td>
 		   <td><span class="VKLFoot"><?php echo $yhtVKL; ?></span></td>
 		  </tr>

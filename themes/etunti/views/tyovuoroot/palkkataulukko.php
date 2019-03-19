@@ -16,7 +16,7 @@ $this->breadcrumbs=array(
         <div class="tray-center">
 
 
-        <h2 class="myBgColors p10"> <i class="fa fa-eur"></i> <?php echo Yii::t('main', 'Palkkataulukko'); ?> 
+        <h2 class="myBgColors p10"> <i class="fa fa-eur"></i> <?php echo Yii::t('main', 'Palkkataulukko (Työvuoroista)'); ?> 
 
 	<?php if(!isset($_GET['kaikki_tyontekijat'])): ?>
 	<?php echo ', '.Yii::t('main', 'aktiiviset työntekijät'); ?>
@@ -70,7 +70,6 @@ $this->breadcrumbs=array(
       </div>
       <input type="submit" name="tulosta_pdf" class="btn btn-primary btn-sm myBgColors" value="PDF">
      </form>
-     <button class="btn btn-primary btn-sm btn-group myBgColors" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Ekstrat'); ?> <b class="caret"></b></button>
     </div>
    </div>
    <!-- tulostus -->
@@ -116,19 +115,6 @@ $this->breadcrumbs=array(
 
                       <div class="col-md-2">
                         <div class="section">
-                          <label class="field select">
-				<select class="gui-input" name="lu_tai_tot">
-				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
-				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
-				</select>
-                            <i class="arrow double"></i>
-                            </label>
-                          </label>
-                        </div>
-		      </div>
-
-                      <div class="col-md-2">
-                        <div class="section">
                           <label class="field">
 				<?php
 		   		$site = Yii::app()->createController('Site');
@@ -152,6 +138,7 @@ $this->breadcrumbs=array(
 
                     </div>
 
+
 		<div class="row">
 		 <div class="col-sm-4">
 			<h4>Määritellään työvuorosuunnittelussa:</h4>
@@ -166,9 +153,7 @@ $this->breadcrumbs=array(
                 </div>
               </div>
             </div>
-	    </form>
-
-
+	    </form> 
         <!-- loppu: .tray-center -->
         </div>
 
@@ -176,26 +161,6 @@ $this->breadcrumbs=array(
 <br>
 
 
-
-
-
-<div class="row collapse" id="haku">
-  <div class="col-md-12">
-   <br><br><br>
-   <?php
-	$ko = new Korvaukset;
-	echo $this->renderPartial('//korvaukset/_form',array('model'=>$ko)); 
-   ?>
-   <?php
-	$lt = new Lisatyotunnit;
-	echo $this->renderPartial('//lisatyotunnit/_form',array('model'=>$lt)); 
-   ?>
-   <?php
-	$en = new Ennakko;
-	echo $this->renderPartial('//ennakko/_form',array('model'=>$en)); 
-   ?>
-  </div>
-</div>
 
 <?php if(isset($_GET['Tekija']) and $from and $to) : ?>
 
@@ -226,9 +191,6 @@ $this->breadcrumbs=array(
   <th><?php echo Yii::t('main', 'LS'); ?></th>
   <th><?php echo Yii::t('main', 'VL'); ?></th>
   <th><?php echo Yii::t('main', 'VKL'); ?></th>
-  <th><?php echo Yii::t('main', 'Korvaus'); ?></th>
-  <th><?php echo Yii::t('main', 'Lisätyötunnit'); ?></th>
-  <th><?php echo Yii::t('main', 'Ennakko'); ?></th>
   </tr>
   </thead>
 
@@ -274,15 +236,15 @@ $this->breadcrumbs=array(
 
 	$tids[] = $data->id;
 	$tp = $this->Tp($data->id,$from,$to);
-  	$sl = $this->TidfromtoSairausTP($from,$to,$data->id,'SL');
+  	$sl = $this->poissaolot($from,$to,$data->id,'SL');
 	$slYht += $sl;
-  	$ls = $this->TidfromtoSairausTP($from,$to,$data->id,'LS');
+  	$ls = $this->poissaolot($from,$to,$data->id,'LS');
 	$lsYht += $ls;
-  	$spl = $this->TidfromtoSairausTP($from,$to,$data->id,'SPL');
+  	$spl = $this->poissaolot($from,$to,$data->id,'SPL');
 	$splYht += $spl;
-  	$vl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id, 'VL');
+  	$vl = $this->poissaolot($from,$to,$data->id, 'VL');
 	$vlYht += $vl;
-  	$vkl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id, 'VKL');
+  	$vkl = $this->poissaolot($from,$to,$data->id, 'VKL');
 	$vklYht += $vkl;
 	$totalTp += $tp;
   	$pyhat = $this->pyhapaivat($data->id,$from,$to,"pyhat");
@@ -290,32 +252,27 @@ $this->breadcrumbs=array(
   	$el = $this->pyhapaivat($data->id,$from,$to,"el");
 	$elYht += $el;
 
-	$m = $this->renderPartial('//mobile/tidfromtomatkat',array(
-		'from'=>$from,
-		'to'=>$to,
-		'tid'=>$data->id
-		),true);
+	$m = $this->TidfromtoStatus($from,$to,$data->id, 2);
 	$matkaYht += $m;
 
 	// Yo 
 	foreach ($period as $dt) {
-		$IltaYoSu = $toteutuneet[0]->IltaYoSu($data->id, $dt->format("Y-m-d"));
+		$IltaYoSu = $toteutuneet[0]->IltaYoSuTyovuorosta($data->id, $dt->format("Y-m-d"));
 		$iltatunnit += $IltaYoSu[0];
 		$yotunnit += $IltaYoSu[1];
 		$sutunnit += $IltaYoSu[2];
 	}
 
+	$toteutu = $this->toteutu($data->id,"palkkataulukko",$from,$to);
 	$matkaIlta = $this->matkaIlta($data->id,$from,$to);
-	$return = $this->toteutu($data->id,"palkkataulukko",$from,$to);
+	$mPlusTYht += $toteutu+$m;
 
-	$mPlusTYht += $return[0]+$m;
-
-	$loun = $this->TidfromtoStatus($from,$to,$data->id,10);
+	$loun = $this->TidfromtoStatus($from,$to,$data->id, 10);
 	$lounYht += $loun;
 	$matkaIltaYht += $matkaIlta;
 	$iltaMatkaPlusIltatunnitYht += $iltatunnit;
 
-	$yht[0] += $return[0];
+	$yht[0] += $toteutu;
 	$yht[1] += $iltatunnit-$matkaIlta;
 	$yht[2] += $yotunnit;
 	$yht[3] += $sutunnit;
@@ -323,7 +280,7 @@ $this->breadcrumbs=array(
 
 	$this->renderPartial('_palkkataulukko',array(
 			'data'=>$data,
-			'return'=>$return,
+			'toteutu'=>$toteutu,
 			'matka'=>$m,
 			'matkaIlta'=>$matkaIlta,
 			'tp'=>$tp,
@@ -343,8 +300,8 @@ $this->breadcrumbs=array(
 	));
   }
 
-  if($matkaIltaYht != 0)
-  $matkaIltaYht = '<br><b>Matkat</b>:<br>'.$this->num($matkaIltaYht);
+  $matkaIltaYhtfooter = '';
+  if($matkaIltaYht > 0){  $matkaIltaYhtfooter = '<br><b>Matkat</b>:<br>'.$this->num($matkaIltaYht); }
   ?>
   <tfoot>
   <tr>
@@ -353,7 +310,7 @@ $this->breadcrumbs=array(
 	<td><?php echo $this->num($matkaYht); ?></td>
 	<td><?php echo $this->num($yht[0]); ?></td>
 	<td><?php echo $this->num($mPlusTYht); ?></td>
-	<td><?php if($matkaIltaYht != 0 or $this->num($yht[1]) != 0) echo '<b>Työt</b>:<br>'.$this->num($yht[1]).$matkaIltaYht; ?></td>
+	<td><?php if(!empty($matkaIltaYhtfooter) or $this->num($yht[1]) != 0) echo '<b>Työt</b>:<br>'.$this->num($yht[1]).$matkaIltaYhtfooter; ?></td>
 	<td><?php echo $this->num($iltaMatkaPlusIltatunnitYht); ?></td>
 	<td><?php echo $this->num($lounYht); ?></td>
 	<td><?php echo $this->num($yht[2]); ?></td>
@@ -365,9 +322,6 @@ $this->breadcrumbs=array(
 	<td><?=($lsYht > 0)?$lsYht:''?></td>
 	<td><?=($vlYht > 0)?$vlYht:''?></td>
 	<td><?=($vklYht > 0)?$vklYht:''?></td>
-	<td></td>
-	<td></td>
-	<td></td>
   </tr>
   </tfoot>
   </table>
