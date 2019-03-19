@@ -1576,21 +1576,21 @@ $xml = '
 
 	protected function vuosilomaChecker($tid, $pvm)
 	{
-
+		$vl = '';
 	       	$criteria = new CDbCriteria();
 		$criteria->condition = " 
 			tid = '".$tid."' 
 			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."'
+			AND status=11
+			AND tyoajanlaatu!=''
 		";
-		$tv = Tyovuoroot::model()->find($criteria);
-		if(isset($tv->status))
-		{
-			$vl = array();
-			$vl = explode("/", $tv->tyoajanlaatu);
-			return $vl;
+		$tv = Tyovuoroot::model()->findAll($criteria);
+		foreach($tv as $item){
+			$arr = explode("/", $item->tyoajanlaatu);
+			if(isset($arr[1])){ $vl .= '<span style="color:'.$arr[1].'">'.$arr[0].'<br>'; }
 		}
 
-		return null;
+		return $vl;
 
 	}
 

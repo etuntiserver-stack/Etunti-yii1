@@ -301,13 +301,6 @@ function dateDiff($start, $end) {
 		'</div>';
     }
 
-    $vlChecker = '';
-    if($this->vuosilomaChecker($tid, $date))
-    {
-	$returnChecker = $this->vuosilomaChecker($tid, $date);
-	if(is_array($returnChecker) and isset($returnChecker[1]))
-    	$vlChecker = '  <span style="color:'.$returnChecker[1].'"> '.$returnChecker[0].' </span>';
-    }
 
 	  $ispyha = '';
 	  $pyhat = $this->pyhat($date);
@@ -331,8 +324,10 @@ function dateDiff($start, $end) {
 	<tr><td colspan="4">
 		<table class="" cellspacing="0" cellpadding="0">
 		  <tr>
-
-		   <td><h3>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$ispyha.'</h3> <h1 class="text-center">'.$vlChecker.'</h1></td>
+		   <td>
+			<h3>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$ispyha.'</h3> 
+			<h3 class="text-center">'.$this->vuosilomaChecker($tid, $date).'</h3>
+		   </td>
 		  </tr>
 		  <tr>	
 		   <td>';
