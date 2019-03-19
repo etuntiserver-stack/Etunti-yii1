@@ -265,9 +265,9 @@ if(!isset($_POST['tulosta']))
 
 	   } 
 	   if(!empty($tvVal->tyoajanlaatu) and empty($osoite)){
-	    $expl1 = explode("/",$tvVal->tyoajanlaatu);
-	    if(isset($expl1[1]) and !empty($expl1[1])) $color = $expl1[1];
-	    $osoite = (isset($expl1[0])) ? $expl1[0] : '';
+	    $arr_tyoajanlaatu = explode("/",$tvVal->tyoajanlaatu);
+	    if(isset($arr_tyoajanlaatu[1]) and !empty($arr_tyoajanlaatu[1])){ $color = $arr_tyoajanlaatu[1]; }
+	    $osoite = (isset($arr_tyoajanlaatu[0])) ? $arr_tyoajanlaatu[0] : '';
   	   } 
 
 	   $tv_edit 	= 'tv_edit';
@@ -297,7 +297,7 @@ if(!isset($_POST['tulosta']))
 	       $bod .=  '<span class="link text-danger fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></span>';
 	   }
 
-	   $bod .=  '&nbsp;<span class="link '.$tv_edit.'" id="tv_'.$tvVal->id.'" style="'.$uusi_tilaus.'">'.$al.' '.$osoite.'</span>';
+	   $bod .=  '&nbsp;<span class="link '.$tv_edit.'" id="tv_'.$tvVal->id.'" style="'.$uusi_tilaus.'">'.((!isset($arr_tyoajanlaatu[0]))? $al: '').' '.$osoite.'</span>';
 
 	   if(isset($tvVal->avaimet) and count($tvVal->avaimet) > 0){
 	      $bod .=  ' <b class="fa fa-key text-warning"></b>';

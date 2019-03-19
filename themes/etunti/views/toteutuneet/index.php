@@ -25,7 +25,7 @@ $this->breadcrumbs=array(
     	vertical-align: top;
 }
 table { width: 100%; }
-.tdw{
+.tdw1, .tdw2, .tdw3, .tdw4{
 	width: 25%;
 }
 </style>
@@ -217,10 +217,10 @@ function dateDiff($start, $end) {
   <table class="table table-bordered" cellspacing="0" cellpadding="0" id="tuntienHyvaksyntaTaulu">
   <thead class="myBgColors">
   <tr>
-  <th class="tdw"><?php echo Yii::t('main', 'Suunnitellut'); ?></th>
-  <th class="tdw"><?php echo Yii::t('main', 'Luettu'); ?></th>
-  <th class="tdw"><?php echo Yii::t('main', 'Hyväksytyt'); ?></th>
-  <th class="tdw"><?php echo Yii::t('main', 'Yhteensä'); ?></th>
+  <th class="tdw1"><?php echo Yii::t('main', 'Suunnitellut'); ?></th>
+  <th class="tdw2"><?php echo Yii::t('main', 'Luettu'); ?></th>
+  <th class="tdw3"><?php echo Yii::t('main', 'Hyväksytyt'); ?></th>
+  <th class="tdw4"><?php echo Yii::t('main', 'Yhteensä'); ?></th>
   </tr>
   </thead>
   <tbody>
@@ -322,10 +322,10 @@ function dateDiff($start, $end) {
 		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Erikoislauantai').'"></i>';
 	  }
 
-    echo '<tr><td class="text-left" colspan="4"><h4>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$ispyha.'</h4></td></tr>';
+    echo '<tr><td class="text-left" colspan="4">'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$ispyha.'</td></tr>';
 
     if($asetukset->netvisor_kaytto == 1){
-    echo '<tr>';
+    echo '<tr class="korvaukset_ennakkot">';
     echo '<td>';
     echo '<div class="row">'.
 			CHtml::button(Yii::t('main', 'Korvaukset ja ennakot'.$asetukset->netvisor_kaytto), 
@@ -510,7 +510,7 @@ function dateDiff($start, $end) {
 		  </tr>';
 		 if($asetukset->netvisor_kaytto == 1 and ($asetukset->netvisor_mita_onkayttossa == 1 or $asetukset->netvisor_mita_onkayttossa == 2)) { 
 		  echo ' 
-		  <tr>
+		  <tr class="lahetys_netvisoriin">
 		   <td colspan="13">			
 			<button class="btn btn-default btn-sm btn-block esittele_tyotunnit" nvtilanne="'.$nvtilanne.'"
 				pvm="'.$date.'"

@@ -19,8 +19,14 @@ $(document).delegate(".tuntienHyvaksyntaTaulu","click",function(){
         'border:1px solid #333;' +
         'padding:3px 5px;' +
         '}' +
-	'.tdw{' +
-	'width: 25%;' +
+	'.tdw1, .tdw2, .tdw3{' +
+	'width: 30%;' +
+	'}' +
+	'.tdw4{' +
+	'width: 10%;' +
+	'}' +
+	'.korvaukset_ennakkot, .lahetys_netvisoriin{' +
+		'display: none !important;' +
 	'}' +
         '</style>';
     htmlToPrint += $('#forTulostus').html();
