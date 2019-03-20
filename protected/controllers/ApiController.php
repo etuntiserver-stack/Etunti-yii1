@@ -912,7 +912,7 @@ public function actionImei($dom)
 		      if(!empty($val->tietoja)){
 		      $sel .= '
 				  <hr>
-				  <div class="text-small">'.$val->tietoja.'</div>';
+				  <div class="text-small">'.str_replace("\n", "<br>", $val->tietoja).'</div>';
 		      }
 
 		      $sel .= $tplista;
