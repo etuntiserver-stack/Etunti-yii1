@@ -16,7 +16,7 @@
 ?>
 
 
-<tr>
+<tr <?=($data->peruutettu == 1)?'class="text-danger"':''?>>
 	<td>
 		
 	</td>
