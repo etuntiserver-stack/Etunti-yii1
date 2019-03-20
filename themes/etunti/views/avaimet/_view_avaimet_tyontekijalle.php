@@ -20,7 +20,8 @@
 	<td>
 		
 	</td>
-	<td>
+	<td class="text-center">
+		<?=($data->peruutettu == 1)?'<h2>'.Yii::t('main', 'Työvuoro on peruutettu').'</h2>':''?>
 		<?php
 		if(isset($data->kohteet->id)){
 			$as = Asiakkaat::model()->findByPk($data->kohteet->asiakas_id);
