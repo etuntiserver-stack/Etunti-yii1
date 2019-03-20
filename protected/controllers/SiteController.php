@@ -1894,6 +1894,18 @@ $(document).ready(function(){
                   echo json_encode($viestit);
 	}
 
+	protected function UudetMobiiliViestit(){
+
+       		$criteria = new CDbCriteria();
+		$criteria->condition = " status=0 AND tekija='toimisto' ";
+		$vi = Viestinta::model()->find($criteria);
+		if(isset($vi->id)){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public function actionTehdyttunnittanaan()
 	{
 

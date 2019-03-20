@@ -1,4 +1,5 @@
 <?php 
+$site = Yii::app()->createController('Site');
 
      $tas = array();
    if(isset(Yii::app()->user->adminPaketti)) 
@@ -176,7 +177,6 @@ if( $curpage == 'tyovuoroot/tv3' )
 		    <label><?php echo Yii::t('main','Työntekijät'); ?></label>
 
 				<?php
-		   		$site = Yii::app()->createController('Site');
 		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
 					'tyontekijat', // name
 					'multTyontekijat', // class
@@ -233,7 +233,6 @@ if( $curpage == 'tyovuoroot/tv3' )
 			// Toimialue
 			$list = array();
 			$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-			$site = Yii::app()->createController('Site');
 		       	$criteria = new CDbCriteria();
 			$criteria->order = " value ";
 			$criteria->condition = "select_type='tyoryhma'";
@@ -1000,17 +999,19 @@ $('.multTyoryhma').multiselect({
           </li>
 
 
-
+<?php
+if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-danger"></i>'; } else { $uusi_viesti = ''; }
+?>
           <li>
             <a class="accordion-toggle viestinnanHallinta" href="#">
               <span class="fa fa-envelope"></span>
-              <span class="sidebar-title"><?php echo Yii::t('main', 'Viestinnän hallinta'); ?></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Viestinnän hallinta'); ?> <?=$uusi_viesti?></span>
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/viestinta/index">
-                  <span class="glyphicon glyphicon-envelope"></span> <?php echo Yii::t('main', 'Viestit'); ?></a>
+                  <span class="glyphicon glyphicon-envelope"></span> <?php echo Yii::t('main', 'Viestit'); ?> <?=$uusi_viesti?></a>
               </li>
             </ul>
           </li>
@@ -1169,7 +1170,6 @@ $('.multTyoryhma').multiselect({
           </li>
 
 <?php
-$site = Yii::app()->createController('Site');
 if($site[0]->checkEdicoViestit()){ $bell = '<i class="fa fa-bell text-danger"></i>'; } else { $bell = ''; }
 ?>
 	<?php if(in_array('5',$tas)) : ?>
