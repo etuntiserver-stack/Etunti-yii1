@@ -326,8 +326,7 @@ function dateDiff($start, $end) {
 
     if($asetukset->netvisor_kaytto == 1){
     echo '<tr class="korvaukset_ennakkot">';
-    echo '<td>';
-    echo '<div class="row">'.
+    echo '<td>'.
 			CHtml::button(Yii::t('main', 'Korvaukset ja ennakot'.$asetukset->netvisor_kaytto), 
 				array(
 					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
@@ -337,8 +336,7 @@ function dateDiff($start, $end) {
 			)).'
 			<br>
 			  '.$korv.' 
-			</div>';
-    echo '</td><td></td><td></td><td></td></tr>';
+    </td><td></td><td></td><td></td></tr>';
     }
 
     $vlcheck = $this->vuosilomaChecker($tid, $date);
