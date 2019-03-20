@@ -186,12 +186,17 @@ $(document).ready(function(){
 	e.preventDefault();
 	var tuotteet = 0;
 	$( ".tuotevalikko" ).each(function() {
-	  	tuotteet += 1;
-		if( $(this, 'option:selected').val() == '' ){
-			alert('Valitse tuote.');
-			return false;
+		if( $(this, 'option:selected').val() !== '' ){
+			$(this, 'option:selected').focus;
+	  		tuotteet += 1;
 		}
 	});
+
+	if( tuotteet ==  0 ){
+		alert('Valitse tuote.');
+		return false;
+	}
+
 	if( ! $('input[name=alvsis]').is(':checked')  ){
 		alert('Valitse ALV-muoto.');
 		return false;
