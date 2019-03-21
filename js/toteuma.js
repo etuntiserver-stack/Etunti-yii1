@@ -12,6 +12,7 @@ $(document).delegate(".tuntienHyvaksyntaTaulu","click",function(){
 	    	'vertical-align: top;' +
 	'}' +
 	'.forFooterAlla{ width: 100%; }' +
+	'.forFooterAlla th{ width: 100%; }' +
         'table {' +
 	'border-collapse: collapse;' +
 	'border: 0;' +
