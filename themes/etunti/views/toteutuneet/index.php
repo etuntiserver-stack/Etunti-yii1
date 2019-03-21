@@ -563,15 +563,7 @@ function dateDiff($start, $end) {
 	    {
 
 
-    echo '
-	<tr><td colspan="4">
-		<table class="table" cellspacing="0" cellpadding="0">
-		  <tr>
-		   <td><h3>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</h3></td>
-		  </tr>
-		</table>
-	</td></tr>';
-
+    echo '<tr><td colspan="4">'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</td></tr>';
     echo '
 	<tr><td colspan="4">
 		<table class="table everyviikko" cellspacing="0" cellpadding="0">
@@ -644,10 +636,8 @@ function dateDiff($start, $end) {
 
   </tbody>
   <tfoot id="yhteensaTfoot">
-
-
 	<tr><td colspan="4">
-		<table class="table" cellspacing="0" cellpadding="0" id="yhteensaFooterTaulu">
+		<table class="table" cellspacing="0" cellpadding="0" id="yhteensaFooterTaulu" border="0">
 		 <thead class="myBgColors">
 		  <tr>
 		   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
