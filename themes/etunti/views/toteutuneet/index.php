@@ -574,7 +574,7 @@ function dateDiff($start, $end) {
 
     echo '
 	<tr><td colspan="4">
-		<table class="table" cellspacing="0" cellpadding="0">
+		<table class="table everyviikko" cellspacing="0" cellpadding="0">
 		 <thead>
 		  <tr>
 		   <th>'.Yii::t('main', 'Suunn.').'</th>

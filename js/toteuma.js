@@ -11,8 +11,7 @@ $(document).delegate(".tuntienHyvaksyntaTaulu","click",function(){
 	'.table tbody>tr>td{' +
 	    	'vertical-align: top;' +
 	'}' +
-	'.forFooterAlla{ width: 100%; }' +
-	'.forFooterAlla th{ width: 100%; }' +
+	'.forFooterAlla, .everyviikko{ width: 100%; }' +
         'table {' +
 	'border-collapse: collapse;' +
 	'border: 0;' +
