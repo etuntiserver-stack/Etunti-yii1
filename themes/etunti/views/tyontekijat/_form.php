@@ -303,7 +303,7 @@ $(document).ready(function(){
 		$site = Yii::app()->createController('Site');
 	?>
 
-	<?php if( $site[0]->checkOikeusFields($checkOikeus) == 1 ) : ?>
+	<?php /* if( $site[0]->checkOikeusFields($checkOikeus) == 1 ) : */ ?>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tyoryhma'); ?>
 
@@ -335,7 +335,7 @@ $(document).ready(function(){
         	?>
 		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
-	<?php endif; ?>
+	<?php /* endif; */ ?>
 
 	<?php if(isset($model->id) and $model->mobiili == 1) : ?>
 	<legend><?=Yii::t('main', 'APP mobiilisovellus')?></legend>
