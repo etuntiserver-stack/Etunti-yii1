@@ -218,7 +218,7 @@ function dateDiff($start, $end) {
   <thead class="myBgColors">
   <tr>
   <th class="tdw1"><?php echo Yii::t('main', 'Suunnitellut'); ?></th>
-  <th class="tdw2"><?php echo Yii::t('main', 'Luettu'); ?></th>
+  <th class="tdw2"><?php echo Yii::t('main', 'Luetut'); ?></th>
   <th class="tdw3"><?php echo Yii::t('main', 'Hyväksytyt'); ?></th>
   <th class="tdw4"><?php echo Yii::t('main', 'Yhteensä'); ?></th>
   </tr>

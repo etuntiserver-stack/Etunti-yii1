@@ -11,6 +11,7 @@ $(document).delegate(".tuntienHyvaksyntaTaulu","click",function(){
 	'.table tbody>tr>td{' +
 	    	'vertical-align: top;' +
 	'}' +
+	'.forFooterAlla{ width: 100%; }' +
         'table {' +
 	'border-collapse: collapse;' +
 	'border: 0;' +
@@ -28,6 +29,7 @@ $(document).delegate(".tuntienHyvaksyntaTaulu","click",function(){
 	'.korvaukset_ennakkot, .lahetys_netvisoriin{' +
 		'display: none !important;' +
 	'}' +
+	'.tv_kesto, .mob_kesto{ float: right; }' +
         '</style>';
     htmlToPrint += $('#forTulostus').html();
     htmlToPrint += divToPrint.outerHTML;
