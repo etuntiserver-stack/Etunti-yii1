@@ -5,7 +5,9 @@
 
 $position = '';
 $viimeinenAika = '';
-
+if(!isset($model->id)){
+	$model->app_naytta_osoitekenta = 1;
+}
 if(isset($model->position) and isset($model->id)){
 
   $si = explode("//",trim($model->position));
@@ -352,6 +354,7 @@ $(document).ready(function(){
 			); 
 		?>
 	</div>
+	<?php endif; ?>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'app_naytta_osoitekenta'); ?>
 		<?php 
@@ -363,7 +366,6 @@ $(document).ready(function(){
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'app_naytta_osoitekenta'); ?>
 	</div>
-	<?php endif; ?>
    </div>
    <div class="col-sm-3">
 
