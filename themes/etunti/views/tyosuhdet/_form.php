@@ -63,7 +63,7 @@ $result2 = (int)abs((strtotime($d3) - strtotime($d4))/(60*60*24*30));
 	if($model->tyopvm_kk >= 14)
 	echo '<th>'.Yii::t('main', 'Työpäiviä').'</th>';
 
-	if($model->tyopvm_kk < 14)
+	if($model->tyopvm_kk =< 14)
 	echo '<th>'.Yii::t('main', 'Tunnit').'</th>';
 
 	echo '</tr>';
@@ -92,7 +92,7 @@ $result2 = (int)abs((strtotime($d3) - strtotime($d4))/(60*60*24*30));
 	}
 
 	// Toteutu
-	if($model->tyopvm_kk < 14)
+	if($model->tyopvm_kk =< 14)
 	{
 	echo '<td>';
 	   if((int)$m[0]->num($toteutu[0]) < 35)
