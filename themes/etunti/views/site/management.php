@@ -73,7 +73,7 @@ Highcharts.chart('container', {
         type: 'line'
     },
     title: {
-        text: 'Monthly Average Temperature'
+        text: 'Vuoden luetut ja hyväksytyt tunnit'
     },
     subtitle: {
         text: 'Source: WorldClimate.com'
