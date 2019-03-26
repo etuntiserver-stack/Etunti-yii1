@@ -30,6 +30,21 @@ $months=array(
 		AND status=3
 		AND sairaus!=1
 		AND deleted=0
+	";
+	$luetut = Mobile::model()->findAll($criteria);
+
+	$criteria = new CDbCriteria();
+       	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d')) ";
+       	$criteria->select = "
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, t.*
+	";
+        $criteria->condition = " 
+		aloitan!='' AND loppui!=''
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'
+		AND status=3
+		AND sairaus!=1
+		AND deleted=0
 		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 	";
 	$lu = Mobile::model()->findAll($criteria);
@@ -53,7 +68,7 @@ $months=array(
 	$data_luetut = array();
 	$data_hyvaksytyt = array();
 	$categories = array();
-	foreach($lu as $item){
+	foreach($luetut as $item){
 		$data_luetut[date("Ym", strtotime($item->aloitan))] = round($this->num($item->l_tunnit), 2);
 
 	}
