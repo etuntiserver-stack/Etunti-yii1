@@ -127,6 +127,8 @@ class LaskuController extends Controller
 		$paivays = date("Y-m-d", strtotime($paivays));
        		$criteria = new CDbCriteria();
 	        //$criteria->order = " id DESC ";
+
+	    	if( $tunnit == 'mob' ){
 	        $criteria->condition = " 
 		  aktiivinen='1'
 		  AND id IN 
@@ -148,6 +150,27 @@ class LaskuController extends Controller
 		  AND id NOT IN
 		    ( SELECT asiakas_id FROM autolahetteet WHERE from_date='".$from."' AND to_date='".$to."' AND laskutettu=1 )
 		";
+		}
+
+	    	if( $tunnit == 'tv' ){
+	        $criteria->condition = " 
+		  aktiivinen='1'
+		  AND id IN 
+		    ( SELECT asiakas_id FROM sivex_kohdet 
+		      WHERE id IN 
+			( SELECT kohde FROM sivex_tvuoro 
+			  WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+			  BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			  AND status='3' 
+			  AND peruutettu='0'
+			  AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
+			)
+		    )
+		  AND id NOT IN
+		    ( SELECT asiakas_id FROM autolahetteet WHERE from_date='".$from."' AND to_date='".$to."' AND laskutettu=1 )
+		";
+		}
+
 		if( $yrityksen_nimi !== null and !empty($yrityksen_nimi) ){
 	        $criteria->addCondition ("  yrityksen_nimi='".$yrityksen_nimi."' OR yhteyshenkilo='".$yrityksen_nimi."' ");
 		}
