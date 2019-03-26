@@ -50,11 +50,16 @@ $months=array(
 	$tot = Toteutuneet::model()->findAll($criteria);
 	$result = array_merge($lu, $tot);
 
-	$data = array();
+	$data_luetut = array();
+	$data_hyvaksytyt = array();
 	$categories = array();
 	foreach($result as $item){
-		if( isset($data[date("Ym", strtotime($item->aloitan))]) ){ $item->l_tunnit = $data[date("Ym", strtotime($item->aloitan))]+$item->l_tunnit; }
-		$data[date("Ym", strtotime($item->aloitan))] = round($this->num($item->l_tunnit), 2);
+		$data_luetut[date("Ym", strtotime($item->aloitan))] = round($this->num($item->l_tunnit), 2);
+
+	}
+	foreach($result as $item){
+		if( isset($data_hyvaksytyt[date("Ym", strtotime($item->aloitan))]) ){ $item->l_tunnit = $data_hyvaksytyt[date("Ym", strtotime($item->aloitan))]+$item->l_tunnit; }
+		$data_hyvaksytyt[date("Ym", strtotime($item->aloitan))] = round($this->num($item->l_tunnit), 2);
 		$categories[date("Ym", strtotime($item->aloitan))] = $months[date("n", strtotime($item->aloitan))];
 	}
 
@@ -78,7 +83,7 @@ Highcharts.chart('container', {
     },
     yAxis: {
         title: {
-            text: 'Temperature (°C)'
+            text: 'Tunnit'
         }
     },
     plotOptions: {
@@ -90,8 +95,12 @@ Highcharts.chart('container', {
         }
     },
     series: [{
-        name: 'Tokyo',
-        data: JSON.parse('<?=json_encode(array_values($data))?>')
-    }]
+        name: 'Luetut',
+        data: JSON.parse('<?=json_encode(array_values($data_luetut))?>')
+    }, 
+    {
+        name: 'Hyväksytyt',
+        data: JSON.parse('<?=json_encode(array_values($data_hyvaksytyt))?>')
+    },]
 });
 </script>
