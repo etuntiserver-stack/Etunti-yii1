@@ -53,7 +53,7 @@ $months=array(
 	$data_luetut = array();
 	$data_hyvaksytyt = array();
 	$categories = array();
-	foreach($result as $item){
+	foreach($lu as $item){
 		$data_luetut[date("Ym", strtotime($item->aloitan))] = round($this->num($item->l_tunnit), 2);
 
 	}
