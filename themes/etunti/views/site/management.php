@@ -19,7 +19,7 @@ $months=array(
 	$end_date = date ("Y-m-d");
 
 	$criteria = new CDbCriteria();
-       	$criteria->group = " MONTH(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')) ";
+       	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d')) ";
        	$criteria->select = "
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
 		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, t.*
@@ -35,7 +35,7 @@ $months=array(
 	$lu = Mobile::model()->findAll($criteria);
 
 	$criteria = new CDbCriteria();
-       	$criteria->group = " MONTH(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')) ";
+       	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d')) ";
        	$criteria->select = "
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
 		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, t.*
@@ -53,8 +53,9 @@ $months=array(
 	$data = array();
 	$categories = array();
 	foreach($result as $item){
-		$data[] = round($item->l_tunnit/3600, 2);
-		$categories[] = $months[date("n", strtotime($item->aloitan))];
+		if( isset($data[date("Ym", strtotime($item->aloitan))]) ){ $item->l_tunnit = $data[date("Ym", strtotime($item->aloitan))]+$item->l_tunnit; }
+		$data[date("Ym", strtotime($item->aloitan))] = round($this->num($item->l_tunnit), 2);
+		$categories[date("Ym", strtotime($item->aloitan))] = $months[date("n", strtotime($item->aloitan))];
 	}
 
 //print_r($result);
