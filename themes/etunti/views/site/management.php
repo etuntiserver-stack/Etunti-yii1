@@ -15,8 +15,8 @@ $months=array(
 	);
 
 	$result = array();
-	$start_date = date ("Y-m-d", strtotime(" -1 year"));
-	$end_date = date ("Y-m-d");
+	$start_date = date ("Y-m-d", strtotime(" -1 year first day of this month"));
+	$end_date = date ("Y-m-d", strtotime(" last day of last month"));
 
 	$criteria = new CDbCriteria();
        	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d')) ";
@@ -28,10 +28,15 @@ $months=array(
 		aloitan!='' AND loppui!=''
 		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'
 		AND status=3
-		AND sairaus!=1
 		AND deleted=0
 	";
 	$luetut = Mobile::model()->findAll($criteria);
+	$data_luetut = array();
+	foreach($luetut as $item){
+		$data_luetut[date("Ym", strtotime($item->aloitan))] = round($this->num($item->l_tunnit), 2);
+
+	}
+
 
 	$criteria = new CDbCriteria();
        	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y.%m.%d')) ";
@@ -44,6 +49,11 @@ $months=array(
 		AND peruutettu=0
 	";
 	$suunnittelut = Tyovuoroot::model()->findAll($criteria);
+	$data_suunnittellut = array();
+	foreach($suunnittelut as $item){
+		$data_suunnittellut[date("Ym", strtotime($item->pvm))] = round($this->num($item->l_tunnit), 2);
+
+	}
 
 	$criteria = new CDbCriteria();
        	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d')) ";
@@ -55,7 +65,6 @@ $months=array(
 		aloitan!='' AND loppui!=''
 		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'
 		AND status=3
-		AND sairaus!=1
 		AND deleted=0
 		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 	";
@@ -70,28 +79,18 @@ $months=array(
         $criteria->condition = " 
 		aloitan!='' AND loppui!=''
 		AND status=3
-		AND sairaus!=1
 		AND deleted=0
 		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'
 	";
 	$tot = Toteutuneet::model()->findAll($criteria);
 	$result = array_merge($lu, $tot);
-
-	$data_luetut = array();
 	$data_hyvaksytyt = array();
-	$data_suunnittellut = array();
 	$categories = array();
-	foreach($luetut as $item){
-		$data_luetut[date("Ym", strtotime($item->aloitan))] = round($this->num($item->l_tunnit), 2);
-
-	}
-	foreach($suunnittelut as $item){
-		$data_suunnittellut[date("Ym", strtotime($item->pvm))] = round($this->num($item->l_tunnit), 2);
-
-	}
 	foreach($result as $item){
-		if( isset($data_hyvaksytyt[date("Ym", strtotime($item->aloitan))]) ){ $item->l_tunnit = $data_hyvaksytyt[date("Ym", strtotime($item->aloitan))]+$item->l_tunnit; }
-		$data_hyvaksytyt[date("Ym", strtotime($item->aloitan))] = round($this->num($item->l_tunnit), 2);
+		if( !isset($data_hyvaksytyt[date("Ym", strtotime($item->aloitan))]) ){ 
+			$data_hyvaksytyt[date("Ym", strtotime($item->aloitan))] = 0;
+		}
+		$data_hyvaksytyt[date("Ym", strtotime($item->aloitan))] += round($this->num($item->l_tunnit), 2);
 		$categories[date("Ym", strtotime($item->aloitan))] = date("Y", strtotime($item->aloitan)).', '.$months[date("n", strtotime($item->aloitan))];
 	}
 
