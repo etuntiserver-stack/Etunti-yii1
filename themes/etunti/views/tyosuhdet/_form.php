@@ -80,7 +80,7 @@ $result2 = (int)abs((strtotime($d3) - strtotime($d4))/(60*60*24*30));
 	if($model->tyopvm_kk >= 14)
 	{
 	echo '<td>';
-	   if($tp <= 14)
+	   if($tp < 14)
 	   {
 		echo '<span class="btn btn-danger btn-block btn-sm">'.$tp.'</span>';
 		$tulos = "false";
