@@ -86,7 +86,7 @@ $months=array(
 
 	}
 	foreach($suunnittelut as $item){
-		$data_suunnittellut[date("Ym", strtotime($item->alku))] = round($this->num($item->l_tunnit), 2);
+		$data_suunnittellut[date("Ym", strtotime($item->pvm))] = round($this->num($item->l_tunnit), 2);
 
 	}
 	foreach($result as $item){
