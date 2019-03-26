@@ -1247,7 +1247,7 @@ if($site[0]->checkEdicoViestit()){ $bell = '<i class="fa fa-bell text-danger"></
             </a>
             <ul class="nav sub-nav">
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/index">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/management">
                   <span class="fa fa-line-chart"></span> <?php echo Yii::t('main', 'Yhteenveto'); ?></a>
               </li>
             </ul>
