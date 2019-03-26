@@ -149,6 +149,8 @@ public $kpl;
 		        'avaimet' => array(self::HAS_MANY, 'Avaimet', array('kohde'=>'kohde')),
 		        'tt' => array(self::BELONGS_TO, 'Tyontekijat', 'tid'),
 		        'tp' => array(self::BELONGS_TO, 'TuotteetPalvelut', 'tuoteID'),
+		        'mobile' => array(self::HAS_MANY, 'Mobile', 'tv_id', 'condition' => 'deleted=0 and (hyvaksytty="" OR hyvaksytty NOT LIKE "%auto%")'),
+		        'toteutuneet' => array(self::HAS_MANY, 'Toteutuneet', 'tv_id', 'condition' => 'deleted=0 and (hyvaksytty="" OR hyvaksytty NOT LIKE "%auto%")'),
 		);
 	}
 

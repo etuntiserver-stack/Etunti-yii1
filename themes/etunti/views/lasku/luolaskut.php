@@ -284,6 +284,26 @@
 			}
 	        ?>
 		<?php if( $tp_id != 0 and $laheta == null ) : ?>
+		<?php
+		$hyvaksyty_kontentti = '';
+		if(!isset($mob->mobile)){
+			$hyvaksyty = false;
+		}
+		if($tunnit == 'tv' and isset($mob->mobile)){
+		  if(!isset($mob->toteutuneet)){
+		    foreach($mob->mobile as $mobile){
+			if(isset($mobile) and $mobile->hyvaksytty == ''){
+				$hyvaksyty_kontentti .= '<td class="text-danger"><b>Hyväksymättömät luetut tunnit: </b><br>'.$this->etuSukunimi($mobile->tid).'<br>'. date("d.m.Y", strtotime($mobile->aloitan)).', '.date("H:i", strtotime($mobile->aloitan)).'-'.date("H:i", strtotime($mobile->loppui)).'</td>';
+			}
+		    }
+		  }
+		    foreach($mob->toteutuneet as $mobile){
+			if(isset($mobile) and $mobile->hyvaksytty == ''){
+				$hyvaksyty_kontentti .= '<td class="text-danger"><b>Hyväksymättömät toteutuneet tunnit: </b><br>'.$this->etuSukunimi($mobile->tid).'<br>'. date("d.m.Y", strtotime($mobile->aloitan)).', '.date("H:i", strtotime($mobile->aloitan)).'-'.date("H:i", strtotime($mobile->loppui)).'</td>';
+			}
+		    }
+		}
+		?>
 		<tr>
 		<td class="input_nimike" tp_id="<?=$tp_id?>" tv_id="<?=$tv_id?>"><?=$nimike?></td>
 		<td class="input_hinta"><?=number_format($hinta, 2, ',', ' ')?></td>
@@ -293,6 +313,7 @@
 		<td class="input_veroton"><?=number_format($veroton, 2, ',', ' ')?></td>
 		<td class="input_yhteensa"><?=number_format($yht, 2, ',', ' ')?></td>
 		<td class="input_freetext"><?=$freetext?></td>
+		<?=$hyvaksyty_kontentti?>
 		</tr>
 		<?php endif; ?>
 

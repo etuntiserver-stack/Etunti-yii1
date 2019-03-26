@@ -161,9 +161,10 @@ class LaskuController extends Controller
 			( SELECT kohde FROM sivex_tvuoro 
 			  WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 			  BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-			  AND status='3' 
-			  AND peruutettu='0'
-			  AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
+			  AND status='3'
+			  AND peruutettu=0
+			  AND laskutettu=0
+			  AND (tuoteID > 0 OR lisa_tuotteet!='')
 			)
 		    )
 		  AND id NOT IN
@@ -3264,5 +3265,11 @@ $xml = '
 			exit;
 		*/
 		return $last_laskunumero;
+	}
+
+	protected function etuSukunimi($tid)
+	{
+	   $site = Yii::app()->createController('Site');
+	   return $site[0]->etuSukunimi($tid);
 	}
 }
