@@ -40,6 +40,7 @@ $months=array(
 	";
         $criteria->condition = " 
 		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'
+		AND status=3
 		AND peruutettu=0
 	";
 	$suunnittelut = Tyovuoroot::model()->findAll($criteria);
