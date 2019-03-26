@@ -60,7 +60,7 @@ $months=array(
 	foreach($result as $item){
 		if( isset($data_hyvaksytyt[date("Ym", strtotime($item->aloitan))]) ){ $item->l_tunnit = $data_hyvaksytyt[date("Ym", strtotime($item->aloitan))]+$item->l_tunnit; }
 		$data_hyvaksytyt[date("Ym", strtotime($item->aloitan))] = round($this->num($item->l_tunnit), 2);
-		$categories[date("Ym", strtotime($item->aloitan))] = $months[date("n", strtotime($item->aloitan))];
+		$categories[date("Ym", strtotime($item->aloitan))] = date("Y", strtotime($item->aloitan)).', '.$months[date("n", strtotime($item->aloitan))];
 	}
 
 //print_r($result);
