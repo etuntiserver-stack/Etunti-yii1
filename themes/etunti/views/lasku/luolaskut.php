@@ -290,13 +290,11 @@
 			$hyvaksyty = false;
 		}
 		if($tunnit == 'tv' and isset($mob->mobile)){
-		  if(!isset($mob->toteutuneet)){
 		    foreach($mob->mobile as $mobile){
 			if(isset($mobile) and $mobile->hyvaksytty == ''){
 				$hyvaksyty_kontentti .= '<td class="text-danger"><b>Hyväksymättömät luetut tunnit: </b><br>'.$this->etuSukunimi($mobile->tid).'<br>'. date("d.m.Y", strtotime($mobile->aloitan)).', '.date("H:i", strtotime($mobile->aloitan)).'-'.date("H:i", strtotime($mobile->loppui)).'</td>';
 			}
 		    }
-		  }
 		    foreach($mob->toteutuneet as $mobile){
 			if(isset($mobile) and $mobile->hyvaksytty == ''){
 				$hyvaksyty_kontentti .= '<td class="text-danger"><b>Hyväksymättömät toteutuneet tunnit: </b><br>'.$this->etuSukunimi($mobile->tid).'<br>'. date("d.m.Y", strtotime($mobile->aloitan)).', '.date("H:i", strtotime($mobile->aloitan)).'-'.date("H:i", strtotime($mobile->loppui)).'</td>';
