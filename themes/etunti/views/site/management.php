@@ -34,6 +34,18 @@ $months=array(
 	$luetut = Mobile::model()->findAll($criteria);
 
 	$criteria = new CDbCriteria();
+       	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y.%m.%d')) ";
+       	$criteria->select = "
+		SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit, t.*
+	";
+        $criteria->condition = " 
+		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'
+		AND status=3
+		AND peruutettu=0
+	";
+	$suunnittelut = Tyovuoroot::model()->findAll($criteria);
+
+	$criteria = new CDbCriteria();
        	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d')) ";
        	$criteria->select = "
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
@@ -67,9 +79,14 @@ $months=array(
 
 	$data_luetut = array();
 	$data_hyvaksytyt = array();
+	$data_suunnittellut = array();
 	$categories = array();
 	foreach($luetut as $item){
 		$data_luetut[date("Ym", strtotime($item->aloitan))] = round($this->num($item->l_tunnit), 2);
+
+	}
+	foreach($suunnittelut as $item){
+		$data_suunnittellut[date("Ym", strtotime($item->alku))] = round($this->num($item->l_tunnit), 2);
 
 	}
 	foreach($result as $item){
@@ -116,6 +133,10 @@ Highcharts.chart('container', {
     {
         name: 'Hyväksytyt',
         data: JSON.parse('<?=json_encode(array_values($data_hyvaksytyt))?>')
+    },
+    {
+        name: 'Suunnitellut',
+        data: JSON.parse('<?=json_encode(array_values($data_suunnittellut))?>')
     },]
 });
 </script>
