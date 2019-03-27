@@ -103,7 +103,7 @@ ini_set("max_execution_time", "60");
 
 <div class="row">
  <div class="table-responsive">
-  <table class="table table-striped small">
+  <table class="table table-bordered table-striped small">
   <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
@@ -132,33 +132,49 @@ ini_set("max_execution_time", "60");
   while (strtotime($date) <= strtotime($to)) {
 	echo '<tr>';
 	echo '<td>'.$date.'</td>';
-	echo '<td>';
+	echo '<td style="vertical-align: top">';
+	$yht_s = 0;
 	foreach($suunnitelut as $item){
 	    if($item->pvm == $date){
 		echo '<div class="row"><div class="col-sm-12">
-		'.$item->osoiteById.' <div class="pull-right"><b>'.date("H:i", strtotime($item->alku)).'-'.date("H:i", strtotime($item->loppu)).'</b>
+		'.$item->osoiteById.' <div class="pull-right"><b>'.date("H:i", strtotime($item->alku)).'-'.date("H:i", strtotime($item->loppu)).' 
+		<span class="text-success">('.$this->sprint(strtotime($item->loppu)-strtotime($item->alku)).')</span></b>
 		</div></div></div>';
+		$yht_s += strtotime($item->loppu)-strtotime($item->alku);
 	    }
 	}
 	echo '</td>';
-	echo '<td>';
+	echo '<td style="vertical-align: top">';
+	$yht_l = 0;
 	foreach($luetut as $item){
 	    if(date("d.m.Y", strtotime($item->aloitan)) == $date){
 		echo '<div class="row"><div class="col-sm-12">
-		'.$item->kohde_kannasta.' <div class="pull-right"><b>'.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).'</b>
+		'.$item->kohde_kannasta.' <div class="pull-right"><b>'.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).' 
+		<span class="text-success">('.$this->sprint(strtotime($item->loppui)-strtotime($item->aloitan)).')</span></b>
 		</div></div></div>';
+		$yht_l += strtotime($item->loppui)-strtotime($item->aloitan);
 	    }
 	}
 	echo '</td>';
-	echo '<td>';
+	echo '<td style="vertical-align: top">';
+	$yht_t = 0;
 	foreach($toteutuneet as $item){
 	    if(date("d.m.Y", strtotime($item->aloitan)) == $date){
 		echo '<div class="row"><div class="col-sm-12">
-		'.$item->kohde_kannasta.' <div class="pull-right"><b>'.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).'</b>
+		'.$item->kohde_kannasta.' <div class="pull-right"><b>'.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).' 
+		<span class="text-success">('.$this->sprint(strtotime($item->loppui)-strtotime($item->aloitan)).')</span></b>
 		</div></div></div>';
+		$yht_t += strtotime($item->loppui)-strtotime($item->aloitan);
 	    }
 	}
 	echo '</td>';
+	echo '</tr>';
+
+	echo '<tr>';
+	echo '<td></td>';
+	echo '<td><div class="pull-right">'.Yii::t('main', 'Yhteensä').': <span class="text-success">('.$this->sprint($yht_s).')</span></div></td>';
+	echo '<td><div class="pull-right">'.Yii::t('main', 'Yhteensä').': <span class="text-success">('.$this->sprint($yht_l).')</span></div></td>';
+	echo '<td><div class="pull-right">'.Yii::t('main', 'Yhteensä').': <span class="text-success">('.$this->sprint($yht_t).')</span></div></td>';
 	echo '</tr>';
 	$date = date ("d.m.Y", strtotime("+1 day", strtotime($date)));
   }
