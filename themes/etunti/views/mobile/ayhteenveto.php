@@ -109,7 +109,7 @@ ini_set("max_execution_time", "60");
   <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
   <th><?php echo Yii::t('main', 'Suunniteltut tunnit'); ?></th>
   <th><?php echo Yii::t('main', 'Luetut tunnit'); ?></th>
-  <th><?php echo Yii::t('main', 'Toteutuneet tunnit'); ?></th>
+  <th><?php echo Yii::t('main', 'Hyväksytyt tunnit'); ?></th>
   </tr>
   </thead>
   <?php
