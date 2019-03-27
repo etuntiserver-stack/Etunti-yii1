@@ -136,7 +136,7 @@ ini_set("max_execution_time", "60");
 	foreach($suunnitelut as $item){
 	    if($item->pvm == $date){
 		echo '<div class="row"><div class="col-sm-12">
-		<b>'.$item->osoiteById.'</b> <div class="pull-right">'.date("H:i", strtotime($item->alku)).'-'.date("H:i", strtotime($item->loppu)).'
+		'.$item->osoiteById.' <div class="pull-right"><b>'.date("H:i", strtotime($item->alku)).'-'.date("H:i", strtotime($item->loppu)).'</b>
 		</div></div></div>';
 	    }
 	}
@@ -145,7 +145,7 @@ ini_set("max_execution_time", "60");
 	foreach($luetut as $item){
 	    if(date("d.m.Y", strtotime($item->aloitan)) == $date){
 		echo '<div class="row"><div class="col-sm-12">
-		<b>'.$item->kohde_kannasta.'</b> <div class="pull-right">'.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).'
+		'.$item->kohde_kannasta.' <div class="pull-right"><b>'.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).'</b>
 		</div></div></div>';
 	    }
 	}
@@ -154,7 +154,7 @@ ini_set("max_execution_time", "60");
 	foreach($toteutuneet as $item){
 	    if(date("d.m.Y", strtotime($item->aloitan)) == $date){
 		echo '<div class="row"><div class="col-sm-12">
-		<b>'.$item->kohde_kannasta.'</b> <div class="pull-right">'.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).'
+		'.$item->kohde_kannasta.' <div class="pull-right"><b>'.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).'</b>
 		</div></div></div>';
 	    }
 	}
