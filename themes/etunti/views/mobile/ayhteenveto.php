@@ -104,6 +104,7 @@ ini_set("max_execution_time", "60");
   <div class="panel heading-border">
    <div class="panel-body">
 
+  <p id="forTulostus"><?=$_GET['yrityksen_nimi']?>, <?=$from?>-<?=$to?></p>
 
   <table class="table table-bordered table-striped small" cellspacing="0" cellpadding="0" id="tunnit_taulu">
   <thead class="myBgColors">
