@@ -135,21 +135,27 @@ ini_set("max_execution_time", "60");
 	echo '<td>';
 	foreach($suunnitelut as $item){
 	    if($item->pvm == $date){
-		echo $item->osoite.', '.date("H:i", strtotime($item->alku)).'-'.date("H:i", strtotime($item->loppu)).'<br>';
+		echo '<div class="row"><div class="col-sm-12">
+		<b>'.$item->osoite.'</b> <div class="pull-right">'.date("H:i", strtotime($item->alku)).'-'.date("H:i", strtotime($item->loppu)).'
+		</div></div></div>';
 	    }
 	}
 	echo '</td>';
 	echo '<td>';
 	foreach($luetut as $item){
 	    if(date("d.m.Y", strtotime($item->aloitan)) == $date){
-		echo $item->kohde_kannasta.', '.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).'<br>';
+		echo '<div class="row"><div class="col-sm-12">
+		<b>'.$item->kohde_kannasta.'</b> <div class="pull-right">'.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).'
+		</div></div></div>';
 	    }
 	}
 	echo '</td>';
 	echo '<td>';
 	foreach($toteutuneet as $item){
 	    if(date("d.m.Y", strtotime($item->aloitan)) == $date){
-		echo $item->kohde_kannasta.', '.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).'<br>';
+		echo '<div class="row"><div class="col-sm-12">
+		<b>'.$item->kohde_kannasta.'</b> <div class="pull-right">'.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).'
+		</div></div></div>';
 	    }
 	}
 	echo '</td>';
@@ -157,6 +163,7 @@ ini_set("max_execution_time", "60");
 	$date = date ("d.m.Y", strtotime("+1 day", strtotime($date)));
   }
   ?>
+<?php /*
   <tfoot>
   <tr>
   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
@@ -165,7 +172,7 @@ ini_set("max_execution_time", "60");
   <th><?php echo $this->sprint($toteutuneetYht); ?></th>
   </tr>
   </tfoot>
-
+*/ ?>
   </table>
  </div>
 </div>
