@@ -111,7 +111,7 @@ Highcharts.chart('container', {
         text: 'Vuoden luetut, hyväksytyt ja suunnitellut tunnit'
     },
     subtitle: {
-        text: 'Source: WorldClimate.com'
+        text: '<?=Yii::app()->user->domain?>'
     },
     xAxis: {
         categories: JSON.parse('<?=json_encode(array_values($categories))?>')
