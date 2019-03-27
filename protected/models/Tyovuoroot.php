@@ -196,6 +196,18 @@ public $kpl;
                 return $return;
         }
 
+        public function getosoiteById(){
+		$return = '';
+		if(!empty($this->kohde) and empty($this->osoite)){
+			$k = Kohteet::model()->findByPk($this->kohde);
+			if( isset($k->id) ){
+				$return = $k->osoite;
+			}
+		} elseif(!empty($this->osoite)){
+			$return = $this->osoite;
+		}
+                return $return;
+        }
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.

@@ -230,8 +230,16 @@ public $tkohde_kannasta;
 			'criteria'=>$criteria,
 		));
 	}
-
-
-
-
+/*
+        public function getosoiteByKohdenID(){
+		$return = '';
+		if(!empty($this->kohdenID)){
+			$k = Kohteet::model()->findByPk($this->kohdenID);
+			if( isset($k->id) ){
+				$return = $k->osoite;
+			}
+		}
+                return $return;
+        }
+*/
 }

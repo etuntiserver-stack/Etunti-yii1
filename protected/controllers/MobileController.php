@@ -33,7 +33,7 @@ class MobileController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa', 'luetut_toteutuneet_ero_pdf', 'vuosilomat_pdf', 'check_paallekkainMobile', 'tyoajan_seuranta', 'raportit_taulu', 'tulostus', 'hyvaksymattomat'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa', 'luetut_toteutuneet_ero_pdf', 'vuosilomat_pdf', 'check_paallekkainMobile', 'tyoajan_seuranta', 'raportit_taulu', 'tulostus', 'hyvaksymattomat', 'ayhteenveto'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -1773,6 +1773,65 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	*/
 	}
 
+	public function AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, $tilanne)
+	{
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+		if($tilanne == 'luetut' or $tilanne == 'toteutuneet'){
+       		$criteria = new CDbCriteria();
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
+			AND kohdenID IN(
+				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
+			)
+			AND status='3'
+			AND deleted=0
+		";
+		if($tilanne == 'toteutuneet'){
+		$criteria->addCondition(" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
+		}
+		$luetut = Mobile::model()->findAll($criteria);
+
+       		$criteria = new CDbCriteria();
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
+			AND kohdenID IN(
+				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
+			)
+			AND status='3'
+			AND deleted=0
+		";
+		$toteutuneet = Toteutuneet::model()->findAll($criteria);
+		}
+
+		if($tilanne == 'suunnitelut'){
+       		$criteria = new CDbCriteria();
+	        $criteria->condition = " 
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
+			AND kohde IN(
+				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
+			)
+			AND status='3'
+			AND peruutettu=0
+		";
+		$suunnitelut = Tyovuoroot::model()->findAll($criteria);
+		}
+
+		if( $tilanne == 'suunnitelut'){
+			$result = $suunnitelut; 
+		}
+		if( $tilanne == 'luetut'){
+			$result = $luetut; 
+		}
+		if( $tilanne == 'toteutuneet'){
+			$result = array_merge($luetut, $toteutuneet); 
+		}
+		return $result;
+	}
+
 	public function TidfromtoStatus($from,$to,$tid,$status)
 	{
 		$from = date("Y-m-d", strtotime($from));
@@ -2741,21 +2800,26 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		
 	}
 
+	public function actionAyhteenveto()
+	{
+
+		$from = date("d.m.Y");
+		$to = date("d.m.Y");
+
+		if(isset($_GET['from']) and isset($_GET['to'])){
+		$from 	= $_GET['from'];
+		$to 	= $_GET['to'];
+		}
+
+		$this->render('ayhteenveto', array(
+			'from' => $from,
+			'to' => $to
+		));
+	}
+
 
 	public function actionKyhteenveto()
 	{
-
-/*
-
-		if(Yii::app()->request->getPost('kohteet') == 'kaikki')
-		unset(Yii::app()->session['kohteet']);
-
-		if(Yii::app()->request->getPost('kohteet') and Yii::app()->request->getPost('kohteet') != 'kaikki')
-		Yii::app()->session['kohteet'] = Yii::app()->request->getPost('kohteet');
-		
-		if(Yii::app()->request->getPost('mitkatKohteet'))
-		Yii::app()->session['mitkatKohteet'] = Yii::app()->request->getPost('mitkatKohteet');
-*/
 
 		$from = date("d.m.Y");
 		$to = date("d.m.Y");

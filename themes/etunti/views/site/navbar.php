@@ -912,6 +912,10 @@ $('.multTyoryhma').multiselect({
             </a>
             <ul class="nav sub-nav">
               <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/ayhteenveto">
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto asiakkaat'); ?></a>
+              </li>
+              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/yhteenveto?aktiivinen=1">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto työntekijät'); ?></a>
               </li>

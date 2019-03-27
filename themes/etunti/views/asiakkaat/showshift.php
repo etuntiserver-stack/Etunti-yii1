@@ -147,7 +147,7 @@
 
 	$kesto = strtotime($data->loppu)-strtotime($data->alku);
 
-	echo '<tr>';
+	echo '<tr class="'.(($data->peruutettu != 0)? 'text-danger':'').'">';
 	echo '<td>
 	'.CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
 				array('/tyovuoroot/index?year='.date("Y", strtotime($data->pvm)).'&week='.date("W", strtotime($data->pvm)).'&tv_id='.$data->id), 
