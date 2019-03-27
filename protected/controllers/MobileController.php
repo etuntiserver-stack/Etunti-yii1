@@ -1773,14 +1773,16 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	*/
 	}
 
-	public function AsiakasPvmLuTotSuunArray($asiakas_id, $pvm, $tilanne)
+	public function AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, $tilanne)
 	{
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
 		if($tilanne == 'luetut' or $tilanne == 'toteutuneet'){
-		$pvm = date("Y-m-d", strtotime($pvm));
        		$criteria = new CDbCriteria();
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '$pvm'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
 			AND kohdenID IN(
 				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
 			)
@@ -1795,7 +1797,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
        		$criteria = new CDbCriteria();
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '$pvm'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
 			AND kohdenID IN(
 				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
 			)
@@ -1808,7 +1810,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if($tilanne == 'suunnitelut'){
        		$criteria = new CDbCriteria();
 	        $criteria->condition = " 
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '$pvm'
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
 			AND kohde IN(
 				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
 			)

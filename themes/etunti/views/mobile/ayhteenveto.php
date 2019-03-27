@@ -125,22 +125,32 @@ ini_set("max_execution_time", "60");
   $asiakas = Asiakkaat::model()->find($criteria);
   if(!isset($asiakas->id)){ die('Asiakas ei löydy.'); }
 
+  $suunnitelut = $this->AsiakasPvmLuTotSuunArray($asiakas->id, $from, $to, 'suunnitelut');
+  $luetut = $this->AsiakasPvmLuTotSuunArray($asiakas->id, $from, $to, 'luetut');
+  $toteutuneet = $this->AsiakasPvmLuTotSuunArray($asiakas->id, $from, $to, 'toteutuneet');
+
   while (strtotime($date) <= strtotime($to)) {
 	echo '<tr>';
 	echo '<td>'.$date.'</td>';
 	echo '<td>';
-	foreach($this->AsiakasPvmLuTotSuunArray($asiakas->id, $date, 'suunnitelut') as $item){
+	foreach($suunnitelut as $item){
+	    if($item->pvm == $date){
 		echo $item->osoite.', '.date("H:i", strtotime($item->alku)).'-'.date("H:i", strtotime($item->loppu)).'<br>';
+	    }
 	}
 	echo '</td>';
 	echo '<td>';
-	foreach($this->AsiakasPvmLuTotSuunArray($asiakas->id, $date, 'luetut') as $item){
+	foreach($luetut as $item){
+	    if(date("d.m.Y", strtotime($item->aloitan)) == $date){
 		echo $item->kohde_kannasta.', '.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).'<br>';
+	    }
 	}
 	echo '</td>';
 	echo '<td>';
-	foreach($this->AsiakasPvmLuTotSuunArray($asiakas->id, $date, 'toteutuneet') as $item){
+	foreach($toteutuneet as $item){
+	    if(date("d.m.Y", strtotime($item->aloitan)) == $date){
 		echo $item->kohde_kannasta.', '.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).'<br>';
+	    }
 	}
 	echo '</td>';
 	echo '</tr>';
