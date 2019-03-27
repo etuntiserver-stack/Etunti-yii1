@@ -128,46 +128,50 @@ ini_set("max_execution_time", "60");
   $suunnitelut = $this->AsiakasPvmLuTotSuunArray($asiakas->id, $from, $to, 'suunnitelut');
   $luetut = $this->AsiakasPvmLuTotSuunArray($asiakas->id, $from, $to, 'luetut');
   $toteutuneet = $this->AsiakasPvmLuTotSuunArray($asiakas->id, $from, $to, 'toteutuneet');
+  $period = new DatePeriod(new DateTime(date("Y-m-d",strtotime($from))), new DateInterval('P1D'), new DateTime(date("Y-m-d",strtotime($to))));
 
-  while (strtotime($date) <= strtotime($to)) {
-	echo '<tr>';
-	echo '<td><h4>'.$date.'</h4></td>';
-	echo '<td style="vertical-align: top">';
+  foreach($period as $d) {
+	$date = $d->format("d.m.Y");
 	$yht_s = 0;
+	$body_suunnitelut = '';
 	foreach($suunnitelut as $item){
 	    if($item->pvm == $date){
-		echo '<div class="row"><div class="col-sm-12">
+		$body_suunnitelut .= '<div class="row"><div class="col-sm-12">
 		'.$item->osoiteById.' <div class="pull-right"><b>'.date("H:i", strtotime($item->alku)).'-'.date("H:i", strtotime($item->loppu)).' 
 		<span class="text-success">('.$this->sprint(strtotime($item->loppu)-strtotime($item->alku)).')</span></b>
 		</div></div></div>';
 		$yht_s += strtotime($item->loppu)-strtotime($item->alku);
 	    }
 	}
-	echo '</td>';
-	echo '<td style="vertical-align: top">';
 	$yht_l = 0;
+	$body_luetut = '';
 	foreach($luetut as $item){
 	    if(date("d.m.Y", strtotime($item->aloitan)) == $date){
-		echo '<div class="row"><div class="col-sm-12">
+		$body_luetut .= '<div class="row"><div class="col-sm-12">
 		'.$item->kohde_kannasta.' <div class="pull-right"><b>'.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).' 
 		<span class="text-success">('.$this->sprint(strtotime($item->loppui)-strtotime($item->aloitan)).')</span></b>
 		</div></div></div>';
 		$yht_l += strtotime($item->loppui)-strtotime($item->aloitan);
 	    }
 	}
-	echo '</td>';
-	echo '<td style="vertical-align: top">';
 	$yht_t = 0;
+	$body_toteutuneet = '';
 	foreach($toteutuneet as $item){
 	    if(date("d.m.Y", strtotime($item->aloitan)) == $date){
-		echo '<div class="row"><div class="col-sm-12">
+		$body_toteutuneet .= '<div class="row"><div class="col-sm-12">
 		'.$item->kohde_kannasta.' <div class="pull-right"><b>'.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).' 
 		<span class="text-success">('.$this->sprint(strtotime($item->loppui)-strtotime($item->aloitan)).')</span></b>
 		</div></div></div>';
 		$yht_t += strtotime($item->loppui)-strtotime($item->aloitan);
 	    }
 	}
-	echo '</td>';
+	if(empty($body_suunnitelut) and empty($body_luetut) and empty($body_toteutuneet)){ continue; }
+
+	echo '<tr>';
+	echo '<td><h4>'.$date.'</h4></td>';
+	echo '<td style="vertical-align: top">'.$body_suunnitelut.'</td>';
+	echo '<td style="vertical-align: top">'.$body_luetut.'</td>';
+	echo '<td style="vertical-align: top">'.$body_toteutuneet.'</td>';
 	echo '</tr>';
 
 	echo '<tr>';
@@ -176,7 +180,6 @@ ini_set("max_execution_time", "60");
 	echo '<td><div class="pull-right">'.Yii::t('main', 'Yhteensä').': <span class="text-success">('.$this->sprint($yht_l).')</span></div></td>';
 	echo '<td><div class="pull-right">'.Yii::t('main', 'Yhteensä').': <span class="text-success">('.$this->sprint($yht_t).')</span></div></td>';
 	echo '</tr>';
-	$date = date ("d.m.Y", strtotime("+1 day", strtotime($date)));
   }
   ?>
 <?php /*
