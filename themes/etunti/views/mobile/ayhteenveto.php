@@ -217,6 +217,7 @@ $(document).delegate(".tulostataulun","click",function(){
         'table th, table td {' +
         'border:1px solid #333;' +
         'padding:3px 5px;' +
+	'font-size: 70%;' +
         '}' +
 	'.tdw2, .tdw3, .tdw4{' +
 	'width: 30%;' +
