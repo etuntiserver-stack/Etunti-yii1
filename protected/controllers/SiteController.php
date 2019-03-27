@@ -129,6 +129,7 @@ class SiteController extends Controller
 
 	public function actionManagement()
 	{
+                Yii::app()->theme = 'etunti';
 		$this->render('management');
 	}
 

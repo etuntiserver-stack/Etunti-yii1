@@ -18,6 +18,7 @@ $months=array(
 	$start_date = date ("Y-m-d", strtotime(" -1 year first day of this month"));
 	$end_date = date ("Y-m-d", strtotime(" last day of last month"));
 
+	// <-- Luetut
 	$criteria = new CDbCriteria();
        	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d')) ";
        	$criteria->select = "
@@ -36,8 +37,9 @@ $months=array(
 		$data_luetut[date("Ym", strtotime($item->aloitan))] = round($this->num($item->l_tunnit), 2);
 
 	}
+	//     Luetut -->
 
-
+	// <-- Suunnitellut
 	$criteria = new CDbCriteria();
        	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y.%m.%d')) ";
        	$criteria->select = "
@@ -48,13 +50,15 @@ $months=array(
 		AND status=3
 		AND peruutettu=0
 	";
-	$suunnittelut = Tyovuoroot::model()->findAll($criteria);
-	$data_suunnittellut = array();
-	foreach($suunnittelut as $item){
-		$data_suunnittellut[date("Ym", strtotime($item->pvm))] = round($this->num($item->l_tunnit), 2);
+	$suunnitellut = Tyovuoroot::model()->findAll($criteria);
+	$data_suunnitellut = array();
+	foreach($suunnitellut as $item){
+		$data_suunnitellut[date("Ym", strtotime($item->pvm))] = round($this->num($item->l_tunnit), 2);
 
 	}
+	//     Suunnitellut -->
 
+	// <-- Hyvaksytyt
 	$criteria = new CDbCriteria();
        	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d')) ";
        	$criteria->select = "
@@ -93,8 +97,8 @@ $months=array(
 		$data_hyvaksytyt[date("Ym", strtotime($item->aloitan))] += round($this->num($item->l_tunnit), 2);
 		$categories[date("Ym", strtotime($item->aloitan))] = date("Y", strtotime($item->aloitan)).', '.$months[date("n", strtotime($item->aloitan))];
 	}
+	//     Hyvaksytyt -->
 
-//print_r($result);
 ?>
 <script src="https://code.highcharts.com/highcharts.src.js"></script>
 <div id="container"></div>
@@ -104,7 +108,7 @@ Highcharts.chart('container', {
         type: 'line'
     },
     title: {
-        text: 'Vuoden luetut ja hyväksytyt tunnit'
+        text: 'Vuoden luetut, hyväksytyt ja suunnitellut tunnit'
     },
     subtitle: {
         text: 'Source: WorldClimate.com'
@@ -135,7 +139,7 @@ Highcharts.chart('container', {
     },
     {
         name: 'Suunnitellut',
-        data: JSON.parse('<?=json_encode(array_values($data_suunnittellut))?>')
+        data: JSON.parse('<?=json_encode(array_values($data_suunnitellut))?>')
     },]
 });
 </script>
