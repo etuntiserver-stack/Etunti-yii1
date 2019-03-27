@@ -11,6 +11,9 @@ ini_set("max_execution_time", "60");
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
+	   <div class="pull-right">
+	     <button class="btn btn-primary btn-sm myBgColors tulostataulun"><?php echo Yii::t('main', 'Tulosta'); ?></button>
+	   </div>
             <h2 class="myBgColors p10"> <i class="fa fa-home"></i> <?php echo Yii::t('main', 'Tuntiyhteenveto asiakkaat'); ?> </h2>
 
    	    <form id="yhtveto" action="#" class="form-inline" method="GET">
@@ -102,13 +105,13 @@ ini_set("max_execution_time", "60");
    <div class="panel-body">
 
 
-  <table class="table table-bordered table-striped small">
+  <table class="table table-bordered table-striped small" cellspacing="0" cellpadding="0" id="tunnit_taulu">
   <thead class="myBgColors">
   <tr>
-  <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
-  <th><?php echo Yii::t('main', 'Suunniteltut tunnit'); ?></th>
-  <th><?php echo Yii::t('main', 'Luetut tunnit'); ?></th>
-  <th><?php echo Yii::t('main', 'Hyväksytyt tunnit'); ?></th>
+  <th class="tdw1"><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
+  <th class="tdw2"><?php echo Yii::t('main', 'Suunniteltut tunnit'); ?></th>
+  <th class="tdw3"><?php echo Yii::t('main', 'Luetut tunnit'); ?></th>
+  <th class="tdw4"><?php echo Yii::t('main', 'Hyväksytyt tunnit'); ?></th>
   </tr>
   </thead>
   <?php
@@ -198,3 +201,37 @@ ini_set("max_execution_time", "60");
   </div>
 </div>
 <?php endif; ?>
+
+<script>
+$(document).ready(function(){
+
+$(document).delegate(".tulostataulun","click",function(){
+	
+    var divToPrint = document.getElementById('tunnit_taulu');
+    var htmlToPrint = '' +
+        '<style type="text/css">' +
+	'.table tbody>tr>td{' +
+	    	'vertical-align: top;' +
+	'}' +
+        'table th, table td {' +
+        'border:1px solid #333;' +
+        'padding:3px 5px;' +
+        '}' +
+	'.tdw2, .tdw3, .tdw4{' +
+	'width: 30%;' +
+	'}' +
+	'.tdw1{' +
+	'width: 10%;' +
+	'}' +
+
+        '</style>';
+    htmlToPrint += $('#forTulostus').html();
+    htmlToPrint += divToPrint.outerHTML;
+    newWin = window.open("");
+    newWin.document.write(htmlToPrint);
+    newWin.print();
+    newWin.close();
+});
+
+});
+</script>
