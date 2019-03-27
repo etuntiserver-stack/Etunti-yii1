@@ -101,8 +101,7 @@ ini_set("max_execution_time", "60");
   <div class="panel heading-border">
    <div class="panel-body">
 
-<div class="row">
- <div class="table-responsive">
+
   <table class="table table-bordered table-striped small">
   <thead class="myBgColors">
   <tr>
@@ -193,8 +192,6 @@ ini_set("max_execution_time", "60");
   </tfoot>
 */ ?>
   </table>
- </div>
-</div>
 
 
    </div>
