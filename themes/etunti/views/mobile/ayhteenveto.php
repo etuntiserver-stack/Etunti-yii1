@@ -136,7 +136,7 @@ ini_set("max_execution_time", "60");
 	foreach($suunnitelut as $item){
 	    if($item->pvm == $date){
 		echo '<div class="row"><div class="col-sm-12">
-		<b>'.$item->osoite.'</b> <div class="pull-right">'.date("H:i", strtotime($item->alku)).'-'.date("H:i", strtotime($item->loppu)).'
+		<b>'.$item->osoiteById.'</b> <div class="pull-right">'.date("H:i", strtotime($item->alku)).'-'.date("H:i", strtotime($item->loppu)).'
 		</div></div></div>';
 	    }
 	}
