@@ -131,7 +131,7 @@ ini_set("max_execution_time", "60");
 
   while (strtotime($date) <= strtotime($to)) {
 	echo '<tr>';
-	echo '<td>'.$date.'</td>';
+	echo '<td><h4>'.$date.'</h4></td>';
 	echo '<td style="vertical-align: top">';
 	$yht_s = 0;
 	foreach($suunnitelut as $item){
