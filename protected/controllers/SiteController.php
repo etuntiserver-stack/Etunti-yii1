@@ -139,18 +139,17 @@ class SiteController extends Controller
 		}
 
 		$criteria = new CDbCriteria();
-		if(isset($_GET['yrityksen_nimi'])){
+		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])){
 		$criteria->condition = " 
 			yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
 		";
+		$asiakas = Asiakkaat::model()->find($criteria);
 		}
-		if(isset($_GET['asiakas_id'])){
+		if(isset($_GET['asiakas_id']) and !empty($_GET['asiakas_id'])){
 		$criteria->condition = " 
 			id='".$_GET['asiakas_id']."'
 		";
-		}
-		if(isset($_GET['yrityksen_nimi']) or isset($_GET['asiakas_id'])){
-			$asiakas = Asiakkaat::model()->find($criteria);
+		$asiakas = Asiakkaat::model()->find($criteria);
 		}
 
 		$this->render('management', array(

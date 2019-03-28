@@ -11,7 +11,7 @@ ini_set("max_execution_time", "60");
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-            <h2 class="myBgColors p10"> <i class="fa fa-home"></i> <?php echo Yii::t('main', 'Kaavio'); ?> </h2>
+            <h2 class="myBgColors p10"> <i class="fa fa-line-chart"></i> <?=(isset($_GET["yrityksen_nimi"]) and !empty($_GET["yrityksen_nimi"]))? $_GET["yrityksen_nimi"] : "Kaikki asiakkaat"?> </h2>
 
    	    <form id="yhtveto" action="#" class="form-inline" method="GET">
 
@@ -216,7 +216,7 @@ Highcharts.chart('container', {
         text: 'Vuoden luetut, hyväksytyt ja suunnitellut tunnit'
     },
     subtitle: {
-        text: '<?=(isset($_GET["yrityksen_nimi"]))? $_GET["yrityksen_nimi"] : "Kaikki asiakkaat"?>'
+        text: '<?=(isset($_GET["yrityksen_nimi"]) and !empty($_GET["yrityksen_nimi"]))? $_GET["yrityksen_nimi"] : "Kaikki asiakkaat"?>'
     },
     xAxis: {
         categories: JSON.parse('<?=json_encode(array_values($categories))?>')
