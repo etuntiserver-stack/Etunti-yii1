@@ -28,7 +28,7 @@
 					'laheta' => true
 				), 
 				array(
-					'class' => 'btn btn-block btn-success lahetakaikki',
+					'class' => 'btn btn-block btn-success myBgColors lahetakaikki',
 					'data-toggle'=>'tooltip', 
 					'data-placement'=>'top', 
 					'title'=>Yii::t('main', 'Lähetä')
@@ -507,7 +507,7 @@
 					'laheta' => true
 				), 
 				array(
-					'class' => 'btn btn-block btn-success',
+					'class' => 'btn btn-block btn-success myBgColors',
 					'data-toggle'=>'tooltip', 
 					'data-placement'=>'top', 
 					'title'=>Yii::t('main', 'Lähetä')
@@ -516,6 +516,22 @@
 		?>
 		</th>
 		<th>
+		    <?php
+			echo CHtml::link('<i class="fa fa-hourglass"></i>', 
+				array('/mobile/ayhteenveto', 
+					'from' => $from, 
+					'to' => $to, 
+					'asiakas_id' => $item->id
+				), 
+				array(
+					'class' => 'pull-right btn btn-success myBgColors',
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'target' => '_blank',
+					'title'=>Yii::t('main', 'Työtuntien seuranta')
+				)
+			); 
+		    ?>
 		    <h3><?=Yii::t('main', 'Yhteensä')?>: <span class="yhteensa_last"><?=number_format($yhteensa_total, 2, ',', ' ')?></span>&euro;</h3>
 		</th>
 	<?php else: ?>

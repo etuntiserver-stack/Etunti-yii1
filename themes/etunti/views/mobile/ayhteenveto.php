@@ -98,13 +98,13 @@ ini_set("max_execution_time", "60");
 
 
 
-<?php if(isset($_GET['yrityksen_nimi']) and $from and $to) : ?>
+<?php if(isset($_GET['yrityksen_nimi']) or isset($_GET['asiakas_id']) and $from and $to) : ?>
 
 <div class="admin-form">
   <div class="panel heading-border">
    <div class="panel-body">
 
-  <p id="forTulostus"><?=$_GET['yrityksen_nimi']?>, <?=$from?>-<?=$to?></p>
+  <p id="forTulostus"><?php if($asiakas->tyyppi == 'yritys'){ echo $asiakas->yrityksen_nimi; } if($asiakas->tyyppi == 'henkilo'){ echo $asiakas->yhteyshenkilo; } ?>, <?=$from?>-<?=$to?></p>
 
   <table class="table table-bordered table-striped small" cellspacing="0" cellpadding="0" id="tunnit_taulu">
   <thead class="myBgColors">
@@ -120,13 +120,6 @@ ini_set("max_execution_time", "60");
   $luetutYht = 0;
   $toteutuneetYht = 0;
   $date = $from;
-
-  $criteria = new CDbCriteria();
-  $criteria->condition = " 
-	yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
-  ";
-  $asiakas = Asiakkaat::model()->find($criteria);
-  if(!isset($asiakas->id)){ die('Asiakas ei löydy.'); }
 
   $suunnitelut = $this->AsiakasPvmLuTotSuunArray($asiakas->id, $from, $to, 'suunnitelut');
   $luetut = $this->AsiakasPvmLuTotSuunArray($asiakas->id, $from, $to, 'luetut');

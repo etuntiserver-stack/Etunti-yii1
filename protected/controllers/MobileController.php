@@ -2811,9 +2811,25 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$to 	= $_GET['to'];
 		}
 
+		$criteria = new CDbCriteria();
+		if(isset($_GET['yrityksen_nimi'])){
+		$criteria->condition = " 
+			yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
+		";
+		}
+		if(isset($_GET['asiakas_id'])){
+		$criteria->condition = " 
+			id='".$_GET['asiakas_id']."'
+		";
+		}
+		if(isset($_GET['yrityksen_nimi']) or isset($_GET['asiakas_id'])){
+			$asiakas = Asiakkaat::model()->find($criteria);
+		}
+
 		$this->render('ayhteenveto', array(
 			'from' => $from,
-			'to' => $to
+			'to' => $to,
+			'asiakas' => (isset($asiakas->id))?$asiakas:'',
 		));
 	}
 
