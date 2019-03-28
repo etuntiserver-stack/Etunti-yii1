@@ -101,7 +101,7 @@ $months=array(
 
 ?>
 <script src="https://code.highcharts.com/highcharts.src.js"></script>
-<div id="container"></div>
+<div id="container" style="height: 500px"></div>
 <script>
 Highcharts.chart('container', {
     chart: {
