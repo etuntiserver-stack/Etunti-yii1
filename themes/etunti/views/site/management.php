@@ -11,7 +11,7 @@ ini_set("max_execution_time", "60");
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-            <h2 class="myBgColors p10"> <i class="fa fa-line-chart"></i> <?=(isset($_GET["yrityksen_nimi"]) and !empty($_GET["yrityksen_nimi"]))? $_GET["yrityksen_nimi"] : "Kaaviot"?> </h2>
+            <h2 class="myBgColors p10"> <i class="fa fa-line-chart"></i> Kaaviot </h2>
 
 	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'asiakkaat_slh')): ?>
    	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
@@ -20,7 +20,7 @@ ini_set("max_execution_time", "60");
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
-	    	    <legend><h3><?=Yii::t('main', 'Asiakas (Luetut, hyväksytyt ja suunnitellut tunnit)')?></h3></legend>
+	    	    <legend><h3><?=Yii::t('main', 'Asiakas kuukausittain')?></h3></legend>
                     <!-- Input Icons -->
                     <div class="row">
 
@@ -105,7 +105,7 @@ ini_set("max_execution_time", "60");
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
-	    	    <legend><h3><?=Yii::t('main', 'Työntekijät (Luetut, hyväksytyt ja suunnitellut tunnit)')?></h3></legend>
+	    	    <legend><h3><?=Yii::t('main', 'Työntekijät')?></h3></legend>
                     <!-- Input Icons -->
                     <div class="row">
 
@@ -478,6 +478,19 @@ Highcharts.chart('container', {
 
 <script>
 $(document).ready(function(){
+
+$('.mult').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+});
+
   $("#yhtveto_tyontekijat").on("submit", function(){
 	if( $("#tyontekija option:selected").val() == 'kaikki' ){
 		alert("Valitse työntekijä.");
