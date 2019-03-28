@@ -47,6 +47,19 @@ ini_set("max_execution_time", "60");
 
                       <div class="col-md-2">
                         <div class="section">
+                          <label class="field select">
+			    <select name="chart_tyyppi" class="gui-input">
+			     <option value="line"><?php echo Yii::t('main', 'Line'); ?></option>
+			     <option value="bar" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'bar')?'selected':''?>><?php echo Yii::t('main', 'Bar'); ?></option>
+			     <option value="area" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'area')?'selected':''?>><?php echo Yii::t('main', 'Area'); ?></option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
                           <label class="field prepend-icon">
 
 	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($from))?>">
@@ -71,7 +84,7 @@ ini_set("max_execution_time", "60");
                         </div>
                       </div>
 
-                      <div class="col-md-2 col-md-offset-4">
+                      <div class="col-md-2 col-md-offset-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
@@ -212,7 +225,7 @@ $months=array(
 <script>
 Highcharts.chart('container', {
     chart: {
-        type: 'line'
+        type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
     },
     title: {
         text: 'Vuoden luetut, hyväksytyt ja suunnitellut tunnit'
