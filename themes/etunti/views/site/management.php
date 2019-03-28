@@ -1,4 +1,99 @@
 <?php
+/* @var $this MobileController */
+/* @var $dataProvider CActiveDataProvider */
+
+ini_set("max_execution_time", "60");
+?>
+
+
+
+
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
+
+            <h2 class="myBgColors p10"> <i class="fa fa-home"></i> <?php echo Yii::t('main', 'Kaavio'); ?> </h2>
+
+   	    <form id="yhtveto" action="#" class="form-inline" method="GET">
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+                    <!-- Input Icons -->
+                    <div class="row">
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Asiakkaat';
+				$sarake = 'yrityksen_nimi';
+				$placeholder = 'Asiakas';
+				$postvalue = '';
+				if(isset($_GET[$sarake])){ $postvalue = $_GET[$sarake]; }
+		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($from))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($to))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2 col-md-offset-4">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
+		      </div>
+
+                    </div>
+
+
+
+                </div>
+              </div>
+            </div>
+
+	    </form>
+
+
+        <!-- loppu: .tray-center -->
+        </div>
+
+
+<br>
+
+
+<?php
 $months=array(
 	1=>Yii::t('main', 'Tammikuu'),
 	2=>Yii::t('main', 'Helmikuu'),
@@ -15,8 +110,6 @@ $months=array(
 	);
 
 	$result = array();
-	$start_date = date ("Y-m-d", strtotime(" -1 year first day of this month"));
-	$end_date = date ("Y-m-d", strtotime(" last day of last month"));
 
 	// <-- Luetut
 	$criteria = new CDbCriteria();
@@ -27,10 +120,13 @@ $months=array(
 	";
         $criteria->condition = " 
 		aloitan!='' AND loppui!=''
-		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		AND status=3
 		AND deleted=0
 	";
+	if( isset($asiakas->id) ){
+	$criteria->addCondition(" kohdenID IN (SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas->id."') "); 
+	}
 	$luetut = Mobile::model()->findAll($criteria);
 	$data_luetut = array();
 	foreach($luetut as $item){
@@ -46,10 +142,13 @@ $months=array(
 		SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit, t.*
 	";
         $criteria->condition = " 
-		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'
+		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		AND status=3
 		AND peruutettu=0
 	";
+	if( isset($asiakas->id) ){
+	$criteria->addCondition(" kohde IN (SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas->id."') "); 
+	}
 	$suunnitellut = Tyovuoroot::model()->findAll($criteria);
 	$data_suunnitellut = array();
 	foreach($suunnitellut as $item){
@@ -67,11 +166,14 @@ $months=array(
 	";
         $criteria->condition = " 
 		aloitan!='' AND loppui!=''
-		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		AND status=3
 		AND deleted=0
 		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 	";
+	if( isset($asiakas->id) ){
+	$criteria->addCondition(" kohdenID IN (SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas->id."') "); 
+	}
 	$lu = Mobile::model()->findAll($criteria);
 
 	$criteria = new CDbCriteria();
@@ -84,8 +186,11 @@ $months=array(
 		aloitan!='' AND loppui!=''
 		AND status=3
 		AND deleted=0
-		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 	";
+	if( isset($asiakas->id) ){
+	$criteria->addCondition(" kohdenID IN (SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas->id."') "); 
+	}
 	$tot = Toteutuneet::model()->findAll($criteria);
 	$result = array_merge($lu, $tot);
 	$data_hyvaksytyt = array();
@@ -111,7 +216,7 @@ Highcharts.chart('container', {
         text: 'Vuoden luetut, hyväksytyt ja suunnitellut tunnit'
     },
     subtitle: {
-        text: '<?=Yii::app()->user->domain?>'
+        text: '<?=(isset($_GET["yrityksen_nimi"]))? $_GET["yrityksen_nimi"] : Yii::app()->user->domain?>'
     },
     xAxis: {
         categories: JSON.parse('<?=json_encode(array_values($categories))?>')

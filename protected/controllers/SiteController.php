@@ -130,7 +130,34 @@ class SiteController extends Controller
 	public function actionManagement()
 	{
                 Yii::app()->theme = 'etunti';
-		$this->render('management');
+		$from = date ("Y-m-d", strtotime(" -1 year first day of this month"));
+		$to = date ("Y-m-d", strtotime(" last day of last month"));
+
+		if(isset($_GET['from']) and isset($_GET['to'])){
+		$from 	= date ("Y-m-d", strtotime($_GET['from']));
+		$to 	= date ("Y-m-d", strtotime($_GET['to']));
+		}
+
+		$criteria = new CDbCriteria();
+		if(isset($_GET['yrityksen_nimi'])){
+		$criteria->condition = " 
+			yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
+		";
+		}
+		if(isset($_GET['asiakas_id'])){
+		$criteria->condition = " 
+			id='".$_GET['asiakas_id']."'
+		";
+		}
+		if(isset($_GET['yrityksen_nimi']) or isset($_GET['asiakas_id'])){
+			$asiakas = Asiakkaat::model()->find($criteria);
+		}
+
+		$this->render('management', array(
+			'from' => $from,
+			'to' => $to,
+			'asiakas' => (isset($asiakas->id))?$asiakas:'',
+		));
 	}
 
 	public function actionOhjeet()
