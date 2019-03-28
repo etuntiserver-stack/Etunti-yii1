@@ -216,7 +216,7 @@ Highcharts.chart('container', {
         text: 'Vuoden luetut, hyväksytyt ja suunnitellut tunnit'
     },
     subtitle: {
-        text: '<?=(isset($_GET["yrityksen_nimi"]))? $_GET["yrityksen_nimi"] : Yii::app()->user->domain?>'
+        text: '<?=(isset($_GET["yrityksen_nimi"]))? $_GET["yrityksen_nimi"] : "Kaikki asiakkaat"?>'
     },
     xAxis: {
         categories: JSON.parse('<?=json_encode(array_values($categories))?>')
