@@ -13,6 +13,7 @@ ini_set("max_execution_time", "60");
 
             <h2 class="myBgColors p10"> <i class="fa fa-line-chart"></i> <?=(isset($_GET["yrityksen_nimi"]) and !empty($_GET["yrityksen_nimi"]))? $_GET["yrityksen_nimi"] : "Kaaviot"?> </h2>
 
+	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'asiakkaat_slh')): ?>
    	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
 	    <input type="hidden" name="haku" value="asiakkaat_slh">
             <div class="admin-form">
@@ -95,8 +96,9 @@ ini_set("max_execution_time", "60");
               </div>
             </div>
 	    </form>
+	    <?php endif; ?>
 
-
+	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'tyontekijat')): ?>
    	    <form id="yhtveto_tyontekijat" action="#" class="form-inline" method="GET">
 	    <input type="hidden" name="haku" value="tyontekijat">
             <div class="admin-form">
@@ -175,6 +177,7 @@ ini_set("max_execution_time", "60");
               </div>
             </div>
 	    </form>
+	    <?php endif; ?>
         <!-- loppu: .tray-center -->
         </div>
 
