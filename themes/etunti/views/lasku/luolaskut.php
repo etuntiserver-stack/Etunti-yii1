@@ -243,6 +243,10 @@
 				}
 			} //TV
 
+			if( $hinta == 0 ){
+				echo '<h1>Hinta ei saa olla nolla.</h1>';
+				break;
+			}
 			// <-- ALV laskin
 			$veroton 	= 0;
 			$yht 		= 0;
