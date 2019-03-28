@@ -206,6 +206,8 @@ $months=array(
 
 ?>
 <script src="https://code.highcharts.com/highcharts.src.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
 <div id="container" style="height: 500px"></div>
 <script>
 Highcharts.chart('container', {
@@ -245,6 +247,9 @@ Highcharts.chart('container', {
     {
         name: 'Suunnitellut',
         data: JSON.parse('<?=json_encode(array_values($data_suunnitellut))?>')
-    },]
+    },],
+    exporting: {
+        enabled: true
+    }
 });
 </script>
