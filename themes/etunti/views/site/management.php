@@ -50,6 +50,7 @@ ini_set("max_execution_time", "60");
                           <label class="field select">
 			    <select name="chart_tyyppi" class="gui-input">
 			     <option value="line"><?php echo Yii::t('main', 'Line'); ?></option>
+			     <option value="column" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'column')?'selected':''?>><?php echo Yii::t('main', 'Column'); ?></option>
 			     <option value="bar" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'bar')?'selected':''?>><?php echo Yii::t('main', 'Bar'); ?></option>
 			     <option value="area" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'area')?'selected':''?>><?php echo Yii::t('main', 'Area'); ?></option>
 			    </select>
