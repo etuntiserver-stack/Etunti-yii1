@@ -540,12 +540,12 @@ Highcharts.chart('container', {
 <?php
 	// <-- Onlinevaraus
 	$criteria = new CDbCriteria();
-       	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(time, '%Y-%m-%d'), '%Y-%m-%d')) ";
+       	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE(time)) ";
        	$criteria->select = "
 		SUM(hinta) as hinta, t.*
 	";
         $criteria->condition = " 
-		DATE_FORMAT(STR_TO_DATE(time, '%Y-%m-%d'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+		DATE(time) BETWEEN '".$from."' AND '".$to."'
 	";
 	$onlinevaraus = Onlinevaraus::model()->findAll($criteria);
 	$data_onlinevaraus = array();
