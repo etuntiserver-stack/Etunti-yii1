@@ -152,7 +152,7 @@
                         </div>
 
                         <div class="section">
-                          <label class="field select">
+                          <label class="field select" style="z-index:0">
 				<select class="" id="laskutettu" name="laskutettu">
 				<option value="0" <?=((isset($_GET['laskutettu']) and $_GET['laskutettu'] == 0)? 'selected':'') ?>>Laskuttamattomat</option>
 				<option value="1" <?=((isset($_GET['laskutettu']) and $_GET['laskutettu'] == 1)? 'selected':'') ?>>Laskutettu</option>
