@@ -192,6 +192,29 @@ ini_set("max_execution_time", "60");
 
                       <div class="col-md-2">
                         <div class="section">
+                          <label class="field prepend-icon">
+
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Asiakkaat';
+				$sarake = 'yrityksen_nimi';
+				$placeholder = 'Asiakas';
+				$postvalue = '';
+				if(isset($_GET[$sarake])){ $postvalue = $_GET[$sarake]; }
+		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
                           <label class="field select">
 			    <select name="chart_tyyppi" class="gui-input">
 			     <option value="line"><?php echo Yii::t('main', 'Line'); ?></option>
@@ -547,6 +570,9 @@ Highcharts.chart('container', {
         $criteria->condition = " 
 		DATE(time) BETWEEN '".$from."' AND '".$to."'
 	";
+	if( isset($asiakas->id) ){
+	$criteria->addCondition(" asiakas_id ='".$asiakas->id."' "); 
+	}
 	$onlinevaraus = Onlinevaraus::model()->findAll($criteria);
 	$data_onlinevaraus = array();
 	$categories = array();
