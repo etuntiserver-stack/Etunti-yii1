@@ -253,7 +253,7 @@ ini_set("max_execution_time", "60");
                         </div>
                       </div>
 
-                      <div class="col-md-2 col-md-offset-4">
+                      <div class="col-md-2 col-md-offset-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo kaavio'); ?>">
 		      </div>
                     </div>
