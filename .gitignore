@@ -3,6 +3,7 @@ img/*
 lib/defdb.sql
 dev
 dev/
+asiakas/plugins/
 estrom.fi
 estrom.fi/
 sivex.fi
