@@ -1,40 +1,26 @@
 {
-  "_args": [
-    [
-      "cordova-plugin-file-transfer",
-      "/var/www/html/etunti/asiakas"
-    ]
-  ],
-  "_from": "cordova-plugin-file-transfer@latest",
+  "_from": "cordova-plugin-file-transfer",
   "_id": "cordova-plugin-file-transfer@1.7.1",
-  "_inCache": true,
-  "_installable": true,
+  "_inBundle": false,
+  "_integrity": "sha1-p12L4uvDu5sjxbG70ZkhTsJnWGs=",
   "_location": "/cordova-plugin-file-transfer",
-  "_nodeVersion": "6.10.2",
-  "_npmOperationalInternal": {
-    "host": "s3://npm-registry-packages",
-    "tmp": "tmp/cordova-plugin-file-transfer-1.7.1.tgz_1517268291108_0.38711676094681025"
-  },
-  "_npmUser": {
-    "email": "suraj.pindoria@yahoo.com",
-    "name": "surajpindoria"
-  },
-  "_npmVersion": "4.6.1",
   "_phantomChildren": {},
   "_requested": {
-    "name": "cordova-plugin-file-transfer",
+    "type": "tag",
+    "registry": true,
     "raw": "cordova-plugin-file-transfer",
+    "name": "cordova-plugin-file-transfer",
+    "escapedName": "cordova-plugin-file-transfer",
     "rawSpec": "",
-    "scope": null,
-    "spec": "latest",
-    "type": "tag"
+    "saveSpec": null,
+    "fetchSpec": "latest"
   },
   "_requiredBy": [
+    "#USER",
     "/"
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-file-transfer/-/cordova-plugin-file-transfer-1.7.1.tgz",
   "_shasum": "a75d8be2ebc3bb9b23c5b1bbd199214ec267586b",
-  "_shrinkwrap": null,
   "_spec": "cordova-plugin-file-transfer",
   "_where": "/var/www/html/etunti/asiakas",
   "author": {
@@ -43,32 +29,28 @@
   "bugs": {
     "url": "https://issues.apache.org/jira/browse/CB"
   },
+  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-file-transfer",
     "platforms": [
-      "amazon-fireos",
       "android",
-      "blackberry10",
-      "browser",
-      "firefoxos",
-      "ios",
+      "amazon-fireos",
       "ubuntu",
-      "windows",
-      "windows8",
+      "blackberry10",
+      "ios",
       "wp7",
-      "wp8"
+      "wp8",
+      "windows8",
+      "windows",
+      "firefoxos",
+      "browser"
     ]
   },
-  "dependencies": {},
+  "deprecated": false,
   "description": "Cordova File Transfer Plugin",
   "devDependencies": {
     "jscs": "^2.6.0",
     "jshint": "^2.8.0"
-  },
-  "directories": {},
-  "dist": {
-    "shasum": "a75d8be2ebc3bb9b23c5b1bbd199214ec267586b",
-    "tarball": "https://registry.npmjs.org/cordova-plugin-file-transfer/-/cordova-plugin-file-transfer-1.7.1.tgz"
   },
   "engines": {
     "cordovaDependencies": {
@@ -80,71 +62,23 @@
   "homepage": "https://github.com/apache/cordova-plugin-file-transfer#readme",
   "keywords": [
     "cordova",
-    "cordova-amazon-fireos",
+    "file",
+    "transfer",
+    "ecosystem:cordova",
     "cordova-android",
-    "cordova-blackberry10",
-    "cordova-browser",
-    "cordova-firefoxos",
-    "cordova-ios",
+    "cordova-amazon-fireos",
     "cordova-ubuntu",
-    "cordova-windows",
-    "cordova-windows8",
+    "cordova-blackberry10",
+    "cordova-ios",
     "cordova-wp7",
     "cordova-wp8",
-    "ecosystem:cordova",
-    "file",
-    "transfer"
+    "cordova-windows8",
+    "cordova-windows",
+    "cordova-firefoxos",
+    "cordova-browser"
   ],
   "license": "Apache-2.0",
-  "maintainers": [
-    {
-      "name": "purplecabbage",
-      "email": "purplecabbage@gmail.com"
-    },
-    {
-      "name": "surajpindoria",
-      "email": "suraj.pindoria@yahoo.com"
-    },
-    {
-      "name": "macdonst",
-      "email": "simon.macdonald@gmail.com"
-    },
-    {
-      "name": "vishalmishra",
-      "email": "vishalmishra0907@gmail.com"
-    },
-    {
-      "name": "bowserj",
-      "email": "bowserj@apache.org"
-    },
-    {
-      "name": "jcesarmobile",
-      "email": "jcesarmobile@gmail.com"
-    },
-    {
-      "name": "filmaj",
-      "email": "maj.fil@gmail.com"
-    },
-    {
-      "name": "shazron",
-      "email": "shazron@gmail.com"
-    },
-    {
-      "name": "csantanapr",
-      "email": "csantana23@gmail.com"
-    },
-    {
-      "name": "nikhilkh",
-      "email": "nikhil.khandelwal@gmail.com"
-    },
-    {
-      "name": "stevegill",
-      "email": "stevengill97@gmail.com"
-    }
-  ],
   "name": "cordova-plugin-file-transfer",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/apache/cordova-plugin-file-transfer.git"
