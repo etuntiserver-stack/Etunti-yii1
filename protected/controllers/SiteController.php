@@ -2896,13 +2896,27 @@ $(document).ready(function(){
 		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2019-04-01' AND '2019-04-01'
 	";
 	$lu = Mobile::model()->findAll($criteria);
+	echo '<table>';
+		echo '<tr>
+		<th>PVM</th>
+		<th>Aloitus</th>
+		<th>Aloitus korjattuna</th>
+		<th>Lopetus</th>
+		<th>Kohde</th>
+		<th>Työntekijä</th>
+		</tr>';
 	foreach($lu as $item){
-		if( (strtotime(date("H:i", strtotime($item->aloitan))) < strtotime('11:30')) and (strtotime(date("H:i", strtotime($item->aloitan))) > strtotime('06:30')) ){
-		echo date("d.m.Y", strtotime($item->aloitan)).' - <b>'.date("H:i", strtotime($item->aloitan)).'</b> - '.date("H:i", strtotime($item->loppui)).' '.$item->kohde_kannasta.', '.$item->tekijan_nimi.'  + 3 tuntia aloutusajaksi<br>';
+		if( strtotime(date("H:i", strtotime($item->aloitan))) < strtotime('11:30')  ){
+		echo '<tr>
+		<td>'.date("d.m.Y", strtotime($item->aloitan)).'</td>
+		<td>'.date("H:i", strtotime($item->aloitan)).'</td>
+		<td>'.date("H:i", strtotime($item->aloitan)).'</td>
+		<td>'.date("H:i", strtotime($item->loppui)).'</td>
+		<td>'.$item->kohde_kannasta.'</td>
+		<td>'.$item->tekijan_nimi.'</td>
+		</tr>';
 		}
-		if( (strtotime(date("H:i", strtotime($item->aloitan))) < strtotime('06:30'))  ){
-		echo date("d.m.Y", strtotime($item->aloitan)).' - <b>'.date("H:i", strtotime($item->aloitan)).'</b> - '.date("H:i", strtotime($item->loppui)).' '.$item->kohde_kannasta.', '.$item->tekijan_nimi.'  + 1 tunti aloutusajaksi<br>';
-		}
+	echo '</table>';
 	}
 		exit;
 	}
