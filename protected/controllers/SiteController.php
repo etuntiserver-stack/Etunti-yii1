@@ -2903,11 +2903,11 @@ $(document).ready(function(){
 	";
         $criteria->condition = " 
 		aloitan!='' AND loppui!=''
-		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2019-03-31' AND '2019-04-01'
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2019-03-30' AND '2019-04-01'
 	";
 	$lu = Mobile::model()->findAll($criteria);
 	foreach($lu as $item){
-		echo $item->kohde_kannasta.', '.$item->aloitan.' - '.$item->loppui.'<br>';
+		echo '<b>'.date("d.m.Y", strtotime($item->aloitan)).'</b> - '.$item->kohde_kannasta.', <b>'.date("H:i", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->loppui)).'</b><br>';
 	}
 		exit;
 	}
