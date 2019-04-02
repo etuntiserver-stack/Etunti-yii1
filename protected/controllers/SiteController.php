@@ -2903,7 +2903,7 @@ $(document).ready(function(){
 	";
         $criteria->condition = " 
 		aloitan!='' AND loppui!=''
-		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2019-03-30' AND '2019-04-01'
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2019-03-31' AND '2019-04-01'
 	";
 	$lu = Mobile::model()->findAll($criteria);
 	foreach($lu as $item){
