@@ -2906,7 +2906,7 @@ $(document).ready(function(){
 		<th>Työntekijä</th>
 		</tr>';
 	foreach($lu as $item){
-		if( strtotime(date("H:i", strtotime($item->aloitan))) < strtotime('11:30')  ){
+		if( strtotime(date("H:i", strtotime($item->aloitan))) < strtotime('13:00')  ){
 		echo '<tr>
 		<td>'.date("d.m.Y", strtotime($item->aloitan)).'</td>
 		<td>'.date("H:i", strtotime($item->aloitan)).'</td>
