@@ -2901,7 +2901,7 @@ $(document).ready(function(){
 		echo '<b>'.date("d.m.Y", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->loppui)).'</b> '.$item->kohde_kannasta.', '.$item->tekijan_nimi.'  + 3 tuntia aloutusajaksi<br>';
 		}
 		if( (strtotime(date("H:i", strtotime($item->aloitan))) < strtotime('06:30'))  ){
-		echo '<b>'.date("d.m.Y", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->loppui)).'</b> '.$item->kohde_kannasta.', '.$item->tekijan_nimi.'  + 1 tunti aloutusajaksi><br>';
+		echo '<b>'.date("d.m.Y", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->loppui)).'</b> '.$item->kohde_kannasta.', '.$item->tekijan_nimi.'  + 1 tunti aloutusajaksi<br>';
 		}
 	}
 		exit;
