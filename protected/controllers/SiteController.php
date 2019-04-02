@@ -2898,7 +2898,10 @@ $(document).ready(function(){
 	$lu = Mobile::model()->findAll($criteria);
 	foreach($lu as $item){
 		if( (strtotime(date("H:i", strtotime($item->aloitan))) < strtotime('11:30')) and (strtotime(date("H:i", strtotime($item->aloitan))) > strtotime('06:30')) ){
-		echo '<b>'.date("d.m.Y", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->loppui)).'</b> '.$item->kohde_kannasta.', '.$item->tekijan_nimi.'<br>';
+		echo '<b>'.date("d.m.Y", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->loppui)).'</b> '.$item->kohde_kannasta.', '.$item->tekijan_nimi.'  <h3>+ 3 tuntia aloutusajaksi</h3><br>';
+		}
+		if( (strtotime(date("H:i", strtotime($item->aloitan))) < strtotime('06:30'))  ){
+		echo '<b>'.date("d.m.Y", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->loppui)).'</b> '.$item->kohde_kannasta.', '.$item->tekijan_nimi.'  <h3>+ 1 tunti aloutusajaksi</h3><br>';
 		}
 	}
 		exit;
