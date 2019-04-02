@@ -3,7 +3,7 @@
 /* @var $model Viestinta */
 
 //print_r(Yii::app()->getSession()->getSessionId());
-//phpinfo();
+phpinfo();
 
 /*
 	function sprint($val){
