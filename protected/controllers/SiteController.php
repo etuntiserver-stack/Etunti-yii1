@@ -2888,7 +2888,7 @@ $(document).ready(function(){
 	}
 
 	public function actionTesti(){
-
+/*
 	Yii::app()->db1->setActive(false);
 	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$_GET['domain'];
 	$criteria = new CDbCriteria();
@@ -2919,5 +2919,6 @@ $(document).ready(function(){
 	}
 	echo '</table>';
 		exit;
+*/
 	}
 }
