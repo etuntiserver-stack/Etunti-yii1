@@ -133,10 +133,7 @@ $months=array(
                 </div>
               </div>
 
-
-
-
-
+	     <?php /* widjets.js on myos suljettu
              <!-- Pie Chart -->
               <div class="panel" id="p10">
                 <div class="panel-heading">
@@ -146,10 +143,7 @@ $months=array(
                   <div id="high-pie" style="width: 100%; height: 200px; margin: 0 auto"></div>
                 </div>
               </div>
-
-
-
-
+	     */ ?>
 
               <!-- Bar Graph -->
               <div class="panel" id="p12">

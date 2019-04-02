@@ -1348,7 +1348,7 @@
             // Init Chart Types
             demoHighColumns();
             demoHighBars();
-            demoHighPies();
+            //demoHighPies(); Suljettu 02.04.2019
             demoCircleGraphs();
 
 
