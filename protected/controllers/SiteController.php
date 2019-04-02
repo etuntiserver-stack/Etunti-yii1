@@ -2896,7 +2896,7 @@ $(document).ready(function(){
 		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2019-04-01' AND '2019-04-01'
 	";
 	$lu = Mobile::model()->findAll($criteria);
-	echo '<table border="1">';
+	echo '<table>';
 		echo '<tr>
 		<th>PVM</th>
 		<th>Aloitus</th>
@@ -2916,8 +2916,8 @@ $(document).ready(function(){
 		<td>'.$item->tekijan_nimi.'</td>
 		</tr>';
 		}
-	echo '</table>';
 	}
+	echo '</table>';
 		exit;
 	}
 }
