@@ -2897,7 +2897,7 @@ $(document).ready(function(){
 	";
 	$lu = Mobile::model()->findAll($criteria);
 	foreach($lu as $item){
-		if( date("Hi", strtotime($item->aloitan)) < date("Hi", strtotime('09:30')) or date("Hi", strtotime($item->aloitan)) > date("Hi", strtotime('11:30')) ){ continue; }
+		if( strtotime(date("H:i", strtotime($item->aloitan))) < strtotime('09:30') or strtotime(date("H:i", strtotime($item->aloitan))) > strtotime('11:30') ){ continue; }
 		echo '<b>'.date("d.m.Y", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->loppui)).'</b> '.$item->kohde_kannasta.', '.$item->tekijan_nimi.'<br>';
 	}
 		exit;
