@@ -2907,7 +2907,7 @@ $(document).ready(function(){
 	";
 	$lu = Mobile::model()->findAll($criteria);
 	foreach($lu as $item){
-		echo '<b>'.date("d.m.Y", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->loppui)).'</b> '.$item->kohde_kannasta.'<br>';
+		echo '<b>'.date("d.m.Y", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->aloitan)).' - '.date("H:i", strtotime($item->loppui)).'</b> '.$item->kohde_kannasta.', '.$item->tekijan_nimi.'<br>';
 	}
 		exit;
 	}
