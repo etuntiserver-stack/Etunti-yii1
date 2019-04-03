@@ -2524,6 +2524,13 @@ class TyovuorootController extends Controller
 			}
 			if($model->save()){
 
+				// <-- Edico viesti jos peruutettu
+				if( isset($model->kohteet->asiakas_id) ){
+					$edico_viesti = "Työvuoro on peruutettu.\n".$model->pvm.", ".$model->alku."-".$model->loppu;
+					Domainit::sendGCMeDico($model->kohteet->asiakas_id, Yii::t('main', 'Uusi viesti'), $edico_viesti, null);
+				}
+				//     Edico viesti jos peruutettu -->
+
 				// <-- Onko tyopari esitetty
 				$post_tyopaari = array();
 				if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)

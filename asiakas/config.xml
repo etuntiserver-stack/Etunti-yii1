@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="fi.etunti.dico" version="1.0.15" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="fi.etunti.dico" version="1.0.16" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>eDico</name>
     <description>
       EDICO-mobiili on helppo ja turvallinen tapa hoitaa asiakassuhteesi missä ja milloin tahansa. Sen käyttöönotto on nopeaa ja vaivatonta. EDICO-mobiilin lataaminen ja käyttö on asiakkaalle ilmaista. EDICO kulkee kätevästi mukanasi joka paikassa ja sillä asiointi sujuu juuri silloin kuin haluat.
@@ -31,6 +31,7 @@
         <icon density="xhdpi" src="res/android/icones/xhdpi.png" />
         <config-file parent="/manifest" target="AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
             <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+	    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
         </config-file>
 	<preference name="AndroidPersistentFileLocation" value="Compatibility" />
     </platform>

@@ -9,7 +9,9 @@
     "plugins": {
       "cordova-plugin-dialogs": {},
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-file-opener2": {},
+      "cordova-plugin-file-opener2": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
       "cordova-plugin-device": {},
       "cordova-plugin-fcm-with-dependecy-updated": {},
       "cordova-plugin-whitelist": {},

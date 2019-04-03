@@ -17,9 +17,6 @@
 	//console.log(loginFull.edico_tehdyt_tyot)
     } 
 
-
-
-
     //localStorage.clear();
     if(loginArr['palvelin']){
 		server = 'https://'+loginArr['palvelin']+'/';
@@ -31,6 +28,19 @@
     var versio = "";
     // Palvelin -->
 
+    document.addEventListener("deviceready", onServerReady3, true);
+    function onServerReady3() {
+	function showAppVersion() {
+	    cordova.getAppVersion(function(version) {
+	     if(device.platform !== 'iOS'){
+		  document.getElementById('versioBlock').style.display="block";
+		  document.getElementById('version').innerHTML = version;
+		  versio = version;
+	     }
+	    });
+	}
+	showAppVersion();
+    }
 
     if(localStorage.getItem('loginOK'))
     {
@@ -193,7 +203,9 @@ $(document).ready(function(){
       '</div>' +
 
       '<ul class="nav navbar-nav navbar-right">' +
-
+        '<li class="menu-merge">' +
+      '<a style="display:none" id="versioBlock">Versio: <span id="version" class="small"></span></a>' +
+	'</li>' +
         '<li class="dropdown menu-merge hidden" data-toggle="tooltip" data-placement="bottom" title="Valitse värit">' +
           '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
              '<span class="fa fa-eyedropper"></span> ' +
@@ -448,6 +460,5 @@ $(document).ready(function(){
         });
    }
    //     Kayttoehdot check -->
-
 
 });
