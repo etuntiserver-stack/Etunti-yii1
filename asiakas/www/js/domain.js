@@ -146,7 +146,7 @@
 		    // do something
 		}
 		navigator.notification.alert(
-		    data['Viesti']+' \nOlen katsonut',
+		    data['Viesti'],
 		    alertDismissed,
 		    'Viesti',
 		    'OK'

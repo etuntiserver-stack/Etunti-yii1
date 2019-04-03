@@ -25,6 +25,8 @@
     <platform name="android">
         <allow-intent href="market:*" />
         <icon src="icon.png" />
+	<resource-file src="google-services.json" target="src/release/google-services.json" />
+	<resource-file src="google-services.json" target="google-services.json" />
         <icon density="ldpi" src="res/android/icones/ldpi.png" />
         <icon density="mdpi" src="res/android/icones/mdpi.png" />
         <icon density="hdpi" src="res/android/icones/hdpi.png" />

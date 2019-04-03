@@ -2506,6 +2506,17 @@ class TyovuorootController extends Controller
 
 			$toistuva_id = $model->toistuva_id;
 
+			// <-- Edico viesti jos peruutettu
+			if( isset($model->kohteet->asiakas_id) 
+				and $model->kohde == $_POST['Tyovuoroot']['kohde']
+				and $model->peruutettu == 0 
+				and $_POST['Tyovuoroot']['peruutettu'] != 0)
+			{
+				$edico_viesti = "Työvuoro on peruutettu.\n".$model->pvm.", ".$model->alku."-".$model->loppu;
+				Domainit::sendGCMeDico($model->kohteet->asiakas_id, Yii::t('main', 'Uusi viesti'), $edico_viesti, null);
+			}
+			//     Edico viesti jos peruutettu -->
+
 			$model->attributes = $_POST['Tyovuoroot'];
 			if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
 				$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
@@ -2523,13 +2534,6 @@ class TyovuorootController extends Controller
 				$model->muistiinpano = '';
 			}
 			if($model->save()){
-
-				// <-- Edico viesti jos peruutettu
-				if( isset($model->kohteet->asiakas_id) ){
-					$edico_viesti = "Työvuoro on peruutettu.\n".$model->pvm.", ".$model->alku."-".$model->loppu;
-					Domainit::sendGCMeDico($model->kohteet->asiakas_id, Yii::t('main', 'Uusi viesti'), $edico_viesti, null);
-				}
-				//     Edico viesti jos peruutettu -->
 
 				// <-- Onko tyopari esitetty
 				$post_tyopaari = array();
