@@ -200,7 +200,7 @@ public $viesti;
 			  "Viesti": "'.$message.'"
 	                },
 	                "notification": {
-	                  "title": "'.$a->tyonantaja.': '.$subject.'",
+	                  "title": "'.$subject.'",
 	                  "body": "'.$message.'",
 	                  "sound": "default",
 	                  "click_action": "FCM_PLUGIN_ACTIVITY",

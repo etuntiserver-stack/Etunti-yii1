@@ -2512,7 +2512,7 @@ class TyovuorootController extends Controller
 				and $model->peruutettu == 0 
 				and $_POST['Tyovuoroot']['peruutettu'] != 0)
 			{
-				$edico_viesti = $_POST['Tyovuoroot']['pvm'].", ".$_POST['Tyovuoroot']['alku']."-".$_POST['Tyovuoroot']['loppu'];
+				$edico_viesti = Yii::t('main', 'Työvuoro on peruutettu').".\n".$_POST['Tyovuoroot']['pvm'].", ".$_POST['Tyovuoroot']['alku']."-".$_POST['Tyovuoroot']['loppu'];
 				Domainit::sendGCMeDico($model->kohteet->asiakas_id, Yii::t('main', 'Työvuoro on peruutettu'), $edico_viesti, null);
 			}
 			//     Edico viesti jos peruutettu -->
