@@ -22,8 +22,8 @@ if( isset($_GET['haku']) ){
 	$i=0;
 	$tl = array();
 	foreach($lu as $item){
-	$i++; if($i>11){break;}
 	$tl[$item->l_tunnit] = '<b>Aloitus:</b> '.date("d.m.Y H:i", strtotime($item->aloitan)).'  <b>Lopetus:</b> '.date("d.m.Y H:i", strtotime($item->loppui)).'  <span class="text-danger">Kesto: ('.$this->sprint($item->l_tunnit).')</span> '.$this->etuSukunimi($item->tid);
+	$i++; if($i>10){break;}
 	}
 	krsort($tl);
 	//     Luetut -->
@@ -70,8 +70,8 @@ if( isset($_GET['haku']) ){
 	$i=0;
 	$tt = array();
 	foreach($result as $item){
-	$i++; if($i>11){break;}
 	$tt[$item->l_tunnit] = '<b>Aloitus:</b> '.date("d.m.Y H:i", strtotime($item->aloitan)).'  <b>Lopetus:</b> '.date("d.m.Y H:i", strtotime($item->loppui)).'  <span class="text-danger">Kesto: ('.$this->sprint($item->l_tunnit).')</span> '.$this->etuSukunimi($item->tid);
+	$i++; if($i>10){break;}
 	}
 	krsort($tt);
 	//     Hyvaksytyt -->
