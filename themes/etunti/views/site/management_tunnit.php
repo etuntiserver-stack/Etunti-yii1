@@ -107,7 +107,7 @@ if( isset($_GET['haku']) ){
 	$tlp[] = '<b>Aloitus:</b> '.date("d.m.Y H:i", strtotime($item->aloitan)).'  <b>Lopetus:</b> '.date("d.m.Y H:i", strtotime($item->loppui)).'  <span class="text-danger">Kesto: ('.$this->sprint($item->l_tunnit).')</span> '.$this->etuSukunimi($item->tid);
 	$i++; if($i>10){break;}
 	}
-	krsort($tlp);
+	//krsort($tlp);
 	//     Luetut -->
 
 	// <-- Hyvaksytyt
@@ -238,6 +238,20 @@ if( isset($_GET['haku']) ){
 <div class="admin-form">
   <div class="panel heading-border">
    <div class="panel-body">
+
+	<table class="table table-bordered">
+	<tr>
+	<th><?=Yii::t('main', 'Keskimääräinen kesto')?></th>
+	<th><?=Yii::t('main', 'Isoin luettu kesto')?></th>
+	<th><?=Yii::t('main', 'Isoin hyväksytty kesto')?></th>
+	</tr>
+	<tr>
+	<td><?=$tlk?></td>
+	<td><?=$this->sprint(max(array_keys($tl)))?></td>
+	<td><?=$this->sprint(max(array_keys($tt)))?></td>
+	</tr>
+	</table>
+
 	<h2><?=Yii::t('main', '10 isommat kestot')?></h2>
 	<table class="table table-bordered">
 	<tr>
@@ -287,21 +301,7 @@ if( isset($_GET['haku']) ){
 	</tr>
 	</table>
 
-	<h2><?=Yii::t('main', 'Keskimääräinen kesto')?></h2>
-	<table class="table table-bordered">
-	<tr>
-	<th><?=Yii::t('main', 'Luetut')?></th>
-	<th><?=Yii::t('main', 'Hväksytyt')?></th>
-	</tr>
-	<tr>
-	<th>
-	<?=$tlk?>
-	</th>
-	<th>
-	<?=$tlk?>
-	</th>
-	</tr>
-	</table>
+
    </div>
   </div>
 </div>
