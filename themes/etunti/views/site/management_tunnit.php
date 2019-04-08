@@ -158,6 +158,26 @@ if( isset($_GET['haku']) ){
 	}
 	krsort($ttp);
 	//     Hyvaksytyt -->
+
+/* Keskimääräinen */
+	// <-- Luetut
+	$criteria = new CDbCriteria();
+       	$criteria->select = "
+		AVG(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit, t.*
+	";
+        $criteria->condition = " 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') < DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+		AND status!=1
+		AND deleted=0
+	";
+	$lup = Mobile::model()->find($criteria);
+	$tlk = '';
+	if(isset($lup->l_tunnit)){ 
+	$tlk = '<b>'.$this->sprint($lup->l_tunnit).'</b>';
+	}
+	//     Luetut -->
 }
 ?>
 
@@ -249,7 +269,6 @@ if( isset($_GET['haku']) ){
 	<th><?=Yii::t('main', 'Luetut')?></th>
 	<th><?=Yii::t('main', 'Hväksytyt')?></th>
 	</tr>
-
 	<tr>
 	<th>
 	<?php
@@ -264,6 +283,22 @@ if( isset($_GET['haku']) ){
 	echo $v.'<br>';
 	}
 	?>
+	</th>
+	</tr>
+	</table>
+
+	<h2><?=Yii::t('main', 'Keskimääräinen kesto')?></h2>
+	<table class="table table-bordered">
+	<tr>
+	<th><?=Yii::t('main', 'Luetut')?></th>
+	<th><?=Yii::t('main', 'Hväksytyt')?></th>
+	</tr>
+	<tr>
+	<th>
+	<?=$tlk?>
+	</th>
+	<th>
+	<?=$tlk?>
 	</th>
 	</tr>
 	</table>
