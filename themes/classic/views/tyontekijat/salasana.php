@@ -46,7 +46,7 @@
 <?php if($tilanne == 3) : ?>
 <div class="container">
 <div class="row">
-<div class="col-sm-6 col-sm-offset-3">
+<div class="col-sm-8 col-sm-offset-2">
 <p class="text-center"><h1>Käyttäjätunnus ja salasana on luotu.</h1> Lataa sovellus kaupasta ja aloita käyttö uusilla tunnuksilla.</p>
 </div><!--/col-sm-6-->
 </div><!--/row-->
@@ -56,9 +56,14 @@
 <script>
 $(document).ready(function(){
 
+  $("input").keyup(function(e){
+	checker();
+  });
+
   $("#passwordForm").submit(function(e){
 	if(!checker()){
-	   e.preventDefault();
+	   	e.preventDefault();
+		return false;
 	}
   });
 
