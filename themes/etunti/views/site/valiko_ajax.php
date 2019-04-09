@@ -213,7 +213,6 @@
 		 </div>
 		</div>';
 
-	}
 
 	$mod .= '
 	</center></p>
