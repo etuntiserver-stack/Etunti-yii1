@@ -858,11 +858,7 @@ class TyontekijatController extends Controller
 	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
 	; 
 	
-		$payrollrulegroupname = '';
-	if($modelTyosuhteet->palkka_tyyppi == 'kk')
-		$payrollrulegroupname = 'Kuukausipalkkalaiset';
-	if($modelTyosuhteet->palkka_tyyppi == 'h')
-		$payrollrulegroupname = 'Tuntipalkkalaiset, teknologiateollisuus';
+	$payrollrulegroupname = $modelTyosuhteet->palkka_tyyppi;
 
       	$lisat = '';
 	if($tila == 'add')
