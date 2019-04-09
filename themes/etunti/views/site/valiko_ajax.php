@@ -108,7 +108,7 @@
        </div><div class="col-sm-8">
         <p><center>';
 
-	   if(Yii::app()->user->adminStatus == 1){
+
 
 	       	$criteria = new CDbCriteria();
 		$criteria->condition = " select_type = '".$_POST['select_type']."' ";
@@ -213,8 +213,6 @@
 		 </div>
 		</div>';
 
-	} else {
-	$mod .= 'Sinulla ei ole tämän sivun saantiin tarvittavaa oikeutta.';
 	}
 
 	$mod .= '
