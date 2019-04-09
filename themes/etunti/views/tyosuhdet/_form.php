@@ -225,7 +225,7 @@ $model->tid = $_GET['id'];
 		}
 
 			$arr = json_decode($model->palkka_tyyppi);
-			echo '<select name="Tyosuhdet[palkka_tyyppi][]" class="palkka_tyyppi form-control" multiple title="Valitse">';
+			echo '<select name="Tyosuhdet[palkka_tyyppi]" class="form-control" title="Valitse">';
 			foreach($l as $data)
 			{
 				if(is_array($arr) and in_array($data->id, $arr))
@@ -243,20 +243,6 @@ $model->tid = $_GET['id'];
 		</span>
 	   </div>
 	</div>
-
-<script>
-$('.palkka_tyyppi').multiselect({
-	//inheritClass: true,
-	//enableFiltering: true,
-        includeSelectAllOption: true,
-	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
-	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
-	allSelectedText: '<?php echo Yii::t("main", "Ryhmät"); ?>',
-	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
-	numberDisplayed: 0,
-	buttonWidth: '100%',
-});
-</script>
 
 	<div class="section fill mb5">
 		<?php $model->tuntihinta = str_replace(",",".",$model->tuntihinta); ?>
