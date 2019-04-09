@@ -931,10 +931,6 @@ $xml = '
 			$this->redirect(array('index'));
 		}
 
-		if (strpos($result->ResponseStatus->Status[1], 'Palkkalaskelmatietoja ei löydy') !== false and $tila == 'edit') {
-			$this->netvisorTyontekija('add', $model);
-			$this->redirect(array('index'));
-		}
 
 		echo '<pre>';
 		print_r( $result );
