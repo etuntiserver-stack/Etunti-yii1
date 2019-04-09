@@ -623,6 +623,7 @@ $(document).delegate(".poistaRivit","click",function(){
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('sl', data['sl']);
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('spl', data['spl']);
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('ls', data['ls']);
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('vl', data['vl']);
 		//     Hyvaksyn nappin varten -->
 
 
