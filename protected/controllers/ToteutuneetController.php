@@ -333,7 +333,7 @@ class ToteutuneetController extends Controller
 		if($nimike == 'py') $collectorratio =  7;
 		if($nimike == 'el') $collectorratio =  4;
 
-
+		// Mita tehda sl ja ls kanssa en tieda. Ne ovat nyt 1 numerona 
 
 // <-- XML
 $xml = '
