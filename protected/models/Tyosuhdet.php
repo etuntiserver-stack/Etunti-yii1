@@ -115,6 +115,7 @@ class Tyosuhdet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('tid, alku, loppu, vktyoaika, nimike, palkkausmuoto, tuntihinta, matka_thinta, lippu_kuumaks, koe_loppu, koe_hinta, tuloraja_ajalle, perusprosentti, lisaprosentti, kuukaudessa, kahdessa_viikossa, viikossa, paivassa, atk_varten, yksi_tuloraja', 'required'),
+			array('alku, tuntihinta', 'required'),
 			array('tid, tyopvm_kk', 'numerical', 'integerOnly'=>true),
 			array('alku, loppu, koe_loppu', 'length', 'max'=>20),
 			array('vktyoaika, tuntihinta, matka_thinta, lippu_kuumaks, koe_hinta, perusprosentti, lisaprosentti, kuukaudessa, kahdessa_viikossa, viikossa, paivassa, atk_varten, yksi_tuloraja, palkka_tyyppi', 'length', 'max'=>10),
