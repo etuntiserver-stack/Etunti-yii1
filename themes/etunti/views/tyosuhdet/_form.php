@@ -228,10 +228,9 @@ $model->tid = $_GET['id'];
 			echo '<select name="Tyosuhdet[palkka_tyyppi]" class="form-control" title="Valitse">';
 			foreach($l as $data)
 			{
-				if(is_array($arr) and in_array($data->value, $arr))
+				if($data->value == $model->palkka_tyyppi)
 			    		echo '<option value="'.$data->value.'" selected>'.$data->value.'</option>';
-				elseif(!is_array($arr) and $model->palkka_tyyppi == $data->id)
-			    		echo '<option value="'.$data->value.'" selected>'.$data->value.'</option>';
+
 				else
 			    		echo '<option value="'.$data->value.'">'.$data->value.'</option>';
 			}
