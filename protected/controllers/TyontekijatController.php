@@ -865,7 +865,7 @@ class TyontekijatController extends Controller
 		$payrollrulegroupname = 'Tuntipalkkalaiset, teknologiateollisuus';
 
       	$lisat = '';
-	if($tila == 'add')
+	//if($tila == 'add')
       	$lisat .= '<employeenumber>'.$model->id.'</employeenumber>';
 
 // <-- XML
