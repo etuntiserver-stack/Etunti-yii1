@@ -1037,9 +1037,11 @@ $('.ryhmat').multiselect({
 			'tyoyo'=>Yii::t('main', 'Työtunnit yö'),
 			'tyosu'=>Yii::t('main', 'Työtunnit sunnuntai'),
 			'sl'=>Yii::t('main', 'Sairausajan palkka'),
+			'spl'=>Yii::t('main', 'Sairausajan palkaton'),
 			'ls'=>Yii::t('main', 'Lapsen sairaus'),
 			'py'=>Yii::t('main', 'Arkipyhät'),
 			'el'=>Yii::t('main', 'Erikoislauantait'),
+			'vl'=>Yii::t('main', 'Vuosilomat'),
 		);
 
 		$selected   = array();

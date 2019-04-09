@@ -524,6 +524,7 @@ function dateDiff($start, $end) {
 				sl		="'.(int)$sl.'"
 				spl		="'.(int)$spl.'"
 				ls		="'.(int)$ls.'"
+				vl		="'.(int)$vl.'"
 			></button>
 		   </td>
 		  </tr>';

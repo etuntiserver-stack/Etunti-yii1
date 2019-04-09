@@ -323,15 +323,38 @@ class ToteutuneetController extends Controller
 		else
 			$acceptancestatus = $asetukset->netvisor_acceptancestatus;
 
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			pvm='".date("d.m.Y", strtotime($model->pvm))."'
+			AND status=11
+			AND tyoajanlaatu like '%(".$nimike.")%'
+		";
+		$tv = Tyovuoroot::model()->find($criteria);
+		if(isset($tv->id) and $nimike == 'sl'){
+		$sl = (strtotime($tv->loppu)-strtotime($tv->alku))/3600;
+		}
+		if(isset($tv->id) and $nimike == 'spl'){
+		$spl = (strtotime($tv->loppu)-strtotime($tv->alku))/3600;
+		}
+		if(isset($tv->id) and $nimike == 'ls'){
+		$ls = (strtotime($tv->loppu)-strtotime($tv->alku))/3600;
+		}
+
+		if($nimike == 'vl'){
+			$tunti = 7.5;
+		}
+
 		$collectorratio = 1;
 		if($nimike == 'tyoilta') $collectorratio =  2;
 		if($nimike == 'matka') $collectorratio =  1;
 		if($nimike == 'tyoyo') $collectorratio =  3;
 		if($nimike == 'tyosu') $collectorratio =  5;
 		if($nimike == 'sl') $collectorratio =  8;
+		if($nimike == 'spl') $collectorratio =  10;
 		if($nimike == 'ls') $collectorratio =  9;
 		if($nimike == 'py') $collectorratio =  7;
 		if($nimike == 'el') $collectorratio =  4;
+		if($nimike == 'vl') $collectorratio =  11;
 
 		// Mita tehda sl ja ls kanssa en tieda. Ne ovat nyt 1 numerona 
 

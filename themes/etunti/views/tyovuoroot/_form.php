@@ -376,7 +376,7 @@ $(".muokaValiko").click(function() {
  function vuosilomat(val){
 	if(val == 11){
 		$("#1_tila input, #1_tila select").attr('readonly', true);
-		$("#alku, #loppu").val('00:00').attr('readonly', true);
+		$("#alku, #loppu").val('00:00').removeAttr('readonly');
 		$('#Tyovuoroot_tyoajanmerkinta').val('Normaali/');
 		$('#Tyovuoroot_status').val('11').removeAttr('readonly');
 		$('#Tyovuoroot_osoite').val('');
