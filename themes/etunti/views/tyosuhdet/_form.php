@@ -206,15 +206,57 @@ $model->tid = $_GET['id'];
 		<?php echo $form->error($model,'palkkausmuoto'); ?>
 	</div>
 
-	<div class="section fill mb5 tyyppi">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'palkka_tyyppi'); ?>
+
+	   <div class="input-group">
 		<?php
-		$list = array('kk'=>Yii::t('main', 'Kuukausipalkka'),'h'=>Yii::t('main', 'Tuntipalkka'));
-        	echo $form->dropDownList($model, 'palkka_tyyppi', $list,
-		array('class'=>'form-control'));	
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='palkka_tyyppi' ",array('order' => "select_type"));
+		if(count($l) == 0)
+      		{
+			$new_val = new Valikkoot;
+			$new_val->select_type = "palkka_tyyppi";
+			$new_val->value = "Tuntipalkkalaiset";
+			if($new_val->save())
+	      			$l = Valikkoot::model()->findAll(" select_type='palkka_tyyppi' ",array('order' => "select_type"));
+			else
+				var_dump($new_val->getErrors());
+		}
+
+			$arr = json_decode($model->palkka_tyyppi);
+			echo '<select name="Tyosuhdet[palkka_tyyppi][]" class="palkka_tyyppi form-control" multiple title="Valitse">';
+			foreach($l as $data)
+			{
+				if(is_array($arr) and in_array($data->id, $arr))
+			    		echo '<option value="'.$data->id.'" selected>'.$data->value.'</option>';
+				elseif(!is_array($arr) and $model->palkka_tyyppi == $data->id)
+			    		echo '<option value="'.$data->id.'" selected>'.$data->value.'</option>';
+				else
+			    		echo '<option value="'.$data->id.'">'.$data->value.'</option>';
+			}
+			echo '</select>';
+		
         	?>
-		<?php echo $form->error($model,'palkka_tyyppi'); ?>
+		<span class="input-group-btn">
+			<span class="btn btn-primary myBgColors muokaValiko" for="palkka_tyyppi"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
+	   </div>
 	</div>
+
+<script>
+$('.palkka_tyyppi').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Ryhmät"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+});
+</script>
 
 	<div class="section fill mb5">
 		<?php $model->tuntihinta = str_replace(",",".",$model->tuntihinta); ?>

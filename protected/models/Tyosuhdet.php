@@ -44,7 +44,7 @@ class Tyosuhdet extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'sivex_tyosuhdet';
-		$check_this_table = false;
+		$check_this_table = true;
 		unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -64,7 +64,6 @@ class Tyosuhdet extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
                      'tid' => 'int(7) ',
                      'alku' => 'varchar(20) ',
                      'loppu' => 'varchar(20) ',
@@ -89,15 +88,15 @@ class Tyosuhdet extends DB2ActiveRecord
                      'palkka_tyyppi' => 'varchar(10) ',
                      'veronumero' => 'varchar(255) ',
 
-
-
-
-
 		);
 
 		foreach($table_structure as $key=>$value)
 		{
-			if (!isset($table->columns[$key])) {
+			if(isset($table->columns[$key]) and $key == 'palkka_tyyppi' and $value == 'varchar(10) ') {
+				Yii::app()->db1->createCommand()->alterColumn($tb_name, $key, 'varchar(255) DEFAULT NULL');
+			}
+
+			if(!isset($table->columns[$key])) {
 				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
 			}
 		}	
