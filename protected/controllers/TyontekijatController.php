@@ -424,8 +424,7 @@ class TyontekijatController extends Controller
 		if(isset($model->id) and isset($_POST['password1']) and $_POST['password1'] == $_POST['password2'])
 		{
 			Tyontekijat::model()->updateByPk($model->id, array('salasana' => $_POST['password1'], 'token' => ''));
-			$tilanne = 2;
-			$this->redirect(array('/site/index'));
+			$tilanne = 3;
 		}
 
 		$this->render('salasana', array('tilanne' => $tilanne));

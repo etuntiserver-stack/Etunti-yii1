@@ -31,15 +31,23 @@
   </div>
  </div>
 </div>
-
 <?php endif; ?>
-
 
 <?php if($tilanne == 2) : ?>
 <div class="container">
 <div class="row">
 <div class="col-sm-6 col-sm-offset-3">
 <p class="text-center"><h1>Sivu on vanhentunut</h1></p>
+</div><!--/col-sm-6-->
+</div><!--/row-->
+</div>
+<?php endif; ?>
+
+<?php if($tilanne == 3) : ?>
+<div class="container">
+<div class="row">
+<div class="col-sm-6 col-sm-offset-3">
+<p class="text-center"><h1>Käyttäjätunnus ja salasana on luotu.</h1> Lataa sovellus kaupasta ja aloita käyttö uusilla tunnuksilla.</p>
 </div><!--/col-sm-6-->
 </div><!--/row-->
 </div>
