@@ -591,19 +591,6 @@ class TyontekijatController extends Controller
 		}
 
 
-/*
-	       	$criteria = new CDbCriteria();
-		$criteria->condition = " 
-			tid='".$id."' 
-		";
-
-		$dataToteutuneet=new CActiveDataProvider('Mobile', array(
-			'criteria'=>$criteria,
-			//'pagination'=>false
-		));
-		$dataToteutuneet->pagination->pageSize = 50;
-*/
-
 		$this->render('update',array(
 			'model'=>$model,
 			//'dataToteutuneet'=>$dataToteutuneet
