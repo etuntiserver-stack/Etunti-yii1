@@ -1889,6 +1889,25 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		return $result;
 	}
 
+	public function TidfromtoSairausTunnit($from,$to,$tid,$sairaus)
+	{
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+		$return = 0;
+       		$criteria = new CDbCriteria();
+		$criteria->select = " SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit ";
+	        $criteria->condition = " 
+			tid='".$tid."'
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND tyoajanlaatu LIKE '%(".$sairaus.")%'
+		";
+		$vl = Tyovuoroot::model()->find($criteria);
+
+		if(isset($vl->l_tunnit)){ $return = $vl->l_tunnit; }
+		return $return;
+	}
+
 	public function TidfromtoSairausTP($from,$to,$tid,$sairaus)
 	{
 		$from = date("Y-m-d", strtotime($from));

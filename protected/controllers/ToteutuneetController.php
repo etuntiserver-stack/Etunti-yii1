@@ -323,27 +323,6 @@ class ToteutuneetController extends Controller
 		else
 			$acceptancestatus = $asetukset->netvisor_acceptancestatus;
 
-		$criteria=new CDbCriteria;
-		$criteria->condition = " 
-			pvm='".date("d.m.Y", strtotime($model->pvm))."'
-			AND status=11
-			AND tyoajanlaatu like '%(".$nimike.")%'
-		";
-		$tv = Tyovuoroot::model()->find($criteria);
-		if(isset($tv->id) and $nimike == 'sl'){
-		$sl = (strtotime($tv->loppu)-strtotime($tv->alku))/3600;
-		}
-		if(isset($tv->id) and $nimike == 'spl'){
-		$spl = (strtotime($tv->loppu)-strtotime($tv->alku))/3600;
-		}
-		if(isset($tv->id) and $nimike == 'ls'){
-		$ls = (strtotime($tv->loppu)-strtotime($tv->alku))/3600;
-		}
-
-		if($nimike == 'vl'){
-			$tunti = 7.5;
-		}
-
 		$collectorratio = 1;
 		if($nimike == 'tyoilta') $collectorratio =  2;
 		if($nimike == 'matka') $collectorratio =  1;
@@ -664,9 +643,9 @@ $xml = '
 		//     Ilta, Yo, Sunnuntai -->
 
 		// <-- SPL, SL, LS
-		$spl 	= $mobile[0]->TidfromtoSairausTP($pvm,$pvm,$tid,'SPL'); // Palkaton
-		$sl 	= $mobile[0]->TidfromtoSairausTP($pvm,$pvm,$tid,'SL'); // Palkallinen
-		$ls 	= $mobile[0]->TidfromtoSairausTP($pvm,$pvm,$tid,'LS'); // Lapsen sairaus
+		$spl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'SPL'); // Palkaton
+		$sl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'SL'); // Palkallinen
+		$ls 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'LS'); // Lapsen sairaus
 		//     SPL, SL, LS -->
 
 
