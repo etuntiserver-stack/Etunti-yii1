@@ -203,29 +203,22 @@ class ToteutuneetController extends Controller
 			$lastArr = array();
 			foreach($_POST['json'][0] as $key=>$value)
 			{
-
-
-				if($value > 0 and in_array($key,$mitaLahetetaan) )
-				{
+				if($value > 0 and in_array($key,$mitaLahetetaan) ){
+					if($key == 'vl' ){
+						$value = 25200; // 7.5 tuntia
+					}
 					$return = array();
-					//$lastArr[] = array($key=>$value);
-
 					$return = $this->netvisorWorkday($key,$value,$model);
 					if(isset($return['statusOK'])){
 						$update = true;
 						$lastArr[$key] = $value;
 					}
-
 					if(isset($return['statusError'])){
 						echo json_encode($return['statusError']);
 						exit;
 					}
-
 				}
-
 			}
-
-
 
 			if($update == true)
 			{
