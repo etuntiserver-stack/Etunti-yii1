@@ -23,7 +23,8 @@
  $array = array
  (
 	'asetukset'=>array(0=>null,1=>null,2=>'Asetukset ja käyttöoikeudet',3=>null),
-	'tyoryhmat'=>array(4=>'Työryhmät järjestelmänvalvoja'), //0=>'Näytä työryhmät',1=>'Luo työryhmät',2=>'Muokaa työryhmät',3=>'Poista työryhmät',
+	'tyoryhmat'=>array(4=>'Työryhmät järjestelmänvalvoja'),
+	'pudotusvalikot'=>array(4=>'Pudotusvalikot'),
 	'yrityksentiedot'=>array(0=>null,1=>null,2=>'Muokaa yrityksentiedot',3=>null),
 	'henkilotunnukset'=>array(0=>null,1=>null,2=>'Henkilötunnukset',3=>null),
 	'ryhmat'=>array(0=>'Käyttöoikeusryhmät taulu',1=>'Luo käyttöoikeusryhmä',2=>'Muokaa käyttöoikeusryhmiä',3=>null),
@@ -34,7 +35,6 @@
 	'administrators'=>array(0=>'Järjestelmänvalvoja taulu',1=>'Luo järjestelmänvalvoja',2=>'Muokaa järjestelmänvalvoja',3=>'Poista järjestelmänvalvoja'),
 	'mallitiedostot'=>array(0=>null,1=>null,2=>'Mallitiedostot',3=>null),
 	'lasku'=>array(0=>'Laskutus taulu',1=>'Luo lasku',2=>'Muokaa lasku',3=>'Poista lasku'),
-
  );
 
 	$tas = '';

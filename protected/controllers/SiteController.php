@@ -1584,7 +1584,6 @@ class SiteController extends Controller
 	public function actionValiko()
 	{
 
-	
 $mod = '
 	<input type="hidden" id="select_type" value="'.$_POST['select_type'].'">
 	<div id="result"></div>';
@@ -1613,6 +1612,11 @@ $(document).ready(function(){
 
 	public function actionValiko_ajax()
 	{
+		// <-- Oikeudet
+		$checkOikeus = "pudotusvalikot_4_".Yii::app()->user->adminStatus;
+		$this->checkOikeus($checkOikeus, true);
+		//  Oikeudet -->
+
 		$this->renderPartial('valiko_ajax');
 	}
 
@@ -2330,7 +2334,7 @@ $(document).ready(function(){
 	}
 
 
-	public function checkOikeus($pyynto)
+	public function checkOikeus($pyynto, $ajax=null)
 	{
 	   $return = '';
 	   $asetukset = Asetukset::model()->findbypk(1);
@@ -2338,11 +2342,11 @@ $(document).ready(function(){
 	   if (!preg_match("/".$pyynto."/i", $oikeudet) and Yii::app()->user->username != 'admin') {
 
 	      	$return = '
-		<link href="'.Yii::app()->request->baseUrl.'/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		'.(($ajax==null)?'<link href="'.Yii::app()->request->baseUrl.'/css/bootstrap.min.css" rel="stylesheet" type="text/css">':'').'
 		<br>
 		<div class="col-sm-6 col-sm-offset-3">
 		 <center>
-		  <div class="alert alert-warning">
+		  <div class="alert bg-warning">
 			<h2>Sinulla ei ole tarvittavia oikeuksia!</h2>
 			<p>"admin" tunnuksella saa vaihda oikeuksia asetuksessa</p>
 		  </div>
