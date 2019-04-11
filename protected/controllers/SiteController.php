@@ -33,11 +33,11 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array('etunnin_asiakkaat', 'update_etunnin_asiakas', 'etunnin_asiakas_kk', 'laheta_et_kirje', 'etunnin_asiakas_kk_laskuri', 'delete_etunnin_asiakas', 'errorlog'),
+				'actions'=>array('etunnin_asiakkaat', 'update_etunnin_asiakas', 'etunnin_asiakas_kk', 'laheta_et_kirje', 'etunnin_asiakas_kk_laskuri', 'delete_etunnin_asiakas', 'errorlog', 'trl_asiakkaat'),
                 		'expression'=>"Yii::app()->controller->isDigisten()",
 			),
 			array('allow', 
-				'actions'=>array( 'error_custom', 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout', 'salasanan_palauttaminen', 'change_password'),
+				'actions'=>array( 'error_custom', 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout', 'salasanan_palauttaminen', 'change_password', 'trl_login', 'trl'),
 				'users'=>array('*'),
 			),
 			array('allow', 
@@ -2889,6 +2889,23 @@ $(document).ready(function(){
 		    }
 		}
 		return false;
+	}
+
+	public function actionTrl_login()
+	{
+		Yii::app()->theme = 'classic';
+		$this->render('trl_login');
+	}
+
+	public function actionTrl()
+	{
+		Yii::app()->theme = 'classic';
+		$this->render('trl');
+	}
+
+	public function actionTrl_asiakkaat()
+	{
+		$this->render('trl_asiakkaat');
 	}
 
 	public function actionTesti(){
