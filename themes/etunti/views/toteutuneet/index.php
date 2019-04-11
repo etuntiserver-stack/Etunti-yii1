@@ -829,7 +829,7 @@ $(document).ready(function(){
  }
 
 
- $('.did').append('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:-15px;  font-size: 130%" data-toggle="tooltip" data-placement="top" title="Siirrä toteutuun"></i>');
+ $('.tyovuoro').append('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:-15px;  font-size: 130%" data-toggle="tooltip" data-placement="top" title="Siirrä toteutuun"></i>');
 
 
 $( ".sirraToteutuun" ).tooltip({
