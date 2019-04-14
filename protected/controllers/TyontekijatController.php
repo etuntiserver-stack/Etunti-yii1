@@ -796,6 +796,13 @@ class TyontekijatController extends Controller
 
 		$modelTyosuhteet = Tyosuhdet::model()->find(" tid='".$model->id."' ");
 
+		if(!isset($modelTyosuhteet->id)){
+		echo '<pre>';
+		print_r( 'Työsuhteet puutuu.' );
+		echo '</pre>';
+		exit;
+		}
+
 		$return = '';
 		$site = Yii::app()->createController('Site');
 		$n = $site[0]->netvisorYhteys();
