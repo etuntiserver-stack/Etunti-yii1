@@ -1277,14 +1277,6 @@ if($site[0]->checkEdicoViestit()){ $bell = '<i class="fa fa-bell text-danger"></
             </a>
             <ul class="nav sub-nav">
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/trl_asiakkaat">
-                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Tarjouslaskenta asiakkaat'); ?></a>
-              </li>
-              <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etunnin_asiakkaat">
-                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Etunnin domainit'); ?></a>
-              </li>
-              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/digistenTunnitKk">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Digisten tunnit kk'); ?></a>
               </li>
