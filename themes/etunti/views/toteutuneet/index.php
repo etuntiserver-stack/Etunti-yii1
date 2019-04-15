@@ -445,19 +445,8 @@ function dateDiff($start, $end) {
     $spl 	= $totpvmtid['spl']; // Palkaton
     $sl 	= $totpvmtid['sl']; // Palkallinen
     $ls 	= $totpvmtid['ls']; // Lapsen sairaus
-
-    $mVuosilomaVL = $mobile[0]->TidPvmVuosiloma($date,$tid,'VL');
-    $mVuosilomaVKL = $mobile[0]->TidPvmVuosiloma($date,$tid,'VKL');
-
-    if(isset($mVuosilomaVL['count']))
-    {
-    	$vl = $mVuosilomaVL['count'];
-    }
-
-    if(isset($mVuosilomaVKL['count']))
-    {
-    	$vkl = $mVuosilomaVKL['count'];
-    }
+    $vl 	= $totpvmtid['vl']; // Vuosiloma
+    $vkl 	= $totpvmtid['vkl']; // Viikkolomapaiva
 
     $yhtSPL 	+= $spl;
     $yhtSL 	+= $sl;
@@ -503,8 +492,8 @@ function dateDiff($start, $end) {
 		   <td><span class="allaSL" total="'.(int)$sl.'">'.$this->sprint($sl).'</span></td>
 		   <td><span class="allaSPL" total="'.(int)$spl.'">'.$this->sprint($spl).'</span></td>
 		   <td><span class="allaLS" total="'.(int)$ls.'">'.$this->sprint($ls).'</span></td>
-		   <td><span class="allaVL" total="'.(int)$vl.'">'.$vl.'</span></td>
-		   <td><span class="allaVKL" total="'.(int)$vkl.'">'.$vkl.'</span></td>
+		   <td><span class="allaVL" total="'.(int)$vl.'">'.$this->sprint($vl).'</span></td>
+		   <td><span class="allaVKL" total="'.(int)$vkl.'">'.$this->sprint($vkl).'</span></td>
 		  </tr>';
 		 if($asetukset->netvisor_kaytto == 1 and ($asetukset->netvisor_mita_onkayttossa == 1 or $asetukset->netvisor_mita_onkayttossa == 2)) { 
 		  echo ' 
@@ -604,8 +593,8 @@ function dateDiff($start, $end) {
 		   <td class="SLWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtSLWeek).'</td>
 		   <td class="SPLWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtSPLWeek).'</td>
 		   <td class="LSWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtLSWeek).'</td>
-		   <td class="VLWeek_'.date("W",strtotime($date)).'">'.$yhtVLWeek.'</td>
-		   <td class="VKLWeek_'.date("W",strtotime($date)).'">'.$yhtVKLWeek.'</td>
+		   <td class="VLWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtVLWeek).'</td>
+		   <td class="VKLWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtVKLWeek).'</td>
 		  </tr>
 		</table>
 	</td></tr>';
@@ -676,8 +665,8 @@ function dateDiff($start, $end) {
 		   <td><span class="SLFoot"><?php echo $this->sprint($yhtSL); ?></span></td>
 		   <td><span class="SPLFoot"><?php echo $this->sprint($yhtSPL); ?></span></td>
 		   <td><span class="LSFoot"><?php echo $this->sprint($yhtLS); ?></span></td>
-		   <td><span class="VLFoot"><?php echo $yhtVL; ?></span></td>
-		   <td><span class="VKLFoot"><?php echo $yhtVKL; ?></span></td>
+		   <td><span class="VLFoot"><?php echo $this->sprint($yhtVL); ?></span></td>
+		   <td><span class="VKLFoot"><?php echo $this->sprint($yhtVKL); ?></span></td>
 		  </tr>
 		</table>
 	</td></tr>

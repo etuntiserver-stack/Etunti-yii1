@@ -353,13 +353,17 @@ $(".muokaValiko").click(function() {
 /* valikot */
 
  $('#Tyovuoroot_tyoajanlaatu').change(function(){
-	if($(this).val() !== ''){
+	if($('option:selected', this).val() !== ''){
 		$('#Tyovuoroot_kohde').val('');
 		$('#Tyovuoroot_osoite').val('');
 		$('#Tyovuoroot_postinumero').val('');
 		$('#Tyovuoroot_postitoimipaikka').val('');
 		$('#alku').val('00:00');
 		$('#loppu').val('00:00');
+	}
+	if( $('option:selected', this).text() == '(VL) Vuosiloma' ){
+		$("#alku").val('08:00').attr('readonly', true);
+		$("#loppu").val('15:30').attr('readonly', true);
 	}
  });
 

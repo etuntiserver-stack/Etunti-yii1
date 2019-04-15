@@ -204,9 +204,6 @@ class ToteutuneetController extends Controller
 			foreach($_POST['json'][0] as $key=>$value)
 			{
 				if($value > 0 and in_array($key,$mitaLahetetaan) ){
-					if($key == 'vl' ){
-						$value = 25200; // 7.5 tuntia
-					}
 					$return = array();
 					$return = $this->netvisorWorkday($key,$value,$model);
 					if(isset($return['statusOK'])){
@@ -639,6 +636,8 @@ $xml = '
 		$spl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'SPL'); // Palkaton
 		$sl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'SL'); // Palkallinen
 		$ls 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'LS'); // Lapsen sairaus
+		$vl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'VL'); // Vuosiloma
+		$vkl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'VKL'); // Viikkolomapaiva
 		//     SPL, SL, LS -->
 
 
@@ -651,6 +650,8 @@ $xml = '
 			'spl'=>(int)$spl,
 			'sl'=>(int)$sl,
 			'ls'=>(int)$ls,
+			'vl'=>(int)$vl,
+			'vkl'=>(int)$vkl,
 			'tyotunnit'=>$tyotunnit,
 			'matkat'=>$matkat,
 			'lounaat'=>$lounaat,
