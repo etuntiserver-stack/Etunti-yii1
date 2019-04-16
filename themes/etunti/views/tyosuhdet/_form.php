@@ -166,7 +166,7 @@ $model->tid = $_GET['id'];
 		<?php echo $form->hiddenField($model,'tid'); ?>
 <?php if($laaja == 1) : ?>
 <div class="row">
-  <div class="col-sm-3">
+  <div class="col-sm-4">
   <legend>
     <h2><?php echo Yii::t('main', 'TYÖSUHTEET'); ?></h2>
   </legend>
@@ -274,9 +274,9 @@ $model->tid = $_GET['id'];
 		<?php echo $form->error($model,'koe_hinta'); ?>
 	</div>
 
-  </div><div class="col-sm-3">
+  </div><div class="col-sm-4">
   <legend>
-    <h2><?php echo Yii::t('main', 'VEROPROSENTTI'); ?></h2>
+    <h2><?php echo Yii::t('main', 'Tiedot palkan maksua varten.'); ?></h2>
   </legend>
 
 	<div class="section fill mb5">
@@ -338,6 +338,35 @@ $model->tid = $_GET['id'];
 		<?php echo $form->textField($model,'yksi_tuloraja',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'yksi_tuloraja'); ?>
 	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyoelakevakuutuksen_tyyppi'); ?>
+		<?php
+		$list = array(1 =>'Tyel', 2 => 'MYEL', 3 => 'YEL', 4 => 'Ei eläkevakuutettu' );
+        	echo $form->dropDownList($model, 'tyoelakevakuutuksen_tyyppi', $list,
+		array('class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'tyoelakevakuutuksen_tyyppi'); ?>
+	</div>
+	
+	<legend><?php echo Yii::t('main', 'Työttömyysvakuutus'); ?></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyottomyysvakuutus_tyyppi'); ?>
+		<?php
+		$list = array(
+			'automatichandling' =>'Automaattinen käsittely',
+			'under17yearsold' =>'Alle 17-vuotias',
+			'17to64yearsold' =>'17-64 vuotias',
+			'over65yearsold' =>'yli 65-vuotias',
+			'partowner' =>'osaomistaja',
+		);
+        	echo $form->dropDownList($model, 'tyottomyysvakuutus_tyyppi', $list,
+		array('class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'tyottomyysvakuutus_tyyppi'); ?>
+	</div>
+
   </div><div class="col-sm-4">
   <legend>
     <h2><?php echo Yii::t('main', 'Työsuhteet historia'); ?></h2>

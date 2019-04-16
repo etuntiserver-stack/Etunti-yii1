@@ -143,7 +143,7 @@ public $tunnus;
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tekijan_nimi, aktiivinen', 'required'),
+			array('tekijan_nimi, aktiivinen, sukunimi', 'required'),
 			array('tekijan_pankkitili, tekijan_konttori, ammattinimike, tekijan_henkilotunnus', 'netvisorCheck', 'on'=>'insert, update'),
 			array('online_varauksen_valmina, ilmoitus_merkkipaivasta_vuosi, tyontekijan_numero, mobiili, app_naytta_osoitekenta', 'numerical', 'integerOnly'=>true),
 			array('imei', 'length', 'max'=>100),
@@ -151,7 +151,7 @@ public $tunnus;
 			array('tekijan_henkilotunnus, tekijan_puh, tekijan_lanka_puh', 'length', 'max'=>20),
 			array('tekijan_email, tekijan_ptoimipaikka, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_konttori, aktiivinen', 'length', 'max'=>50),
 			array('tekijan_pnumero', 'length', 'max'=>7),
-			array('sukunimi, ammattinimike, token', 'length', 'max'=>255),
+			array('ammattinimike, token', 'length', 'max'=>255),
 			array('ayjasenyys', 'length', 'max'=>10),
 			array('kortit, tekijan_muisti, tekijan_tietoja, tietoja_onlinevarauksen', 'length', 'max'=>2000),
 			array('gcm_reg_id, position, kortit_voimassaolo, tyoryhma', 'length', 'max'=>500),

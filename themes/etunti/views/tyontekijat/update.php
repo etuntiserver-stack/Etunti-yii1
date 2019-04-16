@@ -80,6 +80,14 @@ $laaja = $site[0]->checkOikeusFields($checkLaaja);
       	      <input type="submit" name="tulosta" class="btn btn-success myBgColors" value="PDF">
      	      </form>
   	     <!-- tulostus -->
+
+	    <?php     
+		echo CHtml::link("poista", '#', array(
+		'submit'=>array('delete', "id"=>$model->id), 
+		'confirm' => 'Haluatko varmaasti poistaa?',
+		'class'=>'btn btn-primary myBgColors'
+		));
+	    ?>
 	    </div>
            </div>
 

@@ -87,7 +87,8 @@ class Tyosuhdet extends DB2ActiveRecord
                      'tyopvm_kk' => 'int(2) ',
                      'palkka_tyyppi' => 'varchar(10) ',
                      'veronumero' => 'varchar(255) ',
-
+		     'tyoelakevakuutuksen_tyyppi' => 'int(2) DEFAULT NULL',
+		     'tyottomyysvakuutus_tyyppi' => 'varchar(255) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -115,13 +116,13 @@ class Tyosuhdet extends DB2ActiveRecord
 		return array(
 			//array('tid, alku, loppu, vktyoaika, nimike, palkkausmuoto, tuntihinta, matka_thinta, lippu_kuumaks, koe_loppu, koe_hinta, tuloraja_ajalle, perusprosentti, lisaprosentti, kuukaudessa, kahdessa_viikossa, viikossa, paivassa, atk_varten, yksi_tuloraja', 'required'),
 			array('alku, tuntihinta', 'required'),
-			array('tid, tyopvm_kk', 'numerical', 'integerOnly'=>true),
+			array('tid, tyopvm_kk, tyoelakevakuutuksen_tyyppi', 'numerical', 'integerOnly'=>true),
 			array('alku, loppu, koe_loppu', 'length', 'max'=>20),
-			array('vktyoaika, tuntihinta, matka_thinta, lippu_kuumaks, koe_hinta, perusprosentti, lisaprosentti, kuukaudessa, kahdessa_viikossa, viikossa, paivassa, atk_varten, yksi_tuloraja', 'length', 'max'=>10),
+			array('vktyoaika, tuntihinta, matka_thinta, lippu_kuumaks, koe_hinta, perusprosentti, lisaprosentti, kuukaudessa, kahdessa_viikossa, viikossa, paivassa, atk_varten, yksi_tuloraja, tyottomyysvakuutus_tyyppi', 'length', 'max'=>10),
 			array('nimike', 'length', 'max'=>40),
 			array('palkkausmuoto', 'length', 'max'=>30),
 			array('tuloraja_ajalle', 'length', 'max'=>100),
-			array('veronumero, palkka_tyyppi', 'length', 'max'=>255),
+			array('veronumero, palkka_tyyppi, tyottomyysvakuutus_tyyppi', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, tid, alku, loppu, vktyoaika, nimike, palkkausmuoto, tuntihinta, matka_thinta, lippu_kuumaks, koe_loppu, koe_hinta, tuloraja_ajalle, perusprosentti, lisaprosentti, kuukaudessa, kahdessa_viikossa, viikossa, paivassa, atk_varten, yksi_tuloraja', 'safe', 'on'=>'search'),
@@ -168,6 +169,8 @@ class Tyosuhdet extends DB2ActiveRecord
 			'yksi_tuloraja' => Yii::t('main', 'B Ennakonpidätys yhden tulorajan mukaan'),
 			'tyopvm_kk'=> Yii::t('main', 'Työpäiviä kuukaudessa'),
 			'palkka_tyyppi'=>Yii::t('main', 'Palkkatyyppi'),
+			'tyoelakevakuutuksen_tyyppi' => Yii::t('main', 'Työeläkevakuutuksen tyyppi'),
+			'tyottomyysvakuutus_tyyppi' => Yii::t('main', 'Тyöttömyysvakuutus tyyppi'),
 		);
 	}
 

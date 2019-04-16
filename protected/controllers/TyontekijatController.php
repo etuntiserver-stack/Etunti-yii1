@@ -375,6 +375,21 @@ class TyontekijatController extends Controller
 			if($model->save())
 			{
 
+				$modelTyosuhteet = Tyosuhdet::model()->find(" tid='".$model->id."' ");
+				if(!isset($modelTyosuhteet->id)){
+					$tsnew = new Tyosuhdet;
+					$tsnew->tid = $model->id;
+					$tsnew->alku = date("d.m.Y");
+					$tsnew->tuntihinta = 35;
+					if(!$tsnew->save()){
+						var_dump($tsnew->getErrors());
+						Tyontekijat::model()->deletebypk($model->id);
+						exit;
+					}
+					$this->redirect(array('update', 'id' => $model->id));
+					exit;
+				}
+
 				// <-- LOG
 				if( isset($model->id) )
 				{
@@ -639,6 +654,8 @@ class TyontekijatController extends Controller
 	   unlink(Yii::app()->basePath.$filename);
 
 		$this->loadModel($id)->delete();
+		$ts = Tyosuhdet::model()->find(" tid='".$id."' ");
+		if( isset($ts->id) ){ Tyosuhdet::model()->deletebypk($ts->id); }
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
@@ -796,13 +813,6 @@ class TyontekijatController extends Controller
 
 		$modelTyosuhteet = Tyosuhdet::model()->find(" tid='".$model->id."' ");
 
-		if(!isset($modelTyosuhteet->id)){
-		echo '<pre>';
-		print_r( 'Työsuhteet puutuu.' );
-		echo '</pre>';
-		exit;
-		}
-
 		$return = '';
 		$site = Yii::app()->createController('Site');
 		$n = $site[0]->netvisorYhteys();
@@ -883,6 +893,7 @@ $xml = '
       <payrollrulegroupname>'.$payrollrulegroupname.'</payrollrulegroupname>
       <bankaccountnumber>'.$model->tekijan_pankkitili.'</bankaccountnumber>
       <bankidentificationcode>'.$model->tekijan_konttori.'</bankidentificationcode>
+      <employeeinsurancetype>'.$modelTyosuhteet->tyoelakevakuutuksen_tyyppi.'</employeeinsurancetype>
    </employeepayrollinformation>
   </employee>
 </root>';
