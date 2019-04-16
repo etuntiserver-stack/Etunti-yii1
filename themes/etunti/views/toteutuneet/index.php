@@ -775,15 +775,15 @@ $(document).ready(function(){
 		data = JSON.parse(data);
 		console.log(data);
 		if(data['netvisorOK'] ){
-			$('#ilmoitusLahetysta').append( '<div class="alert bg-success">' + data['netvisorOK'] + '</div>' );
+			$(thisButton).after( '<div class="alert bg-success">' + data['netvisorOK'] + '</div>' );
 			$(thisButton).attr('NVtilanne', '1');
 			LahetaPainike();
 		} else if(data['TallennettuMuttaEiLahetetty'] ) {
-			$('#ilmoitusLahetysta').append( '<div class="alert bg-warning">' + data['TallennettuMuttaEiLahetetty'] + '</div>' );
+			$(thisButton).after( '<div class="alert bg-warning">' + data['TallennettuMuttaEiLahetetty'] + '</div>' );
 		} else if(data['statusError'] ) {
-			$('#ilmoitusLahetysta').append( '<div class="alert bg-danger">' + data + '</div>' );
+			$(thisButton).after( '<div class="alert bg-danger">' + data + '</div>' );
 		} else {
-			$('#ilmoitusLahetysta').append( '<div class="alert bg-danger">' + JSON.stringify(data) + '</div>' );
+			$(thisButton).after( '<div class="alert bg-danger">' + JSON.stringify(data) + '</div>' );
 		}
            }
         });
