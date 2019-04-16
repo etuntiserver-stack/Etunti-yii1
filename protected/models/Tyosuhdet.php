@@ -118,7 +118,7 @@ class Tyosuhdet extends DB2ActiveRecord
 			array('alku, tuntihinta', 'required'),
 			array('tid, tyopvm_kk, tyoelakevakuutuksen_tyyppi', 'numerical', 'integerOnly'=>true),
 			array('alku, loppu, koe_loppu', 'length', 'max'=>20),
-			array('vktyoaika, tuntihinta, matka_thinta, lippu_kuumaks, koe_hinta, perusprosentti, lisaprosentti, kuukaudessa, kahdessa_viikossa, viikossa, paivassa, atk_varten, yksi_tuloraja, tyottomyysvakuutus_tyyppi', 'length', 'max'=>10),
+			array('vktyoaika, tuntihinta, matka_thinta, lippu_kuumaks, koe_hinta, perusprosentti, lisaprosentti, kuukaudessa, kahdessa_viikossa, viikossa, paivassa, atk_varten, yksi_tuloraja, tyoelakevakuutuksen_tyyppi', 'length', 'max'=>10),
 			array('nimike', 'length', 'max'=>40),
 			array('palkkausmuoto', 'length', 'max'=>30),
 			array('tuloraja_ajalle', 'length', 'max'=>100),

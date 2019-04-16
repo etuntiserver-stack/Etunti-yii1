@@ -380,7 +380,7 @@ class TyontekijatController extends Controller
 					$tsnew = new Tyosuhdet;
 					$tsnew->tid = $model->id;
 					$tsnew->alku = date("d.m.Y");
-					$tsnew->tuntihinta = 35;
+					$tsnew->tuntihinta = 0;
 					if(!$tsnew->save()){
 						var_dump($tsnew->getErrors());
 						Tyontekijat::model()->deletebypk($model->id);
@@ -865,9 +865,20 @@ class TyontekijatController extends Controller
 	$payrollrulegroupname = $modelTyosuhteet->palkka_tyyppi;
 
       	$lisat = '';
-	if($tila == 'add')
-      	$lisat .= '<employeenumber>'.$model->id.'</employeenumber>';
+	if($tila == 'add'){ $lisat .= '<employeenumber>'.$model->id.'</employeenumber>'; }
 
+	$employeesettlementpoints = '';
+	if( $modelTyosuhteet->tyoelakevakuutuksen_tyyppi == 'TyEL' ){
+		$employeesettlementpoints = '
+		   <employeesettlementpoints>
+		      <employeeworkpensioninsurance>
+			<type>'.$modelTyosuhteet->tyottomyysvakuutus_tyyppi.'</type>
+			<name>TyEL</name>
+		      </employeeworkpensioninsurance>
+		   </employeesettlementpoints>
+		';
+	}
+;
 // <-- XML
 $xml = '
 <root>
@@ -895,6 +906,7 @@ $xml = '
       <bankidentificationcode>'.$model->tekijan_konttori.'</bankidentificationcode>
       <employeeinsurancetype>'.$modelTyosuhteet->tyoelakevakuutuksen_tyyppi.'</employeeinsurancetype>
    </employeepayrollinformation>
+   '.$employeesettlementpoints.'
   </employee>
 </root>';
 //  XML -->
