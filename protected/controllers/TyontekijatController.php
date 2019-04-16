@@ -868,6 +868,7 @@ class TyontekijatController extends Controller
 	if($tila == 'add'){ $lisat .= '<employeenumber>'.$model->id.'</employeenumber>'; }
 
 	$employeesettlementpoints = '';
+	/*
 	if( $modelTyosuhteet->tyoelakevakuutuksen_tyyppi == 'TyEL' ){
 		$employeesettlementpoints = '
 		   <employeesettlementpoints>
@@ -878,6 +879,7 @@ class TyontekijatController extends Controller
 		   </employeesettlementpoints>
 		';
 	}
+	*/
 ;
 // <-- XML
 $xml = '
