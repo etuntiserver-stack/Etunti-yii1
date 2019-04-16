@@ -34,7 +34,7 @@
 	</div>
 	<br>
 	<div class="section buttons">
-                    <?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-lg btn-block btn-info')); ?>
+                    <?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-lg btn-block btn-primary myBgColors')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

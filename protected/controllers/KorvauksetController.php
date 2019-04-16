@@ -100,6 +100,9 @@ class KorvauksetController extends Controller
 				{
 					$returnNV = $this->netvisorPayrollperiodcollector($model);
 					echo json_encode($returnNV);
+					if( isset($returnNV['ERROR']) ){
+						$this->loadModel($model->id)->delete();
+					}
 					exit;
 				}
 				echo json_encode('ok');
