@@ -238,7 +238,9 @@ class ToteutuneetController extends Controller
 
 	protected function netvisorWorkday($nimike,$sekuntti,$model)
 	{
-		//$tyontekija = Tyontekijat::model()->findByPk($model->tid);
+		$henkkari = '';
+		$tyontekija = Tyontekijat::model()->findByPk($model->tid);
+		if(isset($tyontekija->id)){ $henkkari = $tyontekija->tekijan_henkilotunnus; }
 		$asetukset = Asetukset::model()->findByPk(1);
 
 		$tunti = $sekuntti/3600;
@@ -323,7 +325,7 @@ class ToteutuneetController extends Controller
 		if($nimike == 'ls') $collectorratio =  9;
 		if($nimike == 'py') $collectorratio =  7;
 		if($nimike == 'el') $collectorratio =  4;
-		if($nimike == 'vl') $collectorratio =  11;
+		if($nimike == 'vl') { $collectorratio =  11; $tunti = 1; }
 
 		// Mita tehda sl ja ls kanssa en tieda. Ne ovat nyt 1 numerona 
 
@@ -332,7 +334,7 @@ $xml = '
 <root>
   <workday>
     <date format="ansi" method="'.$method.'">'.date("Y-m-d", strtotime($model->pvm)).'</date>
-    <employeeidentifier type="number" defaultdimensionhandlingtype="usedefault">'.$model->tid.'</employeeidentifier>
+    <employeeidentifier type="personalidentificationnumber" defaultdimensionhandlingtype="usedefault">'.$henkkari.'</employeeidentifier>
     <workdayhour>
       <hours>'.$tunti.'</hours>
       <collectorratio type="number">'.$collectorratio.'</collectorratio>
@@ -636,7 +638,7 @@ $xml = '
 		$spl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'SPL'); // Palkaton
 		$sl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'SL'); // Palkallinen
 		$ls 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'LS'); // Lapsen sairaus
-		$vl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'VL'); // Vuosiloma
+		$vl 	= (($mobile[0]->TidPvmVuosiloma($pvm, $tid, 'VL')['count'] > 0)?1:0); // Vuosiloma
 		$vkl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'VKL'); // Viikkolomapaiva
 		//     SPL, SL, LS -->
 
