@@ -64,7 +64,7 @@
 	<td>
 		<?php echo $versio; ?>
 	</td>
-	<td>
+	<td class="lahetys">
 		<?php echo CHtml::link(Yii::t('main', 'Lähetä tunnukset työntekijälle'), 
 				array('update', 'id'=>$data->id, 'laheta_tunnukset'=>true), 
 				array(

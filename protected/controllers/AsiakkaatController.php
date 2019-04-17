@@ -1073,14 +1073,11 @@ $xml = '
 			exit;
 		}
 
-
-
-
-	// <-- Oikeudet
-	   $checkOikeus = "asiakkaat_0_".Yii::app()->user->adminStatus;
-	   $site = Yii::app()->createController('Site');
-	   $site[0]->checkOikeus($checkOikeus);
-	//  Oikeudet -->
+		// <-- Oikeudet
+		   $checkOikeus = "asiakkaat_0_".Yii::app()->user->adminStatus;
+		   $site = Yii::app()->createController('Site');
+		   $site[0]->checkOikeus($checkOikeus);
+		//  Oikeudet -->
 
        		$criteria = new CDbCriteria();
 

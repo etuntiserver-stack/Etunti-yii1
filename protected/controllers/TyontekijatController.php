@@ -668,13 +668,20 @@ class TyontekijatController extends Controller
 	public function actionIndex()
 	{
 
-	// <-- Oikeudet
-	   $checkOikeus = "tyontekijat_0_".Yii::app()->user->adminStatus;
-	   $site = Yii::app()->createController('Site');
-	   $site[0]->checkOikeus($checkOikeus);
-	//  Oikeudet -->
+		if(isset($_POST['tyontekijatPerSivu']))
+		{
+			Yii::app()->user->setState('tyontekijatPerSivu', $_POST['tyontekijatPerSivu']);
+			echo json_encode($_POST['tyontekijatPerSivu']);
+			exit;
+		}
 
-          //To Keep the session data in the SearchForm
+		// <-- Oikeudet
+		   $checkOikeus = "tyontekijat_0_".Yii::app()->user->adminStatus;
+		   $site = Yii::app()->createController('Site');
+		   $site[0]->checkOikeus($checkOikeus);
+		//  Oikeudet -->
+	
+		//To Keep the session data in the SearchForm
                 if(isset($_GET['tekijan_nimi']))
                 Yii::app()->session['tekijan_nimi']=$_GET['tekijan_nimi'];
 
@@ -746,8 +753,13 @@ class TyontekijatController extends Controller
 		$asetukset = Asetukset::model()->findByPk(1);
 		$current_app_versio = $asetukset->app_version_playmarket;
 
-		$dataProvider->pagination->pageSize = 50;
-		$this->render('index', array('dataProvider' => $dataProvider, 'current_app_versio' => $current_app_versio));
+		$perSivu = 50;
+		if(isset(Yii::app()->user->tyontekijatPerSivu)){
+			$perSivu = Yii::app()->user->tyontekijatPerSivu;
+		}
+		$dataProvider->pagination->pageSize = $perSivu;
+
+		$this->render('index', array('dataProvider' => $dataProvider, 'perSivu' => $perSivu, 'current_app_versio' => $current_app_versio));
 	}
 
 	/**
