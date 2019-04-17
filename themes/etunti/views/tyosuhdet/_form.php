@@ -226,6 +226,7 @@ $model->tid = $_GET['id'];
 
 			$arr = json_decode($model->palkka_tyyppi);
 			echo '<select name="Tyosuhdet[palkka_tyyppi]" class="form-control" title="Valitse">';
+			echo '<option value=>Valitse</option>';
 			foreach($l as $data)
 			{
 				if($data->value == $model->palkka_tyyppi)
