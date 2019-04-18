@@ -73,7 +73,7 @@ $('#korvaukset-form').on('submit',function(e) {
     $("#haku").hide('slow');
 
   $.ajax({
-     url: location.protocol + "//" + location.host + '/index.php/korvaukset/create',
+     url: location.protocol + "//" + location.host + '/index.php/korvaukset/create_netvisor',
      data:$(this).serialize(),
      type:'POST',
      success:function(data){

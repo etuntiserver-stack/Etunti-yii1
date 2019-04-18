@@ -24,7 +24,7 @@ class KorvauksetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index','tidfromto'),
+				'actions'=>array('admin', 'delete', 'create', 'create_netvisor', 'update', 'index','tidfromto'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -83,6 +83,31 @@ class KorvauksetController extends Controller
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionCreate()
+	{
+		$model=new Korvaukset;
+
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['Korvaukset']))
+		{
+			$model->attributes=$_POST['Korvaukset'];
+			$model->pvm=date("Y-m-d", strtotime($_POST['Korvaukset']['pvm']));
+			if($model->save()){
+
+				echo json_encode('ok');
+				exit;
+			}
+
+
+		}
+
+		$this->render('create',array(
+			'model'=>$model,
+		));
+	}
+
+	public function actionCreate_netvisor()
 	{
 		$model=new Korvaukset;
 

@@ -19,6 +19,7 @@
 	<?php echo $form->errorSummary($model); ?>
 
 
+	<div id="error_info"></div>
 
                 <ul class="list-group list-group-flush text-center">
                     <li class="list-group-item">
@@ -110,7 +111,11 @@ $('#korvaukset-form').on('submit',function(e) {
      type:'POST',
      success:function(data){
     	console.log(data);
-	setTimeout(function(){document.location.href = "palkkataulukko";},500);
+	if(data == 'ok'){
+		setTimeout(function(){document.location.href = "palkkataulukko";},500);
+	} else {
+		$("#error_info").html(data);
+	}
      },
      error:function(data){
 	console.log(data); 
