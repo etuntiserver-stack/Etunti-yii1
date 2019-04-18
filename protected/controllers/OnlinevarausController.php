@@ -416,8 +416,7 @@ class OnlinevarausController extends Controller
 			{
 
 			  $body .= '<label>'.Yii::t('main', 'Valitse osoite').'</label>
-			  <select id="valitseOsoite" class="form-control input-lg">
-			  <option>'.Yii::t('main', 'Valitse osoite').'</option>';
+			  <select id="valitseOsoite" class="form-control input-lg">';
 
 			  foreach($a as $asiakasData)
 			  {

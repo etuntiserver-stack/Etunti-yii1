@@ -5,7 +5,7 @@ use CheckoutFinland\Response;
 error_reporting(E_ALL|E_STRICT);
 ini_set('display_errors', 1);
 ?>
-
+<br>
 <?php
 if(!isset($_GET['check']))
 {
@@ -69,19 +69,11 @@ try {
 
 
 
-if($status_string == 'PAID' and !isset($_GET['check']))
-{
-	$ov = Onlinevaraus::model()->find(" id='".$_GET['REFERENCE']."' and tila=0 ");
+if($status_string == 'PAID' and !isset($_GET['check'])){
+$ov = Onlinevaraus::model()->find(" id='".$_GET['REFERENCE']."' and tila=0 ");
+if(isset($ov->id)){ $tv = Tyovuoroot::model()->find(" onlinevaraus_id='".$ov->id."' "); }
 
-
-
-
-
-if(isset($ov->id))
-	$tv = Tyovuoroot::model()->find(" onlinevaraus_id='".$ov->id."' ");
-
-if(isset($ov->id) and isset($tv->id))
-{
+if(isset($ov->id) and isset($tv->id)){
 
 
 
@@ -184,14 +176,14 @@ $message .= '
 
         <section class="esittely">
             <div class="paddings">
-                <div class="container">
+                <div class="container-fluid">
 <style>
 table{ 
 	width:90%;
 }
 td{
 	line-height: 170%;
-	width: 50%;
+	width:50%;
 }
 </style>
 
@@ -204,7 +196,7 @@ Olemme vastaanottaneet tilauksesi ja tästä voit tulostaa tilausvahvistuksen.
 
 
 <div class="table-responsive">
-<table class="table">
+<table class="table table-striped">
 <tr><td>Nimi</td><td>'.$ov->yhteyshenkilo.'</td></tr>
 <tr><td>Osoite</td><td>'.$ov->osoite.'</td></tr>
 <tr><td>Puhelin</td><td>'.$ov->puhelin.'</td></tr>
@@ -218,9 +210,8 @@ $message .= '<tr><td>Y-tunnus</td><td>'.$ov->y_tunnus.'</td></tr>';
 $message .= '
 </table>
 <div>
-<hr>
 <div class="table-responsive">
-<table class="table">
+<table class="table table-striped">
 <tr><td>Tilausnumero</td><td>'.$ov->id.'</td></tr>';
 
 
@@ -288,8 +279,7 @@ $message .= '
 			$mail->setTo($ov->sahkoposti);
 			$mail->setSubject('Online varaus');
 			$mail->setBody($message);
-			if($mail->send())
-			{
+			if($mail->send()){
 							// <-- LOG
 							$log=new Log;
 							$log->log_category 	= 1; // 1-email
@@ -299,7 +289,6 @@ $message .= '
 							$log->save();
 							//     LOG -->
 			}
-
 			// Lähetetään asiakkaalle -->
 
 
@@ -313,8 +302,7 @@ $message .= '
 			$mail->setTo($firmanTiedot->sahkoposti);
 			$mail->setSubject('Online varaus');
 			$mail->setBody($message);
-			if($mail->send())
-			{
+			if($mail->send()){
 							// <-- LOG
 							$log=new Log;
 							$log->log_category 	= 1; // 1-email
@@ -336,8 +324,7 @@ $message .= '
 
 
 				// <-- LOG
-				if( isset($t->id) )
-				{
+				if( isset($t->id) ){
 				$t = Tyovuoroot::model()->findbypk($t->id);
 				$model_log 	= 'Tyovuoroot';
 				$name_log 	= 'Työvuorot';
@@ -352,12 +339,11 @@ $message .= '
 
 			$o = Onlinevaraus::model()->findbypk($ov->id);
 			$o->tila=1;
-			$o->save();
+			//$o->save();
 
 
 				// <-- LOG
-				if( isset($o->id) )
-				{
+				if( isset($o->id) ){
 				$o = Onlinevaraus::model()->findbypk($o->id);
 				$model_log 	= 'Onlinevaraus';
 				$name_log 	= 'Onlinevaraus';
@@ -371,7 +357,7 @@ $message .= '
 				//     LOG -->
 
 			$this->redirect(Yii::app()->request->baseUrl.'/index.php/onlinevaraus/maksettu?check=ok');
-	
+			//echo $_SESSION['onlinevaraus']['message'];
 
 }
 

@@ -1,6 +1,8 @@
 $(document).ready(function(){
 
-
+$("#online_reset").click(function(){
+	localStorage.clear();
+});
 
 $(document).delegate(".kupongi_add","click",function(){
    $.ajax({
@@ -524,17 +526,29 @@ function onkokohde(sahkoposti)
 			localStorage.setItem('onkokohde', 'ei');
 			$('#lomake').show('slow');
 			$('.btncheckPosti').hide('slow');
+			$("#loytynytOsoitteet").html('');
 			console.log(data);
 			count = step;
 
+			$('#yhteyshenkilo').removeAttr('readonly');
+			$('#puhelin').removeAttr('readonly');
+			$('#osoite').removeAttr('readonly');
+			$('#postinumero').removeAttr('readonly');
+			$('#kaupunki').removeAttr('readonly');
+
 		} else {
-			//$('#fullLomake').hide('slow');
 			$('.btncheckPosti').hide('slow');
 			$('#loytynytOsoitteet').html(data);
 			localStorage.setItem('onkokohde', data);
-			//console.log(data);
 			count = step;
 
+			$('#yhteyshenkilo').attr('readonly', true);
+			$('#puhelin').attr('readonly', true);
+			$('#osoite').attr('readonly', true);
+			$('#postinumero').attr('readonly', true);
+			$('#kaupunki').attr('readonly', true);
+
+			$('#valitseOsoite').change();
 		}
    	},
 	error:function(data){
@@ -551,18 +565,19 @@ if($("#aid_sahkoposti").length)
 	$('.tallennaUusi').html('Valmis');
 }
 
-$(document).delegate('#sahkoposti', "keyup", function() {
+	sahkoposti();
+$(document).delegate('#sahkoposti', "keyup, blur", function() {
+	sahkoposti();
+});
 
-   var sahkoposti = $(this).val();
+function sahkoposti(){
+   var sahkoposti = $('#sahkoposti').val();
 
    if(sahkoposti.length > 5)
    {
 	onkokohde(sahkoposti);
    }
-
-});
-
-
+}
 
 $(".tallennaUusi").click(function(){
 
