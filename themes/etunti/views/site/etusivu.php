@@ -361,8 +361,8 @@ var etusivuAjax = function(){
                     </thead>
                     <tbody>
 		      <tr>
-			<td><h3 class="text-primary mn pl5"><?=$sum_laskuri?>h</h3></td>
-			<td><h3 class="text-<?=$pr_class?>-dark mn"> <i class="fa fa-caret-up"></i> <?=$prosentti?>% </h3></td>
+			<td><h3 class="text-primary mn pl5"><?=round($sum_laskuri, 2)?>h</h3></td>
+			<td><h3 class="text-<?=$pr_class?>-dark mn"> <i class="fa fa-caret-up"></i> <?=round($prosentti, 2)?>% </h3></td>
 		      </tr>
                     </tbody>
                   </table>
