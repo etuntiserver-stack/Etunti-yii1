@@ -219,7 +219,7 @@ class LaskuController extends Controller
 	    $lista = array();
 	    if( $tunnit == 'mob' ){
        		$criteria = new CDbCriteria();
-	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
@@ -241,7 +241,7 @@ class LaskuController extends Controller
 		$lu = Mobile::model()->findAll($criteria);
 
        		$criteria = new CDbCriteria();
-	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
