@@ -328,7 +328,6 @@ class ToteutuneetController extends Controller
 		if($nimike == 'vl') { $collectorratio =  11; $tunti = 1; }
 		if($nimike == 'ap') { $collectorratio =  12; $tunti = 1; }
 
-		// Mita tehda sl ja ls kanssa en tieda. Ne ovat nyt 1 numerona 
 
 // <-- XML
 $xml = '
