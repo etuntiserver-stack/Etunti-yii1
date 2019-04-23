@@ -59,11 +59,19 @@
 	<?php foreach($lista as $item) : ?>
 	<tr>
 	<td width="17%">
-	<h3>		
-		<?php echo CHtml::link($item->Fullname, 
+		<h3><?php echo CHtml::link($item->Fullname, 
+				array('/asiakkaat/update', 'id'=>$item->id), 
+				array(
+					'data-toggle'=>'tooltip',
+					'data-placement'=>'top',
+					'target' => '_blank',
+					'title'=>Yii::t('main', 'Asiakkaan kortti') 
+				)
+			); 
+		?>
+		<?php echo CHtml::link('<i class="fa fa-table" aria-hidden="true"></i>', 
 				array('/asiakkaat/showshift', 'id'=>$item->id), 
 				array(
-					'style'=>'font-size: 150%',
 					'data-toggle'=>'tooltip',
 					'data-placement'=>'top',
 					'target' => '_blank',
