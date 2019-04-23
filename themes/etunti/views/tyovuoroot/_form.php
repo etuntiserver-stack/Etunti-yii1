@@ -189,6 +189,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 				'(SL) Sairaus Palkallinen/#FFAC33' => '(SL) Sairaus Palkallinen',
 				'(SPL) Sairaus Palkaton/#FFAC33' => '(SPL) Sairaus Palkaton',
 				'(LS) Lapsen sairaus/#FFAC33' => '(LS) Lapsen sairaus',
+				'(AP) Arkipyhä/#FFAC33' => '(AP) Arkipyhä',
 			);
 			$valikkoot = Valikkoot::model()->findAll("select_type = 'vuosilomat'");
 			$l2 = array();
