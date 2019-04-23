@@ -2052,6 +2052,7 @@ $xml = '
   <SalesInvoice>
     '.(($asetukset->lasku_laskunumero == 1)?'<SalesInvoiceNumber>'.$model->laskunumero.'</SalesInvoiceNumber>':'').'
     <SalesInvoiceDate format="ansi">'.date("Y-m-d", strtotime($model->paivays)).'</SalesInvoiceDate>
+    <SalesInvoiceDueDate>'.date("Y-m-d", strtotime($model->erapaiva)).'</SalesInvoiceDueDate>
     <SalesInvoiceDeliveryDate format="ansi">'.date("Y-m-d", strtotime($model->paivays)).'</SalesInvoiceDeliveryDate>
     <SalesInvoiceReferenceNumber>'.$model->viitenumero.'</SalesInvoiceReferenceNumber>
     <SalesInvoiceAmount>'.$model->yhteensa_total.'</SalesInvoiceAmount>
@@ -2069,8 +2070,8 @@ $xml = '
     <DeliveryAddressLine>'.$model->osoite.'</DeliveryAddressLine>
     <DeliveryAddressPostNumber>'.$model->postinumero.'</DeliveryAddressPostNumber>
     <DeliveryAddressTown>'.$model->toimipaikka.'</DeliveryAddressTown>
-    <DeliveryAddressCountryCode type="ISO-3166">FI</DeliveryAddressCountryCode>
-    <PaymentTermNetDays>'.$model->maksuehto.'</PaymentTermNetDays>';
+    <DeliveryAddressCountryCode type="ISO-3166">FI</DeliveryAddressCountryCode>';
+//<PaymentTermNetDays>'.$model->maksuehto.'</PaymentTermNetDays>
 
 $laskunRivit=LaskunRivit::model()->findAll("lid='".$model->id."'");
 
