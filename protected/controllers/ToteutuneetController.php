@@ -320,8 +320,8 @@ class ToteutuneetController extends Controller
 		if($nimike == 'matka') $collectorratio =  1;
 		if($nimike == 'tyoyo') $collectorratio =  3;
 		if($nimike == 'tyosu') $collectorratio =  5;
-		if($nimike == 'sl') $collectorratio =  8;
-		if($nimike == 'spl') $collectorratio =  10;
+		if($nimike == 'sl') { $collectorratio =  8; $tunti = 1; }
+		if($nimike == 'spl') { $collectorratio =  10; $tunti = 1; }
 		if($nimike == 'ls') $collectorratio =  9;
 		if($nimike == 'py') $collectorratio =  7;
 		if($nimike == 'el') $collectorratio =  4;
@@ -635,8 +635,8 @@ $xml = '
 		//     Ilta, Yo, Sunnuntai -->
 
 		// <-- SPL, SL, LS
-		$spl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'SPL'); // Palkaton
-		$sl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'SL'); // Palkallinen
+		$sl 	= (($mobile[0]->TidPvmVuosiloma($pvm, $tid, 'SL')['count'] > 0)?1:0); // Palkallinen
+		$spl 	= (($mobile[0]->TidPvmVuosiloma($pvm, $tid, 'SPL')['count'] > 0)?1:0); // Palkaton
 		$ls 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'LS'); // Lapsen sairaus
 		$vl 	= (($mobile[0]->TidPvmVuosiloma($pvm, $tid, 'VL')['count'] > 0)?1:0); // Vuosiloma
 		$vkl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'VKL'); // Viikkolomapaiva
