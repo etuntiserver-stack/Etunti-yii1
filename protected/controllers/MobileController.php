@@ -1491,8 +1491,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		time DESC ";
 
 	        $criteria->condition = " 
-			admin!=1 
-			AND deleted=0
+			deleted=0
 		";
 
 		// <-- Tyoryhmat

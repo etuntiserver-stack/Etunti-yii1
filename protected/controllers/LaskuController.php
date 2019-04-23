@@ -3275,4 +3275,78 @@ $xml = '
 	   $site = Yii::app()->createController('Site');
 	   return $site[0]->etuSukunimi($tid);
 	}
+
+	protected function TyovuoroMobileVertailu($kohdeID, $tv_id, $pvm)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->condition = " tv_id='".$tv_id."' AND kohdenID='".$kohdeID."' AND DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')) = '".date("Y-m-d", strtotime($pvm))."' ";
+		$mob = Mobile::model()->find($criteria);
+		if( 
+			isset($mob->id) 
+			and isset($mob->tv_id) 
+			and $mob->tv_id != 0 
+			and $mob->status == 3 
+		){
+			$tv = Tyovuoroot::model()->findByPk($mob->tv_id);
+			if( isset($tv->id) ){
+				$asetukset = Asetukset::model()->findByPk(1);
+
+				// <-- Totetuneen ajan mukaan
+				if( 
+					isset($asetukset->app_auto_hyvaksyminen) and $asetukset->app_auto_hyvaksyminen == 1 
+					and isset($asetukset->app_hyvaksynnan_peruste) and $asetukset->app_hyvaksynnan_peruste == 0
+				){
+				    $aikavali = 0;
+				    $mobile_kesto = strtotime($mob->loppui)-strtotime($mob->aloitan);
+				    $tyovuoro_kesto = strtotime($tv->pvm.' '.$tv->loppu)-strtotime($tv->pvm.' '.$tv->alku);
+
+				    if( isset($asetukset->app_auto_hyvaksyminen_aikavali) ){
+					$aikavali = $asetukset->app_auto_hyvaksyminen_aikavali*60;
+				    }
+
+				    if(
+					$aikavali > 0 and
+					($tyovuoro_kesto == $mobile_kesto)
+					or ( ($mobile_kesto > $tyovuoro_kesto) and ($mobile_kesto-$tyovuoro_kesto) <= $aikavali )
+					or ( ($mobile_kesto < $tyovuoro_kesto) and ($tyovuoro_kesto-$mobile_kesto) <= $aikavali )
+				    ){
+					return true;
+				    }
+
+				}
+				//     Totetuneen ajan mukaan -->
+
+				// <-- Työvuoron aloitus ja lopetus mukaan
+				if( 
+					isset($asetukset->app_auto_hyvaksyminen) and $asetukset->app_auto_hyvaksyminen == 1 
+					and isset($asetukset->app_hyvaksynnan_peruste) and $asetukset->app_hyvaksynnan_peruste == 1
+				){
+				    $aikavali = 0;
+				    $mobile_aloitus = strtotime($mob->aloitan);
+				    $mobile_lopetus = strtotime($mob->loppui);
+				    $tyovuoro_aloitus = strtotime($tv->pvm.' '.$tv->alku);
+				    $tyovuoro_lopetus = strtotime($tv->pvm.' '.$tv->loppu);
+
+				    if( isset($asetukset->app_auto_hyvaksyminen_aikavali )){
+					$aikavali = $asetukset->app_auto_hyvaksyminen_aikavali*60;
+				    }
+
+				    if(
+					$aikavali > 0 and
+					(
+						(($mobile_aloitus+$aikavali) >= $tyovuoro_aloitus and $mobile_aloitus < $tyovuoro_lopetus) 
+						and ($mobile_aloitus <= ($tyovuoro_aloitus+$aikavali) and $mobile_aloitus <= $tyovuoro_lopetus)
+					)
+					and (($mobile_lopetus-$aikavali) <= $tyovuoro_lopetus and $mobile_lopetus >= ($tyovuoro_lopetus-$aikavali))
+				    ){
+					return true;
+				    }
+
+				}
+				//     Työvuoron aloitus ja lopetus mukaan -->
+			}
+		}
+
+		return false;
+	}
 }

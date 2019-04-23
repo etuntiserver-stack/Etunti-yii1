@@ -225,6 +225,7 @@
 				$tv_id		= $mob->id;
 				$t 		= $this->num(strtotime($mob->loppu)-strtotime($mob->alku));
 				$r 		= $this->hinnastoHintaat($mob->tuoteID, $item, $mob->kohteet, $t, $rivi_kpl); // TV
+				$tv_vertailu	= $this->TyovuoroMobileVertailu($mob->kohde, $mob->id, $mob->pvm);
 			}
 
 			if( isset($r['tp_id']) ){ $tp_id = $r['tp_id']; }
@@ -330,7 +331,7 @@
 		    }
 		}
 		?>
-		<tr>
+		<tr class="<?=((isset($tv_vertailu) and $tv_vertailu == true)?'text-success':'')?><?=((isset($tv_vertailu) and $tv_vertailu == false)?'text-danger':'')?>">
 		<td class="input_nimike" tp_id="<?=$tp_id?>" tv_id="<?=$tv_id?>"><?=$nimike?></td>
 		<td class="input_hinta"><?=number_format($hinta, 2, ',', ' ')?></td>
 		<td class="input_yksikko"><?=$yksikko?></td>
