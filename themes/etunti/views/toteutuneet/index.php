@@ -176,7 +176,8 @@ table { width: 100%; }
 <?php if(Yii::app()->session['tekija']) : ?>
 
 <?php
-
+$netvisor_mita_lahetetaan = array();
+$netvisor_mita_lahetetaan = json_decode($asetukset->netvisor_mita_lahetetaan);
 $tid = Yii::app()->session['tekija'];
 
 function dateDiff($start, $end) {
@@ -468,20 +469,20 @@ function dateDiff($start, $end) {
 		<table class="yhteensaPvmAllaTaulu_'.date("W",strtotime($date)).' forFooterAlla table table-bordered" cellspacing="0" cellpadding="0" id="yhteensaPvmAllaTaulu_'.$did.'_'.$tid.'" style="width:100%">
 		 <thead>
 		  <tr>
-		   <th>'.Yii::t('main', 'Työtunnit').'</th>
-		   <th>'.Yii::t('main', 'Matkat').'</th>
-		   <th>'.Yii::t('main', 'Lounaat').'</th>
-		   <th>'.Yii::t('main', 'Ilta').'</th>
-		   <th>'.Yii::t('main', 'Yö').'</th>
-		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Sunnuntaitunnit').'">'.Yii::t('main', 'Su').'</th>
-		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Pyhäpäivätunnit').'">'.Yii::t('main', 'Py').'</th>
-		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Erikoislauantaitunnit').'">'.Yii::t('main', 'El').'</th>
-		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Palkkalinen sairasloma').'">'.Yii::t('main', 'SL').'</th>
-		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Palkaton sairasloma').'">'.Yii::t('main', 'SPL').'</th>
-		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Lapsen sairaus').'">'.Yii::t('main', 'LS').'</th>
-		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Vuosiloma').'">'.Yii::t('main', 'VL').'</th>
+		   <th class="'.((in_array('tyotunnit', $netvisor_mita_lahetetaan, true))?'bg-success':'').'">'.Yii::t('main', 'Työtunnit').'</th>
+		   <th class="'.((in_array('matka', $netvisor_mita_lahetetaan, true))?'bg-success':'').'">'.Yii::t('main', 'Matkat').'</th>
+		   <th class="'.((in_array('lounaat', $netvisor_mita_lahetetaan, true))?'bg-success':'').'">'.Yii::t('main', 'Lounaat').'</th>
+		   <th class="'.((in_array('tyoilta', $netvisor_mita_lahetetaan, true))?'bg-success':'').'">'.Yii::t('main', 'Ilta').'</th>
+		   <th class="'.((in_array('tyoyo', $netvisor_mita_lahetetaan, true))?'bg-success':'').'">'.Yii::t('main', 'Yö').'</th>
+		   <th class="'.((in_array('tyosu', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Sunnuntaitunnit').'">'.Yii::t('main', 'Su').'</th>
+		   <th class="'.((in_array('py', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Pyhäpäivätunnit').'">'.Yii::t('main', 'Py').'</th>
+		   <th class="'.((in_array('el', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Erikoislauantaitunnit').'">'.Yii::t('main', 'El').'</th>
+		   <th class="'.((in_array('sl', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Palkkalinen sairasloma').'">'.Yii::t('main', 'SL').'</th>
+		   <th class="'.((in_array('spl', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Palkaton sairasloma').'">'.Yii::t('main', 'SPL').'</th>
+		   <th class="'.((in_array('ls', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Lapsen sairaus').'">'.Yii::t('main', 'LS').'</th>
+		   <th class="'.((in_array('vl', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Vuosiloma').'">'.Yii::t('main', 'VL').'</th>
 		   <!--<th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Viikkolomapäivä').'">'.Yii::t('main', 'VKL').'</th>-->
-		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Arkipyhä').'">'.Yii::t('main', 'AP').'</th>
+		   <th class="'.((in_array('ap', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Arkipyhä').'">'.Yii::t('main', 'AP').'</th>
 		  </tr>
 		 </thead>
 		  <tr>
