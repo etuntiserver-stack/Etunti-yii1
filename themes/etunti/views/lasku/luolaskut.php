@@ -72,6 +72,7 @@
 		<?php echo CHtml::link('<i class="fa fa-table" aria-hidden="true"></i>', 
 				array('/asiakkaat/showshift', 'id'=>$item->id), 
 				array(
+					'class' => 'pull-right',
 					'data-toggle'=>'tooltip',
 					'data-placement'=>'top',
 					'target' => '_blank',
