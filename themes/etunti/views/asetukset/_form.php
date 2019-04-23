@@ -1042,6 +1042,7 @@ $('.ryhmat').multiselect({
 			'py'=>Yii::t('main', 'Arkipyhät'),
 			'el'=>Yii::t('main', 'Erikoislauantait'),
 			'vl'=>Yii::t('main', 'Vuosilomat'),
+			'ap'=>Yii::t('main', 'Arkipyhä'),
 		);
 
 		$selected   = array();

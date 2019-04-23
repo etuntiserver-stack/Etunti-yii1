@@ -326,6 +326,7 @@ class ToteutuneetController extends Controller
 		if($nimike == 'py') $collectorratio =  7;
 		if($nimike == 'el') $collectorratio =  4;
 		if($nimike == 'vl') { $collectorratio =  11; $tunti = 1; }
+		if($nimike == 'ap') { $collectorratio =  12; $tunti = 1; }
 
 		// Mita tehda sl ja ls kanssa en tieda. Ne ovat nyt 1 numerona 
 
@@ -639,7 +640,8 @@ $xml = '
 		$spl 	= (($mobile[0]->TidPvmVuosiloma($pvm, $tid, 'SPL')['count'] > 0)?1:0); // Palkaton
 		$ls 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'LS'); // Lapsen sairaus
 		$vl 	= (($mobile[0]->TidPvmVuosiloma($pvm, $tid, 'VL')['count'] > 0)?1:0); // Vuosiloma
-		$vkl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'VKL'); // Viikkolomapaiva
+		$vkl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'VKL'); // Viikkolomapaiva  ( Poistettu kaytosta )
+		$ap 	= (($mobile[0]->TidPvmVuosiloma($pvm, $tid, 'AP')['count'] > 0)?1:0); // Arkipaiva
 		//     SPL, SL, LS -->
 
 
@@ -654,6 +656,7 @@ $xml = '
 			'ls'=>(int)$ls,
 			'vl'=>(int)$vl,
 			'vkl'=>(int)$vkl,
+			'ap'=>(int)$ap,
 			'tyotunnit'=>$tyotunnit,
 			'matkat'=>$matkat,
 			'lounaat'=>$lounaat,
