@@ -59,7 +59,18 @@
 	<?php foreach($lista as $item) : ?>
 	<tr>
 	<td width="17%">
-	<h3><?=$item->Fullname?></h3>
+	<h3>		
+		<?php echo CHtml::link($item->Fullname, 
+				array('/asiakkaat/showshift', 'id'=>$item->id), 
+				array(
+					'style'=>'font-size: 150%',
+					'data-toggle'=>'tooltip',
+					'data-placement'=>'top',
+					'target' => '_blank',
+					'title'=>Yii::t('main', 'Näytä tyovuorot') 
+				)
+			); 
+		?></h3>
 	<?php
 	$yhteensa_total_veroton	= 0;
 	$yhteensa_total	= 0;
