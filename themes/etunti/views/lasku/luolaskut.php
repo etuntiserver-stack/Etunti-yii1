@@ -207,7 +207,7 @@
 				$r 		= $this->hinnastoHintaat($mob->tuoteID, $item, $mob->kohteet, $t, $rivi_kpl); // TV
 			}
 
-			if( isset($r['tp_id']) ){ $tp_id = $r['tp_id'];	}
+			if( isset($r['tp_id']) ){ $tp_id = $r['tp_id']; }
 			if( isset($mob['tp_id']) ){ $tp_id = $mob['tp_id']; } // jos autolahetteet
 			if( isset($mob->tuoteID) ){ $tp_id = $mob->tuoteID; }
 			if( isset($mob['tv_id']) ){ $tv_id = $mob['tv_id']; }
@@ -222,6 +222,10 @@
 			if( isset($r['yksikko']) ){ $yksikko = $r['yksikko']; }
 			if( isset($mob['yksikko']) ){ $yksikko = $mob['yksikko']; }
 			if( isset($mob['freetext']) ){ $freetext = $mob['freetext']; }
+
+			if( isset($r['alvsis']) and $r['alvsis'] == 'nolla'){ $alvsis = 0; }
+			if( isset($r['hinta_sis']) and isset($r['alvsis']) and $r['alvsis'] == 'sis'){ $alvsis = 1; $hinta = $r['hinta_sis']; }
+
 			if( isset($mob->kohde_kannasta) ){
 				$freetext = '';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
@@ -352,6 +356,10 @@
 			$hinta 		= (( isset($r['hinta']) )? $r['hinta']:0);
 			$alv 		= (( isset($r['alv']) )? $r['alv']:0);
 			$yksikko	= (( isset($r['yksikko']) )? $r['yksikko']:'');
+
+			if( isset($r['alvsis']) and $r['alvsis'] == 'nolla'){ $alvsis = 0; }
+			if( isset($r['hinta_sis']) and isset($r['alvsis']) and $r['alvsis'] == 'sis'){ $alvsis = 1; $hinta = $r['hinta_sis']; }
+
 			if( isset($mob->kohde_kannasta) ){
 				$freetext = '';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){

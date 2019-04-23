@@ -939,6 +939,7 @@ class LaskuController extends Controller
 		{
 			$return['tp_nimike'] = $tp->nimike;
 			$return['tp_id'] = $tp->id;
+			$return['alvsis'] = $tp->alvsis;
 
 			if($tp->yksikko == 'h')
 			{
@@ -954,6 +955,7 @@ class LaskuController extends Controller
 			}
 
 			$return['hinta'] 	= $tp->hinta_alv_0;
+			$return['hinta_sis'] 	= $tp->hinta_alv_sis;
 			$return['alv'] 		= $tp->alv;
 			$return['yksikko']	= $tp->yksikko;
 		}

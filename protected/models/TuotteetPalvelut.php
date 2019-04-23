@@ -68,6 +68,7 @@ public $image;
                      'varastoitava' => 'int(1) ',
                      'myyntituote' => 'int(1) DEFAULT 1 ',
                      'myyntitili' => 'varchar(20) DEFAULT 3000',
+                     'alvsis' => 'varchar(20) DEFAULT "nolla"',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -95,7 +96,7 @@ public $image;
 			array('nimike, selitysteksti, myyntitili', 'length', 'max'=>255),
 			array('hinta_alv_0, hinta_alv_sis, yksikko', 'length', 'max'=>20),
 			array('hinta, kesto, nelio, kotitalousvahennys, netvisorkey', 'length', 'max'=>20),
-			array('toinen_valikko_rakenne, lisapalvelut, kategoria', 'safe'),
+			array('toinen_valikko_rakenne, lisapalvelut, kategoria, alvsis', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, nimike, hinta, selitysteksti, palvelu, kesto, nelio', 'safe', 'on'=>'search'),

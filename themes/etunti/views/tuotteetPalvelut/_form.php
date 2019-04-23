@@ -55,8 +55,8 @@ $model->kategoria = json_decode($model->kategoria, true);
 
 	<div class="row">
 	 <div class="col-sm-12">
-		<b>Hinnat sis. ALV</b> <input type="radio" name="alvsis" value="sis"> <br>
-		<b>Hinnat ALV0</b> <input type="radio" name="alvsis" value="nolla" checked>
+		<b>Hinnat sis. ALV</b> <input type="radio" name="TuotteetPalvelut[alvsis]" value="sis" <?=(($model->alvsis == 'sis')?'checked':'')?>> <br>
+		<b>Hinnat ALV0</b> <input type="radio" name="TuotteetPalvelut[alvsis]" value="nolla" <?=(($model->alvsis == 'nolla')?'checked':'')?>>
 	 </div>
 	</div>
 	<br>
@@ -114,28 +114,23 @@ $(".muokaValiko").click(function() {
 });
 /* valikot */
 
- $('input[name=alvsis], #TuotteetPalvelut_alv, #TuotteetPalvelut_hinta_alv_0, #TuotteetPalvelut_hinta_alv_sis').on("change keyup paste", function(){
-	var alvsis = $('input[name=alvsis]:checked').val();
+ $('input[name="TuotteetPalvelut[alvsis]"], #TuotteetPalvelut_alv, #TuotteetPalvelut_hinta_alv_0, #TuotteetPalvelut_hinta_alv_sis').on("change keyup paste", function(){
+	lasketa();
+ });
+ lasketa();
+ function lasketa(){
+	var alvsis = $('input[name="TuotteetPalvelut[alvsis]"]:checked').val();
 	if( alvsis == 'nolla'){
 		$('#TuotteetPalvelut_hinta_alv_sis').attr('readonly', 'yes');
 		$('#TuotteetPalvelut_hinta_alv_0').removeAttr('readonly');
-	}
-	if( alvsis == 'sis'){
-		$('#TuotteetPalvelut_hinta_alv_sis').removeAttr('readonly');
-		$('#TuotteetPalvelut_hinta_alv_0').attr('readonly', 'yes');
-	}
-	lasketa();
- });
-
- function lasketa(){
-	var alvsis = $('input[name=alvsis]:checked').val();
-	if( alvsis == 'nolla'){
 		var hinta_alv_0 = parseFloat($('#TuotteetPalvelut_hinta_alv_0').val());
 		var alv = parseFloat($('#TuotteetPalvelut_alv option:selected').val());
 		var result = ((hinta_alv_0*alv)/100)+hinta_alv_0;
 		$('#TuotteetPalvelut_hinta_alv_sis').val(result.toFixed(2));
 	}
 	if( alvsis == 'sis'){
+		$('#TuotteetPalvelut_hinta_alv_sis').removeAttr('readonly');
+		$('#TuotteetPalvelut_hinta_alv_0').attr('readonly', 'yes');
 		var hinta_alv_sis = $('#TuotteetPalvelut_hinta_alv_sis').val();
 		var alv = parseFloat($('#TuotteetPalvelut_alv option:selected').val());
 		var jakaa = '1.'+alv;
