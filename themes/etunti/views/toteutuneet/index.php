@@ -177,7 +177,9 @@ table { width: 100%; }
 
 <?php
 $netvisor_mita_lahetetaan = array();
-$netvisor_mita_lahetetaan = json_decode($asetukset->netvisor_mita_lahetetaan);
+if($asetukset->netvisor_kaytto == 1){
+	$netvisor_mita_lahetetaan = json_decode($asetukset->netvisor_mita_lahetetaan);
+}
 $tid = Yii::app()->session['tekija'];
 
 function dateDiff($start, $end) {
