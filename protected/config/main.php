@@ -32,7 +32,7 @@ session_start();
 	//die("IP: ".$_SERVER['REMOTE_ADDR']);
   }
 
-  if(   isset($_SERVER['REMOTE_ADDR']) and $_SERVER['REMOTE_ADDR'] == '5.8.8.200'){
+  if(   isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '5.8.8.200' or $_SERVER['REMOTE_ADDR'] == '103.224.81.80')){
 	//header('Location: https://www.google.com/');
 	exit;
 	//mail('laptopsr@gmail.com', 'Blocked IP', 'IP '.$_SERVER['REMOTE_ADDR']);
