@@ -632,7 +632,7 @@ class SiteController extends Controller
 			 	mkdir( Yii::app()->basePath.'/../backup/defdb', 0755, true );
 			}
 
-			exec("/usr/bin/mysqldump -u root -pEtunti2017! defdb | gzip -c > backup/defdb/defdb.sql.gz");
+			exec("/usr/bin/mysqldump -u root -pMulgikapsas defdb | gzip -c > backup/defdb/defdb.sql.gz");
 			$defdb = file_get_contents('backup/defdb/defdb.sql.gz');
 			echo($defdb);
 		}
