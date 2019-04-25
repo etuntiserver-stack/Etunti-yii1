@@ -9,7 +9,10 @@
 
 	$arr = file_get_contents('kphts.txt');
 	foreach(json_decode($arr, true) as $k => $v){
-		echo $k.' '.$v.'<br>';
+		$as = Asiakkaat::model()->findByPk($k);
+		if( isset($as->id) ){
+			Asiakkaat::model()->updateByPk($as->id, array('ryhma' => $v));
+		}
 	}
 
 //echo '<pre>';
