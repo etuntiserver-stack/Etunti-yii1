@@ -6,7 +6,7 @@
 
 //phpinfo();
 
-
+/*
 	$arr = file_get_contents('kphts.txt');
 	foreach(json_decode($arr, true) as $k => $v){
 		$as = Asiakkaat::model()->findByPk($k);
@@ -14,7 +14,7 @@
 			Asiakkaat::model()->updateByPk($as->id, array('ryhma' => $v));
 		}
 	}
-
+*/
 //echo '<pre>';
 //print_r($arr);
 //echo '</pre>';
