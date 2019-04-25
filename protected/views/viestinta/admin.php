@@ -6,18 +6,15 @@
 
 //phpinfo();
 
-	$criteria = new CDbCriteria();
-        $criteria->condition = " 
-		ryhma!=''
-	";
-	$as = Asiakkaat::model()->findAll($criteria);
-	$arr = array();
-	foreach($as as $item){
-		$arr[$item->id] = $item->ryhma;
+
+	$arr = file_get_contents('kphts.txt');
+	foreach(json_decode($arr, true) as $k => $v){
+		echo $k.' '.$v.'<br>';
 	}
-echo '<pre>';
-print_r($arr);
-echo '</pre>';
+
+//echo '<pre>';
+//print_r($arr);
+//echo '</pre>';
 exit;
 
 
