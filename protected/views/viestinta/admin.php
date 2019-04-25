@@ -6,98 +6,19 @@
 
 //phpinfo();
 
-/*
-	function sprint($val){
-	    if($val > 0)
-		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	$criteria = new CDbCriteria();
+        $criteria->condition = " 
+		ryhma!=''
+	";
+	$as = Asiakkaat::model()->findAll($criteria);
+	$arr = array();
+	foreach($as as $item){
+		$arr[$item->id] = $item->ryhma;
 	}
-
-			$start_date = "01.05.2018";
-			$end_date = "31.05.2018";
-
-			$result = 0;
-			$mob_result = 0;
-			$tyovuorot_result = 0;
-
-			while (strtotime($start_date) <= strtotime($end_date))
-			{
-				$mobile = 0;
-				$pvm = date( "Y-m-d", strtotime($start_date));
-				$start_date = date ("Y-m-d", strtotime($start_date. " +1 day"));
-	
-	
-				// <-- Ensin katsotaan mobile taulusta toteutuneet
-		       		$criteria = new CDbCriteria();
-		        	$criteria->select = "
-					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-				";
-			        $criteria->condition = " 
-					aloitan!='' AND loppui!=''
-					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
-					AND status=3
-					AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
-				";
-				$lu = Mobile::model()->find($criteria);
-	
-	
-		       		$criteria = new CDbCriteria();
-		        	$criteria->select = "
-					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-				";
-			        $criteria->condition = " 
-					aloitan!='' AND loppui!=''
-					AND status=3
-					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
-				";
-				$tot = Toteutuneet::model()->find($criteria);
-		
-				if(isset($lu->l_tunnit))
-				$mobile += $lu->l_tunnit;
-		
-				if(isset($tot->l_tunnit))
-				$mobile += $tot->l_tunnit;
-				// Ensin katsotaan mobile taulusta toteutuneet -->
-	
-				if( $mobile > 0 )
-				{
-					$mob_result += $mobile;
-				}
-	
-	
-				// <-- tyovuorot
-		       		$criteria = new CDbCriteria();
-			        $criteria->select = "
-					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i'), 
-					DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i')))) as l_tunnit
-				";
-				$criteria->condition = " 
-					alku!='' AND loppu!=''
-					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
-					AND status=3
-					AND peruutettu='0'
-				";
-				$tv = Tyovuoroot::model()->find($criteria);
-	
-				if(isset($tv->l_tunnit))
-				$tyovuorot_result += $tv->l_tunnit;
-				//     tyovuorot -->
-	
-					
-			}
-	
-			if($mob_result > $tyovuorot_result)
-			$result = $mob_result;
-			if($mob_result < $tyovuorot_result)
-			$result = $tyovuorot_result;
-	
-			$sum_result = $result/3600;
-
-
-			echo $sum_result;
-			exit;
-*/
+echo '<pre>';
+print_r($arr);
+echo '</pre>';
+exit;
 
 
 
