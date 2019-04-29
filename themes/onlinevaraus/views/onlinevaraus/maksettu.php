@@ -339,7 +339,7 @@ $message .= '
 
 			$o = Onlinevaraus::model()->findbypk($ov->id);
 			$o->tila=1;
-			//$o->save();
+			$o->save();
 
 
 				// <-- LOG
