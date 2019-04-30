@@ -806,8 +806,9 @@ public function actionImei($dom)
 			if($tp != $ttekija->id)
 			{
 		      	   $tpID = Tyontekijat::model()->findbypk($tp);
-			   if(isset($tpID->tekijan_nimi))
-			   $tplista .= Yii::t('main', 'Työpari').': '.$this->etuSukunimi($tpID->id).'<br>';
+			   if(isset($tpID->tekijan_nimi)){
+			   	$tplista .= '<b>'.Yii::t('main', 'Työpari').'</b>: '.$this->etuSukunimi($tpID->id).' '.((!empty($tpID->laiten_puh))?', <b>Puh.</b>: '.$tpID->laiten_puh:'').'<br>';
+			   }
 			}
 		      }
 		      
