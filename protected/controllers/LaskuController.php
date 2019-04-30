@@ -2107,13 +2107,15 @@ foreach($laskunRivit as $rivit)
 	</InvoiceLine>';
 	}
 
+if( $model->alv_muoto == 0 ){  $type = 'net'; }
+if( $model->alv_muoto == 1 ){  $type = 'gross'; }
 
 $xml .= '
        <InvoiceLine>
          <SalesInvoiceProductLine>
              <ProductIdentifier type="netvisor">'.$ProductIdentifier.'</ProductIdentifier>
              <ProductName>'.$rivit->tkoodi.'</ProductName>
-             <ProductUnitPrice type="net">'.$rivit->hinta.'</ProductUnitPrice>
+             <ProductUnitPrice type="'.$type.'">'.$rivit->hinta.'</ProductUnitPrice>
              <ProductVatPercentage vatcode="KOMY">'.$rivit->alv.'</ProductVatPercentage>
              <SalesInvoiceProductLineQuantity>'.$rivit->kpl.'</SalesInvoiceProductLineQuantity>
              <SalesInvoiceProductLineDiscountPercentage>'.$rivit->ale.'</SalesInvoiceProductLineDiscountPercentage>
