@@ -1974,9 +1974,7 @@ class TyovuorootController extends Controller
 				$toistuva->muistiinpano = '';
 			}
 
-			if(isset($_POST['P']))
-			$toistuva->viikko_paivat=json_encode($_POST['P']);
-
+			if(isset($_POST['P'])){	$toistuva->viikko_paivat=json_encode($_POST['P']); }
 
 			if($saankoSuoritta == 1)
 			{
@@ -1985,7 +1983,6 @@ class TyovuorootController extends Controller
 					$return[] = array('ERROR'=>json_encode(var_dump($toistuva->getErrors())));
 				}
 			}
-
 	
 			if(!isset($_POST['tyopaari']))
 			{
@@ -1999,8 +1996,6 @@ class TyovuorootController extends Controller
 					null
 				);
 			}
-
-
 
 			// <-- jos on tyopaari
 			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
@@ -2328,6 +2323,13 @@ class TyovuorootController extends Controller
 			// <-- SUORITTAMINEN
 			if($saankoSuoritta == 1)
 			{
+
+				// <-- Varauksesta pois original
+				if( $model->tid == 0 ){
+					Tyovuoroot::model()->deleteByPk($model->id);
+				}
+				//     Varauksesta pois original -->
+
 				if(!$toistuva->save()){	$return[] = array('ERROR'=>json_encode(var_dump($toistuva->getErrors()))); }
 
 				// <-- Poistetaanko vai säilytetäänkö vanhan ja uuden aloituspäivämäärän väliin jäävät työvuorot

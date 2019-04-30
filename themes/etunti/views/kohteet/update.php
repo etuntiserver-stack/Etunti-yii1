@@ -87,8 +87,8 @@ exit;
      <div class="section input-group">
        <label class="field prepend-icon append-button file">
          <span class="button"><?php echo Yii::t('main', 'Tiedostot (sopimukset jne)'); ?></span>
-         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;">
-         <input type="text" class="gui-input" name="uploaded_t" id="tiedostoUP" placeholder="Valitse tiedosto..">
+         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUPSop').value = this.value;">
+         <input type="text" class="gui-input" name="uploaded_t" id="tiedostoUPSop" placeholder="Valitse tiedosto..">
          <label class="field-icon">
           <i class="fa fa-upload"></i>
          </label>
