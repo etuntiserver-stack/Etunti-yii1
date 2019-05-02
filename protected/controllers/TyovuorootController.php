@@ -2376,7 +2376,9 @@ class TyovuorootController extends Controller
 			{
 
 			    // <-- Lisätään pää työntekijä
-			    $_POST['tyopaari'][] = $toistuva->tid;
+			    if( $toistuva->tid != 0 ){
+			    		$_POST['tyopaari'][] = $toistuva->tid;
+			    }
 
 			    foreach($_POST['tyopaari'] as $tid)
 			    {
