@@ -70,14 +70,9 @@ $model->kategoria = json_decode($model->kategoria, true);
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alv'); ?>
 		<?php 
-		if(isset($model->id) and $model->alv != 0)
-			$alv = $model->alv;
-		else
-			$alv = 24;
-
         	$l = array(0=>0,10=>10,14=>14,24=>24);
 		echo $form->dropDownList($model,'alv',$l, 
-			array('class'=>'form-control','options' => array('24'=>array('selected'=>true)))
+			array('class'=>'form-control')
 		);
 
 		?>
@@ -126,7 +121,7 @@ $(".muokaValiko").click(function() {
 		var hinta_alv_0 = parseFloat($('#TuotteetPalvelut_hinta_alv_0').val());
 		var alv = parseFloat($('#TuotteetPalvelut_alv option:selected').val());
 		var result = ((hinta_alv_0*alv)/100)+hinta_alv_0;
-		$('#TuotteetPalvelut_hinta_alv_sis').val(result.toFixed(2));
+		$('#TuotteetPalvelut_hinta_alv_sis').val(result.<?=((Yii::app()->user->domain == 'kotipuhtaaksi')?'toFixed(4)':'toFixed(2)')?>);
 	}
 	if( alvsis == 'sis'){
 		$('#TuotteetPalvelut_hinta_alv_sis').removeAttr('readonly');
@@ -135,7 +130,7 @@ $(".muokaValiko").click(function() {
 		var alv = parseFloat($('#TuotteetPalvelut_alv option:selected').val());
 		var jakaa = '1.'+alv;
 		var laske = hinta_alv_sis/parseFloat(jakaa);
-		$('#TuotteetPalvelut_hinta_alv_0').val(laske.toFixed(2));
+		$('#TuotteetPalvelut_hinta_alv_0').val(laske.<?=((Yii::app()->user->domain == 'kotipuhtaaksi')?'toFixed(4)':'toFixed(2)')?>);
 	}
  }
 
@@ -352,7 +347,7 @@ $(".muokaValiko").click(function() {
 					<input type="number" class="form-control hinta_veroton" for="rivi_'.$i.'" name="toinen_valiko[values][hinta_veroton][]" value="'.$hinta_veroton_value.'" step="any">
 				  </div>
 				  <div class="col-sm-3">
-					<label>'.Yii::t('main', 'Hinta (ALV '.$alv.'%)').'</label>
+					<label>'.Yii::t('main', 'Hinta (ALV '.$model->alv.'%)').'</label>
 					<input type="number" class="form-control hinta" for="rivi_'.$i.'" name="toinen_valiko[values][hinta][]" value="'.$hinta[$key].'" step="any">
 				  </div>
 				  <div class="col-sm-3">
@@ -396,7 +391,7 @@ $(".muokaValiko").click(function() {
 			<textarea class="form-control" name="lisapalvelut[values][kuvaus][]"></textarea>
 		  </div>
 		  <div class="col-sm-4">
-			<label><?php echo Yii::t('main', 'Hinta (ALV '.$alv.')'); ?></label>
+			<label><?php echo Yii::t('main', 'Hinta (ALV '.$model->alv.')'); ?></label>
 			<input type="number" class="form-control hinta_veroton" for="lisapalvelut_rivi_1" name="lisapalvelut[values][hinta_veroton][]" step="any">
 		  </div>
 		  <div class="col-sm-4">
@@ -470,7 +465,7 @@ $(".muokaValiko").click(function() {
 					<input type="number" class="form-control hinta_veroton" for="lisapalvelut_rivi_'.$i.'" name="lisapalvelut[values][hinta_veroton][]" value="'.$hinta_veroton[$key].'" step="any">
 				  </div>
 				  <div class="col-sm-4">
-					<label>'.Yii::t('main', 'Hinta (ALV '.$alv.'%)').'</label>
+					<label>'.Yii::t('main', 'Hinta (ALV '.$model->alv.'%)').'</label>
 					<input type="number" class="form-control hinta" for="lisapalvelut_rivi_'.$i.'" name="lisapalvelut[values][hinta][]" value="'.$hinta[$key].'" step="any">
 				  </div>
 				  <div class="col-sm-3">
