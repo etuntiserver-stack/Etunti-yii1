@@ -274,13 +274,14 @@ class AsiakkaatController extends Controller
 		}
 
 
-        	$criteria->addCondition ("
-			kohde IN 
+        	$criteria->condition = "
+			tid!=0
+			AND kohde IN 
 			(SELECT id FROM sivex_kohdet 
 			   WHERE asiakas_id='".$id."'
 			)
-		AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
-		");
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+		";
 
 
 		$model=Tyovuoroot::model()->findAll($criteria);
