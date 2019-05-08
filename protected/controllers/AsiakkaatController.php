@@ -275,8 +275,7 @@ class AsiakkaatController extends Controller
 
 
         	$criteria->condition = "
-			tid!=0
-			AND kohde IN 
+			kohde IN 
 			(SELECT id FROM sivex_kohdet 
 			   WHERE asiakas_id='".$id."'
 			)
