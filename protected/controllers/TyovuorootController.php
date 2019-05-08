@@ -2326,7 +2326,14 @@ class TyovuorootController extends Controller
 
 				// <-- Varauksesta pois original
 				if( $model->tid == 0 ){
-					Tyovuoroot::model()->deleteByPk($model->id);
+
+						$criteria = new CDBcriteria;
+						$criteria->condition = " 
+							tid='0'
+							AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= '".date("Y-m-d", strtotime($toistuva->pvm))."'
+							AND toistuva_id='".$toistuva->id."'
+						";
+						Tyovuoroot::model()->deleteAll($criteria);
 				}
 				//     Varauksesta pois original -->
 
