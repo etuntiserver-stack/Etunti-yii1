@@ -288,7 +288,7 @@ $(".muokaValiko").click(function() {
 			<input type="number" class="form-control hinta_veroton" for="rivi_1" name="toinen_valiko[values][hinta_veroton][]" step="any">
 		  </div>
 		  <div class="col-sm-3">
-			<label><?php echo Yii::t('main', 'Hinta (ALV '.$alv.'%)'); ?></label>
+			<label><?php echo Yii::t('main', 'Hinta (ALV '.$model->alv.'%)'); ?></label>
 			<input type="number" class="form-control hinta" for="rivi_1" name="toinen_valiko[values][hinta][]" step="any">
 		  </div>
 		  <div class="col-sm-3">
