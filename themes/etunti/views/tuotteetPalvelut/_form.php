@@ -82,7 +82,7 @@ $model->kategoria = json_decode($model->kategoria, true);
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta_alv_sis'); ?>
-		<?php echo $form->numberField($model,'hinta_alv_sis',array('size'=>20,'maxlength'=>20,'class'=>'form-control', 'step'=>'0any', 'readonly' => 'yes')); ?>
+		<?php echo $form->numberField($model,'hinta_alv_sis',array('size'=>20,'maxlength'=>20,'class'=>'form-control', 'step'=>'any', 'readonly' => 'yes')); ?>
 		<?php echo $form->error($model,'hinta_alv_sis'); ?>
 	</div>
 
@@ -121,7 +121,7 @@ $(".muokaValiko").click(function() {
 		var hinta_alv_0 = parseFloat($('#TuotteetPalvelut_hinta_alv_0').val());
 		var alv = parseFloat($('#TuotteetPalvelut_alv option:selected').val());
 		var result = ((hinta_alv_0*alv)/100)+hinta_alv_0;
-		$('#TuotteetPalvelut_hinta_alv_sis').val(result.<?=((Yii::app()->user->domain == 'kotipuhtaaksi')?'toFixed(4)':'toFixed(2)')?>);
+		$('#TuotteetPalvelut_hinta_alv_sis').val(result.<?=((Yii::app()->user->domain == 'kotipuhtaaksi' || Yii::app()->user->domain == 'demo')?'toFixed(4)':'toFixed(2)')?>);
 	}
 	if( alvsis == 'sis'){
 		$('#TuotteetPalvelut_hinta_alv_sis').removeAttr('readonly');
@@ -130,7 +130,7 @@ $(".muokaValiko").click(function() {
 		var alv = parseFloat($('#TuotteetPalvelut_alv option:selected').val());
 		var jakaa = '1.'+alv;
 		var laske = hinta_alv_sis/parseFloat(jakaa);
-		$('#TuotteetPalvelut_hinta_alv_0').val(laske.<?=((Yii::app()->user->domain == 'kotipuhtaaksi')?'toFixed(4)':'toFixed(2)')?>);
+		$('#TuotteetPalvelut_hinta_alv_0').val(laske.<?=((Yii::app()->user->domain == 'kotipuhtaaksi' || Yii::app()->user->domain == 'demo')?'toFixed(4)':'toFixed(2)')?>);
 	}
  }
 
