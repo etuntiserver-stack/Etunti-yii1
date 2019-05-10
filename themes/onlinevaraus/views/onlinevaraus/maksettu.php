@@ -81,7 +81,15 @@ if(isset($ov->id) and isset($tv->id)){
 	if(!isset($_SESSION['onlinevaraus']['asiakas_id']) and !isset($_SESSION['onlinevaraus']['kohde_id']))
 	{
 
+
+		  $criteria = new CDbCriteria();
+		  $criteria->order = " cast(asiakasnumero as unsigned) DESC  ";
+		  $anum = Asiakkaat::model()->find($criteria);
+
 		  $asiakkaat = new Asiakkaat;
+		  if(isset($anum->id) and $asetukset->lasku_asiakasnumero == 0){
+		  	$asiakkaat->asiakasnumero = $anum->asiakasnumero+1;
+		  }
 		  $asiakkaat->kaupunki = $ov->kaupunki;
 		  $asiakkaat->postinumero = $ov->postinumero;
 		  $asiakkaat->osoite = $ov->osoite;
