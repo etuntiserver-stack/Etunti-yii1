@@ -19,6 +19,11 @@
 		?>
 	</td>
 	<td>
+		<?php if($data->hinta_alv_0 !=0 and $data->yksikko == 'h' and $data->nayta_vain_onlinevarauksessa == 0): ?>
+		<br><input type="radio" name="oletustuote" id="oletustuote" value="<?=$data->id?>" <?=(($data->oletustuote == 2)?'checked':'')?>>
+		<?php endif; ?>
+	</td>
+	<td>
 		<h3><?php echo $data->nimike; ?></h3>
 	</td>
 	<td>

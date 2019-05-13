@@ -494,6 +494,10 @@ $(".muokaValiko").click(function() {
        		$criteria->order = " nimike ";
        		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND yksikko='h' AND nayta_vain_onlinevarauksessa=0";
 		$tp = TuotteetPalvelut::model()->findAll($criteria);
+		$oletus = TuotteetPalvelut::model()->find("oletustuote=2");
+		if( !isset($model->id) and isset($oletus->id) ){
+			$model->tuoteID = $oletus->id;
+		}
 		echo $form->dropDownList($model,'tuoteID', CHtml::listData($tp, 'id', 'nimike'), 
 		array('empty'=>'Valitse','class'=>'form-control'));
 		?>

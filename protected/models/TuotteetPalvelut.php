@@ -69,6 +69,7 @@ public $image;
                      'myyntituote' => 'int(1) DEFAULT 1 ',
                      'myyntitili' => 'varchar(20) DEFAULT 3000',
                      'alvsis' => 'varchar(20) DEFAULT "nolla"',
+                     'oletustuote' => 'int(1) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -92,7 +93,7 @@ public $image;
 		return array(
 			array('nimike', 'required'),
 			array('image', 'file','types'=>'jpg', 'allowEmpty'=>true, 'on'=>'update'),
-			array('palvelu, nayta_sivuilla, nayta_vain_onlinevarauksessa, paa_palvelu, aktiivinen, varastoitava, myyntituote', 'numerical', 'integerOnly'=>true),
+			array('palvelu, nayta_sivuilla, nayta_vain_onlinevarauksessa, paa_palvelu, aktiivinen, varastoitava, myyntituote, oletustuote', 'numerical', 'integerOnly'=>true),
 			array('nimike, selitysteksti, myyntitili', 'length', 'max'=>255),
 			array('hinta_alv_0, hinta_alv_sis, yksikko', 'length', 'max'=>20),
 			array('hinta, kesto, nelio, kotitalousvahennys, netvisorkey', 'length', 'max'=>20),

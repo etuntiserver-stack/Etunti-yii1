@@ -281,6 +281,16 @@ class TuotteetPalvelutController extends Controller
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
 
+		if(isset($_POST['oletustuote'])){
+			$t = TuotteetPalvelut::model()->find("oletustuote=2");
+			if(isset($t->id)){
+				TuotteetPalvelut::model()->updatebypk($t->id, array('oletustuote' => 1));
+			}
+			TuotteetPalvelut::model()->updatebypk($_POST['oletustuote'], array('oletustuote' => 2));
+			echo $_POST['oletustuote'];
+			exit;
+		}
+
 		$asetukset=Asetukset::model()->findbypk(1);
 		if($asetukset->netvisor_kaytto == 1){ $netvisor = true; } else { $netvisor = false; }
 

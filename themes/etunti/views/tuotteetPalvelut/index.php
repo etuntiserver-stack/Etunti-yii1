@@ -134,6 +134,7 @@ foreach($k as $item){
   <thead class="myBgColors">
   <tr>
   <th></th>
+  <th><i data-toggle="tooltip" class="fa fa-2x fa-info" title="Oletustuote"></i></th>
   <th><?php echo Yii::t('main', 'Nimike'); ?></th>
   <th><?php echo Yii::t('main', 'Kategoria'); ?></th>
   <th><?php echo Yii::t('main', 'Hinta (ALV 0)'); ?></th>
@@ -175,14 +176,29 @@ foreach($k as $item){
 <script type="text/javascript">
 $(document).ready(function(){
 
-if($("#akt").val())
-$("#nayta_sivuilla").val($("#akt").val());
-else
-$("#nayta_sivuilla").val(1);
+ if($("#akt").val()){
+ 	$("#nayta_sivuilla").val($("#akt").val());
+ } else {
+ 	$("#nayta_sivuilla").val(1);
+ }
 
-$(".haemob").click(function(){
+ $(".haemob").click(function(){
 	$("#mobForm").submit();
-});
+ });
+
+ $(document).delegate("#oletustuote","click", function(){
+	  	 $.ajax({
+			url: 'index',
+			type:'POST',
+			data: { "oletustuote" : $(this).val() },
+			  success:function(data){
+			  	console.log(data);
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+ });
 
 });
 </script>
