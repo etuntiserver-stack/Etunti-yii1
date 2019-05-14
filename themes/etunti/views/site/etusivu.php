@@ -10,7 +10,25 @@
 
 	$asetukset = Asetukset::model()->findByPk(1);
 
+	if( $asetukset->app_hyvaksynnan_peruste == 2 ){
+		$criteria = new CDbCriteria();
+	        $criteria->condition = " 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') = '".date('Y-m-d', strtotime('-1 day'))."'
+			AND hyvaksytty=''
+			AND deleted=0
+		";
+		$hyvaksymattomat_eilen = Mobile::model()->findAll($criteria);
+		if( count($hyvaksymattomat_eilen) > 0 ){
+			Yii::app()->user->setFlash('info', 
+			"<marquee><h4>Seuraava automaattinen tuntien hyväksyntä tapahtuu ".date('d.m.Y', strtotime('-1 day'))." kello ".$asetukset->auto_hyvaksynta_klo .". Kirjattuja tunteja hyväksyntään ".count($hyvaksymattomat_eilen)." kappaletta.</marquee>");
 
+			if( time() > strtotime($asetukset->auto_hyvaksynta_klo) ){
+				Mobile::model()->updateAll(array('hyvaksytty' => 'auto//'.date("d.m.Y")), $criteria);
+				Yii::app()->user->setFlash('success', 
+				"<h4>Päivä: ".date('d.m.Y', strtotime('-1 day'))." on hyväksytty.</h4>");
+			}
+		}
+	}
 
 $months=array(
 	'01'=>Yii::t('main', 'Tammikuu'),
