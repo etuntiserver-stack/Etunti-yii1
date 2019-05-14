@@ -32,23 +32,23 @@ class SiteController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow', 
+			array('allow',
 				'actions'=>array('etunnin_asiakkaat', 'update_etunnin_asiakas', 'etunnin_asiakas_kk', 'laheta_et_kirje', 'etunnin_asiakas_kk_laskuri', 'delete_etunnin_asiakas', 'errorlog'),
                 		'expression'=>"Yii::app()->controller->isDigisten()",
 			),
-			array('allow', 
+			array('allow',
 				'actions'=>array( 'error_custom', 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout', 'salasanan_palauttaminen', 'change_password'),
 				'users'=>array('*'),
 			),
-			array('allow', 
-				'actions'=>array('site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan', 'getasiakasidbynimi', 'otakaytoon', 'ohjeet', 'management', 'management_tunnit'),
+			array('allow',
+				'actions'=>array('site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan', 'getasiakasidbynimi', 'otakaytoon', 'ohjeet', 'management', 'management_tunnit', 'management_hours'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
-			array('allow', 
+			array('allow',
 				'actions'=>array('file_safe_opener'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin() || Yii::app()->controller->isAsiakas() || isset(Yii::app()->user->domain)",
 			),
-			array('allow', 
+			array('allow',
 				'actions'=>array('index','test','hyvaksy','hylkaa', 'confirm', 'aloita', 'defdb_dump', 'opentmp'),
 				'users'=>array('*'),
 			),
@@ -59,7 +59,7 @@ class SiteController extends Controller
 	}
 
 
-	public function isAsiakas() 
+	public function isAsiakas()
 	{
 		if(isset(Yii::app()->user->asiakas))
 		{
@@ -127,6 +127,12 @@ class SiteController extends Controller
 		));
 	}
 
+  public function actionManagement_hours()
+  {
+                Yii::app()->theme = 'etunti';
+		$this->render('management_hours');
+  }
+
 	public function actionManagement()
 	{
                 Yii::app()->theme = 'etunti';
@@ -155,13 +161,13 @@ class SiteController extends Controller
 
 		$criteria = new CDbCriteria();
 		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])){
-		$criteria->condition = " 
+		$criteria->condition = "
 			yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
 		";
 		$asiakas = Asiakkaat::model()->find($criteria);
 		}
 		if(isset($_GET['asiakas_id']) and !empty($_GET['asiakas_id'])){
-		$criteria->condition = " 
+		$criteria->condition = "
 			id='".$_GET['asiakas_id']."'
 		";
 		$asiakas = Asiakkaat::model()->find($criteria);
@@ -228,8 +234,8 @@ class SiteController extends Controller
 		$openfile = Yii::app()->basePath.'/../tmp/'.$domain.'/'.$file;
 		if (file_exists( $openfile ))
 		{
-				header("Content-Length: " . filesize ( $openfile ) ); 
-		                header("Content-type: application/octet-stream"); 
+				header("Content-Length: " . filesize ( $openfile ) );
+		                header("Content-type: application/octet-stream");
 		                header("Content-disposition: attachment; filename=".basename($openfile));
 		                readfile($openfile);
 				unlink($openfile);
@@ -245,10 +251,10 @@ class SiteController extends Controller
 		}
 
 		$newfile = basename($filepath);
-		if (copy($filepath, $newfile)) 
+		if (copy($filepath, $newfile))
 		{
-				header("Content-Length: " . filesize ( $newfile ) ); 
-		                header("Content-type: application/octet-stream"); 
+				header("Content-Length: " . filesize ( $newfile ) );
+		                header("Content-type: application/octet-stream");
 		                header("Content-disposition: attachment; filename=".basename($newfile));
 		                readfile($newfile);
 				unlink($newfile);
@@ -269,7 +275,7 @@ class SiteController extends Controller
 			    foreach($model as $data)
 			    {
 				if(!empty($data->osoite) and !empty($data->kaupunki) and !empty($data->pnumero) and is_numeric($data->pnumero))
-				{	
+				{
 					$count++;
 					//$address = $data->id.' '.$data->pnumero.'+'.$data->kaupunki.'+'.$data->osoite.'<br>';
 
@@ -292,7 +298,7 @@ class SiteController extends Controller
 					}
 
 
-				}			
+				}
 			    }
 			}
 		}
@@ -357,7 +363,7 @@ class SiteController extends Controller
 
 		if( isset($domainit->id) )
 		{
-	
+
 			$start_date = date( "Y-m-d", strtotime('first day of this month') );
 			$end_date = date("Y-m-d", strtotime('last day of this month') );
 			$sum_result = $this->digistenTunnitYhteensa($start_date, $end_date);
@@ -373,10 +379,10 @@ class SiteController extends Controller
 		} else {
 			Yii::app()->user->setState('ilmainen', false);
 			return false;
-		}	
+		}
 
 	}
-	
+
 	public function ilmainenIlmoitus()
 	{
 		return 'Ilmainen käyttö on mahdoton jos tunnit enemmään kun 500';
@@ -388,7 +394,7 @@ class SiteController extends Controller
 		$domainit = Domainit::model()->find(" domain='".$domain."' AND aktiivinen=1 AND maksullinen=1 ");
 		if( isset($domainit->id) )
 		{
-	
+
 			$start_date = date( "Y-m-d", strtotime('first day of last month') );
 			$end_date = date("Y-m-d", strtotime('last day of last month') );
 			$sum_result = $this->digistenTunnitYhteensa($start_date, $end_date);
@@ -397,7 +403,7 @@ class SiteController extends Controller
 
 		} else {
 			return false;
-		}	
+		}
 
 	}
 
@@ -414,74 +420,74 @@ class SiteController extends Controller
 				$mobile = 0;
 				$pvm = date( "Y-m-d", strtotime($start_date));
 				$start_date = date ("Y-m-d", strtotime($start_date. " +1 day"));
-	
-	
+
+
 				// <-- Ensin katsotaan mobile taulusta toteutuneet
 		       		$criteria = new CDbCriteria();
 		        	$criteria->select = "
-					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'),
 					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
 				";
-			        $criteria->condition = " 
+			        $criteria->condition = "
 					aloitan!='' AND loppui!=''
 					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
 					AND status=3
 					AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 				";
 				$lu = Mobile::model()->find($criteria);
-	
-	
+
+
 		       		$criteria = new CDbCriteria();
 		        	$criteria->select = "
-					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'),
 					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
 				";
-			        $criteria->condition = " 
+			        $criteria->condition = "
 					aloitan!='' AND loppui!=''
 					AND status=3
 					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
 				";
 				$tot = Toteutuneet::model()->find($criteria);
-		
+
 				if(isset($lu->l_tunnit))
 				$mobile += $lu->l_tunnit;
-		
+
 				if(isset($tot->l_tunnit))
 				$mobile += $tot->l_tunnit;
 				// Ensin katsotaan mobile taulusta toteutuneet -->
-	
+
 				if( $mobile > 0 )
 				{
 					$mob_result += $mobile;
 				}
-	
-	
+
+
 				// <-- tyovuorot
 		       		$criteria = new CDbCriteria();
 			        $criteria->select = "
-					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i'), 
+					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i'),
 					DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i')))) as l_tunnit
 				";
-				$criteria->condition = " 
+				$criteria->condition = "
 					alku!='' AND loppu!=''
 					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
 					AND status=3
 					AND peruutettu='0'
 				";
 				$tv = Tyovuoroot::model()->find($criteria);
-	
+
 				if(isset($tv->l_tunnit))
 				$tyovuorot_result += $tv->l_tunnit;
 				//     tyovuorot -->
-	
-					
+
+
 			}
-	
+
 			if($mob_result > $tyovuorot_result)
 			$result = $mob_result;
 			if($mob_result < $tyovuorot_result)
 			$result = $tyovuorot_result;
-	
+
 			$sum_result = $result/3600;
 
 			return $sum_result;
@@ -525,7 +531,7 @@ class SiteController extends Controller
 			  </tr>
 			  ';
 			}
-	
+
 		    }
 		$bd .='</tbody>
                   </table>';
@@ -546,7 +552,7 @@ class SiteController extends Controller
 
        		    $criteria = new CDbCriteria();
        		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i') ASC";
-       		    $criteria->condition = " 
+       		    $criteria->condition = "
 			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 			AND alku!='00:00'
 			AND peruutettu=0
@@ -574,7 +580,7 @@ class SiteController extends Controller
 	                      </tr>
 				  ';
 			}
-	
+
 		    }
 
 		$bd .= '
@@ -594,7 +600,7 @@ class SiteController extends Controller
 	protected function tasot($num)
 	{
 		$tas = array();
-		if(isset(Yii::app()->user->adminPaketti)) 
+		if(isset(Yii::app()->user->adminPaketti))
 		$tas = explode(",",Yii::app()->user->adminPaketti);
 		if(in_array($num,$tas))
 		return true;
@@ -621,7 +627,7 @@ class SiteController extends Controller
 		echo json_encode($return);
 		exit;
 	}
-  
+
 	public function actionDefdb_dump($domain, $pass)
 	{
                 Yii::app()->theme = 'classic';
@@ -646,7 +652,7 @@ class SiteController extends Controller
 			$user = "root";
 			$token = "N5YBXZSXX245H3IL38U0CPGOMT7XGBTB";
 			$host = 'https://srv.etunti.fi:2087/';
- 
+
 			if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
 			{
 				$servername = "localhost";
@@ -806,7 +812,7 @@ class SiteController extends Controller
 			'database' => $database,
 			'kirjautumistunnus' => $kirjautumistunnus,
 		));
-    
+
 	}
 
 	public function AjaaKaikkiModelit()
@@ -822,7 +828,7 @@ class SiteController extends Controller
 		    {
 		        if (preg_match("/^([A-Za-z0-9]+)\.php$/", $modelFileName, $matches))
 			{
-			   if( 
+			   if(
 				isset($matches[1])
 				and $matches[1] != 'Page'
 				and $matches[1] != 'LoginForm'
@@ -848,7 +854,7 @@ class SiteController extends Controller
 		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,0);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,0);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
- 
+
 		$header[0] = "Authorization: whm $user:$token";
 		curl_setopt($curl,CURLOPT_HTTPHEADER,$header);
 		curl_setopt($curl, CURLOPT_URL, $query);
@@ -856,11 +862,11 @@ class SiteController extends Controller
 
 		$result = curl_exec($curl);
 		if ($result == false) {
-		    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";   
-		
+		    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";
+
 		}
 		curl_close($curl);
- 
+
 		return $result;
 
 	}
@@ -878,14 +884,14 @@ class SiteController extends Controller
 			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,0);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,0);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
- 
+
 			$header[0] = "Authorization: whm $user:$token";
 			curl_setopt($curl,CURLOPT_HTTPHEADER,$header);
 			curl_setopt($curl, CURLOPT_URL, $query);
 			$result = curl_exec($curl);
 			if ($result == false) {
-			    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";   
-			
+			    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";
+
 			}
 			curl_close($curl);
 
@@ -902,21 +908,21 @@ class SiteController extends Controller
 			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,0);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,0);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
- 
+
 			$header[0] = "Authorization: whm $user:$token";
 			curl_setopt($curl,CURLOPT_HTTPHEADER,$header);
 			curl_setopt($curl, CURLOPT_URL, $query);
 			$result = curl_exec($curl);
 			if ($result == false) {
-			    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";   
-			
+			    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";
+
 			}
 			curl_close($curl);
 
 			$decode_result = json_decode($result, true);
 			if(
-				isset($decode_result['cpanelresult']['event']['result']) 
-				and $decode_result['cpanelresult']['event']['result'] == 1 
+				isset($decode_result['cpanelresult']['event']['result'])
+				and $decode_result['cpanelresult']['event']['result'] == 1
 			)
 			{
 
@@ -927,21 +933,21 @@ class SiteController extends Controller
 				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,0);
 				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,0);
 				curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
- 
+
 				$header[0] = "Authorization: whm $user:$token";
 				curl_setopt($curl,CURLOPT_HTTPHEADER,$header);
 				curl_setopt($curl, CURLOPT_URL, $query);
 				$result_privelegies = curl_exec($curl);
 				if ($result_privelegies == false) {
-				    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";   
-				
+				    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";
+
 				}
 				curl_close($curl);
-	
+
 				$decode_result_pr = json_decode($result_privelegies, true);
 				if(
-					isset($decode_result_pr['cpanelresult']['event']['result']) 
-					and $decode_result_pr['cpanelresult']['event']['result'] == 1 
+					isset($decode_result_pr['cpanelresult']['event']['result'])
+					and $decode_result_pr['cpanelresult']['event']['result'] == 1
 				)
 				{
 					return true;
@@ -956,7 +962,7 @@ class SiteController extends Controller
 				print_r(json_decode($result, true));
 				echo '</pre>';
 			}
- 
+
 		return false;
 
 	}
@@ -971,7 +977,7 @@ class SiteController extends Controller
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
 			if(curl_exec($ch) === false)
-			{		
+			{
 				echo 'Error curl: ' . curl_error($ch);
 			} else {
 				$out = curl_exec($ch);
@@ -983,9 +989,9 @@ class SiteController extends Controller
 
 				$file_name = 'tiedostot/temp/defdb.sql.gz';
 				$buffer_size = 4096;
-				$out_file_name = str_replace('.gz', '', $file_name); 
+				$out_file_name = str_replace('.gz', '', $file_name);
 				$file = gzopen($file_name, 'rb');
-				$out_file = fopen($out_file_name, 'wb'); 
+				$out_file = fopen($out_file_name, 'wb');
 				while (!gzeof($file)) {
 				    fwrite($out_file, gzread($file, $buffer_size));
 				}
@@ -996,23 +1002,23 @@ class SiteController extends Controller
 
 				$connection = mysql_connect($servername,$username,$password)
 				or die("Database Connection Failed");
-				$selectdb = mysql_select_db($yritystunnus, $connection) or die("Database could not be selected"); 
+				$selectdb = mysql_select_db($yritystunnus, $connection) or die("Database could not be selected");
 
 
 				$filename = 'tiedostot/temp/defdb.sql';
 				$handle = fopen($filename, "r+");
 				$contents = fread($handle, filesize($filename));
 
-				$sql = explode(";",$contents);// 
+				$sql = explode(";",$contents);//
 	                            foreach($sql as $query){
         	                        $result=mysql_query($query, $connection) or die(mysql_error());
         	                        if ($result){
-					
+
         	                        // echo '<tr><td><BR></td></tr>';
         	                        // echo '<tr><td>' . $query . ' <b>SUCCESS</b></td></tr>';
         	                        // echo '<tr><td><BR></td></tr>';
-					
-        	                        } 
+
+        	                        }
         	                    }
 				fclose($handle);
 
@@ -1086,7 +1092,7 @@ class SiteController extends Controller
 
 				$result = json_encode($ulkonaky);
 				Administrators::model()->updateByPk($ad->id, array('ulkonaky'=>$result));
-			
+
 			}
 
 			if( $_POST['vaihdo'] == 'headerSkin' )
@@ -1097,7 +1103,7 @@ class SiteController extends Controller
 
 				$result = json_encode($ulkonaky);
 				Administrators::model()->updateByPk($ad->id, array('ulkonaky'=>$result));
-			
+
 			}
 		}
 
@@ -1132,7 +1138,7 @@ class SiteController extends Controller
 		{
 
 			if(
-				isset($model->id) 
+				isset($model->id)
 				and !empty(Yii::app()->request->getPost('uusi_salasana'))
 				and Yii::app()->request->getPost('uusi_salasana') == Yii::app()->request->getPost('varmista_uusi_salasana')
 			)
@@ -1146,14 +1152,14 @@ class SiteController extends Controller
 				}
 
 			} elseif(
-				isset($model->id) 
+				isset($model->id)
 				and !empty(Yii::app()->request->getPost('uusi_salasana'))
 				and Yii::app()->request->getPost('uusi_salasana') != Yii::app()->request->getPost('varmista_uusi_salasana')
 			)
 			{
 				echo json_encode('varmistaUusi');
 			} elseif(
-				isset($model->id) 
+				isset($model->id)
 				and ( empty(Yii::app()->request->getPost('uusi_salasana')) or empty(Yii::app()->request->getPost('varmista_uusi_salasana')) )
 			)
 			{
@@ -1182,8 +1188,8 @@ class SiteController extends Controller
 			$m1 = Administrators::model()->findByPk(Yii::app()->user->id);
 
 	       		$criteria = new CDbCriteria();
-		        $criteria->condition = " 
-				id='".Yii::app()->user->id."' 
+		        $criteria->condition = "
+				id='".Yii::app()->user->id."'
 			";
 
 			if( isset($m1->id) and strlen($m1->adm_salasana) < 60 ){
@@ -1203,7 +1209,7 @@ class SiteController extends Controller
 
 
 			if(
-				isset($model->id) 
+				isset($model->id)
 				and !empty(Yii::app()->request->getPost('uusi_salasana'))
 				and Yii::app()->request->getPost('uusi_salasana') == Yii::app()->request->getPost('varmista_uusi_salasana')
 			)
@@ -1213,14 +1219,14 @@ class SiteController extends Controller
 				if( $upd != null )
 				echo json_encode(array('ok'));
 			} elseif(
-				isset($model->id) 
+				isset($model->id)
 				and !empty(Yii::app()->request->getPost('uusi_salasana'))
 				and Yii::app()->request->getPost('uusi_salasana') != Yii::app()->request->getPost('varmista_uusi_salasana')
 			)
 			{
 				echo json_encode('varmistaUusi');
 			} elseif(
-				isset($model->id) 
+				isset($model->id)
 				and ( empty(Yii::app()->request->getPost('uusi_salasana')) or empty(Yii::app()->request->getPost('varmista_uusi_salasana')) )
 			)
 			{
@@ -1244,7 +1250,7 @@ class SiteController extends Controller
 			if(empty(Yii::app()->getRequest()->getParam('domain'))){
 				echo json_encode('domainEmpty');
 				exit;
-			}			
+			}
 
 			$domain 	= Yii::app()->getRequest()->getParam('domain');
 			$username	= Yii::app()->request->getPost('username');
@@ -1320,8 +1326,8 @@ class SiteController extends Controller
 
 			$message = str_replace("\n", "<br>", $_POST['Domainit']['viesti']);
 			foreach($_POST['Domainit']['sahkoposti'] as $sahkoposti)
-			{			
-	
+			{
+
 			$mail = new YiiMailer();
 			$mail->setFrom('no-reply@etunti.fi');
 			$mail->setTo($sahkoposti);
@@ -1417,7 +1423,7 @@ class SiteController extends Controller
 			$model->delete();
 			$this->redirect(array('etunnin_asiakkaat'));
 
-		}	
+		}
 
 	}
 
@@ -1537,9 +1543,9 @@ class SiteController extends Controller
 				if(isset($m->adm_nimi)) $myyja = $m->adm_nimi; else $myyja = '';
 
 				$data[] = array(
-					'Asiakkaat', 
-					$asiakas->yrityksen_nimi, 
-					$asiakas->yhteyshenkilo, 
+					'Asiakkaat',
+					$asiakas->yrityksen_nimi,
+					$asiakas->yhteyshenkilo,
 					$asiakas->osoite,
 					$asiakas->kaupunki,
 					$asiakas->puhelin,
@@ -1563,9 +1569,9 @@ class SiteController extends Controller
 				if(isset($m->adm_nimi)) $myyja = $m->adm_nimi; else $myyja = '';
 
 				$data[] = array(
-					'Yhteystiedot', 
-					$asiakas->yrityksen_nimi, 
-					$asiakas->yhteyshenkilo, 
+					'Yhteystiedot',
+					$asiakas->yrityksen_nimi,
+					$asiakas->yhteyshenkilo,
 					$asiakas->osoite,
 					$asiakas->postitoimipaikka,
 					$asiakas->puhelin,
@@ -1606,7 +1612,7 @@ $(document).ready(function(){
 
 });
 </script>';
-			
+
 		echo json_encode($mod);
 	}
 
@@ -1643,7 +1649,7 @@ $(document).ready(function(){
 
 		// <-- Backup
 		if (
-			isset(Yii::app()->user->domain) and 
+			isset(Yii::app()->user->domain) and
 			!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'_'.Yii::app()->user->domain.'.sql.gz')
 			and $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1'
 		)
@@ -1659,7 +1665,7 @@ $(document).ready(function(){
 
 		      	    //echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
 
-		   	    foreach(array_reverse(glob(Yii::app()->baseUrl.'backup/'.Yii::app()->user->domain.'/*')) as $file) 
+		   	    foreach(array_reverse(glob(Yii::app()->baseUrl.'backup/'.Yii::app()->user->domain.'/*')) as $file)
 			    {
 				$explNimi = explode("/",$file);
 				$explNimi2 = explode("_",end($explNimi));
@@ -1669,15 +1675,15 @@ $(document).ready(function(){
 					unlink(Yii::app()->basePath.'/../backup/'.Yii::app()->user->domain.'/'.end($explNimi));
 				}
 		   	    }
-		
-		
+
+
 		}
 		// Backup -->
 
 
 		if(isset($_POST['currentBody']))
 		Yii::app()->user->setState('currentBody',$_POST['currentBody']);
-		
+
 		if(isset($_GET['theme']))
 		{
 		  Yii::app()->user->setState('user_theme',$_GET['theme']);
@@ -1761,15 +1767,15 @@ $(document).ready(function(){
 		    $explVal = explode("_", $val);
 		    if(isset($explVal[1]))
 		    {
-			if($explVal[0] == 'mobile') 
+			if($explVal[0] == 'mobile')
 			   Mobile::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'1_'.date("d.m.Y")));
-	
+
 			if($explVal[0] == 'toteutu')
 			   Toteutuneet::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'1_'.date("d.m.Y")));
 		    }
-	
+
 		}
-	
+
 
 		$this->render('hyvaksy', array(
 			'asia' => true,
@@ -1831,7 +1837,7 @@ $(document).ready(function(){
 			$message = $_GET['viesti'];
 			$mail = new YiiMailer();
 			$mail->setFrom($afa->email);
-			$mail->setTo($afa->email); 
+			$mail->setTo($afa->email);
 			$mail->setSubject($_GET['otsikko']);
 			$mail->setBody($message);
 			if($mail->send())
@@ -1842,7 +1848,7 @@ $(document).ready(function(){
 		   }
 		}
 
-		$this->render('index'); 
+		$this->render('index');
 	}
 
 
@@ -1939,8 +1945,8 @@ $(document).ready(function(){
         	$criteria->select = "
 			SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit
 		";
-        	$criteria->condition = " 
-			loppu!='' and alku!='' 
+        	$criteria->condition = "
+			loppu!='' and alku!=''
 			AND ".$this->eiLasketa()."
 			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 			AND peruutettu=0
@@ -1968,7 +1974,7 @@ $(document).ready(function(){
 	{
 
 		$criteria = new CDbCriteria();
-        	$criteria->condition = " 
+        	$criteria->condition = "
 			status=0 AND tekija='toimisto'
 		";
 	  	$v = Viestinta::model()->findAll($criteria);
@@ -1995,10 +2001,10 @@ $(document).ready(function(){
 
 		$criteria = new CDbCriteria;
 		$criteria->select="
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'),
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-		";	
-		$criteria->condition=" 
+		";
+		$criteria->condition="
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3
 		";
 
@@ -2030,7 +2036,7 @@ $(document).ready(function(){
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,aloitan,loppui
 		";
 
-        	$criteria->condition = "  
+        	$criteria->condition = "
 			loppui > aloitan
 			AND aloitan !='' and loppui !='' and status ='3'
 			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
@@ -2055,10 +2061,10 @@ $(document).ready(function(){
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,aloitan,loppui 
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,aloitan,loppui
 		";
 
-        	$criteria->condition = "  
+        	$criteria->condition = "
 			loppui > aloitan
 			AND aloitan !='' and loppui !='' and status ='3'
 			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
@@ -2081,7 +2087,7 @@ $(document).ready(function(){
 
 		$result = $total_l+$total_t;
 		if($result <= 0)
-		$return = '00:00'; 
+		$return = '00:00';
 		else
 		$return = $this->sprint($result);
 
@@ -2102,9 +2108,9 @@ $(document).ready(function(){
 		$criteria->with=array('kohteet');
         	$criteria->select = " COUNT(*) as count, aloitan";
         	$criteria->group = " MONTH(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')), kohteet.kaupunki ";
-        	$criteria->condition = "  
+        	$criteria->condition = "
 			aloitan !='' and loppui !='' and status ='3'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')
 			BETWEEN '".$m2."' AND '".$m1."'
 			AND kohteet.kaupunki!=''
 			AND t.id NOT IN(select kid from sivexkuitti_repaired)
@@ -2132,9 +2138,9 @@ $(document).ready(function(){
 		$criteria->with=array('kohteet');
         	$criteria->select = " COUNT(*) as count, aloitan";
         	$criteria->group = " kohteet.kaupunki ";
-        	$criteria->condition = "  
+        	$criteria->condition = "
 			aloitan !='' and loppui !='' and status ='3'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')
 			BETWEEN '".$m2."' AND '".$m1."'
 			AND kohteet.kaupunki!=''
 			AND kohdenID!=0
@@ -2160,7 +2166,7 @@ $(document).ready(function(){
 		$criteria->with=array('kohteet');
         	$criteria->select = " COUNT(*) as count";
         	$criteria->group = " kohdenID ";
-        	$criteria->condition = "  
+        	$criteria->condition = "
 			aloitan !='' and loppui !='' and status ='3'
 			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
 			AND t.id NOT IN(select kid from sivexkuitti_repaired)
@@ -2179,7 +2185,7 @@ $(document).ready(function(){
 		$criteria->with=array('kohteet');
         	$criteria->select = " COUNT(*) as count";
         	$criteria->group = " kohdenID ";
-        	$criteria->condition = "  
+        	$criteria->condition = "
 			aloitan !='' and loppui !='' and status ='3'
 			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
 			AND kohteet.kaupunki LIKE '%".$city."%'
@@ -2208,7 +2214,7 @@ $(document).ready(function(){
        		$criteria = new CDbCriteria();
         	$criteria->select = " COUNT(*) as count,status";
         	$criteria->group = " status ";
-        	$criteria->condition = "  
+        	$criteria->condition = "
 			aloitan !='' and loppui !='' and (status=2 OR status=3 OR status=10)
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
 			AND t.id NOT IN(select kid from sivexkuitti_repaired)
@@ -2233,7 +2239,7 @@ $(document).ready(function(){
        		$criteria = new CDbCriteria();
         	$criteria->select = " COUNT(*) as count, status";
         	$criteria->group = " status ";
-        	$criteria->condition = "  
+        	$criteria->condition = "
 			aloitan !='' and loppui !='' and (status=2 OR status=3 OR status=10)
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
 		";
@@ -2265,7 +2271,7 @@ $(document).ready(function(){
         	$criteria->select = " COUNT(*) as count,tid";
         	$criteria->order = " tekijan_nimi ";
         	$criteria->group = " tid ";
-        	$criteria->condition = "  
+        	$criteria->condition = "
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
 			AND t.id NOT IN(select kid from sivexkuitti_repaired)
 		";
@@ -2290,7 +2296,7 @@ $(document).ready(function(){
         	$criteria->select = " COUNT(*) as count,tid";
         	$criteria->order = " COUNT(*) LIMIT 4 ";
         	$criteria->group = " tid ";
-        	$criteria->condition = "  
+        	$criteria->condition = "
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
 
 
@@ -2315,20 +2321,20 @@ $(document).ready(function(){
 
 /*
  		$return .= CHtml::link("poista", '#', array(
-		'submit'=>array('delete', "id"=>$id), 
+		'submit'=>array('delete', "id"=>$id),
 		'confirm' => 'Haluatko varmaasti poistaa?',
 		'class'=>'btn btn-primary myBgColors'
 		));
 
-	   
+
 	     	$return .= '
 		<script type="text/javascript">
 		$(document).ready(function(){
-		   $(":input").prop("disabled", true);	
+		   $(":input").prop("disabled", true);
 		});
 		</script>';
 */
-	   
+
 
 		echo $return;
 	}
@@ -2378,7 +2384,7 @@ $(document).ready(function(){
 
 	public function eiLasketa()
 	{
-		$return = " 
+		$return = "
 		(tyoajanmerkinta NOT LIKE '%Ei lasketa%' AND tyoajanmerkinta NOT LIKE '%Varallaolo%')
 		";
 
@@ -2427,7 +2433,7 @@ $(document).ready(function(){
 		if(empty($a->netvisor_host))
 		die('Netvisor HOST ei ole määritetty asetuksessa.');
 
-		$url		= $http."://".$a->netvisor_host; 
+		$url		= $http."://".$a->netvisor_host;
 		$host 		= $a->netvisor_host;
 
 		$sender 	= $fm->tyonantaja;
@@ -2538,39 +2544,39 @@ $(document).ready(function(){
 		    {
 		    $arr[] = array(
 		        'label'=>$data->yrityksen_nimi,
-		        'value'=>$data->yrityksen_nimi,    
+		        'value'=>$data->yrityksen_nimi,
 		        'id'=>$data->id,
         	    );
 		    } else if($model == 'Asiakkaat' and $data->tyyppi == 'henkilo' and $sarake != 'osoite' and $sarake != 'kaupunki')
 		    {
 		    $arr[] = array(
 		        'label'=>$data->yhteyshenkilo,
-		        'value'=>$data->yhteyshenkilo,    
+		        'value'=>$data->yhteyshenkilo,
 		        'id'=>$data->id,
         	    );
 		    } else if($model == 'Tyontekijat' and is_array(json_decode($sarake, true)))
 		    {
 		    $arr[] = array(
 		        'label'=>$data->tekijan_nimi.' '.$data->sukunimi,
-		        'value'=>$data->tekijan_nimi.' '.$data->sukunimi,    
+		        'value'=>$data->tekijan_nimi.' '.$data->sukunimi,
 		        'id'=>$data->id,
         	    );
 		    } else if($model == 'Domainit')
 		    {
 		    $arr[] = array(
 		        'label'=>$data->yritys,
-		        'value'=>$data->id,    
+		        'value'=>$data->id,
 		        'id'=>$data->id,
         	    );
 		    } else {
 		    $arr[] = array(
 		        'label'=>$data->$sarake_nimi,
-		        'value'=>$data->$sarake_nimi,    
+		        'value'=>$data->$sarake_nimi,
 		        'id'=>$data->id,
         	    );
 		    }
 		}
-  
+
 		echo CJSON::encode($arr);
 	}
 	// Autocomplete -->
@@ -2602,11 +2608,11 @@ $(document).ready(function(){
         	        }
         	}
         	return false;
-	}	
+	}
 
 
 	public function tyontekiatLista($name, $class, $id, $selectedArray, $aktiivinen)
-	{	
+	{
 		$return = '';
 
 		$criteria = new CDbCriteria();
@@ -2645,7 +2651,7 @@ $(document).ready(function(){
 
 
 	public function tyontekiatListaNoMulti($name, $class, $id, $selected, $aktiivinen)
-	{	
+	{
 		$return = '';
 		$asetukset = Asetukset::model()->findByPk(1);
 
@@ -2896,7 +2902,7 @@ $(document).ready(function(){
 	Yii::app()->db1->setActive(false);
 	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$_GET['domain'];
 	$criteria = new CDbCriteria();
-        $criteria->condition = " 
+        $criteria->condition = "
 		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2019-04-01' AND '2019-04-01'
 	";
 	$lu = Mobile::model()->findAll($criteria);
