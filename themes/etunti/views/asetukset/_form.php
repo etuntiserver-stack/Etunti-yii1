@@ -1227,19 +1227,11 @@ $('.ryhmat').multiselect({
 
 	<div class="section fill mb5" id="seuraavapaiva" style="display:none">
 		<?php echo $form->labelEx($model,'auto_hyvaksynta_klo'); ?>
-		<?php 
-        	$tal = array(
-			'08:00' => '08:00',
-			'10:00' => '10:00',
-			'12:00' => '12:00',
-			'14:00' => '14:00',
-			'16:00' => '16:00',
-		);
-		echo $form->dropDownList($model,'auto_hyvaksynta_klo', $tal, 
-		array('class'=>'form-control')) ?>
+		<?php echo $form->textField($model,'auto_hyvaksynta_klo',array('maxlength'=>10,'class'=>'auto_hyvaksynta_klo form-control')); ?>
 		<?php echo $form->error($model,'auto_hyvaksynta_klo'); ?>
 	</div>
 
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -1254,6 +1246,11 @@ $(document).ready(function(){
 	$("#seuraavapaiva").hide('slow');
     }
  }
+
+ $('.auto_hyvaksynta_klo').mask('00:00',{
+        placeholder: "__:__"
+ });
+
 });
 </script>
 	<div class="section fill mb5">

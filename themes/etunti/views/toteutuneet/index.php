@@ -539,8 +539,10 @@ function dateDiff($start, $end) {
 		$yhteensaToteutuneet	+= $totpvmtid['toteutuneetTunnit'];
     }
     if(isset($exLatikoLu[1])){
-		$yhtLuetutpvmtid 	+= $exLatikoLu[1];
-		$yhteensaLuetut 	+= $exLatikoLu[1];
+	if( (int)$exLatikoLu[1] > 0 ){
+		$yhtLuetutpvmtid 	+= (int)$exLatikoLu[1];
+		$yhteensaLuetut 	+= (int)$exLatikoLu[1];
+	}
     }
 
     $yhtTyotunnitWeek	+= $tyotunnit;

@@ -166,7 +166,7 @@ class Asetukset extends DB2ActiveRecord
                      'asiakas_alv' => 'int(3) DEFAULT 24',
                      'asiakas_hinta_tyyppi' => 'varchar(50) DEFAULT NULL',
                      'asiakas_pakkoliset' => 'varchar(2000) DEFAULT "[\"osoite\",\"kaupunki\",\"postinumero\"]"',
-		     'auto_hyvaksynta_klo' => 'varchar(100) DEFAULT NULL',
+		     'auto_hyvaksynta_klo' => 'varchar(100) DEFAULT "12:00"',
                      //'vinkki_tunnit' => 'varchar(10) ',
                      //'vinkki_prosentti' => 'varchar(10) ',
                      //'ilmainen_versio_kayttotunnit' => 'int(11) ',

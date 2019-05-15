@@ -10,6 +10,7 @@
 
 	$asetukset = Asetukset::model()->findByPk(1);
 
+	// <-- Autohyvaksyminen
 	if( $asetukset->app_hyvaksynnan_peruste == 2 ){
 		$criteria = new CDbCriteria();
 	        $criteria->condition = " 
@@ -29,6 +30,7 @@
 			}
 		}
 	}
+	//     Autohyvaksyminen -->
 
 $months=array(
 	'01'=>Yii::t('main', 'Tammikuu'),
