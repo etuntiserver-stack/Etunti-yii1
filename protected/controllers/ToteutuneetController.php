@@ -933,7 +933,14 @@ $xml = '
 			return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 		}
 
+		if(isset($_POST['hyvaksyminen']))
+		{
+			if( $_POST['hyvaksyminen'] == 'alkaen' ){
 
+			}
+			echo 'ok';
+			exit;
+		}
 		if(isset($_GET['deleteKorvaus']))
 		{
 			Korvaukset::model()->findByPk($_GET['id'])->delete();
@@ -1091,6 +1098,7 @@ $xml = '
 			AND (status = '3' OR status = '2')
 			AND sairaus!=1
 			AND deleted=0
+			AND hyvaksytty!=''
 		";
 
 
@@ -1125,6 +1133,7 @@ $xml = '
 			AND (status = '3' OR status = '2')
 			AND sairaus!=1
 			AND deleted=0
+			AND hyvaksytty!=''
 		";
 
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."' ");

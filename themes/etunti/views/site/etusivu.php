@@ -10,8 +10,8 @@
 
 	$asetukset = Asetukset::model()->findByPk(1);
 
-	// <-- Autohyvaksyminen
-	if( $asetukset->app_hyvaksynnan_peruste == 2 ){
+	// <-- Eilen Autohyvaksyminen
+	if( $asetukset->app_hyvaksynnan_peruste == 2 and time() < strtotime($asetukset->auto_hyvaksynta_klo) ){
 		$criteria = new CDbCriteria();
 	        $criteria->condition = " 
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') = '".date('Y-m-d', strtotime('-1 day'))."'
@@ -21,12 +21,40 @@
 		$hyvaksymattomat_eilen = Mobile::model()->findAll($criteria);
 		if( count($hyvaksymattomat_eilen) > 0 ){
 			Yii::app()->user->setFlash('info', 
-			"<marquee><h4>
-Seuraava automaattinen tuntien hyväksyntä tapahtuu tänään kello ".$asetukset->auto_hyvaksynta_klo ." tunneista, jotka tehty eilen. Kirjattuja tunteja hyväksyntään ".count($hyvaksymattomat_eilen)." kappaletta.</marquee>");
-
+			"<p><center><h4>Seuraava automaattinen tuntien hyväksyntä tapahtuu tänään kello ".$asetukset->auto_hyvaksynta_klo ." tunneista, jotka tehty eilen. Kirjattuja tunteja hyväksyntään ".count($hyvaksymattomat_eilen)." kappaletta.</center></p>");
 		}
 	}
-	//     Autohyvaksyminen -->
+	//     Eilen Autohyvaksyminen -->
+
+	// <-- Eilen isot tunnit
+	if( $asetukset->app_hyvaksynnan_peruste == 2 and time() < strtotime($asetukset->auto_hyvaksynta_klo) ){
+		$criteria = new CDbCriteria();
+		$criteria->order = " 
+			TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) DESC
+		";
+	       	$criteria->select = "
+			TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit, t.*
+		";
+	        $criteria->condition = " 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') = '".date('Y-m-d', strtotime('-1 day'))."'
+			AND hyvaksytty=''
+			AND deleted=0
+			AND TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) >= 28800
+		";
+		$isot = Mobile::model()->findAll($criteria);
+		$fl = '';
+		foreach($isot as $item){
+			$fl .= date("d.m.Y", strtotime($item->aloitan)).', '.$this->etuSukunimi($item->tid).' Kesto: <b>'.$this->sprint($item->l_tunnit).'</b>, Osoite: <b>'.$item->kohde_kannasta.'</b><br>';
+		}
+		if(!empty($fl)){
+			Yii::app()->user->setFlash('danger', 
+			"<p>".$fl."</p>");
+		}
+	}
+	// <-- Eilen isot tunnit
 
 $months=array(
 	'01'=>Yii::t('main', 'Tammikuu'),

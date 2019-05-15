@@ -1854,6 +1854,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND sairaus!=1
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 			AND deleted=0
+			AND hyvaksytty!=''
 		";
 
 
@@ -1874,6 +1875,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND status='".$status."'
 			AND sairaus!=1
 			AND deleted=0
+			AND hyvaksytty!=''
 		";
 
 
@@ -2068,6 +2070,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND aloitan!=loppui
 			AND deleted=0
 			AND palkanlaskentaan=1
+			AND hyvaksytty!=''
 		";
 		$lu = Mobile::model()->findAll($criteria);
 
@@ -2082,6 +2085,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND aloitan!=loppui
 			AND deleted=0
 			AND palkanlaskentaan=1
+			AND hyvaksytty!=''
 		";
 		$tot = Toteutuneet::model()->findAll($criteria);
 		$lista = array_merge($lu, $tot);
@@ -3112,6 +3116,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND sairaus!=1
 			AND deleted=0
+			AND hyvaksytty!=''
 		";
 
 		if( !isset($_GET['lu_tai_tot']) or (isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1) ){
@@ -3159,6 +3164,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND sairaus!=1
 			AND deleted=0
+			AND hyvaksytty!=''
 		";
 		if($sivu == 'palkkataulukko'){ $criteria->addCondition (" status = '3' AND palkanlaskentaan=1 "); }
 		if($sivu == 'yhteenveto')
@@ -3215,6 +3221,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND sairaus!=1
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 			AND deleted=0
+			AND hyvaksytty!=''
 		";
 
 
@@ -3247,6 +3254,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND sairaus!=1
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 			AND deleted=0
+			AND hyvaksytty!=''
 		";
 
 
