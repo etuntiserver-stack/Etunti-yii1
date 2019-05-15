@@ -21,13 +21,9 @@
 		$hyvaksymattomat_eilen = Mobile::model()->findAll($criteria);
 		if( count($hyvaksymattomat_eilen) > 0 ){
 			Yii::app()->user->setFlash('info', 
-			"<marquee><h4>Seuraava automaattinen tuntien hyväksyntä tapahtuu ".date('d.m.Y', strtotime('-1 day'))." kello ".$asetukset->auto_hyvaksynta_klo .". Kirjattuja tunteja hyväksyntään ".count($hyvaksymattomat_eilen)." kappaletta.</marquee>");
+			"<marquee><h4>
+Seuraava automaattinen tuntien hyväksyntä tapahtuu tänään kello ".$asetukset->auto_hyvaksynta_klo ." tunneista, jotka tehty eilen. Kirjattuja tunteja hyväksyntään ".count($hyvaksymattomat_eilen)." kappaletta.</marquee>");
 
-			if( time() > strtotime($asetukset->auto_hyvaksynta_klo) ){
-				Mobile::model()->updateAll(array('hyvaksytty' => 'auto//'.date("d.m.Y")), $criteria);
-				Yii::app()->user->setFlash('success', 
-				"<h4>Päivä: ".date('d.m.Y', strtotime('-1 day'))." on hyväksytty.</h4>");
-			}
 		}
 	}
 	//     Autohyvaksyminen -->
