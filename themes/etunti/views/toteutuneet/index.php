@@ -150,20 +150,22 @@ table { width: 100%; }
                     </div></p>
 		    <?php endif; ?>
 
+		    <?php if(Yii::app()->session['tekija']) : ?>
+		    <center><h3><?=$this->etuSukunimi(Yii::app()->session['tekija'])?></h3></center>
                     <div class="row">
                       <div class="col-md-4">
-			<?php echo CHtml::link('<span class="btn btn-lg btn-block tn-primary myBgColors">'.Yii::t('main', 'HYVÄKSYMÄTTÖMÄT TUNNIT').'</span>', 
-				array('//mobile/hyvaksymattomat')); 
+			<?php echo CHtml::link(Yii::t('main', 'HYVÄKSYMÄTTÖMÄT TUNNIT'), 
+				array('//mobile/hyvaksymattomat', 'tid' => Yii::app()->session['tekija']), array('target' => '_blank', 'class' => 'btn btn-lg btn-block tn-primary myBgColors')); 
 			?>
 		      </div>
                       <div class="col-md-4">
-			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" for="alkaen" arvo="<?=date("Y-m-d", strtotime("first day of last month"))?>"><?php echo Yii::t('main', 'Hyväksy '.date("d.m.Y", strtotime("first day of last month")).' alkaen'); ?></span>
+			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" for="alkaen" arvo="<?=date("Y-m-d", strtotime("first day of last month"))?>" tid="<?=Yii::app()->session['tekija']?>"><?php echo Yii::t('main', 'Hyväksy '.date("d.m.Y", strtotime("first day of last month")).' alkaen'); ?></span>
 		      </div>
                       <div class="col-md-4">
-			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" for="kaikki" arvo="all"><?php echo Yii::t('main', 'Hyväksy kaikki '.date("d.m.Y", strtotime("-1 day")).' asti'); ?></span>
+			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" for="kaikki" arvo="all" tid="<?=Yii::app()->session['tekija']?>"><?php echo Yii::t('main', 'Hyväksy kaikki '.date("d.m.Y", strtotime("-1 day")).' asti'); ?></span>
 		      </div>
                     </div>
-
+		    <?php endif; ?>
                 </div>
               </div>
             </div>
@@ -854,7 +856,7 @@ $(document).ready(function(){
         $.ajax({
            url: 'index',
            type: "POST",
-	   data: { hyvaksyminen : $(this).attr('for'), arvo : $(this).attr('arvo') },
+	   data: { hyvaksyminen : $(this).attr('for'), arvo : $(this).attr('arvo'), tid : $(this).attr('tid') },
            success: function(data){
 		console.log(data);
 		window.location.href="index";

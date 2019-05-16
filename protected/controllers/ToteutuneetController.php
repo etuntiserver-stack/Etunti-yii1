@@ -933,12 +933,13 @@ $xml = '
 			return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 		}
 
-		if(isset($_POST['hyvaksyminen']))
+		if(isset($_POST['hyvaksyminen']) and isset($_POST['tid']))
 		{
 			if( $_POST['hyvaksyminen'] == 'alkaen' ){
 				$criteria = new CDbCriteria();
 			        $criteria->condition = " 
 					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') >= '".$_POST['arvo']."'
+					AND tid='".$_POST['tid']."'
 					AND hyvaksytty NOT LIKE '%//%'
 				";
 				$mob_hyvaksy_alkaen = Mobile::model()->findAll($criteria);
@@ -954,6 +955,7 @@ $xml = '
 				$criteria = new CDbCriteria();
 			        $criteria->condition = " 
 					hyvaksytty NOT LIKE '%//%'
+					AND tid='".$_POST['tid']."'
 				";
 				$mob_hyvaksy_all = Mobile::model()->findAll($criteria);
 				if( count($mob_hyvaksy_all) > 0 ){
