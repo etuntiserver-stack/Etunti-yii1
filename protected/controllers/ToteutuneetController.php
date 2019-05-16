@@ -936,7 +936,33 @@ $xml = '
 		if(isset($_POST['hyvaksyminen']))
 		{
 			if( $_POST['hyvaksyminen'] == 'alkaen' ){
-
+				$criteria = new CDbCriteria();
+			        $criteria->condition = " 
+					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') >= '".$_POST['arvo']."'
+					AND hyvaksytty NOT LIKE '%//%'
+				";
+				$mob_hyvaksy_alkaen = Mobile::model()->findAll($criteria);
+				if( count($mob_hyvaksy_alkaen) > 0 ){
+					Mobile::model()->updateAll(array('hyvaksytty' => Yii::app()->user->username.'//'.date("d.m.Y")), $criteria);
+				}
+				$tot_hyvaksy_alkaen = Toteutuneet::model()->findAll($criteria);
+				if( count($tot_hyvaksy_alkaen) > 0 ){
+					Toteutuneet::model()->updateAll(array('hyvaksytty' => Yii::app()->user->username.'//'.date("d.m.Y")), $criteria);
+				}
+			}
+			if( $_POST['hyvaksyminen'] == 'kaikki' ){
+				$criteria = new CDbCriteria();
+			        $criteria->condition = " 
+					hyvaksytty NOT LIKE '%//%'
+				";
+				$mob_hyvaksy_all = Mobile::model()->findAll($criteria);
+				if( count($mob_hyvaksy_all) > 0 ){
+					Mobile::model()->updateAll(array('hyvaksytty' => Yii::app()->user->username.'//'.date("d.m.Y")), $criteria);
+				}
+				$tot_hyvaksy_all = Toteutuneet::model()->findAll($criteria);
+				if( count($tot_hyvaksy_all) > 0 ){
+					Toteutuneet::model()->updateAll(array('hyvaksytty' => Yii::app()->user->username.'//'.date("d.m.Y")), $criteria);
+				}
 			}
 			echo 'ok';
 			exit;

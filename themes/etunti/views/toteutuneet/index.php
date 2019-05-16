@@ -157,10 +157,10 @@ table { width: 100%; }
 			?>
 		      </div>
                       <div class="col-md-4">
-			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" for="alkaen"><?php echo Yii::t('main', 'Hyväksy '.date("d.m.Y", strtotime("first day of last month")).' alkaen'); ?></span>
+			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" for="alkaen" arvo="<?=date("Y-m-d", strtotime("first day of last month"))?>"><?php echo Yii::t('main', 'Hyväksy '.date("d.m.Y", strtotime("first day of last month")).' alkaen'); ?></span>
 		      </div>
                       <div class="col-md-4">
-			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" for="kaikki"><?php echo Yii::t('main', 'Hyväksy kaikki '.date("d.m.Y", strtotime("-1 day")).' asti'); ?></span>
+			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" for="kaikki" arvo="all"><?php echo Yii::t('main', 'Hyväksy kaikki '.date("d.m.Y", strtotime("-1 day")).' asti'); ?></span>
 		      </div>
                     </div>
 
@@ -850,12 +850,14 @@ $(document).ready(function(){
  });
 
  $(".hyvaksyminen").click(function(){
+	if(!confirm('Oletko varma?')){ return false; }
         $.ajax({
            url: 'index',
            type: "POST",
-	   data: { hyvaksyminen : $(this).attr('for') },
+	   data: { hyvaksyminen : $(this).attr('for'), arvo : $(this).attr('arvo') },
            success: function(data){
 		console.log(data);
+		window.location.href="index";
            }
         });
  });
