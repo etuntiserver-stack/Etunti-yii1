@@ -21,7 +21,7 @@
 		";
 		$hyvaksymattomat_eilen = Mobile::model()->findAll($criteria);
 		if( count($hyvaksymattomat_eilen) > 0 ){
-			$eilen_hyvaksynta = "<div class='alert alert-default'><marquee><h4>Seuraava automaattinen tuntien hyväksyntä tapahtuu tänään kello ".$asetukset->auto_hyvaksynta_klo ." tunneista, jotka tehty eilen. Kirjattuja tunteja hyväksyntään ".count($hyvaksymattomat_eilen)." kappaletta.</marquee></div>";
+			$eilen_hyvaksynta = "<div class='alert alert-default'><marquee>Seuraava automaattinen tuntien hyväksyntä tapahtuu tänään kello ".$asetukset->auto_hyvaksynta_klo ." tunneista, jotka tehty eilen. Kirjattuja tunteja hyväksyntään ".count($hyvaksymattomat_eilen)." kappaletta.</marquee></div>";
 		}
 	}
 	//     Eilen Autohyvaksyminen -->
