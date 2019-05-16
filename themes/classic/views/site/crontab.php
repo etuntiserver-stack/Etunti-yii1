@@ -40,6 +40,28 @@
 	$dh = DigistenHinnasto::model()->findByPk(1);
    	$domainit = Domainit::model()->findByPk($d->id);
 
+	// <-- Tuntien Autohyvaksyminen
+	if( $asetukset->app_hyvaksynnan_peruste == 2 ){
+		$criteria = new CDbCriteria();
+	        $criteria->condition = " 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') = '".date('Y-m-d', strtotime('-1 day'))."'
+			AND hyvaksytty=''
+		";
+		$mob_hyvaksymattomat_eilen = Mobile::model()->findAll($criteria);
+		$tot_hyvaksymattomat_eilen = Toteutuneet::model()->findAll($criteria);
+		if( count($mob_hyvaksymattomat_eilen) > 0 ){
+			if( time() > strtotime($asetukset->auto_hyvaksynta_klo) ){
+				Mobile::model()->updateAll(array('hyvaksytty' => 'auto//'.date("d.m.Y")), $criteria);
+			}
+		}
+		if( count($tot_hyvaksymattomat_eilen) > 0 ){
+			if( time() > strtotime($asetukset->auto_hyvaksynta_klo) ){
+				Toteutuneet::model()->updateAll(array('hyvaksytty' => 'auto//'.date("d.m.Y")), $criteria);
+			}
+		}
+	}
+	//    Tuntien Autohyvaksyminen -->
+
 	// <-- maksullinen versio
 		if( $domainit->maksullinen == 1 and isset($dh->snapshot_pvm) and $dh->snapshot_pvm > 0 )
 		{ 

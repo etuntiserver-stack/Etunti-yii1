@@ -1216,14 +1216,43 @@ $('.ryhmat').multiselect({
 		<?php echo $form->labelEx($model,'app_hyvaksynnan_peruste'); ?>
 		<?php 
         	$tal = array(
-			0=>'Totetuneen ajan mukaan',
-			1=>'Työvuoron aloitus ja lopetus mukaan'
+			0 => 'Totetuneen ajan mukaan',
+			1 => 'Työvuoron aloitus ja lopetus mukaan',
+			2 => 'Kaikki tehdyt työt seuraavana päivänä'
 		);
 		echo $form->dropDownList($model,'app_hyvaksynnan_peruste', $tal, 
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'app_hyvaksynnan_peruste'); ?>
 	</div>
 
+	<div class="section fill mb5" id="seuraavapaiva" style="display:none">
+		<?php echo $form->labelEx($model,'auto_hyvaksynta_klo'); ?>
+		<?php echo $form->textField($model,'auto_hyvaksynta_klo',array('maxlength'=>10,'class'=>'auto_hyvaksynta_klo form-control')); ?>
+		<?php echo $form->error($model,'auto_hyvaksynta_klo'); ?>
+	</div>
+
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+ $("#Asetukset_app_hyvaksynnan_peruste").change(function() {
+	hyvperuste();
+ });
+	hyvperuste();
+ function hyvperuste(){
+    if($("#Asetukset_app_hyvaksynnan_peruste option:selected").val() == 2){
+	$("#seuraavapaiva").show('slow');
+    } else {
+	$("#seuraavapaiva").hide('slow');
+    }
+ }
+
+ $('.auto_hyvaksynta_klo').mask('00:00',{
+        placeholder: "__:__"
+ });
+
+});
+</script>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'app_auto_hyvaksyminen_aikavali'); ?>
 		<?php 
