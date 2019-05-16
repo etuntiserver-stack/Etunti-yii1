@@ -11,6 +11,7 @@
 	$asetukset = Asetukset::model()->findByPk(1);
 
 	// <-- Eilen Autohyvaksyminen
+	$eilen_hyvaksynta = '';
 	if( $asetukset->app_hyvaksynnan_peruste == 2 and time() < strtotime($asetukset->auto_hyvaksynta_klo) ){
 		$criteria = new CDbCriteria();
 	        $criteria->condition = " 
@@ -20,13 +21,13 @@
 		";
 		$hyvaksymattomat_eilen = Mobile::model()->findAll($criteria);
 		if( count($hyvaksymattomat_eilen) > 0 ){
-			Yii::app()->user->setFlash('info', 
-			"<p><center><h4>Seuraava automaattinen tuntien hyväksyntä tapahtuu tänään kello ".$asetukset->auto_hyvaksynta_klo ." tunneista, jotka tehty eilen. Kirjattuja tunteja hyväksyntään ".count($hyvaksymattomat_eilen)." kappaletta.</center></p>");
+			$eilen_hyvaksynta = "<div class='alert alert-default'><marquee><h4>Seuraava automaattinen tuntien hyväksyntä tapahtuu tänään kello ".$asetukset->auto_hyvaksynta_klo ." tunneista, jotka tehty eilen. Kirjattuja tunteja hyväksyntään ".count($hyvaksymattomat_eilen)." kappaletta.</marquee></div>";
 		}
 	}
 	//     Eilen Autohyvaksyminen -->
 
 	// <-- Eilen isot tunnit
+	$eilen_ylitetyt_tyot = '';
 	if( $asetukset->app_hyvaksynnan_peruste == 2 and time() < strtotime($asetukset->auto_hyvaksynta_klo) ){
 		$criteria = new CDbCriteria();
 		$criteria->order = " 
@@ -45,12 +46,8 @@
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) >= 28800
 		";
 		$isot = Mobile::model()->findAll($criteria);
-		$fl = '';
-		if( count($isot) > 0 ){
-			$fl .= '<center><h3>Eilen olevat isot kestot</h3></center>';
-		}
 		foreach($isot as $item){
-			$fl .= date("d.m.Y", strtotime($item->aloitan)).', '.$this->etuSukunimi($item->tid).' Kesto: <b>'.$this->sprint($item->l_tunnit).'</b>, Osoite: <b>'.$item->kohde_kannasta.'</b><br>';
+			$eilen_ylitetyt_tyot .= '<tr><td><b>'.$this->sprint($item->l_tunnit).'</b></td><td>'.$this->etuSukunimi($item->tid).'</td></tr>';
 		}
 		if(!empty($fl)){
 			Yii::app()->user->setFlash('danger', "<p>".$fl."</p>");
@@ -147,12 +144,11 @@ $months=array(
           </div>
         </div>
 
+	<?=$eilen_hyvaksynta?>
+
         <!-- Admin-panels -->
         <div class="admin-panels fade-onload">
-
-
           <div class="row">
-
             <div class="col-md-6 col-lg-5 admin-grid">
 
               <!-- Column Graph -->
@@ -536,6 +532,27 @@ $( document ).ready(function() {
 <!-- Modal -->
 
 
+
+	      <?php if(!empty($eilen_ylitetyt_tyot)) : ?>
+              <div class="panel" id="p23">
+                <div class="panel-heading bg-danger">
+                  <span class="panel-title"><?php echo Yii::t('main', 'Eilen ylitetyt työt'); ?></span>
+                </div>
+                <div class="panel-body pn">
+                  <table class="table mbn tc-list-1 tc-text-muted-2 tc-fw600-2">
+                    <thead>
+                      <tr class="hidden">
+                        <th class="w30">#</th>
+                        <th>First Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+			<?=$eilen_ylitetyt_tyot?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+	      <?php endif; ?>
 
 	      <?php if($this->tasot(5)) : ?>
               <div class="panel" id="p22">
