@@ -46,12 +46,14 @@
 		";
 		$isot = Mobile::model()->findAll($criteria);
 		$fl = '';
+		if( count($isot) > 0 ){
+			$fl .= '<center><h3>Eilen olevat isot kestot</h3></center>';
+		}
 		foreach($isot as $item){
 			$fl .= date("d.m.Y", strtotime($item->aloitan)).', '.$this->etuSukunimi($item->tid).' Kesto: <b>'.$this->sprint($item->l_tunnit).'</b>, Osoite: <b>'.$item->kohde_kannasta.'</b><br>';
 		}
 		if(!empty($fl)){
-			Yii::app()->user->setFlash('danger', 
-			"<p>".$fl."</p>");
+			Yii::app()->user->setFlash('danger', "<p>".$fl."</p>");
 		}
 	}
 	// <-- Eilen isot tunnit
