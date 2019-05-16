@@ -47,7 +47,7 @@
 		";
 		$isot = Mobile::model()->findAll($criteria);
 		foreach($isot as $item){
-			$eilen_ylitetyt_tyot .= '<tr><td><b>'.$this->sprint($item->l_tunnit).'</b></td><td>'.$this->etuSukunimi($item->tid).'</td></tr>';
+			$eilen_ylitetyt_tyot .= '<tr><td class="bg-danger"><b>'.$this->sprint($item->l_tunnit).'</b></td><td>'.$this->etuSukunimi($item->tid).'</td></tr>';
 		}
 		if(!empty($fl)){
 			Yii::app()->user->setFlash('danger', "<p>".$fl."</p>");
@@ -535,7 +535,7 @@ $( document ).ready(function() {
 
 	      <?php if(!empty($eilen_ylitetyt_tyot)) : ?>
               <div class="panel" id="p23">
-                <div class="panel-heading bg-danger">
+                <div class="panel-heading">
                   <span class="panel-title"><?php echo Yii::t('main', 'Eilen ylitetyt työt'); ?></span>
                 </div>
                 <div class="panel-body pn">
