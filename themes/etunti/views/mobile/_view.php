@@ -39,19 +39,14 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 /* TAG */
  $tag = '';
  $t = explode("_",$data->asiakas_num);
- if(isset($t[1]) and $t[1] != 000000)
-    $tag = $t[1];
- else
-    $tag = Yii::t('main', 'TAG ei ollut käytetty');
+ if(isset($t[1]) and $t[1] != 000000){ $tag = $t[1]; } else { $tag = Yii::t('main', 'TAG ei ollut käytetty'); }
 
-    $versio = '';
- if(isset($t[0]))
-    $versio = $t[0];
+ $versio = '';
+ if(isset($t[0])){ $versio = $t[0]; }
 
  $karttaA = '';
  $karttaL = '';
-if(!empty($data->my_location))
-{
+ if(!empty($data->my_location)){
  $expl = explode("_",$data->my_location);
 
  $my_locationStart = explode("**",$data->my_location);
@@ -64,92 +59,84 @@ if(!empty($data->my_location))
  $karttaA = '<a href="http://maps.google.com/maps?q='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&ll='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&z=17" target="_blank"><span class="fa fa-map"></span></a>';
  if(isset($my_locationReal[2][0]) and isset($my_locationReal[2][1]))
  $karttaL = '<a href="http://maps.google.com/maps?q='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&ll='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&z=17" target="_blank"><span class="fa fa-map-o"></span></a>';
-}
+ }
 
-if(!empty($data->loppui))
- $dloppu[$data->id] = date("H:i",strtotime($data->loppui));
-else
- $dloppu[$data->id] = '';
-
-
+ if(!empty($data->loppui)){ $dloppu[$data->id] = date("H:i",strtotime($data->loppui)); } else { $dloppu[$data->id] = ''; }
  $pv = explode("\n", $data->viesti);
 
-if(isset($pv[0]) and !empty($pv[0]) and strpos($pv[0], 'xxx') === false)
- $pikkuviesti = '<div class="row"><div class="col-sm-12 text-danger"><b>'.Yii::t('main', 'Viesti').':</b> '.$pv[0].'</div><div>';
-elseif(isset($pv[1]) and !empty($pv[1]) and strpos($pv[1], 'xxx') === false)
- $pikkuviesti = '<div class="row"><div class="col-sm-12 text-danger"><b>'.Yii::t('main', 'Viesti').':</b> '.$pv[1].'</div><div>';
-else
- $pikkuviesti = '';
+ if(isset($pv[0]) and !empty($pv[0]) and strpos($pv[0], 'xxx') === false){
+	$pikkuviesti = '<div class="row"><div class="col-sm-12 text-danger"><b>'.Yii::t('main', 'Viesti').':</b> '.$pv[0].'</div><div>';
+ } elseif(isset($pv[1]) and !empty($pv[1]) and strpos($pv[1], 'xxx') === false){
+	$pikkuviesti = '<div class="row"><div class="col-sm-12 text-danger"><b>'.Yii::t('main', 'Viesti').':</b> '.$pv[1].'</div><div>';
+ } else {
+	$pikkuviesti = '';
+ }
 
-
-if(!empty($data->aloitan)){
+ if(!empty($data->aloitan)){
  $at[$data->id] = date("H:i",strtotime($data->aloitan));
  $apvm[$data->id] = date("d.m.Y",strtotime($data->aloitan));
  $apvmForSu[$data->id] = date("d.m.Y",strtotime($data->aloitan));
-} else {
+ } else {
  $at[$data->id] = '';
  $apvm[$data->id] = '';
  $apvmForSu[$data->id] = '';
-}
+ }
 
-if(!empty($data->loppui)){
+ if(!empty($data->loppui)){
  $lt[$data->id] = date("H:i",strtotime($data->loppui));
  $lpvm[$data->id] = date("d.m.Y",strtotime($data->loppui));
-} else {
+ } else {
  $lt[$data->id] = '';
  $lpvm[$data->id] = '';
-}
+ }
 
-if(!empty($data->loppui) and !empty($data->aloitan)){
-  $data->loppui = date("d.m.Y H:i",strtotime($data->loppui));
-  $data->aloitan = date("d.m.Y H:i",strtotime($data->aloitan));
-  $kesto[$data->id] =  strtotime($data->loppui) - strtotime($data->aloitan);
-} else {
-  $kesto[$data->id] =  '';
-}
+ if(!empty($data->loppui) and !empty($data->aloitan)){
+ $data->loppui = date("d.m.Y H:i",strtotime($data->loppui));
+ $data->aloitan = date("d.m.Y H:i",strtotime($data->aloitan));
+ $kesto[$data->id] =  strtotime($data->loppui) - strtotime($data->aloitan);
+ } else {
+ $kesto[$data->id] =  '';
+ }
 
-
-	if($data->status == '1')
+ if($data->status == '1'){
 	$door = '<b><i class="fa fa-hourglass-start text-info"></i></b>';
-	elseif($data->status == '3')
+ } elseif($data->status == '3'){
 	$door = '<b><i class="fa fa-check text-success"></i></b>';
-	elseif($data->status == '2')
+ } elseif($data->status == '2'){
 	$door = '<b><i class="fa fa-bus text-info"></i></b>';
-	elseif($data->status == '10')
+ } elseif($data->status == '10'){
 	$door = '<b><i class="fa fa-cutlery text-info"></i></b>';
-	elseif($data->status == '7')
+ } elseif($data->status == '7'){
 	$door = '<i class="fa fa-bolt"></i>';
-	else
+ } else {
 	$door = "";
+ }
 
+ $objcts = '';
+ $osoite = '';
 
-	$objcts = '';
-	$osoite = '';
-
-	// <-- adminPaketti
-	$obtrue = false;
-	$tas = explode(",",Yii::app()->user->adminPaketti);
-
-	if(in_array('2',$tas) and isset($data->tid) and !empty($apvmForSu[$data->id]))
- 	{
+ // <-- adminPaketti
+ $obtrue = false;
+ $tas = explode(",",Yii::app()->user->adminPaketti);
+ if(in_array('2',$tas) and isset($data->tid) and !empty($apvmForSu[$data->id])){
 	  $su = Tyovuoroot::model()->find(" tid='".$data->tid."' and pvm='".$apvmForSu[$data->id]."' ");
 	  if(isset($su['id']))
 	  $obtrue = true;
-	}
-	// <-- adminPaketti 
+ }
+ // <-- adminPaketti 
 
-
-  $diff 	= 0;
-  if(date('Y-m-d H:i', strtotime($data->aloitan.'+4 hour')) < date('Y-m-d H:i') and empty($data->loppui))
-  {
+ $diff = 0;
+ if(date('Y-m-d H:i', strtotime($data->aloitan.'+4 hour')) < date('Y-m-d H:i') and empty($data->loppui)){
   	$diff = strtotime(date('Y-m-d H:i'))-strtotime($data->aloitan);
   	$class = 'border:2px red solid;';
-  } elseif(empty($data->loppui)) {
+ } elseif(empty($data->loppui)) {
   	$diff = strtotime(date('Y-m-d H:i'))-strtotime($data->aloitan);
-  }
+ }
 
-
-
+ $erittelyt = '';
+ if( isset($data->tyovuoroot->tyo_erittelyt) and !empty($data->tyovuoroot->tyo_erittelyt)){
+	$erittelyt = '<i class="link fa fa-list show_erittelyt" tv_id="'.$data->tyovuoroot->id.'" mob_id="'.$data->id.'"></i>';
+ }
 ?>
 
 <tr style="<?php echo $class; ?>" id="rivi_<?php echo $data->id; ?>">
@@ -195,7 +182,7 @@ if(!empty($data->loppui) and !empty($data->aloitan)){
 	  <?php echo CHtml::link(' ','/index.php/viestinta/create?tid='.$data->tid,array('target'=>'_blank','class'=>'link fa fa-envelope')); ?>&nbsp;
 	  <?php echo CHtml::link($this->etuSukunimi($data->tid),'/index.php/tyontekijat/update?id='.$data->tid,array('target'=>'_blank','style'=>'color: #0A98DC;')); ?>
 	</td>
-
+	<td><?=$erittelyt?></td>
 	<!-- adminPaketti -->
 	<?php if( in_array('2',$tas) and isset($sivu) and $sivu == 'index' ) : ?>
 	<?php

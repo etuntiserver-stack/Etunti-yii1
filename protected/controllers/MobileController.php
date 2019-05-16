@@ -1420,6 +1420,30 @@ function num($val){
 	public function actionIndex()
 	{
 
+		if( isset($_POST['geterittelyt'])){
+			$mobile = Mobile::model()->findByPk($_POST['mob_id']);
+			$tv = Tyovuoroot::model()->findByPk($_POST['tv_id']);
+	 		if(is_array(json_decode($tv->tyo_erittelyt, true))){
+			$body = '';
+			 foreach(json_decode($tv->tyo_erittelyt, true) as $k => $v){
+			 $body .= '<div class="row">
+			  <div class="col-sm-11">';
+			   if( isset($mobile->id) ){
+			    $body .= '<input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control input-sm" value="'.$v.'" readonly>';
+			   } else {
+			    $body .= '<input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control input-sm" value="'.$v.'">';
+			   }
+			    $body .= '</div><div class="col-sm-1 text-right">';
+
+			   if( isset($mobile->id) and is_array(json_decode($mobile->tyo_erittelyt, true)) and in_array($k, json_decode($mobile->tyo_erittelyt, true)) ){
+			    $body .= '<span class="text-success fa fa-check"></span>';
+			   }
+			  $body .= '</div></div>';
+			 }
+			}
+			echo json_encode($body);
+			exit;
+		}
 
 		if(Yii::app()->request->getPost('tekijaPaaSivulla') == 'kaikki')
 		unset(Yii::app()->session['tekijaPaaSivulla']);
