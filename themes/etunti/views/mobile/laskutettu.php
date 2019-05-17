@@ -133,6 +133,25 @@
                             </label>
                           </label>
                         </div>
+		        <?php if(isset($_GET['asiakasryhma'])) echo '<input type="hidden" id="asiakasryhma" value="'.$_GET['asiakasryhma'].'">'; ?>
+                        <div class="section">
+                          <label class="field select">
+			  <?php
+					$list = array();
+			      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma_real' ",array('order' => "select_type"));
+					foreach($l as $v)
+					$list[$v->id] = $v->value;
+			
+					if(count($list) > 0)
+					{
+			        	echo CHtml::dropDownList('asiakasryhma', 'asiakasryhma', $list,
+					array('empty'=>'Valitse ryhmä','class'=>'form-control form-group', 'id'=>'ryhmaSelect'));
+					}
+			  ?>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
                       </div>
                       <div class="col-md-2">
                         <div class="section">
@@ -202,6 +221,7 @@
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Kartta'); ?></th>
   <th class="col-sm-4"><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'Er.'); ?></th>
   <th><?php echo Yii::t('main', 'TAG'); ?></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th class="col-sm-4"><?php echo Yii::t('main', 'Osoite'); ?></th>
@@ -243,6 +263,9 @@
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/mobile.js"></script>
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
+  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+
+  <div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 
   <input type="hidden" id="dataChange" >
 
@@ -265,6 +288,39 @@ $("#valitsekaikki").click(function(){
 $(".haemob").click(function(){
 	$("#mobForm").submit();
 });
+
+if($("#asiakasryhma").val()){ $("#ryhmaSelect").val($("#asiakasryhma").val()); }
+
+$(document).delegate(".show_erittelyt", "click", function(){
+    var mob_id = $(this).attr('mob_id');
+    var tv_id = $(this).attr('tv_id');
+    var modal_content = '';
+	$.ajax({
+	      url: 'index',
+	      type: "POST",
+	      data: { geterittelyt : "true", tv_id : tv_id, mob_id : mob_id },
+	      async: false,
+	      	success: function(data){
+			modal_content = JSON.parse(data)
+	  	  	//console.log(data);
+	      	},
+	  	error:function(data){
+			window.location.href=location.protocol + "//" + location.host + '/index.php';
+	  	}
+	});
+
+    $('#showres').modal().html(''+
+    '<div class="modal-dialog modal-md" id="myModal">' +
+    '<div class="modal-content">' +
+      '<div class="modal-header">' +
+        '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+        '<h4 class="modal-title">Työerittelyt</h4>' +
+      '</div>' +
+      '<div class="modal-body">'+ modal_content +'</div>' +
+    '</div>' +
+    '</div>');
+});
+
 
 /*
   $(".chckbxHyvaksynta").bootstrapSwitch({

@@ -1385,6 +1385,16 @@ function num($val){
 			)
 		");
 		}
+		if(isset($_GET['asiakasryhma']) and !empty(trim($_GET['asiakasryhma']))){
+	        $criteria->addCondition ("  
+			kohdenID IN ( 
+			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
+				( SELECT id FROM asiakkaat 
+					WHERE ryhma LIKE '%".$_GET['asiakasryhma']."%'
+				)
+			)
+		");
+		}
 
 		if(isset($_GET['osoite']) and !empty($_GET['osoite'])){
 	        $criteria->addCondition (" kohde_kannasta LIKE '%".$_GET['osoite']."%' ");
