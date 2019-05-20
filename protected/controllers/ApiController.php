@@ -631,9 +631,28 @@ public function actionImei($dom)
 		    $this->_sendResponse(200, 'ei tuloksia');
 		    exit;
 		    }
+		    // <-- Tanaan
+		    $criteria = new CDbCriteria();
+        	    $criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		    ";
+	            $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND tid='".$ttekija->id."'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".date('Y-m-d')."'
+			AND (status=3 OR status=10)
+		    ";
+		    $lu = Mobile::model()->find($criteria);
+		    $tanaan = '';
+		    if( isset($lu->l_tunnit) ){
+			$tanaan = '<h3>Tänään yhteensä - '.$this->sprint($lu->l_tunnit).'</h3>';
+		    }
+		    //    Tanaan -->
 
-
-		    $sel = '<h2>'.Yii::t('app', 'Tekemasi työt. Vko määrä:').' '.$asetukset->app_hyvaksytyt_tyot_vkomaara.'</h2>';
+		    $sel = '<center><h2>'.Yii::t('app', 'Tehdyt työt').'<br>'.date("d.m.Y", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week")).'-'.date('d.m.Y').'</h2><center>';
+		    $sel .= $tanaan;
+		    $sel .= '<hr>';
 		    foreach($mob as $val)
 		    {
 		    $kesto = '00:00';
@@ -1585,6 +1604,10 @@ public function actionImei($dom)
         		return true;
 	}
 
+	protected function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
 /*
     // Actions
     public function actionList()
