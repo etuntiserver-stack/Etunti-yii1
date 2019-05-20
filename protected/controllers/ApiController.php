@@ -831,9 +831,7 @@ public function actionImei($dom)
 			}
 		      }
 		      
-		      if(!empty($tplista))
-		      $tplista = '<hr>'.$tplista;
-
+		      if(!empty($tplista)){ $tplista = '<hr>'.$tplista; }
 
 		      $alkLop = '';
 		      if($val->alku > 0 and $val->loppu > 0)
@@ -905,7 +903,7 @@ public function actionImei($dom)
 		      $tvController = Yii::app()->createController('Tyovuoroot');
 	   	      $tilanteet = $tvController[0]->tilanteet();
 		      if( isset($tilanteet[$val->status]) and $tilanteet[$val->status] != "0" ){
-			      $sel .= '<h3 class="text-center">'. $tilanteet[$val->status].'</h3>';
+			      $sel .= '<h3 class="text-center">'. $tilanteet[$val->status].' <i class="fa fa-repeat text-success"></i></h3>';
 		      }
 
 		      $sel .= '<h3 class="text" style="color:'.$color.'">'.$osoite.'</h3><p><b>'.$val->pvm.'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'</p>';
