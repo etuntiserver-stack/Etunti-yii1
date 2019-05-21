@@ -1888,9 +1888,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND sairaus!=1
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 			AND deleted=0
-			AND hyvaksytty!=''
 		";
 
+		if(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3) {
+			$criteria->addCondition (" hyvaksytty!='' ");
+		}
 
 		$lu = Mobile::model()->find($criteria);
 
@@ -1909,9 +1911,15 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND status='".$status."'
 			AND sairaus!=1
 			AND deleted=0
-			AND hyvaksytty!=''
 		";
 
+		if(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2) {
+			$criteria->addCondition (" hyvaksytty='' ");
+		}
+
+		if(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3) {
+			$criteria->addCondition (" hyvaksytty!='' ");
+		}
 
 		$tot = Toteutuneet::model()->find($criteria);
 
@@ -3150,11 +3158,14 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND sairaus!=1
 			AND deleted=0
-			AND hyvaksytty!=''
 		";
 
-		if( !isset($_GET['lu_tai_tot']) or (isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1) ){
-		$criteria->addCondition (" id NOT IN(select kid from sivexkuitti_repaired) ");
+		if( !isset($_GET['lu_tai_tot']) or (isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2) or (isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3) ){
+			$criteria->addCondition (" id NOT IN(select kid from sivexkuitti_repaired) ");
+		}
+
+		if(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3) {
+			$criteria->addCondition (" hyvaksytty!='' ");
 		}
 
 		if($sivu == 'palkkataulukko'){ 	$criteria->addCondition (" status = '3' AND palkanlaskentaan=1 "); }
@@ -3198,8 +3209,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND sairaus!=1
 			AND deleted=0
-			AND hyvaksytty!=''
 		";
+
+		if(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3) {
+			$criteria->addCondition (" hyvaksytty!='' ");
+		}
+
 		if($sivu == 'palkkataulukko'){ $criteria->addCondition (" status = '3' AND palkanlaskentaan=1 "); }
 		if($sivu == 'yhteenveto')
 		{
@@ -3212,7 +3227,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ");
 
-		if( !isset($_GET['lu_tai_tot']) or (isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1) ){
+		if( !isset($_GET['lu_tai_tot']) or (isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2) or (isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3) ){
 			$tot = Toteutuneet::model()->findAll($criteria);
 			foreach($tot as $l)
 			{
