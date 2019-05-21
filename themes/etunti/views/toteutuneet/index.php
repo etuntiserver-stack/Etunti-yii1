@@ -151,7 +151,6 @@ table { width: 100%; }
 		    <?php endif; ?>
 
 		    <?php if(Yii::app()->session['tekija']) : ?>
-		    <center><h3><?=$this->etuSukunimi(Yii::app()->session['tekija'])?></h3></center>
                     <div class="row">
                       <div class="col-md-4">
 			<?php echo CHtml::link(Yii::t('main', 'HYVÄKSYMÄTTÖMÄT TUNNIT'), 
@@ -159,10 +158,10 @@ table { width: 100%; }
 			?>
 		      </div>
                       <div class="col-md-4">
-			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" for="alkaen" arvo="<?=date("Y-m-d", strtotime("first day of last month"))?>" tid="<?=Yii::app()->session['tekija']?>"><?php echo Yii::t('main', 'Hyväksy '.date("d.m.Y", strtotime("first day of last month")).' alkaen'); ?></span>
+			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Hyväksyntänappi1'); ?> " for="alkaen" arvo="<?=date("Y-m-d", strtotime("first day of last month"))?>" tid="<?=Yii::app()->session['tekija']?>"><?php echo Yii::t('main', 'Hyväksy '.date("d.m.Y", strtotime("first day of last month")).' alkaen'); ?></span>
 		      </div>
                       <div class="col-md-4">
-			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" for="kaikki" arvo="all" tid="<?=Yii::app()->session['tekija']?>"><?php echo Yii::t('main', 'Hyväksy kaikki '.date("d.m.Y", strtotime("-1 day")).' asti'); ?></span>
+			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Hyväksyntänappi2'); ?> " for="kaikki" arvo="all" tid="<?=Yii::app()->session['tekija']?>"><?php echo Yii::t('main', 'Hyväksy kaikki '.date("d.m.Y", strtotime("-1 day")).' asti'); ?></span>
 		      </div>
                     </div>
 		    <?php endif; ?>
