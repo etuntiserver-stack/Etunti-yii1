@@ -536,7 +536,7 @@ $( document ).ready(function() {
 	      <?php if(!empty($eilen_ylitetyt_tyot)) : ?>
               <div class="panel" id="p23">
                 <div class="panel-heading">
-                  <span class="panel-title"><?php echo Yii::t('main', 'Eilen ylitetyt työt'); ?></span>
+                  <span class="panel-title" data-toggle="tooltip" title="Eilen tehdyt työt, joiden kesto on yli 8 tuntia."><?php echo Yii::t('main', 'Ylityöt eilen'); ?></span>
                 </div>
                 <div class="panel-body pn">
                   <table class="table mbn tc-list-1 tc-text-muted-2 tc-fw600-2">
