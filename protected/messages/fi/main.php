@@ -675,6 +675,7 @@ Etunti
 'errorLuoUusiOnlinevaraus' => 'Virhe! Osoite lomake.',
 'sahkoposti' => 'sähköposti',
 
+'Hyväksyntäohje' => 'Hyväksymättömät tunnit voidaan hyväksyä valitsemalla ne alla olevasta listasta, tai hyväksymällä useita tunteja kerralla käyttämällä ylempänä olevia painikkeita.',
 	);
 
 
