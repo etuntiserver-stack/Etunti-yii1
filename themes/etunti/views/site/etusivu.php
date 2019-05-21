@@ -28,7 +28,6 @@
 
 	// <-- Eilen isot tunnit
 	$eilen_ylitetyt_tyot = '';
-	if( $asetukset->app_hyvaksynnan_peruste == 2 and time() < strtotime($asetukset->auto_hyvaksynta_klo) ){
 		$criteria = new CDbCriteria();
 		$criteria->order = " 
 			TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
@@ -52,7 +51,6 @@
 		if(!empty($fl)){
 			Yii::app()->user->setFlash('danger', "<p>".$fl."</p>");
 		}
-	}
 	// <-- Eilen isot tunnit
 
 $months=array(
