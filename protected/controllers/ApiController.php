@@ -631,6 +631,28 @@ public function actionImei($dom)
 		    $this->_sendResponse(200, 'ei tuloksia');
 		    exit;
 		    }
+
+		    // <-- Ajaanjaksolla
+		    $criteria = new CDbCriteria();
+        	    $criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		    ";
+	            $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND tid='".$ttekija->id."'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".date("Y-m-d", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week"))."' AND '".date("Y-m-d")."' 
+			AND (status=3 OR status=2)
+			AND admin!=1
+		    ";
+		    $lu = Mobile::model()->find($criteria);
+		    $ajaanjaksolla = '';
+		    if( isset($lu->l_tunnit) ){
+			$ajaanjaksolla = '<h5>Tehdyt työt ajanjaksolla - '.$this->sprint($lu->l_tunnit).'</h5>';
+		    }
+		    //    Ajaanjaksolla -->
+
 		    // <-- Tanaan
 		    $criteria = new CDbCriteria();
         	    $criteria->select = "
@@ -641,18 +663,20 @@ public function actionImei($dom)
 			aloitan!='' AND loppui!=''
 			AND tid='".$ttekija->id."'
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".date('Y-m-d')."'
-			AND (status=3 OR status=10)
+			AND (status=3 OR status=2)
+			AND admin!=1
 		    ";
 		    $lu = Mobile::model()->find($criteria);
 		    $tanaan = '';
 		    if( isset($lu->l_tunnit) ){
-			$tanaan = '<h3>Tänään yhteensä - '.$this->sprint($lu->l_tunnit).'</h3>';
+			$tanaan = '<h5>Tänään yhteensä - '.$this->sprint($lu->l_tunnit).'</h5>';
 		    }
 		    //    Tanaan -->
 
-		    $sel = '<center><h2>'.Yii::t('app', 'Tehdyt työt').'<br>'.date("d.m.Y", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week")).'-'.date('d.m.Y').'</h2><center>';
+		    $sel = '<center><p><h4>'.date("d.m.Y", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week")).'-'.date('d.m.Y').'</h4></p>';
+		    $sel .= $ajaanjaksolla;
 		    $sel .= $tanaan;
-		    $sel .= '<hr>';
+		    $sel .= '</center><hr>';
 		    foreach($mob as $val)
 		    {
 		    $kesto = '00:00';
