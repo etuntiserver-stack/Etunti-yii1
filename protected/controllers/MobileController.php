@@ -1913,10 +1913,6 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND deleted=0
 		";
 
-		if(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2) {
-			$criteria->addCondition (" hyvaksytty='' ");
-		}
-
 		if(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3) {
 			$criteria->addCondition (" hyvaksytty!='' ");
 		}
