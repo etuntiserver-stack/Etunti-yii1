@@ -45,3 +45,4 @@ access.log
 error.log
 robots.txt
 .htpasswd
+protected/config/main.php
