@@ -649,7 +649,7 @@ public function actionImei($dom)
 		    $lu = Mobile::model()->find($criteria);
 		    $ajaanjaksolla = '';
 		    if( isset($lu->l_tunnit) ){
-			$ajaanjaksolla = '<h5>Tehdyt työt ajanjaksolla - '.$this->sprint($lu->l_tunnit).'</h5>';
+			$ajaanjaksolla = '<h5>Tehdyt työt ajanjaksolla '.$this->sprint($lu->l_tunnit).'</h5>';
 		    }
 		    //    Ajaanjaksolla -->
 
@@ -669,7 +669,7 @@ public function actionImei($dom)
 		    $lu = Mobile::model()->find($criteria);
 		    $tanaan = '';
 		    if( isset($lu->l_tunnit) ){
-			$tanaan = '<h5>Tänään yhteensä - '.$this->sprint($lu->l_tunnit).'</h5>';
+			$tanaan = '<h5>Tänään yhteensä '.$this->sprint($lu->l_tunnit).'</h5>';
 		    }
 		    //    Tanaan -->
 
