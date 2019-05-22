@@ -938,7 +938,7 @@ $xml = '
 			if( $_POST['hyvaksyminen'] == 'alkaen' ){
 				$criteria = new CDbCriteria();
 			        $criteria->condition = " 
-					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') >= '".$_POST['arvo']."'
+					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') < CURDATE()
 					AND tid='".$_POST['tid']."'
 					AND hyvaksytty NOT LIKE '%//%'
 				";
