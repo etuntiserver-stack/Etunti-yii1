@@ -1218,7 +1218,7 @@ $('.ryhmat').multiselect({
         	$tal = array(
 			0 => 'Totetuneen ajan mukaan',
 			1 => 'Työvuoron aloitus ja lopetus mukaan',
-			2 => 'Kaikki tehdyt työt seuraavana päivänä'
+			2 => 'Hyväksy kaikki edellisen päivän tunnit automaattisesti'
 		);
 		echo $form->dropDownList($model,'app_hyvaksynnan_peruste', $tal, 
 		array('class'=>'form-control')) ?>
@@ -1226,7 +1226,7 @@ $('.ryhmat').multiselect({
 	</div>
 
 	<div class="section fill mb5" id="seuraavapaiva" style="display:none">
-		<?php echo $form->labelEx($model,'auto_hyvaksynta_klo'); ?>
+		<label><i data-toggle="tooltip" class="text-danger fa fa-2x fa-info" title="Aseta kellonaika,mihin aikaan automaattinen hyväksy toteutetaan seuraavalla päivällä"></i> Hyväksyminen aika </label>
 		<?php echo $form->textField($model,'auto_hyvaksynta_klo',array('maxlength'=>10,'class'=>'auto_hyvaksynta_klo form-control')); ?>
 		<?php echo $form->error($model,'auto_hyvaksynta_klo'); ?>
 	</div>
