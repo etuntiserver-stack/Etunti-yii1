@@ -37,11 +37,11 @@ class SiteController extends Controller
                 		'expression'=>"Yii::app()->controller->isDigisten()",
 			),
 			array('allow', 
-				'actions'=>array( 'error_custom', 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout', 'salasanan_palauttaminen', 'change_password', 'ohjevideot'),
+				'actions'=>array( 'error_custom', 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout', 'salasanan_palauttaminen', 'change_password'),
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan', 'getasiakasidbynimi', 'otakaytoon', 'ohjeet', 'management', 'management_tunnit'),
+				'actions'=>array('site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan', 'getasiakasidbynimi', 'otakaytoon', 'ohjeet', 'management', 'management_tunnit'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -83,13 +83,13 @@ class SiteController extends Controller
 
 	public function isEtuntiAdmin() {
 
-		if(isset(Yii::app()->user->adminID))
-		{
-		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	        if( isset($m->id) and $m->id == Yii::app()->user->adminID )
-	            return true;
+		if( isset(Yii::app()->user->domain) and isset(Yii::app()->user->adminID)){
+			$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	        	if( isset($m->id) and $m->id == Yii::app()->user->adminID ){
+	            		return true;
+			}
 		} else {
-	            return false;
+	            	return false;
 		}
 	}
 
@@ -1457,6 +1457,10 @@ class SiteController extends Controller
 	}
 	public function actionOhjevideot()
 	{
+		if(!isset(Yii::app()->user->domain)){
+			$this->redirect(array('index'));
+		}
+		Yii::app()->theme = 'etunti';
 		$this->render('ohjevideot');
 	}
 	public function actionAsiakkaat()
