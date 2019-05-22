@@ -954,7 +954,8 @@ $xml = '
 			if( $_POST['hyvaksyminen'] == 'kaikki' ){
 				$criteria = new CDbCriteria();
 			        $criteria->condition = " 
-					hyvaksytty NOT LIKE '%//%'
+					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') < CURDATE()
+					AND hyvaksytty NOT LIKE '%//%'
 					AND tid='".$_POST['tid']."'
 				";
 				$mob_hyvaksy_all = Mobile::model()->findAll($criteria);
