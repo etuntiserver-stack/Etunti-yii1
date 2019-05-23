@@ -322,7 +322,7 @@ if(!isset($model->id) and isset($asetukset->id)){
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'lopetuksen_syy'); ?>
-		<?php echo $form->textarea($model,'lopetuksen_syy',array('rows'=>8,'cols'=>6,'class'=>'form-control')); ?>
+		<?php echo $form->textarea($model,'lopetuksen_syy',array('rows'=>3,'cols'=>6,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'lopetuksen_syy'); ?>
 	</div>
 
