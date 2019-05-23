@@ -483,6 +483,11 @@ class AsiakkaatController extends Controller
 
 			$asetukset = Asetukset::model()->findbypk(1);
 			$model->attributes=$_POST['Asiakkaat'];
+			if( is_array($model->muistiinpano) and count($model->muistiinpano) > 0 ){
+				$model->muistiinpano = json_encode($model->muistiinpano, JSON_FORCE_OBJECT);
+			} else {
+				$model->muistiinpano = '';
+			}
 
 			// <-- Dimension
 			if( isset($_POST['Asiakkaat']['netvisor_dimension_name']) ){
@@ -677,6 +682,11 @@ Yritys '.$yr.'
 
 			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Asiakkaat'];
+			if( is_array($model->muistiinpano) and count($model->muistiinpano) > 0 ){
+				$model->muistiinpano = json_encode($model->muistiinpano, JSON_FORCE_OBJECT);
+			} else {
+				$model->muistiinpano = '';
+			}
 
 			// <-- Dimension
 			if( isset($_POST['Asiakkaat']['netvisor_dimension_name']) ){
