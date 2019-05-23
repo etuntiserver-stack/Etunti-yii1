@@ -604,6 +604,13 @@ $(document).ready(function(){
 	</div>
 	<?php endif; ?>
 
+  </div>
+</div><!-- form -->
+<br>
+
+
+<div class="row">
+  <div class="col-sm-6">
 	<div class="section fill mb5">
 	    <div class="input-group">
 	      <span class="form-control"><?php echo Yii::t('main','Muistiinpano'); ?></span>
@@ -612,29 +619,31 @@ $(document).ready(function(){
 	      </span>
 	    </div>  
 
-	<div id="muistiinpanolista">
-	 <?php if(is_array(json_decode($model->muistiinpano, true))): ?>
-	 <div class=""><div class="col-sm-12 muistiinpanolista_laatiko">
-	 <legend><?php echo Yii::t('main','Muistiinpanot'); ?></legend>
-	 <?php foreach(json_decode($model->muistiinpano, true) as $k => $v): ?>
-	 <div class="row">
-	  <div class="col-sm-11">
-	   <?php if( isset($mobile->id) ) : ?>
-	    <textarea name="Asiakkaat[muistiinpano][]" class="form-control" readonly><?=$v?></textarea>
-	   <?php else: ?>
-	    <textarea name="Asiakkaat[muistiinpano][]" class="form-control"><?=$v?></textarea>
-	   <?php endif; ?>
-	  </div>
-	  <div class="col-sm-1 text-right">
-		<span class="link text-danger fa fa-trash pois_muistiinpano"></span>
-	  </div>
-	 </div>
-	 <?php endforeach; ?>
-	 </div></div><!--row-->
-	 <?php endif; ?>
-	</div>
+		<div id="muistiinpanolista">
+		 <?php if(is_array(json_decode($model->muistiinpano, true))): ?>
+		 <div class="row"><div class="col-sm-12 muistiinpanolista_laatiko">
+		 <legend><?php echo Yii::t('main','Muistiinpanot'); ?></legend>
+		 <?php foreach(json_decode($model->muistiinpano, true) as $k => $v): ?>
+		 <div class="row">
+		  <div class="col-sm-11">
+		   <?php if( isset($mobile->id) ) : ?>
+		    <textarea name="Asiakkaat[muistiinpano][]" class="form-control" readonly><?=$v?></textarea>
+		   <?php else: ?>
+		    <textarea name="Asiakkaat[muistiinpano][]" class="form-control"><?=$v?></textarea>
+		   <?php endif; ?>
+		  </div>
+		  <div class="col-sm-1 text-right">
+			<span class="link text-danger fa fa-trash pois_muistiinpano"></span>
+		  </div>
+		 </div>
+		 <?php endforeach; ?>
+		 </div></div><!--row-->
+		 <?php endif; ?>
+		</div>
 
 	</div>
+  </div>
+</div>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -642,7 +651,7 @@ $(document).ready(function(){
   $(".uusimuistinpanno").click(function(){
     var mp_lista = $("#muistiinpanolista").text().trim();
     if( mp_lista == '' ){
-    $("#muistiinpanolista").append('<div class=""><div class="col-sm-12 muistiinpanolista_laatiko"><legend>Muistiinpanot</legend>');
+    $("#muistiinpanolista").append('<div class="row"><div class="col-sm-12 muistiinpanolista_laatiko"><legend>Muistiinpanot</legend>');
     }
 
     $(".muistiinpanolista_laatiko").append('' +
@@ -667,10 +676,6 @@ $(document).ready(function(){
 
 });
 </script>
-
-  </div>
-</div><!-- form -->
-<br>
 
 	<div class="section">
 		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('main', 'Luo') : Yii::t('main', 'Tallenna'),array('class'=>'btn btn-primary myBgColors luoTallennaAsiakas')); ?>
