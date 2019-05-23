@@ -608,7 +608,7 @@ $(document).ready(function(){
 </div><!-- form -->
 <br>
 
-
+<!-- Muistiinpanot -->
 <div class="row">
   <div class="col-sm-6">
 	<div class="section fill mb5">
@@ -618,7 +618,7 @@ $(document).ready(function(){
 	        <button class="btn btn-primary uusimuistinpanno" type="button"><i class="fa fa-plus"></i></button>
 	      </span>
 	    </div>  
-
+	    <br>
 		<div id="muistiinpanolista">
 		 <?php if(is_array(json_decode($model->muistiinpano, true))): ?>
 		 <div class="row"><div class="col-sm-12 muistiinpanolista_laatiko">
@@ -676,6 +676,7 @@ $(document).ready(function(){
 
 });
 </script>
+<!-- Muistiinpanot //-->
 
 	<div class="section">
 		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('main', 'Luo') : Yii::t('main', 'Tallenna'),array('class'=>'btn btn-primary myBgColors luoTallennaAsiakas')); ?>
