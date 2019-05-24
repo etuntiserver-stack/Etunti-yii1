@@ -576,6 +576,11 @@ $(document).ready(function(){
 	</div>
 	<!-- Tuotteet palvelut -->
 
+	<div class="section fill mb5 ashidd_a">
+		<?php echo $form->labelEx($model,'lisatietoja_laskutuksesta'); ?>
+		<?php echo $form->textarea($model,'lisatietoja_laskutuksesta',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'lisatietoja_laskutuksesta'); ?>
+	</div>
 
   </div>
 <!-- Laskutus loppu -->

@@ -122,6 +122,7 @@
 	<p><b><?=Yii::t('main', 'Eräpäivä')?></b>-<?=date("d.m.Y",strtotime($ep))?></p>
 	<p><b><?=Yii::t('main', 'Maksuehto')?></b>-<?=(!empty($item->maksuehto))? $item->maksuehto:''?></p>
 	<p><b><?=Yii::t('main', 'Viivästyskorko')?></b>-<?=(!empty($item->viivastyskorko))? $item->viivastyskorko:''?></p>
+	<p><b><?=Yii::t('main', 'Lisätietoja laskutuksesta')?></b>: <?=(!empty($item->lisatietoja_laskutuksesta))? $item->lisatietoja_laskutuksesta:''?></p>
 	 <div <?=$l_class?>>
 	 <?=($item->laskutus_kanava == 'sahkoposti' and empty($item->sahkoposti))? '<p>'.Yii::t('main', 'Sähköpostiosoite ei saisi olla tyhjä tässä laskutus kanavassa.').'</p>':''?>
 	 <?=( $asetukset->palvelu_tyyppi == 4 and $asetukset->netvisor_kaytto == 1 and $item->netvisorkey == 0 )? '<p>'.Yii::t('main', 'Asiakas ei vielä saanut netvisorkey. Päivittä tämän asiakkaan tiedot.').'</p>':''?>
