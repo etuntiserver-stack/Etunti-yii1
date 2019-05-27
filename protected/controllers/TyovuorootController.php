@@ -2280,6 +2280,7 @@ class TyovuorootController extends Controller
 	{
 
 		$model=$this->loadModel($id);
+		if(!isset($model->id)){ die('Työvuoroja '.$id.' ei löydy.'); }
 		$edellinenToistuva = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
 		$return = array();
 
