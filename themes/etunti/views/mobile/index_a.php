@@ -7,6 +7,7 @@
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Kartta'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'Er.'); ?></th>
 
   <?php
   $tas = explode(",",Yii::app()->user->adminPaketti);

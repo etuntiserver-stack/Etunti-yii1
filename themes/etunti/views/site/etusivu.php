@@ -10,7 +10,48 @@
 
 	$asetukset = Asetukset::model()->findByPk(1);
 
+	// <-- Eilen Autohyvaksyminen
+	$eilen_hyvaksynta = '';
+	if( $asetukset->app_hyvaksynnan_peruste == 2 and time() < strtotime($asetukset->auto_hyvaksynta_klo) ){
+		$criteria = new CDbCriteria();
+	        $criteria->condition = " 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') = '".date('Y-m-d', strtotime('-1 day'))."'
+			AND hyvaksytty=''
+			AND deleted=0
+		";
+		$hyvaksymattomat_eilen = Mobile::model()->findAll($criteria);
+		if( count($hyvaksymattomat_eilen) > 0 ){
+			$eilen_hyvaksynta = "<div class='alert alert-default'><marquee>Seuraava automaattinen tuntien hyväksyntä tapahtuu tänään kello ".$asetukset->auto_hyvaksynta_klo ." tunneista, jotka tehty eilen. Kirjattuja tunteja hyväksyntään ".count($hyvaksymattomat_eilen)." kappaletta.</marquee></div>";
+		}
+	}
+	//     Eilen Autohyvaksyminen -->
 
+	// <-- Eilen isot tunnit
+	$eilen_ylitetyt_tyot = '';
+		$criteria = new CDbCriteria();
+		$criteria->order = " 
+			TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) DESC
+		";
+	       	$criteria->select = "
+			TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit, t.*
+		";
+	        $criteria->condition = " 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') = '".date('Y-m-d', strtotime('-1 day'))."'
+			AND hyvaksytty=''
+			AND deleted=0
+			AND TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) >= 28800
+		";
+		$isot = Mobile::model()->findAll($criteria);
+		foreach($isot as $item){
+			$eilen_ylitetyt_tyot .= '<tr><td class="bg-danger"><b>'.$this->sprint($item->l_tunnit).'</b></td><td>'.$this->etuSukunimi($item->tid).'</td></tr>';
+		}
+		if(!empty($fl)){
+			Yii::app()->user->setFlash('danger', "<p>".$fl."</p>");
+		}
+	// <-- Eilen isot tunnit
 
 $months=array(
 	'01'=>Yii::t('main', 'Tammikuu'),
@@ -101,12 +142,11 @@ $months=array(
           </div>
         </div>
 
+	<?=$eilen_hyvaksynta?>
+
         <!-- Admin-panels -->
         <div class="admin-panels fade-onload">
-
-
           <div class="row">
-
             <div class="col-md-6 col-lg-5 admin-grid">
 
               <!-- Column Graph -->
@@ -490,6 +530,27 @@ $( document ).ready(function() {
 <!-- Modal -->
 
 
+
+	      <?php if(!empty($eilen_ylitetyt_tyot)) : ?>
+              <div class="panel" id="p23">
+                <div class="panel-heading">
+                  <span class="panel-title" data-toggle="tooltip" title="Eilen tehdyt työt, joiden kesto on yli 8 tuntia."><?php echo Yii::t('main', 'Ylityöt eilen'); ?></span>
+                </div>
+                <div class="panel-body pn">
+                  <table class="table mbn tc-list-1 tc-text-muted-2 tc-fw600-2">
+                    <thead>
+                      <tr class="hidden">
+                        <th class="w30">#</th>
+                        <th>First Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+			<?=$eilen_ylitetyt_tyot?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+	      <?php endif; ?>
 
 	      <?php if($this->tasot(5)) : ?>
               <div class="panel" id="p22">

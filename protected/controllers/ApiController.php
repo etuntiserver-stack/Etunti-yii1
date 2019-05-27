@@ -632,8 +632,51 @@ public function actionImei($dom)
 		    exit;
 		    }
 
+		    // <-- Ajaanjaksolla
+		    $criteria = new CDbCriteria();
+        	    $criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		    ";
+	            $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND tid='".$ttekija->id."'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".date("Y-m-d", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week"))."' AND '".date("Y-m-d")."' 
+			AND (status=3 OR status=2)
+			AND admin!=1
+		    ";
+		    $lu = Mobile::model()->find($criteria);
+		    $ajaanjaksolla = '';
+		    if( isset($lu->l_tunnit) ){
+			$ajaanjaksolla = '<h5>Tehdyt työt ajanjaksolla '.$this->sprint($lu->l_tunnit).'</h5>';
+		    }
+		    //    Ajaanjaksolla -->
 
-		    $sel = '<h2>'.Yii::t('app', 'Tekemasi työt. Vko määrä:').' '.$asetukset->app_hyvaksytyt_tyot_vkomaara.'</h2>';
+		    // <-- Tanaan
+		    $criteria = new CDbCriteria();
+        	    $criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		    ";
+	            $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND tid='".$ttekija->id."'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".date('Y-m-d')."'
+			AND (status=3 OR status=2)
+			AND admin!=1
+		    ";
+		    $lu = Mobile::model()->find($criteria);
+		    $tanaan = '';
+		    if( isset($lu->l_tunnit) ){
+			$tanaan = '<h5>Tänään yhteensä '.$this->sprint($lu->l_tunnit).'</h5>';
+		    }
+		    //    Tanaan -->
+
+		    $sel = '<center><p><h4>'.date("d.m.Y", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week")).'-'.date('d.m.Y').'</h4></p>';
+		    $sel .= $ajaanjaksolla;
+		    $sel .= $tanaan;
+		    $sel .= '</center><hr>';
 		    foreach($mob as $val)
 		    {
 		    $kesto = '00:00';
@@ -812,9 +855,7 @@ public function actionImei($dom)
 			}
 		      }
 		      
-		      if(!empty($tplista))
-		      $tplista = '<hr>'.$tplista;
-
+		      if(!empty($tplista)){ $tplista = '<hr>'.$tplista; }
 
 		      $alkLop = '';
 		      if($val->alku > 0 and $val->loppu > 0)
@@ -886,7 +927,7 @@ public function actionImei($dom)
 		      $tvController = Yii::app()->createController('Tyovuoroot');
 	   	      $tilanteet = $tvController[0]->tilanteet();
 		      if( isset($tilanteet[$val->status]) and $tilanteet[$val->status] != "0" ){
-			      $sel .= '<h3 class="text-center">'. $tilanteet[$val->status].'</h3>';
+			      $sel .= '<h3 class="text-center">'. $tilanteet[$val->status].' '.(($val->toistuva_id != 0)?'<i class="fa fa-repeat text-success"></i>':'').'</h3>';
 		      }
 
 		      $sel .= '<h3 class="text" style="color:'.$color.'">'.$osoite.'</h3><p><b>'.$val->pvm.'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'</p>';
@@ -1585,6 +1626,10 @@ public function actionImei($dom)
         		return true;
 	}
 
+	protected function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
 /*
     // Actions
     public function actionList()

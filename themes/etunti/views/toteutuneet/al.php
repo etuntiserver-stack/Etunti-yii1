@@ -99,7 +99,7 @@
 	   echo '<div id="'.$rivi.'_'.$did.'_'.$tid.'" class="fullRivi form-inline">';
 
 	   if($aloitan > 0 and $loppui > 0)
-	   echo '<span class="pull-right mob_kesto hidden">'.$this->num(strtotime($loppui)-strtotime($aloitan)).'</span>';
+	   echo '<span class="pull-right mob_kesto hidden">&nbsp;'.$this->sprint(strtotime($loppui)-strtotime($aloitan)).'</span>';
 
 	   echo '
 	   <div class="pull-right">'.$ap.'</div>';

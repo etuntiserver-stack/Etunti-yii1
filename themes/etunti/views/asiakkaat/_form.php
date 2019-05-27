@@ -322,7 +322,7 @@ if(!isset($model->id) and isset($asetukset->id)){
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'lopetuksen_syy'); ?>
-		<?php echo $form->textarea($model,'lopetuksen_syy',array('rows'=>8,'cols'=>6,'class'=>'form-control')); ?>
+		<?php echo $form->textarea($model,'lopetuksen_syy',array('rows'=>3,'cols'=>6,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'lopetuksen_syy'); ?>
 	</div>
 
@@ -576,6 +576,11 @@ $(document).ready(function(){
 	</div>
 	<!-- Tuotteet palvelut -->
 
+	<div class="section fill mb5 ashidd_a">
+		<?php echo $form->labelEx($model,'lisatietoja_laskutuksesta'); ?>
+		<?php echo $form->textarea($model,'lisatietoja_laskutuksesta',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'lisatietoja_laskutuksesta'); ?>
+	</div>
 
   </div>
 <!-- Laskutus loppu -->
@@ -590,7 +595,7 @@ $(document).ready(function(){
 		<?php echo CHtml::link(' +','/index.php/kohteet/createfromasiakas?id='.$model->id,array('class'=>'btn btn-default glyphicon glyphicon-home')); ?>
 	</div>
 
-	<div class="section fill mb5">		
+	<div class="section fill mb5">
 		<?php
 		$k = Kohteet::model()->findAll("asiakas_id='".$model->id."'");
         	foreach($k as $v)
@@ -607,6 +612,76 @@ $(document).ready(function(){
   </div>
 </div><!-- form -->
 <br>
+
+<!-- Muistiinpanot -->
+<div class="row">
+  <div class="col-sm-6">
+	<div class="section fill mb5">
+	    <div class="input-group">
+	      <span class="form-control"><?php echo Yii::t('main','Muistiinpano'); ?></span>
+	      <span class="input-group-btn">
+	        <button class="btn btn-primary uusimuistinpanno" type="button"><i class="fa fa-plus"></i></button>
+	      </span>
+	    </div>  
+	    <br>
+		<div id="muistiinpanolista">
+		 <?php if(is_array(json_decode($model->muistiinpano, true))): ?>
+		 <div class="row"><div class="col-sm-12 muistiinpanolista_laatiko">
+		 <legend><?php echo Yii::t('main','Muistiinpanot'); ?></legend>
+		 <?php foreach(json_decode($model->muistiinpano, true) as $k => $v): ?>
+		 <div class="row">
+		  <div class="col-sm-11">
+		   <?php if( isset($mobile->id) ) : ?>
+		    <textarea name="Asiakkaat[muistiinpano][]" class="form-control" readonly><?=$v?></textarea>
+		   <?php else: ?>
+		    <textarea name="Asiakkaat[muistiinpano][]" class="form-control"><?=$v?></textarea>
+		   <?php endif; ?>
+		  </div>
+		  <div class="col-sm-1 text-right">
+			<span class="link text-danger fa fa-trash pois_muistiinpano"></span>
+		  </div>
+		 </div>
+		 <?php endforeach; ?>
+		 </div></div><!--row-->
+		 <?php endif; ?>
+		</div>
+
+	</div>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $(".uusimuistinpanno").click(function(){
+    var mp_lista = $("#muistiinpanolista").text().trim();
+    if( mp_lista == '' ){
+    $("#muistiinpanolista").append('<div class="row"><div class="col-sm-12 muistiinpanolista_laatiko"><legend>Muistiinpanot</legend>');
+    }
+
+    $(".muistiinpanolista_laatiko").append('' +
+		 '<div class="row">' +
+		  '<div class="col-sm-11">' +
+		   '<textarea name="Asiakkaat[muistiinpano][]" class="form-control"></textarea>' +
+		  '</div>' +
+		  '<div class="col-sm-1 text-right">' +
+		   '<span class="link text-danger fa fa-trash pois_muistiinpano"></span>' +
+		  '</div>' +
+ 		 '</div>'
+    );
+    if( mp_lista == '' ){
+    $(".muistiinpanolista_laatiko").append('</div></div>');
+    }
+    $(".muistiinpanolista_laatiko textarea:last").val('<?=date("d.m.Y H:i")?> - <?=Yii::app()->user->nimi?>:\n').focus();
+  });
+
+  $(document).delegate(".pois_muistiinpano","click",function(){
+   $(this).closest(".row").remove();
+  });
+
+});
+</script>
+<!-- Muistiinpanot //-->
 
 	<div class="section">
 		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('main', 'Luo') : Yii::t('main', 'Tallenna'),array('class'=>'btn btn-primary myBgColors luoTallennaAsiakas')); ?>

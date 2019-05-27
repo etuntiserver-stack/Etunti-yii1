@@ -104,7 +104,9 @@ class Asiakkaat extends DB2ActiveRecord
 		     'tyoryhma' => 'int(11)',
                      'gcm_reg_id' => 'varchar(500) ',
                      'lopetuksen_pvm' => 'varchar(50) DEFAULT NULL',
-                     'lopetuksen_syy' => 'TEXT DEFAULT NULL'
+                     'lopetuksen_syy' => 'TEXT DEFAULT NULL',
+		     'muistiinpano' => 'text DEFAULT NULL',
+		     'lisatietoja_laskutuksesta' => 'text DEFAULT NULL',
 
                      //'vinkki_tunnit' => 'varchar(10)',
                      //'vinkki_prosentti' => 'varchar(10)',
@@ -140,7 +142,7 @@ class Asiakkaat extends DB2ActiveRecord
 			array('maksuehto, viivastyskorko, hinta, hinta_sis_alv', 'length', 'max'=>20),
 			array('puhelin', 'length', 'max'=>50),
 			array('asiakasnumero, ovt_tunnus, valittajan_tunnus, hinta_tyyppi, verot, lopetuksen_pvm', 'length', 'max'=>100),
-			array('alennuskoodit, gcm_reg_id, lopetuksen_syy, netvisor_dimension_name, netvisor_dimension_item, toissijainen_puhelinnumero', 'safe'),
+			array('alennuskoodit, gcm_reg_id, lopetuksen_syy, netvisor_dimension_name, netvisor_dimension_item, toissijainen_puhelinnumero, muistiinpano, lisatietoja_laskutuksesta', 'safe'),
 			array('sahkoposti','unique', 'message'=>'Tämä sähköposti on jo rekisteröity asiakkaalle.'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -215,6 +217,7 @@ class Asiakkaat extends DB2ActiveRecord
 			'lopetuksen_pvm' => Yii::t('main', 'Päivämäärä jolloin asiakas menee passiviksi'),
 			'lopetuksen_syy' => Yii::t('main', 'Syy'),
 			'netvisor_dimension_name' => Yii::t('main', 'Kustannuspaikka'),
+			'lisatietoja_laskutuksesta' => Yii::t('main', 'Lisätietoja laskutuksesta'),
 		);
 	}
 

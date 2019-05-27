@@ -248,7 +248,9 @@
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/mobile.js"></script>
+  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 
+  <div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -268,7 +270,35 @@ $(".haemob").click(function(){
 	$("#mobForm").submit();
 });
 
+$(document).delegate(".show_erittelyt", "click", function(){
+    var mob_id = $(this).attr('mob_id');
+    var tv_id = $(this).attr('tv_id');
+    var modal_content = '';
+	$.ajax({
+	      url: 'index',
+	      type: "POST",
+	      data: { geterittelyt : "true", tv_id : tv_id, mob_id : mob_id },
+	      async: false,
+	      	success: function(data){
+			modal_content = JSON.parse(data)
+	  	  	//console.log(data);
+	      	},
+	  	error:function(data){
+			window.location.href=location.protocol + "//" + location.host + '/index.php';
+	  	}
+	});
 
+    $('#showres').modal().html(''+
+    '<div class="modal-dialog modal-md" id="myModal">' +
+    '<div class="modal-content">' +
+      '<div class="modal-header">' +
+        '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+        '<h4 class="modal-title">Työerittelyt</h4>' +
+      '</div>' +
+      '<div class="modal-body">'+ modal_content +'</div>' +
+    '</div>' +
+    '</div>');
+});
 
     /* <-- Taulu updater */
     var interval = 60000;

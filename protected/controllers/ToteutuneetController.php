@@ -933,7 +933,43 @@ $xml = '
 			return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 		}
 
-
+		if(isset($_POST['hyvaksyminen']) and isset($_POST['tid']))
+		{
+			if( $_POST['hyvaksyminen'] == 'alkaen' ){
+				$criteria = new CDbCriteria();
+			        $criteria->condition = " 
+					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') < CURDATE()
+					AND tid='".$_POST['tid']."'
+					AND hyvaksytty NOT LIKE '%//%'
+				";
+				$mob_hyvaksy_alkaen = Mobile::model()->findAll($criteria);
+				if( count($mob_hyvaksy_alkaen) > 0 ){
+					Mobile::model()->updateAll(array('hyvaksytty' => Yii::app()->user->username.'//'.date("d.m.Y")), $criteria);
+				}
+				$tot_hyvaksy_alkaen = Toteutuneet::model()->findAll($criteria);
+				if( count($tot_hyvaksy_alkaen) > 0 ){
+					Toteutuneet::model()->updateAll(array('hyvaksytty' => Yii::app()->user->username.'//'.date("d.m.Y")), $criteria);
+				}
+			}
+			if( $_POST['hyvaksyminen'] == 'kaikki' ){
+				$criteria = new CDbCriteria();
+			        $criteria->condition = " 
+					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') < CURDATE()
+					AND hyvaksytty NOT LIKE '%//%'
+					AND tid='".$_POST['tid']."'
+				";
+				$mob_hyvaksy_all = Mobile::model()->findAll($criteria);
+				if( count($mob_hyvaksy_all) > 0 ){
+					Mobile::model()->updateAll(array('hyvaksytty' => Yii::app()->user->username.'//'.date("d.m.Y")), $criteria);
+				}
+				$tot_hyvaksy_all = Toteutuneet::model()->findAll($criteria);
+				if( count($tot_hyvaksy_all) > 0 ){
+					Toteutuneet::model()->updateAll(array('hyvaksytty' => Yii::app()->user->username.'//'.date("d.m.Y")), $criteria);
+				}
+			}
+			echo 'ok';
+			exit;
+		}
 		if(isset($_GET['deleteKorvaus']))
 		{
 			Korvaukset::model()->findByPk($_GET['id'])->delete();
@@ -1091,6 +1127,7 @@ $xml = '
 			AND (status = '3' OR status = '2')
 			AND sairaus!=1
 			AND deleted=0
+			AND hyvaksytty!=''
 		";
 
 
@@ -1125,6 +1162,7 @@ $xml = '
 			AND (status = '3' OR status = '2')
 			AND sairaus!=1
 			AND deleted=0
+			AND hyvaksytty!=''
 		";
 
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."' ");

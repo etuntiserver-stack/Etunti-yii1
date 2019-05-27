@@ -166,14 +166,14 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 	<div id="luoavain"><br>
 	<?php 
 	if(isset($model->kohteet->id) and isset($model->kohteet->avaimet) and count($model->kohteet->avaimet) > 0){
-	echo CHtml::link('Avaimet', array('/avaimet/index', 'osoite' => $model->kohteet->osoite), array('class'=>'btn btn-primary btn-block myBgColors')); 
+	echo CHtml::link('Avaimet', array('/avaimet/index', 'osoite' => $model->kohteet->osoite), array('class'=>'btn btn-primary btn-block myBgColors', 'target' =>'_blank')); 
 	}
 	?>
 	<?php if(isset($model->kohteet->id) and isset($model->kohteet->avaimet) and count($model->kohteet->avaimet) == 0 and $model->kohteet->asiakas_id > 0): ?>
 	    <div class="input-group">
 	      <span class="form-control"><?php echo Yii::t('main','Luo avain'); ?></span>
 	      <span class="input-group-btn">
-		<?=CHtml::link('<i class="fa fa-plus"></i>', array('/avaimet/create', 'asiakas_id' => $model->kohteet->asiakas_id, 'kohde_id' => $model->kohteet->id), array('class'=>'btn btn-primary'))?>
+		<?=CHtml::link('<i class="fa fa-plus"></i>', array('/avaimet/create', 'asiakas_id' => $model->kohteet->asiakas_id, 'kohde_id' => $model->kohteet->id), array('class'=>'btn btn-primary', 'target' =>'_blank'))?>
 	      </span>
 	    </div> 
 	<?php endif; ?>

@@ -1198,6 +1198,10 @@ class TyovuorootController extends Controller
 		{
 			$ex = explode("_",$cp);
 			$t = Tyovuoroot::model()->findbypk($ex[0]);
+			if(!isset($t->pvm)){
+				echo json_encode('Virhe: Työvuoroja ei löyty');
+				exit;
+			}
 			$vanha_pvm = $t->pvm;
 
 			$model=new Tyovuoroot;

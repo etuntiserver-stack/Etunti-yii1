@@ -105,6 +105,7 @@ public $tunnus;
                      'ammattinimike' => 'varchar(255) ',
                      'onlinevaraus_tuotteet' => 'text ',
                      'app_naytta_osoitekenta' => 'int(1) DEFAULT 0',
+		     'muistiinpano' => 'text DEFAULT NULL'
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -153,7 +154,7 @@ public $tunnus;
 			array('tekijan_pnumero', 'length', 'max'=>7),
 			array('ammattinimike, token', 'length', 'max'=>255),
 			array('ayjasenyys', 'length', 'max'=>10),
-			array('kortit, tekijan_muisti, tekijan_tietoja, tietoja_onlinevarauksen', 'length', 'max'=>2000),
+			array('kortit, tekijan_muisti, tekijan_tietoja, tietoja_onlinevarauksen, muistiinpano', 'safe'),
 			array('gcm_reg_id, position, kortit_voimassaolo, tyoryhma', 'length', 'max'=>500),
 			array('onlinevaraus_tuotteet', 'safe'),
 			// The following rule is used by search().

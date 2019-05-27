@@ -6,7 +6,7 @@
 $this->breadcrumbs=array(
 	Yii::t('main', 'Toteuma'),
 );
-
+$asetukset=Asetukset::model()->findbypk(1);
 ?>
 <style>
 .fullRivi{
@@ -67,7 +67,6 @@ table { width: 100%; }
                     <!-- Input Icons -->
                     <div class="row">
 
-
                       <div class="col-md-3">
                         <div class="section">
                           <label class="field select">
@@ -89,34 +88,22 @@ table { width: 100%; }
                             </label>
                           </label>
                         </div>
-
-
-			<?php
-			$asetukset=Asetukset::model()->findbypk(1);
-			if($asetukset->netvisor_kaytto == 1 and Yii::app()->session['tekija']) : ?>
-                        <div class="section">
-                          <label class="field select">
-				<span class="btn btn-primary btn-lg lahetaKaikki btn-block myBgColors"><?php echo Yii::t('main', 'Lähetä kaikki netvisoriin'); ?></span>
-                          </label>
-                        </div>
-			<?php endif; ?>
-
                       </div>
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
 
-   <?php
-    $lounas = '';
-    $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
-    $matka = '';
-    $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
+			   <?php
+			    $lounas = '';
+			    $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
+			    $matka = '';
+			    $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
 
-    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="'.Yii::t('main', 'Ei lasketa').'">';
-    echo '<option value="Lounastauko" '.$lounas.'>'.Yii::t('main', 'Lounastauko').'</option>';
-    echo '<option value="MATKA" '.$matka.'>'.Yii::t('main', 'Matka').'</option>';
-    echo '</select>';
-   ?>
+			    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="'.Yii::t('main', 'Ei lasketa').'">';
+			    echo '<option value="Lounastauko" '.$lounas.'>'.Yii::t('main', 'Lounastauko').'</option>';
+			    echo '<option value="MATKA" '.$matka.'>'.Yii::t('main', 'Matka').'</option>';
+			    echo '</select>';
+			   ?>
 
 
                           </label>
@@ -126,7 +113,7 @@ table { width: 100%; }
                         <div class="section">
                           <label class="field prepend-icon">
 
-	   <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['from'])) echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>">
+	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['from'])) echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -139,7 +126,7 @@ table { width: 100%; }
                         <div class="section">
                           <label class="field prepend-icon">
 
-   	   <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['to'])) echo date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>">
+   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['to'])) echo date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -151,13 +138,33 @@ table { width: 100%; }
                       <div class="col-md-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
-
                     </div>
 
 
-		<?php echo CHtml::link('<span class="btn btn-primary myBgColors">'.Yii::t('main', 'HYVÄKSYMÄTTÖMÄT TUNNIT').'</span>', array('//mobile/hyvaksymattomat')); ?>
 
+		    <?php if($asetukset->netvisor_kaytto == 1 and Yii::app()->session['tekija']) : ?>
+                    <p><div class="row">
+                      <div class="col-md-12">
+			<span class="btn btn-primary btn-lg lahetaKaikki btn-block myBgColors"><?php echo Yii::t('main', 'Lähetä kaikki netvisoriin'); ?></span>
+		      </div>
+                    </div></p>
+		    <?php endif; ?>
 
+		    <?php if(Yii::app()->session['tekija']) : ?>
+                    <div class="row">
+                      <div class="col-md-4">
+			<?php echo CHtml::link(Yii::t('main', 'HYVÄKSYMÄTTÖMÄT TUNNIT'), 
+				array('//mobile/hyvaksymattomat', 'tid' => Yii::app()->session['tekija']), array('target' => '_blank', 'class' => 'btn btn-lg btn-block tn-primary myBgColors')); 
+			?>
+		      </div>
+                      <div class="col-md-4">
+			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Hyväksyntänappi1'); ?> " for="alkaen" arvo="<?=date("Y-m-d", strtotime("first day of last month"))?>" tid="<?=Yii::app()->session['tekija']?>"><?php echo Yii::t('main', 'Hyväksy '.date("d.m.Y", strtotime("first day of last month")).' alkaen'); ?></span>
+		      </div>
+                      <div class="col-md-4">
+			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Hyväksyntänappi2'); ?> " for="kaikki" arvo="all" tid="<?=Yii::app()->session['tekija']?>"><?php echo Yii::t('main', 'Hyväksy kaikki '.date("d.m.Y", strtotime("-1 day")).' asti'); ?></span>
+		      </div>
+                    </div>
+		    <?php endif; ?>
                 </div>
               </div>
             </div>
@@ -222,7 +229,7 @@ function dateDiff($start, $end) {
   <tr>
   <th class="tdw1"><?php echo Yii::t('main', 'Suunnitellut'); ?></th>
   <th class="tdw2"><?php echo Yii::t('main', 'Luetut'); ?></th>
-  <th class="tdw3"><?php echo Yii::t('main', 'Hyväksytyt'); ?></th>
+  <th class="tdw3"><?php echo Yii::t('main', 'Hyväksyntä'); ?> <a href="#" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Hyväksyntäohje'); ?>">?</a></th>
   <th class="tdw4"><?php echo Yii::t('main', 'Yhteensä'); ?></th>
   </tr>
   </thead>
@@ -539,8 +546,10 @@ function dateDiff($start, $end) {
 		$yhteensaToteutuneet	+= $totpvmtid['toteutuneetTunnit'];
     }
     if(isset($exLatikoLu[1])){
-		$yhtLuetutpvmtid 	+= $exLatikoLu[1];
-		$yhteensaLuetut 	+= $exLatikoLu[1];
+	if( (int)$exLatikoLu[1] > 0 ){
+		$yhtLuetutpvmtid 	+= (int)$exLatikoLu[1];
+		$yhteensaLuetut 	+= (int)$exLatikoLu[1];
+	}
     }
 
     $yhtTyotunnitWeek	+= $tyotunnit;
@@ -835,12 +844,24 @@ $(document).ready(function(){
  $('.tyovuoro').append('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:-15px;  font-size: 130%" data-toggle="tooltip" data-placement="top" title="Siirrä toteutuun"></i>');
 
 
-$( ".sirraToteutuun" ).tooltip({
+ $( ".sirraToteutuun" ).tooltip({
   classes: {
     "ui-tooltip": "highlight"
   }
-});
+ });
 
+ $(".hyvaksyminen").click(function(){
+	if(!confirm('Oletko varma?')){ return false; }
+        $.ajax({
+           url: 'index',
+           type: "POST",
+	   data: { hyvaksyminen : $(this).attr('for'), arvo : $(this).attr('arvo'), tid : $(this).attr('tid') },
+           success: function(data){
+		console.log(data);
+		window.location.href="index";
+           }
+        });
+ });
 
 
 

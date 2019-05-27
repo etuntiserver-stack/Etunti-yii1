@@ -675,7 +675,10 @@ Etunti
 'errorLuoUusiOnlinevaraus' => 'Virhe! Osoite lomake.',
 'sahkoposti' => 'sähköposti',
 
-	);
+'Hyväksyntäohje' => 'Hyväksymättömät tunnit voidaan hyväksyä valitsemalla ne alla olevasta listasta, tai hyväksymällä useita tunteja kerralla käyttämällä ylempänä olevia painikkeita.',
+'Hyväksyntänappi1' => 'Hyväksy kaikki valitun henkilön tunnit ' . date("d.m.Y", strtotime("first day of last month")) . ' alkaen eiliseen asti.',
+'Hyväksyntänappi2' => 'Hyväksy kaikki valitun henkilön tunnit ' . date("d.m.Y", strtotime("-1 day")) . ' asti.'
+);
 
 
 ?>

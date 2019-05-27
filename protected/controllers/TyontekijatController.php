@@ -347,7 +347,13 @@ class TyontekijatController extends Controller
 
 		if(isset($_POST['Tyontekijat']))
 		{
+			$_POST['Tyontekijat']['tekijan_email'] = trim($_POST['Tyontekijat']['tekijan_email']);
 			$model->attributes=$_POST['Tyontekijat'];
+			if( is_array($model->muistiinpano) and count($model->muistiinpano) > 0 ){
+				$model->muistiinpano = json_encode($model->muistiinpano, JSON_FORCE_OBJECT);
+			} else {
+				$model->muistiinpano = '';
+			}
 
 			if(isset($_POST['tyo_toimialue']))
 			$model->tyo_toimialue=json_encode($_POST['tyo_toimialue']);
@@ -552,9 +558,14 @@ class TyontekijatController extends Controller
 
 		if(isset($_POST['Tyontekijat']))
 		{
-
+			$_POST['Tyontekijat']['tekijan_email'] = trim($_POST['Tyontekijat']['tekijan_email']);
 			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Tyontekijat'];
+			if( is_array($model->muistiinpano) and count($model->muistiinpano) > 0 ){
+				$model->muistiinpano = json_encode($model->muistiinpano, JSON_FORCE_OBJECT);
+			} else {
+				$model->muistiinpano = '';
+			}
 
 			if(isset($_POST['tyo_toimialue']))
 			$model->tyo_toimialue=json_encode($_POST['tyo_toimialue']);

@@ -83,13 +83,13 @@ class SiteController extends Controller
 
 	public function isEtuntiAdmin() {
 
-		if(isset(Yii::app()->user->adminID))
-		{
-		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	        if( isset($m->id) and $m->id == Yii::app()->user->adminID )
-	            return true;
+		if( isset(Yii::app()->user->domain) and isset(Yii::app()->user->adminID)){
+			$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	        	if( isset($m->id) and $m->id == Yii::app()->user->adminID ){
+	            		return true;
+			}
 		} else {
-	            return false;
+	            	return false;
 		}
 	}
 
@@ -1463,6 +1463,10 @@ class SiteController extends Controller
 	}
 	public function actionOhjevideot()
 	{
+		if(!isset(Yii::app()->user->domain)){
+			$this->redirect(array('index'));
+		}
+		Yii::app()->theme = 'etunti';
 		$this->render('ohjevideot');
 	}
 	public function actionAsiakkaat()
