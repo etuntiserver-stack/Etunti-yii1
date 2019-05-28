@@ -34,6 +34,7 @@ class Toteutuneet extends DB2ActiveRecord
 {
 
 public $l_tunnit;
+public $s_tunnit;
 public $t_tunnit;
 public $count;
 

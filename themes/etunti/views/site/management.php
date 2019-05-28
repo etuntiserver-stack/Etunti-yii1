@@ -344,7 +344,7 @@ ini_set("max_execution_time", "60");
        	$criteria->group = "asiakas";
        	$criteria->order = "l_tunnit DESC";
        	$criteria->select = "
-		(SELECT id FROM asiakkaat WHERE id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id=t.kohdenID) AND tyyppi='yritys') as asiakas,
+		(SELECT id FROM asiakkaat WHERE id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id=t.kohdenID)) as asiakas,
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
 		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, t.*
 	";
@@ -363,7 +363,7 @@ ini_set("max_execution_time", "60");
        	$criteria->group = "asiakas";
        	$criteria->order = "l_tunnit DESC";
        	$criteria->select = "
-		(SELECT id FROM asiakkaat WHERE id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id=t.kohdenID) AND tyyppi='yritys') as asiakas,
+		(SELECT id FROM asiakkaat WHERE id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id=t.kohdenID)) as asiakas,
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
 		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, t.*
 	";
@@ -376,7 +376,8 @@ ini_set("max_execution_time", "60");
 	";
 	$tot = Toteutuneet::model()->findAll($criteria);
 	$result = array_merge($lu, $tot);
-	$data_hyvaksytyt_yritykset = array();
+	$data_hyvaksytyt = array();
+	$data_suunnitellut = array();
 	$categories_yritykset = array();
 	$new_arr = array();
 	foreach($result as $k=>$v){
@@ -386,69 +387,30 @@ ini_set("max_execution_time", "60");
 	$i = 0;
 	foreach(array_reverse($new_arr) as $item){
 	  if(isset($item->kohteet->asiakkaat->id)){
+
+		$criteria = new CDbCriteria();
+	       	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit
+		";
+	        $criteria->condition = " 
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+			AND kohde IN (SELECT id FROM sivex_kohdet WHERE asiakas_id='".$item->kohteet->asiakkaat->id."')
+			AND status=3
+			AND peruutettu=0
+		";
+		$suunnitellut = Tyovuoroot::model()->find($criteria);
+		$st = 0;
+		if(isset($suunnitellut->l_tunnit)){
+			$st = $suunnitellut->l_tunnit;
+		}
 	  	$i++;
-		$data_hyvaksytyt_yritykset[$item->l_tunnit] = round($this->num($item->l_tunnit), 2);
+		$data_hyvaksytyt[$item->l_tunnit] = round($this->num($item->l_tunnit), 2);
+		$data_suunnitellut[] = round($this->num($st), 2);
 		$categories_yritykset[$item->l_tunnit] = $item->kohteet->asiakkaat->Fullname;
 	  }
 	  if($i > 20){ break; }
 	}
 	//     Hyvaksytyt yritykset -->
-
-	// <-- Hyvaksytyt henkilot
-	$criteria = new CDbCriteria();
-       	$criteria->limit = "20";
-       	$criteria->group = "asiakas";
-       	$criteria->order = "l_tunnit DESC";
-       	$criteria->select = "
-		(SELECT id FROM asiakkaat WHERE id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id=t.kohdenID) AND tyyppi='henkilo') as asiakas,
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, t.*
-	";
-        $criteria->condition = " 
-		aloitan!='' AND loppui!=''
-		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
-		AND status=3
-		AND deleted=0
-		AND hyvaksytty!=''
-		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
-	";
-	$lu = Mobile::model()->findAll($criteria);
-
-	$criteria = new CDbCriteria();
-       	$criteria->limit = "20";
-       	$criteria->group = "asiakas";
-       	$criteria->order = "l_tunnit DESC";
-       	$criteria->select = "
-		(SELECT id FROM asiakkaat WHERE id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id=t.kohdenID) AND tyyppi='henkilo') as asiakas,
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, t.*
-	";
-        $criteria->condition = " 
-		aloitan!='' AND loppui!=''
-		AND status=3
-		AND deleted=0
-		AND hyvaksytty!=''
-		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
-	";
-	$tot = Toteutuneet::model()->findAll($criteria);
-	$result = array_merge($lu, $tot);
-	$data_hyvaksytyt_henkilo = array();
-	$categories_henkilo = array();
-	$new_arr = array();
-	foreach($result as $k=>$v){
-		$new_arr[$v->l_tunnit] = $v;
-	}
-	ksort($new_arr);
-	$i = 0;
-	foreach(array_reverse($new_arr) as $item){
-	  if(isset($item->kohteet->asiakkaat->id)){
-	  	$i++;
-		$data_hyvaksytyt_henkilo[$item->l_tunnit] = round($this->num($item->l_tunnit), 2);
-		$categories_henkilo[$item->l_tunnit] = $item->kohteet->asiakkaat->Fullname;
-	  }
-	  if($i > 20){ break; }
-	}
-	//     Hyvaksytyt henkilot -->
 ?>
 
 <script>
@@ -476,48 +438,16 @@ Highcharts.chart('container', {
         }
     },
     series: [{
-        name: 'YRITYKSET',
-        data: JSON.parse('<?=json_encode(array_values($data_hyvaksytyt_yritykset))?>')
+        name: 'Hyväksytyt tunnit',
+        data: JSON.parse('<?=json_encode(array_values($data_hyvaksytyt))?>')
+    },{
+        name: 'Suunnitellut tunnit',
+        data: JSON.parse('<?=json_encode(array_values($data_suunnitellut))?>')
     }],
     exporting: {
         enabled: true
     }
 });
-</script>
-
-<script>
-Highcharts.chart('container2', {
-    chart: {
-        type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
-    },
-    title: {
-        text: 'TOP Hyväksytyt tunnit - HENKILÖT'
-    },
-    xAxis: {
-        categories: JSON.parse('<?=json_encode(array_values($categories_henkilo))?>')
-    },
-    yAxis: {
-        title: {
-            text: 'Tunnit'
-        }
-    },
-    plotOptions: {
-        line: {
-            dataLabels: {
-                enabled: true
-            },
-            enableMouseTracking: false
-        }
-    },
-    series: [{
-        name: 'HENKILÖT',
-        data: JSON.parse('<?=json_encode(array_values($data_hyvaksytyt_henkilo))?>')
-    }],
-    exporting: {
-        enabled: true
-    }
-});
-$("#container2").show();
 </script>
 <?php endif; ?>
 <!-- Asiakkaat TOP -->
