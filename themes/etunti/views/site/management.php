@@ -419,7 +419,7 @@ Highcharts.chart('container', {
         type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
     },
     title: {
-        text: 'TOP Hyväksytyt tunnit - YRITYKSET'
+        text: 'TOP ASIAKKAAT, Suunnitellut / Hyväksytyt tunnit'
     },
     xAxis: {
         categories: JSON.parse('<?=json_encode(array_values($categories_yritykset))?>')
@@ -438,11 +438,11 @@ Highcharts.chart('container', {
         }
     },
     series: [{
-        name: 'Hyväksytyt tunnit',
-        data: JSON.parse('<?=json_encode(array_values($data_hyvaksytyt))?>')
-    },{
-        name: 'Suunnitellut tunnit',
+        name: 'Suunnitellut',
         data: JSON.parse('<?=json_encode(array_values($data_suunnitellut))?>')
+    },{
+        name: 'Hyväksytyt',
+        data: JSON.parse('<?=json_encode(array_values($data_hyvaksytyt))?>')
     }],
     exporting: {
         enabled: true
