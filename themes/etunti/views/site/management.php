@@ -1,7 +1,7 @@
 <?php
 /* @var $this MobileController */
 /* @var $dataProvider CActiveDataProvider */
-
+ini_set('memory_limit','256M');
 ini_set("max_execution_time", "60");
 ?>
 
@@ -13,6 +13,68 @@ ini_set("max_execution_time", "60");
 
             <h2 class="myBgColors p10"> <i class="fa fa-line-chart"></i> Kaaviot </h2>
 
+	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'asiakkaat_top')): ?>
+   	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
+	    <input type="hidden" name="haku" value="asiakkaat_top">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+	    	    <legend><h3><?=Yii::t('main', 'TOP Asiakkaat')?></h3></legend>
+                    <!-- Input Icons -->
+                    <div class="row">
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			    <select name="chart_tyyppi" class="gui-input">
+			     <option value="line"><?php echo Yii::t('main', 'Line'); ?></option>
+			     <option value="column" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'column')?'selected':''?>><?php echo Yii::t('main', 'Column'); ?></option>
+			     <option value="bar" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'bar')?'selected':''?>><?php echo Yii::t('main', 'Bar'); ?></option>
+			     <option value="area" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'area')?'selected':''?>><?php echo Yii::t('main', 'Area'); ?></option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($from))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($to))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2 col-md-offset-4">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo kaavio'); ?>">
+		      </div>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+	    </form>
+	    <?php endif; ?>
+
 	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'asiakkaat_slh')): ?>
    	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
 	    <input type="hidden" name="haku" value="asiakkaat_slh">
@@ -20,7 +82,7 @@ ini_set("max_execution_time", "60");
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
-	    	    <legend><h3><?=Yii::t('main', 'Asiakas kuukausittain')?></h3></legend>
+	    	    <legend><h3><?=Yii::t('main', 'Asiakkaat/Asiakas kuukausittain')?></h3></legend>
                     <!-- Input Icons -->
                     <div class="row">
 
@@ -270,6 +332,195 @@ ini_set("max_execution_time", "60");
 <script src="https://code.highcharts.com/highcharts.src.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <div id="container" style="height: 500px"></div>
+<div id="container2" style="height: 500px;display:none"></div>
+
+<!-- Asiakkaat TOP -->
+<?php if(isset($_GET['haku']) and $_GET['haku'] == 'asiakkaat_top'): ?>
+<?php
+	$result = array();
+	// <-- Hyvaksytyt yritykset
+	$criteria = new CDbCriteria();
+       	$criteria->limit = "20";
+       	$criteria->group = "asiakas";
+       	$criteria->order = "l_tunnit DESC";
+       	$criteria->select = "
+		(SELECT id FROM asiakkaat WHERE id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id=t.kohdenID) AND tyyppi='yritys') as asiakas,
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, t.*
+	";
+        $criteria->condition = " 
+		aloitan!='' AND loppui!=''
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+		AND status=3
+		AND deleted=0
+		AND hyvaksytty!=''
+		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+	";
+	$lu = Mobile::model()->findAll($criteria);
+
+	$criteria = new CDbCriteria();
+       	$criteria->limit = "20";
+       	$criteria->group = "asiakas";
+       	$criteria->order = "l_tunnit DESC";
+       	$criteria->select = "
+		(SELECT id FROM asiakkaat WHERE id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id=t.kohdenID) AND tyyppi='yritys') as asiakas,
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, t.*
+	";
+        $criteria->condition = " 
+		aloitan!='' AND loppui!=''
+		AND status=3
+		AND deleted=0
+		AND hyvaksytty!=''
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+	";
+	$tot = Toteutuneet::model()->findAll($criteria);
+	$result = array_merge($lu, $tot);
+	$data_hyvaksytyt_yritykset = array();
+	$categories_yritykset = array();
+	$new_arr = array();
+	foreach($result as $k=>$v){
+		$new_arr[$v->l_tunnit] = $v;
+	}
+	ksort($new_arr);
+	$i = 0;
+	foreach(array_reverse($new_arr) as $item){
+	  if(isset($item->kohteet->asiakkaat->id)){
+	  	$i++;
+		$data_hyvaksytyt_yritykset[$item->l_tunnit] = round($this->num($item->l_tunnit), 2);
+		$categories_yritykset[$item->l_tunnit] = $item->kohteet->asiakkaat->Fullname;
+	  }
+	  if($i > 20){ break; }
+	}
+	//     Hyvaksytyt yritykset -->
+
+	// <-- Hyvaksytyt henkilot
+	$criteria = new CDbCriteria();
+       	$criteria->limit = "20";
+       	$criteria->group = "asiakas";
+       	$criteria->order = "l_tunnit DESC";
+       	$criteria->select = "
+		(SELECT id FROM asiakkaat WHERE id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id=t.kohdenID) AND tyyppi='henkilo') as asiakas,
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, t.*
+	";
+        $criteria->condition = " 
+		aloitan!='' AND loppui!=''
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+		AND status=3
+		AND deleted=0
+		AND hyvaksytty!=''
+		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+	";
+	$lu = Mobile::model()->findAll($criteria);
+
+	$criteria = new CDbCriteria();
+       	$criteria->limit = "20";
+       	$criteria->group = "asiakas";
+       	$criteria->order = "l_tunnit DESC";
+       	$criteria->select = "
+		(SELECT id FROM asiakkaat WHERE id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id=t.kohdenID) AND tyyppi='henkilo') as asiakas,
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, t.*
+	";
+        $criteria->condition = " 
+		aloitan!='' AND loppui!=''
+		AND status=3
+		AND deleted=0
+		AND hyvaksytty!=''
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+	";
+	$tot = Toteutuneet::model()->findAll($criteria);
+	$result = array_merge($lu, $tot);
+	$data_hyvaksytyt_henkilo = array();
+	$categories_henkilo = array();
+	$new_arr = array();
+	foreach($result as $k=>$v){
+		$new_arr[$v->l_tunnit] = $v;
+	}
+	ksort($new_arr);
+	$i = 0;
+	foreach(array_reverse($new_arr) as $item){
+	  if(isset($item->kohteet->asiakkaat->id)){
+	  	$i++;
+		$data_hyvaksytyt_henkilo[$item->l_tunnit] = round($this->num($item->l_tunnit), 2);
+		$categories_henkilo[$item->l_tunnit] = $item->kohteet->asiakkaat->Fullname;
+	  }
+	  if($i > 20){ break; }
+	}
+	//     Hyvaksytyt henkilot -->
+?>
+
+<script>
+Highcharts.chart('container', {
+    chart: {
+        type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
+    },
+    title: {
+        text: 'TOP Hyväksytyt tunnit - YRITYKSET'
+    },
+    xAxis: {
+        categories: JSON.parse('<?=json_encode(array_values($categories_yritykset))?>')
+    },
+    yAxis: {
+        title: {
+            text: 'Tunnit'
+        }
+    },
+    plotOptions: {
+        line: {
+            dataLabels: {
+                enabled: true
+            },
+            enableMouseTracking: false
+        }
+    },
+    series: [{
+        name: 'YRITYKSET',
+        data: JSON.parse('<?=json_encode(array_values($data_hyvaksytyt_yritykset))?>')
+    }],
+    exporting: {
+        enabled: true
+    }
+});
+</script>
+
+<script>
+Highcharts.chart('container2', {
+    chart: {
+        type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
+    },
+    title: {
+        text: 'TOP Hyväksytyt tunnit - HENKILÖT'
+    },
+    xAxis: {
+        categories: JSON.parse('<?=json_encode(array_values($categories_henkilo))?>')
+    },
+    yAxis: {
+        title: {
+            text: 'Tunnit'
+        }
+    },
+    plotOptions: {
+        line: {
+            dataLabels: {
+                enabled: true
+            },
+            enableMouseTracking: false
+        }
+    },
+    series: [{
+        name: 'HENKILÖT',
+        data: JSON.parse('<?=json_encode(array_values($data_hyvaksytyt_henkilo))?>')
+    }],
+    exporting: {
+        enabled: true
+    }
+});
+$("#container2").show();
+</script>
+<?php endif; ?>
+<!-- Asiakkaat TOP -->
 
 <?php if(isset($_GET['haku']) and $_GET['haku'] == 'asiakkaat_slh'): ?>
 <?php

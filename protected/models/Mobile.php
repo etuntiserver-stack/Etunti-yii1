@@ -32,6 +32,7 @@ class Mobile extends DB2ActiveRecord
 {
 
 public $domain;
+public $asiakas;
 public $l_tunnit;
 public $t_tunnit;
 public $count;
