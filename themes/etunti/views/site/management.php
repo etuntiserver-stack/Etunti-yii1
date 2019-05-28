@@ -41,8 +41,8 @@ ini_set("max_execution_time", "60");
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
-
-	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($from))?>">
+				<?php if(!isset($_GET['from'])){ $from_to_top = "first day of last month"; } else { $from_to_top = $from; } ?>
+	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($from_to_top))?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -54,8 +54,8 @@ ini_set("max_execution_time", "60");
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
-
-   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($to))?>">
+				<?php if(!isset($_GET['to'])){ $to_to_top = "last day of last month"; } else { $to_to_top = $to; } ?>
+   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($to_to_top))?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
