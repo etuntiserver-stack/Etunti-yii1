@@ -229,6 +229,9 @@ class Asiakkaat extends DB2ActiveRecord
 		if( !empty($this->yhteyshenkilo) and !empty($this->tyyppi) and $this->tyyppi == 'henkilo' ){
 			$return = $this->yhteyshenkilo;
 		}
+		if( empty($this->yrityksen_nimi) and empty($this->yhteyshenkilo)){
+			$return = 'Asiakas id: '.$this->id;
+		}
                 return $return;
         }
 
