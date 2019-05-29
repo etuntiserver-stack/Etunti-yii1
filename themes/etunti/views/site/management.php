@@ -20,7 +20,7 @@ ini_set("max_execution_time", "60");
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
-	    	    <legend><h3><?=Yii::t('main', 'TOP Asiakkaat')?></h3></legend>
+	    	    <legend><h3><?=Yii::t('main', 'Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja')?></h3></legend>
                     <!-- Input Icons -->
                     <div class="row">
 
@@ -28,10 +28,22 @@ ini_set("max_execution_time", "60");
                         <div class="section">
                           <label class="field select">
 			    <select name="chart_tyyppi" class="gui-input">
-			     <option value="line"><?php echo Yii::t('main', 'Line'); ?></option>
-			     <option value="column" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'column')?'selected':''?>><?php echo Yii::t('main', 'Column'); ?></option>
 			     <option value="bar" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'bar')?'selected':''?>><?php echo Yii::t('main', 'Bar'); ?></option>
+			     <option value="line" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'line')?'selected':''?>><?php echo Yii::t('main', 'Line'); ?></option>
+			     <option value="column" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'column')?'selected':''?>><?php echo Yii::t('main', 'Column'); ?></option>
 			     <option value="area" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'area')?'selected':''?>><?php echo Yii::t('main', 'Area'); ?></option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			    <select name="hyvaksynta" class="gui-input">
+			     <option value="1" <?=(isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == '1')?'selected':''?>><?php echo Yii::t('main', 'Hyväksyntä'); ?></option>
+			     <option value="2" <?=(isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == '2')?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
 			    </select>
                             <i class="arrow double"></i>
                             </label>
@@ -64,7 +76,7 @@ ini_set("max_execution_time", "60");
                         </div>
                       </div>
 
-                      <div class="col-md-2 col-md-offset-4">
+                      <div class="col-md-2 col-md-offset-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo kaavio'); ?>">
 		      </div>
                     </div>
@@ -353,9 +365,14 @@ ini_set("max_execution_time", "60");
 		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		AND status=3
 		AND deleted=0
-		AND hyvaksytty!=''
 		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 	";
+	if(isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 1){
+		$criteria->addCondition(" hyvaksytty='' OR hyvaksytty!='' ");
+	}
+	if(isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 2){
+		$criteria->addCondition(" hyvaksytty!='' ");
+	}
 	$lu = Mobile::model()->findAll($criteria);
 
 	$criteria = new CDbCriteria();
@@ -371,17 +388,28 @@ ini_set("max_execution_time", "60");
 		aloitan!='' AND loppui!=''
 		AND status=3
 		AND deleted=0
-		AND hyvaksytty!=''
 		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 	";
+	if(isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 1){
+		$criteria->addCondition(" hyvaksytty='' OR hyvaksytty!='' ");
+	}
+	if(isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 2){
+		$criteria->addCondition(" hyvaksytty!='' ");
+	}
 	$tot = Toteutuneet::model()->findAll($criteria);
 	$result = array_merge($lu, $tot);
 	$data_hyvaksytyt = array();
 	$data_suunnitellut = array();
 	$categories_yritykset = array();
 	$new_arr = array();
+	$arr = array();
 	foreach($result as $k=>$v){
-		$new_arr[$v->l_tunnit] = $v;
+		if(isset($v->kohteet->asiakkaat->id) and !isset($arr[$v->kohteet->asiakkaat->id])){
+			$new_arr[$v->l_tunnit] = $v;
+		}
+		if(isset($v->kohteet->asiakkaat->id)){
+			$arr[$v->kohteet->asiakkaat->id] = true;
+		}
 	}
 	ksort($new_arr);
 	$i = 0;
@@ -405,7 +433,7 @@ ini_set("max_execution_time", "60");
 		}
 	  	$i++;
 		$data_hyvaksytyt[$item->l_tunnit] = round($this->num($item->l_tunnit), 2);
-		$data_suunnitellut[] = round($this->num($st), 2);
+		$data_suunnitellut[$item->l_tunnit] = round($this->num($st), 2);
 		$categories_yritykset[$item->l_tunnit] = $item->kohteet->asiakkaat->Fullname;
 	  }
 	  if($i > 20){ break; }
@@ -419,7 +447,7 @@ Highcharts.chart('container', {
         type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
     },
     title: {
-        text: 'TOP ASIAKKAAT, Suunnitellut / Hyväksytyt tunnit'
+        text: 'Suunnitellut ja Hyväksytyt tunnit asiakkaiden mukaan'
     },
     xAxis: {
         categories: JSON.parse('<?=json_encode(array_values($categories_yritykset))?>')
