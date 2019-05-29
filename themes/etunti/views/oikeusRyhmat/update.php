@@ -9,12 +9,13 @@
         <div class="tray-center">
 
 	   <div class="pull-right">
-	   <?php     
+	   <?php if($model->id != 1){
 		echo CHtml::link("poista", '#', array(
 		'submit'=>array('delete', "id"=>$model->id), 
 		'confirm' => 'Haluatko varmaasti poistaa?',
 		'class'=>'btn btn-primary myBgColors'
 		));
+		}
 	   ?>
 	   </div>
 	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Oikeus ryhmät hallinta'); ?>: <?php echo $model->nimike; ?> </h2>
