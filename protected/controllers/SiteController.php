@@ -2340,10 +2340,11 @@ $(document).ready(function(){
 
 	public function checkOikeus($pyynto, $ajax=null)
 	{
+
 	   $return = '';
 	   $asetukset = Asetukset::model()->findbypk(1);
 	   $oikeudet = $asetukset->oikeudet;
-	   if (!preg_match("/".$pyynto."/i", $oikeudet) and Yii::app()->user->username != 'admin') {
+	   if (!preg_match("/".$pyynto."/i", $oikeudet) and Yii::app()->user->username != 'admin' and Yii::app()->user->adminStatus != 1) {
 
 	      	$return = '
 		'.(($ajax==null)?'<link href="'.Yii::app()->request->baseUrl.'/css/bootstrap.min.css" rel="stylesheet" type="text/css">':'').'
@@ -2371,7 +2372,7 @@ $(document).ready(function(){
 
 	   $asetukset = Asetukset::model()->findbypk(1);
 	   $oikeudet = $asetukset->oikeudet;
-	   if (!preg_match("/".$pyynto."/i", $oikeudet) and Yii::app()->user->username != 'admin') {
+	   if (!preg_match("/".$pyynto."/i", $oikeudet) and Yii::app()->user->username != 'admin' and Yii::app()->user->adminStatus != 1) {
 	   	$return = 0;
 	   } else {
 	   	$return = 1;
