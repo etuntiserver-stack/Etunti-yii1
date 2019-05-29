@@ -840,7 +840,7 @@ $('.multTyoryhma').multiselect({
           </li>
 
 
-
+	  <?php if( $site[0]->checkOikeusFields("tuntienhallinta_4_".Yii::app()->user->adminStatus) == 1 ): ?>
           <li>
             <a class="accordion-toggle tuntienHallinta" href="#">
               <span class="fa fa-mobile"></span>
@@ -936,7 +936,7 @@ $('.multTyoryhma').multiselect({
 
             </ul>
           </li>
-
+	  <?php endif; ?>
 
 
           <li>

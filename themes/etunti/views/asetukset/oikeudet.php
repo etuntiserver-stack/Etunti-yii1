@@ -24,6 +24,7 @@
  (
 	'asetukset'=>array(0=>null,1=>null,2=>'Asetukset ja käyttöoikeudet',3=>null),
 	'tyoryhmat'=>array(4=>'Työryhmät järjestelmänvalvoja'),
+	'tuntienhallinta'=>array(4=>'Tuntien hallinta'),
 	'pudotusvalikot'=>array(4=>'Pudotusvalikot'),
 	'yrityksentiedot'=>array(0=>null,1=>null,2=>'Muokaa yrityksentiedot',3=>null),
 	'henkilotunnukset'=>array(0=>null,1=>null,2=>'Henkilötunnukset',3=>null),
@@ -85,8 +86,9 @@ foreach($array as $k=>$v)
 	if($v1 != null)
 	{
 		echo '<tr><td>'.$v1.'</td>';
-   		foreach($r as $ryhma=>$value)
-	  	echo '<td><input type="checkbox" class="check" id="'.$k.'_'.$k1.'_'.$ryhma.'"></td>';
+   		foreach($r as $ryhma=>$value){
+		  	echo '<td><input type="checkbox" class="check '.(($ryhma == 1)?'disabled':'').'" id="'.$k.'_'.$k1.'_'.$ryhma.'" '.(($ryhma == 1)?'checked onclick="return false;"':'').'></td>';
+		}
 		echo '</tr>';
 	}
    }
