@@ -31,8 +31,9 @@ $this->breadcrumbs=array(
       <input type="hidden" name="to" value="<?php echo $to; ?>">
       <div style="display:none">
 				<select class="gui-input" name="lu_tai_tot">
-				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
-				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
+				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
+				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Hyväksyntä'); ?></option>
+				<option value="3" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
 				</select>
 				<?php
 		   		$site = Yii::app()->createController('Site');
@@ -53,8 +54,9 @@ $this->breadcrumbs=array(
       <input type="hidden" name="to" value="<?php echo $to; ?>">
       <div style="display:none">
 				<select class="gui-input" name="lu_tai_tot">
-				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
-				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
+				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
+				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Hyväksyntä'); ?></option>
+				<option value="3" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
 				</select>
 				<?php
 		   		$site = Yii::app()->createController('Site');
