@@ -13,6 +13,80 @@ ini_set("max_execution_time", "60");
 
             <h2 class="myBgColors p10"> <i class="fa fa-line-chart"></i> Kaaviot </h2>
 
+	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'tyontekijat_top')): ?>
+   	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
+	    <input type="hidden" name="haku" value="tyontekijat_top">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+	    	    <legend><h3><?=Yii::t('main', 'Työntekijät, joilla eniten hyväksyttyjä tunteja')?></h3></legend>
+                    <!-- Input Icons -->
+                    <div class="row">
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			    <select name="chart_tyyppi" class="gui-input">
+			     <option value="bar" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'bar')?'selected':''?>><?php echo Yii::t('main', 'Bar'); ?></option>
+			     <option value="line" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'line')?'selected':''?>><?php echo Yii::t('main', 'Line'); ?></option>
+			     <option value="column" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'column')?'selected':''?>><?php echo Yii::t('main', 'Column'); ?></option>
+			     <option value="area" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'area')?'selected':''?>><?php echo Yii::t('main', 'Area'); ?></option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			    <select name="hyvaksynta" class="gui-input">
+			     <option value="1" <?=(isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == '1')?'selected':''?>><?php echo Yii::t('main', 'Hyväksyntä'); ?></option>
+			     <option value="2" <?=(isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == '2')?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+				<?php if(!isset($_GET['from'])){ $from_to_top = "first day of last month"; } else { $from_to_top = $from; } ?>
+	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($from_to_top))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+				<?php if(!isset($_GET['to'])){ $to_to_top = "last day of last month"; } else { $to_to_top = $to; } ?>
+   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($to_to_top))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2 col-md-offset-2">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo kaavio'); ?>">
+		      </div>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+	    </form>
+	    <?php endif; ?>
+
 	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'asiakkaat_top')): ?>
    	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
 	    <input type="hidden" name="haku" value="asiakkaat_top">
@@ -345,6 +419,135 @@ ini_set("max_execution_time", "60");
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <div id="container" style="height: 500px"></div>
 <div id="container2" style="height: 500px;display:none"></div>
+
+<!-- Työntekijät TOP -->
+<?php if(isset($_GET['haku']) and $_GET['haku'] == 'tyontekijat_top'): ?>
+<?php
+	$result = array();
+	// <-- Hyvaksytyt yritykset
+	$criteria = new CDbCriteria();
+       	$criteria->limit = "20";
+       	$criteria->group = "tid";
+       	$criteria->order = "l_tunnit DESC";
+       	$criteria->select = "
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, t.*
+	";
+        $criteria->condition = " 
+		aloitan!='' AND loppui!=''
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+		AND status=3
+		AND deleted=0
+		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+	";
+	if(isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 1){
+		$criteria->addCondition(" hyvaksytty='' OR hyvaksytty!='' ");
+	}
+	if(isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 2){
+		$criteria->addCondition(" hyvaksytty!='' ");
+	}
+	$lu = Mobile::model()->findAll($criteria);
+
+	$criteria = new CDbCriteria();
+       	$criteria->limit = "20";
+       	$criteria->group = "tid";
+       	$criteria->order = "l_tunnit DESC";
+       	$criteria->select = "
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, t.*
+	";
+        $criteria->condition = " 
+		aloitan!='' AND loppui!=''
+		AND status=3
+		AND deleted=0
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+	";
+	if(isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 1){
+		$criteria->addCondition(" hyvaksytty='' OR hyvaksytty!='' ");
+	}
+	if(isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 2){
+		$criteria->addCondition(" hyvaksytty!='' ");
+	}
+	$tot = Toteutuneet::model()->findAll($criteria);
+	$result = array_merge($lu, $tot);
+	$data_hyvaksytyt = array();
+	$data_suunnitellut = array();
+	$categories_yritykset = array();
+	$new_arr = array();
+	$arr = array();
+	foreach($result as $k=>$v){
+		if(isset($v->kohteet->asiakkaat->id) and !isset($arr[$v->kohteet->asiakkaat->id])){
+			$new_arr[$v->l_tunnit] = $v;
+		}
+		if(isset($v->kohteet->asiakkaat->id)){
+			$arr[$v->kohteet->asiakkaat->id] = true;
+		}
+	}
+	ksort($new_arr);
+	$i = 0;
+	foreach(array_reverse($new_arr) as $item){
+		$criteria = new CDbCriteria();
+	       	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit
+		";
+	        $criteria->condition = " 
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+			AND tid='".$item->tid."'
+			AND status=3
+			AND peruutettu=0
+		";
+		$suunnitellut = Tyovuoroot::model()->find($criteria);
+		$st = 0;
+		if(isset($suunnitellut->l_tunnit)){
+			$st = $suunnitellut->l_tunnit;
+		}
+	  	$i++;
+		$data_hyvaksytyt[$item->l_tunnit] = round($this->num($item->l_tunnit), 2);
+		$data_suunnitellut[$item->l_tunnit] = round($this->num($st), 2);
+		$categories_yritykset[$item->l_tunnit] = $this->etuSukunimi($item->tid);
+	  if($i > 20){ break; }
+	}
+	//     Hyvaksytyt yritykset -->
+?>
+
+<script>
+Highcharts.chart('container', {
+    chart: {
+        type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
+    },
+    title: {
+        text: 'Suunnitellut ja Hyväksytyt tunnit työntekijän mukaan'
+    },
+    xAxis: {
+        categories: JSON.parse('<?=json_encode(array_values($categories_yritykset))?>')
+    },
+    yAxis: {
+        title: {
+            text: 'Tunnit'
+        }
+    },
+    plotOptions: {
+        line: {
+            dataLabels: {
+                enabled: true
+            },
+            enableMouseTracking: false
+        }
+    },
+    series: [{
+        name: 'Suunnitellut',
+        data: JSON.parse('<?=json_encode(array_values($data_suunnitellut))?>')
+    },{
+        name: 'Hyväksytyt',
+        data: JSON.parse('<?=json_encode(array_values($data_hyvaksytyt))?>')
+    }],
+    exporting: {
+        enabled: true
+    }
+});
+</script>
+<?php endif; ?>
+<!-- Työntekijät TOP -->
 
 <!-- Asiakkaat TOP -->
 <?php if(isset($_GET['haku']) and $_GET['haku'] == 'asiakkaat_top'): ?>
