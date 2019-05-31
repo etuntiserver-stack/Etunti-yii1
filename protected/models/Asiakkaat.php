@@ -19,7 +19,7 @@
 class Asiakkaat extends DB2ActiveRecord
 {
 
-	public $filter_postitoimipaikka, $filter_tyoryhma, $filter_asiakasryhma, $filter_tyyppi;
+	public $count, $filter_postitoimipaikka, $filter_tyoryhma, $filter_asiakasryhma, $filter_tyyppi;
 
 	/**
 	 * Returns the static model of the specified AR class.
