@@ -13,6 +13,68 @@ ini_set("max_execution_time", "60");
 
             <h2 class="myBgColors p10"> <i class="fa fa-line-chart"></i> Kaaviot </h2>
 
+	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'lomat_poissaolot')): ?>
+   	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
+	    <input type="hidden" name="haku" value="lomat_poissaolot">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+	    	    <legend><h3><?=Yii::t('main', 'Lomat ja poissaolot')?></h3></legend>
+                    <!-- Input Icons -->
+                    <div class="row">
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			    <select name="chart_tyyppi" class="gui-input">
+			     <option value="line" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'line')?'selected':''?>><?php echo Yii::t('main', 'Line'); ?></option>
+			     <option value="bar" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'bar')?'selected':''?>><?php echo Yii::t('main', 'Bar'); ?></option>
+			     <option value="column" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'column')?'selected':''?>><?php echo Yii::t('main', 'Column'); ?></option>
+			     <option value="area" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'area')?'selected':''?>><?php echo Yii::t('main', 'Area'); ?></option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($from))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($to))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2 col-md-offset-4">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo kaavio'); ?>">
+		      </div>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+	    </form>
+	    <?php endif; ?>
+
 	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'asiakkaat_uudet_lopettaneet')): ?>
    	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
 	    <input type="hidden" name="haku" value="asiakkaat_uudet_lopettaneet">
@@ -504,6 +566,89 @@ ini_set("max_execution_time", "60");
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <div id="container" style="height: 500px"></div>
 <div id="container2" style="height: 500px;display:none"></div>
+
+<!-- Lomat ja poissaolot -->
+<?php if(isset($_GET['haku']) and $_GET['haku'] == 'lomat_poissaolot'): ?>
+<?php
+	// <-- Uudet
+	$criteria = new CDbCriteria();
+       	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')),tyoajanlaatu ";
+       	$criteria->select = "
+		COUNT(*) as count, t.*
+	";
+        $criteria->condition = " 
+		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+		AND tyoajanlaatu!=''
+	";
+	$asiakkaat = Tyovuoroot::model()->findAll($criteria);
+	$arr = array();
+	foreach($asiakkaat as $item){
+		$arr[$item->tyoajanlaatu][date("Ym", strtotime($item->pvm))] = (int)$item->count;
+	}
+	//     Uudet -->
+
+echo '<pre>';
+print_r($arr);
+exit;
+echo '</pre>';
+
+
+	$categories = array();
+	$begin = new DateTime( date("Y-m-d", strtotime($from)) );
+	$end = new DateTime( date("Y-m-d", strtotime($to)) );
+	$end = $end->modify( '+1 month' );
+	$interval = DateInterval::createFromDateString('1 month');
+	$period = new DatePeriod($begin, $interval, $end);
+	$data_arr = array();
+	foreach($period as $dt) {
+		$categories[$dt->format( "Ym" )] = $dt->format( "Y" ).', '.$months[$dt->format( "n" )];
+		if(isset($arr[$dt->format( "Ym" )])){
+		   foreach($arr as $k=>$tyoajanlaatu) {
+			$data_arr[$k] = $tyoajanlaatu;
+		   }
+		} else {
+			$data_arr[$k] = 0;
+		}
+	}
+
+echo '<pre>';
+print_r($data_arr);
+exit;
+echo '</pre>';
+?>
+
+<script>
+Highcharts.chart('container', {
+    chart: {
+        type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
+    },
+    title: {
+        text: 'Lomat ja poissaolot'
+    },
+    xAxis: {
+        categories: JSON.parse('<?=json_encode(array_values($categories))?>')
+    },
+    yAxis: {
+        title: {
+            text: 'Tunnit'
+        }
+    },
+    plotOptions: {
+        line: {
+            dataLabels: {
+                enabled: true
+            },
+            enableMouseTracking: false
+        }
+    },
+    series: '<?=json_encode(array_values($data_uudet))?>',
+    exporting: {
+        enabled: true
+    }
+});
+</script>
+<?php endif; ?>
+<!-- Lomat ja poissaolot -->
 
 <!-- Uudet ja lopettaneet asiakkaat kuukausittain -->
 <?php if(isset($_GET['haku']) and $_GET['haku'] == 'asiakkaat_uudet_lopettaneet'): ?>
