@@ -2886,6 +2886,20 @@ class TyovuorootController extends Controller
 		if($model->save())
 		{
 
+			// <-- LOG
+			$model_log 	= 'Tyovuoroot';
+			$name_log 	= 'Työvuorot';
+			$status_log 	= 'Create';
+			if(isset($_POST[$model_log]))
+			{
+				$old_values = null;
+				$n_m = Tyovuoroot::model()->findbypk($model->id);
+				$new_values = json_encode($n_m->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			//     LOG -->
+
 			// <-- jos on tyopaari
 			$luotu = array();
 			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
@@ -3113,6 +3127,21 @@ class TyovuorootController extends Controller
 
 		  if($asiakkaat->save())
 		  {
+
+			// <-- LOG
+			$model_log 	= 'Asiakkaat';
+			$name_log 	= 'Asiakkaat';
+			$status_log 	= 'Create';
+			if(isset($_POST[$model_log]))
+			{
+				$old_values = null;
+				$n_m = Asiakkaat::model()->findbypk($asiakkaat->id);
+				$new_values = json_encode($n_m->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			//     LOG -->
+
 	       		$criteria = new CDbCriteria();
 	       		$criteria->order = " cast(asiakasnumero as unsigned) DESC  ";
 			$anum = Asiakkaat::model()->find($criteria);
@@ -3165,6 +3194,18 @@ class TyovuorootController extends Controller
 
 		  	   if($kohteet->save())
 		  	   {
+
+				// <-- LOG
+				$model_log 	= 'Kohteet';
+				$name_log 	= 'Kohteet';
+				$status_log 	= 'Create';
+					$old_values = null;
+					$n_m = Kohteet::model()->findbypk($kohteet->id);
+					$new_values = json_encode($n_m->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+
 				$model->attributes=$_POST['Tyovuoroot'];
 				if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
 					$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
@@ -3181,6 +3222,20 @@ class TyovuorootController extends Controller
 				if($model->save())
 				{
 				
+				// <-- LOG
+				$model_log 	= 'Tyovuoroot';
+				$name_log 	= 'Työvuorot';
+				$status_log 	= 'Create';
+				if(isset($_POST[$model_log]))
+				{
+					$old_values = null;
+					$n_m = Tyovuoroot::model()->findbypk($model->id);
+					$new_values = json_encode($n_m->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
+
 
 			// <-- jos on tyopaari
 			$luotu = array();
