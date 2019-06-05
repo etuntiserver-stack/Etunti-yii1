@@ -17,7 +17,7 @@ return array(
 'Mob' => 'Sovellus',
 'Mobile' => 'Työtunnit',
 'Toteutuneet' => 'Työtunnit',
-'Auto Delete' => 'Automaattinen poisto',
+'Auto Delete' => '<span class="btn btn-block btn-danger">Automaattinen poisto</span>',
 );
 
 

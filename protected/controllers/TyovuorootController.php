@@ -2331,14 +2331,30 @@ class TyovuorootController extends Controller
 
 				// <-- Varauksesta pois original
 				if( $model->tid == 0 ){
+					$criteria = new CDBcriteria;
+					$criteria->condition = " 
+						tid='0'
+						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= '".date("Y-m-d", strtotime($toistuva->pvm))."'
+						AND toistuva_id='".$toistuva->id."'
+					";
+					$tv_pois = Tyovuoroot::model()->findAll($criteria);
+					foreach($tv_pois as $item){
+						$tv = Tyovuoroot::model()->findbypk($item->id);
+						if(isset($tv->id)){
+						// <-- LOG
+						$model_log 	= 'Tyovuoroot';
+						$name_log 	= 'Työvuorot';
+						$status_log 	= 'Auto Delete';
+	
+						$old_values = json_encode($tv->attributes);
+						$new_values = null;
+						$site = Yii::app()->createController('Site');
+						$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+						//     LOG -->
+						$this->loadModel($tv->id)->delete();
+						}
+					}
 
-						$criteria = new CDBcriteria;
-						$criteria->condition = " 
-							tid='0'
-							AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= '".date("Y-m-d", strtotime($toistuva->pvm))."'
-							AND toistuva_id='".$toistuva->id."'
-						";
-						Tyovuoroot::model()->deleteAll($criteria);
 				}
 				//     Varauksesta pois original -->
 
@@ -2359,7 +2375,23 @@ class TyovuorootController extends Controller
 						AND '".date("Y-m-d",strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
 						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
 					";
-					Tyovuoroot::model()->deleteAll($pois_valipavm);
+					$tv_pois = Tyovuoroot::model()->findAll($pois_valipavm);
+					foreach($tv_pois as $item){
+						$tv = Tyovuoroot::model()->findbypk($item->id);
+						if(isset($tv->id)){
+						// <-- LOG
+						$model_log 	= 'Tyovuoroot';
+						$name_log 	= 'Työvuorot';
+						$status_log 	= 'Auto Delete';
+	
+						$old_values = json_encode($tv->attributes);
+						$new_values = null;
+						$site = Yii::app()->createController('Site');
+						$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+						//     LOG -->
+						$this->loadModel($tv->id)->delete();
+						}
+					}
 				}
 				//     Poistetaanko vai säilytetäänkö vanhan ja uuden aloituspäivämäärän väliin jäävät työvuorot -->
 
@@ -2437,7 +2469,23 @@ class TyovuorootController extends Controller
 								tid='".$v."'
 								AND toistuva_id='".$toistuva->id."'
 							";
-							Tyovuoroot::model()->deleteAll($criteria);
+							$tv_pois = Tyovuoroot::model()->findAll($criteria);
+							foreach($tv_pois as $item){
+								$tv = Tyovuoroot::model()->findbypk($item->id);
+								if(isset($tv->id)){
+								// <-- LOG
+								$model_log 	= 'Tyovuoroot';
+								$name_log 	= 'Työvuorot';
+								$status_log 	= 'Auto Delete';
+	
+								$old_values = json_encode($tv->attributes);
+								$new_values = null;
+								$site = Yii::app()->createController('Site');
+								$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+								//     LOG -->
+								$this->loadModel($tv->id)->delete();
+								}
+							}
 						}
 				    	   }
 				    	}
@@ -2623,7 +2671,23 @@ class TyovuorootController extends Controller
 							AND tid='".$m->tid."'
 							AND toistuva_id='".$toistuva_id."'
 						";
-						Tyovuoroot::model()->deleteAll($criteria);
+						$tv_pois = Tyovuoroot::model()->findAll($criteria);
+						foreach($tv_pois as $item){
+							$tv = Tyovuoroot::model()->findbypk($item->id);
+							if(isset($tv->id)){
+							// <-- LOG
+							$model_log 	= 'Tyovuoroot';
+							$name_log 	= 'Työvuorot';
+							$status_log 	= 'Auto Delete';
+	
+							$old_values = json_encode($tv->attributes);
+							$new_values = null;
+							$site = Yii::app()->createController('Site');
+							$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+							//     LOG -->
+							$this->loadModel($tv->id)->delete();
+							}
+						}
 						}
 						//  Poistetaan tyovuoro henkilosta joka oli toistuvissa -->
 
@@ -2645,7 +2709,21 @@ class TyovuorootController extends Controller
 							$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
 							}
 
-							Tyovuoroot::model()->deleteByPk($k);
+							$tv = Tyovuoroot::model()->findbypk($k);
+							if(isset($tv->id)){
+							// <-- LOG
+							$model_log 	= 'Tyovuoroot';
+							$name_log 	= 'Työvuorot';
+							$status_log 	= 'Auto Delete';
+	
+							$old_values = json_encode($tv->attributes);
+							$new_values = null;
+							$site = Yii::app()->createController('Site');
+							$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+							//     LOG -->
+							$this->loadModel($tv->id)->delete();
+							}
+						
 							if(isset($luotu[$k])){	unset($luotu[$k]); }	
 						}
 				    	}
@@ -2673,7 +2751,20 @@ class TyovuorootController extends Controller
 							$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
 							}
 
-							Tyovuoroot::model()->deleteByPk($k);
+							$tv = Tyovuoroot::model()->findbypk($k);
+							if(isset($tv->id)){
+							// <-- LOG
+							$model_log 	= 'Tyovuoroot';
+							$name_log 	= 'Työvuorot';
+							$status_log 	= 'Auto Delete';
+	
+							$old_values = json_encode($tv->attributes);
+							$new_values = null;
+							$site = Yii::app()->createController('Site');
+							$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+							//     LOG -->
+							$this->loadModel($tv->id)->delete();
+							}
 							if(isset($luotu[$k])){	unset($luotu[$k]); }	
 						}
 				    	}
@@ -4090,7 +4181,25 @@ class TyovuorootController extends Controller
 			(time + INTERVAL ".$asetukset->onlinevaraus_autoremove." MINUTE) < NOW()
 			AND osoiteOnline=1
 		";
-		Tyovuoroot::model()->deleteAll($criteria);
+		$tv_pois = Tyovuoroot::model()->All($criteria);
+
+						foreach($tv_pois as $item){
+							$tv = Tyovuoroot::model()->findbypk($item->id);
+							if(isset($tv->id)){
+							// <-- LOG
+							$model_log 	= 'Tyovuoroot';
+							$name_log 	= 'Työvuorot';
+							$status_log 	= 'Auto Delete';
+	
+							$old_values = json_encode($tv->attributes);
+							$new_values = null;
+							$site = Yii::app()->createController('Site');
+							$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+							//     LOG -->
+							$this->loadModel($tv->id)->delete();
+							}
+						}
+
 		// Poistaminen -->
 
 	}
@@ -4354,7 +4463,23 @@ class TyovuorootController extends Controller
 				);
 			}
 			if($saankoSuoritta == 1){
-			Tyovuoroot::model()->deleteAll($criteria_1);
+			$tv_pois = Tyovuoroot::model()->findAll($criteria_1);
+						foreach($tv_pois as $item){
+							$tv = Tyovuoroot::model()->findbypk($item->id);
+							if(isset($tv->id)){
+							// <-- LOG
+							$model_log 	= 'Tyovuoroot';
+							$name_log 	= 'Työvuorot';
+							$status_log 	= 'Auto Delete';
+	
+							$old_values = json_encode($tv->attributes);
+							$new_values = null;
+							$site = Yii::app()->createController('Site');
+							$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+							//     LOG -->
+							$this->loadModel($tv->id)->delete();
+							}
+						}
 			}
 		}
 
@@ -4379,7 +4504,23 @@ class TyovuorootController extends Controller
 				);
 			}
 			if($saankoSuoritta == 1){
-			Tyovuoroot::model()->deleteAll($criteria_2);
+			$tv_pois = Tyovuoroot::model()->findAll($criteria_2);
+						foreach($tv_pois as $item){
+							$tv = Tyovuoroot::model()->findbypk($item->id);
+							if(isset($tv->id)){
+							// <-- LOG
+							$model_log 	= 'Tyovuoroot';
+							$name_log 	= 'Työvuorot';
+							$status_log 	= 'Auto Delete';
+	
+							$old_values = json_encode($tv->attributes);
+							$new_values = null;
+							$site = Yii::app()->createController('Site');
+							$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+							//     LOG -->
+							$this->loadModel($tv->id)->delete();
+							}
+						}
 			}
 		}
 
@@ -4735,8 +4876,9 @@ class TyovuorootController extends Controller
 		}
 
 	   } else {
-		Tyovuoroot::model()->deleteAll(" tid = '".$_POST['Vuosilomat']['tid']."' and pvm='".date("d.m.Y",strtotime($_POST['Vuosilomat']['pvm']))."' and tyoajanlaatu like '%".$txt."%' ");
-		$this->loadModel($id)->delete();
+		//Tyovuoroot::model()->deleteAll(" tid = '".$_POST['Vuosilomat']['tid']."' and pvm='".date("d.m.Y",strtotime($_POST['Vuosilomat']['pvm']))."' and tyoajanlaatu like '%".$txt."%' ");
+		//$this->loadModel($id)->delete();
+		// pois kaytosta 06.06.2019
 				echo 'removed';
 	   }
 
