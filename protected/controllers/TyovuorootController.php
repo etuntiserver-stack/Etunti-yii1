@@ -4181,7 +4181,7 @@ class TyovuorootController extends Controller
 			(time + INTERVAL ".$asetukset->onlinevaraus_autoremove." MINUTE) < NOW()
 			AND osoiteOnline=1
 		";
-		$tv_pois = Tyovuoroot::model()->All($criteria);
+		$tv_pois = Tyovuoroot::model()->findAll($criteria);
 
 						foreach($tv_pois as $item){
 							$tv = Tyovuoroot::model()->findbypk($item->id);
