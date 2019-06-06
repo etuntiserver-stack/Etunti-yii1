@@ -22,7 +22,7 @@
 	</td>
 -->
 	<td>
-		<?php echo date("d.m.Y H:i", strtotime($data->time)); ?>
+		<?php echo date("d.m.Y H:i:s", strtotime($data->time)); ?>
 	</td>
 	<td>
 
