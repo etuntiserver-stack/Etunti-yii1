@@ -227,8 +227,10 @@
 
                       <div class="col-md-2">
                         <div class="section">
-                          <label class="field select">
+			   <div class="form-inline">
+			   <input type="checkbox" class="form-group" name="not_tilanne" data-toggle="tooltip" title="Not this">
 
+                          <label class="field select form-group">
 			   <?php
        				$criteria = new CDbCriteria();
 			        $criteria->group = " tilanne ";
@@ -238,7 +240,7 @@
 				foreach($l as $item)
 					$option[] = $item->tilanne;
 			   ?>
-			   <select class="gui-input" name="tilanne" id="tilanne">
+			   <select class="form-control" name="tilanne" id="tilanne">
        				<option value=""><?=Yii::t('main', 'Valitse tilanne')?></option>
 				<?php foreach($option as $o) : ?>
        				<option value="<?=$o?>" <?php echo (isset($_GET['tilanne']) and $_GET['tilanne'] == $o)? 'selected': ''; ?>><?=Yii::t('log', $o)?></option>
@@ -249,6 +251,7 @@
                             <i class="arrow double"></i>
                             </label>
                           </label>
+			   </div>
                         </div>
                       </div>
 
