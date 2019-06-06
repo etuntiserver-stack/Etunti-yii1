@@ -1,12 +1,12 @@
 <?php
 if( isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )){
 	header("Access-Control-Allow-Origin: *");
-} /*elseif(isset($_SERVER['HTTP_HOST'])) {
+} elseif(isset($_SERVER['HTTP_HOST'])) {
 	$parsed = parse_url($_SERVER['HTTP_HOST']);
 	if (isset($parsed['host']) && $parsed['host'] == 'mobemu.etunti.fi') {
 		header("Access-Control-Allow-Origin: *");
 	}
-}*/
+}
 //echo $_SERVER['HTTP_X_USERNAME'];
 //var_dump($_GET);
 
