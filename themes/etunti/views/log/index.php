@@ -230,7 +230,10 @@
                           <label class="field select">
 
 			   <?php
-				$l = Log::model()->findAll(array('group' => 'tilanne'));
+       				$criteria = new CDbCriteria();
+			        $criteria->group = " tilanne ";
+			        $criteria->condition = " log_category=2 ";
+				$l = Log::model()->findAll($criteria);
 				$option = array();
 				foreach($l as $item)
 					$option[] = $item->tilanne;
