@@ -1450,7 +1450,7 @@ public function actionLogin($domain)
 				$lista .= '<br><br>
 				<div class="vastaus">
 					<input type="hidden" id="id" value="'.$item->id.'">
-					<textarea id="vastaus" class="form-control" placeholder="Vasta tähään keskusteluun.."></textarea>
+					<textarea id="vastaus" class="form-control" placeholder="Vastaa tähään keskusteluun.."></textarea>
 					<button class="btn btn-success btn-block laheta_vastaus">Lähetä</button>
 				</div>';
 				}
