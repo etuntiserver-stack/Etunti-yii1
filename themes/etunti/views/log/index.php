@@ -228,7 +228,7 @@
                       <div class="col-md-2">
                         <div class="section">
 
-			  <input class="pull-left" type="checkbox" style="margin-top: 14px" name="not_tilanne" data-toggle="tooltip" title="Not this" <?= (isset($_GET['not_tilanne'])?'checked':'')?>>
+			  <input class="pull-left" type="checkbox" style="margin-top: 14px" name="not_tilanne" data-toggle="tooltip" title="Valitsemalla tämä, haetaan kaikki tilanteet paitsi valittu tilanne." <?= (isset($_GET['not_tilanne'])?'checked':'')?>>
 
                           <label class="field select form-group" style="width:90%;margin-left:2px;">
 			   <?php
