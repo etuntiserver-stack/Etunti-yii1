@@ -227,10 +227,10 @@
 
                       <div class="col-md-2">
                         <div class="section">
-			   <div class="form-inline">
-			   <input type="checkbox" class="form-group" name="not_tilanne" data-toggle="tooltip" title="Not this" <?= (isset($_GET['not_tilanne'])?'checked':'')?>>
 
-                          <label class="field select form-group">
+			  <input class="pull-left" type="checkbox" name="not_tilanne" data-toggle="tooltip" title="Not this" <?= (isset($_GET['not_tilanne'])?'checked':'')?>>
+
+                          <label class="field select form-group" style="width:90%;margin-left:2px;">
 			   <?php
        				$criteria = new CDbCriteria();
 			        $criteria->group = " tilanne ";
@@ -251,7 +251,7 @@
                             <i class="arrow double"></i>
                             </label>
                           </label>
-			   </div>
+
                         </div>
                       </div>
 
@@ -268,10 +268,9 @@
             </div>
 
 	    </form>
-
-
         <!-- loppu: .tray-center -->
         </div>
+
 
 <div class="admin-form">
   <div class="panel heading-border">
