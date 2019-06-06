@@ -1,13 +1,5 @@
 <?php
-if( isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )){
-	header("Access-Control-Allow-Origin: *");
-} elseif(isset($_SERVER['HTTP_HOST'])) {
-	$host = $_SERVER['HTTP_HOST'];
-	preg_match("/[^\.\/]+\.[^\.\/]+$/", $host, $matches);
-	if( isset($matches[0]) && $matches[0] == 'mobemu.etunti.fi' ){
 		header("Access-Control-Allow-Origin: *");
-	}
-}
 //echo $_SERVER['HTTP_X_USERNAME'];
 //var_dump($_GET);
 
