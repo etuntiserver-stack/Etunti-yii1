@@ -228,7 +228,7 @@
                       <div class="col-md-2">
                         <div class="section">
 			   <div class="form-inline">
-			   <input type="checkbox" class="form-group" name="not_tilanne" data-toggle="tooltip" title="Not this">
+			   <input type="checkbox" class="form-group" name="not_tilanne" data-toggle="tooltip" title="Not this" <?= (isset($_GET['not_tilanne'])?'checked':'')?>>
 
                           <label class="field select form-group">
 			   <?php
