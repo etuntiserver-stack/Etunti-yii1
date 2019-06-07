@@ -595,8 +595,12 @@ $(document).ready(function(){
        <?php
     	echo '<select class="form-control selectpicker" multiple name="status[]" title="Lomat">';
         echo '<option value=""></option>';
-        echo '<option value="VL" selected>Vuosiloma</option>';
-        echo '<option value="VKL" selected>Viikkolomapäivä</option>';
+        echo '<option value="(VL)" selected>Vuosiloma</option>';
+        echo '<option value="(VKL)" selected>Viikkolomapäivä</option>';
+        echo '<option value="(SL)" selected>Sairaus Palkallinen</option>';
+        echo '<option value="(SPL)" selected>Sairaus Palkaton</option>';
+        echo '<option value="(LS)" selected>Lapsen sairaus</option>';
+        echo '<option value="(AP)" selected>Arkipyhä</option>';
    	echo '</select>';
    	?>
        </div>
