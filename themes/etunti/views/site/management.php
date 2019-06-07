@@ -570,9 +570,12 @@ ini_set("max_execution_time", "60");
 <!-- Lomat ja poissaolot -->
 <?php if(isset($_GET['haku']) and $_GET['haku'] == 'lomat_poissaolot'): ?>
 <?php
+//EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')),
+
 	// <-- Uudet
 	$criteria = new CDbCriteria();
-       	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')),tyoajanlaatu ";
+       	$criteria->order = " tyoajanlaatu ";
+       	$criteria->group = " tyoajanlaatu ";
        	$criteria->select = "
 		COUNT(*) as count, t.*
 	";
@@ -581,14 +584,33 @@ ini_set("max_execution_time", "60");
 		AND tyoajanlaatu!=''
 	";
 	$asiakkaat = Tyovuoroot::model()->findAll($criteria);
+	$arr_new = array();
 	$arr = array();
-	foreach($asiakkaat as $item){
-		$arr[$item->tyoajanlaatu][date("Ym", strtotime($item->pvm))] = (int)$item->count;
+	$i = 0;
+	foreach($asiakkaat as $v){
+		$i++;
+		$arr_new[$i] = array('name' => $v->tyoajanlaatu);
+		$arr_new[$i]['data'] = array();
+		foreach($arr as $item){
+
+		}
 	}
 	//     Uudet -->
 
+/*
+
+    series: [{
+        name: 'Uudet',
+        data: JSON.parse('<?=json_encode(array_values($data_uudet))?>')
+    },{
+        name: 'Lopettaneet',
+        data: JSON.parse('<?=json_encode(array_values($data_lop))?>')
+    }],
+
+*/
+
 echo '<pre>';
-print_r($arr);
+print_r($arr_new);
 exit;
 echo '</pre>';
 
@@ -602,12 +624,8 @@ echo '</pre>';
 	$data_arr = array();
 	foreach($period as $dt) {
 		$categories[$dt->format( "Ym" )] = $dt->format( "Y" ).', '.$months[$dt->format( "n" )];
-		if(isset($arr[$dt->format( "Ym" )])){
-		   foreach($arr as $k=>$tyoajanlaatu) {
-			$data_arr[$k] = $tyoajanlaatu;
-		   }
-		} else {
-			$data_arr[$k] = 0;
+		foreach($arr as $k=>$v) {
+
 		}
 	}
 
