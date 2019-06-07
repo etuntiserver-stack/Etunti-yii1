@@ -899,13 +899,13 @@ Yritys '.$yr.'
 	$context = stream_context_create($optsPOST);
 	
 	$response = file_get_contents($url, false, $context);
-	//$result = new SimpleXMLElement($response);
+	$result = new SimpleXMLElement($response);
 	
 
 		//if($result->ResponseStatus->Status == 'OK')
 		//{
 			echo '<pre>';
-			//print_r( $response );
+			print_r( $response );
 			echo '</pre>';
 			//exit;
 		//}
