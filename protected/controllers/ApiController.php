@@ -3,7 +3,7 @@ if( isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SE
 	header("Access-Control-Allow-Origin: *");
 } elseif(isset($_SERVER['HTTP_HOST'])) {
 	$parsed = parse_url($_SERVER['HTTP_HOST']);
-	if (isset($parsed['host']) && $parsed['host'] == 'mobemu.etunti.fi') {
+	if (isset($parsed['path']) && $parsed['path'] == 'mobemu.etunti.fi') {
 		header("Access-Control-Allow-Origin: *");
 	}
 }
