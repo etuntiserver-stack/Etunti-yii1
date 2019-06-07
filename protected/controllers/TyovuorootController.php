@@ -2335,6 +2335,7 @@ class TyovuorootController extends Controller
 					$criteria->condition = " 
 						tid='0'
 						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= '".date("Y-m-d", strtotime($toistuva->pvm))."'
+						AND toistuva_id!=0
 						AND toistuva_id='".$toistuva->id."'
 					";
 					$tv_pois = Tyovuoroot::model()->findAll($criteria);
@@ -2467,6 +2468,7 @@ class TyovuorootController extends Controller
 							$criteria = new CDBcriteria;
 							$criteria->condition = " 
 								tid='".$v."'
+								AND toistuva_id!=0
 								AND toistuva_id='".$toistuva->id."'
 							";
 							$tv_pois = Tyovuoroot::model()->findAll($criteria);
@@ -2669,6 +2671,7 @@ class TyovuorootController extends Controller
 						$criteria->condition = " 
 							pvm='".$m->pvm."' 
 							AND tid='".$m->tid."'
+							AND toistuva_id!=0
 							AND toistuva_id='".$toistuva_id."'
 						";
 						$tv_pois = Tyovuoroot::model()->findAll($criteria);
