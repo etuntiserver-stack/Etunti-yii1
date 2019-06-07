@@ -108,7 +108,7 @@
 
 		<div class="row">
 	 	 <div class="pull-right">
-		  '.CHtml::link("Vasta", Yii::app()->request->baseUrl.'/index.php/viestinta/update?id='.$v->id, array('class'=>'btn btn-xs btn-primary')).'
+		  '.CHtml::link("Vastaa", Yii::app()->request->baseUrl.'/index.php/viestinta/update?id='.$v->id, array('class'=>'btn btn-xs btn-primary')).'
 		  <div class="btn btn-xs btn-default vastaanotettu" for="v_'.$v->id.'">'.Yii::t('main','Sulje').'</div>
 		 </div>
 		</div>';

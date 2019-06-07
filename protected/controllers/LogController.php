@@ -160,8 +160,12 @@ class LogController extends Controller
 		if(isset($_GET['log_nimike']) and !empty($_GET['log_nimike']))
 	        $criteria->addCondition (" log_nimike LIKE '%".$_GET['log_nimike']."%' ");
 
-		if(isset($_GET['tilanne']) and !empty($_GET['tilanne']))
-	        $criteria->addCondition (" tilanne LIKE '%".$_GET['tilanne']."%' ");
+		if(isset($_GET['tilanne']) and !empty($_GET['tilanne']) and !isset($_GET['not_tilanne'])){
+		        $criteria->addCondition (" tilanne LIKE '%".$_GET['tilanne']."%' ");
+		}
+		if(isset($_GET['tilanne']) and !empty($_GET['tilanne']) and isset($_GET['not_tilanne'])){
+		        $criteria->addCondition (" tilanne NOT LIKE '%".$_GET['tilanne']."%' ");
+		}
 
 		if(isset($_GET['model']) and !empty($_GET['model']))
 	        $criteria->addCondition (" model LIKE '%".$_GET['model']."%' ");

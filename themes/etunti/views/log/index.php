@@ -227,15 +227,20 @@
 
                       <div class="col-md-2">
                         <div class="section">
-                          <label class="field select">
 
+			  <input class="pull-left" type="checkbox" style="margin-top: 14px" name="not_tilanne" data-toggle="tooltip" title="Valitsemalla tämä, haetaan kaikki tilanteet paitsi valittu tilanne." <?= (isset($_GET['not_tilanne'])?'checked':'')?>>
+
+                          <label class="field select form-group" style="width:90%;margin-left:2px;">
 			   <?php
-				$l = Log::model()->findAll(array('group' => 'tilanne'));
+       				$criteria = new CDbCriteria();
+			        $criteria->group = " tilanne ";
+			        $criteria->condition = " log_category=2 ";
+				$l = Log::model()->findAll($criteria);
 				$option = array();
 				foreach($l as $item)
 					$option[] = $item->tilanne;
 			   ?>
-			   <select class="gui-input" name="tilanne" id="tilanne">
+			   <select class="form-control" name="tilanne" id="tilanne">
        				<option value=""><?=Yii::t('main', 'Valitse tilanne')?></option>
 				<?php foreach($option as $o) : ?>
        				<option value="<?=$o?>" <?php echo (isset($_GET['tilanne']) and $_GET['tilanne'] == $o)? 'selected': ''; ?>><?=Yii::t('log', $o)?></option>
@@ -246,6 +251,7 @@
                             <i class="arrow double"></i>
                             </label>
                           </label>
+
                         </div>
                       </div>
 
@@ -262,10 +268,9 @@
             </div>
 
 	    </form>
-
-
         <!-- loppu: .tray-center -->
         </div>
+
 
 <div class="admin-form">
   <div class="panel heading-border">
