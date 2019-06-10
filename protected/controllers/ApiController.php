@@ -3,12 +3,9 @@ if( isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SE
 	header("Access-Control-Allow-Origin: *");
 }
 
-if(isset($_SERVER['HTTP_REFERER'])) {
-	$parsed = parse_url($_SERVER['HTTP_REFERER']);
-	if (isset($parsed['path']) && $parsed['path'] == 'mobemu.etunti.fi') {
 		header("Access-Control-Allow-Origin: *");
-	}
-}
+
+
 
 //echo $_SERVER['HTTP_X_USERNAME'];
 //var_dump($_GET);
@@ -273,6 +270,11 @@ public function actionLang($dom)
     switch($_GET['model'])
     {
         case 'mob':
+
+if(isset($_SERVER['HTTP_REFERER'])) {
+	$parsed = parse_url($_SERVER['HTTP_REFERER']);
+mail('laptopsr@gmail.com', 'test', json_encode($parsed));
+}
 
 		$lang = array();
 
