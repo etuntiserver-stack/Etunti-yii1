@@ -570,7 +570,16 @@ ini_set("max_execution_time", "60");
 <!-- Lomat ja poissaolot -->
 <?php if(isset($_GET['haku']) and $_GET['haku'] == 'lomat_poissaolot'): ?>
 <?php
-//EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')),
+	$categories = array();
+	$begin = new DateTime( date("Y-m-d", strtotime($from)) );
+	$end = new DateTime( date("Y-m-d", strtotime($to)) );
+	$end = $end->modify( '+1 month' );
+	$interval = DateInterval::createFromDateString('1 month');
+	$period = new DatePeriod($begin, $interval, $end);
+	$data_arr = array();
+	foreach($period as $dt) {
+		$categories[$dt->format( "Ym" )] = $dt->format( "Y" ).', '.$months[$dt->format( "n" )];
+	}
 
 	// <-- Uudet
 	$criteria = new CDbCriteria();
@@ -584,55 +593,38 @@ ini_set("max_execution_time", "60");
 		AND tyoajanlaatu!=''
 	";
 	$asiakkaat = Tyovuoroot::model()->findAll($criteria);
+
 	$arr_new = array();
 	$arr = array();
 	$i = 0;
 	foreach($asiakkaat as $v){
 		$i++;
-		$arr_new[$i] = array('name' => $v->tyoajanlaatu);
+		$name_expl = explode("/", $v->tyoajanlaatu);
+		$arr_new[$i] = array('name' => ((isset($name_expl[0]))?$name_expl[0]:'') );
 		$arr_new[$i]['data'] = array();
-		foreach($arr as $item){
+		foreach($categories as $k_cat => $item_cat){
 
+			$criteria = new CDbCriteria();
+		       	$criteria->select = "
+				COUNT(tyoajanlaatu) as count
+			";
+		        $criteria->condition = " 
+				DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m')='".$k_cat."'
+				AND tyoajanlaatu='".$v->tyoajanlaatu."'
+			";
+			$asiakkaat_month = Tyovuoroot::model()->find($criteria);
+
+			$arr_new[$i]['data'][] = (int)$asiakkaat_month->count;
 		}
 	}
 	//     Uudet -->
 
 /*
-
-    series: [{
-        name: 'Uudet',
-        data: JSON.parse('<?=json_encode(array_values($data_uudet))?>')
-    },{
-        name: 'Lopettaneet',
-        data: JSON.parse('<?=json_encode(array_values($data_lop))?>')
-    }],
-
-*/
-
 echo '<pre>';
 print_r($arr_new);
 exit;
 echo '</pre>';
-
-
-	$categories = array();
-	$begin = new DateTime( date("Y-m-d", strtotime($from)) );
-	$end = new DateTime( date("Y-m-d", strtotime($to)) );
-	$end = $end->modify( '+1 month' );
-	$interval = DateInterval::createFromDateString('1 month');
-	$period = new DatePeriod($begin, $interval, $end);
-	$data_arr = array();
-	foreach($period as $dt) {
-		$categories[$dt->format( "Ym" )] = $dt->format( "Y" ).', '.$months[$dt->format( "n" )];
-		foreach($arr as $k=>$v) {
-
-		}
-	}
-
-echo '<pre>';
-print_r($data_arr);
-exit;
-echo '</pre>';
+*/
 ?>
 
 <script>
@@ -641,7 +633,7 @@ Highcharts.chart('container', {
         type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
     },
     title: {
-        text: 'Lomat ja poissaolot'
+        text: 'Lomat ja poissaolot <?=date("d.m.Y", strtotime($from))."-".date("d.m.Y", strtotime($to))?>'
     },
     xAxis: {
         categories: JSON.parse('<?=json_encode(array_values($categories))?>')
@@ -659,7 +651,7 @@ Highcharts.chart('container', {
             enableMouseTracking: false
         }
     },
-    series: '<?=json_encode(array_values($data_uudet))?>',
+    series: JSON.parse('<?=json_encode(array_values($arr_new))?>'),
     exporting: {
         enabled: true
     }
