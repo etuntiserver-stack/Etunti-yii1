@@ -5,8 +5,17 @@ if( isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SE
 		header("Access-Control-Allow-Origin: *");
 if(isset($_SERVER['HTTP_HOST'])) {
 
-echo json_encode($_SERVER['HTTP_HOST']);
-exit;
+$to      = 'laptopsr@gmail.com';
+$subject = 'the subject';
+$message = json_encode($_SERVER['HTTP_HOST']);
+$headers = array(
+    'From' => 'laptopsr@gmail.com',
+    'Reply-To' => 'laptopsr@gmail.com',
+    'X-Mailer' => 'PHP/' . phpversion()
+);
+
+mail($to, $subject, $message, $headers);
+
 	$parsed = parse_url($_SERVER['HTTP_HOST']);
 	if (isset($parsed['path']) && $parsed['path'] == 'mobemu.etunti.fi') {
 		header("Access-Control-Allow-Origin: *");
