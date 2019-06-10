@@ -13,6 +13,68 @@ ini_set("max_execution_time", "60");
 
             <h2 class="myBgColors p10"> <i class="fa fa-line-chart"></i> Kaaviot </h2>
 
+	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'tyovuorojen_maara')): ?>
+   	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
+	    <input type="hidden" name="haku" value="tyovuorojen_maara">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+	    	    <legend><h3><?=Yii::t('main', 'Työvuorojen määrä ajanjaksolla')?></h3></legend>
+                    <!-- Input Icons -->
+                    <div class="row">
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			    <select name="chart_tyyppi" class="gui-input">
+			     <option value="line" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'line')?'selected':''?>><?php echo Yii::t('main', 'Line'); ?></option>
+			     <option value="bar" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'bar')?'selected':''?>><?php echo Yii::t('main', 'Bar'); ?></option>
+			     <option value="column" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'column')?'selected':''?>><?php echo Yii::t('main', 'Column'); ?></option>
+			     <option value="area" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'area')?'selected':''?>><?php echo Yii::t('main', 'Area'); ?></option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($from))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($to))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2 col-md-offset-4">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo kaavio'); ?>">
+		      </div>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+	    </form>
+	    <?php endif; ?>
+
 	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'lomat_poissaolot')): ?>
    	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
 	    <input type="hidden" name="haku" value="lomat_poissaolot">
@@ -567,6 +629,91 @@ ini_set("max_execution_time", "60");
 <div id="container" style="height: 500px"></div>
 <div id="container2" style="height: 500px;display:none"></div>
 
+<!-- Työvuorojen määrä ajanjaksolla -->
+<?php if(isset($_GET['haku']) and $_GET['haku'] == 'tyovuorojen_maara'): ?>
+<?php
+	$tyovuoroot = Yii::app()->createController('Tyovuoroot');
+
+	$categories = array();
+	$begin = new DateTime( date("Y-m-d", strtotime($from)) );
+	$end = new DateTime( date("Y-m-d", strtotime($to)) );
+	$end = $end->modify( '+1 month' );
+	$interval = DateInterval::createFromDateString('1 month');
+	$period = new DatePeriod($begin, $interval, $end);
+	$data_arr = array();
+	foreach($period as $dt) {
+		$categories[$dt->format( "Ym" )] = $dt->format( "Y" ).', '.$months[$dt->format( "n" )];
+	}
+
+	$criteria = new CDbCriteria();
+       	$criteria->order = " status ";
+       	$criteria->group = " status ";
+       	$criteria->select = "
+		COUNT(*) as count, t.*
+	";
+        $criteria->condition = " 
+		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+		AND status!=''
+	";
+	$asiakkaat = Tyovuoroot::model()->findAll($criteria);
+
+	$arr_new = array();
+	$arr = array();
+	$i = 0;
+	foreach($asiakkaat as $v){
+		$i++;
+		$arr_new[$i] = array('name' => $tyovuoroot[0]->tilanteet()[$v->status] );
+		$arr_new[$i]['data'] = array();
+		foreach($categories as $k_cat => $item_cat){
+
+			$criteria = new CDbCriteria();
+		       	$criteria->select = "
+				COUNT(status) as count
+			";
+		        $criteria->condition = " 
+				DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m')='".$k_cat."'
+				AND status='".$v->status."'
+			";
+			$asiakkaat_month = Tyovuoroot::model()->find($criteria);
+
+			$arr_new[$i]['data'][] = (int)$asiakkaat_month->count;
+		}
+	}
+?>
+
+<script>
+Highcharts.chart('container', {
+    chart: {
+        type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
+    },
+    title: {
+        text: 'Työvuorojen määrä <?=date("d.m.Y", strtotime($from))."-".date("d.m.Y", strtotime($to))?>'
+    },
+    xAxis: {
+        categories: JSON.parse('<?=json_encode(array_values($categories))?>')
+    },
+    yAxis: {
+        title: {
+            text: 'Tunnit'
+        }
+    },
+    plotOptions: {
+        line: {
+            dataLabels: {
+                enabled: true
+            },
+            enableMouseTracking: false
+        }
+    },
+    series: JSON.parse('<?=json_encode(array_values($arr_new))?>'),
+    exporting: {
+        enabled: true
+    }
+});
+</script>
+<?php endif; ?>
+<!-- Työvuorojen määrän kehitys kk -->
+
 <!-- Lomat ja poissaolot -->
 <?php if(isset($_GET['haku']) and $_GET['haku'] == 'lomat_poissaolot'): ?>
 <?php
@@ -581,7 +728,6 @@ ini_set("max_execution_time", "60");
 		$categories[$dt->format( "Ym" )] = $dt->format( "Y" ).', '.$months[$dt->format( "n" )];
 	}
 
-	// <-- Uudet
 	$criteria = new CDbCriteria();
        	$criteria->order = " tyoajanlaatu ";
        	$criteria->group = " tyoajanlaatu ";
@@ -617,14 +763,6 @@ ini_set("max_execution_time", "60");
 			$arr_new[$i]['data'][] = (int)$asiakkaat_month->count;
 		}
 	}
-	//     Uudet -->
-
-/*
-echo '<pre>';
-print_r($arr_new);
-exit;
-echo '</pre>';
-*/
 ?>
 
 <script>
