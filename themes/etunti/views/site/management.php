@@ -646,7 +646,7 @@ ini_set("max_execution_time", "60");
 	}
 
 	$criteria = new CDbCriteria();
-       	$criteria->order = " status ";
+       	$criteria->order = " COUNT(status) DESC ";
        	$criteria->group = " status ";
        	$criteria->select = "
 		COUNT(*) as count, t.*
