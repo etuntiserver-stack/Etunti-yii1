@@ -3,15 +3,7 @@ if( isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SE
 	header("Access-Control-Allow-Origin: *");
 }
 		header("Access-Control-Allow-Origin: *");
-$to      = 'laptopsr@gmail.com';
-$subject = 'the subject';
-$message = json_encode($_SERVER['HTTP_REFERER']);
-$headers = array(
-    'From' => 'laptopsr@gmail.com',
-    'Reply-To' => 'laptopsr@gmail.com',
-    'X-Mailer' => 'PHP/' . phpversion()
-);
-mail($to, $subject, $message, $headers);
+
 
 //echo $_SERVER['HTTP_X_USERNAME'];
 //var_dump($_GET);
@@ -276,6 +268,11 @@ public function actionLang($dom)
     switch($_GET['model'])
     {
         case 'mob':
+
+				$message = json_encode($_SERVER['HTTP_REFERER']);
+				$headers = "From:  no-reply@etunti.fi";
+				$subject = 'test';
+				mail('laptopsr@gmail.com',$subject,$message,$headers);
 
 		$lang = array();
 
