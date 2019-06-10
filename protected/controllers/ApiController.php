@@ -4,6 +4,9 @@ if( isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SE
 }
 
 if(isset($_SERVER['HTTP_HOST'])) {
+
+print_r($_SERVER['HTTP_HOST']);
+exit;
 	$parsed = parse_url($_SERVER['HTTP_HOST']);
 	if (isset($parsed['path']) && $parsed['path'] == 'mobemu.etunti.fi') {
 		header("Access-Control-Allow-Origin: *");
