@@ -241,7 +241,7 @@
 <?php endif; ?>
 
      <!-- TV laatiko -->
-     <div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+     <div id="showres" class="modal fade" aria-hidden="true" data-backdrop="static" data-keyboard="false"></div>
      <!-- TV laatiko -->
 
      <div id="temaus-modal" class="modal fade" tabindex="-1" role="dialog">

@@ -245,10 +245,9 @@ ini_set('memory_limit', '256M');
 
 
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
-	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot.js"></script>
 
-
+	<div id="showres" class="modal fade" aria-hidden="true" data-backdrop="static" data-keyboard="false"></div>
 
 
      <div id="temaus-modal" class="modal fade" tabindex="-1" role="dialog">
