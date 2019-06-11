@@ -1,7 +1,17 @@
 <?php
-if( isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' or $_SERVER['REMOTE_ADDR'] == '84.230.173.92')){
+if( isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1')){
 	header("Access-Control-Allow-Origin: *");
 }
+
+if(isset($_SERVER['HTTP_REFERER'])) {
+	$parsed = parse_url($_SERVER['HTTP_REFERER']);
+	if (isset($parsed['host']) && $parsed['host'] == 'mobemu.etunti.fi') {
+		header("Access-Control-Allow-Origin: *");
+	}
+	//mail('laptopsr@gmail.com', 'test', json_encode($parsed));
+}
+
+
 //echo $_SERVER['HTTP_X_USERNAME'];
 //var_dump($_GET);
 
