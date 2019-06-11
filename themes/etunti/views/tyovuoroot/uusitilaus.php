@@ -194,7 +194,8 @@ $('.ryhmat').multiselect({
     </div>
     <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Asiakkaan sähköposti'); ?></label>
-		<input type="text" name="Asiakkaat[sahkoposti]" class="form-control">
+		<input type="text" name="Asiakkaat[sahkoposti]" id="Asiakas_sahkoposti" class="form-control">
+		<div id="sahkoposti_error"></div>
     </div>
   </div>
 
@@ -214,6 +215,30 @@ $(document).ready(function(){
 				$('#yrityksen_nimi_error').addClass('errorMessage').show().html(data);
 			else
 				$('#yrityksen_nimi_error').removeClass('errorMessage').hide().html('');
+	   	},
+		error:function(data){
+		console.log(data);
+	    	}
+	  });
+  });
+
+  $("#Asiakas_sahkoposti").blur(function() {
+    var value = $(this).val();
+	  $.ajax({
+		  url: 'is_asiakas',
+		  data:{ sahkoposti : value },
+		  type:'POST',
+		  success:function(data){
+			data = JSON.parse(data);
+			//console.log(data);
+			if( data !== ''){
+				$('#sahkoposti_error').addClass('errorMessage').show().html(data);
+				$("#Asiakas_sahkoposti").focus();
+				$("#submitButton").addClass('disabled');
+			} else {
+				$('#sahkoposti_error').removeClass('errorMessage').hide().html('');
+				$("#submitButton").removeClass('disabled');
+			}
 	   	},
 		error:function(data){
 		console.log(data);

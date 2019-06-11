@@ -386,6 +386,12 @@ class TyovuorootController extends Controller
 			if(isset($model->id))
 			$bd .= Yii::t('main', 'Asiakas on olemassa');	
 		}
+		if(Yii::app()->request->getPost('sahkoposti'))
+		{
+			$model = Asiakkaat::model()->find(" sahkoposti LIKE '%".Yii::app()->request->getPost('sahkoposti')."' ");
+			if(isset($model->id))
+			$bd .= Yii::t('main', 'Asiakas on olemassa');	
+		}
 		echo json_encode($bd);
 		exit;
 	}
