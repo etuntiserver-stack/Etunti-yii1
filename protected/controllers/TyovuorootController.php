@@ -371,7 +371,7 @@ class TyovuorootController extends Controller
 		{
 			$model = Asiakkaat::model()->find(" yhteyshenkilo LIKE '%".Yii::app()->request->getPost('yhteyshenkilo')."' ");
 			if(isset($model->id))
-			$bd = Yii::t('main', 'Asiakas on olemassa');	
+			$bd = Yii::t('main', 'Asiakas löyty tietokannasta');	
 		}
 		echo json_encode($bd);
 		exit;
@@ -384,7 +384,13 @@ class TyovuorootController extends Controller
 		{
 			$model = Asiakkaat::model()->find(" yrityksen_nimi LIKE '%".Yii::app()->request->getPost('yrityksen_nimi')."' ");
 			if(isset($model->id))
-			$bd .= Yii::t('main', 'Asiakas on olemassa');	
+			$bd .= Yii::t('main', 'Asiakas löyty tietokannasta');	
+		}
+		if(Yii::app()->request->getPost('sahkoposti'))
+		{
+			$model = Asiakkaat::model()->find(" sahkoposti LIKE '%".Yii::app()->request->getPost('sahkoposti')."' ");
+			if(isset($model->id))
+			$bd .= Yii::t('main', 'Asiakas löyty tietokannasta');	
 		}
 		echo json_encode($bd);
 		exit;
