@@ -384,7 +384,7 @@ class TyovuorootController extends Controller
 		{
 			$model = Asiakkaat::model()->find(" yrityksen_nimi LIKE '%".Yii::app()->request->getPost('yrityksen_nimi')."' ");
 			if(isset($model->id))
-			$bd .= Yii::t('main', 'Asiakas on olemassa');	
+			$bd .= Yii::t('main', 'Asiakas löyty tietokannasta');	
 		}
 		if(Yii::app()->request->getPost('sahkoposti'))
 		{
