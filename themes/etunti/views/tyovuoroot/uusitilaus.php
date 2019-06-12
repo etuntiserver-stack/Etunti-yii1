@@ -234,11 +234,11 @@ $(document).ready(function(){
 			if( data !== ''){
 				$('#sahkoposti_error').addClass('errorMessage').show().html(data);
 				$("#Asiakas_sahkoposti").focus();
-				$("#submitButton").addClass('disabled');
+				$("#submitButton").addClass('disabled').hide();
 				return false;
 			} else {
 				$('#sahkoposti_error').removeClass('errorMessage').hide().html('');
-				$("#submitButton").removeClass('disabled');
+				$("#submitButton").removeClass('disabled').show();
 				return false;
 			}
 	   	},
