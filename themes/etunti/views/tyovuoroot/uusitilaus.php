@@ -235,9 +235,11 @@ $(document).ready(function(){
 				$('#sahkoposti_error').addClass('errorMessage').show().html(data);
 				$("#Asiakas_sahkoposti").focus();
 				$("#submitButton").addClass('disabled');
+				return false;
 			} else {
 				$('#sahkoposti_error').removeClass('errorMessage').hide().html('');
 				$("#submitButton").removeClass('disabled');
+				return false;
 			}
 	   	},
 		error:function(data){
