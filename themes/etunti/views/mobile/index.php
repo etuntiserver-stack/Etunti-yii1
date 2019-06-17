@@ -440,12 +440,30 @@ e.preventDefault();
    });
    // Start and stop Table update -->
 
+   if($('#tunni_status').val()){ $('#tunni_status_select').val($('#tunni_status').val()); }
 
+ // <-- Huonot symbolit hakussa
+ $("input").keyup(function(){
+	var specialChars = "<>@!#$%^&*()_+[]{}?:;|'\"\\,./~`=";
+	var checkForSpecialChar = function(string){
+	 for(i = 0; i < specialChars.length;i++){
+	   if(string.indexOf(specialChars[i]) > -1){
+	       return true
+	    }
+	 }
+	 return false;
+	}
 
-
-
-   if($('#tunni_status').val())
-   $('#tunni_status_select').val($('#tunni_status').val());
-
+	var str = $(this).val();
+	if(checkForSpecialChar(str)){
+	  alert("Tämä merkki ei sallittu");
+	  $('.haemob').addClass('disabled');
+	  $(this).addClass('bg-danger');
+	} else {
+	  $('.haemob').removeClass('disabled');
+	  $(this).removeClass('bg-danger');
+	}
+ });
+ //     Huonot symbolit hakussa -->
 });
 </script>
