@@ -81,12 +81,22 @@ $laaja = $site[0]->checkOikeusFields($checkLaaja);
      	      </form>
   	     <!-- tulostus -->
 
-	    <?php     
-		echo CHtml::link("poista", '#', array(
-		'submit'=>array('delete', "id"=>$model->id), 
-		'confirm' => 'Haluatko varmaasti poistaa?',
-		'class'=>'btn btn-primary myBgColors'
-		));
+	    <?php
+       		$criteria = new CDbCriteria();
+		$criteria->condition = " 
+			tid='".$model->id."' 
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
+		";
+		$tv=Tyovuoroot::model()->find($criteria);
+  		if( isset($tv->id) ){
+			echo '<span class="btn btn-primary myBgColors" data-toggle="tooltip" title="'.Yii::t('main', 'Työntekijällä on tulevaisuudessa merkittyjä työvuoroja.').'">poista<span>';
+		} else {
+			echo CHtml::link("poista", '#', array(
+			'submit'=>array('delete', "id"=>$model->id), 
+			'confirm' => 'Haluatko varmaasti poistaa?',
+			'class'=>'btn btn-primary myBgColors'
+			));
+		}
 	    ?>
 	    </div>
            </div>
