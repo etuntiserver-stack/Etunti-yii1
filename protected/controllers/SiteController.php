@@ -1652,6 +1652,7 @@ $(document).ready(function(){
 		//     juuri_tullut_asiakkaaksi -->
 
 		// <-- Backup
+		/*
 		if (
 			isset(Yii::app()->user->domain) and
 			!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'_'.Yii::app()->user->domain.'.sql.gz')
@@ -1682,6 +1683,7 @@ $(document).ready(function(){
 
 
 		}
+		*/
 		// Backup -->
 
 
