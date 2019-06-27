@@ -11,7 +11,7 @@
 <tr>
 	<td><?=$this->etuSukunimi($data->id)?></td>
 	<td><?=$this->statusMuutosNimeksi($val->status)?></td>
-	<td><?=$val->kohde_kannasta;?></td>
+	<td><?=((isset($val->kohteet->osoite))?$val->kohteet->osoite:'');?></td>
 	<td><?=date("d.m.Y", strtotime($val->aloitan))?></td>
 	<td data-order="<?=strtotime($val->aloitan)?>"><?=date("H:i", strtotime($val->aloitan))?></td>
 	<td data-order="<?=strtotime($val->loppui)?>"><?=date("H:i", strtotime($val->loppui))?></td>
