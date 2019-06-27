@@ -716,6 +716,7 @@ function num($val){
 	public function actionRaportit_taulu()
 	{
 		$kohde_id = 0;
+		$mob_or_tv = '';
 		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Luetut'){
 			$mob_or_tv = 'mob';
 		}
