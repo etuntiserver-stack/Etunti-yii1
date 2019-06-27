@@ -741,12 +741,14 @@ function num($val){
 		}
 
 		$criteria = new CDBCriteria;
-		$criteria->condition = " 
+		if( $mob_or_tv == 'mob' ){
+			$criteria->condition = " 
 			id IN ( SELECT tid FROM sivexkuitti	
 				WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."' 
 				)
-		";
+			";
+		}
 
 		if(isset($_GET['tekijaPaaSivulla']))
 		{
