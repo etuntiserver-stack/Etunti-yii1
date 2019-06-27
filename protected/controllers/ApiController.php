@@ -978,6 +978,7 @@ public function actionImei($dom)
 
 		    $model = new Viestinta;
 		    $model->admin = "tt_".$ttekija->id.",".$this->etuSukunimi($ttekija->id);
+		    $model->status = 3;
 		    $model->tekija = "toimisto";
 	
 		    $viesti = '';
@@ -998,6 +999,7 @@ public function actionImei($dom)
 
 		    $model = new Viestinta;
 		    $model->admin = "tt_".$ttekija->id.",".$this->etuSukunimi($ttekija->id);
+		    $model->status = 3;
 		    $model->tekija = "toimisto";
 	
 		    $viesti = '';
@@ -1044,7 +1046,7 @@ public function actionImei($dom)
 		  		  <div class="col-sm-12">
 				    <div class="well">
 				      <div class="card-content black-text">
-				        <center><a href="viestinta.html"><h2 class="glyphicon glyphicon-envelope form-group"></h2>&nbsp;&nbsp;&nbsp;<b>Sinulla on lukematon viesti</b></a></center>
+				        <center><a href="viestinta.html"><h2><i class="glyphicon glyphicon-envelope"></i>&nbsp;&nbsp;&nbsp;<b>Sinulla on lukematon viesti</b></h2></a></center>
 				      </div>
 				    </div>
 				   </div>
@@ -1124,9 +1126,8 @@ public function actionImei($dom)
 
 	            $viestinta = Viestinta::model()->findbypk($_POST['viestinID']);
 		    $tekija = Tyontekijat::model()->findbypk($viestinta->tekija);
-
-
 	            $viestinta->viesti = $viestinta->viesti."\n".date("d.m H:i").", ".$this->etuSukunimi($ttekija->id).": ".$_POST['vastText'];
+	            $viestinta->status = 3;
 	            $viestinta->save();
 		    $this->_sendResponse(200, $viestinta->viesti);
 		    exit;
