@@ -77,6 +77,7 @@
                         <div class="section">
                           <label class="field select">
 				<select name="raporti_tyyppi">
+				 <option value="Suunnitellut" <?=(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Suunnitellut')?'selected':''?>><?=Yii::t('main', 'Suunnitellut')?></option>
 				 <option value="Luetut" <?=(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Luetut')?'selected':''?>><?=Yii::t('main', 'Luetut')?></option>
 				 <option value="Hyvaksynta" <?=(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksynta')?'selected':''?>><?=Yii::t('main', 'Hyväksynta')?></option>
 				 <option value="Hyvaksytyt" <?=(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksytyt')?'selected':''?>><?=Yii::t('main', 'Hyväksytyt')?></option>
@@ -228,11 +229,22 @@
 	if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksytyt'){
 		$m = $this->tidFromTo_toteutuneet($data->id, $from, $to, $kohde_id, 'Hyvaksytyt');
 	}
+	if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Suunnitellut'){
+		$m = $this->tidFromTo_suunnitellut($data->id, $from, $to, $kohde_id);
+	}
 	echo $this->renderPartial('_raportit_taulu', array( 
-			'data' => $data, 'from' => $from, 'to' => $to, 'm' => $m
+			'data' => $data, 'from' => $from, 'to' => $to, 'm' => $m, 'mob_or_tv' => $mob_or_tv
 	), true);
 	foreach($m as $k=>$val){
-		$yhteensa += strtotime($val->loppui)-strtotime($val->aloitan);
+		if( $mob_or_tv == 'mob' ){
+			$aloitus = $val->aloitan;
+			$lopetus = $val->loppui;
+		}
+		if( $mob_or_tv == 'tv' ){
+			$aloitus = $val->alku;
+			$lopetus = $val->loppu;
+		}
+		$yhteensa += strtotime($lopetus)-strtotime($aloitus);
 	}
   }
   ?>

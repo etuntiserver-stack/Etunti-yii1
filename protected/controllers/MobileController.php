@@ -716,6 +716,19 @@ function num($val){
 	public function actionRaportit_taulu()
 	{
 		$kohde_id = 0;
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Luetut'){
+			$mob_or_tv = 'mob';
+		}
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksynta'){
+			$mob_or_tv = 'mob';
+		}
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksytyt'){
+			$mob_or_tv = 'mob';
+		}
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Suunnitellut'){
+			$mob_or_tv = 'tv';
+		}
+
 		$from = date("d.m.Y", strtotime('first day of this month'));
 		$to = date("d.m.Y");
 
@@ -746,7 +759,7 @@ function num($val){
 		{
 			$k = Kohteet::model()->find(" osoite='".$_GET['osoite']."' ");
 			if(isset($k->id)){ $kohde_id = $k->id; }
-
+			/*
 		        $criteria->addCondition (" 
 				id IN ( SELECT tid FROM sivexkuitti
 					WHERE kohde_kannasta LIKE '%".$_GET['osoite']."%'
@@ -755,6 +768,7 @@ function num($val){
 					WHERE kohde_kannasta LIKE '%".$_GET['osoite']."%'
 				)
 			");
+			*/
 		}
 
 
@@ -766,7 +780,8 @@ function num($val){
 			'model' => $model,
 			'from' => $from,
 			'to' => $to,
-			'kohde_id' => $kohde_id
+			'kohde_id' => $kohde_id,
+			'mob_or_tv' => $mob_or_tv
 		));
 
 
@@ -853,6 +868,37 @@ function num($val){
 
   			foreach($tot as $data){
 				$model[strtotime($data->aloitan)] = $data;
+			}
+
+			if(count($model) > 0)
+			ksort($model);
+
+		return $model;
+	}
+
+	protected function tidFromTo_suunnitellut($tid, $from, $to, $kohde_id)
+	{
+
+			$model = array();
+
+			/* lu */
+		       	$criteria = new CDbCriteria();
+        		$criteria->select = "
+			TIME_TO_SEC(TIMEDIFF(loppu, alku)) as l_tunnit, t.*
+			";
+
+			$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
+			$criteria->condition = "  
+				tid='".$tid."'
+				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			";
+
+			if($kohde_id > 0){ $criteria->addCondition (" kohden='".$kohde_id."' "); }
+
+			$lu = Tyovuoroot::model()->findAll($criteria);
+  			foreach($lu as $data){
+				$model[strtotime($data->pvm)] = $data;
 			}
 
 			if(count($model) > 0)
