@@ -15,7 +15,7 @@
 	<td><?=date("d.m.Y", strtotime($val->aloitan))?></td>
 	<td data-order="<?=strtotime($val->aloitan)?>"><?=date("H:i", strtotime($val->aloitan))?></td>
 	<td data-order="<?=strtotime($val->loppui)?>"><?=date("H:i", strtotime($val->loppui))?></td>
-	<td><?=$this->sprint($val->l_tunnit);?>&nbsp;|&nbsp;<?=$this->num($val->l_tunnit);?></td>
+	<td><?php if($val->l_tunnit > 0): ?><?=$this->sprint($val->l_tunnit);?>&nbsp;|&nbsp;<?=$this->num($val->l_tunnit);?><?php endif; ?></td>
 </tr>
 <?php endforeach; ?>
 
