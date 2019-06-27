@@ -239,13 +239,13 @@
   </tbody>
   <tfoot>
    <tr>
-	<td><?=Yii::t('main', 'Yhteensä')?></td>
 	<td></td>
 	<td></td>
 	<td></td>
 	<td></td>
+	<td></td>
+	<td><b><?=Yii::t('main', 'Yhteensä')?></b></td>
 	<td><?=($yhteensa > 0)?$this->sprint($yhteensa).'&nbsp;|&nbsp'.$this->num($yhteensa):''?></td>
-	<td></td>
    </tr>
   </tfoot>
   </table>
@@ -271,6 +271,8 @@ $(document).ready(function() {
     });
 });
 
+$('#mobileTable tfoot tr').prependTo('#mobileTable thead');
+
 $(document).ready(function(){
 
 
@@ -292,7 +294,7 @@ function multi(){
 	//inheritClass: true,
 	//enableFiltering: true,
         includeSelectAllOption: true,
-	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	nonSelectedText: '<?php echo Yii::t("main", "Valitse työntekijät"); ?>',
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
 	allSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
