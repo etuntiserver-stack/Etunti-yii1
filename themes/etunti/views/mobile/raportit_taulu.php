@@ -79,7 +79,7 @@
 				<select name="raporti_tyyppi">
 				 <option value="Suunnitellut" <?=(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Suunnitellut')?'selected':''?>><?=Yii::t('main', 'Suunnitellut')?></option>
 				 <option value="Luetut" <?=(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Luetut')?'selected':''?>><?=Yii::t('main', 'Luetut')?></option>
-				 <option value="Hyvaksynta" <?=(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksynta')?'selected':''?>><?=Yii::t('main', 'Hyväksynta')?></option>
+				 <option value="Hyvaksynta" <?=(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksynta')?'selected':''?>><?=Yii::t('main', 'Hyväksyntä')?></option>
 				 <option value="Hyvaksytyt" <?=(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksytyt')?'selected':''?>><?=Yii::t('main', 'Hyväksytyt')?></option>
 				</select>
                             <i class="arrow double"></i>
