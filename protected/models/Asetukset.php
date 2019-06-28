@@ -330,6 +330,7 @@ class Asetukset extends DB2ActiveRecord
 			'asiakas_pakkoliset' => Yii::t('main', 'Pakolliset kentät'),
 			'netvisor_accountingaccountsuggestion' => Yii::t('main', 'Myyntilaskut kirjanpidon oletustili'),
 			'auto_hyvaksynta_klo' => Yii::t('main', 'Hyväksyminen aika'),
+			'netvisor_lahetetaanko_tyontekija' => Yii::t('main', 'Lähetä työntekijä'),
 		);
 	}
 
