@@ -1244,7 +1244,7 @@ if($site[0]->checkEdicoViestit()){ $bell = '<i class="fa fa-bell text-danger"></
           </li>
 	<?php endif; ?>
 
-	<?php /*if(in_array('6',$tas)) :*/ ?>
+	<?php /* ?>
           <li>
             <a class="accordion-toggle" href="#">
               <span class="fa fa-line-chart"></span>
@@ -1264,7 +1264,7 @@ if($site[0]->checkEdicoViestit()){ $bell = '<i class="fa fa-bell text-danger"></
 
             </ul>
           </li>
-	<?php /* endif; */ ?>
+	<?php */ ?>
 
 	<?php if(in_array('999',$tas)) : ?>
           <li>
