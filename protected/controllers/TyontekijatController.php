@@ -67,7 +67,7 @@ class TyontekijatController extends Controller
         }
 
 
-	public function actionIs_aktiivinen_multiple($name_tyontekijat, $value, $selected)
+	public function actionIs_aktiivinen_multiple($name_tyontekijat, $aktiivinen, $tyoryhma, $selected)
 	{
 		$bd = '';
 		$site = Yii::app()->createController('Site');
@@ -76,7 +76,8 @@ class TyontekijatController extends Controller
 				'null', //class
 				'tyontekijat', // id
 				null, //selected
-				$value // aktiivinen
+				$aktiivinen,
+				$tyoryhma
 		);
 
 		echo json_encode($tyontekiatLista);

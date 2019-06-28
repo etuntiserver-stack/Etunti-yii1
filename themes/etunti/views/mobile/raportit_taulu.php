@@ -36,11 +36,35 @@
 				   $tal[$exV[1]] = $exV[0];
 				}
 				$selectedValues = 1;
-				if(isset($_GET['aktiivinen']))
-				$selectedValues = array($_GET['aktiivinen']=> Array('selected' => 'selected'));
-		
+				if(isset($_GET['aktiivinen'])){
+					$selectedValues = array($_GET['aktiivinen']=> array('selected' => 'selected'));
+				}
 				echo CHtml::dropDownList('aktiivinen','aktiivinen', $tal, 
 				array('class'=>'gui-input aktiivinen'));
+				?>
+
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+
+                        <div class="section">
+                          <label class="field select">
+
+				<?php 
+				$a = Valikkoot::model()->findAll(" select_type='tyoryhma' ");
+		        	$tal = array();
+				foreach($a as $v){
+				   $tal[$v->value] = $v->value;
+				}
+				$selectedValues = 1;
+/*
+				if(isset($_GET['aktiivinen'])){
+					$selectedValues = array($_GET['aktiivinen']=> array('selected' => 'selected'));
+				}
+*/		
+				echo CHtml::dropDownList('tyoryhma','tyoryhma', $tal, 
+				array('class'=>'gui-input tyoryhma'));
 				?>
 
                             <i class="arrow double"></i>
@@ -317,12 +341,17 @@ function multi(){
 }
 
 
-  $(".aktiivinen").change(function(){
-	var thisVal = parseInt($(this).val());
+  $(".aktiivinen, .tyoryhma").change(function(){
+	checker();
+  });
+
+  function checker(){
+    	var aktiivinen = parseInt($('.aktiivinen').val());
+    	var tyoryhma = $('.tyoryhma').val();
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyontekijat/is_aktiivinen_multiple',
            type: "GET",
-	   data: { name_tyontekijat : '<?=$name_tyontekijat?>', value : thisVal, selected : null },
+	   data: { name_tyontekijat : '<?=$name_tyontekijat?>', aktiivinen : aktiivinen, tyoryhma : tyoryhma, selected : null },
            success: function(data){
 		data = JSON.parse(data);
 		console.log(data);
@@ -330,7 +359,7 @@ function multi(){
 		multi();
            }
         });
-  });
+  }
 
 });
 </script>

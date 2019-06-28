@@ -2618,7 +2618,7 @@ $(document).ready(function(){
 	}
 
 
-	public function tyontekiatLista($name, $class, $id, $selectedArray, $aktiivinen)
+	public function tyontekiatLista($name, $class, $id, $selectedArray, $aktiivinen=null, $tyoryhma=null)
 	{
 		$return = '';
 
@@ -2628,7 +2628,12 @@ $(document).ready(function(){
 		$criteria = $this->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
 
-		$criteria->condition = " aktiivinen='".$aktiivinen."' ";
+		if( $aktiivinen !== null ){
+			$criteria->addCondition (" aktiivinen='".$aktiivinen."' ");
+		}
+		if( $tyoryhma !== null ){
+	        	$criteria->addCondition (" REPLACE(REPLACE(tyoryhma,'\\\u00f6','ö'), '\\\u00e4', 'ä') LIKE '%".$tyoryhma."%' ");
+		}
 
 		// <-- Tyoryhmat
 		$tt = Yii::app()->createController('Tyontekijat');
