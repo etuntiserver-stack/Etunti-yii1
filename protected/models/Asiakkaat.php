@@ -19,7 +19,7 @@
 class Asiakkaat extends DB2ActiveRecord
 {
 
-	public $filter_postitoimipaikka, $filter_tyoryhma, $filter_asiakasryhma, $filter_tyyppi;
+	public $count, $filter_postitoimipaikka, $filter_tyoryhma, $filter_asiakasryhma, $filter_tyyppi;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -228,6 +228,9 @@ class Asiakkaat extends DB2ActiveRecord
 		}
 		if( !empty($this->yhteyshenkilo) and !empty($this->tyyppi) and $this->tyyppi == 'henkilo' ){
 			$return = $this->yhteyshenkilo;
+		}
+		if( empty($this->yrityksen_nimi) and empty($this->yhteyshenkilo)){
+			$return = 'Asiakas id: '.$this->id;
 		}
                 return $return;
         }

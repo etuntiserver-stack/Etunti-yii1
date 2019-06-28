@@ -239,18 +239,49 @@ if( isset($_GET['haku']) ){
   <div class="panel heading-border">
    <div class="panel-body">
 
-	<table class="table table-bordered">
-	<tr>
-	<th><?=Yii::t('main', 'Keskimääräinen kesto')?></th>
-	<th><?=Yii::t('main', 'Isoin luettu kesto')?></th>
-	<th><?=Yii::t('main', 'Isoin hyväksytty kesto')?></th>
-	</tr>
-	<tr>
-	<td><?=$tlk?></td>
-	<td><?=$this->sprint(max(array_keys($tl)))?></td>
-	<td><?=$this->sprint(max(array_keys($tt)))?></td>
-	</tr>
-	</table>
+	<section id="content" class="animated fadeIn">
+	<div class="row mb10">
+	  <div class="col-sm-6 col-md-4">
+	    <div class="panel bg-alert light of-h mb10">
+	      <div class="pn pl20 p5">
+	        <div class="icon-bg">
+	          <i class="fa fa-clock-o"></i>
+	        </div>
+	        <h2 class="mt15 lh15">
+	          <b><div id="tunnit"><?=$tlk?></div></b>
+	        </h2>
+	        <h5 class="text-muted"><?=Yii::t('main', 'Keskimääräinen kesto')?></h5>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="col-sm-6 col-md-4">
+	    <div class="panel bg-info light of-h mb10">
+	      <div class="pn pl20 p5">
+	        <div class="icon-bg">
+	          <i class="fa fa-clock-o"></i>
+	        </div>
+	        <h2 class="mt15 lh15">
+	          <b><div id="tehdyttunnittanaan"><?=$this->sprint(max(array_keys($tl)))?></div></b>
+	        </h2>
+	        <h5 class="text-muted"><?=Yii::t('main', 'Isoin luettu kesto')?></h5>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="col-sm-6 col-md-4">
+	    <div class="panel bg-warning light of-h mb10">
+	      <div class="pn pl20 p5">
+	        <div class="icon-bg">
+	          <i class="fa fa-clock-o"></i>
+	        </div>
+	        <h2 class="mt15 lh15">
+	          <b><div id="suunnitteltutunnittanaan"><?=$this->sprint(max(array_keys($tt)))?></div></b>
+	        </h2>
+	        <h5 class="text-muted"><?=Yii::t('main', 'Isoin hyväksytty kesto')?></h5>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	</section>
 
 	<h2><?=Yii::t('main', '10 isommat kestot')?></h2>
 	<table class="table table-bordered">
