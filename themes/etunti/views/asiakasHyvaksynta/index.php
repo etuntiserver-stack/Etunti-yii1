@@ -86,7 +86,7 @@ $this->menu=array(
                         <div class="section">
                           <label class="field prepend-icon">
 
-	   <input type="text" name="from" id="from" class="gui-input datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+	   <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php echo Yii::app()->session['from']; ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -99,7 +99,7 @@ $this->menu=array(
                         <div class="section">
                           <label class="field prepend-icon">
 
-   	   <input type="text" name="to" id="to" class="gui-input datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+   	   <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php echo Yii::app()->session['to']; ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
