@@ -1640,6 +1640,7 @@ nyt ne ovat etusivu.php ssa
 	|| curpage === 'mobile/kyhteenveto'
 	|| curpage === 'mobile/kyhteenveto_tuntemattomat'
 	|| curpage === 'mobile/yhteenveto_m'
+	|| curpage === 'mobile/raportit_taulu'
     ){  $('.tuntienHallinta').addClass('menu-open'); $('.Yhteenvedot').addClass('menu-open'); }
     else if(
 	curpage === 'tyontekijat/index' 

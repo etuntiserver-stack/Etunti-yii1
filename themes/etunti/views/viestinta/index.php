@@ -85,7 +85,7 @@
 
 <?php
        	$criteria = new CDbCriteria();
-	$criteria->condition = " status=0 AND tekija='toimisto' ";
+	$criteria->condition = " status=3 ";
 	$vi = Viestinta::model()->findAll($criteria);
 
 	if(isset($vi[0]->id) and !empty($vi[0]->id))

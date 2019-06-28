@@ -1993,7 +1993,7 @@ $(document).ready(function(){
 	protected function UudetMobiiliViestit(){
 
        		$criteria = new CDbCriteria();
-		$criteria->condition = " status=0 AND tekija='toimisto' ";
+		$criteria->condition = " status=3 ";
 		$vi = Viestinta::model()->find($criteria);
 		if(isset($vi->id)){
 			return true;

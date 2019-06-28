@@ -9,11 +9,11 @@
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?=Yii::t('main', 'Tuntiraportti')?> (<?=$raporti_tyyppi?>)</h2>
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?=Yii::t('main', 'Tuntiraportti')?></h2>
 
 
 
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <form id="mobForm" action="#" class="form-inline" method="GET">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
@@ -29,18 +29,18 @@
 
 				<?php 
 				$a = Valikkoot::model()->findAll(" select_type='aktiivinen' ");
-		        	$tal = '';
+		        	$tal = array();
 				foreach($a as $v){
 				$exV = explode("/",$v->value);
 				   if(isset($exV[0]) and isset($exV[1]))
 				   $tal[$exV[1]] = $exV[0];
 				}
 				$selectedValues = 1;
-				if(isset($_POST['aktiivinen']))
-				$selectedValues = array($_POST['aktiivinen']=> Array('selected' => 'selected'));
+				if(isset($_GET['aktiivinen']))
+				$selectedValues = array($_GET['aktiivinen']=> Array('selected' => 'selected'));
 		
 				echo CHtml::dropDownList('aktiivinen','aktiivinen', $tal, 
-				array('class'=>'gui-input aktiivinen','options' => $selectedValues)) 
+				array('class'=>'gui-input aktiivinen'));
 				?>
 
                             <i class="arrow double"></i>
@@ -53,13 +53,13 @@
                             <div id="tekijat_result"> 
 				<?php
 				$name_tyontekijat = 'tekijaPaaSivulla';
-				(isset($_POST['aktiivinen']))? $aktiivinen = $_POST['aktiivinen'] : $aktiivinen = 1;
+				(isset($_GET['aktiivinen']))? $aktiivinen = $_GET['aktiivinen'] : $aktiivinen = 1;
 		   		$site = Yii::app()->createController('Site');
 		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
 						$name_tyontekijat, // name
 						'null', //class
 						'tyontekijat', // id
-						Yii::app()->request->getPost('tekijaPaaSivulla'), //selected
+						(isset($_GET['tekijaPaaSivulla']))?$_GET['tekijaPaaSivulla']:'', //selected
 						$aktiivinen// aktiivinen
 				);
 				echo $tyontekiatLista;
@@ -77,11 +77,10 @@
                         <div class="section">
                           <label class="field select">
 				<select name="raporti_tyyppi">
-				 <?php if(Yii::app()->request->getPost('raporti_tyyppi')): ?>
-				 <option value="<?=$raporti_tyyppi?>"><?=$raporti_tyyppi?></option>
-				 <?php endif; ?>
-				 <option value="Luetut"><?=Yii::t('main', 'Luetut')?></option>
-				 <option value="Toteutuneet"><?=Yii::t('main', 'Toteutuneet')?></option>
+				 <option value="Suunnitellut" <?=(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Suunnitellut')?'selected':''?>><?=Yii::t('main', 'Suunnitellut')?></option>
+				 <option value="Luetut" <?=(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Luetut')?'selected':''?>><?=Yii::t('main', 'Luetut')?></option>
+				 <option value="Hyvaksynta" <?=(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksynta')?'selected':''?>><?=Yii::t('main', 'Hyväksynta')?></option>
+				 <option value="Hyvaksytyt" <?=(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksytyt')?'selected':''?>><?=Yii::t('main', 'Hyväksytyt')?></option>
 				</select>
                             <i class="arrow double"></i>
                             </label>
@@ -97,7 +96,7 @@
 				$mod = 'Kohteet';
 				$sarake = 'osoite';
 				$placeholder = 'Osoite';
-				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
+				if(isset($_GET[$sarake])){ $postvalue = $_GET[$sarake]; } else { $postvalue=''; }
 		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
 			    ?>
 			    <!-- Autocomplete -->
@@ -157,6 +156,7 @@
 
 	<div id="odota"></div>
 
+<?php if(isset($_GET['aktiivinen'])): ?>
 <div class="admin-form">
   <div class="panel-header">
       <div class="row">
@@ -181,7 +181,7 @@
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
 	  </form>
 	  <form action="tulostus" class="form-group" target="_blank" method="POST">
-	    <input type="hidden" name="header" value="<?php if(Yii::app()->request->getPost('raporti_tyyppi')) echo Yii::app()->request->getPost('raporti_tyyppi'); ?>, <?=$from?>-<?=$to?>">
+	    <input type="hidden" name="header" value="<?=$from?>-<?=$to?>">
 	    <input type="hidden" name="ext" value="pdf">
 	    <input type="hidden" name="fileName" value="Raporti">
 	    <input type="hidden" name="from" value="<?=$from?>">
@@ -206,12 +206,12 @@
   <thead>
   <tr>
   <th><?=Yii::t('main', 'Työntekijä')?></th>
+  <th><?=Yii::t('main', 'Tilanne')?></th>
   <th><?=Yii::t('main', 'Kohde')?></th>
   <th><?=Yii::t('main', 'Pvm')?></th>
   <th><?=Yii::t('main', 'Aloitus')?></th>
   <th><?=Yii::t('main', 'Lopetus')?></th>
   <th><?=Yii::t('main', 'Kesto')?></th>
-  <th><?=Yii::t('main', 'Viesti')?></th>
   </tr>
   </thead>
   <tbody>
@@ -220,29 +220,44 @@
   foreach($model as $data)
   {
 
-	if($raporti_tyyppi == 'Luetut')
-	$m = $this->tidFromTo_luetut($data->id, $from, $to, $osoite);
-	if($raporti_tyyppi == 'Toteutuneet')
-	$m = $this->tidFromTo_toteutuneet($data->id, $from, $to, $osoite);
-
+	if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Luetut'){
+		$m = $this->tidFromTo_luetut($data->id, $from, $to, $kohde_id);
+	}
+	if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksynta'){
+		$m = $this->tidFromTo_toteutuneet($data->id, $from, $to, $kohde_id, 'Hyvaksynta');
+	}
+	if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksytyt'){
+		$m = $this->tidFromTo_toteutuneet($data->id, $from, $to, $kohde_id, 'Hyvaksytyt');
+	}
+	if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Suunnitellut'){
+		$m = $this->tidFromTo_suunnitellut($data->id, $from, $to, $kohde_id);
+	}
 	echo $this->renderPartial('_raportit_taulu', array( 
-			'data' => $data, 'from' => $from, 'to' => $to, 'raporti_tyyppi' => $raporti_tyyppi, 'osoite' => $osoite, 'm' => $m
+			'data' => $data, 'from' => $from, 'to' => $to, 'm' => $m, 'mob_or_tv' => $mob_or_tv
 	), true);
 	foreach($m as $k=>$val){
-		$yhteensa += strtotime($val->loppui)-strtotime($val->aloitan);
+		if( $mob_or_tv == 'mob' ){
+			$aloitus = $val->aloitan;
+			$lopetus = $val->loppui;
+		}
+		if( $mob_or_tv == 'tv' ){
+			$aloitus = $val->alku;
+			$lopetus = $val->loppu;
+		}
+		$yhteensa += strtotime($lopetus)-strtotime($aloitus);
 	}
   }
   ?>
   </tbody>
   <tfoot>
    <tr>
-	<td><?=Yii::t('main', 'Yhteensä')?></td>
 	<td></td>
 	<td></td>
 	<td></td>
 	<td></td>
+	<td></td>
+	<td><b><?=Yii::t('main', 'Yhteensä')?></b></td>
 	<td><?=($yhteensa > 0)?$this->sprint($yhteensa).'&nbsp;|&nbsp'.$this->num($yhteensa):''?></td>
-	<td></td>
    </tr>
   </tfoot>
   </table>
@@ -255,6 +270,7 @@
    </div>
   </div>
 </div>
+<?php endif; ?>
 
 <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.dataTables.min.js" type="text/javascript"></script>
@@ -266,6 +282,8 @@ $(document).ready(function() {
         "bInfo": false
     });
 });
+
+$('#mobileTable tfoot tr').prependTo('#mobileTable thead');
 
 $(document).ready(function(){
 
@@ -288,7 +306,7 @@ function multi(){
 	//inheritClass: true,
 	//enableFiltering: true,
         includeSelectAllOption: true,
-	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	nonSelectedText: '<?php echo Yii::t("main", "Valitse työntekijät"); ?>',
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
 	allSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',

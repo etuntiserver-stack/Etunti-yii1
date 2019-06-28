@@ -1,8 +1,19 @@
 <?php
-     $tas = array();
-   if(isset(Yii::app()->user->adminPaketti)) 
-     $tas = explode(",",Yii::app()->user->adminPaketti);
+   $tas = array();
+   if(isset(Yii::app()->user->adminPaketti)){
+	$tas = explode(",",Yii::app()->user->adminPaketti);
+   }
+   if(isset(Yii::app()->session['from'])){
+	$from =  date('d.m.Y', strtotime(Yii::app()->session['from']));
+   } else {
+	$from =  date('d.m.Y', strtotime("first day of last month"));
+   }
 
+   if(isset(Yii::app()->session['to'])){
+	$to =  date('d.m.Y', strtotime(Yii::app()->session['to']));
+   } else {
+	$to =  date('d.m.Y', strtotime("last day of last month"));
+   }
 /*
 	// <-- Järjestelmanvalvojan kuluvia ryhmiä
 	$criteria = new CDbCriteria();
@@ -87,7 +98,7 @@ $(document).ready(function(){
 
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['from'])) echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>">
+   			    <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=$from?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -97,7 +108,7 @@ $(document).ready(function(){
 
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['to'])) echo date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>">
+   			    <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=$to?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -269,7 +280,7 @@ $(document).ready(function(){
        <div class="col-sm-6">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['from'])) echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>">
+   			    <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=$from?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -279,7 +290,7 @@ $(document).ready(function(){
 
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['to'])) echo date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>">
+   			    <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=$to?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -420,7 +431,7 @@ $(document).ready(function(){
        <div class="col-sm-6">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['from'])) echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>">
+   			    <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=$from?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -431,7 +442,7 @@ $(document).ready(function(){
 
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['to'])) echo date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>">
+   			    <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=$to?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -558,7 +569,7 @@ $(document).ready(function(){
        <div class="col-sm-6">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['from'])) echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>">
+   			    <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=$from?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -569,7 +580,7 @@ $(document).ready(function(){
 
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['to'])) echo date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>">
+   			    <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=$to?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>

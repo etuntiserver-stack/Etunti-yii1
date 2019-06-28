@@ -715,49 +715,63 @@ function num($val){
 
 	public function actionRaportit_taulu()
 	{
-
-		$raporti_tyyppi = 'Luetut';
-		if(Yii::app()->request->getPost('raporti_tyyppi'))
-		$raporti_tyyppi = Yii::app()->request->getPost('raporti_tyyppi');
-
-		$osoite = '';
-		if(Yii::app()->request->getPost('osoite'))
-		$osoite = Yii::app()->request->getPost('osoite');
+		$kohde_id = 0;
+		$mob_or_tv = '';
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Luetut'){
+			$mob_or_tv = 'mob';
+		}
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksynta'){
+			$mob_or_tv = 'mob';
+		}
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksytyt'){
+			$mob_or_tv = 'mob';
+		}
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Suunnitellut'){
+			$mob_or_tv = 'tv';
+		}
 
 		$from = date("d.m.Y", strtotime('first day of this month'));
 		$to = date("d.m.Y");
 
-		if(Yii::app()->request->getPost('from'))
-		$from = date("d.m.Y", strtotime(Yii::app()->request->getPost('from')));
-		if(Yii::app()->request->getPost('to'))
-		$to = date("d.m.Y", strtotime(Yii::app()->request->getPost('to')));
+		if(isset($_GET['from'])){
+			$from = date("d.m.Y", strtotime($_GET['from']));
+		}
+		if(isset($_GET['to'])){
+			$to = date("d.m.Y", strtotime($_GET['to']));
+		}
 
 		$criteria = new CDBCriteria;
-		$criteria->condition = " 
+		if( $mob_or_tv == 'mob' ){
+			$criteria->condition = " 
 			id IN ( SELECT tid FROM sivexkuitti	
 				WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."' 
 				)
-		";
+			";
+		}
 
-		if(Yii::app()->request->getPost('tekijaPaaSivulla'))
+		if(isset($_GET['tekijaPaaSivulla']))
 		{
-			$impl = implode(",", Yii::app()->request->getPost('tekijaPaaSivulla'));
+			$impl = implode(",", $_GET['tekijaPaaSivulla']);
 	        	$criteria->addCondition (" id IN ($impl) ");
 		} else {
 	        	$criteria->addCondition (" id=0 ");
 		}
 
-		if(Yii::app()->request->getPost('osoite'))
+		if(isset($_GET['osoite']) and !empty($_GET['osoite']))
 		{
-	        $criteria->addCondition (" 
-			id IN ( SELECT tid FROM sivexkuitti
-				WHERE kohde_kannasta LIKE '%".Yii::app()->request->getPost('osoite')."%'
-			) OR
-			id IN ( SELECT tid FROM sivexkuitti_repaired
-				WHERE kohde_kannasta LIKE '%".Yii::app()->request->getPost('osoite')."%'
-			)
-		");
+			$k = Kohteet::model()->find(" osoite='".$_GET['osoite']."' ");
+			if(isset($k->id)){ $kohde_id = $k->id; }
+			/*
+		        $criteria->addCondition (" 
+				id IN ( SELECT tid FROM sivexkuitti
+					WHERE kohde_kannasta LIKE '%".$_GET['osoite']."%'
+				) OR
+				id IN ( SELECT tid FROM sivexkuitti_repaired
+					WHERE kohde_kannasta LIKE '%".$_GET['osoite']."%'
+				)
+			");
+			*/
 		}
 
 
@@ -769,14 +783,14 @@ function num($val){
 			'model' => $model,
 			'from' => $from,
 			'to' => $to,
-			'raporti_tyyppi' => $raporti_tyyppi,
-			'osoite' => $osoite
+			'kohde_id' => $kohde_id,
+			'mob_or_tv' => $mob_or_tv
 		));
 
 
 	}
 
-	protected function tidFromTo_luetut($tid, $from, $to, $osoite)
+	protected function tidFromTo_luetut($tid, $from, $to, $kohde_id)
 	{
 
 			$model = array();
@@ -795,8 +809,7 @@ function num($val){
 				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
 			";
 
-			if(!empty($osoite))
-			$criteria->addCondition (" kohde_kannasta LIKE '%".$osoite."%' ");
+			if($kohde_id > 0){ $criteria->addCondition (" kohdenID='".$kohde_id."' "); }
 
 			$lu = Mobile::model()->findAll($criteria);
   			foreach($lu as $data){
@@ -810,7 +823,7 @@ function num($val){
 	}
 
 
-	protected function tidFromTo_toteutuneet($tid, $from, $to, $osoite)
+	protected function tidFromTo_toteutuneet($tid, $from, $to, $kohde_id, $type)
 	{
 
 			$model = array();
@@ -829,9 +842,8 @@ function num($val){
 				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
 				AND deleted=0
 			";
-
-			if(!empty($osoite))
-			$criteria->addCondition (" kohde_kannasta LIKE '%".$osoite."%' ");
+			if($kohde_id > 0){ $criteria->addCondition (" kohdenID='".$kohde_id."' "); }
+			if($type == 'Hyvaksytyt'){ $criteria->addCondition (" hyvaksytty!='' "); }
 
 			$lu = Mobile::model()->findAll($criteria);
   			foreach($lu as $data){
@@ -851,15 +863,45 @@ function num($val){
 				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
 				AND deleted=0
 			";
-
-			if(!empty($osoite))
-			$criteria->addCondition (" kohde_kannasta LIKE '%".$osoite."%' ");
+			if($kohde_id > 0){ $criteria->addCondition (" kohdenID='".$kohde_id."' "); }
+			if($type == 'Hyvaksytyt'){ $criteria->addCondition (" hyvaksytty!='' "); }
 
 			$tot = array();
 			$tot = Toteutuneet::model()->findAll($criteria); 
 
   			foreach($tot as $data){
 				$model[strtotime($data->aloitan)] = $data;
+			}
+
+			if(count($model) > 0)
+			ksort($model);
+
+		return $model;
+	}
+
+	protected function tidFromTo_suunnitellut($tid, $from, $to, $kohde_id)
+	{
+
+			$model = array();
+
+			/* lu */
+		       	$criteria = new CDbCriteria();
+        		$criteria->select = "
+			TIME_TO_SEC(TIMEDIFF(loppu, alku)) as l_tunnit, t.*
+			";
+
+			$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
+			$criteria->condition = "  
+				tid='".$tid."'
+				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			";
+
+			if($kohde_id > 0){ $criteria->addCondition (" kohden='".$kohde_id."' "); }
+
+			$lu = Tyovuoroot::model()->findAll($criteria);
+  			foreach($lu as $data){
+				$model[strtotime($data->pvm)] = $data;
 			}
 
 			if(count($model) > 0)
