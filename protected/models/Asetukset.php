@@ -296,7 +296,7 @@ class Asetukset extends DB2ActiveRecord
 			'tyottomyysvakuutusmaksu' => Yii::t('main', 'TYÖTTÖMYYSVAKUUTUSMAKSU'),
 			'sosiaaliturvamaksu' => Yii::t('main', 'SOSIAALITURVAMAKSU'),
 			'tyel_maksun_osuus_palkkansummasta' => Yii::t('main', 'TyEL-MAKSUN OSUUS PALKKASUMMASTA'),
-			'peruutusehdot' => Yii::t('main', 'Asiakkaalle naytettavat varauksen peruutusehdot'),
+			'peruutusehdot' => Yii::t('main', 'Asiakkaalle näytettävät varauksen peruutusehdot'),
 			'gtm' => Yii::t('main', 'Google Tag Manager'),
 			'app_naytetaanko_kohteen_yhteyshenkilo' => Yii::t('main', 'Näytetäänkö kohteen yhteyshenkilö'),
 			'onlinevaraus_viikonlopput'=> Yii::t('main', 'Näytetäänkö viikonloput'),

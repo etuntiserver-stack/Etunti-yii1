@@ -12,6 +12,7 @@ return array(
 'Copy' => '<span class="btn btn-block btn-success">Kopio</span>',
 'Create from APP' => '<span class="btn btn-block btn-success">Luonti (app)</span>',
 'Update by APP' => '<span class="btn btn-block btn-warning">Muokkaus (app)</span>',
+'Update from mobile' => '<span class="btn btn-block btn-warning">Muokkaus (app)</span>',
 'Tyovuoroot' => 'Työvuorot',
 'Tyosuhdet' => 'Työsuhteet',
 'Tyontekijat' => 'Työntekijät',
