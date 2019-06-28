@@ -58,9 +58,9 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 	<h2 class="myBgColors p10"> <i class="fa fa-calendar-o"></i> <?php echo Yii::t('main', 'Kuukausinäkymä'); ?> 
 
 	&nbsp;&nbsp;&nbsp;
-	  <a href="kk?pvm=<?php echo $previous; ?>">
+	  <a href="kk?pvm=<?php echo $previous; ?>" class="text-warning">
 	  <<</a> <?php echo $months[$month].' '.$year; ?> 
- 	  <a href="kk?pvm=<?php echo $next; ?>">>></a>
+ 	  <a href="kk?pvm=<?php echo $next; ?>" class="text-warning">>></a>
 
 	</h2>
 
@@ -155,7 +155,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 	$tot[$i] = $this->renderPartial('pvmtid',array('pvm'=>$thisDate,'tid'=>$v->id,'from'=>'kk'),true);
 	$explT = explode("//",$tot[$i]);
 	if(isset($explT[1]))
-	$yht += $explT[1];
+	$yht += (int)$explT[1];
 
 	$cl = "";
 	if(isset($explT[1]) and (int)$explT[1] < 18000)
