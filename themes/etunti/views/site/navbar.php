@@ -644,7 +644,8 @@ $('.multTyoryhma').multiselect({
           </a>
           <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
             <li class="list-group-item">
-              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/ohjeet" class="animated animated-short fadeInUp">
+              <a href="https://app.etunti.fi/lib/pdf/etunti_ko.pdf" target="_blank" class="animated animated-short fadeInUp">
+	      <!-- <?php echo Yii::app()->request->baseUrl; ?>/index.php/site/ohjeet -->
                 <span class="fa fa-gear"></span> <?php echo Yii::t('main', 'Lue ohjeet'); ?> </a>
             </li>
             <li class="list-group-item">
