@@ -53,7 +53,7 @@
 
 				<?php 
 				$a = Valikkoot::model()->findAll(" select_type='tyoryhma' ");
-		        	$tal = array();
+		        	$tal = array(''=>'Valitse');
 				foreach($a as $v){
 				   $tal[$v->value] = $v->value;
 				}
@@ -241,6 +241,15 @@
   <tbody>
   <?php
   $yhteensa = 0;
+
+  if( count($model) == 0 ){
+	$data->id = 0;
+	$m = $this->tidFromTo_suunnitellut($data->id, $from, $to, $kohde_id);
+	echo $this->renderPartial('_raportit_taulu', array( 
+			'data' => $data, 'from' => $from, 'to' => $to, 'm' => $m, 'mob_or_tv' => $mob_or_tv
+	), true);
+  }
+
   foreach($model as $data)
   {
 
