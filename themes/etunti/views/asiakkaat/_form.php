@@ -753,6 +753,11 @@ $("#Asiakkaat_tyyppi").change(function() {
     laskutusTyyppi(value);
 });
 
+$("#Asiakkaat_lopetuksen_pvm").keyup(function(e) {
+    if( e.which == 9 ) {
+        alert('Huomio! Tämä vaikuttaa työvuoroihiin!');
+    }
+});
 
 /*
 $("#Asiakkaat_asiakasnumero").keyup(function() {
@@ -777,17 +782,12 @@ $("#Asiakkaat_asiakasnumero").keyup(function() {
 });
 */
 
-function openAll(){
-
+ function openAll(){
 	$(".ashidd_a").show('slow');
 	$(".ashidd").show('slow');
+ }
 
-
-}
-
-
-
-function laskutusTyyppi(value){
+ function laskutusTyyppi(value){
 
 	$(".ashidd_a").show('slow');
     if(value == 'yritys'){
@@ -801,10 +801,9 @@ function laskutusTyyppi(value){
 	$(".nimi").show('slow');
     }
 
-}
+ }
 
-
-$('.ryhmat').multiselect({
+ $('.ryhmat').multiselect({
 	//inheritClass: true,
 	//enableFiltering: true,
         includeSelectAllOption: true,
@@ -814,7 +813,8 @@ $('.ryhmat').multiselect({
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 	numberDisplayed: 0,
 	buttonWidth: '100%',
-});
+ });
+
 
 
 });
