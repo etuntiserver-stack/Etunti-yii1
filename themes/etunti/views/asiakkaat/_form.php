@@ -755,7 +755,7 @@ $("#Asiakkaat_tyyppi").change(function() {
 
 $("#Asiakkaat_lopetuksen_pvm").keyup(function(e) {
     if( e.which == 9 ) {
-        alert('Huomio! Tämä vaikuttaa työvuoroihiin!');
+        alert('VAROITUS! Olet laittamassa asiakkaan passiiviseksi ja tämän asiakkaan työvuorot eivät sen jälkeen enää toimi oikein. \n Jos haluat perua tämän siirron, poista päivämäärä kentästä: "Päivämäärä, jolloin asiakas menee passiiviseksi"');
     }
 });
 
