@@ -490,6 +490,8 @@
 				if(!empty($sp))
 					array_push($saaja, $sp);
 
+echo 'ok';
+exit;
 			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' and count($saaja) > 0 and !empty($message) )
 			{
 
