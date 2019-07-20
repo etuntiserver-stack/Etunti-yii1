@@ -448,10 +448,10 @@
 			$tekijan_nimi = '';
 			if(isset($t->id)){ $tekijan_nimi = $this->etuSukunimi($t->id); }
 
-			if( $tyovuoroot[0]->tilanteet[$data->status] == 3 ){
+			if( $tyovuoroot[0]->tilanteet()[$data->status] == 3 ){
 				$m .= '<hr><b>'.Yii::t('main', 'Osoite').':</b> '.$osoite.'<br>';
 			} else {
-				$m .= '<hr><b>'.$tyovuoroot[0]->tilanteet[$data->status].'</b><br>';
+				$m .= '<hr><b>'.$tyovuoroot[0]->tilanteet()[$data->status].'</b><br>';
 			}
 			$m .= '<b>'.Yii::t('main', 'Aikaväli').':</b> '.$data->pfrom.'-'.$data->pto.'<br>';
 			$m .= '<b>'.Yii::t('main', 'Klo').':</b> '.$data->alku.'-'.$data->loppu.'<br>';
