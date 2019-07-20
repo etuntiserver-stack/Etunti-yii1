@@ -32,6 +32,9 @@
 
 
 	$asetukset = Asetukset::model()->findByPk(1);
+	$site = Yii::app()->createController('Site');
+	$tyovuoroot = Yii::app()->createController('Tyovuoroot');
+
 	$aikavali_halytys = 15;
 	if(!empty($asetukset->aikavali_halytys))
 	$aikavali_halytys = $asetukset->aikavali_halytys;
@@ -79,8 +82,6 @@
 	
 				if(!isset($digisten_tunnit->id))
 				{
-
-		   			$site = Yii::app()->createController('Site');
 					$tunnit = 0;
 					$tunnit = $site[0]->laskuriForCron($d->domain);
 
@@ -436,25 +437,22 @@
 
 		$m = '';
 		$message = '';
-
 		foreach($toistuvat as $data)
 		{
-
-
 			$k = Kohteet::model()->findbypk($data->kohde);
 			$t = Tyontekijat::model()->findbypk($data->tid);
 
-			if(isset($t->id) and $t->aktiivinen == 0){
-			continue;
-			}
-
+			if(isset($t->id) and $t->aktiivinen == 0){ continue; }
 			$osoite = '';
-			if(isset($k->osoite)) $osoite = $k->osoite;
-
+			if(isset($k->osoite)){ $osoite = $k->osoite; }
 			$tekijan_nimi = '';
-			if(isset($t->id)) $tekijan_nimi = $this->etuSukunimi($t->id);
+			if(isset($t->id)){ $tekijan_nimi = $this->etuSukunimi($t->id); }
 
-			$m .= '<hr><b>'.Yii::t('main', 'Osoite').':</b> '.$osoite.'<br>';
+			if( $tyovuoroot[0]->tilanteet[$data->status] == 3 ){
+				$m .= '<hr><b>'.Yii::t('main', 'Osoite').':</b> '.$osoite.'<br>';
+			} else {
+				$m .= '<hr><b>'.$tyovuoroot[0]->tilanteet[$data->status].'</b><br>';
+			}
 			$m .= '<b>'.Yii::t('main', 'Aikaväli').':</b> '.$data->pfrom.'-'.$data->pto.'<br>';
 			$m .= '<b>'.Yii::t('main', 'Klo').':</b> '.$data->alku.'-'.$data->loppu.'<br>';
 			$m .= '<b>'.Yii::t('main', 'Työntekijä').':</b> '.$tekijan_nimi.'<br>';
@@ -498,7 +496,7 @@
 			$ft = FirmanTiedot::model()->findbypk(1);
 			   foreach($saaja as $key=>$sahkoposti)
 			   {		
-				$subject = Yii::t('main', 'lmoitus toistuvien työvuorojen päättymisestä');
+				$subject = Yii::t('main', 'Ilmoitus toistuvien työvuorojen päättymisestä');
 				$mail = new YiiMailer();
 				$mail->setFrom('no-reply@etunti.fi');
 				$mail->setTo($sahkoposti);
