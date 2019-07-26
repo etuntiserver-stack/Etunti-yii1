@@ -439,14 +439,18 @@
 		$message = '';
 		foreach($toistuvat as $data)
 		{
+			$check_onkotyovuorot = Tyovuoroot::model()->find(" toistuva_id='".$data->id."' ");
+			if( !isset($check_onkotyovuorot->id) ){ continue; }
 			$k = Kohteet::model()->findbypk($data->kohde);
 			$t = Tyontekijat::model()->findbypk($data->tid);
 
 			if(isset($t->id) and $t->aktiivinen == 0){ continue; }
 			$osoite = '';
 			if(isset($k->osoite)){ $osoite = $k->osoite; }
+			if(isset($data->osoite) and !empty($data->osoite)){ $osoite = $data->osoite; }
 			$tekijan_nimi = '';
 			if(isset($t->id)){ $tekijan_nimi = $this->etuSukunimi($t->id); }
+			if($data->tid == 0){ $tekijan_nimi = 'VARAUS'; }
 
 			if( $tyovuoroot[0]->tilanteet()[$data->status] == 3 ){
 				$m .= '<hr><b>'.Yii::t('main', 'Osoite').':</b> '.$osoite.'<br>';
