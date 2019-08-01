@@ -300,6 +300,10 @@ $(document).ready(function() {
   <thead class="myBgColors">
   <tr>
   <th></th>
+  <?php
+	if($this->tas(2))
+		echo '<th>'.Yii::t('main', 'Työvuorot').'</th>';
+  ?>
   <th><?php echo '
 	<table>
 	 <tr>
@@ -440,14 +444,7 @@ $(document).ready(function() {
 	</table>';
       ?>
   </th>
-
-
   <th><?php echo Yii::t('main', 'Tyyppi'); ?></th>
-  
-  <?php
-	if($this->tas(2))
-		echo '<th>'.Yii::t('main', 'Työvuorot').'</th>';
-  ?>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

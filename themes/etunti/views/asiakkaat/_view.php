@@ -26,6 +26,22 @@
 			); 
 		?>
 	</td>
+
+	<?php if($this->tas(2)) : ?>
+	<td align="center">
+		<?php echo CHtml::link('<i class="fa fa-table" aria-hidden="true"></i>', 
+				array('showshift', 'id'=>$data->id), 
+				array(
+					'style'=>'font-size: 150%',
+					'data-toggle'=>'tooltip',
+					'data-placement'=>'top',
+					'title'=>Yii::t('main', 'Näytä tyovuorot') 
+				)
+			); 
+		?>
+	</td>
+	<?php endif; ?>
+
 	<td>
 		<?php echo $data->yrityksen_nimi; ?>
 	</td>
@@ -59,23 +75,6 @@
 	<td class="<?php echo $tauste; ?>" align="center">
 		<?php echo $tyyppi; ?>
 	</td>
-
-
-<?php if($this->tas(2)) : ?>
-	<td align="center">
-		<?php echo CHtml::link('<i class="fa fa-table" aria-hidden="true"></i>', 
-				array('showshift', 'id'=>$data->id), 
-				array(
-					'style'=>'font-size: 150%',
-					'data-toggle'=>'tooltip',
-					'data-placement'=>'top',
-					'title'=>Yii::t('main', 'Näytä tyovuorot') 
-				)
-			); 
-		?>
-	</td>
-<?php endif; ?>
-
 </tr>
 
 <?php
