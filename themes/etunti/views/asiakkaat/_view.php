@@ -32,6 +32,7 @@
 	<?php if($this->tas(2)) : ?>
 	<td align="center">
 		<?php 
+/*
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
 			peruutettu=0
@@ -39,6 +40,7 @@
 		";
 		$chktv = Tyovuoroot::model()->find($criteria);
 		if( isset($chktv->id) ){
+*/
 			echo CHtml::link('<i class="fa fa-table" aria-hidden="true"></i>', 
 				array('showshift', 'id'=>$data->id), 
 				array(
@@ -48,7 +50,7 @@
 					'title'=>Yii::t('main', 'Näytä tyovuorot') 
 				)
 			); 
-		}
+		//}
 		?>
 	</td>
 	<?php endif; ?>
