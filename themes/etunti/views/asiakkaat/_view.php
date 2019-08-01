@@ -40,6 +40,8 @@
 		";
 		$chktv = Tyovuoroot::model()->find($criteria);
 		if( isset($chktv->id) ){
+
+		Se tekee tosi hidas sivu
 */
 			echo CHtml::link('<i class="fa fa-table" aria-hidden="true"></i>', 
 				array('showshift', 'id'=>$data->id), 
