@@ -300,10 +300,8 @@ $(document).ready(function() {
   <thead class="myBgColors">
   <tr>
   <th></th>
-  <?php
-	if($this->tas(2))
-		echo '<th>'.Yii::t('main', 'Työvuorot').'</th>';
-  ?>
+  <th></th>
+  <?php	if($this->tas(2)){ echo '<th></th>'; }  ?>
   <th><?php echo '
 	<table>
 	 <tr>

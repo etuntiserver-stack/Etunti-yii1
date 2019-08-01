@@ -26,7 +26,9 @@
 			); 
 		?>
 	</td>
-
+	<td>
+		<p><a href="https://www.google.com/maps/place/<?=urlencode($data->osoite)?>,<?=urlencode($data->postinumero)?> <?=urlencode($data->kaupunki)?>" target="_blank"><span class="fa fa-2x fa-map-marker"></span></a></p>
+	</td>
 	<?php if($this->tas(2)) : ?>
 	<td align="center">
 		<?php 
@@ -50,7 +52,6 @@
 		?>
 	</td>
 	<?php endif; ?>
-
 	<td>
 		<?php echo $data->yrityksen_nimi; ?>
 	</td>
