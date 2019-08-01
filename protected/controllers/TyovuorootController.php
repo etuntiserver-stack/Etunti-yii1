@@ -440,7 +440,7 @@ class TyovuorootController extends Controller
 		   $src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
 		   $bd .= '<div class="pull-right"><img src="'.$src.'" class="img-thumbnail"></div>';
 		} else {
-		   echo '<img src="'.Yii::app()->request->baseUrl.'/img/tekijat/noname.jpg" class="img-thumbnail">';
+		   $bd .= '<img src="'.Yii::app()->request->baseUrl.'/img/tekijat/noname.jpg" class="img-thumbnail">';
 		}
 		$bd .= '</div></div>';
 
