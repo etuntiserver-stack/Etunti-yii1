@@ -897,7 +897,7 @@ function num($val){
 				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
 			";
 
-			if($kohde_id > 0){ $criteria->addCondition (" kohdenID='".$kohde_id."' "); }
+			if($kohde_id > 0){ $criteria->addCondition (" kohde='".$kohde_id."' "); }
 
 			$lu = Tyovuoroot::model()->findAll($criteria);
   			foreach($lu as $data){
