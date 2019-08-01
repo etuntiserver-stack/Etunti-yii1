@@ -29,7 +29,15 @@
 
 	<?php if($this->tas(2)) : ?>
 	<td align="center">
-		<?php echo CHtml::link('<i class="fa fa-table" aria-hidden="true"></i>', 
+		<?php 
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			peruutettu=0
+			AND kohde IN( SELECT id FROM sivex_kohdet WHERE asiakas_id='".$data->id."')
+		";
+		$chktv = Tyovuoroot::model()->find($criteria);
+		if( isset($chktv->id) ){
+			echo CHtml::link('<i class="fa fa-table" aria-hidden="true"></i>', 
 				array('showshift', 'id'=>$data->id), 
 				array(
 					'style'=>'font-size: 150%',
@@ -38,6 +46,7 @@
 					'title'=>Yii::t('main', 'Näytä tyovuorot') 
 				)
 			); 
+		}
 		?>
 	</td>
 	<?php endif; ?>
