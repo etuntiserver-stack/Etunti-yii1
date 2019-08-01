@@ -425,13 +425,24 @@ class TyovuorootController extends Controller
 		$model = Tyontekijat::model()->findByPk($id);
 
 		$bd = '';
-		$bd .= '<div class="section">';
+		$bd .= '<div class="row">';
+		$bd .= '<div class="col-sm-8">';
 		$bd .= Yii::t('main', 'Nimi').': <b>'.$this->etuSukunimi($model->id).'</b><br>';
 		$bd .= Yii::t('main', 'Työpuhelin').': <b>'.$model->laiten_puh.'</b><br>';
 		$bd .= Yii::t('main', 'Oma puhelin').': <b>'.$model->tekijan_puh.'</b><br>';
 		$bd .= Yii::t('main', 'Sähköpostiosoite').': <b>'.$model->tekijan_email.'</b><br>';
 		$bd .= Yii::t('main', 'Kotiosoite').': <b>'.$model->tekijan_katuosoite.'</b><br>';
-		$bd .= '</div>';
+
+		$bd .= '</div><div class="col-sm-4">';
+		$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg";
+		if (file_exists($filepath)){
+		   $imageData = base64_encode(file_get_contents($filepath));
+		   $src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+		   $bd .= '<div class="pull-right"><img src="'.$src.'" class="img-thumbnail"></div>';
+		} else {
+		   echo '<img src="'.Yii::app()->request->baseUrl.'/img/tekijat/noname.jpg" class="img-thumbnail">';
+		}
+		$bd .= '</div></div>';
 
 		echo json_encode(array('bd'=>$bd, 'etusuku' => $this->etuSukunimi($model->id)));	
 	}
