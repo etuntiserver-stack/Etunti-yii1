@@ -427,7 +427,8 @@ class TyovuorootController extends Controller
 		$bd = '';
 		$bd .= '<div class="section">';
 		$bd .= Yii::t('main', 'Nimi').': <b>'.$this->etuSukunimi($model->id).'</b><br>';
-		$bd .= Yii::t('main', 'Puhelinnumero').': <b>'.$model->laiten_puh.' '.$model->tekijan_puh.'</b><br>';
+		$bd .= Yii::t('main', 'Työpuhelin').': <b>'.$model->laiten_puh.'</b><br>';
+		$bd .= Yii::t('main', 'Oma puhelin').': <b>'.$model->tekijan_puh.'</b><br>';
 		$bd .= Yii::t('main', 'Sähköpostiosoite').': <b>'.$model->tekijan_email.'</b><br>';
 		$bd .= Yii::t('main', 'Kotiosoite').': <b>'.$model->tekijan_katuosoite.'</b><br>';
 		$bd .= '</div>';
