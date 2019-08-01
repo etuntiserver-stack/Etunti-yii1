@@ -2,7 +2,8 @@
 
        	$criteria = new CDbCriteria();
 	$criteria->condition = " tid = '".$tid."' 
-	and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
+	AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
+	AND peruutettu=0
 	";
 	$tv = Tyovuoroot::model()->findAll($criteria); 
 
