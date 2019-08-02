@@ -9,8 +9,7 @@
 //echo '<pre>';
 //print_r($arr);
 //echo '</pre>';
-
-
+echo date("H:i");
 
 if(isset($_GET['mail'])){
 	$m = $_GET['mail'];
@@ -26,7 +25,7 @@ if(isset($_GET['mail'])){
 	}
 }
 
-echo dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain);
+//echo dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain);
 //phpinfo();
 
 $this->breadcrumbs=array(
