@@ -256,6 +256,49 @@ ini_set("max_execution_time", "60");
                         </div>
                       </div>
 */ ?>
+
+		      <?php if(isset($_GET['tyoryhma'])) echo '<input type="hidden" id="tyoryhma" value="'.$_GET['tyoryhma'].'">'; ?>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			  <?php
+					$list = array();
+			      		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
+					foreach($l as $v)
+					$list[$v->id] = $v->value;
+			
+					if(count($list) > 0)
+					{
+			        	echo CHtml::dropDownList('tyoryhma', 'tyoryhma', $list,
+					array('empty'=>'Valitse työryhmä','class'=>'form-control form-group', 'id'=>'tyoryhmaSelect'));
+					}
+			  ?>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+		      <?php if(isset($_GET['ryhma'])) echo '<input type="hidden" id="ryhma" value="'.$_GET['ryhma'].'">'; ?>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			  <?php
+					$list = array();
+			      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma_real' ",array('order' => "select_type"));
+					foreach($l as $v)
+					$list[$v->id] = $v->value;
+			
+					if(count($list) > 0)
+					{
+			        	echo CHtml::dropDownList('ryhma', 'ryhma', $list,
+					array('empty'=>'Valitse ryhmä','class'=>'form-control form-group', 'id'=>'ryhmaSelect'));
+					}
+			  ?>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
@@ -296,7 +339,7 @@ ini_set("max_execution_time", "60");
                         </div>
                       </div>
 
-                      <div class="col-md-2 col-md-offset-4">
+                      <div class="col-md-2 col-md-offset-0">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo kaavio'); ?>">
 		      </div>
                     </div>
@@ -1004,6 +1047,12 @@ Highcharts.chart('container', {
 			AND status=3
 			AND peruutettu=0
 		";
+		if(isset($_GET['ryhma']) and !empty(trim($_GET['ryhma']))){
+		        $criteria->addCondition (" kohde IN( SELECT id FROM sivex_kohdet WHERE asiakas_id IN( SELECT id FROM asiakkaat WHERE ryhma LIKE '%".$_GET['ryhma']."%' )) ");
+		}
+		if(isset($_GET['tyoryhma']) and !empty(trim($_GET['tyoryhma']))){
+		        $criteria->addCondition (" kohde IN( SELECT id FROM sivex_kohdet WHERE asiakas_id IN( SELECT id FROM asiakkaat WHERE tyoryhma LIKE '%".$_GET['tyoryhma']."%' )) ");
+		}
 		$kohteet = Tyovuoroot::model()->findAll($criteria);
 		$arr_uudet = array();
 		$arr_kohdet = array();
@@ -1021,6 +1070,12 @@ exit;
 ?>
 
 <script>
+if($("#ryhma").val()){
+ $("#ryhmaSelect").val($("#ryhma").val());
+}
+if($("#tyoryhma").val()){
+ $("#tyoryhmaSelect").val($("#tyoryhma").val());
+}
 Highcharts.chart('container', {
     chart: {
         type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
