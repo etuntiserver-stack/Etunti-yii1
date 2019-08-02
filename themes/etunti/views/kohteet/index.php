@@ -218,6 +218,7 @@ $(document).ready(function() {
   <thead class="myBgColors">
   <tr>
   <th></th>
+  <th></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Kohteen osoite'); ?></th>
   <th><?php echo Yii::t('main', 'Kohteen yhteyshenkilö'); ?></th>

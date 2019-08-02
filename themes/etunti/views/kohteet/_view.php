@@ -27,6 +27,9 @@
 		?>
 	</td>
 	<td>
+		<p><a href="https://www.google.com/maps/place/<?=urlencode($data->osoite)?>,<?=urlencode($data->pnumero)?> <?=urlencode($data->kaupunki)?>" target="_blank"><span class="fa fa-2x fa-map-marker"></span></a></p>
+	</td>
+	<td>
 		<?php echo $asiakas; ?>
 	</td>
 	<td>
