@@ -35,7 +35,7 @@
 class Kohteet extends DB2ActiveRecord
 {
 
-public $verot;
+public $verot, $count;
 
 	/**
 	 * Returns the static model of the specified AR class.
