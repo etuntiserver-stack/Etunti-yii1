@@ -106,7 +106,7 @@
 	if(isset($asetukset->id) and empty( $item->viivastyskorko ) and !empty( $asetukset->asiakas_viivastyskorko )){
 		$item->viivastyskorko = $asetukset->asiakas_viivastyskorko;
 	}
-
+	$viitenumero = $this->Viite($item->asiakasnumero."00".$item->id);
 
 	if( 
 		( $item->laskutus_kanava == 'sahkoposti' and empty($item->sahkoposti) )
@@ -118,6 +118,7 @@
 	?>
 	<div>
 	<p><b><?=Yii::t('main', 'Laskutus kanava')?></b>-<?=(!empty($item->laskutus_kanava))? Yii::t('main', $item->laskutus_kanava):''?></p>
+	<p><b><?=Yii::t('main', 'Viitenumero')?></b>-<?=$viitenumero?></p>
 	<p><b><?=Yii::t('main', 'Päiväys')?></b>-<?=date("d.m.Y",strtotime($paivays))?></p>
 	<p><b><?=Yii::t('main', 'Eräpäivä')?></b>-<?=date("d.m.Y",strtotime($ep))?></p>
 	<p><b><?=Yii::t('main', 'Maksuehto')?></b>-<?=(!empty($item->maksuehto))? $item->maksuehto:''?></p>
@@ -161,7 +162,7 @@
 		$lasku->paivays = $paivays;
 		$lasku->erapaiva = $ep;
 		$lasku->maksuehto = $item->maksuehto;
-		$lasku->viitenumero = $this->Viite($item->asiakasnumero."00".$item->id);
+		$lasku->viitenumero = $viitenumero;
 		$lasku->yhteensa_total = $yhteensa_total;
 		$lasku->saaja_iban = $asetukset->iban;
 		$lasku->laskun_nimetys = 'Lasku';
