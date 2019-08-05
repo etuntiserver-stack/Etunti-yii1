@@ -12,16 +12,19 @@
 <?php
 $center = '';
 $valCenter = '';
-if(isset($_GET['center']) and !empty($_GET['center']) and $_GET['center'] != 'null'){
+$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
+if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey)){
+
+  if(isset($_GET['center']) and !empty($_GET['center']) and $_GET['center'] != 'null'){
 	$valCenter = $_GET['center'];
 	$cityclean = str_replace (" ", "+", $_GET['center']);
-	$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.$cityclean.'&language=fi&sensor=true';
+	$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.$cityclean.'&language=fi&sensor=true&key='.$asetuksetForAll->googlemaps_apikey;
 	$json = file_get_contents($json_url);
 	$obj = json_decode($json);
 	$get_osoite = $obj->results[0]->geometry->location->lat.",".$obj->results[0]->geometry->location->lng;
 	$center = $get_osoite;
+  }
 }
-
 
 if(isset($_GET['tila']) and !empty($_GET['tila'])){
 	echo '<input type="hidden" id="getThistila" value="'.$_GET['tila'].'">';
