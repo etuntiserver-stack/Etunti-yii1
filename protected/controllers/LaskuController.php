@@ -1272,7 +1272,7 @@ class LaskuController extends Controller
 				//     edico_tilaus_id -->
 
 				// Viite
-				$viite = $this->Viite($model->as_nro."00".$model->id);
+				$viite = $this->Viite($model->as_nro."00".date("md").$model->id);
 				Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite));
 
 

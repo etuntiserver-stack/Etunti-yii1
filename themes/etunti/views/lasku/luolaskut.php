@@ -106,7 +106,7 @@
 	if(isset($asetukset->id) and empty( $item->viivastyskorko ) and !empty( $asetukset->asiakas_viivastyskorko )){
 		$item->viivastyskorko = $asetukset->asiakas_viivastyskorko;
 	}
-	$viitenumero = $this->Viite($item->asiakasnumero."00".date("Ymd").$item->id);
+	$viitenumero = $this->Viite($item->asiakasnumero."00".date("md").$item->id);
 
 	if( 
 		( $item->laskutus_kanava == 'sahkoposti' and empty($item->sahkoposti) )
