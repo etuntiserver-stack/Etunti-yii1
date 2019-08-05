@@ -268,7 +268,7 @@ class LaskuController extends Controller
 	    // TV
 	    if( $tunnit == 'tv' ){
        		$criteria = new CDbCriteria();
-	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(alku, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
 	        $criteria->condition = " 
 			alku!='' AND loppu!='' AND kohde!=0
 			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
