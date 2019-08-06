@@ -229,7 +229,7 @@ ini_set("max_execution_time", "60");
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
-	    	    <legend><h3><?=Yii::t('main', 'Uudet suunnitteltut tunnit kuukausittain')?></h3></legend>
+	    	    <legend><h3><?=Yii::t('main', 'Uudet suunniteltut tunnit kuukausittain')?></h3></legend>
                     <!-- Input Icons -->
                     <div class="row">
 <?php /*
