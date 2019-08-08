@@ -189,6 +189,7 @@ public $digisten_tunnit_id, $edico_tilaus_id;
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+		        'asiakkaat' => array(self::BELONGS_TO, 'Asiakkaat', array('as_nro'=>'asiakasnumero')),
 		);
 	}
 

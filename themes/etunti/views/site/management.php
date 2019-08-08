@@ -232,30 +232,6 @@ ini_set("max_execution_time", "60");
 	    	    <legend><h3><?=Yii::t('main', 'Uudet suunniteltut tunnit kuukausittain')?></h3></legend>
                     <!-- Input Icons -->
                     <div class="row">
-<?php /*
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field prepend-icon">
-
-			    <!-- Autocomplete -->
-			    <?php
-	   			$site = Yii::app()->createController('Site');
-				$mod = 'Asiakkaat';
-				$sarake = 'yrityksen_nimi';
-				$placeholder = 'Asiakas';
-				$postvalue = '';
-				if(isset($_GET[$sarake])){ $postvalue = $_GET[$sarake]; }
-		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
-			    ?>
-			    <!-- Autocomplete -->
-
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-user"></i>
-                            </label>
-                          </label>
-                        </div>
-                      </div>
-*/ ?>
 
 		      <?php if(isset($_GET['tyoryhma'])) echo '<input type="hidden" id="tyoryhma" value="'.$_GET['tyoryhma'].'">'; ?>
                       <div class="col-md-2">
@@ -532,6 +508,80 @@ ini_set("max_execution_time", "60");
                         </div>
                       </div>
 
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			    <select name="chart_tyyppi" class="gui-input">
+			     <option value="line"><?php echo Yii::t('main', 'Line'); ?></option>
+			     <option value="column" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'column')?'selected':''?>><?php echo Yii::t('main', 'Column'); ?></option>
+			     <option value="bar" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'bar')?'selected':''?>><?php echo Yii::t('main', 'Bar'); ?></option>
+			     <option value="area" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'area')?'selected':''?>><?php echo Yii::t('main', 'Area'); ?></option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($from))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($to))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2 col-md-offset-2">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo kaavio'); ?>">
+		      </div>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+	    </form>
+	    <?php endif; ?>
+
+	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'asiakkaat_arvoikkaimat')): ?>
+   	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
+	    <input type="hidden" name="haku" value="asiakkaat_arvoikkaimat">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+	    	    <legend><h3><?=Yii::t('main', 'Liikevaihto arvokkaimmat asiakkaat')?></h3></legend>
+                    <!-- Input Icons -->
+                    <div class="row">
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			    <select name="kpl_maara" class="gui-input">
+			     <option value="5" <?=(isset($_GET['kpl_maara']) and $_GET['kpl_maara'] == 5)?'selected':''?>>5</option>
+			     <option value="10" <?=(isset($_GET['kpl_maara']) and $_GET['kpl_maara'] == 10)?'selected':''?>>10</option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
@@ -1519,6 +1569,110 @@ Highcharts.chart('container', {
 <?php endif; ?>
 <!-- Asiakkaat kuukausittain -->
 
+<!-- Liikevaihto arvokkaimmat asiakkaat -->
+<?php if(isset($_GET['haku']) and $_GET['haku'] == 'asiakkaat_arvoikkaimat'): ?>
+<?php
+	function clean($string) {
+	   $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+	   $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+
+	   return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
+	}
+
+	$categories = array();
+	$begin = new DateTime( date("Y-m-d", strtotime($from)) );
+	$end = new DateTime( date("Y-m-d", strtotime($to)) );
+	$end = $end->modify( '+1 month' );
+	$interval = DateInterval::createFromDateString('1 month');
+	$period = new DatePeriod($begin, $interval, $end);
+	$data = array();
+	foreach($period as $dt) {
+		$categories[$dt->format( "Ym" )] = $dt->format( "Y" ).', '.$months[$dt->format( "n" )];
+	}
+
+
+	for ($i = 1; $i <= $_GET['kpl_maara']; $i++) {
+		$per = array();
+		foreach($period as $dt) {
+			$criteria = new CDbCriteria();
+		       	$criteria->group = " as_nro ";
+		       	$criteria->limit = $_GET['kpl_maara'];
+		       	$criteria->order = " SUM(yhteensa_total_veroton) DESC ";
+			$criteria->select = " SUM(yhteensa_total_veroton) as yhteensa_total_veroton, t.*";
+		       	$criteria->condition = "
+				YEAR(time)='".$dt->format( "Y" )."' AND MONTH(time)='".$dt->format( "m" )."'
+			";
+			$lasku = Lasku::model()->findAll($criteria);
+			$as_arr = array();
+			$ii = 1;
+			$asiakas = '';
+			foreach($lasku as $item){
+				$ii++;
+				if( !isset($olemassa[$dt->format( "Ym" )][$item->as_nro]) ){
+					if( isset($item->asiakkaat->tyyppi) and $item->asiakkaat->tyyppi == 'yritys' ){ 
+						$asiakas = $item->asiakkaat->yrityksen_nimi; 
+					}
+					if( isset($item->asiakkaat->tyyppi) and $item->asiakkaat->tyyppi == 'henkilo' ){ 
+						$asiakas = $item->asiakkaat->yhteyshenkilo; 
+					}
+					$per[] = array("name" => clean($asiakas), "y" => (int)$item->yhteensa_total_veroton);
+					$olemassa[$dt->format( "Ym" )][$item->as_nro] = $item->as_nro;
+					break;
+				}	
+			}
+
+			if( count($lasku) == 0 ){
+				//$per[] = array("name" => "null", "y" => "null");
+			}
+		}
+		array_push($data, array("data" => $per));
+	}
+
+
+/*
+echo '<pre>';
+print_r(json_encode($data));
+echo '</pre>';
+//exit;
+*/
+?>
+
+<script>
+Highcharts.chart('container', {
+    chart: {
+        type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
+    },
+    title: {
+        text: 'Luetut, hyväksytyt ja suunnitellut tunnit'
+    },
+    subtitle: {
+        text: '<?=(isset($_GET["yrityksen_nimi"]) and !empty($_GET["yrityksen_nimi"]))? $_GET["yrityksen_nimi"] : "Kaikki asiakkaat"?>'
+    },
+    xAxis: {
+        categories: JSON.parse('<?=json_encode(array_values($categories))?>')
+    },
+    yAxis: {
+        title: {
+            text: 'Tunnit'
+        }
+    },
+    plotOptions: {
+        line: {
+            dataLabels: {
+                enabled: true
+            },
+            enableMouseTracking: false
+        }
+    },
+    series: JSON.parse('<?=json_encode(array_values($data))?>'),
+    exporting: {
+        enabled: true
+    }
+});
+//    series: JSON.parse('<?=json_encode($data)?>'),
+</script>
+<?php endif; ?>
+<!-- Liikevaihto arvokkaimmat asiakkaat -->
 
 <?php if(isset($_GET['haku']) and $_GET['haku'] == 'tyontekijat'): ?>
 <?php
