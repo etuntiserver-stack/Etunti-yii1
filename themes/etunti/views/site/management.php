@@ -1643,7 +1643,7 @@ Highcharts.chart('container', {
         type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
     },
     title: {
-        text: 'Luetut, hyväksytyt ja suunnitellut tunnit'
+        text: 'Liikevaihto arvokkaimmat asiakkaat'
     },
     subtitle: {
         text: '<?=(isset($_GET["yrityksen_nimi"]) and !empty($_GET["yrityksen_nimi"]))? $_GET["yrityksen_nimi"] : "Kaikki asiakkaat"?>'
