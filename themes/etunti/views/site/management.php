@@ -1572,13 +1572,6 @@ Highcharts.chart('container', {
 <!-- Liikevaihto arvokkaimmat asiakkaat -->
 <?php if(isset($_GET['haku']) and $_GET['haku'] == 'asiakkaat_arvoikkaimat'): ?>
 <?php
-	function clean($string) {
-	   $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
-	   $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
-
-	   return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
-	}
-
 	$categories = array();
 	$begin = new DateTime( date("Y-m-d", strtotime($from)) );
 	$end = new DateTime( date("Y-m-d", strtotime($to)) );
@@ -1615,7 +1608,7 @@ Highcharts.chart('container', {
 					if( isset($item->asiakkaat->tyyppi) and $item->asiakkaat->tyyppi == 'henkilo' ){ 
 						$asiakas = $item->asiakkaat->yhteyshenkilo; 
 					}
-					$per[] = array("name" => clean($asiakas), "y" => (int)$item->yhteensa_total_veroton);
+					$per[] = array("name" => $this->clean($asiakas), "y" => (int)$item->yhteensa_total_veroton);
 					$olemassa[$dt->format( "Ym" )][$item->as_nro] = $item->as_nro;
 					break;
 				}	
@@ -1625,7 +1618,7 @@ Highcharts.chart('container', {
 				//$per[] = array("name" => "null", "y" => "null");
 			}
 		}
-		array_push($data, array("data" => $per));
+		array_push($data, array("data" => $per, "name" => ""));
 	}
 
 
@@ -1651,19 +1644,24 @@ Highcharts.chart('container', {
     xAxis: {
         categories: JSON.parse('<?=json_encode(array_values($categories))?>')
     },
-    yAxis: {
-        title: {
-            text: 'Tunnit'
-        }
-    },
-    plotOptions: {
-        line: {
-            dataLabels: {
-                enabled: true
-            },
-            enableMouseTracking: false
-        }
-    },
+        yAxis: {
+            stackLabels: {
+                enabled: true,
+                align: 'center',
+		text: 'Euro',
+            }
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal',
+                pointPadding: 0,
+                groupPadding: 0,
+                dataLabels: {
+                    enabled: true,
+                    color: 'white'
+                }
+            }
+        },
     series: JSON.parse('<?=json_encode(array_values($data))?>'),
     exporting: {
         enabled: true
