@@ -1644,14 +1644,14 @@ Highcharts.chart('container', {
     xAxis: {
         categories: JSON.parse('<?=json_encode(array_values($categories))?>')
     },
-        yAxis: {
+    yAxis: {
             stackLabels: {
                 enabled: true,
                 align: 'center',
 		text: 'Euro',
             }
-        },
-        plotOptions: {
+    },
+    plotOptions: {
             column: {
                 stacking: 'normal',
                 pointPadding: 0,
@@ -1661,7 +1661,14 @@ Highcharts.chart('container', {
                     color: 'white'
                 }
             }
-        },
+    },
+    tooltip: {
+       	split: false,
+        shared: true,
+        pointFormatter: function() {
+		return "<span style='color:{point.color}'></span> " + this.name + ": <b>" + Highcharts.numberFormat(this.y, 2, ",", ".") + "</b><br/>";
+        }
+    }, 
     series: JSON.parse('<?=json_encode(array_values($data))?>'),
     exporting: {
         enabled: true
