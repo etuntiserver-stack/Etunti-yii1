@@ -576,6 +576,7 @@ ini_set("max_execution_time", "60");
 			    <select name="kpl_maara" class="gui-input">
 			     <option value="5" <?=(isset($_GET['kpl_maara']) and $_GET['kpl_maara'] == 5)?'selected':''?>>5</option>
 			     <option value="10" <?=(isset($_GET['kpl_maara']) and $_GET['kpl_maara'] == 10)?'selected':''?>>10</option>
+			     <option value="20" <?=(isset($_GET['kpl_maara']) and $_GET['kpl_maara'] == 20)?'selected':''?>>20</option>
 			    </select>
                             <i class="arrow double"></i>
                             </label>
