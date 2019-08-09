@@ -89,6 +89,25 @@ ini_set("max_execution_time", "60");
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
+						'tyontekija', // name
+						'gui-input', //class
+						'tyontekija', // id
+						(isset($_GET['tyontekija']))?$_GET['tyontekija']:'', //selected
+						1 // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+		      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
 			    <select name="chart_tyyppi" class="gui-input">
 			     <option value="line" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'line')?'selected':''?>><?php echo Yii::t('main', 'Line'); ?></option>
 			     <option value="bar" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'bar')?'selected':''?>><?php echo Yii::t('main', 'Bar'); ?></option>
@@ -126,7 +145,7 @@ ini_set("max_execution_time", "60");
                         </div>
                       </div>
 
-                      <div class="col-md-2 col-md-offset-4">
+                      <div class="col-md-2 col-md-offset-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo kaavio'); ?>">
 		      </div>
                     </div>
@@ -917,12 +936,15 @@ Highcharts.chart('container', {
 		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		AND tyoajanlaatu!=''
 	";
-	$asiakkaat = Tyovuoroot::model()->findAll($criteria);
+	if( isset($_GET['tyontekija']) and $_GET['tyontekija'] !== 'kaikki' and $_GET['tyontekija'] > 0 ){
+	        $criteria->addCondition (" tid='".$_GET['tyontekija']."' ");
+	}
+	$tv = Tyovuoroot::model()->findAll($criteria);
 
 	$arr_new = array();
 	$arr = array();
 	$i = 0;
-	foreach($asiakkaat as $v){
+	foreach($tv as $v){
 		$i++;
 		$name_expl = explode("/", $v->tyoajanlaatu);
 		$arr_new[$i] = array('name' => ((isset($name_expl[0]))?$name_expl[0]:'') );
