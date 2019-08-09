@@ -1608,17 +1608,15 @@ Highcharts.chart('container', {
 					if( isset($item->asiakkaat->tyyppi) and $item->asiakkaat->tyyppi == 'henkilo' ){ 
 						$asiakas = $item->asiakkaat->yhteyshenkilo; 
 					}
-					$per[] = array("name" => $this->clean($asiakas), "y" => (int)$item->yhteensa_total_veroton);
+					$per[(int)$item->yhteensa_total_veroton] = array("name" => $this->clean($asiakas), "y" => (int)$item->yhteensa_total_veroton);
 					$olemassa[$dt->format( "Ym" )][$item->as_nro] = $item->as_nro;
 					break;
 				}	
 			}
+			ksort($per);
 
-			if( count($lasku) == 0 ){
-				//$per[] = array("name" => "null", "y" => "null");
-			}
 		}
-		array_push($data, array("data" => $per, "name" => ""));
+		array_push($data, array("data" => array_values($per), "name" => ""));
 	}
 
 
