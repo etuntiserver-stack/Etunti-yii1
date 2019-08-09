@@ -578,6 +578,91 @@ ini_set("max_execution_time", "60");
 	    </form>
 	    <?php endif; ?>
 
+	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'lahetettyjen_laskut')): ?>
+   	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
+	    <input type="hidden" name="haku" value="lahetettyjen_laskut">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+	    	    <legend><h3><?=Yii::t('main', 'Lähetettyjen laskujen määrä ja summa')?></h3></legend>
+                    <!-- Input Icons -->
+                    <div class="row">
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Asiakkaat';
+				$sarake = 'yrityksen_nimi';
+				$placeholder = 'Asiakas';
+				$postvalue = '';
+				if(isset($_GET[$sarake])){ $postvalue = $_GET[$sarake]; }
+		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			    <select name="chart_tyyppi" class="gui-input">
+			     <option value="line"><?php echo Yii::t('main', 'Line'); ?></option>
+			     <option value="column" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'column')?'selected':''?>><?php echo Yii::t('main', 'Column'); ?></option>
+			     <option value="bar" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'bar')?'selected':''?>><?php echo Yii::t('main', 'Bar'); ?></option>
+			     <option value="area" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'area')?'selected':''?>><?php echo Yii::t('main', 'Area'); ?></option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($from))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($to))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2 col-md-offset-2">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo kaavio'); ?>">
+		      </div>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+	    </form>
+	    <?php endif; ?>
+
 	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'asiakkaat_arvoikkaimat')): ?>
    	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
 	    <input type="hidden" name="haku" value="asiakkaat_arvoikkaimat">
@@ -1591,6 +1676,86 @@ Highcharts.chart('container', {
 </script>
 <?php endif; ?>
 <!-- Asiakkaat kuukausittain -->
+
+<!-- Lähetettyjen laskujen määrä ja summa -->
+<?php if(isset($_GET['haku']) and $_GET['haku'] == 'lahetettyjen_laskut'): ?>
+<?php
+	// <-- Laskut
+	$criteria = new CDbCriteria();
+       	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(paivays, '%Y-%m-%d'), '%Y-%m-%d')) ";
+       	$criteria->select = "
+		paivays, SUM(yhteensa_total_veroton) as yhteensa_total_veroton
+	";
+        $criteria->condition = " 
+		DATE_FORMAT(STR_TO_DATE(paivays, '%Y-%m-%d'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+		AND tilanne=1
+	";
+	if( isset($asiakas->id) ){
+	$criteria->addCondition(" as_nro IN (SELECT asiakasnumero FROM asiakkaat WHERE id='".$asiakas->id."') "); 
+	}
+	$lasku = Lasku::model()->findAll($criteria);
+	$data_kpl = array();
+	$data_summa = array();
+	$categories = array();
+	foreach($lasku as $item){
+		$lasku_count = 0;
+		$criteria = new CDbCriteria();
+		$criteria->select = "COUNT(*) as count";
+	        $criteria->condition = " 
+			YEAR(DATE_FORMAT(STR_TO_DATE(paivays, '%Y-%m-%d'), '%Y-%m-%d'))='".date("Y", strtotime($item->paivays))."' 
+			AND MONTH(DATE_FORMAT(STR_TO_DATE(paivays, '%Y-%m-%d'), '%Y-%m-%d'))='".date("m", strtotime($item->paivays))."' 
+		";
+		$lasku_count = Lasku::model()->find($criteria);
+
+		$data_kpl[date("Ym", strtotime($item->paivays))] = (isset($lasku_count->count))?(int)$lasku_count->count:0;
+		$data_summa[date("Ym", strtotime($item->paivays))] = (int)round($item->yhteensa_total_veroton, 2);
+		$categories[date("Ym", strtotime($item->paivays))] = date("Y", strtotime($item->paivays)).', '.$months[date("n", strtotime($item->paivays))];
+	}
+	//     Laskut -->
+?>
+
+<script>
+Highcharts.chart('container', {
+    chart: {
+        type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
+    },
+    title: {
+        text: 'Lähetettyjen laskujen määrä ja summa'
+    },
+    subtitle: {
+        text: '<?=(isset($_GET["yrityksen_nimi"]) and !empty($_GET["yrityksen_nimi"]))? $_GET["yrityksen_nimi"] : "Kaikki asiakkaat"?>'
+    },
+    xAxis: {
+        categories: JSON.parse('<?=json_encode(array_values($categories))?>')
+    },
+    yAxis: {
+        title: {
+            text: 'Tunnit'
+        }
+    },
+    plotOptions: {
+        line: {
+            dataLabels: {
+                enabled: true
+            },
+            enableMouseTracking: false
+        }
+    },
+    series: [{
+        name: 'Määrä',
+        data: JSON.parse('<?=json_encode(array_values($data_kpl))?>')
+    }, 
+    {
+        name: 'Summa',
+        data: JSON.parse('<?=json_encode(array_values($data_summa))?>')
+    }],
+    exporting: {
+        enabled: true
+    }
+});
+</script>
+<?php endif; ?>
+<!-- Lähetettyjen laskujen määrä ja summa -->
 
 <!-- Liikevaihto arvokkaimmat asiakkaat -->
 <?php if(isset($_GET['haku']) and $_GET['haku'] == 'asiakkaat_arvoikkaimat'): ?>
