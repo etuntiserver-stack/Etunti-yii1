@@ -1705,6 +1705,9 @@ Highcharts.chart('container', {
 			YEAR(DATE_FORMAT(STR_TO_DATE(paivays, '%Y-%m-%d'), '%Y-%m-%d'))='".date("Y", strtotime($item->paivays))."' 
 			AND MONTH(DATE_FORMAT(STR_TO_DATE(paivays, '%Y-%m-%d'), '%Y-%m-%d'))='".date("m", strtotime($item->paivays))."' 
 		";
+		if( isset($asiakas->id) ){
+			$criteria->addCondition(" as_nro IN (SELECT asiakasnumero FROM asiakkaat WHERE id='".$asiakas->id."') "); 
+		}
 		$lasku_count = Lasku::model()->find($criteria);
 
 		$data_kpl[date("Ym", strtotime($item->paivays))] = (isset($lasku_count->count))?(int)$lasku_count->count:0;
