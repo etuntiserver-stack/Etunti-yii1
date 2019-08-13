@@ -68,7 +68,13 @@
 	elseif($_POST['select_type'] == 'asiakastila') $selType = 'Asiakastila';
 	elseif($_POST['select_type'] == 'tarjous_tarvikkeet') $selType = 'Tarvikkeet';
 	elseif($_POST['select_type'] == 'kategoria') $selType = 'Kategoriat';
+	elseif($_POST['select_type'] == 'lopetuksen_syy') $selType = 'Lopetuksen syy';
 	else $selType = $r->select_type;
+
+	$maxlength = "150";
+	if($_POST['select_type'] == 'lopetuksen_syy'){
+		$maxlength = "50";
+	}
 
 /*
 	if($_POST['select_type'] == 'tyoryhma')
@@ -180,7 +186,7 @@
 			*/
 			// Työryhmä -->
 
-			$mod .= '<input type="text" class="form-control form-group '.$success.'" value="'.$u->value.'" id="m_'.$u->id.'">';
+			$mod .= '<input type="text" class="form-control form-group '.$success.'" value="'.$u->value.'" id="m_'.$u->id.'" maxlength="'.$maxlength.'">';
 
 		}
 
@@ -207,7 +213,7 @@
 		<div class="row">
 		 <div class="col-sm-12">
 		  <div class="form-inline pull-right">
-			<input type="text" class="form-control form-group" id="u_'.$r->id.'">
+			<input type="text" class="form-control form-group" id="u_'.$r->id.'" maxlength="'.$maxlength.'">
 			<button class="btn btn-success form-group uusi" tyyppi="'.$r->select_type.'" for="u_'.$r->id.'">uusi</button>
 		  </div>
 		 </div>

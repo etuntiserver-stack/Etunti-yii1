@@ -154,16 +154,6 @@ if(!isset($model->id) and isset($asetukset->id)){
 	</div>
 
 	<div class="section fill mb5 ashidd_a">
-		<?php echo $form->labelEx($model,'aktiivinen'); ?>
-		<?php
-		$list = array(1=>Yii::t('main', 'Kyllä'),0=>Yii::t('main', 'Ei'));
-        	echo $form->dropDownList($model, 'aktiivinen', $list,
-		array('class'=>'form-control'));	
-        	?>
-		<?php echo $form->error($model,'aktiivinen'); ?>
-	</div>
-
-	<div class="section fill mb5 ashidd_a">
 
 		<?php echo $form->labelEx($model,'myyja'); ?>
 		<?php echo $form->dropDownList($model, 'myyja', CHtml::listData(Administrators::model()->findAll(), 'id', 'adm_nimi'), 
@@ -312,8 +302,20 @@ if(!isset($model->id) and isset($asetukset->id)){
 
 <?php endif; ?>
 
-	<br><br>
-	<legend>.</legend>
+	<div class="section fill mb5 ashidd_a">
+		<?php echo $form->labelEx($model,'aktiivinen'); ?>
+		<?php
+		$list = array(1=>Yii::t('main', 'Kyllä'),0=>Yii::t('main', 'Ei'));
+        	echo $form->dropDownList($model, 'aktiivinen', $list,
+		array('class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'aktiivinen'); ?>
+	</div>
+
+	<span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#lopettaminen">Asiakas lopettaa <i class="caret"></i></span>
+
+	<div id="lopettaminen" class="collapse">
+	<p>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'lopetuksen_pvm'); ?>
 		<?php echo $form->textField($model,'lopetuksen_pvm',array('size'=>60,'maxlength'=>100,'class'=>'form-control datepickerFI')); ?>
@@ -322,10 +324,36 @@ if(!isset($model->id) and isset($asetukset->id)){
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'lopetuksen_syy'); ?>
-		<?php echo $form->textarea($model,'lopetuksen_syy',array('rows'=>3,'cols'=>6,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'lopetuksen_syy'); ?>
-	</div>
 
+	   <div class="input-group">
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='lopetuksen_syy' ",array('order' => "select_type"));
+		if(count($l) == 0)
+      		{
+			$new_val = new Valikkoot;
+			$new_val->select_type = "lopetuksen_syy";
+			$new_val->value = "Kallis Hinta";
+			if($new_val->save())
+	      			$l = Valikkoot::model()->findAll(" select_type='lopetuksen_syy' ",array('order' => "select_type"));
+			else
+				var_dump($new_val->getErrors());
+		}
+		foreach($l as $val)
+			$list[$val->id] = $val->value;
+
+        		echo $form->dropDownList($model, 'lopetuksen_syy', $list,
+			array('empty'=>'Valitse', 'class'=>'form-control'));
+        	?>
+		<span class="input-group-btn">
+			<span class="btn btn-primary myBgColors muokaValiko" for="lopetuksen_syy"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
+	   </div>
+
+		<?php echo $form->error($model,'asiakastila'); ?>
+	</div>
+	</p>
+	</div>
 
   </div><div class="col-sm-3">
 	<legend><h3><?php echo Yii::t('main', 'Laskutusosoite'); ?></h3></legend>
