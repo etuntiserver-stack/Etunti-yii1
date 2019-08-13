@@ -822,6 +822,9 @@ public function actionImei($dom)
 				AND piilota_mobiilista!=1
 				AND (peruutettu=0 OR peruutettu IS NULL)
 		    ";
+		    if( isset($asetukset->app_naytta_sairauslomat) and $asetukset->app_naytta_sairauslomat == 0 ){
+			$criteria->addCondition(" tyoajanlaatu NOT LIKE '%(SPL)%' AND tyoajanlaatu NOT LIKE '%(SL)%' ");
+		    }
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
 
 		    if(empty($tvuoro))

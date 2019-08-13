@@ -825,6 +825,18 @@ $('.ryhmat').multiselect({
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_naytta_sairauslomat'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'app_naytta_sairauslomat', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'app_naytta_sairauslomat'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'show_name'); ?>
 		<?php 
         	$tal = array(
