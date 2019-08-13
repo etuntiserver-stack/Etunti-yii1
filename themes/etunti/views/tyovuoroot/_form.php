@@ -1603,10 +1603,13 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 			//console.log(data);
 			var d = JSON.parse(data);
 
-			if(d[2] !== '')
+			if(d[2] !== ''){
 				$('#arvioitu_kesto').html(d[2]);
-			else
+			} else {
 				$('#arvioitu_kesto').html('00:00');
+			}
+
+			$(".kohteen_lisatiedot").html('<span class="pull-right link avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'">Kohteen listätietoja </span><div class="collapse" id="open_kohde_'+ thisID +'">Puh.: '+ d[7] +'<br>Sähköposti: '+ d[8] +'</div>');
 
 	   	},
 		error:function(data){
@@ -1628,7 +1631,7 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 	  $.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+ thisID +'&tv_id='+ tv_id,
 		  success:function(data){
-			//console.log(data);
+			console.log(data);
 			var d = JSON.parse(data);
 
 			$('.ohje').html(d[0]);
@@ -1654,10 +1657,13 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 			$("#erittelynlista").html('<div class="col-sm-6 erittelynlista_laatiko"><legend>Työerittelyt</legend>' + tyo_erittelyt + '</div>');
 			//    tyo_erittelyt -->
 
-			if(d[2] !== '')
+			if(d[2] !== ''){
 				$('#arvioitu_kesto').html(d[2]);
-			else
+			} else {
 				$('#arvioitu_kesto').html('00:00');
+			}
+
+			$(".kohteen_lisatiedot").html('<span class="pull-right link avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'">Kohteen listätietoja </span><div class="collapse" id="open_kohde_'+ thisID +'">Puh.: '+ d[7] +'<br>Sähköposti: '+ d[8] +'</div>');
 
 	   	},
 		error:function(data){

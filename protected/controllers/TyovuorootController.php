@@ -1592,7 +1592,7 @@ class TyovuorootController extends Controller
 		  $ohje .= "<br>Tietoja: ".$m->tietoja;
 		if(!empty($m->muut))
 		  $ohje .= "<br>Muut: ".$m->muut;
-		echo json_encode(array($ohje,$m->tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt));
+		echo json_encode(array($ohje,$m->tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt,$m->puh_nro,$m->email));
 	
 	}
 
@@ -2220,7 +2220,7 @@ class TyovuorootController extends Controller
 				<span aria-hidden="true">&times;</span>
 			</button>
               <span class="panel-title"><i class="fa fa-clock-o"></i> 
-		<?php echo Yii::t('main', 'Työvuoron suunnittelu').': '.$tnimi; ?>
+		<?php echo Yii::t('main', 'Työvuoron suunnittelu').': '.$tnimi; ?> <span class="kohteen_lisatiedot"></span>
 	      </span>
             </div>
             <!-- end .panel-heading section -->
@@ -2848,11 +2848,10 @@ class TyovuorootController extends Controller
 				<span aria-hidden="true">&times;</span>
 			</button>
               <span class="panel-title"><i class="fa fa-clock-o"></i> 
-		<?php echo Yii::t('main', 'Työvuoron suunnittelu').' #'.$model->id.': '.$tekijan_nimi; ?>
+		<?php echo Yii::t('main', 'Työvuoron suunnittelu').' #'.$model->id.' <span class="kohteen_lisatiedot"></span> '.$tekijan_nimi; ?>
 	      </span>
             </div>
             <!-- end .panel-heading section -->
-
               <div class="panel-body p25">
 		<?php
 		$this->renderPartial('_form',array(
