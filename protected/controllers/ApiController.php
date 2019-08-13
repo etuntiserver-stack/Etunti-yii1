@@ -941,7 +941,7 @@ public function actionImei($dom)
 			      $sel .= '<h3 class="text-center">'. $tilanteet[$val->status].' '.(($val->toistuva_id != 0)?'<i class="fa fa-repeat text-success"></i>':'').'</h3>';
 		      }
 
-		      $sel .= '<h3 class="text" style="color:'.$color.'">'.$osoite.'</h3><p><b>'.$val->pvm.'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'</p>';
+		      $sel .= '<h3 class="text" style="color:'.$color.'">'.$osoite.'</h3><p><b>'.$this->vkopaiva($val->pvm).', '.$val->pvm.'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'</p>';
 
 		      if( isset($val->tyo_erittelyt) and is_array(json_decode($val->tyo_erittelyt, true))){
 				$sel .= '<p><label>Työ-erittelyt:</label><ul>';
@@ -1655,6 +1655,17 @@ public function actionImei($dom)
 	    if($val > 0)
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
+
+	protected function vkopaiva($val){
+	    	$v = date("w", strtotime($val));
+		$p_arr = array('1' => 'Ma', '2' => 'Ti', '3' => 'Ke', '4' => 'To', '5' => 'Pe', '6' => 'La', '7' => 'Su', );
+		if( isset($p_arr[$v]) ){
+			return $p_arr[$v];
+		} else {
+			return '';
+		}
+	}
+
 /*
     // Actions
     public function actionList()
