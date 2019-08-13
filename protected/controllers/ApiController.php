@@ -1507,6 +1507,18 @@ public function actionImei($dom)
 			$this->_sendResponse(200, "sp_1 function error");
 			exit;
 		}
+
+		$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
+		$kartta = '';
+		if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey)){
+			$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($mobCheck->kohde_kannasta).'&language=fi&sensor=true&key='.$asetuksetForAll->googlemaps_apikey;
+			$json = file_get_contents($json_url);
+			$obj = json_decode($json);
+			if( isset($obj->results[0]->geometry->location->lat) ){
+				$kartta = '<p><a href="geo:'.$obj->results[0]->geometry->location->lat.",".$obj->results[0]->geometry->location->lng.'">'.Yii::t('main', 'Näytä kartalla').'</a></p>';
+			}
+		}
+
 		$nykyinenKesto = 0;
 		if(strtotime($mobCheck->aloitan) > 0)
 		{
@@ -1515,11 +1527,12 @@ public function actionImei($dom)
 		}
 		$sp1 = 'Kesto: <b>'.$nykyinenKesto.'</b>';
 		$sp1 .= '<div class="text-left">';
-		$sp1 .= '<p>'.$mobCheck->kohde_kannasta.'</p><br>';
+		$sp1 .= '<p>'.$mobCheck->kohde_kannasta.'</p>';
+		$sp1 .= '<p>'.$kartta.'</p>';
 
            	$tv = Tyovuoroot::model()->findByPk($mobCheck->tv_id);
 		if(isset($tv->id) and is_array(json_decode($tv->tyo_erittelyt, true))){
-			$sp1 .= '<label>Työ-erittelyt:</label>';
+			$sp1 .= '<br><label>Työ-erittelyt:</label>';
 			 foreach(json_decode($tv->tyo_erittelyt, true) as $k => $v){
 			 $sp1 .= '
 			 <div class="row">
