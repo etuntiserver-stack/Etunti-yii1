@@ -1197,7 +1197,7 @@ Highcharts.chart('container', {
         name: 'Suunnitellut',
         data: JSON.parse('<?=json_encode(array_values($data_suunnitellut))?>')
     },{
-        name: 'Hyväksytyt',
+        name: '<?=(isset($_GET["hyvaksynta"]) and $_GET["hyvaksynta"] == 1)?"Hyväksyntä":""?><?=(isset($_GET["hyvaksynta"]) and $_GET["hyvaksynta"] == 2)?"Hyväksytyt":""?>',
         data: JSON.parse('<?=json_encode(array_values($data_hyvaksytyt))?>')
     }],
     exporting: {
@@ -1331,7 +1331,7 @@ Highcharts.chart('container', {
         name: 'Suunnitellut',
         data: JSON.parse('<?=json_encode(array_values($data_suunnitellut))?>')
     },{
-        name: 'Hyväksytyt',
+        name: '<?=(isset($_GET["hyvaksynta"]) and $_GET["hyvaksynta"] == 1)?"Hyväksyntä":""?><?=(isset($_GET["hyvaksynta"]) and $_GET["hyvaksynta"] == 2)?"Hyväksytyt":""?>',
         data: JSON.parse('<?=json_encode(array_values($data_hyvaksytyt))?>')
     }],
     exporting: {
