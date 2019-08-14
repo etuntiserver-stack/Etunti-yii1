@@ -1861,7 +1861,7 @@ Highcharts.chart('container', {
     },
     yAxis: {
         title: {
-            text: 'Tunnit'
+            text: 'Liikevaihto'
         }
     },
     plotOptions: {
