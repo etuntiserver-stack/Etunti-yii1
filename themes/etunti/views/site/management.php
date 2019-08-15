@@ -1205,10 +1205,10 @@ Highcharts.chart('container', {
     series: [{
         name: 'Uudet',
         data: JSON.parse('<?=json_encode(array_values($arr_uudet))?>')
-    },{
+    }/*,{
         name: 'Lopettaneet',
         data: JSON.parse('<?=json_encode(array_values($data_lopettaneet))?>')
-    }],
+    }*/],
     exporting: {
         enabled: true
     }
