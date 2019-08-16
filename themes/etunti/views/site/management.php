@@ -2144,10 +2144,13 @@ Highcharts.chart('container', {
         categories: JSON.parse('<?=json_encode(array_values($categories))?>')
     },
     yAxis: {
+	    title: {
+		text: 'KPL'
+	    },
             stackLabels: {
                 enabled: true,
                 align: 'center',
-		text: 'Euro',
+		text: 'KPL',
             }
     },
     plotOptions: {
