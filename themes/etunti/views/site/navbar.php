@@ -1248,7 +1248,7 @@ if($site[0]->checkEdicoViestit()){ $bell = '<i class="fa fa-bell text-danger"></
           </li>
 	<?php endif; ?>
 
-	<?php /* ?>
+
           <li>
             <a class="accordion-toggle" href="#">
               <span class="fa fa-line-chart"></span>
@@ -1261,14 +1261,15 @@ if($site[0]->checkEdicoViestit()){ $bell = '<i class="fa fa-bell text-danger"></
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/management">
                   <span class="fa fa-line-chart"></span> <?php echo Yii::t('main', 'Yhteenveto'); ?></a>
               </li>
+	<?php /* ?>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/management_tunnit">
                   <span class="fa fa-line-chart"></span> <?php echo Yii::t('main', 'Tunnit'); ?></a>
               </li>
-
+	<?php */ ?>
             </ul>
           </li>
-	<?php */ ?>
+
 
 	<?php if(in_array('999',$tas)) : ?>
           <li>

@@ -20,8 +20,8 @@
 
 
 <?php
- $array = array
- (
+	$array = array
+	(
 	'asetukset'=>array(0=>null,1=>null,2=>'Asetukset ja käyttöoikeudet',3=>null),
 	'tyoryhmat'=>array(4=>'Työryhmät järjestelmänvalvoja'),
 	'tuntienhallinta'=>array(4=>'Tuntien hallinta'),
@@ -36,7 +36,9 @@
 	'administrators'=>array(0=>'Järjestelmänvalvoja taulu',1=>'Luo järjestelmänvalvoja',2=>'Muokaa järjestelmänvalvoja',3=>'Poista järjestelmänvalvoja'),
 	'mallitiedostot'=>array(0=>null,1=>null,2=>'Mallitiedostot',3=>null),
 	'lasku'=>array(0=>'Laskutus taulu',1=>'Luo lasku',2=>'Muokaa lasku',3=>'Poista lasku'),
- );
+	'management'=>array(0=>null,1=>null,2=>'Management köyttöoikeus',3=>null),
+	);
+	ksort($array);
 
 	$tas = '';
 	if(isset(Yii::app()->user->adminPaketti))

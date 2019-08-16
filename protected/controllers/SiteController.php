@@ -127,14 +127,21 @@ class SiteController extends Controller
 		));
 	}
 
-  public function actionManagement_hours()
-  {
+	public function actionManagement_hours()
+	{
                 Yii::app()->theme = 'etunti';
 		$this->render('management_hours');
-  }
+	}
 
 	public function actionManagement()
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "management_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
                 Yii::app()->theme = 'etunti';
 		$months=array(
 		1=>Yii::t('main', 'Tammikuu'),

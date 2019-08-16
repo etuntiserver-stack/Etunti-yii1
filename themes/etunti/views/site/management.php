@@ -1151,7 +1151,7 @@ Highcharts.chart('container', {
 		} else {
 			$arr_uudet[$dt->format( "Ym" )] = 0;
 		}
-
+/*
 		$criteria = new CDbCriteria();
 		$criteria->select = "
 			SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit
@@ -1170,6 +1170,7 @@ Highcharts.chart('container', {
 		} else {
 			$data_lopettaneet[$dt->format( "Ym" )] = 0;
 		}
+*/
 	}
 /*
 echo '<pre>';
