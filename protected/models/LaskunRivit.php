@@ -21,6 +21,8 @@
  */
 class LaskunRivit extends DB2ActiveRecord
 {
+	public $count;
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -106,6 +108,7 @@ class LaskunRivit extends DB2ActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+		        'tuotteet_palvelut' => array(self::BELONGS_TO, 'TuotteetPalvelut', 'tuoteID'),
 		);
 	}
 
