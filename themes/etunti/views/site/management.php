@@ -435,7 +435,7 @@ ini_set("max_execution_time", "60");
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
-	    	    <legend><h3><?=Yii::t('main', 'Asiakkaat/Asiakas kuukausittain')?></h3></legend>
+	    	    <legend><h3><?=Yii::t('main', 'Suunniteltut, luetut ja hyväksytyt tunnit')?></h3></legend>
                     <!-- Input Icons -->
                     <div class="row">
 
@@ -1710,7 +1710,7 @@ Highcharts.chart('container', {
         type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
     },
     title: {
-        text: 'Luetut, hyväksytyt ja suunnitellut tunnit'
+        text: 'Suunniteltut, luetut ja hyväksytyt tunnit'
     },
     subtitle: {
         text: '<?=(isset($_GET["yrityksen_nimi"]) and !empty($_GET["yrityksen_nimi"]))? $_GET["yrityksen_nimi"] : "Kaikki asiakkaat"?>'
