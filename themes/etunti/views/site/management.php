@@ -2168,8 +2168,8 @@ Highcharts.chart('container', {
 			$criteria->select = " COUNT(tuoteID) as count, t.*";
 		       	$criteria->condition = "
 				tuoteID!=0
-				AND lid IN( SELECT id FROM laskut WHERE tilanne=1 )
-				AND YEAR(time)='".$dt->format( "Y" )."' AND MONTH(time)='".$dt->format( "m" )."'
+				AND lid IN( SELECT id FROM laskut WHERE tilanne!=999 AND DATE_FORMAT(STR_TO_DATE(paivays, '%Y-%m-%d'), '%Y-%m') = '".$dt->format( "Y-m" )."' )
+				
 			";
 			$laskur = LaskunRivit::model()->findAll($criteria);
 			foreach($laskur as $item){
@@ -2250,40 +2250,49 @@ Highcharts.chart('container', {
 	$end = $end->modify( '+1 month' );
 	$interval = DateInterval::createFromDateString('1 month');
 	$period = new DatePeriod($begin, $interval, $end);
+	foreach($period as $dt) {
+		$categories[$dt->format( "Ym" )] = $dt->format( "Y" ).', '.$months[$dt->format( "n" )];
+	}
 	$data = array();
-	for ($i = 1; $i <= 10; $i++) {
+	//for ($i = 1; $i <= 10; $i++) {
 		$per = array();
+		$tuote = array();
 		foreach($period as $dt) {
-			$categories[$dt->format( "Ym" )] = $dt->format( "Y" ).', '.$months[$dt->format( "n" )];
 			$criteria = new CDbCriteria();
 		       	$criteria->group = " tuoteID ";
 		       	$criteria->limit = 10;
 		       	$criteria->order = " SUM(veroton) DESC ";
-			$criteria->select = " SUM(veroton) as count, t.*";
+			$criteria->select = " SUM(veroton) as veroton, t.*";
 		       	$criteria->condition = "
 				tuoteID!=0
-				AND lid IN( SELECT id FROM laskut WHERE tilanne=1 )
-				AND YEAR(time)='".$dt->format( "Y" )."' AND MONTH(time)='".$dt->format( "m" )."'
+				AND lid IN( SELECT id FROM laskut WHERE tilanne!=999 
+						AND YEAR(DATE_FORMAT(STR_TO_DATE(paivays, '%Y-%m-%d'), '%Y-%m-%d'))='".$dt->format( "Y" )."' 
+						AND MONTH(DATE_FORMAT(STR_TO_DATE(paivays, '%Y-%m-%d'), '%Y-%m-%d'))='".$dt->format( "m" )."' 
+				)
 			";
 			$laskur = LaskunRivit::model()->findAll($criteria);
 			foreach($laskur as $item){
-				if( !isset($olemassa[$dt->format( "Ym" )][$item->tuoteID]) ){
-					$per[$item->count] = array("name" => ( isset($item->tuotteet_palvelut->nimike) )?$item->tuotteet_palvelut->nimike:'', "y" => (int)$item->count);
-					$olemassa[$dt->format( "Ym" )][$item->tuoteID] = $item->tuoteID;
-					break;
-				}	
+					if( isset($tuote[$dt->format( "Ym" )][$item->tuoteID]) ){
+						continue;
+					}
+					$per[$dt->format( "Ym" )][] = array(
+						"name" => ( isset($item->tuotteet_palvelut->nimike) )?$item->tuotteet_palvelut->nimike:'', 
+						"y" => (int)$item->veroton
+					);
+					$tuote[$dt->format( "Ym" )][$item->tuoteID] = array();
 			}
-			ksort($per);
-		}
-		array_push($data, array("data" => array_values($per), "name" => ""));
-	}
 
-/*
+			$data[$dt->format( "Ym" )] = array("data" => array_values($per[$dt->format( "Ym" )]), "name" => "");
+		}
+
+	//}
+
+
 echo '<pre>';
-print_r(json_encode($data));
+print_r($data);
 echo '</pre>';
 //exit;
-*/
+
 ?>
 
 <script>
