@@ -839,68 +839,6 @@ ini_set("max_execution_time", "60");
 	    </form>
 	    <?php endif; ?>
 
-	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'eniten_tuotteet_per_laskurivi')): ?>
-   	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
-	    <input type="hidden" name="haku" value="eniten_tuotteet_per_laskurivi">
-            <div class="admin-form">
-              <div class="panel heading-border">
-                <div class="panel-body bg-light">
-
-	    	    <legend><h3><?=Yii::t('main', 'Eniten Tuotteet ja palvelut KPL')?></h3></legend>
-                    <!-- Input Icons -->
-                    <div class="row">
-
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field select">
-			    <select name="chart_tyyppi" class="gui-input">
-			     <option value="column" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'column')?'selected':''?>><?php echo Yii::t('main', 'Column'); ?></option>
-			     <option value="bar" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'bar')?'selected':''?>><?php echo Yii::t('main', 'Bar'); ?></option>
-			     <option value="line" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'line')?'selected':''?>><?php echo Yii::t('main', 'Line'); ?></option>
-			     <option value="area" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'area')?'selected':''?>><?php echo Yii::t('main', 'Area'); ?></option>
-			    </select>
-                            <i class="arrow double"></i>
-                            </label>
-                          </label>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field prepend-icon">
-
-	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($from))?>">
-
-                            <label for="firstname" class="field-icon">
-                              <i class="glyphicon glyphicon-calendar"></i>
-                            </label>
-                          </label>
-                        </div>
-                      </div>
-
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field prepend-icon">
-
-   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($to))?>">
-
-                            <label for="firstname" class="field-icon">
-                              <i class="glyphicon glyphicon-calendar"></i>
-                            </label>
-                          </label>
-                        </div>
-                      </div>
-
-                      <div class="col-md-2 col-md-offset-4">
-        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo kaavio'); ?>">
-		      </div>
-                    </div>
-
-                </div>
-              </div>
-            </div>
-	    </form>
-	    <?php endif; ?>
-
 	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'eniten_tuotteet_per_laskurivi_euro')): ?>
    	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
 	    <input type="hidden" name="haku" value="eniten_tuotteet_per_laskurivi_euro">
@@ -2147,100 +2085,6 @@ Highcharts.chart('container', {
 </script>
 <?php endif; ?>
 
-<!-- Enitent Tuotteet ja palvelut KPL -->
-<?php if(isset($_GET['haku']) and $_GET['haku'] == 'eniten_tuotteet_per_laskurivi'): ?>
-<?php
-	$categories = array();
-	$begin = new DateTime( date("Y-m-d", strtotime($from)) );
-	$end = new DateTime( date("Y-m-d", strtotime($to)) );
-	$end = $end->modify( '+1 month' );
-	$interval = DateInterval::createFromDateString('1 month');
-	$period = new DatePeriod($begin, $interval, $end);
-	$data = array();
-	for ($i = 1; $i <= 10; $i++) {
-		$per = array();
-		foreach($period as $dt) {
-			$categories[$dt->format( "Ym" )] = $dt->format( "Y" ).', '.$months[$dt->format( "n" )];
-			$criteria = new CDbCriteria();
-		       	$criteria->group = " tuoteID ";
-		       	$criteria->limit = 10;
-		       	$criteria->order = " COUNT(tuoteID) DESC ";
-			$criteria->select = " COUNT(tuoteID) as count, t.*";
-		       	$criteria->condition = "
-				tuoteID!=0
-				AND lid IN( SELECT id FROM laskut WHERE tilanne!=999 AND DATE_FORMAT(STR_TO_DATE(paivays, '%Y-%m-%d'), '%Y-%m') = '".$dt->format( "Y-m" )."' )
-				
-			";
-			$laskur = LaskunRivit::model()->findAll($criteria);
-			foreach($laskur as $item){
-				if( !isset($olemassa[$dt->format( "Ym" )][$item->tuoteID]) ){
-					$per[$item->count] = array("name" => ( isset($item->tuotteet_palvelut->nimike) )?$item->tuotteet_palvelut->nimike:'', "y" => (int)$item->count);
-					$olemassa[$dt->format( "Ym" )][$item->tuoteID] = $item->tuoteID;
-					break;
-				}	
-			}
-			ksort($per);
-		}
-		array_push($data, array("data" => array_values($per), "name" => ""));
-	}
-
-/*
-echo '<pre>';
-print_r(json_encode($data));
-echo '</pre>';
-//exit;
-*/
-?>
-
-<script>
-Highcharts.chart('container', {
-    chart: {
-        type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
-    },
-    title: {
-        text: 'Eniten Tuotteet ja palvelut KPL'
-    },
-    xAxis: {
-        categories: JSON.parse('<?=json_encode(array_values($categories))?>')
-    },
-    yAxis: {
-	    title: {
-		text: 'KPL'
-	    },
-            stackLabels: {
-                enabled: true,
-                align: 'center',
-		text: 'KPL',
-            }
-    },
-    plotOptions: {
-            column: {
-                stacking: 'normal',
-                pointPadding: 0,
-                groupPadding: 0,
-                dataLabels: {
-                    enabled: true,
-                    color: 'white'
-                }
-            }
-    },
-    tooltip: {
-       	split: false,
-        shared: true,
-        pointFormatter: function() {
-		return "<span style='color:{point.color}'></span> " + this.name + ": <b>" + this.y + " kpl</b><br/>";
-        }
-    }, 
-    series: JSON.parse('<?=json_encode(array_values($data))?>'),
-    exporting: {
-        enabled: true
-    }
-});
-//    series: JSON.parse('<?=json_encode($data)?>'),
-</script>
-<?php endif; ?>
-<!-- Enitent Tuotteet ja palvelut KPL -->
-
 <!-- Enitent Tuotteet ja palvelut Euro -->
 <?php if(isset($_GET['haku']) and $_GET['haku'] == 'eniten_tuotteet_per_laskurivi_euro'): ?>
 <?php
@@ -2250,19 +2094,21 @@ Highcharts.chart('container', {
 	$end = $end->modify( '+1 month' );
 	$interval = DateInterval::createFromDateString('1 month');
 	$period = new DatePeriod($begin, $interval, $end);
+	$data = array();
 	foreach($period as $dt) {
 		$categories[$dt->format( "Ym" )] = $dt->format( "Y" ).', '.$months[$dt->format( "n" )];
 	}
-	$data = array();
-	//for ($i = 1; $i <= 10; $i++) {
+
+	$tuote = array();
+	for ($i = 1; $i <= 10; $i++) {
 		$per = array();
-		$tuote = array();
 		foreach($period as $dt) {
 			$criteria = new CDbCriteria();
+		       	$criteria->with = array('tuotteet_palvelut');
 		       	$criteria->group = " tuoteID ";
-		       	$criteria->limit = 10;
+		       	$criteria->limit = " 1 ";
 		       	$criteria->order = " SUM(veroton) DESC ";
-			$criteria->select = " SUM(veroton) as veroton, t.*";
+			$criteria->select = " SUM(veroton) as veroton, tuoteID";
 		       	$criteria->condition = "
 				tuoteID!=0
 				AND lid IN( SELECT id FROM laskut WHERE tilanne!=999 
@@ -2270,29 +2116,36 @@ Highcharts.chart('container', {
 						AND MONTH(DATE_FORMAT(STR_TO_DATE(paivays, '%Y-%m-%d'), '%Y-%m-%d'))='".$dt->format( "m" )."' 
 				)
 			";
+			if( isset($tuote[$dt->format( "Ym" )]) ){
+				foreach($tuote[$dt->format( "Ym" )] as $k=>$v){
+					foreach($v as $k1=>$v1){
+		       				$criteria->addcondition (" tuoteID!='".$v1."' ");
+					}
+				}
+			}
 			$laskur = LaskunRivit::model()->findAll($criteria);
 			foreach($laskur as $item){
-					if( isset($tuote[$dt->format( "Ym" )][$item->tuoteID]) ){
-						continue;
-					}
-					$per[$dt->format( "Ym" )][] = array(
+					$per[] = array(
 						"name" => ( isset($item->tuotteet_palvelut->nimike) )?$item->tuotteet_palvelut->nimike:'', 
 						"y" => (int)$item->veroton
 					);
-					$tuote[$dt->format( "Ym" )][$item->tuoteID] = array();
+					$tuote[$dt->format( "Ym" )][$item->tuoteID][] = $item->tuoteID;
 			}
 
-			$data[$dt->format( "Ym" )] = array("data" => array_values($per[$dt->format( "Ym" )]), "name" => "");
 		}
+			$data[] = array("data" => array_values($per), "name" => "");
 
-	//}
+	}
 
 
+
+
+/*
 echo '<pre>';
 print_r($data);
 echo '</pre>';
 //exit;
-
+*/
 ?>
 
 <script>
