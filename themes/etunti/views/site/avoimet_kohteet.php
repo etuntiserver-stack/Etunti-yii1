@@ -26,7 +26,7 @@
 			  $bd .= '
                       <tr>
                         <td>
-                          <span class=""></span> '.CHtml::link($data->kohde_kannasta, array('/mobile/update', 'id' => $data->id)).'</td>
+                          <span class=""></span> '.CHtml::link($data->kohde_kannasta.' #'.$data->id, array('/mobile/update', 'id' => $data->id)).'</td>
                         <td>'.$this->sprint($kesto).'</td>
                       </tr>
 			  ';
