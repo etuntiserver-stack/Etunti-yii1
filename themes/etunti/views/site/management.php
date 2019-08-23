@@ -588,6 +588,81 @@ ini_set("max_execution_time", "60");
 	    </form>
 	    <?php endif; ?>
 
+	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'eniten_tyovuoro_kpl')): ?>
+   	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
+	    <input type="hidden" name="haku" value="eniten_tyovuoro_kpl">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+	    	    <legend><h3><?=Yii::t('main', 'Eniten Suunniteltu työvuoro - KPL')?></h3></legend>
+                    <!-- Input Icons -->
+                    <div class="row">
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			    <select name="kpl_maara" class="gui-input">
+			     <option value="5" <?=(isset($_GET['kpl_maara']) and $_GET['kpl_maara'] == 5)?'selected':''?>>5</option>
+			     <option value="10" <?=(isset($_GET['kpl_maara']) and $_GET['kpl_maara'] == 10)?'selected':''?>>10</option>
+			     <option value="20" <?=(isset($_GET['kpl_maara']) and $_GET['kpl_maara'] == 20)?'selected':''?>>20</option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			    <select name="chart_tyyppi" class="gui-input">
+			     <option value="column" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'column')?'selected':''?>><?php echo Yii::t('main', 'Column'); ?></option>
+			     <option value="line" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'line')?'selected':''?>><?php echo Yii::t('main', 'Line'); ?></option>
+			     <option value="bar" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'bar')?'selected':''?>><?php echo Yii::t('main', 'Bar'); ?></option>
+			     <option value="area" <?=(isset($_GET['chart_tyyppi']) and $_GET['chart_tyyppi'] == 'area')?'selected':''?>><?php echo Yii::t('main', 'Area'); ?></option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($from))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=date("d.m.Y", strtotime($to))?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2 col-md-offset-2">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo kaavio'); ?>">
+		      </div>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+	    </form>
+	    <?php endif; ?>
+
 	    <?php if(!isset($_GET['haku']) or (isset($_GET['haku']) and $_GET['haku'] == 'lahetettyjen_laskut')): ?>
    	    <form id="yhtveto_asiakas" action="#" class="form-inline" method="GET">
 	    <input type="hidden" name="haku" value="lahetettyjen_laskut">
@@ -1954,7 +2029,7 @@ Highcharts.chart('container', {
 <?php endif; ?>
 <!-- Liikevaihto arvokkaimmat asiakkaat -->
 
-<!-- Liikevaihto arvokkaimmat asiakkaat -->
+<!-- Eniten Suunniteltu työvuoro - Kestot -->
 <?php if(isset($_GET['haku']) and $_GET['haku'] == 'eniten_tyovuoro_kestot'): ?>
 <?php
 	$categories = array();
@@ -2059,7 +2134,117 @@ Highcharts.chart('container', {
 });
 </script>
 <?php endif; ?>
-<!-- Liikevaihto arvokkaimmat asiakkaat -->
+<!-- Eniten Suunniteltu työvuoro - Kestot-->
+
+<!-- Eniten Suunniteltu työvuoro - KPL -->
+<?php if(isset($_GET['haku']) and $_GET['haku'] == 'eniten_tyovuoro_kpl'): ?>
+<?php
+	$categories = array();
+	$begin = new DateTime( date("Y-m-d", strtotime($from)) );
+	$end = new DateTime( date("Y-m-d", strtotime($to)) );
+	$end = $end->modify( '+1 month' );
+	$interval = DateInterval::createFromDateString('1 month');
+	$period = new DatePeriod($begin, $interval, $end);
+	$data = array();
+	foreach($period as $dt) {
+		$categories[$dt->format( "Ym" )] = $dt->format( "Y" ).', '.$months[$dt->format( "n" )];
+	}
+
+	$tuote = array();
+	for ($i = 1; $i <= $_GET['kpl_maara']; $i++) {
+		$per = array();
+		foreach($period as $dt) {
+			$criteria = new CDbCriteria();
+		       	$criteria->group = " kohde ";
+		       	$criteria->limit = 1;
+		       	$criteria->order = " COUNT(kohde) DESC ";
+			$criteria->select = " COUNT(kohde) as l_tunnit, osoite, kohde";
+		       	$criteria->condition = "
+				kohde!=0
+				AND YEAR(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'))='".$dt->format( "Y" )."' 
+				AND MONTH(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'))='".$dt->format( "m" )."'
+				AND status=3
+				AND peruutettu=0
+			";
+			if( isset($tuote[$dt->format( "Ym" )]) ){
+				foreach($tuote[$dt->format( "Ym" )] as $k=>$v){
+					foreach($v as $k1=>$v1){
+		       				$criteria->addcondition (" kohde!='".$v1."' ");
+					}
+				}
+			}
+			$lasku = Tyovuoroot::model()->findAll($criteria);
+			foreach($lasku as $item){
+					$osoite = '';
+					if( !empty($item->osoite)){ 
+						$osoite = $item->osoite; 
+					} elseif( isset($item->kohteet->osoite) ){
+						$osoite = $item->kohteet->osoite; 
+					}
+					$per[] = array("name" => $this->clean($osoite), "y" => (int)$item->l_tunnit);
+					$tuote[$dt->format( "Ym" )][$item->kohde][] = $item->kohde;
+			}
+
+		}
+			$data[] = array("data" => array_values($per), "name" => "");
+
+	}
+
+/*
+echo '<pre>';
+print_r($data);
+echo '</pre>';
+//exit;
+*/
+?>
+
+<script>
+Highcharts.chart('container', {
+    chart: {
+        type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
+    },
+    title: {
+        text: 'Eniten Suunniteltu työvuoro - KPL'
+    },
+    xAxis: {
+        categories: JSON.parse('<?=json_encode(array_values($categories))?>')
+    },
+    yAxis: {
+            title: {
+            	text: 'KPL'
+	    },
+            stackLabels: {
+                enabled: true,
+                align: 'center',
+		text: 'KPL',
+            }
+    },
+    plotOptions: {
+            column: {
+                stacking: 'normal',
+                pointPadding: 0,
+                groupPadding: 0,
+                dataLabels: {
+                    enabled: true,
+                    color: 'white'
+                }
+            }
+    },
+    tooltip: {
+       	split: false,
+        shared: true,
+        pointFormatter: function() {
+		return "<span style='color:{point.color}'></span> " + this.name + ": <b>" + this.y + " kpl</b><br/>";
+        }
+    }, 
+    series: JSON.parse('<?=json_encode(array_values($data))?>'),
+    exporting: {
+        enabled: true
+    }
+});
+</script>
+<?php endif; ?>
+<!-- Eniten Suunniteltu työvuoro - KPL-->
 
 <?php if(isset($_GET['haku']) and $_GET['haku'] == 'tyontekijat'): ?>
 <?php
