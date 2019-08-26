@@ -26,6 +26,32 @@ $this->breadcrumbs=array(
    <!-- tulostus -->
    <div class="pull-right">
     <div class="form-inline">
+	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="ext" value="doc">
+	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
+	  </form>
+	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="ext" value="xls">
+	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+	  </form>
+	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="header" value="<?=$from?>-<?=$to?>">
+	    <input type="hidden" name="ext" value="pdf">
+	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+	  </form>
+<?php /*
      <form action="#" class="form-group" method="GET">
       <input type="hidden" name="from" value="<?php echo $from; ?>">
       <input type="hidden" name="to" value="<?php echo $to; ?>">
@@ -70,6 +96,7 @@ $this->breadcrumbs=array(
       </div>
       <input type="submit" name="tulosta_pdf" class="btn btn-primary btn-sm myBgColors" value="PDF">
      </form>
+*/ ?>
     </div>
    </div>
    <!-- tulostus -->
@@ -169,7 +196,7 @@ $this->breadcrumbs=array(
                 <div class="panel-body bg-light">
                  <div class="row">
 
-<div class="table-responsive">
+<div class="table-responsive" id="tableContent">
 
   <table class="table table-bordered small" id="palkkatauluTaulu">
   <thead class="myBgColors">
@@ -345,23 +372,26 @@ $this->breadcrumbs=array(
 <script type="text/javascript">
 $(document).ready(function(){
 
-$(".haemob").click(function(){
+  $(".submitForm").on('click', function(e){
+	$('.mobileTable').addClass('table-bordered');
+	$(this).prev('textarea').val(JSON.stringify($('#tableContent').html()));
+	$(this).closest('form').submit();
+	e.preventDefault();
+  });
+
+  $(".haemob").click(function(){
 	$("#yhtveto").submit();
-});
+  });
 
-$('#deselAll').click(function(){
+  $('#deselAll').click(function(){
    $('#tyontekijat').selectpicker('deselectAll');
-});
+  });
 
-
-$('#selAll').click(function(){
+  $('#selAll').click(function(){
    $('#tyontekijat').selectpicker('selectAll');
-});
+  });
 
-
-
-
-$("#yhtveto").on('submit',function(e){
+  $("#yhtveto").on('submit',function(e){
 
   var from = $("#from").val();
   var to = $("#to").val();
@@ -375,7 +405,7 @@ $("#yhtveto").on('submit',function(e){
         return false;
     }
 
-});
+  });
 
 
 $('#tyontekijat').multiselect({

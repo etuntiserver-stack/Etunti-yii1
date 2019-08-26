@@ -2090,6 +2090,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		if(isset($_GET['tulosta_pdf']))
 		{
+/*
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
 		  $html2pdf->setTestTdInOnePage(false);
@@ -2099,9 +2100,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			'to' => $to
 		  ),true));
 	          $html2pdf->Output();
+*/
 		} elseif(isset($_GET['tulosta_xls']))
 		{
-
+/*
 			if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
 			 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
 			}
@@ -2129,7 +2131,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				unlink($path.$tiedosto.'.xls');
 				exit;
 			}
-
+*/
 		} else {
 		  //$dataProvider->pagination->pageSize = 50;
 		  $this->render('palkkataulukko', array(

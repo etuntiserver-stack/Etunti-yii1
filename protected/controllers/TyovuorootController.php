@@ -136,6 +136,7 @@ class TyovuorootController extends Controller
 
 		if(isset($_GET['tulosta_pdf']))
 		{
+/*
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
 	          $html2pdf->WriteHTML($this->renderPartial('tulosta_palkkataulukko', array(
@@ -144,9 +145,10 @@ class TyovuorootController extends Controller
 			'to' => $to
 		  ),true));
 	          $html2pdf->Output();
+*/
 		} elseif(isset($_GET['tulosta_xls']))
 		{
-
+/*
 			if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
 			 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
 			}
@@ -174,7 +176,7 @@ class TyovuorootController extends Controller
 				unlink($path.$tiedosto.'.xls');
 				exit;
 			}
-
+*/
 		} else {
 		  //$dataProvider->pagination->pageSize = 50;
 		  $this->render('palkkataulukko', array(
