@@ -2092,6 +2092,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		{
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
+		  //$html2pdf->setTestTdInOnePage(false);
 	          $html2pdf->WriteHTML($this->renderPartial('tulosta_palkkataulukko', array(
 			'model' => $model,
 			'from' => $from,
