@@ -1,4 +1,4 @@
-<?php ?>
+<?php /* ?>
 <link rel="stylesheet" type="text/css" href="css/pdf_table_palkka.css">
 <style>
 #ylataulu{
