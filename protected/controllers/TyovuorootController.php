@@ -1739,7 +1739,7 @@ class TyovuorootController extends Controller
 		if(!isset(Yii::app()->session['from']))
 			Yii::app()->session['from'] = date("Y-m-d");
 		if(!isset(Yii::app()->session['to']))
-			Yii::app()->session['to'] = date("Y-m-d",strtotime("+1 month", time()));
+			Yii::app()->session['to'] = date("Y-m-d",strtotime("+2 week", time()));
 
 
 
