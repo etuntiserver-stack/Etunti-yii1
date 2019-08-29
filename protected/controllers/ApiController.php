@@ -217,7 +217,7 @@ protected function kirjautuminen($domain, $email, $salasana){
 	if( isset($kirjautumistunnus->domain) ){
 		$domain = $kirjautumistunnus->domain;
 	}
-	$this->checkDBexists($domain);
+	//$this->checkDBexists($domain);
 	$criteria = new CDbCriteria();
 	$criteria->condition = "
 		aktiivinen=1 AND mobiili=1 
