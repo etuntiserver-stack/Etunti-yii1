@@ -213,6 +213,10 @@ public function actionPaivita_tiedot($dom)
 
 protected function kirjautuminen($domain, $email, $salasana){
 	$domain = strtolower($domain);
+        $kirjautumistunnus = Domainit::model()->find(" kirjautumistunnus='".$domain."' ");
+	if( isset($kirjautumistunnus->domain) ){
+		$domain = $kirjautumistunnus->domain;
+	}
 	$this->checkDBexists($domain);
 	$criteria = new CDbCriteria();
 	$criteria->condition = "
