@@ -31,16 +31,14 @@
 class Mobile extends DB2ActiveRecord
 {
 
-public $domain;
-public $asiakas;
-public $l_tunnit;
-public $s_tunnit;
-public $t_tunnit;
-public $count;
-public $lkohde_kannasta;
-public $tkohde_kannasta;
-
-
+	public $domain;
+	public $asiakas;
+	public $l_tunnit;
+	public $s_tunnit;
+	public $t_tunnit;
+	public $count;
+	public $lkohde_kannasta;
+	public $tkohde_kannasta;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -71,35 +69,34 @@ public $tkohde_kannasta;
 		}
 
 		$table_structure = array(
-
-                     'asiakas_num' => 'varchar(50)',
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'requests' => 'int(7) DEFAULT 1 ',
-                     'puh_numero' => 'varchar(50) ',
-                     'imei' => 'varchar(100) ',
-                     'bluetooth_name' => 'varchar(50) ',
-                     'sim_serial_number' => 'varchar(100) ',
-                     'subscriber_id' => 'varchar(50) ',
-                     'my_location' => 'varchar(1000)',
-                     'osoite' => 'varchar(255) ',
-                     'kohde_kannasta' => 'varchar(100)',
-                     'kohdenID' => 'int(7)',
-                     'aloitan' => 'varchar(20)',
-                     'loppui' => 'varchar(20)',
-                     'viesti' => 'varchar(250)',
-                     'tekijan_nimi' => 'varchar(50)',
-                     'tid' => 'int(7)',
-                     'etaisyys' => 'varchar(20)',
-                     'status' => 'int(1)',
-                     'tietoja' => 'text ',
-                     'admin' => 'int(1) 0 ',
-                     'hyvaksytty' => 'varchar(100) ',
-                     'domain' => 'varchar(100) ',
-                     'asiakas_hyvaksy' => 'varchar(100) ',
-                     'sairaus' => 'int(1) ',
-                     'laskutettu' => 'int(1) ',
-                     'laskutetaan' => 'int(1) DEFAULT 1 ',
-                     'tuoteID' => 'int(11)',
+                     'asiakas_num' => 'varchar(50) DEFAULT NULL',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'requests' => 'int(7) DEFAULT 1',
+                     'puh_numero' => 'varchar(50) DEFAULT NULL',
+                     'imei' => 'varchar(100) DEFAULT NULL',
+                     'bluetooth_name' => 'varchar(50) DEFAULT NULL',
+                     'sim_serial_number' => 'varchar(100) DEFAULT NULL',
+                     'subscriber_id' => 'varchar(50) DEFAULT NULL',
+                     'my_location' => 'varchar(1000) DEFAULT NULL',
+                     'osoite' => 'varchar(255) DEFAULT NULL',
+                     'kohde_kannasta' => 'varchar(100) DEFAULT NULL',
+                     'kohdenID' => 'int(7) DEFAULT 0',
+                     'aloitan' => 'varchar(20) DEFAULT NULL',
+                     'loppui' => 'varchar(20) DEFAULT NULL',
+                     'viesti' => 'varchar(250) DEFAULT NULL',
+                     'tekijan_nimi' => 'varchar(50) DEFAULT NULL',
+                     'tid' => 'int(7) DEFAULT 0',
+                     'etaisyys' => 'varchar(20) DEFAULT NULL',
+                     'status' => 'int(1) DEFAULT 0',
+                     'tietoja' => 'text DEFAULT NULL',
+                     'admin' => 'int(1) DEFAULT 0',
+                     'hyvaksytty' => 'varchar(100) DEFAULT NULL',
+                     'domain' => 'varchar(100) DEFAULT NULL',
+                     'asiakas_hyvaksy' => 'varchar(100) DEFAULT NULL',
+                     'sairaus' => 'int(1) DEFAULT 0',
+                     'laskutettu' => 'int(1) DEFAULT 0',
+                     'laskutetaan' => 'int(1) DEFAULT 1',
+                     'tuoteID' => 'int(11) DEFAULT 0',
                      'tv_id' => 'int(11) DEFAULT 0',
 		     'deleted' => 'int(11) DEFAULT 0',
 		     'tyo_erittelyt' => 'text DEFAULT NULL',

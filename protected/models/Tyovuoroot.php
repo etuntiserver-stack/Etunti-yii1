@@ -22,13 +22,13 @@
  */
 class Tyovuoroot extends DB2ActiveRecord
 {
-public $osoite;
-public $kaupunki;
-public $tekijan_nimi;
-public $l_tunnit;
-public $count;
-public $suunnittellut;
-public $kpl;
+	public $osoite;
+	public $kaupunki;
+	public $tekijan_nimi;
+	public $l_tunnit;
+	public $count;
+	public $suunnittellut;
+	public $kpl;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -58,39 +58,38 @@ public $kpl;
 		}
 
 		$table_structure = array(
-
-                     'tid' => 'int(7) ',
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'kohde' => 'varchar(255)',
+                     'tid' => 'int(7) DEFAULT 0',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'kohde' => 'varchar(255) DEFAULT NULL',
                      'osoite' => 'varchar(255) DEFAULT NULL',
                      'postinumero' => 'varchar(255) DEFAULT NULL',
                      'postitoimipaikka' => 'varchar(255) DEFAULT NULL',
-                     'pvm' => 'varchar(20)  ',
-                     'alku' => 'varchar(10)  ',
-                     'loppu' => 'varchar(10)  ',
-                     'pituus' => 'varchar(10)  ',
-                     'ruokatauko' => 'varchar(50) ',
-                     'alku_r' => 'varchar(10) ',
-                     'kesto' => 'varchar(10) ',
+                     'pvm' => 'varchar(20) DEFAULT NULL',
+                     'alku' => 'varchar(10) DEFAULT NULL',
+                     'loppu' => 'varchar(10) DEFAULT NULL',
+                     'pituus' => 'varchar(10) DEFAULT NULL',
+                     'ruokatauko' => 'varchar(50) DEFAULT NULL',
+                     'alku_r' => 'varchar(10) DEFAULT NULL',
+                     'kesto' => 'varchar(10) DEFAULT NULL',
                      'tyoajanlaatu' => 'varchar(50) DEFAULT NULL',
-                     'tyoajanmerkinta' => 'varchar(50) ',
-                     'tietoja' => 'text ',
-                     'osoiteOnline' => 'varchar(100)',
+                     'tyoajanmerkinta' => 'varchar(50) DEFAULT NULL',
+                     'tietoja' => 'text DEFAULT NULL',
+                     'osoiteOnline' => 'varchar(100) DEFAULT NULL',
                      'onlinevaraus_id' => 'int(11) DEFAULT 0',
                      'status' => 'int(2) DEFAULT 0',
                      'toistuva_id' => 'int(11) DEFAULT 0',
-                     'tyopaari' => 'text ',
+                     'tyopaari' => 'text DEFAULT NULL',
                      'ilmoitus_avoimista_kohteesta' => 'int(1) DEFAULT 0',
                      'ilmoitus_myohastyneista_kohteesta' => 'int(1) DEFAULT 0',
                      'piilota_mobiilista' => 'int(1) DEFAULT 0',
                      'tuoteID' => 'int(1) DEFAULT 0',
-                     'lisa_tuotteet' => 'text',
+                     'lisa_tuotteet' => 'text DEFAULT NULL',
                      'peruutettu' => 'int(1) DEFAULT 0',
 		     'apuaika' => 'int(1) DEFAULT 0',
 		     'laskutettu' => 'int(1) DEFAULT 0',
 		     'lasku_id' => 'int(1) DEFAULT 0',
-		     'tilausviesti' => 'TEXT',
-		     'toimenpiteet' => 'TEXT',
+		     'tilausviesti' => 'TEXT DEFAULT NULL',
+		     'toimenpiteet' => 'TEXT DEFAULT NULL',
 		     'uusi_tilaus' => 'int(1) DEFAULT 0',
 		     'tyo_erittelyt' => 'text DEFAULT NULL',
 		     'muistiinpano' => 'text DEFAULT NULL'

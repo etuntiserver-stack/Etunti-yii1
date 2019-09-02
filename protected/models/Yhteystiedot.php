@@ -27,7 +27,7 @@ class Yhteystiedot extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'yhteystiedot';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -47,24 +47,19 @@ class Yhteystiedot extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'yhteystieto_tyyppi' => 'varchar(100) ',
-                     'yrityksen_nimi' => 'varchar(100) ',
-                     'y_tunnus' => 'varchar(50) ',
-                     'yhteyshenkilo' => 'varchar(100) ',
-                     'osoite' => 'varchar(255) ',
-                     'postitoimipaikka' => 'varchar(255) ',
-                     'postinumero' => 'int(10) ',
-                     'puhelin' => 'varchar(100) ',
-                     'sahkoposti' => 'varchar(100) ',
-                     'ryhma' => 'varchar(100) ',
-                     'myyja' => 'varchar(100) ',
-                     'status' => 'int(1) ',
-
-
-
-
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'yhteystieto_tyyppi' => 'varchar(100) DEFAULT NULL',
+                     'yrityksen_nimi' => 'varchar(100) DEFAULT NULL',
+                     'y_tunnus' => 'varchar(50) DEFAULT NULL',
+                     'yhteyshenkilo' => 'varchar(100) DEFAULT NULL',
+                     'osoite' => 'varchar(255) DEFAULT NULL',
+                     'postitoimipaikka' => 'varchar(255) DEFAULT NULL',
+                     'postinumero' => 'int(10) DEFAULT 0',
+                     'puhelin' => 'varchar(100) DEFAULT NULL',
+                     'sahkoposti' => 'varchar(100) DEFAULT NULL',
+                     'ryhma' => 'varchar(100) DEFAULT NULL',
+                     'myyja' => 'varchar(100) DEFAULT NULL',
+                     'status' => 'int(1) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)

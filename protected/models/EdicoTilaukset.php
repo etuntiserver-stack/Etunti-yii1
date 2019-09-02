@@ -39,17 +39,17 @@ class EdicoTilaukset extends DB2ActiveRecord
 
 		$table_structure = array(
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'asiakas_id' => 'int(11)',
-                     'kohde_id' => 'int(11)',
-                     'osoite' => 'varchar(255)',
-                     'postinumero' => 'varchar(10) ',
-                     'postitoimipaikka' => 'varchar(255)',
-                     'asiakas_puhelinnumero' => 'varchar(255)',
-                     'toivottu_pvm' => 'varchar(50)',
-                     'toivottu_aloitus' => 'varchar(50)',
-                     'toivottu_lopetus' => 'varchar(50)',
-                     'viesti' => 'text',
-                     'tuotteet' => 'text',
+                     'asiakas_id' => 'int(11) DEFAULT 0',
+                     'kohde_id' => 'int(11) DEFAULT 0',
+                     'osoite' => 'varchar(255) DEFAULT NULL',
+                     'postinumero' => 'varchar(10) DEFAULT NULL',
+                     'postitoimipaikka' => 'varchar(255) DEFAULT NULL',
+                     'asiakas_puhelinnumero' => 'varchar(255) DEFAULT NULL',
+                     'toivottu_pvm' => 'varchar(50) DEFAULT NULL',
+                     'toivottu_aloitus' => 'varchar(50) DEFAULT NULL',
+                     'toivottu_lopetus' => 'varchar(50) DEFAULT NULL',
+                     'viesti' => 'text DEFAULT NULL',
+                     'tuotteet' => 'text DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

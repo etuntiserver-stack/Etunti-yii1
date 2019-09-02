@@ -40,15 +40,14 @@ class AsetuksetForAll extends CActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'asetus' => 'varchar(255)',
-                     'api_access_key' => 'varchar(500)',
-                     'ohjesivu' => 'text',
-                     'googlemaps_apikey' => 'varchar(500)',
-                     'viralliset_pyhapaivat' => 'text',
-                     'erikoislauantai' => 'text',
-                     'app_info_sivu' => 'text',
-		     'email' => 'varchar(255)',
+                     'asetus' => 'varchar(255) DEFAULT NULL',
+                     'api_access_key' => 'varchar(500) DEFAULT NULL',
+                     'ohjesivu' => 'text DEFAULT NULL',
+                     'googlemaps_apikey' => 'varchar(500) DEFAULT NULL',
+                     'viralliset_pyhapaivat' => 'text DEFAULT NULL',
+                     'erikoislauantai' => 'text DEFAULT NULL',
+                     'app_info_sivu' => 'text DEFAULT NULL',
+		     'email' => 'varchar(255) DEFAULT NULL',
                      'session_aikamaara' => 'int(2) DEFAULT 8',
 		);
 

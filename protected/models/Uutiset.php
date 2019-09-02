@@ -18,7 +18,7 @@ class Uutiset extends CActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'uutiset';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -38,15 +38,10 @@ class Uutiset extends CActiveRecord
 		}
 
 		$table_structure = array(
-
-
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'otsikko' => 'varchar(255) ',
-                     'teksti' => 'text ',
-                     'luoja' => 'varchar(255) ',
-
-
-
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'otsikko' => 'varchar(255) DEFAULT NULL',
+                     'teksti' => 'text DEFAULT NULL',
+                     'luoja' => 'varchar(255) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

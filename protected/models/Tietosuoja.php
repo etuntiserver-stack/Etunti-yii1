@@ -29,29 +29,26 @@ class Tietosuoja extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-                     'asiakas_oikeusperuste' => 'varchar(255)',
-                     'asiakas_kayttotarkoitus' => 'TEXT',
-                     'asiakas_viesti' => 'TEXT',
-                     'asiakas_sailytysajan_tyyppi' => 'int(1)',
-                     'asiakas_sailytysaika_lukumaara' => 'int(3)',
-
-                     'tyontekija_oikeusperuste' => 'varchar(255)',
-                     'tyontekija_kayttotarkoitus' => 'TEXT',
-                     'tyontekija_viesti' => 'TEXT',
-                     'tyontekija_sailytysajan_tyyppi' => 'int(1)',
-                     'tyontekija_sailytysaika_lukumaara' => 'int(3)',
-
-                     'onlinevaraus_oikeusperuste' => 'varchar(255)',
-                     'onlinevaraus_kayttotarkoitus' => 'TEXT',
-                     'onlinevaraus_viesti' => 'TEXT',
-                     'onlinevaraus_sailytysajan_tyyppi' => 'int(1)',
-                     'onlinevaraus_sailytysaika_lukumaara' => 'int(3)',
-
-                     'edico_vinkki_oikeusperuste' => 'varchar(255)',
-                     'edico_vinkki_kayttotarkoitus' => 'TEXT',
-                     'edico_vinkki_viesti' => 'TEXT',
-                     'edico_vinkki_sailytysajan_tyyppi' => 'int(1)',
-                     'edico_vinkki_sailytysaika_lukumaara' => 'int(3)',
+                     'asiakas_oikeusperuste' => 'varchar(255) DEFAULT NULL',
+                     'asiakas_kayttotarkoitus' => 'TEXT DEFAULT NULL',
+                     'asiakas_viesti' => 'TEXT DEFAULT NULL',
+                     'asiakas_sailytysajan_tyyppi' => 'int(1) DEFAULT 0',
+                     'asiakas_sailytysaika_lukumaara' => 'int(3) DEFAULT 0',
+                     'tyontekija_oikeusperuste' => 'varchar(255) DEFAULT NULL',
+                     'tyontekija_kayttotarkoitus' => 'TEXT DEFAULT NULL',
+                     'tyontekija_viesti' => 'TEXT DEFAULT NULL',
+                     'tyontekija_sailytysajan_tyyppi' => 'int(1) DEFAULT 0',
+                     'tyontekija_sailytysaika_lukumaara' => 'int(3) DEFAULT 0',
+                     'onlinevaraus_oikeusperuste' => 'varchar(255) DEFAULT NULL',
+                     'onlinevaraus_kayttotarkoitus' => 'TEXT DEFAULT NULL',
+                     'onlinevaraus_viesti' => 'TEXT DEFAULT NULL',
+                     'onlinevaraus_sailytysajan_tyyppi' => 'int(1) DEFAULT 0',
+                     'onlinevaraus_sailytysaika_lukumaara' => 'int(3) DEFAULT 0',
+                     'edico_vinkki_oikeusperuste' => 'varchar(255) DEFAULT NULL',
+                     'edico_vinkki_kayttotarkoitus' => 'TEXT DEFAULT NULL',
+                     'edico_vinkki_viesti' => 'TEXT DEFAULT NULL',
+                     'edico_vinkki_sailytysajan_tyyppi' => 'int(1) DEFAULT 0',
+                     'edico_vinkki_sailytysaika_lukumaara' => 'int(3) DEFAULT 0',
 		);
 		$is_added_somthing = false;
 		foreach($table_structure as $key=>$value)

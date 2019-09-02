@@ -20,7 +20,7 @@ class VinkkiExtranet extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'vinkki_extranet';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -40,21 +40,16 @@ class VinkkiExtranet extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'asiakas_id' => 'int(11) ',
-                     'nimi' => 'varchar(100) ',
-                     'puhelin' => 'varchar(100) ',
-                     'sahkoposti' => 'varchar(255) ',
-                     'teksti' => 'text ',
-                     'tila' => 'int(1) ',
-                     'muutos_pvm' => 'varchar(50) ',
-                     'token' => 'varchar(255) ',
-                     'vinkkaja_asiakas_id' => 'int(11) ',
-
-
-
-
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'asiakas_id' => 'int(11) DEFAULT 0',
+                     'nimi' => 'varchar(100) DEFAULT NULL',
+                     'puhelin' => 'varchar(100) DEFAULT NULL',
+                     'sahkoposti' => 'varchar(255) DEFAULT NULL',
+                     'teksti' => 'text DEFAULT NULL',
+                     'tila' => 'int(1) DEFAULT 0',
+                     'muutos_pvm' => 'varchar(50) DEFAULT NULL',
+                     'token' => 'varchar(255) DEFAULT NULL',
+                     'vinkkaja_asiakas_id' => 'int(11) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)

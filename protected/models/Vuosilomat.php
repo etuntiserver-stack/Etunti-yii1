@@ -12,8 +12,8 @@
 class Vuosilomat extends DB2ActiveRecord
 {
 
-public $kpl;
-public $tekijan_nimi;
+	public $kpl;
+	public $tekijan_nimi;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -32,14 +32,13 @@ public $tekijan_nimi;
 	{
 
 		$tb_name = 'vuosilomat';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
 			$check_this_table = true;
 		}
-
 
 		if($check_this_table)
 		{
@@ -52,10 +51,10 @@ public $tekijan_nimi;
 		}
 
 		$table_structure = array(
-                     'tid' => 'int(11)',
-                     'pvm' => 'varchar(50)',
-                     'status' => 'varchar(100)',
-                     'hyvaksytty' => 'int(1)',
+                     'tid' => 'int(11) DEFAULT NULL',
+                     'pvm' => 'varchar(50) DEFAULT NULL',
+                     'status' => 'varchar(100) DEFAULT NULL',
+                     'hyvaksytty' => 'int(1) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)

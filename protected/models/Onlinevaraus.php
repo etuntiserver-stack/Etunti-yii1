@@ -33,7 +33,6 @@ class Onlinevaraus extends DB2ActiveRecord
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
@@ -46,31 +45,30 @@ class Onlinevaraus extends DB2ActiveRecord
 
 		$table_structure = array(
 
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'tv_id' => 'int(11) ',
-                     'maksun_onnistu_koodi' => 'varchar(1000) ',
-                     'tila' => 'int(1) ',
-                     'asiakas_id' => 'int(11) ',
-                     'kohde_id' => 'int(11) ',
-                     'kesto' => 'varchar(50) ',
-                     'hinta' => 'varchar(50) ',
-                     'tilauksen_kuvaus' => 'text ',
-                     'yhteyshenkilo' => 'varchar(100) ',
-                     'puhelin' => 'varchar(100) ',
-                     'osoite' => 'varchar(255) ',
-                     'postinumero' => 'varchar(10) ',
-                     'kaupunki' => 'varchar(255) ',
-                     'lisatietoja' => 'text ',
-                     'sahkoposti' => 'varchar(255) ',
-                     'alv' => 'int(3) ',
-                     'veroton_hinta' => 'varchar(10) ',
-                     'tyyppi' => 'varchar(100) ',
-                     'yrityksen_nimi' => 'varchar(255) ',
-                     'y_tunnus' => 'varchar(100) ',
-                     'valokuvat' => 'text ',
-                     'laskutettu' => 'int(1) ',
-                     'lasku_id' => 'int(11) ',
-
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'tv_id' => 'int(11) DEFAULT 0',
+                     'maksun_onnistu_koodi' => 'varchar(1000) DEFAULT NULL',
+                     'tila' => 'int(1) DEFAULT 0',
+                     'asiakas_id' => 'int(11) DEFAULT 0',
+                     'kohde_id' => 'int(11) DEFAULT 0',
+                     'kesto' => 'varchar(50) DEFAULT NULL',
+                     'hinta' => 'varchar(50) DEFAULT NULL',
+                     'tilauksen_kuvaus' => 'text DEFAULT NULL',
+                     'yhteyshenkilo' => 'varchar(100) DEFAULT NULL',
+                     'puhelin' => 'varchar(100) DEFAULT NULL',
+                     'osoite' => 'varchar(255) DEFAULT NULL',
+                     'postinumero' => 'varchar(10) DEFAULT NULL',
+                     'kaupunki' => 'varchar(255) DEFAULT NULL',
+                     'lisatietoja' => 'text DEFAULT NULL',
+                     'sahkoposti' => 'varchar(255) DEFAULT NULL',
+                     'alv' => 'int(3) DEFAULT 0',
+                     'veroton_hinta' => 'varchar(10) DEFAULT NULL',
+                     'tyyppi' => 'varchar(100) DEFAULT NULL',
+                     'yrityksen_nimi' => 'varchar(255) DEFAULT NULL',
+                     'y_tunnus' => 'varchar(100) DEFAULT NULL',
+                     'valokuvat' => 'text DEFAULT NULL',
+                     'laskutettu' => 'int(1) DEFAULT 0',
+                     'lasku_id' => 'int(11) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)

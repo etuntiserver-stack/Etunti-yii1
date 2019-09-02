@@ -32,7 +32,7 @@ class AsiakasHyvaksynta extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'asiakas_hyvaksynta';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -52,17 +52,14 @@ class AsiakasHyvaksynta extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'asiakas_id' => 'int(11) ',
+                     'asiakas_id' => 'int(11) DEFAULT 0',
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'ids' => 'text ',
-                     'sahkoposti' => 'varchar(255) ',
-                     'code' => 'varchar(500) ',
-                     'status' => 'int(2) ',
-                     'selitys' => 'text ',
-                     'kirjen_body' => 'text ',
-
-
+                     'ids' => 'text DEFAULT NULL',
+                     'sahkoposti' => 'varchar(255) DEFAULT NULL',
+                     'code' => 'varchar(500) DEFAULT NULL',
+                     'status' => 'int(2) DEFAULT NULL',
+                     'selitys' => 'text DEFAULT NULL',
+                     'kirjen_body' => 'text DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

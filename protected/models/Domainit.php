@@ -37,7 +37,6 @@ public $viesti;
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 
@@ -50,23 +49,22 @@ public $viesti;
 		}
 
 		$table_structure = array(
-
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'domain' => 'varchar(100) ',
-                     'paketti' => 'varchar(100) ',
-                     'yritys' => 'varchar(100) ',
-                     'puhelin' => 'varchar(255) ',
-                     'sahkoposti' => 'varchar(255) ',
-                     'pakettin_nimetus' => 'varchar(100) ',
-                     'huoltokatko' => 'int(1) ',
-                     'palveluhinta_persiivoja' => 'int(11) ',
-                     'tyovuorohinta_persiivoja' => 'int(11) ',
-                     'muut_tyokaluhinta' => 'int(11) ',
-                     'aktiivinen' => 'int(1) DEFAULT 1 ',
-                     'maksullinen' => 'int(1) DEFAULT 0 ',
-                     'ilmainen_versio_kayttotunnit' => 'int(11) ',
-                     'kirjautumistunnus' => 'varchar(100)',
-		     'y_tunnus' => 'varchar(100)',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'domain' => 'varchar(100) DEFAULT NULL',
+                     'paketti' => 'varchar(100) DEFAULT NULL',
+                     'yritys' => 'varchar(100) DEFAULT NULL',
+                     'puhelin' => 'varchar(255) DEFAULT NULL',
+                     'sahkoposti' => 'varchar(255) DEFAULT NULL',
+                     'pakettin_nimetus' => 'varchar(100) DEFAULT NULL',
+                     'huoltokatko' => 'int(1) DEFAULT 0',
+                     'palveluhinta_persiivoja' => 'int(11) DEFAULT 0',
+                     'tyovuorohinta_persiivoja' => 'int(11) DEFAULT 0',
+                     'muut_tyokaluhinta' => 'int(11) DEFAULT 0',
+                     'aktiivinen' => 'int(1) DEFAULT 1',
+                     'maksullinen' => 'int(1) DEFAULT 0',
+                     'ilmainen_versio_kayttotunnit' => 'int(11) DEFAULT 0',
+                     'kirjautumistunnus' => 'varchar(100) DEFAULT NULL',
+		     'y_tunnus' => 'varchar(100) DEFAULT NULL',
                 );
 
 		foreach($table_structure as $key=>$value)

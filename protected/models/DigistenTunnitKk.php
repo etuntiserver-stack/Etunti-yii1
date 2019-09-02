@@ -31,20 +31,17 @@ class DigistenTunnitKk extends CActiveRecord
 		}
 
 		$table_structure = array(
-
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'domain_id' => 'int(11) ',
-                     'domain' => 'varchar(255) YES ',
-                     'year' => 'int(4) ',
-                     'month' => 'int(2) ',
-                     'tunnit' => 'int(11) ',
-                     'tasot' => 'text ',
-                     'maksettu' => 'int(1) 0 ',
-                     'laskutettu' => 'int(1) ',
-                     'lasku_id' => 'int(11) ',
-		     'jarjestelmanvalvoja_maara' => 'int(11) ',
-
-
+                     'domain_id' => 'int(11) DEFAULT 0',
+                     'domain' => 'varchar(255) DEFAULT NULL',
+                     'year' => 'int(4) DEFAULT 0',
+                     'month' => 'int(2) DEFAULT 0',
+                     'tunnit' => 'int(11) DEFAULT 0',
+                     'tasot' => 'text DEFAULT NULL',
+                     'maksettu' => 'int(1) DEFAULT 0',
+                     'laskutettu' => 'int(1) DEFAULT 0',
+                     'lasku_id' => 'int(11) DEFAULT 0',
+		     'jarjestelmanvalvoja_maara' => 'int(11) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)

@@ -37,7 +37,6 @@ class UsersOnline extends DB2ActiveRecord
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
@@ -49,16 +48,11 @@ class UsersOnline extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'ip' => 'varchar(50) ',
-                     'session' => 'varchar(150) ',
-                     'time' => 'int(11) ',
-                     'user' => 'varchar(100) ',
-                     'url' => 'varchar(1000) ',
-
-
-
-
+                     'ip' => 'varchar(50) DEFAULT NULL',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'session' => 'varchar(150) DEFAULT NULL',
+                     'user' => 'varchar(100) DEFAULT NULL',
+                     'url' => 'varchar(1000) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

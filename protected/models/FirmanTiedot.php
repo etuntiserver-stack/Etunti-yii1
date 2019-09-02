@@ -43,7 +43,6 @@ class FirmanTiedot extends DB2ActiveRecord
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
@@ -55,27 +54,25 @@ class FirmanTiedot extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'tyonantaja' => 'varchar(50) ',
-                     'osoite' => 'varchar(100) ',
-                     'postinumero' => 'varchar(50) ',
-                     'postitoimipaikka' => 'varchar(50) ',
-                     'puhelin' => 'varchar(100) ',
-                     'y_tunnus' => 'varchar(50) ',
-                     'sahkoposti' => 'varchar(100) ',
-                     'tilinumero' => 'varchar(100) ',
-                     'iban' => 'varchar(100) ',
-                     'bic' => 'varchar(20) ',
-                     'johtaja' => 'varchar(100) ',
-			
-                     'laskutus_kanava' => 'varchar(255)',
-                     'laskutus_osoite' => 'varchar(255)',
-                     'laskutus_postinumero' => 'varchar(50)',
-                     'laskutus_postitoimipaikka' => 'varchar(255)',
-                     'sahkopostilaskuosoite' => 'varchar(255)',
-                     'laskutus_ovt_tunnus' => 'varchar(255)',
-                     'verkkolaskuosoite' => 'varchar(255)',
-                     'operaattorin_valittajan_tunnus' => 'varchar(255)',
+                     'tyonantaja' => 'varchar(50) DEFAULT NULL',
+                     'osoite' => 'varchar(100) DEFAULT NULL',
+                     'postinumero' => 'varchar(50) DEFAULT NULL',
+                     'postitoimipaikka' => 'varchar(50) DEFAULT NULL',
+                     'puhelin' => 'varchar(100) DEFAULT NULL',
+                     'y_tunnus' => 'varchar(50) DEFAULT NULL',
+                     'sahkoposti' => 'varchar(100) DEFAULT NULL',
+                     'tilinumero' => 'varchar(100) DEFAULT NULL',
+                     'iban' => 'varchar(100) DEFAULT NULL',
+                     'bic' => 'varchar(20) DEFAULT NULL',
+                     'johtaja' => 'varchar(100) DEFAULT NULL',
+                     'laskutus_kanava' => 'varchar(255) DEFAULT NULL',
+                     'laskutus_osoite' => 'varchar(255) DEFAULT NULL',
+                     'laskutus_postinumero' => 'varchar(50) DEFAULT NULL',
+                     'laskutus_postitoimipaikka' => 'varchar(255) DEFAULT NULL',
+                     'sahkopostilaskuosoite' => 'varchar(255) DEFAULT NULL',
+                     'laskutus_ovt_tunnus' => 'varchar(255) DEFAULT NULL',
+                     'verkkolaskuosoite' => 'varchar(255) DEFAULT NULL',
+                     'operaattorin_valittajan_tunnus' => 'varchar(255) DEFAULT NULL',
                      'juuri_tullut_asiakkaaksi' => 'int(1) DEFAULT 1'
 		);
 

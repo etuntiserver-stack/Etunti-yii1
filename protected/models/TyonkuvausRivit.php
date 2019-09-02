@@ -20,14 +20,13 @@ class TyonkuvausRivit extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'tyonkuvaus_rivit';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
 			$check_this_table = true;
 		}
-
 
 		if($check_this_table)
 		{
@@ -40,16 +39,11 @@ class TyonkuvausRivit extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'tyonkuvaus_id' => 'int(11) ',
-                     'tilat' => 'text ',
-                     'tyontehtavat' => 'text ',
-                     'laatutaso' => 'text ',
-                     'kommenti' => 'text ',
-
-
-
-
+                     'tyonkuvaus_id' => 'int(11) DEFAULT 0',
+                     'tilat' => 'text DEFAULT NULL',
+                     'tyontehtavat' => 'text DEFAULT NULL',
+                     'laatutaso' => 'text DEFAULT NULL',
+                     'kommenti' => 'text DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

@@ -20,14 +20,13 @@ class KirjeidenHallinta extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'kirjeiden_hallinta';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
 			$check_this_table = true;
 		}
-
 
 		if($check_this_table)
 		{
@@ -40,16 +39,12 @@ class KirjeidenHallinta extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'ryhma' => 'varchar(255) ',
-                     'teksti' => 'text ',
-                     'hyvaksyn_koodi' => 'varchar(255) ',
-                     'status' => 'int(1) ',
-                     'liite' => 'varchar(255) ',
-
-
-
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'ryhma' => 'varchar(255) DEFAULT NULL',
+                     'teksti' => 'text DEFAULT NULL',
+                     'hyvaksyn_koodi' => 'varchar(255) DEFAULT NULL',
+                     'status' => 'int(1) DEFAULT 0',
+                     'liite' => 'varchar(255) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

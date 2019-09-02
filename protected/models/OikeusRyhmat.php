@@ -15,14 +15,13 @@ class OikeusRyhmat extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'oikeus_ryhmat';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
 			$check_this_table = true;
 		}
-
 
 		if($check_this_table)
 		{
@@ -35,12 +34,7 @@ class OikeusRyhmat extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'nimike' => 'varchar(255) ',
-
-
-
-
+                     'nimike' => 'varchar(255) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

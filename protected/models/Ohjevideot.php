@@ -26,7 +26,6 @@ class Ohjevideot extends CActiveRecord
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 		$table = Yii::app()->db->schema->getTable($tb_name);
@@ -38,15 +37,11 @@ class Ohjevideot extends CActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'otsiko' => 'varchar(500) ',
-                     'kuvaus' => 'text ',
-                     'tiedoston_nimi' => 'varchar(255) ',
-                     'sort' => 'int(3) ',
-
-
-
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'otsiko' => 'varchar(500) DEFAULT NULL',
+                     'kuvaus' => 'text DEFAULT NULL',
+                     'tiedoston_nimi' => 'varchar(255) DEFAULT NULL',
+                     'sort' => 'int(3) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)

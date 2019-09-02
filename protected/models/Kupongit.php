@@ -30,7 +30,6 @@ class Kupongit extends DB2ActiveRecord
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
@@ -42,16 +41,16 @@ class Kupongit extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'kupongin_id' => 'varchar(255) YES ',
-                     'voimassa' => 'date ',
-                     'euro_maara' => 'float YES 0 ',
-                     'prosentti_maara' => 'int(11) YES 0 ',
-                     'maara_tyyppi' => 'varchar(255) YES ',
-                     'jatkuva' => 'int(1) 0 ',
-                     'status' => 'int(1) 0 ',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'kupongin_id' => 'varchar(255) DEFAULT NULL',
+                     'voimassa' => 'date',
+                     'euro_maara' => 'float DEFAULT 0',
+                     'prosentti_maara' => 'int(11) DEFAULT 0',
+                     'maara_tyyppi' => 'varchar(255) DEFAULT NULL',
+                     'jatkuva' => 'int(1) DEFAULT 0',
+                     'status' => 'int(1) DEFAULT 0',
                      //'asiakas_id' => 'int(11) ',
-                     'lahetetyt_asiakas_id_lista' => 'text ',
+                     'lahetetyt_asiakas_id_lista' => 'text DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

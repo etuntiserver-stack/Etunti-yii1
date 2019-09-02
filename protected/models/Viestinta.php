@@ -13,8 +13,8 @@
  */
 class Viestinta extends DB2ActiveRecord
 {
-public $count;
-public $edellinen_viesti;
+	public $count;
+	public $edellinen_viesti;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -32,14 +32,13 @@ public $edellinen_viesti;
 	public function tableName()
 	{
 		$tb_name = 'sivex_viestinta';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
 			$check_this_table = true;
 		}
-
 
 		if($check_this_table)
 		{
@@ -52,13 +51,12 @@ public $edellinen_viesti;
 		}
 
 		$table_structure = array(
-
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'pvm' => 'varchar(20) ',
-                     'tekija' => 'varchar(255) ',
-                     'viesti' => 'text ',
-                     'admin' => 'varchar(50) ',
-                     'status' => 'int(1) 0 ',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'pvm' => 'varchar(20) DEFAULT NULL',
+                     'tekija' => 'varchar(255) DEFAULT NULL',
+                     'viesti' => 'text DEFAULT NULL',
+                     'admin' => 'varchar(50) DEFAULT NULL',
+                     'status' => 'int(1) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)

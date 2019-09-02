@@ -30,7 +30,6 @@ class Log extends DB2ActiveRecord
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
@@ -42,22 +41,20 @@ class Log extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'text' => 'text ',
-                     'kuka' => 'varchar(50) ',
-                     'log_category' => 'int(3) ',
-                     'email_to' => 'varchar(255) ',
-                     'email_subject' => 'varchar(255) ',
-                     'email_message' => 'text ',
-                     'email_attachment' => 'varchar(500) ',
-                     'email_attachment_sisalto' => 'text ',
-                     'log_nimike' => 'varchar(100) ',
-                     'old_values' => 'text ',
-                     'new_values' => 'text ',
-                     'tilanne' => 'varchar(255) ',
-                     'model' => 'varchar(255) ',
-
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'text' => 'text DEFAULT NULL',
+                     'kuka' => 'varchar(50) DEFAULT NULL',
+                     'log_category' => 'int(3) DEFAULT 0',
+                     'email_to' => 'varchar(255) DEFAULT NULL',
+                     'email_subject' => 'varchar(255) DEFAULT NULL',
+                     'email_message' => 'text DEFAULT NULL',
+                     'email_attachment' => 'varchar(500) DEFAULT NULL',
+                     'email_attachment_sisalto' => 'text DEFAULT NULL',
+                     'log_nimike' => 'varchar(100) DEFAULT NULL',
+                     'old_values' => 'text DEFAULT NULL',
+                     'new_values' => 'text DEFAULT NULL',
+                     'tilanne' => 'varchar(255) DEFAULT NULL',
+                     'model' => 'varchar(255) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

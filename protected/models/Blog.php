@@ -38,15 +38,11 @@ class Blog extends CActiveRecord
 		}
 
 		$table_structure = array(
-
-
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP AFTER id',
-                     'luoja' => 'varchar(255) AFTER time',
-                     'otsikko' => 'varchar(255) AFTER luoja',
-                     'teksti' => 'text AFTER otsikko',
-                     'kuva' => 'varchar(255) AFTER teksti',
-
-
+                     'luoja' => 'varchar(255) DEFAULT NULL',
+                     'otsikko' => 'varchar(255) DEFAULT NULL',
+                     'teksti' => 'text DEFAULT NULL',
+                     'kuva' => 'varchar(255) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

@@ -37,8 +37,8 @@
 class TyosuhteenPaattaminen extends DB2ActiveRecord
 {
 
-public $template;
-public $tyontekijat;
+	public $template;
+	public $tyontekijat;
 
 	/**
 	 * @return string the associated database table name
@@ -46,14 +46,13 @@ public $tyontekijat;
 	public function tableName()
 	{
 		$tb_name = 'tyosuhteen_paattaminen';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
 			$check_this_table = true;
 		}
-
 
 		if($check_this_table)
 		{
@@ -66,39 +65,34 @@ public $tyontekijat;
 		}
 
 		$table_structure = array(
-
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'key' => 'int(1) DEFAULT 2 ',
-                     'titteli' => 'varchar(255) ',
-                     'kuuleminen' => 'text ',
-                     'tyosuhteen_paattaminen' => 'text ',
-                     'tyonantaja' => 'varchar(70) ',
-                     'osoite' => 'varchar(255) ',
-                     'postinumero' => 'varchar(7) ',
-                     'postitoimipaikka' => 'varchar(100) ',
-                     'puhelin' => 'varchar(50) ',
-                     'y_tunnus' => 'varchar(50) ',
-                     'sahkoposti' => 'varchar(100) ',
-                     'tekijan_email' => 'varchar(100) ',
-                     'tid' => 'int(7) ',
-                     'tekijan_nimi' => 'varchar(70) ',
-                     'tekijan_katuosoite' => 'varchar(100) ',
-                     'tekijan_pnumero' => 'varchar(7) ',
-                     'tekijan_ptoimipaikka' => 'varchar(50) ',
-                     'tekijan_puh' => 'varchar(50) ',
-                     'tekijan_henkilotunnus' => 'varchar(50) ',
-                     'teksti' => 'text ',
-                     'Paivays' => 'varchar(50) ',
-                     'Paikka' => 'varchar(100) ',
-                     'TyonantajanEdustaja' => 'varchar(100) ',
-                     'NimikeTehtava' => 'varchar(100) ',
-                     'tiedosto' => 'varchar(255) ',
-                     'alku_pvm' => 'varchar(50) ',
-                     'loppu_pvm' => 'varchar(50) ',
-
-
-
-
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'key' => 'int(1) DEFAULT 2',
+                     'titteli' => 'varchar(255) DEFAULT NULL',
+                     'kuuleminen' => 'text DEFAULT NULL',
+                     'tyosuhteen_paattaminen' => 'text DEFAULT NULL',
+                     'tyonantaja' => 'varchar(70) DEFAULT NULL',
+                     'osoite' => 'varchar(255) DEFAULT NULL',
+                     'postinumero' => 'varchar(7) DEFAULT NULL',
+                     'postitoimipaikka' => 'varchar(100) DEFAULT NULL',
+                     'puhelin' => 'varchar(50) DEFAULT NULL',
+                     'y_tunnus' => 'varchar(50) DEFAULT NULL',
+                     'sahkoposti' => 'varchar(100) DEFAULT NULL',
+                     'tekijan_email' => 'varchar(100) DEFAULT NULL',
+                     'tid' => 'int(7) DEFAULT 0',
+                     'tekijan_nimi' => 'varchar(70) DEFAULT NULL',
+                     'tekijan_katuosoite' => 'varchar(100) DEFAULT NULL',
+                     'tekijan_pnumero' => 'varchar(7) DEFAULT NULL',
+                     'tekijan_ptoimipaikka' => 'varchar(50) DEFAULT NULL',
+                     'tekijan_puh' => 'varchar(50) DEFAULT NULL',
+                     'tekijan_henkilotunnus' => 'varchar(50) DEFAULT NULL',
+                     'teksti' => 'text DEFAULT NULL',
+                     'Paivays' => 'varchar(50) DEFAULT NULL',
+                     'Paikka' => 'varchar(100) DEFAULT NULL',
+                     'TyonantajanEdustaja' => 'varchar(100) DEFAULT NULL',
+                     'NimikeTehtava' => 'varchar(100) DEFAULT NULL',
+                     'tiedosto' => 'varchar(255) DEFAULT NULL',
+                     'alku_pvm' => 'varchar(50) DEFAULT NULL',
+                     'loppu_pvm' => 'varchar(50) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

@@ -34,16 +34,14 @@ class Avaimet extends CActiveRecord
 		}
 
 		$table_structure = array(
-
 		  'time' => 'timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
-		  'avainnumero' => 'varchar(255) NOT NULL',
-		  'asiakas_id' => 'int(11) NOT NULL',
-		  'kohde' => 'int(11) NOT NULL',
-		  'tid' => 'int(11) NOT NULL',
-		  'sijainti' => 'varchar(255) NOT NULL',
-		  'lisatiedot' => 'text NOT NULL',
-		  'status' => 'int(11) NOT NULL',
-
+		  'avainnumero' => 'varchar(255) DEFAULT NULL',
+		  'asiakas_id' => 'int(11) DEFAULT 0',
+		  'kohde' => 'int(11) DEFAULT 0',
+		  'tid' => 'int(11) DEFAULT 0',
+		  'sijainti' => 'varchar(255) DEFAULT NULL',
+		  'lisatiedot' => 'text DEFAULT NULL',
+		  'status' => 'int(11) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

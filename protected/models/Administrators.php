@@ -54,17 +54,13 @@ public $adm_salasana_repeat;
 		}
 
 		$table_structure = array(
-
-                     'adm_login' => 'varchar(100) ',
-                     'adm_salasana' => 'varchar(100) ',
-                     'adm_email' => 'varchar(100) ',
-                     'adm_nimi' => 'varchar(100) ',
-                     'status' => 'int(1) ',
-                     'ulkonaky' => 'text ',
-                     'token' => 'varchar(255) ',
-
-
-
+                     'adm_login' => 'varchar(100) DEFAULT NULL',
+                     'adm_salasana' => 'varchar(100) DEFAULT NULL',
+                     'adm_email' => 'varchar(100) DEFAULT NULL',
+                     'adm_nimi' => 'varchar(100) DEFAULT NULL',
+                     'status' => 'int(1) DEFAULT 0',
+                     'ulkonaky' => 'text DEFAULT NULL',
+                     'token' => 'varchar(255) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

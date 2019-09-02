@@ -30,7 +30,7 @@ class Lisatyotunnit extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'sivex_lisatyot';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -50,17 +50,12 @@ class Lisatyotunnit extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'tid' => 'int(11) ',
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'pvm' => 'varchar(20) ',
-                     'syy' => 'varchar(255) ',
-                     'prosentti' => 'varchar(10) ',
-                     'tunnimaara' => 'varchar(10) ',
-
-
-
-
+                     'tid' => 'int(11) DEFAULT 0',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'pvm' => 'varchar(20) DEFAULT NULL',
+                     'syy' => 'varchar(255) DEFAULT NULL',
+                     'prosentti' => 'varchar(10) DEFAULT NULL',
+                     'tunnimaara' => 'varchar(10) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

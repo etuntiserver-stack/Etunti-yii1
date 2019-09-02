@@ -13,7 +13,7 @@
 class LaskuHistoria extends DB2ActiveRecord
 {
 
-public $viitenumero, $laskunumero, $yhteensa_total_veroton, $yhteensa_total_verot;
+	public $viitenumero, $laskunumero, $yhteensa_total_veroton, $yhteensa_total_verot;
 
 
 	/**
@@ -32,14 +32,13 @@ public $viitenumero, $laskunumero, $yhteensa_total_veroton, $yhteensa_total_vero
 	public function tableName()
 	{
 		$tb_name = 'lasku_historia';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
 			$check_this_table = true;
 		}
-
 
 		if($check_this_table)
 		{
@@ -52,20 +51,15 @@ public $viitenumero, $laskunumero, $yhteensa_total_veroton, $yhteensa_total_vero
 		}
 
 		$table_structure = array(
-
-                     'lid' => 'int(11) ',
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'status' => 'text ',
-                     'yht_euro' => 'varchar(50) ',
-                     'palvelu' => 'varchar(50) ',
-                     'trust_statuscode' => 'varchar(100) ',
-                     'paydate' => 'varchar(50) ',
-                     'amount' => 'varchar(50) ',
-                     'postita_statuscode' => 'varchar(100) ',
-
-
-
-
+                     'lid' => 'int(11) DEFAULT 0',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'status' => 'text DEFAULT NULL',
+                     'yht_euro' => 'varchar(50) DEFAULT NULL',
+                     'palvelu' => 'varchar(50) DEFAULT NULL',
+                     'trust_statuscode' => 'varchar(100) DEFAULT NULL',
+                     'paydate' => 'varchar(50) DEFAULT NULL',
+                     'amount' => 'varchar(50) DEFAULT NULL',
+                     'postita_statuscode' => 'varchar(100) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

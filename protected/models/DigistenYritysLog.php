@@ -25,7 +25,6 @@ class DigistenYritysLog extends CActiveRecord
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 
@@ -38,11 +37,10 @@ class DigistenYritysLog extends CActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'yritys_id' => 'int(11)',
-                     'tapahtuma' => 'text',
-                     'paketti' => 'varchar(100)',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'yritys_id' => 'int(11) DEFAULT 0',
+                     'tapahtuma' => 'text DEFAULT NULL',
+                     'paketti' => 'varchar(100) DEFAULT NULL',
                 );
 
 		foreach($table_structure as $key=>$value)

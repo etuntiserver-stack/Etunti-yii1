@@ -34,12 +34,11 @@ class EdicoViestinta extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
-                     'asiakas_id' => 'int(11)',
-                     'otsikko' => 'varchar(255)',
+                     'asiakas_id' => 'int(11) DEFAULT 0',
+                     'otsikko' => 'varchar(255) DEFAULT NULL',
                      'status' => 'int(1) DEFAULT 1',
-                     'luoja' => 'varchar(50)'
+                     'luoja' => 'varchar(50) DEFAULT NULL'
 		);
 
 		foreach($table_structure as $key=>$value)

@@ -14,7 +14,7 @@
 class TuotteetPalvelut extends DB2ActiveRecord
 {
 
-public $image;
+	public $image;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -45,28 +45,26 @@ public $image;
 		}
 
 		$table_structure = array(
-
-                     'nimike' => 'varchar(255) ',
-                     'kategoria' => 'varchar(255) ',
-                     'selitysteksti' => 'text ',
-                     'palvelu' => 'int(1) ',
-                     'kesto' => 'varchar(20) ',
-                     'nelio' => 'varchar(20) ',
-                     'kotitalousvahennys' => 'varchar(20) ',
-                     'nayta_sivuilla' => 'int(1) DEFAULT 1 ',
+                     'nimike' => 'varchar(255) DEFAULT NULL',
+                     'kategoria' => 'varchar(255) DEFAULT NULL',
+                     'selitysteksti' => 'text DEFAULT NULL',
+                     'palvelu' => 'int(1) DEFAULT 0',
+                     'kesto' => 'varchar(20) DEFAULT NULL',
+                     'nelio' => 'varchar(20) DEFAULT NULL',
+                     'kotitalousvahennys' => 'varchar(20) DEFAULT NULL',
+                     'nayta_sivuilla' => 'int(1) DEFAULT 1',
                      'nayta_vain_onlinevarauksessa' => 'int(1) DEFAULT 0',
-                     'paa_palvelu' => 'int(11) ',
-                     'toinen_valikko_rakenne' => 'text ',
-                     'lisapalvelut' => 'text ',
-
+                     'paa_palvelu' => 'int(11) DEFAULT 0',
+                     'toinen_valikko_rakenne' => 'text DEFAULT NULL',
+                     'lisapalvelut' => 'text DEFAULT NULL',
                      'hinta_alv_0' => 'float DEFAULT 0',
                      'hinta_alv_sis' => 'float DEFAULT 0',
                      'alv' => 'int(3) DEFAULT 24',
-                     'yksikko' => 'varchar(20) ',
-                     'netvisorkey' => 'int(11) ',
+                     'yksikko' => 'varchar(20) DEFAULT NULL',
+                     'netvisorkey' => 'int(11) DEFAULT 0',
                      'aktiivinen' => 'int(1) DEFAULT 1',
-                     'varastoitava' => 'int(1) ',
-                     'myyntituote' => 'int(1) DEFAULT 1 ',
+                     'varastoitava' => 'int(1) DEFAULT 0',
+                     'myyntituote' => 'int(1) DEFAULT 1',
                      'myyntitili' => 'varchar(20) DEFAULT 3000',
                      'alvsis' => 'varchar(20) DEFAULT "nolla"',
                      'oletustuote' => 'int(1) DEFAULT 0',

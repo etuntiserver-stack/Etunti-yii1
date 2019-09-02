@@ -34,7 +34,6 @@ class Valikkoot extends DB2ActiveRecord
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
@@ -46,9 +45,9 @@ class Valikkoot extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-                     'value' => 'varchar(255) ',
-                     'select_type' => 'varchar(50) ',
-                     'value2' => 'varchar(255) ',
+                     'value' => 'varchar(255) DEFAULT NULL',
+                     'select_type' => 'varchar(50) DEFAULT NULL',
+                     'value2' => 'varchar(255) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

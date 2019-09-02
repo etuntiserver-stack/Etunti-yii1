@@ -65,7 +65,7 @@
 class Tyosopimukset extends DB2ActiveRecord
 {
 
-public $template;
+	public $template;
 
 	/**
 	 * @return string the associated database table name
@@ -81,7 +81,6 @@ public $template;
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
@@ -93,66 +92,64 @@ public $template;
 		}
 
 		$table_structure = array(
-
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'key' => 'int(1) DEFAULT 1 ',
-                     'tyonantaja' => 'varchar(70) ',
-                     'osoite' => 'varchar(255) ',
-                     'postinumero' => 'varchar(7) ',
-                     'postitoimipaikka' => 'varchar(100) ',
-                     'puhelin' => 'varchar(50) ',
-                     'y_tunnus' => 'varchar(50) ',
-                     'sahkoposti' => 'varchar(100) ',
-                     'tekijan_email' => 'varchar(100) ',
-                     'tid' => 'int(7) ',
-                     'tekijan_nimi' => 'varchar(70) ',
-                     'tekijan_katuosoite' => 'varchar(100) ',
-                     'tekijan_pnumero' => 'varchar(7) ',
-                     'tekijan_ptoimipaikka' => 'varchar(50) ',
-                     'tekijan_puh' => 'varchar(50) ',
-                     'tekijan_henkilotunnus' => 'varchar(50) ',
-                     'sopimus' => 'varchar(50) ',
-                     'ToistaVoimaSopimus' => 'varchar(100) ',
-                     'MaaraVoimaSopimusAlkaa' => 'varchar(100) ',
-                     'MaaraVoimaSopimusPaattyy' => 'varchar(100) ',
-                     'peruste' => 'text ',
-                     'koeaika' => 'varchar(100) ',
-                     'SoveltavaSopimus' => 'varchar(100) ',
-                     'Tyotehtavat' => 'text ',
-                     'tyonSuorittamisPaikka' => 'text ',
-                     'PalkanMaaraytymisperuste' => 'varchar(50) ',
-                     'PalkanMaaraytymisperusteMuu' => 'varchar(100) ',
-                     'TyokokemusVuotta' => 'varchar(20) ',
-                     'TyokokemusKuu' => 'varchar(20) ',
-                     'palkka_kk' => 'varchar(20) ',
-                     'Palkkaluokka' => 'varchar(50) ',
-                     'palkka_h' => 'varchar(20) ',
-                     'Luontaiseudut' => 'text ',
-                     'Raha_arvo' => 'varchar(70) ',
-                     'Verotusarvo' => 'varchar(70) ',
-                     'palkka_muu2' => 'varchar(70) ',
-                     'Palkanmaksukausi' => 'varchar(50) ',
-                     'Palkanmaksupaivat' => 'varchar(50) ',
-                     'Palkka_tilille' => 'varchar(100) ',
-                     'tyoaika_hvrk' => 'varchar(50) ',
-                     'tyoaika_hvko' => 'varchar(50) ',
-                     'tyoaika_h_jakso' => 'varchar(50) ',
-                     'tyoaika_vko_jaksossa' => 'varchar(50) ',
-                     'RuokataukonPituus' => 'varchar(50) ',
-                     'Muu_tyoaika' => 'text ',
-                     'lomasta_sovittu' => 'text ',
-                     'Salassapito' => 'text ',
-                     'IrtisanomisaikaM' => 'varchar(50) ',
-                     'Muut_sopimusehdot' => 'text ',
-                     'Muutospaiva' => 'varchar(50) ',
-                     'LisayksetSopimukseen' => 'text ',
-                     'Paivays' => 'varchar(50) ',
-                     'Paikka' => 'varchar(100) ',
-                     'TyonantajanEdustaja' => 'varchar(100) ',
-                     'NimikeTehtava' => 'varchar(100) ',
-                     'tiedosto' => 'varchar(255) ',
-                     'teksti' => 'text '
-
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'key' => 'int(1) DEFAULT 1',
+                     'tyonantaja' => 'varchar(70) DEFAULT NULL',
+                     'osoite' => 'varchar(255) DEFAULT NULL',
+                     'postinumero' => 'varchar(7) DEFAULT NULL',
+                     'postitoimipaikka' => 'varchar(100) DEFAULT NULL',
+                     'puhelin' => 'varchar(50) DEFAULT NULL',
+                     'y_tunnus' => 'varchar(50) DEFAULT NULL',
+                     'sahkoposti' => 'varchar(100) DEFAULT NULL',
+                     'tekijan_email' => 'varchar(100) DEFAULT NULL',
+                     'tid' => 'int(7) DEFAULT 0',
+                     'tekijan_nimi' => 'varchar(70) DEFAULT NULL',
+                     'tekijan_katuosoite' => 'varchar(100) DEFAULT NULL',
+                     'tekijan_pnumero' => 'varchar(7) DEFAULT NULL',
+                     'tekijan_ptoimipaikka' => 'varchar(50) DEFAULT NULL',
+                     'tekijan_puh' => 'varchar(50) DEFAULT NULL',
+                     'tekijan_henkilotunnus' => 'varchar(50) DEFAULT NULL',
+                     'sopimus' => 'varchar(50) DEFAULT NULL',
+                     'ToistaVoimaSopimus' => 'varchar(100) DEFAULT NULL',
+                     'MaaraVoimaSopimusAlkaa' => 'varchar(100) DEFAULT NULL',
+                     'MaaraVoimaSopimusPaattyy' => 'varchar(100) DEFAULT NULL',
+                     'peruste' => 'text DEFAULT NULL',
+                     'koeaika' => 'varchar(100) DEFAULT NULL',
+                     'SoveltavaSopimus' => 'varchar(100) DEFAULT NULL',
+                     'Tyotehtavat' => 'text DEFAULT NULL',
+                     'tyonSuorittamisPaikka' => 'text DEFAULT NULL',
+                     'PalkanMaaraytymisperuste' => 'varchar(50) DEFAULT NULL',
+                     'PalkanMaaraytymisperusteMuu' => 'varchar(100) DEFAULT NULL',
+                     'TyokokemusVuotta' => 'varchar(20) DEFAULT NULL',
+                     'TyokokemusKuu' => 'varchar(20) DEFAULT NULL',
+                     'palkka_kk' => 'varchar(20) DEFAULT NULL',
+                     'Palkkaluokka' => 'varchar(50) DEFAULT NULL',
+                     'palkka_h' => 'varchar(20) DEFAULT NULL',
+                     'Luontaiseudut' => 'text DEFAULT NULL',
+                     'Raha_arvo' => 'varchar(70) DEFAULT NULL',
+                     'Verotusarvo' => 'varchar(70) DEFAULT NULL',
+                     'palkka_muu2' => 'varchar(70) DEFAULT NULL',
+                     'Palkanmaksukausi' => 'varchar(50) DEFAULT NULL',
+                     'Palkanmaksupaivat' => 'varchar(50) DEFAULT NULL',
+                     'Palkka_tilille' => 'varchar(100) DEFAULT NULL',
+                     'tyoaika_hvrk' => 'varchar(50) DEFAULT NULL',
+                     'tyoaika_hvko' => 'varchar(50) DEFAULT NULL',
+                     'tyoaika_h_jakso' => 'varchar(50) DEFAULT NULL',
+                     'tyoaika_vko_jaksossa' => 'varchar(50) DEFAULT NULL',
+                     'RuokataukonPituus' => 'varchar(50) DEFAULT NULL',
+                     'Muu_tyoaika' => 'text DEFAULT NULL',
+                     'lomasta_sovittu' => 'text DEFAULT NULL',
+                     'Salassapito' => 'text DEFAULT NULL',
+                     'IrtisanomisaikaM' => 'varchar(50) DEFAULT NULL',
+                     'Muut_sopimusehdot' => 'text DEFAULT NULL',
+                     'Muutospaiva' => 'varchar(50) DEFAULT NULL',
+                     'LisayksetSopimukseen' => 'text DEFAULT NULL',
+                     'Paivays' => 'varchar(50) DEFAULT NULL',
+                     'Paikka' => 'varchar(100) DEFAULT NULL',
+                     'TyonantajanEdustaja' => 'varchar(100) DEFAULT NULL',
+                     'NimikeTehtava' => 'varchar(100) DEFAULT NULL',
+                     'tiedosto' => 'varchar(255) DEFAULT NULL',
+                     'teksti' => 'text DEFAULT NULL'
 		);
 
 		foreach($table_structure as $key=>$value)

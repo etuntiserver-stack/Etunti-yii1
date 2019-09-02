@@ -31,12 +31,12 @@ class EdicoViestintaRivit extends DB2ActiveRecord
 
 		$table_structure = array(
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
-                     'viestinta_id' => 'int(11)',
-                     'asiakas_id' => 'int(11)',
-                     'admin_id' => 'int(11)',
-                     'teksti' => 'TEXT',
+                     'viestinta_id' => 'int(11) DEFAULT 0',
+                     'asiakas_id' => 'int(11) DEFAULT 0',
+                     'admin_id' => 'int(11) DEFAULT 0',
+                     'teksti' => 'TEXT DEFAULT NULL',
                      'katsottu' => 'int(1) DEFAULT 0',
-                     'luoja' => 'varchar(50)'
+                     'luoja' => 'varchar(50) DEFAULT NULL'
 		);
 
 		foreach($table_structure as $key=>$value)

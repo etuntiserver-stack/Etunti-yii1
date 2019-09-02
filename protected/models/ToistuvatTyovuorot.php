@@ -38,7 +38,6 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
@@ -50,32 +49,31 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'pfrom' => 'varchar(50) ',
-                     'pto' => 'varchar(50) ',
-                     'viikkoja' => 'int(1) ',
-                     'viikko_paivat' => 'text ',
-                     'tid' => 'int(11) ',
-                     'kohde' => 'int(11) ',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'pfrom' => 'varchar(50) DEFAULT NULL',
+                     'pto' => 'varchar(50) DEFAULT NULL',
+                     'viikkoja' => 'int(1) DEFAULT 0',
+                     'viikko_paivat' => 'text DEFAULT NULL',
+                     'tid' => 'int(11) DEFAULT 0',
+                     'kohde' => 'int(11) DEFAULT 0',
                      'osoite' => 'varchar(255) DEFAULT NULL',
                      'postinumero' => 'varchar(255) DEFAULT NULL',
                      'postitoimipaikka' => 'varchar(255) DEFAULT NULL',
-                     'pvm' => 'varchar(50) ',
-                     'alku' => 'varchar(10) ',
-                     'loppu' => 'varchar(10) ',
-                     'pituus' => 'varchar(10) ',
-                     'kesto' => 'varchar(10) ',
-                     'tyoajanmerkinta' => 'varchar(100) ',
-                     'status' => 'int(3) ',
-                     'tietoja' => 'text ',
-                     'tyopaari' => 'text ',
-		     'piilota_mobiilista' => 'int(1)',
+                     'pvm' => 'varchar(50) DEFAULT NULL',
+                     'alku' => 'varchar(10) DEFAULT NULL',
+                     'loppu' => 'varchar(10) DEFAULT NULL',
+                     'pituus' => 'varchar(10) DEFAULT NULL',
+                     'kesto' => 'varchar(10) DEFAULT NULL',
+                     'tyoajanmerkinta' => 'varchar(100) DEFAULT NULL',
+                     'status' => 'int(3) DEFAULT 0',
+                     'tietoja' => 'text DEFAULT NULL',
+                     'tyopaari' => 'text DEFAULT NULL',
+		     'piilota_mobiilista' => 'int(1) DEFAULT 0',
                      'tuoteID' => 'int(1) DEFAULT 0',
-                     'lisa_tuotteet' => 'text',
-                     'ilmoitus_paattymisesta' => 'int(1) ',
-                     'tvuoro_ids' => 'text ',
-                     'poistettu_pvm' => 'text',
+                     'lisa_tuotteet' => 'text DEFAULT NULL',
+                     'ilmoitus_paattymisesta' => 'int(1) DEFAULT 0',
+                     'tvuoro_ids' => 'text DEFAULT NULL',
+                     'poistettu_pvm' => 'text DEFAULT NULL',
 		     'tyo_erittelyt' => 'text DEFAULT NULL',
 		     'muistiinpano' => 'text DEFAULT NULL',
                      'tyoajanlaatu' => 'varchar(50) DEFAULT NULL',

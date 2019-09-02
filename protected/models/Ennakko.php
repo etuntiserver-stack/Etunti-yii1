@@ -30,14 +30,13 @@ class Ennakko extends DB2ActiveRecord
 	{
 
 		$tb_name = 'sivex_ennakko';
-		$check_this_table = false;
+		$check_this_table = true;
 		unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
 			$check_this_table = true;
 		}
-
 
 		if($check_this_table)
 		{
@@ -50,16 +49,11 @@ class Ennakko extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'tid' => 'int(11) ',
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'pvm' => 'varchar(20) ',
-                     'syy' => 'varchar(100) ',
-                     'ennakko' => 'varchar(20) ',
-
-
-
-
+                     'tid' => 'int(11) DEFAULT 0',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'pvm' => 'varchar(20) DEFAULT NULL',
+                     'syy' => 'varchar(100) DEFAULT NULL',
+                     'ennakko' => 'varchar(20) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

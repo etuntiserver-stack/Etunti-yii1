@@ -23,14 +23,13 @@ class Palautteet extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'palautteet';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
 			$check_this_table = true;
 		}
-
 
 		if($check_this_table)
 		{
@@ -43,22 +42,16 @@ class Palautteet extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'keskustelu_id' => 'int(11) ',
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'asiakas_id' => 'int(11) ',
-                     'teksti' => 'text ',
-                     //'otsikko' => 'varchar(255) ',
-                     'status' => 'int(1) ',
-                     'emoji_tila' => 'int(1) ',
-                     'asiakas_luettu' => 'int(1) ',
-                     'lahettaja' => 'varchar(20) ',
-                     'viimeinen_tyo' => 'varchar(255) ',
-                     'kategoria' => 'int(11) ',
-
-
-
-
+                     'keskustelu_id' => 'int(11) DEFAULT 0',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'asiakas_id' => 'int(11) DEFAULT 0',
+                     'teksti' => 'text DEFAULT NULL',
+                     'status' => 'int(1) DEFAULT 0',
+                     'emoji_tila' => 'int(1) DEFAULT 0',
+                     'asiakas_luettu' => 'int(1) DEFAULT 0',
+                     'lahettaja' => 'varchar(20) DEFAULT NULL',
+                     'viimeinen_tyo' => 'varchar(255) DEFAULT NULL',
+                     'kategoria' => 'int(11) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)

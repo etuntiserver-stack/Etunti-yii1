@@ -37,7 +37,6 @@ class TarjousHintaRivit extends DB2ActiveRecord
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
@@ -49,26 +48,21 @@ class TarjousHintaRivit extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'tarjous_id' => 'int(11) ',
-                     'rivi' => 'int(11) ',
-                     'tkoodi' => 'varchar(255) ',
-                     'nimike' => 'varchar(100) ',
-                     'kpl' => 'varchar(20) ',
-                     'yksikko' => 'varchar(20) ',
-                     'hinta' => 'varchar(20) ',
-                     'alv' => 'varchar(20) ',
-                     'hinta_alv' => 'varchar(20) ',
-                     'ale' => 'varchar(20) ',
-                     'veroton' => 'varchar(20) ',
-                     'yhteensa_alv' => 'varchar(20) ',
-                     'tuoteID' => 'int(11) ',
-                     'free_text' => 'varchar(250) ',
-
-
-
-
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'tarjous_id' => 'int(11) DEFAULT 0',
+                     'rivi' => 'int(11) DEFAULT 0',
+                     'tkoodi' => 'varchar(255) DEFAULT NULL',
+                     'nimike' => 'varchar(100) DEFAULT NULL',
+                     'kpl' => 'varchar(20) DEFAULT NULL',
+                     'yksikko' => 'varchar(20) DEFAULT NULL',
+                     'hinta' => 'varchar(20) DEFAULT NULL',
+                     'alv' => 'varchar(20) DEFAULT NULL',
+                     'hinta_alv' => 'varchar(20) DEFAULT NULL',
+                     'ale' => 'varchar(20) DEFAULT NULL',
+                     'veroton' => 'varchar(20) DEFAULT NULL',
+                     'yhteensa_alv' => 'varchar(20) DEFAULT NULL',
+                     'tuoteID' => 'int(11) DEFAULT 0',
+                     'free_text' => 'varchar(250) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

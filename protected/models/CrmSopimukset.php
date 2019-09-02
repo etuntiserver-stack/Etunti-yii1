@@ -15,8 +15,8 @@
 class CrmSopimukset extends DB2ActiveRecord
 {
 
-public $asiakastila;
-public $template;
+	public $asiakastila;
+	public $template;
 
 	/**
 	 * @return string the associated database table name
@@ -32,7 +32,6 @@ public $template;
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
@@ -46,32 +45,31 @@ public $template;
 		}
 
 		$table_structure = array(
-
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'tarjous_id' => 'int(11) ',
-                     'asiakas_id' => 'int(11) ',
+                     'tarjous_id' => 'int(11) DEFAULT 0',
+                     'asiakas_id' => 'int(11) DEFAULT 0',
                      'as_nro' => 'int(11) DEFAULT 0',
-                     'tarjous' => 'text ',
-                     'hyvaksyn_koodi' => 'varchar(255) ',
-                     'asiakkaan_sahkoposti' => 'varchar(100) ',
-                     'status' => 'int(1) ',
-                     'liite' => 'varchar(255) ',
-                     'yhteystiedot_id' => 'int(11) ',
-                     'tyonkuvaus' => 'text ',
+                     'tarjous' => 'text DEFAULT NULL',
+                     'hyvaksyn_koodi' => 'varchar(255) DEFAULT NULL',
+                     'asiakkaan_sahkoposti' => 'varchar(100) DEFAULT NULL',
+                     'status' => 'int(1) DEFAULT 0',
+                     'liite' => 'varchar(255) DEFAULT NULL',
+                     'yhteystiedot_id' => 'int(11) DEFAULT 0',
+                     'tyonkuvaus' => 'text DEFAULT NULL',
                      'kohde_id' => 'int(11) ',
-                     'kohteen_osoite' => 'varchar(255) ',
-                     'kohteen_postinumero' => 'varchar(50) ',
-                     'kohteen_postitoimipaikka' => 'varchar(255) ',
-                     'tyonkuvaus_id' => 'int(11) ',
-                     'alv' => 'int(3) ',
-                     'hinta_tyyppi' => 'varchar(50) ',
-                     'hinta' => 'int(11) ',
-                     'tarvikkeet' => 'text ',
-                     'voimassa' => 'varchar(20) ',
-                     'tuote_palvelu' => 'varchar(255) ',
-		     'yhteensa_total_verot' => 'float',
-		     'yhteensa_total_veroton' => 'float',
-		     'yhteensa_total' => 'float',
+                     'kohteen_osoite' => 'varchar(255) DEFAULT NULL',
+                     'kohteen_postinumero' => 'varchar(50) DEFAULT NULL',
+                     'kohteen_postitoimipaikka' => 'varchar(255) DEFAULT NULL',
+                     'tyonkuvaus_id' => 'int(11) DEFAULT 0',
+                     'alv' => 'int(3) DEFAULT 0',
+                     'hinta_tyyppi' => 'varchar(50) DEFAULT NULL',
+                     'hinta' => 'int(11) DEFAULT 0',
+                     'tarvikkeet' => 'text DEFAULT NULL',
+                     'voimassa' => 'varchar(20) DEFAULT NULL',
+                     'tuote_palvelu' => 'varchar(255) DEFAULT NULL',
+		     'yhteensa_total_verot' => 'float DEFAULT 0',
+		     'yhteensa_total_veroton' => 'float DEFAULT 0',
+		     'yhteensa_total' => 'float DEFAULT 0',
 		     'voimassaolo' => 'int(11) DEFAULT 0',
 		);
 

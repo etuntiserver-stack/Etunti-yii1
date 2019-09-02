@@ -52,7 +52,6 @@ class Tyosuhdet extends DB2ActiveRecord
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
@@ -64,29 +63,29 @@ class Tyosuhdet extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-                     'tid' => 'int(7) ',
-                     'alku' => 'varchar(20) ',
-                     'loppu' => 'varchar(20) ',
-                     'vktyoaika' => 'varchar(10) ',
-                     'nimike' => 'varchar(40) ',
-                     'palkkausmuoto' => 'varchar(30) ',
-                     'tuntihinta' => 'varchar(10) ',
-                     'matka_thinta' => 'varchar(10) ',
-                     'lippu_kuumaks' => 'varchar(10) ',
-                     'koe_loppu' => 'varchar(20) ',
-                     'koe_hinta' => 'varchar(10) ',
-                     'tuloraja_ajalle' => 'varchar(100) ',
-                     'perusprosentti' => 'varchar(10) ',
-                     'lisaprosentti' => 'varchar(10) ',
-                     'kuukaudessa' => 'varchar(10) ',
-                     'kahdessa_viikossa' => 'varchar(10) ',
-                     'viikossa' => 'varchar(10) ',
-                     'paivassa' => 'varchar(10) ',
-                     'atk_varten' => 'varchar(10) ',
-                     'yksi_tuloraja' => 'varchar(10) ',
-                     'tyopvm_kk' => 'int(2) ',
-                     'palkka_tyyppi' => 'varchar(10) ',
-                     'veronumero' => 'varchar(255) ',
+                     'tid' => 'int(7) DEFAULT 0',
+                     'alku' => 'varchar(20) DEFAULT NULL',
+                     'loppu' => 'varchar(20) DEFAULT NULL',
+                     'vktyoaika' => 'varchar(10) DEFAULT NULL',
+                     'nimike' => 'varchar(40) DEFAULT NULL',
+                     'palkkausmuoto' => 'varchar(30) DEFAULT NULL',
+                     'tuntihinta' => 'varchar(10) DEFAULT NULL',
+                     'matka_thinta' => 'varchar(10) DEFAULT NULL',
+                     'lippu_kuumaks' => 'varchar(10) DEFAULT NULL',
+                     'koe_loppu' => 'varchar(20) DEFAULT NULL',
+                     'koe_hinta' => 'varchar(10) DEFAULT NULL',
+                     'tuloraja_ajalle' => 'varchar(100) DEFAULT NULL',
+                     'perusprosentti' => 'varchar(10) DEFAULT NULL',
+                     'lisaprosentti' => 'varchar(10) DEFAULT NULL',
+                     'kuukaudessa' => 'varchar(10) DEFAULT NULL',
+                     'kahdessa_viikossa' => 'varchar(10) DEFAULT NULL',
+                     'viikossa' => 'varchar(10) DEFAULT NULL',
+                     'paivassa' => 'varchar(10) DEFAULT NULL',
+                     'atk_varten' => 'varchar(10) DEFAULT NULL',
+                     'yksi_tuloraja' => 'varchar(10) DEFAULT NULL',
+                     'tyopvm_kk' => 'int(2) DEFAULT NULL',
+                     'palkka_tyyppi' => 'varchar(10) DEFAULT NULL',
+                     'veronumero' => 'varchar(255) DEFAULT NULL',
 		     'tyoelakevakuutuksen_tyyppi' => 'int(2) DEFAULT NULL',
 		     'tyottomyysvakuutus_tyyppi' => 'varchar(255) DEFAULT NULL',
 		);

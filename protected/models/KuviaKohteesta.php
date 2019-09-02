@@ -21,7 +21,7 @@ class KuviaKohteesta extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'kuvia_kohteesta';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -41,18 +41,13 @@ class KuviaKohteesta extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'kohde_id' => 'int(11) ',
-                     'osoite' => 'varchar(255) ',
-                     'tid' => 'int(11) ',
-                     'tekijan_nimi' => 'varchar(255) ',
-                     'tiedosto' => 'varchar(255) ',
-                     'kuvaus' => 'text ',
-
-
-
-
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'kohde_id' => 'int(11) DEFAULT 0',
+                     'osoite' => 'varchar(255) DEFAULT NULL',
+                     'tid' => 'int(11) DEFAULT 0',
+                     'tekijan_nimi' => 'varchar(255) DEFAULT NULL',
+                     'tiedosto' => 'varchar(255) DEFAULT NULL',
+                     'kuvaus' => 'text DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

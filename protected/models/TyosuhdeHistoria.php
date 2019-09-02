@@ -28,8 +28,8 @@ class TyosuhdeHistoria extends DB2ActiveRecord
 
 		$table_structure = array(
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
-                     'tid' => 'int(11)',
-                     'arr' => 'TEXT',
+                     'tid' => 'int(11) DEFAULT 0',
+                     'arr' => 'TEXT DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

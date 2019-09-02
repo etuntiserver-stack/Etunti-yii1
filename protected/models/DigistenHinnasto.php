@@ -38,13 +38,12 @@ class DigistenHinnasto extends CActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'digisten_hinnasto';
-		$check_this_table = false;
+		$check_this_table = true;
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
 			$check_this_table = true;
 		}
-
 
 		if($check_this_table)
 		{
@@ -57,36 +56,32 @@ class DigistenHinnasto extends CActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'etyo_1000' => 'float ',
-                     'etyo_1000_2000' => 'float ',
-                     'etyo_2000_3000' => 'float ',
-                     'etyo_3000_6000' => 'float ',
-                     'etyo_6000_9000' => 'float ',
-                     'etyo_9000_plus' => 'float ',
-                     'elasku_1000' => 'float ',
-                     'elasku_1000_2000' => 'float ',
-                     'elasku_2000_3000' => 'float ',
-                     'elasku_3000_6000' => 'float ',
-                     'elasku_6000_9000' => 'float ',
-                     'elasku_9000_plus' => 'float ',
-                     'eonline_1000' => 'float ',
-                     'eonline_1000_2000' => 'float ',
-                     'eonline_2000_3000' => 'float ',
-                     'eonline_3000_6000' => 'float ',
-                     'eonline_6000_9000' => 'float ',
-                     'eonline_9000_plus' => 'float ',
-                     'edico_1000' => 'float ',
-                     'edico_1000_2000' => 'float ',
-                     'edico_2000_3000' => 'float ',
-                     'edico_3000_6000' => 'float ',
-                     'edico_6000_9000' => 'float ',
-                     'edico_9000_plus' => 'float ',
-                     'jarjestelmanvalvoja' => 'float ',
-                     'snapshot_pvm' => 'int(11) ',
-
-
-
+                     'etyo_1000' => 'float DEFAULT 0',
+                     'etyo_1000_2000' => 'float DEFAULT 0',
+                     'etyo_2000_3000' => 'float DEFAULT 0',
+                     'etyo_3000_6000' => 'float DEFAULT 0',
+                     'etyo_6000_9000' => 'float DEFAULT 0',
+                     'etyo_9000_plus' => 'float DEFAULT 0',
+                     'elasku_1000' => 'float DEFAULT 0',
+                     'elasku_1000_2000' => 'float DEFAULT 0',
+                     'elasku_2000_3000' => 'float DEFAULT 0',
+                     'elasku_3000_6000' => 'float DEFAULT 0',
+                     'elasku_6000_9000' => 'float DEFAULT 0',
+                     'elasku_9000_plus' => 'float DEFAULT 0',
+                     'eonline_1000' => 'float DEFAULT 0',
+                     'eonline_1000_2000' => 'float DEFAULT 0',
+                     'eonline_2000_3000' => 'float DEFAULT 0',
+                     'eonline_3000_6000' => 'float DEFAULT 0',
+                     'eonline_6000_9000' => 'float DEFAULT 0',
+                     'eonline_9000_plus' => 'float DEFAULT 0',
+                     'edico_1000' => 'float DEFAULT 0',
+                     'edico_1000_2000' => 'float DEFAULT 0',
+                     'edico_2000_3000' => 'float DEFAULT 0',
+                     'edico_3000_6000' => 'float DEFAULT 0',
+                     'edico_6000_9000' => 'float DEFAULT 0',
+                     'edico_9000_plus' => 'float DEFAULT 0',
+                     'jarjestelmanvalvoja' => 'float DEFAULT 0',
+                     'snapshot_pvm' => 'int(11) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)

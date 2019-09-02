@@ -35,7 +35,7 @@
 class Kohteet extends DB2ActiveRecord
 {
 
-public $verot, $count;
+	public $verot, $count;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -61,7 +61,6 @@ public $verot, $count;
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
@@ -73,11 +72,10 @@ public $verot, $count;
 		}
 
 		$table_structure = array(
-
-                     'asiakas_id' => 'int(11) ',
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'tag_id' => 'varchar(20) ',
-                     'gps_sijainti' => 'varchar(50) ',
+                     'asiakas_id' => 'int(11) DEFAULT 0',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'tag_id' => 'varchar(20) DEFAULT NULL',
+                     'gps_sijainti' => 'varchar(50) DEFAULT NULL',
                      'lyhenne' => 'varchar(46) DEFAULT NULL',
                      'osoite' => 'varchar(50) DEFAULT NULL',
                      'katuosoite' => 'varchar(50) DEFAULT NULL',
@@ -90,27 +88,27 @@ public $verot, $count;
                      'muut' => 'text DEFAULT NULL',
                      'toimenpiteet' => 'longtext DEFAULT NULL',
                      'tietoja' => 'text DEFAULT NULL',
-                     'tyoryhma' => 'int(11)',
+                     'tyoryhma' => 'int(11) DEFAULT 0',
                      'ryhma' => 'varchar(10) DEFAULT NULL',
-                     'aktiivinen' => 'int(1) DEFAULT NULL',
+                     'aktiivinen' => 'int(1) DEFAULT 0',
                      'avain' => 'varchar(255) DEFAULT NULL',
-                     'kenella_on_avain' => 'varchar(50) ',
-                     'puh_nro' => 'varchar(50) ',
-                     'siivous' => 'varchar(100) ',
-                     'etu_suku_nimet' => 'varchar(100) ',
-                     'maksuehto_paiva' => 'int(2) ',
-                     'viivastyskorko' => 'varchar(10) ',
-                     'lasku_tiedot' => 'varchar(255) ',
-                     'avaimen_sijainti' => 'int(1) ',
-                     'tarvittavien_tyontekijoiden_maara' => 'int(3) ',
-                     'arvioitu_kesto' => 'varchar(100) ',
-                     'uusi_tilaus' => 'int(1) ',
+                     'kenella_on_avain' => 'varchar(50) DEFAULT NULL',
+                     'puh_nro' => 'varchar(50) DEFAULT NULL',
+                     'siivous' => 'varchar(100) DEFAULT NULL',
+                     'etu_suku_nimet' => 'varchar(100) DEFAULT NULL',
+                     'maksuehto_paiva' => 'int(2) DEFAULT 0',
+                     'viivastyskorko' => 'varchar(10) DEFAULT NULL',
+                     'lasku_tiedot' => 'varchar(255) DEFAULT NULL',
+                     'avaimen_sijainti' => 'int(1) DEFAULT 0',
+                     'tarvittavien_tyontekijoiden_maara' => 'int(3) DEFAULT 0',
+                     'arvioitu_kesto' => 'varchar(100) DEFAULT NULL',
+                     'uusi_tilaus' => 'int(1) DEFAULT 0',
 		     'hinnasto_id' => 'int(11) DEFAULT 0',
-                     'alv' => 'int(2) ',
-                     'hinta_sis_alv' => 'float',
-                     'hinta_tyyppi' => 'varchar(50)',
-                     'hinta' => 'varchar(10)',
-                     'verot' => 'varchar(100)',
+                     'alv' => 'int(2) DEFAULT 0',
+                     'hinta_sis_alv' => 'float DEFAULT 0',
+                     'hinta_tyyppi' => 'varchar(50) DEFAULT NULL',
+                     'hinta' => 'varchar(10) DEFAULT NULL',
+                     'verot' => 'varchar(100) DEFAULT NULL',
 		     'tyo_erittelyt' => 'text DEFAULT NULL',
                      'kohteen_neliot' => 'float(11) DEFAULT 0',
 		);

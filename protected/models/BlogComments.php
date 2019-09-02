@@ -18,7 +18,7 @@ class BlogComments extends CActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'blog_comments';
-		$check_this_table = false;
+		$check_this_table = true;
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
@@ -37,15 +37,10 @@ class BlogComments extends CActiveRecord
 		}
 
 		$table_structure = array(
-
-
-                     'blog_id' => 'int(11) AFTER id',
+                     'blog_id' => 'int(11) DEFAULT 0',
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP AFTER blog_id',
-                     'nimimerkki' => 'varchar(255) AFTER time',
-                     'teksti' => 'text AFTER nimimerkki',
-               
-
-
+                     'nimimerkki' => 'varchar(255) DEFAULT NULL',
+                     'teksti' => 'text DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

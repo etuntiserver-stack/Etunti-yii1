@@ -26,7 +26,6 @@ class Tyonkuvaus extends DB2ActiveRecord
 			$check_this_table = true;
 		}
 
-
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
@@ -38,14 +37,12 @@ class Tyonkuvaus extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'yhteystiedot_id' => 'int(11) ',
-                     'asiakas_id' => 'int(11) ',
-                     'otsikko' => 'varchar(255) ',
-                     'aktiivinen' => 'int(1) DEFAULT 1 ',
-                     'kohde_id' => 'int(11) ',
-
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'yhteystiedot_id' => 'int(11) DEFAULT 0',
+                     'asiakas_id' => 'int(11) DEFAULT 0',
+                     'otsikko' => 'varchar(255) DEFAULT NULL',
+                     'aktiivinen' => 'int(1) DEFAULT 1',
+                     'kohde_id' => 'int(11) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)

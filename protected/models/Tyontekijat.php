@@ -31,9 +31,8 @@
 class Tyontekijat extends DB2ActiveRecord
 {
 
-public $count;
-public $tunnus;
-
+	public $count;
+	public $tunnus;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -51,14 +50,13 @@ public $tunnus;
 	public function tableName()
 	{
 		$tb_name = 'sivex_ttekijat';
-		$check_this_table = false;
+		$check_this_table = true;
 		unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
 			$check_this_table = true;
 		}
-
 
 		if($check_this_table)
 		{
@@ -71,39 +69,38 @@ public $tunnus;
 		}
 
 		$table_structure = array(
-
-                     'imei' => 'varchar(100) ',
-                     'laiten_puh' => 'varchar(100) ',
-                     'tekijan_nimi' => 'varchar(100) ',
-                     'tekijan_henkilotunnus' => 'varchar(20) ',
-                     'tekijan_puh' => 'varchar(20) ',
-                     'tekijan_email' => 'varchar(50) ',
-                     'tekijan_lanka_puh' => 'varchar(20) ',
-                     'tekijan_katuosoite' => 'varchar(100) ',
-                     'tekijan_pnumero' => 'varchar(7) ',
-                     'tekijan_ptoimipaikka' => 'varchar(50) ',
-                     'tyoryhma' => 'varchar(500) ',
-                     'tyoehtosopimus' => 'varchar(50) ',
-                     'tekijan_kulunvalvonta' => 'varchar(50) ',
-                     'tekijan_pankkitili' => 'varchar(100) ',
-                     'tekijan_konttori' => 'varchar(50) ',
-                     'aktiivinen' => 'varchar(50) ',
-                     'tekijan_tietoja' => 'text ',
-                     'tekijan_muisti' => 'text ',
-                     'salasana' => 'varchar(100) ',
-                     'online_varauksen_valmina' => 'int(1)',
-                     'kortit' => 'text ',
-                     'ayjasenyys' => 'varchar(10) ',
-                     'gcm_reg_id' => 'varchar(500) ',
-                     'position' => 'varchar(255) ',
-                     'tyo_toimialue' => 'varchar(100) ',
-                     'tietoja_onlinevarauksen' => 'text ',
-                     'sukunimi' => 'varchar(255) ',
-                     'ilmoitus_merkkipaivasta_vuosi' => 'int(4) ',
-                     'kortit_voimassaolo' => 'varchar(500) ',
-                     'tyontekijan_numero' => 'int(10) ',
-                     'ammattinimike' => 'varchar(255) ',
-                     'onlinevaraus_tuotteet' => 'text ',
+                     'imei' => 'varchar(100) DEFAULT NULL',
+                     'laiten_puh' => 'varchar(100) DEFAULT NULL',
+                     'tekijan_nimi' => 'varchar(100) DEFAULT NULL',
+                     'tekijan_henkilotunnus' => 'varchar(20) DEFAULT NULL',
+                     'tekijan_puh' => 'varchar(20) DEFAULT NULL',
+                     'tekijan_email' => 'varchar(50) DEFAULT NULL',
+                     'tekijan_lanka_puh' => 'varchar(20) DEFAULT NULL',
+                     'tekijan_katuosoite' => 'varchar(100) DEFAULT NULL',
+                     'tekijan_pnumero' => 'varchar(7) DEFAULT NULL',
+                     'tekijan_ptoimipaikka' => 'varchar(50) DEFAULT NULL',
+                     'tyoryhma' => 'varchar(500) DEFAULT NULL',
+                     'tyoehtosopimus' => 'varchar(50) DEFAULT NULL',
+                     'tekijan_kulunvalvonta' => 'varchar(50) DEFAULT NULL',
+                     'tekijan_pankkitili' => 'varchar(100) DEFAULT NULL',
+                     'tekijan_konttori' => 'varchar(50) DEFAULT NULL',
+                     'aktiivinen' => 'varchar(50) DEFAULT NULL',
+                     'tekijan_tietoja' => 'text DEFAULT NULL',
+                     'tekijan_muisti' => 'text DEFAULT NULL',
+                     'salasana' => 'varchar(100) DEFAULT NULL',
+                     'online_varauksen_valmina' => 'int(1) DEFAULT 0',
+                     'kortit' => 'text DEFAULT NULL',
+                     'ayjasenyys' => 'varchar(10) DEFAULT NULL',
+                     'gcm_reg_id' => 'varchar(500) DEFAULT NULL',
+                     'position' => 'varchar(255) DEFAULT NULL',
+                     'tyo_toimialue' => 'varchar(100) DEFAULT NULL',
+                     'tietoja_onlinevarauksen' => 'text DEFAULT NULL',
+                     'sukunimi' => 'varchar(255) DEFAULT NULL',
+                     'ilmoitus_merkkipaivasta_vuosi' => 'int(4) DEFAULT 0',
+                     'kortit_voimassaolo' => 'varchar(500) DEFAULT NULL',
+                     'tyontekijan_numero' => 'int(10) DEFAULT 0',
+                     'ammattinimike' => 'varchar(255) DEFAULT NULL',
+                     'onlinevaraus_tuotteet' => 'text DEFAULT NULL',
                      'app_naytta_osoitekenta' => 'int(1) DEFAULT 0',
 		     'muistiinpano' => 'text DEFAULT NULL'
 		);
