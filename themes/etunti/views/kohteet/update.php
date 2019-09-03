@@ -1,9 +1,4 @@
 <?php
-if(isset($_POST['poistaTamaTiedosto'])){
-	unlink($_POST['poistaTamaTiedosto']);
-exit;
-}
-
    if(isset($_POST['poistaTamaKuva']))
    {
 	KuviaKohteesta::model()->deletebypk($_POST['kuva_id']);

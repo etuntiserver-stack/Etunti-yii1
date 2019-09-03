@@ -387,6 +387,7 @@ class KohteetController extends Controller
 
 		$model=$this->loadModel($id);
 
+		// <-- FILES
 		if(isset($_POST['uploaded_t'])){
 			Asetukset::model()->uploadFile(
 				Yii::app()->user->domain, 
@@ -394,6 +395,11 @@ class KohteetController extends Controller
 				$model->id.'_'.$_FILES['file']['name']
 			);
 		}
+		if(isset($_POST['poistaTamaTiedosto'])){
+			unlink($_POST['poistaTamaTiedosto']);
+			exit;
+		}
+		//     FILES -->
 
 		// <-- Koordinatiit
 	        $latAuto = '';

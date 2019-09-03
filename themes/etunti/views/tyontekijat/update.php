@@ -1,46 +1,4 @@
 <?php
-
-if(isset($_POST['uploaded']))
-{
-  Yii::app()->user->domain = strtolower(Yii::app()->user->domain);
-
-  if (!file_exists(Yii::app()->basePath."/../img/tekijat/".Yii::app()->user->domain)) {
-  	mkdir(Yii::app()->basePath."/../img/tekijat/".Yii::app()->user->domain, 0777, true);
-  }
-
-  $uploaddir = Yii::app()->basePath.'/../img/tekijat/'.Yii::app()->user->domain.'/';
-  $uploadfile = $uploaddir . basename($model->id.'.jpg');
-
-  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-
-
-	// <-- Image resize
-	//header('Content-Type: image/jpeg');
-	$url = $uploadfile;
-	$width = 640;
-	$image = imagecreatefromjpeg($url);
-	$orig_width = imagesx($image);
-	$orig_height = imagesy($image);
-	$height = (($orig_height * $width) / $orig_width);
-	$new_image = imagecreatetruecolor($width, $height);
-	imagecopyresized($new_image, $image,
-		0, 0, 0, 0,
-		$width, $height,
-		$orig_width, $orig_height);
-	
-	imagejpeg($new_image, $uploadfile);
-	//     Image resize -->
-
-
-     echo "";
-  } 
-}
-
-if(isset($_POST['poistaTamaTiedosto'])){
-	unlink($_POST['poistaTamaTiedosto']);
-exit;
-}
-
 $site = Yii::app()->createController('Site');
 $checkLaaja = "tyontekijat_4_".Yii::app()->user->adminStatus;
 $laaja = $site[0]->checkOikeusFields($checkLaaja);
@@ -175,7 +133,7 @@ $laaja = $site[0]->checkOikeusFields($checkLaaja);
        <label class="field prepend-icon append-button file">
          <span class="button"><?php echo Yii::t('main', 'Työntekijän kuva'); ?></span>
          <input type="file" class="gui-file" name="file" id="i_file" onChange="document.getElementById('uploader1').value = this.value;">
-         <input type="text" class="gui-input" name="uploaded" id="uploader1" placeholder="Valitse tiedosto..">
+         <input type="text" class="gui-input" name="uploaded_img" id="uploader1" placeholder="Valitse tiedosto..">
          <label class="field-icon">
           <i class="fa fa-upload"></i>
          </label>

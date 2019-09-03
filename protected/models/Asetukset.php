@@ -406,4 +406,35 @@ class Asetukset extends DB2ActiveRecord
 		}
 	}
 
+	public function uploadImage($domain, $folder, $fname){
+		$domain = strtolower($domain);
+		if (!file_exists(Yii::app()->basePath."/../img/".$folder."/".$domain)) {
+		  	mkdir(Yii::app()->basePath."/../img/".$folder."/".$domain, 0777, true);
+		}
+
+		$uploaddir = Yii::app()->basePath."/../img/".$folder."/".$domain."/";
+		$uploadfile = $uploaddir . basename($fname);
+		if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+			// <-- Image resize
+			//header('Content-Type: image/jpeg');
+			$url = $uploadfile;
+			$width = 640;
+			$image = imagecreatefromjpeg($url);
+			$orig_width = imagesx($image);
+			$orig_height = imagesy($image);
+			$height = (($orig_height * $width) / $orig_width);
+			$new_image = imagecreatetruecolor($width, $height);
+			imagecopyresized($new_image, $image,
+				0, 0, 0, 0,
+				$width, $height,
+				$orig_width, $orig_height);
+	
+			imagejpeg($new_image, $uploadfile);
+			//     Image resize -->
+		  	Yii::app()->user->setFlash('success', "Kuva tallennettu.");
+  		} else {
+			Yii::app()->user->setFlash('danger', "Laataminen ei onnistunut.");
+		}
+	}
+
 }

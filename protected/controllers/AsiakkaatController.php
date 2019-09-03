@@ -641,6 +641,7 @@ Yritys '.$yr.'
 
 		$model=$this->loadModel($id);
 
+		// <-- FILES
 		if(isset($_POST['uploaded_t'])){
 			Asetukset::model()->uploadFile(
 				Yii::app()->user->domain, 
@@ -648,6 +649,11 @@ Yritys '.$yr.'
 				$model->id.'_'.$_FILES['file']['name']
 			);
 		}
+		if(isset($_POST['poistaTamaTiedosto'])){
+			unlink($_POST['poistaTamaTiedosto']);
+			exit;
+		}
+		//     FILES -->
 
 		if(isset($_GET['suljeJuttelu']))
 		{

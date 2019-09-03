@@ -1,6 +1,4 @@
 <?php
-
-
 $head = '';
 
 if(!empty($model->yrityksen_nimi))
@@ -9,12 +7,6 @@ elseif(empty($model->yrityksen_nimi) and !empty($model->yhteyshenkilo))
 $head = $model->yhteyshenkilo;
 else
 $head = $model->osoite;
-
-
-if(isset($_POST['poistaTamaTiedosto'])){
-	unlink($_POST['poistaTamaTiedosto']);
-exit;
-}
 
 $asetukset = Asetukset::model()->findbypk(1);
 ?>
