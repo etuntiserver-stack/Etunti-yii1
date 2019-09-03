@@ -11,20 +11,6 @@ else
 $head = $model->osoite;
 
 
-if(isset($_POST['uploaded_t']))
-{
-
-  if (!file_exists(Yii::app()->basePath."/../tiedostot/asiakkaat/".Yii::app()->user->domain)) {
-  	mkdir(Yii::app()->basePath."/../tiedostot/asiakkaat/".Yii::app()->user->domain, 0777, true);
-  }
-
-  $uploaddir = Yii::app()->basePath.'/../tiedostot/asiakkaat/'.Yii::app()->user->domain.'/';
-  $uploadfile = $uploaddir . basename($model->id.'_'.$_FILES['file']['name']);
-  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-     //echo "";
-  } 
-}
-
 if(isset($_POST['poistaTamaTiedosto'])){
 	unlink($_POST['poistaTamaTiedosto']);
 exit;
@@ -124,8 +110,6 @@ $asetukset = Asetukset::model()->findbypk(1);
 <br>
 
     <?php
-
-
 	$i = 0;
 	foreach(array_reverse(glob('tiedostot/asiakkaat/'.Yii::app()->user->domain.'/'.$model->id.'_*.*')) as $file) {
 	$i++;
@@ -145,10 +129,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 		));
 		//     file_safe_opener -->
 
-	echo '
-	</div>
-	';
-	$kuvat[$i] = $file;
+	echo '</div>';
 	}
    ?>
      

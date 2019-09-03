@@ -851,69 +851,6 @@ class SiteController extends Controller
 		}
 	}
 
-	public function ModelienCleaner()
-	{
-
-		$models = array();
-		$modelsDir = Yii::getPathOfAlias("application.models");
-		$dh = opendir($modelsDir);
-		if ($dh !== false)
-		{
-		    $matches = array();
-		    echo '<table class="table">';	
-		    echo '<tr><th></th><th></th><th>vanha</th><th>uusi</th></tr>';
-		    while (($modelFileName = readdir($dh)) !== false)
-		    {
-		        if (preg_match("/^([A-Za-z0-9]+)\.php$/", $modelFileName, $matches))
-			{
-			   if(
-				isset($matches[1])
-				and $matches[1] != 'Page'
-				and $matches[1] != 'LoginForm'
-			    )
-			    {
-			
-				$tb_name = $matches[1]::model()->tableName();
-				$table = Yii::app()->db1->schema->getTable($tb_name);
-				foreach($table as $k=>$v){
-					foreach($v as $key=>$value){
-						if ( empty($value->defaultValue) ) {
-							echo '<tr><td>'.$tb_name. '</td><td>' .$key.'</td><td>'.$value->dbType.'</td>';
-							if (strpos($value->dbType, 'int') !== false) {
-								echo '<td>'.$value->dbType.' DEFAULT 0</td>';
-								Yii::app()->db1->createCommand()->alterColumn($tb_name, $key, $value->dbType.' DEFAULT 0' );
-							}
-							if (strpos($value->dbType, 'float') !== false) {
-								echo '<td>'.$value->dbType.' DEFAULT 0</td>';
-								Yii::app()->db1->createCommand()->alterColumn($tb_name, $key, $value->dbType.' DEFAULT 0' );
-							}
-							if (strpos($value->dbType, 'varchar') !== false) {
-								echo '<td>'.$value->dbType.' DEFAULT NULL</td>';
-								Yii::app()->db1->createCommand()->alterColumn($tb_name, $key, $value->dbType.' DEFAULT NULL' );
-							}
-							if (strpos($value->dbType, 'text') !== false) {
-								echo '<td>'.$value->dbType.' DEFAULT NULL</td>';
-								Yii::app()->db1->createCommand()->alterColumn($tb_name, $key, $value->dbType.' DEFAULT NULL' );
-							}
-							if (strpos($value->dbType, 'timestamp') !== false) {
-								echo '<td>'.$value->dbType.' DEFAULT CURRENT_TIMESTAMP</td>';
-								Yii::app()->db1->createCommand()->alterColumn($tb_name, $key, $value->dbType.' DEFAULT CURRENT_TIMESTAMP' );
-							}
-							echo '</tr>';
-						}
-					}
-				}
-
-		            	$m = new $matches[1];
-				//echo $matches[1].'<br>';
-			    }
-			}
-		    }
-		    echo '</table>';
-		    //exit;
-		    closedir($dh);
-		}
-	}
 /*
 	protected function cPanelConnect($host, $user, $token, $c_panel_user)
 	{

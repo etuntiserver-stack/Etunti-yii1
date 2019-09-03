@@ -641,6 +641,13 @@ Yritys '.$yr.'
 
 		$model=$this->loadModel($id);
 
+		if(isset($_POST['uploaded_t'])){
+			Asetukset::model()->uploadFile(
+				strtolower(Yii::app()->user->domain), 
+				'asiakkaat', 
+				$model->id.'_'.$_FILES['file']['name']
+			);
+		}
 
 		if(isset($_GET['suljeJuttelu']))
 		{

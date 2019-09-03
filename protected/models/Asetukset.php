@@ -189,7 +189,6 @@ class Asetukset extends DB2ActiveRecord
 		return $tb_name;
 	}
 
-
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -366,4 +365,23 @@ class Asetukset extends DB2ActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+	public function uploadFile($domain, $folder, $fname){
+		if (!file_exists(Yii::app()->basePath."/../tiedostot/".$folder."/".$domain)) {
+		  	mkdir(Yii::app()->basePath."/../tiedostot/".$folder."/".$domain, 0777, true);
+		}
+
+		$uploaddir = Yii::app()->basePath."/../tiedostot/".$folder."/".$domain."/";
+		$uploadfile = $uploaddir . basename($fname);
+		if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+		  	Yii::app()->user->setFlash('success', "Tiedosto tallennettu.");
+  		} else {
+			Yii::app()->user->setFlash('danger', "Laataminen ei onnistunut.");
+		}
+	}
+
+	public function getFile($domain, $folder, $fname){
+
+	}
+
 }

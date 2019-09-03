@@ -1,5 +1,4 @@
 <?php
-//$this->ModelienCleaner();
 
 	// <-- Change password to bcrypt
 	$adm = Administrators::model()->findByPk(Yii::app()->user->id);
