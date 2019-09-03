@@ -465,11 +465,19 @@ class TyontekijatController extends Controller
 		$netvisorResponse = '';
 		$model=$this->loadModel($id);
 
-	// <-- Oikeudet
-	   $checkOikeus = "tyontekijat_2_".Yii::app()->user->adminStatus;
-	   $site = Yii::app()->createController('Site');
-	   $site[0]->checkOikeus($checkOikeus);
-	//  Oikeudet -->
+		// <-- Oikeudet
+		$checkOikeus = "tyontekijat_2_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		$site[0]->checkOikeus($checkOikeus);
+		//  Oikeudet -->
+
+		if(isset($_POST['uploaded_t'])){
+			Asetukset::model()->uploadFile(
+				Yii::app()->user->domain, 
+				'tekijat', 
+				$model->id.'_'.$_FILES['file']['name']
+			);
+		}
 
 		// <-- Tyosuhteet talteen
 		if(isset($_GET['tyosuhteet_talteen']))

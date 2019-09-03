@@ -107,32 +107,14 @@ $asetukset = Asetukset::model()->findbypk(1);
     </div>
   </form>
 
-<br>
-
-    <?php
-	$i = 0;
-	foreach(array_reverse(glob('tiedostot/asiakkaat/'.Yii::app()->user->domain.'/'.$model->id.'_*.*')) as $file) {
-	$i++;
-	$explNimi = explode("/",$file);
- 	echo '
-	<div class="form-inline" id="t_'.$model->id.$i.'">
-	  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$model->id.'" for="t_'.$model->id.$i.'">X</div>
-	  &nbsp;&nbsp;&nbsp;';
-
-		// <-- file_safe_opener
-		$e = explode(".", end($explNimi));
-		$ext = $e[1];
-		$filepath = $file;
-		echo CHtml::link(end($explNimi),
-			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
-			array('target'=>'_blank','class'=>'text-danger'
-		));
-		//     file_safe_opener -->
-
-	echo '</div>';
-	}
-   ?>
-     
+  <br>
+  <?php
+	Asetukset::model()->getFiles(
+		Yii::app()->user->domain, 
+		'asiakkaat', 
+		$model->id
+	);
+  ?>
 
 </div>
 

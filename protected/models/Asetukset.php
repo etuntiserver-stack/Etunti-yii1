@@ -367,6 +367,7 @@ class Asetukset extends DB2ActiveRecord
 	}
 
 	public function uploadFile($domain, $folder, $fname){
+		$domain = strtolower($domain);
 		if (!file_exists(Yii::app()->basePath."/../tiedostot/".$folder."/".$domain)) {
 		  	mkdir(Yii::app()->basePath."/../tiedostot/".$folder."/".$domain, 0777, true);
 		}
@@ -380,8 +381,29 @@ class Asetukset extends DB2ActiveRecord
 		}
 	}
 
-	public function getFile($domain, $folder, $fname){
+	public function getFiles($domain, $folder, $id){
+		$domain = strtolower($domain);
+		$i = 0;
+		foreach(array_reverse(glob('tiedostot/'.$folder.'/'.$domain.'/'.$id.'_*.*')) as $file) {
+		$i++;
+		$explNimi = explode("/",$file);
+	 	echo '
+		<div class="form-inline" id="t_'.$id.$i.'">
+		  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$id.'" for="t_'.$id.$i.'">X</div>
+		  &nbsp;&nbsp;&nbsp;';
 
+			// <-- file_safe_opener
+			$e = explode(".", end($explNimi));
+			$ext = $e[1];
+			$filepath = $file;
+			echo CHtml::link(end($explNimi),
+				array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
+				array('target'=>'_blank','class'=>'text-danger'
+			));
+			//     file_safe_opener -->
+
+		echo '</div>';
+		}
 	}
 
 }

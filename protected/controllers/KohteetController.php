@@ -379,15 +379,23 @@ class KohteetController extends Controller
 	public function actionUpdate($id)
 	{
 
-	// <-- Oikeudet
-	   $checkOikeus = "kohteet_2_".Yii::app()->user->adminStatus;
-	   $site = Yii::app()->createController('Site');
-	   $site[0]->checkOikeus($checkOikeus);
-	//  Oikeudet -->
+		// <-- Oikeudet
+		$checkOikeus = "kohteet_2_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		$site[0]->checkOikeus($checkOikeus);
+		//  Oikeudet -->
 
+		$model=$this->loadModel($id);
+
+		if(isset($_POST['uploaded_t'])){
+			Asetukset::model()->uploadFile(
+				Yii::app()->user->domain, 
+				'kohteet', 
+				$model->id.'_'.$_FILES['file']['name']
+			);
+		}
 
 		// <-- Koordinatiit
-		$model=$this->loadModel($id);
 	        $latAuto = '';
 	        $lngAuto = '';
 	    	$coordinates = $this->getlatlong($model->osoite);

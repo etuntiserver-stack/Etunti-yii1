@@ -633,17 +633,17 @@ Yritys '.$yr.'
 	public function actionUpdate($id)
 	{
 
-	// <-- Oikeudet
-	   $checkOikeus = "asiakkaat_2_".Yii::app()->user->adminStatus;
-	   $site = Yii::app()->createController('Site');
-	   $site[0]->checkOikeus($checkOikeus);
-	//  Oikeudet -->
+		// <-- Oikeudet
+		$checkOikeus = "asiakkaat_2_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		$site[0]->checkOikeus($checkOikeus);
+		//  Oikeudet -->
 
 		$model=$this->loadModel($id);
 
 		if(isset($_POST['uploaded_t'])){
 			Asetukset::model()->uploadFile(
-				strtolower(Yii::app()->user->domain), 
+				Yii::app()->user->domain, 
 				'asiakkaat', 
 				$model->id.'_'.$_FILES['file']['name']
 			);

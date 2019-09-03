@@ -1,19 +1,4 @@
 <?php
-
-if(isset($_POST['uploaded_t']))
-{
-
-  if (!file_exists(Yii::app()->basePath."/../tiedostot/kohteet/".Yii::app()->user->domain)) {
-  	mkdir(Yii::app()->basePath."/../tiedostot/kohteet/".Yii::app()->user->domain, 0777, true);
-  }
-
-  $uploaddir = Yii::app()->basePath.'/../tiedostot/kohteet/'.Yii::app()->user->domain.'/';
-  $uploadfile = $uploaddir . basename($model->id.'_'.$_FILES['file']['name']);
-  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-     //echo "";
-  } 
-}
-
 if(isset($_POST['poistaTamaTiedosto'])){
 	unlink($_POST['poistaTamaTiedosto']);
 exit;
@@ -27,7 +12,7 @@ exit;
 	exit;
    }
 
-
+// Huono tehty
 if(isset($_POST['uploaded_tyonkuvaus']))
 {
 
@@ -46,12 +31,6 @@ if(isset($_POST['poistaTyonkuvaus'])){
 	unlink($_POST['poistaTyonkuvaus']);
 exit;
 }
-
-
-
-
-
-
 ?>
 
         <!-- begin: .tray-center -->
@@ -99,30 +78,14 @@ exit;
     </div>
   </form>
 
-<br>
-
-    <?php
-	$i = 0;
-	foreach(array_reverse(glob('tiedostot/kohteet/'.Yii::app()->user->domain.'/'.$model->id.'_*.*')) as $file) {
-	$i++;
-	$ext = pathinfo(basename($file), PATHINFO_EXTENSION);
- 	echo '
-	<div class="form-inline" id="t_'.$i.'">
-	  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$model->id.'" for="t_'.$i.'">X </div> ';
-				// <-- file_safe_opener
-				$filepath = Yii::getPathOfAlias('application').'/../'.$file;
-				echo CHtml::link(basename($file),
-					array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
-					array(
-						'target'=>'_blank',
-						'class'=>'link'
-				));
-				//     file_safe_opener// -->
-	echo '</div>
-	';
-	$kuvat[$i] = $file;
-	}
-   ?>
+  <br>
+  <?php
+	Asetukset::model()->getFiles(
+		Yii::app()->user->domain, 
+		'kohteet', 
+		$model->id
+	);
+  ?>
      
    </div>
 </div>
