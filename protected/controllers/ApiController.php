@@ -218,8 +218,7 @@ protected function kirjautuminen($domain, $email, $salasana){
 	if( isset($kirjautumistunnus->domain) ){
 		$domain = $kirjautumistunnus->domain;
 	}
-		die(json_encode($domain));
-	//$this->checkDBexists($domain);
+	$this->checkDBexists($domain);
 
 	$criteria = new CDbCriteria();
 	$criteria->condition = "
@@ -545,6 +544,7 @@ public function actionImei($dom)
 	$_SESSION['lang'] = $_POST['lang'];
 
 	// <-- Check Tyontekija
+/*
 	if(isset($_POST['email']) and isset($_POST['salasana']) )
 	{
 
@@ -575,7 +575,10 @@ public function actionImei($dom)
 	    }
 
 	}
-
+*/
+	if(isset($_POST['email']) and isset($_POST['salasana']) ){
+		$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
+	}
     	if(!isset($ttekija->id))
 	{
 		$this->_sendResponse(200, "eiLoytyTekija//Työntekijää ei löydy");
