@@ -218,7 +218,7 @@ protected function kirjautuminen($domain, $email, $salasana){
 	if( isset($kirjautumistunnus->domain) ){
 		$domain = $kirjautumistunnus->domain;
 	}
-
+		die(json_encode($domain));
 	//$this->checkDBexists($domain);
 
 	$criteria = new CDbCriteria();
