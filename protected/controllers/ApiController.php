@@ -213,11 +213,13 @@ public function actionPaivita_tiedot($dom)
 
 protected function kirjautuminen($domain, $email, $salasana){
 	$domain = strtolower($domain);
+/*
         $kirjautumistunnus = Domainit::model()->find(" kirjautumistunnus='".$domain."' ");
 	if( isset($kirjautumistunnus->domain) ){
 		$domain = $kirjautumistunnus->domain;
 	}
-	//$this->checkDBexists($domain);
+*/
+	$this->checkDBexists($domain);
 	$criteria = new CDbCriteria();
 	$criteria->condition = "
 		aktiivinen=1 AND mobiili=1 
@@ -228,7 +230,7 @@ protected function kirjautuminen($domain, $email, $salasana){
         $ttekija = Tyontekijat::model()->find($criteria);
 	if(!isset($ttekija->id)){
 		$this->_sendResponse(200, CJSON::encode(array('error' => 'Työntekijää ei löydy.')));
-		die(json_encode("Työntekijää ei löydy."));
+		die(json_encode("Kirjautuminen ei onnistui."));
 	}
 	return $ttekija;
 }
