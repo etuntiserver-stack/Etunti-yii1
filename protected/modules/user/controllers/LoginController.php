@@ -102,8 +102,7 @@ class LoginController extends Controller
 			    Yii::app()->user->setState('nimi', $mod->adm_nimi);
 			    Yii::app()->user->setState('domain', $domain);
 
-			    if(Yii::app()->user->domain == 'sivex'){
-echo $_SERVER['HTTP_HOST'];
+			    if(Yii::app()->user->domain == 'sivex' and $_SERVER['HTTP_HOST'] == 'app.etunti.fi'){
 				die('Error: Sivex on suljettu tässä sivussa.');
 			    }
 
