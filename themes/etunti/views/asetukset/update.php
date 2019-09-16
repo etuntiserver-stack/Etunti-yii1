@@ -114,9 +114,11 @@ $this->menu=array(
 	
 		if(isset($version_number[0]))
 		{
+/*
 		    $version['short'] = "v1.".trim($version_number[0]);
 		    $version['full'] = "v1.".trim($version_number[0]).".$version_mini_hash[0] (".str_replace('commit ','',$line[0]).")";
 		    echo Yii::t('main', 'Versio').':  '.$version['short'];
+*/
 		}
 		// GIT version -->
 	  	?>
