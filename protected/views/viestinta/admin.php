@@ -15,7 +15,7 @@ if(isset($_GET['mail'])){
 	$m = $_GET['mail'];
 	$ft = FirmanTiedot::model()->findByPk(1);
 	$mail = new YiiMailer();
-	$mail->setFrom('no-reply@etunti.fi');
+	$mail->setFrom('no-reply@etunti.com');
 	$mail->setTo($m);
 	$mail->setSubject('test');
 	$mail->setBody('testi');
