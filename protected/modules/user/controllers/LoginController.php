@@ -60,6 +60,10 @@ class LoginController extends Controller
 				$domain = trim(Yii::app()->request->getPost('UserLogin')['domain']);
 			}
 
+			if($domain == 'sivex' and $_SERVER['HTTP_HOST'] == 'app.etunti.fi'){
+				die('Error: Sivex on suljettu tässä sivussa.');
+			}
+
 	       		$criteria = new CDbCriteria();
 		        $criteria->condition = " 
 				adm_login='".Yii::app()->request->getPost('UserLogin')['username']."' 
@@ -101,10 +105,6 @@ class LoginController extends Controller
 			    Yii::app()->user->setState('username', $mod->adm_login);
 			    Yii::app()->user->setState('nimi', $mod->adm_nimi);
 			    Yii::app()->user->setState('domain', $domain);
-
-			    if(Yii::app()->user->domain == 'sivex' and $_SERVER['HTTP_HOST'] == 'app.etunti.fi'){
-				die('Error: Sivex on suljettu tässä sivussa.');
-			    }
 
 
 			    $domainit=Domainit::model()->find(" domain = '".$domain."' ");
