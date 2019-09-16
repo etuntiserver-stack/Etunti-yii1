@@ -102,6 +102,9 @@ class LoginController extends Controller
 			    Yii::app()->user->setState('nimi', $mod->adm_nimi);
 			    Yii::app()->user->setState('domain', $domain);
 
+			    if(Yii::app()->user->domain == 'sivex'){
+				die('Error: Sivex on suljettu tässä sivussa.');
+			    }
 
 
 			    $domainit=Domainit::model()->find(" domain = '".$domain."' ");
