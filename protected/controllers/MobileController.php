@@ -3020,7 +3020,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$model = Toteutuneet::model()->findAll($criteria);
 		foreach($model as $d){
 			if(isset($d->kohteet->id)){
-				if( isset($lu[$d->kohteet->osoite]) ){ $d->l_tunnit += $lu[$d->kohteet->osoite]['l_tunnit']; }
+				if( isset($lu[$d->kohteet->osoite]) ){ 
+					$d->l_tunnit += $lu[$d->kohteet->osoite]['l_tunnit'];
+					$d->count += $lu[$d->kohteet->osoite]['count'];
+				}
 				$lu[$d->kohteet->osoite] = array('kohdenID' => $d->kohdenID, 'l_tunnit' => $d->l_tunnit, 'count' => $d->count);
 			}
 		}
