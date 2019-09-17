@@ -81,7 +81,7 @@ $(document).ready(function() {
 
 				<?php 
 				$a = Valikkoot::model()->findAll(" select_type='aktiivinen' ");
-		        	$tal = '';
+		        	$tal = array();
 				foreach($a as $v){
 				$exV = explode("/",$v->value);
 				   if(isset($exV[0]) and isset($exV[1]))
