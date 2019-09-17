@@ -2643,6 +2643,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND kohdenID='".$kohdenID."'
 			AND $fromTo
 			AND deleted=0
+			AND hyvaksytty!=''
 		";
 
 		$model = Mobile::model()->findAll($criteria);
@@ -2665,6 +2666,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND kohdenID='".$kohdenID."'
 			AND $fromTo
 			AND deleted=0
+			AND hyvaksytty!=''
 		";
 
 		$model = Toteutuneet::model()->findAll($criteria);
