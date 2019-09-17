@@ -25,8 +25,8 @@
 	}
 	?>
 
-	<td class="col3"><?php echo $this->sprint($luetut); ?></td>
-	<td class="col4"><?php echo $this->sprint($toteutuneet); ?></td>
+	<td class="col3"><?=($luetut > 0)?$this->sprint($luetut):'00:00'?></td>
+	<td class="col4"><?=($toteutuneet > 0)?$this->sprint($toteutuneet):'00:00'?></td>
 	<td class="col5"><?php echo $kpl; ?></td>
 
 </tr>
