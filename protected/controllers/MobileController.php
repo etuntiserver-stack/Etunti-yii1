@@ -2984,7 +2984,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		//    Tyoryhmat -->
 
 		if(isset($_GET['osoite']) and !empty($_GET['osoite'])){
-			$criteria->addCondition  (" kohde_kannasta LIKE '%".$_GET['osoite']."%' ");
+			$k = Kohteet::model()->find(" osoite='".$_GET['osoite']."' ");
+			if( isset($k->id) ){
+				$criteria->addCondition  (" kohdenID='".$k->id."' ");
+			}
 		}
 
 		$model = Mobile::model()->findAll($criteria);
@@ -3012,7 +3015,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		";
 
 		if(isset($_GET['osoite']) and !empty($_GET['osoite'])){
-			$criteria->addCondition  (" kohde_kannasta LIKE '%".$_GET['osoite']."%' ");
+			$k = Kohteet::model()->find(" osoite='".$_GET['osoite']."' ");
+			if( isset($k->id) ){
+				$criteria->addCondition  (" kohdenID='".$k->id."' ");
+			}
 		}
 
 		$model = Toteutuneet::model()->findAll($criteria);
