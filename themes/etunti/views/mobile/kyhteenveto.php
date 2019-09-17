@@ -18,10 +18,10 @@ $this->breadcrumbs=array(
 
    <!-- tulostus -->
    <div class="pull-right">
-     <form action="#" target="_blank" method="POST">
+     <form action="#" target="_blank" method="GET">
       <input type="hidden" name="from" value="<?php echo $from; ?>">
       <input type="hidden" name="to" value="<?php echo $to; ?>">
-      <input type="hidden" name="osoite" value="<?php if(isset($_POST['osoite'])) echo $_POST['osoite']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>..">
+      <input type="hidden" name="osoite" value="<?php if(isset($_GET['osoite'])) echo $_GET['osoite']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>..">
       <input type="submit" name="tulosta" class="btn btn-primary btn-sm myBgColors" value="PDF">
      </form>
    </div>
@@ -34,7 +34,7 @@ $this->breadcrumbs=array(
 
 
 
-   	    <form id="yhtveto" action="#" class="form-inline" method="POST">
+   	    <form id="yhtveto" action="#" class="form-inline" method="GET">
 
             <div class="admin-form">
               <div class="panel heading-border">
@@ -47,7 +47,7 @@ $this->breadcrumbs=array(
                         <div class="section">
                           <label class="field prepend-icon">
 
-	   <input type="text" name="osoite" class="gui-input" value="<?php if(isset($_POST['osoite'])) echo $_POST['osoite']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>..">
+	   <input type="text" name="osoite" class="gui-input" value="<?php if(isset($_GET['osoite'])) echo $_GET['osoite']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>..">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-home"></i>
@@ -133,20 +133,21 @@ $this->breadcrumbs=array(
   </thead>
 
   <?php 
-  $sunYht = 0;
-  $luetutYht = 0;
-  $toteutuneetYht = 0;
-  $kplyht = 0;
+  $sunYht 		= 0;
+  $luetutYht 		= 0;
+  $toteutuneetYht 	= 0;
+  $kplyht 		= 0;
+  $kpl			= 0;
   foreach($lu as $key=>$val)
   {
 	// <-- sunniteltu
-	$sunniteltu = $this->renderPartial('//mobile/suunniteltu',array('id'=>$val,'kohde_tid'=>'kohde','from'=>$from,'to'=>$to),true);
+	$sunniteltu = $this->renderPartial('//mobile/suunniteltu',array('id'=>$val['kohdenID'],'kohde_tid'=>'kohde','from'=>$from,'to'=>$to),true);
         $sunYht += $sunniteltu;
 	// sunniteltu -->
 
 	// <-- luetut
 	$cr1 = new CDbCriteria();
-	$this->totLu($cr1,$val,$from,$to);
+	$this->totLu($cr1,$val['kohdenID'],$from,$to);
 	$lu = Mobile::model()->find($cr1);
 
 	$luetut = $lu->l_tunnit;
@@ -154,37 +155,39 @@ $this->breadcrumbs=array(
 	// luetut -->
 
 	// <-- toteutuneet
+/*
 	$cr2 = new CDbCriteria();
-	$this->totLu($cr2,$val,$from,$to);
+	$this->totLu($cr2,$val[0],$from,$to);
 	$cr2->addCondition (" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
 	$tot1 = Mobile::model()->find($cr2);
 
 	$cr3 = new CDbCriteria();
-	$this->totLu($cr3,$val,$from,$to);
+	$this->totLu($cr3,$val[0],$from,$to);
 	$tot2 = Toteutuneet::model()->find($cr3);
-
-	$toteutuneet = $tot1->l_tunnit+$tot2->l_tunnit;
+*/
+	$toteutuneet = $val['l_tunnit'];
   	$toteutuneetYht += $toteutuneet;
 	//  toteutuneet -->
 
 	// <-- kpl
+/*
 	$kpl = 0;
 	$kpl1 = 0;
 	$kpl2 = 0;
 	$cr4 = new CDbCriteria();
-	$this->totKpl($cr4,$val,$from,$to);
+	$this->totKpl($cr4,$val[0],$from,$to);
 	$cr4->addCondition (" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
 	$k = Mobile::model()->find($cr4);
 
 	if(isset($k->count)) $kpl1 += $k->count;
 
 	$cr5 = new CDbCriteria();
-	$this->totKpl($cr5,$val,$from,$to);
+	$this->totKpl($cr5,$val[0],$from,$to);
 	$kt = Toteutuneet::model()->find($cr5);
 
-	if(isset($kt->count)) $kpl2 += $kt->count;
-
-	$kpl = $kpl1+$kpl2;
+	if(isset($kt->count)) $kpl2 += $tot2->count;
+*/
+	$kpl = $val['count'];
 	$kplyht += $kpl;
 	// kpl -->
 
@@ -193,7 +196,7 @@ $this->breadcrumbs=array(
 		'toteutuneet'=>$toteutuneet,
 		'sunniteltu'=>$sunniteltu, 
 		'kohde_kannasta'=>$key,
-		'kohdenID'=>$val,
+		'kohdenID'=>$val['kohdenID'],
 		'kpl'=>$kpl,
 		'from'=>$from,
 		'to'=>$to

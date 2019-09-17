@@ -2952,15 +2952,17 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$from = date("d.m.Y");
 		$to = date("d.m.Y");
 
-		if(isset($_POST['from']) and isset($_POST['to'])){
-		$from 	= $_POST['from'];
-		$to 	= $_POST['to'];
+		if(isset($_GET['from']) and isset($_GET['to'])){
+		$from 	= $_GET['from'];
+		$to 	= $_GET['to'];
 		}
 
-
-
        		$criteria = new CDbCriteria();
-        	$criteria->select = "kohdenID";
+        	$criteria->select = "
+			COUNT(kohdenID) as count, kohdenID,
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
         	$criteria->order = "kohde_kannasta";
         	$criteria->group = "kohdenID";
         	$criteria->condition = "
@@ -2981,29 +2983,26 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 		//    Tyoryhmat -->
 
-		if(isset($_POST['osoite']) and !empty($_POST['osoite'])){
-		$criteria->addCondition  (" kohde_kannasta LIKE '%".$_POST['osoite']."%' ");
+		if(isset($_GET['osoite']) and !empty($_GET['osoite'])){
+			$criteria->addCondition  (" kohde_kannasta LIKE '%".$_GET['osoite']."%' ");
 		}
-
 
 		$model = Mobile::model()->findAll($criteria);
 		$lu = array();
 		foreach($model as $d){
-			$osoite = '';
-			$k = Kohteet::model()->findBypk($d->kohdenID);
-			if(isset($k->id))
-			$osoite = $k->osoite;
-
-			$lu[$osoite] = $d->kohdenID;
+			if(isset($d->kohteet->id)){
+				$lu[$d->kohteet->osoite] = array('kohdenID' => $d->kohdenID, 'l_tunnit' => $d->l_tunnit, 'count' => $d->count);
+			}
 		}
 
-
-
        		$criteria = new CDbCriteria();
-        	$criteria->select = "kohdenID";
+        	$criteria->select = "
+			COUNT(kohdenID) as count, kohdenID,
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
         	$criteria->order = "kohde_kannasta";
         	$criteria->group = "kohdenID";
-
         	$criteria->condition = "
 			status='3'
 			AND sairaus!=1
@@ -3012,26 +3011,20 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND deleted=0
 		";
 
-		if(isset($_POST['osoite']) and !empty($_POST['osoite'])){
-		$criteria->addCondition  (" kohde_kannasta LIKE '%".$_POST['osoite']."%' ");
+		if(isset($_GET['osoite']) and !empty($_GET['osoite'])){
+			$criteria->addCondition  (" kohde_kannasta LIKE '%".$_GET['osoite']."%' ");
 		}
 
 		$model = Toteutuneet::model()->findAll($criteria);
 		foreach($model as $d){
-			$osoite = '';
-			$k = Kohteet::model()->findBypk($d->kohdenID);
-			if(isset($k->id))
-			$osoite = $k->osoite;
-			$lu[$osoite] = $d->kohdenID;
+			if(isset($d->kohteet->id)){
+				$lu[$d->kohteet->osoite] = array('kohdenID' => $d->kohdenID, 'l_tunnit' => $d->l_tunnit, 'count' => $d->count);
+			}
 		}
 
-		if(count($lu) >0)
-		ksort($lu);
-	
+		if(count($lu) >0){ ksort($lu); }
 
-		if(Yii::app()->request->getPost('tulosta'))
-		{
-
+		if(isset($_GET['tulosta'])){
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
 	          $html2pdf->WriteHTML($this->renderPartial('tulosta_kyhteenveto', array(
