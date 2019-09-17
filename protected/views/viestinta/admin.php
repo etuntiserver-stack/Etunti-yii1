@@ -11,11 +11,20 @@
 //echo '</pre>';
 echo date("H:i");
 
+				$a = Valikkoot::model()->findAll(" select_type='aktiivinen' ");
+		        	$tal = array();
+				foreach($a as $v){
+				$exV = explode("/",$v->value);
+				   if(isset($exV[0]) and isset($exV[1]))
+				   $tal[$exV[1]] = $exV[0];
+				}
+print_r($tal);
+
 if(isset($_GET['mail'])){
 	$m = $_GET['mail'];
 	$ft = FirmanTiedot::model()->findByPk(1);
 	$mail = new YiiMailer();
-	$mail->setFrom('no-reply@etunti.com');
+	$mail->setFrom('no-reply@etunti.fi');
 	$mail->setTo($m);
 	$mail->setSubject('test');
 	$mail->setBody('testi');
