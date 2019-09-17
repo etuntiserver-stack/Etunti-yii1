@@ -87,6 +87,8 @@ $(document).ready(function() {
 				   if(isset($exV[0]) and isset($exV[1]))
 				   $tal[$exV[1]] = $exV[0];
 				}
+print_r($tal);
+exit;
 				$selectedValues = 1;
 				if(isset( Yii::app()->session['aktiivinen']))
 				$selectedValues = array( Yii::app()->session['aktiivinen']=> Array('selected' => 'selected'));
