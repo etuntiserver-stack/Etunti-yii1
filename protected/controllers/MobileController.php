@@ -2481,7 +2481,6 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."' 
 			AND deleted=0
-			AND hyvaksytty!=''
 		";
 
 		return $criteria;
@@ -2965,7 +2964,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
 		";
         	$criteria->order = "kohde_kannasta";
-        	$criteria->group = "kohdenID";
+        	//$criteria->group = "kohdenID";
         	$criteria->condition = "
 			id NOT IN (select kid from sivexkuitti_repaired) 
 			AND status='3' 
@@ -3003,7 +3002,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
 		";
         	$criteria->order = "kohde_kannasta";
-        	$criteria->group = "kohdenID";
+        	//$criteria->group = "kohdenID";
         	$criteria->condition = "
 			status='3'
 			AND kohdenID!=''
