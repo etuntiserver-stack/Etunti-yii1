@@ -1058,6 +1058,7 @@ $('.mult').multiselect({
 			$('#pfrom').val('<?=date("d.m.Y")?>')
 			$('#pfrom').after('<p class="text-danger">Ketjun Alkupäivämäärä muuttuu. Sitä aikaisemmat päivät muuttuvat yksittäisiksi työvuoroiksi.</p>');
 		}
+		$("#Toistuva_viikkoja").closest('div').hide();
 	}
 
 
