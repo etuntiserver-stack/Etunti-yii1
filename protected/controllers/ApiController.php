@@ -1657,7 +1657,7 @@ public function actionImei($dom)
 		$sql = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '".trim(strtolower($db))."'";
 		$command=$connection->createCommand($sql);
 		if($command->execute() != true){
-			die(json_encode("Yritystunnus on virheellinen."));
+			die(json_encode(array("error" => "Yritystunnus on virheellinen.")));
 		}
         		return true;
 	}
