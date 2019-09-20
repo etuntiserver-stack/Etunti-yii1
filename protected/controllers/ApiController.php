@@ -287,6 +287,7 @@ public function actionLang($dom)
 	    if(isset($_POST['lang']))
 	    {
 	  	$_SESSION['lang'] = $_POST['lang'];
+		Yii::app()->language = $_POST['lang'];
 		$lang = array(
 
 		/* Index */		
