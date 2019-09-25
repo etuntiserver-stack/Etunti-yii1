@@ -21,8 +21,13 @@ if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googl
 	$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.$cityclean.'&language=fi&sensor=true&key='.$asetuksetForAll->googlemaps_apikey;
 	$json = file_get_contents($json_url);
 	$obj = json_decode($json);
-	$get_osoite = $obj->results[0]->geometry->location->lat.",".$obj->results[0]->geometry->location->lng;
-	$center = $get_osoite;
+	//print_r($obj);
+	if( isset($obj->results[0]->geometry->location->lat) ){
+		$get_osoite = $obj->results[0]->geometry->location->lat.",".$obj->results[0]->geometry->location->lng;
+		$center = $get_osoite;
+	} else {
+		die('Ei onnistunut siirrää '.$cityclean);
+	}
   }
 }
 
