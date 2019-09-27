@@ -253,21 +253,18 @@ class SiteController extends Controller
 	public function actionFile_safe_opener($filepath, $ext)
 	{
 		//$file = file_get_contents($filepath);
-		if (!file_exists(Yii::app()->basePath . '/../tmp/' . Yii::app()->user->domain)) {
-			mkdir(Yii::app()->basePath . '/../tmp/' . Yii::app()->user->domain, 0777, true);
+		if (!file_exists( Yii::app()->basePath.'/../tmp/'.Yii::app()->user->domain )) {
+		 	mkdir( Yii::app()->basePath.'/../tmp/'.Yii::app()->user->domain, 0777, true );
 		}
 
 		$newfile = basename($filepath);
-		if (copy($filepath, $newfile)) {
-			header('Content-Description: File Transfer');
-			header('Content-Type: application/octet-stream');
-			header('Content-Disposition: attachment; filename="' . basename($newfile) . '"');
-			header('Expires: 0');
-			header('Cache-Control: must-revalidate');
-			header('Pragma: public');
-			header('Content-Length: ' . filesize($newfile));
-			readfile($newfile);
-			unlink($newfile);
+		if (copy($filepath, $newfile))
+		{
+				header("Content-Length: " . filesize ( $newfile ) );
+		                header("Content-type: application/octet-stream");
+		                header("Content-disposition: attachment; filename=".basename($newfile));
+		                readfile($newfile);
+				unlink($newfile);
 		}
 		exit;
 	}
