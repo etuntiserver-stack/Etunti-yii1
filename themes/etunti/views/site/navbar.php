@@ -30,6 +30,8 @@ if( $curpage == 'tyovuoroot/tv2' )
    $tyovuorot_sivut = Yii::t('main','Työvuorot työntekijöiden mukaan');
 if( $curpage == 'tyovuoroot/tv3' )
    $tyovuorot_sivut = Yii::t('main','Työvuorot v3');
+if( $curpage == 'tyovuoroot/tv4' )
+   $tyovuorot_sivut = Yii::t('main','Työvuorot v4');
 ?>
   
 
@@ -78,7 +80,7 @@ if( $curpage == 'tyovuoroot/tv3' )
 
 
 	<!-- Haku -->
-	<?php if($curpage == 'tyovuoroot/tv2' or $curpage == 'tyovuoroot/index' or $curpage == 'tyovuoroot/tv3') : ?>
+	<?php if($curpage == 'tyovuoroot/tv2' or $curpage == 'tyovuoroot/index' or $curpage == 'tyovuoroot/tv3' or $curpage == 'tyovuoroot/tv4') : ?>
 	<?php 
 		$year           = Yii::app()->session['year'];
 		$week           = Yii::app()->session['week'];
@@ -122,7 +124,7 @@ if( $curpage == 'tyovuoroot/tv3' )
 	     <legend><?php echo Yii::t('main','Haku'); ?></legend>
 
               <div class="form-group">
-		<?php if($curpage == 'tyovuoroot/tv2' or $curpage == 'tyovuoroot/tv3') : ?>
+		<?php if($curpage == 'tyovuoroot/tv2' or $curpage == 'tyovuoroot/tv3' or $curpage == 'tyovuoroot/tv4') : ?>
 		    <label><?php echo Yii::t('main','Aikaväli'); ?></label>
 			<div class="row">
 			 <div class="col-sm-6">
@@ -133,7 +135,7 @@ if( $curpage == 'tyovuoroot/tv3' )
 			</div>
 		<?php endif; ?>
 
-		<?php if($curpage == 'tyovuoroot/index' or $curpage == 'tyovuoroot/tv3') : ?>
+		<?php if($curpage == 'tyovuoroot/index' or $curpage == 'tyovuoroot/tv3' or $curpage == 'tyovuoroot/tv4') : ?>
 			<div class="row">
 			 <div class="col-sm-5">
 		    	  <label><?php echo Yii::t('main','Vuosi'); ?></label>
@@ -1036,11 +1038,14 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
 	      <!-- Nakyma -->
               <li class="p10" data-toggle="tooltip">
 	      <select class="form-control tvchange" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Valitse näkymä'); ?>">
- 	        <?php if($curpage != 'tyovuoroot/index' and $curpage != 'tyovuoroot/tv3'): ?>
+ 	        <?php if($curpage != 'tyovuoroot/index' and $curpage != 'tyovuoroot/tv3' and $curpage != 'tyovuoroot/tv4'): ?>
 		<option value=><?php echo Yii::t('main', 'Työvuoro näkymä'); ?></option>
 		<?php endif; ?>
  	        <option value="index" <?php if($curpage == 'tyovuoroot/index') echo 'selected'; ?>><?php echo Yii::t('main', 'Työvuoro / Viikko'); ?></option>
  	        <option value="tv3" <?php if($curpage == 'tyovuoroot/tv3') echo 'selected'; ?>><?php echo Yii::t('main', 'Työvuoro / Työntekijä'); ?></option>
+		<?php if(Yii::app()->user->domain == 'sivex' or Yii::app()->user->domain =='demo'): ?>
+ 	        <option value="tv4" <?php if($curpage == 'tyovuoroot/tv4') echo 'selected'; ?>><?php echo Yii::t('main', '--- V4'); ?></option>
+		<?php endif; ?>
 	      </select>
               </li>
 	      <!-- Nakyma -->

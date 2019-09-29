@@ -1918,20 +1918,76 @@ class TyovuorootController extends Controller
 	}
 
 	public function actionTv4() {
-		$from = date("Y-m-d", strtotime('next week'));
-		$to = date("Y-m-d", strtotime($from.' +1 week'));
+		// <-- Post haku
+		if(isset($_POST['haku']))
+		{
+
+			if(isset($_POST['kohteiden_tyonimike']) and !empty($_POST['kohteiden_tyonimike']))
+				Yii::app()->session['kohteiden_tyonimike'] = $_POST['kohteiden_tyonimike'];
+			if(isset($_POST['kohteiden_tyonimike']) and empty($_POST['kohteiden_tyonimike']))
+				unset(Yii::app()->session['kohteiden_tyonimike']);
+
+			if(isset($_POST['tyo_toimialue']) and !empty($_POST['tyo_toimialue']))
+				Yii::app()->session['tyo_toimialue'] = $_POST['tyo_toimialue'];
+			if(!isset($_POST['tyo_toimialue']))
+				unset(Yii::app()->session['tyo_toimialue']);
+
+			if(isset($_POST['tyoryhma']) and !empty($_POST['tyoryhma']))
+				Yii::app()->session['tyoryhma'] = $_POST['tyoryhma'];
+			if(!isset($_POST['tyoryhma']))
+				unset(Yii::app()->session['tyoryhma']);
+
+			// <-- Asiakas
+			if(isset($_POST['asiakas']) and !empty($_POST['asiakas']))
+
+				Yii::app()->session['asiakas'] = $_POST['asiakas'];
+			if(isset($_POST['asiakas']) and empty($_POST['asiakas']))
+				unset(Yii::app()->session['asiakas']);
+			// Asiakas -->
+	
+			// <-- Kohde
+			if(isset($_POST['kohde']) and !empty($_POST['kohde']))
+				Yii::app()->session['kohde'] = $_POST['kohde'];
+			if(isset($_POST['kohde']) and empty($_POST['kohde']))
+				unset(Yii::app()->session['kohde']);
+			// Kohde -->
+	
+			// <-- tyontekijat
+			if(isset($_POST['tyontekijat']) and !empty($_POST['tyontekijat']))
+				Yii::app()->session['tyontekijat'] = $_POST['tyontekijat'];
+			if(!isset($_POST['tyontekijat']))
+				unset(Yii::app()->session['tyontekijat']);
+			//  tyontekijat -->
+
+			if(isset($_POST['from']) and !empty($_POST['from']))
+				Yii::app()->session['from'] = date("Y-m-d",strtotime($_POST['from']));
+	
+			if(isset($_POST['to']) and !empty($_POST['to']))
+				Yii::app()->session['to'] = date("Y-m-d",strtotime($_POST['to']));
+
+
+			$this->redirect(array('tv4'));
+		}		
+		//  Post haku -->
+		if(!isset(Yii::app()->session['from']))
+			Yii::app()->session['from'] = date("Y-m-d");
+		if(!isset(Yii::app()->session['to']))
+			Yii::app()->session['to'] = date("Y-m-d",strtotime("+2 week", time()));
+
        		$criteria = new CDbCriteria();
-		//$criteria->select = "id, tid, kohde, pvm, alku, loppu, osoite, tietoja, status, piilota_mobiilista";
-		$criteria->order = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')";
+		$criteria->with = array('kohteet');
+		$criteria->select = "id, tid, pvm, alku, loppu, osoite";
+		$criteria->order = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'), alku";
 		$criteria->condition = "
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
-			AND tid IN(SELECT id FROM sivex_ttekijat WHERE aktiivinen=1)
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
 		";
 		$model = Tyovuoroot::model()->findAll($criteria);
+		$asetukset = Asetukset::model()->findByPk(1);
 		$this->render('tv4', array(
 			'model'	=> $model,
-			'from'	=> $from,
-			'to'	=> $to,
+			'from'	=> Yii::app()->session['from'],
+			'to'	=> Yii::app()->session['to'],
+			'asetukset' => $asetukset,
 		));
 	}
 
