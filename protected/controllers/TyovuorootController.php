@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'tv4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'tv4', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -2126,6 +2126,38 @@ class TyovuorootController extends Controller
 		));
 	}
 
+	public function actionDid4($pvm, $tid) {
+
+		$site = Yii::app()->createController('Site');
+       		$criteria = new CDbCriteria();
+		$criteria->with = array('kohteet');
+		$criteria->select = " id, tid, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu";
+		$criteria->order = "alku ASC"; //tt.$tt_order_1 ASC, 
+		$criteria->condition = "
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')='".date("Y-m-d", strtotime($pvm))."' 
+			AND tid='".$tid."'
+		";
+		$tv = Tyovuoroot::model()->findAll($criteria);
+		$tv_arr = array();
+		foreach($tv as $val){
+		     $val['osoite'] = (!empty($val['osoite']))?$val['osoite']:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
+		     $tv_arr[$val->tid][$val->pvm][] = $val;
+		} 
+		$content = '';
+		if(isset($tv_arr[$tid][$pvm])){
+ 	     	$content = $this->renderPartial('//tyovuoroot/did4',array(
+					'tv_arr' => $tv_arr[$tid][$pvm],
+					'pvm'=>$pvm,
+					'did'=>date("Ymd", strtotime($pvm)),
+					'tid'=>$tid,
+					'site_0' => $site[0],
+	     	), true);
+		}
+
+	     	echo json_decode($content);
+		exit;
+	}
+
 	public function actionHovertietoja($tv_id) {
 
 		$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
@@ -2286,8 +2318,6 @@ class TyovuorootController extends Controller
 			'tid'=>$tid,
 		));
 	}
-
-
 
 	public function actionCreate()
 	{
@@ -3193,7 +3223,832 @@ class TyovuorootController extends Controller
 	<?php
 	}
 
+	public function actionCreate4()
+	{
 
+		$return = array();
+
+		if(isset($_POST['ToistuvatTyovuorot']) and isset($_POST['ToistuvatTyovuorot']['toistuva_aktiivinen']) and $_POST['ToistuvatTyovuorot']['toistuva_aktiivinen'] == 'on')
+		{
+			$saankoSuoritta = $_POST['ToistuvatTyovuorot']['sopivatPaivat'];
+
+			$toistuva=new ToistuvatTyovuorot;
+			$toistuva->attributes=$_POST['ToistuvatTyovuorot'];
+			$toistuva->attributes=$_POST['Tyovuoroot'];
+			$toistuva->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+
+			if( is_array($toistuva->lisa_tuotteet) and count($toistuva->lisa_tuotteet) > 0 ){
+				$toistuva->lisa_tuotteet = json_encode($toistuva->lisa_tuotteet);
+			} else {
+				$toistuva->lisa_tuotteet = '';
+			}
+			if( is_array($toistuva->tyo_erittelyt) and count($toistuva->tyo_erittelyt) > 0 ){
+				$toistuva->tyo_erittelyt = json_encode($toistuva->tyo_erittelyt, JSON_FORCE_OBJECT);
+			} else {
+				$toistuva->tyo_erittelyt = '';
+			}
+			if( is_array($toistuva->muistiinpano) and count($toistuva->muistiinpano) > 0 ){
+				$toistuva->muistiinpano = json_encode($toistuva->muistiinpano, JSON_FORCE_OBJECT);
+			} else {
+				$toistuva->muistiinpano = '';
+			}
+
+			if(isset($_POST['P'])){	$toistuva->viikko_paivat=json_encode($_POST['P']); }
+
+			if($saankoSuoritta == 1)
+			{
+				if(!$toistuva->save())
+				{
+					$return[] = array('ERROR'=>json_encode(var_dump($toistuva->getErrors())));
+				}
+			}
+	
+			if(!isset($_POST['tyopaari']))
+			{
+			  	$return[] = $this->toistuvaInsert(
+					null,
+					$toistuva,
+					$toistuva->tid,  
+					json_decode($toistuva->viikko_paivat, true),
+					'', // tyopaari
+					$saankoSuoritta,
+					null
+				);
+			}
+
+			// <-- jos on tyopaari
+			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
+			{
+
+			    // <-- Lisätään pää työntekijä
+			    $_POST['tyopaari'][] = $toistuva->tid;
+
+			    foreach($_POST['tyopaari'] as $tid)
+			    {
+				$return[] = $this->toistuvaInsert(
+					null,
+					$toistuva,
+					$tid,  
+					json_decode($toistuva->viikko_paivat, true),
+					json_encode($_POST['tyopaari']),
+					$saankoSuoritta,
+					null
+					);
+			    }
+
+				ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('tyopaari' => json_encode($_POST['tyopaari'])));
+			}
+			// jos on tyopaari -->
+
+
+			// <-- LOG
+			if( $saankoSuoritta == 1 )
+			{
+			$model_log 	= 'ToistuvatTyovuorot';
+			$name_log 	= 'Toistuvat työvuorot';
+			$status_log 	= 'Create';
+			if(isset($toistuva->id))
+			{
+				$old_values = null;
+				$n_m = ToistuvatTyovuorot::model()->findbypk($toistuva->id);
+				$new_values = json_encode($n_m->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			}
+			//     LOG -->
+
+
+			echo json_encode($return);
+			exit;
+		}
+
+		$model=new Tyovuoroot;
+
+		if(isset($_POST['Tyovuoroot']))
+		{
+
+			$model->attributes=$_POST['Tyovuoroot'];
+			if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
+				$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
+			} else {
+				$model->lisa_tuotteet = '';
+			}
+			if( is_array($model->tyo_erittelyt) and count($model->tyo_erittelyt) > 0 ){
+				$model->tyo_erittelyt = json_encode($model->tyo_erittelyt, JSON_FORCE_OBJECT);
+			} else {
+				$model->tyo_erittelyt = '';
+			}
+			if( is_array($model->muistiinpano) and count($model->muistiinpano) > 0 ){
+				$model->muistiinpano = json_encode($model->muistiinpano, JSON_FORCE_OBJECT);
+			} else {
+				$model->muistiinpano = '';
+			}
+			// <-- Apuaika
+			if(isset($_POST['Tyovuoroot']['apuaika']) and $_POST['Tyovuoroot']['apuaika'] == 1)
+				$model->apuaika = 1;
+			else if(isset($_POST['Tyovuoroot']['apuaika']) and $_POST['Tyovuoroot']['apuaika'] != 1)
+				$model->apuaika = 0;
+			//     Apuaika -->
+
+			$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+
+			if($model->save())
+			{
+
+			// <-- PushNotify
+			if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
+			$this->pushNotifySending($model->id);
+			// PushNotify -->
+
+
+
+			// <-- jos on tyopaari
+			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
+			{
+
+			    $luotu = array();
+			    $luotu[$model->id] = $model->tid;
+
+			    foreach($_POST['tyopaari'] as $tid)
+			    {
+				$m=new Tyovuoroot;
+				$m->attributes=$_POST['Tyovuoroot'];
+				$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+				$m->tid=$tid;
+				if( is_array($model->tyopaari) and count($m->tyopaari) > 0 ){
+					$m->tyopaari = json_encode($m->tyopaari);
+				} else {
+					$m->tyopaari = '';
+				}
+				if( isset($_POST['Tyovuoroot']['lisa_tuotteet']) and is_array($_POST['Tyovuoroot']['lisa_tuotteet']) ){
+					$m->lisa_tuotteet = json_encode($_POST['Tyovuoroot']['lisa_tuotteet']);
+				} else {
+					$m->lisa_tuotteet = '';
+				}
+				if( is_array($m->tyo_erittelyt) and count($m->tyo_erittelyt) > 0 ){
+					$m->tyo_erittelyt = json_encode($m->tyo_erittelyt, JSON_FORCE_OBJECT);
+				} else {
+					$m->tyo_erittelyt = '';
+				}
+				if($m->save())
+				{
+					$luotu[$m->id] = $m->tid;
+					$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
+
+					// <-- PushNotify
+					if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
+					$this->pushNotifySending($m->id);
+					// PushNotify -->
+
+				}
+
+			    }
+			    foreach($luotu as $k=>$v)
+					Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode($luotu)));
+
+
+			}
+			// jos on tyopaari -->
+
+
+			// <-- LOG
+			$model_log 	= 'Tyovuoroot';
+			$name_log 	= 'Työvuorot';
+			$status_log 	= 'Create';
+			if(isset($_POST[$model_log]))
+			{
+				$old_values = null;
+				$n_m = Tyovuoroot::model()->findbypk($model->id);
+				$new_values = json_encode($n_m->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			//     LOG -->
+
+
+			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
+			echo json_encode($return);
+
+			}
+		exit;
+		}
+
+
+  	$tnimi = '';
+	if(isset($_POST['tid']) and $_POST['tid'] != 0){
+  	  $tekija = Tyontekijat::model()->findbypk($_POST['tid']);
+	  $tnimi = $this->etuSukunimi($tekija->id);
+
+
+		// Tyosuhde oikeus
+		$oikeus = '<div class="alert alert-danger">'.Yii::t('main', 'Työsuhdetta ei ole määritelty tai työsuhde ei ole voimassa.').'</div>';
+		$pvm = date("Ymd", strtotime($_POST['pvm']));
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			tid='".$tekija->id."' 
+		";
+		$ts = Tyosuhdet::model()->find($criteria);
+		if(isset($ts->id) and !empty($ts->alku))
+		{
+			$alku = date("Ymd", strtotime($ts->alku));
+
+			if($pvm >= $alku and empty($ts->loppu))
+			$oikeus = '';
+			elseif($pvm >= $alku and !empty($ts->loppu) and $pvm <= date("Ymd", strtotime($ts->loppu)))
+			$oikeus = '';
+		}
+		// Tyosuhde oikeus
+
+	}
+
+	$form_content = '';
+        $form_content = '
+        <div id="modal-form" class=" popup-basic popup-xl admin-form mfp-with-anim mfp-hide">
+          <div class="panel">
+            <div class="panel-heading">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">
+				<span aria-hidden="true">&times;</span>
+			</button>
+              <span class="panel-title"><i class="fa fa-clock-o"></i> 
+		'.Yii::t('main', 'Työvuoron suunnittelu').': '.$tnimi.' <span class="kohteen_lisatiedot"></span>
+	      </span>
+            </div>
+              <div class="panel-body p25">
+		'.((isset($oikeus))?$oikeus:'').'
+		'.$this->renderPartial('_form4',array('model'=>$model), true).'
+              </div>
+          </div>
+        </div>';
+	echo json_encode($form_content);
+	exit;
+	}
+
+	public function actionUpdate4($id)
+	{
+
+		$model=$this->loadModel($id);
+		if(!isset($model->id)){ die('Työvuoroja '.$id.' ei löydy.'); }
+		$edellinenToistuva = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
+		$return = array();
+
+		// <-- Toistuva tyovuorot ja tyoparit
+		if(
+			isset($_POST['ToistuvatTyovuorot']['toistuva_aktiivinen']) 
+			and $_POST['ToistuvatTyovuorot']['toistuva_aktiivinen'] == 'on'
+		)
+		{
+			$fi = $this->vkoPaivat();
+			$saankoSuoritta = $_POST['ToistuvatTyovuorot']['sopivatPaivat'];
+
+			if(isset($edellinenToistuva->id))
+				$toistuva = ToistuvatTyovuorot::model()->findByPk($edellinenToistuva->id);
+			else
+				$toistuva = new ToistuvatTyovuorot;
+
+			$toistuva->attributes = $_POST['ToistuvatTyovuorot'];
+			$toistuva->attributes = $_POST['Tyovuoroot'];
+			$toistuva->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+
+			if( is_array($toistuva->lisa_tuotteet) and count($toistuva->lisa_tuotteet) > 0 ){
+				$toistuva->lisa_tuotteet = json_encode($toistuva->lisa_tuotteet);
+			} else {
+				$toistuva->lisa_tuotteet = '';
+			}
+			if( is_array($toistuva->tyo_erittelyt) and count($toistuva->tyo_erittelyt) > 0 ){
+				$toistuva->tyo_erittelyt = json_encode($toistuva->tyo_erittelyt, JSON_FORCE_OBJECT);
+			} else {
+				$toistuva->tyo_erittelyt = '';
+			}
+			if( is_array($toistuva->muistiinpano) and count($toistuva->muistiinpano) > 0 ){
+				$toistuva->muistiinpano = json_encode($toistuva->muistiinpano, JSON_FORCE_OBJECT);
+			} else {
+				$toistuva->muistiinpano = '';
+			}
+
+			// <-- viikko_paivat
+			if(isset($_POST['P'])){	
+				$toistuva->viikko_paivat=json_encode($_POST['P']);
+			}
+			//     viikko_paivat -->
+
+
+			// <-- SUORITTAMINEN
+			if($saankoSuoritta == 1)
+			{
+
+				// <-- Varauksesta pois original
+				if( $model->tid == 0 ){
+					$criteria = new CDBcriteria;
+					$criteria->condition = " 
+						tid='0'
+						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= '".date("Y-m-d", strtotime($toistuva->pvm))."'
+						AND toistuva_id!=0
+						AND toistuva_id='".$toistuva->id."'
+					";
+					$tv_pois = Tyovuoroot::model()->findAll($criteria);
+					foreach($tv_pois as $item){
+						$tv = Tyovuoroot::model()->findbypk($item->id);
+						if(isset($tv->id)){
+						// <-- LOG
+						$model_log 	= 'Tyovuoroot';
+						$name_log 	= 'Työvuorot';
+						$status_log 	= 'Auto Delete';
+	
+						$old_values = json_encode($tv->attributes);
+						$new_values = null;
+						$site = Yii::app()->createController('Site');
+						$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+						//     LOG -->
+						$this->loadModel($tv->id)->delete();
+						}
+					}
+
+				}
+				//     Varauksesta pois original -->
+
+				if(!$toistuva->save()){	$return[] = array('ERROR'=>json_encode(var_dump($toistuva->getErrors()))); }
+
+				// <-- Poistetaanko vai säilytetäänkö vanhan ja uuden aloituspäivämäärän väliin jäävät työvuorot
+				if(
+					isset($_POST['poisto_alkaen_taaksepain'])
+					and isset($edellinenToistuva->id)
+					and strtotime($_POST['ToistuvatTyovuorot']['pfrom']) > strtotime($edellinenToistuva->pfrom)
+				)
+				{
+					$pois_valipavm = new CDBcriteria;
+					$pois_valipavm->condition=" 
+						toistuva_id='".$toistuva->id."'
+						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+						BETWEEN '".date("Y-m-d",strtotime($edellinenToistuva->pfrom))."'
+						AND '".date("Y-m-d",strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
+						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
+					";
+					$tv_pois = Tyovuoroot::model()->findAll($pois_valipavm);
+					foreach($tv_pois as $item){
+						$tv = Tyovuoroot::model()->findbypk($item->id);
+						if(isset($tv->id)){
+						// <-- LOG
+						$model_log 	= 'Tyovuoroot';
+						$name_log 	= 'Työvuorot';
+						$status_log 	= 'Auto Delete';
+	
+						$old_values = json_encode($tv->attributes);
+						$new_values = null;
+						$site = Yii::app()->createController('Site');
+						$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+						//     LOG -->
+						$this->loadModel($tv->id)->delete();
+						}
+					}
+				}
+				//     Poistetaanko vai säilytetäänkö vanhan ja uuden aloituspäivämäärän väliin jäävät työvuorot -->
+
+
+				if(
+					!isset($_POST['poisto_alkaen_taaksepain'])
+					and isset($edellinenToistuva->id)
+					and strtotime($_POST['ToistuvatTyovuorot']['pfrom']) > strtotime($edellinenToistuva->pfrom)
+				)
+				{
+					$upd_valipavm = new CDBcriteria;
+					$upd_valipavm->condition=" 
+						toistuva_id='".$toistuva->id."'
+						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+						BETWEEN '".date("Y-m-d",strtotime($edellinenToistuva->pfrom))."'
+						AND '".date("Y-m-d",strtotime($_POST['ToistuvatTyovuorot']['pfrom']." -1 day"))."'
+					";
+					Tyovuoroot::model()->updateAll(array('toistuva_id'=>0), $upd_valipavm);
+				}
+
+
+			}
+
+			// <-- jos on tyopaari
+			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
+			{
+
+			    // <-- Lisätään pää työntekijä
+			    if( $toistuva->tid != 0 ){
+			    		$_POST['tyopaari'][] = $toistuva->tid;
+			    }
+
+			    foreach($_POST['tyopaari'] as $tid)
+			    {
+				$return[] = $this->toistuvaInsert(
+					$id,
+					$toistuva, 
+					$tid, 
+					json_decode($toistuva->viikko_paivat, true),
+					json_encode($_POST['tyopaari']),
+					$saankoSuoritta,
+					$edellinenToistuva
+					);
+			    }
+
+				if($saankoSuoritta == 1)
+				ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('tyopaari' => json_encode($_POST['tyopaari'])));
+
+			} else { // jos on tyopaari -->
+
+				$return[] = $this->toistuvaInsert(
+					$id,
+					$toistuva,
+					$toistuva->tid, 
+					json_decode($toistuva->viikko_paivat, true),
+					'', // tyopaari
+					$saankoSuoritta,
+					$edellinenToistuva
+				);
+
+			}
+
+
+			if($saankoSuoritta == 1)
+			{
+					// <-- Poistetaan tyopaari
+					$tp_post = (isset($_POST['tyopaari']))? $_POST['tyopaari']:array();
+				    	if(!empty($edellinenToistuva->tyopaari) and is_array(json_decode($edellinenToistuva->tyopaari, true))){
+				    	   $diff = array_diff(json_decode($edellinenToistuva->tyopaari, true), $tp_post);
+				    	   foreach($diff as $v)
+				    	   {
+						if( $model->tid != $v ){
+							$criteria = new CDBcriteria;
+							$criteria->condition = " 
+								tid='".$v."'
+								AND toistuva_id!=0
+								AND toistuva_id='".$toistuva->id."'
+							";
+							$tv_pois = Tyovuoroot::model()->findAll($criteria);
+							foreach($tv_pois as $item){
+								$tv = Tyovuoroot::model()->findbypk($item->id);
+								if(isset($tv->id)){
+								// <-- LOG
+								$model_log 	= 'Tyovuoroot';
+								$name_log 	= 'Työvuorot';
+								$status_log 	= 'Auto Delete';
+	
+								$old_values = json_encode($tv->attributes);
+								$new_values = null;
+								$site = Yii::app()->createController('Site');
+								$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+								//     LOG -->
+								$this->loadModel($tv->id)->delete();
+								}
+							}
+						}
+				    	   }
+				    	}
+					//     Poistetaan tyopaari -->
+
+					$nt = ToistuvatTyovuorot::model()->findbypk($toistuva->id);
+					if(isset($edellinenToistuva->id))
+					{
+					// <-- LOG
+					$model_log 	= 'ToistuvatTyovuorot';
+					$name_log 	= 'Toistuvat työvuorot';
+					$status_log 	= 'Update';
+					$old_values = json_encode($edellinenToistuva->attributes);
+					$new_values = json_encode($nt->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+					//     LOG -->
+					} else {
+					// <-- LOG
+					$model_log 	= 'ToistuvatTyovuorot';
+					$name_log 	= 'Toistuvat työvuorot';
+					$status_log 	= 'Create';
+					$old_values = null;
+					$new_values = json_encode($nt->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+					//     LOG -->
+					}
+			}
+
+
+			if( count($return) > 0 )
+				echo json_encode($return);
+			else
+				echo json_encode(array('ERROR'=>'Ei muutoksia'));
+			exit;
+		}
+		//     Toistuva tyovuorot ja tyoparit -->
+
+
+
+
+
+
+
+
+		// Jos Toistuva Ruksi ei ole päällä
+		if(isset($_POST['Tyovuoroot']) and !isset($_POST['ToistuvatTyovuorot']['toistuva_aktiivinen']))
+		{
+
+
+		// <-- LOG
+		$model_log 	= 'Tyovuoroot';
+		$name_log 	= 'Työvuorot';
+		$status_log 	= 'Update';
+		if(isset($_POST[$model_log]))
+		{
+			$old_values = json_encode($model->attributes);
+			$new_values = json_encode($_POST[$model_log]);
+			$site = Yii::app()->createController('Site');
+			$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+		}
+		//     LOG -->
+
+
+
+			// <-- Jos toistuva, otetaan sen Päivämäärä pois ketjusta
+			if( isset($model->pvm) and $model->toistuva_id != 0)
+			{
+				$this->toistuvaDeletePvm($model->toistuva_id, $model->pvm);
+				$_POST['Tyovuoroot']['toistuva_id'] = 0;
+			}
+			//     Jos toistuva, otetaan sen Päivämäärä pois ketjusta -->
+
+
+			$_POST['Tyovuoroot']['pvm'] = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+
+			// <-- Tyontekijan vaihto
+			if( $model->tid != $_POST['Tyovuoroot']['tid'] )
+			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
+			// Tyontekijan vaihto -->
+
+			$toistuva_id = $model->toistuva_id;
+
+			// <-- Edico viesti jos peruutettu
+			if( isset($model->kohteet->asiakas_id) 
+				and $model->kohde == $_POST['Tyovuoroot']['kohde']
+				and $model->peruutettu == 0 
+				and $_POST['Tyovuoroot']['peruutettu'] != 0)
+			{
+				$edico_viesti = Yii::t('main', 'Työvuoro on peruutettu').".\n".$_POST['Tyovuoroot']['pvm'].", ".$_POST['Tyovuoroot']['alku']."-".$_POST['Tyovuoroot']['loppu'];
+				Domainit::sendGCMeDico($model->kohteet->asiakas_id, Yii::t('main', 'Työvuoro on peruutettu'), $edico_viesti, null);
+			}
+			//     Edico viesti jos peruutettu -->
+
+			$model->attributes = $_POST['Tyovuoroot'];
+			if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
+				$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
+			} else {
+				$model->lisa_tuotteet = '';
+			}
+			if( is_array($model->tyo_erittelyt) and count($model->tyo_erittelyt) > 0 ){
+				$model->tyo_erittelyt = json_encode($model->tyo_erittelyt, JSON_FORCE_OBJECT);
+			} else {
+				$model->tyo_erittelyt = '';
+			}
+			if( is_array($model->muistiinpano) and count($model->muistiinpano) > 0 ){
+				$model->muistiinpano = json_encode($model->muistiinpano, JSON_FORCE_OBJECT);
+			} else {
+				$model->muistiinpano = '';
+			}
+			if($model->save()){
+
+				// <-- Onko tyopari esitetty
+				$post_tyopaari = array();
+				if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
+				$post_tyopaari = $_POST['tyopaari'];
+				// Onko tyopari esitetty -->
+	
+				// <-- Vanhat
+				$vanhat = json_decode($model->tyopaari, true);
+				$vanhat_arr = array();
+				if(is_array($vanhat))
+				{
+				   foreach($vanhat as $tyovuoroID=>$tid)
+				   {
+					$vanhat_arr[$tid] = $tyovuoroID;
+				   }
+				}
+				// Vanhat -->
+
+				if(count($post_tyopaari) == 0)
+				Tyovuoroot::model()->updatebypk($model->id, array('tyopaari' => ''));
+
+
+				// <-- jos on tyopaari
+				if(count($post_tyopaari) > 0)
+				{
+	
+				$luotu = array();
+				$arr = array();
+				$luotu[$model->id] = $model->tid;
+				$arr[$model->id] = array($model->tid,$model->pvm);
+	
+				    foreach($_POST['tyopaari'] as $tid)
+				    {
+					if( isset($vanhat_arr[$tid]) ){
+						$m = Tyovuoroot::model()->findByPk($vanhat_arr[$tid]);
+					} else {
+						$m = new Tyovuoroot;
+					}
+					if( count($m) == 0 ){ $m = new Tyovuoroot; }
+
+					$m->attributes=$_POST['Tyovuoroot'];
+					$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+					$m->tid=$tid;
+
+					if( is_array($m->lisa_tuotteet) and count($m->lisa_tuotteet) > 0 ){
+						$m->lisa_tuotteet = json_encode($m->lisa_tuotteet);
+					} else {
+						$m->lisa_tuotteet = '';
+					}
+					if( is_array($m->tyo_erittelyt) and count($m->tyo_erittelyt) > 0 ){
+						$m->tyo_erittelyt = json_encode($m->tyo_erittelyt, JSON_FORCE_OBJECT);
+					} else {
+						$m->tyo_erittelyt = '';
+					}
+					if( is_array($m->muistiinpano) and count($m->muistiinpano) > 0 ){
+						$m->muistiinpano = json_encode($m->muistiinpano, JSON_FORCE_OBJECT);
+					} else {
+						$m->muistiinpano = '';
+					}
+
+					if($m->save())
+					{
+
+						// <-- Poistetaan tyovuoro henkilosta joka oli toistuvissa
+						if( $toistuva_id != 0 )
+						{
+						$criteria = new CDBcriteria;
+						$criteria->condition = " 
+							pvm='".$m->pvm."' 
+							AND tid='".$m->tid."'
+							AND toistuva_id!=0
+							AND toistuva_id='".$toistuva_id."'
+						";
+						$tv_pois = Tyovuoroot::model()->findAll($criteria);
+						foreach($tv_pois as $item){
+							$tv = Tyovuoroot::model()->findbypk($item->id);
+							if(isset($tv->id)){
+							// <-- LOG
+							$model_log 	= 'Tyovuoroot';
+							$name_log 	= 'Työvuorot';
+							$status_log 	= 'Auto Delete';
+	
+							$old_values = json_encode($tv->attributes);
+							$new_values = null;
+							$site = Yii::app()->createController('Site');
+							$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+							//     LOG -->
+							$this->loadModel($tv->id)->delete();
+							}
+						}
+						}
+						//  Poistetaan tyovuoro henkilosta joka oli toistuvissa -->
+
+						$luotu[$m->id] = $m->tid;
+				    		$arr[$m->id] = array($m->tid,$m->pvm);
+					} else {
+						echo json_encode($m->getErrors());
+						exit;
+					}
+				    }
+	
+				    if(is_array($vanhat)){
+				    	$diff = array_diff($vanhat, $_POST['tyopaari']);
+				    	foreach($diff as $k => $v)
+				    	{
+						if($k!=$model->id){
+							$m = Tyovuoroot::model()->findByPk($k);
+							if( isset($m->id) ){
+							$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
+							}
+
+							$tv = Tyovuoroot::model()->findbypk($k);
+							if(isset($tv->id)){
+							// <-- LOG
+							$model_log 	= 'Tyovuoroot';
+							$name_log 	= 'Työvuorot';
+							$status_log 	= 'Auto Delete';
+	
+							$old_values = json_encode($tv->attributes);
+							$new_values = null;
+							$site = Yii::app()->createController('Site');
+							$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+							//     LOG -->
+							$this->loadModel($tv->id)->delete();
+							}
+						
+							if(isset($luotu[$k])){	unset($luotu[$k]); }	
+						}
+				    	}
+				    }
+
+				    foreach($arr as $k => $v)
+				    {
+					Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode($luotu)));
+					$return[] = array('tid'=>$v[0], 'pvm'=>$v[1], 'ymd'=>date("Ymd",strtotime($v[1])));
+		
+					// <-- PushNotify
+					if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
+					$this->pushNotifySending($k);
+					// PushNotify -->
+				    }
+	
+				}
+
+				if(is_array($vanhat) and !isset($_POST['tyopaari'])){
+				    	foreach($vanhat as $k => $v)
+				    	{
+						if($k!=$model->id){
+							$m = Tyovuoroot::model()->findByPk($k);
+							if( isset($m->id) ){
+							$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
+							}
+
+							$tv = Tyovuoroot::model()->findbypk($k);
+							if(isset($tv->id)){
+							// <-- LOG
+							$model_log 	= 'Tyovuoroot';
+							$name_log 	= 'Työvuorot';
+							$status_log 	= 'Auto Delete';
+	
+							$old_values = json_encode($tv->attributes);
+							$new_values = null;
+							$site = Yii::app()->createController('Site');
+							$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+							//     LOG -->
+							$this->loadModel($tv->id)->delete();
+							}
+							if(isset($luotu[$k])){	unset($luotu[$k]); }	
+						}
+				    	}
+				}
+				// jos on tyopaari -->
+
+				if(count($post_tyopaari) == 0 and $model->toistuva_id == 0)
+				{
+					// <-- PushNotify
+					if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
+					$this->pushNotifySending($model->id);
+					// PushNotify -->
+				}
+
+			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
+			echo json_encode($return);
+
+			} else { // model save 
+				echo json_encode($model->getErrors());
+			}
+
+			exit;
+		}
+
+
+
+
+
+		$criteria = new CDBcriteria;
+		// <-- Return order etu ja sukunimella
+		$site = Yii::app()->createController('Site');
+		$criteria = $site[0]->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
+		$criteria->condition="aktiivinen=1";
+	  	$t = Tyontekijat::model()->findAll($criteria);
+		$tekijan_nimi = '<select id="tekijanVaihdo" class="form-control" '.((!empty($model->tyopaari))?'disabled':'').'>';
+		if(count($t) > 0)
+		{
+		   if($model->tid == 0)
+		   $tekijan_nimi .= '<option value="'.$model->id.'">'.Yii::t('main', 'Valitse').'</option>';
+
+		   foreach($t as $tekijanData)
+		   {
+			if($tekijanData->id == $model->tid)
+			$tekijan_nimi .= '<option value="'.$tekijanData->id.'" selected>'.$this->etuSukunimi($tekijanData->id).'</option>';
+			else
+			$tekijan_nimi .= '<option value="'.$tekijanData->id.'">'.$this->etuSukunimi($tekijanData->id).'</option>';
+		   }
+		}
+		$tekijan_nimi .= '</select>';
+
+	$form_content = '';
+        $form_content = '
+        <div id="modal-form" class=" popup-basic popup-xl admin-form mfp-with-anim mfp-hide">
+          <div class="panel">
+            <div class="panel-heading">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">
+				<span aria-hidden="true">&times;</span>
+			</button>
+              <span class="panel-title"><i class="fa fa-clock-o"></i> 
+		'.Yii::t('main', 'Työvuoron suunnittelu').' #'.$model->id.' <span class="kohteen_lisatiedot"></span> '.$tekijan_nimi.'
+	      </span>
+            </div>
+            <!-- end .panel-heading section -->
+              <div class="panel-body p25">
+		'.$this->renderPartial('_form4',array('model'=>$model), true).'
+              </div>
+          </div>
+        </div>';
+
+	echo json_encode( $form_content);
+	exit;
+	}
 
 	protected function pushNotifySending($tv_id)
 	{

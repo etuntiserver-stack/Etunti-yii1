@@ -87,7 +87,7 @@
   echo '</table>';
 
 
-  function  head($did, $tid, $pvm, $onkoMennyt){
+  function head($did, $tid, $pvm, $onkoMennyt){
 	$bod = '
 	<div class="latikkolisatiedot_paa">
 		<div class="latikkolisatiedot">

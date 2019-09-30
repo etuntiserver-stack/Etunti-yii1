@@ -67,24 +67,40 @@ if(getUrlVars()["tv_id"]){
         });
 }
 */
+$(document).delegate(".luominen","click",function(){
+	var pvm = $(this).attr("pvm");
+	var tid = $(this).attr("tid");
 
-$(".tv_edit").click(function(){
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/create4',
+           type: "POST",
+           data: { "pvm" : pvm, "tid" : tid },
+           success: function(data){
+		d = JSON.parse(data);
+		$('#showres').modal().html(d);
+		//console.log(data);
+           }
+        });
+   	return false;
+});
+
+$(document).delegate(".tv_edit","click",function(){
 	var tv_id = $(this).attr('id');
 
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update?id='+tv_id,
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update4?id='+tv_id,
            type: "GET",
            //data: {"tarjousPainike" : "true"},
-           success: function(html){
-		$('#showres').modal().html(html);
+           success: function(data){
+		d = JSON.parse(data);
+		$('#showres').modal().html(d);
+		//console.log(data);
            },
 	   error:function(data){
 		alert('Kohdetta ei löydy! Päivitä sivu!');
 	   }
         });
 });
-
-
 
 $(document).delegate(".valitseKokopaiva","click",function(){
 	var pvm = $(this).attr("pvm");
@@ -101,22 +117,6 @@ $(document).delegate(".valitseKokopaiva","click",function(){
         });
    	return false;
 });
-
-$(document).delegate(".luominen","click",function(){
-	var pvm = $(this).attr("pvm");
-	var tid = $(this).attr("tid");
-
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/create',
-           type: "POST",
-           data: { "pvm" : pvm, "tid" : tid },
-           success: function(html){
-		$('#showres').modal().html(html);
-           }
-        });
-   	return false;
-});
-
 
 jQuery.clearKaikki = function clearKaikki(){
 
