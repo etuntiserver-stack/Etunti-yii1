@@ -2106,6 +2106,11 @@ class TyovuorootController extends Controller
 		$criteria->addCondition  (" kohde IN ($impl) ");
 		}
 
+		if(isset(Yii::app()->session['tyontekijat']) and count(Yii::app()->session['tyontekijat'] > 0)){
+		      	$ids = implode(",", Yii::app()->session['tyontekijat']);
+		        $criteria->addCondition ('tid IN ('.$ids.') ');
+		}
+
 		$tv = Tyovuoroot::model()->findAll($criteria);
 
 		$this->render('tv4', array(

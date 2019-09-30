@@ -24,7 +24,7 @@
 <!-- Fixed Table -->
 
 <!-- TV laatiko -->
-<div id="showres" class="modal fade" aria-hidden="true" data-backdrop="static" data-keyboard="false"></div>
+<div id="showres" class="modal" aria-hidden="true" data-backdrop="static" data-keyboard="false"></div>
 <!-- TV laatiko -->
 
 
