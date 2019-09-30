@@ -8,42 +8,6 @@ $(document).ready(function(){
   });
   if( varaus_l > 0 ){ $('.td_varaus').addClass('in'); }
 
-  $( ".luolaatiko" ).each(function( index ) {
-
-	var forThis = $(this).attr("for");
-	$("#"+forThis).html('odota..');
-	var pvm = $(this).attr("pvm");
-	var tid = $(this).attr("tid");
-	var from = $(this).attr("from");
-	var kohteet_siivous = $(this).attr("kohteet_siivous");
-	var asiakas = $(this).attr("asiakas");
-	var kohde = $(this).attr("kohde");
-	
-	var xhr = new XMLHttpRequest();
-	xhr.open("POST", 'didnew3', true);
-	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	xhr.onload = function () {
-		d = JSON.parse(xhr.responseText);
-		//console.log(xhr.responseText)
-		$("#"+forThis).html(d);
-	};
-	xhr.send('pvm='+pvm+'&tid='+tid+'&from='+from+'&kohteet_siivous='+kohteet_siivous+'&asiakas='+asiakas+'&kohde='+kohde);
-	
-
-	/*
-        $.ajax({
-           url: 'didnew3',
-           type: "POST",
-	   data: { pvm : pvm, tid: tid, from : from, kohteet_siivous : kohteet_siivous, asiakas : asiakas, kohde : kohde },
-           success: function(data){
-		d = JSON.parse(data);
-		//console.log(data)
-		$("#"+forThis).html(d);
-           }
-        });
-	*/
-  });
-
 $('td').hover(function()
 {
      $(this).find('.plussa, .valitseKokopaiva').show();
@@ -77,7 +41,7 @@ $('td').hover(function()
      $(this).find('.plussa, .valitseKokopaiva').hide();
      $(this).find('.ikoonintila').hide();
 });
-
+/*
 function getUrlVars() {
     var vars = {};
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
@@ -102,12 +66,13 @@ if(getUrlVars()["tv_id"]){
 	   }
         });
 }
+*/
 
-$(document).delegate(".tv_edit","click",function(){
-	var thisVal = $(this).attr("id").split("_");
+$(".tv_edit").click(function(){
+	var tv_id = $(this).attr('id');
 
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update?id='+thisVal[1],
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update?id='+tv_id,
            type: "GET",
            //data: {"tarjousPainike" : "true"},
            success: function(html){

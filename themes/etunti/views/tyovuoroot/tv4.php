@@ -27,34 +27,6 @@
 <div id="showres" class="modal fade" aria-hidden="true" data-backdrop="static" data-keyboard="false"></div>
 <!-- TV laatiko -->
 
-<div id="temaus-modal" class="modal fade" tabindex="-1" role="dialog">
-   <!-- Admin Form Popup -->
-   <div id="modal-form" class=" popup-basic popup-lg admin-form mfp-with-anim mfp-hide">
-     <div class="panel">
-       <div class="panel-heading">
-		<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">
-			<span aria-hidden="true">&times;</span>
-		</button>
-         <span class="panel-title"></span>
-       </div>
-       <!-- end .panel-heading section -->
-
-       <form method="post" action="/" id="comment">
-         <div class="panel-body p25">
-         </div>
-         <!-- end .form-body section -->
-
-         <div class="panel-footer">
-		<button type="button" class="button btn-default" data-dismiss="modal" aria-label="Close">Sulje</button>
-           <!--<button type="submit" class="button btn-primary">Post Comment</button>-->
-         </div>
-         <!-- end .form-footer section -->
-       </form>
-     </div>
-     <!-- end: .panel -->
-   </div>
-   <!-- end: .admin-form -->
-</div>
 
 <?php
   $tv_arr = array();
@@ -92,9 +64,9 @@
      if($did < date("Ymd")){ $onkoMennyt = 'mennytPaivat'; }
      while (strtotime($f) <= strtotime($to)) {
            echo '<td class="laatiko_td"><div id="'.$did.'_'.$tid.'">';
-           echo head($did, $tid, $pvm, $onkoMennyt);
+           echo json_decode(head($did, $tid, $pvm, $onkoMennyt));
            if( isset($tv_arr[$tid][$f]) ){
- 	     echo $this->renderPartial('//tyovuoroot/did4',array(
+ 	     $content = $this->renderPartial('//tyovuoroot/did4',array(
 					'tv_arr' => $tv_arr[$tid][$f],
 					'pvm'=>$pvm,
 					'did'=>$did,
@@ -105,7 +77,8 @@
 					'kohde'=>$kohde,
 					'asetukset'=>$asetukset,
 					'site_0' => $site[0],
-	     ));
+	     ), true);
+	     echo json_decode($content);
            }
            echo '</div></div></td>';
 	$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
@@ -139,6 +112,6 @@
 	</div>
 	';
 	$bod .= '<div style="position:relative" class="latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
-	return $bod;
+	return json_encode($bod);
   }
 ?>

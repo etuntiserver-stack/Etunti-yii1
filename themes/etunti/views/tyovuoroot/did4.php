@@ -3,7 +3,6 @@
               foreach($tv_arr as $tvVal){ 
 		$color = '#888';
 		$bgcol = 'color:#333';
-
 		// <-- Osoite
 		$osoite = $tvVal['osoite'];
 		// Osoite -->
@@ -13,14 +12,11 @@
 			$reikatyyppi = 'reika-warning';
 			$bod .= '<div class="reika '.$reikatyyppi.' text-center"><i class="glyphicon glyphicon-time"></i> Aika: '.$this->sprint($valilyonti).'</div>';
 		}
-
 		$tv_edit 	= 'tv_edit';
 		$fullRivi 	= 'fullRivi';
 	   	$muistin	= 'muistin';
-
 		$kellot = '<b class="kellot">'.$tvVal['alku'].'-'.$tvVal['loppu'].'&nbsp; </b>';
 	        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal['id'].'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></i>';
-
 		if(!empty($tvVal['tyoajanmerkinta'])){
 			$expl = explode("/",$tvVal['tyoajanmerkinta']);
 			if(isset($expl[1]) and !empty($expl[1])){
@@ -35,7 +31,6 @@
 			$kellot = '';
 			$status = '';
 		}
-
 	   	// <-- Tyoryhmat
 		if( 
 		   isset($tvVal['kohteet']) 
@@ -49,7 +44,6 @@
 			}
 		}
 	   	//    Tyoryhmat -->
-		
 	   	$bod .= '<div id="'.$tvVal['id'].'_'.$did.'_'.$tid.'" class="'.$fullRivi.'" style="'.$bgcol.'">';
 		$bod .= '<div class="pull-left ikoonintila" style="display:none;margin-right: 5px">'.$muokkaus.' </div>';
 		$bod .= '<span class="'.$tv_edit.'" id="'.$tvVal['id'].'">';
@@ -58,5 +52,5 @@
 	   	$bod .= '</div>';
 		$loppu = array($tvVal['tyoajanlaatu'], $tvVal['loppu']);
               }
-  echo $bod;
+  echo json_encode($bod);
 ?>
