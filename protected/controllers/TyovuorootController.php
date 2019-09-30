@@ -2062,8 +2062,7 @@ class TyovuorootController extends Controller
 
        		$criteria = new CDbCriteria();
 		$criteria->with = array('kohteet');
-		//$criteria->limit = "1";
-		//$criteria->select = " osoite , t.*";
+		$criteria->select = " id, tid, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu";
 		$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'), alku "; //tt.$tt_order_1 ASC, 
 		$criteria->condition = "
 			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
@@ -2119,7 +2118,6 @@ class TyovuorootController extends Controller
 			'kohteet_siivous' => $kohteet_siivous,
 			'kohde' => $kohde,
 			'asiakas' => $asiakas,
-			'asetukset' => $asetukset,
 		));
 	}
 

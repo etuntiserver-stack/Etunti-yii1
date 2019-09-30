@@ -75,7 +75,6 @@
 					'kohteet_siivous'=>json_encode($kohteet_siivous), 
 					'asiakas'=>$asiakas,
 					'kohde'=>$kohde,
-					'asetukset'=>$asetukset,
 					'site_0' => $site[0],
 	     ), true);
 	     echo json_decode($content);

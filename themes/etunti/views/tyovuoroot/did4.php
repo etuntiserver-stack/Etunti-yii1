@@ -12,11 +12,8 @@
 			$reikatyyppi = 'reika-warning';
 			$bod .= '<div class="reika '.$reikatyyppi.' text-center"><i class="glyphicon glyphicon-time"></i> Aika: '.$this->sprint($valilyonti).'</div>';
 		}
-		$tv_edit 	= 'tv_edit';
-		$fullRivi 	= 'fullRivi';
-	   	$muistin	= 'muistin';
 		$kellot = '<b class="kellot">'.$tvVal['alku'].'-'.$tvVal['loppu'].'&nbsp; </b>';
-	        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal['id'].'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></i>';
+	        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o muistin" for="'.$tvVal['id'].'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></i>';
 		if(!empty($tvVal['tyoajanmerkinta'])){
 			$expl = explode("/",$tvVal['tyoajanmerkinta']);
 			if(isset($expl[1]) and !empty($expl[1])){
@@ -29,24 +26,11 @@
 			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 			$osoite = (isset($expl1[0])) ? '<div class="text-center"><b style="color:'.$color.'">'.$expl1[0].'</b></div>' : '';
 			$kellot = '';
-			$status = '';
 		}
-	   	// <-- Tyoryhmat
-		if( 
-		   isset($tvVal['kohteet']) 
-		   and $asetukset->tyoryhmat_kohde == 1 
-		){
-			$arr = $site_0->TyoryhmatHelper();
-			if( count($arr) > 0 and !in_array($tvVal['kohteet']['tyoryhma'], $arr)){
-	   			$tv_edit 	= '';
-	   			$fullRivi 	= 'fullRivi bg-danger ei_saa_muokata';
-				$muistin	= '';
-			}
-		}
-	   	//    Tyoryhmat -->
-	   	$bod .= '<div id="'.$tvVal['id'].'_'.$did.'_'.$tid.'" class="'.$fullRivi.'" style="'.$bgcol.'">';
+
+	   	$bod .= '<div id="'.$tvVal['id'].'_'.$did.'_'.$tid.'" class="fullRivi" style="'.$bgcol.'">';
 		$bod .= '<div class="pull-left ikoonintila" style="display:none;margin-right: 5px">'.$muokkaus.' </div>';
-		$bod .= '<span class="'.$tv_edit.'" id="'.$tvVal['id'].'">';
+		$bod .= '<span class="tv_edit" id="'.$tvVal['id'].'">';
 		$bod .= $kellot.$osoite;
 	   	$bod .= '</span>';
 	   	$bod .= '</div>';
