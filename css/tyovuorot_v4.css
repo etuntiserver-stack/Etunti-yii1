@@ -1,0 +1,141 @@
+.mennytPaivat{
+	opacity: 0.4;
+}
+#fixTable td,th{
+	margin:0;
+	padding:0;
+}
+#fixTable td{
+	white-space: nowrap;
+}
+#fixTable td:hover{
+	background: #fff;
+}
+.ajanreika{
+	background: orange;
+}
+.latikkolisatiedot_paa{
+	position: relative;
+}
+.hover_well{
+	padding: 7px;
+	background: #ededed;
+	border: 1px #ddd solid;
+	margin-bottom: 5px;
+}
+.latikkolisatiedot{
+	padding: 2px 5px;
+	background: orange;
+	color: #fff;
+	display: none; 
+	position: absolute; top: 0; right: 0;
+	border-right: 1px #ddd solid;
+	border-bottom: 1px #ddd solid;
+	z-index: 999;
+}
+.tvikooni{
+
+}
+
+.fullRivi{
+
+}
+.reika{
+	color: #fff;
+	padding: 3px;
+	font-size: 90%;
+	font-weight: bold;
+}
+.reika-success{
+	background: #28a745;
+}
+.reika-warning{
+	background: orange;
+}
+.dropdown-menu{
+	z-index: 999;
+}
+.text-orange{
+	color: orange;
+}
+.fixed-column{
+	max-width:50px;
+	width:50px;
+	z-index: 99;
+}
+td .latikkoAsetukset{
+	font-family: ibm-plex-sans, sans-serif;
+	font-size: 90%;
+	width: 270px;
+	min-width: 270px;
+	max-width: 270px; overflow-x: hidden;
+	padding: 5px 7px;
+	max-height: 150px; overflow-y: auto;
+	line-height: 16px;
+}
+td .nimi{
+	white-space: normal;
+	font-family: ibm-plex-sans, sans-serif;
+	font-size: 90%;
+	width: 80px;
+	min-width: 80px;
+	padding: 5px 7px;
+	line-height: 16px;
+}
+#hovertietoja{
+	position: absolute; left: 0; top: 0;
+	width: 300px;
+	padding: 10px 20px;
+	position: absolute;
+	font-family: ibm-plex-sans, sans-serif;
+	font-size: 90%;
+	line-height: 16px;
+	border-right:1px #ddd solid;
+	border-bottom:1px #ddd solid;
+	background: #fff;
+	color: #333;
+	z-index: 999999;
+
+	-moz-box-shadow:    1px 1px 1px 2px #ccc;
+	-webkit-box-shadow: 1px 1px 1px 2px #ccc;
+	box-shadow:         1px 1px 1px 2px #ccc;
+	/*opacity: 0.9;*/
+}
+.kellot{
+	
+}
+.tyoajanlaatu_laatiko{
+	padding: 3px;
+	color: #fff;
+}
+.tv_edit{
+	width: 100%;
+	cursor: pointer;
+}
+.fullRivi:hover{
+	background: #ededed;
+}
+.forCut,
+.forCopy,
+.mplus,
+.mcut,
+#hovertietoja,
+.hovertietoja,
+.luominen,
+.valitseKokopaiva
+{ 
+	display: none;
+}
+.clear, .trash{ 
+	font-size: 150%;
+	margin-left:5px;
+}
+td:hover .mplus, td:hover .mcut, td:hover .latikkolisatiedot{
+	display : block;
+}
+.table tbody>tr>td{
+    	vertical-align: top;
+}
+.table{
+    height: 100%;
+}

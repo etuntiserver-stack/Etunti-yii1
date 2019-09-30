@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'tv4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'tv4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -1917,7 +1917,45 @@ class TyovuorootController extends Controller
 		));
 	}
 
-	public function actionTv4() {
+	public function actionTv4($kohteet_siivous=array(), $kohde='', $asiakas='') {
+		$asetukset = Asetukset::model()->findByPk(1);
+
+		// <-- Reset
+		if(isset($_GET['reset']))
+		{
+			unset(Yii::app()->session['year']);
+			unset(Yii::app()->session['week']);
+			unset(Yii::app()->session['vkolopput']);
+			unset(Yii::app()->session['asiakas']);
+			unset(Yii::app()->session['kohde']);
+			unset(Yii::app()->session['tyontekijat']);
+			unset(Yii::app()->session['tyo_toimialue']);
+			unset(Yii::app()->session['kohteiden_tyonimike']);
+			unset(Yii::app()->session['tyoryhma']);
+
+			$this->redirect(array('index'));
+		}
+		//     Reset -->
+
+
+		// <-- GET haku
+		if(isset($_GET['year']) or isset($_GET['week']))
+		{
+
+			if(isset($_GET['year']) and !empty($_GET['year']))
+				Yii::app()->session['year'] = $_GET['year'];
+			
+			if(isset($_GET['week']) and !empty($_GET['week']))
+				Yii::app()->session['week'] = $_GET['week'];
+
+			if(isset($_GET['tid']) and !empty($_GET['tid']))
+				Yii::app()->session['tyontekijat'] = array($_GET['tid']);
+
+			if(isset($_GET['tv_id'])){ $this->redirect(array('index', 'tv_id' => $_GET['tv_id'])); } 
+			$this->redirect(array('index'));
+		}		
+		//  GET haku -->
+
 		// <-- Post haku
 		if(isset($_POST['haku']))
 		{
@@ -1969,26 +2007,232 @@ class TyovuorootController extends Controller
 			$this->redirect(array('tv4'));
 		}		
 		//  Post haku -->
-		if(!isset(Yii::app()->session['from']))
-			Yii::app()->session['from'] = date("Y-m-d");
-		if(!isset(Yii::app()->session['to']))
-			Yii::app()->session['to'] = date("Y-m-d",strtotime("+2 week", time()));
+
+
+		// <-- Year Week
+		if(!isset(Yii::app()->session['year']))
+			Yii::app()->session['year'] = date("Y");
+
+		if(!isset(Yii::app()->session['week']))
+			Yii::app()->session['week'] = date("W");
+
+		$year = Yii::app()->session['year'];
+		$week = sprintf("%02d", Yii::app()->session['week']);
+		Yii::app()->session['week'] = $week;
+		//    Year Week -->
+
+
+		if(!isset(Yii::app()->session['vkolopput']))
+			$numDays = 5;
+		else
+			$numDays = 7;
+
+
+		Yii::app()->session['from'] = date("Y-m-d", strtotime($year ."W". $week.'1'));
+		Yii::app()->session['to'] = date("Y-m-d", strtotime($year ."W". $week . $numDays));
+
+
+		// <-- Order tyontekijat
+		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+			$tt_order_1 = "tekijan_nimi";
+			$tt_order_2 = "sukunimi";
+		} else {
+			$tt_order_1 = "sukunimi";
+			$tt_order_2 = "tekijan_nimi";
+		}
+		// Order tyontekijat -->
+
+       		$criteria = new CDbCriteria();
+		$criteria->select = "id, $tt_order_1, $tt_order_2";
+		$criteria->order = "$tt_order_1 ASC";
+		$criteria->condition = "
+			aktiivinen=1
+		";
+		if(isset(Yii::app()->session['tyontekijat']) and count(Yii::app()->session['tyontekijat'] > 0)){
+		      	$ids = implode(",", Yii::app()->session['tyontekijat']);
+		        $criteria->addCondition ('id IN ('.$ids.') ');
+		}
+
+		$tt = Tyontekijat::model()->findAll($criteria);
+
+//			AND id NOT IN(SELECT tid FROM sivex_tvuoro WHERE
+//			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
+//			)
+
 
        		$criteria = new CDbCriteria();
 		$criteria->with = array('kohteet');
-		$criteria->select = "id, tid, pvm, alku, loppu, osoite";
-		$criteria->order = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'), alku";
+		//$criteria->limit = "1";
+		//$criteria->select = " osoite , t.*";
+		$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'), alku "; //tt.$tt_order_1 ASC, 
 		$criteria->condition = "
 			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
 		";
-		$model = Tyovuoroot::model()->findAll($criteria);
-		$asetukset = Asetukset::model()->findByPk(1);
+
+		// <-- Asiakas
+		if(isset($asiakas) and !empty($asiakas))
+		{
+		$criteria->addCondition ("
+		kohde IN 
+		       (
+			    SELECT id FROM sivex_kohdet WHERE asiakas_id IN
+   			    (
+			       SELECT id FROM asiakkaat WHERE 
+				yrityksen_nimi LIKE '%".$asiakas."%' 
+				OR yhteyshenkilo LIKE '%".$asiakas."%' 
+				OR puhelin LIKE '%".$asiakas."%'
+			    )
+		       )
+		   ");
+		}
+		// Asiakas -->
+
+		// <-- Kohde
+		if(isset($kohde) and !empty($kohde))
+		{
+	           $criteria->addCondition ("
+		   kohde IN 
+		       (
+			    SELECT id FROM sivex_kohdet WHERE 
+				osoite LIKE '%".$kohde."%' 
+				OR puh_nro LIKE '%".$kohde."%'
+		       )
+		   ");
+		}
+		// Kohde -->
+
+		if(isset($kohteet_siivous) and count($kohteet_siivous) > 0)
+		{
+		$impl = implode(',',$kohteet_siivous);
+		$criteria->addCondition  (" kohde IN ($impl) ");
+		}
+
+		$tv = Tyovuoroot::model()->findAll($criteria);
+
 		$this->render('tv4', array(
-			'model'	=> $model,
+			'tt_order_1' => $tt_order_1,
+			'tt_order_2' => $tt_order_2,
+			'tt'	=> $tt,
+			'tv'	=> $tv,
 			'from'	=> Yii::app()->session['from'],
 			'to'	=> Yii::app()->session['to'],
+			'kohteet_siivous' => $kohteet_siivous,
+			'kohde' => $kohde,
+			'asiakas' => $asiakas,
 			'asetukset' => $asetukset,
 		));
+	}
+
+	public function actionHovertietoja($tv_id) {
+
+		$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
+		$asetukset = Asetukset::model()->findByPk(1);
+		$asetukset_new = array();
+		$asetukset_new['tyoryhmat_kohde'] = $asetukset->tyoryhmat_kohde;
+		$asetukset_new['paikkakunta_tyovuorossa'] = $asetukset->paikkakunta_tyovuorossa;
+		$asetukset_new['asiakas_tyovuorossa'] = $asetukset->asiakas_tyovuorossa;
+		$asetukset_new['lasketaanko_lounastauko'] = $asetukset->lasketaanko_lounastauko;
+		$tvVal = Tyovuoroot::model()->findByPk($tv_id);
+		$hovertietoja = '';
+
+		$columnDate = date("N/d.m",strtotime($tvVal->pvm));
+		$explColDate = explode("/",$columnDate);
+
+		$hovertietoja .= '<h4>'.$arrDate[$explColDate[0]].', '.$explColDate[1].' '.$this->etuSukunimi($tvVal->tid).'</h4>';
+
+		// <-- Osoite
+		$osoite = '';
+		if(!empty($tvVal->osoite)){
+			$osoite = $tvVal->osoite;
+		} elseif(empty($tvVal->osoite) and isset($tvVal->kohteet->osoite)){
+			$osoite = $tvVal->kohteet->osoite;
+		}
+		// Osoite -->
+
+		// <-- Status
+		$status = '';
+		if($tvVal->status == 10){
+			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-success' : $teksti_vari = 'text-danger';
+			$status = ' <i class="tvikooni fa fa-cutlery '.$teksti_vari.'"></i>';
+		}
+		if($tvVal->status == 2) {
+			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-warning' : $teksti_vari = 'text-danger';
+			$status = ' <i class="tvikooni fa fa-bus '.$teksti_vari.'"></i>';
+		}
+		if($tvVal->status == 3) {
+			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-info' : $teksti_vari = 'text-danger';
+			$status = ' <i class="tvikooni fa fa-hourglass '.$teksti_vari.'"></i>';
+		}
+		if($tvVal->status == 11) {
+			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-info' : $teksti_vari = 'text-danger';
+			$status = ' <i class="tvikooni fa fa-clock-o '.$teksti_vari.'"></i>';
+		}
+		// Status -->
+
+		// <-- Toistuva
+		$toistuva = '';
+		if($tvVal->toistuva_id != 0){
+			$toistuva = ' <i class="tvikooni fa fa-repeat text-success" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Toistuva työvuoro').'"></i>';
+		}
+		// Toistuva -->
+
+		// <-- Avaimet
+		$avaimet = '';
+		if(isset($tvVal->avaimet) and count($tvVal->avaimet) > 0){
+			$avaimet =  ' <i class="tvikooni fa fa-key"></i>';
+		}
+		// Avaimet -->
+
+		// <-- Asiakas nakyvissa
+		$asiakasNakyvissa = '';
+		if($asetukset_new['asiakas_tyovuorossa'] == 1){
+		$name = '';
+		if(isset($tvVal->kohteet->asiakkaat) and $tvVal->kohteet->asiakkaat->tyyppi == 'yritys')
+		$name = $tvVal->kohteet->asiakkaat->yrityksen_nimi;
+		if(isset($tvVal->kohteet->asiakkaat) and $tvVal->kohteet->asiakkaat->tyyppi == 'henkilo')
+		$name = $tvVal->kohteet->asiakkaat->yhteyshenkilo;
+		if(!empty($name)){ $asiakasNakyvissa = '<b>Asiakas:</b> '.$name.'<br>'; }
+		}
+		//  Asiakas nakyvissa -->
+
+		// <-- Paikkakunta nakyvissa
+		$paikkakuntaNakyvissa = '';
+		if($asetukset_new['paikkakunta_tyovuorossa'] == 1){
+		$paikkakunta = '';
+		if(isset($tvVal->kohteet->kaupunki) and !empty($tvVal->kohteet->kaupunki))
+		$paikkakunta = $tvVal->kohteet->kaupunki;
+		if(!empty($paikkakunta)){ $paikkakuntaNakyvissa = '<b>Paikkakunta:</b> '.$paikkakunta.'<br>'; }
+		}
+		//  Paikkakunta nakyvissa -->
+
+		// <-- Hovertietoja generoi
+		// <-- peruutettu
+		if($tvVal['peruutettu'] == 1 and isset($tv_controller)){
+			$hovertietoja .= '<h3 class="text-danger">'. $this->peruutettuArray()[1] .'</h3>';
+			$bgcol = 'color:red';
+		}
+		if($tvVal['peruutettu'] == 2 and isset($tv_controller)){
+			$hovertietoja .= '<h3 class="text-danger">'. $this->peruutettuArray()[2] .'</h3>';
+			$bgcol = 'color:red';
+		}
+		//    peruutettu -->
+		$hovertietoja .= $asiakasNakyvissa;
+		//if(!empty($asiakasNakyvissa)){ $title .= ', '; }
+		$hovertietoja .= $paikkakuntaNakyvissa;
+		$hovertietoja .= '<br><p><span class="didstatus">'.$status.$toistuva.$avaimet.'</span>&nbsp; &nbsp;<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.$osoite.'</p>';
+		if( $tvVal->tyopaari != '' and $tvVal->tyopaari != "[\"$tvVal->tid\"]" ){
+		$hovertietoja .= '<div class="hover_well"><h5>Työparit</h5>';
+		   foreach(json_decode($tvVal->tyopaari, true) as $tyopaari){
+			if( $tvVal->tid != $tyopaari )
+			$hovertietoja .=  $this->etuSukunimi($tyopaari).'<br>';
+		   }
+		$hovertietoja .= '</div>';
+		}
+		if( !empty($tvVal->tietoja) ){ $hovertietoja .= '<div class="hover_well"><h5>Tietoja:</h5> '.$tvVal->tietoja.'</div>'; }
+		//    Hovertietoja generoi -->
+
+		echo json_encode($hovertietoja);
+		exit;
 	}
 
 	protected function time_to_float($time) {
