@@ -1919,6 +1919,7 @@ class TyovuorootController extends Controller
 
 	public function actionTv4($kohteet_siivous=array(), $kohde='', $asiakas='') {
 		$asetukset = Asetukset::model()->findByPk(1);
+		$tv_update = false;
 		// <-- Reset
 		if(isset($_GET['reset']))
 		{
@@ -1982,6 +1983,8 @@ class TyovuorootController extends Controller
 	
 			if(isset($_POST['to']) and !empty($_POST['to']))
 				Yii::app()->session['to'] = date("Y-m-d",strtotime($_POST['to']));
+
+			$tv_update = true;
 
 		}		
 		//  Post haku -->
@@ -2083,7 +2086,7 @@ class TyovuorootController extends Controller
 		}
 
 		// <-- Tv array
-		if(!isset(Yii::app()->user->tiedot_tvuorosta)){
+		if($tv_update or !isset(Yii::app()->user->tiedot_tvuorosta)){
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$tv_arr = array();
 		   foreach($tv as $val){
