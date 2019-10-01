@@ -2036,6 +2036,7 @@ class TyovuorootController extends Controller
 
        		$criteria = new CDbCriteria();
 		$criteria->with = array('kohteet');
+		//$criteria->limit = "10";
 		$criteria->select = " id, tid, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu";
 		$criteria->order = "alku ASC"; //tt.$tt_order_1 ASC, 
 		$criteria->condition = "
@@ -2088,10 +2089,10 @@ class TyovuorootController extends Controller
 		// <-- Tv array
 		//if($tv_update or !isset(Yii::app()->user->tiedot_tvuorosta)){
 		$tv = Tyovuoroot::model()->findAll($criteria);
-		$tv_arr = array();
+		   $tv_arr = array();
 		   foreach($tv as $val){
-		   $val['osoite'] = (!empty($val['osoite']))?$val['osoite']:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
-		   $tv_arr[$val->tid][$val->pvm][] = $val->attributes;
+		      $val['osoite'] = (!empty($val['osoite']))?$val['osoite']:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
+		      $tv_arr[$val->tid][$val->pvm][] = $val->attributes;
 		   }
 		   //Yii::app()->user->setState('tiedot_tvuorosta', $tv_arr);
 		//}
@@ -2109,6 +2110,7 @@ class TyovuorootController extends Controller
 			'kohde' 	=> $kohde,
 			'asiakas' 	=> $asiakas,
 		));
+
 	}
 
 	protected function tv4head($did, $tid, $pvm){
