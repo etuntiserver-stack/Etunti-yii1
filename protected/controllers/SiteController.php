@@ -2628,8 +2628,8 @@ $(document).ready(function(){
 
 	public function tyontekiatLista($name, $class, $id, $selectedArray, $aktiivinen=null, $tyoryhma=null)
 	{
+		$asetukset = Asetukset::model()->findByPk(1);
 		$return = '';
-
 		$criteria = new CDbCriteria();
 
 		// <-- Return order etu ja sukunimella
@@ -2655,11 +2655,21 @@ $(document).ready(function(){
 		if($class != null) $cl = ' class="'.$class.'" '; else $cl = '';
 		if($id != null)	$i = ' id="'.$id.'" '; else $i = '';
 
+		// <-- Order tyontekijat
+		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+			$tt_order_1 = "tekijan_nimi";
+			$tt_order_2 = "sukunimi";
+		} else {
+			$tt_order_1 = "sukunimi";
+			$tt_order_2 = "tekijan_nimi";
+		}
+		// Order tyontekijat -->
+
 		$list = Tyontekijat::model()->findAll($criteria);
 		$return .= '<select name="'.$name.'[]" '.$cl.' '.$i.' multiple title="Työntekijät">';
 		foreach($list as $val){
 		  if(isset($selectedArray) and in_array($val->id, $selectedArray))
-		    $return .= '<option value="'.$val->id.'" selected>'.$this->etuSukunimi($val->id).'</option>';
+		    $return .= '<option value="'.$val->id.'" selected>'.$val->$tt_order_1.' '.$tt_order_2.'</option>';
 		  else
 		    $return .= '<option value="'.$val->id.'">'.$this->etuSukunimi($val->id).'</option>';
 		}

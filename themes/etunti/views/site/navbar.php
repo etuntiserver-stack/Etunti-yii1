@@ -307,7 +307,7 @@ if( $curpage == 'tyovuoroot/tv4' )
 	<!-- Haku -->
 
 	<!-- Viikonloput -->
-	<?php if($curpage == 'tyovuoroot/index' or $curpage == 'tyovuoroot/tv4') : ?>
+	<?php if($curpage == 'tyovuoroot/index') : ?>
         <li class="p10" data-toggle="tooltip">
               <div class="form-group">
                <div class="form-inline">
