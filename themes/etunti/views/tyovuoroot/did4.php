@@ -1,4 +1,5 @@
 <?php
+	      $bod = '';
 	      $bod = json_decode($this->tv4head($did, $tid, $pvm));
               foreach($tv_arr as $tvVal){ 
 		$color = '#888';
