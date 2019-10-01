@@ -2114,8 +2114,6 @@ class TyovuorootController extends Controller
 	}
 
 	protected function tv4head($did, $tid, $pvm){
-	$onkoMennyt = '';
-	if($did < date("Ymd")){ $onkoMennyt = 'mennytPaivat'; }
 	$bod = '
 	<div class="latikkolisatiedot_paa">
 		<div class="latikkolisatiedot">
@@ -2138,7 +2136,6 @@ class TyovuorootController extends Controller
 		</div>
 	</div>
 	';
-	$bod .= '<div style="position:relative" class="latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 	return json_encode($bod);
 	}
 
