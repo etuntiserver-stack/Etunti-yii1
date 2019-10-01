@@ -1952,7 +1952,7 @@ class TyovuorootController extends Controller
 				Yii::app()->session['tyontekijat'] = array($_GET['tid']);
 
 			if(isset($_GET['tv_id'])){ $this->redirect(array('index', 'tv_id' => $_GET['tv_id'])); } 
-			$this->redirect(array('index'));
+			$this->redirect(array('tv4'));
 		}		
 		//  GET haku -->
 
@@ -2053,12 +2053,22 @@ class TyovuorootController extends Controller
 		        $criteria->addCondition ('id IN ('.$ids.') ');
 		}
 
-		$tt = Tyontekijat::model()->findAll($criteria);
-
-//			AND id NOT IN(SELECT tid FROM sivex_tvuoro WHERE
-//			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-//			)
-
+		$tt = array();
+		if(
+			!isset(Yii::app()->user->tyontekijat_tvuorossa)
+			or ( 
+			isset(Yii::app()->user->tyontekijat_tvuorossa) 
+			and isset(Yii::app()->session['tyontekijat']) 
+			and count(Yii::app()->session['tyontekijat']) != count(Yii::app()->user->tyontekijat_tvuorossa)
+			)
+		){
+			$tyontekijat = Tyontekijat::model()->findAll($criteria);
+			foreach($tyontekijat as $item){
+				$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1.' '.$item->$tt_order_2);
+			}
+			Yii::app()->user->setState('tyontekijat_tvuorossa', $tt);
+		}
+		$tt = Yii::app()->user->tyontekijat_tvuorossa;
 
        		$criteria = new CDbCriteria();
 		$criteria->with = array('kohteet');
