@@ -2669,9 +2669,9 @@ $(document).ready(function(){
 		$return .= '<select name="'.$name.'[]" '.$cl.' '.$i.' multiple title="Työntekijät">';
 		foreach($list as $val){
 		  if(isset($selectedArray) and in_array($val->id, $selectedArray))
-		    $return .= '<option value="'.$val->id.'" selected>'.$val->$tt_order_1.' '.$tt_order_2.'</option>';
+		    $return .= '<option value="'.$val->id.'" selected>'.$val->$tt_order_1.' '.$val->$tt_order_2.'</option>';
 		  else
-		    $return .= '<option value="'.$val->id.'">'.$val->$tt_order_1.' '.$tt_order_2.'</option>';
+		    $return .= '<option value="'.$val->id.'">'.$val->$tt_order_1.' '.$val->$tt_order_2.'</option>';
 		}
 		$return .= '</select>';
 
