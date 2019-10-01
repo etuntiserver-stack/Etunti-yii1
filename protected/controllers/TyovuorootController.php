@@ -2086,16 +2086,16 @@ class TyovuorootController extends Controller
 		}
 
 		// <-- Tv array
-		if($tv_update or !isset(Yii::app()->user->tiedot_tvuorosta)){
+		//if($tv_update or !isset(Yii::app()->user->tiedot_tvuorosta)){
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$tv_arr = array();
 		   foreach($tv as $val){
 		   $val['osoite'] = (!empty($val['osoite']))?$val['osoite']:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
 		   $tv_arr[$val->tid][$val->pvm][] = $val->attributes;
 		   }
-		   Yii::app()->user->setState('tiedot_tvuorosta', $tv_arr);
-		}
-		$tv_arr = Yii::app()->user->tiedot_tvuorosta;
+		   //Yii::app()->user->setState('tiedot_tvuorosta', $tv_arr);
+		//}
+		//$tv_arr = Yii::app()->user->tiedot_tvuorosta;
 		//     Tv array -->
 
 		$this->render('tv4', array(
