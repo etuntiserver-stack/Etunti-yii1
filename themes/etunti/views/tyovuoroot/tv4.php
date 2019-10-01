@@ -29,16 +29,12 @@
 
 
 <?php
-  $tv_arr = array();
-  foreach($tv as $val){
-     $val['osoite'] = (!empty($val['osoite']))?$val['osoite']:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
-     $tv_arr[$val->tid][$val->pvm][] = $val;
-  } 
-  /*
+/*  
   echo '<pre>';
-  print_r($tv_arr);
+  print_r($tv_arr[267]);
   echo '</pre>';
-  */
+  exit;
+*/
   $site = Yii::app()->createController('Site');
   echo '<div class="" id="parent">';
   echo '<table class="table table-bordered" id="fixTable">';
@@ -63,10 +59,10 @@
      if($did < date("Ymd")){ $onkoMennyt = 'mennytPaivat'; }
      while (strtotime($f) <= strtotime($to)) {
            echo '<td class="laatiko_td"><div id="'.$did.'_'.$tid.'">';
-           echo json_decode(head($did, $tid, $pvm, $onkoMennyt));
            if( isset($tv_arr[$tid][$f]) ){
  	     $content = $this->renderPartial('//tyovuoroot/did4',array(
 					'tv_arr' => $tv_arr[$tid][$f],
+					'onkoMennyt' => $onkoMennyt,
 					'pvm'=>$pvm,
 					'did'=>$did,
 					'tid'=>$tid,
@@ -78,14 +74,14 @@
 	     ), true);
 	     echo json_decode($content);
            }
-           echo '</div></div></td>';
+           echo '</div></td>';
 	$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
      }
      echo '</tr>';
   }
   echo '</table>';
 
-
+/*
   function head($did, $tid, $pvm, $onkoMennyt){
 	$bod = '
 	<div class="latikkolisatiedot_paa">
@@ -112,4 +108,5 @@
 	$bod .= '<div style="position:relative" class="latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 	return json_encode($bod);
   }
+*/
 ?>

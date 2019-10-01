@@ -2053,6 +2053,7 @@ class TyovuorootController extends Controller
 		        $criteria->addCondition ('id IN ('.$ids.') ');
 		}
 
+		// <-- Tyontekijat muistiin
 		$tt = array();
 		if(
 			!isset(Yii::app()->user->tyontekijat_tvuorossa)
@@ -2069,6 +2070,7 @@ class TyovuorootController extends Controller
 			Yii::app()->user->setState('tyontekijat_tvuorossa', $tt);
 		}
 		$tt = Yii::app()->user->tyontekijat_tvuorossa;
+		//     Tyontekijat muistiin -->
 
        		$criteria = new CDbCriteria();
 		$criteria->with = array('kohteet');
@@ -2121,18 +2123,27 @@ class TyovuorootController extends Controller
 		        $criteria->addCondition ('tid IN ('.$ids.') ');
 		}
 
-		$tv = Tyovuoroot::model()->findAll($criteria);
+		$tv_arr = array();
+		if(!isset(Yii::app()->user->tiedot_tvuorosta)){
+			$tv = Tyovuoroot::model()->findAll($criteria);
+			foreach($tv as $val){
+			$val['osoite'] = (!empty($val['osoite']))?$val['osoite']:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
+			$tv_arr[$val->tid][$val->pvm][] = $val->attributes;
+			}
+			Yii::app()->user->setState('tiedot_tvuorosta', $tv_arr);
+		}
+		$tv_arr = Yii::app()->user->tiedot_tvuorosta;
 
 		$this->render('tv4', array(
-			'tt_order_1' => $tt_order_1,
-			'tt_order_2' => $tt_order_2,
-			'tt'	=> $tt,
-			'tv'	=> $tv,
-			'from'	=> Yii::app()->session['from'],
-			'to'	=> Yii::app()->session['to'],
+			'tt_order_1' 	=> $tt_order_1,
+			'tt_order_2' 	=> $tt_order_2,
+			'tt'		=> $tt,
+			'tv_arr'	=> $tv_arr,
+			'from'		=> Yii::app()->session['from'],
+			'to'		=> Yii::app()->session['to'],
 			'kohteet_siivous' => $kohteet_siivous,
-			'kohde' => $kohde,
-			'asiakas' => $asiakas,
+			'kohde' 	=> $kohde,
+			'asiakas' 	=> $asiakas,
 		));
 	}
 

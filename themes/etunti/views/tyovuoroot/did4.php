@@ -1,5 +1,29 @@
 <?php
-  $bod = '';
+	$bod = '';
+	$bod = '
+	<div class="latikkolisatiedot_paa">
+		<div class="latikkolisatiedot">
+		 <div class="form-inline">
+			<div class="form-group">
+			   <span class="text-center" id="sum_tunnit_'.$did.'_'.$tid.'" style="text-align:center;opacity:0.6"></span>
+			</div>
+			<div class="kokopaiva form-group">
+			   <span class="valitseKokopaiva link glyphicon glyphicon-th-large" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
+			</div>
+			<div class="plussamerkki form-group">
+			   <span class="plussa link fa fa-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
+			</div>
+			<div class="form-group">
+		   	   <i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mcut fa fa-exchange link':'forCut').'"" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
+		 	</div><div class="form-group">
+		   	   <i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mplus fa fa-copy link':'forCopy').'" id="forCopy_'.$did.'_'.$tid.'"></i> 
+			</div>
+		 </div>
+		</div>
+	</div>
+	';
+	$bod .= '<div style="position:relative" class="latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
+
               foreach($tv_arr as $tvVal){ 
 		$color = '#888';
 		$bgcol = 'color:#333';
@@ -36,5 +60,7 @@
 	   	$bod .= '</div>';
 		$loppu = array($tvVal['tyoajanlaatu'], $tvVal['loppu']);
               }
+	$bod .= '</div>';
+
   echo json_encode($bod);
 ?>
