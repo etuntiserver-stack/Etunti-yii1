@@ -1919,7 +1919,7 @@ class TyovuorootController extends Controller
 
 	public function actionTv4($kohteet_siivous=array(), $kohde='', $asiakas='') {
 		$asetukset = Asetukset::model()->findByPk(1);
-
+		$tv_update = false;
 		// <-- Reset
 		if(isset($_GET['reset']))
 		{
@@ -1936,25 +1936,6 @@ class TyovuorootController extends Controller
 			$this->redirect(array('index'));
 		}
 		//     Reset -->
-
-
-		// <-- GET haku
-		if(isset($_GET['year']) or isset($_GET['week']))
-		{
-
-			if(isset($_GET['year']) and !empty($_GET['year']))
-				Yii::app()->session['year'] = $_GET['year'];
-			
-			if(isset($_GET['week']) and !empty($_GET['week']))
-				Yii::app()->session['week'] = $_GET['week'];
-
-			if(isset($_GET['tid']) and !empty($_GET['tid']))
-				Yii::app()->session['tyontekijat'] = array($_GET['tid']);
-
-			if(isset($_GET['tv_id'])){ $this->redirect(array('index', 'tv_id' => $_GET['tv_id'])); } 
-			$this->redirect(array('tv4'));
-		}		
-		//  GET haku -->
 
 		// <-- Post haku
 		if(isset($_POST['haku']))
@@ -2004,33 +1985,15 @@ class TyovuorootController extends Controller
 				Yii::app()->session['to'] = date("Y-m-d",strtotime($_POST['to']));
 
 
-			$this->redirect(array('tv4'));
+			//$this->redirect(array('tv4'));
+			$tv_update = true;
 		}		
 		//  Post haku -->
 
-
-		// <-- Year Week
-		if(!isset(Yii::app()->session['year']))
-			Yii::app()->session['year'] = date("Y");
-
-		if(!isset(Yii::app()->session['week']))
-			Yii::app()->session['week'] = date("W");
-
-		$year = Yii::app()->session['year'];
-		$week = sprintf("%02d", Yii::app()->session['week']);
-		Yii::app()->session['week'] = $week;
-		//    Year Week -->
-
-
-		if(!isset(Yii::app()->session['vkolopput']))
-			$numDays = 5;
-		else
-			$numDays = 7;
-
-
-		Yii::app()->session['from'] = date("Y-m-d", strtotime($year ."W". $week.'1'));
-		Yii::app()->session['to'] = date("Y-m-d", strtotime($year ."W". $week . $numDays));
-
+		if(!isset(Yii::app()->session['from']) or !isset(Yii::app()->session['to'])){
+			Yii::app()->session['from'] = date("Y-m-d", strtotime('Monday this week'));
+			Yii::app()->session['to'] = date("Y-m-d", strtotime(Yii::app()->session['from'].' Friday +4 week'));
+		}
 
 		// <-- Order tyontekijat
 		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
@@ -2124,7 +2087,10 @@ class TyovuorootController extends Controller
 		}
 
 		$tv_arr = array();
-		if(!isset(Yii::app()->user->tiedot_tvuorosta)){
+		if(	
+			$tv_update 
+			or !isset(Yii::app()->user->tiedot_tvuorosta)
+		){
 			$tv = Tyovuoroot::model()->findAll($criteria);
 			foreach($tv as $val){
 			$val['osoite'] = (!empty($val['osoite']))?$val['osoite']:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';

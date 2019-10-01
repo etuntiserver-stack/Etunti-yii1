@@ -2671,7 +2671,7 @@ $(document).ready(function(){
 		  if(isset($selectedArray) and in_array($val->id, $selectedArray))
 		    $return .= '<option value="'.$val->id.'" selected>'.$val->$tt_order_1.' '.$tt_order_2.'</option>';
 		  else
-		    $return .= '<option value="'.$val->id.'">'.$this->etuSukunimi($val->id).'</option>';
+		    $return .= '<option value="'.$val->id.'">'.$val->$tt_order_1.' '.$tt_order_2.'</option>';
 		}
 		$return .= '</select>';
 

@@ -1046,8 +1046,9 @@ $xml = '
 		$criteria = new CDbCriteria();
 		//$criteria->condition = " aktiivinen = '1' ";
 		$tt = Tyontekijat::model()->findAll($criteria);
+		$chk_oikeusfields = $site[0]->checkOikeusFields($checkOikeus);
 		foreach($tt as $tekija){
-			if( $site[0]->checkOikeusFields($checkOikeus) == 1 and $tr_array == null){
+			if( $chk_oikeusfields == 1 and $tr_array == null){
 				$tt_arr[$tekija->id] = $tekija->id;
 				continue;
 			}
