@@ -38,38 +38,31 @@ exit;
   $site = Yii::app()->createController('Site');
   echo '<div class="" id="parent">';
   echo '<table class="table table-bordered" id="fixTable">';
-  $f = date("d.m.Y", strtotime($from));
   echo '<thead><tr>';
-  echo '<th>Nimi</th>';
-  while (strtotime($f) <= strtotime($to)) {
-	echo '<th style="z-index: 999;">'.$f.'</th>';
-	$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
+  echo '<th></th>';
+  foreach($tt as $tid=>$item){
+	$etusukunimi = $item['etusukunimi'];
+	echo '<th style="z-index: 999;">'.$etusukunimi.'</th>';
   }
   echo '</tr></thead>';
-
+  $f = date("d.m.Y", strtotime($from));
+  while (strtotime($f) <= strtotime($to)) {
+  $pvm = date("d.m.Y", strtotime($f));
+  $did = date("Ymd", strtotime($f));
+  $onkoMennyt = '';
+  if(date("Ymd", strtotime($f)) < date("Ymd")){ $onkoMennyt = 'mennytPaivat'; }
+  echo '<tr>';
+  echo '<td class="laatiko_td" style="z-index: 999;"><div class="nimi">'.$f.'</div></td>';
   foreach($tt as $tid=>$item){
-     $etusukunimi = $item['etusukunimi'];
-     echo '<tr>';
-     echo '<td class="laatiko_td" style="z-index: 999;"><div class="nimi">'.$etusukunimi.'</div></td>';
-     $f = date("d.m.Y", strtotime($from));
-     $pvm = date("d.m.Y", strtotime($from));
-     $did = date("Ymd", strtotime($from));
-     $onkoMennyt = '';
-     if($did < date("Ymd")){ $onkoMennyt = 'mennytPaivat'; }
-
-     while (strtotime($f) <= strtotime($to)) {
-           echo '<td class="laatiko_td"><div id="'.$did.'_'.$tid.'">';
-           if( isset($tv_arr[$tid][$f]) ){
+	echo '<td class="laatiko_td"><div id="'.$did.'_'.$tid.'">';
+	      // <-- BOD
 	      $bod = json_decode($this->tv4head($did, $tid, $pvm));
 	      $bod .= '<div style="position:relative" class="latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
-
+              if( isset($tv_arr[$tid][$f]) ){
               foreach($tv_arr[$tid][$f] as $tvVal){ 
 		$color = '#888';
 		$bgcol = 'color:#333';
-		// <-- Osoite
 		$osoite = $tvVal['osoite'];
-		// Osoite -->
-
 		if( isset($loppu[0]) and empty($loppu[0]) and isset($loppu[1]) and ($this->num(strtotime($tvVal['alku'])-strtotime($loppu[1])) > 0) ){
 			$valilyonti = strtotime($tvVal['alku'])-strtotime($loppu[1]);
 			$reikatyyppi = 'reika-warning';
@@ -90,22 +83,20 @@ exit;
 			$osoite = (isset($expl1[0])) ? '<div class="text-center"><b style="color:'.$color.'">'.$expl1[0].'</b></div>' : '';
 			$kellot = '';
 		}
-
 	   	$bod .= '<div id="'.$tvVal['id'].'_'.$did.'_'.$tid.'" class="fullRivi" style="'.$bgcol.'">';
 		$bod .= '<div class="pull-left ikoonintila" style="display:none;margin-right: 5px">'.$muokkaus.' </div>';
-		$bod .= '<span class="tv_edit" id="'.$tvVal['id'].'">';
-		$bod .= $kellot.$osoite;
-	   	$bod .= '</span>';
+		$bod .= '<span class="tv_edit" id="'.$tvVal['id'].'">'.$kellot.$osoite.'</span>';
 	   	$bod .= '</div>';
 		$loppu = array($tvVal['tyoajanlaatu'], $tvVal['loppu']);
-              }
+              } // foreach
+	      }
 	      $bod .= '</div>';
 	      echo $bod;
-           }
-           echo '</div></td>';
-	$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
-     }
-     echo '</tr>';
+	      //     BOD -->
+        echo '</div></td>';
+  }
+  echo '</tr>';
+  $f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
   }
   echo '</table></div>';
 
