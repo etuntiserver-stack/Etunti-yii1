@@ -1919,7 +1919,6 @@ class TyovuorootController extends Controller
 
 	public function actionTv4($kohteet_siivous=array(), $kohde='', $asiakas='') {
 		$asetukset = Asetukset::model()->findByPk(1);
-		$tv_update = false;
 		// <-- Reset
 		if(isset($_GET['reset']))
 		{
@@ -1984,9 +1983,6 @@ class TyovuorootController extends Controller
 			if(isset($_POST['to']) and !empty($_POST['to']))
 				Yii::app()->session['to'] = date("Y-m-d",strtotime($_POST['to']));
 
-
-			//$this->redirect(array('tv4'));
-			$tv_update = true;
 		}		
 		//  Post haku -->
 
@@ -2086,19 +2082,14 @@ class TyovuorootController extends Controller
 		        $criteria->addCondition ('tid IN ('.$ids.') ');
 		}
 
+		// <-- Tv array
+		$tv = Tyovuoroot::model()->findAll($criteria);
 		$tv_arr = array();
-		if(	
-			$tv_update 
-			or !isset(Yii::app()->user->tiedot_tvuorosta)
-		){
-			$tv = Tyovuoroot::model()->findAll($criteria);
-			foreach($tv as $val){
-			$val['osoite'] = (!empty($val['osoite']))?$val['osoite']:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
+		foreach($tv as $val){
+		$val['osoite'] = (!empty($val['osoite']))?$val['osoite']:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
 			$tv_arr[$val->tid][$val->pvm][] = $val->attributes;
-			}
-			Yii::app()->user->setState('tiedot_tvuorosta', $tv_arr);
 		}
-		$tv_arr = Yii::app()->user->tiedot_tvuorosta;
+		//     Tv array -->
 
 		$this->render('tv4', array(
 			'tt_order_1' 	=> $tt_order_1,
@@ -2111,6 +2102,35 @@ class TyovuorootController extends Controller
 			'kohde' 	=> $kohde,
 			'asiakas' 	=> $asiakas,
 		));
+	}
+
+	protected function tv4head($did, $tid, $pvm){
+	$onkoMennyt = '';
+	if($did < date("Ymd")){ $onkoMennyt = 'mennytPaivat'; }
+	$bod = '
+	<div class="latikkolisatiedot_paa">
+		<div class="latikkolisatiedot">
+		 <div class="form-inline">
+			<div class="form-group">
+			   <span class="text-center" id="sum_tunnit_'.$did.'_'.$tid.'" style="text-align:center;opacity:0.6"></span>
+			</div>
+			<div class="kokopaiva form-group">
+			   <span class="valitseKokopaiva link glyphicon glyphicon-th-large" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
+			</div>
+			<div class="plussamerkki form-group">
+			   <span class="plussa link fa fa-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
+			</div>
+			<div class="form-group">
+		   	   <i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mcut fa fa-exchange link':'forCut').'"" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
+		 	</div><div class="form-group">
+		   	   <i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mplus fa fa-copy link':'forCopy').'" id="forCopy_'.$did.'_'.$tid.'"></i> 
+			</div>
+		 </div>
+		</div>
+	</div>
+	';
+	$bod .= '<div style="position:relative" class="latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
+	return json_encode($bod);
 	}
 
 	public function actionDid4($pvm, $tid) {

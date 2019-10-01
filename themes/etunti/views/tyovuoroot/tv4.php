@@ -29,12 +29,6 @@
 
 
 <?php
-/*  
-  echo '<pre>';
-  print_r($tv_arr[267]);
-  echo '</pre>';
-  exit;
-*/
   $site = Yii::app()->createController('Site');
   echo '<div class="" id="parent">';
   echo '<table class="table table-bordered" id="fixTable">';
@@ -54,15 +48,13 @@
      $f = date("d.m.Y", strtotime($from));
      $pvm = date("d.m.Y", strtotime($from));
      $did = date("Ymd", strtotime($from));
-     $onkoMennyt = '';
-     $sum = 0;
-     if($did < date("Ymd")){ $onkoMennyt = 'mennytPaivat'; }
      while (strtotime($f) <= strtotime($to)) {
            echo '<td class="laatiko_td"><div id="'.$did.'_'.$tid.'">';
-           if( isset($tv_arr[$tid][$f]) ){
+           if( !isset($tv_arr[$tid][$f]) ){
+           	echo json_decode($this->tv4head($did, $tid, $pvm));
+           } else {
  	     $content = $this->renderPartial('//tyovuoroot/did4',array(
 					'tv_arr' => $tv_arr[$tid][$f],
-					'onkoMennyt' => $onkoMennyt,
 					'pvm'=>$pvm,
 					'did'=>$did,
 					'tid'=>$tid,
@@ -70,43 +62,13 @@
 					'kohteet_siivous'=>json_encode($kohteet_siivous), 
 					'asiakas'=>$asiakas,
 					'kohde'=>$kohde,
-					'site_0' => $site[0],
 	     ), true);
 	     echo json_decode($content);
            }
-           echo '</div></td>';
+           echo '</div></div></td>';
 	$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
      }
      echo '</tr>';
   }
   echo '</table>';
-
-/*
-  function head($did, $tid, $pvm, $onkoMennyt){
-	$bod = '
-	<div class="latikkolisatiedot_paa">
-		<div class="latikkolisatiedot">
-		 <div class="form-inline">
-			<div class="form-group">
-			   <span class="text-center" id="sum_tunnit_'.$did.'_'.$tid.'" style="text-align:center;opacity:0.6"></span>
-			</div>
-			<div class="kokopaiva form-group">
-			   <span class="valitseKokopaiva link glyphicon glyphicon-th-large" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
-			</div>
-			<div class="plussamerkki form-group">
-			   <span class="plussa link fa fa-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
-			</div>
-			<div class="form-group">
-		   	   <i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mcut fa fa-exchange link':'forCut').'"" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
-		 	</div><div class="form-group">
-		   	   <i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mplus fa fa-copy link':'forCopy').'" id="forCopy_'.$did.'_'.$tid.'"></i> 
-			</div>
-		 </div>
-		</div>
-	</div>
-	';
-	$bod .= '<div style="position:relative" class="latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
-	return json_encode($bod);
-  }
-*/
 ?>

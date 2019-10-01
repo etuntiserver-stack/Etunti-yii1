@@ -1436,12 +1436,9 @@ function laatikonPaivays(thisDataReturn){
 			data: { "pvm" : d['pvm'], "tid" : d['tid'] }, //, "kohde" : d['kohde'], "asiakas" : d['asiakas']
 			  success:function(data){
 			  //console.log(data);
-
-			  if( $('#'+d['ymd']+'_'+d['tid']).length )
-			  {
-			    $('#'+d['ymd']+'_'+d['tid']).html(data);
-			  }
-
+			     if( $('#'+d['ymd']+'_'+d['tid']).length ){
+			        $('#'+d['ymd']+'_'+d['tid']).html(data);
+			     }
 			  },
 			  error:function(data){
 			  	console.log(data);
