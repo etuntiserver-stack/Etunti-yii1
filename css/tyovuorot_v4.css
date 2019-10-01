@@ -63,7 +63,7 @@
 	width:50px;
 	z-index: 99;
 }
-td .latikkoAsetukset{
+td.latikkoAsetukset{
 	font-family: ibm-plex-sans, sans-serif;
 	font-size: 90%;
 	width: 270px;
@@ -77,8 +77,8 @@ td .nimi{
 	white-space: normal;
 	font-family: ibm-plex-sans, sans-serif;
 	font-size: 90%;
-	width: 80px;
-	min-width: 80px;
+	width: 60px;
+	min-width: 60px;
 	padding: 5px 7px;
 	line-height: 16px;
 }

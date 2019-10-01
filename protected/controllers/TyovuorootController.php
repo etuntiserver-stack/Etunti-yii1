@@ -1918,8 +1918,10 @@ class TyovuorootController extends Controller
 	}
 
 	public function actionTv4($kohteet_siivous=array(), $kohde='', $asiakas='') {
+		$site = Yii::app()->createController('Site');
+		$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
 		$asetukset = Asetukset::model()->findByPk(1);
-		$tv_update = false;
+
 		// <-- Reset
 		if(isset($_GET['reset']))
 		{
@@ -1940,7 +1942,6 @@ class TyovuorootController extends Controller
 		// <-- Post haku
 		if(isset($_POST['haku']))
 		{
-
 			if(isset($_POST['kohteiden_tyonimike']) and !empty($_POST['kohteiden_tyonimike']))
 				Yii::app()->session['kohteiden_tyonimike'] = $_POST['kohteiden_tyonimike'];
 			if(isset($_POST['kohteiden_tyonimike']) and empty($_POST['kohteiden_tyonimike']))
@@ -1984,8 +1985,7 @@ class TyovuorootController extends Controller
 			if(isset($_POST['to']) and !empty($_POST['to']))
 				Yii::app()->session['to'] = date("Y-m-d",strtotime($_POST['to']));
 
-			$tv_update = true;
-
+			$this->redirect(array('tv4'));
 		}		
 		//  Post haku -->
 
@@ -2087,16 +2087,18 @@ class TyovuorootController extends Controller
 		}
 
 		// <-- Tv array
-		//if($tv_update or !isset(Yii::app()->user->tiedot_tvuorosta)){
 		$tv = Tyovuoroot::model()->findAll($criteria);
-		   $tv_arr = array();
-		   foreach($tv as $val){
+		$tv_arr = array();
+		foreach($tv as $val){
 		      $val['osoite'] = (!empty($val['osoite']))?$val['osoite']:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
-		      $tv_arr[$val->tid][$val->pvm][] = $val->attributes;
-		   }
-		   //Yii::app()->user->setState('tiedot_tvuorosta', $tv_arr);
-		//}
-		//$tv_arr = Yii::app()->user->tiedot_tvuorosta;
+		      $tv_arr[$val->tid][date("Ymd", strtotime($val->pvm))][] = $val->attributes;
+		}
+		/*
+		echo '<pre>';
+		print_r($tv_arr);
+		echo '</pre>';
+		exit;
+		*/
 		//     Tv array -->
 
 		$this->render('tv4', array(
@@ -2109,6 +2111,8 @@ class TyovuorootController extends Controller
 			'kohteet_siivous' => $kohteet_siivous,
 			'kohde' 	=> $kohde,
 			'asiakas' 	=> $asiakas,
+			'arrDate'	=> $arrDate,
+			'site'		=> $site,
 		));
 
 	}
@@ -2137,6 +2141,47 @@ class TyovuorootController extends Controller
 	</div>
 	';
 	return json_encode($bod);
+	}
+
+	protected function tv4_loop($tv_arr, $did, $tid, $pvm){
+	      $onkoMennyt = '';
+	      if(date("Ymd", strtotime($pvm)) < date("Ymd")){ $onkoMennyt = 'mennytPaivat'; }
+	      $bod = '';
+	      $bod .= '<div style="position:relative" class="latikkoAsetukset">';
+              //foreach($tv_arr as $tvVal){ 
+	      for ($i = 0; $i <= count($tv_arr); $i++) {
+		if(!isset($tv_arr[$i])){ continue; }
+		if( isset($loppu[0]) and empty($loppu[0]) and isset($loppu[1]) and ($this->num(strtotime($tv_arr[$i]['alku'])-strtotime($loppu[1])) > 0) ){
+			$valilyonti = strtotime($tv_arr[$i]['alku'])-strtotime($loppu[1]);
+			$reikatyyppi = 'reika-warning';
+			$bod .= '<div class="reika '.$reikatyyppi.' text-center"><i class="glyphicon glyphicon-time"></i> Aika: '.$this->sprint($valilyonti).'</div>';
+		}
+		$color = '#888';
+		$bgcol = 'color:#333';
+		$osoite = $tv_arr[$i]['osoite'];
+		$kellot = '<b class="kellot">'.$tv_arr[$i]['alku'].'-'.$tv_arr[$i]['loppu'].'&nbsp; </b>';
+	        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o muistin" for="'.$tv_arr[$i]['id'].'_'.$did.'_'.$tid.'"></i>';
+		if(!empty($tv_arr[$i]['tyoajanmerkinta'])){
+			$expl = explode("/",$tv_arr[$i]['tyoajanmerkinta']);
+			if(isset($expl[1]) and !empty($expl[1])){
+				$color = $expl[1];
+				$bgcol = 'color:'.$color;
+			}
+		}
+		if(!empty($tv_arr[$i]['tyoajanlaatu']) and empty($osoite)){
+			$expl1 = explode("/",$tv_arr[$i]['tyoajanlaatu']);
+			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
+			$osoite = (isset($expl1[0])) ? '<div class="text-center"><b style="color:'.$color.'">'.$expl1[0].'</b></div>' : '';
+			$kellot = '';
+		}
+	   	$bod .= '<div id="'.$tv_arr[$i]['id'].'_'.$did.'_'.$tid.'" class="fullRivi" style="'.$bgcol.'">';
+		$bod .= '<div class="pull-left ikoonintila" style="display:none;margin-right: 5px">'.$muokkaus.' </div>';
+		$bod .= '<span class="tv_edit" id="'.$tv_arr[$i]['id'].'">'.$kellot.$osoite.'</span>';
+	   	$bod .= '</div>';
+		$loppu = array($tv_arr[$i]['tyoajanlaatu'], $tv_arr[$i]['loppu']);
+              } // foreach
+	      $bod .= '</div>';
+	      return json_encode($bod);
 	}
 
 	public function actionDid4($pvm, $tid) {
