@@ -394,7 +394,7 @@ class AsiakkaatController extends Controller
 			}
 			//     Dimension -->
 
-			if(isset($post['ryhma'])){ $model->ryhma=json_encode($post['ryhma']); } else { $model->ryhma=""; }
+			if(isset($post['ryhma'])){ $model->ryhma=json_encode($post['ryhma']); }
 
 			if($model->save())
 			{
