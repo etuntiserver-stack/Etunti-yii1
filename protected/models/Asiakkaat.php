@@ -149,7 +149,13 @@ class Asiakkaat extends DB2ActiveRecord
 		);
 
 		$controller = Yii::app()->getController()->getAction()->controller->id;
-		if( $controller == 'asiakkaat' and isset($asetukset->asiakas_pakkoliset) and is_array(json_decode($asetukset->asiakas_pakkoliset, true)) ){
+		$action = Yii::app()->controller->action->id;
+		if( 
+			$controller == 'asiakkaat' 
+			and $action != 'massamuokkaus'
+			and isset($asetukset->asiakas_pakkoliset) 
+			and is_array(json_decode($asetukset->asiakas_pakkoliset, true)) 
+		){
 			$impl = implode(", ", json_decode($asetukset->asiakas_pakkoliset, true));
 			array_push($arr, array($impl, 'required'));
 		}
