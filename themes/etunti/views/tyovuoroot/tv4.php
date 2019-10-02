@@ -77,7 +77,7 @@ ini_set('memory_limit', '512M');
 
 <?php 
 function superfast($arvo){
-	echo '<span class="tv_edit" id="'.$arvo['id'].'">'.((!empty($arvo['alku']))?$arvo['alku'].'-'.$arvo['loppu'].' ':'').$arvo['osoite'].'</span><br>';
+	echo json_decode($arvo['osoite']);
 }
 /*
 <script type="text/javascript">

@@ -2078,24 +2078,35 @@ class TyovuorootController extends Controller
 		// <-- Tv array
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$tv_arr = array();
-		foreach($tv as $val){
-			$osoite = (!empty($osoite))?$osoite:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
-			if(!empty($val['tyoajanmerkinta'])){
-				$expl = explode("/",$val['tyoajanmerkinta']);
+		foreach($tv as $arvo){
+			$did = date("Ymd", strtotime($arvo['pvm']));
+			$tid = date("Ymd", strtotime($arvo['tid']));
+			$bod = '';
+			$color = '#888';
+			$bgcol = 'color:#333';
+			$osoite = (!empty($osoite))?$osoite:(isset($arvo['kohteet']['osoite']))?$arvo['kohteet']['osoite']:'';
+			$kellot = '<b class="kellot">'.$arvo['alku'].'-'.$arvo['loppu'].'&nbsp; </b>';
+		        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o muistin" for="'.$arvo['id'].'_'.$did.'_'.$tid.'"></i>';
+			if(!empty($arvo['tyoajanmerkinta'])){
+				$expl = explode("/",$arvo['tyoajanmerkinta']);
 				if(isset($expl[1]) and !empty($expl[1])){
 					$color = $expl[1];
 					$bgcol = 'color:'.$color;
 				}
 			}
-			if(!empty($val['tyoajanlaatu']) and empty($osoite)){
-				$expl1 = explode("/",$val['tyoajanlaatu']);
+			if(!empty($arvo['tyoajanlaatu']) and empty($osoite)){
+				$expl1 = explode("/",$arvo['tyoajanlaatu']);
 				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 				$osoite = (isset($expl1[0])) ? '<div class="text-center"><b style="color:'.$color.'">'.$expl1[0].'</b></div>' : '';
-				$val['alku'] = '';
-				$val['loppu'] = '';
+				$kellot = '';
 			}
-			$val['osoite'] = $osoite;
-			$tv_arr[$val->tid][$val->pvm][] = $val->attributes;
+		   	$bod .= '<div id="'.$arvo['id'].'_'.$did.'_'.$tid.'" class="fullRivi" style="'.$bgcol.'">';
+			$bod .= '<div class="pull-left ikoonintila" style="margin-right: 5px">'.$muokkaus.' </div>';
+			$bod .= '<span class="tv_edit" id="'.$arvo['id'].'">'.$kellot.$osoite.'</span>';
+		   	$bod .= '</div>';
+
+			$arvo['osoite'] = json_encode($bod);
+			$tv_arr[$arvo->tid][$arvo->pvm][] = $arvo->attributes;
 		}
 		/*
 		echo '<pre>';
