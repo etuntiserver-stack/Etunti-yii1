@@ -42,7 +42,7 @@ ini_set('memory_limit', '512M');
   $explColDate = explode("/",$columnDate);
  ?>
  <th class="text-center" style="z-index: 999;">
-  <div class="laatiko_td"><b><?=$arrDate[$explColDate[0]]?></b>, <?=$explColDate[1]?></b></div>
+	<div class="laatiko_td"><b><?=$arrDate[$explColDate[0]]?></b>, <?=$explColDate[1]?></b></div>
  </th>
  <?php $f = date ("d.m.Y", strtotime("+1 day", strtotime($f))); ?>
  <?php endwhile; ?>
@@ -51,22 +51,23 @@ ini_set('memory_limit', '512M');
  <tbody>
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
- <td class="laatiko_td text-center" style="z-index: 999;">
-  <div class="nimi"><?=$item['etusukunimi']?></div>
- </td>
- <?php $f = date("d.m.Y", strtotime($from)); ?>
- <?php while (strtotime($f) <= strtotime($to)): ?>
- <?php $did = date("Ymd", strtotime($f)); ?>
- <td class="laatiko_td">
- <div id="<?=$did.'_'.$tid?>">
- <?=json_decode($this->tv4head($tid, $f))?>
- <?php if( isset($tv_arr[$tid][$f]) ): ?>
- <?=json_decode($this->tv4_loop($tv_arr[$tid][$f], $tid, $f))?>
- <?php endif; ?>
- </div>
- </td>
- <?php $f = date ("d.m.Y", strtotime("+1 day", strtotime($f))); ?>
- <?php endwhile; ?>
+    <td class="laatiko_td text-center" style="z-index: 999; width: 50px">
+	<div class="nimi"><?=$item['etusukunimi']?></div>
+    </td>
+    <?php $f = date("d.m.Y", strtotime($from)); ?>
+    <?php while (strtotime($f) <= strtotime($to)): ?>
+      <?php $did = date("Ymd", strtotime($f)); ?>
+      <td class="latikkoAsetukset">
+	<div id="<?=$did.'_'.$tid?>">
+		<?php //echo json_decode($this->tv4head($tid, $f)); ?>
+		<?php if( isset($tv_arr[$tid][$f]) ): ?>
+			<?php array_map('superfast', $tv_arr[$tid][$f]); ?>
+			<?php //echo json_decode($this->tv4_loop($tv_arr[$tid][$f], $tid, $f)); ?>
+		<?php endif; ?>
+	</div>
+      </td>
+      <?php $f = date ("d.m.Y", strtotime("+1 day", strtotime($f))); ?>
+    <?php endwhile; ?>
  </tr>
  <?php endforeach; ?>
  </tbody>
@@ -75,7 +76,9 @@ ini_set('memory_limit', '512M');
 
 
 <?php 
-
+function superfast($arvo){
+	echo '<span class="tv_edit" id="'.$arvo['id'].'">'.((!empty($arvo['alku']))?$arvo['alku'].'-'.$arvo['loppu'].' ':'').$arvo['osoite'].'</span><br>';
+}
 /*
 <script type="text/javascript">
 $(document).ready(function(){

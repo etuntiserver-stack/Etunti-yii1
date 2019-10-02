@@ -2079,10 +2079,24 @@ class TyovuorootController extends Controller
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$tv_arr = array();
 		foreach($tv as $val){
-		      $val['osoite'] = (!empty($val['osoite']))?$val['osoite']:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
-		      $tv_arr[$val->tid][$val->pvm][] = $val->attributes;
+			$osoite = (!empty($osoite))?$osoite:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
+			if(!empty($val['tyoajanmerkinta'])){
+				$expl = explode("/",$val['tyoajanmerkinta']);
+				if(isset($expl[1]) and !empty($expl[1])){
+					$color = $expl[1];
+					$bgcol = 'color:'.$color;
+				}
+			}
+			if(!empty($val['tyoajanlaatu']) and empty($osoite)){
+				$expl1 = explode("/",$val['tyoajanlaatu']);
+				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
+				$osoite = (isset($expl1[0])) ? '<div class="text-center"><b style="color:'.$color.'">'.$expl1[0].'</b></div>' : '';
+				$val['alku'] = '';
+				$val['loppu'] = '';
+			}
+			$val['osoite'] = $osoite;
+			$tv_arr[$val->tid][$val->pvm][] = $val->attributes;
 		}
-
 		/*
 		echo '<pre>';
 		print_r($tv_arr);

@@ -66,7 +66,7 @@
 td.laatiko_td{
 	min-width: 170px;
 }
-td .latikkoAsetukset{
+td.latikkoAsetukset div{
 	font-family: ibm-plex-sans, sans-serif;
 	font-size: 90%;
 	width: 270px;
@@ -76,11 +76,10 @@ td .latikkoAsetukset{
 	line-height: 16px;
 }
 td .nimi{
+	color: #333;
 	white-space: normal;
 	font-family: ibm-plex-sans, sans-serif;
 	font-size: 90%;
-	width: 100px;
-	min-width: 100px;
 	padding: 5px 7px;
 	line-height: 16px;
 }
