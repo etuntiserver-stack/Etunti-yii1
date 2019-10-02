@@ -307,6 +307,15 @@ if( $curpage == 'tyovuoroot/tv4' )
 	<!-- Haku -->
 
 	<!-- Viikonloput -->
+	<?php if($curpage == 'tyovuoroot/tv4') : ?>
+        <li class="p10" data-toggle="tooltip">
+        <li class="p10" data-toggle="tooltip">
+              <div class="form-group">
+	 	<div class="btn btn-default fa fa-calendar-check-o" id="vkolopput" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Viikonloput'); ?>"></div>
+	      </div>
+	</li>
+	<?php endif; ?>
+
 	<?php if($curpage == 'tyovuoroot/index') : ?>
         <li class="p10" data-toggle="tooltip">
               <div class="form-group">

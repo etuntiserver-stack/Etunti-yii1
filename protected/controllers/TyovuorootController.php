@@ -2097,7 +2097,7 @@ class TyovuorootController extends Controller
 			if(!empty($arvo['tyoajanlaatu']) and empty($osoite)){
 				$expl1 = explode("/",$arvo['tyoajanlaatu']);
 				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
-				$osoite = (isset($expl1[0])) ? '<div class="text-center"><b style="color:'.$color.'">'.$expl1[0].'</b></div>' : '';
+				$osoite = (isset($expl1[0])) ? '<b style="color:'.$color.'">'.$expl1[0].'</b>' : '';
 				$kellot = '';
 			}
 		   	$bod .= '<div id="'.$arvo['id'].'_'.$did.'_'.$tid.'" class="fullRivi" style="'.$bgcol.'">';

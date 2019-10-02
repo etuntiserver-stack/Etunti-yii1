@@ -38,6 +38,11 @@ ini_set('memory_limit', '512M');
  <?php $f = date("d.m.Y", strtotime($from)); ?>
  <?php while (strtotime($f) <= strtotime($to)): ?>
  <?php
+ if(!isset(Yii::app()->session['vkolopput']) and date("w", strtotime($f)) == 6){
+	$f = date ("d.m.Y", strtotime("+2 day", strtotime($f)));
+ }
+ ?>
+ <?php
   $columnDate = date("N/d.m",strtotime($f));
   $explColDate = explode("/",$columnDate);
  ?>
@@ -56,7 +61,12 @@ ini_set('memory_limit', '512M');
     </td>
     <?php $f = date("d.m.Y", strtotime($from)); ?>
     <?php while (strtotime($f) <= strtotime($to)): ?>
-      <?php $did = date("Ymd", strtotime($f)); ?>
+    <?php
+    if(!isset(Yii::app()->session['vkolopput']) and date("w", strtotime($f)) == 6){
+	$f = date ("d.m.Y", strtotime("+2 day", strtotime($f)));
+    }
+    ?>
+    <?php $did = date("Ymd", strtotime($f)); ?>
       <td>
 	<div id="<?=$did.'_'.$tid?>" class="latikkoAsetukset">
 		<?php //echo json_decode($this->tv4head($tid, $f)); ?>
