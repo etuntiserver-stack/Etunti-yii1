@@ -87,7 +87,7 @@ ini_set('memory_limit', '512M');
 
 <?php 
 function superfast($arvo){
-	echo json_decode($arvo['osoite']);
+	echo '<span class="tv_edit" id="'.$arvo['id'].'">'.$arvo['alku'].'-'.$arvo['loppu'].' '.$arvo['osoite'].'</span><br>';
 }
 /*
 <script type="text/javascript">
