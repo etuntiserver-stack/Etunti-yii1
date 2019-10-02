@@ -66,7 +66,7 @@
 td.laatiko_td{
 	min-width: 170px;
 }
-td.latikkoAsetukset div{
+td .latikkoAsetukset{
 	font-family: ibm-plex-sans, sans-serif;
 	font-size: 90%;
 	width: 270px;

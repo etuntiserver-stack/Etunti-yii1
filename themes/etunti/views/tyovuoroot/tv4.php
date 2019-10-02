@@ -57,8 +57,8 @@ ini_set('memory_limit', '512M');
     <?php $f = date("d.m.Y", strtotime($from)); ?>
     <?php while (strtotime($f) <= strtotime($to)): ?>
       <?php $did = date("Ymd", strtotime($f)); ?>
-      <td class="latikkoAsetukset">
-	<div id="<?=$did.'_'.$tid?>">
+      <td>
+	<div id="<?=$did.'_'.$tid?>" class="latikkoAsetukset">
 		<?php //echo json_decode($this->tv4head($tid, $f)); ?>
 		<?php if( isset($tv_arr[$tid][$f]) ): ?>
 			<?php array_map('superfast', $tv_arr[$tid][$f]); ?>
