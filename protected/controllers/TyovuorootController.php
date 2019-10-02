@@ -1991,7 +1991,7 @@ class TyovuorootController extends Controller
 
 		if(!isset(Yii::app()->session['from']) or !isset(Yii::app()->session['to'])){
 			Yii::app()->session['from'] = date("Y-m-d");
-			Yii::app()->session['to'] = date("Y-m-d", strtotime(Yii::app()->session['from'].' Friday this week'));
+			Yii::app()->session['to'] = date("Y-m-d", strtotime(Yii::app()->session['from'].' Friday next week'));
 		}
 
 		// <-- Order tyontekijat
