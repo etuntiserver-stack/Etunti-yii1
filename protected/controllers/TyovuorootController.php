@@ -2091,8 +2091,9 @@ class TyovuorootController extends Controller
 		$tv_arr = array();
 		foreach($tv as $val){
 		      $val['osoite'] = (!empty($val['osoite']))?$val['osoite']:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
-		      $tv_arr[$val->tid][date("Ymd", strtotime($val->pvm))][] = $val->attributes;
+		      $tv_arr[date("Ymd", strtotime($val->pvm)).'_'.$val->tid][] = $val->attributes;
 		}
+
 		/*
 		echo '<pre>';
 		print_r($tv_arr);

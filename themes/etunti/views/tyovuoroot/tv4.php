@@ -3,7 +3,7 @@
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v4.css">
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
-<?php /*<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot_v4.js"></script>*/ ?>
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot_v4.js"></script>
 
 <!-- Fixed Table -->
 <!-- http://www.jqueryscript.net/table/jQuery-Plugin-For-Fixed-Table-Header-Footer-Columns-TableHeadFixer.html -->
@@ -59,7 +59,41 @@
   </div>
  </td>
  <?php foreach($tid_arr as $tid): ?>
- <td class="laatiko_td latikkoAsetukset" id="<?=$did.'_'.$tid?>"></td>
+ <td class="laatiko_td">
+  <div class="latikkoAsetukset" for="<?=$did.'_'.$tid?>">
+  <?php
+  if( isset($tv_arr[$did.'_'.$tid]) ){
+     for ($i = 0; $i <= count($tv_arr[$did.'_'.$tid]); $i++) {
+	if(isset($tv_arr[$did.'_'.$tid][$i])){
+		$color = '#888';
+		$bgcol = 'color:#333';
+		$arvo = $tv_arr[$did.'_'.$tid][$i];
+		$osoite = $arvo['osoite'];
+		$kellot = '<b class="kellot">'.$arvo['alku'].'-'.$arvo['loppu'].'&nbsp; </b>';
+	        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o muistin" for="'.$arvo['id'].'_'.$did.'_'.$tid.'"></i>';
+		if(!empty($tv_arr[$i]['tyoajanmerkinta'])){
+			$expl = explode("/",$tv_arr[$i]['tyoajanmerkinta']);
+			if(isset($expl[1]) and !empty($expl[1])){
+				$color = $expl[1];
+				$bgcol = 'color:'.$color;
+			}
+		}
+		if(!empty($tv_arr[$i]['tyoajanlaatu']) and empty($osoite)){
+			$expl1 = explode("/",$tv_arr[$i]['tyoajanlaatu']);
+			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
+			$osoite = (isset($expl1[0])) ? '<div class="text-center"><b style="color:'.$color.'">'.$expl1[0].'</b></div>' : '';
+			$kellot = '';
+		}
+	   	echo '<div class="fullRivi" style="'.$bgcol.'">';
+		echo '<div class="pull-left ikoonintila" style="display:none;margin-right: 5px">'.$muokkaus.' </div>';
+		echo '<span class="tv_edit" id="'.$arvo['id'].'">'.$kellot.$osoite.'</span>';
+	   	echo '</div>';
+	}
+     }
+  }
+  ?>
+  </div>
+ </td>
  <?php endforeach; ?>
  </tr>
  </tbody>
@@ -69,6 +103,9 @@
 </div>
 
 
+<?php 
+
+/*
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -77,7 +114,7 @@ $('#fixTable tr td').each(function(){
 	console.log(this_id);
 });
 
-/*
+
   $.each(<?=json_encode($tv_arr)?>, function( i, elem ) {
     $.each(elem, function( index, value ) {
       var html = '';
@@ -88,7 +125,8 @@ $('#fixTable tr td').each(function(){
       });
     });
   });
-*/
+
 
 });
 </script>
+*/ ?>

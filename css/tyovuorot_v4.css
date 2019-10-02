@@ -63,7 +63,7 @@
 	width:50px;
 	z-index: 99;
 }
-td.latikkoAsetukset{
+td .latikkoAsetukset{
 	font-family: ibm-plex-sans, sans-serif;
 	font-size: 90%;
 	width: 270px;
