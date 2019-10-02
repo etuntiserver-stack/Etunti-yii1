@@ -1,4 +1,5 @@
 <?php
+/*
 	      $bod = '';
 	      //$bod = json_decode($this->tv4head($did, $tid, $pvm));
 	$onkoMennyt = '';

@@ -35,76 +35,41 @@
  <thead>
  <tr>
  <th></th>
- <?php $tid_arr = array(); ?>
- <?php foreach($tt as $tid=>$item): ?>
- <?php $tid_arr[$tid] = $tid; ?>
- <th class="text-center" style="z-index: 999;"><?=$item['etusukunimi']?></th>
- <?php endforeach; ?>
- </tr>
- </thead>
  <?php $f = date("d.m.Y", strtotime($from)); ?>
  <?php while (strtotime($f) <= strtotime($to)): ?>
  <?php
-  $did = date("Ymd", strtotime($f));
   $columnDate = date("N/d.m",strtotime($f));
   $explColDate = explode("/",$columnDate);
  ?>
- <tbody>
- <tr>
- <td class="laatiko_td text-center" style="z-index: 999;">
-  <div class="nimi">
-   <b><?=$arrDate[$explColDate[0]]?></b>
-   <br>
-   <?=$explColDate[1]?></b>
-  </div>
- </td>
- <?php foreach($tid_arr as $tid): ?>
- <td class="laatiko_td">
-  <div class="latikkoAsetukset" for="<?=$did.'_'.$tid?>">
-  <?php
-  if( isset($tv_arr[$did.'_'.$tid]) ){
-     for ($i = 0; $i <= count($tv_arr[$did.'_'.$tid]); $i++) {
-	if(isset($tv_arr[$did.'_'.$tid][$i])){
-		$color = '#888';
-		$bgcol = 'color:#333';
-		$arvo = $tv_arr[$did.'_'.$tid][$i];
-		$osoite = $arvo['osoite'];
-		$kellot = '<b class="kellot">'.$arvo['alku'].'-'.$arvo['loppu'].'&nbsp; </b>';
-	        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o muistin" for="'.$arvo['id'].'_'.$did.'_'.$tid.'"></i>';
-		if(!empty($arvo['tyoajanmerkinta'])){
-			$expl = explode("/",$arvo['tyoajanmerkinta']);
-			if(isset($expl[1]) and !empty($expl[1])){
-				$color = $expl[1];
-				$bgcol = 'color:'.$color;
-			}
-		}
-		if(!empty($arvo['tyoajanlaatu']) and empty($osoite)){
-			$expl1 = explode("/",$arvo['tyoajanlaatu']);
-			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
-			$osoite = (isset($expl1[0])) ? '<div class="text-center"><b style="color:'.$color.'">'.$expl1[0].'</b></div>' : '';
-			$kellot = '';
-		}
-		if( isset($loppu[0]) and empty($loppu[0]) and isset($loppu[1]) and ($this->num(strtotime($arvo['alku'])-strtotime($loppu[1])) > 0) ){
-			$valilyonti = strtotime($arvo['alku'])-strtotime($loppu[1]);
-			$reikatyyppi = 'reika-warning';
-			echo'<div class="reika '.$reikatyyppi.' text-center"><i class="glyphicon glyphicon-time"></i> Aika: '.$this->sprint($valilyonti).'</div>';
-		}
-	   	echo '<div class="fullRivi" style="'.$bgcol.'">';
-		echo '<div class="pull-left ikoonintila" style="margin-right: 5px">'.$muokkaus.' </div>';
-		echo '<span class="tv_edit" id="'.$arvo['id'].'">'.$kellot.$osoite.'</span>';
-	   	echo '</div>';
-		$loppu = array($arvo['tyoajanlaatu'], $arvo['loppu']);
-	}
-     }
-  }
-  ?>
-  </div>
- </td>
- <?php endforeach; ?>
- </tr>
- </tbody>
+ <th class="text-center" style="z-index: 999;">
+  <div class="laatiko_td"><b><?=$arrDate[$explColDate[0]]?></b>, <?=$explColDate[1]?></b></div>
+ </th>
  <?php $f = date ("d.m.Y", strtotime("+1 day", strtotime($f))); ?>
  <?php endwhile; ?>
+ </tr>
+ </thead>
+ <tbody>
+ <?php foreach($tt as $tid=>$item): ?>
+ <tr>
+ <td class="laatiko_td text-center" style="z-index: 999;">
+  <div class="nimi"><?=$item['etusukunimi']?></div>
+ </td>
+ <?php $f = date("d.m.Y", strtotime($from)); ?>
+ <?php while (strtotime($f) <= strtotime($to)): ?>
+ <?php $did = date("Ymd", strtotime($f)); ?>
+ <td class="laatiko_td">
+ <div id="<?=$did.'_'.$tid?>">
+ <?=json_decode($this->tv4head($tid, $f))?>
+ <?php if( isset($tv_arr[$tid][$f]) ): ?>
+ <?=json_decode($this->tv4_loop($tv_arr[$tid][$f], $tid, $f))?>
+ <?php endif; ?>
+ </div>
+ </td>
+ <?php $f = date ("d.m.Y", strtotime("+1 day", strtotime($f))); ?>
+ <?php endwhile; ?>
+ </tr>
+ <?php endforeach; ?>
+ </tbody>
  </table>
 </div>
 

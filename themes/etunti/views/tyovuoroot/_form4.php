@@ -19,14 +19,14 @@
 		//     Check tunnit jos ilmainen -->
 
 
-if(isset($_POST['pvm']))
-  $model->pvm = date("d.m.Y",strtotime($_POST['pvm']));
+if(isset($_GET['pvm']))
+  $model->pvm = date("d.m.Y",strtotime($_GET['pvm']));
 else
   $model->pvm = date("d.m.Y",strtotime($model->pvm));
 
 
-if(isset($_POST['tid']))
-  $model->tid = $_POST['tid'];
+if(isset($_GET['tid']))
+  $model->tid = $_GET['tid'];
 
 
 		  $ohje = '';
@@ -1435,10 +1435,10 @@ function laatikonPaivays(thisDataReturn){
 			type:'GET',
 			data: { "pvm" : d['pvm'], "tid" : d['tid'] }, //, "kohde" : d['kohde'], "asiakas" : d['asiakas']
 			  success:function(data){
-			  //console.log(data);
-			     if( $('#'+d['ymd']+'_'+d['tid']).length ){
-			        $('#'+d['ymd']+'_'+d['tid']).html(data);
-			     }
+				//console.log(data);
+			     	if( $('#'+d['ymd']+'_'+d['tid']).length ){
+			        	$('#'+d['ymd']+'_'+d['tid']).html(JSON.parse(data));
+			     	}
 			  },
 			  error:function(data){
 			  	console.log(data);

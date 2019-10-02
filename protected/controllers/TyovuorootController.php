@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'tv4', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'tv4', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -1991,7 +1991,7 @@ class TyovuorootController extends Controller
 
 		if(!isset(Yii::app()->session['from']) or !isset(Yii::app()->session['to'])){
 			Yii::app()->session['from'] = date("Y-m-d", strtotime('Monday this week'));
-			Yii::app()->session['to'] = date("Y-m-d", strtotime(Yii::app()->session['from'].' Friday +4 week'));
+			Yii::app()->session['to'] = date("Y-m-d", strtotime(Yii::app()->session['from'].' Friday this week'));
 		}
 
 		// <-- Order tyontekijat
@@ -2017,21 +2017,10 @@ class TyovuorootController extends Controller
 
 		// <-- Tyontekijat muistiin
 		$tt = array();
-		if(
-			!isset(Yii::app()->user->tyontekijat_tvuorossa)
-			or ( 
-			isset(Yii::app()->user->tyontekijat_tvuorossa) 
-			and isset(Yii::app()->session['tyontekijat']) 
-			and count(Yii::app()->session['tyontekijat']) != count(Yii::app()->user->tyontekijat_tvuorossa)
-			)
-		){
-			$tyontekijat = Tyontekijat::model()->findAll($criteria);
-			foreach($tyontekijat as $item){
-				$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1.' '.$item->$tt_order_2);
-			}
-			Yii::app()->user->setState('tyontekijat_tvuorossa', $tt);
+		$tyontekijat = Tyontekijat::model()->findAll($criteria);
+		foreach($tyontekijat as $item){
+			$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1.' '.$item->$tt_order_2);
 		}
-		$tt = Yii::app()->user->tyontekijat_tvuorossa;
 		//     Tyontekijat muistiin -->
 
        		$criteria = new CDbCriteria();
@@ -2091,7 +2080,7 @@ class TyovuorootController extends Controller
 		$tv_arr = array();
 		foreach($tv as $val){
 		      $val['osoite'] = (!empty($val['osoite']))?$val['osoite']:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
-		      $tv_arr[date("Ymd", strtotime($val->pvm)).'_'.$val->tid][] = $val->attributes;
+		      $tv_arr[$val->tid][$val->pvm][] = $val->attributes;
 		}
 
 		/*
@@ -2118,7 +2107,8 @@ class TyovuorootController extends Controller
 
 	}
 
-	protected function tv4head($did, $tid, $pvm){
+	protected function tv4head($tid, $pvm){
+	$did = date("Ymd", strtotime($pvm));
 	$bod = '
 	<div class="latikkolisatiedot_paa">
 		<div class="latikkolisatiedot">
@@ -2144,42 +2134,41 @@ class TyovuorootController extends Controller
 	return json_encode($bod);
 	}
 
-	protected function tv4_loop($tv_arr, $did, $tid, $pvm){
+	protected function tv4_loop($tv_arr, $tid, $pvm){
+	      $did = date("Ymd", strtotime($pvm));
 	      $onkoMennyt = '';
 	      if(date("Ymd", strtotime($pvm)) < date("Ymd")){ $onkoMennyt = 'mennytPaivat'; }
 	      $bod = '';
-	      $bod .= '<div style="position:relative" class="latikkoAsetukset">';
-              //foreach($tv_arr as $tvVal){ 
-	      for ($i = 0; $i <= count($tv_arr); $i++) {
-		if(!isset($tv_arr[$i])){ continue; }
-		if( isset($loppu[0]) and empty($loppu[0]) and isset($loppu[1]) and ($this->num(strtotime($tv_arr[$i]['alku'])-strtotime($loppu[1])) > 0) ){
-			$valilyonti = strtotime($tv_arr[$i]['alku'])-strtotime($loppu[1]);
+	      $bod .= '<div style="position:relative" class="latikkoAsetukset '.$onkoMennyt.'">';
+              foreach($tv_arr as $k=>$arvo){ 
+		if( isset($loppu[0]) and empty($loppu[0]) and isset($loppu[1]) and ($this->num(strtotime($arvo['alku'])-strtotime($loppu[1])) > 0) ){
+			$valilyonti = strtotime($arvo['alku'])-strtotime($loppu[1]);
 			$reikatyyppi = 'reika-warning';
 			$bod .= '<div class="reika '.$reikatyyppi.' text-center"><i class="glyphicon glyphicon-time"></i> Aika: '.$this->sprint($valilyonti).'</div>';
 		}
 		$color = '#888';
 		$bgcol = 'color:#333';
-		$osoite = $tv_arr[$i]['osoite'];
-		$kellot = '<b class="kellot">'.$tv_arr[$i]['alku'].'-'.$tv_arr[$i]['loppu'].'&nbsp; </b>';
-	        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o muistin" for="'.$tv_arr[$i]['id'].'_'.$did.'_'.$tid.'"></i>';
-		if(!empty($tv_arr[$i]['tyoajanmerkinta'])){
-			$expl = explode("/",$tv_arr[$i]['tyoajanmerkinta']);
+		$osoite = $arvo['osoite'];
+		$kellot = '<b class="kellot">'.$arvo['alku'].'-'.$arvo['loppu'].'&nbsp; </b>';
+	        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o muistin" for="'.$arvo['id'].'_'.$did.'_'.$tid.'"></i>';
+		if(!empty($arvo['tyoajanmerkinta'])){
+			$expl = explode("/",$arvo['tyoajanmerkinta']);
 			if(isset($expl[1]) and !empty($expl[1])){
 				$color = $expl[1];
 				$bgcol = 'color:'.$color;
 			}
 		}
-		if(!empty($tv_arr[$i]['tyoajanlaatu']) and empty($osoite)){
-			$expl1 = explode("/",$tv_arr[$i]['tyoajanlaatu']);
+		if(!empty($arvo['tyoajanlaatu']) and empty($osoite)){
+			$expl1 = explode("/",$arvo['tyoajanlaatu']);
 			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 			$osoite = (isset($expl1[0])) ? '<div class="text-center"><b style="color:'.$color.'">'.$expl1[0].'</b></div>' : '';
 			$kellot = '';
 		}
-	   	$bod .= '<div id="'.$tv_arr[$i]['id'].'_'.$did.'_'.$tid.'" class="fullRivi" style="'.$bgcol.'">';
-		$bod .= '<div class="pull-left ikoonintila" style="display:none;margin-right: 5px">'.$muokkaus.' </div>';
-		$bod .= '<span class="tv_edit" id="'.$tv_arr[$i]['id'].'">'.$kellot.$osoite.'</span>';
+	   	$bod .= '<div id="'.$arvo['id'].'_'.$did.'_'.$tid.'" class="fullRivi" style="'.$bgcol.'">';
+		$bod .= '<div class="pull-left ikoonintila" style="margin-right: 5px">'.$muokkaus.' </div>';
+		$bod .= '<span class="tv_edit" id="'.$arvo['id'].'">'.$kellot.$osoite.'</span>';
 	   	$bod .= '</div>';
-		$loppu = array($tv_arr[$i]['tyoajanlaatu'], $tv_arr[$i]['loppu']);
+		$loppu = array($arvo['tyoajanlaatu'], $arvo['loppu']);
               } // foreach
 	      $bod .= '</div>';
 	      return json_encode($bod);
@@ -2200,20 +2189,15 @@ class TyovuorootController extends Controller
 		$tv_arr = array();
 		foreach($tv as $val){
 		     $val['osoite'] = (!empty($val['osoite']))?$val['osoite']:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
-		     $tv_arr[$val->tid][$val->pvm][] = $val;
+		     $tv_arr[$val->tid][$val->pvm][] = $val->attributes;
 		} 
 		$content = '';
 		if(isset($tv_arr[$tid][$pvm])){
- 	     	$content = $this->renderPartial('//tyovuoroot/did4',array(
-					'tv_arr' => $tv_arr[$tid][$pvm],
-					'pvm'=>$pvm,
-					'did'=>date("Ymd", strtotime($pvm)),
-					'tid'=>$tid,
-					'site_0' => $site[0],
-	     	), true);
+			$content = json_decode($this->tv4head($tid, $pvm));
+			$content .= json_decode($this->tv4_loop($tv_arr[$tid][$pvm], $tid, $pvm));
 		}
 
-	     	echo json_decode($content);
+	     	echo json_encode($content);
 		exit;
 	}
 
@@ -3493,19 +3477,16 @@ class TyovuorootController extends Controller
 		exit;
 		}
 
+	}
 
-  	$tnimi = '';
-	if(isset($_POST['tid']) and $_POST['tid'] != 0){
-  	  $tekija = Tyontekijat::model()->findbypk($_POST['tid']);
-	  $tnimi = $this->etuSukunimi($tekija->id);
-
+	public function actionCreate4_form($pvm, $tid)
+	{
 
 		// Tyosuhde oikeus
 		$oikeus = '<div class="alert alert-danger">'.Yii::t('main', 'Työsuhdetta ei ole määritelty tai työsuhde ei ole voimassa.').'</div>';
-		$pvm = date("Ymd", strtotime($_POST['pvm']));
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
-			tid='".$tekija->id."' 
+			tid='".$tid."' 
 		";
 		$ts = Tyosuhdet::model()->find($criteria);
 		if(isset($ts->id) and !empty($ts->alku))
@@ -3519,28 +3500,79 @@ class TyovuorootController extends Controller
 		}
 		// Tyosuhde oikeus
 
+		$model=new Tyovuoroot;
+
+		$form_content = '';
+	        $form_content = '
+	        <div id="modal-form" class=" popup-basic popup-xl admin-form mfp-with-anim mfp-hide">
+	          <div class="panel">
+	            <div class="panel-heading">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">
+					<span aria-hidden="true">&times;</span>
+				</button>
+	              <span class="panel-title"><i class="fa fa-clock-o"></i> 
+			'.Yii::t('main', 'Työvuoron suunnittelu').': '.$this->etuSukunimi($tid).' <span class="kohteen_lisatiedot"></span>
+		      </span>
+	            </div>
+	              <div class="panel-body p25">
+			'.((isset($oikeus))?$oikeus:'').'
+			'.$this->renderPartial('_form4',array('model'=>$model), true).'
+	              </div>
+	          </div>
+	        </div>';
+		echo json_encode($form_content);
+		exit;
 	}
 
-	$form_content = '';
-        $form_content = '
-        <div id="modal-form" class=" popup-basic popup-xl admin-form mfp-with-anim mfp-hide">
-          <div class="panel">
-            <div class="panel-heading">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">
-				<span aria-hidden="true">&times;</span>
-			</button>
-              <span class="panel-title"><i class="fa fa-clock-o"></i> 
-		'.Yii::t('main', 'Työvuoron suunnittelu').': '.$tnimi.' <span class="kohteen_lisatiedot"></span>
-	      </span>
-            </div>
-              <div class="panel-body p25">
-		'.((isset($oikeus))?$oikeus:'').'
-		'.$this->renderPartial('_form4',array('model'=>$model), true).'
-              </div>
-          </div>
-        </div>';
-	echo json_encode($form_content);
-	exit;
+	public function actionUpdate4_form($id)
+	{
+
+		$model=$this->loadModel($id);
+
+		$criteria = new CDBcriteria;
+		// <-- Return order etu ja sukunimella
+		$site = Yii::app()->createController('Site');
+		$criteria = $site[0]->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
+		$criteria->condition="aktiivinen=1";
+	  	$t = Tyontekijat::model()->findAll($criteria);
+		$tekijan_nimi = '<select id="tekijanVaihdo" class="form-control" '.((!empty($model->tyopaari))?'disabled':'').'>';
+		if(count($t) > 0)
+		{
+		   if($model->tid == 0)
+		   $tekijan_nimi .= '<option value="'.$model->id.'">'.Yii::t('main', 'Valitse').'</option>';
+
+		   foreach($t as $tekijanData)
+		   {
+			if($tekijanData->id == $model->tid)
+			$tekijan_nimi .= '<option value="'.$tekijanData->id.'" selected>'.$this->etuSukunimi($tekijanData->id).'</option>';
+			else
+			$tekijan_nimi .= '<option value="'.$tekijanData->id.'">'.$this->etuSukunimi($tekijanData->id).'</option>';
+		   }
+		}
+		$tekijan_nimi .= '</select>';
+
+		$form_content = '';
+	        $form_content = '
+	        <div id="modal-form" class=" popup-basic popup-xl admin-form mfp-with-anim mfp-hide">
+	          <div class="panel">
+	            <div class="panel-heading">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">
+					<span aria-hidden="true">&times;</span>
+				</button>
+	              <span class="panel-title"><i class="fa fa-clock-o"></i> 
+			'.Yii::t('main', 'Työvuoron suunnittelu').' #'.$model->id.' <span class="kohteen_lisatiedot"></span> '.$tekijan_nimi.'
+		      </span>
+	            </div>
+	            <!-- end .panel-heading section -->
+	              <div class="panel-body p25">
+			'.$this->renderPartial('_form4',array('model'=>$model), true).'
+	              </div>
+	          </div>
+	        </div>';
+	
+		echo json_encode( $form_content);
+		exit;
 	}
 
 	public function actionUpdate4($id)
@@ -3793,12 +3825,6 @@ class TyovuorootController extends Controller
 			exit;
 		}
 		//     Toistuva tyovuorot ja tyoparit -->
-
-
-
-
-
-
 
 
 		// Jos Toistuva Ruksi ei ole päällä
@@ -4059,54 +4085,6 @@ class TyovuorootController extends Controller
 			exit;
 		}
 
-
-
-
-
-		$criteria = new CDBcriteria;
-		// <-- Return order etu ja sukunimella
-		$site = Yii::app()->createController('Site');
-		$criteria = $site[0]->etuSukunimiCriteria($criteria);
-		//     Return order etu ja sukunimella -->
-		$criteria->condition="aktiivinen=1";
-	  	$t = Tyontekijat::model()->findAll($criteria);
-		$tekijan_nimi = '<select id="tekijanVaihdo" class="form-control" '.((!empty($model->tyopaari))?'disabled':'').'>';
-		if(count($t) > 0)
-		{
-		   if($model->tid == 0)
-		   $tekijan_nimi .= '<option value="'.$model->id.'">'.Yii::t('main', 'Valitse').'</option>';
-
-		   foreach($t as $tekijanData)
-		   {
-			if($tekijanData->id == $model->tid)
-			$tekijan_nimi .= '<option value="'.$tekijanData->id.'" selected>'.$this->etuSukunimi($tekijanData->id).'</option>';
-			else
-			$tekijan_nimi .= '<option value="'.$tekijanData->id.'">'.$this->etuSukunimi($tekijanData->id).'</option>';
-		   }
-		}
-		$tekijan_nimi .= '</select>';
-
-	$form_content = '';
-        $form_content = '
-        <div id="modal-form" class=" popup-basic popup-xl admin-form mfp-with-anim mfp-hide">
-          <div class="panel">
-            <div class="panel-heading">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">
-				<span aria-hidden="true">&times;</span>
-			</button>
-              <span class="panel-title"><i class="fa fa-clock-o"></i> 
-		'.Yii::t('main', 'Työvuoron suunnittelu').' #'.$model->id.' <span class="kohteen_lisatiedot"></span> '.$tekijan_nimi.'
-	      </span>
-            </div>
-            <!-- end .panel-heading section -->
-              <div class="panel-body p25">
-		'.$this->renderPartial('_form4',array('model'=>$model), true).'
-              </div>
-          </div>
-        </div>';
-
-	echo json_encode( $form_content);
-	exit;
 	}
 
 	protected function pushNotifySending($tv_id)

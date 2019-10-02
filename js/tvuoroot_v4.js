@@ -72,8 +72,8 @@ $(document).delegate(".luominen","click",function(){
 	var tid = $(this).attr("tid");
 
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/create4',
-           type: "POST",
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/create4_form',
+           type: "GET",
            data: { "pvm" : pvm, "tid" : tid },
            success: function(data){
 		d = JSON.parse(data);
@@ -88,7 +88,7 @@ $(document).delegate(".tv_edit","click",function(){
 	var tv_id = $(this).attr('id');
 
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update4?id='+tv_id,
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update4_form?id='+tv_id,
            type: "GET",
            //data: {"tarjousPainike" : "true"},
            success: function(data){
@@ -97,6 +97,7 @@ $(document).delegate(".tv_edit","click",function(){
 		//console.log(data);
            },
 	   error:function(data){
+		console.log(data);
 		alert('Kohdetta ei löydy! Päivitä sivu!');
 	   }
         });
