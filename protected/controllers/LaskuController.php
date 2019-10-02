@@ -128,6 +128,11 @@ class LaskuController extends Controller
        		$criteria = new CDbCriteria();
 	        //$criteria->order = " id DESC ";
 
+		$alvsis_tuote = 'nolla';
+		if($alvsis != null and $alvsis == 1){
+			$alvsis_tuote = 'sis';
+		}
+
 	    	if( $tunnit == 'mob' ){
 	        $criteria->condition = " 
 		  aktiivinen='1'
@@ -143,7 +148,7 @@ class LaskuController extends Controller
 			  AND sairaus!=1
 			  AND tv_id IS NOT NULL AND tv_id > 0
 			  AND tv_id IN (
-				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
+				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND ((tuoteID > 0 AND tuoteID IN (SELECT id FROM onlinevaraus_tuotteet WHERE alvsis='$alvsis_tuote')) OR lisa_tuotteet!='') AND laskutettu='0'
 			  )
 			)
 		    )
@@ -165,7 +170,7 @@ class LaskuController extends Controller
 			  AND status='3'
 			  AND peruutettu=0
 			  AND laskutettu=0
-			  AND (tuoteID > 0 OR lisa_tuotteet!='')
+			  AND ((tuoteID > 0 AND tuoteID IN (SELECT id FROM onlinevaraus_tuotteet WHERE alvsis='$alvsis_tuote')) OR lisa_tuotteet!='')
 			)
 		    )
 		  AND id NOT IN

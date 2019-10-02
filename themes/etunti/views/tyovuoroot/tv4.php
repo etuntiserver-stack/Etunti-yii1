@@ -71,23 +71,29 @@
 		$osoite = $arvo['osoite'];
 		$kellot = '<b class="kellot">'.$arvo['alku'].'-'.$arvo['loppu'].'&nbsp; </b>';
 	        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o muistin" for="'.$arvo['id'].'_'.$did.'_'.$tid.'"></i>';
-		if(!empty($tv_arr[$i]['tyoajanmerkinta'])){
-			$expl = explode("/",$tv_arr[$i]['tyoajanmerkinta']);
+		if(!empty($arvo['tyoajanmerkinta'])){
+			$expl = explode("/",$arvo['tyoajanmerkinta']);
 			if(isset($expl[1]) and !empty($expl[1])){
 				$color = $expl[1];
 				$bgcol = 'color:'.$color;
 			}
 		}
-		if(!empty($tv_arr[$i]['tyoajanlaatu']) and empty($osoite)){
-			$expl1 = explode("/",$tv_arr[$i]['tyoajanlaatu']);
+		if(!empty($arvo['tyoajanlaatu']) and empty($osoite)){
+			$expl1 = explode("/",$arvo['tyoajanlaatu']);
 			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 			$osoite = (isset($expl1[0])) ? '<div class="text-center"><b style="color:'.$color.'">'.$expl1[0].'</b></div>' : '';
 			$kellot = '';
 		}
+		if( isset($loppu[0]) and empty($loppu[0]) and isset($loppu[1]) and ($this->num(strtotime($arvo['alku'])-strtotime($loppu[1])) > 0) ){
+			$valilyonti = strtotime($arvo['alku'])-strtotime($loppu[1]);
+			$reikatyyppi = 'reika-warning';
+			echo'<div class="reika '.$reikatyyppi.' text-center"><i class="glyphicon glyphicon-time"></i> Aika: '.$this->sprint($valilyonti).'</div>';
+		}
 	   	echo '<div class="fullRivi" style="'.$bgcol.'">';
-		echo '<div class="pull-left ikoonintila" style="display:none;margin-right: 5px">'.$muokkaus.' </div>';
+		echo '<div class="pull-left ikoonintila" style="margin-right: 5px">'.$muokkaus.' </div>';
 		echo '<span class="tv_edit" id="'.$arvo['id'].'">'.$kellot.$osoite.'</span>';
 	   	echo '</div>';
+		$loppu = array($arvo['tyoajanlaatu'], $arvo['loppu']);
 	}
      }
   }

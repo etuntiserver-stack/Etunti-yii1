@@ -34,12 +34,12 @@ $('td').hover(function()
      { 
 	$('#hovertietoja').html('').hide();
      });
-     $(this).find('.ikoonintila').show();
+     //$(this).find('.ikoonintila').show();
 
 }, function()
 { 
      $(this).find('.plussa, .valitseKokopaiva').hide();
-     $(this).find('.ikoonintila').hide();
+     //$(this).find('.ikoonintila').hide();
 });
 /*
 function getUrlVars() {
