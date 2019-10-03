@@ -212,7 +212,7 @@ $months=array(
               </div>
 
 
-
+	<?php /*
               <!-- Country List -->
               <div class="panel" id="p216">
                 <div class="panel-heading">
@@ -222,7 +222,7 @@ $months=array(
                   <div id="suunniteltulistatanaan"></div>
                 </div>
               </div>
-
+	*/ ?>
             </div>
             <!-- end: .col-md-5-->
 

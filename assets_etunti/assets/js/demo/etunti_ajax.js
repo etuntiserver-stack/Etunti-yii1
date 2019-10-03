@@ -95,7 +95,7 @@ var suunnitteltutunnittanaan = function () {
             });
 	    // SiteController avoimet_kohteet -->
 }
-
+/*
 var suunniteltulistatanaan = function () {
 
 	    // <-- SiteController avoimet_kohteet
@@ -116,7 +116,7 @@ var suunniteltulistatanaan = function () {
             });
 	    // SiteController avoimet_kohteet -->
 }
-
+*/
 var viestittanaan = function () {
 
 	    // <-- SiteController avoimet_kohteet
@@ -185,7 +185,7 @@ var kayttajaonline = function () {
 	    toteututhismonth();
 	    tehdyttunnittanaan();
 	    suunnitteltutunnittanaan();
-	    suunniteltulistatanaan();
+	    //suunniteltulistatanaan();
 	    viestittanaan();
 	    avoimetKohteet();
 	    kayttajaonline();

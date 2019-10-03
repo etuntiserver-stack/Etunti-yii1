@@ -547,6 +547,7 @@ class SiteController extends Controller
 
 	public function actionSuunniteltulistatanaan()
 	{
+	/*
 		$bd = '
                   <table class="table mbn tc-med-1 tc-bold-last">
                     <thead>
@@ -593,8 +594,8 @@ class SiteController extends Controller
 		$bd .= '
                     </tbody>
                   </table>';
-
-		echo json_encode($bd);
+	*/
+		echo json_encode(0);
 	}
 
 	public function actionMail_template()
