@@ -8,17 +8,93 @@ $(document).ready(function(){
   });
   if( varaus_l > 0 ){ $('.td_varaus').addClass('in'); }
 
+
+$(document).delegate(".muistin","click",function(){
+	$('.latikkolisatiedot_paa').remove();
+	var thisvar = this;
+	var thisFor = $(this).attr('for');
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/muistin',
+	   type:'POST',
+	   data: { "id" : thisFor },
+           success: function(data){
+        	//console.log(data);
+	  	muisti();
+		thisvar.remove();
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
+        });
+
+});
+
+muisti();
+function muisti(){
+
+	var dat = '';
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/muistissa',
+           success: function(data){
+        	//console.log(data);
+	
+		if(data != 'muistityhja')
+		{
+		var parseData = 0;
+		var tv_id = 0;
+		parseData = data.split(',');
+		$(parseData).each(function(index, value) {
+			tv_id = value.split('_');
+			if( $('#'+tv_id[0]).hasClass('ei_saa_muokata') ){ return true; }
+     			$('#'+tv_id[0]).css({"opacity":"0.4"});
+     			$('#'+tv_id[0]).addClass("muistissa");
+		});
+			$(".muokkausLi").show();
+			localStorage.setItem("muistissa", true);
+			$(".mcut, .mplus").css({"display":"block !important"});
+		}
+		return false;
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
+        });
+
+}
+
 $('td').hover(function()
 {
-     $(this).find('.plussa, .valitseKokopaiva').show();
-     //var hovertietoja = $(this).find('.td_hovertietoja').html();
+     var did_tid = $(this).find('.latikkoAsetukset').attr('id');
+     var pvm = $(this).find('.latikkoAsetukset').attr('pvm');
+     var tid = $(this).find('.latikkoAsetukset').attr('tid');
+     $(this).find('.latikkoAsetukset').prepend('' +
+	'<div class="latikkolisatiedot_paa">' +
+		'<div class="latikkolisatiedot">' +
+		 '<div class="form-inline">' +
+			   '<i class="form-group valitseKokopaiva link glyphicon glyphicon-th-large" did_tid="' + did_tid + '"></i>' +
+			   '<i class="form-group plussa link fa fa-plus luominen" pvm="' + pvm + '" tid="' + tid + '"></i>' +
+			'</div>' +
+		 '</div>' +
+		'</div>' +
+	'</div>'
+     );
+     if(localStorage.getItem("muistissa")){
+     $(this).find('.latikkolisatiedot .form-inline').append('' +
+		   	   '<i class="form-group mcut fa fa-exchange" id="forCut_' + did_tid + '"></i>' +
+		   	   '<i class="form-group mplus fa fa-copy" id="forCopy_' + did_tid + '"></i> '
+     );
+     }
      $(this).find('.tv_edit').hover(function(){
+	if( !$(this).hasClass('muistissa') && !$(this).prev('i').hasClass('muistissa') ){
+	   if( !$(this).prev('i').hasClass('muistin') ){
+		$(this).before('<i class="fa fa-pencil-square-o muistin" for="' + $(this).attr('id') + '_' + did_tid + '"></i>');
+	   }
+	}
 	var hovertietoja = '';
 	var tv_id = $(this).attr('id');
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/hovertietoja?tv_id='+tv_id,
-           //type: "GET",
-           //data: {"tarjousPainike" : "true"},
 	   async: false,
            success: function(data){
 		d = JSON.parse(data);
@@ -34,39 +110,12 @@ $('td').hover(function()
      { 
 	$('#hovertietoja').html('').hide();
      });
-     //$(this).find('.ikoonintila').show();
 
 }, function()
 { 
-     $(this).find('.plussa, .valitseKokopaiva').hide();
-     //$(this).find('.ikoonintila').hide();
+     $(this).find('.muistin, .latikkolisatiedot_paa').remove();
 });
-/*
-function getUrlVars() {
-    var vars = {};
-    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
-    function(m,key,value) {
-      vars[key] = value;
-    });
-    return vars;
-  }
 
-if(getUrlVars()["tv_id"]){
-	var thisVal = getUrlVars()["tv_id"];
-
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update?id='+thisVal,
-           type: "GET",
-           //data: {"tarjousPainike" : "true"},
-           success: function(html){
-		$('#showres').modal().html(html);
-           },
-	   error:function(data){
-		alert('Kohdetta ei löydy! Päivitä sivu!');
-	   }
-        });
-}
-*/
 $(document).delegate(".luominen","click",function(){
 	var pvm = $(this).attr("pvm");
 	var tid = $(this).attr("tid");
@@ -126,78 +175,22 @@ jQuery.clearKaikki = function clearKaikki(){
 	   type:'POST',
 	   data: { "clear" : 1 },
            success: function(data){
-        	console.log(data);
+        	//console.log(data);
 
 		$(".muistissa").each(function() {
 		     $(this).css({"opacity":"1"});
-		     $(this).removeClass("muistissa").addClass("muistin");
+		     $(this).removeClass("muistissa");
 		});
 
 		$(".muokkausLi").hide();
-		$(".mplus").removeClass().addClass("forCopy");
-		$(".mcut").removeClass().addClass("forCut");
-		$('#muistissa').html('')
-
+		$(".latikkolisatiedot_paa").remove();
+		localStorage.clear("muistissa");
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	console.log(XMLHttpRequest);
  	   }
         });
 
-
-}
-
-$(document).delegate(".muistin","click",function(){
-
-	var thisFor = $(this).attr('for');
-	//var thisVal = $(this).attr('for').split('_');
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/muistin',
-	   type:'POST',
-	   data: { "id" : thisFor },
-           success: function(data){
-        	//console.log(data);
-	  	muisti();
-    	   },
-    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
-	    	console.log(XMLHttpRequest);
- 	   }
-        });
-
-});
-
-muisti();
-function muisti(){
-
-	var dat = '';
-
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/muistissa',
-           success: function(data){
-        	//console.log(data);
-	
-		if(data != 'muistityhja')
-		{
-		var parseData = 0;
-		parseData = data.split(',');
-		$(parseData).each(function(index, value) {
-
-			if( $('#'+value).hasClass('ei_saa_muokata') ){ return true; }
-
-     			$('#'+value).css({"opacity":"0.4"});
-     			$('#'+value).removeClass("muistin").addClass("muistissa");
-		});
-
-			$(".muokkausLi").show();
-			$(".forCut").removeClass("forCut").addClass("mcut fa fa-exchange link");
-			$(".forCopy").removeClass("forCopy").addClass("mplus fa fa-copy link");		
-		}
-		return false;
-    	   },
-    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
-	    	console.log(XMLHttpRequest);
- 	   }
-        });
 
 }
 
@@ -229,9 +222,7 @@ window.addEventListener('message', function(e) {
   var edata = e.data.split('//');
   if(edata[0] == 'doit')
   {
-	var thisID = edata[1].split('_');
-
-
+  var thisID = edata[1].split('_');
   var newPvm	= thisID[1];
   var newTid	= thisID[2];
   var doWhat	= 0;
@@ -248,16 +239,15 @@ window.addEventListener('message', function(e) {
   if(thisID[0] == 'forRemove')
   {
 	var r = confirm('Haluatko varmasti poistaa tämän?');
-	if(!r)
-	return false;
+	if(!r){	return false; }
   }
 
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio?did=did3',
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio?did=did4',
 	   type:'POST',
 	   data: doWhat,
            success: function(data){
-        	//console.log(data);
+        	//console.log(JSON.parse(data));
 
 		if(data !== '')
 		{
@@ -270,19 +260,7 @@ window.addEventListener('message', function(e) {
 				}
 				$('#'+newPvm+'_'+newTid).html(JSON.parse(sp[0]));
 				
-				if(thisID[0] == 'forCopy' && parent.location.href.match(/index/))
-				{
-					var ThisHeight = $('#'+newPvm+'_'+newTid).height();
-					var FirstHeight = $('#first_'+newTid).height(ThisHeight);
-				}
-
-				if(thisID[0] == 'forCopy' && parent.location.href.match(/tv2/))
-				{
-					var ThisHeight = $('#'+newPvm+'_'+newTid).height();
-					var FirstHeight = $('#first_'+newPvm).height(ThisHeight);
-				}
-
-				if(thisID[0] == 'forCopy' && parent.location.href.match(/tv3/))
+				if(thisID[0] == 'forCopy')
 				{
 					var ThisHeight = $('#'+newPvm+'_'+newTid).height();
 					var FirstHeight = $('#first_'+newPvm).height(ThisHeight);
@@ -293,9 +271,11 @@ window.addEventListener('message', function(e) {
 			if(sp[1])
 			{
 	  			var parseData = sp[1].split(',');
+				tv_id = 0;
 	  			$(parseData).each(function(index, value) {
-					console.log(value);
-					$('#'+value).remove();
+					//console.log(value);
+					tv_id = value.split('_');
+					$('#'+tv_id[0]).remove();
 				});
 				parseData = '';
 			}
@@ -315,15 +295,6 @@ window.addEventListener('message', function(e) {
   }
 
 });
-
-
-
-
-
-
-
-
-
 
 vkolopputCheck();
 function vkolopputCheck(){

@@ -34,7 +34,7 @@ ini_set('memory_limit', '512M');
  <table class="table table-bordered" id="fixTable">
  <thead>
  <tr>
- <th></th>
+ <th width="1"></th>
  <?php $f = date("d.m.Y", strtotime($from)); ?>
  <?php while (strtotime($f) <= strtotime($to)): ?>
  <?php
@@ -57,7 +57,7 @@ ini_set('memory_limit', '512M');
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
     <td class="laatiko_td text-center" style="z-index: 999; width: 50px">
-	<div class="nimi"><?=$item['etusukunimi']?></div>
+	<span class="nimi"><?=$item['etusukunimi']?></span>
     </td>
     <?php $f = date("d.m.Y", strtotime($from)); ?>
     <?php while (strtotime($f) <= strtotime($to)): ?>
@@ -68,11 +68,9 @@ ini_set('memory_limit', '512M');
     ?>
     <?php $did = date("Ymd", strtotime($f)); ?>
       <td>
-	<div id="<?=$did.'_'.$tid?>" class="latikkoAsetukset">
-		<?php //echo json_decode($this->tv4head($tid, $f)); ?>
+	<div id="<?=$did.'_'.$tid?>" class="latikkoAsetukset" pvm="<?=$f?>" tid="<?=$tid?>">
 		<?php if( isset($tv_arr[$tid][$f]) ): ?>
 			<?php array_map('superfast', $tv_arr[$tid][$f]); ?>
-			<?php //echo json_decode($this->tv4_loop($tv_arr[$tid][$f], $tid, $f)); ?>
 		<?php endif; ?>
 	</div>
       </td>
@@ -87,7 +85,7 @@ ini_set('memory_limit', '512M');
 
 <?php 
 function superfast($arvo){
-	echo '<span class="tv_edit" id="'.$arvo['id'].'">'.$arvo['alku'].'-'.$arvo['loppu'].' '.$arvo['osoite'].'</span><br>';
+	echo $arvo.'<br>';
 }
 /*
 <script type="text/javascript">

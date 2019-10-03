@@ -995,9 +995,10 @@ class TyovuorootController extends Controller
 
 	public function actionMuisticlear()
 	{
-		if(isset($_POST['clear']))
-		unset($_SESSION['muistin']);
-
+		if(isset($_SESSION['muistin']) and isset($_POST['clear'])){
+			echo json_encode($_SESSION['muistin']);
+			unset($_SESSION['muistin']);
+		}
 	}
 
 	public function actionPoistaTv()
@@ -2079,8 +2080,24 @@ class TyovuorootController extends Controller
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$tv_arr = array();
 		foreach($tv as $arvo){
-			$arvo['osoite'] = (!empty($arvo['osoite']))?$arvo['osoite']:(isset($arvo['kohteet']['osoite']))?$arvo['kohteet']['osoite']:'';
-			$tv_arr[$arvo->tid][$arvo->pvm][] = $arvo->attributes;
+			$osoite = (!empty($arvo['osoite']))?$arvo['osoite']:(isset($arvo['kohteet']['osoite']))?$arvo['kohteet']['osoite']:'';
+			$color = '#888';
+			$bgcol = 'color:#333';
+			if(!empty($arvo['tyoajanmerkinta'])){
+				$expl = explode("/",$arvo['tyoajanmerkinta']);
+				if(isset($expl[1]) and !empty($expl[1])){
+					$color = $expl[1];
+					$bgcol = 'color:'.$color;
+				}
+			}
+			if(!empty($arvo['tyoajanlaatu'])){
+				$expl1 = explode("/",$arvo['tyoajanlaatu']);
+				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
+				$arvo['osoite'] = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$arvo['id'].'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
+			} else {
+				$arvo['osoite'] = '<span class="tv_edit" id="'.$arvo['id'].'" style="'.$bgcol.'">'.$arvo['alku'].'-'.$arvo['loppu'].' '.$osoite.'</span>';
+			}
+			$tv_arr[$arvo->tid][$arvo->pvm][] = $arvo['osoite'];
 		}
 		/*
 		echo '<pre>';
@@ -2105,7 +2122,7 @@ class TyovuorootController extends Controller
 		));
 
 	}
-
+/*
 	protected function tv4head($tid, $pvm){
 	$did = date("Ymd", strtotime($pvm));
 	$bod = '
@@ -2132,7 +2149,8 @@ class TyovuorootController extends Controller
 	';
 	return json_encode($bod);
 	}
-
+*/
+/*
 	protected function tv4_loop($tv_arr, $tid, $pvm){
 	      $did = date("Ymd", strtotime($pvm));
 	      $onkoMennyt = '';
@@ -2172,31 +2190,15 @@ class TyovuorootController extends Controller
 	      $bod .= '</div>';
 	      return json_encode($bod);
 	}
+*/
 
 	public function actionDid4($pvm, $tid) {
 
-		$site = Yii::app()->createController('Site');
-       		$criteria = new CDbCriteria();
-		$criteria->with = array('kohteet');
-		$criteria->select = " id, tid, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu";
-		$criteria->order = "alku ASC"; //tt.$tt_order_1 ASC, 
-		$criteria->condition = "
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')='".date("Y-m-d", strtotime($pvm))."' 
-			AND tid='".$tid."'
-		";
-		$tv = Tyovuoroot::model()->findAll($criteria);
-		$tv_arr = array();
-		foreach($tv as $val){
-		     $val['osoite'] = (!empty($val['osoite']))?$val['osoite']:(isset($val['kohteet']['osoite']))?$val['kohteet']['osoite']:'';
-		     $tv_arr[$val->tid][$val->pvm][] = $val->attributes;
-		} 
-		$content = '';
-		if(isset($tv_arr[$tid][$pvm])){
-			$content = json_decode($this->tv4head($tid, $pvm));
-			$content .= json_decode($this->tv4_loop($tv_arr[$tid][$pvm], $tid, $pvm));
-		}
-
-	     	echo json_encode($content);
+		$content = $this->renderPartial('did4', array(
+			'pvm' 	=> $pvm,
+			'tid' 	=> $tid,
+		), true);
+	     	echo $content;
 		exit;
 	}
 
