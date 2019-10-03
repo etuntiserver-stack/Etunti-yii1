@@ -2307,7 +2307,7 @@ class TyovuorootController extends Controller
 		   }
 		$hovertietoja .= '</div>';
 		}
-		if( !empty($tvVal->tietoja) ){ $hovertietoja .= '<div class="hover_well"><h5>Tietoja:</h5> '.$tvVal->tietoja.'</div>'; }
+		if( !empty($tvVal->tietoja) ){ $hovertietoja .= '<div class="hover_well"><h5>Tietoja:</h5> '.str_replace("\n", "<br>", $tvVal->tietoja).'</div>'; }
 		//    Hovertietoja generoi -->
 
 		echo json_encode($hovertietoja);
