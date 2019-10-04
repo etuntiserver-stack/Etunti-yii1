@@ -1,4 +1,5 @@
 <?php 
+/*
 	$criteria = new CDbCriteria();
 	$criteria->select = "  COUNT(*) as count ";
 	$criteria->condition = " 

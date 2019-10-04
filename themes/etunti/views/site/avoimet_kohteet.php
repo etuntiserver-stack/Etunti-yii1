@@ -1,5 +1,5 @@
 <?php
-
+/*
 	$bd = '<table class="table mbn tc-med-1 tc-bold-last">
                     <thead>
                       <tr class="hidden">
@@ -36,4 +36,5 @@
 	$bd .= '</tbody>
         </table>';
 	echo json_encode($bd);
+*/
 ?>

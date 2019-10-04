@@ -502,47 +502,142 @@ class SiteController extends Controller
 
 	public function actionTyot_tanaan()
 	{
-		$this->renderPartial('tyot_tanaan');
+	$criteria = new CDbCriteria();
+	$criteria->select = "  COUNT(*) as count ";
+	$criteria->condition = " 
+		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+		AND kohde!=''
+		AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
+	";
+
+		// <-- Tyoryhmat
+		$tt = Yii::app()->createController('Tyontekijat');
+		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+		$ids = implode(",", $tt_arr);
+		if( count($tt_arr) > 0 ){
+        		$criteria->addCondition (" tid IN ($ids)");
+		}
+		//    Tyoryhmat -->
+
+	$s = Tyovuoroot::model()->find($criteria);
+
+	$criteria = new CDbCriteria();
+	$criteria->select = "  COUNT(*) as count ";
+	$criteria->condition = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() AND status=1 ";
+
+		// <-- Tyoryhmat
+		$tt = Yii::app()->createController('Tyontekijat');
+		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+		$ids = implode(",", $tt_arr);
+		if( count($tt_arr) > 0 ){
+        		$criteria->addCondition (" tid IN ($ids)");
+		}
+		//    Tyoryhmat -->
+
+	$a = Mobile::model()->find($criteria);	
+
+	$criteria = new CDbCriteria();
+	$criteria->select = "  COUNT(*) as count ";
+	$criteria->condition = " 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3
+	";
+
+		// <-- Tyoryhmat
+		$tt = Yii::app()->createController('Tyontekijat');
+		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+		$ids = implode(",", $tt_arr);
+		if( count($tt_arr) > 0 ){
+        		$criteria->addCondition (" tid IN ($ids)");
+		}
+		//    Tyoryhmat -->
+
+	$t = Mobile::model()->find($criteria);
+
+
+	$ss = 0;
+	if(isset($s->count))
+	$ss = $s->count;
+
+	$aa = 0;
+	if(isset($a->count))
+	$aa = $a->count;
+
+	$tt = 0;
+	if(isset($t->count))
+	$tt = $t->count;
+
+	$bd = '
+		<input type="hidden" id="tanaan_sun" value="'.$ss.'">
+		<input type="hidden" id="tanaan_al" value="'.$aa.'">
+		<input type="hidden" id="tanaan_tehdyt" value="'.$tt.'">
+
+                      <table class="table mbn tc-med-1 tc-bold-last">
+                        <thead>
+                          <tr class="hidden">
+                            <th>#</th>
+                            <th>First Name</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <span class="fa fa-circle text-warning fs14 mr10"></span>'.Yii::t('main','Suunnitellut').'</td>
+                            <td>'.$ss.'</td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <span class="fa fa-circle text-info fs14 mr10"></span>'.Yii::t('main','Käynnissä').'</td>
+                            <td>'.$aa.'</td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <span class="fa fa-circle text-primary fs14 mr10"></span>'.Yii::t('main','Tehdyt').'</td>
+                            <td>'.$tt.'</td>
+                          </tr>
+                        </tbody>
+                      </table>
+	';
+	echo json_encode($bd);
+	exit;
 	}
 
 	public function actionAvoimet_kohteet()
 	{
-		$this->renderPartial('avoimet_kohteet');
+		$return = array();
+       		$criteria = new CDbCriteria();
+       		$criteria->select = " id,aloitan,loppui,kohde_kannasta  ";
+       		$criteria->order = " id DESC  ";
+       		$criteria->group = "kohde_kannasta";
+       		$criteria->condition = "status=1";
+		$m = Mobile::model()->findAll($criteria);
+		foreach($m as $data){
+ 			$data->loppui = date("d.m.Y H:i",time());
+			$data->aloitan = date("d.m.Y H:i",strtotime($data->aloitan));
+			$kesto =  strtotime($data->loppui) - strtotime($data->aloitan);
+			$return[] = array(
+				'kohde_kannasta'=>CHtml::link($data->kohde_kannasta.' #'.$data->id, array('/mobile/update', 'id' => $data->id)),
+				'kesto'=>$this->sprint($kesto)
+			);
+
+		}
+		echo json_encode($return);
+		exit;
 	}
 
 	public function actionKayttajaonline()
 	{
 
-		$bd = '
-                  <table class="table mbn tc-list-1 tc-text-muted-2 tc-fw600-2">
-                    <thead>
-                      <tr class="hidden">
-                        <th class="w30">#</th>
-                        <th>First Name</th>
-                      </tr>
-                    </thead>
-                    <tbody>';
+		$return = array();
 
-       		    $criteria = new CDbCriteria();
-       		    $criteria->order = " time DESC ";
-       		    $criteria->group = "user";
-		    $uo = UsersOnline::model()->findAll($criteria);
-		    if(isset($uo[0]))
-		    {
-			foreach($uo as $data)
-			{
-			  $bd .= '
-			  <tr>
-			   <td>'.date("H:i",$data->time).'</td>
-			   <td>'.$data->user.'</td>
-			  </tr>
-			  ';
-			}
-
-		    }
-		$bd .='</tbody>
-                  </table>';
-		echo json_encode($bd);
+       		$criteria = new CDbCriteria();
+       		$criteria->order = " time DESC ";
+       		$criteria->group = "user";
+		$uo = UsersOnline::model()->findAll($criteria);
+		foreach($uo as $data){
+			$return[] = array('time'=>date("H:i",$data->time), 'user'=>$data->user);
+		}
+		echo json_encode($return);
+		exit;
 	}
 
 	public function actionSuunniteltulistatanaan()
@@ -1955,6 +2050,11 @@ $(document).ready(function(){
 
 	public function actionSuunnitteltutunnittanaan()
 	{
+		if(isset(Yii::app()->user->Suunnitteltutunnittanaan)){
+			echo json_encode(Yii::app()->user->Suunnitteltutunnittanaan);
+			exit;
+		}
+		$suunniteltu = 0;
 
 		$criteria = new CDbCriteria();
         	$criteria->select = "
@@ -1977,26 +2077,29 @@ $(document).ready(function(){
 		//    Tyoryhmat -->
 
 	  	$su = Tyovuoroot::model()->find($criteria);
-		  $suunniteltu = '00:00';
-		if(isset($su->l_tunnit) and $su->l_tunnit > 0)
-		  $suunniteltu = $this->sprint($su->l_tunnit);
+		$suunniteltu = '00:00';
+		if(isset($su->l_tunnit) and $su->l_tunnit > 0){
+			$suunniteltu = $this->sprint($su->l_tunnit);
+			Yii::app()->user->setState('Suunnitteltutunnittanaan', $suunniteltu);
+		}
 
-
-                  echo json_encode($suunniteltu);
+                echo json_encode($suunniteltu);
+		exit;
 	}
 
 	public function actionViestittanaan()
 	{
-
+	  	$viestit = 0;
 		$criteria = new CDbCriteria();
         	$criteria->condition = "
 			status=0 AND tekija='toimisto'
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 		";
 	  	$v = Viestinta::model()->findAll($criteria);
 	  	$viestit = count($v);
 
-
-                  echo json_encode($viestit);
+                echo json_encode($viestit);
+		exit;
 	}
 
 	protected function UudetMobiiliViestit(){
@@ -2033,15 +2136,21 @@ $(document).ready(function(){
 		//    Tyoryhmat -->
 
 		$a = Mobile::model()->find($criteria);
-		  $tehdyht = '00:00';
-		if(isset($a->l_tunnit) and $a->l_tunnit > 0)
-		  $tehdyht = $this->sprint($a->l_tunnit);
+		$tehdyht = '00:00';
+		if(isset($a->l_tunnit) and $a->l_tunnit > 0){
+			$tehdyht = $this->sprint($a->l_tunnit);
+		}
 
-                  echo json_encode($tehdyht);
+                echo json_encode($tehdyht);
+		exit;
 	}
 
 	public function actionToteututhismonth()
 	{
+		if(isset(Yii::app()->user->Toteututhismonth)){
+			echo json_encode(Yii::app()->user->Toteututhismonth);
+			exit;
+		}
 		$month = date("Ym");
 		$total_l = 0;
 		$total_t = 0;
@@ -2101,13 +2210,15 @@ $(document).ready(function(){
 
 
 		$result = $total_l+$total_t;
-		if($result <= 0)
-		$return = '00:00';
-		else
-		$return = $this->sprint($result);
+		if($result <= 0){
+			$return = '00:00';
+		} else {
+			$return = $this->sprint($result);
+			Yii::app()->user->setState('Toteututhismonth', $return);
+		}
 
 		echo json_encode($return);
-
+		exit;
 	}
 
 
@@ -2122,7 +2233,7 @@ $(document).ready(function(){
        		$criteria = new CDbCriteria();
 		$criteria->with=array('kohteet');
         	$criteria->select = " COUNT(*) as count, aloitan";
-        	$criteria->group = " MONTH(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')), kohteet.kaupunki ";
+        	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d')), kohteet.kaupunki ";
         	$criteria->condition = "
 			aloitan !='' and loppui !='' and status ='3'
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')
@@ -2152,7 +2263,7 @@ $(document).ready(function(){
        		$criteria = new CDbCriteria();
 		$criteria->with=array('kohteet');
         	$criteria->select = " COUNT(*) as count, aloitan";
-        	$criteria->group = " kohteet.kaupunki ";
+        	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d')), kohteet.kaupunki ";
         	$criteria->condition = "
 			aloitan !='' and loppui !='' and status ='3'
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')
@@ -2169,7 +2280,7 @@ $(document).ready(function(){
 
 
 		echo json_encode(array('toimipaikkaat'=>$toimipaikkaat));
-
+		exit;
 	}
 /*
 	public function toteutuThisMonthByCity($k,$city)

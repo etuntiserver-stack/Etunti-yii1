@@ -136,7 +136,7 @@ $(document).ready(function(){
 // Aktiivinen -->
 
 
-if(isset(Yii::app()->user->nimi))
+if(isset(Yii::app()->user->nimi) and !empty(Yii::app()->user->nimi))
 {
   /* online */
   $criteria = new CDbCriteria();
@@ -156,7 +156,7 @@ if(isset(Yii::app()->user->nimi))
   $online->ip = (isset($_SERVER['REMOTE_ADDR']))?$_SERVER['REMOTE_ADDR']:'';
   $online->session = Yii::app()->getSession()->getSessionId();
   $online->user = Yii::app()->user->nimi;
-  $online->save();
+  if(!$online->save()){ var_dump($online->getErrors());}
   }
   /* online */
 }

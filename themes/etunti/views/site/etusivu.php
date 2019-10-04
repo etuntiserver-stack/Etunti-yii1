@@ -579,7 +579,16 @@ $( document ).ready(function() {
                   <span class="panel-title"><?php echo Yii::t('main', 'Käyttäjää online'); ?></span>
                 </div>
                 <div class="panel-body pn">
-			<div id="kayttajaonline"></div>
+                  <table class="table mbn tc-list-1 tc-text-muted-2 tc-fw600-2">
+                    <thead>
+                      <tr class="hidden">
+                        <th class="w30">#</th>
+                        <th>First Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+		    </tbody>
+                  </table>
                 </div>
               </div>
 
@@ -590,8 +599,17 @@ $( document ).ready(function() {
                 <div class="panel-heading">
                   <span class="panel-title"><?php echo Yii::t('main', 'Avoimet kohteet'); ?></span>
                 </div>
-                <div class="panel-body pn">
-			<div id="avoimet_kohteet"></div>
+                <div class="panel-body panel-scroller scroller-md scroller-overlay pn">
+		 <table class="table mbn tc-med-1 tc-bold-last">
+                    <thead>
+                      <tr class="hidden">
+                        <th>#</th>
+                        <th>First Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+		    </tbody>
+	        </table>
                 </div>
               </div>
 

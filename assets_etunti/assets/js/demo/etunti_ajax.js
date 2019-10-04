@@ -140,15 +140,19 @@ var viestittanaan = function () {
 
 
 var avoimetKohteet = function () {
-
 	    // <-- SiteController avoimet_kohteet
             $.ajax({
                url: 'avoimet_kohteet',
 	       //async: false,
                success: function(data){
 		    try {
-			    var d = JSON.parse(data);
-			    $("#avoimet_kohteet").replaceWith(d);
+				var d = JSON.parse(data);
+				var table_data = '';
+				$.each(d, function( index, value ) {
+				   table_data += '<tr><td>' + value['kohde_kannasta'] + '</td><td>' + value['kesto'] + '</td></tr>';
+				});
+				$("#p16 tbody").html(table_data);
+
 		    } catch (e) {
 		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?avoimetKohteet'
 		    }
@@ -168,8 +172,13 @@ var kayttajaonline = function () {
 	       //async: false,
                success: function(data){
 		    try {
-			    var d = JSON.parse(data);
-			    $("#kayttajaonline").replaceWith(d);
+				var d = JSON.parse(data);
+				var table_data = '';
+				$.each(d, function( index, value ) {
+				   table_data += '<tr><td>' + value['time'] + '</td><td>' + value['user'] + '</td></tr>';
+				});
+				$("#p21 tbody").html(table_data);
+
 		    } catch (e) {
 		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?kayttajaonline'
 		    }
@@ -181,7 +190,6 @@ var kayttajaonline = function () {
 	    // SiteController avoimet_kohteet -->
 }
 
-	    eDico();
 	    toteututhismonth();
 	    tehdyttunnittanaan();
 	    suunnitteltutunnittanaan();
@@ -189,4 +197,4 @@ var kayttajaonline = function () {
 	    viestittanaan();
 	    avoimetKohteet();
 	    kayttajaonline();
-
+	    eDico();
