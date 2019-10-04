@@ -280,6 +280,7 @@ $this->breadcrumbs=array(
   $ls 		= 0;
   $spl 		= 0;
   $vl 		= 0;
+  $vkl 		= 0;
   $vlYht	= 0;
   $vklYht	= 0;
   $slYht	= 0;

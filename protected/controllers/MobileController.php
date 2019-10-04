@@ -3206,7 +3206,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
 		";
 
         	$criteria->condition = "  
@@ -3233,11 +3233,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			if(Yii::app()->session['MATKA'])
 		        $criteria->addCondition (" status != '2' ");
 		}
-
-
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ");
-
-		$lu = Mobile::model()->findAll($criteria);
+		$lu = Mobile::model()->find($criteria);
+		if(isset($lu->l_tunnit)){
+			$total_l = $lu->l_tunnit;
+		}
+/*
 		foreach($lu as $l)
 		{
 
@@ -3253,19 +3254,18 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		    //if(date('N', strtotime($al[0])) == 7)
 		    //$totalSu += (strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1]));
 		}
+*/
 		/* ////////////////////////// */
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui 
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit 
 		";
-
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND sairaus!=1
 			AND deleted=0
 		";
-
 		if(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3) {
 			$criteria->addCondition (" hyvaksytty!='' ");
 		}
@@ -3283,17 +3283,21 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ");
 
 		if( !isset($_GET['lu_tai_tot']) or (isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2) or (isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3) ){
-			$tot = Toteutuneet::model()->findAll($criteria);
-			foreach($tot as $l)
-			{
-
+		$tot = Toteutuneet::model()->find($criteria);
+		if(isset($tot->l_tunnit)){
+			$total_l += $tot->l_tunnit;
+		}
+/*
+		foreach($tot as $l)
+		{
 				$l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
 				$l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
 				$l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
 				$al = explode(" ",$l->aloitan);
 				$lop = explode(" ",$l->loppui);
 				$total_l += $l->l_tunnit;
-			}
+		}
+*/
 		}
 
 		$kaikki = array($total_l,$totalIlta,$totalYo,$totalSu);
