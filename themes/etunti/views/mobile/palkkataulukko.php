@@ -1,6 +1,7 @@
 <div class="row">
 <?php
 ini_set('memory_limit', '512M');
+set_time_limit(300);
 /* @var $this MobileController */
 /* @var $dataProvider CActiveDataProvider */
 
