@@ -2122,7 +2122,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(isset($_GET['to']) and !empty($_GET['to'])){ $to = $_GET['to']; }
 
        		$criteria = new CDbCriteria();
-		$criteria->select = " id,tekijan_nimi ";
+		$criteria->select = " id, tekijan_nimi, sukunimi ";
 
 		// <-- Return order etu ja sukunimella
 		$site = Yii::app()->createController('Site');
