@@ -1923,65 +1923,58 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		return $result;
 	}
 
-	public function TidfromtoStatus($from,$to,$tid,$status)
+	public function TidfromtoMobiili($from, $to, $tid, $status=array(), $hyvaksytty='', $ilta=null, $yo=null, $su=null)
 	{
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
-
 		$result = 0;
-
        		$criteria = new CDbCriteria();
         	$criteria->select = "
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
 		";
-
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
+			AND palkanlaskentaan=1 
 			AND tid='".$tid."'
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."'
-			AND status='".$status."'
-			AND sairaus!=1
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 			AND deleted=0
 		";
-
-		if(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3) {
+		if(count($status) > 0) {
+			$st_or = "status='".implode("' OR status='", $status)."'";
+			$criteria->addCondition ($st_or);
+		}
+		if($hyvaksytty == 3) {
 			$criteria->addCondition (" hyvaksytty!='' ");
 		}
-
 		$lu = Mobile::model()->find($criteria);
-
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
 		";
-
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
+			AND palkanlaskentaan=1 
 			AND tid='".$tid."'
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."'
-			AND status='".$status."'
-			AND sairaus!=1
 			AND deleted=0
 		";
-
-		if(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3) {
+		if(count($status) > 0) {
+			$st_or = "status='".implode("' OR status='", $status)."'";
+			$criteria->addCondition ($st_or);
+		}
+		if($hyvaksytty == 3) {
 			$criteria->addCondition (" hyvaksytty!='' ");
 		}
-
 		$tot = Toteutuneet::model()->find($criteria);
 
-		if(isset($lu->l_tunnit))
-		$result = $lu->l_tunnit;
-
-		if(isset($tot->l_tunnit))
-		$result = $result+$tot->l_tunnit;
-
+		if(isset($lu->l_tunnit)){ $result = $lu->l_tunnit; }
+		if(isset($tot->l_tunnit)){ $result = $result+$tot->l_tunnit; }
 
 		return $result;
 	}
@@ -2064,6 +2057,17 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	public function actionPalkkataulukko()
 	{
+		$asetukset = Asetukset::model()->findByPk(1);
+		// <-- Order tyontekijat
+		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+			$tt_order_1 = "tekijan_nimi";
+			$tt_order_2 = "sukunimi";
+		} else {
+			$tt_order_1 = "sukunimi";
+			$tt_order_2 = "tekijan_nimi";
+		}
+		// Order tyontekijat -->
+
 
 		$from = date("d.m.Y",strtotime("first day of this month"));
 		$to = date("d.m.Y");
@@ -2146,7 +2150,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  $this->render('palkkataulukko', array(
 			'model' => $model,
 			'from' => $from,
-			'to' => $to
+			'to' => $to,
+			'tt_order_1' => $tt_order_1,
+			'tt_order_2' => $tt_order_2
 		  ));
 		}
 	}
@@ -3163,7 +3169,6 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan!='' and loppui!='' 
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".$pvm."'
 			$status $kohdenID 
-			AND sairaus!=1
 			AND id NOT IN(select kid from sivexkuitti_repaired)
 			AND deleted=0
 		";
@@ -3178,16 +3183,13 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan!='' and loppui!='' 
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".$pvm."'
 			$status $kohdenID 
-			AND sairaus!=1
 			AND deleted=0
 		";
 		$toteutuneet = Toteutuneet::model()->find($criteria);
 
-
 		return $luetut->l_tunnit+$toteutuneet->l_tunnit;
 
 	}
-
 
 	public function toteutu($tid,$sivu,$from,$to)
 	{

@@ -15,24 +15,42 @@ $this->breadcrumbs=array(
 
         <!-- begin: .tray-center -->
         <div class="tray-center">
+        <h2 class="myBgColors p15"> <i class="fa fa-home"></i> <?php echo Yii::t('main', 'Tuntiyhteenveto kohteet'); ?> 
 
    <!-- tulostus -->
    <div class="pull-right">
-     <form action="#" target="_blank" method="GET">
-      <input type="hidden" name="from" value="<?php echo $from; ?>">
-      <input type="hidden" name="to" value="<?php echo $to; ?>">
-      <input type="hidden" name="osoite" value="<?php if(isset($_GET['osoite'])) echo $_GET['osoite']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>..">
-      <input type="submit" name="tulosta" class="btn btn-primary btn-sm myBgColors" value="PDF">
-     </form>
+    <div class="form-inline">
+	  <form action="tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="ext" value="doc">
+	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
+	  </form>
+	  <form action="tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="ext" value="xls">
+	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+	  </form>
+	  <form action="tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="header" value="<?=$from?>-<?=$to?>">
+	    <input type="hidden" name="ext" value="pdf">
+	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+	  </form>
+     	  <button class="btn btn-primary btn-sm btn-group myBgColors" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Ekstrat'); ?> <b class="caret"></b></button>
+    </div>
    </div>
    <!-- tulostus -->
 
-
-              <h2 class="myBgColors p10"> <i class="fa fa-home"></i> <?php echo Yii::t('main', 'Tuntiyhteenveto kohteet'); ?> 
-
-		</h2>
-
-
+	</h2>
 
    	    <form id="yhtveto" action="#" class="form-inline" method="GET">
 
@@ -113,8 +131,8 @@ $this->breadcrumbs=array(
    <div class="panel-body">
 
 <div class="row">
- <div class="table-responsive">
-  <table class="table table-striped small">
+ <div class="table-responsive" id="tableContent">
+  <table class="table table-striped small" id="this_table">
   <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Osoite'); ?></th>
@@ -243,6 +261,15 @@ $this->breadcrumbs=array(
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  /* Tulostus */
+  $(".submitForm").on('click', function(e){
+	$('.mobileTable').addClass('table-bordered');
+	$(this).prev('textarea').val(JSON.stringify($('#tableContent').html()));
+	$(this).closest('form').submit();
+	e.preventDefault();
+  });
+  /* Tulostus */
 
 $(".haemob").click(function(){
 	$("#yhtveto").submit();

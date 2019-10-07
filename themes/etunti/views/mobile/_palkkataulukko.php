@@ -53,7 +53,7 @@
 
 <tr>
 
-	<td class="tulostus_tekija col1"><?php echo $this->etuSukunimi($data->id); ?></td>
+	<td class="tulostus_tekija col1"><?=$data->$tt_order_1.' '.$data->$tt_order_2?></td>
 	<td class="col2"><?php if($tp != 0) echo $tp; ?></td>
 	<td class="col3"><?php if($this->num($matka) != 0) echo $this->num($matka); ?></td>
 	<td class="col4"><?php if($return[0] != 0) echo $this->num($return[0]); ?></td>

@@ -56,60 +56,6 @@ $this->breadcrumbs=array(
      	  <button class="btn btn-primary btn-sm btn-group myBgColors" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Ekstrat'); ?> <b class="caret"></b></button>
     </div>
    </div>
-
-<?php /*
-   <div class="pull-right">
-    <div class="form-inline">
-     <form action="#" class="form-group" method="GET">
-      <input type="hidden" name="from" value="<?php echo $from; ?>">
-      <input type="hidden" name="to" value="<?php echo $to; ?>">
-      <div style="display:none">
-				<select class="gui-input" name="lu_tai_tot">
-				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
-				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Hyväksyntä'); ?></option>
-				<option value="3" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
-				</select>
-				<?php
-		   		$site = Yii::app()->createController('Site');
-		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
-					'Tekija', // name
-					null, // class
-					'tyontekijat2', // id
-					(isset($_GET['Tekija']))?$_GET['Tekija']:array(), //selected
-					1 // aktiivinen
-				);
-				echo $tyontekiatLista;
-				?>
-      </div>
-      <input type="submit" name="tulosta_xls" class="btn btn-primary btn-sm myBgColors" value="XLS">
-     </form>
-     <form action="#" class="form-group" method="GET">
-      <input type="hidden" name="from" value="<?php echo $from; ?>">
-      <input type="hidden" name="to" value="<?php echo $to; ?>">
-      <div style="display:none">
-				<select class="gui-input" name="lu_tai_tot">
-				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
-				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Hyväksyntä'); ?></option>
-				<option value="3" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
-				</select>
-				<?php
-		   		$site = Yii::app()->createController('Site');
-		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
-					'Tekija', // name
-					null, // class
-					'tyontekijat2', // id
-					(isset($_GET['Tekija']))?$_GET['Tekija']:array(), //selected
-					1 // aktiivinen
-				);
-				echo $tyontekiatLista;
-				?>
-      </div>
-      <input type="submit" name="tulosta_pdf" class="btn btn-primary btn-sm myBgColors" value="PDF">
-     </form>
-     <button class="btn btn-primary btn-sm btn-group myBgColors" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Ekstrat'); ?> <b class="caret"></b></button>
-    </div>
-   </div>
-*/ ?>
    <!-- tulostus -->
 	</h2>
 
@@ -286,6 +232,8 @@ $this->breadcrumbs=array(
   $slYht	= 0;
   $splYht	= 0;
   $lsYht	= 0;
+  $pyhat	= 0;
+  $el		= 0;
   $pyhatYht	= 0;
   $elYht	= 0;
   $matkaYht	= 0;
@@ -336,7 +284,8 @@ $this->breadcrumbs=array(
 		),true);
 	$matkaYht += $m;
 
-	// Yo 
+	// <-- Ilta Yo Su
+
 	foreach ($period as $dt) {
 		$IltaYoSu = $toteutuneet[0]->IltaYoSu($data->id, $dt->format("Y-m-d"));
 		$iltatunnit += $IltaYoSu[0];
@@ -344,12 +293,15 @@ $this->breadcrumbs=array(
 		$sutunnit += $IltaYoSu[2];
 	}
 
+	//$iltatunnit += $this->TidfromtoMobiili($from, $to, $data->id, array(3,2), $_GET['lu_tai_tot'], true);
+	//     Ilta Yo Su -->
+
 	$matkaIlta = $this->matkaIlta($data->id,$from,$to);
 	$return = $this->toteutu($data->id,"palkkataulukko",$from,$to);
 
 	$mPlusTYht += $return[0]+$m;
 
-	$loun = $this->TidfromtoStatus($from,$to,$data->id,10);
+	$loun = $this->TidfromtoMobiili($from, $to, $data->id, array(10), $_GET['lu_tai_tot']);
 	$lounYht += $loun;
 	$matkaIltaYht += $matkaIlta;
 	$iltaMatkaPlusIltatunnitYht += $iltatunnit;
@@ -362,6 +314,8 @@ $this->breadcrumbs=array(
 
 	$this->renderPartial('_palkkataulukko',array(
 			'data'=>$data,
+			'tt_order_1' => $tt_order_1,
+			'tt_order_2' => $tt_order_2,
 			'return'=>$return,
 			'matka'=>$m,
 			'matkaIlta'=>$matkaIlta,
