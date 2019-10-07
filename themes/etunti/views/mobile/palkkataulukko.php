@@ -305,7 +305,8 @@ $this->breadcrumbs=array(
 	$loun = $this->TidfromtoMobiili($from, $to, $data->id, array(10), $_GET['lu_tai_tot'], null, null, null);
 
 	$iltatunnit_ja_iltamatka = $iltatunnit+$matkaIlta;
-
+echo $iltatunnit;
+exit;
 
 	$yht[0] 	+= $tyotunnit;
 	$yht[1] 	+= $iltatunnit;
