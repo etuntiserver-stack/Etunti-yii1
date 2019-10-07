@@ -1852,18 +1852,18 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		return  number_format((float)$val/3600, 2, '.', '');
 	}
 
-
+/*
 	public function actionTidfromtomatkat($from,$to,$tid)
 	{
-	/*
+	
 		$this->renderPartial('palkkataulukko', array(
 		'from'=>$from,
 		'to'=>$to,
 		'tid'=>$tid
 		));
-	*/
+	
 	}
-
+*/
 	public function AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, $tilanne)
 	{
 		$from = date("Y-m-d", strtotime($from));
@@ -1929,29 +1929,29 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$ilta_criteria = "
         	SUM(CASE 
 	            WHEN 
-			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i:%s')) >= TIME('18:00') 
-			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s')) > TIME('18:00') 
-			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s')) <= TIME('23:00') 
-			   THEN TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i:%s')))
+			TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i')) >= TIME('18:00') 
+			&& TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i')) > TIME('18:00') 
+			&& TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i')) <= TIME('23:00') 
+			   THEN TIME_TO_SEC(TIMEDIFF(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i')))
 	            WHEN 
-			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i:%s')) < TIME('18:00') 
-			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s')) > TIME('18:00') 
-			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s')) <= TIME('23:00') 
-			   THEN TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s'), TIME('18:00')))
+			TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i')) < TIME('18:00') 
+			&& TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i')) > TIME('18:00') 
+			&& TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i')) <= TIME('23:00') 
+			   THEN TIME_TO_SEC(TIMEDIFF(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), TIME('18:00')))
 	            WHEN 
-			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i:%s')) >= TIME('18:00') 
+			TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i')) >= TIME('18:00') 
 			&& 
 			(
-			  TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s')) > TIME('23:00')
-			  || TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%d.%m.%Y')) != TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%d.%m.%Y'))
+			  TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i')) > TIME('23:00')
+			  || DATE(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i')) != DATE(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'))
 			)
-			   THEN TIME_TO_SEC(TIMEDIFF(TIME('23:00'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i:%s')))
+			   THEN TIME_TO_SEC(TIMEDIFF(TIME('23:00'), STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i')))
 	            WHEN 
-			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i:%s')) < TIME('18:00') 
+			TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i')) < TIME('18:00') 
 			&& 
 			(
-			  TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s')) > TIME('23:00')
-			  || TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%d.%m.%Y')) != TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%d.%m.%Y'))
+			  TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i')) > TIME('23:00')
+			  || DATE(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i')) != DATE(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'))
 			)
 			   THEN TIME_TO_SEC(TIMEDIFF(TIME('23:00'), TIME('18:00')))
 	            ELSE 0
@@ -1959,12 +1959,26 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		";
 		//     ILTA -->
 
+		// <-- YÖ
+		$yo_criteria = "
+        	SUM(CASE 
+	            WHEN 
+			TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i:%s') <= TIME('06:00') 
+			&& TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s') < TIME('06:00') 
+			   THEN TIME_TO_SEC(TIMEDIFF(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i:%s'))
+	            ELSE 0
+	        END) AS l_tunnit
+		";
+		//     YÖ -->
+
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 		$result = 0;
        		$criteria = new CDbCriteria();
 		if($ilta != null){
         	$criteria->select = $ilta_criteria;
+		} elseif($yo != null){
+        	$criteria->select = $yo_criteria;
 		} else {
         	$criteria->select = "
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
@@ -1994,6 +2008,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
        		$criteria = new CDbCriteria();
 		if($ilta != null){
         	$criteria->select = $ilta_criteria;
+		} elseif($yo != null){
+        	$criteria->select = $yo_criteria;
 		} else {
         	$criteria->select = "
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
@@ -2043,7 +2059,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(isset($vl->l_tunnit)){ $return = $vl->l_tunnit; }
 		return $return;
 	}
-
+/*
 	public function TidfromtoSairausTP($from,$to,$tid,$sairaus)
 	{
 		$from = date("Y-m-d", strtotime($from));
@@ -2061,7 +2077,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		return count($vl);
 	}
-
+*/
 	protected function TidfromtoVuosilomaPalkkatauluko($from,$to,$tid,$tila)
 	{
 
@@ -3355,7 +3371,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 
 
-
+/*
 	public function matkaIlta($tid,$from,$to)
 	{
 
@@ -3397,7 +3413,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		    $totalIlta += $this->ilta($al,$lop);
 
 		}
-		/* ////////////////////////// */
+
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
@@ -3432,7 +3448,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		return $totalIlta;
 
 	}
-
+*/
 
 
 	public function lounaat($tid,$from,$to)

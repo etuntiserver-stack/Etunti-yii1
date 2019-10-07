@@ -262,11 +262,11 @@ $this->breadcrumbs=array(
 
 	$tids[] = $data->id;
 	$tp = $this->Tp($data->id,$from,$to);
-  	$sl = $this->TidfromtoSairausTP($from,$to,$data->id,'SL');
+  	$sl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id,'SL');
 	$slYht += $sl;
-  	$ls = $this->TidfromtoSairausTP($from,$to,$data->id,'LS');
+  	$ls = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id,'LS');
 	$lsYht += $ls;
-  	$spl = $this->TidfromtoSairausTP($from,$to,$data->id,'SPL');
+  	$spl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id,'SPL');
 	$splYht += $spl;
   	$vl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id, 'VL');
 	$vlYht += $vl;
