@@ -1926,36 +1926,35 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	public function TidfromtoMobiili($from, $to, $tid, $status=array(), $hyvaksytty='', $ilta=null, $yo=null, $su=null)
 	{
 		// <-- ILTA
-		$ilta_criteria = "SUM(
-			CASE
+		// Note: 18000 at end of query is equal to TIME_TO_SEC(TIMEDIFF('23:00:00', '18:00:00'))
+		$ilta_criteria = "SUM(CASE
 			WHEN
 				TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) >= '18:00:00'
-			THEN
-				CASE
+			THEN CASE
 				WHEN
 					TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > '23:00:00' ||
 					DATE(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) != DATE(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))
 				THEN
 					TIME_TO_SEC(TIMEDIFF('23:00:00', TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
 				WHEN
-					TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > '18:00:00' &&
-					TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) <= '23:00:00'
+					TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > '18:00:00'
 				THEN
 					TIME_TO_SEC(TIMEDIFF(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')))
-				ELSE 0
+				ELSE
+					0
 				END
-			ELSE
-				CASE
-				WHEN
-					TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > '18:00:00' &&
-					TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) <= '23:00:00'
-				THEN
-					TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), '18:00:00'))
+			ELSE CASE
 				WHEN
 					TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > '23:00:00' ||
 					DATE(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) != DATE(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))
-				THEN 18000 /* TIME_TO_SEC(TIMEDIFF('23:00:00', '18:00:00')) = 18000 */
-				ELSE 0
+				THEN
+					18000
+				WHEN
+					TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > '18:00:00'
+				THEN
+					TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), '18:00:00'))
+				ELSE
+					0
 				END
 			END) AS l_tunnit
 		";
