@@ -5,7 +5,7 @@
 		$korv 	= '';
 		$lisatt	= '';
 		$ennakko= '';
-		$iltatunnit_tyotjamatkat = 0;
+		$iltatunnit_tyotjamatkat = '';
 		$sum 	= 0;
 
 		if($sutunnit != 0){
@@ -13,7 +13,7 @@
 		}
 
 		if($iltatunnit != 0){
-			$iltatunnit_tyotjamatkat = '<b>Työt</b>:<br>'.$iltatunnit;
+			$iltatunnit_tyotjamatkat = '<b>Työt</b>:<br>'.$this->num($iltatunnit);
 	        } else {
 			$iltatunnit = '';
 	  	}
