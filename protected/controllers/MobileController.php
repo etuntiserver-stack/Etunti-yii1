@@ -1929,28 +1929,28 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$ilta_criteria = "
         	SUM(CASE 
 	            WHEN 
-			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i')) >= TIME('18:00') 
-			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i')) > TIME('18:00') 
-			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i')) <= TIME('23:00') 
-			   THEN TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i')))
+			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i:%s')) >= TIME('18:00') 
+			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s')) > TIME('18:00') 
+			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s')) <= TIME('23:00') 
+			   THEN TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i:%s')))
 	            WHEN 
-			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i')) < TIME('18:00') 
-			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i')) > TIME('18:00') 
-			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i')) <= TIME('23:00') 
-			   THEN TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i'), TIME('18:00')))
+			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i:%s')) < TIME('18:00') 
+			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s')) > TIME('18:00') 
+			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s')) <= TIME('23:00') 
+			   THEN TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s'), TIME('18:00')))
 	            WHEN 
-			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i')) >= TIME('18:00') 
+			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i:%s')) >= TIME('18:00') 
 			&& 
 			(
-			  TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i')) > TIME('23:00')
+			  TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s')) > TIME('23:00')
 			  || TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%d.%m.%Y')) != TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%d.%m.%Y'))
 			)
-			   THEN TIME_TO_SEC(TIMEDIFF(TIME('23:00'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i')))
+			   THEN TIME_TO_SEC(TIMEDIFF(TIME('23:00'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i:%s')))
 	            WHEN 
-			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i')) < TIME('18:00') 
+			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i:%s')) < TIME('18:00') 
 			&& 
 			(
-			  TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i')) > TIME('23:00')
+			  TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i:%s')) > TIME('23:00')
 			  || TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%d.%m.%Y')) != TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%d.%m.%Y'))
 			)
 			   THEN TIME_TO_SEC(TIMEDIFF(TIME('23:00'), TIME('18:00')))

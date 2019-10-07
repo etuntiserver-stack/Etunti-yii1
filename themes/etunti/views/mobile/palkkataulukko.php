@@ -302,12 +302,10 @@ $this->breadcrumbs=array(
 	$matkaIlta = $this->TidfromtoMobiili($from, $to, $data->id, array(2), $_GET['lu_tai_tot'], true, null, null);
 	$tyotunnit = $this->TidfromtoMobiili($from, $to, $data->id, array(3), $_GET['lu_tai_tot'], null, null, null);
 	$matkatunnit = $this->TidfromtoMobiili($from, $to, $data->id, array(2), $_GET['lu_tai_tot'], null, null, null);
-
 	$loun = $this->TidfromtoMobiili($from, $to, $data->id, array(10), $_GET['lu_tai_tot'], null, null, null);
-	$lounYht += $loun;
-	$matkaIltaYht += $matkaIlta;
+
 	$iltatunnit_ja_iltamatka = $iltatunnit+$matkaIlta;
-	$iltaMatkaPlusIltatunnitYht += $iltatunnit_ja_iltamatka;
+
 
 	$yht[0] 	+= $tyotunnit;
 	$yht[1] 	+= $iltatunnit;
@@ -315,6 +313,9 @@ $this->breadcrumbs=array(
 	$yht[3] 	+= $sutunnit;
 	$matkaYht 	+= $matkatunnit;
 	$mPlusTYht 	+= $tyotunnit+$matkatunnit;
+	$iltaMatkaPlusIltatunnitYht += $iltatunnit_ja_iltamatka;
+	$lounYht 	+= $loun;
+	$matkaIltaYht 	+= $matkaIlta;
 
 	$this->renderPartial('_palkkataulukko',array(
 			'data'=>$data,
