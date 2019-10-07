@@ -8,14 +8,15 @@
 		$iltatunnit_tyotjamatkat = 0;
 		$sum 	= 0;
 
+		if($sutunnit != 0){
+			$sutunnit = $this->num($sutunnit);
+		}
+
 		if($iltatunnit != 0){
 			$iltatunnit_tyotjamatkat = '<b>Työt</b>:<br>'.$this->num($iltatunnit);
 	        } else {
 			$iltatunnit = '';
 	  	}
-
-		if($sutunnit != 0)
-		$sutunnit = $this->num($sutunnit);
 
 		if($matkaIlta != 0){
 			$matkaIlta = '<br><b>Matkat</b>:<br>'.$this->num($matkaIlta);
