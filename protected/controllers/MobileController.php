@@ -1950,7 +1950,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				CASE
 				WHEN
 					TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > TIME('18:00')
-					&& TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) < TIME('23:00')
+					&& TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) <= TIME('23:00')
 				THEN
 					TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), TIME('18:00')))
 				WHEN
