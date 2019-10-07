@@ -2,29 +2,26 @@
 /* @var $this MobileController */
 /* @var $data Mobile */
 
-		$sum 	= '';
-		$sumI 	= '';
 		$korv 	= '';
 		$lisatt	= '';
 		$ennakko= '';
 		$iltatunnit_tyotjamatkat = 0;
+		$sum 	= 0;
 
-
-		$sum = $return[0];
-
-		if($iltatunnit != 0)
-		$iltatunnit_tyotjamatkat = '<b>Työt</b>:<br>'.$this->num($iltatunnit-$matkaIlta);
-	        else
-		$iltatunnit = '';
+		if($iltatunnit != 0){
+			$iltatunnit_tyotjamatkat = '<b>Työt</b>:<br>'.$this->num($iltatunnit);
+	        } else {
+			$iltatunnit = '';
+	  	}
 
 		if($sutunnit != 0)
 		$sutunnit = $this->num($sutunnit);
 
-		if($matkaIlta != 0)
-		$matkaIlta = '<br><b>Matkat</b>:<br>'.$this->num($matkaIlta);
-	        else
-		$matkaIlta = '';
-
+		if($matkaIlta != 0){
+			$matkaIlta = '<br><b>Matkat</b>:<br>'.$this->num($matkaIlta);
+	        } else {
+			$matkaIlta = '';
+		}
 
 
   $lisatt = $this->renderPartial('//lisatyotunnit/tidfromto',array(
@@ -46,8 +43,7 @@
 		),true);
 
 
-		$sum = $matka+$sum;
-		$sum = $this->num($sum);
+		$sum = $this->num($matkatunnit+$tyotunnit);
 
 ?>
 
@@ -55,11 +51,11 @@
 
 	<td class="tulostus_tekija col1"><?=$data->$tt_order_1.' '.$data->$tt_order_2?></td>
 	<td class="col2"><?php if($tp != 0) echo $tp; ?></td>
-	<td class="col3"><?php if($this->num($matka) != 0) echo $this->num($matka); ?></td>
-	<td class="col4"><?php if($return[0] != 0) echo $this->num($return[0]); ?></td>
+	<td class="col3"><?php if($this->num($matkatunnit) != 0) echo $this->num($matkatunnit); ?></td>
+	<td class="col4"><?php if($tyotunnit != 0) echo $this->num($tyotunnit); ?></td>
 	<td class="col5"><?php echo $sum; ?></td>
 	<td class="col6"><?php echo $iltatunnit_tyotjamatkat.$matkaIlta; ?></td>
-	<td class="col7"><?php if($iltatunnit != 0) echo $this->num($iltatunnit); ?></td>
+	<td class="col7"><?php echo $this->num($iltatunnit_ja_iltamatka); ?></td>
 	<td class="col8"><?php echo $this->num($loun); ?></td>
 	<td class="col8"><?=$this->num($yotunnit)?></td>
 	<td class="col9"><?php if($sutunnit != 0) echo $sutunnit; ?></td>

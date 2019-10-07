@@ -1925,26 +1925,66 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	public function TidfromtoMobiili($from, $to, $tid, $status=array(), $hyvaksytty='', $ilta=null, $yo=null, $su=null)
 	{
+		// <-- ILTA
+		$ilta_criteria = "
+        	SUM(CASE 
+	            WHEN 
+			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i')) >= TIME('18:00') 
+			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i')) > TIME('18:00') 
+			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i')) <= TIME('23:00') 
+			   THEN TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i')))
+	            WHEN 
+			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i')) < TIME('18:00') 
+			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i')) > TIME('18:00') 
+			&& TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i')) <= TIME('23:00') 
+			   THEN TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i'), TIME('18:00')))
+	            WHEN 
+			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i')) >= TIME('18:00') 
+			&& 
+			(
+			  TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i')) > TIME('23:00')
+			  || TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%d.%m.%Y')) != TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%d.%m.%Y'))
+			)
+			   THEN TIME_TO_SEC(TIMEDIFF(TIME('23:00'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i')))
+	            WHEN 
+			TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%H:%i')) < TIME('18:00') 
+			&& 
+			(
+			  TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%H:%i')) > TIME('23:00')
+			  || TIME(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%d.%m.%Y')) != TIME(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%d.%m.%Y'))
+			)
+			   THEN TIME_TO_SEC(TIMEDIFF(TIME('23:00'), TIME('18:00')))
+	            ELSE 0
+	        END) AS l_tunnit
+		";
+		//     ILTA -->
+
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 		$result = 0;
        		$criteria = new CDbCriteria();
+		if($ilta != null){
+        	$criteria->select = $ilta_criteria;
+		} else {
         	$criteria->select = "
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
 		";
+		}
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
 			AND palkanlaskentaan=1 
 			AND tid='".$tid."'
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."'
-			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 			AND deleted=0
 		";
 		if(count($status) > 0) {
 			$st_or = "status='".implode("' OR status='", $status)."'";
 			$criteria->addCondition ($st_or);
+		}
+		if($hyvaksytty == '' or $hyvaksytty == 2 or $hyvaksytty == 3) {
+			$criteria->addCondition (" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
 		}
 		if($hyvaksytty == 3) {
 			$criteria->addCondition (" hyvaksytty!='' ");
@@ -1952,10 +1992,14 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$lu = Mobile::model()->find($criteria);
 
        		$criteria = new CDbCriteria();
+		if($ilta != null){
+        	$criteria->select = $ilta_criteria;
+		} else {
         	$criteria->select = "
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
 		";
+		}
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
 			AND palkanlaskentaan=1 
@@ -1971,7 +2015,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if($hyvaksytty == 3) {
 			$criteria->addCondition (" hyvaksytty!='' ");
 		}
-		$tot = Toteutuneet::model()->find($criteria);
+		if($hyvaksytty != 1 or $hyvaksytty == ''){
+			$tot = Toteutuneet::model()->find($criteria);
+		}
 
 		if(isset($lu->l_tunnit)){ $result = $lu->l_tunnit; }
 		if(isset($tot->l_tunnit)){ $result = $result+$tot->l_tunnit; }
