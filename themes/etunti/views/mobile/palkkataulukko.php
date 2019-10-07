@@ -295,10 +295,10 @@ $this->breadcrumbs=array(
 	}
 */
 	//     Ilta Yo Su -->
-
 	//$matkaIlta = $this->matkaIlta($data->id,$from,$to);
 
 	$iltatunnit = $this->TidfromtoMobiili($from, $to, $data->id, array(3), $_GET['lu_tai_tot'], true, null, null);
+	$yotunnit = $this->TidfromtoMobiili($from, $to, $data->id, array(3), $_GET['lu_tai_tot'], null, true, null);
 	$matkaIlta = $this->TidfromtoMobiili($from, $to, $data->id, array(2), $_GET['lu_tai_tot'], true, null, null);
 	$tyotunnit = $this->TidfromtoMobiili($from, $to, $data->id, array(3), $_GET['lu_tai_tot'], null, null, null);
 	$matkatunnit = $this->TidfromtoMobiili($from, $to, $data->id, array(2), $_GET['lu_tai_tot'], null, null, null);
