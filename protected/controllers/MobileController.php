@@ -1923,6 +1923,124 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		return $result;
 	}
 
+	/**
+	 * Get day/evening/night work hours for tids.
+	 * @param mixed $tids Array of tids, or single tid in string or int format.
+	 * @param int $time Lookup time, 0 = day, 1 = evening, 2 = nighttime.
+	 */
+	public function TidfromtoMobiiliTest($from, $to, $tids, $status = array(), $hyvaksytty = '', $time = 0)
+	{
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+		$tids = is_array($tids) ? implode(", ", $tids) : $tids;
+		$status = is_array($status) ? (count($status) > 0 ? array_shift($status) : 0) : $status;
+		$criteria = new CDbCriteria();
+		$criteria->group = "tid";
+
+		// Helper function to avoid duplicate code (doesn't handle 'hyvaksytty' as it differs)
+		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $time) {
+			$criteria->group = "tid";
+			// Select statements
+			if ($time == 1) {
+				// Note: 18000 at end of query is equal to TIME_TO_SEC(TIMEDIFF('23:00:00', '18:00:00'))
+				$criteria->select = "tid, SUM(CASE
+					WHEN
+						TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) >= '18:00:00'
+					THEN CASE
+						WHEN
+							TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > '23:00:00' ||
+							DATE(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) != DATE(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))
+						THEN
+							TIME_TO_SEC(TIMEDIFF('23:00:00', TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
+						WHEN
+							TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > '18:00:00'
+						THEN
+							TIME_TO_SEC(TIMEDIFF(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')))
+						ELSE
+							0
+						END
+					ELSE CASE
+						WHEN
+							TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > '23:00:00' ||
+							DATE(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) != DATE(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))
+						THEN
+							18000
+						WHEN
+							TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > '18:00:00'
+						THEN
+							TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), '18:00:00'))
+						ELSE
+							0
+						END
+					END) AS l_tunnit";
+			} elseif ($time == 2) {
+				$criteria->select = "tid, SUM(CASE
+					WHEN
+						TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) <= TIME('06:00') &&
+						TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) <= TIME('06:00')
+					THEN
+						TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
+					WHEN
+						TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) <= TIME('06:00') &&
+						TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > TIME('06:00')
+					THEN
+						TIME_TO_SEC(TIMEDIFF(TIME('06:00'), TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
+					ELSE
+						0
+					END) AS l_tunnit";
+			} else {
+				$criteria->select = "
+					tid, SUM(TIME_TO_SEC(TIMEDIFF(
+						STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'),
+						STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i')
+					))) as l_tunnit";
+			}
+
+			// Conditions
+			$criteria->condition = "
+				aloitan!='' AND loppui!=''
+				AND palkanlaskentaan=1q
+				AND tid IN ($tids)
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
+				AND deleted=0";
+			if ($status) $criteria->addCondition("status='$status'");
+		};
+
+		// Build CDbCriteria
+		$buildCriteria($criteria);
+
+		// Add conditions based on 'hyvaksytty' (not added by buildCriteria().)
+		switch ($hyvaksytty) {
+				// Case 3 falls through due to no break statement, this is intentional.
+			case 3:
+				$criteria->addCondition("hyvaksytty!='' ");
+			case '':
+			case 2:
+				$criteria->addCondition("id NOT IN (SELECT kid FROM sivexkuitti_repaired)");
+		}
+
+		// Exec query
+		$lu = Mobile::model()->findAll($criteria);
+
+		// Build second CDbCriteria for sivexkuitti_repaired (toteutuneet) if $hyvaksytty != 1
+		$tot = [];
+		if ($hyvaksytty != 1) {
+			$criteria = new CDbCriteria();
+			$buildCriteria($criteria);
+			if ($hyvaksytty == 3)
+				$criteria->addCondition(" hyvaksytty!='' ");
+			$tot = Toteutuneet::model()->findAll($criteria);
+		}
+
+		// Build final array for results, in form of tid => tunnit.
+		$set = [];
+		foreach ($lu as $l)
+			$set[$l->tid] = $l->l_tunnit;
+		foreach ($tot as $t)
+			$set[$t->tid] = ($set[$t->tid] ?? 0) + $t->l_tunnit;
+		return $set;
+	}
+
 	public function TidfromtoMobiili($from, $to, $tid, $status=array(), $hyvaksytty='', $ilta=null, $yo=null, $su=null)
 	{
 		// <-- ILTA
