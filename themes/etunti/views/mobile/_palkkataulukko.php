@@ -13,7 +13,7 @@
 		}
 
 		if($iltatunnit != 0){
-			$iltatunnit_tyotjamatkat = '<b>Työt</b>:<br>'.$this->num($iltatunnit);
+			$iltatunnit_tyotjamatkat = '<b>Työt</b>:<br>'.$iltatunnit;
 	        } else {
 			$iltatunnit = '';
 	  	}
