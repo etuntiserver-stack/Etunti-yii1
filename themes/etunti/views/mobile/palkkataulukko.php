@@ -285,15 +285,15 @@ $this->breadcrumbs=array(
 	$matkaYht += $m;
 
 	// <-- Ilta Yo Su
-
+/*
 	foreach ($period as $dt) {
 		$IltaYoSu = $toteutuneet[0]->IltaYoSu($data->id, $dt->format("Y-m-d"));
 		$iltatunnit += $IltaYoSu[0];
 		$yotunnit += $IltaYoSu[1];
 		$sutunnit += $IltaYoSu[2];
 	}
-
-	//$iltatunnit += $this->TidfromtoMobiili($from, $to, $data->id, array(3,2), $_GET['lu_tai_tot'], true);
+*/
+	$iltatunnit += $this->TidfromtoMobiili($from, $to, $data->id, array(3,2), $_GET['lu_tai_tot'], true);
 	//     Ilta Yo Su -->
 
 	$matkaIlta = $this->matkaIlta($data->id,$from,$to);

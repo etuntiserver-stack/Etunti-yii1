@@ -607,11 +607,11 @@ $xml = '
 		//$mobile = Yii::app()->createController('Mobile');
 
 		// <-- Tyotunnit	
-		$tyotunnit = $mobile[0]->TidfromtoStatus($pvm,$pvm,$tid,3);
+		$tyotunnit = $mobile[0]->TidfromtoMobiili($pvm,$pvm,$tid,array(3));
 		//     Tyotunnit -->
 
 		// <-- Lounaat	
-		$lounaat = $mobile[0]->TidfromtoStatus($pvm,$pvm,$tid,10);
+		$lounaat = $mobile[0]->TidfromtoMobiili($pvm,$pvm,$tid,array(10));
 		//     Lounaat -->
 
 		// <-- Matkat	
