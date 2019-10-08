@@ -1939,10 +1939,6 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			$set[$tids] = 0;
 		}
 
-		// Temporarily return 0 for nighttime hours as the query is still being worked on.
-		if ($time ==2)
-			return $set;
-
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 		$status = is_array($status) ? (count($status) > 0 ? array_shift($status) : 0) : $status;
@@ -1988,17 +1984,54 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			} elseif ($time == 2) {
 				$criteria->select = "tid, SUM(CASE
 					WHEN
-						TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) <= TIME('06:00') &&
-						TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) <= TIME('06:00')
-					THEN
-						TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
-					WHEN
-						TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) <= TIME('06:00') &&
-						TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > TIME('06:00')
-					THEN
-						TIME_TO_SEC(TIMEDIFF(TIME('06:00'), TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
-					ELSE
-						0
+						DATE(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) = DATE(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))
+					THEN CASE
+						WHEN
+							TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) <= '06:00:00'
+						THEN
+							TIME_TO_SEC(TIMEDIFF(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')))
+						WHEN
+							TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > '23:00:00'
+						THEN CASE
+							WHEN
+								TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) <= '06:00:00'
+							THEN
+								TIME_TO_SEC(TIMEDIFF('06:00:00', TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')))) +
+								TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), '23:00:00'))
+							WHEN
+								TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) > '23:00:00'
+							THEN
+								TIME_TO_SEC(TIMEDIFF(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')))
+							ELSE
+								TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), '23:00:00'))
+							END
+						WHEN
+							TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) <= '06:00:00'
+						THEN
+							TIME_TO_SEC(TIMEDIFF('06:00:00', TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
+						ELSE
+							0
+						END
+					ELSE CASE
+						WHEN
+							TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) <= '06:00:00'
+						THEN CASE
+							WHEN
+								TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) <= '23:00:00'
+							THEN
+								TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), '00:00:00')) + 3600
+							ELSE
+								TIME_TO_SEC(TIMEDIFF(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')))
+							END
+						ELSE CASE
+							WHEN
+								TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) <= '23:00:00'
+							THEN
+								25200 /* TIME_TO_SEC('06:00:00') + TIME_TO_SEC('01:00:00') */
+							ELSE
+								TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')), '23:00:00')) + 21600
+							END
+						END
 					END) AS l_tunnit";
 			} else {
 				$criteria->select = "
