@@ -556,12 +556,6 @@ $xml = '
 		   $muutos = true;
 
 	   	$get[strtotime($tvVal->aloitan).'_'.$tvVal->id] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->kid."//".$tvVal->asiakas_hyvaksy."//".$tvVal->tietoja."//".$tvVal->sairaus."//".$tvVal->status."//".$tvVal->tuoteID;
-	
-		  $tvVal->loppui = date("Y-m-d H:i",strtotime($tvVal->loppui));
-		  $tvVal->aloitan = date("Y-m-d H:i",strtotime($tvVal->aloitan));
-	
-		   if(!empty($tvVal->aloitan) and !empty($tvVal->loppui))
-		   $tun += strtotime($tvVal->loppui)-strtotime($tvVal->aloitan);
 		   }
 		}
 	
@@ -586,14 +580,8 @@ $xml = '
 		   $muutos = false;
 
 		   $get[strtotime($tvVal->aloitan).'_'.$tvVal->id] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->id."//".$tvVal->asiakas_hyvaksy."////".$tvVal->sairaus."//".$tvVal->status."//".$tvVal->tuoteID;
-	
-	
-		  $tvVal->loppui = date("Y-m-d H:i",strtotime($tvVal->loppui));
-		  $tvVal->aloitan = date("Y-m-d H:i",strtotime($tvVal->aloitan));
-	
-		   if(!empty($tvVal->aloitan) and !empty($tvVal->loppui))
-		   $tun += strtotime($tvVal->loppui)-strtotime($tvVal->aloitan);
 		   }
+	
 		}
 	
 		ksort($get);
@@ -606,7 +594,8 @@ $xml = '
 	
 		//$mobile = Yii::app()->createController('Mobile');
 
-		$tyotunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 3, 0);
+		$tyotunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksynta*/ 2, 0);
+		$hyvaksytyt_tyotunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 3, 0);
 		$lounaat 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(10), /*hyvaksytyt*/ 3, 0);
 		$matkatunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(2), /*hyvaksytyt*/ 3, 0);
 		$iltatunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 3, 1);
@@ -625,8 +614,8 @@ $xml = '
 
 		$arr = array(
 			'laatikot'=>$laatikot,
-			'toteutuneetTunnit'=>(int)$tun,
 			'tyotunnit'=>$tyotunnit[$tid],
+			'hyvaksytyt_tyotunnit'=>$hyvaksytyt_tyotunnit[$tid],
 			'lounaat'=>$lounaat[$tid],
 			'matkatunnit'=>$matkatunnit[$tid],
 			'iltatunnit'=>$iltatunnit[$tid],

@@ -389,10 +389,10 @@ function dateDiff($start, $end) {
     echo '</td>';
 
 
-    if($suunnittelut > $totpvmtid['toteutuneetTunnit'])
-    	$eroAika = $suunnittelut-$totpvmtid['toteutuneetTunnit'];
+    if($suunnittelut > $totpvmtid['hyvaksytyt_tyotunnit'])
+    	$eroAika = $suunnittelut-$totpvmtid['hyvaksytyt_tyotunnit'];
     else
-    	$eroAika = ($totpvmtid['toteutuneetTunnit']-$suunnittelut);
+    	$eroAika = ($totpvmtid['hyvaksytyt_tyotunnit']-$suunnittelut);
 
     echo '<td class="yhteensaPvm_'.date("W",strtotime($date)).' forFooter" id="yhteensaPvm_'.$did.'_'.$tid.'">
 	   <div class="row">
@@ -403,9 +403,9 @@ function dateDiff($start, $end) {
 	   </div>
 	   <div class="row">
 	    </div><div class="col-sm-5">
-		'.Yii::t('main', 'Hyväksytyt: ').'
+		'.Yii::t('main', 'Hyväksytyt työtunnit: ').'
 	    </div><div class="col-sm-6">
-		<span class="pvmTot" total="'.(int)$totpvmtid['toteutuneetTunnit'].'">'.$this->sprint($totpvmtid['toteutuneetTunnit']).'</span>
+		<span class="pvmTot" total="'.(int)$totpvmtid['hyvaksytyt_tyotunnit'].'">'.$this->sprint($totpvmtid['hyvaksytyt_tyotunnit']).'</span>
 	   </div>
 	   <div class="row">
 	    </div><div class="col-sm-5">
@@ -528,9 +528,9 @@ function dateDiff($start, $end) {
 
 
     $yhtSuunnittelutWeek += $suunnittelut;
-    if(isset($totpvmtid['toteutuneetTunnit'])){
-		$yhtTotpvmtid 		+= $totpvmtid['toteutuneetTunnit'];
-		$yhteensaToteutuneet	+= $totpvmtid['toteutuneetTunnit'];
+    if(isset($totpvmtid['hyvaksytyt_tyotunnit'])){
+		$yhtTotpvmtid 		+= $totpvmtid['hyvaksytyt_tyotunnit'];
+		$yhteensaToteutuneet	+= $totpvmtid['hyvaksytyt_tyotunnit'];
     }
     if(isset($exLatikoLu[1])){
 	if( (int)$exLatikoLu[1] > 0 ){
@@ -567,7 +567,7 @@ function dateDiff($start, $end) {
 		  <tr>
 		   <th>'.Yii::t('main', 'Suunn.').'</th>
 		   <th>'.Yii::t('main', 'Luetut').'</th>
-		   <th>'.Yii::t('main', 'Hyväksytyt').'</th>
+		   <th>'.Yii::t('main', 'Hyväksytyt työtunnit').'</th>
 		   <th>'.Yii::t('main', 'Työtunnit').'</th>
 		   <th>'.Yii::t('main', 'Matkat').'</th>
 		   <th>'.Yii::t('main', 'Lounaat').'</th>
@@ -641,7 +641,7 @@ function dateDiff($start, $end) {
 		   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
 		   <th><?php echo Yii::t('main', 'Suunn.'); ?></th>
 		   <th><?php echo Yii::t('main', 'Luetut'); ?></th>
-		   <th><?php echo Yii::t('main', 'Hyväksytyt'); ?></th>
+		   <th><?php echo Yii::t('main', 'Hyväksytyt työtunnit'); ?></th>
 		   <th><?php echo Yii::t('main', 'Työtunnit'); ?></th>
 		   <th><?php echo Yii::t('main', 'Matkat'); ?></th>
 		   <th><?php echo Yii::t('main', 'Lounaat'); ?></th>
