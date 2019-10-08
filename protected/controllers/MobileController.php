@@ -1928,11 +1928,18 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	 * @param mixed $tids Array of tids, or single tid in string or int format.
 	 * @param int $time Lookup time, 0 = day, 1 = evening, 2 = nighttime.
 	 */
-	public function TidfromtoMobiiliTest($from, $to, $tids, $status = array(), $hyvaksytty = '', $time = 0)
+	public function TidfromtoMobiiliAll($from, $to, $tids, $status = array(), $hyvaksytty = '', $time = 0)
 	{
+		$set = [];
+		if (is_array($tids)) {
+			foreach($tids as $tid)
+				$set[$tid] = 0;
+			$tids = implode(", ", $tids);
+		} else {
+			$set[$tids] = 0;
+		}
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
-		$tids = is_array($tids) ? implode(", ", $tids) : $tids;
 		$status = is_array($status) ? (count($status) > 0 ? array_shift($status) : 0) : $status;
 		$criteria = new CDbCriteria();
 		$criteria->group = "tid";
@@ -1999,7 +2006,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			// Conditions
 			$criteria->condition = "
 				aloitan!='' AND loppui!=''
-				AND palkanlaskentaan=1q
+				AND palkanlaskentaan=1
 				AND tid IN ($tids)
 				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
 				AND deleted=0";
@@ -2033,11 +2040,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 
 		// Build final array for results, in form of tid => tunnit.
-		$set = [];
 		foreach ($lu as $l)
-			$set[$l->tid] = $l->l_tunnit;
+			$set[$l->tid] += $l->l_tunnit;
 		foreach ($tot as $t)
-			$set[$t->tid] = ($set[$t->tid] ?? 0) + $t->l_tunnit;
+			$set[$t->tid] += $t->l_tunnit;
 		return $set;
 	}
 

@@ -252,99 +252,85 @@ $this->breadcrumbs=array(
   $begin = new DateTime(date("Y-m-d", strtotime($from)));
   $end = new DateTime(date("Y-m-d", strtotime($to." +1 day")));
   $interval = DateInterval::createFromDateString('1 day');
-  $period = new DatePeriod($begin, $interval, $end);
+	$period = new DatePeriod($begin, $interval, $end);
+
+	$tids = [];
+	foreach ($model as $data)
+		$tids[] = $data->id;
+	$tyotunnit = $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], 0);
+	$iltatunnit = $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], 1);
+	$yotunnit = $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], 2);
+	$matkaIlta = $this->TidfromtoMobiiliAll($from, $to, $tids, array(2), $_GET['lu_tai_tot'], 1);
+	$matkatunnit = $this->TidfromtoMobiiliAll($from, $to, $tids, array(2), $_GET['lu_tai_tot'], 0);
+	$loun = $this->TidfromtoMobiiliAll($from, $to, $tids, array(10), $_GET['lu_tai_tot'], 0);
 
   foreach($model as $data)
   {
-	$yotunnit	= 0;
-	$iltatunnit	= 0;
-	$sutunnit	= 0;
+		$sutunnit	= 0;
 
-	$tids[] = $data->id;
-	$tp = $this->Tp($data->id,$from,$to);
-  	$sl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id,'SL');
-	$slYht += $sl;
-  	$ls = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id,'LS');
-	$lsYht += $ls;
-  	$spl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id,'SPL');
-	$splYht += $spl;
-  	$vl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id, 'VL');
-	$vlYht += $vl;
-  	$vkl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id, 'VKL');
-	$vklYht += $vkl;
-	$totalTp += $tp;
-  	$pyhat = $this->pyhapaivat($data->id,$from,$to,"pyhat");
-	$pyhatYht += $pyhat;
-  	$el = $this->pyhapaivat($data->id,$from,$to,"el");
-	$elYht += $el;
-/*
-	$m = $this->renderPartial('//mobile/tidfromtomatkat',array(
-		'from'=>$from,
-		'to'=>$to,
-		'tid'=>$data->id
-		),true);
-*/
+		$tp = $this->Tp($data->id,$from,$to);
+			$sl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id,'SL');
+		$slYht += $sl;
+			$ls = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id,'LS');
+		$lsYht += $ls;
+			$spl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id,'SPL');
+		$splYht += $spl;
+			$vl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id, 'VL');
+		$vlYht += $vl;
+			$vkl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id, 'VKL');
+		$vklYht += $vkl;
+		$totalTp += $tp;
+			$pyhat = $this->pyhapaivat($data->id,$from,$to,"pyhat");
+		$pyhatYht += $pyhat;
+			$el = $this->pyhapaivat($data->id,$from,$to,"el");
+		$elYht += $el;
 
-	// <-- Ilta Yo Su
-/*
-	foreach ($period as $dt) {
-		$IltaYoSu = $toteutuneet[0]->IltaYoSu($data->id, $dt->format("Y-m-d"));
-		$iltatunnit += $IltaYoSu[0];
-		$yotunnit += $IltaYoSu[1];
-		$sutunnit += $IltaYoSu[2];
-	}
-*/
-	//     Ilta Yo Su -->
-	//$matkaIlta = $this->matkaIlta($data->id,$from,$to);
+		/* $m = $this->renderPartial('//mobile/tidfromtomatkat',array(
+				'from'=>$from,
+				'to'=>$to,
+				'tid'=>$data->id
+				),true); */
 
-	$iltatunnit = $this->TidfromtoMobiili($from, $to, $data->id, array(3), $_GET['lu_tai_tot'], true, null, null);
-	$yotunnit = $this->TidfromtoMobiili($from, $to, $data->id, array(3), $_GET['lu_tai_tot'], null, true, null);
-	$matkaIlta = $this->TidfromtoMobiili($from, $to, $data->id, array(2), $_GET['lu_tai_tot'], true, null, null);
-	$tyotunnit = $this->TidfromtoMobiili($from, $to, $data->id, array(3), $_GET['lu_tai_tot'], null, null, null);
-	$matkatunnit = $this->TidfromtoMobiili($from, $to, $data->id, array(2), $_GET['lu_tai_tot'], null, null, null);
-	$loun = $this->TidfromtoMobiili($from, $to, $data->id, array(10), $_GET['lu_tai_tot'], null, null, null);
+		$iltatunnit_ja_iltamatka = $iltatunnit[$data->id]+$matkaIlta[$data->id];
+		$yht[0] 	+= $tyotunnit[$data->id];
+		$yht[1] 	+= $iltatunnit[$data->id];
+		$yht[2] 	+= $yotunnit[$data->id];
+		$yht[3] 	+= $sutunnit;
+		$matkaYht 	+= $matkatunnit[$data->id];
+		$mPlusTYht 	+= $tyotunnit[$data->id]+$matkatunnit[$data->id];
+		$iltaMatkaPlusIltatunnitYht += $iltatunnit_ja_iltamatka;
+		$lounYht 	+= $loun[$data->id];
+		$matkaIltaYht 	+= $matkaIlta[$data->id];
 
-	$iltatunnit_ja_iltamatka = $iltatunnit+$matkaIlta;
+		$this->renderPartial('_palkkataulukko',array(
+				'data'=>$data,
+				'tt_order_1' => $tt_order_1,
+				'tt_order_2' => $tt_order_2,
+				'tyotunnit' => $tyotunnit[$data->id],
+				'matkatunnit'=>$matkatunnit[$data->id],
+				'tp'=>$tp,
+				'sl'=>$sl,
+				'spl'=>$spl,
+				'ls'=>$ls,
+				'vl'=>$vl,
+				'vkl'=>$vkl,
+				'from'=>$from,
+				'to'=>$to,
+				'pyhat'=>$pyhat,
+				'el'=>$el,
+				'loun'=>$loun[$data->id],
+				'yotunnit' => $yotunnit[$data->id],
+				'iltatunnit' => $iltatunnit[$data->id],
+				'matkaIlta'=>$matkaIlta[$data->id],
+				'iltatunnit_ja_iltamatka' => $iltatunnit_ja_iltamatka,
+				'sutunnit' => $sutunnit
+		));
+		}
 
-	$yht[0] 	+= $tyotunnit;
-	$yht[1] 	+= $iltatunnit;
-	$yht[2] 	+= $yotunnit;
-	$yht[3] 	+= $sutunnit;
-	$matkaYht 	+= $matkatunnit;
-	$mPlusTYht 	+= $tyotunnit+$matkatunnit;
-	$iltaMatkaPlusIltatunnitYht += $iltatunnit_ja_iltamatka;
-	$lounYht 	+= $loun;
-	$matkaIltaYht 	+= $matkaIlta;
-
-	$this->renderPartial('_palkkataulukko',array(
-			'data'=>$data,
-			'tt_order_1' => $tt_order_1,
-			'tt_order_2' => $tt_order_2,
-			'tyotunnit' => $tyotunnit,
-			'matkatunnit'=>$matkatunnit,
-			'tp'=>$tp,
-			'sl'=>$sl,
-			'spl'=>$spl,
-			'ls'=>$ls,
-			'vl'=>$vl,
-			'vkl'=>$vkl,
-			'from'=>$from,
-			'to'=>$to,
-			'pyhat'=>$pyhat,
-			'el'=>$el,
-			'loun'=>$loun,
-			'yotunnit' => $yotunnit,
-			'iltatunnit' => $iltatunnit,
-			'matkaIlta'=>$matkaIlta,
-			'iltatunnit_ja_iltamatka' => $iltatunnit_ja_iltamatka,
-			'sutunnit' => $sutunnit
-	));
-  }
-
-  if($matkaIltaYht != 0){
-	$matkaIltaYht = '<br><b>Matkat</b>:<br>'.$this->num($matkaIltaYht);
-  } else {
-	$matkaIltaYht = '';
+		if($matkaIltaYht != 0){
+		$matkaIltaYht = '<br><b>Matkat</b>:<br>'.$this->num($matkaIltaYht);
+		} else {
+		$matkaIltaYht = '';
   }
   ?>
   <tfoot>
