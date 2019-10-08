@@ -1938,6 +1938,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		} else {
 			$set[$tids] = 0;
 		}
+
+		// Temporarily return 0 for nighttime hours as the query is still being worked on.
+		if ($time ==2)
+			return $set;
+
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 		$status = is_array($status) ? (count($status) > 0 ? array_shift($status) : 0) : $status;
