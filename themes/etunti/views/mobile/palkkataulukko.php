@@ -263,10 +263,10 @@ $this->breadcrumbs=array(
 	$matkaIlta = $this->TidfromtoMobiiliAll($from, $to, $tids, array(2), $_GET['lu_tai_tot'], 1);
 	$matkatunnit = $this->TidfromtoMobiiliAll($from, $to, $tids, array(2), $_GET['lu_tai_tot'], 0);
 	$loun = $this->TidfromtoMobiiliAll($from, $to, $tids, array(10), $_GET['lu_tai_tot'], 0);
+	$sutunnit	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], 3);
 
   foreach($model as $data)
   {
-		$sutunnit	= 0;
 
 		$tp = $this->Tp($data->id,$from,$to);
 			$sl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id,'SL');
@@ -295,7 +295,7 @@ $this->breadcrumbs=array(
 		$yht[0] 	+= $tyotunnit[$data->id];
 		$yht[1] 	+= $iltatunnit[$data->id];
 		$yht[2] 	+= $yotunnit[$data->id];
-		$yht[3] 	+= $sutunnit;
+		$yht[3] 	+= $sutunnit[$data->id];
 		$matkaYht 	+= $matkatunnit[$data->id];
 		$mPlusTYht 	+= $tyotunnit[$data->id]+$matkatunnit[$data->id];
 		$iltaMatkaPlusIltatunnitYht += $iltatunnit_ja_iltamatka;
@@ -323,7 +323,7 @@ $this->breadcrumbs=array(
 				'iltatunnit' => $iltatunnit[$data->id],
 				'matkaIlta'=>$matkaIlta[$data->id],
 				'iltatunnit_ja_iltamatka' => $iltatunnit_ja_iltamatka,
-				'sutunnit' => $sutunnit
+				'sutunnit' => $sutunnit[$data->id]
 		));
 		}
 
