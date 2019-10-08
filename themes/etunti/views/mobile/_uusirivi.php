@@ -105,7 +105,7 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 		      //array_unshift($list, $list[$s->status]);
 		      echo $form->dropDownList($model,'status', 
 			 	$list, 
-				array('empty'=>Yii::t('main','Valitse tilanne'),'class'=>'form-control input-sm'));
+				array('class'=>'form-control input-sm'));
 		?>
 		<?php echo $form->error($model,'status'); ?>
 	</div>

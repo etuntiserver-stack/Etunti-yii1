@@ -302,7 +302,7 @@ function dateDiff($start, $end) {
     $columnDate = date("N/d.m",strtotime($date));
     $explColDate = explode("/",$columnDate);
     $did = date("Ymd",strtotime($date));
-
+    $totpvmtid = $this->TotPvmTid($date,$tid,$mobile);
 
     $korv = $this->korvauksetPvmTid(date("Y-m-d",strtotime($date)),$tid);
     if(!empty($korv))
@@ -385,10 +385,7 @@ function dateDiff($start, $end) {
     echo '</td>';
 
     echo '<td id="'.$did.'_'.$tid.'">';
-
-	   $totpvmtid = $this->TotPvmTid($date,$tid,$mobile);
 	   echo $totpvmtid['laatikot'];
-
     echo '</td>';
 
 
@@ -423,29 +420,19 @@ function dateDiff($start, $end) {
 
 
 
-    $tyotunnit = $totpvmtid['tyotunnit'];
-    $yhtTyotunnit += $tyotunnit;
-
-    $matka = $totpvmtid['matkat'];
-    $yhtMatka += $matka;
-
-    $lounaat = $totpvmtid['lounaat'];
-    $yhtLounaat += $lounaat;
-
-    $return 	= $this->IltaYoSu($tid,$date);
-
-    if(isset($return[0])){
-    $tyoIlta 	= $return[0];
-    $yhtIlta 	+= $tyoIlta;
-    }
-    if(isset($return[1])){
-    $tyoYo 	= $return[1];
-    $yhtYo 	+= $tyoYo;
-    }
-    if(isset($return[2])){
-    $tyoSu 	= $return[2];
-    $yhtSu 	+= $tyoSu;
-    }
+    $tyotunnit 		= $totpvmtid['tyotunnit'];
+    $yhtTyotunnit 	+= $tyotunnit;
+    $matka 		= $totpvmtid['matkatunnit'];
+    $yhtMatka 		+= $matka;
+    $lounaat 		= $totpvmtid['lounaat'];
+    $yhtLounaat 	+= $lounaat;
+    $tyoIlta 		= $totpvmtid['iltatunnit'];
+    $yhtIlta 		+= $tyoIlta;
+    $tyoYo 		= $totpvmtid['yotunnit'];
+    $yhtYo 		+= $tyoYo;
+    $tyoSu 		= $totpvmtid['sutunnit'];
+    $yhtSu 		+= $tyoSu;
+   
 
     $tyoPy 	= $this->pyhapaivat($tid,$date,"pyhat");
     $yhtPy 	+= $tyoPy;

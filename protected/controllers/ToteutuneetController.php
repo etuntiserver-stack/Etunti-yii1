@@ -606,39 +606,12 @@ $xml = '
 	
 		//$mobile = Yii::app()->createController('Mobile');
 
-		// <-- Tyotunnit	
-		$tyotunnit = $mobile[0]->TidfromtoMobiili($pvm,$pvm,$tid,array(3));
-		//     Tyotunnit -->
-
-		// <-- Lounaat	
-		$lounaat = $mobile[0]->TidfromtoMobiili($pvm,$pvm,$tid,array(10));
-		//     Lounaat -->
-
-		// <-- Matkat	
-		$matkat = $this->renderPartial('//mobile/tidfromtomatkat',array(
-		'from'=>date("Y-m-d",strtotime($pvm)),
-		'to'=>date("Y-m-d",strtotime($pvm)),
-		'tid'=>$tid
-		),true);
-		// <-- Matkat
-
-		// <-- Ilta, Yo, Sunnuntai
-		$yhtIlta= 0;
-		$yhtYo 	= 0;
-		$yhtSu 	= 0;
-	
-		$return 	= $this->IltaYoSu($tid,$pvm);
-	
-		if(isset($return[0])){
-		    $tyoIlta 	= $return[0];
-		}
-		if(isset($return[1])){
-		    $tyoYo 	= $return[1];
-		}
-		if(isset($return[2])){
-		    $tyoSu 	= $return[2];
-		}
-		//     Ilta, Yo, Sunnuntai -->
+		$tyotunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 3, 0);
+		$lounaat 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(10), /*hyvaksytyt*/ 3, 0);
+		$matkatunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(2), /*hyvaksytyt*/ 3, 0);
+		$iltatunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 3, 1);
+		$yotunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 3, 2);
+		$sutunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 3, 3);
 
 		// <-- SPL, SL, LS
 		$sl 	= (($mobile[0]->TidPvmVuosiloma($pvm, $tid, 'SL')['count'] > 0)?1:0); // Palkallinen
@@ -653,22 +626,21 @@ $xml = '
 		$arr = array(
 			'laatikot'=>$laatikot,
 			'toteutuneetTunnit'=>(int)$tun,
-			'ilta'=>(int)$tyoIlta,
-			'yo'=>(int)$tyoYo,
-			'su'=>(int)$tyoSu,
+			'tyotunnit'=>$tyotunnit[$tid],
+			'lounaat'=>$lounaat[$tid],
+			'matkatunnit'=>$matkatunnit[$tid],
+			'iltatunnit'=>$iltatunnit[$tid],
+			'yotunnit'=>$yotunnit[$tid],
+			'sutunnit'=>$sutunnit[$tid],
 			'spl'=>(int)$spl,
 			'sl'=>(int)$sl,
 			'ls'=>(int)$ls,
 			'vl'=>(int)$vl,
 			'vkl'=>(int)$vkl,
 			'ap'=>(int)$ap,
-			'tyotunnit'=>$tyotunnit,
-			'matkat'=>$matkat,
-			'lounaat'=>$lounaat,
 			'week'=>date("W", strtotime($pvm)),
 		);
 	        return $arr;
-
 
 	}
 
