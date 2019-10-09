@@ -248,41 +248,63 @@ $this->breadcrumbs=array(
   $loun		= 0;
   $lounYht	= 0;
 
-
+/*
   $begin = new DateTime(date("Y-m-d", strtotime($from)));
   $end = new DateTime(date("Y-m-d", strtotime($to." +1 day")));
   $interval = DateInterval::createFromDateString('1 day');
 	$period = new DatePeriod($begin, $interval, $end);
+*/
+  $tids = [];
+   foreach ($model as $data)
+	$tids[] = $data->id;
 
-	$tids = [];
-	foreach ($model as $data)
-		$tids[] = $data->id;
-	$tyotunnit = $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], 0);
-	$iltatunnit = $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], 1);
-	$yotunnit = $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], 2);
-	$matkaIlta = $this->TidfromtoMobiiliAll($from, $to, $tids, array(2), $_GET['lu_tai_tot'], 1);
-	$matkatunnit = $this->TidfromtoMobiiliAll($from, $to, $tids, array(2), $_GET['lu_tai_tot'], 0);
-	$loun = $this->TidfromtoMobiiliAll($from, $to, $tids, array(10), $_GET['lu_tai_tot'], 0);
-	$sutunnit	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], 3);
+  $tyotunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 0);
+  $iltatunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 1);
+  $yotunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 2);
+  $matkaIlta 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(2), $_GET['lu_tai_tot'], true, 1);
+  $matkatunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(2), $_GET['lu_tai_tot'], true, 0);
+  $loun 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(10), $_GET['lu_tai_tot'], true, 0);
+  $sutunnit	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 3);
+
+  // <-- SPL, SL, LS, VL, VKL, AP
+  $sl_all 		= $this->TidfromtoVuosilomaBetween($from,$to,$tids,'SL'); // Palkallinen
+  $spl_all 		= $this->TidfromtoVuosilomaBetween($from,$to,$tids,'SPL'); // Palkaton
+  $ls_all 		= $this->TidfromtoVuosilomaBetween($from,$to,$tids,'LS'); // Lapsen sairaus
+  $vl_all 		= $this->TidfromtoVuosilomaBetween($from,$to,$tids,'VL'); // Vuosiloma
+  $vkl_all 		= $this->TidfromtoVuosilomaBetween($from,$to,$tids,'VKL'); // Viikkolomapaiva  ( Poistettu kaytosta )
+  $ap_all 		= $this->TidfromtoVuosilomaBetween($from,$to,$tids,'AP'); // Arkipaiva
+  //     SPL, SL, LS, VL, VKL, AP -->
+
+  /*
+  echo '<pre>';
+  print_r($spl_all);
+  echo '<pre>';
+  exit;
+  */
 
   foreach($model as $data)
   {
 
 		$tp = $this->Tp($data->id,$from,$to);
-			$sl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id,'SL');
+
+		// <-- SPL, SL, LS, VL, VKL, AP
+		$sl 		= (isset($sl_all[$data->id]))? $sl_all[$data->id] : 0; // Palkallinen
+		$spl 		= (isset($spl_all[$data->id]))? $spl_all[$data->id] : 0; // Palkaton
+		$ls 		= (isset($ls_all[$data->id]))? $ls_all[$data->id] : 0; // Lapsen sairaus
+		$vl 		= (isset($vl_all[$data->id]))? $vl_all[$data->id] : 0; // Vuosiloma
+		$vkl 		= (isset($vkl_all[$data->id]))? $vkl_all[$data->id] : 0; // Viikkolomapaiva  ( Poistettu kaytosta )
+		//     SPL, SL, LS, VL, VKL, AP -->
+
+
 		$slYht += $sl;
-			$ls = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id,'LS');
 		$lsYht += $ls;
-			$spl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id,'SPL');
 		$splYht += $spl;
-			$vl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id, 'VL');
 		$vlYht += $vl;
-			$vkl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id, 'VKL');
 		$vklYht += $vkl;
 		$totalTp += $tp;
-			$pyhat = $this->pyhapaivat($data->id,$from,$to,"pyhat");
+		$pyhat = $this->pyhapaivat($data->id,$from,$to,"pyhat");
 		$pyhatYht += $pyhat;
-			$el = $this->pyhapaivat($data->id,$from,$to,"el");
+		$el = $this->pyhapaivat($data->id,$from,$to,"el");
 		$elYht += $el;
 
 		/* $m = $this->renderPartial('//mobile/tidfromtomatkat',array(

@@ -46,7 +46,7 @@ table { width: 100%; }
 
 
 
-   	    <form id="yhtveto" action="#" class="form-inline" method="POST">
+   	    <form id="yhtveto" action="#" class="form-inline" method="GET">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
@@ -67,7 +67,7 @@ table { width: 100%; }
 						'tekija', // name
 						'gui-input', //class
 						'nimi', // id
-						Yii::app()->session['tekija'], //selected
+						(isset($_GET['tekija']))? $_GET['tekija'] : '', //selected
 						1 // aktiivinen
 				);
 				echo $tyontekiatLista;
@@ -78,15 +78,16 @@ table { width: 100%; }
                           </label>
                         </div>
                       </div>
+<?php /*
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
 
 			   <?php
 			    $lounas = '';
-			    $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
+			    $lounas = ( isset($_GET['Lounastauko']))  ? 'selected' : '';
 			    $matka = '';
-			    $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
+			    $matka = ( isset($_GET['MATKA']))  ? 'selected' : '';
 
 			    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="'.Yii::t('main', 'Ei lasketa').'">';
 			    echo '<option value="Lounastauko" '.$lounas.'>'.Yii::t('main', 'Lounastauko').'</option>';
@@ -98,11 +99,12 @@ table { width: 100%; }
                           </label>
                         </div>
                       </div>
-                      <div class="col-md-2 col-md-offset-1">
+*/ ?>
+                      <div class="col-md-2 col-md-offset-2">
                         <div class="section">
                           <label class="field prepend-icon">
 
-	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['from'])) echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>">
+	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=date('d.m.Y', strtotime($from))?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -115,7 +117,7 @@ table { width: 100%; }
                         <div class="section">
                           <label class="field prepend-icon">
 
-   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['to'])) echo date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>">
+   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=date('d.m.Y', strtotime($to))?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -131,7 +133,7 @@ table { width: 100%; }
 
 
 
-		    <?php if($asetukset->netvisor_kaytto == 1 and Yii::app()->session['tekija']) : ?>
+		    <?php if($asetukset->netvisor_kaytto == 1 and isset($_GET['tekija'])) : ?>
                     <p><div class="row">
                       <div class="col-md-12">
 			<span class="btn btn-primary btn-lg lahetaKaikki btn-block myBgColors"><?php echo Yii::t('main', 'Lähetä kaikki netvisoriin'); ?></span>
@@ -139,18 +141,18 @@ table { width: 100%; }
                     </div></p>
 		    <?php endif; ?>
 
-		    <?php if(Yii::app()->session['tekija']) : ?>
+		    <?php if(isset($_GET['tekija'])) : ?>
                     <div class="row">
                       <div class="col-md-4">
 			<?php echo CHtml::link(Yii::t('main', 'HYVÄKSYMÄTTÖMÄT TUNNIT'), 
-				array('//mobile/hyvaksymattomat', 'tid' => Yii::app()->session['tekija']), array('target' => '_blank', 'class' => 'btn btn-lg btn-block tn-primary myBgColors')); 
+				array('//mobile/hyvaksymattomat', 'tid' => $_GET['tekija']), array('target' => '_blank', 'class' => 'btn btn-lg btn-block tn-primary myBgColors')); 
 			?>
 		      </div>
                       <div class="col-md-4">
-			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Hyväksyntänappi1'); ?> " for="alkaen" arvo="<?=date("Y-m-d", strtotime("first day of last month"))?>" tid="<?=Yii::app()->session['tekija']?>"><?php echo Yii::t('main', 'Hyväksy '.date("d.m.Y", strtotime("first day of last month")).' alkaen'); ?></span>
+			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Hyväksyntänappi1'); ?> " for="alkaen" arvo="<?=date("Y-m-d", strtotime("first day of last month"))?>" tid="<?=$_GET['tekija']?>"><?php echo Yii::t('main', 'Hyväksy '.date("d.m.Y", strtotime("first day of last month")).' alkaen'); ?></span>
 		      </div>
                       <div class="col-md-4">
-			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Hyväksyntänappi2'); ?> " for="kaikki" arvo="all" tid="<?=Yii::app()->session['tekija']?>"><?php echo Yii::t('main', 'Hyväksy kaikki '.date("d.m.Y", strtotime("-1 day")).' asti'); ?></span>
+			<span class="btn btn-primary btn-lg hyvaksyminen btn-block myBgColors" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Hyväksyntänappi2'); ?> " for="kaikki" arvo="all" tid="<?=$_GET['tekija']?>"><?php echo Yii::t('main', 'Hyväksy kaikki '.date("d.m.Y", strtotime("-1 day")).' asti'); ?></span>
 		      </div>
                     </div>
 		    <?php endif; ?>
@@ -169,14 +171,14 @@ table { width: 100%; }
 	<div id="ilmoitusLahetysta"></div>
 
 
-<?php if(Yii::app()->session['tekija']) : ?>
+<?php if(isset($_GET['tekija'])) : ?>
 
 <?php
 $netvisor_mita_lahetetaan = array();
 if($asetukset->netvisor_kaytto == 1){
 	$netvisor_mita_lahetetaan = json_decode($asetukset->netvisor_mita_lahetetaan);
 }
-$tid = Yii::app()->session['tekija'];
+$tid = $_GET['tekija'];
 
 function dateDiff($start, $end) {
   $start_ts = strtotime($start);
@@ -185,24 +187,24 @@ function dateDiff($start, $end) {
   return round($diff / 86400);
 }
 
-		if(isset(Yii::app()->session['from']))
-		$from = date("d.m.Y",strtotime(Yii::app()->session['from']));
-		if(isset(Yii::app()->session['to']))
-		$to = date("d.m.Y",strtotime(Yii::app()->session['to']));
+if(isset($_GET['from']))
+  $from = date("d.m.Y",strtotime($_GET['from']));
+if(isset($_GET['to']))
+  $to = date("d.m.Y",strtotime($_GET['to']));
 
-		$dateDiff = dateDiff($from, $to);
+$dateDiff = dateDiff($from, $to);
 ?>
   
   <div id="forTulostus">
 	<h3>
-		<?php echo $this->etuSukunimi(Yii::app()->session['tekija']); ?>, 
-		<?php echo date("d.m.Y",strtotime(Yii::app()->session['from'])); ?> - <?php echo date("d.m.Y",strtotime(Yii::app()->session['to'])); ?>
+		<?php echo $this->etuSukunimi($_GET['tekija']); ?>, 
+		<?php echo date("d.m.Y",strtotime($_GET['from'])); ?> - <?php echo date("d.m.Y",strtotime($_GET['to'])); ?>
 	</h3>
   </div>
 
 
   <div class="panel heading-border">
-   <div class="panel-heading"><?php echo Yii::t('main', 'Yhteensä'); ?> <?php echo date("d.m.Y",strtotime(Yii::app()->session['from'])); ?> - <?php echo date("d.m.Y",strtotime(Yii::app()->session['to'])); ?></div>
+   <div class="panel-heading"><?php echo Yii::t('main', 'Yhteensä'); ?> <?php echo date("d.m.Y",strtotime($_GET['from'])); ?> - <?php echo date("d.m.Y",strtotime($_GET['to'])); ?></div>
    <div class="panel-body">
 	<div id="yhteensaTfootContent"></div>
    </div>
@@ -240,17 +242,12 @@ function dateDiff($start, $end) {
   $yhtTyotunnit	= 0;
   $yhtLounaat	= 0;
 
-  $viikkoBreak 	= false;
-
-  $tyotunnit	= 0;
-  $lounaat	= 0;
   $tyoPy 	= 0;
   $yhtPy	= 0;
   $tyoEl 	= 0;
   $yhtEl	= 0;
   $yhtPyWeek	= 0;
   $yhtElWeek	= 0;
-
 
   $suunnittelut = 0;
   $yhtSuunnittelut = 0;
@@ -259,14 +256,7 @@ function dateDiff($start, $end) {
   $yhteensaLuetut 	= 0;
   $yhteensaToteutuneet 	= 0;
 
-
   $mobile = Yii::app()->createController('Mobile');
-  $sl 		= 0;
-  $spl 		= 0;
-  $ls 		= 0;
-  $vl 		= 0;
-  $vkl 		= 0;
-
   $yhtSPLWeek	= 0;
   $yhtSLWeek	= 0;
   $yhtLSWeek	= 0;
@@ -281,6 +271,32 @@ function dateDiff($start, $end) {
   $yhtVKL	= 0;
   $yhtAP	= 0;
 
+  $tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksynta*/ 2, false, 0, true);
+  $hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksytyt*/ 3, false, 0, true);
+  $lounaat_all 		= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), /*hyvaksytyt*/ 3, false, 0, true);
+  $matkatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2), /*hyvaksytyt*/ 3, false, 0, true);
+  $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksytyt*/ 3, false, 1, true);
+  $yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksytyt*/ 3, false, 2, true);
+  $sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksytyt*/ 3, false, 3, true);
+
+  // <-- SPL, SL, LS, VL, VKL, AP
+  $sl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'SL',true); // Palkallinen
+  $spl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'SPL',true); // Palkaton
+  $ls_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'LS',true); // Lapsen sairaus
+  $vl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'VL',true); // Vuosiloma
+  $vkl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'VKL',true); // Viikkolomapaiva  ( Poistettu kaytosta )
+  $ap_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'AP',true); // Arkipaiva
+  //     SPL, SL, LS, VL, VKL, AP -->
+
+  $luetut_laatikot = json_decode($this->LuetutPvmTidBetween($from,$to,$tid), true);
+  $toteutuneet_laatikot = json_decode($this->TotPvmTidBetween($from,$to,$tid), true);
+/*
+echo '<pre>';
+print_r($luetut_laatikot['laatikkot']);
+echo '<pre>';
+exit;
+*/
+
   for ($i = 0; $i <= $dateDiff; $i++) 
   {
   
@@ -291,7 +307,31 @@ function dateDiff($start, $end) {
     $columnDate = date("N/d.m",strtotime($date));
     $explColDate = explode("/",$columnDate);
     $did = date("Ymd",strtotime($date));
-    $totpvmtid = $this->TotPvmTid($date,$tid,$mobile);
+
+    $pvm		= date("Y-m-d", strtotime($date));
+    $tyotunnit		= (isset($tyotunnit_all[$pvm][$tid]))? $tyotunnit_all[$pvm][$tid] : 0;
+    $hyv_tyotunnit 	= (isset($hyv_tyotunnit_all[$pvm][$tid]))? $hyv_tyotunnit_all[$pvm][$tid] : 0;
+    $lounaat 		= (isset($lounaat_all[$pvm][$tid]))? $lounaat_all[$pvm][$tid] : 0;
+    $matkatunnit 	= (isset($matkatunnit_all[$pvm][$tid]))? $matkatunnit_all[$pvm][$tid] : 0;
+    $iltatunnit 	= (isset($iltatunnit_all[$pvm][$tid]))? $iltatunnit_all[$pvm][$tid] : 0;
+    $yotunnit 		= (isset($yotunnit_all[$pvm][$tid]))? $yotunnit_all[$pvm][$tid] : 0;
+    $sutunnit 		= (isset($sutunnit_all[$pvm][$tid]))? $sutunnit_all[$pvm][$tid] : 0;
+
+    // <-- SPL, SL, LS, VL, VKL, AP
+    $sl 		= (isset($sl_all[$pvm][$tid]))? $sl_all[$pvm][$tid] : 0; // Palkallinen
+    $spl 		= (isset($spl_all[$pvm][$tid]))? $spl_all[$pvm][$tid] : 0; // Palkaton
+    $ls 		= (isset($ls_all[$pvm][$tid]))? $ls_all[$pvm][$tid] : 0; // Lapsen sairaus
+    $vl 		= (isset($vl_all[$pvm][$tid]))? $vl_all[$pvm][$tid] : 0; // Vuosiloma
+    $vkl 		= (isset($vkl_all[$pvm][$tid]))? $vkl_all[$pvm][$tid] : 0; // Viikkolomapaiva  ( Poistettu kaytosta )
+    $ap 		= (isset($ap_all[$pvm][$tid]))? $ap_all[$pvm][$tid] : 0; // Arkipaiva
+    //     SPL, SL, LS, VL, VKL, AP -->
+
+    $yhtTyotunnit 	+= $tyotunnit;
+    $yhtMatka 		+= $matkatunnit;
+    $yhtLounaat 	+= $lounaat;
+    $yhtIlta 		+= $iltatunnit;
+    $yhtYo 		+= $yotunnit;
+    $yhtSu 		+= $sutunnit;
 
     $korv = $this->korvauksetPvmTid(date("Y-m-d",strtotime($date)),$tid);
     if(!empty($korv))
@@ -367,21 +407,29 @@ function dateDiff($start, $end) {
 
 
     echo '<td>';
-	   $luetutpvmtid = $this->renderPartial('luetutpvmtid',array('pvm'=>$date,'tid'=>$tid,'from'=>'mobiili'),true);
-	   $exLatikoLu = explode('explode999', $luetutpvmtid);
-	   echo $exLatikoLu[0];
-
+    if(isset($luetut_laatikot['laatikkot'][$date])){
+    	echo '<div class="small" style="opacity:0.6">';
+	   foreach($luetut_laatikot['laatikkot'][$date] as $item)
+		echo $item;
+    	echo '</div>';
+    }
     echo '</td>';
 
     echo '<td id="'.$did.'_'.$tid.'">';
-	   echo $totpvmtid['laatikot'];
+    if(isset($toteutuneet_laatikot[$date])){
+    	echo '<div class="small">';
+	   foreach($toteutuneet_laatikot[$date] as $item)
+		echo $item;
+    	echo '&nbsp;&nbsp;<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
+    	echo '</div>';
+    }
     echo '</td>';
 
 
-    if($suunnittelut > $totpvmtid['hyvaksytyt_tyotunnit'])
-    	$eroAika = $suunnittelut-$totpvmtid['hyvaksytyt_tyotunnit'];
+    if($suunnittelut > $hyv_tyotunnit)
+    	$eroAika = $suunnittelut-$hyv_tyotunnit;
     else
-    	$eroAika = ($totpvmtid['hyvaksytyt_tyotunnit']-$suunnittelut);
+    	$eroAika = ($hyv_tyotunnit-$suunnittelut);
 
     echo '<td class="yhteensaPvm_'.date("W",strtotime($date)).' forFooter" id="yhteensaPvm_'.$did.'_'.$tid.'">
 	   <div class="row">
@@ -394,7 +442,7 @@ function dateDiff($start, $end) {
 	    </div><div class="col-sm-5">
 		'.Yii::t('main', 'Hyväksytyt työtunnit: ').'
 	    </div><div class="col-sm-6">
-		<span class="pvmTot" total="'.(int)$totpvmtid['hyvaksytyt_tyotunnit'].'">'.$this->sprint($totpvmtid['hyvaksytyt_tyotunnit']).'</span>
+		<span class="pvmTot" total="'.(int)$hyv_tyotunnit.'">'.$this->sprint($hyv_tyotunnit).'</span>
 	   </div>
 	   <div class="row">
 	    </div><div class="col-sm-5">
@@ -408,34 +456,10 @@ function dateDiff($start, $end) {
     echo '</tr>';
 
 
-
-    $tyotunnit 		= $totpvmtid['tyotunnit'];
-    $yhtTyotunnit 	+= $tyotunnit;
-    $matka 		= $totpvmtid['matkatunnit'];
-    $yhtMatka 		+= $matka;
-    $lounaat 		= $totpvmtid['lounaat'];
-    $yhtLounaat 	+= $lounaat;
-    $tyoIlta 		= $totpvmtid['iltatunnit'];
-    $yhtIlta 		+= $tyoIlta;
-    $tyoYo 		= $totpvmtid['yotunnit'];
-    $yhtYo 		+= $tyoYo;
-    $tyoSu 		= $totpvmtid['sutunnit'];
-    $yhtSu 		+= $tyoSu;
-   
-
     $tyoPy 	= $this->pyhapaivat($tid,$date,"pyhat");
     $yhtPy 	+= $tyoPy;
-
     $tyoEl 	= $this->pyhapaivat($tid,$date,"el");
     $yhtEl 	+= $tyoEl;
-
-    $spl 	= $totpvmtid['spl']; // Palkaton
-    $sl 	= $totpvmtid['sl']; // Palkallinen
-    $ls 	= $totpvmtid['ls']; // Lapsen sairaus
-    $vl 	= $totpvmtid['vl']; // Vuosiloma
-    $vkl 	= $totpvmtid['vkl']; // Viikkolomapaiva
-    $ap 	= $totpvmtid['ap']; // Arkipyha
-
     $yhtSPL 	+= $spl;
     $yhtSL 	+= $sl;
     $yhtLS 	+= $ls;
@@ -472,16 +496,16 @@ function dateDiff($start, $end) {
 		 </thead>
 		  <tr>
 		   <td><span class="allaTyotunnit" total="'.(int)$tyotunnit.'">'.$this->sprint($tyotunnit).'</span></td>
-		   <td><span class="allaMatkat" total="'.(int)$matka.'">'.$this->sprint($matka).'</span></td>
+		   <td><span class="allaMatkat" total="'.(int)$matkatunnit.'">'.$this->sprint($matkatunnit).'</span></td>
 		   <td><span class="allaLounaat" total="'.(int)$lounaat.'">'.$this->sprint($lounaat).'</span></td>
-		   <td><span class="allaIlta" total="'.(int)$tyoIlta.'">'.$this->sprint($tyoIlta).'</span></td>
-		   <td><span class="allaYo" total="'.(int)$tyoYo.'">'.$this->sprint($tyoYo).'</span></td>
-		   <td><span class="allaSu" total="'.(int)$tyoSu.'">'.$this->sprint($tyoSu).'</span></td>
+		   <td><span class="allaIlta" total="'.(int)$iltatunnit.'">'.$this->sprint($iltatunnit).'</span></td>
+		   <td><span class="allaYo" total="'.(int)$yotunnit.'">'.$this->sprint($yotunnit).'</span></td>
+		   <td><span class="allaSu" total="'.(int)$sutunnit.'">'.$this->sprint($sutunnit).'</span></td>
 		   <td>'.$this->sprint($tyoPy).'</td>
 		   <td>'.$this->sprint($tyoEl).'</td>
 		   <td><span class="allaSL" total="'.(int)$sl.'">'.$sl.'</span></td>
 		   <td><span class="allaSPL" total="'.(int)$spl.'">'.$spl.'</span></td>
-		   <td><span class="allaLS" total="'.(int)$ls.'">'.$this->sprint($ls).'</span></td>
+		   <td><span class="allaLS" total="'.(int)$ls.'">'.$ls.'</span></td>
 		   <td><span class="allaVL" total="'.(int)$vl.'">'.$vl.'</span></td>
 		   <!--<td><span class="allaVKL" total="'.(int)$vkl.'">'.$this->sprint($vkl).'</span></td>-->
 		   <td><span class="allaAP" total="'.(int)$ap.'">'.$ap.'</span></td>
@@ -494,11 +518,11 @@ function dateDiff($start, $end) {
 				pvm="'.$date.'"
 				tid="'.$tid.'"
 				tyotunnit	="'.(int)$tyotunnit.'"
-				matka		="'.(int)$matka.'"
+				matka		="'.(int)$matkatunnit.'"
 				lounaat		="'.(int)$lounaat.'"
-				tyoilta		="'.(int)$tyoIlta.'"
-				tyoyo		="'.(int)$tyoYo.'"
-				tyosu		="'.(int)$tyoSu.'"
+				tyoilta		="'.(int)$iltatunnit.'"
+				tyoyo		="'.(int)$yotunnit.'"
+				tyosu		="'.(int)$sutunnit.'"
 				tyopy		="'.(int)$tyoPy.'"
 				tyoel		="'.(int)$tyoEl.'"
 				sl		="'.(int)$sl.'"
@@ -516,24 +540,21 @@ function dateDiff($start, $end) {
 	</td></tr>';
 
 
-    $yhtSuunnittelutWeek += $suunnittelut;
-    if(isset($totpvmtid['hyvaksytyt_tyotunnit'])){
-		$yhtTotpvmtid 		+= $totpvmtid['hyvaksytyt_tyotunnit'];
-		$yhteensaToteutuneet	+= $totpvmtid['hyvaksytyt_tyotunnit'];
-    }
-    if(isset($exLatikoLu[1])){
-	if( (int)$exLatikoLu[1] > 0 ){
-		$yhtLuetutpvmtid 	+= (int)$exLatikoLu[1];
-		$yhteensaLuetut 	+= (int)$exLatikoLu[1];
-	}
+    $yhtSuunnittelutWeek 	+= $suunnittelut;
+    $yhtTotpvmtid 		+= $hyv_tyotunnit;
+    $yhteensaToteutuneet	+= $hyv_tyotunnit;
+
+    if(isset($luetut_laatikot['tunnit'][$date])){
+	$yhtLuetutpvmtid 	+= array_sum($luetut_laatikot['tunnit'][$date]);
+	$yhteensaLuetut 	+= array_sum($luetut_laatikot['tunnit'][$date]);
     }
 
     $yhtTyotunnitWeek	+= $tyotunnit;
-    $yhtMatkaWeek 	+= $matka;
+    $yhtMatkaWeek 	+= $matkatunnit;
     $yhtLounaatWeek	+= $lounaat;
-    $yhtIltaWeek 	+= $tyoIlta;
-    $yhtYoWeek 		+= $tyoYo;
-    $yhtSuWeek 		+= $tyoSu;
+    $yhtIltaWeek 	+= $iltatunnit;
+    $yhtYoWeek 		+= $yotunnit;
+    $yhtSuWeek 		+= $sutunnit;
     $yhtPyWeek 		+= $tyoPy;
     $yhtElWeek 		+= $tyoEl;
     $yhtSLWeek 		+= $sl;
@@ -588,7 +609,7 @@ function dateDiff($start, $end) {
 
 		   <td class="SLWeek_'.date("W",strtotime($date)).'">'.$yhtSLWeek.'</td>
 		   <td class="SPLWeek_'.date("W",strtotime($date)).'">'.$yhtSPLWeek.'</td>
-		   <td class="LSWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtLSWeek).'</td>
+		   <td class="LSWeek_'.date("W",strtotime($date)).'">'.$yhtLSWeek.'</td>
 		   <td class="VLWeek_'.date("W",strtotime($date)).'">'.$yhtVLWeek.'</td>
 		   <!--<td class="VKLWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtVKLWeek).'</td>-->
 		   <td class="APWeek_'.date("W",strtotime($date)).'">'.$yhtAPWeek.'</td>
@@ -662,7 +683,7 @@ function dateDiff($start, $end) {
 		   <td><?php echo $this->sprint($yhtEl); ?></td>
 		   <td><span class="SLFoot"><?php echo $yhtSL; ?></span></td>
 		   <td><span class="SPLFoot"><?php echo $yhtSPL; ?></span></td>
-		   <td><span class="LSFoot"><?php echo $this->sprint($yhtLS); ?></span></td>
+		   <td><span class="LSFoot"><?php echo $yhtLS; ?></span></td>
 		   <td><span class="VLFoot"><?php echo $yhtVL; ?></span></td>
 		   <td><span class="APFoot"><?php echo $yhtAP; ?></span></td>
 		   <!--<td><span class="VKLFoot"><?php echo $this->sprint($yhtVKL); ?></span></td>-->

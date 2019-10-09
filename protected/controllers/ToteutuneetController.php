@@ -526,44 +526,76 @@ $xml = '
 		echo json_encode($arr);
 	}
 
-	public function TotPvmTid($pvm,$tid,$mobile)
+	protected function LuetutPvmTidBetween($from,$to,$tid)
+	{
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+
+	       	$criteria = new CDbCriteria();
+		$criteria->order = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC";
+		$criteria->condition = " 
+			tid = '".$tid."' 
+			AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) BETWEEN '".$from."' AND '".$to."'
+			AND admin!='1'
+			AND aloitan!='' AND loppui!=''
+		";
+
+		if(Yii::app()->session['Lounastauko'])
+			$criteria->addCondition (" status != '10' ");
+
+		if(Yii::app()->session['MATKA'])
+			$criteria->addCondition (" status != '2' ");
+
+		$tv = Mobile::model()->findAll($criteria); 
+		$tun = [];
+		$get = [];
+		foreach($tv as $tvVal)
+		{
+			$tvVal->loppui = date("Y-m-d H:i",strtotime($tvVal->loppui));
+			$tvVal->aloitan = date("Y-m-d H:i",strtotime($tvVal->aloitan));
+			$tun[date("d.m.Y",strtotime($tvVal->aloitan))][] = strtotime($tvVal->loppui)-strtotime($tvVal->aloitan);
+	
+			$strlen = strlen($tvVal->kohde_kannasta);
+			if($strlen > 18)
+				$tvVal->kohde_kannasta = substr($tvVal->kohde_kannasta,0,18).'..';
+			else
+				$tvVal->kohde_kannasta = $tvVal->kohde_kannasta;
+	
+			if($tvVal->aloitan > 0 and $tvVal->loppui > 0)
+				$al = date("H:i",strtotime($tvVal->aloitan)).'-'.date("H:i",strtotime($tvVal->loppui));
+			else
+				$al = '';
+
+			$did = date("Ymd",strtotime($tvVal->aloitan));
+			$get[date("d.m.Y",strtotime($tvVal->aloitan))][] = '
+			<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="fullRivi">
+				&nbsp;<span class="" id="tv_'.$tvVal->id.'">'.$al.'<br>'.$tvVal->kohde_kannasta.'</span><br>
+			</div>';
+		}
+
+		//$luetutpvmtid = '<div class="small" style="opacity:0.6">';
+		//$luetutpvmtid .= '</div>';
+	
+		return json_encode(array('laatikkot'=>$get, 'tunnit'=>$tun));
+	}
+
+	protected function TotPvmTidBetween($from,$to,$tid)
 	{
 	
-		$did = date("Ymd",strtotime($pvm));
-		//echo '<div id="'.$did.'_'.$tid.'">';
-		$laatikot = '<div class="small">';
-	
+		$mobile = Yii::app()->createController('Mobile');
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+		$get = [];
 		$muutos = false;
 		$tun = 0;
-		$get = array();
-	
-	       	$criteria = new CDbCriteria();
-		$criteria->condition = " 
-			tid = '".$tid."' 
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
-			AND aloitan!='' AND loppui!=''
-			AND deleted=0
-		 ";
-		if(Yii::app()->session['Lounastauko'])
-		$criteria->addCondition (" status != '10' ");
-		if(Yii::app()->session['MATKA'])
-		$criteria->addCondition (" status != '2' ");
-	
-		$tv = Toteutuneet::model()->findAll($criteria); 
-		foreach($tv as $tvVal){
-	
-		   if($tvVal->id){
-		   $muutos = true;
 
-	   	$get[strtotime($tvVal->aloitan).'_'.$tvVal->id] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->kid."//".$tvVal->asiakas_hyvaksy."//".$tvVal->tietoja."//".$tvVal->sairaus."//".$tvVal->status."//".$tvVal->tuoteID;
-		   }
-		}
-	
-	
 	       	$criteria = new CDbCriteria();
+		$criteria->order = "TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'))";
 		$criteria->condition = " 
 			tid = '".$tid."' 
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
+			AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) BETWEEN '".$from."' AND '".$to."'
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) 
 			AND aloitan!='' AND loppui!=''
 			AND deleted=0
@@ -575,61 +607,42 @@ $xml = '
 	
 		$mob = Mobile::model()->findAll($criteria); 
 		foreach($mob as $tvVal){
-	
-		   if($tvVal->id){
-		   $muutos = false;
-
-		   $get[strtotime($tvVal->aloitan).'_'.$tvVal->id] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->id."//".$tvVal->asiakas_hyvaksy."////".$tvVal->sairaus."//".$tvVal->status."//".$tvVal->tuoteID;
-		   }
+			if($tvVal->id){
+				$muutos = false;
+				$did = date("Ymd",strtotime($tvVal->aloitan));
+				$get[date("Y-m-d H:i",strtotime($tvVal->aloitan))][] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->id."//".$tvVal->asiakas_hyvaksy."////".$tvVal->sairaus."//".$tvVal->status."//".$tvVal->tuoteID;
+			}
 	
 		}
+
+	       	$criteria = new CDbCriteria();
+		$criteria->order = "TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'))";
+		$criteria->condition = " 
+			tid = '".$tid."' 
+			AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) BETWEEN '".$from."' AND '".$to."'
+			AND aloitan!='' AND loppui!=''
+			AND deleted=0
+		 ";
+		if(Yii::app()->session['Lounastauko'])
+		$criteria->addCondition (" status != '10' ");
+		if(Yii::app()->session['MATKA'])
+		$criteria->addCondition (" status != '2' ");
 	
+		$tv = Toteutuneet::model()->findAll($criteria); 
+		foreach($tv as $tvVal){
+			if($tvVal->id){
+				$muutos = true;
+				$did = date("Ymd",strtotime($tvVal->aloitan));
+				$get[date("Y-m-d H:i",strtotime($tvVal->aloitan))][] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->kid."//".$tvVal->asiakas_hyvaksy."//".$tvVal->tietoja."//".$tvVal->sairaus."//".$tvVal->status."//".$tvVal->tuoteID;
+		   	}
+		}
+
 		ksort($get);
-		foreach($get as $v){
-		      $laatikot .= $this->renderPartial('al',array('str'=>$v), true);
+		$laatikot = [];
+		foreach($get as $k=>$v){
+		      $laatikot[date("d.m.Y",strtotime($k))][] = $this->renderPartial('al',array('str'=>$v), true);
 		}
-		
-		$laatikot .= '&nbsp;&nbsp;<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
-		$laatikot .= '</div>';
-	
-		//$mobile = Yii::app()->createController('Mobile');
-
-		$tyotunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksynta*/ 2, 0);
-		$hyvaksytyt_tyotunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 3, 0);
-		$lounaat 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(10), /*hyvaksytyt*/ 3, 0);
-		$matkatunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(2), /*hyvaksytyt*/ 3, 0);
-		$iltatunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 3, 1);
-		$yotunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 3, 2);
-		$sutunnit 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 3, 3);
-
-		// <-- SPL, SL, LS
-		$sl 	= (($mobile[0]->TidPvmVuosiloma($pvm, $tid, 'SL')['count'] > 0)?1:0); // Palkallinen
-		$spl 	= (($mobile[0]->TidPvmVuosiloma($pvm, $tid, 'SPL')['count'] > 0)?1:0); // Palkaton
-		$ls 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'LS'); // Lapsen sairaus
-		$vl 	= (($mobile[0]->TidPvmVuosiloma($pvm, $tid, 'VL')['count'] > 0)?1:0); // Vuosiloma
-		$vkl 	= $mobile[0]->TidfromtoSairausTunnit($pvm,$pvm,$tid,'VKL'); // Viikkolomapaiva  ( Poistettu kaytosta )
-		$ap 	= (($mobile[0]->TidPvmVuosiloma($pvm, $tid, 'AP')['count'] > 0)?1:0); // Arkipaiva
-		//     SPL, SL, LS -->
-
-
-		$arr = array(
-			'laatikot'=>$laatikot,
-			'tyotunnit'=>$tyotunnit[$tid],
-			'hyvaksytyt_tyotunnit'=>$hyvaksytyt_tyotunnit[$tid],
-			'lounaat'=>$lounaat[$tid],
-			'matkatunnit'=>$matkatunnit[$tid],
-			'iltatunnit'=>$iltatunnit[$tid],
-			'yotunnit'=>$yotunnit[$tid],
-			'sutunnit'=>$sutunnit[$tid],
-			'spl'=>(int)$spl,
-			'sl'=>(int)$sl,
-			'ls'=>(int)$ls,
-			'vl'=>(int)$vl,
-			'vkl'=>(int)$vkl,
-			'ap'=>(int)$ap,
-			'week'=>date("W", strtotime($pvm)),
-		);
-	        return $arr;
+	        return json_encode($laatikot);
 
 	}
 
@@ -881,11 +894,14 @@ $xml = '
 	 */
 	public function actionIndex()
 	{
+		$from = date("Y-m-d", strtotime("first day of last month"));
+		$to = date("Y-m-d", strtotime("last day of last month"));
+
 		// <-- Check days count
-		if(Yii::app()->request->getPost('from') and Yii::app()->request->getPost('to'))
+		if(isset($_GET['from']) and isset($_GET['to']))
 		{
 			$site = Yii::app()->createController('Site');
-			$daysreturn = $site[0]->daysBetween(Yii::app()->request->getPost('from'), Yii::app()->request->getPost('to'));
+			$daysreturn = $site[0]->daysBetween($_GET['from'], $_GET['to']);
 			if((int)$daysreturn > 100)
 			{
 				Yii::app()->user->setFlash('danger', "Haku aikaväli on liian pitkä.");
@@ -953,65 +969,17 @@ $xml = '
 			$this->redirect('index');
 		}
 
-
-		if(Yii::app()->request->getPost('tekija')){
-		Yii::app()->session['tekija'] = Yii::app()->request->getPost('tekija');
-		}
-
-
-		if(isset($_POST['tekija']))
-		{
-			unset(Yii::app()->session['Lounastauko']);
-			unset(Yii::app()->session['MATKA']);
-		}
-
-		if(isset($_POST['tekija']) and $_POST['tekija'] == 'kaikki')
-		{
-			unset(Yii::app()->session['tekija']);
-		}
-
-
-		if(isset($_POST['ilman']))
-		{
-		  foreach($_POST['ilman'] as $val){
-			if($val == 'Lounastauko')
-			Yii::app()->session['Lounastauko'] = 10;
-
-			if($val == 'MATKA')
-			Yii::app()->session['MATKA'] = 2;
-		  }
-		}
-
-		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
-
-		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
+		if(isset($_GET['from']))
+		   $from = date("Y-m-d",strtotime($_GET['from']));
+		if(isset($_GET['to']))
+		   $to = date("Y-m-d",strtotime($_GET['to']));
 
 		$tekija = '';
-		if(isset(Yii::app()->session['tekija']))
+		if(isset($_GET['tekija']))
 		{
-			$tekija = $this->etuSukunimi(Yii::app()->session['tekija']);
+			$tekija = $this->etuSukunimi($_GET['tekija']);
 		}
-
-
-		$from = '';
-		$to = '';
-		if(isset(Yii::app()->session['from']))
-		$from = Yii::app()->session['from'];
-
-
-		if(isset(Yii::app()->session['to']))
-		$to = Yii::app()->session['to'];
-
-		if( isset($_GET['from']) and isset($_GET['to']) and isset($_GET['tid']) ){
-			$from = date("Y-m-d", strtotime($_GET['from']));
-			$to = date("Y-m-d", strtotime($_GET['to']));
-			Yii::app()->session['from'] = $from;
-			Yii::app()->session['to'] = $to;
-			Yii::app()->session['tekija'] = $_GET['tid'];
-		}
-
+/*
 		if(isset($_POST['tulosta']))
 		{
 
@@ -1025,7 +993,8 @@ $xml = '
 		  //$dataProvider->pagination->pageSize = 50;
 		  $this->render('index',array('from'=>$from,'to'=>$to));
 		}
-		
+*/
+		  $this->render('index',array('from'=>$from,'to'=>$to));
 	}
 
 	/**

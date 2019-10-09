@@ -1,8 +1,6 @@
 <?php
-
-
-
-  $explStr = explode("//", $str);
+foreach($str as $str_n){
+  $explStr = explode("//", $str_n);
   $rivi = $explStr['0'];
   $aloitan = $explStr['1'];
   $loppui = $explStr['2'];
@@ -95,7 +93,6 @@
 	   if($status == 10)
 		$kohde = 'LOUNASTAUKO <i class="p3 fa fa-cutlery text-danger"></i>';
 
-
 	   echo '<div id="'.$rivi.'_'.$did.'_'.$tid.'" class="fullRivi form-inline">';
 
 	   if($aloitan > 0 and $loppui > 0)
@@ -113,6 +110,6 @@
 		'.$asiakas_hyvaksy.'
 		'.$riviTietoja.'
 	   </div>';
-
   } // if empty loppui
+}
 ?>

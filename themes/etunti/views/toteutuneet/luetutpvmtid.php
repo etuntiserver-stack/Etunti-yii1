@@ -1,5 +1,5 @@
 <?php
-
+/*
 	$luetutpvmtid = '<div class="small" style="opacity:0.6">';
 	$did = date("Ymd",strtotime($pvm));
 
@@ -45,7 +45,7 @@
 	$luetutpvmtid .= '</div>';
 
 	echo $luetutpvmtid.'explode999'.$tun;
-
+*/
 //print_r($tvVal->kohde);
 //exit;
 ?>

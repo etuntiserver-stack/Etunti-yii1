@@ -1928,7 +1928,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	 * @param mixed $tids Array of tids, or single tid in string or int format.
 	 * @param int $time Lookup time, 0 = day, 1 = evening, 2 = nighttime, 3 = sunday.
 	 */
-	public function TidfromtoMobiiliAll($from, $to, $tids, $status = array(), $hyvaksytty = '', $time = 0)
+	public function TidfromtoMobiiliAll($from, $to, $tids, $status = array(), $hyvaksytty = '', $palkanlaskentaan = false, $time = 0, $by_aloitan = false)
 	{
 		$set = [];
 		if (is_array($tids)) {
@@ -1943,23 +1943,29 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$to = date("Y-m-d", strtotime($to));
 		$status = is_array($status) ? (count($status) > 0 ? array_shift($status) : 0) : $status;
 		$criteria = new CDbCriteria();
-		$criteria->group = "tid";
+		if($by_aloitan)
+		   $criteria->group = "DATE(STR_TO_DATE(loppui, '%d.%m.%Y'))";
+		else
+		   $criteria->group = "tid";
 
 		// Helper function to avoid duplicate code (doesn't handle 'hyvaksytty' as it differs)
-		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $time) {
-			$criteria->group = "tid";
+		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $palkanlaskentaan, $time, $by_aloitan) {
+			if($by_aloitan)
+			   $criteria->group = "DATE(STR_TO_DATE(loppui, '%d.%m.%Y'))";
+			else
+			   $criteria->group = "tid";
 			// Select statements
 			switch ($time) {
 				case 0:
 					$criteria->select = "
-						tid, SUM(TIME_TO_SEC(TIMEDIFF(
+						tid, aloitan, SUM(TIME_TO_SEC(TIMEDIFF(
 							STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'),
 							STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i')
 						))) as l_tunnit";
 					break;
 				case 1:
 					// Note: 18000 at end of query is equal to TIME_TO_SEC(TIMEDIFF('23:00:00', '18:00:00'))
-					$criteria->select = "tid, SUM(CASE
+					$criteria->select = "tid, aloitan, SUM(CASE
 						WHEN
 							TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) >= '18:00:00'
 						THEN CASE
@@ -1991,7 +1997,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 						END) AS l_tunnit";
 					break;
 				case 2:
-					$criteria->select = "tid, SUM(CASE
+					$criteria->select = "tid, aloitan, SUM(CASE
 						WHEN
 							DATE(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) = DATE(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))
 						THEN CASE
@@ -2044,7 +2050,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 						END) AS l_tunnit";
 					break;
 				case 3:
-					$criteria->select = "tid, SUM(CASE
+					$criteria->select = "tid, aloitan, SUM(CASE
 						WHEN
 							DAYOFWEEK(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) = 1
 						THEN CASE
@@ -2068,11 +2074,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			// Conditions
 			$criteria->condition = "
 				aloitan!='' AND loppui!=''
-				AND palkanlaskentaan=1
 				AND tid IN ($tids)
 				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
 				AND deleted=0";
 			if ($status) $criteria->addCondition("status='$status'");
+			if ($palkanlaskentaan) $criteria->addCondition("palkanlaskentaan=1");
 		};
 
 		// Build CDbCriteria
@@ -2102,13 +2108,26 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 
 		// Build final array for results, in form of tid => tunnit.
-		foreach ($lu as $l)
-			$set[$l->tid] += $l->l_tunnit;
-		foreach ($tot as $t)
-			$set[$t->tid] += $t->l_tunnit;
+		if($by_aloitan){
+			foreach ($lu as $l){
+				$set[date("Y-m-d", strtotime($l->aloitan))][$l->tid] = $l->l_tunnit;
+			}
+			foreach ($tot as $t){
+				if(!isset($set[date("Y-m-d", strtotime($t->aloitan))][$t->tid])){
+					$set[date("Y-m-d", strtotime($t->aloitan))][$t->tid] = $t->l_tunnit;
+				} else {
+					$set[date("Y-m-d", strtotime($t->aloitan))][$t->tid] += $t->l_tunnit;
+				}
+			}
+		} else {
+			foreach ($lu as $l)
+				$set[$l->tid] += $l->l_tunnit;
+			foreach ($tot as $t)
+				$set[$t->tid] += $t->l_tunnit;
+		}
 		return $set;
 	}
-
+/*
 	public function TidfromtoSairausTunnit($from,$to,$tid,$sairaus)
 	{
 		$from = date("Y-m-d", strtotime($from));
@@ -2127,6 +2146,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(isset($vl->l_tunnit)){ $return = $vl->l_tunnit; }
 		return $return;
 	}
+*/
 /*
 	public function TidfromtoSairausTP($from,$to,$tid,$sairaus)
 	{
@@ -2146,27 +2166,47 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		return count($vl);
 	}
 */
-	protected function TidfromtoVuosilomaPalkkatauluko($from,$to,$tid,$tila)
+	protected function TidfromtoVuosilomaBetween($from, $to, $tids, $tila, $by_pvm = false)
 	{
+		$set = [];
+		if (is_array($tids)) {
+			foreach($tids as $tid)
+				$set[$tid] = 0;
+			$tids = implode(", ", $tids);
+		} else {
+			$set[$tids] = 0;
+		}
 
 		$from 	= date("Y-m-d", strtotime($from));
 		$to 	= date("Y-m-d", strtotime($to));
 
 		$result = 0;
        		$criteria = new CDbCriteria();
-	        $criteria->group = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ";
-	        $criteria->condition = "
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+		if($by_pvm){
+			$criteria->group = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y'))";
+			$criteria->select = "pvm, tid, COUNT(*) as count";
+		} else {
+			$criteria->group = "tid";
+			$criteria->select = "tid, COUNT(*) as count";
+		}
+		$criteria->condition = "
+			DATE(STR_TO_DATE(pvm, '%d.%m.%Y'))
 			BETWEEN '".$from."' AND '".$to."' 
-			AND tid='".$tid."'
+			AND tid IN ($tids)
 			AND tyoajanlaatu LIKE '%(".$tila.")%'
 		";
 
 		$tv = Tyovuoroot::model()->findAll($criteria);
-
-		return count($tv);
+		foreach($tv as $item){
+			if($by_pvm){
+				$set[date("Y-m-d", strtotime($item->pvm))][$item->tid] = $item->count;
+			} else {
+				$set[$item->tid] = $item->count;
+			}
+		}
+		return $set;
 	}
-
+/*
 	public function TidPvmVuosiloma($pvm,$tid,$tila)
 	{
 		$pvm 	= date("Y-m-d", strtotime($pvm));
@@ -2183,7 +2223,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(isset($vl->id)){ $arr = array('count'=>1); }
 		return $arr;
 	}
-
+*/
 
 	public function actionPalkkataulukko()
 	{
