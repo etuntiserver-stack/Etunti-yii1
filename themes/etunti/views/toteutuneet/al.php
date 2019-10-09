@@ -1,31 +1,23 @@
 <?php
-foreach($str as $str_n){
-  $explStr = explode("//", $str_n);
-  $rivi = $explStr['0'];
-  $aloitan = $explStr['1'];
-  $loppui = $explStr['2'];
-  $kohde = $explStr['3'];
-  $did = $explStr['4'];
-  $tid = $explStr['5'];
-  $muutos = $explStr['6'];
-  $kesto = $explStr['7'];
-  $idKid = $explStr['8'];
-  $ashyv = $explStr['9'];
-  $tietoja = $explStr['10'];
-  $sairaus = $explStr['11'];
-  $status = $explStr['12'];
-  $tuoteID = $explStr['13'];
+foreach($attributes as $str){
+
+  //$explStr = explode("//", $str_n);
+  $rivi = $str['id'];
+  $aloitan = $str['aloitan'];
+  $loppui = $str['loppui'];
+  $kohde = $str['kohde_kannasta'];
+  $did = date("Ymd", strtotime($str['aloitan']));
+  $tid = $str['tid'];
+  $muutos = (isset($str['kid']))? true : false;
+  $tot_lu = (($muutos)?'tot':'lu');
+  $kesto = strtotime($str['loppui'])-strtotime($str['aloitan']);
+  $idKid = (isset($str['kid']))? $str['kid'] : $str['id'];
+  $ashyv = $str['asiakas_hyvaksy'];
+  $status = $str['status'];
+  $tuoteID = $str['tuoteID'];
 
   $tp = TuotteetPalvelut::model()->findbypk($tuoteID);
   if(isset($tp->nimike)) { $tuote = '<br><b class="text-success">'.$tp->nimike.'</b>'; } else { $tuote = ''; }
-
-     $riviTietoja = '';
-  if(!empty($tietoja) and isset($_POST['tulosta']))
-     $riviTietoja = '<br><br>&nbsp;&nbsp;&nbsp;<b>'.Yii::t('main','Tietoja: ').'</b> '.$tietoja.'<hr>';
-  elseif(!empty($tietoja) and !isset($_POST['tulosta']))
-     $riviTietoja =  '<br> <b class="fa fa-file-text-o text-warning" title="Tietoja"></b>';
-
-  $spl = $this->sairausMerkki($sairaus);
 
   if(empty($loppui))
   {
@@ -93,7 +85,7 @@ foreach($str as $str_n){
 	   if($status == 10)
 		$kohde = 'LOUNASTAUKO <i class="p3 fa fa-cutlery text-danger"></i>';
 
-	   echo '<div id="'.$rivi.'_'.$did.'_'.$tid.'" class="fullRivi form-inline">';
+	   echo '<div id="'.$tot_lu.'_'.$rivi.'_'.$did.'_'.$tid.'" class="fullRivi form-inline">';
 
 	   if($aloitan > 0 and $loppui > 0)
 	   echo '<span class="pull-right mob_kesto hidden">&nbsp;'.$this->sprint(strtotime($loppui)-strtotime($aloitan)).'</span>';
@@ -102,13 +94,12 @@ foreach($str as $str_n){
 	   <div class="pull-right">'.$ap.'</div>';
 	   echo '
 		<span class="form-group">
-			<input type="checkbox" class="chckbxHyvaksynta" id="hyv_'.$rivi.'" '.$chk[$rivi].' kuka="'.Yii::app()->user->username.'///'.date('d.m.Y').'" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hyväksy').'">&nbsp; 
+			<input type="checkbox" class="chckbxHyvaksynta" id="hyv_'.$rivi.'" '.$chk[$rivi].' tot_lu="'.$tot_lu.'" kuka="'.Yii::app()->user->username.'///'.date('d.m.Y').'" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hyväksy').'">&nbsp; 
 		</span><span class="form-group">
-			'.$isEripaivat.'<i class="form-group link totRivi '.$admin.'" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.$spl.'<br>'.$kohde.'</i>
+			'.$isEripaivat.'<i class="form-group link totRivi '.$admin.'" mod="'.$mod.'" id="'.$tot_lu.'_'.$rivi.'">'.$al.'<br>'.$kohde.'</i>
 			'.$tuote.'
 		</span>
 		'.$asiakas_hyvaksy.'
-		'.$riviTietoja.'
 	   </div>';
   } // if empty loppui
 }

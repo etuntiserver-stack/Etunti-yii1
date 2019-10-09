@@ -456,10 +456,18 @@ $xml = '
 		exit;
 	}
 
-	public function actionHyvaksy($id){
+	public function actionHyvaksy($id, $tot_lu){
 
-		$mob=Mobile::model()->findbypk($id);
-		$tot=Toteutuneet::model()->findbypk($id);
+		if($tot_lu == 'lu'){
+			$mob=Mobile::model()->findbypk($id);
+		}
+		if($tot_lu == 'tot'){
+			//$mob=Mobile::model()->findbypk($id);
+			$tot=Toteutuneet::model()->findbypk($id);
+			if(isset($tot->kid)){
+				$mob=Mobile::model()->findbypk($tot->kid);
+			}
+		}
 		if($_POST['hyvaksy'] == 'kylla')
 		{
 		if(isset($mob->id)){
@@ -519,13 +527,6 @@ $xml = '
 		));
 	}
 
-	public function actionTotpvmtid($pvm,$tid)
-	{
-		$mobile = Yii::app()->createController('Mobile');
-		$arr = $this->TotPvmTid($pvm,$tid,$mobile);
-		echo json_encode($arr);
-	}
-
 	protected function LuetutPvmTidBetween($from,$to,$tid)
 	{
 		$from = date("Y-m-d", strtotime($from));
@@ -573,17 +574,39 @@ $xml = '
 				&nbsp;<span class="" id="tv_'.$tvVal->id.'">'.$al.'<br>'.$tvVal->kohde_kannasta.'</span><br>
 			</div>';
 		}
-
-		//$luetutpvmtid = '<div class="small" style="opacity:0.6">';
-		//$luetutpvmtid .= '</div>';
 	
 		return json_encode(array('laatikkot'=>$get, 'tunnit'=>$tun));
 	}
 
+	public function actionTotpvmtid($pvm,$tid)
+	{
+		$pvm			= date("Y-m-d", strtotime($pvm));
+		$mobile = Yii::app()->createController('Mobile');
+
+		$tyotunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksynta*/ 2, false, 0, true);
+		$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 3, false, 0, true);
+		$lounaat_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(10), /*hyvaksytyt*/ 2, false, 0, true);
+		$matkatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(2), /*hyvaksytyt*/ 2, false, 0, true);
+		$iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 1, true);
+		$yotunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 2, true);
+		$sutunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 3, true);
+
+		$laatikot = $this->TotPvmTidBetween($pvm,$pvm,$tid);
+		echo json_encode(array(
+			'laatikot' 	=> json_decode($laatikot),
+			'tyotunnit' 	=> (isset($tyotunnit_all[$pvm][$tid]))? $tyotunnit_all[$pvm][$tid] : 0,
+			'hyv_tyotunnit'	=> (isset($hyv_tyotunnit_all[$pvm][$tid]))? $hyv_tyotunnit_all[$pvm][$tid] : 0,
+			'lounaat' 	=> (isset($lounaat_all[$pvm][$tid]))? $lounaat_all[$pvm][$tid] : 0,
+			'matkatunnit' 	=> (isset($matkatunnit_all[$pvm][$tid]))? $matkatunnit_all[$pvm][$tid] : 0,
+			'iltatunnit' 	=> (isset($iltatunnit_all[$pvm][$tid]))? $iltatunnit_all[$pvm][$tid] : 0,
+			'yotunnit' 	=> (isset($yotunnit_all[$pvm][$tid]))? $yotunnit_all[$pvm][$tid] : 0,
+			'sutunnit' 	=> (isset($sutunnit_all[$pvm][$tid]))? $sutunnit_all[$pvm][$tid] : 0,
+		));
+		exit;
+	}
+
 	protected function TotPvmTidBetween($from,$to,$tid)
 	{
-	
-		$mobile = Yii::app()->createController('Mobile');
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 
@@ -610,7 +633,7 @@ $xml = '
 			if($tvVal->id){
 				$muutos = false;
 				$did = date("Ymd",strtotime($tvVal->aloitan));
-				$get[date("Y-m-d H:i",strtotime($tvVal->aloitan))][] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->id."//".$tvVal->asiakas_hyvaksy."////".$tvVal->sairaus."//".$tvVal->status."//".$tvVal->tuoteID;
+				$get[date("Y-m-d H:i",strtotime($tvVal->aloitan))][] = $tvVal->attributes;
 			}
 	
 		}
@@ -633,14 +656,14 @@ $xml = '
 			if($tvVal->id){
 				$muutos = true;
 				$did = date("Ymd",strtotime($tvVal->aloitan));
-				$get[date("Y-m-d H:i",strtotime($tvVal->aloitan))][] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->kid."//".$tvVal->asiakas_hyvaksy."//".$tvVal->tietoja."//".$tvVal->sairaus."//".$tvVal->status."//".$tvVal->tuoteID;
+				$get[date("Y-m-d H:i",strtotime($tvVal->aloitan))][] = $tvVal->attributes;
 		   	}
 		}
 
 		ksort($get);
 		$laatikot = [];
 		foreach($get as $k=>$v){
-		      $laatikot[date("d.m.Y",strtotime($k))][] = $this->renderPartial('al',array('str'=>$v), true);
+		      $laatikot[date("d.m.Y",strtotime($k))][] = $this->renderPartial('al',array('attributes'=>$v), true);
 		}
 	        return json_encode($laatikot);
 

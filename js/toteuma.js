@@ -113,25 +113,26 @@ $(document).delegate(".chckbxHyvaksynta","click",function(){
   $(this).each(function() {
       var label = $(this).prop("checked");
       var kuka = $(this).attr("kuka");
+      var tot_lu = $(this).attr("tot_lu");
       var thisID = $(this).attr("id").split("_");
 
       if(label)
       {
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/hyvaksy?id='+thisID[1],
+           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/hyvaksy?id='+thisID[1]+'&tot_lu='+tot_lu,
            type: "POST",
 	   data: { hyvaksy : "kylla", kuka : kuka },
            success: function(data){
-		console.log(data);
+		//console.log(data);
            }
         });
       } else {
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/hyvaksy?id='+thisID[1],
+           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/hyvaksy?id='+thisID[1]+'&tot_lu='+tot_lu,
            type: "POST",
 	   data: { hyvaksy : "ei" },
            success: function(data){
-		console.log(data);
+		//console.log(data);
            }
         });
       }
@@ -160,7 +161,7 @@ $(document).delegate(".vuosilomaHyvaksynta","click",function(){
            type: "POST",
 	   data: { hyvaksy : "kylla", pvm : pvm, tid : tid, tila : tila },
            success: function(data){
-		console.log(data);
+		//console.log(data);
 		VL_VKL_JNE(thisDID, tila, week, 1);
            }
         });
@@ -170,7 +171,7 @@ $(document).delegate(".vuosilomaHyvaksynta","click",function(){
            type: "POST",
 	   data: { hyvaksy : "ei", pvm : pvm, tid : tid, tila : tila },
            success: function(data){
-		console.log(data);
+		//console.log(data);
 		VL_VKL_JNE(thisDID, tila, week, 0);
            }
         });
@@ -232,7 +233,7 @@ $(document).ready(function(){
 	   data: lomake[0],
            success: function(data){
 		data = JSON.parse(data);
-		console.log(data);
+		//console.log(data);
 		if(data !== '')
 		isLine = data;
            }
@@ -255,7 +256,7 @@ $(document).ready(function(){
 		  async: false,
 		  success:function(data){
 			data = JSON.parse(data);
-			console.log(data);
+			//console.log(data);
 			if(data > 0)
 			count = data;
 	   	},
@@ -313,8 +314,8 @@ $(document).ready(function(){
 
   $(document).on('submit', '#mobile-form', function(e) {
 
-	console.log( $( this ).serializeArray() );
-	console.log( e.target[0].value );
+	//console.log( $( this ).serializeArray() );
+	//console.log( e.target[0].value );
 
 	  $.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/mobile/uusirivi',
@@ -361,8 +362,8 @@ $(document).ready(function(){
 
   $(document).on('submit', '#toteutuneet-form', function(e) {
 
-	console.log( $( this ).serializeArray() );
-	console.log( e.target[0].value );
+	//console.log( $( this ).serializeArray() );
+	//console.log( e.target[0].value );
 
 	  $.ajax({
 		  url: 'create',
@@ -371,7 +372,7 @@ $(document).ready(function(){
 		  success:function(data){
 
 			var divID = data.split("_");
-			console.log(divID);
+			//console.log(divID);
 
 			if( divID )
 			blockUpdater(divID);
@@ -395,8 +396,8 @@ $(document).ready(function(){
 
   $(document).on('submit', '#toteutuneet-form-upd', function(e) {
 
-	console.log( $( this ).serializeArray() );
-	console.log( e.target[0].value );
+	//console.log( $( this ).serializeArray() );
+	//console.log( e.target[0].value );
 
 	//alert(e.target[0].value)
 	  $.ajax({
@@ -406,7 +407,7 @@ $(document).ready(function(){
 		  success:function(data){
 
 			var divID = data.split("_");
-			console.log(divID);
+			//console.log(divID);
 
 			if( divID )
 			blockUpdater(divID);
@@ -433,7 +434,7 @@ $(document).ready(function(){
            url: location.protocol + "//" + location.host + '/index.php/kohteet/osoite?osoite='+thisVal,
            type: "GET",
            success: function(data){
-		console.log(data);
+		//console.log(data);
 		$("#kohdenID").val(data);
            }
         });
@@ -455,7 +456,7 @@ $(document).delegate(".totRivi","click",function(){
            url: location.protocol + "//" + location.host + '/index.php/toteutuneet/update?id='+thisVal[1],
            type: "GET",
            success: function(html){
-		console.log("update " + thisVal[1]);
+		//console.log("update " + thisVal[1]);
 		$('#showres').modal().html(html);
            }
         });
@@ -469,7 +470,7 @@ $(document).delegate(".totRivi","click",function(){
            type: "POST",
 	   data: { forid : thisVal[1] },
            success: function(html){
-		console.log("create " + thisVal[1]);
+		//console.log("create " + thisVal[1]);
 		$('#showres').modal().html(html);
            }
         });
@@ -516,7 +517,7 @@ $(document).delegate(".poistaRivit","click",function(){
            data: { "id" : thisVal },
            success: function(data){
 		var d = JSON.parse(data);
-		console.log(d);
+		//console.log(d);
 
 	  	blockUpdater(divID);
 		$('#showres').modal('hide');
@@ -541,7 +542,7 @@ $(document).delegate(".poistaRivit","click",function(){
 	   //data: { id : forThis[1] },
            success: function(data){
 		data = JSON.parse(data);
-		console.log(data);
+		//console.log(data);
 		if(data['OK'])
 		{
 			var did = data['did'].split("_");
@@ -583,9 +584,10 @@ $(document).delegate(".poistaRivit","click",function(){
 			  success:function(data){
 			  data = JSON.parse(data);
 			  //console.log(data);
-
-				dataUpdater(thisDID, data);
-
+				//$.each(data, function( index, value ) {
+					dataUpdater(thisDID, data);
+					//console.log(data );
+				//});
 			  },
 			  error:function(data){
 			  console.log(data);
@@ -596,22 +598,31 @@ $(document).delegate(".poistaRivit","click",function(){
 
   function dataUpdater(thisDID, data)
   {
+		var laatikot = '';
+		$.each(data['laatikot'], function( index, value ) {
+			$.each(value, function( i, l ) {
+				laatikot += l;
+			});
+		});
+		//console.log(laatikot);
+		//return false;
+
 		var pvmSuunn 		= $('#yhteensaPvm_'+thisDID).find('.pvmSuunn').attr('total');
 		var toteutuneetTunnit 	= parseFloat(data['toteutuneetTunnit']);
 		var ero 		= eroaika(pvmSuunn, toteutuneetTunnit);
 
-	 	$('#'+thisDID).html(data['laatikot']);
+	 	$('#'+thisDID).html('<div class="small">' + laatikot + '<b class="link glyphicon glyphicon-plus uusirivi" for="' + thisDID + '"></b>');
 	 	$('#yhteensaPvm_'+thisDID).find('.pvmTot').attr('total', data['toteutuneetTunnit']).html(sprint(toteutuneetTunnit));
 	 	$('#yhteensaPvm_'+thisDID).find('.pvmEro').attr('total', data['toteutuneetTunnit']).html(sprint(ero));
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaTyotunnit').attr('total', data['tyotunnit']).html(sprint(data['tyotunnit']));
-	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaMatkat').attr('total', data['matkat']).html(sprint(data['matkat']));
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaMatkat').attr('total', data['matkatunnit']).html(sprint(data['matkatunnit']));
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaLounaat').attr('total', data['lounaat']).html(sprint(data['lounaat']));
-	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaIlta').attr('total', data['ilta']).html(sprint(data['ilta']));
-	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaYo').attr('total', data['yo']).html(sprint(data['yo']));
-	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaSu').attr('total', data['su']).html(sprint(data['su']));
-	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaSL').attr('total', data['sl']).html(sprint(data['sl']));
-	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaSPL').attr('total', data['spl']).html(sprint(data['spl']));
-	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaLS').attr('total', data['ls']).html(sprint(data['ls']));
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaIlta').attr('total', data['iltatunnit']).html(sprint(data['iltatunnit']));
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaYo').attr('total', data['yotunnit']).html(sprint(data['yotunnit']));
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaSu').attr('total', data['sutunnit']).html(sprint(data['sutunnit']));
+	  	//$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaSL').attr('total', data['sl']).html(sprint(data['sl']));
+	  	//$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaSPL').attr('total', data['spl']).html(sprint(data['spl']));
+	  	//$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaLS').attr('total', data['ls']).html(sprint(data['ls']));
 
 		// <-- Hyvaksyn nappin varten
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('tyotunnit', data['tyotunnit']);
@@ -620,10 +631,10 @@ $(document).delegate(".poistaRivit","click",function(){
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('tyoilta', data['ilta']);
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('tyoyo', data['yo']);
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('tyosu', data['su']);
-	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('sl', data['sl']);
-	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('spl', data['spl']);
-	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('ls', data['ls']);
-	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('vl', data['vl']);
+	  	//$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('sl', data['sl']);
+	  	//$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('spl', data['spl']);
+	  	//$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('ls', data['ls']);
+	  	//$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('vl', data['vl']);
 		//     Hyvaksyn nappin varten -->
 
 
@@ -653,9 +664,9 @@ $(document).delegate(".poistaRivit","click",function(){
 			yoWeek += parseFloat($(this).find('.allaYo').attr('total'));
 			suWeek += parseFloat($(this).find('.allaSu').attr('total'));
 
-			SLWeek += parseFloat($(this).find('.allaSL').attr('total'));
-			SPLWeek += parseFloat($(this).find('.allaSPL').attr('total'));
-			LSWeek += parseFloat($(this).find('.allaLS').attr('total'));
+			//SLWeek += parseFloat($(this).find('.allaSL').attr('total'));
+			//SPLWeek += parseFloat($(this).find('.allaSPL').attr('total'));
+			//LSWeek += parseFloat($(this).find('.allaLS').attr('total'));
 
 		});
 
@@ -669,9 +680,9 @@ $(document).delegate(".poistaRivit","click",function(){
 	  	$('.yoWeek_'+data['week']).html(sprint(yoWeek)+'<br>'+num(yoWeek));
 	  	$('.suWeek_'+data['week']).html(sprint(suWeek)+'<br>'+num(suWeek));
 
-	  	$('.SLWeek_'+data['week']).html(sprint(SLWeek)+'<br>'+num(SLWeek));
-	  	$('.SPLWeek_'+data['week']).html(sprint(SPLWeek)+'<br>'+num(SPLWeek));
-	  	$('.LSWeek_'+data['week']).html(sprint(LSWeek)+'<br>'+num(LSWeek));
+	  	//$('.SLWeek_'+data['week']).html(sprint(SLWeek)+'<br>'+num(SLWeek));
+	  	//$('.SPLWeek_'+data['week']).html(sprint(SPLWeek)+'<br>'+num(SPLWeek));
+	  	//$('.LSWeek_'+data['week']).html(sprint(LSWeek)+'<br>'+num(LSWeek));
 		//     Week -->
 
 

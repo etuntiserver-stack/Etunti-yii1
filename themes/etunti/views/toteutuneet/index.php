@@ -273,11 +273,11 @@ $dateDiff = dateDiff($from, $to);
 
   $tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksynta*/ 2, false, 0, true);
   $hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksytyt*/ 3, false, 0, true);
-  $lounaat_all 		= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), /*hyvaksytyt*/ 3, false, 0, true);
-  $matkatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2), /*hyvaksytyt*/ 3, false, 0, true);
-  $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksytyt*/ 3, false, 1, true);
-  $yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksytyt*/ 3, false, 2, true);
-  $sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksytyt*/ 3, false, 3, true);
+  $lounaat_all 		= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), /*hyvaksytyt*/ 2, false, 0, true);
+  $matkatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2), /*hyvaksytyt*/ 2, false, 0, true);
+  $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksytyt*/ 2, false, 1, true);
+  $yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksytyt*/ 2, false, 2, true);
+  $sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksytyt*/ 2, false, 3, true);
 
   // <-- SPL, SL, LS, VL, VKL, AP
   $sl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'SL',true); // Palkallinen
@@ -420,7 +420,7 @@ exit;
     	echo '<div class="small">';
 	   foreach($toteutuneet_laatikot[$date] as $item)
 		echo $item;
-    	echo '&nbsp;&nbsp;<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
+    	echo '<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
     	echo '</div>';
     }
     echo '</td>';
