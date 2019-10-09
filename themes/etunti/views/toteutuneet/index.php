@@ -39,17 +39,6 @@ table { width: 100%; }
      <button class="btn btn-primary btn-sm myBgColors tuntienHyvaksyntaTaulu"><?php echo Yii::t('main', 'Tulosta'); ?></button>
      <button class="btn btn-primary btn-sm myBgColors tuntienHyvaksyntaTauluTivistelma"><?php echo Yii::t('main', 'Tulosta tiivistelmä'); ?></button>
    </div>
-<?php
-/*
-   <div class="pull-right">
-     <form action="#" target="_blank" method="POST">
-      <input type="hidden" name="from" value="<?php echo $from; ?>">
-      <input type="hidden" name="to" value="<?php echo $to; ?>">
-      <input type="submit" name="tulosta" class="btn btn-primary btn-sm myBgColors" value="PDF">
-     </form>
-   </div>
-*/
-?>
    <!-- tulostus -->
 
               <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-time"></i> <?php echo Yii::t('main', 'TUNTIEN HYVÄKSYNTÄ'); ?> 
