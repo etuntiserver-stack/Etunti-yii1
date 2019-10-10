@@ -614,6 +614,19 @@ $xml = '
 		$muutos = false;
 		$tun = 0;
 
+		$ilman_lounastaukot 	= false;
+		$ilman_matkat 		= false;
+		if(isset($_GET['ilman']))
+		{
+		  foreach($_GET['ilman'] as $val){
+			if($val == 'Lounastauko')
+			$ilman_lounastaukot = true;
+
+			if($val == 'MATKA')
+			$ilman_matkat = true;
+		  }
+		}
+
 	       	$criteria = new CDbCriteria();
 		$criteria->order = "TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'))";
 		$criteria->condition = " 
@@ -623,9 +636,9 @@ $xml = '
 			AND aloitan!='' AND loppui!=''
 			AND deleted=0
 		";
-		if(Yii::app()->session['Lounastauko'])
+		if($ilman_lounastaukot)
 		$criteria->addCondition (" status != '10' ");
-		if(Yii::app()->session['MATKA'])
+		if($ilman_matkat)
 		$criteria->addCondition (" status != '2' ");
 	
 		$mob = Mobile::model()->findAll($criteria); 
@@ -646,9 +659,9 @@ $xml = '
 			AND aloitan!='' AND loppui!=''
 			AND deleted=0
 		 ";
-		if(Yii::app()->session['Lounastauko'])
+		if($ilman_lounastaukot)
 		$criteria->addCondition (" status != '10' ");
-		if(Yii::app()->session['MATKA'])
+		if($ilman_matkat)
 		$criteria->addCondition (" status != '2' ");
 	
 		$tv = Toteutuneet::model()->findAll($criteria); 

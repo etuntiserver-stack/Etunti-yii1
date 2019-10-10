@@ -80,7 +80,6 @@ table { width: 100%; }
                           </label>
                         </div>
                       </div>
-<?php /*
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
@@ -101,8 +100,7 @@ table { width: 100%; }
                           </label>
                         </div>
                       </div>
-*/ ?>
-                      <div class="col-md-2 col-md-offset-2">
+                      <div class="col-md-2 col-md-offset-1">
                         <div class="section">
                           <label class="field prepend-icon">
 
@@ -271,15 +269,35 @@ $dateDiff = dateDiff($from, $to);
   $yhtVKL	= 0;
   $yhtAP	= 0;
 
+  $ilman_lounastaukot 	= false;
+  $ilman_matkat 	= false;
+  if(isset($_GET['ilman']))
+  {
+	foreach($_GET['ilman'] as $val){
+		if($val == 'Lounastauko')
+		$ilman_lounastaukot = true;
+
+		if($val == 'MATKA')
+		$ilman_matkat = true;
+	}
+  }
+
   $tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 0, true);
   $hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 3, false, 0, true);
-  $lounaat_all 		= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), 2, false, 0, true);
-  $matkatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2), 2, false, 0, true);
+  if(!$ilman_lounastaukot)
+  	$lounaat_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), 2, false, 0, true);
+  if(!$ilman_matkat)
+  	$matkatunnit_all = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2), 2, false, 0, true);
   $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 1, true);
   $yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 2, true);
   $sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 3, true);
-  $pyhapaivat_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 4, true);
-  $erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 5, true);
+  if(!$ilman_matkat){
+  	$pyhapaivat_all		= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 4, true);
+	$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 5, true);
+  } else {
+  	$pyhapaivat_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 4, true);
+	$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 5, true);
+  }
 
   // <-- SPL, SL, LS, VL, VKL, AP
   $sl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'SL',true); // Palkallinen
