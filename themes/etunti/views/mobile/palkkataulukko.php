@@ -285,7 +285,7 @@ $this->breadcrumbs=array(
   foreach($model as $data)
   {
 
-		$tp = $tyopaivia[$data->id];// $this->Tp($data->id,$from,$to);
+		$tp = $this->Tp($data->id,$from,$to); //$tyopaivia[$data->id];// $this->Tp($data->id,$from,$to); on kaytossa muuala
 
 		// <-- SPL, SL, LS, VL, VKL, AP
 		$sl 		= (isset($sl_all[$data->id]))? $sl_all[$data->id] : 0; // Palkallinen
