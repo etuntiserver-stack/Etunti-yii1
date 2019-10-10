@@ -282,15 +282,24 @@ $dateDiff = dateDiff($from, $to);
 	}
   }
 
+
   $tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 0, true);
-  $hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 3, false, 0, true);
-  if(!$ilman_lounastaukot)
-  	$lounaat_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), 2, false, 0, true);
+
   if(!$ilman_matkat)
-  	$matkatunnit_all = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2), 2, false, 0, true);
+  $hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 3, false, 0, true);
+  else
+  $hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 3, false, 0, true);
+
+  if(!$ilman_lounastaukot)
+  $lounaat_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), 2, false, 0, true);
+
+  if(!$ilman_matkat)
+  $matkatunnit_all = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2), 2, false, 0, true);
+
   $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 1, true);
   $yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 2, true);
   $sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 3, true);
+
   if(!$ilman_matkat){
   	$pyhapaivat_all		= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 4, true);
 	$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 5, true);
@@ -441,7 +450,7 @@ exit;
     }
     echo '</td>';
 
-    echo '<td id="'.$did.'_'.$tid.'">';
+    echo '<td id="'.$did.'_'.$tid.'" ilman_lounastaukot="'.$ilman_lounastaukot.'" ilman_matkat="'.$ilman_matkat.'">';
     if(isset($toteutuneet_laatikot[$date])){
     	echo '<div class="small">';
 	   foreach($toteutuneet_laatikot[$date] as $item)
@@ -466,7 +475,7 @@ exit;
 	   </div>
 	   <div class="row">
 	    </div><div class="col-sm-5">
-		'.Yii::t('main', 'Hyväksytyt työtunnit: ').'
+		'.Yii::t('main', 'Hyväksytyt: ').'
 	    </div><div class="col-sm-6">
 		<span class="pvmTot" total="'.(int)$hyv_tyotunnit.'">'.$this->sprint($hyv_tyotunnit).'</span>
 	   </div>
@@ -592,7 +601,7 @@ exit;
 		  <tr>
 		   <th>'.Yii::t('main', 'Suunn.').'</th>
 		   <th>'.Yii::t('main', 'Luetut').'</th>
-		   <th>'.Yii::t('main', 'Hyväksytyt työtunnit').'</th>
+		   <th>'.Yii::t('main', 'Hyväksytyt').'</th>
 		   <th>'.Yii::t('main', 'Työtunnit').'</th>
 		   <th>'.Yii::t('main', 'Matkat').'</th>
 		   <th>'.Yii::t('main', 'Lounaat').'</th>
@@ -666,7 +675,7 @@ exit;
 		   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
 		   <th><?php echo Yii::t('main', 'Suunn.'); ?></th>
 		   <th><?php echo Yii::t('main', 'Luetut'); ?></th>
-		   <th><?php echo Yii::t('main', 'Hyväksytyt työtunnit'); ?></th>
+		   <th><?php echo Yii::t('main', 'Hyväksytyt'); ?></th>
 		   <th><?php echo Yii::t('main', 'Työtunnit'); ?></th>
 		   <th><?php echo Yii::t('main', 'Matkat'); ?></th>
 		   <th><?php echo Yii::t('main', 'Lounaat'); ?></th>

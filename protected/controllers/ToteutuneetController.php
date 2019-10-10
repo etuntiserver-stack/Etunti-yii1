@@ -578,20 +578,29 @@ $xml = '
 		return json_encode(array('laatikkot'=>$get, 'tunnit'=>$tun));
 	}
 
-	public function actionTotpvmtid($pvm,$tid)
+	public function actionTotpvmtid($pvm,$tid,$ilman_lounastaukot,$ilman_matkat)
 	{
 		$pvm			= date("Y-m-d", strtotime($pvm));
 		$mobile = Yii::app()->createController('Mobile');
 
 		$tyotunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksynta*/ 2, false, 0, true);
-		$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 3, false, 0, true);
-		$lounaat_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(10), /*hyvaksytyt*/ 2, false, 0, true);
-		$matkatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(2), /*hyvaksytyt*/ 2, false, 0, true);
+
+		if(!$ilman_matkat)
+		$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(2,3), 3, false, 0, true);
+		else
+		$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), 3, false, 0, true);
+
+		if(!$ilman_lounastaukot)
+		$lounaat_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(10), 2, false, 0, true);
+
+		if(!$ilman_matkat)
+		$matkatunnit_all = $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(2), 2, false, 0, true);
+
 		$iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 1, true);
 		$yotunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 2, true);
 		$sutunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 3, true);
 
-		$laatikot = $this->TotPvmTidBetween($pvm,$pvm,$tid);
+		$laatikot = $this->TotPvmTidBetween($pvm,$pvm,$tid,$ilman_lounastaukot,$ilman_matkat);
 		echo json_encode(array(
 			'laatikot' 	=> json_decode($laatikot),
 			'tyotunnit' 	=> (isset($tyotunnit_all[$pvm][$tid]))? $tyotunnit_all[$pvm][$tid] : 0,
@@ -605,7 +614,7 @@ $xml = '
 		exit;
 	}
 
-	protected function TotPvmTidBetween($from,$to,$tid)
+	protected function TotPvmTidBetween($from,$to,$tid,$ilman_lounastaukot=false,$ilman_matkat=false)
 	{
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
@@ -614,8 +623,6 @@ $xml = '
 		$muutos = false;
 		$tun = 0;
 
-		$ilman_lounastaukot 	= false;
-		$ilman_matkat 		= false;
 		if(isset($_GET['ilman']))
 		{
 		  foreach($_GET['ilman'] as $val){

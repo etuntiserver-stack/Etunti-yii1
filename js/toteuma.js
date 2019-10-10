@@ -115,6 +115,7 @@ $(document).delegate(".chckbxHyvaksynta","click",function(){
       var kuka = $(this).attr("kuka");
       var tot_lu = $(this).attr("tot_lu");
       var thisID = $(this).attr("id").split("_");
+      var divID = $(this).attr("for").split("_");
 
       if(label)
       {
@@ -124,6 +125,7 @@ $(document).delegate(".chckbxHyvaksynta","click",function(){
 	   data: { hyvaksy : "kylla", kuka : kuka },
            success: function(data){
 		//console.log(data);
+		blockUpdater(divID);
            }
         });
       } else {
@@ -133,6 +135,7 @@ $(document).delegate(".chckbxHyvaksynta","click",function(){
 	   data: { hyvaksy : "ei" },
            success: function(data){
 		//console.log(data);
+		blockUpdater(divID);
            }
         });
       }
@@ -203,17 +206,6 @@ function VL_VKL_JNE(thisDID, tila, week, count){
 }
 
 
-
-
-
-});
-
-
-
-
-
-
-$(document).ready(function(){
 
 
    $(document).delegate(".uusiRiviSubmit","click",function(){
@@ -576,14 +568,15 @@ $(document).delegate(".poistaRivit","click",function(){
   function blockUpdater(divID){
 
 		var thisDID = divID[0]+'_'+divID[1];
-
+		var ilman_lounastaukot = $("#" + thisDID).attr('ilman_lounastaukot');
+		var ilman_matkat = $("#" + thisDID).attr('ilman_matkat');
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/totpvmtid',
 			type:'GET',
-			data: { "pvm" : divID[0], "tid" : divID[1] },
+			data: { "pvm" : divID[0], "tid" : divID[1], ilman_lounastaukot : ilman_lounastaukot, ilman_matkat : ilman_matkat },
 			  success:function(data){
-			  data = JSON.parse(data);
 			  //console.log(data);
+			  data = JSON.parse(data);
 				//$.each(data, function( index, value ) {
 					dataUpdater(thisDID, data);
 					//console.log(data );
@@ -608,12 +601,12 @@ $(document).delegate(".poistaRivit","click",function(){
 		//return false;
 
 		var pvmSuunn 		= $('#yhteensaPvm_'+thisDID).find('.pvmSuunn').attr('total');
-		var toteutuneetTunnit 	= parseFloat(data['toteutuneetTunnit']);
-		var ero 		= eroaika(pvmSuunn, toteutuneetTunnit);
+		var hyv_tyotunnit 	= parseFloat(data['hyv_tyotunnit']);
+		var ero 		= eroaika(pvmSuunn, hyv_tyotunnit);
 
 	 	$('#'+thisDID).html('<div class="small">' + laatikot + '<b class="link glyphicon glyphicon-plus uusirivi" for="' + thisDID + '"></b>');
-	 	$('#yhteensaPvm_'+thisDID).find('.pvmTot').attr('total', data['toteutuneetTunnit']).html(sprint(toteutuneetTunnit));
-	 	$('#yhteensaPvm_'+thisDID).find('.pvmEro').attr('total', data['toteutuneetTunnit']).html(sprint(ero));
+	 	$('#yhteensaPvm_'+thisDID).find('.pvmTot').attr('total', data['hyv_tyotunnit']).html(sprint(hyv_tyotunnit));
+	 	$('#yhteensaPvm_'+thisDID).find('.pvmEro').attr('total', data['hyv_tyotunnit']).html(sprint(ero));
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaTyotunnit').attr('total', data['tyotunnit']).html(sprint(data['tyotunnit']));
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaMatkat').attr('total', data['matkatunnit']).html(sprint(data['matkatunnit']));
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaLounaat').attr('total', data['lounaat']).html(sprint(data['lounaat']));
@@ -696,9 +689,9 @@ $(document).delegate(".poistaRivit","click",function(){
 		var iltaFoot	= 0;
 		var yoFoot	= 0;
 		var suFoot	= 0;
-		var SLFoot	= 0;
-		var SPLFoot	= 0;
-		var LSFoot	= 0;
+		//var SLFoot	= 0;
+		//var SPLFoot	= 0;
+		//var LSFoot	= 0;
 
 
   		$( ".forFooter" ).each(function( i ) {
@@ -714,24 +707,30 @@ $(document).delegate(".poistaRivit","click",function(){
 			yoFoot += parseFloat($(this).find('.allaYo').attr('total'));
 			suFoot += parseFloat($(this).find('.allaSu').attr('total'));
 
-			SLFoot += parseFloat($(this).find('.allaSL').attr('total'));
-			SPLFoot += parseFloat($(this).find('.allaSPL').attr('total'));
-			LSFoot += parseFloat($(this).find('.allaLS').attr('total'));
+			//SLFoot += parseFloat($(this).find('.allaSL').attr('total'));
+			//SPLFoot += parseFloat($(this).find('.allaSPL').attr('total'));
+			//LSFoot += parseFloat($(this).find('.allaLS').attr('total'));
 		});
-
+		if(suunnFoot !== 0)
 	  	$('#yhteensaFooterTaulu').find('.suunnFoot').html(sprint(suunnFoot)+'<br>'+num(suunnFoot));
+		if(totFoot !== 0)
 	  	$('#yhteensaFooterTaulu').find('.totFoot').html(sprint(totFoot)+'<br>'+num(totFoot));
+		if(tyotunnitFoot !== 0)
 	  	$('#yhteensaFooterTaulu').find('.tyotunnitFoot').html(sprint(tyotunnitFoot)+'<br>'+num(tyotunnitFoot));
+		if(matkatFoot !== 0)
 	  	$('#yhteensaFooterTaulu').find('.matkatFoot').html(sprint(matkatFoot)+'<br>'+num(matkatFoot));
+		if(lounaatFoot !== 0)
 	  	$('#yhteensaFooterTaulu').find('.lounaatFoot').html(sprint(lounaatFoot)+'<br>'+num(lounaatFoot));
-
+		if(iltaFoot !== 0)
 	  	$('#yhteensaFooterTaulu').find('.iltaFoot').html(sprint(iltaFoot)+'<br>'+num(iltaFoot));
+		if(yoFoot !== 0)
 	  	$('#yhteensaFooterTaulu').find('.yoFoot').html(sprint(yoFoot)+'<br>'+num(yoFoot));
+		if(suFoot !== 0)
 	  	$('#yhteensaFooterTaulu').find('.suFoot').html(sprint(suFoot)+'<br>'+num(suFoot));
 
-	  	$('#yhteensaFooterTaulu').find('.SLFoot').html(sprint(SLFoot)+'<br>'+num(SLFoot));
-	  	$('#yhteensaFooterTaulu').find('.SPLFoot').html(sprint(SPLFoot)+'<br>'+num(SPLFoot));
-	  	$('#yhteensaFooterTaulu').find('.LSFoot').html(sprint(LSFoot)+'<br>'+num(LSFoot));
+	  	//$('#yhteensaFooterTaulu').find('.SLFoot').html(sprint(SLFoot)+'<br>'+num(SLFoot));
+	  	//$('#yhteensaFooterTaulu').find('.SPLFoot').html(sprint(SPLFoot)+'<br>'+num(SPLFoot));
+	  	//$('#yhteensaFooterTaulu').find('.LSFoot').html(sprint(LSFoot)+'<br>'+num(LSFoot));
 		//     Footer -->
 
 

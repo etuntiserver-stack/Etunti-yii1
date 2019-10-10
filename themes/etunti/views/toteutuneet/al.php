@@ -91,10 +91,10 @@ foreach($attributes as $str){
 	   echo '<span class="pull-right mob_kesto hidden">&nbsp;'.$this->sprint(strtotime($loppui)-strtotime($aloitan)).'</span>';
 
 	   echo '
-	   <div class="pull-right">'.$ap.'</div>';
+	   <div class="pull-right">'.$ap.'</div>'; //data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hyväksy').'"
 	   echo '
 		<span class="form-group">
-			<input type="checkbox" class="chckbxHyvaksynta" id="hyv_'.$rivi.'" '.$chk[$rivi].' tot_lu="'.$tot_lu.'" kuka="'.Yii::app()->user->username.'///'.date('d.m.Y').'" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hyväksy').'">&nbsp; 
+			<input type="checkbox" class="chckbxHyvaksynta" id="hyv_'.$rivi.'" '.$chk[$rivi].' tot_lu="'.$tot_lu.'" for="'.$did.'_'.$tid.'" kuka="'.Yii::app()->user->username.'///'.date('d.m.Y').'" >&nbsp; 
 		</span><span class="form-group">
 			'.$isEripaivat.'<i class="form-group link totRivi '.$admin.'" mod="'.$mod.'" id="'.$tot_lu.'_'.$rivi.'">'.$al.'<br>'.$kohde.'</i>
 			'.$tuote.'
