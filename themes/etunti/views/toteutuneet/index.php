@@ -7,6 +7,8 @@ $this->breadcrumbs=array(
 	Yii::t('main', 'Toteuma'),
 );
 $asetukset=Asetukset::model()->findbypk(1);
+$netvisor_kaytto = $asetukset->netvisor_kaytto;
+$netvisor_mita_onkayttossa = $asetukset->netvisor_mita_onkayttossa;
 ?>
 <style>
 .fullRivi{
@@ -133,7 +135,7 @@ table { width: 100%; }
 
 
 
-		    <?php if($asetukset->netvisor_kaytto == 1 and isset($_GET['tekija'])) : ?>
+		    <?php if($netvisor_kaytto == 1 and isset($_GET['tekija'])) : ?>
                     <p><div class="row">
                       <div class="col-md-12">
 			<span class="btn btn-primary btn-lg lahetaKaikki btn-block myBgColors"><?php echo Yii::t('main', 'Lähetä kaikki netvisoriin'); ?></span>
@@ -175,7 +177,7 @@ table { width: 100%; }
 
 <?php
 $netvisor_mita_lahetetaan = array();
-if($asetukset->netvisor_kaytto == 1){
+if($netvisor_kaytto == 1){
 	$netvisor_mita_lahetetaan = json_decode($asetukset->netvisor_mita_lahetetaan);
 }
 $tid = $_GET['tekija'];
@@ -242,9 +244,7 @@ $dateDiff = dateDiff($from, $to);
   $yhtTyotunnit	= 0;
   $yhtLounaat	= 0;
 
-  $tyoPy 	= 0;
   $yhtPy	= 0;
-  $tyoEl 	= 0;
   $yhtEl	= 0;
   $yhtPyWeek	= 0;
   $yhtElWeek	= 0;
@@ -271,13 +271,15 @@ $dateDiff = dateDiff($from, $to);
   $yhtVKL	= 0;
   $yhtAP	= 0;
 
-  $tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksynta*/ 2, false, 0, true);
-  $hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksytyt*/ 3, false, 0, true);
-  $lounaat_all 		= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), /*hyvaksytyt*/ 2, false, 0, true);
-  $matkatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2), /*hyvaksytyt*/ 2, false, 0, true);
-  $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksytyt*/ 2, false, 1, true);
-  $yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksytyt*/ 2, false, 2, true);
-  $sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), /*hyvaksytyt*/ 2, false, 3, true);
+  $tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 0, true);
+  $hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 3, false, 0, true);
+  $lounaat_all 		= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), 2, false, 0, true);
+  $matkatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2), 2, false, 0, true);
+  $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 1, true);
+  $yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 2, true);
+  $sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 3, true);
+  $pyhapaivat_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 4, true);
+  $erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 5, true);
 
   // <-- SPL, SL, LS, VL, VKL, AP
   $sl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'SL',true); // Palkallinen
@@ -290,9 +292,13 @@ $dateDiff = dateDiff($from, $to);
 
   $luetut_laatikot = json_decode($this->LuetutPvmTidBetween($from,$to,$tid), true);
   $toteutuneet_laatikot = json_decode($this->TotPvmTidBetween($from,$to,$tid), true);
+
+  $vuosilomachecker	= $this->vuosilomaCheckerBetween($from, $to, $tid);
+  $hyvaksymmattomat_t	= $this->hyvaksyttamatTunnitBetween($from, $to, $tid);
+
 /*
 echo '<pre>';
-print_r($luetut_laatikot['laatikkot']);
+print_r($vuosilomachecker);
 echo '<pre>';
 exit;
 */
@@ -316,6 +322,8 @@ exit;
     $iltatunnit 	= (isset($iltatunnit_all[$pvm][$tid]))? $iltatunnit_all[$pvm][$tid] : 0;
     $yotunnit 		= (isset($yotunnit_all[$pvm][$tid]))? $yotunnit_all[$pvm][$tid] : 0;
     $sutunnit 		= (isset($sutunnit_all[$pvm][$tid]))? $sutunnit_all[$pvm][$tid] : 0;
+    $pyhapaivat_tunnit	= (isset($pyhapaivat_all[$pvm][$tid]))? $pyhapaivat_all[$pvm][$tid] : 0;
+    $erikoislauantai_tunnit = (isset($erikoislauantai_all[$pvm][$tid]))? $erikoislauantai_all[$pvm][$tid] : 0;
 
     // <-- SPL, SL, LS, VL, VKL, AP
     $sl 		= (isset($sl_all[$pvm][$tid]))? $sl_all[$pvm][$tid] : 0; // Palkallinen
@@ -333,6 +341,15 @@ exit;
     $yhtYo 		+= $yotunnit;
     $yhtSu 		+= $sutunnit;
 
+    $yhtPy 		+= $pyhapaivat_tunnit;
+    $yhtEl 		+= $erikoislauantai_tunnit;
+    $yhtSPL 		+= $spl;
+    $yhtSL 		+= $sl;
+    $yhtLS 		+= $ls;
+    $yhtVL 		+= $vl;
+    $yhtVKL 		+= $vkl;
+    $yhtAP 		+= $ap;
+
     $korv = $this->korvauksetPvmTid(date("Y-m-d",strtotime($date)),$tid);
     if(!empty($korv))
     {
@@ -343,31 +360,20 @@ exit;
 		'</div></div>';
     }
 
-
-	  $ispyha = '';
-	  $pyhat = $this->pyhat($date);
-	  if($pyhat == 'su' or $pyhat == 'pyhapaiva' or $pyhat == 'erikoislauantai')
-	  {
-		$clPyhat = 'style="background:#ddd"';
-		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>';
-	  }
-
-	  if($pyhat == 'pyhapaiva')
-	  {
-		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>';
-	  }
-
-	  if($pyhat == 'erikoislauantai')
-	  {
-		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Erikoislauantai').'"></i>';
-	  }
+    $ispyha = '';
+    if($pyhapaivat_tunnit > 0){
+	$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>';
+    }
+    if($erikoislauantai_tunnit > 0){
+	$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Erikoislauantai').'"></i>';
+    }
 
     echo '<tr><td class="text-left" colspan="4">'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$ispyha.'</td></tr>';
 
-    if($asetukset->netvisor_kaytto == 1){
+    if($netvisor_kaytto == 1){
     echo '<tr class="korvaukset_ennakkot">';
     echo '<td colspan="4">'.
-			CHtml::button(Yii::t('main', 'Korvaukset ja ennakot'.$asetukset->netvisor_kaytto), 
+			CHtml::button(Yii::t('main', 'Korvaukset ja ennakot'.$netvisor_kaytto), 
 				array(
 					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
 					'taulu'=>'korvaukset',
@@ -379,10 +385,12 @@ exit;
     </td></tr>';
     }
 
-    $vlcheck = $this->vuosilomaChecker($tid, $date);
-    if(!empty($vlcheck)){
+    if(isset($vuosilomachecker[$date])){
     echo '<tr>';
-    echo '<td></td><td></td><td><h3>'.$vlcheck.'</h3></td><td></td>';
+    echo '<td></td><td></td><td class="text-center">';
+	foreach($vuosilomachecker[$date] as $vuosiloma)
+		echo $vuosiloma;
+    echo '</td><td></td>';
     echo '</tr>';
     }
     echo '<tr class="su_lu_tot">';
@@ -456,19 +464,8 @@ exit;
     echo '</tr>';
 
 
-    $tyoPy 	= $this->pyhapaivat($tid,$date,"pyhat");
-    $yhtPy 	+= $tyoPy;
-    $tyoEl 	= $this->pyhapaivat($tid,$date,"el");
-    $yhtEl 	+= $tyoEl;
-    $yhtSPL 	+= $spl;
-    $yhtSL 	+= $sl;
-    $yhtLS 	+= $ls;
-    $yhtVL 	+= $vl;
-    $yhtVKL 	+= $vkl;
-    $yhtAP 	+= $ap;
-
-    $hyvaksytty = HyvaksyttamatPvmTunnit::model()->find(" tid='".$tid."' AND pvm='".date("Y-m-d",strtotime($date))."' AND netvisor_ok_list!='' ");
-    if(isset($hyvaksytty->id))
+    //$hyvaksytty = HyvaksyttamatPvmTunnit::model()->find(" tid='".$tid."' AND pvm='".date("Y-m-d",strtotime($date))."' AND netvisor_ok_list!='' ");
+    if(isset($hyvaksymmattomat_t[$date]))
 	$nvtilanne = 1;
     else
 	$nvtilanne = 0;
@@ -478,20 +475,20 @@ exit;
 		<table class="yhteensaPvmAllaTaulu_'.date("W",strtotime($date)).' forFooterAlla table table-bordered" cellspacing="0" cellpadding="0" id="yhteensaPvmAllaTaulu_'.$did.'_'.$tid.'" style="width:100%">
 		 <thead>
 		  <tr>
-		   <th class="'.(($asetukset->netvisor_kaytto == 1 and in_array('tyotunnit', $netvisor_mita_lahetetaan, true))?'bg-success':'').'">'.Yii::t('main', 'Työtunnit').'</th>
-		   <th class="'.(($asetukset->netvisor_kaytto == 1 and in_array('matka', $netvisor_mita_lahetetaan, true))?'bg-success':'').'">'.Yii::t('main', 'Matkat').'</th>
-		   <th class="'.(($asetukset->netvisor_kaytto == 1 and in_array('lounaat', $netvisor_mita_lahetetaan, true))?'bg-success':'').'">'.Yii::t('main', 'Lounaat').'</th>
-		   <th class="'.(($asetukset->netvisor_kaytto == 1 and in_array('tyoilta', $netvisor_mita_lahetetaan, true))?'bg-success':'').'">'.Yii::t('main', 'Ilta').'</th>
-		   <th class="'.(($asetukset->netvisor_kaytto == 1 and in_array('tyoyo', $netvisor_mita_lahetetaan, true))?'bg-success':'').'">'.Yii::t('main', 'Yö').'</th>
-		   <th class="'.(($asetukset->netvisor_kaytto == 1 and in_array('tyosu', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Sunnuntaitunnit').'">'.Yii::t('main', 'Su').'</th>
-		   <th class="'.(($asetukset->netvisor_kaytto == 1 and in_array('py', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Pyhäpäivätunnit').'">'.Yii::t('main', 'Py').'</th>
-		   <th class="'.(($asetukset->netvisor_kaytto == 1 and in_array('el', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Erikoislauantaitunnit').'">'.Yii::t('main', 'El').'</th>
-		   <th class="'.(($asetukset->netvisor_kaytto == 1 and in_array('sl', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Palkkalinen sairasloma').'">'.Yii::t('main', 'SL').'</th>
-		   <th class="'.(($asetukset->netvisor_kaytto == 1 and in_array('spl', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Palkaton sairasloma').'">'.Yii::t('main', 'SPL').'</th>
-		   <th class="'.(($asetukset->netvisor_kaytto == 1 and in_array('ls', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Lapsen sairaus').'">'.Yii::t('main', 'LS').'</th>
-		   <th class="'.(($asetukset->netvisor_kaytto == 1 and in_array('vl', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Vuosiloma').'">'.Yii::t('main', 'VL').'</th>
+		   <th class="'.(($netvisor_kaytto == 1 and in_array('tyotunnit', $netvisor_mita_lahetetaan, true))?'bg-success':'').'">'.Yii::t('main', 'Työtunnit').'</th>
+		   <th class="'.(($netvisor_kaytto == 1 and in_array('matka', $netvisor_mita_lahetetaan, true))?'bg-success':'').'">'.Yii::t('main', 'Matkat').'</th>
+		   <th class="'.(($netvisor_kaytto == 1 and in_array('lounaat', $netvisor_mita_lahetetaan, true))?'bg-success':'').'">'.Yii::t('main', 'Lounaat').'</th>
+		   <th class="'.(($netvisor_kaytto == 1 and in_array('tyoilta', $netvisor_mita_lahetetaan, true))?'bg-success':'').'">'.Yii::t('main', 'Ilta').'</th>
+		   <th class="'.(($netvisor_kaytto == 1 and in_array('tyoyo', $netvisor_mita_lahetetaan, true))?'bg-success':'').'">'.Yii::t('main', 'Yö').'</th>
+		   <th class="'.(($netvisor_kaytto == 1 and in_array('tyosu', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Sunnuntaitunnit').'">'.Yii::t('main', 'Su').'</th>
+		   <th class="'.(($netvisor_kaytto == 1 and in_array('py', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Pyhäpäivätunnit').'">'.Yii::t('main', 'Py').'</th>
+		   <th class="'.(($netvisor_kaytto == 1 and in_array('el', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Erikoislauantaitunnit').'">'.Yii::t('main', 'El').'</th>
+		   <th class="'.(($netvisor_kaytto == 1 and in_array('sl', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Palkkalinen sairasloma').'">'.Yii::t('main', 'SL').'</th>
+		   <th class="'.(($netvisor_kaytto == 1 and in_array('spl', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Palkaton sairasloma').'">'.Yii::t('main', 'SPL').'</th>
+		   <th class="'.(($netvisor_kaytto == 1 and in_array('ls', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Lapsen sairaus').'">'.Yii::t('main', 'LS').'</th>
+		   <th class="'.(($netvisor_kaytto == 1 and in_array('vl', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Vuosiloma').'">'.Yii::t('main', 'VL').'</th>
 		   <!--<th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Viikkolomapäivä').'">'.Yii::t('main', 'VKL').'</th>-->
-		   <th class="'.(($asetukset->netvisor_kaytto == 1 and in_array('ap', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Arkipyhä').'">'.Yii::t('main', 'AP').'</th>
+		   <th class="'.(($netvisor_kaytto == 1 and in_array('ap', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Arkipyhä').'">'.Yii::t('main', 'AP').'</th>
 		  </tr>
 		 </thead>
 		  <tr>
@@ -501,8 +498,8 @@ exit;
 		   <td><span class="allaIlta" total="'.(int)$iltatunnit.'">'.$this->sprint($iltatunnit).'</span></td>
 		   <td><span class="allaYo" total="'.(int)$yotunnit.'">'.$this->sprint($yotunnit).'</span></td>
 		   <td><span class="allaSu" total="'.(int)$sutunnit.'">'.$this->sprint($sutunnit).'</span></td>
-		   <td>'.$this->sprint($tyoPy).'</td>
-		   <td>'.$this->sprint($tyoEl).'</td>
+		   <td>'.$this->sprint($pyhapaivat_tunnit).'</td>
+		   <td>'.$this->sprint($erikoislauantai_tunnit).'</td>
 		   <td><span class="allaSL" total="'.(int)$sl.'">'.$sl.'</span></td>
 		   <td><span class="allaSPL" total="'.(int)$spl.'">'.$spl.'</span></td>
 		   <td><span class="allaLS" total="'.(int)$ls.'">'.$ls.'</span></td>
@@ -510,7 +507,7 @@ exit;
 		   <!--<td><span class="allaVKL" total="'.(int)$vkl.'">'.$this->sprint($vkl).'</span></td>-->
 		   <td><span class="allaAP" total="'.(int)$ap.'">'.$ap.'</span></td>
 		  </tr>';
-		 if($asetukset->netvisor_kaytto == 1 and ($asetukset->netvisor_mita_onkayttossa == 1 or $asetukset->netvisor_mita_onkayttossa == 2)) { 
+		 if($netvisor_kaytto == 1 and ($netvisor_mita_onkayttossa == 1 or $netvisor_mita_onkayttossa == 2)) { 
 		  echo ' 
 		  <tr class="lahetys_netvisoriin">
 		   <td colspan="13">			
@@ -523,8 +520,8 @@ exit;
 				tyoilta		="'.(int)$iltatunnit.'"
 				tyoyo		="'.(int)$yotunnit.'"
 				tyosu		="'.(int)$sutunnit.'"
-				tyopy		="'.(int)$tyoPy.'"
-				tyoel		="'.(int)$tyoEl.'"
+				tyopy		="'.(int)$pyhapaivat_tunnit.'"
+				tyoel		="'.(int)$erikoislauantai_tunnit.'"
 				sl		="'.(int)$sl.'"
 				spl		="'.(int)$spl.'"
 				ls		="'.(int)$ls.'"
@@ -555,8 +552,8 @@ exit;
     $yhtIltaWeek 	+= $iltatunnit;
     $yhtYoWeek 		+= $yotunnit;
     $yhtSuWeek 		+= $sutunnit;
-    $yhtPyWeek 		+= $tyoPy;
-    $yhtElWeek 		+= $tyoEl;
+    $yhtPyWeek 		+= $pyhapaivat_tunnit;
+    $yhtElWeek 		+= $erikoislauantai_tunnit;
     $yhtSLWeek 		+= $sl;
     $yhtSPLWeek		+= $spl;
     $yhtLSWeek 		+= $ls;

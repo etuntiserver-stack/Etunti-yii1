@@ -1926,7 +1926,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	/**
 	 * Get day/evening/night work hours for tids.
 	 * @param mixed $tids Array of tids, or single tid in string or int format.
-	 * @param int $time Lookup time, 0 = day, 1 = evening, 2 = nighttime, 3 = sunday.
+	 * @param int $time Lookup time, 0 = day, 1 = evening, 2 = nighttime, 3 = sunday, 4 = pyhapaivat
 	 */
 	public function TidfromtoMobiiliAll($from, $to, $tids, $status = array(), $hyvaksytty = '', $palkanlaskentaan = false, $time = 0, $by_aloitan = false)
 	{
@@ -1939,9 +1939,49 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			$set[$tids] = 0;
 		}
 
+		// <-- Pyhapaivat
+		$pyhapaivat = [];
+		if($time==4){
+			$asetukset = AsetuksetForAll::model()->findbypk(1);
+			$p_explode = explode("\n", $asetukset->viralliset_pyhapaivat);
+			$p_explode = array_map('trim', $p_explode); // clear spaces
+			$p_explode = array_map('rtrim', $p_explode); // clear spaces
+
+			$begin = date ("d.m.Y", strtotime($from));
+			$end   = date ("d.m.Y", strtotime($to));
+			while (strtotime($begin) <= strtotime($end)) {
+                		if(in_array($begin, $p_explode)){
+					$pyhapaivat[] = $begin;
+				}
+                		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
+			}
+			$pyhapaivat = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%d.%m.%Y')='".implode("' OR DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%d.%m.%Y')='", $pyhapaivat)."'";
+		}
+		//     Pyhapaivat -->
+
+		// <-- Erikoislauantai
+		$erikoislauantai = [];
+		if($time==5){
+			$asetukset = AsetuksetForAll::model()->findbypk(1);
+			$p_explode = explode("\n", $asetukset->erikoislauantai);
+			$p_explode = array_map('trim', $p_explode); // clear spaces
+			$p_explode = array_map('rtrim', $p_explode); // clear spaces
+
+			$begin = date ("d.m.Y", strtotime($from));
+			$end   = date ("d.m.Y", strtotime($to));
+			while (strtotime($begin) <= strtotime($end)) {
+                		if(in_array($begin, $p_explode)){
+					$erikoislauantai[] = $begin;
+				}
+                		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
+			}
+			$erikoislauantai = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%d.%m.%Y')='".implode("' OR DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%d.%m.%Y')='", $erikoislauantai)."'";
+		}
+		//     Erikoislauantai -->
+
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
-		$status = is_array($status) ? (count($status) > 0 ? array_shift($status) : 0) : $status;
+		$status = "status='".implode("' OR status='", $status)."'";
 		$criteria = new CDbCriteria();
 		if($by_aloitan)
 		   $criteria->group = "DATE(STR_TO_DATE(loppui, '%d.%m.%Y'))";
@@ -1949,7 +1989,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		   $criteria->group = "tid";
 
 		// Helper function to avoid duplicate code (doesn't handle 'hyvaksytty' as it differs)
-		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $palkanlaskentaan, $time, $by_aloitan) {
+		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $palkanlaskentaan, $time, $by_aloitan, $pyhapaivat, $erikoislauantai) {
 			if($by_aloitan)
 			   $criteria->group = "DATE(STR_TO_DATE(loppui, '%d.%m.%Y'))";
 			else
@@ -2069,6 +2109,26 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 							0
 						END) AS l_tunnit";
 					break;
+				case 4:
+					$criteria->select = "tid, aloitan, SUM(CASE
+						WHEN
+							$pyhapaivat
+						THEN 
+							TIME_TO_SEC(TIMEDIFF(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')))
+						ELSE
+							0
+						END) AS l_tunnit";
+					break;
+				case 5:
+					$criteria->select = "tid, aloitan, SUM(CASE
+						WHEN
+							$erikoislauantai
+						THEN 
+							TIME_TO_SEC(TIMEDIFF(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')))
+						ELSE
+							0
+						END) AS l_tunnit";
+					break;
 			}
 
 			// Conditions
@@ -2077,7 +2137,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				AND tid IN ($tids)
 				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
 				AND deleted=0";
-			if ($status) $criteria->addCondition("status='$status'");
+			if ($status) $criteria->addCondition($status);
 			if ($palkanlaskentaan) $criteria->addCondition("palkanlaskentaan=1");
 		};
 
@@ -2095,6 +2155,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 
 		// Exec query
+
 		$lu = Mobile::model()->findAll($criteria);
 
 		// Build second CDbCriteria for sivexkuitti_repaired (toteutuneet) if $hyvaksytty != 1

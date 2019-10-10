@@ -1553,26 +1553,47 @@ $xml = '
 		return $bod;
 	}
 
-	protected function vuosilomaChecker($tid, $pvm)
+	protected function vuosilomaCheckerBetween($from, $to, $tid)
 	{
-		$vl = '';
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+		$set = [];
 	       	$criteria = new CDbCriteria();
 		$criteria->condition = " 
 			tid = '".$tid."' 
-			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."'
+			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$from' AND '$to'
 			AND status=11
 			AND tyoajanlaatu!=''
 		";
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		foreach($tv as $item){
 			$arr = explode("/", $item->tyoajanlaatu);
-			if(isset($arr[1])){ $vl .= '<span style="color:'.$arr[1].'">'.$arr[0].'<br>'; }
+			if(isset($arr[1])){ $set[date("d.m.Y", strtotime($item->pvm))][] = '<h3 style="color:'.$arr[1].'">'.$arr[0].'</h3>'; }
 		}
 
-		return $vl;
+		return $set;
 
 	}
 
+	protected function hyvaksyttamatTunnitBetween($from, $to, $tid){
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+		$set = [];
+	       	$criteria = new CDbCriteria();
+		$criteria->condition = " 
+			tid='".$tid."' 
+			AND DATE(STR_TO_DATE(pvm, '%Y-%m-%d')) BETWEEN '$from' AND '$to'
+			AND netvisor_ok_list!=''
+		";
+		$model = HyvaksyttamatPvmTunnit::model()->findAll($criteria);
+		foreach($model as $item){
+			$set[date("d.m.Y", strtotime($item->pvm))] = 1;
+		}
+		return $set;
+	}
+/*
 	protected function pyhat($date){
 
 		$dateMonth = '';
@@ -1600,6 +1621,7 @@ $xml = '
 		return false;
 
  	}
+*/
 
 	public function eiLasketaSubStr($val)
 	{

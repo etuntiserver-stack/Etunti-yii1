@@ -248,12 +248,6 @@ $this->breadcrumbs=array(
   $loun		= 0;
   $lounYht	= 0;
 
-/*
-  $begin = new DateTime(date("Y-m-d", strtotime($from)));
-  $end = new DateTime(date("Y-m-d", strtotime($to." +1 day")));
-  $interval = DateInterval::createFromDateString('1 day');
-	$period = new DatePeriod($begin, $interval, $end);
-*/
   $tids = [];
    foreach ($model as $data)
 	$tids[] = $data->id;
@@ -265,6 +259,8 @@ $this->breadcrumbs=array(
   $matkatunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(2), $_GET['lu_tai_tot'], true, 0);
   $loun 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(10), $_GET['lu_tai_tot'], true, 0);
   $sutunnit	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 3);
+  $pyhapaivat	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(2,3), $_GET['lu_tai_tot'], true, 4);
+  $erikoislauantai	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(2,3), $_GET['lu_tai_tot'], true, 5);
 
   // <-- SPL, SL, LS, VL, VKL, AP
   $sl_all 		= $this->TidfromtoVuosilomaBetween($from,$to,$tids,'SL'); // Palkallinen
@@ -275,12 +271,15 @@ $this->breadcrumbs=array(
   $ap_all 		= $this->TidfromtoVuosilomaBetween($from,$to,$tids,'AP'); // Arkipaiva
   //     SPL, SL, LS, VL, VKL, AP -->
 
-  /*
+  
+
+
+/*
   echo '<pre>';
-  print_r($spl_all);
+  print_r($pyhapaivat);
   echo '<pre>';
   exit;
-  */
+*/  
 
   foreach($model as $data)
   {
@@ -302,9 +301,9 @@ $this->breadcrumbs=array(
 		$vlYht += $vl;
 		$vklYht += $vkl;
 		$totalTp += $tp;
-		$pyhat = $this->pyhapaivat($data->id,$from,$to,"pyhat");
+		$pyhat = $pyhapaivat[$data->id];
 		$pyhatYht += $pyhat;
-		$el = $this->pyhapaivat($data->id,$from,$to,"el");
+		$el = $erikoislauantai[$data->id];
 		$elYht += $el;
 
 		/* $m = $this->renderPartial('//mobile/tidfromtomatkat',array(
