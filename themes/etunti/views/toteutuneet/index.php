@@ -86,9 +86,9 @@ table { width: 100%; }
 
 			   <?php
 			    $lounas = '';
-			    $lounas = ( isset($_GET['Lounastauko']))  ? 'selected' : '';
+			    $lounas = (isset($_GET['ilman']) and in_array('Lounastauko', $_GET['ilman']))  ? 'selected' : '';
 			    $matka = '';
-			    $matka = ( isset($_GET['MATKA']))  ? 'selected' : '';
+			    $matka = (isset($_GET['ilman']) and in_array('MATKA', $_GET['ilman']))   ? 'selected' : '';
 
 			    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="'.Yii::t('main', 'Ei lasketa').'">';
 			    echo '<option value="Lounastauko" '.$lounas.'>'.Yii::t('main', 'Lounastauko').'</option>';
