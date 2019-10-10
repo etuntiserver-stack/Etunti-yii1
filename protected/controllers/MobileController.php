@@ -1984,23 +1984,16 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$status = "status='".implode("' OR status='", $status)."'";
 		$criteria = new CDbCriteria();
 		if($by_aloitan)
-		   $criteria->group = "DATE(STR_TO_DATE(loppui, '%d.%m.%Y'))";
+		   $criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))";
 		else
-		   if($time==6)
-		   	$criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')), tid";
-		   else
-		   	$criteria->group = "tid";
+		   $criteria->group = "tid";
 
 		// Helper function to avoid duplicate code (doesn't handle 'hyvaksytty' as it differs)
 		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $palkanlaskentaan, $time, $by_aloitan, $pyhapaivat, $erikoislauantai) {
 			if($by_aloitan)
-			   $criteria->group = "DATE(STR_TO_DATE(loppui, '%d.%m.%Y'))";
+			   $criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))";
 			else
-		   	   if($time==6)
-			   	$criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')), tid";
-		   	   else
-			   	$criteria->group = "tid";
-
+			   $criteria->group = "tid";
 			// Select statements
 			switch ($time) {
 				case 0:
@@ -2135,10 +2128,6 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 						ELSE
 							0
 						END) AS l_tunnit";
-					break;
-				case 6:
-					$criteria->select = "
-						tid, aloitan, (1) as l_tunnit";
 					break;
 			}
 
