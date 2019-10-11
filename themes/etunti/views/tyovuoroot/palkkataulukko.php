@@ -51,52 +51,6 @@ $this->breadcrumbs=array(
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
 	  </form>
-<?php /*
-     <form action="#" class="form-group" method="GET">
-      <input type="hidden" name="from" value="<?php echo $from; ?>">
-      <input type="hidden" name="to" value="<?php echo $to; ?>">
-      <div style="display:none">
-				<select class="gui-input" name="lu_tai_tot">
-				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
-				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
-				</select>
-				<?php
-		   		$site = Yii::app()->createController('Site');
-		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
-					'Tekija', // name
-					null, // class
-					'tyontekijat2', // id
-					(isset($_GET['Tekija']))?$_GET['Tekija']:array(), //selected
-					1 // aktiivinen
-				);
-				echo $tyontekiatLista;
-				?>
-      </div>
-      <input type="submit" name="tulosta_xls" class="btn btn-primary btn-sm myBgColors" value="XLS">
-     </form>
-     <form action="#" class="form-group" method="GET">
-      <input type="hidden" name="from" value="<?php echo $from; ?>">
-      <input type="hidden" name="to" value="<?php echo $to; ?>">
-      <div style="display:none">
-				<select class="gui-input" name="lu_tai_tot">
-				<option value="1" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1)?'selected':''?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
-				<option value="2" <?=(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2)?'selected':''?>><?php echo Yii::t('main', 'Luetut'); ?></option>
-				</select>
-				<?php
-		   		$site = Yii::app()->createController('Site');
-		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
-					'Tekija', // name
-					null, // class
-					'tyontekijat2', // id
-					(isset($_GET['Tekija']))?$_GET['Tekija']:array(), //selected
-					1 // aktiivinen
-				);
-				echo $tyontekiatLista;
-				?>
-      </div>
-      <input type="submit" name="tulosta_pdf" class="btn btn-primary btn-sm myBgColors" value="PDF">
-     </form>
-*/ ?>
     </div>
    </div>
    <!-- tulostus -->
