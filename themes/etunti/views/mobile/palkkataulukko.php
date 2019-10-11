@@ -305,12 +305,6 @@ $this->breadcrumbs=array(
 		$el = $erikoislauantai[$data->id];
 		$elYht += $el;
 
-		/* $m = $this->renderPartial('//mobile/tidfromtomatkat',array(
-				'from'=>$from,
-				'to'=>$to,
-				'tid'=>$data->id
-				),true); */
-
 		$iltatunnit_ja_iltamatka = $iltatunnit[$data->id]+$matkaIlta[$data->id];
 		$yht[0] 	+= $tyotunnit[$data->id];
 		$yht[1] 	+= $iltatunnit[$data->id];

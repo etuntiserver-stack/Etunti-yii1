@@ -101,6 +101,16 @@ class TyovuorootController extends Controller
 
 	public function actionPalkkataulukko()
 	{
+		$asetukset = Asetukset::model()->findByPk(1);
+		// <-- Order tyontekijat
+		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+			$tt_order_1 = "tekijan_nimi";
+			$tt_order_2 = "sukunimi";
+		} else {
+			$tt_order_1 = "sukunimi";
+			$tt_order_2 = "tekijan_nimi";
+		}
+		// Order tyontekijat -->
 
 		$from = date("d.m.Y",strtotime("first day of this month"));
 		$to = date("d.m.Y");
@@ -134,57 +144,15 @@ class TyovuorootController extends Controller
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 
-		if(isset($_GET['tulosta_pdf']))
-		{
-/*
-	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
-		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('tulosta_palkkataulukko', array(
+		//$dataProvider->pagination->pageSize = 50;
+		$this->render('palkkataulukko', array(
 			'model' => $model,
 			'from' => $from,
-			'to' => $to
-		  ),true));
-	          $html2pdf->Output();
-*/
-		} elseif(isset($_GET['tulosta_xls']))
-		{
-/*
-			if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
-			 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
-			}
-
-		        $html = $this->renderPartial('tulosta_palkkataulukko', array(
-				'model' => $model,
-				'from' => $from,
-				'to' => $to
-			),true);
-
-			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
-			$tiedosto = 'palkkatauluko';
-			file_put_contents($path.$tiedosto.'.html', $html);
-
-			exec('pandoc -s '.$path.$tiedosto.'.html -o '.$path.$tiedosto.'.xls', $output, $return);
-		        if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xls' ))
-			{
-				header("Content-Length: " . filesize ( $path.$tiedosto.'.xls' ) ); 
-		                header("Content-type: application/vnd.ms-excel;"); 
-		                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.xls'));
-		                header('Expires: 0');
-		                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		                readfile($path.$tiedosto.'.xls');
-				unlink($path.$tiedosto.'.html');
-				unlink($path.$tiedosto.'.xls');
-				exit;
-			}
-*/
-		} else {
-		  //$dataProvider->pagination->pageSize = 50;
-		  $this->render('palkkataulukko', array(
-			'model' => $model,
-			'from' => $from,
-			'to' => $to
-		  ));
-		}
+			'to' => $to,
+			'tt_order_1' => $tt_order_1,
+			'tt_order_2' => $tt_order_2,
+		));
+		
 	}
 
 	protected function TP($tid,$from,$to){
@@ -278,7 +246,7 @@ class TyovuorootController extends Controller
 		if(isset($tv->l_tunnit)){ $result = $tv->l_tunnit; }
 		return $result;
 	}
-
+/*
 	public function matkaIlta($tid,$from,$to)
 	{
 		$mobile = Yii::app()->createController('Mobile');
@@ -311,7 +279,8 @@ class TyovuorootController extends Controller
 		return $totalIlta;
 
 	}
-
+*/
+/*
 	public function toteutu($tid,$sivu,$from,$to)
 	{
 		$from = date("Y-m-d", strtotime($from));
@@ -343,7 +312,231 @@ class TyovuorootController extends Controller
 		return $result;
 
 	}
+*/
+	protected function TidfromtoTyovuoroAll($from, $to, $tids, $status, $time){
+		$set = [];
+		if (is_array($tids)) {
+			foreach($tids as $tid)
+				$set[$tid] = 0;
+			$tids = implode(", ", $tids);
+		} else {
+			$set[$tids] = 0;
+		}
 
+		// <-- Pyhapaivat
+		$pyhapaivat = [];
+		if($time==4){
+			$asetukset = AsetuksetForAll::model()->findbypk(1);
+			$p_explode = explode("\n", $asetukset->viralliset_pyhapaivat);
+			$p_explode = array_map('trim', $p_explode); // clear spaces
+			$p_explode = array_map('rtrim', $p_explode); // clear spaces
+
+			$begin = date ("d.m.Y", strtotime($from));
+			$end   = date ("d.m.Y", strtotime($to));
+			while (strtotime($begin) <= strtotime($end)) {
+                		if(in_array($begin, $p_explode)){
+					$pyhapaivat[] = $begin;
+				}
+                		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
+			}
+			$pyhapaivat = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%d.%m.%Y')='".implode("' OR DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%d.%m.%Y')='", $pyhapaivat)."'";
+		}
+		//     Pyhapaivat -->
+
+		// <-- Erikoislauantai
+		$erikoislauantai = [];
+		if($time==5){
+			$asetukset = AsetuksetForAll::model()->findbypk(1);
+			$p_explode = explode("\n", $asetukset->erikoislauantai);
+			$p_explode = array_map('trim', $p_explode); // clear spaces
+			$p_explode = array_map('rtrim', $p_explode); // clear spaces
+
+			$begin = date ("d.m.Y", strtotime($from));
+			$end   = date ("d.m.Y", strtotime($to));
+			while (strtotime($begin) <= strtotime($end)) {
+                		if(in_array($begin, $p_explode)){
+					$erikoislauantai[] = $begin;
+				}
+                		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
+			}
+			$erikoislauantai = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%d.%m.%Y')='".implode("' OR DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%d.%m.%Y')='", $erikoislauantai)."'";
+		}
+		//     Erikoislauantai -->
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+		$status = "status='".implode("' OR status='", $status)."'";
+		$criteria = new CDbCriteria();
+		$criteria->group = "tid";
+
+		// Helper function to avoid duplicate code (doesn't handle 'hyvaksytty' as it differs)
+		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $time, $pyhapaivat, $erikoislauantai) {
+			// Select statements
+			switch ($time) {
+				case 0:
+					$criteria->select = "
+						tid, SUM(TIME_TO_SEC(TIMEDIFF(
+							TIME(loppu), TIME(alku)
+						))) as l_tunnit";
+					break;
+				case 1:
+					// Note: 18000 at end of query is equal to TIME_TO_SEC(TIMEDIFF('23:00:00', '18:00:00'))
+					$criteria->select = "tid, SUM(CASE
+						WHEN
+							TIME(alku) >= '18:00:00'
+						THEN CASE
+							WHEN
+								TIME(loppu) > '23:00:00'
+							THEN
+								TIME_TO_SEC(TIMEDIFF('23:00:00', TIME(alku)))
+							WHEN
+								TIME(loppu) > '18:00:00'
+							THEN
+								TIME_TO_SEC(TIMEDIFF(TIME(loppu), TIME(alku)))
+							ELSE
+								0
+							END
+						ELSE CASE
+							WHEN
+								TIME(loppu) > '23:00:00'
+							THEN
+								18000
+							WHEN
+								TIME(loppu) > '18:00:00'
+							THEN
+								TIME_TO_SEC(TIMEDIFF(TIME(loppu), '18:00:00'))
+							ELSE
+								0
+							END
+						END) AS l_tunnit";
+					break;
+				case 2:
+					$criteria->select = "tid, SUM(CASE
+							WHEN
+								TIME(loppu) <= '06:00:00'
+							THEN
+								TIME_TO_SEC(TIMEDIFF(TIME(loppu), TIME(alku)))
+							WHEN
+								TIME(loppu) > '23:00:00'
+							THEN CASE
+								WHEN
+									TIME(alku) <= '06:00:00'
+								THEN
+									TIME_TO_SEC(TIMEDIFF('06:00:00', TIME(alku))) +
+									TIME_TO_SEC(TIMEDIFF(TIME(loppu), '23:00:00'))
+								WHEN
+									TIME(alku) > '23:00:00'
+								THEN
+									TIME_TO_SEC(TIMEDIFF(TIME(loppu), TIME(alku)))
+								ELSE
+									TIME_TO_SEC(TIMEDIFF(TIME(loppu), '23:00:00'))
+								END
+							WHEN
+								TIME(alku) <= '06:00:00'
+							THEN
+								TIME_TO_SEC(TIMEDIFF('06:00:00', TIME(alku)))
+							ELSE
+								0
+							END
+						) AS l_tunnit";
+					break;
+				case 3:
+					$criteria->select = "tid, SUM(CASE
+						WHEN
+							DAYOFWEEK(STR_TO_DATE(pvm, '%d.%m.%Y')) = 1
+						THEN CASE
+							WHEN
+								DAYOFWEEK(STR_TO_DATE(pvm, '%d.%m.%Y')) = 1
+							THEN
+								TIME_TO_SEC(TIMEDIFF(TIME(loppu), TIME(alku)))
+							ELSE
+								TIME_TO_SEC(TIMEDIFF('23:59:00', TIME(alku))) + 60
+							END
+						WHEN
+							DAYOFWEEK(STR_TO_DATE(pvm, '%d.%m.%Y')) = 1
+						THEN
+							TIME_TO_SEC(TIMEDIFF(TIME(loppu), '00:01')) + 60
+						ELSE
+							0
+						END) AS l_tunnit";
+					break;
+				case 4:
+					$criteria->select = "tid, SUM(CASE
+						WHEN
+							$pyhapaivat
+						THEN 
+							TIME_TO_SEC(TIMEDIFF(TIME(loppu), TIME(alku)))
+						ELSE
+							0
+						END) AS l_tunnit";
+					break;
+				case 5:
+					$criteria->select = "tid, SUM(CASE
+						WHEN
+							$erikoislauantai
+						THEN 
+							TIME_TO_SEC(TIMEDIFF(TIME(loppu), TIME(alku)))
+						ELSE
+							0
+						END) AS l_tunnit";
+					break;
+			}
+
+			// Conditions
+			$criteria->condition = "
+				tid IN ($tids)
+				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
+				AND peruutettu=0";
+			if ($status) $criteria->addCondition($status);
+		};
+
+		// Build CDbCriteria
+		$buildCriteria($criteria);
+		$tv = Tyovuoroot::model()->findAll($criteria);
+
+		foreach ($tv as $t)
+			$set[$t->tid] += $t->l_tunnit;
+
+		return $set;
+	}
+
+	protected function TPBetweenTvAll($from,$to,$tids){
+
+		$set = [];
+		$t = [];
+		if (is_array($tids)) {
+			foreach($tids as $tid)
+				$t[$tid] = 0;
+			$tids = implode(", ", $t);
+		} else {
+			$t[$tids] = 0;
+		}
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "tid, pvm";
+        	$criteria->group = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y')), tid";
+	        $criteria->condition = "
+			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '".$from."' AND '".$to."' 
+			AND peruutettu=0
+		";
+		$tv = Tyovuoroot::model()->findAll($criteria);
+		foreach($tv as $item){
+			$set[date("Y-m-d", strtotime($item->pvm))][$item->tid] = 1;
+		}
+		$total = [];
+		foreach($set as $pvm=>$val){
+			foreach($val as $tid=>$count){
+				if(!isset($total[$tid])){ $total[$tid]=0; }
+				$total[$tid] += $count;
+			}
+		}
+		return $total;
+
+	}
+/*
 	public function TidfromtoStatus($from,$to,$tid,$status)
 	{
 		$from = date("Y-m-d", strtotime($from));
@@ -365,7 +558,7 @@ class TyovuorootController extends Controller
 		if(isset($tv->l_tunnit)){ $result = $tv->l_tunnit; }
 		return $result;
 	}
-
+*/
 	public function actionIs_yhteyshenkilo()
 	{
 		$bd = '';
