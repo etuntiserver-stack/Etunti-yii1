@@ -540,24 +540,7 @@ $(document).delegate(".poistaRivit","click",function(){
 			var did = data['did'].split("_");
 			laatikot = did[1]+'_'+did[2];
 			var divID = [did[1],did[2]];
-
-		        $.ajax({
-		           url: 'totpvmtid',
-		           type: "GET",
-			   data: { pvm : did[1], tid : did[2] },
-		           success: function(data){
-				d = JSON.parse(data);
-				if(d['laatikot'])
-				{
-					//console.log(laatikot);
-					$('#'+laatikot).html(d['laatikot']);
-					blockUpdater(divID);
-		
-				}
-		           }
-		        });
-
-
+			blockUpdater(divID);
 		}
            }
         });
