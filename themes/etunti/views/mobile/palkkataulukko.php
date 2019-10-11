@@ -252,7 +252,7 @@ $this->breadcrumbs=array(
    foreach ($model as $data)
 	$tids[] = $data->id;
 
-  //$tyopaivia 	= $this->TPBetweenAll($from, $to, $tids, true);
+  $tyopaivia 	= $this->TPBetweenAll($from, $to, $tids, true);
   $tyotunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 0);
   $iltatunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 1);
   $yotunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 2);
@@ -283,7 +283,7 @@ $this->breadcrumbs=array(
   foreach($model as $data)
   {
 
-		$tp = $this->Tp($data->id,$from,$to); // $tyopaivia[$data->id];// $this->Tp($data->id,$from,$to); on kaytossa muuala
+		$tp = (isset($tyopaivia[$data->id]))? $tyopaivia[$data->id] : 0; // $this->Tp($data->id,$from,$to); on kaytossa muuala
 
 		// <-- SPL, SL, LS, VL, VKL, AP
 		$sl 		= (isset($sl_all[$data->id]))? $sl_all[$data->id] : 0; // Palkallinen
