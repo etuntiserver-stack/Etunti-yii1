@@ -2432,6 +2432,55 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	}
 
+	protected function TPBetweenAll($from,$to,$tids,$palkanlaskentaan=false){
+
+		$set = [];
+		if (is_array($tids)) {
+			foreach($tids as $tid)
+				$set[$tid] = 0;
+			$tids = implode(", ", $tids);
+		} else {
+			$set[$tids] = 0;
+		}
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "tid, aloitan";
+        	$criteria->group = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'),tid";
+	        $criteria->condition = "
+			id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+			AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) BETWEEN '".$from."' AND '".$to."' 
+			AND tid IN ($tids)
+			AND deleted=0
+			AND hyvaksytty!=''
+		";
+		if ($palkanlaskentaan) $criteria->addCondition("palkanlaskentaan=1");
+		$lu = Mobile::model()->findAll($criteria);
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "tid, aloitan";
+        	$criteria->group = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'),tid";
+	        $criteria->condition = "
+			DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) BETWEEN '".$from."' AND '".$to."' 
+			AND tid IN ($tids)
+			AND deleted=0
+			AND hyvaksytty!=''
+		";
+		if ($palkanlaskentaan) $criteria->addCondition("palkanlaskentaan=1");
+		$tot = Toteutuneet::model()->findAll($criteria);
+
+		foreach($lu as $item1){
+			$set[$item1->tid][date("Y-m-d", strtotime($item1->aloitan))][] = date("Y-m-d", strtotime($item1->aloitan));
+		}
+		foreach($tot as $item2){
+			$set[$item2->tid][date("Y-m-d", strtotime($item2->aloitan))][] = date("Y-m-d", strtotime($item2->aloitan));
+		}
+		return $set;
+
+	}
+
 	public function actionYhteenveto()
 	{
 

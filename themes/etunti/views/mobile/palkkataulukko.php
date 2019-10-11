@@ -252,7 +252,7 @@ $this->breadcrumbs=array(
    foreach ($model as $data)
 	$tids[] = $data->id;
 
-  //$tyopaivia 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(2,3), $_GET['lu_tai_tot'], true, 6, true);
+  //$tyopaivia 	= $this->TPBetweenAll($from, $to, $tids, true);
   $tyotunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 0);
   $iltatunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 1);
   $yotunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 2);
