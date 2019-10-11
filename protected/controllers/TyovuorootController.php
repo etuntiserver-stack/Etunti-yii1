@@ -1565,6 +1565,8 @@ class TyovuorootController extends Controller
 
 	public function actionShowohje($id, $tv_id=null)
 	{
+		$asetukset = Asetukset::model()->findbypk(1);
+		$tietoja = $asetukset->tyovuoro_tietoja_mobiilisovellukseen;
 		$m = Kohteet::model()->findbypk($id);
 		if($m === null){
 			//throw new CHttpException(404, 'Kohdetta '.$id.' ei löydy');
@@ -1591,11 +1593,13 @@ class TyovuorootController extends Controller
 		  $ohje .= "<br>Aikataulu: ".$m->aikataulu;
 		if(!empty($m->toimenpiteet))
 		  $ohje .= "<br>Toimenpiteet: ".$m->toimenpiteet;
-		if(!empty($m->tietoja))
+		if(!empty($m->tietoja)){
 		  $ohje .= "<br>Tietoja: ".$m->tietoja;
+		  $tietoja = $m->tietoja;
+		}
 		if(!empty($m->muut))
 		  $ohje .= "<br>Muut: ".$m->muut;
-		echo json_encode(array($ohje,$m->tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt,$m->puh_nro,$m->email));
+		echo json_encode(array($ohje,$tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt,$m->puh_nro,$m->email));
 	
 	}
 

@@ -398,6 +398,12 @@ $('.ryhmat').multiselect({
 		<?php echo $form->error($model,'lasketaanko_lounastauko'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyovuoro_tietoja_mobiilisovellukseen'); ?>
+		<?php echo $form->textarea($model,'tyovuoro_tietoja_mobiilisovellukseen',array('rows'=>8,'maxlength'=>3000,'class'=>'form-control', 'placeholder' => "Esim. Avainten tiedot tai kohteesa olevat rajoitukset.")); ?>
+		<?php echo $form->error($model,'tyovuoro_tietoja_mobiilisovellukseen'); ?>
+	</div>
+
    </div>
 
    <div class="col-sm-3">

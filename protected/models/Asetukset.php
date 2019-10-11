@@ -108,6 +108,7 @@ class Asetukset extends DB2ActiveRecord
                      'ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat' => 'text DEFAULT NULL',
                      'tyovuorolahetys_naytetaanko_asiakas' => 'int(1) DEFAULT 0',
                      'tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka' => 'int(1) DEFAULT 0',
+		     'tyovuoro_tietoja_mobiilisovellukseen' => 'text DEFAULT NULL',
                      'ilmoitus_merkkipaivasta' => 'int(1) DEFAULT 0',
                      'ilmoitus_uudesta_kuvasta_saajat' => 'text DEFAULT NULL',
                      'netvisor_host' => 'varchar(500) DEFAULT NULL',
@@ -205,7 +206,7 @@ class Asetukset extends DB2ActiveRecord
 			array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier, merkkipaivailmoitukset_sahkoposti, netvisor_mita_lahetetaan, gtm, apuaika_palkkalaji, app_version_playmarket, asiakas_laskutus_kanava, asiakas_ryhma, netvisor_accountingaccountsuggestion', 'length', 'max'=>255),
 			array('viikonloppulisa_la, viikonloppulisa_su', 'length', 'max'=>10),
 			array('aikavali_halytys', 'length', 'max'=>3),
-			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat, ilmoitus_uudesta_kuvasta_saajat, peruutusehdot, palautteet_autovastaus_hyva, palautteet_autovastaus_huono, asiakas_pakkoliset', 'safe'),
+			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat, ilmoitus_uudesta_kuvasta_saajat, peruutusehdot, palautteet_autovastaus_hyva, palautteet_autovastaus_huono, asiakas_pakkoliset, tyovuoro_tietoja_mobiilisovellukseen', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic, trust_cid, trust_api, palvelu_tyyppi, trust_url, pyhapaivat, erikoislauantai, sovellus_tyovuorot', 'safe', 'on'=>'search'),
@@ -277,6 +278,7 @@ class Asetukset extends DB2ActiveRecord
 			'ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat' => Yii::t('main', 'Saajan sähköpostit'),
 			'tyovuorolahetys_naytetaanko_asiakas' => Yii::t('main', 'Työvuorolahetys näytetäänkö asiakas'),
 			'tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka' => Yii::t('main', 'Työvuorolahetys näytetäänkö postitoimipaikka'),
+			'tyovuoro_tietoja_mobiilisovellukseen' => Yii::t('main', 'Tietoja mobiilisovellukseen'),
 			'ilmoitus_merkkipaivasta'=>Yii::t('main', 'Ilmoitus merkkipäivästä sähköpostiin'),
 			'ilmoitus_uudesta_kuvasta_saajat'=>Yii::t('main', 'Sähköpostit johon lähetetään ilmoitus uudesta kuvasta.'),
 			'tyontekijan_etunimi_sukunimi_jarjestys'=>Yii::t('main', 'Työntekijän etunimi ja sukunimi järjestys'),
