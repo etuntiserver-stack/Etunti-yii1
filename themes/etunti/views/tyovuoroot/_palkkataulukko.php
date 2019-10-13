@@ -28,11 +28,11 @@
 
 <tr>
 
-	<td class="tulostus_tekija col1"><?php echo $this->etuSukunimi($data->id); ?></td>
+	<td class="tulostus_tekija col1"><?php echo $data->$tt_order_1.' '.$data->$tt_order_2; ?></td>
 	<td class="col2"><?php if($tp != 0) echo $tp; ?></td>
-	<td class="col3"><?php if($this->num($matka) != 0) echo $this->num($matka); ?></td>
-	<td class="col4"><?php if($toteutu != 0) echo $this->num($toteutu); ?></td>
-	<td class="col5"><?php echo $this->num($matka+$toteutu); ?></td>
+	<td class="col3"><?php if($this->num($matkatunnit) != 0) echo $this->num($matkatunnit); ?></td>
+	<td class="col4"><?php if($tyotunnit != 0) echo $this->num($tyotunnit); ?></td>
+	<td class="col5"><?php echo $this->num($matkatunnit+$tyotunnit); ?></td>
 	<td class="col6"><?php echo $iltatunnit_tyotjamatkat.$matkaIlta; ?></td>
 	<td class="col7"><?php if($iltatunnit != 0) echo $this->num($iltatunnit); ?></td>
 	<td class="col8"><?php echo $this->num($loun); ?></td>
