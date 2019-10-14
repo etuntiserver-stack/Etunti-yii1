@@ -12,11 +12,8 @@ if($suoritus == 'cronin_asiat')
 		AND ilmoitus_avoimista_kohteesta=1
 	";
 	$tv = Tyovuoroot::model()->findAll($criteria);
-	
-	if(count($tv) > 0)
+	foreach($tv as $dat)
 	{
-	  foreach($tv as $dat)
-	  {
 		$k = Kohteet::model()->findbypk($dat->kohde);
 		$t = Tyontekijat::model()->findbypk($dat->tid);
 		if(isset($t->id) and isset($k->id))
@@ -39,7 +36,6 @@ if($suoritus == 'cronin_asiat')
 		$ylittaneet .= '<tr><td><span class=""></span> '.$this->etuSukunimi($t->id).'<br>'.$k->osoite.'</td><td>'.$dat->alku.'-'.$dat->loppu.'<br>'.$tilanne.'</td></tr>';
 
 		}
-	  }
 	
 	}
 	// ylittaneet -->
@@ -53,11 +49,8 @@ if($suoritus == 'cronin_asiat')
 		AND ilmoitus_myohastyneista_kohteesta=1
 	";
 	$tv = Tyovuoroot::model()->findAll($criteria);
-	
-	if(count($tv) > 0)
+	foreach($tv as $dat)
 	{
-	  foreach($tv as $dat)
-	  {
 		$k = Kohteet::model()->findbypk($dat->kohde);
 		$t = Tyontekijat::model()->findbypk($dat->tid);
 		if(isset($t->id) and isset($k->id))
@@ -76,8 +69,6 @@ if($suoritus == 'cronin_asiat')
 
 		$myohastyneet .= '<tr><td><span class=""></span> '.$this->etuSukunimi($t->id).'<br>'.$k->osoite.'</td><td>'.$dat->alku.'-'.$dat->loppu.'<br>'.$tilanne.'</td></tr>';
 		}
-	  }
-	
 	}
 	// myohastyneet -->
 

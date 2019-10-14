@@ -316,57 +316,6 @@ $months=array(
             <!-- end: .col-md-4-->
 
 
-
-
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-var count = 0;
-var etusivuAjax = function(){
-     if(count < 20) {
-          count++;
-
-	console.log('Count: '+count);
-        $.ajax({
-           url: 'etusivu_ajax',
-           type: "POST",
-           data: { "suoritus" : "cronin_asiat" , count : count },
-           success: function(data){
-		//console.log('DATA: '+ data);
-		try {
-			var d = JSON.parse(data);
-		} catch (e) {
-		        window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error'
-		}
-
-		$("#ylittaneet").html(d[0]);
-		$("#myohastyneet").html(d[1]);
-
-
-           },
-           error: function(data){
-		        window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error'
-	   }
-        });
-
-     } else {
-
-	  $("#ylittaneet").html('<div class="alert alert-danger">Tiedot ovat vanhetuneet</div>');
-	  $("#myohastyneet").html('<div class="alert alert-danger">Tiedot ovat vanhetuneet</div>');
-          clearInterval(etusivuAjax);
-
-     }
-};
-
-	//etusivuAjax();
-	//setInterval(etusivuAjax, 60000);
-	setTimeout(etusivuAjax, 2000);
-
-});
-</script>
-
-
             <div class="col-md-6 col-lg-3 admin-grid">
 
 
@@ -657,16 +606,39 @@ $( document ).ready(function() {
 
 <script type="text/javascript">
 var jsLoaded = false;
-setTimeout("callback()", 2000);
+setTimeout("callback()", 1000);
 function callback() {
     if (!jsLoaded) {
         console.log("Javascript not loaded after 2 seconds!");
     } else {
         $.getScript("<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/widgets.js");
+	etusivuAjax();
     }
 }
+
+var etusivuAjax = function(){
+        $.ajax({
+           url: 'etusivu_ajax',
+           type: "POST",
+           data: { "suoritus" : "cronin_asiat" },
+           success: function(data){
+		//console.log('DATA: '+ data);
+		try {
+			var d = JSON.parse(data);
+			$("#ylittaneet").html(d[0]);
+			$("#myohastyneet").html(d[1]);
+		} catch (e) {
+		        window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error'
+		}
+           },
+           error: function(data){
+		        window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error'
+	   }
+        });
+};
 </script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/etunti_ajax.js" onload="jsLoaded=true"></script>
+
 
 
 <?php /*
