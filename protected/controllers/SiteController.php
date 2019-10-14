@@ -502,71 +502,63 @@ class SiteController extends Controller
 
 	public function actionTyot_tanaan()
 	{
-	$criteria = new CDbCriteria();
-	$criteria->select = "  COUNT(*) as count ";
-	$criteria->condition = " 
-		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
-		AND kohde!=''
-		AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
-	";
-
+		$tyoryhmat_criteria = '';
 		// <-- Tyoryhmat
 		$tt = Yii::app()->createController('Tyontekijat');
 		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
 		$ids = implode(",", $tt_arr);
 		if( count($tt_arr) > 0 ){
-        		$criteria->addCondition (" tid IN ($ids)");
+        		$tyoryhmat_criteria = " tid IN ($ids)";
 		}
 		//    Tyoryhmat -->
 
-	$s = Tyovuoroot::model()->find($criteria);
+		$criteria = new CDbCriteria();
+		$criteria->select = "  COUNT(*) as count ";
+		$criteria->condition = " 
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+			AND kohde!=''
+			AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
+		";
 
-	$criteria = new CDbCriteria();
-	$criteria->select = "  COUNT(*) as count ";
-	$criteria->condition = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() AND status=1 ";
+		if( !empty($tyoryhmat_criteria) )
+			$criteria->addCondition ($tyoryhmat_criteria);
 
-		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-        		$criteria->addCondition (" tid IN ($ids)");
-		}
-		//    Tyoryhmat -->
+		$s = Tyovuoroot::model()->find($criteria);
 
-	$a = Mobile::model()->find($criteria);	
+		$criteria = new CDbCriteria();
+		$criteria->select = "  COUNT(*) as count ";
+		$criteria->condition = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() AND status=1 ";
 
-	$criteria = new CDbCriteria();
-	$criteria->select = "  COUNT(*) as count ";
-	$criteria->condition = " 
-		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3
-	";
+		if( !empty($tyoryhmat_criteria) )
+			$criteria->addCondition ($tyoryhmat_criteria);
 
-		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-        		$criteria->addCondition (" tid IN ($ids)");
-		}
-		//    Tyoryhmat -->
+		$a = Mobile::model()->find($criteria);	
 
-	$t = Mobile::model()->find($criteria);
+		$criteria = new CDbCriteria();
+		$criteria->select = "  COUNT(*) as count ";
+		$criteria->condition = " 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3
+		";
+
+		if( !empty($tyoryhmat_criteria) )
+			$criteria->addCondition ($tyoryhmat_criteria);
+
+		$t = Mobile::model()->find($criteria);
 
 
-	$ss = 0;
-	if(isset($s->count))
-	$ss = $s->count;
+		$ss = 0;
+		if(isset($s->count))
+			$ss = $s->count;
 
-	$aa = 0;
-	if(isset($a->count))
-	$aa = $a->count;
+		$aa = 0;
+		if(isset($a->count))
+			$aa = $a->count;
 
-	$tt = 0;
-	if(isset($t->count))
-	$tt = $t->count;
+		$tt = 0;
+		if(isset($t->count))
+			$tt = $t->count;
 
-	$bd = '
+		$bd = '
 		<input type="hidden" id="tanaan_sun" value="'.$ss.'">
 		<input type="hidden" id="tanaan_al" value="'.$aa.'">
 		<input type="hidden" id="tanaan_tehdyt" value="'.$tt.'">
@@ -596,9 +588,9 @@ class SiteController extends Controller
                           </tr>
                         </tbody>
                       </table>
-	';
-	echo json_encode($bd);
-	exit;
+		';
+		echo json_encode($bd);
+		exit;
 	}
 
 	public function actionAvoimet_kohteet()
@@ -1410,6 +1402,7 @@ class SiteController extends Controller
 			'suoritus'=>$suoritus,
 		));
 		}
+		exit;
 	}
 
 	public function actionCrontab($pass)

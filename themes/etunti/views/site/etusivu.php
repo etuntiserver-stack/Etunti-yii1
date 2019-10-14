@@ -333,7 +333,7 @@ var etusivuAjax = function(){
            type: "POST",
            data: { "suoritus" : "cronin_asiat" , count : count },
            success: function(data){
-
+		//console.log('DATA: '+ data);
 		try {
 			var d = JSON.parse(data);
 		} catch (e) {
@@ -359,10 +359,9 @@ var etusivuAjax = function(){
      }
 };
 
-     etusivuAjax();
-     setInterval(etusivuAjax, 60000);
-
-
+	//etusivuAjax();
+	//setInterval(etusivuAjax, 60000);
+	setTimeout(etusivuAjax, 2000);
 
 });
 </script>
@@ -650,8 +649,25 @@ $( document ).ready(function() {
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/widgets.js"></script> 
 */ ?>
 
+<?php /*
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/etunti_ajax.js"></script> 
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/widgets.js"></script> 
+*/
+?>
+
+<script type="text/javascript">
+var jsLoaded = false;
+setTimeout("callback()", 2000);
+function callback() {
+    if (!jsLoaded) {
+        console.log("Javascript not loaded after 2 seconds!");
+    } else {
+        $.getScript("<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/widgets.js");
+    }
+}
+</script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/etunti_ajax.js" onload="jsLoaded=true"></script>
+
 
 <?php /*
 <script>

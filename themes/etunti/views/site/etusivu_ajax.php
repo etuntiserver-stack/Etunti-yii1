@@ -25,7 +25,7 @@ if($suoritus == 'cronin_asiat')
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
 			kohdenID='".$k->id."' AND tid='".$t->id."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d", strtotime($dat->pvm))."'
+			AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) = CURDATE()
 			AND (status=1 OR status=3)
 		";
 		$mob = Mobile::model()->find($criteria);
@@ -49,7 +49,7 @@ if($suoritus == 'cronin_asiat')
 	$myohastyneet = '';
 	$criteria=new CDbCriteria;
 	$criteria->condition = " 
-		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+		DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
 		AND ilmoitus_myohastyneista_kohteesta=1
 	";
 	$tv = Tyovuoroot::model()->findAll($criteria);
@@ -66,7 +66,7 @@ if($suoritus == 'cronin_asiat')
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
 			kohdenID='".$k->id."' AND tid='".$t->id."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d", strtotime($dat->pvm))."'
+			AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) = CURDATE()
 		";
 		$mob = Mobile::model()->find($criteria);
 
