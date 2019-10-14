@@ -502,36 +502,29 @@ class SiteController extends Controller
 
 	public function actionTyot_tanaan()
 	{
-		$tyoryhmat_criteria = '';
 		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-        		$tyoryhmat_criteria = " tid IN ($ids)";
+		$tyoryhmat_criteria = '';
+		$tids = [];
+		if( isset(Yii::app()->user->TyoryhmatTyontekijatHelperArray) ){
+			$tids = Yii::app()->user->TyoryhmatTyontekijatHelperArray;
 		}
 		//    Tyoryhmat -->
 
-		$criteria = new CDbCriteria();
-		$criteria->select = "  COUNT(*) as count ";
-		$criteria->condition = " 
-			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
-			AND kohde!=''
-			AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
-		";
-
-		if( !empty($tyoryhmat_criteria) )
-			$criteria->addCondition ($tyoryhmat_criteria);
-
-		$s = Tyovuoroot::model()->find($criteria);
+		$criteria_array = array(
+			"pvm" => date("d.m.Y"),
+			"status" => 3,
+			"peruutettu" => 0,
+		);
+		if( count($tids) > 0 )
+			$criteria_array['tid'] = $tids;
+		$s = 0;
+		$s = Tyovuoroot::model()->countByAttributes($criteria_array);
 
 		$criteria = new CDbCriteria();
 		$criteria->select = "  COUNT(*) as count ";
 		$criteria->condition = " DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) = CURDATE() AND status=1 ";
-
 		if( !empty($tyoryhmat_criteria) )
 			$criteria->addCondition ($tyoryhmat_criteria);
-
 		$a = Mobile::model()->find($criteria);	
 
 		$criteria = new CDbCriteria();
@@ -539,16 +532,9 @@ class SiteController extends Controller
 		$criteria->condition = " 
 			DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) = CURDATE() and status=3
 		";
-
 		if( !empty($tyoryhmat_criteria) )
 			$criteria->addCondition ($tyoryhmat_criteria);
-
 		$t = Mobile::model()->find($criteria);
-
-
-		$ss = 0;
-		if(isset($s->count))
-			$ss = $s->count;
 
 		$aa = 0;
 		if(isset($a->count))
@@ -559,7 +545,7 @@ class SiteController extends Controller
 			$tt = $t->count;
 
 		$bd = '
-		<input type="hidden" id="tanaan_sun" value="'.$ss.'">
+		<input type="hidden" id="tanaan_sun" value="'.$s.'">
 		<input type="hidden" id="tanaan_al" value="'.$aa.'">
 		<input type="hidden" id="tanaan_tehdyt" value="'.$tt.'">
 
@@ -574,7 +560,7 @@ class SiteController extends Controller
                           <tr>
                             <td>
                               <span class="fa fa-circle text-warning fs14 mr10"></span>'.Yii::t('main','Suunnitellut').'</td>
-                            <td>'.$ss.'</td>
+                            <td>'.$s.'</td>
                           </tr>
                           <tr>
                             <td>
@@ -1739,6 +1725,14 @@ $(document).ready(function(){
 	public function actionEtusivu()
 	{
 
+		// <-- Tyoryhmat
+		$tt = Yii::app()->createController('Tyontekijat');
+		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+		if( count($tt_arr) > 0 ){
+			Yii::app()->user->setState('TyoryhmatTyontekijatHelperArray', $tt_arr);
+		}
+		//    Tyoryhmat -->
+
 		// <-- juuri_tullut_asiakkaaksi
 		if( isset(Yii::app()->user->domain) )
 		{
@@ -2046,37 +2040,26 @@ $(document).ready(function(){
 
 	public function actionSuunnitteltutunnittanaan()
 	{
-		if(isset(Yii::app()->user->Suunnitteltutunnittanaan)){
-			echo json_encode(Yii::app()->user->Suunnitteltutunnittanaan);
-			exit;
-		}
-		$suunniteltu = 0;
-
-		$criteria = new CDbCriteria();
-        	$criteria->select = "
-			SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit
-		";
-        	$criteria->condition = "
-			loppu!='' and alku!=''
-			AND ".$this->eiLasketa()."
-			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
-			AND peruutettu=0
-		";
-
 		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-        		$criteria->addCondition (" tid IN ($ids)");
+		$tyoryhmat_criteria = '';
+		if( isset(Yii::app()->user->TyoryhmatTyontekijatHelperArray) ){
+			$impl = implode(",", Yii::app()->user->TyoryhmatTyontekijatHelperArray);
+			$tyoryhmat_criteria = "tid IN ($impl)";
 		}
 		//    Tyoryhmat -->
 
-	  	$su = Tyovuoroot::model()->find($criteria);
+		$suunniteltu = 0;
+
+		$query = Yii::app()->db1->createCommand()
+			->select("SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit")
+			->from("sivex_tvuoro")
+			->where("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE() AND loppu!='' and alku!='' AND peruutettu=0 AND ".$this->eiLasketa())
+			->andwhere($tyoryhmat_criteria)
+			->queryRow();
+
 		$suunniteltu = '00:00';
-		if(isset($su->l_tunnit) and $su->l_tunnit > 0){
-			$suunniteltu = $this->sprint($su->l_tunnit);
-			Yii::app()->user->setState('Suunnitteltutunnittanaan', $suunniteltu);
+		if(isset($query['l_tunnit'])){
+			$suunniteltu = $this->sprint($query['l_tunnit']);
 		}
 
                 echo json_encode($suunniteltu);
@@ -2089,7 +2072,7 @@ $(document).ready(function(){
 		$criteria = new CDbCriteria();
         	$criteria->condition = "
 			status=0 AND tekija='toimisto'
-			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
 		";
 	  	$v = Viestinta::model()->findAll($criteria);
 	  	$viestit = count($v);
@@ -2112,29 +2095,24 @@ $(document).ready(function(){
 
 	public function actionTehdyttunnittanaan()
 	{
-
-		$criteria = new CDbCriteria;
-		$criteria->select="
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'),
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-		";
-		$criteria->condition="
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3
-		";
-
 		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-        		$criteria->addCondition (" tid IN ($ids)");
+		$tyoryhmat_criteria = '';
+		if( isset(Yii::app()->user->TyoryhmatTyontekijatHelperArray) ){
+			$impl = implode(",", Yii::app()->user->TyoryhmatTyontekijatHelperArray);
+			$tyoryhmat_criteria = "tid IN ($impl)";
 		}
 		//    Tyoryhmat -->
 
-		$a = Mobile::model()->find($criteria);
+		$query = Yii::app()->db1->createCommand()
+			->select("SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit")
+			->from("sivexkuitti")
+			->where("DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) = CURDATE() and status=3")
+			->andwhere($tyoryhmat_criteria)
+			->queryRow();
+
 		$tehdyht = '00:00';
-		if(isset($a->l_tunnit) and $a->l_tunnit > 0){
-			$tehdyht = $this->sprint($a->l_tunnit);
+		if(isset($query['l_tunnit'])){
+			$tehdyht = $this->sprint($query['l_tunnit']);
 		}
 
                 echo json_encode($tehdyht);
@@ -2143,36 +2121,30 @@ $(document).ready(function(){
 
 	public function actionToteututhismonth()
 	{
-		if(isset(Yii::app()->user->Toteututhismonth)){
-			echo json_encode(Yii::app()->user->Toteututhismonth);
-			exit;
+		// <-- Tyoryhmat
+		$tyoryhmat_criteria = '';
+		if( isset(Yii::app()->user->TyoryhmatTyontekijatHelperArray) ){
+			$impl = implode(",", Yii::app()->user->TyoryhmatTyontekijatHelperArray);
+			$tyoryhmat_criteria = "tid IN ($impl)";
 		}
+		//    Tyoryhmat -->
+
 		$month = date("Ym");
 		$total_l = 0;
 		$total_t = 0;
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,aloitan,loppui
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
 		";
-
         	$criteria->condition = "
-			loppui > aloitan
-			AND aloitan !='' and loppui !='' and status ='3'
-			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
+			status='3'
+			AND EXTRACT(YEAR_MONTH FROM DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')))  = '".$month."'
 			AND id NOT IN(select kid from sivexkuitti_repaired)
-			AND sairaus!=1
 			AND deleted=0
 		";
-
-		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-        		$criteria->addCondition (" tid IN ($ids)");
-		}
-		//    Tyoryhmat -->
+		if( !empty($tyoryhmat_criteria) )
+			$criteria->addCondition ($tyoryhmat_criteria);
 
 		$lu = Mobile::model()->find($criteria);
 		$total_l = $lu->l_tunnit;
@@ -2181,25 +2153,15 @@ $(document).ready(function(){
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,aloitan,loppui
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
 		";
-
         	$criteria->condition = "
-			loppui > aloitan
-			AND aloitan !='' and loppui !='' and status ='3'
-			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
-			AND sairaus!=1
+			status='3'
+			AND EXTRACT(YEAR_MONTH FROM DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')))  = '".$month."'
 			AND deleted=0
 		";
-
-		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-        		$criteria->addCondition (" tid IN ($ids)");
-		}
-		//    Tyoryhmat -->
+		if( !empty($tyoryhmat_criteria) )
+			$criteria->addCondition ($tyoryhmat_criteria);
 
 		$tot = Toteutuneet::model()->find($criteria);
 		$total_t = $tot->l_tunnit;
@@ -2210,7 +2172,6 @@ $(document).ready(function(){
 			$return = '00:00';
 		} else {
 			$return = $this->sprint($result);
-			Yii::app()->user->setState('Toteututhismonth', $return);
 		}
 
 		echo json_encode($return);
@@ -2220,6 +2181,13 @@ $(document).ready(function(){
 
 	public function actionGetcityes()
 	{
+		// <-- Tyoryhmat
+		$tyoryhmat_criteria = '';
+		if( isset(Yii::app()->user->TyoryhmatTyontekijatHelperArray) ){
+			$impl = implode(",", Yii::app()->user->TyoryhmatTyontekijatHelperArray);
+			$tyoryhmat_criteria = "tid IN ($impl)";
+		}
+		//    Tyoryhmat -->
 
 		$m1 = Yii::app()->request->getPost('month1');
 		$m2 = Yii::app()->request->getPost('month2');
@@ -2229,24 +2197,18 @@ $(document).ready(function(){
        		$criteria = new CDbCriteria();
 		$criteria->with=array('kohteet');
         	$criteria->select = " COUNT(*) as count, aloitan";
-        	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d')), kohteet.kaupunki ";
+        	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))), kohteet.kaupunki ";
         	$criteria->condition = "
-			aloitan !='' and loppui !='' and status ='3'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')
+			status='3'
+			AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))
 			BETWEEN '".$m2."' AND '".$m1."'
 			AND kohteet.kaupunki!=''
 			AND t.id NOT IN(select kid from sivexkuitti_repaired)
 			AND kohdenID!=0
 		";
 
-		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-        		$criteria->addCondition (" tid IN ($ids)");
-		}
-		//    Tyoryhmat -->
+		if( !empty($tyoryhmat_criteria) )
+			$criteria->addCondition ($tyoryhmat_criteria);
 
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $l)
@@ -2259,14 +2221,17 @@ $(document).ready(function(){
        		$criteria = new CDbCriteria();
 		$criteria->with=array('kohteet');
         	$criteria->select = " COUNT(*) as count, aloitan";
-        	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d')), kohteet.kaupunki ";
+        	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))), kohteet.kaupunki ";
         	$criteria->condition = "
-			aloitan !='' and loppui !='' and status ='3'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')
+			status='3'
+			AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))
 			BETWEEN '".$m2."' AND '".$m1."'
 			AND kohteet.kaupunki!=''
 			AND kohdenID!=0
 		";
+
+		if( !empty($tyoryhmat_criteria) )
+			$criteria->addCondition ($tyoryhmat_criteria);
 
 		$tot = Toteutuneet::model()->findAll($criteria);
 		foreach($tot as $l)
@@ -2328,6 +2293,15 @@ $(document).ready(function(){
 
 	public function tilatTanaan()
 	{
+
+		// <-- Tyoryhmat
+		$tyoryhmat_criteria = '';
+		if( isset(Yii::app()->user->TyoryhmatTyontekijatHelperArray) ){
+			$impl = implode(",", Yii::app()->user->TyoryhmatTyontekijatHelperArray);
+			$tyoryhmat_criteria = "tid IN ($impl)";
+		}
+		//    Tyoryhmat -->
+
 		$total = array();
 		$total[2] = 0;
 		$total[3] = 0;
@@ -2342,14 +2316,8 @@ $(document).ready(function(){
 			AND t.id NOT IN(select kid from sivexkuitti_repaired)
 		";
 
-		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-        		$criteria->addCondition (" tid IN ($ids)");
-		}
-		//    Tyoryhmat -->
+		if( !empty($tyoryhmat_criteria) )
+			$criteria->addCondition ($tyoryhmat_criteria);
 
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $l)
@@ -2366,14 +2334,8 @@ $(document).ready(function(){
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
 		";
 
-		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-        		$criteria->addCondition (" tid IN ($ids)");
-		}
-		//    Tyoryhmat -->
+		if( !empty($tyoryhmat_criteria) )
+			$criteria->addCondition ($tyoryhmat_criteria);
 
 		$tot = Toteutuneet::model()->findAll($criteria);
 		foreach($tot as $l)
@@ -2387,6 +2349,15 @@ $(document).ready(function(){
 
 	public function actionParassiivojatanaan()
 	{
+
+		// <-- Tyoryhmat
+		$tyoryhmat_criteria = '';
+		if( isset(Yii::app()->user->TyoryhmatTyontekijatHelperArray) ){
+			$impl = implode(",", Yii::app()->user->TyoryhmatTyontekijatHelperArray);
+			$tyoryhmat_criteria = "tid IN ($impl)";
+		}
+		//    Tyoryhmat -->
+
 		$total_l = array();
 
        		$criteria = new CDbCriteria();
@@ -2394,18 +2365,11 @@ $(document).ready(function(){
         	$criteria->order = " tekijan_nimi ";
         	$criteria->group = " tid ";
         	$criteria->condition = "
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
+			DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))  = CURDATE()
 			AND t.id NOT IN(select kid from sivexkuitti_repaired)
 		";
-
-		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-        		$criteria->addCondition (" tid IN ($ids)");
-		}
-		//    Tyoryhmat -->
+		if( !empty($tyoryhmat_criteria) )
+			$criteria->addCondition ($tyoryhmat_criteria);
 
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $l)
@@ -2419,10 +2383,12 @@ $(document).ready(function(){
         	$criteria->order = " COUNT(*) LIMIT 4 ";
         	$criteria->group = " tid ";
         	$criteria->condition = "
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
+			DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))  = CURDATE()
 
 
 		";
+		if( !empty($tyoryhmat_criteria) )
+			$criteria->addCondition ($tyoryhmat_criteria);
 
 		$tot = Toteutuneet::model()->findAll($criteria);
 		foreach($tot as $l)
