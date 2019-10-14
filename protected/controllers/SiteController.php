@@ -2191,8 +2191,8 @@ $(document).ready(function(){
 		}
 		//    Tyoryhmat -->
 
-		$m1 = Yii::app()->request->getPost('month1');
-		$m2 = Yii::app()->request->getPost('month2');
+		$m1 = date("Y-m-d");
+		$m2 = date("Y-m-d", strtotime($m1.'first day of this month -1 month'));
 		$total_l = array();
 		$toimipaikkaat = array();
 
@@ -2208,7 +2208,6 @@ $(document).ready(function(){
 			AND t.id NOT IN(select kid from sivexkuitti_repaired)
 			AND kohdenID!=0
 		";
-
 		if( !empty($tyoryhmat_criteria) )
 			$criteria->addCondition ($tyoryhmat_criteria);
 
@@ -2245,53 +2244,6 @@ $(document).ready(function(){
 		echo json_encode(array('toimipaikkaat'=>$toimipaikkaat));
 		exit;
 	}
-/*
-	public function toteutuThisMonthByCity($k,$city)
-	{
-		$month = $k;
-		$total_l = 0;
-
-       		$criteria = new CDbCriteria();
-		$criteria->with=array('kohteet');
-        	$criteria->select = " COUNT(*) as count";
-        	$criteria->group = " kohdenID ";
-        	$criteria->condition = "
-			aloitan !='' and loppui !='' and status ='3'
-			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
-			AND t.id NOT IN(select kid from sivexkuitti_repaired)
-			AND kohteet.kaupunki LIKE '%".$city."%'
-		";
-
-		$lu = Mobile::model()->findAll($criteria);
-		foreach($lu as $l)
-		{
-		    $total_l += $l->count;
-		}
-
-
-
-       		$criteria = new CDbCriteria();
-		$criteria->with=array('kohteet');
-        	$criteria->select = " COUNT(*) as count";
-        	$criteria->group = " kohdenID ";
-        	$criteria->condition = "
-			aloitan !='' and loppui !='' and status ='3'
-			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
-			AND kohteet.kaupunki LIKE '%".$city."%'
-		";
-
-		$tot = Toteutuneet::model()->findAll($criteria);
-		foreach($tot as $l)
-		{
-		    $total_l += $l->count;
-		}
-
-
-		return $total_l;
-
-	}
-*/
-
 
 	public function tilatTanaan()
 	{

@@ -194,12 +194,9 @@ $months=array(
 		  <?php 
 		    $month1 = $months[date("m")];
 		    $month2 = $months[date("m",strtotime("-1 month"))];
-
-		    $m1 = date("Y-m-d");
-		    $m2 = date("Y-m-d", strtotime($m1.'first day of this month -1 month'));
 		  ?>
-                  <input type="hidden" id="month1" value="<?php echo $month1; ?>" month="<?php echo $m1; ?>" m="<?php echo date('m'); ?>">
-                  <input type="hidden" id="month2" value="<?php echo $month2; ?>" month="<?php echo $m2; ?>" m="<?php echo date('m',strtotime('-1 month')); ?>">
+                  <input type="hidden" id="month1" value="<?php echo $month1; ?>" m="<?php echo date('m'); ?>">
+                  <input type="hidden" id="month2" value="<?php echo $month2; ?>" m="<?php echo date('m',strtotime('-1 month')); ?>">
                 </div>
                 <div class="panel-menu">
 

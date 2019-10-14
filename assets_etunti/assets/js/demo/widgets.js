@@ -297,8 +297,6 @@
                 var bars1 = $('#high-bars');
                 var m1 = parseInt($('#month1').attr('m'));
                 var m2 = parseInt($('#month2').attr('m'));
-                var month1 = $('#month1').attr('month');
-                var month2 = $('#month2').attr('month');
                 var month_1_val = $('#month1').val();
                 var month_2_val = $('#month2').val();
 
@@ -306,12 +304,12 @@
 		var returnData = [];
         	$.ajax({
 	           url: location.protocol + "//" + location.host + '/index.php/site/getcityes',
-	           type: "POST",
+	           //type: "POST",
 		   async: false,
-		   data: { month1 : month1, month2 : month2 },
+		   //data: { month1 : month1, month2 : month2 },
 	           success: function(data){
 			returnData = JSON.parse(data);
-			//console.log( returnData['total'] );
+			//console.log( returnData['toimipaikkaat'] );
 	           }
 	        });
 
