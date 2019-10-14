@@ -515,7 +515,7 @@ class SiteController extends Controller
 		$criteria = new CDbCriteria();
 		$criteria->select = "  COUNT(*) as count ";
 		$criteria->condition = " 
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
 			AND kohde!=''
 			AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
 		";
@@ -527,7 +527,7 @@ class SiteController extends Controller
 
 		$criteria = new CDbCriteria();
 		$criteria->select = "  COUNT(*) as count ";
-		$criteria->condition = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() AND status=1 ";
+		$criteria->condition = " DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) = CURDATE() AND status=1 ";
 
 		if( !empty($tyoryhmat_criteria) )
 			$criteria->addCondition ($tyoryhmat_criteria);
@@ -537,7 +537,7 @@ class SiteController extends Controller
 		$criteria = new CDbCriteria();
 		$criteria->select = "  COUNT(*) as count ";
 		$criteria->condition = " 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3
+			DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) = CURDATE() and status=3
 		";
 
 		if( !empty($tyoryhmat_criteria) )
@@ -600,7 +600,10 @@ class SiteController extends Controller
        		$criteria->select = " id,aloitan,loppui,kohde_kannasta  ";
        		$criteria->order = " id DESC  ";
        		$criteria->group = "kohde_kannasta";
-       		$criteria->condition = "status=1";
+       		$criteria->condition = "
+			status=1
+			AND EXTRACT(YEAR_MONTH FROM DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')))='".date("Ym")."'
+		";
 		$m = Mobile::model()->findAll($criteria);
 		foreach($m as $data){
  			$data->loppui = date("d.m.Y H:i",time());
