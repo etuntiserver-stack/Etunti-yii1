@@ -612,7 +612,7 @@ function callback() {
         console.log("Javascript not loaded after 2 seconds!");
     } else {
         $.getScript("<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/widgets.js");
-	etusivuAjax();
+	//etusivuAjax();
     }
 }
 
