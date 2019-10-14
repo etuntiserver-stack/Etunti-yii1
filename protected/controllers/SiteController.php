@@ -3023,7 +3023,7 @@ $(document).ready(function(){
 		$tv = Tyovuoroot::model()->findAll($criteria);
 */
 		$tv = Yii::app()->db1->createCommand()
-			->select("kohde,tid")
+			->select("kohde,tid,alku,loppu")
 			->from("sivex_tvuoro")
 			->where("ilmoitus_avoimista_kohteesta=1 AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()")
 			->queryAll();
@@ -3048,7 +3048,7 @@ $(document).ready(function(){
 			elseif( isset($mob->id) and $mob->status == 3 )
 			$tilanne = '<span class="text-success">'.Yii::t('main', 'Lopetettu klo:').' '.date("H:i", strtotime($mob->loppui)).'</span>';
 
-			$ylittaneet .= '<tr><td><span class=""></span> '.$this->etuSukunimi($t->id).'<br>'.$k->osoite.'</td><td>'.$dat->alku.'-'.$dat->loppu.'<br>'.$tilanne.'</td></tr>';
+			$ylittaneet .= '<tr><td><span class=""></span> '.$this->etuSukunimi($t->id).'<br>'.$k->osoite.'</td><td>'.$dat['alku'].'-'.$dat['loppu'].'<br>'.$tilanne.'</td></tr>';
 
 			}
 
@@ -3067,7 +3067,7 @@ $(document).ready(function(){
 		$tv = Tyovuoroot::model()->findAll($criteria);
 */
 		$tv = Yii::app()->db1->createCommand()
-			->select("kohde,tid")
+			->select("kohde,tid,alku,loppu")
 			->from("sivex_tvuoro")
 			->where("ilmoitus_myohastyneista_kohteesta=1 AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()")
 			->queryAll();
@@ -3086,9 +3086,9 @@ $(document).ready(function(){
 
 			$tilanne = '';
 			if( !isset($mob->id) )
-			$tilanne = '<span class="text-danger">'.Yii::t('main', 'Myöhässä:').' '.$this->sprint(time()-strtotime($dat->alku)).'</span>';
+			$tilanne = '<span class="text-danger">'.Yii::t('main', 'Myöhässä:').' '.$this->sprint(time()-strtotime($dat['alku'])).'</span>';
 	
-			$myohastyneet .= '<tr><td><span class=""></span> '.$this->etuSukunimi($t->id).'<br>'.$k->osoite.'</td><td>'.$dat->alku.'-'.$dat->loppu.'<br>'.$tilanne.'</td></tr>';
+			$myohastyneet .= '<tr><td><span class=""></span> '.$this->etuSukunimi($t->id).'<br>'.$k->osoite.'</td><td>'.$dat['alku'].'-'.$dat['loppu'].'<br>'.$tilanne.'</td></tr>';
 			}
 		}
 		// myohastyneet -->
