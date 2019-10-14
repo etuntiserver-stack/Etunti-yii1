@@ -1384,6 +1384,7 @@ class SiteController extends Controller
 
 	public function actionEtusivu_ajax()
 	{
+/*
 		if(isset($_POST['suoritus']))
 		{
 		$suoritus = $_POST['suoritus'];
@@ -1392,6 +1393,7 @@ class SiteController extends Controller
 		));
 		}
 		exit;
+*/
 	}
 
 	public function actionCrontab($pass)
@@ -3008,38 +3010,89 @@ $(document).ready(function(){
 	   return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
 	}
 
-	public function actionTesti(){
+	public function ylittaneetMyohastyneet()
+	{
+		// <-- ylittaneet
+		$ylittaneet = '';
 /*
-	Yii::app()->db1->setActive(false);
-	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$_GET['domain'];
-	$criteria = new CDbCriteria();
-        $criteria->condition = "
-		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2019-04-01' AND '2019-04-01'
-	";
-	$lu = Mobile::model()->findAll($criteria);
-	echo '<table>';
-		echo '<tr>
-		<th>PVM</th>
-		<th>Aloitus</th>
-		<th>Aloitus korjattuna</th>
-		<th>Lopetus</th>
-		<th>Kohde</th>
-		<th>Työntekijä</th>
-		</tr>';
-	foreach($lu as $item){
-		if( strtotime(date("H:i", strtotime($item->aloitan))) < strtotime('13:00')  ){
-		echo '<tr>
-		<td>'.date("d.m.Y", strtotime($item->aloitan)).'</td>
-		<td>'.date("H:i", strtotime($item->aloitan)).'</td>
-		<td>'.date("H:i", strtotime($item->aloitan)).'</td>
-		<td>'.date("H:i", strtotime($item->loppui)).'</td>
-		<td>'.$item->kohde_kannasta.'</td>
-		<td>'.$item->tekijan_nimi.'</td>
-		</tr>';
-		}
-	}
-	echo '</table>';
-		exit;
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
+			AND ilmoitus_avoimista_kohteesta=1
+		";
+		$tv = Tyovuoroot::model()->findAll($criteria);
 */
+		$tv = Yii::app()->db1->createCommand()
+			->select("kohde,tid")
+			->from("sivex_tvuoro")
+			->where("ilmoitus_avoimista_kohteesta=1 AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()")
+			->queryAll();
+		foreach($tv as $dat)
+		{
+			$k = Kohteet::model()->findbypk($dat['kohde']);
+			$t = Tyontekijat::model()->findbypk($dat['tid']);
+			if(isset($t->id) and isset($k->id))
+			{
+
+			$criteria=new CDbCriteria;
+			$criteria->condition = " 
+				kohdenID='".$k->id."' AND tid='".$t->id."'
+				AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) = CURDATE()
+				AND (status=1 OR status=3)
+			";
+			$mob = Mobile::model()->find($criteria);
+
+			$tilanne = '';
+			if( isset($mob->id) and $mob->status == 1 )
+			$tilanne = '<span class="text-danger">'.Yii::t('main', 'Avoin').'</span>';
+			elseif( isset($mob->id) and $mob->status == 3 )
+			$tilanne = '<span class="text-success">'.Yii::t('main', 'Lopetettu klo:').' '.date("H:i", strtotime($mob->loppui)).'</span>';
+
+			$ylittaneet .= '<tr><td><span class=""></span> '.$this->etuSukunimi($t->id).'<br>'.$k->osoite.'</td><td>'.$dat->alku.'-'.$dat->loppu.'<br>'.$tilanne.'</td></tr>';
+
+			}
+
+		}
+		// ylittaneet -->
+
+
+		// <-- myohastyneet
+		$myohastyneet = '';
+/*
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
+			AND ilmoitus_myohastyneista_kohteesta=1
+		";
+		$tv = Tyovuoroot::model()->findAll($criteria);
+*/
+		$tv = Yii::app()->db1->createCommand()
+			->select("kohde,tid")
+			->from("sivex_tvuoro")
+			->where("ilmoitus_myohastyneista_kohteesta=1 AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()")
+			->queryAll();
+		foreach($tv as $dat)
+		{
+			$k = Kohteet::model()->findbypk($dat['kohde']);
+			$t = Tyontekijat::model()->findbypk($dat['tid']);
+			if(isset($t->id) and isset($k->id))
+			{
+			$criteria=new CDbCriteria;
+			$criteria->condition = " 
+				kohdenID='".$k->id."' AND tid='".$t->id."'
+				AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) = CURDATE()
+			";
+			$mob = Mobile::model()->find($criteria);
+
+			$tilanne = '';
+			if( !isset($mob->id) )
+			$tilanne = '<span class="text-danger">'.Yii::t('main', 'Myöhässä:').' '.$this->sprint(time()-strtotime($dat->alku)).'</span>';
+	
+			$myohastyneet .= '<tr><td><span class=""></span> '.$this->etuSukunimi($t->id).'<br>'.$k->osoite.'</td><td>'.$dat->alku.'-'.$dat->loppu.'<br>'.$tilanne.'</td></tr>';
+			}
+		}
+		// myohastyneet -->
+
+		return array($ylittaneet,$myohastyneet);
 	}
 }

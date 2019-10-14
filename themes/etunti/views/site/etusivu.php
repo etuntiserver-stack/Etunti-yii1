@@ -1,4 +1,5 @@
 <?php
+	$ylittaneetMyohastyneet = $this->ylittaneetMyohastyneet();
 
 	// <-- Change password to bcrypt
 	$adm = Administrators::model()->findByPk(Yii::app()->user->id);
@@ -282,7 +283,7 @@ $months=array(
                         <th>First Name</th>
                       </tr>
                     </thead>
-                    <tbody id="myohastyneet">
+                    <?php echo (isset($ylittaneetMyohastyneet[1]))? $ylittaneetMyohastyneet[1] : ''; ?>
                     </tbody>
                   </table>
 
@@ -304,7 +305,7 @@ $months=array(
                         <th>First Name</th>
                       </tr>
                     </thead>
-                    <tbody id="ylittaneet">
+                    <?php echo (isset($ylittaneetMyohastyneet[0]))? $ylittaneetMyohastyneet[0] : ''; ?>
                     </tbody>
                   </table>
 

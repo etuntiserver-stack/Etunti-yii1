@@ -1,5 +1,5 @@
 <?php
-
+/*
 
 if($suoritus == 'cronin_asiat')
 {
@@ -8,7 +8,7 @@ if($suoritus == 'cronin_asiat')
 	$ylittaneet = '';
 	$criteria=new CDbCriteria;
 	$criteria->condition = " 
-		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+		DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
 		AND ilmoitus_avoimista_kohteesta=1
 	";
 	$tv = Tyovuoroot::model()->findAll($criteria);
