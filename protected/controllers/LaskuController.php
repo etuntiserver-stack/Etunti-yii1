@@ -203,20 +203,27 @@ class LaskuController extends Controller
 			$criteria->addCondition(" ryhma LIKE '%\"".$_GET['filter_asiakasryhma']."\"%' "); 
 		}
 
-		$lista = Asiakkaat::model()->findAll($criteria);
-/*
+		//$lista = Asiakkaat::model()->findAll($criteria);
+
 		$hyv_lista_all = $this->hyvaksyttyListaByAsiakasAll($from, $to, $alvsis_tuote, $tunnit);
 		$asiakkaat_ids = [];
 		foreach($hyv_lista_all as $item){
-			$asiakkaat_ids[$item->kohde][$item->kohteet->asiakkaat->id][] = array('asiakas_attributes'=>$item->kohteet->asiakkaat->attributes, 'tyovuorot_attributes'=>$item->attributes);
+			if($item->kohteet->asiakkaat->tyyppi == 'henkilo'){ $nimi = $item->kohteet->asiakkaat->yhteyshenkilo; }
+			if($item->kohteet->asiakkaat->tyyppi == 'yritys'){ $nimi = $item->kohteet->asiakkaat->yrityksen_nimi; }
+			$asiakkaat_ids[$nimi][$item->id][] = array(
+				'asiakas_attr' => $item->kohteet->asiakkaat->attributes, 
+				'tyovuorot_attr'=> $item->pvm.' '.$item->osoite
+			);
 		}
+		ksort($asiakkaat_ids);
 
 echo '<pre>';
 print_r($asiakkaat_ids);
 echo '</pre>';
 exit;
-*/
+
 		$this->render('luolaskut', array(
+			'asiakkaat_ids' => $asiakkaat_ids,
 			'asetukset' => $asetukset,
 			'lista' => $lista,
 			'from' => $from,
@@ -232,7 +239,7 @@ exit;
 		));
 	}
 
-	protected function hyvaksyttyListaByAsiakasAll($from, $to, $alvsis_tuote, $tunnit){ // Tama on uusi
+	protected function hyvaksyttyListaByAsiakasAll($from, $to, $alvsis_tuote, $tunnit){
 
 	    $lista = array();
 	    if( $tunnit == 'mob' ){
