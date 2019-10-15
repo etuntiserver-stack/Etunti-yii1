@@ -207,14 +207,22 @@ class LaskuController extends Controller
 
 		$hyv_lista_all = $this->hyvaksyttyListaByAsiakasAll($from, $to, $alvsis_tuote, $tunnit);
 		$asiakkaat_ids = [];
+		$attr = [];
 		foreach($hyv_lista_all as $item){
 			if($item->kohteet->asiakkaat->tyyppi == 'henkilo'){ $nimi = $item->kohteet->asiakkaat->yhteyshenkilo; }
 			if($item->kohteet->asiakkaat->tyyppi == 'yritys'){ $nimi = $item->kohteet->asiakkaat->yrityksen_nimi; }
-			$asiakkaat_ids[$nimi][$item->id][] = array(
-				'asiakas_attr' => array('asiakas_id' => $item->kohteet->asiakkaat->id, 'asiakas_osoite' => $item->kohteet->asiakkaat->osoite), 
+			if (!array_key_exists($nimi, $attr)) $attr[$nimi] = [
+				'asiakas_id' => $item->kohteet->asiakkaat->id,
+				'asiakas_osoite' => $item->kohteet->asiakkaat->osoite
+			];
+			$asiakkaat_ids[$nimi][$item->id][] = [
 				'tyovuorot_attr'=> $item->pvm.' '.$item->osoite
-			);
+			];
 		}
+		foreach($asiakkaat_ids as $k => $i)
+			if (array_key_exists($k, $attr)) $asiakkaat_ids[$k] =
+				array_merge(['asiakas_attr' => $attr[$k]], $asiakkaat_ids[$k]);
+
 		ksort($asiakkaat_ids);
 
 echo '<pre>';
