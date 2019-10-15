@@ -211,7 +211,7 @@ class LaskuController extends Controller
 			if($item->kohteet->asiakkaat->tyyppi == 'henkilo'){ $nimi = $item->kohteet->asiakkaat->yhteyshenkilo; }
 			if($item->kohteet->asiakkaat->tyyppi == 'yritys'){ $nimi = $item->kohteet->asiakkaat->yrityksen_nimi; }
 			$asiakkaat_ids[$nimi][$item->id][] = array(
-				'asiakas_attr' => $item->kohteet->asiakkaat->attributes, 
+				'asiakas_attr' => array('asiakas_id' => $item->kohteet->asiakkaat->id, 'asiakas_osoite' => $item->kohteet->asiakkaat->osoite), 
 				'tyovuorot_attr'=> $item->pvm.' '.$item->osoite
 			);
 		}
