@@ -141,7 +141,7 @@ class LaskuController extends Controller
 		      WHERE id IN 
 			( SELECT kohdenID FROM sivexkuitti 
 			  WHERE 
-			  DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			  DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
 			  BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
 			  AND status='3' 
 			  AND hyvaksytty!=''
@@ -164,7 +164,7 @@ class LaskuController extends Controller
 		    ( SELECT asiakas_id FROM sivex_kohdet 
 		      WHERE id IN 
 			( SELECT kohde FROM sivex_tvuoro 
-			  WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+			  WHERE DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) 
 			  BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
 			  AND tid!=0
 			  AND status='3'
@@ -204,6 +204,10 @@ class LaskuController extends Controller
 		}
 
 		$lista = Asiakkaat::model()->findAll($criteria);
+// <--
+echo 'ensin korjataan tama haku. Yhteensa asiakas kpl maara on nyt '. count($lista);
+exit;
+// -->
 		$this->render('luolaskut', array(
 			'asetukset' => $asetukset,
 			'lista' => $lista,
