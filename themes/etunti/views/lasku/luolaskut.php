@@ -58,6 +58,7 @@
 	</tr>
 	<?php foreach($asiakkaat_ids as $asiakas_nimi => $item) : ?>
 	<?php
+	if( !isset($item['asiakas']) ){ continue; }
 	$asiakas = $item['asiakas'];
 	unset($item['asiakas']);
 	?>
@@ -241,13 +242,6 @@
 				$tv_vertailu	= $this->TyovuoroMobileVertailu($tyovuoroot['kohde'], $tyovuoroot['id'], $tyovuoroot['pvm']);
 			}
 
-/*
-echo '<pre>';
-print_r($asiakkaat_ids);
-echo '</pre>';
-exit;
-*/
-
 			if( isset($r['tp_id']) ){ $tp_id = $r['tp_id']; }
 			if( isset($mob['tp_id']) ){ $tp_id = $mob['tp_id']; } // jos autolahetteet
 			if( isset($mob['tv_id']) ){ $tv_id = $mob['tv_id']; }
@@ -380,7 +374,7 @@ exit;
 		<?php $key++; ?>
 		<?php
 			if( isset($mob->tv_id) and isset($tp_lisatuotteet[$mob->tyovuoroot->tyopaari][$mob->tyovuoroot->pvm][$v]) ){ continue; }
-			if( isset($mob->kohde) and isset($tp_lisatuotteet[$mob->tyopaari][$mob->pvm][$v]) ){ continue; }
+			if( isset($tyovuoroot['kohde']) and isset($tp_lisatuotteet[$tyovuoroot['tyopaari']][$tyovuoroot['pvm']][$v]) ){ continue; }
 
 			if( isset($mob->tv_id)){
 				$kohteet 	= $mob->kohteet;
@@ -480,8 +474,8 @@ exit;
 			if( isset($mob->kohde_kannasta) and isset($mob->tyovuoroot) and is_array(json_decode($mob->tyovuoroot->tyopaari, true))){
 				$tp_lisatuotteet[$mob->tyovuoroot->tyopaari][$mob->tyovuoroot->pvm][$v] = $asiakas['id']; //MOB
 			}
-			if( isset($mob->kohde) and is_array(json_decode($mob->tyopaari, true))){
-				$tp_lisatuotteet[$mob->tyopaari][$mob->pvm][$v] = $asiakas['id']; //TV
+			if( isset($tyovuoroot['kohde']) and is_array(json_decode($tyovuoroot['tyopaari'], true))){
+				$tp_lisatuotteet[$tyovuoroot['tyopaari']][$tyovuoroot['pvm']][$v] = $asiakas['id']; //TV
 			}
 		?>
 		<?php endforeach; ?>

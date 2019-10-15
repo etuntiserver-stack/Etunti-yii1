@@ -217,18 +217,19 @@ class LaskuController extends Controller
 		}
 		// Order tyontekijat -->
 
-		$hyv_lista_all = $this->hyvaksyttyListaByAsiakasAll($from, $to, $alvsis_tuote, $tunnit, $criteria->condition);
+		$hyv_lista_all = $this->hyvaksyttyListaByAsiakasAll($from, $to, $tunnit, $criteria->condition);
 		$asiakkaat_ids = [];
 		$attr = [];
 		foreach($hyv_lista_all as $item){
-			if($item->kohteet->asiakkaat->tyyppi == 'henkilo'){ $nimi = $item->kohteet->asiakkaat->yhteyshenkilo; }
-			if($item->kohteet->asiakkaat->tyyppi == 'yritys'){ $nimi = $item->kohteet->asiakkaat->yrityksen_nimi; }
-			if (!array_key_exists($nimi, $attr)) $attr[$nimi] = $item->kohteet->asiakkaat->attributes;
+			$nimi = '';
+			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'henkilo'){ $nimi = $item->kohteet->asiakkaat->yhteyshenkilo; }
+			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'yritys'){ $nimi = $item->kohteet->asiakkaat->yrityksen_nimi; }
+			if (isset($item->kohteet->asiakkaat) and !array_key_exists($nimi, $attr)) $attr[$nimi] = $item->kohteet->asiakkaat->attributes;
 			$asiakkaat_ids[$nimi][$item->id] = [
 				'tyovuoroot' => $item->attributes, 
 				'kohteet' => (isset($item->kohteet->attributes))? $item->kohteet->attributes : '', 
 				'mobile' => (isset($item->mobile->attributes))? $item->mobile->attributes : '',
-				'toteutuneet' => (isset($item->mobile->toteutuneet))? $item->mobile->toteutuneet : '',
+				'toteutuneet' => (isset($item->mobile->toteutuneet->attributes))? $item->mobile->toteutuneet->attributes : '',
 				'tyontekijan_nimi' => (isset($item->tt->id))? $item->tt->$tt_order_1.' '.$item->tt->$tt_order_2 : '', 
 			];
 		}
@@ -262,7 +263,7 @@ exit;
 		));
 	}
 
-	protected function hyvaksyttyListaByAsiakasAll($from, $to, $alvsis_tuote, $tunnit, $asiakas_condition){
+	protected function hyvaksyttyListaByAsiakasAll($from, $to, $tunnit, $asiakas_condition){
 
 	    $lista = array();
 	    if( $tunnit == 'mob' ){
@@ -315,17 +316,15 @@ exit;
 	    // TV
 	    if( $tunnit == 'tv' ){
        		$criteria = new CDbCriteria();
-	        //$criteria->select = "kohde";
-	        //$criteria->group = "kohde";
-	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
+		//$criteria->with = array("kohteet","mobile","toteutuneet","tt");
+	        $criteria->select = "id,kohde,tid,pvm,alku,loppu,tuoteID,lisa_tuotteet,tyopaari";
 	        $criteria->condition = " 
-			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) 
-			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-			AND tid!=0
-			AND status='3'
-			AND peruutettu=0
+			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
 			AND laskutettu=0
-			AND ((tuoteID > 0 AND tuoteID IN (SELECT id FROM onlinevaraus_tuotteet WHERE alvsis='$alvsis_tuote')))
+			AND tuoteID > 0
+			AND status='3'
+			AND tid!=0
+			AND peruutettu=0
 		";
 		if(!empty($asiakas_condition)){
 			$criteria->addCondition("
