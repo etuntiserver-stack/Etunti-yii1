@@ -3,7 +3,7 @@
 ?>
         <!-- begin: .tray-center -->
         <div class="tray-center">
-
+	Yhteensä <?=count($asiakkaat_ids)?> kpl.
         <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'LASKUTUKSEN AUTOMAATIO ESIKATSELU'); ?></h2>
 
 	</div>
