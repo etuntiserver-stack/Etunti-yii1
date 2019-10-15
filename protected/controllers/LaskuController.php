@@ -205,8 +205,8 @@ class LaskuController extends Controller
 
 		$lista = Asiakkaat::model()->findAll($criteria);
 // <--
-echo 'ensin korjataan tama haku. Yhteensa asiakas kpl maara on nyt '. count($lista);
-exit;
+//echo 'ensin korjataan tama haku. Yhteensa asiakas kpl maara on nyt '. count($lista);
+//exit;
 // -->
 		$this->render('luolaskut', array(
 			'asetukset' => $asetukset,
