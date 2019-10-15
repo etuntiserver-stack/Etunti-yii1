@@ -182,7 +182,7 @@
 		if( isset($al->id) and is_array(json_decode($al->tab_array, true)) ){
 			$hyv_lista = json_decode($al->tab_array, true);
 		} else {
-			$hyv_lista = $this->hyvaksyttyListaByAsiakas($item->id, $from, $to, $tunnit);
+			//$hyv_lista = $this->hyvaksyttyListaByAsiakas($item->id, $from, $to, $tunnit);
 		}
 		?>
 		<p class="m_icons"><i class="link fa fa-2x fa-edit"></i></p>
