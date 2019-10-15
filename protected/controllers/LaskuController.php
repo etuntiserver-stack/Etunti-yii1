@@ -170,7 +170,7 @@ class LaskuController extends Controller
 			  AND status='3'
 			  AND peruutettu=0
 			  AND laskutettu=0
-			  AND ((tuoteID > 0 AND tuoteID IN (SELECT id FROM onlinevaraus_tuotteet WHERE alvsis='$alvsis_tuote')) OR lisa_tuotteet!='')
+			  AND ((tuoteID > 0 AND tuoteID IN (SELECT id FROM onlinevaraus_tuotteet WHERE alvsis='$alvsis_tuote')))
 			)
 		    )
 		  AND id NOT IN
@@ -204,10 +204,18 @@ class LaskuController extends Controller
 		}
 
 		$lista = Asiakkaat::model()->findAll($criteria);
-// <--
-//echo 'ensin korjataan tama haku. Yhteensa asiakas kpl maara on nyt '. count($lista);
-//exit;
-// -->
+/*
+		$hyv_lista_all = $this->hyvaksyttyListaByAsiakasAll($from, $to, $alvsis_tuote, $tunnit);
+		$asiakkaat_ids = [];
+		foreach($hyv_lista_all as $item){
+			$asiakkaat_ids[$item->kohde][$item->kohteet->asiakkaat->id][] = array('asiakas_attributes'=>$item->kohteet->asiakkaat->attributes, 'tyovuorot_attributes'=>$item->attributes);
+		}
+
+echo '<pre>';
+print_r($asiakkaat_ids);
+echo '</pre>';
+exit;
+*/
 		$this->render('luolaskut', array(
 			'asetukset' => $asetukset,
 			'lista' => $lista,
@@ -222,6 +230,77 @@ class LaskuController extends Controller
 			'tunnit' => $tunnit,
 			'yrityksen_nimi' => $yrityksen_nimi,
 		));
+	}
+
+	protected function hyvaksyttyListaByAsiakasAll($from, $to, $alvsis_tuote, $tunnit){ // Tama on uusi
+
+	    $lista = array();
+	    if( $tunnit == 'mob' ){
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND status='3'
+			AND sairaus!=1
+			AND hyvaksytty!=''
+			AND tv_id IS NOT NULL AND tv_id > 0
+			AND tv_id IN (
+				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
+			)
+			AND kohdenID IN (
+				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$id."'
+			)
+			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+			AND deleted=0
+			AND laskutetaan=1
+		";
+		$lu = Mobile::model()->findAll($criteria);
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND status='3'
+			AND sairaus!=1
+			AND hyvaksytty!=''
+			AND tv_id IS NOT NULL AND tv_id > 0
+			AND tv_id IN (
+				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
+			)
+			AND kohdenID IN (
+				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$id."'
+			)
+			AND deleted=0
+			AND laskutetaan=1
+		";
+		$tot = Toteutuneet::model()->findAll($criteria);
+		$lista = $lu;
+		if( is_array($tot) and count($tot) > 0 ){ $lista = array_merge($lu, $tot); }
+	    }
+
+	    // TV
+	    if( $tunnit == 'tv' ){
+       		$criteria = new CDbCriteria();
+	        //$criteria->select = "kohde";
+	        //$criteria->group = "kohde";
+	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
+	        $criteria->condition = " 
+			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) 
+			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND kohde!=0
+			AND tid!=0
+			AND status='3'
+			AND peruutettu=0
+			AND laskutettu=0
+			AND ((tuoteID > 0 AND tuoteID IN (SELECT id FROM onlinevaraus_tuotteet WHERE alvsis='$alvsis_tuote')))
+		";
+		$lista = Tyovuoroot::model()->findAll($criteria);
+	    }
+	    return $lista;
 	}
 
 	protected function hyvaksyttyListaByAsiakas($id, $from, $to, $tunnit){

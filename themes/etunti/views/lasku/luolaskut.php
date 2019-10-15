@@ -176,13 +176,11 @@
 
 		<?php
 		$hyv_lista = array();
-		$criteria = new CDbCriteria();
-		$criteria->condition = " from_date='".$from."' AND to_date='".$to."' AND asiakas_id='".$item->id."' AND laskutettu=0 ";
-		$al = Autolahetteet::model()->find($criteria);
+		$al = Autolahetteet::model()->find(" from_date='".$from."' AND to_date='".$to."' AND asiakas_id='".$item->id."' AND laskutettu=0 ");
 		if( isset($al->id) and is_array(json_decode($al->tab_array, true)) ){
 			$hyv_lista = json_decode($al->tab_array, true);
 		} else {
-			//$hyv_lista = $this->hyvaksyttyListaByAsiakas($item->id, $from, $to, $tunnit);
+			$hyv_lista = $this->hyvaksyttyListaByAsiakas($item->id, $from, $to, $tunnit);
 		}
 		?>
 		<p class="m_icons"><i class="link fa fa-2x fa-edit"></i></p>
