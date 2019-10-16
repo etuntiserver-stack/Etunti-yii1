@@ -52,6 +52,15 @@ $tp_lisatuotteet = array();
 	//  Laskunumero netvisorista -->
 	?>
 <p>
+<?php
+$asiakas_maksuehto 		= $asetukset->asiakas_maksuehto;
+$asiakas_laskutus_kanava 	= $asetukset->asiakas_laskutus_kanava;
+$asiakas_kirjeenluokka		= $asetukset->asiakas_kirjeenluokka;
+$asiakas_viivastyskorko		= $asetukset->asiakas_viivastyskorko;
+$palvelu_tyyppi			= $asetukset->palvelu_tyyppi;
+$netvisor_kaytto		= $asetukset->netvisor_kaytto;
+$iban				= $asetukset->iban;
+?>
 <div class="container-fluid">
 	<?php if( count($asiakkaat_ids) > 0 ): ?>
 	<table class="table table-bordered paa_taulu">
@@ -95,8 +104,8 @@ $tp_lisatuotteet = array();
 	$l_class	= 'class="bg-default"';
 	$ep		= '';
 
-	if(isset($asetukset->id) and empty( $asiakas['maksuehto'] ) and !empty( $asetukset->asiakas_maksuehto )){
-		$asiakas['maksuehto'] = $asetukset->asiakas_maksuehto;
+	if(empty( $asiakas['maksuehto'] ) and !empty( $asiakas_maksuehto )){
+		$asiakas['maksuehto'] = $asiakas_maksuehto;
 	}
 
 	if(!empty($asiakas['maksuehto']) and empty($erapaiva)){
@@ -105,20 +114,20 @@ $tp_lisatuotteet = array();
 		$ep = $erapaiva;
 	}
 
-	if(isset($asetukset->id) and empty( $asiakas['laskutus_kanava'] ) and !empty( $asetukset->asiakas_laskutus_kanava )){
-		$asiakas['laskutus_kanava'] = $asetukset->asiakas_laskutus_kanava;
+	if(empty( $asiakas['laskutus_kanava'] ) and !empty( $asiakas_laskutus_kanava )){
+		$asiakas['laskutus_kanava'] = $asiakas_laskutus_kanava;
 	}
-	if(isset($asetukset->id) and empty( $asiakas['kirjeenluokka'] ) and !empty( $asetukset->asiakas_kirjeenluokka )){
-		$asiakas['kirjeenluokka'] = $asetukset->asiakas_kirjeenluokka;
+	if(empty( $asiakas['kirjeenluokka'] ) and !empty( $asiakas_kirjeenluokka )){
+		$asiakas['kirjeenluokka'] = $asiakas_kirjeenluokka;
 	}
-	if(isset($asetukset->id) and empty( $asiakas['viivastyskorko'] ) and !empty( $asetukset->asiakas_viivastyskorko )){
-		$asiakas['viivastyskorko'] = $asetukset->asiakas_viivastyskorko;
+	if(empty( $asiakas['viivastyskorko'] ) and !empty( $asiakas_viivastyskorko )){
+		$asiakas['viivastyskorko'] = $asiakas_viivastyskorko;
 	}
 	$viitenumero = $this->Viite($asiakas['asiakasnumero']."00".date("md").$asiakas['id']);
 
 	if( 
 		( $asiakas['laskutus_kanava'] == 'sahkoposti' and empty($asiakas['sahkoposti']) )
-		or ( $asetukset->palvelu_tyyppi == 4 and $asetukset->netvisor_kaytto == 1 and $asiakas['netvisorkey'] == 0 )
+		or ( $palvelu_tyyppi == 4 and $netvisor_kaytto == 1 and $asiakas['netvisorkey'] == 0 )
 	){ 
 		$is_ok_lasku 	= false; 
 		$l_class	= 'class="alert bg-danger"';
@@ -134,7 +143,7 @@ $tp_lisatuotteet = array();
 	<p><b><?=Yii::t('main', 'Lisätietoja laskutuksesta')?></b>: <?=(!empty($asiakas['lisatietoja_laskutuksesta']))? $asiakas['lisatietoja_laskutuksesta']:''?></p>
 	 <div <?=$l_class?>>
 	 <?=($asiakas['laskutus_kanava'] == 'sahkoposti' and empty($asiakas['sahkoposti']))? '<p>'.Yii::t('main', 'Sähköpostiosoite ei saisi olla tyhjä tässä laskutus kanavassa.').'</p>':''?>
-	 <?=( $asetukset->palvelu_tyyppi == 4 and $asetukset->netvisor_kaytto == 1 and $asiakas['netvisorkey'] == 0 )? '<p>'.Yii::t('main', 'Asiakas ei vielä saanut netvisorkey. Päivittä tämän asiakkaan tiedot.').'</p>':''?>
+	 <?=( $palvelu_tyyppi == 4 and $netvisor_kaytto == 1 and $asiakas['netvisorkey'] == 0 )? '<p>'.Yii::t('main', 'Asiakas ei vielä saanut netvisorkey. Päivittä tämän asiakkaan tiedot.').'</p>':''?>
 	 </div>
 	</div>
 	</td>
@@ -172,7 +181,7 @@ $tp_lisatuotteet = array();
 		$lasku->maksuehto = $asiakas['maksuehto'];
 		$lasku->viitenumero = $viitenumero;
 		$lasku->yhteensa_total = $yhteensa_total;
-		$lasku->saaja_iban = $asetukset->iban;
+		$lasku->saaja_iban = $iban;
 		$lasku->laskun_nimetys = 'Lasku';
 		$lasku->alv_muoto = $alvsis;
 		if(!$lasku->save()){
@@ -184,9 +193,8 @@ $tp_lisatuotteet = array();
 
 		<?php
 		$hyv_lista = array();
-		$al = Autolahetteet::model()->find(" from_date='".$from."' AND to_date='".$to."' AND asiakas_id='".$asiakas['id']."' AND laskutettu=0 ");
-		if( isset($al->id) and is_array(json_decode($al->tab_array, true)) ){
-			$hyv_lista = json_decode($al->tab_array, true);
+		if( isset($autolahetteet_asids[$asiakas['id']]) and is_array(json_decode($autolahetteet_asids[$asiakas['tab_array']], true)) ){
+			$hyv_lista = json_decode($autolahetteet_asids[$asiakas['tab_array']], true);
 		} else {
 			$hyv_lista = $item;
 		}
@@ -220,7 +228,7 @@ $tp_lisatuotteet = array();
 			$kohteet 	= $mob['kohteet'];
 			$mobile 	= $mob['mobile'];
 			$toteutuneet 	= $mob['toteutuneet'];
-			$tyontekijan_nimi = $mob['tyontekijan_nimi'];
+			//$tyontekijan_nimi = $mobile['tekijan_nimi'];
 		}
 		?>
 		<?php $key++; ?>
@@ -339,12 +347,12 @@ $tp_lisatuotteet = array();
 		if($tunnit == 'tv' and isset($mobile)){
 		    foreach($mobile as $mobile_item){
 			if(isset($mobile_item) and $mobile_item['hyvaksytty'] == ''){
-				$hyvaksyty_kontentti .= '<td class="text-danger"><b>Hyväksymättömät luetut tunnit: </b><br>'.$tyontekijan_nimi.'<br>'. date("d.m.Y", strtotime($mobile_item['aloitan'])).', '.date("H:i", strtotime($mobile_item['aloitan'])).'-'.date("H:i", strtotime($mobile_item['loppui'])).'</td>';
+				$hyvaksyty_kontentti .= '<td class="text-danger"><b>Hyväksymättömät luetut tunnit: </b><br>'.$mobile_item['tekijan_nimi'].'<br>'. date("d.m.Y", strtotime($mobile_item['aloitan'])).', '.date("H:i", strtotime($mobile_item['aloitan'])).'-'.date("H:i", strtotime($mobile_item['loppui'])).'</td>';
 			}
 		    }
 		    foreach($toteutuneet as $toteutuneet_item){
 			if(isset($toteutuneet_item) and $toteutuneet_item['hyvaksytty'] == ''){
-				$hyvaksyty_kontentti .= '<td class="text-danger"><b>Hyväksymättömät toteutuneet tunnit: </b><br>'.$tyontekijan_nimi.'<br>'. date("d.m.Y", strtotime($toteutuneet_item['aloitan'])).', '.date("H:i", strtotime($toteutuneet_item['aloitan'])).'-'.date("H:i", strtotime($toteutuneet_item['loppui'])).'</td>';
+				$hyvaksyty_kontentti .= '<td class="text-danger"><b>Hyväksymättömät toteutuneet tunnit: </b><br>'.$mobile_item['tekijan_nimi'].'<br>'. date("d.m.Y", strtotime($toteutuneet_item['aloitan'])).', '.date("H:i", strtotime($toteutuneet_item['aloitan'])).'-'.date("H:i", strtotime($toteutuneet_item['loppui'])).'</td>';
 			}
 		    }
 		}
@@ -511,7 +519,7 @@ $tp_lisatuotteet = array();
 		// <<- Lahetys Trust
 		if(isset($lasku->id) 
 			and $lasku->tilanne == 1 
-			and $asetukset->palvelu_tyyppi == 2 
+			and $palvelu_tyyppi == 2 
 		){
 			$l = Lasku::model()->findByPk($lasku->id); 
 			$resp = $this->finvoiceAuto($l->id, 'finvoiceTrust');
@@ -528,8 +536,8 @@ $tp_lisatuotteet = array();
 		// <<- Lahetys Netvisor
 		if(isset($lasku->id) 
 			and $lasku->tilanne == 1 
-			and $asetukset->palvelu_tyyppi == 4
-			and $asetukset->netvisor_kaytto == 1
+			and $palvelu_tyyppi == 4
+			and $netvisor_kaytto == 1
 		){
 			$return = $this->lahetaNetvisoriin($lasku->id);
 			if( $return != false ){

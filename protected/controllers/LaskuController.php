@@ -206,7 +206,7 @@ class LaskuController extends Controller
 
 		//$lista = Asiakkaat::model()->findAll($criteria);
 
-
+/*
 		// <-- Order tyontekijat
 		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
 			$tt_order_1 = "tekijan_nimi";
@@ -216,6 +216,12 @@ class LaskuController extends Controller
 			$tt_order_2 = "tekijan_nimi";
 		}
 		// Order tyontekijat -->
+*/
+
+		$al = Autolahetteet::model()->findAll(" from_date='".$from."' AND to_date='".$to."' AND laskutettu=0 AND tab_array!=''");
+		$autolahetteet_asids = [];
+		foreach($al as $item)
+			$autolahetteet_asids[$item->asiakas_id] = $item->tab_array;
 
 		$hyv_lista_all = $this->hyvaksyttyListaByAsiakasAll($from, $to, $tunnit, $criteria->condition);
 		$asiakkaat_ids = [];
@@ -230,7 +236,7 @@ class LaskuController extends Controller
 				'kohteet' => (isset($item->kohteet->attributes))? $item->kohteet->attributes : '', 
 				'mobile' => (isset($item->mobile->attributes))? $item->mobile->attributes : '',
 				'toteutuneet' => (isset($item->mobile->toteutuneet->attributes))? $item->mobile->toteutuneet->attributes : '',
-				'tyontekijan_nimi' => (isset($item->tt->id))? $item->tt->$tt_order_1.' '.$item->tt->$tt_order_2 : '', 
+				//'tyontekijan_nimi' => (isset($item->tt->id))? $item->tt->$tt_order_1.' '.$item->tt->$tt_order_2 : '', 
 			];
 		}
 		foreach($asiakkaat_ids as $k => $i)
@@ -239,7 +245,6 @@ class LaskuController extends Controller
 
 		ksort($asiakkaat_ids);
 
-
 /*
 echo '<pre>';
 print_r($asiakkaat_ids);
@@ -247,6 +252,7 @@ echo '</pre>';
 exit;
 */
 		$this->render('luolaskut', array(
+			'autolahetteet_asids' => $autolahetteet_asids,
 			'asiakkaat_ids' => $asiakkaat_ids,
 			'asetukset' => $asetukset,
 			//'lista' => $lista,
