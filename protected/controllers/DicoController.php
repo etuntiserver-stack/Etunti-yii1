@@ -675,6 +675,8 @@ public function actionLogin($domain)
 								"Content-type: text/html; charset=UTF-8";
 
 							mail($model->sahkoposti,$subject,$message,$headers);
+							if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
+								mail($firma->sahkoposti,$subject,$message,$headers);
 							//     Sahkoposti lahetys -->
 
 							// <-- LOG
