@@ -1,5 +1,8 @@
 <?php
-	$tp_lisatuotteet = array();
+ini_set('memory_limit', '512M');
+set_time_limit(300);
+
+$tp_lisatuotteet = array();
 ?>
         <!-- begin: .tray-center -->
         <div class="tray-center">
