@@ -1,6 +1,6 @@
 <?php
-ini_set('memory_limit', '2048M');
-set_time_limit(300);
+ini_set('memory_limit', '256M');
+//set_time_limit(300);
 
 $tp_lisatuotteet = array();
 ?>
