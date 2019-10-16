@@ -148,8 +148,8 @@ class Tyovuoroot extends DB2ActiveRecord
 		        'avaimet' => array(self::HAS_MANY, 'Avaimet', array('kohde'=>'kohde')),
 		        'tt' => array(self::BELONGS_TO, 'Tyontekijat', 'tid'),
 		        'tp' => array(self::BELONGS_TO, 'TuotteetPalvelut', 'tuoteID'),
-		        'mobile' => array(self::HAS_MANY, 'Mobile', array('tv_id'=>'id', 'kohdenID'=>'kohde'), 'condition' => 'deleted=0 and (hyvaksytty="" OR hyvaksytty NOT LIKE "%auto%")'),
-		        'toteutuneet' => array(self::HAS_MANY, 'Toteutuneet', array('tv_id'=>'id', 'kohdenID'=>'kohde'), 'condition' => 'deleted=0 and (hyvaksytty="" OR hyvaksytty NOT LIKE "%auto%")'),
+		        'mobile' => array(self::HAS_MANY, 'Mobile', array('tv_id'=>'id', 'kohdenID'=>'kohde'), 'condition' => 'tv_id!=0 AND deleted=0 and (hyvaksytty="" OR hyvaksytty NOT LIKE "%auto%")'),
+		        'toteutuneet' => array(self::HAS_MANY, 'Toteutuneet', array('tv_id'=>'id', 'kohdenID'=>'kohde'), 'condition' => 'tv_id!=0 AND deleted=0 and (hyvaksytty="" OR hyvaksytty NOT LIKE "%auto%")'),
 		);
 	}
 
