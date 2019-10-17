@@ -322,7 +322,7 @@ foreach ($list as $d) {
 				Tyontekijat::model()->updateByPk($data->id, array('ilmoitus_merkkipaivasta_vuosi' => date("Y")));
 		}
 	}
-
+	echo "test \n";
 
 	if (count($arr) > 0 and $asetukset->ilmoitus_merkkipaivasta == 1) {
 
