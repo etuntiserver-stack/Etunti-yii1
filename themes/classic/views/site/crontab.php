@@ -524,4 +524,5 @@ foreach ($list as $d) {
 	Asiakkaat::model()->updateAll(array('aktiivinen' => '0'), $criteria);
 	//     Asiakas passiviseksi paivamaaran mukaan -->
 
+	echo "end loop \n";
 }
