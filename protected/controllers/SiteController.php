@@ -1396,7 +1396,7 @@ class SiteController extends Controller
 */
 	}
 
-	public function actionCrontab($pass)
+	public function actionCrontab($full)
 	{
                 Yii::app()->theme = 'classic';
 		$this->renderPartial('crontab',array(
