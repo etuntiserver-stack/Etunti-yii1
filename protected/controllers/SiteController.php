@@ -2962,23 +2962,16 @@ $(document).ready(function(){
 	   return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
 	}
 
-	public function ylittaneetMyohastyneet()
+	protected function ylittaneetMyohastyneet()
 	{
 		// <-- ylittaneet
 		$ylittaneet = '';
-/*
-		$criteria=new CDbCriteria;
-		$criteria->condition = " 
-			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
-			AND ilmoitus_avoimista_kohteesta=1
-		";
-		$tv = Tyovuoroot::model()->findAll($criteria);
-*/
 		$tv = Yii::app()->db1->createCommand()
 			->select("kohde,tid,alku,loppu")
 			->from("sivex_tvuoro")
-			->where("ilmoitus_avoimista_kohteesta=1 AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()")
+			->where("DATE(STR_TO_DATE(pvm, '%d.%m.%Y'))=CURDATE() AND ilmoitus_avoimista_kohteesta=1")
 			->queryAll();
+
 		foreach($tv as $dat)
 		{
 			$k = Kohteet::model()->findbypk($dat['kohde']);
@@ -3007,22 +3000,14 @@ $(document).ready(function(){
 		}
 		// ylittaneet -->
 
-
 		// <-- myohastyneet
 		$myohastyneet = '';
-/*
-		$criteria=new CDbCriteria;
-		$criteria->condition = " 
-			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
-			AND ilmoitus_myohastyneista_kohteesta=1
-		";
-		$tv = Tyovuoroot::model()->findAll($criteria);
-*/
 		$tv = Yii::app()->db1->createCommand()
 			->select("kohde,tid,alku,loppu")
 			->from("sivex_tvuoro")
-			->where("ilmoitus_myohastyneista_kohteesta=1 AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()")
+			->where("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE() AND ilmoitus_myohastyneista_kohteesta=1")
 			->queryAll();
+
 		foreach($tv as $dat)
 		{
 			$k = Kohteet::model()->findbypk($dat['kohde']);

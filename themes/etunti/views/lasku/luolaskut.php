@@ -193,8 +193,8 @@ $iban				= $asetukset->iban;
 
 		<?php
 		$hyv_lista = array();
-		if( isset($autolahetteet_asids[$asiakas['id']]) and is_array(json_decode($autolahetteet_asids[$asiakas['tab_array']], true)) ){
-			$hyv_lista = json_decode($autolahetteet_asids[$asiakas['tab_array']], true);
+		if( isset($autolahetteet_asids[$asiakas['id']]) and is_array(json_decode($autolahetteet_asids[$asiakas['id']], true)) ){
+			$hyv_lista = json_decode($autolahetteet_asids[$asiakas['id']], true);
 		} else {
 			$hyv_lista = $item;
 		}
@@ -266,6 +266,8 @@ $iban				= $asetukset->iban;
 			if( isset($mob['alv']) ){ $alv = $mob['alv']; }
 			if( isset($r['yksikko']) ){ $yksikko = $r['yksikko']; }
 			if( isset($mob['yksikko']) ){ $yksikko = $mob['yksikko']; }
+			if( isset($mob['freetext']) ){ $freetext = $mob['freetext']; }
+
 			// <-- TV
 			if( isset($tyovuoroot['tuoteID']) ){ $tp_id = $tyovuoroot['tuoteID']; }
 			if( isset($tyovuoroot['freetext']) ){ $freetext = $tyovuoroot['freetext']; }
