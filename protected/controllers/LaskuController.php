@@ -260,11 +260,6 @@ exit;
 			AND sairaus!=1
 			AND hyvaksytty!=''
 			AND kohdenID > 0
-			AND kohdenID IN(SELECT id FROM sivex_kohdet
-				WHERE asiakas_id IN(SELECT id FROM asiakkaat
-					WHERE $asiakas_condition	
-				)
-			)
 			AND tv_id IS NOT NULL AND tv_id > 0
 			AND tv_id IN (
 				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
@@ -273,6 +268,15 @@ exit;
 			AND deleted=0
 			AND laskutetaan=1
 		";
+		if(!empty($asiakas_condition)){
+			$criteria->addCondition("
+			kohdenID IN(SELECT id FROM sivex_kohdet
+				WHERE asiakas_id IN(SELECT id FROM asiakkaat
+					WHERE $asiakas_condition	
+				)
+			)
+			");
+		}
 		$lu = Mobile::model()->findAll($criteria);
 
        		$criteria = new CDbCriteria();
@@ -285,11 +289,6 @@ exit;
 			AND sairaus!=1
 			AND hyvaksytty!=''
 			AND kohdenID > 0
-			AND kohdenID IN(SELECT id FROM sivex_kohdet
-				WHERE asiakas_id IN(SELECT id FROM asiakkaat
-					WHERE $asiakas_condition	
-				)
-			)
 			AND tv_id IS NOT NULL AND tv_id > 0
 			AND tv_id IN (
 				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
@@ -297,6 +296,15 @@ exit;
 			AND deleted=0
 			AND laskutetaan=1
 		";
+		if(!empty($asiakas_condition)){
+			$criteria->addCondition("
+			kohdenID IN(SELECT id FROM sivex_kohdet
+				WHERE asiakas_id IN(SELECT id FROM asiakkaat
+					WHERE $asiakas_condition	
+				)
+			)
+			");
+		}
 		$tot = Toteutuneet::model()->findAll($criteria);
 		$lista = $lu;
 		if( is_array($tot) and count($tot) > 0 ){ $lista = array_merge($lu, $tot); }
