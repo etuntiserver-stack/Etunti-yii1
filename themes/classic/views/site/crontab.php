@@ -26,11 +26,11 @@ foreach ($list as $d) {
 	Yii::app()->db1->setActive(false);
 	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname=' . $d->domain;
 	Yii::app()->db1->setActive(true);
-
+	echo "test \n";
 	$asetukset = Asetukset::model()->findByPk(1);
 	$site = Yii::app()->createController('Site');
 	$tyovuoroot = Yii::app()->createController('Tyovuoroot');
-	echo "test \n";
+
 	$aikavali_halytys = 15;
 	if (!empty($asetukset->aikavali_halytys))
 		$aikavali_halytys = $asetukset->aikavali_halytys;
