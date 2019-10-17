@@ -16,7 +16,7 @@ $koodi_aktiivinen = 1;
 if ($local_run)
 	$list = Domainit::model()->findAll(" domain='demo' ");
 else
-	$list = Domainit::model()->findAll(" domain!='defdb' AND aktiivinen=1 ");
+	$list = Domainit::model()->findAll(" domain!='defdb' AND domain!='sivex' AND aktiivinen=1 ");
 
 foreach ($list as $d) {
 
