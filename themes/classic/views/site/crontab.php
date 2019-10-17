@@ -97,7 +97,7 @@ foreach ($list as $d) {
 	}
 	//     maksullinen versio -->
 
-	// <-- Ilmoitus mÃ¤Ã¤rÃ¤ajan ylittÃ¤neistÃ¤ kohteista
+	// <-- Ilmoitus määräajan ylittäneistä kohteista
 	$criteria = new CDbCriteria;
 	$criteria->condition = " 
 		DATE_FORMAT(STR_TO_DATE(CONCAT(pvm,loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') < (NOW() - INTERVAL $aikavali_halytys MINUTE)
@@ -120,9 +120,9 @@ foreach ($list as $d) {
 			$tekijan_nimi   = '';
 			$tyoryhmaForArr = '';
 			$osoite = Yii::t('main', 'Osoite') . ': <b>' . $data->osoite . '</b><br>';
-			$tekijan_nimi = Yii::t('main', 'TyÃ¶ntekijÃ¤') . ':  <b>' . $this->etuSukunimi($data->tid) . '</b><br>';
+			$tekijan_nimi = Yii::t('main', 'Työntekijä') . ':  <b>' . $this->etuSukunimi($data->tid) . '</b><br>';
 			$bod   .= $tekijan_nimi . $osoite;
-			$bod   .= Yii::t('main', 'Lopetusajaksi oli mÃ¤Ã¤ritelty') . ': ' . $data->pvm . ', ' . $data->alku;
+			$bod   .= Yii::t('main', 'Lopetusajaksi oli määritelty') . ': ' . $data->pvm . ', ' . $data->alku;
 			$bod   .= '<br>';
 
 			if (!$local_run)
@@ -134,7 +134,7 @@ foreach ($list as $d) {
 				if (is_array(json_decode($tekija->tyoryhma, true))) {
 					foreach (json_decode($tekija->tyoryhma, true) as $tyoryhma) {
 						$mailMessage = '';
-						$mailMessage .= '<h3>' . Yii::t('main', 'TyÃ¶ryhmÃ¤') . ' ' . $tyoryhma . '</h3><br>';
+						$mailMessage .= '<h3>' . Yii::t('main', 'Työryhmä') . ' ' . $tyoryhma . '</h3><br>';
 						$mailMessage .= $bod;
 						$criteria = new CDbCriteria();
 						$criteria->order = " value ";
@@ -172,7 +172,7 @@ foreach ($list as $d) {
 			//     Sahkopostin lahetys -->
 		}
 	}
-	// Ilmoitus mÃ¤Ã¤rÃ¤ajan ylittÃ¤neistÃ¤ kohteista -->
+	// Ilmoitus määräajan ylittäneistä kohteista -->
 
 
 
@@ -195,7 +195,7 @@ foreach ($list as $d) {
 
 	if (count($m) > 0) {
 		echo '<h2>' . strtoupper($ft->tyonantaja) . '</h2>';
-		echo '<h2>' . Yii::t('main', 'MyÃ¶hÃ¤styneet kohteet') . ' ' . date("d.m.Y H:i") . '</h2><br>';
+		echo '<h2>' . Yii::t('main', 'Myöhästyneet kohteet') . ' ' . date("d.m.Y H:i") . '</h2><br>';
 
 		foreach ($m as $data) {
 			$bod     = '';
@@ -203,10 +203,10 @@ foreach ($list as $d) {
 			$tekijan_nimi   = '';
 			$tyoryhmaForArr = '';
 			$osoite = Yii::t('main', 'Osoite') . ': <b>' . $data->osoite . '</b><br>';
-			$tekijan_nimi = Yii::t('main', 'TyÃ¶ntekijÃ¤') . ':  <b>' . $this->etuSukunimi($data->tid) . '</b><br>';
+			$tekijan_nimi = Yii::t('main', 'Työntekijä') . ':  <b>' . $this->etuSukunimi($data->tid) . '</b><br>';
 
 			$bod   .= $tekijan_nimi . $osoite;
-			$bod   .= Yii::t('main', 'Aloitusajaksi oli mÃ¤Ã¤ritelty') . ': ' . $data->pvm . ', ' . $data->alku;
+			$bod   .= Yii::t('main', 'Aloitusajaksi oli määritelty') . ': ' . $data->pvm . ', ' . $data->alku;
 			$bod   .= '<br>';
 
 			if (!$local_run) {
@@ -218,7 +218,7 @@ foreach ($list as $d) {
 				if (is_array(json_decode($tekija->tyoryhma, true))) {
 					foreach (json_decode($tekija->tyoryhma, true) as $tyoryhma) {
 						$mailMessage   = '';
-						$mailMessage   .= '<h3>' . Yii::t('main', 'TyÃ¶ryhmÃ¤') . ' ' . $tyoryhma . '</h3><br>';
+						$mailMessage   .= '<h3>' . Yii::t('main', 'Työryhmä') . ' ' . $tyoryhma . '</h3><br>';
 						$mailMessage   .= $bod;
 						$criteria = new CDbCriteria();
 						$criteria->order = " value ";
@@ -232,7 +232,7 @@ foreach ($list as $d) {
 								$administrators = Administrators::model()->findByPk($adm_id);
 								if (isset($administrators->adm_email) and !empty($administrators->adm_email)) {
 									if (!$local_run) {
-										$subject = Yii::t('main', 'Ilmoitus myÃ¶hÃ¤styneistÃ¤ kohteesta ' . date("d.m.Y H:i"));
+										$subject = Yii::t('main', 'Ilmoitus myöhästyneistä kohteesta ' . date("d.m.Y H:i"));
 										$mail = new YiiMailer();
 										$mail->setFrom('no-reply@etunti.fi');
 										$mail->setTo($administrators->adm_email);
@@ -284,12 +284,12 @@ foreach ($list as $d) {
 
 	if (isset($tt[0])) {
 		echo '<h2>' . strtoupper($ft->tyonantaja) . '</h2>';
-		echo '<h2>' . Yii::t('main', 'Ilmoitus merkkipÃ¤ivÃ¤stÃ¤') . ' ' . date("d.m.Y H:i") . '</h2><br>';
+		echo '<h2>' . Yii::t('main', 'Ilmoitus merkkipäivästä') . ' ' . date("d.m.Y H:i") . '</h2><br>';
 
 		foreach ($tt as $data) {
 
 			$bod     = '';
-			$bod   .= Yii::t('main', 'MerkkipÃ¤ivÃ¤') . ': <b>' . date("d.m.Y", strtotime($data->tekijan_henkilotunnus)) . ', ' . $this->etuSukunimi($data->id) . '</b><br>';
+			$bod   .= Yii::t('main', 'Merkkipäivä') . ': <b>' . date("d.m.Y", strtotime($data->tekijan_henkilotunnus)) . ', ' . $this->etuSukunimi($data->id) . '</b><br>';
 
 			$tyoryhmaForArr = $data->tyoryhma;
 
@@ -324,7 +324,7 @@ foreach ($list as $d) {
 
 	if (count($arr) > 0 and $asetukset->ilmoitus_merkkipaivasta == 1) {
 
-		// <-- JÃ¤rjestelmanvalvojan kuluvia ryhmiÃ¤
+		// <-- Jäjestelmanvalvojan kuluvia ryhmiä
 		$criteria = new CDbCriteria();
 		$criteria->order = " value ";
 		$criteria->condition = " 
@@ -341,7 +341,7 @@ foreach ($list as $d) {
 
 					$sahkopostiArray  = array();
 					$mailMessage   = '';
-					$mailMessage   .= '<h3>' . Yii::t('main', 'TyÃ¶ryhmÃ¤') . ' ' . $ryhma . '</h3>';
+					$mailMessage   .= '<h3>' . Yii::t('main', 'Työryhmä') . ' ' . $ryhma . '</h3>';
 
 					foreach ($forMessage as $key => $value) {
 						if ($value['tyoryhma'] == $data->value)
@@ -358,7 +358,7 @@ foreach ($list as $d) {
 					}
 
 					if (!$local_run) {
-						$subject = Yii::t('main', 'Ilmoitus merkkipÃ¤ivÃ¤stÃ¤ ' . date("d.m.Y H:i"));
+						$subject = Yii::t('main', 'Ilmoitus merkkipäivästä ' . date("d.m.Y H:i"));
 						$mail = new YiiMailer();
 						$mail->setFrom('no-reply@etunti.fi');
 						$mail->setTo($sahkopostiArray);
@@ -388,7 +388,7 @@ foreach ($list as $d) {
 
 
 
-	// <-- lmoitus toistuvien tyÃ¶vuorojen pÃ¤Ã¤ttymisestÃ¤
+	// <-- lmoitus toistuvien työvuorojen päättymisestä
 	if (isset($asetukset->ilmoitus_toistuvien_tyovuorojen_paattymisesta) and $asetukset->ilmoitus_toistuvien_tyovuorojen_paattymisesta == 1) {
 		$criteria = new CDbCriteria;
 		//$criteria->select = "";
@@ -432,9 +432,9 @@ foreach ($list as $d) {
 			} else {
 				$m .= '<hr><b>' . $tyovuoroot[0]->tilanteet()[$data->status] . '</b><br>';
 			}
-			$m .= '<b>' . Yii::t('main', 'AikavÃ¤li') . ':</b> ' . $data->pfrom . '-' . $data->pto . '<br>';
+			$m .= '<b>' . Yii::t('main', 'Aikaväli') . ':</b> ' . $data->pfrom . '-' . $data->pto . '<br>';
 			$m .= '<b>' . Yii::t('main', 'Klo') . ':</b> ' . $data->alku . '-' . $data->loppu . '<br>';
-			$m .= '<b>' . Yii::t('main', 'TyÃ¶ntekijÃ¤') . ':</b> ' . $tekijan_nimi . '<br>';
+			$m .= '<b>' . Yii::t('main', 'Työntekijä') . ':</b> ' . $tekijan_nimi . '<br>';
 
 			if (!empty($data->tyopaari)) {
 				$tyopari = json_decode($data->tyopaari);
@@ -443,7 +443,7 @@ foreach ($list as $d) {
 					$t2 = Tyontekijat::model()->findbypk($tid);
 					if (isset($t2->id) and $tid != $data->tid) {
 						$tekijan_nimi2 = $this->etuSukunimi($t2->id);
-						$m .= '<b>' . Yii::t('main', 'TyÃ¶pari') . ':</b> ' . $tekijan_nimi2 . '<br>';
+						$m .= '<b>' . Yii::t('main', 'Työpari') . ':</b> ' . $tekijan_nimi2 . '<br>';
 					}
 				}
 			}
@@ -455,7 +455,7 @@ foreach ($list as $d) {
 
 		// <-- Valmistetaan viesti
 		if (!empty($m)) {
-			$message .= '<h2>' . Yii::t('main', 'Ilmoitus toistuvien tyÃ¶vuorojen pÃ¤Ã¤ttymisestÃ¤') . '</h2>';
+			$message .= '<h2>' . Yii::t('main', 'Ilmoitus toistuvien työvuorojen päättymisestä') . '</h2>';
 			$message .= $m;
 		}
 
@@ -469,7 +469,7 @@ foreach ($list as $d) {
 
 			$ft = FirmanTiedot::model()->findbypk(1);
 			foreach ($saaja as $key => $sahkoposti) {
-				$subject = Yii::t('main', 'Ilmoitus toistuvien tyÃ¶vuorojen pÃ¤Ã¤ttymisestÃ¤');
+				$subject = Yii::t('main', 'Ilmoitus toistuvien työvuorojen päättymisestä');
 				$mail = new YiiMailer();
 				$mail->setFrom('no-reply@etunti.fi');
 				$mail->setTo($sahkoposti);
@@ -494,7 +494,7 @@ foreach ($list as $d) {
 		// Valmistetaan viesti -->
 
 	}
-	// lmoitus toistuvien tyÃ¶vuorojen pÃ¤Ã¤ttymisestÃ¤ -->
+	// lmoitus toistuvien työvuorojen päätymisestä -->
 
 	// <-- Vinkkit autopoistaminen
 	if (isset($asetukset->tietosuoja_vinkki_sailyttaminen)) {
