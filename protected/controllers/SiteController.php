@@ -1400,7 +1400,7 @@ class SiteController extends Controller
 	{
                 Yii::app()->theme = 'classic';
 		$this->renderPartial('crontab',array(
-			'pass'=>$pass,
+			'full'=>$full,
 		));
 	}
 
