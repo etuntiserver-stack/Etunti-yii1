@@ -223,6 +223,11 @@ $iban				= $asetukset->iban;
 		<?php $key = 0; ?>
 		<?php foreach($hyv_lista as $mob) : ?>
 		<?php
+		if( isset($mob['mob_tunnit']) ){
+			$mob_tunnit 	= $mob['mob_tunnit'];
+			$mob_tunnit_tyovuoroot 	= $mob['mob_tunnit_tyovuoroot'];
+			$kohteet 	= $mob['kohteet'];
+		}
 		if( isset($mob['tyovuoroot']) ){
 			$tyovuoroot 	= $mob['tyovuoroot'];
 			$kohteet 	= $mob['kohteet'];
@@ -241,10 +246,10 @@ $iban				= $asetukset->iban;
 			$rivi_kpl 	= 0;
 			$r		= [];
 
-			if( isset($mob->tv_id) ){
-				$tv_id		= $mob->tv_id;
-				$t 		= $this->num(strtotime($mob->loppui)-strtotime($mob->aloitan));
-				$r 		= $this->hinnastoHintaat($mob->tyovuoroot->tuoteID, $item, $mob->kohteet, $t, $rivi_kpl); // MOB
+			if( isset($mob_tunnit) ){
+				$tv_id		= $mob_tunnit['tv_id'];
+				$t 		= $this->num(strtotime($mob_tunnit['loppui'])-strtotime($mob_tunnit['aloitan']));
+				$r 		= $this->hinnastoHintaat($mob_tunnit_tyovuoroot['tuoteID'], $item, $kohteet, $t, $rivi_kpl); // MOB
 			}
 			if( isset($tyovuoroot['kohde']) ){
 				$tv_id		= $tyovuoroot['id'];
@@ -275,16 +280,18 @@ $iban				= $asetukset->iban;
 			if( isset($r['alvsis']) and $r['alvsis'] == 'nolla'){ $alvsis = 0; }
 			if( isset($r['hinta_sis']) and isset($r['alvsis']) and $r['alvsis'] == 'sis'){ $alvsis = 1; $hinta = $r['hinta_sis']; }
 
-			if( isset($mob->kohde_kannasta) ){
+			// <-- MOB
+			if( isset($mob_tunnit['kohde_kannasta']) ){
 				$freetext = '';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-					$freetext .= date("d.m.Y", strtotime($mob->aloitan));
+					$freetext .= date("d.m.Y", strtotime($mob_tunnit['aloitan']));
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
 					if(!empty($freetext)){ $freetext .= ', '; }
-					$freetext .= $mob->kohde_kannasta;
+					$freetext .= $mob_tunnit['kohde_kannasta'];
 				}
 			}
+			// <-- TV
 			if( isset($tyovuoroot['kohde']) and isset($kohteet['osoite']) ){
 				$freetext = '';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
@@ -294,7 +301,7 @@ $iban				= $asetukset->iban;
 					if(!empty($freetext)){ $freetext .= ', '; }
 					$freetext .= $kohteet['osoite'];
 				}
-			} //TV
+			}
 
 			if( $hinta == 0 ){
 				echo '<h1>Hinta ei saa olla nolla.</h1>';
@@ -346,6 +353,7 @@ $iban				= $asetukset->iban;
 		if(!isset($mobile)){
 			$hyvaksyty = false;
 		}
+		// <-- TV
 		if($tunnit == 'tv' and isset($mobile)){
 		    foreach($mobile as $mobile_item){
 			if(isset($mobile_item) and $mobile_item['hyvaksytty'] == ''){
