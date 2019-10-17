@@ -292,7 +292,7 @@ $iban				= $asetukset->iban;
 				}
 			}
 			// <-- TV
-			if( isset($tyovuoroot['kohde']) and isset($kohteet['osoite']) ){
+			if( isset($tyovuoroot['id']) and isset($kohteet['osoite']) ){
 				$freetext = '';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
 					$freetext .= $tyovuoroot['pvm'];
@@ -381,10 +381,10 @@ $iban				= $asetukset->iban;
 		<?php endif; ?>
 
 		<!-- Lisatuote -->
-		<?php if( isset($mob->tv_id) or isset($tyovuoroot['lisa_tuotteet']) ) : ?>
+		<?php if( isset($mob_tunnit_tyovuoroot['id']) or isset($tyovuoroot['lisa_tuotteet']) ) : ?>
 		<?php 
-			if( isset($mob->tv_id)){
-				$lisa_tuotteet = json_decode($mob->tyovuoroot->lisa_tuotteet, true); //MOB
+			if( isset($mob_tunnit_tyovuoroot['id'])){
+				$lisa_tuotteet = json_decode($mob_tunnit_tyovuoroot['lisa_tuotteet'], true); //MOB
 			}
 			if( isset($tyovuoroot['kohde'])){
 				$lisa_tuotteet = json_decode($tyovuoroot['lisa_tuotteet'], true); //TV
@@ -394,17 +394,17 @@ $iban				= $asetukset->iban;
 		<?php foreach($lisa_tuotteet['tuote'] as $k => $v) : ?>
 		<?php $key++; ?>
 		<?php
-			if( isset($mob->tv_id) and isset($tp_lisatuotteet[$mob->tyovuoroot->tyopaari][$mob->tyovuoroot->pvm][$v]) ){ continue; }
+			if( isset($mob_tunnit_tyovuoroot['id']) and isset($tp_lisatuotteet[$mob_tunnit_tyovuoroot['tyopaari']][$mob_tunnit_tyovuoroot['pvm']][$v]) ){ continue; }
 			if( isset($tyovuoroot['kohde']) and isset($tp_lisatuotteet[$tyovuoroot['tyopaari']][$tyovuoroot['pvm']][$v]) ){ continue; }
-
-			if( isset($mob->tv_id)){
-				$kohteet 	= $mob->kohteet;
-				$t 		= json_decode($mob->tyovuoroot->lisa_tuotteet, true)['maara'][$k];
-				$rivi_kpl 	= json_decode($mob->tyovuoroot->lisa_tuotteet, true)['maara'][$k]; //MOB
+			// <-- MOB
+			if( isset($mob_tunnit_tyovuoroot['id'])){
+				$t 		= json_decode($mob_tunnit_tyovuoroot['lisa_tuotteet'], true)['maara'][$k];
+				$rivi_kpl 	= json_decode($mob_tunnit_tyovuoroot['lisa_tuotteet'], true)['maara'][$k];
 			}
+			// <-- TV
 			if( isset($tyovuoroot['kohde'])){
 				$t 		= json_decode($tyovuoroot['lisa_tuotteet'], true)['maara'][$k];
-				$rivi_kpl 	= json_decode($tyovuoroot['lisa_tuotteet'], true)['maara'][$k]; // TV
+				$rivi_kpl 	= json_decode($tyovuoroot['lisa_tuotteet'], true)['maara'][$k];
 			}
 			$r		= [];
 			$r 		= $this->hinnastoHintaat($v, $item, $kohteet, $t, $rivi_kpl);
@@ -417,18 +417,19 @@ $iban				= $asetukset->iban;
 
 			if( isset($r['alvsis']) and $r['alvsis'] == 'nolla'){ $alvsis = 0; }
 			if( isset($r['hinta_sis']) and isset($r['alvsis']) and $r['alvsis'] == 'sis'){ $alvsis = 1; $hinta = $r['hinta_sis']; }
-
-			if( isset($mob->kohde_kannasta) ){
+			// <-- MOB
+			if( isset($mob_tunnit['kohde_kannasta']) ){
 				$freetext = '';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-					$freetext .= date("d.m.Y", strtotime($mob->aloitan));
+					$freetext .= date("d.m.Y", strtotime($mob_tunnit['aloitan']));
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
 					if(!empty($freetext)){ $freetext .= ', '; }
-					$freetext .= $mob->kohde_kannasta;
+					$freetext .= $mob_tunnit['kohde_kannasta'];
 				}
 			}
-			if( isset($kohteet['osoite']) ){
+			// <-- TV
+			if( isset($tyovuoroot['id']) ){
 				$freetext = '';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
 					$freetext .= $tyovuoroot['pvm'];
@@ -437,7 +438,7 @@ $iban				= $asetukset->iban;
 					if(!empty($freetext)){ $freetext .= ', '; }
 					$freetext .= $kohteet['osoite'];
 				}
-			} //TV
+			} 
 
 			// <-- ALV laskin
 			$veroton 	= 0;
@@ -492,11 +493,13 @@ $iban				= $asetukset->iban;
 		</tr>
 		<?php endif; ?>
 		<?php 
-			if( isset($mob->kohde_kannasta) and isset($mob->tyovuoroot) and is_array(json_decode($mob->tyovuoroot->tyopaari, true))){
-				$tp_lisatuotteet[$mob->tyovuoroot->tyopaari][$mob->tyovuoroot->pvm][$v] = $asiakas['id']; //MOB
+			// <-- MOB
+			if( isset($mob_tunnit_tyovuoroot['tyopaari']) and is_array(json_decode($mob_tunnit_tyovuoroot['tyopaari'], true))){
+				$tp_lisatuotteet[$mob_tunnit_tyovuoroot['tyopaari']][$mob_tunnit_tyovuoroot['pvm']][$v] = $asiakas['id'];
 			}
-			if( isset($tyovuoroot['kohde']) and is_array(json_decode($tyovuoroot['tyopaari'], true))){
-				$tp_lisatuotteet[$tyovuoroot['tyopaari']][$tyovuoroot['pvm']][$v] = $asiakas['id']; //TV
+			// <-- TV
+			if( isset($tyovuoroot['tyopaari']) and is_array(json_decode($tyovuoroot['tyopaari'], true))){
+				$tp_lisatuotteet[$tyovuoroot['tyopaari']][$tyovuoroot['pvm']][$v] = $asiakas['id'];
 			}
 		?>
 		<?php endforeach; ?>
