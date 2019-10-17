@@ -30,7 +30,7 @@ foreach ($list as $d) {
 	$asetukset = Asetukset::model()->findByPk(1);
 	$site = Yii::app()->createController('Site');
 	$tyovuoroot = Yii::app()->createController('Tyovuoroot');
-
+	echo "test \n";
 	$aikavali_halytys = 15;
 	if (!empty($asetukset->aikavali_halytys))
 		$aikavali_halytys = $asetukset->aikavali_halytys;
@@ -38,7 +38,7 @@ foreach ($list as $d) {
 	$ft = FirmanTiedot::model()->findByPk(1);
 	$dh = DigistenHinnasto::model()->findByPk(1);
 	$domainit = Domainit::model()->findByPk($d->id);
-	echo "test \n";
+
 	// <-- Tuntien Autohyvaksyminen
 	if ($asetukset->app_hyvaksynnan_peruste == 2) {
 		$date_yday = date('Y-m-d', strtotime('-1 day'));
