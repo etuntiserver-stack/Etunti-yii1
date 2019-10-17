@@ -638,7 +638,7 @@ $(document).ready(function(){
 		'<input type="text" name="nimike" class="form-control">' +
 		'</div>' +
 		'</td>' +
-		'<td class="input_hinta"><input type="number" name="hinta" class="form-control" placeholder="Hinta"></td>' +
+		'<td class="input_hinta"><input type="text" name="hinta" class="form-control" placeholder="Hinta"></td>' +
 		'<td class="input_yksikko">'+ lista +'</td>' +
 		'<td class="input_kpl"><input type="number" name="kpl" class="form-control" value="1"></td>' +
 		'<td class="input_alv"><input type="number" name="alv" class="form-control"></td>' +
@@ -692,7 +692,7 @@ $(document).ready(function(){
     });
     $( $(this).closest('td').find('.rivintaulu td.input_hinta') ).each(function( index ) {
 	todigit = $(this).text().replace(/\,/g, '.');
-	$(this).replaceWith('<td class="input_hinta" width="110"><input type="number" name="hinta" class="form-control" value="'+ todigit +'"></td>');
+	$(this).replaceWith('<td class="input_hinta" width="110"><input type="text" name="hinta" class="form-control" value="'+ todigit +'"></td>');
     });
     $( $(this).closest('td').find('.rivintaulu td.input_yksikko') ).each(function( index ) {
 	lista = '<select class="form-control lista" name="yksikko"><?=$this->yksikkot("'+ $(this).text() +'")?></select>';
@@ -800,7 +800,7 @@ $(document).ready(function(){
     });
   });
 
-  $(document).delegate("input[type=number]","keyup change paste",function(){
+  $(document).delegate("input[type=number], input[name=hinta]","keyup change paste",function(){
   	var alvsis = parseInt($(this).closest('.lahetys_laatikko').find('.lasku_alv_muoto').val());
 	var hinta_alv_0 = 0;
 	var alv = 0;
