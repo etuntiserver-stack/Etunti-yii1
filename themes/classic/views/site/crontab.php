@@ -9,10 +9,6 @@ $is_local = in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']);
 $local_run = !$full && $is_local; // If true, request is from localhost and limit to demo domain.
 
 // If invalid password, exit script to reduce nesting.
-/*
-if ($pass !== 'Estrom2016!')
-	exit("Invalid password.");
-*/
 $koodi_aktiivinen = 1;
 if ($local_run)
 	$list = Domainit::model()->findAll(" domain='demo' ");
