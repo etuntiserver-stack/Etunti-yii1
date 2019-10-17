@@ -322,7 +322,7 @@ exit;
 	    // TV
 	    if( $tunnit == 'tv' ){
        		$criteria = new CDbCriteria();
-		//$criteria->with = array("kohteet","mobile","toteutuneet","tt");
+	        $criteria->order = " DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) ASC ";
 	        $criteria->select = "id,kohde,tid,pvm,alku,loppu,tuoteID,lisa_tuotteet,tyopaari";
 	        $criteria->condition = " 
 			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
