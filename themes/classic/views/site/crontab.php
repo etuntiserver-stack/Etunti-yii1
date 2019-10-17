@@ -38,7 +38,7 @@ foreach ($list as $d) {
 	$ft = FirmanTiedot::model()->findByPk(1);
 	$dh = DigistenHinnasto::model()->findByPk(1);
 	$domainit = Domainit::model()->findByPk($d->id);
-
+	echo "test \n";
 	// <-- Tuntien Autohyvaksyminen
 	if ($asetukset->app_hyvaksynnan_peruste == 2) {
 		$date_yday = date('Y-m-d', strtotime('-1 day'));
@@ -58,7 +58,7 @@ foreach ($list as $d) {
 		}
 	}
 	//    Tuntien Autohyvaksyminen -->
-	echo "test \n";
+
 	// <-- maksullinen versio
 	if ($domainit->maksullinen == 1 and isset($dh->snapshot_pvm) and $dh->snapshot_pvm > 0) {
 		$snapshot_paiva = $dh->snapshot_pvm;
