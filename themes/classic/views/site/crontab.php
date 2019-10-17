@@ -16,8 +16,10 @@ $koodi_aktiivinen = 1;
 if ($local_run)
 	$list = Domainit::model()->findAll(" domain='demo' ");
 else
-	$list = Domainit::model()->findAll(" domain!='defdb' AND domain!='sivex' ");
+	$list = Domainit::model()->findAll(" domain!='defdb' AND domain!='sivex' AND aktiivinen=1 ");
 
+echo count($list);
+exit;
 foreach ($list as $d) {
 
 	echo $d->domain . '<br>';
@@ -396,7 +398,7 @@ foreach ($list as $d) {
 		DATE_FORMAT(STR_TO_DATE(pto, '%d.%m.%Y'), '%Y-%m-%d') 
 		BETWEEN (CURDATE() - INTERVAL '" . $asetukset->ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen . "' DAY) AND CURDATE()
 		AND ilmoitus_paattymisesta!=1
-	";
+		";
 		$toistuvat = ToistuvatTyovuorot::model()->findAll($criteria);
 
 		$m = '';
@@ -518,7 +520,7 @@ foreach ($list as $d) {
 	$criteria->condition = " 
 	DATE_FORMAT(STR_TO_DATE(lopetuksen_pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 	AND aktiivinen=1
-";
+	";
 	Asiakkaat::model()->updateAll(array('aktiivinen' => '0'), $criteria);
 	//     Asiakas passiviseksi paivamaaran mukaan -->
 
