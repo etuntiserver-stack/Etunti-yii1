@@ -58,7 +58,7 @@ foreach ($list as $d) {
 		}
 	}
 	//    Tuntien Autohyvaksyminen -->
-
+	echo "test \n";
 	// <-- maksullinen versio
 	if ($domainit->maksullinen == 1 and isset($dh->snapshot_pvm) and $dh->snapshot_pvm > 0) {
 		$snapshot_paiva = $dh->snapshot_pvm;
@@ -98,7 +98,7 @@ foreach ($list as $d) {
 		}
 	}
 	//     maksullinen versio -->
-	echo "test \n";
+
 	// <-- Ilmoitus määräajan ylittäneistä kohteista
 	$criteria = new CDbCriteria;
 	$criteria->condition = " 
