@@ -98,7 +98,7 @@ foreach ($list as $d) {
 		}
 	}
 	//     maksullinen versio -->
-
+	echo "test \n";
 	// <-- Ilmoitus määräajan ylittäneistä kohteista
 	$criteria = new CDbCriteria;
 	$criteria->condition = " 
@@ -175,8 +175,6 @@ foreach ($list as $d) {
 		}
 	}
 	// Ilmoitus määräajan ylittäneistä kohteista -->
-
-
 
 	// <-- ilmoitus_myohastyneista_kohteesta
 	$criteria = new CDbCriteria;
@@ -263,9 +261,6 @@ foreach ($list as $d) {
 	}
 	// ilmoitus_myohastyneista_kohteesta -->
 
-
-
-
 	// <-- merkkipaivailmoitukset
 	$message   = '';
 	$arr     = array();
@@ -322,7 +317,6 @@ foreach ($list as $d) {
 				Tyontekijat::model()->updateByPk($data->id, array('ilmoitus_merkkipaivasta_vuosi' => date("Y")));
 		}
 	}
-	echo "test \n";
 
 	if (count($arr) > 0 and $asetukset->ilmoitus_merkkipaivasta == 1) {
 
