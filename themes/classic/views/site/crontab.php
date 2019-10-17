@@ -18,11 +18,11 @@ if ($local_run)
 else
 	$list = Domainit::model()->findAll(" domain!='defdb' AND domain!='sivex' AND aktiivinen=1 ");
 
-echo count($list);
-exit;
+echo "KPL yhteensa: " . count($list) . "\n";
+
 foreach ($list as $d) {
 
-	echo $d->domain . '<br>';
+	echo $d->domain . "\n";
 	Yii::app()->db1->setActive(false);
 	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname=' . $d->domain;
 	Yii::app()->db1->setActive(true);
