@@ -313,14 +313,14 @@ $iban				= $asetukset->iban;
 			$yht 		= 0;
 			if( $alvsis == 0 ){
 				$laske = ($hinta*$kpl)/100*$alv;
-				$veroton = round(($hinta*$kpl), 2);
+				$veroton = round(($hinta*$kpl), $decimal);
 				$yht = $laske+$veroton;
 			}
 			if( $alvsis == 1 ){
 				$yht = $hinta*$kpl;
 				$jakaa = '1.'.$alv;
 				$l = $yht/$jakaa;
-				$veroton = round($l, 2);
+				$veroton = round($l, $decimal);
 			}
 			//     ALV laskin -->
 
@@ -446,14 +446,14 @@ $iban				= $asetukset->iban;
 			$yht 		= 0;
 			if( $alvsis == 0 ){
 				$laske = ($hinta*$kpl)/100*$alv;
-				$veroton = round(($hinta*$kpl), 2);
+				$veroton = round(($hinta*$kpl), $decimal);
 				$yht = $laske+$veroton;
 			}
 			if( $alvsis == 1 ){
 				$yht = $hinta*$kpl;
 				$jakaa = '1.'.$alv;
 				$l = $yht/$jakaa;
-				$veroton = round($l, 2);
+				$veroton = round($l, $decimal);
 			}
 			//     ALV laskin -->
 
@@ -525,8 +525,8 @@ $iban				= $asetukset->iban;
 	<?php if( $is_ok_lasku and $laheta !== null and isset($lasku->id) ){
 		Lasku::model()->updateByPk($lasku->id, 
 			array(
-			'yhteensa_total_verot' => round(($yhteensa_total-$yhteensa_total_veroton), 2), 
-			'yhteensa_total_veroton' => round($yhteensa_total_veroton, 2), 
+			'yhteensa_total_verot' => round(($yhteensa_total-$yhteensa_total_veroton), $decimal), 
+			'yhteensa_total_veroton' => round($yhteensa_total_veroton, $decimal), 
 			'yhteensa_total' => $yhteensa_total
 		));
 
