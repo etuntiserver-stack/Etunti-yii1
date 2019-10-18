@@ -121,7 +121,7 @@ class LaskuController extends Controller
 		exit;
 	}
 
-	public function actionLuolaskut($from, $to, $yrityksen_nimi=null, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null, $erapaiva=null, $tunnit=null)
+	public function actionLuolaskut($from, $to, $yrityksen_nimi=null, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null, $erapaiva=null, $tunnit=null, $decimal=null)
 	{
 		$asetukset = Asetukset::model()->findByPk(1);
 		$paivays = date("Y-m-d", strtotime($paivays));
@@ -241,6 +241,7 @@ exit;
 			'laheta' => $laheta,
 			'luo' => $luo,
 			'alvsis' => $alvsis,
+			'decimal' => $decimal,
 			'tunnit' => $tunnit,
 			'yrityksen_nimi' => $yrityksen_nimi,
 		));

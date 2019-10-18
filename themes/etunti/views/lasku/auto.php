@@ -116,6 +116,18 @@
                             </label>
                           </label>
                         </div>
+                        <div class="section">
+                          <label class="field select">
+			    <select name="decimal" id="decimal" class="gui-input">
+			     <option value="2">2 decimalia</option>
+			     <option value="3">3 decimalia</option>
+			     <option value="4">4 decimalia</option>
+			     <option value="5">5 decimalia</option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
                       </div>
 
                       <div class="col-md-2">
