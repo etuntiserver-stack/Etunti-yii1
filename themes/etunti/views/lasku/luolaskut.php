@@ -607,7 +607,7 @@ $iban				= $asetukset->iban;
 				)
 			); 
 		    ?>
-		    <h3><?=Yii::t('main', 'Yhteensä')?>: <span class="yhteensa_last"><?=number_format($yhteensa_total, 2, ',', ' ')?></span>&euro;</h3>
+		    <h3><?=Yii::t('main', 'Yhteensä')?>: <span class="yhteensa_last"><?=number_format($yhteensa_total, $decimal, ',', ' ')?></span>&euro;</h3>
 		</th>
 	<?php else: ?>
 		<tr><th><button class="btn btn-block btn-danger">Lasku ei mennyt läpi</button></th></tr>
