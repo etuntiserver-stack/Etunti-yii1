@@ -92,9 +92,9 @@ class TuotteetPalvelut extends DB2ActiveRecord
 			array('nimike', 'required'),
 			array('image', 'file','types'=>'jpg', 'allowEmpty'=>true, 'on'=>'update'),
 			array('palvelu, nayta_sivuilla, nayta_vain_onlinevarauksessa, paa_palvelu, aktiivinen, varastoitava, myyntituote, oletustuote', 'numerical', 'integerOnly'=>true),
+			array('hinta_alv_0, hinta_alv_sis', 'numerical', 'integerOnly'=>false),
 			array('nimike, selitysteksti, myyntitili', 'length', 'max'=>255),
-			array('hinta_alv_0, hinta_alv_sis, yksikko', 'length', 'max'=>20),
-			array('hinta, kesto, nelio, kotitalousvahennys, netvisorkey', 'length', 'max'=>20),
+			array('hinta, kesto, nelio, kotitalousvahennys, netvisorkey, yksikko', 'length', 'max'=>20),
 			array('toinen_valikko_rakenne, lisapalvelut, kategoria, alvsis, alv', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
