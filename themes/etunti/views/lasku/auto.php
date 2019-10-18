@@ -148,8 +148,8 @@
                         <div class="section">
                           <label class="field select">
 			    <select name="tunnit" id="tunnit" class="gui-input">
-			     <option value="mob"><?php echo Yii::t('main', 'Tunnit'); ?></option>
 			     <option value="tv"><?php echo Yii::t('main', 'Työvuorot'); ?></option>
+			     <option value="mob"><?php echo Yii::t('main', 'Tunnit'); ?></option>
 			    </select>
                             <i class="arrow double"></i>
                             </label>

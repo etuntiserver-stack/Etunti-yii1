@@ -369,12 +369,12 @@ $iban				= $asetukset->iban;
 		?>
 		<tr class="<?=((isset($tv_vertailu) and $tv_vertailu == true)?'text-success':'')?><?=((isset($tv_vertailu) and $tv_vertailu == false)?'text-danger':'')?>">
 		<td class="input_nimike" tp_id="<?=$tp_id?>" tv_id="<?=$tv_id?>"><?=$nimike?></td>
-		<td class="input_hinta"><?=number_format($hinta, 2, ',', ' ')?></td>
+		<td class="input_hinta"><?=number_format($hinta, 4, ',', ' ')?></td>
 		<td class="input_yksikko"><?=$yksikko?></td>
 		<td class="input_kpl"><?=$kpl?></td>
 		<td class="input_alv"><?=$alv?></td>
-		<td class="input_veroton"><?=number_format($veroton, 2, ',', ' ')?></td>
-		<td class="input_yhteensa"><?=number_format($yht, 2, ',', ' ')?></td>
+		<td class="input_veroton"><?=number_format($veroton, 4, ',', ' ')?></td>
+		<td class="input_yhteensa"><?=number_format($yht, 4, ',', ' ')?></td>
 		<td class="input_freetext"><?=$freetext?></td>
 		<?=$hyvaksyty_kontentti?>
 		</tr>
@@ -483,12 +483,12 @@ $iban				= $asetukset->iban;
 		<?php if( $tp_id != 0 and $laheta == null ) : ?>
 		<tr>
 		<td class="input_nimike" tp_id="<?=$tp_id?>" tv_id="<?=$tv_id?>"><?=$nimike?></td>
-		<td class="input_hinta"><?=number_format($hinta, 2, ',', ' ')?></td>
+		<td class="input_hinta"><?=number_format($hinta, 4, ',', ' ')?></td>
 		<td class="input_yksikko"><?=$yksikko?></td>
 		<td class="input_kpl"><?=$kpl?></td>
 		<td class="input_alv"><?=$alv?></td>
-		<td class="input_veroton"><?=number_format($veroton, 2, ',', ' ')?></td>
-		<td class="input_yhteensa"><?=number_format($yht, 2, ',', ' ')?></td>
+		<td class="input_veroton"><?=number_format($veroton, 4, ',', ' ')?></td>
+		<td class="input_yhteensa"><?=number_format($yht, 4, ',', ' ')?></td>
 		<td class="input_freetext"><?=$freetext?></td>
 		</tr>
 		<?php endif; ?>
