@@ -688,7 +688,7 @@ $(document).ready(function(){
 	if(hinta_veroton > 0){
 		result = (hinta_veroton*alv)/100;
 		result = result+hinta_veroton;
-		hinta.val(result.toFixed(2));
+		hinta.val(result.toFixed(6));
 	}
    }
 
@@ -699,7 +699,7 @@ $(document).ready(function(){
 	if(hinta > 0){
 		result = (hinta*alv)/100;
 		result = hinta-result;
-		hinta_veroton.val(result.toFixed(2));
+		hinta_veroton.val(result.toFixed(6));
 	}
    }
 
