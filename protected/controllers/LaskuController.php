@@ -121,7 +121,7 @@ class LaskuController extends Controller
 		exit;
 	}
 
-	public function actionLuolaskut($from, $to, $yrityksen_nimi=null, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null, $erapaiva=null, $tunnit=null)
+	public function actionLuolaskut($from, $to, $yrityksen_nimi=null, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null, $erapaiva=null, $tunnit=null, $decimal=null)
 	{
 		$asetukset = Asetukset::model()->findByPk(1);
 		$paivays = date("Y-m-d", strtotime($paivays));
@@ -131,51 +131,6 @@ class LaskuController extends Controller
 		$alvsis_tuote = 'nolla';
 		if($alvsis != null and $alvsis == 1){
 			$alvsis_tuote = 'sis';
-		}
-
-	    	if( $tunnit == 'mob' ){
-	        $criteria->condition = " 
-		  aktiivinen='1'
-		  AND id IN 
-		    ( SELECT asiakas_id FROM sivex_kohdet 
-		      WHERE id IN 
-			( SELECT kohdenID FROM sivexkuitti 
-			  WHERE 
-			  DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			  BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-			  AND status='3' 
-			  AND hyvaksytty!=''
-			  AND sairaus!=1
-			  AND tv_id IS NOT NULL AND tv_id > 0
-			  AND tv_id IN (
-				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND ((tuoteID > 0 AND tuoteID IN (SELECT id FROM onlinevaraus_tuotteet WHERE alvsis='$alvsis_tuote')) OR lisa_tuotteet!='') AND laskutettu='0'
-			  )
-			)
-		    )
-		  AND id NOT IN
-		    ( SELECT asiakas_id FROM autolahetteet WHERE from_date='".$from."' AND to_date='".$to."' AND laskutettu=1 )
-		";
-		}
-
-	    	if( $tunnit == 'tv' ){
-	        $criteria->condition = " 
-		  aktiivinen='1'
-		  AND id IN 
-		    ( SELECT asiakas_id FROM sivex_kohdet 
-		      WHERE id IN 
-			( SELECT kohde FROM sivex_tvuoro 
-			  WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-			  BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-			  AND tid!=0
-			  AND status='3'
-			  AND peruutettu=0
-			  AND laskutettu=0
-			  AND ((tuoteID > 0 AND tuoteID IN (SELECT id FROM onlinevaraus_tuotteet WHERE alvsis='$alvsis_tuote')) OR lisa_tuotteet!='')
-			)
-		    )
-		  AND id NOT IN
-		    ( SELECT asiakas_id FROM autolahetteet WHERE from_date='".$from."' AND to_date='".$to."' AND laskutettu=1 )
-		";
 		}
 
 		if( $yrityksen_nimi !== null and !empty($yrityksen_nimi) ){
@@ -203,10 +158,81 @@ class LaskuController extends Controller
 			$criteria->addCondition(" ryhma LIKE '%\"".$_GET['filter_asiakasryhma']."\"%' "); 
 		}
 
-		$lista = Asiakkaat::model()->findAll($criteria);
+		//$lista = Asiakkaat::model()->findAll($criteria);
+
+/*
+		// <-- Order tyontekijat
+		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+			$tt_order_1 = "tekijan_nimi";
+			$tt_order_2 = "sukunimi";
+		} else {
+			$tt_order_1 = "sukunimi";
+			$tt_order_2 = "tekijan_nimi";
+		}
+		// Order tyontekijat -->
+*/
+
+		$al = Autolahetteet::model()->findAll(" from_date='".$from."' AND to_date='".$to."' AND laskutettu=0 AND tab_array!=''");
+		$autolahetteet_asids = [];
+		foreach($al as $item)
+			$autolahetteet_asids[$item->asiakas_id] = $item->tab_array;
+
+		if( $tunnit == 'mob' ){
+		   $hyv_lista_all = $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, $criteria->condition);
+		   $asiakkaat_ids = [];
+		   $attr = [];
+		   foreach($hyv_lista_all as $item){
+			$nimi = '';
+			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'henkilo'){ $nimi = $item->kohteet->asiakkaat->yhteyshenkilo; }
+			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'yritys'){ $nimi = $item->kohteet->asiakkaat->yrityksen_nimi; }
+			if (isset($item->kohteet->asiakkaat) and !array_key_exists($nimi, $attr)) $attr[$nimi] = $item->kohteet->asiakkaat->attributes;
+			$asiakkaat_ids[$nimi][$item->id] = [
+				'mob_tunnit' => (isset($item->attributes))? $item->attributes : '',
+				'mob_tunnit_tyovuoroot' => (isset($item->tyovuoroot->attributes))? $item->tyovuoroot->attributes : '', 
+				'kohteet' => (isset($item->kohteet->attributes))? $item->kohteet->attributes : '', 
+			];
+		   }
+		   foreach($asiakkaat_ids as $k => $i)
+			if (array_key_exists($k, $attr)) $asiakkaat_ids[$k] =
+				array_merge(['asiakas' => $attr[$k]], $asiakkaat_ids[$k]);
+
+		   ksort($asiakkaat_ids);
+		}
+
+		if( $tunnit == 'tv' ){
+		   $hyv_lista_all = $this->hyvaksyttyListaByAsiakasTyovuoroistaAll($from, $to, $criteria->condition);
+		   $asiakkaat_ids = [];
+		   $attr = [];
+		   foreach($hyv_lista_all as $item){
+			$nimi = '';
+			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'henkilo'){ $nimi = $item->kohteet->asiakkaat->yhteyshenkilo; }
+			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'yritys'){ $nimi = $item->kohteet->asiakkaat->yrityksen_nimi; }
+			if (isset($item->kohteet->asiakkaat) and !array_key_exists($nimi, $attr)) $attr[$nimi] = $item->kohteet->asiakkaat->attributes;
+			$asiakkaat_ids[$nimi][$item->id] = [
+				'tyovuoroot' => $item->attributes, 
+				'kohteet' => (isset($item->kohteet->attributes))? $item->kohteet->attributes : '', 
+				'mobile' => (isset($item->mobile->attributes))? $item->mobile->attributes : '',
+				'toteutuneet' => (isset($item->mobile->toteutuneet->attributes))? $item->mobile->toteutuneet->attributes : '',
+				//'tyontekijan_nimi' => (isset($item->tt->id))? $item->tt->$tt_order_1.' '.$item->tt->$tt_order_2 : '', 
+			];
+		   }
+		   foreach($asiakkaat_ids as $k => $i)
+			if (array_key_exists($k, $attr)) $asiakkaat_ids[$k] =
+				array_merge(['asiakas' => $attr[$k]], $asiakkaat_ids[$k]);
+
+		   ksort($asiakkaat_ids);
+		}
+/*
+echo '<pre>';
+print_r($asiakkaat_ids);
+echo '</pre>';
+exit;
+*/
 		$this->render('luolaskut', array(
+			'autolahetteet_asids' => $autolahetteet_asids,
+			'asiakkaat_ids' => $asiakkaat_ids,
 			'asetukset' => $asetukset,
-			'lista' => $lista,
+			//'lista' => $lista,
 			'from' => $from,
 			'to' => $to,
 			'paivays' => $paivays,
@@ -215,9 +241,104 @@ class LaskuController extends Controller
 			'laheta' => $laheta,
 			'luo' => $luo,
 			'alvsis' => $alvsis,
+			'decimal' => $decimal,
 			'tunnit' => $tunnit,
 			'yrityksen_nimi' => $yrityksen_nimi,
 		));
+	}
+
+	protected function hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, $asiakas_condition){
+
+	    $lista = array();
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) ASC ";
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
+			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND status='3'
+			AND sairaus!=1
+			AND hyvaksytty!=''
+			AND kohdenID > 0
+			AND tv_id IS NOT NULL AND tv_id > 0
+			AND tv_id IN (
+				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
+			)
+			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+			AND deleted=0
+			AND laskutetaan=1
+		";
+		if(!empty($asiakas_condition)){
+			$criteria->addCondition("
+			kohdenID IN(SELECT id FROM sivex_kohdet
+				WHERE asiakas_id IN(SELECT id FROM asiakkaat
+					WHERE $asiakas_condition	
+				)
+			)
+			");
+		}
+		$lu = Mobile::model()->findAll($criteria);
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) ASC ";
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
+			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND status='3'
+			AND sairaus!=1
+			AND hyvaksytty!=''
+			AND kohdenID > 0
+			AND tv_id IS NOT NULL AND tv_id > 0
+			AND tv_id IN (
+				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
+			)
+			AND deleted=0
+			AND laskutetaan=1
+		";
+		if(!empty($asiakas_condition)){
+			$criteria->addCondition("
+			kohdenID IN(SELECT id FROM sivex_kohdet
+				WHERE asiakas_id IN(SELECT id FROM asiakkaat
+					WHERE $asiakas_condition	
+				)
+			)
+			");
+		}
+		$tot = Toteutuneet::model()->findAll($criteria);
+		$lista = $lu;
+		if( is_array($tot) and count($tot) > 0 ){ $lista = array_merge($lu, $tot); }
+
+	    return $lista;
+	}
+
+	protected function hyvaksyttyListaByAsiakasTyovuoroistaAll($from, $to, $asiakas_condition){
+
+	    $lista = array();
+	    // TV
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) ASC ";
+	        $criteria->select = "id,kohde,tid,pvm,alku,loppu,tuoteID,lisa_tuotteet,tyopaari";
+	        $criteria->condition = " 
+			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND laskutettu=0
+			AND tuoteID > 0
+			AND status='3'
+			AND tid!=0
+			AND peruutettu=0
+		";
+		if(!empty($asiakas_condition)){
+			$criteria->addCondition("
+			kohde IN(SELECT id FROM sivex_kohdet
+				WHERE asiakas_id IN(SELECT id FROM asiakkaat
+					WHERE $asiakas_condition	
+				)
+			)
+			");
+		}
+		$lista = Tyovuoroot::model()->findAll($criteria);
+	    return $lista;
 	}
 
 	protected function hyvaksyttyListaByAsiakas($id, $from, $to, $tunnit){
@@ -969,9 +1090,12 @@ class LaskuController extends Controller
 		//     TuotteetPalvelut -->
 
 		// <-- 2. Asiakas
-		if(isset($tp->id) and isset($asiakas->id) and $asiakas->hinnasto_id != 0)
+		if(isset($tp->id))
 		{
-			$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$tp->id."' AND hinnastot_id='".$asiakas->hinnasto_id."' ");
+			if(isset($asiakas->id) and $asiakas->hinnasto_id != 0)
+				$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$tp->id."' AND hinnastot_id='".$asiakas->hinnasto_id."' ");
+			if(isset($asiakas['id']) and $asiakas['hinnasto_id'] != 0)
+				$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$tp->id."' AND hinnastot_id='".$asiakas['hinnasto_id']."' ");
 			if(isset($hinnasto->id))
 			{
 
@@ -997,9 +1121,12 @@ class LaskuController extends Controller
 		//     Asiakas -->
 
 		// <-- 3. Kohteet
-		if(isset($tp->id) and isset($kohteet->id) and $kohteet->hinnasto_id != 0)
+		if(isset($tp->id))
 		{
-			$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$tp->id."' AND hinnastot_id='".$kohteet->hinnasto_id."' ");
+			if(isset($kohteet->id) and $kohteet->hinnasto_id != 0)
+				$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$tp->id."' AND hinnastot_id='".$kohteet->hinnasto_id."' ");
+			if(isset($kohteet['id']) and $kohteet['hinnasto_id'] != 0)
+				$hinnasto = HinnastotRivi::model()->find(" tuote_palvelu_id='".$tp->id."' AND hinnastot_id='".$kohteet['hinnasto_id']."' ");
 			if(isset($hinnasto->id))
 			{
 

@@ -674,7 +674,11 @@ public function actionLogin($domain)
 								"MIME-Version: 1.0\r\n".
 								"Content-type: text/html; charset=UTF-8";
 
-							mail($model->sahkoposti,$subject,$message,$headers);
+							if($peruutettu != 0){
+								mail($model->sahkoposti,$subject,$message,$headers);
+								if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
+									mail($firma->sahkoposti,$subject,$message,$headers);
+							}
 							//     Sahkoposti lahetys -->
 
 							// <-- LOG

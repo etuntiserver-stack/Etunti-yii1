@@ -8,71 +8,6 @@
 
         <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo strtoupper(Yii::t('main', 'Laskutuksen automaatio')); ?></h2>
 
-<?php /*
-
-   	    <form id="mobForm" action="#" class="form-inline" method="GET">
-            <div class="admin-form">
-              <div class="panel heading-border">
-                <div class="panel-body">
-
-                    <!-- Input Icons -->
-                    <div class="row">
-
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field prepend-icon">
-
-			    <!-- Autocomplete -->
-			    <?php
-	   			$site = Yii::app()->createController('Site');
-				$mod = 'Asiakkaat';
-				$sarake = 'yrityksen_nimi';
-				$placeholder = 'Asiakas';
-				if(isset($_GET[$sarake])) 			$postvalue = $_GET[$sarake]; 
-				else $postvalue='';				
-		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
-			    ?>
-			    <!-- Autocomplete -->
-
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-user"></i>
-                            </label>
-                          </label>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field prepend-icon">
-
-   			    <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php if(isset($_GET['from'])) echo date('d.m.Y', strtotime($_GET['from'])); ?>" placeholder="Mistä">
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-calendar"></i>
-                            </label>
-                          </label>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field prepend-icon">
-
-   			    <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php if(isset($_GET['to'])) echo date('d.m.Y', strtotime($_GET['to'])); ?>" placeholder="Mihin">
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-calendar"></i>
-                            </label>
-                          </label>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
-		      </div>
-                    </div>
-
-                </div>
-              </div>
-            </div>
-
-	    </form>
-*/ ?>
 
    	    <form id="mobForm" action="luolaskut" class="form-inline" method="GET">
             <div class="admin-form">
@@ -181,6 +116,18 @@
                             </label>
                           </label>
                         </div>
+                        <div class="section">
+                          <label class="field select">
+			    <select name="decimal" id="decimal" class="gui-input">
+			     <option value="2">2 decimalia</option>
+			     <option value="3">3 decimalia</option>
+			     <option value="4">4 decimalia</option>
+			     <option value="5">5 decimalia</option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
                       </div>
 
                       <div class="col-md-2">
@@ -213,8 +160,8 @@
                         <div class="section">
                           <label class="field select">
 			    <select name="tunnit" id="tunnit" class="gui-input">
-			     <option value="mob"><?php echo Yii::t('main', 'Tunnit'); ?></option>
 			     <option value="tv"><?php echo Yii::t('main', 'Työvuorot'); ?></option>
+			     <option value="mob"><?php echo Yii::t('main', 'Tunnit'); ?></option>
 			    </select>
                             <i class="arrow double"></i>
                             </label>
