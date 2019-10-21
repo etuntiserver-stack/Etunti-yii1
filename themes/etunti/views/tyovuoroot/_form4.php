@@ -1607,7 +1607,7 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 	$('#Tyovuoroot_status').val('3').css({"border" : "1px green solid"});
 	$('#Tyovuoroot_tyoajanlaatu').val('');
 	$(this).removeClass('bg-danger');
-	var thisID = $(this).val();
+	var thisID = $(this, 'option:selected').val();
 	var tyo_erittelyt = '';
 	var tv_id = '<?php if(isset($model->id)){ echo $model->id; } ?>';
 	linkkiKohteeseen();

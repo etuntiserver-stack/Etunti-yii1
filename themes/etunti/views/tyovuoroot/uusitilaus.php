@@ -4,6 +4,10 @@
 /* @var $form CActiveForm */
 
 $asiakkaat_model = new Asiakkaat;
+$asetukset = Asetukset::model()->findbypk(1);
+$tietoja = $asetukset->tyovuoro_tietoja_mobiilisovellukseen;
+if(empty($model->tietoja))
+	$model->tietoja = $tietoja;
 ?>
 
 <style>
@@ -650,6 +654,35 @@ $(document).ready(function(){
 			  }
 	 	});
   }
+
+  $(document).delegate("#Tyovuoroot_kohde","change",function(){
+
+	var thisID = $(this, 'option:selected').val();
+
+	  $.ajax({
+		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+ thisID ,
+		  success:function(data){
+			//console.log(data);
+			var d = JSON.parse(data);
+
+			$('#Tyovuoroot_tietoja').val(d[1]);
+			$('#Tyovuoroot_osoite').val(d[3]);
+			$('#Tyovuoroot_postinumero').val(d[4]);
+			$('#Tyovuoroot_postitoimipaikka').val(d[5]);
+
+
+			if(d[2] !== ''){
+				$('#arvioitu_kesto').html(d[2]);
+			} else {
+				$('#arvioitu_kesto').html('00:00');
+			}
+
+	   	},
+		error:function(data){
+		console.log(data);
+	    	}
+	  });
+  });
 
   $('#asiakas').keyup(function(){
 	var thisVal = $(this).val();

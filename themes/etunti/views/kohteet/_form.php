@@ -15,6 +15,10 @@ if($ismobile and !empty($model->puh_nro)) {
 
 }
 if(!isset($model->id)){ $model->alv = 24; }
+$asetukset = Asetukset::model()->findbypk(1);
+$tietoja = $asetukset->tyovuoro_tietoja_mobiilisovellukseen;
+if(empty($model->tietoja))
+	$model->tietoja = $tietoja;
 ?>
 <div class="row">
 
