@@ -604,7 +604,7 @@ $(".poistaKuva").click(function(){
     <?php
 	$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
     ?>
-    <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $asetuksetForAll->googlemaps_apikey; ?>&callback=initMap"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $asetuksetForAll->googlemaps_apikey; ?>"></script>
     <script>
 
 window.initialize = function() {
