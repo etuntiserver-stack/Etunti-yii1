@@ -1,18 +1,19 @@
 
 
 
-
+<?php
+$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
+?>
 <html xmlns="https://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <title>Sivex OY XML kohteet</title>
 
-    <script src="https://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyDxP-DS_aQzY8LILgWQccV3H26XrD3yvlE" type="text/javascript"></script>
+    <script src="https://maps.google.com/maps?file=api&amp;v=2&amp;key=<?=$asetuksetForAll->googlemaps_apikey?>" type="text/javascript"></script>
  
 <?php
 $center = '';
 $valCenter = '';
-$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
 if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey)){
 
   if(isset($_GET['center']) and !empty($_GET['center']) and $_GET['center'] != 'null'){
