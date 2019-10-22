@@ -23,6 +23,7 @@
 .muistin{
 	float: left;
 	margin-top: 4px;
+	margin-right: 3px;
 	cursor: pointer;
 }
 .reika{
@@ -52,7 +53,6 @@
 	margin-top: 4px;
 }
 .tvikooni{
-	margin-left: 3px;
 	margin-right: 4px;
 }
 .tv_edit{
