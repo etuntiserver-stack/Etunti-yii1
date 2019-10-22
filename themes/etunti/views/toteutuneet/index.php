@@ -296,7 +296,11 @@ $dateDiff = dateDiff($from, $to);
   if(!$ilman_matkat)
   $matkatunnit_all = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2), 2, false, 0, true);
 
+  if($ilman_matkat)
   $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 1, true);
+  else
+  $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 1, true);
+
   $yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 2, true);
   $sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 3, true);
 
