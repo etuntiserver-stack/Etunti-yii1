@@ -22,6 +22,7 @@
 }
 .muistin{
 	float: left;
+	margin-top: 4px;
 	cursor: pointer;
 }
 .reika{
@@ -50,6 +51,9 @@
 .plussa{
 	margin-top: 4px;
 }
+.tvikooni{
+	margin-right: 4px;
+}
 .valitseKokopaiva, .plussa, .mcut, .mplus{
 	font-size: 130%;
 	margin-right: 3px;
@@ -58,6 +62,7 @@
 .latikkolisatiedot_paa{
 	position: absolute; top: 0; right: 0;
 	float: right;
+	background: #fff;
 }
 .latikkolisatiedot{
 	padding: 2px 5px;
@@ -67,24 +72,24 @@
 td .latikkoAsetukset{
 	position: relative;
 	font-family: ibm-plex-sans, sans-serif;
-	font-size: 80%;
-	width: 190px;
+	/*font-size: 80%;*/
+	width: 250px;
 	min-width: 190px;
-	max-width: 190px; overflow-x: hidden;
+	max-width: 250px; overflow-x: hidden;
 	padding: 5px 7px;
 	min-height: 40px;
 	max-height: 150px; overflow-y: auto;
-	line-height: 13px;
+
 }
 td span.nimi{
 	color: #333;
 	white-space: normal;
 	font-family: ibm-plex-sans, sans-serif;
-	font-size: 80%;
+	/*font-size: 80%;*/
 	max-width: 120px;
 	width: 120px;
 	padding: 5px 7px;
-	line-height: 14px;
+	line-height: 16px;
 }
 .tv_edit{
 	width: 100%;

@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'tv4', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -2115,7 +2115,7 @@ class TyovuorootController extends Controller
 		));
 	}
 
-	public function actionTv4($kohteet_siivous=array(), $kohde='', $asiakas='') {
+	public function actionBeta($kohteet_siivous=array(), $kohde='', $asiakas='') {
 		$site = Yii::app()->createController('Site');
 		$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
 		$asetukset = Asetukset::model()->findByPk(1);
@@ -2183,7 +2183,7 @@ class TyovuorootController extends Controller
 			if(isset($_POST['to']) and !empty($_POST['to']))
 				Yii::app()->session['to'] = date("Y-m-d",strtotime($_POST['to']));
 
-			$this->redirect(array('tv4'));
+			$this->redirect(array('beta'));
 		}		
 		//  Post haku -->
 
@@ -2224,7 +2224,7 @@ class TyovuorootController extends Controller
        		$criteria = new CDbCriteria();
 		$criteria->with = array('kohteet');
 		//$criteria->limit = "10";
-		$criteria->select = "id, tid, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu";
+		$criteria->select = "id, tid, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu, status";
 		$criteria->order = "alku ASC"; //tt.$tt_order_1 ASC, 
 		$criteria->condition = "
 			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
@@ -2273,6 +2273,14 @@ class TyovuorootController extends Controller
 		        $criteria->addCondition ('tid IN ('.$ids.') ');
 		}
 
+		// <-- Status
+		$status = [];
+		$status[10] = '<i class="tvikooni fa fa-cutlery text-success"></i>';
+		$status[2] = '<i class="tvikooni fa fa-bus text-warning"></i>';
+		$status[3] = '<i class="tvikooni fa fa-hourglass text-info"></i>';
+		$status[11] = '<i class="tvikooni fa fa-clock-o text-info"></i>';
+		// Status -->
+
 		// <-- Tv array
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$tv_arr = array();
@@ -2292,7 +2300,7 @@ class TyovuorootController extends Controller
 				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 				$arvo['osoite'] = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$arvo['id'].'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
 			} else {
-				$arvo['osoite'] = '<span class="tv_edit" id="'.$arvo['id'].'" style="'.$bgcol.'">'.$arvo['alku'].'-'.$arvo['loppu'].' '.$osoite.'</span>';
+				$arvo['osoite'] = '<span class="tv_edit" id="'.$arvo['id'].'" style="'.$bgcol.'">'.$status[$arvo['status']].''.$arvo['alku'].'-'.$arvo['loppu'].' '.$osoite.'</span>';
 			}
 			$tv_arr[$arvo->tid][$arvo->pvm][] = $arvo['osoite'];
 		}
@@ -2319,75 +2327,6 @@ class TyovuorootController extends Controller
 		));
 
 	}
-/*
-	protected function tv4head($tid, $pvm){
-	$did = date("Ymd", strtotime($pvm));
-	$bod = '
-	<div class="latikkolisatiedot_paa">
-		<div class="latikkolisatiedot">
-		 <div class="form-inline">
-			<div class="form-group">
-			   <span class="text-center" id="sum_tunnit_'.$did.'_'.$tid.'" style="text-align:center;opacity:0.6"></span>
-			</div>
-			<div class="kokopaiva form-group">
-			   <span class="valitseKokopaiva link glyphicon glyphicon-th-large" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
-			</div>
-			<div class="plussamerkki form-group">
-			   <span class="plussa link fa fa-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
-			</div>
-			<div class="form-group">
-		   	   <i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mcut fa fa-exchange link':'forCut').'"" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
-		 	</div><div class="form-group">
-		   	   <i class="'.((isset($_SESSION['muistin']) and count($_SESSION['muistin']) > 0)?'mplus fa fa-copy link':'forCopy').'" id="forCopy_'.$did.'_'.$tid.'"></i> 
-			</div>
-		 </div>
-		</div>
-	</div>
-	';
-	return json_encode($bod);
-	}
-*/
-/*
-	protected function tv4_loop($tv_arr, $tid, $pvm){
-	      $did = date("Ymd", strtotime($pvm));
-	      $onkoMennyt = '';
-	      if(date("Ymd", strtotime($pvm)) < date("Ymd")){ $onkoMennyt = 'mennytPaivat'; }
-	      $bod = '';
-	      $bod .= '<div style="position:relative" class="latikkoAsetukset '.$onkoMennyt.'">';
-              foreach($tv_arr as $k=>$arvo){ 
-		if( isset($loppu[0]) and empty($loppu[0]) and isset($loppu[1]) and ($this->num(strtotime($arvo['alku'])-strtotime($loppu[1])) > 0) ){
-			$valilyonti = strtotime($arvo['alku'])-strtotime($loppu[1]);
-			$reikatyyppi = 'reika-warning';
-			$bod .= '<div class="reika '.$reikatyyppi.' text-center"><i class="glyphicon glyphicon-time"></i> Aika: '.$this->sprint($valilyonti).'</div>';
-		}
-		$color = '#888';
-		$bgcol = 'color:#333';
-		$osoite = $arvo['osoite'];
-		$kellot = '<b class="kellot">'.$arvo['alku'].'-'.$arvo['loppu'].'&nbsp; </b>';
-	        $muokkaus =  '<i class="link tvikooni fa fa-pencil-square-o muistin" for="'.$arvo['id'].'_'.$did.'_'.$tid.'"></i>';
-		if(!empty($arvo['tyoajanmerkinta'])){
-			$expl = explode("/",$arvo['tyoajanmerkinta']);
-			if(isset($expl[1]) and !empty($expl[1])){
-				$color = $expl[1];
-				$bgcol = 'color:'.$color;
-			}
-		}
-		if(!empty($arvo['tyoajanlaatu']) and empty($osoite)){
-			$expl1 = explode("/",$arvo['tyoajanlaatu']);
-			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
-			$osoite = (isset($expl1[0])) ? '<div class="text-center"><b style="color:'.$color.'">'.$expl1[0].'</b></div>' : '';
-			$kellot = '';
-		}
-	   	$bod .= '<div id="'.$arvo['id'].'_'.$did.'_'.$tid.'" class="fullRivi" style="'.$bgcol.'">';
-		$bod .= '<div class="pull-left ikoonintila" style="margin-right: 5px">'.$muokkaus.' </div>';
-		$bod .= '<span class="tv_edit" id="'.$arvo['id'].'">'.$kellot.$osoite.'</span>';
-	   	$bod .= '</div>';
-		$loppu = array($arvo['tyoajanlaatu'], $arvo['loppu']);
-              } // foreach
-	      $bod .= '</div>';
-	      return json_encode($bod);
-	}
-*/
 
 	public function actionDid4($pvm, $tid) {
 

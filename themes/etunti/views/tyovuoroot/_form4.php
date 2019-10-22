@@ -1423,7 +1423,7 @@ function laatikonPaivays(thisDataReturn){
 		var did = '';
 		var ilmoitus = '';
 		var didlink = 'did';
-		if(parent.location.href.match(/tv4/)){ didlink = 'did4'; }
+		if(parent.location.href.match(/beta/)){ didlink = 'did4'; }
 
 		$(thisDataReturn).each(function( iarr, arr ) {
 		 $(arr).each(function( i, d ) {
