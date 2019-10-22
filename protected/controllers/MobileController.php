@@ -3285,9 +3285,14 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		//    Tyoryhmat -->
 
 		if(isset($_GET['osoite']) and !empty($_GET['osoite'])){
-			$k = Kohteet::model()->find(" osoite='".$_GET['osoite']."' ");
-			if( isset($k->id) ){
-				$criteria->addCondition  (" kohdenID='".$k->id."' ");
+			$k = Kohteet::model()->findAll(" osoite LIKE '%".$_GET['osoite']."%' ");
+			$osoiteet = [];
+			foreach($k as $item)
+				$osoiteet[$item->id] = $item->id;
+
+			if( count($osoiteet) > 0 ){
+				$impl = "kohdenID='" . implode("' OR kohdenID='", $osoiteet)."'";
+				$criteria->addCondition  ($impl);
 			}
 		}
 
@@ -3315,9 +3320,14 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		";
 
 		if(isset($_GET['osoite']) and !empty($_GET['osoite'])){
-			$k = Kohteet::model()->find(" osoite='".$_GET['osoite']."' ");
-			if( isset($k->id) ){
-				$criteria->addCondition  (" kohdenID='".$k->id."' ");
+			$k = Kohteet::model()->findAll(" osoite LIKE '%".$_GET['osoite']."%' ");
+			$osoiteet = [];
+			foreach($k as $item)
+				$osoiteet[$item->id] = $item->id;
+
+			if( count($osoiteet) > 0 ){
+				$impl = "kohdenID='" . implode("' OR kohdenID='", $osoiteet)."'";
+				$criteria->addCondition  ($impl);
 			}
 		}
 
