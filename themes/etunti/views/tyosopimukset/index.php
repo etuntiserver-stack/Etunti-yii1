@@ -175,7 +175,7 @@
 			 <div class="col-sm-12">
 			  <table class="table table-striped">
 			  <?php
-			  foreach(glob(Yii::app()->baseUrl.$this->templates_polkku().'/*.docx') as $file) 
+			  foreach(glob($this->templates_polkku().'/*.docx') as $file) 
 			  {
 				$explNimi = explode("/",$file);
 
