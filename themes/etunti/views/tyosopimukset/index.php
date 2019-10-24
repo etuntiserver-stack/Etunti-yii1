@@ -175,14 +175,14 @@
 			 <div class="col-sm-12">
 			  <table class="table table-striped">
 			  <?php
-			  foreach(glob($this->templates_polkku().'/*.docx') as $file) 
+			  foreach(glob(Yii::app()->baseUrl.$this->templates_polkku().'/*.docx') as $file) 
 			  {
 				$explNimi = explode("/",$file);
 
 			 	echo '<tr><td>';
 
 				// <-- file_safe_opener
-				$filepath = Yii::getPathOfAlias('application').'/../'.$file;
+				$filepath = Yii::app()->basePath.'/../'.$file;
 				echo CHtml::link(end($explNimi),
 					array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'docx'),
 					array(
