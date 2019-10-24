@@ -585,10 +585,12 @@ $xml = '
 
 		$tyotunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksynta*/ 2, false, 0, true);
 
-		if(!$ilman_matkat)
-		$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(2,3), 3, false, 0, true);
-		else
-		$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), 3, false, 0, true);
+		$hyv_arr = array(3,2,10);
+		if($ilman_matkat)
+			unset($hyv_arr[1]);
+		if($ilman_lounastaukot)
+			unset($hyv_arr[2]);
+		$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, $hyv_arr, 3, false, 0, true);
 
 		if(!$ilman_lounastaukot)
 		$lounaat_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(10), 2, false, 0, true);
