@@ -10,10 +10,13 @@ $local_run = !$full && $is_local; // If true, request is from localhost and limi
 
 // If invalid password, exit script to reduce nesting.
 $koodi_aktiivinen = 1;
-if ($local_run)
+if ($local_run){
 	$list = Domainit::model()->findAll(" domain='demo' ");
-else
+	$db_host = 'localhost';
+} else {
 	$list = Domainit::model()->findAll(" domain!='defdb' AND domain!='sivex' AND aktiivinen=1 ");
+	$db_host = '10.215.25.9';
+}
 
 echo "KPL yhteensa: " . count($list) . "\n";
 
@@ -21,7 +24,7 @@ foreach ($list as $d) {
 	$_SESSION['domain'] = $d->domain;
 	echo $d->domain . "\n";
 	Yii::app()->db1->setActive(false);
-	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname=' . $d->domain;
+	Yii::app()->db1->connectionString = 'mysql:host=' . $db_host. ';dbname=' . $d->domain;
 	Yii::app()->db1->setActive(true);
 
 	$asetukset = Asetukset::model()->findByPk(1);
