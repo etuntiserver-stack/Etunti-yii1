@@ -67,7 +67,8 @@ class AsetuksetController extends Controller
 	public function actionCreatebackup($domain)
 	{
 		echo $domain;
-		exec("");
+		exec("php /usr/local/bin/etunti-backup-cos.php -d$domain -y1", $output);
+		print_r($output);
 		//$this->redirect(array('update', 'id' => 1));
 		exit;
 	}
