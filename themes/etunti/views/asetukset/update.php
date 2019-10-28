@@ -37,8 +37,31 @@ $this->menu=array(
             </div>
 
 
+	   <!--Varmuskopiot-->
+	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#dumpit"><h3><?php echo Yii::t('main','Varmuskopio dumpit'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div></p>
 
+            <div class="admin-form collapse" id="dumpit">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+		<p><?php echo CHtml::link('Luo uusi varmuskopio','http://host.fi/'.strtolower(Yii::app()->user->domain), array('class' => 'btn btn-lg btn-primary myBgColors')); ?></p>
 
+		<?php
+		   foreach(array_reverse(glob(Yii::app()->baseUrl.'backup/'.Yii::app()->user->domain.'/*')) as $file) 
+		   {
+			$explNimi = explode("/",$file);
+
+		 	echo '
+			<div class="row">
+			  <a href="../../'.$file.'">'.end($explNimi).'</a>
+			</div>
+			';
+			
+		   }
+		?>
+                </div>
+              </div>
+            </div>
+	   <!--Varmuskopiot-->
 
 <?php if(Yii::app()->user->username == 'roman'): ?>
 	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#kehitys"><h3><?php echo Yii::t('main','Kehitys'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div></p>
@@ -59,34 +82,6 @@ $this->menu=array(
               </div>
             </div>
 
-
-
-	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#dumpit"><h3><?php echo Yii::t('main','Varmuskopio dumpit'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div></p>
-
-            <div class="admin-form collapse" id="dumpit">
-              <div class="panel heading-border">
-		<h2 class="p15"><?php echo Yii::t('main','Varmuskopio dumpit');?></h2>
-                <div class="panel-body bg-light">
-
-
-   <?php
-   foreach(array_reverse(glob(Yii::app()->baseUrl.'backup/'.Yii::app()->user->domain.'/*')) as $file) 
-   {
-	$explNimi = explode("/",$file);
-
- 	echo '
-	<div class="row">
-	  <a href="../../'.$file.'">'.end($explNimi).'</a>
-	</div>
-	';
-	
-   }
-   ?>
-
-
-                </div>
-              </div>
-            </div>
 <?php endif; ?><!-- is admin -->
 
 
