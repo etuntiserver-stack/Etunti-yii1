@@ -24,7 +24,7 @@ class AsetuksetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('update', 'yrityksentiedot', 'oikeudet', 'rekisteriseloste', 'tiedostot'),
+				'actions'=>array('update', 'yrityksentiedot', 'oikeudet', 'rekisteriseloste', 'tiedostot', 'createbackup'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -63,6 +63,14 @@ class AsetuksetController extends Controller
                 }
                 parent::init();
         }
+
+	public function actionCreatebackup($domain)
+	{
+		echo $domain;
+		exec("");
+		//$this->redirect(array('update', 'id' => 1));
+		exit;
+	}
 
 	public function actionOikeudet()
 	{

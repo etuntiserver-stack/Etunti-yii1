@@ -43,7 +43,7 @@ $this->menu=array(
             <div class="admin-form collapse" id="dumpit">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
-		<p><?php echo CHtml::link('Luo uusi varmuskopio','http://host.fi/'.strtolower(Yii::app()->user->domain), array('class' => 'btn btn-lg btn-primary myBgColors')); ?></p>
+		<p><?php echo CHtml::link('Luo uusi varmuskopio',array('createbackup', 'domain' => strtolower(Yii::app()->user->domain)), array('class' => 'btn btn-lg btn-primary myBgColors')); ?></p>
 
 		<?php
 		   foreach(array_reverse(glob(Yii::app()->baseUrl.'backup/'.Yii::app()->user->domain.'/*')) as $file) 
