@@ -1335,7 +1335,7 @@ $(document).ready(function(){
 <br>
 <br>
 	<p><div class="buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-success')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-lg btn-primary myBgColors')); ?>
 	</div></p>
 
 
