@@ -63,8 +63,8 @@ td .latikkoAsetukset p:hover{
 	background: #ddd;
 }
 td .latikkoAsetukset p{
-	border: 1px #ccc solid;
-	border-radius: 2px;
+	border-bottom: 1px #ccc solid;
+	/*border-radius: 2px;*/
 	padding: 4px 7px;
 	overflow-x: hidden;
 	margin-bottom: 2px;
