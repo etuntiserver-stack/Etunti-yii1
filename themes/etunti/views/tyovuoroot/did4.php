@@ -36,7 +36,7 @@
 		$content = '';
 		if(isset($tv_arr[$tid][$pvm])){
 			foreach($tv_arr[$tid][$pvm] as $item){
-				$content .= $item.'<br>';
+				$content .= '<p>'.$item.'</p>';
 			}
 		}
   echo json_encode($content);

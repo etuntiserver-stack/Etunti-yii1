@@ -85,7 +85,7 @@ ini_set('memory_limit', '512M');
 
 <?php 
 function superfast($arvo){
-	echo $arvo.'<br>';
+	echo '<p>'.$arvo.'</p>';
 }
 /*
 <script type="text/javascript">
