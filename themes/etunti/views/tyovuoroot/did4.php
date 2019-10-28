@@ -29,7 +29,7 @@
 				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 				$arvo['osoite'] = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$arvo['id'].'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
 			} else {
-				$arvo['osoite'] = '<span class="tv_edit" id="'.$arvo['id'].'" style="'.$bgcol.'">'.$arvo['alku'].'-'.$arvo['loppu'].' '.$osoite.'</span>';
+				$arvo['osoite'] = '<span class="tv_edit" id="'.$arvo['id'].'" style="'.$bgcol.'">'.$arvo['alku'].'-'.$arvo['loppu'].'<br> '.$osoite.'</span>';
 			}
 			$tv_arr[$arvo->tid][$arvo->pvm][] = $arvo['osoite'];
 		} 

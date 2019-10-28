@@ -4,12 +4,13 @@
 #fixTable td,th{
 	margin:0;
 	padding:0;
+	background: rgba(0, 0, 0, 0);
 }
 #fixTable td{
 	white-space: nowrap;
 }
 #fixTable td:hover{
-	background: #fff;
+	/*background: #fff;*/
 }
 .ajanreika{
 	background: orange;
@@ -60,14 +61,14 @@
 	cursor: pointer;
 }
 td .latikkoAsetukset p:hover{
-	background: #ddd;
+	/*background: #ddd;*/
 }
 td .latikkoAsetukset p{
-	/*border-bottom: 1px #ccc solid;*/
-	/*border-radius: 2px;*/
-	padding: 3px 7px;
+	border: 1px #ddd solid;
+	border-radius: 2px;
+	padding: 4px 7px;
 	overflow-x: hidden;
-	margin-bottom: 2px;
+	margin-bottom: 3px;
 }
 .valitseKokopaiva, .plussa, .mcut, .mplus{
 	font-size: 130%;
@@ -92,7 +93,7 @@ td .latikkoAsetukset{
 	min-width: 190px;
 	padding: 5px 7px;
 	min-height: 40px;
-	max-height: 150px; overflow-y: auto;
+	max-height: 200px; overflow-y: auto;
 }
 td span.nimi{
 	color: #333;
