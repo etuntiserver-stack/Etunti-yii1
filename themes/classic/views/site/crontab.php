@@ -14,7 +14,7 @@ if ($local_run){
 	$list = Domainit::model()->findAll(" domain='demo' ");
 	$db_host = 'localhost';
 } else {
-	$list = Domainit::model()->findAll(" domain!='defdb' AND domain!='sivex' AND aktiivinen=1 ");
+	$list = Domainit::model()->findAll(" domain!='defdb' AND aktiivinen=1 ");
 	$db_host = '10.215.25.9';
 }
 
