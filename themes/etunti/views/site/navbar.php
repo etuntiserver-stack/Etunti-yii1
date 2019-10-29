@@ -1292,6 +1292,14 @@ if($site[0]->checkEdicoViestit()){ $bell = '<i class="fa fa-bell text-danger"></
             </a>
             <ul class="nav sub-nav">
               <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/ilmoitusKaikkille/create">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Luo uusi ilmoitus'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/ilmoitusKaikkille/admin">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Kaikki ilmoitukset'); ?></a>
+              </li>
+              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etunnin_asiakkaat">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Etunnin domainit'); ?></a>
               </li>

@@ -12,6 +12,24 @@
 
 	$asetukset = Asetukset::model()->findByPk(1);
 
+	// <-- Ilmoitus kaikkille
+	$criteria = new CDbCriteria();
+	$criteria->condition = " 
+		NOW() BETWEEN aloitus AND lopetus
+	";
+	$ilmoitukset_content = '';
+	$ilmoitukset = IlmoitusKaikkille::model()->findAll($criteria);
+	if(count($ilmoitukset) > 0){
+		$ilmoitukset_content = '<div class="alert alert-default">';
+		foreach($ilmoitukset as $item){
+			$ilmoitukset_content .= '<h4>Ilmoitus Nro.#'.$item->id.'</h4>';
+			$ilmoitukset_content .= str_replace("\n", "<br>", $item->viesti);
+			$ilmoitukset_content .= '<hr>';
+		}
+		$ilmoitukset_content .= '</div>';
+	}
+	//     Ilmoitus kaikkille -->
+
 	// <-- Eilen Autohyvaksyminen
 	$eilen_hyvaksynta = '';
 	if( $asetukset->app_hyvaksynnan_peruste == 2 and time() < strtotime($asetukset->auto_hyvaksynta_klo) ){
@@ -145,6 +163,7 @@ $months=array(
         </div>
 
 	<?=$eilen_hyvaksynta?>
+	<?=$ilmoitukset_content?>
 
         <!-- Admin-panels -->
         <div class="admin-panels fade-onload">
