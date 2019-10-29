@@ -207,8 +207,6 @@ class AsetuksetController extends Controller
 			{
 				$exec = 'pdftohtml -c -s -noframes '.$path.'/'.$bname.'.pdf '.$path_html.'/'.$bname.'.html';
 				exec($exec.' 2>&1', $output, $return);
-print_r($output);
-exit;
 				if (file_exists($path_html.'/'.$bname.'.html')) {
 				  	$html_content = file_get_contents($path_html.'/'.$bname.'.html');
 				  	$html_content = str_replace("background image", "", $html_content);
