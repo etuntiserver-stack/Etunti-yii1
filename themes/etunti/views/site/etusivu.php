@@ -20,11 +20,10 @@
 	$ilmoitukset_content = '';
 	$ilmoitukset = IlmoitusKaikkille::model()->findAll($criteria);
 	if(count($ilmoitukset) > 0){
-		$ilmoitukset_content = '<div class="alert alert-default">';
+		$ilmoitukset_content = '<div class="alert bg-warning">';
 		foreach($ilmoitukset as $item){
 			$ilmoitukset_content .= '<h4>Ilmoitus Nro.#'.$item->id.'</h4>';
-			$ilmoitukset_content .= str_replace("\n", "<br>", $item->viesti);
-			$ilmoitukset_content .= '<hr>';
+			$ilmoitukset_content .= '<div style="border-bottom:1px #ccc solid">'.str_replace("\n", "<br>", $item->viesti).'</div>';
 		}
 		$ilmoitukset_content .= '</div>';
 	}
