@@ -207,7 +207,8 @@ class AsetuksetController extends Controller
 			{
 				$exec = 'pdftohtml -c -s -noframes '.$path.'/'.$bname.'.pdf '.$path_html.'/'.$bname.'.html';
 				exec($exec.' 2>&1', $output, $return);
-
+print_r($output);
+exit;
 				if (file_exists($path_html.'/'.$bname.'.html')) {
 				  	$html_content = file_get_contents($path_html.'/'.$bname.'.html');
 				  	$html_content = str_replace("background image", "", $html_content);
@@ -216,8 +217,8 @@ class AsetuksetController extends Controller
 				  	$html_content = str_replace("p {margin: 0; padding: 0;}", "", $html_content);
 
 					//$html_content = strip_tags($html_content, '<style>');
-		$html_content = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $html_content);
-		$html_content = preg_replace('/(<[^>]+) class=".*?"/i', '$1', $html_content);
+					$html_content = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $html_content);
+					$html_content = preg_replace('/(<[^>]+) class=".*?"/i', '$1', $html_content);
 					if(file_put_contents($path.'/'.basename($bname.'.html'), $html_content))
 		  				exec('rm -rf '.$path_html);
 				}
