@@ -67,7 +67,7 @@ class AsetuksetController extends Controller
 	public function actionCreatebackup($domain)
 	{
 		echo $domain;
-		exec("php /usr/local/bin/etunti-backup-cos.php -d$domain -y1", $output);
+		exec("php " . Yii::app()->basePath . "/cosbackup.php -d$domain", $output);
 		print_r($output);
 		//$this->redirect(array('update', 'id' => 1));
 		exit;
