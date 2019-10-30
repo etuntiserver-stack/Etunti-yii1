@@ -16,6 +16,7 @@
 	$criteria = new CDbCriteria();
 	$criteria->condition = " 
 		NOW() BETWEEN aloitus AND lopetus
+		AND vastaanottajat LIKE '%".Yii::app()->user->domain."%'
 	";
 	$ilmoitukset_content = '';
 	$ilmoitukset = IlmoitusKaikkille::model()->findAll($criteria);
