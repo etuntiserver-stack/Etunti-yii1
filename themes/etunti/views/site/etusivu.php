@@ -23,7 +23,7 @@
 		$ilmoitukset_content = '';
 		foreach($ilmoitukset as $item){
 			$ilmoitukset_content = '<div class="panel">
-	                <div class="panel-heading bg-info pulsar">
+	                <div class="panel-heading bg-danger pulsar">
         	          <span class="panel-title">'.$item->otsikko.'</span>
         	        </div>
         	        <div class="panel-body">';
