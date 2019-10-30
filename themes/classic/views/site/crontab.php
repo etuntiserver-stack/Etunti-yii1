@@ -388,7 +388,6 @@ foreach ($list as $d) {
 
 
 	// <-- lmoitus toistuvien työvuorojen päättymisestä
-/*
 	if (isset($asetukset->ilmoitus_toistuvien_tyovuorojen_paattymisesta) and $asetukset->ilmoitus_toistuvien_tyovuorojen_paattymisesta == 1) {
 		$criteria = new CDbCriteria;
 		//$criteria->select = "";
@@ -494,7 +493,6 @@ foreach ($list as $d) {
 		// Valmistetaan viesti -->
 
 	}
-*/
 	// lmoitus toistuvien työvuorojen päätymisestä -->
 
 	// <-- Vinkkit autopoistaminen
