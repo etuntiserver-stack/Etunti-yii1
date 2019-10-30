@@ -265,7 +265,6 @@ foreach ($list as $d) {
 	// ilmoitus_myohastyneista_kohteesta -->
 
 	// <-- merkkipaivailmoitukset
-/*
 	$message   = '';
 	$arr     = array();
 	$forMessage  = array();
@@ -384,7 +383,6 @@ foreach ($list as $d) {
 
 		echo '<hr>';
 	}
-*/
 	// merkkipaivailmoitukset -->
 
 
