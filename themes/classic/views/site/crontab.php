@@ -392,7 +392,7 @@ foreach ($list as $d) {
 		$criteria = new CDbCriteria;
 		//$criteria->select = "";
 		$criteria->condition = " 
-		DATE_FORMAT(STR_TO_DATE(pto, '%d.%m.%Y'), '%Y-%m-%d') 
+		DATE(STR_TO_DATE(pto, '%d.%m.%Y')) 
 		BETWEEN (CURDATE() - INTERVAL '" . $asetukset->ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen . "' DAY) AND CURDATE()
 		AND ilmoitus_paattymisesta!=1
 		";
