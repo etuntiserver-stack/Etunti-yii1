@@ -1396,11 +1396,12 @@ class SiteController extends Controller
 */
 	}
 
-	public function actionCrontab($full)
+	public function actionCrontab($full, $only_domain=null)
 	{
                 Yii::app()->theme = 'classic';
 		$this->renderPartial('crontab',array(
 			'full'=>$full,
+			'only_domain' => $only_domain
 		));
 	}
 
