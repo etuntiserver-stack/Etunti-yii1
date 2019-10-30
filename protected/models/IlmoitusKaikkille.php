@@ -59,7 +59,7 @@ class IlmoitusKaikkille extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('viesti', 'required'),
+			array('viesti, vastaanottajat, aloitus, lopetus', 'required'),
 			array('viesti, aloitus, lopetus, vastaanottajat', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

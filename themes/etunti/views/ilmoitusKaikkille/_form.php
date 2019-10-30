@@ -45,7 +45,7 @@ if( isset($model->id) ){
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'viesti'); ?>
-		<?php echo $form->textArea($model,'viesti',array('class'=>'form-control', 'rows'=>6, 'cols'=>50)); ?>
+		<?php echo $form->textArea($model,'viesti',array('class'=>'form-control', 'rows'=>6, 'cols'=>50, 'placeholder' => "<h3>Hei</h3>\n\nEsimerkki teksti")); ?>
 		<?php echo $form->error($model,'viesti'); ?>
 	</div>
 
@@ -62,7 +62,7 @@ if( isset($model->id) ){
 	</div>
 
 	<div class="section buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna', array('class'=>'btn btn-primary')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Seuraava >>>' : 'Tallenna', array('class'=>'btn btn-primary')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

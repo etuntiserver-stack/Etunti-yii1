@@ -20,10 +20,20 @@
 	$ilmoitukset_content = '';
 	$ilmoitukset = IlmoitusKaikkille::model()->findAll($criteria);
 	if(count($ilmoitukset) > 0){
-		$ilmoitukset_content = '<div class="alert bg-warning">';
+		$ilmoitukset_content = '<div class="alert bg-info text-white">';
 		foreach($ilmoitukset as $item){
-			$ilmoitukset_content .= '<h4>Ilmoitus Nro.#'.$item->id.'</h4>';
-			$ilmoitukset_content .= '<div style="border-bottom:1px #ccc solid">'.str_replace("\n", "<br>", $item->viesti).'</div>';
+			$files = Asetukset::model()->getFiles(
+				'digisten', 
+				'digisten_ilmoitukset', 
+				$item->id,
+				true,
+				false
+			);
+			$ilmoitukset_content .= '<div>'.str_replace("\n", "<br>", $item->viesti).'</div>';
+			if( !empty($files) ){
+				$ilmoitukset_content .= '<br><label>Tiedostot:</label><p>'.$files.'</p><br>';
+			}
+			$ilmoitukset_content .= '<div style="border-bottom:1px #ccc solid"></div>';
 		}
 		$ilmoitukset_content .= '</div>';
 	}

@@ -383,29 +383,33 @@ class Asetukset extends DB2ActiveRecord
 		}
 	}
 
-	public function getFiles($domain, $folder, $id){
+	public function getFiles($domain, $folder, $id, $return=null, $delete=true){
 		$domain = strtolower($domain);
 		$i = 0;
+		$return = '';
 		foreach(array_reverse(glob('tiedostot/'.$folder.'/'.$domain.'/'.$id.'_*.*')) as $file) {
 		$i++;
 		$explNimi = explode("/",$file);
-	 	echo '
-		<div class="form-inline" id="t_'.$id.$i.'">
-		  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$id.'" for="t_'.$id.$i.'">X</div>
-		  &nbsp;&nbsp;&nbsp;';
+	 	$return .= '<div class="form-inline" id="t_'.$id.$i.'">';
+		if($delete)
+		$return .= '<div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$id.'" for="t_'.$id.$i.'">X</div>&nbsp;&nbsp;&nbsp;';
 
 			// <-- file_safe_opener
 			$e = explode(".", end($explNimi));
 			$ext = $e[1];
 			$filepath = $file;
-			echo CHtml::link(end($explNimi),
+			$return .= CHtml::link(end($explNimi),
 				array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
 				array('target'=>'_blank','class'=>'text-danger'
 			));
 			//     file_safe_opener -->
 
-		echo '</div>';
+		$return .= '</div>';
 		}
+		if($return == null)
+			echo $return;
+		else
+			return $return;
 	}
 
 	public function uploadImage($domain, $folder, $fname){

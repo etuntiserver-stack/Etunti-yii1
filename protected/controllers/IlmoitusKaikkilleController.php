@@ -123,8 +123,10 @@ class IlmoitusKaikkilleController extends Controller
 			$model->vastaanottajat=json_encode($_POST['vastaanottajat']);
 			$model->aloitus=date("Y-m-d H:i:s", strtotime($model->aloitus));
 			$model->lopetus=date("Y-m-d H:i:s", strtotime($model->lopetus));
-			if($model->save())
-				$this->redirect(array('admin'));
+			if($model->save()){
+				Yii::app()->user->setFlash('success','Uusi ilmoitus on valmis. Nyt voit lisätä tiedostoja.');
+				$this->redirect(array('update', 'id' => $model->id, 'from' => 'create'));
+			}
 		}
 
 		$this->render('create',array(
@@ -137,9 +139,24 @@ class IlmoitusKaikkilleController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionUpdate($id)
+	public function actionUpdate($id, $from=null)
 	{
 		$model=$this->loadModel($id);
+
+		// <-- FILES
+		if(isset($_POST['uploaded_t'])){
+			Asetukset::model()->uploadFile(
+				'digisten', 
+				'digisten_ilmoitukset', 
+				$model->id.'_'.$_FILES['file']['name']
+			);
+			$this->redirect(array('update', 'id' => $model->id));
+		}
+		if(isset($_POST['poistaTamaTiedosto'])){
+			unlink($_POST['poistaTamaTiedosto']);
+			exit;
+		}
+		//     FILES -->
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
