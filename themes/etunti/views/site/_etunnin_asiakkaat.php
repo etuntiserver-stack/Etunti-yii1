@@ -1,11 +1,9 @@
 <?php
 /* @var $this AsiakkaatController */
 /* @var $data Asiakkaat */
-	$is_local = in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']);
-	$db_host = ($is_local)?'localhost':'10.215.25.9';
 	$tyontekijat_maara = 0;
 	Yii::app()->db1->setActive(false);
-	Yii::app()->db1->connectionString = 'mysql:host='.$db_host.';dbname='.$data->domain;
+	Yii::app()->db1->connectionString = 'mysql:host='.$this->dbhost().';dbname='.$data->domain;
 	Yii::app()->db1->setActive(true);
 	$tt = Tyontekijat::model()->findAll(" aktiivinen=1 ");
 	if(isset($tt[0]))
