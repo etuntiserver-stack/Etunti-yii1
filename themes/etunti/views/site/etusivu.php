@@ -20,8 +20,13 @@
 	$ilmoitukset_content = '';
 	$ilmoitukset = IlmoitusKaikkille::model()->findAll($criteria);
 	if(count($ilmoitukset) > 0){
-		$ilmoitukset_content = '<div class="alert alert-default">';
+		$ilmoitukset_content = '';
 		foreach($ilmoitukset as $item){
+			$ilmoitukset_content = '<div class="panel">
+	                <div class="panel-heading bg-danger">
+        	          <span class="panel-title">test</span>
+        	        </div>
+        	        <div class="panel-body">';
 			$files = Asetukset::model()->getFiles(
 				'digisten', 
 				'digisten_ilmoitukset', 
@@ -31,11 +36,11 @@
 			);
 			$ilmoitukset_content .= '<div>'.str_replace("\n", "<br>", $item->viesti).'</div>';
 			if( !empty($files) ){
-				$ilmoitukset_content .= '<br><label>Tiedostot:</label><p>'.$files.'</p><br>';
+				$ilmoitukset_content .= '<label>Tiedostot:</label><br>'.$files;
 			}
-			$ilmoitukset_content .= '<div style="border-bottom:1px #ccc solid"></div>';
+			$ilmoitukset_content .= '</div></div>';
 		}
-		$ilmoitukset_content .= '</div>';
+
 	}
 	//     Ilmoitus kaikkille -->
 
