@@ -117,7 +117,9 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   $yht = 0;
   echo '<TR>';
   echo '<TD>'.$v->tekijan_nimi.'</TD>';
-
+  $from = date("Y-m-d", strtotime($year.'-'.$month.' first day of this month'));
+  $to = date("Y-m-d", strtotime($year.'-'.$month.' last day of this month'));
+  $tyotunnit_all = $mob[0]->TidfromtoMobiiliAll($from, $to, $v->id, array(3), 2, false, 0, true);
    for ($i = 1; $i <= $number; $i++) 
    {
      $thisDate = $year.'-'.$month.'-'.$i;
@@ -125,7 +127,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
 
 	$toteutuneet = 0;
-	$tot[$i] = $mob[0]->TidfromtoStatus($thisDate,$thisDate,$v->id,3);
+	$tot[$i] = (isset($tyotunnit_all[$thisDate][$v->id]))? $tyotunnit_all[$thisDate][$v->id] : 0;//$mob[0]->TidfromtoStatus($thisDate,$thisDate,$v->id,3);
 	$toteutuneet = $tot[$i];
 
 	$yht += $toteutuneet;
