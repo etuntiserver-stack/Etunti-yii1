@@ -786,7 +786,7 @@ class SiteController extends Controller
 
 
 			Yii::app()->db->setActive(false);
-			Yii::app()->db->connectionString = 'mysql:host=localhost;dbname=etuntifw';
+			Yii::app()->db->connectionString = 'mysql:host='.$this->dbhost().';dbname=etuntifw';
 			Yii::app()->db->setActive(true);
 			$connection=Yii::app()->db;
 			$connection->createCommand("CREATE DATABASE IF NOT EXISTS `$kirjautumistunnus`")->execute();
@@ -821,7 +821,7 @@ class SiteController extends Controller
 
 
 			Yii::app()->db1->setActive(false);
-			Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$kirjautumistunnus;
+			Yii::app()->db1->connectionString = 'mysql:host='.$this->dbhost().';dbname='.$kirjautumistunnus;
 			Yii::app()->db1->setActive(true);
 
 
@@ -1458,7 +1458,7 @@ class SiteController extends Controller
 		$model=Domainit::model()->findbypk($id);
 
 		Yii::app()->db1->setActive(false);
-		Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$model->domain;
+		Yii::app()->db1->connectionString = 'mysql:host='.$this->dbhost().';dbname='.$model->domain;
 
 		$this->render('etunnin_asiakas_kk_laskuri',array(
 			'id'=>$id,
@@ -1473,7 +1473,7 @@ class SiteController extends Controller
 		$model=Domainit::model()->findbypk($id);
 
 		Yii::app()->db1->setActive(false);
-		Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$model->domain;
+		Yii::app()->db1->connectionString = 'mysql:host='.$this->dbhost().';dbname='.$model->domain;
 
 		$this->render('etunnin_asiakas_kk',array(
 			'id'=>$id,
