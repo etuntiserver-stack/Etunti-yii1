@@ -43,7 +43,6 @@ foreach ($list as $d) {
 	$domainit = Domainit::model()->findByPk($d->id);
 
 	// <-- Tuntien Autohyvaksyminen
-/*
 	if ($asetukset->app_hyvaksynnan_peruste == 2) {
 		$date_yday = date('Y-m-d', strtotime('-1 day'));
 		$criteria = new CDbCriteria();
@@ -61,7 +60,6 @@ foreach ($list as $d) {
 			}
 		}
 	}
-*/
 	//    Tuntien Autohyvaksyminen -->
 
 	// <-- maksullinen versio
@@ -105,7 +103,6 @@ foreach ($list as $d) {
 	//     maksullinen versio -->
 
 	// <-- Ilmoitus määräajan ylittäneistä kohteista
-/*
 	$criteria = new CDbCriteria;
 	$criteria->condition = " 
 		DATE_FORMAT(STR_TO_DATE(CONCAT(pvm,loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') < (NOW() - INTERVAL $aikavali_halytys MINUTE)
@@ -180,11 +177,9 @@ foreach ($list as $d) {
 			//     Sahkopostin lahetys -->
 		}
 	}
-*/
 	// Ilmoitus määräajan ylittäneistä kohteista -->
 
 	// <-- ilmoitus_myohastyneista_kohteesta
-/*
 	$criteria = new CDbCriteria;
 	$criteria->condition = " 
 		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
@@ -267,7 +262,6 @@ foreach ($list as $d) {
 			//     Sahkopostin lahetys -->
 		}
 	}
-*/
 	// ilmoitus_myohastyneista_kohteesta -->
 
 	// <-- merkkipaivailmoitukset
