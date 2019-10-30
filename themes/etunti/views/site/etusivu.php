@@ -20,7 +20,7 @@
 	$ilmoitukset_content = '';
 	$ilmoitukset = IlmoitusKaikkille::model()->findAll($criteria);
 	if(count($ilmoitukset) > 0){
-		$ilmoitukset_content = '<div class="alert bg-info text-white">';
+		$ilmoitukset_content = '<div class="alert alert-default">';
 		foreach($ilmoitukset as $item){
 			$files = Asetukset::model()->getFiles(
 				'digisten', 
