@@ -397,15 +397,15 @@ foreach ($list as $d) {
 		AND ilmoitus_paattymisesta!=1
 		";
 		$toistuvat = ToistuvatTyovuorot::model()->findAll($criteria);
-echo count($toistuvat);
-exit;
 		$m = '';
 		$message = '';
 		foreach ($toistuvat as $data) {
+			/*
 			$check_onkotyovuorot = Tyovuoroot::model()->find(" toistuva_id='" . $data->id . "' ");
 			if (!isset($check_onkotyovuorot->id)) {
 				continue;
 			}
+			*/
 			$k = Kohteet::model()->findbypk($data->kohde);
 			$t = Tyontekijat::model()->findbypk($data->tid);
 
@@ -451,6 +451,8 @@ exit;
 			if (!$local_run)
 				ToistuvatTyovuorot::model()->updateByPk($data->id, array('ilmoitus_paattymisesta' => 1));
 		}
+
+echo $m;
 
 
 		// <-- Valmistetaan viesti
