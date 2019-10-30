@@ -406,23 +406,23 @@ foreach ($list as $d) {
 				continue;
 			}
 			*/
-			$k = Kohteet::model()->findbypk($data->kohde);
-			$t = Tyontekijat::model()->findbypk($data->tid);
+			//$k = Kohteet::model()->findbypk($data->kohde);
+			//$t = Tyontekijat::model()->findbypk($data->tid);
 
 			if (isset($t->id) and $t->aktiivinen == 0) {
 				continue;
 			}
 			$osoite = '';
-			if (isset($k->osoite)) {
-				$osoite = $k->osoite;
-			}
 			if (isset($data->osoite) and !empty($data->osoite)) {
 				$osoite = $data->osoite;
+			} else {
+				if (isset($data->kohteet->osoite)) {
+					$osoite = $data->kohteet->osoite;
+				}
 			}
 			$tekijan_nimi = '';
-			if (isset($t->id)) {
-				$tekijan_nimi = $this->etuSukunimi($t->id);
-			}
+			$tekijan_nimi = $this->etuSukunimi($data->tid);
+
 			if ($data->tid == 0) {
 				$tekijan_nimi = 'VARAUS';
 			}
