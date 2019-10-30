@@ -885,7 +885,7 @@ $(document).ready(function(){
 	   data: { hyvaksyminen : $(this).attr('for'), arvo : $(this).attr('arvo'), tid : $(this).attr('tid') },
            success: function(data){
 		console.log(data);
-		window.location.href="index";
+		window.location.reload();
            }
         });
  });
