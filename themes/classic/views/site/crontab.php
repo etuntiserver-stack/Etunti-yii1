@@ -109,7 +109,7 @@ foreach ($list as $d) {
 		AND ilmoitus_avoimista_kohteesta=0
 		AND id IN (SELECT tv_id FROM sivexkuitti 
 			WHERE status=1 
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = DATE_FORMAT(STR_TO_DATE(t.pvm, '%d.%m.%Y'), '%Y-%m-%d')
+			AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) = DATE(STR_TO_DATE(t.pvm, '%d.%m.%Y'))
 			AND tid=t.tid)
 		AND peruutettu=0
 	";
@@ -182,12 +182,12 @@ foreach ($list as $d) {
 	// <-- ilmoitus_myohastyneista_kohteesta
 	$criteria = new CDbCriteria;
 	$criteria->condition = " 
-		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+		DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
 		AND ilmoitus_myohastyneista_kohteesta=0
 		AND DATE_ADD(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), INTERVAL $aikavali_halytys MINUTE) < NOW() 
 		AND id NOT IN 
 		(SELECT tv_id FROM sivexkuitti 
-		WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = DATE_FORMAT(STR_TO_DATE(t.pvm, '%d.%m.%Y'), '%Y-%m-%d')
+		WHERE DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) = DATE(STR_TO_DATE(t.pvm, '%d.%m.%Y'))
 		AND tid=t.tid
 		)
 		AND tyoajanmerkinta LIKE '%Normaali%'
