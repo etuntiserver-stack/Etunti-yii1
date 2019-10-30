@@ -397,6 +397,7 @@ foreach ($list as $d) {
 		AND ilmoitus_paattymisesta!=1
 		";
 		$toistuvat = ToistuvatTyovuorot::model()->findAll($criteria);
+echo count($toistuvat);
 exit;
 		$m = '';
 		$message = '';
