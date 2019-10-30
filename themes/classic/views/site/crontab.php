@@ -452,9 +452,6 @@ foreach ($list as $d) {
 				ToistuvatTyovuorot::model()->updateByPk($data->id, array('ilmoitus_paattymisesta' => 1));
 		}
 
-echo $m;
-
-
 		// <-- Valmistetaan viesti
 		if (!empty($m)) {
 			$message .= '<h2>' . Yii::t('main', 'Ilmoitus toistuvien työvuorojen päättymisestä') . '</h2>';
