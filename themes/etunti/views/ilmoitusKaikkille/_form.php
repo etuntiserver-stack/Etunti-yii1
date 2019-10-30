@@ -44,6 +44,12 @@ if( isset($model->id) ){
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'otsikko'); ?>
+		<?php echo $form->textField($model,'otsikko', array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'otsikko'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'viesti'); ?>
 		<?php echo $form->textArea($model,'viesti',array('class'=>'form-control', 'rows'=>6, 'cols'=>50, 'placeholder' => "<h3>Hei</h3>\n\nEsimerkki teksti")); ?>
 		<?php echo $form->error($model,'viesti'); ?>

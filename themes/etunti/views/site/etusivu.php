@@ -24,7 +24,7 @@
 		foreach($ilmoitukset as $item){
 			$ilmoitukset_content = '<div class="panel">
 	                <div class="panel-heading bg-danger">
-        	          <span class="panel-title">test</span>
+        	          <span class="panel-title"><marquee>'.$item->otsikko.'</marquee></span>
         	        </div>
         	        <div class="panel-body">';
 			$files = Asetukset::model()->getFiles(
@@ -36,7 +36,7 @@
 			);
 			$ilmoitukset_content .= '<div>'.str_replace("\n", "<br>", $item->viesti).'</div>';
 			if( !empty($files) ){
-				$ilmoitukset_content .= '<label>Tiedostot:</label><br>'.$files;
+				$ilmoitukset_content .= '<br><label>Tiedostot:</label><br>'.$files;
 			}
 			$ilmoitukset_content .= '</div></div>';
 		}

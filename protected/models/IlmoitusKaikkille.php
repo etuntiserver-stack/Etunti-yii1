@@ -31,6 +31,7 @@ class IlmoitusKaikkille extends CActiveRecord
 
 		$table_structure = array(
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+		     'otsikko' => 'varchar(255) DEFAULT NULL',
                      'viesti' => 'TEXT DEFAULT NULL',
                      'aloitus' => 'DATETIME DEFAULT NULL',
                      'lopetus' => 'DATETIME DEFAULT NULL',
@@ -59,7 +60,7 @@ class IlmoitusKaikkille extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('viesti, vastaanottajat, aloitus, lopetus', 'required'),
+			array('otsikko, viesti, vastaanottajat, aloitus, lopetus', 'required'),
 			array('viesti, aloitus, lopetus, vastaanottajat', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
