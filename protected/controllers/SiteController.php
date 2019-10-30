@@ -2584,14 +2584,14 @@ $(document).ready(function(){
 		foreach($m as $data)
 		{
 
-		    if($model == 'Asiakkaat' and $data->tyyppi == 'yritys' and $sarake != 'osoite' and $sarake != 'kaupunki')
+		    if($model == 'Asiakkaat' and $data->tyyppi == 'yritys' and $sarake != 'osoite' and $sarake != 'kaupunki' and $sarake != 'postinumero')
 		    {
 		    $arr[] = array(
 		        'label'=>$data->yrityksen_nimi,
 		        'value'=>$data->yrityksen_nimi,
 		        'id'=>$data->id,
         	    );
-		    } else if($model == 'Asiakkaat' and $data->tyyppi == 'henkilo' and $sarake != 'osoite' and $sarake != 'kaupunki')
+		    } else if($model == 'Asiakkaat' and $data->tyyppi == 'henkilo' and $sarake != 'osoite' and $sarake != 'kaupunki' and $sarake != 'postinumero')
 		    {
 		    $arr[] = array(
 		        'label'=>$data->yhteyshenkilo,

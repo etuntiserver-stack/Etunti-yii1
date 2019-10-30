@@ -1154,6 +1154,9 @@ $xml = '
 		if(isset($_GET['kaupunki']) and !empty(trim($_GET['kaupunki']))){
 		        $criteria->addCondition (" kaupunki LIKE '%".$_GET['kaupunki']."%' ");
 		}
+		if(isset($_GET['postinumero']) and !empty(trim($_GET['postinumero']))){
+		        $criteria->addCondition (" postinumero LIKE '%".$_GET['postinumero']."%' ");
+		}
 		if(isset($_GET['myyja']) and !empty(trim($_GET['myyja']))){
 		        $criteria->addCondition (" myyja='".$_GET['myyja']."' ");
 		}
