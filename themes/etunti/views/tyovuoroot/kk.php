@@ -141,31 +141,37 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
 
   $t = Tyontekijat::model()->findAll($criteria);
-  foreach($t as $v)
+  $tids = [];
+  foreach($t as $v){
+	$tids[$v->id] = $v->id;
+  }
+  $from = date("Y-m-d", strtotime($year.'-'.$month.' first day of this month'));
+  $to = date("Y-m-d", strtotime($year.'-'.$month.' last day of this month'));
+  $tyotunnit = $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 0, true);
+
+  foreach($tids as $v)
   {
   $yht = 0;
   echo '<TR>';
-  echo '<TD>'.$this->etuSukunimi($v->id).'</TD>';
+  echo '<TD>'.$this->etuSukunimi($v).'</TD>';
 
    for ($i = 1; $i <= $number; $i++) 
    {
-     $thisDate = $year.'-'.$month.'-'.$i;
+     $thisDate = date("Y-m-d", strtotime($year.'-'.$month.'-'.$i));
      $date = $i.'.'.$month;
 
-	$tot[$i] = $this->renderPartial('pvmtid',array('pvm'=>$thisDate,'tid'=>$v->id,'from'=>'kk'),true);
-	$explT = explode("//",$tot[$i]);
-	if(isset($explT[1]))
-	$yht += (int)$explT[1];
+	$tot[$i] = (isset($tyotunnit[$thisDate][$v]))? $tyotunnit[$thisDate][$v] : 0; //$this->renderPartial('pvmtid',array('pvm'=>$thisDate,'tid'=>$v->id,'from'=>'kk'),true);
+	$yht += (int)$tot[$i];
 
 	$cl = "";
-	if(isset($explT[1]) and (int)$explT[1] < 18000)
+	if((int)$tot[$i] < 18000)
 	$cl = "btn btn-xs btn-warning";
-	elseif(isset($explT[1]) and (int)$explT[1] > 28800)
+	elseif((int)$tot[$i] > 28800)
 	$cl = "btn btn-xs btn-danger";
 
 	echo '<td>';
 	if(!empty($tot[$i]))
-	echo '<span class="link text-small '.$cl.'" tyle="font-size:90%" pvm="'.date("Y-m-d", strtotime($thisDate)).'" tid="'.$v->id.'">'.$explT[0].'</span>';
+	echo '<span class="link text-small '.$cl.'" tyle="font-size:90%" pvm="'.date("Y-m-d", strtotime($thisDate)).'" tid="'.$v.'">'.$this->num($tot[$i]).'</span>';
 	echo '</td>';
 
    }

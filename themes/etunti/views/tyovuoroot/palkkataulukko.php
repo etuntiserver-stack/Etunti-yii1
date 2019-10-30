@@ -215,15 +215,15 @@ $this->breadcrumbs=array(
 	$tids[] = $data->id;
 
   $tyopaivia 	= $this->TPBetweenTvAll($from, $to, $tids);
-  $tyotunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 0);
-  $matkatunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2), 0);
-  $loun 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(10), 0);
-  $iltatunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 1);
-  $matkaIlta 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2), 1);
-  $yotunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 2);
-  $sutunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 3);
-  $pyhapaivat	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2,3), 4);
-  $erikoislauantai= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2,3), 5);
+  $tyotunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 0, false);
+  $matkatunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2), 0, false);
+  $loun 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(10), 0, false);
+  $iltatunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 1, false);
+  $matkaIlta 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2), 1, false);
+  $yotunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 2, false);
+  $sutunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 3, false);
+  $pyhapaivat	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2,3), 4, false);
+  $erikoislauantai= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2,3), 5, false);
 
   // <-- SPL, SL, LS, VL, VKL, AP
   $sl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tids,'SL'); // Palkallinen

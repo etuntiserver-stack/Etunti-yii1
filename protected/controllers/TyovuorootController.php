@@ -313,7 +313,7 @@ class TyovuorootController extends Controller
 
 	}
 */
-	protected function TidfromtoTyovuoroAll($from, $to, $tids, $status, $time){
+	protected function TidfromtoTyovuoroAll($from, $to, $tids, $status, $time, $by_pvm=false){
 		$set = [];
 		if (is_array($tids)) {
 			foreach($tids as $tid)
@@ -339,7 +339,7 @@ class TyovuorootController extends Controller
 				}
                 		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
 			}
-			$pyhapaivat = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%d.%m.%Y')='".implode("' OR DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%d.%m.%Y')='", $pyhapaivat)."'";
+			$pyhapaivat = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y'))='".implode("' OR DATE(STR_TO_DATE(pvm, '%d.%m.%Y'))='", $pyhapaivat)."'";
 		}
 		//     Pyhapaivat -->
 
@@ -367,7 +367,10 @@ class TyovuorootController extends Controller
 		$to = date("Y-m-d", strtotime($to));
 		$status = "status='".implode("' OR status='", $status)."'";
 		$criteria = new CDbCriteria();
-		$criteria->group = "tid";
+		if($by_pvm)
+		   $criteria->group = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y')), tid";
+		else
+		   $criteria->group = "tid";
 
 		// Helper function to avoid duplicate code (doesn't handle 'hyvaksytty' as it differs)
 		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $time, $pyhapaivat, $erikoislauantai) {
@@ -375,13 +378,13 @@ class TyovuorootController extends Controller
 			switch ($time) {
 				case 0:
 					$criteria->select = "
-						tid, SUM(TIME_TO_SEC(TIMEDIFF(
+						pvm, tid, SUM(TIME_TO_SEC(TIMEDIFF(
 							TIME(loppu), TIME(alku)
 						))) as l_tunnit";
 					break;
 				case 1:
 					// Note: 18000 at end of query is equal to TIME_TO_SEC(TIMEDIFF('23:00:00', '18:00:00'))
-					$criteria->select = "tid, SUM(CASE
+					$criteria->select = "pvm, tid, SUM(CASE
 						WHEN
 							TIME(alku) >= '18:00:00'
 						THEN CASE
@@ -411,7 +414,7 @@ class TyovuorootController extends Controller
 						END) AS l_tunnit";
 					break;
 				case 2:
-					$criteria->select = "tid, SUM(CASE
+					$criteria->select = "pvm, tid, SUM(CASE
 							WHEN
 								TIME(loppu) <= '06:00:00'
 							THEN
@@ -441,7 +444,7 @@ class TyovuorootController extends Controller
 						) AS l_tunnit";
 					break;
 				case 3:
-					$criteria->select = "tid, SUM(CASE
+					$criteria->select = "pvm, tid, SUM(CASE
 						WHEN
 							DAYOFWEEK(STR_TO_DATE(pvm, '%d.%m.%Y')) = 1
 						THEN CASE
@@ -461,7 +464,7 @@ class TyovuorootController extends Controller
 						END) AS l_tunnit";
 					break;
 				case 4:
-					$criteria->select = "tid, SUM(CASE
+					$criteria->select = "pvm, tid, SUM(CASE
 						WHEN
 							$pyhapaivat
 						THEN 
@@ -471,7 +474,7 @@ class TyovuorootController extends Controller
 						END) AS l_tunnit";
 					break;
 				case 5:
-					$criteria->select = "tid, SUM(CASE
+					$criteria->select = "pvm, tid, SUM(CASE
 						WHEN
 							$erikoislauantai
 						THEN 
@@ -485,7 +488,7 @@ class TyovuorootController extends Controller
 			// Conditions
 			$criteria->condition = "
 				tid IN ($tids)
-				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
+				AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$from' AND '$to'
 				AND peruutettu=0";
 			if ($status) $criteria->addCondition($status);
 		};
@@ -494,9 +497,14 @@ class TyovuorootController extends Controller
 		$buildCriteria($criteria);
 		$tv = Tyovuoroot::model()->findAll($criteria);
 
-		foreach ($tv as $t)
-			$set[$t->tid] += $t->l_tunnit;
-
+		if($by_pvm){
+			foreach ($tv as $t){
+				$set[date("Y-m-d", strtotime($t->pvm))][$t->tid] = $t->l_tunnit;
+			}
+		} else {
+			foreach ($tv as $t)
+				$set[$t->tid] += $t->l_tunnit;
+		}
 		return $set;
 	}
 
