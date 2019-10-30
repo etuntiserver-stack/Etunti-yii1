@@ -161,7 +161,7 @@ $months=array(
 	  </script>
 	  <?php endif; ?>
 
-          <div class="col-sm-6 col-md-3 pulsar">
+          <div class="col-sm-6 col-md-3">
             <div class="panel bg-danger light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
