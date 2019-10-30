@@ -383,7 +383,7 @@ class Asetukset extends DB2ActiveRecord
 		}
 	}
 
-	public function getFiles($domain, $folder, $id, $return=null, $delete=true){
+	public function getFiles($domain, $folder, $id, $r=false, $delete=true){
 		$domain = strtolower($domain);
 		$i = 0;
 		$return = '';
@@ -406,7 +406,7 @@ class Asetukset extends DB2ActiveRecord
 
 		$return .= '</div>';
 		}
-		if($return == null)
+		if($r == null)
 			echo $return;
 		else
 			return $return;
