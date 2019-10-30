@@ -85,9 +85,9 @@ class IlmoitusKaikkilleController extends Controller
 		$return .= '<select '.$nm.' '.$cl.' '.$i.' multiple title="Domainit">';
 		foreach($list as $val){
 			if(in_array($val->id, $selected)){
-				$return .= '<option value="'.$val->id.'" selected>'.$val->domain.'</option>';
+				$return .= '<option value="'.$val->domain.'" selected>'.$val->domain.'</option>';
 			} else {
-				$return .= '<option value="'.$val->id.'">'.$val->domain.'</option>';
+				$return .= '<option value="'.$val->domain.'">'.$val->domain.'</option>';
 			}
 		}
 		$return .= '</select>';
