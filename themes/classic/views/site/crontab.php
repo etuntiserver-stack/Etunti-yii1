@@ -428,7 +428,8 @@ foreach ($list as $d) {
 			}
 
 			if($data->status == 3) {
-				$m .= '<hr><b>' . Yii::t('main', 'Osoite') . ':</b> ' . $osoite . '<br>';
+				$m .= '<hr><b>' . $tyovuoroot[0]->tilanteet()[$data->status] . '</b><br>';
+				$m .= '<b>' . Yii::t('main', 'Osoite') . ':</b> ' . $osoite . '<br>';
 			} else {
 				$m .= '<hr><b>' . $tyovuoroot[0]->tilanteet()[$data->status] . '</b><br>';
 			}
