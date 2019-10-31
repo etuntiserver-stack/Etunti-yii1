@@ -655,6 +655,8 @@ $xml = '
 		$criteria->addCondition (" status != '2' ");
 	
 		$mob = Mobile::model()->findAll($criteria); 
+echo count($mob);
+exit;
 		foreach($mob as $tvVal){
 			if($tvVal->id){
 				$muutos = false;

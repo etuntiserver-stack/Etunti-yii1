@@ -1,5 +1,4 @@
 <?php
-echo 'test';
 foreach($attributes as $str){
 
   //$explStr = explode("//", $str_n);
