@@ -457,6 +457,8 @@ exit;
     echo '</td>';
 
     echo '<td id="'.$did.'_'.$tid.'" ilman_lounastaukot="'.$ilman_lounastaukot.'" ilman_matkat="'.$ilman_matkat.'">';
+echo '<textarea class="form-control">'.print_r($toteutuneet_laatikot[$date]).'</textarea>';
+exit;
     if(isset($toteutuneet_laatikot[$date])){
     	echo '<div class="small">';
 	   foreach($toteutuneet_laatikot[$date] as $item)
