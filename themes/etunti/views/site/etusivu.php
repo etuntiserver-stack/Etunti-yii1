@@ -23,7 +23,7 @@
 	if(count($ilmoitukset) > 0){
 		$ilmoitukset_content = '';
 		foreach($ilmoitukset as $item){
-			$ilmoitukset_content = '<div class="panel">
+			$ilmoitukset_content .= '<div class="panel">
 	                <div class="panel-heading bg-danger pulsar">
         	          <span class="panel-title">'.$item->otsikko.'</span>
         	        </div>

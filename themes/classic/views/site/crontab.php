@@ -409,11 +409,11 @@ foreach ($list as $d) {
 			//$k = Kohteet::model()->findbypk($data->kohde);
 			//$t = Tyontekijat::model()->findbypk($data->tid);
 
-			if (isset($t->id) and $t->aktiivinen == 0) {
+			if(isset($t->id) and $t->aktiivinen == 0) {
 				continue;
 			}
 			$osoite = '';
-			if (isset($data->osoite) and !empty($data->osoite)) {
+			if(isset($data->osoite) and !empty($data->osoite)) {
 				$osoite = $data->osoite;
 			} else {
 				if (isset($data->kohteet->osoite)) {
@@ -423,11 +423,11 @@ foreach ($list as $d) {
 			$tekijan_nimi = '';
 			$tekijan_nimi = $this->etuSukunimi($data->tid);
 
-			if ($data->tid == 0) {
+			if($data->tid == 0) {
 				$tekijan_nimi = 'VARAUS';
 			}
 
-			if ($tyovuoroot[0]->tilanteet()[$data->status] == 3) {
+			if($data->status == 3) {
 				$m .= '<hr><b>' . Yii::t('main', 'Osoite') . ':</b> ' . $osoite . '<br>';
 			} else {
 				$m .= '<hr><b>' . $tyovuoroot[0]->tilanteet()[$data->status] . '</b><br>';

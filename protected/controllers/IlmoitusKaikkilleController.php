@@ -84,7 +84,7 @@ class IlmoitusKaikkilleController extends Controller
 		$list = Domainit::model()->findAll($criteria);
 		$return .= '<select '.$nm.' '.$cl.' '.$i.' multiple title="Domainit">';
 		foreach($list as $val){
-			if(in_array($val->id, $selected)){
+			if(in_array($val->domain, $selected)){
 				$return .= '<option value="'.$val->domain.'" selected>'.$val->domain.'</option>';
 			} else {
 				$return .= '<option value="'.$val->domain.'">'.$val->domain.'</option>';
