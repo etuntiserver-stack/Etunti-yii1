@@ -325,7 +325,8 @@ $dateDiff = dateDiff($from, $to);
 
   $luetut_laatikot = json_decode($this->LuetutPvmTidBetween($from,$to,$tid), true);
   $toteutuneet_laatikot = json_decode($this->TotPvmTidBetween($from,$to,$tid), true);
-
+echo '<textarea class="form-control">'.print_r($toteutuneet_laatikot).'</textarea>';
+exit;
   $vuosilomachecker	= $this->vuosilomaCheckerBetween($from, $to, $tid);
   $hyvaksymmattomat_t	= $this->hyvaksyttamatTunnitBetween($from, $to, $tid);
 
@@ -457,8 +458,7 @@ exit;
     echo '</td>';
 
     echo '<td id="'.$did.'_'.$tid.'" ilman_lounastaukot="'.$ilman_lounastaukot.'" ilman_matkat="'.$ilman_matkat.'">';
-echo '<textarea class="form-control">'.print_r($toteutuneet_laatikot).'</textarea>';
-exit;
+
     if(isset($toteutuneet_laatikot[$date])){
     	echo '<div class="small">';
 	   foreach($toteutuneet_laatikot[$date] as $item)
