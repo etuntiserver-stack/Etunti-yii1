@@ -1052,7 +1052,7 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
 		<?php endif; ?>
  	        <option value="index" <?php if($curpage == 'tyovuoroot/index') echo 'selected'; ?>><?php echo Yii::t('main', 'VIIKKO'); ?></option>
  	        <option value="tv3" <?php if($curpage == 'tyovuoroot/tv3') echo 'selected'; ?>><?php echo Yii::t('main', 'TYÖNTEKIJÄ'); ?></option>
- 	        <option value="beta" <?php if($curpage == 'tyovuoroot/beta') echo 'selected'; ?>><?php echo Yii::t('main', '--BETA--'); ?></option>
+ 	        <option value="beta" <?php if($curpage == 'tyovuoroot/beta') echo 'selected'; ?>><?php echo Yii::t('main', 'Työvuorot ( NOPEA )'); ?></option>
 	      </select>
               </li>
 	      <!-- Nakyma -->
