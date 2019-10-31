@@ -1955,7 +1955,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				}
                 		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
 			}
-			$pyhapaivat = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%d.%m.%Y')='".implode("' OR DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%d.%m.%Y')='", $pyhapaivat)."'";
+			$pyhapaivat = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='".implode("' OR DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='", $pyhapaivat)."'";
 		}
 		//     Pyhapaivat -->
 
@@ -1975,7 +1975,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				}
                 		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
 			}
-			$erikoislauantai = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%d.%m.%Y')='".implode("' OR DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%d.%m.%Y')='", $erikoislauantai)."'";
+			$erikoislauantai = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='".implode("' OR DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='", $erikoislauantai)."'";
 		}
 		//     Erikoislauantai -->
 
@@ -2135,7 +2135,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			$criteria->condition = "
 				aloitan!='' AND loppui!=''
 				AND tid IN ($tids)
-				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
+				AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) BETWEEN '$from' AND '$to'
 				AND deleted=0";
 			if ($status) $criteria->addCondition($status);
 			if ($palkanlaskentaan) $criteria->addCondition("palkanlaskentaan=1");
