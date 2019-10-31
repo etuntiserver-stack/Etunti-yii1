@@ -1955,7 +1955,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				}
                 		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
 			}
-			$pyhapaivat = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='".implode("' OR DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='", $pyhapaivat)."'";
+			$pyhapaivat = "(DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='".implode("' OR DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='", $pyhapaivat)."')";
 		}
 		//     Pyhapaivat -->
 
@@ -1975,7 +1975,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				}
                 		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
 			}
-			$erikoislauantai = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='".implode("' OR DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='", $erikoislauantai)."'";
+			$erikoislauantai = "(DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='".implode("' OR DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='", $erikoislauantai)."')";
 		}
 		//     Erikoislauantai -->
 
