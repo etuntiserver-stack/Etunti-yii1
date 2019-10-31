@@ -1951,7 +1951,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			$end   = date ("d.m.Y", strtotime($to));
 			while (strtotime($begin) <= strtotime($end)) {
                 		if(in_array($begin, $p_explode)){
-					$pyhapaivat[] = $begin;
+					$pyhapaivat[] = date ("Y-m-d", strtotime($begin));
 				}
                 		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
 			}
@@ -1971,7 +1971,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			$end   = date ("d.m.Y", strtotime($to));
 			while (strtotime($begin) <= strtotime($end)) {
                 		if(in_array($begin, $p_explode)){
-					$erikoislauantai[] = $begin;
+					$erikoislauantai[] = date ("Y-m-d", strtotime($begin));
 				}
                 		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
 			}
