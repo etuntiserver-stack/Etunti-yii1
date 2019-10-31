@@ -688,12 +688,10 @@ $xml = '
 
 		ksort($get);
 		$laatikot = [];
-echo count($get);
-exit;
 		foreach($get as $k=>$v){
 		      $laatikot[date("d.m.Y",strtotime($k))][] = $this->renderPartial('al',array('attributes'=>$v), true);
 		}
-	        return json_encode($laatikot);
+	        return json_encode(json_encode($laatikot));
 
 	}
 
