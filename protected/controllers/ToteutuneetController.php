@@ -655,8 +655,6 @@ $xml = '
 		$criteria->addCondition (" status != '2' ");
 	
 		$mob = Mobile::model()->findAll($criteria); 
-echo count($mob);
-exit;
 		foreach($mob as $tvVal){
 			if($tvVal->id){
 				$muutos = false;
@@ -690,6 +688,8 @@ exit;
 
 		ksort($get);
 		$laatikot = [];
+echo count($get);
+exit;
 		foreach($get as $k=>$v){
 		      $laatikot[date("d.m.Y",strtotime($k))][] = $this->renderPartial('al',array('attributes'=>$v), true);
 		}
