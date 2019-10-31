@@ -349,8 +349,6 @@ exit;
 
     $pvm		= date("Y-m-d", strtotime($date));
     $tyotunnit		= (isset($tyotunnit_all[$pvm][$tid]))? $tyotunnit_all[$pvm][$tid] : 0;
-echo $tyotunnit;
-exit;
     $hyv_tyotunnit 	= (isset($hyv_tyotunnit_all[$pvm][$tid]))? $hyv_tyotunnit_all[$pvm][$tid] : 0;
     $lounaat 		= (isset($lounaat_all[$pvm][$tid]))? $lounaat_all[$pvm][$tid] : 0;
     $matkatunnit 	= (isset($matkatunnit_all[$pvm][$tid]))? $matkatunnit_all[$pvm][$tid] : 0;
