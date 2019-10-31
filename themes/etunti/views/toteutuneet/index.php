@@ -284,8 +284,7 @@ $dateDiff = dateDiff($from, $to);
 
 
   $tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 0, true);
-print_r($tyotunnit_all);
-exit;
+
   $hyv_arr = array(3,2,10);
   if($ilman_matkat)
 	unset($hyv_arr[1]);
@@ -350,6 +349,8 @@ exit;
 
     $pvm		= date("Y-m-d", strtotime($date));
     $tyotunnit		= (isset($tyotunnit_all[$pvm][$tid]))? $tyotunnit_all[$pvm][$tid] : 0;
+echo $tyotunnit;
+exit;
     $hyv_tyotunnit 	= (isset($hyv_tyotunnit_all[$pvm][$tid]))? $hyv_tyotunnit_all[$pvm][$tid] : 0;
     $lounaat 		= (isset($lounaat_all[$pvm][$tid]))? $lounaat_all[$pvm][$tid] : 0;
     $matkatunnit 	= (isset($matkatunnit_all[$pvm][$tid]))? $matkatunnit_all[$pvm][$tid] : 0;

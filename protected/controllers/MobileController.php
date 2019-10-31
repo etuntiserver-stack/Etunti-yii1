@@ -2110,11 +2110,14 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 						END) AS l_tunnit";
 					break;
 				case 4:
-					$criteria->select = "
-						tid, aloitan, SUM(TIME_TO_SEC(TIMEDIFF(
-							STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'),
-							STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i')
-						))) as l_tunnit";
+					$criteria->select = "tid, aloitan, SUM(CASE
+						WHEN
+							$pyhapaivat
+						THEN 
+							TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
+						ELSE
+							0
+						END) AS l_tunnit";
 					break;
 				case 5:
 					$criteria->select = "tid, aloitan, SUM(CASE
