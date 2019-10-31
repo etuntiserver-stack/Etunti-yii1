@@ -660,6 +660,7 @@ $xml = '
 				$muutos = false;
 				$did = date("Ymd",strtotime($tvVal->aloitan));
 				$get[date("Y-m-d H:i",strtotime($tvVal->aloitan))][] = $tvVal->attributes;
+echo json_encode($tvVal->kohde_kannasta).'  kkk<br>';
 			}
 	
 		}
@@ -691,7 +692,7 @@ $xml = '
 		foreach($get as $k=>$v){
 		      $laatikot[date("d.m.Y",strtotime($k))][] = $this->renderPartial('al',array('attributes'=>$v), true);
 		}
-print_r($laatikot);
+
 exit;
 	        return json_encode($laatikot);
 
