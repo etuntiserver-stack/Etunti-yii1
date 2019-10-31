@@ -284,7 +284,8 @@ $dateDiff = dateDiff($from, $to);
 
 
   $tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 0, true);
-
+print_r($tyotunnit_all);
+exit;
   $hyv_arr = array(3,2,10);
   if($ilman_matkat)
 	unset($hyv_arr[1]);
