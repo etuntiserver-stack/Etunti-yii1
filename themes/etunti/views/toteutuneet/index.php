@@ -325,7 +325,8 @@ $dateDiff = dateDiff($from, $to);
 
   $luetut_laatikot = json_decode($this->LuetutPvmTidBetween($from,$to,$tid), true);
   $toteutuneet_laatikot = json_decode($this->TotPvmTidBetween($from,$to,$tid), true);
-
+echo count($this->TotPvmTidBetween($from,$to,$tid));
+exit;
   $vuosilomachecker	= $this->vuosilomaCheckerBetween($from, $to, $tid);
   $hyvaksymmattomat_t	= $this->hyvaksyttamatTunnitBetween($from, $to, $tid);
 

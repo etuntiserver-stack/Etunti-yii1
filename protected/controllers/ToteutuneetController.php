@@ -691,8 +691,6 @@ $xml = '
 		foreach($get as $k=>$v){
 		      $laatikot[date("d.m.Y",strtotime($k))][] = $this->renderPartial('al',array('attributes'=>$v), true);
 		}
-echo '<textarea class="form-control">'.print_r($laatikot).'</textarea>';
-exit;
 	        return json_encode($laatikot);
 
 	}
