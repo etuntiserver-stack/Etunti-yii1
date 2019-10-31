@@ -691,8 +691,6 @@ $xml = '
 		foreach($get as $k=>$v){
 		      $laatikot[date("d.m.Y",strtotime($k))][] = $this->renderPartial('al',array('attributes'=>$v), true);
 		}
-print_r( $laatikot);
-exit;
 	        return json_encode($laatikot);
 
 	}
