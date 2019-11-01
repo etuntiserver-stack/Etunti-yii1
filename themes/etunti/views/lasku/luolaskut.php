@@ -293,11 +293,13 @@ $iban				= $asetukset->iban;
 			}
 			// <-- TV
 			if( isset($tyovuoroot['pvm']) and isset($kohteet['osoite']) ){
+				$pvm_hakusta = false;
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
 					$freetext .= $tyovuoroot['pvm'];
+					$pvm_hakusta = true;
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
-					if(!empty($freetext)){ $freetext .= ', '; }
+					if($pvm_hakusta){ $freetext .= ', '; }
 					$freetext .= $kohteet['osoite'];
 				}
 			}
