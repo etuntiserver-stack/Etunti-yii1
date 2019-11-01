@@ -288,7 +288,7 @@ $iban				= $asetukset->iban;
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
 					if(!empty($freetext)){ $freetext[$asiakas_nimi] .= ', '; }
-					$freetext[$asiakas_nimi .= $mob_tunnit['kohde_kannasta'];
+					$freetext[$asiakas_nimi] .= $mob_tunnit['kohde_kannasta'];
 				}
 			}
 			// <-- TV
