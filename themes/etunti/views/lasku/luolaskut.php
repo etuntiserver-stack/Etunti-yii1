@@ -246,6 +246,7 @@ $iban				= $asetukset->iban;
 			$alv 		= 0;
 			$rivi_kpl 	= 0;
 			$r		= [];
+			$freetext 	= '';
 
 			if( isset($mob_tunnit) ){
 				$tv_id		= $mob_tunnit['tv_id'];
@@ -276,14 +277,12 @@ $iban				= $asetukset->iban;
 
 			// <-- TV
 			if( isset($tyovuoroot['tuoteID']) ){ $tp_id = $tyovuoroot['tuoteID']; }
-			if( isset($tyovuoroot['freetext']) ){ $freetext = $tyovuoroot['freetext']; }
 
 			if( isset($r['alvsis']) and $r['alvsis'] == 'nolla'){ $alvsis = 0; }
 			if( isset($r['hinta_sis']) and isset($r['alvsis']) and $r['alvsis'] == 'sis'){ $alvsis = 1; $hinta = $r['hinta_sis']; }
 
 			// <-- MOB
 			if( isset($mob_tunnit['kohde_kannasta']) ){
-				$freetext = '';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
 					$freetext .= date("d.m.Y", strtotime($mob_tunnit['aloitan']));
 				}
@@ -294,13 +293,12 @@ $iban				= $asetukset->iban;
 			}
 			// <-- TV
 			if( isset($tyovuoroot['id']) and isset($kohteet['osoite']) ){
-				$freetext = '';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-					$freetext .= $tyovuoroot['pvm'];
+					//$freetext .= $tyovuoroot['pvm'];
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
-					if(!empty($freetext)){ $freetext .= ', '; }
-					$freetext .= $kohteet['osoite'];
+					//if(!empty($freetext)){ $freetext .= ', '; }
+					//$freetext .= $kohteet['osoite'];
 				}
 			}
 
