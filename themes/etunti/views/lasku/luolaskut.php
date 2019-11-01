@@ -273,7 +273,7 @@ $iban				= $asetukset->iban;
 			if( isset($mob['alv']) ){ $alv = $mob['alv']; }
 			if( isset($r['yksikko']) ){ $yksikko = $r['yksikko']; }
 			if( isset($mob['yksikko']) ){ $yksikko = $mob['yksikko']; }
-			//if( isset($mob['freetext']) ){ $freetext = $mob['freetext']; }
+			if( isset($mob['freetext']) ){ $freetext = $mob['freetext']; }
 
 			// <-- TV
 			if( isset($tyovuoroot['tuoteID']) ){ $tp_id = $tyovuoroot['tuoteID']; }
@@ -284,25 +284,21 @@ $iban				= $asetukset->iban;
 			// <-- MOB
 			if( isset($mob_tunnit['aloitan']) and isset($mob_tunnit['kohde_kannasta']) ){
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-					//$freetext .= date("d.m.Y", strtotime($mob_tunnit['aloitan']));
+					$freetext .= date("d.m.Y", strtotime($mob_tunnit['aloitan']));
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
 					if(!empty($freetext)){ $freetext .= ', '; }
-					//$freetext .= $mob_tunnit['kohde_kannasta'];
+					$freetext .= $mob_tunnit['kohde_kannasta'];
 				}
 			}
 			// <-- TV
 			if( isset($tyovuoroot['pvm']) and isset($kohteet['osoite']) ){
-				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta']) and !in_array('osoite', $_GET['viestikenta'])){
-					$freetext = $tyovuoroot['pvm'];
+				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
+					$freetext .= $tyovuoroot['pvm'];
 				}
-				else if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
+				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
 					if(!empty($freetext)){ $freetext .= ', '; }
-					$freetext = $tyovuoroot['pvm'].', '.$kohteet['osoite'];
-				}
-				else if(isset($_GET['viestikenta']) and !in_array('pvm', $_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
-					if(!empty($freetext)){ $freetext .= ', '; }
-					$freetext = $kohteet['osoite'];
+					$freetext .= $kohteet['osoite'];
 				}
 			}
 
