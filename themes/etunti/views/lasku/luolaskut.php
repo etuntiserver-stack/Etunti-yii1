@@ -246,7 +246,7 @@ $iban				= $asetukset->iban;
 			$alv 		= 0;
 			$rivi_kpl 	= 0;
 			$r		= [];
-			$freetext[$asiakas_nimi] = '';
+			$freetext 	= '';
 
 			if( isset($mob_tunnit) ){
 				$tv_id		= $mob_tunnit['tv_id'];
@@ -273,7 +273,7 @@ $iban				= $asetukset->iban;
 			if( isset($mob['alv']) ){ $alv = $mob['alv']; }
 			if( isset($r['yksikko']) ){ $yksikko = $r['yksikko']; }
 			if( isset($mob['yksikko']) ){ $yksikko = $mob['yksikko']; }
-			if( isset($mob['freetext']) ){ $freetext[$asiakas_nimi] = $mob['freetext']; }
+			if( isset($mob['freetext']) ){ $freetext = $mob['freetext']; }
 
 			// <-- TV
 			if( isset($tyovuoroot['tuoteID']) ){ $tp_id = $tyovuoroot['tuoteID']; }
@@ -284,23 +284,21 @@ $iban				= $asetukset->iban;
 			// <-- MOB
 			if( isset($mob_tunnit['aloitan']) and isset($mob_tunnit['kohde_kannasta']) ){
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-					$freetext[$asiakas_nimi] .= date("d.m.Y", strtotime($mob_tunnit['aloitan']));
+					$freetext .= date("d.m.Y", strtotime($mob_tunnit['aloitan']));
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
-					if(!empty($freetext)){ $freetext[$asiakas_nimi] .= ', '; }
-					$freetext[$asiakas_nimi] .= $mob_tunnit['kohde_kannasta'];
+					if(!empty($freetext)){ $freetext .= ', '; }
+					$freetext .= $mob_tunnit['kohde_kannasta'];
 				}
 			}
 			// <-- TV
 			if( isset($tyovuoroot['pvm']) and isset($kohteet['osoite']) ){
-				$pvm_hakusta = false;
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-					$freetext[$asiakas_nimi] .= $tyovuoroot['pvm'];
-					$pvm_hakusta = true;
+					$freetext .= $tyovuoroot['pvm'];
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
-					if($pvm_hakusta){ $freetext[$asiakas_nimi] .= ', '; }
-					$freetext[$asiakas_nimi] .= $kohteet['osoite'];
+					if(!empty($freetext)){ $freetext .= ', '; }
+					$freetext .= $kohteet['osoite'];
 				}
 			}
 
@@ -341,7 +339,7 @@ $iban				= $asetukset->iban;
 			   $lr->alv	= $alv;
 			   $lr->ale	= 0;
 			   $lr->tuoteID = $tp_id;
-			   $lr->free_text= $freetext[$asiakas_nimi];
+			   $lr->free_text= $freetext;
 			   if(!$lr->save()){
 				print_r($lr->getErrors());
 				exit;
@@ -376,7 +374,7 @@ $iban				= $asetukset->iban;
 		<td class="input_alv"><?=$alv?></td>
 		<td class="input_veroton"><?=number_format($veroton, $decimal, ',', ' ')?></td>
 		<td class="input_yhteensa"><?=number_format($yht, $decimal, ',', ' ')?></td>
-		<td class="input_freetext"><?=$freetext[$asiakas_nimi]?></td>
+		<td class="input_freetext"><?=$freetext?></td>
 		<?=$hyvaksyty_kontentti?>
 		</tr>
 		<?php endif; ?>
@@ -420,22 +418,24 @@ $iban				= $asetukset->iban;
 			if( isset($r['hinta_sis']) and isset($r['alvsis']) and $r['alvsis'] == 'sis'){ $alvsis = 1; $hinta = $r['hinta_sis']; }
 			// <-- MOB
 			if( isset($mob_tunnit['kohde_kannasta']) ){
+				$freetext = '';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-					$freetext[$asiakas_nimi] .= date("d.m.Y", strtotime($mob_tunnit['aloitan']));
+					$freetext .= date("d.m.Y", strtotime($mob_tunnit['aloitan']));
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
-					if(!empty($freetext)){ $freetext[$asiakas_nimi] .= ', '; }
-					$freetext[$asiakas_nimi] .= $mob_tunnit['kohde_kannasta'];
+					if(!empty($freetext)){ $freetext .= ', '; }
+					$freetext .= $mob_tunnit['kohde_kannasta'];
 				}
 			}
 			// <-- TV
 			if( isset($tyovuoroot['pvm']) and isset($kohteet['osoite']) ){
+				$freetext = '';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-					$freetext[$asiakas_nimi] .= $tyovuoroot['pvm'];
+					$freetext .= $tyovuoroot['pvm'];
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
-					if(!empty($freetext)){ $freetext[$asiakas_nimi] .= ', '; }
-					$freetext[$asiakas_nimi] .= $kohteet['osoite'];
+					if(!empty($freetext)){ $freetext .= ', '; }
+					$freetext .= $kohteet['osoite'];
 				}
 			} 
 
@@ -472,7 +472,7 @@ $iban				= $asetukset->iban;
 			   $lr->alv	= $alv;
 			   $lr->ale	= 0;
 			   $lr->tuoteID = $tp_id;
-			   $lr->free_text= $freetext[$asiakas_nimi];
+			   $lr->free_text= $freetext;
 			   if(!$lr->save()){
 				print_r($lr->getErrors());
 				exit;
@@ -488,7 +488,7 @@ $iban				= $asetukset->iban;
 		<td class="input_alv"><?=$alv?></td>
 		<td class="input_veroton"><?=number_format($veroton, $decimal, ',', ' ')?></td>
 		<td class="input_yhteensa"><?=number_format($yht, $decimal, ',', ' ')?></td>
-		<td class="input_freetext"><?=$freetext[$asiakas_nimi]?></td>
+		<td class="input_freetext"><?=$freetext?></td>
 		</tr>
 		<?php endif; ?>
 		<?php 
