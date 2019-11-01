@@ -606,9 +606,9 @@ $xml = '
 		$yotunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 2, true);
 		$sutunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 3, true);
 
-		$laatikot = json_encode($this->TotPvmTidBetween($pvm,$pvm,$tid,$ilman_lounastaukot,$ilman_matkat));
+		$laatikot = $this->TotPvmTidBetween($pvm,$pvm,$tid,$ilman_lounastaukot,$ilman_matkat);
 		echo json_encode(array(
-			'laatikot' 	=> json_decode($laatikot),
+			'laatikot' 	=> $laatikot,
 			'tyotunnit' 	=> (isset($tyotunnit_all[$pvm][$tid]))? $tyotunnit_all[$pvm][$tid] : 0,
 			'hyv_tyotunnit'	=> (isset($hyv_tyotunnit_all[$pvm][$tid]))? $hyv_tyotunnit_all[$pvm][$tid] : 0,
 			'lounaat' 	=> (isset($lounaat_all[$pvm][$tid]))? $lounaat_all[$pvm][$tid] : 0,
