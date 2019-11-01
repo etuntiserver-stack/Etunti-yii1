@@ -221,7 +221,10 @@ $iban				= $asetukset->iban;
 		<th>Free text</th>
 		</tr>
 		<tbody>
-		<?php $key = 0; ?>
+		<?php 
+		$key = 0; 			
+		$freetext = '';
+		?>
 		<?php foreach($hyv_lista as $mob) : ?>
 		<?php
 		if( isset($mob['mob_tunnit']) ){
@@ -246,7 +249,6 @@ $iban				= $asetukset->iban;
 			$alv 		= 0;
 			$rivi_kpl 	= 0;
 			$r		= [];
-			$freetext 	= '';
 
 			if( isset($mob_tunnit) ){
 				$tv_id		= $mob_tunnit['tv_id'];
@@ -428,7 +430,7 @@ $iban				= $asetukset->iban;
 				}
 			}
 			// <-- TV
-			if( isset($tyovuoroot['id']) ){
+			if( isset($tyovuoroot['pvm']) and isset($kohteet['osoite']) ){
 				$freetext = '';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
 					$freetext .= $tyovuoroot['pvm'];
