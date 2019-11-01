@@ -216,10 +216,11 @@ class LaskuController extends Controller
 				//'tyontekijan_nimi' => (isset($item->tt->id))? $item->tt->$tt_order_1.' '.$item->tt->$tt_order_2 : '', 
 			];
 		   }
+/*
 		   foreach($asiakkaat_ids as $k => $i)
 			if (array_key_exists($k, $attr)) $asiakkaat_ids[$k] =
 				array_merge(['asiakas' => $attr[$k]], $asiakkaat_ids[$k]);
-
+*/
 		   ksort($asiakkaat_ids);
 		}
 /*
