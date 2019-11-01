@@ -294,11 +294,10 @@ $iban				= $asetukset->iban;
 			// <-- TV
 			if( isset($tyovuoroot['pvm']) and isset($kohteet['osoite']) ){
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-					//$freetext .= $tyovuoroot['pvm'];
+					$freetext .= $tyovuoroot['pvm'];
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
-					//if(!empty($freetext)){ $freetext .= ', '; }
-					//$freetext .= $kohteet['osoite'];
+					$freetext .= ', '.$kohteet['osoite'];
 				}
 			}
 
