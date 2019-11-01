@@ -246,6 +246,7 @@ $iban				= $asetukset->iban;
 			$alv 		= 0;
 			$rivi_kpl 	= 0;
 			$r		= [];
+			$freetext 	= '';
 
 			if( isset($mob_tunnit) ){
 				$tv_id		= $mob_tunnit['tv_id'];
