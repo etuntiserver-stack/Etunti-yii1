@@ -514,7 +514,6 @@ $iban				= $asetukset->iban;
 			}
 		} ?>
 		<!-- / Update tyovuoro -->
-		<?php $freetext = ''; ?>
 		<?php endforeach; ?>
 		</tbody>
 		</table>
