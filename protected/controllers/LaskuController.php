@@ -205,8 +205,8 @@ class LaskuController extends Controller
 		   $attr = [];
 		   foreach($hyv_lista_all as $item){
 			$nimi = '';
-			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'henkilo'){ //$nimi = $item->kohteet->asiakkaat->yhteyshenkilo; }
-			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'yritys'){ //$nimi = $item->kohteet->asiakkaat->yrityksen_nimi; }
+			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'henkilo'){ /*$nimi = $item->kohteet->asiakkaat->yhteyshenkilo; */}
+			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'yritys'){ /*$nimi = $item->kohteet->asiakkaat->yrityksen_nimi; */}
 			if (isset($item->kohteet->asiakkaat) and !array_key_exists($nimi, $attr)) $attr[$nimi] = $item->kohteet->asiakkaat->attributes;
 			$asiakkaat_ids[$nimi][$item->id] = [
 				'tyovuoroot' => $item->attributes, 
