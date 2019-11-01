@@ -275,7 +275,7 @@ $iban				= $asetukset->iban;
 			if( isset($mob['alv']) ){ $alv = $mob['alv']; }
 			if( isset($r['yksikko']) ){ $yksikko = $r['yksikko']; }
 			if( isset($mob['yksikko']) ){ $yksikko = $mob['yksikko']; }
-			if( isset($mob['freetext']) ){ $freetext = $mob['freetext']; }
+			//if( isset($mob['freetext']) ){ $freetext = $mob['freetext']; }
 
 			// <-- TV
 			if( isset($tyovuoroot['tuoteID']) ){ $tp_id = $tyovuoroot['tuoteID']; }
