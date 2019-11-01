@@ -221,10 +221,7 @@ $iban				= $asetukset->iban;
 		<th>Free text</th>
 		</tr>
 		<tbody>
-		<?php 
-		$key = 0; 			
-		$freetext = '';
-		?>
+		<?php $key = 0; ?>
 		<?php foreach($hyv_lista as $mob) : ?>
 		<?php
 		if( isset($mob['mob_tunnit']) ){
@@ -249,6 +246,7 @@ $iban				= $asetukset->iban;
 			$alv 		= 0;
 			$rivi_kpl 	= 0;
 			$r		= [];
+			$freetext 	= '';
 
 			if( isset($mob_tunnit) ){
 				$tv_id		= $mob_tunnit['tv_id'];
@@ -275,7 +273,7 @@ $iban				= $asetukset->iban;
 			if( isset($mob['alv']) ){ $alv = $mob['alv']; }
 			if( isset($r['yksikko']) ){ $yksikko = $r['yksikko']; }
 			if( isset($mob['yksikko']) ){ $yksikko = $mob['yksikko']; }
-			//if( isset($mob['freetext']) ){ $freetext = $mob['freetext']; }
+			if( isset($mob['freetext']) ){ $freetext = $mob['freetext']; }
 
 			// <-- TV
 			if( isset($tyovuoroot['tuoteID']) ){ $tp_id = $tyovuoroot['tuoteID']; }
@@ -516,6 +514,7 @@ $iban				= $asetukset->iban;
 			}
 		} ?>
 		<!-- / Update tyovuoro -->
+		<?php $freetext = ''; ?>
 		<?php endforeach; ?>
 		</tbody>
 		</table>
