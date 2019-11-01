@@ -230,7 +230,7 @@ $iban				= $asetukset->iban;
 			$kohteet 	= $mob['kohteet'];
 		}
 		if( isset($mob['tyovuoroot']) ){
-			$tyovuoroot[$asiakas_nimi] 	= $mob['tyovuoroot'];
+			$tyovuoroot[$asiakas_nimi] = $mob['tyovuoroot'];
 			$kohteet 	= $mob['kohteet'];
 			$mobile 	= $mob['mobile'];
 			$toteutuneet 	= $mob['toteutuneet'];
