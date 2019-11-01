@@ -1785,9 +1785,6 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 	}
   });
 
-
-
-
   // <-- modal siirtaminen
 	$("#modal-form").find(".panel-heading").hover(function() {
 	    $(this).css('cursor','pointer');
