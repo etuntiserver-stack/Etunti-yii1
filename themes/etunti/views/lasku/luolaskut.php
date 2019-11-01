@@ -282,7 +282,7 @@ $iban				= $asetukset->iban;
 			if( isset($r['hinta_sis']) and isset($r['alvsis']) and $r['alvsis'] == 'sis'){ $alvsis = 1; $hinta = $r['hinta_sis']; }
 
 			// <-- MOB
-			if( isset($mob_tunnit['kohde_kannasta']) ){
+			if( isset($mob_tunnit['aloitan']) and isset($mob_tunnit['kohde_kannasta']) ){
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
 					$freetext .= date("d.m.Y", strtotime($mob_tunnit['aloitan']));
 				}
