@@ -246,7 +246,6 @@ $iban				= $asetukset->iban;
 			$alv 		= 0;
 			$rivi_kpl 	= 0;
 			$r		= [];
-			$freetext 	= '';
 
 			if( isset($mob_tunnit) ){
 				$tv_id		= $mob_tunnit['tv_id'];
@@ -396,7 +395,6 @@ $iban				= $asetukset->iban;
 		<?php foreach($lisa_tuotteet['tuote'] as $k => $v) : ?>
 		<?php $key++; ?>
 		<?php
-			$freetext 	= '';
 			if( isset($mob_tunnit_tyovuoroot['id']) and isset($tp_lisatuotteet[$mob_tunnit_tyovuoroot['tyopaari']][$mob_tunnit_tyovuoroot['pvm']][$v]) ){ continue; }
 			if( isset($tyovuoroot['kohde']) and isset($tp_lisatuotteet[$tyovuoroot['tyopaari']][$tyovuoroot['pvm']][$v]) ){ continue; }
 			// <-- MOB
