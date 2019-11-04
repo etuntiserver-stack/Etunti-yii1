@@ -3,7 +3,170 @@
 if(isset($_GET['id']))
   $id = $_GET['id'];
 
+if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
+  $l = Lasku::model()->findbypk($_GET['id']);
 
+  // var_dump($l->attributes);
+  // echo '<br><br>';
+  // $lr = LaskunRivit::model()->findAll('lid=' . $_GET['id']);
+  // var_dump($lr);
+  // exit;
+
+  $name = $l->tyyppi == 'yritys' ? $l->yritys : $l->yhteyshenkilo;
+  $channel = ($l->laskutus == 'verkkolasku') ? 'ELECTRONIC_INVOICE' : ($l->laskutus == 'posti') ? 'MAIL' : 'EMAIL';
+
+  $params = [
+    "partnerId" => 0,                           // (int) Technical ID for the business partner. Used to link the invoice to a customer or supplier in the business partner register. If supplied, the company must have this partner ID in the corresponding register.
+    "type" => "SALES_INVOICE",                  // (string) Invoice type. Note that this affects validation requirements.
+    "status" => "UNFINISHED",                   // (string) Invoice status. A new invoice created through the API will have its status set as UNFINISHED.
+    "date" => $l->paivays,                      // (string) Invoice date. This is synonymous to billing date.
+
+    // This object holds information about the counterparty of the invoice. With sales invoices, it is the buyer. With
+    // purchase invoices, it is the seller. With travel and expense invoices, it is the reporter of the expenses
+    "counterParty" => (object) [
+      "contactPersonName" => $l->yhteyshenkilo, // (string) Name of the contact person.
+      "identifier" => $l->t_y_tunnus,           // (string) SALES_INVOICE and PURCHASE_INVOICE only. Business ID or national identification number.
+      "taxCode" => "",                          // (string) SALES_INVOICE only. Tax code of the customer.
+      "customerNumber" => $l->as_nro,           // (string) SALES_INVOICE and PURCHASE_INVOICE only. Customer number.
+      "email" => $l->sahkoposti,                // (string) SALES_INVOICE only. Email address of the buyer. Required if invoicing channel is EMAIL, otherwise not visible on the UI.
+
+      // Intermediary bank name and address.
+      "counterPartyAddress" => (object) [
+        "name" => $name,                        // (string) Name ("first line") in the address.
+        "specifier" => "",                      // (string) Specifier, such as c/o address.
+        "street" => "",                         // (string) Street. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
+        "zip" => "",                            // (string) Zip code. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
+        "city" => "",                           // (string) City.
+        "country" => "",                        // (string) Country.
+        "subdivision" => ""                     // (string) Subdivision of the city.
+      ],
+
+      // Payment bank account. Not required if payment method is cash.
+      "bankAccount" => (object) [
+        // Bank account IBAN. If using a financing agreement, the account number must match the account of the specified
+        // financing agreement. The account number must be valid for the specified country, include country code and
+        // exclude any spaces.
+        "accountNumber" => str_replace(' ', '', $l->saaja_iban),
+
+        // (string) PURCHASE_INVOICE only. Bank account BIC/SWIFT.
+        "bic" => ""
+      ],
+
+      // SALES_INVOICE only. EInvoice address of the buyer. Required if invoicing channel is ELECTRONIC_INVOICE,
+      // otherwise not visible on the UI.
+      "einvoiceAddress" => (object) [
+        "operator" => $l->v_tunnus,         // (string) SALES_INVOICE Only. Operator code. Required if the invoiceChannel is ELECTRONIC_INVOICE and country is FINLAND.
+        "address" => $l->verkkolaskuosoite  // (string) SALES_INVOICE Only. EInvoice Address. Required if the invoiceChannel is ELECTRONIC_INVOICE, format must be valid for the specified country.
+      ]
+    ],
+
+    // Intermediary bank name and address.
+    "billingAddress" => (object) [
+      "name" => $name,                      // (string) Name ("first line") in the address.
+      "specifier" => "",                    // (string) Specifier, such as c/o address.
+      "street" => $l->osoite,               // (string) Street. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
+      "zip" => $l->postinumero,             // (string) Zip code. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
+      "city" => $l->toimipaikka,            // (string) City.
+      "country" => "FINLAND",               // (string) Country.
+      "subdivision" => ""                   // (string) Subdivision of the city.
+    ],
+
+    // Intermediary bank name and address.
+    "deliveryAddress" => (object) [
+      "name" => $name,                      // (string) Name ("first line") in the address.
+      "specifier" => "",                    // (string) Specifier, such as c/o address.
+      "street" => $l->osoite,               // (string) Street. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
+      "zip" => $l->postinumero,             // (string) Zip code. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
+      "city" => $l->toimipaikka,            // (string) City.
+      "country" => "FINLAND",               // (string) Country.
+      "subdivision" => ""                   // (string) Subdivision of the city.
+    ],
+
+    // Invoice payment info. Includes the bank account to which the invoice should be paid, how it should be paid and when it should be paid.
+    "paymentInfo" => (object) [
+      "paymentMethod" => "BANK_TRANSFER",   // (string) Payment method. Methods other than BANK_TRANSFER, CASH, CLEARING, OTHER may require fields not supported by the API. Method DIRECT_DEBIT is not supported for new invoices.
+      "currency" => "EUR",                  // (string) Currency of the payment in ISO 4217 format.
+      "referenceCode" => $l->viitenumero,   // (string) Payment reference code. If specified, must be a valid reference code where the last digit is a check digit. If the field is given an empty string value, a reference code is automatically generated by Procountor. If the field is not provided at all, no reference code will be assigned to the invoice.
+      "dueDate" => $l->erapaiva,            // (string) Payment due date. The payment term can be 0-999 days.
+      "currencyRate" => 1,                  // (number) Currency exchange rate. Calculated as the amount of one unit of domestic currency in foreign currency. Only foreign currency payments should have a value other than 1.
+      "paymentTermPercentage" => 0,         // (number) Discount percentage set in term of payment. Determines the discount if the invoice is paid before due date.
+      "clearingCode" => "",                 // (string) Receiver bank's clearing code for foreign payments.
+
+      // Payment bank account. Not required if payment method is cash.
+      "bankAccount" => (object) [
+        // (string) Bank account IBAN. If using a financing agreement, the account number must match the account of the
+        // specified financing agreement. The account number must be valid for the specified country, include country
+        // code and exclude any spaces.
+        "accountNumber" => str_replace(' ', '', $l->saaja_iban),
+
+        // (bic) PURCHASE_INVOICE only. Bank account BIC/SWIFT.
+        "bic" => ""
+      ],
+
+      // Only SALES_INVOICE and PURCHASE_INVOICE. Cash discount set on the invoice.
+      "cashDiscount" => (object) [
+        "numberOfDays" => 0,          // (int) Days specified in cash discount
+        "discountPercentage" => 0     // (number) Discount percentage specified in cash discount
+      ],
+    ],
+
+    // Invoice extra info.
+    "extraInfo" => (object) [
+      "accountingByRow" => false,     // (bool) Accounting by row means that a separate ledger transaction is created for each invoice row.
+      "unitPricesIncludeVat" => true  // (bool) Indicates if the unit prices on invoice rows include VAT (true) or not (false).
+    ],
+
+    "discountPercent" => 0,           // (int) Invoice discount percentage. Scale: 4.
+    "orderReference" => "",           // (string) Order reference of the invoice. This will be copied to the payment as message if no reference code is specified.
+    "invoiceRows" => [],              // Filled later in a loop.
+    "vatStatus" => 0,                 // (int) Invoice VAT status. Required for all invoices except travel invoices and expense claims.
+    "originalInvoiceNumber" => "",    // (string) Invoice number from the biller in an external system.
+    "deliveryStartDate" => "",        // (string) First day of the delivery period.
+    "deliveryEndDate" => "",          // (string) Last day of the delivery period.
+    "deliveryMethod" => "OTHER",      // (string) Delivery method for the goods. Sales invoices do not support type OTHER.
+    "deliveryInstructions" => "",     // (string) Delivery instructions.
+    "invoiceChannel" => $channel,     // (string) Channel of distribution for the invoice. Values EDIFACT and PAPER_INVOICE are not allowed for new invoices.
+    "penaltyPercent" => 0,            // (number) Penal interest rate. Scale: 2.
+    "language" => "FINNISH",          // (string) Language of the invoice. Required for sales invoices, otherwise ignored.
+    "additionalInformation" => "",    // (string) Invoice notes containing additional information. Visible on the invoice. Use \n as line break.
+    "vatCountry" => "FINLAND",        // (string) Country code describing which country is VAT standards are being used. Usage of foreign VAT settings must be agreed on separately with Procountor. Required if the company uses foreign VATs. Example value: SWEDEN.See Address.country in POST /invoices for a list of allowable values
+    "notes" => "",                    // (string) Invoice notes (seller's/buyer's notes). Not visible on the invoice. Use \n as line break.
+    "factoringContractId" => 0,       // (int) SALES_INVOICE only. ID for external financing agreement. The bankAccount.accountNumber specified must match the one used by the specified financing agreement. Financing agreements cannot be used with cash payments.
+    "factoringText" => "",            // (string) SALES_INVOICE only. Additional notes about external financing agreement.
+    "orderNumber" => "",              // (string) Order number
+    "agreementNumber" => "",          // (string) Agreement number
+    "accountingCode" => "",           // (string) Accounting code
+    "deliverySite" => "",             // (string) Delivery site
+    "tenderReference" => ""           // (string) Tender reference
+
+    // Travel information items. A travel invoice may have one or more travel information items containing departure
+    // date, return date, destinations and travel purpose.
+    /* "travelInformationItems" => [
+      (object)[
+        "departure" => "",
+        "arrival" => "",
+        "places" => "",
+        "purpose" => ""
+      ]
+    ], */
+
+  ];
+
+  // Specify invoice rows.
+  foreach (LaskunRivit::model()->findAll('lid=' . $_GET['id']) as $lr) {
+    $params['invoiceRows'][] = (object) [
+      "product" => $lr->tkoodi,       // (string) Product name.
+      "productCode" => $lr->tkoodi,   // (string) Product code.
+      "quantity" => $lr->kpl,         // (number) Product quantity.
+      "unit" => "NO_UNIT",            // (string) Product unit.
+      "unitPrice" => $lr->hinta,      // (number) Product unit price. This value is affected by the "unit prices include VAT" setting on the invoice.
+      "discountPercent" => $lr->ale,  // (number) Product discount percentage.
+      "vatPercent" => $lr->alv,       // (number) Product VAT percentage. Must be a percentage currently in use for the company.
+      "vatStatus" => 0,               // (int) Product VAT status.
+      "comment" => $lr->tkoodi        // (string) Invoice row comment. Visible on the invoice. Use \ as line break.
+    ];
+  }
+}
 
 if(isset($_GET['kopio'])){
 

@@ -774,7 +774,10 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php endif; */?>
 
 
-
+		<?php
+		if(isset($model->id) && $model->tilanne == '1' && $asetukset->palvelu_tyyppi == 5)
+			echo CHtml::link('Lähetä Procountoriin', ['finvoice', 'id' => $model->id, 'procountor' => true], ['class' => 'btn btn-success btn-group myBgColors']);
+		?>
 
 		<?php if(isset($model->id) and $model->tilanne == '1' and $asetukset->palvelu_tyyppi == 1) : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&finvoice=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä finvoice (POSTITA.FI)'); ?></a>
