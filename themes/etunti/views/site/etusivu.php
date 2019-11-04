@@ -12,39 +12,6 @@
 
 	$asetukset = Asetukset::model()->findByPk(1);
 
-	// <-- Ilmoitus kaikkille
-	$criteria = new CDbCriteria();
-	$criteria->condition = " 
-		NOW() BETWEEN aloitus AND lopetus
-		AND vastaanottajat LIKE '%".Yii::app()->user->domain."%'
-	";
-	$ilmoitukset_content = '';
-	$ilmoitukset = IlmoitusKaikkille::model()->findAll($criteria);
-	if(count($ilmoitukset) > 0){
-		$ilmoitukset_content = '';
-		foreach($ilmoitukset as $item){
-			$ilmoitukset_content .= '<div class="panel">
-	                <div class="panel-heading bg-danger pulsar">
-        	          <span class="panel-title">'.$item->otsikko.'</span>
-        	        </div>
-        	        <div class="panel-body">';
-			$files = Asetukset::model()->getFiles(
-				'digisten', 
-				'digisten_ilmoitukset', 
-				$item->id,
-				true,
-				false
-			);
-			$ilmoitukset_content .= '<div>'.str_replace("\n", "<br>", $item->viesti).'</div>';
-			if( !empty($files) ){
-				$ilmoitukset_content .= '<br><label>Tiedostot:</label><br>'.$files;
-			}
-			$ilmoitukset_content .= '</div></div>';
-		}
-
-	}
-	//     Ilmoitus kaikkille -->
-
 	// <-- Eilen Autohyvaksyminen
 	$eilen_hyvaksynta = '';
 	if( $asetukset->app_hyvaksynnan_peruste == 2 and time() < strtotime($asetukset->auto_hyvaksynta_klo) ){
@@ -178,7 +145,6 @@ $months=array(
         </div>
 
 	<?=$eilen_hyvaksynta?>
-	<?=$ilmoitukset_content?>
 
         <!-- Admin-panels -->
         <div class="admin-panels fade-onload">
@@ -608,9 +574,6 @@ $( document ).ready(function() {
 
   </div>
   <!-- End: Main -->
-
-
-
 
   <!-- HighCharts Plugin -->
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/highcharts/highcharts.js"></script>

@@ -549,6 +549,68 @@ $('.multTyoryhma').multiselect({
           </ul>
         </li>
 */ ?>
+	<!-- Ilmoitus kaikkille -->
+	<?php
+	$criteria = new CDbCriteria();
+	$criteria->condition = " 
+		NOW() BETWEEN aloitus AND lopetus
+		AND vastaanottajat LIKE '%".Yii::app()->user->domain."%'
+	";
+	$ilmoitukset = IlmoitusKaikkille::model()->findAll($criteria);
+	$ilmoitukset_content = '';
+	if(count($ilmoitukset) > 0){
+		$ilmoitukset_content = '';
+		foreach($ilmoitukset as $item){
+			$ilmoitukset_content .= '<div class="panel">
+	                <div class="panel-heading bg-danger">
+        	          <span class="panel-title">'.$item->otsikko.'</span>
+        	        </div>
+        	        <div class="panel-body">';
+			$files = Asetukset::model()->getFiles(
+				'digisten', 
+				'digisten_ilmoitukset', 
+				$item->id,
+				true,
+				false
+			);
+			$ilmoitukset_content .= '<div>'.str_replace("\n", "<br>", $item->viesti).'</div>';
+			if( !empty($files) ){
+				$ilmoitukset_content .= '<br><label>Tiedostot:</label><br>'.$files;
+			}
+			$ilmoitukset_content .= '</div></div>';
+		}
+
+	}
+	?>
+	<?php if( isset($ilmoitukset) and count($ilmoitukset) > 0 ): ?>
+        <li class="p10" data-toggle="tooltip">
+              <div class="form-group">
+	 	<div class="btn btn-danger pulsar fa fa-envelope" data-toggle="collapse" data-target="#myModalIlmoitukset" title="<?php echo Yii::t('main', 'Uusi ilmoitus'); ?>"></div>
+	      </div>
+	</li>
+
+	<div id="myModalIlmoitukset" class="collapse" style="position: absolute; left: 25%; top: 40px;">
+	  <div class="modal-dialog modal-lg">
+	    <!-- Modal content-->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+	        <h4 class="modal-title">Ilmoitukset</h4>
+	      </div>
+	      <div class="modal-body">
+	        <p><?=$ilmoitukset_content?></p>
+	      </div>
+	      <div class="modal-footer">
+	        <!--<button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>-->
+	      </div>
+	    </div>
+
+	  </div>
+	</div>
+	<?php endif; ?>
+	<!-- Ilmoitus kaikkille -->
+
+
 
         <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Luo uusi'); ?>">
           <a href="#" class="dropdown-toggle " data-toggle="dropdown"> 
