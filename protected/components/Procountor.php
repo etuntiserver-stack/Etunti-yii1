@@ -171,11 +171,11 @@ class Procountor extends CComponent
 	 * @param string $addr URL Address
 	 * @param mixed $header Additional header item, or array. Auth bearer is automatic.
 	 * @param string $custom_request Customrequest field.
+	 * @param string $method Method, e.g. CURLOPT_GET/CURLOPT_POST. Null to skip.
 	 * @param string $post_fields Possible post fields.
-	 * @param bool $return_transfer ReturnTransfer flag
-	 * @param bool $return_xml If $return_transfer, whether to parse XML from returned data.
+	 * @param bool $return_transfer ReturnTransfer flag. If true, output of curl_exec is returned.
 	 */
-	private function request($addr, $header = '', $custom_request = '', $post_fields = '', $return_transfer = true)
+	private function request($addr, $header = '', $custom_request = '', $method = CURLOPT_POST, $post_fields = '', $return_transfer = true)
 	{
 		if (empty($token = $this->getAccessToken()))
 			return false;
@@ -198,11 +198,13 @@ class Procountor extends CComponent
 		if (!empty($custom_request))
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $custom_request);
 
+		// Set method
+		if (!empty($method))
+			curl_setopt($ch, $method, 1);
+
 		// Set postfields
-		if (!empty($post_fields)) {
-			curl_setopt($ch, CURLOPT_POST, 1);
+		if (!empty($post_fields))
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
-		}
 
 		// Execute
 		if ($return_transfer) {
