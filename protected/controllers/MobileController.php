@@ -1941,6 +1941,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		// <-- Pyhapaivat
 		$pyhapaivat = [];
+		$pyhapaivat_str = '';
 		if($time==4){
 			$asetukset = AsetuksetForAll::model()->findbypk(1);
 			$p_explode = explode("\n", $asetukset->viralliset_pyhapaivat);
@@ -1955,12 +1956,14 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				}
                 		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
 			}
-			$pyhapaivat = "(DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='".implode("' OR DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='", $pyhapaivat)."')";
+			if( count($pyhapaivat) > 0 )
+				$pyhapaivat_str = "(DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='".implode("' OR DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='", $pyhapaivat)."')";
 		}
 		//     Pyhapaivat -->
 
 		// <-- Erikoislauantai
 		$erikoislauantai = [];
+		$erikoislauantai_str = '';
 		if($time==5){
 			$asetukset = AsetuksetForAll::model()->findbypk(1);
 			$p_explode = explode("\n", $asetukset->erikoislauantai);
@@ -1975,7 +1978,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				}
                 		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
 			}
-			$erikoislauantai = "(DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='".implode("' OR DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='", $erikoislauantai)."')";
+			if( count($erikoislauantai) > 0 )
+				$erikoislauantai_str = "(DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='".implode("' OR DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='", $erikoislauantai)."')";
 		}
 		//     Erikoislauantai -->
 
@@ -1989,7 +1993,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		   $criteria->group = "tid";
 
 		// Helper function to avoid duplicate code (doesn't handle 'hyvaksytty' as it differs)
-		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $palkanlaskentaan, $time, $by_aloitan, $pyhapaivat, $erikoislauantai) {
+		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $palkanlaskentaan, $time, $by_aloitan, $pyhapaivat_str, $erikoislauantai_str) {
 			if($by_aloitan)
 			   $criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))";
 			else
@@ -2110,24 +2114,28 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 						END) AS l_tunnit";
 					break;
 				case 4:
+				if( !empty($pyhapaivat_str) ){
 					$criteria->select = "tid, aloitan, SUM(CASE
 						WHEN
-							$pyhapaivat
+							$pyhapaivat_str
 						THEN 
 							TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
 						ELSE
 							0
 						END) AS l_tunnit";
+				}
 					break;
 				case 5:
+				if( !empty($erikoislauantai_str) ){
 					$criteria->select = "tid, aloitan, SUM(CASE
 						WHEN
-							$erikoislauantai
+							$erikoislauantai_str
 						THEN 
 							TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
 						ELSE
 							0
 						END) AS l_tunnit";
+				}
 					break;
 			}
 

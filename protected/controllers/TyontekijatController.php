@@ -43,11 +43,12 @@ class TyontekijatController extends Controller
 
 	public function isEtuntiAdmin() {
 
-		if(isset(Yii::app()->user->adminID))
-		{
-		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	        if(isset($m->id) and $m->id == Yii::app()->user->adminID)
-	            return true;
+		if(isset(Yii::app()->user->adminID)){
+			$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	        	if(isset($m->id) and $m->id == Yii::app()->user->adminID)
+	            		return true;
+			else
+	            		return false;
 		} else {
 	            return false;
 		}
@@ -1018,6 +1019,10 @@ $xml = '
 
 	public function TyoryhmatTyontekijatHelper($tr_array)
 	{
+		if(!isset(Yii::app()->user->adminID)){
+			$this->redirect(array('/site/logout'));
+		}
+
 		$tt_arr = array();
 		$asetukset = Asetukset::model()->findbypk(1);
 		if( isset($asetukset->tyoryhmat) and $asetukset->tyoryhmat == 0){ return $tt_arr; }

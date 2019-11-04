@@ -105,9 +105,9 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 	{
 
 		$criteria = new CDbCriteria();
-        	$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'))";
+        	$criteria->group = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y'))";
 	        $criteria->condition = "
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) 
 			BETWEEN '".$from."' AND '".$to."' 
 			AND tid='".$tdata->id."'
 		";

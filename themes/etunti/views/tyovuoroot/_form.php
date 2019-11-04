@@ -1746,6 +1746,7 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
   });
 
   $('#pto').blur(function(){
+	checkToistuvaVuosi( $(this).val() );
   	$(this).removeClass('bg-danger').addClass('bg-success');
   });
 
@@ -1784,10 +1785,7 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 	}
   });
 
-
-
-
-// <-- modal siirtaminen
+  // <-- modal siirtaminen
 	$("#modal-form").find(".panel-heading").hover(function() {
 	    $(this).css('cursor','pointer');
 	}, function() {
@@ -1797,8 +1795,18 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
             handle: ".panel-heading",
 	    revert:"invalid",
         });
-// modal siirtaminen -->
+  // modal siirtaminen -->
 
+  function checkToistuvaVuosi(value){
+	var cur_year = new Date().getFullYear();
+	var pto_check_year = value.split(".");
+	var pto_year = parseInt(pto_check_year[2]);
+	if( (pto_year-cur_year) > 8 ){
+		alert('Liian pitkä aikaväli. Maksimi on 8 vuotta!');
+		$('#pto').val(pto_check_year[0] + '.' + pto_check_year[1] + '.' + cur_year);
+		return false;
+	}
+  }
 
 });
 </script>
