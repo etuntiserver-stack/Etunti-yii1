@@ -539,8 +539,8 @@ $('.ryhmat').multiselect({
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'palvelu_tyyppi'); ?>
-		<?php 
-        	$tal = array(1=>'POSTITA',2=>'TRUST',3=>'MANUAL',4=>'NETVISOR');
+		<?php
+			$tal = array(1=>'POSTITA',2=>'TRUST',3=>'MANUAL',4=>'NETVISOR',5=>'PROCOUNTOR');
 		echo $form->dropDownList($model,'palvelu_tyyppi', $tal, 
 		array('empty'=>'Valitse palvelu','class'=>'form-control','id'=>'osoite')) ?>
 		<?php echo $form->error($model,'palvelu_tyyppi'); ?>
