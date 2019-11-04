@@ -3,6 +3,7 @@
 class Procountor extends CComponent
 {
 	private $settings;
+	private $api_base_url  = 'https://api-test.procountor.com/api';
 	private $client_id     = 'etuntiTestClient';
 	private $client_secret = 'testsecret_W2ir6fiE4fdtO3Htevx9';
 	private $redirect_uri  = 'redirect-uri-placeholder';
@@ -46,7 +47,7 @@ class Procountor extends CComponent
 
 		// Request authorization code.
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, "https://api-test.procountor.com/api/oauth/authz?response_type=code&client_id={$this->client_id}");
+		curl_setopt($ch, CURLOPT_URL, "{$this->api_base_url}/oauth/authz?response_type=code&client_id={$this->client_id}");
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, "response_type=code&username={$this->user}&password={$this->pw}&company={$this->company}&redirect_uri={$this->redirect_uri}");
 		curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/x-www-form-urlencoded"]);
@@ -84,7 +85,7 @@ class Procountor extends CComponent
 
 		// Request access token and refresh token.
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, "https://api-test.procountor.com/api/oauth/token");
+		curl_setopt($ch, CURLOPT_URL, "{$this->api_base_url}/oauth/token");
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, "client_id={$this->client_id}&client_secret={$this->client_secret}&grant_type=authorization_code&redirect_uri={$this->redirect_uri}&code=$code");
 		curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/x-www-form-urlencoded"]);
@@ -145,7 +146,7 @@ class Procountor extends CComponent
 		// 	Content-Type:application/x-www-form-urlencoded
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, "https://api-test.procountor.com/api/oauth/token");
+		curl_setopt($ch, CURLOPT_URL, "{$this->api_base_url}/oauth/token");
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=refresh_token&refresh_token=$refresh_token&client_id={$this->client_id}&client_secret={$this->client_secret}");
 		curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/x-www-form-urlencoded"]);
@@ -169,13 +170,11 @@ class Procountor extends CComponent
 	/**
 	 * Create cURL request.
 	 * @param string $addr URL Address
-	 * @param mixed $header Additional header item, or array. Auth bearer is automatic.
-	 * @param string $custom_request Customrequest field.
 	 * @param string $method Method, e.g. CURLOPT_GET/CURLOPT_POST. Null to skip.
 	 * @param string $post_fields Possible post fields.
 	 * @param bool $return_transfer ReturnTransfer flag. If true, output of curl_exec is returned.
 	 */
-	private function request($addr, $header = '', $custom_request = '', $method = CURLOPT_POST, $post_fields = '', $return_transfer = true)
+	private function request($addr, $method = CURLOPT_POST, $post_fields = '', $return_transfer = true)
 	{
 		if (empty($token = $this->getAccessToken()))
 			return false;
@@ -183,20 +182,19 @@ class Procountor extends CComponent
 		$ch = curl_init($addr);
 
 		// Set HTTPHeader
-		$header_final = ["Authorization: bearer $token"];
-		if (!empty($header)) {
+		$header_final = [
+			"Content-Type: application/json",
+			"Authorization: bearer $token"
+		];
+		/* if (!empty($header)) {
 			if (is_array($header)) {
 				foreach ($header as $item)
 					$header_final[] = $item;
 			} else {
 				$header_final[] = $header;
 			}
-		}
+		} */
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $header_final);
-
-		// Set customrequest
-		if (!empty($custom_request))
-			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $custom_request);
 
 		// Set method
 		if (!empty($method))
