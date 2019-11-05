@@ -28,7 +28,7 @@ class ToistuvatTyovuorotController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view'),
+				'actions'=>array('admin','delete','create','update','index','view', 'korjaus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -92,6 +92,11 @@ class ToistuvatTyovuorotController extends Controller
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
+	}
+
+	public function actionKorjaus()
+	{
+		$this->render('korjaus');
 	}
 
 	/**
