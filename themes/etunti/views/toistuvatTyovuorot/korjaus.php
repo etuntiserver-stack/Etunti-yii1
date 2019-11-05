@@ -2,9 +2,9 @@
 $criteria = new CDBCriteria;
 $criteria->condition = " 				
 	DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '2020-01-01'
-	AND viikkoja!='1'
 	AND korjattu_poista_tama=0
 ";
+//	AND viikkoja!='1'
 //	AND id=3888
 $data = ToistuvatTyovuorot::model()->findAll($criteria);
 echo count($data).'<br><br>';
@@ -18,7 +18,7 @@ foreach($data as $item){
 	$tv = Tyovuoroot::model()->find($criteria);
 	Tyovuoroot::model()->deleteAll($criteria);
 	ToistuvatTyovuorot::model()->updateByPk($item->id, array('korjattu_poista_tama' => 1));
-	echo $item->id.' - '.$item->pfrom.' '.$item->pto.' '.count($tv).'<br>';
+	//echo $item->id.' - '.$item->pfrom.' '.$item->pto.' '.count($tv).'<br>';
 	
 	if( isset($tv->id) ){
 		$startDate	= date("Y-m-d", strtotime($tv->pvm));
@@ -30,7 +30,7 @@ foreach($data as $item){
 		    new DateTime($end_date)
 		);
 		foreach ($weeks as $wk) {
-			echo $wk->format('d.m.Y').'<br>';
+			//echo $wk->format('d.m.Y').'<br>';
 			$new_tv = new Tyovuoroot();
 			$new_tv->attributes = $tv->attributes;
 			$new_tv->pvm = $wk->format('d.m.Y');
