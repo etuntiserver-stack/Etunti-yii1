@@ -121,9 +121,12 @@ class LaskuController extends Controller
 		exit;
 	}
 
-	public function actionLuolaskut($from, $to, $yrityksen_nimi=null, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null, $erapaiva=null, $tunnit=null, $decimal=null)
+	public function actionLuolaskut($from, $to, $yrityksen_nimi=null, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null, $erapaiva=null, $tunnit=null, $decimal=null, $ajax=null)
 	{
 		$asetukset = Asetukset::model()->findByPk(1);
+		if( $asetukset->netvisor_kaytto != 1 or $asetukset->palvelu_tyyppi != 4 ){
+			die('Netvisor ei ole aktiivinen asetuksessa.');
+		}
 		$paivays = date("Y-m-d", strtotime($paivays));
        		$criteria = new CDbCriteria();
 	        //$criteria->order = " id DESC ";
@@ -230,6 +233,7 @@ exit;
 			'decimal' => $decimal,
 			'tunnit' => $tunnit,
 			'yrityksen_nimi' => $yrityksen_nimi,
+			'ajax' => $ajax
 		));
 	}
 
