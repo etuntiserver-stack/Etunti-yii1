@@ -9,7 +9,7 @@ $criteria->condition = "
 ";
 //	AND viikkoja!='1'
 //	AND id=3888
-// 193730
+// $2y$10$SxO2lt2rcWJdUdtTYHHqp.7hmjiwpYXtjmBaMgGX7KYTuZZzVyr16
 $data = ToistuvatTyovuorot::model()->findAll($criteria);
 echo count($data).'<br><br>';
 foreach($data as $item){
@@ -29,7 +29,7 @@ foreach($data as $item){
 	}
 
 	if( isset($tv[0]->id) ){
-		echo $item->pfrom.' - '.$item->pto.',  Joka: '.$item->viikkoja.' vko. '.$item->osoite.'<br>';
+		echo '<h3>'.$item->pfrom.' - '.$item->pto.',  Joka: '.$item->viikkoja.' vko. '.$item->osoite.'</h3><br>';
 		if(!isset($_GET['go'])){
 		echo '<table class="table table-bordered" style="width:50%" border="1">
 		<tr><th>Nykyinen ketju (Poistetaan kaikki)</th><th>Uusi ketju muutoksen jalkeen</th></tr>
