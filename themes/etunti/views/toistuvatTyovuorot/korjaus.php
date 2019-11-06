@@ -29,14 +29,14 @@ foreach($data as $item){
 	}
 
 	if( isset($tv[0]->id) ){
-		echo '<h3>'.$item->pfrom.' - '.$item->pto.',  Joka: '.$item->viikkoja.' vko. '.$item->osoite.'</h3><br>';
+		echo '<h3>'.$item->pfrom.' - '.$item->pto.',  Joka: '.$item->viikkoja.' vko.,  Kohde/osoite ID: '.$item->kohde.'</h3><br>';
 		if(!isset($_GET['go'])){
 		echo '<table class="table table-bordered" style="width:50%" border="1">
 		<tr><th>Nykyinen ketju (Poistetaan kaikki)</th><th>Uusi ketju muutoksen jalkeen</th></tr>
 		<tr><td style="vertical-align:top">
 		';
 		foreach($tv as $tv_item){
-			echo $tv_item->tid.'  <b>'.$tv_item->pvm.'</b><br>';
+			echo 'Siivoja ID:'.$tv_item->tid.',  Vanha PVM:<b>'.$tv_item->pvm.'</b><br>';
 		}
 		}
 
