@@ -121,9 +121,12 @@ class LaskuController extends Controller
 		exit;
 	}
 
-	public function actionLuolaskut($from, $to, $yrityksen_nimi=null, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null, $erapaiva=null, $tunnit=null, $decimal=null)
+	public function actionLuolaskut($from, $to, $yrityksen_nimi=null, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null, $erapaiva=null, $tunnit=null, $decimal=null, $ajax=null)
 	{
 		$asetukset = Asetukset::model()->findByPk(1);
+		if( $asetukset->netvisor_kaytto != 1 or $asetukset->palvelu_tyyppi != 4 ){
+			die('Netvisor ei ole aktiivinen asetuksessa.');
+		}
 		$paivays = date("Y-m-d", strtotime($paivays));
        		$criteria = new CDbCriteria();
 	        //$criteria->order = " id DESC ";
@@ -157,20 +160,6 @@ class LaskuController extends Controller
 		if(isset($_GET['filter_asiakasryhma']) and !empty($_GET['filter_asiakasryhma'])){
 			$criteria->addCondition(" ryhma LIKE '%\"".$_GET['filter_asiakasryhma']."\"%' "); 
 		}
-
-		//$lista = Asiakkaat::model()->findAll($criteria);
-
-/*
-		// <-- Order tyontekijat
-		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
-			$tt_order_1 = "tekijan_nimi";
-			$tt_order_2 = "sukunimi";
-		} else {
-			$tt_order_1 = "sukunimi";
-			$tt_order_2 = "tekijan_nimi";
-		}
-		// Order tyontekijat -->
-*/
 
 		$al = Autolahetteet::model()->findAll(" from_date='".$from."' AND to_date='".$to."' AND laskutettu=0 AND tab_array!=''");
 		$autolahetteet_asids = [];
@@ -244,6 +233,7 @@ exit;
 			'decimal' => $decimal,
 			'tunnit' => $tunnit,
 			'yrityksen_nimi' => $yrityksen_nimi,
+			'ajax' => $ajax
 		));
 	}
 
@@ -2457,8 +2447,7 @@ $xml .= '
 		$site = Yii::app()->createController('Site');
 		$n = $site[0]->netvisorYhteys();
 
-	  if(isset($n[0]))
-	  {
+	  	if(isset($n[0])){
 		$url		= $n[0].'/salesinvoicelist.nv?BeginInvoiceDate='.$from.'&EndInvoiceDate='.$to;
 		$host 		= $n[1];
 		$sender 	= $n[2];
@@ -2511,8 +2500,13 @@ $xml .= '
 		
 		$response = file_get_contents($url, false, $context);
 		$return = new SimpleXMLElement($response);
-
-	   }
+		/*
+			echo '<pre>';
+			print_r($return); // $netvisorList->SalesInvoiceList
+			echo '</pre>';
+			exit;
+		*/
+	   	}
 
 		return $return;
 	}
@@ -3391,18 +3385,10 @@ $xml = '
 		}
 
 		$netvisorList = $this->netvisorListByDay(date("Y-m-d", strtotime("first day of last month")), date("Y-m-d"));
-		if($netvisorList->ResponseStatus->Status == 'OK'){
-		  foreach($netvisorList->SalesInvoiceList->SalesInvoice as $list){
-			$last_laskunumero = $list->InvoiceNumber;
-		  }
-
+		if( isset($netvisorList->ResponseStatus->Status) and $netvisorList->ResponseStatus->Status == 'OK' ){
+			foreach($netvisorList->SalesInvoiceList->SalesInvoice as $list)
+				$last_laskunumero = $list->InvoiceNumber;
 		}
-		/*
-			echo '<pre>';
-			print_r($netvisorList->SalesInvoiceList);
-			echo '</pre>';
-			exit;
-		*/
 		return $last_laskunumero;
 	}
 

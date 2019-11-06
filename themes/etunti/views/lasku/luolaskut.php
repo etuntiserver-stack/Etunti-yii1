@@ -75,7 +75,7 @@ $iban				= $asetukset->iban;
 	$asiakas = $item['asiakas'];
 	unset($item['asiakas']);
 	?>
-	<tr>
+	<tr id="<?=$asiakas['id']?>">
 	<td width="17%">
 		<h3><?php echo CHtml::link($asiakas_nimi, 
 				array('/asiakkaat/update', 'id'=>$asiakas['id']), 
@@ -556,12 +556,15 @@ $iban				= $asetukset->iban;
 				$criteria=new CDbCriteria;
 				$criteria->condition = " lasku_id='".$lasku->id."' AND peruutettu=0 ";
 				Tyovuoroot::model()->updateAll(array('laskutettu' => '1'), $criteria);
+				if( $laheta and $ajax == true ){
+					echo '<input type="text" class="lahetetty" value="'.$asiakas['id'].'" asiakas_nimi="'.$asiakas_nimi.'">';
+				}
 			}
 		}
 		// Lahetys Netvisor -->
 	} ?>
 
-	<tr>
+	<tr class="painikkeet">
 	<!-- Painikkeet -->
 	<?php if($is_ok_lasku): ?>
 		<th>
@@ -577,10 +580,11 @@ $iban				= $asetukset->iban;
 					'erapaiva' => $erapaiva, 
 					'decimal' => $decimal,
 					'viestikenta' => (isset($_GET['viestikenta']))?$_GET['viestikenta']:'',
-					'laheta' => true
+					'laheta' => true,
+					'ajax' => true
 				), 
 				array(
-					'class' => 'btn btn-block btn-success myBgColors',
+					'class' => 'btn btn-block btn-success myBgColors ajax_lahetys',
 					'data-toggle'=>'tooltip', 
 					'data-placement'=>'top', 
 					'title'=>Yii::t('main', 'Lähetä')
@@ -616,16 +620,38 @@ $iban				= $asetukset->iban;
 	</table>
 	<?php endif; // count($lista) > 0 ?>
 
-	<?php if( $laheta ){
+	<?php 
+	if( $laheta and $ajax == null ){
 		$this->redirect(array('/lasku/auto'));
-	} ?>
-
+	}
+	?>
 
 </div>
 </p>
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  $(".ajax_lahetys").click(function(e){
+	e.preventDefault();
+	if(!confirm('Oletko varma')){
+		return false;
+	} else {
+    	  $.ajax({
+           url: $(this).attr('href'),
+           success: function(data){
+        	var parsedResponse = $.parseHTML(data);
+	        var result = parseInt($(parsedResponse).find(".lahetetty").val());
+		var asiakas_nimi = $(parsedResponse).find(".lahetetty").attr('asiakas_nimi');
+		if( result > 0 ){
+			$('#' + result).next('.painikkeet').remove();
+			$('#' + result).replaceWith('<tr><td class="bg-success"><h4>' + asiakas_nimi + ' - Lähetetty</h4></td><td></td></tr>');
+	  		console.log( result );
+		}
+           }
+    	  });
+	}
+  });
 
   $(".lahetakaikki").click(function(e){
 	e.preventDefault();

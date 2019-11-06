@@ -2308,7 +2308,7 @@ class TyovuorootController extends Controller
 				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 				$arvo['osoite'] = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$arvo['id'].'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
 			} else {
-				$arvo['osoite'] = '<span class="tv_edit" id="'.$arvo['id'].'" style="'.$bgcol.'">'.$status[$arvo['status']].''.$arvo['alku'].'-'.$arvo['loppu'].'<br> '.$osoite.'</span>';
+				$arvo['osoite'] = '<span class="tv_edit" id="'.$arvo['id'].'" style="'.$bgcol.'">'.((isset($status[$arvo['status']]))?$status[$arvo['status']]:'').''.$arvo['alku'].'-'.$arvo['loppu'].'<br> '.$osoite.'</span>';
 			}
 			$tv_arr[$arvo->tid][$arvo->pvm][] = $arvo['osoite'];
 		}
@@ -5695,42 +5695,26 @@ class TyovuorootController extends Controller
 		}
 		//     Tsekataan poistettut PVM -->
 
-		$startDate	= $attr->pfrom;
-		$end_date	= $attr->pto;
-		$date		= $startDate;
+		$startDate	= date("Y-m-d", strtotime($attr->pfrom));
+		$end_date	= date("Y-m-d", strtotime($attr->pto));
 
-		$var		= 1;
-
-		if($attr->viikkoja == 1)
-			$var	= 0;
+		$weeks = new DatePeriod(
+		    new DateTime($startDate), 
+		    new DateInterval('P'.$attr->viikkoja.'W'), 
+		    new DateTime($end_date)
+		);
+		$sopivaViikot = [];
+		foreach ($weeks as $wk) {
+			$sopivaViikot[$wk->format('YW')] = $wk->format('YW');
+		}
 
 		$w		= $viikko_paivat;
-		$v 		= $attr->viikkoja;
-		$weeksArr = array();
- 		while (strtotime($date) <= strtotime($end_date)) {
-
-			$viikonNumero = (date('W',strtotime($date)));
-		  	$weeksArr[$viikonNumero] = $viikonNumero;
-	                $date = date ("d.m.Y", strtotime("+1 day", strtotime($date)));
-		}
-
-		$i = 1;
-		$sopivaViikot = array();
-		foreach($weeksArr as $k=>$result)
-		{
-		    if($i % $attr->viikkoja === $var) {
-		        $sopivaViikot[$result] = $result;
-		    }
-		    $i++;
-		}
-
-		$date		= $startDate;
-		$end_date	= $end_date;
 		$return 	= array();
 		$tyopaariUpdater = array();
+		$date		= date("d.m.Y", strtotime($startDate));
  		while (strtotime($date) <= strtotime($end_date)) {
 
-			$viikonNumero = (date('W',strtotime($date)));
+			$viikonNumero = (date('YW',strtotime($date)));
 
 	                if( 
 				in_array(date('N',strtotime($date)),$w) 

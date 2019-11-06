@@ -206,7 +206,7 @@
   <th><?=Yii::t('main', 'Luotu')?></th>
   <th><?=Yii::t('main', 'Asiakas')?></th>
   <th><?=Yii::t('main', 'Aikaväli')?></th>
-  <th><?=Yii::t('main', 'Tilanne')?></th>
+  <?php /* <th><?=Yii::t('main', 'Tilanne')?></th> */ ?>
   <th></th>
   </tr>
   </thead>

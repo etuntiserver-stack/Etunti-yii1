@@ -27,23 +27,61 @@ class ToistuvatTyovuorotController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+				'actions'=>array('admin','delete','create','update','index','view', 'korjaus'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
+			),
+			array('deny', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain','laheta','kk','pvmtid','laheta_k'),
+                		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
 	}
+
+	public function isEtuntiAdmin() {
+
+		if(!isset(Yii::app()->user->adminID))
+		{
+			//die('login error');
+		  	echo '<script type="text/javascript">
+				window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";
+			</script>';
+			exit;
+		}
+
+		$tas = '';
+		if(isset(Yii::app()->user->adminPaketti))
+		$tas = explode(",",Yii::app()->user->adminPaketti);
+
+		if(isset(Yii::app()->user->adminID) and in_array('2',$tas))
+		{
+		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	       	if($m->id == Yii::app()->user->adminID)
+	       	  return true;
+		else
+	       	   return false;		
+
+		} else {
+	            return false;
+		}
+	}
+
+        public function init()
+        {
+
+
+                if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = 'etunti';
+                } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = Yii::app()->user->user_theme;
+                } else {
+                        Yii::app()->theme = 'classic';
+                }
+                parent::init();
+        }
 
 	/**
 	 * Displays a particular model.
@@ -54,6 +92,11 @@ class ToistuvatTyovuorotController extends Controller
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
+	}
+
+	public function actionKorjaus()
+	{
+		$this->renderPartial('korjaus');
 	}
 
 	/**
