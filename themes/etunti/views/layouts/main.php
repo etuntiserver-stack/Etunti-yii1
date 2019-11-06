@@ -136,8 +136,10 @@ $(document).ready(function(){
 // Aktiivinen -->
 
 
-if(isset(Yii::app()->user->nimi) and !empty(Yii::app()->user->nimi))
-{
+if(
+	isset(Yii::app()->user->nimi) and !empty(Yii::app()->user->nimi)
+	and isset(Yii::app()->user->username) and Yii::app()->user->username != 'etunti'
+  ){
   /* online */
   $criteria = new CDbCriteria();
   $criteria->condition = " time < '".(time()-900)."' ";
