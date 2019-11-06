@@ -36,7 +36,7 @@ foreach($data as $item){
 		<tr><td style="vertical-align:top">
 		';
 		foreach($tv as $tv_item){
-			echo $site[0]->etuSukunimi($tv_item->tid).'  <b>'.$tv_item->pvm.'</b><br>';
+			echo $tv_item->tid.'  <b>'.$tv_item->pvm.'</b><br>';
 		}
 		}
 
@@ -63,7 +63,7 @@ foreach($data as $item){
 			$new_tv->tid = $tid;
 			$new_tv->pvm = $wk->format('d.m.Y');
 			if(!isset($_GET['go']))
-			echo $site[0]->etuSukunimi($new_tv->tid).' <b>'.$wk->format('d.m.Y').' '.$new_tv->osoite.'</b><br>';
+			echo $new_tv->tid.' <b>'.$wk->format('d.m.Y').' '.$new_tv->osoite.'</b><br>';
 			// <-- GO
 			if(isset($_GET['go'])){
 				$new_tv->save();
