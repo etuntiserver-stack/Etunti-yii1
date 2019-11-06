@@ -573,7 +573,7 @@ $('.multTyoryhma').multiselect({
 				true,
 				false
 			);
-			$ilmoitukset_content .= '<div>'.str_replace("\n", "<br>", $item->viesti).'</div>';
+			$ilmoitukset_content .= '<div style="color:#333">'.str_replace("\n", "<br>", $item->viesti).'</div>';
 			if( !empty($files) ){
 				$ilmoitukset_content .= '<br><label>Tiedostot:</label><br>'.$files;
 			}
