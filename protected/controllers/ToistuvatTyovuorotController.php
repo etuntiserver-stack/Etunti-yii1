@@ -96,7 +96,7 @@ class ToistuvatTyovuorotController extends Controller
 
 	public function actionKorjaus()
 	{
-		$this->render('korjaus');
+		$this->renderPartial('korjaus');
 	}
 
 	/**
