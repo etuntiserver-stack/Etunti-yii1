@@ -29,9 +29,8 @@ foreach($data as $item){
 	}
 
 	if( isset($tv[0]->id) ){
-
+		echo $item->pfrom.' - '.$item->pto.',  Joka: '.$item->viikkoja.' vko. '.$item->osoite.'<br>';
 		if(!isset($_GET['go'])){
-		echo '<h4>#'.$item->id.', '.$item->pfrom.' - '.$item->pto.',  Joka: '.$item->viikkoja.' vko.</h4><br>';
 		echo '<table class="table table-bordered" style="width:50%">
 		<tr><th>Nykyinen ketju (Poistetaan kaikki)</th><th>Uusi ketju muutoksen jalkeen</th></tr>
 		<tr><td style="vertical-align:top">
@@ -73,7 +72,6 @@ foreach($data as $item){
 		}
 		if(!isset($_GET['go'])){
 		echo '</td></tr></table>';
-		echo '<hr>';
 		}
 	}
 }
