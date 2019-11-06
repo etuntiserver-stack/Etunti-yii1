@@ -57,7 +57,7 @@ foreach($data as $item){
 			$new_tv[0]->pvm = $wk->format('d.m.Y');
 			// <-- GO
 			if(isset($_GET['go'])){
-				$new_tv->save();
+				$new_tv[0]->save();
 			}
 		}
 		if(!isset($_GET['go'])){
