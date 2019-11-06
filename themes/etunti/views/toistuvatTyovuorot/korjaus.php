@@ -33,7 +33,7 @@ foreach($data as $item){
 		if(!isset($_GET['go'])){
 		echo '<h4>'.$item->pfrom.' - '.$item->pto.',  Joka: '.$item->viikkoja.' vko.</h4><br>';
 		echo '<table class="table table-bordered" style="width:40%">
-		<tr><th>Nykyinen ketju</th><th>Uusi ketju muutoksen jalkeen</th></tr>
+		<tr><th>Nykyinen ketju (Poistetaan kaikki)</th><th>Uusi ketju muutoksen jalkeen</th></tr>
 		<tr><td style="vertical-align:top">
 		';
 		foreach($tv as $tv_item){
