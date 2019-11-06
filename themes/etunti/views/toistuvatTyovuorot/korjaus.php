@@ -31,7 +31,7 @@ foreach($data as $item){
 	if( isset($tv[0]->id) ){
 		echo $item->pfrom.' - '.$item->pto.',  Joka: '.$item->viikkoja.' vko. '.$item->osoite.'<br>';
 		if(!isset($_GET['go'])){
-		echo '<table class="table table-bordered" style="width:50%">
+		echo '<table class="table table-bordered" style="width:50%" border="1">
 		<tr><th>Nykyinen ketju (Poistetaan kaikki)</th><th>Uusi ketju muutoksen jalkeen</th></tr>
 		<tr><td style="vertical-align:top">
 		';
