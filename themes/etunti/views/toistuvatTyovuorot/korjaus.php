@@ -59,6 +59,7 @@ foreach($data as $item){
 		foreach($tids as $tid => $attributes){
 		   foreach ($weeks as $wk) {
 			$new_tv = new Tyovuoroot();
+			unset($attributes['id'],$attributes['time']);
 			$new_tv->attributes = $attributes;
 			$new_tv->tid = $tid;
 			$new_tv->pvm = $wk->format('d.m.Y');
