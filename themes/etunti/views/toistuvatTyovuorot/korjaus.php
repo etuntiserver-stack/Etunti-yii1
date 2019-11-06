@@ -11,7 +11,7 @@ $criteria->condition = "
 //	AND id=3888
 // 193730
 $data = ToistuvatTyovuorot::model()->findAll($criteria);
-//echo count($data).'<br><br>';
+echo count($data).'<br><br>';
 foreach($data as $item){
 	$criteria = new CDBCriteria;
 	$criteria->order = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y'))";
