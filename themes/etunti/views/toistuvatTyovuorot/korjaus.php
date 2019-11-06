@@ -3,7 +3,7 @@ $site = Yii::app()->createController('Site');
 $criteria = new CDBCriteria;
 $criteria->limit = "200";
 $criteria->condition = "
-	DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '2020-01-01'
+	DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '2021-01-01'
 	AND korjattu_poista_tama=0
 	AND viikkoja!='1'
 ";
@@ -31,7 +31,7 @@ foreach($data as $item){
 	if( isset($tv[0]->id) ){
 
 		if(!isset($_GET['go'])){
-		echo '<h4>'.$item->pfrom.' - '.$item->pto.',  Joka: '.$item->viikkoja.' vko.</h4><br>';
+		echo '<h4>#'.$item->id.', '.$item->pfrom.' - '.$item->pto.',  Joka: '.$item->viikkoja.' vko.</h4><br>';
 		echo '<table class="table table-bordered" style="width:40%">
 		<tr><th>Nykyinen ketju (Poistetaan kaikki)</th><th>Uusi ketju muutoksen jalkeen</th></tr>
 		<tr><td style="vertical-align:top">
@@ -40,6 +40,12 @@ foreach($data as $item){
 			echo $site[0]->etuSukunimi($tv_item->tid).'  <b>'.$tv_item->pvm.'</b><br>';
 		}
 		}
+
+		$tids = [];
+		foreach($tv as $tv_item){
+			$tids[$tv_item->tid] = $tv_item->tid;
+		}
+
 		$startDate	= date("Y-m-d", strtotime($tv[0]->pvm));
 		$end_date	= date("Y-m-d", strtotime($item->pto));
 
@@ -50,15 +56,19 @@ foreach($data as $item){
 		);
 		if(!isset($_GET['go']))
 		echo '</td><td style="vertical-align:top">';
-		foreach ($weeks as $wk) {
-			echo $wk->format('d.m.Y').'<br>';
+		foreach($tids as $tid){
+		   foreach ($weeks as $wk) {
 			$new_tv[0] = new Tyovuoroot();
 			$new_tv[0]->attributes = $tv[0]->attributes;
+			$new_tv[0]->tid = $tid;
 			$new_tv[0]->pvm = $wk->format('d.m.Y');
+			if(!isset($_GET['go']))
+			echo $site[0]->etuSukunimi($new_tv[0]->tid).' <b>'.$wk->format('d.m.Y').'</b><br>';
 			// <-- GO
 			if(isset($_GET['go'])){
 				$new_tv[0]->save();
 			}
+		   }
 		}
 		if(!isset($_GET['go'])){
 		echo '</td></tr></table>';
