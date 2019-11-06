@@ -1,7 +1,7 @@
 <?php
 $site = Yii::app()->createController('Site');
 $criteria = new CDBCriteria;
-$criteria->limit = "100";
+$criteria->limit = "10";
 $criteria->condition = "
 	DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '2020-01-01'
 	AND korjattu_poista_tama=0
