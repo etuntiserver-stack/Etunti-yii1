@@ -32,7 +32,7 @@ foreach($data as $item){
 
 		if(!isset($_GET['go'])){
 		echo '<h4>#'.$item->id.', '.$item->pfrom.' - '.$item->pto.',  Joka: '.$item->viikkoja.' vko.</h4><br>';
-		echo '<table class="table table-bordered" style="width:40%">
+		echo '<table class="table table-bordered" style="width:50%">
 		<tr><th>Nykyinen ketju (Poistetaan kaikki)</th><th>Uusi ketju muutoksen jalkeen</th></tr>
 		<tr><td style="vertical-align:top">
 		';
@@ -43,7 +43,8 @@ foreach($data as $item){
 
 		$tids = [];
 		foreach($tv as $tv_item){
-			$tids[$tv_item->tid] = $tv_item->tid;
+			if(isset($tids[$tv_item->tid])){ continue; }
+			$tids[$tv_item->tid] = $tv_item->attributes;
 		}
 
 		$startDate	= date("Y-m-d", strtotime($tv[0]->pvm));
@@ -56,17 +57,17 @@ foreach($data as $item){
 		);
 		if(!isset($_GET['go']))
 		echo '</td><td style="vertical-align:top">';
-		foreach($tids as $tid){
+		foreach($tids as $tid => $attributes){
 		   foreach ($weeks as $wk) {
-			$new_tv[0] = new Tyovuoroot();
-			$new_tv[0]->attributes = $tv[0]->attributes;
-			$new_tv[0]->tid = $tid;
-			$new_tv[0]->pvm = $wk->format('d.m.Y');
+			$new_tv = new Tyovuoroot();
+			$new_tv->attributes = $attributes;
+			$new_tv->tid = $tid;
+			$new_tv->pvm = $wk->format('d.m.Y');
 			if(!isset($_GET['go']))
-			echo $site[0]->etuSukunimi($new_tv[0]->tid).' <b>'.$wk->format('d.m.Y').'</b><br>';
+			echo $site[0]->etuSukunimi($new_tv->tid).' <b>'.$wk->format('d.m.Y').' '.$new_tv->osoite.'</b><br>';
 			// <-- GO
 			if(isset($_GET['go'])){
-				$new_tv[0]->save();
+				$new_tv->save();
 			}
 		   }
 		}
