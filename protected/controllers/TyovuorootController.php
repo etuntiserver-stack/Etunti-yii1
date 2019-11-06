@@ -5711,7 +5711,7 @@ class TyovuorootController extends Controller
 		$w		= $viikko_paivat;
 		$return 	= array();
 		$tyopaariUpdater = array();
-		$date		= $startDate;
+		$date		= date("d.m.Y", strtotime($startDate));
  		while (strtotime($date) <= strtotime($end_date)) {
 
 			$viikonNumero = (date('YW',strtotime($date)));
