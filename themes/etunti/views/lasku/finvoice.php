@@ -172,9 +172,6 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
   // Send request to Procountor API.
   $pc = Yii::createComponent('Procountor');
   $response = $pc->invoices(json_encode($params));
-
-  // Return to invoice.
-  $this->redirect(array('update', 'id' => $id));
 }
 
 if(isset($_GET['kopio'])){

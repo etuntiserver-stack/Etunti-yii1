@@ -776,7 +776,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 
 		<?php
 		if(isset($model->id) && $model->tilanne == '1' && $asetukset->palvelu_tyyppi == 5)
-			echo CHtml::link('Lähetä Procountoriin', ['finvoice', 'id' => $model->id, 'procountor' => true], ['class' => 'btn btn-success btn-group myBgColors']);
+			echo CHtml::link('Lähetä Procountoriin', ['finvoice', 'id' => $model->id, 'procountor' => true, 'merkitseLahetettavaksi' => true], ['class' => 'btn btn-success btn-group myBgColors']);
 		?>
 
 		<?php if(isset($model->id) and $model->tilanne == '1' and $asetukset->palvelu_tyyppi == 1) : ?>
