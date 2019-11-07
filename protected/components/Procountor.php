@@ -229,7 +229,7 @@ class Procountor extends CComponent
 		if (empty($token = $this->getAccessToken()))
 			return false;
 		if (is_array($data))
-			$data = http_build_query($data);
+			$data = json_encode($data);
 		$ch = curl_init("{$this->api_base_url}/$target");
 		curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json", "Authorization: Bearer $token"]);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -237,6 +237,6 @@ class Procountor extends CComponent
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 		foreach($tags as $tag => $value)
 			curl_setopt($ch, $tag, $value);
-		return curl_exec($ch);
+		return json_decode(curl_exec($ch));
 	}
 }

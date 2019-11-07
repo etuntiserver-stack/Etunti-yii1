@@ -176,14 +176,13 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
   }
 
   // Send request to Procountor API.
-  $response = $pc->invoices(json_encode($params));
-  $response_data = json_decode($response, true);
+  $response = $pc->invoices($params);
 
   // Look for the generated ID.
-  if (isset($response_data['id'])) {
+  if (isset($response['id'])) {
 
     // Invoice was sent successfully. Save ID.
-    $l->procountor_id = $response_data['id'];
+    $l->procountor_id = $response['id'];
     $l->save();
   } else {
 
