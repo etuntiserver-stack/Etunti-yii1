@@ -1,4 +1,6 @@
 <?php
+exit;
+/*
 $site = Yii::app()->createController('Site');
 $criteria = new CDBCriteria;
 $criteria->limit = "50";

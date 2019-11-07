@@ -310,6 +310,8 @@ $iban				= $asetukset->iban;
 			$veroton 	= 0;
 			$yht 		= 0;
 			if( $alvsis == 0 ){
+echo $hinta.' '.$kpl.' '.$alv;
+exit;
 				$laske = ($hinta*$kpl)/100*$alv;
 				$veroton = round(($hinta*$kpl), $decimal);
 				$yht = $laske+$veroton;
