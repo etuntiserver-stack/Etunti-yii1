@@ -12,6 +12,12 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
   // var_dump($lr);
   // exit;
 
+  $pc = Yii::createComponent('Procountor');
+
+  // Get bank accounts from Procountor, and add this receiver if it's not there.
+  var_dump($pc->getBankAccounts());
+  exit;
+
   $name = $l->tyyppi == 'yritys' ? $l->yritys : $l->yhteyshenkilo;
   $channel = ($l->laskutus == 'verkkolasku') ? 'ELECTRONIC_INVOICE' : ($l->laskutus == 'posti') ? 'MAIL' : 'EMAIL';
 
@@ -164,13 +170,12 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
       "unitPrice" => $lr->hinta,      // (number) Product unit price. This value is affected by the "unit prices include VAT" setting on the invoice.
       "discountPercent" => $lr->ale,  // (number) Product discount percentage.
       "vatPercent" => $lr->alv,       // (number) Product VAT percentage. Must be a percentage currently in use for the company.
-      "vatStatus" => 1,               // (int) Product VAT status.
+      //"vatStatus" => 1,               // (int) Product VAT status.
       "comment" => $lr->tkoodi        // (string) Invoice row comment. Visible on the invoice. Use \ as line break.
     ];
   }
 
   // Send request to Procountor API.
-  $pc = Yii::createComponent('Procountor');
   $response = $pc->invoices(json_encode($params));
   $response_data = json_decode($response, true);
 

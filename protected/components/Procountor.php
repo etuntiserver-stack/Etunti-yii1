@@ -184,6 +184,37 @@ class Procountor extends CComponent
 	}
 
 	/**
+	 * Call API /bankaccounts (search/list bank accounts).
+	 *
+	 * @param int $previousId
+	 * Previous bank account ID for pagination. If this field is set and results
+	 * are ordered by order number, value has to an identifier of existing bank
+	 * account in the given company. <= 0 to disable.
+	 * @param string $orderById
+	 * Order the results by bank account ID. Null to disable.
+	 * @param string $orderByOrderNo
+	 * Order the results by bank account order number. Null to disable.
+	 * @param int $size
+	 * Page size for the results. Default value: 50. -1 to disable.
+	 */
+	public function getBankAccounts(int $previousId = -1, string $orderById = null, string $orderByOrderNo = null, int $size = -1)
+	{
+		$data = [];
+		if ($previousId > 0)
+			$data['previousId'] = $previousId;
+		if (!empty($orderById))
+			$data['orderById'] = $orderById;
+		if (!empty($orderByOrderNo))
+			$data['orderByOrderNo'] = $orderByOrderNo;
+		if ($size > 0)
+			$data['size'] = $size;
+		$target = 'bankaccounts';
+		if (!empty($query = http_build_query($data)))
+			$target .= "&$query";
+		return $this->request($target, null, ['CURLOPT_CUSTOMREQUEST' => 'GET']);
+	}
+
+	/**
 	 * Create cURL request.
 	 *
 	 * @param string $target
@@ -202,7 +233,8 @@ class Procountor extends CComponent
 		$ch = curl_init("{$this->api_base_url}/$target");
 		curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json", "Authorization: Bearer $token"]);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		if (!empty($data))
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 		foreach($tags as $tag => $value)
 			curl_setopt($ch, $tag, $value);
 		return curl_exec($ch);
