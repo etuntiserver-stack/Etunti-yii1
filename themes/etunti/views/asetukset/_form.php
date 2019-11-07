@@ -589,10 +589,10 @@ $('.ryhmat').multiselect({
 		if (
 			!empty($model->procountor_access_token) &&
 			!empty($model->procountor_refresh_token) &&
-			!empty($model->procountor_expires_in) &&
-			!empty($model->procountor_authorized_time)
+			!empty($model->procountor_refresh_time) &&
+			!empty($model->procountor_expires_in)
 		) {
-			$procountor_timediff = time() - $model->procountor_authorized_time;
+			$procountor_timediff = time() - $model->procountor_refresh_time;
 			if ($procountor_timediff > $model->procountor_expires_in) {
 				echo "<p>Kirjautuminen on vanhentunut.</p>";
 			} else {

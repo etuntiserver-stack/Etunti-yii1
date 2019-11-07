@@ -177,8 +177,8 @@ class Asetukset extends DB2ActiveRecord
                      //'edico_muut_kulut' => 'text ',
 					'procountor_access_token' => 'varchar(128) DEFAULT NULL',
 					'procountor_refresh_token' => 'varchar(128) DEFAULT NULL',
-					'procountor_expires_in' => 'int(6) DEFAULT 0',
-					'procountor_authorized_time' => 'int(11) DEFAULT 0'
+					'procountor_refresh_time' => 'int(11) DEFAULT 0',
+					'procountor_expires_in' => 'int(6) DEFAULT 0'
 		    );
 
 		    foreach($table_structure as $key=>$value)

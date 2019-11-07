@@ -100,8 +100,8 @@ class Procountor extends CComponent
 			Asetukset::model()->updateByPk(1, [
 				'procountor_access_token' => $response['access_token'],
 				'procountor_refresh_token' => $response['refresh_token'],
-				'procountor_expires_in' => $response['expires_in'],
-				'procountor_authorized_time' => time()
+				'procountor_refresh_time' => time(),
+				'procountor_expires_in' => $response['expires_in']
 			]);
 
 			return true;
@@ -124,12 +124,12 @@ class Procountor extends CComponent
 	public function getAccessToken()
 	{
 		$access_token = $this->settings->procountor_access_token;
+		$refresh_time = $this->settings->procountor_refresh_time;
 		$expires_in = $this->settings->procountor_expires_in;
-		$authorized_time = $this->settings->procountor_authorized_time;
 
 		// Check if current access token is valid.
-		if (!empty($access_token) && !empty($expires_in) && !empty($authorized_time))
-			if (time() - $authorized_time < $expires_in) return $access_token;
+		if (!empty($access_token) && !empty($expires_in) && !empty($refresh_time))
+			if (time() - $refresh_time < $expires_in) return $access_token;
 
 		// Access token has expired and needs to be refreshed. If refresh token is
 		// unavailable, return now to avoid errors.
@@ -157,8 +157,8 @@ class Procountor extends CComponent
 		if (isset($response['access_token']) && isset($response['expires_in'])) {
 			Asetukset::model()->updateByPk(1, [
 				'procountor_access_token' => $response['access_token'],
-				'procountor_expires_in' => $response['expires_in'],
-				'procountor_authorized_time' => time()
+				'procountor_refresh_time' => time(),
+				'procountor_expires_in' => $response['expires_in']
 			]);
 
 			return $response['access_token'];
