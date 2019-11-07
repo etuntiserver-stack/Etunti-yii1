@@ -16,7 +16,7 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
   $channel = ($l->laskutus == 'verkkolasku') ? 'ELECTRONIC_INVOICE' : ($l->laskutus == 'posti') ? 'MAIL' : 'EMAIL';
 
   $params = [
-    "partnerId" => 0,                           // (int) Technical ID for the business partner. Used to link the invoice to a customer or supplier in the business partner register. If supplied, the company must have this partner ID in the corresponding register.
+    //"partnerId" => 0,                           // (int) Technical ID for the business partner. Used to link the invoice to a customer or supplier in the business partner register. If supplied, the company must have this partner ID in the corresponding register.
     "type" => "SALES_INVOICE",                  // (string) Invoice type. Note that this affects validation requirements.
     "status" => "UNFINISHED",                   // (string) Invoice status. A new invoice created through the API will have its status set as UNFINISHED.
     "date" => $l->paivays,                      // (string) Invoice date. This is synonymous to billing date.
@@ -34,10 +34,10 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
       "counterPartyAddress" => (object) [
         "name" => $name,                        // (string) Name ("first line") in the address.
         "specifier" => "",                      // (string) Specifier, such as c/o address.
-        "street" => "",                         // (string) Street. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
-        "zip" => "",                            // (string) Zip code. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
-        "city" => "",                           // (string) City.
-        "country" => "",                        // (string) Country.
+        "street" => $l->osoite,                 // (string) Street. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
+        "zip" => $l->postinumero,               // (string) Zip code. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
+        "city" => $l->toimipaikka,              // (string) City.
+        "country" => "FINLAND",                 // (string) Country.
         "subdivision" => ""                     // (string) Subdivision of the city.
       ],
 
@@ -46,7 +46,8 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
         // Bank account IBAN. If using a financing agreement, the account number must match the account of the specified
         // financing agreement. The account number must be valid for the specified country, include country code and
         // exclude any spaces.
-        "accountNumber" => str_replace(' ', '', $l->saaja_iban),
+        // "accountNumber" => str_replace(' ', '', $l->saaja_iban),
+        "accountNumber" => 'FI7999999900032082',
 
         // (string) PURCHASE_INVOICE only. Bank account BIC/SWIFT.
         "bic" => ""
@@ -97,7 +98,8 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
         // (string) Bank account IBAN. If using a financing agreement, the account number must match the account of the
         // specified financing agreement. The account number must be valid for the specified country, include country
         // code and exclude any spaces.
-        "accountNumber" => str_replace(' ', '', $l->saaja_iban),
+        //"accountNumber" => str_replace(' ', '', $l->saaja_iban),
+        "accountNumber" => 'FI7999999900032082',
 
         // (bic) PURCHASE_INVOICE only. Bank account BIC/SWIFT.
         "bic" => ""
@@ -119,11 +121,11 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
     "discountPercent" => 0,           // (int) Invoice discount percentage. Scale: 4.
     "orderReference" => "",           // (string) Order reference of the invoice. This will be copied to the payment as message if no reference code is specified.
     "invoiceRows" => [],              // Filled later in a loop.
-    "vatStatus" => 0,                 // (int) Invoice VAT status. Required for all invoices except travel invoices and expense claims.
+    "vatStatus" => 1,                 // (int) Invoice VAT status. Required for all invoices except travel invoices and expense claims.
     "originalInvoiceNumber" => "",    // (string) Invoice number from the biller in an external system.
     "deliveryStartDate" => "",        // (string) First day of the delivery period.
     "deliveryEndDate" => "",          // (string) Last day of the delivery period.
-    "deliveryMethod" => "OTHER",      // (string) Delivery method for the goods. Sales invoices do not support type OTHER.
+    //"deliveryMethod" => "OTHER",      // (string) Delivery method for the goods. Sales invoices do not support type OTHER.
     "deliveryInstructions" => "",     // (string) Delivery instructions.
     "invoiceChannel" => $channel,     // (string) Channel of distribution for the invoice. Values EDIFACT and PAPER_INVOICE are not allowed for new invoices.
     "penaltyPercent" => 0,            // (number) Penal interest rate. Scale: 2.
@@ -131,7 +133,7 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
     "additionalInformation" => "",    // (string) Invoice notes containing additional information. Visible on the invoice. Use \n as line break.
     "vatCountry" => "FINLAND",        // (string) Country code describing which country is VAT standards are being used. Usage of foreign VAT settings must be agreed on separately with Procountor. Required if the company uses foreign VATs. Example value: SWEDEN.See Address.country in POST /invoices for a list of allowable values
     "notes" => "",                    // (string) Invoice notes (seller's/buyer's notes). Not visible on the invoice. Use \n as line break.
-    "factoringContractId" => 0,       // (int) SALES_INVOICE only. ID for external financing agreement. The bankAccount.accountNumber specified must match the one used by the specified financing agreement. Financing agreements cannot be used with cash payments.
+    // "factoringContractId" => 0,       // (int) SALES_INVOICE only. ID for external financing agreement. The bankAccount.accountNumber specified must match the one used by the specified financing agreement. Financing agreements cannot be used with cash payments.
     "factoringText" => "",            // (string) SALES_INVOICE only. Additional notes about external financing agreement.
     "orderNumber" => "",              // (string) Order number
     "agreementNumber" => "",          // (string) Agreement number
@@ -162,7 +164,7 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
       "unitPrice" => $lr->hinta,      // (number) Product unit price. This value is affected by the "unit prices include VAT" setting on the invoice.
       "discountPercent" => $lr->ale,  // (number) Product discount percentage.
       "vatPercent" => $lr->alv,       // (number) Product VAT percentage. Must be a percentage currently in use for the company.
-      "vatStatus" => 0,               // (int) Product VAT status.
+      "vatStatus" => 1,               // (int) Product VAT status.
       "comment" => $lr->tkoodi        // (string) Invoice row comment. Visible on the invoice. Use \ as line break.
     ];
   }
