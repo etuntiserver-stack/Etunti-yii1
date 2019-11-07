@@ -172,6 +172,20 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
   // Send request to Procountor API.
   $pc = Yii::createComponent('Procountor');
   $response = $pc->invoices(json_encode($params));
+  $response_data = json_decode($response, true);
+
+  // Look for the generated ID.
+  if (isset($response_data['id'])) {
+
+    // Invoice was sent successfully. Save ID.
+    $l->procountor_id = $response_data['id'];
+    $l->save();
+  } else {
+
+    // If response doesn't contain ID, the invoice was not sent properly. Return
+    // to the form now to avoid finvoice setting the status to 'LÄHETETTY'.
+    $this->redirect(array('update','id'=>$id));
+  }
 }
 
 if(isset($_GET['kopio'])){

@@ -7,6 +7,7 @@
  * @property integer $id
  * @property integer $lid
  * @property integer $yid
+ * @property integer $procountor_id
  * @property string $time
  * @property string $tyyppi
  * @property string $yritys
@@ -83,7 +84,8 @@ class Lasku extends DB2ActiveRecord
 
 		$table_structure = array(
                      'lid' => 'int(11) DEFAULT 0',
-                     'yid' => 'int(11) DEFAULT 0',
+										 'yid' => 'int(11) DEFAULT 0',
+										 'procountor_id' => 'int(11) DEFAULT 0',
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
                      'tyyppi' => 'varchar(100) DEFAULT NULL',
                      'yritys' => 'varchar(100) DEFAULT NULL',
