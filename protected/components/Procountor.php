@@ -116,19 +116,22 @@ class Procountor extends CComponent
 	 * stored refresh token. If token has expired, and refresh token is
 	 * unavailable, or parsing the new access token fails, returns false.
 	 *
+	 * @param bool $force
+	 * If true, access token is refreshed even if previous token is still valid.
+	 *
 	 * @return mixed
 	 * Current access token if it is still valid, or newly requested access token
 	 * if previous token had expired. If the previous token has expired or is
 	 * unavailable, and refresh token is unavailable or invalid, returns false.
 	 */
-	public function getAccessToken()
+	public function getAccessToken($force = false)
 	{
 		$access_token = $this->settings->procountor_access_token;
 		$refresh_time = $this->settings->procountor_refresh_time;
 		$expires_in = $this->settings->procountor_expires_in;
 
 		// Check if current access token is valid.
-		if (!empty($access_token) && !empty($expires_in) && !empty($refresh_time))
+		if (!$force && !empty($access_token) && !empty($expires_in) && !empty($refresh_time))
 			if (time() - $refresh_time < $expires_in) return $access_token;
 
 		// Access token has expired and needs to be refreshed. If refresh token is
@@ -167,11 +170,44 @@ class Procountor extends CComponent
 		return false;
 	}
 
+	public function invoices($params)
+	{
+		// $result = $this->request('invoices', CURLOPT_POST, urlencode(json_encode($params)));
+		$token = $this->getAccessToken();
+		$ch = curl_init("{$this->api_base_url}/invoices");
+		$data_json = json_encode($params);
+		$len = strlen($data_json);
+
+		// $result = file_get_contents("{$this->api_base_url}/invoices", false, stream_context_create([
+		// 	'http' => [
+		// 		'method' => 'POST',
+		// 		'header' => "Content-Type: application/json\r\nContent-Length: $len\r\nAuthorization: bearer $token\r\n",
+		// 		'content' => $data_json
+		// 	]
+		// ]));
+
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, [
+				"Content-Type: application/json",
+				"Content-Length: $len",
+				"Authorization: bearer $token"
+		]);
+
+		$result = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		var_dump($result);
+		var_dump($info);
+		exit;
+	}
+
 	/**
 	 * Create cURL request.
-	 * @param string $addr URL Address
+	 * @param string $addr URL after / (e.g. "invoices")
 	 * @param string $method Method, e.g. CURLOPT_GET/CURLOPT_POST. Null to skip.
-	 * @param string $post_fields Possible post fields.
+	 * @param string $post_fields Possible post fields (JSON).
 	 * @param bool $return_transfer ReturnTransfer flag. If true, output of curl_exec is returned.
 	 */
 	private function request($addr, $method = CURLOPT_POST, $post_fields = '', $return_transfer = true)
@@ -179,7 +215,7 @@ class Procountor extends CComponent
 		if (empty($token = $this->getAccessToken()))
 			return false;
 
-		$ch = curl_init($addr);
+		$ch = curl_init("{$this->api_base_url}/$addr");
 
 		// Set HTTPHeader
 		$header_final = [

@@ -166,6 +166,13 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
       "comment" => $lr->tkoodi        // (string) Invoice row comment. Visible on the invoice. Use \ as line break.
     ];
   }
+
+  // Send request to Procountor API.
+  $pc = Yii::createComponent('Procountor');
+  $pc->invoices($params);
+
+  // Return to invoice.
+  $this->redirect(array('update','id'=>$id));
 }
 
 if(isset($_GET['kopio'])){
