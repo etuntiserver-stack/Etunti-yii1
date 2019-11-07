@@ -309,8 +309,12 @@ $iban				= $asetukset->iban;
 			// <-- ALV laskin
 			$veroton 	= 0;
 			$yht 		= 0;
+			if(!is_numeric($hinta) or !is_numeric($kpl) or !is_numeric($alv)){
+				echo '<h1>Hinta tai ALV ei saa olla teksti muodossa tai pilkulla.</h1>';
+				break;
+			}
 			if( $alvsis == 0 ){
-				$laske = ((float)$hinta*$kpl)/100*(float)$alv;
+				$laske = ($hinta*$kpl)/100*$alv;
 				$veroton = round(($hinta*$kpl), $decimal);
 				$yht = $laske+$veroton;
 			}
