@@ -69,6 +69,15 @@ ini_set('memory_limit', '256M');
 
 
 <?php if( !empty($year) and !empty($week) and count($tyontekijat_model) > 0 ) : ?>
+<?php
+$site = Yii::app()->createController('Site');
+$eilasketa = $site[0]->eiLasketa();
+
+$date = new DateTime();
+$date->setISODate($year,$week);
+$this_monday = $date->format('Y-m-d');
+$this_sunday = date('Y-m-d', strtotime($this_monday.' this week sunday'));
+?>
 <div class="row">
             <div class="admin-form">
               <div class="panel heading-border myBgColors">
@@ -165,11 +174,25 @@ ini_set('memory_limit', '256M');
 	  echo '<tr id="tr_'.$t->id.'">';
 	  echo '<td width=1 id="first_'.$t->id.'" style="z-index: 999">';
 
-	     $vktyoaika = '';
-	     $ts = Tyosuhdet::model()->find(" tid = '".$t->id."' ");
-	     if(isset($ts->id) and !empty($ts['vktyoaika']))
-	     $vktyoaika = $ts['vktyoaika'];
-	     $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>$week,'year'=>$year),true);
+	     	$vktyoaika = '';
+	     	$ts = Tyosuhdet::model()->find(" tid = '".$t->id."' ");
+	     	if(isset($ts->id) and !empty($ts['vktyoaika']))
+	     	$vktyoaika = $ts['vktyoaika'];
+
+		// <-- Kokoviikko
+		$kokoViikko = 0;
+	       	$criteria = new CDbCriteria();
+	        $criteria->select = "SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit";
+	        $criteria->condition = " 
+			tid = '".$t->id."'  
+			AND $eilasketa
+			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$this_monday' AND '$this_sunday'
+		";
+
+		$tv = Tyovuoroot::model()->find($criteria);
+		if(isset($tv->l_tunnit))
+	     		$kokoViikko = $this->sprint($tv->l_tunnit);
+		//     Kokoviikko -->
  	  
 		$cl = '';
 		if((int)str_replace(":","",$kokoViikko) > (int)str_replace(":","",$vktyoaika)
