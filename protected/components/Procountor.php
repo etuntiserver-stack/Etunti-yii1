@@ -215,6 +215,17 @@ class Procountor extends CComponent
 	}
 
 	/**
+	 * Call API /bankaccounts; Endpoint for creating new company bank account.
+	 *
+	 * @return array
+	 * Created bank information.
+	 */
+	public function createBankAccount()
+	{
+
+	}
+
+	/**
 	 * Create cURL request.
 	 *
 	 * @param string $target

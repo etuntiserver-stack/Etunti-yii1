@@ -15,8 +15,51 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
   $pc = Yii::createComponent('Procountor');
 
   // Get bank accounts from Procountor, and add this receiver if it's not there.
-  var_dump($pc->getBankAccounts());
-  exit;
+  $current_iban = str_replace(' ', '', $l->saaja_iban);
+  $bank_account_found = false;
+  $bank_account_results = $pc->getBankAccounts();
+
+  if (isset($bank_account_results['results'])) {
+
+    // Loop result bank accounts and compare IBAN.
+    foreach($bank_account_results['results'] as $bank_account) {
+      if (($iban = $bank_account['iban'] ?? '') == $current_iban) {
+
+        // Ensure this bank account is active, because otherwise we get errors.
+        if (($bank_account['status'] ?? '') != 'ACTIVE') {
+          // TODO: error, bank account is not active. Set active?
+          $this->redirect(array('update','id'=>$id));
+        }
+
+        $bank_account_found = true;
+        break;
+      }
+    }
+  }
+
+  if (!$bank_account_found) {
+
+    // TODO: Create bank account, BIC is needed! Not saved currently.
+    // Also: ledgerAccount and bankingCode (important).
+    $this->redirect(array('update','id'=>$id));
+
+    $bank_account_params = [
+      "iban" => $current_iban,
+      "bic" => "",
+      "bankName" => "",
+      "currency" => "EUR",
+      "defaultForInvoice" => false,
+      "defaultForPayment" => false,
+      "status" => "ACTIVE",
+      "ledgerAccount" => "1910", // TODO
+      "bankingCode" => "",
+      "showAccountOnInvoice" => true,
+      "allowPayments" => true,
+      "allowForeignPayments" => true,
+      "allowSalaryPayments" => true,
+      "allowExpressPayments" => true
+    ];
+  }
 
   $name = $l->tyyppi == 'yritys' ? $l->yritys : $l->yhteyshenkilo;
   $channel = ($l->laskutus == 'verkkolasku') ? 'ELECTRONIC_INVOICE' : ($l->laskutus == 'posti') ? 'MAIL' : 'EMAIL';
