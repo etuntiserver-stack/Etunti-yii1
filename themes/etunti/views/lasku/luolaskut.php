@@ -310,8 +310,11 @@ $iban				= $asetukset->iban;
 			$veroton 	= 0;
 			$yht 		= 0;
 			if(!is_numeric($hinta) or !is_numeric($kpl) or !is_numeric($alv)){
-				echo 'Hinta: '.$hinta.', ALV: '.$alv.'<br>'; 
-				echo '<div class="alert bg-danger"><h1>Hinta tai ALV ei saa olla teksti muodossa tai pilkulla.</h1></div>';
+				echo ; 
+				echo '<div class="alert bg-danger">
+					Hinta:'.$hinta.' KPL:'.$kpl.' ALV:'.$alv.'<br>
+					<h1>Hinta tai ALV ei saa olla teksti muodossa tai pilkulla.</h1>
+				</div>';
 				break;
 			}
 			if( $alvsis == 0 ){
