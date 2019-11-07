@@ -172,81 +172,33 @@ class Procountor extends CComponent
 
 	public function invoices($params)
 	{
-		// $result = $this->request('invoices', CURLOPT_POST, urlencode(json_encode($params)));
-		$token = $this->getAccessToken();
-		$ch = curl_init("{$this->api_base_url}/invoices");
-		$data_json = json_encode($params);
-		$len = strlen($data_json);
-
-		// $result = file_get_contents("{$this->api_base_url}/invoices", false, stream_context_create([
-		// 	'http' => [
-		// 		'method' => 'POST',
-		// 		'header' => "Content-Type: application/json\r\nContent-Length: $len\r\nAuthorization: bearer $token\r\n",
-		// 		'content' => $data_json
-		// 	]
-		// ]));
-
-		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, [
-				"Content-Type: application/json",
-				"Content-Length: $len",
-				"Authorization: bearer $token"
-		]);
-
-		$result = curl_exec($ch);
-		$info = curl_getinfo($ch);
+		$result = $this->request('invoices', json_encode($params));
 		var_dump($result);
-		var_dump($info);
 		exit;
 	}
 
 	/**
 	 * Create cURL request.
-	 * @param string $addr URL after / (e.g. "invoices")
-	 * @param string $method Method, e.g. CURLOPT_GET/CURLOPT_POST. Null to skip.
-	 * @param string $post_fields Possible post fields (JSON).
-	 * @param bool $return_transfer ReturnTransfer flag. If true, output of curl_exec is returned.
+	 *
+	 * @param string $target
+	 * URL after / (e.g. "invoices")
+	 * @param mixed $data
+	 * String or array containing post field data.
+	 * @param array $tags
+	 * Tags ( [ OPTION => VALUE, OPTION2 => VALUE2 ... ] )
 	 */
-	private function request($addr, $method = CURLOPT_POST, $post_fields = '', $return_transfer = true)
+	private function request($target, $data, array $tags = ['CURLOPT_POST' => true])
 	{
 		if (empty($token = $this->getAccessToken()))
 			return false;
-
-		$ch = curl_init("{$this->api_base_url}/$addr");
-
-		// Set HTTPHeader
-		$header_final = [
-			"Content-Type: application/json",
-			"Authorization: bearer $token"
-		];
-		/* if (!empty($header)) {
-			if (is_array($header)) {
-				foreach ($header as $item)
-					$header_final[] = $item;
-			} else {
-				$header_final[] = $header;
-			}
-		} */
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $header_final);
-
-		// Set method
-		if (!empty($method))
-			curl_setopt($ch, $method, 1);
-
-		// Set postfields
-		if (!empty($post_fields))
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
-
-		// Execute
-		if ($return_transfer) {
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			return curl_exec($ch);
-		} else {
-			curl_exec($ch);
-			return;
-		}
+		if (is_array($data))
+			$data = http_build_query($data);
+		$ch = curl_init("{$this->api_base_url}/$target");
+		curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json", "Authorization: Bearer $token"]);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		foreach($tags as $tag => $value)
+			curl_setopt($ch, $tag, $value);
+		return curl_exec($ch);
 	}
 }
