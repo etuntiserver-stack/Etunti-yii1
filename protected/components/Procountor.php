@@ -227,26 +227,31 @@ class Procountor extends CComponent
 
   /**
    * Call API /invoices (Create Invoice).
-   *
-   * @param string $params_json
-   * Parameters in JSON, like from json_encode().
-   * @return string
-   * JSON response from the server.
+   * @param string $params_json Parameters in JSON, like from json_encode().
+   * @return string JSON response from the server.
    */
-  public function invoices($params_json)
+  public function createInvoice($params_json)
   {
     return $this->request('invoices', $params_json);
   }
 
   /**
-   * Call API /invoices/{invoiceId}/approve
-   *
+   * Call API /invoices/{invoiceId}/approve.
    * @param int $invoice_id Invoice ID.
    * @param string $comment Comment for verification or approval event.
    */
-  public function invoicesApprove(int $invoice_id, string $comment = null)
+  public function approveInvoice(int $invoice_id, string $comment = null)
   {
     return $this->request("invoices/$invoice_id/approve", $comment, ['CURLOPT_PUT' => true]);
+  }
+
+  /**
+   * Call API /invoices/{invoiceId}/invalidate.
+   * @param int $invoice_id Invoice ID.
+   */
+  public function invalidateInvoice(int $invoice_id)
+  {
+    return $this->request("invoices/$invoice_id/invalidate", null, ['CURLOPT_PUT', true]);
   }
 
   /**

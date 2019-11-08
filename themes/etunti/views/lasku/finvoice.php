@@ -225,7 +225,7 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
   }
 
   // Send request to Procountor API.
-  $response = $pc->invoices($params);
+  $response = $pc->createInvoice($params);
 
   // Look for the generated ID.
   if (isset($response['id'])) {
@@ -237,7 +237,7 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
 
     // If response doesn't contain ID, the invoice was not sent properly. Return
     // to the form now to avoid finvoice setting the status to 'LÄHETETTY'.
-    $pc->logError('invoices', $response, ['Lasku ID' => $l->id], 'Server didn\'t return a generated invoice ID.');
+    $pc->logError('createInvoice', $response, ['Lasku ID' => $l->id], 'Server didn\'t return a generated invoice ID.');
     Yii::app()->user->setFlash('danger', 'Laskun lähettämisessä tapahtui virhe. Viasta on ilmoitettu
                                           ylläpidolle. Jos vika jatkuu, ota yhteyttä ylläpitoon.');
     $this->redirect(array('update','id'=>$id));
