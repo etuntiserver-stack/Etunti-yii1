@@ -1,5 +1,6 @@
 <?php
 
+/** Procountor API manager. */
 class Procountor extends CComponent
 {
   private $settings;
@@ -11,6 +12,7 @@ class Procountor extends CComponent
   private $pw            = 'Elias2011!';
   private $company       = 15022;
 
+  /** Initialize Procountor. */
   public function __construct()
   {
     $this->settings = Asetukset::model()->findByPk(1);
@@ -21,6 +23,55 @@ class Procountor extends CComponent
     $this->pw = urlencode($this->pw);
     $this->company = urlencode($this->company);
   }
+
+  /**
+   * Log error in request, e.g. when $results['errors'] is defined.
+   *
+   * @param string $request Requested API call, e.g. "invoices"
+   * @param array $results Results array returned by the API function.
+   * @param array $params Additional parameters, e.g. ['uid' => 123] => "uid: 123"
+   * @param string $start_msg First line of the log message.
+   */
+  public function logError(string $request, array $results, array $params = [], string $start_msg = 'Error in Procountor API request.')
+  {
+    $json = json_encode($results);
+    $params_str = "";
+    foreach ($params as $param => $value)
+      $params_str .= "$param: $value\n";
+    $stacktrace = (new \Exception())->getTraceAsString();
+    $message = "$start_msg\nRequest: $request\nResponse: $json\n{$params_str}Stack trace:\n$stacktrace";
+    Yii::getLogger()->log($message, 'error', 'procountor');
+  }
+
+  /**
+   * Create cURL request.
+   *
+   * @param string $target
+   * URL after / (e.g. "invoices")
+   * @param mixed $data
+   * String or array containing post field data.
+   * @param array $tags
+   * Tags ( [ OPTION => VALUE, OPTION2 => VALUE2 ... ] )
+   */
+  private function request($target, $data = null, array $tags = ['CURLOPT_POST' => true])
+  {
+    if (empty($token = $this->getAccessToken()))
+      return false;
+    if (is_array($data))
+      $data = json_encode($data);
+    $ch = curl_init("{$this->api_base_url}/$target");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json", "Authorization: Bearer $token"]);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    if (!empty($data))
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    foreach($tags as $tag => $value)
+      curl_setopt($ch, $tag, $value);
+    return json_decode(curl_exec($ch), true);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Authorization
+  // ---------------------------------------------------------------------------
 
   /**
    * Login to Procountor test environment.
@@ -170,6 +221,10 @@ class Procountor extends CComponent
     return false;
   }
 
+  // ---------------------------------------------------------------------------
+  // API functions
+  // ---------------------------------------------------------------------------
+
   /**
    * Call API /invoices (Create Invoice).
    *
@@ -186,26 +241,26 @@ class Procountor extends CComponent
   /**
    * Call API /bankaccounts (search/list bank accounts).
    *
-   * @param int $previousId
+   * @param int $previous_id
    * Previous bank account ID for pagination. If this field is set and results
    * are ordered by order number, value has to an identifier of existing bank
    * account in the given company. <= 0 to disable.
-   * @param string $orderById
+   * @param string $order_by_id
    * Order the results by bank account ID. Null to disable.
-   * @param string $orderByOrderNo
+   * @param string $order_by_order_no
    * Order the results by bank account order number. Null to disable.
    * @param int $size
    * Page size for the results. Default value: 50. -1 to disable.
    */
-  public function getBankAccounts(int $previousId = -1, string $orderById = null, string $orderByOrderNo = null, int $size = -1)
+  public function getBankAccounts(int $previous_id = -1, string $order_by_id = null, string $order_by_order_no = null, int $size = -1)
   {
     $data = [];
-    if ($previousId > 0)
-      $data['previousId'] = $previousId;
-    if (!empty($orderById))
-      $data['orderById'] = $orderById;
-    if (!empty($orderByOrderNo))
-      $data['orderByOrderNo'] = $orderByOrderNo;
+    if ($previous_id > 0)
+      $data['previousId'] = $previous_id;
+    if (!empty($order_by_id))
+      $data['orderById'] = $order_by_id;
+    if (!empty($order_by_order_no))
+      $data['orderByOrderNo'] = $order_by_order_no;
     if ($size > 0)
       $data['size'] = $size;
     $target = 'bankaccounts';
@@ -223,50 +278,5 @@ class Procountor extends CComponent
   public function createBankAccount()
   {
 
-  }
-
-  /**
-   * Create cURL request.
-   *
-   * @param string $target
-   * URL after / (e.g. "invoices")
-   * @param mixed $data
-   * String or array containing post field data.
-   * @param array $tags
-   * Tags ( [ OPTION => VALUE, OPTION2 => VALUE2 ... ] )
-   */
-  private function request($target, $data, array $tags = ['CURLOPT_POST' => true])
-  {
-    if (empty($token = $this->getAccessToken()))
-      return false;
-    if (is_array($data))
-      $data = json_encode($data);
-    $ch = curl_init("{$this->api_base_url}/$target");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json", "Authorization: Bearer $token"]);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    if (!empty($data))
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    foreach($tags as $tag => $value)
-      curl_setopt($ch, $tag, $value);
-    return json_decode(curl_exec($ch), true);
-  }
-
-  /**
-   * Log error in request, e.g. when $results['errors'] is defined.
-   *
-   * @param string $request Requested API call, e.g. "invoices"
-   * @param array $results Results array returned by the API function.
-   * @param array $params Additional parameters, e.g. ['uid' => 123] => "uid: 123"
-   * @param string $start_msg First line of the log message.
-   */
-  public function logError(string $request, array $results, array $params = [], string $start_msg = 'Error in Procountor API request.')
-  {
-    $json = json_encode($results);
-    $params_str = "";
-    foreach ($params as $param => $value)
-      $params_str .= "$param: $value\n";
-    $stacktrace = (new \Exception())->getTraceAsString();
-    $message = "$start_msg\nRequest: $request\nResponse: $json\n{$params_str}Stack trace:\n$stacktrace";
-    Yii::getLogger()->log($message, 'error', 'procountor');
   }
 }
