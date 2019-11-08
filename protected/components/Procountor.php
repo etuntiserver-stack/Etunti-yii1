@@ -248,6 +248,6 @@ class Procountor extends CComponent
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 		foreach($tags as $tag => $value)
 			curl_setopt($ch, $tag, $value);
-		return json_decode(curl_exec($ch));
+		return json_decode(curl_exec($ch), true);
 	}
 }
