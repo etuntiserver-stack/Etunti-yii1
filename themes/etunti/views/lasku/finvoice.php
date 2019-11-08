@@ -15,7 +15,9 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
   $pc = Yii::createComponent('Procountor');
 
   // Get bank accounts from Procountor, and add this receiver if it's not there.
-  $current_iban = str_replace(' ', '', $l->saaja_iban);
+  // $current_iban = str_replace(' ', '', $l->saaja_iban);
+  // TODO: replace with above commented line. This IBAN is for the testing environment.
+  $current_iban = 'FI7999999900032082';
   $bank_account_found = false;
   $bank_account_results = $pc->getBankAccounts();
 
@@ -27,7 +29,7 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
 
         // Ensure this bank account is active, because otherwise we get errors.
         if (($bank_account['status'] ?? '') != 'ACTIVE') {
-          // TODO: error, bank account is not active. Set active?
+          Yii::app()->user->setFlash('danger', 'Valittu pankkitili ei ole aktivoitu Procountorissa.');
           $this->redirect(array('update','id'=>$id));
         }
 
@@ -41,6 +43,8 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
 
     // TODO: Create bank account, BIC is needed! Not saved currently.
     // Also: ledgerAccount and bankingCode (important).
+    Yii::app()->user->setFlash('danger', 'Valittua pankkitiliä ei löydy Procountorista. Jos pankkitili
+                                          on lisätty Procountor tilillesi, ota yhteyttä ylläpitoon.');
     $this->redirect(array('update','id'=>$id));
 
     $bank_account_params = [
@@ -96,6 +100,7 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
         // financing agreement. The account number must be valid for the specified country, include country code and
         // exclude any spaces.
         // "accountNumber" => str_replace(' ', '', $l->saaja_iban),
+        // TODO: replace with above commented line. This IBAN is for the testing environment.
         "accountNumber" => 'FI7999999900032082',
 
         // (string) PURCHASE_INVOICE only. Bank account BIC/SWIFT.
@@ -148,6 +153,7 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
         // specified financing agreement. The account number must be valid for the specified country, include country
         // code and exclude any spaces.
         //"accountNumber" => str_replace(' ', '', $l->saaja_iban),
+        // TODO: replace with above commented line. This IBAN is for the testing environment.
         "accountNumber" => 'FI7999999900032082',
 
         // (bic) PURCHASE_INVOICE only. Bank account BIC/SWIFT.
@@ -231,6 +237,9 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
 
     // If response doesn't contain ID, the invoice was not sent properly. Return
     // to the form now to avoid finvoice setting the status to 'LÄHETETTY'.
+    $pc->logError('invoices', $response, ['Lasku ID' => $l->id], 'Server didn\'t return a generated invoice ID.');
+    Yii::app()->user->setFlash('danger', 'Laskun lähettämisessä tapahtui virhe. Viasta on ilmoitettu
+                                          ylläpidolle. Jos vika jatkuu, ota yhteyttä ylläpitoon.');
     $this->redirect(array('update','id'=>$id));
   }
 }
