@@ -70,12 +70,17 @@ class Procountor extends CComponent
   }
 
   /** Shortcut to request() with CURLOPT_CUSTOMREQUEST => true tag. */
+  private function requestGet($target, $data = null, array $tags = [])
+  {
+    $tags['CURLOPT_CUSTOMREQUEST'] = 'GET';
+    $this->request($target, $data, $tags);
+  }
+
+  /** Shortcut to request() with CURLOPT_CUSTOMREQUEST => true tag. */
   private function requestPut($target, $data = null, array $tags = [])
   {
-    $tags_final = ['CURLOPT_CUSTOMREQUEST' => true];
-    if (count($tags) > 0)
-      $tags_final = array_replace($tags_final, $tags);
-    $this->request($target, $data, $tags_final);
+    $tags['CURLOPT_CUSTOMREQUEST'] = 'PUT';
+    $this->request($target, $data, $tags);
   }
 
   // ---------------------------------------------------------------------------
@@ -252,6 +257,15 @@ class Procountor extends CComponent
   public function approveInvoice(int $invoice_id, string $comment = null)
   {
     return $this->requestPut("invoices/$invoice_id/approve", $comment);
+  }
+
+  /**
+   * Call API /invoices/{invoice_id}
+   * @param int $invoice_id Invoice ID.
+   */
+  public function getInvoice(int $invoice_id)
+  {
+    return $this->requestGet("invoices/$invoice_id");
   }
 
   /**
