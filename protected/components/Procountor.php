@@ -250,4 +250,23 @@ class Procountor extends CComponent
       curl_setopt($ch, $tag, $value);
     return json_decode(curl_exec($ch), true);
   }
+
+  /**
+   * Log error in request, e.g. when $results['errors'] is defined.
+   *
+   * @param string $request Requested API call, e.g. "invoices"
+   * @param array $results Results array returned by the API function.
+   * @param array $params Additional parameters, e.g. ['uid' => 123] => "uid: 123"
+   * @param string $start_msg First line of the log message.
+   */
+  public function logError(string $request, array $results, array $params = [], string $start_msg = 'Error in Procountor API request.')
+  {
+    $json = json_encode($results);
+    $params_str = "";
+    foreach ($params as $param => $value)
+      $params_str .= "$param: $value\n";
+    $stacktrace = (new \Exception())->getTraceAsString();
+    $message = "$start_msg\nRequest: $request\nResponse: $json\n{$params_str}Stack trace:\n$stacktrace";
+    Yii::getLogger()->log($message, 'error', 'procountor');
+  }
 }
