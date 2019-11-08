@@ -25,11 +25,10 @@ class Procountor extends CComponent
   }
 
   /**
-   * Log error in request, e.g. when $results['errors'] is defined.
-   *
-   * @param string $request Requested API call, e.g. "invoices"
+   * Log error in request, usually when 'errors' is defined in results.
+   * @param string $request Requested API call, e.g. "createInvoice".
    * @param array $results Results array returned by the API function.
-   * @param array $params Additional parameters, e.g. ['uid' => 123] => "uid: 123"
+   * @param array $params Additional parameters, like ['uid' => 123].
    * @param string $start_msg First line of the log message.
    */
   public function logError(string $request, array $results, array $params = [], string $start_msg = 'Error in Procountor API request.')
@@ -69,14 +68,14 @@ class Procountor extends CComponent
     return json_decode(curl_exec($ch), true);
   }
 
-  /** Shortcut to request() with CURLOPT_CUSTOMREQUEST => true tag. */
+  /** Shortcut to request() with CURLOPT_CUSTOMREQUEST = 'GET'. */
   private function requestGet($target, $data = null, array $tags = [])
   {
     $tags['CURLOPT_CUSTOMREQUEST'] = 'GET';
     $this->request($target, $data, $tags);
   }
 
-  /** Shortcut to request() with CURLOPT_CUSTOMREQUEST => true tag. */
+  /** Shortcut to request() with CURLOPT_CUSTOMREQUEST = 'PUT'. */
   private function requestPut($target, $data = null, array $tags = [])
   {
     $tags['CURLOPT_CUSTOMREQUEST'] = 'PUT';
@@ -240,7 +239,7 @@ class Procountor extends CComponent
   // ---------------------------------------------------------------------------
 
   /**
-   * Call API /invoices (Create Invoice).
+   * Call API /invoices.
    * @param string $params_json Parameters in JSON, like from json_encode().
    * @return string JSON response from the server.
    */
@@ -251,7 +250,7 @@ class Procountor extends CComponent
 
   /**
    * Call API /invoices/{invoiceId}/approve.
-   * @param int $invoice_id Invoice ID.
+   * @param int $invoice_id Procountor invoice ID (Lasku->procountor_id).
    * @param string $comment Comment for verification or approval event.
    */
   public function approveInvoice(int $invoice_id, string $comment = null)
@@ -260,8 +259,8 @@ class Procountor extends CComponent
   }
 
   /**
-   * Call API /invoices/{invoice_id}
-   * @param int $invoice_id Invoice ID.
+   * Call API /invoices/{invoice_id}.
+   * @param int $invoice_id Procountor invoice ID (Lasku->procountor_id).
    */
   public function getInvoice(int $invoice_id)
   {
@@ -270,7 +269,7 @@ class Procountor extends CComponent
 
   /**
    * Call API /invoices/{invoiceId}/invalidate.
-   * @param int $invoice_id Invoice ID.
+   * @param int $invoice_id Procountor invoice ID (Lasku->procountor_id).
    */
   public function invalidateInvoice(int $invoice_id)
   {
@@ -278,7 +277,7 @@ class Procountor extends CComponent
   }
 
   /**
-   * Call API /bankaccounts (search/list bank accounts).
+   * Call API /bankaccounts.
    *
    * @param int $previous_id
    * Previous bank account ID for pagination. If this field is set and results
@@ -305,17 +304,6 @@ class Procountor extends CComponent
     $target = 'bankaccounts';
     if (!empty($query = http_build_query($data)))
       $target .= "&$query";
-    return $this->request($target, null, ['CURLOPT_CUSTOMREQUEST' => 'GET']);
-  }
-
-  /**
-   * Call API /bankaccounts; Endpoint for creating new company bank account.
-   *
-   * @return array
-   * Created bank information.
-   */
-  public function createBankAccount()
-  {
-
+    return $this->requestGet($target);
   }
 }
