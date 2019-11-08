@@ -239,6 +239,17 @@ class Procountor extends CComponent
   }
 
   /**
+   * Call API /invoices/{invoiceId}/approve
+   *
+   * @param int $invoice_id Invoice ID.
+   * @param string $comment Comment for verification or approval event.
+   */
+  public function invoicesApprove(int $invoice_id, string $comment = null)
+  {
+    return $this->request("invoices/$invoice_id/approve", $comment, ['CURLOPT_PUT' => true]);
+  }
+
+  /**
    * Call API /bankaccounts (search/list bank accounts).
    *
    * @param int $previous_id
