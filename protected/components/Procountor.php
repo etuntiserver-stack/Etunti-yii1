@@ -69,6 +69,15 @@ class Procountor extends CComponent
     return json_decode(curl_exec($ch), true);
   }
 
+  /** Shortcut to request() with CURLOPT_CUSTOMREQUEST => true tag. */
+  private function requestPut($target, $data = null, array $tags = [])
+  {
+    $tags_final = ['CURLOPT_CUSTOMREQUEST' => true];
+    if (count($tags) > 0)
+      $tags_final = array_replace($tags_final, $tags);
+    $this->request($target, $data, $tags_final);
+  }
+
   // ---------------------------------------------------------------------------
   // Authorization
   // ---------------------------------------------------------------------------
@@ -242,7 +251,7 @@ class Procountor extends CComponent
    */
   public function approveInvoice(int $invoice_id, string $comment = null)
   {
-    return $this->request("invoices/$invoice_id/approve", $comment, ['CURLOPT_PUT' => true]);
+    return $this->requestPut("invoices/$invoice_id/approve", $comment);
   }
 
   /**
@@ -251,7 +260,7 @@ class Procountor extends CComponent
    */
   public function invalidateInvoice(int $invoice_id)
   {
-    return $this->request("invoices/$invoice_id/invalidate", null, ['CURLOPT_PUT', true]);
+    return $this->requestPut("invoices/$invoice_id/invalidate");
   }
 
   /**
