@@ -240,12 +240,12 @@ class Procountor extends CComponent
 
   /**
    * Call API /invoices.
-   * @param string $params_json Parameters in JSON, like from json_encode().
+   * @param array $params Parameters. Automatically converted to JSON.
    * @return string JSON response from the server.
    */
-  public function createInvoice($params_json)
+  public function createInvoice(array $params)
   {
-    return $this->request('invoices', $params_json);
+    return $this->request('invoices', $params);
   }
 
   /**
