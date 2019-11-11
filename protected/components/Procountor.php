@@ -51,15 +51,19 @@ class Procountor extends CComponent
    * String or array containing post field data.
    * @param array $tags
    * Tags ( [ OPTION => VALUE, OPTION2 => VALUE2 ... ] )
+   * @param bool $json
+   * If true, 'Content-Type: application/json' is passed to the request.
    */
-  private function request($target, $data = null, array $tags = ['CURLOPT_POST' => true])
+  private function request($target, $data = null, array $tags = ['CURLOPT_POST' => true], $json = true)
   {
     if (empty($token = $this->getAccessToken()))
       return false;
     if (is_array($data))
       $data = json_encode($data);
     $ch = curl_init("{$this->api_base_url}/$target");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json", "Authorization: Bearer $token"]);
+    if ($json) $header[] = "Content-Type: application/json";
+    $header[] = "Authorization: Bearer $token";
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     if (!empty($data))
       curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -71,15 +75,15 @@ class Procountor extends CComponent
   /** Shortcut to request() with CURLOPT_CUSTOMREQUEST = 'GET'. */
   private function requestGet($target, $data = null, array $tags = [])
   {
-    $tags['CURLOPT_CUSTOMREQUEST'] = 'GET';
-    return $this->request($target, $data, $tags);
+    $tags[CURLOPT_CUSTOMREQUEST] = 'GET';
+    return $this->request($target, $data, $tags, false);
   }
 
   /** Shortcut to request() with CURLOPT_CUSTOMREQUEST = 'PUT'. */
   private function requestPut($target, $data = null, array $tags = [])
   {
-    $tags['CURLOPT_CUSTOMREQUEST'] = 'PUT';
-    return $this->request($target, $data, $tags);
+    $tags[CURLOPT_CUSTOMREQUEST] = 'PUT';
+    return $this->request($target, $data, $tags, false);
   }
 
   // ---------------------------------------------------------------------------
