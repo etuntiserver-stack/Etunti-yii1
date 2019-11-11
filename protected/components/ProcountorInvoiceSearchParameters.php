@@ -78,4 +78,37 @@ class ProcountorInvoiceSearchParameters extends CComponent
   {
     return 'Y-m-d\TH:i:s.v\Z';
   }
+
+  /**
+   * Build final parameters for the API call.
+   * @return array Parameters.
+   */
+  public function buildParameters()
+  {
+    $params = [];
+
+    $options = [
+      'status' => $this->status,
+      'startDate' => $this->startDate,
+      'endDate' => $this->endDate,
+      'createdStartDate' => $this->createdStartDate,
+      'createdEndDate' => $this->createdEndDate,
+      'versionStartDate' => $this->versionStartDate,
+      'versionEndDate' => $this->versionEndDate,
+      'types' => $this->types,
+      'businessPartnerId' => $this->businessPartnerId,
+      'previousId' => $this->previousId,
+      'orderById' => $this->orderById,
+      'orderByDate' => $this->orderByDate,
+      'orderByCreated' => $this->orderByCreated,
+      'orderByVersion' => $this->orderByVersion
+    ];
+
+    foreach($options as $key => $option) {
+      if (!empty($option))
+        $params[$key] = urlencode($option);
+    }
+
+    return $params;
+  }
 }

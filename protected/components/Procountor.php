@@ -268,6 +268,18 @@ class Procountor extends CComponent
   }
 
   /**
+   * Call API /invoices.
+   * @param mixed $params
+   * Parameters array, or ProcountorInvoiceSearchParameters object.
+   */
+  public function searchInvoices($params)
+  {
+    if ($params instanceof ProcountorInvoiceSearchParameters)
+      $params = $params->buildParameters();
+    return $this->requestGet('invoices', $params);
+  }
+
+  /**
    * Call API /invoices/{invoiceId}/invalidate.
    * @param int $invoice_id Procountor invoice ID (Lasku->procountor_id).
    */
