@@ -294,7 +294,17 @@ class Procountor extends CComponent
    */
   public function sendInvoice(int $invoice_id)
   {
-    $this->requestPut("invoice/$invoice_id/send");
+    return $this->requestPut("invoices/$invoice_id/send");
+  }
+
+  /**
+   * Call API /invoices/{invoiceId}/verify.
+   * @param int $invoice_id Procountor invoice ID (Lasku->procountor_id).
+   * @param string $comment Comment for verification or approval event.
+   */
+  public function verifyInvoice(int $invoice_id, string $comment = null)
+  {
+    return $this->requestPut("invoices/$invoice_id/verify", $comment);
   }
 
   /**
