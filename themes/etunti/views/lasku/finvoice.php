@@ -233,6 +233,17 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
     // Invoice was sent successfully. Save ID.
     $l->procountor_id = $response['id'];
     $l->save();
+
+    // Approve invoice.
+    $approve_result = $pc->approveInvoice($response['id']);
+    if (isset($approve_result['errors'])) {
+      $pc->logError('approveInvoice', $approve_result, ['Lasku ID' => $l->id], 'Error while approving invoice.');
+      Yii::app()->user->setFlash('danger', 'Laskun hyväksymisessä tapahtui virhe. Vika on kirjattu, ja ylläpidolle on ilmoitettu asiasta.');
+
+      // Invalidate the invoice.
+      $pc->invalidateInvoice($response['id']);
+      $this->redirect(array('update', 'id' => $id));
+    }
   } else {
 
     // If response doesn't contain ID, the invoice was not sent properly. Return
