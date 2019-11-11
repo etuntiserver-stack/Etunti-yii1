@@ -63,7 +63,7 @@ class Procountor extends CComponent
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     if (!empty($data))
       curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    foreach($tags as $tag => $value)
+    foreach ($tags as $tag => $value)
       curl_setopt($ch, $tag, $value);
     return json_decode(curl_exec($ch), true);
   }
@@ -240,12 +240,33 @@ class Procountor extends CComponent
 
   /**
    * Call API /invoices.
+   * @param mixed $params
+   * Parameters array, or ProcountorInvoiceSearchParameters object.
+   */
+  public function searchInvoices($params)
+  {
+    if ($params instanceof ProcountorInvoiceSearchParameters)
+      $params = $params->buildParameters();
+    return $this->requestGet('invoices', $params);
+  }
+
+  /**
+   * Call API /invoices.
    * @param array $params Parameters. Automatically converted to JSON.
    * @return string JSON response from the server.
    */
   public function createInvoice(array $params)
   {
     return $this->request('invoices', $params);
+  }
+
+  /**
+   * Call API /invoices/{invoice_id}.
+   * @param int $invoice_id Procountor invoice ID (Lasku->procountor_id).
+   */
+  public function getInvoice(int $invoice_id)
+  {
+    return $this->requestGet("invoices/$invoice_id");
   }
 
   /**
@@ -259,33 +280,21 @@ class Procountor extends CComponent
   }
 
   /**
-   * Call API /invoices/{invoice_id}.
-   * @param int $invoice_id Procountor invoice ID (Lasku->procountor_id).
-   */
-  public function getInvoice(int $invoice_id)
-  {
-    return $this->requestGet("invoices/$invoice_id");
-  }
-
-  /**
-   * Call API /invoices.
-   * @param mixed $params
-   * Parameters array, or ProcountorInvoiceSearchParameters object.
-   */
-  public function searchInvoices($params)
-  {
-    if ($params instanceof ProcountorInvoiceSearchParameters)
-      $params = $params->buildParameters();
-    return $this->requestGet('invoices', $params);
-  }
-
-  /**
    * Call API /invoices/{invoiceId}/invalidate.
    * @param int $invoice_id Procountor invoice ID (Lasku->procountor_id).
    */
   public function invalidateInvoice(int $invoice_id)
   {
     return $this->requestPut("invoices/$invoice_id/invalidate");
+  }
+
+  /**
+   * Call API /invoices/{invoiceId}/send.
+   * @param int $invoice_id Procountor invoice ID (Lasku->procountor_id).
+   */
+  public function sendInvoice(int $invoice_id)
+  {
+    $this->requestPut("invoice/$invoice_id/send");
   }
 
   /**
