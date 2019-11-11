@@ -773,12 +773,6 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<a href="lasku_pdf?id=<?php echo $model->id; ?>" target="_blank" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Esikatselu'); ?></a>
 		<?php endif; */?>
 
-
-		<?php
-		if(isset($model->id) && $model->tilanne == '1' && $asetukset->palvelu_tyyppi == 5)
-			echo CHtml::link('Lähetä Procountoriin', ['finvoice', 'id' => $model->id, 'procountor' => true, 'merkitseLahetettavaksi' => true], ['class' => 'btn btn-success btn-group myBgColors']);
-		?>
-
 		<?php if(isset($model->id) and $model->tilanne == '1' and $asetukset->palvelu_tyyppi == 1) : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&finvoice=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä finvoice (POSTITA.FI)'); ?></a>
 		<?php endif; ?>
@@ -834,9 +828,15 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true" class="btn  btn-success btn-group myBgColors" data-toggle="tooltip" data-placement="top" title="<?php echo Yii::t('main', 'Lähetä Trustiin'); ?>"><?php echo Yii::t('main','Lähetä'); ?></a>
 		<?php endif; ?>
 
-		<?php if(isset($model->id) and $model->tilanne == '0') : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&hyvaksyminen=true" class="btn btn-success btn-group myBgColors" id="hyvaksytaan_lasku"><?php echo Yii::t('main','Hyväksy'); ?></a>
-		<?php endif; ?>
+		<?php
+		if(isset($model->id) and $model->tilanne == '0') {
+			// Procountor (invoice is sent to Procountor when approved)
+			if($asetukset->palvelu_tyyppi == 5)
+				echo CHtml::link('Hyväksy', ['finvoice', 'id' => $model->id, 'procountor' => true, 'hyvaksyminen' => true], ['class' => 'btn btn-success btn-group myBgColors']);
+			else
+				echo "<a href='finvoice?id={$model->id}&hyvaksyminen=true' class='btn btn-success btn-group myBgColors' id='hyvaksytaan_lasku'>" . Yii::t('main','Hyväksy') . '</a>';
+		}
+		?>
 
 		<?php if(
 			isset($model->id)
