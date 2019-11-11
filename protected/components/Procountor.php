@@ -72,14 +72,14 @@ class Procountor extends CComponent
   private function requestGet($target, $data = null, array $tags = [])
   {
     $tags['CURLOPT_CUSTOMREQUEST'] = 'GET';
-    $this->request($target, $data, $tags);
+    return $this->request($target, $data, $tags);
   }
 
   /** Shortcut to request() with CURLOPT_CUSTOMREQUEST = 'PUT'. */
   private function requestPut($target, $data = null, array $tags = [])
   {
     $tags['CURLOPT_CUSTOMREQUEST'] = 'PUT';
-    $this->request($target, $data, $tags);
+    return $this->request($target, $data, $tags);
   }
 
   // ---------------------------------------------------------------------------
