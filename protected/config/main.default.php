@@ -8,6 +8,43 @@ session_start();
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 
+/*
+  if(
+	(isset($_GET['dom']) and strtolower($_GET['dom']) == 'demo')
+	or (isset($_GET['dom']) and strtolower($_GET['dom']) == 'sivex')
+    ){
+    header("Access-Control-Allow-Origin: *");
+    $url = "https://etunti.com".$_SERVER['REQUEST_URI'];
+    $params = array(
+        'http' => array(
+            'method' => 'POST',
+            'content' => http_build_query($_POST)
+        )
+    );
+    //if (!is_null($params)) {
+        $params['http']['header'] = '';
+        foreach ($headers as $k => $v) {
+            $params['http']['header'] .= "$k: $v\n";
+        }
+    //}
+    $ctx = stream_context_create($params);
+    $fp = @fopen($url, 'rb', false, $ctx);
+    if ($fp) {
+        echo @stream_get_contents($fp);
+        exit;
+    } else {
+        // Error
+        throw new Exception("Error loading '$url', $php_errormsg");
+    }
+    exit;
+  }
+*/
+
+  if ( isset($_GET['dom']) and empty(trim($_GET['dom']))){
+	//$_GET['dom'] = 'demo';
+	//echo json_encode(array('error' => 'Domain ei saa olla tyhja'));
+	//exit;
+  }
   if ( isset($_SERVER['REQUEST_URI']) 
 	and 
 	(
@@ -143,37 +180,29 @@ session_start();
   //     LOG -->
 
 
-
-
-  if( isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' ))
-  {
   $db = 'etuntifw';
-  $db_host = 'localhost';
-  $etuntifw_user = 'root';
+  $db_host = '10.215.25.9';
+  $etuntifw_user = '';
   $etuntifw_pass = '';
 
   $db2 = '';
-  if(isset($_SESSION['domain']))
-  $db2 = $_SESSION['domain'];
-
-  $db2_host = 'localhost';
-  $db2_user = 'root';
-  $db2_pass = '';
-
-  } else {
-
-  $db = 'etuntifw';
-  $db_host = 'localhost';
-  $etuntifw_user = 'root';
-  $etuntifw_pass = '';
-
-  $db2 = '';
-  if(isset($_SESSION['domain']))
-  $db2 = $_SESSION['domain'];
-  $db2_host = 'localhost';
-  $db2_user = 'root';
-  $db2_pass = '';
+  if(isset($_SESSION['domain'])){ $db2 = $_SESSION['domain']; }
+  if(isset($_GET['dom'])){
+          $db = "etuntifw";
+          $conn = mysqli_connect($db_host, $etuntifw_user, $etuntifw_pass, $db);
+          if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+          }
+          $sql = mysqli_query($conn, "SELECT domain FROM domainit WHERE kirjautumistunnus='".$_GET['dom']."' ") or die(mysqli_error($db));
+          if($row = mysqli_fetch_array($sql)){
+                $db2 = $row['domain'];
+          }
   }
+
+  $db2_host = '10.215.25.9';
+  $db2_user = '';
+  $db2_pass = '';
+
 
 
 return array(
@@ -521,3 +550,4 @@ return array(
 
 
 );
+

@@ -842,7 +842,7 @@ ini_set("max_execution_time", "60");
 		   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
 						'tyontekija', // name
 						'gui-input', //class
-						'tyontekija', // id
+						'yhtveto-tyontekijat-tyontekija', // id
 						(isset($_GET['tyontekija']))?$_GET['tyontekija']:'', //selected
 						1 // aktiivinen
 				);
@@ -2579,7 +2579,7 @@ $('.mult').multiselect({
 });
 
   $("#yhtveto_tyontekijat").on("submit", function(){
-	if( $("#tyontekija option:selected").val() == 'kaikki' ){
+	if( $("#yhtveto-tyontekijat-tyontekija option:selected").val() == 'kaikki' ){
 		alert("Valitse työntekijä.");
 		return false;
 	}

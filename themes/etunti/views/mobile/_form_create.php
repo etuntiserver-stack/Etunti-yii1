@@ -83,6 +83,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 <br>
 
 	<div class="section">
+		<div class="alert bg-warning">Tämä kirjaus mene suoraan Tuntien hyväksyntä  sivuille</div>
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary myBgColors luoTallennaKohde')); ?>
 	</div>
 

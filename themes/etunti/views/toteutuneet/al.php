@@ -88,7 +88,7 @@ foreach($attributes as $str){
 	   echo '<div id="'.$tot_lu.'_'.$rivi.'_'.$did.'_'.$tid.'" class="fullRivi form-inline">';
 
 	   if($aloitan > 0 and $loppui > 0)
-	   echo '<span class="pull-right mob_kesto hidden">&nbsp;'.$this->sprint(strtotime($loppui)-strtotime($aloitan)).'</span>';
+	   echo '<span class="pull-right mob_kesto">&nbsp;'.$this->sprint(strtotime($loppui)-strtotime($aloitan)).'</span>';
 
 	   echo '
 	   <div class="pull-right">'.$ap.'</div>'; //data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hyväksy').'"
