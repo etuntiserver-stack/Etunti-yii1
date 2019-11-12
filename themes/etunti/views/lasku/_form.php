@@ -882,6 +882,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 			and $model->tilanne != 0 
 			and $asetukset->palvelu_tyyppi != 2
 			and $asetukset->palvelu_tyyppi != 4
+			and $asetukset->palvelu_tyyppi != 5
 			and $model->tilanne != 999
 		) : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaSahkopostilla=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä sähköpostilla'); ?></a>
@@ -893,6 +894,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 			and $model->tilanne != 0 
 			and $asetukset->palvelu_tyyppi != 2
 			and $asetukset->palvelu_tyyppi != 4
+			and $asetukset->palvelu_tyyppi != 5
 			and !empty($asetukset->trust_url)
 			and !empty($asetukset->trust_cid)
 			and !empty($asetukset->trust_api)
