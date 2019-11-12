@@ -21,21 +21,24 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
   $bank_account_found = false;
   $bank_account_results = $pc->getBankAccounts();
 
-  if (isset($bank_account_results['results'])) {
+  if (isset($bank_account_results['errors']) || !isset($bank_account_results['results'])) {
+    $pc->logError('getBankAccounts', $bank_account_results, ['Lasku ID' => $l->id], 'Failed to get bank accounts from Procountor.');
+    Yii::app()->user->setFlash('danger', 'Pankkitilien haku Procountorista epäonnistui.');
+    $this->redirect(array('update','id'=>$id));
+  }
 
-    // Loop result bank accounts and compare IBAN.
-    foreach($bank_account_results['results'] as $bank_account) {
-      if (($iban = $bank_account['iban'] ?? '') == $current_iban) {
+  // Loop result bank accounts and compare IBAN.
+  foreach($bank_account_results['results'] as $bank_account) {
+    if (($iban = $bank_account['iban'] ?? '') == $current_iban) {
 
-        // Ensure this bank account is active, because otherwise we get errors.
-        if (($bank_account['status'] ?? '') != 'ACTIVE') {
-          Yii::app()->user->setFlash('danger', 'Valittu pankkitili ei ole aktivoitu Procountorissa.');
-          $this->redirect(array('update','id'=>$id));
-        }
-
-        $bank_account_found = true;
-        break;
+      // Ensure this bank account is active, because otherwise we get errors.
+      if (($bank_account['status'] ?? '') != 'ACTIVE') {
+        Yii::app()->user->setFlash('danger', 'Valittu pankkitili ei ole aktivoitu Procountorissa.');
+        $this->redirect(array('update','id'=>$id));
       }
+
+      $bank_account_found = true;
+      break;
     }
   }
 
