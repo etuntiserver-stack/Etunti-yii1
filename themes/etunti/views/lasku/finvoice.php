@@ -282,6 +282,26 @@ if (isset($_GET['mitatointi']) && isset($_GET['procountor'])) {
   }
 }
 
+// Procountor sending.
+if (isset($_GET['merkitseLahetettavaksi']) && isset($_GET['procountor'])) {
+  $pc = Yii::createComponent('Procountor');
+  $l = Lasku::model()->findbypk($_GET['id']);
+
+  // Ensure that the invoice was created to Procountor from the invoice view.
+  if (!$l->procountor_id) {
+    Yii::app()->user->setFlash('danger', 'Laskua ei voida lähettää Procountorissa koska sitä ei ole luotu Procountoriin Etunti käyttöliittymän kautta.');
+    $this->redirect(array('update', 'id' => $id));
+  }
+
+  // Send invoice.
+  $send_results = $pc->sendInvoice($l->procountor_id);
+  if (isset($send_results['errors'])) {
+    $pc->logError('sendInvoice', $send_results, ['Lasku ID' => $_GET['id']], 'Failed to send invoice.');
+    Yii::app()->user->setFlash('danger', 'Laskun lähetys Procountorissa epäonnistui. Vika on ilmoitettu ylläpitoon.');
+    $this->redirect(array('update', 'id' => $id));
+  }
+}
+
 if(isset($_GET['kopio'])){
 
      // <-- Viimeinen laskunumero taulusta
