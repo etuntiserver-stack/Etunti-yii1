@@ -1,7 +1,4 @@
-<?php
-	//$asetukset=Asetukset::model()->findbypk(1);
-
-?>
+<?php $asetukset=Asetukset::model()->findbypk(1); ?>
 
         <!-- begin: .tray-center -->
         <div class="tray-center">
@@ -187,7 +184,10 @@
 
 	<?php if($lahettamattomat == true): ?>
 	<h3 class="alert alert-primary myBgColors"><?php echo Yii::t('main', 'Lähettämättömät laskut'); ?>
-		<button class="col-sm-offset-1 valitseKaikki btn btn-sm btn-default btn-group"><?php echo Yii::t('main', 'Valitse kaikki'); ?></button>
+    <?php if ($asetukset->palvelu_tyyppi == 5): ?>
+      <button class="lahetaKaikkiProcountor col-sm-offset-1 btn btn-sm btn-default btn-group"><?php echo Yii::t('main', 'Lähetä kaikki'); ?></button>
+    <?php endif; ?>
+    <button class="valitseKaikki btn btn-sm btn-default btn-group"><?php echo Yii::t('main', 'Valitse kaikki'); ?></button>
 		<span id="lahetaValitsemmat"></span>
 	</h3>
 	<?php endif; ?>
@@ -278,23 +278,35 @@ $(".valitseLahetettavaksi").click(function(){
 	}
 });
 
+// Send all, or only selected invoices.
+$(document).delegate(".lahetaNamat, .lahetaKaikkiProcountor", "click", function() {
 
-
-$(document).delegate(".lahetaNamat", "click", function() {
+  // Check if the send all button was pressed.
+  var procountor = $(this).hasClass('lahetaKaikkiProcountor');
   $('#mobileTable input:checkbox').each(function() {
-    if (this.checked) {
-      var thisFor = $(this).attr('for');
+
+    // Process all or only checked invoices, depending on what was pressed.
+    if (procountor || this.checked) {
+
+      // Get invoice ID.
+      var id = $(this).attr('for');
+
+      // Save this element to access the current row later in AJAX callback.
       var temp = $(this);
+
       $.ajax({
-        url: 'laheta_valitsemmat?id='+thisFor,
+        url: (procountor ? 'laheta_procountor' : 'laheta_valitsemmat') + '?id=' + id,
         /*type: "POST",
-        data: { id : thisFor },*/
+        data: { id : id },*/
         success: function(data) {
-          console.log(data);
+
+          // Check if there was an error. If so, stop the loop now.
           if (data.trim() != 'OK') {
             alert(data);
             return false; // break invoice loop
           } else {
+
+            // Action successful, find the status column of this row and change the text.
             temp.parent().parent().parent().find('td').each(function(index) {
               if ($(this).text().trim() == 'Lasku hyväksytty') {
                 $(this).text('Lasku lähetetty');
