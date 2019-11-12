@@ -836,6 +836,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php if(
 			isset($model->id)
 			and $asetukset->palvelu_tyyppi != 4
+			and $asetukset->palvelu_tyyppi != 5
 			and $model->tilanne != 999
 		) : ?>
 		<a href="lasku_pdf?id=<?php echo $model->id; ?>&muistutuslasku=true" target="_blank" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksumuistutus'); ?></a>
