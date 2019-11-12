@@ -3202,28 +3202,23 @@ $xml .= '
 
 	public function actionLaheta_valitsemmat($id)
 	{
-		$bod = '';
-		$asetukset = Asetukset::model()->findByPk(1);
+		switch (Asetukset::model()->findByPk(1)->palvelu_tyyppi) {
 
-		// <-- Netvisor
-		if($asetukset->palvelu_tyyppi == 4)
-		{
-			$return = $this->lahetaNetvisoriin($id);
-			if($return != false)
-				$bod = "OK";
-			else
-				$bod = "Error";
+			// Netvisor
+			case 4:
+				echo $this->lahetaNetvisoriin($id) ? "OK" : "Error";
+				break;
+
+			// Procountor
+			case 5:
+				echo $this->lahetaProcountor($id);
+				break;
+
+			// Not supported
+			default:
+				echo 'Valittu laskutuksen palvelutyyppi ei tue tätä toimintoa.';
+				break;
 		}
-		//     Netvisor -->
-
-		// Procountor
-		if ($asetukset->palvelu_tyyppi == 5) {
-			echo $this->lahetaProcountor($id);
-			return;
-		}
-
-		echo $bod;
-		return $bod;
 	}
 
 	public function actionInsert_lahete()
