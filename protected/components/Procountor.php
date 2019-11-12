@@ -302,6 +302,15 @@ class Procountor extends CComponent
   }
 
   /**
+   * Call API /invoices/{invoiceId}/unfinished.
+   * @param int $invoice_id Procountor invoice ID (Lasku->procountor_id).
+   */
+  public function setInvoiceUnfinished(int $invoice_id)
+  {
+    return $this->requestPut("invoices/$invoice_id/unfinished");
+  }
+
+  /**
    * Call API /invoices/{invoiceId}/verify.
    * @param int $invoice_id Procountor invoice ID (Lasku->procountor_id).
    * @param string $comment Comment for verification or approval event.

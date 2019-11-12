@@ -3,7 +3,8 @@
 if(isset($_GET['id']))
   $id = $_GET['id'];
 
-if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
+// Procountor invoice creation and approval.
+if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
   $l = Lasku::model()->findbypk($_GET['id']);
 
   // var_dump($l->attributes);
@@ -255,6 +256,29 @@ if (isset($_GET['procountor']) && $_GET['procountor'] == true) {
     Yii::app()->user->setFlash('danger', 'Laskun lähettämisessä tapahtui virhe. Viasta on ilmoitettu
                                           ylläpidolle. Jos vika jatkuu, ota yhteyttä ylläpitoon.');
     $this->redirect(array('update','id'=>$id));
+  }
+}
+
+// Procountor invalidation.
+if (isset($_GET['mitatointi']) && isset($_GET['procountor'])) {
+  $pc = Yii::createComponent('Procountor');
+  $l = Lasku::model()->findbypk($_GET['id']);
+
+  // If invoice was not created in Procountor, dont do anything here.
+  if ($l->procountor_id) {
+
+    // Change state to unfinished first, as an invoice cannot be invalidated in
+    // NOT_SENT state. Set unfinished even if the invoice already is unfinished
+    // (ignore any errors in the operation).
+    $pc->setInvoiceUnfinished($l->procountor_id);
+
+    // Invalidate
+    $invalidate_results = $pc->invalidateInvoice($l->procountor_id);
+    if (isset($invalidate_results['errors'])) {
+      $pc->logError('getBankAccounts', $invalidate_results, ['Lasku ID' => $_GET['id']], 'Failed to invalidate invoice.');
+      Yii::app()->user->setFlash('danger', 'Laskun mitätöinti Procountorissa epäonnistui. Vika on ilmoitettu ylläpitoon.');
+      $this->redirect(array('update', 'id' => $id));
+    }
   }
 }
 
