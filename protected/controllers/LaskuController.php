@@ -3193,6 +3193,25 @@ $xml .= '
 		}
 		//     Netvisor -->
 
+		// Procountor
+		if ($asetukset->palvelu_tyyppi == 5) {
+			$pc = Yii::createComponent('Procountor');
+			$l = Lasku::model()->findbypk($id);
+			$bod = 'OK';
+
+			if ($l->procountor_id) {
+				$send_results = $pc->sendInvoice($l->procountor_id);
+				if (isset($send_results['errors'])) {
+					$pc->logError('sendInvoice', $send_results, ['Lasku ID' => $id], 'Failed to send invoice.');
+					$bod = 'Laskun lähetys Procountorissa epäonnistui. Vika on ilmoitettu ylläpitoon.';
+					Yii::app()->user->setFlash('danger', 'Laskun lähetys Procountorissa epäonnistui. Vika on ilmoitettu ylläpitoon.');
+				}
+			} else {
+				$bod = 'Laskua ei voida lähettää Procountorissa koska sitä ei ole luotu Procountoriin Etunti käyttöliittymän kautta.';
+			}
+		}
+
+		echo $bod;
 		return $bod;
 	}
 

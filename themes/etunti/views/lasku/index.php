@@ -280,24 +280,32 @@ $(".valitseLahetettavaksi").click(function(){
 
 
 
-$(document).delegate(".lahetaNamat","click",function(){
-	$('#mobileTable input:checkbox').each(function () {
-           if (this.checked) {
-
-		var thisFor = $(this).attr('for');
-
-	        $.ajax({
-	           url: 'laheta_valitsemmat?id='+thisFor,
-	           /*type: "POST",
-	           data: { id : thisFor },*/
-	           success: function(data){
-			console.log(data);
-	           }
-	        });
-
-           }
-	});
-	window.location.reload();
+$(document).delegate(".lahetaNamat", "click", function() {
+  $('#mobileTable input:checkbox').each(function() {
+    if (this.checked) {
+      var thisFor = $(this).attr('for');
+      var temp = $(this);
+      $.ajax({
+        url: 'laheta_valitsemmat?id='+thisFor,
+        /*type: "POST",
+        data: { id : thisFor },*/
+        success: function(data) {
+          console.log(data);
+          if (data.trim() != 'OK') {
+            alert(data);
+            return false; // break invoice loop
+          } else {
+            temp.parent().parent().parent().find('td').each(function(index) {
+              if ($(this).text().trim() == 'Lasku hyväksytty') {
+                $(this).text('Lasku lähetetty');
+                return false; // break
+              }
+            });
+          }
+        }
+      });
+    }
+  });
 });
 
 
