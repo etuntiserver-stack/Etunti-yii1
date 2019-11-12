@@ -828,15 +828,10 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true" class="btn  btn-success btn-group myBgColors" data-toggle="tooltip" data-placement="top" title="<?php echo Yii::t('main', 'Lähetä Trustiin'); ?>"><?php echo Yii::t('main','Lähetä'); ?></a>
 		<?php endif; ?>
 
-		<?php
-		if(isset($model->id) and $model->tilanne == '0') {
-			// Procountor (invoice is sent to Procountor when approved)
-			if($asetukset->palvelu_tyyppi == 5)
-				echo CHtml::link('Hyväksy', ['finvoice', 'id' => $model->id, 'procountor' => true, 'hyvaksyminen' => true], ['class' => 'btn btn-success btn-group myBgColors']);
-			else
-				echo "<a href='finvoice?id={$model->id}&hyvaksyminen=true' class='btn btn-success btn-group myBgColors' id='hyvaksytaan_lasku'>" . Yii::t('main','Hyväksy') . '</a>';
-		}
-		?>
+		<?php $procountor_param = $asetukset->palvelu_tyyppi == 5 ? '&procountor=1' : ''; ?>
+		<?php if(isset($model->id) and $model->tilanne == '0') : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&hyvaksyminen=true<?php echo $procountor_param; ?>" class="btn btn-success btn-group myBgColors" id="hyvaksytaan_lasku"><?php echo Yii::t('main','Hyväksy'); ?></a>
+		<?php endif; ?>
 
 		<?php if(
 			isset($model->id)
@@ -907,7 +902,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 			isset($model->id)
 			and $model->tilanne != 999
 		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&mitatointi=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Mitätöi'); ?></a>
+		<a href="finvoice?id=<?php echo $model->id; ?>&mitatointi=true<?php echo $procountor_param; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Mitätöi'); ?></a>
 		<a href="finvoice?id=<?php echo $model->id; ?>&kopio=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Kopio'); ?></a>
 		<?php endif; ?>
 
