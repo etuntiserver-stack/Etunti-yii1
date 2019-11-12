@@ -10,6 +10,14 @@
 
 
         <div class="pull-right myBgColors p10">
+  <?php
+  if ($asetukset->palvelu_tyyppi == 5) {
+    echo "<button class='lahetaSivuProcountor btn btn-success myBgColors'
+      style='color:white' data-toggle='tooltip' data-placement='top' title=''
+      data-original-title='Lähetä tällä sivulla näkyvät hyväksytyt laskut asiakkaille.'
+      '>" . Yii::t('main', 'Lähetä kaikki hyväksytyt tällä sivulla') . "</button>";
+  }
+  ?>
 	<?php echo CHtml::link(Yii::t('main', 'Lähettämättömät'), 
 		array('index', 'lahettamattomat'=>'true'), 
 		array(
@@ -278,6 +286,40 @@ $(".valitseLahetettavaksi").click(function(){
 	}
 });
 
+// Procountor: Send all approved invoices on this page.
+$(document).delegate(".lahetaSivuProcountor", "click", function() {
+
+  $('i.link[for]').each(function() {
+
+    // Get invoice ID.
+    var id = $(this).attr('for');
+
+    // Save this element to access the current row later in AJAX callback.
+    var temp = $(this);
+
+    $.ajax({
+      url: 'laheta_valitsemmat?id=' + id,
+      success: function(data) {
+
+        // Check if there was an error. If so, stop the loop now.
+        if (data.trim() != 'OK') {
+          alert(data);
+          return false; // break invoice loop
+        } else {
+
+          // Action successful, find the status column of this row and change the text.
+          temp.parent().parent().parent().find('td').each(function(index) {
+            if ($(this).text().trim() == 'Lasku hyväksytty') {
+              $(this).text('Lasku lähetetty');
+              return false; // break
+            }
+          });
+        }
+      }
+    });
+  });
+});
+
 // Send all, or only selected invoices.
 $(document).delegate(".lahetaNamat, .lahetaKaikkiProcountor", "click", function() {
 
@@ -295,7 +337,7 @@ $(document).delegate(".lahetaNamat, .lahetaKaikkiProcountor", "click", function(
       var temp = $(this);
 
       $.ajax({
-        url: (procountor ? 'laheta_procountor' : 'laheta_valitsemmat') + '?id=' + id,
+        url: 'laheta_valitsemmat?id=' + id,
         /*type: "POST",
         data: { id : id },*/
         success: function(data) {

@@ -27,7 +27,7 @@ class LaskuController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'laheta_procountor', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow',  // allow all users to perform 'index' and 'view' actions
@@ -3177,6 +3177,29 @@ $xml .= '
 		return $return;
 	}
 
+	/**
+	 * Send approved invoice when using Procountor. This is mainly called from
+	 * invoices index, by 'Send all' and 'Send selected' -buttons (jQuery).
+	 */
+	protected function lahetaProcountor($id)
+	{
+		$pc = Yii::createComponent('Procountor');
+		$l = Lasku::model()->findbypk($id);
+		$result = 'OK';
+
+		if ($l->procountor_id) {
+			$send_results = $pc->sendInvoice($l->procountor_id);
+			if (isset($send_results['errors'])) {
+				$pc->logError('sendInvoice', $send_results, ['Lasku ID' => $id], 'Failed to send invoice.');
+				$result = 'Laskun lähetys Procountorissa epäonnistui. Vika on ilmoitettu ylläpitoon.';
+			}
+		} else {
+			$result = 'Laskua ei voida lähettää Procountorissa koska sitä ei ole luotu Procountoriin Etunti käyttöliittymän kautta.';
+		}
+
+		return $result;
+	}
+
 	public function actionLaheta_valitsemmat($id)
 	{
 		$bod = '';
@@ -3195,35 +3218,12 @@ $xml .= '
 
 		// Procountor
 		if ($asetukset->palvelu_tyyppi == 5) {
-			$this->actionLaheta_procountor($id);
+			echo $this->lahetaProcountor($id);
 			return;
 		}
 
 		echo $bod;
 		return $bod;
-	}
-
-	/**
-	 * Send approved invoice when using Procountor. This is mainly called from
-	 * invoices index, by 'Send all' and 'Send selected' -buttons (jQuery).
-	 */
-	public function actionLaheta_procountor($id)
-	{
-		$pc = Yii::createComponent('Procountor');
-		$l = Lasku::model()->findbypk($id);
-		$body = 'OK';
-
-		if ($l->procountor_id) {
-			$send_results = $pc->sendInvoice($l->procountor_id);
-			if (isset($send_results['errors'])) {
-				$pc->logError('sendInvoice', $send_results, ['Lasku ID' => $id], 'Failed to send invoice.');
-				$body = 'Laskun lähetys Procountorissa epäonnistui. Vika on ilmoitettu ylläpitoon.';
-			}
-		} else {
-			$body = 'Laskua ei voida lähettää Procountorissa koska sitä ei ole luotu Procountoriin Etunti käyttöliittymän kautta.';
-		}
-
-		echo $body;
 	}
 
 	public function actionInsert_lahete()
