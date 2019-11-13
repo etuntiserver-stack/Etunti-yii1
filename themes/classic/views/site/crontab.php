@@ -43,7 +43,6 @@ foreach ($list as $d) {
 	Yii::app()->db1->setActive(true);
 
 	$asetukset = Asetukset::model()->findByPk(1);
-	//$site = Yii::app()->createController('Site');
 	$tyovuoroot = Yii::app()->createController('Tyovuoroot');
 
 	$aikavali_halytys = 15;
