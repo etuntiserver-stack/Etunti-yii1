@@ -73,8 +73,10 @@ public function actionLogin($dom){
 				$return['domain'] = $d->domain;
 				$this->_sendResponse(200, CJSON::encode($return));
 				break;
+				exit;
 			}
 		}
+		$this->_sendResponse(200, CJSON::encode(array('error' => 'Työntekijää ei löydy.')));
 		exit;
         break;
         default:
