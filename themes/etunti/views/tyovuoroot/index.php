@@ -77,6 +77,17 @@ $date = new DateTime();
 $date->setISODate($year,$week);
 $this_monday = $date->format('Y-m-d');
 $this_sunday = date('Y-m-d', strtotime($this_monday.' this week sunday'));
+
+$asetukset = Asetukset::model()->findByPk(1);
+// <-- Order tyontekijat
+if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+	$tt_order_1 = "tekijan_nimi";
+	$tt_order_2 = "sukunimi";
+} else {
+	$tt_order_1 = "sukunimi";
+	$tt_order_2 = "tekijan_nimi";
+}
+// Order tyontekijat -->
 ?>
 <div class="row">
             <div class="admin-form">
@@ -137,7 +148,6 @@ $this_sunday = date('Y-m-d', strtotime($this_monday.' this week sunday'));
 
 	  echo '</td>';
 
-	  $asetukset = Asetukset::model()->findByPk(1);
 	  for($day= 1; $day <= $numDays; $day++)
 	  {
   	     $d = strtotime($year ."W". $week . $day);
@@ -220,7 +230,7 @@ $this_sunday = date('Y-m-d', strtotime($this_monday.' this week sunday'));
 		//     Kuva -->
 
 		echo '
-				<br> '.$this->etuSukunimi($t->id).'</a>
+				<br> '.$t->$tt_order_1.' '.$t->$tt_order_2.'</a>
 			<br>
 			<span '.$cl.'><b id="vk_'.$week.'_'.$t->id.'">'.$kokoViikko. '</b> ('.$vktyoaika.')</span>
 		  </div>

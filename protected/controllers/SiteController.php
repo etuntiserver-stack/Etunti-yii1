@@ -3034,9 +3034,21 @@ $(document).ready(function(){
 		return array($ylittaneet,$myohastyneet);
 	}
 
-	public function dbhost(){
+	public function dbhost(){ // tama pitaa poista, etsi missa se kaytetaan
 		$is_local = in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']);
 		$db_host = ($is_local)?'localhost':'10.215.25.9';
 		return $db_host;
+	}
+
+	public function dbConnectArr(){
+		$host = 'localhost';
+		$connection = explode(";", Yii::app()->db->connectionString);
+		if(isset($connection[0]))
+			$hoststring = explode("=", $connection[0]);
+				if(isset($hoststring[1]))
+					$host = $hoststring[1];
+	
+		$return = ['host'=>$host, 'username'=>Yii::app()->db->username, 'password'=>Yii::app()->db->password];
+		return $return;
 	}
 }

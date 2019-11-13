@@ -37,6 +37,69 @@ class ApiController extends Controller
     }
  
 
+public function actionLogin($dom){
+
+    switch($_GET['model'])
+    {
+        case 'mob':
+		$db_host = 'localhost';
+		$site = Yii::app()->createController('Site');
+		$conn = $site[0]->dbConnectArr();
+		if( isset($conn['host']) )
+			$db_host = $conn['host'];
+		$return = [];
+		$list = Domainit::model()->findAll(" domain!='defdb' AND aktiivinen=1 ");
+		try {
+			$mysqli = new mysqli($conn['host'], $conn['username'], $conn['password']);
+		} catch (\Exception $e) {
+			echo $e->getMessage(), PHP_EOL;
+			exit;
+		}
+		foreach ($list as $d) {
+			if ($mysqli->select_db($d->domain) === false) { continue; }
+			Yii::app()->db1->setActive(false);
+			Yii::app()->db1->connectionString = 'mysql:host=' . $db_host. ';dbname=' . $d->domain;
+			Yii::app()->db1->setActive(true);
+
+			$criteria = new CDbCriteria;
+			$criteria->condition = " 
+				aktiivinen=1
+				AND salasana!=''
+				AND tekijan_email='".$_POST['email']."' AND salasana='".$_POST['salasana']."'
+			";
+			$t = Tyontekijat::model()->find($criteria);
+			if( isset($t->id) ){
+				$return = $t->attributes;
+				$return['domain'] = $d->domain;
+				$this->_sendResponse(200, CJSON::encode($return));
+				break;
+				exit;
+			}
+		}
+		$this->_sendResponse(200, CJSON::encode(array('error' => 'Työntekijää ei löydy.')));
+		exit;
+        break;
+        default:
+            // Model not implemented error
+            $this->_sendResponse(501, sprintf(
+                'Error: Mode <b>list</b> is not implemented for model <b>%s</b>',
+                $_GET['model']) );
+            Yii::app()->end();
+    }
+    // Did we get some results?
+    if(empty($models)) {
+        // No
+        $this->_sendResponse(200, 
+                sprintf('No items where found for model <b>%s</b>', $_GET['model']) );
+    } else {
+        // Prepare response
+        $rows = array();
+        foreach($models as $model)
+            $rows[] = $model->attributes;
+        // Send the response
+        $this->_sendResponse(200, CJSON::encode($rows));
+    }
+}
 
 
 
@@ -173,8 +236,12 @@ public function actionPaivita_tiedot($dom)
 			exit;
 		}
 		// check domain is not empty -->
-
-		$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
+		if(isset($_POST['tid']) ){
+			$ttekija = Tyontekijat::model()->findByPk($_POST['tid']);
+		}
+		if(isset($_POST['email']) and isset($_POST['salasana'])){
+			$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
+		}
 		if( isset($_POST['token']) and !empty($_POST['token']) and isset($ttekija->id) and $ttekija->gcm_reg_id != $_POST['token'] )
 		{
 			$token = $_POST['token'];
@@ -240,7 +307,17 @@ public function actionAsetukset($dom)
     switch($_GET['model'])
     {
         case 'mob':
-       	$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
+	if(isset($_POST['tid']) ){
+		$ttekija = Tyontekijat::model()->findByPk($_POST['tid']);
+	}
+	if(isset($_POST['email']) and isset($_POST['salasana'])){
+       		$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
+	}
+    	if(!isset($ttekija->id))
+	{
+		$this->_sendResponse(200, CJSON::encode(array("error" => "Työntekijää ei löydy")));
+		exit;
+	}
 	$asetukset = Asetukset::model()->findbypk(1);
 	$app_naytta_osoitekenta = 'no';
 	if( $asetukset->app_auto_hyvaksyminen == 0 and $ttekija->app_naytta_osoitekenta == 1 and $asetukset->app_naytta_osoitekenta == 1 ){
@@ -381,7 +458,12 @@ public function actionTiedosto($dom)
 		  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".$dom, 0777, true);
 		}
 
-		$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
+		if(isset($_POST['tid']) ){
+			$ttekija = Tyontekijat::model()->findByPk($_POST['tid']);
+		}
+		if(isset($_POST['email']) and isset($_POST['salasana']) ){
+			$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
+		}
 
 	  	if(isset($ttekija->id)){
 
@@ -510,8 +592,6 @@ protected function checkKokeiluversion($domain)
 public function actionImei($dom)
 {
 
-//$this->_checkAuth();
-
     switch($_GET['model'])
     {
         // Get an instance of the respective model
@@ -545,38 +625,9 @@ public function actionImei($dom)
 	$_SESSION['lang'] = $_POST['lang'];
 
 	// <-- Check Tyontekija
-/*
-	if(isset($_POST['email']) and isset($_POST['salasana']) )
-	{
-
-	    if(
-		isset($_SESSION['tid']) and isset($_SESSION['email']) and isset($_SESSION['salasana']) 
-		and $_SESSION['email'] == $_POST['email'] and $_SESSION['salasana'] == $_POST['salasana'])
-	    {
-		$ttekija = Tyontekijat::model()->findByPk($_SESSION['tid']);
-	    }
-
-	    if(
-		isset($_SESSION['tid']) and isset($_SESSION['email']) and isset($_SESSION['salasana']) 
-		and ($_SESSION['email'] != $_POST['email'] or $_SESSION['salasana'] != $_POST['salasana']))
-	    {
-		unset($_SESSION['tid'], $_SESSION['email'], $_SESSION['salasana']);
-	    }
-
-	    if(!isset($_SESSION['tid']) and !isset($_SESSION['email']) and !isset($_SESSION['salasana']))
-	    {
-
-		$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
-		if(isset($ttekija->id)){ 
-			$_SESSION['tid'] = $ttekija->id;
-			$_SESSION['email'] = $_POST['email'];
-			$_SESSION['salasana'] = $_POST['salasana'];
-		}
-
-	    }
-
+	if(isset($_POST['tid']) ){
+		$ttekija = Tyontekijat::model()->findByPk($_POST['tid']);
 	}
-*/
 	if(isset($_POST['email']) and isset($_POST['salasana']) ){
 		$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
 	}
@@ -800,8 +851,6 @@ public function actionImei($dom)
 		    $this->_sendResponse(200, $sel);
 		exit;
 	        }
-
-
 
 	        if($_POST['check'] == 'tvuoro'){
 
@@ -1231,8 +1280,6 @@ public function actionImei($dom)
 		}
 		// Jos versio yli 0.0.57 -->
 
-
-
 		// <-- Jos versio vanhempi kun  0.0.57
 	    	$criteria = new CDbCriteria();
 	    	$criteria->order = " loppui='' DESC, id DESC ";
@@ -1262,11 +1309,6 @@ public function actionImei($dom)
                      	$this->_sendResponse(200, "3//null//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//vanha versio");
 		  }
 		// Jos versio vanhempi kun  0.0.57 -->
-
-
-
-
-
 
 	     	exit;
 	    } // if(isset($_POST['check']))

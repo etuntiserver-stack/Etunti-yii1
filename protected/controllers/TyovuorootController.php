@@ -5092,7 +5092,7 @@ class TyovuorootController extends Controller
 			$criteria = $site[0]->etuSukunimiCriteria($criteria);
 			//     Return order etu ja sukunimella -->
 
-	        	$criteria->select = "id,tekijan_nimi";
+	        	$criteria->select = "id,tekijan_nimi, sukunimi";
 	        	$criteria->condition = ' aktiivinen=1 ';
 
 			// <-- Tyoryhmat
@@ -5124,7 +5124,7 @@ class TyovuorootController extends Controller
 			//     Return order etu ja sukunimella -->
 
 
-        		$criteria->select = "id,tekijan_nimi, tyoryhma";
+        		$criteria->select = "id,tekijan_nimi, sukunimi, tyoryhma";
         		$criteria->condition = " aktiivinen = '1' ";
 
 		    	if(count(Yii::app()->session['tyontekijat'] > 1))
