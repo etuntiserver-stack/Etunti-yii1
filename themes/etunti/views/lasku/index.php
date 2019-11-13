@@ -11,6 +11,8 @@
 
         <div class="pull-right myBgColors p10">
   <?php
+  // Procountor send all approved on this page -button. This needs a confirm
+  // dialog as it is a potentially harmful action. See the related jQuery code.
   if ($asetukset->palvelu_tyyppi == 5) {
     echo "<button class='lahetaSivuProcountor btn btn-success myBgColors'
       style='color:white' data-toggle='tooltip' data-placement='top' title=''
@@ -287,37 +289,26 @@ $(".valitseLahetettavaksi").click(function(){
 });
 
 // Procountor: Send all approved invoices on this page.
-$(document).delegate(".lahetaSivuProcountor", "click", function() {
+$('.lahetaSivuProcountor').click(function() {
 
+  // Confirm this action as it is a potentially harmful one.
+  if (!confirm('Haluatko varmasti lähettää kaikki tämän sivun hyväksytyt laskut?'))
+    return;
+
+  // Build list of IDs. Just send all IDs on this page to the action. The action
+  // will check whether an invoice should be sent.
+  var ids = [];
   $('i.link[for]').each(function() {
-
-    // Get invoice ID.
-    var id = $(this).attr('for');
-
-    // Save this element to access the current row later in AJAX callback.
-    var temp = $(this);
-
-    $.ajax({
-      url: 'laheta_valitsemmat?id=' + id,
-      success: function(data) {
-
-        // Check if there was an error. If so, stop the loop now.
-        if (data.trim() != 'OK') {
-          alert(data);
-          return false; // break invoice loop
-        } else {
-
-          // Action successful, find the status column of this row and change the text.
-          temp.parent().parent().parent().find('td').each(function(index) {
-            if ($(this).text().trim() == 'Lasku hyväksytty') {
-              $(this).text('Lasku lähetetty');
-              return false; // break
-            }
-          });
-        }
-      }
-    });
+    ids.push($(this).attr('for'));
+    alert($(this).attr('for'));
   });
+
+  // Build hidden form for POST.
+  var form = '';
+  $.each(ids, function( key, value ) { form += '<input type="hidden" name="ids[]" value="'+value+'">'; });
+
+  // Submit and continue to action.
+  $('<form action="laheta_procountor" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
 });
 
 // Send all, or only selected invoices.
