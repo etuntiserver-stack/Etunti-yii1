@@ -1652,7 +1652,8 @@ exit;
 
 		// <!-- Lasku updater
 		$info 	= '';
-		$info 	.= $this->LaskuUpdater($from,$to);
+		$is_error = false;
+		$info 	.= $this->LaskuUpdater($from, $to, $is_error);
 		// Lasku updater -->
 
        		$criteria = new CDbCriteria();
@@ -1770,6 +1771,7 @@ exit;
 				'to'=>$to, 
 				'asetukset' => $asetukset,
 				'info' => $info,
+				'is_error' => $is_error,
 				'lahettamattomat' => $lahettamattomat
 		));
 	}
@@ -2827,10 +2829,39 @@ $xml .= '
 
 
 
-	public function LaskuUpdater($from,$to)
+	public function LaskuUpdater($from,$to, &$is_error = false)
 	{
 		$return = '';
 		$asetukset=Asetukset::model()->findbypk(1);
+
+		// Procountor - get invoice status on invoice search, and update if needed.
+		if ($asetukset->palvelu_tyyppi == 5) {
+			$pc = Yii::createComponent('Procountor');
+			$params = new ProcountorInvoiceSearchParameters();
+
+			// Set search dates. Add one day to end date so that a day is not skipped.
+			// (one day search: 12.12-12.12 -> adjust -> 12.12-13.12).
+			$params->createdStartDate = $from;
+			$params->createdEndDate = date('Y-m-d', strtotime("$to +1 day"));
+
+			// Get search results and check for errors.
+			$procountor_results = $pc->searchInvoices($params);
+			if (isset($procountor_results['errors'])) {
+
+				// Log request results and set a notification for the user.
+				$pc->logError(
+					'searchInvoices',
+					$procountor_results,
+					['Haun alku' => $params->createdStartDate, 'Haun loppu' => $params->createdEndDate],
+					'Failed to get bank accounts from Procountor.'
+				);
+
+				$is_error = true;
+				return '<p>Laskujen haku Procountorista epäonnistui. Viasta on ilmoitettu ylläpidolle.</p>';
+			}
+
+			return '<p>Procountor laskut on päivitetty.</p>';
+		}
 
 		// <-- Netvisor updater
 		$netvisorUpdateCheck = false;

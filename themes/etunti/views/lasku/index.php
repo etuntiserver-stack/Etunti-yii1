@@ -5,7 +5,7 @@
 
 
 	<?php if($info != ''): ?>
-	<div class="alert alert-success"><?php echo $info; ?></div>
+	<div class="alert <?php echo (isset($is_error) && $is_error) ? 'alert-danger' : 'alert-success' ?>"><?php echo $info; ?></div>
 	<?php endif; ?>
 
 
