@@ -251,7 +251,12 @@ class Procountor extends CComponent
   {
     if ($params instanceof ProcountorInvoiceSearchParameters)
       $params = $params->buildParameters();
-    return $this->requestGet('invoices', $params);
+    elseif (is_array($params) && count($params) > 0)
+      $params = http_build_query($params);
+    $target = 'invoices';
+    if (!empty($params))
+      $target .= "?$params";
+    return $this->requestGet($target);
   }
 
   /**

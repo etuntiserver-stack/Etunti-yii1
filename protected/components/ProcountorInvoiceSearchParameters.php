@@ -6,23 +6,29 @@
  * @property string $status Invoice
  * Invoice status.
  * @property string $startDate
- * Start date of the search (invoice billing date).
- * Format: Y-m-d\TH:i:s.v\Z (2016-08-31T00:00:00.000Z).
+ * Start date of the search (invoice billing date). Given value is formatted
+ * automatically when assigned, if the value is accepted by strtotime().
+ * Format: Y-m-d (2016-08-31).
  * @property string $endDate
- * End date of the search (invoice billing date).
- * Format: Y-m-d\TH:i:s.v\Z (2016-08-31T00:00:00.000Z).
+ * End date of the search (invoice billing date). Given value is formatted
+ * automatically when assigned, if the value is accepted by strtotime().
+ * Format: Y-m-d (2016-08-31).
  * @property string $createdStartDate
- * Start date of the search (invoice created date).
- * Format: Y-m-d\TH:i:s.v\Z (2016-08-31T00:00:00.000Z).
+ * Start date of the search (invoice created date). Given value is formatted
+ * automatically when assigned, if the value is accepted by strtotime().
+ * Format: Y-m-d\TH:i:s (2016-08-31T00:00:00).
  * @property string $createdEndDate
- * End date of the search (invoice created date).
- * Format: Y-m-d\TH:i:s.v\Z (2016-08-31T00:00:00.000Z).
+ * End date of the search (invoice created date). Given value is formatted
+ * automatically when assigned, if the value is accepted by strtotime().
+ * Format: Y-m-d\TH:i:s (2016-08-31T00:00:00).
  * @property string $versionStartDate
- * Start date of the search (invoice updated date).
- * Format: Y-m-d\TH:i:s.v\Z (2016-08-31T00:00:00.000Z).
+ * Start date of the search (invoice updated date). Given value is formatted
+ * automatically when assigned, if the value is accepted by strtotime().
+ * Format: Y-m-d\TH:i:s (2016-08-31T00:00:00).
  * @property string $versionEndDate
- * End date of the search (invoice updated date).
- * Format: Y-m-d\TH:i:s.v\Z (2016-08-31T00:00:00.000Z).
+ * End date of the search (invoice updated date). Given value is formatted
+ * automatically when assigned, if the value is accepted by strtotime().
+ * Format: Y-m-d\TH:i:s (2016-08-31T00:00:00).
  * @property array $types
  * Invoice types. Available values: PERIODIC_TAX_RETURN, PURCHASE_INVOICE,
  * SALES_INVOICE, TRAVEL_INVOICE, BILL_OF_CHARGES.
@@ -46,12 +52,12 @@
 class ProcountorInvoiceSearchParameters extends CComponent
 {
   public $status;
-  public $startDate;
-  public $endDate;
-  public $createdStartDate;
-  public $createdEndDate;
-  public $versionStartDate;
-  public $versionEndDate;
+  protected $startDate;
+  protected $endDate;
+  protected $createdStartDate;
+  protected $createdEndDate;
+  protected $versionStartDate;
+  protected $versionEndDate;
   public $types;
   public $businessPartnerId;
   public $previousId;
@@ -60,23 +66,32 @@ class ProcountorInvoiceSearchParameters extends CComponent
   public $orderByCreated;
   public $orderByVersion;
 
-  /**
-   * Get a date string formatted to what the API expects.
-   *
-   * @param string $date_str
-   * Date string for strtotime() (format e.g. "y-m-d" or "y-m-d H:i:s" etc.)
-   */
-  public function formatDate($date_str)
+  public function __get($property)
   {
-    return date($this->getDateFormat(), strtotime($date_str));
+    // Empty getter to allow retrieving protected date properties.
+    if (property_exists($this, $property))
+      return $this->$property;
   }
 
-  /**
-   * Get a format string for dates for the API call.
-   */
-  public function getDateFormat()
+  public function __set($property, $value)
   {
-    return 'Y-m-d\TH:i:s.v\Z';
+    // Attempt to parse value if requested property is one of the date
+    // properties. startDate and endDate formats are different from the other
+    // dates (no time). Alternative regex conditionals commented above the if
+    // -lines in case in_array calls are too slow.
+    if (property_exists($this, $property)) {
+      // if (preg_match('/(start|end)Date/', $property))
+      if (in_array($property, ['createdStartDate', 'createdEndDate', 'versionStartDate', 'versionEndDate']))
+        $this->$property = (!empty($time = strtotime($value))) ? date('Y-m-d\TH:i:s', $time) : $value;
+      // elseif (preg_match('/(created|version)[\w]*Date/', $property))
+      elseif (in_array($property, ['startDate', 'endDate']))
+        $this->$property = (!empty($time = strtotime($value))) ? date('Y-m-d', $time) : $value;
+      // other non-public property
+      else
+        $this->$property = $value;
+    }
+
+    return $this;
   }
 
   /**
@@ -109,6 +124,6 @@ class ProcountorInvoiceSearchParameters extends CComponent
         $params[$key] = urlencode($option);
     }
 
-    return $params;
+    return http_build_query($params);
   }
 }
