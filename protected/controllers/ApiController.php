@@ -42,8 +42,11 @@ public function actionLogin($dom){
     switch($_GET['model'])
     {
         case 'mob':
+		$db_host = 'localhost';
 		$site = Yii::app()->createController('Site');
 		$conn = $site[0]->dbConnectArr();
+		if( isset($conn['host']) )
+			$db_host = $conn['host'];
 		$return = [];
 		$list = Domainit::model()->findAll(" domain!='defdb' AND aktiivinen=1 ");
 		try {

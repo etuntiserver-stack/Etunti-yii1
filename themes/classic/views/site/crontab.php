@@ -9,21 +9,33 @@ $is_local = in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']);
 $local_run = !$full && $is_local; // If true, request is from localhost and limit to demo domain.
 
 // If invalid password, exit script to reduce nesting.
+$db_host = 'localhost';
+$site = Yii::app()->createController('Site');
+$conn = $site[0]->dbConnectArr();
+if( isset($conn['host']) )
+	$db_host = $conn['host'];
+
 $koodi_aktiivinen = 1;
 if ($local_run){
 	$list = Domainit::model()->findAll(" domain='demo' ");
-	$db_host = 'localhost';
 } else {
 	if($only_domain != null)
 	$list = Domainit::model()->findAll(" domain='$only_domain' ");
 	else
 	$list = Domainit::model()->findAll(" domain!='defdb' AND aktiivinen=1 ");
-	$db_host = '10.215.25.9';
 }
 
-echo "KPL yhteensa: " . count($list) . "\n";
+try {
+	$mysqli = new mysqli($conn['host'], $conn['username'], $conn['password']);
+} catch (\Exception $e) {
+	echo $e->getMessage(), PHP_EOL;
+	exit;
+}
+
+//echo "KPL yhteensa: " . count($list) . "\n";
 
 foreach ($list as $d) {
+	if ($mysqli->select_db($d->domain) === false) { continue; }
 	$_SESSION['domain'] = $d->domain;
 	echo $d->domain . "\n";
 	Yii::app()->db1->setActive(false);
