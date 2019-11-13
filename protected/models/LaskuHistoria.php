@@ -59,7 +59,8 @@ class LaskuHistoria extends DB2ActiveRecord
                      'trust_statuscode' => 'varchar(100) DEFAULT NULL',
                      'paydate' => 'varchar(50) DEFAULT NULL',
                      'amount' => 'varchar(50) DEFAULT NULL',
-                     'postita_statuscode' => 'varchar(100) DEFAULT NULL',
+										 'postita_statuscode' => 'varchar(100) DEFAULT NULL',
+										 'procountor_statuscode' => 'varchar(100) DEFAULT NULL'
 		);
 
 		foreach($table_structure as $key=>$value)

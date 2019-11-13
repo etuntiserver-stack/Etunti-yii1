@@ -2838,6 +2838,7 @@ $xml .= '
 		if ($asetukset->palvelu_tyyppi == 5) {
 			$pc = Yii::createComponent('Procountor');
 			$params = new ProcountorInvoiceSearchParameters();
+			$procountor_updated = false;
 
 			// Set search dates. Add one day to end date so that a day is not skipped.
 			// (one day search: 12.12-12.12 -> adjust -> 12.12-13.12).
@@ -2860,7 +2861,92 @@ $xml .= '
 				return '<p>Laskujen haku Procountorista epäonnistui. Viasta on ilmoitettu ylläpidolle.</p>';
 			}
 
-			return '<p>Procountor laskut on päivitetty.</p>';
+			foreach($procountor_results['results'] ?? [] as $remote_invoice) {
+
+				// Get local invoice data.
+				$criteria = new CDbCriteria();
+				$criteria->condition = "procountor_id={$remote_invoice['id']}";
+				$local_invoice = Lasku::model()->find($criteria);
+				if (!$local_invoice || empty($local_invoice->id))
+					continue;
+
+				// Get local invoice history.
+				$criteria = new CDbCriteria();
+				$criteria->condition = "lid={$local_invoice->id}";
+				$criteria->order = "id DESC";
+				$local_invoice_history = LaskuHistoria::model()->find($criteria);
+				if (!$local_invoice_history || empty($local_invoice_history->id) || $local_invoice_history->lid != $local_invoice->id)
+					continue;
+
+				// Get full remote invoice data.
+				$remote_invoice_full = $pc->getInvoice($remote_invoice['id']);
+				if (isset($remote_invoice_full['errors']) || !isset($remote_invoice_full['id']))
+					continue;
+
+				// Calculate total price (yht_euro).
+				$total_price = 0.0;
+				$includes_vat = $remote_invoice_full['extraInfo']['unitPricesIncludeVat'] ?? true;
+				foreach($remote_invoice_full['invoiceRows'] ?? [] as $invoice_row) {
+					$vat_multiplier = $includes_vat ? 1 : 1 + $invoice_row['vatPercent'] / 100;
+					$total_price += $invoice_row['unitPrice'] * $invoice_row['quantity'] * $vat_multiplier;
+				}
+
+				// Continue if neither status or price have updated.
+				if ($local_invoice_history->procountor_statuscode == $remote_invoice['status'] && $local_invoice_history->yht_euro == $total_price)
+					continue;
+
+				// Translate remote statuscode. Most status texts copied directly from
+				// finvoice.php. Available statuscodes: [
+				//   EMPTY, UNFINISHED, NOT_SENT, SENT, RECEIVED, PAID, PAYMENT_DENIED,
+				//   VERIFIED, APPROVED, INVALIDATED, PAYMENT_QUEUED, PARTLY_PAID,
+				//   PAYMENT_SENT_TO_BANK, MARKED_PAID, STARTED, INVOICED, OVERRIDDEN,
+				//   DELETED, UNSAVED, PAYMENT_TRANSACTION_REMOVED
+				// ]
+				switch ($remote_invoice['status']) {
+					case 'EMPTY':
+					case 'STARTED':
+					case 'UNFINISHED':
+					case 'UNSAVED':
+						$status = 'Lasku luotu';
+						break;
+					case 'NOT_SENT':
+					case 'APPROVED':
+					case 'VERIFIED':
+						$status = 'HYVÄKSYTTY';
+						break;
+					case 'SENT':
+					case 'INVOICED':
+						$status = 'LÄHETETTY';
+						break;
+					case 'RECEIVED':
+					case 'PAID':
+						$status = 'MAKSETTU';
+						break;
+					case 'INVALIDATED':
+						$status = 'Lasku mitätöity';
+						break;
+					case 'DELETED':
+						$status = 'POISTETTU';
+						break;
+					default:
+						$status = 'MUU';
+						break;
+				}
+
+				// Update history.
+				$history_entry = new LaskuHistoria;
+				$history_entry->time = date("Y-m-d H:i:s", strtotime($remote_invoice['version']));
+				$history_entry->lid = $local_invoice->id;
+				$history_entry->status = $status;
+				$history_entry->procountor_statuscode = $remote_invoice['status'];
+				$history_entry->palvelu = "procountor";
+				$history_entry->yht_euro = number_format($total_price, 2);
+				$history_entry->save();
+				$procountor_updated = true;
+			}
+
+			if ($procountor_updated)
+				$return .= '<p>Procountor laskut on päivitetty.</p>';
 		}
 
 		// <-- Netvisor updater
@@ -2873,7 +2959,6 @@ $xml .= '
 			{
 				foreach($netvisorList->SalesInvoiceList->SalesInvoice as $list)
 				{
-	
 					//echo '<pre>';
 					//print_r( $list );
 					//echo '</pre>';
