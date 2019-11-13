@@ -42,19 +42,12 @@ public function actionLogin($dom){
     switch($_GET['model'])
     {
         case 'mob':
-		$is_local = in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']);
-		if ($is_local){
-			$etuntifw_user = 'root';
-			$db_host = 'localhost';
-		} else {
-			$etuntifw_user = 'admin';
-			$db_host = '10.215.25.9';
-		}
+		$site = Yii::app()->createController('Site');
+		$conn = $site[0]->dbConnectArr();
 		$return = [];
 		$list = Domainit::model()->findAll(" domain!='defdb' AND aktiivinen=1 ");
-
 		try {
-			$mysqli = new mysqli($db_host, Yii::app()->db->username, Yii::app()->db->password);
+			$mysqli = new mysqli($conn['host'], $conn['username'], $conn['password']);
 		} catch (\Exception $e) {
 			echo $e->getMessage(), PHP_EOL;
 			exit;
