@@ -1,5 +1,5 @@
 <?php
-
+/*
 $did = date("Ymd",strtotime($pvm));
 //echo '<div id="'.$did.'_'.$tid.'">';
 	$laatikot = '<div class="small">';
@@ -96,6 +96,6 @@ $did = date("Ymd",strtotime($pvm));
 	$arr = array($laatikot,$tun,$tyoIlta,$tyoYo,$tyoSu);
         return $arr;
 
-
+*/
 ?>
 

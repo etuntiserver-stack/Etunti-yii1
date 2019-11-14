@@ -89,10 +89,12 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
      $date = $i.'.'.$month;
 
 	$tot[$i] = $this->renderPartial('//toteutuneet/totpvmtid',array('pvm'=>$thisDate,'tid'=>$v->id,'from'=>'kk'),true);
-	//$explT = explode("//",$tot[$i]);
-	if(isset($tot[$i][1]))
-	$yht += $tot[$i][1];
-	echo '<TD class="text-small" style="font-size:90%">'.$tot[$i][1].'</TD>';
+//print_r($tot[$i]);
+//exit;
+	$explT = explode("//",$tot[$i]);
+	if(isset($explT[1]) and is_numeric((int)$explT[1]))
+	$yht += (int)$explT[1];
+	echo '<TD class="text-small" style="font-size:90%">'.((isset($explT[0]))?$explT[0]:'').'</TD>';
 
    }
   echo '<TD class="text-small"><b>'.sprint($yht).'</b></TD>';
