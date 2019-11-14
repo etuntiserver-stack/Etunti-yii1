@@ -1566,7 +1566,7 @@ exit;
 		    		// Lasku historia
 				$historia = new LaskuHistoria;
 				$historia->lid = $model->id;
-				$historia->status = "Lasku on muokattu";
+				$historia->status = "Muokattu";
 				$historia->palvelu = "local";
 				$historia->yht_euro = $model->yhteensa_total;
 				$historia->save();
@@ -1961,8 +1961,8 @@ exit;
 			} elseif ($l->status == 'Lasku mitätöity') {
 				$localStr = 'Lasku mitätöity';
 				$local = true;
-			} elseif ($l->status == 'Lasku on muokattu') {
-				$localStr = 'Lasku on muokattu';
+			} elseif ($l->status == 'Muokattu') {
+				$localStr = 'Muokattu';
 				$local = true;
 			}
 		}
@@ -1985,6 +1985,10 @@ exit;
 			$tilanne = $localStr;
 		elseif ($netvisor == true)
 			$tilanne = $netvisorStr;
+
+		$invoice = Lasku::model()->findByPk($data->id);
+		if ($invoice->tilanne == 0)
+			$tilanne .= " <b>(hyväksymätön)</b>";
 
 		return $tilanne;
 	}
