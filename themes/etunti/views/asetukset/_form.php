@@ -583,24 +583,13 @@ $('.ryhmat').multiselect({
 	<!-- PROCOUNTOR -->
 	<br><h2><?php echo Yii::t('main','PROCOUNTOR tunnukset'); ?></h2><br>
 	<div class="section fill mb5">
-		<p><?php echo CHtml::link('Kirjaudu Procountoriin', ['procountorAuthorize', 'domain' => strtolower(Yii::app()->user->domain)], ['class' => 'btn btn-lg btn-primary myBgColors']); ?></p>
+		<p><?php echo CHtml::link('Kirjaudu Procountoriin', 'https://api-test.procountor.com/login?response_type=code&client_id=etuntiTestClient&redirect_uri=redirect-uri-placeholder&state=' . strtolower(Yii::app()->user->domain), ['class' => 'btn btn-lg btn-primary myBgColors']); ?></p>
 	</div>
 	<?php
-		if (
-			!empty($model->procountor_access_token) &&
-			!empty($model->procountor_refresh_token) &&
-			!empty($model->procountor_refresh_time) &&
-			!empty($model->procountor_expires_in)
-		) {
-			$procountor_timediff = time() - $model->procountor_refresh_time;
-			if ($procountor_timediff > $model->procountor_expires_in) {
-				echo "<p>Kirjautuminen on vanhentunut.</p>";
-			} else {
-				$procountor_expires_min = round(($model->procountor_expires_in - $procountor_timediff) / 60);
-				echo "<p>Nykyinen kirjautumisesi vanhenee <b>{$procountor_expires_min}</b> minuutin päästä.</p>";
-				echo "<p>Pääsyavain:<br><small style='word-wrap: break-word;'>{$model->procountor_access_token}</small></p>";
-				echo "<p>Päivitysavain:<br><small style='word-wrap: break-word;'>{$model->procountor_refresh_token}</small></p>";
-			}
+		if (!empty($model->procountor_access_token) && !empty($model->procountor_refresh_token)) {
+			echo "<p>Procountor kirjautumisesi on voimassa.</p>";
+			echo "<p>Pääsyavain:<br><small style='word-wrap: break-word;'>{$model->procountor_access_token}</small></p>";
+			echo "<p>Päivitysavain:<br><small style='word-wrap: break-word;'>{$model->procountor_refresh_token}</small></p>";
 		}
 	?>
   </div>

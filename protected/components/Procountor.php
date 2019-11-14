@@ -8,9 +8,9 @@ class Procountor extends CComponent
   private $client_id     = 'etuntiTestClient';
   private $client_secret = 'testsecret_W2ir6fiE4fdtO3Htevx9';
   private $redirect_uri  = 'redirect-uri-placeholder';
-  private $user          = 'etunti.test';
-  private $pw            = 'Elias2011!';
-  private $company       = 15022;
+  // private $user          = 'etunti.test';
+  // private $pw            = 'Elias2011!';
+  // private $company       = 15022;
 
   /** Initialize Procountor. */
   public function __construct()
@@ -19,9 +19,9 @@ class Procountor extends CComponent
     $this->client_id = urlencode($this->client_id);
     $this->client_secret = urlencode($this->client_secret);
     $this->redirect_uri = urlencode($this->redirect_uri);
-    $this->user = urlencode($this->user);
-    $this->pw = urlencode($this->pw);
-    $this->company = urlencode($this->company);
+    // $this->user = urlencode($this->user);
+    // $this->pw = urlencode($this->pw);
+    // $this->company = urlencode($this->company);
   }
 
   /**
@@ -96,8 +96,12 @@ class Procountor extends CComponent
    * @param bool $force
    * If true, authorize even if already authorized.
    */
-  public function authorize()
+  public function authorize($code)
   {
+    // This is needed for testing. However, once using the Procountor login
+    // page, it provides an authorization code. I'm leaving this first part here
+    // in case the authorization process needs to be updated in the future.
+
     // REQUEST 1: Authorization code.
     // POST https://api-test.procountor.com/api/oauth/authz
     // URL parameters:
@@ -114,31 +118,29 @@ class Procountor extends CComponent
     // 	Content-Type: application/x-www-form-urlencoded
 
     // Request authorization code.
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "{$this->api_base_url}/oauth/authz?response_type=code&client_id={$this->client_id}");
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, "response_type=code&username={$this->user}&password={$this->pw}&company={$this->company}&redirect_uri={$this->redirect_uri}");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/x-www-form-urlencoded"]);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false); //don't follow redirects
-    curl_exec($ch);
-    $curl_info = curl_getinfo($ch);
-    curl_close($ch);
+    // $ch = curl_init();
+    // curl_setopt($ch, CURLOPT_URL, "{$this->api_base_url}/oauth/authz?response_type=code&client_id={$this->client_id}");
+    // curl_setopt($ch, CURLOPT_POST, 1);
+    // curl_setopt($ch, CURLOPT_POSTFIELDS, "response_type=code&username={$this->user}&password={$this->pw}&company={$this->company}&redirect_uri={$this->redirect_uri}");
+    // curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/x-www-form-urlencoded"]);
+    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    // curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false); //don't follow redirects
+    // curl_exec($ch);
+    // $curl_info = curl_getinfo($ch);
+    // curl_close($ch);
 
     // Parse authorization code from response.
-    if (isset($curl_info['redirect_url'])) {
-      $response_url_parts = parse_url($curl_info['redirect_url']);
-      if (isset($response_url_parts['query'])) {
-        parse_str($response_url_parts['query'], $query);
-        if (isset($query['code']))
-          $code = $query['code'];
-      }
-    }
+    // if (isset($curl_info['redirect_url'])) {
+    //   $response_url_parts = parse_url($curl_info['redirect_url']);
+    //   if (isset($response_url_parts['query'])) {
+    //     parse_str($response_url_parts['query'], $query);
+    //     if (isset($query['code']))
+    //       $code = $query['code'];
+    //   }
+    // }
 
-    if (!isset($code)) {
-      // echo "Unable to parse authorization code.";
-      return false;
-    }
+    // if (!isset($code))
+    //   return false;
 
     // REQUEST 2: Swap the authorization code for an access token.
     // POST https://api-test.procountor.com/api/oauth/token
@@ -161,21 +163,24 @@ class Procountor extends CComponent
     $response = json_decode(curl_exec($ch), true);
     curl_close($ch);
 
-    // Check that the request was successful.
-    if (isset($response['access_token']) && isset($response['refresh_token']) && isset($response['expires_in'])) {
-
-      // Success, store current access token in settings.
-      Asetukset::model()->updateByPk(1, [
-        'procountor_access_token' => $response['access_token'],
-        'procountor_refresh_token' => $response['refresh_token'],
-        'procountor_refresh_time' => time(),
-        'procountor_expires_in' => $response['expires_in']
-      ]);
-
-      return true;
+    // Log any errors.
+    if (isset($response['errors'])) {
+      $this->logError('oauth/token', $response, ['auth_code' => $code], 'Failed to authorize using provided authorization code.');
+      return false;
+    } elseif (!isset($response['access_token']) || !isset($response['refresh_token']) || !isset($response['expires_in'])) {
+      $this->logError('oauth/token', $response, ['auth_code' => $code], 'Unexpected response received from the server.');
+      return false;
     }
 
-    return false;
+    // Success, store current access token in settings.
+    Asetukset::model()->updateByPk(1, [
+      'procountor_access_token' => $response['access_token'],
+      'procountor_refresh_token' => $response['refresh_token'],
+      'procountor_refresh_time' => time(),
+      'procountor_expires_in' => $response['expires_in']
+    ]);
+
+    return true;
   }
 
   /**

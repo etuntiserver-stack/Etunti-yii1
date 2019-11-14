@@ -24,7 +24,7 @@ class AsetuksetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('update', 'yrityksentiedot', 'oikeudet', 'rekisteriseloste', 'tiedostot', 'createbackup', 'procountorAuthorize'),
+				'actions'=>array('update', 'yrityksentiedot', 'oikeudet', 'rekisteriseloste', 'tiedostot', 'createbackup', 'procountor_auth'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -590,10 +590,20 @@ Jos yritykselläsi ei ole Ropo Capital Oy:n kanssa sopimusta tunnuksista, lähet
 		return  number_format((float)$val/3600, 2, '.', '');
 	}
 
-	public function actionProcountorAuthorize()
+	public function actionProcountor_auth($code, $state = null)
 	{
 		$model = $this->loadModel(1);
-		$result = Yii::createComponent('Procountor')->authorize();
+
+		if (empty($code)) {
+			Yii::app()->user->setFlash('danger', 'Virheellinen pyyntö (vastaanotettu kirjautumistunnus on tyhjä).');
+			$this->render('update', ['model' => $model]);
+		}
+
+		if (Yii::createComponent('Procountor')->authorize($code))
+			Yii::app()->user->setFlash('success', 'Procountor kirjautuminen onnistui.');
+		else
+			Yii::app()->user->setFlash('danger', 'Procountor kirjautuminen epäonnistui.');
+
 		$this->render('update', ['model' => $model]);
 	}
 }
