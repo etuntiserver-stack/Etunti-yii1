@@ -872,6 +872,8 @@ public function actionImei($dom)
 		    $aikaVali = date('Y-m-d',strtotime('+7 day'));
 		    elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '3')
 		    $aikaVali = date('Y-m-d',strtotime('+14 day'));
+		    elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '4')
+		    $aikaVali = date('Y-m-d',strtotime('+30 day'));
 		    else
 		    $aikaVali = date('Y-m-d',strtotime('sunday this week'));
 
