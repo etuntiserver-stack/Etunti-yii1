@@ -1575,6 +1575,10 @@ exit;
 			}
 		}
 
+		if ($model->tilanne == 0 && Asetukset::model()->findByPk(1)->palvelu_tyyppi == 5) {
+			Yii::app()->user->setFlash('primary', 'Lasku ei ole vielä lähetetty Procountoriin. Lähetä lasku hyväksymällä se alalaidassa olevalla painikkeella.');
+		}
+
 		$this->render('update',array(
 			'model'=>$model,
 			'laskunRivit'=>$laskunRivit,
