@@ -3341,7 +3341,7 @@ $xml .= '
 				continue;
 			$invoice = Lasku::model()->findByPk($id);
 			if ($invoice->tilanne ?? 0 == 1) {
-				if ($result = $this->lahetaProcountor($id) != 'OK') {
+				if (($result = $this->lahetaProcountor($id)) != 'OK') {
 					Yii::app()->user->setFlash('danger', $result);
 					$this->redirect('index');
 				}

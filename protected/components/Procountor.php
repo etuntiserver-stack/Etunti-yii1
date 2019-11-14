@@ -4,28 +4,26 @@
 class Procountor extends CComponent
 {
   private $settings;
-  private $api_base_url  = 'https://api-test.procountor.com/api';
-  private $client_id     = 'etuntiTestClient';
-  private $client_secret = 'testsecret_W2ir6fiE4fdtO3Htevx9';
-  private $redirect_uri  = 'redirect-uri-placeholder';
-  // private $user          = 'etunti.test';
-  // private $pw            = 'Elias2011!';
-  // private $company       = 15022;
+  private $redirect_uri        = 'http://etunti.local/index.php/asetukset/procountor_auth';
+  private $api_base_url        = 'https://api-test.procountor.com/api';
+  private $client_id           = 'etuntiTestClient';
+  private $client_secret       = 'testsecret_W2ir6fiE4fdtO3Htevx9';
 
   /** Initialize Procountor. */
   public function __construct()
   {
     $this->settings = Asetukset::model()->findByPk(1);
-    $this->client_id = urlencode($this->client_id);
-    $this->client_secret = urlencode($this->client_secret);
     $this->redirect_uri = urlencode($this->redirect_uri);
-    // $this->user = urlencode($this->user);
-    // $this->pw = urlencode($this->pw);
-    // $this->company = urlencode($this->company);
+  }
+
+  /** Get the encoded redirect uri. */
+  public function getRedirectUri()
+  {
+    return $this->redirect_uri;
   }
 
   /**
-   * Check if current authorization is valid.
+   * Check if current user is authorized.
    *
    * @return bool
    * True if authorized; otherwise false. If current authorization is invalid
@@ -38,10 +36,16 @@ class Procountor extends CComponent
 
   /**
    * Log error in request, usually when 'errors' is defined in results.
-   * @param string $request Requested API call, e.g. "createInvoice".
-   * @param array $results Results array returned by the API function.
-   * @param array $params Additional parameters, like ['uid' => 123].
-   * @param string $start_msg First line of the log message.
+   * Depending on server configuration, this may send error email to admin.
+   *
+   * @param string $request
+   * Requested API call, e.g. "createInvoice".
+   * @param array $results
+   * Results array returned by the API function.
+   * @param array $params
+   * Additional parameters, like ['uid' => 123].
+   * @param string $start_msg
+   * First line of the log message.
    */
   public function logError(string $request, array $results, array $params = [], string $start_msg = 'Error in Procountor API request.')
   {
