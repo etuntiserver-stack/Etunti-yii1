@@ -694,7 +694,7 @@ public function actionImei($dom)
 			AND loppui!=''
 			AND admin!=1
 		    ";
-	            $mob = Mob::model()->findAll($criteria);
+	            $mob = Mobile::model()->findAll($criteria);
 
 		    if(empty($mob))
 		    {
@@ -1255,7 +1255,7 @@ public function actionImei($dom)
 
 	    		$criteria = new CDbCriteria();
 	    		$criteria->condition = " id='".(int)$avoinID."' AND tid = '".$ttekija->id."' ";
-	           	$mobCheck = Mob::model()->find($criteria);
+	           	$mobCheck = Mobile::model()->find($criteria);
 
 		  	if(isset($mobCheck->id) 
 				and ($mobCheck->status == 1 or $mobCheck->status == 2 or $mobCheck->status == 10))
@@ -1285,7 +1285,7 @@ public function actionImei($dom)
 	    	$criteria->order = " loppui='' DESC, id DESC ";
 	    	$criteria->condition = " tid = '".$ttekija->id."' "; //AND loppui=''
 
-           	$mobCheck = Mob::model()->find($criteria);
+           	$mobCheck = Mobile::model()->find($criteria);
 		$kohdenID = '';
 		$get_osoite = '';
 
@@ -1328,7 +1328,7 @@ public function actionImei($dom)
 
 	    		$criteria = new CDbCriteria();
 	    		$criteria->condition = " id='".(int)$avoinID."' AND tid = '".$ttekija->id."' ";
-	           	$mob = Mob::model()->find($criteria);
+	           	$mob = Mobile::model()->find($criteria);
 			if(isset($explVersio[2]))
 			$checkVersio = (int)$explVersio[2];	
 
@@ -1346,7 +1346,7 @@ public function actionImei($dom)
 				and loppui='' 
 				AND status IN (1,2,10)
 	    		";
-            		$mob = Mob::model()->find($criteria);
+            		$mob = Mobile::model()->find($criteria);
 			$checkVersio = 'versio vanhempi kun 0.0.57';
 	}
 	// Mob finder -->
@@ -1354,7 +1354,7 @@ public function actionImei($dom)
 
 	    if(isset($mob->id)){
 
-                $mobupdate = Mob::model()->findbypk($mob->id);
+                $mobupdate = Mobile::model()->findbypk($mob->id);
 		$log_old = $mobupdate->attributes;
                 $mobupdate->loppui = date("d.m.Y H:i:s");
 
@@ -1563,8 +1563,9 @@ public function actionImei($dom)
 
 		$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
 		$kartta = '';
-		if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey)){
-			$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($mobCheck->kohde_kannasta).'&language=fi&sensor=true&key='.$asetuksetForAll->googlemaps_apikey;
+		if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey) and isset($mobCheck->kohteet->id)){
+			$full_addr = $mobCheck->kohteet->osoite.' '.$mobCheck->kohteet->pnumero.' '.$mobCheck->kohteet->kaupunki;
+			$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($full_addr).'&language=fi&sensor=true&key='.$asetuksetForAll->googlemaps_apikey;
 			$json = file_get_contents($json_url);
 			$obj = json_decode($json);
 			if( isset($obj->results[0]->geometry->location->lat) ){
