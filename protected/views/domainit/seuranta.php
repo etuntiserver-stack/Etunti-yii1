@@ -92,7 +92,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 	//$explT = explode("//",$tot[$i]);
 	if(isset($tot[$i][1]))
 	$yht += $tot[$i][1];
-	echo '<TD class="text-small" style="font-size:90%">'.$explT[0].'</TD>';
+	echo '<TD class="text-small" style="font-size:90%">'.$tot[$i][1].'</TD>';
 
    }
   echo '<TD class="text-small"><b>'.sprint($yht).'</b></TD>';
