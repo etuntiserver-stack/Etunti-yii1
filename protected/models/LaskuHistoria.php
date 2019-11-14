@@ -9,6 +9,8 @@
  * @property string $time
  * @property string $status
  * @property string $yht_euro
+ * @property string $procountor_statuscode
+ * Status specifier of the invoice in Procountor.
  */
 class LaskuHistoria extends DB2ActiveRecord
 {
