@@ -1840,128 +1840,153 @@ exit;
 	}
 
 
-    	public function tilanneCheck($data)
-	{ 
-
-       		$criteria = new CDbCriteria();
-       		$criteria->order = " id DESC ";
-       		$criteria->condition = " lid='".$data->id."' ";
+	public function tilanneCheck($data)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->order = " id DESC ";
+		$criteria->condition = " lid='" . $data->id . "' ";
 		$l = LaskuHistoria::model()->find($criteria);
+		$tilanne = '';
 
 		// <-- Trust
 		$trust = false;
 		$trustStr = '';
-		if(isset($l->palvelu) and $l->palvelu == 'trust')
-		{
-
-		  $json = json_decode($l->status, true);
-		    if(isset($json['statustext']) and !empty($json['statustext']))
-		    {
-		      	$trustStr = date("d.m.Y",strtotime($json['statustime'])).' '.$json['statustext'];
-			$trust = true;
-		    } elseif(!isset($json['statustext']) and isset($json['reference'])) {
-
-			$trustStr = 'Vastaanotettu<br>';
-			$trust = true;
-
-		    } else {
-		      	$trustStr = print_r($json);
-			$trust = true;
-		    }
-
+		if (isset($l->palvelu) and $l->palvelu == 'trust') {
+			$json = json_decode($l->status, true);
+			if (isset($json['statustext']) and !empty($json['statustext'])) {
+				$trustStr = date("d.m.Y", strtotime($json['statustime'])) . ' ' . $json['statustext'];
+				$trust = true;
+			} elseif (!isset($json['statustext']) and isset($json['reference'])) {
+				$trustStr = 'Vastaanotettu<br>';
+				$trust = true;
+			} else {
+				$trustStr = print_r($json);
+				$trust = true;
+			}
 		}
 		//  Trust -->
-
 
 		// <-- Postita
 		$postita = false;
 		$postitaStr = '';
 
-
-		if(isset($l->palvelu) and $l->palvelu == 'postita')
-		{
-
-		  if($l->postita_statuscode == 'NE'){
-		   $postitaStr = 'Lasku on vielä vahvistettava';
-		   $postita = true;
-		  } elseif($l->postita_statuscode == 'CO'){
-		   $postitaStr = 'Odottaa lähetystä';
-		   $postita = true;
-		  } elseif($l->postita_statuscode == 'SE'){
-		   $postitaStr = 'Lasku lähetetty';
-		   $postita = true;
-		  } elseif($l->postita_statuscode == 'CA'){
-		   $postitaStr = 'Lasku peruutettu';
-		   $postita = true;
-		  } elseif($l->postita_statuscode == 'MAKSUMUISTUTUS'){
-		   $postitaStr = 'Maksumuistutus lähetetty';
-		   $postita = true;
-		  } elseif($l->postita_statuscode == 'POISTETTU'){
-		   $postitaStr = 'Lasku poistettu POSTITA.FI:sta';
-		   $postita = true;
-		  }
-
+		if (isset($l->palvelu) and $l->palvelu == 'postita') {
+			if ($l->postita_statuscode == 'NE') {
+				$postitaStr = 'Lasku on vielä vahvistettava';
+				$postita = true;
+			} elseif ($l->postita_statuscode == 'CO') {
+				$postitaStr = 'Odottaa lähetystä';
+				$postita = true;
+			} elseif ($l->postita_statuscode == 'SE') {
+				$postitaStr = 'Lasku lähetetty';
+				$postita = true;
+			} elseif ($l->postita_statuscode == 'CA') {
+				$postitaStr = 'Lasku peruutettu';
+				$postita = true;
+			} elseif ($l->postita_statuscode == 'MAKSUMUISTUTUS') {
+				$postitaStr = 'Maksumuistutus lähetetty';
+				$postita = true;
+			} elseif ($l->postita_statuscode == 'POISTETTU') {
+				$postitaStr = 'Lasku poistettu POSTITA.FI:sta';
+				$postita = true;
+			}
 		}
 		//  Postita -->
 
+		// Procountor - Copied from other entries @ 14.11.19.
+		if (isset($l->palvelu) && $l->palvelu == 'procountor') {
 
+			// Check for procountor status, received when updating invoices.
+			if (isset($l->procountor_statuscode) && !empty($l->procountor_statuscode)) {
+				switch($l->procountor_statuscode) {
+					case 'EMPTY':                       $tilanne = 'Tyhjä'; break;
+					case 'UNFINISHED':                  $tilanne = 'Kesken'; break;
+					case 'NOT_SENT':                    $tilanne = 'Ei lähetetty'; break;
+					case 'SENT':                        $tilanne = 'Lähetetty'; break;
+					case 'RECEIVED':                    $tilanne = 'Vastaanotettu'; break;
+					case 'PAID':                        $tilanne = 'Maksettu'; break;
+					case 'PAYMENT_DENIED':              $tilanne = 'Maksu epäonnistunut'; break;
+					case 'VERIFIED':                    $tilanne = 'Varmistettu'; break;
+					case 'APPROVED':                    $tilanne = 'Hyväksytty'; break;
+					case 'INVALIDATED':                 $tilanne = 'Mitätöity'; break;
+					case 'PAYMENT_QUEUED':              $tilanne = 'Maksu jonossa'; break;
+					case 'PARTLY_PAID':                 $tilanne = 'Osittain maksettu'; break;
+					case 'PAYMENT_SENT_TO_BANK':        $tilanne = 'Maksu lähetetty pankille'; break;
+					case 'MARKED_PAID':                 $tilanne = 'Merkitty maksetuksi'; break;
+					case 'STARTED':                     $tilanne = 'Aloitettu'; break;
+					case 'INVOICED':                    $tilanne = 'Laskutettu'; break;
+					case 'OVERRIDDEN':                  $tilanne = 'Ohitettu'; break;
+					case 'DELETED':                     $tilanne = 'Poistettu'; break;
+					case 'UNSAVED':                     $tilanne = 'Tallentamatta'; break;
+					case 'PAYMENT_TRANSACTION_REMOVED': $tilanne = 'Maksutapahtuma poistettu'; break;
+					case 'MUU': default:                $tilanne = 'Muu tilanne'; break;
+				}
+			} else {
+				switch ($l->status) {
+					case 'LÄHETETTY':                   $tilanne = 'Lasku lähetetty'; break;
+					case 'MAKSUMUISTUTUS':              $tilanne = 'Maksumuistutus lähetetty'; break;
+					case 'MAKSETTU':                    $tilanne = 'Lasku maksettu'; break;
+					case 'Lasku luotu':                 $tilanne = 'Lasku luotu'; break;
+					case 'HYVÄKSYTTY':                  $tilanne = 'Lasku hyväksytty'; break;
+					case 'Lähetetty sähköpostilla':     $tilanne = 'Lähetetty sähköpostilla'; break;
+					case 'Lasku mitätöity':             $tilanne = 'Lasku mitätöity'; break;
+					case 'POISTETTU':                   $tilanne = 'Lasku poistettu'; break;
+					case 'MUU': default:                $tilanne = 'Muu tilanne'; break;
+				}
+			}
+		}
 
 		// <-- Local
 		$local = false;
 		$localStr = '';
-		if(isset($l->palvelu) and $l->palvelu == 'local')
-		{
-
-		  if($l->status == 'LÄHETETTY'){
-		   $localStr = 'Lasku lähetetty';
-		   $local = true;
-		  } elseif($l->status == 'MAKSUMUISTUTUS'){
-		   $localStr = 'Maksumuistutus lähetetty';
-		   $local = true;
-		  } elseif($l->status == 'MAKSETTU'){
-		   $localStr = 'Lasku maksettu';
-		   $local = true;
-		  } elseif($l->status == 'Lasku luotu'){
-		   $localStr = 'Lasku luotu';
-		   $local = true;
-		  } elseif($l->status == 'HYVÄKSYTTY'){
-		   $localStr = 'Lasku hyväksytty';
-		   $local = true;
-		  } elseif($l->status == 'Lähetetty sähköpostilla'){
-		   $localStr = 'Lähetetty sähköpostilla';
-		   $local = true;
-		  } elseif($l->status == 'Lasku mitätöity'){
-		   $localStr = 'Lasku mitätöity';
-		   $local = true;
-		  }
-
+		if (isset($l->palvelu) and $l->palvelu == 'local') {
+			if ($l->status == 'LÄHETETTY') {
+				$localStr = 'Lasku lähetetty';
+				$local = true;
+			} elseif ($l->status == 'MAKSUMUISTUTUS') {
+				$localStr = 'Maksumuistutus lähetetty';
+				$local = true;
+			} elseif ($l->status == 'MAKSETTU') {
+				$localStr = 'Lasku maksettu';
+				$local = true;
+			} elseif ($l->status == 'Lasku luotu') {
+				$localStr = 'Lasku luotu';
+				$local = true;
+			} elseif ($l->status == 'HYVÄKSYTTY') {
+				$localStr = 'Lasku hyväksytty';
+				$local = true;
+			} elseif ($l->status == 'Lähetetty sähköpostilla') {
+				$localStr = 'Lähetetty sähköpostilla';
+				$local = true;
+			} elseif ($l->status == 'Lasku mitätöity') {
+				$localStr = 'Lasku mitätöity';
+				$local = true;
+			} elseif ($l->status == 'Lasku on muokattu') {
+				$localStr = 'Lasku on muokattu';
+				$local = true;
+			}
 		}
 		//  Local -->
-		
-
 
 		// <-- Netvisor
 		$netvisor = false;
 		$netvisorStr = '';
-		if(isset($l->palvelu) and $l->palvelu == 'netvisor')
-		{
-		   $netvisorStr = $l->status;
-		   $netvisor = true;
+		if (isset($l->palvelu) and $l->palvelu == 'netvisor') {
+			$netvisorStr = $l->status;
+			$netvisor = true;
 		}
 		//  Netvisor -->
-  
-		$tilanne = ''; 
 
-		if($trust == true)
-		    $tilanne = $trustStr; 
-		elseif($postita == true)
-		    $tilanne = $postitaStr;
-		elseif($local == true)
-		    $tilanne = $localStr;
-		elseif($netvisor == true)
-		    $tilanne = $netvisorStr;
+		if ($trust == true)
+			$tilanne = $trustStr;
+		elseif ($postita == true)
+			$tilanne = $postitaStr;
+		elseif ($local == true)
+			$tilanne = $localStr;
+		elseif ($netvisor == true)
+			$tilanne = $netvisorStr;
 
-            	return $tilanne;
+		return $tilanne;
 	}
 
 
