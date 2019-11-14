@@ -370,7 +370,7 @@ public function actionLang($dom)
 		/* Index */		
 		'TYO' => Yii::t('app', 'TYÖ'),
 		'MATKA' => Yii::t('app', 'MATKA'),
-		'LOUNAS' => Yii::t('app', 'LOUNAS'),
+		'LOUNAS' => Yii::t('app', 'LOUNASTAUKO'),
 		'ALOITA' => Yii::t('app', 'ALOITA'),
 		'LOPETA' => Yii::t('app', 'LOPETA'),
 		'osoite' => Yii::t('app', 'Osoite'),
@@ -631,9 +631,12 @@ public function actionImei($dom)
 	if(isset($_POST['email']) and isset($_POST['salasana']) ){
 		$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
 	}
-    	if(!isset($ttekija->id))
-	{
-		$this->_sendResponse(200, "eiLoytyTekija//Työntekijää ei löydy");
+    	if(!isset($ttekija->id)){
+		$this->_sendResponse(200, CJSON::encode(array("error" => "Työntekijää ei löydy.")));
+		exit;
+	}
+    	if(isset($ttekija->id) and $ttekija->mobiili == 0){
+		$this->_sendResponse(200, CJSON::encode(array("error" => "Ei oikeuksia mobiilisovellukseen.")));
 		exit;
 	}
 	//     Check Tyontekija -->
