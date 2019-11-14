@@ -297,7 +297,6 @@ $('.lahetaSivuProcountor').click(function() {
   var ids = [];
   $('i.link[for]').each(function() {
     ids.push($(this).attr('for'));
-    alert($(this).attr('for'));
   });
 
   // Build hidden form for POST.

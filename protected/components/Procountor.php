@@ -25,6 +25,18 @@ class Procountor extends CComponent
   }
 
   /**
+   * Check if current authorization is valid.
+   *
+   * @return bool
+   * True if authorized; otherwise false. If current authorization is invalid
+   * (access token expired and unable to refresh), returns false.
+   */
+  public function isAuthorized()
+  {
+    return !empty($this->getAccessToken());
+  }
+
+  /**
    * Log error in request, usually when 'errors' is defined in results.
    * @param string $request Requested API call, e.g. "createInvoice".
    * @param array $results Results array returned by the API function.
@@ -56,8 +68,17 @@ class Procountor extends CComponent
    */
   private function request($target, $data = null, array $tags = ['CURLOPT_POST' => true], $json = true)
   {
+    $asetukset = Asetukset::model()->findByPk(1);
+
+    // Check if user hasn't authorized Procountor in this environment.
+    if (empty($asetukset->procountor_refresh_token ?? ''))
+      return ['auth_none' => true, 'errors' => 'Procountor is not authorized in this environment.'];
+
+    // If refresh fails, getAccessToken() will mark this authorization as
+    // invalid/expired. In that case, return now.
     if (empty($token = $this->getAccessToken()))
-      return false;
+      return ['auth_invalid' => true, 'errors' => 'Procountor access token has expired and was unable to be refreshed.'];
+
     if (is_array($data))
       $data = json_encode($data);
     $ch = curl_init("{$this->api_base_url}/$target");
@@ -177,7 +198,8 @@ class Procountor extends CComponent
       'procountor_access_token' => $response['access_token'],
       'procountor_refresh_token' => $response['refresh_token'],
       'procountor_refresh_time' => time(),
-      'procountor_expires_in' => $response['expires_in']
+      'procountor_expires_in' => $response['expires_in'],
+      'procountor_invalid' => 0
     ]);
 
     return true;
@@ -234,12 +256,14 @@ class Procountor extends CComponent
       Asetukset::model()->updateByPk(1, [
         'procountor_access_token' => $response['access_token'],
         'procountor_refresh_time' => time(),
-        'procountor_expires_in' => $response['expires_in']
+        'procountor_expires_in' => $response['expires_in'],
+        'procountor_invalid' => 0
       ]);
 
       return $response['access_token'];
     }
 
+    Asetukset::model()->updateByPk(1, ['procountor_invalid' => 1]);
     return false;
   }
 

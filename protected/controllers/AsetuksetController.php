@@ -590,20 +590,26 @@ Jos yritykselläsi ei ole Ropo Capital Oy:n kanssa sopimusta tunnuksista, lähet
 		return  number_format((float)$val/3600, 2, '.', '');
 	}
 
+	/**
+	 * Authorize Procountor in this environment. Procountor login page returns to
+	 * this action, providing the authorization code that will be traded for an
+	 * access token and a refresh token.
+	 *
+	 * @param int $code
+	 * Authorization code.
+	 * @param mixed $state
+	 * Custom state set by this app.
+	 */
 	public function actionProcountor_auth($code, $state = null)
 	{
-		$model = $this->loadModel(1);
-
-		if (empty($code)) {
+		if (empty($code))
 			Yii::app()->user->setFlash('danger', 'Virheellinen pyyntö (vastaanotettu kirjautumistunnus on tyhjä).');
-			$this->render('update', ['model' => $model]);
-		}
-
-		if (Yii::createComponent('Procountor')->authorize($code))
+		elseif (Yii::createComponent('Procountor')->authorize($code))
 			Yii::app()->user->setFlash('success', 'Procountor kirjautuminen onnistui.');
 		else
 			Yii::app()->user->setFlash('danger', 'Procountor kirjautuminen epäonnistui.');
 
-		$this->render('update', ['model' => $model]);
+		// Redirect back to the settings page.
+		$this->render('update', ['model' => $this->loadModel(1)]);
 	}
 }

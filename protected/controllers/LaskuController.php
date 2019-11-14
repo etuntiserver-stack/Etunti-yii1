@@ -2837,6 +2837,13 @@ $xml .= '
 		// Procountor - get invoice status on invoice search, and update if needed.
 		if ($asetukset->palvelu_tyyppi == 5) {
 			$pc = Yii::createComponent('Procountor');
+
+			// Check that authorization is valid.
+			if (!$pc->isAuthorized()) {
+				$is_error = true;
+				return '<p>Procountor kirjautuminen on viallinen tai vanhentunut. Kirjaudu Procountoriin uudelleen asetuksista.</p>';
+			}
+
 			$params = new ProcountorInvoiceSearchParameters();
 			$procountor_updated = false;
 
@@ -3303,13 +3310,20 @@ $xml .= '
 		$l = Lasku::model()->findbypk($id);
 		$result = 'OK';
 
-		if ($l->procountor_id) {
+		// Check that authorization is valid.
+		if (!$pc->isAuthorized()) {
+			$result = 'Procountor kirjautuminen on viallinen tai vanhentunut. Kirjaudu Procountoriin uudelleen asetuksista.';
+		}
+		// Ensure the invoice has been sent to Procountor (procountor_id defined).
+		elseif ($l->procountor_id) {
 			$send_results = $pc->sendInvoice($l->procountor_id);
 			if (isset($send_results['errors'])) {
 				$pc->logError('sendInvoice', $send_results, ['Lasku ID' => $id], 'Failed to send invoice.');
 				$result = 'Laskun lähetys Procountorissa epäonnistui. Vika on ilmoitettu ylläpitoon.';
 			}
-		} else {
+		}
+		// Invoice cannot be sent from Procountor because if was created with another API or locally.
+		else {
 			$result = 'Laskua ei voida lähettää Procountorissa koska sitä ei ole luotu Procountoriin Etunti käyttöliittymän kautta.';
 		}
 
@@ -3321,13 +3335,25 @@ $xml .= '
 	 */
 	public function actionLaheta_procountor()
 	{
+		$count = 0;
 		foreach($_POST['ids'] ?? [] as $id) {
 			if (!is_numeric($id))
 				continue;
 			$invoice = Lasku::model()->findByPk($id);
-			if ($invoice->tilanne ?? 0 == 1)
-				$this->lahetaProcountor($id);
+			if ($invoice->tilanne ?? 0 == 1) {
+				if ($result = $this->lahetaProcountor($id) != 'OK') {
+					Yii::app()->user->setFlash('danger', $result);
+					$this->redirect('index');
+				}
+				$count++;
+			}
 		}
+
+		if ($count > 0)
+			Yii::app()->user->setFlash('success', "$count laskua lähetettiin onnistuneesti.");
+		else
+			Yii::app()->user->setFlash('primary', 'Ei lähetettäviä laskuja.');
+		$this->redirect('index');
 	}
 
 	public function actionLaheta_valitsemmat($id)

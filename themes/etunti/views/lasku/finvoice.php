@@ -16,6 +16,12 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
 
   $pc = Yii::createComponent('Procountor');
 
+  // Check that authorization is valid.
+  if (!$pc->isAuthorized()) {
+    Yii::app()->user->setFlash('danger', 'Procountor kirjautuminen on viallinen tai vanhentunut. Kirjaudu Procountoriin uudelleen asetuksista.');
+    $this->redirect(array('update','id'=>$id));
+  }
+
   // Get bank accounts from Procountor, and add this receiver if it's not there.
   // $current_iban = str_replace(' ', '', $l->saaja_iban);
   // TODO: replace with above commented line. This IBAN is for the testing environment.
@@ -265,6 +271,12 @@ if (isset($_GET['mitatointi']) && isset($_GET['procountor'])) {
   $pc = Yii::createComponent('Procountor');
   $l = Lasku::model()->findbypk($_GET['id']);
 
+  // Check that authorization is valid.
+  if (!$pc->isAuthorized()) {
+    Yii::app()->user->setFlash('danger', 'Procountor kirjautuminen on viallinen tai vanhentunut. Kirjaudu Procountoriin uudelleen asetuksista.');
+    $this->redirect(array('update','id'=>$id));
+  }
+
   // If invoice was not created in Procountor, dont do anything here.
   if ($l->procountor_id) {
 
@@ -287,6 +299,12 @@ if (isset($_GET['mitatointi']) && isset($_GET['procountor'])) {
 if (isset($_GET['merkitseLahetettavaksi']) && isset($_GET['procountor'])) {
   $pc = Yii::createComponent('Procountor');
   $l = Lasku::model()->findbypk($_GET['id']);
+
+  // Check that authorization is valid.
+  if (!$pc->isAuthorized()) {
+    Yii::app()->user->setFlash('danger', 'Procountor kirjautuminen on viallinen tai vanhentunut. Kirjaudu Procountoriin uudelleen asetuksista.');
+    $this->redirect(array('update','id'=>$id));
+  }
 
   // Ensure that the invoice was created to Procountor from the invoice view.
   if (!$l->procountor_id) {
