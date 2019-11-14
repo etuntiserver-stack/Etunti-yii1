@@ -194,9 +194,6 @@
 
 	<?php if($lahettamattomat == true): ?>
 	<h3 class="alert alert-primary myBgColors"><?php echo Yii::t('main', 'Lähettämättömät laskut'); ?>
-    <?php if ($asetukset->palvelu_tyyppi == 5): ?>
-      <button class="lahetaKaikkiProcountor col-sm-offset-1 btn btn-sm btn-default btn-group"><?php echo Yii::t('main', 'Lähetä kaikki'); ?></button>
-    <?php endif; ?>
     <button class="valitseKaikki btn btn-sm btn-default btn-group"><?php echo Yii::t('main', 'Valitse kaikki'); ?></button>
 		<span id="lahetaValitsemmat"></span>
 	</h3>
@@ -312,14 +309,9 @@ $('.lahetaSivuProcountor').click(function() {
 });
 
 // Send all, or only selected invoices.
-$(document).delegate(".lahetaNamat, .lahetaKaikkiProcountor", "click", function() {
-
-  // Check if the send all button was pressed.
-  var procountor = $(this).hasClass('lahetaKaikkiProcountor');
+$(document).delegate(".lahetaNamat", "click", function() {
   $('#mobileTable input:checkbox').each(function() {
-
-    // Process all or only checked invoices, depending on what was pressed.
-    if (procountor || this.checked) {
+    if (this.checked) {
 
       // Get invoice ID.
       var id = $(this).attr('for');

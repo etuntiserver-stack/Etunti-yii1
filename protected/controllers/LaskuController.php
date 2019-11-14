@@ -3295,7 +3295,7 @@ $xml .= '
 
 	/**
 	 * Send approved invoice when using Procountor. This is mainly called from
-	 * invoices index, by 'Send all' and 'Send selected' -buttons (jQuery).
+	 * invoices index, by 'Send all' and 'Send selected' buttons.
 	 */
 	protected function lahetaProcountor($id)
 	{
@@ -3316,10 +3316,18 @@ $xml .= '
 		return $result;
 	}
 
+	/**
+	 * Handle the 'Send all' -button on invoice page (Procountor).
+	 */
 	public function actionLaheta_procountor()
 	{
-		// TODO
-		var_dump($_POST['ids'] ?? []);
+		foreach($_POST['ids'] ?? [] as $id) {
+			if (!is_numeric($id))
+				continue;
+			$invoice = Lasku::model()->findByPk($id);
+			if ($invoice->tilanne ?? 0 == 1)
+				$this->lahetaProcountor($id);
+		}
 	}
 
 	public function actionLaheta_valitsemmat($id)
