@@ -1587,7 +1587,6 @@ public function actionImei($dom)
 		$sp1 = 'Kesto: <b>'.$nykyinenKesto.'</b>';
 		$sp1 .= '<div class="text-center">';
 		$sp1 .= '<p>'.$mobCheck->kohde_kannasta.'</p>';
-		$sp1 .= '<p>'.json_encode($_POST).'</p>';
 		if(!empty($my_location))
 			$sp1 .= '<p>'.$my_location.'</p>';
 		if(!empty($kartta))
