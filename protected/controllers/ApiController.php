@@ -1588,7 +1588,7 @@ public function actionImei($dom)
 		$sp1 = 'Kesto: <b>'.$nykyinenKesto.'</b>';
 		$sp1 .= '<div class="text-center">';
 		$sp1 .= '<p>'.$mobCheck->kohde_kannasta.'</p>';
-		if(isset($my_location[1]))
+		if(isset($my_location[0]))
 			$sp1 .= '<p>'.$my_location[0].','.$my_location[1].'</p>';
 		if(!empty($kartta))
 			$sp1 .= '<p>'.$kartta.'</p>';
