@@ -2893,7 +2893,7 @@ $xml .= '
 				$pc->logError(
 					'searchInvoices',
 					$procountor_results,
-					['Haun alku' => $params->createdStartDate, 'Haun loppu' => $params->createdEndDate],
+					['Search dates' => "{$params->createdStartDate} - {$params->createdEndDate}"],
 					'Failed to get bank accounts from Procountor.'
 				);
 
