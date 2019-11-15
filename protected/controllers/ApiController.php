@@ -840,7 +840,7 @@ public function actionImei($dom)
 					$return = ["return" => 'EiTuloksia'];
 					$this->_sendResponse(200, CJSON::encode($return));
 				} else {
-					$this->_sendResponse(200, 'ei tuloksia');
+					$this->_sendResponse(200, '');
 				}
 				exit;
 			}
