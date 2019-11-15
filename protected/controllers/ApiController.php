@@ -651,12 +651,18 @@ public function actionImei($dom)
 	$asetukset = Asetukset::model()->findbypk(1);
 	if(isset($_POST['check'])){
 
-	        if($_POST['check'] == 'sendLocation'){
-
+		// <-- CHECK sendLocation
+		if($_POST['check'] == 'sendLocation'){
 			Tyontekijat::model()->updatebypk($ttekija->id, array('position'=>$_POST['my_location']."//".date("d.m.Y H:i")));
-			$this->_sendResponse(200, $ttekija->id."//".date("d.m.Y H:i")."//".$_POST['my_location']);
+			if( $new_login ){
+				$return = ["tid" => $ttekija->id, "date" => date("d.m.Y H:i"), "my_location" => $_POST['my_location']];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, $ttekija->id."//".date("d.m.Y H:i")."//".$_POST['my_location']);
+			}
 			exit;
 	        }
+		//     CHECK sendLocation -->
 
 		$get_osoite 		= '';
 		$kohdenID 		= 0;
@@ -692,76 +698,79 @@ public function actionImei($dom)
 		  exit;
 	        }
 
-	        if($_POST['check'] == 'tehty'){
+		// <-- CHECK tehty
+		if($_POST['check'] == 'tehty'){
 
-		    $criteria = new CDbCriteria();
-		    $criteria->order = " id DESC ";
-		    $criteria->condition = " 
-			tid = '".$ttekija->id."' 
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".date("Y-m-d", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week"))."' AND '".date("Y-m-d")."' 
-			AND loppui!=''
-			AND admin!=1
-		    ";
-	            $mob = Mobile::model()->findAll($criteria);
+			$criteria = new CDbCriteria();
+			$criteria->order = " id DESC ";
+			$criteria->condition = " 
+				tid = '".$ttekija->id."' 
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+				BETWEEN '".date("Y-m-d", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week"))."' AND '".date("Y-m-d")."' 
+				AND loppui!=''
+				AND admin!=1
+			";
+			$mob = Mobile::model()->findAll($criteria);
 
-		    if(empty($mob))
-		    {
-		    $this->_sendResponse(200, 'ei tuloksia');
-		    exit;
-		    }
+			if(empty($mob)){
+				if( $new_login ){
+					$return = ["return" => 'Ei tuloksia'];
+					$this->_sendResponse(200, CJSON::encode($return));
+				} else {
+					$this->_sendResponse(200, 'ei tuloksia');
+				}
+				exit;
+			}
 
-		    // <-- Ajaanjaksolla
-		    $criteria = new CDbCriteria();
-        	    $criteria->select = "
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-		    ";
-	            $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND tid='".$ttekija->id."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".date("Y-m-d", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week"))."' AND '".date("Y-m-d")."' 
-			AND (status=3 OR status=2)
-			AND admin!=1
-		    ";
-		    $lu = Mobile::model()->find($criteria);
-		    $ajaanjaksolla = '';
-		    if( isset($lu->l_tunnit) ){
-			$ajaanjaksolla = '<h5>Tehdyt työt ajanjaksolla '.$this->sprint($lu->l_tunnit).'</h5>';
-		    }
-		    //    Ajaanjaksolla -->
+			// <-- Ajaanjaksolla
+			$criteria = new CDbCriteria();
+			$criteria->select = "
+				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+			";
+			$criteria->condition = " 
+				aloitan!='' AND loppui!=''
+				AND tid='".$ttekija->id."'
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+				BETWEEN '".date("Y-m-d", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week"))."' AND '".date("Y-m-d")."' 
+				AND (status=3 OR status=2)
+				AND admin!=1
+			";
+			$lu = Mobile::model()->find($criteria);
+			$ajaanjaksolla = '';
+			if( isset($lu->l_tunnit) ){
+				$ajaanjaksolla = '<h5>Tehdyt työt ajanjaksolla '.$this->sprint($lu->l_tunnit).'</h5>';
+			}
+			//    Ajaanjaksolla -->
 
-		    // <-- Tanaan
-		    $criteria = new CDbCriteria();
-        	    $criteria->select = "
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-		    ";
-	            $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND tid='".$ttekija->id."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".date('Y-m-d')."'
-			AND (status=3 OR status=2)
-			AND admin!=1
-		    ";
-		    $lu = Mobile::model()->find($criteria);
-		    $tanaan = '';
-		    if( isset($lu->l_tunnit) ){
-			$tanaan = '<h5>Tänään yhteensä '.$this->sprint($lu->l_tunnit).'</h5>';
-		    }
-		    //    Tanaan -->
+			// <-- Tanaan
+			$criteria = new CDbCriteria();
+			$criteria->select = "
+				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+			";
+			$criteria->condition = " 
+				aloitan!='' AND loppui!=''
+				AND tid='".$ttekija->id."'
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".date('Y-m-d')."'
+				AND (status=3 OR status=2)
+				AND admin!=1
+			";
+			$lu = Mobile::model()->find($criteria);
+			$tanaan = '';
+			if( isset($lu->l_tunnit) ){
+				$tanaan = '<h5>Tänään yhteensä '.$this->sprint($lu->l_tunnit).'</h5>';
+			}
+			//    Tanaan -->
 
-		    $sel = '<center><p><h4>'.date("d.m.Y", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week")).'-'.date('d.m.Y').'</h4></p>';
-		    $sel .= $ajaanjaksolla;
-		    $sel .= $tanaan;
-		    $sel .= '</center><hr>';
-		    foreach($mob as $val)
-		    {
-		    $kesto = '00:00';
-		    if(!empty($val->loppui))
-		    $kesto = (strtotime($val->loppui)-strtotime($val->aloitan));
-
+			$sel = '<center><p><h4>'.date("d.m.Y", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week")).'-'.date('d.m.Y').'</h4></p>';
+			$sel .= $ajaanjaksolla;
+			$sel .= $tanaan;
+			$sel .= '</center><hr>';
+			foreach($mob as $val){
+				$kesto = '00:00';
+				if(!empty($val->loppui))
+					$kesto = (strtotime($val->loppui)-strtotime($val->aloitan));
 
 				$sel .= '<div class="well">
 				  <b>'.Yii::t('app', 'Päivämäärä').':</b> '.date("d.m.Y",strtotime($val->aloitan)).'<br> 
@@ -772,281 +781,293 @@ public function actionImei($dom)
 
 
 				// <-- check Hyvaksytty
-				if($asetukset->app_naytetaanko_hyvaksyttyt_tunnit == 1)
-				{
-				$mobile = Yii::app()->createController('Mobile');
-				$hyvaksytty_return = $mobile[0]->onkoRiviHyvaksytty($val->id);
-				if( $hyvaksytty_return > 0 )
-					$hyvaksytty = sprint($hyvaksytty_return);
-				else
-					$hyvaksytty = '';
-				if(!empty($hyvaksytty))
-					$sel .= '<h3 style="color:green">'.Yii::t('app', 'Hyväksytty').': '.$hyvaksytty.'</h3>';
+				if($asetukset->app_naytetaanko_hyvaksyttyt_tunnit == 1){
+					$mobile = Yii::app()->createController('Mobile');
+					$hyvaksytty_return = $mobile[0]->onkoRiviHyvaksytty($val->id);
+					if( $hyvaksytty_return > 0 )
+						$hyvaksytty = sprint($hyvaksytty_return);
+					else
+						$hyvaksytty = '';
+					if(!empty($hyvaksytty))
+						$sel .= '<h3 style="color:green">'.Yii::t('app', 'Hyväksytty').': '.$hyvaksytty.'</h3>';
 				}
 				// check Hyvaksytty -->
 
+				$sel .= '</div>';
+			}
 
-				$sel .= '
-				</div>';
-		    }
-
-		    $this->_sendResponse(200, $sel);
-		exit;
+			if( $new_login ){
+				$return = ["return" => $sel];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, $sel);
+			}
+			exit;
 	        }
+		//     CHECK tehty -->
 
+		// <-- CHECK getTyovuorotToday
+		if($_POST['check'] == 'getTyovuorotToday'){
 
-	        if($_POST['check'] == 'getTyovuorotToday'){
+			$site = Yii::app()->createController('Site');
+			$eilasketa = $site[0]->eiLasketa();
 
-		    $site = Yii::app()->createController('Site');
-		    $eilasketa = $site[0]->eiLasketa();
-
-		    $criteria = new CDbCriteria();
-		    $criteria->order = " alku ASC ";
-		    $criteria->condition = " 
+			$criteria = new CDbCriteria();
+			$criteria->order = " alku ASC ";
+			$criteria->condition = " 
 				tid = '".$ttekija->id."' 
 				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
 				AND $eilasketa
 				AND piilota_mobiilista!=1
 				AND (peruutettu=0 OR peruutettu IS NULL)
-		    ";
+			";
 
-	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
+			$tvuoro = Tyovuoroot::model()->findAll($criteria);
 
-		    if(!isset($tvuoro[0]))
-		    {
-		    //$this->_sendResponse(200, 'ei tuloksia');
-		    exit;
-		    }
-
-		    $sel = '';
-		    $sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
-		    $sel .= '<option value=>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
-		    foreach($tvuoro as $val){
-			$k = Kohteet::model()->findbypk($val->kohde);
-			if(isset($k->osoite))
-			{
-				$osoite = '';
-				if(!empty($k->osoite))
-				$osoite .= $k->osoite;
-				if(!empty($k->pnumero))
-				$osoite .= ', '.$k->pnumero;
-				if(!empty($k->kaupunki))
-				$osoite .= ', '.$k->kaupunki;
-
-				if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $k->asiakas_id != 0)
-				{
-					$asiakas = Asiakkaat::model()->findbypk($k->asiakas_id);
-					$nm = '';
-					if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
-			      			$nm = $asiakas->yrityksen_nimi;
-					} elseif(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and !empty($asiakas->yhteyshenkilo)){
-			      			$nm = $asiakas->yhteyshenkilo;
-					}
-					if(!empty($nm))
-					$osoite .= '. '.$nm;
-				}
-
-				if( isset($_POST['tv_option_byid']) ){
-		      		$sel .= '<option value="'.$k->id.'" id="'.$val->id.'">'.$osoite.'</option>';
+			if( count($tvuoro) == 0 ){
+				if( $new_login ){
+					$return = ["return" => 'Ei tuloksia'];
+					$this->_sendResponse(200, CJSON::encode($return));
 				} else {
-		      		$sel .= '<option value="'.$k->id.'" tv_id="'.$val->id.'">'.$osoite.'</option>';
+					$this->_sendResponse(200, 'ei tuloksia');
 				}
-
-
+				exit;
 			}
-		    }
-		    $sel .= '</select>';
 
-		    $this->_sendResponse(200, $sel);
-		exit;
+			$sel = '';
+			$sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
+			$sel .= '<option value=>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
+			foreach($tvuoro as $val){
+				$k = Kohteet::model()->findbypk($val->kohde);
+				if(isset($k->osoite)){
+					$osoite = '';
+					if(!empty($k->osoite))
+						$osoite .= $k->osoite;
+					if(!empty($k->pnumero))
+						$osoite .= ', '.$k->pnumero;
+					if(!empty($k->kaupunki))
+						$osoite .= ', '.$k->kaupunki;
+
+					if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $k->asiakas_id != 0){
+						$asiakas = Asiakkaat::model()->findbypk($k->asiakas_id);
+						$nm = '';
+						if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
+							$nm = $asiakas->yrityksen_nimi;
+						} elseif(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and !empty($asiakas->yhteyshenkilo)){
+							$nm = $asiakas->yhteyshenkilo;
+						}
+						if(!empty($nm))
+							$osoite .= '. '.$nm;
+					}
+
+					if( isset($_POST['tv_option_byid']) ){
+						$sel .= '<option value="'.$k->id.'" id="'.$val->id.'">'.$osoite.'</option>';
+					} else {
+						$sel .= '<option value="'.$k->id.'" tv_id="'.$val->id.'">'.$osoite.'</option>';
+					}
+				}
+			}
+			$sel .= '</select>';
+
+			if( $new_login ){
+				$return = ["return" => $sel];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, $sel);
+			}
+
+			exit;
 	        }
+		//     CHECK getTyovuorotToday -->
 
+		// <-- CHECK tvuoro
 	        if($_POST['check'] == 'tvuoro'){
 
-		    $tas = Domainit::model()->find(" domain='".$dom."' ");
-		    $p = array();
-		    if(isset($tas->paketti)){ $p = explode(",",$tas->paketti); }
+			$tas = Domainit::model()->find(" domain='".$dom."' ");
+			$p = array();
+			if(isset($tas->paketti)){ $p = explode(",",$tas->paketti); }
 
-		    if(!in_array('2',$p, true)){
-		    $this->_sendResponse(200, 'Osta lisäosa työvuorojenhallinta');
-		    exit;
-		    } 
+			if(!in_array('2',$p, true)){
+				if( $new_login ){
+					$return = ["return" => 'Osta lisäosa työvuorojenhallinta'];
+					$this->_sendResponse(200, CJSON::encode($return));
+				} else {
+					$this->_sendResponse(200, 'Osta lisäosa työvuorojenhallinta');
+				}
+				exit;
+			} 
 
-		    if(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '1')
-		    $aikaVali = date('Y-m-d',strtotime('sunday this week'));
-		    elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '2')
-		    $aikaVali = date('Y-m-d',strtotime('+7 day'));
-		    elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '3')
-		    $aikaVali = date('Y-m-d',strtotime('+14 day'));
-		    elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '4')
-		    $aikaVali = date('Y-m-d',strtotime('+30 day'));
-		    else
-		    $aikaVali = date('Y-m-d',strtotime('sunday this week'));
+			if(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '1')
+				$aikaVali = date('Y-m-d',strtotime('sunday this week'));
+			elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '2')
+				$aikaVali = date('Y-m-d',strtotime('+7 day'));
+			elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '3')
+				$aikaVali = date('Y-m-d',strtotime('+14 day'));
+			elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '4')
+				$aikaVali = date('Y-m-d',strtotime('+30 day'));
+			else
+				$aikaVali = date('Y-m-d',strtotime('sunday this week'));
 
 
-		    $criteria = new CDbCriteria();
-		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'),alku ASC ";
-		    $criteria->condition = " 
+			$criteria = new CDbCriteria();
+			$criteria->order = " DATE(STR_TO_DATE(pvm, '%d.%m.%Y')),alku ASC ";
+			$criteria->condition = " 
 				tid = '".$ttekija->id."' 
-				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+				and DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) 
 				BETWEEN CURDATE() AND '".$aikaVali."'
 				AND piilota_mobiilista!=1
 				AND (peruutettu=0 OR peruutettu IS NULL)
-		    ";
-		    if( isset($asetukset->app_naytta_sairauslomat) and $asetukset->app_naytta_sairauslomat == 0 ){
-			$criteria->addCondition(" tyoajanlaatu NOT LIKE '%(SPL)%' AND tyoajanlaatu NOT LIKE '%(SL)%' ");
-		    }
-	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
-
-		    if(empty($tvuoro))
-		    {
-		    $this->_sendResponse(200, 'ei tuloksia');
-		    exit;
-		    }
-
-		    $sel = '<h2>'.Yii::t('app', 'Työvuorot').'</h2>';
-
-		    foreach($tvuoro as $val)
-		    {
-		      $osoite = '';
-		      $kohde = Kohteet::model()->findbypk($val->kohde);
-		      if(isset($kohde->osoite))
-		      {
-				$osoite = '';
-				if(!empty($kohde->osoite))
-				$osoite .= $kohde->osoite;
-				if(!empty($kohde->pnumero))
-				$osoite .= ', '.$kohde->pnumero;
-				if(!empty($kohde->kaupunki))
-				$osoite .= ', '.$kohde->kaupunki;
-		      }
-
-
-		      $tyopaari = array();
-		      if(!empty($val->tyopaari))
-		      $tyopaari = json_decode($val->tyopaari, true);
-		      $tplista = '';
-		      foreach($tyopaari as $tp)
-		      {
-			if($tp != $ttekija->id)
-			{
-		      	   $tpID = Tyontekijat::model()->findbypk($tp);
-			   if(isset($tpID->tekijan_nimi)){
-			   	$tplista .= '<b>'.Yii::t('main', 'Työpari').'</b>: '.$this->etuSukunimi($tpID->id).' '.((!empty($tpID->laiten_puh))?', <b>Puh.</b>: '.$tpID->laiten_puh:'').'<br>';
-			   }
+			";
+			if( isset($asetukset->app_naytta_sairauslomat) and $asetukset->app_naytta_sairauslomat == 0 ){
+				$criteria->addCondition(" tyoajanlaatu NOT LIKE '%(SPL)%' AND tyoajanlaatu NOT LIKE '%(SL)%' ");
 			}
-		      }
+			$tvuoro = Tyovuoroot::model()->findAll($criteria);
+
+			if(empty($tvuoro)){
+				if( $new_login ){
+					$return = ["return" => 'Ei tuloksia'];
+					$this->_sendResponse(200, CJSON::encode($return));
+				} else {
+					$this->_sendResponse(200, 'ei tuloksia');
+				}
+				exit;
+			}
+
+			$sel = '<h2>'.Yii::t('app', 'Työvuorot').'</h2>';
+
+			foreach($tvuoro as $val){
+				$osoite = '';
+				$kohde = Kohteet::model()->findbypk($val->kohde);
+				if(isset($kohde->osoite)){
+					$osoite = '';
+					if(!empty($kohde->osoite))
+						$osoite .= $kohde->osoite;
+					if(!empty($kohde->pnumero))
+						$osoite .= ', '.$kohde->pnumero;
+					if(!empty($kohde->kaupunki))
+						$osoite .= ', '.$kohde->kaupunki;
+				}
+
+				$tyopaari = array();
+				if(!empty($val->tyopaari))
+					$tyopaari = json_decode($val->tyopaari, true);
+				$tplista = '';
+				foreach($tyopaari as $tp){
+					if($tp != $ttekija->id){
+						$tpID = Tyontekijat::model()->findbypk($tp);
+						if(isset($tpID->tekijan_nimi)){
+							$tplista .= '<b>'.Yii::t('main', 'Työpari').'</b>: '.$this->etuSukunimi($tpID->id).' '.((!empty($tpID->laiten_puh))?', <b>Puh.</b>: '.$tpID->laiten_puh:'').'<br>';
+						}
+					}
+				}
 		      
-		      if(!empty($tplista)){ $tplista = '<hr>'.$tplista; }
+				if(!empty($tplista)){ $tplista = '<hr>'.$tplista; }
 
-		      $alkLop = '';
-		      if($val->alku > 0 and $val->loppu > 0)
-		      $alkLop = $val->alku.'-'.$val->loppu.' ';
+				$alkLop = '';
+				if($val->alku > 0 and $val->loppu > 0)
+					$alkLop = $val->alku.'-'.$val->loppu.' ';
 
-		      $color = '';
-	 	      if(!empty($val->tyoajanlaatu) and empty($osoite))
-	 	      {
-			    $expl1 = explode("/",$val->tyoajanlaatu);
-			    $color = (isset($expl1[1])) ? $expl1[1] : '';
-			    $osoite = (isset($expl1[0])) ? $expl1[0] : '';
-		      }
+				$color = '';
+				if(!empty($val->tyoajanlaatu) and empty($osoite)){
+					$expl1 = explode("/",$val->tyoajanlaatu);
+					$color = (isset($expl1[1])) ? $expl1[1] : '';
+					$osoite = (isset($expl1[0])) ? $expl1[0] : '';
+				}
 
-		      // <-- Nayta asiakas
-		      $nm = '';
-		      if(isset($kohde->id) and isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->asiakas_id != 0){
-				$asiakas = Asiakkaat::model()->findbypk($kohde->asiakas_id);
+				// <-- Nayta asiakas
+				$nm = '';
+				if(isset($kohde->id) and isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->asiakas_id != 0){
+					$asiakas = Asiakkaat::model()->findbypk($kohde->asiakas_id);
 				if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
-		      			$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yrityksen_nimi.'</b>';
+					$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yrityksen_nimi.'</b>';
 				} elseif(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and !empty($asiakas->yhteyshenkilo)){
-		      			$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yhteyshenkilo.'</b>';
+					$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yhteyshenkilo.'</b>';
 				}
-		      }
-		      // Nayta asiakas -->
+				}
+				// Nayta asiakas -->
 
-		      // <-- Nayta kohteen puhelinnumero
-		      $puh_nro = '';
-		      if(isset($kohde->id) and isset($asetukset->app_show_phone) and $asetukset->app_show_phone == 1 and $kohde->puh_nro != ''){
+				// <-- Nayta kohteen puhelinnumero
+				$puh_nro = '';
+				if(isset($kohde->id) and isset($asetukset->app_show_phone) and $asetukset->app_show_phone == 1 and $kohde->puh_nro != ''){
 		      			$puh_nro = '<br>'.Yii::t('main', 'Kohteen puhelinnumero').': <b>'.$kohde->puh_nro.'</b>';
-		      }
-		      // Nayta kohteen puhelinnumero -->
-
-		      // <-- Nayta kohteen avaimet
-		      $avaimet = '';
-		      if(isset($kohde->id) and isset($asetukset->app_naytta_avain) and $asetukset->app_naytta_avain == 1 ){
-
-				if(isset($kohde->avaimet) and count($kohde->avaimet) > 0){
-				  $avaimet .= '<br><p><center><h4>'.Yii::t('main', 'Avaimet').' '.$kohde->osoite.'</h4></center><br>';
-				  $avaimet .= '<table class="table table-bordered table-striped">';
-				  $avaimet .= '<tr>';
-				  $avaimet .= '<th>'.Yii::t('main', 'Avain').'</th>';
-				  $avaimet .= '<th>'.Yii::t('main', 'Työntekijä').'</th>';
-				  $avaimet .= '<th>'.Yii::t('main', 'Sijainti').'</th>';
-				  $avaimet .= '</tr>';
-				  foreach($kohde->avaimet as $avain){
-					$avaimet .= '
-					<tr>
-					  <td>'.$avain->avainnumero.'</td>
-					  <td>'.$this->etuSukunimi($avain->tid).'</td>
-					  <td>'.$avain->sijainti.'</td>
-					</tr>';
-				  }
-				  $avaimet .= '</table>';
 				}
-		      }
-		      // Nayta kohteen avaimet -->
+				// Nayta kohteen puhelinnumero -->
 
+				// <-- Nayta kohteen avaimet
+				$avaimet = '';
+				if(isset($kohde->id) and isset($asetukset->app_naytta_avain) and $asetukset->app_naytta_avain == 1 ){
+					if(isset($kohde->avaimet) and count($kohde->avaimet) > 0){
+						$avaimet .= '<br><p><center><h4>'.Yii::t('main', 'Avaimet').' '.$kohde->osoite.'</h4></center><br>';
+						$avaimet .= '<table class="table table-bordered table-striped">';
+						$avaimet .= '<tr>';
+						$avaimet .= '<th>'.Yii::t('main', 'Avain').'</th>';
+						$avaimet .= '<th>'.Yii::t('main', 'Työntekijä').'</th>';
+						$avaimet .= '<th>'.Yii::t('main', 'Sijainti').'</th>';
+						$avaimet .= '</tr>';
+						foreach($kohde->avaimet as $avain){
+							$avaimet .= '
+							<tr>
+							<td>'.$avain->avainnumero.'</td>
+							<td>'.$this->etuSukunimi($avain->tid).'</td>
+							<td>'.$avain->sijainti.'</td>
+							</tr>';
+						}
+						$avaimet .= '</table>';
+					}
+				}
+				// Nayta kohteen avaimet -->
 
-		      // <-- app_naytetaanko_kohteen_yhteyshenkilo
-		      $kohteen_yhteyshenkilo = '';
-		      if(isset($kohde->id) and isset($asetukset->app_naytetaanko_kohteen_yhteyshenkilo) and $asetukset->app_naytetaanko_kohteen_yhteyshenkilo == 1 and $kohde->etu_suku_nimet != ''){
-		      			$kohteen_yhteyshenkilo = '<br>'.Yii::t('main', 'Kohteen yhteyshenkilö').': <b>'.$kohde->etu_suku_nimet.'</b>';
-		      }
-		      // app_naytetaanko_kohteen_yhteyshenkilo -->
+				// <-- app_naytetaanko_kohteen_yhteyshenkilo
+				$kohteen_yhteyshenkilo = '';
+				if(isset($kohde->id) and isset($asetukset->app_naytetaanko_kohteen_yhteyshenkilo) and $asetukset->app_naytetaanko_kohteen_yhteyshenkilo == 1 and $kohde->etu_suku_nimet != ''){
+					$kohteen_yhteyshenkilo = '<br>'.Yii::t('main', 'Kohteen yhteyshenkilö').': <b>'.$kohde->etu_suku_nimet.'</b>';
+				}
+				// app_naytetaanko_kohteen_yhteyshenkilo -->
+				$sel .= '<div class="well">';
 
+				$tvController = Yii::app()->createController('Tyovuoroot');
+				$tilanteet = $tvController[0]->tilanteet();
+				if( isset($tilanteet[$val->status]) and $tilanteet[$val->status] != "0" ){
+					$sel .= '<h3 class="text-center">'. $tilanteet[$val->status].' '.(($val->toistuva_id != 0)?'<i class="fa fa-repeat text-success"></i>':'').'</h3>';
+				}
 
-		      $sel .= '<div class="well">';
+				$sel .= '<h3 class="text" style="color:'.$color.'">'.$osoite.'</h3><p><b>'.$this->vkopaiva($val->pvm).', '.$val->pvm.'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'</p>';
 
-		      $tvController = Yii::app()->createController('Tyovuoroot');
-	   	      $tilanteet = $tvController[0]->tilanteet();
-		      if( isset($tilanteet[$val->status]) and $tilanteet[$val->status] != "0" ){
-			      $sel .= '<h3 class="text-center">'. $tilanteet[$val->status].' '.(($val->toistuva_id != 0)?'<i class="fa fa-repeat text-success"></i>':'').'</h3>';
-		      }
+				if( isset($val->tyo_erittelyt) and is_array(json_decode($val->tyo_erittelyt, true))){
+					$sel .= '<p><label>Työ-erittelyt:</label><ul>';
+					foreach(json_decode($val->tyo_erittelyt, true) as $k => $v){
+						$sel .= '<li>'.$v.'</li>';
+					}
+					$sel .= '</ul></p><hr>';
+				}
 
-		      $sel .= '<h3 class="text" style="color:'.$color.'">'.$osoite.'</h3><p><b>'.$this->vkopaiva($val->pvm).', '.$val->pvm.'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'</p>';
+				if(!empty($nm) or !empty($puh_nro) or !empty($avaimet) or !empty($kohteen_yhteyshenkilo)){
+					$sel .= '<br><p>
+					'.$nm.'
+					'.$kohteen_yhteyshenkilo.'
+					'.$puh_nro.'
+					'.$avaimet.'
+					</p>';
+				}
 
-		      if( isset($val->tyo_erittelyt) and is_array(json_decode($val->tyo_erittelyt, true))){
-				$sel .= '<p><label>Työ-erittelyt:</label><ul>';
-				 foreach(json_decode($val->tyo_erittelyt, true) as $k => $v){
-				 $sel .= '<li>'.$v.'</li>';
-				 }
-				$sel .= '</ul></p><hr>';
-		      }
+				if(!empty($val->tietoja)){
+					$sel .= '<hr><div class="text-small">'.str_replace("\n", "<br>", $val->tietoja).'</div>';
+				}
 
-		      if(!empty($nm) or !empty($puh_nro) or !empty($avaimet) or !empty($kohteen_yhteyshenkilo)){
-		      $sel .= '
-		      <br>
-		      <p>
-				  '.$nm.'
-				  '.$kohteen_yhteyshenkilo.'
-				  '.$puh_nro.'
-				  '.$avaimet.'
-		      </p>';
-		      }
+				$sel .= $tplista;
+				$sel .= '</div>';
+			}
 
-		      if(!empty($val->tietoja)){
-		      $sel .= '
-				  <hr>
-				  <div class="text-small">'.str_replace("\n", "<br>", $val->tietoja).'</div>';
-		      }
-
-		      $sel .= $tplista;
-		      $sel .= '
-				</div>';
-		    }
-
-		    $this->_sendResponse(200, $sel);
-		    exit;
+			if( $new_login ){
+				$return = ["return" => $sel];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, $sel);
+			}
+		    
+			exit;
 	        }
+		//     CHECK tvuoro -->
 
 		// <-- CHECK uusiviesti
 	        if($_POST['check'] == 'uusiviesti'){
@@ -1209,32 +1230,37 @@ public function actionImei($dom)
 	        }
 		//     CHECK vastaus -->
 
-	        if($_POST['check'] == 'osoitevaihto'){
+		// <-- CHECK osoitevaihto
+		if($_POST['check'] == 'osoitevaihto'){
 
-		    $criteria = new CDbCriteria();
-		    $criteria->order = " osoite ";
-		    $criteria->condition = " osoite like '%".$_POST['thisKey']."%' ";
-	            $kohteet = Kohteet::model()->findAll($criteria);
+			$criteria = new CDbCriteria();
+			$criteria->order = " osoite ";
+			$criteria->condition = " osoite like '%".$_POST['thisKey']."%' ";
+			$kohteet = Kohteet::model()->findAll($criteria);
 
-		    $sel = '<select id="list" class="form-control input-lg list_osoitevaihto">';
-		    $sel .= '<option id="valitseOsoite">'.Yii::t('app', 'Valitse osoite').'</option>';
-		    foreach($kohteet as $kohde)
-		    {
+			$sel = '<select id="list" class="form-control input-lg list_osoitevaihto">';
+			$sel .= '<option id="valitseOsoite">'.Yii::t('app', 'Valitse osoite').'</option>';
+			foreach($kohteet as $kohde){
 
-			$osoite = '';
-			if(!empty($kohde->osoite))
-			$osoite .= $kohde->osoite;
-			if(!empty($kohde->pnumero))
-			$osoite .= ', '.$kohde->pnumero;
-			if(!empty($kohde->kaupunki))
-			$osoite .= ', '.$kohde->kaupunki;
+				$osoite = '';
+				if(!empty($kohde->osoite))
+					$osoite .= $kohde->osoite;
+				if(!empty($kohde->pnumero))
+					$osoite .= ', '.$kohde->pnumero;
+				if(!empty($kohde->kaupunki))
+					$osoite .= ', '.$kohde->kaupunki;
 
-		        $sel .= '<option value="'.$kohde->id.'">'.$osoite.'</option>';
-		    }
-		    $sel .= '</select>';
+				$sel .= '<option value="'.$kohde->id.'">'.$osoite.'</option>';
+			}
+			$sel .= '</select>';
 
-		    $this->_sendResponse(200, $sel);
-		exit;
+			if( $new_login ){
+				$return = ["return" => $sel];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, $sel);
+			}
+			exit;
 	        }
 
 		// Tasta alkaa getfirstpage
