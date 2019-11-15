@@ -826,7 +826,7 @@ public function actionImei($dom)
 
 			if( count($tvuoro) == 0 ){
 				if( $new_login ){
-					$return = ["return" => ''];
+					$return = ["return" => 'EiTuloksia'];
 					$this->_sendResponse(200, CJSON::encode($return));
 				} else {
 					$this->_sendResponse(200, 'ei tuloksia');
