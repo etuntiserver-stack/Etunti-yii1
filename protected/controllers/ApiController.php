@@ -1568,7 +1568,7 @@ public function actionImei($dom)
 
 		$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
 		$kartta = '';
-		$my_location = (isset($_POST['my_location']))?$_POST['my_location']:'';
+		$my_location = (isset($_POST['my_location']))?explode("/", $_POST['my_location']):[];
 		if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey) and isset($mobCheck->kohteet->id)){
 			$full_addr = $mobCheck->kohteet->osoite.' '.$mobCheck->kohteet->pnumero.' '.$mobCheck->kohteet->kaupunki;
 			$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($full_addr).'&language=fi&sensor=true&key='.$asetuksetForAll->googlemaps_apikey;
@@ -1588,8 +1588,8 @@ public function actionImei($dom)
 		$sp1 = 'Kesto: <b>'.$nykyinenKesto.'</b>';
 		$sp1 .= '<div class="text-center">';
 		$sp1 .= '<p>'.$mobCheck->kohde_kannasta.'</p>';
-		if(!empty($my_location))
-			$sp1 .= '<p>'.$my_location.'</p>';
+		if(isset($my_location[1]))
+			$sp1 .= '<p>'.$my_location[0].','.$my_location[1].'</p>';
 		if(!empty($kartta))
 			$sp1 .= '<p>'.$kartta.'</p>';
 
