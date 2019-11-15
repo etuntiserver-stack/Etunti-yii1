@@ -824,15 +824,7 @@ public function actionImei($dom)
 
 			$tvuoro = Tyovuoroot::model()->findAll($criteria);
 
-			if( count($tvuoro) == 0 ){
-				if( $new_login ){
-					$return = ["return" => 'Ei tuloksia'];
-					$this->_sendResponse(200, CJSON::encode($return));
-				} else {
-					$this->_sendResponse(200, 'ei tuloksia');
-				}
-				exit;
-			}
+			if( count($tvuoro) == 0 ){ exit; }
 
 			$sel = '';
 			$sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
