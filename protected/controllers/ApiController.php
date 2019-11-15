@@ -1590,7 +1590,7 @@ public function actionImei($dom)
 		if(!empty($kartta))
 			$sp1 .= '<p>'.$kartta.'</p>';
 
-		$sp1 .= '<p><a href="https://www.google.com/maps/place/'.urlencode($full_addr).'" target="_blank">'.Yii::t('main', 'Näytä kartalla').'</a></p>';
+		$sp1 .= '<p><a href="https://www.google.com/maps/place/'.urlencode($full_addr).'">'.Yii::t('main', 'Näytä kartalla').'</a></p>';
 
            	$tv = Tyovuoroot::model()->findByPk($mobCheck->tv_id);
 		if(isset($tv->id) and is_array(json_decode($tv->tyo_erittelyt, true))){
