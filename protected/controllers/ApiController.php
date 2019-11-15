@@ -655,7 +655,7 @@ public function actionImei($dom)
 		if($_POST['check'] == 'sendLocation'){
 			Tyontekijat::model()->updatebypk($ttekija->id, array('position'=>$_POST['my_location']."//".date("d.m.Y H:i")));
 			if( $new_login ){
-				$return = ["tid" => $ttekija->id, "date" => date("d.m.Y H:i"), "my_location" => $_POST['my_location']];
+				$return = ["tid" => $ttekija->id, "date" => date("d.m.Y H:i"), "my_location" => $my_location];
 				$this->_sendResponse(200, CJSON::encode($return));
 			} else {
 				$this->_sendResponse(200, $ttekija->id."//".date("d.m.Y H:i")."//".$_POST['my_location']);
