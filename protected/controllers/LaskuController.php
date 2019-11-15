@@ -1494,6 +1494,25 @@ exit;
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
+		// Procountor update status.
+		if (Asetukset::model()->findByPk(1)->palvelu_tyyppi == 5) {
+
+			// If invoice has been sent to Procountor, updated status.
+			if (!empty($model->procountor_id ?? '')) {
+				$error_msg = '';
+				if ($this->updateProcountorInvoice($model->id, $error_msg)) {
+					// Yii::app()->user->setFlash('success', 'Uusimmat laskun tiedot haettiin Procountorista.');
+					$model->refresh();
+				} elseif (!empty($error_msg)) {
+					Yii::app()->user->setFlash('warning', 'Laskun tietojen päivitys Procountorista epäonnistui.');
+				}
+			}
+			// If invoice is unapproved, and not sent to Procountor, add notification.
+			elseif ($model->tilanne == 0) {
+				Yii::app()->user->setFlash('primary', 'Lasku ei ole vielä lähetetty Procountoriin. Lähetä lasku hyväksymällä se alalaidassa olevalla painikkeella.');
+			}
+		}
+
 		if(isset($_GET['tilanne']) and $_GET['tilanne'] == '1')
 		{
 			Lasku::model()->updatebypk($id, array('tilanne'=>1));
@@ -1573,10 +1592,6 @@ exit;
 
 				$this->redirect(array('update','id'=>$model->id));
 			}
-		}
-
-		if ($model->tilanne == 0 && Asetukset::model()->findByPk(1)->palvelu_tyyppi == 5 && empty($model->procountor_id ?? '')) {
-			Yii::app()->user->setFlash('primary', 'Lasku ei ole vielä lähetetty Procountoriin. Lähetä lasku hyväksymällä se alalaidassa olevalla painikkeella.');
 		}
 
 		$this->render('update',array(
@@ -2932,6 +2947,13 @@ $xml .= '
 				$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
 				$local_invoice->save();
 				break;
+			case 'APPROVED':
+			case 'NOT_SENT':
+				// Set invoice status (tilanne) to 1 (approved).
+				$local_invoice->tilanne = 1;
+				$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+				$local_invoice->save();
+				break;
 			case 'SENT':
 				// Set invoice status (tilanne) to 2 (sent).
 				$local_invoice->tilanne = 2;
@@ -2954,7 +2976,7 @@ $xml .= '
 
 		// Update history.
 		$history_entry = new LaskuHistoria;
-		$history_entry->time = date("Y-m-d H:i:s", strtotime($remote_invoice_full['version']));
+		$history_entry->time = date("Y-m-d H:i:s", time());
 		$history_entry->lid = $local_invoice->id;
 		$history_entry->status = $pc->translateProcountorStatus($remote_invoice_full['status']);
 		$history_entry->procountor_statuscode = $remote_invoice_full['status'];
@@ -3046,6 +3068,13 @@ $xml .= '
 						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
 						$local_invoice->save();
 						break;
+					case 'APPROVED':
+					case 'NOT_SENT':
+						// Set invoice status (tilanne) to 1 (approved).
+						$local_invoice->tilanne = 1;
+						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+						$local_invoice->save();
+						break;
 					case 'SENT':
 						// Set invoice status (tilanne) to 2 (sent).
 						$local_invoice->tilanne = 2;
@@ -3068,7 +3097,7 @@ $xml .= '
 
 				// Update history.
 				$history_entry = new LaskuHistoria;
-				$history_entry->time = date("Y-m-d H:i:s", strtotime($remote_invoice['version']));
+				$history_entry->time = date("Y-m-d H:i:s", time());
 				$history_entry->lid = $local_invoice->id;
 				$history_entry->status = $pc->translateProcountorStatus($remote_invoice['status']);
 				$history_entry->procountor_statuscode = $remote_invoice['status'];
