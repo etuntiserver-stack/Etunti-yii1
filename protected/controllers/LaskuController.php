@@ -2860,7 +2860,136 @@ $xml .= '
 */
 	}
 
+	/**
+	 * Get updated invoice status from Procountor.
+	 *
+	 * @param int $invoice_id
+	 * Local invoice ID.
+	 * @param string $error_msg
+	 * Possible error message if result is false.
+	 * @return bool
+	 * True if status or open amount was updated; otherwise, false. If false,
+	 * possible error message is stored in &$error_msg. However, false doesn't
+	 * always mean an error happened; if status hasn't changed, returns false.
+	 */
+	public function updateProcountorInvoice($invoice_id, &$error_msg)
+	{
+		$asetukset = Asetukset::model()->findbypk(1);
+		if ($asetukset->palvelu_tyyppi != 5) {
+			$error_msg = 'Procountor ei ole käytössä.';
+			return false;
+		}
 
+		// Check that authorization is valid.
+		$pc = Yii::createComponent('Procountor');
+		if (!$pc->isAuthorized()) {
+			$error_msg = 'Procountor kirjautuminen on viallinen tai vanhentunut. Kirjaudu Procountoriin uudelleen asetuksista.';
+			return false;
+		}
+
+		// Get local invoice data.
+		$local_invoice = Lasku::model()->findByPk($invoice_id);
+		if (!$local_invoice || empty($local_invoice->id ?? '')) {
+			$error_msg = 'Laskun tietojen lataaminen epäonnistui.';
+			return false;
+		}
+
+		// Get local invoice history.
+		$criteria = new CDbCriteria();
+		$criteria->condition = "lid={$local_invoice->id}";
+		$criteria->order = "id DESC";
+		$local_invoice_history = LaskuHistoria::model()->find($criteria);
+		if (!$local_invoice_history || empty($local_invoice_history->id) || $local_invoice_history->lid != $local_invoice->id) {
+			$error_msg = 'Laskuhistorian lataaminen epäonnistui.';
+			return false;
+		}
+
+		// Get full remote invoice data.
+		$remote_invoice_full = $pc->getInvoice($local_invoice->procountor_id);
+		if (isset($remote_invoice_full['errors']) || !isset($remote_invoice_full['id'])) {
+			$error_msg = 'Laskun tietojen hakeminen Procountorista epäonnistui.';
+			return false;
+		}
+
+		// Calculate total price (yht_euro).
+		$total_price = 0.0;
+		$includes_vat = $remote_invoice_full['extraInfo']['unitPricesIncludeVat'] ?? true;
+		foreach ($remote_invoice_full['invoiceRows'] ?? [] as $invoice_row) {
+			$vat_multiplier = $includes_vat ? 1 : 1 + $invoice_row['vatPercent'] / 100;
+			$total_price += $invoice_row['unitPrice'] * $invoice_row['quantity'] * $vat_multiplier;
+		}
+
+		// Do nothing if neither statuscode or price have updated.
+		if ($local_invoice_history->procountor_statuscode == $remote_invoice_full['status'] && $local_invoice_history->yht_euro == $total_price)
+			return false;
+
+		// Updated status. In some cases, update invoice status, such as when
+		// the invoice is marked sent/paid/invalidated in Procountor.
+		// Available statuscodes: [
+		//   EMPTY, UNFINISHED, NOT_SENT, SENT, RECEIVED, PAID, PAYMENT_DENIED,
+		//   VERIFIED, APPROVED, INVALIDATED, PAYMENT_QUEUED, PARTLY_PAID,
+		//   PAYMENT_SENT_TO_BANK, MARKED_PAID, STARTED, INVOICED, OVERRIDDEN,
+		//   DELETED, UNSAVED, PAYMENT_TRANSACTION_REMOVED
+		// ]
+		switch ($remote_invoice_full['status']) {
+			case 'UNFINISHED':
+				// Set invoice status (tilanne) to 0 (unfinished).
+				$local_invoice->tilanne = 0;
+				$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+				$local_invoice->save();
+				$status = 'Kesken';
+				break;
+			case 'SENT':
+				// Set invoice status (tilanne) to 2 (sent).
+				$local_invoice->tilanne = 2;
+				$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+				$local_invoice->save();
+				$status = 'Lähetetty';
+				break;
+			case 'PAID':
+				// Set invoice status (tilanne) to 3 (paid).
+				$local_invoice->tilanne = 3;
+				$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+				$local_invoice->save();
+				$status = 'Maksettu';
+				break;
+			case 'INVALIDATED':
+				// Set invoice status (tilanne) to 999 (invalidated).
+				$local_invoice->tilanne = 999;
+				$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+				$local_invoice->save();
+				$status = 'Mitätöity';
+				break;
+			case 'EMPTY':                       $status = 'Tyhjä'; break;
+			case 'NOT_SENT':                    $status = 'Ei lähetetty'; break;
+			case 'RECEIVED':                    $status = 'Vastaanotettu'; break;
+			case 'PAYMENT_DENIED':              $status = 'Maksu epäonnistunut'; break;
+			case 'VERIFIED':                    $status = 'Varmistettu'; break;
+			case 'APPROVED':                    $status = 'Hyväksytty'; break;
+			case 'PAYMENT_QUEUED':              $status = 'Maksu jonossa'; break;
+			case 'PARTLY_PAID':                 $status = 'Osittain maksettu'; break;
+			case 'PAYMENT_SENT_TO_BANK':        $status = 'Maksu lähetetty pankille'; break;
+			case 'MARKED_PAID':                 $status = 'Merkitty maksetuksi'; break;
+			case 'STARTED':                     $status = 'Aloitettu'; break;
+			case 'INVOICED':                    $status = 'Laskutettu'; break;
+			case 'OVERRIDDEN':                  $status = 'Ohitettu'; break;
+			case 'DELETED':                     $status = 'Poistettu'; break;
+			case 'UNSAVED':                     $status = 'Tallentamatta'; break;
+			case 'PAYMENT_TRANSACTION_REMOVED': $status = 'Maksutapahtuma poistettu'; break;
+			case 'MUU': default:                $status = 'Muu tilanne'; break;
+		}
+
+		// Update history.
+		$history_entry = new LaskuHistoria;
+		$history_entry->time = date("Y-m-d H:i:s", strtotime($remote_invoice_full['version']));
+		$history_entry->lid = $local_invoice->id;
+		$history_entry->status = $status;
+		$history_entry->procountor_statuscode = $remote_invoice_full['status'];
+		$history_entry->palvelu = "procountor";
+		$history_entry->yht_euro = number_format($total_price, 2);
+		$history_entry->save();
+		return true;
+	}
 
 	public function LaskuUpdater($from,$to, &$is_error = false)
 	{
