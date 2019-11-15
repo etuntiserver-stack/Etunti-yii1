@@ -1575,7 +1575,7 @@ exit;
 			}
 		}
 
-		if ($model->tilanne == 0 && Asetukset::model()->findByPk(1)->palvelu_tyyppi == 5) {
+		if ($model->tilanne == 0 && Asetukset::model()->findByPk(1)->palvelu_tyyppi == 5 && empty($model->procountor_id ?? '')) {
 			Yii::app()->user->setFlash('primary', 'Lasku ei ole vielä lähetetty Procountoriin. Lähetä lasku hyväksymällä se alalaidassa olevalla painikkeella.');
 		}
 
@@ -2935,54 +2935,105 @@ $xml .= '
 				if ($local_invoice_history->procountor_statuscode == $remote_invoice['status'] && $local_invoice_history->yht_euro == $total_price)
 					continue;
 
-				// Translate remote statuscode. Most status texts copied directly from
-				// finvoice.php. Available statuscodes: [
+				// Previous statuscodes, based on finvoice markings. This is replaced by
+				// the next section, identical status codes to tilanneCheck() switch.
+				// switch ($remote_invoice['status']) {
+				// 	case 'EMPTY':
+				// 	case 'STARTED':
+				// 	case 'UNFINISHED':
+				// 	case 'UNSAVED':
+				// 		$status = 'Lasku luotu';
+				// 		break;
+				// 	case 'NOT_SENT':
+				// 	case 'APPROVED':
+				// 	case 'VERIFIED':
+				// 		$status = 'HYVÄKSYTTY';
+				// 		break;
+				// 	case 'SENT':
+				// 	// case 'INVOICED':
+				// 		// Set invoice status (tilanne) to 2 (sent).
+				// 		$local_invoice->tilanne = 2;
+				// 		$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+				// 		$local_invoice->save();
+				// 		$status = 'LÄHETETTY';
+				// 		break;
+				// 	case 'PAID':
+				// 	// case 'RECEIVED':
+				// 		// Set invoice status (tilanne) to 3 (paid).
+				// 		$local_invoice->tilanne = 3;
+				// 		$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+				// 		$local_invoice->save();
+				// 		$status = 'MAKSETTU';
+				// 		break;
+				// 	case 'INVALIDATED':
+				// 		// Set invoice status (tilanne) to 999 (invalidated).
+				// 		$local_invoice->tilanne = 999;
+				// 		$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+				// 		$local_invoice->save();
+				// 		$status = 'Lasku mitätöity';
+				// 		break;
+				// 	case 'DELETED':
+				// 		$status = 'POISTETTU';
+				// 		break;
+				// 	default:
+				// 		$status = 'MUU';
+				// 		break;
+				// }
+
+				// Updated status. In some cases, update invoice status, such as when
+				// the invoice is marked sent/paid/invalidated in Procountor.
+				// Available statuscodes: [
 				//   EMPTY, UNFINISHED, NOT_SENT, SENT, RECEIVED, PAID, PAYMENT_DENIED,
 				//   VERIFIED, APPROVED, INVALIDATED, PAYMENT_QUEUED, PARTLY_PAID,
 				//   PAYMENT_SENT_TO_BANK, MARKED_PAID, STARTED, INVOICED, OVERRIDDEN,
 				//   DELETED, UNSAVED, PAYMENT_TRANSACTION_REMOVED
 				// ]
 				switch ($remote_invoice['status']) {
-					case 'EMPTY':
-					case 'STARTED':
 					case 'UNFINISHED':
-					case 'UNSAVED':
-						$status = 'Lasku luotu';
-						break;
-					case 'NOT_SENT':
-					case 'APPROVED':
-					case 'VERIFIED':
-						$status = 'HYVÄKSYTTY';
+						// Set invoice status (tilanne) to 0 (unfinished).
+						$local_invoice->tilanne = 0;
+						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+						$local_invoice->save();
+						$status = 'Kesken';
 						break;
 					case 'SENT':
-					// case 'INVOICED':
 						// Set invoice status (tilanne) to 2 (sent).
 						$local_invoice->tilanne = 2;
 						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
 						$local_invoice->save();
-						$status = 'LÄHETETTY';
+						$status = 'Lähetetty';
 						break;
 					case 'PAID':
-					// case 'RECEIVED':
 						// Set invoice status (tilanne) to 3 (paid).
 						$local_invoice->tilanne = 3;
 						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
 						$local_invoice->save();
-						$status = 'MAKSETTU';
+						$status = 'Maksettu';
 						break;
 					case 'INVALIDATED':
 						// Set invoice status (tilanne) to 999 (invalidated).
 						$local_invoice->tilanne = 999;
 						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
 						$local_invoice->save();
-						$status = 'Lasku mitätöity';
+						$status = 'Mitätöity';
 						break;
-					case 'DELETED':
-						$status = 'POISTETTU';
-						break;
-					default:
-						$status = 'MUU';
-						break;
+					case 'EMPTY':                       $status = 'Tyhjä'; break;
+					case 'NOT_SENT':                    $status = 'Ei lähetetty'; break;
+					case 'RECEIVED':                    $status = 'Vastaanotettu'; break;
+					case 'PAYMENT_DENIED':              $status = 'Maksu epäonnistunut'; break;
+					case 'VERIFIED':                    $status = 'Varmistettu'; break;
+					case 'APPROVED':                    $status = 'Hyväksytty'; break;
+					case 'PAYMENT_QUEUED':              $status = 'Maksu jonossa'; break;
+					case 'PARTLY_PAID':                 $status = 'Osittain maksettu'; break;
+					case 'PAYMENT_SENT_TO_BANK':        $status = 'Maksu lähetetty pankille'; break;
+					case 'MARKED_PAID':                 $status = 'Merkitty maksetuksi'; break;
+					case 'STARTED':                     $status = 'Aloitettu'; break;
+					case 'INVOICED':                    $status = 'Laskutettu'; break;
+					case 'OVERRIDDEN':                  $status = 'Ohitettu'; break;
+					case 'DELETED':                     $status = 'Poistettu'; break;
+					case 'UNSAVED':                     $status = 'Tallentamatta'; break;
+					case 'PAYMENT_TRANSACTION_REMOVED': $status = 'Maksutapahtuma poistettu'; break;
+					case 'MUU': default:                $status = 'Muu tilanne'; break;
 				}
 
 				// Update history.
