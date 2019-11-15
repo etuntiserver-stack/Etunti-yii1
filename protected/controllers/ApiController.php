@@ -640,7 +640,7 @@ public function actionImei($dom)
 		exit;
 	}
 	//     Check Tyontekija -->
-
+	$my_location = (isset($_POST['my_location']))?str_replace("/",",",$_POST['my_location']):'';
 	$asetukset = Asetukset::model()->findbypk(1);
 
 	    if(isset($_POST['check'])){
@@ -1275,7 +1275,7 @@ public function actionImei($dom)
 				if($mobCheck->status == 10 and $mobCheck->loppui == '')
 					$mobCheck->status = 10.1;
 
-				$this->_sendResponse(200, $mobCheck->status."//".$this->sp_1($mobCheck)."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//uusi versio");
+				$this->_sendResponse(200, $mobCheck->status."//".$this->sp_1($mobCheck, $my_location)."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//uusi versio");
 
 			} else {
                      		$this->_sendResponse(200, "3//null//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//uusi versio");
@@ -1308,7 +1308,7 @@ public function actionImei($dom)
 			if($mobCheck->status == 10 and $mobCheck->loppui == '')
 				$mobCheck->status = 10.1;
 
-                       	$this->_sendResponse(200, $mobCheck->status."//".$this->sp_1($mobCheck)."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//vanha versio");
+                       	$this->_sendResponse(200, $mobCheck->status."//".$this->sp_1($mobCheck, $my_location)."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//vanha versio");
 
 		  } else {
                      	$this->_sendResponse(200, "3//null//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//vanha versio");
@@ -1559,7 +1559,7 @@ public function actionImei($dom)
 
 }
 
-	protected function sp_1($mobCheck)
+	protected function sp_1($mobCheck, $my_location)
 	{
 		if(!isset($mobCheck->id)){
 			$this->_sendResponse(200, "sp_1 function error");
@@ -1568,7 +1568,6 @@ public function actionImei($dom)
 
 		$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
 		$kartta = '';
-		$my_location = (isset($_POST['my_location']))?explode("/", $_POST['my_location']):[];
 		if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey) and isset($mobCheck->kohteet->id)){
 			$full_addr = $mobCheck->kohteet->osoite.' '.$mobCheck->kohteet->pnumero.' '.$mobCheck->kohteet->kaupunki;
 			$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($full_addr).'&language=fi&sensor=true&key='.$asetuksetForAll->googlemaps_apikey;
@@ -1589,8 +1588,8 @@ public function actionImei($dom)
 		$sp1 .= '<div class="text-center">';
 		$sp1 .= '<p>'.$mobCheck->kohde_kannasta.'</p>';
 		$sp1 .= '<p>'.json_encode($_POST).'</p>';
-		if(isset($my_location[1]))
-			$sp1 .= '<p>'.$my_location[0].','.$my_location[1].'</p>';
+		if(!empty($my_location))
+			$sp1 .= '<p>'.$my_location.'</p>';
 		if(!empty($kartta))
 			$sp1 .= '<p>'.$kartta.'</p>';
 
