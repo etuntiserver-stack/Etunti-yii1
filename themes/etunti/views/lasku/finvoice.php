@@ -77,7 +77,7 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
   }
 
   $name = $l->tyyppi == 'yritys' ? $l->yritys : $l->yhteyshenkilo;
-  $channel = ($l->laskutus == 'verkkolasku') ? 'ELECTRONIC_INVOICE' : ($l->laskutus == 'posti') ? 'MAIL' : 'EMAIL';
+  $channel = ($l->laskutus == 'verkkolasku') ? 'ELECTRONIC_INVOICE' : ($l->laskutus == 'posti' ? 'MAIL' : 'EMAIL');
 
   $params = [
     //"partnerId" => 0,                         // (int) Technical ID for the business partner. Used to link the invoice to a customer or supplier in the business partner register. If supplied, the company must have this partner ID in the corresponding register.
@@ -89,7 +89,7 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
     // purchase invoices, it is the seller. With travel and expense invoices, it is the reporter of the expenses
     "counterParty" => (object) [
       "contactPersonName" => $l->yhteyshenkilo, // (string) Name of the contact person.
-      "identifier" => $l->t_y_tunnus,           // (string) SALES_INVOICE and PURCHASE_INVOICE only. Business ID or national identification number.
+      "identifier" => $l->y_tunnus,             // (string) SALES_INVOICE and PURCHASE_INVOICE only. Business ID or national identification number.
       "taxCode" => "",                          // (string) SALES_INVOICE only. Tax code of the customer.
       "customerNumber" => $l->as_nro,           // (string) SALES_INVOICE and PURCHASE_INVOICE only. Customer number.
       "email" => $l->sahkoposti,                // (string) SALES_INVOICE only. Email address of the buyer. Required if invoicing channel is EMAIL, otherwise not visible on the UI.
@@ -185,7 +185,7 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
     ],
 
     "discountPercent" => 0,           // (int) Invoice discount percentage. Scale: 4.
-    "orderReference" => "",           // (string) Order reference of the invoice. This will be copied to the payment as message if no reference code is specified.
+    "orderReference" => $l->viitenne, // (string) Order reference of the invoice. This will be copied to the payment as message if no reference code is specified.
     "invoiceRows" => [],              // Filled later in a loop.
     "vatStatus" => 1,                 // (int) Invoice VAT status. Required for all invoices except travel invoices and expense claims.
     "originalInvoiceNumber" => "",    // (string) Invoice number from the biller in an external system.
