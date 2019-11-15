@@ -649,6 +649,10 @@ public function actionImei($dom)
 	//     Check Tyontekija -->
 	$my_location = (isset($_POST['my_location']))?str_replace("/",",",$_POST['my_location']):'';
 	$asetukset = Asetukset::model()->findbypk(1);
+	$get_osoite 		= '';
+	$kohdenID 		= 0;
+	$list_tyovuorosta 	= '';
+
 	if(isset($_POST['check'])){
 
 		// <-- CHECK sendLocation
@@ -664,39 +668,46 @@ public function actionImei($dom)
 	        }
 		//     CHECK sendLocation -->
 
-		$get_osoite 		= '';
-		$kohdenID 		= 0;
-		$list_tyovuorosta 	= '';
-	        if($_POST['check'] == 'getObjbyTag'){
-		  if(isset($_POST['tag']) and $_POST['tag'] != '000000'){
-		    $kohteet = Kohteet::model()->find(" tag_id='".$_POST['tag']."' ");
-		    if(isset($kohteet->osoite) and !empty($kohteet->osoite)){
-		      $get_osoite = $kohteet->osoite;
-		      $kohdenID = $kohteet->id;
+		// <-- CHECK getObjbyTag
+		if($_POST['check'] == 'getObjbyTag'){
+			if(isset($_POST['tag']) and $_POST['tag'] != '000000'){
+				$kohteet = Kohteet::model()->find(" tag_id='".$_POST['tag']."' ");
+				if(isset($kohteet->osoite) and !empty($kohteet->osoite)){
+					$get_osoite = $kohteet->osoite;
+					$kohdenID = $kohteet->id;
 
-		      $tv_id = 0;
-		      $site = Yii::app()->createController('Site');
-		      $eilasketa = $site[0]->eiLasketa();
-		      $criteria = new CDbCriteria();
-		      $criteria->condition = " 
-				tid = '".$ttekija->id."' AND kohde='".$kohteet->id."'
-				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
-				AND $eilasketa
-				AND piilota_mobiilista!=1
-				AND (peruutettu=0 OR peruutettu IS NULL)
-		      ";
-	              $tv = Tyovuoroot::model()->find($criteria);
-		      if( isset($tv->id) ){ $tv_id = $tv->id; }
+					$tv_id = 0;
+					$site = Yii::app()->createController('Site');
+					$eilasketa = $site[0]->eiLasketa();
+					$criteria = new CDbCriteria();
+					$criteria->condition = " 
+						tid = '".$ttekija->id."' AND kohde='".$kohteet->id."'
+					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+					AND $eilasketa
+					AND piilota_mobiilista!=1
+					AND (peruutettu=0 OR peruutettu IS NULL)
+					";
+					$tv = Tyovuoroot::model()->find($criteria);
+					if( isset($tv->id) ){ $tv_id = $tv->id; }
 
-		      $this->_sendResponse(200, $get_osoite."//".$kohdenID."//ok//".$tv_id);
-		      exit;
-		    } else {
-		      $this->_sendResponse(200, "Tuntematon TAG//".$_POST['tag']."//error");
-		      exit;
-		    }
-		  } 
-		  exit;
+					if( $new_login ){
+						$return = ["osoite" => $get_osoite, "kohdenID" => $kohdenID, "is_ok" => "true", "tv_id" => $tv_id];
+						$this->_sendResponse(200, CJSON::encode($return));
+					} else {
+						$this->_sendResponse(200, $get_osoite."//".$kohdenID."//ok//".$tv_id);
+					}
+				} else {
+					if( $new_login ){
+						$return = ["is_ok" => "false"];
+						$this->_sendResponse(200, CJSON::encode($return));
+					} else {
+						$this->_sendResponse(200, "Tuntematon TAG//".$_POST['tag']."//error");
+					}
+				}
+			} 
+			exit;
 	        }
+		//     CHECK getObjbyTag -->
 
 		// <-- CHECK tehty
 		if($_POST['check'] == 'tehty'){
@@ -1264,7 +1275,7 @@ public function actionImei($dom)
 	        }
 
 		// Tasta alkaa getfirstpage
-		if($_POST['check'] == 'getfirstpage'){
+		if( ($new_login and $_POST['check'] == 'getfirstpage') or !$new_login){
 			if(isset($_POST['tag']) and $_POST['tag'] != '000000'){
 		  		$kohteet = Kohteet::model()->find(" tag_id='".$_POST['tag']."' ");
 
