@@ -1587,10 +1587,9 @@ public function actionImei($dom)
 		$sp1 = 'Kesto: <b>'.$nykyinenKesto.'</b>';
 		$sp1 .= '<div class="text-center">';
 		$sp1 .= '<p>'.$mobCheck->kohde_kannasta.'</p>';
-		if(!empty($my_location))
-			$sp1 .= '<p>'.$my_location.'</p>';
 		if(!empty($kartta))
 			$sp1 .= '<p>'.$kartta.'</p>';
+		$sp1 = '<p><a href="geo:'.$full_addr.'">'.Yii::t('main', 'Näytä kartalla').'</a></p>';
 
            	$tv = Tyovuoroot::model()->findByPk($mobCheck->tv_id);
 		if(isset($tv->id) and is_array(json_decode($tv->tyo_erittelyt, true))){
