@@ -388,4 +388,49 @@ class Procountor extends CComponent
       $target .= "&$query";
     return $this->requestGet($target);
   }
+
+  // ---------------------------------------------------------------------------
+  // General
+  // ---------------------------------------------------------------------------
+
+	/**
+	 * Get translated status message from a Procountor statuscode.
+   *
+	 * @param string $statuscode
+   * Remote statuscode.
+   * @return string
+   * Translated status message.
+	 */
+	public function translateProcountorStatus($statuscode)
+	{
+    // Available statuscodes: [
+    //   EMPTY, UNFINISHED, NOT_SENT, SENT, RECEIVED, PAID, PAYMENT_DENIED,
+    //   VERIFIED, APPROVED, INVALIDATED, PAYMENT_QUEUED, PARTLY_PAID,
+    //   PAYMENT_SENT_TO_BANK, MARKED_PAID, STARTED, INVOICED, OVERRIDDEN,
+    //   DELETED, UNSAVED, PAYMENT_TRANSACTION_REMOVED
+    // ]
+		switch ($statuscode) {
+			case 'UNFINISHED':                  return 'Kesken';
+			case 'SENT':                        return 'Lähetetty';
+			case 'PAID':                        return 'Maksettu';
+			case 'INVALIDATED':                 return 'Mitätöity';
+			case 'EMPTY':                       return 'Tyhjä';
+			case 'NOT_SENT':                    return 'Ei lähetetty';
+			case 'RECEIVED':                    return 'Vastaanotettu';
+			case 'PAYMENT_DENIED':              return 'Maksu epäonnistunut';
+			case 'VERIFIED':                    return 'Varmistettu';
+			case 'APPROVED':                    return 'Hyväksytty';
+			case 'PAYMENT_QUEUED':              return 'Maksu jonossa';
+			case 'PARTLY_PAID':                 return 'Osittain maksettu';
+			case 'PAYMENT_SENT_TO_BANK':        return 'Maksu lähetetty pankille';
+			case 'MARKED_PAID':                 return 'Merkitty maksetuksi';
+			case 'STARTED':                     return 'Aloitettu';
+			case 'INVOICED':                    return 'Laskutettu';
+			case 'OVERRIDDEN':                  return 'Ohitettu';
+			case 'DELETED':                     return 'Poistettu';
+			case 'UNSAVED':                     return 'Tallentamatta';
+			case 'PAYMENT_TRANSACTION_REMOVED': return 'Maksutapahtuma poistettu';
+			case 'MUU': default:                return 'Muu tilanne';
+		}
+	}
 }

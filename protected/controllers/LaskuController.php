@@ -2925,65 +2925,38 @@ $xml .= '
 
 		// Updated status. In some cases, update invoice status, such as when
 		// the invoice is marked sent/paid/invalidated in Procountor.
-		// Available statuscodes: [
-		//   EMPTY, UNFINISHED, NOT_SENT, SENT, RECEIVED, PAID, PAYMENT_DENIED,
-		//   VERIFIED, APPROVED, INVALIDATED, PAYMENT_QUEUED, PARTLY_PAID,
-		//   PAYMENT_SENT_TO_BANK, MARKED_PAID, STARTED, INVOICED, OVERRIDDEN,
-		//   DELETED, UNSAVED, PAYMENT_TRANSACTION_REMOVED
-		// ]
 		switch ($remote_invoice_full['status']) {
 			case 'UNFINISHED':
 				// Set invoice status (tilanne) to 0 (unfinished).
 				$local_invoice->tilanne = 0;
 				$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
 				$local_invoice->save();
-				$status = 'Kesken';
 				break;
 			case 'SENT':
 				// Set invoice status (tilanne) to 2 (sent).
 				$local_invoice->tilanne = 2;
 				$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
 				$local_invoice->save();
-				$status = 'Lähetetty';
 				break;
 			case 'PAID':
 				// Set invoice status (tilanne) to 3 (paid).
 				$local_invoice->tilanne = 3;
 				$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
 				$local_invoice->save();
-				$status = 'Maksettu';
 				break;
 			case 'INVALIDATED':
 				// Set invoice status (tilanne) to 999 (invalidated).
 				$local_invoice->tilanne = 999;
 				$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
 				$local_invoice->save();
-				$status = 'Mitätöity';
 				break;
-			case 'EMPTY':                       $status = 'Tyhjä'; break;
-			case 'NOT_SENT':                    $status = 'Ei lähetetty'; break;
-			case 'RECEIVED':                    $status = 'Vastaanotettu'; break;
-			case 'PAYMENT_DENIED':              $status = 'Maksu epäonnistunut'; break;
-			case 'VERIFIED':                    $status = 'Varmistettu'; break;
-			case 'APPROVED':                    $status = 'Hyväksytty'; break;
-			case 'PAYMENT_QUEUED':              $status = 'Maksu jonossa'; break;
-			case 'PARTLY_PAID':                 $status = 'Osittain maksettu'; break;
-			case 'PAYMENT_SENT_TO_BANK':        $status = 'Maksu lähetetty pankille'; break;
-			case 'MARKED_PAID':                 $status = 'Merkitty maksetuksi'; break;
-			case 'STARTED':                     $status = 'Aloitettu'; break;
-			case 'INVOICED':                    $status = 'Laskutettu'; break;
-			case 'OVERRIDDEN':                  $status = 'Ohitettu'; break;
-			case 'DELETED':                     $status = 'Poistettu'; break;
-			case 'UNSAVED':                     $status = 'Tallentamatta'; break;
-			case 'PAYMENT_TRANSACTION_REMOVED': $status = 'Maksutapahtuma poistettu'; break;
-			case 'MUU': default:                $status = 'Muu tilanne'; break;
 		}
 
 		// Update history.
 		$history_entry = new LaskuHistoria;
 		$history_entry->time = date("Y-m-d H:i:s", strtotime($remote_invoice_full['version']));
 		$history_entry->lid = $local_invoice->id;
-		$history_entry->status = $status;
+		$history_entry->status = $pc->translateProcountorStatus($remote_invoice_full['status']);
 		$history_entry->procountor_statuscode = $remote_invoice_full['status'];
 		$history_entry->palvelu = "procountor";
 		$history_entry->yht_euro = number_format($total_price, 2);
@@ -3064,112 +3037,40 @@ $xml .= '
 				if ($local_invoice_history->procountor_statuscode == $remote_invoice['status'] && $local_invoice_history->yht_euro == $total_price)
 					continue;
 
-				// Previous statuscodes, based on finvoice markings. This is replaced by
-				// the next section, identical status codes to tilanneCheck() switch.
-				// switch ($remote_invoice['status']) {
-				// 	case 'EMPTY':
-				// 	case 'STARTED':
-				// 	case 'UNFINISHED':
-				// 	case 'UNSAVED':
-				// 		$status = 'Lasku luotu';
-				// 		break;
-				// 	case 'NOT_SENT':
-				// 	case 'APPROVED':
-				// 	case 'VERIFIED':
-				// 		$status = 'HYVÄKSYTTY';
-				// 		break;
-				// 	case 'SENT':
-				// 	// case 'INVOICED':
-				// 		// Set invoice status (tilanne) to 2 (sent).
-				// 		$local_invoice->tilanne = 2;
-				// 		$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
-				// 		$local_invoice->save();
-				// 		$status = 'LÄHETETTY';
-				// 		break;
-				// 	case 'PAID':
-				// 	// case 'RECEIVED':
-				// 		// Set invoice status (tilanne) to 3 (paid).
-				// 		$local_invoice->tilanne = 3;
-				// 		$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
-				// 		$local_invoice->save();
-				// 		$status = 'MAKSETTU';
-				// 		break;
-				// 	case 'INVALIDATED':
-				// 		// Set invoice status (tilanne) to 999 (invalidated).
-				// 		$local_invoice->tilanne = 999;
-				// 		$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
-				// 		$local_invoice->save();
-				// 		$status = 'Lasku mitätöity';
-				// 		break;
-				// 	case 'DELETED':
-				// 		$status = 'POISTETTU';
-				// 		break;
-				// 	default:
-				// 		$status = 'MUU';
-				// 		break;
-				// }
-
 				// Updated status. In some cases, update invoice status, such as when
 				// the invoice is marked sent/paid/invalidated in Procountor.
-				// Available statuscodes: [
-				//   EMPTY, UNFINISHED, NOT_SENT, SENT, RECEIVED, PAID, PAYMENT_DENIED,
-				//   VERIFIED, APPROVED, INVALIDATED, PAYMENT_QUEUED, PARTLY_PAID,
-				//   PAYMENT_SENT_TO_BANK, MARKED_PAID, STARTED, INVOICED, OVERRIDDEN,
-				//   DELETED, UNSAVED, PAYMENT_TRANSACTION_REMOVED
-				// ]
 				switch ($remote_invoice['status']) {
 					case 'UNFINISHED':
 						// Set invoice status (tilanne) to 0 (unfinished).
 						$local_invoice->tilanne = 0;
 						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
 						$local_invoice->save();
-						$status = 'Kesken';
 						break;
 					case 'SENT':
 						// Set invoice status (tilanne) to 2 (sent).
 						$local_invoice->tilanne = 2;
 						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
 						$local_invoice->save();
-						$status = 'Lähetetty';
 						break;
 					case 'PAID':
 						// Set invoice status (tilanne) to 3 (paid).
 						$local_invoice->tilanne = 3;
 						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
 						$local_invoice->save();
-						$status = 'Maksettu';
 						break;
 					case 'INVALIDATED':
 						// Set invoice status (tilanne) to 999 (invalidated).
 						$local_invoice->tilanne = 999;
 						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
 						$local_invoice->save();
-						$status = 'Mitätöity';
 						break;
-					case 'EMPTY':                       $status = 'Tyhjä'; break;
-					case 'NOT_SENT':                    $status = 'Ei lähetetty'; break;
-					case 'RECEIVED':                    $status = 'Vastaanotettu'; break;
-					case 'PAYMENT_DENIED':              $status = 'Maksu epäonnistunut'; break;
-					case 'VERIFIED':                    $status = 'Varmistettu'; break;
-					case 'APPROVED':                    $status = 'Hyväksytty'; break;
-					case 'PAYMENT_QUEUED':              $status = 'Maksu jonossa'; break;
-					case 'PARTLY_PAID':                 $status = 'Osittain maksettu'; break;
-					case 'PAYMENT_SENT_TO_BANK':        $status = 'Maksu lähetetty pankille'; break;
-					case 'MARKED_PAID':                 $status = 'Merkitty maksetuksi'; break;
-					case 'STARTED':                     $status = 'Aloitettu'; break;
-					case 'INVOICED':                    $status = 'Laskutettu'; break;
-					case 'OVERRIDDEN':                  $status = 'Ohitettu'; break;
-					case 'DELETED':                     $status = 'Poistettu'; break;
-					case 'UNSAVED':                     $status = 'Tallentamatta'; break;
-					case 'PAYMENT_TRANSACTION_REMOVED': $status = 'Maksutapahtuma poistettu'; break;
-					case 'MUU': default:                $status = 'Muu tilanne'; break;
 				}
 
 				// Update history.
 				$history_entry = new LaskuHistoria;
 				$history_entry->time = date("Y-m-d H:i:s", strtotime($remote_invoice['version']));
 				$history_entry->lid = $local_invoice->id;
-				$history_entry->status = $status;
+				$history_entry->status = $pc->translateProcountorStatus($remote_invoice['status']);
 				$history_entry->procountor_statuscode = $remote_invoice['status'];
 				$history_entry->palvelu = "procountor";
 				$history_entry->yht_euro = number_format($total_price, 2);
