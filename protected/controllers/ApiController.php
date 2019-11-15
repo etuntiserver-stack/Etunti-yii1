@@ -1586,7 +1586,7 @@ public function actionImei($dom)
 			$nykyinenKesto = sprint($nykyinenKesto);
 		}
 		$sp1 = 'Kesto: <b>'.$nykyinenKesto.'</b>';
-		$sp1 .= '<div class="text-left">';
+		$sp1 .= '<div class="text-center">';
 		$sp1 .= '<p>'.$mobCheck->kohde_kannasta.'</p>';
 		if(!empty($my_location))
 			$sp1 .= '<p>'.$my_location.'</p>';
