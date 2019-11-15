@@ -1,4 +1,5 @@
 <?php
+// AIzaSyBR8t3Xq2pvDlRvNBdwUFBYFGrUAuMWblI
 exit;
 /*
 $site = Yii::app()->createController('Site');

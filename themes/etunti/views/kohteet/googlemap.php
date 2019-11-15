@@ -27,7 +27,7 @@ if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googl
 		$get_osoite = $obj->results[0]->geometry->location->lat.",".$obj->results[0]->geometry->location->lng;
 		$center = $get_osoite;
 	} else {
-		die('Ei onnistunut siirrää '.$cityclean);
+		die('Ei onnistunut siirrää '.$cityclean.'<br> Virhe: '.$json);
 	}
   }
 }
