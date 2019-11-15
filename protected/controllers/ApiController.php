@@ -370,7 +370,7 @@ public function actionLang($dom)
 		/* Index */		
 		'TYO' => Yii::t('app', 'TYÖ'),
 		'MATKA' => Yii::t('app', 'MATKA'),
-		'LOUNAS' => Yii::t('app', 'LOUNAS'),
+		'LOUNAS' => Yii::t('app', 'LOUNASTAUKO'),
 		'ALOITA' => Yii::t('app', 'ALOITA'),
 		'LOPETA' => Yii::t('app', 'LOPETA'),
 		'osoite' => Yii::t('app', 'Osoite'),
@@ -631,13 +631,16 @@ public function actionImei($dom)
 	if(isset($_POST['email']) and isset($_POST['salasana']) ){
 		$ttekija = $this->kirjautuminen($dom, $_POST['email'], $_POST['salasana']);
 	}
-    	if(!isset($ttekija->id))
-	{
-		$this->_sendResponse(200, "eiLoytyTekija//Työntekijää ei löydy");
+    	if(!isset($ttekija->id)){
+		$this->_sendResponse(200, CJSON::encode(array("error" => "Työntekijää ei löydy.")));
+		exit;
+	}
+    	if(isset($ttekija->id) and $ttekija->mobiili == 0){
+		$this->_sendResponse(200, CJSON::encode(array("error" => "Ei oikeuksia mobiilisovellukseen.")));
 		exit;
 	}
 	//     Check Tyontekija -->
-
+	$my_location = (isset($_POST['my_location']))?str_replace("/",",",$_POST['my_location']):'';
 	$asetukset = Asetukset::model()->findbypk(1);
 
 	    if(isset($_POST['check'])){
@@ -869,6 +872,8 @@ public function actionImei($dom)
 		    $aikaVali = date('Y-m-d',strtotime('+7 day'));
 		    elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '3')
 		    $aikaVali = date('Y-m-d',strtotime('+14 day'));
+		    elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '4')
+		    $aikaVali = date('Y-m-d',strtotime('+30 day'));
 		    else
 		    $aikaVali = date('Y-m-d',strtotime('sunday this week'));
 
@@ -1270,7 +1275,7 @@ public function actionImei($dom)
 				if($mobCheck->status == 10 and $mobCheck->loppui == '')
 					$mobCheck->status = 10.1;
 
-				$this->_sendResponse(200, $mobCheck->status."//".$this->sp_1($mobCheck)."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//uusi versio");
+				$this->_sendResponse(200, $mobCheck->status."//".$this->sp_1($mobCheck, $my_location)."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//uusi versio");
 
 			} else {
                      		$this->_sendResponse(200, "3//null//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//uusi versio");
@@ -1303,7 +1308,7 @@ public function actionImei($dom)
 			if($mobCheck->status == 10 and $mobCheck->loppui == '')
 				$mobCheck->status = 10.1;
 
-                       	$this->_sendResponse(200, $mobCheck->status."//".$this->sp_1($mobCheck)."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//vanha versio");
+                       	$this->_sendResponse(200, $mobCheck->status."//".$this->sp_1($mobCheck, $my_location)."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//vanha versio");
 
 		  } else {
                      	$this->_sendResponse(200, "3//null//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//vanha versio");
@@ -1554,10 +1559,10 @@ public function actionImei($dom)
 
 }
 
-	protected function sp_1($mobCheck)
+	protected function sp_1($mobCheck, $my_location)
 	{
 		if(!isset($mobCheck->id)){
-			$this->_sendResponse(200, "sp_1 function error");
+			$this->_sendResponse(200, CJSON::encode(array("error" => "sp_1 function error")));
 			exit;
 		}
 
@@ -1580,9 +1585,12 @@ public function actionImei($dom)
 			$nykyinenKesto = sprint($nykyinenKesto);
 		}
 		$sp1 = 'Kesto: <b>'.$nykyinenKesto.'</b>';
-		$sp1 .= '<div class="text-left">';
+		$sp1 .= '<div class="text-center">';
 		$sp1 .= '<p>'.$mobCheck->kohde_kannasta.'</p>';
-		$sp1 .= '<p>'.$kartta.'</p>';
+		if(!empty($kartta))
+			$sp1 .= '<p>'.$kartta.'</p>';
+
+		$sp1 .= '<p><a href="https://www.google.com/maps/place/'.urlencode($full_addr).'">'.Yii::t('main', 'Näytä kartalla').'</a></p>';
 
            	$tv = Tyovuoroot::model()->findByPk($mobCheck->tv_id);
 		if(isset($tv->id) and is_array(json_decode($tv->tyo_erittelyt, true))){

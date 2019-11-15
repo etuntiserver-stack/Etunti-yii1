@@ -56,24 +56,29 @@ $domain = $_GET['domain'];
 
 <br>
 
-<?php if(!empty($domain)) {
-
+<?php
+$db_host = 'localhost';
+$site = Yii::app()->createController('Site');
+$conn = $site[0]->dbConnectArr();
+if( isset($conn['host']) )
+	$db_host = $conn['host'];
+try {
+	$mysqli = new mysqli($conn['host'], $conn['username'], $conn['password']);
+} catch (\Exception $e) {
+	echo $e->getMessage(), PHP_EOL;
+	exit;
+}
+if(!empty($domain)) {
 
     Yii::app()->db1->setActive(false);
-    Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$pref.$domain;
-/*
-    if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
-    {
-      Yii::app()->db1->username = 'root';
-      Yii::app()->db1->password = 'Etunti2017!';
-    }
-*/
+    Yii::app()->db1->connectionString = 'mysql:host=' . $db_host. ';dbname=' . $domain;
     Yii::app()->db1->setActive(true);
 
 
     $this->renderPartial('seuranta',array('domain'=>$domain));
 
-} ?>
+}
+?>
 
 
 

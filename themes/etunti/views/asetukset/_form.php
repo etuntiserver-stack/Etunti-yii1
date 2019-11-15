@@ -839,7 +839,8 @@ $('.ryhmat').multiselect({
         	$tal = array(
 			1=>'Vain tämä viikko suunnuntai asti',
 			2=>'Tästä päivä alkaen +7pv',
-			3=>'Tästä päivä alkaen +14pv'
+			3=>'Tästä päivä alkaen +14pv',
+			4=>'Tästä päivä alkaen +30pv'
 		);
 		echo $form->dropDownList($model,'sovellus_tyovuorot', $tal, 
 		array('class'=>'form-control')) ?>
