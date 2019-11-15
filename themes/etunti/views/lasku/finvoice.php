@@ -7,6 +7,7 @@ if(isset($_GET['id']))
 if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
   $l = Lasku::model()->findbypk($_GET['id']);
   $hyvitys = $l->laskun_nimetys == 'Hyvityslasku';
+  $local = in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']);
 
   // var_dump($l->attributes);
   // echo '<br><br>';
@@ -27,10 +28,8 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
   // and then marked UNFINISHED, allowing the code to reach this again.
   if (empty($l->procountor_id ?? '')) {
 
-    // Get bank accounts from Procountor, and add this receiver if it's not there.
-    // $current_iban = str_replace(' ', '', $l->saaja_iban);
-    // TODO: replace with above commented line. This IBAN is for the testing environment.
-    $current_iban = 'FI7999999900032082';
+    // Use testing bank account for localhost (for etunti.test).
+    $current_iban = $local ? 'FI7999999900032082' : str_replace(' ', '', $l->saaja_iban);
     $bank_account_found = false;
     $bank_account_results = $pc->getBankAccounts();
 
@@ -56,13 +55,12 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
     }
 
     if (!$bank_account_found) {
-
-      // TODO: Create bank account, BIC is needed! Not saved currently.
-      // Also: ledgerAccount and bankingCode (important).
       Yii::app()->user->setFlash('danger', 'Valittua pankkitiliä ei löydy Procountorista. Jos pankkitili
                                             on lisätty Procountor tilillesi, ota yhteyttä ylläpitoon.');
       $this->redirect(array('update','id'=>$id));
 
+      // TODO (?): Create bank account, BIC is needed! Not saved currently.
+      // Also: ledgerAccount and bankingCode (important).
       $bank_account_params = [
         "iban" => $current_iban,
         "bic" => "",
