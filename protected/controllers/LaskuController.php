@@ -2955,14 +2955,26 @@ $xml .= '
 						$status = 'HYVÄKSYTTY';
 						break;
 					case 'SENT':
-					case 'INVOICED':
+					// case 'INVOICED':
+						// Set invoice status (tilanne) to 2 (sent).
+						$local_invoice->tilanne = 2;
+						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+						$local_invoice->save();
 						$status = 'LÄHETETTY';
 						break;
-					case 'RECEIVED':
 					case 'PAID':
+					// case 'RECEIVED':
+						// Set invoice status (tilanne) to 3 (paid).
+						$local_invoice->tilanne = 3;
+						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+						$local_invoice->save();
 						$status = 'MAKSETTU';
 						break;
 					case 'INVALIDATED':
+						// Set invoice status (tilanne) to 999 (invalidated).
+						$local_invoice->tilanne = 999;
+						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+						$local_invoice->save();
 						$status = 'Lasku mitätöity';
 						break;
 					case 'DELETED':
