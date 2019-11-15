@@ -1562,7 +1562,7 @@ public function actionImei($dom)
 	protected function sp_1($mobCheck, $my_location)
 	{
 		if(!isset($mobCheck->id)){
-			$this->_sendResponse(200, "sp_1 function error");
+			$this->_sendResponse(200, CJSON::encode(array("error" => "sp_1 function error")));
 			exit;
 		}
 
@@ -1589,6 +1589,8 @@ public function actionImei($dom)
 		$sp1 .= '<p>'.$mobCheck->kohde_kannasta.'</p>';
 		if(!empty($kartta))
 			$sp1 .= '<p>'.$kartta.'</p>';
+
+		$sp1 .= '<p><a href="https://www.google.com/maps/place/'.urlencode($full_addr).'" target="_blank"></p>';
 
            	$tv = Tyovuoroot::model()->findByPk($mobCheck->tv_id);
 		if(isset($tv->id) and is_array(json_decode($tv->tyo_erittelyt, true))){
