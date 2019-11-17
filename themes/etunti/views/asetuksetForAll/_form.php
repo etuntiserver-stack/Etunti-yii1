@@ -2,6 +2,16 @@
 /* @var $this AsetuksetForAllController */
 /* @var $model AsetuksetForAll */
 /* @var $form CActiveForm */
+$ilmoitusKaikkille = Yii::app()->createController('ilmoitusKaikkille');
+$vastaanottajat = [];
+if(is_array(json_decode($model->app_ilmoitus_vastaanottajat, true))){
+	$vastaanottajat = json_decode($model->app_ilmoitus_vastaanottajat, true);
+}
+if( isset($model->id) ){
+	$model->app_ilmoitus_voimassa_asti = date("d.m.Y H:i", strtotime($model->app_ilmoitus_voimassa_asti));
+} else {
+	$model->app_ilmoitus_voimassa_asti = date("d.m.Y H:i", strtotime("16:00"));
+}
 ?>
 
 
@@ -60,7 +70,33 @@
 		<?php echo $form->error($model,'erikoislauantai'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_info_sivu'); ?>
+		<?php echo $form->textarea($model,'app_info_sivu',array('rows'=>10,'maxlength'=>50000,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'app_info_sivu'); ?>
+	</div>
+
   </div><div class="col-sm-6">
+	<legend>APP Ilmoitus kaikkille</legend>
+
+	<div class="section fill mb5">
+				<?php
+		   		$domainit = $ilmoitusKaikkille[0]->domainitMulti( 
+						'app_ilmoitus_vastaanottajat[]', // name
+						'form-control', //class
+						'domain', // id
+						(count($vastaanottajat) > 0)?$vastaanottajat:'', //selected
+						1 // aktiivinen
+				);
+				echo $domainit;
+				?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_ilmoitus_voimassa_asti'); ?>
+		<?php echo $form->textField($model,'app_ilmoitus_voimassa_asti', array('class'=>'form-control datetimepicker')); ?>
+		<?php echo $form->error($model,'app_ilmoitus_voimassa_asti'); ?>
+	</div>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'app_ilmoitus_kaikkille'); ?>
@@ -68,11 +104,6 @@
 		<?php echo $form->error($model,'app_ilmoitus_kaikkille'); ?>
 	</div>
 
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'app_info_sivu'); ?>
-		<?php echo $form->textarea($model,'app_info_sivu',array('rows'=>10,'maxlength'=>50000,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'app_info_sivu'); ?>
-	</div>
   </div>
 </div><!-- form -->
 
@@ -84,4 +115,21 @@
 
 <?php $this->endWidget(); ?>
 
+<script type="text/javascript">
+$(document).ready(function(){
 
+  $('#domain').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: 'Valitse domainia',
+	selectAllText: 'Valitse kaikki',
+	allSelectedText: 'Kaikki',
+	nSelectedText: 'valittu',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
+  });
+
+});
+</script>

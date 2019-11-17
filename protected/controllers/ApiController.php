@@ -663,7 +663,7 @@ public function actionImei($dom)
 			$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
 			if( $new_login ){
 				$ilmoitus_kaikkille = '';
-				if( $platform == 'Android' and !empty($asetuksetForAll->app_ilmoitus_kaikkille) ){
+				if( (time() < strtotime($asetuksetForAll->app_ilmoitus_voimassa_asti)) and !empty($asetuksetForAll->app_ilmoitus_kaikkille) ){
 					// Tästä saa informoida esimerkiksi uudesta versiotsta
 					// $platform, $versio - ovat valmina tässä vaihessa
 					$ilmoitus_kaikkille = '<div class="alert alert-warning">'.str_replace("/n", "<br>", $asetuksetForAll->app_ilmoitus_kaikkille).'</div>';
