@@ -884,9 +884,9 @@ public function actionImei($dom)
 						$sel .= '<option value="'.$k->id.'" id="'.$val->id.'" tv_id="'.$val->id.'" status="'.$val->status.'" alku="'.$val->alku.'" loppu="'.$val->loppu.'">'.$osoite.'</option>';
 					} else {
 						if( $val->status == 2 )
-							$sel .= '<option value="'.(int)$val->kohde.'" tv_id="'.$val->id.'" status="'.$val->status.'" alku="'.$val->alku.'" loppu="'.$val->loppu.'">MATKA</option>';
+							$sel .= '<option value="'.(int)$val->kohde.'" id="'.$val->id.'" tv_id="'.$val->id.'" status="'.$val->status.'" alku="'.$val->alku.'" loppu="'.$val->loppu.'">MATKA</option>';
 						if( $val->status == 10 )
-							$sel .= '<option value="'.(int)$val->kohde.'" tv_id="'.$val->id.'" status="'.$val->status.'" alku="'.$val->alku.'" loppu="'.$val->loppu.'">LOUNASTAUKO</option>';
+							$sel .= '<option value="'.(int)$val->kohde.'" id="'.$val->id.'" tv_id="'.$val->id.'" status="'.$val->status.'" alku="'.$val->alku.'" loppu="'.$val->loppu.'">LOUNASTAUKO</option>';
 					}
 				}
 			}
