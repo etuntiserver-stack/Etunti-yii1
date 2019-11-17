@@ -663,7 +663,7 @@ public function actionImei($dom)
 			if( $new_login ){
 				$ilmoitus_kaikkille = '';
 				if( $platform == 'Android' ){
-					$ilmoitus_kaikkille = '<div class="alert alert-warning"><h3>Test</h3></div>';
+					$ilmoitus_kaikkille = '<div class="alert alert-warning"><h3>Test '.$versio.'</h3></div>';
 				}
 				$return = [
 					"tid" => $ttekija->id,
