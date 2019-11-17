@@ -663,10 +663,16 @@ public function actionImei($dom)
 			$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
 			if( $new_login ){
 				$ilmoitus_kaikkille = '';
-				if( (time() < strtotime($asetuksetForAll->app_ilmoitus_voimassa_asti)) and !empty($asetuksetForAll->app_ilmoitus_kaikkille) ){
+				if( 
+					(time() < strtotime($asetuksetForAll->app_ilmoitus_voimassa_asti)) 
+					and !empty($asetuksetForAll->app_ilmoitus_kaikkille) 
+					and is_array(json_decode($asetuksetForAll->app_ilmoitus_vastaanottajat))
+				){
+					$app_ilmoitus_vastaanottajat = json_decode($asetuksetForAll->app_ilmoitus_vastaanottajat);
 					// Tästä saa informoida esimerkiksi uudesta versiotsta
 					// $platform, $versio - ovat valmina tässä vaihessa
-					$ilmoitus_kaikkille = '<div class="alert alert-warning">'.str_replace("/n", "<br>", $asetuksetForAll->app_ilmoitus_kaikkille).'</div>';
+					if( in_array(strtolower($dom), $app_ilmoitus_vastaanottajat) )
+						$ilmoitus_kaikkille = '<div class="alert alert-warning">'.str_replace("/n", "<br>", $asetuksetForAll->app_ilmoitus_kaikkille).'</div>';
 				}
 				$return = [
 					"tid" => $ttekija->id,
