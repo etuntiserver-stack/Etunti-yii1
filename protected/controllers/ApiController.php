@@ -667,6 +667,7 @@ public function actionImei($dom)
 					(time() < strtotime($asetuksetForAll->app_ilmoitus_voimassa_asti)) 
 					and !empty($asetuksetForAll->app_ilmoitus_kaikkille) 
 					and is_array(json_decode($asetuksetForAll->app_ilmoitus_vastaanottajat))
+					and $asetuksetForAll->app_ilmoitus_versio_eisamakun != $versio
 				){
 					$app_ilmoitus_vastaanottajat = json_decode($asetuksetForAll->app_ilmoitus_vastaanottajat);
 					// Tästä saa informoida esimerkiksi uudesta versiotsta

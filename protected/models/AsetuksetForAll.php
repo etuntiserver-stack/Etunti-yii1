@@ -50,6 +50,7 @@ class AsetuksetForAll extends CActiveRecord
                      'app_ilmoitus_kaikkille' => 'text DEFAULT NULL',
 		     'app_ilmoitus_vastaanottajat' => 'text DEFAULT NULL',
                      'app_ilmoitus_voimassa_asti' => 'DATETIME DEFAULT NULL',
+                     'app_ilmoitus_versio_eisamakun' => 'varchar(255) DEFAULT "0.0.620"',
 		     'email' => 'varchar(255) DEFAULT NULL',
                      'session_aikamaara' => 'int(2) DEFAULT 8',
 		);
@@ -76,7 +77,7 @@ class AsetuksetForAll extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('api_access_key', 'required'),
-			array('asetus, email', 'length', 'max'=>255),
+			array('asetus, email, app_ilmoitus_versio_eisamakun', 'length', 'max'=>255),
 			array('api_access_key, googlemaps_apikey', 'length', 'max'=>500),
 			array('ohjesivu, viralliset_pyhapaivat, erikoislauantai, app_info_sivu, session_aikamaara, app_ilmoitus_kaikkille, app_ilmoitus_vastaanottajat, app_ilmoitus_voimassa_asti', 'safe'),
 			// The following rule is used by search().
@@ -110,6 +111,7 @@ class AsetuksetForAll extends CActiveRecord
 			'session_aikamaara' => Yii::t('main', 'Automaatinen kirjaudu ulos (tunti määrä)'),
 			'app_ilmoitus_kaikkille' => Yii::t('main', 'Ilmoituksen teksti'),
 			'app_ilmoitus_voimassa_asti' => Yii::t('main', 'Ilmoitus on voimassa Asti'),
+			'app_ilmoitus_versio_eisamakun' => Yii::t('main', 'Ilmoitus tulee kaikkille joiden APP versio ei sama kun:'),
 		);
 	}
 

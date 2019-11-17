@@ -99,6 +99,12 @@ if( isset($model->id) and !empty($model->app_ilmoitus_voimassa_asti)){
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_ilmoitus_versio_eisamakun'); ?>
+		<?php echo $form->textField($model,'app_ilmoitus_versio_eisamakun',array('rows'=>8,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'app_ilmoitus_versio_eisamakun'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'app_ilmoitus_kaikkille'); ?>
 		<?php echo $form->textarea($model,'app_ilmoitus_kaikkille',array('rows'=>8,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'app_ilmoitus_kaikkille'); ?>
