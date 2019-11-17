@@ -667,7 +667,7 @@ public function actionImei($dom)
 				}
 				$return = [
 					"tid" => $ttekija->id,
-					"ilmoitus_kaikkille" => $ilmoitus_kaikkille;
+					"ilmoitus_kaikkille" => $ilmoitus_kaikkille
 				];
 				$this->_sendResponse(200, CJSON::encode($return));
 			} else {
