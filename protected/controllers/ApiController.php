@@ -660,12 +660,13 @@ public function actionImei($dom)
 		// <-- CHECK sendLocation, versio, platform
 		if($_POST['check'] == 'sendLocation'){
 			Tyontekijat::model()->updatebypk($ttekija->id, array('position'=>$_POST['my_location']."//".date("d.m.Y H:i")));
+			$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
 			if( $new_login ){
 				$ilmoitus_kaikkille = '';
-				if( $platform == 'Android' ){
+				if( $platform == 'Android' and !empty($asetuksetForAll->app_ilmoitus_kaikkille) ){
 					// Tästä saa informoida esimerkiksi uudesta versiotsta
 					// $platform, $versio - ovat valmina tässä vaihessa
-					// $ilmoitus_kaikkille = '<div class="alert alert-warning"><h3>Test '.$versio.'</h3></div>';
+					$ilmoitus_kaikkille = '<div class="alert alert-warning">'.str_replace("/n", "<br>", $asetuksetForAll->app_ilmoitus_kaikkille).'</div>';
 				}
 				$return = [
 					"tid" => $ttekija->id,

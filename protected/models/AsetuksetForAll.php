@@ -47,6 +47,7 @@ class AsetuksetForAll extends CActiveRecord
                      'viralliset_pyhapaivat' => 'text DEFAULT NULL',
                      'erikoislauantai' => 'text DEFAULT NULL',
                      'app_info_sivu' => 'text DEFAULT NULL',
+                     'app_ilmoitus_kaikkille' => 'text DEFAULT NULL',
 		     'email' => 'varchar(255) DEFAULT NULL',
                      'session_aikamaara' => 'int(2) DEFAULT 8',
 		);
@@ -75,7 +76,7 @@ class AsetuksetForAll extends CActiveRecord
 			array('api_access_key', 'required'),
 			array('asetus, email', 'length', 'max'=>255),
 			array('api_access_key, googlemaps_apikey', 'length', 'max'=>500),
-			array('ohjesivu, viralliset_pyhapaivat, erikoislauantai, app_info_sivu, session_aikamaara', 'safe'),
+			array('ohjesivu, viralliset_pyhapaivat, erikoislauantai, app_info_sivu, session_aikamaara, app_ilmoitus_kaikkille', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, asetus, api_access_key, ohjesivu', 'safe', 'on'=>'search'),

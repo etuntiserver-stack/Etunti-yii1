@@ -14,7 +14,7 @@
 	<?php echo $form->errorSummary($model); ?>
 
 <div class="row">
-  <div class="col-sm-3">
+  <div class="col-sm-6">
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'email'); ?>
@@ -60,20 +60,22 @@
 		<?php echo $form->error($model,'erikoislauantai'); ?>
 	</div>
 
-  </div>
-</div><!-- form -->
+  </div><div class="col-sm-6">
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_ilmoitus_kaikkille'); ?>
+		<?php echo $form->textarea($model,'app_ilmoitus_kaikkille',array('rows'=>8,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'app_ilmoitus_kaikkille'); ?>
+	</div>
 
-
-<div class="row">
-  <div class="col-sm-12">
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'app_info_sivu'); ?>
 		<?php echo $form->textarea($model,'app_info_sivu',array('rows'=>10,'maxlength'=>50000,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'app_info_sivu'); ?>
 	</div>
   </div>
-</div>
+</div><!-- form -->
+
 
 	<br>
 	<div class="buttons">
