@@ -10,7 +10,7 @@ if(is_array(json_decode($model->app_ilmoitus_vastaanottajat, true))){
 if( isset($model->id) ){
 	$model->app_ilmoitus_voimassa_asti = date("d.m.Y H:i", strtotime($model->app_ilmoitus_voimassa_asti));
 } else {
-	$model->app_ilmoitus_voimassa_asti = date("d.m.Y H:i", strtotime("16:00"));
+	$model->app_ilmoitus_voimassa_asti = date("d.m.Y 16:00");
 }
 ?>
 
