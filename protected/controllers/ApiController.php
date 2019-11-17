@@ -663,7 +663,9 @@ public function actionImei($dom)
 			if( $new_login ){
 				$ilmoitus_kaikkille = '';
 				if( $platform == 'Android' ){
-					//$ilmoitus_kaikkille = '<div class="alert alert-warning"><h3>Test '.$versio.'</h3></div>';
+					// Tästä saa informoida esimerkiksi uudesta versiotsta
+					// $platform, $versio - ovat valmina tässä vaihessa
+					// $ilmoitus_kaikkille = '<div class="alert alert-warning"><h3>Test '.$versio.'</h3></div>';
 				}
 				$return = [
 					"tid" => $ttekija->id,
@@ -691,7 +693,7 @@ public function actionImei($dom)
 					$criteria = new CDbCriteria();
 					$criteria->condition = " 
 						tid = '".$ttekija->id."' AND kohde='".$kohteet->id."'
-					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+					AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE() 
 					AND $eilasketa
 					AND piilota_mobiilista!=1
 					AND (peruutettu=0 OR peruutettu IS NULL)
@@ -836,7 +838,7 @@ public function actionImei($dom)
 			$criteria->order = " alku ASC ";
 			$criteria->condition = " 
 				tid = '".$ttekija->id."' 
-				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+				and DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE() 
 				AND $eilasketa
 				AND piilota_mobiilista!=1
 				AND (peruutettu=0 OR peruutettu IS NULL)
@@ -859,7 +861,7 @@ public function actionImei($dom)
 			$sel .= '<option value=>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
 			foreach($tvuoro as $val){
 				$k = Kohteet::model()->findbypk($val->kohde);
-				if(isset($k->osoite)){
+				if(isset($k->osoite) or ($val->status == 2 or $val->status == 10)){
 					$osoite = '';
 					if(!empty($k->osoite))
 						$osoite .= $k->osoite;
@@ -868,7 +870,7 @@ public function actionImei($dom)
 					if(!empty($k->kaupunki))
 						$osoite .= ', '.$k->kaupunki;
 
-					if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $k->asiakas_id != 0){
+					if( isset($k->asiakas_id) and isset($asetukset->show_name) and $asetukset->show_name == 1 and $k->asiakas_id != 0 ){
 						$asiakas = Asiakkaat::model()->findbypk($k->asiakas_id);
 						$nm = '';
 						if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
@@ -880,10 +882,13 @@ public function actionImei($dom)
 							$osoite .= '. '.$nm;
 					}
 
-					if( isset($_POST['tv_option_byid']) ){
-						$sel .= '<option value="'.$k->id.'" id="'.$val->id.'">'.$osoite.'</option>';
+					if( isset($k->id) ){
+						$sel .= '<option value="'.$k->id.'" id="'.$val->id.'" status="'.$val->status.'" alku="'.$val->alku.'" loppu="'.$val->loppu.'">'.$osoite.'</option>';
 					} else {
-						$sel .= '<option value="'.$k->id.'" tv_id="'.$val->id.'">'.$osoite.'</option>';
+						if( $val->status == 2 )
+							$sel .= '<option value="'.(int)$val->kohde.'" tv_id="'.$val->id.'" status="'.$val->status.'" alku="'.$val->alku.'" loppu="'.$val->loppu.'">MATKA</option>';
+						if( $val->status == 10 )
+							$sel .= '<option value="'.(int)$val->kohde.'" tv_id="'.$val->id.'" status="'.$val->status.'" alku="'.$val->alku.'" loppu="'.$val->loppu.'">LOUNASTAUKO</option>';
 					}
 				}
 			}
@@ -1348,7 +1353,6 @@ public function actionImei($dom)
 	}
 	// Check loppu -->
 
-
 	// <-- INSERT or UPDATE
 	$checkVersio = '';
 	$explVersio = array();
@@ -1608,7 +1612,7 @@ public function actionImei($dom)
 			$this->_sendResponse(200, CJSON::encode(array("error" => "sp_1 function error")));
 			exit;
 		}
-
+           	$tv = Tyovuoroot::model()->findByPk($mobCheck->tv_id);
 		$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
 		$kartta = '';
 		if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey) and isset($mobCheck->kohteet->id)){
@@ -1622,19 +1626,20 @@ public function actionImei($dom)
 		}
 
 		$nykyinenKesto = 0;
-		if(strtotime($mobCheck->aloitan) > 0)
-		{
+		if(strtotime($mobCheck->aloitan) > 0){
 			$nykyinenKesto = time()-strtotime($mobCheck->aloitan);
 			$nykyinenKesto = sprint($nykyinenKesto);
 		}
 		$sp1 = 'Kesto: <b>'.$nykyinenKesto.'</b>';
 		$sp1 .= '<div class="text-center">';
 		$sp1 .= '<p>'.$mobCheck->kohde_kannasta.'</p>';
+		if( isset($tv->id) ){
+			$sp1 .= '<p class="text-danger">Muistakaa lopettaa klo. '.$tv->loppu.'</p>';
+		}
 		if(!empty($kartta))
 			$sp1 .= '<p>'.$kartta.'</p>';
 
-           	$tv = Tyovuoroot::model()->findByPk($mobCheck->tv_id);
-		if(isset($tv->id) and is_array(json_decode($tv->tyo_erittelyt, true))){
+		if( isset($tv->id) and is_array(json_decode($tv->tyo_erittelyt, true)) ){
 			$sp1 .= '<br><label>Työ-erittelyt:</label>';
 			 foreach(json_decode($tv->tyo_erittelyt, true) as $k => $v){
 			 $sp1 .= '
