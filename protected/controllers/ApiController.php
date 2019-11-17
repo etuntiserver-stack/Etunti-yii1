@@ -832,19 +832,16 @@ public function actionImei($dom)
 		// <-- CHECK getTyovuorotToday
 		if($_POST['check'] == 'getTyovuorotToday'){
 
-			$site = Yii::app()->createController('Site');
-			$eilasketa = $site[0]->eiLasketa();
-
 			$criteria = new CDbCriteria();
 			$criteria->order = " alku ASC ";
 			$criteria->condition = " 
 				tid = '".$ttekija->id."' 
 				and DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE() 
-				AND $eilasketa
 				AND piilota_mobiilista!=1
 				AND (peruutettu=0 OR peruutettu IS NULL)
+				AND (status=3 OR status=2 OR status=10)
+				AND id NOT IN( SELECT tv_id FROM sivexkuitti WHERE tv_id!=0 AND tv_id IS NOT NULL AND tid='".$ttekija->id."' )
 			";
-
 			$tvuoro = Tyovuoroot::model()->findAll($criteria);
 
 			if( count($tvuoro) == 0 ){
@@ -884,7 +881,7 @@ public function actionImei($dom)
 					}
 
 					if( isset($k->id) ){
-						$sel .= '<option value="'.$k->id.'" id="'.$val->id.'" status="'.$val->status.'" alku="'.$val->alku.'" loppu="'.$val->loppu.'">'.$osoite.'</option>';
+						$sel .= '<option value="'.$k->id.'" id="'.$val->id.'" tv_id="'.$val->id.'" status="'.$val->status.'" alku="'.$val->alku.'" loppu="'.$val->loppu.'">'.$osoite.'</option>';
 					} else {
 						if( $val->status == 2 )
 							$sel .= '<option value="'.(int)$val->kohde.'" tv_id="'.$val->id.'" status="'.$val->status.'" alku="'.$val->alku.'" loppu="'.$val->loppu.'">MATKA</option>';
