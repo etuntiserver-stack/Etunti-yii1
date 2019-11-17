@@ -624,6 +624,8 @@ public function actionImei($dom)
 	if(isset($_POST['lang']))
 	$_SESSION['lang'] = $_POST['lang'];
 
+	(isset($_POST['versio']))? $versio = $_POST['versio']: $versio = '';
+	(isset($_POST['platform']))? $platform = $_POST['platform']: $platform = '';
 	(isset($_POST['newlogin']))? $new_login = true: $new_login = false;
 	if(isset($_POST['newlogin'])){ unset($_POST['newlogin']); }
 	if(isset($_POST['avoinID'])) $avoinID = $_POST['avoinID']; else $avoinID = 0;
@@ -655,11 +657,18 @@ public function actionImei($dom)
 
 	if(isset($_POST['check'])){
 
-		// <-- CHECK sendLocation
+		// <-- CHECK sendLocation, versio, platform
 		if($_POST['check'] == 'sendLocation'){
 			Tyontekijat::model()->updatebypk($ttekija->id, array('position'=>$_POST['my_location']."//".date("d.m.Y H:i")));
 			if( $new_login ){
-				$return = ["tid" => $ttekija->id, "date" => date("d.m.Y H:i"), "my_location" => $my_location];
+				$ilmoitus_kaikkille = '';
+				if( $platform == 'Android' ){
+					$ilmoitus_kaikkille = '<div class="alert alert-warning"><h3>Test</h3></div>';
+				}
+				$return = [
+					"tid" => $ttekija->id,
+					"ilmoitus_kaikkille" => $ilmoitus_kaikkille;
+				];
 				$this->_sendResponse(200, CJSON::encode($return));
 			} else {
 				$this->_sendResponse(200, $ttekija->id."//".date("d.m.Y H:i")."//".$_POST['my_location']);
