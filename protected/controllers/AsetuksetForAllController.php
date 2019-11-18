@@ -108,6 +108,8 @@ class AsetuksetForAllController extends Controller
 		if(isset($_POST['AsetuksetForAll']))
 		{
 			$model->attributes=$_POST['AsetuksetForAll'];
+			$model->app_ilmoitus_vastaanottajat=json_encode($_POST['app_ilmoitus_vastaanottajat']);
+			$model->app_ilmoitus_voimassa_asti=date("Y-m-d H:i:s", strtotime($model->app_ilmoitus_voimassa_asti));
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -132,6 +134,8 @@ class AsetuksetForAllController extends Controller
 		if(isset($_POST['AsetuksetForAll']))
 		{
 			$model->attributes=$_POST['AsetuksetForAll'];
+			$model->app_ilmoitus_vastaanottajat=json_encode($_POST['app_ilmoitus_vastaanottajat']);
+			$model->app_ilmoitus_voimassa_asti=date("Y-m-d H:i:s", strtotime($model->app_ilmoitus_voimassa_asti));
 			if($model->save())
 			{
 				Yii::app()->user->setFlash('success', "Onnistunut");

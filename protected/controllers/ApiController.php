@@ -624,6 +624,15 @@ public function actionImei($dom)
 	if(isset($_POST['lang']))
 	$_SESSION['lang'] = $_POST['lang'];
 
+	(isset($_POST['versio']))? $versio = $_POST['versio']: $versio = '';
+	(isset($_POST['platform']))? $platform = $_POST['platform']: $platform = '';
+	(isset($_POST['newlogin']))? $new_login = true: $new_login = false;
+	if(isset($_POST['newlogin'])){ unset($_POST['newlogin']); }
+	if(isset($_POST['avoinID'])) $avoinID = $_POST['avoinID']; else $avoinID = 0;
+	if(isset($_POST['avoinID'])){ unset($_POST['avoinID']); }
+	if(isset($_POST['appVersio'])) $appVersio = $_POST['appVersio']; else $appVersio = 0;
+	if(isset($_POST['appVersio'])){ unset($_POST['appVersio']); }
+
 	// <-- Check Tyontekija
 	if(isset($_POST['tid']) ){
 		$ttekija = Tyontekijat::model()->findByPk($_POST['tid']);
@@ -642,120 +651,156 @@ public function actionImei($dom)
 	//     Check Tyontekija -->
 	$my_location = (isset($_POST['my_location']))?str_replace("/",",",$_POST['my_location']):'';
 	$asetukset = Asetukset::model()->findbypk(1);
+	$get_osoite 		= '';
+	$kohdenID 		= 0;
+	$list_tyovuorosta 	= '';
 
-	    if(isset($_POST['check'])){
+	if(isset($_POST['check'])){
 
-	        if($_POST['check'] == 'sendLocation'){
-
+		// <-- CHECK sendLocation, versio, platform
+		if($_POST['check'] == 'sendLocation'){
 			Tyontekijat::model()->updatebypk($ttekija->id, array('position'=>$_POST['my_location']."//".date("d.m.Y H:i")));
-			$this->_sendResponse(200, $ttekija->id."//".date("d.m.Y H:i")."//".$_POST['my_location']);
+			$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
+			if( $new_login ){
+				$ilmoitus_kaikkille = '';
+				if( 
+					(time() < strtotime($asetuksetForAll->app_ilmoitus_voimassa_asti)) 
+					and !empty($asetuksetForAll->app_ilmoitus_kaikkille) 
+					and is_array(json_decode($asetuksetForAll->app_ilmoitus_vastaanottajat))
+					and $asetuksetForAll->app_ilmoitus_versio_eisamakun != $versio
+				){
+					$app_ilmoitus_vastaanottajat = json_decode($asetuksetForAll->app_ilmoitus_vastaanottajat);
+					// Tästä saa informoida esimerkiksi uudesta versiotsta
+					// $platform, $versio - ovat valmina tässä vaihessa
+					if( in_array(strtolower($dom), $app_ilmoitus_vastaanottajat) )
+						$ilmoitus_kaikkille = '<div class="alert alert-warning">'.str_replace("/n", "<br>", $asetuksetForAll->app_ilmoitus_kaikkille).'</div>';
+				}
+				$return = [
+					"tid" => $ttekija->id,
+					"ilmoitus_kaikkille" => $ilmoitus_kaikkille
+				];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, $ttekija->id."//".date("d.m.Y H:i")."//".$_POST['my_location']);
+			}
 			exit;
 	        }
+		//     CHECK sendLocation -->
 
-		$get_osoite 		= '';
-		$kohdenID 		= 0;
-		$list_tyovuorosta 	= '';
-	        if($_POST['check'] == 'getObjbyTag'){
-		  if(isset($_POST['tag']) and $_POST['tag'] != '000000'){
-		    $kohteet = Kohteet::model()->find(" tag_id='".$_POST['tag']."' ");
-		    if(isset($kohteet->osoite) and !empty($kohteet->osoite)){
-		      $get_osoite = $kohteet->osoite;
-		      $kohdenID = $kohteet->id;
+		// <-- CHECK getObjbyTag
+		if($_POST['check'] == 'getObjbyTag'){
+			if(isset($_POST['tag']) and $_POST['tag'] != '000000'){
+				$kohteet = Kohteet::model()->find(" tag_id='".$_POST['tag']."' ");
+				if(isset($kohteet->osoite) and !empty($kohteet->osoite)){
+					$get_osoite = $kohteet->osoite;
+					$kohdenID = $kohteet->id;
 
-		      $tv_id = 0;
-		      $site = Yii::app()->createController('Site');
-		      $eilasketa = $site[0]->eiLasketa();
-		      $criteria = new CDbCriteria();
-		      $criteria->condition = " 
-				tid = '".$ttekija->id."' AND kohde='".$kohteet->id."'
-				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
-				AND $eilasketa
-				AND piilota_mobiilista!=1
-				AND (peruutettu=0 OR peruutettu IS NULL)
-		      ";
-	              $tv = Tyovuoroot::model()->find($criteria);
-		      if( isset($tv->id) ){ $tv_id = $tv->id; }
+					$tv_id = 0;
+					$site = Yii::app()->createController('Site');
+					$eilasketa = $site[0]->eiLasketa();
+					$criteria = new CDbCriteria();
+					$criteria->condition = " 
+						tid = '".$ttekija->id."' AND kohde='".$kohteet->id."'
+					AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE() 
+					AND $eilasketa
+					AND piilota_mobiilista!=1
+					AND (peruutettu=0 OR peruutettu IS NULL)
+					";
+					$tv = Tyovuoroot::model()->find($criteria);
+					if( isset($tv->id) ){ $tv_id = $tv->id; }
 
-		      $this->_sendResponse(200, $get_osoite."//".$kohdenID."//ok//".$tv_id);
-		      exit;
-		    } else {
-		      $this->_sendResponse(200, "Tuntematon TAG//".$_POST['tag']."//error");
-		      exit;
-		    }
-		  } 
-		  exit;
+					if( $new_login ){
+						$return = ["osoite" => $get_osoite, "kohdenID" => $kohdenID, "is_ok" => "true", "tv_id" => $tv_id];
+						$this->_sendResponse(200, CJSON::encode($return));
+					} else {
+						$this->_sendResponse(200, $get_osoite."//".$kohdenID."//ok//".$tv_id);
+					}
+				} else {
+					if( $new_login ){
+						$return = ["is_ok" => "false"];
+						$this->_sendResponse(200, CJSON::encode($return));
+					} else {
+						$this->_sendResponse(200, "Tuntematon TAG//".$_POST['tag']."//error");
+					}
+				}
+			} 
+			exit;
 	        }
+		//     CHECK getObjbyTag -->
 
-	        if($_POST['check'] == 'tehty'){
+		// <-- CHECK tehty
+		if($_POST['check'] == 'tehty'){
 
-		    $criteria = new CDbCriteria();
-		    $criteria->order = " id DESC ";
-		    $criteria->condition = " 
-			tid = '".$ttekija->id."' 
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".date("Y-m-d", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week"))."' AND '".date("Y-m-d")."' 
-			AND loppui!=''
-			AND admin!=1
-		    ";
-	            $mob = Mobile::model()->findAll($criteria);
+			$criteria = new CDbCriteria();
+			$criteria->order = " id DESC ";
+			$criteria->condition = " 
+				tid = '".$ttekija->id."' 
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+				BETWEEN '".date("Y-m-d", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week"))."' AND '".date("Y-m-d")."' 
+				AND loppui!=''
+				AND admin!=1
+			";
+			$mob = Mobile::model()->findAll($criteria);
 
-		    if(empty($mob))
-		    {
-		    $this->_sendResponse(200, 'ei tuloksia');
-		    exit;
-		    }
+			if(empty($mob)){
+				if( $new_login ){
+					$return = ["return" => 'Ei tuloksia'];
+					$this->_sendResponse(200, CJSON::encode($return));
+				} else {
+					$this->_sendResponse(200, 'ei tuloksia');
+				}
+				exit;
+			}
 
-		    // <-- Ajaanjaksolla
-		    $criteria = new CDbCriteria();
-        	    $criteria->select = "
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-		    ";
-	            $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND tid='".$ttekija->id."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".date("Y-m-d", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week"))."' AND '".date("Y-m-d")."' 
-			AND (status=3 OR status=2)
-			AND admin!=1
-		    ";
-		    $lu = Mobile::model()->find($criteria);
-		    $ajaanjaksolla = '';
-		    if( isset($lu->l_tunnit) ){
-			$ajaanjaksolla = '<h5>Tehdyt työt ajanjaksolla '.$this->sprint($lu->l_tunnit).'</h5>';
-		    }
-		    //    Ajaanjaksolla -->
+			// <-- Ajaanjaksolla
+			$criteria = new CDbCriteria();
+			$criteria->select = "
+				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+			";
+			$criteria->condition = " 
+				aloitan!='' AND loppui!=''
+				AND tid='".$ttekija->id."'
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+				BETWEEN '".date("Y-m-d", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week"))."' AND '".date("Y-m-d")."' 
+				AND (status=3 OR status=2)
+				AND admin!=1
+			";
+			$lu = Mobile::model()->find($criteria);
+			$ajaanjaksolla = '';
+			if( isset($lu->l_tunnit) ){
+				$ajaanjaksolla = '<h5>Tehdyt työt ajanjaksolla '.$this->sprint($lu->l_tunnit).'</h5>';
+			}
+			//    Ajaanjaksolla -->
 
-		    // <-- Tanaan
-		    $criteria = new CDbCriteria();
-        	    $criteria->select = "
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-		    ";
-	            $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND tid='".$ttekija->id."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".date('Y-m-d')."'
-			AND (status=3 OR status=2)
-			AND admin!=1
-		    ";
-		    $lu = Mobile::model()->find($criteria);
-		    $tanaan = '';
-		    if( isset($lu->l_tunnit) ){
-			$tanaan = '<h5>Tänään yhteensä '.$this->sprint($lu->l_tunnit).'</h5>';
-		    }
-		    //    Tanaan -->
+			// <-- Tanaan
+			$criteria = new CDbCriteria();
+			$criteria->select = "
+				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+			";
+			$criteria->condition = " 
+				aloitan!='' AND loppui!=''
+				AND tid='".$ttekija->id."'
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".date('Y-m-d')."'
+				AND (status=3 OR status=2)
+				AND admin!=1
+			";
+			$lu = Mobile::model()->find($criteria);
+			$tanaan = '';
+			if( isset($lu->l_tunnit) ){
+				$tanaan = '<h5>Tänään yhteensä '.$this->sprint($lu->l_tunnit).'</h5>';
+			}
+			//    Tanaan -->
 
-		    $sel = '<center><p><h4>'.date("d.m.Y", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week")).'-'.date('d.m.Y').'</h4></p>';
-		    $sel .= $ajaanjaksolla;
-		    $sel .= $tanaan;
-		    $sel .= '</center><hr>';
-		    foreach($mob as $val)
-		    {
-		    $kesto = '00:00';
-		    if(!empty($val->loppui))
-		    $kesto = (strtotime($val->loppui)-strtotime($val->aloitan));
-
+			$sel = '<center><p><h4>'.date("d.m.Y", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week")).'-'.date('d.m.Y').'</h4></p>';
+			$sel .= $ajaanjaksolla;
+			$sel .= $tanaan;
+			$sel .= '</center><hr>';
+			foreach($mob as $val){
+				$kesto = '00:00';
+				if(!empty($val->loppui))
+					$kesto = (strtotime($val->loppui)-strtotime($val->aloitan));
 
 				$sel .= '<div class="well">
 				  <b>'.Yii::t('app', 'Päivämäärä').':</b> '.date("d.m.Y",strtotime($val->aloitan)).'<br> 
@@ -766,400 +811,407 @@ public function actionImei($dom)
 
 
 				// <-- check Hyvaksytty
-				if($asetukset->app_naytetaanko_hyvaksyttyt_tunnit == 1)
-				{
-				$mobile = Yii::app()->createController('Mobile');
-				$hyvaksytty_return = $mobile[0]->onkoRiviHyvaksytty($val->id);
-				if( $hyvaksytty_return > 0 )
-					$hyvaksytty = sprint($hyvaksytty_return);
-				else
-					$hyvaksytty = '--:--';
-
-				$sel .= '<h3 style="color:green">'.Yii::t('app', 'Hyväksytty').': '.$hyvaksytty.'</h3>';
+				if($asetukset->app_naytetaanko_hyvaksyttyt_tunnit == 1){
+					$mobile = Yii::app()->createController('Mobile');
+					$hyvaksytty_return = $mobile[0]->onkoRiviHyvaksytty($val->id);
+					if( $hyvaksytty_return > 0 )
+						$hyvaksytty = sprint($hyvaksytty_return);
+					else
+						$hyvaksytty = '';
+					if(!empty($hyvaksytty))
+						$sel .= '<h3 style="color:green">'.Yii::t('app', 'Hyväksytty').': '.$hyvaksytty.'</h3>';
 				}
 				// check Hyvaksytty -->
 
+				$sel .= '</div>';
+			}
 
-				$sel .= '
-				</div>';
-		    }
-
-		    $this->_sendResponse(200, $sel);
-		exit;
+			if( $new_login ){
+				$return = ["return" => $sel];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, $sel);
+			}
+			exit;
 	        }
+		//     CHECK tehty -->
 
+		// <-- CHECK getTyovuorotToday
+		if($_POST['check'] == 'getTyovuorotToday'){
 
-	        if($_POST['check'] == 'getTyovuorotToday'){
-
-		    $site = Yii::app()->createController('Site');
-		    $eilasketa = $site[0]->eiLasketa();
-
-		    $criteria = new CDbCriteria();
-		    $criteria->order = " alku ASC ";
-		    $criteria->condition = " 
+			$criteria = new CDbCriteria();
+			$criteria->order = " alku ASC ";
+			$criteria->condition = " 
 				tid = '".$ttekija->id."' 
-				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
-				AND $eilasketa
+				and DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE() 
 				AND piilota_mobiilista!=1
 				AND (peruutettu=0 OR peruutettu IS NULL)
-		    ";
+				AND (status=3 OR status=2 OR status=10)
+			";
+			// AND id NOT IN( SELECT tv_id FROM sivexkuitti WHERE tv_id!=0 AND tv_id IS NOT NULL AND tid='".$ttekija->id."' )
+			$tvuoro = Tyovuoroot::model()->findAll($criteria);
 
-	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
-
-		    if(!isset($tvuoro[0]))
-		    {
-		    //$this->_sendResponse(200, 'ei tuloksia');
-		    exit;
-		    }
-
-		    $sel = '';
-		    $sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
-		    $sel .= '<option value=>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
-		    foreach($tvuoro as $val){
-			$k = Kohteet::model()->findbypk($val->kohde);
-			if(isset($k->osoite))
-			{
-				$osoite = '';
-				if(!empty($k->osoite))
-				$osoite .= $k->osoite;
-				if(!empty($k->pnumero))
-				$osoite .= ', '.$k->pnumero;
-				if(!empty($k->kaupunki))
-				$osoite .= ', '.$k->kaupunki;
-
-				if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $k->asiakas_id != 0)
-				{
-					$asiakas = Asiakkaat::model()->findbypk($k->asiakas_id);
-					$nm = '';
-					if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
-			      			$nm = $asiakas->yrityksen_nimi;
-					} elseif(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and !empty($asiakas->yhteyshenkilo)){
-			      			$nm = $asiakas->yhteyshenkilo;
-					}
-					if(!empty($nm))
-					$osoite .= '. '.$nm;
-				}
-
-				if( isset($_POST['tv_option_byid']) ){
-		      		$sel .= '<option value="'.$k->id.'" id="'.$val->id.'">'.$osoite.'</option>';
+			if( count($tvuoro) == 0 ){
+				if( $new_login ){
+					$return = ["return" => 'EiTuloksia'];
+					$this->_sendResponse(200, CJSON::encode($return));
 				} else {
-		      		$sel .= '<option value="'.$k->id.'" tv_id="'.$val->id.'">'.$osoite.'</option>';
+					//$this->_sendResponse(200, 'ei tuloksia');
 				}
-
-
+				exit;
 			}
-		    }
-		    $sel .= '</select>';
 
-		    $this->_sendResponse(200, $sel);
-		exit;
+			$sel = '';
+			$sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
+			$sel .= '<option value=>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
+			foreach($tvuoro as $val){
+				$k = Kohteet::model()->findbypk($val->kohde);
+				if(isset($k->osoite) or ($val->status == 2 or $val->status == 10)){
+					$osoite = '';
+					if(!empty($k->osoite))
+						$osoite .= $k->osoite;
+					if(!empty($k->pnumero))
+						$osoite .= ', '.$k->pnumero;
+					if(!empty($k->kaupunki))
+						$osoite .= ', '.$k->kaupunki;
+
+					if( isset($k->asiakas_id) and isset($asetukset->show_name) and $asetukset->show_name == 1 and $k->asiakas_id != 0 ){
+						$asiakas = Asiakkaat::model()->findbypk($k->asiakas_id);
+						$nm = '';
+						if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
+							$nm = $asiakas->yrityksen_nimi;
+						} elseif(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and !empty($asiakas->yhteyshenkilo)){
+							$nm = $asiakas->yhteyshenkilo;
+						}
+						if(!empty($nm))
+							$osoite .= '. '.$nm;
+					}
+
+					if( isset($k->id) ){
+						$sel .= '<option value="'.$k->id.'" id="'.$val->id.'" tv_id="'.$val->id.'" status="'.$val->status.'" alku="'.$val->alku.'" loppu="'.$val->loppu.'">'.$osoite.'</option>';
+					} else {
+						if( $val->status == 2 )
+							$sel .= '<option value="'.(int)$val->kohde.'" id="'.$val->id.'" tv_id="'.$val->id.'" status="'.$val->status.'" alku="'.$val->alku.'" loppu="'.$val->loppu.'">MATKA</option>';
+						if( $val->status == 10 )
+							$sel .= '<option value="'.(int)$val->kohde.'" id="'.$val->id.'" tv_id="'.$val->id.'" status="'.$val->status.'" alku="'.$val->alku.'" loppu="'.$val->loppu.'">LOUNASTAUKO</option>';
+					}
+				}
+			}
+			$sel .= '</select>';
+
+			if( $new_login ){
+				$return = ["return" => $sel];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, $sel);
+			}
+
+			exit;
 	        }
+		//     CHECK getTyovuorotToday -->
 
+		// <-- CHECK tvuoro
 	        if($_POST['check'] == 'tvuoro'){
 
-		    $tas = Domainit::model()->find(" domain='".$dom."' ");
-		    $p = array();
-		    if(isset($tas->paketti)){ $p = explode(",",$tas->paketti); }
+			$tas = Domainit::model()->find(" domain='".$dom."' ");
+			$p = array();
+			if(isset($tas->paketti)){ $p = explode(",",$tas->paketti); }
 
-		    if(!in_array('2',$p, true)){
-		    $this->_sendResponse(200, 'Osta lisäosa työvuorojenhallinta');
-		    exit;
-		    } 
+			if(!in_array('2',$p, true)){
+				if( $new_login ){
+					$return = ["return" => 'Osta lisäosa työvuorojenhallinta'];
+					$this->_sendResponse(200, CJSON::encode($return));
+				} else {
+					$this->_sendResponse(200, 'Osta lisäosa työvuorojenhallinta');
+				}
+				exit;
+			} 
 
-		    if(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '1')
-		    $aikaVali = date('Y-m-d',strtotime('sunday this week'));
-		    elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '2')
-		    $aikaVali = date('Y-m-d',strtotime('+7 day'));
-		    elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '3')
-		    $aikaVali = date('Y-m-d',strtotime('+14 day'));
-		    elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '4')
-		    $aikaVali = date('Y-m-d',strtotime('+30 day'));
-		    else
-		    $aikaVali = date('Y-m-d',strtotime('sunday this week'));
+			if(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '1')
+				$aikaVali = date('Y-m-d',strtotime('sunday this week'));
+			elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '2')
+				$aikaVali = date('Y-m-d',strtotime('+7 day'));
+			elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '3')
+				$aikaVali = date('Y-m-d',strtotime('+14 day'));
+			elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '4')
+				$aikaVali = date('Y-m-d',strtotime('+30 day'));
+			else
+				$aikaVali = date('Y-m-d',strtotime('sunday this week'));
 
 
-		    $criteria = new CDbCriteria();
-		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'),alku ASC ";
-		    $criteria->condition = " 
+			$criteria = new CDbCriteria();
+			$criteria->order = " DATE(STR_TO_DATE(pvm, '%d.%m.%Y')),alku ASC ";
+			$criteria->condition = " 
 				tid = '".$ttekija->id."' 
-				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+				and DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) 
 				BETWEEN CURDATE() AND '".$aikaVali."'
 				AND piilota_mobiilista!=1
 				AND (peruutettu=0 OR peruutettu IS NULL)
-		    ";
-		    if( isset($asetukset->app_naytta_sairauslomat) and $asetukset->app_naytta_sairauslomat == 0 ){
-			$criteria->addCondition(" tyoajanlaatu NOT LIKE '%(SPL)%' AND tyoajanlaatu NOT LIKE '%(SL)%' ");
-		    }
-	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
-
-		    if(empty($tvuoro))
-		    {
-		    $this->_sendResponse(200, 'ei tuloksia');
-		    exit;
-		    }
-
-		    $sel = '<h2>'.Yii::t('app', 'Työvuorot').'</h2>';
-
-		    foreach($tvuoro as $val)
-		    {
-		      $osoite = '';
-		      $kohde = Kohteet::model()->findbypk($val->kohde);
-		      if(isset($kohde->osoite))
-		      {
-				$osoite = '';
-				if(!empty($kohde->osoite))
-				$osoite .= $kohde->osoite;
-				if(!empty($kohde->pnumero))
-				$osoite .= ', '.$kohde->pnumero;
-				if(!empty($kohde->kaupunki))
-				$osoite .= ', '.$kohde->kaupunki;
-		      }
-
-
-		      $tyopaari = array();
-		      if(!empty($val->tyopaari))
-		      $tyopaari = json_decode($val->tyopaari, true);
-		      $tplista = '';
-		      foreach($tyopaari as $tp)
-		      {
-			if($tp != $ttekija->id)
-			{
-		      	   $tpID = Tyontekijat::model()->findbypk($tp);
-			   if(isset($tpID->tekijan_nimi)){
-			   	$tplista .= '<b>'.Yii::t('main', 'Työpari').'</b>: '.$this->etuSukunimi($tpID->id).' '.((!empty($tpID->laiten_puh))?', <b>Puh.</b>: '.$tpID->laiten_puh:'').'<br>';
-			   }
+			";
+			if( isset($asetukset->app_naytta_sairauslomat) and $asetukset->app_naytta_sairauslomat == 0 ){
+				$criteria->addCondition(" tyoajanlaatu NOT LIKE '%(SPL)%' AND tyoajanlaatu NOT LIKE '%(SL)%' ");
 			}
-		      }
+			$tvuoro = Tyovuoroot::model()->findAll($criteria);
+
+			if(empty($tvuoro)){
+				if( $new_login ){
+					$return = ["return" => 'Ei tuloksia'];
+					$this->_sendResponse(200, CJSON::encode($return));
+				} else {
+					$this->_sendResponse(200, 'ei tuloksia');
+				}
+				exit;
+			}
+
+			$sel = '<h2>'.Yii::t('app', 'Työvuorot').'</h2>';
+
+			foreach($tvuoro as $val){
+				$osoite = '';
+				$kohde = Kohteet::model()->findbypk($val->kohde);
+				if(isset($kohde->osoite)){
+					$osoite = '';
+					if(!empty($kohde->osoite))
+						$osoite .= $kohde->osoite;
+					if(!empty($kohde->pnumero))
+						$osoite .= ', '.$kohde->pnumero;
+					if(!empty($kohde->kaupunki))
+						$osoite .= ', '.$kohde->kaupunki;
+				}
+
+				$tyopaari = array();
+				if(!empty($val->tyopaari))
+					$tyopaari = json_decode($val->tyopaari, true);
+				$tplista = '';
+				foreach($tyopaari as $tp){
+					if($tp != $ttekija->id){
+						$tpID = Tyontekijat::model()->findbypk($tp);
+						if(isset($tpID->tekijan_nimi)){
+							$tplista .= '<b>'.Yii::t('main', 'Työpari').'</b>: '.$this->etuSukunimi($tpID->id).' '.((!empty($tpID->laiten_puh))?', <b>Puh.</b>: '.$tpID->laiten_puh:'').'<br>';
+						}
+					}
+				}
 		      
-		      if(!empty($tplista)){ $tplista = '<hr>'.$tplista; }
+				if(!empty($tplista)){ $tplista = '<hr>'.$tplista; }
 
-		      $alkLop = '';
-		      if($val->alku > 0 and $val->loppu > 0)
-		      $alkLop = $val->alku.'-'.$val->loppu.' ';
+				$alkLop = '';
+				if($val->alku > 0 and $val->loppu > 0)
+					$alkLop = $val->alku.'-'.$val->loppu.' ';
 
-		      $color = '';
-	 	      if(!empty($val->tyoajanlaatu) and empty($osoite))
-	 	      {
-			    $expl1 = explode("/",$val->tyoajanlaatu);
-			    $color = (isset($expl1[1])) ? $expl1[1] : '';
-			    $osoite = (isset($expl1[0])) ? $expl1[0] : '';
-		      }
+				$color = '';
+				if(!empty($val->tyoajanlaatu) and empty($osoite)){
+					$expl1 = explode("/",$val->tyoajanlaatu);
+					$color = (isset($expl1[1])) ? $expl1[1] : '';
+					$osoite = (isset($expl1[0])) ? $expl1[0] : '';
+				}
 
-		      // <-- Nayta asiakas
-		      $nm = '';
-		      if(isset($kohde->id) and isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->asiakas_id != 0){
-				$asiakas = Asiakkaat::model()->findbypk($kohde->asiakas_id);
+				// <-- Nayta asiakas
+				$nm = '';
+				if(isset($kohde->id) and isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->asiakas_id != 0){
+					$asiakas = Asiakkaat::model()->findbypk($kohde->asiakas_id);
 				if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
-		      			$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yrityksen_nimi.'</b>';
+					$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yrityksen_nimi.'</b>';
 				} elseif(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and !empty($asiakas->yhteyshenkilo)){
-		      			$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yhteyshenkilo.'</b>';
+					$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yhteyshenkilo.'</b>';
 				}
-		      }
-		      // Nayta asiakas -->
+				}
+				// Nayta asiakas -->
 
-		      // <-- Nayta kohteen puhelinnumero
-		      $puh_nro = '';
-		      if(isset($kohde->id) and isset($asetukset->app_show_phone) and $asetukset->app_show_phone == 1 and $kohde->puh_nro != ''){
+				// <-- Nayta kohteen puhelinnumero
+				$puh_nro = '';
+				if(isset($kohde->id) and isset($asetukset->app_show_phone) and $asetukset->app_show_phone == 1 and $kohde->puh_nro != ''){
 		      			$puh_nro = '<br>'.Yii::t('main', 'Kohteen puhelinnumero').': <b>'.$kohde->puh_nro.'</b>';
-		      }
-		      // Nayta kohteen puhelinnumero -->
-
-		      // <-- Nayta kohteen avaimet
-		      $avaimet = '';
-		      if(isset($kohde->id) and isset($asetukset->app_naytta_avain) and $asetukset->app_naytta_avain == 1 ){
-
-				if(isset($kohde->avaimet) and count($kohde->avaimet) > 0){
-				  $avaimet .= '<br><p><center><h4>'.Yii::t('main', 'Avaimet').' '.$kohde->osoite.'</h4></center><br>';
-				  $avaimet .= '<table class="table table-bordered table-striped">';
-				  $avaimet .= '<tr>';
-				  $avaimet .= '<th>'.Yii::t('main', 'Avain').'</th>';
-				  $avaimet .= '<th>'.Yii::t('main', 'Työntekijä').'</th>';
-				  $avaimet .= '<th>'.Yii::t('main', 'Sijainti').'</th>';
-				  $avaimet .= '</tr>';
-				  foreach($kohde->avaimet as $avain){
-					$avaimet .= '
-					<tr>
-					  <td>'.$avain->avainnumero.'</td>
-					  <td>'.$this->etuSukunimi($avain->tid).'</td>
-					  <td>'.$avain->sijainti.'</td>
-					</tr>';
-				  }
-				  $avaimet .= '</table>';
 				}
-		      }
-		      // Nayta kohteen avaimet -->
+				// Nayta kohteen puhelinnumero -->
 
+				// <-- Nayta kohteen avaimet
+				$avaimet = '';
+				if(isset($kohde->id) and isset($asetukset->app_naytta_avain) and $asetukset->app_naytta_avain == 1 ){
+					if(isset($kohde->avaimet) and count($kohde->avaimet) > 0){
+						$avaimet .= '<br><p><center><h4>'.Yii::t('main', 'Avaimet').' '.$kohde->osoite.'</h4></center><br>';
+						$avaimet .= '<table class="table table-bordered table-striped">';
+						$avaimet .= '<tr>';
+						$avaimet .= '<th>'.Yii::t('main', 'Avain').'</th>';
+						$avaimet .= '<th>'.Yii::t('main', 'Työntekijä').'</th>';
+						$avaimet .= '<th>'.Yii::t('main', 'Sijainti').'</th>';
+						$avaimet .= '</tr>';
+						foreach($kohde->avaimet as $avain){
+							$avaimet .= '
+							<tr>
+							<td>'.$avain->avainnumero.'</td>
+							<td>'.$this->etuSukunimi($avain->tid).'</td>
+							<td>'.$avain->sijainti.'</td>
+							</tr>';
+						}
+						$avaimet .= '</table>';
+					}
+				}
+				// Nayta kohteen avaimet -->
 
-		      // <-- app_naytetaanko_kohteen_yhteyshenkilo
-		      $kohteen_yhteyshenkilo = '';
-		      if(isset($kohde->id) and isset($asetukset->app_naytetaanko_kohteen_yhteyshenkilo) and $asetukset->app_naytetaanko_kohteen_yhteyshenkilo == 1 and $kohde->etu_suku_nimet != ''){
-		      			$kohteen_yhteyshenkilo = '<br>'.Yii::t('main', 'Kohteen yhteyshenkilö').': <b>'.$kohde->etu_suku_nimet.'</b>';
-		      }
-		      // app_naytetaanko_kohteen_yhteyshenkilo -->
+				// <-- app_naytetaanko_kohteen_yhteyshenkilo
+				$kohteen_yhteyshenkilo = '';
+				if(isset($kohde->id) and isset($asetukset->app_naytetaanko_kohteen_yhteyshenkilo) and $asetukset->app_naytetaanko_kohteen_yhteyshenkilo == 1 and $kohde->etu_suku_nimet != ''){
+					$kohteen_yhteyshenkilo = '<br>'.Yii::t('main', 'Kohteen yhteyshenkilö').': <b>'.$kohde->etu_suku_nimet.'</b>';
+				}
+				// app_naytetaanko_kohteen_yhteyshenkilo -->
+				$sel .= '<div class="well">';
 
+				$tvController = Yii::app()->createController('Tyovuoroot');
+				$tilanteet = $tvController[0]->tilanteet();
+				if( isset($tilanteet[$val->status]) and $tilanteet[$val->status] != "0" ){
+					$sel .= '<h3 class="text-center">'. $tilanteet[$val->status].' '.(($val->toistuva_id != 0)?'<i class="fa fa-repeat text-success"></i>':'').'</h3>';
+				}
 
-		      $sel .= '<div class="well">';
+				$sel .= '<h3 class="text" style="color:'.$color.'">'.$osoite.'</h3><p><b>'.$this->vkopaiva($val->pvm).', '.$val->pvm.'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'</p>';
 
-		      $tvController = Yii::app()->createController('Tyovuoroot');
-	   	      $tilanteet = $tvController[0]->tilanteet();
-		      if( isset($tilanteet[$val->status]) and $tilanteet[$val->status] != "0" ){
-			      $sel .= '<h3 class="text-center">'. $tilanteet[$val->status].' '.(($val->toistuva_id != 0)?'<i class="fa fa-repeat text-success"></i>':'').'</h3>';
-		      }
+				if( isset($val->tyo_erittelyt) and is_array(json_decode($val->tyo_erittelyt, true))){
+					$sel .= '<p><label>Työ-erittelyt:</label><ul>';
+					foreach(json_decode($val->tyo_erittelyt, true) as $k => $v){
+						$sel .= '<li>'.$v.'</li>';
+					}
+					$sel .= '</ul></p><hr>';
+				}
 
-		      $sel .= '<h3 class="text" style="color:'.$color.'">'.$osoite.'</h3><p><b>'.$this->vkopaiva($val->pvm).', '.$val->pvm.'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'</p>';
+				if(!empty($nm) or !empty($puh_nro) or !empty($avaimet) or !empty($kohteen_yhteyshenkilo)){
+					$sel .= '<br><p>
+					'.$nm.'
+					'.$kohteen_yhteyshenkilo.'
+					'.$puh_nro.'
+					'.$avaimet.'
+					</p>';
+				}
 
-		      if( isset($val->tyo_erittelyt) and is_array(json_decode($val->tyo_erittelyt, true))){
-				$sel .= '<p><label>Työ-erittelyt:</label><ul>';
-				 foreach(json_decode($val->tyo_erittelyt, true) as $k => $v){
-				 $sel .= '<li>'.$v.'</li>';
-				 }
-				$sel .= '</ul></p><hr>';
-		      }
+				if(!empty($val->tietoja)){
+					$sel .= '<hr><div class="text-small">'.str_replace("\n", "<br>", $val->tietoja).'</div>';
+				}
 
-		      if(!empty($nm) or !empty($puh_nro) or !empty($avaimet) or !empty($kohteen_yhteyshenkilo)){
-		      $sel .= '
-		      <br>
-		      <p>
-				  '.$nm.'
-				  '.$kohteen_yhteyshenkilo.'
-				  '.$puh_nro.'
-				  '.$avaimet.'
-		      </p>';
-		      }
+				$sel .= $tplista;
+				$sel .= '</div>';
+			}
 
-		      if(!empty($val->tietoja)){
-		      $sel .= '
-				  <hr>
-				  <div class="text-small">'.str_replace("\n", "<br>", $val->tietoja).'</div>';
-		      }
-
-		      $sel .= $tplista;
-		      $sel .= '
-				</div>';
-		    }
-
-		    $this->_sendResponse(200, $sel);
-		    exit;
+			if( $new_login ){
+				$return = ["return" => $sel];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, $sel);
+			}
+		    
+			exit;
 	        }
+		//     CHECK tvuoro -->
 
+		// <-- CHECK uusiviesti
 	        if($_POST['check'] == 'uusiviesti'){
-
-		    $model = new Viestinta;
-		    $model->admin = "tt_".$ttekija->id.",".$this->etuSukunimi($ttekija->id);
-		    $model->status = 3;
-		    $model->tekija = "toimisto";
+			$model = new Viestinta;
+			$model->admin = "tt_".$ttekija->id.",".$this->etuSukunimi($ttekija->id);
+			$model->status = 3;
+			$model->tekija = "toimisto";
 	
-		    $viesti = '';
-		    if(isset($_POST['viesti']))
-		    $viesti .= $_POST['viesti'];
+			$viesti = '';
+			if(isset($_POST['viesti']))
+				$viesti .= $_POST['viesti'];
+			$model->viesti = date("d.m H:i").", ".$this->etuSukunimi($ttekija->id).": ".$viesti;
+			if($model->save())
+				$str = "Viestisi vastaanotettu";
+			else
+				$str = "Ei onnistuu";
 
-		    $model->viesti = date("d.m H:i").", ".$this->etuSukunimi($ttekija->id).": ".$viesti;
+			if( $new_login ){
+				$return = ["return" => $str];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, $str);
+			}
+			exit;
+		}
+		//     CHECK uusiviesti -->
 
-		    if($model->save())
-		       $this->_sendResponse(200, "Viestisi vastaanotettu");
-		    else
-		       $this->_sendResponse(200, "Ei onnistuu");
-		    exit;
-	        }
-
-
-	        if($_POST['check'] == 'oleneksynyt'){
-
-		    $model = new Viestinta;
-		    $model->admin = "tt_".$ttekija->id.",".$this->etuSukunimi($ttekija->id);
-		    $model->status = 3;
-		    $model->tekija = "toimisto";
+		// <-- CHECK oleneksynyt
+		if($_POST['check'] == 'oleneksynyt'){
+			$model = new Viestinta;
+			$model->admin = "tt_".$ttekija->id.",".$this->etuSukunimi($ttekija->id);
+			$model->status = 3;
+			$model->tekija = "toimisto";
 	
-		    $viesti = '';
-		    if(isset($_POST['viesti']))
-		    $viesti .= $_POST['viesti'];
-
+			$viesti = '';
+			if(isset($_POST['viesti']))
+				$viesti .= $_POST['viesti'];
 		    
-		    if(isset($_POST['my_location']) and !empty($_POST['my_location']))
-		    {
-		    $viesti .= '<br> <a href="http://maps.google.com/maps?q='.str_replace("/",",",$_POST['my_location']).'&ll='.str_replace("/",",",$_POST['my_location']).'&z=17" target="_blank">KARTTA</a>';
-		    }
-		    
+			if(isset($_POST['my_location']) and !empty($_POST['my_location'])){
+				$viesti .= '<br> <a href="http://maps.google.com/maps?q='.str_replace("/",",",$_POST['my_location']).'&ll='.str_replace("/",",",$_POST['my_location']).'&z=17" target="_blank">KARTTA</a>';
+			}
+			$model->viesti = date("d.m H:i").", ".$this->etuSukunimi($ttekija->id).": ".$viesti;
 
-		    $model->viesti = date("d.m H:i").", ".$this->etuSukunimi($ttekija->id).": ".$viesti;
+			if($model->save())
+				$str = "Viestisi vastaanotettu";
+			else
+				$str = "Ei onnistuu";
 
-		    if($model->save())
-		       $this->_sendResponse(200, "Viestisi vastaanotettu");
-		    else
-		       $this->_sendResponse(200, "Ei onnistuu");
-		    exit;
+			if( $new_login ){
+				$return = ["return" => $str];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, $str);
+			}
+			exit;
 	        }
+		//     CHECK oleneksynyt -->
 
+		// <-- CHECK uusi checkviesti
+		if($_POST['check'] == 'checkviesti'){
 
-	        if($_POST['check'] == 'checkviesti'){
+			$criteria = new CDbCriteria();
+			$criteria->order = " id DESC,status = '0' DESC LIMIT 20";
+			$criteria->condition = " tekija = '".$ttekija->id."' and status = '0' ";
+			$viestinta = Viestinta::model()->findAll($criteria);
 
-		    $criteria = new CDbCriteria();
-		    $criteria->order = " id DESC,status = '0' DESC LIMIT 20";
-		    $criteria->condition = " tekija = '".$ttekija->id."' and status = '0' ";
-	            $viestinta = Viestinta::model()->findAll($criteria);
+			if( count($viestinta) > 0 ){ 
+				$on = '<a href="viestinta.html"><div class="alert alert-warning text-center"><h2><i class="glyphicon glyphicon-envelope"></i>&nbsp;&nbsp;&nbsp;<b>Sinulla on lukematon viesti</b></h2></div></a>';
+			} else { 
+				$on = '';
+			}
 
-		    if(empty($viestinta))
-		    {
-		    $this->_sendResponse(200, 'ei tuloksia');
-		    exit;
-		    }
-
-		    $sel = 0;
-		    foreach($viestinta as $count)
-		    $sel += 1;
-
-		    if($sel > 0){ 
-
-				$on = '<br><div class="row">
-		  		  <div class="col-sm-12">
-				    <div class="well">
-				      <div class="card-content black-text">
-				        <center><a href="viestinta.html"><h2><i class="glyphicon glyphicon-envelope"></i>&nbsp;&nbsp;&nbsp;<b>Sinulla on lukematon viesti</b></h2></a></center>
-				      </div>
-				    </div>
-				   </div>
-				  </div>';
-
-		    } else { 
-  		      $on = '';
-		    }
-
-		    $this->_sendResponse(200, $sel."//".$on);
-		exit;
+			if( $new_login ){
+				$return = ["count" => count($viestinta), "return" => $on];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, count($viestinta)."//".$on);
+			}
+			exit;
 	        }
+		//     CHECK uusi checkviesti -->
 
+		// <-- CHECK viestinta
+		if($_POST['check'] == 'viestinta'){
+			$criteria = new CDbCriteria();
+			$criteria->order = " id DESC,status = '0' LIMIT 20";
+			$criteria->condition = " tekija = '".$ttekija->id."' ";
+			$viestinta = Viestinta::model()->findAll($criteria);
 
-	        if($_POST['check'] == 'viestinta'){
+			if(empty($viestinta)){
+				if( $new_login ){
+					$return = ["return" => 'Ei tuloksia'];
+					$this->_sendResponse(200, CJSON::encode($return));
+				} else {
+					$this->_sendResponse(200, 'ei tuloksia');
+				}
+				exit;
+			}
 
-		    $criteria = new CDbCriteria();
-		    $criteria->order = " id DESC,status = '0' LIMIT 20";
-		    $criteria->condition = " tekija = '".$ttekija->id."' ";
-	            $viestinta = Viestinta::model()->findAll($criteria);
+			$sel = '';
+			$cl = '';
+			$admin = '';
 
-		    if(empty($viestinta))
-		    {
-		    $this->_sendResponse(200, 'ei tuloksia');
-		    exit;
-		    }
+			foreach($viestinta as $val){
+				if($val->status == '0')
+					$cl = ' <span class="btn btn-xs btn-success">Uusi</span>';
+				else
+					$cl = '';
 
-		    $sel = '';
-		    $cl = '';
-		    $admin = '';
-
-		    foreach($viestinta as $val)
-		    {
-		      if($val->status == '0')
-
-
-  			$cl = ' <span class="btn btn-xs btn-success">Uusi</span>';
-		      else
-  			$cl = '';
-
-		      $exAdmin = explode(",",$val->admin);
-		      if(isset($exAdmin[1]))
-  			$admin = $exAdmin[1];
-		      else
-  			$admin = $val->admin;
+			$exAdmin = explode(",",$val->admin);
+			if(isset($exAdmin[1]))
+				$admin = $exAdmin[1];
+			else
+				$admin = $val->admin;
 
 		     	$sel .= '<div class="well">
 				  <p>'.$cl.' <b>'.Yii::t('app', 'Keskustelu').': '.$val->id.'</b></p>
@@ -1168,106 +1220,107 @@ public function actionImei($dom)
 				  if(isset($exAdmin[0]) and !empty($exAdmin[0])){
 				  $sel .= '
 				  <br>
-
             			    <div class="input-group">
 			              <input type="text" class="form-control form-input" id="vastaus_'.$val->id.'">
 			              <div class="input-group-btn">
 			                <button class="viesti btn btn-primary btn-group" id="'.$val->id.'">'.Yii::t('app', 'vastaus').'</button>
 			              </div>
 			            </div>
-
-
 			  	  </div>
 				  ';
 				  }
+			}
 
-		    }
+			Viestinta::model()->updateAll(array('status'=>1),'tekija="'.$ttekija->id.'"');
 
-		    Viestinta::model()->updateAll(array('status'=>1),'tekija="'.$ttekija->id.'"');
-
-		    $this->_sendResponse(200, $sel);
-		exit;
+			if( $new_login ){
+				$return = ["return" => $sel];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, $sel);
+			}
+			exit;
 	        }
+		//     CHECK viestinta -->
 
-
+		// <-- CHECK vastaus
 	        if($_POST['check'] == 'vastaus' and isset($_POST['viestinID'])){
+			$viestinta = Viestinta::model()->findbypk($_POST['viestinID']);
+			$tekija = Tyontekijat::model()->findbypk($viestinta->tekija);
+			$viestinta->viesti = $viestinta->viesti."\n".date("d.m H:i").", ".$this->etuSukunimi($ttekija->id).": ".$_POST['vastText'];
+			$viestinta->status = 3;
+			$viestinta->save();
+			if( $new_login ){
+				$return = ["return" => $viestinta->viesti];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, $viestinta->viesti);
+			}
+			exit;
+	        }
+		//     CHECK vastaus -->
 
-	            $viestinta = Viestinta::model()->findbypk($_POST['viestinID']);
-		    $tekija = Tyontekijat::model()->findbypk($viestinta->tekija);
-	            $viestinta->viesti = $viestinta->viesti."\n".date("d.m H:i").", ".$this->etuSukunimi($ttekija->id).": ".$_POST['vastText'];
-	            $viestinta->status = 3;
-	            $viestinta->save();
-		    $this->_sendResponse(200, $viestinta->viesti);
-		    exit;
+		// <-- CHECK osoitevaihto
+		if($_POST['check'] == 'osoitevaihto'){
+
+			$criteria = new CDbCriteria();
+			$criteria->order = " osoite ";
+			$criteria->condition = " osoite like '%".$_POST['thisKey']."%' ";
+			$kohteet = Kohteet::model()->findAll($criteria);
+
+			$sel = '<select id="list" class="form-control input-lg list_osoitevaihto">';
+			$sel .= '<option id="valitseOsoite">'.Yii::t('app', 'Valitse osoite').'</option>';
+			foreach($kohteet as $kohde){
+
+				$osoite = '';
+				if(!empty($kohde->osoite))
+					$osoite .= $kohde->osoite;
+				if(!empty($kohde->pnumero))
+					$osoite .= ', '.$kohde->pnumero;
+				if(!empty($kohde->kaupunki))
+					$osoite .= ', '.$kohde->kaupunki;
+
+				$sel .= '<option value="'.$kohde->id.'">'.$osoite.'</option>';
+			}
+			$sel .= '</select>';
+
+			if( $new_login ){
+				$return = ["return" => $sel];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, $sel);
+			}
+			exit;
 	        }
 
+		// Tasta alkaa getfirstpage
+		if( ($new_login and $_POST['check'] == 'getfirstpage') or !$new_login){
+			if(isset($_POST['tag']) and $_POST['tag'] != '000000'){
+		  		$kohteet = Kohteet::model()->find(" tag_id='".$_POST['tag']."' ");
 
-	        if($_POST['check'] == 'osoitevaihto'){
+		    		if(isset($kohteet['osoite']) and !empty($kohteet['osoite'])){
+		      			$get_osoite = $kohteet['osoite'];
+		      			$kohdenID = $kohteet['id'];
+		    		} 
+			}
 
-		    $criteria = new CDbCriteria();
-		    $criteria->order = " osoite ";
-		    $criteria->condition = " osoite like '%".$_POST['thisKey']."%' ";
-	            $kohteet = Kohteet::model()->findAll($criteria);
+			if(isset($_POST['tag'])) $tag = $_POST['tag']; else $tag = '';
 
-		    $sel = '<select id="list" class="form-control input-lg list_osoitevaihto">';
-		    $sel .= '<option id="valitseOsoite">'.Yii::t('app', 'Valitse osoite').'</option>';
-		    foreach($kohteet as $kohde)
-		    {
-
-			$osoite = '';
-			if(!empty($kohde->osoite))
-			$osoite .= $kohde->osoite;
-			if(!empty($kohde->pnumero))
-			$osoite .= ', '.$kohde->pnumero;
-			if(!empty($kohde->kaupunki))
-			$osoite .= ', '.$kohde->kaupunki;
-
-		        $sel .= '<option value="'.$kohde->id.'">'.$osoite.'</option>';
-		    }
-		    $sel .= '</select>';
-
-		    $this->_sendResponse(200, $sel);
-		exit;
-	        }
-
-
-		if(isset($_POST['tag']) and $_POST['tag'] != '000000')
-		{
-		  $kohteet = Kohteet::model()->find(" tag_id='".$_POST['tag']."' ");
-
-		    if(isset($kohteet['osoite']) and !empty($kohteet['osoite']))
-		    {
-		      $get_osoite = $kohteet['osoite'];
-		      $kohdenID = $kohteet['id'];
-		    } 
-		} 
-
-
-
-	
-		if(isset($_POST['tag'])) $tag = $_POST['tag']; else $tag = '';
-
-
-		if(isset($_POST['avoinID'])) $avoinID = $_POST['avoinID']; else $avoinID = 0;
-		if(isset($_POST['appVersio'])) $appVersio = $_POST['appVersio']; else $appVersio = '';	
-		// <-- Jos versio yli 0.0.57
-		$explVersio = array();
-		$explVersio = explode(".", $appVersio);
-		//if( isset($explVersio[2]) and (int)$explVersio[2] >= 57 and (int)$avoinID > 0 )
-		if( (int)$avoinID > 0 )
-		{
-
-
-	    		$criteria = new CDbCriteria();
-	    		$criteria->condition = " id='".(int)$avoinID."' AND tid = '".$ttekija->id."' ";
-	           	$mobCheck = Mobile::model()->find($criteria);
-
-		  	if(isset($mobCheck->id) 
-				and ($mobCheck->status == 1 or $mobCheck->status == 2 or $mobCheck->status == 10))
+			if( (int)$avoinID > 0 ){
+	    			$criteria = new CDbCriteria();
+	    			$criteria->condition = " id='".(int)$avoinID."' AND tid = '".$ttekija->id."' ";
+			} else {
+	    			$criteria = new CDbCriteria();
+		    		$criteria->order = " loppui='' DESC, id DESC ";
+		    		$criteria->condition = " tid = '".$ttekija->id."' ";
+			}
+           		$mobCheck = Mobile::model()->find($criteria);
+		  	if(
+				isset($mobCheck->id) 
+				and ($mobCheck->status == 1 or $mobCheck->status == 2 or $mobCheck->status == 10)
+			)
 		  	{
-
 		    		if($mobCheck->loppui == '') $tila = 'avoina'; else $tila = 'suljettu';
-
 			    	if($mobCheck->status == 1 and $mobCheck->loppui == '')
 			    		$mobCheck->status = 1;
 			    	if($mobCheck->status == 2 and $mobCheck->loppui == '')
@@ -1275,57 +1328,38 @@ public function actionImei($dom)
 				if($mobCheck->status == 10 and $mobCheck->loppui == '')
 					$mobCheck->status = 10.1;
 
-				$this->_sendResponse(200, $mobCheck->status."//".$this->sp_1($mobCheck, $my_location)."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//uusi versio");
+				if( $new_login ){
+					$return = [
+						"status" => $mobCheck->status,
+						"sp_1" => $this->sp_1($mobCheck, $my_location),
+						"osoite" => $get_osoite,
+						"tekijan_nimi" => $this->etuSukunimi($ttekija->id),
+					];
+					$this->_sendResponse(200, CJSON::encode($return));
+				} else {
+					$this->_sendResponse(200, $mobCheck->status."//".$this->sp_1($mobCheck, $my_location)."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//uusi versio");
+				}
 
 			} else {
-                     		$this->_sendResponse(200, "3//null//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//uusi versio");
+				if( $new_login ){
+					$return = [
+						"status" => 3,
+						"sp_1" => "null",
+						"osoite" => $get_osoite,
+						"tekijan_nimi" => $this->etuSukunimi($ttekija->id),
+					];
+					$this->_sendResponse(200, CJSON::encode($return));
+				} else {
+                     			$this->_sendResponse(200, "3//null//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//uusi versio");
+				}
 			}
+		} // getfirstpage
+	exit;
+	}
+	// Check loppu -->
 
-		exit;
-		}
-		// Jos versio yli 0.0.57 -->
-
-		// <-- Jos versio vanhempi kun  0.0.57
-	    	$criteria = new CDbCriteria();
-	    	$criteria->order = " loppui='' DESC, id DESC ";
-	    	$criteria->condition = " tid = '".$ttekija->id."' "; //AND loppui=''
-
-           	$mobCheck = Mobile::model()->find($criteria);
-		$kohdenID = '';
-		$get_osoite = '';
-
-
-		  if(isset($mobCheck->id) 
-			and ($mobCheck->status == 1 or $mobCheck->status == 2 or $mobCheck->status == 10))
-		  {
-
-		    	if($mobCheck->loppui == '') $tila = 'avoina'; else $tila = 'suljettu';
-
-		    	if($mobCheck->status == 1 and $mobCheck->loppui == '')
-		    		$mobCheck->status = 1;
-		    	if($mobCheck->status == 2 and $mobCheck->loppui == '')
-				$mobCheck->status = 2.1;
-			if($mobCheck->status == 10 and $mobCheck->loppui == '')
-				$mobCheck->status = 10.1;
-
-                       	$this->_sendResponse(200, $mobCheck->status."//".$this->sp_1($mobCheck, $my_location)."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//vanha versio");
-
-		  } else {
-                     	$this->_sendResponse(200, "3//null//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//vanha versio");
-		  }
-		// Jos versio vanhempi kun  0.0.57 -->
-
-	     	exit;
-	    } // if(isset($_POST['check']))
-	    // Check loppu -->
-
-
-
-	// <-- Mob finder
-	// <-- Jos versio yli 0.0.57
+	// <-- INSERT or UPDATE
 	$checkVersio = '';
-	if(isset($_POST['avoinID'])) $avoinID = $_POST['avoinID']; else $avoinID = 0;
-	if(isset($_POST['appVersio'])) $appVersio = $_POST['appVersio']; else $appVersio = '';	
 	$explVersio = array();
 	$explVersio = explode(".", $appVersio);
 	if( (int)$avoinID > 0 )
@@ -1337,10 +1371,7 @@ public function actionImei($dom)
 			if(isset($explVersio[2]))
 			$checkVersio = (int)$explVersio[2];	
 
-	} else { // Jos versio yli 0.0.57 -->
-
-
-	    		// <-- jos on avoin kohde
+	} else {
 			$criteria = new CDbCriteria();
 	    		$criteria->order = " 
 				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') 
@@ -1356,8 +1387,8 @@ public function actionImei($dom)
 	}
 	// Mob finder -->
 
-
-	    if(isset($mob->id)){
+	// <-- jos on avoin kohde
+	if(isset($mob->id)){
 
                 $mobupdate = Mobile::model()->findbypk($mob->id);
 		$log_old = $mobupdate->attributes;
@@ -1369,9 +1400,6 @@ public function actionImei($dom)
 			$mobupdate->tyo_erittelyt = '';
 		}
 
-                //$this->_sendResponse(200, json_encode($_POST['tyo_erittelyt']));
-	        //exit;
-
 		$vanhaViesti = '';
 		if($mobupdate->viesti != '')
 		$vanhaViesti = $mobupdate->viesti."\n";
@@ -1381,7 +1409,7 @@ public function actionImei($dom)
 		$kesto = '';
 		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
 
-		  $ms = '';
+		$ms = '';
 		if($mob->status == 1)
 		  $ms = 'Työ';
 		if($mob->status == 2)
@@ -1404,7 +1432,14 @@ public function actionImei($dom)
 				and $explAsNum[1] != $explAsNumPost[1] 
 			)
 			{
+				if( $new_login ){
+				$return = [
+					"tagnumerror" => "Voit lopettaa osoitessa <b>".$mob->kohde_kannasta
+				];
+				$this->_sendResponse(200, CJSON::encode($return));
+				} else {
 		                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//tagnumerror//null//update");
+				}
 			        exit;
 			}
 			// Check TAG -->
@@ -1418,10 +1453,8 @@ public function actionImei($dom)
 			exit;
 		}
 
-
 		$save = '';
-		if($mobupdate->save())
-		{
+		if($mobupdate->save()){
 			// <-- Auto hyvaksynta
 			$this->autoHyvaksynta($mobupdate->id);
 			//     Auto hyvaksynta -->
@@ -1441,18 +1474,28 @@ public function actionImei($dom)
 			//     LOG -->
 
 			$save = 'ok';
+			if( $new_login ){
+				$return = [
+					"tilanne_" => $ms,
+					"id" => $mobupdate->id,
+					"status" => $mobupdate->status,
+					"kohde_kannasta" => $mobupdate->kohde_kannasta,
+					"kesto" => $kesto,
+					"is_new" => "false"
+				];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+                		$this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto."//update//".$save."//".$checkVersio);
+			}
 		} else {
-			$save = var_dump($mobupdate->getErrors());
+			$this->_sendResponse(200, CJSON::encode($mobupdate->getErrors()));
 		}
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto."//update//".$save."//".$checkVersio);
 		exit;
+	}
+	// jos on avoin kohde -->
 
-	    }
-	    // jos on avoin kohde -->
-
-
-	    // <-- uusi rivi
-	    if(isset($ttekija->id) and !empty($_POST['aloitan']) and empty($_POST['loppui'])){
+	// <-- uusi rivi
+	if(isset($ttekija->id) and !empty($_POST['aloitan']) and empty($_POST['loppui'])){
 
 		// <-- Matka, Lounastauko ja Osoite mukaan
 		if($_POST['status'] == 2 and $asetukset->app_matka_osoite != 1 and (!empty($_POST['kohdenID']) or !empty($_POST['kohde_kannasta'])))
@@ -1496,23 +1539,19 @@ public function actionImei($dom)
 			$mobinsert->tyo_erittelyt = '';
 		}
 
-                if($mobinsert->save())
-		{
-
-				// <-- LOG
-				if( isset($mobinsert->id) )
-				{
-				$model_log 	= 'Mob';
-				$name_log 	= 'Tunnit';
-				$status_log 	= 'Create from APP';
+                if($mobinsert->save()){
+			// <-- LOG
+			if( isset($mobinsert->id) ){
+			$model_log 	= 'Mob';
+			$name_log 	= 'Tunnit';
+			$status_log 	= 'Create from APP';
 	
-					$old_values = null;
-					$new_values = json_encode($mobinsert->attributes);
-					$site = Yii::app()->createController('Site');
-					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-				}
-				//     LOG -->
-
+			$old_values = null;
+			$new_values = json_encode($mobinsert->attributes);
+			$site = Yii::app()->createController('Site');
+			$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			//     LOG -->
 
 			$loppu = '';
 			$sekForSignal = '';
@@ -1536,20 +1575,33 @@ public function actionImei($dom)
 			}
 			// Timer -->
 
-
-	                $this->_sendResponse(200, $mobinsert->id."//".$mobinsert->kohde_kannasta."//new//".$mobinsert->kohdenID."//".$loppu."//".$sekForSignal);
-
+			if( $new_login ){
+				$return = [
+					"id" => $mobinsert->id,
+					"kohde_kannasta" => $mobinsert->kohde_kannasta,
+					"is_new" => "true",
+					"kohdenID" => $mobinsert->kohdenID,
+					"loppu" => $loppu,
+					"sekForSignal" => $sekForSignal,
+				];
+				$this->_sendResponse(200, CJSON::encode($return));
+				exit;
+			} else {
+		                $this->_sendResponse(200, $mobinsert->id."//".$mobinsert->kohde_kannasta."//new//".$mobinsert->kohdenID."//".$loppu."//".$sekForSignal);
+				exit;
+			}
 		} else {
 	                $this->_sendResponse(200, "mobinsert Error!");
+			exit;
 		}
 
 
-	    } else {
-                $this->_sendResponse(200, "Kaikki on suljettu, ei ole mitään avoina");
-	      exit;
-	    }
-	    // uusi rivi -->
-            break;
+	} else {
+		$this->_sendResponse(200, "Kaikki on suljettu, ei ole mitään avoina");
+		exit;
+	}
+	// uusi rivi -->
+	break;
         default:
             $this->_sendResponse(501, 
                 sprintf('Mode <b>create</b> is not implemented for model <b>%s</b>',
@@ -1565,7 +1617,7 @@ public function actionImei($dom)
 			$this->_sendResponse(200, CJSON::encode(array("error" => "sp_1 function error")));
 			exit;
 		}
-
+           	$tv = Tyovuoroot::model()->findByPk($mobCheck->tv_id);
 		$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
 		$kartta = '';
 		if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey) and isset($mobCheck->kohteet->id)){
@@ -1579,21 +1631,20 @@ public function actionImei($dom)
 		}
 
 		$nykyinenKesto = 0;
-		if(strtotime($mobCheck->aloitan) > 0)
-		{
+		if(strtotime($mobCheck->aloitan) > 0){
 			$nykyinenKesto = time()-strtotime($mobCheck->aloitan);
 			$nykyinenKesto = sprint($nykyinenKesto);
 		}
 		$sp1 = 'Kesto: <b>'.$nykyinenKesto.'</b>';
 		$sp1 .= '<div class="text-center">';
 		$sp1 .= '<p>'.$mobCheck->kohde_kannasta.'</p>';
+		if( isset($tv->id) ){
+			$sp1 .= '<p class="text-danger">Muistakaa lopettaa klo. '.$tv->loppu.'</p>';
+		}
 		if(!empty($kartta))
 			$sp1 .= '<p>'.$kartta.'</p>';
 
-		$sp1 .= '<p><a href="https://www.google.com/maps/place/'.urlencode($full_addr).'">'.Yii::t('main', 'Näytä kartalla').'</a></p>';
-
-           	$tv = Tyovuoroot::model()->findByPk($mobCheck->tv_id);
-		if(isset($tv->id) and is_array(json_decode($tv->tyo_erittelyt, true))){
+		if( isset($tv->id) and is_array(json_decode($tv->tyo_erittelyt, true)) ){
 			$sp1 .= '<br><label>Työ-erittelyt:</label>';
 			 foreach(json_decode($tv->tyo_erittelyt, true) as $k => $v){
 			 $sp1 .= '
