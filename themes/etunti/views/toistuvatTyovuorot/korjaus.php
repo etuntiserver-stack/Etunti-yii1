@@ -1,18 +1,4 @@
 <?php
-// AIzaSyBR8t3Xq2pvDlRvNBdwUFBYFGrUAuMWblI
-$k = Kohteet::model()->findbypk(10);
-		$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
-		$kartta = '';
-		if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey)){
-			$full_addr = $k->osoite.' '.$k->pnumero.' '.$k->kaupunki;
-			$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($full_addr).'&language=fi&sensor=false&key='.$asetuksetForAll->googlemaps_apikey;
-			$json = file_get_contents($json_url);
-			$obj = json_decode($json);
-			if( isset($obj->results[0]->geometry->location->lat) ){
-				$kartta = '<p><a href="geo:'.$obj->results[0]->geometry->location->lat.",".$obj->results[0]->geometry->location->lng.'">'.Yii::t('main', 'Näytä kartalla').'</a></p>';
-			}
-		}
-echo $json;
 exit;
 /*
 $site = Yii::app()->createController('Site');
