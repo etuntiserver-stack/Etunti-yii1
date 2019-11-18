@@ -4,15 +4,32 @@
 class Procountor extends CComponent
 {
   private $settings;
-  private $redirect_uri        = 'http://etunti.local/index.php/asetukset/procountor_auth';
-  private $api_base_url        = 'https://api-test.procountor.com/api';
-  private $client_id           = 'etuntiTestClient';
-  private $client_secret       = 'testsecret_W2ir6fiE4fdtO3Htevx9';
+  private $redirect_uri;
+  private $api_base_url;
+  private $client_id;
+  private $client_secret;
 
   /** Initialize Procountor. */
   public function __construct()
   {
     $this->settings = Asetukset::model()->findByPk(1);
+
+    // If localhost, use testing environment.
+    if (in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1'])) {
+      $this->redirect_uri  = 'http://etunti.local/index.php/asetukset/procountor_auth';
+      $this->api_base_url  = 'https://api-test.procountor.com/api';
+      $this->client_id     = 'etuntiTestClient';
+      $this->client_secret = 'testsecret_W2ir6fiE4fdtO3Htevx9';
+    }
+    // Specify client id and secret for production.
+    else {
+      $this->redirect_uri  = 'https://app.etunti.fi/index.php/asetukset/procountor_auth';
+      $this->api_base_url  = 'https://api.procountor.com/api';
+      $this->client_id     = 'etuntiClient';
+      $this->client_secret = 'secret_ib4Phz9XGYAoBrim7RQxUsuaarFCOH3Dky1ZP8vX6eHyJUCnox';
+    }
+
+    // Encode redirect URI to be used for authentication.
     $this->redirect_uri = urlencode($this->redirect_uri);
   }
 
