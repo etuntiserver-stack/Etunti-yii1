@@ -584,7 +584,7 @@ $('.ryhmat').multiselect({
 	<br><h2><?php echo Yii::t('main','PROCOUNTOR tunnukset'); ?></h2><br>
 	<div class="section fill mb5">
 		<?php $redirect = Yii::createComponent('Procountor')->getRedirectUri(); ?>
-		<p><?php echo CHtml::link('Kirjaudu Procountoriin', "https://api-test.procountor.com/login?response_type=code&client_id=etuntiTestClient&redirect_uri=$redirect&state=" . strtolower(Yii::app()->user->domain), ['class' => 'btn btn-lg btn-primary myBgColors']); ?></p>
+		<p><?php echo CHtml::link('Kirjaudu Procountoriin', "https://api.procountor.com/login?response_type=code&client_id=etuntiClient&redirect_uri=$redirect&state=" . strtolower(Yii::app()->user->domain), ['class' => 'btn btn-lg btn-primary myBgColors']); ?></p>
 	</div>
 	<?php
 		// Auth success message
