@@ -336,16 +336,14 @@ function num($val){
 	
 			if(isset($_POST['luoPDF']))
 			{
-/*
-			        $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en', 'true', 'UTF-8', array(3,10,5,10));
-				$html2pdf->setDefaultFont('Arial');
-			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true));
-			        $html2pdf->Output();
-*/
+
 				$content = '<link rel="stylesheet" type="text/css" href="../../css/raportit_table2.css">';
 				$content .= $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'), true);
 				//echo $content;
-				$this->transformContentTo($content, 'pdf');
+				//$this->transformContentTo($content, 'pdf');
+
+				$header = '';
+				$this->transformHtmlTo($header, $content, 'pdf');
 			        exit;
 			}
 
