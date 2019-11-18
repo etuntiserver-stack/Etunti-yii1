@@ -1,13 +1,4 @@
 <?php
-// AIzaSyBR8t3Xq2pvDlRvNBdwUFBYFGrUAuMWblI
-$_POST['email'] = 'laptopsr@gmail.com';
-$_POST['salasana'] = 'KristinA1';
-
-$adm_salasana = password_hash($_POST['salasana'], PASSWORD_BCRYPT);
-if (password_verify('KristinA1', $adm_salasana))
-echo 'true';
-
-
 exit;
 /*
 $site = Yii::app()->createController('Site');
