@@ -65,7 +65,7 @@ public function actionLogin($dom){
 			$criteria->condition = " 
 				aktiivinen=1
 				AND salasana!=''
-				AND tekijan_email='".$_POST['email']."' AND salasana='".$_POST['salasana']."'
+				AND tekijan_email='".$_POST['email']."' AND SHA2(salasana, 256)='".$_POST['salasana']."'
 			";
 			$t = Tyontekijat::model()->find($criteria);
 			if( isset($t->id) ){
@@ -100,8 +100,6 @@ public function actionLogin($dom){
         $this->_sendResponse(200, CJSON::encode($rows));
     }
 }
-
-
 
 public function actionCheck_admin($dom)
 
