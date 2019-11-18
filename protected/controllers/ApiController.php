@@ -847,8 +847,8 @@ public function actionImei($dom)
 				AND piilota_mobiilista!=1
 				AND (peruutettu=0 OR peruutettu IS NULL)
 				AND (status=3 OR status=2 OR status=10)
-				AND id NOT IN( SELECT tv_id FROM sivexkuitti WHERE tv_id!=0 AND tv_id IS NOT NULL AND tid='".$ttekija->id."' )
 			";
+			// AND id NOT IN( SELECT tv_id FROM sivexkuitti WHERE tv_id!=0 AND tv_id IS NOT NULL AND tid='".$ttekija->id."' )
 			$tvuoro = Tyovuoroot::model()->findAll($criteria);
 
 			if( count($tvuoro) == 0 ){
