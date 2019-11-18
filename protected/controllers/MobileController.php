@@ -350,8 +350,10 @@ function num($val){
 			if(isset($_POST['luoExcel']))
 			{
 			        $html = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true);
-				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
-				$this->htmlToXls($match[0][0], 'luetut');
+				//preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
+				//$this->htmlToXls($match[0][0], 'luetut');
+				$header = '';
+				$this->transformHtmlTo($header, $html, 'xls');
 			        exit;
 			}
 
@@ -430,15 +432,19 @@ function num($val){
 				*/
 				$content = '<link rel="stylesheet" type="text/css" href="../../css/raportit_table2.css">';
 				$content .= $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Hyväksytyt'), true);
-				$this->transformContentTo($content, 'pdf');
+				//$this->transformContentTo($content, 'pdf');
+				$header = '';
+				$this->transformHtmlTo($header, $content, 'pdf');
 			        exit;
 			}
 
 			if(isset($_POST['luoExcel']))
 			{
 			        $html = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Hyväksytyt'),true);
-				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
-				$this->htmlToXls($match[0][0], 'toteutuneet');
+				//preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
+				//$this->htmlToXls($match[0][0], 'toteutuneet');
+				$header = '';
+				$this->transformHtmlTo($header, $html, 'xls');
 			        exit;
 			}
 
@@ -506,18 +512,26 @@ function num($val){
 
 			if(isset($_POST['luoPDF']))
 			{
+/*
 			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en', 'true', 'UTF-8', array(3,10,5,10));
 				$html2pdf->setDefaultFont('Arial');
 			        $html2pdf->WriteHTML($this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model, 'from'=>$_POST['from'],'to'=>$_POST['to']),true));
 			        $html2pdf->Output();
+
+*/
+				$content = $this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model, 'from'=>$_POST['from'],'to'=>$_POST['to']),true);
+				$header = '';
+				$this->transformHtmlTo($header, $content, 'pdf');
 			        exit;
 			}
 
 			if(isset($_POST['luoExcel']))
 			{
 			        $html = $this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model, 'from'=>$_POST['from'],'to'=>$_POST['to']),true);
-				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
-				$this->htmlToXls($match[0][0], 'LuetutToteutuneetEro');
+				//preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
+				//$this->htmlToXls($match[0][0], 'LuetutToteutuneetEro');
+				$header = '';
+				$this->transformHtmlTo($header, $html, 'xls');
 			        exit;
 			}
 
@@ -563,18 +577,25 @@ function num($val){
 
 			if(isset($_POST['luoPDF']))
 			{
+/*
 			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 				$html2pdf->setDefaultFont('Arial');
 			        $html2pdf->WriteHTML($this->renderPartial('vuosilomat_pdf', array('model' => $model),true));
 			        $html2pdf->Output();
+*/
+				$content = $this->renderPartial('vuosilomat_pdf', array('model' => $model),true);
+				$header = '';
+				$this->transformHtmlTo($header, $content, 'pdf');
 			        exit;
 			}
 
 			if(isset($_POST['luoExcel']))
 			{
 			        $html = $this->renderPartial('vuosilomat_pdf', array('model' => $model),true);
-				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
-				$this->htmlToXls($match[0][0], 'lomatJaPoissaolot');
+				//preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
+				//$this->htmlToXls($match[0][0], 'lomatJaPoissaolot');
+				$header = '';
+				$this->transformHtmlTo($header, $html, 'xls');
 			        exit;
 			}
 
