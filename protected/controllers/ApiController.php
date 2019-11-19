@@ -747,7 +747,7 @@ public function actionImei($dom)
 			$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/".$dom."/".$ttekija->id.".jpg";
 			$body .= '<div class="well">';
 			$body .= '<div class="row"><div class="col-xs-9">';
-			$body .= '<div class="text-center"><img src="'.$asetukset->logon_polkku.'" height="50px"></div>';
+			$body .= '<img src="'.$asetukset->logon_polkku.'" height="50px">';
 			$body .= '<h3>'.$firma->yritys.'</h3>';
 			$body .= '<p>Y-tunnus: '.$firma->y_tunnus.'</p>';
 			$body .= $ttekija->tekijan_nimi.' '.$ttekija->sukunimi;
