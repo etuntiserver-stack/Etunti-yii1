@@ -630,6 +630,8 @@ public function actionImei($dom)
 	if(isset($_POST['avoinID'])){ unset($_POST['avoinID']); }
 	if(isset($_POST['appVersio'])) $appVersio = $_POST['appVersio']; else $appVersio = 0;
 	if(isset($_POST['appVersio'])){ unset($_POST['appVersio']); }
+	if(isset($_POST['tv_id'])) $post_tv_id = $_POST['tv_id']; else $post_tv_id = 0;
+
 
 	// <-- Check Tyontekija
 	if(isset($_POST['tid']) ){
@@ -1479,7 +1481,8 @@ public function actionImei($dom)
 					"status" => $mobupdate->status,
 					"kohde_kannasta" => $mobupdate->kohde_kannasta,
 					"kesto" => $kesto,
-					"is_new" => "false"
+					"is_new" => "false",
+					"tv_id" => (int)$mobupdate->tv_id,
 				];
 				$this->_sendResponse(200, CJSON::encode($return));
 			} else {
@@ -1551,25 +1554,23 @@ public function actionImei($dom)
 			}
 			//     LOG -->
 
-			$loppu = '';
-			$sekForSignal = '';
+			$loppu 		= '';
+			$sekForSignal 	= '';
 			// <-- Timer
-			if(isset($mobinsert->kohdenID))
-			{
-			    $criteria = new CDbCriteria();
-			    $criteria->order = "alku DESC"; 
-			    $criteria->condition = " 
-					tid = '".$ttekija->id."' and kohde = '".$mobinsert->kohdenID."'
-					and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
-			    ";
-		            $tvuoro = Tyovuoroot::model()->find($criteria);
+			if( $post_tv_id > 0 ){
+				$criteria = new CDbCriteria();
+				$criteria->order = "alku DESC"; 
+				$criteria->condition = " 
+					tid = '".$ttekija->id."' 
+					AND id='".$post_tv_id."'
+					AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
+				";
+				$tvuoro = Tyovuoroot::model()->find($criteria);
 
-			    if(isset($tvuoro->id))
-			    {
-				$loppu = date("d.m.Y H:i",strtotime($tvuoro->pvm." ".$tvuoro->loppu));
-				$sekForSignal = strtotime($tvuoro->pvm." ".$tvuoro->loppu)-time();
-			    }
-	
+				if(isset($tvuoro->id)){
+					$loppu = date("d.m.Y H:i",strtotime($tvuoro->pvm." ".$tvuoro->loppu));
+					$sekForSignal = strtotime($tvuoro->pvm." ".$tvuoro->loppu)-time();
+				}
 			}
 			// Timer -->
 
@@ -1579,6 +1580,7 @@ public function actionImei($dom)
 					"kohde_kannasta" => $mobinsert->kohde_kannasta,
 					"is_new" => "true",
 					"kohdenID" => $mobinsert->kohdenID,
+					"tv_id" => (isset($tvuoro->id))? (int)$tvuoro->id : 0,
 					"loppu" => $loppu,
 					"sekForSignal" => $sekForSignal,
 				];
