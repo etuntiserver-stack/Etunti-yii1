@@ -746,13 +746,13 @@ public function actionImei($dom)
 			$body = '<h2>'.Yii::t('app', 'Henkilökortti').'</h2>';
 			$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/".$dom."/".$ttekija->id.".jpg";
 			$body .= '<div class="well">';
-			$body .= '<div class="row"><div class="col-xs-9">';
+			$body .= '<div class="row"><div class="col-xs-8">';
 			$body .= '<img src="'.$asetukset->logon_polkku.'" height="50px">';
 			$body .= '<h3>'.$firma->yritys.'</h3>';
 			$body .= '<p>Y-tunnus: '.$firma->y_tunnus.'</p>';
 			$body .= $ttekija->tekijan_nimi.' '.$ttekija->sukunimi;
 			$body .= '<p>Veronumero: '.$tyosuhdet->veronumero.'</p>';
-			$body .= '</div><div class="col-xs-3"><div class="pull-right">';
+			$body .= '</div><div class="col-xs-4"><div class="pull-right">';
 			if (file_exists($filepath)){
 				$imageData = base64_encode(file_get_contents($filepath));
 				$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
