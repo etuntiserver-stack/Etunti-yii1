@@ -1639,7 +1639,7 @@ public function actionImei($dom)
 		$sp1 .= '<div class="text-center">';
 		$sp1 .= '<p>'.$mobCheck->kohde_kannasta.'</p>';
 		if( isset($tv->id) ){
-			$sp1 .= '<p class="text-danger">Muistakaa lopettaa klo. '.$tv->loppu.'</p>';
+			$sp1 .= '<p class="text-danger">Muista lopettaa klo. '.$tv->loppu.'</p>';
 		}
 		if(!empty($kartta))
 			$sp1 .= '<p>'.$kartta.'</p>';
