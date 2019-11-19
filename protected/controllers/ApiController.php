@@ -743,7 +743,7 @@ public function actionImei($dom)
 				$this->_sendResponse(200, CJSON::encode($return));
 				exit;
 			}
-			$body = '<h2>'.Yii::t('app', 'Työntekijän Henkilökortti').'</h2>';
+			$body = '<h2>'.Yii::t('app', 'Työntekijän henkilökortti').'</h2>';
 			$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/".$dom."/".$ttekija->id.".jpg";
 			$body .= '<div class="well">';
 			$body .= '<div class="row"><div class="col-xs-9">';
