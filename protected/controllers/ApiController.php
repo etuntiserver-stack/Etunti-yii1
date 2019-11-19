@@ -373,6 +373,7 @@ public function actionLang($dom)
 		'LOPETA' => Yii::t('app', 'LOPETA'),
 		'osoite' => Yii::t('app', 'Osoite'),
 		'lyhyt_viesti' => Yii::t('app', 'lyhyt_viesti'),
+		'kirjaudu' => Yii::t('app', 'Lähetä tunnukset'),
 
 		/* Viestinta */
 		'LangViestinta' => Yii::t('app', 'Viestintä'),
