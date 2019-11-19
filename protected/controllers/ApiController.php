@@ -757,8 +757,10 @@ public function actionImei($dom)
 				$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
 				$body .= '<img src="'.$src.'" class="img-thumbnail" style="border: none">';
 			}
+			$body .= '</div></div></div>';
+			$body .= '<div class="row"><div class="col-xs-12">';
+			$body .= '<br><p>Veronumero: <b>'.$tyosuhdet->veronumero.'</b></p>';
 			$body .= '</div></div>';
-			$body .= '<p>Veronumero: <b>'.$tyosuhdet->veronumero.'</b></p>';
 			$body .= '</div>';
 			if( $new_login ){
 				$return = ["return" => $body];
