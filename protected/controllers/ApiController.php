@@ -751,7 +751,6 @@ public function actionImei($dom)
 			$body .= '<h3>'.$firma->yritys.'</h3>';
 			$body .= '<p>Y-tunnus: <b>'.$firma->y_tunnus.'</b></p>';
 			$body .= '<p><h4>'.$ttekija->tekijan_nimi.' '.$ttekija->sukunimi.'</h4></p>';
-			$body .= '<p>Veronumero: <b>'.$tyosuhdet->veronumero.'</b></p>';
 			$body .= '</div><div class="col-xs-6"><div class="pull-right">';
 			if (file_exists($filepath)){
 				$imageData = base64_encode(file_get_contents($filepath));
@@ -759,6 +758,7 @@ public function actionImei($dom)
 				$body .= '<img src="'.$src.'" class="img-thumbnail" style="border: none">';
 			}
 			$body .= '</div></div></div>';
+			$body .= '<p>Veronumero: <b>'.$tyosuhdet->veronumero.'</b></p>';
 			$body .= '</div>';
 			if( $new_login ){
 				$return = ["return" => $body];
