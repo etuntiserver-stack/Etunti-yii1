@@ -729,6 +729,45 @@ public function actionImei($dom)
 	        }
 		//     CHECK getObjbyTag -->
 
+		// <-- CHECK henkilokortti
+		if($_POST['check'] == 'henkilokortti'){
+			$firma = Domainit::model()->find(" domain='".strtolower($dom)."' ");
+			if( !isset($firma->id) ){
+				$return = ["return" => "Domain ei löyty"];
+				$this->_sendResponse(200, CJSON::encode($return));
+				exit;
+			}
+			$tyosuhdet = Tyosuhdet::model()->find(" tid='".$ttekija->id."' ");
+			if( !isset($tyosuhdet->id) ){
+				$return = ["return" => "Työsuhteet ei löyty"];
+				$this->_sendResponse(200, CJSON::encode($return));
+				exit;
+			}
+			$body = '<h2>'.Yii::t('app', 'Työntekijän Henkilökortti').'</h2>';
+			$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/".$dom."/".$ttekija->id.".jpg";
+			$body .= '<div class="well">';
+			$body .= '<div class="row"><div class="col-xs-9">';
+			$body .= '<div class="text-center"><img src="'.$asetukset->logon_polkku.'" height="50px"></div>';
+			$body .= '<h3>'.$firma->yritys.'</h3>';
+			$body .= '<p>Y-tunnus: '.$firma->y_tunnus.'</p>';
+			$body .= $ttekija->tekijan_nimi.' '.$ttekija->sukunimi;
+			$body .= '<p>Veronumero: '.$tyosuhdet->veronumero.'</p>';
+			$body .= '</div><div class="col-xs-3"><div class="pull-right">';
+			if (file_exists($filepath)){
+				$imageData = base64_encode(file_get_contents($filepath));
+				$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+				$body .= '<img src="'.$src.'" class="img-thumbnail" style="border: none">';
+			}
+			$body .= '</div></div></div>';
+			$body .= '</div>';
+			if( $new_login ){
+				$return = ["return" => $body];
+				$this->_sendResponse(200, CJSON::encode($return));
+			}
+			exit;
+		}
+		//     CHECK henkilokortti -->
+
 		// <-- CHECK tehty
 		if($_POST['check'] == 'tehty'){
 
