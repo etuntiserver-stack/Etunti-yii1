@@ -1617,7 +1617,8 @@ public function actionImei($dom)
 			$this->_sendResponse(200, CJSON::encode(array("error" => "sp_1 function error")));
 			exit;
 		}
-           	$tv = Tyovuoroot::model()->findByPk($mobCheck->tv_id);
+		if( $mobCheck->tv_id > 0 )
+           		$tv = Tyovuoroot::model()->findByPk($mobCheck->tv_id);
 		$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
 		$kartta = '';
 		if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey) and isset($mobCheck->kohteet->id)){
