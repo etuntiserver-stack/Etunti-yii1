@@ -39,7 +39,7 @@
 
 	$al = '';
 	if($t->alku > 0 and $t->loppu > 0){
-	  $al = $t->alku.'-'.$t->loppu;
+	  $al = $t->alku.'-'.$t->loppu.' (Kesto: '.$this->sprint(strtotime($t->loppu)-strtotime($t->alku)).')';
 	  if($site[0]->eiLasketaSubStr($t->tyoajanmerkinta) === false){ $yht += strtotime($t->loppu)-strtotime($t->alku); }
 	}
 
