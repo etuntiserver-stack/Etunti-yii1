@@ -744,14 +744,20 @@ public function actionImei($dom)
 				exit;
 			}
 			$body = '<h2>'.Yii::t('app', 'Henkilökortti').'</h2>';
-			$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/".$dom."/".$ttekija->id.".jpg";
 			$body .= '<div class="well">';
-			$body .= '<legend><p class="text-center"><img src="'.$asetukset->logon_polkku.'" height="50px"></p></legend>';
+			// <-- Logo
+			if( !empty($asetukset->logon_polkku) ){
+				$filepath = $asetukset->logon_polkku;
+				$imageData = base64_encode(file_get_contents($filepath));
+				$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+				$body .= '<legend><p class="text-center"><img src="'.$src.'" height="50px"></p></legend>';
+			}
 			$body .= '<div class="row"><div class="col-xs-6">';
 			$body .= '<h3>'.$firma->yritys.'</h3>';
 			$body .= '<p>Y-tunnus: <b>'.$firma->y_tunnus.'</b></p>';
 			$body .= '<p><h4>'.$ttekija->tekijan_nimi.' '.$ttekija->sukunimi.'</h4></p>';
 			$body .= '</div><div class="col-xs-6"><div class="pull-right">';
+			$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/".$dom."/".$ttekija->id.".jpg";
 			if (file_exists($filepath)){
 				$imageData = base64_encode(file_get_contents($filepath));
 				$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
