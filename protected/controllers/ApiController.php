@@ -1067,7 +1067,7 @@ public function actionImei($dom)
 				// <-- Nayta kohteen puhelinnumero
 				$puh_nro = '';
 				if(isset($kohde->id) and isset($asetukset->app_show_phone) and $asetukset->app_show_phone == 1 and $kohde->puh_nro != ''){
-		      			$puh_nro = '<br>'.Yii::t('main', 'Kohteen puhelinnumero').': <b>'.$kohde->puh_nro.'</b>';
+		      			$puh_nro = '<br>'.Yii::t('main', 'Kohteen puhelinnumero').': <b><a href="tel:'.$kohde->puh_nro.'">'.$kohde->puh_nro.'</a></b>';
 				}
 				// Nayta kohteen puhelinnumero -->
 
