@@ -373,6 +373,7 @@ public function actionLang($dom)
 		'LOPETA' => Yii::t('app', 'LOPETA'),
 		'osoite' => Yii::t('app', 'Osoite'),
 		'lyhyt_viesti' => Yii::t('app', 'lyhyt_viesti'),
+		'kirjaudu' => Yii::t('app', 'Lähetä tunnukset'),
 
 		/* Viestinta */
 		'LangViestinta' => Yii::t('app', 'Viestintä'),
@@ -630,6 +631,8 @@ public function actionImei($dom)
 	if(isset($_POST['avoinID'])){ unset($_POST['avoinID']); }
 	if(isset($_POST['appVersio'])) $appVersio = $_POST['appVersio']; else $appVersio = 0;
 	if(isset($_POST['appVersio'])){ unset($_POST['appVersio']); }
+	if(isset($_POST['tv_id'])) $post_tv_id = $_POST['tv_id']; else $post_tv_id = 0;
+
 
 	// <-- Check Tyontekija
 	if(isset($_POST['tid']) ){
@@ -725,6 +728,53 @@ public function actionImei($dom)
 			exit;
 	        }
 		//     CHECK getObjbyTag -->
+
+		// <-- CHECK henkilokortti
+		if($_POST['check'] == 'henkilokortti'){
+			$firma = Domainit::model()->find(" domain='".strtolower($dom)."' ");
+			if( !isset($firma->id) ){
+				$return = ["return" => "Domain ei löyty"];
+				$this->_sendResponse(200, CJSON::encode($return));
+				exit;
+			}
+			$tyosuhdet = Tyosuhdet::model()->find(" tid='".$ttekija->id."' ");
+			if( !isset($tyosuhdet->id) ){
+				$return = ["return" => "Työsuhteet ei löyty"];
+				$this->_sendResponse(200, CJSON::encode($return));
+				exit;
+			}
+			$body = '<h2>'.Yii::t('app', 'Henkilökortti').'</h2>';
+			$body .= '<div class="well">';
+			// <-- Logo
+			if( !empty($asetukset->logon_polkku) ){
+				$filepath = $asetukset->logon_polkku;
+				$imageData = base64_encode(file_get_contents($filepath));
+				$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+				$body .= '<legend><p class="text-center"><img src="'.$src.'" height="50px"></p></legend>';
+			}
+			$body .= '<div class="row"><div class="col-xs-6">';
+			$body .= '<h3>'.$firma->yritys.'</h3>';
+			$body .= '<p>Y-tunnus: <b>'.$firma->y_tunnus.'</b></p>';
+			$body .= '<p><h4>'.$ttekija->tekijan_nimi.' '.$ttekija->sukunimi.'</h4></p>';
+			$body .= '</div><div class="col-xs-6"><div class="pull-right">';
+			$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/".$dom."/".$ttekija->id.".jpg";
+			if (file_exists($filepath)){
+				$imageData = base64_encode(file_get_contents($filepath));
+				$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+				$body .= '<img src="'.$src.'" class="img-thumbnail" style="border: none">';
+			}
+			$body .= '</div></div></div>';
+			$body .= '<div class="row"><div class="col-xs-12">';
+			$body .= '<br><p>Veronumero: <b>'.$tyosuhdet->veronumero.'</b></p>';
+			$body .= '</div></div>';
+			$body .= '</div>';
+			if( $new_login ){
+				$return = ["return" => $body];
+				$this->_sendResponse(200, CJSON::encode($return));
+			}
+			exit;
+		}
+		//     CHECK henkilokortti -->
 
 		// <-- CHECK tehty
 		if($_POST['check'] == 'tehty'){
@@ -1017,7 +1067,7 @@ public function actionImei($dom)
 				// <-- Nayta kohteen puhelinnumero
 				$puh_nro = '';
 				if(isset($kohde->id) and isset($asetukset->app_show_phone) and $asetukset->app_show_phone == 1 and $kohde->puh_nro != ''){
-		      			$puh_nro = '<br>'.Yii::t('main', 'Kohteen puhelinnumero').': <b>'.$kohde->puh_nro.'</b>';
+		      			$puh_nro = '<br>'.Yii::t('main', 'Kohteen puhelinnumero').': <b><a href="tel:'.$kohde->puh_nro.'">'.$kohde->puh_nro.'</a></b>';
 				}
 				// Nayta kohteen puhelinnumero -->
 
@@ -1479,7 +1529,8 @@ public function actionImei($dom)
 					"status" => $mobupdate->status,
 					"kohde_kannasta" => $mobupdate->kohde_kannasta,
 					"kesto" => $kesto,
-					"is_new" => "false"
+					"is_new" => "false",
+					"tv_id" => (int)$mobupdate->tv_id,
 				];
 				$this->_sendResponse(200, CJSON::encode($return));
 			} else {
@@ -1551,25 +1602,23 @@ public function actionImei($dom)
 			}
 			//     LOG -->
 
-			$loppu = '';
-			$sekForSignal = '';
+			$loppu 		= '';
+			$sekForSignal 	= '';
 			// <-- Timer
-			if(isset($mobinsert->kohdenID))
-			{
-			    $criteria = new CDbCriteria();
-			    $criteria->order = "alku DESC"; 
-			    $criteria->condition = " 
-					tid = '".$ttekija->id."' and kohde = '".$mobinsert->kohdenID."'
-					and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
-			    ";
-		            $tvuoro = Tyovuoroot::model()->find($criteria);
+			if( $post_tv_id > 0 ){
+				$criteria = new CDbCriteria();
+				$criteria->order = "alku DESC"; 
+				$criteria->condition = " 
+					tid = '".$ttekija->id."' 
+					AND id='".$post_tv_id."'
+					AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
+				";
+				$tvuoro = Tyovuoroot::model()->find($criteria);
 
-			    if(isset($tvuoro->id))
-			    {
-				$loppu = date("d.m.Y H:i",strtotime($tvuoro->pvm." ".$tvuoro->loppu));
-				$sekForSignal = strtotime($tvuoro->pvm." ".$tvuoro->loppu)-time();
-			    }
-	
+				if(isset($tvuoro->id)){
+					$loppu = date("d.m.Y H:i",strtotime($tvuoro->pvm." ".$tvuoro->loppu));
+					$sekForSignal = strtotime($tvuoro->pvm." ".$tvuoro->loppu)-time();
+				}
 			}
 			// Timer -->
 
@@ -1579,6 +1628,7 @@ public function actionImei($dom)
 					"kohde_kannasta" => $mobinsert->kohde_kannasta,
 					"is_new" => "true",
 					"kohdenID" => $mobinsert->kohdenID,
+					"tv_id" => (isset($tvuoro->id))? (int)$tvuoro->id : 0,
 					"loppu" => $loppu,
 					"sekForSignal" => $sekForSignal,
 				];
@@ -1615,7 +1665,8 @@ public function actionImei($dom)
 			$this->_sendResponse(200, CJSON::encode(array("error" => "sp_1 function error")));
 			exit;
 		}
-           	$tv = Tyovuoroot::model()->findByPk($mobCheck->tv_id);
+		if( $mobCheck->tv_id > 0 )
+           		$tv = Tyovuoroot::model()->findByPk($mobCheck->tv_id);
 		$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
 		$kartta = '';
 		if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey) and isset($mobCheck->kohteet->id)){
@@ -1637,7 +1688,7 @@ public function actionImei($dom)
 		$sp1 .= '<div class="text-center">';
 		$sp1 .= '<p>'.$mobCheck->kohde_kannasta.'</p>';
 		if( isset($tv->id) ){
-			$sp1 .= '<p class="text-danger">Muistakaa lopettaa klo. '.$tv->loppu.'</p>';
+			$sp1 .= '<p class="text-danger">Muista lopettaa klo. '.$tv->loppu.'</p>';
 		}
 		if(!empty($kartta))
 			$sp1 .= '<p>'.$kartta.'</p>';

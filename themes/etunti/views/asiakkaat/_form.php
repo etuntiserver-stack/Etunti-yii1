@@ -312,6 +312,16 @@ if(!isset($model->id) and isset($asetukset->id)){
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'sopimustyyppi'); ?>
+		<?php
+		$list = array(1=>Yii::t('main', 'Jatkuva'), 2=>Yii::t('main', 'Kerta'), 3=>Yii::t('main', 'Määräinen'));
+        	echo $form->dropDownList($model, 'sopimustyyppi', $list,
+		array('class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'sopimustyyppi'); ?>
+	</div>
+
 	<span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#lopettaminen">Asiakas lopettaa <i class="caret"></i></span>
 
 	<div id="lopettaminen" class="collapse">
@@ -775,6 +785,21 @@ $("#Asiakkaat_tyyppi").each(function() {
       openAll();
 
 });
+
+$("#Asiakkaat_sopimustyyppi").change(function() {
+	sopimustyyppi();
+});
+sopimustyyppi();
+function sopimustyyppi(){
+	if( $('#Asiakkaat_sopimustyyppi option:selected').val() == '3' ){
+		$("#lopettaminen").addClass('in');
+		$("#Asiakkaat_lopetuksen_pvm").prop('required',true);
+		alert('Päättymispäivä jolloin asiakas menee passiviksi on pakkollinen');
+	} else {
+		$("#Asiakkaat_lopetuksen_pvm").prop('required',false);
+		$("#lopettaminen").removeClass('in');
+	}
+}
 
 $("#Asiakkaat_tyyppi").change(function() {
     var value = $(this).val();

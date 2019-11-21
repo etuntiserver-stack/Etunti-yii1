@@ -106,6 +106,7 @@ class Asiakkaat extends DB2ActiveRecord
                      'lopetuksen_syy' => 'TEXT DEFAULT NULL',
 		     'muistiinpano' => 'text DEFAULT NULL',
 		     'lisatietoja_laskutuksesta' => 'text DEFAULT NULL',
+                     'sopimustyyppi' => 'int(1) DEFAULT 1',
 
                      //'vinkki_tunnit' => 'varchar(10)',
                      //'vinkki_prosentti' => 'varchar(10)',
@@ -135,7 +136,7 @@ class Asiakkaat extends DB2ActiveRecord
 		$arr = array(
                         array('asiakasnumero','unique', 'message'=>'Tämä asiakasnumero on jo olemassa!'),
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
-			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot, hinnasto_id, alv, tyoryhma', 'numerical', 'integerOnly'=>true),
+			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot, hinnasto_id, alv, tyoryhma, sopimustyyppi', 'numerical', 'integerOnly'=>true),
 			array('myyja, postinumero, k_postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, k_kaupunki, sahkoposti', 'length', 'max'=>100),
 			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma, sahkopostilaskuosoite, token', 'length', 'max'=>255),
 			array('maksuehto, viivastyskorko, hinta, hinta_sis_alv', 'length', 'max'=>20),
@@ -219,7 +220,7 @@ class Asiakkaat extends DB2ActiveRecord
 			'filter_tyoryhma' => Yii::t('main', 'Työryhmä'),
 			'filter_asiakasryhma' => Yii::t('main', 'Asiakasryhmä'),
 			'filter_tyyppi' => Yii::t('main', 'Tyyppi'),
-			'lopetuksen_pvm' => Yii::t('main', 'Päivämäärä jolloin asiakas menee passiviksi'),
+			'lopetuksen_pvm' => Yii::t('main', 'Sopimuksen päättymispäivä jolloin asiakas menee passiviksi'),
 			'lopetuksen_syy' => Yii::t('main', 'Syy'),
 			'netvisor_dimension_name' => Yii::t('main', 'Kustannuspaikka'),
 			'lisatietoja_laskutuksesta' => Yii::t('main', 'Lisätietoja laskutuksesta'),

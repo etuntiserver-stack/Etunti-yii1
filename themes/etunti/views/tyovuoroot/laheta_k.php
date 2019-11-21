@@ -63,7 +63,7 @@ $paivat=array(
   $criteria->order = " alku ASC "; 
   $criteria->group = " tid "; 
   $criteria->condition = "  
-  DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')  
+  DATE(STR_TO_DATE(pvm, '%d.%m.%Y'))  
   BETWEEN  '".date('Y-m-d',strtotime($year ."W". $week .'1'))."' AND '".date('Y-m-d',strtotime($year ."W". $week .'7'))."' 
   AND pvm!='' 
   AND peruutettu=0
