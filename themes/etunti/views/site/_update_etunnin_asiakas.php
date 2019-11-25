@@ -3,6 +3,7 @@
 /* @var $model Domainit */
 /* @var $form CActiveForm */
 $model->time = date("d.m.Y", strtotime($model->time));
+/*
 if( $model->puhelin == '' ){
 
 	Yii::app()->db1->setActive(false);
@@ -12,6 +13,7 @@ if( $model->puhelin == '' ){
 	$ft = FirmanTiedot::model()->find(" y_tunnus='". $model->y_tunnus."' ");
 	if( isset($ft->id) ){ $model->puhelin = $ft->puhelin; }
 }
+*/
 ?>
 
 <div class="row">
