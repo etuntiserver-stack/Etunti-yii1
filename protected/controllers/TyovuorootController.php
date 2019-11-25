@@ -2313,12 +2313,25 @@ class TyovuorootController extends Controller
 			}
 			$tv_arr[$arvo->tid][$arvo->pvm][] = $arvo['osoite'];
 		}
-		/*
+
+		// <-- toistuvat
+       		$criteria = new CDbCriteria(); 
+		$criteria->condition = "
+			DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
+			OR
+			DATE(STR_TO_DATE(pto, '%d.%m.%Y')) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
+			OR
+			(DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '".Yii::app()->session['from']."' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '".Yii::app()->session['to']."')
+
+		";
+		$toistuvat = ToistuvatTyovuorot::model()->findAll($criteria);
+
+		echo Yii::app()->session['from'] . '<br>' . Yii::app()->session['to'] . '<br>';
 		echo '<pre>';
-		print_r($tv_arr);
+		print_r(count($toistuvat));
 		echo '</pre>';
 		exit;
-		*/
+		
 		//     Tv array -->
 
 		$this->render('tv4', array(
