@@ -2235,7 +2235,8 @@ class TyovuorootController extends Controller
 		$criteria->select = "id, tid, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu, status";
 		$criteria->order = "alku ASC"; //tt.$tt_order_1 ASC, 
 		$criteria->condition = "
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
+			toistuva_id=0
+			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
 		";
 
 		// <-- Asiakas
