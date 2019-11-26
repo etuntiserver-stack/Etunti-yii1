@@ -2232,7 +2232,7 @@ class TyovuorootController extends Controller
        		$criteria = new CDbCriteria();
 		$criteria->with = array('kohteet');
 		//$criteria->limit = "10";
-		$criteria->select = "id, tid, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu, status";
+		$criteria->select = "id, tid, kohde, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu, status";
 		$criteria->order = "alku ASC"; //tt.$tt_order_1 ASC, 
 		$criteria->condition = "
 			toistuva_id='0'
@@ -2292,11 +2292,14 @@ class TyovuorootController extends Controller
 
 		// <-- Tv array
 		$tv = Tyovuoroot::model()->findAll($criteria);
-		$tv_arr = array();
+		$tv_arr = [];
+		$tv_alku_loppu_kohde = [];
 		foreach($tv as $arvo){
 			$return = $this->laatikkorakenne($arvo, $status);
-			if( isset($return['laatikko']['osoite']) )
+			if( isset($return['laatikko']['osoite']) ){
 				$tv_arr[$arvo->tid][$arvo->pvm][] = $return['laatikko']['osoite'];
+				$tv_alku_loppu_kohde[$arvo->tid][$arvo->pvm][] = $return['alku_loppu_kohde'];
+			}
 		}
 
 		// <-- toistuvat
@@ -2328,7 +2331,7 @@ class TyovuorootController extends Controller
 			$weeks = new DatePeriod(
 			    new DateTime($arvo->pfrom), 
 			    new DateInterval('P'.$arvo->viikkoja.'W'), 
-			    new DateTime($toistuva_to)
+			    new DateTime(date("Y-m-d", strtotime($toistuva_to.' +1 day')))
 			);
 			$pvms = [];
 			foreach ($weeks as $wk) {
@@ -2344,9 +2347,9 @@ class TyovuorootController extends Controller
 							if( isset($return['laatikko']['osoite']) ){
 								foreach($tids as $tid){
 									$is_isset = false; // Onko Tyovuoro taulussa samanlainen
-									if( isset($tv_arr[$tid][$pvm->format('d.m.Y')]) ){
-										foreach($tv_arr[$tid][$pvm->format('d.m.Y')] as $item){
-											if( $item['alku_loppu_kohde'] == $arvo->alku.'_'.$arvo->loppu.'_'.$arvo->kohde ){
+									if( isset($tv_alku_loppu_kohde[$tid][$pvm->format('d.m.Y')]) ){
+										foreach($tv_alku_loppu_kohde[$tid][$pvm->format('d.m.Y')] as $item){
+											if( $item == $arvo->alku.'_'.$arvo->loppu.'_'.$arvo->kohde ){
 												$is_isset = true;							
 												break;
 											}
