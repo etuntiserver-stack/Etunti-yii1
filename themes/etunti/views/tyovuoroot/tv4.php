@@ -72,6 +72,9 @@ ini_set('memory_limit', '512M');
 		<?php if( isset($tv_arr[$tid][$f]) ): ?>
 			<?php array_map('superfast', $tv_arr[$tid][$f]); ?>
 		<?php endif; ?>
+		<?php if( isset($toistuvat_arr[$tid][$f]) ): ?>
+			<?php array_map('superfast', $toistuvat_arr[$tid][$f]); ?>
+		<?php endif; ?>
 	</div>
       </td>
       <?php $f = date ("d.m.Y", strtotime("+1 day", strtotime($f))); ?>

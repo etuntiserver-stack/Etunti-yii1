@@ -2235,7 +2235,7 @@ class TyovuorootController extends Controller
 		$criteria->select = "id, tid, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu, status";
 		$criteria->order = "alku ASC"; //tt.$tt_order_1 ASC, 
 		$criteria->condition = "
-			toistuva_id=0
+			toistuva_id='0'
 			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
 		";
 
@@ -2294,6 +2294,103 @@ class TyovuorootController extends Controller
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$tv_arr = array();
 		foreach($tv as $arvo){
+			$return = $this->laatikkorakenne($arvo, $status);
+			if( isset($return['laatikko']['osoite']) )
+				$tv_arr[$arvo->tid][$arvo->pvm][] = $return['laatikko']['osoite'];
+		}
+
+		// <-- toistuvat
+		$toistuva_from = Yii::app()->session['from'];
+		$toistuva_to = Yii::app()->session['to'];
+       		$criteria = new CDbCriteria(); 
+		$criteria->condition = "
+			DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) BETWEEN '".$toistuva_from."' AND '".$toistuva_to."'
+			OR
+			DATE(STR_TO_DATE(pto, '%d.%m.%Y')) BETWEEN '".$toistuva_from."' AND '".$toistuva_to."'
+			OR
+			(DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '".$toistuva_from."' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '".$toistuva_to."')
+
+		";
+		$t = ToistuvatTyovuorot::model()->findAll($criteria);
+		$toistuvat_arr = [];
+		foreach($t as $arvo){
+			//echo 'Haku: '.date("d.m.Y", strtotime($toistuva_from)).' - '.date("d.m.Y", strtotime($toistuva_to)).'<br>';
+			//echo 'Ketju: '.$ketju->pfrom.' - '.$ketju->pto.'<br>';
+			$tids = [];
+			if( !empty($arvo->tyopaari) ){
+				foreach(json_decode($arvo->tyopaari, true) as $tid){
+					$tids[$tid] = $tid;
+				}
+			} else {
+				$tids[$arvo->tid] = $arvo->tid;
+			}
+
+			$weeks = new DatePeriod(
+			    new DateTime($arvo->pfrom), 
+			    new DateInterval('P'.$arvo->viikkoja.'W'), 
+			    new DateTime($toistuva_to)
+			);
+			$pvms = [];
+			foreach ($weeks as $wk) {
+				if( strtotime($wk->format('Y-m-d')) >= strtotime($toistuva_from) ){
+					$pvm_intrvl = new DatePeriod(
+					    new DateTime(date("Y-m-d", strtotime($wk->format('Y').'W'.$wk->format('W').'1'))), 
+					    new DateInterval('P1D'), 
+					    new DateTime(date("Y-m-d", strtotime($wk->format('Y').'W'.$wk->format('W').'7')))
+					);
+					foreach ($pvm_intrvl as $pvm) {
+						if(in_array($pvm->format('w'), json_decode($arvo->viikko_paivat, true))){
+							$return = $this->laatikkorakenne($arvo, $status);
+							if( isset($return['laatikko']['osoite']) ){
+								foreach($tids as $tid){
+									$is_isset = false; // Onko Tyovuoro taulussa samanlainen
+									if( isset($tv_arr[$tid][$pvm->format('d.m.Y')]) ){
+										foreach($tv_arr[$tid][$pvm->format('d.m.Y')] as $item){
+											if( $item['alku_loppu_kohde'] == $arvo->alku.'_'.$arvo->loppu.'_'.$arvo->kohde ){
+												$is_isset = true;							
+												break;
+											}
+										}
+									}
+									if(!$is_isset)
+										$toistuvat_arr[$tid][$pvm->format('d.m.Y')][] = $return['laatikko']['osoite'];
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		//     toistuvat -->
+
+		/*
+		echo '<pre>';
+		print_r( $toistuvat_arr );
+		echo '</pre>';
+		exit;
+		*/
+
+		//     Tv array -->
+
+		$this->render('tv4', array(
+			'tt_order_1' 	=> $tt_order_1,
+			'tt_order_2' 	=> $tt_order_2,
+			'tt'		=> $tt,
+			'tv_arr'	=> $tv_arr,
+			'toistuvat_arr' => $toistuvat_arr,
+			'from'		=> Yii::app()->session['from'],
+			'to'		=> Yii::app()->session['to'],
+			'kohteet_siivous' => $kohteet_siivous,
+			'kohde' 	=> $kohde,
+			'asiakas' 	=> $asiakas,
+			'arrDate'	=> $arrDate,
+			'site'		=> $site,
+		));
+
+	}
+
+	protected function laatikkorakenne($arvo, $status){
+			$return = [];
 			$osoite = (!empty($arvo['osoite']))?$arvo['osoite']:(isset($arvo['kohteet']['osoite']))?$arvo['kohteet']['osoite']:'';
 			$color = '#888';
 			$bgcol = 'color:#333';
@@ -2307,47 +2404,14 @@ class TyovuorootController extends Controller
 			if(!empty($arvo['tyoajanlaatu'])){
 				$expl1 = explode("/",$arvo['tyoajanlaatu']);
 				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
-				$arvo['osoite'] = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$arvo['id'].'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
+				$return['osoite'] = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$arvo['id'].'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
 			} else {
-				$arvo['osoite'] = '<span class="tv_edit" id="'.$arvo['id'].'" style="'.$bgcol.'">'.((isset($status[$arvo['status']]))?$status[$arvo['status']]:'').''.$arvo['alku'].'-'.$arvo['loppu'].'<br> '.$osoite.'</span>';
+				$return['osoite'] = '<span class="tv_edit" id="'.$arvo['id'].'" style="'.$bgcol.'">'.((isset($status[$arvo['status']]))?$status[$arvo['status']]:'').''.$arvo['alku'].'-'.$arvo['loppu'].'<br> '.$osoite.'</span>';
+
 			}
-			$tv_arr[$arvo->tid][$arvo->pvm][] = $arvo['osoite'];
-		}
 
-		// <-- toistuvat
-       		$criteria = new CDbCriteria(); 
-		$criteria->condition = "
-			DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-			OR
-			DATE(STR_TO_DATE(pto, '%d.%m.%Y')) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-			OR
-			(DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '".Yii::app()->session['from']."' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '".Yii::app()->session['to']."')
-
-		";
-		$toistuvat = ToistuvatTyovuorot::model()->findAll($criteria);
-
-		echo Yii::app()->session['from'] . '<br>' . Yii::app()->session['to'] . '<br>';
-		echo '<pre>';
-		print_r(count($toistuvat));
-		echo '</pre>';
-		exit;
-		
-		//     Tv array -->
-
-		$this->render('tv4', array(
-			'tt_order_1' 	=> $tt_order_1,
-			'tt_order_2' 	=> $tt_order_2,
-			'tt'		=> $tt,
-			'tv_arr'	=> $tv_arr,
-			'from'		=> Yii::app()->session['from'],
-			'to'		=> Yii::app()->session['to'],
-			'kohteet_siivous' => $kohteet_siivous,
-			'kohde' 	=> $kohde,
-			'asiakas' 	=> $asiakas,
-			'arrDate'	=> $arrDate,
-			'site'		=> $site,
-		));
-
+			$arr = ['laatikko' => $return, 'alku_loppu_kohde' => $arvo->alku.'_'.$arvo->loppu.'_'.$arvo->kohde];
+			return $arr;
 	}
 
 	public function actionDid4($pvm, $tid) {
