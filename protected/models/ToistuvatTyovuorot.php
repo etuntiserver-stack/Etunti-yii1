@@ -23,6 +23,9 @@
  */
 class ToistuvatTyovuorot extends DB2ActiveRecord
 {
+
+	public $peruutettu, $laskutettu;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -151,6 +154,11 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 
 		);
 	}
+
+        public function getToistuva_id(){
+		$return = $this->id;
+                return $return;
+        }
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.

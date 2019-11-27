@@ -2295,7 +2295,7 @@ class TyovuorootController extends Controller
 		$tv_arr = [];
 		$tv_alku_loppu_kohde = [];
 		foreach($tv as $arvo){
-			$return = $this->laatikkorakenne($arvo, $status);
+			$return = $this->laatikkorakenne($arvo, $status, false);
 			if( isset($return['laatikko']['osoite']) ){
 				$tv_arr[$arvo->tid][$arvo->pvm][] = $return['laatikko']['osoite'];
 				$tv_alku_loppu_kohde[$arvo->tid][$arvo->pvm][] = $return['alku_loppu_kohde'];
@@ -2343,7 +2343,7 @@ class TyovuorootController extends Controller
 					);
 					foreach ($pvm_intrvl as $pvm) {
 						if(in_array($pvm->format('w'), json_decode($arvo->viikko_paivat, true))){
-							$return = $this->laatikkorakenne($arvo, $status);
+							$return = $this->laatikkorakenne($arvo, $status, true);
 							if( isset($return['laatikko']['osoite']) ){
 								foreach($tids as $tid){
 									$is_isset = false; // Onko Tyovuoro taulussa samanlainen
@@ -2366,6 +2366,7 @@ class TyovuorootController extends Controller
 		}
 		//     toistuvat -->
 
+		//$merge = array_merge($tv_arr, $toistuvat_arr);
 		/*
 		echo '<pre>';
 		print_r( $toistuvat_arr );
@@ -2392,8 +2393,9 @@ class TyovuorootController extends Controller
 
 	}
 
-	protected function laatikkorakenne($arvo, $status){
+	protected function laatikkorakenne($arvo, $status, $toistuva){
 			$return = [];
+			$toistuva_id = ($toistuva)? 'toistuva_id="'.$arvo['id'].'"' : '';
 			$osoite = (!empty($arvo['osoite']))?$arvo['osoite']:(isset($arvo['kohteet']['osoite']))?$arvo['kohteet']['osoite']:'';
 			$color = '#888';
 			$bgcol = 'color:#333';
@@ -2407,9 +2409,9 @@ class TyovuorootController extends Controller
 			if(!empty($arvo['tyoajanlaatu'])){
 				$expl1 = explode("/",$arvo['tyoajanlaatu']);
 				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
-				$return['osoite'] = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$arvo['id'].'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
+				$return['osoite'] = (isset($expl1[0])) ? '<b class="tv_edit" '.$toistuva_id.' id="'.$arvo['id'].'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
 			} else {
-				$return['osoite'] = '<span class="tv_edit" id="'.$arvo['id'].'" style="'.$bgcol.'">'.((isset($status[$arvo['status']]))?$status[$arvo['status']]:'').''.$arvo['alku'].'-'.$arvo['loppu'].'<br> '.$osoite.'</span>';
+				$return['osoite'] = '<span class="tv_edit" '.$toistuva_id.' id="'.$arvo['id'].'" style="'.$bgcol.'">'.((isset($status[$arvo['status']]))?$status[$arvo['status']]:'').''.$arvo['alku'].'-'.$arvo['loppu'].'<br> '.$osoite.'</span>';
 
 			}
 
@@ -3750,10 +3752,16 @@ class TyovuorootController extends Controller
 		exit;
 	}
 
-	public function actionUpdate4_form($id)
+	public function actionUpdate4_form($id, $toistuva_id=0)
 	{
 
-		$model=$this->loadModel($id);
+		if( $toistuva_id != 0 ){
+			$model = ToistuvatTyovuorot::model()->findByPk($id);
+			$toistuva = true;
+		} else {
+			$model=$this->loadModel($id);
+			$toistuva = false;
+		}
 
 		$criteria = new CDBcriteria;
 		// <-- Return order etu ja sukunimella
@@ -3787,17 +3795,17 @@ class TyovuorootController extends Controller
 					<span aria-hidden="true">&times;</span>
 				</button>
 	              <span class="panel-title"><i class="fa fa-clock-o"></i> 
-			'.Yii::t('main', 'Työvuoron suunnittelu').' #'.$model->id.' <span class="kohteen_lisatiedot"></span> '.$tekijan_nimi.'
+			'.Yii::t('main', 'Työvuoron suunnittelu').' '.(($toistuva)?'ketju: ':'').' #'.$model->id.' <span class="kohteen_lisatiedot"></span> '.$tekijan_nimi.'
 		      </span>
 	            </div>
 	            <!-- end .panel-heading section -->
 	              <div class="panel-body p25">
-			'.$this->renderPartial('_form4',array('model'=>$model), true).'
+			'.$this->renderPartial('_form4',array('model'=>$model, 'toistuva'=>$toistuva), true).'
 	              </div>
 	          </div>
 	        </div>';
 	
-		echo json_encode( $form_content);
+		echo json_encode($form_content);
 		exit;
 	}
 

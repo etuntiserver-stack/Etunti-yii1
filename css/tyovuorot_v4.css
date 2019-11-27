@@ -93,7 +93,7 @@ td .latikkoAsetukset{
 	min-width: 190px;
 	padding: 5px 7px;
 	min-height: 40px;
-	max-height: 200px; overflow-y: auto;
+	max-height: 370px; overflow-y: auto;
 }
 td span.nimi{
 	color: #333;

@@ -146,11 +146,14 @@ $(document).delegate(".luominen","click",function(){
 
 $(document).delegate(".tv_edit","click",function(){
 	var tv_id = $(this).attr('id');
+	var toistuva_id = 0;
+	if( $(this).attr('toistuva_id') )
+		toistuva_id = $(this).attr('toistuva_id');
 
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update4_form?id='+tv_id,
            type: "GET",
-           //data: {"tarjousPainike" : "true"},
+           data: {toistuva_id : toistuva_id},
            success: function(data){
 		d = JSON.parse(data);
 		$('#showres').modal().html(d);

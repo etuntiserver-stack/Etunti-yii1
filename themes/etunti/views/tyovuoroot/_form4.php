@@ -63,12 +63,17 @@ if(isset($model->id))
 	echo '<input type="hidden" id="updateMuoto" value="false">';
 }
 
-
-$ov = Onlinevaraus::model()->findbypk($model->onlinevaraus_id);
-if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
-	Tyovuoroot::model()->updatebypk($model->id, array('kohde'=>$ov->kohde_id));
-	$model->kohde = $ov->kohde_id;
+if($toistuva){
+	$java_prefix = 'ToistuvatTyovuorot';
+} else {
+	$java_prefix = 'Tyovuoroot';
+	$ov = Onlinevaraus::model()->findbypk($model->onlinevaraus_id);
+	if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
+		Tyovuoroot::model()->updatebypk($model->id, array('kohde'=>$ov->kohde_id));
+		$model->kohde = $ov->kohde_id;
+	}
 }
+
 if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 	$model->status = 11;
 }
@@ -94,15 +99,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 
 
 	<?php echo $form->errorSummary($model); ?>
-	<?php echo $form->hiddenField($model,'id',array('id'=>$model->id)); ?>
-	<?php echo $form->hiddenField($model,'tid'); ?>
-	<?php echo $form->hiddenField($model,'ruokatauko'); ?>
-	<?php echo $form->hiddenField($model,'alku_r'); ?>
-	<?php echo $form->hiddenField($model,'pituus'); ?>
-	<?php echo $form->hiddenField($model,'kesto'); ?>
-	<?php echo $form->hiddenField($model,'osoiteOnline'); ?>
-	<?php echo $form->hiddenField($model,'time'); ?>
-	<?php echo $form->hiddenField($model,'toistuva_id'); ?>
+	<?php if(!$toistuva){ echo $form->hiddenField($model,'toistuva_id'); } ?>
 	<?php echo $form->error($model,'tid'); ?>
 
 <div id="1_tila">
@@ -353,12 +350,12 @@ $(".muokaValiko").click(function() {
   });
 /* valikot */
 
- $('#Tyovuoroot_tyoajanlaatu').change(function(){
+ $('#<?=$java_prefix?>_tyoajanlaatu').change(function(){
 	if($('option:selected', this).val() !== ''){
-		$('#Tyovuoroot_kohde').val('');
-		$('#Tyovuoroot_osoite').val('');
-		$('#Tyovuoroot_postinumero').val('');
-		$('#Tyovuoroot_postitoimipaikka').val('');
+		$('#<?=$java_prefix?>_kohde').val('');
+		$('#<?=$java_prefix?>_osoite').val('');
+		$('#<?=$java_prefix?>_postinumero').val('');
+		$('#<?=$java_prefix?>_postitoimipaikka').val('');
 		$('#alku').val('00:00');
 		$('#loppu').val('00:00');
 	}
@@ -368,33 +365,33 @@ $(".muokaValiko").click(function() {
 	}
  });
 
- $(document).delegate("#Tyovuoroot_status","change",function(){
+ $(document).delegate("#<?=$java_prefix?>_status","change",function(){
 	if($(this).val() == '10'){
-		$('#Tyovuoroot_tyoajanmerkinta').val('Ei lasketa/red');
+		$('#<?=$java_prefix?>_tyoajanmerkinta').val('Ei lasketa/red');
 	} else {
-		$('#Tyovuoroot_tyoajanmerkinta').val('Normaali/');
+		$('#<?=$java_prefix?>_tyoajanmerkinta').val('Normaali/');
 	}
 	vuosilomat($(this).val());
  });
 
- vuosilomat($('#Tyovuoroot_status').val());
+ vuosilomat($('#<?=$java_prefix?>_status').val());
  function vuosilomat(val){
 	if(val == 11){
 		$("#1_tila input, #1_tila select").attr('readonly', true);
 		//$("#alku, #loppu").val('00:00').removeAttr('readonly');
-		$('#Tyovuoroot_tyoajanmerkinta').val('Normaali/');
-		$('#Tyovuoroot_status').val('11').removeAttr('readonly');
-		$('#Tyovuoroot_osoite').val('');
-		$('#Tyovuoroot_kohde').val('');
-		$('#Tyovuoroot_postinumero').val('');
-		$('#Tyovuoroot_postitoimipaikka').val('');
+		$('#<?=$java_prefix?>_tyoajanmerkinta').val('Normaali/');
+		$('#<?=$java_prefix?>_status').val('11').removeAttr('readonly');
+		$('#<?=$java_prefix?>_osoite').val('');
+		$('#<?=$java_prefix?>_kohde').val('');
+		$('#<?=$java_prefix?>_postinumero').val('');
+		$('#<?=$java_prefix?>_postitoimipaikka').val('');
 		$('#luoavain').hide('slow');
 		$("#tyoajanlaatu_laatikko").show('slow');
-		$("#Tyovuoroot_tyoajanlaatu").removeAttr('readonly').css({"border" : "2px green solid"}).focus();
+		$("#<?=$java_prefix?>_tyoajanlaatu").removeAttr('readonly').css({"border" : "2px green solid"}).focus();
 	} else {
 		$("#tyovuoroot-form input, #tyovuoroot-form select").removeAttr('readonly');
 		$('#luoavain').show('slow');
-		$("#Tyovuoroot_tyoajanlaatu").val('');
+		$("#<?=$java_prefix?>_tyoajanlaatu").val('');
 		$("#tyoajanlaatu_laatikko").hide('slow');
 	}
  }
@@ -721,22 +718,20 @@ $(document).ready(function(){
     $classCol = 'collapse';
     $toistuvaID =  '<span id="toistuvaID"></span>';
 
-  if(isset($model->id) and $model->toistuva_id != 0)
-  {
-    $toistuva = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
-    if(isset($toistuva->id))
-    {
-    	$pfrom = $toistuva->pfrom;
-    	$viikkoja = $toistuva->viikkoja;
-    	$viikko_paivat = json_decode($toistuva->viikko_paivat, true);
-    	$pto = $toistuva->pto;
+    if(isset($model->id) and $model->toistuva_id != 0){
+	$tvt = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
+	if(isset($tvt->id)){
+    	$pfrom = $tvt->pfrom;
+    	$viikkoja = $tvt->viikkoja;
+    	$viikko_paivat = json_decode($tvt->viikko_paivat, true);
+    	$pto = $tvt->pto;
     	$classCol = 'collapse in';
     	$toistuvaID =  '<span id="toistuvaID">'.$model->toistuva_id.'</span>';
-    }
+	}
 
-  } else {
-    $pfrom = $model->pvm;
-  }
+    } else {
+    	$pfrom = $model->pvm;
+    }
 ?>
 
 <div id="toistuvaAllsijaan"></div>
@@ -906,9 +901,9 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
 
-  if($('#Tyovuoroot_kohde').val() !== '')
+  if($('#<?=$java_prefix?>_kohde').val() !== '')
   {
-	var kohdeOn = $('#Tyovuoroot_kohde option:selected').val();
+	var kohdeOn = $('#<?=$java_prefix?>_kohde option:selected').val();
 	  	 $.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/getAsiakasByKohde',
 			type:'GET',
@@ -969,7 +964,7 @@ $(document).ready(function(){
 			  success:function(data){
 				data = JSON.parse(data);
 			  	//console.log(data);
-				$('#Tyovuoroot_kohde').html(data);
+				$('#<?=$java_prefix?>_kohde').html(data);
 				$('#asiakasAutocompleteResult').html('').hide();
 				$('#asiakas').val(thisAsiakas);
 
@@ -990,7 +985,7 @@ $(document).ready(function(){
 			  success:function(data){
 				data = JSON.parse(data);
 			  	//console.log(data);
-				$('#Tyovuoroot_kohde').html(data);
+				$('#<?=$java_prefix?>_kohde').html(data);
 				$('#asiakasAutocompleteResult').html('').hide();
 				$('#asiakas').val(thisAsiakas);
 
@@ -1078,9 +1073,9 @@ $('#tyovuoroot-form').on('submit',function(e) {
  	}
 
 	/* <-- Tarkistetaan Aloitus/Lopetus Klo ja status */
-	if( $('#Tyovuoroot_status option:selected').val() === '' )
+	if( $('#<?=$java_prefix?>_status option:selected').val() === '' )
 	{
-		$('#Tyovuoroot_status').addClass('bg-danger').focus();
+		$('#<?=$java_prefix?>_status').addClass('bg-danger').focus();
 		return false;
 	}
 	if( $('#alku').val() === '' )
@@ -1123,7 +1118,7 @@ $('#tyovuoroot-form').on('submit',function(e) {
 		$('#submitButton').hide();
 
 	// <-- tarkistetaan tietoja pituus
-	var leng = $('#Tyovuoroot_tietoja').val().length;
+	var leng = $('#<?=$java_prefix?>_tietoja').val().length;
 
 	var raja = 10000;
 	if(leng > raja)
@@ -1136,8 +1131,8 @@ $('#tyovuoroot-form').on('submit',function(e) {
 	// <-- tarkistetaan ajaat päällekäin
 	if( e.target[0].value === '')
 	{
-	var tid		= $('#Tyovuoroot_tid').val();
-	var pvm		= $('#Tyovuoroot_pvm').val();
+	var tid		= $('#<?=$java_prefix?>_tid').val();
+	var pvm		= $('#<?=$java_prefix?>_pvm').val();
 	var alku 	= $("#alku").val();
 	var loppu 	= $("#loppu").val();
 	var count	= 0;
@@ -1375,7 +1370,7 @@ function getAllTids(){
 		tids.push('<?=$model->tid?>');
 	}
 	if( ('<?=$model->id?>') === '' ){
-		tids.push($('#Tyovuoroot_tid').val());
+		tids.push($('#<?=$java_prefix?>_tid').val());
 	}
 
 	/* Työpari */
@@ -1579,8 +1574,8 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
   });
 
 
-  if( $('#Tyovuoroot_kohde').val() !== '' ){
-	var thisID = $('#Tyovuoroot_kohde option:selected').val();
+  if( $('#<?=$java_prefix?>_kohde').val() !== '' ){
+	var thisID = $('#<?=$java_prefix?>_kohde option:selected').val();
 	  $.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+thisID,
 		  success:function(data){
@@ -1602,10 +1597,10 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 	  });
   }
 
-  $(document).delegate("#Tyovuoroot_kohde","change",function(){
+  $(document).delegate("#<?=$java_prefix?>_kohde","change",function(){
 
-	$('#Tyovuoroot_status').val('3').css({"border" : "1px green solid"});
-	$('#Tyovuoroot_tyoajanlaatu').val('');
+	$('#<?=$java_prefix?>_status').val('3').css({"border" : "1px green solid"});
+	$('#<?=$java_prefix?>_tyoajanlaatu').val('');
 	$(this).removeClass('bg-danger');
 	var thisID = $(this, 'option:selected').val();
 	var tyo_erittelyt = '';
@@ -1619,10 +1614,10 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 			var d = JSON.parse(data);
 
 			$('.ohje').html(d[0]);
-			$('#Tyovuoroot_tietoja').val(d[1]);
-			$('#Tyovuoroot_osoite').val(d[3]);
-			$('#Tyovuoroot_postinumero').val(d[4]);
-			$('#Tyovuoroot_postitoimipaikka').val(d[5]);
+			$('#<?=$java_prefix?>_tietoja').val(d[1]);
+			$('#<?=$java_prefix?>_osoite').val(d[3]);
+			$('#<?=$java_prefix?>_postinumero').val(d[4]);
+			$('#<?=$java_prefix?>_postitoimipaikka').val(d[5]);
 
 			// <-- tyo_erittelyt 
 			if($.isArray(d[6])){
@@ -1707,8 +1702,8 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
   linkkiKohteeseen();
 
   function linkkiKohteeseen(){
-	var thisID = $('#Tyovuoroot_kohde option:selected').val();
-	var thisText = $('#Tyovuoroot_kohde option:selected').text();
+	var thisID = $('#<?=$java_prefix?>_kohde option:selected').val();
+	var thisText = $('#<?=$java_prefix?>_kohde option:selected').text();
 	var url = location.protocol + "//" + location.host + '/index.php/kohteet/update?id='+ thisID;
 	if(thisID !== '')
 	$("#kohde_url").html('<a href="'+ url +'" target="_blank">Muokkaa '+ thisText +'</a>');
@@ -1717,7 +1712,7 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
 
   $('#tekijanVaihdo').change(function(){
 	var thisId = $('#tekijanVaihdo option:selected').val();
-	$('#Tyovuoroot_tid').val(thisId);
+	$('#<?=$java_prefix?>_tid').val(thisId);
   });
 
   $(document).delegate(".sopiiSopivat","click",function(){
