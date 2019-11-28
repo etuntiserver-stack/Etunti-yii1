@@ -315,7 +315,7 @@ if(!isset($model->id) and isset($asetukset->id)){
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'sopimustyyppi'); ?>
 		<?php
-		$list = array(1=>Yii::t('main', 'Jatkuva'), 2=>Yii::t('main', 'Kerta'), 3=>Yii::t('main', 'Määräinen'));
+		$list = array(1=>Yii::t('main', 'Jatkuva'), 2=>Yii::t('main', 'Kerta'), 3=>Yii::t('main', 'Määräaikainen'));
         	echo $form->dropDownList($model, 'sopimustyyppi', $list,
 		array('class'=>'form-control'));	
         	?>
