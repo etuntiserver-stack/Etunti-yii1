@@ -2235,8 +2235,7 @@ class TyovuorootController extends Controller
 		$criteria->select = "id, tid, kohde, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu, status";
 		$criteria->order = "alku ASC"; //tt.$tt_order_1 ASC, 
 		$criteria->condition = "
-			toistuva_id='0'
-			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
+			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
 		";
 
 		// <-- Asiakas
@@ -2293,12 +2292,12 @@ class TyovuorootController extends Controller
 		// <-- Tv array
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$tv_arr = [];
-		$tv_alku_loppu_kohde = [];
+		$toistuva_ids = [];
 		foreach($tv as $arvo){
 			$return = $this->laatikkorakenne($arvo, $status, false);
 			if( isset($return['laatikko']['osoite']) ){
 				$tv_arr[$arvo->tid][$arvo->pvm][] = $return['laatikko']['osoite'];
-				$tv_alku_loppu_kohde[$arvo->tid][$arvo->pvm][] = $return['alku_loppu_kohde'];
+				$toistuva_ids[$arvo->tid][$arvo->pvm][$arvo->toistuva_id] = $arvo->toistuva_id;
 			}
 		}
 
@@ -2346,16 +2345,7 @@ class TyovuorootController extends Controller
 							$return = $this->laatikkorakenne($arvo, $status, true);
 							if( isset($return['laatikko']['osoite']) ){
 								foreach($tids as $tid){
-									$is_isset = false; // Onko Tyovuoro taulussa samanlainen
-									if( isset($tv_alku_loppu_kohde[$tid][$pvm->format('d.m.Y')]) ){
-										foreach($tv_alku_loppu_kohde[$tid][$pvm->format('d.m.Y')] as $item){
-											if( $item == $arvo->alku.'_'.$arvo->loppu.'_'.$arvo->kohde ){
-												$is_isset = true;							
-												break;
-											}
-										}
-									}
-									if(!$is_isset)
+									if( !isset($toistuva_ids[$tid][$pvm->format('d.m.Y')][$arvo->id]) )
 										$toistuvat_arr[$tid][$pvm->format('d.m.Y')][] = $return['laatikko']['osoite'];
 								}
 							}
@@ -2415,7 +2405,7 @@ class TyovuorootController extends Controller
 
 			}
 
-			$arr = ['laatikko' => $return, 'alku_loppu_kohde' => $arvo->alku.'_'.$arvo->loppu.'_'.$arvo->kohde];
+			$arr = [ 'laatikko' => $return ];
 			return $arr;
 	}
 
