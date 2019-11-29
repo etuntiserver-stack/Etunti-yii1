@@ -1,15 +1,43 @@
 <?php
-$startDate = '26.08.2019';
-$end_date = '31.12.2025';
-$viikkoja = 4;
-	$weeks = new DatePeriod(
-	    new DateTime(date("Y-m-d", strtotime($startDate))), 
-	    new DateInterval('P'.$viikkoja.'W'), 
-	    new DateTime(date("Y-m-d", strtotime($end_date)))
-	);
-	foreach ($weeks as $wk) {
-		echo $wk->format('d.m.Y').'<br>';
-	}
+/*
+Hossain Iqbal
+Kovalenko Valentyna
+Lepik Marius
+Ongachi
+Peipsi
+Tornea Kimberly
+Zerouali Ali
+Rahkema Aira
+*/
+
+$arvo = ToistuvatTyovuorot::model()->findbypk($_GET['toistuva_id']);
+echo 'Ketju: '.$arvo->id.', Toistuva tid: '.$arvo->tid.', pfrom: '.$arvo->pfrom.', pto: '.$arvo->pto.', viikkoja: '.$arvo->viikkoja;
+echo '<br><br>';
+			// <-- Poistettu_pvms
+			$poistettu_pvms = [];
+			if( !empty($arvo->poistettu_pvm) ){
+				foreach(json_decode($arvo->poistettu_pvm, true) as $ppvm){
+					$poistettu_pvms[$arvo->id][$ppvm] = $ppvm;
+				}
+			}
+
+			$weeks = new DatePeriod(
+			    new DateTime(date("Y-m-d", strtotime($arvo->pfrom))), 
+			    new DateInterval('P'.$arvo->viikkoja.'W'), 
+			    new DateTime(date("Y-m-d", strtotime($arvo->pto)))
+			);
+			$pvms = [];
+			foreach ($weeks as $wk) {
+				//if( strtotime($wk->format('Y-m-d')) >= strtotime($toistuva_from) ){
+					foreach(json_decode($arvo->viikko_paivat, true) as $day){
+						$gendate = new DateTime();
+						$gendate->setISODate($wk->format('Y'),$wk->format('W'),$day);
+						$pvm = $gendate->format('d.m.Y');
+						//if( isset($poistettu_pvms[$arvo->id][$pvm]) ){ continue; }
+						echo $pvm.'<br>';
+					}
+				//}
+			}
 
 exit;
 /*

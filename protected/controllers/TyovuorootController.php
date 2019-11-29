@@ -2222,7 +2222,7 @@ class TyovuorootController extends Controller
 		}
 
 		// <-- Tyontekijat muistiin
-		$tt = array();
+		$tt = [];
 		$tyontekijat = Tyontekijat::model()->findAll($criteria);
 		foreach($tyontekijat as $item){
 			$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1.' '.$item->$tt_order_2);
@@ -2298,8 +2298,6 @@ class TyovuorootController extends Controller
 			$return = $this->laatikkorakenne($arvo, $status, false);
 			if( isset($return['laatikko']['osoite']) ){
 				$tv_arr[$arvo->tid][$arvo->pvm][] = $return['laatikko']['osoite'];
-				//if( $arvo->toistuva_id > 0 )
-				//$toistuva_ids[$arvo->tid][$arvo->pvm][$arvo->toistuva_id] = $arvo->toistuva_id;
 			}
 		}
 
@@ -2313,8 +2311,16 @@ class TyovuorootController extends Controller
 			DATE(STR_TO_DATE(pto, '%d.%m.%Y')) BETWEEN '".$toistuva_from."' AND '".$toistuva_to."'
 			OR
 			(DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '".$toistuva_from."' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '".$toistuva_to."')
-
 		";
+		if( count($tt) > 0 ){
+			$tt_ret = [];
+			foreach($tt as $k => $v){
+				$tt_ret[$k] = $k;
+			}
+		      	$ids = implode(",", $tt_ret);
+			$tyopaari = "tyopaari LIKE '%\"".implode("\"%' OR tyopaari LIKE'%\"", $tt_ret)."\"%'";
+		        $criteria->addCondition ('tid IN ('.$ids.') OR ('.$tyopaari.')');
+		}
 		$t = ToistuvatTyovuorot::model()->findAll($criteria);
 		$toistuvat_arr = [];
 		foreach($t as $arvo){
@@ -2324,6 +2330,7 @@ class TyovuorootController extends Controller
 				foreach(json_decode($arvo->tyopaari, true) as $tid){
 					$tids[$tid] = $tid;
 				}
+				$tids[$arvo->tid] = $arvo->tid;
 			} else {
 				$tids[$arvo->tid] = $arvo->tid;
 			}
@@ -2344,20 +2351,16 @@ class TyovuorootController extends Controller
 			$pvms = [];
 			foreach ($weeks as $wk) {
 				if( strtotime($wk->format('Y-m-d')) >= strtotime($toistuva_from) ){
-					$pvm_intrvl = new DatePeriod(
-					    new DateTime(date("Y-m-d", strtotime($wk->format('Y').'W'.$wk->format('W').'1'))), 
-					    new DateInterval('P1D'), 
-					    new DateTime(date("Y-m-d", strtotime($wk->format('Y').'W'.$wk->format('W').'7')))
-					);
-					foreach ($pvm_intrvl as $pvm) {
-						if( isset($poistettu_pvms[$arvo->id][$pvm->format('d.m.Y')]) ){ continue; }
-						if(in_array($pvm->format('w'), json_decode($arvo->viikko_paivat, true))){
-							$return = $this->laatikkorakenne($arvo, $status, true);
-							if( isset($return['laatikko']['osoite']) ){
-								foreach($tids as $tid){
-									//if( !isset($toistuva_ids[$tid][$pvm->format('d.m.Y')][$arvo->id]) )
-										$toistuvat_arr[$tid][$pvm->format('d.m.Y')][] = $return['laatikko']['osoite'];
-								}
+					foreach(json_decode($arvo->viikko_paivat, true) as $day){
+						$gendate = new DateTime();
+						$gendate->setISODate($wk->format('Y'),$wk->format('W'),$day);
+						$pvm = $gendate->format('d.m.Y');
+						if( isset($poistettu_pvms[$arvo->id][$pvm]) ){ continue; }
+						$return = $this->laatikkorakenne($arvo, $status, true);
+						if( isset($return['laatikko']['osoite']) ){
+							//echo $arvo->id.' '.$pvm.'<br>';
+							foreach($tids as $tid){
+								$toistuvat_arr[$tid][$pvm][] = $return['laatikko']['osoite'];
 							}
 						}
 					}
@@ -2366,6 +2369,7 @@ class TyovuorootController extends Controller
 		}
 		//     toistuvat -->
 
+		//exit;
 		//$merge = array_merge($tv_arr, $toistuvat_arr);
 		/*
 		echo '<pre>';

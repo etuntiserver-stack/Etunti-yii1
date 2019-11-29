@@ -754,9 +754,11 @@ $(document).ready(function(){
 	</p>
 	<br>
 
+<?=($toistuva)? 'Ketju: '.$model->id.', Toistuva tid: '.$model->tid.', pfrom: '.$pfrom:''?>
+
 <div class="row" id="alkaen_loppuen">
   <div class="col-sm-4">
-	<label><?php echo Yii::t('main', 'Alkaen'); ?> (<?=$pfrom?>)</label>
+	<label><?php echo Yii::t('main', 'Alkaen'); ?> </label>
 	<input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pfrom]" id="pfrom" value="<?php echo date('d.m.Y', strtotime($pfrom)); ?>">
   </div>
   <div class="col-sm-4">
