@@ -2232,10 +2232,11 @@ class TyovuorootController extends Controller
        		$criteria = new CDbCriteria();
 		$criteria->with = array('kohteet');
 		//$criteria->limit = "10";
-		$criteria->select = "id, tid, kohde, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu, status";
+		$criteria->select = "id, tid, toistuva_id, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu, status";
 		$criteria->order = "alku ASC"; //tt.$tt_order_1 ASC, 
 		$criteria->condition = "
-			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
+			toistuva_id=0
+			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
 		";
 
 		// <-- Asiakas
@@ -2278,7 +2279,7 @@ class TyovuorootController extends Controller
 
 		if(isset(Yii::app()->session['tyontekijat']) and count(Yii::app()->session['tyontekijat'] > 0)){
 		      	$ids = implode(",", Yii::app()->session['tyontekijat']);
-		        $criteria->addCondition ('tid IN ('.$ids.') ');
+		        $criteria->addCondition ('tid IN ('.$ids.') OR tid=0');
 		}
 
 		// <-- Status
@@ -2297,7 +2298,8 @@ class TyovuorootController extends Controller
 			$return = $this->laatikkorakenne($arvo, $status, false);
 			if( isset($return['laatikko']['osoite']) ){
 				$tv_arr[$arvo->tid][$arvo->pvm][] = $return['laatikko']['osoite'];
-				$toistuva_ids[$arvo->tid][$arvo->pvm][$arvo->toistuva_id] = $arvo->toistuva_id;
+				//if( $arvo->toistuva_id > 0 )
+				//$toistuva_ids[$arvo->tid][$arvo->pvm][$arvo->toistuva_id] = $arvo->toistuva_id;
 			}
 		}
 
@@ -2316,8 +2318,7 @@ class TyovuorootController extends Controller
 		$t = ToistuvatTyovuorot::model()->findAll($criteria);
 		$toistuvat_arr = [];
 		foreach($t as $arvo){
-			//echo 'Haku: '.date("d.m.Y", strtotime($toistuva_from)).' - '.date("d.m.Y", strtotime($toistuva_to)).'<br>';
-			//echo 'Ketju: '.$ketju->pfrom.' - '.$ketju->pto.'<br>';
+			// <-- Tids
 			$tids = [];
 			if( !empty($arvo->tyopaari) ){
 				foreach(json_decode($arvo->tyopaari, true) as $tid){
@@ -2325,6 +2326,14 @@ class TyovuorootController extends Controller
 				}
 			} else {
 				$tids[$arvo->tid] = $arvo->tid;
+			}
+
+			// <-- Poistettu_pvms
+			$poistettu_pvms = [];
+			if( !empty($arvo->poistettu_pvm) ){
+				foreach(json_decode($arvo->poistettu_pvm, true) as $ppvm){
+					$poistettu_pvms[$arvo->id][$ppvm] = $ppvm;
+				}
 			}
 
 			$weeks = new DatePeriod(
@@ -2341,11 +2350,12 @@ class TyovuorootController extends Controller
 					    new DateTime(date("Y-m-d", strtotime($wk->format('Y').'W'.$wk->format('W').'7')))
 					);
 					foreach ($pvm_intrvl as $pvm) {
+						if( isset($poistettu_pvms[$arvo->id][$pvm->format('d.m.Y')]) ){ continue; }
 						if(in_array($pvm->format('w'), json_decode($arvo->viikko_paivat, true))){
 							$return = $this->laatikkorakenne($arvo, $status, true);
 							if( isset($return['laatikko']['osoite']) ){
 								foreach($tids as $tid){
-									if( !isset($toistuva_ids[$tid][$pvm->format('d.m.Y')][$arvo->id]) )
+									//if( !isset($toistuva_ids[$tid][$pvm->format('d.m.Y')][$arvo->id]) )
 										$toistuvat_arr[$tid][$pvm->format('d.m.Y')][] = $return['laatikko']['osoite'];
 								}
 							}
@@ -2386,6 +2396,7 @@ class TyovuorootController extends Controller
 	protected function laatikkorakenne($arvo, $status, $toistuva){
 			$return = [];
 			$toistuva_id = ($toistuva)? 'toistuva_id="'.$arvo['id'].'"' : '';
+			$toistuva_icon = ($toistuva)? '<i class="text-success fa fa-repeat"></i> ' : '';
 			$osoite = (!empty($arvo['osoite']))?$arvo['osoite']:(isset($arvo['kohteet']['osoite']))?$arvo['kohteet']['osoite']:'';
 			$color = '#888';
 			$bgcol = 'color:#333';
@@ -2401,7 +2412,7 @@ class TyovuorootController extends Controller
 				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 				$return['osoite'] = (isset($expl1[0])) ? '<b class="tv_edit" '.$toistuva_id.' id="'.$arvo['id'].'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
 			} else {
-				$return['osoite'] = '<span class="tv_edit" '.$toistuva_id.' id="'.$arvo['id'].'" style="'.$bgcol.'">'.((isset($status[$arvo['status']]))?$status[$arvo['status']]:'').''.$arvo['alku'].'-'.$arvo['loppu'].'<br> '.$osoite.'</span>';
+				$return['osoite'] = '<span class="tv_edit" '.$toistuva_id.' id="'.$arvo['id'].'" style="'.$bgcol.'">'.((isset($status[$arvo['status']]))?$status[$arvo['status']]:'').$toistuva_icon.''.$arvo['alku'].'-'.$arvo['loppu'].'<br> '.$osoite.'</span>';
 
 			}
 

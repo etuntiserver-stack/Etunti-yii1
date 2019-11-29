@@ -1,4 +1,16 @@
 <?php
+$startDate = '26.08.2019';
+$end_date = '31.12.2025';
+$viikkoja = 4;
+	$weeks = new DatePeriod(
+	    new DateTime(date("Y-m-d", strtotime($startDate))), 
+	    new DateInterval('P'.$viikkoja.'W'), 
+	    new DateTime(date("Y-m-d", strtotime($end_date)))
+	);
+	foreach ($weeks as $wk) {
+		echo $wk->format('d.m.Y').'<br>';
+	}
+
 exit;
 /*
 $site = Yii::app()->createController('Site');

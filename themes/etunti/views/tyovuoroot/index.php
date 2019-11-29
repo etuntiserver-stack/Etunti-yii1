@@ -96,7 +96,7 @@ if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
                  <div class="row">
 
 
-
+<div id="yht_tv"></div>
 <div class="table-responsive" id="parent">
   <table class="table table-bordered" id="fixTable">
      <thead>
@@ -257,7 +257,17 @@ if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
 
 
 	     echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'" valign="top">';
-	     echo '<div class="luolaatiko" for="'.$did.'_'.$t->id.'" pvm="'.$date.'" tid="'.$t->id.'" from="tvuoro" kohteet_siivous="'.$ks.'" asiakas="'.$asiakas.'" kohde="'.$kohde.'"></div>';
+	     //echo '<div class="luolaatiko" for="'.$did.'_'.$t->id.'" pvm="'.$date.'" tid="'.$t->id.'" from="tvuoro" kohteet_siivous="'.$ks.'" asiakas="'.$asiakas.'" kohde="'.$kohde.'"></div>';
+ 	     $did = $this->renderPartial('//tyovuoroot/did',array(
+					'pvm'=>$date,
+					'tid'=>$t->id,
+					'from'=>'tvuoro', 
+					'kohteet_siivous'=>$kohteet_siivous, 
+					'asetukset'=>$asetukset,
+					'asiakas'=>$asiakas,
+					'kohde'=>$kohde,
+	     ), true);
+	     echo json_decode($did, true);
 	     echo '</td>';
 	  }
 	  echo '</tr>';
@@ -337,6 +347,8 @@ $(document).ready(function(){
 
   });
 
+	var numItems = $('.tv_edit').length;
+	$('#yht_tv').html(numItems);
 
 });
 </script>

@@ -718,8 +718,8 @@ $(document).ready(function(){
     $classCol = 'collapse';
     $toistuvaID =  '<span id="toistuvaID"></span>';
 
-    if(isset($model->id) and $model->toistuva_id != 0){
-	$tvt = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
+    if($toistuva){
+	$tvt = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id); // Toistuva modelissa on GETtoistuva_id
 	if(isset($tvt->id)){
     	$pfrom = $tvt->pfrom;
     	$viikkoja = $tvt->viikkoja;
@@ -756,7 +756,7 @@ $(document).ready(function(){
 
 <div class="row" id="alkaen_loppuen">
   <div class="col-sm-4">
-	<label><?php echo Yii::t('main', 'Alkaen'); ?></label>
+	<label><?php echo Yii::t('main', 'Alkaen'); ?> (<?=$pfrom?>)</label>
 	<input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pfrom]" id="pfrom" value="<?php echo date('d.m.Y', strtotime($pfrom)); ?>">
   </div>
   <div class="col-sm-4">
