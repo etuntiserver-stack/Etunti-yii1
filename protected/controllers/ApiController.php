@@ -599,8 +599,7 @@ public function actionImei($dom)
 		if(!$this->checkKokeiluversion($dom))
 		{
 			$site = Yii::app()->createController('Site');
-			$return = ['error' => $site[0]->ilmainenIlmoitus()];
-        		$this->_sendResponse(200, CJSON::encode($return));
+        		$this->_sendResponse(200, "eiLoytyTekija//".$site[0]->ilmainenIlmoitus());
 			exit;
 		}
 		//     kokeiluversion -->
