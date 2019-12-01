@@ -12,6 +12,7 @@ return array(
 	'LOPETA' => 'FINISH',
 	'Osoite' => 'Address',
 	'lyhyt_viesti' => 'Short message',
+	'Lähetä tunnukset' => 'LOGIN',
 
 	/* Viestinta */
 	'Viestintä' => 'Communication',
@@ -38,6 +39,8 @@ return array(
 	'Valitse kieli' => 'Choose language',
 	'Asetukset' => 'Settings',
 	'Tallenna kieli' => 'Save language',
+	'MuutAsetukset' => 'Settings',
+	'henkilokortti' => 'Identity card',
 
 	/* Kameraa */
 	'Kuvien lähettäminen' => 'Picture sender',

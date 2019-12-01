@@ -374,6 +374,7 @@ public function actionLang($dom)
 		'osoite' => Yii::t('app', 'Osoite'),
 		'lyhyt_viesti' => Yii::t('app', 'lyhyt_viesti'),
 		'kirjaudu' => Yii::t('app', 'Lähetä tunnukset'),
+		'kirjaudu_sisaan' => Yii::t('app', 'Kirjaudu sisään'),
 
 		/* Viestinta */
 		'LangViestinta' => Yii::t('app', 'Viestintä'),
@@ -393,6 +394,7 @@ public function actionLang($dom)
 		'paaAsetukset' => Yii::t('app', 'Pääasetukset'),
 		'MuutAsetukset' => Yii::t('app', 'Muut asetukset'),
 		'tallennaKieli' => Yii::t('app', 'Tallenna'),
+		'henkilokortti' => Yii::t('app', 'Työntekijän Henkilökortti'),
 
 		/* Kamera */
 		'LangKuvienLahettaminen' => Yii::t('app', 'Kuvien lähettäminen'),
