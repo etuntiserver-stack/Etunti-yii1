@@ -39,8 +39,8 @@ return array(
 	'Valitse kieli' => 'Choose language',
 	'Asetukset' => 'Settings',
 	'Tallenna kieli' => 'Save language',
-	'MuutAsetukset' => 'Settings',
-	'henkilokortti' => 'Identity card',
+	'Muut asetukset' => 'Settings',
+	'Työntekijän Henkilökortti' => 'Identity card',
 
 	/* Kameraa */
 	'Kuvien lähettäminen' => 'Picture sender',
