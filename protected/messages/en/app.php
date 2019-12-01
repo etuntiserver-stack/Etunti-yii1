@@ -12,6 +12,7 @@ return array(
 	'LOPETA' => 'FINISH',
 	'Osoite' => 'Address',
 	'lyhyt_viesti' => 'Short message',
+	'Kirjaudu sisään' => 'LOGIN',
 	'Lähetä tunnukset' => 'LOGIN',
 
 	/* Viestinta */
