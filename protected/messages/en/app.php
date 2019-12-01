@@ -7,6 +7,7 @@ return array(
 	'TYÖ' => 'WORK',
 	'MATKA' => 'TRIP',
 	'LOUNAS' => 'LUNCH',
+	'LOUNASTAUKO' => 'LUNCH',
 	'ALOITA' => 'START',
 	'LOPETA' => 'FINISH',
 	'Osoite' => 'Address',
