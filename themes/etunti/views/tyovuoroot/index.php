@@ -1,5 +1,7 @@
 <?php
 ini_set('memory_limit', '256M');
+//print_r($_SESSION['muistin']);
+//exit;
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot.css">

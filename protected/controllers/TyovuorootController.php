@@ -1354,60 +1354,59 @@ class TyovuorootController extends Controller
 		}
 
 		// remove
-		if(isset($_POST['remove']) and isset($_SESSION['muistin']))
-		{
-		foreach($_SESSION['muistin'] as $cp)
-		{
-			$ex = explode("_",$cp);
+		if(isset($_POST['remove']) and isset($_SESSION['muistin'])){
+			foreach($_SESSION['muistin'] as $cp){
 
-			$t = Tyovuoroot::model()->findbypk($ex[0]);
-			if( !isset($t->id) ){ exit; }
+				$ex = explode("_",$cp);
+				if( isset($ex[0]) and $ex[0] == 'tv' ){
+					$t = Tyovuoroot::model()->findbypk($ex[1]);
+				}
 
-			// <-- Jos toistuva, otetaan sen Päivämäärä pois ketjusta
-			if( isset($t->pvm) and $t->toistuva_id != 0)
-			{
-				$this->toistuvaDeletePvm($t->toistuva_id, $t->pvm);
-			}
-			//     Jos toistuva, otetaan sen Päivämäärä pois ketjusta -->
+				// <-- Jos toistuva, otetaan sen Päivämäärä pois ketjusta
+				if( isset($ex[0]) and $ex[0] == 'toistuva' ){
+					$this->toistuvaDeletePvm($ex[1], $ex[2], $ex[3]); // id, did, tid
+				}
+				//     Jos toistuva, otetaan sen Päivämäärä pois ketjusta -->
 
 
-			if( is_array(json_decode($t->tyopaari, true)) ){
-				$uusi_tp_arr = array();
-				foreach(json_decode($t->tyopaari, true) as  $id => $tp_id){
-					$tv = Tyovuoroot::model()->findByPk($id);
-					if( isset($tv->id) and $tv->tid == $t->tid ){
-						// ei mitaan koska pois
-					} else {
-						$uusi_tp_arr[$id] = $tp_id;
+				if( isset($t->id) and is_array(json_decode($t->tyopaari, true)) ){
+					$uusi_tp_arr = array();
+					foreach(json_decode($t->tyopaari, true) as  $id => $tp_id){
+						$tv = Tyovuoroot::model()->findByPk($id);
+						if( isset($tv->id) and $tv->tid == $t->tid ){
+							// ei mitaan koska pois
+						} else {
+							$uusi_tp_arr[$id] = $tp_id;
+						}
+					}
+					foreach( $uusi_tp_arr as $k => $v ){
+						if( count($uusi_tp_arr) == 1 ){
+						Tyovuoroot::model()->updateByPk($k, array('tyopaari' => ''));
+						break;
+						}
+						Tyovuoroot::model()->updateByPk($k, array('tyopaari' => json_encode($uusi_tp_arr)));
 					}
 				}
-				foreach( $uusi_tp_arr as $k => $v ){
-					if( count($uusi_tp_arr) == 1 ){
-					Tyovuoroot::model()->updateByPk($k, array('tyopaari' => ''));
-					break;
-					}
-					Tyovuoroot::model()->updateByPk($k, array('tyopaari' => json_encode($uusi_tp_arr)));
-				}
-			}
 			
 
-			// <-- LOG
-			if( isset($t->id) )
-			{
-			$model_log 	= 'Tyovuoroot';
-			$name_log 	= 'Työvuorot';
-			$status_log 	= 'Delete';
+				// <-- LOG
+				if( isset($t->id) )
+				{
+				$model_log 	= 'Tyovuoroot';
+				$name_log 	= 'Työvuorot';
+				$status_log 	= 'Delete';
+	
+					$old_values = json_encode($t->attributes);
+					$new_values = null;
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
 
-				$old_values = json_encode($t->attributes);
-				$new_values = null;
-				$site = Yii::app()->createController('Site');
-				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				if( isset($ex[0]) and $ex[0] == 'tv' ){
+					Tyovuoroot::model()->deletebypk($ex[1]);
+				}
 			}
-			//     LOG -->
-
-
-			Tyovuoroot::model()->deletebypk($ex[0]);
-		}
 
 			echo json_encode('//'.implode(",",$_SESSION['muistin']));
 			exit;
@@ -1567,15 +1566,15 @@ class TyovuorootController extends Controller
 		}
 	}
 
-	public function toistuvaDeletePvm($toistuva_id, $pvm)
+	public function toistuvaDeletePvm($id, $did, $tid)
 	{
-		$toistuva = ToistuvatTyovuorot::model()->findbypk($toistuva_id);
+		$toistuva = ToistuvatTyovuorot::model()->findbypk($id);
 		if(isset($toistuva->id))
 		{
 			$poistettu_pvm = array();
 			$poistettu_pvm = json_decode($toistuva->poistettu_pvm, true);
 
-			$poistettu_pvm[] = $pvm;
+			$poistettu_pvm[] = [ 'tid' => $tid, 'pvm' => date("d.m.Y", strtotime($did)) ];
 			ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('poistettu_pvm'=>json_encode($poistettu_pvm)));
 
 		}
@@ -2124,6 +2123,26 @@ class TyovuorootController extends Controller
 	}
 
 	public function actionBeta($kohteet_siivous=array(), $kohde='', $asiakas='') {
+
+		// <-- Ketjun kasikorjaus
+		$criteria = new CDbCriteria(); 
+		$criteria->order = "id ASC";
+		$criteria->group = "toistuva_id";
+		$criteria->condition = "
+			id IN( SELECT MAX(id) FROM sivex_tvuoro GROUP BY toistuva_id )
+			AND tid!=0
+			AND toistuva_id!=0
+			AND toistuva_id IN(
+				SELECT id FROM toistuvat_tyovuorot WHERE tyopaari='' AND tid!=t.tid
+			)
+		";
+		$tvr = Tyovuoroot::model()->findAll($criteria);
+		foreach($tvr as $item){
+			ToistuvatTyovuorot::model()->updatebypk($item->toistuva_id, array('tid' => $item->tid));
+		}
+		//     Ketjun kasikorjaus -->
+
+
 		$site = Yii::app()->createController('Site');
 		$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
 		$asetukset = Asetukset::model()->findByPk(1);
@@ -2305,6 +2324,7 @@ class TyovuorootController extends Controller
 		$toistuva_from = Yii::app()->session['from'];
 		$toistuva_to = Yii::app()->session['to'];
        		$criteria = new CDbCriteria(); 
+		$criteria->order = "alku";
 		$criteria->condition = "
 			DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) BETWEEN '".$toistuva_from."' AND '".$toistuva_to."'
 			OR
@@ -2370,8 +2390,9 @@ class TyovuorootController extends Controller
 		//     toistuvat -->
 
 		//exit;
-		//$merge = array_merge($tv_arr, $toistuvat_arr);
-		/*
+/*
+		$merge = array_combine($tv_arr, $toistuvat_arr);
+		
 		echo '<pre>';
 		print_r( $toistuvat_arr );
 		echo '</pre>';

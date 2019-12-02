@@ -144,6 +144,7 @@ class Tyovuoroot extends DB2ActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+		        'toistuvat' => array(self::BELONGS_TO, 'ToistuvatTyovuorot', 'toistuva_id'),
 		        'kohteet' => array(self::BELONGS_TO, 'Kohteet', 'kohde'),
 		        'avaimet' => array(self::HAS_MANY, 'Avaimet', array('kohde'=>'kohde')),
 		        'tt' => array(self::BELONGS_TO, 'Tyontekijat', 'tid'),

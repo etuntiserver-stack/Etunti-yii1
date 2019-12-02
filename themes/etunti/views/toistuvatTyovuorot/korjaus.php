@@ -10,35 +10,23 @@ Zerouali Ali
 Rahkema Aira
 */
 
-$arvo = ToistuvatTyovuorot::model()->findbypk($_GET['toistuva_id']);
-echo 'Ketju: '.$arvo->id.', Toistuva tid: '.$arvo->tid.', pfrom: '.$arvo->pfrom.', pto: '.$arvo->pto.', viikkoja: '.$arvo->viikkoja;
-echo '<br><br>';
-			// <-- Poistettu_pvms
-			$poistettu_pvms = [];
-			if( !empty($arvo->poistettu_pvm) ){
-				foreach(json_decode($arvo->poistettu_pvm, true) as $ppvm){
-					$poistettu_pvms[$arvo->id][$ppvm] = $ppvm;
-				}
-			}
-
-			$weeks = new DatePeriod(
-			    new DateTime(date("Y-m-d", strtotime($arvo->pfrom))), 
-			    new DateInterval('P'.$arvo->viikkoja.'W'), 
-			    new DateTime(date("Y-m-d", strtotime($arvo->pto)))
-			);
-			$pvms = [];
-			foreach ($weeks as $wk) {
-				//if( strtotime($wk->format('Y-m-d')) >= strtotime($toistuva_from) ){
-					foreach(json_decode($arvo->viikko_paivat, true) as $day){
-						$gendate = new DateTime();
-						$gendate->setISODate($wk->format('Y'),$wk->format('W'),$day);
-						$pvm = $gendate->format('d.m.Y');
-						//if( isset($poistettu_pvms[$arvo->id][$pvm]) ){ continue; }
-						echo $pvm.'<br>';
-					}
-				//}
-			}
-
+$criteria = new CDbCriteria(); 
+$criteria->order = "id ASC";
+$criteria->group = "toistuva_id";
+$criteria->condition = "
+	id IN( SELECT MAX(id) FROM sivex_tvuoro GROUP BY toistuva_id )
+	AND tid!=0
+	AND toistuva_id!=0
+	AND toistuva_id IN(
+		SELECT id FROM toistuvat_tyovuorot WHERE tyopaari='' AND tid!=t.tid
+	)
+";
+$tv = Tyovuoroot::model()->findAll($criteria);
+foreach($tv as $item){
+//echo $item->toistuvat->id.' '.$item->tid.'-'.$item->toistuvat->tid.'<br>';
+	ToistuvatTyovuorot::model()->updatebypk($item->toistuva_id, array('tid' => $item->tid));
+}
+echo count($tv);
 exit;
 /*
 $site = Yii::app()->createController('Site');

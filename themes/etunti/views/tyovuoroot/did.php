@@ -295,7 +295,12 @@ if(!isset($_POST['tulosta']))
 	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="did '.$fullRivi.' '.(($tvVal->laskutettu == 1)? 'laskutettu':'').' '.(($tvVal->status == 11)? 'loma':'tyovuoro').'" style="color:'.$color.'">';
 	   //$bod .= '<h5>Toistuva nro. #'.$tvVal->toistuva_id.'</h5>';
 	   if( $from != 'mobiili' ){
-	       $bod .=  '<span class="link text-danger fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></span>';
+		if( $tvVal->toistuva_id > 0 )
+			$new_tv_id = 'toistuva_'.$tvVal->toistuva_id.'_'.$did.'_'.$tid;
+		else
+			$new_tv_id = 'tv_'.$tvVal->id.'_'.$did.'_'.$tid;
+
+		$bod .=  '<span class="link text-danger fa fa-pencil-square-o '.$muistin.'" for="'.$new_tv_id.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></span>';
 	   }
 
 	   $bod .=  '&nbsp;<span class="link '.$tv_edit.'" id="tv_'.$tvVal->id.'" style="'.$uusi_tilaus.'">'.((isset($arr_tyoajanlaatu[0]))? '': $al).' '.$osoite.'</span>';
