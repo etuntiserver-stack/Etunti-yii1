@@ -2325,13 +2325,7 @@ class TyovuorootController extends Controller
 		$toistuva_to = Yii::app()->session['to'];
        		$criteria = new CDbCriteria(); 
 		$criteria->order = "alku";
-		$criteria->condition = "
-			DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) BETWEEN '".$toistuva_from."' AND '".$toistuva_to."'
-			OR
-			DATE(STR_TO_DATE(pto, '%d.%m.%Y')) BETWEEN '".$toistuva_from."' AND '".$toistuva_to."'
-			OR
-			(DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '".$toistuva_from."' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '".$toistuva_to."')
-		";
+		$criteria->condition = "DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '$toistuva_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '$toistuva_from'";
 		if( count($tt) > 0 ){
 			$tt_ret = [];
 			foreach($tt as $k => $v){
