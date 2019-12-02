@@ -2411,8 +2411,8 @@ class TyovuorootController extends Controller
 
 		// Loop each day of each worker, and usort. Calling usort by key instead of
 		// looped array is required, as foreach doesn't provide array by reference.
-		foreach ($merge as $m_tt => $m_tt_arr) {
-			foreach (array_keys($m_tt_arr) as $m_pv) {
+		foreach (array_keys($merge) as $m_tt) {
+			foreach (array_keys($merge[$m_tt]) as $m_pv) {
 				usort($merge[$m_tt][$m_pv], function ($a, $b) {
 
 					// Apply the 'spaceship operator' to avoid truncation, while avoiding
