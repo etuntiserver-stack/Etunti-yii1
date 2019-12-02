@@ -495,9 +495,9 @@ $('.ryhmat').multiselect({
 <?php if(in_array('3',$tas)) : ?>
 <br>
 
-<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#laskutuksenAsetukset"><h3><?php echo Yii::t('main','Laskutuksen asetukset'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
-
-  <div class="row form collapse" id="laskutuksenAsetukset">
+<div id="laskutus" class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#laskutuksenAsetukset"><h3><?php echo Yii::t('main','Laskutuksen asetukset'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
+		<!-- Open this section when authenticating on Procountor. -->
+		s<div class="row form collapse<?php if (isset($procountor_auth_success) && !empty($procountor_auth_message ?? '')) echo " in" ?>" id="laskutuksenAsetukset">
     <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','Laskutuksen asetukset'); ?></h2></legend>
 
@@ -539,8 +539,8 @@ $('.ryhmat').multiselect({
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'palvelu_tyyppi'); ?>
-		<?php 
-        	$tal = array(1=>'POSTITA',2=>'TRUST',3=>'MANUAL',4=>'NETVISOR');
+		<?php
+			$tal = array(1=>'POSTITA',2=>'TRUST',3=>'MANUAL',4=>'NETVISOR',5=>'PROCOUNTOR');
 		echo $form->dropDownList($model,'palvelu_tyyppi', $tal, 
 		array('empty'=>'Valitse palvelu','class'=>'form-control','id'=>'osoite')) ?>
 		<?php echo $form->error($model,'palvelu_tyyppi'); ?>
@@ -580,10 +580,31 @@ $('.ryhmat').multiselect({
 
 		<?php echo $form->error($model,'postita_password'); ?>
 	</div>
+	<!-- PROCOUNTOR -->
+	<br><h2><?php echo Yii::t('main','PROCOUNTOR tunnukset'); ?></h2><br>
+	<div class="section fill mb5">
+		<?php $redirect = Yii::createComponent('Procountor')->getRedirectUri(); ?>
+		<p><?php echo CHtml::link('Kirjaudu Procountoriin', "https://api.procountor.com/login?response_type=code&client_id=etuntiClient&redirect_uri=$redirect&state=" . strtolower(Yii::app()->user->domain), ['class' => 'btn btn-lg btn-primary myBgColors']); ?></p>
+	</div>
+	<?php
+		// Auth success message
+		if (isset($procountor_auth_success) && !empty($procountor_auth_message ?? ''))
+			echo "<h3 class='text-" . ($procountor_auth_success ? 'success' : 'danger') . "'>$procountor_auth_message</h3>";
 
-    </div><div class="col-sm-4">
+		// Auth info
+		if (!empty($model->procountor_access_token) && !empty($model->procountor_refresh_token)) {
+			if (($model->procountor_invalid ?? 0) == 1) {
+				echo "<p>Procountor kirjautumisesi on vanhentunut. Kirjauduthan uudelleen jatkaaksesi Procountor ominaisuuksien käyttämistä.</p>";
+			} else {
+				echo "<p>Procountor kirjautumisesi on voimassa.</p>";
+				echo "<p>Pääsyavain:<br><small style='word-wrap: break-word;'>{$model->procountor_access_token}</small></p>";
+				echo "<p>Päivitysavain:<br><small style='word-wrap: break-word;'>{$model->procountor_refresh_token}</small></p>";
+			}
+		}
+	?>
+  </div>
+	<div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','TRUST.FI tunnukset'); ?></h2></legend>
-
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'trust_url'); ?>
 		<?php echo $form->textField($model,'trust_url',array('size'=>20,'maxlength'=>255,'class'=>'form-control')); ?>
@@ -632,8 +653,6 @@ $('.ryhmat').multiselect({
     </div>
   </div>
 <?php endif; ?>
-
-
 
 <?php if(in_array('4',$tas)) : ?>
 <br>
@@ -1250,6 +1269,17 @@ $('.ryhmat').multiselect({
 		<?php echo $form->error($model,'auto_hyvaksynta_klo'); ?>
 	</div>
 
+	<!-- Procountor scroll to laskutus -section on authentication event. -->
+	<?php if (isset($procountor_auth_success) && !empty($procountor_auth_message ?? '')): ?>
+	<script type="text/javascript">
+	$(document).ready(function () {
+		$('html, body').animate({
+			scrollTop: $("#laskutus").offset().top
+		}, 20);
+	});
+	</script>
+
+	<?php endif; ?>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){

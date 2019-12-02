@@ -30,7 +30,12 @@ $this->menu=array(
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
                  <div class="row">
-		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+									<?php
+									if (isset($procountor_auth_success) && !empty($procountor_auth_message ?? ''))
+										echo $this->renderPartial('_form', ['model' => $model, 'procountor_auth_success' => $procountor_auth_success, 'procountor_auth_message' => $procountor_auth_message]);
+									else
+										echo $this->renderPartial('_form', ['model' => $model]);
+									?>
                  </div>
                 </div>
               </div>
