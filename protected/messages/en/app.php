@@ -7,10 +7,13 @@ return array(
 	'TYÖ' => 'WORK',
 	'MATKA' => 'TRIP',
 	'LOUNAS' => 'LUNCH',
+	'LOUNASTAUKO' => 'LUNCH',
 	'ALOITA' => 'START',
 	'LOPETA' => 'FINISH',
 	'Osoite' => 'Address',
 	'lyhyt_viesti' => 'Short message',
+	'Kirjaudu sisään' => 'LOGIN',
+	'Lähetä tunnukset' => 'LOGIN',
 
 	/* Viestinta */
 	'Viestintä' => 'Communication',
@@ -37,6 +40,8 @@ return array(
 	'Valitse kieli' => 'Choose language',
 	'Asetukset' => 'Settings',
 	'Tallenna kieli' => 'Save language',
+	'Muut asetukset' => 'Settings',
+	'Työntekijän Henkilökortti' => 'Identity card',
 
 	/* Kameraa */
 	'Kuvien lähettäminen' => 'Picture sender',
