@@ -2390,14 +2390,44 @@ class TyovuorootController extends Controller
 		//     toistuvat -->
 
 		//exit;
-/*
-		$merge = array_combine($tv_arr, $toistuvat_arr);
+
+
+		/**
+		 * Sort hours inside day based on starting hour. Hours string (06:00-07:00)
+		 * is split by '-', and comparison is made on the starting hours of each
+		 * day. Using usort for quicker and shorter code. Array structure:
+		 * $merge = Array(
+		 *   [255] => Array(
+		 *     [04.04.2019] => Array(
+		 *       [0] => 06:00-08:00
+		 *       [1] => 07:00-09:00
+		 *     )
+		 *   )
+		 * )
+		 */
+
+		// Merge tv arrays and preserve keys.
+		$merge = $tv_arr + $toistuvat_arr;
+
+		// Loop each day of each worker, and usort. Calling usort by key instead of
+		// looped array is required, as foreach doesn't provide array by reference.
+		foreach ($merge as $m_tt => $m_tt_arr) {
+			foreach (array_keys($m_tt_arr) as $m_pv) {
+				usort($merge[$m_tt][$m_pv], function ($a, $b) {
+
+					// Apply the 'spaceship operator' to avoid truncation, while avoiding
+					// errors by checking that values are correct.
+					return
+						(is_numeric($a_str = strtotime(explode('-', $a)[0])) ? $a_str : 0) <=>
+						(is_numeric($b_str = strtotime(explode('-', $b)[0])) ? $b_str : 0);
+				});
+			}
+		}
 		
-		echo '<pre>';
-		print_r( $toistuvat_arr );
+		/* echo '<pre>';
+		print_r( $merge );
 		echo '</pre>';
-		exit;
-		*/
+		exit; */
 
 		//     Tv array -->
 
