@@ -1,18 +1,25 @@
-<?php
-	//$asetukset=Asetukset::model()->findbypk(1);
-
-?>
+<?php $asetukset=Asetukset::model()->findbypk(1); ?>
 
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
 
 	<?php if($info != ''): ?>
-	<div class="alert alert-success"><?php echo $info; ?></div>
+	<div class="alert <?php echo (isset($is_error) && $is_error) ? 'alert-danger' : 'alert-success' ?>"><?php echo $info; ?></div>
 	<?php endif; ?>
 
 
         <div class="pull-right myBgColors p10">
+  <?php
+  // Procountor send all approved on this page -button. This needs a confirm
+  // dialog as it is a potentially harmful action. See the related jQuery code.
+  if ($asetukset->palvelu_tyyppi == 5) {
+    echo "<button class='lahetaSivuProcountor btn btn-success myBgColors'
+      style='color:white' data-toggle='tooltip' data-placement='top' title=''
+      data-original-title='Lähetä tällä sivulla näkyvät hyväksytyt laskut asiakkaille.'
+      '>" . Yii::t('main', 'Lähetä kaikki hyväksytyt tällä sivulla') . "</button>";
+  }
+  ?>
 	<?php echo CHtml::link(Yii::t('main', 'Lähettämättömät'), 
 		array('index', 'lahettamattomat'=>'true'), 
 		array(
@@ -187,7 +194,7 @@
 
 	<?php if($lahettamattomat == true): ?>
 	<h3 class="alert alert-primary myBgColors"><?php echo Yii::t('main', 'Lähettämättömät laskut'); ?>
-		<button class="col-sm-offset-1 valitseKaikki btn btn-sm btn-default btn-group"><?php echo Yii::t('main', 'Valitse kaikki'); ?></button>
+    <button class="valitseKaikki btn btn-sm btn-default btn-group"><?php echo Yii::t('main', 'Valitse kaikki'); ?></button>
 		<span id="lahetaValitsemmat"></span>
 	</h3>
 	<?php endif; ?>
@@ -278,26 +285,63 @@ $(".valitseLahetettavaksi").click(function(){
 	}
 });
 
+// Procountor: Send all approved invoices on this page.
+$('.lahetaSivuProcountor').click(function() {
 
+  // Confirm this action as it is a potentially harmful one.
+  if (!confirm('Haluatko varmasti lähettää kaikki tämän sivun hyväksytyt laskut?'))
+    return;
 
-$(document).delegate(".lahetaNamat","click",function(){
-	$('#mobileTable input:checkbox').each(function () {
-           if (this.checked) {
+  // Build list of IDs. Just send all IDs on this page to the action. The action
+  // will check whether an invoice should be sent.
+  var ids = [];
+  $('i.link[for]').each(function() {
+    ids.push($(this).attr('for'));
+  });
 
-		var thisFor = $(this).attr('for');
+  // Build hidden form for POST.
+  var form = '';
+  $.each(ids, function( key, value ) { form += '<input type="hidden" name="ids[]" value="'+value+'">'; });
 
-	        $.ajax({
-	           url: 'laheta_valitsemmat?id='+thisFor,
-	           /*type: "POST",
-	           data: { id : thisFor },*/
-	           success: function(data){
-			console.log(data);
-	           }
-	        });
+  // Submit and continue to action.
+  $('<form action="laheta_procountor" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
+});
 
-           }
-	});
-	window.location.reload();
+// Send all, or only selected invoices.
+$(document).delegate(".lahetaNamat", "click", function() {
+  $('#mobileTable input:checkbox').each(function() {
+    if (this.checked) {
+
+      // Get invoice ID.
+      var id = $(this).attr('for');
+
+      // Save this element to access the current row later in AJAX callback.
+      var temp = $(this);
+
+      $.ajax({
+        url: 'laheta_valitsemmat?id=' + id,
+        /*type: "POST",
+        data: { id : id },*/
+        success: function(data) {
+
+          // Check if there was an error. If so, stop the loop now.
+          if (data.trim() != 'OK') {
+            alert(data);
+            return false; // break invoice loop
+          } else {
+
+            // Action successful, find the status column of this row and change the text.
+            temp.parent().parent().parent().find('td').each(function(index) {
+              if ($(this).text().trim() == 'Lasku hyväksytty') {
+                $(this).text('Lasku lähetetty');
+                return false; // break
+              }
+            });
+          }
+        }
+      });
+    }
+  });
 });
 
 

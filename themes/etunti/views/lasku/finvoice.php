@@ -3,7 +3,328 @@
 if(isset($_GET['id']))
   $id = $_GET['id'];
 
+// Procountor invoice creation and approval.
+if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
+  $l = Lasku::model()->findbypk($_GET['id']);
+  $hyvitys = $l->laskun_nimetys == 'Hyvityslasku';
+  $local = in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']);
 
+  // var_dump($l->attributes);
+  // echo '<br><br>';
+  // $lr = LaskunRivit::model()->findAll('lid=' . $_GET['id']);
+  // var_dump($lr);
+  // exit;
+
+  $pc = Yii::createComponent('Procountor');
+
+  // Check that authorization is valid.
+  if (!$pc->isAuthorized()) {
+    Yii::app()->user->setFlash('danger', 'Procountor kirjautuminen on viallinen tai vanhentunut. Kirjaudu Procountoriin uudelleen asetuksista.');
+    $this->redirect(array('update','id'=>$id));
+  }
+
+  // Create new invoice on Procountor only if it hasn't been created there
+  // already. It's possible that the invoice was previously sent to Procountor,
+  // and then marked UNFINISHED, allowing the code to reach this again.
+  if (empty($l->procountor_id ?? '')) {
+
+    // Use testing bank account for localhost (for etunti.test).
+    $current_iban = $local ? 'FI7999999900032082' : str_replace(' ', '', $l->saaja_iban);
+    $bank_account_found = false;
+    $bank_account_results = $pc->getBankAccounts();
+
+    if (isset($bank_account_results['errors']) || !isset($bank_account_results['results'])) {
+      $pc->logError('getBankAccounts', $bank_account_results, ['Lasku ID' => $l->id], 'Failed to get bank accounts from Procountor.');
+      Yii::app()->user->setFlash('danger', 'Pankkitilien haku Procountorista epäonnistui.');
+      $this->redirect(array('update','id'=>$id));
+    }
+
+    // Loop result bank accounts and compare IBAN.
+    foreach($bank_account_results['results'] as $bank_account) {
+      if (($iban = $bank_account['iban'] ?? '') == $current_iban) {
+
+        // Ensure this bank account is active, because otherwise we get errors.
+        if (($bank_account['status'] ?? '') != 'ACTIVE') {
+          Yii::app()->user->setFlash('danger', 'Valittu pankkitili ei ole aktivoitu Procountorissa.');
+          $this->redirect(array('update','id'=>$id));
+        }
+
+        $bank_account_found = true;
+        break;
+      }
+    }
+
+    if (!$bank_account_found) {
+      Yii::app()->user->setFlash('danger', 'Valittua pankkitiliä ei löydy Procountorista. Jos pankkitili
+                                            on lisätty Procountor tilillesi, ota yhteyttä ylläpitoon.');
+      $this->redirect(array('update','id'=>$id));
+
+      // TODO (?): Create bank account, BIC is needed! Not saved currently.
+      // Also: ledgerAccount and bankingCode (important).
+      $bank_account_params = [
+        "iban" => $current_iban,
+        "bic" => "",
+        "bankName" => "",
+        "currency" => "EUR",
+        "defaultForInvoice" => false,
+        "defaultForPayment" => false,
+        "status" => "ACTIVE",
+        "ledgerAccount" => "1910", // TODO
+        "bankingCode" => "",
+        "showAccountOnInvoice" => true,
+        "allowPayments" => true,
+        "allowForeignPayments" => true,
+        "allowSalaryPayments" => true,
+        "allowExpressPayments" => true
+      ];
+    }
+
+    $name = $l->tyyppi == 'yritys' ? $l->yritys : $l->yhteyshenkilo;
+    $channel = ($l->laskutus == 'verkkolasku') ? 'ELECTRONIC_INVOICE' : ($l->laskutus == 'posti' ? 'MAIL' : 'EMAIL');
+
+    $params = [
+      //"partnerId" => 0,                         // (int) Technical ID for the business partner. Used to link the invoice to a customer or supplier in the business partner register. If supplied, the company must have this partner ID in the corresponding register.
+      "type" => "SALES_INVOICE",                  // (string) Invoice type. Note that this affects validation requirements.
+      "status" => "UNFINISHED",                   // (string) Invoice status. A new invoice created through the API will have its status set as UNFINISHED.
+      "date" => $l->paivays,                      // (string) Invoice date. This is synonymous to billing date.
+
+      // This object holds information about the counterparty of the invoice. With sales invoices, it is the buyer. With
+      // purchase invoices, it is the seller. With travel and expense invoices, it is the reporter of the expenses
+      "counterParty" => (object) [
+        "contactPersonName" => $l->yhteyshenkilo, // (string) Name of the contact person.
+        "identifier" => $l->y_tunnus,             // (string) SALES_INVOICE and PURCHASE_INVOICE only. Business ID or national identification number.
+        "taxCode" => "",                          // (string) SALES_INVOICE only. Tax code of the customer.
+        "customerNumber" => $l->as_nro,           // (string) SALES_INVOICE and PURCHASE_INVOICE only. Customer number.
+        "email" => $l->sahkoposti,                // (string) SALES_INVOICE only. Email address of the buyer. Required if invoicing channel is EMAIL, otherwise not visible on the UI.
+
+        // Intermediary bank name and address.
+        "counterPartyAddress" => (object) [
+          "name" => $name,                        // (string) Name ("first line") in the address.
+          "specifier" => "",                      // (string) Specifier, such as c/o address.
+          "street" => $l->osoite,                 // (string) Street. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
+          "zip" => $l->postinumero,               // (string) Zip code. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
+          "city" => $l->toimipaikka,              // (string) City.
+          "country" => "FINLAND",                 // (string) Country.
+          "subdivision" => ""                     // (string) Subdivision of the city.
+        ],
+
+        // Payment bank account. Not required if payment method is cash.
+        "bankAccount" => (object) [
+          // Bank account IBAN. If using a financing agreement, the account number must match the account of the specified
+          // financing agreement. The account number must be valid for the specified country, include country code and
+          // exclude any spaces.
+          // "accountNumber" => str_replace(' ', '', $l->saaja_iban),
+          // TODO: replace with above commented line. This IBAN is for the testing environment.
+          "accountNumber" => 'FI7999999900032082',
+
+          // (string) PURCHASE_INVOICE only. Bank account BIC/SWIFT.
+          "bic" => ""
+        ],
+
+        // SALES_INVOICE only. EInvoice address of the buyer. Required if invoicing channel is ELECTRONIC_INVOICE,
+        // otherwise not visible on the UI.
+        "einvoiceAddress" => (object) [
+          "operator" => $l->v_tunnus,         // (string) SALES_INVOICE Only. Operator code. Required if the invoiceChannel is ELECTRONIC_INVOICE and country is FINLAND.
+          "address" => $l->verkkolaskuosoite  // (string) SALES_INVOICE Only. EInvoice Address. Required if the invoiceChannel is ELECTRONIC_INVOICE, format must be valid for the specified country.
+        ]
+      ],
+
+      // Intermediary bank name and address.
+      "billingAddress" => (object) [
+        "name" => $name,                      // (string) Name ("first line") in the address.
+        "specifier" => "",                    // (string) Specifier, such as c/o address.
+        "street" => $l->osoite,               // (string) Street. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
+        "zip" => $l->postinumero,             // (string) Zip code. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
+        "city" => $l->toimipaikka,            // (string) City.
+        "country" => "FINLAND",               // (string) Country.
+        "subdivision" => ""                   // (string) Subdivision of the city.
+      ],
+
+      // Intermediary bank name and address.
+      "deliveryAddress" => (object) [
+        "name" => $name,                      // (string) Name ("first line") in the address.
+        "specifier" => "",                    // (string) Specifier, such as c/o address.
+        "street" => $l->osoite,               // (string) Street. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
+        "zip" => $l->postinumero,             // (string) Zip code. Required for SALES_INVOICE if invoicing channel is MAIL. In that case, must be specified in counterPartyAddress if not specified in billingAddress.
+        "city" => $l->toimipaikka,            // (string) City.
+        "country" => "FINLAND",               // (string) Country.
+        "subdivision" => ""                   // (string) Subdivision of the city.
+      ],
+
+      // Invoice payment info. Includes the bank account to which the invoice should be paid, how it should be paid and when it should be paid.
+      "paymentInfo" => (object) [
+        "paymentMethod" => "BANK_TRANSFER",   // (string) Payment method. Methods other than BANK_TRANSFER, CASH, CLEARING, OTHER may require fields not supported by the API. Method DIRECT_DEBIT is not supported for new invoices.
+        "currency" => "EUR",                  // (string) Currency of the payment in ISO 4217 format.
+        "referenceCode" => $l->viitenumero,   // (string) Payment reference code. If specified, must be a valid reference code where the last digit is a check digit. If the field is given an empty string value, a reference code is automatically generated by Procountor. If the field is not provided at all, no reference code will be assigned to the invoice.
+        "dueDate" => $l->erapaiva,            // (string) Payment due date. The payment term can be 0-999 days.
+        "currencyRate" => 1,                  // (number) Currency exchange rate. Calculated as the amount of one unit of domestic currency in foreign currency. Only foreign currency payments should have a value other than 1.
+        "paymentTermPercentage" => 0,         // (number) Discount percentage set in term of payment. Determines the discount if the invoice is paid before due date.
+        "clearingCode" => "",                 // (string) Receiver bank's clearing code for foreign payments.
+
+        // Payment bank account. Not required if payment method is cash.
+        "bankAccount" => (object) [
+          // (string) Bank account IBAN. If using a financing agreement, the account number must match the account of the
+          // specified financing agreement. The account number must be valid for the specified country, include country
+          // code and exclude any spaces.
+          //"accountNumber" => str_replace(' ', '', $l->saaja_iban),
+          // TODO: replace with above commented line. This IBAN is for the testing environment.
+          "accountNumber" => 'FI7999999900032082',
+
+          // (bic) PURCHASE_INVOICE only. Bank account BIC/SWIFT.
+          "bic" => ""
+        ],
+
+        // Only SALES_INVOICE and PURCHASE_INVOICE. Cash discount set on the invoice.
+        "cashDiscount" => (object) [
+          "numberOfDays" => 0,          // (int) Days specified in cash discount
+          "discountPercentage" => 0     // (number) Discount percentage specified in cash discount
+        ],
+      ],
+
+      // Invoice extra info.
+      "extraInfo" => (object) [
+        "accountingByRow" => false,     // (bool) Accounting by row means that a separate ledger transaction is created for each invoice row.
+        "unitPricesIncludeVat" => true  // (bool) Indicates if the unit prices on invoice rows include VAT (true) or not (false).
+      ],
+
+      "discountPercent" => 0,           // (int) Invoice discount percentage. Scale: 4.
+      "orderReference" => $l->viitenne, // (string) Order reference of the invoice. This will be copied to the payment as message if no reference code is specified.
+      "invoiceRows" => [],              // Filled later in a loop.
+      "vatStatus" => 1,                 // (int) Invoice VAT status. Required for all invoices except travel invoices and expense claims.
+      "originalInvoiceNumber" => "",    // (string) Invoice number from the biller in an external system.
+      "deliveryStartDate" => "",        // (string) First day of the delivery period.
+      "deliveryEndDate" => "",          // (string) Last day of the delivery period.
+      //"deliveryMethod" => "OTHER",    // (string) Delivery method for the goods. Sales invoices do not support type OTHER.
+      "deliveryInstructions" => "",     // (string) Delivery instructions.
+      "invoiceChannel" => $channel,     // (string) Channel of distribution for the invoice. Values EDIFACT and PAPER_INVOICE are not allowed for new invoices.
+      "penaltyPercent" => 0,            // (number) Penal interest rate. Scale: 2.
+      "language" => "FINNISH",          // (string) Language of the invoice. Required for sales invoices, otherwise ignored.
+      "additionalInformation" => $hyvitys ? 'Hyvityslasku' : "", // (string) Invoice notes containing additional information. Visible on the invoice. Use \n as line break.
+      "vatCountry" => "FINLAND",        // (string) Country code describing which country is VAT standards are being used. Usage of foreign VAT settings must be agreed on separately with Procountor. Required if the company uses foreign VATs. Example value: SWEDEN.See Address.country in POST /invoices for a list of allowable values
+      "notes" => $hyvitys ? 'Hyvityslasku' : "", // (string) Invoice notes (seller's/buyer's notes). Not visible on the invoice. Use \n as line break.
+      // "factoringContractId" => 0,    // (int) SALES_INVOICE only. ID for external financing agreement. The bankAccount.accountNumber specified must match the one used by the specified financing agreement. Financing agreements cannot be used with cash payments.
+      "factoringText" => "",            // (string) SALES_INVOICE only. Additional notes about external financing agreement.
+      "orderNumber" => "",              // (string) Order number
+      "agreementNumber" => "",          // (string) Agreement number
+      "accountingCode" => "",           // (string) Accounting code
+      "deliverySite" => "",             // (string) Delivery site
+      "tenderReference" => ""           // (string) Tender reference
+
+      // Travel information items. A travel invoice may have one or more travel information items containing departure
+      // date, return date, destinations and travel purpose.
+      /* "travelInformationItems" => [
+        (object)[
+          "departure" => "",
+          "arrival" => "",
+          "places" => "",
+          "purpose" => ""
+        ]
+      ], */
+
+    ];
+
+    // Specify invoice rows.
+    foreach (LaskunRivit::model()->findAll('lid=' . $_GET['id']) as $lr) {
+      $params['invoiceRows'][] = (object) [
+        "product" => $lr->tkoodi,       // (string) Product name.
+        "productCode" => $lr->tkoodi,   // (string) Product code.
+        "quantity" => $lr->kpl,         // (number) Product quantity.
+        "unit" => "NO_UNIT",            // (string) Product unit.
+        "unitPrice" => $lr->hinta,      // (number) Product unit price. This value is affected by the "unit prices include VAT" setting on the invoice.
+        "discountPercent" => $lr->ale,  // (number) Product discount percentage.
+        "vatPercent" => $lr->alv,       // (number) Product VAT percentage. Must be a percentage currently in use for the company.
+        //"vatStatus" => 1,             // (int) Product VAT status.
+        "comment" => $lr->tkoodi        // (string) Invoice row comment. Visible on the invoice. Use \ as line break.
+      ];
+    }
+
+    // Send request to Procountor API.
+    $response = $pc->createInvoice($params);
+
+    // Look for the generated ID.
+    if (isset($response['id'])) {
+
+      // Invoice was sent successfully. Save ID.
+      $l->procountor_id = $response['id'];
+      $l->save();
+    }
+  }
+
+  // Get the ID that was generated now or in previous event.
+  if (!empty($procountor_id = $l->procountor_id ?? '')) {
+
+    // Approve invoice.
+    $approve_result = $pc->approveInvoice($procountor_id);
+    if (isset($approve_result['errors'])) {
+      $pc->logError('approveInvoice', $approve_result, ['Lasku ID' => $l->id], 'Error while approving invoice.');
+      Yii::app()->user->setFlash('danger', 'Laskun hyväksymisessä tapahtui virhe. Vika on kirjattu, ja ylläpidolle on ilmoitettu asiasta.');
+      $this->redirect(array('update', 'id' => $id));
+    }
+  } else {
+
+    // If response doesn't contain ID, the invoice was not sent properly. Return
+    // to the form now to avoid finvoice setting the status to 'LÄHETETTY'.
+    $pc->logError('createInvoice', $response, ['Lasku ID' => $l->id], 'Server didn\'t return a generated invoice ID.');
+    Yii::app()->user->setFlash('danger', 'Laskun hyväksymisessä/lähettämisessä tapahtui virhe. Viasta on ilmoitettu
+                                          ylläpidolle. Jos vika jatkuu, ota yhteyttä ylläpitoon.');
+    $this->redirect(array('update','id'=>$id));
+  }
+}
+
+// Procountor invalidation.
+if (isset($_GET['mitatointi']) && isset($_GET['procountor'])) {
+  $pc = Yii::createComponent('Procountor');
+  $l = Lasku::model()->findbypk($_GET['id']);
+
+  // Check that authorization is valid.
+  if (!$pc->isAuthorized()) {
+    Yii::app()->user->setFlash('danger', 'Procountor kirjautuminen on viallinen tai vanhentunut. Kirjaudu Procountoriin uudelleen asetuksista.');
+    $this->redirect(array('update','id'=>$id));
+  }
+
+  // If invoice was not created in Procountor, dont do anything here.
+  if ($l->procountor_id) {
+
+    // Change state to unfinished first, as an invoice cannot be invalidated in
+    // NOT_SENT state. Set unfinished even if the invoice already is unfinished
+    // (ignore any errors in the operation).
+    $pc->setInvoiceUnfinished($l->procountor_id);
+
+    // Invalidate
+    $invalidate_results = $pc->invalidateInvoice($l->procountor_id);
+    if (isset($invalidate_results['errors'])) {
+      $pc->logError('getBankAccounts', $invalidate_results, ['Lasku ID' => $_GET['id']], 'Failed to invalidate invoice.');
+      Yii::app()->user->setFlash('danger', 'Laskun mitätöinti Procountorissa epäonnistui. Vika on ilmoitettu ylläpitoon.');
+      $this->redirect(array('update', 'id' => $id));
+    }
+  }
+}
+
+// Procountor sending.
+if (isset($_GET['merkitseLahetettavaksi']) && isset($_GET['procountor'])) {
+  $pc = Yii::createComponent('Procountor');
+  $l = Lasku::model()->findbypk($_GET['id']);
+
+  // Check that authorization is valid.
+  if (!$pc->isAuthorized()) {
+    Yii::app()->user->setFlash('danger', 'Procountor kirjautuminen on viallinen tai vanhentunut. Kirjaudu Procountoriin uudelleen asetuksista.');
+    $this->redirect(array('update','id'=>$id));
+  }
+
+  // Ensure that the invoice was created to Procountor from the invoice view.
+  if (!$l->procountor_id) {
+    Yii::app()->user->setFlash('danger', 'Laskua ei voida lähettää Procountorissa koska sitä ei ole luotu Procountoriin Etunti käyttöliittymän kautta.');
+    $this->redirect(array('update', 'id' => $id));
+  }
+
+  // Send invoice.
+  $send_results = $pc->sendInvoice($l->procountor_id);
+  if (isset($send_results['errors'])) {
+    $pc->logError('sendInvoice', $send_results, ['Lasku ID' => $_GET['id']], 'Failed to send invoice.');
+    Yii::app()->user->setFlash('danger', 'Laskun lähetys Procountorissa epäonnistui. Vika on ilmoitettu ylläpitoon.');
+    $this->redirect(array('update', 'id' => $id));
+  }
+}
 
 if(isset($_GET['kopio'])){
 
