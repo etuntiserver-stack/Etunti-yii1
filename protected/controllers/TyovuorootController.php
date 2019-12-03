@@ -3915,7 +3915,7 @@ class TyovuorootController extends Controller
 				$new_toistuva = new ToistuvatTyovuorot;
 				$new_toistuva->attributes 	= $edellinen_model;
 				$new_toistuva->pfrom 		= $edellinen_model['pfrom'];
-				$new_toistuva->pto 		= date("d.m.Y", strtotime($model->pfrom.' -1 day'));
+				$new_toistuva->pto 		= date("d.m.Y", strtotime(' -1 day'));
 				if(!$new_toistuva->save()){
 					echo json_encode($new_toistuva->getErrors());
 					exit;
