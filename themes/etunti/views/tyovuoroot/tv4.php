@@ -98,7 +98,11 @@ ini_set('memory_limit', '512M');
 	<div id="<?=$did.'_'.$tid?>" class="latikkoAsetukset" pvm="<?=$f?>" tid="<?=$tid?>">
 		<?php if( isset($tv_arr[$tid][$f]) ): ?>
 		<?php ksort($tv_arr[$tid][$f]); ?>
-		<?php array_map('superfast', $tv_arr[$tid][$f]); ?>
+		<?php foreach($tv_arr[$tid][$f] as $k => $v): ?>
+			<?php foreach($v as $v2): ?>
+				<p><?=$v2?></p>
+			<?php endforeach; ?>
+		<?php endforeach; ?>
 		<?php endif; ?>
 	</div>
       </td>
@@ -112,9 +116,10 @@ ini_set('memory_limit', '512M');
 
 
 <?php 
+/*
 function superfast($arvo){
 	echo '<p>'.$arvo.'</p>';
-}
+} */
 ?>
 
 <script type="text/javascript">

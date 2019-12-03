@@ -2316,7 +2316,7 @@ class TyovuorootController extends Controller
 		foreach($tv as $arvo){
 			$return = $this->laatikkorakenne($arvo, $status, false);
 			if( isset($return['laatikko']['osoite']) ){
-				$tv_arr[$arvo->tid][$arvo->pvm][strtotime($arvo->alku)] = $return['laatikko']['osoite'];
+				$tv_arr[$arvo->tid][$arvo->pvm][strtotime($arvo->alku)][] = $return['laatikko']['osoite'];
 			}
 		}
 
@@ -2377,7 +2377,7 @@ class TyovuorootController extends Controller
 					if( isset($return['laatikko']['osoite']) ){
 
 						foreach($tids as $tid){
-							$tv_arr[$tid][$pvm][strtotime($arvo->alku)] = $return['laatikko']['osoite'];
+							$tv_arr[$tid][$pvm][strtotime($arvo->alku)][] = $return['laatikko']['osoite'];
 						}
 					}
 				}
