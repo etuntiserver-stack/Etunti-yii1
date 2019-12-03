@@ -109,7 +109,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 			array('alku, loppu, pituus, kesto', 'length', 'max'=>10),
 			array('tyoajanmerkinta', 'length', 'max'=>100),
 			array('tietoja', 'length', 'max'=>10000),
-			array('tyopaari, tvuoro_ids, poistettu_pvm, lisa_tuotteet, tyo_erittelyt, muistiinpano', 'safe'),
+			array('tyopaari, tvuoro_ids, poistettu_pvm, lisa_tuotteet, tyo_erittelyt, muistiinpano, viikko_paivat', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, pfrom, pto, viikkoja, viikko_paivat, tid, kohde, pvm, alku, loppu, kesto, tyoajanmerkinta, status, tietoja, tyopaari', 'safe', 'on'=>'search'),

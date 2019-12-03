@@ -93,9 +93,9 @@ $('td').hover(function()
 		$(this).before('<i class="fa fa-pencil-square-o muistin" for="' + $(this).attr('id') + '_' + did_tid + '"></i>');
 	   }
 	}
-	var tv_id = $(this).attr('id');
+	var this_id = $(this).attr('id');
 	setTimeoutConst = setTimeout(function() {
-		var hovertietoja = hv_tiedot(tv_id);
+		var hovertietoja = hv_tiedot(this_id);
 		$('#hovertietoja').html(hovertietoja).show();
 	}, delay);
 
@@ -110,10 +110,10 @@ $('td').hover(function()
      $(this).find('.muistin, .latikkolisatiedot_paa').remove();
 });
 
-function hv_tiedot(tv_id){
+function hv_tiedot(this_id){
 	var hovertietoja = '';
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/hovertietoja?tv_id='+tv_id,
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/hovertietoja?this_id='+this_id,
 	   async: false,
            success: function(data){
 		d = JSON.parse(data);
@@ -145,19 +145,15 @@ $(document).delegate(".luominen","click",function(){
 });
 
 $(document).delegate(".tv_edit","click",function(){
-	var tv_id = $(this).attr('id');
-	var toistuva_id = 0;
-	if( $(this).attr('toistuva_id') )
-		toistuva_id = $(this).attr('toistuva_id');
-
+	var this_id = $(this).attr('id');
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update4_form?id='+tv_id,
-           type: "GET",
-           data: {toistuva_id : toistuva_id},
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update4_form?this_id='+this_id,
+           //type: "GET",
+           //data: {toistuva_id : toistuva_id},
            success: function(data){
 		d = JSON.parse(data);
 		$('#showres').modal().html(d);
-		//console.log(data);
+		//console.log('tv_edit click: ' + data);
            },
 	   error:function(data){
 		console.log(data);

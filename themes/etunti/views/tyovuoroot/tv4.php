@@ -70,10 +70,12 @@ ini_set('memory_limit', '512M');
       <td>
 	<div id="<?=$did.'_0'?>" class="latikkoAsetukset" pvm="<?=$f?>" tid="0">
 		<?php if( isset($tv_arr[0][$f]) ): ?>
-			<?php array_map('superfast', $tv_arr[0][$f]); ?>
-		<?php endif; ?>
-		<?php if( isset($toistuvat_arr[0][$f]) ): ?>
-			<?php array_map('superfast', $toistuvat_arr[0][$f]); ?>
+		<?php ksort($tv_arr[0][$f]); ?>
+		<?php foreach($tv_arr[0][$f] as $k => $v): ?>
+			<?php foreach($v as $v2): ?>
+				<p><?=$v2?></p>
+			<?php endforeach; ?>
+		<?php endforeach; ?>
 		<?php endif; ?>
 	</div>
       </td>
