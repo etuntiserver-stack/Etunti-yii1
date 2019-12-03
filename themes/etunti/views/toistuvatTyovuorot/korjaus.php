@@ -5,9 +5,9 @@ Kovalenko Valentyna
 Lepik Marius
 Ongachi
 Peipsi
+Rahkema Aira
 Tornea Kimberly
 Zerouali Ali
-Rahkema Aira
 */
 
 $criteria = new CDbCriteria(); 

@@ -2316,16 +2316,16 @@ class TyovuorootController extends Controller
 		foreach($tv as $arvo){
 			$return = $this->laatikkorakenne($arvo, $status, false);
 			if( isset($return['laatikko']['osoite']) ){
-				$tv_arr[$arvo->tid][$arvo->pvm][] = $return['laatikko']['osoite'];
+				$tv_arr[$arvo->tid][$arvo->pvm][strtotime($arvo->alku)] = $return['laatikko']['osoite'];
 			}
 		}
 
 		// <-- toistuvat
-		$toistuva_from = Yii::app()->session['from'];
-		$toistuva_to = Yii::app()->session['to'];
+		$haku_from = Yii::app()->session['from'];
+		$haku_to = Yii::app()->session['to'];
        		$criteria = new CDbCriteria(); 
 		$criteria->order = "alku";
-		$criteria->condition = "DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '$toistuva_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '$toistuva_from'";
+		$criteria->condition = "DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '$haku_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '$haku_from'";
 		if( count($tt) > 0 ){
 			$tt_ret = [];
 			foreach($tt as $k => $v){
@@ -2336,7 +2336,6 @@ class TyovuorootController extends Controller
 		        $criteria->addCondition ('tid IN ('.$ids.') OR ('.$tyopaari.')');
 		}
 		$t = ToistuvatTyovuorot::model()->findAll($criteria);
-		$toistuvat_arr = [];
 		foreach($t as $arvo){
 			// <-- Tids
 			$tids = [];
@@ -2357,25 +2356,28 @@ class TyovuorootController extends Controller
 				}
 			}
 
+			$startday = date("Y-m-d", strtotime($arvo->pfrom));
+			$stopday = date("Y-m-d", strtotime($arvo->pto));
+			if( date("Ymd", strtotime($haku_to)) <= date("Ymd", strtotime($arvo->pto)) )
+				$stopday = date("Y-m-d", strtotime($haku_to.' this sunday'));
 			$weeks = new DatePeriod(
-			    new DateTime($arvo->pfrom), 
+			    new DateTime($startday), 
 			    new DateInterval('P'.$arvo->viikkoja.'W'), 
-			    new DateTime(date("Y-m-d", strtotime($toistuva_to.' +1 day')))
+			    new DateTime($stopday)
 			);
 			$pvms = [];
 			foreach ($weeks as $wk) {
-				if( strtotime($wk->format('Y-m-d')) >= strtotime($toistuva_from) ){
-					foreach(json_decode($arvo->viikko_paivat, true) as $day){
-						$gendate = new DateTime();
-						$gendate->setISODate($wk->format('Y'),$wk->format('W'),$day);
-						$pvm = $gendate->format('d.m.Y');
-						if( isset($poistettu_pvms[$arvo->id][$pvm]) ){ continue; }
-						$return = $this->laatikkorakenne($arvo, $status, true);
-						if( isset($return['laatikko']['osoite']) ){
-							//echo $arvo->id.' '.$pvm.'<br>';
-							foreach($tids as $tid){
-								$toistuvat_arr[$tid][$pvm][] = $return['laatikko']['osoite'];
-							}
+				foreach(json_decode($arvo->viikko_paivat, true) as $day){
+					$gendate = new DateTime();
+					$gendate->setISODate($wk->format('Y'),$wk->format('W'),$day);
+					$pvm = $gendate->format('d.m.Y');
+					//echo $arvo->id.' '.$pvm.'<br>';
+					if( isset($poistettu_pvms[$arvo->id][$pvm]) or (strtotime($pvm) < strtotime($haku_from))){ continue; }
+					$return = $this->laatikkorakenne($arvo, $status, true);
+					if( isset($return['laatikko']['osoite']) ){
+
+						foreach($tids as $tid){
+							$tv_arr[$tid][$pvm][strtotime($arvo->alku)] = $return['laatikko']['osoite'];
 						}
 					}
 				}
@@ -2385,41 +2387,9 @@ class TyovuorootController extends Controller
 
 		//exit;
 
-
-		/**
-		 * Sort hours inside day based on starting hour. Hours string (06:00-07:00)
-		 * is split by '-', and comparison is made on the starting hours of each
-		 * day. Using usort for quicker and shorter code. Array structure:
-		 * $merge = Array(
-		 *   [255] => Array(
-		 *     [04.04.2019] => Array(
-		 *       [0] => 06:00-08:00
-		 *       [1] => 07:00-09:00
-		 *     )
-		 *   )
-		 * )
-		 */
-
-		// Merge tv arrays and preserve keys.
-		$merge = $tv_arr + $toistuvat_arr;
-
-		// Loop each day of each worker, and usort. Calling usort by key instead of
-		// looped array is required, as foreach doesn't provide array by reference.
-		foreach (array_keys($merge) as $m_tt) {
-			foreach (array_keys($merge[$m_tt]) as $m_pv) {
-				usort($merge[$m_tt][$m_pv], function ($a, $b) {
-
-					// Apply the 'spaceship operator' to avoid truncation, while avoiding
-					// errors by checking that values are correct.
-					return
-						(is_numeric($a_str = strtotime(explode('-', $a)[0])) ? $a_str : 0) <=>
-						(is_numeric($b_str = strtotime(explode('-', $b)[0])) ? $b_str : 0);
-				});
-			}
-		}
-		
-		/* echo '<pre>';
-		print_r( $merge );
+		/*
+		echo '<pre>';
+		print_r( $tv_arr );
 		echo '</pre>';
 		exit; */
 
@@ -2430,7 +2400,6 @@ class TyovuorootController extends Controller
 			'tt_order_2' 	=> $tt_order_2,
 			'tt'		=> $tt,
 			'tv_arr'	=> $tv_arr,
-			'toistuvat_arr' => $toistuvat_arr,
 			'from'		=> Yii::app()->session['from'],
 			'to'		=> Yii::app()->session['to'],
 			'kohteet_siivous' => $kohteet_siivous,
@@ -2444,24 +2413,24 @@ class TyovuorootController extends Controller
 
 	protected function laatikkorakenne($arvo, $status, $toistuva){
 			$return = [];
-			$toistuva_id = ($toistuva)? 'toistuva_id="'.$arvo['id'].'"' : '';
+			$toistuva_id = ($toistuva)? 'toistuva_id="'.$arvo->id.'"' : '';
 			$toistuva_icon = ($toistuva)? '<i class="text-success fa fa-repeat"></i> ' : '';
-			$osoite = (!empty($arvo['osoite']))?$arvo['osoite']:(isset($arvo['kohteet']['osoite']))?$arvo['kohteet']['osoite']:'';
+			$osoite = (!empty($arvo->osoite))?$arvo->osoite:(isset($arvo->kohteet->osoite))?$arvo->kohteet->osoite:'';
 			$color = '#888';
 			$bgcol = 'color:#333';
-			if(!empty($arvo['tyoajanmerkinta'])){
-				$expl = explode("/",$arvo['tyoajanmerkinta']);
+			if(!empty($arvo->tyoajanmerkinta)){
+				$expl = explode("/",$arvo->tyoajanmerkinta);
 				if(isset($expl[1]) and !empty($expl[1])){
 					$color = $expl[1];
 					$bgcol = 'color:'.$color;
 				}
 			}
-			if(!empty($arvo['tyoajanlaatu'])){
-				$expl1 = explode("/",$arvo['tyoajanlaatu']);
+			if(!empty($arvo->tyoajanlaatu)){
+				$expl1 = explode("/",$arvo->tyoajanlaatu);
 				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
-				$return['osoite'] = (isset($expl1[0])) ? '<b class="tv_edit" '.$toistuva_id.' id="'.$arvo['id'].'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
+				$return['osoite'] = (isset($expl1[0])) ? '<b class="tv_edit" '.$toistuva_id.' id="'.$arvo->id.'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
 			} else {
-				$return['osoite'] = '<span class="tv_edit" '.$toistuva_id.' id="'.$arvo['id'].'" style="'.$bgcol.'">'.((isset($status[$arvo['status']]))?$status[$arvo['status']]:'').$toistuva_icon.''.$arvo['alku'].'-'.$arvo['loppu'].'<br> '.$osoite.'</span>';
+				$return['osoite'] = '<span class="tv_edit" '.$toistuva_id.' id="'.$arvo->id.'" style="'.$bgcol.'">'.((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$osoite.'</span>';
 
 			}
 

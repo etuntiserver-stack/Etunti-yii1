@@ -97,10 +97,8 @@ ini_set('memory_limit', '512M');
       <td>
 	<div id="<?=$did.'_'.$tid?>" class="latikkoAsetukset" pvm="<?=$f?>" tid="<?=$tid?>">
 		<?php if( isset($tv_arr[$tid][$f]) ): ?>
-			<?php array_map('superfast', $tv_arr[$tid][$f]); ?>
-		<?php endif; ?>
-		<?php if( isset($toistuvat_arr[$tid][$f]) ): ?>
-			<?php array_map('superfast', $toistuvat_arr[$tid][$f]); ?>
+		<?php ksort($tv_arr[$tid][$f]); ?>
+		<?php array_map('superfast', $tv_arr[$tid][$f]); ?>
 		<?php endif; ?>
 	</div>
       </td>
@@ -123,5 +121,6 @@ function superfast($arvo){
 $(document).ready(function(){
 	var numItems = $('.tv_edit').length;
 	$('#yht_tv').html(numItems);
+
 });
 </script>
