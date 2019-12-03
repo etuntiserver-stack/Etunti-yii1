@@ -27,7 +27,7 @@ class LaskuController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_procountor', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow',  // allow all users to perform 'index' and 'view' actions
@@ -1494,6 +1494,25 @@ exit;
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
+		// Procountor update status.
+		if (Asetukset::model()->findByPk(1)->palvelu_tyyppi == 5) {
+
+			// If invoice has been sent to Procountor, updated status.
+			if (!empty($model->procountor_id ?? '')) {
+				$error_msg = '';
+				if ($this->updateProcountorInvoice($model->id, $error_msg)) {
+					// Yii::app()->user->setFlash('success', 'Uusimmat laskun tiedot haettiin Procountorista.');
+					$model->refresh();
+				} elseif (!empty($error_msg)) {
+					Yii::app()->user->setFlash('warning', 'Laskun tietojen päivitys Procountorista epäonnistui.');
+				}
+			}
+			// If invoice is unapproved, and not sent to Procountor, add notification.
+			elseif ($model->tilanne == 0) {
+				Yii::app()->user->setFlash('primary', 'Lasku ei ole vielä lähetetty Procountoriin. Lähetä lasku hyväksymällä se alalaidassa olevalla painikkeella.');
+			}
+		}
+
 		if(isset($_GET['tilanne']) and $_GET['tilanne'] == '1')
 		{
 			Lasku::model()->updatebypk($id, array('tilanne'=>1));
@@ -1566,7 +1585,7 @@ exit;
 		    		// Lasku historia
 				$historia = new LaskuHistoria;
 				$historia->lid = $model->id;
-				$historia->status = "Lasku on muokattu";
+				$historia->status = "Muokattu";
 				$historia->palvelu = "local";
 				$historia->yht_euro = $model->yhteensa_total;
 				$historia->save();
@@ -1652,7 +1671,8 @@ exit;
 
 		// <!-- Lasku updater
 		$info 	= '';
-		$info 	.= $this->LaskuUpdater($from,$to);
+		$is_error = false;
+		$info 	.= $this->LaskuUpdater($from, $to, $is_error);
 		// Lasku updater -->
 
        		$criteria = new CDbCriteria();
@@ -1770,6 +1790,7 @@ exit;
 				'to'=>$to, 
 				'asetukset' => $asetukset,
 				'info' => $info,
+				'is_error' => $is_error,
 				'lahettamattomat' => $lahettamattomat
 		));
 	}
@@ -1838,128 +1859,157 @@ exit;
 	}
 
 
-    	public function tilanneCheck($data)
-	{ 
-
-       		$criteria = new CDbCriteria();
-       		$criteria->order = " id DESC ";
-       		$criteria->condition = " lid='".$data->id."' ";
+	public function tilanneCheck($data)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->order = " id DESC ";
+		$criteria->condition = " lid='" . $data->id . "' ";
 		$l = LaskuHistoria::model()->find($criteria);
+		$tilanne = '';
 
 		// <-- Trust
 		$trust = false;
 		$trustStr = '';
-		if(isset($l->palvelu) and $l->palvelu == 'trust')
-		{
-
-		  $json = json_decode($l->status, true);
-		    if(isset($json['statustext']) and !empty($json['statustext']))
-		    {
-		      	$trustStr = date("d.m.Y",strtotime($json['statustime'])).' '.$json['statustext'];
-			$trust = true;
-		    } elseif(!isset($json['statustext']) and isset($json['reference'])) {
-
-			$trustStr = 'Vastaanotettu<br>';
-			$trust = true;
-
-		    } else {
-		      	$trustStr = print_r($json);
-			$trust = true;
-		    }
-
+		if (isset($l->palvelu) and $l->palvelu == 'trust') {
+			$json = json_decode($l->status, true);
+			if (isset($json['statustext']) and !empty($json['statustext'])) {
+				$trustStr = date("d.m.Y", strtotime($json['statustime'])) . ' ' . $json['statustext'];
+				$trust = true;
+			} elseif (!isset($json['statustext']) and isset($json['reference'])) {
+				$trustStr = 'Vastaanotettu<br>';
+				$trust = true;
+			} else {
+				$trustStr = print_r($json);
+				$trust = true;
+			}
 		}
 		//  Trust -->
-
 
 		// <-- Postita
 		$postita = false;
 		$postitaStr = '';
 
-
-		if(isset($l->palvelu) and $l->palvelu == 'postita')
-		{
-
-		  if($l->postita_statuscode == 'NE'){
-		   $postitaStr = 'Lasku on vielä vahvistettava';
-		   $postita = true;
-		  } elseif($l->postita_statuscode == 'CO'){
-		   $postitaStr = 'Odottaa lähetystä';
-		   $postita = true;
-		  } elseif($l->postita_statuscode == 'SE'){
-		   $postitaStr = 'Lasku lähetetty';
-		   $postita = true;
-		  } elseif($l->postita_statuscode == 'CA'){
-		   $postitaStr = 'Lasku peruutettu';
-		   $postita = true;
-		  } elseif($l->postita_statuscode == 'MAKSUMUISTUTUS'){
-		   $postitaStr = 'Maksumuistutus lähetetty';
-		   $postita = true;
-		  } elseif($l->postita_statuscode == 'POISTETTU'){
-		   $postitaStr = 'Lasku poistettu POSTITA.FI:sta';
-		   $postita = true;
-		  }
-
+		if (isset($l->palvelu) and $l->palvelu == 'postita') {
+			if ($l->postita_statuscode == 'NE') {
+				$postitaStr = 'Lasku on vielä vahvistettava';
+				$postita = true;
+			} elseif ($l->postita_statuscode == 'CO') {
+				$postitaStr = 'Odottaa lähetystä';
+				$postita = true;
+			} elseif ($l->postita_statuscode == 'SE') {
+				$postitaStr = 'Lasku lähetetty';
+				$postita = true;
+			} elseif ($l->postita_statuscode == 'CA') {
+				$postitaStr = 'Lasku peruutettu';
+				$postita = true;
+			} elseif ($l->postita_statuscode == 'MAKSUMUISTUTUS') {
+				$postitaStr = 'Maksumuistutus lähetetty';
+				$postita = true;
+			} elseif ($l->postita_statuscode == 'POISTETTU') {
+				$postitaStr = 'Lasku poistettu POSTITA.FI:sta';
+				$postita = true;
+			}
 		}
 		//  Postita -->
 
+		// Procountor - Copied from other entries @ 14.11.19.
+		if (isset($l->palvelu) && $l->palvelu == 'procountor') {
 
+			// Check for procountor status, received when updating invoices.
+			if (isset($l->procountor_statuscode) && !empty($l->procountor_statuscode)) {
+				switch($l->procountor_statuscode) {
+					case 'EMPTY':                       $tilanne = 'Tyhjä'; break;
+					case 'UNFINISHED':                  $tilanne = 'Kesken'; break;
+					case 'NOT_SENT':                    $tilanne = 'Ei lähetetty'; break;
+					case 'SENT':                        $tilanne = 'Lähetetty'; break;
+					case 'RECEIVED':                    $tilanne = 'Vastaanotettu'; break;
+					case 'PAID':                        $tilanne = 'Maksettu'; break;
+					case 'PAYMENT_DENIED':              $tilanne = 'Maksu epäonnistunut'; break;
+					case 'VERIFIED':                    $tilanne = 'Varmistettu'; break;
+					case 'APPROVED':                    $tilanne = 'Hyväksytty'; break;
+					case 'INVALIDATED':                 $tilanne = 'Mitätöity'; break;
+					case 'PAYMENT_QUEUED':              $tilanne = 'Maksu jonossa'; break;
+					case 'PARTLY_PAID':                 $tilanne = 'Osittain maksettu'; break;
+					case 'PAYMENT_SENT_TO_BANK':        $tilanne = 'Maksu lähetetty pankille'; break;
+					case 'MARKED_PAID':                 $tilanne = 'Merkitty maksetuksi'; break;
+					case 'STARTED':                     $tilanne = 'Aloitettu'; break;
+					case 'INVOICED':                    $tilanne = 'Laskutettu'; break;
+					case 'OVERRIDDEN':                  $tilanne = 'Ohitettu'; break;
+					case 'DELETED':                     $tilanne = 'Poistettu'; break;
+					case 'UNSAVED':                     $tilanne = 'Tallentamatta'; break;
+					case 'PAYMENT_TRANSACTION_REMOVED': $tilanne = 'Maksutapahtuma poistettu'; break;
+					case 'MUU': default:                $tilanne = 'Muu tilanne'; break;
+				}
+			} else {
+				switch ($l->status) {
+					case 'LÄHETETTY':                   $tilanne = 'Lasku lähetetty'; break;
+					case 'MAKSUMUISTUTUS':              $tilanne = 'Maksumuistutus lähetetty'; break;
+					case 'MAKSETTU':                    $tilanne = 'Lasku maksettu'; break;
+					case 'Lasku luotu':                 $tilanne = 'Lasku luotu'; break;
+					case 'HYVÄKSYTTY':                  $tilanne = 'Lasku hyväksytty'; break;
+					case 'Lähetetty sähköpostilla':     $tilanne = 'Lähetetty sähköpostilla'; break;
+					case 'Lasku mitätöity':             $tilanne = 'Lasku mitätöity'; break;
+					case 'POISTETTU':                   $tilanne = 'Lasku poistettu'; break;
+					case 'MUU': default:                $tilanne = 'Muu tilanne'; break;
+				}
+			}
+		}
 
 		// <-- Local
 		$local = false;
 		$localStr = '';
-		if(isset($l->palvelu) and $l->palvelu == 'local')
-		{
-
-		  if($l->status == 'LÄHETETTY'){
-		   $localStr = 'Lasku lähetetty';
-		   $local = true;
-		  } elseif($l->status == 'MAKSUMUISTUTUS'){
-		   $localStr = 'Maksumuistutus lähetetty';
-		   $local = true;
-		  } elseif($l->status == 'MAKSETTU'){
-		   $localStr = 'Lasku maksettu';
-		   $local = true;
-		  } elseif($l->status == 'Lasku luotu'){
-		   $localStr = 'Lasku luotu';
-		   $local = true;
-		  } elseif($l->status == 'HYVÄKSYTTY'){
-		   $localStr = 'Lasku hyväksytty';
-		   $local = true;
-		  } elseif($l->status == 'Lähetetty sähköpostilla'){
-		   $localStr = 'Lähetetty sähköpostilla';
-		   $local = true;
-		  } elseif($l->status == 'Lasku mitätöity'){
-		   $localStr = 'Lasku mitätöity';
-		   $local = true;
-		  }
-
+		if (isset($l->palvelu) and $l->palvelu == 'local') {
+			if ($l->status == 'LÄHETETTY') {
+				$localStr = 'Lasku lähetetty';
+				$local = true;
+			} elseif ($l->status == 'MAKSUMUISTUTUS') {
+				$localStr = 'Maksumuistutus lähetetty';
+				$local = true;
+			} elseif ($l->status == 'MAKSETTU') {
+				$localStr = 'Lasku maksettu';
+				$local = true;
+			} elseif ($l->status == 'Lasku luotu') {
+				$localStr = 'Lasku luotu';
+				$local = true;
+			} elseif ($l->status == 'HYVÄKSYTTY') {
+				$localStr = 'Lasku hyväksytty';
+				$local = true;
+			} elseif ($l->status == 'Lähetetty sähköpostilla') {
+				$localStr = 'Lähetetty sähköpostilla';
+				$local = true;
+			} elseif ($l->status == 'Lasku mitätöity') {
+				$localStr = 'Lasku mitätöity';
+				$local = true;
+			} elseif ($l->status == 'Muokattu') {
+				$localStr = 'Muokattu';
+				$local = true;
+			}
 		}
 		//  Local -->
-		
-
 
 		// <-- Netvisor
 		$netvisor = false;
 		$netvisorStr = '';
-		if(isset($l->palvelu) and $l->palvelu == 'netvisor')
-		{
-		   $netvisorStr = $l->status;
-		   $netvisor = true;
+		if (isset($l->palvelu) and $l->palvelu == 'netvisor') {
+			$netvisorStr = $l->status;
+			$netvisor = true;
 		}
 		//  Netvisor -->
-  
-		$tilanne = ''; 
 
-		if($trust == true)
-		    $tilanne = $trustStr; 
-		elseif($postita == true)
-		    $tilanne = $postitaStr;
-		elseif($local == true)
-		    $tilanne = $localStr;
-		elseif($netvisor == true)
-		    $tilanne = $netvisorStr;
+		if ($trust == true)
+			$tilanne = $trustStr;
+		elseif ($postita == true)
+			$tilanne = $postitaStr;
+		elseif ($local == true)
+			$tilanne = $localStr;
+		elseif ($netvisor == true)
+			$tilanne = $netvisorStr;
 
-            	return $tilanne;
+		$invoice = Lasku::model()->findByPk($data->id);
+		if ($invoice->tilanne == 0)
+			$tilanne .= " <b>(hyväksymätön)</b>";
+
+		return $tilanne;
 	}
 
 
@@ -2825,12 +2875,241 @@ $xml .= '
 */
 	}
 
+	/**
+	 * Get updated invoice status from Procountor.
+	 *
+	 * @param int $invoice_id
+	 * Local invoice ID.
+	 * @param string $error_msg
+	 * Possible error message if result is false.
+	 * @return bool
+	 * True if status or open amount was updated; otherwise, false. If false,
+	 * possible error message is stored in &$error_msg. However, false doesn't
+	 * always mean an error happened; if status hasn't changed, returns false.
+	 */
+	public function updateProcountorInvoice($invoice_id, &$error_msg)
+	{
+		$asetukset = Asetukset::model()->findbypk(1);
+		if ($asetukset->palvelu_tyyppi != 5) {
+			$error_msg = 'Procountor ei ole käytössä.';
+			return false;
+		}
 
+		// Check that authorization is valid.
+		$pc = Yii::createComponent('Procountor');
+		if (!$pc->isAuthorized()) {
+			$error_msg = 'Procountor kirjautuminen on viallinen tai vanhentunut. Kirjaudu Procountoriin uudelleen asetuksista.';
+			return false;
+		}
 
-	public function LaskuUpdater($from,$to)
+		// Get local invoice data.
+		$local_invoice = Lasku::model()->findByPk($invoice_id);
+		if (!$local_invoice || empty($local_invoice->id ?? '')) {
+			$error_msg = 'Laskun tietojen lataaminen epäonnistui.';
+			return false;
+		}
+
+		// Get local invoice history.
+		$criteria = new CDbCriteria();
+		$criteria->condition = "lid={$local_invoice->id}";
+		$criteria->order = "id DESC";
+		$local_invoice_history = LaskuHistoria::model()->find($criteria);
+		if (!$local_invoice_history || empty($local_invoice_history->id) || $local_invoice_history->lid != $local_invoice->id) {
+			$error_msg = 'Laskuhistorian lataaminen epäonnistui.';
+			return false;
+		}
+
+		// Get full remote invoice data.
+		$remote_invoice_full = $pc->getInvoice($local_invoice->procountor_id);
+		if (isset($remote_invoice_full['errors']) || !isset($remote_invoice_full['id'])) {
+			$error_msg = 'Laskun tietojen hakeminen Procountorista epäonnistui.';
+			return false;
+		}
+
+		// Calculate total price (yht_euro).
+		$total_price = 0.0;
+		$includes_vat = $remote_invoice_full['extraInfo']['unitPricesIncludeVat'] ?? true;
+		foreach ($remote_invoice_full['invoiceRows'] ?? [] as $invoice_row) {
+			$vat_multiplier = $includes_vat ? 1 : 1 + $invoice_row['vatPercent'] / 100;
+			$total_price += $invoice_row['unitPrice'] * $invoice_row['quantity'] * $vat_multiplier;
+		}
+
+		// Do nothing if neither statuscode or price have updated.
+		if ($local_invoice_history->procountor_statuscode == $remote_invoice_full['status'] && $local_invoice_history->yht_euro == $total_price)
+			return false;
+
+		// Updated status. In some cases, update invoice status, such as when
+		// the invoice is marked sent/paid/invalidated in Procountor.
+		switch ($remote_invoice_full['status']) {
+			case 'UNFINISHED':
+				// Set invoice status (tilanne) to 0 (unfinished).
+				$local_invoice->tilanne = 0;
+				$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+				$local_invoice->save();
+				break;
+			case 'APPROVED':
+			case 'NOT_SENT':
+				// Set invoice status (tilanne) to 1 (approved).
+				$local_invoice->tilanne = 1;
+				$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+				$local_invoice->save();
+				break;
+			case 'SENT':
+				// Set invoice status (tilanne) to 2 (sent).
+				$local_invoice->tilanne = 2;
+				$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+				$local_invoice->save();
+				break;
+			case 'PAID':
+				// Set invoice status (tilanne) to 3 (paid).
+				$local_invoice->tilanne = 3;
+				$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+				$local_invoice->save();
+				break;
+			case 'INVALIDATED':
+				// Set invoice status (tilanne) to 999 (invalidated).
+				$local_invoice->tilanne = 999;
+				$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+				$local_invoice->save();
+				break;
+		}
+
+		// Update history.
+		$history_entry = new LaskuHistoria;
+		$history_entry->time = date("Y-m-d H:i:s", time());
+		$history_entry->lid = $local_invoice->id;
+		$history_entry->status = $pc->translateProcountorStatus($remote_invoice_full['status']);
+		$history_entry->procountor_statuscode = $remote_invoice_full['status'];
+		$history_entry->palvelu = "procountor";
+		$history_entry->yht_euro = number_format($total_price, 2);
+		$history_entry->save();
+		return true;
+	}
+
+	public function LaskuUpdater($from,$to, &$is_error = false)
 	{
 		$return = '';
 		$asetukset=Asetukset::model()->findbypk(1);
+
+		// Procountor - get invoice status on invoice search, and update if needed.
+		if ($asetukset->palvelu_tyyppi == 5) {
+			$pc = Yii::createComponent('Procountor');
+
+			// Check that authorization is valid.
+			if (!$pc->isAuthorized()) {
+				$is_error = true;
+				return '<p>Procountor kirjautuminen on viallinen tai vanhentunut. Kirjaudu Procountoriin uudelleen asetuksista.</p>';
+			}
+
+			$params = new ProcountorInvoiceSearchParameters();
+			$procountor_updated = false;
+
+			// Set search dates. Add one day to end date so that a day is not skipped.
+			// (one day search: 12.12-12.12 -> adjust -> 12.12-13.12).
+			$params->createdStartDate = $from;
+			$params->createdEndDate = date('Y-m-d', strtotime("$to +1 day"));
+
+			// Get search results and check for errors.
+			$procountor_results = $pc->searchInvoices($params);
+			if (isset($procountor_results['errors'])) {
+
+				// Log request results and set a notification for the user.
+				$pc->logError(
+					'searchInvoices',
+					$procountor_results,
+					['Search dates' => "{$params->createdStartDate} - {$params->createdEndDate}"],
+					'Failed to get bank accounts from Procountor.'
+				);
+
+				$is_error = true;
+				return '<p>Laskujen haku Procountorista epäonnistui. Viasta on ilmoitettu ylläpidolle.</p>';
+			}
+
+			foreach($procountor_results['results'] ?? [] as $remote_invoice) {
+
+				// Get local invoice data.
+				$criteria = new CDbCriteria();
+				$criteria->condition = "procountor_id={$remote_invoice['id']}";
+				$local_invoice = Lasku::model()->find($criteria);
+				if (!$local_invoice || empty($local_invoice->id))
+					continue;
+
+				// Get local invoice history.
+				$criteria = new CDbCriteria();
+				$criteria->condition = "lid={$local_invoice->id}";
+				$criteria->order = "id DESC";
+				$local_invoice_history = LaskuHistoria::model()->find($criteria);
+				if (!$local_invoice_history || empty($local_invoice_history->id) || $local_invoice_history->lid != $local_invoice->id)
+					continue;
+
+				// Get full remote invoice data.
+				$remote_invoice_full = $pc->getInvoice($remote_invoice['id']);
+				if (isset($remote_invoice_full['errors']) || !isset($remote_invoice_full['id']))
+					continue;
+
+				// Calculate total price (yht_euro).
+				$total_price = 0.0;
+				$includes_vat = $remote_invoice_full['extraInfo']['unitPricesIncludeVat'] ?? true;
+				foreach($remote_invoice_full['invoiceRows'] ?? [] as $invoice_row) {
+					$vat_multiplier = $includes_vat ? 1 : 1 + $invoice_row['vatPercent'] / 100;
+					$total_price += $invoice_row['unitPrice'] * $invoice_row['quantity'] * $vat_multiplier;
+				}
+
+				// Continue if neither status or price have updated.
+				if ($local_invoice_history->procountor_statuscode == $remote_invoice['status'] && $local_invoice_history->yht_euro == $total_price)
+					continue;
+
+				// Updated status. In some cases, update invoice status, such as when
+				// the invoice is marked sent/paid/invalidated in Procountor.
+				switch ($remote_invoice['status']) {
+					case 'UNFINISHED':
+						// Set invoice status (tilanne) to 0 (unfinished).
+						$local_invoice->tilanne = 0;
+						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+						$local_invoice->save();
+						break;
+					case 'APPROVED':
+					case 'NOT_SENT':
+						// Set invoice status (tilanne) to 1 (approved).
+						$local_invoice->tilanne = 1;
+						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+						$local_invoice->save();
+						break;
+					case 'SENT':
+						// Set invoice status (tilanne) to 2 (sent).
+						$local_invoice->tilanne = 2;
+						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+						$local_invoice->save();
+						break;
+					case 'PAID':
+						// Set invoice status (tilanne) to 3 (paid).
+						$local_invoice->tilanne = 3;
+						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+						$local_invoice->save();
+						break;
+					case 'INVALIDATED':
+						// Set invoice status (tilanne) to 999 (invalidated).
+						$local_invoice->tilanne = 999;
+						$local_invoice->tapahtumapvm = date("Y-m-d H:i:s");
+						$local_invoice->save();
+						break;
+				}
+
+				// Update history.
+				$history_entry = new LaskuHistoria;
+				$history_entry->time = date("Y-m-d H:i:s", time());
+				$history_entry->lid = $local_invoice->id;
+				$history_entry->status = $pc->translateProcountorStatus($remote_invoice['status']);
+				$history_entry->procountor_statuscode = $remote_invoice['status'];
+				$history_entry->palvelu = "procountor";
+				$history_entry->yht_euro = number_format($total_price, 2);
+				$history_entry->save();
+				$procountor_updated = true;
+			}
+
+			if ($procountor_updated)
+				$return .= '<p>Procountor laskut on päivitetty.</p>';
+		}
 
 		// <-- Netvisor updater
 		$netvisorUpdateCheck = false;
@@ -2842,7 +3121,6 @@ $xml .= '
 			{
 				foreach($netvisorList->SalesInvoiceList->SalesInvoice as $list)
 				{
-	
 					//echo '<pre>';
 					//print_r( $list );
 					//echo '</pre>';
@@ -3177,23 +3455,81 @@ $xml .= '
 		return $return;
 	}
 
+	/**
+	 * Send approved invoice when using Procountor. This is mainly called from
+	 * invoices index, by 'Send all' and 'Send selected' buttons.
+	 */
+	protected function lahetaProcountor($id)
+	{
+		$pc = Yii::createComponent('Procountor');
+		$l = Lasku::model()->findbypk($id);
+		$result = 'OK';
+
+		// Check that authorization is valid.
+		if (!$pc->isAuthorized()) {
+			$result = 'Procountor kirjautuminen on viallinen tai vanhentunut. Kirjaudu Procountoriin uudelleen asetuksista.';
+		}
+		// Ensure the invoice has been sent to Procountor (procountor_id defined).
+		elseif ($l->procountor_id) {
+			$send_results = $pc->sendInvoice($l->procountor_id);
+			if (isset($send_results['errors'])) {
+				$pc->logError('sendInvoice', $send_results, ['Lasku ID' => $id], 'Failed to send invoice.');
+				$result = 'Laskun lähetys Procountorissa epäonnistui. Vika on ilmoitettu ylläpitoon.';
+			}
+		}
+		// Invoice cannot be sent from Procountor because if was created with another API or locally.
+		else {
+			$result = 'Laskua ei voida lähettää Procountorissa koska sitä ei ole luotu Procountoriin Etunti käyttöliittymän kautta.';
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Handle the 'Send all' -button on invoice page (Procountor).
+	 */
+	public function actionLaheta_procountor()
+	{
+		$count = 0;
+		foreach($_POST['ids'] ?? [] as $id) {
+			if (!is_numeric($id))
+				continue;
+			$invoice = Lasku::model()->findByPk($id);
+			if (($invoice->tilanne ?? 0) == 1) {
+				if (($result = $this->lahetaProcountor($id)) != 'OK') {
+					Yii::app()->user->setFlash('danger', $result);
+					$this->redirect('index');
+				}
+				$count++;
+			}
+		}
+
+		if ($count > 0)
+			Yii::app()->user->setFlash('success', "$count laskua lähetettiin onnistuneesti.");
+		else
+			Yii::app()->user->setFlash('primary', 'Ei lähetettäviä laskuja.');
+		$this->redirect('index');
+	}
+
 	public function actionLaheta_valitsemmat($id)
 	{
-		$bod = '';
-		$asetukset = Asetukset::model()->findByPk(1);
+		switch (Asetukset::model()->findByPk(1)->palvelu_tyyppi) {
 
-		// <-- Netvisor
-		if($asetukset->palvelu_tyyppi == 4)
-		{
-			$return = $this->lahetaNetvisoriin($id);
-			if($return != false)
-				$bod = "OK";
-			else
-				$bod = "Error";
+			// Netvisor
+			case 4:
+				echo $this->lahetaNetvisoriin($id) ? "OK" : "Error";
+				break;
+
+			// Procountor
+			case 5:
+				echo $this->lahetaProcountor($id);
+				break;
+
+			// Not supported
+			default:
+				echo 'Valittu laskutuksen palvelutyyppi ei tue tätä toimintoa.';
+				break;
 		}
-		//     Netvisor -->
-
-		return $bod;
 	}
 
 	public function actionInsert_lahete()

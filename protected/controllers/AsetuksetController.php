@@ -24,7 +24,7 @@ class AsetuksetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('update', 'yrityksentiedot', 'oikeudet', 'rekisteriseloste', 'tiedostot', 'createbackup'),
+				'actions'=>array('update', 'yrityksentiedot', 'oikeudet', 'rekisteriseloste', 'tiedostot', 'createbackup', 'procountor_auth'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -588,5 +588,38 @@ Jos yritykselläsi ei ole Ropo Capital Oy:n kanssa sopimusta tunnuksista, lähet
 	protected function num($val){
 	    if($val > 0)
 		return  number_format((float)$val/3600, 2, '.', '');
+	}
+
+	/**
+	 * Authorize Procountor in this environment. Procountor login page returns to
+	 * this action, providing the authorization code that will be traded for an
+	 * access token and a refresh token.
+	 *
+	 * @param int $code
+	 * Authorization code.
+	 * @param mixed $state
+	 * Custom state set by this app.
+	 */
+	public function actionProcountor_auth($code, $state = null)
+	{
+		$context = ['model' => $this->loadModel(1)];
+
+		// Login success message is now displayed under the login button.
+		if (empty($code)) {
+			$context['procountor_auth_success'] = false;
+			// 	Yii::app()->user->setFlash('danger', 'Virheellinen pyyntö (vastaanotettu kirjautumistunnus on tyhjä).');
+			$context['procountor_auth_message'] = 'Virheellinen pyyntö (vastaanotettu kirjautumistunnus on tyhjä).';
+		} elseif (Yii::createComponent('Procountor')->authorize($code)) {
+			$context['procountor_auth_success'] = true;
+			$context['procountor_auth_message'] = 'Procountor kirjautuminen onnistui.';
+			// 	Yii::app()->user->setFlash('success', 'Procountor kirjautuminen onnistui.');
+		} else {
+			$context['procountor_auth_success'] = false;
+			$context['procountor_auth_message'] = 'Procountor kirjautuminen epäonnistui.';
+			// 	Yii::app()->user->setFlash('danger', 'Procountor kirjautuminen epäonnistui.');
+		}
+
+		// Redirect back to the settings page.
+		$this->render('update', $context);
 	}
 }
