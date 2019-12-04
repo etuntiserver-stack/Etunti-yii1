@@ -128,7 +128,10 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 
         public function getTyontekijanNimi(){
 		$site = Yii::app()->createController('Site');
-		$return = $site[0]->etuSukunimi($this->tid);
+		if( $this->tid == 0 )
+			$return = 'VARAUS';
+		else
+			$return = $site[0]->etuSukunimi($this->tid);
                 return $return;
         }
 
