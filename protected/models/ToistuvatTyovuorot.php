@@ -129,6 +129,30 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 		);
 	}
 
+        public function getTyontekijanNimi(){
+		$site = Yii::app()->createController('Site');
+		$return = $site[0]->etuSukunimi($this->tid);
+                return $return;
+        }
+
+        public function getOsoiteFunc(){
+		$return = '';
+		if( empty($this->osoite) and isset($this->kohteet->osoite) )
+			$return = $this->kohteet->osoite;
+		elseif( !empty($this->osoite) )
+			$return = $this->osoite;
+                return $return;
+        }
+
+        public function getTyopaariFunc(){
+		$site = Yii::app()->createController('Site');
+		$return = '';
+		if( is_array(json_decode($this->tyopaari, true)) )
+			foreach(json_decode($this->tyopaari, true) as $tid)
+				$return .= $site[0]->etuSukunimi($tid)."<br>";
+                return $return;
+        }
+
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
