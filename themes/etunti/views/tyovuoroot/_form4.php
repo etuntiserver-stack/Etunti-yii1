@@ -830,25 +830,40 @@ $(document).ready(function(){
 
 	<?php 
 	if(isset($model->id) and $toistuva and $poista == 1 and !empty($laatikko_tid)){
-		echo '
-		<legend><h3>Poistaminen</h3></legend>
+		echo '<hr>
+		<center><h3 class="text-danger">Poistaminen</h3></center>
 		<div class="row">
-		'.( ( strtotime($model->pvm) >= strtotime(date("d.m.Y")) )? '
 		 <div class="col-sm-4">
+			<legend><h4>Vain tämä päivä/henkilö</h4></legend>
+			<div class="row">
+			 <div class="col-sm-3">
+				<div class="pull-right" style="margin-top: 7px">Pvm: </div>
+			 </div>
+			 <div class="col-sm-9">
+				<input type="text" id="poista_tama_paiva" class="form-control datepickerFI" value="'.$laatikko_pvm.'">
+			 </div>
+			</div>
 			<span class="btn btn-block btn-danger tvpoisto" tilanne="poista_pvm">
-				Poista ketjusta '.$laatiko_etusukunimi.'<br>
-				'.$model->pvm.'
+				Poista '.$laatiko_etusukunimi.'
 			</span>
 		 </div>
-		 ' : '' ).'
 		 <div class="col-sm-4">
+			<legend><h4>Alkaen - '.$model->pto.'</h4></legend>
+			<div class="row">
+			 <div class="col-sm-3">
+				<div class="pull-right" style="margin-top: 7px">Alkaen: </div>
+			 </div>
+			 <div class="col-sm-9">
+				<input type="text" id="poista_alkaen" class="form-control datepickerFI" value="'.$today.'">
+			 </div>
+			</div>
 			<span class="btn btn-block btn-danger tvpoisto" tilanne="poista_ketjusta_henkilo">
 				Poista ketjusta '.$laatiko_etusukunimi.'<br>
 			</span>
-				Alkaen: <input type="text" id="poista_alkaen" class="form-control datepickerFI" value="'.$today.'">
 		 </div>
 		'.( (is_array($tyopaari) and count($tyopaari)-1 > 0)? '
 		 <div class="col-sm-4">
+			<legend><h4>Kaikki</h4></legend>
 			<span class="btn btn-block btn-danger tvpoisto" tilanne="poista_ketju_kokonaan">
 				Poista ketju kokonaan<br>
 				Ja kuluvat työparit, joiden määrä on: '.( (is_array($tyopaari) and count($tyopaari) > 0)? count($tyopaari)-1 : 0 ).'
@@ -1223,9 +1238,27 @@ function laskePituus(){
 	var this_id = '<?=$this_id?>';
 	var toistuva_aktiivinen = '<?=$toistuva?>';
 
+	var todaysDate 		= new Date();
+
+	var poista_tama_paiva 	= $("#poista_tama_paiva").val().split('.');
+	poista_tama_paiva 	= new Date(+poista_tama_paiva[1]+"/"+poista_tama_paiva[0]+"/"+poista_tama_paiva[2]);
+	if( tilanne == 'poista_pvm' && poista_tama_paiva.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0) ){
+		alert('Ei saa poista menneisyydestä.');
+		return false;
+	}
+	var poista_alkaen 	= $("#poista_alkaen").val().split('.');
+	poista_alkaen 		= new Date(+poista_alkaen[1]+"/"+poista_alkaen[0]+"/"+poista_alkaen[2]);
+	if( tilanne == 'poista_ketjusta_henkilo' && poista_alkaen.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0) ){
+		alert('Ei voida olla alkamaan menneisyydestä.');
+		return false;
+	}
+
+
 	if(toistuva_aktiivinen == true){
 		if( tilanne == 'poista_pvm' )
 			var r = confirm('Haluatko varmasti poistaa tämä päivä ketjusta?');
+		if( tilanne == 'poista_ketjusta_henkilo' )
+			var r = confirm('Haluatko varmasti poistaa alkaen: ' + $("#poista_alkaen").val() + '?');
 		if( tilanne == 'poista_ketjun' )
 			var r = confirm('Poistaa kaikki tähän toistuvaan työvuoroon kuuluvat työvuorot.');
 	} else {

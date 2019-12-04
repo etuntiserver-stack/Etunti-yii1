@@ -10,23 +10,36 @@ Tornea Kimberly
 Zerouali Ali
 */
 
-$criteria = new CDbCriteria(); 
-$criteria->order = "id ASC";
-$criteria->group = "toistuva_id";
-$criteria->condition = "
-	id IN( SELECT MAX(id) FROM sivex_tvuoro GROUP BY toistuva_id )
-	AND tid!=0
-	AND toistuva_id!=0
-	AND toistuva_id IN(
-		SELECT id FROM toistuvat_tyovuorot WHERE tyopaari='' AND tid!=t.tid
-	)
-";
-$tv = Tyovuoroot::model()->findAll($criteria);
-foreach($tv as $item){
-//echo $item->toistuvat->id.' '.$item->tid.'-'.$item->toistuvat->tid.'<br>';
-	ToistuvatTyovuorot::model()->updatebypk($item->toistuva_id, array('tid' => $item->tid));
-}
-echo count($tv);
+		$toistuva = ToistuvatTyovuorot::model()->findbypk(3559);
+		if( is_array(json_decode($toistuva->poistettu_pvm, true)) ){
+
+			$tids = [];
+			if( !empty($toistuva->tyopaari) ){
+				foreach(json_decode($toistuva->tyopaari, true) as $tid){
+					$tids[$tid] = $tid;
+				}
+				$tids[$toistuva->tid] = $toistuva->tid;
+			} else {
+				$tids[$toistuva->tid] = $toistuva->tid;
+			}
+
+			if( empty($toistuva->new_poistettu_pvm) ){
+				$new_poistettu_pvm = [];
+				foreach($tids as $tid)
+					foreach(json_decode($toistuva->poistettu_pvm, true) as $k => $v)
+						$new_poistettu_pvm[] = [$tid => $v];
+
+				$clearing = [];
+				foreach ($new_poistettu_pvm as $key => $value){
+				  if(!in_array($value, $clearing))
+				    $clearing[] = $value;
+				}
+
+				//echo json_encode($clearing);
+				ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('new_poistettu_pvm'=>json_encode($clearing)));
+			}
+			return true;
+		}
 exit;
 /*
 $site = Yii::app()->createController('Site');

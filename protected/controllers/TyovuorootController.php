@@ -1209,134 +1209,18 @@ class TyovuorootController extends Controller
 		$model 		= $get_id['model'];
 		$toistuva 	= $get_id['toistuva'];
 		$pvm 		= $get_id['pvm'];
+		$tid 		= $get_id['tid'];
 
-echo json_encode($_POST['tilanne']);
-exit;
 		$return = array();
-
-		if(	$toistuva
-			and isset($_POST['pfrom']) and !empty($_POST['pfrom'])
-			and isset($_POST['pto']) and !empty($_POST['pto'])
-		)
-		{
-
-			$poistoCriteria = new CDbCriteria;
-			$poistoCriteria->condition = " 
-				toistuva_id='".$model->toistuva_id."' 
-				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN 
-				'".date("Y-m-d", strtotime($_POST['pfrom']))."'
-					AND '".date("Y-m-d", strtotime($_POST['pto']))."'
-				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
-			";
-			$m = Tyovuoroot::model()->findAll($poistoCriteria);
-
-			
-			foreach($m as $model)
-			{
-
-				$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
-				$this->toistuvaDeletePvm($model->toistuva_id, $model->pvm);
-
-				// <-- LOG
-				if( isset($model->id) )
-				{
-					$model_log 	= 'Tyovuoroot';
-					$name_log 	= 'Työvuorot';
-					$status_log 	= 'Delete';
-	
-					$old_values = json_encode($model->attributes);
-					$new_values = null;
-					$site = Yii::app()->createController('Site');
-					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-				}
-				//     LOG -->
-
-			}
-
-			Tyovuoroot::model()->deleteAll($poistoCriteria);
-
-			// <-- Otetaan pois tyovuoro_id noista jotka on tehtty
-			$upd_criteria = new CDBcriteria;
-			$upd_criteria->condition=" 
-				toistuva_id='".$model->toistuva_id."'
-				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') < CURDATE()
-			";
-			Tyovuoroot::model()->updateAll(array('toistuva_id'=>0), $upd_criteria);
-			//    Otetaan pois tyovuoro_id noista jotka on tehtty -->
-
-			// <-- Tsekataan, onko jai jonkun tyovuorojen koskemattomana
-			$tsekka_tv = Tyovuoroot::model()->findAll(" toistuva_id='".$model->toistuva_id."' ");
-			//  Tsekataan, onko jai jonkun tyovuorojen koskemattomana -->
-
-
-
-			if( $tsekka_tv == null )
-			{
-
-				// <-- LOG
-				if( isset($model->toistuva_id) )
-				{
-					$model_log 	= 'ToistuvatTyovuorot';
-					$name_log 	= 'Toistuvat työvuorot';
-					$status_log 	= 'Delete';
-					$t_m = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
-					$old_values = json_encode($t_m->attributes);
-					$new_values = null;
-					$site = Yii::app()->createController('Site');
-					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-				}
-				//     LOG -->
-
-				ToistuvatTyovuorot::model()->findByPk($model->toistuva_id)->delete();
-
-			} else {
-
-				// Keksi loogikka
-			}
-
-
-			echo json_encode($return);
-			exit;
+		if( $toistuva and $_POST['tilanne'] == 'poista_pvm'){
+			if($this->toistuvaDeletePvm($model->id, $pvm, $tid))
+				$return = ['return' => 'ok'];
+			else
+				$return = ['return' => 'error'];
 		}
 
-
-
-
-		if(	isset($_POST['toistuva_aktiivinen']) 
-			and $_POST['toistuva_aktiivinen'] != 'true'
-		)
-		{
-			if(isset($model->id))
-			{
-				$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
-			}
-
-			// <-- LOG
-			if( isset($model->id) )
-			{
-			$model_log 	= 'Tyovuoroot';
-			$name_log 	= 'Työvuorot';
-			$status_log 	= 'Delete';
-
-				$old_values = json_encode($model->attributes);
-				$new_values = null;
-				$site = Yii::app()->createController('Site');
-				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-			}
-			//     LOG -->
-
-			// <-- Jos toistuva, otetaan sen Päivämäärä pois ketjusta
-			if( isset($model->pvm) and $model->toistuva_id != 0)
-			{
-				$this->toistuvaDeletePvm($model->toistuva_id, $model->pvm);
-			}
-			//     Jos toistuva, otetaan sen Päivämäärä pois ketjusta -->
-
-			Tyovuoroot::model()->deletebypk($model->id);
-
-			echo json_encode($return);
-			exit;
-		}
+		echo json_encode($return);
+		exit;
 	}
 
 	public function actionOperatio($did_versio='did')
@@ -1569,7 +1453,7 @@ exit;
 		}
 	}
 
-	public function toistuvaDeletePvm($id, $did, $tid)
+	public function toistuvaDeletePvm($id, $pvm, $tid)
 	{
 		$toistuva = ToistuvatTyovuorot::model()->findbypk($id);
 		if(isset($toistuva->id))
@@ -1577,10 +1461,12 @@ exit;
 			$poistettu_pvm = array();
 			$poistettu_pvm = json_decode($toistuva->poistettu_pvm, true);
 
-			$poistettu_pvm[] = [ 'tid' => $tid, 'pvm' => date("d.m.Y", strtotime($did)) ];
-			ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('poistettu_pvm'=>json_encode($poistettu_pvm)));
-
+			//$poistettu_pvm[] = [ 'tid' => $tid, 'pvm' => date("d.m.Y", strtotime($pvm)) ];
+			//ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('poistettu_pvm'=>json_encode($poistettu_pvm)));
+			return true;
 		}
+
+		return false;
 	}
 
 	public function actionPalautta_toistuva_pvm($id, $pvm)
@@ -2351,12 +2237,28 @@ exit;
 				$tids[$arvo->tid] = $arvo->tid;
 			}
 
+			// <-- Poistettu_pvm redirect to another field
+			if( !empty($arvo->poistettu_pvm) and empty($arvo->new_poistettu_pvm) ){
+				$new_poistettu_pvm = [];
+				foreach($tids as $tid)
+					foreach(json_decode($arvo->poistettu_pvm, true) as $k => $v)
+						$new_poistettu_pvm[] = [$tid => $v];
+
+				$clearing = [];
+				foreach ($new_poistettu_pvm as $key => $value){
+				  if(!in_array($value, $clearing))
+				    $clearing[] = $value;
+				}
+
+				ToistuvatTyovuorot::model()->updatebypk($arvo->id, array('new_poistettu_pvm'=>json_encode($clearing)));
+				$arvo = ToistuvatTyovuorot::model()->findByPk($arvo->id);
+			}
+
 			// <-- Poistettu_pvms
 			$poistettu_pvms = [];
-			if( !empty($arvo->poistettu_pvm) ){
-				foreach(json_decode($arvo->poistettu_pvm, true) as $ppvm){
-					$poistettu_pvms[$arvo->id][$ppvm] = $ppvm;
-				}
+			if( !empty($arvo->new_poistettu_pvm) and $arvo->new_poistettu_pvm != '[]' ){
+				foreach(json_decode($arvo->new_poistettu_pvm, true) as $key => $val)
+					$poistettu_pvms[$arvo->id][] = $val;
 			}
 
 			$startday = date("Y-m-d", strtotime($arvo->pfrom));
@@ -2373,19 +2275,24 @@ exit;
 					$gendate = new DateTime();
 					$gendate->setISODate($wk->format('Y'),$wk->format('W'),$day);
 					$pvm = $gendate->format('d.m.Y');
-					//echo $arvo->id.' '.$pvm.'<br>';
 					if( 
-						isset($poistettu_pvms[$arvo->id][$pvm]) 
-						or (strtotime($pvm) < strtotime($haku_from))
+						(strtotime($pvm) < strtotime($haku_from))
 						or (strtotime($pvm) < strtotime($startday))
 					)
 						continue; 
 					if( strtotime($pvm) > strtotime($arvo->pto) )
 						break;
 					foreach($tids as $tid){
-							$return = $this->laatikkorakenne($arvo, $status, $pvm, $tid, true);
-							if( isset($return['osoite']) )
-								$tv_arr[$tid][$pvm][strtotime($arvo->alku)][] = $return['osoite'];
+						if( isset($poistettu_pvms[$arvo->id]) ){
+							foreach($poistettu_pvms[$arvo->id] as $k => $v){
+								if( isset($v[$tid]) and $v[$tid] == $pvm)
+									continue 2;
+							}
+						}
+
+						$return = $this->laatikkorakenne($arvo, $status, $pvm, $tid, true);
+						if( isset($return['osoite']) )
+							$tv_arr[$tid][$pvm][strtotime($arvo->alku)][] = $return['osoite'];
 					}
 				}
 			}
