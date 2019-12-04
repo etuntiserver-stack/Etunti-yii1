@@ -6,6 +6,9 @@
 
 // <-- Check tunnit jos ilmainen
 $site = Yii::app()->createController('Site');
+$checkPoista = "tyovuorot_3_".Yii::app()->user->adminStatus;
+$poista = $site[0]->checkOikeusFields($checkPoista);
+
 if(
 	!isset($model->id) 
 	and $site[0]->laskuri() !== false 
@@ -18,15 +21,17 @@ if(
 }
 //     Check tunnit jos ilmainen -->
 
+$today = date("d.m.Y");
+if(isset($_GET['tid'])){ $model->tid = $_GET['tid']; }
 if(!isset($this_id)){ $this_id = ''; }
+if(!isset($laatikko_pvm)){ $laatikko_pvm = ''; }
+if(!isset($laatikko_tid)){ $laatikko_tid = ''; }
+if(!isset($laatiko_etusukunimi)){ $laatiko_etusukunimi = ''; }
 
-if(isset($_GET['tid']))
-  $model->tid = $_GET['tid'];
+$tyopaari = json_decode($model->tyopaari, true);
 
-
-		  $ohje = '';
-if(isset($model->id))
-{
+$ohje = '';
+if(isset($model->id)){
 
 	$m = Kohteet::model()->findbypk($model->kohde);
 		
@@ -60,7 +65,7 @@ if(isset($model->id))
 
 if($toistuva){
 	$java_prefix = 'ToistuvatTyovuorot';
-	$model->pvm = $pvm;
+	$model->pvm = $laatikko_pvm;
 } else {
 	$java_prefix = 'Tyovuoroot';
 	$ov = Onlinevaraus::model()->findbypk($model->onlinevaraus_id);
@@ -118,7 +123,6 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 		$criteria->condition = " aktiivinen=1 ";
 
 		// <-- TyoryhmatHelper
-		$site = Yii::app()->createController('Site');
 		$arr = $site[0]->TyoryhmatHelper();
 		$ids = implode(",", $arr);
 		if( count($arr) > 0 ){
@@ -417,8 +421,6 @@ $(".muokaValiko").click(function() {
   <div class="col-sm-3">
 		<label><?php echo Yii::t('main', 'Työpari'); ?></label><br>
 		<?php 
-		$tyopaari = json_decode($model->tyopaari, true);
-
 		$criteria=new CDbCriteria;
 		// <-- Return order etu ja sukunimella
 		$site = Yii::app()->createController('Site');
@@ -544,7 +546,7 @@ $(".muokaValiko").click(function() {
     <div class="input-group">
       <span class="form-control"><?php echo Yii::t('main','Toistuva työvuoro'); ?></span>
       <span class="input-group-btn">
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-eye"></i></button>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#toistuva_aktiivinen" aria-expanded="false"><i class="fa fa-eye"></i></button>
       </span>
     </div>  
   </div>
@@ -733,103 +735,132 @@ $(document).ready(function(){
 <div id="toistuvaAllsijaan"></div>
 <br>
 <div id="toistuvaAll">
-<div class="row">
- <div class="col-sm-12">
+ <div class="row">
+  <div class="col-sm-12">
+   <div class="<?php echo $classCol; ?> panel-footer" id="toistuva_aktiivinen">
+	<legend><?php echo Yii::t('main','Toistuva työvuoro'); ?></legend>
 
-	<div class="<?php echo $classCol; ?> panel-footer" id="collapseExample">
-	<legend><?php echo Yii::t('main','Tämä on toistuva työvuoro'); ?></legend>
+	<?=($toistuva)? 'Ketju: '.$model->id.', Toistuva tid: '.$model->tid.', pfrom: '.$pfrom:''?>
 
-<?=($toistuva)? 'Ketju: '.$model->id.', Toistuva tid: '.$model->tid.', pfrom: '.$pfrom:''?>
-
-<div class="row" id="alkaen_loppuen">
-  <div class="col-sm-4">
-	<label><?php echo Yii::t('main', 'Alkaen'); ?> </label>
-	<input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pfrom]" id="pfrom" value="<?php echo date('d.m.Y', strtotime($pfrom)); ?>">
-  </div>
-  <div class="col-sm-4">
-	<label><?php echo Yii::t('main', 'Loppuen'); ?></label>
-	<input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pto]" id="pto" value="<?php if(!empty($pto)) echo date('d.m.Y', strtotime($pto)); ?>">
-  </div>
-  <div class="col-sm-4">
-	<label><?php echo Yii::t('main', 'Työvuorojen viikkoväli'); ?></label>
-	<select class="form-control" name="ToistuvatTyovuorot[viikkoja]" id="Toistuva_viikkoja">
-	<?php
-	if(!empty($viikkoja)) echo '<option value="'.$viikkoja.'">'.$viikkoja.'</option>';
-	?>
-	<option value="1">1</option>
-	<option value="2">2</option>
-	<option value="3">3</option>
-	<option value="4">4</option>
-	</select>
-  </div>
-</div>
-
-<br>
-<div class="row" id="vikoPvm">
-  <div class="col-sm-12 col-sm-offset-1">
-  <label><?php echo Yii::t('main', 'Ma'); ?></label>
-
-  <?php if(in_array(1, $viikko_paivat)): ?>
-  <input type="checkbox" class="sw vkopvmswitch" name="P[1]" id="ma" value="1" checked>
-  <?php else: ?>
-  <input type="checkbox" class="sw vkopvmswitch" name="P[1]" id="ma" value="1">
-  <?php endif; ?>
-
-  <label><?php echo Yii::t('main', 'Ti'); ?></label>
-
-  <?php if(in_array(2, $viikko_paivat)): ?>
-  <input type="checkbox" class="sw vkopvmswitch" name="P[2]" id="ti" value="2" checked>
-  <?php else: ?>
-  <input type="checkbox" class="sw vkopvmswitch" name="P[2]" id="ti" value="2">
-  <?php endif; ?>
-
-
-  <label><?php echo Yii::t('main', 'Ke'); ?></label>
-
-  <?php if(in_array(3, $viikko_paivat)): ?>
-  <input type="checkbox" class="sw vkopvmswitch" name="P[3]" id="ke" value="3" checked>
-  <?php else: ?>
-  <input type="checkbox" class="sw vkopvmswitch" name="P[3]" id="ke" value="3">
-  <?php endif; ?>
-
-  <label><?php echo Yii::t('main', 'To'); ?></label>
-
-  <?php if(in_array(4, $viikko_paivat)): ?>
-  <input type="checkbox" class="sw vkopvmswitch" name="P[4]" id="to" value="4" checked>
-  <?php else: ?>
-  <input type="checkbox" class="sw vkopvmswitch" name="P[4]" id="to" value="4">
-  <?php endif; ?>
-
-  <label><?php echo Yii::t('main', 'Pe'); ?></label>
-
-  <?php if(in_array(5, $viikko_paivat)): ?>
-  <input type="checkbox" class="sw vkopvmswitch" name="P[5]" id="pe" value="5" checked>
-  <?php else: ?>
-  <input type="checkbox" class="sw vkopvmswitch" name="P[5]" id="pe" value="5">
-  <?php endif; ?>
-
-  <label><?php echo Yii::t('main', 'La'); ?></label>
-
-  <?php if(in_array(6, $viikko_paivat)): ?>
-  <input type="checkbox" class="sw vkopvmswitch" name="P[6]" id="la" value="6" checked>
-  <?php else: ?>
-  <input type="checkbox" class="sw vkopvmswitch" name="P[6]" id="la" value="6">
-  <?php endif; ?>
-
-  <label><?php echo Yii::t('main', 'Su'); ?></label>
-
-  <?php if(in_array(7, $viikko_paivat)): ?>
-  <input type="checkbox" class="sw vkopvmswitch" name="P[7]" id="su" value="7" checked>
-  <?php else: ?>
-  <input type="checkbox" class="sw vkopvmswitch" name="P[7]" id="su" value="7">
-  <?php endif; ?>
-
-  </div>
-</div>
-
+	<div class="row" id="alkaen_loppuen">
+	  <div class="col-sm-4">
+		<label><?php echo Yii::t('main', 'Alkaen'); ?> </label>
+		<input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pfrom]" id="pfrom" value="<?php echo date('d.m.Y', strtotime($pfrom)); ?>">
+	  </div>
+	  <div class="col-sm-4">
+		<label><?php echo Yii::t('main', 'Loppuen'); ?></label>
+		<input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pto]" id="pto" value="<?php if(!empty($pto)) echo date('d.m.Y', strtotime($pto)); ?>">
+	  </div>
+	  <div class="col-sm-4">
+		<label><?php echo Yii::t('main', 'Työvuorojen viikkoväli'); ?></label>
+		<select class="form-control" name="ToistuvatTyovuorot[viikkoja]" id="Toistuva_viikkoja">
+		<?php
+		if(!empty($viikkoja)) echo '<option value="'.$viikkoja.'">'.$viikkoja.'</option>';
+		?>
+		<option value="1">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		</select>
+	  </div>
 	</div>
+
+	<br>
+	<div class="row" id="vikoPvm">
+	  <div class="col-sm-12 col-sm-offset-1">
+	  <label><?php echo Yii::t('main', 'Ma'); ?></label>
+	
+	  <?php if(in_array(1, $viikko_paivat)): ?>
+	  <input type="checkbox" class="sw vkopvmswitch" name="P[1]" id="ma" value="1" checked>
+	  <?php else: ?>
+	  <input type="checkbox" class="sw vkopvmswitch" name="P[1]" id="ma" value="1">
+	  <?php endif; ?>
+
+	  <label><?php echo Yii::t('main', 'Ti'); ?></label>
+
+	  <?php if(in_array(2, $viikko_paivat)): ?>
+	  <input type="checkbox" class="sw vkopvmswitch" name="P[2]" id="ti" value="2" checked>
+	  <?php else: ?>
+	  <input type="checkbox" class="sw vkopvmswitch" name="P[2]" id="ti" value="2">
+	  <?php endif; ?>
+
+
+	  <label><?php echo Yii::t('main', 'Ke'); ?></label>
+
+	  <?php if(in_array(3, $viikko_paivat)): ?>
+	  <input type="checkbox" class="sw vkopvmswitch" name="P[3]" id="ke" value="3" checked>
+	  <?php else: ?>
+	  <input type="checkbox" class="sw vkopvmswitch" name="P[3]" id="ke" value="3">
+	  <?php endif; ?>
+	
+	  <label><?php echo Yii::t('main', 'To'); ?></label>
+
+	  <?php if(in_array(4, $viikko_paivat)): ?>
+	  <input type="checkbox" class="sw vkopvmswitch" name="P[4]" id="to" value="4" checked>
+	  <?php else: ?>
+	  <input type="checkbox" class="sw vkopvmswitch" name="P[4]" id="to" value="4">
+	  <?php endif; ?>
+
+	  <label><?php echo Yii::t('main', 'Pe'); ?></label>
+
+	  <?php if(in_array(5, $viikko_paivat)): ?>
+	  <input type="checkbox" class="sw vkopvmswitch" name="P[5]" id="pe" value="5" checked>
+	  <?php else: ?>
+	  <input type="checkbox" class="sw vkopvmswitch" name="P[5]" id="pe" value="5">
+	  <?php endif; ?>
+
+	  <label><?php echo Yii::t('main', 'La'); ?></label>
+
+	  <?php if(in_array(6, $viikko_paivat)): ?>
+	  <input type="checkbox" class="sw vkopvmswitch" name="P[6]" id="la" value="6" checked>
+	  <?php else: ?>
+	  <input type="checkbox" class="sw vkopvmswitch" name="P[6]" id="la" value="6">
+	  <?php endif; ?>
+
+	  <label><?php echo Yii::t('main', 'Su'); ?></label>
+	
+	  <?php if(in_array(7, $viikko_paivat)): ?>
+	  <input type="checkbox" class="sw vkopvmswitch" name="P[7]" id="su" value="7" checked>
+	  <?php else: ?>
+	  <input type="checkbox" class="sw vkopvmswitch" name="P[7]" id="su" value="7">
+	  <?php endif; ?>
+
+	  </div>
+	</div>
+
+	<?php 
+	if(isset($model->id) and $toistuva and $poista == 1 and !empty($laatikko_tid)){
+		echo '
+		<legend><h3>Poistaminen</h3></legend>
+		<div class="row">
+		'.( ( strtotime($model->pvm) >= strtotime(date("d.m.Y")) )? '
+		 <div class="col-sm-4">
+			<span class="btn btn-block btn-danger tvpoisto" tilanne="poista_pvm">
+				Poista ketjusta '.$laatiko_etusukunimi.'<br>
+				'.$model->pvm.'
+			</span>
+		 </div>
+		 ' : '' ).'
+		 <div class="col-sm-4">
+			<span class="btn btn-block btn-danger tvpoisto" tilanne="poista_ketjusta_henkilo">
+				Poista ketjusta '.$laatiko_etusukunimi.'<br>
+			</span>
+				Alkaen: <input type="text" id="poista_alkaen" class="form-control datepickerFI" value="'.$today.'">
+		 </div>
+		'.( (is_array($tyopaari) and count($tyopaari)-1 > 0)? '
+		 <div class="col-sm-4">
+			<span class="btn btn-block btn-danger tvpoisto" tilanne="poista_ketju_kokonaan">
+				Poista ketju kokonaan<br>
+				Ja kuluvat työparit, joiden määrä on: '.( (is_array($tyopaari) and count($tyopaari) > 0)? count($tyopaari)-1 : 0 ).'
+			</span>
+		 </div>
+		 ' : '' ).'
+		</div>';
+	}
+	?>
+   </div>
+  </div>
  </div>
-</div>
 </div><!-- toistuvaAll -->
 
 
@@ -840,22 +871,8 @@ $(document).ready(function(){
 <br>
 
 	<div class="panel-footer text-right">
-		<?php 
-	   	$site = Yii::app()->createController('Site');
-
-	   	$checkPoista = "tyovuorot_3_".Yii::app()->user->adminStatus;
-	   	$poista = $site[0]->checkOikeusFields($checkPoista);
-
-			if(isset($model->id) and $poista == 1)
-			{
-			$doit = date("Ymd",strtotime($model->pvm))."_".$model->tid; 
-			echo CHtml::Button('Poista',array('class'=>'btn btn-danger', 'id'=>'poistaTv', 'for'=>$doit, 'model'=>$model->id, 'data-dismiss'=>'modal'));
-			}
-		?>
 		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
 		<?php 
-
-
 	   	$checkLuo = "tyovuorot_1_".Yii::app()->user->adminStatus;
 	   	$luo = $site[0]->checkOikeusFields($checkLuo);
 
@@ -1201,26 +1218,28 @@ function laskePituus(){
 
 
   // Poistaminen
-  $('#poistaTv').click(function(){
+  $('.tvpoisto').click(function(){
+	var tilanne = $(this).attr('tilanne');
+	var this_id = '<?=$this_id?>';
+	var toistuva_aktiivinen = '<?=$toistuva?>';
 
-	var thisID = 'checkThis_'+$(this).attr('for');
-	var model = $(this).attr('model');
-	var toistuva_aktiivinen = $('#toistuva_aktiivinen').is(':checked');
-
-	if(toistuva_aktiivinen == true)
-	var r = confirm('Poistaa kaikki tähän toistuvaan työvuoroon kuuluvat työvuorot.');
-	else
-	var r = confirm('Haluatko varmasti poistaa?');
+	if(toistuva_aktiivinen == true){
+		if( tilanne == 'poista_pvm' )
+			var r = confirm('Haluatko varmasti poistaa tämä päivä ketjusta?');
+		if( tilanne == 'poista_ketjun' )
+			var r = confirm('Poistaa kaikki tähän toistuvaan työvuoroon kuuluvat työvuorot.');
+	} else {
+		var r = confirm('Haluatko varmasti poistaa?');
+	}
 	if(r)
 	{
         $.ajax({
-           url: 'poistaTv',
+           url: 'poistaTv?this_id=' + this_id,
 	   type:'POST',
-	   data: { "poistaTv" : model, toistuva_aktiivinen : toistuva_aktiivinen, pfrom : $('#pfrom').val(), pto : $('#pto').val() },
+	   data: { tilanne : tilanne, pfrom : $('#pfrom').val(), pto : $('#pto').val() },
            success: function(data){
 		data = JSON.parse(data);
-		console.log('paivita laatikot, poisto > ' +data);
-		laatikonPaivaysData(getAllTids());
+		console.log(data);
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	console.log(XMLHttpRequest);

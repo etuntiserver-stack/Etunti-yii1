@@ -1202,16 +1202,19 @@ class TyovuorootController extends Controller
 		}
 	}
 
-	public function actionPoistaTv()
+	public function actionPoistaTv($id)
 	{
 
-		$model = Tyovuoroot::model()->findbypk($_POST['poistaTv']);
+		$get_id 	= $this->this_id($this_id);
+		$model 		= $get_id['model'];
+		$toistuva 	= $get_id['toistuva'];
+		$pvm 		= $get_id['pvm'];
+
+echo json_encode($_POST['tilanne']);
+exit;
 		$return = array();
 
-		if(	isset($_POST['toistuva_aktiivinen']) 
-			and $_POST['toistuva_aktiivinen'] == 'true'
-			and isset($model->toistuva_id)
-			and $model->toistuva_id != 0
+		if(	$toistuva
 			and isset($_POST['pfrom']) and !empty($_POST['pfrom'])
 			and isset($_POST['pto']) and !empty($_POST['pto'])
 		)
@@ -2375,10 +2378,10 @@ class TyovuorootController extends Controller
 						isset($poistettu_pvms[$arvo->id][$pvm]) 
 						or (strtotime($pvm) < strtotime($haku_from))
 						or (strtotime($pvm) < strtotime($startday))
-						or (strtotime($pvm) > strtotime($arvo->pto))
-					){ 
+					)
 						continue; 
-					}
+					if( strtotime($pvm) > strtotime($arvo->pto) )
+						break;
 					foreach($tids as $tid){
 							$return = $this->laatikkorakenne($arvo, $status, $pvm, $tid, true);
 							if( isset($return['osoite']) )
@@ -3795,8 +3798,12 @@ class TyovuorootController extends Controller
 			$model		= $this->loadModel($id_explode[1]);
 			$toistuva 	= false;
 		}
+		if( isset($id_explode[3])  )
+			$tid 		= $id_explode[3];
+		else
+			$tid 		= 0;
 
-		return ['model' => $model, 'toistuva' => $toistuva, 'pvm' => $pvm];
+		return ['model' => $model, 'toistuva' => $toistuva, 'pvm' => $pvm, 'tid' => $tid];
 	}
 
 	public function actionUpdate4_form($this_id)
@@ -3805,6 +3812,8 @@ class TyovuorootController extends Controller
 		$model 		= $get_id['model'];
 		$toistuva 	= $get_id['toistuva'];
 		$pvm 		= $get_id['pvm'];
+		$tid 		= $get_id['tid'];
+		$etusukunimi	= $this->etuSukunimi($tid);
 
 		$criteria = new CDBcriteria;
 		// <-- Return order etu ja sukunimella
@@ -3843,7 +3852,15 @@ class TyovuorootController extends Controller
 	            </div>
 	            <!-- end .panel-heading section -->
 	              <div class="panel-body p25">
-			'.$this->renderPartial('_form4',array('this_id' => $this_id, 'model'=>$model, 'toistuva'=>$toistuva, 'pvm' => $pvm), true).'
+			'.$this->renderPartial('_form4',
+				array(
+					'this_id' => $this_id, 
+					'model'=>$model, 
+					'toistuva'=>$toistuva, 
+					'laatikko_pvm' => $pvm, 
+					'laatikko_tid' => $tid, 
+					'laatiko_etusukunimi' => $etusukunimi
+				), true).'
 	              </div>
 	          </div>
 	        </div>';
