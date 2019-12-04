@@ -36,8 +36,10 @@
 		'tietoja',
 		'tyopaari',
 		*/
+/*
 		array(
-			//'class'=>'CButtonColumn',
+			'class'=>'CButtonColumn',
 		),
+*/
 	),
 )); ?>
