@@ -9,35 +9,27 @@ Rahkema Aira
 Tornea Kimberly
 Zerouali Ali
 */
-
-		$toistuva = ToistuvatTyovuorot::model()->findbypk(3559);
-		if( is_array(json_decode($toistuva->poistettu_pvm, true)) ){
-
-			$tids = [];
-			if( !empty($toistuva->tyopaari) ){
-				foreach(json_decode($toistuva->tyopaari, true) as $tid){
-					$tids[$tid] = $tid;
-				}
-				$tids[$toistuva->tid] = $toistuva->tid;
-			} else {
-				$tids[$toistuva->tid] = $toistuva->tid;
+//$id, $pvm, $tid
+		$tid = 10;
+		$pvm = "06.12.2019";
+		$arvo = ToistuvatTyovuorot::model()->findbypk(19);
+		if(isset($arvo->id)){
+			$poistettu_pvms = [];
+			if( !empty($arvo->new_poistettu_pvm) ){
+				foreach(json_decode($arvo->new_poistettu_pvm, true) as $key => $val)
+					$poistettu_pvms[] = $val;
 			}
 
-			if( empty($toistuva->new_poistettu_pvm) ){
-				$new_poistettu_pvm = [];
-				foreach($tids as $tid)
-					foreach(json_decode($toistuva->poistettu_pvm, true) as $k => $v)
-						$new_poistettu_pvm[] = [$tid => $v];
+			$poistettu_pvms[] = [$tid => date("d.m.Y", strtotime($pvm))]; // Lisataan uusi
 
-				$clearing = [];
-				foreach ($new_poistettu_pvm as $key => $value){
-				  if(!in_array($value, $clearing))
-				    $clearing[] = $value;
-				}
-
-				//echo json_encode($clearing);
-				ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('new_poistettu_pvm'=>json_encode($clearing)));
+			$clearing = []; // Otetaan pois jos on samanlainen
+			foreach ($poistettu_pvms as $key => $value){
+			  if(!in_array($value, $clearing))
+			    $clearing[] = $value;
 			}
+
+			echo json_encode($clearing).'<br>';
+			ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('poistettu_pvm'=>json_encode($clearing)));
 			return true;
 		}
 exit;

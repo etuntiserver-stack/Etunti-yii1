@@ -23,7 +23,6 @@ if(
 
 $today = date("d.m.Y");
 if(isset($_GET['tid'])){ $model->tid = $_GET['tid']; }
-if(!isset($this_id)){ $this_id = ''; }
 if(!isset($laatikko_pvm)){ $laatikko_pvm = ''; }
 if(!isset($laatikko_tid)){ $laatikko_tid = ''; }
 if(!isset($laatiko_etusukunimi)){ $laatiko_etusukunimi = ''; }
@@ -390,6 +389,7 @@ $(".muokaValiko").click(function() {
 		$("#<?=$java_prefix?>_tyoajanlaatu").removeAttr('readonly').css({"border" : "2px green solid"}).focus();
 	} else {
 		$("#tyovuoroot-form input, #tyovuoroot-form select").removeAttr('readonly');
+		$(".readonly").attr('readonly', true);
 		$('#luoavain').show('slow');
 		$("#<?=$java_prefix?>_tyoajanlaatu").val('');
 		$("#tyoajanlaatu_laatikko").hide('slow');
@@ -854,22 +854,27 @@ $(document).ready(function(){
 				<div class="pull-right" style="margin-top: 7px">Alkaen: </div>
 			 </div>
 			 <div class="col-sm-9">
-				<input type="text" id="poista_alkaen" class="form-control datepickerFI" value="'.$today.'">
+				<input type="text" id="poista_henkilo_alkaen" class="form-control datepickerFI" value="'.$today.'">
 			 </div>
 			</div>
 			<span class="btn btn-block btn-danger tvpoisto" tilanne="poista_ketjusta_henkilo">
 				Poista ketjusta '.$laatiko_etusukunimi.'<br>
 			</span>
 		 </div>
-		'.( (is_array($tyopaari) and count($tyopaari)-1 > 0)? '
 		 <div class="col-sm-4">
-			<legend><h4>Kaikki</h4></legend>
+			<legend><h4>Poista ketju</h4></legend>
+			<div class="row">
+			 <div class="col-sm-6">
+				<input type="text" class="form-control readonly" value="'.$model->pfrom.'">
+			 </div>
+			 <div class="col-sm-6">
+				<input type="text" class="form-control readonly" value="'.$model->pto.'">
+			 </div>
+			</div>
 			<span class="btn btn-block btn-danger tvpoisto" tilanne="poista_ketju_kokonaan">
-				Poista ketju kokonaan<br>
-				Ja kuluvat työparit, joiden määrä on: '.( (is_array($tyopaari) and count($tyopaari) > 0)? count($tyopaari)-1 : 0 ).'
+				Poista kaikki. '.( (is_array($tyopaari) and count($tyopaari) > 0)? 'Työparit - '.(count($tyopaari)-1).'kpl' : 0 ).'
 			</span>
 		 </div>
-		 ' : '' ).'
 		</div>';
 	}
 	?>
@@ -1178,13 +1183,14 @@ $('#tyovuoroot-form').on('submit',function(e) {
 	var str = '';
 	$('#virheilmoitus').html('').hide();
 
-	if( <?=$this_id?> != ''){
+	if( '<?=$this_id?>' != 'null'){
 	  $.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update4?this_id=<?=$this_id?>',
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
 			console.log(data);
+			laatikonPaivays();
 			return false;
 			//window.location.reload();
 	   	  },
@@ -1210,9 +1216,27 @@ $('#tyovuoroot-form').on('submit',function(e) {
 
 }); /* #tyovuoroot-form */
 
-laskePituus();
 
-function laskePituus(){
+  function laatikonPaivays(){
+
+	var didlink = 'did4';
+	//if(parent.location.href.match(/tv3/)){ didlink = 'did3'; }
+	$.ajax({
+		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/' + didlink,
+		type: 'GET',
+		data: { haku_from : '<?=$haku_from?>', haku_to : '<?=$haku_to?>', haku_tids : '<?=json_encode($haku_tids)?>' },
+		success:function(data){
+			console.log(data);
+		  	
+		},error:function(data){
+		  	console.log(data);
+			//window.location.href=location.protocol + "//" + location.host + '/index.php';
+		}
+	});
+  }
+
+  laskePituus();
+  function laskePituus(){
 
 	var alku = $("#alku").val().split(':');
 	var loppu = $("#loppu").val().split(':');
@@ -1229,7 +1253,7 @@ function laskePituus(){
 	var m = (sec-h*3600)/60 ^ 0 ;
 
 	$("#tvPituus").html((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));
-}
+  }
 
 
   // Poistaminen
@@ -1246,21 +1270,20 @@ function laskePituus(){
 		alert('Ei saa poista menneisyydestä.');
 		return false;
 	}
-	var poista_alkaen 	= $("#poista_alkaen").val().split('.');
-	poista_alkaen 		= new Date(+poista_alkaen[1]+"/"+poista_alkaen[0]+"/"+poista_alkaen[2]);
-	if( tilanne == 'poista_ketjusta_henkilo' && poista_alkaen.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0) ){
+	var poista_henkilo_alkaen 	= $("#poista_henkilo_alkaen").val().split('.');
+	poista_henkilo_alkaen 		= new Date(+poista_henkilo_alkaen[1]+"/"+poista_henkilo_alkaen[0]+"/"+poista_henkilo_alkaen[2]);
+	if( tilanne == 'poista_ketjusta_henkilo' && poista_henkilo_alkaen.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0) ){
 		alert('Ei voida olla alkamaan menneisyydestä.');
 		return false;
 	}
-
 
 	if(toistuva_aktiivinen == true){
 		if( tilanne == 'poista_pvm' )
 			var r = confirm('Haluatko varmasti poistaa tämä päivä ketjusta?');
 		if( tilanne == 'poista_ketjusta_henkilo' )
 			var r = confirm('Haluatko varmasti poistaa alkaen: ' + $("#poista_alkaen").val() + '?');
-		if( tilanne == 'poista_ketjun' )
-			var r = confirm('Poistaa kaikki tähän toistuvaan työvuoroon kuuluvat työvuorot.');
+		if( tilanne == 'poista_ketju_kokonaan' )
+			var r = confirm('Poistaa kaikki ketjun kuluvat työvuorot ja työparit.');
 	} else {
 		var r = confirm('Haluatko varmasti poistaa?');
 	}
@@ -1272,7 +1295,8 @@ function laskePituus(){
 	   data: { tilanne : tilanne, pfrom : $('#pfrom').val(), pto : $('#pto').val() },
            success: function(data){
 		data = JSON.parse(data);
-		console.log(data);
+		window.location.reload();
+		//console.log(data);
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	console.log(XMLHttpRequest);
@@ -1511,24 +1535,6 @@ function laskePituus(){
 		$('#toistuva-repair-funktio').removeClass('in');
 	}
 
-  });
-
-  $('#toistuva_repair').on('switchChange.bootstrapSwitch', function(event, state) {
-	if(state === true){
-		$('#alkaen_loppuen').hide(370);
-		$('#vikoPvm').hide(370);
-		$('#pfrom').attr('readonly', 'yes');
-		$('#pto').attr('readonly', 'yes');
-		$('#Toistuva_viikkoja').attr('readonly', 'yes');
-		$('#vikoPvm').addClass('collapse');
-	} else {
-		$('#alkaen_loppuen').show(370);
-		$('#vikoPvm').show(370);
-		$('#pfrom').removeAttr('readonly');
-		$('#pto').removeAttr('readonly');
-		$('#Toistuva_viikkoja').removeAttr('readonly');
-		$('#vikoPvm').removeClass('collapse');
-	}
   });
 
   // <-- modal siirtaminen

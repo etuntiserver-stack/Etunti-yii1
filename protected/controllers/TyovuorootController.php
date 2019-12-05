@@ -1202,7 +1202,7 @@ class TyovuorootController extends Controller
 		}
 	}
 
-	public function actionPoistaTv($id)
+	public function actionPoistaTv($this_id)
 	{
 
 		$get_id 	= $this->this_id($this_id);
@@ -1217,6 +1217,10 @@ class TyovuorootController extends Controller
 				$return = ['return' => 'ok'];
 			else
 				$return = ['return' => 'error'];
+		}
+		if( $toistuva and $_POST['tilanne'] == 'poista_ketju_kokonaan'){
+			ToistuvatTyovuorot::model()->deleteByPk($model->id);
+			$return = ['return' => 'ok'];
 		}
 
 		echo json_encode($return);
@@ -1456,13 +1460,22 @@ class TyovuorootController extends Controller
 	public function toistuvaDeletePvm($id, $pvm, $tid)
 	{
 		$toistuva = ToistuvatTyovuorot::model()->findbypk($id);
-		if(isset($toistuva->id))
-		{
-			$poistettu_pvm = array();
-			$poistettu_pvm = json_decode($toistuva->poistettu_pvm, true);
+		if(isset($toistuva->id)){
+			$poistettu_pvms = [];
+			if( !empty($toistuva->new_poistettu_pvm) ){
+				foreach(json_decode($toistuva->new_poistettu_pvm, true) as $key => $val)
+					$poistettu_pvms[] = $val;
+			}
 
-			//$poistettu_pvm[] = [ 'tid' => $tid, 'pvm' => date("d.m.Y", strtotime($pvm)) ];
-			//ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('poistettu_pvm'=>json_encode($poistettu_pvm)));
+			$poistettu_pvms[] = [$tid => date("d.m.Y", strtotime($pvm))]; // Lisataan uusi
+
+			$clearing = []; // Otetaan pois jos on samanlainen
+			foreach ($poistettu_pvms as $key => $value){
+			  if(!in_array($value, $clearing))
+			    $clearing[] = $value;
+			}
+
+			ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('new_poistettu_pvm'=>json_encode($clearing)));
 			return true;
 		}
 
@@ -1471,6 +1484,7 @@ class TyovuorootController extends Controller
 
 	public function actionPalautta_toistuva_pvm($id, $pvm)
 	{
+/*
 		$toistuva = ToistuvatTyovuorot::model()->findByPk($id);
 		if(isset($toistuva->poistettu_pvm) and is_array(json_decode($toistuva->poistettu_pvm, true)))
 		{
@@ -1480,6 +1494,7 @@ class TyovuorootController extends Controller
 			echo json_encode('ok');
 		}
 		exit;
+*/
 	}
 
 	public function actionAutoinsert()
@@ -2029,6 +2044,39 @@ class TyovuorootController extends Controller
 		foreach($tvr as $item){
 			ToistuvatTyovuorot::model()->updatebypk($item->toistuva_id, array('tid' => $item->tid));
 		}
+		/* ------ */
+
+		// <-- Poistettu_pvm redirect to another field
+		$criteria = new CDbCriteria(); 
+		$criteria->condition = "
+			poistettu_pvm!='' AND new_poistettu_pvm IS NULL
+		";
+		$tstv = ToistuvatTyovuorot::model()->findAll($criteria);
+		foreach($tstv as $arvo){
+			// <-- Tids
+			$tids = [];
+			if( !empty($arvo->tyopaari) ){
+				foreach(json_decode($arvo->tyopaari, true) as $tid){
+					$tids[$tid] = $tid;
+				}
+				$tids[$arvo->tid] = $arvo->tid;
+			} else {
+				$tids[$arvo->tid] = $arvo->tid;
+			}
+
+			$new_poistettu_pvm = [];
+			foreach($tids as $tid)
+				foreach(json_decode($arvo->poistettu_pvm, true) as $k => $v)
+					$new_poistettu_pvm[] = [$tid => $v];
+
+			$clearing = [];
+			foreach ($new_poistettu_pvm as $key => $value){
+			  if(!in_array($value, $clearing))
+			    $clearing[] = $value;
+			}
+
+			ToistuvatTyovuorot::model()->updatebypk($arvo->id, array('new_poistettu_pvm'=>json_encode($clearing)));
+		}
 		//     Ketjun kasikorjaus -->
 
 
@@ -2124,21 +2172,44 @@ class TyovuorootController extends Controller
 		$criteria->condition = "
 			aktiivinen=1
 		";
+
 		if(isset(Yii::app()->session['tyontekijat']) and count(Yii::app()->session['tyontekijat'] > 0)){
 		      	$ids = implode(",", Yii::app()->session['tyontekijat']);
 		        $criteria->addCondition ('id IN ('.$ids.') ');
 		}
 
-		// <-- Tyontekijat muistiin
+		// <-- Tyontekijat
 		$tt = [];
+		$haku_tids = [];
 		$tyontekijat = Tyontekijat::model()->findAll($criteria);
 		foreach($tyontekijat as $item){
 			$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1.' '.$item->$tt_order_2);
+			$haku_tids[$item->id] = $item->id;
 		}
-		//     Tyontekijat muistiin -->
+		//     Tyontekijat -->
 
 		$haku_from = date("Y-m-d", strtotime(Yii::app()->session['from']));
 		$haku_to = date("Y-m-d", strtotime(Yii::app()->session['to']));
+
+		$tv_arr = $this->tv_arr($haku_from, $haku_to, $haku_tids, $asiakas, $kohde, $kohteet_siivous=[]);
+
+		$this->render('tv4', array(
+			'tt_order_1' 	=> $tt_order_1,
+			'tt_order_2' 	=> $tt_order_2,
+			'tt'		=> $tt,
+			'tv_arr'	=> $tv_arr,
+			'from'		=> Yii::app()->session['from'],
+			'to'		=> Yii::app()->session['to'],
+			'kohteet_siivous' => $kohteet_siivous,
+			'kohde' 	=> $kohde,
+			'asiakas' 	=> $asiakas,
+			'arrDate'	=> $arrDate,
+			'site'		=> $site,
+		));
+
+	}
+
+	protected function tv_arr($haku_from, $haku_to, $haku_tids, $asiakas, $kohde, $kohteet_siivous=[]){
 
        		$criteria = new CDbCriteria();
 		$criteria->with = array('kohteet');
@@ -2151,8 +2222,7 @@ class TyovuorootController extends Controller
 		";
 
 		// <-- Asiakas
-		if(isset($asiakas) and !empty($asiakas))
-		{
+		if(isset($asiakas) and !empty($asiakas)){
 		$criteria->addCondition ("
 		kohde IN 
 		       (
@@ -2169,8 +2239,7 @@ class TyovuorootController extends Controller
 		// Asiakas -->
 
 		// <-- Kohde
-		if(isset($kohde) and !empty($kohde))
-		{
+		if(isset($kohde) and !empty($kohde)){
 	           $criteria->addCondition ("
 		   kohde IN 
 		       (
@@ -2182,14 +2251,13 @@ class TyovuorootController extends Controller
 		}
 		// Kohde -->
 
-		if(isset($kohteet_siivous) and count($kohteet_siivous) > 0)
-		{
-		$impl = implode(',',$kohteet_siivous);
-		$criteria->addCondition  (" kohde IN ($impl) ");
+		if(isset($kohteet_siivous) and count($kohteet_siivous) > 0){
+			$impl = implode(',',$kohteet_siivous);
+			$criteria->addCondition  (" kohde IN ($impl) ");
 		}
 
-		if(isset(Yii::app()->session['tyontekijat']) and count(Yii::app()->session['tyontekijat'] > 0)){
-		      	$ids = implode(",", Yii::app()->session['tyontekijat']);
+		if( count($haku_tids) > 0 ){
+		      	$ids = implode(",", $haku_tids);
 		        $criteria->addCondition ('tid IN ('.$ids.') OR tid=0');
 		}
 
@@ -2215,9 +2283,9 @@ class TyovuorootController extends Controller
        		$criteria = new CDbCriteria(); 
 		$criteria->order = "alku";
 		$criteria->condition = "DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '$haku_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '$haku_from'";
-		if( count($tt) > 0 ){
+		if( count($haku_tids) > 0 ){
 			$tt_ret = [];
-			foreach($tt as $k => $v){
+			foreach($haku_tids as $k => $v){
 				$tt_ret[$k] = $k;
 			}
 		      	$ids = implode(",", $tt_ret);
@@ -2237,26 +2305,9 @@ class TyovuorootController extends Controller
 				$tids[$arvo->tid] = $arvo->tid;
 			}
 
-			// <-- Poistettu_pvm redirect to another field
-			if( !empty($arvo->poistettu_pvm) and empty($arvo->new_poistettu_pvm) ){
-				$new_poistettu_pvm = [];
-				foreach($tids as $tid)
-					foreach(json_decode($arvo->poistettu_pvm, true) as $k => $v)
-						$new_poistettu_pvm[] = [$tid => $v];
-
-				$clearing = [];
-				foreach ($new_poistettu_pvm as $key => $value){
-				  if(!in_array($value, $clearing))
-				    $clearing[] = $value;
-				}
-
-				ToistuvatTyovuorot::model()->updatebypk($arvo->id, array('new_poistettu_pvm'=>json_encode($clearing)));
-				$arvo = ToistuvatTyovuorot::model()->findByPk($arvo->id);
-			}
-
 			// <-- Poistettu_pvms
 			$poistettu_pvms = [];
-			if( !empty($arvo->new_poistettu_pvm) and $arvo->new_poistettu_pvm != '[]' ){
+			if( !empty($arvo->new_poistettu_pvm) ){
 				foreach(json_decode($arvo->new_poistettu_pvm, true) as $key => $val)
 					$poistettu_pvms[$arvo->id][] = $val;
 			}
@@ -2307,22 +2358,7 @@ class TyovuorootController extends Controller
 		echo '</pre>';
 		exit; */
 
-		//     Tv array -->
-
-		$this->render('tv4', array(
-			'tt_order_1' 	=> $tt_order_1,
-			'tt_order_2' 	=> $tt_order_2,
-			'tt'		=> $tt,
-			'tv_arr'	=> $tv_arr,
-			'from'		=> Yii::app()->session['from'],
-			'to'		=> Yii::app()->session['to'],
-			'kohteet_siivous' => $kohteet_siivous,
-			'kohde' 	=> $kohde,
-			'asiakas' 	=> $asiakas,
-			'arrDate'	=> $arrDate,
-			'site'		=> $site,
-		));
-
+		return $tv_arr;
 	}
 
 	protected function laatikkorakenne($arvo, $status, $this_pvm, $this_tid, $toistuva){
@@ -2351,13 +2387,9 @@ class TyovuorootController extends Controller
 			return $return;
 	}
 
-	public function actionDid4($pvm, $tid) {
-
-		$content = $this->renderPartial('did4', array(
-			'pvm' 	=> $pvm,
-			'tid' 	=> $tid,
-		), true);
-	     	echo $content;
+	public function actionDid4($haku_from, $haku_to, $haku_tids) {
+		$tv_arr = $this->tv_arr($haku_from, $haku_to, json_decode($haku_tids, true), $asiakas='', $kohde='', $kohteet_siivous=[]);
+		echo json_encode($tv_arr);
 		exit;
 	}
 
@@ -3647,6 +3679,11 @@ class TyovuorootController extends Controller
 	public function actionCreate4_form($pvm, $tid)
 	{
 
+		$haku_tids = [];
+		$haku_tids[$tid] = [$tid];
+		$haku_from = date("Y-m-d", strtotime(Yii::app()->session['from']));
+		$haku_to = date("Y-m-d", strtotime(Yii::app()->session['to']));
+
 		// Tyosuhde oikeus
 		$oikeus = '<div class="alert alert-danger">'.Yii::t('main', 'Työsuhdetta ei ole määritelty tai työsuhde ei ole voimassa.').'</div>';
 		$criteria=new CDbCriteria;
@@ -3681,7 +3718,15 @@ class TyovuorootController extends Controller
 	            </div>
 	              <div class="panel-body p25">
 			'.((isset($oikeus))?$oikeus:'').'
-			'.$this->renderPartial('_form4',array('model'=>$model), true).'
+			'.$this->renderPartial('_form4',
+				array(
+					'haku_from' 	=> $haku_from,
+					'haku_to' 	=> $haku_to,
+					'haku_tids'	=> $haku_tids,
+					'model'		=> $model, 
+					'this_id'	=> 'null',
+					'toistuva'	=> false,
+				), true).'
 	              </div>
 	          </div>
 	        </div>';
@@ -3722,6 +3767,16 @@ class TyovuorootController extends Controller
 		$tid 		= $get_id['tid'];
 		$etusukunimi	= $this->etuSukunimi($tid);
 
+
+		$haku_tids = [];
+		$haku_tids[$tid] = [$tid];
+		if( is_array(json_decode($model->tyopaari, true)) )
+			foreach(json_decode($model->tyopaari, true) as $h_tid)
+				$haku_tids[$h_tid] = $h_tid;
+
+		$haku_from = date("Y-m-d", strtotime(Yii::app()->session['from']));
+		$haku_to = date("Y-m-d", strtotime(Yii::app()->session['to']));
+
 		$criteria = new CDBcriteria;
 		// <-- Return order etu ja sukunimella
 		$site = Yii::app()->createController('Site');
@@ -3761,11 +3816,14 @@ class TyovuorootController extends Controller
 	              <div class="panel-body p25">
 			'.$this->renderPartial('_form4',
 				array(
-					'this_id' => $this_id, 
-					'model'=>$model, 
-					'toistuva'=>$toistuva, 
-					'laatikko_pvm' => $pvm, 
-					'laatikko_tid' => $tid, 
+					'haku_from' 	=> $haku_from,
+					'haku_to' 	=> $haku_to,
+					'haku_tids'	=> $haku_tids,
+					'this_id' 	=> $this_id, 
+					'model'		=> $model, 
+					'toistuva'	=> $toistuva, 
+					'laatikko_pvm' 	=> $pvm, 
+					'laatikko_tid' 	=> $tid, 
 					'laatiko_etusukunimi' => $etusukunimi
 				), true).'
 	              </div>

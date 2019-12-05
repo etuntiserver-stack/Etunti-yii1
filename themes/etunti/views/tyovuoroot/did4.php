@@ -1,4 +1,5 @@
 <?php
+/*
 		if(isset($from)){
 			$pvm = date("d.m.Y",strtotime($pvm));
 		}
