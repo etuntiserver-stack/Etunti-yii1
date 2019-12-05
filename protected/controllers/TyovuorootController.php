@@ -3530,17 +3530,18 @@ class TyovuorootController extends Controller
 		$return = array();
 		if( $toistuva == 'true' ){
 			$toistuva = true;
-			$model 	= new Tyovuoroot;
-			$post 	= $_POST['ToistuvatTyovuorot'];
+			$model 	= new ToistuvatTyovuorot;
+			$post 	= array_merge($_POST['Tyovuoroot'], $_POST['ToistuvatTyovuorot']);
 		} else {
 			$toistuva = false;
-			$model 	= new ToistuvatTyovuorot;
+			$model 	= new Tyovuoroot;
 			$post 	= $_POST['Tyovuoroot'];
 		}
 
 		if(isset($post)){
 
 			$model->attributes = $post;
+			if(isset($_POST['P'])){	$model->viikko_paivat = json_encode($_POST['P']); }
 			if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
 				$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
 			} else {
@@ -3625,13 +3626,11 @@ class TyovuorootController extends Controller
 					$name_log 	= 'Työvuorot';
 				}
 				$status_log 	= 'Create';
-				if(isset($post)){
-					$old_values = null;
-					$n_m = Tyovuoroot::model()->findbypk($model->id);
-					$new_values = json_encode($n_m->attributes);
-					$site = Yii::app()->createController('Site');
-					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-				}
+				$old_values 	= null;
+				$n_m = Tyovuoroot::model()->findbypk($model->id);
+				$new_values = json_encode($n_m->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 				//     LOG -->
 	
 				$return[] = array('model' => $model->attributes);

@@ -1067,11 +1067,7 @@ $('.mult').multiselect({
 
 
 
- 	if( 
-		('<?=$model->id?>') !== '' 
-		&& ('<?=$model->toistuva_id?>') !== '0' 
- 	)
- 	{
+  if( ('<?=$model->id?>') !== '' && ('<?=$model->toistuva_id?>') !== '0' ){
 		var edellinen_pfrom = ('<?=$pfrom?>').split('.');
 		var old_pfrom = new Date(+edellinen_pfrom[1]+"/"+edellinen_pfrom[0]+"/"+edellinen_pfrom[2]); //"11/21/2011"
 		var todaysDate = new Date();
@@ -1080,7 +1076,7 @@ $('.mult').multiselect({
 			$('#pfrom').after('<p class="text-danger">Ketjun Alkupäivämäärä muuttuu. Sitä aikaisemmat päivät muuttuvat yksittäisiksi työvuoroiksi.</p>');
 		}
 		$("#Toistuva_viikkoja").replaceWith('<input type="number" name="ToistuvatTyovuorot[viikkoja]" id="Toistuva_viikkoja" class="form-control" value="'+ $("#Toistuva_viikkoja option:selected").val() +'" readonly>');
-	}
+  }
 
   /* on submit */
   $('#tyovuoroot-form').on('submit',function(e) {
@@ -1130,6 +1126,18 @@ $('.mult').multiselect({
 		var todaysDate = new Date();
 		if(new_pfrom.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
 			alert('Toistuvan työvuoron aloitus päivämäärä ei voida muokata alkamaan menneisyydestä.');
+			return false;
+		}
+
+		var vkopvmswitch_check = false;
+		$( ".vkopvmswitch" ).each(function() {
+			if($( this ).prop( "checked" ) == true){
+				vkopvmswitch_check = true;
+				return false;
+			}
+		});
+		if(!vkopvmswitch_check){ 
+			alert('Valitse viikko päivä');
 			return false;
 		}
 	}
