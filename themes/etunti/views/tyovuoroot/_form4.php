@@ -879,12 +879,14 @@ $(document).ready(function(){
 			 </div>
 			</div>
 			<span class="btn btn-block btn-danger tvpoisto" tilanne="poista_ketju_kokonaan">
-				Poista kaikki. '.( (is_array($tyopaari) and count($tyopaari) > 0)? 'Työparit - '.(count($tyopaari)-1).'kpl' : 0 ).'
+				Poista kaikki. '.( (is_array($tyopaari) and count($tyopaari) > 0)? 'Työparit - '.(count($tyopaari)-1).'kpl' : '' ).'
 			</span>
 		 </div>
 		</div>';
 	}
 	?>
+
+	<div id="sopivatPaivat" style="display:none"></div>
    </div>
   </div>
  </div>
@@ -1025,10 +1027,7 @@ $(document).ready(function(){
 
   });
 
-
-
-
-$('.mult').multiselect({
+  $('.mult').multiselect({
 	//inheritClass: true,
 	//enableFiltering: true,
         includeSelectAllOption: true,
@@ -1039,9 +1038,7 @@ $('.mult').multiselect({
 	numberDisplayed: 0,
 	buttonWidth: '100%',
         maxHeight: 300,
-});
-
-
+  });
 
   $('.timeVuorot').mask('00:00',{
         placeholder: "__:__"
@@ -1056,16 +1053,13 @@ $('.mult').multiselect({
   });
 
 
-	var pfrom = '';
-	var pto = '';
+  var pfrom = '';
+  var pto = '';
 
-	$('#submitButton').click(function(){
-
-		$('#tyovuoroot-form').submit();
-		return false;
-	});
-
-
+  $('#submitButton').click(function(){
+	$('#tyovuoroot-form').submit();
+	return false;
+  });
 
   if( ('<?=$model->id?>') !== '' && ('<?=$model->toistuva_id?>') !== '0' ){
 		var edellinen_pfrom = ('<?=$pfrom?>').split('.');
@@ -1080,7 +1074,7 @@ $('.mult').multiselect({
 
   /* on submit */
   $('#tyovuoroot-form').on('submit',function(e) {
-
+	var pvmTarkistus = $('#submitButton').attr('pvmTarkistus');
 	var toistuva = ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
 
 	/* <-- Tarkistetaan Aloitus/Lopetus Klo ja status */
@@ -1140,12 +1134,27 @@ $('.mult').multiselect({
 			alert('Valitse viikko päivä');
 			return false;
 		}
+
+		// <-- Check PVM lista
+		if( pvmTarkistus == 'true' ){
+			var pvmTarkistus_lista = '';
+			$.ajax({
+			  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista',
+			  data:$(this).serialize(),
+			  type:'POST',
+			  async: false,
+			  success:function(data){
+				data = JSON.parse(data);
+				console.log(data);
+				$('#sopivatPaivat').html(data).show('slow');
+		   	},
+			error:function(data){
+				console.log(data);
+		    	}
+			});
+			return false;
+		}
 	}
-
-
-
-	//if( ($('#submitButton').val() === 'Luo') || ($('#submitButton').val() === 'Tallenna') ) 
-		//$('#submitButton').hide();
 
 	// <-- tarkistetaan tietoja pituus
 	var leng = $('#<?=$java_prefix?>_tietoja').val().length;
@@ -1417,7 +1426,7 @@ $('.mult').multiselect({
 	  $.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+ thisID +'&tv_id='+ tv_id,
 		  success:function(data){
-			console.log(data);
+			//console.log(data);
 			var d = JSON.parse(data);
 
 			$('.ohje').html(d[0]);

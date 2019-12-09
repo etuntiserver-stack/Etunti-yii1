@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -3463,6 +3463,72 @@ class TyovuorootController extends Controller
 	<?php
 	}
 
+	public function actionPvmTarkistus_lista()
+	{
+		//echo json_encode($_POST);
+		//exit;
+		$return 	= '';
+		$tid 		= $_POST['Tyovuoroot']['tid'];
+		$startday 	= $_POST['ToistuvatTyovuorot']['pfrom'];
+		$stopday 	= $_POST['ToistuvatTyovuorot']['pto'];
+		$viikkoja 	= $_POST['ToistuvatTyovuorot']['viikkoja'];
+		$viikko_paivat 	= (isset($_POST['P']))? $_POST['P'] : [] ;
+		$tyopaari 	= (isset($_POST['tyopaari']))? $_POST['tyopaari'] : [] ;
+
+
+			// <-- Tids
+			$tids = [];
+			if( count($tyopaari) > 0 ){
+				foreach($tyopaari as $tid){
+					$tids[$tid] = $tid;
+				}
+				$tids[$tid] = $tid;
+			} else {
+				$tids[$tid] = $tid;
+			}
+
+			// <-- Poistettu_pvms
+			/*
+			$poistettu_pvms = [];
+			if( !empty($arvo->new_poistettu_pvm) ){
+				foreach(json_decode($arvo->new_poistettu_pvm, true) as $key => $val)
+					$poistettu_pvms[$arvo->id][] = $val;
+			}
+			*/
+
+			$weeks = new DatePeriod(
+			    new DateTime($startday), 
+			    new DateInterval('P'.$viikkoja.'W'), 
+			    new DateTime($stopday)
+			);
+			foreach ($weeks as $wk) {
+				foreach($viikko_paivat as $day){
+					$gendate = new DateTime();
+					$gendate->setISODate($wk->format('Y'),$wk->format('W'),$day);
+					$pvm = $gendate->format('d.m.Y');
+					if( strtotime($pvm) < strtotime($startday) )
+						continue; 
+					if( strtotime($pvm) > strtotime($stopday) )
+						break;
+					foreach($tids as $tid){
+						/*
+						if( isset($poistettu_pvms[$arvo->id]) ){
+							foreach($poistettu_pvms[$arvo->id] as $k => $v){
+								if( isset($v[$tid]) and $v[$tid] == $pvm)
+									continue 2;
+							}
+						}
+						*/
+						$return .= $pvm.'<br>';
+					}
+				}
+			}
+
+
+		echo json_encode($return);
+		exit;
+	}
+
 	public function actionCreate4_form($pvm, $tid)
 	{
 
@@ -3621,13 +3687,14 @@ class TyovuorootController extends Controller
 				if( $toistuva ){
 					$model_log 	= 'ToistuvatTyovuorot';
 					$name_log 	= 'Toistuvat työvuorot';
+					$n_m = ToistuvatTyovuorot::model()->findbypk($model->id);
 				} else {
 					$model_log 	= 'Tyovuoroot';
 					$name_log 	= 'Työvuorot';
+					$n_m = Tyovuoroot::model()->findbypk($model->id);
 				}
 				$status_log 	= 'Create';
 				$old_values 	= null;
-				$n_m = Tyovuoroot::model()->findbypk($model->id);
 				$new_values = json_encode($n_m->attributes);
 				$site = Yii::app()->createController('Site');
 				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
