@@ -3524,30 +3524,44 @@ class TyovuorootController extends Controller
 		}
 		*/
 
-		$weeks = new DatePeriod(
-		    new DateTime($startday), 
-		    new DateInterval('P'.$viikkoja.'W'), 
-		    new DateTime($stopday)
-		);
-		$sopivaViikot = [];
-		foreach ($weeks as $wk) {
-			$sopivaViikot[$wk->format('YW')] = $wk->format('YW');
-		}
+		$begin = new DateTime($startday.' 00:00:00', new DateTimeZone('Europe/Helsinki'));
+		$begin->modify('this sunday');
+		$interval = new DateInterval('P'.$viikkoja.'W');
+		$end = new DateTime($stopday.' 23:59:59', new DateTimeZone('Europe/Helsinki'));
+		$end->modify('next week sunday'); // zapas
+		$period = new DatePeriod($begin, $interval, $end);
+
+		// <-- Vko paivat
+		$vko_pvms = $this->vkoPaivatLyhyesti();
+		$return .= '<center><h3>Ketjun esikatsellu</h3></center>';
 		$pvm	= date("d.m.Y", strtotime($startday));
- 		while (strtotime($pvm) <= strtotime($stopday)) {
-	                if( 
-				in_array(date('N',strtotime($pvm)), $viikko_paivat) 
-				and in_array( date('YW',strtotime($pvm)), $sopivaViikot ) 
-			){
-				foreach($tt as $tyontekija){
-					$return .= '<b>'.$pvm.'</b> '.$tyontekija.'<br>';
+		$return .= '<table class="table table-striped">';
+		foreach ($period as $wk) {
+			$startpvm = date("Y-m-d", strtotime($wk->format('d.m.Y').' this week monday'));
+			$stoppvm = date("Y-m-d", strtotime($wk->format('d.m.Y').' this week sunday'));
+			$pvms = new DatePeriod(
+			    new DateTime($startpvm), 
+			    new DateInterval('P1D'), 
+			    new DateTime($stoppvm)
+			);
+			$return .= '<tr><th colspan="3"><h3>Viikko - '.$wk->format('W / Y').'</h3></th></tr>';
+			foreach($pvms as $pvm){
+				if( strtotime($pvm->format('Y-m-d')) < strtotime($startday) )
+					continue;
+
+				if( in_array($pvm->format('N'), $viikko_paivat) ){
+					$this_pvm = $pvm->format('d.m.Y');
+					$return .= '<tr>';
+					$return .= '<td width="1%">'.$vko_pvms[date('N',strtotime($this_pvm))];
+					$return .= '<td width="2%"><b>'.$this_pvm.'</b></td>';
+					$return .= '<td>'.implode(", ", $tt).'</td>';
+					$return .= '</tr>';
 				}
 			}
-	                $pvm = date ("d.m.Y", strtotime("+1 day", strtotime($pvm)));
 		}
+		$return .= '</table>';
 
-
-		echo json_encode($sopivaViikot);
+		echo json_encode($return);
 		exit;
 	}
 
@@ -5775,6 +5789,20 @@ class TyovuorootController extends Controller
 		    5=>'Perjantai',
 		    6=>'Lauantai',
 		    7=>'Sunnuntai',
+		);
+		return $arr;
+	}
+
+	protected function vkoPaivatLyhyesti(){
+
+		$arr = array(
+		    1=>'Ma',
+		    2=>'Ti',
+		    3=>'Ke',
+		    4=>'To',
+		    5=>'Pe',
+		    6=>'La',
+		    7=>'Su',
 		);
 		return $arr;
 	}

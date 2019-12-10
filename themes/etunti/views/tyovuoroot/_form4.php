@@ -1137,6 +1137,8 @@ $(document).ready(function(){
 
 		// <-- Check PVM lista
 		if( pvmTarkistus == 'true' ){
+			$('#sopivatPaivat').hide('slow');
+			$('#sopivatPaivat').html('');
 			var pvmTarkistus_lista = '';
 			$.ajax({
 			  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista',
@@ -1145,7 +1147,7 @@ $(document).ready(function(){
 			  success:function(data){
 				data = JSON.parse(data);
 				console.log(data);
-				$('#sopivatPaivat').html('<p>' + data + '</p>').show('slow');
+				$('#sopivatPaivat').html('<br><div class="row"><div class="col-sm-12">' + data + '</div></div>').show('slow');
 		   	},
 			error:function(data){
 				console.log(data);
@@ -1372,21 +1374,18 @@ $(document).ready(function(){
 	laskePituus();
   });
 
-  $('#pto, #pfrom').blur(function(){
-
+  $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari').on('blur, change', function(){
+	sopivatPaivat_hide();
   });
-
-  $('#Toistuva_viikkoja').change(function(){
-
-  });
-
-  $('#Toistuva_viikkoja, #tyopaari').change(function(){
-
-  });
-  
+ 
   $('#ma,#ti,#ke,#to,#pe,#la,#su').on('switchChange.bootstrapSwitch', function(event, state) {
-
+	sopivatPaivat_hide();
   });
+
+  function sopivatPaivat_hide(){
+	$('#sopivatPaivat').hide('slow');
+	$('#sopivatPaivat').html('');
+  }
 
 
   if( $('#<?=$java_prefix?>_kohde').val() !== '' ){
