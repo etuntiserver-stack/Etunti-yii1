@@ -1142,11 +1142,10 @@ $(document).ready(function(){
 			  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista',
 			  data:$(this).serialize(),
 			  type:'POST',
-			  async: false,
 			  success:function(data){
 				data = JSON.parse(data);
 				console.log(data);
-				$('#sopivatPaivat').html(data).show('slow');
+				$('#sopivatPaivat').html('<p>' + data + '</p>').show('slow');
 		   	},
 			error:function(data){
 				console.log(data);

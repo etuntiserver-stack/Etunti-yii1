@@ -2297,8 +2297,8 @@ class TyovuorootController extends Controller
 			// <-- Tids
 			$tids = [];
 			if( !empty($arvo->tyopaari) ){
-				foreach(json_decode($arvo->tyopaari, true) as $tid){
-					$tids[$tid] = $tid;
+				foreach(json_decode($arvo->tyopaari, true) as $tp_tid){
+					$tids[$tp_tid] = $tp_tid;
 				}
 				$tids[$arvo->tid] = $arvo->tid;
 			} else {
@@ -3465,67 +3465,89 @@ class TyovuorootController extends Controller
 
 	public function actionPvmTarkistus_lista()
 	{
+
 		//echo json_encode($_POST);
 		//exit;
 		$return 	= '';
 		$tid 		= $_POST['Tyovuoroot']['tid'];
-		$startday 	= $_POST['ToistuvatTyovuorot']['pfrom'];
-		$stopday 	= $_POST['ToistuvatTyovuorot']['pto'];
+		$startday 	= date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pfrom']));
+		$stopday 	= date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pto']));
 		$viikkoja 	= $_POST['ToistuvatTyovuorot']['viikkoja'];
 		$viikko_paivat 	= (isset($_POST['P']))? $_POST['P'] : [] ;
 		$tyopaari 	= (isset($_POST['tyopaari']))? $_POST['tyopaari'] : [] ;
 
 
-			// <-- Tids
-			$tids = [];
-			if( count($tyopaari) > 0 ){
-				foreach($tyopaari as $tid){
-					$tids[$tid] = $tid;
+		// <-- Tids
+		$tids = [];
+		if( count($tyopaari) > 0 ){
+			foreach($tyopaari as $tp_tid){
+				$tids[$tp_tid] = $tp_tid;
+			}
+			$tids[$tid] = $tid;
+		} else {
+			$tids[$tid] = $tid;
+		}
+
+		// <-- Order tyontekijat
+		$asetukset = Asetukset::model()->findByPk(1);
+		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+			$tt_order_1 = "tekijan_nimi";
+			$tt_order_2 = "sukunimi";
+		} else {
+			$tt_order_1 = "sukunimi";
+			$tt_order_2 = "tekijan_nimi";
+		}
+		// Order tyontekijat -->
+
+	      	$ids = "id='".implode("' OR id='", $tids)."'";
+       		$criteria = new CDbCriteria();
+		$criteria->select = "id, $tt_order_1, $tt_order_2";
+		$criteria->order = "$tt_order_1 ASC";
+		$criteria->condition = "
+		        ($ids)
+		";
+
+		// <-- Tyontekijat
+		$tyontekijat = Tyontekijat::model()->findAll($criteria);
+		$tt = [];
+		foreach($tyontekijat as $item){
+			$tt[$item->id] = $item->$tt_order_1.' '.$item->$tt_order_2;
+		}
+		//     Tyontekijat -->
+
+		// <-- Poistettu_pvms
+		/*
+		$poistettu_pvms = [];
+		if( !empty($arvo->new_poistettu_pvm) ){
+			foreach(json_decode($arvo->new_poistettu_pvm, true) as $key => $val)
+				$poistettu_pvms[$arvo->id][] = $val;
+		}
+		*/
+
+		$weeks = new DatePeriod(
+		    new DateTime($startday), 
+		    new DateInterval('P'.$viikkoja.'W'), 
+		    new DateTime($stopday)
+		);
+		$sopivaViikot = [];
+		foreach ($weeks as $wk) {
+			$sopivaViikot[$wk->format('YW')] = $wk->format('YW');
+		}
+		$pvm	= date("d.m.Y", strtotime($startday));
+ 		while (strtotime($pvm) <= strtotime($stopday)) {
+	                if( 
+				in_array(date('N',strtotime($pvm)), $viikko_paivat) 
+				and in_array( date('YW',strtotime($pvm)), $sopivaViikot ) 
+			){
+				foreach($tt as $tyontekija){
+					$return .= '<b>'.$pvm.'</b> '.$tyontekija.'<br>';
 				}
-				$tids[$tid] = $tid;
-			} else {
-				$tids[$tid] = $tid;
 			}
-
-			// <-- Poistettu_pvms
-			/*
-			$poistettu_pvms = [];
-			if( !empty($arvo->new_poistettu_pvm) ){
-				foreach(json_decode($arvo->new_poistettu_pvm, true) as $key => $val)
-					$poistettu_pvms[$arvo->id][] = $val;
-			}
-			*/
-
-			$weeks = new DatePeriod(
-			    new DateTime($startday), 
-			    new DateInterval('P'.$viikkoja.'W'), 
-			    new DateTime($stopday)
-			);
-			foreach ($weeks as $wk) {
-				foreach($viikko_paivat as $day){
-					$gendate = new DateTime();
-					$gendate->setISODate($wk->format('Y'),$wk->format('W'),$day);
-					$pvm = $gendate->format('d.m.Y');
-					if( strtotime($pvm) < strtotime($startday) )
-						continue; 
-					if( strtotime($pvm) > strtotime($stopday) )
-						break;
-					foreach($tids as $tid){
-						/*
-						if( isset($poistettu_pvms[$arvo->id]) ){
-							foreach($poistettu_pvms[$arvo->id] as $k => $v){
-								if( isset($v[$tid]) and $v[$tid] == $pvm)
-									continue 2;
-							}
-						}
-						*/
-						$return .= $pvm.'<br>';
-					}
-				}
-			}
+	                $pvm = date ("d.m.Y", strtotime("+1 day", strtotime($pvm)));
+		}
 
 
-		echo json_encode($return);
+		echo json_encode($sopivaViikot);
 		exit;
 	}
 
