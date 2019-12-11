@@ -3464,13 +3464,22 @@ class TyovuorootController extends Controller
 	<?php
 	}
 
-	public function actionPvmTarkistus_lista()
+	public function actionPvmTarkistus_lista($this_id='')
 	{
+		$toistuva = false;
+		if( !empty($this_id) ){
+			$get_id 	= $this->this_id($this_id);
+			$model 		= $get_id['model'];
+			$toistuva 	= $get_id['toistuva'];
+			$pvm 		= $get_id['pvm'];
+			$tid 		= $get_id['tid'];
+			$etusukunimi	= $this->etuSukunimi($tid);
+		}
 
-		//echo json_encode($_POST);
-		//exit;
 		$return 	= '';
+		if(!$toistuva)
 		$tid 		= $_POST['Tyovuoroot']['tid'];
+
 		$startday 	= date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pfrom']));
 		$stopday 	= date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pto']));
 		$viikkoja 	= $_POST['ToistuvatTyovuorot']['viikkoja'];
@@ -3886,6 +3895,11 @@ class TyovuorootController extends Controller
 		$model->attributes 	= $post;
 
 		if(isset($_POST['P'])){	$model->viikko_paivat = json_encode($_POST['P']); }
+		if($toistuva and isset($_POST['tyopaari'])){
+			$_POST['tyopaari'][] = $model->tid;
+			$model->tyopaari = json_encode($_POST['tyopaari']); 
+		}
+
 		if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
 			$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
 		} else {

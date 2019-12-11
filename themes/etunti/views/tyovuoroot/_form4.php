@@ -553,7 +553,7 @@ $(".muokaValiko").click(function() {
     <div class="input-group">
       <span><?php echo Yii::t('main','Toistuva työvuoro'); ?></span>
       <span class="input-group-btn">
-        <input type="checkbox" name="is_toistuva" class="sw" id="is_toistuva">
+        <input type="checkbox" name="is_toistuva" class="sw" id="is_toistuva" <?=($toistuva)? 'disabled checked' : ''?>>
       </span>
     </div>  
   </div>
@@ -929,8 +929,7 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
 
-  if($('#<?=$java_prefix?>_kohde').val() !== '')
-  {
+  if($('#<?=$java_prefix?>_kohde').val() !== ''){
 	var kohdeOn = $('#<?=$java_prefix?>_kohde option:selected').val();
 	  	 $.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/getAsiakasByKohde',
@@ -953,108 +952,12 @@ $(document).ready(function(){
 	 	});
   }
 
-  $('#asiakas').keyup(function(){
-	var thisVal = $(this).val();
-
-	if( thisVal.length >= 2 )
-	{
-
-	  	 $.ajax({
-			url: 'asiakas_autocomplete',
-			type:'GET',
-			async : false,
-			data: { "key" : thisVal },
-			  success:function(data){
-				data = JSON.parse(data);
-			  	//console.log(data);
-				if(data !== '')
-					$('#asiakasAutocompleteResult').html(data).show();
-				else
-					$('#asiakasAutocompleteResult').html('').show();
-			  },
-			  error:function(data){
-			  	console.log(data);
-			  }
-	 	});
-
-	} else {
-					$('#asiakasAutocompleteResult').html('');
-	}
-
-
-     $('.asiakasSelecter').click(function(){
-	var thisVal = $(this).attr('for');
-	var thisAsiakas = $(this).text();
-	  	 $.ajax({
-			url: 'getKohdeByAsiakas',
-			type:'GET',
-			data: { "id" : thisVal },
-			  success:function(data){
-				data = JSON.parse(data);
-			  	//console.log(data);
-				$('#<?=$java_prefix?>_kohde').html(data);
-				$('#asiakasAutocompleteResult').html('').hide();
-				$('#asiakas').val(thisAsiakas);
-
-			  },
-			  error:function(data){
-			  	console.log(data);
-			  }
-	 	});
-     });
-
-     $('.kohteenSelecter').click(function(){
-	var thisVal = $(this).attr('for');
-	var thisAsiakas = $(this).text();
-	  	 $.ajax({
-			url: 'getKohdeById',
-			type:'GET',
-			data: { "id" : thisVal },
-			  success:function(data){
-				data = JSON.parse(data);
-			  	//console.log(data);
-				$('#<?=$java_prefix?>_kohde').html(data);
-				$('#asiakasAutocompleteResult').html('').hide();
-				$('#asiakas').val(thisAsiakas);
-
-			  },
-			  error:function(data){
-			  	console.log(data);
-			  }
-	 	});
-     });
-
-
-  });
-
-  $('.mult').multiselect({
-	//inheritClass: true,
-	//enableFiltering: true,
-        includeSelectAllOption: true,
-	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
-	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
-	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
-	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
-	numberDisplayed: 0,
-	buttonWidth: '100%',
-        maxHeight: 300,
-  });
-
-  $('.timeVuorot').mask('00:00',{
-        placeholder: "__:__"
-  });
-
-  $(".sw").bootstrapSwitch({
-	size: "mini",
-	onColor: "success",
-	offColor: "danger",
-	onText: "Kyllä",
-	offText: "Ei"
-  });
-
-
   var pfrom = '';
   var pto = '';
+  var toistuva = ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
+  if( toistuva == true ){
+	$('#submitButton').val('Tarkista päivämäärät').attr("pvmTarkistus",true);
+  }
 
   $('#submitButton').click(function(){
 	$('#tyovuoroot-form').submit();
@@ -1075,7 +978,7 @@ $(document).ready(function(){
   /* on submit */
   $('#tyovuoroot-form').on('submit',function(e) {
 	var pvmTarkistus = $('#submitButton').attr('pvmTarkistus');
-	var toistuva = ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
+	toistuva = ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
 
 	/* <-- Tarkistetaan Aloitus/Lopetus Klo ja status */
 	if( $('#<?=$java_prefix?>_status option:selected').val() === '' )
@@ -1214,7 +1117,6 @@ $(document).ready(function(){
 		  success:function(data){
 			console.log(data);
 			laatikonPaivays();
-			$('#showres').modal().hide();
 			return false;
 			//window.location.reload();
 	   	  },
@@ -1229,9 +1131,8 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			console.log(data);
+			//console.log(data);
 			laatikonPaivays();
-			//$('#showres').modal().hide();
 			return false;
 	   	  },
 		  error: function(xhr, status, error) {
@@ -1271,7 +1172,7 @@ $(document).ready(function(){
 	}
 	/* Työpari */
 
-	console.log('Tids joille päivitetään laatikko: ' + tids);
+	//console.log('Tids joille päivitetään laatikko: ' + tids);
 	return tids;
   }
 
@@ -1284,7 +1185,21 @@ $(document).ready(function(){
 		type: 'POST',
 		data: { haku_from : '<?=$haku_from?>', haku_to : '<?=$haku_to?>', tids : getAllTids() },
 		success:function(data){
-			console.log(data);
+			data = JSON.parse(data);
+			//console.log(data);
+			var did = '';
+			$.each(data, function( tid, value ) {
+				$.each(value, function( pvm, v ) {
+					all_tv_edit = '';
+					$.each(v, function( i2, tv_edit ) {
+						all_tv_edit += '<p>' + tv_edit + '</p>';
+					});
+					pvm_muutos = pvm.split(".");
+					did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
+					$("#" + did).html(all_tv_edit);
+					$('#showres').modal('hide');
+				});
+			});
 		  	
 		},error:function(data){
 		  	console.log(data);
@@ -1313,6 +1228,104 @@ $(document).ready(function(){
 	$("#tvPituus").html((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));
   }
 
+  $('#asiakas').keyup(function(){
+	var thisVal = $(this).val();
+
+	if( thisVal.length >= 2 )
+	{
+
+	  	 $.ajax({
+			url: 'asiakas_autocomplete',
+			type:'GET',
+			async : false,
+			data: { "key" : thisVal },
+			  success:function(data){
+				data = JSON.parse(data);
+			  	//console.log(data);
+				if(data !== '')
+					$('#asiakasAutocompleteResult').html(data).show();
+				else
+					$('#asiakasAutocompleteResult').html('').show();
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+
+	} else {
+					$('#asiakasAutocompleteResult').html('');
+	}
+
+
+     $('.asiakasSelecter').click(function(){
+	var thisVal = $(this).attr('for');
+	var thisAsiakas = $(this).text();
+	  	 $.ajax({
+			url: 'getKohdeByAsiakas',
+			type:'GET',
+			data: { "id" : thisVal },
+			  success:function(data){
+				data = JSON.parse(data);
+			  	//console.log(data);
+				$('#<?=$java_prefix?>_kohde').html(data);
+				$('#asiakasAutocompleteResult').html('').hide();
+				$('#asiakas').val(thisAsiakas);
+
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+     });
+
+     $('.kohteenSelecter').click(function(){
+	var thisVal = $(this).attr('for');
+	var thisAsiakas = $(this).text();
+	  	 $.ajax({
+			url: 'getKohdeById',
+			type:'GET',
+			data: { "id" : thisVal },
+			  success:function(data){
+				data = JSON.parse(data);
+			  	//console.log(data);
+				$('#<?=$java_prefix?>_kohde').html(data);
+				$('#asiakasAutocompleteResult').html('').hide();
+				$('#asiakas').val(thisAsiakas);
+
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+     });
+
+
+  });
+
+  $('.mult').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
+  });
+
+  $('.timeVuorot').mask('00:00',{
+        placeholder: "__:__"
+  });
+
+  $(".sw").bootstrapSwitch({
+	size: "mini",
+	onColor: "success",
+	offColor: "danger",
+	onText: "Kyllä",
+	offText: "Ei"
+  });
 
   // Poistaminen
   $('.tvpoisto').click(function(){

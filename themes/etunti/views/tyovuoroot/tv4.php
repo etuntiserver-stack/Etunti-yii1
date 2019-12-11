@@ -116,14 +116,6 @@ ini_set('memory_limit', '512M');
  </table>
 </div>
 
-
-<?php 
-/*
-function superfast($arvo){
-	echo '<p>'.$arvo.'</p>';
-} */
-?>
-
 <script type="text/javascript">
 $(document).ready(function(){
 	var numItems = $('.tv_edit').length;
