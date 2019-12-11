@@ -2322,9 +2322,12 @@ class TyovuorootController extends Controller
 			    new DateTime($stopday)
 			);
 */
+			$viikko_paivat 	= json_decode($arvo->viikko_paivat, true);
 			$startday 	= date("Y-m-d", strtotime($arvo->pfrom));
 			$stopday 	= date("Y-m-d", strtotime($arvo->pto));
-			$viikko_paivat 	= json_decode($arvo->viikko_paivat, true);
+			if( date("Ymd", strtotime($haku_to)) <= date("Ymd", strtotime($arvo->pto)) )
+				$stopday = date("Y-m-d", strtotime($haku_to.' this sunday'));
+
 			$begin 		= new DateTime($startday.' 00:00:00', new DateTimeZone('Europe/Helsinki'));
 			$begin->modify('this sunday');
 			$interval 	= new DateInterval('P'.$arvo->viikkoja.'W');
@@ -2333,6 +2336,8 @@ class TyovuorootController extends Controller
 			$period 	= new DatePeriod($begin, $interval, $end);
 
 			foreach ($period as $wk) {
+				if( date("YW", strtotime($haku_from)) > $wk->format('YW')  )
+					continue;
 				$startpvm 	= date("Y-m-d", strtotime($wk->format('d.m.Y').' this week monday'));
 				$stoppvm 	= date("Y-m-d", strtotime($startpvm.' +7 days'));
 				$pvms 		= new DatePeriod(
@@ -2398,7 +2403,7 @@ class TyovuorootController extends Controller
 		echo '<pre>';
 		print_r( $tv_arr );
 		echo '</pre>';
-		exit; */
+		exit; */ 
 
 		return $tv_arr;
 	}
