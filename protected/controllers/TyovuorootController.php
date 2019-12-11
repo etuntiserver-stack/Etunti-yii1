@@ -5695,8 +5695,8 @@ class TyovuorootController extends Controller
 		}
 		//     Tsekataan poistettut PVM -->
 
-		$startDate	= date("Y-m-d", strtotime($attr->pfrom));
-		$end_date	= date("Y-m-d", strtotime($attr->pto));
+		$startDate	= date("Y-m-d", strtotime($attr->pfrom.' this sunday'));
+		$end_date	= date("Y-m-d", strtotime($attr->pto.' next sunday'));
 
 		$weeks = new DatePeriod(
 		    new DateTime($startDate), 
@@ -5711,8 +5711,8 @@ class TyovuorootController extends Controller
 		$w		= $viikko_paivat;
 		$return 	= array();
 		$tyopaariUpdater = array();
-		$date		= date("d.m.Y", strtotime($startDate));
- 		while (strtotime($date) <= strtotime($end_date)) {
+		$date		= date("d.m.Y", strtotime($attr->pfrom));
+ 		while (strtotime($date) <= strtotime($attr->pto)) {
 
 			$viikonNumero = (date('YW',strtotime($date)));
 
