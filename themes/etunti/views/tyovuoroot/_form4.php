@@ -956,7 +956,7 @@ $(document).ready(function(){
   var pto = '';
   var toistuva = ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
   if( toistuva == true ){
-	$('#submitButton').val('Tarkista päivämäärät').attr("pvmTarkistus",true);
+	$('#submitButton').val('Ketjun esikatsellu').attr("pvmTarkistus",true);
   }
 
   $('#submitButton').click(function(){
@@ -1044,7 +1044,7 @@ $(document).ready(function(){
 			$('#sopivatPaivat').html('');
 			var pvmTarkistus_lista = '';
 			$.ajax({
-			  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista',
+			  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista?this_id=<?=$this_id?>',
 			  data:$(this).serialize(),
 			  type:'POST',
 			  success:function(data){
@@ -1431,7 +1431,7 @@ $(document).ready(function(){
   function sopivatPaivat_hide(){
 	$('#sopivatPaivat').hide('slow');
 	$('#sopivatPaivat').html('');
-	$('#submitButton').val('Tarkista päivämäärät').attr("pvmTarkistus",true);
+	$('#submitButton').val('Ketjun esikatsellu').attr("pvmTarkistus",true);
 	$('#submitButton').removeClass('btn-success').addClass('btn-primary');
   }
 
@@ -1597,7 +1597,7 @@ $(document).ready(function(){
 		if( $('#pto').val() === '' )
 		$('#pto').removeClass('bg-success').addClass('bg-danger');
 
-		$('#submitButton').val('Tarkista päivämäärät').attr("pvmTarkistus",true);
+		$('#submitButton').val('Ketjun esikatsellu').attr("pvmTarkistus",true);
 		$('#toistuva-repair-funktio').addClass('in');
 
 	} else {
