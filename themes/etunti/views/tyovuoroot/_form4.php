@@ -1146,8 +1146,9 @@ $(document).ready(function(){
 			  type:'POST',
 			  success:function(data){
 				data = JSON.parse(data);
-				console.log(data);
+				//console.log(data);
 				$('#sopivatPaivat').html('<br><div class="row"><div class="col-sm-12">' + data + '</div></div>').show('slow');
+				$('#submitButton').removeClass('btn-primary').addClass('btn-success').removeAttr('pvmtarkistus').val('Hyväksy valitut päivät ja tallenna');
 		   	},
 			error:function(data){
 				console.log(data);
@@ -1213,6 +1214,7 @@ $(document).ready(function(){
 		  success:function(data){
 			console.log(data);
 			laatikonPaivays();
+			$('#showres').modal().hide();
 			return false;
 			//window.location.reload();
 	   	  },
@@ -1228,7 +1230,8 @@ $(document).ready(function(){
 		  type:'POST',
 		  success:function(data){
 			console.log(data);
-			//laatikonPaivays();
+			laatikonPaivays();
+			//$('#showres').modal().hide();
 			return false;
 	   	  },
 		  error: function(xhr, status, error) {
@@ -1241,6 +1244,36 @@ $(document).ready(function(){
 
   }); /* on submit */
 
+  function getAllTids(){
+
+	var tids = [];
+	tids.push($('#tekijanVaihdo option:selected').val());
+	if( ('<?=$model->id?>') !== '' && ('<?=$model->tid?>') !== $('#tekijanVaihdo option:selected').val() ){
+		tids.push('<?=$model->tid?>');
+	}
+	if( ('<?=$model->id?>') === '' ){
+		tids.push($('#Tyovuoroot_tid').val());
+	}
+
+	/* Työpari */
+	var tyopaari = $('#tyopaari').val();
+	if(tyopaari !== null){
+		console.log('Uudet työparit: ' + tyopaari);
+		$(tyopaari).each(function( index, val ) {
+			tids.push(val);
+		});
+	}
+	if( '<?=$model->tyopaari?>' !== '' ){
+		var edelliset_tyoparit = JSON.parse('<?=(is_array(json_decode($model->tyopaari, true)))?json_encode(array_values(json_decode($model->tyopaari, true))):""?>');
+		console.log('Edelliset työparit: ' + edelliset_tyoparit);
+		var c = tids.concat(edelliset_tyoparit);
+		var tids = c.filter(function (item, pos) {return c.indexOf(item) == pos});
+	}
+	/* Työpari */
+
+	console.log('Tids joille päivitetään laatikko: ' + tids);
+	return tids;
+  }
 
   function laatikonPaivays(){
 
@@ -1248,8 +1281,8 @@ $(document).ready(function(){
 	//if(parent.location.href.match(/tv3/)){ didlink = 'did3'; }
 	$.ajax({
 		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/' + didlink,
-		type: 'GET',
-		data: { haku_from : '<?=$haku_from?>', haku_to : '<?=$haku_to?>', haku_tids : '<?=json_encode($haku_tids)?>' },
+		type: 'POST',
+		data: { haku_from : '<?=$haku_from?>', haku_to : '<?=$haku_to?>', tids : getAllTids() },
 		success:function(data){
 			console.log(data);
 		  	
@@ -1374,7 +1407,7 @@ $(document).ready(function(){
 	laskePituus();
   });
 
-  $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari').on('blur, change', function(){
+  $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari').on('blur change focus select', function(){
 	sopivatPaivat_hide();
   });
  
@@ -1385,6 +1418,8 @@ $(document).ready(function(){
   function sopivatPaivat_hide(){
 	$('#sopivatPaivat').hide('slow');
 	$('#sopivatPaivat').html('');
+	$('#submitButton').val('Tarkista päivämäärät').attr("pvmTarkistus",true);
+	$('#submitButton').removeClass('btn-success').addClass('btn-primary');
   }
 
 

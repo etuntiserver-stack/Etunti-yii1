@@ -2286,7 +2286,7 @@ class TyovuorootController extends Controller
 		if( count($haku_tids) > 0 ){
 			$tt_ret = [];
 			foreach($haku_tids as $k => $v){
-				$tt_ret[$k] = $k;
+				$tt_ret[$v] = $v;
 			}
 		      	$ids = implode(",", $tt_ret);
 			$tyopaari = "tyopaari LIKE '%\"".implode("\"%' OR tyopaari LIKE'%\"", $tt_ret)."\"%'";
@@ -2387,8 +2387,9 @@ class TyovuorootController extends Controller
 			return $return;
 	}
 
-	public function actionDid4($haku_from, $haku_to, $haku_tids) {
-		$tv_arr = $this->tv_arr($haku_from, $haku_to, json_decode($haku_tids, true), $asiakas='', $kohde='', $kohteet_siivous=[]);
+	public function actionDid4() {
+		$tids = array_filter($_POST['tids']);
+		$tv_arr = $this->tv_arr($_POST['haku_from'], $_POST['haku_to'], $tids, $asiakas='', $kohde='', $kohteet_siivous=[]);
 		echo json_encode($tv_arr);
 		exit;
 	}
@@ -3538,7 +3539,7 @@ class TyovuorootController extends Controller
 		$return .= '<table class="table table-striped">';
 		foreach ($period as $wk) {
 			$startpvm = date("Y-m-d", strtotime($wk->format('d.m.Y').' this week monday'));
-			$stoppvm = date("Y-m-d", strtotime($wk->format('d.m.Y').' this week sunday'));
+			$stoppvm = date("Y-m-d", strtotime($startpvm.' +7 days'));
 			$pvms = new DatePeriod(
 			    new DateTime($startpvm), 
 			    new DateInterval('P1D'), 
@@ -3548,7 +3549,6 @@ class TyovuorootController extends Controller
 			foreach($pvms as $pvm){
 				if( strtotime($pvm->format('Y-m-d')) < strtotime($startday) )
 					continue;
-
 				if( in_array($pvm->format('N'), $viikko_paivat) ){
 					$this_pvm = $pvm->format('d.m.Y');
 					$return .= '<tr>';
@@ -3644,6 +3644,11 @@ class TyovuorootController extends Controller
 
 			$model->attributes = $post;
 			if(isset($_POST['P'])){	$model->viikko_paivat = json_encode($_POST['P']); }
+			if($toistuva and isset($_POST['tyopaari'])){
+				$_POST['tyopaari'][] = $model->tid;
+				$model->tyopaari = json_encode($_POST['tyopaari']); 
+			}
+
 			if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
 				$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
 			} else {
