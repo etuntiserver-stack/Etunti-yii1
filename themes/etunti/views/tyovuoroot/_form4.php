@@ -747,8 +747,6 @@ $(document).ready(function(){
    <div class="<?php echo $classCol; ?> panel-footer" id="toistuva_aktiivinen">
 	<legend><?php echo Yii::t('main','Toistuva työvuoro'); ?></legend>
 
-	<?=($toistuva)? 'Ketju: '.$model->id.', Toistuva tid: '.$model->tid.', pfrom: '.$pfrom:''?>
-
 	<div class="row" id="alkaen_loppuen">
 	  <div class="col-sm-4">
 		<label><?php echo Yii::t('main', 'Alkaen'); ?> </label>
@@ -840,7 +838,7 @@ $(document).ready(function(){
 		echo '<hr>
 		<center><h3 class="text-danger">Poistaminen</h3></center>
 		<div class="row">
-		 <div class="col-sm-4">
+		 <div class="col-sm-6">
 			<legend><h4>Vain tämä päivä/henkilö</h4></legend>
 			<div class="row">
 			 <div class="col-sm-3">
@@ -854,21 +852,7 @@ $(document).ready(function(){
 				Poista '.$laatiko_etusukunimi.'
 			</span>
 		 </div>
-		 <div class="col-sm-4">
-			<legend><h4>Alkaen - '.$model->pto.'</h4></legend>
-			<div class="row">
-			 <div class="col-sm-3">
-				<div class="pull-right" style="margin-top: 7px">Alkaen: </div>
-			 </div>
-			 <div class="col-sm-9">
-				<input type="text" id="poista_henkilo_alkaen" class="form-control datepickerFI" value="'.$today.'">
-			 </div>
-			</div>
-			<span class="btn btn-block btn-danger tvpoisto" tilanne="poista_ketjusta_henkilo">
-				Poista ketjusta '.$laatiko_etusukunimi.'<br>
-			</span>
-		 </div>
-		 <div class="col-sm-4">
+		 <div class="col-sm-6">
 			<legend><h4>Poista ketju</h4></legend>
 			<div class="row">
 			 <div class="col-sm-6">
@@ -963,18 +947,18 @@ $(document).ready(function(){
 	$('#tyovuoroot-form').submit();
 	return false;
   });
-
+/*
   if( ('<?=$model->id?>') !== '' && ('<?=$model->toistuva_id?>') !== '0' ){
 		var edellinen_pfrom = ('<?=$pfrom?>').split('.');
 		var old_pfrom = new Date(+edellinen_pfrom[1]+"/"+edellinen_pfrom[0]+"/"+edellinen_pfrom[2]); //"11/21/2011"
 		var todaysDate = new Date();
 		if(old_pfrom.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
 			$('#pfrom').val('<?=date("d.m.Y")?>')
-			$('#pfrom').after('<p class="text-danger">Ketjun Alkupäivämäärä muuttuu. Sitä aikaisemmat päivät muuttuvat yksittäisiksi työvuoroiksi.</p>');
+			$('#pfrom').after('<p class="text-danger">Ketjun Alkupäivämäärä on vanhentunut. Tästä päivästä luodaan uusi ketju.</p>');
 		}
 		$("#Toistuva_viikkoja").replaceWith('<input type="number" name="ToistuvatTyovuorot[viikkoja]" id="Toistuva_viikkoja" class="form-control" value="'+ $("#Toistuva_viikkoja option:selected").val() +'" readonly>');
   }
-
+*/
   /* on submit */
   $('#tyovuoroot-form').on('submit',function(e) {
 	var pvmTarkistus = $('#submitButton').attr('pvmTarkistus');
@@ -1341,18 +1325,10 @@ $(document).ready(function(){
 		alert('Ei saa poista menneisyydestä.');
 		return false;
 	}
-	var poista_henkilo_alkaen 	= $("#poista_henkilo_alkaen").val().split('.');
-	poista_henkilo_alkaen 		= new Date(+poista_henkilo_alkaen[1]+"/"+poista_henkilo_alkaen[0]+"/"+poista_henkilo_alkaen[2]);
-	if( tilanne == 'poista_ketjusta_henkilo' && poista_henkilo_alkaen.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0) ){
-		alert('Ei voida olla alkamaan menneisyydestä.');
-		return false;
-	}
 
 	if(toistuva_aktiivinen == true){
 		if( tilanne == 'poista_pvm' )
 			var r = confirm('Haluatko varmasti poistaa tämä päivä ketjusta?');
-		if( tilanne == 'poista_ketjusta_henkilo' )
-			var r = confirm('Haluatko varmasti poistaa alkaen: ' + $("#poista_alkaen").val() + '?');
 		if( tilanne == 'poista_ketju_kokonaan' )
 			var r = confirm('Poistaa kaikki ketjun kuluvat työvuorot ja työparit.');
 	} else {
@@ -1420,7 +1396,7 @@ $(document).ready(function(){
 	laskePituus();
   });
 
-  $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari').on('blur change focus select', function(){
+  $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari, #tekijanVaihdo').on('blur change focus select', function(){
 	sopivatPaivat_hide();
   });
  

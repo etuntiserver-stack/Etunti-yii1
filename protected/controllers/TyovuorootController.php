@@ -2411,7 +2411,7 @@ class TyovuorootController extends Controller
 	protected function laatikkorakenne($arvo, $status, $this_pvm, $this_tid, $toistuva){
 			$return 	= [];
 			$this_pvm 	= date("Ymd", strtotime($this_pvm));
-			$this_id 	= ($toistuva)? 'toistuva_'.$arvo->id.'_'.$this_pvm.'_'.$this_tid : 'tv_'.$arvo->id.'_'.$this_pvm.'_'.$this_tid;
+			$this_id 	= ($toistuva)? (int)'99999999'.str_pad($arvo->id, 8, '0', STR_PAD_LEFT).''.$this_pvm.''.$this_tid : $arvo->id;
 			$toistuva_icon 	= ($toistuva)? '<i class="text-success fa fa-repeat"></i> ' : '';
 			$osoite 	= (!empty($arvo->osoite))?$arvo->osoite:(isset($arvo->kohteet->osoite))?$arvo->kohteet->osoite:'';
 			$color 		= '#888';
@@ -2428,7 +2428,7 @@ class TyovuorootController extends Controller
 				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 				$return['osoite'] = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$this_id.'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
 			} else {
-				$return['osoite'] = '<span class="tv_edit" id="'.$this_id.'" style="'.$bgcol.'">'.((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$osoite.'</span>';
+				$return['osoite'] = '<span class="tv_edit" id="'.$this_id.'" style="'.$bgcol.'">'.$this_id.'<br>'.((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$osoite.'</span>';
 
 			}
 			return $return;
@@ -3513,8 +3513,9 @@ class TyovuorootController extends Controller
 
 	public function actionPvmTarkistus_lista($this_id)
 	{
+		$return 	= '<hr>';
 		$toistuva = false;
-		if( !empty($this_id) ){
+		if( $this_id != 'null' ){
 			$get_id 	= $this->this_id($this_id);
 			$model 		= $get_id['model'];
 			$toistuva 	= $get_id['toistuva'];
@@ -3523,7 +3524,24 @@ class TyovuorootController extends Controller
 			$etusukunimi	= $this->etuSukunimi($tid);
 		}
 
-		$return 	= '';
+		if( 
+			$toistuva and isset($model->id)
+			and strtotime($model->pfrom) < strtotime(date("d.m.Y")) 
+			and strtotime($_POST['ToistuvatTyovuorot']['pfrom']) >= strtotime(date("d.m.Y")) 
+		){
+			$return .= '<h3 class="text-danger">';
+			$return .= 'Tämä ketju tallennetaan seuraavaksi: <br><br>';
+			$return .= '<p>Aloitus: '.$model->pfrom.',  Lopetus: '. date("d.m.Y", strtotime($_POST['ToistuvatTyovuorot']['pfrom'].' -1 day')).'<br>';
+			if( !empty($model->osoite) )
+				$return .= $model->osoite;
+			elseif(isset($model->kohteet->osoite) and empty($model->osoite))
+				$return .= $model->kohteet->osoite;
+
+			$return .= ', '.$model->alku.' - '.$model->loppu.'</p>';
+			$return .= '<p>Nämät tiedot ei pysty muokkamaan koska ketjun alkamispäivä on vanhentunut</p>';
+			$return .= '</h3>';
+		}
+
 		if(!$toistuva)
 		$tid 		= $_POST['Tyovuoroot']['tid'];
 
@@ -3590,7 +3608,7 @@ class TyovuorootController extends Controller
 
 		// <-- Vko paivat
 		$vko_pvms = $this->vkoPaivatLyhyesti();
-		$return .= '<center><h3>Ketjun esikatsellu</h3></center>';
+		$return .= '<center><h3>Uusi ketju</h3></center>';
 		$pvm	= date("d.m.Y", strtotime($startday));
 		$return .= '<table class="table table-striped">';
 		foreach ($period as $wk) {
@@ -3809,26 +3827,20 @@ class TyovuorootController extends Controller
 	}
 
 	protected function this_id($this_id){
-		$id_explode = explode("_", $this_id);
-		if( isset($id_explode[2]) ){
-			$pvm 		= date("d.m.Y", strtotime($id_explode[2]));
-		} else {
-			echo json_encode(['error' => 'Pvm error']);
-			exit;
-		}
-
-		if( isset($id_explode[0]) and $id_explode[0] == 'toistuva' ){
-			$model 		= ToistuvatTyovuorot::model()->findByPk($id_explode[1]);
+		if( substr($this_id, 0, 8) == '99999999' ){
 			$toistuva 	= true;
-		} if( isset($id_explode[0]) and $id_explode[0] == 'tv' ){
-			$model		= $this->loadModel($id_explode[1]);
+			$model 		= ToistuvatTyovuorot::model()->findByPk((int)substr($this_id, 8, 8));
+			$tid 		= substr($this_id, 24);
+			$pvm 		= date("d.m.Y", strtotime(substr($this_id, 16, 8)));
+		} else {
 			$toistuva 	= false;
+			$model		= $this->loadModel($this_id);
+			$tid 		= $model->tid;
+			$pvm 		= $model->pvm;
 		}
-		if( isset($id_explode[3])  )
-			$tid 		= $id_explode[3];
-		else
-			$tid 		= 0;
 
+		//echo json_encode( $pvm .' '.$tid.' '.$model->id );
+		//exit;
 		return ['model' => $model, 'toistuva' => $toistuva, 'pvm' => $pvm, 'tid' => $tid];
 	}
 
@@ -3943,47 +3955,32 @@ class TyovuorootController extends Controller
 		$edellinen_model 	= $model->attributes;
 		$model->attributes 	= $post;
 
-		if(isset($_POST['P'])){	$model->viikko_paivat = json_encode($_POST['P']); }
-		if($toistuva and isset($_POST['tyopaari'])){
-			$_POST['tyopaari'][] = $model->tid;
-			$model->tyopaari = json_encode($_POST['tyopaari']); 
-		}
-
-		if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
-			$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
-		} else {
-			$model->lisa_tuotteet = '';
-		}
-		if( is_array($model->tyo_erittelyt) and count($model->tyo_erittelyt) > 0 ){
-			$model->tyo_erittelyt = json_encode($model->tyo_erittelyt, JSON_FORCE_OBJECT);
-		} else {
-			$model->tyo_erittelyt = '';
-		}
-		if( is_array($model->muistiinpano) and count($model->muistiinpano) > 0 ){
-			$model->muistiinpano = json_encode($model->muistiinpano, JSON_FORCE_OBJECT);
-		} else {
-			$model->muistiinpano = '';
-		}
-//print_r($edellinen_model['viikko_paivat']);
-//exit;
-		if($model->save()){
-
-			// <-- Toistuva pfrom muutos
-			if( 
-				$toistuva 
-				and strtotime($edellinen_model['pfrom']) < strtotime(date("d.m.Y")) 
-				and strtotime($model->pfrom) >= strtotime(date("d.m.Y")) 
-			){
+		// <-- Toistuva pfrom muutos.
+		if( 
+			$toistuva and isset($edellinen_model['id'])
+			and strtotime($edellinen_model['pfrom']) < strtotime(date("d.m.Y")) 
+			and strtotime($_POST['ToistuvatTyovuorot']['pfrom']) >= strtotime(date("d.m.Y")) 
+		){
+			$model->attributes 	= $edellinen_model;
+			$model->pto 		= date("d.m.Y", strtotime($_POST['ToistuvatTyovuorot']['pfrom'].' -1 day'));
+			if($model->save()){
 				$new_toistuva = new ToistuvatTyovuorot;
-				$new_toistuva->attributes 	= $edellinen_model;
-				$new_toistuva->pfrom 		= $edellinen_model['pfrom'];
-				$new_toistuva->pto 		= date("d.m.Y", strtotime(' -1 day'));
+				$new_toistuva->attributes = $post;
+				$this->model_json_converter($_POST, $new_toistuva, $toistuva);
 				if(!$new_toistuva->save()){
 					echo json_encode($new_toistuva->getErrors());
-					exit;
+				} else {
+					$return = ['return' => 'pfrom_muutos_ok'];
+					echo json_encode($return);
 				}
+				exit;
 			}
-			//     Toistuva pfrom muutos -->
+		}
+		//     Toistuva pfrom muutos -->
+
+		$this->model_json_converter($_POST, $model, $toistuva);
+
+		if($model->save()){
 
 			// <-- Onko tyopari esitetty
 			$post_tyopaari = array();
@@ -4184,6 +4181,32 @@ class TyovuorootController extends Controller
 
 			exit;
 
+	}
+
+	protected function model_json_converter($post, $model, $toistuva)
+	{
+		if(isset($post['P'])){	$model->viikko_paivat = json_encode($post['P']); }
+		if($toistuva and isset($post['tyopaari'])){
+			$post['tyopaari'][] = $model->tid;
+			$model->tyopaari = json_encode($post['tyopaari']); 
+		}
+
+		if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
+			$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
+		} else {
+			$model->lisa_tuotteet = '';
+		}
+		if( is_array($model->tyo_erittelyt) and count($model->tyo_erittelyt) > 0 ){
+			$model->tyo_erittelyt = json_encode($model->tyo_erittelyt, JSON_FORCE_OBJECT);
+		} else {
+			$model->tyo_erittelyt = '';
+		}
+		if( is_array($model->muistiinpano) and count($model->muistiinpano) > 0 ){
+			$model->muistiinpano = json_encode($model->muistiinpano, JSON_FORCE_OBJECT);
+		} else {
+			$model->muistiinpano = '';
+		}
+		return $model;
 	}
 
 	protected function pushNotifySending($tv_id)
