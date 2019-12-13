@@ -3524,9 +3524,26 @@ class TyovuorootController extends Controller
 			$etusukunimi	= $this->etuSukunimi($tid);
 		}
 
+		if(!$toistuva or !isset($model->id)){
+			echo json_encode(['error' => 'Toistuva error']);
+			exit;
+		}
+
 		if( 
-			$toistuva and isset($model->id)
-			and strtotime($model->pfrom) < strtotime(date("d.m.Y")) 
+			is_array(json_decode($model->tyopaari, true))
+			and isset($_POST['tyopaari']) 
+			and count($_POST['tyopaari']) != count(json_decode($model->tyopaari, true))
+ 		){
+			$vanhat = json_decode($model->tyopaari, true);
+			$return .= '<h3 class="text-danger">';
+			$diff = array_diff($vanhat, $_POST['tyopaari']);
+			foreach($diff as $k => $v)
+				$return .= $v.'<br>';
+			$return .= '</h3>';
+		}
+
+		if( 
+			strtotime($model->pfrom) < strtotime(date("d.m.Y")) 
 			and strtotime($_POST['ToistuvatTyovuorot']['pfrom']) >= strtotime(date("d.m.Y")) 
 		){
 			$return .= '<h3 class="text-danger">';
