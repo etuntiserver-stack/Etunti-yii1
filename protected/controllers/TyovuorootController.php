@@ -5695,33 +5695,30 @@ class TyovuorootController extends Controller
 		}
 		//     Tsekataan poistettut PVM -->
 
-		$startDate	= date("Y-m-d", strtotime($attr->pfrom.' this sunday'));
-		$end_date	= date("Y-m-d", strtotime($attr->pto.' next sunday'));
+		$startday	= date("Y-m-d", strtotime($attr->pfrom.' this sunday'));
+		$stopday	= date("Y-m-d", strtotime($attr->pto.' next sunday'));
 
-		$weeks = new DatePeriod(
-		    new DateTime($startDate), 
-		    new DateInterval('P'.$attr->viikkoja.'W'), 
-		    new DateTime($end_date)
-		);
-		$sopivaViikot = [];
-		foreach ($weeks as $wk) {
-			$sopivaViikot[$wk->format('YW')] = $wk->format('YW');
-		}
+		$begin = new DateTime($startday.' 00:00:00', new DateTimeZone('Europe/Helsinki'));
+		$begin->modify('this sunday');
+		$interval = new DateInterval('P'.$attr->viikkoja.'W');
+		$end = new DateTime($stopday.' 23:59:59', new DateTimeZone('Europe/Helsinki'));
+		$end->modify('next week sunday'); // zapas
+		$period = new DatePeriod($begin, $interval, $end);
 
-		$w		= $viikko_paivat;
-		$return 	= array();
-		$tyopaariUpdater = array();
-		$date		= date("d.m.Y", strtotime($attr->pfrom));
- 		while (strtotime($date) <= strtotime($attr->pto)) {
-
-			$viikonNumero = (date('YW',strtotime($date)));
-
-	                if( 
-				in_array(date('N',strtotime($date)),$w) 
-				and in_array($viikonNumero,$sopivaViikot) 
-			)
-			{
-				$pvm = $date;
+		// <-- Vko paivat
+		foreach ($period as $wk) {
+			$startpvm = date("Y-m-d", strtotime($wk->format('d.m.Y').' this week monday'));
+			$stoppvm = date("Y-m-d", strtotime($startpvm.' +7 days'));
+			$pvms = new DatePeriod(
+			    new DateTime($startpvm), 
+			    new DateInterval('P1D'), 
+			    new DateTime($stoppvm)
+			);
+			foreach($pvms as $pvm){
+				if( strtotime($pvm->format('Y-m-d')) > strtotime($stopday) )
+					break;
+				if( in_array($pvm->format('N'), $viikko_paivat) ){
+				$pvm = $pvm->format('d.m.Y');
 				//$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)));
 
 				$tekijan_nimi='';
@@ -5791,11 +5788,11 @@ class TyovuorootController extends Controller
 					}
 
 					if( isset($t->id) ){	$suoritettu_ids[] = $t->id; }
-
+				} // viikko paivat
 				} // if otettu pois
 
 			}
-	                $date = date ("d.m.Y", strtotime("+1 day", strtotime($date)));
+			
 		}
 
 		//$return[] = array('ERROR' => json_encode($tid." ".$toistuva->tid));
