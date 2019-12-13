@@ -5699,7 +5699,6 @@ class TyovuorootController extends Controller
 		$stopday	= date("Y-m-d", strtotime($attr->pto));
 
 		$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
-		$date->modify('this monday');
 		$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
  
 		while ($date->getTimestamp() < $date_end){
