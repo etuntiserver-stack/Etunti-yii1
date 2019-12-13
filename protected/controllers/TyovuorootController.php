@@ -5699,6 +5699,7 @@ class TyovuorootController extends Controller
 		$stopday	= date("Y-m-d", strtotime($attr->pto));
 
 		$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
+		$date->modify('this week monday');
 		$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
  
 		while ($date->getTimestamp() < $date_end){
@@ -5706,6 +5707,8 @@ class TyovuorootController extends Controller
 				$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
 				$paiva->modify("+" . ($viikko_paiva - 1) . "day");
 				$pvm = $paiva->format('d.m.Y');
+				if (strtotime($pvm) < strtotime($startday))
+					continue;
 				//$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)));
 
 				$tekijan_nimi='';
