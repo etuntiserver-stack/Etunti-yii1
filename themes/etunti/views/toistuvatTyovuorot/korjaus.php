@@ -1,37 +1,39 @@
 <?php
-/*
-Hossain Iqbal
-Kovalenko Valentyna
-Lepik Marius
-Ongachi
-Peipsi
-Rahkema Aira
-Tornea Kimberly
-Zerouali Ali
-*/
-//$id, $pvm, $tid
-		$tid = 10;
-		$pvm = "06.12.2019";
-		$arvo = ToistuvatTyovuorot::model()->findbypk(19);
-		if(isset($arvo->id)){
-			$poistettu_pvms = [];
-			if( !empty($arvo->new_poistettu_pvm) ){
-				foreach(json_decode($arvo->new_poistettu_pvm, true) as $key => $val)
-					$poistettu_pvms[] = $val;
-			}
 
-			$poistettu_pvms[] = [$tid => date("d.m.Y", strtotime($pvm))]; // Lisataan uusi
 
-			$clearing = []; // Otetaan pois jos on samanlainen
-			foreach ($poistettu_pvms as $key => $value){
-			  if(!in_array($value, $clearing))
-			    $clearing[] = $value;
-			}
+	// <-- toistuvat
+	$criteria = new CDbCriteria(); 
+	$criteria->order = "alku";
+	$criteria->condition = "YEAR(STR_TO_DATE(pfrom, '%d.%m.%Y'))=2019";
+	$t = ToistuvatTyovuorot::model()->findAll($criteria);
+	foreach($t as $attr){
+ 		echo '<h2>'.$attr->id.'</h2>';
 
-			echo json_encode($clearing).'<br>';
-			ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('poistettu_pvm'=>json_encode($clearing)));
-			return true;
+		$tv = Tyovuoroot::model()->findAll("toistuva_id='".$attr->id."'");
+		foreach($tv as $item){
+			echo $item->pvm.'<br>';
 		}
+		echo '---olevat loppu---';
+		$startday	= date("Y-m-d", strtotime($attr->pfrom));
+		$stopday	= date("Y-m-d", strtotime($attr->pto));
+
+		$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
+		$date->modify('this week monday');
+		$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
+
+		while ($date->getTimestamp() < $date_end){
+			foreach(json_decode($attr->viikko_paivat, true) as $viikko_paiva) {
+				$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
+				$paiva->modify("+" . ($viikko_paiva - 1) . "day");
+				$pvm = $paiva->format('d.m.Y');
+				if (strtotime($pvm) < strtotime($startday))
+					continue;
+				echo $pvm.'<br>';
+			}
+			$date->modify("+{$attr->viikkoja}week");
+		}
+	}
+
 exit;
 /*
 $site = Yii::app()->createController('Site');
