@@ -1,39 +1,5 @@
 <?php
 
-
-	// <-- toistuvat
-	$criteria = new CDbCriteria(); 
-	$criteria->order = "alku";
-	$criteria->condition = "YEAR(STR_TO_DATE(pfrom, '%d.%m.%Y'))=2019";
-	$t = ToistuvatTyovuorot::model()->findAll($criteria);
-	foreach($t as $attr){
- 		echo '<h2>'.$attr->id.'</h2>';
-
-		$tv = Tyovuoroot::model()->findAll("toistuva_id='".$attr->id."'");
-		foreach($tv as $item){
-			echo $item->pvm.'<br>';
-		}
-		echo '---olevat loppu---';
-		$startday	= date("Y-m-d", strtotime($attr->pfrom));
-		$stopday	= date("Y-m-d", strtotime($attr->pto));
-
-		$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
-		$date->modify('this week monday');
-		$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
-
-		while ($date->getTimestamp() < $date_end){
-			foreach(json_decode($attr->viikko_paivat, true) as $viikko_paiva) {
-				$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
-				$paiva->modify("+" . ($viikko_paiva - 1) . "day");
-				$pvm = $paiva->format('d.m.Y');
-				if (strtotime($pvm) < strtotime($startday))
-					continue;
-				echo $pvm.'<br>';
-			}
-			$date->modify("+{$attr->viikkoja}week");
-		}
-	}
-
 exit;
 /*
 $site = Yii::app()->createController('Site');
