@@ -2321,6 +2321,7 @@ class TyovuorootController extends Controller
 
 			while ($date->getTimestamp() < $date_end){
 				foreach(json_decode($arvo->viikko_paivat, true) as $viikko_paiva) {
+/*
 					$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
 					$paiva->modify("+" . ($viikko_paiva - 1) . "day");
 					$this_pvm = $paiva->format('d.m.Y');
@@ -2333,7 +2334,9 @@ class TyovuorootController extends Controller
 						break 1;
 						break;
 					}
+
 					//     Haku from to rajoitukset -->
+/* 10 sekuntti aika se syo
 					foreach($tids as $tid){
 						if( isset($poistettu_pvms[$arvo->id]) ){
 							foreach($poistettu_pvms[$arvo->id] as $k => $v){
@@ -2341,11 +2344,11 @@ class TyovuorootController extends Controller
 									continue 2;
 							}
 						}
-
 						$return = $this->laatikkorakenne($arvo, $status, $this_pvm, $tid, true);
 						if( isset($return['osoite']) )
 							$tv_arr[$tid][$this_pvm][strtotime($arvo->alku)][] = $return['osoite'];
 					}
+*/
 				}
 
 				$date->modify("+{$arvo->viikkoja}week");
@@ -2353,7 +2356,7 @@ class TyovuorootController extends Controller
 		}
 		//     toistuvat -->
 
-		//exit;
+		exit;
 
 		/*
 		echo '<pre>';
@@ -2384,7 +2387,7 @@ class TyovuorootController extends Controller
 				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 				$return['osoite'] = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$this_id.'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
 			} else {
-				$return['osoite'] = '<span class="tv_edit" id="'.$this_id.'" style="'.$bgcol.'">'.$this_id.'<br>'.((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$osoite.'</span>';
+				$return['osoite'] = '<span class="tv_edit" id="'.$this_id.'" style="'.$bgcol.'">'.((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$osoite.'</span>';
 
 			}
 			return $return;
@@ -3480,13 +3483,14 @@ class TyovuorootController extends Controller
 			$etusukunimi	= $this->etuSukunimi($tid);
 		}
 
-		if(!$toistuva or !isset($model->id)){
+		if($toistuva and !isset($model->id)){
 			echo json_encode(['error' => 'Toistuva error']);
 			exit;
 		}
 
 		if( 
-			is_array(json_decode($model->tyopaari, true))
+			$this_id != 'null'
+			and is_array(json_decode($model->tyopaari, true))
 			and isset($_POST['tyopaari']) 
 			and count($_POST['tyopaari']) != count(json_decode($model->tyopaari, true))
  		){
@@ -3499,7 +3503,8 @@ class TyovuorootController extends Controller
 		}
 
 		if( 
-			strtotime($model->pfrom) < strtotime(date("d.m.Y")) 
+			$this_id != 'null'
+			and strtotime($model->pfrom) < strtotime(date("d.m.Y")) 
 			and strtotime($_POST['ToistuvatTyovuorot']['pfrom']) >= strtotime(date("d.m.Y")) 
 		){
 			$return .= '<h3 class="text-danger">';
@@ -3515,7 +3520,7 @@ class TyovuorootController extends Controller
 			$return .= '</h3>';
 		}
 
-		if(!$toistuva)
+		if($this_id == 'null')
 		$tid 		= $_POST['Tyovuoroot']['tid'];
 
 		$startday 	= date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pfrom']));
@@ -3572,41 +3577,28 @@ class TyovuorootController extends Controller
 		}
 		*/
 
-		$begin = new DateTime($startday.' 00:00:00', new DateTimeZone('Europe/Helsinki'));
-		$begin->modify('this sunday');
-		$interval = new DateInterval('P'.$viikkoja.'W');
-		$end = new DateTime($stopday.' 23:59:59', new DateTimeZone('Europe/Helsinki'));
-		$end->modify('next week sunday'); // zapas
-		$period = new DatePeriod($begin, $interval, $end);
-
 		// <-- Vko paivat
 		$vko_pvms = $this->vkoPaivatLyhyesti();
+
+		$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
+		$date->modify('this week monday');
+		$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
 		$return .= '<center><h3>Uusi ketju</h3></center>';
-		$pvm	= date("d.m.Y", strtotime($startday));
 		$return .= '<table class="table table-striped">';
-		foreach ($period as $wk) {
-			$startpvm = date("Y-m-d", strtotime($wk->format('d.m.Y').' this week monday'));
-			$stoppvm = date("Y-m-d", strtotime($startpvm.' +7 days'));
-			$pvms = new DatePeriod(
-			    new DateTime($startpvm), 
-			    new DateInterval('P1D'), 
-			    new DateTime($stoppvm)
-			);
-			$return .= '<tr><th colspan="3"><h3>Viikko - '.$wk->format('W / Y').'</h3></th></tr>';
-			foreach($pvms as $pvm){
-				if( strtotime($pvm->format('Y-m-d')) < strtotime($startday) )
-					continue;
-				if( strtotime($pvm->format('Y-m-d')) > strtotime($stopday) )
-					break;
-				if( in_array($pvm->format('N'), $viikko_paivat) ){
-					$this_pvm = $pvm->format('d.m.Y');
-					$return .= '<tr>';
-					$return .= '<td width="1%">'.$vko_pvms[date('N',strtotime($this_pvm))];
-					$return .= '<td width="2%"><b>'.$this_pvm.'</b></td>';
-					$return .= '<td>'.implode(", ", $tt).'</td>';
-					$return .= '</tr>';
-				}
+		while ($date->getTimestamp() < $date_end){
+			$return .= '<tr><th colspan="3"><h3>Viikko - '.$date->format('W / Y').'</h3></th></tr>';
+			foreach($viikko_paivat as $viikko_paiva) {
+				$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
+				$paiva->modify("+" . ($viikko_paiva - 1) . "day");
+				$this_pvm = $paiva->format('d.m.Y');
+
+				$return .= '<tr>';
+				$return .= '<td width="1%">'.$vko_pvms[date('N',strtotime($this_pvm))];
+				$return .= '<td width="2%"><b>'.$this_pvm.'</b></td>';
+				$return .= '<td>'.implode(", ", $tt).'</td>';
+				$return .= '</tr>';
 			}
+			$date->modify("+{$viikkoja}week");
 		}
 		$return .= '</table>';
 

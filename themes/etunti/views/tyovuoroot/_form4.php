@@ -1033,7 +1033,7 @@ $(document).ready(function(){
 			  type:'POST',
 			  success:function(data){
 				data = JSON.parse(data);
-				//console.log(data);
+				console.log(data);
 				$('#sopivatPaivat').html('<br><div class="row"><div class="col-sm-12">' + data + '</div></div>').show('slow');
 				$('#submitButton').removeClass('btn-primary').addClass('btn-success').removeAttr('pvmtarkistus').val('Hyväksy valitut päivät ja tallenna');
 		   	},
