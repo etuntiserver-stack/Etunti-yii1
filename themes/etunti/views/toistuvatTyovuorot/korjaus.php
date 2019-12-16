@@ -94,7 +94,7 @@
 				if( isset($new_poistettu[$pvm]) )
 					continue;
 
-				if( strtotime($pvm) >= strtotime($stop_haku) ){
+				if( strtotime($pvm) > strtotime($stop_haku) ){
 					break 1;
 					break;
 				}
