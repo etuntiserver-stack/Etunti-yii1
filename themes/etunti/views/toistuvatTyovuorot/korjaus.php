@@ -25,6 +25,8 @@
 		$body = '';
 		$body .= '<tr><td valign="top">';
 		$body .= '<h2>Ketju: '.$attr->toistuvat->id.'</h2>';
+		if( isset($attr->tt->id) )
+		$body .= '<b>Työntekijä</b>: '.$attr->tt->tekijan_nimi.' '.$attr->tt->sukunimi.'<br>';
 		if(!empty($attr->tyoajanlaatu)){
 				$expl = explode("/",$attr->tyoajanlaatu);
 				if(isset($expl[0]) and !empty($expl[0])){
