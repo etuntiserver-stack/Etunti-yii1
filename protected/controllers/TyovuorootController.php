@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'palautta_toistuva_pvm', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -1248,23 +1248,23 @@ class TyovuorootController extends Controller
 		if(isset($_POST['remove']) and isset($_SESSION['muistin'])){
 			foreach($_SESSION['muistin'] as $cp){
 
-				$ex = explode("_",$cp);
-				if( isset($ex[0]) and $ex[0] == 'tv' ){
-					$t = Tyovuoroot::model()->findbypk($ex[1]);
+				$get_id 	= $this->this_id($cp);
+				if(!isset($get_id['model']))
+					continue;
+				$model 		= $get_id['model'];
+				$toistuva 	= $get_id['toistuva'];
+				$pvm 		= $get_id['pvm'];
+				$tid 		= $get_id['tid'];
+
+				if( $toistuva ){
+					$this->toistuvaDeletePvm($model->id, $pvm, $tid); // id, did, tid
 				}
 
-				// <-- Jos toistuva, otetaan sen Päivämäärä pois ketjusta
-				if( isset($ex[0]) and $ex[0] == 'toistuva' ){
-					$this->toistuvaDeletePvm($ex[1], $ex[2], $ex[3]); // id, did, tid
-				}
-				//     Jos toistuva, otetaan sen Päivämäärä pois ketjusta -->
-
-
-				if( isset($t->id) and is_array(json_decode($t->tyopaari, true)) ){
-					$uusi_tp_arr = array();
-					foreach(json_decode($t->tyopaari, true) as  $id => $tp_id){
+				if( !$toistuva and is_array(json_decode($model->tyopaari, true)) ){
+					$uusi_tp_arr = [];
+					foreach(json_decode($model->tyopaari, true) as  $id => $tp_id){
 						$tv = Tyovuoroot::model()->findByPk($id);
-						if( isset($tv->id) and $tv->tid == $t->tid ){
+						if( isset($tv->id) and $tv->tid == $model->tid ){
 							// ei mitaan koska pois
 						} else {
 							$uusi_tp_arr[$id] = $tp_id;
@@ -1272,30 +1272,25 @@ class TyovuorootController extends Controller
 					}
 					foreach( $uusi_tp_arr as $k => $v ){
 						if( count($uusi_tp_arr) == 1 ){
-						Tyovuoroot::model()->updateByPk($k, array('tyopaari' => ''));
-						break;
+							Tyovuoroot::model()->updateByPk($k, array('tyopaari' => ''));
+							break;
 						}
 						Tyovuoroot::model()->updateByPk($k, array('tyopaari' => json_encode($uusi_tp_arr)));
 					}
 				}
-			
 
-				// <-- LOG
-				if( isset($t->id) )
-				{
-				$model_log 	= 'Tyovuoroot';
-				$name_log 	= 'Työvuorot';
-				$status_log 	= 'Delete';
+				if( !$toistuva ){
+					// <-- LOG
+					$model_log 	= 'Tyovuoroot';
+					$name_log 	= 'Työvuorot';
+					$status_log 	= 'Delete';
 	
-					$old_values = json_encode($t->attributes);
+					$old_values = json_encode($model->attributes);
 					$new_values = null;
 					$site = Yii::app()->createController('Site');
 					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-				}
-				//     LOG -->
-
-				if( isset($ex[0]) and $ex[0] == 'tv' ){
-					Tyovuoroot::model()->deletebypk($ex[1]);
+					//     LOG -->
+					Tyovuoroot::model()->deletebypk($model->id);
 				}
 			}
 
@@ -1455,6 +1450,17 @@ class TyovuorootController extends Controller
 			echo json_encode($did.'//'.implode(",",$_SESSION['muistin']));
 			exit;
 		}
+	}
+
+
+	public function actionPois_pvm_ketjusta($toistuva_id, $tid, $pvm)
+	{
+		if($this->toistuvaDeletePvm($toistuva_id, $pvm, $tid))
+			echo json_encode(['return' => 'ok']);
+		else
+			echo json_encode(['return' => 'error']);
+
+		exit;
 	}
 
 	public function toistuvaDeletePvm($id, $pvm, $tid)
@@ -2211,6 +2217,7 @@ class TyovuorootController extends Controller
 
 	protected function tv_arr($haku_from, $haku_to, $haku_tids, $asiakas, $kohde, $kohteet_siivous=[]){
 
+		$haku_to_ts = strtotime($haku_to);
        		$criteria = new CDbCriteria();
 		$criteria->with = array('kohteet');
 		//$criteria->limit = "10";
@@ -2313,6 +2320,7 @@ class TyovuorootController extends Controller
 			}
 
 			$startday 	= date("Y-m-d", strtotime($arvo->pfrom));
+			$startday_ts	= strtotime($startday); 
 			$stopday 	= date("Y-m-d", strtotime($arvo->pto));
 
 			$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
@@ -2320,35 +2328,34 @@ class TyovuorootController extends Controller
 			$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
 
 			while ($date->getTimestamp() < $date_end){
-				foreach(json_decode($arvo->viikko_paivat, true) as $viikko_paiva) {
-/*
-					$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
-					$paiva->modify("+" . ($viikko_paiva - 1) . "day");
-					$this_pvm = $paiva->format('d.m.Y');
-					if (strtotime($this_pvm) < strtotime($startday))
-						continue;
-					// <-- Haku from to rajoitukset
-					if (strtotime($this_pvm) < strtotime($haku_from))
-						continue;
-					if (strtotime($this_pvm) > strtotime($haku_to)){
-						break 1;
-						break;
-					}
+				if ($date->format("YW") >= date("YW", strtotime($haku_from))){
+					foreach(json_decode($arvo->viikko_paivat, true) as $viikko_paiva) {
 
-					//     Haku from to rajoitukset -->
-/* 10 sekuntti aika se syo
-					foreach($tids as $tid){
-						if( isset($poistettu_pvms[$arvo->id]) ){
-							foreach($poistettu_pvms[$arvo->id] as $k => $v){
-								if( isset($v[$tid]) and $v[$tid] == $this_pvm)
-									continue 2;
-							}
+						$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
+						$paiva->modify("+" . ($viikko_paiva - 1) . "day");
+						$this_pvm = $paiva->format('d.m.Y');
+						if (strtotime($this_pvm) < $startday_ts)
+							continue;
+						// <-- Haku from to rajoitukset
+						if (strtotime($this_pvm) > $haku_to_ts){
+							break 2;
 						}
-						$return = $this->laatikkorakenne($arvo, $status, $this_pvm, $tid, true);
-						if( isset($return['osoite']) )
-							$tv_arr[$tid][$this_pvm][strtotime($arvo->alku)][] = $return['osoite'];
+
+						//     Haku from to rajoitukset -->
+
+						foreach($tids as $tid){
+							if( isset($poistettu_pvms[$arvo->id]) ){
+								foreach($poistettu_pvms[$arvo->id] as $k => $v){
+									if( isset($v[$tid]) and $v[$tid] == $this_pvm)
+										continue 2;
+								}
+							}
+							$return = $this->laatikkorakenne($arvo, $status, $this_pvm, $tid, true);
+							if( isset($return['osoite']) )
+								$tv_arr[$tid][$this_pvm][strtotime($arvo->alku)][] = $return['osoite'];
+						}
+
 					}
-*/
 				}
 
 				$date->modify("+{$arvo->viikkoja}week");
@@ -2356,7 +2363,7 @@ class TyovuorootController extends Controller
 		}
 		//     toistuvat -->
 
-		exit;
+		//exit;
 
 		/*
 		echo '<pre>';
@@ -3146,12 +3153,6 @@ class TyovuorootController extends Controller
 		//     Toistuva tyovuorot ja tyoparit -->
 
 
-
-
-
-
-
-
 		// Jos Toistuva Ruksi ei ole päällä
 		if(isset($_POST['Tyovuoroot']) and !isset($_POST['ToistuvatTyovuorot']['toistuva_aktiivinen']))
 		{
@@ -3498,7 +3499,7 @@ class TyovuorootController extends Controller
 			$return .= '<h3 class="text-danger">';
 			$diff = array_diff($vanhat, $_POST['tyopaari']);
 			foreach($diff as $k => $v)
-				$return .= $v.'<br>';
+				//$return .= $v.'<br>';
 			$return .= '</h3>';
 		}
 
@@ -3569,13 +3570,12 @@ class TyovuorootController extends Controller
 		//     Tyontekijat -->
 
 		// <-- Poistettu_pvms
-		/*
+		if( $this_id != 'null' and !empty($model->new_poistettu_pvm) ){
 		$poistettu_pvms = [];
-		if( !empty($arvo->new_poistettu_pvm) ){
-			foreach(json_decode($arvo->new_poistettu_pvm, true) as $key => $val)
-				$poistettu_pvms[$arvo->id][] = $val;
+			foreach(json_decode($model->new_poistettu_pvm, true) as $key => $val)
+				foreach($val as $tid => $pvm)
+					$poistettu_pvms[$tid][$pvm] = $pvm;
 		}
-		*/
 
 		// <-- Vko paivat
 		$vko_pvms = $this->vkoPaivatLyhyesti();
@@ -3586,18 +3586,32 @@ class TyovuorootController extends Controller
 		$return .= '<center><h3>Uusi ketju</h3></center>';
 		$return .= '<table class="table table-striped">';
 		while ($date->getTimestamp() < $date_end){
-			$return .= '<tr><th colspan="3"><h3>Viikko - '.$date->format('W / Y').'</h3></th></tr>';
-			foreach($viikko_paivat as $viikko_paiva) {
-				$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
-				$paiva->modify("+" . ($viikko_paiva - 1) . "day");
-				$this_pvm = $paiva->format('d.m.Y');
-
-				$return .= '<tr>';
-				$return .= '<td width="1%">'.$vko_pvms[date('N',strtotime($this_pvm))];
-				$return .= '<td width="2%"><b>'.$this_pvm.'</b></td>';
-				$return .= '<td>'.implode(", ", $tt).'</td>';
-				$return .= '</tr>';
+			$return .= '<tr><th colspan="'.count($tt).'"><center><h3>Viikko - '.$date->format('W / Y').'</h3></center></th></tr>';
+			$return .= '<tr>';
+			foreach($tt as $tid => $tnimi) {
+				$return .= '<td>';
+				$return .= '<table class="table table-striped">';
+				$return .= '<tr><th colspan="2"><center><h4>'.$tnimi.'</h4></center></th></tr>';
+				foreach($viikko_paivat as $viikko_paiva) {
+					$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
+					$paiva->modify("+" . ($viikko_paiva - 1) . "day");
+					$this_pvm = $paiva->format('d.m.Y');
+					$return .= '<tr>';
+					$return .= '<td width="1%">'.$vko_pvms[date('N',strtotime($this_pvm))].'</td>';
+					$return .= '<td width="98%"><b>'.$this_pvm.'</b></td>';
+					$return .= '<td width="1%">';
+					if( isset($poistettu_pvms[$tid][$this_pvm]) )
+						$return .= '<i class="link fa fa-recycle text-warning palauta_kejuun" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'"></i>';
+					else
+						$return .= '<i class="link fa fa-trash text-danger pois_ketjusta" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'"></i>';
+					$return .= '</td>';
+					$return .= '</tr>';
+				}
+				$return .= '</table>';
+				$return .= '</td>';
 			}
+
+			$return .= '</tr>';
 			$date->modify("+{$viikkoja}week");
 		}
 		$return .= '</table>';

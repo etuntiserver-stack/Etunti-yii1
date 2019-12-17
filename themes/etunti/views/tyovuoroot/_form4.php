@@ -434,14 +434,14 @@ $(".muokaValiko").click(function() {
 		$criteria = $site[0]->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
 
-		$criteria->condition =" aktiivinen=1 and id!='".$model->tid."' ";
+		$criteria->condition =" aktiivinen=1 and id!='".$laatikko_tid."' ";
 
 		// <-- Tyoryhmat
 		$tt = Yii::app()->createController('Tyontekijat');
 		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
 		$ids = implode(",", $tt_arr);
 		if( count($tt_arr) > 0 ){
-	       		$criteria->addCondition (" id IN ($ids) and id!='".$model->tid."' ");
+	       		$criteria->addCondition (" id IN ($ids) and id!='".$laatikko_tid."' ");
 		}
 		//     Tyoryhmat -->
 
@@ -870,7 +870,7 @@ $(document).ready(function(){
 	}
 	?>
 
-	<div id="sopivatPaivat" style="display:none"></div>
+	<div id="sopivatPaivat" class="table-responsive" style="display:none"></div>
    </div>
   </div>
  </div>
@@ -1033,7 +1033,7 @@ $(document).ready(function(){
 			  type:'POST',
 			  success:function(data){
 				data = JSON.parse(data);
-				console.log(data);
+				//console.log(data);
 				$('#sopivatPaivat').html('<br><div class="row"><div class="col-sm-12">' + data + '</div></div>').show('slow');
 				$('#submitButton').removeClass('btn-primary').addClass('btn-success').removeAttr('pvmtarkistus').val('Hyväksy valitut päivät ja tallenna');
 		   	},

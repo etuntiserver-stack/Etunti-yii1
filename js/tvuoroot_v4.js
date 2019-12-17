@@ -8,6 +8,25 @@ $(document).ready(function(){
   });
   if( varaus_l > 0 ){ $('.td_varaus').addClass('in'); }
 
+$(document).delegate(".pois_ketjusta","click",function(){
+	var toistuva_id = $(this).attr('toistuva_id');
+	var tid = $(this).attr('tid');
+	var pvm = $(this).attr('pvm');
+	var r = confirm('Haluatko varmasti poistaa tämän?');
+	if(r){
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pois_pvm_ketjusta',
+	   type:'GET',
+	   data: { toistuva_id : toistuva_id, tid : tid, pvm : pvm },
+           success: function(data){
+        	console.log(data);
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
+        });
+	}
+});
 
 $(document).delegate(".muistin","click",function(){
 	$('.latikkolisatiedot_paa').remove();
@@ -90,7 +109,7 @@ $('td').hover(function()
      $(this).find('.tv_edit').hover(function(){
 	if( !$(this).hasClass('muistissa') && !$(this).prev('i').hasClass('muistissa') ){
 	   if( !$(this).prev('i').hasClass('muistin') ){
-		$(this).before('<i class="fa fa-pencil-square-o muistin" for="' + $(this).attr('id') + '_' + did_tid + '"></i>');
+		$(this).before('<i class="fa fa-pencil-square-o muistin" for="' + $(this).attr('id') + '"></i>');
 	   }
 	}
 	var this_id = $(this).attr('id');
@@ -257,7 +276,7 @@ window.addEventListener('message', function(e) {
 	   type:'POST',
 	   data: doWhat,
            success: function(data){
-        	//console.log(JSON.parse(data));
+        	console.log(JSON.parse(data));
 
 		if(data !== '')
 		{
