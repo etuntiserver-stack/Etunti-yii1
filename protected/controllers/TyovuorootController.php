@@ -2330,7 +2330,7 @@ class TyovuorootController extends Controller
 		// <-- toistuvat
        		$criteria = new CDbCriteria(); 
 		$criteria->order = "alku";
-		$criteria->condition = "DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '$haku_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '$haku_from'";
+		$criteria->condition = "DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) <= '$haku_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '$haku_from'"; // <= laitoin pvm palautus varten
 		if( count($haku_tids) > 0 ){
 			$tt_ret = [];
 			foreach($haku_tids as $k => $v){

@@ -51,7 +51,7 @@ $(document).delegate(".palauta_kejuun","click",function(){
         	//console.log(data);
 		if( data['return'] && data['return'] == 'ok' ){
 			this_item.removeClass('fa-recycle text-warning palauta_kejuun').addClass('fa-trash text-danger pois_ketjusta');
-
+	        	console.log(data);
 			var did = '';
 			$.each(data['tv_arr'], function( tid, value ) {
 				$.each(value, function( pvm, v ) {
@@ -65,7 +65,7 @@ $(document).delegate(".palauta_kejuun","click",function(){
 						$("#" + did).html(all_tv_edit);
 				});
 			});
-	        	console.log(data['tv_arr']);
+
 		}
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
