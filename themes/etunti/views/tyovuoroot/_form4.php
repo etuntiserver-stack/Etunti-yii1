@@ -1180,7 +1180,8 @@ $(document).ready(function(){
 					});
 					pvm_muutos = pvm.split(".");
 					did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
-					$("#" + did).html(all_tv_edit);
+					if( $("#" + did).length > 0 )
+						$("#" + did).html(all_tv_edit);
 					$('#showres').modal('hide');
 				});
 			});

@@ -10,6 +10,7 @@ $(document).ready(function(){
 
 $(document).delegate(".pois_ketjusta","click",function(){
 	var this_item = $(this);
+	var this_id = $(this).attr('this_id');
 	var toistuva_id = $(this).attr('toistuva_id');
 	var tid = $(this).attr('tid');
 	var pvm = $(this).attr('pvm');
@@ -22,8 +23,10 @@ $(document).delegate(".pois_ketjusta","click",function(){
            success: function(data){
 		data = JSON.parse(data);
         	console.log(data);
-		if( data['return'] && data['return'] == 'ok' )
-		this_item.removeClass('fa-trash text-danger pois_ketjusta').addClass('fa-recycle text-warning palauta_kejuun');
+		if( data['return'] && data['return'] == 'ok' ){
+			this_item.removeClass('fa-trash text-danger pois_ketjusta').addClass('fa-recycle text-warning palauta_kejuun');
+			$("#" + this_id).closest('p').remove();
+		}
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	console.log(XMLHttpRequest);
@@ -45,9 +48,25 @@ $(document).delegate(".palauta_kejuun","click",function(){
 	   data: { toistuva_id : toistuva_id, tid : tid, pvm : pvm },
            success: function(data){
 		data = JSON.parse(data);
-        	console.log(data);
-		if( data['return'] && data['return'] == 'ok' )
-		this_item.removeClass('fa-recycle text-warning palauta_kejuun').addClass('fa-trash text-danger pois_ketjusta');
+        	//console.log(data);
+		if( data['return'] && data['return'] == 'ok' ){
+			this_item.removeClass('fa-recycle text-warning palauta_kejuun').addClass('fa-trash text-danger pois_ketjusta');
+
+			var did = '';
+			$.each(data['tv_arr'], function( tid, value ) {
+				$.each(value, function( pvm, v ) {
+					all_tv_edit = '';
+					$.each(v, function( i2, tv_edit ) {
+						all_tv_edit += '<p>' + tv_edit + '</p>';
+					});
+					pvm_muutos = pvm.split(".");
+					did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
+					if( $("#" + did).length > 0 )
+						$("#" + did).html(all_tv_edit);
+				});
+			});
+	        	console.log(data['tv_arr']);
+		}
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	console.log(XMLHttpRequest);

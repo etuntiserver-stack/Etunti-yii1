@@ -1454,10 +1454,26 @@ class TyovuorootController extends Controller
 
 	public function actionPalauta_pvm_kejuun($toistuva_id, $tid, $pvm)
 	{
-		if($this->toistuvaRestorePvm($toistuva_id, $pvm, $tid))
-			echo json_encode(['return' => 'ok']);
-		else
+		if($this->toistuvaRestorePvm($toistuva_id, $pvm, $tid)){
+			$toistuva = ToistuvatTyovuorot::model()->findbypk($toistuva_id);
+			// <-- Tids
+			$tids = [];
+			if( is_array(json_decode($toistuva->tyopaari, true)) ){
+				foreach(json_decode($toistuva->tyopaari, true) as $tp_tid)
+					$tids[$tp_tid] = $tp_tid;
+
+				$tids[$tid] = $tid;
+			} else {
+				$tids[$tid] = $tid;
+			}
+
+			$pvm_from = date("Y-m-d", strtotime($pvm));
+			$pvm_to = date("Y-m-d", strtotime($pvm));
+			$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[]);
+			echo json_encode(['return' => 'ok', 'tv_arr' => $tv_arr]);
+		} else {
 			echo json_encode(['return' => 'error']);
+		}
 
 		exit;
 	}
@@ -2235,6 +2251,15 @@ class TyovuorootController extends Controller
 
 	}
 
+	protected function statukset(){
+		$status = [];
+		$status[10] = '<i class="tvikooni fa fa-cutlery text-success"></i>';
+		$status[2] = '<i class="tvikooni fa fa-bus text-warning"></i>';
+		$status[3] = '<i class="tvikooni fa fa-hourglass text-info"></i>';
+		$status[11] = '<i class="tvikooni fa fa-clock-o text-info"></i>';
+		return $status;
+	}
+
 	protected function tv_arr($haku_from, $haku_to, $haku_tids, $asiakas, $kohde, $kohteet_siivous=[]){
 
 		$haku_to_ts = strtotime($haku_to);
@@ -2289,11 +2314,7 @@ class TyovuorootController extends Controller
 		}
 
 		// <-- Status
-		$status = [];
-		$status[10] = '<i class="tvikooni fa fa-cutlery text-success"></i>';
-		$status[2] = '<i class="tvikooni fa fa-bus text-warning"></i>';
-		$status[3] = '<i class="tvikooni fa fa-hourglass text-info"></i>';
-		$status[11] = '<i class="tvikooni fa fa-clock-o text-info"></i>';
+		$status = $this->statukset();
 		// Status -->
 
 		// <-- Tv array
@@ -2394,12 +2415,19 @@ class TyovuorootController extends Controller
 		return $tv_arr;
 	}
 
+	protected function this_id_builder($id, $this_pvm, $this_tid){
+		$this_pvm = date("Ymd", strtotime($this_pvm));
+		return (int)'99999999'.str_pad($id, 8, '0', STR_PAD_LEFT).''.$this_pvm.''.$this_tid;
+	}
+
 	protected function laatikkorakenne($arvo, $status, $this_pvm, $this_tid, $toistuva){
 			$return 	= [];
-			$this_pvm 	= date("Ymd", strtotime($this_pvm));
-			$this_id 	= ($toistuva)? (int)'99999999'.str_pad($arvo->id, 8, '0', STR_PAD_LEFT).''.$this_pvm.''.$this_tid : $arvo->id;
+			$this_id 	= ($toistuva)? $this->this_id_builder($arvo->id, $this_pvm, $this_tid) : $arvo->id;
 			$toistuva_icon 	= ($toistuva)? '<i class="text-success fa fa-repeat"></i> ' : '';
-			$osoite 	= (!empty($arvo->osoite))?$arvo->osoite:(isset($arvo->kohteet->osoite))?$arvo->kohteet->osoite:'';
+			$osoite 	= ( isset($arvo->osoite) and !empty($arvo->osoite))?$arvo->osoite:'';
+			if(empty($osoite) and isset($arvo->kohteet->osoite))
+			$osoite 	= $arvo->kohteet->osoite;
+
 			$color 		= '#888';
 			$bgcol 		= 'color:#333';
 			if(!empty($arvo->tyoajanmerkinta)){
@@ -3624,14 +3652,15 @@ class TyovuorootController extends Controller
 					if (strtotime($this_pvm) > $stopday_ts){
 						break 2;
 					}
+					$this_id_builder = $this->this_id_builder($model->id, $this_pvm, $tid);
 					$return .= '<tr>';
 					$return .= '<td width="1%">'.$vko_pvms[date('N',strtotime($this_pvm))].'</td>';
 					$return .= '<td width="98%"><b>'.$this_pvm.'</b></td>';
 					$return .= '<td width="1%">';
 					if( isset($poistettu_pvms[$tid][$this_pvm]) )
-						$return .= '<i class="link fa fa-recycle text-warning palauta_kejuun" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'"></i>';
+						$return .= '<i class="link fa fa-recycle text-warning palauta_kejuun" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>';
 					else
-						$return .= '<i class="link fa fa-trash text-danger pois_ketjusta" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'"></i>';
+						$return .= '<i class="link fa fa-trash text-danger pois_ketjusta" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>';
 					$return .= '</td>';
 					$return .= '</tr>';
 				}
