@@ -9,6 +9,7 @@ $(document).ready(function(){
   if( varaus_l > 0 ){ $('.td_varaus').addClass('in'); }
 
 $(document).delegate(".pois_ketjusta","click",function(){
+	var this_item = $(this);
 	var toistuva_id = $(this).attr('toistuva_id');
 	var tid = $(this).attr('tid');
 	var pvm = $(this).attr('pvm');
@@ -19,7 +20,34 @@ $(document).delegate(".pois_ketjusta","click",function(){
 	   type:'GET',
 	   data: { toistuva_id : toistuva_id, tid : tid, pvm : pvm },
            success: function(data){
+		data = JSON.parse(data);
         	console.log(data);
+		if( data['return'] && data['return'] == 'ok' )
+		this_item.removeClass('fa-trash text-danger pois_ketjusta').addClass('fa-recycle text-warning palauta_kejuun');
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
+        });
+	}
+});
+
+$(document).delegate(".palauta_kejuun","click",function(){
+	var this_item = $(this);
+	var toistuva_id = $(this).attr('toistuva_id');
+	var tid = $(this).attr('tid');
+	var pvm = $(this).attr('pvm');
+	var r = confirm('Haluatko varmasti palauttaa tämän?');
+	if(r){
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/palauta_pvm_kejuun',
+	   type:'GET',
+	   data: { toistuva_id : toistuva_id, tid : tid, pvm : pvm },
+           success: function(data){
+		data = JSON.parse(data);
+        	console.log(data);
+		if( data['return'] && data['return'] == 'ok' )
+		this_item.removeClass('fa-recycle text-warning palauta_kejuun').addClass('fa-trash text-danger pois_ketjusta');
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	console.log(XMLHttpRequest);
