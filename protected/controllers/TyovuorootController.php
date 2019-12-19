@@ -1177,21 +1177,21 @@ class TyovuorootController extends Controller
 
 	public function actionMuistin()
 	{
-		if(isset($_POST['id']))
-		{
-			$_SESSION['muistin'][$_POST['id']] = $_POST['id'];
-			print_r($_SESSION['muistin']);
-			
+		if(isset($_POST['id'])){
+			$_SESSION['muistin'][] = $_POST['id'];
+			//print_r($_SESSION['muistin']);
 		}
-
+		exit;
 	}
 
 	public function actionMuistissa()
 	{
 		if(isset($_SESSION['muistin']))
-		   echo implode(",",$_SESSION['muistin']);
+		   echo json_encode($_SESSION['muistin']);
 		else
-		   echo 'muistityhja';
+		   echo json_encode('muistityhja');
+
+		exit;
 	}
 
 	public function actionMuisticlear()
@@ -1230,6 +1230,8 @@ class TyovuorootController extends Controller
 	public function actionOperatio($did_versio='did')
 	{
 		if( isset($_GET['did']) ){ $did_versio = $_GET['did']; }
+		$haku_from = date("Y-m-d", strtotime(Yii::app()->session['from']));
+		$haku_to = date("Y-m-d", strtotime(Yii::app()->session['to']));
 		$asetukset = Asetukset::model()->findByPk(1);
 
 		if(isset($_POST['checkThis']))
@@ -1293,163 +1295,150 @@ class TyovuorootController extends Controller
 					Tyovuoroot::model()->deletebypk($model->id);
 				}
 			}
-
-			echo json_encode('//'.implode(",",$_SESSION['muistin']));
+			$return = ['poistettu' => $_SESSION['muistin']];
+			echo json_encode($return);
 			exit;
 		}
 
 		// copy
-		if(isset($_POST['copy']) and isset($_SESSION['muistin']))
-		{
-		foreach($_SESSION['muistin'] as $cp)
-		{
-			$ex = explode("_",$cp);
-			$t = Tyovuoroot::model()->findbypk($ex[0]);
-			if(!isset($t->pvm)){
-				echo json_encode('Virhe: Työvuoroja ei löyty');
-				exit;
-			}
-			$vanha_pvm = $t->pvm;
+		if(isset($_POST['copy']) and isset($_SESSION['muistin'])){
+			$tids	= [$_POST['newTid']];
+			foreach($_SESSION['muistin'] as $cp){
 
-			$model=new Tyovuoroot;
-			$model->attributes=$t->attributes;
-			$model->pvm=date("d.m.Y",strtotime($_POST['newPvm']));
-			$model->tid=$_POST['newTid'];
-			if( $t->toistuva_id != 0 )
-			{
-				$model->tyopaari='';
-			}
-			$model->toistuva_id=0;
-			if($model->save()){
-			    if( $t->toistuva_id == 0 and  is_array(json_decode($t->tyopaari, true)) ){
-				$uusi_tp_arr = array();
-				$uusi_tp_arr[$model->id] = $model->tid;
-				foreach(json_decode($t->tyopaari, true) as  $id => $tp_id){
-					$uusi_tp_arr[$id] = $tp_id;
-				}
-				if( $vanha_pvm != $model->pvm and isset($uusi_tp_arr[$model->id])){
-					unset($uusi_tp_arr[$model->id]);
-					Tyovuoroot::model()->updateByPk($model->id, array('tyopaari' => ''));
-				}
-				foreach( $uusi_tp_arr as $k => $v ){
-					if( count($uusi_tp_arr) == 1 ){
-					Tyovuoroot::model()->updateByPk($k, array('tyopaari' => ''));
-					break;
+				$get_id 	= $this->this_id($cp);
+				if(!isset($get_id['model']))
+					continue;
+				$model 		= $get_id['model'];
+				$toistuva 	= $get_id['toistuva'];
+				$pvm 		= $get_id['pvm'];
+				$tid 		= $get_id['tid'];
+				$tids[]		= $tid;
+
+				$vanha_pvm = $model->pvm;
+
+				$tv_new = new Tyovuoroot;
+				$tv_new->attributes = $model->attributes;
+				$tv_new->pvm=date("d.m.Y",strtotime($_POST['newPvm']));
+				$tv_new->tid=$_POST['newTid'];
+				if( $toistuva )
+					$model->tyopaari='';
+
+				if($tv_new->save()){
+					if( !$toistuva and is_array(json_decode($model->tyopaari, true)) ){
+						$uusi_tp_arr = array();
+						$uusi_tp_arr[$tv_new->id] = $tv_new->tid;
+						foreach(json_decode($model->tyopaari, true) as  $id => $tp_id){
+							$uusi_tp_arr[$id] = $tp_id;
+						}
+						if( $vanha_pvm != $tv_new->pvm and isset($uusi_tp_arr[$tv_new->id])){
+							unset($uusi_tp_arr[$tv_new->id]);
+							Tyovuoroot::model()->updateByPk($tv_new->id, array('tyopaari' => ''));
+						}
+						foreach( $uusi_tp_arr as $k => $v ){
+							if( count($uusi_tp_arr) == 1 ){
+								Tyovuoroot::model()->updateByPk($k, array('tyopaari' => ''));
+								break;
+							}
+							Tyovuoroot::model()->updateByPk($k, array('tyopaari' => json_encode($uusi_tp_arr)));
+						}
 					}
-					Tyovuoroot::model()->updateByPk($k, array('tyopaari' => json_encode($uusi_tp_arr)));
+
+					// <-- LOG
+					$model_log 	= 'Tyovuoroot';
+					$name_log 	= 'Työvuorot';
+					$status_log 	= 'NewByCopy';
+					$old_values = json_encode($model->attributes);
+					$new_values = json_encode($tv_new->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+					//     LOG -->
 				}
-			    }
-			}
-
-			// <-- LOG
-			if( isset($t->id) and isset($model->id) )
-			{
-			$model_log 	= 'Tyovuoroot';
-			$name_log 	= 'Työvuorot';
-			$status_log 	= 'Copy';
-
-				$old_values = json_encode($t->attributes);
-				$new_values = json_encode($model->attributes);
-				$site = Yii::app()->createController('Site');
-				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-			}
-			//     LOG -->
 			
-		}
+			}
 
-			$did = $this->renderPartial($did_versio,array(
-					'pvm'=>$_POST['newPvm'],
-					'tid'=>$_POST['newTid'],
-					'from'=>'ajax',
-					'asetukset'=>$asetukset
-			), true);
-			echo json_encode($did.'//');
+			$tv_arr = $this->tv_arr($haku_from, $haku_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[]);
+			$return = ['tv_arr' => $tv_arr];
+			echo json_encode($return);
 			exit;
 
 		}
-		// cut
-		if(isset($_POST['cut']) and isset($_SESSION['muistin']))
-		{
-		foreach($_SESSION['muistin'] as $cp)
-		{
-			$ex = explode("_",$cp);
-			$t = Tyovuoroot::model()->findbypk($ex[0]);
-			if(isset($t->id))
-			{
-			$vanha_pvm = $t->pvm;
-			if( $t->toistuva_id != 0)
-			{
-				echo json_encode('Error//Et voi siirtää toistuva työvuoro.');
-				exit;
-			}
-/*
-			// <-- Jos toistuva, otetaan sen Päivämäärä pois ketjusta
-			if( isset($t->pvm) and $t->toistuva_id != 0)
-			{
-				$this->toistuvaDeletePvm($t->toistuva_id, $t->pvm);
-			}
-			//     Jos toistuva, otetaan sen Päivämäärä pois ketjusta -->
-*/
+		// <-- Siirto
+		if(isset($_POST['cut']) and isset($_SESSION['muistin'])){
+			$tids	= [$_POST['newTid']];
+			foreach($_SESSION['muistin'] as $cp){
 
-			$model=$t;
-			$model->pvm=date("d.m.Y",strtotime($_POST['newPvm']));
-			$model->tid=$_POST['newTid'];
-			$model->toistuva_id=0;
-			if($model->save()){
-			    if( is_array(json_decode($t->tyopaari, true)) ){
-				$uusi_tp_arr = array();
-				foreach(json_decode($t->tyopaari, true) as  $id => $tp_id){
-					$tv = Tyovuoroot::model()->findByPk($id);
-					if( isset($tv->id) and $tv->tid == $t->tid ){
-						$uusi_tp_arr[$model->id] = $model->tid;
-					} else {
-						$uusi_tp_arr[$id] = $tp_id;
+				$get_id 	= $this->this_id($cp);
+				if(!isset($get_id['model']))
+					continue;
+				$model 		= $get_id['model'];
+				$toistuva 	= $get_id['toistuva'];
+				$pvm 		= $get_id['pvm'];
+				$tid 		= $get_id['tid'];
+				$tids[]		= $tid;
+				
+				if( $toistuva and $this->toistuvaDeletePvm($model->id, $pvm, $tid) ){
+						$tv_new = new Tyovuoroot;
+						$tv_new->attributes = $model->attributes;
+						$tv_new->pvm = date("d.m.Y",strtotime($_POST['newPvm']));
+						$tv_new->tid = $_POST['newTid'];
+						if(!$tv_new->save()){
+							echo json_encode(['error' => $tv_new->getErrors()]);
+							exit;
+						}
+				}
+
+				if( !$toistuva ){
+					$vanha_pvm = $model->pvm;
+					$model->pvm = date("d.m.Y",strtotime($_POST['newPvm']));
+					$model->tid = $_POST['newTid'];
+
+					if($model->save()){
+			    			if( is_array(json_decode($model->tyopaari, true)) ){
+							$uusi_tp_arr = array();
+							foreach(json_decode($model->tyopaari, true) as  $id => $tp_id){
+								$tv = Tyovuoroot::model()->findByPk($id);
+								if( isset($tv->id) and $tv->tid == $model->tid ){
+									$uusi_tp_arr[$model->id] = $model->tid;
+								} else {
+									$uusi_tp_arr[$id] = $tp_id;
+								}
+							}
+							if( $vanha_pvm != $model->pvm and isset($uusi_tp_arr[$model->id])){
+								unset($uusi_tp_arr[$model->id]);
+								Tyovuoroot::model()->updateByPk($model->id, array('tyopaari' => ''));
+							}
+							foreach( $uusi_tp_arr as $k => $v ){
+								if( count($uusi_tp_arr) == 1 ){
+									Tyovuoroot::model()->updateByPk($k, array('tyopaari' => ''));
+									break;
+								}
+								Tyovuoroot::model()->updateByPk($k, array('tyopaari' => json_encode($uusi_tp_arr)));
+							}
+						}
 					}
-				}
-				if( $vanha_pvm != $model->pvm and isset($uusi_tp_arr[$model->id])){
-					unset($uusi_tp_arr[$model->id]);
-					Tyovuoroot::model()->updateByPk($model->id, array('tyopaari' => ''));
-				}
-				foreach( $uusi_tp_arr as $k => $v ){
-					if( count($uusi_tp_arr) == 1 ){
-					Tyovuoroot::model()->updateByPk($k, array('tyopaari' => ''));
-					break;
+
+					// <-- LOG
+					if( isset($t->id) and isset($model->id) ){
+						$model_log 	= 'Tyovuoroot';
+						$name_log 	= 'Työvuorot';
+						$status_log 	= 'Move';	
+						$old_values = json_encode($t->attributes);
+						$new_values = json_encode($model->attributes);
+						$site = Yii::app()->createController('Site');
+						$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 					}
-					Tyovuoroot::model()->updateByPk($k, array('tyopaari' => json_encode($uusi_tp_arr)));
-				}
-			    }
-			}
+					//     LOG -->
 
-			// <-- LOG
-			if( isset($t->id) and isset($model->id) )
-			{
-			$model_log 	= 'Tyovuoroot';
-			$name_log 	= 'Työvuorot';
-			$status_log 	= 'Move';
+				} // !$toistuva
 
-				$old_values = json_encode($t->attributes);
-				$new_values = json_encode($model->attributes);
-				$site = Yii::app()->createController('Site');
-				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-			}
-			//     LOG -->
+			} // foreach
 
-			} else {
-			echo json_encode('id puuttuu');
-			break;
-			}		
-		}
-
-
-			$did = $this->renderPartial($did_versio,array(
-				'pvm'=>$_POST['newPvm'],
-				'tid'=>$_POST['newTid'],
-				'from'=>'ajax',
-				'asetukset'=>$asetukset
-			), true);
-			echo json_encode($did.'//'.implode(",",$_SESSION['muistin']));
+			$tv_arr = $this->tv_arr($haku_from, $haku_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[]);
+			$return = ['poistettu' => $_SESSION['muistin'], 'tv_arr' => $tv_arr];
+			echo json_encode($return);
 			exit;
 		}
+		//     Siirto -->
 	}
 
 	public function actionPalauta_pvm_kejuun($toistuva_id, $tid, $pvm)
@@ -1498,6 +1487,16 @@ class TyovuorootController extends Controller
 			}
 
 			ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('new_poistettu_pvm'=>json_encode($clearing)));
+			$after_update = ToistuvatTyovuorot::model()->findByPk($toistuva->id);
+			// <-- LOG
+			$model_log 	= 'ToistuvatTyovuorot';
+			$name_log 	= 'Toistuvat työvuorot';
+			$status_log 	= 'Update';	
+			$old_values = json_encode($toistuva->attributes);
+			$new_values = json_encode($after_update->attributes);
+			$site = Yii::app()->createController('Site');
+			$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			//     LOG -->
 			return true;
 		}
 
@@ -1533,6 +1532,17 @@ class TyovuorootController extends Controller
 			}
 
 			ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('new_poistettu_pvm'=>json_encode($clearing)));
+			$after_update = ToistuvatTyovuorot::model()->findByPk($toistuva->id);
+			// <-- LOG
+			$model_log 	= 'ToistuvatTyovuorot';
+			$name_log 	= 'Toistuvat työvuorot';
+			$status_log 	= 'Update';	
+			$old_values = json_encode($toistuva->attributes);
+			$new_values = json_encode($after_update->attributes);
+			$site = Yii::app()->createController('Site');
+			$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			//     LOG -->
+
 			return true;
 		}
 
@@ -2369,7 +2379,8 @@ class TyovuorootController extends Controller
 			$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
 
 			while ($date->getTimestamp() < $date_end){
-				if ($date->format("YW") >= date("YW", strtotime($haku_from))){
+				$this_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
+				if ( $this_week_sunday >= date("YW", strtotime($haku_from)) ){ // Jotta ei saada pitkä array päivästä
 					foreach(json_decode($arvo->viikko_paivat, true) as $viikko_paiva) {
 
 						$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
@@ -2424,6 +2435,7 @@ class TyovuorootController extends Controller
 			$return 	= [];
 			$this_id 	= ($toistuva)? $this->this_id_builder($arvo->id, $this_pvm, $this_tid) : $arvo->id;
 			$toistuva_icon 	= ($toistuva)? '<i class="text-success fa fa-repeat"></i> ' : '';
+			$mennytPaivat	= (strtotime($this_pvm) < strtotime(date("Y-m-d")))? 'mennytPaivat' : '';
 			$osoite 	= ( isset($arvo->osoite) and !empty($arvo->osoite))?$arvo->osoite:'';
 			if(empty($osoite) and isset($arvo->kohteet->osoite))
 			$osoite 	= $arvo->kohteet->osoite;
@@ -2442,7 +2454,7 @@ class TyovuorootController extends Controller
 				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 				$return['osoite'] = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$this_id.'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
 			} else {
-				$return['osoite'] = '<span class="tv_edit" id="'.$this_id.'" style="'.$bgcol.'">'.((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$osoite.'</span>';
+				$return['osoite'] = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$osoite.'</span>';
 
 			}
 			return $return;
@@ -3633,7 +3645,7 @@ class TyovuorootController extends Controller
 		$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
 		$date->modify('this week monday');
 		$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
-		$return .= '<center><h3>Uusi ketju</h3></center>';
+		$return .= '<center><h3>Ketjun esikatsellu</h3></center>';
 		$return .= '<table class="table table-striped">';
 		while ($date->getTimestamp() < $date_end){
 			$return .= '<tr><th colspan="'.count($tt).'"><center><h3>Viikko - '.$date->format('W / Y').'</h3></center></th></tr>';

@@ -920,10 +920,9 @@ $(document).ready(function(){
 			type:'GET',
 			data: { "id" : kohdeOn },
 			  success:function(data){
-			     if(data)
-			     {
+			     if(data){
 				data = JSON.parse(data);
-			  	console.log(data);
+			  	//console.log(data);
 				$('#asiakas').val(data);
 			     } else {
 			  	console.log('ei ole asiakas id');
@@ -1002,6 +1001,7 @@ $(document).ready(function(){
 			$('#pto').addClass('bg-danger').focus();
 			return false;
 		}
+
 		var valinnut_pfrom = $('#pfrom').val().split('.');
 		var new_pfrom = new Date(+valinnut_pfrom[1]+"/"+valinnut_pfrom[0]+"/"+valinnut_pfrom[2]); //"11/21/2011"
 		var todaysDate = new Date();
@@ -1009,7 +1009,7 @@ $(document).ready(function(){
 			alert('Toistuvan työvuoron aloitus päivämäärä ei voida muokata alkamaan menneisyydestä.');
 			return false;
 		}
-
+		
 		var vkopvmswitch_check = false;
 		$( ".vkopvmswitch" ).each(function() {
 			if($( this ).prop( "checked" ) == true){
@@ -1070,7 +1070,7 @@ $(document).ready(function(){
 		  async: false,
 		  success:function(data){
 			data = JSON.parse(data);
-			console.log(data);
+			//console.log(data);
 			if(data > 0)
 			count = data;
 	   	},
@@ -1099,7 +1099,7 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			console.log(data);
+			//console.log(data);
 			laatikonPaivays();
 			return false;
 			//window.location.reload();
@@ -1143,14 +1143,14 @@ $(document).ready(function(){
 	/* Työpari */
 	var tyopaari = $('#tyopaari').val();
 	if(tyopaari !== null){
-		console.log('Uudet työparit: ' + tyopaari);
+		//console.log('Uudet työparit: ' + tyopaari);
 		$(tyopaari).each(function( index, val ) {
 			tids.push(val);
 		});
 	}
 	if( '<?=$model->tyopaari?>' !== '' ){
 		var edelliset_tyoparit = JSON.parse('<?=(is_array(json_decode($model->tyopaari, true)))?json_encode(array_values(json_decode($model->tyopaari, true))):""?>');
-		console.log('Edelliset työparit: ' + edelliset_tyoparit);
+		//console.log('Edelliset työparit: ' + edelliset_tyoparit);
 		var c = tids.concat(edelliset_tyoparit);
 		var tids = c.filter(function (item, pos) {return c.indexOf(item) == pos});
 	}
@@ -1546,7 +1546,7 @@ $(document).ready(function(){
 	var url = location.protocol + "//" + location.host + '/index.php/kohteet/update?id='+ thisID;
 	if(thisID !== '')
 	$("#kohde_url").html('<a href="'+ url +'" target="_blank">Muokkaa '+ thisText +'</a>');
-	console.log(thisID);
+	//console.log(thisID);
   }
 
   $('#tekijanVaihdo').change(function(){
