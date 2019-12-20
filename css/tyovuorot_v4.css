@@ -138,5 +138,10 @@ td span.nimi{
     	vertical-align: top;
 }
 .table{
-    height: 100%;
+	height: 100%;
+}
+
+/* toistuva calendar */
+.valittu_pvm{
+	background: #ededed;
 }

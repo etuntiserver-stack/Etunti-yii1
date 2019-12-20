@@ -41,7 +41,8 @@ $(document).delegate(".pois_ketjusta","click",function(){
 		data = JSON.parse(data);
         	//console.log(data);
 		if( data['return'] && data['return'] == 'ok' ){
-			this_item.removeClass('fa-trash text-danger pois_ketjusta').addClass('fa-recycle text-warning palauta_kejuun');
+			this_item.closest('td').removeClass('bg-success').addClass('bg-warning');
+			this_item.removeClass('fa-trash pois_ketjusta').addClass('fa-recycle palauta_kejuun');
 			$("#" + this_id).closest('p').remove();
 		}
     	   },
@@ -67,7 +68,8 @@ $(document).delegate(".palauta_kejuun","click",function(){
 		data = JSON.parse(data);
         	//console.log(data);
 		if( data['return'] && data['return'] == 'ok' ){
-			this_item.removeClass('fa-recycle text-warning palauta_kejuun').addClass('fa-trash text-danger pois_ketjusta');
+			this_item.closest('td').removeClass('bg-warning').addClass('bg-success');
+			this_item.removeClass('fa-recycle palauta_kejuun').addClass('fa-trash pois_ketjusta');
 	        	//console.log(data);
 			tv_arr_update(data['tv_arr']);
 		}

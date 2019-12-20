@@ -3566,11 +3566,11 @@ class TyovuorootController extends Controller
 		if( 
 			$this_id != 'null'
 			and strtotime($model->pfrom) < strtotime(date("d.m.Y")) 
-			and strtotime($_POST['ToistuvatTyovuorot']['pfrom']) >= strtotime(date("d.m.Y")) 
+			and strtotime($_POST['pfrom']) >= strtotime(date("d.m.Y")) 
 		){
 			$return .= '<h3 class="text-danger">';
 			$return .= 'Tämä ketju tallennetaan seuraavaksi: <br><br>';
-			$return .= '<p>Aloitus: '.$model->pfrom.',  Lopetus: '. date("d.m.Y", strtotime($_POST['ToistuvatTyovuorot']['pfrom'].' -1 day')).'<br>';
+			$return .= '<p>Aloitus: '.$model->pfrom.',  Lopetus: '. date("d.m.Y", strtotime($_POST['pfrom'].' -1 day')).'<br>';
 			if( !empty($model->osoite) )
 				$return .= $model->osoite;
 			elseif(isset($model->kohteet->osoite) and empty($model->osoite))
@@ -3581,17 +3581,13 @@ class TyovuorootController extends Controller
 			$return .= '</h3>';
 		}
 
-		if($this_id == 'null')
-		$tid 		= $_POST['Tyovuoroot']['tid'];
-
-		$startday 	= date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pfrom']));
+		$startday 	= date("Y-m-d", strtotime($_POST['pfrom']));
 		$startday_ts	= strtotime($startday);
-		$stopday 	= date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pto']));
+		$stopday 	= date("Y-m-d", strtotime($_POST['pto']));
 		$stopday_ts	= strtotime($stopday);
-		$viikkoja 	= $_POST['ToistuvatTyovuorot']['viikkoja'];
-		$viikko_paivat 	= (isset($_POST['P']))? $_POST['P'] : [] ;
-		$tyopaari 	= (isset($_POST['tyopaari']))? $_POST['tyopaari'] : [] ;
-
+		$viikkoja 	= $_POST['viikkoja'];
+		$viikko_paivat 	= $_POST['vkopaivat'];
+		$tyopaari 	= $_POST['tyopaari'];
 
 		// <-- Tids
 		$tids = [];
@@ -3615,19 +3611,17 @@ class TyovuorootController extends Controller
 		}
 		// Order tyontekijat -->
 
-	      	$ids = "id='".implode("' OR id='", $tids)."'";
        		$criteria = new CDbCriteria();
 		$criteria->select = "id, $tt_order_1, $tt_order_2";
 		$criteria->order = "$tt_order_1 ASC";
-		$criteria->condition = "
-		        ($ids)
-		";
+		$ids = "id='".implode("' OR id='", $tids)."'";
+		$criteria->condition = "$ids";
 
 		// <-- Tyontekijat
-		$tyontekijat = Tyontekijat::model()->findAll($criteria);
 		$tt = [];
+		$tyontekijat = Tyontekijat::model()->findAll($criteria);
 		foreach($tyontekijat as $item){
-			$tt[$item->id] = $item->$tt_order_1.' '.$item->$tt_order_2;
+			$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1.' '.$item->$tt_order_2);
 		}
 		//     Tyontekijat -->
 
@@ -3635,28 +3629,19 @@ class TyovuorootController extends Controller
 		if( $this_id != 'null' and !empty($model->new_poistettu_pvm) ){
 		$poistettu_pvms = [];
 			foreach(json_decode($model->new_poistettu_pvm, true) as $key => $val)
-				foreach($val as $tid => $pvm)
-					$poistettu_pvms[$tid][$pvm] = $pvm;
+				foreach($val as $ptid => $pvm)
+					$poistettu_pvms[$ptid][$pvm] = $pvm;
 		}
-
-		// <-- Vko paivat
-		$vko_pvms = $this->vkoPaivatLyhyesti();
 
 		$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
 		$date->modify('this week monday');
 		$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
-		$return .= '<center><h3>Ketjun esikatsellu</h3></center>';
-		$return .= '<table class="table table-striped">';
+		$pvms = [];
 		while ($date->getTimestamp() < $date_end){
-			$return .= '<tr><th colspan="'.count($tt).'"><center><h3>Viikko - '.$date->format('W / Y').'</h3></center></th></tr>';
-			$return .= '<tr>';
-			foreach($tt as $tid => $tnimi) {
-				$return .= '<td>';
-				$return .= '<table class="table table-striped">';
-				$return .= '<tr><th colspan="2"><center><h4>'.$tnimi.'</h4></center></th></tr>';
-				foreach($viikko_paivat as $viikko_paiva) {
+			foreach($viikko_paivat as $viikko_paiva) {
 					$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
 					$paiva->modify("+" . ($viikko_paiva - 1) . "day");
+					$cal_pvm = $paiva->format('j.m.Y');
 					$this_pvm = $paiva->format('d.m.Y');
 					if (strtotime($this_pvm) < $startday_ts)
 						continue;
@@ -3664,29 +3649,128 @@ class TyovuorootController extends Controller
 					if (strtotime($this_pvm) > $stopday_ts){
 						break 2;
 					}
-					$this_id_builder = $this->this_id_builder($model->id, $this_pvm, $tid);
-					$return .= '<tr>';
-					$return .= '<td width="1%">'.$vko_pvms[date('N',strtotime($this_pvm))].'</td>';
-					$return .= '<td width="98%"><b>'.$this_pvm.'</b></td>';
-					$return .= '<td width="1%">';
-					if( isset($poistettu_pvms[$tid][$this_pvm]) )
-						$return .= '<i class="link fa fa-recycle text-warning palauta_kejuun" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>';
-					else
-						$return .= '<i class="link fa fa-trash text-danger pois_ketjusta" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>';
-					$return .= '</td>';
-					$return .= '</tr>';
-				}
-				$return .= '</table>';
-				$return .= '</td>';
-			}
+					foreach( $tids as $tid ){
+						$this_id_builder = $this->this_id_builder($model->id, $this_pvm, $tid);
+						if( isset($poistettu_pvms[$tid][$this_pvm]) )
+							$pvms[$cal_pvm][$tid] = [ 'poisto' => '<br><i class="link fa fa-recycle palauta_kejuun" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => true ];
+						else
+							$pvms[$cal_pvm][$tid] = [ 'poisto' => '<br><i class="link fa fa-trash pois_ketjusta" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => false ];
+					}
 
-			$return .= '</tr>';
+			}
 			$date->modify("+{$viikkoja}week");
 		}
-		$return .= '</table>';
 
+		$m_start = new DateTime();
+		$m_start->modify("first day of this month");
+		$m_interval = new DateInterval('P1M');
+		$m_end = new DateTime($m_start->format("Y-m-d"));
+		$m_end->modify("+3 month");
+		$m_period = new DatePeriod($m_start, $m_interval, $m_end);
+		foreach( $tids as $tid ){
+			(isset($tt[$tid]['etusukunimi']))? $return .= '<center><h2>'.$tt[$tid]['etusukunimi'].'</h2></center>' : '' ;
+			$return .= '<div class="row">';
+			foreach ($m_period as $dt) {
+				$return .= '<div class="col-sm-4">';
+				$return .= '<center><h3>'.$this->monthFI($dt->format("n")).' '.$dt->format("Y").'</h3></center>';
+				$return .= $this->draw_calendar($dt->format("m"), $dt->format("Y"), $pvms, $tid);
+				$return .= '</div>';
+			}
+			$return .= '</div>';
+		}
 		echo json_encode($return);
 		exit;
+	}
+
+	protected function monthFI($arvo){
+		$months=array(
+			1=>Yii::t('main', 'Tammikuu'),
+			2=>Yii::t('main', 'Helmikuu'),
+			3=>Yii::t('main', 'Maaliskuu'),
+			4=>Yii::t('main', 'Huhtikuu'),
+			5=>Yii::t('main', 'Toukokuu'),
+			6=>Yii::t('main', 'Kesäkuu'),
+			7=>Yii::t('main', 'Heinäkuu'),
+			8=>Yii::t('main', 'Elokuu'),
+			9=>Yii::t('main', 'Syyskuu'),
+			10=>Yii::t('main', 'Lokakuu'),
+			11=>Yii::t('main', 'Marraskuu'),
+			12=>Yii::t('main', 'Joulukuu')
+			);
+		return $months[$arvo];
+	}
+
+	protected function draw_calendar($month, $year, $pvms, $tid) {
+		$calendar = '';
+		$calendar .= '<table cellpadding="3" cellspacing="0" class="table table-striped">';
+		$headings = $this->vkoPaivatLyhyesti();
+		$calendar.= '<tr class="b-calendar__row">';
+		for($head_day = 1; $head_day <= 7; $head_day++) {
+			$calendar.= '<th class="b-calendar__head';
+			if ($head_day != 0) {
+				if (($head_day % 6 == 0) || ($head_day % 7 == 0)) {
+					$calendar .= ' b-calendar__weekend';
+				}
+			}
+			$calendar .= '">';
+			$calendar.= '<div class="b-calendar__number">'.$headings[$head_day].'</div>';
+			$calendar.= '</th>';
+		}
+		$calendar.= '</tr>';
+		$running_day = date('w',mktime(0,0,0,$month,1,$year));
+		$running_day = $running_day - 1;
+		if ($running_day == -1) {
+			$running_day = 6;
+		}
+		
+		$days_in_month = date('t',mktime(0,0,0,$month,1,$year));
+		$day_counter = 0;
+		$days_in_this_week = 1;
+		$dates_array = array();
+		$calendar.= '<tr class="b-calendar__row">';
+		for ($x = 0; $x < $running_day; $x++) {
+			$calendar.= '<td class="b-calendar__np"></td>';
+			$days_in_this_week++;
+		}
+		for($list_day = 1; $list_day <= $days_in_month; $list_day++) {
+			$mennytPaivat	= (strtotime($list_day.'.'.$month.'.'.$year) < strtotime(date("Y-m-d")))? 'mennytPaivat ' : '';
+			$poisto = '';
+			if( isset($pvms[$list_day.'.'.$month.'.'.$year][$tid]) ){
+				$this_class = 'bg-success';
+				$poisto = $pvms[$list_day.'.'.$month.'.'.$year][$tid]['poisto'];
+				($pvms[$list_day.'.'.$month.'.'.$year][$tid]['pois_tilanne'])? $this_class='bg-warning' : $this_class=$this_class;
+			} else {
+				$this_class = '';
+			}
+			$calendar.= '<td align="center" class="'.$mennytPaivat.$this_class;
+			if ($running_day != 0) {
+				if (($running_day % 5 == 0) || ($running_day % 6 == 0)) {
+					$calendar .= ' b-calendar__weekend';
+				}
+			}
+			$calendar .= '">';
+			$calendar.= '<div class="pvm">'.$list_day.$poisto.'</div>';
+			$calendar.= '</td>';
+			if ($running_day == 6) {
+				$calendar.= '</tr>';
+				if (($day_counter + 1) != $days_in_month) {
+					$calendar.= '<tr class="b-calendar__row">';
+				}
+				$running_day = -1;
+				$days_in_this_week = 0;
+			}
+			$days_in_this_week++; 
+			$running_day++; 
+			$day_counter++;
+		}
+		if ($days_in_this_week < 8) {
+			for($x = 1; $x <= (8 - $days_in_this_week); $x++) {
+				$calendar.= '<td class="b-calendar__np"> </td>';
+			}
+		}
+		$calendar.= '</tr>';
+		$calendar.= '</table>';
+		return $calendar;
 	}
 
 	public function actionCreate4_form($pvm, $tid)

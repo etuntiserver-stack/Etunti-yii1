@@ -834,6 +834,7 @@ $(document).ready(function(){
 	</div>
 
 	<?php 
+/*
 	if(isset($model->id) and $toistuva and $poista == 1 and !empty($laatikko_tid)){
 		echo '<hr>
 		<center><h3 class="text-danger">Poistaminen</h3></center>
@@ -868,9 +869,10 @@ $(document).ready(function(){
 		 </div>
 		</div>';
 	}
+*/
 	?>
 
-	<div id="sopivatPaivat" class="table-responsive" style="display:none"></div>
+	<div id="sopivatPaivat" style="display:none"></div>
    </div>
   </div>
  </div>
@@ -884,6 +886,7 @@ $(document).ready(function(){
 <br>
 
 	<div class="panel-footer text-right">
+		<?php echo CHtml::Button('Reload',array('class'=>'btn btn-default reload')); ?>
 		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
 		<?php 
 	   	$checkLuo = "tyovuorot_1_".Yii::app()->user->adminStatus;
@@ -939,25 +942,58 @@ $(document).ready(function(){
   var pto = '';
   var toistuva = ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
   if( toistuva == true ){
-	$('#submitButton').val('Ketjun esikatsellu').attr("pvmTarkistus",true);
+	tarkistusLista('<?=$this_id?>');
+  }
+
+  $('.reload').click(function(){
+	tarkistusLista('<?=$this_id?>');
+  });
+  $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari, #tekijanVaihdo').on('blur change focus select', function(){
+	if(toistuva)
+	tarkistusLista('<?=$this_id?>');
+  });
+  $('#ma,#ti,#ke,#to,#pe,#la,#su').on('switchChange.bootstrapSwitch', function(event, state) {
+	if(toistuva)
+	tarkistusLista('<?=$this_id?>');
+  });
+
+  function tarkistusLista(this_id){
+	var tyopaari = [];
+	/* Työpari */
+	var tyopaari = $('#tyopaari').val();
+	if(tyopaari !== null){
+		//console.log('Uudet työparit: ' + tyopaari);
+		$(tyopaari).each(function( index, val ) {
+			tyopaari.push(val);
+		});
+	}
+	/* vkopaivat */
+	var vkopaivat = [];
+	$("input.vkopvmswitch:checkbox:checked").each(function( ) {
+		vkopaivat.push($(this).val());
+	});
+
+	$.ajax({
+	  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista?this_id=' + this_id,
+	  data:{ pfrom : $("#pfrom").val(), pto : $("#pto").val(), viikkoja : $("#Toistuva_viikkoja option:selected").val(), vkopaivat : vkopaivat, tyopaari : tyopaari },
+	  type:'POST',
+	  success:function(data){
+		data = JSON.parse(data);
+		//console.log(data);
+		$('#sopivatPaivat').html('<br><div class="row"><div class="col-sm-12">' + data + '</div></div>').show('slow');
+		$('#sopivatPaivat').append('<br><h3 class="text-danger">Huomio! Päivien poisto ja palautus tapahtuu ilman lomaken tallentamista</h3>');
+   	  },
+	  error:function(data){
+		console.log(data);
+    	  }
+	});
   }
 
   $('#submitButton').click(function(){
 	$('#tyovuoroot-form').submit();
 	return false;
   });
-/*
-  if( ('<?=$model->id?>') !== '' && ('<?=$model->toistuva_id?>') !== '0' ){
-		var edellinen_pfrom = ('<?=$pfrom?>').split('.');
-		var old_pfrom = new Date(+edellinen_pfrom[1]+"/"+edellinen_pfrom[0]+"/"+edellinen_pfrom[2]); //"11/21/2011"
-		var todaysDate = new Date();
-		if(old_pfrom.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
-			$('#pfrom').val('<?=date("d.m.Y")?>')
-			$('#pfrom').after('<p class="text-danger">Ketjun Alkupäivämäärä on vanhentunut. Tästä päivästä luodaan uusi ketju.</p>');
-		}
-		$("#Toistuva_viikkoja").replaceWith('<input type="number" name="ToistuvatTyovuorot[viikkoja]" id="Toistuva_viikkoja" class="form-control" value="'+ $("#Toistuva_viikkoja option:selected").val() +'" readonly>');
-  }
-*/
+
   /* on submit */
   $('#tyovuoroot-form').on('submit',function(e) {
 	var pvmTarkistus = $('#submitButton').attr('pvmTarkistus');
@@ -1021,28 +1057,6 @@ $(document).ready(function(){
 			alert('Valitse viikko päivä');
 			return false;
 		}
-
-		// <-- Check PVM lista
-		if( pvmTarkistus == 'true' ){
-			$('#sopivatPaivat').hide('slow');
-			$('#sopivatPaivat').html('');
-			var pvmTarkistus_lista = '';
-			$.ajax({
-			  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista?this_id=<?=$this_id?>',
-			  data:$(this).serialize(),
-			  type:'POST',
-			  success:function(data){
-				data = JSON.parse(data);
-				//console.log(data);
-				$('#sopivatPaivat').html('<br><div class="row"><div class="col-sm-12">' + data + '</div></div>').show('slow');
-				$('#submitButton').removeClass('btn-primary').addClass('btn-success').removeAttr('pvmtarkistus').val('Hyväksy valitut päivät ja tallenna');
-		   	},
-			error:function(data){
-				console.log(data);
-		    	}
-			});
-			return false;
-		}
 	}
 
 	// <-- tarkistetaan tietoja pituus
@@ -1089,9 +1103,12 @@ $(document).ready(function(){
 	}
 	//     tarkistetaan ajaat päällekäin -->
 
-
 	var str = '';
 	$('#virheilmoitus').html('').hide();
+
+	// <-- Viimeinen kysymys
+	var r = confirm('Haluatko varmasti tallenna tämän?');
+	if(!r){ return false; }
 
 	if( '<?=$create_update?>' == 'update'){
 		$.ajax({
@@ -1313,6 +1330,7 @@ $(document).ready(function(){
   });
 
   // Poistaminen
+/*
   $('.tvpoisto').click(function(){
 	var tilanne = $(this).attr('tilanne');
 	var this_id = '<?=$this_id?>';
@@ -1354,7 +1372,7 @@ $(document).ready(function(){
 	}
 
   });
-
+*/
 
   $('#alku').blur(function(){
 	$(this).removeClass('bg-danger');
@@ -1396,22 +1414,6 @@ $(document).ready(function(){
   $('#loppu').change(function(){
 	laskePituus();
   });
-
-  $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari, #tekijanVaihdo').on('blur change focus select', function(){
-	sopivatPaivat_hide();
-  });
- 
-  $('#ma,#ti,#ke,#to,#pe,#la,#su').on('switchChange.bootstrapSwitch', function(event, state) {
-	sopivatPaivat_hide();
-  });
-
-  function sopivatPaivat_hide(){
-	$('#sopivatPaivat').hide('slow');
-	$('#sopivatPaivat').html('');
-	$('#submitButton').val('Ketjun esikatsellu').attr("pvmTarkistus",true);
-	$('#submitButton').removeClass('btn-success').addClass('btn-primary');
-  }
-
 
   if( $('#<?=$java_prefix?>_kohde').val() !== '' ){
 	var thisID = $('#<?=$java_prefix?>_kohde option:selected').val();
