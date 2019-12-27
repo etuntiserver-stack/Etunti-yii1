@@ -3531,9 +3531,9 @@ class TyovuorootController extends Controller
 	<?php
 	}
 
-	public function actionPvmTarkistus_lista($this_id)
+	public function actionPvmTarkistus_lista($this_id, $cal_start)
 	{
-		$return 	= '<hr>';
+		$return = '';
 		$toistuva = false;
 		if( $this_id != 'null' ){
 			$get_id 	= $this->this_id($this_id);
@@ -3661,7 +3661,7 @@ class TyovuorootController extends Controller
 			$date->modify("+{$viikkoja}week");
 		}
 
-		$m_start = new DateTime();
+		$m_start = new DateTime($cal_start);
 		$m_start->modify("first day of this month");
 		$m_interval = new DateInterval('P1M');
 		$m_end = new DateTime($m_start->format("Y-m-d"));
@@ -3672,7 +3672,7 @@ class TyovuorootController extends Controller
 			$return .= '<div class="row">';
 			foreach ($m_period as $dt) {
 				$return .= '<div class="col-sm-4">';
-				$return .= '<center><h3>'.$this->monthFI($dt->format("n")).' '.$dt->format("Y").'</h3></center>';
+				$return .= '<center><h5>'.$this->monthFI($dt->format("n")).' '.$dt->format("Y").'</h5></center>';
 				$return .= $this->draw_calendar($dt->format("m"), $dt->format("Y"), $pvms, $tid);
 				$return .= '</div>';
 			}

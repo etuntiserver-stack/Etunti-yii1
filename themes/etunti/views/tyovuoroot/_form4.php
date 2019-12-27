@@ -872,7 +872,22 @@ $(document).ready(function(){
 */
 	?>
 
+	<hr>
+	<?php
+		$m_start = new DateTime();
+		$m_start->modify("first day of this month");
+		$m_interval = new DateInterval('P1M');
+		$m_end = new DateTime($m_start->format("Y-m-d"));
+		$m_end->modify("+3 month");
+		$m_period = new DatePeriod($m_start, $m_interval, $m_end);
+	?>
+	<input type="hidden" id="cal_start" value="<?=$m_start->format("Y/n/j")?>">
+	<div class="row">
+	<div class="col-sm-6"><i class="btn btn-default pull-left fa fa-arrow-left vasemalle"></i></div>
+	<div class="col-sm-6"><i class="btn btn-default pull-right fa fa-arrow-right oikealle"></i></div>
+	</div>
 	<div id="sopivatPaivat" style="display:none"></div>
+
    </div>
   </div>
  </div>
@@ -956,7 +971,20 @@ $(document).ready(function(){
 	if(toistuva)
 	tarkistusLista('<?=$this_id?>');
   });
-
+  $('.vasemalle').click(function(){
+	cal_start = $("#cal_start").val();
+	var d = new Date(cal_start);
+	d.setMonth(d.getMonth() - 3);
+	$("#cal_start").val(d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate());
+	tarkistusLista('<?=$this_id?>');
+  });
+  $('.oikealle').click(function(){
+	cal_start = $("#cal_start").val();
+	var d = new Date(cal_start);
+	d.setMonth(d.getMonth() + 3);
+	$("#cal_start").val(d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate());
+	tarkistusLista('<?=$this_id?>');
+  });
   function tarkistusLista(this_id){
 	var tyopaari = [];
 	/* Työpari */
@@ -974,7 +1002,7 @@ $(document).ready(function(){
 	});
 
 	$.ajax({
-	  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista?this_id=' + this_id,
+	  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista?this_id=' + this_id + '&cal_start=' + $("#cal_start").val(),
 	  data:{ pfrom : $("#pfrom").val(), pto : $("#pto").val(), viikkoja : $("#Toistuva_viikkoja option:selected").val(), vkopaivat : vkopaivat, tyopaari : tyopaari },
 	  type:'POST',
 	  success:function(data){
