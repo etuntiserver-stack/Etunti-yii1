@@ -872,7 +872,6 @@ $(document).ready(function(){
 */
 	?>
 
-	<hr>
 	<?php
 		$m_start = new DateTime();
 		$m_start->modify("first day of this month");
