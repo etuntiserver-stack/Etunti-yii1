@@ -3533,8 +3533,19 @@ class TyovuorootController extends Controller
 
 	public function actionPvmTarkistus_lista($this_id, $cal_start)
 	{
-		$return = '';
-		$toistuva = false;
+		$return 	= '';
+		$toistuva 	= false;
+		$pfrom_origin 	= null;
+		$viikko_paivat_origin = [];
+
+		$startday 	= date("Y-m-d", strtotime($_POST['pfrom']));
+		$startday_ts	= strtotime($startday);
+		$stopday 	= date("Y-m-d", strtotime($_POST['pto']));
+		$stopday_ts	= strtotime($stopday);
+		$viikkoja 	= $_POST['viikkoja'];
+		$viikko_paivat 	= $_POST['vkopaivat'];
+		$tyopaari 	= $_POST['tyopaari'];
+
 		if( $this_id != 'null' ){
 			$get_id 	= $this->this_id($this_id);
 			$model 		= $get_id['model'];
@@ -3542,6 +3553,8 @@ class TyovuorootController extends Controller
 			$pvm 		= $get_id['pvm'];
 			$tid 		= $get_id['tid'];
 			$etusukunimi	= $this->etuSukunimi($tid);
+			$startday 	= date("Y-m-d", strtotime($model->pfrom));
+			$viikko_paivat_origin = json_decode($model->viikko_paivat, true);
 		}
 
 		if($toistuva and !isset($model->id)){
@@ -3569,7 +3582,7 @@ class TyovuorootController extends Controller
 			and strtotime($_POST['pfrom']) >= strtotime(date("d.m.Y")) 
 		){
 			$return .= '<h3 class="text-danger">';
-			$return .= 'Tämä ketju tallennetaan seuraavaksi: <br><br>';
+			$return .= 'Ketju jakataan puoleksi: <br><br>';
 			$return .= '<p>Aloitus: '.$model->pfrom.',  Lopetus: '. date("d.m.Y", strtotime($_POST['pfrom'].' -1 day')).'<br>';
 			if( !empty($model->osoite) )
 				$return .= $model->osoite;
@@ -3580,14 +3593,6 @@ class TyovuorootController extends Controller
 			$return .= '<p>Nämät tiedot ei pysty muokkamaan koska ketjun alkamispäivä on vanhentunut</p>';
 			$return .= '</h3>';
 		}
-
-		$startday 	= date("Y-m-d", strtotime($_POST['pfrom']));
-		$startday_ts	= strtotime($startday);
-		$stopday 	= date("Y-m-d", strtotime($_POST['pto']));
-		$stopday_ts	= strtotime($stopday);
-		$viikkoja 	= $_POST['viikkoja'];
-		$viikko_paivat 	= $_POST['vkopaivat'];
-		$tyopaari 	= $_POST['tyopaari'];
 
 		// <-- Tids
 		$tids = [];
@@ -3638,7 +3643,14 @@ class TyovuorootController extends Controller
 		$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
 		$pvms = [];
 		while ($date->getTimestamp() < $date_end){
-			foreach($viikko_paivat as $viikko_paiva) {
+			$this_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
+			$vp = [];
+			if ( $this_week_sunday >= date("YW", strtotime($cal_start)) ){ // Tama pitaa testata
+				if( $this_week_sunday < date("YW") and count($viikko_paivat_origin) > 0 )
+					$vp = $viikko_paivat_origin;
+				else
+					$vp = $viikko_paivat;
+				foreach($vp as $viikko_paiva) {
 					$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
 					$paiva->modify("+" . ($viikko_paiva - 1) . "day");
 					$cal_pvm = $paiva->format('j.m.Y');
@@ -3649,6 +3661,10 @@ class TyovuorootController extends Controller
 					if (strtotime($this_pvm) > $stopday_ts){
 						break 2;
 					}
+
+					//if( !in_array($viikko_paiva, $viikko_paivat_origin) and strtotime($this_pvm) < strtotime(date("Y-m-d")) )
+					//continue;
+
 					foreach( $tids as $tid ){
 						$this_id_builder = $this->this_id_builder($model->id, $this_pvm, $tid);
 						if( isset($poistettu_pvms[$tid][$this_pvm]) )
@@ -3656,7 +3672,7 @@ class TyovuorootController extends Controller
 						else
 							$pvms[$cal_pvm][$tid] = [ 'poisto' => '<br><i class="link fa fa-trash pois_ketjusta" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => false ];
 					}
-
+				}
 			}
 			$date->modify("+{$viikkoja}week");
 		}
@@ -3733,12 +3749,14 @@ class TyovuorootController extends Controller
 			$days_in_this_week++;
 		}
 		for($list_day = 1; $list_day <= $days_in_month; $list_day++) {
-			$mennytPaivat	= (strtotime($list_day.'.'.$month.'.'.$year) < strtotime(date("Y-m-d")))? 'mennytPaivat ' : '';
+			$this_cal_pvm 	= $list_day.'.'.$month.'.'.$year;
+			$mennytPaivat	= (strtotime($this_cal_pvm) < strtotime(date("Y-m-d")))? 'mennytPaivat ' : '';
 			$poisto = '';
-			if( isset($pvms[$list_day.'.'.$month.'.'.$year][$tid]) ){
+			if( isset($pvms[$this_cal_pvm][$tid]) ){
 				$this_class = 'bg-success';
-				$poisto = $pvms[$list_day.'.'.$month.'.'.$year][$tid]['poisto'];
-				($pvms[$list_day.'.'.$month.'.'.$year][$tid]['pois_tilanne'])? $this_class='bg-warning' : $this_class=$this_class;
+				$poisto = $pvms[$this_cal_pvm][$tid]['poisto'];
+				if($pvms[$this_cal_pvm][$tid]['pois_tilanne'])
+					$this_class = 'bg-warning';
 			} else {
 				$this_class = '';
 			}
