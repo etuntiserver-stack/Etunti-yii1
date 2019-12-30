@@ -3643,10 +3643,10 @@ class TyovuorootController extends Controller
 		$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
 		$pvms = [];
 		while ($date->getTimestamp() < $date_end){
-			$this_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
-			$vp = [];
-			if ( $this_week_sunday >= date("YW", strtotime($cal_start)) ){ // Tama pitaa testata
-				if( $this_week_sunday < date("YW") and count($viikko_paivat_origin) > 0 )
+			$loop_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
+			$this_week_sunday = date("YW", strtotime('this week sunday'));
+			if ( $loop_week_sunday >= date("YW", strtotime($cal_start.' this week sunday')) ){ // Tama pitaa testata
+				if( $loop_week_sunday < $this_week_sunday and count($viikko_paivat_origin) > 0 )
 					$vp = $viikko_paivat_origin;
 				else
 					$vp = $viikko_paivat;
@@ -3661,9 +3661,6 @@ class TyovuorootController extends Controller
 					if (strtotime($this_pvm) > $stopday_ts){
 						break 2;
 					}
-
-					//if( !in_array($viikko_paiva, $viikko_paivat_origin) and strtotime($this_pvm) < strtotime(date("Y-m-d")) )
-					//continue;
 
 					foreach( $tids as $tid ){
 						$this_id_builder = $this->this_id_builder($model->id, $this_pvm, $tid);
