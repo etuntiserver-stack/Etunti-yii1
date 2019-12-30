@@ -966,6 +966,13 @@ $(document).ready(function(){
 	if(toistuva)
 	tarkistusLista('<?=$this_id?>');
   });
+  $('#pfrom').on('blur change', function(){
+	if(toistuva)
+	if(!pfrom_and_today_check()){
+		$('#pfrom').val('<?=$model->pfrom?>');
+		return false;
+	}
+  });
   $('#ma,#ti,#ke,#to,#pe,#la,#su').on('switchChange.bootstrapSwitch', function(event, state) {
 	if(toistuva)
 	tarkistusLista('<?=$this_id?>');
@@ -1014,6 +1021,16 @@ $(document).ready(function(){
 		console.log(data);
     	  }
 	});
+  }
+  function pfrom_and_today_check(){
+	var valinnut_pfrom = $('#pfrom').val().split('.');
+	var new_pfrom = new Date(+valinnut_pfrom[1]+"/"+valinnut_pfrom[0]+"/"+valinnut_pfrom[2]); //"11/21/2011"
+	var todaysDate = new Date();
+	if(new_pfrom.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
+		alert('Toistuvan työvuoron aloitus päivämäärä ei voida muokata alkamaan menneisyydestä.');
+		return false;
+	}
+	return false;
   }
 
   $('#submitButton').click(function(){
@@ -1065,14 +1082,9 @@ $(document).ready(function(){
 			return false;
 		}
 
-		var valinnut_pfrom = $('#pfrom').val().split('.');
-		var new_pfrom = new Date(+valinnut_pfrom[1]+"/"+valinnut_pfrom[0]+"/"+valinnut_pfrom[2]); //"11/21/2011"
-		var todaysDate = new Date();
-		if(new_pfrom.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
-			alert('Toistuvan työvuoron aloitus päivämäärä ei voida muokata alkamaan menneisyydestä.');
+		if(!pfrom_and_today_check())
 			return false;
-		}
-		
+
 		var vkopvmswitch_check = false;
 		$( ".vkopvmswitch" ).each(function() {
 			if($( this ).prop( "checked" ) == true){

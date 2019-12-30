@@ -3537,6 +3537,7 @@ class TyovuorootController extends Controller
 		$toistuva 	= false;
 		$pfrom_origin 	= null;
 		$viikko_paivat_origin = [];
+		$viikkoja_origin 	= null;
 
 		$startday 	= date("Y-m-d", strtotime($_POST['pfrom']));
 		$startday_ts	= strtotime($startday);
@@ -3555,6 +3556,7 @@ class TyovuorootController extends Controller
 			$etusukunimi	= $this->etuSukunimi($tid);
 			$startday 	= date("Y-m-d", strtotime($model->pfrom));
 			$viikko_paivat_origin = json_decode($model->viikko_paivat, true);
+			$viikkoja_origin = $model->viikkoja;
 		}
 
 		if($toistuva and !isset($model->id)){
@@ -3645,11 +3647,14 @@ class TyovuorootController extends Controller
 		while ($date->getTimestamp() < $date_end){
 			$loop_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
 			$this_week_sunday = date("YW", strtotime('this week sunday'));
+			if( $this_id != 'null' and $loop_week_sunday < $this_week_sunday ){
+				$vp 	= $viikko_paivat_origin;
+				$vkj 	= $viikkoja_origin;
+			} else {
+				$vp 	= $viikko_paivat;
+				$vkj 	= $viikkoja;
+			}
 			if ( $loop_week_sunday >= date("YW", strtotime($cal_start.' this week sunday')) ){ // Tama pitaa testata
-				if( $loop_week_sunday < $this_week_sunday and count($viikko_paivat_origin) > 0 )
-					$vp = $viikko_paivat_origin;
-				else
-					$vp = $viikko_paivat;
 				foreach($vp as $viikko_paiva) {
 					$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
 					$paiva->modify("+" . ($viikko_paiva - 1) . "day");
@@ -3671,7 +3676,7 @@ class TyovuorootController extends Controller
 					}
 				}
 			}
-			$date->modify("+{$viikkoja}week");
+			$date->modify("+{$vkj}week");
 		}
 
 		$m_start = new DateTime($cal_start);
