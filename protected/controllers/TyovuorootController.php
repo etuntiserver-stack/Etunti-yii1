@@ -5189,10 +5189,10 @@ class TyovuorootController extends Controller
 
 		// <-- Year Week
 		if(!isset(Yii::app()->session['year']))
-			Yii::app()->session['year'] = date("Y");
+			Yii::app()->session['year'] = date("Y", strtotime('this week sunday'));
 
 		if(!isset(Yii::app()->session['week']))
-			Yii::app()->session['week'] = date("W");
+			Yii::app()->session['week'] = date("W", strtotime('this week sunday'));
 
 		$year = Yii::app()->session['year'];
 		$week = sprintf("%02d", Yii::app()->session['week']);
