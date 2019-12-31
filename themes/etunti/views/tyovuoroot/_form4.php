@@ -930,6 +930,14 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
 
+  $(".sw").bootstrapSwitch({
+	size: "mini",
+	onColor: "success",
+	offColor: "danger",
+	onText: "Kyllä",
+	offText: "Ei"
+  });
+
   if($('#<?=$java_prefix?>_kohde').val() !== ''){
 	var kohdeOn = $('#<?=$java_prefix?>_kohde option:selected').val();
 	  	 $.ajax({
@@ -967,9 +975,9 @@ $(document).ready(function(){
 	tarkistusLista('<?=$this_id?>');
   });
   $('#pfrom').on('blur change', function(){
-	if(toistuva)
-	if(!pfrom_and_today_check()){
+	if(toistuva && !pfrom_and_today_check()){
 		$('#pfrom').val('<?=$model->pfrom?>');
+		alert('Toistuvan työvuoron aloitus päivämäärä ei voida muokata alkamaan menneisyydestä.');
 		return false;
 	}
   });
@@ -992,6 +1000,14 @@ $(document).ready(function(){
 	tarkistusLista('<?=$this_id?>');
   });
   function tarkistusLista(this_id){
+	if(!pfrom_and_today_check()){
+		$(".vkopvmswitch").bootstrapSwitch('disabled', true);
+		$("#Toistuva_viikkoja").attr('disabled', 'yes');
+	} else {
+		$(".vkopvmswitch").bootstrapSwitch('disabled', false);
+		$("#Toistuva_viikkoja").removeAttr('disabled');
+	}
+
 	var tyopaari = [];
 	/* Työpari */
 	var tyopaari = $('#tyopaari').val();
@@ -1027,10 +1043,9 @@ $(document).ready(function(){
 	var new_pfrom = new Date(+valinnut_pfrom[1]+"/"+valinnut_pfrom[0]+"/"+valinnut_pfrom[2]); //"11/21/2011"
 	var todaysDate = new Date();
 	if(new_pfrom.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
-		alert('Toistuvan työvuoron aloitus päivämäärä ei voida muokata alkamaan menneisyydestä.');
 		return false;
 	}
-	return false;
+	return true;
   }
 
   $('#submitButton').click(function(){
@@ -1082,9 +1097,10 @@ $(document).ready(function(){
 			return false;
 		}
 
-		if(!pfrom_and_today_check())
+		if(!pfrom_and_today_check()){
+			alert('Toistuvan työvuoron aloitus päivämäärä ei voida aloita alkamaan menneisyydestä.');
 			return false;
-
+		}
 		var vkopvmswitch_check = false;
 		$( ".vkopvmswitch" ).each(function() {
 			if($( this ).prop( "checked" ) == true){
@@ -1360,13 +1376,6 @@ $(document).ready(function(){
         placeholder: "__:__"
   });
 
-  $(".sw").bootstrapSwitch({
-	size: "mini",
-	onColor: "success",
-	offColor: "danger",
-	onText: "Kyllä",
-	offText: "Ei"
-  });
 
   // Poistaminen
 /*
