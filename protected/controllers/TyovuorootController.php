@@ -3645,17 +3645,10 @@ class TyovuorootController extends Controller
 		$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
 		$pvms = [];
 		while ($date->getTimestamp() < $date_end){
-			$loop_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
+			//$loop_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
 			$this_week_sunday = date("YW", strtotime('this week sunday'));
-			if( $this_id != 'null' and $loop_week_sunday < $this_week_sunday ){
-				$vp 	= $viikko_paivat_origin;
-				$vkj 	= $viikkoja_origin;
-			} else {
-				$vp 	= $viikko_paivat;
-				$vkj 	= $viikkoja;
-			}
-			if ( $loop_week_sunday >= date("YW", strtotime($cal_start.' this week sunday')) ){ // Tama pitaa testata
-				foreach($vp as $viikko_paiva) {
+			if ( $this_week_sunday >= date("YW", strtotime($cal_start.' this week sunday')) ){ // Tama pitaa testata
+				foreach($viikko_paivat as $viikko_paiva) {
 					$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
 					$paiva->modify("+" . ($viikko_paiva - 1) . "day");
 					$cal_pvm = $paiva->format('j.m.Y');
@@ -3676,7 +3669,7 @@ class TyovuorootController extends Controller
 					}
 				}
 			}
-			$date->modify("+{$vkj}week");
+			$date->modify("+{$viikkoja}week");
 		}
 
 		$m_start = new DateTime($cal_start);
@@ -4073,14 +4066,13 @@ class TyovuorootController extends Controller
 		exit;
 	}
 
-	public function actionUpdate4($this_id)
+	public function actionUpdate4($this_id, $laatikko_pvm, $laatikko_tid)
 	{
 
 		$get_id 	= $this->this_id($this_id);
 		$model 		= $get_id['model'];
 		$toistuva 	= $get_id['toistuva'];
 		$pvm 		= $get_id['pvm'];
-
 		if(!isset($model->id)){ die('Työvuoroja '.$id.' ei löydy.'); }
 
 		$return = [];
@@ -4107,9 +4099,30 @@ class TyovuorootController extends Controller
 		$edellinen_model 	= $model->attributes;
 		$model->attributes 	= $post;
 
-		// <-- Toistuva pfrom muutos.
+		// <-- CREATE uusi tavallinen tyovuoro ja poistetan tama paiva ketjusta.
 		if( 
 			$toistuva and isset($edellinen_model['id'])
+			and !isset($_POST['is_toistuva'])
+			and (int)$laatikko_tid > 0
+		){
+			$new_tavallinen = new Tyovuoroot;
+			$new_tavallinen->attributes = $post;
+			$this->model_json_converter($_POST, $new_tavallinen, false);
+			if(!$new_tavallinen->save()){
+				echo json_encode($new_toistuva->getErrors());
+			} else {
+				if($this->toistuvaDeletePvm($model->id, $laatikko_pvm, $laatikko_tid)){
+					$return = ['return' => 'luottu_uusi_tyovuoro', 'id' => $new_tavallinen->id];
+					echo json_encode($return);
+				}
+			}
+			exit;
+		}
+		//     CREATE uusi tavallinen tyovuoro. -->
+
+		// <-- Toistuva pfrom muutos.
+		if( 
+			$toistuva and isset($edellinen_model['id']) and isset($_POST['is_toistuva'])
 			and strtotime($edellinen_model['pfrom']) < strtotime(date("d.m.Y")) 
 			and strtotime($_POST['ToistuvatTyovuorot']['pfrom']) >= strtotime(date("d.m.Y")) 
 		){

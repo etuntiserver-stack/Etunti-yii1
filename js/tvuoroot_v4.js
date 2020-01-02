@@ -18,7 +18,7 @@ function tv_arr_update(tv_arr){
 			});
 			pvm_muutos = pvm.split(".");
 			did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
-			//console.log(all_tv_edit);
+			console.log(all_tv_edit);
 			if( $("#" + did).length > 0 )
 				$("#" + did).html(all_tv_edit);
 		});

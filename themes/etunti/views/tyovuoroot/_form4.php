@@ -553,7 +553,7 @@ $(".muokaValiko").click(function() {
     <div class="input-group">
       <span><?php echo Yii::t('main','Toistuva työvuoro'); ?></span>
       <span class="input-group-btn">
-        <input type="checkbox" name="is_toistuva" class="sw" id="is_toistuva" <?=($toistuva)? 'disabled checked' : ''?>>
+        <input type="checkbox" name="is_toistuva" class="sw" id="is_toistuva" <?=($toistuva)? 'checked' : ''?>>
       </span>
     </div>  
   </div>
@@ -960,6 +960,21 @@ $(document).ready(function(){
 	 	});
   }
 
+  $('#is_toistuva').on('switchChange.bootstrapSwitch', function(event, state) {
+	if(state === true){
+		$("#toistuva_aktiivinen").addClass('in');
+		if( $('#pto').val() === '' )
+		$('#pto').removeClass('bg-success').addClass('bg-danger');
+		$('#toistuva-repair-funktio').addClass('in');
+	} else {
+		$("#toistuva_aktiivinen").removeClass('in');
+		$('#submitButton').show();
+		$('#toistuva-repair-funktio').removeClass('in');
+		alert('Varoitus!!!\nKun muutat tämän työvuoron yksittäiseksi, niin tämä päivä poistetaan toistuvasta ketjusta.');
+	}
+
+  });
+
   var pfrom = '';
   var pto = '';
   var toistuva = ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
@@ -976,7 +991,6 @@ $(document).ready(function(){
   });
   $('#pfrom').on('blur change', function(){
 	if(toistuva && !pfrom_and_today_check()){
-		$('#pfrom').val('<?=$model->pfrom?>');
 		alert('Toistuvan työvuoron aloitus päivämäärä ei voida muokata alkamaan menneisyydestä.');
 		return false;
 	}
@@ -1001,11 +1015,16 @@ $(document).ready(function(){
   });
   function tarkistusLista(this_id){
 	if(!pfrom_and_today_check()){
+		if(!$("#pfrom").hasClass('bg-danger'))
+			$("#pfrom").addClass('bg-danger');
 		$(".vkopvmswitch").bootstrapSwitch('disabled', true);
 		$("#Toistuva_viikkoja").attr('disabled', 'yes');
+		$('#submitButton').hide();
 	} else {
+		$("#pfrom").removeClass('bg-danger');
 		$(".vkopvmswitch").bootstrapSwitch('disabled', false);
 		$("#Toistuva_viikkoja").removeAttr('disabled');
+		$('#submitButton').show();
 	}
 
 	var tyopaari = [];
@@ -1030,8 +1049,9 @@ $(document).ready(function(){
 	  success:function(data){
 		data = JSON.parse(data);
 		//console.log(data);
-		$('#sopivatPaivat').html('<br><div class="row"><div class="col-sm-12">' + data + '</div></div>').show('slow');
-		$('#sopivatPaivat').append('<br><h3 class="text-danger">Huomio! Päivien poisto ja palautus tapahtuu ilman lomaken tallentamista</h3>');
+		$('#sopivatPaivat').html('');
+		$('#sopivatPaivat').append('<br><center><h3 class="text-danger">Huomio! Päivien poisto ja palautus tapahtuu ilman lomaken tallentamista</h3></center>');
+		$('#sopivatPaivat').append('<br><div class="row"><div class="col-sm-12">' + data + '</div></div>').show('slow');
    	  },
 	  error:function(data){
 		console.log(data);
@@ -1167,11 +1187,11 @@ $(document).ready(function(){
 
 	if( '<?=$create_update?>' == 'update'){
 		$.ajax({
-		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update4?this_id=<?=$this_id?>',
+		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update4?this_id=<?=$this_id?>&laatikko_pvm=<?=$laatikko_pvm?>&laatikko_tid=<?=$laatikko_tid?>',
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			//console.log(data);
+			console.log(data);
 			laatikonPaivays();
 			return false;
 			//window.location.reload();
@@ -1615,24 +1635,6 @@ $(document).ready(function(){
   $('#pto').blur(function(){
 	checkToistuvaVuosi( $(this).val() );
   	$(this).removeClass('bg-danger').addClass('bg-success');
-  });
-
-
-  $('#is_toistuva').on('switchChange.bootstrapSwitch', function(event, state) {
-	if(state === true){
-		$("#toistuva_aktiivinen").addClass('in');
-		if( $('#pto').val() === '' )
-		$('#pto').removeClass('bg-success').addClass('bg-danger');
-
-		$('#submitButton').val('Ketjun esikatsellu').attr("pvmTarkistus",true);
-		$('#toistuva-repair-funktio').addClass('in');
-
-	} else {
-		$("#toistuva_aktiivinen").removeClass('in');
-		$('#submitButton').val('Tallenna').removeAttr( "pvmTarkistus" );
-		$('#toistuva-repair-funktio').removeClass('in');
-	}
-
   });
 
   // <-- modal siirtaminen
