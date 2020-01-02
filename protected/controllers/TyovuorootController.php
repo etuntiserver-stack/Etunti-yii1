@@ -3583,17 +3583,39 @@ class TyovuorootController extends Controller
 			and strtotime($model->pfrom) < strtotime(date("d.m.Y")) 
 			and strtotime($_POST['pfrom']) >= strtotime(date("d.m.Y")) 
 		){
-			$return .= '<h3 class="text-danger">';
-			$return .= 'Ketju jakataan puoleksi: <br><br>';
-			$return .= '<p>Aloitus: '.$model->pfrom.',  Lopetus: '. date("d.m.Y", strtotime($_POST['pfrom'].' -1 day')).'<br>';
+			$return .= '<div class="alert bg-info">';
+			$return .= '<center><h3>Huomio! Aloituspäivä on muutettu, jolloin ketju jakataan kahdeksi puoleksi.</h3></center>';
+			$return .= '<br>';
+			$return .= '<table class="table table-bordered">';
+			$return .= '<tr>';
+			$return .= '<th>'.$model->pfrom.' - '. date("d.m.Y", strtotime($_POST['pfrom'].' -1 day')).'</th>';
+			$return .= '<th>'.$_POST['pfrom'].' - '.$_POST['pto'].'</th>';
+			$return .= '</tr>';
+			$return .= '<tr><td>';
+			$return .= '<p><b>';
 			if( !empty($model->osoite) )
 				$return .= $model->osoite;
 			elseif(isset($model->kohteet->osoite) and empty($model->osoite))
 				$return .= $model->kohteet->osoite;
 
-			$return .= ', '.$model->alku.' - '.$model->loppu.'</p>';
-			$return .= '<p>Nämät tiedot ei pysty muokkamaan koska ketjun alkamispäivä on vanhentunut</p>';
-			$return .= '</h3>';
+			$return .= '</b><br>Klo.: '.$model->alku.' - '.$model->loppu.'<br>';
+			$return .= 'Viikko päivät: ';
+			foreach(json_decode($model->viikko_paivat, true) as $vkp)
+				$return .= $this->vkoPaivatLyhyesti()[$vkp].' ';
+			$return .= '<br>Työvuorojen viikkoväli: '.$model->viikkoja;
+			$return .= '</p>';
+			$return .= '</td>';
+			$return .= '<td>';
+			$return .= '<p><b>'.$_POST['osoite'].'</b>';
+			$return .= '</b><br>Klo.: '.$_POST['alku'].' - '.$_POST['loppu'].'<br>';
+			$return .= 'Viikko päivät: ';
+			foreach($viikko_paivat as $vkp)
+				$return .= $this->vkoPaivatLyhyesti()[$vkp].' ';
+			$return .= '<br>Työvuorojen viikkoväli: '.$viikkoja;
+			$return .= '</p>';
+			$return .= '</td></tr>';
+			$return .= '</table>';
+			$return .= '</div>';
 		}
 
 		// <-- Tids

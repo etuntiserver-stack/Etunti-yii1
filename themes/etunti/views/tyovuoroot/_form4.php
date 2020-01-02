@@ -1044,7 +1044,7 @@ $(document).ready(function(){
 
 	$.ajax({
 	  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista?this_id=' + this_id + '&cal_start=' + $("#cal_start").val(),
-	  data:{ pfrom : $("#pfrom").val(), pto : $("#pto").val(), viikkoja : $("#Toistuva_viikkoja option:selected").val(), vkopaivat : vkopaivat, tyopaari : tyopaari },
+	  data:{ pfrom : $("#pfrom").val(), pto : $("#pto").val(), viikkoja : $("#Toistuva_viikkoja option:selected").val(), vkopaivat : vkopaivat, tyopaari : tyopaari, osoite : $('#<?=$java_prefix?>_osoite').val(), alku : $('#alku').val(), loppu : $('#loppu').val() },
 	  type:'POST',
 	  success:function(data){
 		data = JSON.parse(data);
