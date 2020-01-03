@@ -754,7 +754,12 @@ $(document).ready(function(){
 	  </div>
 	  <div class="col-sm-4">
 		<label><?php echo Yii::t('main', 'Loppuen'); ?></label>
-		<input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pto]" id="pto" value="<?php if(!empty($pto)) echo date('d.m.Y', strtotime($pto)); ?>">
+		<div class="input-group">
+		      <input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pto]" id="pto" value="<?php if(!empty($pto)) echo date('d.m.Y', strtotime($pto)); ?>">
+		      <span class="input-group-btn pto_save link" title="Tallenna ja sulje ikkuna.">
+		        <button class="btn btn-default pto_save_button" type="button" disabled><i class="fa fa-save"></i></button>
+		      </span>
+		</div>
 	  </div>
 	  <div class="col-sm-4">
 		<label><?php echo Yii::t('main', 'Työvuorojen viikkoväli'); ?></label>
@@ -976,7 +981,7 @@ $(document).ready(function(){
   });
 
   var pfrom = $("#pfrom").val();
-  var pto = '';
+  var pto = $("#pto").val();
   var toistuva = ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
   if( toistuva == true ){
 	tarkistusLista('<?=$this_id?>');
@@ -990,6 +995,31 @@ $(document).ready(function(){
 		alert('Toistuvan työvuoron aloitus päivämäärä ei voida muokata alkamaan menneisyydestä.');
 		$("#pfrom").val(pfrom);
 		return false;
+	}
+  });
+  $('#pto').on('blur change', function(){
+	checkToistuvaVuosi( $(this).val() );
+	if( pto != $(this).val() ){
+		$('.pto_save_button').removeClass('btn-default').addClass('btn-primary').removeAttr('disabled');
+	} else {
+		$('.pto_save_button').removeClass('btn-primary').addClass('btn-default').attr('disabled', 'yes');
+	}
+  });
+  $('.pto_save_button').click(function(){
+	if( ('<?=$model->id?>') !== ''){
+	$.ajax({
+	  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pto_muutos?id=<?=$model->id?>',
+	  data:{ pto : $("#pto").val() },
+	  type:'POST',
+	  success:function(data){
+		data = JSON.parse(data);
+		//console.log(data);
+		laatikonPaivays();
+   	  },
+	  error:function(data){
+		console.log(data);
+    	  }
+	});
 	}
   });
   $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari, #tekijanVaihdo').on('blur change focus select', function(){
@@ -1631,11 +1661,6 @@ $(document).ready(function(){
 	$('#toistuvaAll').hide('slow');
 	$('#submitButton').val('Tallenna').removeAttr( "pvmTarkistus" );
 	$('#toistuvaAllsijaan').html('<h3 class="alert alert-success">Toistuvien työvuorojen päivät tallennettu.<br>Paina Tallenna-painikketta lisätäksesi työvuorot työvuorolistaan.</h3>').show('slow');
-  });
-
-  $('#pto').blur(function(){
-	checkToistuvaVuosi( $(this).val() );
-  	$(this).removeClass('bg-danger').addClass('bg-success');
   });
 
   // <-- modal siirtaminen
