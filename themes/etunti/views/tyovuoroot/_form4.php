@@ -760,6 +760,7 @@ $(document).ready(function(){
 		        <button class="btn btn-default pto_save_button" type="button" disabled><i class="fa fa-save"></i></button>
 		      </span>
 		</div>
+		<div id="pto_ilmoitus" style="position:relative;"></div>
 	  </div>
 	  <div class="col-sm-4">
 		<label><?php echo Yii::t('main', 'Työvuorojen viikkoväli'); ?></label>
@@ -1001,6 +1002,7 @@ $(document).ready(function(){
 	checkToistuvaVuosi( $(this).val() );
 	if( pto != $(this).val() ){
 		$('.pto_save_button').removeClass('btn-default').addClass('btn-primary').removeAttr('disabled');
+		$('#pto_ilmoitus').html('<p class="small text-danger" style="position:absolute; z-index:9999; padding: 10px; background:white; border:1px #ddd solid">Olet muuttanut lopetuspäivä niin voit tallenna sen vieressä oleva painikkeella.<br>Huomio! Tämä tallennus ei ota muukaan muut muutokset.</p>');
 	} else {
 		$('.pto_save_button').removeClass('btn-primary').addClass('btn-default').attr('disabled', 'yes');
 	}
