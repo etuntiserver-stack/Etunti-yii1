@@ -2378,23 +2378,18 @@ class TyovuorootController extends Controller
 			$date->modify('this week monday');
 			$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
 
-			while ($date->getTimestamp() < $date_end){
+			while ($date->getTimestamp() <= $date_end){
 				$this_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
 				if ( $this_week_sunday >= date("YW", strtotime($haku_from)) ){ // Jotta ei saada pitkä array päivästä
 					foreach(json_decode($arvo->viikko_paivat, true) as $viikko_paiva) {
-
 						$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
 						$paiva->modify("+" . ($viikko_paiva - 1) . "day");
 						$this_pvm = $paiva->format('d.m.Y');
 						if (strtotime($this_pvm) < $startday_ts)
 							continue;
-						// <-- Haku from to rajoitukset
-						if (strtotime($this_pvm) > $haku_to_ts){
+						if (strtotime($this_pvm) > $haku_to_ts or strtotime($this_pvm) > strtotime($stopday)){
 							break 2;
 						}
-
-						//     Haku from to rajoitukset -->
-
 						foreach($tids as $tid){
 							if( isset($poistettu_pvms[$arvo->id]) ){
 								foreach($poistettu_pvms[$arvo->id] as $k => $v){
@@ -2409,7 +2404,6 @@ class TyovuorootController extends Controller
 
 					}
 				}
-
 				$date->modify("+{$arvo->viikkoja}week");
 			}
 		}
@@ -3666,9 +3660,9 @@ class TyovuorootController extends Controller
 		$date->modify('this week monday');
 		$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
 		$pvms = [];
-		while ($date->getTimestamp() < $date_end){
+		while ($date->getTimestamp() <= $date_end){
 			//$loop_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
-			$this_week_sunday = date("YW", strtotime('this week sunday'));
+			$this_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
 			if ( $this_week_sunday >= date("YW", strtotime($cal_start.' this week sunday')) ){ // Tama pitaa testata
 				foreach($viikko_paivat as $viikko_paiva) {
 					$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));

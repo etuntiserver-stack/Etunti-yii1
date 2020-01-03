@@ -975,7 +975,7 @@ $(document).ready(function(){
 
   });
 
-  var pfrom = '';
+  var pfrom = $("#pfrom").val();
   var pto = '';
   var toistuva = ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
   if( toistuva == true ){
@@ -985,15 +985,16 @@ $(document).ready(function(){
   $('.reload').click(function(){
 	tarkistusLista('<?=$this_id?>');
   });
-  $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari, #tekijanVaihdo').on('blur change focus select', function(){
-	if(toistuva)
-	tarkistusLista('<?=$this_id?>');
-  });
   $('#pfrom').on('blur change', function(){
 	if(toistuva && !pfrom_and_today_check()){
 		alert('Toistuvan työvuoron aloitus päivämäärä ei voida muokata alkamaan menneisyydestä.');
+		$("#pfrom").val(pfrom);
 		return false;
 	}
+  });
+  $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari, #tekijanVaihdo').on('blur change focus select', function(){
+	if(toistuva)
+	tarkistusLista('<?=$this_id?>');
   });
   $('#ma,#ti,#ke,#to,#pe,#la,#su').on('switchChange.bootstrapSwitch', function(event, state) {
 	if(toistuva)
