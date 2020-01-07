@@ -1510,8 +1510,27 @@ class TyovuorootController extends Controller
 		return false;
 	}
 
-	public function actionPois_pvm_ketjusta($toistuva_id, $tid, $pvm)
+	public function actionPois_pvm_ketjusta($toistuva_id, $tid, $pvm, $peruuttaminen)
 	{
+		if( (int)$peruuttaminen > 0 ){
+			$ttv = ToistuvatTyovuorot::model()->findByPk($toistuva_id);
+			$model = new Tyovuoroot;
+			$model->attributes = $ttv->attributes;
+			$model->tid = $tid;
+			$model->pvm = $pvm;
+			$model->peruutettu = $peruuttaminen;
+			if($model->save()){
+				// <-- LOG
+				$model_log 	= 'Tyovuoroot';
+				$name_log 	= 'Työvuorot';
+				$status_log 	= 'ToistuvaKetjustaPeruutamisessa';
+				$old_values 	= null;
+				$new_values = json_encode($model->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+			}
+		}
 		if($this->toistuvaDeletePvm($toistuva_id, $pvm, $tid))
 			echo json_encode(['return' => 'ok']);
 		else
@@ -2283,7 +2302,7 @@ class TyovuorootController extends Controller
        		$criteria = new CDbCriteria();
 		$criteria->with = array('kohteet');
 		//$criteria->limit = "10";
-		$criteria->select = "id, tid, toistuva_id, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu, status";
+		$criteria->select = "id, tid, toistuva_id, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu, status, peruutettu";
 		$criteria->order = "alku ASC"; //tt.$tt_order_1 ASC, 
 		$criteria->condition = "
 			toistuva_id=0
@@ -2347,7 +2366,7 @@ class TyovuorootController extends Controller
 		// <-- toistuvat
        		$criteria = new CDbCriteria(); 
 		$criteria->order = "alku";
-		$criteria->condition = "DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) <= '$haku_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) > '$haku_from'"; // <= laitoin pvm palautus varten
+		$criteria->condition = "DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) <= '$haku_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$haku_from'"; // <= laitoin pvm palautus varten
 		if( count($haku_tids) > 0 ){
 			$tt_ret = [];
 			foreach($haku_tids as $k => $v){
@@ -2439,7 +2458,14 @@ class TyovuorootController extends Controller
 			$mennytPaivat	= (strtotime($this_pvm) < strtotime(date("Y-m-d")))? 'mennytPaivat' : '';
 			$osoite 	= ( isset($arvo->osoite) and !empty($arvo->osoite))?$arvo->osoite:'';
 			if(empty($osoite) and isset($arvo->kohteet->osoite))
-			$osoite 	= $arvo->kohteet->osoite;
+				$osoite 	= $arvo->kohteet->osoite;
+			$peruutettu = '';
+			if($arvo->peruutettu == 1){
+				$peruutettu = '<br><span class="text-danger">'. $this->peruutettuArray()[1] .'</span>';
+			}
+			if($arvo->peruutettu == 2){
+				$peruutettu = '<br><span class="text-danger">'. $this->peruutettuArray()[2] .'</span>';
+			}
 
 			$color 		= '#888';
 			$bgcol 		= 'color:#333';
@@ -2455,7 +2481,7 @@ class TyovuorootController extends Controller
 				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 				$return['osoite'] = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$this_id.'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
 			} else {
-				$return['osoite'] = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$osoite.'</span>';
+				$return['osoite'] = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$osoite.$peruutettu.'</span>';
 
 			}
 			return $return;
@@ -3622,10 +3648,10 @@ class TyovuorootController extends Controller
 		// <-- Tids
 		$tids = [];
 		if( count($tyopaari) > 0 ){
+			$tids[$tid] = $tid;
 			foreach($tyopaari as $tp_tid){
 				$tids[$tp_tid] = $tp_tid;
 			}
-			$tids[$tid] = $tid;
 		} else {
 			$tids[$tid] = $tid;
 		}
@@ -3686,9 +3712,9 @@ class TyovuorootController extends Controller
 					foreach( $tids as $tid ){
 						$this_id_builder = $this->this_id_builder($model->id, $this_pvm, $tid);
 						if( isset($poistettu_pvms[$tid][$this_pvm]) )
-							$pvms[$cal_pvm][$tid] = [ 'poisto' => '<br><i class="link fa fa-recycle palauta_kejuun" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => true ];
+							$pvms[$cal_pvm][$tid] = [ 'html' => '<br><i class="link fa fa-recycle palauta_kejuun" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => true ];
 						else
-							$pvms[$cal_pvm][$tid] = [ 'poisto' => '<br><i class="link fa fa-trash pois_ketjusta" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => false ];
+							$pvms[$cal_pvm][$tid] = [ 'html' => '<br><i class="link fa fa-gear cal_tilanne" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => false ];
 					}
 				}
 			}
@@ -3772,7 +3798,7 @@ class TyovuorootController extends Controller
 			$poisto = '';
 			if( isset($pvms[$this_cal_pvm][$tid]) ){
 				$this_class = 'bg-success';
-				$poisto = $pvms[$this_cal_pvm][$tid]['poisto'];
+				$poisto = $pvms[$this_cal_pvm][$tid]['html'];
 				if($pvms[$this_cal_pvm][$tid]['pois_tilanne'])
 					$this_class = 'bg-warning';
 			} else {

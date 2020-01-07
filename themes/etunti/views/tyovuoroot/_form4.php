@@ -464,12 +464,16 @@ $(".muokaValiko").click(function() {
 
   </div>
   <div class="col-sm-3">
+		<?php if(!$toistuva): ?>
 		<?php echo $form->labelEx($model,'peruutettu'); ?>
 		<?php
 		$list = $this->peruutettuArray();
 		echo $form->dropDownList($model,'peruutettu', $list, 
 		array('empty'=>'Valitse','class'=>'form-control'));
 		?>
+		<?php else : ?>
+		<div class="text-danger">Huomio! Toistuvan ketjussa peruutukset voidaan tehdä alla olevalla kalenterilla painamalla <i class="fa fa-gear"></i> ikonia.</div>
+		<?php endif; ?>
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'piilota_mobiilista'); ?>
@@ -1285,8 +1289,36 @@ $(document).ready(function(){
 	return tids;
   }
 
-  function laatikonPaivays(){
+  function dids_before(){
+	var didlink = 'did4';
+	var dids = [];
+	$.ajax({
+		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/' + didlink,
+		type: 'POST',
+		async: false,
+		data: { haku_from : '<?=$haku_from?>', haku_to : '<?=$haku_to?>', tids : getAllTids() },
+		success:function(data){
+			data = JSON.parse(data);
+			//console.log(data);
+			$.each(data, function( tid, value ) {
+				$.each(value, function( pvm, v ) {
+					pvm_muutos = pvm.split(".");
+					did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
+					dids.push(did);
+				});
+			});
 
+		},error:function(data){
+		  	console.log(data);
+			//window.location.href=location.protocol + "//" + location.host + '/index.php';
+		}
+	});
+	return dids;
+  }
+  
+  var dids_before_arr = dids_before();
+
+  function laatikonPaivays(){
 	var didlink = 'did4';
 	//if(parent.location.href.match(/tv3/)){ didlink = 'did3'; }
 	$.ajax({
@@ -1296,6 +1328,11 @@ $(document).ready(function(){
 		success:function(data){
 			data = JSON.parse(data);
 			//console.log(data);
+			// <-- Tyhjenna kaikki kuluvia laatikot
+			$.each(dids_before_arr, function( i, v ) {
+				$("#" + v).html('');
+			});
+
 			var did = '';
 			$.each(data, function( tid, value ) {
 				$.each(value, function( pvm, v ) {
@@ -1307,10 +1344,9 @@ $(document).ready(function(){
 					did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
 					if( $("#" + did).length > 0 )
 						$("#" + did).html(all_tv_edit);
-					$('#showres').modal('hide');
 				});
 			});
-		  	
+		  	$('#showres').modal('hide');
 		},error:function(data){
 		  	console.log(data);
 			//window.location.href=location.protocol + "//" + location.host + '/index.php';

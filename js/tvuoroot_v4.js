@@ -25,32 +25,55 @@ function tv_arr_update(tv_arr){
 	});
 }
 
-$(document).delegate(".pois_ketjusta","click",function(){
+$(document).delegate(".cal_tilanne","click",function(){
+	$("#cal_tilanne").remove();
 	var this_item = $(this);
 	var this_id = $(this).attr('this_id');
 	var toistuva_id = $(this).attr('toistuva_id');
 	var tid = $(this).attr('tid');
 	var pvm = $(this).attr('pvm');
-	var r = confirm('Haluatko varmasti poistaa tämän?');
-	if(r){
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pois_pvm_ketjusta',
-	   type:'GET',
-	   data: { toistuva_id : toistuva_id, tid : tid, pvm : pvm },
-           success: function(data){
-		data = JSON.parse(data);
-        	//console.log(data);
-		if( data['return'] && data['return'] == 'ok' ){
-			this_item.closest('td').removeClass('bg-success').addClass('bg-warning');
-			this_item.removeClass('fa-trash pois_ketjusta').addClass('fa-recycle palauta_kejuun');
-			$("#" + this_id).closest('p').remove();
+	$(this).closest('table').before('' + 
+		'<div style="position:relative; z-index: 99999999; opacity: 2" id="cal_tilanne"><div style="position:absolute; width: 100%;">' +
+		'<div style="padding: 10px; background: white; border:1px #ddd solid; color:#333; ">' +
+		'<center><h4>' + pvm + '</h4></center>' +
+		'<label>Peruuttaminen</label>' +
+		'<select class="form-control" id="cal_peruutettu">' +
+		'<option value=""></option>' +
+		'<option value="1">Peruutettu</option>' +
+		'<option value="2">Peruutettu laskutettava</option>' +
+		'</select>' +
+		'<p class="text-danger">Huomio! Valitsemalla peruuttamista luodaan yksittäinen peruutettu työvuoro.</p>' +
+		'<br><p><span class="btn btn-block btn-danger" id="cal_poista_paiva_ketjusta">Poista päivä ketjusta</span></p>' +
+		'</div></div></div>'
+	);
+
+	$("#cal_poista_paiva_ketjusta").click(function(){
+		var peruuttaminen = $("#cal_peruutettu option:selected").val();
+		if( peruuttaminen == 0 )
+			var r = confirm('Haluatko varmasti poistaa tämä päivä ketjusta?');
+		else
+			var r = confirm('Haluatko varmasti poistaa tämä päivä ketjusta ja luoda yksittäinen peruutettu työvuoro?');
+		if(r){
+	        $.ajax({
+	           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pois_pvm_ketjusta',
+		   type:'GET',
+		   data: { toistuva_id : toistuva_id, tid : tid, pvm : pvm, peruuttaminen : peruuttaminen },
+	           success: function(data){
+			data = JSON.parse(data);
+	        	console.log(data);
+			$("#cal_tilanne").remove();
+			if( data['return'] && data['return'] == 'ok' ){
+				this_item.closest('td').removeClass('bg-success').addClass('bg-warning');
+				this_item.removeClass('fa-gear pois_ketjusta').addClass('fa-recycle palauta_kejuun');
+				$("#" + this_id).closest('p').remove();
+			}
+	    	   },
+	    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+		    	console.log(XMLHttpRequest);
+	 	   }
+	        });
 		}
-    	   },
-    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
-	    	console.log(XMLHttpRequest);
- 	   }
-        });
-	}
+	});
 });
 
 $(document).delegate(".palauta_kejuun","click",function(){
@@ -69,7 +92,7 @@ $(document).delegate(".palauta_kejuun","click",function(){
         	//console.log(data);
 		if( data['return'] && data['return'] == 'ok' ){
 			this_item.closest('td').removeClass('bg-warning').addClass('bg-success');
-			this_item.removeClass('fa-recycle palauta_kejuun').addClass('fa-trash pois_ketjusta');
+			this_item.removeClass('fa-recycle palauta_kejuun').addClass('fa-gear pois_ketjusta');
 	        	//console.log(data);
 			tv_arr_update(data['tv_arr']);
 		}
