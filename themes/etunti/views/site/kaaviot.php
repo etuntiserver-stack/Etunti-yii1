@@ -124,8 +124,8 @@
       </label>
       <br>
       <div class="row">
-        <div class="col-sm-3 col-xs-offset-4">
-          <button type="submit" id="toggle-menu-save" class="btn btn-primary btn-sm">Tallenna</button>
+        <div class="col-sm-12">
+          <button type="submit" id="toggle-menu-save" class="btn btn-primary btn-sm btn-block"><b>Tallenna</b></button>
         </div>
       </div>
     </form>
