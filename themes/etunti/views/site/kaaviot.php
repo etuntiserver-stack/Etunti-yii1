@@ -38,59 +38,73 @@
   <div id="toggle-chart" class="collapse">
     <form action="#" method="POST">
       <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" name="toggle_tyovuorojen_maara" id="toggle_tyovuorojen_maara"> Työvuorojen määrä ajanjaksolla
+        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tyovuorojen_maara'])) echo 'checked="checked"'; ?>
+          name="toggle_tyovuorojen_maara" id="toggle_tyovuorojen_maara"> Työvuorojen määrä ajanjaksolla
       </label>
       <br>
       <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" name="toggle_lomat_ja_poissaolot" id="toggle_lomat_ja_poissaolot"> Lomat ja poissaolot
+        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_lomat_ja_poissaolot'])) echo 'checked="checked"'; ?>
+          name="toggle_lomat_ja_poissaolot" id="toggle_lomat_ja_poissaolot"> Lomat ja poissaolot
       </label>
       <br>
       <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" name="toggle_uudet_lopettaneet_asiakkaat_kpl" id="toggle_uudet_lopettaneet_asiakkaat_kpl"> Uudet ja lopettaneet asiakkaat: KPL määrä
+        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_kpl'])) echo 'checked="checked"'; ?>
+          name="toggle_uudet_lopettaneet_asiakkaat_kpl" id="toggle_uudet_lopettaneet_asiakkaat_kpl"> Uudet ja lopettaneet asiakkaat: KPL määrä
       </label>
       <br>
       <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" name="toggle_uudet_lopettaneet_asiakkaat_tuovuorot" id="toggle_uudet_lopettaneet_asiakkaat_tuovuorot"> Uudet ja lopettaneet asiakkaat: Suunnitellut työvuorot
+        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_tuovuorot'])) echo 'checked="checked"'; ?>
+          name="toggle_uudet_lopettaneet_asiakkaat_tuovuorot" id="toggle_uudet_lopettaneet_asiakkaat_tuovuorot"> Uudet ja lopettaneet asiakkaat: Suunnitellut työvuorot
       </label>
       <br>
       <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" name="toggle_tyontekijat_eniten_tunteja" id="toggle_tyontekijat_eniten_tunteja"> Työntekijät, joilla eniten hyväksyttyjä tunteja
+        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tyontekijat_eniten_tunteja'])) echo 'checked="checked"'; ?>
+          name="toggle_tyontekijat_eniten_tunteja" id="toggle_tyontekijat_eniten_tunteja"> Työntekijät, joilla eniten hyväksyttyjä tunteja
       </label>
       <br>
       <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" name="toggle_asiakkaat_eniten_tunteja" id="toggle_asiakkaat_eniten_tunteja"> Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja
+        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_asiakkaat_eniten_tunteja'])) echo 'checked="checked"'; ?>
+          name="toggle_asiakkaat_eniten_tunteja" id="toggle_asiakkaat_eniten_tunteja"> Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja
       </label>
       <br>
       <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" name="toggle_tunnit" id="toggle_tunnit"> Suunnitellut, luetut ja hyväksytyt tunnit
+        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tunnit'])) echo 'checked="checked"'; ?>
+          name="toggle_tunnit" id="toggle_tunnit"> Suunnitellut, luetut ja hyväksytyt tunnit
       </label>
       <br>
       <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" name="toggle_eniten_suunniteltu_kestot" id="toggle_eniten_suunniteltu_kestot"> Eniten suunniteltu työvuoro: Kestot
+        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_eniten_suunniteltu_kestot'])) echo 'checked="checked"'; ?>
+          name="toggle_eniten_suunniteltu_kestot" id="toggle_eniten_suunniteltu_kestot"> Eniten suunniteltu työvuoro: Kestot
       </label>
       <br>
       <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" name="toggle_eniten_suunniteltu_kpl" id="toggle_eniten_suunniteltu_kpl"> Eniten suunniteltu työvuoro: KPL
+        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_eniten_suunniteltu_kpl'])) echo 'checked="checked"'; ?>
+          name="toggle_eniten_suunniteltu_kpl" id="toggle_eniten_suunniteltu_kpl"> Eniten suunniteltu työvuoro: KPL
       </label>
       <br>
       <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" name="toggle_lahetetut_laskut_maara_summa" id="toggle_lahetetut_laskut_maara_summa"> Lähetettyjen laskujen määrä ja summa
+        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_lahetetut_laskut_maara_summa'])) echo 'checked="checked"'; ?>
+          name="toggle_lahetetut_laskut_maara_summa" id="toggle_lahetetut_laskut_maara_summa"> Lähetettyjen laskujen määrä ja summa
       </label>
       <br>
       <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" name="toggle_liikevaihto_arvokkaimmat_asiakkaat" id="toggle_liikevaihto_arvokkaimmat_asiakkaat"> Liikevaihto arvokkaimmat asiakkaat
+        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_liikevaihto_arvokkaimmat_asiakkaat'])) echo 'checked="checked"'; ?>
+          name="toggle_liikevaihto_arvokkaimmat_asiakkaat" id="toggle_liikevaihto_arvokkaimmat_asiakkaat"> Liikevaihto arvokkaimmat asiakkaat
       </label>
       <br>
       <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" name="toggle_tyontekijat" id="toggle_tyontekijat"> Työntekijät
+        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tyontekijat'])) echo 'checked="checked"'; ?>
+          name="toggle_tyontekijat" id="toggle_tyontekijat"> Työntekijät
       </label>
       <br>
       <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" name="toggle_onlinevaraukset" id="toggle_onlinevaraukset"> Onlinevaraukset
+        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_onlinevaraukset'])) echo 'checked="checked"'; ?>
+          name="toggle_onlinevaraukset" id="toggle_onlinevaraukset"> Onlinevaraukset
       </label>
       <br>
       <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" name="toggle_eniten_tuotteet_palvelut_euro" id="toggle_eniten_tuotteet_palvelut_euro"> Eniten tuotteet ja palvelut euro
+        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_eniten_tuotteet_palvelut_euro'])) echo 'checked="checked"'; ?>
+          name="toggle_eniten_tuotteet_palvelut_euro" id="toggle_eniten_tuotteet_palvelut_euro"> Eniten tuotteet ja palvelut euro
       </label>
       <br>
       <div class="row">
