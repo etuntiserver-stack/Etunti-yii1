@@ -5,22 +5,36 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
 <style>
-  #toggle-chart {
+	/* Container div for the chart toggle menu. */
+	#toggle-menu-container {
+		position: relative;
+	}
+
+	/* Chart toggle menu (hidden, collapsible). */
+  #toggle-menu {
     position: absolute;
     z-index: 999;
     background-color:whitesmoke;
     border: 1px solid #ddd;
     padding: 2px 8px;
   }
-  #toggle-chart-save {
+
+	/* Save button of the toggle chart form. */
+  #toggle-menu-save {
     margin: 12px 0px 6px;
   }
+
+	/* Add margin between the automatic bootstrap-toggle checkboxes. */
   .toggle.custom {
     margin: 4px 0px;
   }
+
+	/* Remove automatic padding from the bootstrap-toggle input containers. */
   .checkbox-inline, .radio-inline {
     padding-left: 0px;
   }
+
+	/* Container div for all displayed charts. */
   .chart-container {
     height: 350px;
   }
@@ -30,12 +44,14 @@
 -- Yläpalkki
 ------------------------------------------------------------------------------->
 
-<button class="btn-primary" data-toggle="collapse" data-target="#toggle-chart" aria-expanded="false" aria-controls="toggle-chart">
+<!-- Toggle button -->
+<button class="btn-primary" data-toggle="collapse" data-target="#toggle-menu" aria-expanded="false" aria-controls="toggle-menu">
   <b>Valitse näytetyt kaaviot</b>
 </button>
 
-<div style="position:relative">
-  <div id="toggle-chart" class="collapse">
+<!-- Main chart toggle menu -->
+<div id="toggle-menu-container">
+  <div id="toggle-menu" class="collapse">
     <form action="#" method="POST">
       <label class="checkbox-inline">
         <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tyovuorojen_maara'])) echo 'checked="checked"'; ?>
@@ -109,13 +125,14 @@
       <br>
       <div class="row">
         <div class="col-sm-3 col-xs-offset-4">
-          <button type="submit" id="toggle-chart-save" class="btn btn-primary btn-sm">Tallenna</button>
+          <button type="submit" id="toggle-menu-save" class="btn btn-primary btn-sm">Tallenna</button>
         </div>
       </div>
     </form>
   </div>
 </div>
 
+<!-- Init bootstrap-toggle -->
 <script>
   $(function() {
     $("#toggle_tyovuorojen_maara, #toggle_lomat_ja_poissaolot, #toggle_uudet_lopettaneet_asiakkaat_kpl, " +
