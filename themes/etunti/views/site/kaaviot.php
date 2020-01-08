@@ -18,6 +18,9 @@
   .checkbox-inline, .radio-inline {
     padding-left: 0px;
   }
+  .chart-container {
+    height: 350px;
+  }
 </style>
 
 <!------------------------------------------------------------------------------
@@ -90,10 +93,58 @@
 ------------------------------------------------------------------------------->
 <div class="row">
   <div class="col-sm-6">
-    <div id="container-tyovuorojen-maara" style="height: 350px;"></div>
+    <div class="chart-container" id="container_tyovuorojen_maara"></div>
   </div>
   <div class="col-sm-6">
-    <div id="container-uudet-lopettaneet-asiakkaat-kpl" style="height: 350px;"></div>
+    <div class="chart-container" id="container_lomat_ja_poissaolot"></div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6">
+    <div class="chart-container" id="container_uudet_lopettaneet_asiakkaat_kpl"></div>
+  </div>
+  <div class="col-sm-6">
+    <div class="chart-container" id="container_uudet_lopettaneet_asiakkaat_tuovuorot"></div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6">
+    <div class="chart-container" id="container_tyontekijat_eniten_tunteja"></div>
+  </div>
+  <div class="col-sm-6">
+    <div class="chart-container" id="container_asiakkaat_eniten_tunteja"></div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6">
+    <div class="chart-container" id="container_tunnit"></div>
+  </div>
+  <div class="col-sm-6">
+    <div class="chart-container" id="container_eniten_suunniteltu_kestot"></div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6">
+    <div class="chart-container" id="container_eniten_suunniteltu_kpl"></div>
+  </div>
+  <div class="col-sm-6">
+    <div class="chart-container" id="container_lahetetut_laskut_maara_summa"></div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6">
+    <div class="chart-container" id="container_liikevaihto_arvokkaimmat_asiakkaat"></div>
+  </div>
+  <div class="col-sm-6">
+    <div class="chart-container" id="container_tyontekijat"></div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6">
+    <div class="chart-container" id="container_onlinevaraukset"></div>
+  </div>
+  <div class="col-sm-6">
+    <div class="chart-container" id="container_eniten_tuotteet_palvelut_euro"></div>
   </div>
 </div>
 <?php
@@ -163,7 +214,7 @@ foreach ($asiakkaat as $v) {
 ?>
 
 <script>
-  Highcharts.chart('container-tyovuorojen-maara', {
+  Highcharts.chart('container_tyovuorojen_maara', {
     chart: {
       type: '<?= (isset($_GET["chart_tyyppi"])) ? $_GET["chart_tyyppi"] : "line" ?>'
     },
@@ -256,7 +307,7 @@ foreach ($asiakkaat as $v) {
 ?>
 
 <script>
-Highcharts.chart('container-uudet-lopettaneet-asiakkaat-kpl', {
+Highcharts.chart('container_uudet_lopettaneet_asiakkaat_kpl', {
     chart: {
         type: '<?=(isset($_GET["chart_tyyppi"]))?$_GET["chart_tyyppi"]:"line"?>'
     },
