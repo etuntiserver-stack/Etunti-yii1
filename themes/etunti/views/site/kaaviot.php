@@ -12,6 +12,9 @@
     border: 1px solid #ddd;
     padding: 2px 8px;
   }
+  #toggle-chart-save {
+    margin: 12px 0px 6px;
+  }
   .toggle.custom {
     margin: 4px 0px;
   }
@@ -26,53 +29,79 @@
 <!------------------------------------------------------------------------------
 -- Yläpalkki
 ------------------------------------------------------------------------------->
-<button class="btn-primary" data-toggle="collapse" data-target="#toggle-chart" aria-expanded="false" aria-controls="toggle-chart"><b>Valitse näytetyt kaaviot</b></button>
+
+<button class="btn-primary" data-toggle="collapse" data-target="#toggle-chart" aria-expanded="false" aria-controls="toggle-chart">
+  <b>Valitse näytetyt kaaviot</b>
+</button>
+
 <div style="position:relative">
   <div id="toggle-chart" class="collapse">
-    <label class="checkbox-inline">
-      <input type="checkbox" data-style="custom" id="toggle_tyovuorojen_maara"> Työvuorojen määrä ajanjaksolla
-    </label><br>
-    <label class="checkbox-inline">
-      <input type="checkbox" data-style="custom" id="toggle_lomat_ja_poissaolot"> Lomat ja poissaolot
-    </label><br>
-    <label class="checkbox-inline">
-      <input type="checkbox" data-style="custom" id="toggle_uudet_lopettaneet_asiakkaat_kpl"> Uudet ja lopettaneet asiakkaat: KPL määrä
-    </label><br>
-    <label class="checkbox-inline">
-      <input type="checkbox" data-style="custom" id="toggle_uudet_lopettaneet_asiakkaat_tuovuorot"> Uudet ja lopettaneet asiakkaat: Suunnitellut työvuorot
-    </label><br>
-    <label class="checkbox-inline">
-      <input type="checkbox" data-style="custom" id="toggle_tyontekijat_eniten_tunteja"> Työntekijät, joilla eniten hyväksyttyjä tunteja
-    </label><br>
-    <label class="checkbox-inline">
-      <input type="checkbox" data-style="custom" id="toggle_asiakkaat_eniten_tunteja"> Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja
-    </label><br>
-    <label class="checkbox-inline">
-      <input type="checkbox" data-style="custom" id="toggle_tunnit"> Suunnitellut, luetut ja hyväksytyt tunnit
-    </label><br>
-    <label class="checkbox-inline">
-      <input type="checkbox" data-style="custom" id="toggle_eniten_suunniteltu_kestot"> Eniten suunniteltu työvuoro: Kestot
-    </label><br>
-    <label class="checkbox-inline">
-      <input type="checkbox" data-style="custom" id="toggle_eniten_suunniteltu_kpl"> Eniten suunniteltu työvuoro: KPL
-    </label><br>
-    <label class="checkbox-inline">
-      <input type="checkbox" data-style="custom" id="toggle_lahetetut_laskut_maara_summa"> Lähetettyjen laskujen määrä ja summa
-    </label><br>
-    <label class="checkbox-inline">
-      <input type="checkbox" data-style="custom" id="toggle_liikevaihto_arvokkaimmat_asiakkaat"> Liikevaihto arvokkaimmat asiakkaat
-    </label><br>
-    <label class="checkbox-inline">
-      <input type="checkbox" data-style="custom" id="toggle_tyontekijat"> Työntekijät
-    </label><br>
-    <label class="checkbox-inline">
-      <input type="checkbox" data-style="custom" id="toggle_onlinevaraukset"> Onlinevaraukset
-    </label><br>
-    <label class="checkbox-inline">
-      <input type="checkbox" data-style="custom" id="toggle_eniten_tuotteet_palvelut_euro"> Eniten tuotteet ja palvelut euro
-    </label><br>
+    <form action="#" method="POST">
+      <label class="checkbox-inline">
+        <input type="checkbox" data-style="custom" name="toggle_tyovuorojen_maara" id="toggle_tyovuorojen_maara"> Työvuorojen määrä ajanjaksolla
+      </label>
+      <br>
+      <label class="checkbox-inline">
+        <input type="checkbox" data-style="custom" name="toggle_lomat_ja_poissaolot" id="toggle_lomat_ja_poissaolot"> Lomat ja poissaolot
+      </label>
+      <br>
+      <label class="checkbox-inline">
+        <input type="checkbox" data-style="custom" name="toggle_uudet_lopettaneet_asiakkaat_kpl" id="toggle_uudet_lopettaneet_asiakkaat_kpl"> Uudet ja lopettaneet asiakkaat: KPL määrä
+      </label>
+      <br>
+      <label class="checkbox-inline">
+        <input type="checkbox" data-style="custom" name="toggle_uudet_lopettaneet_asiakkaat_tuovuorot" id="toggle_uudet_lopettaneet_asiakkaat_tuovuorot"> Uudet ja lopettaneet asiakkaat: Suunnitellut työvuorot
+      </label>
+      <br>
+      <label class="checkbox-inline">
+        <input type="checkbox" data-style="custom" name="toggle_tyontekijat_eniten_tunteja" id="toggle_tyontekijat_eniten_tunteja"> Työntekijät, joilla eniten hyväksyttyjä tunteja
+      </label>
+      <br>
+      <label class="checkbox-inline">
+        <input type="checkbox" data-style="custom" name="toggle_asiakkaat_eniten_tunteja" id="toggle_asiakkaat_eniten_tunteja"> Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja
+      </label>
+      <br>
+      <label class="checkbox-inline">
+        <input type="checkbox" data-style="custom" name="toggle_tunnit" id="toggle_tunnit"> Suunnitellut, luetut ja hyväksytyt tunnit
+      </label>
+      <br>
+      <label class="checkbox-inline">
+        <input type="checkbox" data-style="custom" name="toggle_eniten_suunniteltu_kestot" id="toggle_eniten_suunniteltu_kestot"> Eniten suunniteltu työvuoro: Kestot
+      </label>
+      <br>
+      <label class="checkbox-inline">
+        <input type="checkbox" data-style="custom" name="toggle_eniten_suunniteltu_kpl" id="toggle_eniten_suunniteltu_kpl"> Eniten suunniteltu työvuoro: KPL
+      </label>
+      <br>
+      <label class="checkbox-inline">
+        <input type="checkbox" data-style="custom" name="toggle_lahetetut_laskut_maara_summa" id="toggle_lahetetut_laskut_maara_summa"> Lähetettyjen laskujen määrä ja summa
+      </label>
+      <br>
+      <label class="checkbox-inline">
+        <input type="checkbox" data-style="custom" name="toggle_liikevaihto_arvokkaimmat_asiakkaat" id="toggle_liikevaihto_arvokkaimmat_asiakkaat"> Liikevaihto arvokkaimmat asiakkaat
+      </label>
+      <br>
+      <label class="checkbox-inline">
+        <input type="checkbox" data-style="custom" name="toggle_tyontekijat" id="toggle_tyontekijat"> Työntekijät
+      </label>
+      <br>
+      <label class="checkbox-inline">
+        <input type="checkbox" data-style="custom" name="toggle_onlinevaraukset" id="toggle_onlinevaraukset"> Onlinevaraukset
+      </label>
+      <br>
+      <label class="checkbox-inline">
+        <input type="checkbox" data-style="custom" name="toggle_eniten_tuotteet_palvelut_euro" id="toggle_eniten_tuotteet_palvelut_euro"> Eniten tuotteet ja palvelut euro
+      </label>
+      <br>
+      <div class="row">
+        <div class="col-sm-3 col-xs-offset-4">
+          <button type="submit" id="toggle-chart-save" class="btn btn-primary btn-sm">Tallenna</button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
+
 <script>
   $(function() {
     $("#toggle_tyovuorojen_maara, #toggle_lomat_ja_poissaolot, #toggle_uudet_lopettaneet_asiakkaat_kpl, " +
@@ -148,6 +177,7 @@
   </div>
 </div>
 <?php
+
 $from = '01.12.2018';
 $to = '30.11.2019';
 $months=array(
