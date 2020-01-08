@@ -3558,7 +3558,7 @@ class TyovuorootController extends Controller
 	<?php
 	}
 
-	public function actionPvmTarkistus_lista($this_id, $cal_start)
+	public function actionPvmTarkistus_lista($this_id, $cal_start, $tid, $pvm)
 	{
 		$return 	= '';
 		$toistuva 	= false;
@@ -3568,9 +3568,17 @@ class TyovuorootController extends Controller
 
 		$startday 	= date("Y-m-d", strtotime($_POST['pfrom']));
 		$startday_ts	= strtotime($startday);
+		if( empty($_POST['pto']) ){
+			echo json_encode(['error' => '<br><center><p class="text-danger">Loppumispäivä puuttuu.</p></center>']);
+			exit;
+		}
 		$stopday 	= date("Y-m-d", strtotime($_POST['pto']));
 		$stopday_ts	= strtotime($stopday);
 		$viikkoja 	= $_POST['viikkoja'];
+		if( !isset($_POST['vkopaivat']) ){
+			echo json_encode(['error' => '<br><center><p class="text-danger">Valitse vähintään yksi viikonpäivä.</p></center>']);
+			exit;
+		}
 		$viikko_paivat 	= $_POST['vkopaivat'];
 		$tyopaari 	= $_POST['tyopaari'];
 
@@ -3611,7 +3619,7 @@ class TyovuorootController extends Controller
 			and strtotime($_POST['pfrom']) >= strtotime(date("d.m.Y")) 
 		){
 			$return .= '<div class="alert bg-info">';
-			$return .= '<center><h3>Huomio! Aloituspäivä on muutettu, jolloin ketju jakataan kahdeksi puoleksi.</h3></center>';
+			$return .= '<center><h4>Aloituspäivä on muutettu. Uusi ketju luodaan, ja vanha ketju asetetaan päättymään '.date("d.m.Y").' päivänä.<br><br>Huomio! Nykypäivän ja uuden ketjun aloituspäivän väliset työvuorot poistetaan.</h4></center>';
 			$return .= '<br>';
 			$return .= '<table class="table table-bordered">';
 			$return .= '<tr>';
@@ -3710,17 +3718,17 @@ class TyovuorootController extends Controller
 					}
 
 					foreach( $tids as $tid ){
-						$this_id_builder = $this->this_id_builder($model->id, $this_pvm, $tid);
+						$this_id_builder = ( $this_id != 'null' )? $this->this_id_builder($model->id, $this_pvm, $tid) : '';
+						$model_id = ( $this_id != 'null' )? $model->id : '';
 						if( isset($poistettu_pvms[$tid][$this_pvm]) )
-							$pvms[$cal_pvm][$tid] = [ 'html' => '<br><i class="link fa fa-recycle palauta_kejuun" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => true ];
+							$pvms[$cal_pvm][$tid] = [ 'html' => '<br><i class="link fa fa-recycle palauta_kejuun" toistuva_id="'.$model_id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => true ];
 						else
-							$pvms[$cal_pvm][$tid] = [ 'html' => '<br><i class="link fa fa-gear cal_tilanne" toistuva_id="'.$model->id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => false ];
+							$pvms[$cal_pvm][$tid] = [ 'html' => '<br><i class="link fa fa-gear cal_tilanne" toistuva_id="'.$model_id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => false ];
 					}
 				}
 			}
 			$date->modify("+{$viikkoja}week");
 		}
-
 		$m_start = new DateTime($cal_start);
 		$m_start->modify("first day of this month");
 		$m_interval = new DateInterval('P1M');
@@ -3728,7 +3736,7 @@ class TyovuorootController extends Controller
 		$m_end->modify("+3 month");
 		$m_period = new DatePeriod($m_start, $m_interval, $m_end);
 		foreach( $tids as $tid ){
-			(isset($tt[$tid]['etusukunimi']))? $return .= '<center><h2>'.$tt[$tid]['etusukunimi'].'</h2></center>' : '' ;
+			(isset($tt[$tid]['etusukunimi']))? $return .= '<center><h2><i class="btn btn-default fa fa-arrow-left vasemalle"></i> '.$tt[$tid]['etusukunimi'].' <i class="btn btn-default fa fa-arrow-right oikealle"></i></h2></center>' : '' ;
 			$return .= '<div class="row">';
 			foreach ($m_period as $dt) {
 				$return .= '<div class="col-sm-4">';
@@ -3883,8 +3891,8 @@ class TyovuorootController extends Controller
 					'haku_to' 	=> $haku_to,
 					'haku_tids'	=> $haku_tids,
 					'model'		=> $model, 
-					'pvm'		=> $pvm,
-					'tid'		=> $tid,
+					'laatikko_pvm' 	=> $pvm, 
+					'laatikko_tid' 	=> $tid,
 					'this_id'	=> 'null',
 					'toistuva'	=> false,
 					'create_update'	=> 'create',
@@ -4176,7 +4184,7 @@ class TyovuorootController extends Controller
 			and strtotime($_POST['ToistuvatTyovuorot']['pfrom']) >= strtotime(date("d.m.Y")) 
 		){
 			$model->attributes 	= $edellinen_model;
-			$model->pto 		= date("d.m.Y", strtotime($_POST['ToistuvatTyovuorot']['pfrom'].' -1 day'));
+			$model->pto 		= date("d.m.Y");
 			if($model->save()){
 				$new_toistuva = new ToistuvatTyovuorot;
 				$new_toistuva->attributes = $post;

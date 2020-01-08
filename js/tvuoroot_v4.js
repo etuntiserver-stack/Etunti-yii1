@@ -1,5 +1,9 @@
 $(document).ready(function(){
 
+  $(document).delegate("#showres","click",function(){
+	$("#pto_ilmoitus").html('');
+  });
+
   var varaus_l = 0;
   $( ".td_varaus.varaus_l" ).each(function( index ) {
 	if( $(this).find('.tv_edit').text() !== '' ){
@@ -42,7 +46,7 @@ $(document).delegate(".cal_tilanne","click",function(){
 		'<option value="1">Peruutettu</option>' +
 		'<option value="2">Peruutettu laskutettava</option>' +
 		'</select>' +
-		'<p class="text-danger">Huomio! Valitsemalla peruuttamista luodaan yksittäinen peruutettu työvuoro.</p>' +
+		'<p class="text-danger">Huomio! Tämä työvuoro poistetaan ketjusta. Voit luoda tilalle peruutetun työvuoron valitsemalla ylläolevasta listasta.</p>' +
 		'<br><p><span class="btn btn-block btn-danger" id="cal_poista_paiva_ketjusta">Poista päivä ketjusta</span></p>' +
 		'</div></div></div>'
 	);
@@ -349,8 +353,8 @@ window.addEventListener('message', function(e) {
 		}
 		var lisa_teksti = '';
 		if(check_toistuva)
-			lisa_teksti = "Yrität irtoa toistuva ketjusta kohde.\n";
-		var r = confirm( lisa_teksti + 'Haluatko varmasti siirrä tämän? ' );
+			lisa_teksti = "Olet irroittamassa työvuoron toistuvasta ketjusta. Haluatko varmasti siirtää tämän?\n\n";
+		var r = confirm( lisa_teksti + 'Huomaa, että voit palauttaa työvuoron tähän ketjuun työvuorokortilla olevasta kalenterista.' );
 		if(!r){	jQuery.clearKaikki(); return false; }
 	}
 

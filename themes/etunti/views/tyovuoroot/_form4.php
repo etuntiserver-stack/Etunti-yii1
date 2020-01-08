@@ -472,7 +472,7 @@ $(".muokaValiko").click(function() {
 		array('empty'=>'Valitse','class'=>'form-control'));
 		?>
 		<?php else : ?>
-		<div class="text-danger">Huomio! Toistuvan ketjussa peruutukset voidaan tehdä alla olevalla kalenterilla painamalla <i class="fa fa-gear"></i> ikonia.</div>
+		<div class="text-danger">Huomio! Toistuvan ketjun peruutukset tehdään allaolevasta kalenterista, painamalla <i class="fa fa-gear"></i> ikonia valitun päivän alla.</div>
 		<?php endif; ?>
   </div>
   <div class="col-sm-3">
@@ -844,7 +844,6 @@ $(document).ready(function(){
 	</div>
 
 	<?php 
-/*
 	if(isset($model->id) and $toistuva and $poista == 1 and !empty($laatikko_tid)){
 		echo '<hr>
 		<center><h3 class="text-danger">Poistaminen</h3></center>
@@ -877,9 +876,8 @@ $(document).ready(function(){
 				Poista kaikki. '.( (is_array($tyopaari) and count($tyopaari) > 0)? 'Työparit - '.(count($tyopaari)-1).'kpl' : '' ).'
 			</span>
 		 </div>
-		</div>';
+		</div><br>';
 	}
-*/
 	?>
 
 	<?php
@@ -891,10 +889,6 @@ $(document).ready(function(){
 		$m_period = new DatePeriod($m_start, $m_interval, $m_end);
 	?>
 	<input type="hidden" id="cal_start" value="<?=$m_start->format("Y/n/j")?>">
-	<div class="row">
-	<div class="col-sm-6"><i class="btn btn-default pull-left fa fa-arrow-left vasemalle"></i></div>
-	<div class="col-sm-6"><i class="btn btn-default pull-right fa fa-arrow-right oikealle"></i></div>
-	</div>
 	<div id="sopivatPaivat" style="display:none"></div>
 
    </div>
@@ -908,7 +902,9 @@ $(document).ready(function(){
 	</div> <!-- end modal-dialog -->
 
 <br>
-
+	<?php if($toistuva): ?>
+		<p class="text-center text-danger ilmoitus_tulevaisuudesta">Lomakkeen muutokset pystyy tallentamaan vain silloin, kun alkaen -päivämäärä on tulevaisuudessa.</p>
+	<?php endif; ?>
 	<div class="panel-footer text-right">
 		<?php echo CHtml::Button('Reload',array('class'=>'btn btn-default reload')); ?>
 		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
@@ -974,12 +970,16 @@ $(document).ready(function(){
 	if(state === true){
 		$("#toistuva_aktiivinen").addClass('in');
 		if( $('#pto').val() === '' )
-		$('#pto').removeClass('bg-success').addClass('bg-danger');
+			$('#pto').addClass('bg-danger');
 		$('#toistuva-repair-funktio').addClass('in');
+		tarkistusLista('<?=$this_id?>');
 	} else {
+		$('#sopivatPaivat').html('');
+		$("#nuolet").hide();
 		$("#toistuva_aktiivinen").removeClass('in');
 		$('#submitButton').show();
 		$('#toistuva-repair-funktio').removeClass('in');
+		if('<?=$toistuva?>')
 		alert('Varoitus!!!\nKun muutat tämän työvuoron yksittäiseksi, niin tämä päivä poistetaan toistuvasta ketjusta.');
 	}
 
@@ -989,6 +989,7 @@ $(document).ready(function(){
   var pto = $("#pto").val();
   var toistuva = ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
   if( toistuva == true ){
+	$("#nuolet").show();
 	tarkistusLista('<?=$this_id?>');
   }
 
@@ -997,22 +998,34 @@ $(document).ready(function(){
   });
   $('#pfrom').on('blur change', function(){
 	if(toistuva && !pfrom_and_today_check()){
-		alert('Toistuvan työvuoron aloitus päivämäärä ei voida muokata alkamaan menneisyydestä.');
+		alert('Toistuvan työvuoron aloituspäivämäärää ei voida muokata alkamaan menneisyydestä.');
+		$("#pfrom").val(pfrom);
+		return false;
+	}
+	if(toistuva && !pfrom_and_pto_check()){
+		alert('Toistuvan työvuoron aloituspäivä ei voi olla myöhemmin kun lopetuspäivä.');
 		$("#pfrom").val(pfrom);
 		return false;
 	}
   });
   $('#pto').on('blur change', function(){
+	if(toistuva && !pfrom_and_pto_check()){
+		alert('Toistuvan työvuoron aloituspäivä ei voi olla myöhemmin kun lopetuspäivä.');
+		$("#pfrom").val(pfrom);
+		return false;
+	}
 	checkToistuvaVuosi( $(this).val() );
-	if( pto != $(this).val() ){
+	if( toistuva && pto != $(this).val() ){
 		$('.pto_save_button').removeClass('btn-default').addClass('btn-primary').removeAttr('disabled');
-		$('#pto_ilmoitus').html('<p class="small text-danger" style="position:absolute; z-index:9999; padding: 10px; background:white; border:1px #ddd solid">Olet muuttanut lopetuspäivä niin voit tallenna sen vieressä oleva painikkeella.<br>Huomio! Tämä tallennus ei ota muukaan muut muutokset.</p>');
+		$('#pto_ilmoitus').html('<p class="small text-danger" style="position:absolute; z-index:9999; padding: 10px; background:white; border:1px #ddd solid">Tallenna muutettu lopetuspäivä vieressä olevalla painikkeella.<br><br>Huomio! Muita muutoksia ei tallenneta.</p>');
 	} else {
 		$('.pto_save_button').removeClass('btn-primary').addClass('btn-default').attr('disabled', 'yes');
 	}
+	$('#pto').removeClass('bg-danger');
   });
   $('.pto_save_button').click(function(){
-	if( ('<?=$model->id?>') !== ''){
+	var r = confirm('Haluatko muuttaa ketjun lopetuspäivän ja sulkea ikkunan? Huom. muita muutoksia ei tallenneta.');
+	if(('<?=$model->id?>') !== '' && r){
 	$.ajax({
 	  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pto_muutos?id=<?=$model->id?>',
 	  data:{ pto : $("#pto").val() },
@@ -1028,28 +1041,13 @@ $(document).ready(function(){
 	});
 	}
   });
-  $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari, #tekijanVaihdo').on('blur change focus select', function(){
-	if(toistuva)
+  $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari, #tekijanVaihdo').on('blur change select', function(){
 	tarkistusLista('<?=$this_id?>');
   });
   $('#ma,#ti,#ke,#to,#pe,#la,#su').on('switchChange.bootstrapSwitch', function(event, state) {
-	if(toistuva)
 	tarkistusLista('<?=$this_id?>');
   });
-  $('.vasemalle').click(function(){
-	cal_start = $("#cal_start").val();
-	var d = new Date(cal_start);
-	d.setMonth(d.getMonth() - 3);
-	$("#cal_start").val(d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate());
-	tarkistusLista('<?=$this_id?>');
-  });
-  $('.oikealle').click(function(){
-	cal_start = $("#cal_start").val();
-	var d = new Date(cal_start);
-	d.setMonth(d.getMonth() + 3);
-	$("#cal_start").val(d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate());
-	tarkistusLista('<?=$this_id?>');
-  });
+
   function tarkistusLista(this_id){
 	if(!pfrom_and_today_check()){
 		if(!$("#pfrom").hasClass('bg-danger'))
@@ -1080,15 +1078,38 @@ $(document).ready(function(){
 	});
 
 	$.ajax({
-	  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista?this_id=' + this_id + '&cal_start=' + $("#cal_start").val(),
+	  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista?this_id=' + this_id + '&cal_start=' + $("#cal_start").val() + '&tid=<?=$laatikko_tid?>&pvm=<?=$laatikko_pvm?>',
 	  data:{ pfrom : $("#pfrom").val(), pto : $("#pto").val(), viikkoja : $("#Toistuva_viikkoja option:selected").val(), vkopaivat : vkopaivat, tyopaari : tyopaari, osoite : $('#<?=$java_prefix?>_osoite').val(), alku : $('#alku').val(), loppu : $('#loppu').val() },
 	  type:'POST',
 	  success:function(data){
 		data = JSON.parse(data);
+		if( data['error'] ){
+			$('#submitButton').hide();
+			$('#sopivatPaivat').html(data['error']).show();
+			return false;
+		}
 		//console.log(data);
 		$('#sopivatPaivat').html('');
-		$('#sopivatPaivat').append('<br><center><h3 class="text-danger">Huomio! Päivien poisto ja palautus tapahtuu ilman lomaken tallentamista</h3></center>');
+		$('#sopivatPaivat').append('<br><center><h3 class="text-danger">Huomio! Lomaketta ei tarvitse tallentaa päiviä poistaessa tai palauttaessa.</h3></center>');
 		$('#sopivatPaivat').append('<br><div class="row"><div class="col-sm-12">' + data + '</div></div>').show('slow');
+		$("#nuolet").show();
+
+
+		$('.vasemalle').click(function(){
+			cal_start = $("#cal_start").val();
+			var d = new Date(cal_start);
+			d.setMonth(d.getMonth() - 3);
+			$("#cal_start").val(d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate());
+			tarkistusLista('<?=$this_id?>');
+		});
+		$('.oikealle').click(function(){
+			cal_start = $("#cal_start").val();
+			var d = new Date(cal_start);
+			d.setMonth(d.getMonth() + 3);
+			$("#cal_start").val(d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate());
+			tarkistusLista('<?=$this_id?>');
+		});
+
    	  },
 	  error:function(data){
 		console.log(data);
@@ -1097,14 +1118,24 @@ $(document).ready(function(){
   }
   function pfrom_and_today_check(){
 	var valinnut_pfrom = $('#pfrom').val().split('.');
-	var new_pfrom = new Date(+valinnut_pfrom[1]+"/"+valinnut_pfrom[0]+"/"+valinnut_pfrom[2]); //"11/21/2011"
+	var new_pfrom = new Date(+valinnut_pfrom[1]+"/"+valinnut_pfrom[0]+"/"+valinnut_pfrom[2]);
 	var todaysDate = new Date();
 	if(new_pfrom.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
 		return false;
 	}
+	$(".ilmoitus_tulevaisuudesta").hide();
 	return true;
   }
-
+  function pfrom_and_pto_check(){
+	var valinnut_pfrom = $('#pfrom').val().split('.');
+	var new_pfrom = new Date(+valinnut_pfrom[1]+"/"+valinnut_pfrom[0]+"/"+valinnut_pfrom[2]);
+	var valinnut_pto = $('#pto').val().split('.');
+	var new_pto = new Date(+valinnut_pto[1]+"/"+valinnut_pto[0]+"/"+valinnut_pto[2]);
+	if(new_pfrom.setHours(0,0,0,0) >= new_pto.setHours(0,0,0,0)) {
+		return false;
+	}
+	return true;
+  }
   $('#submitButton').click(function(){
 	$('#tyovuoroot-form').submit();
 	return false;
@@ -1142,7 +1173,7 @@ $(document).ready(function(){
 			pto = parseInt(pto[2]+''+pto[1]+''+pto[0]);
 		}
 		if(pto !=='' & pto < pfrom){
-			alert('Toistuvan työvuoron lopetuspäivämäärä ei voi olla ennen toistuvan työvuoron aloituspäivämäärä');
+			alert('Toistuvan työvuoron lopetuspäivämäärä ei voi olla ennen toistuvan työvuoron aloituspäivämäärää.');
 			return false;
 		}
 		if( $('#pfrom').val() === '' ){
@@ -1155,7 +1186,7 @@ $(document).ready(function(){
 		}
 
 		if(!pfrom_and_today_check()){
-			alert('Toistuvan työvuoron aloitus päivämäärä ei voida aloita alkamaan menneisyydestä.');
+			alert('Toistuvan työvuoron aloituspäivämäärää ei voida aloita alkamaan menneisyydestä.');
 			return false;
 		}
 		var vkopvmswitch_check = false;
@@ -1467,14 +1498,11 @@ $(document).ready(function(){
 
 
   // Poistaminen
-/*
   $('.tvpoisto').click(function(){
 	var tilanne = $(this).attr('tilanne');
 	var this_id = '<?=$this_id?>';
 	var toistuva_aktiivinen = '<?=$toistuva?>';
-
 	var todaysDate 		= new Date();
-
 	var poista_tama_paiva 	= $("#poista_tama_paiva").val().split('.');
 	poista_tama_paiva 	= new Date(+poista_tama_paiva[1]+"/"+poista_tama_paiva[0]+"/"+poista_tama_paiva[2]);
 	if( tilanne == 'poista_pvm' && poista_tama_paiva.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0) ){
@@ -1498,7 +1526,7 @@ $(document).ready(function(){
 	   data: { tilanne : tilanne, pfrom : $('#pfrom').val(), pto : $('#pto').val() },
            success: function(data){
 		data = JSON.parse(data);
-		window.location.reload();
+		laatikonPaivays();
 		//console.log(data);
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -1509,7 +1537,7 @@ $(document).ready(function(){
 	}
 
   });
-*/
+
 
   $('#alku').blur(function(){
 	$(this).removeClass('bg-danger');
