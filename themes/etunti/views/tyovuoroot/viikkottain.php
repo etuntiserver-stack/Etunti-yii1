@@ -12,8 +12,8 @@ $paivat=array(
 
 //$wkMaara = 53;
 
-$year = (isset($_GET['year'])) ? $_GET['year'] : date("Y");
-$week = (isset($_GET['week'])) ? $_GET['week'] : date('W');
+$year = (isset($_GET['year'])) ? $_GET['year'] : date("Y", strtotime('this week sunday'));
+$week = (isset($_GET['week'])) ? $_GET['week'] : date('W', strtotime('this week sunday'));
 $week = sprintf("%02d", $week);
 
 		// <-- Previous Next Weeks
