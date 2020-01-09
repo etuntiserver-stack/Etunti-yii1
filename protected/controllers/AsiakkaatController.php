@@ -1028,6 +1028,7 @@ $xml = '
       <email>'.$model->sahkoposti.'</email>
       <isactive>'.$model->aktiivinen.'</isactive>
       <isprivatecustomer>'.$isprivatecustomer.'</isprivatecustomer>
+      <EmailInvoicingAddress>'.$model->sahkopostilaskuosoite.'</EmailInvoicingAddress>
     </customerbaseinformation>
 	'.$customerfinvoicedetails.'
     <customerdeliverydetails>
