@@ -265,7 +265,7 @@ $(document).ready(function(){
   /* Tulostus */
   $(".submitForm").on('click', function(e){
 	$('.mobileTable').addClass('table-bordered');
-	$(this).prev('textarea').val(JSON.stringify($('#tableContent').html()));
+	$(this).prev('textarea').val($('#tableContent').html());
 	$(this).closest('form').submit();
 	e.preventDefault();
   });
