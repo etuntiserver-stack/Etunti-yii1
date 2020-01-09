@@ -1,16 +1,16 @@
 $(document).ready(function(){
 
-  $(document).delegate("#showres","click",function(){
+$(document).delegate("#showres","click",function(){
 	$("#pto_ilmoitus").html('');
-  });
+});
 
-  var varaus_l = 0;
-  $( ".td_varaus.varaus_l" ).each(function( index ) {
+var varaus_l = 0;
+$( ".td_varaus.varaus_l" ).each(function( index ) {
 	if( $(this).find('.tv_edit').text() !== '' ){
 		varaus_l += 1;
 	}
-  });
-  if( varaus_l > 0 ){ $('.td_varaus').addClass('in'); }
+});
+if( varaus_l > 0 ){ $('.td_varaus').addClass('in'); }
 
 function tv_arr_update(tv_arr){
 	var did = '';
@@ -22,24 +22,30 @@ function tv_arr_update(tv_arr){
 			});
 			pvm_muutos = pvm.split(".");
 			did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
-			console.log(all_tv_edit);
+			//console.log(all_tv_edit);
 			if( $("#" + did).length > 0 )
 				$("#" + did).html(all_tv_edit);
 		});
 	});
 }
 
+var cal_this_id 	= '';
+var cal_this_item 	= '';
+var cal_pvm 		= '';
+var cal_tid 		= '';
+var cal_toistuva_id 	= '';
 $(document).delegate(".cal_tilanne","click",function(){
 	$("#cal_tilanne").remove();
-	var this_item = $(this);
-	var this_id = $(this).attr('this_id');
-	var toistuva_id = $(this).attr('toistuva_id');
-	var tid = $(this).attr('tid');
-	var pvm = $(this).attr('pvm');
+	cal_this_item = $(this);
+	cal_this_id = $(this).attr('this_id');
+	cal_toistuva_id = $(this).attr('toistuva_id');
+	cal_tid = $(this).attr('tid');
+	cal_pvm = $(this).attr('pvm');
 	$(this).closest('table').before('' + 
 		'<div style="position:relative; z-index: 99999999; opacity: 2" id="cal_tilanne"><div style="position:absolute; width: 100%;">' +
 		'<div style="padding: 10px; background: white; border:1px #ddd solid; color:#333; ">' +
-		'<center><h4>' + pvm + '</h4></center>' +
+		'<span class="pull-right btn btn-sm btn-default" id="cal_sulje">x</span>' +
+		'<center><h4>' + cal_pvm + '</h4></center>' +
 		'<label>Peruuttaminen</label>' +
 		'<select class="form-control" id="cal_peruutettu">' +
 		'<option value=""></option>' +
@@ -50,53 +56,63 @@ $(document).delegate(".cal_tilanne","click",function(){
 		'<br><p><span class="btn btn-block btn-danger" id="cal_poista_paiva_ketjusta">Poista päivä ketjusta</span></p>' +
 		'</div></div></div>'
 	);
-
-	$("#cal_poista_paiva_ketjusta").click(function(){
-		var peruuttaminen = $("#cal_peruutettu option:selected").val();
-		if( peruuttaminen == 0 )
-			var r = confirm('Haluatko varmasti poistaa tämä päivä ketjusta?');
-		else
-			var r = confirm('Haluatko varmasti poistaa tämä päivä ketjusta ja luoda yksittäinen peruutettu työvuoro?');
-		if(r){
-	        $.ajax({
-	           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pois_pvm_ketjusta',
-		   type:'GET',
-		   data: { toistuva_id : toistuva_id, tid : tid, pvm : pvm, peruuttaminen : peruuttaminen },
-	           success: function(data){
-			data = JSON.parse(data);
-	        	console.log(data);
-			$("#cal_tilanne").remove();
-			if( data['return'] && data['return'] == 'ok' ){
-				this_item.closest('td').removeClass('bg-success').addClass('bg-warning');
-				this_item.removeClass('fa-gear pois_ketjusta').addClass('fa-recycle palauta_kejuun');
-				$("#" + this_id).closest('p').remove();
-			}
-	    	   },
-	    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
-		    	console.log(XMLHttpRequest);
-	 	   }
-	        });
-		}
+	$("#cal_sulje").click(function(){
+		$("#cal_tilanne").remove();
 	});
 });
+
+$(document).delegate("#cal_poista_paiva_ketjusta","click",function(){
+	var peruuttaminen = $("#cal_peruutettu option:selected").val();
+	if( peruuttaminen == 0 )
+		var r = confirm('Haluatko varmasti poistaa tämä päivä ketjusta?');
+	else
+		var r = confirm('Haluatko varmasti poistaa tämä päivä ketjusta ja luoda yksittäinen peruutettu työvuoro?');
+	if(r){
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pois_pvm_ketjusta',
+	   type:'GET',
+	   data: { toistuva_id : cal_toistuva_id, tid : cal_tid, pvm : cal_pvm, peruuttaminen : peruuttaminen },
+           success: function(data){
+		data = JSON.parse(data);
+        	//console.log(data);
+		if( data['return'] && data['return'] == 'ok' ){
+			cal_this_item.closest('td').removeClass('bg-success').addClass('bg-warning');
+			cal_this_item.removeClass('fa-gear cal_tilanne').addClass('fa-recycle palauta_kejuun');
+			$("#" + cal_this_id).closest('p').remove();
+			tv_arr_update(data['tv_arr']);
+			$("#cal_tilanne").remove();
+		}
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
+        });
+	}
+});
+
 
 $(document).delegate(".palauta_kejuun","click",function(){
 	var this_item = $(this);
 	var toistuva_id = $(this).attr('toistuva_id');
 	var tid = $(this).attr('tid');
 	var pvm = $(this).attr('pvm');
+	pvm_muutos = pvm.split(".");
+	var did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
 	var r = confirm('Haluatko varmasti palauttaa tämän?');
 	if(r){
+	// <-- Puhdistetaan laatiko per pvm ja tid
+	if( $("#" + did).length > 0 )
+		$("#" + did).html('');
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/palauta_pvm_kejuun',
 	   type:'GET',
 	   data: { toistuva_id : toistuva_id, tid : tid, pvm : pvm },
            success: function(data){
 		data = JSON.parse(data);
-        	//console.log(data);
+        	console.log(data);
 		if( data['return'] && data['return'] == 'ok' ){
 			this_item.closest('td').removeClass('bg-warning').addClass('bg-success');
-			this_item.removeClass('fa-recycle palauta_kejuun').addClass('fa-gear pois_ketjusta');
+			this_item.removeClass('fa-recycle palauta_kejuun').addClass('fa-gear cal_tilanne');
 	        	//console.log(data);
 			tv_arr_update(data['tv_arr']);
 		}
@@ -353,8 +369,8 @@ window.addEventListener('message', function(e) {
 		}
 		var lisa_teksti = '';
 		if(check_toistuva)
-			lisa_teksti = "Olet irroittamassa työvuoron toistuvasta ketjusta. Haluatko varmasti siirtää tämän?\n\n";
-		var r = confirm( lisa_teksti + 'Huomaa, että voit palauttaa työvuoron tähän ketjuun työvuorokortilla olevasta kalenterista.' );
+			lisa_teksti = "Olet irroittamassa työvuoron toistuvasta ketjusta. Haluatko varmasti siirtää tämän?\nHuomaa, että voit palauttaa työvuoron tähän ketjuun työvuorokortilla olevasta kalenterista.\n\n";
+		var r = confirm( lisa_teksti + 'Oletko varmaa?' );
 		if(!r){	jQuery.clearKaikki(); return false; }
 	}
 

@@ -913,8 +913,24 @@ public function actionImei($dom)
 			}
 
 			$sel = '';
+$sel .= $ttekija->id;
 			$sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
 			$sel .= '<option value=>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
+			$tv_controller = Yii::app()->createController('Tyovuoroot');
+			$pvm = date("Y-m-d");
+			$tids = [$ttekija->id];
+			$pvm_from = date("Y-m-d", strtotime($pvm));
+			$pvm_to = date("Y-m-d", strtotime($pvm));
+			$tv_arr = $tv_controller[0]->tv_arr($pvm_from, $pvm_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[], false);
+			if( isset($tv_arr[$ttekija->id][$pvm]) ){
+				ksort($tv_arr[$ttekija->id][$pvm]);
+				foreach($tv_arr[$ttekija->id][$pvm] as $k => $v){
+					foreach($v as $v2){
+						$sel .= '<option value="'.(int)$v2['kohde'].'" id="'.$v2['this_id'].'" tv_id="'.$v2['this_id'].'" status="'.$v2['status'].'" alku="'.$v2['alku'].'" loppu="'.$v2['loppu'].'">'.$v2['osoite'].'</option>';
+					}
+				}
+			}
+/*
 			foreach($tvuoro as $val){
 				$k = Kohteet::model()->findbypk($val->kohde);
 				if(isset($k->osoite) or ($val->status == 2 or $val->status == 10)){
@@ -948,6 +964,7 @@ public function actionImei($dom)
 					}
 				}
 			}
+*/
 			$sel .= '</select>';
 
 			if( $new_login ){

@@ -28,10 +28,10 @@ if(!isset($laatikko_tid)){ $laatikko_tid = ''; }
 if(!isset($laatiko_etusukunimi)){ $laatiko_etusukunimi = ''; }
 // <-- on CREATE
 if(!isset($model->id)){
-	if(isset($pvm))
-		$model->pvm = $pvm;
-	if(isset($tid))
-		$model->tid = $tid;
+	if(!empty($laatikko_pvm))
+		$model->pvm = $laatikko_pvm;
+	if(!empty($laatikko_tid))
+		$model->tid = $laatikko_tid;
 }
 $tyopaari = json_decode($model->tyopaari, true);
 
@@ -70,7 +70,6 @@ if(isset($model->id)){
 
 if($toistuva){
 	$java_prefix = 'ToistuvatTyovuorot';
-	$model->pvm = $laatikko_pvm;
 } else {
 	$java_prefix = 'Tyovuoroot';
 	$ov = Onlinevaraus::model()->findbypk($model->onlinevaraus_id);
@@ -904,6 +903,7 @@ $(document).ready(function(){
 <br>
 	<?php if($toistuva): ?>
 		<p class="text-center text-danger ilmoitus_tulevaisuudesta">Lomakkeen muutokset pystyy tallentamaan vain silloin, kun alkaen -päivämäärä on tulevaisuudessa.</p>
+		<p class="text-center text-danger">Huomio! Lomaketta ei tarvitse tallentaa päiviä poistaessa tai palauttaessa.</p>
 	<?php endif; ?>
 	<div class="panel-footer text-right">
 		<?php echo CHtml::Button('Reload',array('class'=>'btn btn-default reload')); ?>
@@ -992,7 +992,9 @@ $(document).ready(function(){
 	$("#nuolet").show();
 	tarkistusLista('<?=$this_id?>');
   }
-
+  $('#tekijanVaihdo').change(function(){
+	$('#<?=$java_prefix?>_tid').val( $('#tekijanVaihdo option:selected').val() );
+  });
   $('.reload').click(function(){
 	tarkistusLista('<?=$this_id?>');
   });
@@ -1047,7 +1049,6 @@ $(document).ready(function(){
   $('#ma,#ti,#ke,#to,#pe,#la,#su').on('switchChange.bootstrapSwitch', function(event, state) {
 	tarkistusLista('<?=$this_id?>');
   });
-
   function tarkistusLista(this_id){
 	if(!pfrom_and_today_check()){
 		if(!$("#pfrom").hasClass('bg-danger'))
@@ -1078,7 +1079,7 @@ $(document).ready(function(){
 	});
 
 	$.ajax({
-	  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista?this_id=' + this_id + '&cal_start=' + $("#cal_start").val() + '&tid=<?=$laatikko_tid?>&pvm=<?=$laatikko_pvm?>',
+	  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista?this_id=' + this_id + '&cal_start=' + $("#cal_start").val() + '&tid=' + $('#<?=$java_prefix?>_tid').val() + '&pvm=<?=$laatikko_pvm?>',
 	  data:{ pfrom : $("#pfrom").val(), pto : $("#pto").val(), viikkoja : $("#Toistuva_viikkoja option:selected").val(), vkopaivat : vkopaivat, tyopaari : tyopaari, osoite : $('#<?=$java_prefix?>_osoite').val(), alku : $('#alku').val(), loppu : $('#loppu').val() },
 	  type:'POST',
 	  success:function(data){
@@ -1090,7 +1091,6 @@ $(document).ready(function(){
 		}
 		//console.log(data);
 		$('#sopivatPaivat').html('');
-		$('#sopivatPaivat').append('<br><center><h3 class="text-danger">Huomio! Lomaketta ei tarvitse tallentaa päiviä poistaessa tai palauttaessa.</h3></center>');
 		$('#sopivatPaivat').append('<br><div class="row"><div class="col-sm-12">' + data + '</div></div>').show('slow');
 		$("#nuolet").show();
 
@@ -1715,11 +1715,6 @@ $(document).ready(function(){
 	$("#kohde_url").html('<a href="'+ url +'" target="_blank">Muokkaa '+ thisText +'</a>');
 	//console.log(thisID);
   }
-
-  $('#tekijanVaihdo').change(function(){
-	var thisId = $('#tekijanVaihdo option:selected').val();
-	$('#<?=$java_prefix?>_tid').val(thisId);
-  });
 
   $(document).delegate(".sopiiSopivat","click",function(){
 	$(this).remove();

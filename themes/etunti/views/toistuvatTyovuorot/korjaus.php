@@ -1,5 +1,22 @@
 <?php
+	$tv_controller = Yii::app()->createController('Tyovuoroot');
+	$pvm = "09.01.2020";
+	$tid = 29;
+	$tids = ["29"];
+	$pvm_from = date("Y-m-d", strtotime($pvm));
+	$pvm_to = date("Y-m-d", strtotime($pvm));
+	$tv_arr = $tv_controller[0]->tv_arr($pvm_from, $pvm_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[], false);
+	if( isset($tv_arr[$tid][$pvm]) ){
+		ksort($tv_arr[$tid][$pvm]);
+		foreach($tv_arr[$tid][$pvm] as $k => $v){
+			foreach($v as $v2){
+				echo $v2['this_id'].' '.$v2['osoite'].' '.$tv_controller[0]->tilanteet()[$v2['status']].'<br>';
+			}
+		}
+	}
 
+
+/*
 	// <-- toistuvat
 	$start_haku = '2019-11-15';
 	$stop_haku = '2020-02-01';
@@ -117,6 +134,7 @@
 	}
 	echo '</table>';
 	echo $i;
+*/
 
 /*
 		$startday	= date("Y-m-d", strtotime($attr->pfrom));
