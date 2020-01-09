@@ -129,10 +129,11 @@ class CHttpRequest extends CApplicationComponent
 		// normalize request
 
 		// !!! get_magic_quotes_gpc() is DEPRECATED in PHP 7.4.1, causing a startup error.
-		// General suggestion is simply skipping this part of code. Disabled @ 08.01.2020 -- Arttu H.
+		// Magic quotes no longer exist, so stripping slashes is unnecessary, and can corrupt data.
+		// Code commented out @ 08.01.2020 -- Arttu H.
 
-		//if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc())
-		//{
+		/*if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc())
+		{
 			if(isset($_GET))
 				$_GET=$this->stripSlashes($_GET);
 			if(isset($_POST))
@@ -141,7 +142,7 @@ class CHttpRequest extends CApplicationComponent
 				$_REQUEST=$this->stripSlashes($_REQUEST);
 			if(isset($_COOKIE))
 				$_COOKIE=$this->stripSlashes($_COOKIE);
-		//}
+		}*/
 
 		if($this->enableCsrfValidation)
 			Yii::app()->attachEventHandler('onBeginRequest',array($this,'validateCsrfToken'));
