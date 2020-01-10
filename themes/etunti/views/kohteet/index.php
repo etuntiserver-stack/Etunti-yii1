@@ -26,7 +26,7 @@
 $(document).ready(function() {
 
   $(".submitForm").on('click', function(e){
-	$(this).prev('textarea').val(JSON.stringify($('#tableContent').html()));
+	$(this).prev('textarea').val($('#tableContent').html());
 	$(this).closest('form').submit();
 	e.preventDefault();
   });

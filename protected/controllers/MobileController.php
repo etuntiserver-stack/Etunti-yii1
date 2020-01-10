@@ -102,7 +102,7 @@ class MobileController extends Controller
 		if(isset($_POST['html_content']) and isset($_POST['ext']))
 		{
 			(isset($_POST['header']))? $header = $_POST['header'] : $header = '';
-			$this->transformHtmlTo($header, json_decode($_POST['html_content']), $_POST['ext']);
+			$this->transformHtmlTo($header, $_POST['html_content'], $_POST['ext']);
 			exit;
 		}
 		echo json_encode('false');
@@ -3137,7 +3137,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		if(Yii::app()->request->getPost('tulosta'))
 		{
-
+/*
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
 	          $html2pdf->WriteHTML($this->renderPartial('tulosta_kyhteenveto', array(
@@ -3146,6 +3146,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			'to' => $to
 		  ),true));
 	          $html2pdf->Output();
+*/
 		} else {
 		  //$dataProvider->pagination->pageSize = 50;
 		  $this->render('kyhteenveto_tuntemattomat', array(
