@@ -1,20 +1,14 @@
 <?php
-	$tv_controller = Yii::app()->createController('Tyovuoroot');
-	$pvm = "09.01.2020";
-	$tid = 29;
-	$tids = ["29"];
-	$pvm_from = date("Y-m-d", strtotime($pvm));
-	$pvm_to = date("Y-m-d", strtotime($pvm));
-	$tv_arr = $tv_controller[0]->tv_arr($pvm_from, $pvm_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[], false);
-	if( isset($tv_arr[$tid][$pvm]) ){
-		ksort($tv_arr[$tid][$pvm]);
-		foreach($tv_arr[$tid][$pvm] as $k => $v){
-			foreach($v as $v2){
-				echo $v2['this_id'].' '.$v2['osoite'].' '.$tv_controller[0]->tilanteet()[$v2['status']].'<br>';
-			}
-		}
-	}
 
+			$tv_controller = Yii::app()->createController('Tyovuoroot');
+			$get_id = $tv_controller[0]->this_id('99999999000000632020011029');
+			$model 		= $get_id['model'];
+
+						$tv_new = new Tyovuoroot;
+						$cleared_attr = $tv_controller[0]->compareToistuvaAttributes($tv_new->attributes, $model->attributes);
+						$tv_new->attributes = $cleared_attr;
+
+exit;
 
 /*
 	// <-- toistuvat

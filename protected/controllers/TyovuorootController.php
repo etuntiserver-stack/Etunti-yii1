@@ -2472,7 +2472,10 @@ class TyovuorootController extends Controller
 			$osoite 	= ( isset($arvo->osoite) and !empty($arvo->osoite))?$arvo->osoite:'';
 			if(empty($osoite) and isset($arvo->kohteet->osoite))
 				$osoite 	= $arvo->kohteet->osoite;
-
+			if($arvo->status == 2)
+				$osoite = 'MATKA';
+			if($arvo->status == 10)
+				$osoite = 'LOUNASTAUKO';
 			if( !$laatikkomuoto ){
 				$return = ['this_id' => $this_id, 'kohde' => $arvo->kohde, 'alku' => $arvo->alku, 'loppu' => $arvo->loppu, 'osoite' => $osoite, 'status' => $arvo->status];
 				return $return;
@@ -3583,6 +3586,7 @@ class TyovuorootController extends Controller
 		$toistuva 	= false;
 		$pfrom_origin 	= null;
 		$viikko_paivat_origin = [];
+		$tids_origin 	= [];
 		$viikkoja_origin 	= null;
 
 		$startday 	= date("Y-m-d", strtotime($_POST['pfrom']));
@@ -3611,13 +3615,17 @@ class TyovuorootController extends Controller
 			$startday 	= date("Y-m-d", strtotime($model->pfrom));
 			$viikko_paivat_origin = json_decode($model->viikko_paivat, true);
 			$viikkoja_origin = $model->viikkoja;
+			$tids_origin[$get_id['tid']] = $get_id['tid'];
+			foreach(json_decode($model->tyopaari, true) as $tid_origin)
+				$tids_origin[$tid_origin] = $tid_origin;
+			ksort($tid_origin);
 		}
 
 		if($toistuva and !isset($model->id)){
 			echo json_encode(['error' => 'Toistuva error']);
 			exit;
 		}
-
+/*
 		if( 
 			$this_id != 'null'
 			and is_array(json_decode($model->tyopaari, true))
@@ -3631,6 +3639,42 @@ class TyovuorootController extends Controller
 				//$return .= $v.'<br>';
 			$return .= '</h3>';
 		}
+*/
+		// <-- Tids
+		$tids = [];
+		if( count($tyopaari) > 0 ){
+			$tids[$tid] = $tid;
+			foreach($tyopaari as $tp_tid){
+				$tids[$tp_tid] = $tp_tid;
+			}
+		} else {
+			$tids[$tid] = $tid;
+		}
+
+		// <-- Order tyontekijat
+		$asetukset = Asetukset::model()->findByPk(1);
+		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+			$tt_order_1 = "tekijan_nimi";
+			$tt_order_2 = "sukunimi";
+		} else {
+			$tt_order_1 = "sukunimi";
+			$tt_order_2 = "tekijan_nimi";
+		}
+		// Order tyontekijat -->
+
+		// <-- Tyontekijat
+      		$criteria = new CDbCriteria();
+		$criteria->select = "id, $tt_order_1, $tt_order_2";
+		$criteria->order = "$tt_order_1 ASC";
+		$tids_all = array_merge($tids, $tids_origin);
+		$ids = "id='".implode("' OR id='", $tids_all)."'";
+		$criteria->condition = "$ids";
+		$tt = [];
+		$tyontekijat = Tyontekijat::model()->findAll($criteria);
+		foreach($tyontekijat as $item){
+			$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1.' '.$item->$tt_order_2);
+		}
+		//     Tyontekijat -->
 
 		if( 
 			$this_id != 'null'
@@ -3657,6 +3701,10 @@ class TyovuorootController extends Controller
 			foreach(json_decode($model->viikko_paivat, true) as $vkp)
 				$return .= $this->vkoPaivatLyhyesti()[$vkp].' ';
 			$return .= '<br>Työvuorojen viikkoväli: '.$model->viikkoja;
+			$return .= '<br>Työvuorojen työntekijät: <br>';
+			foreach( $tids_origin as $tid_o ){
+				$return .= '<b>'.$tt[$tid_o]['etusukunimi'].'</b><br>';
+			}
 			$return .= '</p>';
 			$return .= '</td>';
 			$return .= '<td>';
@@ -3666,49 +3714,17 @@ class TyovuorootController extends Controller
 			foreach($viikko_paivat as $vkp)
 				$return .= $this->vkoPaivatLyhyesti()[$vkp].' ';
 			$return .= '<br>Työvuorojen viikkoväli: '.$viikkoja;
+			$return .= '<br>Työvuorojen työntekijät: <br>';
+			foreach( $tids as $tid_u ){
+				$return .= '<b>'.$tt[$tid_u]['etusukunimi'].'</b><br>';
+			}
 			$return .= '</p>';
 			$return .= '</td></tr>';
 			$return .= '</table>';
 			$return .= '</div>';
 		}
 
-		// <-- Tids
-		$tids = [];
-		if( count($tyopaari) > 0 ){
-			$tids[$tid] = $tid;
-			foreach($tyopaari as $tp_tid){
-				$tids[$tp_tid] = $tp_tid;
-			}
-		} else {
-			$tids[$tid] = $tid;
-		}
-
-		// <-- Order tyontekijat
-		$asetukset = Asetukset::model()->findByPk(1);
-		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
-			$tt_order_1 = "tekijan_nimi";
-			$tt_order_2 = "sukunimi";
-		} else {
-			$tt_order_1 = "sukunimi";
-			$tt_order_2 = "tekijan_nimi";
-		}
-		// Order tyontekijat -->
-
-       		$criteria = new CDbCriteria();
-		$criteria->select = "id, $tt_order_1, $tt_order_2";
-		$criteria->order = "$tt_order_1 ASC";
-		$ids = "id='".implode("' OR id='", $tids)."'";
-		$criteria->condition = "$ids";
-
-		// <-- Tyontekijat
-		$tt = [];
-		$tyontekijat = Tyontekijat::model()->findAll($criteria);
-		foreach($tyontekijat as $item){
-			$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1.' '.$item->$tt_order_2);
-		}
-		//     Tyontekijat -->
-
-		// <-- Poistettu_pvms
+ 		// <-- Poistettu_pvms
 		if( $this_id != 'null' and !empty($model->new_poistettu_pvm) ){
 		$poistettu_pvms = [];
 			foreach(json_decode($model->new_poistettu_pvm, true) as $key => $val)
@@ -4047,7 +4063,7 @@ class TyovuorootController extends Controller
 		exit;
 	}
 
-	protected function this_id($this_id){
+	public function this_id($this_id){
 		if( substr($this_id, 0, 8) == '99999999' ){
 			$toistuva 	= true;
 			$model 		= ToistuvatTyovuorot::model()->findByPk((int)substr($this_id, 8, 8));
@@ -4055,7 +4071,7 @@ class TyovuorootController extends Controller
 			$pvm 		= date("d.m.Y", strtotime(substr($this_id, 16, 8)));
 		} else {
 			$toistuva 	= false;
-			$model		= $this->loadModel($this_id);
+			$model		= Tyovuoroot::model()->findByPk($this_id);
 			$tid 		= $model->tid;
 			$pvm 		= $model->pvm;
 		}
@@ -4063,6 +4079,19 @@ class TyovuorootController extends Controller
 		//echo json_encode( $pvm .' '.$tid.' '.$model->id );
 		//exit;
 		return ['model' => $model, 'toistuva' => $toistuva, 'pvm' => $pvm, 'tid' => $tid];
+	}
+
+	public function compareToistuvaAttributes($tv_attr, $toistuva_attr){
+		$cleared = [];
+		foreach($tv_attr as $key => $attr){
+			if( isset($toistuva_attr[$key]) )
+				$cleared[$key] = $toistuva_attr[$key];
+		}
+		if( isset($cleared['id']) )
+			unset($cleared['id']);
+		if( isset($cleared['time']) )
+			unset($cleared['time']);
+		return $cleared;
 	}
 
 	public function actionUpdate4_form($this_id)

@@ -944,6 +944,19 @@ $(document).ready(function(){
 	offText: "Ei"
   });
 
+  $('.mult').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
+  });
+
   if($('#<?=$java_prefix?>_kohde').val() !== ''){
 	var kohdeOn = $('#<?=$java_prefix?>_kohde option:selected').val();
 	  	 $.ajax({
@@ -1055,11 +1068,17 @@ $(document).ready(function(){
 			$("#pfrom").addClass('bg-danger');
 		$(".vkopvmswitch").bootstrapSwitch('disabled', true);
 		$("#Toistuva_viikkoja").attr('disabled', 'yes');
+		$('#tekijanVaihdo').attr('disabled', 'yes');
+		$('.panel-title').after('<p id="tekijanVaihdo_huomio" class="text-center text-danger">Huomio! Piilotetut kentäät avataan kun ketjun alkaen -päivämäärä on tulevaisuudessa</p>');
+		$(".mult").multiselect("disable");
 		$('#submitButton').hide();
 	} else {
 		$("#pfrom").removeClass('bg-danger');
 		$(".vkopvmswitch").bootstrapSwitch('disabled', false);
 		$("#Toistuva_viikkoja").removeAttr('disabled');
+		$('#tekijanVaihdo').removeAttr('disabled');
+		$('#tekijanVaihdo_huomio').remove();
+		$(".mult").multiselect("enable");
 		$('#submitButton').show();
 	}
 
@@ -1477,19 +1496,6 @@ $(document).ready(function(){
      });
 
 
-  });
-
-  $('.mult').multiselect({
-	//inheritClass: true,
-	//enableFiltering: true,
-        includeSelectAllOption: true,
-	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
-	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
-	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
-	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
-	numberDisplayed: 0,
-	buttonWidth: '100%',
-        maxHeight: 300,
   });
 
   $('.timeVuorot').mask('00:00',{

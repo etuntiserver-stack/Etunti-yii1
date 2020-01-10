@@ -889,7 +889,7 @@ public function actionImei($dom)
 
 		// <-- CHECK getTyovuorotToday
 		if($_POST['check'] == 'getTyovuorotToday'){
-
+/*
 			$criteria = new CDbCriteria();
 			$criteria->order = " alku ASC ";
 			$criteria->condition = " 
@@ -911,17 +911,17 @@ public function actionImei($dom)
 				}
 				exit;
 			}
-
-			$sel = '';
-$sel .= $ttekija->id;
-			$sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
-			$sel .= '<option value=>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
+*/
 			$tv_controller = Yii::app()->createController('Tyovuoroot');
-			$pvm = date("Y-m-d");
+			$pvm = date("d.m.Y");
 			$tids = [$ttekija->id];
 			$pvm_from = date("Y-m-d", strtotime($pvm));
 			$pvm_to = date("Y-m-d", strtotime($pvm));
 			$tv_arr = $tv_controller[0]->tv_arr($pvm_from, $pvm_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[], false);
+
+			$sel = '';
+			$sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
+			$sel .= '<option value=>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
 			if( isset($tv_arr[$ttekija->id][$pvm]) ){
 				ksort($tv_arr[$ttekija->id][$pvm]);
 				foreach($tv_arr[$ttekija->id][$pvm] as $k => $v){
@@ -1580,6 +1580,30 @@ $sel .= $ttekija->id;
 			exit;
 		}
 		//     Matka, Lounastauko ja Osoite mukaan -->
+
+		// <-- Check is this Virtuaalinen toistuva
+		if( isset($_POST['tv_id']) and $_POST['tv_id'] > 0 ){
+			$tv_controller = Yii::app()->createController('Tyovuoroot');
+			$get_id = $tv_controller[0]->this_id($_POST['tv_id']);
+			if(isset($get_id['toistuva']) and $get_id['toistuva'] == true){
+				$model 		= $get_id['model'];
+				$pvm 		= $get_id['pvm'];
+				$tid 		= $get_id['tid'];		
+				if( $tv_controller[0]->toistuvaDeletePvm($model->id, $pvm, $tid) ){
+						$tv_new = new Tyovuoroot;
+						$cleared_attr = $tv_controller[0]->compareToistuvaAttributes($tv_new->attributes, $model->attributes);
+						$tv_new->attributes = $cleared_attr;
+						$tv_new->pvm = date("d.m.Y",strtotime($pvm));
+						$tv_new->tid = $tid;
+						if(!$tv_new->save()){
+							echo json_encode(['error' => $tv_new->getErrors()]);
+							exit;
+						} else {
+							$_POST['tv_id'] = $tv_new->id;
+						}
+				}
+			}
+		}
 
                 $mobinsert = new Mob;
                 $mobinsert->attributes = $_POST;
