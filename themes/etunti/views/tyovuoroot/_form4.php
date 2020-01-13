@@ -998,14 +998,24 @@ $(document).ready(function(){
 
   });
 
-  var pfrom = $("#pfrom").val();
-  var pto = $("#pto").val();
-  var toistuva = ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
+  var pfrom 	= $("#pfrom").val();
+  var pto 	= $("#pto").val();
+  var tekijanVaihdo 	= $('#tekijanVaihdo option:selected').val();
+  var toistuva 	= ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
   if( toistuva == true ){
 	$("#nuolet").show();
 	tarkistusLista('<?=$this_id?>');
   }
   $('#tekijanVaihdo').change(function(){
+	if($('#tyopaari').val() !== null){
+		$($('#tyopaari').val()).each(function( index, val ) {
+			if( $('#tekijanVaihdo option:selected').val() == val ){
+				alert('Tämä henkilö on jo työparina.');
+				$('#tekijanVaihdo').val(tekijanVaihdo)
+				return false;
+			}
+		});
+	}
 	$('#<?=$java_prefix?>_tid').val( $('#tekijanVaihdo option:selected').val() );
   });
   $('.reload').click(function(){
@@ -1069,6 +1079,7 @@ $(document).ready(function(){
 		$(".vkopvmswitch").bootstrapSwitch('disabled', true);
 		$("#Toistuva_viikkoja").attr('disabled', 'yes');
 		$('#tekijanVaihdo').attr('disabled', 'yes');
+		$('#tekijanVaihdo_huomio').remove();
 		$('.panel-title').after('<p id="tekijanVaihdo_huomio" class="text-center text-danger">Huomio! Piilotetut kentäät avataan kun ketjun alkaen -päivämäärä on tulevaisuudessa</p>');
 		$(".mult").multiselect("disable");
 		$('#submitButton').hide();
@@ -1082,15 +1093,17 @@ $(document).ready(function(){
 		$('#submitButton').show();
 	}
 
-	var tyopaari = [];
+	var post_tids = [];
+	post_tids.push($('#tekijanVaihdo option:selected').val());
 	/* Työpari */
 	var tyopaari = $('#tyopaari').val();
 	if(tyopaari !== null){
 		//console.log('Uudet työparit: ' + tyopaari);
 		$(tyopaari).each(function( index, val ) {
-			tyopaari.push(val);
+			post_tids.push(val);
 		});
 	}
+
 	/* vkopaivat */
 	var vkopaivat = [];
 	$("input.vkopvmswitch:checkbox:checked").each(function( ) {
@@ -1099,7 +1112,7 @@ $(document).ready(function(){
 
 	$.ajax({
 	  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista?this_id=' + this_id + '&cal_start=' + $("#cal_start").val() + '&tid=' + $('#<?=$java_prefix?>_tid').val() + '&pvm=<?=$laatikko_pvm?>',
-	  data:{ pfrom : $("#pfrom").val(), pto : $("#pto").val(), viikkoja : $("#Toistuva_viikkoja option:selected").val(), vkopaivat : vkopaivat, tyopaari : tyopaari, osoite : $('#<?=$java_prefix?>_osoite').val(), alku : $('#alku').val(), loppu : $('#loppu').val() },
+	  data:{ pfrom : $("#pfrom").val(), pto : $("#pto").val(), viikkoja : $("#Toistuva_viikkoja option:selected").val(), vkopaivat : vkopaivat, post_tids : post_tids, osoite : $('#<?=$java_prefix?>_osoite').val(), alku : $('#alku').val(), loppu : $('#loppu').val() },
 	  type:'POST',
 	  success:function(data){
 		data = JSON.parse(data);

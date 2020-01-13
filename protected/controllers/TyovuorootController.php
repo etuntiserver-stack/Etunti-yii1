@@ -3603,7 +3603,7 @@ class TyovuorootController extends Controller
 			exit;
 		}
 		$viikko_paivat 	= $_POST['vkopaivat'];
-		$tyopaari 	= $_POST['tyopaari'];
+		$post_tids 	= $_POST['post_tids'];
 
 		if( $this_id != 'null' ){
 			$get_id 	= $this->this_id($this_id);
@@ -3642,13 +3642,8 @@ class TyovuorootController extends Controller
 */
 		// <-- Tids
 		$tids = [];
-		if( count($tyopaari) > 0 ){
-			$tids[$tid] = $tid;
-			foreach($tyopaari as $tp_tid){
-				$tids[$tp_tid] = $tp_tid;
-			}
-		} else {
-			$tids[$tid] = $tid;
+		foreach($post_tids as $tp_tid){
+			$tids[$tp_tid] = $tp_tid;
 		}
 
 		// <-- Order tyontekijat
@@ -4096,13 +4091,13 @@ class TyovuorootController extends Controller
 
 	public function actionUpdate4_form($this_id)
 	{
+		$asetukset = Asetukset::model()->findByPk(1);
 		$get_id 	= $this->this_id($this_id);
 		$model 		= $get_id['model'];
 		$toistuva 	= $get_id['toistuva'];
 		$pvm 		= $get_id['pvm'];
 		$tid 		= $get_id['tid'];
 		$etusukunimi	= $this->etuSukunimi($tid);
-
 
 		$haku_tids = [];
 		$haku_tids[$tid] = [$tid];
@@ -4113,26 +4108,27 @@ class TyovuorootController extends Controller
 		$haku_from = date("Y-m-d", strtotime(Yii::app()->session['from']));
 		$haku_to = date("Y-m-d", strtotime(Yii::app()->session['to']));
 
-		$criteria = new CDBcriteria;
-		// <-- Return order etu ja sukunimella
-		$site = Yii::app()->createController('Site');
-		$criteria = $site[0]->etuSukunimiCriteria($criteria);
-		//     Return order etu ja sukunimella -->
-		$criteria->condition="aktiivinen=1";
-	  	$t = Tyontekijat::model()->findAll($criteria);
-		$tekijan_nimi = '<select id="tekijanVaihdo" class="form-control" '.((!empty($model->tyopaari))?'disabled':'').'>';
-		if(count($t) > 0)
-		{
-		   if($model->tid == 0)
-		   $tekijan_nimi .= '<option value="'.$model->id.'">'.Yii::t('main', 'Valitse').'</option>';
+		// <-- Order tyontekijat
+		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+			$tt_order_1 = "tekijan_nimi";
+			$tt_order_2 = "sukunimi";
+		} else {
+			$tt_order_1 = "sukunimi";
+			$tt_order_2 = "tekijan_nimi";
+		}
+		// Order tyontekijat -->
 
-		   foreach($t as $tekijanData)
-		   {
-			if($tekijanData->id == $model->tid)
-			$tekijan_nimi .= '<option value="'.$tekijanData->id.'" selected>'.$this->etuSukunimi($tekijanData->id).'</option>';
+       		$criteria = new CDbCriteria();
+		$criteria->select = "id, $tt_order_1, $tt_order_2";
+		$criteria->order = "$tt_order_1 ASC";
+		$criteria->condition = "aktiivinen=1";
+	  	$t = Tyontekijat::model()->findAll($criteria);
+		$tekijan_nimi = '<select id="tekijanVaihdo" class="form-control">';
+		foreach($t as $tekijanData){
+			if($tekijanData->id == $tid)
+			$tekijan_nimi .= '<option value="'.$tekijanData->id.'" selected>'.$tekijanData->$tt_order_1.' '.$tekijanData->$tt_order_2.'</option>';
 			else
-			$tekijan_nimi .= '<option value="'.$tekijanData->id.'">'.$this->etuSukunimi($tekijanData->id).'</option>';
-		   }
+			$tekijan_nimi .= '<option value="'.$tekijanData->id.'">'.$tekijanData->$tt_order_1.' '.$tekijanData->$tt_order_2.'</option>';
 		}
 		$tekijan_nimi .= '</select>';
 
