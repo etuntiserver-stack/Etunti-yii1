@@ -888,8 +888,7 @@ public function actionImei($dom)
 		//     CHECK tehty -->
 
 		// <-- CHECK getTyovuorotToday
-		if($_POST['check'] == 'getTyovuorotToday'){
-/*
+		if( !isset($_POST['with_virtual']) and $_POST['check'] == 'getTyovuorotToday'){ // ($_POST['with_virtual']) vanha versioille 0.0.635 ja alle
 			$criteria = new CDbCriteria();
 			$criteria->order = " alku ASC ";
 			$criteria->condition = " 
@@ -911,26 +910,10 @@ public function actionImei($dom)
 				}
 				exit;
 			}
-*/
-			$tv_controller = Yii::app()->createController('Tyovuoroot');
-			$pvm = date("d.m.Y");
-			$tids = [$ttekija->id];
-			$pvm_from = date("Y-m-d", strtotime($pvm));
-			$pvm_to = date("Y-m-d", strtotime($pvm));
-			$tv_arr = $tv_controller[0]->tv_arr($pvm_from, $pvm_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[], false);
 
 			$sel = '';
 			$sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
 			$sel .= '<option value=>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
-			if( isset($tv_arr[$ttekija->id][$pvm]) ){
-				ksort($tv_arr[$ttekija->id][$pvm]);
-				foreach($tv_arr[$ttekija->id][$pvm] as $k => $v){
-					foreach($v as $v2){
-						$sel .= '<option value="'.(int)$v2['kohde'].'" id="'.$v2['this_id'].'" tv_id="'.$v2['this_id'].'" status="'.$v2['status'].'" alku="'.$v2['alku'].'" loppu="'.$v2['loppu'].'">'.$v2['osoite'].'</option>';
-					}
-				}
-			}
-/*
 			foreach($tvuoro as $val){
 				$k = Kohteet::model()->findbypk($val->kohde);
 				if(isset($k->osoite) or ($val->status == 2 or $val->status == 10)){
@@ -964,7 +947,39 @@ public function actionImei($dom)
 					}
 				}
 			}
-*/
+			$sel .= '</select>';
+
+			if( $new_login ){
+				$return = ["return" => $sel];
+				$this->_sendResponse(200, CJSON::encode($return));
+			} else {
+				$this->_sendResponse(200, $sel);
+			}
+
+			exit;
+	        }
+		//     CHECK getTyovuorotToday -->
+
+		// <-- CHECK getTyovuorotToday
+		if( isset($_POST['with_virtual']) and $_POST['check'] == 'getTyovuorotToday'){ // ($_POST['with_virtual']) uudelle versiolle 0.0.636
+			$tv_controller = Yii::app()->createController('Tyovuoroot');
+			$pvm = date("d.m.Y");
+			$tids = [$ttekija->id];
+			$pvm_from = date("Y-m-d", strtotime($pvm));
+			$pvm_to = date("Y-m-d", strtotime($pvm));
+			$tv_arr = $tv_controller[0]->tv_arr($pvm_from, $pvm_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[], false);
+
+			$sel = '';
+			$sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
+			$sel .= '<option value=>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
+			if( isset($tv_arr[$ttekija->id][$pvm]) ){
+				ksort($tv_arr[$ttekija->id][$pvm]);
+				foreach($tv_arr[$ttekija->id][$pvm] as $k => $v){
+					foreach($v as $v2){
+						$sel .= '<option value="'.(int)$v2['kohde'].'" id="'.$v2['this_id'].'" tv_id="'.$v2['this_id'].'" status="'.$v2['status'].'" alku="'.$v2['alku'].'" loppu="'.$v2['loppu'].'">'.$v2['osoite'].'</option>';
+					}
+				}
+			}
 			$sel .= '</select>';
 
 			if( $new_login ){
@@ -1588,13 +1603,15 @@ public function actionImei($dom)
 			if(isset($get_id['toistuva']) and $get_id['toistuva'] == true){
 				$model 		= $get_id['model'];
 				$pvm 		= $get_id['pvm'];
-				$tid 		= $get_id['tid'];		
-				if( $tv_controller[0]->toistuvaDeletePvm($model->id, $pvm, $tid) ){
+				$tid 		= $get_id['tid'];
+				$poisto_syy	= 'AddNewTvFromVirtualByMobile';	
+				if( $tv_controller[0]->toistuvaDeletePvm($model->id, $pvm, $tid, $poisto_syy) ){
 						$tv_new = new Tyovuoroot;
 						$cleared_attr = $tv_controller[0]->compareToistuvaAttributes($tv_new->attributes, $model->attributes);
 						$tv_new->attributes = $cleared_attr;
 						$tv_new->pvm = date("d.m.Y",strtotime($pvm));
 						$tv_new->tid = $tid;
+						$tv_new->tyopaari = '';
 						if(!$tv_new->save()){
 							echo json_encode(['error' => $tv_new->getErrors()]);
 							exit;

@@ -19,7 +19,8 @@ return array(
 'Mob' => 'Sovellus',
 'Mobile' => 'Työtunnit',
 'Toteutuneet' => 'Työtunnit',
-'Auto Delete' => '<span class="btn btn-block btn-danger">Automaattinen poisto</span>'
+'Auto Delete' => '<span class="btn btn-block btn-danger">Automaattinen poisto</span>',
+'AddNewTvFromVirtualByMobile' => "Tästä päivästä on luotu yksittäinen työvuoro\n kun työntekijä valitsisi sen mobiili sovelluksesta.\n",
 );
 
 

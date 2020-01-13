@@ -1554,7 +1554,7 @@ class TyovuorootController extends Controller
 		exit;
 	}
 
-	public function toistuvaDeletePvm($id, $pvm, $tid)
+	public function toistuvaDeletePvm($id, $pvm, $tid, $syy='')
 	{
 		$toistuva = ToistuvatTyovuorot::model()->findbypk($id);
 		if(isset($toistuva->id)){
@@ -1564,7 +1564,7 @@ class TyovuorootController extends Controller
 					$poistettu_pvms[] = $val;
 			}
 
-			$poistettu_pvms[] = [$tid => date("d.m.Y", strtotime($pvm))]; // Lisataan uusi
+			$poistettu_pvms[] = ['tid'=>$tid, 'pvm'=>date("d.m.Y", strtotime($pvm)), 'syy'=>$syy]; // Lisataan uusi
 
 			$clearing = []; // Otetaan pois jos on samanlainen
 			foreach ($poistettu_pvms as $key => $value){
@@ -2407,7 +2407,8 @@ class TyovuorootController extends Controller
 			$poistettu_pvms = [];
 			if( !empty($arvo->new_poistettu_pvm) ){
 				foreach(json_decode($arvo->new_poistettu_pvm, true) as $key => $val)
-					$poistettu_pvms[$arvo->id][] = $val;
+					if( isset($val['tid']) and isset($val['pvm']) and isset($val['syy']) )
+						$poistettu_pvms[$val['tid']][$val['pvm']] = $val['syy'];
 			}
 
 			$startday 	= date("Y-m-d", strtotime($arvo->pfrom));
@@ -2431,12 +2432,8 @@ class TyovuorootController extends Controller
 							break 2;
 						}
 						foreach($tids as $tid){
-							if( isset($poistettu_pvms[$arvo->id]) ){
-								foreach($poistettu_pvms[$arvo->id] as $k => $v){
-									if( isset($v[$tid]) and $v[$tid] == $this_pvm)
-										continue 2;
-								}
-							}
+							if( isset($poistettu_pvms[$tid][$this_pvm]) )
+								continue 2;
 							$return = $this->laatikkorakenne($arvo, $status, $this_pvm, $tid, true, $laatikkomuoto);
 							$tv_arr[$tid][$this_pvm][strtotime($arvo->alku)][] = $return;
 						}
@@ -3721,10 +3718,10 @@ class TyovuorootController extends Controller
 
  		// <-- Poistettu_pvms
 		if( $this_id != 'null' and !empty($model->new_poistettu_pvm) ){
-		$poistettu_pvms = [];
+			$poistettu_pvms = [];
 			foreach(json_decode($model->new_poistettu_pvm, true) as $key => $val)
-				foreach($val as $ptid => $pvm)
-					$poistettu_pvms[$ptid][$pvm] = $pvm;
+				if( isset($val['tid']) and isset($val['pvm']) and isset($val['syy']) )
+					$poistettu_pvms[$val['tid']][$val['pvm']] = $val['syy'];
 		}
 
 		$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
@@ -3751,7 +3748,7 @@ class TyovuorootController extends Controller
 						$this_id_builder = ( $this_id != 'null' )? $this->this_id_builder($model->id, $this_pvm, $tid) : '';
 						$model_id = ( $this_id != 'null' )? $model->id : '';
 						if( isset($poistettu_pvms[$tid][$this_pvm]) )
-							$pvms[$cal_pvm][$tid] = [ 'html' => '<br><i class="link fa fa-recycle palauta_kejuun" toistuva_id="'.$model_id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => true ];
+							$pvms[$cal_pvm][$tid] = [ 'html' => '<br><i class="link fa fa-recycle palauta_kejuun" toistuva_id="'.$model_id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'" title="'.Yii::t('log', $poistettu_pvms[$tid][$this_pvm]).'"></i>', 'pois_tilanne' => true ];
 						else
 							$pvms[$cal_pvm][$tid] = [ 'html' => '<br><i class="link fa fa-gear cal_tilanne" toistuva_id="'.$model_id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => false ];
 					}
