@@ -74,7 +74,7 @@ $(document).delegate("#cal_poista_paiva_ketjusta","click",function(){
 	   data: { toistuva_id : cal_toistuva_id, tid : cal_tid, pvm : cal_pvm, peruuttaminen : peruuttaminen },
            success: function(data){
 		data = JSON.parse(data);
-        	//console.log(data);
+        	console.log(data);
 		if( data['return'] && data['return'] == 'ok' ){
 			cal_this_item.closest('td').removeClass('bg-success').addClass('bg-warning');
 			cal_this_item.removeClass('fa-gear cal_tilanne').addClass('fa-recycle palauta_kejuun');

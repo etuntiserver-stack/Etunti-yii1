@@ -1604,7 +1604,10 @@ public function actionImei($dom)
 				$model 		= $get_id['model'];
 				$pvm 		= $get_id['pvm'];
 				$tid 		= $get_id['tid'];
-				$poisto_syy	= 'AddNewTvFromVirtualByMobile';	
+
+				$u		= $this->etuSukunimi($ttekija->id);
+				$d		= date("d.m.Y");
+				$poisto_syy	= ['text'=>'AddNewTvFromVirtualByMobile', 'user'=>$u, 'date'=>$d];
 				if( $tv_controller[0]->toistuvaDeletePvm($model->id, $pvm, $tid, $poisto_syy) ){
 						$tv_new = new Tyovuoroot;
 						$cleared_attr = $tv_controller[0]->compareToistuvaAttributes($tv_new->attributes, $model->attributes);
