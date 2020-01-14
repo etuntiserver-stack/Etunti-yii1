@@ -861,7 +861,7 @@ $(document).ready(function(){
 			</span>
 		 </div>
 		 <div class="col-sm-6">
-			<legend><h4>Poista ketju</h4></legend>
+			<legend><h4>Poista koko ketju</h4></legend>
 			<div class="row">
 			 <div class="col-sm-6">
 				<input type="text" class="form-control readonly" value="'.$model->pfrom.'">
@@ -901,8 +901,11 @@ $(document).ready(function(){
 
 <br>
 	<?php if($toistuva): ?>
+		<p class="text-center text-danger ilmoitus_pvm_muuttosta">
+			Toistuvan ketjun päivijen poistot tai peruutukset tehdään kalenterista, painamalla <i class="fa fa-gear"></i> ikonia valitun päivän alla.<br>
+			Huomio! Lomaketta ei tarvitse tallentaa päiviä poistaessa tai palauttaessa.
+		</p>
 		<p class="text-center text-danger ilmoitus_tulevaisuudesta">Lomakkeen muutokset pystyy tallentamaan vain silloin, kun alkaen -päivämäärä on tulevaisuudessa.</p>
-		<p class="text-center text-danger ilmoitus_pvm_muuttosta">Huomio! Lomaketta ei tarvitse tallentaa päiviä poistaessa tai palauttaessa.</p>
 	<?php endif; ?>
 	<div class="panel-footer text-right">
 		<?php echo CHtml::Button('Reload',array('class'=>'btn btn-default reload')); ?>
@@ -977,7 +980,14 @@ $(document).ready(function(){
 			  }
 	 	});
   }
-
+  $('#ToistuvatTyovuorot_laskutettu, #ToistuvatTyovuorot_piilota_mobiilista').change(function(){
+	if( $('option:selected', this).val() == '1' ){
+		//alert('Varoitus! Kun muokat laskutettavaksi tämän päiväksi luodaan yksittäinen työvuoro poistamalla toistuvasta ketjusta.');
+		$("#is_toistuva").bootstrapSwitch('state', false);
+	} else {
+		$("#is_toistuva").bootstrapSwitch('state', true);
+	}
+  });
   $('#is_toistuva').on('switchChange.bootstrapSwitch', function(event, state) {
 	if(state === true){
 		$("#toistuva_aktiivinen").addClass('in');
@@ -993,7 +1003,7 @@ $(document).ready(function(){
 		$('#submitButton').show();
 		$('#toistuva-repair-funktio').removeClass('in');
 		if('<?=$toistuva?>')
-			alert('Varoitus!!!\nKun muutat tämän työvuoron yksittäiseksi, niin tämä päivä poistetaan toistuvasta ketjusta.');
+			alert('Varoitus!!!\nYrität irtoa tämä päivä toistuva ketjusta.\nSiitä luodaan uusi yksittäinen työvuoro.');
 		$('.ilmoitus_tulevaisuudesta, .ilmoitus_pvm_muuttosta').hide();	
 	}
 

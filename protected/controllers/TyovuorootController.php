@@ -2355,7 +2355,7 @@ class TyovuorootController extends Controller
        		$criteria = new CDbCriteria();
 		$criteria->with = array('kohteet');
 		//$criteria->limit = "10";
-		$criteria->select = "id, tid, toistuva_id, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu, status, peruutettu";
+		$criteria->select = "id, tid, toistuva_id, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu, status, peruutettu, laskutettu";
 		$criteria->order = "alku ASC"; //tt.$tt_order_1 ASC, 
 		$criteria->condition = "
 			toistuva_id=0
@@ -2515,13 +2515,15 @@ class TyovuorootController extends Controller
 				$return = ['this_id' => $this_id, 'kohde' => $arvo->kohde, 'alku' => $arvo->alku, 'loppu' => $arvo->loppu, 'osoite' => $osoite, 'status' => $arvo->status];
 				return $return;
 			}
-
-			$peruutettu = '';
+			$lisateksti = '';
+			if($arvo->laskutettu == 1){
+				$lisateksti = '<br><span class="text-primary">Laskutettu</span>';
+			}
 			if($arvo->peruutettu == 1){
-				$peruutettu = '<br><span class="text-danger">'. $this->peruutettuArray()[1] .'</span>';
+				$lisateksti = '<br><span class="text-danger">'. $this->peruutettuArray()[1] .'</span>';
 			}
 			if($arvo->peruutettu == 2){
-				$peruutettu = '<br><span class="text-danger">'. $this->peruutettuArray()[2] .'</span>';
+				$lisateksti = '<br><span class="text-danger">'. $this->peruutettuArray()[2] .'</span>';
 			}
 
 			$color 		= '#888';
@@ -2538,7 +2540,7 @@ class TyovuorootController extends Controller
 				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 				$return = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$this_id.'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
 			} else {
-				$return = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$osoite.$peruutettu.'</span>';
+				$return = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$osoite.$lisateksti.'</span>';
 
 			}
 			return $return;
