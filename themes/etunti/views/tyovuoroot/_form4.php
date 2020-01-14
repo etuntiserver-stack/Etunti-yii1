@@ -26,13 +26,12 @@ if(isset($_GET['tid'])){ $model->tid = $_GET['tid']; }
 if(!isset($laatikko_pvm)){ $laatikko_pvm = ''; }
 if(!isset($laatikko_tid)){ $laatikko_tid = ''; }
 if(!isset($laatiko_etusukunimi)){ $laatiko_etusukunimi = ''; }
-// <-- on CREATE
-if(!isset($model->id)){
-	if(!empty($laatikko_pvm))
-		$model->pvm = $laatikko_pvm;
-	if(!empty($laatikko_tid))
-		$model->tid = $laatikko_tid;
-}
+
+if(!empty($laatikko_pvm))
+	$model->pvm = $laatikko_pvm;
+if(!empty($laatikko_tid))
+	$model->tid = $laatikko_tid;
+
 $tyopaari = json_decode($model->tyopaari, true);
 
 $ohje = '';
@@ -903,7 +902,7 @@ $(document).ready(function(){
 <br>
 	<?php if($toistuva): ?>
 		<p class="text-center text-danger ilmoitus_tulevaisuudesta">Lomakkeen muutokset pystyy tallentamaan vain silloin, kun alkaen -päivämäärä on tulevaisuudessa.</p>
-		<p class="text-center text-danger">Huomio! Lomaketta ei tarvitse tallentaa päiviä poistaessa tai palauttaessa.</p>
+		<p class="text-center text-danger ilmoitus_pvm_muuttosta">Huomio! Lomaketta ei tarvitse tallentaa päiviä poistaessa tai palauttaessa.</p>
 	<?php endif; ?>
 	<div class="panel-footer text-right">
 		<?php echo CHtml::Button('Reload',array('class'=>'btn btn-default reload')); ?>
@@ -986,6 +985,7 @@ $(document).ready(function(){
 			$('#pto').addClass('bg-danger');
 		$('#toistuva-repair-funktio').addClass('in');
 		tarkistusLista('<?=$this_id?>');
+		$('.ilmoitus_tulevaisuudesta, .ilmoitus_pvm_muuttosta').show();	
 	} else {
 		$('#sopivatPaivat').html('');
 		$("#nuolet").hide();
@@ -993,7 +993,8 @@ $(document).ready(function(){
 		$('#submitButton').show();
 		$('#toistuva-repair-funktio').removeClass('in');
 		if('<?=$toistuva?>')
-		alert('Varoitus!!!\nKun muutat tämän työvuoron yksittäiseksi, niin tämä päivä poistetaan toistuvasta ketjusta.');
+			alert('Varoitus!!!\nKun muutat tämän työvuoron yksittäiseksi, niin tämä päivä poistetaan toistuvasta ketjusta.');
+		$('.ilmoitus_tulevaisuudesta, .ilmoitus_pvm_muuttosta').hide();	
 	}
 
   });
@@ -1066,13 +1067,15 @@ $(document).ready(function(){
 	});
 	}
   });
-  $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari, #tekijanVaihdo').on('blur change select', function(){
+  $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari, #tekijanVaihdo, #alku, #loppu, #ToistuvatTyovuorot_kohde').on('blur change select', function(){
 	tarkistusLista('<?=$this_id?>');
   });
   $('#ma,#ti,#ke,#to,#pe,#la,#su').on('switchChange.bootstrapSwitch', function(event, state) {
 	tarkistusLista('<?=$this_id?>');
   });
   function tarkistusLista(this_id){
+	if( !toistuva )
+		return false;
 	if(!pfrom_and_today_check()){
 		if(!$("#pfrom").hasClass('bg-danger'))
 			$("#pfrom").addClass('bg-danger');

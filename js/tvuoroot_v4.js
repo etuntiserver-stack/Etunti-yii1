@@ -101,19 +101,23 @@ $(document).delegate(".palauta_kejuun","click",function(){
 	var r = confirm('Haluatko varmasti palauttaa tämän?');
 	if(r){
 	// <-- Puhdistetaan laatiko per pvm ja tid
-	if( $("#" + did).length > 0 )
-		$("#" + did).html('');
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/palauta_pvm_kejuun',
 	   type:'GET',
 	   data: { toistuva_id : toistuva_id, tid : tid, pvm : pvm },
            success: function(data){
 		data = JSON.parse(data);
-        	console.log(data);
+        	//console.log(data);
+		if( data['return'] && data['return'] == 'on_olemassa' ){
+			alert('Huomio!\nTämä päivä ei saa palauttaa, koska löytyy yksittäinen työvuoro saman tiedon mukaan.');
+			return false;
+		}
 		if( data['return'] && data['return'] == 'ok' ){
+			if( $("#" + did).length > 0 )
+				$("#" + did).html('');
 			this_item.closest('td').removeClass('bg-warning').addClass('bg-success');
 			this_item.removeClass('fa-recycle palauta_kejuun').addClass('fa-gear cal_tilanne');
-	        	//console.log(data);
+	        	console.log(data);
 			tv_arr_update(data['tv_arr']);
 		}
     	   },

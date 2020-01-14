@@ -1381,8 +1381,11 @@ class TyovuorootController extends Controller
 				$pvm 		= $get_id['pvm'];
 				$tid 		= $get_id['tid'];
 				$tids[]		= $tid;
-				
-				if( $toistuva and $this->toistuvaDeletePvm($model->id, $pvm, $tid) ){
+
+				$u		= Yii::app()->user->nimi;
+				$d		= date("d.m.Y");
+				$poisto_syy	= ['text'=>'ByOperatioCut', 'user'=>$u, 'date'=>$d];
+				if( $toistuva and $this->toistuvaDeletePvm($model->id, $pvm, $tid, $poisto_syy) ){
 						$tv_new = new Tyovuoroot;
 						$tv_new->attributes = $model->attributes;
 						$tv_new->pvm = date("d.m.Y",strtotime($_POST['newPvm']));
@@ -1522,10 +1525,34 @@ class TyovuorootController extends Controller
 		exit;
 	}
 
+	protected function checkOlemassaTv($toistuva, $pvm, $tid){
+			$criteria=new CDbCriteria;
+			$criteria->condition = " 
+				pvm='".date("d.m.Y", strtotime($pvm))."' 
+				AND tid='".$tid."'
+				AND kohde='".$toistuva->kohde."'
+				AND alku='".$toistuva->alku."'
+				AND loppu='".$toistuva->loppu."'
+				AND status='".$toistuva->status."'
+			";
+			$tv = Tyovuoroot::model()->find($criteria);
+			if( isset($tv->id) ){
+				return true;
+			}
+		return false;
+	}
+
 	public function toistuvaRestorePvm($id, $pvm, $tid)
 	{
 		$toistuva = ToistuvatTyovuorot::model()->findbypk($id);
 		if(isset($toistuva->id)){
+			// <-- Onko oleva samanlainen
+			if( $this->checkOlemassaTv($toistuva, $pvm, $tid) ){
+				echo json_encode(['return' => 'on_olemassa']);
+				exit;
+			}
+			//     Onko oleva samanlainen -->
+
 			$poistettu_pvms = [];
 			if( !empty($toistuva->new_poistettu_pvm) ){
 				foreach(json_decode($toistuva->new_poistettu_pvm, true) as $key => $val){
@@ -2171,7 +2198,7 @@ class TyovuorootController extends Controller
 			$new_poistettu_pvm = [];
 			foreach($tids as $tid)
 				foreach(json_decode($arvo->poistettu_pvm, true) as $k => $v)
-					$new_poistettu_pvm[] = [$tid => $v];
+					$new_poistettu_pvm[] = ['tid'=>$tid, 'pvm'=>$v, 'syy'=>['text'=>'', 'user'=>'', 'date'=>'']];
 
 			$clearing = [];
 			foreach ($new_poistettu_pvm as $key => $value){
@@ -4214,14 +4241,18 @@ class TyovuorootController extends Controller
 			and !isset($_POST['is_toistuva'])
 			and (int)$laatikko_tid > 0
 		){
-			$new_tavallinen = new Tyovuoroot;
-			$new_tavallinen->attributes = $post;
-			$this->model_json_converter($_POST, $new_tavallinen, false);
-			if(!$new_tavallinen->save()){
-				echo json_encode($new_toistuva->getErrors());
+			$tv_new = new Tyovuoroot;
+			$cleared_attr = $this->compareToistuvaAttributes($tv_new->attributes, $post);
+			$tv_new->attributes = $cleared_attr;
+			$this->model_json_converter($_POST, $tv_new, false);
+			if(!$tv_new->save()){
+				echo json_encode($tv_new->getErrors());
 			} else {
-				if($this->toistuvaDeletePvm($model->id, $laatikko_pvm, $laatikko_tid)){
-					$return = ['return' => 'luottu_uusi_tyovuoro', 'id' => $new_tavallinen->id];
+				$u		= Yii::app()->user->nimi;
+				$d		= date("d.m.Y");
+				$poisto_syy	= ['text'=>'ByUpdateChangeToYksittyinen', 'user'=>$u, 'date'=>$d];
+				if($this->toistuvaDeletePvm($model->id, $laatikko_pvm, $laatikko_tid, $poisto_syy)){
+					$return = ['return' => 'luottu_uusi_tyovuoro', 'id' => $tv_new->id];
 					echo json_encode($return);
 				}
 			}
