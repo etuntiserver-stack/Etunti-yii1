@@ -980,14 +980,24 @@ $(document).ready(function(){
 			  }
 	 	});
   }
-  $('#ToistuvatTyovuorot_laskutettu, #ToistuvatTyovuorot_piilota_mobiilista').change(function(){
-	if( $('option:selected', this).val() == '1' ){
-		//alert('Varoitus! Kun muokat laskutettavaksi tämän päiväksi luodaan yksittäinen työvuoro poistamalla toistuvasta ketjusta.');
-		$("#is_toistuva").bootstrapSwitch('state', false);
-	} else {
-		$("#is_toistuva").bootstrapSwitch('state', true);
-	}
-  });
+  var varoitus_yksittainen = 'Varoitus!!!\nYrität irtoa tämä päivä toistuva ketjusta.\nSiitä luodaan uusi yksittäinen työvuoro.';
+  if('<?=$toistuva?>'){
+	var ToistuvatTyovuorot_laskutettu 		= $('#ToistuvatTyovuorot_laskutettu option:selected').val();
+	var ToistuvatTyovuorot_piilota_mobiilista 	= $('#ToistuvatTyovuorot_piilota_mobiilista option:selected').val();
+	var ToistuvatTyovuorot_tyoajanmerkinta 	= $('#ToistuvatTyovuorot_tyoajanmerkinta option:selected').val();
+	$('#ToistuvatTyovuorot_laskutettu, #ToistuvatTyovuorot_piilota_mobiilista, #ToistuvatTyovuorot_tyoajanmerkinta').change(function(){
+		if( 
+			$('#ToistuvatTyovuorot_laskutettu option:selected').val() != ToistuvatTyovuorot_laskutettu ||
+			$('#ToistuvatTyovuorot_piilota_mobiilista option:selected').val() != ToistuvatTyovuorot_piilota_mobiilista ||
+			$('#ToistuvatTyovuorot_tyoajanmerkinta option:selected').val() != ToistuvatTyovuorot_tyoajanmerkinta 
+		){
+			varoitus_yksittainen = 'Varoitus!!!\nTämä muutos pakottaa irtoa tämä päivä toistuva ketjusta.\nSiitä luodaan uusi yksittäinen työvuoro.';
+			$("#is_toistuva").bootstrapSwitch('state', false);
+		} else {
+			$("#is_toistuva").bootstrapSwitch('state', true);
+		}
+	});
+  }
   $('#is_toistuva').on('switchChange.bootstrapSwitch', function(event, state) {
 	if(state === true){
 		$("#toistuva_aktiivinen").addClass('in');
@@ -1003,7 +1013,7 @@ $(document).ready(function(){
 		$('#submitButton').show();
 		$('#toistuva-repair-funktio').removeClass('in');
 		if('<?=$toistuva?>')
-			alert('Varoitus!!!\nYrität irtoa tämä päivä toistuva ketjusta.\nSiitä luodaan uusi yksittäinen työvuoro.');
+			alert(varoitus_yksittainen);
 		$('.ilmoitus_tulevaisuudesta, .ilmoitus_pvm_muuttosta').hide();	
 	}
 
