@@ -4177,9 +4177,13 @@ class TyovuorootController extends Controller
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">
 					<span aria-hidden="true">&times;</span>
 				</button>
-	              <span class="panel-title"><i class="fa fa-clock-o"></i> 
-			'.Yii::t('main', 'Työvuoron suunnittelu').' '.(($toistuva)?'ketju: ':'').' #'.$model->id.' <span class="kohteen_lisatiedot"></span> '.$tekijan_nimi.'
-		      </span>
+			<span class="panel-title"><i class="fa fa-clock-o"></i> 
+				'.Yii::t('main', 'Työvuoron suunnittelu').' '.(($toistuva)?'ketju: ':'').' #'.$model->id.' <span class="kohteen_lisatiedot"></span> '.$tekijan_nimi.'
+			</span>
+			<div id="panel_huomio" class="text-center">
+				<span class="text-danger">Huomio! Piilotetut kentäät avataan kun ketjun alkaen -päivämäärä on tulevaisuudessa tai ottaessa pois tämä työvuoro toistuvasta ketjusta.</span><br>
+				<span style="color: orange">Keltaisen reunaan muokkamaala irotetaan päivä toistuvasta ketjusta</span>
+			</div>
 	            </div>
 	            <!-- end .panel-heading section -->
 	              <div class="panel-body p25">

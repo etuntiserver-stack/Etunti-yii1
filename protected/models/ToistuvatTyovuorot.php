@@ -24,7 +24,7 @@
 class ToistuvatTyovuorot extends DB2ActiveRecord
 {
 
-	public $peruutettu, $laskutettu;
+	public $peruutettu, $laskutettu, $piilota_mobiilista;
 
 	/**
 	 * @return string the associated database table name
@@ -104,7 +104,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('time, pfrom, pto, viikkoja, viikko_paivat, tid, kohde, pvm, alku, loppu, kesto, tyoajanmerkinta, status, tietoja, tyopaari', 'required'),
-			array('viikkoja, tid, kohde, status, ilmoitus_paattymisesta, piilota_mobiilista, tuoteID', 'numerical', 'integerOnly'=>true),
+			array('viikkoja, tid, kohde, status, ilmoitus_paattymisesta, tuoteID', 'numerical', 'integerOnly'=>true),
 			array('osoite, postinumero, postitoimipaikka, tyoajanlaatu, korjattu_poista_tama', 'length', 'max'=>255),
 			array('pfrom, pto, pvm', 'length', 'max'=>50),
 			array('alku, loppu, pituus, kesto', 'length', 'max'=>10),
@@ -176,7 +176,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 			'status' => 'Status',
 			'tietoja' => 'Tietoja',
 			'tyopaari' => 'Tyopaari',
-
+			'piilota_mobiilista'=>Yii::t('main', 'Näytä mobiilissa'),
 		);
 	}
 
