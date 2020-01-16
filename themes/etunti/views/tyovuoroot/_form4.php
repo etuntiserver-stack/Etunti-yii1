@@ -95,6 +95,8 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 
 
 <div class="section">
+	<div id="huomio_yllaosa" class="text-center"></div>
+
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'tyovuoroot-form',
 	'enableAjaxValidation'=>false,
@@ -250,7 +252,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 		<div class="input-group">
 		<?php
         	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
-		echo '<select name="'.$java_prefix.'[tyoajanmerkinta]" class="form-control pakotta_luoda_yskittainen" id="'.$java_prefix.'_tyoajanmerkinta">';
+		echo '<select name="'.$java_prefix.'[tyoajanmerkinta]" class="form-control lomake_valinta" id="'.$java_prefix.'_tyoajanmerkinta">';
 
 		 if(!empty($model->tyoajanmerkinta)){
 		   $expl = explode("/",$model->tyoajanmerkinta);
@@ -477,14 +479,14 @@ $(".muokaValiko").click(function() {
 		<?php 
         	$l = array(0=>'Kyllä',1=>'Ei');
 		echo $form->dropDownList($model,'piilota_mobiilista', $l, 
-		array('class'=>'form-control pakotta_luoda_yskittainen')) ?>
+		array('class'=>'form-control lomake_valinta')) ?>
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'laskutettu'); ?>
 		<?php 
         	$l = array(0 => 'Ei laskutettu', 1 => 'Laskutettu');
 		echo $form->dropDownList($model,'laskutettu', $l, 
-		array('class'=>'form-control pakotta_luoda_yskittainen')) ?>
+		array('class'=>'form-control lomake_valinta')) ?>
   </div>
 </div>
 <br>
@@ -784,7 +786,7 @@ $(document).ready(function(){
 
 	<br>
 	<div class="row" id="vikoPvm">
-	  <div class="col-sm-12 col-sm-offset-1">
+	  <div class="col-sm-12 text-center">
 	  <label><?php echo Yii::t('main', 'Ma'); ?></label>
 	
 	  <?php if(in_array(1, $viikko_paivat)): ?>
@@ -912,8 +914,8 @@ $(document).ready(function(){
 $(document).ready(function(){
 
   $(".sw").bootstrapSwitch({
-	size: "mini",
-	onColor: "success",
+	size: "small",
+	onColor: "primary",
 	offColor: "danger",
 	onText: "Kyllä",
 	offText: "Ei"
@@ -953,11 +955,20 @@ $(document).ready(function(){
 			  }
 	 	});
   }
+  function disable_kentaat(tilanne){
+	$('.lomake_kenta').prop('readonly', tilanne);
+	$('.lomake_valinta, .lomake_btn, #tekijanVaihdo').prop('disabled', tilanne);
+  }
   var varoitus_yksittainen = 'Varoitus!!!\nYrität irtoa tämä päivä toistuva ketjusta.\nTallennamalla luodaan uusi yksittäinen työvuoro.';
-  if( '<?=$toistuva?>' && !pfrom_and_today_check() ){
-	$('.lomake_kenta').prop('readonly', true);
-	$('#ToistuvatTyovuorot_peruutettu, .lomake_valinta, .lomake_btn').prop('disabled', true);
+  if( '<?=$toistuva?>' ){
 	$('#peruuttaminen_div, #viesti_mobiili_div').hide();
+	if( pfrom_and_today_check() ){
+		disable_kentaat(false);
+		$('#huomio_yllaosa').html('<div class="alert alert-default"><h4>Huomio!</h4>Lomakkeen muutokset vaikuttavat koko ketjuun.</div>');
+	} else {
+		disable_kentaat(true);
+		$('#huomio_yllaosa').html('<div class="alert alert-default"><h4>Huomio!</h4>Piilotetut kentäät avataan kun ketjun alkaen -päivämäärä on tulevaisuudessa tai ottaessa pois tämä työvuoro toistuvasta ketjusta.</div>');
+	}
   }
   var toistuva 	= ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
   $('#is_toistuva').on('switchChange.bootstrapSwitch', function(event, state) {
@@ -967,11 +978,12 @@ $(document).ready(function(){
 		if( $('#pto').val() === '' )
 			$('#pto').addClass('bg-danger');
 		$('#toistuva-repair-funktio').addClass('in');
-		//tarkistusLista('<?=$this_id?>'); // pochemuto uze est odin zapros
 		$('.ilmoitus_tulevaisuudesta, .ilmoitus_pvm_muuttosta').show();
 		if( !pfrom_and_laatikkopvm_check() )
 			alert('Huomio! Ketjun alkamispäivä ei sama kun tämän työvuoron päivä.');
 	} else {
+		disable_kentaat(false);
+		$('#huomio_yllaosa').html('').hide();
 		toistuva = false;
 		$('#sopivatPaivat').html('');
 		$("#toistuva_aktiivinen").removeClass('in');
@@ -980,8 +992,6 @@ $(document).ready(function(){
 		if('<?=$toistuva?>')
 			alert(varoitus_yksittainen);
 		$('.ilmoitus_tulevaisuudesta, .ilmoitus_pvm_muuttosta').hide();
-		$('.lomake_kenta').prop('readonly', false);
-		$('.lomake_valinta, .lomake_btn, #tekijanVaihdo').prop('disabled', false);
 		$('.tvpoisto, #tekijanVaihdo_huomio, .huomio_peruutuksesta').hide();
 		$(".mult").multiselect("enable");
 		$('#peruuttaminen_div, #viesti_mobiili_div').show();
@@ -994,22 +1004,6 @@ $(document).ready(function(){
   var tekijanVaihdo 	= $('#tekijanVaihdo option:selected').val();
   if( toistuva == true ){
 	tarkistusLista('<?=$this_id?>');
-	$($('.pakotta_luoda_yskittainen')).each(function() {
-		$(this).css({'border':'2px orange solid'});
-	});
-	$('.pakotta_luoda_yskittainen').focus(function() {
-		prev_val = $(this).val();
-	}).change(function() {
-		c = confirm('Tämä muutos pakottaa ota pois tämä päivä toistuvasta ketjusta.\nHaluatko jatkaa?');
-		if(!c){
-			$(this).val(prev_val);
-			return false;
-		}
-		$('#is_toistuva').bootstrapSwitch('state', false);
-		$($('.pakotta_luoda_yskittainen')).each(function() {
-			$(this).css({'border':'1px #dddddd solid'});
-		});
-	});
   } else {
 	$('.huomio_peruutuksesta').hide();
   }
@@ -1041,6 +1035,7 @@ $(document).ready(function(){
 	}
 	$('.lomake_kenta').prop('readonly', false);
 	$('#ToistuvatTyovuorot_peruutettu, .lomake_valinta, .lomake_btn').prop('disabled', false);
+	$('#huomio_yllaosa').html('');
   });
   $('#pto').on('blur change', function(){
 	if(toistuva && !pfrom_and_pto_check()){
@@ -1094,14 +1089,12 @@ $(document).ready(function(){
 		$('#tekijanVaihdo').attr('disabled', 'yes');
 		$('#tekijanVaihdo_huomio').remove();
 		$(".mult").multiselect("disable");
-		$("#panel_huomio").show();
 		$('#submitButton').hide();
 	} else {
 		$("#pfrom").removeClass('bg-danger');
 		$(".vkopvmswitch").bootstrapSwitch('disabled', false);
 		$("#Toistuva_viikkoja").removeAttr('disabled');
 		$('#tekijanVaihdo').removeAttr('disabled');
-		$('#panel_huomio').hide();
 		$(".mult").multiselect("enable");
 		$('#submitButton').show();
 	}
@@ -1291,7 +1284,6 @@ $(document).ready(function(){
 			console.log(data);
 	    	}
 	  });
-
 	  if(count > 0){
 		var r = confirm('Aika päällekkäin, haluatko jatkaa');
 		if(!r){
@@ -1304,7 +1296,6 @@ $(document).ready(function(){
 
 	var str = '';
 	$('#virheilmoitus').html('').hide();
-
 	// <-- Viimeinen kysymys
 	var r = confirm('Haluatko varmasti tallenna tämän?');
 	if(!r){ return false; }
@@ -1340,13 +1331,10 @@ $(document).ready(function(){
 	    	  }
 		});
 	}
-
 	e.preventDefault();
-
   }); /* on submit */
 
   function getAllTids(){
-
 	var tids = [];
 	tids.push($('#tekijanVaihdo option:selected').val());
 	if( ('<?=$model->id?>') !== '' && ('<?=$model->tid?>') !== $('#tekijanVaihdo option:selected').val() ){
@@ -1355,7 +1343,6 @@ $(document).ready(function(){
 	if( ('<?=$model->id?>') === '' ){
 		tids.push($('#Tyovuoroot_tid').val());
 	}
-
 	/* Työpari */
 	var tyopaari = $('#tyopaari').val();
 	if(tyopaari !== null){
@@ -1371,7 +1358,6 @@ $(document).ready(function(){
 		var tids = c.filter(function (item, pos) {return c.indexOf(item) == pos});
 	}
 	/* Työpari */
-
 	//console.log('Tids joille päivitetään laatikko: ' + tids);
 	return tids;
   }
@@ -1778,5 +1764,20 @@ $(document).ready(function(){
 	}
   }
 
+/* Hyva malli
+	$('.pakotta_luoda_yskittainen').focus(function() {
+		prev_val = $(this).val();
+	}).change(function() {
+		c = confirm('Tämä muutos pakottaa ota pois tämä päivä toistuvasta ketjusta.\nHaluatko jatkaa?');
+		if(!c){
+			$(this).val(prev_val);
+			return false;
+		}
+		$('#is_toistuva').bootstrapSwitch('state', false);
+		$($('.pakotta_luoda_yskittainen')).each(function() {
+			$(this).css({'border':'1px #dddddd solid'});
+		});
+	});
+*/
 });
 </script>

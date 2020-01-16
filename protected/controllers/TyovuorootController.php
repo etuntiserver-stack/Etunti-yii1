@@ -3713,7 +3713,7 @@ class TyovuorootController extends Controller
 			and strtotime($model->pfrom) < strtotime(date("d.m.Y")) 
 			and strtotime($_POST['pfrom']) >= strtotime(date("d.m.Y")) 
 		){
-			$return .= '<div class="alert bg-info">';
+			$return .= '<div class="alert bg-info tarkistuksen_info_ilmoitus">';
 			$return .= '<center><h4>Aloituspäivä on muutettu. Uusi ketju luodaan, ja vanha ketju asetetaan päättymään '.date("d.m.Y").' päivänä.<br><br>Huomio! Nykypäivän ja uuden ketjun aloituspäivän väliset työvuorot poistetaan.</h4></center>';
 			$return .= '<br>';
 			$return .= '<table class="table table-bordered">';
@@ -4168,7 +4168,6 @@ class TyovuorootController extends Controller
 			$tekijan_nimi .= '<option value="'.$tekijanData->id.'">'.$tekijanData->$tt_order_1.' '.$tekijanData->$tt_order_2.'</option>';
 		}
 		$tekijan_nimi .= '</select>';
-
 		$form_content = '';
 	        $form_content = '
 	        <div id="modal-form" class=" popup-basic popup-xl admin-form mfp-with-anim mfp-hide">
@@ -4180,10 +4179,6 @@ class TyovuorootController extends Controller
 			<span class="panel-title"><i class="fa fa-clock-o"></i> 
 				'.Yii::t('main', 'Työvuoron suunnittelu').' '.(($toistuva)?'ketju: ':'').' #'.$model->id.' <span class="kohteen_lisatiedot"></span> '.$tekijan_nimi.'
 			</span>
-			<div id="panel_huomio" class="text-center">
-				<span class="text-danger">Huomio! Piilotetut kentäät avataan kun ketjun alkaen -päivämäärä on tulevaisuudessa tai ottaessa pois tämä työvuoro toistuvasta ketjusta.</span><br>
-				<span style="color: orange">Keltaisen reunaan muokkamaala irotetaan päivä toistuvasta ketjusta</span>
-			</div>
 	            </div>
 	            <!-- end .panel-heading section -->
 	              <div class="panel-body p25">
