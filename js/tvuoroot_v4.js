@@ -281,6 +281,7 @@ $(document).delegate(".valitseKokopaiva","click",function(){
            type: "POST",
            data: { "pvm" : pvm, "tid" : tid },
            success: function(data){
+		d = JSON.parse(data);
 		console.log(data);
 		muisti();
            }

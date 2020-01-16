@@ -1134,9 +1134,10 @@ class TyovuorootController extends Controller
 
 	public function actionValitse_kokopaiva()
 	{
-		if(isset($_POST['pvm']) and isset($_POST['tid']))
-		{
-
+koko paiva
+		$return = [];
+		if(isset($_POST['pvm']) and isset($_POST['tid'])){
+/*
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 
 				pvm='".date("d.m.Y", strtotime($_POST['pvm']))."' 
@@ -1170,7 +1171,9 @@ class TyovuorootController extends Controller
 			  }
 			}
 				print_r($_SESSION['muistin']);
+*/
 		}
+		echo json_encode($return);
 		exit;
 
 	}

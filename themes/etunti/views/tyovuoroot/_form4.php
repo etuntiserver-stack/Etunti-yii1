@@ -1043,7 +1043,6 @@ $(document).ready(function(){
 		$("#pfrom").val(pfrom);
 		return false;
 	}
-	checkToistuvaVuosi( $(this).val() );
 	if( toistuva && pto != $(this).val() ){
 		if( '<?=$model->id?>' !== '' ){
 			$('.pto_save_button').removeClass('btn-default').addClass('btn-primary').removeAttr('disabled');
@@ -1753,16 +1752,6 @@ $(document).ready(function(){
         });
   // modal siirtaminen -->
 
-  function checkToistuvaVuosi(value){
-	var cur_year = new Date().getFullYear();
-	var pto_check_year = value.split(".");
-	var pto_year = parseInt(pto_check_year[2]);
-	if( (pto_year-cur_year) > 8 ){
-		alert('Liian pitkä aikaväli. Maksimi on 8 vuotta!');
-		$('#pto').val(pto_check_year[0] + '.' + pto_check_year[1] + '.' + cur_year);
-		return false;
-	}
-  }
 
 /* Hyva malli
 	$('.pakotta_luoda_yskittainen').focus(function() {
