@@ -151,10 +151,31 @@
 <!------------------------------------------------------------------------------
 -- Common
 ------------------------------------------------------------------------------->
-<?php
+<div id="charts-container"></div>
 
+<script>
+$(function() {
+	var charts_count = 1;
 
-?>
+	// Add chart to charts-container div.
+	function add_chart_container(options) {
+		var row_id = `charts-row-${max(charts_count / 2)}`; // row number, e.g. row 2 for container 3 (max(3/2=1.5)=2).
+		var col_id = `charts-col-${charts_count}`;          // column mnumber.
+
+		// Check whether to add new row div, e.g. container 3%2=1; new row.
+		if (charts_count % 2 == 1)
+			$('#charts-container').append(`<div class="row" id="${row_id}></div>"`);
+
+		// Add column to current row.
+		$(`#${row_id}`).append(`<div class="col-sm-6" id="${col_id}"></div>`);
+
+		// Print chart to selected column.
+		Highcharts.chart(col_id, options);
+		charts_count++;
+	}
+});
+</script>
+
 <!------------------------------------------------------------------------------
 -- Työvuorojen määrä ajanjaksolla
 ------------------------------------------------------------------------------->
