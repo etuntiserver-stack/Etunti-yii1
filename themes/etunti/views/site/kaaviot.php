@@ -138,6 +138,30 @@
 ------------------------------------------------------------------------------->
 <div id="charts-container"></div>
 
+<?php
+
+// Temporary default variables. (Copied from old code)
+$chart_type = 'line'; // line | bar | column | area
+$from = date("Y-m-d", strtotime(" -1 year first day of this month"));
+$to = date("Y-m-d", strtotime(" last day of last month"));
+$asiakas = '';
+$months = array(
+	1 => Yii::t('main', 'Tammikuu'),
+	2 => Yii::t('main', 'Helmikuu'),
+	3 => Yii::t('main', 'Maaliskuu'),
+	4 => Yii::t('main', 'Huhtikuu'),
+	5 => Yii::t('main', 'Toukokuu'),
+	6 => Yii::t('main', 'Kesäkuu'),
+	7 => Yii::t('main', 'Heinäkuu'),
+	8 => Yii::t('main', 'Elokuu'),
+	9 => Yii::t('main', 'Syyskuu'),
+	10 => Yii::t('main', 'Lokakuu'),
+	11 => Yii::t('main', 'Marraskuu'),
+	12 => Yii::t('main', 'Joulukuu')
+);
+
+?>
+
 <script>
 	var charts_count = 1;
 
@@ -165,27 +189,6 @@
 <?php if (isset($_POST['toggle_tyovuorojen_maara'])) : ?>
 
 	<?php
-
-	// Temporary variables, from previous code.
-	$chart_type = 'line'; // line | bar | column | area
-	$from = date("Y-m-d", strtotime(" -1 year first day of this month"));
-	$to = date("Y-m-d", strtotime(" last day of last month"));
-	$asiakas = '';
-
-	$months = array(
-		1 => Yii::t('main', 'Tammikuu'),
-		2 => Yii::t('main', 'Helmikuu'),
-		3 => Yii::t('main', 'Maaliskuu'),
-		4 => Yii::t('main', 'Huhtikuu'),
-		5 => Yii::t('main', 'Toukokuu'),
-		6 => Yii::t('main', 'Kesäkuu'),
-		7 => Yii::t('main', 'Heinäkuu'),
-		8 => Yii::t('main', 'Elokuu'),
-		9 => Yii::t('main', 'Syyskuu'),
-		10 => Yii::t('main', 'Lokakuu'),
-		11 => Yii::t('main', 'Marraskuu'),
-		12 => Yii::t('main', 'Joulukuu')
-	);
 
 	$tyovuoroot = Yii::app()->createController('Tyovuoroot');
 	$categories = array();
@@ -264,27 +267,6 @@
 <?php if (isset($_POST['toggle_lomat_ja_poissaolot'])) : ?>
 
 	<?php
-
-	// Temporary variables, from previous code.
-	$chart_type = 'line'; // line | bar | column | area
-	$from = date("Y-m-d", strtotime(" -1 year first day of last month"));
-	$to = date("Y-m-d", strtotime(" last day of last month"));
-	$asiakas = '';
-
-	$months = array(
-		1 => Yii::t('main', 'Tammikuu'),
-		2 => Yii::t('main', 'Helmikuu'),
-		3 => Yii::t('main', 'Maaliskuu'),
-		4 => Yii::t('main', 'Huhtikuu'),
-		5 => Yii::t('main', 'Toukokuu'),
-		6 => Yii::t('main', 'Kesäkuu'),
-		7 => Yii::t('main', 'Heinäkuu'),
-		8 => Yii::t('main', 'Elokuu'),
-		9 => Yii::t('main', 'Syyskuu'),
-		10 => Yii::t('main', 'Lokakuu'),
-		11 => Yii::t('main', 'Marraskuu'),
-		12 => Yii::t('main', 'Joulukuu')
-	);
 
 	$categories = array();
 	$begin = new DateTime(date("Y-m-d", strtotime($from)));
