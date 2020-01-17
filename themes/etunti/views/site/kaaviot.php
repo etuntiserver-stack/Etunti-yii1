@@ -165,7 +165,7 @@ $months = array(
 ?>
 
 <script>
-	var row_cols = 2; // 12 must be divisible by row_cols; 2, 3, 4, 6, 12
+	var row_cols = 3; // 12 must be divisible by row_cols; 2, 3, 4, 6, 12
 	var charts_total = 1;
 
 	// Assign column class based on selection.
