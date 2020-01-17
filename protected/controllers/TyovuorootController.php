@@ -1134,7 +1134,6 @@ class TyovuorootController extends Controller
 
 	public function actionValitse_kokopaiva()
 	{
-koko paiva
 		$return = [];
 		if(isset($_POST['pvm']) and isset($_POST['tid'])){
 /*
