@@ -754,7 +754,7 @@ $(document).ready(function(){
  <div class="row">
   <div class="col-sm-12">
    <div class="<?php echo $classCol; ?> panel-footer" id="toistuva_aktiivinen">
-	<legend><?php echo Yii::t('main','Toistuva työvuoro'); ?></legend>
+	<legend><?php echo Yii::t('main','Toistuvan työvuoroketjun asetukset'); ?></legend>
 
 	<div class="row" id="alkaen_loppuen">
 	  <div class="col-sm-4">
