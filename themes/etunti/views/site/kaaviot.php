@@ -11,33 +11,34 @@
 	}
 
 	/* Chart toggle menu (hidden, collapsible). */
-  #toggle-menu {
-    position: absolute;
-    z-index: 999;
-    background-color:whitesmoke;
-    border: 1px solid #ddd;
-    padding: 2px 8px;
-  }
+	#toggle-menu {
+		position: absolute;
+		z-index: 999;
+		background-color: whitesmoke;
+		border: 1px solid #ddd;
+		padding: 2px 8px;
+	}
 
 	/* Save button of the toggle chart form. */
-  #toggle-menu-save {
-    margin: 12px 0px 6px;
-  }
+	#toggle-menu-save {
+		margin: 12px 0px 6px;
+	}
 
 	/* Add margin between the automatic bootstrap-toggle checkboxes. */
-  .toggle.custom {
-    margin: 4px 0px;
-  }
+	.toggle.custom {
+		margin: 4px 0px;
+	}
 
 	/* Remove automatic padding from the bootstrap-toggle input containers. */
-  .checkbox-inline, .radio-inline {
-    padding-left: 0px;
-  }
+	.checkbox-inline,
+	.radio-inline {
+		padding-left: 0px;
+	}
 
 	/* Container div for all displayed charts. */
-  .chart-container {
-    height: 350px;
-  }
+	.chart-container {
+		height: 350px;
+	}
 </style>
 
 <!------------------------------------------------------------------------------
@@ -46,106 +47,90 @@
 
 <!-- Toggle button -->
 <button class="btn-primary" data-toggle="collapse" data-target="#toggle-menu" aria-expanded="false" aria-controls="toggle-menu">
-  <b>Valitse näytetyt kaaviot</b>
+	<b>Valitse näytetyt kaaviot</b>
 </button>
 
 <!-- Main chart toggle menu -->
 <div id="toggle-menu-container">
-  <div id="toggle-menu" class="collapse">
-    <form action="#" method="POST">
-      <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tyovuorojen_maara'])) echo 'checked="checked"'; ?>
-          name="toggle_tyovuorojen_maara" id="toggle_tyovuorojen_maara"> Työvuorojen määrä ajanjaksolla
-      </label>
-      <br>
-      <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_lomat_ja_poissaolot'])) echo 'checked="checked"'; ?>
-          name="toggle_lomat_ja_poissaolot" id="toggle_lomat_ja_poissaolot"> Lomat ja poissaolot
-      </label>
-      <br>
-      <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_kpl'])) echo 'checked="checked"'; ?>
-          name="toggle_uudet_lopettaneet_asiakkaat_kpl" id="toggle_uudet_lopettaneet_asiakkaat_kpl"> Uudet ja lopettaneet asiakkaat: KPL määrä
-      </label>
-      <br>
-      <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_tuovuorot'])) echo 'checked="checked"'; ?>
-          name="toggle_uudet_lopettaneet_asiakkaat_tuovuorot" id="toggle_uudet_lopettaneet_asiakkaat_tuovuorot"> Uudet ja lopettaneet asiakkaat: Suunnitellut työvuorot
-      </label>
-      <br>
-      <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tyontekijat_eniten_tunteja'])) echo 'checked="checked"'; ?>
-          name="toggle_tyontekijat_eniten_tunteja" id="toggle_tyontekijat_eniten_tunteja"> Työntekijät, joilla eniten hyväksyttyjä tunteja
-      </label>
-      <br>
-      <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_asiakkaat_eniten_tunteja'])) echo 'checked="checked"'; ?>
-          name="toggle_asiakkaat_eniten_tunteja" id="toggle_asiakkaat_eniten_tunteja"> Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja
-      </label>
-      <br>
-      <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tunnit'])) echo 'checked="checked"'; ?>
-          name="toggle_tunnit" id="toggle_tunnit"> Suunnitellut, luetut ja hyväksytyt tunnit
-      </label>
-      <br>
-      <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_eniten_suunniteltu_kestot'])) echo 'checked="checked"'; ?>
-          name="toggle_eniten_suunniteltu_kestot" id="toggle_eniten_suunniteltu_kestot"> Eniten suunniteltu työvuoro: Kestot
-      </label>
-      <br>
-      <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_eniten_suunniteltu_kpl'])) echo 'checked="checked"'; ?>
-          name="toggle_eniten_suunniteltu_kpl" id="toggle_eniten_suunniteltu_kpl"> Eniten suunniteltu työvuoro: KPL
-      </label>
-      <br>
-      <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_lahetetut_laskut_maara_summa'])) echo 'checked="checked"'; ?>
-          name="toggle_lahetetut_laskut_maara_summa" id="toggle_lahetetut_laskut_maara_summa"> Lähetettyjen laskujen määrä ja summa
-      </label>
-      <br>
-      <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_liikevaihto_arvokkaimmat_asiakkaat'])) echo 'checked="checked"'; ?>
-          name="toggle_liikevaihto_arvokkaimmat_asiakkaat" id="toggle_liikevaihto_arvokkaimmat_asiakkaat"> Liikevaihto arvokkaimmat asiakkaat
-      </label>
-      <br>
-      <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tyontekijat'])) echo 'checked="checked"'; ?>
-          name="toggle_tyontekijat" id="toggle_tyontekijat"> Työntekijät
-      </label>
-      <br>
-      <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_onlinevaraukset'])) echo 'checked="checked"'; ?>
-          name="toggle_onlinevaraukset" id="toggle_onlinevaraukset"> Onlinevaraukset
-      </label>
-      <br>
-      <label class="checkbox-inline">
-        <input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_eniten_tuotteet_palvelut_euro'])) echo 'checked="checked"'; ?>
-          name="toggle_eniten_tuotteet_palvelut_euro" id="toggle_eniten_tuotteet_palvelut_euro"> Eniten tuotteet ja palvelut euro
-      </label>
-      <br>
-      <div class="row">
-        <div class="col-sm-12">
-          <button type="submit" id="toggle-menu-save" class="btn btn-primary btn-sm btn-block"><b>Tallenna</b></button>
-        </div>
-      </div>
-    </form>
-  </div>
+	<div id="toggle-menu" class="collapse">
+		<form action="#" method="POST">
+			<label class="checkbox-inline">
+				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tyovuorojen_maara'])) echo 'checked="checked"'; ?> name="toggle_tyovuorojen_maara" id="toggle_tyovuorojen_maara"> Työvuorojen määrä ajanjaksolla
+			</label>
+			<br>
+			<label class="checkbox-inline">
+				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_lomat_ja_poissaolot'])) echo 'checked="checked"'; ?> name="toggle_lomat_ja_poissaolot" id="toggle_lomat_ja_poissaolot"> Lomat ja poissaolot
+			</label>
+			<br>
+			<label class="checkbox-inline">
+				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_kpl'])) echo 'checked="checked"'; ?> name="toggle_uudet_lopettaneet_asiakkaat_kpl" id="toggle_uudet_lopettaneet_asiakkaat_kpl"> Uudet ja lopettaneet asiakkaat: KPL määrä
+			</label>
+			<br>
+			<label class="checkbox-inline">
+				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_tuovuorot'])) echo 'checked="checked"'; ?> name="toggle_uudet_lopettaneet_asiakkaat_tuovuorot" id="toggle_uudet_lopettaneet_asiakkaat_tuovuorot"> Uudet ja lopettaneet asiakkaat: Suunnitellut työvuorot
+			</label>
+			<br>
+			<label class="checkbox-inline">
+				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tyontekijat_eniten_tunteja'])) echo 'checked="checked"'; ?> name="toggle_tyontekijat_eniten_tunteja" id="toggle_tyontekijat_eniten_tunteja"> Työntekijät, joilla eniten hyväksyttyjä tunteja
+			</label>
+			<br>
+			<label class="checkbox-inline">
+				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_asiakkaat_eniten_tunteja'])) echo 'checked="checked"'; ?> name="toggle_asiakkaat_eniten_tunteja" id="toggle_asiakkaat_eniten_tunteja"> Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja
+			</label>
+			<br>
+			<label class="checkbox-inline">
+				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tunnit'])) echo 'checked="checked"'; ?> name="toggle_tunnit" id="toggle_tunnit"> Suunnitellut, luetut ja hyväksytyt tunnit
+			</label>
+			<br>
+			<label class="checkbox-inline">
+				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_eniten_suunniteltu_kestot'])) echo 'checked="checked"'; ?> name="toggle_eniten_suunniteltu_kestot" id="toggle_eniten_suunniteltu_kestot"> Eniten suunniteltu työvuoro: Kestot
+			</label>
+			<br>
+			<label class="checkbox-inline">
+				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_eniten_suunniteltu_kpl'])) echo 'checked="checked"'; ?> name="toggle_eniten_suunniteltu_kpl" id="toggle_eniten_suunniteltu_kpl"> Eniten suunniteltu työvuoro: KPL
+			</label>
+			<br>
+			<label class="checkbox-inline">
+				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_lahetetut_laskut_maara_summa'])) echo 'checked="checked"'; ?> name="toggle_lahetetut_laskut_maara_summa" id="toggle_lahetetut_laskut_maara_summa"> Lähetettyjen laskujen määrä ja summa
+			</label>
+			<br>
+			<label class="checkbox-inline">
+				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_liikevaihto_arvokkaimmat_asiakkaat'])) echo 'checked="checked"'; ?> name="toggle_liikevaihto_arvokkaimmat_asiakkaat" id="toggle_liikevaihto_arvokkaimmat_asiakkaat"> Liikevaihto arvokkaimmat asiakkaat
+			</label>
+			<br>
+			<label class="checkbox-inline">
+				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tyontekijat'])) echo 'checked="checked"'; ?> name="toggle_tyontekijat" id="toggle_tyontekijat"> Työntekijät
+			</label>
+			<br>
+			<label class="checkbox-inline">
+				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_onlinevaraukset'])) echo 'checked="checked"'; ?> name="toggle_onlinevaraukset" id="toggle_onlinevaraukset"> Onlinevaraukset
+			</label>
+			<br>
+			<label class="checkbox-inline">
+				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_eniten_tuotteet_palvelut_euro'])) echo 'checked="checked"'; ?> name="toggle_eniten_tuotteet_palvelut_euro" id="toggle_eniten_tuotteet_palvelut_euro"> Eniten tuotteet ja palvelut euro
+			</label>
+			<br>
+			<div class="row">
+				<div class="col-sm-12">
+					<button type="submit" id="toggle-menu-save" class="btn btn-primary btn-sm btn-block"><b>Tallenna</b></button>
+				</div>
+			</div>
+		</form>
+	</div>
 </div>
 
 <!-- Init bootstrap-toggle -->
 <script>
-  $(function() {
-    $("#toggle_tyovuorojen_maara, #toggle_lomat_ja_poissaolot, #toggle_uudet_lopettaneet_asiakkaat_kpl, " +
-      "#toggle_uudet_lopettaneet_asiakkaat_tuovuorot, #toggle_tyontekijat_eniten_tunteja, " +
-      "#toggle_asiakkaat_eniten_tunteja, #toggle_tunnit, #toggle_eniten_suunniteltu_kestot, " +
-      "#toggle_eniten_suunniteltu_kpl, #toggle_lahetetut_laskut_maara_summa, #toggle_liikevaihto_arvokkaimmat_asiakkaat, " +
-      "#toggle_tyontekijat, #toggle_onlinevaraukset, #toggle_eniten_tuotteet_palvelut_euro").bootstrapToggle({
-      on: 'Kyllä',
-      off: 'Ei',
-      size: 'mini',
-      width: 50
-    });
-  })
+	$(function() {
+		$('#toggle-menu-container #toggle-menu form label input').each(function(index) {
+			$(this).bootstrapToggle({
+				on: 'Kyllä',
+				off: 'Ei',
+				size: 'mini',
+				width: 50
+			});
+		});
+	})
 </script>
 
 <!------------------------------------------------------------------------------
@@ -154,178 +139,178 @@
 <div id="charts-container"></div>
 
 <script>
-$(function() {
-	var charts_count = 1;
+	$(function() {
+		var charts_count = 1;
 
-	// Add chart to charts-container div.
-	function add_chart_container(options) {
-		var row_id = `charts-row-${max(charts_count / 2)}`; // row number, e.g. row 2 for container 3 (max(3/2=1.5)=2).
-		var col_id = `charts-col-${charts_count}`;          // column mnumber.
+		// Add chart to charts-container div.
+		function add_chart_container(options) {
+			var row_id = `charts-row-${max(charts_count / 2)}`; // row number, e.g. row 2 for container 3 (max(3/2=1.5)=2).
+			var col_id = `charts-col-${charts_count}`; // column mnumber.
 
-		// Check whether to add new row div, e.g. container 3%2=1; new row.
-		if (charts_count % 2 == 1)
-			$('#charts-container').append(`<div class="row" id="${row_id}></div>"`);
+			// Check whether to add new row div, e.g. container 3%2=1; new row.
+			if (charts_count % 2 == 1)
+				$('#charts-container').append(`<div class="row" id="${row_id}></div>"`);
 
-		// Add column to current row.
-		$(`#${row_id}`).append(`<div class="col-sm-6" id="${col_id}"></div>`);
+			// Add column to current row.
+			$(`#${row_id}`).append(`<div class="col-sm-6" id="${col_id}"></div>`);
 
-		// Print chart to selected column.
-		Highcharts.chart(col_id, options);
-		charts_count++;
-	}
-});
+			// Print chart to selected column.
+			Highcharts.chart(col_id, options);
+			charts_count++;
+		}
+	});
 </script>
 
 <!------------------------------------------------------------------------------
 -- Työvuorojen määrä ajanjaksolla
 ------------------------------------------------------------------------------->
-<?php if (isset($_POST['toggle_tyovuorojen_maara'])): ?>
+<?php if (isset($_POST['toggle_tyovuorojen_maara'])) : ?>
 
-<div class="col-sm-6">
-  <div class="chart-container" id="container_tyovuorojen_maara"></div>
-</div>
+	<div class="col-sm-6">
+		<div class="chart-container" id="container_tyovuorojen_maara"></div>
+	</div>
 
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Lomat ja poissaolot
 ------------------------------------------------------------------------------->
-<?php if (isset($_POST['toggle_lomat_ja_poissaolot'])): ?>
+<?php if (isset($_POST['toggle_lomat_ja_poissaolot'])) : ?>
 
-<div class="col-sm-6">
-  <div class="chart-container" id="container_lomat_ja_poissaolot"></div>
-</div>
+	<div class="col-sm-6">
+		<div class="chart-container" id="container_lomat_ja_poissaolot"></div>
+	</div>
 
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Uudet ja lopettaneet asiakkaat: KPL määrä
 ------------------------------------------------------------------------------->
-<?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_kpl'])): ?>
+<?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_kpl'])) : ?>
 
-<div class="col-sm-6">
-  <div class="chart-container" id="container_uudet_lopettaneet_asiakkaat_kpl"></div>
-</div>
+	<div class="col-sm-6">
+		<div class="chart-container" id="container_uudet_lopettaneet_asiakkaat_kpl"></div>
+	</div>
 
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Uudet ja lopettaneet asiakkaat: Suunnitellut työvuorot
 ------------------------------------------------------------------------------->
-<?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_tuovuorot'])): ?>
+<?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_tuovuorot'])) : ?>
 
-<div class="col-sm-6">
-  <div class="chart-container" id="container_uudet_lopettaneet_asiakkaat_tuovuorot"></div>
-</div>
+	<div class="col-sm-6">
+		<div class="chart-container" id="container_uudet_lopettaneet_asiakkaat_tuovuorot"></div>
+	</div>
 
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Työntekijät, joilla eniten hyväksyttyjä tunteja
 ------------------------------------------------------------------------------->
-<?php if (isset($_POST['toggle_tyontekijat_eniten_tunteja'])): ?>
+<?php if (isset($_POST['toggle_tyontekijat_eniten_tunteja'])) : ?>
 
-<div class="col-sm-6">
-  <div class="chart-container" id="container_tyontekijat_eniten_tunteja"></div>
-</div>
+	<div class="col-sm-6">
+		<div class="chart-container" id="container_tyontekijat_eniten_tunteja"></div>
+	</div>
 
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja
 ------------------------------------------------------------------------------->
-<?php if (isset($_POST['toggle_asiakkaat_eniten_tunteja'])): ?>
+<?php if (isset($_POST['toggle_asiakkaat_eniten_tunteja'])) : ?>
 
-<div class="col-sm-6">
-  <div class="chart-container" id="container_asiakkaat_eniten_tunteja"></div>
-</div>
+	<div class="col-sm-6">
+		<div class="chart-container" id="container_asiakkaat_eniten_tunteja"></div>
+	</div>
 
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Suunnitellut, luetut ja hyväksytyt tunnit
 ------------------------------------------------------------------------------->
-<?php if (isset($_POST['toggle_tunnit'])): ?>
+<?php if (isset($_POST['toggle_tunnit'])) : ?>
 
-<div class="col-sm-6">
-  <div class="chart-container" id="container_tunnit"></div>
-</div>
+	<div class="col-sm-6">
+		<div class="chart-container" id="container_tunnit"></div>
+	</div>
 
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Eniten suunniteltu työvuoro: Kestot
 ------------------------------------------------------------------------------->
-<?php if (isset($_POST['toggle_eniten_suunniteltu_kestot'])): ?>
+<?php if (isset($_POST['toggle_eniten_suunniteltu_kestot'])) : ?>
 
-<div class="col-sm-6">
-  <div class="chart-container" id="container_eniten_suunniteltu_kestot"></div>
-</div>
+	<div class="col-sm-6">
+		<div class="chart-container" id="container_eniten_suunniteltu_kestot"></div>
+	</div>
 
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Eniten suunniteltu työvuoro: KPL
 ------------------------------------------------------------------------------->
-<?php if (isset($_POST['toggle_eniten_suunniteltu_kpl'])): ?>
+<?php if (isset($_POST['toggle_eniten_suunniteltu_kpl'])) : ?>
 
-<div class="col-sm-6">
-  <div class="chart-container" id="container_eniten_suunniteltu_kpl"></div>
-</div>
+	<div class="col-sm-6">
+		<div class="chart-container" id="container_eniten_suunniteltu_kpl"></div>
+	</div>
 
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Lähetettyjen laskujen määrä ja summa
 ------------------------------------------------------------------------------->
-<?php if (isset($_POST['toggle_lahetetut_laskut_maara_summa'])): ?>
+<?php if (isset($_POST['toggle_lahetetut_laskut_maara_summa'])) : ?>
 
-<div class="col-sm-6">
-  <div class="chart-container" id="container_lahetetut_laskut_maara_summa"></div>
-</div>
+	<div class="col-sm-6">
+		<div class="chart-container" id="container_lahetetut_laskut_maara_summa"></div>
+	</div>
 
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Liikevaihto arvokkaimmat asiakkaat
 ------------------------------------------------------------------------------->
-<?php if (isset($_POST['toggle_liikevaihto_arvokkaimmat_asiakkaat'])): ?>
+<?php if (isset($_POST['toggle_liikevaihto_arvokkaimmat_asiakkaat'])) : ?>
 
-<div class="col-sm-6">
-  <div class="chart-container" id="container_liikevaihto_arvokkaimmat_asiakkaat"></div>
-</div>
+	<div class="col-sm-6">
+		<div class="chart-container" id="container_liikevaihto_arvokkaimmat_asiakkaat"></div>
+	</div>
 
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Työntekijät
 ------------------------------------------------------------------------------->
-<?php if (isset($_POST['toggle_tyontekijat'])): ?>
+<?php if (isset($_POST['toggle_tyontekijat'])) : ?>
 
-<div class="col-sm-6">
-  <div class="chart-container" id="container_tyontekijat"></div>
-</div>
+	<div class="col-sm-6">
+		<div class="chart-container" id="container_tyontekijat"></div>
+	</div>
 
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Onlinevaraukset
 ------------------------------------------------------------------------------->
-<?php if (isset($_POST['toggle_onlinevaraukset'])): ?>
+<?php if (isset($_POST['toggle_onlinevaraukset'])) : ?>
 
-<div class="col-sm-6">
-  <div class="chart-container" id="container_onlinevaraukset"></div>
-</div>
+	<div class="col-sm-6">
+		<div class="chart-container" id="container_onlinevaraukset"></div>
+	</div>
 
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Eniten tuotteet ja palvelut euro
 ------------------------------------------------------------------------------->
-<?php if (isset($_POST['toggle_eniten_tuotteet_palvelut_euro'])): ?>
+<?php if (isset($_POST['toggle_eniten_tuotteet_palvelut_euro'])) : ?>
 
-<div class="col-sm-6">
-  <div class="chart-container" id="container_eniten_tuotteet_palvelut_euro"></div>
-</div>
+	<div class="col-sm-6">
+		<div class="chart-container" id="container_eniten_tuotteet_palvelut_euro"></div>
+	</div>
 
 <?php endif; ?>
