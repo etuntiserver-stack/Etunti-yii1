@@ -263,20 +263,12 @@
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_lomat_ja_poissaolot'])) : ?>
 
-	<div class="col-sm-6">
-		<div class="chart-container" id="container_lomat_ja_poissaolot"></div>
-	</div>
-
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Uudet ja lopettaneet asiakkaat: KPL määrä
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_kpl'])) : ?>
-
-	<div class="col-sm-6">
-		<div class="chart-container" id="container_uudet_lopettaneet_asiakkaat_kpl"></div>
-	</div>
 
 <?php endif; ?>
 
@@ -285,20 +277,12 @@
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_tuovuorot'])) : ?>
 
-	<div class="col-sm-6">
-		<div class="chart-container" id="container_uudet_lopettaneet_asiakkaat_tuovuorot"></div>
-	</div>
-
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Työntekijät, joilla eniten hyväksyttyjä tunteja
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_tyontekijat_eniten_tunteja'])) : ?>
-
-	<div class="col-sm-6">
-		<div class="chart-container" id="container_tyontekijat_eniten_tunteja"></div>
-	</div>
 
 <?php endif; ?>
 
@@ -307,20 +291,12 @@
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_asiakkaat_eniten_tunteja'])) : ?>
 
-	<div class="col-sm-6">
-		<div class="chart-container" id="container_asiakkaat_eniten_tunteja"></div>
-	</div>
-
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Suunnitellut, luetut ja hyväksytyt tunnit
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_tunnit'])) : ?>
-
-	<div class="col-sm-6">
-		<div class="chart-container" id="container_tunnit"></div>
-	</div>
 
 <?php endif; ?>
 
@@ -329,20 +305,12 @@
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_eniten_suunniteltu_kestot'])) : ?>
 
-	<div class="col-sm-6">
-		<div class="chart-container" id="container_eniten_suunniteltu_kestot"></div>
-	</div>
-
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Eniten suunniteltu työvuoro: KPL
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_eniten_suunniteltu_kpl'])) : ?>
-
-	<div class="col-sm-6">
-		<div class="chart-container" id="container_eniten_suunniteltu_kpl"></div>
-	</div>
 
 <?php endif; ?>
 
@@ -351,20 +319,12 @@
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_lahetetut_laskut_maara_summa'])) : ?>
 
-	<div class="col-sm-6">
-		<div class="chart-container" id="container_lahetetut_laskut_maara_summa"></div>
-	</div>
-
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Liikevaihto arvokkaimmat asiakkaat
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_liikevaihto_arvokkaimmat_asiakkaat'])) : ?>
-
-	<div class="col-sm-6">
-		<div class="chart-container" id="container_liikevaihto_arvokkaimmat_asiakkaat"></div>
-	</div>
 
 <?php endif; ?>
 
@@ -373,10 +333,6 @@
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_tyontekijat'])) : ?>
 
-	<div class="col-sm-6">
-		<div class="chart-container" id="container_tyontekijat"></div>
-	</div>
-
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
@@ -384,19 +340,11 @@
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_onlinevaraukset'])) : ?>
 
-	<div class="col-sm-6">
-		<div class="chart-container" id="container_onlinevaraukset"></div>
-	</div>
-
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
 -- Eniten tuotteet ja palvelut euro
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_eniten_tuotteet_palvelut_euro'])) : ?>
-
-	<div class="col-sm-6">
-		<div class="chart-container" id="container_eniten_tuotteet_palvelut_euro"></div>
-	</div>
 
 <?php endif; ?>
