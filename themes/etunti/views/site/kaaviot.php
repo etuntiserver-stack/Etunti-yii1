@@ -263,6 +263,100 @@
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_lomat_ja_poissaolot'])) : ?>
 
+	<?php
+
+	// Temporary variables, from previous code.
+	$chart_type = 'line'; // line | bar | column | area
+	$from = date("Y-m-d", strtotime(" -1 year first day of last month"));
+	$to = date("Y-m-d", strtotime(" last day of last month"));
+	$asiakas = '';
+
+	$months = array(
+		1 => Yii::t('main', 'Tammikuu'),
+		2 => Yii::t('main', 'Helmikuu'),
+		3 => Yii::t('main', 'Maaliskuu'),
+		4 => Yii::t('main', 'Huhtikuu'),
+		5 => Yii::t('main', 'Toukokuu'),
+		6 => Yii::t('main', 'Kesäkuu'),
+		7 => Yii::t('main', 'Heinäkuu'),
+		8 => Yii::t('main', 'Elokuu'),
+		9 => Yii::t('main', 'Syyskuu'),
+		10 => Yii::t('main', 'Lokakuu'),
+		11 => Yii::t('main', 'Marraskuu'),
+		12 => Yii::t('main', 'Joulukuu')
+	);
+
+	$categories = array();
+	$begin = new DateTime(date("Y-m-d", strtotime($from)));
+	$end = new DateTime(date("Y-m-d", strtotime($to)));
+	//$end = $end->modify('+1 month');
+	$interval = DateInterval::createFromDateString('1 month');
+	$period = new DatePeriod($begin, $interval, $end);
+	$data_arr = array();
+
+	foreach ($period as $dt)
+		$categories[$dt->format("Ym")] = $dt->format("Y") . ', ' . $months[$dt->format("n")];
+
+	$criteria = new CDbCriteria();
+	$criteria->order = "tyoajanlaatu";
+	$criteria->group = "tyoajanlaatu";
+	$criteria->select = "COUNT(*) as count, t.*";
+	$criteria->condition = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to' AND tyoajanlaatu!=''";
+	if (isset($_GET['tyontekija']) and $_GET['tyontekija'] !== 'kaikki' and $_GET['tyontekija'] > 0)
+		$criteria->addCondition(" tid='" . $_GET['tyontekija'] . "' ");
+	$tv = Tyovuoroot::model()->findAll($criteria);
+	$arr_new = array();
+	$arr = array();
+	$i = 0;
+
+	foreach ($tv as $v) {
+		$i++;
+		$name_expl = explode("/", $v->tyoajanlaatu);
+		$arr_new[$i] = array('name' => ((isset($name_expl[0])) ? $name_expl[0] : ''));
+		$arr_new[$i]['data'] = array();
+
+		foreach ($categories as $k_cat => $item_cat) {
+			$criteria = new CDbCriteria();
+			$criteria->select = "COUNT(tyoajanlaatu) as count";
+			$criteria->condition = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m')='$k_cat' AND tyoajanlaatu='{$v->tyoajanlaatu}'";
+			$asiakkaat_month = Tyovuoroot::model()->find($criteria);
+			$arr_new[$i]['data'][] = (int) $asiakkaat_month->count;
+		}
+	}
+	?>
+
+	<script>
+		$(function() {
+			add_chart_container({
+				chart: {
+					type: '<?= $chart_type ?>'
+				},
+				title: {
+					text: 'Lomat ja poissaolot <?= date("d.m.Y", strtotime($from)) . "-" . date("d.m.Y", strtotime($to)) ?>'
+				},
+				xAxis: {
+					categories: JSON.parse('<?= json_encode(array_values($categories)) ?>')
+				},
+				yAxis: {
+					title: {
+						text: 'Tunnit'
+					}
+				},
+				plotOptions: {
+					line: {
+						dataLabels: {
+							enabled: true
+						},
+						enableMouseTracking: false
+					}
+				},
+				series: JSON.parse('<?= json_encode(array_values($arr_new)) ?>'),
+				exporting: {
+					enabled: true
+				}
+			});
+		});
+	</script>
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
