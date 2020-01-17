@@ -139,26 +139,24 @@
 <div id="charts-container"></div>
 
 <script>
-	$(function() {
-		var charts_count = 1;
+	var charts_count = 1;
 
-		// Add chart to charts-container div.
-		function add_chart_container(options) {
-			var row_id = `charts-row-${max(charts_count / 2)}`; // row number, e.g. row 2 for container 3 (max(3/2=1.5)=2).
-			var col_id = `charts-col-${charts_count}`; // column mnumber.
+	// Add chart to charts-container div.
+	var add_chart_container = function(options) {
+		var row_id = `charts-row-${Math.ceil(charts_count / 2)}`; // row number, e.g. row 2 for container 3 (ceil(3/2=1.5)=2).
+		var col_id = `charts-col-${charts_count}`; // column mnumber.
 
-			// Check whether to add new row div, e.g. container 3%2=1; new row.
-			if (charts_count % 2 == 1)
-				$('#charts-container').append(`<div class="row" id="${row_id}></div>"`);
+		// Check whether to add new row div, e.g. container 3%2=1; new row.
+		if (charts_count % 2 == 1)
+			$('#charts-container').append(`<div class="row" id="${row_id}"></div>`);
 
-			// Add column to current row.
-			$(`#${row_id}`).append(`<div class="col-sm-6" id="${col_id}"></div>`);
+		// Add column to current row.
+		$(`#${row_id}`).append(`<div class="col-sm-6" id="${col_id}"></div>`);
 
-			// Print chart to selected column.
-			Highcharts.chart(col_id, options);
-			charts_count++;
-		}
-	});
+		// Print chart to selected column.
+		Highcharts.chart(col_id, options);
+		charts_count++;
+	};
 </script>
 
 <!------------------------------------------------------------------------------
@@ -166,10 +164,98 @@
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_tyovuorojen_maara'])) : ?>
 
-	<div class="col-sm-6">
-		<div class="chart-container" id="container_tyovuorojen_maara"></div>
-	</div>
+	<?php
 
+	// Temporary variables, from previous code.
+	$chart_type = 'line'; // line | bar | column | area
+	$from = date("Y-m-d", strtotime(" -1 year first day of this month"));
+	$to = date("Y-m-d", strtotime(" last day of last month"));
+	$asiakas = '';
+
+	$months = array(
+		1 => Yii::t('main', 'Tammikuu'),
+		2 => Yii::t('main', 'Helmikuu'),
+		3 => Yii::t('main', 'Maaliskuu'),
+		4 => Yii::t('main', 'Huhtikuu'),
+		5 => Yii::t('main', 'Toukokuu'),
+		6 => Yii::t('main', 'Kesäkuu'),
+		7 => Yii::t('main', 'Heinäkuu'),
+		8 => Yii::t('main', 'Elokuu'),
+		9 => Yii::t('main', 'Syyskuu'),
+		10 => Yii::t('main', 'Lokakuu'),
+		11 => Yii::t('main', 'Marraskuu'),
+		12 => Yii::t('main', 'Joulukuu')
+	);
+
+	$tyovuoroot = Yii::app()->createController('Tyovuoroot');
+	$categories = array();
+	$begin = new DateTime(date("Y-m-d", strtotime($from)));
+	$end = new DateTime(date("Y-m-d", strtotime($to)));
+	$end = $end->modify('+1 month');
+	$interval = DateInterval::createFromDateString('1 month');
+	$period = new DatePeriod($begin, $interval, $end);
+	$data_arr = array();
+
+	foreach ($period as $dt)
+		$categories[$dt->format("Ym")] = $dt->format("Y") . ', ' . $months[$dt->format("n")];
+
+	$criteria = new CDbCriteria();
+	$criteria->order = "COUNT(status) DESC";
+	$criteria->group = "status";
+	$criteria->select = "COUNT(*) as count, t.*";
+	$criteria->condition = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to' AND status!=''";
+	$asiakkaat = Tyovuoroot::model()->findAll($criteria);
+	$arr_new = array();
+	$arr = array();
+	$i = 0;
+
+	foreach ($asiakkaat as $v) {
+		$i++;
+		$arr_new[$i] = array('name' => $tyovuoroot[0]->tilanteet()[$v->status]);
+		$arr_new[$i]['data'] = array();
+
+		foreach ($categories as $k_cat => $item_cat) {
+			$criteria = new CDbCriteria();
+			$criteria->select = "COUNT(status) as count";
+			$criteria->condition = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m')='$k_cat' AND status='$v->status'";
+			$asiakkaat_month = Tyovuoroot::model()->find($criteria);
+			$arr_new[$i]['data'][] = (int) $asiakkaat_month->count;
+		}
+	}
+	?>
+
+	<script>
+		$(function() {
+			add_chart_container({
+				chart: {
+					type: '<?= $chart_type ?>'
+				},
+				title: {
+					text: 'Työvuorojen määrä <?= date("d.m.Y", strtotime($from)) . "-" . date("d.m.Y", strtotime($to)) ?>'
+				},
+				xAxis: {
+					categories: JSON.parse('<?= json_encode(array_values($categories)) ?>')
+				},
+				yAxis: {
+					title: {
+						text: 'KPL'
+					}
+				},
+				plotOptions: {
+					line: {
+						dataLabels: {
+							enabled: true
+						},
+						enableMouseTracking: false
+					}
+				},
+				series: JSON.parse('<?= json_encode(array_values($arr_new)) ?>'),
+				exporting: {
+					enabled: true
+				}
+			});
+		});
+	</script>
 <?php endif; ?>
 
 <!------------------------------------------------------------------------------
