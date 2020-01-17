@@ -163,23 +163,44 @@ $months = array(
 ?>
 
 <script>
-	var charts_count = 1;
+	var row_cols = 3; // 12 must be divisible by row_cols; 2, 3, 4, 6, 12
+	var charts_total = 1;
 
-	// Add chart to charts-container div.
+	// Assign column class based on selection.
+	var col_class = (function(cols) {
+		switch (cols) {
+			case 2:
+				return 'col-sm-6';
+			case 3:
+				return 'col-sm-4';
+			case 4:
+				return 'col-sm-3';
+			case 6:
+				return 'col-sm-2';
+			case 12:
+				return 'col-sm-1';
+		};
+	})(row_cols);
+
+	// Function to add chart to charts-container div.
 	var add_chart_container = function(options) {
-		var row_id = `charts-row-${Math.ceil(charts_count / 2)}`; // row number, e.g. row 2 for container 3 (ceil(3/2=1.5)=2).
-		var col_id = `charts-col-${charts_count}`; // column mnumber.
+		var row_num = Math.ceil(charts_total / row_cols); // row number, e.g. row 2 for container 3 (ceil(3/2=1.5)=2).
+		var charts_remainder = charts_total % row_cols;
+		var col_num = (charts_remainder == 0) ? row_cols : charts_remainder;
+		var row_id = `charts-row-${row_num}`;
+		var col_id = `charts-row-${row_num}-col-${col_num}`; // column number.
+
+		charts_total++;
 
 		// Check whether to add new row div, e.g. container 3%2=1; new row.
-		if (charts_count % 2 == 1)
+		if (charts_remainder == 1)
 			$('#charts-container').append(`<div class="row" id="${row_id}"></div>`);
 
 		// Add column to current row.
-		$(`#${row_id}`).append(`<div class="col-sm-6" id="${col_id}"></div>`);
+		$(`#${row_id}`).append(`<div class="${col_class}" id="${col_id}"></div>`);
 
 		// Print chart to selected column.
 		Highcharts.chart(col_id, options);
-		charts_count++;
 	};
 </script>
 
@@ -345,6 +366,103 @@ $months = array(
 -- Uudet ja lopettaneet asiakkaat: KPL määrä
 ------------------------------------------------------------------------------->
 <?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_kpl'])) : ?>
+
+	<?php
+	// <-- Uudet
+	$criteria = new CDbCriteria();
+	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE(time)) ";
+	$criteria->select = "
+		COUNT(*) as count, t.*
+	";
+	$criteria->condition = " 
+		DATE(time) BETWEEN '" . $from . "' AND '" . $to . "'
+	";
+	$asiakkaat = Asiakkaat::model()->findAll($criteria);
+	$arr_uudet = array();
+	foreach ($asiakkaat as $item) {
+		$arr_uudet[date("Ym", strtotime($item->time))] = (int) $item->count;
+	}
+	//     Uudet -->
+
+	// <-- Lopettaneet
+	$criteria = new CDbCriteria();
+	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(lopetuksen_pvm, '%d.%m.%Y'), '%Y-%m-%d')) ";
+	$criteria->select = "
+		COUNT(*) as count, t.*
+	";
+	$criteria->condition = " 
+		lopetuksen_pvm!=''
+		AND DATE_FORMAT(STR_TO_DATE(lopetuksen_pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '" . $from . "' AND '" . $to . "'
+	";
+	$asiakkaat = Asiakkaat::model()->findAll($criteria);
+	$arr_lop = array();
+	foreach ($asiakkaat as $item) {
+		$arr_lop[date("Ym", strtotime($item->lopetuksen_pvm))] = (int) $item->count;
+	}
+	//     Lopettaneet -->
+
+	$categories = array();
+	$begin = new DateTime(date("Y-m-d", strtotime($from)));
+	$end = new DateTime(date("Y-m-d", strtotime($to)));
+	$end = $end->modify('+1 month');
+	$interval = DateInterval::createFromDateString('1 month');
+	$period = new DatePeriod($begin, $interval, $end);
+	$data_uudet = array();
+	$data_lop = array();
+	foreach ($period as $dt) {
+		$categories[$dt->format("Ym")] = $dt->format("Y") . ', ' . $months[$dt->format("n")];
+		if (isset($arr_uudet[$dt->format("Ym")])) {
+			$data_uudet[$dt->format("Ym")] = $arr_uudet[$dt->format("Ym")];
+		} else {
+			$data_uudet[$dt->format("Ym")] = 0;
+		}
+
+		if (isset($arr_lop[$dt->format("Ym")])) {
+			$data_lop[$dt->format("Ym")] = $arr_lop[$dt->format("Ym")];
+		} else {
+			$data_lop[$dt->format("Ym")] = 0;
+		}
+	}
+	?>
+
+	<script>
+		$(function() {
+			add_chart_container({
+				chart: {
+					type: '<?= $chart_type ?>'
+				},
+				title: {
+					text: 'Uudet ja lopettaneet asiakkaat'
+				},
+				xAxis: {
+					categories: JSON.parse('<?= json_encode(array_values($categories)) ?>')
+				},
+				yAxis: {
+					title: {
+						text: 'Tunnit'
+					}
+				},
+				plotOptions: {
+					line: {
+						dataLabels: {
+							enabled: true
+						},
+						enableMouseTracking: false
+					}
+				},
+				series: [{
+					name: 'Uudet',
+					data: JSON.parse('<?= json_encode(array_values($data_uudet)) ?>')
+				}, {
+					name: 'Lopettaneet',
+					data: JSON.parse('<?= json_encode(array_values($data_lop)) ?>')
+				}],
+				exporting: {
+					enabled: true
+				}
+			});
+		});
+	</script>
 
 <?php endif; ?>
 
