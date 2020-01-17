@@ -109,6 +109,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 	<?php echo $form->hiddenField($model,'tid'); ?>
 	<?php echo $form->error($model,'tid'); ?>
 
+<legend>Työvuoron perustiedot</legend>
 <div id="1_tila">
 <div class="row">
   <div class="col-sm-3">
@@ -964,7 +965,7 @@ $(document).ready(function(){
 	$('#peruuttaminen_div, #viesti_mobiili_div').hide();
 	if( pfrom_and_today_check() ){
 		disable_kentaat(false);
-		$('#huomio_yllaosa').html('<div class="alert alert-default"><h4>Huomio!</h4>Lomakkeen muutokset vaikuttavat koko ketjuun.</div>');
+		$('#huomio_yllaosa').html('<div class="alert alert-default"><h4>Huomio!</h4>Tämä on toistuva työvuoro jotta "Työvuoron perustiedot" muokkaus vaikuttaa koko ketjuun.</div>');
 	} else {
 		disable_kentaat(true);
 		$('#huomio_yllaosa').html('<div class="alert alert-default"><h4>Huomio!</h4>Piilotetut kentäät avataan kun ketjun alkaen -päivämäärä on tulevaisuudessa tai ottaessa pois tämä työvuoro toistuvasta ketjusta.</div>');
