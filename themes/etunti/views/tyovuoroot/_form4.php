@@ -450,7 +450,7 @@ $(".muokaValiko").click(function() {
  		$tt = Tyontekijat::model()->findAll($criteria);
 		if(isset($tt[0]))
 		{
-			echo '<select name="tyopaari[]" id="tyopaari" class="mult" multiple>';
+			echo '<select name="'.$java_prefix.'[tyopaari][]" id="tyopaari" class="mult" multiple>';
 			foreach($tt as $tekija)
 			{
 			  if(is_array($tyopaari) and in_array($tekija->id,$tyopaari, true))
@@ -556,7 +556,7 @@ $(".muokaValiko").click(function() {
     <div class="input-group">
       <span><?php echo Yii::t('main','Toistuva työvuoro'); ?></span>
       <span class="input-group-btn">
-        <input type="checkbox" name="is_toistuva" class="sw" id="is_toistuva" <?=(( strtotime($laatikko_pvm) < strtotime(date("Y-m-d")) )? 'disabled': '')?>>
+        <input type="checkbox" name="<?=$java_prefix?>[is_toistuva]" class="sw" id="is_toistuva" <?=(( strtotime($laatikko_pvm) < strtotime(date("Y-m-d")) )? 'disabled': '')?>>
       </span>
     </div>  
   </div>
@@ -989,8 +989,8 @@ $(document).ready(function(){
 	tarkistusLista('<?=$this_id?>');
   });
   $('#pfrom').on('blur change', function(){
-	if(toistuva && !pfrom_and_today_check()){
-		alert('Toistuvan työvuoron aloituspäivämäärää ei voida muokata alkamaan menneisyydestä.');
+	if(toistuva && !pfrom_and_laatikkopvm_check()){
+		alert('Toistuvan työvuoron aloituspäivämäärää ei voida muokata alkamaan ajemmin kun: ' + pfrom);
 		$("#pfrom").val(pfrom);
 		return false;
 	}
@@ -1010,7 +1010,7 @@ $(document).ready(function(){
 		return false;
 	}
 	if( toistuva && pto != $(this).val() ){
-		if( '<?=$model->id?>' !== '' ){
+		if( '<?=$toistuva?>' ){
 			$('.pto_save_button').removeClass('btn-default').addClass('btn-primary').removeAttr('disabled');
 			$('#pto_ilmoitus').html('<p class="small text-danger" style="position:absolute; z-index:9999; padding: 10px; background:white; border:1px #ddd solid">Tallenna muutettu lopetuspäivä vieressä olevalla painikkeella.<br><br>Huomio! Muita muutoksia ei tallenneta.</p>');
 		}
@@ -1061,21 +1061,7 @@ $(document).ready(function(){
 		$('#tekijanVaihdo').removeAttr('disabled');
 		$(".mult").multiselect("enable");
 	}
-
-	var post_tids = [];
-	post_tids.push(parseInt('<?=$laatikko_tid?>'));
-	if( '<?=$model->id?>' !== '' )
-		post_tids.push(parseInt($('#tekijanVaihdo option:selected').val()));
-	/* Työpari */
-	var tyopaari = $('#tyopaari').val();
-	if(tyopaari !== null){
-		//console.log('Uudet työparit: ' + tyopaari);
-		$(tyopaari).each(function( index, val ) {
-			post_tids.push(parseInt(val));
-		});
-	}
-	post_tids = post_tids.filter((a, b) => post_tids.indexOf(a) === b); // remove duplicates
-	console.log('tarkistuslista load');
+	var post_tids = sendpost_tyopaarit_all();
 
 	/* vkopaivat */
 	var vkopaivat = [];
@@ -1084,7 +1070,7 @@ $(document).ready(function(){
 	});
 
 	$.ajax({
-	  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista?this_id=' + this_id + '&cal_start=' + $("#cal_start").val() + '&tid=' + $('#<?=$java_prefix?>_tid').val() + '&pvm=<?=$laatikko_pvm?>',
+	  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista?this_id=' + this_id + '&cal_start=' + $("#cal_start").val() + '&tid=' + $('#<?=$java_prefix?>_tid').val() + '&laatikko_pvm=<?=$laatikko_pvm?>',
 	  data:{ pfrom : $("#pfrom").val(), pto : $("#pto").val(), viikkoja : $("#Toistuva_viikkoja option:selected").val(), vkopaivat : vkopaivat, post_tids : post_tids, osoite : $('#<?=$java_prefix?>_osoite').val(), alku : $('#alku').val(), loppu : $('#loppu').val() },
 	  type:'POST',
 	  success:function(data){
@@ -1093,6 +1079,8 @@ $(document).ready(function(){
 			$('#submitButton').hide();
 			$('#sopivatPaivat').html(data['error']).show();
 			return false;
+		} else {
+			$('#submitButton').show();
 		}
 		//console.log(data);
 		$('#sopivatPaivat').html('');
@@ -1123,7 +1111,7 @@ $(document).ready(function(){
 	var new_pfrom = new Date(+valinnut_pfrom[1]+"/"+valinnut_pfrom[0]+"/"+valinnut_pfrom[2]);
 	var laatikko_pvm = $('#<?=$java_prefix?>_pvm').val().split('.');
 	var new_pvm = new Date(+laatikko_pvm[1]+"/"+laatikko_pvm[0]+"/"+laatikko_pvm[2]);
-	if(new_pfrom.setHours(0,0,0,0) != new_pvm.setHours(0,0,0,0)) {
+	if(new_pfrom.setHours(0,0,0,0) < new_pvm.setHours(0,0,0,0)) {
 		return false;
 	}
 	return true;
@@ -1295,6 +1283,25 @@ $(document).ready(function(){
 	}
 	e.preventDefault();
   }); /* on submit */
+
+  function sendpost_tyopaarit_all(){
+	var returnthis = [];
+	if( '<?=$model->id?>' !== '' )
+		returnthis.push(parseInt($('#tekijanVaihdo option:selected').val()));
+	else
+		returnthis.push(parseInt('<?=$laatikko_tid?>'));
+
+	/* Työpari */
+	var tyopaari = $('#tyopaari').val();
+	if(tyopaari !== null){
+		//console.log('Uudet työparit: ' + tyopaari);
+		$(tyopaari).each(function( index, val ) {
+			returnthis.push(parseInt(val));
+		});
+	}
+	returnthis = post_tids.filter((a, b) => post_tids.indexOf(a) === b); // remove duplicates
+	return returnthis;
+  }
 
   function getAllTids(){
 	var tids = [];

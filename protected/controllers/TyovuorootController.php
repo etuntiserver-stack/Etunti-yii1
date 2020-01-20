@@ -3619,11 +3619,14 @@ class TyovuorootController extends Controller
 	<?php
 	}
 
-	public function actionPvmTarkistus_lista($this_id, $cal_start, $tid, $pvm)
+	public function actionPvmTarkistus_lista($this_id, $cal_start, $tid, $laatikko_pvm)
 	{
+		$get_id 	= $this->this_id($this_id);
+		$model 		= $get_id['model'];
+		$toistuva 	= $get_id['toistuva'];
+
 		$return 	= '';
 		$toistuva 	= false;
-		$pfrom_origin 	= null;
 		$viikko_paivat_origin = [];
 		$tids_origin 	= [];
 		$viikkoja_origin 	= null;
@@ -3644,12 +3647,7 @@ class TyovuorootController extends Controller
 		$viikko_paivat 	= $_POST['vkopaivat'];
 		$post_tids 	= $_POST['post_tids'];
 
-		if( $this_id != 'null' ){
-			$get_id 	= $this->this_id($this_id);
-			$model 		= $get_id['model'];
-			$toistuva 	= $get_id['toistuva'];
-			$pvm 		= $get_id['pvm'];
-			//$tid 		= $get_id['tid'];
+		if( $toistuva ){
 			$etusukunimi	= $this->etuSukunimi($tid);
 			$startday 	= date("Y-m-d", strtotime($model->pfrom));
 			$viikko_paivat_origin = json_decode($model->viikko_paivat, true);
@@ -3711,7 +3709,7 @@ class TyovuorootController extends Controller
 		//     Tyontekijat -->
 
 		if( 
-			$this_id != 'null'
+			$toistuva
 			and strtotime($model->pfrom) < strtotime(date("d.m.Y")) 
 			and strtotime($_POST['pfrom']) >= strtotime(date("d.m.Y")) 
 		){
@@ -3720,7 +3718,7 @@ class TyovuorootController extends Controller
 			$return .= '<br>';
 			$return .= '<table class="table table-bordered">';
 			$return .= '<tr>';
-			$return .= '<th>'.$model->pfrom.' - '. date("d.m.Y", strtotime($_POST['pfrom'].' -1 day')).'</th>';
+			$return .= '<th>'.$model->pfrom.' - '. date("d.m.Y", strtotime($laatikko_pvm.' -1 day')).'</th>';
 			$return .= '<th>'.$_POST['pfrom'].' - '.$_POST['pto'].'</th>';
 			$return .= '</tr>';
 			$return .= '<tr><td>';
@@ -3804,7 +3802,7 @@ class TyovuorootController extends Controller
 		$m_end = new DateTime($m_start->format("Y-m-d"));
 		$m_end->modify("+3 month");
 		$m_period = new DatePeriod($m_start, $m_interval, $m_end);
-		foreach( $tids as $tid ){
+		foreach( $post_tids as $tid ){
 			(isset($tt[$tid]['etusukunimi']))? $return .= '<center><h2><i class="btn btn-default fa fa-arrow-left vasemalle"></i>&nbsp; '.$tt[$tid]['etusukunimi'].' #'.$tid.' &nbsp;<i class="btn btn-default fa fa-arrow-right oikealle"></i></h2></center>' : '' ;
 			$return .= '<div class="row">';
 			foreach ($m_period as $dt) {
@@ -3990,35 +3988,14 @@ class TyovuorootController extends Controller
 		if(isset($post)){
 
 			$model->attributes = $post;
-			if(isset($_POST['P'])){	$model->viikko_paivat = json_encode($_POST['P']); }
-			if($toistuva and isset($_POST['tyopaari'])){
-				$_POST['tyopaari'][] = $model->tid;
-				$model->tyopaari = json_encode($_POST['tyopaari']); 
-			}
+			$this->model_json_converter($post, $model, $toistuva);
 
-			if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
-				$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
-			} else {
-				$model->lisa_tuotteet = '';
-			}
-			if( is_array($model->tyo_erittelyt) and count($model->tyo_erittelyt) > 0 ){
-				$model->tyo_erittelyt = json_encode($model->tyo_erittelyt, JSON_FORCE_OBJECT);
-			} else {
-				$model->tyo_erittelyt = '';
-			}
-			if( is_array($model->muistiinpano) and count($model->muistiinpano) > 0 ){
-				$model->muistiinpano = json_encode($model->muistiinpano, JSON_FORCE_OBJECT);
-			} else {
-				$model->muistiinpano = '';
-			}
 			// <-- Apuaika
 			if(isset($post['apuaika']) and $post['apuaika'] == 1)
 				$model->apuaika = 1;
 			else if(isset($post['apuaika']) and $post['apuaika'] != 1)
 				$model->apuaika = 0;
 			//     Apuaika -->
-
-			$model->pvm = date("d.m.Y",strtotime($post['pvm']));
 
 			if($model->save()){
 
@@ -4028,46 +4005,32 @@ class TyovuorootController extends Controller
 				// PushNotify -->
 
 				// <-- jos on tyopaari
-				if(!$toistuva and isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0){
+				if(!$toistuva and count(json_decode($model->tyopaari, true)) > 1){
+					$tids 		= json_decode($model->tyopaari, true);
+					$created_id 	= $model->id;
+					$luotu 		= [];
+					foreach($tids as $tid){
+						if( $post['tid'] == $tid ){
+							$luotu[$created_id] = $model->tid;
+							continue;
+						}
+						$model = new Tyovuoroot;
+						$model->attributes = $post;
+						$model->pvm = date("d.m.Y",strtotime($post['pvm']));
+						$model->tid = $tid;
+						$this->model_json_converter($post, $model, $toistuva);
+						if($model->save()){
+							$luotu[$model->id] = $model->tid;
 
-				    $luotu = array();
-				    $luotu[$model->id] = $model->tid;
-	
-				    foreach($_POST['tyopaari'] as $tid)
-				    {
-					$m = new Tyovuoroot;
-					$m->attributes = $post;
-					$m->pvm = date("d.m.Y",strtotime($post['pvm']));
-					$m->tid=$tid;
-					if( is_array($model->tyopaari) and count($m->tyopaari) > 0 ){
-						$m->tyopaari = json_encode($m->tyopaari);
-					} else {
-						$m->tyopaari = '';
-					}
-					if( isset($post['lisa_tuotteet']) and is_array($post['lisa_tuotteet']) ){
-						$m->lisa_tuotteet = json_encode($post['lisa_tuotteet']);
-					} else {
-						$m->lisa_tuotteet = '';
-					}
-					if( is_array($m->tyo_erittelyt) and count($m->tyo_erittelyt) > 0 ){
-						$m->tyo_erittelyt = json_encode($m->tyo_erittelyt, JSON_FORCE_OBJECT);
-					} else {
-						$m->tyo_erittelyt = '';
-					}
-					if($m->save()){
-						$luotu[$m->id] = $m->tid;
+							// <-- PushNotify
+							if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+								$this->pushNotifySending($model->id);
+							// PushNotify -->
+						}
 
-						// <-- PushNotify
-						if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
-						$this->pushNotifySending($m->id);
-						// PushNotify -->
 					}
-
-				    }
-				    foreach($luotu as $k=>$v)
+					foreach($luotu as $k => $v)
 						Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode($luotu)));
-
-	
 				}
 				// jos on tyopaari -->
 
@@ -4211,7 +4174,6 @@ class TyovuorootController extends Controller
 		$get_id 	= $this->this_id($this_id);
 		$model 		= $get_id['model'];
 		$toistuva 	= $get_id['toistuva'];
-		$pvm 		= $get_id['pvm'];
 		if(!isset($model->id)){ die('Työvuoroja '.$id.' ei löydy.'); }
 
 		$return = [];
@@ -4220,7 +4182,8 @@ class TyovuorootController extends Controller
 		else
 			$post = $_POST['Tyovuoroot'];
 
-		$post['pvm'] = date("d.m.Y",strtotime($post['pvm']));
+		$post['pvm'] 		= date("d.m.Y",strtotime($laatikko_pvm));
+		$edellinen_model 	= $model->attributes;
 
 		// <-- Edico viesti jos peruutettu
 		if( 
@@ -4235,58 +4198,74 @@ class TyovuorootController extends Controller
 		}
 		//     Edico viesti jos peruutettu -->
 
-		$edellinen_model 	= $model->attributes;
-		$model->attributes 	= $post;
+		// <-- Luodaan uusi ketju yksittaisesta.
+		if( 
+			!$toistuva and isset($_POST['is_toistuva'])
+		){
+			$model = new ToistuvatTyovuorot;
+			$merge = array_merge($_POST['Tyovuoroot'], $_POST['ToistuvatTyovuorot']);
+			$model->attributes = $merge;
+			$this->model_json_converter($post, $model, $toistuva);
+			if(!$model->save()){
+				echo json_encode($model->getErrors());
+			} else {
+				Tyovuoroot::model()->deleteByPk($model->id);
+				$return = ['return' => 'uusi_ketju_ok'];
+				echo json_encode($return);
+			}
+			exit;
+		}
+		//     Luodaan uusi ketju yksittaisesta. -->
 
-		// <-- CREATE uusi tavallinen tyovuoro ja poistetan tama paiva ketjusta.
+		// <-- Luodaan yksittainen toistuvasta.
 		if( 
 			$toistuva and isset($edellinen_model['id'])
 			and !isset($_POST['is_toistuva'])
-			and (int)$laatikko_tid > 0
 		){
-			$tv_new = new Tyovuoroot;
-			$cleared_attr = $this->compareToistuvaAttributes($tv_new->attributes, $post);
-			$tv_new->attributes = $cleared_attr;
-			$this->model_json_converter($_POST, $tv_new, false);
-			if(!$tv_new->save()){
-				echo json_encode($tv_new->getErrors());
+			$model = new Tyovuoroot;
+			$cleared_attr = $this->compareToistuvaAttributes($model->attributes, $post);
+			$model->attributes = $cleared_attr;
+			$this->model_json_converter($post, $model, false);
+			if(!$model->save()){
+				echo json_encode($model->getErrors());
 			} else {
+				$this->tyopari_updater($model);
 				$u		= Yii::app()->user->nimi;
 				$d		= date("d.m.Y");
 				$poisto_syy	= ['text'=>'ByUpdateChangeToYksittyinen', 'user'=>$u, 'date'=>$d];
-				if($this->toistuvaDeletePvm($model->id, $laatikko_pvm, $laatikko_tid, $poisto_syy)){
-					$return = ['return' => 'luottu_uusi_tyovuoro', 'id' => $tv_new->id];
+				if($this->toistuvaDeletePvm($edellinen_model['id'], $laatikko_pvm, $laatikko_tid, $poisto_syy)){
+					$return = ['return' => 'luottu_uusi_tyovuoro', 'id' => $model->id];
 					echo json_encode($return);
 				}
 			}
 			exit;
 		}
-		//     CREATE uusi tavallinen tyovuoro. -->
+		//     Luodaan yksittainen toistuvasta. -->
 
-		// <-- Toistuva pfrom muutos.
+		// <-- Toistuva Alkamispaiva siirto.
 		if( 
 			$toistuva and isset($edellinen_model['id']) and isset($_POST['is_toistuva'])
-			and strtotime($edellinen_model['pfrom']) < strtotime(date("d.m.Y")) 
-			and strtotime($_POST['ToistuvatTyovuorot']['pfrom']) >= strtotime(date("d.m.Y")) 
+			and strtotime($edellinen_model['pfrom']) != strtotime($laatikko_pvm) 
 		){
 			$model->attributes 	= $edellinen_model;
-			$model->pto 		= date("d.m.Y");
+			$model->pto 		= date("d.m.Y", strtotime($laatikko_pvm . " -1 day"));
 			if($model->save()){
 				$new_toistuva = new ToistuvatTyovuorot;
 				$new_toistuva->attributes = $post;
-				$this->model_json_converter($_POST, $new_toistuva, $toistuva);
+				$this->model_json_converter($post, $new_toistuva, $toistuva);
 				if(!$new_toistuva->save()){
 					echo json_encode($new_toistuva->getErrors());
 				} else {
 					$return = ['return' => 'pfrom_muutos_ok'];
 					echo json_encode($return);
 				}
-				exit;
 			}
+			exit;
 		}
-		//     Toistuva pfrom muutos -->
+		//     Toistuva Alkamispaiva siirto -->
 
-		$this->model_json_converter($_POST, $model, $toistuva);
+		$model->attributes 	= $post;
+		$this->model_json_converter($post, $model, $toistuva);
 
 		if($model->save()){
 
@@ -4304,19 +4283,14 @@ class TyovuorootController extends Controller
 				$vanhat_arr[$tid] = $tyovuoroID;
 			// Vanhat -->
 
-			if($toistuva and count($post_tyopaari) == 0)
-				ToistuvatTyovuorot::model()->updatebypk($model->id, array('tyopaari' => ''));
-			elseif(!$toistuva and count($post_tyopaari) == 0)
-				Tyovuoroot::model()->updatebypk($model->id, array('tyopaari' => ''));
-
 			// <-- jos on tyopaari
 			if(!$toistuva and count($post_tyopaari) > 0){
 	
-			$luotu = array();
-			$arr = array();
-			$luotu[$model->id] = $model->tid;
-			$arr[$model->id] = array($model->tid,$model->pvm);
-	
+				$luotu = [];
+				$arr = [];
+				$luotu[$model->id] = $model->tid;
+				$arr[$model->id] = array($model->tid,$model->pvm);
+KKKKKKK
 			    foreach($_POST['tyopaari'] as $tid)
 			    {
 				if( isset($vanhat_arr[$tid]) ){
@@ -4491,29 +4465,36 @@ class TyovuorootController extends Controller
 
 	}
 
+	protected function tyopari_updater($model)
+	{
+
+	}
+
 	protected function model_json_converter($post, $model, $toistuva)
 	{
-		if($toistuva and isset($post['P'])){ $model->viikko_paivat = json_encode($post['P']); }
-		if($toistuva and isset($post['tyopaari'])){
-			$post['tyopaari'][] = $model->tid;
+		if( isset($post['is_toistuva']) and isset($post['P']) )
+			$model->viikko_paivat = json_encode($post['P']);
+
+		if( isset($post['tyopaari']) ){
+			$post['tyopaari'][] = $post['tid'];
 			$model->tyopaari = json_encode($post['tyopaari']); 
 		}
 
-		if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 ){
+		if( is_array($model->lisa_tuotteet) and count($model->lisa_tuotteet) > 0 )
 			$model->lisa_tuotteet = json_encode($model->lisa_tuotteet);
-		} else {
+		else
 			$model->lisa_tuotteet = '';
-		}
-		if( is_array($model->tyo_erittelyt) and count($model->tyo_erittelyt) > 0 ){
+	
+		if( is_array($model->tyo_erittelyt) and count($model->tyo_erittelyt) > 0 )
 			$model->tyo_erittelyt = json_encode($model->tyo_erittelyt, JSON_FORCE_OBJECT);
-		} else {
+		else
 			$model->tyo_erittelyt = '';
-		}
-		if( is_array($model->muistiinpano) and count($model->muistiinpano) > 0 ){
+
+		if( is_array($model->muistiinpano) and count($model->muistiinpano) > 0 )
 			$model->muistiinpano = json_encode($model->muistiinpano, JSON_FORCE_OBJECT);
-		} else {
+		else
 			$model->muistiinpano = '';
-		}
+
 		return $model;
 	}
 
