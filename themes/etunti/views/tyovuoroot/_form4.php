@@ -465,15 +465,12 @@ $(".muokaValiko").click(function() {
 
   </div>
   <div class="col-sm-3">
-		<div id="peruuttaminen_div">
 		<?php echo $form->labelEx($model,'peruutettu'); ?>
 		<?php
 		$list = $this->peruutettuArray();
 		echo $form->dropDownList($model,'peruutettu', $list, 
 		array('empty'=>'Valitse','class'=>'form-control lomake_valinta'));
 		?>
-		</div>
-		<div class="text-danger huomio_peruutuksesta">Huomio! Toistuvan ketjun peruutukset tehdään allaolevasta kalenterista, painamalla <i class="fa fa-gear"></i> ikonia valitun päivän alla.</div>
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'piilota_mobiilista'); ?>
@@ -559,7 +556,7 @@ $(".muokaValiko").click(function() {
     <div class="input-group">
       <span><?php echo Yii::t('main','Toistuva työvuoro'); ?></span>
       <span class="input-group-btn">
-        <input type="checkbox" name="is_toistuva" class="sw" id="is_toistuva" <?=($toistuva)? 'checked' : ''?>>
+        <input type="checkbox" name="is_toistuva" class="sw" id="is_toistuva">
       </span>
     </div>  
   </div>
@@ -726,7 +723,6 @@ $(document).ready(function(){
     $pto = '';
     $viikkoja = '';
     $viikko_paivat = array();
-    $classCol = 'collapse';
     $toistuvaID =  '<span id="toistuvaID"></span>';
 
     if($toistuva){
@@ -736,7 +732,6 @@ $(document).ready(function(){
     	$viikkoja = $tvt->viikkoja;
     	$viikko_paivat = json_decode($tvt->viikko_paivat, true);
     	$pto = $tvt->pto;
-    	$classCol = 'collapse in';
     	$toistuvaID =  '<span id="toistuvaID">'.$model->toistuva_id.'</span>';
 	}
 
@@ -748,12 +743,11 @@ $(document).ready(function(){
     }
 ?>
 
-<div id="toistuvaAllsijaan"></div>
 <br>
-<div id="toistuvaAll">
+<div id="toistuvaAll" class="collapse">
  <div class="row">
   <div class="col-sm-12">
-   <div class="<?php echo $classCol; ?> panel-footer" id="toistuva_aktiivinen">
+   <div class="panel-footer">
 	<legend><?php echo Yii::t('main','Toistuvan työvuoroketjun asetukset'); ?></legend>
 
 	<div class="row" id="alkaen_loppuen">
@@ -858,7 +852,7 @@ $(document).ready(function(){
 		$m_period = new DatePeriod($m_start, $m_interval, $m_end);
 	?>
 	<input type="hidden" id="cal_start" value="<?=$m_start->format("Y/n/j")?>">
-	<div id="sopivatPaivat" style="display:none"></div>
+	<div id="sopivatPaivat"></div>
 
    </div>
   </div>
@@ -873,10 +867,9 @@ $(document).ready(function(){
 <br>
 	<?php if($toistuva): ?>
 		<p class="text-center text-danger ilmoitus_pvm_muuttosta">
-			Toistuvan ketjun päivijen poistot tai peruutukset tehdään kalenterista, painamalla <i class="fa fa-gear"></i> ikonia valitun päivän alla.<br>
+			Tämä työvuoro kuluu toistuvan ketjun, jolloin poistot ja peruutukset saa tehdä kalenterista, painamalla <i class="fa fa-gear"></i> ikonia valitun päivän alla.<br>
 			Huomio! Lomaketta ei tarvitse tallentaa päiviä poistaessa tai palauttaessa.
 		</p>
-		<p class="text-center text-danger ilmoitus_tulevaisuudesta">Lomakkeen muutokset pystyy tallentamaan vain silloin, kun alkaen -päivämäärä on tulevaisuudessa.</p>
 	<?php endif; ?>
 	<div class="panel-footer text-right">
 		<?php 
@@ -956,58 +949,36 @@ $(document).ready(function(){
 			  }
 	 	});
   }
+/*
   function disable_kentaat(tilanne){
 	$('.lomake_kenta').prop('readonly', tilanne);
 	$('.lomake_valinta, .lomake_btn, #tekijanVaihdo').prop('disabled', tilanne);
   }
-  var varoitus_yksittainen = 'Varoitus!!!\nYrität irtoa tämä päivä toistuva ketjusta.\nTallennamalla luodaan uusi yksittäinen työvuoro.';
-  if( '<?=$toistuva?>' ){
-	$('#peruuttaminen_div, #viesti_mobiili_div').hide();
-	if( pfrom_and_today_check() ){
-		disable_kentaat(false);
-		$('#huomio_yllaosa').html('<div class="alert alert-default"><h4>Huomio!</h4>Tämä on toistuva työvuoro jotta "Työvuoron perustiedot" muokkaus vaikuttaa koko ketjuun.</div>');
-	} else {
-		disable_kentaat(true);
-		$('#huomio_yllaosa').html('<div class="alert alert-default"><h4>Huomio!</h4>Piilotetut kentäät avataan kun ketjun alkaen -päivämäärä on tulevaisuudessa tai ottaessa pois tämä työvuoro toistuvasta ketjusta.</div>');
-	}
-  }
+*/
   var toistuva 	= ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
   $('#is_toistuva').on('switchChange.bootstrapSwitch', function(event, state) {
 	if(state === true){
 		toistuva = true;
+		$('#toistuvaAll').addClass('in');
+		tarkistusLista('<?=$this_id?>');
 		$("#toistuva_aktiivinen").addClass('in');
 		if( $('#pto').val() === '' )
 			$('#pto').addClass('bg-danger');
-		$('#toistuva-repair-funktio').addClass('in');
-		$('.ilmoitus_tulevaisuudesta, .ilmoitus_pvm_muuttosta').show();
-		if( !pfrom_and_laatikkopvm_check() )
-			alert('Huomio! Ketjun alkamispäivä ei sama kun tämän työvuoron päivä.');
+		$('.ilmoitus_pvm_muuttosta, #toistuvaAll').show();
 	} else {
-		disable_kentaat(false);
-		$('#huomio_yllaosa').html('').hide();
 		toistuva = false;
-		$('#sopivatPaivat').html('');
-		$("#toistuva_aktiivinen").removeClass('in');
-		$('#submitButton').show();
-		$('#toistuva-repair-funktio').removeClass('in');
-		if('<?=$toistuva?>')
-			alert(varoitus_yksittainen);
-		$('.ilmoitus_tulevaisuudesta, .ilmoitus_pvm_muuttosta').hide();
-		$('.tvpoisto, #tekijanVaihdo_huomio, .huomio_peruutuksesta').hide();
+		$('#toistuvaAll').removeClass('in');
+		$('#huomio_yllaosa').html('').hide();
+		$('.ilmoitus_pvm_muuttosta').hide();
+		$('.tvpoisto, #tekijanVaihdo_huomio').hide();
 		$(".mult").multiselect("enable");
-		$('#peruuttaminen_div, #viesti_mobiili_div').show();
-		$('#is_toistuva').bootstrapSwitch('disabled', true);
 	}
 
   });
   var pfrom 	= $("#pfrom").val();
   var pto 	= $("#pto").val();
   var tekijanVaihdo 	= $('#tekijanVaihdo option:selected').val();
-  if( toistuva == true ){
-	tarkistusLista('<?=$this_id?>');
-  } else {
-	$('.huomio_peruutuksesta').hide();
-  }
+
   $('#tekijanVaihdo').change(function(){
 	if($('#tyopaari').val() !== null){
 		$($('#tyopaari').val()).each(function( index, val ) {
@@ -1172,7 +1143,6 @@ $(document).ready(function(){
 	if(new_pfrom.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
 		return false;
 	}
-	$(".ilmoitus_tulevaisuudesta").hide();
 	return true;
   }
   function pfrom_and_pto_check(){
@@ -1732,14 +1702,6 @@ $(document).ready(function(){
 	$("#kohde_url").html('<a href="'+ url +'" target="_blank">Muokkaa '+ thisText +'</a>');
 	//console.log(thisID);
   }
-
-  $(document).delegate(".sopiiSopivat","click",function(){
-	$(this).remove();
-	$('#sopivatPaivatInput').val(1);
-	$('#toistuvaAll').hide('slow');
-	$('#submitButton').val('Tallenna').removeAttr( "pvmTarkistus" );
-	$('#toistuvaAllsijaan').html('<h3 class="alert alert-success">Toistuvien työvuorojen päivät tallennettu.<br>Paina Tallenna-painikketta lisätäksesi työvuorot työvuorolistaan.</h3>').show('slow');
-  });
 
   // <-- modal siirtaminen
 	$("#modal-form").find(".panel-heading").hover(function() {

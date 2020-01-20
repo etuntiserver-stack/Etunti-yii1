@@ -4493,7 +4493,7 @@ class TyovuorootController extends Controller
 
 	protected function model_json_converter($post, $model, $toistuva)
 	{
-		if(isset($post['P'])){	$model->viikko_paivat = json_encode($post['P']); }
+		if($toistuva and isset($post['P'])){ $model->viikko_paivat = json_encode($post['P']); }
 		if($toistuva and isset($post['tyopaari'])){
 			$post['tyopaari'][] = $model->tid;
 			$model->tyopaari = json_encode($post['tyopaari']); 
