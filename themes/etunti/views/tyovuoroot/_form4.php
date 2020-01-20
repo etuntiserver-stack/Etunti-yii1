@@ -556,7 +556,7 @@ $(".muokaValiko").click(function() {
     <div class="input-group">
       <span><?php echo Yii::t('main','Toistuva työvuoro'); ?></span>
       <span class="input-group-btn">
-        <input type="checkbox" name="is_toistuva" class="sw" id="is_toistuva">
+        <input type="checkbox" name="is_toistuva" class="sw" id="is_toistuva" <?=(( strtotime($laatikko_pvm) < strtotime(date("Y-m-d")) )? 'disabled': '')?>>
       </span>
     </div>  
   </div>
@@ -728,18 +728,12 @@ $(document).ready(function(){
     if($toistuva){
 	$tvt = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id); // Toistuva modelissa on GETtoistuva_id
 	if(isset($tvt->id)){
-    	$pfrom = $tvt->pfrom;
-    	$viikkoja = $tvt->viikkoja;
-    	$viikko_paivat = json_decode($tvt->viikko_paivat, true);
-    	$pto = $tvt->pto;
-    	$toistuvaID =  '<span id="toistuvaID">'.$model->toistuva_id.'</span>';
+    		$viikkoja = $tvt->viikkoja;
+    		$viikko_paivat = json_decode($tvt->viikko_paivat, true);
+    		$pto = $tvt->pto;
+    		$toistuvaID =  '<span id="toistuvaID">'.$model->toistuva_id.'</span>';
 	}
 
-    } else {
-	if( strtotime($laatikko_pvm) < strtotime($today) )
-	    	$pfrom = $today;
-	else
-	    	$pfrom = $laatikko_pvm;
     }
 ?>
 
@@ -753,7 +747,7 @@ $(document).ready(function(){
 	<div class="row" id="alkaen_loppuen">
 	  <div class="col-sm-4">
 		<label><?php echo Yii::t('main', 'Alkaen'); ?> </label>
-		<input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pfrom]" id="pfrom" value="<?php echo date('d.m.Y', strtotime($pfrom)); ?>">
+		<input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pfrom]" id="pfrom" value="<?php echo date('d.m.Y', strtotime($laatikko_pvm)); ?>">
 	  </div>
 	  <div class="col-sm-4">
 		<label><?php echo Yii::t('main', 'Loppuen'); ?></label>
@@ -1060,14 +1054,12 @@ $(document).ready(function(){
 		$('#tekijanVaihdo').attr('disabled', 'yes');
 		$('#tekijanVaihdo_huomio').remove();
 		$(".mult").multiselect("disable");
-		$('#submitButton').hide();
 	} else {
 		$("#pfrom").removeClass('bg-danger');
 		$(".vkopvmswitch").bootstrapSwitch('disabled', false);
 		$("#Toistuva_viikkoja").removeAttr('disabled');
 		$('#tekijanVaihdo').removeAttr('disabled');
 		$(".mult").multiselect("enable");
-		$('#submitButton').show();
 	}
 
 	var post_tids = [];
