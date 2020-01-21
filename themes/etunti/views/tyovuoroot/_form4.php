@@ -429,6 +429,16 @@ $(".muokaValiko").click(function() {
   <div class="col-sm-3">
 		<label><?php echo Yii::t('main', 'Työpari'); ?></label><br>
 		<?php 
+		// <-- Order tyontekijat
+		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+			$tt_order_1 = "tekijan_nimi";
+			$tt_order_2 = "sukunimi";
+		} else {
+			$tt_order_1 = "sukunimi";
+			$tt_order_2 = "tekijan_nimi";
+		}
+		// Order tyontekijat -->
+
 		$criteria=new CDbCriteria;
 		// <-- Return order etu ja sukunimella
 		$site = Yii::app()->createController('Site');
@@ -453,10 +463,10 @@ $(".muokaValiko").click(function() {
 			echo '<select name="'.$java_prefix.'[tyopaari][]" id="tyopaari" class="mult" multiple>';
 			foreach($tt as $tekija)
 			{
-			  if(is_array($tyopaari) and in_array($tekija->id,$tyopaari, true))
-			    echo '<option value="'.$tekija->id.'" selected>'.$this->etuSukunimi($tekija->id).'</option>';
+			  if(is_array($tyopaari) and in_array($tekija->id, $tyopaari, true))
+			    echo '<option value="'.$tekija->id.'" selected>'.$tekija->$tt_order_1.' '.$tekija->$tt_order_2.'</option>';
 			  else
-			    echo '<option value="'.$tekija->id.'">'.$this->etuSukunimi($tekija->id).'</option>';
+			    echo '<option value="'.$tekija->id.'">'.$tekija->$tt_order_1.' '.$tekija->$tt_order_2.'</option>';
 			}
 			echo '</select>';
 		}
@@ -1256,7 +1266,7 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			//console.log(data);
+			console.log(data);
 			laatikonPaivays();
 			return false;
 			//window.location.reload();
