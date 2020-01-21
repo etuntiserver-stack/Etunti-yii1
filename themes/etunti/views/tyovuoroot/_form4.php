@@ -779,58 +779,58 @@ $(document).ready(function(){
 	  <label><?php echo Yii::t('main', 'Ma'); ?></label>
 	
 	  <?php if(in_array(1, $viikko_paivat)): ?>
-	  <input type="checkbox" class="sw vkopvmswitch" name="P[1]" id="ma" value="1" checked>
+	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][1]" id="ma" value="1" checked>
 	  <?php else: ?>
-	  <input type="checkbox" class="sw vkopvmswitch" name="P[1]" id="ma" value="1">
+	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][1]" id="ma" value="1">
 	  <?php endif; ?>
 
 	  <label><?php echo Yii::t('main', 'Ti'); ?></label>
 
 	  <?php if(in_array(2, $viikko_paivat)): ?>
-	  <input type="checkbox" class="sw vkopvmswitch" name="P[2]" id="ti" value="2" checked>
+	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][2]" id="ti" value="2" checked>
 	  <?php else: ?>
-	  <input type="checkbox" class="sw vkopvmswitch" name="P[2]" id="ti" value="2">
+	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][2]" id="ti" value="2">
 	  <?php endif; ?>
 
 
 	  <label><?php echo Yii::t('main', 'Ke'); ?></label>
 
 	  <?php if(in_array(3, $viikko_paivat)): ?>
-	  <input type="checkbox" class="sw vkopvmswitch" name="P[3]" id="ke" value="3" checked>
+	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][3]" id="ke" value="3" checked>
 	  <?php else: ?>
-	  <input type="checkbox" class="sw vkopvmswitch" name="P[3]" id="ke" value="3">
+	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][3]" id="ke" value="3">
 	  <?php endif; ?>
 	
 	  <label><?php echo Yii::t('main', 'To'); ?></label>
 
 	  <?php if(in_array(4, $viikko_paivat)): ?>
-	  <input type="checkbox" class="sw vkopvmswitch" name="P[4]" id="to" value="4" checked>
+	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][4]" id="to" value="4" checked>
 	  <?php else: ?>
-	  <input type="checkbox" class="sw vkopvmswitch" name="P[4]" id="to" value="4">
+	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][4]" id="to" value="4">
 	  <?php endif; ?>
 
 	  <label><?php echo Yii::t('main', 'Pe'); ?></label>
 
 	  <?php if(in_array(5, $viikko_paivat)): ?>
-	  <input type="checkbox" class="sw vkopvmswitch" name="P[5]" id="pe" value="5" checked>
+	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][5]" id="pe" value="5" checked>
 	  <?php else: ?>
-	  <input type="checkbox" class="sw vkopvmswitch" name="P[5]" id="pe" value="5">
+	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][5]" id="pe" value="5">
 	  <?php endif; ?>
 
 	  <label><?php echo Yii::t('main', 'La'); ?></label>
 
 	  <?php if(in_array(6, $viikko_paivat)): ?>
-	  <input type="checkbox" class="sw vkopvmswitch" name="P[6]" id="la" value="6" checked>
+	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][6]" id="la" value="6" checked>
 	  <?php else: ?>
-	  <input type="checkbox" class="sw vkopvmswitch" name="P[6]" id="la" value="6">
+	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][6]" id="la" value="6">
 	  <?php endif; ?>
 
 	  <label><?php echo Yii::t('main', 'Su'); ?></label>
 	
 	  <?php if(in_array(7, $viikko_paivat)): ?>
-	  <input type="checkbox" class="sw vkopvmswitch" name="P[7]" id="su" value="7" checked>
+	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][7]" id="su" value="7" checked>
 	  <?php else: ?>
-	  <input type="checkbox" class="sw vkopvmswitch" name="P[7]" id="su" value="7">
+	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][7]" id="su" value="7">
 	  <?php endif; ?>
 
 	  </div>
@@ -1256,7 +1256,7 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			console.log(data);
+			//console.log(data);
 			laatikonPaivays();
 			return false;
 			//window.location.reload();
@@ -1299,7 +1299,7 @@ $(document).ready(function(){
 			returnthis.push(parseInt(val));
 		});
 	}
-	returnthis = post_tids.filter((a, b) => post_tids.indexOf(a) === b); // remove duplicates
+	returnthis = returnthis.filter((a, b) => returnthis.indexOf(a) === b); // remove duplicates
 	return returnthis;
   }
 

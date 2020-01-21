@@ -3986,8 +3986,10 @@ class TyovuorootController extends Controller
 		}
 
 		if(isset($post)){
-
-			$model->attributes = $post;
+			//print_r($post);
+			//exit;
+			$cleared_attr = $this->compareToistuvaAttributes($model->attributes, $post);
+			$model->attributes = $cleared_attr;
 			$this->model_json_converter($post, $model, $toistuva);
 
 			// <-- Apuaika
@@ -4001,37 +4003,12 @@ class TyovuorootController extends Controller
 
 				// <-- PushNotify
 				if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
-				$this->pushNotifySending($model->id);
+					$this->pushNotifySending($model->id);
 				// PushNotify -->
 
 				// <-- jos on tyopaari
-				if(!$toistuva and count(json_decode($model->tyopaari, true)) > 1){
-					$tids 		= json_decode($model->tyopaari, true);
-					$created_id 	= $model->id;
-					$luotu 		= [];
-					foreach($tids as $tid){
-						if( $post['tid'] == $tid ){
-							$luotu[$created_id] = $model->tid;
-							continue;
-						}
-						$model = new Tyovuoroot;
-						$model->attributes = $post;
-						$model->pvm = date("d.m.Y",strtotime($post['pvm']));
-						$model->tid = $tid;
-						$this->model_json_converter($post, $model, $toistuva);
-						if($model->save()){
-							$luotu[$model->id] = $model->tid;
-
-							// <-- PushNotify
-							if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
-								$this->pushNotifySending($model->id);
-							// PushNotify -->
-						}
-
-					}
-					foreach($luotu as $k => $v)
-						Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode($luotu)));
-				}
+				if(!$toistuva and count(json_decode($model->tyopaari, true)) > 1)
+					$this->tyopari_luonti($model, $post);
 				// jos on tyopaari -->
 
 				// <-- LOG
@@ -4061,28 +4038,29 @@ class TyovuorootController extends Controller
 	}
 
 	public function this_id($this_id){
-		if( substr($this_id, 0, 8) == '99999999' ){
-			$toistuva 	= true;
-			$model 		= ToistuvatTyovuorot::model()->findByPk((int)substr($this_id, 8, 8));
-			$tid 		= substr($this_id, 24);
-			$pvm 		= date("d.m.Y", strtotime(substr($this_id, 16, 8)));
-		} else {
-			$toistuva 	= false;
-			$model		= Tyovuoroot::model()->findByPk($this_id);
-			$tid 		= $model->tid;
-			$pvm 		= $model->pvm;
-		}
-
+		if( $this_id != 'null' ){
+			if( substr($this_id, 0, 8) == '99999999' ){
+				$toistuva 	= true;
+				$model 		= ToistuvatTyovuorot::model()->findByPk((int)substr($this_id, 8, 8));
+				$tid 		= substr($this_id, 24);
+				$pvm 		= date("d.m.Y", strtotime(substr($this_id, 16, 8)));
+			} else {
+				$toistuva 	= false;
+				$model		= Tyovuoroot::model()->findByPk($this_id);
+				$tid 		= $model->tid;
+				$pvm 		= $model->pvm;
+			}
 		//echo json_encode( $pvm .' '.$tid.' '.$model->id );
 		//exit;
 		return ['model' => $model, 'toistuva' => $toistuva, 'pvm' => $pvm, 'tid' => $tid];
+		}
 	}
 
-	public function compareToistuvaAttributes($tv_attr, $toistuva_attr){
+	public function compareToistuvaAttributes($attr1, $attr2){
 		$cleared = [];
-		foreach($tv_attr as $key => $attr){
-			if( isset($toistuva_attr[$key]) )
-				$cleared[$key] = $toistuva_attr[$key];
+		foreach($attr1 as $key => $attr){
+			if( isset($attr2[$key]) )
+				$cleared[$key] = $attr2[$key];
 		}
 		if( isset($cleared['id']) )
 			unset($cleared['id']);
@@ -4229,7 +4207,12 @@ class TyovuorootController extends Controller
 			if(!$model->save()){
 				echo json_encode($model->getErrors());
 			} else {
-				$this->tyopari_updater($model);
+				// <-- jos on tyopaari
+				if(count(json_decode($model->tyopaari, true)) > 1){
+					$this->tyopari_luonti($model, $post);
+				}
+				// jos on tyopaari -->
+
 				$u		= Yii::app()->user->nimi;
 				$d		= date("d.m.Y");
 				$poisto_syy	= ['text'=>'ByUpdateChangeToYksittyinen', 'user'=>$u, 'date'=>$d];
@@ -4290,7 +4273,7 @@ class TyovuorootController extends Controller
 				$arr = [];
 				$luotu[$model->id] = $model->tid;
 				$arr[$model->id] = array($model->tid,$model->pvm);
-KKKKKKK
+
 			    foreach($_POST['tyopaari'] as $tid)
 			    {
 				if( isset($vanhat_arr[$tid]) ){
@@ -4465,15 +4448,49 @@ KKKKKKK
 
 	}
 
-	protected function tyopari_updater($model)
+	protected function tyopari_luonti($model, $post)
 	{
+		$site = Yii::app()->createController('Site');
+		$tids 		= json_decode($model->tyopaari, true);
+		$created_id 	= $model->id;
+		$luotu 		= [];
+		foreach($tids as $tid){
+			if( $post['tid'] == $tid ){
+				$luotu[$created_id] = $model->tid;
+				continue;
+			}
+			$model = new Tyovuoroot;
+			$model->attributes = $post;
+			$model->pvm = date("d.m.Y",strtotime($post['pvm']));
+			$model->tid = $tid;
+			$this->model_json_converter($post, $model, false);
+			if($model->save()){
+				$luotu[$model->id] = $model->tid;
+				// <-- PushNotify
+				if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+					$this->pushNotifySending($model->id);
+				// PushNotify -->
 
+				// <-- LOG
+				$model_log 	= 'Tyovuoroot';
+				$name_log 	= 'Työvuorot';
+				$status_log 	= 'Create';
+				$old_values 	= null;
+				$new_values = json_encode($model->attributes);
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+			}
+		}
+		foreach($luotu as $k => $v)
+			Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode($luotu)));
+
+		return true;
 	}
 
 	protected function model_json_converter($post, $model, $toistuva)
 	{
-		if( isset($post['is_toistuva']) and isset($post['P']) )
-			$model->viikko_paivat = json_encode($post['P']);
+		if( isset($post['is_toistuva']) and isset($post['viikko_paivat']) )
+			$model->viikko_paivat = json_encode($post['viikko_paivat']);
 
 		if( isset($post['tyopaari']) ){
 			$post['tyopaari'][] = $post['tid'];
