@@ -4297,7 +4297,7 @@ class TyovuorootController extends Controller
 
 		}
 		//     Tavallinen tyovuoro Tyopari preUpdate -->
-PAKKO MIETTIA
+
 		print_r($tp_preupdate);
 		exit;
 
