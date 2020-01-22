@@ -397,44 +397,6 @@ window.addEventListener('message', function(e) {
 		}
 
 		jQuery.clearKaikki();
-
-/*
-		if(data !== '')
-		{
-			var sp = JSON.parse(data);
-			if(sp[0])
-			{
-				if(sp[0] == 'Error'){
-					alert(sp[1]);
-					return false;
-				}
-				$('#'+newPvm+'_'+newTid).html(JSON.parse(sp[0]));
-				
-				if(thisID[0] == 'forCopy')
-				{
-					var ThisHeight = $('#'+newPvm+'_'+newTid).height();
-					var FirstHeight = $('#first_'+newPvm).height(ThisHeight);
-				}
-
-			}
-	
-			if(sp[1])
-			{
-	  			var parseData = sp[1].split(',');
-				tv_id = 0;
-	  			$(parseData).each(function(index, value) {
-					//console.log(value);
-					tv_id = value.split('_');
-					$('#'+tv_id[0]).remove();
-				});
-				parseData = '';
-			}
-	
-		  	jQuery.clearKaikki();
-
-		}
-*/
-
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	console.log(XMLHttpRequest);
