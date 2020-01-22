@@ -4184,15 +4184,40 @@ class TyovuorootController extends Controller
 			$merge = array_merge($_POST['Tyovuoroot'], $_POST['ToistuvatTyovuorot']);
 			$model->attributes = $merge;
 			$this->model_json_converter($post, $model, $toistuva);
+
+			// <-- Tyopaarit
+			$must_delete = [];
+			if( !empty($model->tyopaari) )
+				$updated_tp = json_decode($model->tyopaari, true);
+			if( count($edelliset_tyoparit) > 0 ){
+				$luotu = [];
+				if( count($post_tyopaari) == 0 ){
+					foreach($edelliset_tyoparit as $tv_id => $tid)
+						if( $tv_id != $cur_model_id )
+							$luotu[$tv_id] = $tid;
+					foreach($luotu as $tv_id => $tid)
+						Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => json_encode($luotu)));
+				} else {
+					$unchecked 	= [];
+					$rm 		= array_diff( $edelliset_tyoparit, $updated_tp );
+					foreach($rm as $tid)
+						$unchecked[$tid] = $tid;
+					foreach($edelliset_tyoparit as $tv_id => $tid){
+						if(isset($unchecked[$tid]))
+							$luotu[$tv_id] = $tid;
+						else
+							Tyovuoroot::model()->deleteByPk($tv_id);
+					}
+					foreach($luotu as $tv_id => $tid)
+						Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => json_encode($luotu)));
+				}
+			}
+			Tyovuoroot::model()->deleteByPk($cur_model_id);
+			//     Tyopaarit -->
+
 			if(!$model->save()){
 				echo json_encode($model->getErrors());
 			} else {
-				if( count($edelliset_tyoparit) > 0 ){
-					foreach($edelliset_tyoparit as $tv_id => $tid)
-						Tyovuoroot::model()->deleteByPk($tv_id);
-				} else {
-					Tyovuoroot::model()->deleteByPk($cur_model_id);
-				}
 				$return = ['return' => 'uusi_ketju_ok'];
 				echo json_encode($return);
 			}
