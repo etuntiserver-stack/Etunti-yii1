@@ -1179,10 +1179,16 @@ class TyovuorootController extends Controller
 
 	public function actionMuistin()
 	{
+		$return 	= [];
+		$get_id 	= $this->this_id($_POST['id']);
+		$model 		= $get_id['model'];
+		$toistuva 	= $get_id['toistuva'];
+		if( !$toistuva and is_array(json_decode($model->tyopaari, true)) and count(json_decode($model->tyopaari, true)) > 0 )
+			$return['varoitus'] = "Huomio!\n\nSiirtäessä tai poistaessa irotat tämä työvuoro olevasta työparista.\nKopiointi ei vaikuttaa työpariin.";
 		if(isset($_POST['id'])){
 			$_SESSION['muistin'][] = $_POST['id'];
-			//print_r($_SESSION['muistin']);
 		}
+		echo json_encode($return);
 		exit;
 	}
 
@@ -1316,7 +1322,7 @@ class TyovuorootController extends Controller
 				$toistuva 	= $get_id['toistuva'];
 				$pvm 		= $get_id['pvm'];
 				$tid 		= $get_id['tid'];
-				$tids[]		= $tid;
+				$tids[$tid]	= $tid;
 
 				$vanha_pvm = $model->pvm;
 
@@ -1378,7 +1384,7 @@ class TyovuorootController extends Controller
 				$toistuva 	= $get_id['toistuva'];
 				$pvm 		= $get_id['pvm'];
 				$tid 		= $get_id['tid'];
-				$tids[]		= $tid;
+				$tids[$tid]	= $tid;
 
 				$u		= Yii::app()->user->nimi;
 				$d		= date("d.m.Y");
@@ -1404,6 +1410,7 @@ class TyovuorootController extends Controller
 			    			if( is_array($edelliset_tyoparit) ){
 							$uusi_tp_arr = [];
 							foreach($edelliset_tyoparit as  $id => $tp_id){
+								$tids[$tp_id] = $tp_id; // for tv_arr_update
 								if( $id != $model->id )
 									$uusi_tp_arr[$id] = $tp_id;
 							}
@@ -4196,7 +4203,10 @@ class TyovuorootController extends Controller
 						if( $tv_id != $cur_model_id )
 							$luotu[$tv_id] = $tid;
 					foreach($luotu as $tv_id => $tid)
-						Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => json_encode($luotu)));
+						if( count($luotu) == 1 )
+							Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => ''));
+						else
+							Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => json_encode($luotu)));
 				} else {
 					$unchecked 	= [];
 					$rm 		= array_diff( $edelliset_tyoparit, $updated_tp );
@@ -4209,7 +4219,10 @@ class TyovuorootController extends Controller
 							Tyovuoroot::model()->deleteByPk($tv_id);
 					}
 					foreach($luotu as $tv_id => $tid)
-						Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => json_encode($luotu)));
+						if( count($luotu) == 1 )
+							Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => ''));
+						else
+							Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => json_encode($luotu)));
 				}
 			}
 			Tyovuoroot::model()->deleteByPk($cur_model_id);

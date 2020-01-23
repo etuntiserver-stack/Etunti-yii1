@@ -137,7 +137,10 @@ $(document).delegate(".muistin","click",function(){
 	   type:'POST',
 	   data: { "id" : thisFor },
            success: function(data){
-        	//console.log(data);
+		data = JSON.parse(data);
+        	console.log(data);
+		if( data['varoitus'] )
+			alert( data['varoitus'] );
 	  	muisti();
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
