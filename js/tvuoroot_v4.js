@@ -139,8 +139,14 @@ $(document).delegate(".muistin","click",function(){
            success: function(data){
 		data = JSON.parse(data);
         	console.log(data);
-		if( data['varoitus'] )
-			alert( data['varoitus'] );
+		if( data['varoitus_tyopaari'] || data['varoitus_toistuva'] ){
+			alertti = "Huomio!\n\n";
+			if( data['varoitus_tyopaari'] )
+				alertti += "Siirtäessä tai poistaessa irotat " + data['varoitus_tyopaari']['alku'] + "-" + data['varoitus_tyopaari']['loppu'] + ", " + data['varoitus_tyopaari']['osoite'] + " työvuoro olevasta työparista";
+			if( data['varoitus_toistuva'] )
+				alertti += "Siirtäessä tai poistaessa irotat " + data['varoitus_toistuva']['alku'] + "-" + data['varoitus_toistuva']['loppu'] + ", " + data['varoitus_toistuva']['osoite'] + " työvuoro toistuvasta ketjusta.";
+			alert(alertti);
+		}
 	  	muisti();
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -276,9 +282,8 @@ $(document).delegate(".tv_edit","click",function(){
 });
 
 $(document).delegate(".valitseKokopaiva","click",function(){
-	var pvm = $(this).attr("pvm");
-	var tid = $(this).attr("tid");
-
+	var pvm = $(this).closest('.latikkoAsetukset').attr("pvm");
+	var tid = $(this).closest('.latikkoAsetukset').attr("tid");
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/valitse_kokopaiva',
            type: "POST",
@@ -286,6 +291,15 @@ $(document).delegate(".valitseKokopaiva","click",function(){
            success: function(data){
 		d = JSON.parse(data);
 		console.log(data);
+		alertti = "Huomio!\n\n";
+		$(d).each(function( index, value ) {
+			if( value['varoitus_tyopaari'] || value['varoitus_toistuva'] )
+				if( value['varoitus_tyopaari'] )
+					alertti += "Siirtäessä tai poistaessa irotat " + value['varoitus_tyopaari']['alku'] + "-" + value['varoitus_tyopaari']['loppu'] + ", " + value['varoitus_tyopaari']['osoite'] + " työvuoro olevasta työparista.\n\r";
+				if( value['varoitus_toistuva'] )
+					alertti += "Siirtäessä tai poistaessa irotat " + value['varoitus_toistuva']['alku'] + "-" + value['varoitus_toistuva']['loppu'] + ", " + value['varoitus_toistuva']['osoite'] + " työvuoro toistuvasta ketjusta.\n\r";
+		});
+		alert(alertti);
 		muisti();
            }
         });

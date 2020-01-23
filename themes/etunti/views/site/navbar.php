@@ -508,19 +508,17 @@ $('.multTyoryhma').multiselect({
 });
 </script>
 
-
-
 	    <li class="muokkausLi" style="display:none">
 	     <a href="#" class="bg-warning">
 	        <span class="mr10">Muokkaus tila</span>
 	     </a>
 	    </li>
 	    <li class="muokkausLi" style="display:none">
-	     <a href="#" class="trash fa fa-trash-o" style="font-size: 150%">
+	     <a href="#" class="trash fa fa-trash-o" style="font-size: 150%" data-toggle="tooltip" data-placement="bottom" title="Poista valinnut työvuorot">
 	     </a>
 	    </li>
 	    <li class="muokkausLi" style="display:none">
-	     <a href="#" class="clear fa fa-circle-o-notch" style="font-size: 150%">
+	     <a href="#" class="clear fa fa-circle-o-notch" style="font-size: 150%" data-toggle="tooltip" data-placement="bottom" title="Keskeytä">
 	     </a>
 	    </li>
 	    <?php endif; ?>

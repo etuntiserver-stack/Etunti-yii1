@@ -1136,55 +1136,39 @@ class TyovuorootController extends Controller
 	{
 		$return = [];
 		if(isset($_POST['pvm']) and isset($_POST['tid'])){
-/*
-			$criteria=new CDbCriteria;
-			$criteria->condition = " 
-				pvm='".date("d.m.Y", strtotime($_POST['pvm']))."' 
-				AND tid='".$_POST['tid']."'
-			";
-			$tv = Tyovuoroot::model()->findAll($criteria);
-			$asetukset = Asetukset::model()->findByPk(1);
-			$for = '';
-			if(isset($tv[0]))
-			{
-			  foreach($tv as $data)
-			  {
-
-			   	// <-- Tyoryhmat
-				if( 
-				   isset($data->kohteet) 
-				   and isset($asetukset) 
-				   and $asetukset->tyoryhmat_kohde == 1 
-				){
-					$site = Yii::app()->createController('Site');
-					$arr = $site[0]->TyoryhmatHelper();
-					if( count($arr) > 0 and !in_array($data->kohteet->tyoryhma, $arr)){
-			   			continue;
+			$pvm_from = date("Y-m-d", strtotime($_POST['pvm']));
+			$pvm_to = date("Y-m-d", strtotime($_POST['pvm']));
+			$tv_arr = $this->tv_arr($pvm_from, $pvm_to, [$_POST['tid']], $asiakas='', $kohde='', $kohteet_siivous=[]);
+			foreach($tv_arr[$_POST['tid']][$_POST['pvm']] as $k => $v)
+				foreach($v as $v2){
+					preg_match_all("/id=\"(.*?)\"/is", $v2, $matches );
+					if( isset($matches[1][0]) ){
+						$return[] = $this->check_muistista($matches[1][0]);
+						$_SESSION['muistin'][] = $matches[1][0];
 					}
 				}
-			   	//    Tyoryhmat -->
-
-				$id = $data->id."_".date("Ymd", strtotime($data->pvm))."_".$data->tid;
-				$for = date("Ymd", strtotime($data->pvm))."_".$data->tid;
-				$_SESSION['muistin'][$id] = $id;
-			  }
-			}
-				print_r($_SESSION['muistin']);
-*/
-		}
 		echo json_encode($return);
+		}
 		exit;
 
 	}
 
-	public function actionMuistin()
+	protected function check_muistista($id)
 	{
 		$return 	= [];
-		$get_id 	= $this->this_id($_POST['id']);
+		$get_id 	= $this->this_id($id);
 		$model 		= $get_id['model'];
 		$toistuva 	= $get_id['toistuva'];
 		if( !$toistuva and is_array(json_decode($model->tyopaari, true)) and count(json_decode($model->tyopaari, true)) > 0 )
-			$return['varoitus'] = "Huomio!\n\nSiirtäessä tai poistaessa irotat tämä työvuoro olevasta työparista.\nKopiointi ei vaikuttaa työpariin.";
+			$return['varoitus_tyopaari'] = ['alku' => $model->alku, 'loppu' => $model->loppu, 'osoite' => $model->osoite];
+		if( $toistuva )
+			$return['varoitus_toistuva'] = ['alku' => $model->alku, 'loppu' => $model->loppu, 'osoite' => $model->osoite];
+		return $return;
+	}
+
+	public function actionMuistin()
+	{
+		$return = $this->check_muistista($_POST['id']);
 		if(isset($_POST['id'])){
 			$_SESSION['muistin'][] = $_POST['id'];
 		}
@@ -4164,7 +4148,7 @@ class TyovuorootController extends Controller
 			$post = $_POST['Tyovuoroot'];
 
 		// <-- Variables
-		$post['pvm'] 		= date("d.m.Y",strtotime($laatikko_pvm));
+		//$post['pvm'] 		= date("d.m.Y",strtotime($laatikko_pvm)); Kun siirretaan tyoparit muu paivaan.. sitten se ei onnistuu
 		$edellinen_model 	= $model->attributes;
 		$edelliset_tyoparit 	= json_decode($edellinen_model['tyopaari'], true);
 		$post_tyopaari		= (isset($post['tyopaari']))? $post['tyopaari'] : [];
