@@ -229,12 +229,6 @@ $months = array(
 		};
 	})(row_cols);
 
-	$(function() {
-		$(document).delegate("input", "blur", function() {
-			$('#charts_submit').show('slow');
-		});
-	});
-
 	// Function to add chart to charts-container div.
 	var add_chart_container = function(options, inputs = []) {
 		var row_num = Math.ceil(charts_total / row_cols); // row number, e.g. row 2 for container 3 (ceil(3/2=1.5)=2).
@@ -248,11 +242,11 @@ $months = array(
 
 		// Check whether to add new row div, e.g. container 3%2=1; new row.
 		if (charts_remainder == 1)
-			$('#charts-container').append(`<div class="row p10" id="${row_id}"></div>`);
+			$('#charts-container').append(`<div class="row p10 chart-row" id="${row_id}"></div>`);
 
 		// Add column to current row.
-		$(`#${row_id}`).append(`<div class="${col_class}" id="${col_id}"></div>`);
-		$(`#${col_id}`).append(`<div id="${chart_id}"></div>`)
+		$(`#${row_id}`).append(`<div class="${col_class} chart-col" id="${col_id}"></div>`);
+		$(`#${col_id}`).append(`<div class="chart-container" id="${chart_id}"></div>`)
 
 		// Print chart to selected column.
 		Highcharts.chart(chart_id, options);
@@ -270,7 +264,7 @@ $months = array(
 				};
 			})(inputs.length);
 
-			var content = '<div class="admin-form"><div class="row">';
+			var content = '<div class="admin-form"><div class="row chart-controls">';
 			var date_fields = [];
 
 			$(inputs).each(function(k, v) {
@@ -279,7 +273,7 @@ $months = array(
 						content += `
 							<div class="${inputs_class}">
 								<label class="field prepend-icon">
-									<input type="text" name="${v.id}" id="${v.id}" class="gui-input datepickerFI" value="${v.default_value}">
+									<input type="text" name="${v.id}" id="${v.id}" class="gui-input datepickerFI" value="${v.default}">
 									<label for="firstname" class="field-icon">
 										<i class="glyphicon glyphicon-calendar"></i>
 									</label>
@@ -287,6 +281,21 @@ $months = array(
 							</div>
 						`;
 						date_fields.push(v.id);
+						break;
+					case 'chart_type':
+						content += `
+							<div class="${inputs_class}">
+								<label class="field select">
+									<select name="${v.id}" class="gui-input">
+										<option value="line" ` + (v.default == 'line' ? 'selected' : '') + `><?php echo Yii::t('main', 'Line'); ?></option>
+										<option value="bar" ` + (v.default == 'bar' ? 'selected' : '') + `><?php echo Yii::t('main', 'Bar'); ?></option>
+										<option value="column" ` + (v.default == 'column' ? 'selected' : '') + `><?php echo Yii::t('main', 'Column'); ?></option>
+										<option value="area" ` + (v.default == 'area' ? 'selected' : '') + `><?php echo Yii::t('main', 'Area'); ?></option>
+									</select>
+									<i class="arrow double"></i>
+								</label>
+							</div>
+						`;
 						break;
 				}
 			});
@@ -303,6 +312,13 @@ $months = array(
 			});
 		}
 	};
+
+	$(function() {
+		// Activate the save button.
+		$(document).delegate("input, select", "blur", function() {
+			$('#charts_submit').show('slow');
+		});
+	});
 </script>
 
 <!------------------------------------------------------------------------------
@@ -314,6 +330,7 @@ $months = array(
 
 	$tyovuorojen_maara_from = date("Y-m-d", strtotime($_POST['tyovuorojen_maara_from'] ?? '01.01.2019'));
 	$tyovuorojen_maara_to = date("Y-m-d", strtotime($_POST['tyovuorojen_maara_to'] ?? '31.12.2019'));
+	$tyovuorojen_maara_type = $_POST['tyovuorojen_maara_type'] ?? 'line';
 	$tyovuorojen_maara_from_formated = date("d.m.Y", strtotime($tyovuorojen_maara_from));
 	$tyovuorojen_maara_to_formated = date("d.m.Y", strtotime($tyovuorojen_maara_to));
 
@@ -361,7 +378,7 @@ $months = array(
 					type: '<?= $chart_type ?>'
 				},
 				title: {
-					text: 'Työvuorojen määrä <?= date("d.m.Y", strtotime($tyovuorojen_maara_from)) . "-" . date("d.m.Y", strtotime($tyovuorojen_maara_to)) ?>'
+					text: 'Työvuorojen määrä <?= "$tyovuorojen_maara_from_formated-$tyovuorojen_maara_to_formated" ?>'
 				},
 				xAxis: {
 					categories: JSON.parse('<?= json_encode(array_values($categories)) ?>')
@@ -384,8 +401,9 @@ $months = array(
 					enabled: true
 				}
 			}, [
-				{ id: 'tyovuorojen_maara_from', type: 'date', default_value: '<?= $tyovuorojen_maara_from_formated ?>' },
-				{ id: 'tyovuorojen_maara_to', type: 'date', default_value: '<?= $tyovuorojen_maara_to_formated ?>' },
+				{ id: 'tyovuorojen_maara_type', type: 'chart_type', default: '<?= $tyovuorojen_maara_type ?>' },
+				{ id: 'tyovuorojen_maara_from', type: 'date', default: '<?= $tyovuorojen_maara_from_formated ?>' },
+				{ id: 'tyovuorojen_maara_to', type: 'date', default: '<?= $tyovuorojen_maara_to_formated ?>' }
 			]);
 		});
 	</script>
