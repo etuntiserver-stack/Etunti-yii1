@@ -41,7 +41,7 @@
 	}
 
 	/* Charts submit button */
-	#charts_submit {
+	#chart-submit-btn {
 		position: fixed;
 		margin: 0 8px 8px 0;
 		bottom: 0;
@@ -52,6 +52,13 @@
     line-height: normal;
 	}
 </style>
+
+<?php
+
+// var_dump($_POST);
+// exit;
+
+?>
 
 <!------------------------------------------------------------------------------
 -- Yläpalkki
@@ -65,7 +72,10 @@
 <!-- Main chart toggle menu -->
 <div id="toggle-menu-container">
 	<div id="toggle-menu" class="collapse">
-		<form action="#" method="POST">
+		<!-- Main chart options form. The chart toggle form is used on submit, so
+				 that modified values are added to it as hidden inputs. This way,
+				 modified values and selected charts are preserved between reloads. -->
+		<form id="chart-options-form" action="#" method="POST">
 			<label class="checkbox-inline">
 				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tyovuorojen_maara'])) echo 'checked="checked"'; ?>
 					name="toggle_tyovuorojen_maara" id="toggle_tyovuorojen_maara"> Työvuorojen määrä ajanjaksolla
@@ -142,9 +152,9 @@
 					<div class="section">
 						<label class="field select">
 							<select name="row_count" class="gui-input">
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
+								<option value="2" <?= (isset($_POST['row_count']) && $_POST['row_count'] == '2') ? 'selected' : '' ?>>2</option>
+								<option value="3" <?= (isset($_POST['row_count']) && $_POST['row_count'] == '3') ? 'selected' : '' ?>>3</option>
+								<option value="4" <?= (isset($_POST['row_count']) && $_POST['row_count'] == '4') ? 'selected' : '' ?>>4</option>
 							</select>
 							<i class="arrow double"></i>
 						</label>
@@ -157,16 +167,28 @@
 					<button type="submit" id="toggle-menu-save" class="btn btn-primary btn-sm btn-block"><b>Tallenna</b></button>
 				</div>
 			</div>
+
+			<!-- Add modified fields from $_POST to this form, so that further submits preserve these values. -->
+			<?php foreach($_POST as $k => $v): ?>
+				<script>
+					if ( ! $('#chart-options-form[name="<?= $k ?>"]').length )
+						$('#chart-options-form').append(`<input type="hidden" name="<?= $k ?>" value="<?= $v ?>" />`);
+				</script>
+			<?php endforeach; ?>
+
 		</form>
 	</div>
 </div>
 
 <!-- Save button -->
-<button class="btn btn-success btn-lg" id="charts_submit">Tallenna</button>
+<button class="btn btn-success btn-lg" id="chart-submit-btn">Tallenna</button>
 
-<!-- Init bootstrap-toggle -->
 <script>
 	$(function() {
+		// changed_elements holds values modified during this refresh session.
+		var changed_elements = new Object();
+
+		// Init bootstrap-toggle
 		$('#toggle-menu-container #toggle-menu form label input').each(function(index) {
 			$(this).bootstrapToggle({
 				on: 'Kyllä',
@@ -174,6 +196,33 @@
 				size: 'mini',
 				width: 50
 			});
+		});
+
+		// Show the save button when data changes.
+		$('#charts-container').delegate("input, select", "blur", function() {
+			$('#chart-submit-btn').show('slow');
+
+			// Add this value to the list of changed values, so that submit will recognize the field.
+			changed_elements[$(this).attr('name')] = $(this).val();
+		});
+
+		// Handle save button click event (submit). The chart toggle form is used on
+		// submit, so that modified values are added to it as hidden inputs. This
+		// way, modified values and selected charts are preserved between reloads.
+		$(document).delegate("#chart-submit-btn", "click", function() {
+
+			// Check each changed element, adding them to the form, or modifying existing form value.
+			$.each(changed_elements, function(k, v) {
+				// If input field by this name already exists, modify it's value.
+				if ( $(`#chart-options-form[name='${k}']`).length )
+					$(`#chart-options-form[name='${k}']`).val(v);
+				// Field doesn't exist; append hidden field to the form with the modified value.
+				else
+					$('#chart-options-form').append(`<input type="hidden" name="${k}" value="${v}" />`);
+			});
+
+			// Submit form.
+			$('#chart-options-form').submit();
 		});
 	});
 </script>
@@ -315,13 +364,6 @@ $months = array(
 			});
 		}
 	};
-
-	$(function() {
-		// Activate the save button.
-		$(document).delegate("input, select", "blur", function() {
-			$('#charts_submit').show('slow');
-		});
-	});
 </script>
 
 <!------------------------------------------------------------------------------
