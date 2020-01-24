@@ -110,6 +110,22 @@
 				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_eniten_tuotteet_palvelut_euro'])) echo 'checked="checked"'; ?> name="toggle_eniten_tuotteet_palvelut_euro" id="toggle_eniten_tuotteet_palvelut_euro"> Eniten tuotteet ja palvelut euro
 			</label>
 			<br>
+			<br>
+			<div class="row">
+				<div class="col-md-2">
+					<div class="section">
+						<label class="field select">
+							<select name="row_count" class="gui-input">
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+							</select>
+							<i class="arrow double"></i>
+						</label>
+						</label>
+					</div>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-sm-12">
 					<button type="submit" id="toggle-menu-save" class="btn btn-primary btn-sm btn-block"><b>Tallenna</b></button>
@@ -165,7 +181,7 @@ $months = array(
 ?>
 
 <script>
-	var row_cols = 3; // 12 must be divisible by row_cols; 2, 3, 4, 6, 12
+	var row_cols = <?= $_POST['row_count'] ?? 2 ?>; // 12 must be divisible by row_cols; 2, 3, 4, 6, 12
 	var charts_total = 1;
 
 	// Assign column class based on selection.
