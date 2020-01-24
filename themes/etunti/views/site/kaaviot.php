@@ -39,6 +39,18 @@
 	.chart-container {
 		height: 350px;
 	}
+
+	/* Charts submit button */
+	#charts_submit {
+		position: fixed;
+		margin: 0 8px 8px 0;
+		bottom: 0;
+		right: 0;
+		display: none;
+		z-index: 999999;
+    font-size: 22px;
+    line-height: normal;
+	}
 </style>
 
 <!------------------------------------------------------------------------------
@@ -135,6 +147,9 @@
 	</div>
 </div>
 
+<!-- Save button -->
+<button class="btn btn-success btn-lg" id="charts_submit">Tallenna</button>
+
 <!-- Init bootstrap-toggle -->
 <script>
 	$(function() {
@@ -146,7 +161,7 @@
 				width: 50
 			});
 		});
-	})
+	});
 </script>
 
 <!------------------------------------------------------------------------------
@@ -200,25 +215,79 @@ $months = array(
 		};
 	})(row_cols);
 
+	$(function() {
+		$(document).delegate("input", "blur", function() {
+			$('#charts_submit').show('slow');
+		});
+	});
+
 	// Function to add chart to charts-container div.
-	var add_chart_container = function(options) {
+	var add_chart_container = function(options, inputs = []) {
 		var row_num = Math.ceil(charts_total / row_cols); // row number, e.g. row 2 for container 3 (ceil(3/2=1.5)=2).
 		var charts_remainder = charts_total % row_cols;
 		var col_num = (charts_remainder == 0) ? row_cols : charts_remainder;
 		var row_id = `charts-row-${row_num}`;
 		var col_id = `charts-row-${row_num}-col-${col_num}`; // column number.
+		var chart_id = `${col_id}-chart`;
 
 		charts_total++;
 
 		// Check whether to add new row div, e.g. container 3%2=1; new row.
 		if (charts_remainder == 1)
-			$('#charts-container').append(`<div class="row" id="${row_id}"></div>`);
+			$('#charts-container').append(`<div class="row p10" id="${row_id}"></div>`);
 
 		// Add column to current row.
 		$(`#${row_id}`).append(`<div class="${col_class}" id="${col_id}"></div>`);
+		$(`#${col_id}`).append(`<div id="${chart_id}"></div>`)
 
 		// Print chart to selected column.
-		Highcharts.chart(col_id, options);
+		Highcharts.chart(chart_id, options);
+
+		if (inputs.length > 0) {
+			var inputs_class = (function(count) {
+				switch (count) {
+					case 2:
+						return 'col-sm-6';
+					case 3:
+						return 'col-sm-4';
+					case 4:
+					default:
+						return 'col-sm-3';
+				};
+			})(inputs.length);
+
+			var content = '<div class="admin-form"><div class="row">';
+			var date_fields = [];
+
+			$(inputs).each(function(k, v) {
+				switch (v.type) {
+					case 'date':
+						content += `
+							<div class="${inputs_class}">
+								<label class="field prepend-icon">
+									<input type="text" name="${v.id}" id="${v.id}" class="gui-input datepickerFI" value="${v.default_value}">
+									<label for="firstname" class="field-icon">
+										<i class="glyphicon glyphicon-calendar"></i>
+									</label>
+								</label>
+							</div>
+						`;
+						date_fields.push(v.id);
+						break;
+				}
+			});
+
+			content += '</div></div>';
+			$(`#${col_id}`).append(content);
+
+			// Initialize date fields
+			$(date_fields).each(function(k, v) {
+				$(`#${v}`).datetimepicker({
+					format : 'DD.MM.YYYY',
+					locale: 'fi',
+				});
+			});
+		}
 	};
 </script>
 
@@ -229,9 +298,14 @@ $months = array(
 
 	<?php
 
+	$tyovuorojen_maara_from = date("Y-m-d", strtotime($_POST['tyovuorojen_maara_from'] ?? '01.01.2019'));
+	$tyovuorojen_maara_to = date("Y-m-d", strtotime($_POST['tyovuorojen_maara_to'] ?? '31.12.2019'));
+	$tyovuorojen_maara_from_formated = date("d.m.Y", strtotime($tyovuorojen_maara_from));
+	$tyovuorojen_maara_to_formated = date("d.m.Y", strtotime($tyovuorojen_maara_to));
+
 	$tyovuoroot = Yii::app()->createController('Tyovuoroot');
 	$categories = array();
-	$begin = new DateTime(date("Y-m-d", strtotime($from)));
+	$begin = new DateTime(date("Y-m-d", strtotime($tyovuorojen_maara_from)));
 	$end = new DateTime(date("Y-m-d", strtotime($to)));
 	$end = $end->modify('+1 month');
 	$interval = DateInterval::createFromDateString('1 month');
@@ -245,7 +319,7 @@ $months = array(
 	$criteria->order = "COUNT(status) DESC";
 	$criteria->group = "status";
 	$criteria->select = "COUNT(*) as count, t.*";
-	$criteria->condition = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to' AND status!=''";
+	$criteria->condition = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$tyovuorojen_maara_from' AND '$tyovuorojen_maara_to' AND status!=''";
 	$asiakkaat = Tyovuoroot::model()->findAll($criteria);
 	$arr_new = array();
 	$arr = array();
@@ -273,7 +347,7 @@ $months = array(
 					type: '<?= $chart_type ?>'
 				},
 				title: {
-					text: 'Työvuorojen määrä <?= date("d.m.Y", strtotime($from)) . "-" . date("d.m.Y", strtotime($to)) ?>'
+					text: 'Työvuorojen määrä <?= date("d.m.Y", strtotime($tyovuorojen_maara_from)) . "-" . date("d.m.Y", strtotime($tyovuorojen_maara_to)) ?>'
 				},
 				xAxis: {
 					categories: JSON.parse('<?= json_encode(array_values($categories)) ?>')
@@ -295,7 +369,10 @@ $months = array(
 				exporting: {
 					enabled: true
 				}
-			});
+			}, [
+				{ id: 'tyovuorojen_maara_from', type: 'date', default_value: '<?= $tyovuorojen_maara_from_formated ?>' },
+				{ id: 'tyovuorojen_maara_to', type: 'date', default_value: '<?= $tyovuorojen_maara_to_formated ?>' },
+			]);
 		});
 	</script>
 <?php endif; ?>
