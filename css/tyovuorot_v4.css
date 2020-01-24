@@ -145,3 +145,11 @@ td span.nimi{
 .valittu_pvm{
 	background: #ededed;
 }
+.custom-menu {
+	width: 250px;
+	z-index:1000;
+	position: absolute;
+	background-color: #ededed;
+	border: 1px solid #ddd;
+	padding: 10px 20px;
+}

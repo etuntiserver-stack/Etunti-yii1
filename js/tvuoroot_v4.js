@@ -280,7 +280,33 @@ $(document).delegate(".tv_edit","click",function(){
 	   }
         });
 });
-
+$(document).delegate(".latikkoAsetukset p","contextmenu",function(e){
+	e.preventDefault();
+	var valinnat = '';
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/contextmenu_valinnat',
+	   //type:'POST',
+	   //data: { },
+	   async: false,
+           success: function(data){
+		//d = JSON.parse(data);
+        	console.log(data);
+		valinnat += data;
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
+        });
+	$("div.custom-menu").remove();
+	$('<div class="custom-menu">' + 
+		valinnat +
+	"</div>")
+        .appendTo("body")
+        .css({top: event.pageY + "px", left: event.pageX + "px"});
+});
+$(document).bind("click", function(event) {
+    $("div.custom-menu").hide();
+});
 $(document).delegate(".valitseKokopaiva","click",function(){
 	var pvm = $(this).closest('.latikkoAsetukset').attr("pvm");
 	var tid = $(this).closest('.latikkoAsetukset').attr("tid");
