@@ -266,8 +266,11 @@ $months = array(
 
 			var content = '<div class="admin-form"><div class="row chart-controls">';
 			var date_fields = [];
+			var count = 0;
 
 			$(inputs).each(function(k, v) {
+				if (count++ > 4)
+					return false;
 				switch (v.type) {
 					case 'date':
 						content += `
