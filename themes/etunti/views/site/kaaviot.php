@@ -146,8 +146,12 @@
 					name="toggle_eniten_tuotteet_palvelut_euro" id="toggle_eniten_tuotteet_palvelut_euro"> Eniten tuotteet ja palvelut euro
 			</label>
 			<br>
+			<label class="checkbox-inline mt25">
+				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_hide_chart_type_option'])) echo 'checked="checked"'; ?>
+					name="toggle_hide_chart_type_option" id="toggle_hide_chart_type_option"> Piilota kaavion tulostustyypin valinta
+			</label>
 			<br>
-			<div class="row">
+			<div class="row mt15">
 				<div class="col-md-2">
 					<div class="section">
 						<label class="field select">
@@ -157,7 +161,6 @@
 								<option value="4" <?= (isset($_POST['row_count']) && $_POST['row_count'] == '4') ? 'selected' : '' ?>>4</option>
 							</select>
 							<i class="arrow double"></i>
-						</label>
 						</label>
 					</div>
 				</div>
@@ -234,6 +237,9 @@
 
 <?php
 
+$site_controller = Yii::app()->createController('Site')[0];
+
+
 // Temporary default variables. (Copied from old code)
 $chart_type = 'line'; // line | bar | column | area
 $from = date("Y-m-d", strtotime(" -1 year first day of this month"));
@@ -301,6 +307,14 @@ $months = array(
 		Highcharts.chart(chart_id, options);
 
 		if (inputs.length > 0) {
+
+			// Remove chart type selection if the option is checked.
+			<?php if (isset($_POST['toggle_hide_chart_type_option'])): ?>
+				inputs = inputs.filter(function(obj) {
+					return obj.type !== 'chart_type';
+				});
+			<?php endif; ?>
+
 			var inputs_class = (function(count) {
 				switch (count) {
 					case 2:
@@ -348,6 +362,25 @@ $months = array(
 								</label>
 							</div>
 						`;
+						break;
+					case 'customer_list':
+						<?php
+						$tyontekiatLista = $site_controller->tyontekiatListaNoMulti( 
+							'tyontekija', // name
+							'gui-input', // class
+							'tyontekija', // id
+							'', //selected
+							1 // aktiivinen
+						);
+						?>
+						content += `
+							<div class="${inputs_class}">
+								<label class="field select">
+									<?= $tyontekiatLista ?>
+									<i class="arrow double"></i>
+								</label>
+							</div>
+						`
 						break;
 				}
 			});
@@ -461,9 +494,15 @@ $months = array(
 
 	<?php
 
+	$lomat_ja_poissaolot_from = date("Y-m-d", strtotime($_POST['lomat_ja_poissaolot_from'] ?? '01.01.2019'));
+	$lomat_ja_poissaolot_to = date("Y-m-d", strtotime($_POST['lomat_ja_poissaolot_to'] ?? '31.12.2019'));
+	$lomat_ja_poissaolot_type = $_POST['lomat_ja_poissaolot_type'] ?? 'line';
+	$lomat_ja_poissaolot_from_formated = date("d.m.Y", strtotime($lomat_ja_poissaolot_from));
+	$lomat_ja_poissaolot_to_formated = date("d.m.Y", strtotime($lomat_ja_poissaolot_to));
+
 	$categories = array();
-	$begin = new DateTime(date("Y-m-d", strtotime($from)));
-	$end = new DateTime(date("Y-m-d", strtotime($to)));
+	$begin = new DateTime(date("Y-m-d", strtotime($lomat_ja_poissaolot_from)));
+	$end = new DateTime(date("Y-m-d", strtotime($lomat_ja_poissaolot_to)));
 	//$end = $end->modify('+1 month');
 	$interval = DateInterval::createFromDateString('1 month');
 	$period = new DatePeriod($begin, $interval, $end);
@@ -476,7 +515,7 @@ $months = array(
 	$criteria->order = "tyoajanlaatu";
 	$criteria->group = "tyoajanlaatu";
 	$criteria->select = "COUNT(*) as count, t.*";
-	$criteria->condition = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to' AND tyoajanlaatu!=''";
+	$criteria->condition = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$lomat_ja_poissaolot_from' AND '$lomat_ja_poissaolot_to' AND tyoajanlaatu!=''";
 	if (isset($_GET['tyontekija']) and $_GET['tyontekija'] !== 'kaikki' and $_GET['tyontekija'] > 0)
 		$criteria->addCondition(" tid='" . $_GET['tyontekija'] . "' ");
 	$tv = Tyovuoroot::model()->findAll($criteria);
@@ -507,7 +546,7 @@ $months = array(
 					type: '<?= $chart_type ?>'
 				},
 				title: {
-					text: 'Lomat ja poissaolot <?= date("d.m.Y", strtotime($from)) . "-" . date("d.m.Y", strtotime($to)) ?>'
+					text: 'Lomat ja poissaolot <?= date("d.m.Y", strtotime($lomat_ja_poissaolot_from)) . "-" . date("d.m.Y", strtotime($lomat_ja_poissaolot_to)) ?>'
 				},
 				xAxis: {
 					categories: JSON.parse('<?= json_encode(array_values($categories)) ?>')
@@ -529,7 +568,12 @@ $months = array(
 				exporting: {
 					enabled: true
 				}
-			});
+			}, [
+				{ id: 'lomat_ja_poissaolot_asiakas', type: 'customer_list', default: '' },
+				{ id: 'lomat_ja_poissaolot_type', type: 'chart_type', default: '<?= $lomat_ja_poissaolot_type ?>' },
+				{ id: 'lomat_ja_poissaolot_from', type: 'date', default: '<?= $lomat_ja_poissaolot_from_formated ?>' },
+				{ id: 'lomat_ja_poissaolot_to', type: 'date', default: '<?= $lomat_ja_poissaolot_to_formated ?>' }
+			]);
 		});
 	</script>
 <?php endif; ?>
