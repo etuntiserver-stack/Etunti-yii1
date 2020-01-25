@@ -76,93 +76,132 @@
 				 that modified values are added to it as hidden inputs. This way,
 				 modified values and selected charts are preserved between reloads. -->
 		<form id="chart-options-form" action="#" method="POST">
-			<label class="checkbox-inline">
-				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tyovuorojen_maara'])) echo 'checked="checked"'; ?>
-					name="toggle_tyovuorojen_maara" id="toggle_tyovuorojen_maara"> Työvuorojen määrä ajanjaksolla
-			</label>
-			<br>
-			<label class="checkbox-inline">
-				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_lomat_ja_poissaolot'])) echo 'checked="checked"'; ?>
-					name="toggle_lomat_ja_poissaolot" id="toggle_lomat_ja_poissaolot"> Lomat ja poissaolot
-			</label>
-			<br>
-			<label class="checkbox-inline">
-				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_kpl'])) echo 'checked="checked"'; ?>
-					name="toggle_uudet_lopettaneet_asiakkaat_kpl" id="toggle_uudet_lopettaneet_asiakkaat_kpl"> Uudet ja lopettaneet asiakkaat: KPL määrä
-			</label>
-			<br>
-			<label class="checkbox-inline">
-				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_tuovuorot'])) echo 'checked="checked"'; ?>
-					name="toggle_uudet_lopettaneet_asiakkaat_tuovuorot" id="toggle_uudet_lopettaneet_asiakkaat_tuovuorot"> Uudet ja lopettaneet asiakkaat: Suunnitellut työvuorot
-			</label>
-			<br>
-			<label class="checkbox-inline">
-				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tyontekijat_eniten_tunteja'])) echo 'checked="checked"'; ?>
-					name="toggle_tyontekijat_eniten_tunteja" id="toggle_tyontekijat_eniten_tunteja"> Työntekijät, joilla eniten hyväksyttyjä tunteja
-			</label>
-			<br>
-			<label class="checkbox-inline">
-				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_asiakkaat_eniten_tunteja'])) echo 'checked="checked"'; ?>
-					name="toggle_asiakkaat_eniten_tunteja" id="toggle_asiakkaat_eniten_tunteja"> Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja
-			</label>
-			<br>
-			<label class="checkbox-inline">
-				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tunnit'])) echo 'checked="checked"'; ?>
-					name="toggle_tunnit" id="toggle_tunnit"> Suunnitellut, luetut ja hyväksytyt tunnit
-			</label>
-			<br>
-			<label class="checkbox-inline">
-				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_eniten_suunniteltu_kestot'])) echo 'checked="checked"'; ?>
-					name="toggle_eniten_suunniteltu_kestot" id="toggle_eniten_suunniteltu_kestot"> Eniten suunniteltu työvuoro: Kestot
-			</label>
-			<br>
-			<label class="checkbox-inline">
-				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_eniten_suunniteltu_kpl'])) echo 'checked="checked"'; ?>
-					name="toggle_eniten_suunniteltu_kpl" id="toggle_eniten_suunniteltu_kpl"> Eniten suunniteltu työvuoro: KPL
-			</label>
-			<br>
-			<label class="checkbox-inline">
-				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_lahetetut_laskut_maara_summa'])) echo 'checked="checked"'; ?>
-					name="toggle_lahetetut_laskut_maara_summa" id="toggle_lahetetut_laskut_maara_summa"> Lähetettyjen laskujen määrä ja summa
-			</label>
-			<br>
-			<label class="checkbox-inline">
-				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_liikevaihto_arvokkaimmat_asiakkaat'])) echo 'checked="checked"'; ?>
-					name="toggle_liikevaihto_arvokkaimmat_asiakkaat" id="toggle_liikevaihto_arvokkaimmat_asiakkaat"> Liikevaihto arvokkaimmat asiakkaat
-			</label>
-			<br>
-			<label class="checkbox-inline">
-				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_tyontekijat'])) echo 'checked="checked"'; ?>
-					name="toggle_tyontekijat" id="toggle_tyontekijat"> Työntekijät
-			</label>
-			<br>
-			<label class="checkbox-inline">
-				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_onlinevaraukset'])) echo 'checked="checked"'; ?>
-					name="toggle_onlinevaraukset" id="toggle_onlinevaraukset"> Onlinevaraukset
-			</label>
-			<br>
-			<label class="checkbox-inline">
-				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_eniten_tuotteet_palvelut_euro'])) echo 'checked="checked"'; ?>
-					name="toggle_eniten_tuotteet_palvelut_euro" id="toggle_eniten_tuotteet_palvelut_euro"> Eniten tuotteet ja palvelut euro
-			</label>
-			<br>
-			<label class="checkbox-inline mt25">
-				<input type="checkbox" data-style="custom" <?php if (isset($_POST['toggle_hide_chart_type_option'])) echo 'checked="checked"'; ?>
-					name="toggle_hide_chart_type_option" id="toggle_hide_chart_type_option"> Piilota kaavion tulostustyypin valinta
-			</label>
-			<br>
+			<div class="row m10">
+				<div class="col-sm-12">
+					<label class="checkbox-inline">
+						<input type="checkbox" <?php if (isset($_POST['toggle_tyovuorojen_maara'])) echo 'checked="checked"'; ?>
+							name="toggle_tyovuorojen_maara" id="toggle_tyovuorojen_maara"> Työvuorojen määrä ajanjaksolla
+					</label>
+				</div>
+			</div>
+			<div class="row m10">
+				<div class="col-sm-12">
+					<label class="checkbox-inline">
+						<input type="checkbox" <?php if (isset($_POST['toggle_lomat_ja_poissaolot'])) echo 'checked="checked"'; ?>
+							name="toggle_lomat_ja_poissaolot" id="toggle_lomat_ja_poissaolot"> Lomat ja poissaolot
+					</label>
+				</div>
+			</div>
+			<div class="row m10">
+				<div class="col-sm-12">
+					<label class="checkbox-inline">
+						<input type="checkbox" <?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_kpl'])) echo 'checked="checked"'; ?>
+							name="toggle_uudet_lopettaneet_asiakkaat_kpl" id="toggle_uudet_lopettaneet_asiakkaat_kpl"> Uudet ja lopettaneet asiakkaat: KPL määrä
+					</label>
+				</div>
+			</div>
+			<div class="row m10">
+				<div class="col-sm-12">
+					<label class="checkbox-inline">
+						<input type="checkbox" <?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_tuovuorot'])) echo 'checked="checked"'; ?>
+							name="toggle_uudet_lopettaneet_asiakkaat_tuovuorot" id="toggle_uudet_lopettaneet_asiakkaat_tuovuorot"> Uudet ja lopettaneet asiakkaat: Suunnitellut työvuorot
+					</label>
+				</div>
+			</div>
+			<div class="row m10">
+				<div class="col-sm-12">
+					<label class="checkbox-inline">
+						<input type="checkbox" <?php if (isset($_POST['toggle_tyontekijat_eniten_tunteja'])) echo 'checked="checked"'; ?>
+							name="toggle_tyontekijat_eniten_tunteja" id="toggle_tyontekijat_eniten_tunteja"> Työntekijät, joilla eniten hyväksyttyjä tunteja
+					</label>
+				</div>
+			</div>
+			<div class="row m10">
+				<div class="col-sm-12">
+					<label class="checkbox-inline">
+						<input type="checkbox" <?php if (isset($_POST['toggle_asiakkaat_eniten_tunteja'])) echo 'checked="checked"'; ?>
+							name="toggle_asiakkaat_eniten_tunteja" id="toggle_asiakkaat_eniten_tunteja"> Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja
+					</label>
+				</div>
+			</div>
+			<div class="row m10">
+				<div class="col-sm-12">
+					<label class="checkbox-inline">
+						<input type="checkbox" <?php if (isset($_POST['toggle_tunnit'])) echo 'checked="checked"'; ?>
+							name="toggle_tunnit" id="toggle_tunnit"> Suunnitellut, luetut ja hyväksytyt tunnit
+					</label>
+				</div>
+			</div>
+			<div class="row m10">
+				<div class="col-sm-12">
+					<label class="checkbox-inline">
+						<input type="checkbox" <?php if (isset($_POST['toggle_eniten_suunniteltu_kestot'])) echo 'checked="checked"'; ?>
+							name="toggle_eniten_suunniteltu_kestot" id="toggle_eniten_suunniteltu_kestot"> Eniten suunniteltu työvuoro: Kestot
+					</label>
+				</div>
+			</div>
+			<div class="row m10">
+				<div class="col-sm-12">
+					<label class="checkbox-inline">
+						<input type="checkbox" <?php if (isset($_POST['toggle_eniten_suunniteltu_kpl'])) echo 'checked="checked"'; ?>
+							name="toggle_eniten_suunniteltu_kpl" id="toggle_eniten_suunniteltu_kpl"> Eniten suunniteltu työvuoro: KPL
+					</label>
+				</div>
+			</div>
+			<div class="row m10">
+				<div class="col-sm-12">
+					<label class="checkbox-inline">
+						<input type="checkbox" <?php if (isset($_POST['toggle_lahetetut_laskut_maara_summa'])) echo 'checked="checked"'; ?>
+							name="toggle_lahetetut_laskut_maara_summa" id="toggle_lahetetut_laskut_maara_summa"> Lähetettyjen laskujen määrä ja summa
+					</label>
+				</div>
+			</div>
+			<div class="row m10">
+				<div class="col-sm-12">
+					<label class="checkbox-inline">
+						<input type="checkbox" <?php if (isset($_POST['toggle_liikevaihto_arvokkaimmat_asiakkaat'])) echo 'checked="checked"'; ?>
+							name="toggle_liikevaihto_arvokkaimmat_asiakkaat" id="toggle_liikevaihto_arvokkaimmat_asiakkaat"> Liikevaihto arvokkaimmat asiakkaat
+					</label>
+				</div>
+			</div>
+			<div class="row m10">
+				<div class="col-sm-12">
+					<label class="checkbox-inline">
+						<input type="checkbox" <?php if (isset($_POST['toggle_tyontekijat'])) echo 'checked="checked"'; ?>
+							name="toggle_tyontekijat" id="toggle_tyontekijat"> Työntekijät
+					</label>
+				</div>
+			</div>
+			<div class="row m10">
+				<div class="col-sm-12">
+					<label class="checkbox-inline">
+						<input type="checkbox" <?php if (isset($_POST['toggle_onlinevaraukset'])) echo 'checked="checked"'; ?>
+							name="toggle_onlinevaraukset" id="toggle_onlinevaraukset"> Onlinevaraukset
+					</label>
+				</div>
+			</div>
+			<div class="row m10">
+				<div class="col-sm-12">
+					<label class="checkbox-inline">
+						<input type="checkbox" <?php if (isset($_POST['toggle_eniten_tuotteet_palvelut_euro'])) echo 'checked="checked"'; ?>
+							name="toggle_eniten_tuotteet_palvelut_euro" id="toggle_eniten_tuotteet_palvelut_euro"> Eniten tuotteet ja palvelut euro
+					</label>
+				</div>
+			</div>
 			<div class="row mt15">
-				<div class="col-md-2">
-					<div class="section">
-						<label class="field select">
-							<select name="row_count" class="gui-input">
-								<option value="2" <?= (isset($_POST['row_count']) && $_POST['row_count'] == '2') ? 'selected' : '' ?>>2</option>
-								<option value="3" <?= (isset($_POST['row_count']) && $_POST['row_count'] == '3') ? 'selected' : '' ?>>3</option>
-								<option value="4" <?= (isset($_POST['row_count']) && $_POST['row_count'] == '4') ? 'selected' : '' ?>>4</option>
-							</select>
-							<i class="arrow double"></i>
-						</label>
-					</div>
+				<div class="col-sm-6">
+					<select class="form-control" name="row_count">
+						<option value="2" <?= (isset($_POST['row_count']) && $_POST['row_count'] == '2') ? 'selected' : '' ?>>2 kaaviota rivillä</option>
+						<option value="3" <?= (isset($_POST['row_count']) && $_POST['row_count'] == '3') ? 'selected' : '' ?>>3 kaaviota rivillä</option>
+						<option value="4" <?= (isset($_POST['row_count']) && $_POST['row_count'] == '4') ? 'selected' : '' ?>>4 kaaviota rivillä</option>
+					</select>
+				</div>
+				<div class="col-sm-6">
+					<select class="form-control" name="selections">
+						<option value="all" <?= (isset($_POST['selections']) && $_POST['selections'] == 'all') ? 'selected' : '' ?>>Kaikki valinnat näytetään</option>
+						<option value="notype" <?= (isset($_POST['selections']) && $_POST['selections'] == 'notype') ? 'selected' : '' ?>>Piilota kaavion tyypin valinta</option>
+						<option value="none" <?= (isset($_POST['selections']) && $_POST['selections'] == 'none') ? 'selected' : '' ?>>Piilota kaikki valinnat</option>
+					</select>
 				</div>
 			</div>
 			<div class="row">
@@ -170,15 +209,6 @@
 					<button type="submit" id="toggle-menu-save" class="btn btn-primary btn-sm btn-block"><b>Tallenna</b></button>
 				</div>
 			</div>
-
-			<!-- Add modified fields from $_POST to this form, so that further submits preserve these values. -->
-			<?php foreach($_POST as $k => $v): ?>
-				<script>
-					if ( ! $('#chart-options-form[name="<?= $k ?>"]').length )
-						$('#chart-options-form').append(`<input type="hidden" name="<?= $k ?>" value="<?= $v ?>" />`);
-				</script>
-			<?php endforeach; ?>
-
 		</form>
 	</div>
 </div>
@@ -188,6 +218,12 @@
 
 <script>
 	$(function() {
+		// Add modified fields from $_POST to this form, so that further submits preserve these values.
+		<?php foreach($_POST as $k => $v): ?>
+			if ($('#chart-options-form [name="<?= $k ?>"]').length <= 0)
+				$('#chart-options-form').append(`<input type="hidden" name="<?= $k ?>" value="<?= $v ?>" />`);
+		<?php endforeach; ?>
+
 		// changed_elements holds values modified during this refresh session.
 		var changed_elements = new Object();
 
@@ -207,25 +243,39 @@
 
 			// Add this value to the list of changed values, so that submit will recognize the field.
 			changed_elements[$(this).attr('name')] = $(this).val();
+			// alert(`Changed ${$(this).attr('name')}: ${$(this).val()}`)
 		});
+
+		// Check each changed element, adding them to the main form, or modifying existing form value.
+		var add_changed_elements = function() {
+			if ($.isEmptyObject(changed_elements)) return;
+			$.each(changed_elements, function(k, v) {
+				if ( $(`#chart-options-form [name='${k}']`).length ) {
+					// Input field by this name already exists, modify it's value.
+					$(`#chart-options-form [name='${k}']`).val(v);
+					// alert(`Modified ${k}: ${v}`);
+				}
+				else {
+					// Field doesn't exist; append hidden field to the form with the modified value.
+					$('#chart-options-form').append(`<input type="hidden" name="${k}" value="${v}" />`);
+					// alert(`Added ${k}: ${v}`);
+				}
+			});
+		};
 
 		// Handle save button click event (submit). The chart toggle form is used on
 		// submit, so that modified values are added to it as hidden inputs. This
 		// way, modified values and selected charts are preserved between reloads.
 		$(document).delegate("#chart-submit-btn", "click", function() {
-
-			// Check each changed element, adding them to the form, or modifying existing form value.
-			$.each(changed_elements, function(k, v) {
-				// If input field by this name already exists, modify it's value.
-				if ( $(`#chart-options-form[name='${k}']`).length )
-					$(`#chart-options-form[name='${k}']`).val(v);
-				// Field doesn't exist; append hidden field to the form with the modified value.
-				else
-					$('#chart-options-form').append(`<input type="hidden" name="${k}" value="${v}" />`);
-			});
-
-			// Submit form.
+			add_changed_elements();
 			$('#chart-options-form').submit();
+		});
+
+		$("#chart-options-form").submit(function(e) {
+			e.preventDefault();
+			add_changed_elements();
+			var form = this; // required to not trigger endless submit loop
+			form.submit();
 		});
 	});
 </script>
@@ -238,6 +288,7 @@
 <?php
 
 $site_controller = Yii::app()->createController('Site')[0];
+$tyontekijat_controller = Yii::app()->createController('Tyontekijat')[0];
 
 
 // Temporary default variables. (Copied from old code)
@@ -307,94 +358,106 @@ $months = array(
 		Highcharts.chart(chart_id, options);
 
 		if (inputs.length > 0) {
+			var print_controls = true;
 
-			// Remove chart type selection if the option is checked.
-			<?php if (isset($_POST['toggle_hide_chart_type_option'])): ?>
+			// Remove chart type selection if 'notype' is selected.
+			// Don't print any controls if 'none' is selected.
+			<?php switch ($_POST['selections'] ?? ''): case 'notype': ?>
 				inputs = inputs.filter(function(obj) {
 					return obj.type !== 'chart_type';
 				});
-			<?php endif; ?>
+			<?php break; case 'none': ?>
+				inputs = [];
+				print_controls = false;
+			<?php break; endswitch; ?>
 
-			var inputs_class = (function(count) {
-				switch (count) {
-					case 2:
-						return 'col-sm-6';
-					case 3:
-						return 'col-sm-4';
-					case 4:
-					default:
-						return 'col-sm-3';
-				};
-			})(inputs.length);
+			if (print_controls) {
+				var inputs_class = (function(count) {
+					switch (count) {
+						case 2:
+							return 'col-sm-6';
+						case 3:
+							return 'col-sm-4';
+						case 4:
+						default:
+							return 'col-sm-3';
+					};
+				})(inputs.length);
 
-			var content = '<div class="admin-form"><div class="row chart-controls">';
-			var date_fields = [];
-			var count = 0;
+				var content = '<div class="admin-form"><div class="row chart-controls">';
+				var date_fields = [];
+				var count = 0;
 
-			$(inputs).each(function(k, v) {
-				if (count++ > 4)
-					return false;
-				switch (v.type) {
-					case 'date':
-						content += `
-							<div class="${inputs_class}">
-								<label class="field prepend-icon">
-									<input type="text" name="${v.id}" id="${v.id}" class="gui-input datepickerFI" value="${v.default}">
-									<label for="firstname" class="field-icon">
-										<i class="glyphicon glyphicon-calendar"></i>
+				$(inputs).each(function(k, v) {
+					if (count++ > 4)
+						return false;
+					switch (v.type) {
+						case 'date':
+							content += `
+								<div class="${inputs_class}">
+									<label class="field prepend-icon">
+										<input type="text" name="${v.id}" id="${v.id}" class="gui-input datepickerFI" value="${v.default}">
+										<label for="firstname" class="field-icon">
+											<i class="glyphicon glyphicon-calendar"></i>
+										</label>
 									</label>
-								</label>
-							</div>
-						`;
-						date_fields.push(v.id);
-						break;
-					case 'chart_type':
-						content += `
-							<div class="${inputs_class}">
-								<label class="field select">
-									<select name="${v.id}" class="gui-input">
-										<option value="line" ` + (v.default == 'line' ? 'selected' : '') + `><?php echo Yii::t('main', 'Line'); ?></option>
-										<option value="bar" ` + (v.default == 'bar' ? 'selected' : '') + `><?php echo Yii::t('main', 'Bar'); ?></option>
-										<option value="column" ` + (v.default == 'column' ? 'selected' : '') + `><?php echo Yii::t('main', 'Column'); ?></option>
-										<option value="area" ` + (v.default == 'area' ? 'selected' : '') + `><?php echo Yii::t('main', 'Area'); ?></option>
-									</select>
-									<i class="arrow double"></i>
-								</label>
-							</div>
-						`;
-						break;
-					case 'customer_list':
-						<?php
-						$tyontekiatLista = $site_controller->tyontekiatListaNoMulti( 
-							'tyontekija', // name
-							'gui-input', // class
-							'tyontekija', // id
-							'', //selected
-							1 // aktiivinen
-						);
-						?>
-						content += `
-							<div class="${inputs_class}">
-								<label class="field select">
-									<?= $tyontekiatLista ?>
-									<i class="arrow double"></i>
-								</label>
-							</div>
-						`
-						break;
-				}
-			});
-
-			content += '</div></div>';
-			$(`#${col_id}`).append(content);
-
-			// Initialize date fields
-			$(date_fields).each(function(k, v) {
-				$(`#${v}`).datetimepicker({
-					format : 'DD.MM.YYYY',
-					locale: 'fi',
+								</div>
+							`;
+							date_fields.push(v.id);
+							break;
+						case 'chart_type':
+							content += `
+								<div class="${inputs_class}">
+									<label class="field select">
+										<select name="${v.id}" class="gui-input">
+											<option value="line" ` + (v.default == 'line' ? 'selected' : '') + `><?php echo Yii::t('main', 'Line'); ?></option>
+											<option value="bar" ` + (v.default == 'bar' ? 'selected' : '') + `><?php echo Yii::t('main', 'Bar'); ?></option>
+											<option value="column" ` + (v.default == 'column' ? 'selected' : '') + `><?php echo Yii::t('main', 'Column'); ?></option>
+											<option value="area" ` + (v.default == 'area' ? 'selected' : '') + `><?php echo Yii::t('main', 'Area'); ?></option>
+										</select>
+										<i class="arrow double"></i>
+									</label>
+								</div>
+							`;
+							break;
+						case 'worker_list':
+							<?php
+							$worker_list = [];
+							$worker_list_criteria = $this->etuSukunimiCriteria(new CDbCriteria());
+							$worker_list_criteria->condition = " aktiivinen=1 ";
+							$worker_list_worker_ids = $tyontekijat_controller->TyoryhmatTyontekijatHelper(null);
+							if (count($worker_list_worker_ids) > 0)
+								$worker_list_criteria->addCondition("id IN (" . implode(",", $worker_list_worker_ids) . ")");
+							foreach (Tyontekijat::model()->findAll($worker_list_criteria) as $item)
+								$worker_list[$item->id] = $this->etuSukunimi($item->id);
+							?>
+							content += `
+								<div class="${inputs_class}">
+									<label class="field select">
+										<select name="${v.id}" class="gui-input">
+											<?php foreach ($worker_list as $id => $name): ?>
+												<option value="<?= $id ?>" ` + (v.default == <?= $id ?> ? 'selected' : '') + `><?= $name ?></option>
+											<?php endforeach; ?>
+										</select>
+										<i class="arrow double"></i>
+									</label>
+								</div>
+							`
+							break;
+					}
 				});
-			});
+
+				content += '</div></div>';
+				$(`#${col_id}`).append(content);
+
+				// Initialize date fields
+				$(date_fields).each(function(k, v) {
+					$(`#${v}`).datetimepicker({
+						format : 'DD.MM.YYYY',
+						locale: 'fi',
+					});
+				});
+			}
 		}
 	};
 </script>
@@ -499,6 +562,7 @@ $months = array(
 	$lomat_ja_poissaolot_type = $_POST['lomat_ja_poissaolot_type'] ?? 'line';
 	$lomat_ja_poissaolot_from_formated = date("d.m.Y", strtotime($lomat_ja_poissaolot_from));
 	$lomat_ja_poissaolot_to_formated = date("d.m.Y", strtotime($lomat_ja_poissaolot_to));
+	$lomat_ja_poissaolot_worker = $_POST['lomat_ja_poissaolot_worker'] ?? 0;
 
 	$categories = array();
 	$begin = new DateTime(date("Y-m-d", strtotime($lomat_ja_poissaolot_from)));
@@ -516,8 +580,8 @@ $months = array(
 	$criteria->group = "tyoajanlaatu";
 	$criteria->select = "COUNT(*) as count, t.*";
 	$criteria->condition = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$lomat_ja_poissaolot_from' AND '$lomat_ja_poissaolot_to' AND tyoajanlaatu!=''";
-	if (isset($_GET['tyontekija']) and $_GET['tyontekija'] !== 'kaikki' and $_GET['tyontekija'] > 0)
-		$criteria->addCondition(" tid='" . $_GET['tyontekija'] . "' ");
+	if ($lomat_ja_poissaolot_worker > 0)
+		$criteria->addCondition("tid='$lomat_ja_poissaolot_worker'");
 	$tv = Tyovuoroot::model()->findAll($criteria);
 	$arr_new = array();
 	$arr = array();
@@ -569,7 +633,7 @@ $months = array(
 					enabled: true
 				}
 			}, [
-				{ id: 'lomat_ja_poissaolot_asiakas', type: 'customer_list', default: '' },
+				{ id: 'lomat_ja_poissaolot_worker', type: 'worker_list', default: <?= $lomat_ja_poissaolot_worker ?> },
 				{ id: 'lomat_ja_poissaolot_type', type: 'chart_type', default: '<?= $lomat_ja_poissaolot_type ?>' },
 				{ id: 'lomat_ja_poissaolot_from', type: 'date', default: '<?= $lomat_ja_poissaolot_from_formated ?>' },
 				{ id: 'lomat_ja_poissaolot_to', type: 'date', default: '<?= $lomat_ja_poissaolot_to_formated ?>' }
