@@ -129,7 +129,36 @@ class SiteController extends Controller
 
 	public function actionKaaviot()
 	{
-		$this->render('kaaviot', []);
+		// Temporary default variables. (Copied from old code)
+		$chart_type = 'line'; // line | bar | column | area
+		$from = date("Y-m-d", strtotime(" -1 year first day of this month"));
+		$to = date("Y-m-d", strtotime(" last day of last month"));
+		$asiakas = '';
+		$tyontekija = '';
+		$kpl_maara = 10;
+		$months = array(
+			1 => Yii::t('main', 'Tammikuu'),
+			2 => Yii::t('main', 'Helmikuu'),
+			3 => Yii::t('main', 'Maaliskuu'),
+			4 => Yii::t('main', 'Huhtikuu'),
+			5 => Yii::t('main', 'Toukokuu'),
+			6 => Yii::t('main', 'Kesäkuu'),
+			7 => Yii::t('main', 'Heinäkuu'),
+			8 => Yii::t('main', 'Elokuu'),
+			9 => Yii::t('main', 'Syyskuu'),
+			10 => Yii::t('main', 'Lokakuu'),
+			11 => Yii::t('main', 'Marraskuu'),
+			12 => Yii::t('main', 'Joulukuu')
+		);
+		$this->render('kaaviot', [
+			'chart_type' => $chart_type,
+			'from' => $from,
+			'to' => $to,
+			'asiakas' => $asiakas,
+			'tyontekija' => $tyontekija,
+			'kpl_maara' => $kpl_maara,
+			'months' => $months
+		]);
 	}
 
 	public function actionManagement_hours()
