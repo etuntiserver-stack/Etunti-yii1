@@ -4224,20 +4224,21 @@ class TyovuorootController extends Controller
 			$this->model_json_converter($post, $model, $toistuva);
 
 			// <-- Tyopaarit
-			$must_delete = [];
 			if( !empty($model->tyopaari) )
 				$updated_tp = json_decode($model->tyopaari, true);
 			if( count($edelliset_tyoparit) > 0 ){
-				$luotu = [];
+				$updater = [];
 				if( count($post_tyopaari) == 0 ){
 					foreach($edelliset_tyoparit as $tv_id => $tid)
 						if( $tv_id != $cur_model_id )
-							$luotu[$tv_id] = $tid;
-					foreach($luotu as $tv_id => $tid)
-						if( count($luotu) == 1 )
+							$updater[$tv_id] = $tid;
+					foreach($updater as $tv_id => $tid)
+						if( count($updater) == 1 )
 							Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => ''));
 						else
-							Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => json_encode($luotu)));
+							Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => json_encode($updater)));
+
+					Tyovuoroot::model()->deleteByPk($cur_model_id);
 				} else {
 					$unchecked 	= [];
 					$rm 		= array_diff( $edelliset_tyoparit, $updated_tp );
@@ -4245,18 +4246,17 @@ class TyovuorootController extends Controller
 						$unchecked[$tid] = $tid;
 					foreach($edelliset_tyoparit as $tv_id => $tid){
 						if(isset($unchecked[$tid]))
-							$luotu[$tv_id] = $tid;
+							$updater[$tv_id] = $tid;
 						else
 							Tyovuoroot::model()->deleteByPk($tv_id);
 					}
-					foreach($luotu as $tv_id => $tid)
-						if( count($luotu) == 1 )
+					foreach($updater as $tv_id => $tid)
+						if( count($updater) == 1 )
 							Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => ''));
 						else
-							Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => json_encode($luotu)));
+							Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => json_encode($updater)));
 				}
 			}
-			Tyovuoroot::model()->deleteByPk($cur_model_id);
 			//     Tyopaarit -->
 
 			if(!$model->save()){
