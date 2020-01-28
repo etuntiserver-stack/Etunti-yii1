@@ -283,14 +283,15 @@ $(document).delegate(".tv_edit","click",function(){
 $(document).delegate(".latikkoAsetukset p","contextmenu",function(e){
 	e.preventDefault();
 	var valinnat = '';
+	var this_id = $(this).find('.tv_edit').attr('id');
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/contextmenu_valinnat',
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/contextmenu_valinnat?this_id=' + this_id,
 	   //type:'POST',
 	   //data: { },
 	   async: false,
            success: function(data){
 		//d = JSON.parse(data);
-        	console.log(data);
+        	//console.log(data);
 		valinnat += data;
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -298,15 +299,36 @@ $(document).delegate(".latikkoAsetukset p","contextmenu",function(e){
  	   }
         });
 	$("div.custom-menu").remove();
-	$('<div class="custom-menu">' + 
+	$('<div class="custom-menu" for="' + this_id + '">' + 
 		valinnat +
 	"</div>")
         .appendTo("body")
         .css({top: event.pageY + "px", left: event.pageX + "px"});
 });
+
 $(document).bind("click", function(event) {
-    $("div.custom-menu").hide();
+	$("div.custom-menu").hide();
 });
+
+$(document).delegate("div.custom-menu select","change",function(){
+	var this_id = $(this).closest('.custom-menu').attr('for');
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/contextmenu_submits?this_id=' + this_id,
+	   type:'POST',
+	   data: { field : $(this).attr('id'), value : $('option:selected', this).val() },
+           success: function(data){
+		data = JSON.parse(data);
+        	console.log(data);
+		if( data['tv_arr'] ){
+			tv_arr_update(data['tv_arr']);
+		}
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
+        });
+});
+
 $(document).delegate(".valitseKokopaiva","click",function(){
 	var pvm = $(this).closest('.latikkoAsetukset').attr("pvm");
 	var tid = $(this).closest('.latikkoAsetukset').attr("tid");

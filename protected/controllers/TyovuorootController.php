@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -2447,13 +2447,13 @@ class TyovuorootController extends Controller
 			}
 			$lisateksti = '';
 			if($arvo->laskutettu == 1){
-				$lisateksti = '<br><span class="text-primary">Laskutettu</span>';
+				$lisateksti .= '<br><span class="text-primary">Laskutettu</span>';
 			}
 			if($arvo->peruutettu == 1){
-				$lisateksti = '<br><span class="text-danger">'. $this->peruutettuArray()[1] .'</span>';
+				$lisateksti .= '<br><span class="text-danger">'. $this->peruutettuArray()[1] .'</span>';
 			}
 			if($arvo->peruutettu == 2){
-				$lisateksti = '<br><span class="text-danger">'. $this->peruutettuArray()[2] .'</span>';
+				$lisateksti .= '<br><span class="text-danger">'. $this->peruutettuArray()[2] .'</span>';
 			}
 			if($arvo->tyopaari != ''){
 				$ikoonit .= ' <i class="fa fa-male text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i> ';
@@ -4000,9 +4000,37 @@ class TyovuorootController extends Controller
 		return $cleared;
 	}
 
-	public function actionContextmenu_valinnat()
+	public function actionContextmenu_submits($this_id)
 	{
-		$model = new Tyovuoroot;
+		$get_id 	= $this->this_id($this_id);
+		$model 		= $get_id['model'];
+		$toistuva 	= $get_id['toistuva'];
+		$pvm 		= $get_id['pvm'];
+		$tid 		= $get_id['tid'];
+		$return = [];
+		if( !isset($model->id) ){
+			echo json_encode(['error' => 'Kohdetta ei löydy']);
+			exit;
+		}
+		if( !$toistuva )
+			Tyovuoroot::model()->updatebypk($model->id, array($_POST['field'] => $_POST['value']));
+
+		$haku_from = date("Y-m-d", strtotime(Yii::app()->session['from']));
+		$haku_to = date("Y-m-d", strtotime(Yii::app()->session['to']));
+		$tv_arr = $this->tv_arr($haku_from, $haku_to, [$tid], $asiakas='', $kohde='', $kohteet_siivous=[]);
+		$return = ['tv_arr' => $tv_arr];
+		echo json_encode($return);
+		exit;
+	}
+
+	public function actionContextmenu_valinnat($this_id)
+	{
+		$get_id 	= $this->this_id($this_id);
+		$model 		= $get_id['model'];
+		$toistuva 	= $get_id['toistuva'];
+		$pvm 		= $get_id['pvm'];
+		$tid 		= $get_id['tid'];
+
 		$return = "";
 
 		$form=$this->beginWidget('CActiveForm', array(
@@ -4014,7 +4042,13 @@ class TyovuorootController extends Controller
         	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
 		$return .= '<div class="col-sm-12">
 		'.$form->labelEx($model,'tyoajanmerkinta').
-		'<select name="Tyovuoroot_[tyoajanmerkinta]" class="form-control">
+		'<select name="Tyovuoroot_[tyoajanmerkinta]" class="form-control" id="tyoajanmerkinta">';
+			if(!empty($model->tyoajanmerkinta)){
+				$expl = explode("/",$model->tyoajanmerkinta);
+				$value = (isset($expl[0])) ? $expl[0] : '';
+				$return .= '<option value="'.$model->tyoajanmerkinta.'">'.$value.'</option>';
+			}
+		$return .= '
 			<option style="color:" value="Normaali/">Normaali</option>
 			<option style="color:red" value="Ei lasketa/red">Ei lasketa</option>';
 			foreach($tal as $v){
@@ -4030,14 +4064,14 @@ class TyovuorootController extends Controller
 		$return .= '<div class="col-sm-12">
 		'.$form->labelEx($model,'peruutettu').'
 		'.$form->dropDownList($model,"peruutettu", $list, 
-		array("empty"=>"Valitse","class"=>"form-control")).'
+		array("empty"=>"", "class"=>"form-control", "id" => "peruutettu")).'
 		</div>';
 
 		$list = array(0 => 'Ei laskutettu', 1 => 'Laskutettu');
 		$return .= '<div class="col-sm-12">
 		'.$form->labelEx($model,'laskutettu').'
 		'.$form->dropDownList($model,"laskutettu", $list, 
-		array("empty"=>"Valitse","class"=>"form-control")).'
+		array("class"=>"form-control", "id" => "laskutettu")).'
 		</div>';
 
 		$return .= '</div>';
