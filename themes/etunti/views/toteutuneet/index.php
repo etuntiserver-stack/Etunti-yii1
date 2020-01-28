@@ -31,7 +31,7 @@ table { width: 100%; }
 	width: 25%;
 }
 </style>
-
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v4.css">
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
@@ -255,6 +255,7 @@ $dateDiff = dateDiff($from, $to);
   $yhteensaToteutuneet 	= 0;
 
   $mobile = Yii::app()->createController('Mobile');
+  $tyovuoroot = Yii::app()->createController('Tyovuoroot');
   $yhtSPLWeek	= 0;
   $yhtSLWeek	= 0;
   $yhtLSWeek	= 0;
@@ -329,9 +330,14 @@ $dateDiff = dateDiff($from, $to);
   $vuosilomachecker	= $this->vuosilomaCheckerBetween($from, $to, $tid);
   $hyvaksymmattomat_t	= $this->hyvaksyttamatTunnitBetween($from, $to, $tid);
 
+
+  $haku_from = date("Y-m-d", strtotime($from));
+  $haku_to = date("Y-m-d", strtotime($to));
+  $tv_arr = $tyovuoroot[0]->tv_arr($haku_from, $haku_to, [$tid], $asiakas='', $kohde='', $kohteet_siivous=[]);
+
 /*
 echo '<pre>';
-print_r($vuosilomachecker);
+print_r($tv_arr);
 echo '<pre>';
 exit;
 */
@@ -428,7 +434,7 @@ exit;
     }
     echo '<tr class="su_lu_tot">';
   
-
+/*
 	$dido = '';
 	$dido = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$tid,'from'=>'mobiili','yhteensa'=>true),true);
 	
@@ -443,7 +449,16 @@ exit;
 	} else {
 		$didoResult = 0;
 	}
-
+*/
+	$didoResult = '';
+	if( isset($tv_arr[$tid][$date]) ){
+		$didoResult .= '<div id="suun_'.$did.'_'.$tid.'" class="latikkoAsetukset" pvm="'.$date.'" tid="'.$tid.'">';
+		ksort($tv_arr[$tid][$date]);
+		foreach($tv_arr[$tid][$date] as $k => $v)
+			foreach($v as $v2)
+				$didoResult .= '<p>'.$v2.'</p>';
+		$didoResult .= '</div>';
+	}
     	echo '<td>'.$didoResult.'</td>';
 
 
@@ -456,14 +471,15 @@ exit;
     }
     echo '</td>';
 
-    echo '<td id="'.$did.'_'.$tid.'" ilman_lounastaukot="'.$ilman_lounastaukot.'" ilman_matkat="'.$ilman_matkat.'">';
+    echo '<td id="'.$did.'_'.$tid.'">';
     if(isset($toteutuneet_laatikot[$date])){
     	echo '<div class="small">';
 	   foreach($toteutuneet_laatikot[$date] as $item)
 		echo $item;
-    	echo '<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
+
     	echo '</div>';
     }
+    echo '<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
     echo '</td>';
 
 
@@ -735,7 +751,7 @@ exit;
 
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
-	<?php Yii::app()->clientScript->registerPackage('tyovuoroot'); ?>
+	<?php /* Yii::app()->clientScript->registerPackage('tyovuoroot'); */ ?>
 	<?php Yii::app()->clientScript->registerPackage('toteuma'); ?>
 
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/totrivi_poista.js"></script>
@@ -868,7 +884,7 @@ $(document).ready(function(){
  }
 
 
- $('.tyovuoro').append('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:-15px;  font-size: 130%" data-toggle="tooltip" data-placement="top" title="Siirrä toteutuun"></i>');
+ $('.tv_edit').append('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:-10px; font-size: 130%; z-index: 99999999" data-toggle="tooltip" data-placement="left" title="Siirrä toteutuun"></i>');
 
 
  $( ".sirraToteutuun" ).tooltip({

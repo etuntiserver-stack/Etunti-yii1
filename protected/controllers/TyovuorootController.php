@@ -4012,9 +4012,27 @@ class TyovuorootController extends Controller
 			echo json_encode(['error' => 'Kohdetta ei löydy']);
 			exit;
 		}
-		if( !$toistuva )
+		if( !$toistuva ){
 			Tyovuoroot::model()->updatebypk($model->id, array($_POST['field'] => $_POST['value']));
+		} else {
+			$u		= Yii::app()->user->nimi;
+			$d		= date("d.m.Y");
+			$poisto_syy	= ['text' => 'ByContextMeny', 'user'=>$u, 'date'=>$d];
+			$this->toistuvaDeletePvm($model->id, $pvm, $tid, $poisto_syy);
 
+			$tv_new = new Tyovuoroot;
+			$cleared_attr = $this->compareToistuvaAttributes($tv_new->attributes, $model->attributes);
+			$tv_new->attributes = $cleared_attr;
+			$tv_new->pvm = date("d.m.Y",strtotime($pvm));
+			$tv_new->tid = $tid;
+			$tv_new->tyopaari = '';
+			if($tv_new->save()){
+				Tyovuoroot::model()->updatebypk($tv_new->id, array($_POST['field'] => $_POST['value']));
+			} else {
+				echo json_encode($tv_new->getErrors());
+				exit;
+			}
+		}
 		$haku_from = date("Y-m-d", strtotime(Yii::app()->session['from']));
 		$haku_to = date("Y-m-d", strtotime(Yii::app()->session['to']));
 		$tv_arr = $this->tv_arr($haku_from, $haku_to, [$tid], $asiakas='', $kohde='', $kohteet_siivous=[]);
@@ -4037,7 +4055,10 @@ class TyovuorootController extends Controller
 			'id'=>'tyovuoroot-form',
 			'enableAjaxValidation'=>false,
 		));
-		$return .= '<div class="row">';
+
+		if( $toistuva )
+			$return .= '<span class="text-danger">Huomio!<p>Tämä muokaus irrotta päivä toistuvasta ketjusta ja tilalle luodaan yksittyinen työvuoro.</p></span>';
+		$return .= '<div class="row form_lomake" toistuva="'.(($toistuva)? 'true':'false').'">';
 
         	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
 		$return .= '<div class="col-sm-12">
