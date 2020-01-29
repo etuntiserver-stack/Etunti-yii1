@@ -280,19 +280,21 @@
   </thead>
   <tbody>
   <?php
-	foreach($tids as $tid=>$item){
+	foreach($tids as $tid){
 		$f = date("d.m.Y", strtotime($from));
 		while (strtotime($f) <= strtotime($to)){
-			foreach($tv_arr[$_POST['tid']][$_POST['pvm']] as $k => $v){
+			ksort($tv_arr[$tid][$f]);
+			foreach($tv_arr[$tid][$f] as $k => $v){
 				foreach($v as $v2){
 					if( isset($v2['this_id']) ){
 						$tv = $this->renderPartial('_lista',array(
-							'data' => $v2['data']
+							'data' => (object)$v2['data']
 						), true);
-						echo json_decode($tv, true);
+						echo $tv;
 					}
+				}
 			}
-		$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
+			$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
 		}
 	}
   ?>

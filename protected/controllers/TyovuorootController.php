@@ -1138,7 +1138,7 @@ class TyovuorootController extends Controller
 		if(isset($_POST['pvm']) and isset($_POST['tid'])){
 			$pvm_from = date("Y-m-d", strtotime($_POST['pvm']));
 			$pvm_to = date("Y-m-d", strtotime($_POST['pvm']));
-			$tv_arr = $this->tv_arr($pvm_from, $pvm_to, [$_POST['tid']], $asiakas='', $kohde='', $kohteet_siivous=[], false);
+			$tv_arr = $this->tv_arr($pvm_from, $pvm_to, [$_POST['tid']], [], false);
 			foreach($tv_arr[$_POST['tid']][$_POST['pvm']] as $k => $v)
 				foreach($v as $v2){
 					if( isset($v2['this_id']) ){
@@ -1269,7 +1269,7 @@ class TyovuorootController extends Controller
 					}
 				}
 			}
-			$tv_arr = $this->tv_arr($haku_from, $haku_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[]);
+			$tv_arr = $this->tv_arr($haku_from, $haku_to, $tids, [], true);
 			$return = ['poistettu' => $removed, 'tv_arr' => $tv_arr, 'tids' => $tids];
 			echo json_encode($return);
 			exit;
@@ -1310,7 +1310,7 @@ class TyovuorootController extends Controller
 			
 			}
 
-			$tv_arr = $this->tv_arr($haku_from, $haku_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[]);
+			$tv_arr = $this->tv_arr($haku_from, $haku_to, $tids, [], true);
 			$return = ['tv_arr' => $tv_arr];
 			echo json_encode($return);
 			exit;
@@ -1369,7 +1369,7 @@ class TyovuorootController extends Controller
 
 			} // foreach
 
-			$tv_arr = $this->tv_arr($haku_from, $haku_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[]);
+			$tv_arr = $this->tv_arr($haku_from, $haku_to, $tids, [], true);
 			$return = ['poistettu' => $_SESSION['muistin'], 'tv_arr' => $tv_arr];
 			echo json_encode($return);
 			exit;
@@ -1418,7 +1418,7 @@ class TyovuorootController extends Controller
 
 			$pvm_from = date("Y-m-d", strtotime($pvm));
 			$pvm_to = date("Y-m-d", strtotime($pvm));
-			$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[]);
+			$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, [], true);
 			echo json_encode(['return' => 'ok', 'tv_arr' => $tv_arr]);
 		} else {
 			echo json_encode(['return' => 'error']);
@@ -1443,7 +1443,7 @@ class TyovuorootController extends Controller
 
 			$pvm_from = date("Y-m-d", strtotime($pvm));
 			$pvm_to = date("Y-m-d", strtotime($pvm));
-			$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[]);
+			$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, [], true);
 			echo json_encode(['return' => 'ok', 'tv_arr' => $tv_arr]);
 		} else {
 			echo json_encode(['return' => 'error']);
@@ -2084,7 +2084,7 @@ class TyovuorootController extends Controller
 		));
 	}
 
-	public function actionBeta($kohteet_siivous=array(), $kohde='', $asiakas='') {
+	public function actionBeta($kohteet_siivous=[], $kohde='', $asiakas='') {
 
 		// <-- Ketjun kasikorjaus
 		$criteria = new CDbCriteria(); 
@@ -2141,6 +2141,11 @@ class TyovuorootController extends Controller
 		$site = Yii::app()->createController('Site');
 		$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
 		$asetukset = Asetukset::model()->findByPk(1);
+		// <-- From To
+		if(!isset(Yii::app()->session['from']) or !isset(Yii::app()->session['to'])){
+			Yii::app()->session['from'] = date("Y-m-d");
+			Yii::app()->session['to'] = date("Y-m-d", strtotime(Yii::app()->session['from'].' Friday next week'));
+		}
 
 		// <-- Reset
 		if(isset($_GET['reset']))
@@ -2155,7 +2160,7 @@ class TyovuorootController extends Controller
 			unset(Yii::app()->session['kohteiden_tyonimike']);
 			unset(Yii::app()->session['tyoryhma']);
 
-			$this->redirect(array('index'));
+			$this->redirect(array('beta'));
 		}
 		//     Reset -->
 
@@ -2179,7 +2184,6 @@ class TyovuorootController extends Controller
 
 			// <-- Asiakas
 			if(isset($_POST['asiakas']) and !empty($_POST['asiakas']))
-
 				Yii::app()->session['asiakas'] = $_POST['asiakas'];
 			if(isset($_POST['asiakas']) and empty($_POST['asiakas']))
 				unset(Yii::app()->session['asiakas']);
@@ -2206,13 +2210,41 @@ class TyovuorootController extends Controller
 				Yii::app()->session['to'] = date("Y-m-d",strtotime($_POST['to']));
 
 			$this->redirect(array('beta'));
-		}		
+		}	
 		//  Post haku -->
 
-		if(!isset(Yii::app()->session['from']) or !isset(Yii::app()->session['to'])){
-			Yii::app()->session['from'] = date("Y-m-d");
-			Yii::app()->session['to'] = date("Y-m-d", strtotime(Yii::app()->session['from'].' Friday next week'));
+		// <-- HAKU
+		if(isset(Yii::app()->session['asiakas']))
+			$asiakas = Yii::app()->session['asiakas'];
+		if(isset(Yii::app()->session['kohde']))
+			$kohde = Yii::app()->session['kohde'];
+
+		$haku_criteria 	= [];
+		if(isset($asiakas) and !empty($asiakas)){
+			$haku_criteria[] = "
+			kohde IN (
+			    SELECT id FROM sivex_kohdet WHERE asiakas_id IN
+   			    (
+			       SELECT id FROM asiakkaat WHERE 
+				yrityksen_nimi LIKE '%".$asiakas."%' 
+				OR yhteyshenkilo LIKE '%".$asiakas."%' 
+				OR puhelin LIKE '%".$asiakas."%'
+			    )
+			)";
 		}
+		if(isset($kohde) and !empty($kohde)){
+			$haku_criteria[] = "
+			kohde IN (
+			    SELECT id FROM sivex_kohdet WHERE 
+				osoite LIKE '%".$kohde."%' 
+				OR puh_nro LIKE '%".$kohde."%'
+		       )";
+		}
+		if(isset($kohteet_siivous) and count($kohteet_siivous) > 0){
+			$impl = implode(',',$kohteet_siivous);
+			$haku_criteria[] = " kohde IN ($impl) ";
+		}
+		//     HAKU -->
 
 		// <-- Order tyontekijat
 		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
@@ -2246,10 +2278,9 @@ class TyovuorootController extends Controller
 		}
 		//     Tyontekijat -->
 
-		$haku_from = date("Y-m-d", strtotime(Yii::app()->session['from']));
-		$haku_to = date("Y-m-d", strtotime(Yii::app()->session['to']));
-
-		$tv_arr = $this->tv_arr($haku_from, $haku_to, $haku_tids, $asiakas, $kohde, $kohteet_siivous=[]);
+		$haku_from 	= date("Y-m-d", strtotime(Yii::app()->session['from']));
+		$haku_to 	= date("Y-m-d", strtotime(Yii::app()->session['to']));
+		$tv_arr = $this->tv_arr($haku_from, $haku_to, $haku_tids, $haku_criteria, true);
 
 		$this->render('tv4', array(
 			'tt_order_1' 	=> $tt_order_1,
@@ -2276,74 +2307,37 @@ class TyovuorootController extends Controller
 		return $status;
 	}
 
-	public function tv_arr($haku_from, $haku_to, $haku_tids, $asiakas, $kohde, $kohteet_siivous=[], $laatikkomuoto=true){
+	public function tv_arr($haku_from, $haku_to, $haku_tids, $haku_criteria, $laatikkomuoto){
 
 		$haku_to_ts = strtotime($haku_to);
        		$criteria = new CDbCriteria();
 		$criteria->with = array('kohteet');
 		//$criteria->limit = "10";
-		$criteria->select = "id, tid, toistuva_id, osoite, pvm, alku, loppu, tyoajanmerkinta, tyoajanlaatu, status, peruutettu, laskutettu, tyopaari";
-		$criteria->order = "alku ASC"; //tt.$tt_order_1 ASC, 
+		$criteria->order = "alku ASC"; 
 		$criteria->condition = "
 			toistuva_id=0
 			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$haku_from' AND '$haku_to'
 		";
-
-		// <-- Asiakas
-		if(isset($asiakas) and !empty($asiakas)){
-		$criteria->addCondition ("
-		kohde IN 
-		       (
-			    SELECT id FROM sivex_kohdet WHERE asiakas_id IN
-   			    (
-			       SELECT id FROM asiakkaat WHERE 
-				yrityksen_nimi LIKE '%".$asiakas."%' 
-				OR yhteyshenkilo LIKE '%".$asiakas."%' 
-				OR puhelin LIKE '%".$asiakas."%'
-			    )
-		       )
-		   ");
-		}
-		// Asiakas -->
-
-		// <-- Kohde
-		if(isset($kohde) and !empty($kohde)){
-	           $criteria->addCondition ("
-		   kohde IN 
-		       (
-			    SELECT id FROM sivex_kohdet WHERE 
-				osoite LIKE '%".$kohde."%' 
-				OR puh_nro LIKE '%".$kohde."%'
-		       )
-		   ");
-		}
-		// Kohde -->
-
-		if(isset($kohteet_siivous) and count($kohteet_siivous) > 0){
-			$impl = implode(',',$kohteet_siivous);
-			$criteria->addCondition  (" kohde IN ($impl) ");
-		}
+		if( count($haku_criteria) > 0 )
+			$criteria->addCondition($haku_criteria);
 
 		if( count($haku_tids) > 0 ){
 		      	$ids = implode(",", $haku_tids);
-		        $criteria->addCondition ('tid IN ('.$ids.') OR tid=0');
+		        $criteria->addCondition('tid IN ('.$ids.') OR tid=0');
 		}
-
-		// <-- Status
-		$status = $this->statukset();
-		// Status -->
 
 		// <-- Tv array
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$tv_arr = [];
 		$toistuva_ids = [];
 		foreach($tv as $arvo){
-			$return = $this->laatikkorakenne($arvo, $status, $arvo->pvm, $arvo->tid, false, $laatikkomuoto);
+			$return = $this->laatikkorakenne($arvo, $arvo->pvm, $arvo->tid, false, $laatikkomuoto);
 			$tv_arr[$arvo->tid][$arvo->pvm][strtotime($arvo->alku)][] = $return;
 		}
 
 		// <-- toistuvat
-       		$criteria = new CDbCriteria(); 
+       		$criteria = new CDbCriteria();
+		$criteria->with = array('kohteet');
 		$criteria->order = "alku";
 		$criteria->condition = "DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) <= '$haku_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$haku_from'"; // <= laitoin pvm palautus varten
 		if( count($haku_tids) > 0 ){
@@ -2355,6 +2349,12 @@ class TyovuorootController extends Controller
 			$tyopaari = "tyopaari LIKE '%\"".implode("\"%' OR tyopaari LIKE'%\"", $tt_ret)."\"%'";
 		        $criteria->addCondition ('tid IN ('.$ids.') OR ('.$tyopaari.')');
 		}
+		if( count($haku_criteria) > 0 ){
+			if(isset($haku_criteria['uusi_tilaus']))
+				unset($haku_criteria['uusi_tilaus']);
+			$criteria->addCondition($haku_criteria);
+		}
+
 		$t = ToistuvatTyovuorot::model()->findAll($criteria);
 		foreach($t as $arvo){
 			// <-- Tids
@@ -2399,7 +2399,7 @@ class TyovuorootController extends Controller
 						foreach($tids as $tid){
 							if( isset($poistettu_pvms[$tid][$this_pvm]) )
 								continue;
-							$return = $this->laatikkorakenne($arvo, $status, $this_pvm, $tid, true, $laatikkomuoto);
+							$return = $this->laatikkorakenne($arvo, $this_pvm, $tid, true, $laatikkomuoto);
 							$tv_arr[$tid][$this_pvm][strtotime($arvo->alku)][] = $return;
 						}
 
@@ -2426,62 +2426,63 @@ class TyovuorootController extends Controller
 		return (int)'99999999'.str_pad($id, 8, '0', STR_PAD_LEFT).''.$this_pvm.''.$this_tid;
 	}
 
-	protected function laatikkorakenne($arvo, $status, $this_pvm, $this_tid, $toistuva, $laatikkomuoto){
-			$return 	= [];
-			$this_id 	= ($toistuva)? $this->this_id_builder($arvo->id, $this_pvm, $this_tid) : $arvo->id;
-			$toistuva_icon 	= ($toistuva)? '<i class="text-success fa fa-repeat"></i> ' : '';
-			$mennytPaivat	= (strtotime($this_pvm) < strtotime(date("Y-m-d")))? 'mennytPaivat' : '';
-			$osoite 	= ( isset($arvo->osoite) and !empty($arvo->osoite))?$arvo->osoite:'';
-			$ikoonit	= ((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon;
+	protected function laatikkorakenne($arvo, $this_pvm, $this_tid, $toistuva, $laatikkomuoto){
+		// <-- Status
+		$status = $this->statukset();
+		// Status -->
 
-			if(empty($osoite) and isset($arvo->kohteet->osoite))
-				$arvo->osoite = $arvo->kohteet->osoite;
-			if($arvo->status == 2)
-				$arvo->osoite = 'MATKA';
-			if($arvo->status == 10)
-				$arvo->osoite = 'LOUNASTAUKO';
-			// <-- Return Array
-			if( !$laatikkomuoto ){
-				$return = ['this_id' => $this_id, 'data' => $arvo->attributes];
-				return $return;
-			}
+		$return 	= [];
+		$this_id 	= ($toistuva)? $this->this_id_builder($arvo->id, $this_pvm, $this_tid) : $arvo->id;
+		$toistuva_icon 	= ($toistuva)? '<i class="text-success fa fa-repeat"></i> ' : '';
+		$mennytPaivat	= (strtotime($this_pvm) < strtotime(date("Y-m-d")))? 'mennytPaivat' : '';
+		$osoite 	= ( isset($arvo->osoite) and !empty($arvo->osoite))?$arvo->osoite:'';
+		$ikoonit	= ((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon;
 
-			$lisateksti = '';
-			if($arvo->laskutettu == 1){
-				$lisateksti .= '<br><span class="text-primary">Laskutettu</span>';
-			}
-			if($arvo->peruutettu == 1){
-				$lisateksti .= '<br><span class="text-danger">'. $this->peruutettuArray()[1] .'</span>';
-			}
-			if($arvo->peruutettu == 2){
-				$lisateksti .= '<br><span class="text-danger">'. $this->peruutettuArray()[2] .'</span>';
-			}
-			if($arvo->tyopaari != ''){
-				$ikoonit .= ' <i class="fa fa-male text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i> ';
-			}
-			$color 		= '#888';
-			$bgcol 		= 'color:#333';
-			if(!empty($arvo->tyoajanmerkinta)){
-				$expl = explode("/",$arvo->tyoajanmerkinta);
-				if(isset($expl[1]) and !empty($expl[1])){
-					$color = $expl[1];
-					$bgcol = 'color:'.$color;
-				}
-			}
-			if(!empty($arvo->tyoajanlaatu)){
-				$expl1 = explode("/",$arvo->tyoajanlaatu);
-				if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
-				$return = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$this_id.'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
-			} else {
-				$return = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$osoite.$lisateksti.'</span>';
-
-			}
+		if(empty($osoite) and isset($arvo->kohteet->osoite))
+			$arvo->osoite = $arvo->kohteet->osoite;
+		if($arvo->status == 2)
+			$arvo->osoite = 'MATKA';
+		if($arvo->status == 10)
+			$arvo->osoite = 'LOUNASTAUKO';
+		// <-- Return Array
+		if( !$laatikkomuoto ){
+			$arvo->pvm 	= $this_pvm;
+			$arvo->tid 	= $this_tid;
+			$return 	= ['this_id' => $this_id, 'data' => $arvo->attributes];
 			return $return;
+		}
+		$lisateksti = '';
+		if($arvo->laskutettu == 1)
+			$lisateksti .= '<br><span class="text-primary">Laskutettu</span>';
+		if($arvo->peruutettu == 1)
+			$lisateksti .= '<br><span class="text-danger">'. $this->peruutettuArray()[1] .'</span>';
+		if($arvo->peruutettu == 2)
+			$lisateksti .= '<br><span class="text-danger">'. $this->peruutettuArray()[2] .'</span>';
+		if($arvo->tyopaari != '')
+			$ikoonit .= ' <i class="fa fa-male text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i> ';
+
+		$color 		= '#888';
+		$bgcol 		= 'color:#333';
+		if(!empty($arvo->tyoajanmerkinta)){
+			$expl = explode("/",$arvo->tyoajanmerkinta);
+			if(isset($expl[1]) and !empty($expl[1])){
+				$color = $expl[1];
+				$bgcol = 'color:'.$color;
+			}
+		}
+		if(!empty($arvo->tyoajanlaatu)){
+			$expl1 = explode("/",$arvo->tyoajanlaatu);
+			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
+			$return = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$this_id.'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
+		} else {
+			$return = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$osoite.$lisateksti.'</span>';
+		}
+		return $return;
 	}
 
 	public function actionDid4() {
 		$tids = array_filter($_POST['tids']);
-		$tv_arr = $this->tv_arr($_POST['haku_from'], $_POST['haku_to'], $tids, $asiakas='', $kohde='', $kohteet_siivous=[]);
+		$tv_arr = $this->tv_arr($_POST['haku_from'], $_POST['haku_to'], $tids, [], true);
 		echo json_encode($tv_arr);
 		exit;
 	}
@@ -4036,7 +4037,7 @@ class TyovuorootController extends Controller
 		}
 		$haku_from = date("Y-m-d", strtotime(Yii::app()->session['from']));
 		$haku_to = date("Y-m-d", strtotime(Yii::app()->session['to']));
-		$tv_arr = $this->tv_arr($haku_from, $haku_to, [$tid], $asiakas='', $kohde='', $kohteet_siivous=[]);
+		$tv_arr = $this->tv_arr($haku_from, $haku_to, [$tid], [], true);
 		$return = ['tv_arr' => $tv_arr];
 		echo json_encode($return);
 		exit;
@@ -6359,6 +6360,7 @@ class TyovuorootController extends Controller
 		if(isset($_GET['to']) and !empty($_GET['to']))
 		$to = date("d.m.Y", strtotime($_GET['to']));
 
+
 /*
 		$criteria = new CDBCriteria;
         	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
@@ -6367,49 +6369,43 @@ class TyovuorootController extends Controller
 			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
 			AND peruutettu=0 
 		";
-
-		if(isset($_GET['tekijaPaaSivulla']))
-		{
+*/
+		$haku_criteria = [];
+		if(isset($_GET['tekijaPaaSivulla'])){
 			$impl = implode(",", $_GET['tekijaPaaSivulla']);
-	        	$criteria->addCondition (" tid IN ($impl) ");
+	        	$haku_criteria[] = " tid IN ($impl) ";
 		}
-		if(isset($_GET['laskutettu']) and !empty($_GET['laskutettu']))
-		{
-	        	$criteria->addCondition (" laskutettu='".$_GET['laskutettu']."' ");
+		if(isset($_GET['laskutettu']) and !empty($_GET['laskutettu'])){
+	        	$haku_criteria[] = " laskutettu='".$_GET['laskutettu']."' ";
 		} else {
-	        	$criteria->addCondition (" laskutettu='0' ");
+	        	$haku_criteria[] = " laskutettu='0' ";
 		}
-		if(isset($_GET['uusi_tilaus']) and !empty($_GET['uusi_tilaus']))
-		{
-	        	$criteria->addCondition (" uusi_tilaus='".$_GET['uusi_tilaus']."' ");
+		if(isset($_GET['uusi_tilaus']) and !empty($_GET['uusi_tilaus'])){
+	        	$haku_criteria['uusi_tilaus'] = " t.uusi_tilaus='".$_GET['uusi_tilaus']."' ";
 		} else {
-	        	$criteria->addCondition (" uusi_tilaus='0' ");
+	        	$haku_criteria['uusi_tilaus'] = " t.uusi_tilaus='0' ";
 		}
-		if(isset($_GET['status']) and !empty($_GET['status']))
-		{
+		if(isset($_GET['status']) and !empty($_GET['status'])){
 			$impl_status = implode(",", $_GET['status']);
-	        	$criteria->addCondition (" status IN ($impl_status) ");
+	        	$haku_criteria[] = " status IN ($impl_status) ";
 		}
-		if(isset($_GET['yrityksen_nimi']))
-		{
-	        	$criteria->addCondition (" kohde IN (SELECT id FROM sivex_kohdet WHERE 
+		if(isset($_GET['yrityksen_nimi'])){
+	        	$haku_criteria[] = " kohde IN (SELECT id FROM sivex_kohdet WHERE 
 				asiakas_id IN (
 					SELECT id FROM asiakkaat WHERE
 					yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'
 				)
-			) ");
+			) ";
 		}
-		if(isset($_GET['osoite']))
-		{
-	        	$criteria->addCondition (" kohde IN (SELECT id FROM sivex_kohdet WHERE osoite LIKE '%".$_GET['osoite']."%') ");
+		if(isset($_GET['osoite']) and !empty($_GET['osoite'])){
+	        	$haku_criteria[] = " kohde IN (SELECT id FROM sivex_kohdet WHERE osoite LIKE '%".$_GET['osoite']."%') ";
 		}
 
-
+/*
 		$dataProvider=new CActiveDataProvider('Tyovuoroot', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false
 		));
-
 		$perSivu = 50;
 		if(isset(Yii::app()->user->asiakkaatPerSivu)){
 			$perSivu = Yii::app()->user->asiakkaatPerSivu;
@@ -6420,13 +6416,18 @@ class TyovuorootController extends Controller
 		$tids = [];
 		$pvm_from = date("Y-m-d", strtotime($from));
 		$pvm_to = date("Y-m-d", strtotime($to));
-		$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[], false);
-
+		$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, $haku_criteria, false);
+		$tids_after = [];
+		foreach($tv_arr as $t => $arr)
+			$tids_after[] = $t;
+/*
 echo '<pre>';
-print_r($tv_arr);
+print_r($haku_criteria);
 echo '</pre>';
 exit;
+*/
 		$this->render('lista', array(
+			'tids' => $tids_after,
 			'tv_arr' => $tv_arr,
 			'perSivu' => $perSivu,
 			'from' => $from,

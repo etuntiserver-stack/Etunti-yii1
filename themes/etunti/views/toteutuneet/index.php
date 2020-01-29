@@ -333,7 +333,7 @@ $dateDiff = dateDiff($from, $to);
 
   $haku_from = date("Y-m-d", strtotime($from));
   $haku_to = date("Y-m-d", strtotime($to));
-  $tv_arr = $tyovuoroot[0]->tv_arr($haku_from, $haku_to, [$tid], $asiakas='', $kohde='', $kohteet_siivous=[]);
+  $tv_arr = $tyovuoroot[0]->tv_arr($haku_from, $haku_to, [$tid], [], true);
 
 /*
 echo '<pre>';

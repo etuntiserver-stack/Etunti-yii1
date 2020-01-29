@@ -24,6 +24,8 @@
 class ToistuvatTyovuorot extends DB2ActiveRecord
 {
 
+	public $uusi_tilaus;
+
 	/**
 	 * @return string the associated database table name
 	 */
