@@ -1138,13 +1138,12 @@ class TyovuorootController extends Controller
 		if(isset($_POST['pvm']) and isset($_POST['tid'])){
 			$pvm_from = date("Y-m-d", strtotime($_POST['pvm']));
 			$pvm_to = date("Y-m-d", strtotime($_POST['pvm']));
-			$tv_arr = $this->tv_arr($pvm_from, $pvm_to, [$_POST['tid']], $asiakas='', $kohde='', $kohteet_siivous=[]);
+			$tv_arr = $this->tv_arr($pvm_from, $pvm_to, [$_POST['tid']], $asiakas='', $kohde='', $kohteet_siivous=[], false);
 			foreach($tv_arr[$_POST['tid']][$_POST['pvm']] as $k => $v)
 				foreach($v as $v2){
-					preg_match_all("/id=\"(.*?)\"/is", $v2, $matches );
-					if( isset($matches[1][0]) ){
-						$return[] = $this->check_muistista($matches[1][0]);
-						$_SESSION['muistin'][] = $matches[1][0];
+					if( isset($v2['this_id']) ){
+						$return[] = $this->check_muistista($v2['this_id']);
+						$_SESSION['muistin'][] = $v2['this_id'];
 					}
 				}
 		echo json_encode($return);
@@ -2436,15 +2435,17 @@ class TyovuorootController extends Controller
 			$ikoonit	= ((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon;
 
 			if(empty($osoite) and isset($arvo->kohteet->osoite))
-				$osoite 	= $arvo->kohteet->osoite;
+				$arvo->osoite = $arvo->kohteet->osoite;
 			if($arvo->status == 2)
-				$osoite = 'MATKA';
+				$arvo->osoite = 'MATKA';
 			if($arvo->status == 10)
-				$osoite = 'LOUNASTAUKO';
+				$arvo->osoite = 'LOUNASTAUKO';
+			// <-- Return Array
 			if( !$laatikkomuoto ){
-				$return = ['this_id' => $this_id, 'kohde' => $arvo->kohde, 'alku' => $arvo->alku, 'loppu' => $arvo->loppu, 'osoite' => $osoite, 'status' => $arvo->status];
+				$return = ['this_id' => $this_id, 'data' => $arvo->attributes];
 				return $return;
 			}
+
 			$lisateksti = '';
 			if($arvo->laskutettu == 1){
 				$lisateksti .= '<br><span class="text-primary">Laskutettu</span>';
@@ -6358,7 +6359,7 @@ class TyovuorootController extends Controller
 		if(isset($_GET['to']) and !empty($_GET['to']))
 		$to = date("d.m.Y", strtotime($_GET['to']));
 
-
+/*
 		$criteria = new CDBCriteria;
         	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
         	$criteria->condition = " 				
@@ -6414,10 +6415,19 @@ class TyovuorootController extends Controller
 			$perSivu = Yii::app()->user->asiakkaatPerSivu;
 		}
 		$dataProvider->pagination->pageSize = $perSivu;
+*/
+		$perSivu = 50;
+		$tids = [];
+		$pvm_from = date("Y-m-d", strtotime($from));
+		$pvm_to = date("Y-m-d", strtotime($to));
+		$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, $asiakas='', $kohde='', $kohteet_siivous=[], false);
 
-
+echo '<pre>';
+print_r($tv_arr);
+echo '</pre>';
+exit;
 		$this->render('lista', array(
-			'dataProvider' => $dataProvider,
+			'tv_arr' => $tv_arr,
 			'perSivu' => $perSivu,
 			'from' => $from,
 			'to' => $to,

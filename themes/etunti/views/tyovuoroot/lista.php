@@ -279,24 +279,23 @@
   </tr>
   </thead>
   <tbody>
-  <?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_lista',
-	//'viewData' => array( 'netvisor' => $netvisor ),
-  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
-
-
-	'pager' => array(
-           'firstPageLabel'=>'<<',
-           'prevPageLabel'=>'< Edellinen',
-           'nextPageLabel'=>'Seuraava >',
-           'lastPageLabel'=>'>>',
-           //'maxButtonCount'=>'10',
-           'header'=>'<h3>Siirry sivulle:</h3>',
-           'cssFile'=>false,
-       ), 
-
-  )); ?>
+  <?php
+	foreach($tids as $tid=>$item){
+		$f = date("d.m.Y", strtotime($from));
+		while (strtotime($f) <= strtotime($to)){
+			foreach($tv_arr[$_POST['tid']][$_POST['pvm']] as $k => $v){
+				foreach($v as $v2){
+					if( isset($v2['this_id']) ){
+						$tv = $this->renderPartial('_lista',array(
+							'data' => $v2['data']
+						), true);
+						echo json_decode($tv, true);
+					}
+			}
+		$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
+		}
+	}
+  ?>
   </tbody>
   </table>
 

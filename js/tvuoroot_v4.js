@@ -338,7 +338,7 @@ $(document).delegate(".valitseKokopaiva","click",function(){
            data: { "pvm" : pvm, "tid" : tid },
            success: function(data){
 		d = JSON.parse(data);
-		console.log(data);
+		//console.log(data);
 		alertti = "Huomio!\n\n";
 		$(d).each(function( index, value ) {
 			if( value['varoitus_tyopaari'] || value['varoitus_toistuva'] )
