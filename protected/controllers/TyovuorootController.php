@@ -2519,7 +2519,6 @@ class TyovuorootController extends Controller
 			$toistuva=new ToistuvatTyovuorot;
 			$toistuva->attributes=$_POST['ToistuvatTyovuorot'];
 			$toistuva->attributes=$_POST['Tyovuoroot'];
-			$toistuva->peruutettu=$_POST['Tyovuoroot']['peruutettu'];
 			$toistuva->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 
 			if( is_array($toistuva->lisa_tuotteet) and count($toistuva->lisa_tuotteet) > 0 ){
