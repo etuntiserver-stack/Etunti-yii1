@@ -23,7 +23,6 @@
  */
 class ToistuvatTyovuorot extends DB2ActiveRecord
 {
-
 	public $uusi_tilaus;
 
 	/**
