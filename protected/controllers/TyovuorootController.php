@@ -511,6 +511,7 @@ class TyovuorootController extends Controller
 		// Mä en voi anta tv_arr funktiolle $criteria->select joka saisimme tässä funktiossa, koska se vaikuttaa pelka Tavalliselle työvuoroille
 		// tv_arr funktio on tehty kahdesta osasta, tavalliset ja Virtualiset
 		// Jos laita $criteria->select toistuville, niin tulos olisi pelkä 1 rivistä ja EI koko ketjusta. Tämä on tärkeä asia mistä olen taistelemassa
+		// Tärkeä!  tv_arr funktio on käytössä nyt monessa paikassa
 		$haku_criteria 	= [];
 		$haku_criteria[] = "status=3";
 		$tv_arr = $this->tv_arr($from, $to, $tids, $haku_criteria, false);
