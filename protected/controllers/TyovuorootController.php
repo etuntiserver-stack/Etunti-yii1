@@ -514,7 +514,7 @@ class TyovuorootController extends Controller
 		// Tärkeä!  tv_arr funktio on käytössä nyt monessa paikassa
 		$haku_criteria 	= [];
 		$haku_criteria[] = "status=3";
-		$tv_arr = $this->tv_arr($from, $to, $tids, $haku_criteria, false);
+		$tv_arr = $this->tv_arr($from, $to, $tids, $haku_criteria, false); // false=Array muodossa, true=Laatikko(HTML) muodossa. Esim. työvuorotaulu rakennetaan truella
 		echo '<pre>';
 		print_r( $tv_arr );
 		echo '</pre>';
