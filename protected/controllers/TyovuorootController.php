@@ -511,6 +511,37 @@ class TyovuorootController extends Controller
 
 	protected function TidfromtoTyovuoroWithVirtual($from, $to, $tids)
 	{
+
+		$asetukset = AsetuksetForAll::model()->findbypk(1);
+	
+		// <-- Pyhapaivat
+		$pyhapaivat = [];
+		$p_explode = explode("\n", $asetukset->viralliset_pyhapaivat);
+		$p_explode = array_map('trim', $p_explode); // clear spaces
+		$p_explode = array_map('rtrim', $p_explode); // clear spaces
+		$begin = date ("d.m.Y", strtotime($from));
+		$end   = date ("d.m.Y", strtotime($to));
+		while (strtotime($begin) <= strtotime($end)) {
+               		if(in_array($begin, $p_explode)){
+				$pyhapaivat[$begin] = $begin;
+			}
+               		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
+		}
+
+		// <-- erikoislauantai
+		$erikoislauantai = [];
+		$p_explode = explode("\n", $asetukset->erikoislauantai);
+		$p_explode = array_map('trim', $p_explode); // clear spaces
+		$p_explode = array_map('rtrim', $p_explode); // clear spaces
+		$begin = date ("d.m.Y", strtotime($from));
+		$end   = date ("d.m.Y", strtotime($to));
+		while (strtotime($begin) <= strtotime($end)) {
+               		if(in_array($begin, $p_explode)){
+				$erikoislauantai[$begin] = $begin;
+			}
+               		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
+		}
+
 		// Initialize results array.
 		foreach ((is_array($tids) ? $tids : [$tids]) as $tid) {
 			$result[$tid] = [
@@ -530,12 +561,47 @@ class TyovuorootController extends Controller
 
 				// Increment total work days.
 				$result[$tid]['tp_maara']++;
-
 				foreach ($arr2 as $unixtime => $attributes) {
 					$alku_hm = date('Hi', strtotime($attributes[0]['data']['alku']));
 					$loppu_hm = date('Hi', strtotime($attributes[0]['data']['loppu']));
 					$iltatunnit = 0;
 					$yotunnit = 0;
+
+					// Pyhapaivat
+					if( 
+						isset($pyhapaivat[$attributes[0]['data']['pvm']]) 
+						and (
+							$attributes[0]['data']['status'] == 2
+							or $attributes[0]['data']['status'] == 3
+						)
+					){
+						if(!isset($result[$tid]['pyhapaivat']))
+							$result[$tid]['pyhapaivat'] = 0;
+						$result[$tid]['pyhapaivat'] += strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']);
+					}
+
+					// Erikoislauantai
+					if( 
+						isset($erikoislauantai[$attributes[0]['data']['pvm']]) 
+						and (
+							$attributes[0]['data']['status'] == 2
+							or $attributes[0]['data']['status'] == 3
+						)
+					){
+						if(!isset($result[$tid]['erikoislauantai']))
+							$result[$tid]['erikoislauantai'] = 0;
+						$result[$tid]['erikoislauantai'] += strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']);
+					}
+
+					// Suunnuntaitunnit
+					if( 
+						date("N", strtotime($attributes[0]['data']['pvm'])) == 7
+						and $attributes[0]['data']['status'] == 3
+					){
+						if(!isset($result[$tid]['sutunnit']))
+							$result[$tid]['sutunnit'] = 0;
+						$result[$tid]['sutunnit'] += strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']);
+					}
 
 					// Iltatunnit 18-23
 					if ($alku_hm < 2300 && $loppu_hm > 1800) {

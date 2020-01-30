@@ -223,18 +223,20 @@ $this->breadcrumbs=array(
   $iltatunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 1, false);
   $matkaIlta 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2), 1, false);
   $yotunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 2, false);
-  $sutunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 3, false);
   $pyhapaivat	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2,3), 4, false);
   $erikoislauantai= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2,3), 5, false);
+  $sutunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 3, false);
 */
+
+
   // < -- UUSI MUOTO / VIRTUAALISET
   $getAll 	= $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids);
-
+/*
   echo '<pre>';
   print_r($getAll);
   echo '<pre>';
   exit;
-
+*/
   // <-- SPL, SL, LS, VL, VKL, AP
   $sl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tids,'SL'); // Palkallinen
   $spl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tids,'SPL'); // Palkaton
@@ -244,18 +246,19 @@ $this->breadcrumbs=array(
   $ap_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tids,'AP'); // Arkipaiva
   //     SPL, SL, LS, VL, VKL, AP -->
 
-
-/*
-  echo '<pre>';
-  print_r($tyotunnit);
-  echo '<pre>';
-  exit;
-*/
-
   foreach($model as $data)
   {
+		$tp 		= (isset($getAll[$data->id]['tp_maara']))? $getAll[$data->id]['tp_maara'] : 0;
+		$tyotunnit	= (isset($getAll[$data->id]['tyotunnit']['kaikki']))? $getAll[$data->id]['tyotunnit']['kaikki'] : 0;
+		$iltatunnit	= (isset($getAll[$data->id]['tyotunnit']['ilta']))? $getAll[$data->id]['tyotunnit']['ilta'] : 0;
+		$yotunnit	= (isset($getAll[$data->id]['tyotunnit']['yo']))? $getAll[$data->id]['tyotunnit']['yo'] : 0;
+		$matkatunnit	= (isset($getAll[$data->id]['matkatunnit']['kaikki']))? $getAll[$data->id]['matkatunnit']['kaikki'] : 0;
+		$matkaIlta	= (isset($getAll[$data->id]['matkatunnit']['ilta']))? $getAll[$data->id]['matkatunnit']['ilta'] : 0;
+		$loun		= (isset($getAll[$data->id]['lounaat']['kaikki']))? $getAll[$data->id]['lounaat']['kaikki'] : 0;
+		$pyhapaivat	= (isset($getAll[$data->id]['pyhapaivat']))? $getAll[$data->id]['pyhapaivat'] : 0;
+		$erikoislauantai= (isset($getAll[$data->id]['erikoislauantai']))? $getAll[$data->id]['erikoislauantai'] : 0;
+		$sutunnit	= (isset($getAll[$data->id]['sutunnit']))? $getAll[$data->id]['sutunnit'] : 0;
 
-		$tp = (isset($tyopaivia[$data->id]))? $tyopaivia[$data->id] : 0;
 		// <-- SPL, SL, LS, VL, VKL, AP
 		$sl 		= (isset($sl_all[$data->id]))? $sl_all[$data->id] : 0; // Palkallinen
 		$spl 		= (isset($spl_all[$data->id]))? $spl_all[$data->id] : 0; // Palkaton
@@ -264,37 +267,36 @@ $this->breadcrumbs=array(
 		$vkl 		= (isset($vkl_all[$data->id]))? $vkl_all[$data->id] : 0; // Viikkolomapaiva  ( Poistettu kaytosta )
 		//     SPL, SL, LS, VL, VKL, AP -->
 
-
 		$slYht += $sl;
 		$lsYht += $ls;
 		$splYht += $spl;
 		$vlYht += $vl;
 		$vklYht += $vkl;
 		$totalTp += $tp;
-		$pyhat = $pyhapaivat[$data->id];
+		$pyhat = $pyhapaivat;
 		$pyhatYht += $pyhat;
-		$el = $erikoislauantai[$data->id];
+		$el = $erikoislauantai;
 		$elYht += $el;
 
-		$matkaYht += $matkatunnit[$data->id];
-		$mPlusTYht += $tyotunnit[$data->id]+$matkatunnit[$data->id];
-		$lounYht += $loun[$data->id];
-		$matkaIltaYht += $matkaIlta[$data->id];
-		$iltaMatkaPlusIltatunnitYht += $iltatunnit[$data->id];
+		$matkaYht += $matkatunnit;
+		$mPlusTYht += $tyotunnit+$matkatunnit;
+		$lounYht += $loun;
+		$matkaIltaYht += $matkaIlta;
+		$iltaMatkaPlusIltatunnitYht += $iltatunnit;
 
-		$yht[0] += $tyotunnit[$data->id];
-		$yht[1] += $iltatunnit[$data->id]-$matkaIlta[$data->id];
-		$yht[2] += $yotunnit[$data->id];
-		$yht[3] += $sutunnit[$data->id];
+		$yht[0] += $tyotunnit;
+		$yht[1] += $iltatunnit-$matkaIlta;
+		$yht[2] += $yotunnit;
+		$yht[3] += $sutunnit;
 
 
 		$this->renderPartial('_palkkataulukko',array(
 			'tt_order_1' => $tt_order_1,
 			'tt_order_2' => $tt_order_2,
 			'data'=>$data,
-			'tyotunnit'=>$tyotunnit[$data->id],
-			'matkatunnit'=>$matkatunnit[$data->id],
-			'matkaIlta'=>$matkaIlta[$data->id],
+			'tyotunnit'=>$tyotunnit,
+			'matkatunnit'=>$matkatunnit,
+			'matkaIlta'=>$matkaIlta,
 			'tp'=>$tp,
 			'sl'=>$sl,
 			'spl'=>$spl,
@@ -305,9 +307,9 @@ $this->breadcrumbs=array(
 			'to'=>$to,
 			'pyhat'=>$pyhat,
 			'el'=>$el,
-			'loun'=>$loun[$data->id],
-			'yotunnit' => $yotunnit[$data->id],
-			'iltatunnit' => $iltatunnit[$data->id],
+			'loun'=>$loun,
+			'yotunnit' => $yotunnit,
+			'iltatunnit' => $iltatunnit,
 			'sutunnit' => $sutunnit[$data->id]
 		));
   }
