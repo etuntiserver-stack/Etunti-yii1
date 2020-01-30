@@ -530,6 +530,7 @@ class TyovuorootController extends Controller
 
 		$haku_criteria 	= [];
 		$haku_criteria[] = $status;
+		// $this->tv_arr fuktio parempi ei kosketta jos onnistuu
 		$tv_arr = $this->tv_arr($from, $to, $tids, $haku_criteria, false); // false=Array muodossa, true=Laatikko(HTML) muodossa. Esim. työvuorotaulu rakennetaan truella
 		foreach($tv_arr as $tid => $arr){
 			foreach($arr as $pvm => $arr2){
