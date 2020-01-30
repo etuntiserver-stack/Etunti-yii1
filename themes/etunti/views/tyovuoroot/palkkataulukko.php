@@ -214,16 +214,22 @@ $this->breadcrumbs=array(
    foreach ($model as $data)
 	$tids[] = $data->id;
 
+  // < -- VANHA MUOTO
   $tyopaivia 	= $this->TPBetweenTvAll($from, $to, $tids);
-  $tyotunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 0, false);
-  $matkatunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2), 0, false);
-  $loun 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(10), 0, false);
+  //$tyotunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 0, false);
+  //$matkatunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2), 0, false);
+  //$loun 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(10), 0, false);
   $iltatunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 1, false);
   $matkaIlta 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2), 1, false);
   $yotunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 2, false);
   $sutunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 3, false);
   $pyhapaivat	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2,3), 4, false);
   $erikoislauantai= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2,3), 5, false);
+
+  // < -- UUSI MUOTO / VIRTUAALISET
+  $tyotunnit 	= $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids, [3], 0);
+  $matkatunnit 	= $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids, [2], 0);
+  $loun 	= $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids, [10], 0);
 
   // <-- SPL, SL, LS, VL, VKL, AP
   $sl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tids,'SL'); // Palkallinen
@@ -233,6 +239,7 @@ $this->breadcrumbs=array(
   $vkl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tids,'VKL'); // Viikkolomapaiva  ( Poistettu kaytosta )
   $ap_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tids,'AP'); // Arkipaiva
   //     SPL, SL, LS, VL, VKL, AP -->
+
 
 /*
   echo '<pre>';

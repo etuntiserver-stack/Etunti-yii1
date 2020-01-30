@@ -506,30 +506,45 @@ class TyovuorootController extends Controller
 				$set[$t->tid] += $t->l_tunnit;
 		}
 
-/*
+		return $set;
+	}
+
+	protected function TidfromtoTyovuoroWithVirtual($from, $to, $tids, $status, $time){
+		$set = [];
+		if (is_array($tids)) {
+			foreach($tids as $tid)
+				$set[$tid] = 0;
+		} else {
+			$set[$tids] = 0;
+		}
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+		$status = "status='".implode("' OR status='", $status)."'";
+
 		// Tässä on uusi muoto työvuorojen saamisestä, jossa on arrayissa kaikki yhteensä ( tavalliset ja Viertualiset )
 		// Mä en voi anta tv_arr funktiolle $criteria->select joka saisimme tässä funktiossa, koska se vaikuttaa pelka Tavalliselle työvuoroille
 		// tv_arr funktio on tehty kahdesta osasta, tavalliset ja Virtualiset
 		// Jos laita $criteria->select toistuville, niin tulos olisi pelkä 1 rivistä ja EI koko ketjusta. Tämä on tärkeä asia mistä olen taistelemassa
 		// Tärkeä!  tv_arr funktio on käytössä nyt monessa paikassa
+
 		$haku_criteria 	= [];
-		//$haku_criteria[] = "status=3";
+		$haku_criteria[] = $status;
 		$tv_arr = $this->tv_arr($from, $to, $tids, $haku_criteria, false); // false=Array muodossa, true=Laatikko(HTML) muodossa. Esim. työvuorotaulu rakennetaan truella
-		$return_tids = [];
 		foreach($tv_arr as $tid => $arr){
-			$return_tids[$tid] = 0;
 			foreach($arr as $pvm => $arr2){
 				foreach($arr2 as $unixtime => $attributes){
-					$return_tids[$tid] += strtotime($attributes[0]['data']['loppu'])-strtotime($attributes[0]['data']['alku']);
+					// Tässä olisi IF ELSE jos $time on 1,2,3,4 tai 5
+					$set[$tid] += strtotime($attributes[0]['data']['loppu'])-strtotime($attributes[0]['data']['alku']);
 				}
 			}
 		}
+		/*
 		echo '<pre>';
 		print_r( $return_tids ); // Tässä on nyt lopputulos palkkatauluko.php:lle, mutta ilman eroa, onko se iltatunnit tai onko se matkat, tai onko se erikoislauantai jne
 		echo '</pre>';
 		exit;
-*/
-
+		*/
 		return $set;
 	}
 
