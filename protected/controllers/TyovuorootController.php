@@ -548,7 +548,10 @@ class TyovuorootController extends Controller
 				'tyotunnit' => ['kaikki' => 0, 'ilta' => 0, 'yo' => 0],
 				'matkatunnit' => ['kaikki' => 0, 'ilta' => 0, 'yo' => 0],
 				'lounaat' => ['kaikki' => 0, 'ilta' => 0, 'yo' => 0],
-				'tp_maara' => 0
+				'tp_maara' => 0,
+				'pyhapaivat' => 0,
+				'erikoislauantai' => 0,
+				'sutunnit' => 0
 			];
 		}
 
@@ -566,42 +569,7 @@ class TyovuorootController extends Controller
 					$loppu_hm = date('Hi', strtotime($attributes[0]['data']['loppu']));
 					$iltatunnit = 0;
 					$yotunnit = 0;
-
-					// Pyhapaivat
-					if( 
-						isset($pyhapaivat[$attributes[0]['data']['pvm']]) 
-						and (
-							$attributes[0]['data']['status'] == 2
-							or $attributes[0]['data']['status'] == 3
-						)
-					){
-						if(!isset($result[$tid]['pyhapaivat']))
-							$result[$tid]['pyhapaivat'] = 0;
-						$result[$tid]['pyhapaivat'] += strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']);
-					}
-
-					// Erikoislauantai
-					if( 
-						isset($erikoislauantai[$attributes[0]['data']['pvm']]) 
-						and (
-							$attributes[0]['data']['status'] == 2
-							or $attributes[0]['data']['status'] == 3
-						)
-					){
-						if(!isset($result[$tid]['erikoislauantai']))
-							$result[$tid]['erikoislauantai'] = 0;
-						$result[$tid]['erikoislauantai'] += strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']);
-					}
-
-					// Suunnuntaitunnit
-					if( 
-						date("N", strtotime($attributes[0]['data']['pvm'])) == 7
-						and $attributes[0]['data']['status'] == 3
-					){
-						if(!isset($result[$tid]['sutunnit']))
-							$result[$tid]['sutunnit'] = 0;
-						$result[$tid]['sutunnit'] += strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']);
-					}
+					$tunnit_yht = strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']);
 
 					// Iltatunnit 18-23
 					if ($alku_hm < 2300 && $loppu_hm > 1800) {
@@ -621,7 +589,7 @@ class TyovuorootController extends Controller
 
 								// alku > 18:00, loppu < 23:00
 							case ($loppu_hm < 2300):
-								$iltatunnit += strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']);
+								$iltatunnit += $tunnit_yht;
 								break;
 
 								// alku > 18:00, loppu >= 23:00
@@ -634,29 +602,38 @@ class TyovuorootController extends Controller
 					// Yötunnit 23-06: 00-06
 					if ($alku_hm < 600) {
 						$yotunnit += $loppu_hm < 600 ?
-							strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']) :
+							$tunnit_yht :
 							strtotime('06:00') - strtotime($attributes[0]['data']['alku']);
 					}
 
 					// Yötunnit 23-06: 23-00
 					if ($loppu_hm > 2300) {
 						$yotunnit += $alku_hm > 2300 ?
-							strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']) :
+							$tunnit_yht :
 							strtotime($attributes[0]['data']['loppu']) - strtotime('23:00');
 					}
 
 					// Assign hours
-					$tunnit_yht = strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']);
 					switch ($attributes[0]['data']['status']) {
 						case 2:
 							$result[$tid]['matkatunnit']['kaikki'] += $tunnit_yht;
 							$result[$tid]['matkatunnit']['ilta'] += $iltatunnit;
 							$result[$tid]['matkatunnit']['yo'] += $yotunnit;
+							if (isset($pyhapaivat[$attributes[0]['data']['pvm']]))
+								$result[$tid]['pyhapaivat'] += $tunnit_yht;
+							if (isset($erikoislauantai[$attributes[0]['data']['pvm']]))
+								$result[$tid]['erikoislauantai'] += $tunnit_yht;
 							break;
 						case 3:
 							$result[$tid]['tyotunnit']['kaikki'] += $tunnit_yht;
 							$result[$tid]['tyotunnit']['ilta'] += $iltatunnit;
 							$result[$tid]['tyotunnit']['yo'] += $yotunnit;
+							if (isset($pyhapaivat[$attributes[0]['data']['pvm']]))
+								$result[$tid]['pyhapaivat'] += $tunnit_yht;
+							if (isset($erikoislauantai[$attributes[0]['data']['pvm']]))
+								$result[$tid]['erikoislauantai'] += $tunnit_yht;
+							if (date("N", strtotime($attributes[0]['data']['pvm'])) == 7)
+								$result[$tid]['sutunnit'] += $tunnit_yht;
 							break;
 						case 10:
 							$result[$tid]['lounaat']['kaikki'] += $tunnit_yht;
@@ -667,6 +644,14 @@ class TyovuorootController extends Controller
 				}
 			}
 		}
+
+		// Jos haluat tyhjät arvot pois:
+		// array_walk($result, function(&$tid_arr, $tid) {
+		// 	$tid_arr = array_filter($tid_arr, function($item, $key) {
+		// 		return (is_array($item) || $item > 0);
+		// 	}, ARRAY_FILTER_USE_BOTH);
+		// });
+		// echo '<pre>' . print_r($result, true) . '</pre>';
 
 		return $result;
 	}
