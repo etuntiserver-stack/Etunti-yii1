@@ -509,42 +509,100 @@ class TyovuorootController extends Controller
 		return $set;
 	}
 
-	protected function TidfromtoTyovuoroWithVirtual($from, $to, $tids){
-		$tyotunnit 	= [];
-		$matkatunnit 	= [];
-		$lounaat 	= [];
-		if (is_array($tids)) {
-			foreach($tids as $tid){
-				$tyotunnit[$tid] = 0;
-				$matkatunnit[$tid] = 0;
-				$lounaat[$tid] = 0;
-			}
-		} else {
-				$tyotunnit[$tid] = 0;
-				$matkatunnit[$tid] = 0;
-				$lounaat[$tid] = 0;
+	protected function TidfromtoTyovuoroWithVirtual($from, $to, $tids)
+	{
+		// Initialize results array.
+		foreach ((is_array($tids) ? $tids : [$tids]) as $tid) {
+			$result[$tid] = [
+				'tyotunnit' => ['kaikki' => 0, 'ilta' => 0, 'yo' => 0],
+				'matkatunnit' => ['kaikki' => 0, 'ilta' => 0, 'yo' => 0],
+				'lounaat' => ['kaikki' => 0, 'ilta' => 0, 'yo' => 0],
+				'tp_maara' => 0
+			];
 		}
+
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 		$tv_arr = $this->tv_arr($from, $to, $tids, [], false);
-		foreach($tv_arr as $tid => $arr){
-			foreach($arr as $pvm => $arr2){
-				foreach($arr2 as $unixtime => $attributes){
-					if( $attributes[0]['data']['status'] == 3 )
-						$tyotunnit[$tid] += strtotime($attributes[0]['data']['loppu'])-strtotime($attributes[0]['data']['alku']);
-					if( $attributes[0]['data']['status'] == 2 )
-						$matkatunnit[$tid] += strtotime($attributes[0]['data']['loppu'])-strtotime($attributes[0]['data']['alku']);
-					if( $attributes[0]['data']['status'] == 10 )
-						$lounaat[$tid] += strtotime($attributes[0]['data']['loppu'])-strtotime($attributes[0]['data']['alku']);
+
+		foreach ($tv_arr as $tid => $arr) {
+			foreach ($arr as $pvm => $arr2) {
+
+				// Increment total work days.
+				$result[$tid]['tp_maara']++;
+
+				foreach ($arr2 as $unixtime => $attributes) {
+					$alku_hm = date('Hi', strtotime($attributes[0]['data']['alku']));
+					$loppu_hm = date('Hi', strtotime($attributes[0]['data']['loppu']));
+					$iltatunnit = 0;
+					$yotunnit = 0;
+
+					// Iltatunnit 18-23
+					if ($alku_hm < 2300 && $loppu_hm > 1800) {
+
+						// Use switch with process of elimination, leaving us with less conditions to check.
+						switch (true) {
+
+								// alku <= 18:00, loppu < 23:00
+							case ($alku_hm <= 1800 && $loppu_hm < 2300):
+								$iltatunnit += strtotime($attributes[0]['data']['loppu']) - strtotime('18:00');
+								break;
+
+								// alku <= 18:00, loppu >= 23:00
+							case ($alku_hm <= 1800):
+								$iltatunnit += strtotime('23:00') - strtotime('18:00');
+								break;
+
+								// alku > 18:00, loppu < 23:00
+							case ($loppu_hm < 2300):
+								$iltatunnit += strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']);
+								break;
+
+								// alku > 18:00, loppu >= 23:00
+							default:
+								$iltatunnit += strtotime('23:00') - strtotime($attributes[0]['data']['alku']);
+								break;
+						}
+					}
+
+					// Yötunnit 23-06: 00-06
+					if ($alku_hm < 600) {
+						$yotunnit += $loppu_hm < 600 ?
+							strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']) :
+							strtotime('06:00') - strtotime($attributes[0]['data']['alku']);
+					}
+
+					// Yötunnit 23-06: 23-00
+					if ($loppu_hm > 2300) {
+						$yotunnit += $alku_hm > 2300 ?
+							strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']) :
+							strtotime($attributes[0]['data']['loppu']) - strtotime('23:00');
+					}
+
+					// Assign hours
+					$tunnit_yht = strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']);
+					switch ($attributes[0]['data']['status']) {
+						case 2:
+							$result[$tid]['matkatunnit']['kaikki'] += $tunnit_yht;
+							$result[$tid]['matkatunnit']['ilta'] += $iltatunnit;
+							$result[$tid]['matkatunnit']['yo'] += $yotunnit;
+							break;
+						case 3:
+							$result[$tid]['tyotunnit']['kaikki'] += $tunnit_yht;
+							$result[$tid]['tyotunnit']['ilta'] += $iltatunnit;
+							$result[$tid]['tyotunnit']['yo'] += $yotunnit;
+							break;
+						case 10:
+							$result[$tid]['lounaat']['kaikki'] += $tunnit_yht;
+							$result[$tid]['lounaat']['ilta'] += $iltatunnit;
+							$result[$tid]['lounaat']['yo'] += $yotunnit;
+							break;
+					}
 				}
 			}
 		}
-		$return = [
-			'tyotunnit' => $tyotunnit,
-			'matkatunnit' => $matkatunnit,
-			'lounaat' => $lounaat,
-		];
-		return $return;
+
+		return $result;
 	}
 
 	protected function TPBetweenTvAll($from,$to,$tids){
