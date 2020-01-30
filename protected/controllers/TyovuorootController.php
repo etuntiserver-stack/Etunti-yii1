@@ -315,10 +315,11 @@ class TyovuorootController extends Controller
 */
 	protected function TidfromtoTyovuoroAll($from, $to, $tids, $status, $time, $by_pvm=false){
 		$set = [];
+		$tids_imploded = '';
 		if (is_array($tids)) {
 			foreach($tids as $tid)
 				$set[$tid] = 0;
-			$tids = implode(", ", $tids);
+			$tids_imploded = implode(", ", $tids);
 		} else {
 			$set[$tids] = 0;
 		}
@@ -373,7 +374,7 @@ class TyovuorootController extends Controller
 		   $criteria->group = "tid";
 
 		// Helper function to avoid duplicate code (doesn't handle 'hyvaksytty' as it differs)
-		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $time, $pyhapaivat, $erikoislauantai) {
+		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $status, $tids_imploded, $time, $pyhapaivat, $erikoislauantai) {
 			// Select statements
 			switch ($time) {
 				case 0:
@@ -487,7 +488,7 @@ class TyovuorootController extends Controller
 
 			// Conditions
 			$criteria->condition = "
-				tid IN ($tids)
+				tid IN ($tids_imploded)
 				AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$from' AND '$to'
 				AND peruutettu=0";
 			if ($status) $criteria->addCondition($status);
@@ -496,7 +497,6 @@ class TyovuorootController extends Controller
 		// Build CDbCriteria
 		$buildCriteria($criteria);
 		$tv = Tyovuoroot::model()->findAll($criteria);
-
 		if($by_pvm){
 			foreach ($tv as $t){
 				$set[date("Y-m-d", strtotime($t->pvm))][$t->tid] = $t->l_tunnit;
@@ -505,6 +505,21 @@ class TyovuorootController extends Controller
 			foreach ($tv as $t)
 				$set[$t->tid] += $t->l_tunnit;
 		}
+
+		/*
+		// Tässä on uusi muoto työvuorojen saamisestä, jossa on arrayissa kaikki yhteensä ( tavalliset ja Viertualiset )
+		// Mä en voi anta tv_arr funktiolle $criteria->select joka saisimme tässä funktiossa, koska se vaikuttaa pelka Tavalliselle työvuoroille
+		// tv_arr funktio on tehty kahdesta osasta, tavalliset ja Virtualiset
+		// Jos laita $criteria->select toistuville, niin tulos olisi pelkä 1 rivistä ja EI koko ketjusta. Tämä on tärkeä asia mistä olen taistelemassa
+		$haku_criteria 	= [];
+		$haku_criteria[] = "status=3";
+		$tv_arr = $this->tv_arr($from, $to, $tids, $haku_criteria, false);
+		echo '<pre>';
+		print_r( $tv_arr );
+		echo '</pre>';
+		exit;
+		*/
+
 		return $set;
 	}
 
@@ -3594,21 +3609,7 @@ class TyovuorootController extends Controller
 			echo json_encode(['error' => 'Toistuva error']);
 			exit;
 		}
-/*
-		if( 
-			$this_id != 'null'
-			and is_array(json_decode($model->tyopaari, true))
-			and isset($_POST['tyopaari']) 
-			and count($_POST['tyopaari']) != count(json_decode($model->tyopaari, true))
- 		){
-			$vanhat = json_decode($model->tyopaari, true);
-			$return .= '<h3 class="text-danger">';
-			$diff = array_diff($vanhat, $_POST['tyopaari']);
-			foreach($diff as $k => $v)
-				//$return .= $v.'<br>';
-			$return .= '</h3>';
-		}
-*/
+
 		// <-- Tids
 		$tids = [];
 		foreach($post_tids as $tp_tid){
@@ -6360,16 +6361,6 @@ class TyovuorootController extends Controller
 		if(isset($_GET['to']) and !empty($_GET['to']))
 		$to = date("d.m.Y", strtotime($_GET['to']));
 
-
-/*
-		$criteria = new CDBCriteria;
-        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
-        	$criteria->condition = " 				
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-			AND peruutettu=0 
-		";
-*/
 		$haku_criteria = [];
 		if(isset($_GET['tekijaPaaSivulla'])){
 			$impl = implode(",", $_GET['tekijaPaaSivulla']);
@@ -6401,17 +6392,6 @@ class TyovuorootController extends Controller
 	        	$haku_criteria[] = " kohde IN (SELECT id FROM sivex_kohdet WHERE osoite LIKE '%".$_GET['osoite']."%') ";
 		}
 
-/*
-		$dataProvider=new CActiveDataProvider('Tyovuoroot', array(
-			'criteria'=>$criteria,
-			//'pagination'=>false
-		));
-		$perSivu = 50;
-		if(isset(Yii::app()->user->asiakkaatPerSivu)){
-			$perSivu = Yii::app()->user->asiakkaatPerSivu;
-		}
-		$dataProvider->pagination->pageSize = $perSivu;
-*/
 		$perSivu = 50;
 		$tids = [];
 		$pvm_from = date("Y-m-d", strtotime($from));
@@ -6420,12 +6400,7 @@ class TyovuorootController extends Controller
 		$tids_after = [];
 		foreach($tv_arr as $t => $arr)
 			$tids_after[] = $t;
-/*
-echo '<pre>';
-print_r($haku_criteria);
-echo '</pre>';
-exit;
-*/
+
 		$this->render('lista', array(
 			'tids' => $tids_after,
 			'tv_arr' => $tv_arr,

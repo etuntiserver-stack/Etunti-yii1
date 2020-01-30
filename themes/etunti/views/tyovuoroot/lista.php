@@ -283,6 +283,8 @@
 	foreach($tids as $tid){
 		$f = date("d.m.Y", strtotime($from));
 		while (strtotime($f) <= strtotime($to)){
+			if(!isset($tv_arr[$tid][$f]))
+				continue;
 			ksort($tv_arr[$tid][$f]);
 			foreach($tv_arr[$tid][$f] as $k => $v){
 				foreach($v as $v2){
