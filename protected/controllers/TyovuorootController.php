@@ -511,21 +511,19 @@ class TyovuorootController extends Controller
 
 	protected function TidfromtoTyovuoroWithVirtual($from, $to, $tids)
 	{
-
 		$asetukset = AsetuksetForAll::model()->findbypk(1);
-	
+
 		// <-- Pyhapaivat
 		$pyhapaivat = [];
 		$p_explode = explode("\n", $asetukset->viralliset_pyhapaivat);
 		$p_explode = array_map('trim', $p_explode); // clear spaces
 		$p_explode = array_map('rtrim', $p_explode); // clear spaces
-		$begin = date ("d.m.Y", strtotime($from));
-		$end   = date ("d.m.Y", strtotime($to));
+		$begin = date("d.m.Y", strtotime($from));
+		$end   = date("d.m.Y", strtotime($to));
 		while (strtotime($begin) <= strtotime($end)) {
-               		if(in_array($begin, $p_explode)){
+			if (in_array($begin, $p_explode))
 				$pyhapaivat[$begin] = $begin;
-			}
-               		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
+			$begin = date("d.m.Y", strtotime("+1 day", strtotime($begin)));
 		}
 
 		// <-- erikoislauantai
@@ -533,13 +531,12 @@ class TyovuorootController extends Controller
 		$p_explode = explode("\n", $asetukset->erikoislauantai);
 		$p_explode = array_map('trim', $p_explode); // clear spaces
 		$p_explode = array_map('rtrim', $p_explode); // clear spaces
-		$begin = date ("d.m.Y", strtotime($from));
-		$end   = date ("d.m.Y", strtotime($to));
+		$begin = date("d.m.Y", strtotime($from));
+		$end   = date("d.m.Y", strtotime($to));
 		while (strtotime($begin) <= strtotime($end)) {
-               		if(in_array($begin, $p_explode)){
+			if (in_array($begin, $p_explode))
 				$erikoislauantai[$begin] = $begin;
-			}
-               		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
+			$begin = date("d.m.Y", strtotime("+1 day", strtotime($begin)));
 		}
 
 		// Initialize results array.
