@@ -509,44 +509,42 @@ class TyovuorootController extends Controller
 		return $set;
 	}
 
-	protected function TidfromtoTyovuoroWithVirtual($from, $to, $tids, $status, $time){
-		$set = [];
+	protected function TidfromtoTyovuoroWithVirtual($from, $to, $tids){
+		$tyotunnit 	= [];
+		$matkatunnit 	= [];
+		$lounaat 	= [];
 		if (is_array($tids)) {
-			foreach($tids as $tid)
-				$set[$tid] = 0;
+			foreach($tids as $tid){
+				$tyotunnit[$tid] = 0;
+				$matkatunnit[$tid] = 0;
+				$lounaat[$tid] = 0;
+			}
 		} else {
-			$set[$tids] = 0;
+				$tyotunnit[$tid] = 0;
+				$matkatunnit[$tid] = 0;
+				$lounaat[$tid] = 0;
 		}
-
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
-		$status = "status='".implode("' OR status='", $status)."'";
-
-		// Tässä on uusi muoto työvuorojen saamisestä, jossa on arrayissa kaikki yhteensä ( tavalliset ja Viertualiset )
-		// Mä en voi anta tv_arr funktiolle $criteria->select joka saisimme vanhassa funktiossa, koska se vaikuttaa pelka Tavalliselle työvuoroille
-		// tv_arr funktio on tehty kahdesta osasta, tavalliset ja Virtualiset
-		// Jos laita $criteria->select toistuville, niin tulos olisi pelkä 1 rivistä ja EI koko ketjusta. Tämä on tärkeä asia mistä olen taistelemassa
-		// Tärkeä!  tv_arr funktio on käytössä nyt monessa paikassa
-
-		$haku_criteria 	= [];
-		$haku_criteria[] = $status;
-		// $this->tv_arr fuktio parempi ei kosketta jos onnistuu
-		$tv_arr = $this->tv_arr($from, $to, $tids, $haku_criteria, false); // false=Array muodossa, true=Laatikko(HTML) muodossa. Esim. työvuorotaulu rakennetaan truella
+		$tv_arr = $this->tv_arr($from, $to, $tids, [], false);
 		foreach($tv_arr as $tid => $arr){
 			foreach($arr as $pvm => $arr2){
 				foreach($arr2 as $unixtime => $attributes){
-					// Tässä olisi IF ELSE jos $time on 1,2,3,4 tai 5
-					$set[$tid] += strtotime($attributes[0]['data']['loppu'])-strtotime($attributes[0]['data']['alku']);
+					if( $attributes[0]['data']['status'] == 3 )
+						$tyotunnit[$tid] += strtotime($attributes[0]['data']['loppu'])-strtotime($attributes[0]['data']['alku']);
+					if( $attributes[0]['data']['status'] == 2 )
+						$matkatunnit[$tid] += strtotime($attributes[0]['data']['loppu'])-strtotime($attributes[0]['data']['alku']);
+					if( $attributes[0]['data']['status'] == 10 )
+						$lounaat[$tid] += strtotime($attributes[0]['data']['loppu'])-strtotime($attributes[0]['data']['alku']);
 				}
 			}
 		}
-		/*
-		echo '<pre>';
-		print_r( $set );
-		echo '</pre>';
-		exit;
-		*/
-		return $set;
+		$return = [
+			'tyotunnit' => $tyotunnit,
+			'matkatunnit' => $matkatunnit,
+			'lounaat' => $lounaat,
+		];
+		return $return;
 	}
 
 	protected function TPBetweenTvAll($from,$to,$tids){
