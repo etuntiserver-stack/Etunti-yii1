@@ -542,7 +542,7 @@ class TyovuorootController extends Controller
 		}
 		/*
 		echo '<pre>';
-		print_r( $return_tids ); // Tässä on nyt lopputulos palkkatauluko.php:lle, mutta ilman eroa, onko se iltatunnit tai onko se matkat, tai onko se erikoislauantai jne
+		print_r( $set );
 		echo '</pre>';
 		exit;
 		*/
