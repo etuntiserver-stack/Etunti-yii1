@@ -83,13 +83,13 @@
 					</label>
 				</div>
 			</div>
-			<div class="row m10">
+			<!-- <div class="row m10">
 				<div class="col-sm-12">
 					<label class="checkbox-inline">
 						<input type="checkbox" <?php if (isset($_POST['toggle_lomat_ja_poissaolot'])) echo 'checked="checked"'; ?> name="toggle_lomat_ja_poissaolot" id="toggle_lomat_ja_poissaolot"> Lomat ja poissaolot
 					</label>
 				</div>
-			</div>
+			</div> -->
 			<div class="row m10">
 				<div class="col-sm-12">
 					<label class="checkbox-inline">
