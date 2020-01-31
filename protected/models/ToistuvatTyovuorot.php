@@ -23,6 +23,7 @@
  */
 class ToistuvatTyovuorot extends DB2ActiveRecord
 {
+	public $peruutettu;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -78,6 +79,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 		     'muistiinpano' => 'text DEFAULT NULL',
                      'tyoajanlaatu' => 'varchar(50) DEFAULT NULL',
                      'korjattu_poista_tama' => 'int(1) DEFAULT 0',
+                     'peruutettu' => 'int(1) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -100,7 +102,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('time, pfrom, pto, viikkoja, viikko_paivat, tid, kohde, pvm, alku, loppu, kesto, tyoajanmerkinta, status, tietoja, tyopaari', 'required'),
-			array('viikkoja, tid, kohde, status, ilmoitus_paattymisesta, piilota_mobiilista, tuoteID', 'numerical', 'integerOnly'=>true),
+			array('viikkoja, tid, kohde, status, ilmoitus_paattymisesta, piilota_mobiilista, tuoteID, peruutettu', 'numerical', 'integerOnly'=>true),
 			array('osoite, postinumero, postitoimipaikka, tyoajanlaatu, korjattu_poista_tama', 'length', 'max'=>255),
 			array('pfrom, pto, pvm', 'length', 'max'=>50),
 			array('alku, loppu, pituus, kesto', 'length', 'max'=>10),
