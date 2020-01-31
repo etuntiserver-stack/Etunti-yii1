@@ -246,275 +246,8 @@ class TyovuorootController extends Controller
 		if(isset($tv->l_tunnit)){ $result = $tv->l_tunnit; }
 		return $result;
 	}
-/*
-	public function matkaIlta($tid,$from,$to)
-	{
-		$mobile = Yii::app()->createController('Mobile');
-		$from = date("Y-m-d", strtotime($from));
-		$to = date("Y-m-d", strtotime($to));
 
-		$totalIlta = 0;
-
-       		$criteria = new CDbCriteria();
-        	$criteria->condition = "  
-			tid = '".$tid."'
-			AND status = '2'
-			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
-			AND peruutettu=0
-		";
-
-		$tv = Tyovuoroot::model()->findAll($criteria);
-		foreach($tv as $l)
-		{
-		    $loppui = date("d.m.Y H:i",strtotime($l->pvm.' '.$l->loppu));
-		    $aloitan = date("d.m.Y H:i",strtotime($l->pvm.' '.$l->alku));
-
-		    $l->l_tunnit = (strtotime($loppui)-strtotime($aloitan));
-		    $al = explode(" ",$aloitan);
-		    $lop = explode(" ",$loppui);
-		    $totalIlta += $mobile[0]->ilta($al,$lop);
-
-		}
-
-		return $totalIlta;
-
-	}
-*/
-/*
-	public function toteutu($tid,$sivu,$from,$to)
-	{
-		$from = date("Y-m-d", strtotime($from));
-		$to = date("Y-m-d", strtotime($to));
-		$result 	= 0;
-
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "
-			SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit
-		";
-        	$criteria->condition = "  
-			tid = '".$tid."'
-			AND peruutettu=0
-		";
-		if($sivu == 'palkkataulukko'){ $criteria->addCondition (" status = '3' "); }
-		if($sivu == 'yhteenveto')
-		{
-			if(Yii::app()->session['Lounastauko'])
-		        $criteria->addCondition (" status != '10' ");
-	
-			if(Yii::app()->session['MATKA'])
-		        $criteria->addCondition (" status != '2' ");
-		}
-
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ");
-
-		$tv = Tyovuoroot::model()->find($criteria);
-		if(isset($tv->l_tunnit)){ $result = $tv->l_tunnit; }
-		return $result;
-
-	}
-*/
-	protected function TidfromtoTyovuoroAll($from, $to, $tids, $status, $time, $by_pvm=false){
-
-echo 'suljettu';
-exit;
-/*
-		$set = [];
-		$tids_imploded = '';
-		if (is_array($tids)) {
-			foreach($tids as $tid)
-				$set[$tid] = 0;
-			$tids_imploded = implode(", ", $tids);
-		} else {
-			$set[$tids] = 0;
-		}
-
-		// <-- Pyhapaivat
-		$pyhapaivat = [];
-		if($time==4){
-			$asetukset = AsetuksetForAll::model()->findbypk(1);
-			$p_explode = explode("\n", $asetukset->viralliset_pyhapaivat);
-			$p_explode = array_map('trim', $p_explode); // clear spaces
-			$p_explode = array_map('rtrim', $p_explode); // clear spaces
-
-			$begin = date ("d.m.Y", strtotime($from));
-			$end   = date ("d.m.Y", strtotime($to));
-			while (strtotime($begin) <= strtotime($end)) {
-                		if(in_array($begin, $p_explode)){
-					$pyhapaivat[] = $begin;
-				}
-                		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
-			}
-			$pyhapaivat = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y'))='".implode("' OR DATE(STR_TO_DATE(pvm, '%d.%m.%Y'))='", $pyhapaivat)."'";
-		}
-		//     Pyhapaivat -->
-
-		// <-- Erikoislauantai
-		$erikoislauantai = [];
-		if($time==5){
-			$asetukset = AsetuksetForAll::model()->findbypk(1);
-			$p_explode = explode("\n", $asetukset->erikoislauantai);
-			$p_explode = array_map('trim', $p_explode); // clear spaces
-			$p_explode = array_map('rtrim', $p_explode); // clear spaces
-
-			$begin = date ("d.m.Y", strtotime($from));
-			$end   = date ("d.m.Y", strtotime($to));
-			while (strtotime($begin) <= strtotime($end)) {
-                		if(in_array($begin, $p_explode)){
-					$erikoislauantai[] = $begin;
-				}
-                		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
-			}
-			$erikoislauantai = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%d.%m.%Y')='".implode("' OR DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%d.%m.%Y')='", $erikoislauantai)."'";
-		}
-		//     Erikoislauantai -->
-
-		$from = date("Y-m-d", strtotime($from));
-		$to = date("Y-m-d", strtotime($to));
-		$status = "status='".implode("' OR status='", $status)."'";
-		$criteria = new CDbCriteria();
-		if($by_pvm)
-		   $criteria->group = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y')), tid";
-		else
-		   $criteria->group = "tid";
-
-		// Helper function to avoid duplicate code (doesn't handle 'hyvaksytty' as it differs)
-		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $status, $tids_imploded, $time, $pyhapaivat, $erikoislauantai) {
-			// Select statements
-			switch ($time) {
-				case 0:
-					$criteria->select = "
-						pvm, tid, SUM(TIME_TO_SEC(TIMEDIFF(
-							TIME(loppu), TIME(alku)
-						))) as l_tunnit";
-					break;
-				case 1:
-					// Note: 18000 at end of query is equal to TIME_TO_SEC(TIMEDIFF('23:00:00', '18:00:00'))
-					$criteria->select = "pvm, tid, SUM(CASE
-						WHEN
-							TIME(alku) >= '18:00:00'
-						THEN CASE
-							WHEN
-								TIME(loppu) > '23:00:00'
-							THEN
-								TIME_TO_SEC(TIMEDIFF('23:00:00', TIME(alku)))
-							WHEN
-								TIME(loppu) > '18:00:00'
-							THEN
-								TIME_TO_SEC(TIMEDIFF(TIME(loppu), TIME(alku)))
-							ELSE
-								0
-							END
-						ELSE CASE
-							WHEN
-								TIME(loppu) > '23:00:00'
-							THEN
-								18000
-							WHEN
-								TIME(loppu) > '18:00:00'
-							THEN
-								TIME_TO_SEC(TIMEDIFF(TIME(loppu), '18:00:00'))
-							ELSE
-								0
-							END
-						END) AS l_tunnit";
-					break;
-				case 2:
-					$criteria->select = "pvm, tid, SUM(CASE
-							WHEN
-								TIME(loppu) <= '06:00:00'
-							THEN
-								TIME_TO_SEC(TIMEDIFF(TIME(loppu), TIME(alku)))
-							WHEN
-								TIME(loppu) > '23:00:00'
-							THEN CASE
-								WHEN
-									TIME(alku) <= '06:00:00'
-								THEN
-									TIME_TO_SEC(TIMEDIFF('06:00:00', TIME(alku))) +
-									TIME_TO_SEC(TIMEDIFF(TIME(loppu), '23:00:00'))
-								WHEN
-									TIME(alku) > '23:00:00'
-								THEN
-									TIME_TO_SEC(TIMEDIFF(TIME(loppu), TIME(alku)))
-								ELSE
-									TIME_TO_SEC(TIMEDIFF(TIME(loppu), '23:00:00'))
-								END
-							WHEN
-								TIME(alku) <= '06:00:00'
-							THEN
-								TIME_TO_SEC(TIMEDIFF('06:00:00', TIME(alku)))
-							ELSE
-								0
-							END
-						) AS l_tunnit";
-					break;
-				case 3:
-					$criteria->select = "pvm, tid, SUM(CASE
-						WHEN
-							DAYOFWEEK(STR_TO_DATE(pvm, '%d.%m.%Y')) = 1
-						THEN CASE
-							WHEN
-								DAYOFWEEK(STR_TO_DATE(pvm, '%d.%m.%Y')) = 1
-							THEN
-								TIME_TO_SEC(TIMEDIFF(TIME(loppu), TIME(alku)))
-							ELSE
-								TIME_TO_SEC(TIMEDIFF('23:59:00', TIME(alku))) + 60
-							END
-						WHEN
-							DAYOFWEEK(STR_TO_DATE(pvm, '%d.%m.%Y')) = 1
-						THEN
-							TIME_TO_SEC(TIMEDIFF(TIME(loppu), '00:01')) + 60
-						ELSE
-							0
-						END) AS l_tunnit";
-					break;
-				case 4:
-					$criteria->select = "pvm, tid, SUM(CASE
-						WHEN
-							$pyhapaivat
-						THEN 
-							TIME_TO_SEC(TIMEDIFF(TIME(loppu), TIME(alku)))
-						ELSE
-							0
-						END) AS l_tunnit";
-					break;
-				case 5:
-					$criteria->select = "pvm, tid, SUM(CASE
-						WHEN
-							$erikoislauantai
-						THEN 
-							TIME_TO_SEC(TIMEDIFF(TIME(loppu), TIME(alku)))
-						ELSE
-							0
-						END) AS l_tunnit";
-					break;
-			}
-
-			// Conditions
-			$criteria->condition = "
-				tid IN ($tids_imploded)
-				AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$from' AND '$to'
-				AND peruutettu=0";
-			if ($status) $criteria->addCondition($status);
-		};
-
-		// Build CDbCriteria
-		$buildCriteria($criteria);
-		$tv = Tyovuoroot::model()->findAll($criteria);
-		if($by_pvm){
-			foreach ($tv as $t){
-				$set[date("Y-m-d", strtotime($t->pvm))][$t->tid] = $t->l_tunnit;
-			}
-		} else {
-			foreach ($tv as $t)
-				$set[$t->tid] += $t->l_tunnit;
-		}
-
-		return $set;
-*/
-	}
-
-	protected function TidfromtoTyovuoroWithVirtual($from, $to, $tids, $by_pvm)
+	protected function TidfromtoTyovuoroWithVirtual($from, $to, $tids, $by_pvm, $status)
 	{
 		$asetukset = AsetuksetForAll::model()->findbypk(1);
 
@@ -573,6 +306,9 @@ exit;
 					$iltatunnit = 0;
 					$yotunnit = 0;
 					$tunnit_yht = strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']);
+
+					if($status !== null and !in_array($attributes[0]['data']['status'], $status))
+						continue;
 					if($by_pvm){
 						$eilasketa = $this->eiLasketaSubStr($attributes[0]['data']['tyoajanmerkinta']);
 						if($eilasketa != true){
@@ -2298,11 +2034,6 @@ exit;
 		$site = Yii::app()->createController('Site');
 		$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
 		$asetukset = Asetukset::model()->findByPk(1);
-		// <-- From To
-		if(!isset(Yii::app()->session['from']) or !isset(Yii::app()->session['to'])){
-			Yii::app()->session['from'] = date("Y-m-d");
-			Yii::app()->session['to'] = date("Y-m-d", strtotime(Yii::app()->session['from'].' Friday next week'));
-		}
 
 		// <-- Reset
 		if(isset($_GET['reset']))
@@ -2320,6 +2051,22 @@ exit;
 			$this->redirect(array('beta'));
 		}
 		//     Reset -->
+
+		// <-- GET haku
+		if(isset($_GET['year']) or isset($_GET['week'])){
+			if(isset($_GET['year']) and !empty($_GET['year']))
+				Yii::app()->session['year'] = $_GET['year'];
+			
+			if(isset($_GET['week']) and !empty($_GET['week']))
+				Yii::app()->session['week'] = $_GET['week'];
+
+			if(isset($_GET['tid']) and !empty($_GET['tid']))
+				Yii::app()->session['tyontekijat'] = array($_GET['tid']);
+
+			if(isset($_GET['tv_id'])){ $this->redirect(array('index', 'tv_id' => $_GET['tv_id'])); } 
+			$this->redirect(array('beta'));
+		}		
+		//  GET haku -->
 
 		// <-- Post haku
 		if(isset($_POST['haku']))
@@ -2369,6 +2116,26 @@ exit;
 			$this->redirect(array('beta'));
 		}	
 		//  Post haku -->
+
+		// <-- Year Week
+		if(!isset(Yii::app()->session['year']))
+			Yii::app()->session['year'] = date("Y", strtotime('this week sunday'));
+
+		if(!isset(Yii::app()->session['week']))
+			Yii::app()->session['week'] = date("W", strtotime('this week sunday'));
+
+		$year = Yii::app()->session['year'];
+		$week = sprintf("%02d", Yii::app()->session['week']);
+		Yii::app()->session['week'] = $week;
+		//    Year Week -->
+
+		if(!isset(Yii::app()->session['vkolopput']))
+			$numDays = 5;
+		else
+			$numDays = 7;
+
+		Yii::app()->session['from'] = date("Y-m-d", strtotime($year ."W". $week.'1'));
+		Yii::app()->session['to'] = date("Y-m-d", strtotime($year ."W". $week . $numDays));
 
 		// <-- HAKU
 		if(isset(Yii::app()->session['asiakas']))
@@ -5399,9 +5166,7 @@ exit;
 
 
 		// <-- GET haku
-		if(isset($_GET['year']) or isset($_GET['week']))
-		{
-
+		if(isset($_GET['year']) or isset($_GET['week'])){
 			if(isset($_GET['year']) and !empty($_GET['year']))
 				Yii::app()->session['year'] = $_GET['year'];
 			

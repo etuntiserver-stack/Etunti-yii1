@@ -6,7 +6,7 @@ ini_set('memory_limit', '512M');
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v4.css">
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot_v4.js"></script>
-
+<?php echo CHtml::button(Yii::t('main', 'Lähetä'),array('class'=>'btn btn-lg btn-success','id'=>'lahetaTyovuoroja', 'style' => 'display: none; position:fixed; bottom: 0; right: 0')); ?>
 <!-- Fixed Table -->
 <!-- http://www.jqueryscript.net/table/jQuery-Plugin-For-Fixed-Table-Header-Footer-Columns-TableHeadFixer.html -->
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/tableHeadFixer.js"></script>
@@ -36,7 +36,7 @@ ini_set('memory_limit', '512M');
  <table class="table table-bordered" id="fixTable">
  <thead>
  <tr>
- <th width="1"></th>
+ <th class="text-center" width="1"><?php echo CHtml::button(Yii::t('main', 'Valitse kaikki'),array('target'=>'_blank','class'=>'btn btn-default valitseKaikkiLahetettavaksi')); ?></th>
  <?php $f = date("d.m.Y", strtotime($from)); ?>
  <?php while (strtotime($f) <= strtotime($to)): ?>
  <?php
@@ -87,8 +87,9 @@ ini_set('memory_limit', '512M');
  <!-- VARAUKSET -->
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
-    <td class="laatiko_td text-center" style="z-index: 999; width: 50px">
-	<span class="nimi"><?=$item['etusukunimi']?></span>
+    <td class="laatiko_td text-center" style="z-index: 999; min-width: 150px">
+	<h5 class="nimi"><?=$item['etusukunimi']?></h5>
+	<input type="checkbox" class="lahetettava_checkbox" for="<?=$tid?>" data-toggle="tooltip" data-placement="right" title="<?=Yii::t('main', 'Määrittele lähetettäväksi')?>">
     </td>
     <?php $f = date("d.m.Y", strtotime($from)); ?>
     <?php while (strtotime($f) <= strtotime($to)): ?>
@@ -121,7 +122,7 @@ ini_set('memory_limit', '512M');
 <script type="text/javascript">
 $(document).ready(function(){
 	var numItems = $('.tv_edit').length;
-	$('#yht_tv').html(numItems);
+	//$('#yht_tv').html(numItems);
 
 });
 </script>

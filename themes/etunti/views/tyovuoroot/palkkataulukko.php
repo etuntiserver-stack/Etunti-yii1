@@ -215,7 +215,7 @@ $this->breadcrumbs=array(
 	$tids[] = $data->id;
 
   // < -- UUSI MUOTO / VIRTUAALISET
-  $getAll 	= $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids, false);
+  $getAll 	= $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids, false, null);
 /*
   echo '<pre>';
   print_r($getAll);

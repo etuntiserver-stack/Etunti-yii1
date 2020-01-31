@@ -147,7 +147,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   }
   $from = date("Y-m-d", strtotime($year.'-'.$month.' first day of this month'));
   $to = date("Y-m-d", strtotime($year.'-'.$month.' last day of this month'));
-  $tyotunnit = $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 0, true);
+  $getAll = $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids, true, [3]);
 
   foreach($tids as $v)
   {
@@ -157,10 +157,10 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
    for ($i = 1; $i <= $number; $i++) 
    {
-     $thisDate = date("Y-m-d", strtotime($year.'-'.$month.'-'.$i));
+     $thisDate = date("d.m.Y", strtotime($year.'-'.$month.'-'.$i));
      $date = $i.'.'.$month;
 
-	$tot[$i] = (isset($tyotunnit[$thisDate][$v]))? $tyotunnit[$thisDate][$v] : 0; //$this->renderPartial('pvmtid',array('pvm'=>$thisDate,'tid'=>$v->id,'from'=>'kk'),true);
+	$tot[$i] = (isset($getAll[$v][$thisDate]))? $getAll[$v][$thisDate] : 0;
 	$yht += (int)$tot[$i];
 
 	$cl = "";

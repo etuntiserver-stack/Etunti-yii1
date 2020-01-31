@@ -306,17 +306,7 @@ if( $curpage == 'tyovuoroot/beta' )
         </li>
 	<!-- Haku -->
 
-	<!-- Viikonloput -->
-	<?php if($curpage == 'tyovuoroot/beta') : ?>
-        <li class="p10" data-toggle="tooltip">
-        <li class="p10" data-toggle="tooltip">
-              <div class="form-group">
-	 	<div class="btn btn-default fa fa-calendar-check-o" id="vkolopput" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Viikonloput'); ?>"></div>
-	      </div>
-	</li>
-	<?php endif; ?>
-
-	<?php if($curpage == 'tyovuoroot/index') : ?>
+	<?php if($curpage == 'tyovuoroot/index' or $curpage == 'tyovuoroot/beta') : ?>
         <li class="p10" data-toggle="tooltip">
               <div class="form-group">
                <div class="form-inline">

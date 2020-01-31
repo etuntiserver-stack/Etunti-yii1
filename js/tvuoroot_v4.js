@@ -1,9 +1,46 @@
 $(document).ready(function(){
+// <-- TV Lahetys
+checkChecked();
+$('.lahetettava_checkbox').change(function() {
+        checkChecked();
+});
+function checkChecked(){
+	var get = [];
+	$('.lahetettava_checkbox').each(function() {
+		if(this.checked)
+			get.push($(this).attr("for"));
+	});
+	if( get.length > 0 )
+		$('#lahetaTyovuoroja').show('slow');
+	else
+		$('#lahetaTyovuoroja').hide('slow');
+	return get; 
+}
+$(document).delegate(".valitseKaikkiLahetettavaksi","click",function(){
+	$('.lahetettava_checkbox').prop("checked", true);
+	localStorage.setItem('tvLahetysChckBoxes', 'all');
+	valitseTaiPiilota();
+	checkChecked();
+});
+valitseTaiPiilota();
+function valitseTaiPiilota(){
+	if(localStorage.getItem('tvLahetysChckBoxes') == 'all'){
+		$('.lahetettava_checkbox').prop("checked", true);
+		$('.valitseKaikkiLahetettavaksi').val('Piilota kaikki').removeClass('valitseKaikkiLahetettavaksi').addClass('piilotaKaikkiLahettykset');
+
+		$(document).delegate(".piilotaKaikkiLahettykset","click",function(){
+			$('.lahetettava_checkbox').prop("checked", false);
+			localStorage.removeItem('tvLahetysChckBoxes');
+			$(this).val('Valitse kaikki').addClass('valitseKaikkiLahetettavaksi').removeClass('piilotaKaikkiLahettykset');
+			checkChecked();
+		});
+	}
+}
+//     TV Lahetys -->
 
 $(document).delegate("#showres","click",function(){
 	$("#pto_ilmoitus").html('');
 });
-
 var varaus_l = 0;
 $( ".td_varaus.varaus_l" ).each(function( index ) {
 	if( $(this).find('.tv_edit').text() !== '' ){
