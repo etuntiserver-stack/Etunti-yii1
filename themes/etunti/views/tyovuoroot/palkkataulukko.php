@@ -214,23 +214,8 @@ $this->breadcrumbs=array(
    foreach ($model as $data)
 	$tids[] = $data->id;
 
-  // < -- VANHA MUOTO
-/*
-  $tyopaivia 	= $this->TPBetweenTvAll($from, $to, $tids);
-  $tyotunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 0, false);
-  $matkatunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2), 0, false);
-  $loun 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(10), 0, false);
-  $iltatunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 1, false);
-  $matkaIlta 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2), 1, false);
-  $yotunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 2, false);
-  $pyhapaivat	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2,3), 4, false);
-  $erikoislauantai= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(2,3), 5, false);
-  $sutunnit 	= $this->TidfromtoTyovuoroAll($from, $to, $tids, array(3), 3, false);
-*/
-
-
   // < -- UUSI MUOTO / VIRTUAALISET
-  $getAll 	= $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids);
+  $getAll 	= $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids, false);
 /*
   echo '<pre>';
   print_r($getAll);

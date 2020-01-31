@@ -331,13 +331,14 @@ $dateDiff = dateDiff($from, $to);
   $hyvaksymmattomat_t	= $this->hyvaksyttamatTunnitBetween($from, $to, $tid);
 
 
-  $haku_from = date("Y-m-d", strtotime($from));
-  $haku_to = date("Y-m-d", strtotime($to));
-  $tv_arr = $tyovuoroot[0]->tv_arr($haku_from, $haku_to, [$tid], [], true);
+  $haku_from 	= date("Y-m-d", strtotime($from));
+  $haku_to 	= date("Y-m-d", strtotime($to));
+  $tv_arr 	= $tyovuoroot[0]->tv_arr($haku_from, $haku_to, [$tid], [], true);
+  $getAll 	= $tyovuoroot[0]->TidfromtoTyovuoroWithVirtual($from, $to, [$tid], true);
 
 /*
 echo '<pre>';
-print_r($tv_arr);
+print_r($getAll);
 echo '<pre>';
 exit;
 */
@@ -433,23 +434,11 @@ exit;
     echo '</tr>';
     }
     echo '<tr class="su_lu_tot">';
-  
-/*
-	$dido = '';
-	$dido = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$tid,'from'=>'mobiili','yhteensa'=>true),true);
-	
-	$dido = explode("//", json_decode($dido, true));
-	if(isset($dido[1]))
-	{
-		$didoResult = $dido[0];
+	$suunnittelut = 0;
+	if(isset($getAll[$tid][$date]))
+		$suunnittelut = $getAll[$tid][$date];
+	$yhtSuunnittelut += $suunnittelut;
 
-		$suunnittelut = 0;
-		$suunnittelut = $dido[1];
-		$yhtSuunnittelut += $suunnittelut;
-	} else {
-		$didoResult = 0;
-	}
-*/
 	$didoResult = '';
 	if( isset($tv_arr[$tid][$date]) ){
 		$didoResult .= '<div id="suun_'.$did.'_'.$tid.'" class="latikkoAsetukset" pvm="'.$date.'" tid="'.$tid.'">';
@@ -459,9 +448,7 @@ exit;
 				$didoResult .= '<p>'.$v2.'</p>';
 		$didoResult .= '</div>';
 	}
-    	echo '<td>'.$didoResult.'</td>';
-
-
+    echo '<td>'.$didoResult.'</td>';
     echo '<td>';
     if(isset($luetut_laatikot['laatikkot'][$date])){
     	echo '<div class="small" style="opacity:0.6">';

@@ -283,16 +283,16 @@
 	foreach($tids as $tid){
 		$f = date("d.m.Y", strtotime($from));
 		while (strtotime($f) <= strtotime($to)){
-			if(!isset($tv_arr[$tid][$f]))
-				continue;
-			ksort($tv_arr[$tid][$f]);
-			foreach($tv_arr[$tid][$f] as $k => $v){
-				foreach($v as $v2){
-					if( isset($v2['this_id']) ){
-						$tv = $this->renderPartial('_lista',array(
-							'data' => (object)$v2['data']
-						), true);
-						echo $tv;
+			if(isset($tv_arr[$tid][$f])){
+				ksort($tv_arr[$tid][$f]);
+				foreach($tv_arr[$tid][$f] as $k => $v){
+					foreach($v as $v2){
+						if( isset($v2['this_id']) ){
+							$tv = $this->renderPartial('_lista',array(
+								'data' => (object)$v2['data']
+							), true);
+							echo $tv;
+						}
 					}
 				}
 			}

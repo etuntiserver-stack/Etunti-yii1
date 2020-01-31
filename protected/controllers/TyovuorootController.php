@@ -314,6 +314,10 @@ class TyovuorootController extends Controller
 	}
 */
 	protected function TidfromtoTyovuoroAll($from, $to, $tids, $status, $time, $by_pvm=false){
+
+echo 'suljettu';
+exit;
+/*
 		$set = [];
 		$tids_imploded = '';
 		if (is_array($tids)) {
@@ -507,9 +511,10 @@ class TyovuorootController extends Controller
 		}
 
 		return $set;
+*/
 	}
 
-	protected function TidfromtoTyovuoroWithVirtual($from, $to, $tids)
+	protected function TidfromtoTyovuoroWithVirtual($from, $to, $tids, $by_pvm)
 	{
 		$asetukset = AsetuksetForAll::model()->findbypk(1);
 
@@ -559,6 +564,7 @@ class TyovuorootController extends Controller
 		foreach ($tv_arr as $tid => $arr) {
 			foreach ($arr as $pvm => $arr2) {
 
+				$result[$tid][$pvm] = 0;
 				// Increment total work days.
 				$result[$tid]['tp_maara']++;
 				foreach ($arr2 as $unixtime => $attributes) {
@@ -567,7 +573,13 @@ class TyovuorootController extends Controller
 					$iltatunnit = 0;
 					$yotunnit = 0;
 					$tunnit_yht = strtotime($attributes[0]['data']['loppu']) - strtotime($attributes[0]['data']['alku']);
-
+					if($by_pvm){
+						$eilasketa = $this->eiLasketaSubStr($attributes[0]['data']['tyoajanmerkinta']);
+						if($eilasketa != true){
+							$result[$tid][$pvm] += $tunnit_yht;
+							continue;
+						}
+					}
 					// Iltatunnit 18-23
 					if ($alku_hm < 2300 && $loppu_hm > 1800) {
 
