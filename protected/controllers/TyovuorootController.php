@@ -4657,11 +4657,9 @@ class TyovuorootController extends Controller
 			if(isset($_POST['LahjakortinNumero']) and !empty($_POST['LahjakortinNumero']))
 			$toimenpiteet .= "\n".Yii::t('main', 'Lahjakortin numero').": ".$_POST['LahjakortinNumero']."\n";
 
-
-
 			$kohteet->toimenpiteet = $toimenpiteet;
-
 			$kohteet->muut = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']))."\n".date("H:i",strtotime($_POST['Tyovuoroot']['alku']))."-".date("H:i",strtotime($_POST['Tyovuoroot']['loppu']))."\nHinta: ".$asiakkaat->hinta;
+			$kohteet->tietoja = $_POST['Tyovuoroot']['tietoja'];
 
 		  	   if($kohteet->save())
 		  	   {
