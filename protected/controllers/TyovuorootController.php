@@ -2201,9 +2201,17 @@ class TyovuorootController extends Controller
 		}
 		//     Tyontekijat -->
 
+		// Taulun rakennus
 		$haku_from 	= date("Y-m-d", strtotime(Yii::app()->session['from']));
 		$haku_to 	= date("Y-m-d", strtotime(Yii::app()->session['to']));
 		$tv_arr = $this->tv_arr($haku_from, $haku_to, $haku_tids, $haku_criteria, true);
+
+		// Työsuhteet
+	     	$tyosuhteet = Tyosuhdet::model()->findAll(" tid IN(".implode(",",$haku_tids).") ");
+		$vktyoaika = [];
+		foreach($tyosuhteet as $item)
+			if(!empty($item->vktyoaika))
+				$vktyoaika[$item->tid] = $item->vktyoaika;
 
 		$this->render('tv4', array(
 			'tt_order_1' 	=> $tt_order_1,
@@ -2219,6 +2227,7 @@ class TyovuorootController extends Controller
 			'site'		=> $site,
 			'week'		=> $week,
 			'year'		=> $year,
+			'vktyoaika'	=> $vktyoaika
 		));
 
 	}

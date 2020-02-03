@@ -105,6 +105,9 @@ ini_set('memory_limit', '512M');
 		)).'</p>';
 		//     file_safe_opener -->
 	}
+
+	if(isset($vktyoaika[$tid]))
+		echo '<p>'.$vktyoaika[$tid].'</p>';
 	?>
     </td>
     <?php $f = date("d.m.Y", strtotime($from)); ?>
