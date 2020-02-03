@@ -1323,6 +1323,10 @@ if($site[0]->checkEdicoViestit()){ $bell = '<i class="fa fa-bell text-danger"></
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/management">
                   <span class="fa fa-line-chart"></span> <?php echo Yii::t('main', 'Yhteenveto'); ?></a>
               </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/kaaviot">
+                  <span class="fa fa-line-chart"></span> <?php echo Yii::t('main', 'Kaaviot'); ?></a>
+              </li>
 	<?php /* ?>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/management_tunnit">

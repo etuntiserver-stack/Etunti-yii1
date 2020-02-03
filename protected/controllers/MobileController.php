@@ -2137,8 +2137,14 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 					$criteria->select = "tid, aloitan, SUM(CASE
 						WHEN
 							$pyhapaivat_str
-						THEN 
-							TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
+						THEN CASE
+							WHEN
+								DATE(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) = DATE(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))
+							THEN
+								TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
+							ELSE
+								TIME_TO_SEC(TIMEDIFF('23:59:00', TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')))) + 60
+							END
 						ELSE
 							0
 						END) AS l_tunnit";
@@ -2149,8 +2155,14 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 					$criteria->select = "tid, aloitan, SUM(CASE
 						WHEN
 							$erikoislauantai_str
-						THEN 
-							TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
+						THEN CASE
+							WHEN
+								DATE(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) = DATE(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))
+							THEN
+								TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
+							ELSE
+								TIME_TO_SEC(TIMEDIFF('23:59:00', TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')))) + 60
+							END
 						ELSE
 							0
 						END) AS l_tunnit";

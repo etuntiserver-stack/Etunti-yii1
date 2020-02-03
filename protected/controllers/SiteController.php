@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow',
-				'actions'=>array('site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan', 'getasiakasidbynimi', 'otakaytoon', 'ohjeet', 'management', 'management_tunnit', 'management_hours'),
+				'actions'=>array('site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan', 'getasiakasidbynimi', 'otakaytoon', 'ohjeet', 'kaaviot', 'management', 'management_tunnit', 'management_hours'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow',
@@ -125,6 +125,40 @@ class SiteController extends Controller
 		$this->render('otakaytoon', array(
 			'tila' => $tila
 		));
+	}
+
+	public function actionKaaviot()
+	{
+		// Temporary default variables. (Copied from old code)
+		$chart_type = 'line'; // line | bar | column | area
+		$from = date("Y-m-d", strtotime(" -1 year first day of this month"));
+		$to = date("Y-m-d", strtotime(" last day of last month"));
+		$asiakas = '';
+		$tyontekija = '';
+		$kpl_maara = 10;
+		$months = array(
+			1 => Yii::t('main', 'Tammikuu'),
+			2 => Yii::t('main', 'Helmikuu'),
+			3 => Yii::t('main', 'Maaliskuu'),
+			4 => Yii::t('main', 'Huhtikuu'),
+			5 => Yii::t('main', 'Toukokuu'),
+			6 => Yii::t('main', 'Kesäkuu'),
+			7 => Yii::t('main', 'Heinäkuu'),
+			8 => Yii::t('main', 'Elokuu'),
+			9 => Yii::t('main', 'Syyskuu'),
+			10 => Yii::t('main', 'Lokakuu'),
+			11 => Yii::t('main', 'Marraskuu'),
+			12 => Yii::t('main', 'Joulukuu')
+		);
+		$this->render('kaaviot', [
+			'chart_type' => $chart_type,
+			'from' => $from,
+			'to' => $to,
+			'asiakas' => $asiakas,
+			'tyontekija' => $tyontekija,
+			'kpl_maara' => $kpl_maara,
+			'months' => $months
+		]);
 	}
 
 	public function actionManagement_hours()
