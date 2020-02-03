@@ -257,9 +257,8 @@ class SiteController extends Controller
 		 	mkdir( Yii::app()->basePath.'/../tmp/'.Yii::app()->user->domain, 0777, true );
 		}
 
-		$newfile = basename($filepath);
-		if (copy($filepath, $newfile))
-		{
+		$newfile = 'tmp/'.Yii::app()->user->domain.'/'.basename($filepath);
+		if (copy($filepath, $newfile)){
 				header("Content-Length: " . filesize ( $newfile ) );
 		                header("Content-type: application/octet-stream");
 		                header("Content-disposition: attachment; filename=".basename($newfile));

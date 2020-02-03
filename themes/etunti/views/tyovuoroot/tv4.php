@@ -28,6 +28,9 @@ ini_set('memory_limit', '512M');
 </script>
 <!-- Fixed Table -->
 
+<input type="hidden" id="week" value="<?=$week?>">
+<input type="hidden" id="year" value="<?=$year?>">
+
 <!-- TV laatiko -->
 <div id="showres" class="modal" aria-hidden="true" data-backdrop="static" data-keyboard="false"></div>
 <!-- TV laatiko -->
@@ -90,6 +93,19 @@ ini_set('memory_limit', '512M');
     <td class="laatiko_td text-center" style="z-index: 999; min-width: 150px">
 	<h5 class="nimi"><?=$item['etusukunimi']?></h5>
 	<input type="checkbox" class="lahetettava_checkbox" for="<?=$tid?>" data-toggle="tooltip" data-placement="right" title="<?=Yii::t('main', 'Määrittele lähetettäväksi')?>">
+	<?php
+	$file = $week.'_'.$year.'_'.$tid.'.pdf';
+	$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
+	if (file_exists($path.'/'.$file)){
+		// <-- file_safe_opener
+		$filepath = 'emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file;
+		echo '<p>'.CHtml::link(Yii::t('main', ' Lähetetty'),
+			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
+			array('target'=>'_blank','class'=>'text-danger'
+		)).'</p>';
+		//     file_safe_opener -->
+	}
+	?>
     </td>
     <?php $f = date("d.m.Y", strtotime($from)); ?>
     <?php while (strtotime($f) <= strtotime($to)): ?>
@@ -121,8 +137,7 @@ ini_set('memory_limit', '512M');
 
 <script type="text/javascript">
 $(document).ready(function(){
-	var numItems = $('.tv_edit').length;
+	//var numItems = $('.tv_edit').length;
 	//$('#yht_tv').html(numItems);
-
 });
 </script>

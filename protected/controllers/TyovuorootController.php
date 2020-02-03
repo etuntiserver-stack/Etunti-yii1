@@ -872,9 +872,6 @@ class TyovuorootController extends Controller
 		    exit;
 		}
 
-
-
-
 		foreach($kenelle as $key)
 		{
 		 if(!empty($key))
@@ -883,7 +880,8 @@ class TyovuorootController extends Controller
 
 			$html = '<meta charset="UTF-8">';
 			$html .= $this->renderPartial('laheta',array('tid'=>$tt->id,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true);
-
+			//echo $html;
+			//exit;
 			$basePath = Yii::app()->basePath.'/../emails/tyovuorot/'.Yii::app()->user->domain.'/';
 			$path = 'emails/tyovuorot/'.Yii::app()->user->domain.'/';
 			if (!file_exists( $basePath )) {
@@ -984,7 +982,7 @@ class TyovuorootController extends Controller
 		}
 		//
 
-		  $this->redirect('viikkottain');
+		  $this->redirect('beta');
 
 		} else {
 		  $this->render('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>false));
@@ -992,6 +990,7 @@ class TyovuorootController extends Controller
 
 
 	}
+
 	public function actionViikkottain() {
 
 		if(Yii::app()->request->getPost('tulosta'))
@@ -2218,6 +2217,8 @@ class TyovuorootController extends Controller
 			'asiakas' 	=> $asiakas,
 			'arrDate'	=> $arrDate,
 			'site'		=> $site,
+			'week'		=> $week,
+			'year'		=> $year,
 		));
 
 	}
@@ -2376,6 +2377,8 @@ class TyovuorootController extends Controller
 			return $return;
 		}
 		$lisateksti = '';
+		if($arvo->piilota_mobiilista == 1)
+			$lisateksti .= '<br><span class="text-primary">Ei mobiili</span>';
 		if($arvo->laskutettu == 1)
 			$lisateksti .= '<br><span class="text-primary">Laskutettu</span>';
 		if($arvo->peruutettu == 1)
@@ -3910,6 +3913,25 @@ class TyovuorootController extends Controller
 		if( isset($cleared['time']) )
 			unset($cleared['time']);
 		return $cleared;
+	}
+
+	public function newTvFromToistuva($toistuva_model, $pvm, $tid, $syy) {
+			$u		= Yii::app()->user->nimi;
+			$d		= date("d.m.Y");
+			$poisto_syy	= ['text'=>$syy, 'user'=>$u, 'date'=>$d];
+			$this->toistuvaDeletePvm($toistuva_model['id'], $pvm, $tid, $poisto_syy);
+
+			$tv_new = new Tyovuoroot;
+			$cleared_attr = $this->compareToistuvaAttributes($tv_new->attributes, $toistuva_model);
+			$tv_new->attributes = $cleared_attr;
+			$tv_new->pvm = date("d.m.Y",strtotime($pvm));
+			$tv_new->tid = $tid;
+			$tv_new->tyopaari = '';
+			$tv_new->toistuva_id = 0;
+			if(!$tv_new->save()){
+				var_dump($tv_new->getErrors());
+				exit;
+			}
 	}
 
 	public function actionContextmenu_submits($this_id)

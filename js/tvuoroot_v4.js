@@ -36,6 +36,13 @@ function valitseTaiPiilota(){
 		});
 	}
 }
+$("#lahetaTyovuoroja").click(function(){
+	if( checkChecked().length > 0 ){
+		setTimeout(function(){document.location.href = location.protocol + "//" + location.host + "/index.php/tyovuoroot/laheta_k?week=" + $('#week').val() + "&year=" + $('#year').val() + "&tulosta=false&check="+checkChecked();},500);
+	} else {
+		alert('Valitse työntekijä');
+	}
+});
 //     TV Lahetys -->
 
 $(document).delegate("#showres","click",function(){
