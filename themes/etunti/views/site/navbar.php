@@ -1119,7 +1119,7 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Lista työvuoroista'); ?></a>
               </li>
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/viikkottain">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/beta">
                   <span class="fa fa-paper-plane"></span> <?php echo Yii::t('main', 'Työvuorojen lähetys'); ?></a>
               </li>
               <li>

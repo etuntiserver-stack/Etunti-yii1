@@ -257,36 +257,32 @@ class AsiakkaatController extends Controller
 
 	public function actionShowshift($id)
 	{
-
-       		$criteria = new CDbCriteria();
-	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
-/*
-        	$criteria->condition = "DATE(paivays) BETWEEN 
-			asiakas_id='".$id."'
-		";
-*/
+		$tyovuorot = Yii::app()->createController('Tyovuoroot');
 		$from = date("Y-m-d");
 		$to = date("Y-m-d", strtotime("+1 month"));
 
-		if(isset($_POST['from']) and isset($_POST['to'])){
-		$from 	= date("Y-m-d",strtotime($_POST['from']));
-		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		if(isset($_GET['from']) and isset($_GET['to'])){
+			$from 	= date("Y-m-d",strtotime($_GET['from']));
+			$to 	= date("Y-m-d",strtotime($_GET['to']));
 		}
 
 
-        	$criteria->condition = "
+        	$haku_criteria = "
 			kohde IN 
 			(SELECT id FROM sivex_kohdet 
 			   WHERE asiakas_id='".$id."'
 			)
-			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		";
 
-
-		$model=Tyovuoroot::model()->findAll($criteria);
+		$pvm_from = date("Y-m-d", strtotime($from));
+		$pvm_to = date("Y-m-d", strtotime($to));
+		$tv_arr = $tyovuorot[0]->tv_arr($pvm_from, $pvm_to, [], $haku_criteria, false);
+		$tids_after = [];
+		foreach($tv_arr as $t => $arr)
+			$tids_after[] = $t;
 
 		if(isset($_POST['tulosta'])){
-
+/*
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
 	          $html2pdf->WriteHTML($this->renderPartial('showshift', 
@@ -297,16 +293,16 @@ class AsiakkaatController extends Controller
 			'id'=>$id,
 			),true));
 	          $html2pdf->Output();
+*/
 
 		} else {
-
-		$this->render('showshift',array(
-			'model'=>$model,
-			'from'=>$from,
-			'to'=>$to,
-			'id'=>$id,
-		));
-
+			$this->render('showshift',array(
+				'tids' => $tids_after,
+				'tv_arr' => $tv_arr,
+				'from' => $from,
+				'to' => $to,
+				'id' => $id,
+			));
 		}
 	}
 

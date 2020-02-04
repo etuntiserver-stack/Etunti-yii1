@@ -2055,14 +2055,13 @@ class TyovuorootController extends Controller
 		if(isset($_GET['year']) or isset($_GET['week'])){
 			if(isset($_GET['year']) and !empty($_GET['year']))
 				Yii::app()->session['year'] = $_GET['year'];
-			
 			if(isset($_GET['week']) and !empty($_GET['week']))
 				Yii::app()->session['week'] = $_GET['week'];
-
 			if(isset($_GET['tid']) and !empty($_GET['tid']))
 				Yii::app()->session['tyontekijat'] = array($_GET['tid']);
+			if(isset($_GET['tv_id']))
+				$this->redirect(array('beta', 'tv_id' => $_GET['tv_id']));
 
-			if(isset($_GET['tv_id'])){ $this->redirect(array('index', 'tv_id' => $_GET['tv_id'])); } 
 			$this->redirect(array('beta'));
 		}		
 		//  GET haku -->

@@ -134,7 +134,6 @@ $(document).delegate("#cal_poista_paiva_ketjusta","click",function(){
 	}
 });
 
-
 $(document).delegate(".palauta_kejuun","click",function(){
 	var this_item = $(this);
 	var toistuva_id = $(this).attr('toistuva_id');
@@ -307,12 +306,34 @@ $(document).delegate(".luominen","click",function(){
    	return false;
 });
 
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+  }
+
+if(getUrlVars()["tv_id"]){
+	var thisVal = getUrlVars()["tv_id"];
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update4_form?id='+thisVal,
+           type: "GET",
+           success: function(data){
+		d = JSON.parse(data);
+		$('#showres').modal().html(d);
+           },
+	   error:function(data){
+		alert('Kohdetta ei löydy! Päivitä sivu!');
+	   }
+        });
+}
+
 $(document).delegate(".tv_edit","click",function(){
 	var this_id = $(this).attr('id');
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update4_form?this_id='+this_id,
-           //type: "GET",
-           //data: {toistuva_id : toistuva_id},
            success: function(data){
 		d = JSON.parse(data);
 		$('#showres').modal().html(d);
@@ -554,31 +575,24 @@ function vkolopputCheck(){
 
 }
 
-
-
 $("#viikkonhyppaminen, #vuodenhyppaminen").change(function() {
 	var thisVal = $(this).val();
 	window.location.href=thisVal;
 	return false;
 });
 
-
-
-
 $("#yhtveto").on('submit',function(e){
+	var from = $("#from").val();
+	var to = $("#to").val();
 
-  var from = $("#from").val();
-  var to = $("#to").val();
-
-    if (from  === '') {
-        $('#from').css({"border" : "2px #f14010 solid"}).focus();
-        return false;
-    }
-    if (to  === '') {
-        $('#to').css({"border" : "2px #f14010 solid"}).focus();
-        return false;
-    }
-
+	if (from  === '') {
+  	      $('#from').css({"border" : "2px #f14010 solid"}).focus();
+        	return false;
+	}
+	if (to  === '') {
+        	$('#to').css({"border" : "2px #f14010 solid"}).focus();
+        	return false;
+	}
 });
 
 
