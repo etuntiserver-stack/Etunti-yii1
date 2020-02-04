@@ -260,26 +260,17 @@ class AsiakkaatController extends Controller
 		$tyovuorot = Yii::app()->createController('Tyovuoroot');
 		$from = date("Y-m-d");
 		$to = date("Y-m-d", strtotime("+1 month"));
-
 		if(isset($_GET['from']) and isset($_GET['to'])){
 			$from 	= date("Y-m-d",strtotime($_GET['from']));
 			$to 	= date("Y-m-d",strtotime($_GET['to']));
 		}
-
-
         	$haku_criteria = "
 			kohde IN 
 			(SELECT id FROM sivex_kohdet 
 			   WHERE asiakas_id='".$id."'
 			)
 		";
-
-		$pvm_from = date("Y-m-d", strtotime($from));
-		$pvm_to = date("Y-m-d", strtotime($to));
-		$tv_arr = $tyovuorot[0]->tv_arr($pvm_from, $pvm_to, [], $haku_criteria, false);
-		$tids_after = [];
-		foreach($tv_arr as $t => $arr)
-			$tids_after[] = $t;
+		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria);
 
 		if(isset($_POST['tulosta'])){
 /*
@@ -297,8 +288,7 @@ class AsiakkaatController extends Controller
 
 		} else {
 			$this->render('showshift',array(
-				'tids' => $tids_after,
-				'tv_arr' => $tv_arr,
+				'dataAll' => $dataAll,
 				'from' => $from,
 				'to' => $to,
 				'id' => $id,

@@ -6334,21 +6334,44 @@ class TyovuorootController extends Controller
 
 		$perSivu = 50;
 		$tids = [];
-		$pvm_from = date("Y-m-d", strtotime($from));
-		$pvm_to = date("Y-m-d", strtotime($to));
-		$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, $haku_criteria, false);
-		$tids_after = [];
-		foreach($tv_arr as $t => $arr)
-			$tids_after[] = $t;
+		$dataAll = $this->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria);
 
 		$this->render('lista', array(
-			'tids' => $tids_after,
-			'tv_arr' => $tv_arr,
+			'dataAll' => $dataAll,
 			'perSivu' => $perSivu,
 			'from' => $from,
 			'to' => $to,
 		));
 
+	}
+
+	public function FromToSuunnitellutAll($from, $to, $tids, $haku_criteria)
+	{
+		$tyovuorot = Yii::app()->createController('Tyovuoroot');
+		$data = [];
+		$pvm_from = date("Y-m-d", strtotime($from));
+		$pvm_to = date("Y-m-d", strtotime($to));
+		$tv_arr = $tyovuorot[0]->tv_arr($pvm_from, $pvm_to, $tids, $haku_criteria, false);
+		$tids_after = [];
+		foreach($tv_arr as $t => $arr)
+			$tids_after[] = $t;
+		foreach($tids_after as $tid){
+			$f = date("d.m.Y", strtotime($from));
+			while (strtotime($f) <= strtotime($to)){
+				if(isset($tv_arr[$tid][$f])){
+					ksort($tv_arr[$tid][$f]);
+					foreach($tv_arr[$tid][$f] as $k => $v){
+						foreach($v as $v2){
+							if( isset($v2['this_id']) )
+								$data[] = ['data' => (object)$v2['data'], 'this_id' => $v2['this_id']];
+						}
+					}
+				}
+				$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
+			}
+		}
+
+		return $data;
 	}
 
 	public function actionSiirto($kenelta=null, $kenelle=null, $alkaen=null)

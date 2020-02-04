@@ -242,6 +242,7 @@
   <?php
   $yhteensa = 0;
 
+/*
   if( count($model) == 0 ){
 	$data->id = 0;
 	$m = $this->tidFromTo_suunnitellut($data->id, $from, $to, $kohde_id);
@@ -249,35 +250,37 @@
 			'data' => $data, 'from' => $from, 'to' => $to, 'm' => $m, 'mob_or_tv' => $mob_or_tv
 	), true);
   }
+*/
+  if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Suunnitellut'){
+	echo $this->renderPartial('_raportit_taulu', [
+		'm' => $dataAll, 'mob_or_tv' => $mob_or_tv
+	], true);
+  } else {
 
-  foreach($model as $data)
-  {
+	foreach($model as $data){
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Luetut')
+			$m = $this->tidFromTo_luetut($data->id, $from, $to, $kohde_id);
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksynta')
+			$m = $this->tidFromTo_toteutuneet($data->id, $from, $to, $kohde_id, 'Hyvaksynta');
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksytyt')
+			$m = $this->tidFromTo_toteutuneet($data->id, $from, $to, $kohde_id, 'Hyvaksytyt');
 
-	if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Luetut'){
-		$m = $this->tidFromTo_luetut($data->id, $from, $to, $kohde_id);
-	}
-	if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksynta'){
-		$m = $this->tidFromTo_toteutuneet($data->id, $from, $to, $kohde_id, 'Hyvaksynta');
-	}
-	if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksytyt'){
-		$m = $this->tidFromTo_toteutuneet($data->id, $from, $to, $kohde_id, 'Hyvaksytyt');
-	}
-	if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Suunnitellut'){
-		$m = $this->tidFromTo_suunnitellut($data->id, $from, $to, $kohde_id);
-	}
-	echo $this->renderPartial('_raportit_taulu', array( 
-			'data' => $data, 'from' => $from, 'to' => $to, 'm' => $m, 'mob_or_tv' => $mob_or_tv
-	), true);
-	foreach($m as $k=>$val){
-		if( $mob_or_tv == 'mob' ){
-			$aloitus = $val->aloitan;
-			$lopetus = $val->loppui;
+		echo $this->renderPartial('_raportit_taulu', [
+				'data' => $data, 'm' => $m, 'mob_or_tv' => $mob_or_tv
+		], true);
+		foreach($m as $val){
+			if( $mob_or_tv == 'mob' ){
+				$aloitus = $val->aloitan;
+				$lopetus = $val->loppui;
+			}
+			if( $mob_or_tv == 'tv' ){
+				$data = $val['data'];
+				$val = $data;
+				$aloitus = $val->alku;
+				$lopetus = $val->loppu;
+			}
+			$yhteensa += strtotime($lopetus)-strtotime($aloitus);
 		}
-		if( $mob_or_tv == 'tv' ){
-			$aloitus = $val->alku;
-			$lopetus = $val->loppu;
-		}
-		$yhteensa += strtotime($lopetus)-strtotime($aloitus);
 	}
   }
   ?>
