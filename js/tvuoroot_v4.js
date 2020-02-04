@@ -315,23 +315,16 @@ function getUrlVars() {
     return vars;
   }
 
+var this_id = 0;
 if(getUrlVars()["tv_id"]){
-	var thisVal = getUrlVars()["tv_id"];
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update4_form?id='+thisVal,
-           type: "GET",
-           success: function(data){
-		d = JSON.parse(data);
-		$('#showres').modal().html(d);
-           },
-	   error:function(data){
-		alert('Kohdetta ei löydy! Päivitä sivu!');
-	   }
-        });
+	this_id = getUrlVars()["tv_id"];
+	openTV(this_id);
 }
-
 $(document).delegate(".tv_edit","click",function(){
 	var this_id = $(this).attr('id');
+	openTV(this_id);
+});
+function openTV(this_id){
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update4_form?this_id='+this_id,
            success: function(data){
@@ -344,7 +337,7 @@ $(document).delegate(".tv_edit","click",function(){
 		alert('Kohdetta ei löydy! Päivitä sivu!');
 	   }
         });
-});
+}
 $(document).delegate(".latikkoAsetukset p","contextmenu",function(e){
 	e.preventDefault();
 	var valinnat = '';
