@@ -88,28 +88,34 @@ ini_set('memory_limit', '512M');
     <?php endwhile; ?>
  </tr>
  <!-- VARAUKSET -->
+ <?php $week_yhteensa = []; ?>
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
-    <td class="laatiko_td text-center" style="z-index: 999; min-width: 150px">
-	<h5 class="nimi"><?=$item['etusukunimi']?></h5>
-	<input type="checkbox" class="lahetettava_checkbox" for="<?=$tid?>" data-toggle="tooltip" data-placement="right" title="<?=Yii::t('main', 'Määrittele lähetettäväksi')?>">
-	<?php
-	$file = $week.'_'.$year.'_'.$tid.'.pdf';
-	$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
-	if (file_exists($path.'/'.$file)){
-		// <-- file_safe_opener
-		$filepath = 'emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file;
-		echo '<p>'.CHtml::link(Yii::t('main', ' Lähetetty'),
-			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
-			array('target'=>'_blank','class'=>'text-danger'
-		)).'</p>';
-		//     file_safe_opener -->
-	}
-
-	if(isset($vktyoaika[$tid]))
-		echo '<p>'.$vktyoaika[$tid].'</p>';
-	?>
+    <td class="laatiko_td" style="z-index: 999; min-width: 150px">
+	<div class="m15 text-center">
+		<h5 class="nimi text-left">
+			<input type="checkbox" class="lahetettava_checkbox" for="<?=$tid?>" data-toggle="tooltip" data-placement="left" title="<?=Yii::t('main', 'Määrittele lähetettäväksi')?>">&nbsp;
+			<?=$item['etusukunimi']?>
+		</h5>
+		<?php
+		$file = $week.'_'.$year.'_'.$tid.'.pdf';
+		$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
+		if (file_exists($path.'/'.$file)){
+			// <-- file_safe_opener
+			$filepath = 'emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file;
+			echo '<p>'.CHtml::link(Yii::t('main', ' Lähetetty'),
+				array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
+				array('target'=>'_blank','class'=>'text-danger'
+			)).'</p>';
+			//     file_safe_opener -->
+		}
+		if(isset($vktyoaika[$tid])){
+			echo '<div class="text-center"><b>'.$vktyoaika[$tid].'</b> / <b id="vkoyht_'.$tid.'">00:00</b></div>';
+		}
+		?>
+	</div>
     </td>
+    <?php $week_yhteensa[$tid] = 0; ?>
     <?php $f = date("d.m.Y", strtotime($from)); ?>
     <?php while (strtotime($f) <= strtotime($to)): ?>
     <?php
@@ -120,14 +126,18 @@ ini_set('memory_limit', '512M');
     <?php $did = date("Ymd", strtotime($f)); ?>
       <td>
 	<div id="<?=$did.'_'.$tid?>" class="latikkoAsetukset" pvm="<?=$f?>" tid="<?=$tid?>">
+		<?php $pvm_yhteensa = 0; ?>
 		<?php if( isset($tv_arr[$tid][$f]) ): ?>
 		<?php ksort($tv_arr[$tid][$f]); ?>
 		<?php foreach($tv_arr[$tid][$f] as $k => $v): ?>
 			<?php foreach($v as $v2): ?>
-				<p><?=$v2?></p>
+				<p><?=$v2['tv_edit']?></p>
+				<?php $pvm_yhteensa += $v2['tv_kesto']; ?>
 			<?php endforeach; ?>
 		<?php endforeach; ?>
 		<?php endif; ?>
+		<?=($pvm_yhteensa > 0)? '<div class="pull-right pvm_yht">'.$this->sprint($pvm_yhteensa).'</div>':''?>
+		<?php $week_yhteensa[$tid] += $pvm_yhteensa; ?>
 	</div>
       </td>
       <?php $f = date ("d.m.Y", strtotime("+1 day", strtotime($f))); ?>
@@ -140,7 +150,8 @@ ini_set('memory_limit', '512M');
 
 <script type="text/javascript">
 $(document).ready(function(){
-	//var numItems = $('.tv_edit').length;
-	//$('#yht_tv').html(numItems);
+	$.each(JSON.parse('<?=json_encode($week_yhteensa)?>'), function( tid, value ) {
+		$('#vkoyht_' + tid).html($.sprint(value));
+	});
 });
 </script>

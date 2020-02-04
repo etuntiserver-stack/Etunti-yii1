@@ -1,4 +1,11 @@
 $(document).ready(function(){
+// GLOBALS
+jQuery.sprint = function sprint(sec){
+	var h = sec/3600 ^ 0 ;
+	var m = (sec-h*3600)/60 ^ 0 ;
+	return (h<10?"0"+h:h)+":"+(m<10?"0"+m:m);
+}
+
 // <-- TV Lahetys
 checkChecked();
 $('.lahetettava_checkbox').change(function() {
@@ -56,20 +63,27 @@ $( ".td_varaus.varaus_l" ).each(function( index ) {
 });
 if( varaus_l > 0 ){ $('.td_varaus').addClass('in'); }
 
-function tv_arr_update(tv_arr){
-	var did = '';
+jQuery.tv_arr_update = function tv_arr_update(tv_arr){
+	var did 	= '';
+	var kesto_yht 	= [];
+	var yht		= 0;
 	$.each(tv_arr, function( tid, value ) {
+		yht = 0;
 		$.each(value, function( pvm, v ) {
-			all_tv_edit = '';
+			all_tv_edit 	= '';
+			tv_kesto	= 0;
 			$.each(v, function( i2, tv_edit ) {
-				all_tv_edit += '<p>' + tv_edit + '</p>';
+				tv_kesto	+= tv_edit[0]['tv_kesto'];
+				all_tv_edit += '<p>' + tv_edit[0]['tv_edit'] + '</p>';
 			});
 			pvm_muutos = pvm.split(".");
 			did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
 			//console.log(all_tv_edit);
 			if( $("#" + did).length > 0 )
-				$("#" + did).html(all_tv_edit);
+				$("#" + did).html(all_tv_edit + '<div class="pull-right pvm_yht">' + $.sprint(tv_kesto) + '</div>');
+			yht += tv_kesto;
 		});
+		$('#vkoyht_' + tid).html($.sprint(yht));
 	});
 }
 
@@ -123,7 +137,7 @@ $(document).delegate("#cal_poista_paiva_ketjusta","click",function(){
 			cal_this_item.closest('td').removeClass('bg-success').addClass('bg-warning');
 			cal_this_item.removeClass('fa-gear cal_tilanne').addClass('fa-recycle palauta_kejuun');
 			$("#" + cal_this_id).closest('p').remove();
-			tv_arr_update(data['tv_arr']);
+			$.tv_arr_update(data['tv_arr']);
 			$("#cal_tilanne").remove();
 		}
     	   },
@@ -161,7 +175,7 @@ $(document).delegate(".palauta_kejuun","click",function(){
 			this_item.closest('td').removeClass('bg-warning').addClass('bg-success');
 			this_item.removeClass('fa-recycle palauta_kejuun').addClass('fa-gear cal_tilanne');
 	        	console.log(data);
-			tv_arr_update(data['tv_arr']);
+			$.tv_arr_update(data['tv_arr']);
 		}
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -378,7 +392,7 @@ $(document).delegate("div.custom-menu select","change",function(){
 		data = JSON.parse(data);
         	console.log(data);
 		if( data['tv_arr'] ){
-			tv_arr_update(data['tv_arr']);
+			$.tv_arr_update(data['tv_arr']);
 		}
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -516,7 +530,7 @@ window.addEventListener('message', function(e) {
 			});
 		}
 		if( data['tv_arr'] ){
-			tv_arr_update(data['tv_arr']);
+			$.tv_arr_update(data['tv_arr']);
 		}
 
 		jQuery.clearKaikki();

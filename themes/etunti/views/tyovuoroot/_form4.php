@@ -1385,20 +1385,7 @@ $(document).ready(function(){
 			$.each(dids_before_arr, function( i, v ) {
 				$("#" + v).html('');
 			});
-
-			var did = '';
-			$.each(data, function( tid, value ) {
-				$.each(value, function( pvm, v ) {
-					all_tv_edit = '';
-					$.each(v, function( i2, tv_edit ) {
-						all_tv_edit += '<p>' + tv_edit + '</p>';
-					});
-					pvm_muutos = pvm.split(".");
-					did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
-					if( $("#" + did).length > 0 )
-						$("#" + did).html(all_tv_edit);
-				});
-			});
+			$.tv_arr_update(data);
 		  	$('#showres').modal('hide');
 		},error:function(data){
 		  	console.log(data);
