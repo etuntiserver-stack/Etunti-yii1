@@ -2320,71 +2320,18 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	        	$criteria->addCondition ('id IN ('.$ids.') ');
 		}
 
-/*
-		$dataProvider=new CActiveDataProvider('Mobile', array(
-			'criteria'=>$criteria,
-			'pagination'=>false
-		));
-*/
 		$model = Tyontekijat::model()->findAll($criteria);
 
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 
-		if(isset($_GET['tulosta_pdf']))
-		{
-/*
-	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
-		  $html2pdf->setDefaultFont('Arial');
-		  $html2pdf->setTestTdInOnePage(false);
-	          $html2pdf->WriteHTML($this->renderPartial('tulosta_palkkataulukko', array(
-			'model' => $model,
-			'from' => $from,
-			'to' => $to
-		  ),true));
-	          $html2pdf->Output();
-*/
-		} elseif(isset($_GET['tulosta_xls']))
-		{
-/*
-			if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
-			 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
-			}
-
-		        $html = $this->renderPartial('tulosta_palkkataulukko', array(
-				'model' => $model,
-				'from' => $from,
-				'to' => $to
-			),true);
-
-			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
-			$tiedosto = 'palkkatauluko';
-			file_put_contents($path.$tiedosto.'.html', $html);
-
-			exec('pandoc -s '.$path.$tiedosto.'.html -o '.$path.$tiedosto.'.xls', $output, $return);
-		        if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xls' ))
-			{
-				header("Content-Length: " . filesize ( $path.$tiedosto.'.xls' ) ); 
-		                header("Content-type: application/vnd.ms-excel;"); 
-		                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.xls'));
-		                header('Expires: 0');
-		                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		                readfile($path.$tiedosto.'.xls');
-				unlink($path.$tiedosto.'.html');
-				unlink($path.$tiedosto.'.xls');
-				exit;
-			}
-*/
-		} else {
-		  //$dataProvider->pagination->pageSize = 50;
-		  $this->render('palkkataulukko', array(
+		$this->render('palkkataulukko', array(
 			'model' => $model,
 			'from' => $from,
 			'to' => $to,
 			'tt_order_1' => $tt_order_1,
 			'tt_order_2' => $tt_order_2
-		  ));
-		}
+		));
 	}
 
 	protected function TP($tid,$from,$to){

@@ -272,28 +272,13 @@ class AsiakkaatController extends Controller
 		";
 		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria);
 
-		if(isset($_POST['tulosta'])){
-/*
-	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('showshift', 
-			array(
-			'model'=>$model,
-			'from'=>$from,
-			'to'=>$to,
-			'id'=>$id,
-			),true));
-	          $html2pdf->Output();
-*/
-
-		} else {
-			$this->render('showshift',array(
+		$this->render('showshift',array(
 				'dataAll' => $dataAll,
 				'from' => $from,
 				'to' => $to,
 				'id' => $id,
-			));
-		}
+		));
+
 	}
 
 	public function actionView_edico($id)
