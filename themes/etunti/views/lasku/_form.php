@@ -1228,7 +1228,7 @@ $(document).delegate(".poista","click",function(){
 Rivi();
 function Rivi(){
 
-  $(".onlyDigits ").attr('type', 'number').attr('step', '0.01');
+  $(".onlyDigits ").attr('type', 'number').attr('step', 'any');
 
 }
 

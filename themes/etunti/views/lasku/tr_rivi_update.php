@@ -27,7 +27,7 @@
 	</TD>
 	<TD>
 	  <div class="input-group">
-	   <input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $rivi['hinta']; ?>" step="0.01"> 
+	   <input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $rivi['hinta']; ?>" step="any"> 
 	   <span class="input-group-btn">
 		<?=$hinnaston_otsikko?>
 	   </span>
