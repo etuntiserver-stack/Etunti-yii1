@@ -2385,7 +2385,13 @@ class TyovuorootController extends Controller
 		if( !$laatikkomuoto ){
 			$arvo->pvm 	= $this_pvm;
 			$arvo->tid 	= $this_tid;
-			$return 	= ['this_id' => $this_id, 'data' => $arvo->attributes];
+			$return 	= [
+				'this_id' => $this_id,
+				'data' => $arvo->attributes,
+				'kohteet' => (isset($arvo->kohteet))?$arvo->kohteet->attributes:[],
+				'avaimet' => (isset($arvo->avaimet))?$arvo->avaimet:[],
+				'tt' => (isset($arvo->tt))?$arvo->tt->attributes:[],
+			];
 			return $return;
 		}
 		$lisateksti = '';
@@ -6347,11 +6353,10 @@ class TyovuorootController extends Controller
 
 	public function FromToSuunnitellutAll($from, $to, $tids, $haku_criteria)
 	{
-		$tyovuorot = Yii::app()->createController('Tyovuoroot');
 		$data = [];
 		$pvm_from = date("Y-m-d", strtotime($from));
 		$pvm_to = date("Y-m-d", strtotime($to));
-		$tv_arr = $tyovuorot[0]->tv_arr($pvm_from, $pvm_to, $tids, $haku_criteria, false);
+		$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, $haku_criteria, false);
 		$tids_after = [];
 		foreach($tv_arr as $t => $arr)
 			$tids_after[] = $t;
@@ -6362,8 +6367,15 @@ class TyovuorootController extends Controller
 					ksort($tv_arr[$tid][$f]);
 					foreach($tv_arr[$tid][$f] as $k => $v){
 						foreach($v as $v2){
-							if( isset($v2['this_id']) )
-								$data[] = ['data' => (object)$v2['data'], 'this_id' => $v2['this_id']];
+							if( isset($v2['this_id']) ){
+								$data[] = [
+									'data' => (object)$v2['data'],
+									'kohteet' => (object)$v2['kohteet'],
+									'avaimet' => $v2['avaimet'],
+									'tt' => (object)$v2['tt'],
+									'this_id' => $v2['this_id']
+								];
+							}
 						}
 					}
 				}

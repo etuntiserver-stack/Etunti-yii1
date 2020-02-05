@@ -5,9 +5,9 @@
   $avain_tyontekijalla = [];
   $avain_sijainti = [];
 
-  if(isset($data->avaimet)){
-	foreach($data->avaimet as $avain){
-	   if( isset($data->kohteet->id) and $avain->kohde == $data->kohteet->id ){
+  if(isset($avaimet)){
+	foreach($avaimet as $avain){
+	   if( isset($kohteet->id) and $avain->kohde == $kohteet->id ){
   		$avain_tyontekijalla[] = $this->etuSukunimi($avain->tid);
 		$avain_sijainti[] = $avain->sijainti;
 	   }
@@ -23,8 +23,8 @@
 	<td class="text-center">
 		<?=($data->peruutettu == 1)?'<h2>'.Yii::t('main', 'Työvuoro on peruutettu').'</h2>':''?>
 		<?php
-		if(isset($data->kohteet->id)){
-			$as = Asiakkaat::model()->findByPk($data->kohteet->asiakas_id);
+		if(isset($kohteet->id)){
+			$as = Asiakkaat::model()->findByPk($kohteet->asiakas_id);
 			if(isset($as->id) and $as->tyyppi == 'yritys')
 				echo $as->yrityksen_nimi;
 			if(isset($as->id) and $as->tyyppi == 'henkilo')
@@ -34,20 +34,20 @@
 	</td>
 	<td>
 		<?php
-		if(isset($data->kohteet->osoite)){
-			echo $data->kohteet->osoite; 
+		if(isset($kohteet->osoite)){
+			echo $kohteet->osoite; 
 		}
 		?>
 	</td>
 	<td>
 		<p><?php echo $data->pvm; ?></p>
 		<p><?php echo $data->alku; ?> - <?php echo $data->loppu; ?></p>
-		<p><?php if(isset($data->tt->id)) { echo $this->etuSukunimi($data->tt->id); } ?></p>
+		<p><?php if(isset($tt->id)) { echo $this->etuSukunimi($tt->id); } ?></p>
 	</td>
 	<td>
 		<?php
-		if(isset($data->avaimet)){
-			foreach($data->avaimet as $avain){
+		if(isset($avaimet)){
+			foreach($avaimet as $avain){
 			   echo '<p><input type="checkbox" class="avainnumero" value="'.$avain->id.'"> '.$avain->avainnumero.'</p>';
 			}
 		}

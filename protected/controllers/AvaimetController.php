@@ -285,10 +285,8 @@ class AvaimetController extends Controller
 	public function actionAvaimet_tyontekijalle()
 	{
 
-		if(isset($_POST['avaimet']))
-		{
-			foreach($_POST['avaimet'] as $avain_id)
-			{
+		if(isset($_POST['avaimet'])){
+			foreach($_POST['avaimet'] as $avain_id){
 				$avaimet_old = Avaimet::model()->findByPk($avain_id);
 				Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti'], 'tid' => $_POST['tyontekija']));
 				$avaimet_new = Avaimet::model()->findByPk($avain_id);
@@ -305,70 +303,42 @@ class AvaimetController extends Controller
 				//     LOG -->
 			}
 		}
-		if(isset($_POST['asiakkaatPerSivu']))
-		{
+		if(isset($_POST['asiakkaatPerSivu'])){
 			Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);
 			echo json_encode($_POST['asiakkaatPerSivu']);
 			exit;
 		}
-
 		$from = date("Y-m-d");
 		$to = date("Y-m-d", strtotime($from.' +1 month'));
-
-       		$criteria = new CDbCriteria();
-       		$criteria->order = " id DESC "; //DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC
-
-       		$criteria = new CDbCriteria();
-		if(isset($_GET['from']) and isset($_GET['to']))
-		{
+		if(isset($_GET['from']) and isset($_GET['to'])){
 			$from = date("Y-m-d", strtotime($_GET['from']));
 			$to = date("Y-m-d", strtotime($_GET['to']));
 		}
-
-	        $criteria->addCondition (" 
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')
-			BETWEEN '".$from."' and '".$to."'
-		");
-
-		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
-		{
-	        $criteria->addCondition (" 
+		$haku_criteria = [];
+		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])){
+			$haku_criteria[] = " 
 			kohde IN ( SELECT id FROM sivex_kohdet
 				WHERE asiakas_id IN ( SELECT id FROM asiakkaat
 					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'
 				)
-			)
-		");
+			)";
 		}
-		if(isset($_GET['osoite']) and !empty($_GET['osoite']))
-		{
-	        $criteria->addCondition (" 
+		if(isset($_GET['osoite']) and !empty($_GET['osoite'])){
+			$haku_criteria[] = " 
 			kohde IN ( SELECT id FROM sivex_kohdet
 				WHERE osoite LIKE '%".$_GET['osoite']."%'
-			)
-		");
+			)";
 		}
-		if(isset($_GET['tekijan_nimi']) and !empty($_GET['tekijan_nimi']))
-		{
-	        $criteria->addCondition (" tid IN 
-			(
+		if(isset($_GET['tekijan_nimi']) and !empty($_GET['tekijan_nimi'])){
+			$haku_criteria[] = " tid IN (
 			SELECT id FROM sivex_ttekijat WHERE CONCAT(tekijan_nimi, ' ', sukunimi)  LIKE '%".$_GET['tekijan_nimi']."%' 
-			)"
-		);
+			)";
 		}
-		$dataProvider=new CActiveDataProvider('Tyovuoroot', array(
-			'criteria'=>$criteria,
-			//'pagination'=>false
-		));
-
+		$tyovuorot = Yii::app()->createController('Tyovuoroot');
+		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria);
 		$perSivu = 50;
-		if(isset(Yii::app()->user->asiakkaatPerSivu))
-		$perSivu = Yii::app()->user->asiakkaatPerSivu;
-
-		$dataProvider->pagination->pageSize = $perSivu;
-
 		$this->render('avaimet_tyontekijalle', array(
-			'dataProvider' => $dataProvider, 
+			'dataAll' => $dataAll, 
 			'perSivu' => $perSivu,
 			'from' => $from,
 			'to' => $to,

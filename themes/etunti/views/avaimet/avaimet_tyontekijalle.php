@@ -11,7 +11,7 @@
 
 	<h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?php echo Yii::t('main', 'Avaimet työvuoroittain'); ?> 
 		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/avaimet/create',array('class'=>'btn btn-default fa fa-plus')); ?>
-
+<?php /*
 	 <div class="pull-right montakoRiviaSivulle">
 	   <?php
 	   ($perSivu == 10) ? $defcl10 = 'btn-success' : $defcl10 = 'btn-default';
@@ -24,6 +24,8 @@
 	   echo '<button class="btn '.$defcl00.' kpl" kpl="2000" data-toggle="tooltip" title="'.Yii::t('main', 'Näytä').' 2000 '.Yii::t('main', 'asiakasta sivulla').'">2000</button>';
 	   ?>
 	 </div>
+virtual TV takia
+*/ ?>
 	</h2>
 
 
@@ -42,7 +44,7 @@
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
-   			    <input type="text" class="gui-input datepicker" name="from" value="<?=$from?>" placeholder="<?php echo Yii::t('main', 'Mistä'); ?>...">
+   			    <input type="text" class="gui-input datepickerFI" name="from" value="<?=date("d.m.Y", strtotime($from))?>" placeholder="<?php echo Yii::t('main', 'Mistä'); ?>...">
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
                             </label>
@@ -53,7 +55,7 @@
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
-   			    <input type="text" class="gui-input datepicker" name="to" value="<?=$to?>" placeholder="<?php echo Yii::t('main', 'Mihin'); ?>...">
+   			    <input type="text" class="gui-input datepickerFI" name="to" value="<?=date("d.m.Y", strtotime($to))?>" placeholder="<?php echo Yii::t('main', 'Mihin'); ?>...">
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
                             </label>
@@ -224,23 +226,18 @@ $(document).ready(function(){
   <th><?php echo Yii::t('main', 'Sijainti'); ?></th>
   </tr>
   </thead>
-  <?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view_avaimet_tyontekijalle',
-  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
-
-
-	'pager' => array(
-           'firstPageLabel'=>'<<',
-           'prevPageLabel'=>'< Edellinen',
-           'nextPageLabel'=>'Seuraava >',
-           'lastPageLabel'=>'>>',
-           //'maxButtonCount'=>'10',
-           'header'=>'<h3>Siirry sivulle:</h3>',
-           'cssFile'=>false,
-       ), 
-
-  )); ?>
+  <?php 
+	foreach($dataAll as $arr){
+		$tv = $this->renderPartial('_view_avaimet_tyontekijalle',array(
+			'data' => $arr['data'],
+			'kohteet' => $arr['kohteet'],
+			'avaimet' => $arr['avaimet'],
+			'tt' => $arr['tt'],
+			'this_id' => $arr['this_id']
+		), true);
+		echo $tv;
+	}
+  ?>
   </table>
  </div>
 </div>
