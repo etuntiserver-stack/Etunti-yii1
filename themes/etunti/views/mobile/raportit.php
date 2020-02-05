@@ -456,14 +456,8 @@ $(document).ready(function(){
        <div class="col-sm-6">
       	<?php
 	   echo '<select name="tekija[]" multiple class="mult">';
-	   foreach($tlist as $val){
-/*
-		if(count($tyoryhmat) > 0 and in_array($val->tyoryhma, $tyoryhmat))
-			echo '<option value="'.$val->id.'" selected>'.$this->etuSukunimi($val->id).'</option>';
-		else
-*/
-			echo '<option value="'.$val->id.'">'.$this->etuSukunimi($val->id).'</option>';
-	   }
+	   foreach($tlist as $val)
+		echo '<option value="'.$val->id.'">'.$this->etuSukunimi($val->id).'</option>';
 	   echo '</select>';
 	?>
        <br>
@@ -592,12 +586,10 @@ $(document).ready(function(){
 
       <div class="row">
        <div class="col-sm-6">
-      	<?php
-	   echo '<select name="tekija" class="form-control">';
-	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
-	   foreach($tlist as $val){
-			echo '<option value="'.$val->id.'">'.$this->etuSukunimi($val->id).'</option>';
-	   }
+       	<?php
+	   echo '<select name="tekija[]" multiple class="mult">';
+	   foreach($tlist as $val)
+		echo '<option value="'.$val->id.'">'.$this->etuSukunimi($val->id).'</option>';
 	   echo '</select>';
 	?>
        <br>

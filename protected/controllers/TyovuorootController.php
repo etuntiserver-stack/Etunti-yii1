@@ -2418,7 +2418,7 @@ class TyovuorootController extends Controller
 		if(!empty($arvo->tyoajanlaatu)){
 			$expl1 = explode("/",$arvo->tyoajanlaatu);
 			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
-			$tv_edit = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$this_id.'" style="color:'.$color.'">'.$expl1[0].'</b>' : '';
+			$tv_edit = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$this_id.'" style="color:'.$color.'">'.$ikoonit.''.$expl1[0].'</b>' : '';
 		} else {
 			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$osoite.$lisateksti.'</span>';
 		}
