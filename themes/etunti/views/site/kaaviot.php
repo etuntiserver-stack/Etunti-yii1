@@ -423,14 +423,23 @@ function output_chart_menu()
  *? View names are the same as toggle names, with "toggle_" => "kaaviot_".
  ******************************************************************************/
 foreach ($_POST as $key => $value) {
+
+	// Split chart name at first underscore to find the actual chart view name.
+	// For example: toggle_onlinevaraukset => [1]:'onlinevaraukset' => 'kaaviot_onlinevaraukset'.
 	$exp_key = explode('_', $key, 2);
+
+	// Check that naming of the entry is valid, and that the chart is enabled.
 	if (!$exp_key || $exp_key[0] != 'toggle' || count($exp_key) < 2 || $value != 'on')
 		continue;
+
+	// Set final expected view name of the chart.
 	$view_name = "kaaviot_" . $exp_key[1];
-	if (!$this->getViewFile($view_name)) {
-		// TODO: Log, view not found; error in code.
-		continue;
-	}
+
+	// Ensure the view exists. If not, the form is configured incorrectly.
+	if (!$this->getViewFile($view_name))
+		throw new CHttpException(404, "Pyydettyä kaaviota ei löydetty. Ongelmasta on ilmoitettu ylläpitoon. ({$exp_key[1]})");
+
+	// Render the chart.
 	$this->renderPartial($view_name, [
 		'chart_type' => $chart_type,
 		'from' => $from,
