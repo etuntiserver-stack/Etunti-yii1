@@ -1,15 +1,33 @@
 <?php
 
-$lomat_ja_poissaolot_from = date("Y-m-d", strtotime($_POST['lomat_ja_poissaolot_from'] ?? '01.01.2019'));
-$lomat_ja_poissaolot_to = date("Y-m-d", strtotime($_POST['lomat_ja_poissaolot_to'] ?? '31.12.2019'));
-$lomat_ja_poissaolot_type = $_POST['lomat_ja_poissaolot_type'] ?? 'line';
-$lomat_ja_poissaolot_from_formated = date("d.m.Y", strtotime($lomat_ja_poissaolot_from));
-$lomat_ja_poissaolot_to_formated = date("d.m.Y", strtotime($lomat_ja_poissaolot_to));
-$lomat_ja_poissaolot_worker = $_POST['lomat_ja_poissaolot_worker'] ?? 0;
+/**
+ * Kaavio: Lomat ja poissaolot - Not working yet, to be fixed.
+ * For use in kaaviot.php (@see actionKaaviot()).
+ *
+ * @var $this AsiakkaatController
+ *
+ * Expected variables inside $_POST:
+ *   lomat_ja_poissaolot_from       Chart start date
+ *   lomat_ja_poissaolot_to         Chart end date
+ *   lomat_ja_poissaolot_worker_id  Worker ID
+ *   lomat_ja_poissaolot_type       Chart type
+ */
+
+$from = date('Y-m-d', isset($_POST['lomat_ja_poissaolot_from'])
+  ? strtotime($_POST['lomat_ja_poissaolot_from'])
+  : strtotime('-1year', time()));
+$to = date('Y-m-d', isset($_POST['lomat_ja_poissaolot_to'])
+  ? strtotime($_POST['lomat_ja_poissaolot_to'])
+  : time());
+$worker_id = $_POST['lomat_ja_poissaolot_worker_id'] ?? 0;
+$type = $_POST['lomat_ja_poissaolot_type'] ?? 'bar';
+
+$from_formated = date("d.m.Y", strtotime($from));
+$to_formated = date("d.m.Y", strtotime($to));
 
 $categories = array();
-$begin = new DateTime(date("Y-m-d", strtotime($lomat_ja_poissaolot_from)));
-$end = new DateTime(date("Y-m-d", strtotime($lomat_ja_poissaolot_to)));
+$begin = new DateTime(date("Y-m-d", strtotime($from)));
+$end = new DateTime(date("Y-m-d", strtotime($to)));
 //$end = $end->modify('+1 month');
 $interval = DateInterval::createFromDateString('1 month');
 $period = new DatePeriod($begin, $interval, $end);
@@ -22,9 +40,9 @@ $criteria = new CDbCriteria();
 $criteria->order = "tyoajanlaatu";
 $criteria->group = "tyoajanlaatu";
 $criteria->select = "COUNT(*) as count, t.*";
-$criteria->condition = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$lomat_ja_poissaolot_from' AND '$lomat_ja_poissaolot_to' AND tyoajanlaatu!=''";
-if ($lomat_ja_poissaolot_worker > 0)
-  $criteria->addCondition("tid='$lomat_ja_poissaolot_worker'");
+$criteria->condition = "DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to' AND tyoajanlaatu!=''";
+if ($worker_id > 0)
+  $criteria->addCondition("tid='$worker_id'");
 $tv = Tyovuoroot::model()->findAll($criteria);
 $arr_new = array();
 $arr = array();
@@ -53,7 +71,7 @@ foreach ($tv as $v) {
         type: '<?= $chart_type ?>'
       },
       title: {
-        text: 'Lomat ja poissaolot <?= date("d.m.Y", strtotime($lomat_ja_poissaolot_from)) . "-" . date("d.m.Y", strtotime($lomat_ja_poissaolot_to)) ?>'
+        text: 'Lomat ja poissaolot <?= date("d.m.Y", strtotime($from)) . "-" . date("d.m.Y", strtotime($to)) ?>'
       },
       xAxis: {
         categories: JSON.parse('<?= json_encode(array_values($categories)) ?>')
@@ -76,24 +94,24 @@ foreach ($tv as $v) {
         enabled: true
       }
     }, [{
-        id: 'lomat_ja_poissaolot_worker',
+        id: 'lomat_ja_poissaolot_worker_id',
         type: 'worker_list',
-        default: <?= $lomat_ja_poissaolot_worker ?>
+        default: <?= $worker_id ?>
       },
       {
         id: 'lomat_ja_poissaolot_type',
         type: 'chart_type',
-        default: '<?= $lomat_ja_poissaolot_type ?>'
+        default: '<?= $type ?>'
       },
       {
         id: 'lomat_ja_poissaolot_from',
         type: 'date',
-        default: '<?= $lomat_ja_poissaolot_from_formated ?>'
+        default: '<?= $from_formated ?>'
       },
       {
         id: 'lomat_ja_poissaolot_to',
         type: 'date',
-        default: '<?= $lomat_ja_poissaolot_to_formated ?>'
+        default: '<?= $to_formated ?>'
       }
     ]);
   });

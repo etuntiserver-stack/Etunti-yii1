@@ -294,7 +294,7 @@ function output_chart_menu()
 
 			// Remove any and all chart_type inputs if 'notype' is selected in the
 			// chart settings menu setting 'selections'.
-			<?php if ($_POST['selections'] ?? '' == 'notype') : ?>
+			<?php if (($_POST['selections'] ?? '') == 'notype') : ?>
 				inputs = inputs.filter(function(obj) {
 					return obj.type !== 'chart_type';
 				});
@@ -419,6 +419,29 @@ function output_chart_menu()
 
 <?php
 /*******************************************************************************
+ *? Common // shared variables for charts
+ ******************************************************************************/
+
+/** TyovuorootController object. */
+$tyovuoroot = Yii::app()->createController('Tyovuoroot')[0];
+
+/** Array of month labels for charts to use. */
+$months = array(
+	1 => Yii::t('main', 'Tammikuu'),
+	2 => Yii::t('main', 'Helmikuu'),
+	3 => Yii::t('main', 'Maaliskuu'),
+	4 => Yii::t('main', 'Huhtikuu'),
+	5 => Yii::t('main', 'Toukokuu'),
+	6 => Yii::t('main', 'Kesäkuu'),
+	7 => Yii::t('main', 'Heinäkuu'),
+	8 => Yii::t('main', 'Elokuu'),
+	9 => Yii::t('main', 'Syyskuu'),
+	10 => Yii::t('main', 'Lokakuu'),
+	11 => Yii::t('main', 'Marraskuu'),
+	12 => Yii::t('main', 'Joulukuu')
+);
+
+/*******************************************************************************
  *? Render the views that handle the selected charts.
  *? View names are the same as toggle names, with "toggle_" => "kaaviot_".
  ******************************************************************************/
@@ -441,12 +464,7 @@ foreach ($_POST as $key => $value) {
 
 	// Render the chart.
 	$this->renderPartial($view_name, [
-		'chart_type' => $chart_type,
-		'from' => $from,
-		'to' => $to,
-		'asiakas' => $asiakas,
-		'tyontekija' => $tyontekija,
-		'kpl_maara' => $kpl_maara,
+		'tyovuoroot' => $tyovuoroot,
 		'months' => $months
 	], false);
 }

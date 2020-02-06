@@ -1,4 +1,29 @@
 <?php
+/**
+ * Kaavio: Suunnitellut, luetut ja hyväksytyt tunnit.
+ * For use in kaaviot.php (@see actionKaaviot()).
+ *
+ * @var $this AsiakkaatController
+ *
+ * Expected variables inside $_POST:
+ *   tunnit_from         Chart start date
+ *   tunnit_to           Chart end date
+ *   tunnit_customer_id  Customer ID
+ *   tunnit_type         Chart type
+ */
+
+$from = date('Y-m-d', isset($_POST['tunnit_from'])
+  ? strtotime($_POST['tunnit_from'])
+  : strtotime('-1year', time()));
+$to = date('Y-m-d', isset($_POST['tunnit_to'])
+  ? strtotime($_POST['tunnit_to'])
+  : time());
+$customer_id = $_POST['tunnit_customer_id'] ?? 0;
+$type = $_POST['tunnit_type'] ?? 'line';
+
+$from_formated = date("d.m.Y", strtotime($from));
+$to_formated = date("d.m.Y", strtotime($to));
+
 $result = array();
 // <-- Luetut
 $criteria = new CDbCriteria();

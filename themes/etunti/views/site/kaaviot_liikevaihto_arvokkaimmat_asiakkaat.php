@@ -1,4 +1,28 @@
 <?php
+
+/**
+ * Kaavio: Liikevaihto arvokkaimmat asiakkaat.
+ * For use in kaaviot.php (@see actionKaaviot()).
+ *
+ * @var $this AsiakkaatController
+ *
+ * Expected variables inside $_POST:
+ *   liikevaihto_arvokkaimmat_asiakkaat_from  Chart start date
+ *   liikevaihto_arvokkaimmat_asiakkaat_to    Chart end date
+ *   liikevaihto_arvokkaimmat_asiakkaat_type  Chart type
+ */
+
+$from = date('Y-m-d', isset($_POST['liikevaihto_arvokkaimmat_asiakkaat_from'])
+  ? strtotime($_POST['liikevaihto_arvokkaimmat_asiakkaat_from'])
+  : strtotime('-1year', time()));
+$to = date('Y-m-d', isset($_POST['liikevaihto_arvokkaimmat_asiakkaat_to'])
+  ? strtotime($_POST['liikevaihto_arvokkaimmat_asiakkaat_to'])
+  : time());
+$type = $_POST['liikevaihto_arvokkaimmat_asiakkaat_type'] ?? 'column';
+
+$from_formated = date("d.m.Y", strtotime($from));
+$to_formated = date("d.m.Y", strtotime($to));
+
 $categories = array();
 $begin = new DateTime(date("Y-m-d", strtotime($from)));
 $end = new DateTime(date("Y-m-d", strtotime($to)));

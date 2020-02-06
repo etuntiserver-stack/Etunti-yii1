@@ -1,4 +1,30 @@
 <?php
+
+/**
+ * Kaavio: Työntekijät.
+ * For use in kaaviot.php (@see actionKaaviot()).
+ *
+ * @var $this AsiakkaatController
+ *
+ * Expected variables inside $_POST:
+ *   tyontekijat_from       Chart start date
+ *   tyontekijat_to         Chart end date
+ *   tyontekijat_worker_id  Worker ID
+ *   tyontekijat_type       Chart type
+ */
+
+$from = date('Y-m-d', isset($_POST['tyontekijat_from'])
+  ? strtotime($_POST['tyontekijat_from'])
+  : strtotime('-1year', time()));
+$to = date('Y-m-d', isset($_POST['tyontekijat_to'])
+  ? strtotime($_POST['tyontekijat_to'])
+  : time());
+$worker_id = $_POST['tyontekijat_worker_id'] ?? 0;
+$type = $_POST['tyontekijat_type'] ?? 'line';
+
+$from_formated = date("d.m.Y", strtotime($from));
+$to_formated = date("d.m.Y", strtotime($to));
+
 $result = array();
 // <-- Luetut
 $criteria = new CDbCriteria();

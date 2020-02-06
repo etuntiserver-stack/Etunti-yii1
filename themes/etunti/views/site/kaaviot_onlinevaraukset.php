@@ -1,4 +1,30 @@
 <?php
+
+/**
+ * Kaavio: Onlinevaraukset.
+ * For use in kaaviot.php (@see actionKaaviot()).
+ *
+ * @var $this AsiakkaatController
+ *
+ * Expected variables inside $_POST:
+ *   onlinevaraukset_from         Chart start date
+ *   onlinevaraukset_to           Chart end date
+ *   onlinevaraukset_customer_id  Customer ID
+ *   onlinevaraukset_type         Chart type
+ */
+
+$from = date('Y-m-d', isset($_POST['onlinevaraukset_from'])
+  ? strtotime($_POST['onlinevaraukset_from'])
+  : strtotime('-1year', time()));
+$to = date('Y-m-d', isset($_POST['onlinevaraukset_to'])
+  ? strtotime($_POST['onlinevaraukset_to'])
+  : time());
+$customer_id = $_POST['onlinevaraukset_customer_id'] ?? 0;
+$type = $_POST['onlinevaraukset_type'] ?? 'line';
+
+$from_formated = date("d.m.Y", strtotime($from));
+$to_formated = date("d.m.Y", strtotime($to));
+
 // <-- Onlinevaraus
 $criteria = new CDbCriteria();
 $criteria->group = " EXTRACT(YEAR_MONTH FROM DATE(time)) ";

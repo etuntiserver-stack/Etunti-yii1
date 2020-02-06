@@ -1,4 +1,30 @@
 <?php
+
+/**
+ * Kaavio: Lähetettyjen laskujen määrä ja summa.
+ * For use in kaaviot.php (@see actionKaaviot()).
+ *
+ * @var $this AsiakkaatController
+ *
+ * Expected variables inside $_POST:
+ *   lahetetut_laskut_maara_summa_from         Chart start date
+ *   lahetetut_laskut_maara_summa_to           Chart end date
+ *   lahetetut_laskut_maara_summa_customer_id  Customer ID
+ *   lahetetut_laskut_maara_summa_type         Chart type
+ */
+
+$from = date('Y-m-d', isset($_POST['lahetetut_laskut_maara_summa_from'])
+  ? strtotime($_POST['lahetetut_laskut_maara_summa_from'])
+  : strtotime('-1year', time()));
+$to = date('Y-m-d', isset($_POST['lahetetut_laskut_maara_summa_to'])
+  ? strtotime($_POST['lahetetut_laskut_maara_summa_to'])
+  : time());
+$customer_id = $_POST['lahetetut_laskut_maara_summa_customer_id'] ?? 0;
+$type = $_POST['lahetetut_laskut_maara_summa_type'] ?? 'line';
+
+$from_formated = date("d.m.Y", strtotime($from));
+$to_formated = date("d.m.Y", strtotime($to));
+
 // <-- Laskut
 $criteria = new CDbCriteria();
 $criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(paivays, '%Y-%m-%d'), '%Y-%m-%d')) ";

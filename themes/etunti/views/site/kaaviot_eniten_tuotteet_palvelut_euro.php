@@ -1,4 +1,28 @@
 <?php
+
+/**
+ * Kaavio: Eniten tuotteet ja palvelut euro.
+ * For use in kaaviot.php (@see actionKaaviot()).
+ *
+ * @var $this AsiakkaatController
+ *
+ * Expected variables inside $_POST:
+ *   eniten_tuotteet_palvelut_euro_from  Chart start date
+ *   eniten_tuotteet_palvelut_euro_to    Chart end date
+ *   eniten_tuotteet_palvelut_euro_type  Chart type
+ */
+
+$from = date('Y-m-d', isset($_POST['eniten_tuotteet_palvelut_euro_from'])
+  ? strtotime($_POST['eniten_tuotteet_palvelut_euro_from'])
+  : strtotime('-1year', time()));
+$to = date('Y-m-d', isset($_POST['eniten_tuotteet_palvelut_euro_to'])
+  ? strtotime($_POST['eniten_tuotteet_palvelut_euro_to'])
+  : time());
+$type = $_POST['eniten_tuotteet_palvelut_euro_type'] ?? 'column';
+
+$from_formated = date("d.m.Y", strtotime($from));
+$to_formated = date("d.m.Y", strtotime($to));
+
 $categories = array();
 $begin = new DateTime(date("Y-m-d", strtotime($from)));
 $end = new DateTime(date("Y-m-d", strtotime($to)));

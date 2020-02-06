@@ -1,4 +1,30 @@
 <?php
+
+/**
+ * Kaavio: Työntekijät, joilla eniten hyväksyttyjä tunteja.
+ * For use in kaaviot.php (@see actionKaaviot()).
+ *
+ * @var $this AsiakkaatController
+ *
+ * Expected variables inside $_POST:
+ *   tyontekijat_eniten_tunteja_from      Chart start date
+ *   tyontekijat_eniten_tunteja_to        Chart end date
+ *   tyontekijat_eniten_tunteja_approved  Hyväksytyt (true) || Kaikki (false)
+ *   tyontekijat_eniten_tunteja_type      Chart type
+ */
+
+$from = date('Y-m-d', isset($_POST['tyontekijat_eniten_tunteja_from'])
+  ? strtotime($_POST['tyontekijat_eniten_tunteja_from'])
+  : strtotime('-1month', time()));
+$to = date('Y-m-d', isset($_POST['tyontekijat_eniten_tunteja_to'])
+  ? strtotime($_POST['tyontekijat_eniten_tunteja_to'])
+  : time());
+$approved = $_POST['tyontekijat_eniten_tunteja_approved'] ?? true;
+$type = $_POST['tyontekijat_eniten_tunteja_type'] ?? 'bar';
+
+$from_formated = date("d.m.Y", strtotime($from));
+$to_formated = date("d.m.Y", strtotime($to));
+
 $result = array();
 // <-- Hyvaksytyt yritykset
 $criteria = new CDbCriteria();

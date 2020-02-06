@@ -1,4 +1,30 @@
 <?php
+
+/**
+ * Kaavio: Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja.
+ * For use in kaaviot.php (@see actionKaaviot()).
+ *
+ * @var $this AsiakkaatController
+ *
+ * Expected variables inside $_POST:
+ *   asiakkaat_eniten_tunteja_from      Chart start date
+ *   asiakkaat_eniten_tunteja_to        Chart end date
+ *   asiakkaat_eniten_tunteja_approved  Hyväksytyt (true) || Kaikki (false)
+ *   asiakkaat_eniten_tunteja_type      Chart type
+ */
+
+$from = date('Y-m-d', isset($_POST['asiakkaat_eniten_tunteja_from'])
+  ? strtotime($_POST['asiakkaat_eniten_tunteja_from'])
+  : strtotime('-1month', time()));
+$to = date('Y-m-d', isset($_POST['asiakkaat_eniten_tunteja_to'])
+  ? strtotime($_POST['asiakkaat_eniten_tunteja_to'])
+  : time());
+$approved = $_POST['asiakkaat_eniten_tunteja_approved'] ?? true;
+$type = $_POST['asiakkaat_eniten_tunteja_type'] ?? 'bar';
+
+$from_formated = date("d.m.Y", strtotime($from));
+$to_formated = date("d.m.Y", strtotime($to));
+
 $result = array();
 // <-- Hyvaksytyt yritykset
 $criteria = new CDbCriteria();
@@ -12,7 +38,7 @@ $criteria->select = "
 	";
 $criteria->condition = " 
 		aloitan!='' AND loppui!=''
-		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '" . $from . "' AND '" . $to . "'
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
 		AND status=3
 		AND deleted=0
 		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
