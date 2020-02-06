@@ -2387,6 +2387,7 @@ class TyovuorootController extends Controller
 			$arvo->tid 	= $this_tid;
 			$return 	= [
 				'this_id' => $this_id,
+				'toistuva' => $toistuva,
 				'data' => $arvo->attributes,
 				'kohteet' => (isset($arvo->kohteet))?$arvo->kohteet->attributes:[],
 				'avaimet' => (isset($arvo->avaimet))?$arvo->avaimet:[],
@@ -6370,6 +6371,7 @@ class TyovuorootController extends Controller
 							if( isset($v2['this_id']) ){
 								$data[] = [
 									'data' => (object)$v2['data'],
+									'toistuva' => $v2['toistuva'],
 									'kohteet' => (object)$v2['kohteet'],
 									'avaimet' => $v2['avaimet'],
 									'tt' => (object)$v2['tt'],
