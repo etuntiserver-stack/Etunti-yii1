@@ -170,7 +170,7 @@ class SiteController extends Controller
 	 * Kaavio: Työvuorojen määrä ajanjaksolla.
 	 * For use in kaaviot.php (@see actionKaaviot()).
 	 */
-	function kaavio_tyovuorojen_maara()
+	function kaavio_tyovuorojen_maara(DateTime $from, DateTime $to, string $chart_type = 'line')
 	{
 	}
 
@@ -178,7 +178,7 @@ class SiteController extends Controller
 	 * Kaavio: Lomat ja poissaolot - Not working yet, to be fixed.
 	 * For use in kaaviot.php (@see actionKaaviot()).
 	 */
-	function kaavio_lomat_ja_poissaolot()
+	function kaavio_lomat_ja_poissaolot(int $worker_id, DateTime $from, DateTime $to, string $chart_type = 'bar')
 	{
 	}
 
@@ -186,7 +186,7 @@ class SiteController extends Controller
 	 * Kaavio: Uudet ja lopettaneet asiakkaat: KPL määrä.
 	 * For use in kaaviot.php (@see actionKaaviot()).
 	 */
-	function kaavio_uudet_lopettaneet_asiakkaat_kpl()
+	function kaavio_uudet_lopettaneet_asiakkaat_kpl(DateTime $from, DateTime $to, string $chart_type = 'bar')
 	{
 	}
 
@@ -194,7 +194,7 @@ class SiteController extends Controller
 	 * Kaavio: Uudet ja lopettaneet asiakkaat: Suunnitellut työvuorot.
 	 * For use in kaaviot.php (@see actionKaaviot()).
 	 */
-	function kaavio_uudet_lopettaneet_asiakkaat_tyovuorot()
+	function kaavio_uudet_lopettaneet_asiakkaat_tyovuorot(DateTime $from, DateTime $to, string $chart_type = 'column')
 	{
 	}
 
@@ -202,7 +202,7 @@ class SiteController extends Controller
 	 * Kaavio: Työntekijät, joilla eniten hyväksyttyjä tunteja.
 	 * For use in kaaviot.php (@see actionKaaviot()).
 	 */
-	function kaavio_tyontekijat_eniten_tunteja()
+	function kaavio_tyontekijat_eniten_tunteja(DateTime $from, DateTime $to, bool $approved = true, string $chart_type = 'bar')
 	{
 	}
 
@@ -210,7 +210,7 @@ class SiteController extends Controller
 	 * Kaavio: Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja.
 	 * For use in kaaviot.php (@see actionKaaviot()).
 	 */
-	function kaavio_asiakkaat_eniten_tunteja()
+	function kaavio_asiakkaat_eniten_tunteja(DateTime $from, DateTime $to, bool $approved = true, string $chart_type = 'bar')
 	{
 	}
 
@@ -218,7 +218,7 @@ class SiteController extends Controller
 	 * Kaavio: Suunnitellut, luetut ja hyväksytyt tunnit.
 	 * For use in kaaviot.php (@see actionKaaviot()).
 	 */
-	function kaavio_tunnit()
+	function kaavio_tunnit(int $customer_id, DateTime $from, DateTime $to, string $chart_type = 'line')
 	{
 	}
 
@@ -226,7 +226,7 @@ class SiteController extends Controller
 	 * Kaavio: Eniten suunniteltu työvuoro: Kestot.
 	 * For use in kaaviot.php (@see actionKaaviot()).
 	 */
-	function kaavio_eniten_suunniteltu_kestot()
+	function kaavio_eniten_suunniteltu_kestot(DateTime $from, DateTime $to, int $items_per_month = 5, string $chart_type = 'column')
 	{
 	}
 
@@ -234,7 +234,7 @@ class SiteController extends Controller
 	 * Kaavio: Eniten suunniteltu työvuoro: KPL.
 	 * For use in kaaviot.php (@see actionKaaviot()).
 	 */
-	function kaavio_eniten_suunniteltu_kpl()
+	function kaavio_eniten_suunniteltu_kpl(DateTime $from, DateTime $to, int $items_per_month = 5, string $chart_type = 'column')
 	{
 	}
 
@@ -242,7 +242,7 @@ class SiteController extends Controller
 	 * Kaavio: Lähetettyjen laskujen määrä ja summa.
 	 * For use in kaaviot.php (@see actionKaaviot()).
 	 */
-	function kaavio_lahetetut_laskut_maara_summa()
+	function kaavio_lahetetut_laskut_maara_summa(int $customer_id, DateTime $from, DateTime $to, string $chart_type = 'line')
 	{
 	}
 
@@ -250,7 +250,7 @@ class SiteController extends Controller
 	 * Kaavio: Liikevaihto arvokkaimmat asiakkaat.
 	 * For use in kaaviot.php (@see actionKaaviot()).
 	 */
-	function kaavio_liikevaihto_arvokkaimmat_asiakkaat()
+	function kaavio_liikevaihto_arvokkaimmat_asiakkaat(DateTime $from, DateTime $to, int $items_per_month = 5, string $chart_type = 'column')
 	{
 	}
 
@@ -258,7 +258,7 @@ class SiteController extends Controller
 	 * Kaavio: Työntekijät.
 	 * For use in kaaviot.php (@see actionKaaviot()).
 	 */
-	function kaavio_tyontekijat()
+	function kaavio_tyontekijat(int $worker_id, DateTime $from, DateTime $to, string $chart_type = 'line')
 	{
 	}
 
@@ -266,7 +266,7 @@ class SiteController extends Controller
 	 * Kaavio: Onlinevaraukset.
 	 * For use in kaaviot.php (@see actionKaaviot()).
 	 */
-	function kaavio_onlinevaraukset()
+	function kaavio_onlinevaraukset(int $customer_id, DateTime $from, DateTime $to, string $chart_type = 'line')
 	{
 	}
 
@@ -274,7 +274,7 @@ class SiteController extends Controller
 	 * Kaavio: Eniten tuotteet ja palvelut euro.
 	 * For use in kaaviot.php (@see actionKaaviot()).
 	 */
-	function kaavio_eniten_tuotteet_palvelut_euro()
+	function kaavio_eniten_tuotteet_palvelut_euro(DateTime $from, DateTime $to, string $chart_type = 'column')
 	{
 	}
 
