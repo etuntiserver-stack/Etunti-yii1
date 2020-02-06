@@ -127,6 +127,11 @@ class SiteController extends Controller
 		));
 	}
 
+	/*******************************************************************************
+	 *? Charts (kaaviot)
+	 ******************************************************************************/
+
+	/** Charts page. */
 	public function actionKaaviot()
 	{
 		// Temporary default variables. (Copied from old code)
@@ -160,6 +165,122 @@ class SiteController extends Controller
 			'months' => $months
 		]);
 	}
+
+	/**
+	 * Kaavio: Työvuorojen määrä ajanjaksolla.
+	 * For use in kaaviot.php (@see actionKaaviot()).
+	 */
+	function kaavio_tyovuorojen_maara()
+	{
+	}
+
+	/**
+	 * Kaavio: Lomat ja poissaolot - Not working yet, to be fixed.
+	 * For use in kaaviot.php (@see actionKaaviot()).
+	 */
+	function kaavio_lomat_ja_poissaolot()
+	{
+	}
+
+	/**
+	 * Kaavio: Uudet ja lopettaneet asiakkaat: KPL määrä.
+	 * For use in kaaviot.php (@see actionKaaviot()).
+	 */
+	function kaavio_uudet_lopettaneet_asiakkaat_kpl()
+	{
+	}
+
+	/**
+	 * Kaavio: Uudet ja lopettaneet asiakkaat: Suunnitellut työvuorot.
+	 * For use in kaaviot.php (@see actionKaaviot()).
+	 */
+	function kaavio_uudet_lopettaneet_asiakkaat_tyovuorot()
+	{
+	}
+
+	/**
+	 * Kaavio: Työntekijät, joilla eniten hyväksyttyjä tunteja.
+	 * For use in kaaviot.php (@see actionKaaviot()).
+	 */
+	function kaavio_tyontekijat_eniten_tunteja()
+	{
+	}
+
+	/**
+	 * Kaavio: Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja.
+	 * For use in kaaviot.php (@see actionKaaviot()).
+	 */
+	function kaavio_asiakkaat_eniten_tunteja()
+	{
+	}
+
+	/**
+	 * Kaavio: Suunnitellut, luetut ja hyväksytyt tunnit.
+	 * For use in kaaviot.php (@see actionKaaviot()).
+	 */
+	function kaavio_tunnit()
+	{
+	}
+
+	/**
+	 * Kaavio: Eniten suunniteltu työvuoro: Kestot.
+	 * For use in kaaviot.php (@see actionKaaviot()).
+	 */
+	function kaavio_eniten_suunniteltu_kestot()
+	{
+	}
+
+	/**
+	 * Kaavio: Eniten suunniteltu työvuoro: KPL.
+	 * For use in kaaviot.php (@see actionKaaviot()).
+	 */
+	function kaavio_eniten_suunniteltu_kpl()
+	{
+	}
+
+	/**
+	 * Kaavio: Lähetettyjen laskujen määrä ja summa.
+	 * For use in kaaviot.php (@see actionKaaviot()).
+	 */
+	function kaavio_lahetetut_laskut_maara_summa()
+	{
+	}
+
+	/**
+	 * Kaavio: Liikevaihto arvokkaimmat asiakkaat.
+	 * For use in kaaviot.php (@see actionKaaviot()).
+	 */
+	function kaavio_liikevaihto_arvokkaimmat_asiakkaat()
+	{
+	}
+
+	/**
+	 * Kaavio: Työntekijät.
+	 * For use in kaaviot.php (@see actionKaaviot()).
+	 */
+	function kaavio_tyontekijat()
+	{
+	}
+
+	/**
+	 * Kaavio: Onlinevaraukset.
+	 * For use in kaaviot.php (@see actionKaaviot()).
+	 */
+	function kaavio_onlinevaraukset()
+	{
+	}
+
+	/**
+	 * Kaavio: Eniten tuotteet ja palvelut euro.
+	 * For use in kaaviot.php (@see actionKaaviot()).
+	 */
+	function kaavio_eniten_tuotteet_palvelut_euro()
+	{
+	}
+
+	/*******************************************************************************
+	 *? END Charts (kaaviot)
+	 ******************************************************************************/
 
 	public function actionManagement_hours()
 	{
