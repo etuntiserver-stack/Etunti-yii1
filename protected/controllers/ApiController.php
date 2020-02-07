@@ -1037,7 +1037,7 @@ public function actionImei($dom)
 					if($tp != $ttekija->id){
 						$tpID = Tyontekijat::model()->findbypk($tp);
 						if(isset($tpID->tekijan_nimi)){
-							$tplista .= '<b>'.Yii::t('main', 'Työpari').'</b>: '.$this->etuSukunimi($tpID->id).' '.((!empty($tpID->laiten_puh))?', <b>Puh.</b>: '.$tpID->laiten_puh:'').'<br>';
+							$tplista .= '<b>'.Yii::t('main', 'Työpari').'</b>: '.$this->etuSukunimi($tpID->id).' '.((!empty($tpID->laiten_puh))?', <b>Puh.</b>: <a href="tel:'.$tpID->laiten_puh.'">'.$tpID->laiten_puh.'</a>':'').'<br>';
 						}
 					}
 				}
