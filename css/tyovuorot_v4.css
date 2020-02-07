@@ -32,6 +32,8 @@
 	padding: 3px;
 	font-size: 90%;
 	font-weight: bold;
+	height: 24px;
+	font-size: smaller;
 }
 .reika-success{
 	background: #28a745;

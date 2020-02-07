@@ -132,7 +132,7 @@ ini_set('memory_limit', '512M');
 		<?php foreach($tv_arr[$tid][$f] as $k => $v): ?>
 			<?php foreach($v as $v2): ?>
 				<?php if( isset($last_loppu) and ($this->num(strtotime($v2['alku'])-strtotime($last_loppu)) > 0) ): ?>
-					<p class="reika reika-warning text-center">Aika: <?=$this->sprint(strtotime($v2['alku'])-strtotime($last_loppu))?></p>
+					<p class="reika reika-warning text-center">Vapaa-aika: <?=$this->sprint(strtotime($v2['alku'])-strtotime($last_loppu))?></p>
 				<?php endif; ?>
 				<p><?=$v2['tv_edit']?></p>
 				<?php $pvm_yhteensa += $v2['tv_kesto']; ?>
