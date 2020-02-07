@@ -126,22 +126,24 @@ ini_set('memory_limit', '512M');
     <?php $did = date("Ymd", strtotime($f)); ?>
       <td>
 	<div id="<?=$did.'_'.$tid?>" class="latikkoAsetukset" pvm="<?=$f?>" tid="<?=$tid?>">
-		<?php $pvm_yhteensa = 0; ?>
-		<?php if( isset($tv_arr[$tid][$f]) ): ?>
-		<?php ksort($tv_arr[$tid][$f]); ?>
-		<?php foreach($tv_arr[$tid][$f] as $k => $v): ?>
-			<?php foreach($v as $v2): ?>
-				<?php if( isset($last_loppu) and ($this->num(strtotime($v2['alku'])-strtotime($last_loppu)) > 0) ): ?>
-					<p class="reika reika-warning text-center">Vapaa-aika: <?=$this->sprint(strtotime($v2['alku'])-strtotime($last_loppu))?></p>
-				<?php endif; ?>
-				<p><?=$v2['tv_edit']?></p>
-				<?php $pvm_yhteensa += $v2['tv_kesto']; ?>
-				<?php $last_loppu = $v2['loppu']; ?>
-			<?php endforeach; ?>
-		<?php endforeach; ?>
-		<?php endif; ?>
-		<?=($pvm_yhteensa > 0)? '<div class="pull-right pvm_yht">'.$this->sprint($pvm_yhteensa).'</div>':''?>
-		<?php $week_yhteensa[$tid] += $pvm_yhteensa; ?>
+		<?php
+		$pvm_yhteensa = 0;
+		if( isset($tv_arr[$tid][$f]) ) {
+			ksort($tv_arr[$tid][$f]);
+			foreach($tv_arr[$tid][$f] as $k => $v) {
+				foreach($v as $v2) {
+					if( isset($last_loppu) and ($this->num(strtotime($v2['alku'])-strtotime($last_loppu)) > 0) )
+						echo "<p class=\"reika reika-warning text-center\">Vapaa-aika: " . $this->sprint(strtotime($v2['alku'])-strtotime($last_loppu)) . "</p>";				
+					echo "<p>{$v2['tv_edit']}</p>";
+					$pvm_yhteensa += $v2['tv_kesto'];
+					$last_loppu = $v2['loppu'];
+				}
+			}
+		}
+		if ($pvm_yhteensa > 0)
+			echo '<div class="pull-right pvm_yht">' . $this->sprint($pvm_yhteensa) . '</div>';
+		$week_yhteensa[$tid] += $pvm_yhteensa;
+		?>
 	</div>
       </td>
       <?php $f = date ("d.m.Y", strtotime("+1 day", strtotime($f))); ?>
