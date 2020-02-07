@@ -2022,7 +2022,6 @@ $(document).ready(function(){
 	public function actionSuunnitteltutunnittanaan()
 	{
 		$tids 		= [];
-		$haku_criteria 	= [];
 
 		// <-- Tyoryhmat
 		$tyoryhmat_criteria = '';
@@ -2034,14 +2033,17 @@ $(document).ready(function(){
 		$suunniteltu 	= 0;
 		$thisday	= date("Y-m-d");
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
-		$getAll = $tyovuorot[0]->TidfromtoTyovuoroWithVirtual($thisday, $thisday, $tids, false, null, $haku_criteria);
-
+		$getAll 	= $tyovuorot[0]->TidfromtoTyovuoroWithVirtual($thisday, $thisday, $tids, false, null);
+		$result 	= 0;
+		foreach($getAll as $tid => $arr)
+			$result += $arr['tyotunnit']['kaikki']+$arr['matkatunnit']['kaikki']+$arr['lounaat']['kaikki'];
+		/*
 		echo '<pre>';
-		print_r($getAll);
+		print_r($result);
 		echo '<pre>';
 		exit;
-
-                echo json_encode($suunniteltu);
+		*/
+                echo json_encode($this->sprint($result));
 		exit;
 	}
 

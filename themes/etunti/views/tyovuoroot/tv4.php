@@ -131,8 +131,12 @@ ini_set('memory_limit', '512M');
 		<?php ksort($tv_arr[$tid][$f]); ?>
 		<?php foreach($tv_arr[$tid][$f] as $k => $v): ?>
 			<?php foreach($v as $v2): ?>
+				<?php if( isset($last_loppu) and ($this->num(strtotime($v2['alku'])-strtotime($last_loppu)) > 0) ): ?>
+					<p class="reika reika-warning text-center"><i class="glyphicon glyphicon-time"></i> Aika: <?=$this->sprint(strtotime($v2['alku'])-strtotime($last_loppu))?></p>
+				<?php endif; ?>
 				<p><?=$v2['tv_edit']?></p>
 				<?php $pvm_yhteensa += $v2['tv_kesto']; ?>
+				<?php $last_loppu = $v2['loppu']; ?>
 			<?php endforeach; ?>
 		<?php endforeach; ?>
 		<?php endif; ?>

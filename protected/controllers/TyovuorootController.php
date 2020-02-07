@@ -247,7 +247,7 @@ class TyovuorootController extends Controller
 		return $result;
 	}
 
-	protected function TidfromtoTyovuoroWithVirtual($from, $to, $tids, $by_pvm, $status)
+	public function TidfromtoTyovuoroWithVirtual($from, $to, $tids, $by_pvm, $status)
 	{
 		$result = [];
 		$asetukset = AsetuksetForAll::model()->findbypk(1);
@@ -2371,6 +2371,7 @@ class TyovuorootController extends Controller
 		// Status -->
 
 		$return 	= [];
+		$tv_edit	= [];
 		$this_id 	= ($toistuva)? $this->this_id_builder($arvo->id, $this_pvm, $this_tid) : $arvo->id;
 		$toistuva_icon 	= ($toistuva)? '<i class="text-success fa fa-repeat"></i> ' : '';
 		$mennytPaivat	= (strtotime($this_pvm) < strtotime(date("Y-m-d")))? 'mennytPaivat' : '';
@@ -2383,10 +2384,6 @@ class TyovuorootController extends Controller
 
 		if(empty($osoite) and isset($arvo->kohteet->osoite))
 			$arvo->osoite = $arvo->kohteet->osoite;
-		/*if($arvo->status == 2)
-			//$arvo->osoite = 'MATKA';
-		if($arvo->status == 10)
-			$arvo->osoite = 'LOUNASTAUKO'; */
 		// <-- Return Array
 		if( !$laatikkomuoto ){
 			$arvo->pvm 	= $this_pvm;
@@ -2429,7 +2426,7 @@ class TyovuorootController extends Controller
 		} else {
 			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$osoite.$lisateksti.'</span>';
 		}
-		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto];
+		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto, 'alku' => $arvo->alku, 'loppu' => $arvo->loppu];
 		return $return;
 	}
 
