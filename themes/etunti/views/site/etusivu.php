@@ -1,4 +1,30 @@
 <?php
+		$tids 		= [];
+		$haku_criteria 	= [];
+
+		// <-- Tyoryhmat
+		$tyoryhmat_criteria = '';
+		if( isset(Yii::app()->user->TyoryhmatTyontekijatHelperArray) ){
+			$tids = Yii::app()->user->TyoryhmatTyontekijatHelperArray;
+		}
+		//    Tyoryhmat -->
+
+		$suunniteltu 	= 0;
+		$thisday	= date("Y-m-d");
+		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+		$getAll 	= $tyovuorot[0]->TidfromtoTyovuoroWithVirtual($thisday, $thisday, $tids, false, [2,3,10]);
+		$result 	= 0;
+		foreach($getAll as $tid => $arr){
+			$result += $arr['tyotunnit']['kaikki']+$arr['matkatunnit']['kaikki']+$arr['lounaat']['kaikki'];
+			//echo $result;
+		}
+
+		echo '<pre>';
+		print_r($getAll);
+		echo '<pre>';
+		exit;
+
+exit;
 	$ylittaneetMyohastyneet = $this->ylittaneetMyohastyneet();
 
 	// <-- Change password to bcrypt

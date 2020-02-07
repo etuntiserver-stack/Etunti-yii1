@@ -109,7 +109,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 	<?php echo $form->hiddenField($model,'tid'); ?>
 	<?php echo $form->error($model,'tid'); ?>
 
-<legend>Työvuoron perustiedot</legend>
+<h4>Työvuoron perustiedot</h4>
 <div id="1_tila">
 <div class="row">
   <div class="col-sm-3">
@@ -560,7 +560,6 @@ $(".muokaValiko").click(function() {
 	$criteria->condition = " tv_id!=0 AND tv_id='".$model->id."' AND tid='".$model->tid."' ";
 	$mobile = Mobile::model()->find($criteria);
 ?>
-<p>
 <div class="row">
   <div class="col-sm-3">
     <div class="input-group">
@@ -587,9 +586,7 @@ $(".muokaValiko").click(function() {
     </div>  
   </div>
 </div>
-</p>
 
-<hr>
 
 <div class="row">
 	<div id="lisapalvelu_lista">
@@ -747,13 +744,11 @@ $(document).ready(function(){
     }
 ?>
 
-<br>
 <div id="toistuvaAll" class="collapse">
+ <br><h4><?php echo Yii::t('main','Toistuvan työvuoroketjun asetukset'); ?></h4></p>
  <div class="row">
   <div class="col-sm-12">
    <div class="panel-footer">
-	<legend><?php echo Yii::t('main','Toistuvan työvuoroketjun asetukset'); ?></legend>
-
 	<div class="row" id="alkaen_loppuen">
 	  <div class="col-sm-4">
 		<label><?php echo Yii::t('main', 'Alkaen'); ?> </label>
@@ -794,34 +789,25 @@ $(document).ready(function(){
 	  <?php else: ?>
 	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][1]" id="ma" value="1">
 	  <?php endif; ?>
-
 	  <label><?php echo Yii::t('main', 'Ti'); ?></label>
-
 	  <?php if(in_array(2, $viikko_paivat)): ?>
 	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][2]" id="ti" value="2" checked>
 	  <?php else: ?>
 	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][2]" id="ti" value="2">
 	  <?php endif; ?>
-
-
 	  <label><?php echo Yii::t('main', 'Ke'); ?></label>
-
 	  <?php if(in_array(3, $viikko_paivat)): ?>
 	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][3]" id="ke" value="3" checked>
 	  <?php else: ?>
 	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][3]" id="ke" value="3">
 	  <?php endif; ?>
-	
 	  <label><?php echo Yii::t('main', 'To'); ?></label>
-
 	  <?php if(in_array(4, $viikko_paivat)): ?>
 	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][4]" id="to" value="4" checked>
 	  <?php else: ?>
 	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][4]" id="to" value="4">
 	  <?php endif; ?>
-
 	  <label><?php echo Yii::t('main', 'Pe'); ?></label>
-
 	  <?php if(in_array(5, $viikko_paivat)): ?>
 	  <input type="checkbox" class="sw vkopvmswitch" name="<?=$java_prefix?>[viikko_paivat][5]" id="pe" value="5" checked>
 	  <?php else: ?>
@@ -846,8 +832,6 @@ $(document).ready(function(){
 
 	  </div>
 	</div>
-
-
 	<?php
 		$m_start = new DateTime();
 		$m_start->modify("first day of this month");
@@ -882,7 +866,7 @@ $(document).ready(function(){
 			echo '<span class="btn btn-danger tvpoisto" tilanne="poista_ketju_kokonaan">Poista kaikki. '.( (is_array($tyopaari) and count($tyopaari) > 0)? 'Työparit - '.(count($tyopaari)-1).'kpl' : '' ).'</span>';
 		}
 		?>
-		<?php echo CHtml::Button('Reload',array('class'=>'btn btn-default reload')); ?>
+		<?php /* echo CHtml::Button('Reload',array('class'=>'btn btn-default reload')); */ ?>
 		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
 		<?php 
 	   	$checkLuo = "tyovuorot_1_".Yii::app()->user->adminStatus;

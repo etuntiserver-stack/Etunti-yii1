@@ -654,65 +654,10 @@ class SiteController extends Controller
 		exit;
 	}
 
-	public function actionSuunniteltulistatanaan()
-	{
-	/*
-		$bd = '
-                  <table class="table mbn tc-med-1 tc-bold-last">
-                    <thead>
-                      <tr class="hidden">
-                        <th>#</th>
-                        <th>First Name</th>
-                      </tr>
-                    </thead>
-                    <tbody>';
-
-       		    $criteria = new CDbCriteria();
-       		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i') ASC";
-       		    $criteria->condition = "
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
-			AND alku!='00:00'
-			AND peruutettu=0
-		    ";
-
-		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-        		$criteria->addCondition (" tid IN ($ids)");
-		}
-		//    Tyoryhmat -->
-
-		    $m = Tyovuoroot::model()->findAll($criteria);
-		    if(isset($m[0]))
-		    {
-
-			foreach($m as $data)
-			{
-			     $bd .= '<tr>
-	                        <td>
-	                          '.$data->alku.'-'.$data->loppu.'</td>
-	                        <td>'.$this->etuSukunimi($data->tid).'<br>'.(isset($data->kohteet->osoite)? $data->kohteet->osoite: '').'</td>
-	                      </tr>
-				  ';
-			}
-
-		    }
-
-		$bd .= '
-                    </tbody>
-                  </table>';
-	*/
-		echo json_encode(0);
-	}
-
 	public function actionMail_template()
 	{
 		$this->renderPartial('mail_template');
 	}
-
-
 
 	protected function tasot($num)
 	{
@@ -2076,27 +2021,25 @@ $(document).ready(function(){
 
 	public function actionSuunnitteltutunnittanaan()
 	{
+		$tids 		= [];
+		$haku_criteria 	= [];
+
 		// <-- Tyoryhmat
 		$tyoryhmat_criteria = '';
 		if( isset(Yii::app()->user->TyoryhmatTyontekijatHelperArray) ){
-			$impl = implode(",", Yii::app()->user->TyoryhmatTyontekijatHelperArray);
-			$tyoryhmat_criteria = "tid IN ($impl)";
+			$tids = Yii::app()->user->TyoryhmatTyontekijatHelperArray;
 		}
 		//    Tyoryhmat -->
 
-		$suunniteltu = 0;
+		$suunniteltu 	= 0;
+		$thisday	= date("Y-m-d");
+		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+		$getAll = $tyovuorot[0]->TidfromtoTyovuoroWithVirtual($thisday, $thisday, $tids, false, null, $haku_criteria);
 
-		$query = Yii::app()->db1->createCommand()
-			->select("SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit")
-			->from("sivex_tvuoro")
-			->where("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE() AND loppu!='' and alku!='' AND peruutettu=0 AND ".$this->eiLasketa())
-			->andwhere($tyoryhmat_criteria)
-			->queryRow();
-
-		$suunniteltu = '00:00';
-		if(isset($query['l_tunnit'])){
-			$suunniteltu = $this->sprint($query['l_tunnit']);
-		}
+		echo '<pre>';
+		print_r($getAll);
+		echo '<pre>';
+		exit;
 
                 echo json_encode($suunniteltu);
 		exit;

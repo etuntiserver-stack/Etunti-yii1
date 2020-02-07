@@ -89,8 +89,7 @@ td .latikkoAsetukset{
 	position: relative;
 	font-family: ibm-plex-sans, sans-serif;
 	/*font-size: 80%;*/
-	width: 260px;
-	min-width: 190px;
+	min-width: 120px;
 	padding: 5px 7px;
 	min-height: 40px;
 	max-height: 370px; overflow-y: auto;

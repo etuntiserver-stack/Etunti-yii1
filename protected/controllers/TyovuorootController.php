@@ -249,6 +249,7 @@ class TyovuorootController extends Controller
 
 	protected function TidfromtoTyovuoroWithVirtual($from, $to, $tids, $by_pvm, $status)
 	{
+		$result = [];
 		$asetukset = AsetuksetForAll::model()->findbypk(1);
 
 		// <-- Pyhapaivat
@@ -290,9 +291,10 @@ class TyovuorootController extends Controller
 			];
 		}
 
-		$from = date("Y-m-d", strtotime($from));
-		$to = date("Y-m-d", strtotime($to));
-		$tv_arr = $this->tv_arr($from, $to, $tids, [], false);
+		$from 		= date("Y-m-d", strtotime($from));
+		$to 		= date("Y-m-d", strtotime($to));
+		$haku_criteria	= $this->eiLasketa(). " AND peruutettu!=0";
+		$tv_arr 	= $this->tv_arr($from, $to, $tids, [], false);
 
 		foreach ($tv_arr as $tid => $arr) {
 			foreach ($arr as $pvm => $arr2) {
@@ -310,11 +312,8 @@ class TyovuorootController extends Controller
 					if($status !== null and !in_array($attributes[0]['data']['status'], $status))
 						continue;
 					if($by_pvm){
-						$eilasketa = $this->eiLasketaSubStr($attributes[0]['data']['tyoajanmerkinta']);
-						if($eilasketa != true){
-							$result[$tid][$pvm] += $tunnit_yht;
-							continue;
-						}
+						$result[$tid][$pvm] += $tunnit_yht;
+						continue;
 					}
 					// Iltatunnit 18-23
 					if ($alku_hm < 2300 && $loppu_hm > 1800) {
@@ -399,6 +398,13 @@ class TyovuorootController extends Controller
 		// echo '<pre>' . print_r($result, true) . '</pre>';
 
 		return $result;
+	}
+
+	public function eiLasketa(){
+		$return = "
+		(tyoajanmerkinta NOT LIKE '%Ei lasketa%' AND tyoajanmerkinta NOT LIKE '%Varallaolo%')
+		";
+		return $return;
 	}
 
 	protected function TPBetweenTvAll($from,$to,$tids){
@@ -2377,10 +2383,10 @@ class TyovuorootController extends Controller
 
 		if(empty($osoite) and isset($arvo->kohteet->osoite))
 			$arvo->osoite = $arvo->kohteet->osoite;
-		if($arvo->status == 2)
-			$arvo->osoite = 'MATKA';
+		/*if($arvo->status == 2)
+			//$arvo->osoite = 'MATKA';
 		if($arvo->status == 10)
-			$arvo->osoite = 'LOUNASTAUKO';
+			$arvo->osoite = 'LOUNASTAUKO'; */
 		// <-- Return Array
 		if( !$laatikkomuoto ){
 			$arvo->pvm 	= $this_pvm;
@@ -3817,7 +3823,7 @@ class TyovuorootController extends Controller
 			'.Yii::t('main', 'Työvuoron suunnittelu').': '.$this->etuSukunimi($tid).' <span class="kohteen_lisatiedot"></span>
 		      </span>
 	            </div>
-	              <div class="panel-body p25">
+	              <div class="panel-body">
 			'.((isset($oikeus))?$oikeus:'').'
 			'.$this->renderPartial('_form4',
 				array(

@@ -1097,12 +1097,10 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
 	      <!-- Nakyma -->
               <li class="p10" data-toggle="tooltip">
 	      <select class="form-control tvchange" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Valitse näkymä'); ?>">
- 	        <?php if($curpage != 'tyovuoroot/index' and $curpage != 'tyovuoroot/tv3' and $curpage != 'tyovuoroot/beta'): ?>
+ 	        <?php if($curpage != 'tyovuoroot/beta'): ?>
 		<option value=><?php echo Yii::t('main', 'Työvuoro näkymä'); ?></option>
 		<?php endif; ?>
- 	        <option value="index" <?php if($curpage == 'tyovuoroot/index') echo 'selected'; ?>><?php echo Yii::t('main', 'VIIKKO'); ?></option>
- 	        <option value="tv3" <?php if($curpage == 'tyovuoroot/tv3') echo 'selected'; ?>><?php echo Yii::t('main', 'TYÖNTEKIJÄ'); ?></option>
- 	        <option value="beta" <?php if($curpage == 'tyovuoroot/beta') echo 'selected'; ?>><?php echo Yii::t('main', 'Työvuorot ( NOPEA )'); ?></option>
+ 	        <option value="beta" <?php if($curpage == 'tyovuoroot/beta') echo 'selected'; ?>><?php echo Yii::t('main', 'VIKKO'); ?></option>
 	      </select>
               </li>
 	      <!-- Nakyma -->
