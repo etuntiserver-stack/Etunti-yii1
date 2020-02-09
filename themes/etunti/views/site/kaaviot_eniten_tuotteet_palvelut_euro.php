@@ -18,7 +18,7 @@ $from = date('Y-m-d', isset($_POST['eniten_tuotteet_palvelut_euro_from'])
 $to = date('Y-m-d', isset($_POST['eniten_tuotteet_palvelut_euro_to'])
   ? strtotime($_POST['eniten_tuotteet_palvelut_euro_to'])
   : time());
-$type = $_POST['eniten_tuotteet_palvelut_euro_type'] ?? 'column';
+$chart_type = $_POST['eniten_tuotteet_palvelut_euro_type'] ?? 'column';
 
 $from_formated = date("d.m.Y", strtotime($from));
 $to_formated = date("d.m.Y", strtotime($to));
@@ -115,6 +115,21 @@ for ($i = 1; $i <= 10; $i++) {
       exporting: {
         enabled: true
       }
-    });
+    }, [{
+        id: 'eniten_tuotteet_palvelut_euro_from',
+        type: 'date',
+        default: '<?= $from_formated ?>'
+      },
+      {
+        id: 'eniten_tuotteet_palvelut_euro_to',
+        type: 'date',
+        default: '<?= $to_formated ?>'
+      },
+      {
+        id: 'eniten_tuotteet_palvelut_euro_type',
+        type: 'chart_type',
+        default: '<?= $chart_type ?>'
+      }
+    ]);
   });
 </script>

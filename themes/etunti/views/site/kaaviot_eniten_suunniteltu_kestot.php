@@ -18,7 +18,7 @@ $from = date('Y-m-d', isset($_POST['eniten_suunniteltu_kestot_from'])
 $to = date('Y-m-d', isset($_POST['eniten_suunniteltu_kestot_to'])
   ? strtotime($_POST['eniten_suunniteltu_kestot_to'])
   : time());
-$type = $_POST['eniten_suunniteltu_kestot_type'] ?? 'column';
+$chart_type = $_POST['eniten_suunniteltu_kestot_type'] ?? 'column';
 
 $from_formated = date("d.m.Y", strtotime($from));
 $to_formated = date("d.m.Y", strtotime($to));
@@ -114,6 +114,21 @@ for ($i = 1; $i <= $kpl_maara; $i++) {
       exporting: {
         enabled: true
       }
-    });
+    }, [{
+        id: 'eniten_suunniteltu_kestot_from',
+        type: 'date',
+        default: '<?= $from_formated ?>'
+      },
+      {
+        id: 'eniten_suunniteltu_kestot_to',
+        type: 'date',
+        default: '<?= $to_formated ?>'
+      },
+      {
+        id: 'eniten_suunniteltu_kestot_type',
+        type: 'chart_type',
+        default: '<?= $chart_type ?>'
+      }
+    ]);
   });
 </script>

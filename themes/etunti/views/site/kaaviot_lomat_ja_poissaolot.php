@@ -20,7 +20,7 @@ $to = date('Y-m-d', isset($_POST['lomat_ja_poissaolot_to'])
   ? strtotime($_POST['lomat_ja_poissaolot_to'])
   : time());
 $worker_id = $_POST['lomat_ja_poissaolot_worker_id'] ?? 0;
-$type = $_POST['lomat_ja_poissaolot_type'] ?? 'bar';
+$chart_type = $_POST['lomat_ja_poissaolot_type'] ?? 'bar';
 
 $from_formated = date("d.m.Y", strtotime($from));
 $to_formated = date("d.m.Y", strtotime($to));
@@ -101,7 +101,7 @@ foreach ($tv as $v) {
       {
         id: 'lomat_ja_poissaolot_type',
         type: 'chart_type',
-        default: '<?= $type ?>'
+        default: '<?= $chart_type ?>'
       },
       {
         id: 'lomat_ja_poissaolot_from',

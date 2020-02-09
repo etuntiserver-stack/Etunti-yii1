@@ -18,7 +18,7 @@ $from = date('Y-m-d', isset($_POST['tyovuorojen_maara_from'])
 $to = date('Y-m-d', isset($_POST['tyovuorojen_maara_to'])
   ? strtotime($_POST['tyovuorojen_maara_to'])
   : time());
-$type = $_POST['tyovuorojen_maara_type'] ?? 'line';
+$chart_type = $_POST['tyovuorojen_maara_type'] ?? 'line';
 
 $from_formated = date("d.m.Y", strtotime($from));
 $to_formated = date("d.m.Y", strtotime($to));
@@ -62,7 +62,7 @@ foreach ($asiakkaat as $v) {
   $(function() {
     add_chart_container({
       chart: {
-        type: '<?= $type ?>'
+        type: '<?= $chart_type ?>'
       },
       title: {
         text: 'Työvuorojen määrä <?= "$from_formated-$to_formated" ?>'
@@ -90,7 +90,7 @@ foreach ($asiakkaat as $v) {
     }, [{
         id: 'tyovuorojen_maara_type',
         type: 'chart_type',
-        default: '<?= $type ?>'
+        default: '<?= $chart_type ?>'
       },
       {
         id: 'tyovuorojen_maara_from',

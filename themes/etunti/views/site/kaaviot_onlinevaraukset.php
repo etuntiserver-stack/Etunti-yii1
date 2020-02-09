@@ -20,7 +20,7 @@ $to = date('Y-m-d', isset($_POST['onlinevaraukset_to'])
   ? strtotime($_POST['onlinevaraukset_to'])
   : time());
 $customer_id = $_POST['onlinevaraukset_customer_id'] ?? 0;
-$type = $_POST['onlinevaraukset_type'] ?? 'line';
+$chart_type = $_POST['onlinevaraukset_type'] ?? 'line';
 
 $from_formated = date("d.m.Y", strtotime($from));
 $to_formated = date("d.m.Y", strtotime($to));
@@ -82,6 +82,21 @@ foreach ($onlinevaraus as $item) {
       exporting: {
         enabled: true
       }
-    });
+    }/* , [{
+        id: 'tyovuorojen_maara_from',
+        type: 'date',
+        default: '<?= $from_formated ?>'
+      },
+      {
+        id: 'tyovuorojen_maara_to',
+        type: 'date',
+        default: '<?= $to_formated ?>'
+      },
+      {
+        id: 'tyovuorojen_maara_type',
+        type: 'chart_type',
+        default: '<?= $chart_type ?>'
+      }
+    ] */);
   });
 </script>

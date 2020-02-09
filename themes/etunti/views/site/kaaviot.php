@@ -394,7 +394,52 @@ function output_chart_menu()
 									<i class="arrow double"></i>
 								</label>
 							</div>
-						`
+						`;
+						break;
+
+						// customer_auto: Auto-complete text field for customers (asiakkaat).
+					case 'customer_auto':
+						<?php
+						$customer_auto_field = $this->widget('zii.widgets.jui.CJuiAutoComplete', [
+							'name' => 'customer_auto_temp', // will be replaced by calling chart via jquery next
+							'id' => 'customer_auto_' . rand(10000, 99999), // set random id, as it will not be used, and out of the way of .replace().
+							'value' => 'asiakas_value',
+							'source' => $this->createUrl('autocomplete', ['model' => 'Asiakkaat', 'sarake' => json_encode(['yrityksen_nimi', 'yhteyshenkilo'])]),
+							'options' => ['minLength' => '2'],
+							'htmlOptions' => [
+								'showAnim' => 'fold',
+								'class' => 'gui-input autocomplete_valikko',
+								'placeholder' => Yii::t('main', 'Asiakas'),
+							],
+						], true);
+						?>
+
+						content += `
+							<div class="${inputs_class}" id="${v.id}_container">
+								<?= $customer_auto_field ?>
+							</div>
+						`;
+
+						// For now, use .replace() to set name and value for the field.
+						// There is a better way to do this, but this works just fine.
+						content = content.replace('customer_auto_temp', v.id)
+							.replace('asiakas_value', v.default);
+
+						break;
+
+						// approved: Hyväksytyt (true) || Kaikki (false)
+					case 'approved':
+						content += `
+							<div class="${inputs_class}">
+								<label class="field select">
+									<select name="${v.id}" class="gui-input">
+										<option value=1 ` + (v.default ? 'selected' : '') + `>Hyväksytyt</option>
+										<option value=0 ` + (!v.default ? 'selected' : '') + `>Kaikki</option>
+									</select>
+									<i class="arrow double"></i>
+								</label>
+							</div>
+						`;
 						break;
 				}
 			});

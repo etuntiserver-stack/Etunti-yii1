@@ -20,7 +20,7 @@ $to = date('Y-m-d', isset($_POST['lahetetut_laskut_maara_summa_to'])
   ? strtotime($_POST['lahetetut_laskut_maara_summa_to'])
   : time());
 $customer_id = $_POST['lahetetut_laskut_maara_summa_customer_id'] ?? 0;
-$type = $_POST['lahetetut_laskut_maara_summa_type'] ?? 'line';
+$chart_type = $_POST['lahetetut_laskut_maara_summa_type'] ?? 'line';
 
 $from_formated = date("d.m.Y", strtotime($from));
 $to_formated = date("d.m.Y", strtotime($to));
@@ -102,6 +102,26 @@ foreach ($lasku as $item) {
       exporting: {
         enabled: true
       }
-    });
+    }, [{
+        id: 'lahetetut_laskut_maara_summa_from',
+        type: 'date',
+        default: '<?= $from_formated ?>'
+      },
+      {
+        id: 'lahetetut_laskut_maara_summa_to',
+        type: 'date',
+        default: '<?= $to_formated ?>'
+      },
+      {
+        id: 'lahetetut_laskut_maara_summa_customer_id',
+        type: 'customer_auto',
+        default: '<?= $customer_id ?>'
+      },
+      {
+        id: 'lahetetut_laskut_maara_summa_type',
+        type: 'chart_type',
+        default: '<?= $chart_type ?>'
+      }
+    ]);
   });
 </script>

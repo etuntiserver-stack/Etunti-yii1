@@ -18,7 +18,7 @@ $from = date('Y-m-d', isset($_POST['liikevaihto_arvokkaimmat_asiakkaat_from'])
 $to = date('Y-m-d', isset($_POST['liikevaihto_arvokkaimmat_asiakkaat_to'])
   ? strtotime($_POST['liikevaihto_arvokkaimmat_asiakkaat_to'])
   : time());
-$type = $_POST['liikevaihto_arvokkaimmat_asiakkaat_type'] ?? 'column';
+$chart_type = $_POST['liikevaihto_arvokkaimmat_asiakkaat_type'] ?? 'column';
 
 $from_formated = date("d.m.Y", strtotime($from));
 $to_formated = date("d.m.Y", strtotime($to));
@@ -114,6 +114,21 @@ for ($i = 1; $i <= $kpl_maara; $i++) {
       exporting: {
         enabled: true
       }
-    });
+    }/* , [{
+        id: 'tyovuorojen_maara_from',
+        type: 'date',
+        default: '<?= $from_formated ?>'
+      },
+      {
+        id: 'tyovuorojen_maara_to',
+        type: 'date',
+        default: '<?= $to_formated ?>'
+      },
+      {
+        id: 'tyovuorojen_maara_type',
+        type: 'chart_type',
+        default: '<?= $chart_type ?>'
+      }
+    ] */);
   });
 </script>

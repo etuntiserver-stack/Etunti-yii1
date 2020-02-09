@@ -19,8 +19,8 @@ $from = date('Y-m-d', isset($_POST['tyontekijat_eniten_tunteja_from'])
 $to = date('Y-m-d', isset($_POST['tyontekijat_eniten_tunteja_to'])
   ? strtotime($_POST['tyontekijat_eniten_tunteja_to'])
   : time());
-$approved = $_POST['tyontekijat_eniten_tunteja_approved'] ?? true;
-$type = $_POST['tyontekijat_eniten_tunteja_type'] ?? 'bar';
+$approved = ($_POST['tyontekijat_eniten_tunteja_approved'] ?? true) == true;
+$chart_type = $_POST['tyontekijat_eniten_tunteja_type'] ?? 'bar';
 
 $from_formated = date("d.m.Y", strtotime($from));
 $to_formated = date("d.m.Y", strtotime($to));
@@ -149,6 +149,21 @@ foreach (array_reverse($new_arr) as $item) {
       exporting: {
         enabled: true
       }
-    });
+    }/* , [{
+        id: 'tyovuorojen_maara_from',
+        type: 'date',
+        default: '<?= $from_formated ?>'
+      },
+      {
+        id: 'tyovuorojen_maara_to',
+        type: 'date',
+        default: '<?= $to_formated ?>'
+      },
+      {
+        id: 'tyovuorojen_maara_type',
+        type: 'chart_type',
+        default: '<?= $chart_type ?>'
+      }
+    ] */);
   });
 </script>

@@ -18,7 +18,7 @@ $from = date('Y-m-d', isset($_POST['uudet_lopettaneet_asiakkaat_kpl_from'])
 $to = date('Y-m-d', isset($_POST['uudet_lopettaneet_asiakkaat_kpl_to'])
   ? strtotime($_POST['uudet_lopettaneet_asiakkaat_kpl_to'])
   : time());
-$type = $_POST['uudet_lopettaneet_asiakkaat_kpl_type'] ?? 'bar';
+$chart_type = $_POST['uudet_lopettaneet_asiakkaat_kpl_type'] ?? 'bar';
 
 $from_formated = date("d.m.Y", strtotime($from));
 $to_formated = date("d.m.Y", strtotime($to));
@@ -65,7 +65,7 @@ foreach ($period as $dt) {
   $(function() {
     add_chart_container({
       chart: {
-        type: '<?= $type ?>'
+        type: '<?= $chart_type ?>'
       },
       title: {
         text: 'Uudet ja lopettaneet asiakkaat'
@@ -99,7 +99,7 @@ foreach ($period as $dt) {
     }, [{
         id: 'uudet_lopettaneet_asiakkaat_kpl_type',
         type: 'chart_type',
-        default: '<?= $type ?>'
+        default: '<?= $chart_type ?>'
       },
       {
         id: 'uudet_lopettaneet_asiakkaat_kpl_from',

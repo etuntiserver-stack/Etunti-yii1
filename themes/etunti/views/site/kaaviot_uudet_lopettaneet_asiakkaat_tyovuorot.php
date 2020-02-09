@@ -18,7 +18,7 @@ $from = date('Y-m-d', isset($_POST['uudet_lopettaneet_asiakkaat_tyovuorot_from']
 $to = date('Y-m-d', isset($_POST['uudet_lopettaneet_asiakkaat_tyovuorot_to'])
   ? strtotime($_POST['uudet_lopettaneet_asiakkaat_tyovuorot_to'])
   : time());
-$type = $_POST['uudet_lopettaneet_asiakkaat_tyovuorot_type'] ?? 'column';
+$chart_type = $_POST['uudet_lopettaneet_asiakkaat_tyovuorot_type'] ?? 'column';
 
 $from_formated = date("d.m.Y", strtotime($from));
 $to_formated = date("d.m.Y", strtotime($to));
@@ -110,6 +110,21 @@ foreach ($period as $dt) {
       exporting: {
         enabled: true
       }
-    });
+    }, [{
+        id: 'uudet_lopettaneet_asiakkaat_tyovuorot_from',
+        type: 'date',
+        default: '<?= $from_formated ?>'
+      },
+      {
+        id: 'uudet_lopettaneet_asiakkaat_tyovuorot_to',
+        type: 'date',
+        default: '<?= $to_formated ?>'
+      },
+      {
+        id: 'uudet_lopettaneet_asiakkaat_tyovuorot_type',
+        type: 'chart_type',
+        default: '<?= $chart_type ?>'
+      }
+    ]);
   });
 </script>
