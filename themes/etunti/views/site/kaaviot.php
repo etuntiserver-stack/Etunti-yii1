@@ -88,6 +88,19 @@ function output_chart_menu()
 		'toggle_eniten_tuotteet_palvelut_euro' => 'Eniten tuotteet ja palvelut euro'
 	];
 
+	// Enable a few charts by default, if no selections have been made. Two charts
+	// are enabled by default for now, because 4 can be heavy on big environments.
+	if (empty($_POST)) {
+		$toggles_default = [
+			'toggle_tyovuorojen_maara',
+			'toggle_tunnit',
+			// 'toggle_lahetetut_laskut_maara_summa',
+			// 'toggle_liikevaihto_arvokkaimmat_asiakkaat'
+		];
+		foreach ($toggles_default as $default_toggle_name)
+			$_POST[$default_toggle_name] = 'on';
+	}
+
 	foreach ($toggles as $toggle_id => $label) {
 		$is_checked = isset($_POST[$toggle_id]) ? 'checked="checked"' : '';
 		echo <<<EOD
