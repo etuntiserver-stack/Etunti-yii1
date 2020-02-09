@@ -1,4 +1,28 @@
 <?php
+
+/**
+ * Kaavio: Liikevaihto arvokkaimmat asiakkaat.
+ * For use in kaaviot.php (@see actionKaaviot()).
+ *
+ * @var $this AsiakkaatController
+ *
+ * Expected variables inside $_POST:
+ *   liikevaihto_arvokkaimmat_asiakkaat_from  Chart start date
+ *   liikevaihto_arvokkaimmat_asiakkaat_to    Chart end date
+ *   liikevaihto_arvokkaimmat_asiakkaat_type  Chart type
+ */
+
+$from = date('Y-m-d', isset($_POST['liikevaihto_arvokkaimmat_asiakkaat_from'])
+  ? strtotime($_POST['liikevaihto_arvokkaimmat_asiakkaat_from'])
+  : strtotime('-1year', time()));
+$to = date('Y-m-d', isset($_POST['liikevaihto_arvokkaimmat_asiakkaat_to'])
+  ? strtotime($_POST['liikevaihto_arvokkaimmat_asiakkaat_to'])
+  : time());
+$chart_type = $_POST['liikevaihto_arvokkaimmat_asiakkaat_type'] ?? 'column';
+
+$from_formated = date("d.m.Y", strtotime($from));
+$to_formated = date("d.m.Y", strtotime($to));
+
 $categories = array();
 $begin = new DateTime(date("Y-m-d", strtotime($from)));
 $end = new DateTime(date("Y-m-d", strtotime($to)));
@@ -56,7 +80,7 @@ for ($i = 1; $i <= $kpl_maara; $i++) {
         text: 'Liikevaihto arvokkaimmat asiakkaat'
       },
       subtitle: {
-        text: '<?= (isset($_GET["yrityksen_nimi"]) and !empty($_GET["yrityksen_nimi"])) ? $_GET["yrityksen_nimi"] : "Kaikki asiakkaat" ?>'
+        text: '<?= (!empty($customer_name)) ? $customer_name : "Kaikki asiakkaat" ?>'
       },
       xAxis: {
         categories: JSON.parse('<?= json_encode(array_values($categories)) ?>')
@@ -90,6 +114,21 @@ for ($i = 1; $i <= $kpl_maara; $i++) {
       exporting: {
         enabled: true
       }
-    });
+    }, [{
+        id: 'liikevaihto_arvokkaimmat_asiakkaat_from',
+        type: 'date',
+        default: '<?= $from_formated ?>'
+      },
+      {
+        id: 'liikevaihto_arvokkaimmat_asiakkaat_to',
+        type: 'date',
+        default: '<?= $to_formated ?>'
+      },
+      {
+        id: 'liikevaihto_arvokkaimmat_asiakkaat_type',
+        type: 'chart_type',
+        default: '<?= $chart_type ?>'
+      }
+    ]);
   });
 </script>

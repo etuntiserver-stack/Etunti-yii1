@@ -55,8 +55,52 @@
 
 <?php
 
-// var_dump($_POST);
-// exit;
+/**
+ * Output chart toggles in place, using bootstrap layout (row => col-12).
+ *
+ * This is generally used inside the toggle popup menu, but can be used from
+ * elsewhere, too.
+ *
+ * The function (as opposed to plain html code) serves two purposes:
+ *   1. Toggles can be printed in multiple places without duplicate code, and
+ *   2. Local variables, to not interfere with other code.
+ *
+ * Note that, if creating another form for the options, the form id should be
+ * provided to the same jQuery selector as #chart-options-form, where items in
+ * $_POST are appended to the form to preserve choices.
+ */
+function output_chart_menu()
+{
+	$toggles = [
+		'toggle_tyovuorojen_maara' => 'Työvuorojen määrä ajanjaksolla',
+		//'toggle_lomat_ja_poissaolot' => 'Lomat ja poissaolot', // Not working yet, to be fixed.
+		'toggle_uudet_lopettaneet_asiakkaat_kpl' => 'Uudet ja lopettaneet asiakkaat: KPL määrä',
+		'toggle_uudet_lopettaneet_asiakkaat_tyovuorot' => 'Uudet ja lopettaneet asiakkaat: Suunnitellut työvuorot',
+		'toggle_tyontekijat_eniten_tunteja' => 'Työntekijät, joilla eniten hyväksyttyjä tunteja',
+		'toggle_asiakkaat_eniten_tunteja' => 'Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja',
+		'toggle_tunnit' => 'Suunnitellut, luetut ja hyväksytyt tunnit',
+		'toggle_eniten_suunniteltu_kestot' => 'Eniten suunniteltu työvuoro: Kestot',
+		'toggle_eniten_suunniteltu_kpl' => 'Eniten suunniteltu työvuoro: KPL',
+		'toggle_lahetetut_laskut_maara_summa' => 'Lähetettyjen laskujen määrä ja summa',
+		'toggle_liikevaihto_arvokkaimmat_asiakkaat' => 'Liikevaihto arvokkaimmat asiakkaat',
+		'toggle_tyontekijat' => 'Työntekijät',
+		'toggle_onlinevaraukset' => 'Onlinevaraukset',
+		'toggle_eniten_tuotteet_palvelut_euro' => 'Eniten tuotteet ja palvelut euro'
+	];
+
+	foreach ($toggles as $toggle_id => $label) {
+		$is_checked = isset($_POST[$toggle_id]) ? 'checked="checked"' : '';
+		echo <<<EOD
+			<div class="row m10">
+				<div class="col-sm-12">
+					<label class="checkbox-inline">
+						<input type="checkbox" $is_checked name="$toggle_id" id="$toggle_id"> $label
+					</label>
+				</div>
+			</div>
+		EOD;
+	}
+}
 
 ?>
 
@@ -76,104 +120,11 @@
 				 that modified values are added to it as hidden inputs. This way,
 				 modified values and selected charts are preserved between reloads. -->
 		<form id="chart-options-form" action="#" method="POST">
-			<div class="row m10">
-				<div class="col-sm-12">
-					<label class="checkbox-inline">
-						<input type="checkbox" <?php if (isset($_POST['toggle_tyovuorojen_maara'])) echo 'checked="checked"'; ?> name="toggle_tyovuorojen_maara" id="toggle_tyovuorojen_maara"> Työvuorojen määrä ajanjaksolla
-					</label>
-				</div>
-			</div>
-			<!-- <div class="row m10">
-				<div class="col-sm-12">
-					<label class="checkbox-inline">
-						<input type="checkbox" <?php if (isset($_POST['toggle_lomat_ja_poissaolot'])) echo 'checked="checked"'; ?> name="toggle_lomat_ja_poissaolot" id="toggle_lomat_ja_poissaolot"> Lomat ja poissaolot
-					</label>
-				</div>
-			</div> -->
-			<div class="row m10">
-				<div class="col-sm-12">
-					<label class="checkbox-inline">
-						<input type="checkbox" <?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_kpl'])) echo 'checked="checked"'; ?> name="toggle_uudet_lopettaneet_asiakkaat_kpl" id="toggle_uudet_lopettaneet_asiakkaat_kpl"> Uudet ja lopettaneet asiakkaat: KPL määrä
-					</label>
-				</div>
-			</div>
-			<div class="row m10">
-				<div class="col-sm-12">
-					<label class="checkbox-inline">
-						<input type="checkbox" <?php if (isset($_POST['toggle_uudet_lopettaneet_asiakkaat_tyovuorot'])) echo 'checked="checked"'; ?> name="toggle_uudet_lopettaneet_asiakkaat_tyovuorot" id="toggle_uudet_lopettaneet_asiakkaat_tyovuorot"> Uudet ja lopettaneet asiakkaat: Suunnitellut työvuorot
-					</label>
-				</div>
-			</div>
-			<div class="row m10">
-				<div class="col-sm-12">
-					<label class="checkbox-inline">
-						<input type="checkbox" <?php if (isset($_POST['toggle_tyontekijat_eniten_tunteja'])) echo 'checked="checked"'; ?> name="toggle_tyontekijat_eniten_tunteja" id="toggle_tyontekijat_eniten_tunteja"> Työntekijät, joilla eniten hyväksyttyjä tunteja
-					</label>
-				</div>
-			</div>
-			<div class="row m10">
-				<div class="col-sm-12">
-					<label class="checkbox-inline">
-						<input type="checkbox" <?php if (isset($_POST['toggle_asiakkaat_eniten_tunteja'])) echo 'checked="checked"'; ?> name="toggle_asiakkaat_eniten_tunteja" id="toggle_asiakkaat_eniten_tunteja"> Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja
-					</label>
-				</div>
-			</div>
-			<div class="row m10">
-				<div class="col-sm-12">
-					<label class="checkbox-inline">
-						<input type="checkbox" <?php if (isset($_POST['toggle_tunnit'])) echo 'checked="checked"'; ?> name="toggle_tunnit" id="toggle_tunnit"> Suunnitellut, luetut ja hyväksytyt tunnit
-					</label>
-				</div>
-			</div>
-			<div class="row m10">
-				<div class="col-sm-12">
-					<label class="checkbox-inline">
-						<input type="checkbox" <?php if (isset($_POST['toggle_eniten_suunniteltu_kestot'])) echo 'checked="checked"'; ?> name="toggle_eniten_suunniteltu_kestot" id="toggle_eniten_suunniteltu_kestot"> Eniten suunniteltu työvuoro: Kestot
-					</label>
-				</div>
-			</div>
-			<div class="row m10">
-				<div class="col-sm-12">
-					<label class="checkbox-inline">
-						<input type="checkbox" <?php if (isset($_POST['toggle_eniten_suunniteltu_kpl'])) echo 'checked="checked"'; ?> name="toggle_eniten_suunniteltu_kpl" id="toggle_eniten_suunniteltu_kpl"> Eniten suunniteltu työvuoro: KPL
-					</label>
-				</div>
-			</div>
-			<div class="row m10">
-				<div class="col-sm-12">
-					<label class="checkbox-inline">
-						<input type="checkbox" <?php if (isset($_POST['toggle_lahetetut_laskut_maara_summa'])) echo 'checked="checked"'; ?> name="toggle_lahetetut_laskut_maara_summa" id="toggle_lahetetut_laskut_maara_summa"> Lähetettyjen laskujen määrä ja summa
-					</label>
-				</div>
-			</div>
-			<div class="row m10">
-				<div class="col-sm-12">
-					<label class="checkbox-inline">
-						<input type="checkbox" <?php if (isset($_POST['toggle_liikevaihto_arvokkaimmat_asiakkaat'])) echo 'checked="checked"'; ?> name="toggle_liikevaihto_arvokkaimmat_asiakkaat" id="toggle_liikevaihto_arvokkaimmat_asiakkaat"> Liikevaihto arvokkaimmat asiakkaat
-					</label>
-				</div>
-			</div>
-			<div class="row m10">
-				<div class="col-sm-12">
-					<label class="checkbox-inline">
-						<input type="checkbox" <?php if (isset($_POST['toggle_tyontekijat'])) echo 'checked="checked"'; ?> name="toggle_tyontekijat" id="toggle_tyontekijat"> Työntekijät
-					</label>
-				</div>
-			</div>
-			<div class="row m10">
-				<div class="col-sm-12">
-					<label class="checkbox-inline">
-						<input type="checkbox" <?php if (isset($_POST['toggle_onlinevaraukset'])) echo 'checked="checked"'; ?> name="toggle_onlinevaraukset" id="toggle_onlinevaraukset"> Onlinevaraukset
-					</label>
-				</div>
-			</div>
-			<div class="row m10">
-				<div class="col-sm-12">
-					<label class="checkbox-inline">
-						<input type="checkbox" <?php if (isset($_POST['toggle_eniten_tuotteet_palvelut_euro'])) echo 'checked="checked"'; ?> name="toggle_eniten_tuotteet_palvelut_euro" id="toggle_eniten_tuotteet_palvelut_euro"> Eniten tuotteet ja palvelut euro
-					</label>
-				</div>
-			</div>
+
+			<!-- Print chart toggles -->
+			<?php output_chart_menu(); ?>
+
+			<!-- Other selections -->
 			<div class="row mt15">
 				<div class="col-sm-6">
 					<select class="form-control" name="row_count">
@@ -343,7 +294,7 @@
 
 			// Remove any and all chart_type inputs if 'notype' is selected in the
 			// chart settings menu setting 'selections'.
-			<?php if ($_POST['selections'] ?? '' == 'notype') : ?>
+			<?php if (($_POST['selections'] ?? '') == 'notype') : ?>
 				inputs = inputs.filter(function(obj) {
 					return obj.type !== 'chart_type';
 				});
@@ -443,7 +394,52 @@
 									<i class="arrow double"></i>
 								</label>
 							</div>
-						`
+						`;
+						break;
+
+						// customer_auto: Auto-complete text field for customers (asiakkaat).
+					case 'customer_auto':
+						<?php
+						$customer_auto_field = $this->widget('zii.widgets.jui.CJuiAutoComplete', [
+							'name' => 'customer_auto_temp', // will be replaced by calling chart via jquery next
+							'id' => 'customer_auto_' . rand(10000, 99999), // set random id, as it will not be used, and out of the way of .replace().
+							'value' => 'asiakas_value',
+							'source' => $this->createUrl('autocomplete', ['model' => 'Asiakkaat', 'sarake' => json_encode(['yrityksen_nimi', 'yhteyshenkilo'])]),
+							'options' => ['minLength' => '2'],
+							'htmlOptions' => [
+								'showAnim' => 'fold',
+								'class' => 'gui-input autocomplete_valikko',
+								'placeholder' => Yii::t('main', 'Asiakas'),
+							],
+						], true);
+						?>
+
+						content += `
+							<div class="${inputs_class}" id="${v.id}_container">
+								<?= $customer_auto_field ?>
+							</div>
+						`;
+
+						// For now, use .replace() to set name and value for the field.
+						// There is a better way to do this, but this works just fine.
+						content = content.replace('customer_auto_temp', v.id)
+							.replace('asiakas_value', v.default);
+
+						break;
+
+						// approved_only: Vain hyväksytyt (true) || Kaikki (false)
+					case 'approved_only':
+						content += `
+							<div class="${inputs_class}">
+								<label class="field select">
+									<select name="${v.id}" class="gui-input">
+										<option value=1 ` + (v.default ? 'selected' : '') + `>Hyväksytyt</option>
+										<option value=0 ` + (!v.default ? 'selected' : '') + `>Kaikki</option>
+									</select>
+									<i class="arrow double"></i>
+								</label>
+							</div>
+						`;
 						break;
 				}
 			});
@@ -468,25 +464,57 @@
 
 <?php
 /*******************************************************************************
+ *? Common // shared variables for charts
+ ******************************************************************************/
+
+/** TyovuorootController object. */
+$tyovuoroot = Yii::app()->createController('Tyovuoroot')[0];
+
+/** Array of month labels for charts to use. */
+$months = array(
+	1 => Yii::t('main', 'Tammikuu'),
+	2 => Yii::t('main', 'Helmikuu'),
+	3 => Yii::t('main', 'Maaliskuu'),
+	4 => Yii::t('main', 'Huhtikuu'),
+	5 => Yii::t('main', 'Toukokuu'),
+	6 => Yii::t('main', 'Kesäkuu'),
+	7 => Yii::t('main', 'Heinäkuu'),
+	8 => Yii::t('main', 'Elokuu'),
+	9 => Yii::t('main', 'Syyskuu'),
+	10 => Yii::t('main', 'Lokakuu'),
+	11 => Yii::t('main', 'Marraskuu'),
+	12 => Yii::t('main', 'Joulukuu')
+);
+
+// Random variable used in a few charts. This will be removed soon. Selection is
+// not available for now.
+$kpl_maara = 10;
+
+/*******************************************************************************
  *? Render the views that handle the selected charts.
  *? View names are the same as toggle names, with "toggle_" => "kaaviot_".
  ******************************************************************************/
 foreach ($_POST as $key => $value) {
+
+	// Split chart name at first underscore to find the actual chart view name.
+	// For example: toggle_onlinevaraukset => [1]:'onlinevaraukset' => 'kaaviot_onlinevaraukset'.
 	$exp_key = explode('_', $key, 2);
+
+	// Check that naming of the entry is valid, and that the chart is enabled.
 	if (!$exp_key || $exp_key[0] != 'toggle' || count($exp_key) < 2 || $value != 'on')
 		continue;
+
+	// Set final expected view name of the chart.
 	$view_name = "kaaviot_" . $exp_key[1];
-	if (!$this->getViewFile($view_name)) {
-		// TODO: Log, view not found; error in code.
-		continue;
-	}
+
+	// Ensure the view exists. If not, the form is configured incorrectly.
+	if (!$this->getViewFile($view_name))
+		throw new CHttpException(404, "Pyydettyä kaaviota ei löydetty. Ongelmasta on ilmoitettu ylläpitoon. ({$exp_key[1]})");
+
+	// Render the chart.
 	$this->renderPartial($view_name, [
-		'chart_type' => $chart_type,
-		'from' => $from,
-		'to' => $to,
-		'asiakas' => $asiakas,
-		'tyontekija' => $tyontekija,
-		'kpl_maara' => $kpl_maara,
-		'months' => $months
+		'tyovuoroot' => $tyovuoroot,
+		'months' => $months,
+		'kpl_maara' => $kpl_maara
 	], false);
 }

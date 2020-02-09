@@ -1,4 +1,30 @@
 <?php
+
+/**
+ * Kaavio: Asiakkaat, joille on tehty eniten hyväksyttyjä tunteja.
+ * For use in kaaviot.php (@see actionKaaviot()).
+ *
+ * @var $this AsiakkaatController
+ *
+ * Expected variables inside $_POST:
+ *   asiakkaat_eniten_tunteja_from      Chart start date
+ *   asiakkaat_eniten_tunteja_to        Chart end date
+ *   asiakkaat_eniten_tunteja_approved  Hyväksytyt (true) || Kaikki (false)
+ *   asiakkaat_eniten_tunteja_type      Chart type
+ */
+
+$from = date('Y-m-d', isset($_POST['asiakkaat_eniten_tunteja_from'])
+  ? strtotime($_POST['asiakkaat_eniten_tunteja_from'])
+  : strtotime('-1month', time()));
+$to = date('Y-m-d', isset($_POST['asiakkaat_eniten_tunteja_to'])
+  ? strtotime($_POST['asiakkaat_eniten_tunteja_to'])
+  : time());
+$approved_only = ($_POST['asiakkaat_eniten_tunteja_approved'] ?? true) == true;
+$chart_type = $_POST['asiakkaat_eniten_tunteja_type'] ?? 'bar';
+
+$from_formated = date("d.m.Y", strtotime($from));
+$to_formated = date("d.m.Y", strtotime($to));
+
 $result = array();
 // <-- Hyvaksytyt yritykset
 $criteria = new CDbCriteria();
@@ -12,15 +38,15 @@ $criteria->select = "
 	";
 $criteria->condition = " 
 		aloitan!='' AND loppui!=''
-		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '" . $from . "' AND '" . $to . "'
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
 		AND status=3
 		AND deleted=0
 		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 	";
-if (isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 1) {
+if (!$approved_only) {
   $criteria->addCondition(" hyvaksytty='' OR hyvaksytty!='' ");
 }
-if (isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 2) {
+if ($approved_only) {
   $criteria->addCondition(" hyvaksytty!='' ");
 }
 $lu = Mobile::model()->findAll($criteria);
@@ -40,10 +66,10 @@ $criteria->condition = "
 		AND deleted=0
 		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '" . $from . "' AND '" . $to . "'
 	";
-if (isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 1) {
+if (!$approved_only) {
   $criteria->addCondition(" hyvaksytty='' OR hyvaksytty!='' ");
 }
-if (isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 2) {
+if ($approved_only) {
   $criteria->addCondition(" hyvaksytty!='' ");
 }
 $tot = Toteutuneet::model()->findAll($criteria);
@@ -122,12 +148,32 @@ foreach (array_reverse($new_arr) as $item) {
         name: 'Suunnitellut',
         data: JSON.parse('<?= json_encode(array_values($data_suunnitellut)) ?>')
       }, {
-        name: '<?= (isset($_GET["hyvaksynta"]) and $_GET["hyvaksynta"] == 1) ? "Hyväksyntä" : "" ?><?= (isset($_GET["hyvaksynta"]) and $_GET["hyvaksynta"] == 2) ? "Hyväksytyt" : "" ?>',
+        name: '<?= (!$approved_only) ? "Hyväksyntä" : "" ?><?= ($approved_only) ? "Hyväksytyt" : "" ?>',
         data: JSON.parse('<?= json_encode(array_values($data_hyvaksytyt)) ?>')
       }],
       exporting: {
         enabled: true
       }
-    });
+    }, [{
+        id: 'asiakkaat_eniten_tunteja_from',
+        type: 'date',
+        default: '<?= $from_formated ?>'
+      },
+      {
+        id: 'asiakkaat_eniten_tunteja_to',
+        type: 'date',
+        default: '<?= $to_formated ?>'
+      },
+      {
+        id: 'asiakkaat_eniten_tunteja_approved_only',
+        type: 'approved_only',
+        default: '<?= $approved_only ?>'
+      },
+      {
+        id: 'asiakkaat_eniten_tunteja_type',
+        type: 'chart_type',
+        default: '<?= $chart_type ?>'
+      }
+    ]);
   });
 </script>
