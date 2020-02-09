@@ -19,11 +19,14 @@ $from = date('Y-m-d', isset($_POST['lahetetut_laskut_maara_summa_from'])
 $to = date('Y-m-d', isset($_POST['lahetetut_laskut_maara_summa_to'])
   ? strtotime($_POST['lahetetut_laskut_maara_summa_to'])
   : time());
-$customer_id = $_POST['lahetetut_laskut_maara_summa_customer_id'] ?? 0;
+$customer_name = $_POST['lahetetut_laskut_maara_summa_customer_name'] ?? 0;
 $chart_type = $_POST['lahetetut_laskut_maara_summa_type'] ?? 'line';
 
 $from_formated = date("d.m.Y", strtotime($from));
 $to_formated = date("d.m.Y", strtotime($to));
+$customer = !empty($customer_name)
+  ? Asiakkaat::model()->find("yrityksen_nimi='$customer_name' OR yhteyshenkilo='$customer_name'")
+  : null;
 
 // <-- Laskut
 $criteria = new CDbCriteria();
@@ -35,8 +38,8 @@ $criteria->condition = "
 		DATE_FORMAT(STR_TO_DATE(paivays, '%Y-%m-%d'), '%Y-%m-%d') BETWEEN '" . $from . "' AND '" . $to . "'
 		AND tilanne=1
 	";
-if (isset($asiakas->id)) {
-  $criteria->addCondition(" as_nro IN (SELECT asiakasnumero FROM asiakkaat WHERE id='" . $asiakas->id . "') ");
+if (isset($customer->id)) {
+  $criteria->addCondition(" as_nro IN (SELECT asiakasnumero FROM asiakkaat WHERE id='" . $customer->id . "') ");
 }
 $lasku = Lasku::model()->findAll($criteria);
 $data_kpl = array();
@@ -50,8 +53,8 @@ foreach ($lasku as $item) {
 			YEAR(DATE_FORMAT(STR_TO_DATE(paivays, '%Y-%m-%d'), '%Y-%m-%d'))='" . date("Y", strtotime($item->paivays)) . "' 
 			AND MONTH(DATE_FORMAT(STR_TO_DATE(paivays, '%Y-%m-%d'), '%Y-%m-%d'))='" . date("m", strtotime($item->paivays)) . "' 
 		";
-  if (isset($asiakas->id)) {
-    $criteria->addCondition(" as_nro IN (SELECT asiakasnumero FROM asiakkaat WHERE id='" . $asiakas->id . "') ");
+  if (isset($customer->id)) {
+    $criteria->addCondition(" as_nro IN (SELECT asiakasnumero FROM asiakkaat WHERE id='" . $customer->id . "') ");
   }
   $lasku_count = Lasku::model()->find($criteria);
 
@@ -72,7 +75,7 @@ foreach ($lasku as $item) {
         text: 'Lähetettyjen laskujen määrä ja summa'
       },
       subtitle: {
-        text: '<?= (isset($_GET["yrityksen_nimi"]) and !empty($_GET["yrityksen_nimi"])) ? $_GET["yrityksen_nimi"] : "Kaikki asiakkaat" ?>'
+        text: '<?= (!empty($customer_name)) ? $customer_name : "Kaikki asiakkaat" ?>'
       },
       xAxis: {
         categories: JSON.parse('<?= json_encode(array_values($categories)) ?>')
@@ -102,10 +105,10 @@ foreach ($lasku as $item) {
       exporting: {
         enabled: true
       }
-    }, [a{
-        id: 'lahetetut_laskut_maara_summa_customer_id',
+    }, [{
+        id: 'lahetetut_laskut_maara_summa_customer_name',
         type: 'customer_auto',
-        default: '<?= $customer_id ?>'
+        default: '<?= $customer_name ?>'
       },
       {
         id: 'lahetetut_laskut_maara_summa_from',

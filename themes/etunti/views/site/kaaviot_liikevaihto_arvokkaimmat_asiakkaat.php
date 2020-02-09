@@ -80,7 +80,7 @@ for ($i = 1; $i <= $kpl_maara; $i++) {
         text: 'Liikevaihto arvokkaimmat asiakkaat'
       },
       subtitle: {
-        text: '<?= (isset($_GET["yrityksen_nimi"]) and !empty($_GET["yrityksen_nimi"])) ? $_GET["yrityksen_nimi"] : "Kaikki asiakkaat" ?>'
+        text: '<?= (!empty($customer_name)) ? $customer_name : "Kaikki asiakkaat" ?>'
       },
       xAxis: {
         categories: JSON.parse('<?= json_encode(array_values($categories)) ?>')

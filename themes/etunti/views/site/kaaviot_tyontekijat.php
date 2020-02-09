@@ -39,8 +39,8 @@ $criteria->condition = "
 		AND status=3
 		AND deleted=0
 	";
-if (isset($_GET['tyontekija'])) {
-  $criteria->addCondition(" tid='" . $_GET['tyontekija'] . "' ");
+if ($worker_id > 0) {
+  $criteria->addCondition("tid='$worker_id'");
 }
 $luetut = Mobile::model()->findAll($criteria);
 $data_luetut = array();
@@ -51,17 +51,15 @@ foreach ($luetut as $item) {
 
 // <-- Suunnitellut
 $criteria = new CDbCriteria();
-$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y.%m.%d')) ";
-$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit, t.*
-	";
+$criteria->group = "EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y.%m.%d'))";
+$criteria->select = "SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit, t.*";
 $criteria->condition = " 
 		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '" . $from . "' AND '" . $to . "'
 		AND status=3
 		AND peruutettu=0
 	";
-if (isset($_GET['tyontekija'])) {
-  $criteria->addCondition(" tid='" . $_GET['tyontekija'] . "' ");
+if ($worker_id > 0) {
+  $criteria->addCondition("tid='$worker_id'");
 }
 $suunnitellut = Tyovuoroot::model()->findAll($criteria);
 $data_suunnitellut = array();
@@ -84,8 +82,8 @@ $criteria->condition = "
 		AND deleted=0
 		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 	";
-if (isset($_GET['tyontekija'])) {
-  $criteria->addCondition(" tid='" . $_GET['tyontekija'] . "' ");
+if ($worker_id > 0) {
+  $criteria->addCondition("tid='$worker_id'");
 }
 $lu = Mobile::model()->findAll($criteria);
 
@@ -101,8 +99,8 @@ $criteria->condition = "
 		AND deleted=0
 		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '" . $from . "' AND '" . $to . "'
 	";
-if (isset($_GET['tyontekija'])) {
-  $criteria->addCondition(" tid='" . $_GET['tyontekija'] . "' ");
+if ($worker_id > 0) {
+  $criteria->addCondition("tid='$worker_id'");
 }
 $tot = Toteutuneet::model()->findAll($criteria);
 $result = array_merge($lu, $tot);
@@ -125,7 +123,7 @@ foreach ($result as $item) {
         type: '<?= $chart_type ?>'
       },
       title: {
-        text: '<?= $this->etuSukunimi($tyontekija) ?>'
+        text: '<?= $this->etuSukunimi($worker_id) ?>'
       },
       subtitle: {
         text: 'Luetut, hyväksytyt ja suunnitellut tunnit'

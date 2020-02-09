@@ -19,11 +19,14 @@ $from = date('Y-m-d', isset($_POST['onlinevaraukset_from'])
 $to = date('Y-m-d', isset($_POST['onlinevaraukset_to'])
   ? strtotime($_POST['onlinevaraukset_to'])
   : time());
-$customer_id = $_POST['onlinevaraukset_customer_id'] ?? 0;
+$customer_name = $_POST['onlinevaraukset_customer_name'] ?? 0;
 $chart_type = $_POST['onlinevaraukset_type'] ?? 'line';
 
 $from_formated = date("d.m.Y", strtotime($from));
 $to_formated = date("d.m.Y", strtotime($to));
+$customer = !empty($customer_name)
+  ? Asiakkaat::model()->find("yrityksen_nimi='$customer_name' OR yhteyshenkilo='$customer_name'")
+  : null;
 
 // <-- Onlinevaraus
 $criteria = new CDbCriteria();
@@ -34,8 +37,8 @@ $criteria->select = "
 $criteria->condition = " 
 		DATE(time) BETWEEN '" . $from . "' AND '" . $to . "'
 	";
-if (isset($asiakas->id)) {
-  $criteria->addCondition(" asiakas_id ='" . $asiakas->id . "' ");
+if (isset($customer->id)) {
+  $criteria->addCondition(" asiakas_id ='" . $customer->id . "' ");
 }
 $onlinevaraus = Onlinevaraus::model()->findAll($criteria);
 $data_onlinevaraus = array();
@@ -83,9 +86,9 @@ foreach ($onlinevaraus as $item) {
         enabled: true
       }
     }, [{
-        id: 'onlinevaraukset_customer_id',
+        id: 'onlinevaraukset_customer_name',
         type: 'customer_auto',
-        default: '<?= $customer_id ?>'
+        default: '<?= $customer_name ?>'
       },
       {
         id: 'onlinevaraukset_from',

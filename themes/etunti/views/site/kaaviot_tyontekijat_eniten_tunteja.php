@@ -19,7 +19,7 @@ $from = date('Y-m-d', isset($_POST['tyontekijat_eniten_tunteja_from'])
 $to = date('Y-m-d', isset($_POST['tyontekijat_eniten_tunteja_to'])
   ? strtotime($_POST['tyontekijat_eniten_tunteja_to'])
   : time());
-$approved = ($_POST['tyontekijat_eniten_tunteja_approved'] ?? true) == true;
+$approved_only = ($_POST['tyontekijat_eniten_tunteja_approved'] ?? true) == true;
 $chart_type = $_POST['tyontekijat_eniten_tunteja_type'] ?? 'bar';
 
 $from_formated = date("d.m.Y", strtotime($from));
@@ -42,10 +42,10 @@ $criteria->condition = "
 		AND deleted=0
 		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 	";
-if (isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 1) {
+if (!$approved_only) {
   $criteria->addCondition(" hyvaksytty='' OR hyvaksytty!='' ");
 }
-if (isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 2) {
+if ($approved_only) {
   $criteria->addCondition(" hyvaksytty!='' ");
 }
 $lu = Mobile::model()->findAll($criteria);
@@ -64,10 +64,10 @@ $criteria->condition = "
 		AND deleted=0
 		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '" . $from . "' AND '" . $to . "'
 	";
-if (isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 1) {
+if (!$approved_only) {
   $criteria->addCondition(" hyvaksytty='' OR hyvaksytty!='' ");
 }
-if (isset($_GET['hyvaksynta']) and $_GET['hyvaksynta'] == 2) {
+if ($approved_only) {
   $criteria->addCondition(" hyvaksytty!='' ");
 }
 $tot = Toteutuneet::model()->findAll($criteria);
@@ -143,7 +143,7 @@ foreach (array_reverse($new_arr) as $item) {
         name: 'Suunnitellut',
         data: JSON.parse('<?= json_encode(array_values($data_suunnitellut)) ?>')
       }, {
-        name: '<?= (isset($_GET["hyvaksynta"]) and $_GET["hyvaksynta"] == 1) ? "Hyväksyntä" : "" ?><?= (isset($_GET["hyvaksynta"]) and $_GET["hyvaksynta"] == 2) ? "Hyväksytyt" : "" ?>',
+        name: '<?= (!$approved_only) ? "Hyväksyntä" : "" ?><?= ($approved_only) ? "Hyväksytyt" : "" ?>',
         data: JSON.parse('<?= json_encode(array_values($data_hyvaksytyt)) ?>')
       }],
       exporting: {
@@ -160,9 +160,9 @@ foreach (array_reverse($new_arr) as $item) {
         default: '<?= $to_formated ?>'
       },
       {
-        id: 'tyontekijat_eniten_tunteja_approved',
-        type: 'approved',
-        default: '<?= $approved ?>'
+        id: 'tyontekijat_eniten_tunteja_approved_only',
+        type: 'approved_only',
+        default: '<?= $approved_only ?>'
       },
       {
         id: 'tyontekijat_eniten_tunteja_type',

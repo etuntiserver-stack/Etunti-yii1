@@ -427,8 +427,8 @@ function output_chart_menu()
 
 						break;
 
-						// approved: Hyväksytyt (true) || Kaikki (false)
-					case 'approved':
+						// approved_only: Vain hyväksytyt (true) || Kaikki (false)
+					case 'approved_only':
 						content += `
 							<div class="${inputs_class}">
 								<label class="field select">
@@ -486,6 +486,10 @@ $months = array(
 	12 => Yii::t('main', 'Joulukuu')
 );
 
+// Random variable used in a few charts. This will be removed soon. Selection is
+// not available for now.
+$kpl_maara = 10;
+
 /*******************************************************************************
  *? Render the views that handle the selected charts.
  *? View names are the same as toggle names, with "toggle_" => "kaaviot_".
@@ -510,6 +514,7 @@ foreach ($_POST as $key => $value) {
 	// Render the chart.
 	$this->renderPartial($view_name, [
 		'tyovuoroot' => $tyovuoroot,
-		'months' => $months
+		'months' => $months,
+		'kpl_maara' => $kpl_maara
 	], false);
 }

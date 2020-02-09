@@ -18,11 +18,14 @@ $from = date('Y-m-d', isset($_POST['tunnit_from'])
 $to = date('Y-m-d', isset($_POST['tunnit_to'])
   ? strtotime($_POST['tunnit_to'])
   : time());
-$customer_id = $_POST['tunnit_customer_id'] ?? 0;
+$customer_name = $_POST['tunnit_customer_name'] ?? 0;
 $chart_type = $_POST['tunnit_type'] ?? 'line';
 
 $from_formated = date("d.m.Y", strtotime($from));
 $to_formated = date("d.m.Y", strtotime($to));
+$customer = !empty($customer_name)
+  ? Asiakkaat::model()->find("yrityksen_nimi='$customer_name' OR yhteyshenkilo='$customer_name'")
+  : null;
 
 $result = array();
 // <-- Luetut
@@ -38,8 +41,8 @@ $criteria->condition = "
 		AND status=3
 		AND deleted=0
 	";
-if (isset($asiakas->id)) {
-  $criteria->addCondition(" kohdenID IN (SELECT id FROM sivex_kohdet WHERE asiakas_id='" . $asiakas->id . "') ");
+if (isset($customer->id)) {
+  $criteria->addCondition(" kohdenID IN (SELECT id FROM sivex_kohdet WHERE asiakas_id='" . $customer->id . "') ");
 }
 $luetut = Mobile::model()->findAll($criteria);
 $data_luetut = array();
@@ -59,8 +62,8 @@ $criteria->condition = "
 		AND status=3
 		AND peruutettu=0
 	";
-if (isset($asiakas->id)) {
-  $criteria->addCondition(" kohde IN (SELECT id FROM sivex_kohdet WHERE asiakas_id='" . $asiakas->id . "') ");
+if (isset($customer->id)) {
+  $criteria->addCondition(" kohde IN (SELECT id FROM sivex_kohdet WHERE asiakas_id='" . $customer->id . "') ");
 }
 $suunnitellut = Tyovuoroot::model()->findAll($criteria);
 $data_suunnitellut = array();
@@ -83,8 +86,8 @@ $criteria->condition = "
 		AND deleted=0
 		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 	";
-if (isset($asiakas->id)) {
-  $criteria->addCondition(" kohdenID IN (SELECT id FROM sivex_kohdet WHERE asiakas_id='" . $asiakas->id . "') ");
+if (isset($customer->id)) {
+  $criteria->addCondition(" kohdenID IN (SELECT id FROM sivex_kohdet WHERE asiakas_id='" . $customer->id . "') ");
 }
 $lu = Mobile::model()->findAll($criteria);
 
@@ -100,8 +103,8 @@ $criteria->condition = "
 		AND deleted=0
 		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '" . $from . "' AND '" . $to . "'
 	";
-if (isset($asiakas->id)) {
-  $criteria->addCondition(" kohdenID IN (SELECT id FROM sivex_kohdet WHERE asiakas_id='" . $asiakas->id . "') ");
+if (isset($customer->id)) {
+  $criteria->addCondition(" kohdenID IN (SELECT id FROM sivex_kohdet WHERE asiakas_id='" . $customer->id . "') ");
 }
 $tot = Toteutuneet::model()->findAll($criteria);
 $result = array_merge($lu, $tot);
@@ -127,7 +130,7 @@ foreach ($result as $item) {
         text: 'Suunniteltut, luetut ja hyväksytyt tunnit'
       },
       subtitle: {
-        text: '<?= (isset($_GET["yrityksen_nimi"]) and !empty($_GET["yrityksen_nimi"])) ? $_GET["yrityksen_nimi"] : "Kaikki asiakkaat" ?>'
+        text: '<?= (!empty($customer_name)) ? $customer_name : "Kaikki asiakkaat" ?>'
       },
       xAxis: {
         categories: JSON.parse('<?= json_encode(array_values($categories)) ?>')
@@ -162,9 +165,9 @@ foreach ($result as $item) {
         enabled: true
       }
     }, [{
-        id: 'tunnit_customer_id',
+        id: 'tunnit_customer_name',
         type: 'customer_auto',
-        default: '<?= $customer_id ?>'
+        default: '<?= $customer_name ?>'
       },
       {
         id: 'tunnit_from',
