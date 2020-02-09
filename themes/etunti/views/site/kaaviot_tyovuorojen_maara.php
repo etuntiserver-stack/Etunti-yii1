@@ -88,11 +88,6 @@ foreach ($asiakkaat as $v) {
         enabled: true
       }
     }, [{
-        id: 'tyovuorojen_maara_type',
-        type: 'chart_type',
-        default: '<?= $chart_type ?>'
-      },
-      {
         id: 'tyovuorojen_maara_from',
         type: 'date',
         default: '<?= $from_formated ?>'
@@ -101,6 +96,11 @@ foreach ($asiakkaat as $v) {
         id: 'tyovuorojen_maara_to',
         type: 'date',
         default: '<?= $to_formated ?>'
+      },
+      {
+        id: 'tyovuorojen_maara_type',
+        type: 'chart_type',
+        default: '<?= $chart_type ?>'
       }
     ]);
   });

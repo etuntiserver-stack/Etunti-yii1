@@ -102,7 +102,12 @@ foreach ($lasku as $item) {
       exporting: {
         enabled: true
       }
-    }, [{
+    }, [a{
+        id: 'lahetetut_laskut_maara_summa_customer_id',
+        type: 'customer_auto',
+        default: '<?= $customer_id ?>'
+      },
+      {
         id: 'lahetetut_laskut_maara_summa_from',
         type: 'date',
         default: '<?= $from_formated ?>'
@@ -111,11 +116,6 @@ foreach ($lasku as $item) {
         id: 'lahetetut_laskut_maara_summa_to',
         type: 'date',
         default: '<?= $to_formated ?>'
-      },
-      {
-        id: 'lahetetut_laskut_maara_summa_customer_id',
-        type: 'customer_auto',
-        default: '<?= $customer_id ?>'
       },
       {
         id: 'lahetetut_laskut_maara_summa_type',

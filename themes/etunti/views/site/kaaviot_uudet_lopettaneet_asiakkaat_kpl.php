@@ -97,11 +97,6 @@ foreach ($period as $dt) {
         enabled: true
       }
     }, [{
-        id: 'uudet_lopettaneet_asiakkaat_kpl_type',
-        type: 'chart_type',
-        default: '<?= $chart_type ?>'
-      },
-      {
         id: 'uudet_lopettaneet_asiakkaat_kpl_from',
         type: 'date',
         default: '<?= $from_formated ?>'
@@ -110,6 +105,11 @@ foreach ($period as $dt) {
         id: 'uudet_lopettaneet_asiakkaat_kpl_to',
         type: 'date',
         default: '<?= $to_formated ?>'
+      },
+      {
+        id: 'uudet_lopettaneet_asiakkaat_kpl_type',
+        type: 'chart_type',
+        default: '<?= $chart_type ?>'
       }
     ]);
   });

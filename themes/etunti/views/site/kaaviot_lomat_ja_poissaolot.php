@@ -99,11 +99,6 @@ foreach ($tv as $v) {
         default: <?= $worker_id ?>
       },
       {
-        id: 'lomat_ja_poissaolot_type',
-        type: 'chart_type',
-        default: '<?= $chart_type ?>'
-      },
-      {
         id: 'lomat_ja_poissaolot_from',
         type: 'date',
         default: '<?= $from_formated ?>'
@@ -112,6 +107,11 @@ foreach ($tv as $v) {
         id: 'lomat_ja_poissaolot_to',
         type: 'date',
         default: '<?= $to_formated ?>'
+      },
+      {
+        id: 'lomat_ja_poissaolot_type',
+        type: 'chart_type',
+        default: '<?= $chart_type ?>'
       }
     ]);
   });

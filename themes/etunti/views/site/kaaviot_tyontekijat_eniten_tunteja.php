@@ -149,21 +149,26 @@ foreach (array_reverse($new_arr) as $item) {
       exporting: {
         enabled: true
       }
-    }/* , [{
-        id: 'tyovuorojen_maara_from',
+    }, [{
+        id: 'tyontekijat_eniten_tunteja_from',
         type: 'date',
         default: '<?= $from_formated ?>'
       },
       {
-        id: 'tyovuorojen_maara_to',
+        id: 'tyontekijat_eniten_tunteja_to',
         type: 'date',
         default: '<?= $to_formated ?>'
       },
       {
-        id: 'tyovuorojen_maara_type',
+        id: 'tyontekijat_eniten_tunteja_approved',
+        type: 'approved',
+        default: '<?= $approved ?>'
+      },
+      {
+        id: 'tyontekijat_eniten_tunteja_type',
         type: 'chart_type',
         default: '<?= $chart_type ?>'
       }
-    ] */);
+    ]);
   });
 </script>

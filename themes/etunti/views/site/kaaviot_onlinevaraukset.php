@@ -82,21 +82,26 @@ foreach ($onlinevaraus as $item) {
       exporting: {
         enabled: true
       }
-    }/* , [{
-        id: 'tyovuorojen_maara_from',
+    }, [{
+        id: 'onlinevaraukset_customer_id',
+        type: 'customer_auto',
+        default: '<?= $customer_id ?>'
+      },
+      {
+        id: 'onlinevaraukset_from',
         type: 'date',
         default: '<?= $from_formated ?>'
       },
       {
-        id: 'tyovuorojen_maara_to',
+        id: 'onlinevaraukset_to',
         type: 'date',
         default: '<?= $to_formated ?>'
       },
       {
-        id: 'tyovuorojen_maara_type',
+        id: 'onlinevaraukset_type',
         type: 'chart_type',
         default: '<?= $chart_type ?>'
       }
-    ] */);
+    ]);
   });
 </script>

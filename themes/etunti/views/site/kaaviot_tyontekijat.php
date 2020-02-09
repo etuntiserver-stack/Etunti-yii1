@@ -162,21 +162,26 @@ foreach ($result as $item) {
       exporting: {
         enabled: true
       }
-    }/* , [{
-        id: 'tyovuorojen_maara_from',
+    }, [{
+        id: 'tyontekijat_worker_id',
+        type: 'worker_list',
+        default: '<?= $worker_id ?>'
+      },
+      {
+        id: 'tyontekijat_from',
         type: 'date',
         default: '<?= $from_formated ?>'
       },
       {
-        id: 'tyovuorojen_maara_to',
+        id: 'tyontekijat_to',
         type: 'date',
         default: '<?= $to_formated ?>'
       },
       {
-        id: 'tyovuorojen_maara_type',
+        id: 'tyontekijat_type',
         type: 'chart_type',
         default: '<?= $chart_type ?>'
       }
-    ] */);
+    ]);
   });
 </script>
