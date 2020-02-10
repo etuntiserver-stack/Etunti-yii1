@@ -192,6 +192,7 @@ class TyovuorootController extends Controller
 		return count($vl);
 	}
 
+/*
 	public function pyhapaivat($tid,$from,$to,$m)
 	{
 
@@ -246,7 +247,7 @@ class TyovuorootController extends Controller
 		if(isset($tv->l_tunnit)){ $result = $tv->l_tunnit; }
 		return $result;
 	}
-
+*/
 	public function TidfromtoTyovuoroWithVirtual($from, $to, $tids, $by_pvm, $status)
 	{
 		$result = [];
@@ -2117,7 +2118,7 @@ class TyovuorootController extends Controller
 			if(isset($_POST['to']) and !empty($_POST['to']))
 				Yii::app()->session['to'] = date("Y-m-d",strtotime($_POST['to']));
 
-			$this->redirect(array('beta'));
+			$this->redirect(array('beta', 'mode' => $mode));
 		}	
 		//  Post haku -->
 
@@ -2227,7 +2228,14 @@ class TyovuorootController extends Controller
 		foreach($tyosuhteet as $item)
 			if(!empty($item->vktyoaika))
 				$vktyoaika[$item->tid] = $item->vktyoaika;
-
+		// Pyhapaivat
+		$pyhapaivat = $this->pyhapaivatAll($haku_from, $haku_to);
+		/*
+		echo '<pre>';
+		print_r( $pyhapaivat );
+		echo '</pre>';
+		exit;
+		*/
 		if( $mode == 'tt' ){
 			$this->render('tt', array(
 				'tt_order_1' 	=> $tt_order_1,
@@ -2241,7 +2249,8 @@ class TyovuorootController extends Controller
 				'asiakas' 	=> $asiakas,
 				'arrDate'	=> $arrDate,
 				'site'		=> $site,
-				'vktyoaika'	=> $vktyoaika
+				'vktyoaika'	=> $vktyoaika,	
+				'pyhapaivat'	=> $pyhapaivat
 			));
 		}
 		if( $mode == 'vko' ){
@@ -2259,9 +2268,35 @@ class TyovuorootController extends Controller
 				'site'		=> $site,
 				'week'		=> $week,
 				'year'		=> $year,
-				'vktyoaika'	=> $vktyoaika
+				'vktyoaika'	=> $vktyoaika,
+				'pyhapaivat'	=> $pyhapaivat
 			));
 		}
+	}
+
+	public function pyhapaivatAll($from, $to)
+	{
+		$from 	= date("Y-m-d", strtotime($from));
+		$to 	= date("Y-m-d", strtotime($to));
+		$result = [];
+
+		$asetuksetForAll 	= AsetuksetForAll::model()->findbypk(1);
+		$vp 			= explode("\n",$asetuksetForAll->viralliset_pyhapaivat);
+		$el 			= explode("\n",$asetuksetForAll->erikoislauantai);
+		$f = date("d.m.Y", strtotime($from));
+		$viralliset_pyhapaivat 	= [];
+		$erikoislauantai 	= [];
+		while (strtotime($f) <= strtotime($to)){
+			if( in_array($f, array_values($vp), true) )
+				$result[$f]['vp'] = true;
+			if( in_array($f, array_values($el), true) )
+				$result[$f]['el'] = true;
+			if( date("N", strtotime($f)) == 7 )
+				$result[$f]['su'] = true;
+			$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
+		}
+
+		return $result;
 	}
 
 	protected function statukset(){
