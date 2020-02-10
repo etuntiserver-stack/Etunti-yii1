@@ -116,13 +116,15 @@ ini_set('memory_limit', '512M');
 		}
 	echo '</tr>';
 	if(date('N', strtotime($f)) == 7){
+	$vko 	= date("W",strtotime($f));
+	$year 	= date("Y",strtotime($f));
 	echo '<tr>';
   		echo '<td class="text-center myBgColors viikkoRivi"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($f)).' <i class="fa fa-arrow-up" aria-hidden="true"></i>
 </b></td>';
 		echo '<td class="myBgColors viikkoRivi"></td>';
 		foreach($tt as $tid => $item){
 		echo '<td class="myBgColors viikkoRivi">';
-		echo '<div id="vko_'.$did.'_'.$tid.'" class="viikkolaatiko" pvm="'.$f.'" tid="'.$tid.'"></div>';
+		echo '<div id="vko_'.$did.'_'.$tid.'" class="link viikkolaatiko text-center" pvm="'.$f.'" tid="'.$tid.'"><i class="fa fa-2x fa-eye"></i></div>';
 		echo '</td>';
 		}
 	echo '</tr>';
