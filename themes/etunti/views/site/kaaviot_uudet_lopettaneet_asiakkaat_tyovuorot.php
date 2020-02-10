@@ -1,5 +1,28 @@
 <?php
 
+/**
+ * Kaavio: Uudet ja lopettaneet asiakkaat: Suunnitellut työvuorot.
+ * For use in kaaviot.php (@see actionKaaviot()).
+ *
+ * @var $this AsiakkaatController
+ *
+ * Expected variables inside $_POST:
+ *   uudet_lopettaneet_asiakkaat_tyovuorot_from  Chart start date
+ *   uudet_lopettaneet_asiakkaat_tyovuorot_to    Chart end date
+ *   uudet_lopettaneet_asiakkaat_tyovuorot_type  Chart type
+ */
+
+$from = date('Y-m-d', isset($_POST['uudet_lopettaneet_asiakkaat_tyovuorot_from'])
+  ? strtotime($_POST['uudet_lopettaneet_asiakkaat_tyovuorot_from'])
+  : strtotime('-1year', time()));
+$to = date('Y-m-d', isset($_POST['uudet_lopettaneet_asiakkaat_tyovuorot_to'])
+  ? strtotime($_POST['uudet_lopettaneet_asiakkaat_tyovuorot_to'])
+  : time());
+$chart_type = $_POST['uudet_lopettaneet_asiakkaat_tyovuorot_type'] ?? 'column';
+
+$from_formated = date("d.m.Y", strtotime($from));
+$to_formated = date("d.m.Y", strtotime($to));
+
 $categories = array();
 $begin = new DateTime(date("Y-m-d", strtotime($from)));
 $end = new DateTime(date("Y-m-d", strtotime($to)));
@@ -87,6 +110,21 @@ foreach ($period as $dt) {
       exporting: {
         enabled: true
       }
-    });
+    }, [{
+        id: 'uudet_lopettaneet_asiakkaat_tyovuorot_from',
+        type: 'date',
+        default: '<?= $from_formated ?>'
+      },
+      {
+        id: 'uudet_lopettaneet_asiakkaat_tyovuorot_to',
+        type: 'date',
+        default: '<?= $to_formated ?>'
+      },
+      {
+        id: 'uudet_lopettaneet_asiakkaat_tyovuorot_type',
+        type: 'chart_type',
+        default: '<?= $chart_type ?>'
+      }
+    ]);
   });
 </script>

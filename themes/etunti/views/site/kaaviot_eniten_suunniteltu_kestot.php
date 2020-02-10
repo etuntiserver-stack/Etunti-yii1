@@ -1,4 +1,28 @@
 <?php
+
+/**
+ * Kaavio: Eniten suunniteltu työvuoro: Kestot.
+ * For use in kaaviot.php (@see actionKaaviot()).
+ *
+ * @var $this AsiakkaatController
+ *
+ * Expected variables inside $_POST:
+ *   eniten_suunniteltu_kestot_from  Chart start date
+ *   eniten_suunniteltu_kestot_to    Chart end date
+ *   eniten_suunniteltu_kestot_type  Chart type
+ */
+
+$from = date('Y-m-d', isset($_POST['eniten_suunniteltu_kestot_from'])
+  ? strtotime($_POST['eniten_suunniteltu_kestot_from'])
+  : strtotime('-1year', time()));
+$to = date('Y-m-d', isset($_POST['eniten_suunniteltu_kestot_to'])
+  ? strtotime($_POST['eniten_suunniteltu_kestot_to'])
+  : time());
+$chart_type = $_POST['eniten_suunniteltu_kestot_type'] ?? 'column';
+
+$from_formated = date("d.m.Y", strtotime($from));
+$to_formated = date("d.m.Y", strtotime($to));
+
 $categories = array();
 $begin = new DateTime(date("Y-m-d", strtotime($from)));
 $end = new DateTime(date("Y-m-d", strtotime($to)));
@@ -90,6 +114,21 @@ for ($i = 1; $i <= $kpl_maara; $i++) {
       exporting: {
         enabled: true
       }
-    });
+    }, [{
+        id: 'eniten_suunniteltu_kestot_from',
+        type: 'date',
+        default: '<?= $from_formated ?>'
+      },
+      {
+        id: 'eniten_suunniteltu_kestot_to',
+        type: 'date',
+        default: '<?= $to_formated ?>'
+      },
+      {
+        id: 'eniten_suunniteltu_kestot_type',
+        type: 'chart_type',
+        default: '<?= $chart_type ?>'
+      }
+    ]);
   });
 </script>
