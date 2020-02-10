@@ -131,8 +131,8 @@ class LogController extends Controller
 		{
 			$model=$this->loadModel($_POST['id']);
 			if(isset($model->id)){
-				$get = $_POST['get'];
-				echo json_decode($model->$get, true);
+				$post = $_POST['get'];
+				echo json_decode($model->$post, true);
 			}
 			exit;
 		}
