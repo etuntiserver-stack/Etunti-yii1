@@ -27,19 +27,15 @@
 	margin-right: 3px;
 	cursor: pointer;
 }
-.reika{
-	color: #fff;
+.reika-warning{
+	/*background: orange;*/
+	color: orange;
 	padding: 3px;
 	font-size: 90%;
 	font-weight: bold;
 	line-height: 70%;
 	font-size: smaller;
-}
-.reika-success{
-	background: #28a745;
-}
-.reika-warning{
-	background: orange;
+	border: none !important;
 }
 .dropdown-menu{
 	z-index: 999;

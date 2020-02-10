@@ -124,7 +124,7 @@ if( $curpage == 'tyovuoroot/beta' )
 	     <legend><?php echo Yii::t('main','Haku'); ?></legend>
 
               <div class="form-group">
-		<?php if($curpage == 'tyovuoroot/tv2' or $curpage == 'tyovuoroot/tv3' or $curpage == 'tyovuoroot/beta') : ?>
+		<?php if($curpage == 'tyovuoroot/beta') : ?>
 		    <label><?php echo Yii::t('main','Aikaväli'); ?></label>
 			<div class="row">
 			 <div class="col-sm-6">
@@ -135,7 +135,7 @@ if( $curpage == 'tyovuoroot/beta' )
 			</div>
 		<?php endif; ?>
 
-		<?php if($curpage == 'tyovuoroot/index' or $curpage == 'tyovuoroot/tv3' or $curpage == 'tyovuoroot/beta') : ?>
+		<?php if( $curpage == 'tyovuoroot/beta' and isset($_GET['mode']) and $_GET['mode'] == 'vko' ) : ?>
 			<div class="row">
 			 <div class="col-sm-5">
 		    	  <label><?php echo Yii::t('main','Vuosi'); ?></label>
@@ -306,7 +306,7 @@ if( $curpage == 'tyovuoroot/beta' )
         </li>
 	<!-- Haku -->
 
-	<?php if($curpage == 'tyovuoroot/index' or $curpage == 'tyovuoroot/beta') : ?>
+	<?php if( $curpage == 'tyovuoroot/beta' and isset($_GET['mode']) and $_GET['mode'] == 'vko' ) : ?>
         <li class="p10" data-toggle="tooltip">
               <div class="form-group">
                <div class="form-inline">
@@ -1100,7 +1100,8 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
  	        <?php if($curpage != 'tyovuoroot/beta'): ?>
 		<option value=><?php echo Yii::t('main', 'Työvuoro näkymä'); ?></option>
 		<?php endif; ?>
- 	        <option value="beta" <?php if($curpage == 'tyovuoroot/beta') echo 'selected'; ?>><?php echo Yii::t('main', 'VIKKO'); ?></option>
+ 	        <option value="beta?mode=vko" <?php if($curpage == 'tyovuoroot/beta') echo 'selected'; ?>><?php echo Yii::t('main', 'VIKKO'); ?></option>
+ 	        <option value="beta?mode=tt" <?php if($curpage == 'tyovuoroot/beta') echo 'selected'; ?>><?php echo Yii::t('main', 'TYÖNTEKIJÄ'); ?></option>
 	      </select>
               </li>
 	      <!-- Nakyma -->

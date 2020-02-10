@@ -1982,7 +1982,7 @@ class TyovuorootController extends Controller
 		));
 	}
 
-	public function actionBeta($kohteet_siivous=[], $kohde='', $asiakas='') {
+	public function actionBeta($kohteet_siivous=[], $kohde='', $asiakas='', $mode=null) {
 
 		// <-- Ketjun kasikorjaus
 		$criteria = new CDbCriteria(); 
@@ -2121,25 +2121,35 @@ class TyovuorootController extends Controller
 		}	
 		//  Post haku -->
 
-		// <-- Year Week
-		if(!isset(Yii::app()->session['year']))
-			Yii::app()->session['year'] = date("Y", strtotime('this week sunday'));
+		// <-- TYONTEKIJA MODE
+		if( $mode == 'tt' ){
+			if(!isset(Yii::app()->session['from']))
+				Yii::app()->session['from'] = date("Y-m-d");
+			if(!isset(Yii::app()->session['to']))
+				Yii::app()->session['to'] = date("Y-m-d",strtotime("+2 week", time()));
+		}
+		//    VKO MODE -->
 
-		if(!isset(Yii::app()->session['week']))
-			Yii::app()->session['week'] = date("W", strtotime('this week sunday'));
+		// <-- VKO MODE
+		if( $mode == 'vko' ){
+			if(!isset(Yii::app()->session['year']))
+				Yii::app()->session['year'] = date("Y", strtotime('this week sunday'));
+			if(!isset(Yii::app()->session['week']))
+				Yii::app()->session['week'] = date("W", strtotime('this week sunday'));
 
-		$year = Yii::app()->session['year'];
-		$week = sprintf("%02d", Yii::app()->session['week']);
-		Yii::app()->session['week'] = $week;
-		//    Year Week -->
+			$year = Yii::app()->session['year'];
+			$week = sprintf("%02d", Yii::app()->session['week']);
+			Yii::app()->session['week'] = $week;
 
-		if(!isset(Yii::app()->session['vkolopput']))
-			$numDays = 5;
-		else
-			$numDays = 7;
+			if(!isset(Yii::app()->session['vkolopput']))
+				$numDays = 5;
+			else
+				$numDays = 7;
 
-		Yii::app()->session['from'] = date("Y-m-d", strtotime($year ."W". $week.'1'));
-		Yii::app()->session['to'] = date("Y-m-d", strtotime($year ."W". $week . $numDays));
+			Yii::app()->session['from'] = date("Y-m-d", strtotime($year ."W". $week.'1'));
+			Yii::app()->session['to'] = date("Y-m-d", strtotime($year ."W". $week . $numDays));
+		}
+		//    VKO MODE -->
 
 		// <-- HAKU
 		if(isset(Yii::app()->session['asiakas']))
@@ -2218,23 +2228,40 @@ class TyovuorootController extends Controller
 			if(!empty($item->vktyoaika))
 				$vktyoaika[$item->tid] = $item->vktyoaika;
 
-		$this->render('tv4', array(
-			'tt_order_1' 	=> $tt_order_1,
-			'tt_order_2' 	=> $tt_order_2,
-			'tt'		=> $tt,
-			'tv_arr'	=> $tv_arr,
-			'from'		=> Yii::app()->session['from'],
-			'to'		=> Yii::app()->session['to'],
-			'kohteet_siivous' => $kohteet_siivous,
-			'kohde' 	=> $kohde,
-			'asiakas' 	=> $asiakas,
-			'arrDate'	=> $arrDate,
-			'site'		=> $site,
-			'week'		=> $week,
-			'year'		=> $year,
-			'vktyoaika'	=> $vktyoaika
-		));
-
+		if( $mode == 'tt' ){
+			$this->render('tt', array(
+				'tt_order_1' 	=> $tt_order_1,
+				'tt_order_2' 	=> $tt_order_2,
+				'tt'		=> $tt,
+				'tv_arr'	=> $tv_arr,
+				'from'		=> Yii::app()->session['from'],
+				'to'		=> Yii::app()->session['to'],
+				'kohteet_siivous' => $kohteet_siivous,
+				'kohde' 	=> $kohde,
+				'asiakas' 	=> $asiakas,
+				'arrDate'	=> $arrDate,
+				'site'		=> $site,
+				'vktyoaika'	=> $vktyoaika
+			));
+		}
+		if( $mode == 'vko' ){
+			$this->render('vko', array(
+				'tt_order_1' 	=> $tt_order_1,
+				'tt_order_2' 	=> $tt_order_2,
+				'tt'		=> $tt,
+				'tv_arr'	=> $tv_arr,
+				'from'		=> Yii::app()->session['from'],
+				'to'		=> Yii::app()->session['to'],
+				'kohteet_siivous' => $kohteet_siivous,
+				'kohde' 	=> $kohde,
+				'asiakas' 	=> $asiakas,
+				'arrDate'	=> $arrDate,
+				'site'		=> $site,
+				'week'		=> $week,
+				'year'		=> $year,
+				'vktyoaika'	=> $vktyoaika
+			));
+		}
 	}
 
 	protected function statukset(){
