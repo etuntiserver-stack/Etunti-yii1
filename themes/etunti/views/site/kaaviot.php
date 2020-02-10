@@ -1,4 +1,4 @@
-<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+﻿<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
 <script src="https://code.highcharts.com/highcharts.src.js"></script>
@@ -442,12 +442,13 @@ function output_chart_menu()
 
 						// approved_only: Vain hyväksytyt (true) || Kaikki (false)
 					case 'approved_only':
+						alert(v.default);
 						content += `
 							<div class="${inputs_class}">
 								<label class="field select">
 									<select name="${v.id}" class="gui-input">
-										<option value=1 ` + (v.default ? 'selected' : '') + `>Hyväksytyt</option>
-										<option value=0 ` + (!v.default ? 'selected' : '') + `>Kaikki</option>
+										<option value=1 ` + (v.default == 1 ? 'selected' : '') + `>Hyväksytyt</option>
+										<option value=0 ` + (v.default == 0 ? 'selected' : '') + `>Kaikki</option>
 									</select>
 									<i class="arrow double"></i>
 								</label>

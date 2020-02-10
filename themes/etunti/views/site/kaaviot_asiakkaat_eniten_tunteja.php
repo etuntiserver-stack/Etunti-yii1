@@ -7,10 +7,10 @@
  * @var $this AsiakkaatController
  *
  * Expected variables inside $_POST:
- *   asiakkaat_eniten_tunteja_from      Chart start date
- *   asiakkaat_eniten_tunteja_to        Chart end date
- *   asiakkaat_eniten_tunteja_approved  Hyväksytyt (true) || Kaikki (false)
- *   asiakkaat_eniten_tunteja_type      Chart type
+ *   asiakkaat_eniten_tunteja_from           Chart start date
+ *   asiakkaat_eniten_tunteja_to             Chart end date
+ *   asiakkaat_eniten_tunteja_approved_only  Hyväksytyt (true) || Kaikki (false)
+ *   asiakkaat_eniten_tunteja_type           Chart type
  */
 
 $from = date('Y-m-d', isset($_POST['asiakkaat_eniten_tunteja_from'])
@@ -19,7 +19,7 @@ $from = date('Y-m-d', isset($_POST['asiakkaat_eniten_tunteja_from'])
 $to = date('Y-m-d', isset($_POST['asiakkaat_eniten_tunteja_to'])
   ? strtotime($_POST['asiakkaat_eniten_tunteja_to'])
   : time());
-$approved_only = ($_POST['asiakkaat_eniten_tunteja_approved'] ?? true) == true;
+$approved_only = ($_POST['asiakkaat_eniten_tunteja_approved_only'] ?? true) == true;
 $chart_type = $_POST['asiakkaat_eniten_tunteja_type'] ?? 'bar';
 
 $from_formated = date("d.m.Y", strtotime($from));
