@@ -2283,13 +2283,27 @@ foreach($laskunRivit as $rivit)
 
 if( $model->alv_muoto == 0 ){  $type = 'net'; }
 if( $model->alv_muoto == 1 ){  $type = 'gross'; }
+$hinta = $rivit->hinta;
+
+// If price contains more than 2 decimal places, calculate price manually,
+// because netvisor doesn't support more than 2 decimal places. (test)
+if (strlen(substr(strrchr($hinta, "."), 1)) > 2) {
+	$alv_modifier = (100 + $rivit->alv) / 100;
+	if ($type == 'net') {
+		$hinta = $hinta * $alv_modifier;
+		$type = 'gross';
+	} else {
+		$hinta = $hinta / $alv_modifier;
+		$type = 'net';
+	}
+}
 
 $xml .= '
        <InvoiceLine>
          <SalesInvoiceProductLine>
              <ProductIdentifier type="netvisor">'.$ProductIdentifier.'</ProductIdentifier>
              <ProductName>'.$rivit->tkoodi.'</ProductName>
-             <ProductUnitPrice type="'.$type.'">'.$rivit->hinta.'</ProductUnitPrice>
+             <ProductUnitPrice type="'.$type.'">'.$hinta.'</ProductUnitPrice>
              <ProductVatPercentage vatcode="KOMY">'.$rivit->alv.'</ProductVatPercentage>
              <SalesInvoiceProductLineQuantity>'.$rivit->kpl.'</SalesInvoiceProductLineQuantity>
              <SalesInvoiceProductLineDiscountPercentage>'.$rivit->ale.'</SalesInvoiceProductLineDiscountPercentage>

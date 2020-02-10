@@ -127,6 +127,7 @@ class SiteController extends Controller
 		));
 	}
 
+	/** Charts page. */
 	public function actionKaaviot()
 	{
 		// Temporary default variables. (Copied from old code)
