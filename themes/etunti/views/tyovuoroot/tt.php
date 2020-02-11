@@ -27,7 +27,7 @@ ini_set('memory_limit', '512M');
 		});
 </script>
 <!-- Fixed Table -->
-
+<?php $odotus_ikooni = '<img src="../../lib/img/etusivu/odotus.gif" height="20px">'; ?>
 <!-- TV laatiko -->
 <div id="showres" class="modal" aria-hidden="true" data-backdrop="static" data-keyboard="false"></div>
 <!-- TV laatiko -->
@@ -36,13 +36,13 @@ ini_set('memory_limit', '512M');
  <table class="table table-bordered" id="fixTable">
  <thead>
  <tr>
- <th class="text-center" width="1"></th>
- <th>
+ <th class="bg-default text-center" width="1"></th>
+ <th class="bg-default">
 	<span class="nimi">VARAUS</span>
  </th>
  <?php
  foreach($tt as $tid => $arr){
-	echo '<th style="z-index: 999;"><div class="text-center laatiko_td">'.$arr['etusukunimi'].'</div></th>';
+	echo '<th class="bg-default" style="z-index: 999;"><div class="text-center laatiko_td">'.$arr['etusukunimi'].'</div></th>';
  }
  ?>
  </tr>
@@ -64,15 +64,15 @@ ini_set('memory_limit', '512M');
 		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Erikoislauantai').'"></i>';
 	}
 	echo '<tr class="'.$tr_pyhat.'">';
-	echo '<td style="z-index: 999; min-width: 100px"><div class="text-center laatiko_td"><b>'.$arrDate[$explColDate[0]].'</b>, '.$explColDate[1].$ispyha.'</b></div></td>';
+	echo '<td class="bg-default" style="z-index: 999; min-width: 100px"><div class="text-center laatiko_td"><b>'.$arrDate[$explColDate[0]].'</b>, '.$explColDate[1].$ispyha.'</b></div></td>';
 		// <-- VARAUKSET
 		echo '<td>';
-		echo '<div id="'.$did.'_0" class="latikkoAsetukset" pvm="'.$f.'" tid="0"></div>';
+		echo '<div id="'.$did.'_0" class="latikkoAsetukset" pvm="'.$f.'" tid="0"><span class="odotus">'.$odotus_ikooni.'</span></div>';
 		echo '</td>';
 		//     VARAUKSET -->
 		foreach($tt as $tid => $item){
 			echo '<td>';
-			echo '<div id="'.$did.'_'.$tid.'" class="latikkoAsetukset" pvm="'.$f.'" tid="'.$tid.'"></div>';
+			echo '<div id="'.$did.'_'.$tid.'" class="latikkoAsetukset" pvm="'.$f.'" tid="'.$tid.'"><span class="odotus">'.$odotus_ikooni.'</span></div>';
 			echo '</td>';
 		}
 	echo '</tr>';
@@ -83,7 +83,7 @@ ini_set('memory_limit', '512M');
 			echo '<td class="myBgColors viikkoRivi"></td>';
 			foreach($tt as $tid => $item){
 				echo '<td class="myBgColors viikkoRivi">';
-				echo '<div class="viikkolaatiko text-center" id="vko_'.$did.'_'.$tid.'"">00:00</div>';
+				echo '<div class="viikkolaatiko text-center" id="vko_'.$did.'_'.$tid.'""><span class="odotusweeklaskennan">'.$odotus_ikooni.'</span></div>';
 				echo '</td>';
 			}
 	echo '</tr>';
@@ -105,6 +105,7 @@ $(document).ready(function(){
 			data = JSON.parse(data);
 			//console.log(data);
 			$.tv_arr_update(data);
+			$('.odotus').remove();
 		},error:function(data){
 		  	console.log(data);
 		}

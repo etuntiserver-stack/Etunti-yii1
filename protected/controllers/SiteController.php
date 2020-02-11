@@ -2034,10 +2034,10 @@ $(document).ready(function(){
 		$suunniteltu 	= 0;
 		$thisday	= date("Y-m-d");
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
-		$getAll 	= $tyovuorot[0]->TidfromtoTyovuoroWithVirtual($thisday, $thisday, $tids, false, null);
+		$getAll 	= $tyovuorot[0]->TidfromtoTyovuoroWithVirtual($thisday, $thisday, $tids, true, null);
 		$result 	= 0;
-		foreach($getAll as $tid => $arr)
-			$result += $arr['tyotunnit']['kaikki']+$arr['matkatunnit']['kaikki']+$arr['lounaat']['kaikki'];
+		foreach($getAll as $tid => $seconds)
+			$result += $seconds;
 		/*
 		echo '<pre>';
 		print_r($result);

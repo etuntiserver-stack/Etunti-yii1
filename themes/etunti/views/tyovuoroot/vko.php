@@ -30,6 +30,7 @@ ini_set('memory_limit', '512M');
 
 <input type="hidden" id="week" value="<?=$week?>">
 <input type="hidden" id="year" value="<?=$year?>">
+<?php $odotus_ikooni = '<img src="../../lib/img/etusivu/odotus.gif" height="20px">'; ?>
 
 <!-- TV laatiko -->
 <div id="showres" class="modal" aria-hidden="true" data-backdrop="static" data-keyboard="false"></div>
@@ -39,7 +40,7 @@ ini_set('memory_limit', '512M');
  <table class="table table-bordered" id="fixTable">
  <thead>
  <tr>
- <th class="text-center" width="1"><?php echo CHtml::button(Yii::t('main', 'Valitse kaikki'),array('target'=>'_blank','class'=>'btn btn-default valitseKaikkiLahetettavaksi')); ?></th>
+ <th class="bg-default text-center" width="1"><?php echo CHtml::button(Yii::t('main', 'Valitse kaikki'),array('target'=>'_blank','class'=>'btn btn-default valitseKaikkiLahetettavaksi')); ?></th>
  <?php
  $f 		= date("d.m.Y", strtotime($from));
  $did_sunday 	= date("Ymd", strtotime($year.'W'.$week.'7'));
@@ -58,7 +59,7 @@ ini_set('memory_limit', '512M');
 	if(isset($pyhapaivat[$f]['el'])){
 		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Erikoislauantai').'"></i>';
 	}
-	echo '<th class="text-center '.$tr_pyhat.'" style="z-index: 999;">
+	echo '<th class="bg-default text-center '.$tr_pyhat.'" style="z-index: 999;">
 		<div class="laatiko_td"><b>'.$arrDate[$explColDate[0]].'</b>, '.$explColDate[1].$ispyha.'</b></div>
 	</th>';
 	$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
@@ -69,7 +70,7 @@ ini_set('memory_limit', '512M');
  <tbody>
  <!-- VARAUKSET -->
  <tr>
-    <td class="laatiko_td text-center" style="z-index: 999; width: 50px">
+    <td class="bg-default text-center" style="z-index: 999; width: 50px">
 	<span class="nimi">VARAUS</span>
     </td>
     <?php
@@ -85,7 +86,7 @@ ini_set('memory_limit', '512M');
 			$tr_pyhat = 'tr_pyhat';
 
 		echo '<td class="'.$tr_pyhat.'">';
-		echo '<div id="'.$did.'_0" class="latikkoAsetukset" pvm="'.$f.'" tid="0"></div>';
+		echo '<div id="'.$did.'_0" class="latikkoAsetukset" pvm="'.$f.'" tid="0"><span class="odotus">'.$odotus_ikooni.'</span></div>';
 		echo '</td>';
     		$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
     } 
@@ -94,12 +95,9 @@ ini_set('memory_limit', '512M');
  <!-- VARAUKSET -->
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
-	<td class="laatiko_td" style="z-index: 999; min-width: 150px">
+	<td class="bg-default" style="z-index: 999; max-width: 150px; white-space: normal;">
 	<div class="m15 text-center">
-		<h5 class="nimi text-left">
-			<input type="checkbox" class="lahetettava_checkbox" for="<?=$tid?>" data-toggle="tooltip" data-placement="left" title="<?=Yii::t('main', 'Määrittele lähetettäväksi')?>">&nbsp;
-			<?=$item['etusukunimi']?>
-		</h5>
+		<h5 class="nimi"><?=$item['etusukunimi']?></h5>
 		<?php
 		$file = $week.'_'.$year.'_'.$tid.'.pdf';
 		$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
@@ -114,8 +112,9 @@ ini_set('memory_limit', '512M');
 		}
 		if(isset($vktyoaika[$tid]))
 			echo '<div class="text-center"><b>'.$vktyoaika[$tid].'</b> / ';
-		echo '<b id="vko_'.$did_sunday.'_'.$tid.'"">00:00</b>';
+		echo '<b id="vko_'.$did_sunday.'_'.$tid.'""><span class="odotusweeklaskennan">'.$odotus_ikooni.'</span></b>';
 		?>
+		<p><input type="checkbox" class="lahetettava_checkbox" for="<?=$tid?>" data-toggle="tooltip" data-placement="bottom" title="<?=Yii::t('main', 'Määrittele lähetettäväksi')?>"></p>
 	</div>
 	</td>
 	<?php
@@ -129,7 +128,7 @@ ini_set('memory_limit', '512M');
 		$tr_pyhat 	= '';
 		if( isset($pyhapaivat[$f]['su']) or isset($pyhapaivat[$f]['vp']) or isset($pyhapaivat[$f]['el']) )
 			$tr_pyhat = 'tr_pyhat';
-		echo '<td class="'.$tr_pyhat.'"><div id="'.$did.'_'.$tid.'" class="latikkoAsetukset" pvm="'.$f.'" tid="'.$tid.'"></div></td>';
+		echo '<td class="'.$tr_pyhat.'"><div id="'.$did.'_'.$tid.'" class="latikkoAsetukset" pvm="'.$f.'" tid="'.$tid.'"><span class="odotus">'.$odotus_ikooni.'</span></div></td>';
 		$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
 	}
 	?>
@@ -150,6 +149,7 @@ $(document).ready(function(){
 			data = JSON.parse(data);
 			//console.log(data);
 			$.tv_arr_update(data);
+			$('.odotus').remove();
 		},error:function(data){
 		  	console.log(data);
 		}

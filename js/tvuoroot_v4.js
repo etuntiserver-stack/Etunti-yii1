@@ -88,7 +88,6 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 	});
 	vkolaskenta(tids);
 }
-vkolaskenta(null);
 function vkolaskenta(tids){
    if( $(".sunday").length > 0 ){
 	$.each($(".sunday"), function( ) {
@@ -113,6 +112,7 @@ function vkolaskenta(tids){
 		   }
 	        });
 	});
+	$('.odotusweeklaskennan').remove();
    }
 }
 

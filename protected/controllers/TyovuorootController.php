@@ -2004,6 +2004,7 @@ class TyovuorootController extends Controller
 		foreach($tvr as $item){
 			ToistuvatTyovuorot::model()->updatebypk($item->toistuva_id, array('tid' => $item->tid));
 		}
+		Tyovuoroot::model()->deleteAll(" toistuva_id > 0 ");
 		/* ------ */
 
 		// <-- Poistettu_pvm redirect to another field
@@ -2333,8 +2334,7 @@ class TyovuorootController extends Controller
 		//$criteria->limit = "10";
 		$criteria->order = "alku ASC"; 
 		$criteria->condition = "
-			toistuva_id=0
-			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$haku_from' AND '$haku_to'
+			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$haku_from' AND '$haku_to'
 		";
 		if( count($haku_criteria) > 0 )
 			$criteria->addCondition($haku_criteria);
