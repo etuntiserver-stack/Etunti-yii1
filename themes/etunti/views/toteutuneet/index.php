@@ -334,14 +334,6 @@ $dateDiff = dateDiff($from, $to);
   $haku_from 	= date("Y-m-d", strtotime($from));
   $haku_to 	= date("Y-m-d", strtotime($to));
   $tv_arr 	= $tyovuoroot[0]->tv_arr($haku_from, $haku_to, [$tid], [], true);
-  //$getAll 	= $tyovuoroot[0]->TidfromtoTyovuoroWithVirtual($from, $to, [$tid], true, null); // lasketaan from laatikko
-
-/*
-echo '<pre>';
-print_r($getAll);
-echo '<pre>';
-exit;
-*/
 
   for ($i = 0; $i <= $dateDiff; $i++) 
   {

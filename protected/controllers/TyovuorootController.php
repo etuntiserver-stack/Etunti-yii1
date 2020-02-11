@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio', 'operatio_v3', 'viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'tv3', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'didnew', 'did3', 'didnew3', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -248,7 +248,7 @@ class TyovuorootController extends Controller
 		return $result;
 	}
 */
-	public function TidfromtoTyovuoroWithVirtual($from, $to, $tids, $by_pvm, $status)
+	public function TidfromtoTyovuoroWithVirtual($from, $to, $tids, $no_ilta, $status)
 	{
 		$result = [];
 		$asetukset = AsetuksetForAll::model()->findbypk(1);
@@ -280,8 +280,9 @@ class TyovuorootController extends Controller
 		}
 
 		// Initialize results array.
-		foreach ((is_array($tids) ? $tids : [$tids]) as $tid) {
-			$result[$tid] = [
+		if(!$no_ilta){
+			foreach ((is_array($tids) ? $tids : [$tids]) as $tid) {
+				$result[$tid] = [
 				'tyotunnit' => ['kaikki' => 0, 'ilta' => 0, 'yo' => 0],
 				'matkatunnit' => ['kaikki' => 0, 'ilta' => 0, 'yo' => 0],
 				'lounaat' => ['kaikki' => 0, 'ilta' => 0, 'yo' => 0],
@@ -289,18 +290,19 @@ class TyovuorootController extends Controller
 				'pyhapaivat' => 0,
 				'erikoislauantai' => 0,
 				'sutunnit' => 0
-			];
+				];
+			}
 		}
-
 		$from 		= date("Y-m-d", strtotime($from));
 		$to 		= date("Y-m-d", strtotime($to));
-		$haku_criteria	= $this->eiLasketa(). " AND peruutettu!=0";
-		$tv_arr 	= $this->tv_arr($from, $to, $tids, [], false);
+		$haku_criteria	= "(".$this->eiLasketa().") AND (peruutettu=0 OR peruutettu IS NULL)";
+		$tv_arr 	= $this->tv_arr($from, $to, $tids, $haku_criteria, false);
 
 		foreach ($tv_arr as $tid => $arr) {
+			if($no_ilta)
+				$result[$tid] = 0;
 			foreach ($arr as $pvm => $arr2) {
 
-				$result[$tid][$pvm] = 0;
 				// Increment total work days.
 				$result[$tid]['tp_maara']++;
 				foreach ($arr2 as $unixtime => $attributes) {
@@ -312,8 +314,8 @@ class TyovuorootController extends Controller
 
 					if($status !== null and !in_array($attributes[0]['data']['status'], $status))
 						continue;
-					if($by_pvm){
-						$result[$tid][$pvm] += $tunnit_yht;
+					if($no_ilta){
+						$result[$tid] += $tunnit_yht;
 						continue;
 					}
 					// Iltatunnit 18-23
@@ -1176,7 +1178,7 @@ class TyovuorootController extends Controller
 
 		// copy
 		if(isset($_POST['copy']) and isset($_SESSION['muistin'])){
-			$tids	= [$_POST['newTid']];
+			$tids	= [];
 			foreach($_SESSION['muistin'] as $cp){
 
 				$get_id 	= $this->this_id($cp);
@@ -1187,6 +1189,7 @@ class TyovuorootController extends Controller
 				$pvm 		= $get_id['pvm'];
 				$tid 		= $get_id['tid'];
 				$tids[$tid]	= $tid;
+				$tids[$_POST['newTid']]	= $_POST['newTid'];
 
 				$vanha_pvm = $model->pvm;
 
@@ -2159,6 +2162,7 @@ class TyovuorootController extends Controller
 			$kohde = Yii::app()->session['kohde'];
 
 		$haku_criteria 	= [];
+/*
 		if(isset($asiakas) and !empty($asiakas)){
 			$haku_criteria[] = "
 			kohde IN (
@@ -2183,6 +2187,7 @@ class TyovuorootController extends Controller
 			$impl = implode(',',$kohteet_siivous);
 			$haku_criteria[] = " kohde IN ($impl) ";
 		}
+*/
 		//     HAKU -->
 
 		// <-- Order tyontekijat
@@ -2220,7 +2225,7 @@ class TyovuorootController extends Controller
 		// Taulun rakennus
 		$haku_from 	= date("Y-m-d", strtotime(Yii::app()->session['from']));
 		$haku_to 	= date("Y-m-d", strtotime(Yii::app()->session['to']));
-		$tv_arr = $this->tv_arr($haku_from, $haku_to, $haku_tids, $haku_criteria, true);
+		//$tv_arr = $this->tv_arr($haku_from, $haku_to, $haku_tids, $haku_criteria, true);
 
 		// Työsuhteet
 	     	$tyosuhteet = Tyosuhdet::model()->findAll(" tid IN(".implode(",",$haku_tids).") ");
@@ -2241,15 +2246,15 @@ class TyovuorootController extends Controller
 				'tt_order_1' 	=> $tt_order_1,
 				'tt_order_2' 	=> $tt_order_2,
 				'tt'		=> $tt,
-				'tv_arr'	=> $tv_arr,
-				'from'		=> Yii::app()->session['from'],
-				'to'		=> Yii::app()->session['to'],
+				'from'		=> $haku_from,
+				'to'		=> $haku_to,
 				'kohteet_siivous' => $kohteet_siivous,
 				'kohde' 	=> $kohde,
 				'asiakas' 	=> $asiakas,
 				'arrDate'	=> $arrDate,
 				'site'		=> $site,
-				'vktyoaika'	=> $vktyoaika,	
+				'vktyoaika'	=> $vktyoaika,
+				'haku_tids'	=> $haku_tids,
 				'pyhapaivat'	=> $pyhapaivat
 			));
 		}
@@ -2258,9 +2263,8 @@ class TyovuorootController extends Controller
 				'tt_order_1' 	=> $tt_order_1,
 				'tt_order_2' 	=> $tt_order_2,
 				'tt'		=> $tt,
-				'tv_arr'	=> $tv_arr,
-				'from'		=> Yii::app()->session['from'],
-				'to'		=> Yii::app()->session['to'],
+				'from'		=> $haku_from,
+				'to'		=> $haku_to,
 				'kohteet_siivous' => $kohteet_siivous,
 				'kohde' 	=> $kohde,
 				'asiakas' 	=> $asiakas,
@@ -2269,9 +2273,22 @@ class TyovuorootController extends Controller
 				'week'		=> $week,
 				'year'		=> $year,
 				'vktyoaika'	=> $vktyoaika,
+				'haku_tids'	=> $haku_tids,
 				'pyhapaivat'	=> $pyhapaivat
 			));
 		}
+	}
+
+	public function actionGetsumbyweekall($this_sunday)
+	{
+		$tids		= [];
+		$tids		= json_decode($_POST['tids'], true);
+		$vko_from 	= date("Y-m-d", strtotime($this_sunday.' this week monday'));
+		$vko_to 	= date("Y-m-d", strtotime($this_sunday));
+		$vkoAll		= $this->TidfromtoTyovuoroWithVirtual($vko_from, $vko_to, $tids, true, null);
+		$return 	= ['vkoAll'=>$vkoAll, 'did'=>date("Ymd", strtotime($this_sunday))];
+		echo json_encode($return);
+		exit;
 	}
 
 	public function pyhapaivatAll($from, $to)

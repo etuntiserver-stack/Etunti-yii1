@@ -5,7 +5,6 @@ jQuery.sprint = function sprint(sec){
 	var m = (sec-h*3600)/60 ^ 0 ;
 	return (h<10?"0"+h:h)+":"+(m<10?"0"+m:m);
 }
-
 // <-- TV Lahetys
 checkChecked();
 $('.lahetettava_checkbox').change(function() {
@@ -67,8 +66,10 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 	var did 	= '';
 	var kesto_yht 	= [];
 	var yht		= 0;
+	var tids	= [];
 	$.each(tv_arr, function( tid, value ) {
 		yht = 0;
+		tids.push(tid);
 		$.each(value, function( pvm, v ) {
 			all_tv_edit 	= '';
 			tv_kesto	= 0;
@@ -78,13 +79,41 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 			});
 			pvm_muutos = pvm.split(".");
 			did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
-			//console.log(all_tv_edit);
+			//console.log(did);
 			if( $("#" + did).length > 0 )
 				$("#" + did).html(all_tv_edit + '<div class="pull-right pvm_yht">' + $.sprint(tv_kesto) + '</div>');
 			yht += tv_kesto;
 		});
-		$('#vkoyht_' + tid).html($.sprint(yht));
+		//$('#vkoyht_' + tid).html($.sprint(yht));
 	});
+	vkolaskenta(tids);
+}
+vkolaskenta(null);
+function vkolaskenta(tids){
+   if( $(".sunday").length > 0 ){
+	$.each($(".sunday"), function( ) {
+		this_sunday 	= $(this).attr('sunday');
+		if(tids !== null)
+			tds = tids;
+		else
+			tds = $(this).attr('tids');
+        	$.ajax({
+        	   url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/getsumbyweekall?this_sunday='+this_sunday,
+		   type: 'POST',
+		   data: { tids : tids },
+        	   success: function(data){
+			d = JSON.parse(data);
+			//console.log(d);
+			$.each(d['vkoAll'], function( tid, seconds ) {
+				$("#vko_" + d['did'] +'_' + tid).html($.sprint(seconds));
+			});
+        	   },
+		   error:function(data){
+			console.log(data)
+		   }
+	        });
+	});
+   }
 }
 
 var cal_this_id 	= '';
@@ -522,7 +551,7 @@ window.addEventListener('message', function(e) {
 	   data: doWhat,
            success: function(data){
 		data = JSON.parse(data);
-		console.log(data);
+		//console.log(data);
 
 		if( data['poistettu'] ){
   			$( data['poistettu'] ).each(function(index, tv_id) {

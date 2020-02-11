@@ -12,9 +12,6 @@
 #fixTable td:hover{
 	/*background: #fff;*/
 }
-.ajanreika{
-	background: orange;
-}
 .hover_well{
 	padding: 7px;
 	background: #ededed;
@@ -27,9 +24,9 @@
 	margin-right: 3px;
 	cursor: pointer;
 }
-.reika-warning{
+.reika-danger{
 	/*background: orange;*/
-	color: orange;
+	color: red;
 	padding: 3px;
 	font-size: 90%;
 	font-weight: bold;
@@ -95,7 +92,7 @@ td .latikkoAsetukset{
 .tr_pyhat{
 	background: #ddd;
 }
-.tr_pyhat td .latikkoAsetukset p{
+.tr_pyhat .latikkoAsetukset p{
 	border: 1px #fff solid;
 }
 td span.nimi{

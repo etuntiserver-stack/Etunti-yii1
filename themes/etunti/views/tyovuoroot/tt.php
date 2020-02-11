@@ -67,66 +67,25 @@ ini_set('memory_limit', '512M');
 	echo '<td style="z-index: 999; min-width: 100px"><div class="text-center laatiko_td"><b>'.$arrDate[$explColDate[0]].'</b>, '.$explColDate[1].$ispyha.'</b></div></td>';
 		// <-- VARAUKSET
 		echo '<td>';
-		echo '<div id="'.$did.'_'.$tid.'" class="latikkoAsetukset" pvm="'.$f.'" tid="0">';
-			$pvm_vaaraus_yhteensa 	= 0;
-			$last_vaaraus_loppu 	= null;
-			if (isset($tv_arr[0][$f])) {
-				ksort($tv_arr[0][$f]);
-				foreach ($tv_arr[0][$f] as $k => $v) {
-					foreach ($v as $v2) {
-						$alku_ts = strtotime($v2['alku']);
-						if ($last_vaaraus_loppu !== null && $alku_vaaraus_ts - ($loppu_vaaraus_ts = strtotime($last_vaaraus_loppu)) > 0) {
-							echo "<p class=\"reika-warning text-center\">Vapaa-aika: " . $this->sprint($alku_vaaraus_ts - $loppu_vaaraus_ts) . "</p>";
-						}
-						echo "<p>{$v2['tv_edit']}</p>";
-						$pvm_vaaraus_yhteensa 	+= $v2['tv_kesto'];
-						$last_vaaraus_loppu 	= $v2['loppu'];
-					}
-				}
-			}
-			if ($pvm_vaaraus_yhteensa > 0)
-				echo '<div class="pull-right pvm_yht">' . $this->sprint($pvm_vaaraus_yhteensa) . '</div>';
-		echo '</div>';
+		echo '<div id="'.$did.'_0" class="latikkoAsetukset" pvm="'.$f.'" tid="0"></div>';
 		echo '</td>';
 		//     VARAUKSET -->
 		foreach($tt as $tid => $item){
-		echo '<td>';
-		echo '<div id="'.$did.'_'.$tid.'" class="latikkoAsetukset" pvm="'.$f.'" tid="'.$tid.'">';
-			$pvm_yhteensa 	= 0;
-			$last_loppu 	= null;
-			if (isset($tv_arr[$tid][$f])) {
-				ksort($tv_arr[$tid][$f]);
-				foreach ($tv_arr[$tid][$f] as $k => $v) {
-
-					foreach ($v as $v2) {
-						$alku_ts = strtotime($v2['alku']);
-						if ($last_loppu !== null && $alku_ts - ($loppu_ts = strtotime($last_loppu)) > 0) {
-							echo "<p class=\"reika-warning text-center\">Vapaa-aika: " . $this->sprint($alku_ts - $loppu_ts) . "</p>";
-						}
-						echo "<p>{$v2['tv_edit']}</p>";
-						$pvm_yhteensa 	+= $v2['tv_kesto'];
-						$last_loppu 	= $v2['loppu'];
-					}
-				}
-			}
-			if ($pvm_yhteensa > 0)
-				echo '<div class="pull-right pvm_yht">' . $this->sprint($pvm_yhteensa) . '</div>';
-		echo '</div>';
-		echo '</td>';
+			echo '<td>';
+			echo '<div id="'.$did.'_'.$tid.'" class="latikkoAsetukset" pvm="'.$f.'" tid="'.$tid.'"></div>';
+			echo '</td>';
 		}
 	echo '</tr>';
 	if(date('N', strtotime($f)) == 7){
-	$vko 	= date("W",strtotime($f));
-	$year 	= date("Y",strtotime($f));
-	echo '<tr>';
-  		echo '<td class="text-center myBgColors viikkoRivi"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($f)).' <i class="fa fa-arrow-up" aria-hidden="true"></i>
+		echo '<tr class="sunday" sunday="'.$f.'" tids="'.json_encode(array_values($haku_tids)).'">';
+  			echo '<td class="text-center myBgColors viikkoRivi"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($f)).' <i class="fa fa-arrow-up" aria-hidden="true"></i>
 </b></td>';
-		echo '<td class="myBgColors viikkoRivi"></td>';
-		foreach($tt as $tid => $item){
-		echo '<td class="myBgColors viikkoRivi">';
-		echo '<div id="vko_'.$did.'_'.$tid.'" class="link viikkolaatiko text-center" pvm="'.$f.'" tid="'.$tid.'"><i class="fa fa-2x fa-eye"></i></div>';
-		echo '</td>';
-		}
+			echo '<td class="myBgColors viikkoRivi"></td>';
+			foreach($tt as $tid => $item){
+				echo '<td class="myBgColors viikkoRivi">';
+				echo '<div class="viikkolaatiko text-center" id="vko_'.$did.'_'.$tid.'"">00:00</div>';
+				echo '</td>';
+			}
 	echo '</tr>';
 	}
 	$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
@@ -137,6 +96,19 @@ ini_set('memory_limit', '512M');
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+	$.ajax({
+		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did4',
+		type: 'POST',
+		data: { haku_from : '<?=$from?>', haku_to : '<?=$to?>', tids : JSON.parse('<?=json_encode($haku_tids)?>') },
+		success:function(data){
+			data = JSON.parse(data);
+			//console.log(data);
+			$.tv_arr_update(data);
+		},error:function(data){
+		  	console.log(data);
+		}
+	});
 
 });
 </script>

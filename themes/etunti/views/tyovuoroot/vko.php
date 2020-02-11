@@ -40,22 +40,30 @@ ini_set('memory_limit', '512M');
  <thead>
  <tr>
  <th class="text-center" width="1"><?php echo CHtml::button(Yii::t('main', 'Valitse kaikki'),array('target'=>'_blank','class'=>'btn btn-default valitseKaikkiLahetettavaksi')); ?></th>
- <?php $f = date("d.m.Y", strtotime($from)); ?>
- <?php while (strtotime($f) <= strtotime($to)): ?>
  <?php
- if(!isset(Yii::app()->session['vkolopput']) and date("w", strtotime($f)) == 6){
-	$f = date ("d.m.Y", strtotime("+2 day", strtotime($f)));
- }
+ $f 		= date("d.m.Y", strtotime($from));
+ $did_sunday 	= date("Ymd", strtotime($year.'W'.$week.'7'));
+ echo '<span class="sunday" sunday="'.date("d.m.Y", strtotime($year.'W'.$week.'7')).'" tids="'.json_encode(array_values($haku_tids)).'"></span>';
+ while (strtotime($f) <= strtotime($to)){
+	if(!isset(Yii::app()->session['vkolopput']) and date("w", strtotime($f)) == 6)
+		$f = date ("d.m.Y", strtotime("+2 day", strtotime($f)));
+	$columnDate 	= date("N/d.m",strtotime($f));
+	$explColDate 	= explode("/",$columnDate);
+	$tr_pyhat 	= '';
+	$ispyha 	= '';
+	if( isset($pyhapaivat[$f]['su']) or isset($pyhapaivat[$f]['vp']) or isset($pyhapaivat[$f]['el']) ){
+		$tr_pyhat = 'tr_pyhat';
+		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>';
+	}
+	if(isset($pyhapaivat[$f]['el'])){
+		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Erikoislauantai').'"></i>';
+	}
+	echo '<th class="text-center '.$tr_pyhat.'" style="z-index: 999;">
+		<div class="laatiko_td"><b>'.$arrDate[$explColDate[0]].'</b>, '.$explColDate[1].$ispyha.'</b></div>
+	</th>';
+	$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
+ } 
  ?>
- <?php
-  $columnDate = date("N/d.m",strtotime($f));
-  $explColDate = explode("/",$columnDate);
- ?>
- <th class="text-center" style="z-index: 999;">
-	<div class="laatiko_td"><b><?=$arrDate[$explColDate[0]]?></b>, <?=$explColDate[1]?></b></div>
- </th>
- <?php $f = date ("d.m.Y", strtotime("+1 day", strtotime($f))); ?>
- <?php endwhile; ?>
  </tr>
  </thead>
  <tbody>
@@ -64,34 +72,29 @@ ini_set('memory_limit', '512M');
     <td class="laatiko_td text-center" style="z-index: 999; width: 50px">
 	<span class="nimi">VARAUS</span>
     </td>
-    <?php $f = date("d.m.Y", strtotime($from)); ?>
-    <?php while (strtotime($f) <= strtotime($to)): ?>
     <?php
-    if(!isset(Yii::app()->session['vkolopput']) and date("w", strtotime($f)) == 6){
-	$f = date ("d.m.Y", strtotime("+2 day", strtotime($f)));
-    }
-    ?>
-    <?php $did = date("Ymd", strtotime($f)); ?>
-      <td>
-	<div id="<?=$did.'_0'?>" class="latikkoAsetukset" pvm="<?=$f?>" tid="0">
-		<?php if( isset($tv_arr[0][$f]) ): ?>
-		<?php ksort($tv_arr[0][$f]); ?>
-		<?php foreach($tv_arr[0][$f] as $k => $v): ?>
-			<?php foreach($v as $v2): ?>
-				<p><?=$v2?></p>
-			<?php endforeach; ?>
-		<?php endforeach; ?>
-		<?php endif; ?>
-	</div>
-      </td>
-      <?php $f = date ("d.m.Y", strtotime("+1 day", strtotime($f))); ?>
-    <?php endwhile; ?>
+	$f = date("d.m.Y", strtotime($from));
+	while (strtotime($f) <= strtotime($to)){
+		if(!isset(Yii::app()->session['vkolopput']) and date("w", strtotime($f)) == 6)
+			$f = date ("d.m.Y", strtotime("+2 day", strtotime($f)));
+		$did 		= date("Ymd", strtotime($f));
+		$columnDate 	= date("N/d.m",strtotime($f));
+		$explColDate 	= explode("/",$columnDate);
+		$tr_pyhat 	= '';
+		if( isset($pyhapaivat[$f]['su']) or isset($pyhapaivat[$f]['vp']) or isset($pyhapaivat[$f]['el']) )
+			$tr_pyhat = 'tr_pyhat';
+
+		echo '<td class="'.$tr_pyhat.'">';
+		echo '<div id="'.$did.'_0" class="latikkoAsetukset" pvm="'.$f.'" tid="0"></div>';
+		echo '</td>';
+    		$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
+    } 
+  ?>
  </tr>
  <!-- VARAUKSET -->
- <?php $week_yhteensa = []; ?>
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
-    <td class="laatiko_td" style="z-index: 999; min-width: 150px">
+	<td class="laatiko_td" style="z-index: 999; min-width: 150px">
 	<div class="m15 text-center">
 		<h5 class="nimi text-left">
 			<input type="checkbox" class="lahetettava_checkbox" for="<?=$tid?>" data-toggle="tooltip" data-placement="left" title="<?=Yii::t('main', 'Määrittele lähetettäväksi')?>">&nbsp;
@@ -110,45 +113,26 @@ ini_set('memory_limit', '512M');
 			//     file_safe_opener -->
 		}
 		if(isset($vktyoaika[$tid]))
-			echo '<div class="text-center"><b>'.$vktyoaika[$tid].'</b> / <b id="vkoyht_'.$tid.'">00:00</b></div>';
+			echo '<div class="text-center"><b>'.$vktyoaika[$tid].'</b> / ';
+		echo '<b id="vko_'.$did_sunday.'_'.$tid.'"">00:00</b>';
 		?>
 	</div>
-    </td>
-    <?php $week_yhteensa[$tid] = 0; ?>
-    <?php $f = date("d.m.Y", strtotime($from)); ?>
-    <?php while (strtotime($f) <= strtotime($to)): ?>
-    <?php
-    if(!isset(Yii::app()->session['vkolopput']) and date("w", strtotime($f)) == 6){
-	$f = date ("d.m.Y", strtotime("+2 day", strtotime($f)));
-    }
-    ?>
-    <?php $did = date("Ymd", strtotime($f)); ?>
-      <td>
-	<div id="<?=$did.'_'.$tid?>" class="latikkoAsetukset" pvm="<?=$f?>" tid="<?=$tid?>">
-		<?php
-			$pvm_yhteensa = 0;
-			if (isset($tv_arr[$tid][$f])) {
-				ksort($tv_arr[$tid][$f]);
-				foreach ($tv_arr[$tid][$f] as $k => $v) {
-					foreach ($v as $v2) {
-						$alku_ts = strtotime($v2['alku']);
-						if (isset($last_loppu) && $alku_ts - ($loppu_ts = strtotime($last_loppu)) > 0) {
-							echo "<p class=\"reika-warning text-center\">Vapaa-aika: " . $this->sprint($alku_ts - $loppu_ts) . "</p>";
-						}
-						echo "<p>{$v2['tv_edit']}</p>";
-						$pvm_yhteensa += $v2['tv_kesto'];
-						$last_loppu = $v2['loppu'];
-					}
-				}
-			}
-			if ($pvm_yhteensa > 0)
-				echo '<div class="pull-right pvm_yht">' . $this->sprint($pvm_yhteensa) . '</div>';
-			$week_yhteensa[$tid] += $pvm_yhteensa;
-		?>
-	</div>
-      </td>
-      <?php $f = date ("d.m.Y", strtotime("+1 day", strtotime($f))); ?>
-    <?php endwhile; ?>
+	</td>
+	<?php
+	$f = date("d.m.Y", strtotime($from));
+	while (strtotime($f) <= strtotime($to)){
+		if(!isset(Yii::app()->session['vkolopput']) and date("w", strtotime($f)) == 6)
+			$f = date ("d.m.Y", strtotime("+2 day", strtotime($f)));
+		$did = date("Ymd", strtotime($f));
+		$columnDate 	= date("N/d.m",strtotime($f));
+		$explColDate 	= explode("/",$columnDate);
+		$tr_pyhat 	= '';
+		if( isset($pyhapaivat[$f]['su']) or isset($pyhapaivat[$f]['vp']) or isset($pyhapaivat[$f]['el']) )
+			$tr_pyhat = 'tr_pyhat';
+		echo '<td class="'.$tr_pyhat.'"><div id="'.$did.'_'.$tid.'" class="latikkoAsetukset" pvm="'.$f.'" tid="'.$tid.'"></div></td>';
+		$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
+	}
+	?>
  </tr>
  <?php endforeach; ?>
  </tbody>
@@ -157,8 +141,19 @@ ini_set('memory_limit', '512M');
 
 <script type="text/javascript">
 $(document).ready(function(){
-	$.each(JSON.parse('<?=json_encode($week_yhteensa)?>'), function( tid, value ) {
-		$('#vkoyht_' + tid).html($.sprint(value));
+
+	$.ajax({
+		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did4',
+		type: 'POST',
+		data: { haku_from : '<?=$from?>', haku_to : '<?=$to?>', tids : JSON.parse('<?=json_encode($haku_tids)?>') },
+		success:function(data){
+			data = JSON.parse(data);
+			//console.log(data);
+			$.tv_arr_update(data);
+		},error:function(data){
+		  	console.log(data);
+		}
 	});
+
 });
 </script>
