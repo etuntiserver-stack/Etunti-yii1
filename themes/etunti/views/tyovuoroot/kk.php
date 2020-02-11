@@ -147,7 +147,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   }
   $from = date("Y-m-d", strtotime($year.'-'.$month.' first day of this month'));
   $to = date("Y-m-d", strtotime($year.'-'.$month.' last day of this month'));
-  $getAll = $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids, true, [3]);
+  $getAll = $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids, true, true, [3]);
 
   foreach($tids as $v)
   {
@@ -175,7 +175,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 	echo '</td>';
 
    }
-  echo '<TD class="text-small"><b>'.sprint($yht).'</b></TD>';
+  echo '<TD class="text-small"><b>'.$this->sprint($yht).'</b></TD>';
   echo '<TR>';
   }
   ?>

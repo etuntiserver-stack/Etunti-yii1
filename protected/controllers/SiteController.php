@@ -2034,13 +2034,13 @@ $(document).ready(function(){
 		$suunniteltu 	= 0;
 		$thisday	= date("Y-m-d");
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
-		$getAll 	= $tyovuorot[0]->TidfromtoTyovuoroWithVirtual($thisday, $thisday, $tids, true, null);
+		$getAll 	= $tyovuorot[0]->TidfromtoTyovuoroWithVirtual($thisday, $thisday, $tids, true, false, null);
 		$result 	= 0;
 		foreach($getAll as $tid => $seconds)
 			$result += $seconds;
 		/*
 		echo '<pre>';
-		print_r($result);
+		print_r($getAll);
 		echo '<pre>';
 		exit;
 		*/

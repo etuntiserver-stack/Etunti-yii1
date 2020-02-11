@@ -211,11 +211,11 @@ $this->breadcrumbs=array(
 
 
   $tids = [];
-   foreach ($model as $data)
-	$tids[] = $data->id;
+  foreach ($model as $data)
+	$tids[$data->id] = $data->id;
 
   // < -- UUSI MUOTO / VIRTUAALISET
-  $getAll 	= $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids, false, null);
+  $getAll = $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids, false, false, null);
 /*
   echo '<pre>';
   print_r($getAll);
