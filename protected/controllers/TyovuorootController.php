@@ -1319,7 +1319,10 @@ class TyovuorootController extends Controller
 		/* ------ */
 
 		// <-- Poistettu_pvm redirect to another field
-		$criteria = new CDbCriteria(); 
+/*
+Pitaa tarkista onko toistuva_id vaika 1 kpl olemassa tavallisessa
+		$criteria = new CDbCriteria();
+		$criteria->select = "id,tyopaari,tid,poistettu_pvm";
 		$criteria->condition = "
 			poistettu_pvm!='' AND new_poistettu_pvm IS NULL
 		";
@@ -1346,9 +1349,10 @@ class TyovuorootController extends Controller
 			  if(!in_array($value, $clearing))
 			    $clearing[] = $value;
 			}
-
-			ToistuvatTyovuorot::model()->updatebypk($arvo->id, array('new_poistettu_pvm'=>json_encode($clearing)));
+			//echo 'id: '.$arvo->id.' KPL: '.count($new_poistettu_pvm).'<br>';
+			//ToistuvatTyovuorot::model()->updatebypk($arvo->id, array('new_poistettu_pvm'=>json_encode($clearing)));
 		}
+*/
 		//     Ketjun kasikorjaus -->
 
 
