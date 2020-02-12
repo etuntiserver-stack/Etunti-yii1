@@ -94,22 +94,4 @@ ini_set('memory_limit', '512M');
  </table>
 </div>
 
-<script type="text/javascript">
-$(document).ready(function(){
-
-	$.ajax({
-		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did4',
-		type: 'POST',
-		data: { haku_from : '<?=$from?>', haku_to : '<?=$to?>', tids : JSON.parse('<?=json_encode($haku_tids)?>') },
-		success:function(data){
-			data = JSON.parse(data);
-			//console.log(data);
-			$.tv_arr_update(data);
-			$('.odotus').remove();
-		},error:function(data){
-		  	console.log(data);
-		}
-	});
-
-});
-</script>
+<?php echo $this->tv_arrJava($from, $to, $haku_criteria, $haku_tids); ?>

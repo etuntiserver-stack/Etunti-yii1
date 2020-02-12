@@ -106,13 +106,13 @@ function vkolaskenta(tids){
 			$.each(d['vkoAll'], function( tid, seconds ) {
 				$("#vko_" + d['did'] +'_' + tid).html($.sprint(seconds));
 			});
+			$('.odotusweeklaskennan').remove();
         	   },
 		   error:function(data){
 			console.log(data)
 		   }
 	        });
 	});
-	$('.odotusweeklaskennan').remove();
    }
 }
 

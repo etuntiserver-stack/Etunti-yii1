@@ -295,7 +295,7 @@ if( $curpage == 'tyovuoroot/beta' )
 		<div class="row">
 		 <div class="col-sm-12">
 		        <button type="submit" class="col-sm-10 btn btn-primary" name="haku" controller="<?php echo $curpage; ?>" type="button"><?php echo Yii::t('main','Hae'); ?></button>
-			<a class="col-sm-2 btn btn-default" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/<?php echo $curpage; ?>?reset"><i class="fa fa-remove"></i></a>
+			<a class="col-sm-2 btn btn-default" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/<?php echo $curpage; ?>?reset<?=((isset($_GET['mode']))?'&mode='.$_GET['mode']:'')?>"><i class="fa fa-remove"></i></a>
 		 </div>
 		</div>
 	      </span>
@@ -1118,7 +1118,7 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Lista työvuoroista'); ?></a>
               </li>
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/beta">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/beta?mode=vko">
                   <span class="fa fa-paper-plane"></span> <?php echo Yii::t('main', 'Työvuorojen lähetys'); ?></a>
               </li>
               <li>
