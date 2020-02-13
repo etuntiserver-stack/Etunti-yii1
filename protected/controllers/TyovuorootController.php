@@ -1295,11 +1295,11 @@ class TyovuorootController extends Controller
 		));
 	}
 
-	public function actionBeta($kohteet_siivous=[], $kohde='', $asiakas='', $mode=null) {
+	public function actionBeta($kohteet_siivous=[], $kohde='', $asiakas='', $mode=null, $stage=null) {
 
 		// <-- Ketjun kasikorjaus
 		// <-- CLEAR puhdista turhat  ketjut 
-/*
+		if( $stage == 1 ){
 		$criteria = new CDbCriteria();
 		$criteria->condition = "
 			id NOT IN(select toistuva_id from sivex_tvuoro where toistuva_id!=0)
@@ -1311,17 +1311,16 @@ class TyovuorootController extends Controller
 				ToistuvatTyovuorot::model()->deletebypk($item->id);
 			}
 			echo 'STAGE 1 - korjattu '.count($tvr).' kpl<br>';
-			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode));
+			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 2));
 			exit;
 		}
-*/
+		}
 		//     CLEAR puhdista turhat  ketjut -->
-/*
+		if( $stage == 2 ){
 		$criteria = new CDbCriteria(); 
 		$criteria->order = "id ASC";
-		//$criteria->group = "toistuva_id";
 		$criteria->condition = "
-			id IN( SELECT MAX(id) FROM sivex_tvuoro GROUP BY toistuva_id )
+			id IN( SELECT MAX(id) FROM sivex_tvuoro )
 			AND tid!=0
 			AND toistuva_id!=0
 			AND toistuva_id IN(
@@ -1335,11 +1334,10 @@ class TyovuorootController extends Controller
 				ToistuvatTyovuorot::model()->updatebypk($item->toistuva_id, array('tid' => $item->tid));
 			}
 			echo 'STAGE 2 - korjattu '.count($tvr).' kpl<br>';
-			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode));
+		}
+			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 3));
 			exit;
 		}
-*/
-
 
 		// <-- Poistettu_pvm redirect to another field
 		$criteria = new CDbCriteria();
@@ -1385,6 +1383,7 @@ class TyovuorootController extends Controller
 					}
 				}
 				$findall = Tyovuoroot::model()->findAll($criteria);
+				echo 'TV määrä '.count($findall).'<br>';
 				foreach($findall as $item){
 					if(isset($new_poistettu_pvm[$item->tid][$item->pvm]))
 						unset($new_poistettu_pvm[$item->tid][$item->pvm]);
@@ -1405,7 +1404,9 @@ class TyovuorootController extends Controller
 				}
 				if( count($poistetut_pvms) > 300 ){
 					echo '<h4>STAGE 3 - on vielä jäljellä '.count($tvr).' kpl</h4>';
-					echo 'Poistetut päivät '. count($poistetut_pvms);
+					echo 'Poistetut päivät määrä '. count($poistetut_pvms);
+					// Jonkun verran aikana tehdään sivun reload jolloin PHP max execute time ei sanoa mitään
+					// Ja hyvää seuraa siitä tapahtumistä
 					echo '
 					<script>
 						window.location.reload();
@@ -1414,12 +1415,6 @@ class TyovuorootController extends Controller
 				}
 			}
 
-/*
-			echo '<pre>';
-			print_r($ei_onnistunut);
-			echo '</pre>';
-			exit;
-*/
 		}
 		//     Ketjun kasikorjaus -->
 
