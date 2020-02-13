@@ -1298,10 +1298,28 @@ class TyovuorootController extends Controller
 	public function actionBeta($kohteet_siivous=[], $kohde='', $asiakas='', $mode=null) {
 
 		// <-- Ketjun kasikorjaus
+		// <-- CLEAR puhdista turhat  ketjut 
+/*
+		$criteria = new CDbCriteria();
+		$criteria->condition = "
+			id NOT IN(select toistuva_id from sivex_tvuoro where toistuva_id!=0)
+		";
+		$ts = ToistuvatTyovuorot::model()->find($criteria);
+		if( isset($ts->id) ){
+			$tvr = ToistuvatTyovuorot::model()->findAll($criteria);
+			foreach($tvr as $item){
+				ToistuvatTyovuorot::model()->deletebypk($item->id);
+			}
+			echo 'STAGE 1 - korjattu '.count($tvr).' kpl<br>';
+			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode));
+			exit;
+		}
+*/
+		//     CLEAR puhdista turhat  ketjut -->
 /*
 		$criteria = new CDbCriteria(); 
 		$criteria->order = "id ASC";
-		$criteria->group = "toistuva_id";
+		//$criteria->group = "toistuva_id";
 		$criteria->condition = "
 			id IN( SELECT MAX(id) FROM sivex_tvuoro GROUP BY toistuva_id )
 			AND tid!=0
@@ -1310,51 +1328,100 @@ class TyovuorootController extends Controller
 				SELECT id FROM toistuvat_tyovuorot WHERE tyopaari='' AND tid!=t.tid
 			)
 		";
-		$tvr = Tyovuoroot::model()->findAll($criteria);
-		foreach($tvr as $item){
-			ToistuvatTyovuorot::model()->updatebypk($item->toistuva_id, array('tid' => $item->tid));
+		$findone = Tyovuoroot::model()->find($criteria);
+		if( isset($findone->id) ){
+			$tvr = Tyovuoroot::model()->findAll($criteria);
+			foreach($tvr as $item){
+				ToistuvatTyovuorot::model()->updatebypk($item->toistuva_id, array('tid' => $item->tid));
+			}
+			echo 'STAGE 2 - korjattu '.count($tvr).' kpl<br>';
+			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode));
+			exit;
 		}
 */
-		//Tyovuoroot::model()->deleteAll(" DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) > CURDATE() AND toistuva_id!=0 "); // ala tee se
-		/* ------ */
+
 
 		// <-- Poistettu_pvm redirect to another field
-/*
-Pitaa tarkista onko toistuva_id vaika 1 kpl olemassa tavallisessa
 		$criteria = new CDbCriteria();
-		$criteria->select = "id,tyopaari,tid,poistettu_pvm";
 		$criteria->condition = "
 			poistettu_pvm!='' AND new_poistettu_pvm IS NULL
 		";
-		$tstv = ToistuvatTyovuorot::model()->findAll($criteria);
-		foreach($tstv as $arvo){
-			// <-- Tids
-			$tids = [];
-			if( !empty($arvo->tyopaari) ){
-				foreach(json_decode($arvo->tyopaari, true) as $tid){
-					$tids[$tid] = $tid;
+		$findone = ToistuvatTyovuorot::model()->find($criteria);
+		if( isset($findone->id) ){
+			$tvr = ToistuvatTyovuorot::model()->findAll($criteria);
+			$i = 0;
+			foreach($tvr as $arvo){
+				$i++;
+				$poistetut_pvms = json_decode($arvo->poistettu_pvm, true);
+				if( count($poistetut_pvms) == 0)
+					continue;
+
+				//echo 'Liika poistettuvat paivat Ketjussa: '.$arvo->id.', <b>'.count($poistetut_pvms).'</b> kpl<br>';
+				//echo 'Osoite: '.$arvo->osoite.',  Kohde: '.$arvo->kohde.', Tid: '.$arvo->tid.'<br>';
+				//echo '<h4>'.$arvo->pfrom.' - '.$arvo->pto.'</h4><br>';
+
+				$criteria = new CDbCriteria(); 
+				$criteria->order = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) DESC";
+				$criteria->condition = "
+					toistuva_id='".$arvo->id."'
+				";
+				$findone = Tyovuoroot::model()->find($criteria);
+				// <-- Tids
+				$tids = [];
+				if( !empty($arvo->tyopaari) ){
+					foreach(json_decode($arvo->tyopaari, true) as $tid){
+						$tids[$tid] = $tid;
+					}
+					$tids[$arvo->tid] = $arvo->tid;
+				} else {
+					$tids[$arvo->tid] = $arvo->tid;
 				}
-				$tids[$arvo->tid] = $arvo->tid;
-			} else {
-				$tids[$arvo->tid] = $arvo->tid;
+				$new_poistettu_pvm = [];
+				foreach($tids as $tid){
+					foreach($poistetut_pvms as $k => $v){
+						if( date("Ymd", strtotime($findone->pvm)) < date("Ymd") and date("Ymd", strtotime($v)) > date("Ymd") )
+							continue;
+						$new_poistettu_pvm[$tid][$v] = ['tid'=>$tid, 'pvm'=>$v, 'syy'=>['text'=>'', 'user'=>'', 'date'=>'']];
+					}
+				}
+				$findall = Tyovuoroot::model()->findAll($criteria);
+				foreach($findall as $item){
+					if(isset($new_poistettu_pvm[$item->tid][$item->pvm]))
+						unset($new_poistettu_pvm[$item->tid][$item->pvm]);
+				}
+				$result = [];
+				foreach($new_poistettu_pvm as $k => $v)
+					foreach($v as $k2 => $v2)
+						$result[] = $v2;
+				$clearing = [];
+				foreach ($result as $key => $value){
+				  if(!in_array($value, $clearing))
+				    $clearing[] = $value;
+				}
+				if( date("Ymd", strtotime($findone->pvm)) < date("Ymd") ){
+					ToistuvatTyovuorot::model()->updatebypk($arvo->id, array('new_poistettu_pvm'=>json_encode(array_values($clearing)), 'pto' => $findone->pvm));
+				} else {
+					ToistuvatTyovuorot::model()->updatebypk($arvo->id, array('new_poistettu_pvm'=>json_encode(array_values($clearing))));
+				}
+				if( count($poistetut_pvms) > 300 ){
+					echo '<h4>STAGE 3 - on vielä jäljellä '.count($tvr).' kpl</h4>';
+					echo 'Poistetut päivät '. count($poistetut_pvms);
+					echo '
+					<script>
+						window.location.reload();
+					</script>';
+					exit;
+				}
 			}
 
-			$new_poistettu_pvm = [];
-			foreach($tids as $tid)
-				foreach(json_decode($arvo->poistettu_pvm, true) as $k => $v)
-					$new_poistettu_pvm[] = ['tid'=>$tid, 'pvm'=>$v, 'syy'=>['text'=>'', 'user'=>'', 'date'=>'']];
-
-			$clearing = [];
-			foreach ($new_poistettu_pvm as $key => $value){
-			  if(!in_array($value, $clearing))
-			    $clearing[] = $value;
-			}
-			//echo 'id: '.$arvo->id.' KPL: '.count($new_poistettu_pvm).'<br>';
-			//ToistuvatTyovuorot::model()->updatebypk($arvo->id, array('new_poistettu_pvm'=>json_encode($clearing)));
-		}
+/*
+			echo '<pre>';
+			print_r($ei_onnistunut);
+			echo '</pre>';
+			exit;
 */
+		}
 		//     Ketjun kasikorjaus -->
-
 
 		$site = Yii::app()->createController('Site');
 		$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
