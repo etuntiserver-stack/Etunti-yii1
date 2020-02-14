@@ -1340,6 +1340,7 @@ class TyovuorootController extends Controller
 		}
 
 		// <-- Poistettu_pvm redirect to another field
+		if( $stage == 3 ){
 		$criteria = new CDbCriteria();
 		$criteria->condition = "
 			poistettu_pvm!='' AND new_poistettu_pvm IS NULL
@@ -1416,7 +1417,43 @@ class TyovuorootController extends Controller
 			}
 
 		}
+
+			$this->redirect(array('beta', 'mode' => $mode, 'stage' => 4));
+		}
+
+		if( $stage == 4 ){
+			// Muutetaan tyovuoroja jossa toistuva_id!=0 ja jotka ei saa poistaa
+			$criteria = new CDbCriteria();
+			$criteria->condition = "
+				toistuva_id!=0 AND laskutettu!=0
+			";
+			$tv = Tyovuoroot::model()->findAll($criteria);
+			foreach($tv as $item){
+				//echo $item->tid.' '.$item->pvm.'<br>';
+				$u		= Yii::app()->user->nimi;
+				$d		= date("d.m.Y");
+				$poisto_syy	= ['text'=>'laskutettu', 'user'=>$u, 'date'=>$d];
+				$this->toistuvaDeletePvm($item->toistuva_id, $item->pvm, $item->tid, $poisto_syy);
+				Tyovuoroot::model()->updatebypk($item->id, array('toistuva_id'=> 0));
+			}
+			if( count($tv) == 0)
+				$this->redirect(array('beta', 'mode' => $mode, 'stage' => 5));
+			exit;
+		}
+
+		if( $stage == 5 ){
+			// poistetaan tyovuoroja jossa toistuva_id!=0 
+			//Yii::app()->db1->createCommand('DELETE FROM sivex_tvuoro WHERE toistuva_id!=0')->execute();
+			echo 'Poisto meni jumiin niin poista käsin mysql terminalista kaikki työvuorot jossa toistuva_id!=0';
+			// Kaikki valmis
+			//$this->redirect(array('beta', 'mode' => $mode));
+			exit;
+		}
 		//     Ketjun kasikorjaus -->
+
+
+
+// ------------------------------------------------
 
 		$site = Yii::app()->createController('Site');
 		$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
@@ -1649,11 +1686,10 @@ class TyovuorootController extends Controller
 
 	public function actionGetsumbyweekall($this_sunday)
 	{
-		$tids		= [];
-		$tids		= json_decode($_POST['tids'], true);
+		$tids		= (isset($_POST['tids']))?json_decode($_POST['tids'], true):[];
 		$vko_from 	= date("Y-m-d", strtotime($this_sunday.' this week monday'));
 		$vko_to 	= date("Y-m-d", strtotime($this_sunday));
-		$vkoAll		= $this->TidfromtoTyovuoroWithVirtual($vko_from, $vko_to, $tids, true, null, null);
+		$vkoAll		= $this->TidfromtoTyovuoroWithVirtual($vko_from, $vko_to, $tids, true, false, null);
 		$return 	= ['vkoAll'=>$vkoAll, 'did'=>date("Ymd", strtotime($this_sunday))];
 		echo json_encode($return);
 		exit;
@@ -1700,8 +1736,7 @@ class TyovuorootController extends Controller
 		//$criteria->with = array('kohteet');
 		$criteria->order = "alku ASC"; 
 		$criteria->condition = "
-			toistuva_id=0
-			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$haku_from' AND '$haku_to'
+			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$haku_from' AND '$haku_to'
 		";
 		if( count($haku_criteria) > 0 )
 			$criteria->addCondition($haku_criteria);
@@ -1881,6 +1916,8 @@ class TyovuorootController extends Controller
 	}
 
 	public function actionDid4($from, $to) {
+		$from 		= date("Y-m-d", strtotime($from));
+		$to 		= date("Y-m-d", strtotime($to));
 		$tids 		= (isset($_POST['tids']))?json_decode($_POST['tids'], true):[];
 		$haku_criteria	= (isset($_POST['haku_criteria']))?$_POST['haku_criteria']:[];
 		$tv_arr = $this->tv_arr($from, $to, $tids, $haku_criteria, true, []);

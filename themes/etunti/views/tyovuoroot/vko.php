@@ -137,5 +137,13 @@ ini_set('memory_limit', '512M');
  </tbody>
  </table>
 </div>
+<?php
 
+
+?>
+<!-- Täytetään tauluu -->
 <?php echo $this->tv_arrJava($from, $to, $haku_criteria, $haku_tids); ?>
+
+
+
+

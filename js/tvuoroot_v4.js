@@ -84,7 +84,6 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 				$("#" + did).html(all_tv_edit + '<div class="pull-right pvm_yht">' + $.sprint(tv_kesto) + '</div>');
 			yht += tv_kesto;
 		});
-		//$('#vkoyht_' + tid).html($.sprint(yht));
 	});
 	vkolaskenta(tids);
 }
