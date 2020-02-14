@@ -6247,6 +6247,23 @@ class TyovuorootController extends Controller
 			$tuotteet[$item->tuoteID] = $item->count;
 		}
 		$criteria = new CDBCriteria;
+        	$criteria->condition = "lisa_tuotteet!=''";
+		$tv = Tyovuoroot::model()->findAll($criteria);
+		$lisa_tuotteet = [];
+		foreach($tv as $item){
+			$dec = json_decode($item->lisa_tuotteet, true);
+			foreach($dec as $k => $v){
+				if($k == 'tuote'){
+					foreach($v as $k1 => $v1){
+						if(!isset($lisa_tuotteet[$v1]))
+							$lisa_tuotteet[$v1] = 1;
+						else
+							$lisa_tuotteet[$v1] += 1;
+					}
+				}
+			}
+		}
+		$criteria = new CDBCriteria;
         	$criteria->group = "tuoteID";
         	$criteria->select = "COUNT(tuoteID) as count, tuoteID";
         	$criteria->condition = "tuoteID!=0";
@@ -6255,6 +6272,6 @@ class TyovuorootController extends Controller
 		foreach($tv as $item){
 			$tuotteet_ketjussa[$item->tuoteID] = $item->count;
 		}
-		return ['tv' => $tuotteet, 'ketjussa' => $tuotteet_ketjussa];
+		return ['tv' => $tuotteet, 'ketjussa' => $tuotteet_ketjussa, 'lisa_tuotteet' => $lisa_tuotteet];
 	}
 }
