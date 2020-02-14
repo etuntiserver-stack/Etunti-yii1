@@ -1306,7 +1306,7 @@ class TyovuorootController extends Controller
 		";
 		$ts = ToistuvatTyovuorot::model()->find($criteria);
 		if( isset($ts->id) ){
-			ToistuvatTyovuorot::model()->deleteAll($criteria);
+			$tvr = ToistuvatTyovuorot::model()->findAll($criteria);
 			foreach($tvr as $item){
 				ToistuvatTyovuorot::model()->deletebypk($item->id);
 			}
