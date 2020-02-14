@@ -1319,8 +1319,9 @@ class TyovuorootController extends Controller
 		if( $stage == 2 ){
 		$criteria = new CDbCriteria(); 
 		$criteria->order = "id ASC";
+		$criteria->group = "toistuva_id";
 		$criteria->condition = "
-			id IN( SELECT MAX(id) FROM sivex_tvuoro )
+			id IN( SELECT MAX(id) FROM sivex_tvuoro GROUP by toistuva_id)
 			AND tid!=0
 			AND toistuva_id!=0
 			AND toistuva_id IN(
