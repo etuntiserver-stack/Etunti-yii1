@@ -6246,6 +6246,7 @@ class TyovuorootController extends Controller
 		foreach($tv as $item){
 			$tuotteet[$item->tuoteID] = $item->count;
 		}
+/*
 		$criteria = new CDBCriteria;
         	$criteria->condition = "lisa_tuotteet!=''";
 		$tv = Tyovuoroot::model()->findAll($criteria);
@@ -6263,6 +6264,7 @@ class TyovuorootController extends Controller
 				}
 			}
 		}
+*/
 		$criteria = new CDBCriteria;
         	$criteria->group = "tuoteID";
         	$criteria->select = "COUNT(tuoteID) as count, tuoteID";
@@ -6272,6 +6274,6 @@ class TyovuorootController extends Controller
 		foreach($tv as $item){
 			$tuotteet_ketjussa[$item->tuoteID] = $item->count;
 		}
-		return ['tv' => $tuotteet, 'ketjussa' => $tuotteet_ketjussa, 'lisa_tuotteet' => $lisa_tuotteet];
+		return ['tv' => $tuotteet, 'ketjussa' => $tuotteet_ketjussa]; //, 'lisa_tuotteet' => $lisa_tuotteet
 	}
 }
