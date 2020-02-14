@@ -1305,12 +1305,15 @@ class TyovuorootController extends Controller
 			id NOT IN(select toistuva_id from sivex_tvuoro where toistuva_id!=0)
 		";
 		$ts = ToistuvatTyovuorot::model()->find($criteria);
-			if( isset($ts->id) ){
-				ToistuvatTyovuorot::model()->deleteAll($criteria);
-				echo 'STAGE 1 - korjattu '.count($tvr).' kpl<br>';
-				echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 2));
-				exit;
+		if( isset($ts->id) ){
+			ToistuvatTyovuorot::model()->deleteAll($criteria);
+			foreach($tvr as $item){
+				ToistuvatTyovuorot::model()->deletebypk($item->id);
 			}
+			echo 'STAGE 1 - korjattu '.count($tvr).' kpl<br>';
+			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 2));
+			exit;
+		}
 		}
 		//     CLEAR puhdista turhat  ketjut -->
 		if( $stage == 2 ){
