@@ -6234,4 +6234,27 @@ class TyovuorootController extends Controller
 		//$this->renderPartial('vlupdater');
 
 	}
+
+	public function tvlaskentaPerTuoteet(){
+
+		$criteria = new CDBCriteria;
+        	$criteria->group = "tuoteID";
+        	$criteria->select = "COUNT(tuoteID) as count, tuoteID";
+        	$criteria->condition = "tuoteID!=0";
+		$tv = Tyovuoroot::model()->findAll($criteria);
+		$tuotteet = [];
+		foreach($tv as $item){
+			$tuotteet[$item->tuoteID] = $item->count;
+		}
+		$criteria = new CDBCriteria;
+        	$criteria->group = "tuoteID";
+        	$criteria->select = "COUNT(tuoteID) as count, tuoteID";
+        	$criteria->condition = "tuoteID!=0";
+		$tv = ToistuvatTyovuorot::model()->findAll($criteria);
+		$tuotteet_ketjussa = [];
+		foreach($tv as $item){
+			$tuotteet_ketjussa[$item->tuoteID] = $item->count;
+		}
+		return ['tv' => $tuotteet, 'ketjussa' => $tuotteet_ketjussa];
+	}
 }

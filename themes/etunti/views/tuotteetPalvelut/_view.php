@@ -24,6 +24,10 @@
 		<?php endif; ?>
 	</td>
 	<td>
+		<?=(isset($getAll['tv'][$data->id]))?'TV:'.$getAll['tv'][$data->id].'kpl':''?>
+		<?=(isset($getAll['ketjussa'][$data->id]))?'<br>Ketjussa:'.$getAll['ketjussa'][$data->id].'kpl':''?>
+	</td>
+	<td>
 		<h3><?php echo $data->nimike; ?></h3>
 	</td>
 	<td>

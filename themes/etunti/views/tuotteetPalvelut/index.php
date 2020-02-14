@@ -125,9 +125,12 @@ foreach($k as $item){
      vertical-align: top;
 }
 </style>
-
-  <div class="panel heading-border">
-   <div class="panel-body">
+<?php
+	$tyovuorot = Yii::app()->createController('Tyovuoroot');
+	$getAll = $tyovuorot[0]->tvlaskentaPerTuoteet();
+?>
+<div class="panel heading-border">
+ <div class="panel-body">
 
 <div class="table-responsive">
   <table class="table table-striped" id="mobileTable">
@@ -135,6 +138,7 @@ foreach($k as $item){
   <tr>
   <th></th>
   <th><i data-toggle="tooltip" class="fa fa-2x fa-info" title="Oletustuote"></i></th>
+  <th><i data-toggle="tooltip" class="fa fa-2x fa-info" title="Käytössä työvuorossa (tv. kpl määrä)"></i></th>
   <th><?php echo Yii::t('main', 'Nimike'); ?></th>
   <th><?php echo Yii::t('main', 'Kategoria'); ?></th>
   <th><?php echo Yii::t('main', 'Hinta (ALV 0)'); ?></th>
@@ -148,7 +152,7 @@ foreach($k as $item){
   <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
-	'viewData' => array( 'netvisor' => $netvisor ),
+	'viewData' => array( 'netvisor' => $netvisor, 'getAll' => $getAll ),
 
   	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
 
@@ -167,8 +171,8 @@ foreach($k as $item){
   </table>
 </div>
 
-   </div>
-  </div>
+ </div>
+</div>
 
 
 

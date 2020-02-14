@@ -23,7 +23,7 @@
  */
 class ToistuvatTyovuorot extends DB2ActiveRecord
 {
-	public $peruutettu;
+	public $peruutettu, $count;
 	/**
 	 * @return string the associated database table name
 	 */
