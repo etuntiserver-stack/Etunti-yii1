@@ -18,14 +18,14 @@
 			); 
 		?>
 	</td>
-	<td>
+	<td class="text-center">
 		<?php if($data->hinta_alv_0 !=0 and $data->yksikko == 'h' and $data->nayta_vain_onlinevarauksessa == 0): ?>
-		<br><input type="radio" name="oletustuote" id="oletustuote" value="<?=$data->id?>" <?=(($data->oletustuote == 2)?'checked':'')?>>
+		<input type="radio" name="oletustuote" id="oletustuote" value="<?=$data->id?>" <?=(($data->oletustuote == 2)?'checked':'')?>>
 		<?php endif; ?>
 	</td>
-	<td>
-		<?=(isset($getAll['tv'][$data->id]))?'Tuotteet:'.$getAll['tv'][$data->id].'kpl':''?>
-		<?=(isset($getAll['lisa_tuotteet'][$data->id]))?'<br>Lisätuotteet:'.$getAll['lisa_tuotteet'][$data->id].'kpl':''?>
+	<td class="text-center">
+		<?=(isset($getAll['tv'][$data->id]))?$getAll['tv'][$data->id]:''?>
+		<?=(isset($getAll['lisa_tuotteet'][$data->id]))?$getAll['lisa_tuotteet'][$data->id]:''?>
 	</td>
 	<td>
 		<h3><?php echo $data->nimike; ?></h3>

@@ -6238,25 +6238,18 @@ class TyovuorootController extends Controller
 	public function tvlaskentaPerTuoteet($from, $to){
 
 		$criteria = new CDBCriteria;
-        	$criteria->group = "tuoteID";
-        	$criteria->select = "COUNT(tuoteID) as count, tuoteID";
         	$criteria->condition = "
-			tuoteID!=0
-			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$from' AND '$to'
-		";
-		$tv = Tyovuoroot::model()->findAll($criteria);
-		$tuotteet = [];
-		foreach($tv as $item){
-			$tuotteet[$item->tuoteID] = $item->count;
-		}
-		$criteria = new CDBCriteria;
-        	$criteria->condition = "
-			lisa_tuotteet!=''
+			(tuoteID!=0 OR lisa_tuotteet!='')
 			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$from' AND '$to'
 		";
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$lisa_tuotteet = [];
+		$tuotteet = [];
 		foreach($tv as $item){
+			if(!isset($tuotteet[$item->tuoteID]))
+				$tuotteet[$item->tuoteID] = 0;
+			else
+				$tuotteet[$item->tuoteID] += 1;
 			$dec = json_decode($item->lisa_tuotteet, true);
 			foreach($dec as $k => $v){
 				if($k == 'tuote'){
