@@ -1737,7 +1737,8 @@ class TyovuorootController extends Controller
 		//$criteria->with = array('kohteet');
 		$criteria->order = "alku ASC"; 
 		$criteria->condition = "
-			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$haku_from' AND '$haku_to'
+			toistuva_id=0
+			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$haku_from' AND '$haku_to'
 		";
 		if( count($haku_criteria) > 0 )
 			$criteria->addCondition($haku_criteria);
