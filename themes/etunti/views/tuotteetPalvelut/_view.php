@@ -24,9 +24,8 @@
 		<?php endif; ?>
 	</td>
 	<td>
-		<?=(isset($getAll['tv'][$data->id]))?'TV:'.$getAll['tv'][$data->id].'kpl':''?>
-		<?php /* (isset($getAll['lisa_tuotteet'][$data->id]))?'<br>Lisätuotteet:'.$getAll['lisa_tuotteet'][$data->id].'kpl':'' */?>
-		<?=(isset($getAll['ketjussa'][$data->id]))?'<br>Ketjussa:'.$getAll['ketjussa'][$data->id].'kpl':''?>
+		<?=(isset($getAll['tv'][$data->id]))?'Tuotteet:'.$getAll['tv'][$data->id].'kpl':''?>
+		<?=(isset($getAll['lisa_tuotteet'][$data->id]))?'<br>Lisätuotteet:'.$getAll['lisa_tuotteet'][$data->id].'kpl':''?>
 	</td>
 	<td>
 		<h3><?php echo $data->nimike; ?></h3>

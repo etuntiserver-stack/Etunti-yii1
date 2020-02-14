@@ -6235,20 +6235,25 @@ class TyovuorootController extends Controller
 
 	}
 
-	public function tvlaskentaPerTuoteet(){
+	public function tvlaskentaPerTuoteet($from, $to){
 
 		$criteria = new CDBCriteria;
         	$criteria->group = "tuoteID";
         	$criteria->select = "COUNT(tuoteID) as count, tuoteID";
-        	$criteria->condition = "tuoteID!=0";
+        	$criteria->condition = "
+			tuoteID!=0
+			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$from' AND '$to'
+		";
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$tuotteet = [];
 		foreach($tv as $item){
 			$tuotteet[$item->tuoteID] = $item->count;
 		}
-/*
 		$criteria = new CDBCriteria;
-        	$criteria->condition = "lisa_tuotteet!=''";
+        	$criteria->condition = "
+			lisa_tuotteet!=''
+			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$from' AND '$to'
+		";
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$lisa_tuotteet = [];
 		foreach($tv as $item){
@@ -6264,16 +6269,6 @@ class TyovuorootController extends Controller
 				}
 			}
 		}
-*/
-		$criteria = new CDBCriteria;
-        	$criteria->group = "tuoteID";
-        	$criteria->select = "COUNT(tuoteID) as count, tuoteID";
-        	$criteria->condition = "tuoteID!=0";
-		$tv = ToistuvatTyovuorot::model()->findAll($criteria);
-		$tuotteet_ketjussa = [];
-		foreach($tv as $item){
-			$tuotteet_ketjussa[$item->tuoteID] = $item->count;
-		}
-		return ['tv' => $tuotteet, 'ketjussa' => $tuotteet_ketjussa]; //, 'lisa_tuotteet' => $lisa_tuotteet
+		return ['tv' => $tuotteet, 'lisa_tuotteet' => $lisa_tuotteet];
 	}
 }

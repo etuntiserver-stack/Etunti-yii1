@@ -318,8 +318,15 @@ class TuotteetPalvelutController extends Controller
 			//'pagination'=>false
 		));
 
+		$from = date("d.m.Y", strtotime("-1 month"));
+		$to = date("d.m.Y");
+		if(isset($_GET['from']) and !empty($_GET['from']))
+			$from = date("d.m.Y", strtotime($_GET['from']));
+		if(isset($_GET['to']) and !empty($_GET['to']))
+			$to = date("d.m.Y", strtotime($_GET['to']));
+
 		$dataProvider->pagination->pageSize = 50;
-		$this->render('index', array('dataProvider' => $dataProvider, 'netvisor' => $netvisor));
+		$this->render('index', array('dataProvider' => $dataProvider, 'netvisor' => $netvisor, 'from' => $from, 'to' => $to));
 	}
 
 	/**
