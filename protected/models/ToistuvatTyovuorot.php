@@ -23,7 +23,7 @@
  */
 class ToistuvatTyovuorot extends DB2ActiveRecord
 {
-	public $uusi_tilaus;
+	public $uusi_tilaus, $count;
 
 	/**
 	 * @return string the associated database table name

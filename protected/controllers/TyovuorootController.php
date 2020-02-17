@@ -4582,4 +4582,34 @@ class TyovuorootController extends Controller
 		//$this->renderPartial('vlupdater');
 
 	}
+
+	public function tvlaskentaPerTuoteet($from, $to){
+
+		$criteria = new CDBCriteria;
+        	$criteria->condition = "
+			(tuoteID!=0 OR lisa_tuotteet!='')
+			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$from' AND '$to'
+		";
+		$tv = Tyovuoroot::model()->findAll($criteria);
+		$lisa_tuotteet = [];
+		$tuotteet = [];
+		foreach($tv as $item){
+			if(!isset($tuotteet[$item->tuoteID]))
+				$tuotteet[$item->tuoteID] = 0;
+			else
+				$tuotteet[$item->tuoteID] += 1;
+			$dec = json_decode($item->lisa_tuotteet, true);
+			foreach($dec as $k => $v){
+				if($k == 'tuote'){
+					foreach($v as $k1 => $v1){
+						if(!isset($lisa_tuotteet[$v1]))
+							$lisa_tuotteet[$v1] = 1;
+						else
+							$lisa_tuotteet[$v1] += 1;
+					}
+				}
+			}
+		}
+		return ['tv' => $tuotteet, 'lisa_tuotteet' => $lisa_tuotteet];
+	}
 }
