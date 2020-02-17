@@ -1877,6 +1877,7 @@ class TyovuorootController extends Controller
 			$arvo->tid 	= $this_tid;
 			$arrforkey 	= [
 				'this_id' => $this_id,
+				'kpl_maara' => 1,
 				'tv_kesto' => $tv_kesto,
 				'toistuva' => $toistuva,
 				'data' => $arvo->attributes,

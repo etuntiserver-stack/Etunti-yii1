@@ -547,13 +547,13 @@ class SiteController extends Controller
 		$thisday	= date("Y-m-d");
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
 		$haku_criteria	= "status=3 AND peruutettu=0";
-		$getAll 	= $tyovuorot[0]->tv_arr($thisday, $thisday, $tids, $haku_criteria, false, ['this_id']);
+		$getAll 	= $tyovuorot[0]->tv_arr($thisday, $thisday, $tids, $haku_criteria, false, ['kpl_maara']);
 		$count = [];
 		foreach($getAll as $k => $v)
 			foreach($v as $unix => $dayarr)
 				foreach($dayarr as $key => $arr)
-					foreach($arr as $this_id)
-						$count[] = $this_id;
+					foreach($arr as $kpl_maara)
+						$count[] = $kpl_maara;
 
 		$s = count($count);
 		// -------------- //
