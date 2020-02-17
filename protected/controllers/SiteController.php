@@ -543,17 +543,20 @@ class SiteController extends Controller
 			$tids = Yii::app()->user->TyoryhmatTyontekijatHelperArray;
 		}
 		//    Tyoryhmat -->
-
-		$criteria_array = array(
-			"pvm" => date("d.m.Y"),
-			"status" => 3,
-			"peruutettu" => 0,
-		);
-		if( count($tids) > 0 )
-			$criteria_array['tid'] = $tids;
 		$s = 0;
-		$s = Tyovuoroot::model()->countByAttributes($criteria_array);
+		$thisday	= date("Y-m-d");
+		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+		$haku_criteria	= "status=3 AND peruutettu=0";
+		$getAll 	= $tyovuorot[0]->tv_arr($thisday, $thisday, $tids, $haku_criteria, false, ['this_id']);
+		$count = [];
+		foreach($getAll as $k => $v)
+			foreach($v as $unix => $dayarr)
+				foreach($dayarr as $key => $arr)
+					foreach($arr as $this_id)
+						$count[] = $this_id;
 
+		$s = count($count);
+		// -------------- //
 		$criteria = new CDbCriteria();
 		$criteria->select = "  COUNT(*) as count ";
 		$criteria->condition = " DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) = CURDATE() AND status=1 ";
@@ -2034,16 +2037,16 @@ $(document).ready(function(){
 		$suunniteltu 	= 0;
 		$thisday	= date("Y-m-d");
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
-		$getAll 	= $tyovuorot[0]->TidfromtoTyovuoroWithVirtual($thisday, $thisday, $tids, true, false, null);
-		$result 	= 0;
-		foreach($getAll as $tid => $seconds)
-			$result += $seconds;
-		/*
-		echo '<pre>';
-		print_r($getAll);
-		echo '<pre>';
-		exit;
-		*/
+		$haku_criteria	= "status=3 AND peruutettu=0";
+		$getAll 	= $tyovuorot[0]->tv_arr($thisday, $thisday, $tids, $haku_criteria, false, ['tv_kesto']);
+		$result = 0;
+		foreach($getAll as $k => $v)
+			foreach($v as $unix => $dayarr)
+				foreach($dayarr as $key => $arr)
+					foreach($arr as $arr2)
+						foreach($arr2 as $tv_kesto)
+							$result += $tv_kesto;
+
                 echo json_encode($this->sprint($result));
 		exit;
 	}

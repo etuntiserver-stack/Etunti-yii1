@@ -1319,7 +1319,7 @@ class TyovuorootController extends Controller
 		if( $stage == 2 ){
 		$criteria = new CDbCriteria(); 
 		$criteria->order = "id ASC";
-		$criteria->group = "toistuva_id";
+		//$criteria->group = "toistuva_id";
 		$criteria->condition = "
 			id IN( SELECT MAX(id) FROM sivex_tvuoro GROUP by toistuva_id)
 			AND tid!=0
@@ -1332,6 +1332,7 @@ class TyovuorootController extends Controller
 		if( isset($findone->id) ){
 			$tvr = Tyovuoroot::model()->findAll($criteria);
 			foreach($tvr as $item){
+				//echo $item->id.'<br>';
 				ToistuvatTyovuorot::model()->updatebypk($item->toistuva_id, array('tid' => $item->tid));
 			}
 			echo 'STAGE 2 - korjattu '.count($tvr).' kpl<br>';
@@ -1343,6 +1344,7 @@ class TyovuorootController extends Controller
 		// <-- Poistettu_pvm redirect to another field
 		if( $stage == 3 ){
 		$criteria = new CDbCriteria();
+		$criteria->select = "poistettu_pvm,id,tyopaari,tid";
 		$criteria->condition = "
 			poistettu_pvm!='' AND new_poistettu_pvm IS NULL
 		";
@@ -1360,7 +1362,8 @@ class TyovuorootController extends Controller
 				//echo 'Osoite: '.$arvo->osoite.',  Kohde: '.$arvo->kohde.', Tid: '.$arvo->tid.'<br>';
 				//echo '<h4>'.$arvo->pfrom.' - '.$arvo->pto.'</h4><br>';
 
-				$criteria = new CDbCriteria(); 
+				$criteria = new CDbCriteria();
+				$criteria->select = "pvm,tid";
 				$criteria->order = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) DESC";
 				$criteria->condition = "
 					toistuva_id='".$arvo->id."'
@@ -1379,7 +1382,7 @@ class TyovuorootController extends Controller
 				$new_poistettu_pvm = [];
 				foreach($tids as $tid){
 					foreach($poistetut_pvms as $k => $v){
-						if( date("Ymd", strtotime($findone->pvm)) < date("Ymd") and date("Ymd", strtotime($v)) > date("Ymd") )
+						if( date("Ymd", strtotime($findone->pvm)) < date("Ymd") and date("Ymd", strtotime($v)) > date("Ymd") ) // Oikein
 							continue;
 						$new_poistettu_pvm[$tid][$v] = ['tid'=>$tid, 'pvm'=>$v, 'syy'=>['text'=>'', 'user'=>'', 'date'=>'']];
 					}
@@ -1387,6 +1390,8 @@ class TyovuorootController extends Controller
 				$findall = Tyovuoroot::model()->findAll($criteria);
 				echo 'TV määrä '.count($findall).'<br>';
 				foreach($findall as $item){
+					// Jos on olemassa tyovuoro sen poistettu pvm mukaan
+					// Emme laiteta sita new_poistettu_pvm listaan
 					if(isset($new_poistettu_pvm[$item->tid][$item->pvm]))
 						unset($new_poistettu_pvm[$item->tid][$item->pvm]);
 				}
@@ -1404,9 +1409,9 @@ class TyovuorootController extends Controller
 				} else {
 					ToistuvatTyovuorot::model()->updatebypk($arvo->id, array('new_poistettu_pvm'=>json_encode(array_values($clearing))));
 				}
-				if( count($poistetut_pvms) > 300 ){
+				if( count($poistetut_pvms) > 50 ){
 					echo '<h4>STAGE 3 - on vielä jäljellä '.count($tvr).' kpl</h4>';
-					echo 'Poistetut päivät määrä '. count($poistetut_pvms);
+					//echo 'Poistetut päivät määrä '. count($poistetut_pvms);
 					// Jonkun verran aikana tehdään sivun reload jolloin PHP max execute time ei sanoa mitään
 					// Ja hyvää seuraa siitä tapahtumistä
 					echo '
@@ -1437,8 +1442,7 @@ class TyovuorootController extends Controller
 				$this->toistuvaDeletePvm($item->toistuva_id, $item->pvm, $item->tid, $poisto_syy);
 				Tyovuoroot::model()->updatebypk($item->id, array('toistuva_id'=> 0));
 			}
-			if( count($tv) == 0)
-				$this->redirect(array('beta', 'mode' => $mode, 'stage' => 5));
+			$this->redirect(array('beta', 'mode' => $mode, 'stage' => 5));
 			exit;
 		}
 
@@ -1873,6 +1877,7 @@ class TyovuorootController extends Controller
 			$arvo->tid 	= $this_tid;
 			$arrforkey 	= [
 				'this_id' => $this_id,
+				'tv_kesto' => $tv_kesto,
 				'toistuva' => $toistuva,
 				'data' => $arvo->attributes,
 				'kohteet' => (isset($arvo->kohteet))?$arvo->kohteet->attributes:[],
