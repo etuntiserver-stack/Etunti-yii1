@@ -1,13 +1,5 @@
 <?php
 
-			$tv_controller = Yii::app()->createController('Tyovuoroot');
-			$get_id = $tv_controller[0]->this_id('99999999000000632020011029');
-			$model 		= $get_id['model'];
-
-						$tv_new = new Tyovuoroot;
-						$cleared_attr = $tv_controller[0]->compareToistuvaAttributes($tv_new->attributes, $model->attributes);
-						$tv_new->attributes = $cleared_attr;
-
 exit;
 
 /*

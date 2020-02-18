@@ -1330,10 +1330,10 @@ $(document).ready(function(){
 	var didlink = 'did4';
 	var dids = [];
 	$.ajax({
-		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/' + didlink,
+		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/' + didlink + '?from=<?=$haku_from?>&to=<?=$haku_to?>',
 		type: 'POST',
 		async: false,
-		data: { haku_from : '<?=$haku_from?>', haku_to : '<?=$haku_to?>', tids : getAllTids() },
+		data: { tids : getAllTids() },
 		success:function(data){
 			data = JSON.parse(data);
 			//console.log(data);
@@ -1359,9 +1359,9 @@ $(document).ready(function(){
 	var didlink = 'did4';
 	//if(parent.location.href.match(/tv3/)){ didlink = 'did3'; }
 	$.ajax({
-		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/' + didlink,
+		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/' + didlink + '?from=<?=$haku_from?>&to=<?=$haku_to?>',
 		type: 'POST',
-		data: { haku_from : '<?=$haku_from?>', haku_to : '<?=$haku_to?>', tids : getAllTids() },
+		data: { tids : getAllTids() },
 		success:function(data){
 			data = JSON.parse(data);
 			//console.log(data);
