@@ -298,7 +298,7 @@ if(!isset($_POST['tulosta']))
 	       $bod .=  '<span class="link text-danger fa fa-pencil-square-o '.$muistin.'" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></span>';
 	   }
 
-	   $bod .=  '&nbsp;<span class="link '.$tv_edit.'" id="tv_'.$tvVal->id.'" style="'.$uusi_tilaus.'">'.((isset($arr_tyoajanlaatu[0]))? '': $al).' '.$osoite.'<br>'.$tvVal->toistuva_id.'</span>';
+	   $bod .=  '&nbsp;<span class="link '.$tv_edit.'" id="tv_'.$tvVal->id.'" style="'.$uusi_tilaus.'">'.((isset($arr_tyoajanlaatu[0]))? '': $al).' '.$osoite.'</span>';
 
 	   if(isset($tvVal->avaimet) and count($tvVal->avaimet) > 0){
 	      $bod .=  ' <b class="fa fa-key text-warning"></b>';
