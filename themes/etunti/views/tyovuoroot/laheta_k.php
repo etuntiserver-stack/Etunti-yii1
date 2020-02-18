@@ -62,7 +62,7 @@ $paivat=array(
 	$haku_criteria = [" peruutettu=0 OR peruutettu IS NULL "];
 	$pvm_from = date("Y-m-d", strtotime($year ."W". $week .'1'));
 	$pvm_to = date("Y-m-d", strtotime($year ."W". $week .'7'));
-	$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, $haku_criteria, false);
+	$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, $haku_criteria, false, ['this_id','data']);
 	$tids_after = [];
 	foreach($tv_arr as $t => $arr)
 		$tids_after[] = $t;
