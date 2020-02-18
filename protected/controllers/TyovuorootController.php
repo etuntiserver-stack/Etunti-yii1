@@ -831,13 +831,16 @@ class TyovuorootController extends Controller
 			$pvm_from = date("Y-m-d", strtotime($_POST['pvm']));
 			$pvm_to = date("Y-m-d", strtotime($_POST['pvm']));
 			$tv_arr = $this->tv_arr($pvm_from, $pvm_to, [$_POST['tid']], [], false, ['this_id']);
-			foreach($tv_arr[$_POST['tid']][$_POST['pvm']] as $k => $v)
-				foreach($v as $v2){
-					if( isset($v2['this_id']) ){
-						$return[] = $this->check_muistista($v2['this_id']);
-						$_SESSION['muistin'][] = $v2['this_id'];
+			if( isset($tv_arr[$_POST['tid']][$_POST['pvm']]) ){
+				foreach($tv_arr[$_POST['tid']][$_POST['pvm']] as $k => $v)
+					foreach($v as $v2){
+						if( isset($v2['this_id']) ){
+							$return[] = $this->check_muistista($v2['this_id']);
+							$_SESSION['muistin'][] = $v2['this_id'];
+						}
 					}
 				}
+			}
 		echo json_encode($return);
 		}
 		exit;
