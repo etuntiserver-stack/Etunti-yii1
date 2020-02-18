@@ -123,10 +123,14 @@
                           <label class="field select">
 
 			   <?php
-				$l = Log::model()->findAll(array('group' => 'kuka'));
+				$l = Yii::app()->db1->createCommand()
+					->select("kuka")
+					->from("log")
+					->group("kuka")
+					->queryAll();
 				$option = array();
 				foreach($l as $item)
-					$option[] = $item->kuka;
+					$option[] = $item['kuka'];
 			   ?>
 			   <select class="gui-input" name="kuka" id="kuka">
        				<option value=""><?=Yii::t('main', 'Merkinnän tekijä')?></option>
@@ -146,10 +150,14 @@
                           <label class="field select">
 
 			   <?php
-				$l = Tyontekijat::model()->findAll('aktiivinen=1');
+				$l = Yii::app()->db1->createCommand()
+					->select("id")
+					->from("sivex_ttekijat")
+					->where("aktiivinen=1")
+					->queryAll();
 				$option = array();
 				foreach($l as $item)
-					$option[$item->id] = $this->etuSukunimi($item->id);
+					$option[$item['id']] = $this->etuSukunimi($item['id']);
 			   ?>
 			   <select class="gui-input" name="tyontekija" id="tyontekija">
        				<option value=""><?=Yii::t('main', 'Työntekijä')?></option>
@@ -183,10 +191,14 @@
                           <label class="field select">
 
 			   <?php
-				$l = Log::model()->findAll(array('group' => 'model'));
+				$l = Yii::app()->db1->createCommand()
+					->select("model")
+					->from("log")
+					->group("model")
+					->queryAll();
 				$option = array();
 				foreach($l as $item)
-					$option[] = $item->model;
+					$option[] = $item['model'];
 			   ?>
 			   <select class="gui-input" name="model" id="model">
        				<option value=""><?=Yii::t('main', 'Valitse tyyppi')?></option>
@@ -232,13 +244,15 @@
 
                           <label class="field select form-group" style="width:90%;margin-left:2px;">
 			   <?php
-       				$criteria = new CDbCriteria();
-			        $criteria->group = " tilanne ";
-			        $criteria->condition = " log_category=2 ";
-				$l = Log::model()->findAll($criteria);
+				$l = Yii::app()->db1->createCommand()
+					->select("tilanne")
+					->from("log")
+					->group("tilanne")
+					->where("log_category=2")
+					->queryAll();
 				$option = array();
 				foreach($l as $item)
-					$option[] = $item->tilanne;
+					$option[] = $item['tilanne'];
 			   ?>
 			   <select class="form-control" name="tilanne" id="tilanne">
        				<option value=""><?=Yii::t('main', 'Valitse tilanne')?></option>
