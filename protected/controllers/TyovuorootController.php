@@ -1952,6 +1952,12 @@ class TyovuorootController extends Controller
 		$tids 		= (isset($_POST['tids']))?json_decode($_POST['tids'], true):[];
 		$haku_criteria	= (isset($_POST['haku_criteria']))?$_POST['haku_criteria']:[];
 		$tv_arr = $this->tv_arr($from, $to, $tids, $haku_criteria, true, []);
+		/*
+		echo '<pre>';
+		print_r( $tv_arr );
+		echo '</pre>';
+		exit;
+		*/
 		echo json_encode($tv_arr);
 		exit;
 	}

@@ -73,13 +73,15 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 		$.each(value, function( pvm, v ) {
 			all_tv_edit 	= '';
 			tv_kesto	= 0;
-			$.each(v, function( i2, tv_edit ) {
-				tv_kesto	+= tv_edit[0]['tv_kesto'];
-				all_tv_edit += '<p>' + tv_edit[0]['tv_edit'] + '</p>';
+			$.each(v, function( i2, laatikko ) {
+				$.each(laatikko, function( i3, tv_edit ) {
+					tv_kesto	+= tv_edit['tv_kesto'];
+					all_tv_edit 	+= '<p>' + tv_edit['tv_edit'] + '</p>';
+				});
 			});
 			pvm_muutos = pvm.split(".");
 			did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
-			//console.log(did);
+			//console.log(all_tv_edit);
 			if( $("#" + did).length > 0 )
 				$("#" + did).html(all_tv_edit + '<div class="pull-right pvm_yht">' + $.sprint(tv_kesto) + '</div>');
 			yht += tv_kesto;
