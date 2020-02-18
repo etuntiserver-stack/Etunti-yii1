@@ -1310,7 +1310,7 @@ class TyovuorootController extends Controller
 			$tvr = ToistuvatTyovuorot::model()->findAll($criteria);
 			foreach($tvr as $item){
 				echo 'Remove ketju: '.$item->id.'<br>';
-				ToistuvatTyovuorot::model()->deletebypk($item->id);
+				//ToistuvatTyovuorot::model()->deletebypk($item->id);
 			}
 			echo 'STAGE 1 - korjattu '.count($tvr).' kpl<br>';
 			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 2));
@@ -1417,7 +1417,6 @@ class TyovuorootController extends Controller
 				} else {
 					//ToistuvatTyovuorot::model()->updatebypk($arvo->id, array('new_poistettu_pvm'=>json_encode(array_values($clearing))));
 				}
-/*
 				if( count($poistetut_pvms) > 50 ){
 					echo '<h4>STAGE 3 - on vielä jäljellä '.count($tvr).' kpl</h4>';
 					//echo 'Poistetut päivät määrä '. count($poistetut_pvms);
@@ -1429,7 +1428,6 @@ class TyovuorootController extends Controller
 					</script>';
 					exit;
 				}
-*/
 			}
 
 		}
@@ -1451,7 +1449,7 @@ class TyovuorootController extends Controller
 				$d		= date("d.m.Y");
 				$poisto_syy	= ['text'=>'laskutettu', 'user'=>$u, 'date'=>$d];
 				$this->toistuvaDeletePvm($item->toistuva_id, $item->pvm, $item->tid, $poisto_syy);
-				Tyovuoroot::model()->updatebypk($item->id, array('toistuva_id'=> 0));
+				//Tyovuoroot::model()->updatebypk($item->id, array('toistuva_id'=> 0));
 			}
 			$this->redirect(array('beta', 'mode' => $mode, 'stage' => 5));
 			exit;
@@ -1942,7 +1940,7 @@ class TyovuorootController extends Controller
 			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 			$tv_edit = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$this_id.'" style="color:'.$color.'">'.$ikoonit.''.$expl1[0].'</b>' : '';
 		} else {
-			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$asiakasNakyvissa.$osoite.$lisateksti.'<br>'.$arvo->id.'</span>';
+			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$asiakasNakyvissa.$osoite.$lisateksti.'</span>';
 		}
 		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto, 'alku' => $arvo->alku, 'loppu' => $arvo->loppu];
 		return $return;
