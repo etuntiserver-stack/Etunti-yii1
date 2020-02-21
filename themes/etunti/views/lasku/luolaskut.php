@@ -430,7 +430,7 @@ $iban				= $asetukset->iban;
 			// <-- MOB
 			$nimike_append = ' ';
 			if( isset($mob_tunnit['kohde_kannasta']) ){
-				$nimike_append = '';
+				$nimike_append = ' ';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
 					$nimike_append .= date("d.m.Y", strtotime($mob_tunnit['aloitan']));
 				}
@@ -441,7 +441,7 @@ $iban				= $asetukset->iban;
 			}
 			// <-- TV
 			if( isset($tyovuoroot[$asiakas_nimi]['pvm']) and isset($kohteet['osoite']) ){
-				$nimike_append = '';
+				$nimike_append = ' ';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
 					$nimike_append .= $tyovuoroot[$asiakas_nimi]['pvm'];
 				}
