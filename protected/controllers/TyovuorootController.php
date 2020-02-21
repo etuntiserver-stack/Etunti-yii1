@@ -1302,29 +1302,21 @@ class TyovuorootController extends Controller
 
 		// <-- Ketjun kasikorjaus
 		// <-- CLEAR puhdista turhat  ketjut 
-		if( $stage == 1 or $stage == 11 or $stage == 12 ){
+		if( $stage == 1 or $stage == 11 ){
 			
 			if( $stage == 1 ){
 				// Optimisointi
 				$query = "OPTIMIZE TABLE sivex_tvuoro";
 				$command = Yii::app()->db1->createCommand($query);
-				$command->execute();	
+				$command->execute();
+
+				$query = "OPTIMIZE TABLE toistuvat_tyovuorot";
+				$command = Yii::app()->db1->createCommand($query);
+				$command->execute();
+
 				$this->redirect(array('beta', 'mode' => $mode, 'stage' => 11));
 			}
-			if( $stage == 11 ){
-				$query = "delete from sivex_tvuoro where toistuva_id!=:t_id AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) > :date";
-				$command = Yii::app()->db1->createCommand($query);
-				$command->execute( ['t_id' => 0, 'date' => "2020-12-31"] );
-				$this->redirect(array('beta', 'mode' => $mode, 'stage' => 12));
-			}
 
-			// Optimisointi
-			$query = "OPTIMIZE TABLE sivex_tvuoro";
-			$command = Yii::app()->db1->createCommand($query);
-			$command->execute();
-
-
-			// tut chto to ubivaetsa
 			$criteria = new CDbCriteria();
 			$criteria->condition = "
 				id NOT IN(select toistuva_id from sivex_tvuoro where toistuva_id!=0)
@@ -1392,7 +1384,7 @@ class TyovuorootController extends Controller
 			foreach($tvr as $arvo){
 				$i++;
 				$poistetut_pvms = json_decode($arvo['poistettu_pvm'], true);
-				if( count($poistetut_pvms) == 0)
+				if( count($poistetut_pvms) == 0 )
 					continue;
 
 				$one = Yii::app()->db1->createCommand()
@@ -1404,6 +1396,7 @@ class TyovuorootController extends Controller
 
 				if(!isset($one['pvm']))
 					continue;
+
 				// <-- Tids
 				$tids = [];
 				if( !empty($arvo['tyopaari']) ){
@@ -1430,7 +1423,7 @@ class TyovuorootController extends Controller
 					->where("toistuva_id='".$arvo['id']."'")
 					->queryAll();
 
-				echo 'TV määrä '.count($findall).'<br>';
+				//echo 'TV määrä '.count($findall).'<br>';
 				foreach($findall as $item){
 					// Jos on olemassa tyovuoro sen poistettu pvm mukaan
 					// Emme laiteta sita new_poistettu_pvm listaan
@@ -1448,9 +1441,9 @@ class TyovuorootController extends Controller
 				}
 				//echo 'Clearning: '.json_encode(array_values($clearing)).'<br>';
 				if( date("Ymd", strtotime($one['pvm'])) < date("Ymd") ){
-					ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('new_poistettu_pvm'=>json_encode(array_values($clearing)), 'pto' => $one['pvm']));
+					ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm'=>json_encode(array_values($clearing)), 'pto' => $one['pvm']));
 				} else {
-					ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('new_poistettu_pvm'=>json_encode(array_values($clearing))));
+					ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm'=>json_encode(array_values($clearing))));
 				}
 				if( count($poistetut_pvms) > 100 ){
 					echo '<h4>STAGE 3 - on vielä jäljellä '.count($tvr).' kpl</h4>';
@@ -1472,7 +1465,8 @@ class TyovuorootController extends Controller
 			$command = Yii::app()->db1->createCommand($query);
 			$command->execute();
 
-			$this->redirect(array('beta', 'mode' => $mode, 'stage' => 4));
+			echo CHtml::link('<h4>STAGE 3 valmis. Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 4));
+			exit;
 		}
 
 		if( $stage == 4 ){
@@ -1808,8 +1802,8 @@ class TyovuorootController extends Controller
 	        $criteria->addCondition($haku_criteria);
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		foreach($tv as $arvo){
-			$return = $this->laatikkorakenne($arvo, $arvo['pvm'], $arvo['tid'], false, $laatikkomuoto, $with, $asiakas_tyovuorossa);
-			$tv_arr[$arvo['tid']][$arvo['pvm']][strtotime($arvo['alku'])][] = $return;
+			$return = $this->laatikkorakenne($arvo, $arvo->pvm, $arvo->tid, false, $laatikkomuoto, $with, $asiakas_tyovuorossa);
+			$tv_arr[$arvo->tid][$arvo->pvm][strtotime($arvo->alku)][] = $return;
 		}
 
 		// <-- toistuvat
@@ -2019,6 +2013,8 @@ class TyovuorootController extends Controller
 					//console.log(data);
 					$.tv_arr_update(data);
 					$(\".odotus\").remove();
+					var numItems = $('.tv_edit').length;
+					$(\"#yht_tv\").text(numItems);
 				},error:function(data){
 				  	console.log(data);
 				}
