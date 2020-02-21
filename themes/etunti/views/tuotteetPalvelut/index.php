@@ -72,6 +72,11 @@ foreach($k as $item){
                             </label>
                           </label>
                         </div>
+                        <div class="section">
+                          <label class="field select">
+				Aikaväli työvuorojen laskemiseen varten.
+                          </label>
+                        </div>
                       </div>
 
 		      <?php if(isset($_GET['nayta_sivuilla'])) echo '<input type="hidden" id="akt" value="'.$_GET['nayta_sivuilla'].'">'; ?>
@@ -87,6 +92,15 @@ foreach($k as $item){
                             </label>
                           </label>
                         </div>
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" name="from" class="gui-input datepickerFI" value="<?=$from?>">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
                       </div>
 
                       <div class="col-md-2">
@@ -96,6 +110,15 @@ foreach($k as $item){
    			    <input type="text" name="nimike"  class="gui-input" value="<?php if(isset($_POST['nimike'])) echo $_POST['nimike']; ?>" placeholder="Nimike..">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-tag"></i>
+                            </label>
+                          </label>
+                        </div>
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" name="to" class="gui-input datepickerFI" value="<?=$to?>">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
                             </label>
                           </label>
                         </div>
@@ -125,9 +148,14 @@ foreach($k as $item){
      vertical-align: top;
 }
 </style>
-
-  <div class="panel heading-border">
-   <div class="panel-body">
+<?php
+	$laskin_from = date("Y-m-d", strtotime($from));
+	$laskin_to = date("Y-m-d", strtotime($to));
+	$tyovuorot = Yii::app()->createController('Tyovuoroot');
+	$getAll = $tyovuorot[0]->tvlaskentaPerTuoteet($laskin_from, $laskin_to);
+?>
+<div class="panel heading-border">
+ <div class="panel-body">
 
 <div class="table-responsive">
   <table class="table table-striped" id="mobileTable">
@@ -135,6 +163,7 @@ foreach($k as $item){
   <tr>
   <th></th>
   <th><i data-toggle="tooltip" class="fa fa-2x fa-info" title="Oletustuote"></i></th>
+  <th>Työvuorojen määrä<br>joile kuluu</th>
   <th><?php echo Yii::t('main', 'Nimike'); ?></th>
   <th><?php echo Yii::t('main', 'Kategoria'); ?></th>
   <th><?php echo Yii::t('main', 'Hinta (ALV 0)'); ?></th>
@@ -148,7 +177,7 @@ foreach($k as $item){
   <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
-	'viewData' => array( 'netvisor' => $netvisor ),
+	'viewData' => array( 'netvisor' => $netvisor, 'getAll' => $getAll ),
 
   	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
 
@@ -167,8 +196,8 @@ foreach($k as $item){
   </table>
 </div>
 
-   </div>
-  </div>
+ </div>
+</div>
 
 
 

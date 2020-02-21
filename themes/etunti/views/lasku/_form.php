@@ -1601,7 +1601,9 @@ function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palv
 					alv : data['alv'],
 					hinnasto_rivi_id : data['hinnasto_rivi_id'],
 					yksikko : data['yksikko'],
-					free_text : data['free_text'],
+					// free_text : data['free_text'],
+					free_text : '',
+					rivi_lisays : data['free_text'],
 					tuotePalvelu : tuotePalvelu,
 					tuotteet_palvelut_muoto : tuotteet_palvelut_muoto
 			   };
