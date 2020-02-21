@@ -436,13 +436,12 @@ function output_chart_menu()
 						// For now, use .replace() to set name and value for the field.
 						// There is a better way to do this, but this works just fine.
 						content = content.replace('customer_auto_temp', v.id)
-							.replace('asiakas_value', v.default);
+							.replace('asiakas_value', (v.default != 0) ? v.default : '');
 
 						break;
 
 						// approved_only: Vain hyväksytyt (true) || Kaikki (false)
 					case 'approved_only':
-						alert(v.default);
 						content += `
 							<div class="${inputs_class}">
 								<label class="field select">
