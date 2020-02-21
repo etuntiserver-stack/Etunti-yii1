@@ -1323,7 +1323,7 @@ class TyovuorootController extends Controller
 			$command = Yii::app()->db1->createCommand($query);
 			$command->execute();
 
-/*
+
 			// tut chto to ubivaetsa
 			$criteria = new CDbCriteria();
 			$criteria->condition = "
@@ -1334,37 +1334,37 @@ class TyovuorootController extends Controller
 				$tvr = ToistuvatTyovuorot::model()->findAll($criteria);
 				echo '<h2>Remove count: '.count($tvr).'</h2><br>';
 				foreach($tvr as $item){
-					echo 'Remove ketju: '.$item->id.'<br>';
+					//echo 'Remove ketju: '.$item->id.'<br>';
 					ToistuvatTyovuorot::model()->deletebypk($item->id);
 				}
 			}			
-*/
+
 			echo 'STAGE 1 - korjattu<br>';
 			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 2));
 			exit;
 		}
 		//     CLEAR puhdista turhat  ketjut -->
 		if( $stage == 2 ){
-		$criteria = new CDbCriteria(); 
-		$criteria->order = "id ASC";
-		//$criteria->group = "toistuva_id";
-		$criteria->condition = "
-			id IN( SELECT MAX(id) FROM sivex_tvuoro GROUP by toistuva_id)
-			AND tid!=0
-			AND toistuva_id!=0
-			AND toistuva_id IN(
-				SELECT id FROM toistuvat_tyovuorot WHERE tyopaari='' AND tid!=t.tid
-			)
-		";
-		$findone = Tyovuoroot::model()->find($criteria);
-		if( isset($findone->id) ){
-			$tvr = Tyovuoroot::model()->findAll($criteria);
-			foreach($tvr as $item){
-				echo 'Tid korjaus: '.$item->toistuva_id.'<br>';
-				ToistuvatTyovuorot::model()->updatebypk($item->toistuva_id, array('tid' => $item->tid));
+			$criteria = new CDbCriteria(); 
+			$criteria->order = "id ASC";
+			//$criteria->group = "toistuva_id";
+			$criteria->condition = "
+				id IN( SELECT MAX(id) FROM sivex_tvuoro GROUP by toistuva_id)
+				AND tid!=0
+				AND toistuva_id!=0
+				AND toistuva_id IN(
+					SELECT id FROM toistuvat_tyovuorot WHERE tyopaari='' AND tid!=t.tid
+				)
+			";
+			$findone = Tyovuoroot::model()->find($criteria);
+			if( isset($findone->id) ){
+				$tvr = Tyovuoroot::model()->findAll($criteria);
+				foreach($tvr as $item){
+					//echo 'Tid korjaus: '.$item->toistuva_id.'<br>';
+					ToistuvatTyovuorot::model()->updatebypk($item->toistuva_id, array('tid' => $item->tid));
+				}
+				echo 'STAGE 2 - korjattu '.count($tvr).' kpl<br>';
 			}
-			echo 'STAGE 2 - korjattu '.count($tvr).' kpl<br>';
-		}
 			// Optimisointi
 			$query = "OPTIMIZE TABLE toistuvat_tyovuorot";
 			$command = Yii::app()->db1->createCommand($query);
@@ -1394,10 +1394,6 @@ class TyovuorootController extends Controller
 				$poistetut_pvms = json_decode($arvo['poistettu_pvm'], true);
 				if( count($poistetut_pvms) == 0)
 					continue;
-
-				//echo 'Liika poistettuvat paivat Ketjussa: '.$arvo->id.', <b>'.count($poistetut_pvms).'</b> kpl<br>';
-				//echo 'Osoite: '.$arvo->osoite.',  Kohde: '.$arvo->kohde.', Tid: '.$arvo->tid.'<br>';
-				//echo '<h4>'.$arvo->pfrom.' - '.$arvo->pto.'</h4><br>';
 
 				$one = Yii::app()->db1->createCommand()
 					->select("pvm,tid")
@@ -1456,7 +1452,7 @@ class TyovuorootController extends Controller
 				} else {
 					ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('new_poistettu_pvm'=>json_encode(array_values($clearing))));
 				}
-				if( count($poistetut_pvms) > 50 ){
+				if( count($poistetut_pvms) > 100 ){
 					echo '<h4>STAGE 3 - on vielä jäljellä '.count($tvr).' kpl</h4>';
 					//echo 'Poistetut päivät määrä '. count($poistetut_pvms);
 					// Jonkun verran aikana tehdään sivun reload jolloin PHP max execute time ei sanoa mitään
@@ -1487,7 +1483,7 @@ class TyovuorootController extends Controller
 			";
 			$tv = Tyovuoroot::model()->findAll($criteria);
 			foreach($tv as $item){
-				echo $item->tid.' '.$item->pvm.'<br>';
+				//echo $item->tid.' '.$item->pvm.'<br>';
 				$u		= Yii::app()->user->nimi;
 				$d		= date("d.m.Y");
 				$poisto_syy	= ['text'=>'laskutettu', 'user'=>$u, 'date'=>$d];
@@ -1495,7 +1491,7 @@ class TyovuorootController extends Controller
 				Tyovuoroot::model()->updatebypk($item->id, array('toistuva_id'=> 0));
 			}
 
-			echo CHtml::link('<h4>Laskutettu korjaus '.count($tv).' kpl</h4>', array('beta', 'mode' => $mode, 'stage' => 5));
+			echo CHtml::link('<h4>Laskutettu korjaus '.count($tv).' kpl. Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 5));
 			exit;
 		}
 
@@ -1800,27 +1796,27 @@ class TyovuorootController extends Controller
 		$tv_arr 		= [];
 
 		// <-- Tv array
+       		$criteria = new CDbCriteria();
+		$criteria->condition = "
+			toistuva_id=0 AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$haku_from' AND '$haku_to'
+		";
 		$tids_criteria = '';
 		if( count($haku_tids) > 0 ){
 		      	$ids = implode(",", $haku_tids);
-		        $tids_criteria = 'tid IN ('.$ids.') OR tid=0';
+		        $criteria->addCondition('tid IN ('.$ids.') OR tid=0');
 		}
-		$tv = Yii::app()->db1->createCommand()
-			//->select("tilanne")
-			->from("sivex_tvuoro")
-			//->group("tilanne")
-			->where("toistuva_id=0 AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$haku_from' AND '$haku_to'")
-			->andWhere($tids_criteria)
-			->andWhere($haku_criteria)
-			->queryAll();
-
+	        $criteria->addCondition($haku_criteria);
+		$tv = Tyovuoroot::model()->findAll($criteria);
 		foreach($tv as $arvo){
 			$return = $this->laatikkorakenne($arvo, $arvo['pvm'], $arvo['tid'], false, $laatikkomuoto, $with, $asiakas_tyovuorossa);
 			$tv_arr[$arvo['tid']][$arvo['pvm']][strtotime($arvo['alku'])][] = $return;
 		}
 
 		// <-- toistuvat
-
+       		$criteria = new CDbCriteria();
+		$criteria->condition = "
+			DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) <= '$haku_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$haku_from'
+		";
 		$tids_criteria = '';
 		if( count($haku_tids) > 0 ){
 			$tt_ret = [];
@@ -1829,46 +1825,37 @@ class TyovuorootController extends Controller
 			}
 		      	$ids = implode(",", $tt_ret);
 			$tyopaari = "tyopaari LIKE '%\"".implode("\"%' OR tyopaari LIKE'%\"", $tt_ret)."\"%'";
-		        $tids_criteria = 'tid IN ('.$ids.') OR ('.$tyopaari.')';
+		        $criteria->addCondition('tid IN ('.$ids.') OR ('.$tyopaari.')');
 		}
-
 		if( count($haku_criteria) > 0 ){
 			if(isset($haku_criteria['uusi_tilaus']))
 				unset($haku_criteria['uusi_tilaus']);
 		}
-
-		$t = Yii::app()->db1->createCommand()
-			//->select("tilanne")
-			->from("toistuvat_tyovuorot")
-			//->group("tilanne")
-			->where("DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) <= '$haku_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$haku_from'")
-			->andWhere($tids_criteria)
-			->andWhere($haku_criteria)
-			->queryAll();
-
+	        $criteria->addCondition($haku_criteria);
+		$t = ToistuvatTyovuorot::model()->findAll($criteria);
 		foreach($t as $arvo){
 			// <-- Tids
 			$tids = [];
 			if( !empty($arvo->tyopaari) ){
-				foreach(json_decode($arvo['tyopaari'], true) as $tp_tid){
+				foreach(json_decode($arvo->tyopaari, true) as $tp_tid){
 					$tids[$tp_tid] = $tp_tid;
 				}
-				$tids[$arvo['tid']] = $arvo['tid'];
+				$tids[$arvo->tid] = $arvo->tid;
 			} else {
-				$tids[$arvo['tid']] = $arvo['tid'];
+				$tids[$arvo->tid] = $arvo->tid;
 			}
 
 			// <-- Poistettu_pvms
 			$poistettu_pvms = [];
-			if( !empty($arvo['new_poistettu_pvm']) ){
-				foreach(json_decode($arvo['new_poistettu_pvm'], true) as $key => $val)
+			if( !empty($arvo->new_poistettu_pvm) ){
+				foreach(json_decode($arvo->new_poistettu_pvm, true) as $key => $val)
 					if( isset($val['tid']) and isset($val['pvm']) and isset($val['syy']) )
 						$poistettu_pvms[$val['tid']][$val['pvm']] = $val['syy'];
 			}
 
-			$startday 	= date("Y-m-d", strtotime($arvo['pfrom']));
+			$startday 	= date("Y-m-d", strtotime($arvo->pfrom));
 			$startday_ts	= strtotime($startday); 
-			$stopday 	= date("Y-m-d", strtotime($arvo['pto']));
+			$stopday 	= date("Y-m-d", strtotime($arvo->pto));
 
 			$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
 			$date->modify('this week monday');
@@ -1877,7 +1864,7 @@ class TyovuorootController extends Controller
 			while ($date->getTimestamp() <= $date_end){
 				$this_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
 				if ( $this_week_sunday >= date("YW", strtotime($haku_from)) ){ // Jotta ei saada pitkä array päivästä
-					foreach(json_decode($arvo['viikko_paivat'], true) as $viikko_paiva) {
+					foreach(json_decode($arvo->viikko_paivat, true) as $viikko_paiva) {
 						$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
 						$paiva->modify("+" . ($viikko_paiva - 1) . "day");
 						$this_pvm = $paiva->format('d.m.Y');
@@ -1890,12 +1877,12 @@ class TyovuorootController extends Controller
 							if( isset($poistettu_pvms[$tid][$this_pvm]) )
 								continue;
 							$return = $this->laatikkorakenne($arvo, $this_pvm, $tid, true, $laatikkomuoto, $with, $asiakas_tyovuorossa);
-							$tv_arr[$tid][$this_pvm][strtotime($arvo['alku'])][] = $return;
+							$tv_arr[$tid][$this_pvm][strtotime($arvo->alku)][] = $return;
 						}
 
 					}
 				}
-				$date->modify("+{$arvo[viikkoja]}week");
+				$date->modify("+{$arvo->viikkoja}week");
 			}
 		}
 		//     toistuvat -->
@@ -1923,31 +1910,31 @@ class TyovuorootController extends Controller
 
 		$return 	= [];
 		$tv_edit	= [];
-		$this_id 	= ($toistuva)? $this->this_id_builder($arvo['id'], $this_pvm, $this_tid) : $arvo['id'];
+		$this_id 	= ($toistuva)? $this->this_id_builder($arvo->id, $this_pvm, $this_tid) : $arvo->id;
 		$toistuva_icon 	= ($toistuva)? '<i class="text-success fa fa-repeat"></i> ' : '';
 		$mennytPaivat	= (strtotime($this_pvm) < strtotime(date("Y-m-d")))? 'mennytPaivat' : '';
-		$osoite 	= ( isset($arvo['osoite']) and !empty($arvo['osoite']))?$arvo['osoite']:'';
-		$ikoonit	= ((isset($status[$arvo['status']]))?$status[$arvo['status']]:'').$toistuva_icon;
+		$osoite 	= ( isset($arvo->osoite) and !empty($arvo->osoite))?$arvo->osoite:'';
+		$ikoonit	= ((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon;
 		$tv_kesto	= 0;
-		$eilasketa 	= $this->eiLasketaSubStr($arvo['tyoajanmerkinta']);
+		$eilasketa 	= $this->eiLasketaSubStr($arvo->tyoajanmerkinta);
 		if($eilasketa != true)
-			$tv_kesto = strtotime($arvo['loppu'])-strtotime($arvo['alku']);
+			$tv_kesto = strtotime($arvo->loppu)-strtotime($arvo->alku);
 
-		if(empty($osoite) and isset($arvo['kohteet']['osoite']))
-			$osoite = $arvo['kohteet']['osoite'];
+		if(empty($osoite) and isset($arvo->kohteet->osoite))
+			$osoite = $arvo->kohteet->osoite;
 		// <-- Return Array
 		if( !$laatikkomuoto ){
-			$arvo['pvm'] 	= $this_pvm;
-			$arvo['tid'] 	= $this_tid;
+			$arvo->pvm 	= $this_pvm;
+			$arvo->tid 	= $this_tid;
 			$arrforkey 	= [
 				'this_id' => $this_id,
 				'kpl_maara' => 1,
 				'tv_kesto' => $tv_kesto,
 				'toistuva' => $toistuva,
 				'data' => $arvo,
-				'kohteet' => (isset($arvo['kohteet']))?$arvo['kohteet']:[],
-				'avaimet' => (isset($arvo['avaimet']))?$arvo['avaimet']:[],
-				'tt' => (isset($arvo['tt']))?$arvo['tt']:[]
+				'kohteet' => (isset($arvo->kohteet))?$arvo->kohteet:[],
+				'avaimet' => (isset($arvo->avaimet))?$arvo->avaimet:[],
+				'tt' => (isset($arvo->tt))?$arvo->tt:[]
 			];
 			$return = [];
 			foreach($with as $key)
@@ -1956,45 +1943,45 @@ class TyovuorootController extends Controller
 			return $return;
 		}
 		$lisateksti = '';
-		if($arvo['piilota_mobiilista'] == 1)
+		if($arvo->piilota_mobiilista == 1)
 			$lisateksti .= '<br><span class="text-primary">Ei mobiili</span>';
-		if($arvo['laskutettu'] == 1)
+		if($arvo->laskutettu == 1)
 			$lisateksti .= '<br><span class="text-primary">Laskutettu</span>';
-		if($arvo['peruutettu'] == 1)
+		if($arvo->peruutettu == 1)
 			$lisateksti .= '<br><span class="text-danger">'. $this->peruutettuArray()[1] .'</span>';
-		if($arvo['peruutettu'] == 2)
+		if($arvo->peruutettu == 2)
 			$lisateksti .= '<br><span class="text-danger">'. $this->peruutettuArray()[2] .'</span>';
-		if($arvo['tyopaari'] != '')
+		if($arvo->tyopaari != '')
 			$ikoonit .= ' <i class="fa fa-male text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i> ';
 
 		$asiakasNakyvissa = '';
 		if( $asiakas_tyovuorossa ){
 			$name = '';
-			if(isset($arvo['kohteet']['asiakkaat']) and $arvo['kohteet']['asiakkaat']['tyyppi'] == 'yritys')
-				$name = $arvo['kohteet']['asiakkaat']['yrityksen_nimi'];
-			if(isset($arvo['kohteet']['asiakkaat']) and $arvo['kohteet']['asiakkaat']['tyyppi'] == 'henkilo')
-				$name = $arvo['kohteet']['asiakkaat']['yhteyshenkilo'];
+			if(isset($arvo->kohteet->asiakkaat) and $arvo->kohteet->asiakkaat->tyyppi == 'yritys')
+				$name = $arvo->kohteet->asiakkaat->yrityksen_nimi;
+			if(isset($arvo->kohteet->asiakkaat) and $arvo->kohteet->asiakkaat->tyyppi == 'henkilo')
+				$name = $arvo->kohteet->asiakkaat->yhteyshenkilo;
 			if(!empty($name))
 				$asiakasNakyvissa = $name.'<br>';
 		}
 
 		$color 		= '#888';
 		$bgcol 		= 'color:#333';
-		if(!empty($arvo['tyoajanmerkinta'])){
-			$expl = explode("/",$arvo['tyoajanmerkinta']);
+		if(!empty($arvo->tyoajanmerkinta)){
+			$expl = explode("/",$arvo->tyoajanmerkinta);
 			if(isset($expl[1]) and !empty($expl[1])){
 				$color = $expl[1];
 				$bgcol = 'color:'.$color;
 			}
 		}
-		if(!empty($arvo['tyoajanlaatu'])){
-			$expl1 = explode("/",$arvo['tyoajanlaatu']);
+		if(!empty($arvo->tyoajanlaatu)){
+			$expl1 = explode("/",$arvo->tyoajanlaatu);
 			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 			$tv_edit = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$this_id.'" style="color:'.$color.'">'.$ikoonit.''.$expl1[0].'</b>' : '';
 		} else {
-			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo['alku'].'-'.$arvo['loppu'].'<br> '.$asiakasNakyvissa.$osoite.$lisateksti.'</span>';
+			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$asiakasNakyvissa.$osoite.$lisateksti.'</span>';
 		}
-		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto, 'alku' => $arvo['alku'], 'loppu' => $arvo['loppu']];
+		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto, 'alku' => $arvo->alku, 'loppu' => $arvo->loppu];
 		return $return;
 	}
 
