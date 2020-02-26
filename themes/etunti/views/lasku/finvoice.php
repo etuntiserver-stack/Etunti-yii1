@@ -113,9 +113,9 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
           // Bank account IBAN. If using a financing agreement, the account number must match the account of the specified
           // financing agreement. The account number must be valid for the specified country, include country code and
           // exclude any spaces.
-          // "accountNumber" => str_replace(' ', '', $l->saaja_iban),
+          "accountNumber" => str_replace(' ', '', $l->saaja_iban),
           // TODO: replace with above commented line. This IBAN is for the testing environment.
-          "accountNumber" => 'FI7999999900032082',
+          // "accountNumber" => 'FI7999999900032082',
 
           // (string) PURCHASE_INVOICE only. Bank account BIC/SWIFT.
           "bic" => ""
@@ -166,9 +166,9 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
           // (string) Bank account IBAN. If using a financing agreement, the account number must match the account of the
           // specified financing agreement. The account number must be valid for the specified country, include country
           // code and exclude any spaces.
-          //"accountNumber" => str_replace(' ', '', $l->saaja_iban),
+          "accountNumber" => str_replace(' ', '', $l->saaja_iban),
           // TODO: replace with above commented line. This IBAN is for the testing environment.
-          "accountNumber" => 'FI7999999900032082',
+          // "accountNumber" => 'FI7999999900032082',
 
           // (bic) PURCHASE_INVOICE only. Bank account BIC/SWIFT.
           "bic" => ""
