@@ -113,7 +113,7 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
           // Bank account IBAN. If using a financing agreement, the account number must match the account of the specified
           // financing agreement. The account number must be valid for the specified country, include country code and
           // exclude any spaces.
-          "accountNumber" => str_replace(' ', '', $l->saaja_iban),
+          "accountNumber" => $local ? 'FI7999999900032082' : str_replace(' ', '', $l->saaja_iban),
           // TODO: replace with above commented line. This IBAN is for the testing environment.
           // "accountNumber" => 'FI7999999900032082',
 
@@ -166,7 +166,7 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
           // (string) Bank account IBAN. If using a financing agreement, the account number must match the account of the
           // specified financing agreement. The account number must be valid for the specified country, include country
           // code and exclude any spaces.
-          "accountNumber" => str_replace(' ', '', $l->saaja_iban),
+          "accountNumber" => $local ? 'FI7999999900032082' : str_replace(' ', '', $l->saaja_iban),
           // TODO: replace with above commented line. This IBAN is for the testing environment.
           // "accountNumber" => 'FI7999999900032082',
 
@@ -184,7 +184,7 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
       // Invoice extra info.
       "extraInfo" => (object) [
         "accountingByRow" => false,     // (bool) Accounting by row means that a separate ledger transaction is created for each invoice row.
-        "unitPricesIncludeVat" => true  // (bool) Indicates if the unit prices on invoice rows include VAT (true) or not (false).
+        "unitPricesIncludeVat" => false  // (bool) Indicates if the unit prices on invoice rows include VAT (true) or not (false).
       ],
 
       "discountPercent" => 0,           // (int) Invoice discount percentage. Scale: 4.
