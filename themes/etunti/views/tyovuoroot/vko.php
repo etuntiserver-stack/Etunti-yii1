@@ -110,9 +110,9 @@ ini_set('memory_limit', '512M');
 			)).'</p>';
 			//     file_safe_opener -->
 		}
-		if(isset($vktyoaika[$tid]))
-			echo '<div class="text-center"><b>'.$vktyoaika[$tid].'</b> / ';
 		echo '<b id="vko_'.$did_sunday.'_'.$tid.'""><span class="odotusweeklaskennan">'.$odotus_ikooni.'</span></b>';
+		if(isset($vktyoaika[$tid]))
+			echo ' ('.$vktyoaika[$tid].')';
 		?>
 		<p><input type="checkbox" class="lahetettava_checkbox" for="<?=$tid?>" data-toggle="tooltip" data-placement="bottom" title="<?=Yii::t('main', 'Määrittele lähetettäväksi')?>"></p>
 	</div>

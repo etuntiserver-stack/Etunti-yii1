@@ -2013,8 +2013,8 @@ class TyovuorootController extends Controller
 					//console.log(data);
 					$.tv_arr_update(data);
 					$(\".odotus\").remove();
-					var numItems = $('.tv_edit').length;
-					$(\"#yht_tv\").text(numItems);
+					//var numItems = $('.tv_edit').length;
+					//$(\"#yht_tv\").text(numItems);
 				},error:function(data){
 				  	console.log(data);
 				}
