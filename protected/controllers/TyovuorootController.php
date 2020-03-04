@@ -1445,7 +1445,7 @@ class TyovuorootController extends Controller
 				} else {
 					ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm'=>json_encode(array_values($clearing))));
 				}
-				if( count($poistetut_pvms) > 100 ){
+				if( count($poistetut_pvms) > 200 ){
 					echo '<h4>STAGE 3 - on vielä jäljellä '.count($tvr).' kpl</h4>';
 					//echo 'Poistetut päivät määrä '. count($poistetut_pvms);
 					// Jonkun verran aikana tehdään sivun reload jolloin PHP max execute time ei sanoa mitään
