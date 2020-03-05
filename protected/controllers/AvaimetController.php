@@ -335,7 +335,7 @@ class AvaimetController extends Controller
 			)";
 		}
 		$tyovuorot = Yii::app()->createController('Tyovuoroot');
-		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria);
+		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data']);
 		$perSivu = 50;
 		$this->render('avaimet_tyontekijalle', array(
 			'dataAll' => $dataAll, 

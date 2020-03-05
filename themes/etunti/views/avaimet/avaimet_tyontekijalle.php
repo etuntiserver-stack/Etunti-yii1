@@ -227,13 +227,13 @@ $(document).ready(function(){
   </tr>
   </thead>
   <?php 
-	foreach($dataAll as $arr){
+	foreach($dataAll['data'] as $arr){
 		$tv = $this->renderPartial('_view_avaimet_tyontekijalle',array(
-			'data' => $arr['data'],
+			'data' => $arr,
 			'kohteet' => $arr['kohteet'],
 			'avaimet' => $arr['avaimet'],
 			'tt' => $arr['tt'],
-			'this_id' => $arr['this_id']
+			//'this_id' => $arr['this_id']
 		), true);
 		echo $tv;
 	}

@@ -1920,20 +1920,19 @@ class TyovuorootController extends Controller
 		if( !$laatikkomuoto ){
 			$arvo->pvm 	= $this_pvm;
 			$arvo->tid 	= $this_tid;
-			$arrforkey 	= [
-				'this_id' => $this_id,
-				'kpl_maara' => 1,
-				'tv_kesto' => $tv_kesto,
-				'toistuva' => $toistuva,
-				'data' => $arvo,
-				'kohteet' => (isset($arvo->kohteet))?$arvo->kohteet:[],
-				'avaimet' => (isset($arvo->avaimet))?$arvo->avaimet:[],
-				'tt' => (isset($arvo->tt))?$arvo->tt:[]
-			];
-			$return = [];
-			foreach($with as $key)
-				if(isset($arrforkey[$key]))
-					$return[$key] = $arrforkey[$key];
+			foreach($with as $k=>$v)
+				$new_with[$v] = $v;
+
+			if(isset($new_with['data']))
+				$return['data'] = $arvo;
+			if(isset($new_with['this_id']))
+				$return['this_id'] = $this_id;
+			if(isset($new_with['tv_kesto']))
+				$return['tv_kesto'] = $tv_kesto;
+			if(isset($new_with['toistuva']))
+				$return['toistuva'] = $toistuva;
+			if(isset($new_with['kpl_maara']))
+				$return['kpl_maara'] = 1;
 			return $return;
 		}
 		$lisateksti = '';
@@ -4511,7 +4510,8 @@ class TyovuorootController extends Controller
 
 		$perSivu = 50;
 		$tids = [];
-		$dataAll = $this->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria);
+		$with	= ['data'];
+		$dataAll = $this->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, $with);
 
 		$this->render('lista', array(
 			'dataAll' => $dataAll,
@@ -4522,12 +4522,11 @@ class TyovuorootController extends Controller
 
 	}
 
-	public function FromToSuunnitellutAll($from, $to, $tids, $haku_criteria)
+	public function FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, $with)
 	{
 		$data = [];
 		$pvm_from = date("Y-m-d", strtotime($from));
 		$pvm_to = date("Y-m-d", strtotime($to));
-		$with	= ['this_id','data','toistuva','kohteet','avaimet','tt'];
 		$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, $haku_criteria, false, $with);
 		$tids_after = [];
 		foreach($tv_arr as $t => $arr)
@@ -4537,20 +4536,9 @@ class TyovuorootController extends Controller
 			while (strtotime($f) <= strtotime($to)){
 				if(isset($tv_arr[$tid][$f])){
 					ksort($tv_arr[$tid][$f]);
-					foreach($tv_arr[$tid][$f] as $k => $v){
-						foreach($v as $v2){
-							if( isset($v2['this_id']) ){
-								$data[] = [
-									'this_id' => $v2['this_id'],
-									'data' => (object)$v2['data'],
-									'toistuva' => $v2['toistuva'],
-									'kohteet' => (object)$v2['kohteet'],
-									'avaimet' => $v2['avaimet'],
-									'tt' => (object)$v2['tt']
-								];
-							}
-						}
-					}
+					foreach($tv_arr[$tid][$f] as $k => $v)
+						foreach($v as $v2)
+							$data[] = $v2;
 				}
 				$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
 			}

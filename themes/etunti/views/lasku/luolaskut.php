@@ -230,6 +230,8 @@ $iban				= $asetukset->iban;
 			$kohteet 	= $mob['kohteet'];
 		}
 		if( isset($mob['tyovuoroot']) ){
+			$toistuva[$asiakas_nimi] = $mob['toistuva'];
+			$this_id[$asiakas_nimi] = $mob['this_id'];
 			$tyovuoroot[$asiakas_nimi] = $mob['tyovuoroot'];
 			$kohteet 	= $mob['kohteet'];
 			$mobile 	= $mob['mobile'];
@@ -254,7 +256,7 @@ $iban				= $asetukset->iban;
 				$r 		= $this->hinnastoHintaat($mob_tunnit_tyovuoroot['tuoteID'], $item, $kohteet, $t, $rivi_kpl); // MOB
 			}
 			if( isset($tyovuoroot[$asiakas_nimi]['kohde']) ){
-				$tv_id		= $tyovuoroot[$asiakas_nimi]['id'];
+				$tv_id		= $this_id[$asiakas_nimi];
 				$t 		= $this->num(strtotime($tyovuoroot[$asiakas_nimi]['loppu'])-strtotime($tyovuoroot[$asiakas_nimi]['alku']));
 				$r 		= $this->hinnastoHintaat($tyovuoroot[$asiakas_nimi]['tuoteID'], $asiakas, $kohteet, $t, $rivi_kpl); // TV
 				$tv_vertailu	= $this->TyovuoroMobileVertailu($tyovuoroot[$asiakas_nimi]['kohde'], $tyovuoroot[$asiakas_nimi]['id'], $tyovuoroot[$asiakas_nimi]['pvm']);
@@ -514,10 +516,35 @@ $iban				= $asetukset->iban;
 		<!-- / Lisatuote -->
 
 		<!-- Update tyovuoro -->
-		<?php if( $is_ok_lasku and $laheta !== null and isset($lasku->id) and $tv_id > 0 ){
-			$tl = Tyovuoroot::model()->findByPk($tv_id);
-			if( isset($tl->id) ){
-			   Tyovuoroot::model()->updateByPk($tl->id, array('lasku_id' => $lasku->id));
+		<?php if( $is_ok_lasku and $laheta !== null and isset($lasku->id) and isset($this_id[$asiakas_nimi]) and isset($toistuva[$asiakas_nimi])){
+			if(!$toistuva[$asiakas_nimi]){
+				$tl = Tyovuoroot::model()->findByPk($tv_id);
+				if( isset($tl->id) )
+					Tyovuoroot::model()->updateByPk($tl->id, array('lasku_id' => $lasku->id));
+			} else {
+				$get_id = $tv_controller[0]->this_id($this_id[$asiakas_nimi]);
+				$model 		= $get_id['model'];
+				$pvm 		= $get_id['pvm'];
+				$tid 		= $get_id['tid'];
+
+				$u		= Yii::app()->user->nimi;
+				$d		= date("d.m.Y");
+				$poisto_syy	= ['text'=>'ByAutolaskutus', 'user'=>$u, 'date'=>$d];
+				if($tv_controller[0]->toistuvaDeletePvm($model->id, $pvm, $tid, $poisto_syy)){
+
+					$tv_new = new Tyovuoroot;
+					$cleared_attr = $tv_controller[0]->compareToistuvaAttributes($tv_new->attributes, $tyovuoroot[$asiakas_nimi]);
+					$tv_new->attributes = $cleared_attr;
+					$tv_new->tid = $tid;
+					$tv_new->pvm = $pvm;
+					$tv_new->tyopaari = '';
+					if($tv_new->save()){
+						Tyovuoroot::model()->updatebypk($tv_new->id, array('lasku_id' => $lasku->id));
+					} else {
+						echo json_encode($tv_new->getErrors());
+						exit;
+					}
+				}
 			}
 		} ?>
 		<!-- / Update tyovuoro -->
@@ -640,6 +667,7 @@ $iban				= $asetukset->iban;
 $(document).ready(function(){
 
   $(".ajax_lahetys").click(function(e){
+	$(this).remove();
 	e.preventDefault();
 	if(!confirm('Oletko varma')){
 		return false;
@@ -661,6 +689,7 @@ $(document).ready(function(){
   });
 
   $(".lahetakaikki").click(function(e){
+	$(this).remove();
 	e.preventDefault();
 	if(!confirm('Oletko varma')){
 		return false;

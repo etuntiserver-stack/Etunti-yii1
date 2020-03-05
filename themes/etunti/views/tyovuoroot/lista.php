@@ -280,9 +280,9 @@
   </thead>
   <tbody>
   <?php
-	foreach($dataAll as $arr){
+	foreach($dataAll['data'] as $arr){
 		$tv = $this->renderPartial('_lista',array(
-			'data' => $arr['data']
+			'data' => $arr
 		), true);
 		echo $tv;
 	}

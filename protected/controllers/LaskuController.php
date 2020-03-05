@@ -189,15 +189,19 @@ class LaskuController extends Controller
 		}
 
 		if( $tunnit == 'tv' ){
-		   $hyv_lista_all = $this->hyvaksyttyListaByAsiakasTyovuoroistaAll($from, $to, $criteria->condition);
+		   $tv_controller = Yii::app()->createController('Tyovuoroot');
+		   $hyv_lista_all = $this->hyvaksyttyListaByAsiakasTyovuoroistaAll($from, $to, $criteria->condition, $tv_controller);
 		   $asiakkaat_ids = [];
 		   $attr = [];
-		   foreach($hyv_lista_all as $item){
+		   foreach($hyv_lista_all as $d){
+			$item = $d['data'];
 			$nimi = '';
 			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'henkilo'){ $nimi = $item->kohteet->asiakkaat->yhteyshenkilo; }
 			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'yritys'){ $nimi = $item->kohteet->asiakkaat->yrityksen_nimi; }
 			if (isset($item->kohteet->asiakkaat) and !array_key_exists($nimi, $attr)) $attr[$nimi] = $item->kohteet->asiakkaat->attributes;
-			$asiakkaat_ids[$nimi][$item->id] = [
+			$asiakkaat_ids[$nimi][$d['this_id']] = [
+				'this_id' => $d['this_id'],
+				'toistuva' => $d['toistuva'],
 				'tyovuoroot' => $item->attributes, 
 				'kohteet' => (isset($item->kohteet->attributes))? $item->kohteet->attributes : '', 
 				'mobile' => (isset($item->mobile->attributes))? $item->mobile->attributes : '',
@@ -211,6 +215,7 @@ class LaskuController extends Controller
 
 		   ksort($asiakkaat_ids);
 		}
+
 /*
 echo '<pre>';
 print_r($asiakkaat_ids);
@@ -218,6 +223,7 @@ echo '</pre>';
 exit;
 */
 		$this->render('luolaskut', array(
+			'tv_controller' => $tv_controller,
 			'autolahetteet_asids' => $autolahetteet_asids,
 			'asiakkaat_ids' => $asiakkaat_ids,
 			'asetukset' => $asetukset,
@@ -303,32 +309,29 @@ exit;
 	    return $lista;
 	}
 
-	protected function hyvaksyttyListaByAsiakasTyovuoroistaAll($from, $to, $asiakas_condition){
+	protected function hyvaksyttyListaByAsiakasTyovuoroistaAll($from, $to, $asiakas_condition, $tv_controller){
 
-	    $lista = array();
-	    // TV
-       		$criteria = new CDbCriteria();
-	        $criteria->order = " DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) ASC ";
-	        $criteria->select = "id,kohde,tid,pvm,alku,loppu,tuoteID,lisa_tuotteet,tyopaari";
-	        $criteria->condition = " 
-			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-			AND laskutettu=0
-			AND tuoteID > 0
-			AND status='3'
-			AND tid!=0
-			AND peruutettu=0
-		";
+		$lista = [];
+		$haku_criteria = ["(laskutettu=0 or laskutettu is NULL) AND tuoteID > 0 AND status=3 AND tid!=0 AND (peruutettu=0 or peruutettu is NULL)"];
 		if(!empty($asiakas_condition)){
-			$criteria->addCondition("
+			$haku_criteria[] = "
 			kohde IN(SELECT id FROM sivex_kohdet
 				WHERE asiakas_id IN(SELECT id FROM asiakkaat
 					WHERE $asiakas_condition	
 				)
 			)
-			");
+			";
 		}
-		$lista = Tyovuoroot::model()->findAll($criteria);
-	    return $lista;
+		$lista = $tv_controller[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['this_id','data','toistuva']);
+
+		/*
+		echo '<pre>';
+		print_r($lista);
+		echo '</pre>';
+		exit;
+		*/
+
+		return $lista;
 	}
 
 	protected function hyvaksyttyListaByAsiakas($id, $from, $to, $tunnit){
