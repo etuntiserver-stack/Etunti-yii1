@@ -188,8 +188,8 @@ class LaskuController extends Controller
 		   ksort($asiakkaat_ids);
 		}
 
+		$tv_controller = Yii::app()->createController('Tyovuoroot');
 		if( $tunnit == 'tv' ){
-		   $tv_controller = Yii::app()->createController('Tyovuoroot');
 		   $hyv_lista_all = $this->hyvaksyttyListaByAsiakasTyovuoroistaAll($from, $to, $criteria->condition, $tv_controller);
 		   $asiakkaat_ids = [];
 		   $attr = [];
@@ -201,6 +201,9 @@ class LaskuController extends Controller
 			if (isset($item->kohteet->asiakkaat) and !array_key_exists($nimi, $attr)) $attr[$nimi] = $item->kohteet->asiakkaat->attributes;
 			$asiakkaat_ids[$nimi][$d['this_id']] = [
 				'this_id' => $d['this_id'],
+				'this_pvm' => $d['this_pvm'],
+				'this_tid' => $d['this_tid'],
+				'tv_kesto' => $d['tv_kesto'],
 				'toistuva' => $d['toistuva'],
 				'tyovuoroot' => $item->attributes, 
 				'kohteet' => (isset($item->kohteet->attributes))? $item->kohteet->attributes : '', 
@@ -322,7 +325,7 @@ exit;
 			)
 			";
 		}
-		$lista = $tv_controller[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['this_id','data','toistuva']);
+		$lista = $tv_controller[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data','tv_kesto']);
 
 		/*
 		echo '<pre>';
