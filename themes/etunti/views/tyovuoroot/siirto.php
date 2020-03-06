@@ -1,4 +1,11 @@
 <?php
+echo "<p>Työvuorojen siirto tapahtuu nykyään ainoastaan työvuorotaulun avulla.</p>";
+echo CHtml::link('Siirry työvuorotauluun', array('beta', 'mode' => 'vko'));
+?>
+
+<?php if (isset($alkaen)): ?>
+
+<?php
 ini_set('memory_limit', '256M');
 ini_set("max_execution_time", "900");
 /* @var $this KohteetController */
@@ -124,13 +131,12 @@ $site = Yii::app()->createController('Site');
 		</tr>
 		<?php $suorittu = 0; ?>
 		<?php $toistuvat = array(); ?>
-		<?php foreach($data_kenelta as $item) : ?>
+		<?php foreach($data_kenelta as $d) : ?>
+		<?php $item = $d['data']; ?>
 		<?php if( isset($_GET['siirra_now']) ): ?>
 		<?php
 			$suorittu++;
-			$t=Tyovuoroot::model()->findByPk($item->id);
-			if(!isset($t->id)){ continue; }
-			$model=$t;
+			$model=$item;
 			$model->attributes=$t->attributes;
 			$model->tid=$_GET['kenelle'];
 			//$model->toistuva_id=0;
@@ -174,7 +180,7 @@ $site = Yii::app()->createController('Site');
 		?>
 		<?php endif; ?>
 		<tr>
-		<td><?=$item->pvm?></td>
+		<td><?=$d['this_pvm']?></td>
 		<td><?=$item->alku?>-<?=$item->loppu?></td>
 		<td><?=isset($item->kohteet->osoite)?$item->kohteet->osoite:$item->osoite?></td>
 		<td><?=$item->toistuva_id?></td>
@@ -252,9 +258,10 @@ $site = Yii::app()->createController('Site');
 		<th><?=Yii::t('main', 'Aika')?></th>
 		<th><?=Yii::t('main', 'Osoite')?></th>
 		</tr>
-		<?php foreach($data_kenelle as $item) : ?>
+		<?php foreach($data_kenelle as $d) : ?>
+		<?php $item = $d['data']; ?>
 		<tr>
-		<td><?=$item->pvm?></td>
+		<td><?=$d['this_pvm']?></td>
 		<td><?=$item->alku?>-<?=$item->loppu?></td>
 		<td><?=isset($item->kohteet->osoite)?$item->kohteet->osoite:$item->osoite?></td>
 		</tr>
@@ -298,3 +305,5 @@ function getUrlVars() {
 
 });
 </script>
+
+<?php endif; ?>

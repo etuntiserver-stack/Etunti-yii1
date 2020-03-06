@@ -1786,14 +1786,20 @@ class TyovuorootController extends Controller
 
 		$asetukset 		= Asetukset::model()->findByPk(1);
 		$asiakas_tyovuorossa 	= ($asetukset->asiakas_tyovuorossa == 1)? true:false;
-		$haku_to_ts 		= strtotime($haku_to);
+		$haku_to_ts 		= strtotime($haku_to ?? 0);
 		$tv_arr 		= [];
 
 		// <-- Tv array
        		$criteria = new CDbCriteria();
-		$criteria->condition = "
-			toistuva_id=0 AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$haku_from' AND '$haku_to'
-		";
+		if( $haku_to === null ){
+			$criteria->condition = "
+				toistuva_id=0 AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) > '$haku_from'
+			";
+		} else {
+			$criteria->condition = "
+				toistuva_id=0 AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$haku_from' AND '$haku_to'
+			";
+		}
 		$tids_criteria = '';
 		if( count($haku_tids) > 0 ){
 		      	$ids = implode(",", $haku_tids);
@@ -1808,9 +1814,15 @@ class TyovuorootController extends Controller
 
 		// <-- toistuvat
        		$criteria = new CDbCriteria();
-		$criteria->condition = "
-			DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) <= '$haku_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$haku_from'
-		";
+		if( $haku_to === null ){
+			$criteria->condition = "
+				DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$haku_from'
+			";
+		} else {
+			$criteria->condition = "
+				DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) <= '$haku_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$haku_from'
+			";
+		}
 		$tids_criteria = '';
 		if( count($haku_tids) > 0 ){
 			$tt_ret = [];
@@ -1864,7 +1876,7 @@ class TyovuorootController extends Controller
 						$this_pvm = $paiva->format('d.m.Y');
 						if (strtotime($this_pvm) < $startday_ts)
 							continue;
-						if (strtotime($this_pvm) > $haku_to_ts or strtotime($this_pvm) > strtotime($stopday)){
+						if ((false !== $haku_to_ts && strtotime($this_pvm) > $haku_to_ts) or strtotime($this_pvm) > strtotime($stopday)){
 							break 2;
 						}
 						foreach($tids as $tid){
@@ -4527,30 +4539,31 @@ class TyovuorootController extends Controller
 	{
 		$data = [];
 		$pvm_from = date("Y-m-d", strtotime($from));
-		$pvm_to = date("Y-m-d", strtotime($to));
+		$pvm_to = ($to !== null)?date("Y-m-d", strtotime($to)):null;
 		$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, $haku_criteria, false, $with);
+
 		$tids_after = [];
 		foreach($tv_arr as $t => $arr)
 			$tids_after[] = $t;
-		foreach($tids_after as $tid){
-			$f = date("d.m.Y", strtotime($from));
-			while (strtotime($f) <= strtotime($to)){
-				if(isset($tv_arr[$tid][$f])){
-					ksort($tv_arr[$tid][$f]);
-					foreach($tv_arr[$tid][$f] as $k => $v)
-						foreach($v as $v2)
-							$data[] = $v2;
-				}
-				$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
-			}
-		}
 
+		foreach($tids_after as $tid)
+			foreach($tv_arr[$tid] as $k => $v)
+				foreach($v as $k1 => $v1)
+					foreach($v1 as $k2 => $v2)
+						$data[] = $v2;
+		/*
+		echo '<pre>';
+		print_r( $data );
+		echo '</pre>';
+		exit;
+		*/
 		return $data;
 	}
 
 	public function actionSiirto($kenelta=null, $kenelle=null, $alkaen=null)
 	{
-//die('Suljettu 11.10.2018 asti');
+		$this->render('siirto');
+		/*
 		if( $alkaen !== null and date('Ymd', strtotime($alkaen)) < date('Ymd') ){
 			Yii::app()->user->setFlash('danger','Työvuoroja menneisyydestä ei voida siirtää.');
 				$this->redirect(array('siirto'));
@@ -4559,16 +4572,14 @@ class TyovuorootController extends Controller
 		$data_kenelta = array();
 		$data_kenelle = array();
 		if( $kenelta !== null and $kenelle !== null ){
-			$criteria = new CDBCriteria;
-	        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
-	        	$criteria->condition = " 				
-				tid='".$kenelta."'
-				AND peruutettu=0 
-			";
-			if( $alkaen !== null ){
-				$criteria->addCondition(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m%d') >= ".date('Ymd', strtotime($alkaen))." ");
-			}
-			$data_kenelta = Tyovuoroot::model()->findAll($criteria);
+
+			$tids 		= [];
+			$haku_criteria 	= ["peruutettu=0 OR peruutettu IS NULL"];
+			$with		= ['data'];
+			$from		= date("Y-m-d", strtotime($alkaen));
+			$to		= null;
+			$dataAll 	= $this->FromToSuunnitellutAll($from, $to, [$kenelta], $haku_criteria, $with);
+			$data_kenelta 	= $dataAll;
 
 			$criteria = new CDBCriteria;
 	        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
@@ -4583,6 +4594,7 @@ class TyovuorootController extends Controller
 			'data_kenelle' => $data_kenelle,
 			'alkaen' => $alkaen
 		));
+		*/
 
 	}
 

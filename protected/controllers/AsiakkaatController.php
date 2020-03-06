@@ -270,7 +270,7 @@ class AsiakkaatController extends Controller
 			   WHERE asiakas_id='".$id."'
 			)
 		";
-		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria);
+		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data']);
 
 		$this->render('showshift',array(
 				'dataAll' => $dataAll,
