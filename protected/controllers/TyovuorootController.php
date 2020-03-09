@@ -973,6 +973,7 @@ class TyovuorootController extends Controller
 		// copy
 		if(isset($_POST['copy']) and isset($_SESSION['muistin'])){
 			$tids	= [];
+			$site = Yii::app()->createController('Site');
 			foreach($_SESSION['muistin'] as $cp){
 
 				$get_id 	= $this->this_id($cp);
@@ -999,7 +1000,6 @@ class TyovuorootController extends Controller
 					$status_log 	= 'NewByCopy';
 					$old_values = json_encode($model->attributes);
 					$new_values = json_encode($tv_new->attributes);
-					$site = Yii::app()->createController('Site');
 					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 					//     LOG -->
 				}
@@ -1015,6 +1015,7 @@ class TyovuorootController extends Controller
 		// <-- Siirto
 		if(isset($_POST['cut']) and isset($_SESSION['muistin'])){
 			$tids	= [$_POST['newTid']];
+			$site = Yii::app()->createController('Site');
 			foreach($_SESSION['muistin'] as $cp){
 
 				$get_id 	= $this->this_id($cp);
@@ -1054,7 +1055,6 @@ class TyovuorootController extends Controller
 					$status_log 	= 'Move';	
 					$old_values = json_encode($model->attributes);
 					$new_values = json_encode($tv_new->attributes);
-					$site = Yii::app()->createController('Site');
 					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 					//     LOG -->
 
@@ -1793,7 +1793,7 @@ class TyovuorootController extends Controller
        		$criteria = new CDbCriteria();
 		if( $haku_to === null ){
 			$criteria->condition = "
-				toistuva_id=0 AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) > '$haku_from'
+				toistuva_id=0 AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '$haku_from'
 			";
 		} else {
 			$criteria->condition = "
@@ -1860,7 +1860,8 @@ class TyovuorootController extends Controller
 			}
 
 			$startday 	= date("Y-m-d", strtotime($arvo->pfrom));
-			$startday_ts	= strtotime($startday); 
+			$startday_ts	= strtotime($startday);
+			$haku_from_ts	= strtotime($haku_from);
 			$stopday 	= date("Y-m-d", strtotime($arvo->pto));
 
 			$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
@@ -1874,7 +1875,7 @@ class TyovuorootController extends Controller
 						$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
 						$paiva->modify("+" . ($viikko_paiva - 1) . "day");
 						$this_pvm = $paiva->format('d.m.Y');
-						if (strtotime($this_pvm) < $startday_ts)
+						if ( (strtotime($this_pvm) < $startday_ts) or (strtotime($this_pvm) < $haku_from_ts) )
 							continue;
 						if ((false !== $haku_to_ts && strtotime($this_pvm) > $haku_to_ts) or strtotime($this_pvm) > strtotime($stopday)){
 							break 2;
@@ -3022,6 +3023,7 @@ class TyovuorootController extends Controller
 
 	}
 
+	// <-- For tavalliset tyovuorot
 	protected function tyopari_poisto($cur_model, $removedArr)
 	{
 		$edelliset_tyoparit = json_decode($cur_model->tyopaari, true);
@@ -4562,40 +4564,44 @@ class TyovuorootController extends Controller
 
 	public function actionSiirto($kenelta=null, $kenelle=null, $alkaen=null)
 	{
-		$this->render('siirto');
-		/*
 		if( $alkaen !== null and date('Ymd', strtotime($alkaen)) < date('Ymd') ){
 			Yii::app()->user->setFlash('danger','Työvuoroja menneisyydestä ei voida siirtää.');
 				$this->redirect(array('siirto'));
 		}
 
-		$data_kenelta = array();
-		$data_kenelle = array();
+		$data_kenelta 	= [];
+		$data_kenelle 	= [];
+		$data_kenelta_k = [];
 		if( $kenelta !== null and $kenelle !== null ){
 
-			$tids 		= [];
-			$haku_criteria 	= ["peruutettu=0 OR peruutettu IS NULL"];
-			$with		= ['data'];
 			$from		= date("Y-m-d", strtotime($alkaen));
-			$to		= null;
-			$dataAll 	= $this->FromToSuunnitellutAll($from, $to, [$kenelta], $haku_criteria, $with);
-			$data_kenelta 	= $dataAll;
-
 			$criteria = new CDBCriteria;
-	        	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
-	        	$criteria->condition = " 				
-				tid='".$kenelle."'
+        		$criteria->condition = "
+				tid='".$kenelta."'
+				AND (peruutettu=0 OR peruutettu IS NULL)
+				AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '$from'
 			";
-			$data_kenelle = Tyovuoroot::model()->findAll($criteria);
-		}
+			$tv = Tyovuoroot::model()->findAll($criteria);
+			$data_kenelta 	= $tv;
 
+			$from		= date("Y-m-d", strtotime($alkaen));
+			$criteria = new CDBCriteria;
+        		$criteria->condition = "
+				(tid='".$kenelta."' OR tyopaari LIKE'%\"$kenelta\"%')
+				AND (peruutettu=0 OR peruutettu IS NULL)
+				AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$from'
+			";
+			$toistuvat = ToistuvatTyovuorot::model()->findAll($criteria);
+			$data_kenelta_k	= $toistuvat;
+
+		}
+		$tilanteet = $this->tilanteet();
 		$this->render('siirto', array(
 			'data_kenelta' => $data_kenelta,
-			'data_kenelle' => $data_kenelle,
-			'alkaen' => $alkaen
+			'data_kenelta_k' => $data_kenelta_k,
+			'alkaen' => $alkaen,
+			'tilanteet' => $tilanteet
 		));
-		*/
-
 	}
 
 	protected function getKohde($id)
