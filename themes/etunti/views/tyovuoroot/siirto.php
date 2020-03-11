@@ -85,7 +85,8 @@ $site = Yii::app()->createController('Site');
                         <div class="section">
 			<br>
 			<?php if( isset($_GET['alkaen'])) : ?>
-        	        <?php echo CHtml::link(Yii::t('main', 'Keskeytä'), array('siirto'),array('class'=>'btn btn-primary btn-lg siirra btn-block myBgColors')); ?>
+        	        <?php /*echo CHtml::link(Yii::t('main', 'Keskeytä'), array('siirto'),array('class'=>'btn btn-primary btn-lg siirra btn-block myBgColors')); */?>
+        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors"><?php echo Yii::t('main', 'Päivitä haku'); ?></button>
 			<?php else : ?>
         	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors"><?php echo Yii::t('main', 'Esikatselu'); ?></button>
 			<?php endif; ?>
@@ -116,7 +117,7 @@ $site = Yii::app()->createController('Site');
         <!-- begin: .tray-center -->
 
 	<div class="text-center">
-		<h2>Saaja: <?=$this->etuSukunimi($_GET['kenelle'])?></h2>
+		<h2>Siirrä</h2>
 		<form action="#" method="GET">
 		<input type="hidden" name="kenelta" value="<?=$_GET['kenelta']?>">
 		<input type="hidden" name="kenelle" value="<?=$_GET['kenelle']?>">
@@ -126,89 +127,177 @@ $site = Yii::app()->createController('Site');
 		</form>
 	</div>
 	<hr>
-	<div class="text-center">
-		<h2>Keneltä: <?=$this->etuSukunimi($_GET['kenelta'])?></h2>
-	</div>
         <div class="tray-center row">
 	    <!-- / Toistuvat -->
             <div class="admin-form col-sm-6">
-	      <legend><h3>Toistuvat ketjut</h3></legend>
+	      <legend><h3>Toistuvat ketjut - Saaja: <?=$this->etuSukunimi($_GET['kenelle'])?></h3></legend>
               <div class="panel heading-border">
-                <div class="panel-body bg-light">
+                <div class="panel-body">
 		<p class="text-danger">Huomio! Poistetut ketjussa olevat päivät tulee saajallekin poistettuna.</p>
-		<table class="table table-striped">
+		<p class="text-danger">Huomio! Aloitus päivä voi muutetta. Tämä johtuu työvuorojen viikkoväleistä</p>
+		<p class="text-danger">Huomio! Menneisyydessä olevat ketjut lopetetaan <?=date("d.m.Y",strtotime($alkaen.' -1 day'))?> päivässä</p>
+		<table class="table table-striped table-bordered">
 		<tr>
-		<th><?=Yii::t('main', 'Ketju')?></th>
+		<th><?=Yii::t('main', 'Aloitus')?></th>
+		<th><?=Yii::t('main', 'Lopetus')?></th>
 		<th><?=Yii::t('main', 'Aika')?></th>
 		<th><?=Yii::t('main', 'Osoite')?></th>
 		</tr>
 		<?php foreach($data_kenelta_k as $item) : ?>
-		<?php if( isset($_GET['siirra_now']) ): ?>
-		<?php
-			$suorittu++;
-			$edellinen_model 	= $item->attributes;
-			$edelliset_tyoparit 	= json_decode($edellinen_model['tyopaari'], true);
-			$edelliselle_new_tyoparit = [];
-			$new_tid_edelliselle = $item->tid; // ensin vanha
-			foreach($edelliset_tyoparit as $tid)
-				if($_GET['kenelta'] != $tid){
-					$edelliselle_new_tyoparit[$tid] = $tid;
-					$new_tid_edelliselle = $tid; // ihan sama minkäläinen olevasta työparista
-				}
-
-			if( count($edelliselle_new_tyoparit) == 1 and isset($edelliselle_new_tyoparit[$item->tid]) )
-				unset($edelliselle_new_tyoparit[$item->tid]);
-
-			$edelliselle_new_tyoparit = (count($edelliselle_new_tyoparit) > 0)?json_encode(array_values($edelliselle_new_tyoparit)):'';
-			ToistuvatTyovuorot::model()->updatebypk($item->id, array('tid' => $new_tid_edelliselle, 'tyopaari' => $edelliselle_new_tyoparit));
-
-			// <-- Vanha ketju lopetetaan Keneltä
-			$tv_new = new ToistuvatTyovuorot;
-			$tv_new->attributes = $item->attributes;
-			$tv_new->pto = date("d.m.Y",strtotime($alkaen.' -1 day'));
-			$tv_new->tid = $_GET['kenelta'];
-			$tv_new->tyopaari = '';
-			if($tv_new->save()){
-
-			}
+		<?php 
+			$aloitus_check 	= [];
+			$saa_aloita 	= $alkaen;
 
 			// <-- Viikkoja laskenta alkuperäisestä
 			$startday 	= date("Y-m-d", strtotime($item->pfrom));
+			$startday_ts	= strtotime($startday);
 			$stopday 	= date("Y-m-d", strtotime($item->pto));
-			$alkaen_YW	= date("YW",strtotime($alkaen.' -1 day'));
-			$saa_aloita 	= $alkaen;
+			$alkaen_YW	= date("YW",strtotime($alkaen));
 
 			$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
 			$date->modify('this week monday');
 			$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
-			
+			$pvm_lista = [];
 			while ($date->getTimestamp() <= $date_end){
 				$this_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
 				if( $this_week_sunday >= $alkaen_YW ){
-					$saa_aloita = date("d.m.Y", strtotime($date->format("d.m.Y").' this week monday'));
-					break;
+					foreach(json_decode($item->viikko_paivat, true) as $viikko_paiva) {
+						$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
+						$paiva->modify("+" . ($viikko_paiva - 1) . "day");
+						$this_pvm = $paiva->format('d.m.Y');
+						if ( (strtotime($this_pvm) < $startday_ts) )
+							continue;
+						if (strtotime($this_pvm) > strtotime($stopday)){
+							break 2;
+						}
+						if(strtotime($this_pvm) >= strtotime($alkaen)){
+							$pvm_lista[$this_pvm] = $this_pvm;
+							if(!isset($aloitus_check['pvm']))
+								$aloitus_check['pvm'] = $this_pvm;
+						}
+					}
 				}
 				$date->modify("+{$item->viikkoja}week");
 			}
 
-			// <-- Kenelle uusi ketju
-			$tv_new = new ToistuvatTyovuorot;
-			$tv_new->attributes = $item->attributes;
-			$tv_new->pfrom = $saa_aloita;
-			$tv_new->tid = $_GET['kenelle'];
-			$tv_new->tyopaari = '';
-			if($tv_new->save()){
+			if(isset($aloitus_check['pvm']))
+				$saa_aloita = $aloitus_check['pvm'];
 
+			// <-- Poistetut pvms KENELLE
+			$poistettu_pvms_kenelle = [];
+			if( !empty($item->new_poistettu_pvm) )
+				foreach(json_decode($item->new_poistettu_pvm, true) as $key => $val)
+					if( strtotime($val['pvm']) >= strtotime($saa_aloita) and $val['tid'] == $_GET['kenelta'] ){
+						$val['tid'] = $_GET['kenelle'];
+						$poistettu_pvms_kenelle[] = $val;
+					}
+
+			// <-- Poistetut pvms uudet arvot alkuperäisen ketjuun
+			$poistettu_pvms_alkuperainen_new = [];
+			if( !empty($item->new_poistettu_pvm) )
+				foreach(json_decode($item->new_poistettu_pvm, true) as $key1 => $val)
+					if( strtotime($val['pvm']) >= strtotime($saa_aloita) and $val['tid'] == $_GET['kenelta'] ){
+						//$val['tid'] = $_GET['kenelle'];
+					} else {
+						$poistettu_pvms_alkuperainen_new[] = $val;
+					}
+
+			// <-- Poistetut pvms jatko ketjulle, eli työparille
+			$poistettu_pvms_jatkoketjulle = [];
+			if( !empty($item->new_poistettu_pvm) )
+				foreach(json_decode($item->new_poistettu_pvm, true) as $key1 => $val)
+					if( strtotime($val['pvm']) >= strtotime($saa_aloita) and $val['tid'] != $_GET['kenelta'] ){
+						$poistettu_pvms_jatkoketjulle[] = $val;
+					}
+			/*
+			echo '<pre>';
+			print_r($poistettu_pvms_jatkoketjulle);
+			echo '</pre>';
+			*/
+		?>
+		<?php if( isset($_GET['siirra_now']) ): ?>
+		<?php
+			$suorittu++;
+			$pto 			= date("d.m.Y",strtotime($alkaen.' -1 day'));
+
+			$edellinen_model 	= $item->attributes;
+			$edelliset_tyoparit 	= json_decode($edellinen_model['tyopaari'], true);
+			$jatko_tids 		= [];
+			foreach($edelliset_tyoparit as $tid)
+				if($_GET['kenelta'] != $tid){
+					$jatko_tids[$tid] = $tid;
+				}
+
+			// <-- Nämät ketjut menee eteenpäin jos oli työparia
+			if( count($jatko_tids) == 1 and strtotime($item->pto) >= strtotime($alkaen) ){
+				foreach($jatko_tids as $jtid){ // no prbl. se looppa 1 kerta vain
+					$tv_new = new ToistuvatTyovuorot;
+					$tv_new->attributes = $item->attributes;
+					$tv_new->pfrom = $saa_aloita;
+					$tv_new->tid = $jtid;
+					$tv_new->tyopaari = '';
+					$tv_new->new_poistettu_pvm = (count($poistettu_pvms_jatkoketjulle) > 0)?json_encode($poistettu_pvms_jatkoketjulle):'';
+					$tv_new->save();
+				}
+			}
+			if( count($jatko_tids) > 1 and strtotime($item->pto) >= strtotime($alkaen) ){
+				foreach($jatko_tids as $jtid)
+					$new_paatid = $jtid; // ihan sama kuka työparista
+
+					$tv_new = new ToistuvatTyovuorot;
+					$tv_new->attributes = $item->attributes;
+					$tv_new->pfrom = $saa_aloita;
+					$tv_new->tid = $new_paatid;
+					$tv_new->tyopaari = json_encode(array_values($jatko_tids));
+					$tv_new->new_poistettu_pvm = (count($poistettu_pvms_jatkoketjulle) > 0)?json_encode($poistettu_pvms_jatkoketjulle):'';
+					$tv_new->save();
+			}
+			//     Nämät ketjut menee eteenpäin jos oli työparia -->
+
+			// <-- $alkaen asti vanhat ketjut STOPPATAAN
+			if( strtotime($pto) > strtotime($item->pfrom) ){
+				ToistuvatTyovuorot::model()->updatebypk($item->id, [
+					'pto' => $pto,
+					'new_poistettu_pvm' => (count($poistettu_pvms_alkuperainen_new) > 0)?json_encode($poistettu_pvms_alkuperainen_new):''
+					]
+				);
+			}
+
+			// <-- Kenelle uusi ketju
+			if( strtotime($saa_aloita) <= strtotime($item->pto) ){
+				$tv_new = new ToistuvatTyovuorot;
+				$tv_new->attributes = $item->attributes;
+				$tv_new->pfrom = $saa_aloita;
+				$tv_new->tid = $_GET['kenelle'];
+				$tv_new->tyopaari = '';
+				$tv_new->new_poistettu_pvm = (count($poistettu_pvms_kenelle) > 0)?json_encode($poistettu_pvms_kenelle):'';
+				$tv_new->save();
 			}
 
 		?>
 		<?php endif; ?>
 		<tr>
-		<td><?=$alkaen?>-<?=$item->pto?></td>
+		<td><?=$saa_aloita?></td>
+		<td><?=$item->pto?></td>
 		<td><?=$item->alku?>-<?=$item->loppu?></td>
 		<td>
 			<?=isset($item->kohteet->osoite)?$item->kohteet->osoite:$item->osoite?>
 			<?=((isset($tilanteet[$item->status]) and ($item->status == 2 or $item->status == 10))?'<p>'.$tilanteet[$item->status].'</p>':'')?>
+		</td>
+		</tr>
+		<tr>
+		<td colspan="4">
+			<button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#lista_<?=$item->id?>" aria-expanded="false" aria-controls="collapseExample">
+			Pvm. lista <i class="caret"></i>
+			</button>
+			<div class="collapse" id="lista_<?=$item->id?>">
+			  <div class="card card-body">
+				<br><p><?php
+				foreach($pvm_lista as $pvml)
+					echo $pvml.'<br>';
+				?></p>
+			  </div>
+			</div>
 		</td>
 		</tr>
 		<?php endforeach; ?>
@@ -217,13 +306,15 @@ $site = Yii::app()->createController('Site');
               </div>
             </div>
 	    <!-- / Toistuvat -->
-
+<?php 
+//exit;
+?>
 	    <!-- / Tavalliset -->
             <div class="admin-form col-sm-6">
-	      <legend><h3>Työvuorot</h3></legend>
+	      <legend><h3>Työvuorot - Saaja: <?=$this->etuSukunimi($_GET['kenelle'])?></h3></legend>
               <div class="panel heading-border">
-                <div class="panel-body bg-light">
-		<table class="table table-striped">
+                <div class="panel-body">
+		<table class="table table-striped table-bordered">
 		<tr>
 		<th><?=Yii::t('main', 'Pvm')?></th>
 		<th><?=Yii::t('main', 'Aika')?></th>

@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'operatio_v3', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall'),
+				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -948,7 +948,7 @@ class TyovuorootController extends Controller
 				$toistuva 	= $get_id['toistuva'];
 				$pvm 		= $get_id['pvm'];
 				$tid 		= $get_id['tid'];
-				$removed[] 	= $model->id;
+				$removed[] 	= $cp;
 
 				if( $toistuva ){
 					$u		= Yii::app()->user->nimi;
@@ -1986,7 +1986,7 @@ class TyovuorootController extends Controller
 			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 			$tv_edit = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$this_id.'" style="color:'.$color.'">'.$ikoonit.''.$expl1[0].'</b>' : '';
 		} else {
-			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$asiakasNakyvissa.$osoite.$lisateksti.'</span>';
+			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$asiakasNakyvissa.$osoite.$lisateksti.'<br>Ketju#'.$arvo->id.'</span>';
 		}
 		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto, 'alku' => $arvo->alku, 'loppu' => $arvo->loppu];
 		return $return;
@@ -2913,10 +2913,37 @@ class TyovuorootController extends Controller
 		){
 			$model->attributes 	= $edellinen_model;
 			$model->pto 		= date("d.m.Y", strtotime($laatikko_pvm . " -1 day"));
+
+			// <-- Poistetut päivät siirto, JOS vaihdettu henkilö
+			$all_new_tids = [$post['tid'] => $post['tid']];
+			foreach($post_tyopaari as $ptid)
+				$all_new_tids[$ptid] = $ptid;
+
+			$edelliset_tyoparit_updater = [];
+			foreach($edelliset_tyoparit as $tptid)
+				$edelliset_tyoparit_updater[$tptid] = $tptid;
+
+			$poistettu_pvms_fornew 		= [];
+			$poistettu_pvms_fororigin 	= [];
+			if( !empty($edellinen_model['new_poistettu_pvm']) ){
+				foreach(json_decode($edellinen_model['new_poistettu_pvm'], true) as $key => $val){
+					if( strtotime($val['pvm']) >= strtotime($post['pfrom']) and in_array($val['tid'], $all_new_tids, true) ){
+						$poistettu_pvms_fornew[] = $val;
+					}
+					if( strtotime($val['pvm']) < strtotime($post['pfrom']) and isset($edelliset_tyoparit_updater[$val['tid']]) ){
+						$poistettu_pvms_fororigin[] = $val;
+					}
+				}
+			}
+
+			$model->new_poistettu_pvm = (count($poistettu_pvms_fororigin) > 0)?json_encode($poistettu_pvms_fororigin):'';
+			//     Poistetut päivät siirto, JOS vaihdettu henkilö -->
+
 			if($model->save()){
 				$new_toistuva = new ToistuvatTyovuorot;
 				$new_toistuva->attributes = $post;
 				$this->model_json_converter($post, $new_toistuva, $toistuva);
+				$new_toistuva->new_poistettu_pvm = (count($poistettu_pvms_fornew) > 0)?json_encode($poistettu_pvms_fornew):'';
 				if(!$new_toistuva->save()){
 					echo json_encode($new_toistuva->getErrors());
 				} else {
