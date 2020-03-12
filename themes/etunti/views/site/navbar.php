@@ -1085,7 +1085,7 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
             </ul>
           </li>
 
-	<?php if(in_array('2',$tas) or (strpos(Yii::app()->user->domain, 'aaaa_') !== false)) : ?>
+	<?php if(in_array('2',$tas) or (strpos(Yii::app()->user->domain, 'staging_') !== false)) : ?>
           <li>
             <a class="accordion-toggle tyovuorojenHallinta" href="#">
               <span class="fa fa-calendar-check-o"></span>
