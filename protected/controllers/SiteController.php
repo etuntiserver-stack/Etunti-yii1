@@ -2037,15 +2037,19 @@ $(document).ready(function(){
 		$suunniteltu 	= 0;
 		$thisday	= date("Y-m-d");
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
-		$haku_criteria	= "status=3 AND peruutettu=0";
+		$haku_criteria	= "status=3 AND (peruutettu=0 OR peruutettu IS NULL)";
 		$getAll 	= $tyovuorot[0]->tv_arr($thisday, $thisday, $tids, $haku_criteria, false, ['tv_kesto']);
+		/*
+		echo '<pre>';
+		print_r($getAll);
+		echo '<pre>';
+		*/
 		$result = 0;
 		foreach($getAll as $k => $v)
 			foreach($v as $unix => $dayarr)
 				foreach($dayarr as $key => $arr)
 					foreach($arr as $arr2)
-						foreach($arr2 as $tv_kesto)
-							$result += $tv_kesto;
+						$result += $arr2['tv_kesto'];
 
                 echo json_encode($this->sprint($result));
 		exit;
