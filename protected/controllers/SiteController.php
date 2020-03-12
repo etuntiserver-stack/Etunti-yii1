@@ -2045,7 +2045,7 @@ $(document).ready(function(){
 				foreach($dayarr as $key => $arr)
 					foreach($arr as $arr2)
 						foreach($arr2 as $tv_kesto)
-							$result += $tv_kesto;
+							$result += (int)$tv_kesto;
 
                 echo json_encode($this->sprint($result));
 		exit;
