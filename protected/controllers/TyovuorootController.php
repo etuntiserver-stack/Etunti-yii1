@@ -1299,7 +1299,7 @@ class TyovuorootController extends Controller
 	}
 
 	public function actionBeta($kohteet_siivous=[], $kohde='', $asiakas='', $mode=null, $stage=null) {
-
+/*
 		// <-- Ketjun kasikorjaus
 		// <-- CLEAR puhdista turhat  ketjut 
 		if( $stage == 1 or $stage == 11 ){
@@ -1505,7 +1505,7 @@ class TyovuorootController extends Controller
 		//     Ketjun kasikorjaus -->
 
 
-
+*/
 // ------------------------------------------------
 
 		$site = Yii::app()->createController('Site');
