@@ -1298,13 +1298,13 @@ class TyovuorootController extends Controller
 		));
 	}
 
-	public function actionBeta($kohteet_siivous=[], $kohde='', $asiakas='', $mode=null, $stage=null) {
-/*
+	public function actionBeta($kohteet_siivous = [], $kohde = '', $asiakas = '', $mode = null, $stage = null)
+	{
 		// <-- Ketjun kasikorjaus
 		// <-- CLEAR puhdista turhat  ketjut 
-		if( $stage == 1 or $stage == 11 ){
-			
-			if( $stage == 1 ){
+		if ($stage == 1 or $stage == 11) {
+
+			if ($stage == 1) {
 				// Optimisointi
 				$query = "OPTIMIZE TABLE sivex_tvuoro";
 				$command = Yii::app()->db1->createCommand($query);
@@ -1322,22 +1322,22 @@ class TyovuorootController extends Controller
 				id NOT IN(select toistuva_id from sivex_tvuoro where toistuva_id!=0)
 			";
 			$ts = ToistuvatTyovuorot::model()->find($criteria);
-			if( isset($ts->id) ){
+			if (isset($ts->id)) {
 				$tvr = ToistuvatTyovuorot::model()->findAll($criteria);
-				echo '<h2>Remove count: '.count($tvr).'</h2><br>';
-				foreach($tvr as $item){
+				echo '<h2>Remove count: ' . count($tvr) . '</h2><br>';
+				foreach ($tvr as $item) {
 					//echo 'Remove ketju: '.$item->id.'<br>';
 					ToistuvatTyovuorot::model()->deletebypk($item->id);
 				}
-			}			
+			}
 
 			echo 'STAGE 1 - korjattu<br>';
 			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 2));
 			exit;
 		}
 		//     CLEAR puhdista turhat  ketjut -->
-		if( $stage == 2 ){
-			$criteria = new CDbCriteria(); 
+		if ($stage == 2) {
+			$criteria = new CDbCriteria();
 			$criteria->order = "id ASC";
 			//$criteria->group = "toistuva_id";
 			$criteria->condition = "
@@ -1349,13 +1349,13 @@ class TyovuorootController extends Controller
 				)
 			";
 			$findone = Tyovuoroot::model()->find($criteria);
-			if( isset($findone->id) ){
+			if (isset($findone->id)) {
 				$tvr = Tyovuoroot::model()->findAll($criteria);
-				foreach($tvr as $item){
+				foreach ($tvr as $item) {
 					//echo 'Tid korjaus: '.$item->toistuva_id.'<br>';
 					ToistuvatTyovuorot::model()->updatebypk($item->toistuva_id, array('tid' => $item->tid));
 				}
-				echo 'STAGE 2 - korjattu '.count($tvr).' kpl<br>';
+				echo 'STAGE 2 - korjattu ' . count($tvr) . ' kpl<br>';
 			}
 			// Optimisointi
 			$query = "OPTIMIZE TABLE toistuvat_tyovuorot";
@@ -1367,98 +1367,97 @@ class TyovuorootController extends Controller
 		}
 
 		// <-- Poistettu_pvm redirect to another field
-		if( $stage == 3 ){
-		$findone = Yii::app()->db1->createCommand()
-			->select("poistettu_pvm,id,tyopaari,tid")
-			->from("toistuvat_tyovuorot")
-			->where("poistettu_pvm!='' AND new_poistettu_pvm IS NULL")
-			->queryRow();
-
-		if( isset($findone['id']) ){
-			$tvr = Yii::app()->db1->createCommand()
+		if ($stage == 3) {
+			$findone = Yii::app()->db1->createCommand()
 				->select("poistettu_pvm,id,tyopaari,tid")
 				->from("toistuvat_tyovuorot")
 				->where("poistettu_pvm!='' AND new_poistettu_pvm IS NULL")
-				->queryAll();
-			$i = 0;
-			foreach($tvr as $arvo){
-				$i++;
-				$poistetut_pvms = json_decode($arvo['poistettu_pvm'], true);
-				if( count($poistetut_pvms) == 0 )
-					continue;
+				->queryRow();
 
-				$one = Yii::app()->db1->createCommand()
-					->select("pvm,tid")
-					->from("sivex_tvuoro")
-					->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) DESC")
-					->where("toistuva_id='".$arvo['id']."'")
-					->queryRow();
-
-				if(!isset($one['pvm']))
-					continue;
-
-				// <-- Tids
-				$tids = [];
-				if( !empty($arvo['tyopaari']) ){
-					foreach(json_decode($arvo['tyopaari'], true) as $tid){
-						$tids[$tid] = $tid;
-					}
-					$tids[$arvo['tid']] = $arvo['tid'];
-				} else {
-					$tids[$arvo['tid']] = $arvo['tid'];
-				}
-				$new_poistettu_pvm = [];
-				foreach($tids as $tid){
-					foreach($poistetut_pvms as $k => $v){
-						if( date("Ymd", strtotime($one['pvm'])) < date("Ymd") and date("Ymd", strtotime($v)) > date("Ymd") ) // Oikein
-							continue;
-						$new_poistettu_pvm[$tid][$v] = ['tid'=>$tid, 'pvm'=>$v, 'syy'=>['text'=>'', 'user'=>'', 'date'=>'']];
-					}
-				}
-
-				$findall = Yii::app()->db1->createCommand()
-					->select("pvm,tid")
-					->from("sivex_tvuoro")
-					->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) DESC")
-					->where("toistuva_id='".$arvo['id']."'")
+			if (isset($findone['id'])) {
+				$tvr = Yii::app()->db1->createCommand()
+					->select("poistettu_pvm,id,tyopaari,tid")
+					->from("toistuvat_tyovuorot")
+					->where("poistettu_pvm!='' AND new_poistettu_pvm IS NULL")
 					->queryAll();
+				$i = 0;
+				foreach ($tvr as $arvo) {
+					$i++;
+					$poistetut_pvms = json_decode($arvo['poistettu_pvm'], true);
+					if (count($poistetut_pvms) == 0)
+						continue;
 
-				//echo 'TV määrä '.count($findall).'<br>';
-				foreach($findall as $item){
-					// Jos on olemassa tyovuoro sen poistettu pvm mukaan
-					// Emme laiteta sita new_poistettu_pvm listaan
-					if(isset($new_poistettu_pvm[$item['tid']][$item['pvm']]))
-						unset($new_poistettu_pvm[$item['tid']][$item['pvm']]);
-				}
-				$result = [];
-				foreach($new_poistettu_pvm as $k => $v)
-					foreach($v as $k2 => $v2)
-						$result[] = $v2;
-				$clearing = [];
-				foreach ($result as $key => $value){
-				  if(!in_array($value, $clearing))
-				    $clearing[] = $value;
-				}
-				//echo 'Clearning: '.json_encode(array_values($clearing)).'<br>';
-				if( date("Ymd", strtotime($one['pvm'])) < date("Ymd") ){
-					ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm'=>json_encode(array_values($clearing)), 'pto' => $one['pvm']));
-				} else {
-					ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm'=>json_encode(array_values($clearing))));
-				}
-				if( count($poistetut_pvms) > 200 ){
-					echo '<h4>STAGE 3 - on vielä jäljellä '.count($tvr).' kpl</h4>';
-					//echo 'Poistetut päivät määrä '. count($poistetut_pvms);
-					// Jonkun verran aikana tehdään sivun reload jolloin PHP max execute time ei sanoa mitään
-					// Ja hyvää seuraa siitä tapahtumistä
-					echo '
+					$one = Yii::app()->db1->createCommand()
+						->select("pvm,tid")
+						->from("sivex_tvuoro")
+						->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) DESC")
+						->where("toistuva_id='" . $arvo['id'] . "'")
+						->queryRow();
+
+					if (!isset($one['pvm']))
+						continue;
+
+					// <-- Tids
+					$tids = [];
+					if (!empty($arvo['tyopaari'])) {
+						foreach (json_decode($arvo['tyopaari'], true) as $tid) {
+							$tids[$tid] = $tid;
+						}
+						$tids[$arvo['tid']] = $arvo['tid'];
+					} else {
+						$tids[$arvo['tid']] = $arvo['tid'];
+					}
+					$new_poistettu_pvm = [];
+					foreach ($tids as $tid) {
+						foreach ($poistetut_pvms as $k => $v) {
+							if (date("Ymd", strtotime($one['pvm'])) < date("Ymd") and date("Ymd", strtotime($v)) > date("Ymd")) // Oikein
+								continue;
+							$new_poistettu_pvm[$tid][$v] = ['tid' => $tid, 'pvm' => $v, 'syy' => ['text' => '', 'user' => '', 'date' => '']];
+						}
+					}
+
+					$findall = Yii::app()->db1->createCommand()
+						->select("pvm,tid")
+						->from("sivex_tvuoro")
+						->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) DESC")
+						->where("toistuva_id='" . $arvo['id'] . "'")
+						->queryAll();
+
+					//echo 'TV määrä '.count($findall).'<br>';
+					foreach ($findall as $item) {
+						// Jos on olemassa tyovuoro sen poistettu pvm mukaan
+						// Emme laiteta sita new_poistettu_pvm listaan
+						if (isset($new_poistettu_pvm[$item['tid']][$item['pvm']]))
+							unset($new_poistettu_pvm[$item['tid']][$item['pvm']]);
+					}
+					$result = [];
+					foreach ($new_poistettu_pvm as $k => $v)
+						foreach ($v as $k2 => $v2)
+							$result[] = $v2;
+					$clearing = [];
+					foreach ($result as $key => $value) {
+						if (!in_array($value, $clearing))
+							$clearing[] = $value;
+					}
+					//echo 'Clearning: '.json_encode(array_values($clearing)).'<br>';
+					if (date("Ymd", strtotime($one['pvm'])) < date("Ymd")) {
+						ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm' => json_encode(array_values($clearing)), 'pto' => $one['pvm']));
+					} else {
+						ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm' => json_encode(array_values($clearing))));
+					}
+					if (count($poistetut_pvms) > 200) {
+						echo '<h4>STAGE 3 - on vielä jäljellä ' . count($tvr) . ' kpl</h4>';
+						//echo 'Poistetut päivät määrä '. count($poistetut_pvms);
+						// Jonkun verran aikana tehdään sivun reload jolloin PHP max execute time ei sanoa mitään
+						// Ja hyvää seuraa siitä tapahtumistä
+						echo '
 					<script>
 						window.location.reload();
 					</script>';
-					exit;
+						exit;
+					}
 				}
 			}
-
-		}
 
 			// Optimisointi
 			$query = "OPTIMIZE TABLE toistuvat_tyovuorot";
@@ -1469,30 +1468,30 @@ class TyovuorootController extends Controller
 			exit;
 		}
 
-		if( $stage == 4 ){
+		if ($stage == 4) {
 			// Muutetaan tyovuoroja jossa toistuva_id!=0 ja jotka ei saa poistaa
 			$criteria = new CDbCriteria();
 			$criteria->condition = "
 				toistuva_id!=0 AND laskutettu!=0
 			";
 			$tv = Tyovuoroot::model()->findAll($criteria);
-			foreach($tv as $item){
+			foreach ($tv as $item) {
 				//echo $item->tid.' '.$item->pvm.'<br>';
 				$u		= Yii::app()->user->nimi;
 				$d		= date("d.m.Y");
-				$poisto_syy	= ['text'=>'laskutettu', 'user'=>$u, 'date'=>$d];
+				$poisto_syy	= ['text' => 'laskutettu', 'user' => $u, 'date' => $d];
 				$this->toistuvaDeletePvm($item->toistuva_id, $item->pvm, $item->tid, $poisto_syy);
-				Tyovuoroot::model()->updatebypk($item->id, array('toistuva_id'=> 0));
+				Tyovuoroot::model()->updatebypk($item->id, array('toistuva_id' => 0));
 			}
 
-			echo CHtml::link('<h4>Laskutettu korjaus '.count($tv).' kpl. Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 5));
+			echo CHtml::link('<h4>Laskutettu korjaus ' . count($tv) . ' kpl. Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 5));
 			exit;
 		}
 
-		if( $stage == 5 ){
+		if ($stage == 5) {
 			$query = "delete from sivex_tvuoro where toistuva_id!=:t_id";
 			$command = Yii::app()->db1->createCommand($query);
-			$command->execute( ['t_id' => 0] );
+			$command->execute(['t_id' => 0]);
 
 			// Optimisointi
 			$query = "OPTIMIZE TABLE sivex_tvuoro";
@@ -1505,16 +1504,15 @@ class TyovuorootController extends Controller
 		//     Ketjun kasikorjaus -->
 
 
-*/
-// ------------------------------------------------
+
+		// ------------------------------------------------
 
 		$site = Yii::app()->createController('Site');
-		$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
+		$arrDate = array(1 => "Ma", 2 => "Ti", 3 => "Ke", 4 => "To", 5 => "Pe", 6 => "La", 7 => "Su");
 		$asetukset = Asetukset::model()->findByPk(1);
 
 		// <-- Reset
-		if(isset($_GET['reset']))
-		{
+		if (isset($_GET['reset'])) {
 			unset(Yii::app()->session['year']);
 			unset(Yii::app()->session['week']);
 			unset(Yii::app()->session['vkolopput']);
@@ -1530,134 +1528,133 @@ class TyovuorootController extends Controller
 		//     Reset -->
 
 		// <-- GET haku
-		if(isset($_GET['year']) or isset($_GET['week'])){
-			if(isset($_GET['year']) and !empty($_GET['year']))
+		if (isset($_GET['year']) or isset($_GET['week'])) {
+			if (isset($_GET['year']) and !empty($_GET['year']))
 				Yii::app()->session['year'] = $_GET['year'];
-			if(isset($_GET['week']) and !empty($_GET['week']))
+			if (isset($_GET['week']) and !empty($_GET['week']))
 				Yii::app()->session['week'] = $_GET['week'];
-			if(isset($_GET['tid']) and !empty($_GET['tid']))
+			if (isset($_GET['tid']) and !empty($_GET['tid']))
 				Yii::app()->session['tyontekijat'] = array($_GET['tid']);
-			if(isset($_GET['tv_id']))
+			if (isset($_GET['tv_id']))
 				$this->redirect(array('beta', 'tv_id' => $_GET['tv_id']));
 
 			$this->redirect(array('beta', 'mode' => $mode));
-		}		
+		}
 		//  GET haku -->
 
 		// <-- Post haku
-		if(isset($_POST['haku']))
-		{
-			if(isset($_POST['kohteiden_tyonimike']) and !empty($_POST['kohteiden_tyonimike']))
+		if (isset($_POST['haku'])) {
+			if (isset($_POST['kohteiden_tyonimike']) and !empty($_POST['kohteiden_tyonimike']))
 				Yii::app()->session['kohteiden_tyonimike'] = $_POST['kohteiden_tyonimike'];
-			if(isset($_POST['kohteiden_tyonimike']) and empty($_POST['kohteiden_tyonimike']))
+			if (isset($_POST['kohteiden_tyonimike']) and empty($_POST['kohteiden_tyonimike']))
 				unset(Yii::app()->session['kohteiden_tyonimike']);
 
-			if(isset($_POST['tyo_toimialue']) and !empty($_POST['tyo_toimialue']))
+			if (isset($_POST['tyo_toimialue']) and !empty($_POST['tyo_toimialue']))
 				Yii::app()->session['tyo_toimialue'] = $_POST['tyo_toimialue'];
-			if(!isset($_POST['tyo_toimialue']))
+			if (!isset($_POST['tyo_toimialue']))
 				unset(Yii::app()->session['tyo_toimialue']);
 
-			if(isset($_POST['tyoryhma']) and !empty($_POST['tyoryhma']))
+			if (isset($_POST['tyoryhma']) and !empty($_POST['tyoryhma']))
 				Yii::app()->session['tyoryhma'] = $_POST['tyoryhma'];
-			if(!isset($_POST['tyoryhma']))
+			if (!isset($_POST['tyoryhma']))
 				unset(Yii::app()->session['tyoryhma']);
 
 			// <-- Asiakas
-			if(isset($_POST['asiakas']) and !empty($_POST['asiakas']))
+			if (isset($_POST['asiakas']) and !empty($_POST['asiakas']))
 				Yii::app()->session['asiakas'] = $_POST['asiakas'];
-			if(isset($_POST['asiakas']) and empty($_POST['asiakas']))
+			if (isset($_POST['asiakas']) and empty($_POST['asiakas']))
 				unset(Yii::app()->session['asiakas']);
 			// Asiakas -->
-	
+
 			// <-- Kohde
-			if(isset($_POST['kohde']) and !empty($_POST['kohde']))
+			if (isset($_POST['kohde']) and !empty($_POST['kohde']))
 				Yii::app()->session['kohde'] = $_POST['kohde'];
-			if(isset($_POST['kohde']) and empty($_POST['kohde']))
+			if (isset($_POST['kohde']) and empty($_POST['kohde']))
 				unset(Yii::app()->session['kohde']);
 			// Kohde -->
-	
+
 			// <-- tyontekijat
-			if(isset($_POST['tyontekijat']) and !empty($_POST['tyontekijat']))
+			if (isset($_POST['tyontekijat']) and !empty($_POST['tyontekijat']))
 				Yii::app()->session['tyontekijat'] = $_POST['tyontekijat'];
-			if(!isset($_POST['tyontekijat']))
+			if (!isset($_POST['tyontekijat']))
 				unset(Yii::app()->session['tyontekijat']);
 			//  tyontekijat -->
 
-			if(isset($_POST['from']) and !empty($_POST['from']))
-				Yii::app()->session['from'] = date("Y-m-d",strtotime($_POST['from']));
-	
-			if(isset($_POST['to']) and !empty($_POST['to']))
-				Yii::app()->session['to'] = date("Y-m-d",strtotime($_POST['to']));
+			if (isset($_POST['from']) and !empty($_POST['from']))
+				Yii::app()->session['from'] = date("Y-m-d", strtotime($_POST['from']));
+
+			if (isset($_POST['to']) and !empty($_POST['to']))
+				Yii::app()->session['to'] = date("Y-m-d", strtotime($_POST['to']));
 
 			$this->redirect(array('beta', 'mode' => $mode));
-		}	
+		}
 		//  Post haku -->
 
 		// <-- TYONTEKIJA MODE
-		if( $mode == 'tt' ){
-			if(!isset(Yii::app()->session['from']))
+		if ($mode == 'tt') {
+			if (!isset(Yii::app()->session['from']))
 				Yii::app()->session['from'] = date("Y-m-d");
-			if(!isset(Yii::app()->session['to']))
-				Yii::app()->session['to'] = date("Y-m-d",strtotime("+2 week", time()));
+			if (!isset(Yii::app()->session['to']))
+				Yii::app()->session['to'] = date("Y-m-d", strtotime("+2 week", time()));
 		}
 		//    VKO MODE -->
 
 		// <-- VKO MODE
-		if( $mode == 'vko' ){
-			if(!isset(Yii::app()->session['year']))
+		if ($mode == 'vko') {
+			if (!isset(Yii::app()->session['year']))
 				Yii::app()->session['year'] = date("Y", strtotime('this week sunday'));
-			if(!isset(Yii::app()->session['week']))
+			if (!isset(Yii::app()->session['week']))
 				Yii::app()->session['week'] = date("W", strtotime('this week sunday'));
 
 			$year = Yii::app()->session['year'];
 			$week = sprintf("%02d", Yii::app()->session['week']);
 			Yii::app()->session['week'] = $week;
 
-			if(!isset(Yii::app()->session['vkolopput']))
+			if (!isset(Yii::app()->session['vkolopput']))
 				$numDays = 5;
 			else
 				$numDays = 7;
 
-			Yii::app()->session['from'] = date("Y-m-d", strtotime($year ."W". $week.'1'));
-			Yii::app()->session['to'] = date("Y-m-d", strtotime($year ."W". $week . $numDays));
+			Yii::app()->session['from'] = date("Y-m-d", strtotime($year . "W" . $week . '1'));
+			Yii::app()->session['to'] = date("Y-m-d", strtotime($year . "W" . $week . $numDays));
 		}
 		//    VKO MODE -->
 
 		// <-- HAKU
-		if(isset(Yii::app()->session['asiakas']))
+		if (isset(Yii::app()->session['asiakas']))
 			$asiakas = Yii::app()->session['asiakas'];
-		if(isset(Yii::app()->session['kohde']))
+		if (isset(Yii::app()->session['kohde']))
 			$kohde = Yii::app()->session['kohde'];
 
 		$haku_criteria 	= [];
-		if(isset($asiakas) and !empty($asiakas)){
+		if (isset($asiakas) and !empty($asiakas)) {
 			$haku_criteria[] = '
 			kohde IN (
 			    SELECT id FROM sivex_kohdet WHERE asiakas_id IN
    			    (
 			       SELECT id FROM asiakkaat WHERE 
-				yrityksen_nimi LIKE "%'.$asiakas.'%" 
-				OR yhteyshenkilo LIKE "%'.$asiakas.'%" 
-				OR puhelin LIKE "%'.$asiakas.'%"
+				yrityksen_nimi LIKE "%' . $asiakas . '%" 
+				OR yhteyshenkilo LIKE "%' . $asiakas . '%" 
+				OR puhelin LIKE "%' . $asiakas . '%"
 			    )
 			)';
 		}
-		if(isset($kohde) and !empty($kohde)){
+		if (isset($kohde) and !empty($kohde)) {
 			$haku_criteria[] = '
 			kohde IN (
 			    SELECT id FROM sivex_kohdet WHERE 
-				osoite LIKE "%'.$kohde.'%" 
-				OR puh_nro LIKE "%'.$kohde.'%"
+				osoite LIKE "%' . $kohde . '%" 
+				OR puh_nro LIKE "%' . $kohde . '%"
 		       )';
 		}
-		if(isset($kohteet_siivous) and count($kohteet_siivous) > 0){
-			$impl = implode(',',$kohteet_siivous);
+		if (isset($kohteet_siivous) and count($kohteet_siivous) > 0) {
+			$impl = implode(',', $kohteet_siivous);
 			$haku_criteria[] = " kohde IN ($impl) ";
 		}
 		//     HAKU -->
 
 		// <-- Order tyontekijat
-		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+		if ($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0) {
 			$tt_order_1 = "tekijan_nimi";
 			$tt_order_2 = "sukunimi";
 		} else {
@@ -1666,24 +1663,24 @@ class TyovuorootController extends Controller
 		}
 		// Order tyontekijat -->
 
-       		$criteria = new CDbCriteria();
+		$criteria = new CDbCriteria();
 		$criteria->select = "id, $tt_order_1, $tt_order_2";
 		$criteria->order = "$tt_order_1 ASC";
 		$criteria->condition = "
 			aktiivinen=1
 		";
 
-		if(isset(Yii::app()->session['tyontekijat']) and count(Yii::app()->session['tyontekijat'] > 0)){
-		      	$ids = implode(",", Yii::app()->session['tyontekijat']);
-		        $criteria->addCondition ('id IN ('.$ids.') ');
+		if (isset(Yii::app()->session['tyontekijat']) and count(Yii::app()->session['tyontekijat'] > 0)) {
+			$ids = implode(",", Yii::app()->session['tyontekijat']);
+			$criteria->addCondition('id IN (' . $ids . ') ');
 		}
 
 		// <-- Tyontekijat
 		$tt = [];
 		$haku_tids = [];
 		$tyontekijat = Tyontekijat::model()->findAll($criteria);
-		foreach($tyontekijat as $item){
-			$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1.' '.$item->$tt_order_2);
+		foreach ($tyontekijat as $item) {
+			$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1 . ' ' . $item->$tt_order_2);
 			$haku_tids[$item->id] = $item->id;
 		}
 		//     Tyontekijat -->
@@ -1694,10 +1691,10 @@ class TyovuorootController extends Controller
 		//$tv_arr = $this->tv_arr($haku_from, $haku_to, $haku_tids, $haku_criteria, true);
 
 		// Työsuhteet
-	     	$tyosuhteet = Tyosuhdet::model()->findAll(" tid IN(".implode(",",$haku_tids).") ");
+		$tyosuhteet = Tyosuhdet::model()->findAll(" tid IN(" . implode(",", $haku_tids) . ") ");
 		$vktyoaika = [];
-		foreach($tyosuhteet as $item)
-			if(!empty($item->vktyoaika))
+		foreach ($tyosuhteet as $item)
+			if (!empty($item->vktyoaika))
 				$vktyoaika[$item->tid] = $item->vktyoaika;
 		// Pyhapaivat
 		$pyhapaivat = $this->pyhapaivatAll($haku_from, $haku_to);
@@ -1707,7 +1704,7 @@ class TyovuorootController extends Controller
 		echo '</pre>';
 		exit;
 		*/
-		if( $mode == 'tt' ){
+		if ($mode == 'tt') {
 			$this->render('tt', array(
 				'tt'		=> $tt,
 				'from'		=> $haku_from,
@@ -1720,7 +1717,7 @@ class TyovuorootController extends Controller
 				'haku_criteria' => $haku_criteria
 			));
 		}
-		if( $mode == 'vko' ){
+		if ($mode == 'vko') {
 			$this->render('vko', array(
 				'tt'		=> $tt,
 				'from'		=> $haku_from,
