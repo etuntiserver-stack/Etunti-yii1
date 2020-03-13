@@ -1318,17 +1318,13 @@ class TyovuorootController extends Controller
 			}
 
 			$criteria = new CDbCriteria();
-			$criteria->condition = "
-				id NOT IN(select toistuva_id from sivex_tvuoro where toistuva_id!=0)
-			";
-			$ts = ToistuvatTyovuorot::model()->find($criteria);
-			if (isset($ts->id)) {
-				$tvr = ToistuvatTyovuorot::model()->findAll($criteria);
-				echo '<h2>Remove count: ' . count($tvr) . '</h2><br>';
-				foreach ($tvr as $item) {
-					//echo 'Remove ketju: '.$item->id.'<br>';
-					ToistuvatTyovuorot::model()->deletebypk($item->id);
-				}
+			$criteria->condition = "id NOT IN(select distinct toistuva_id from sivex_tvuoro where toistuva_id!=0)";
+
+			$tvr = ToistuvatTyovuorot::model()->findAll($criteria);
+			echo '<h2>Remove count: ' . count($tvr) . '</h2><br>';
+			foreach ($tvr as $item) {
+				//echo 'Remove ketju: '.$item->id.'<br>';
+				ToistuvatTyovuorot::model()->deletebypk($item->id);
 			}
 
 			echo 'STAGE 1 - korjattu<br>';
