@@ -73,10 +73,10 @@ class SiteController extends Controller
 
 	public function isDigisten() {
 
-		if($this->tasot(999) or (isset(Yii::app()->user->username) and Yii::app()->user->username == 'roman')){
+		if($this->tasot(999))
 			return true;
-		}
-	            return false;
+		else
+			return false;
 	}
 
 	public function isEtuntiAdmin() {
