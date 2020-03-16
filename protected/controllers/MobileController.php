@@ -176,8 +176,8 @@ class MobileController extends Controller
 
 		if($ext == 'pdf')
 		{
-			echo 'xvfb-run -a wkhtmltopdf --margin-bottom 10 --margin-top 10 '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf';
-			exit;
+			//echo 'xvfb-run -a wkhtmltopdf --margin-bottom 10 --margin-top 10 '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf';
+			//exit;
 			exec('xvfb-run -a wkhtmltopdf --margin-bottom 10 --margin-top 10 '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf', $output, $return); //--orientation Landscape --title "Titulo: do PDF"
 			if($output)
 			{
