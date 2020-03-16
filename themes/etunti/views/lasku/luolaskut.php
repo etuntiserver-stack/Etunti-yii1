@@ -300,11 +300,7 @@ $iban				= $asetukset->iban;
 			// <-- TV
 			if( isset($tyovuoroot[$asiakas_nimi]['pvm']) and isset($kohteet['osoite']) ){
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-<<<<<<< HEAD
-					$freetext .= $tv_pvm;
-=======
 					$nimike_append .= $tyovuoroot[$asiakas_nimi]['pvm'];
->>>>>>> master
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
 					if(!empty($nimike_append)){ $nimike_append .= ', '; }
@@ -452,11 +448,7 @@ $iban				= $asetukset->iban;
 			if( isset($tyovuoroot[$asiakas_nimi]['pvm']) and isset($kohteet['osoite']) ){
 				$nimike_append = ' ';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-<<<<<<< HEAD
-					$freetext .= $tv_pvm;
-=======
 					$nimike_append .= $tyovuoroot[$asiakas_nimi]['pvm'];
->>>>>>> master
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
 					if(!empty($nimike_append)){ $nimike_append .= ', '; }
