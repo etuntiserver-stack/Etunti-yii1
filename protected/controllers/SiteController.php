@@ -93,7 +93,6 @@ class SiteController extends Controller
 
         public function init()
         {
-die('odotta..');
                 if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
 
 			// <-- Ajaa kaikki modelit
