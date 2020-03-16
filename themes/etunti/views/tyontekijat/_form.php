@@ -93,7 +93,7 @@ if(empty($model->position) and isset($model->id))
 */ ?>
 
 	<?php if(isset($model->id)) : ?>
-	<div class="section fill mb5 ashidd_a">
+	<div class="section fill mb5 ashidd_a" id="tunnus_lahettaminen">
 		<?php echo CHtml::link(Yii::t('main', 'Lähetä tunnukset työntekijälle'), 
 				array('update', 'id'=>$model->id, 'laheta_tunnukset'=>true), 
 				array(
@@ -106,6 +106,13 @@ if(empty($model->position) and isset($model->id))
 			); 
 		?>
 	</div>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$('#Tyontekijat_tekijan_email').on('focus blur keydown', function() {
+			$("#tunnus_lahettaminen").remove();
+		});
+	});
+	</script>
 	<?php endif; ?>
 
 	<?php if(isset($model->id) and $model->mobiili == 0) : ?>

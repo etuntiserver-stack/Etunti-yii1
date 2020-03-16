@@ -3022,7 +3022,7 @@ $(document).ready(function(){
 
 	public function dbhost(){ // tama pitaa poista, etsi missa se kaytetaan
 		$is_local = in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']);
-		$db_host = ($is_local)?'localhost':'10.215.25.9';
+		$db_host = ($is_local)?'localhost':'localhost';
 		return $db_host;
 	}
 

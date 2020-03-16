@@ -874,6 +874,7 @@ exit;
 			'yksikko'=>$yksikko,
 			'kohde_id'=>$kohde_id,
 			'free_text'=>$free_text,
+			'rivi_lisays' => $_POST['rivi_lisays'] ?? ''
 		));
 	}
 

@@ -287,25 +287,33 @@ $iban				= $asetukset->iban;
 			if( isset($r['hinta_sis']) and isset($r['alvsis']) and $r['alvsis'] == 'sis'){ $alvsis = 1; $hinta = $r['hinta_sis']; }
 
 			// <-- MOB
+			$nimike_append = ' ';
 			if( isset($mob_tunnit['aloitan']) and isset($mob_tunnit['kohde_kannasta']) ){
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-					$freetext .= date("d.m.Y", strtotime($mob_tunnit['aloitan']));
+					$nimike_append .= date("d.m.Y", strtotime($mob_tunnit['aloitan']));
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
-					if(!empty($freetext)){ $freetext .= ', '; }
-					$freetext .= $mob_tunnit['kohde_kannasta'];
+					if(!empty($nimike_append)){ $nimike_append .= ', '; }
+					$nimike_append .= $mob_tunnit['kohde_kannasta'];
 				}
 			}
 			// <-- TV
 			if( isset($tyovuoroot[$asiakas_nimi]['pvm']) and isset($kohteet['osoite']) ){
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
+<<<<<<< HEAD
 					$freetext .= $tv_pvm;
+=======
+					$nimike_append .= $tyovuoroot[$asiakas_nimi]['pvm'];
+>>>>>>> master
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
-					if(!empty($freetext)){ $freetext .= ', '; }
-					$freetext .= $kohteet['osoite'];
+					if(!empty($nimike_append)){ $nimike_append .= ', '; }
+					$nimike_append .= $kohteet['osoite'];
 				}
 			}
+			if (empty($nimike_append) || ctype_space($nimike_append))
+				$nimike_append = '';
+			$nimike .= $nimike_append;
 
 			if( $hinta == 0 ){
 				echo '<h1>Hinta ei saa olla nolla.</h1>';
@@ -429,27 +437,35 @@ $iban				= $asetukset->iban;
 			if( isset($r['alvsis']) and $r['alvsis'] == 'nolla'){ $alvsis = 0; }
 			if( isset($r['hinta_sis']) and isset($r['alvsis']) and $r['alvsis'] == 'sis'){ $alvsis = 1; $hinta = $r['hinta_sis']; }
 			// <-- MOB
+			$nimike_append = ' ';
 			if( isset($mob_tunnit['kohde_kannasta']) ){
-				$freetext = '';
+				$nimike_append = ' ';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-					$freetext .= date("d.m.Y", strtotime($mob_tunnit['aloitan']));
+					$nimike_append .= date("d.m.Y", strtotime($mob_tunnit['aloitan']));
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
-					if(!empty($freetext)){ $freetext .= ', '; }
-					$freetext .= $mob_tunnit['kohde_kannasta'];
+					if(!empty($nimike_append)){ $nimike_append .= ', '; }
+					$nimike_append .= $mob_tunnit['kohde_kannasta'];
 				}
 			}
 			// <-- TV
 			if( isset($tyovuoroot[$asiakas_nimi]['pvm']) and isset($kohteet['osoite']) ){
-				$freetext = '';
+				$nimike_append = ' ';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
+<<<<<<< HEAD
 					$freetext .= $tv_pvm;
+=======
+					$nimike_append .= $tyovuoroot[$asiakas_nimi]['pvm'];
+>>>>>>> master
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
-					if(!empty($freetext)){ $freetext .= ', '; }
-					$freetext .= $kohteet['osoite'];
+					if(!empty($nimike_append)){ $nimike_append .= ', '; }
+					$nimike_append .= $kohteet['osoite'];
 				}
-			} 
+			}
+			if (empty($nimike_append) || ctype_space($nimike_append))
+				$nimike_append = '';
+			$nimike .= $nimike_append;
 
 			// <-- ALV laskin
 			$veroton 	= 0;
