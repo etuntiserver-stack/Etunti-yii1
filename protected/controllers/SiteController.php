@@ -72,8 +72,7 @@ class SiteController extends Controller
 	}
 
 	public function isDigisten() {
-echo 'test';
-exit;
+
 		if($this->tasot(999))
 			return true;
 		else
