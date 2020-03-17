@@ -1301,6 +1301,91 @@ class TyovuorootController extends Controller
 	public function actionBeta($kohteet_siivous = [], $kohde = '', $asiakas = '', $mode = null, $stage = null)
 	{
 		// <-- Ketjun kasikorjaus
+		if ( $stage == 1 ) {
+			$query = file_get_contents("protected/migrate-wip.sql");
+			$command = Yii::app()->db1->createCommand($query);
+			$command->execute();
+
+			echo 'STAGE 1 - korjattu<br>';
+			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 2));
+			exit;
+		}
+
+		// <-- Poistettu_pvm redirect to another field
+		if ($stage == 2) {
+			$tvr = Yii::app()->db1->createCommand()
+				->select("poistettu_pvm,id,tyopaari,tid")
+				->from("toistuvat_tyovuorot")
+				->where("poistettu_pvm!='' AND new_poistettu_pvm IS NULL")
+				->queryAll();
+			$i = 0;
+			foreach ($tvr as $arvo) {
+				$i++;
+				$poistetut_pvms = json_decode($arvo['poistettu_pvm'], true);
+				if (count($poistetut_pvms) == 0)
+					continue;
+
+				// <-- Tids
+				$tids = [];
+				if (!empty($arvo['tyopaari'])) {
+					foreach (json_decode($arvo['tyopaari'], true) as $tid) {
+						$tids[$tid] = $tid;
+					}
+					$tids[$arvo['tid']] = $arvo['tid'];
+				} else {
+					$tids[$arvo['tid']] = $arvo['tid'];
+				}
+				$new_poistettu_pvm = [];
+				foreach ($tids as $tid) {
+					foreach ($poistetut_pvms as $k => $v) {
+						if ( date("Ymd", strtotime($v)) > date("Ymd")) // Oikein
+							$new_poistettu_pvm[$tid][$v] = ['tid' => $tid, 'pvm' => $v, 'syy' => ['text' => '', 'user' => '', 'date' => '']];
+					}
+				}
+				$result = [];
+				foreach ($new_poistettu_pvm as $k => $v)
+					foreach ($v as $k2 => $v2)
+						$result[] = $v2;
+				$clearing = [];
+				foreach ($result as $key => $value) {
+					if (!in_array($value, $clearing))
+						$clearing[] = $value;
+				}
+				$new_poistettu_pvm_arvo = (count($clearing) > 0)? json_encode(array_values($clearing)) : '';
+				//echo 'Clearning: '.$new_poistettu_pvm_arvo.'<br>';
+				if(count($clearing) > 50){
+					echo 'Ketjussa #'.$arvo['id'].' '.count($clearing).' kpl. poistettu päiviä tulevaisuudessa. EI KORJAUSTA<br>';
+					ToistuvatTyovuorot::model()->deletebypk($arvo['id']);
+				} else {
+					echo 'Ketju #'.$arvo['id'].' korjattu<br>';
+					ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm' => $new_poistettu_pvm_arvo));
+				}
+
+				if (count($poistetut_pvms) > 200) {
+					/*
+					echo '
+					<script>
+						window.location.reload();
+					</script>'; */
+					//exit;
+				}
+			}
+
+			echo CHtml::link('<h4>STAGE 2 valmis. Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 3));
+			exit;
+		}
+
+		if ($stage == 3) {
+			// Optimisointi
+			$query = "OPTIMIZE TABLE toistuvat_tyovuorot";
+			$command = Yii::app()->db1->createCommand($query);
+			$command->execute();
+
+			echo CHtml::link('<h4>STAGE 3 valmis. Kaikki VALMIS</h4>', array('beta', 'mode' => $mode));
+			exit;
+		}
+
+/*
 		// <-- CLEAR puhdista turhat  ketjut 
 		if ($stage == 1 or $stage == 11) {
 
@@ -1497,10 +1582,8 @@ class TyovuorootController extends Controller
 			echo CHtml::link('<h4>Kaikki valmis. Työvuoroille?</h4>', array('beta', 'mode' => $mode));
 			exit;
 		}
+*/
 		//     Ketjun kasikorjaus -->
-
-
-
 		// ------------------------------------------------
 
 		$site = Yii::app()->createController('Site');
@@ -1943,8 +2026,8 @@ class TyovuorootController extends Controller
 			return $return;
 		}
 		$lisateksti = '';
-		if($arvo->piilota_mobiilista == 1)
-			$lisateksti .= '<br><span class="text-primary">Ei mobiili</span>';
+		//if($arvo->piilota_mobiilista == 1)
+			//$lisateksti .= '<br><span class="text-primary">Ei mobiili</span>';
 		if($arvo->laskutettu == 1)
 			$lisateksti .= '<br><span class="text-primary">Laskutettu</span>';
 		if($arvo->peruutettu == 1)
@@ -1979,7 +2062,7 @@ class TyovuorootController extends Controller
 			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 			$tv_edit = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$this_id.'" style="color:'.$color.'">'.$ikoonit.''.$expl1[0].'</b>' : '';
 		} else {
-			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$asiakasNakyvissa.$osoite.$lisateksti.'<br>Ketju#'.$arvo->id.'</span>';
+			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$asiakasNakyvissa.$osoite.$lisateksti.'</span>';
 		}
 		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto, 'alku' => $arvo->alku, 'loppu' => $arvo->loppu];
 		return $return;
