@@ -44,7 +44,7 @@ DELETE FROM sivex_tvuoro
 DELETE FROM toistuvat_tyovuorot WHERE
     DATE(STR_TO_DATE(pto, '%d.%m.%Y')) < @start_date;
 
-
+/* Ei toimii kunnolla
 UPDATE toistuvat_tyovuorot SET pfrom = (
     SELECT IF(
         viikkoja - FLOOR(DATEDIFF(@start_date, DATE(STR_TO_DATE(pfrom, '%d.%m.%Y'))) / 7) % viikkoja = viikkoja,
@@ -53,7 +53,7 @@ UPDATE toistuvat_tyovuorot SET pfrom = (
         )
     FROM toistuvat_tyovuorot WHERE DATE(STR_TO_DATE(t.pfrom, '%d.%m.%Y')) < @start_date
 )
-
+*/
 
 
 /*
