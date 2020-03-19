@@ -1301,16 +1301,12 @@ class TyovuorootController extends Controller
 	public function actionBeta($kohteet_siivous = [], $kohde = '', $asiakas = '', $mode = null, $stage = null)
 	{
 		// <-- Ketjun kasikorjaus
-		$startday = date("Y-m-d", strtotime("next monday"));
+		$startday 	= date("Y-m-d", strtotime("next monday"));
+		$stopday 	= date("Y-m-d", strtotime($startday." +1 month"));
 		//$startWeek = date("YW", strtotime("next monday"));
 		if ( $stage == 1 ) {
-/*
-			$query = file_get_contents("protected/migrate-wip.sql");
-			$command = Yii::app()->db1->createCommand($query);
-			$command->execute();
-*/
+
 			// Optimisointi
-/*
 			$query = "OPTIMIZE TABLE sivex_tvuoro";
 			$command = Yii::app()->db1->createCommand($query);
 			$command->execute();
@@ -1318,86 +1314,154 @@ class TyovuorootController extends Controller
 			$query = "OPTIMIZE TABLE toistuvat_tyovuorot";
 			$command = Yii::app()->db1->createCommand($query);
 			$command->execute();
-*/
 
-			$criteria = new CDbCriteria();
-			$criteria->condition = "id NOT IN(select distinct toistuva_id from sivex_tvuoro where toistuva_id!=0)";
-			$tvr = ToistuvatTyovuorot::model()->deleteAll($criteria);
-
-			$del = Yii::app()->db1->createCommand("DELETE FROM toistuvat_tyovuorot WHERE DATE(STR_TO_DATE(pto, '%d.%m.%Y')) < '$startday'")->execute();
-
-			$tvr = Yii::app()->db1->createCommand()
-				->select("id, pfrom, pto, viikkoja, poistettu_pvm")
-				->from("toistuvat_tyovuorot")
-				->where("DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '$startday' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$startday'")
-				->queryAll();
-			$korjattu = 0;
-			foreach($tvr as $item){
-
-				$before_startday = Yii::app()->db1->createCommand()
-					->select("pvm")
-					->from("sivex_tvuoro")
-					->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) DESC")
-					->where("toistuva_id='" . $item['id'] . "' AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) <= '$startday'")
-					->queryRow();
-
-				if(!isset($before_startday['pvm'])){
-					$after_startday = Yii::app()->db1->createCommand()
-						->select("pvm")
-						->from("sivex_tvuoro")
-						->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) ASC")
-						->where("toistuva_id='".$item['id']."' AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) > '$startday'")
-						->queryRow();
-
-					if(isset($after_startday['pvm'])){
-						echo 'Ketjussa ID: '.$item['id'].' ei löydy ennen '.$startday.', mutta sen jälkeen on olemassa. Seuraava pvm: '.$after_startday['pvm'].'<br>';
-						if( date("Ymd", strtotime($after_startday['pvm'])) < date("Ymd", strtotime($item['pto'])) ){
-							Yii::app()->db1->createCommand("UPDATE toistuvat_tyovuorot SET pfrom='".$after_startday['pvm']."' WHERE id='".$item['id']."'")->execute();
-							Yii::app()->db1->createCommand("DELETE FROM sivex_tvuoro WHERE toistuva_id='".$item['id']."' AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($after_startday['pvm']))."'")->execute();
-							Yii::app()->db1->createCommand("UPDATE sivex_tvuoro SET toistuva_id='0' WHERE toistuva_id='".$item['id']."'")->execute();
-							continue;
-						}
-					}
-				}
-
-				if(isset($before_startday['pvm'])){
-					$last = $before_startday['pvm'];
-					$date = new \DateTime(date("Y-m-d", strtotime($last)), new DateTimeZone('Europe/Helsinki'));
-					$date->modify("+{$item[viikkoja]}week");
-					$date->modify('this week monday');
-					$new_pfrom = $date->format("d.m.Y");
-
-					$korjattu++;
-					//echo 'Korjataan ketju: ID '.$item['id'].', UUSI pfrom: <b>'.$new_pfrom.'</b>,  pto: '.$item['pto'].', Viikkoja: <b>'.$item['viikkoja'].'</b><br>';
-					Yii::app()->db1->createCommand("UPDATE toistuvat_tyovuorot SET pfrom='$new_pfrom' WHERE id='".$item['id']."'")->execute();
-					Yii::app()->db1->createCommand("DELETE FROM sivex_tvuoro WHERE toistuva_id='".$item['id']."' AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '$startday'")->execute();
-					Yii::app()->db1->createCommand("UPDATE sivex_tvuoro SET toistuva_id='0' WHERE toistuva_id='".$item['id']."'")->execute();
-				}
-			}
-
-			echo 'STAGE 1 - Korjattu: '.$korjattu.' kpl.<br>';
+			echo 'STAGE 1 - OPTIMISOINTI valmis.<br>';
 			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 2));
 			exit;
 		}
+
 		if ( $stage == 2 ) {
 
 			$tvr = Yii::app()->db1->createCommand()
-				->select("id, pfrom, pto, viikkoja, poistettu_pvm")
-				->from("toistuvat_tyovuorot")
-				->where("DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '$startday'")
+				->select("id, tid, pvm, toistuva_id")
+				->from("sivex_tvuoro")
+				->group("toistuva_id")
+				->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) ASC")
+				->where("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$startday' AND '$stopday'")
+				->andWhere("toistuva_id!=0")
 				->queryAll();
-			echo '<h3>Ketjut, jossa pfrom < startday: '.count($tvr).' kpl.</h3>';
+
+			$toistuvat = Yii::app()->db1->createCommand()
+				->select("id,tid,tyopaari")
+				->from("toistuvat_tyovuorot")
+				//->where()
+				->queryAll();
+
+			$toist_arr = [];
+			foreach($toistuvat as $item)
+				$toist_arr[$item['id']] = $item;
+
+			$korjattu = 0;
+			echo '<h3>Yhteensä '.count($tvr).'</h3>';
 			foreach($tvr as $item){
-				$poistetut_pvms = json_decode($item['poistettu_pvm'], true);
-				echo 'Ketjut jotka pitää poistaa > ID: '.$item['id'].', Pfrom: '.$item['pfrom'].', Pto: '.$item['pto'].', Viikkoja: <b>'.$item['viikkoja'].'</b>, poistetut: '.count($poistetut_pvms).' kpl<br>';
+
+				if(isset($toist_arr[$item['toistuva_id']])){
+					$tids = [];
+					$tids[$toist_arr[$item['toistuva_id']]['tid']] = $toist_arr[$item['toistuva_id']]['tid'];
+					foreach(json_decode($toist_arr[$item['toistuva_id']]['tyopaari'], true) as $tid)
+						$tids[$tid] = $tid;
+
+					if( !in_array($item['tid'], $tids) ){
+
+						// <-- Jos EI työparia
+						if( empty($toist_arr[$item['toistuva_id']]['tyopaari'])){
+							// ONGELMA 
+							Yii::app()->db1->createCommand(
+							"UPDATE toistuvat_tyovuorot SET tid='".$item['tid']."', pfrom='".date("d.m.Y", strtotime($item['pvm']." this week monday"))."' 
+							WHERE id='".$item['toistuva_id']."'")
+							->execute();
+						} else {
+							Yii::app()->db1->createCommand(
+							"UPDATE toistuvat_tyovuorot SET pfrom='".date("d.m.Y", strtotime($item['pvm']." this week monday"))."' 
+							WHERE id='".$item['toistuva_id']."'")
+							->execute();
+						}
+
+					} else {
+						Yii::app()->db1->createCommand(
+						"UPDATE toistuvat_tyovuorot SET pfrom='".date("d.m.Y", strtotime($item['pvm']." this week monday"))."' 
+						WHERE id='".$item['toistuva_id']."'")
+						->execute();
+					}
+
+
+					Yii::app()->db1->createCommand(
+					"DELETE FROM sivex_tvuoro WHERE toistuva_id='".$item['toistuva_id']."' 
+					AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($item['pvm']." this week monday"))."'")
+					->execute();
+
+					Yii::app()->db1->createCommand("UPDATE sivex_tvuoro SET toistuva_id='0' WHERE toistuva_id='".$item['toistuva_id']."'")
+					->execute();
+
+				} else {
+					echo 'Ketjussa: '.$item['toistuva_id'].' ONGELMA<br>';
+				}
 			}
 
-			echo 'STAGE 2 - korjattu<br>';
+			echo 'STAGE valmis - Korjattu: '.$korjattu.' kpl.<br>';
 			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 3));
 			exit;
 		}
+
+		if ( $stage == 3 ) {
+
+			$tvr = Yii::app()->db1->createCommand()
+				->select("id, tid, pvm, toistuva_id")
+				->from("sivex_tvuoro")
+				->group("toistuva_id")
+				->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) DESC")
+				->andWhere("toistuva_id!=0")
+				->queryAll();
+
+			$toistuvat = Yii::app()->db1->createCommand()
+				->select("id,tid,tyopaari, pfrom, pto")
+				->from("toistuvat_tyovuorot")
+				//->where()
+				->queryAll();
+
+			$toist_arr = [];
+			foreach($toistuvat as $item)
+				$toist_arr[$item['id']] = $item;
+
+			$korjattu = 0;
+			echo '<h3>Yhteensä '.count($tvr).'</h3>';
+			foreach($tvr as $item){
+
+				if(isset($toist_arr[$item['toistuva_id']])){
+
+					if( date("Ymd", strtotime($toist_arr[$item['toistuva_id']]['pto'])) < date("Ymd", strtotime($startday)) ){
+
+						echo 'Ketju '.$item['toistuva_id'].' POISTETAAN<br>';
+						Yii::app()->db1->createCommand(
+						"DELETE FROM toistuvat_tyovuorot WHERE id='".$item['toistuva_id']."'")
+						->execute();
+
+						Yii::app()->db1->createCommand("UPDATE sivex_tvuoro SET toistuva_id='0' WHERE toistuva_id='".$item['toistuva_id']."'")
+						->execute();
+
+					} else {
+
+						if( date("Ymd", strtotime($item['pvm'])) < date("Ymd", strtotime($startday)) ){
+
+							echo 'Ketju '.$item['toistuva_id'].' POISTETAAN<br>';
+							Yii::app()->db1->createCommand(
+							"DELETE FROM toistuvat_tyovuorot WHERE id='".$item['toistuva_id']."'")
+							->execute();
+
+							Yii::app()->db1->createCommand("UPDATE sivex_tvuoro SET toistuva_id='0' WHERE toistuva_id='".$item['toistuva_id']."'")
+							->execute();
+
+						} else {
+							echo 'Ei selvä ongelma ketju '.$item['toistuva_id'];
+						}
+
+					}
+
+				} else {
+					echo 'Ei ketjua sille <br>';
+					Yii::app()->db1->createCommand("UPDATE sivex_tvuoro SET toistuva_id='0' WHERE toistuva_id='".$item['toistuva_id']."'")
+					->execute();
+				}
+
+			}
+
+			echo 'STAGE valmis - korjattu<br>';
+			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 4));
+			exit;
+		}
+
 		// <-- Poistettu_pvm redirect to another field
-		if ($stage == 3) {
+		if ($stage == 4) {
 			$tvr = Yii::app()->db1->createCommand()
 				->select("poistettu_pvm,id,tyopaari,tid")
 				->from("toistuvat_tyovuorot")
@@ -1440,9 +1504,9 @@ class TyovuorootController extends Controller
 				//echo 'Clearning: '.$new_poistettu_pvm_arvo.'<br>';
 				if(count($clearing) > 50){
 					echo 'Ketjussa #'.$arvo['id'].' '.count($clearing).' kpl. poistettu päiviä tulevaisuudessa. EI KORJAUSTA<br>';
-					ToistuvatTyovuorot::model()->deletebypk($arvo['id']);
+					//ToistuvatTyovuorot::model()->deletebypk($arvo['id']);
 				} else {
-					echo 'Ketju #'.$arvo['id'].' korjattu<br>';
+					//echo 'Ketju #'.$arvo['id'].' korjattu<br>';
 					ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm' => $new_poistettu_pvm_arvo));
 				}
 
@@ -1456,12 +1520,25 @@ class TyovuorootController extends Controller
 				}
 			}
 
-			echo CHtml::link('<h4>STAGE 2 valmis. Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 3));
+			echo CHtml::link('<h4>STAGE valmis. Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 5));
 			exit;
 		}
 
-		if ($stage == 3) {
+		if ($stage == 5) {
+
+			Yii::app()->db1->createCommand(
+			"DELETE FROM sivex_tvuoro WHERE toistuva_id!='0' AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($startday))."'")
+			->execute();
+
+			Yii::app()->db1->createCommand("UPDATE sivex_tvuoro SET toistuva_id='0' WHERE toistuva_id!='0'")
+			->execute();
+
+
 			// Optimisointi
+			$query = "OPTIMIZE TABLE sivex_tvuoro";
+			$command = Yii::app()->db1->createCommand($query);
+			$command->execute();
+
 			$query = "OPTIMIZE TABLE toistuvat_tyovuorot";
 			$command = Yii::app()->db1->createCommand($query);
 			$command->execute();
