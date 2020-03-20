@@ -1302,9 +1302,15 @@ class TyovuorootController extends Controller
 	{
 		// <-- Ketjun kasikorjaus
 		$startday 	= date("Y-m-d", strtotime("next monday"));
-		$stopday 	= date("Y-m-d", strtotime($startday." +1 month"));
+
 		//$startWeek = date("YW", strtotime("next monday"));
 		if ( $stage == 1 ) {
+
+			// <-- Otetaan pois aivan turhoja milijona
+			Yii::app()->db1->createCommand(
+				"DELETE FROM sivex_tvuoro WHERE toistuva_id!='0' 
+				AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($startday." +2 month"))."'")
+			->execute();
 
 			// Optimisointi
 			$query = "OPTIMIZE TABLE sivex_tvuoro";
@@ -1323,11 +1329,13 @@ class TyovuorootController extends Controller
 		if ( $stage == 2 ) {
 
 			$tvr = Yii::app()->db1->createCommand()
+				->limit("1")
 				->select("id, tid, pvm, toistuva_id")
 				->from("sivex_tvuoro")
 				->group("toistuva_id")
 				->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) ASC")
-				->where("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$startday' AND '$stopday'")
+				// <-- Etsitään aktiivisiä ketjua
+				->where("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$startday' AND '".date("Y-m-d", strtotime($startday." +1 month"))."'")
 				->andWhere("toistuva_id!=0")
 				->queryAll();
 
@@ -1344,47 +1352,106 @@ class TyovuorootController extends Controller
 			$korjattu = 0;
 			echo '<h3>Yhteensä '.count($tvr).'</h3>';
 			foreach($tvr as $item){
-
-				if(isset($toist_arr[$item['toistuva_id']])){
+				echo 'Ketju '.$item['toistuva_id'].'<br>';
+				$toistuva_id = $item['toistuva_id'];
+				if(isset($toist_arr[$toistuva_id])){
 					$tids = [];
-					$tids[$toist_arr[$item['toistuva_id']]['tid']] = $toist_arr[$item['toistuva_id']]['tid'];
-					foreach(json_decode($toist_arr[$item['toistuva_id']]['tyopaari'], true) as $tid)
+					$tids[$toist_arr[$toistuva_id]['tid']] = $toist_arr[$toistuva_id]['tid'];
+					foreach(json_decode($toist_arr[$toistuva_id]['tyopaari'], true) as $tid)
 						$tids[$tid] = $tid;
 
 					if( !in_array($item['tid'], $tids) ){
 
 						// <-- Jos EI työparia
-						if( empty($toist_arr[$item['toistuva_id']]['tyopaari'])){
+						if( empty($toist_arr[$toistuva_id]['tyopaari'])){
 							// ONGELMA 
-							Yii::app()->db1->createCommand(
-							"UPDATE toistuvat_tyovuorot SET tid='".$item['tid']."', pfrom='".date("d.m.Y", strtotime($item['pvm']." this week monday"))."' 
-							WHERE id='".$item['toistuva_id']."'")
-							->execute();
+							echo 'Ongelma, Korjataan<br>';
+
+							ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array( 'tid' => $item['tid'], 'pfrom' => date("d.m.Y", strtotime($item['pvm']." this week monday")) ));
+
+							// Delete
+							$criteria=new CDbCriteria;
+							$criteria->select = "id";
+							$criteria->condition = " 
+								DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($item['pvm']." this week monday"))."' 
+								AND toistuva_id='".$toistuva_id."' 
+							";
+							$tvdel = Tyovuoroot::model()->findAll($criteria);
+							foreach ($tvdel as $v) {
+								Tyovuoroot::model()->deletebypk($v->id);
+							}
+
+							// Update
+							$criteria=new CDbCriteria;
+							$criteria->select = "id";
+							$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
+							$tvupd = Tyovuoroot::model()->findAll($criteria);
+							foreach ($tvupd as $v) {
+								Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+							}
+
+							echo 'Poistettut: '.count($tvdel).', Muokatut: '.count($tvupd).'<br>';
+
 						} else {
-							Yii::app()->db1->createCommand(
-							"UPDATE toistuvat_tyovuorot SET pfrom='".date("d.m.Y", strtotime($item['pvm']." this week monday"))."' 
-							WHERE id='".$item['toistuva_id']."'")
-							->execute();
+							echo 'tyoparia, Korjataan<br>';
+							ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array( 'pfrom' => date("d.m.Y", strtotime($item['pvm']." this week monday")) ));
+
+							// Delete
+							$criteria=new CDbCriteria;
+							$criteria->select = "id";
+							$criteria->condition = " 
+								DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($item['pvm']." this week monday"))."' 
+								AND toistuva_id='".$toistuva_id."' 
+							";
+							$tvdel = Tyovuoroot::model()->findAll($criteria);
+							foreach ($tvdel as $v) {
+								Tyovuoroot::model()->deletebypk($v->id);
+							}
+
+							// Update
+							$criteria=new CDbCriteria;
+							$criteria->select = "id";
+							$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
+							$tvupd = Tyovuoroot::model()->findAll($criteria);
+							foreach ($tvupd as $v) {
+								Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+							}
+
+							echo 'Poistettut: '.count($tvdel).', Muokatut: '.count($tvupd).'<br>';
+
 						}
 
 					} else {
-						Yii::app()->db1->createCommand(
-						"UPDATE toistuvat_tyovuorot SET pfrom='".date("d.m.Y", strtotime($item['pvm']." this week monday"))."' 
-						WHERE id='".$item['toistuva_id']."'")
-						->execute();
+
+						ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array( 'pfrom' => date("d.m.Y", strtotime($item['pvm']." this week monday")) ));
+
+						// Delete
+						$criteria=new CDbCriteria;
+						$criteria->select = "id";
+						$criteria->condition = " 
+							DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($item['pvm']." this week monday"))."' 
+							AND toistuva_id='".$toistuva_id."' 
+						";
+						$tvdel = Tyovuoroot::model()->findAll($criteria);
+						foreach ($tvdel as $v) {
+							Tyovuoroot::model()->deletebypk($v->id);
+						}
+
+						// Update
+						$criteria=new CDbCriteria;
+						$criteria->select = "id";
+						$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
+						$tvupd = Tyovuoroot::model()->findAll($criteria);
+						foreach ($tvupd as $v) {
+							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+						}
+
+						echo 'Poistettut: '.count($tvdel).', Muokatut: '.count($tvupd).'<br>';
+
 					}
 
-
-					Yii::app()->db1->createCommand(
-					"DELETE FROM sivex_tvuoro WHERE toistuva_id='".$item['toistuva_id']."' 
-					AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($item['pvm']." this week monday"))."'")
-					->execute();
-
-					Yii::app()->db1->createCommand("UPDATE sivex_tvuoro SET toistuva_id='0' WHERE toistuva_id='".$item['toistuva_id']."'")
-					->execute();
-
 				} else {
-					echo 'Ketjussa: '.$item['toistuva_id'].' ONGELMA<br>';
+					echo 'Ketjussa: '.$toistuva_id.' ONGELMA<br>';
 				}
 			}
 
