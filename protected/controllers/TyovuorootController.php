@@ -1298,6 +1298,32 @@ class TyovuorootController extends Controller
 		));
 	}
 
+	protected function updateAndDelete($toistuva_id, $item){
+						// Delete
+						$criteria=new CDbCriteria;
+						$criteria->select = "id";
+						$criteria->condition = " 
+							DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($item['pvm']." this week monday"))."' 
+							AND toistuva_id='".$toistuva_id."' 
+						";
+						$tvdel = Tyovuoroot::model()->findAll($criteria);
+						foreach ($tvdel as $v) {
+							Tyovuoroot::model()->deletebypk($v->id);
+						}
+
+						// Update
+						$criteria=new CDbCriteria;
+						$criteria->select = "id";
+						$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
+						$tvupd = Tyovuoroot::model()->findAll($criteria);
+						foreach ($tvupd as $v) {
+							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+						}
+
+						echo 'Poistettut: '.count($tvdel).', Muokatut: '.count($tvupd).'<br>';
+
+	}
+
 	public function actionBeta($kohteet_siivous = [], $kohde = '', $asiakas = '', $mode = null, $stage = null)
 	{
 		// <-- Ketjun kasikorjaus
@@ -1368,86 +1394,19 @@ class TyovuorootController extends Controller
 							echo 'Ongelma, Korjataan<br>';
 
 							ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array( 'tid' => $item['tid'], 'pfrom' => date("d.m.Y", strtotime($item['pvm']." this week monday")) ));
-
-							// Delete
-							$criteria=new CDbCriteria;
-							$criteria->select = "id";
-							$criteria->condition = " 
-								DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($item['pvm']." this week monday"))."' 
-								AND toistuva_id='".$toistuva_id."' 
-							";
-							$tvdel = Tyovuoroot::model()->findAll($criteria);
-							foreach ($tvdel as $v) {
-								Tyovuoroot::model()->deletebypk($v->id);
-							}
-
-							// Update
-							$criteria=new CDbCriteria;
-							$criteria->select = "id";
-							$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
-							$tvupd = Tyovuoroot::model()->findAll($criteria);
-							foreach ($tvupd as $v) {
-								Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
-							}
-
-							echo 'Poistettut: '.count($tvdel).', Muokatut: '.count($tvupd).'<br>';
+							$this->updateAndDelete($toistuva_id, $item);
 
 						} else {
 							echo 'tyoparia, Korjataan<br>';
 							ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array( 'pfrom' => date("d.m.Y", strtotime($item['pvm']." this week monday")) ));
-
-							// Delete
-							$criteria=new CDbCriteria;
-							$criteria->select = "id";
-							$criteria->condition = " 
-								DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($item['pvm']." this week monday"))."' 
-								AND toistuva_id='".$toistuva_id."' 
-							";
-							$tvdel = Tyovuoroot::model()->findAll($criteria);
-							foreach ($tvdel as $v) {
-								Tyovuoroot::model()->deletebypk($v->id);
-							}
-
-							// Update
-							$criteria=new CDbCriteria;
-							$criteria->select = "id";
-							$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
-							$tvupd = Tyovuoroot::model()->findAll($criteria);
-							foreach ($tvupd as $v) {
-								Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
-							}
-
-							echo 'Poistettut: '.count($tvdel).', Muokatut: '.count($tvupd).'<br>';
+							$this->updateAndDelete($toistuva_id, $item);
 
 						}
 
 					} else {
 
 						ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array( 'pfrom' => date("d.m.Y", strtotime($item['pvm']." this week monday")) ));
-
-						// Delete
-						$criteria=new CDbCriteria;
-						$criteria->select = "id";
-						$criteria->condition = " 
-							DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($item['pvm']." this week monday"))."' 
-							AND toistuva_id='".$toistuva_id."' 
-						";
-						$tvdel = Tyovuoroot::model()->findAll($criteria);
-						foreach ($tvdel as $v) {
-							Tyovuoroot::model()->deletebypk($v->id);
-						}
-
-						// Update
-						$criteria=new CDbCriteria;
-						$criteria->select = "id";
-						$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
-						$tvupd = Tyovuoroot::model()->findAll($criteria);
-						foreach ($tvupd as $v) {
-							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
-						}
-
-						echo 'Poistettut: '.count($tvdel).', Muokatut: '.count($tvupd).'<br>';
-
+						$this->updateAndDelete($toistuva_id, $item);
 					}
 
 				} else {
