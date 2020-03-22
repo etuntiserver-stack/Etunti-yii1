@@ -1335,7 +1335,7 @@ class TyovuorootController extends Controller
 			// <-- Otetaan pois aivan turhoja milijona
 			Yii::app()->db1->createCommand(
 				"DELETE FROM sivex_tvuoro WHERE toistuva_id!='0' 
-				AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($startday." +2 month"))."'")
+				AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($startday." +6 month"))."'")
 			->execute();
 
 			// Optimisointi
