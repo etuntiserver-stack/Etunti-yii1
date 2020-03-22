@@ -1355,7 +1355,7 @@ class TyovuorootController extends Controller
 		if ( $stage == 2 ) {
 
 			$tvr = Yii::app()->db1->createCommand()
-				->limit("1")
+				//->limit("100")
 				->select("id, tid, pvm, toistuva_id")
 				->from("sivex_tvuoro")
 				->group("toistuva_id")
@@ -1397,10 +1397,10 @@ class TyovuorootController extends Controller
 							$this->updateAndDelete($toistuva_id, $item);
 
 						} else {
+
 							echo 'tyoparia, Korjataan<br>';
 							ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array( 'pfrom' => date("d.m.Y", strtotime($item['pvm']." this week monday")) ));
 							$this->updateAndDelete($toistuva_id, $item);
-
 						}
 
 					} else {
@@ -1442,41 +1442,75 @@ class TyovuorootController extends Controller
 			$korjattu = 0;
 			echo '<h3>Yhteensä '.count($tvr).'</h3>';
 			foreach($tvr as $item){
+				$toistuva_id = $item['toistuva_id'];
+				if(isset($toist_arr[$toistuva_id])){
 
-				if(isset($toist_arr[$item['toistuva_id']])){
+					if( date("Ymd", strtotime($toist_arr[$toistuva_id]['pto'])) < date("Ymd", strtotime($startday)) ){
 
-					if( date("Ymd", strtotime($toist_arr[$item['toistuva_id']]['pto'])) < date("Ymd", strtotime($startday)) ){
+						echo 'Ketju '.$toistuva_id.' POISTETAAN<br>';
 
-						echo 'Ketju '.$item['toistuva_id'].' POISTETAAN<br>';
-						Yii::app()->db1->createCommand(
-						"DELETE FROM toistuvat_tyovuorot WHERE id='".$item['toistuva_id']."'")
-						->execute();
+						ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
 
-						Yii::app()->db1->createCommand("UPDATE sivex_tvuoro SET toistuva_id='0' WHERE toistuva_id='".$item['toistuva_id']."'")
-						->execute();
+						// Update
+						$criteria=new CDbCriteria;
+						$criteria->select = "id";
+						$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
+						$tvupd = Tyovuoroot::model()->findAll($criteria);
+						foreach ($tvupd as $v) {
+							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+						}
 
 					} else {
 
 						if( date("Ymd", strtotime($item['pvm'])) < date("Ymd", strtotime($startday)) ){
 
-							echo 'Ketju '.$item['toistuva_id'].' POISTETAAN<br>';
-							Yii::app()->db1->createCommand(
-							"DELETE FROM toistuvat_tyovuorot WHERE id='".$item['toistuva_id']."'")
-							->execute();
+							echo 'Ketju '.$toistuva_id.' POISTETAAN<br>';
+							ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
 
-							Yii::app()->db1->createCommand("UPDATE sivex_tvuoro SET toistuva_id='0' WHERE toistuva_id='".$item['toistuva_id']."'")
-							->execute();
+							// Update
+							$criteria=new CDbCriteria;
+							$criteria->select = "id";
+							$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
+							$tvupd = Tyovuoroot::model()->findAll($criteria);
+							foreach ($tvupd as $v) {
+								Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+							}
 
 						} else {
-							echo 'Ei selvä ongelma ketju '.$item['toistuva_id'];
+
+							// Update
+							$criteria=new CDbCriteria;
+							$criteria->select = "id";
+							$criteria->condition = " 
+								toistuva_id!=0 AND toistuva_id='".$toistuva_id."' 
+								AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) < '".date("Y-m-d", strtotime($startday))."'
+							";
+							$check = Tyovuoroot::model()->find($criteria);
+							if(!isset($check->id)){
+
+								$del = Tyovuoroot::model()->findAll("toistuva_id!=0 AND toistuva_id='".$toistuva_id."'");
+								foreach ($del as $v) {
+									Tyovuoroot::model()->deletebypk($v->id);
+								}
+
+							} else {
+								echo 'Ei selkeä ongelma<br>';
+							}
 						}
 
 					}
 
 				} else {
-					echo 'Ei ketjua sille <br>';
-					Yii::app()->db1->createCommand("UPDATE sivex_tvuoro SET toistuva_id='0' WHERE toistuva_id='".$item['toistuva_id']."'")
-					->execute();
+							echo 'Ei ketjua sille <br>';
+
+							// Update
+							$criteria=new CDbCriteria;
+							$criteria->select = "id";
+							$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
+							$tvupd = Tyovuoroot::model()->findAll($criteria);
+							foreach ($tvupd as $v) {
+								Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+							}
 				}
 
 			}
@@ -1528,22 +1562,8 @@ class TyovuorootController extends Controller
 				}
 				$new_poistettu_pvm_arvo = (count($clearing) > 0)? json_encode(array_values($clearing)) : '';
 				//echo 'Clearning: '.$new_poistettu_pvm_arvo.'<br>';
-				if(count($clearing) > 50){
-					echo 'Ketjussa #'.$arvo['id'].' '.count($clearing).' kpl. poistettu päiviä tulevaisuudessa. EI KORJAUSTA<br>';
-					//ToistuvatTyovuorot::model()->deletebypk($arvo['id']);
-				} else {
-					//echo 'Ketju #'.$arvo['id'].' korjattu<br>';
-					ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm' => $new_poistettu_pvm_arvo));
-				}
+				ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm' => $new_poistettu_pvm_arvo));
 
-				if (count($poistetut_pvms) > 200) {
-					/*
-					echo '
-					<script>
-						window.location.reload();
-					</script>'; */
-					//exit;
-				}
 			}
 
 			echo CHtml::link('<h4>STAGE valmis. Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 5));
@@ -1569,208 +1589,9 @@ class TyovuorootController extends Controller
 			$command = Yii::app()->db1->createCommand($query);
 			$command->execute();
 
-			echo CHtml::link('<h4>STAGE 3 valmis. Kaikki VALMIS</h4>', array('beta', 'mode' => $mode));
+			echo CHtml::link('<h4>STAGE valmis. Kaikki VALMIS</h4>', array('beta', 'mode' => $mode));
 			exit;
 		}
-
-/*
-		// <-- CLEAR puhdista turhat  ketjut 
-		if ($stage == 1 or $stage == 11) {
-
-			if ($stage == 1) {
-				// Optimisointi
-				$query = "OPTIMIZE TABLE sivex_tvuoro";
-				$command = Yii::app()->db1->createCommand($query);
-				$command->execute();
-
-				$query = "OPTIMIZE TABLE toistuvat_tyovuorot";
-				$command = Yii::app()->db1->createCommand($query);
-				$command->execute();
-
-				$this->redirect(array('beta', 'mode' => $mode, 'stage' => 11));
-			}
-
-			$criteria = new CDbCriteria();
-			$criteria->condition = "id NOT IN(select distinct toistuva_id from sivex_tvuoro where toistuva_id!=0)";
-
-			$tvr = ToistuvatTyovuorot::model()->findAll($criteria);
-			echo '<h2>Remove count: ' . count($tvr) . '</h2><br>';
-			foreach ($tvr as $item) {
-				//echo 'Remove ketju: '.$item->id.'<br>';
-				ToistuvatTyovuorot::model()->deletebypk($item->id);
-			}
-
-			echo 'STAGE 1 - korjattu<br>';
-			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 2));
-			exit;
-		}
-		//     CLEAR puhdista turhat  ketjut -->
-		if ($stage == 2) {
-			$criteria = new CDbCriteria();
-			$criteria->order = "id ASC";
-			//$criteria->group = "toistuva_id";
-			$criteria->condition = "
-				id IN( SELECT MAX(id) FROM sivex_tvuoro GROUP by toistuva_id)
-				AND tid!=0
-				AND toistuva_id!=0
-				AND toistuva_id IN(
-					SELECT id FROM toistuvat_tyovuorot WHERE tyopaari='' AND tid!=t.tid
-				)
-			";
-			$findone = Tyovuoroot::model()->find($criteria);
-			if (isset($findone->id)) {
-				$tvr = Tyovuoroot::model()->findAll($criteria);
-				foreach ($tvr as $item) {
-					//echo 'Tid korjaus: '.$item->toistuva_id.'<br>';
-					ToistuvatTyovuorot::model()->updatebypk($item->toistuva_id, array('tid' => $item->tid));
-				}
-				echo 'STAGE 2 - korjattu ' . count($tvr) . ' kpl<br>';
-			}
-			// Optimisointi
-			$query = "OPTIMIZE TABLE toistuvat_tyovuorot";
-			$command = Yii::app()->db1->createCommand($query);
-			$command->execute();
-
-			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 3));
-			exit;
-		}
-
-		// <-- Poistettu_pvm redirect to another field
-		if ($stage == 3) {
-			$findone = Yii::app()->db1->createCommand()
-				->select("poistettu_pvm,id,tyopaari,tid")
-				->from("toistuvat_tyovuorot")
-				->where("poistettu_pvm!='' AND new_poistettu_pvm IS NULL")
-				->queryRow();
-
-			if (isset($findone['id'])) {
-				$tvr = Yii::app()->db1->createCommand()
-					->select("poistettu_pvm,id,tyopaari,tid")
-					->from("toistuvat_tyovuorot")
-					->where("poistettu_pvm!='' AND new_poistettu_pvm IS NULL")
-					->queryAll();
-				$i = 0;
-				foreach ($tvr as $arvo) {
-					$i++;
-					$poistetut_pvms = json_decode($arvo['poistettu_pvm'], true);
-					if (count($poistetut_pvms) == 0)
-						continue;
-
-					$one = Yii::app()->db1->createCommand()
-						->select("pvm,tid")
-						->from("sivex_tvuoro")
-						->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) DESC")
-						->where("toistuva_id='" . $arvo['id'] . "'")
-						->queryRow();
-
-					if (!isset($one['pvm']))
-						continue;
-
-					// <-- Tids
-					$tids = [];
-					if (!empty($arvo['tyopaari'])) {
-						foreach (json_decode($arvo['tyopaari'], true) as $tid) {
-							$tids[$tid] = $tid;
-						}
-						$tids[$arvo['tid']] = $arvo['tid'];
-					} else {
-						$tids[$arvo['tid']] = $arvo['tid'];
-					}
-					$new_poistettu_pvm = [];
-					foreach ($tids as $tid) {
-						foreach ($poistetut_pvms as $k => $v) {
-							if (date("Ymd", strtotime($one['pvm'])) < date("Ymd") and date("Ymd", strtotime($v)) > date("Ymd")) // Oikein
-								continue;
-							$new_poistettu_pvm[$tid][$v] = ['tid' => $tid, 'pvm' => $v, 'syy' => ['text' => '', 'user' => '', 'date' => '']];
-						}
-					}
-
-					$findall = Yii::app()->db1->createCommand()
-						->select("pvm,tid")
-						->from("sivex_tvuoro")
-						->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) DESC")
-						->where("toistuva_id='" . $arvo['id'] . "'")
-						->queryAll();
-
-					//echo 'TV määrä '.count($findall).'<br>';
-					foreach ($findall as $item) {
-						// Jos on olemassa tyovuoro sen poistettu pvm mukaan
-						// Emme laiteta sita new_poistettu_pvm listaan
-						if (isset($new_poistettu_pvm[$item['tid']][$item['pvm']]))
-							unset($new_poistettu_pvm[$item['tid']][$item['pvm']]);
-					}
-					$result = [];
-					foreach ($new_poistettu_pvm as $k => $v)
-						foreach ($v as $k2 => $v2)
-							$result[] = $v2;
-					$clearing = [];
-					foreach ($result as $key => $value) {
-						if (!in_array($value, $clearing))
-							$clearing[] = $value;
-					}
-					//echo 'Clearning: '.json_encode(array_values($clearing)).'<br>';
-					if (date("Ymd", strtotime($one['pvm'])) < date("Ymd")) {
-						ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm' => json_encode(array_values($clearing)), 'pto' => $one['pvm']));
-					} else {
-						ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm' => json_encode(array_values($clearing))));
-					}
-					if (count($poistetut_pvms) > 200) {
-						echo '<h4>STAGE 3 - on vielä jäljellä ' . count($tvr) . ' kpl</h4>';
-						//echo 'Poistetut päivät määrä '. count($poistetut_pvms);
-						// Jonkun verran aikana tehdään sivun reload jolloin PHP max execute time ei sanoa mitään
-						// Ja hyvää seuraa siitä tapahtumistä
-						echo '
-					<script>
-						window.location.reload();
-					</script>';
-						exit;
-					}
-				}
-			}
-
-			// Optimisointi
-			$query = "OPTIMIZE TABLE toistuvat_tyovuorot";
-			$command = Yii::app()->db1->createCommand($query);
-			$command->execute();
-
-			echo CHtml::link('<h4>STAGE 3 valmis. Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 4));
-			exit;
-		}
-
-		if ($stage == 4) {
-			// Muutetaan tyovuoroja jossa toistuva_id!=0 ja jotka ei saa poistaa
-			$criteria = new CDbCriteria();
-			$criteria->condition = "
-				toistuva_id!=0 AND laskutettu!=0
-			";
-			$tv = Tyovuoroot::model()->findAll($criteria);
-			foreach ($tv as $item) {
-				//echo $item->tid.' '.$item->pvm.'<br>';
-				$u		= Yii::app()->user->nimi;
-				$d		= date("d.m.Y");
-				$poisto_syy	= ['text' => 'laskutettu', 'user' => $u, 'date' => $d];
-				$this->toistuvaDeletePvm($item->toistuva_id, $item->pvm, $item->tid, $poisto_syy);
-				Tyovuoroot::model()->updatebypk($item->id, array('toistuva_id' => 0));
-			}
-
-			echo CHtml::link('<h4>Laskutettu korjaus ' . count($tv) . ' kpl. Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 5));
-			exit;
-		}
-
-		if ($stage == 5) {
-			$query = "delete from sivex_tvuoro where toistuva_id!=:t_id";
-			$command = Yii::app()->db1->createCommand($query);
-			$command->execute(['t_id' => 0]);
-
-			// Optimisointi
-			$query = "OPTIMIZE TABLE sivex_tvuoro";
-			$command = Yii::app()->db1->createCommand($query);
-			$command->execute();
-
-			echo CHtml::link('<h4>Kaikki valmis. Työvuoroille?</h4>', array('beta', 'mode' => $mode));
-			exit;
-		}
-*/
 		//     Ketjun kasikorjaus -->
 		// ------------------------------------------------
 
@@ -2089,7 +1910,7 @@ class TyovuorootController extends Controller
 		}
 		$tids_criteria = '';
 		if( count($haku_tids) > 0 ){
-			$tt_ret = [];
+			$tt_ret = [0 => 0];
 			foreach($haku_tids as $k => $v){
 				$tt_ret[$v] = $v;
 			}
