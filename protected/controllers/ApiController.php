@@ -889,7 +889,7 @@ public function actionImei($dom)
 
 		// <-- CHECK getTyovuorotToday
 		if( !isset($_POST['with_virtual']) and ($_POST['check'] == 'tvuoro' or $_POST['check'] == 'getTyovuorotToday')){ // ($_POST['with_virtual']) vanha versioille 0.0.635 ja alle
-			$return = ["return" => '<h3 class="bg-danger text-center">Päivitä sovellus</h3>'];
+			$return = ["return" => '<div class="alert alert-danger"><h1>Päivitä sovellus</h1></div>'];
 			$this->_sendResponse(200, CJSON::encode($return));
 			exit;
 	        }
