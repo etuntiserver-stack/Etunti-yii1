@@ -105,7 +105,10 @@ class LoginController extends Controller
 
 			    $domainit=Domainit::model()->find(" domain = '".$domain."' ");
 			    if(isset($domainit->paketti))
-			    Yii::app()->user->setState('adminPaketti', $domainit->paketti);
+			    	Yii::app()->user->setState('adminPaketti', $domainit->paketti);
+
+			    if(strpos($domain, 'staging_') !== false)
+			    	Yii::app()->user->setState('adminPaketti', "1,2,3,4,5");
 
 			    $this->redirect(Yii::app()->request->baseUrl.'/index.php/site/etusivu');
 			  } else {
