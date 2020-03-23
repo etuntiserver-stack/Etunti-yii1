@@ -218,16 +218,17 @@ $site = Yii::app()->createController('Site');
 		<?php if( isset($_GET['siirra_now']) ): ?>
 		<?php
 			$suorittu++;
-			$pto 			= date("d.m.Y",strtotime($alkaen.' -1 day'));
 
 			$edellinen_model 	= $item->attributes;
 			$edelliset_tyoparit 	= json_decode($edellinen_model['tyopaari'], true);
-			$jatko_tids 		= [];
+			$jatko_tids 		= [$_GET['kenelle'] => $_GET['kenelle']];
 			foreach($edelliset_tyoparit as $tid)
 				if($_GET['kenelta'] != $tid){
 					$jatko_tids[$tid] = $tid;
 				}
 
+//print_r($jatko_tids);
+//exit;
 			// <-- Nämät ketjut menee eteenpäin jos oli työparia
 			if( count($jatko_tids) == 1 and strtotime($item->pto) >= strtotime($alkaen) ){
 				foreach($jatko_tids as $jtid){ // no prbl. se looppa 1 kerta vain
@@ -255,25 +256,16 @@ $site = Yii::app()->createController('Site');
 			//     Nämät ketjut menee eteenpäin jos oli työparia -->
 
 			// <-- $alkaen asti vanhat ketjut STOPPATAAN
-			if( strtotime($pto) > strtotime($item->pfrom) ){
+			if( strtotime($item->pto) >= strtotime($alkaen) ){
+
+				if( date("Ymd", strtotime($alkaen." -1 day")) < date("Ymd", strtotime($item->pfrom)) )
+					ToistuvatTyovuorot::model()->deletebypk($item->id);
+
 				ToistuvatTyovuorot::model()->updatebypk($item->id, [
-					'pto' => $pto,
+					'pto' =>  date("d.m.Y", strtotime($alkaen." -1 day")),
 					'new_poistettu_pvm' => (count($poistettu_pvms_alkuperainen_new) > 0)?json_encode($poistettu_pvms_alkuperainen_new):''
-					]
-				);
+				]);
 			}
-
-			// <-- Kenelle uusi ketju
-			if( strtotime($saa_aloita) <= strtotime($item->pto) ){
-				$tv_new = new ToistuvatTyovuorot;
-				$tv_new->attributes = $item->attributes;
-				$tv_new->pfrom = $saa_aloita;
-				$tv_new->tid = $_GET['kenelle'];
-				$tv_new->tyopaari = '';
-				$tv_new->new_poistettu_pvm = (count($poistettu_pvms_kenelle) > 0)?json_encode($poistettu_pvms_kenelle):'';
-				$tv_new->save();
-			}
-
 		?>
 		<?php endif; ?>
 		<tr>
