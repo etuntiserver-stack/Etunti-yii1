@@ -88,6 +88,7 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 		});
 	});
 	vkolaskenta(tids);
+	hovertietoja();
 }
 function vkolaskenta(tids){
    if( $(".sunday").length > 0 ){
@@ -115,6 +116,44 @@ function vkolaskenta(tids){
 	        });
 	});
    }
+}
+
+function hovertietoja(){
+     var delay=1000, setTimeoutConst;
+     $('.tv_edit').hover(function(){
+	if( !$(this).hasClass('muistissa') && !$(this).prev('i').hasClass('muistissa') ){
+	   if( !$(this).prev('i').hasClass('muistin') ){
+		$(this).before('<i class="fa fa-pencil-square-o muistin" for="' + $(this).attr('id') + '"></i>');
+	   }
+	}
+	this_id = $(this).attr('id');
+	setTimeoutConst = setTimeout(function() {
+		$('#hovertietoja').html( hv_tiedot(this_id) ).show();
+		return false;
+	}, delay);
+
+     }, function()
+     { 
+	$('#hovertietoja').html('').hide();
+	clearTimeout(setTimeoutConst);
+     });
+}
+
+function hv_tiedot(this_id){
+	var hovertietoja = '';
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/hovertietoja?this_id='+this_id,
+	   async: false,
+           success: function(data){
+		d = JSON.parse(data);
+		//console.log(d);
+		hovertietoja += d;
+           },
+	   error:function(data){
+		console.log(data)
+	   }
+        });
+	return hovertietoja;
 }
 
 var cal_this_id 	= '';
@@ -292,46 +331,10 @@ $('td').hover(function()
      );
      }
 
-     var delay=1000, setTimeoutConst;
-     $(this).find('.tv_edit').hover(function(){
-	if( !$(this).hasClass('muistissa') && !$(this).prev('i').hasClass('muistissa') ){
-	   if( !$(this).prev('i').hasClass('muistin') ){
-		$(this).before('<i class="fa fa-pencil-square-o muistin" for="' + $(this).attr('id') + '"></i>');
-	   }
-	}
-	var this_id = $(this).attr('id');
-	setTimeoutConst = setTimeout(function() {
-		var hovertietoja = hv_tiedot(this_id);
-		$('#hovertietoja').html(hovertietoja).show();
-	}, delay);
-
-     }, function()
-     { 
-	$('#hovertietoja').html('').hide();
-	clearTimeout(setTimeoutConst);
-     });
-
 }, function()
 { 
      $(this).find('.muistin, .latikkolisatiedot_paa').remove();
 });
-
-function hv_tiedot(this_id){
-	var hovertietoja = '';
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/hovertietoja?this_id='+this_id,
-	   async: false,
-           success: function(data){
-		d = JSON.parse(data);
-		//console.log(d);
-		hovertietoja += d;
-           },
-	   error:function(data){
-		console.log(data)
-	   }
-        });
-	return hovertietoja;
-}
 
 $(document).delegate(".luominen","click",function(){
 	var pvm = $(this).attr("pvm");
@@ -362,19 +365,24 @@ function getUrlVars() {
 var this_id = 0;
 if(getUrlVars()["tv_id"]){
 	this_id = getUrlVars()["tv_id"];
-	openTV(this_id);
+	openTV(this_id, null);
 }
 $(document).delegate(".tv_edit","click",function(){
 	var this_id = $(this).attr('id');
-	openTV(this_id);
+	var l_sisalto = $(this).html();
+	$(this).html('<center><h4 class="text-danger">Odota..</h4></center>').removeClass('tv_edit');
+	openTV(this_id, l_sisalto);
+	$('#hovertietoja').html('').hide();
 });
-function openTV(this_id){
+function openTV(this_id, l_sisalto){
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update4_form?this_id='+this_id,
            success: function(data){
 		d = JSON.parse(data);
 		$('#showres').modal().html(d);
-		//console.log('tv_edit click: ' + data);
+		if( l_sisalto !== null )
+			$("#" + this_id).html( l_sisalto ).addClass('tv_edit');
+		$('#hovertietoja').html('').hide();
            },
 	   error:function(data){
 		console.log(data);

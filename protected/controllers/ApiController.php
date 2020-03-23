@@ -902,7 +902,7 @@ public function actionImei($dom)
 			$tids = [$ttekija->id];
 			$from = date("Y-m-d", strtotime($pvm));
 			$to = date("Y-m-d", strtotime($pvm));
-			$dataAll = $tv_controller[0]->FromToSuunnitellutAll($from, $to, $tids, []);
+			$dataAll = $tv_controller[0]->FromToSuunnitellutAll($from, $to, $tids, [], ['data']);
 
 			$sel = '';
 			$sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
@@ -963,7 +963,7 @@ public function actionImei($dom)
 
 			$tids = [$ttekija->id];
 			$from = date("Y-m-d");
-			$dataAll = $tv_controller[0]->FromToSuunnitellutAll($from, $aikaVali, $tids, $haku_criteria);
+			$dataAll = $tv_controller[0]->FromToSuunnitellutAll($from, $aikaVali, $tids, $haku_criteria, ['data']);
 			/*
 			$return = ["return" => $val];
 			$this->_sendResponse(200, CJSON::encode($return));

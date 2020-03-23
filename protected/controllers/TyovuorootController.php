@@ -2128,6 +2128,7 @@ class TyovuorootController extends Controller
 		$tvVal 		= $get_id['model'];
 		$toistuva 	= $get_id['toistuva'];
 		$pvm 		= $get_id['pvm'];
+		$tid 		= $get_id['tid'];
 
 		$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
 		$asetukset = Asetukset::model()->findByPk(1);
@@ -2139,10 +2140,10 @@ class TyovuorootController extends Controller
 
 		$hovertietoja = '';
 
-		$columnDate = date("N/d.m",strtotime($tvVal->pvm));
+		$columnDate = date("N/d.m",strtotime($pvm));
 		$explColDate = explode("/",$columnDate);
 
-		$hovertietoja .= '<h4>'.$arrDate[$explColDate[0]].', '.$explColDate[1].' '.$this->etuSukunimi($tvVal->tid).'</h4>';
+		$hovertietoja .= '<h4>'.$arrDate[$explColDate[0]].', '.$explColDate[1].' '.$this->etuSukunimi($tid).'</h4>';
 
 		// <-- Osoite
 		$osoite = '';
