@@ -478,7 +478,7 @@ class MobileController extends Controller
 			if(isset($_POST['siivousPaaSivulla']) and !empty($_POST['siivousPaaSivulla']))
 		        	$haku_criteria[] = " kohde IN ( SELECT id FROM sivex_kohdet WHERE siivous LIKE '%".$_POST['siivousPaaSivulla']."%' ) ";
 
-			$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria);
+			$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, ['data']);
 			$tids_after 	= [];
 			$newarr 	= [];
 			foreach($dataAll as $k => $arr){
@@ -538,7 +538,7 @@ class MobileController extends Controller
 	        		$haku_criteria = $impl;
 			}
 
-			$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria);
+			$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, ['data']);
 			$newarr 	= [];
 			foreach($dataAll as $k => $arr){
 				$data 	= $arr['data'];
@@ -767,7 +767,7 @@ class MobileController extends Controller
 			$tyovuorot = Yii::app()->createController('Tyovuoroot');
 			$haku_criteria = [];
 			if($kohde_id > 0){ $haku_criteria[] = " kohde='".$kohde_id."' "; }
-			$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria);
+			$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data', 'tv_kesto']);
 		}
 
 		$this->render('raportit_taulu', array(
