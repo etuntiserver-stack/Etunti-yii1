@@ -4648,10 +4648,16 @@ class TyovuorootController extends Controller
 			$impl = implode(",", $_GET['tekijaPaaSivulla']);
 	        	$haku_criteria[] = " tid IN ($impl) ";
 		}
+
 		if(isset($_GET['laskutettu']) and !empty($_GET['laskutettu'])){
 	        	$haku_criteria[] = " laskutettu='".$_GET['laskutettu']."' ";
 		} else {
 	        	$haku_criteria[] = " laskutettu='0' ";
+		}
+		if(isset($_GET['peruutettu']) and $_GET['peruutettu'] == 1){
+	        	$haku_criteria[] = " peruutettu!='0' ";
+		} else {
+	        	$haku_criteria[] = " peruutettu='0' ";
 		}
 		if(isset($_GET['uusi_tilaus']) and !empty($_GET['uusi_tilaus'])){
 	        	$haku_criteria['uusi_tilaus'] = " t.uusi_tilaus='".$_GET['uusi_tilaus']."' ";

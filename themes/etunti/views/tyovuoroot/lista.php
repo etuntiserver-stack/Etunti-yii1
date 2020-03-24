@@ -195,6 +195,16 @@
                             </label>
                           </label>
                         </div>
+                        <div class="section">
+                          <label class="field select" style="z-index:0">
+				<select class="" id="peruutettu" name="peruutettu">
+				<option value="0" <?=((isset($_GET['peruutettu']) and $_GET['peruutettu'] == 0)? 'selected':'') ?>>Voimassa olevat</option>
+				<option value="1" <?=((isset($_GET['peruutettu']) and $_GET['peruutettu'] == 1)? 'selected':'') ?>>Peruutetut</option>
+				</select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
                       </div>
 
 
