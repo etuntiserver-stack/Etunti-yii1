@@ -6079,13 +6079,18 @@ class TyovuorootController extends Controller
         	$criteria->condition = " 				
 			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-			AND peruutettu=0 
 		";
 
 		if(isset($_GET['tekijaPaaSivulla']))
 		{
 			$impl = implode(",", $_GET['tekijaPaaSivulla']);
 	        	$criteria->addCondition (" tid IN ($impl) ");
+		}
+		if(isset($_GET['peruutettu']) and $_GET['peruutettu'] == 1)
+		{
+	        	$criteria->addCondition (" peruutettu!='0' ");
+		} else {
+	        	$criteria->addCondition (" peruutettu='0' ");
 		}
 		if(isset($_GET['laskutettu']) and !empty($_GET['laskutettu']))
 		{
