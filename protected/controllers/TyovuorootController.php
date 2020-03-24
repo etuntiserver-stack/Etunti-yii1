@@ -1073,52 +1073,90 @@ class TyovuorootController extends Controller
 		//     Siirto -->
 	}
 
+	public function VirtualtoTV($toistuva_id, $tid, $pvm, $tilanne, $poisto_by)
+	{
+
+		$ttv = ToistuvatTyovuorot::model()->findByPk($toistuva_id);
+		$model = new Tyovuoroot;
+		$cleared_attr = $this->compareToistuvaAttributes($model->attributes, $ttv->attributes);
+		$model->attributes = $cleared_attr;
+		$model->tid = $tid;
+		$model->pvm = $pvm;
+		$model->tyopaari = '';
+		if( isset($tilanne['peruutettu']) and $tilanne['peruutettu'] > 0 )
+			$model->peruutettu = $tilanne['peruutettu'];
+
+		if( isset($tilanne['laskutettu']) ){
+			$model->laskutettu = 1;
+			$model->lasku_id = $tilanne['lasku_id'];
+		}
+
+		if($model->save()){
+			// <-- LOG
+			$model_log 	= 'Tyovuoroot';
+			$name_log 	= 'Työvuorot';
+			$status_log 	= 'ToistuvaKetjustaPeruutamisessa';
+			$old_values 	= null;
+			$new_values = json_encode($model->attributes);
+			$site = Yii::app()->createController('Site');
+			$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			//     LOG -->
+		}
+
+		$kuka = '';
+		if(isset(Yii::app()->user->asiakas)){
+			$a = Asiakkaat::model()->findbypk(Yii::app()->user->asiakas);
+			if( isset($a->id) and $a->tyyppi == 'yritys' )
+				$kuka = $a->yrityksen_nimi;
+			if( isset($a->id) and $a->tyyppi == 'henkilo' )
+				$kuka = $a->yhteyshenkilo;
+		}
+		if(isset(Yii::app()->user->nimi))
+			$kuka = Yii::app()->user->nimi;
+
+		$u		= $kuka;
+		$d		= date("d.m.Y");
+		$poisto_syy	= ['text'=> $poisto_by, 'user' => $u, 'date' => $d];
+		if($this->toistuvaDeletePvm($toistuva_id, $pvm, $tid, $poisto_syy))
+			return true;
+		else
+			return false;
+
+	}
+
 	public function actionPois_pvm_ketjusta($toistuva_id, $tid, $pvm, $peruuttaminen)
 	{
-		$by = 'ByCalendar';
+
 		if( (int)$peruuttaminen > 0 ){
-			$ttv = ToistuvatTyovuorot::model()->findByPk($toistuva_id);
-			$model = new Tyovuoroot;
-			$model->attributes = $ttv->attributes;
-			$model->tid = $tid;
-			$model->pvm = $pvm;
-			$model->peruutettu = $peruuttaminen;
-			if($model->save()){
-				// <-- LOG
-				$model_log 	= 'Tyovuoroot';
-				$name_log 	= 'Työvuorot';
-				$status_log 	= 'ToistuvaKetjustaPeruutamisessa';
-				$old_values 	= null;
-				$new_values = json_encode($model->attributes);
-				$site = Yii::app()->createController('Site');
-				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-				//     LOG -->
-			}
-			$by = 'ByCalendarPeruutettu';
-		}
-		$u		= Yii::app()->user->nimi;
-		$d		= date("d.m.Y");
-		$poisto_syy	= ['text'=>$by, 'user'=>$u, 'date'=>$d];
-		if($this->toistuvaDeletePvm($toistuva_id, $pvm, $tid, $poisto_syy)){
-			$toistuva = ToistuvatTyovuorot::model()->findbypk($toistuva_id);
-			// <-- Tids
-			$tids = [];
-			if( is_array(json_decode($toistuva->tyopaari, true)) ){
-				foreach(json_decode($toistuva->tyopaari, true) as $tp_tid)
-					$tids[$tp_tid] = $tp_tid;
 
-				$tids[$tid] = $tid;
-			} else {
-				$tids[$tid] = $tid;
-			}
+			$tilanne 	= ['peruutettu' => (int)$peruuttaminen];
+			$poisto_by	= 'ByCalendarPeruutettu';
+			$this->VirtualtoTV($toistuva_id, $tid, $pvm, $tilanne, $poisto_by);
 
-			$pvm_from = date("Y-m-d", strtotime($pvm));
-			$pvm_to = date("Y-m-d", strtotime($pvm));
-			$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, [], true, []);
-			echo json_encode(['return' => 'ok', 'tv_arr' => $tv_arr]);
+
 		} else {
-			echo json_encode(['return' => 'error']);
+
+			$poisto_by 	= 'ByCalendar';
+			$u		= Yii::app()->user->nimi;
+			$d		= date("d.m.Y");
+			$poisto_syy	= ['text'=> $poisto_by, 'user' => $u, 'date' => $d];
+			$this->toistuvaDeletePvm($toistuva_id, $pvm, $tid, $poisto_syy);
+
 		}
+
+		$toistuva = ToistuvatTyovuorot::model()->findbypk($toistuva_id);
+		// <-- Tids
+		$tids = [];
+		$tids[$tid] = $tid;
+		if( is_array(json_decode($toistuva->tyopaari, true)) ){
+			foreach(json_decode($toistuva->tyopaari, true) as $tp_tid)
+				$tids[$tp_tid] = $tp_tid;
+		}
+
+		$pvm_from 	= date("Y-m-d", strtotime($pvm));
+		$pvm_to 	= date("Y-m-d", strtotime($pvm));
+		$tv_arr 	= $this->tv_arr($pvm_from, $pvm_to, $tids, [], true, []);
+		echo json_encode(['return' => 'ok', 'tv_arr' => $tv_arr]);
 		exit;
 	}
 
@@ -4661,17 +4699,27 @@ class TyovuorootController extends Controller
 		foreach($tv_arr as $t => $arr)
 			$tids_after[] = $t;
 
+		// <-- Sort by PVM
+		$sort = [];
 		foreach($tids_after as $tid)
 			foreach($tv_arr[$tid] as $k => $v)
-				foreach($v as $k1 => $v1)
-					foreach($v1 as $k2 => $v2)
-						$data[] = $v2;
-		/*
+				$sort[strtotime($k)][$tid][] = $v;
+		ksort($sort);
+
+		foreach($sort as $k => $v)
+			foreach($v as $k1 => $v1)
+				foreach($v1 as $k2 => $v2)
+					foreach($v2 as $k3 => $v3)
+						foreach($v3 as $k4 => $v4)
+							$data[] = $v4;
+
+/*
 		echo '<pre>';
 		print_r( $data );
 		echo '</pre>';
 		exit;
-		*/
+*/
+	
 		return $data;
 	}
 

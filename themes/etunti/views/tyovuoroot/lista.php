@@ -282,7 +282,7 @@
   <?php
 	foreach($dataAll as $arr){
 		$tv = $this->renderPartial('_lista',array(
-			'data' => $arr['data']
+			'arr' => $arr
 		), true);
 		echo $tv;
 	}

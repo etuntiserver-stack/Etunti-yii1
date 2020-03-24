@@ -2,6 +2,8 @@
 /* @var $this ViestintaController */
 /* @var $data Viestinta */
 
+	$data = $arr['data'];
+
 	$asiakas = '';
 	$call = '';
 	$get_kohde = Kohteet::model()->findByPk($data->kohde);
@@ -23,10 +25,10 @@
 		<?php if($data->tid == 0): ?>
 		<?=Yii::t('main', 'VARAUS')?>
 		<?php else: ?>
-		<?=$this->etuSukunimi($data->tid)?>
+		<?=$this->etuSukunimi($arr['this_tid'])?>
 		<?php endif; ?>
 	</td>
-	<td><?=$data->pvm?></td>
+	<td><?=$arr['this_pvm']?></td>
 	<td><?=$data->alku?>-<?=$data->loppu?></td>
 	<td><?=$asiakas?> <?=$call?></td>
 	<td><?=$data->osoite?></td>

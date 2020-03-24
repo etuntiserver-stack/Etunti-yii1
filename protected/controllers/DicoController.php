@@ -617,12 +617,17 @@ public function actionLogin($domain)
 		   if(isset($model->id))
 		   {
 
-
-
 				// <-- Peruuttaa tyovuoroa
-				if(isset($_POST['peruuttaa_tyovuoroa']))
-				{
-					$tv = Tyovuoroot::model()->findByPk($_POST['id']);
+				if(isset($_POST['peruuttaa_tyovuoroa'])){
+
+					$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+					$get_id 	= $tyovuorot[0]->this_id($_POST['id']);
+					$tv 		= $get_id['model'];
+					$toistuva 	= $get_id['toistuva'];
+					$pvm 		= $get_id['pvm'];
+					$tid 		= $get_id['tid'];
+
+
 					if( isset($tv->id) )
 					{
 						$k = Kohteet::model()->findByPk($tv->kohde);
@@ -632,10 +637,23 @@ public function actionLogin($domain)
 						if( $asetukset->peruutta_paiva_ennen > 0 and $r > $asetukset->peruutta_paiva_ennen )
 						{
 							$peruutettu = 1;
-							Tyovuoroot::model()->updateByPk($tv->id, array('peruutettu'=>1));
+							if($toistuva){
+								$tilanne 	= ['peruutettu' => $peruutettu];
+								$poisto_by	= 'ByEDICOPeruutettu';
+								$tyovuorot[0]->VirtualtoTV($tv->id, $tid, $pvm, $tilanne, $poisto_by);
+							} else {
+								Tyovuoroot::model()->updateByPk($tv->id, array('peruutettu'=>$peruutettu));
+							}
+
 						} else {
 							$peruutettu = 2;
-							Tyovuoroot::model()->updateByPk($tv->id, array('peruutettu'=>2));
+							if($toistuva){
+								$tilanne 	= ['peruutettu' => $peruutettu];
+								$poisto_by	= 'ByEDICOPeruutettu';
+								$tyovuorot[0]->VirtualtoTV($tv->id, $tid, $pvm, $tilanne, $poisto_by);
+							} else {
+								Tyovuoroot::model()->updateByPk($tv->id, array('peruutettu'=>$peruutettu));
+							}
 						}
 
 

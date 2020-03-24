@@ -183,20 +183,11 @@ $site = Yii::app()->createController('Site');
 			if(isset($aloitus_check['pvm']))
 				$saa_aloita = $aloitus_check['pvm'];
 
-			// <-- Poistetut pvms KENELLE
-			$poistettu_pvms_kenelle = [];
-			if( !empty($item->new_poistettu_pvm) )
-				foreach(json_decode($item->new_poistettu_pvm, true) as $key => $val)
-					if( strtotime($val['pvm']) >= strtotime($saa_aloita) and $val['tid'] == $_GET['kenelta'] ){
-						$val['tid'] = $_GET['kenelle'];
-						$poistettu_pvms_kenelle[] = $val;
-					}
-
 			// <-- Poistetut pvms uudet arvot alkuperäisen ketjuun
 			$poistettu_pvms_alkuperainen_new = [];
 			if( !empty($item->new_poistettu_pvm) )
 				foreach(json_decode($item->new_poistettu_pvm, true) as $key1 => $val)
-					if( strtotime($val['pvm']) >= strtotime($saa_aloita) and $val['tid'] == $_GET['kenelta'] ){
+					if( strtotime($val['pvm']) >= strtotime($saa_aloita) ){
 						//$val['tid'] = $_GET['kenelle'];
 					} else {
 						$poistettu_pvms_alkuperainen_new[] = $val;
@@ -206,7 +197,9 @@ $site = Yii::app()->createController('Site');
 			$poistettu_pvms_jatkoketjulle = [];
 			if( !empty($item->new_poistettu_pvm) )
 				foreach(json_decode($item->new_poistettu_pvm, true) as $key1 => $val)
-					if( strtotime($val['pvm']) >= strtotime($saa_aloita) and $val['tid'] != $_GET['kenelta'] ){
+					if( strtotime($val['pvm']) >= strtotime($saa_aloita) ){
+						if($val['tid'] == $_GET['kenelta'])
+							$val['tid'] = $_GET['kenelle'];
 						$poistettu_pvms_jatkoketjulle[] = $val;
 					}
 			/*
@@ -227,8 +220,6 @@ $site = Yii::app()->createController('Site');
 					$jatko_tids[$tid] = $tid;
 				}
 
-//print_r($jatko_tids);
-//exit;
 			// <-- Nämät ketjut menee eteenpäin jos oli työparia
 			if( count($jatko_tids) == 1 and strtotime($item->pto) >= strtotime($alkaen) ){
 				foreach($jatko_tids as $jtid){ // no prbl. se looppa 1 kerta vain

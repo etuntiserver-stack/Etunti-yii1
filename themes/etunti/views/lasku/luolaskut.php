@@ -298,9 +298,9 @@ $iban				= $asetukset->iban;
 				}
 			}
 			// <-- TV
-			if( isset($tyovuoroot[$asiakas_nimi]['pvm']) and isset($kohteet['osoite']) ){
+			if( isset($tyovuoroot[$asiakas_nimi]['id']) and isset($kohteet['osoite']) ){
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-					$nimike_append .= $tyovuoroot[$asiakas_nimi]['pvm'];
+					$nimike_append .= $tv_pvm;
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
 					if(!empty($nimike_append)){ $nimike_append .= ', '; }
@@ -445,10 +445,10 @@ $iban				= $asetukset->iban;
 				}
 			}
 			// <-- TV
-			if( isset($tyovuoroot[$asiakas_nimi]['pvm']) and isset($kohteet['osoite']) ){
+			if( isset($tyovuoroot[$asiakas_nimi]['id']) and isset($kohteet['osoite']) ){
 				$nimike_append = ' ';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-					$nimike_append .= $tyovuoroot[$asiakas_nimi]['pvm'];
+					$nimike_append .= $tv_pvm;
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
 					if(!empty($nimike_append)){ $nimike_append .= ', '; }
@@ -533,24 +533,10 @@ $iban				= $asetukset->iban;
 				if( isset($tl->id) )
 					Tyovuoroot::model()->updateByPk($tl->id, array('lasku_id' => $lasku->id));
 			} else {
-				$u		= Yii::app()->user->nimi;
-				$d		= date("d.m.Y");
-				$poisto_syy	= ['text'=>'ByAutolaskutus', 'user'=>$u, 'date'=>$d];
-				if($tv_controller[0]->toistuvaDeletePvm($tyovuoroot[$asiakas_nimi]['id'], $tv_pvm, $tv_tid, $poisto_syy)){
 
-					$tv_new = new Tyovuoroot;
-					$cleared_attr = $tv_controller[0]->compareToistuvaAttributes($tv_new->attributes, $tyovuoroot[$asiakas_nimi]);
-					$tv_new->attributes = $cleared_attr;
-					$tv_new->tid = $tv_tid;
-					$tv_new->pvm = $tv_pvm;
-					$tv_new->tyopaari = '';
-					if($tv_new->save()){
-						Tyovuoroot::model()->updatebypk($tv_new->id, array('lasku_id' => $lasku->id));
-					} else {
-						echo json_encode($tv_new->getErrors());
-						exit;
-					}
-				}
+				$tilanne 	= ['laskutettu' => 1, 'lasku_id' => $lasku->id];
+				$poisto_by	= 'ByAutolaskutus';
+				$tv_controller[0]->VirtualtoTV($tyovuoroot[$asiakas_nimi]['id'], $tv_tid, $tv_pvm, $tilanne, $poisto_by);
 			}
 		} ?>
 		<!-- / Update tyovuoro -->
