@@ -8,7 +8,7 @@
     var loginFull = [];
 
 
-    var developer = false; // true false kun pelaat localhostissa
+    var developer = true; // true false kun pelaat localhostissa
 
     if(localStorage.getItem('loginOK'))
     {
@@ -23,7 +23,7 @@
     }
 
     // <-- Palvelin
-    if(developer){ var server = '../../'; }
+    if(developer){ var server = 'http://etunti.local/'; }
     var url = server+"index.php/dico/asiakkaat";
     var versio = "";
     // Palvelin -->
