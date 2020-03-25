@@ -109,7 +109,7 @@ $site = Yii::app()->createController('Site');
         </div>
 
 
-	<?php if( count($data_kenelta_k) > 0 ) : ?>
+	<?php if( count($data_kenelta) > 0 or count($data_kenelta_k) > 0 ) : ?>
 	<?php 
 		$suorittu = 0; 
 		$site = Yii::app()->createController('Site');

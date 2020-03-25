@@ -4745,7 +4745,7 @@ class TyovuorootController extends Controller
 			$criteria = new CDBCriteria;
         		$criteria->condition = "
 				tid='".$kenelta."'
-				AND (peruutettu=0 OR peruutettu IS NULL)
+				AND toistuva_id=0
 				AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '$from'
 			";
 			$tv = Tyovuoroot::model()->findAll($criteria);
@@ -4755,7 +4755,6 @@ class TyovuorootController extends Controller
 			$criteria = new CDBCriteria;
         		$criteria->condition = "
 				(tid='".$kenelta."' OR tyopaari LIKE'%\"$kenelta\"%')
-				AND (peruutettu=0 OR peruutettu IS NULL)
 				AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$from'
 			";
 			$toistuvat = ToistuvatTyovuorot::model()->findAll($criteria);

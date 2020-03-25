@@ -5,7 +5,7 @@ if( isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SE
 
 if(isset($_SERVER['HTTP_REFERER'])) {
 	$parsed = parse_url($_SERVER['HTTP_REFERER']);
-	if (isset($parsed['host']) && ($parsed['host'] == 'mobemu.etunti.fi' or $parsed['host'] == 'mobemu.etunti.com')) {
+	if (isset($parsed['host']) && ($parsed['host'] == 'mobemu.etunti.fi' or $parsed['host'] == 'mobemu.etunti.com' or $parsed['host'] == 'staging.etunti.com')) {
 		header("Access-Control-Allow-Origin: *");
 	}
 	//mail('laptopsr@gmail.com', 'test', json_encode($parsed));
