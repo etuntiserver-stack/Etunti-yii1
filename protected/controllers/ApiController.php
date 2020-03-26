@@ -305,6 +305,8 @@ public function actionAsetukset($dom)
     switch($_GET['model'])
     {
         case 'mob':
+print_r($_POST);
+exit;
 	if(isset($_POST['tid']) ){
 		$ttekija = Tyontekijat::model()->findByPk($_POST['tid']);
 	}
