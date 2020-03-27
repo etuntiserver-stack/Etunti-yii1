@@ -1776,6 +1776,21 @@ class TyovuorootController extends Controller
 			$kohde = Yii::app()->session['kohde'];
 
 		$haku_criteria 	= [];
+
+		// <-- kohteiden_tyonimike
+		if(isset(Yii::app()->session['kohteiden_tyonimike'])){
+			$criteria = new CDbCriteria();
+	       		$criteria->select = "id";
+	       		$criteria->condition = " 
+				siivous LIKE '%".Yii::app()->session['kohteiden_tyonimike']."%' 
+			";
+			$k = Kohteet::model()->findAll($criteria);
+			foreach($k as $item)
+				$kohteet_siivous[] = $item->id;
+
+		}
+		//   kohteiden_tyonimike -->
+
 		if (isset($asiakas) and !empty($asiakas)) {
 			$haku_criteria[] = '
 			kohde IN (
@@ -1818,6 +1833,29 @@ class TyovuorootController extends Controller
 		$criteria->condition = "
 			aktiivinen=1
 		";
+
+		// <-- tyo_toimialue
+		if(isset(Yii::app()->session['tyo_toimialue'])){
+		   $arr = [];
+		   foreach(Yii::app()->session['tyo_toimialue'] as $it){
+			$arr[] = str_replace("\\", "\\\\\\\\", json_encode($it));
+		   }
+		   $tyo_toimialue_like = "tyo_toimialue LIKE '%".implode("%' OR tyo_toimialue LIKE '%", $arr)."%'";
+	           $criteria->addCondition ($tyo_toimialue_like);
+		}
+		//   tyo_toimialue -->
+
+		// <-- tyoryhma
+		if(isset(Yii::app()->session['tyoryhma']))
+		{
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(Yii::app()->session['tyoryhma']);
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+		        	$criteria->addCondition (" id IN ($ids) ");
+			}
+		}
+		//   tyoryhma -->
 
 		if (isset(Yii::app()->session['tyontekijat']) and count(Yii::app()->session['tyontekijat'] > 0)) {
 			$ids = implode(",", Yii::app()->session['tyontekijat']);
