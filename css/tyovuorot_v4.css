@@ -74,12 +74,15 @@ td .latikkoAsetukset p{
 	cursor: pointer;
 }
 .latikkolisatiedot_paa{
-	position: absolute; top: 0; right: 0;
-	float: right;
-	background: #fff;
+	position: absolute; top: -25px; left: 0;
 }
 .latikkolisatiedot{
+	position: fixed;
+	background: #fff;
 	padding: 2px 5px;
+	border-top: 1px #ddd solid;
+	border-left: 1px #ddd solid;
+	border-right: 1px #ddd solid;
 	color: orange;
 	z-index: 999;
 }
