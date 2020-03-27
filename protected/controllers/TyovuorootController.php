@@ -1337,28 +1337,37 @@ class TyovuorootController extends Controller
 	}
 
 	protected function updateAndDelete($toistuva_id, $item){
-						// Delete
-						$criteria=new CDbCriteria;
-						$criteria->select = "id";
-						$criteria->condition = " 
-							DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($item['pvm']." this week monday"))."' 
-							AND toistuva_id='".$toistuva_id."' 
-						";
-						$tvdel = Tyovuoroot::model()->findAll($criteria);
-						foreach ($tvdel as $v) {
-							Tyovuoroot::model()->deletebypk($v->id);
-						}
 
-						// Update
-						$criteria=new CDbCriteria;
-						$criteria->select = "id";
-						$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
-						$tvupd = Tyovuoroot::model()->findAll($criteria);
-						foreach ($tvupd as $v) {
-							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
-						}
+			$fp = fopen(Yii::app()->user->domain.'_migratio.log', "a");
 
-						echo 'Poistettut: '.count($tvdel).', Muokatut: '.count($tvupd).'<br>';
+			// Delete
+			$criteria=new CDbCriteria;
+			$criteria->select = "id";
+			$criteria->condition = " 
+				DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($item['pvm']." this week monday"))."' 
+				AND toistuva_id='".$toistuva_id."' 
+			";
+			$tvdel = Tyovuoroot::model()->findAll($criteria);
+
+			$mytext = "POISTETAAN Työvuorot jolla toistuva_id=".$toistuva_id." ja PVM >= ".date("Y-m-d", strtotime($item['pvm']." this week monday"))." \r\n";
+			fwrite($fp, $mytext);
+
+			foreach ($tvdel as $v) {
+				Tyovuoroot::model()->deletebypk($v->id);
+			}
+
+			// Update
+			$criteria=new CDbCriteria;
+			$criteria->select = "id";
+			$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
+			$tvupd = Tyovuoroot::model()->findAll($criteria);
+
+			$mytext = "MUOKATAAN Työvuorot jolla toistuva_id=".$toistuva_id." --> toistuva_id=0 \r\n";
+			fwrite($fp, $mytext);
+
+			foreach ($tvupd as $v) {
+				Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+			}
 
 	}
 
@@ -1369,12 +1378,14 @@ class TyovuorootController extends Controller
 
 		//$startWeek = date("YW", strtotime("next monday"));
 		if ( $stage == 1 ) {
-
+			$fp = fopen(Yii::app()->user->domain.'_migratio.log', "w+");
 			// <-- Otetaan pois aivan turhoja milijona
+/*
 			Yii::app()->db1->createCommand(
 				"DELETE FROM sivex_tvuoro WHERE toistuva_id!='0' 
 				AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($startday." +6 month"))."'")
 			->execute();
+*/
 
 			// Optimisointi
 			$query = "OPTIMIZE TABLE sivex_tvuoro";
@@ -1385,12 +1396,17 @@ class TyovuorootController extends Controller
 			$command = Yii::app()->db1->createCommand($query);
 			$command->execute();
 
+			$mytext = "Optimisointi valmis\r\n";
+			$mytext .= "STARTDAY on ".date("d.m.Y", strtotime("next monday")).", joka jakaa logikka kahden osan. Toinen on menneisyys ja toinen tulevaisuus \r\n";
+			fwrite($fp, $mytext);
+
 			echo 'STAGE 1 - OPTIMISOINTI valmis.<br>';
 			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 2));
 			exit;
 		}
 
 		if ( $stage == 2 ) {
+			$fp = fopen(Yii::app()->user->domain.'_migratio.log', "a");
 
 			$tvr = Yii::app()->db1->createCommand()
 				//->limit("100")
@@ -1416,7 +1432,6 @@ class TyovuorootController extends Controller
 			$korjattu = 0;
 			echo '<h3>Yhteensä '.count($tvr).'</h3>';
 			foreach($tvr as $item){
-				echo 'Ketju '.$item['toistuva_id'].'<br>';
 				$toistuva_id = $item['toistuva_id'];
 				if(isset($toist_arr[$toistuva_id])){
 					$tids = [];
@@ -1429,21 +1444,28 @@ class TyovuorootController extends Controller
 						// <-- Jos EI työparia
 						if( empty($toist_arr[$toistuva_id]['tyopaari'])){
 							// ONGELMA 
-							echo 'Ongelma, Korjataan<br>';
 
 							ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array( 'tid' => $item['tid'], 'pfrom' => date("d.m.Y", strtotime($item['pvm']." this week monday")) ));
+							$mytext = "TID ongelma, Ketju ".$toistuva_id.", Uusi TID on - ".$item['tid'].", Uusi aloituspäivä: ".date("d.m.Y", strtotime($item['pvm']." this week monday"))." \r\n";
+							fwrite($fp, $mytext);
+
 							$this->updateAndDelete($toistuva_id, $item);
 
 						} else {
 
-							echo 'tyoparia, Korjataan<br>';
 							ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array( 'pfrom' => date("d.m.Y", strtotime($item['pvm']." this week monday")) ));
+							$mytext = "Ketju ".$toistuva_id.", Uusi aloituspäivä: ".date("d.m.Y", strtotime($item['pvm']." this week monday"))." \r\n";
+							fwrite($fp, $mytext);
+
 							$this->updateAndDelete($toistuva_id, $item);
 						}
 
 					} else {
 
 						ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array( 'pfrom' => date("d.m.Y", strtotime($item['pvm']." this week monday")) ));
+						$mytext = "Ketju ".$toistuva_id.", Uusi aloituspäivä: ".date("d.m.Y", strtotime($item['pvm']." this week monday"))." \r\n";
+						fwrite($fp, $mytext);
+
 						$this->updateAndDelete($toistuva_id, $item);
 					}
 
@@ -1458,6 +1480,7 @@ class TyovuorootController extends Controller
 		}
 
 		if ( $stage == 3 ) {
+			$fp = fopen(Yii::app()->user->domain.'_migratio.log', "a");
 
 			$tvr = Yii::app()->db1->createCommand()
 				->select("id, tid, pvm, toistuva_id")
@@ -1485,67 +1508,64 @@ class TyovuorootController extends Controller
 
 					if( date("Ymd", strtotime($toist_arr[$toistuva_id]['pto'])) < date("Ymd", strtotime($startday)) ){
 
-						echo 'Ketju '.$toistuva_id.' POISTETAAN<br>';
-
 						ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
+						$mytext = "Ketju ".$toistuva_id.", POISTETAAN, koska ketjun lopetuspäivä ajemmin kun ".date("d.m.Y", strtotime($startday))." \r\n";
+						fwrite($fp, $mytext);
 
 						// Update
 						$criteria=new CDbCriteria;
 						$criteria->select = "id";
 						$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
 						$tvupd = Tyovuoroot::model()->findAll($criteria);
+
+						$mytext = "MUOKATAAN Työvuorot jolla toistuva_id=".$toistuva_id." --> toistuva_id=0 \r\n";
+						fwrite($fp, $mytext);
+
 						foreach ($tvupd as $v) {
 							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
 						}
 
 					} else {
 
+						// Toistuva pto on > startday
 						if( date("Ymd", strtotime($item['pvm'])) < date("Ymd", strtotime($startday)) ){
 
-							echo 'Ketju '.$toistuva_id.' POISTETAAN<br>';
 							ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
+
+							$mytext = "Ketju ".$toistuva_id.", POISTETAAN, koska viimeinen työvuoro oli ajemmin kun ".date("d.m.Y", strtotime($startday))." \r\n";
+							fwrite($fp, $mytext);
 
 							// Update
 							$criteria=new CDbCriteria;
 							$criteria->select = "id";
 							$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
 							$tvupd = Tyovuoroot::model()->findAll($criteria);
+
+							$mytext = "MUOKATAAN Työvuorot jolla toistuva_id=".$toistuva_id." --> toistuva_id=0 \r\n";
+							fwrite($fp, $mytext);
+
 							foreach ($tvupd as $v) {
 								Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
 							}
 
 						} else {
 
-							// Update
-							$criteria=new CDbCriteria;
-							$criteria->select = "id";
-							$criteria->condition = " 
-								toistuva_id!=0 AND toistuva_id='".$toistuva_id."' 
-								AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) < '".date("Y-m-d", strtotime($startday))."'
-							";
-							$check = Tyovuoroot::model()->find($criteria);
-							if(!isset($check->id)){
-
-								$del = Tyovuoroot::model()->findAll("toistuva_id!=0 AND toistuva_id='".$toistuva_id."'");
-								foreach ($del as $v) {
-									Tyovuoroot::model()->deletebypk($v->id);
-								}
-
-							} else {
-								echo 'Ei selkeä ongelma<br>';
-							}
+								echo 'Ei selkeä ongelma '.$toistuva_id.'<br>';
 						}
 
 					}
 
 				} else {
-							echo 'Ei ketjua sille <br>';
 
 							// Update
 							$criteria=new CDbCriteria;
 							$criteria->select = "id";
 							$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
 							$tvupd = Tyovuoroot::model()->findAll($criteria);
+
+							$mytext = "MUOKATAAN Työvuorot jolla toistuva_id=".$toistuva_id." --> toistuva_id=0 \r\n";
+							fwrite($fp, $mytext);
+
 							foreach ($tvupd as $v) {
 								Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
 							}
@@ -1560,6 +1580,8 @@ class TyovuorootController extends Controller
 
 		// <-- Poistettu_pvm redirect to another field
 		if ($stage == 4) {
+			$fp = fopen(Yii::app()->user->domain.'_migratio.log', "a");
+
 			$tvr = Yii::app()->db1->createCommand()
 				->select("poistettu_pvm,id,tyopaari,tid")
 				->from("toistuvat_tyovuorot")
@@ -1609,6 +1631,7 @@ class TyovuorootController extends Controller
 		}
 
 		if ($stage == 5) {
+			$fp = fopen(Yii::app()->user->domain.'_migratio.log', "a");
 
 			Yii::app()->db1->createCommand(
 			"DELETE FROM sivex_tvuoro WHERE toistuva_id!='0' AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($startday))."'")
@@ -2109,7 +2132,7 @@ class TyovuorootController extends Controller
 			if(isset($expl1[1]) and !empty($expl1[1])){ $color = $expl1[1]; }
 			$tv_edit = (isset($expl1[0])) ? '<b class="tv_edit" id="'.$this_id.'" style="color:'.$color.'">'.$ikoonit.''.$expl1[0].'</b>' : '';
 		} else {
-			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$asiakasNakyvissa.$osoite.$lisateksti.'<br>'.$arvo->id.'</span>';
+			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$asiakasNakyvissa.$osoite.$lisateksti.'</span>';
 		}
 		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto, 'alku' => $arvo->alku, 'loppu' => $arvo->loppu];
 		return $return;
