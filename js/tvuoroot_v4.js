@@ -449,15 +449,17 @@ $(document).delegate(".valitseKokopaiva","click",function(){
            success: function(data){
 		d = JSON.parse(data);
 		//console.log(data);
-		alertti = "Huomio!\n\n";
 		$(d).each(function( index, value ) {
-			if( value['varoitus_tyopaari'] || value['varoitus_toistuva'] )
+			if( value['varoitus_tyopaari'] || value['varoitus_toistuva'] ){
+				alertti = "Huomio!\n\n";
 				if( value['varoitus_tyopaari'] )
 					alertti += "Siirtäessä tai poistaessa irotat " + value['varoitus_tyopaari']['alku'] + "-" + value['varoitus_tyopaari']['loppu'] + ", " + value['varoitus_tyopaari']['osoite'] + " työvuoro olevasta työparista.\n\r";
 				if( value['varoitus_toistuva'] )
 					alertti += "Siirtäessä tai poistaessa irotat " + value['varoitus_toistuva']['alku'] + "-" + value['varoitus_toistuva']['loppu'] + ", " + value['varoitus_toistuva']['osoite'] + " työvuoro toistuvasta ketjusta.\n\r";
+				alert(alertti);
+			}
 		});
-		alert(alertti);
+
 		muisti();
            }
         });
