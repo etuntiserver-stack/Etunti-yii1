@@ -1241,8 +1241,6 @@ $(document).ready(function(){
 	var str = '';
 	$('#virheilmoitus').html('').hide();
 	// <-- Viimeinen kysymys
-	var r = confirm('Haluatko varmasti tallenna tämän?');
-	if(!r){ return false; }
 
 	if( '<?=$create_update?>' == 'update'){
 		$.ajax({
