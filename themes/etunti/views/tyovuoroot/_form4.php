@@ -1260,7 +1260,7 @@ $(document).ready(function(){
 	}
 	if( '<?=$create_update?>' == 'create'){
 		$.ajax({
-		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/create4?toistuva=' + toistuva,
+		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/create4?toistuva=' + toistuva + '&laatikko_pvm=<?=$laatikko_pvm?>&laatikko_tid=<?=$laatikko_tid?>',
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){

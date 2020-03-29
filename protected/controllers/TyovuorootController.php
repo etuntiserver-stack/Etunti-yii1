@@ -2695,7 +2695,7 @@ class TyovuorootController extends Controller
 		exit;
 	}
 
-	public function actionCreate4($toistuva)
+	public function actionCreate4($toistuva, $laatikko_pvm, $laatikko_tid)
 	{
 
 		$return = array();
@@ -2723,9 +2723,11 @@ class TyovuorootController extends Controller
 
 			if($model->save()){
 
+				$this_id = ($toistuva)? $this->this_id_builder($model->id, $laatikko_pvm, $laatikko_tid) : $model->id;
+
 				// <-- PushNotify
 				if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
-					$this->pushNotifySending($model->id);
+					$this->pushNotifySending($this_id);
 				// PushNotify -->
 
 				// <-- jos on tyopaari
@@ -3006,6 +3008,11 @@ class TyovuorootController extends Controller
 		else
 			$post = $_POST['Tyovuoroot'];
 
+		// <-- PushNotify
+		if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+			$this->pushNotifySending($this_id);
+		// PushNotify -->
+
 		// <-- Variables
 		//$post['pvm'] 		= date("d.m.Y",strtotime($laatikko_pvm)); Kun siirretaan tyoparit muu paivaan.. sitten se ei onnistuu
 		$edellinen_model 	= $model->attributes;
@@ -3017,7 +3024,7 @@ class TyovuorootController extends Controller
 		if( 
 			!$toistuva
 			and isset($model->kohteet->asiakas_id) 
-			and $model->kohde == $_POST['Tyovuoroot']['kohde']
+			and $model->kohde == $post['kohde']
 			and $model->peruutettu == 0 
 			and $post['peruutettu'] != 0)
 		{
@@ -3290,9 +3297,11 @@ class TyovuorootController extends Controller
 		$model->tid = $tid;
 		if($model->save()){
 
+			$this_id = ($toistuva)? $this->this_id_builder($model->id, $model->pvm, $tid) : $model->id;
+
 			// <-- PushNotify
 			if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
-				$this->pushNotifySending($model->id);
+				$this->pushNotifySending($this_id);
 			// PushNotify -->
 
 			// <-- LOG
@@ -3339,20 +3348,27 @@ class TyovuorootController extends Controller
 		return $model;
 	}
 
-	protected function pushNotifySending($tv_id)
+	protected function pushNotifySending($this_id)
 	{
-		$m = Tyovuoroot::model()->findByPk($tv_id);
-		$t = Tyontekijat::model()->findbypk($m->tid);
-		$k = Kohteet::model()->findbypk($m->kohde);
-		if(isset($k->osoite) and !empty($k->osoite) and isset($t->id))
-		{
-			$pushviesti = "Työvuorosi on muuttunut. Alta löydät uudet tiedot:\n
-				".$m->pvm."
-				".$m->alku."-".$m->loppu." ".$k->osoite."
-				".$m->tietoja;
+		$get_id = $this->this_id($this_id);
+		$model 		= $get_id['model'];
+		$toistuva 	= $get_id['toistuva'];
+		$pvm 		= $get_id['pvm'];
+		$tid 		= $get_id['tid'];
 
-			Domainit::sendGCM($t->id,"Hei ".$t->tekijan_nimi,$pushviesti, null);
-		}
+		$m = $model;
+		$t = Tyontekijat::model()->findbypk($tid);
+		$osoite = $model->osoite;
+		if(empty($osoite) and isset($model->kohteet->osoite))
+			$osoite = $model->kohteet->osoite;
+
+		$pushviesti = "Työvuorosi on muuttunut. Alta löydät uudet tiedot:\n
+			".$pvm."
+			".$m->alku."-".$model->loppu." ".$osoite."
+			".$m->tietoja;
+
+		Domainit::sendGCM($tid,"Hei ".$t->tekijan_nimi,$pushviesti, null);
+		exit;
 	}
 
 	protected function hinnastoHintaat($tp, $asiakkaat, $kohteet)
