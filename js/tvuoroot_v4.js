@@ -51,6 +51,24 @@ $("#lahetaTyovuoroja").click(function(){
 });
 //     TV Lahetys -->
 
+$(document).delegate(".getTekijanTiedot","click",function(e){
+	e.preventDefault();
+	var id = $(this).attr('for');
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/get_tekijantiedot?id='+id,
+           success: function(data){
+		data = JSON.parse(data);
+
+		if( data['bd'] ){
+			$('#temaus-modal').find('.panel-title').html('<i class="fa fa-male"></i>'+data['etusuku']);
+			$('#temaus-modal').modal().find('.panel-body').html(data['bd']);
+		}
+
+           }
+        });
+
+});
+
 $(document).delegate("#showres","click",function(){
 	$("#pto_ilmoitus").html('');
 });

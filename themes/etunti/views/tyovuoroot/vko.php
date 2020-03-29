@@ -97,7 +97,27 @@ ini_set('memory_limit', '512M');
  <tr>
 	<td class="bg-default" style="z-index: 999; max-width: 150px; white-space: normal;">
 	<div class="m15 text-center">
-		<h5 class="nimi"><?=$item['etusukunimi']?></h5>
+
+		<?php
+		echo '
+		<div class="row">
+		  <div class="col-sm-12">
+		    	<a href="#" class="getTekijanTiedot" for="'.$tid.'">';
+			// <-- Kuva
+			if(
+				isset(Yii::app()->user->domain) 
+				and file_exists(dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$tid.".jpg") 
+			){
+				echo '<img src="../../img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$tid.".jpg".'" alt="avatar" class="mw50 br64 mr15">';
+			} else {
+				echo '<img src="../../img/tekijat/noname.jpg" alt="avatar" class="mw50 br64 mr15">';
+			}
+			//     Kuva -->
+			echo '<br> '.$item['etusukunimi'].'</a>
+		  </div>
+		</div>';
+		?>
+
 		<?php
 		$file = $week.'_'.$year.'_'.$tid.'.pdf';
 		$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
@@ -137,9 +157,26 @@ ini_set('memory_limit', '512M');
  </tbody>
  </table>
 </div>
-<?php
 
+<div id="temaus-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div id="modal-form" class=" popup-basic popup-lg admin-form mfp-with-anim mfp-hide">
+          <div class="panel">
+            <div class="panel-heading">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">
+				<span aria-hidden="true">&times;</span>
+			</button>
+              <span class="panel-title"></span>
+            </div>
+            <form method="post" action="/" id="comment">
+              <div class="panel-body p25">
+              </div>
+              <div class="panel-footer">
+		<button type="button" class="button btn-default" data-dismiss="modal" aria-label="Close">Sulje</button>
+              </div>
+            </form>
+          </div>
+        </div>
+</div>
 
-?>
 <!-- Täytetään tauluu -->
 <?php echo $this->tv_arrJava($from, $to, $haku_criteria, $haku_tids); ?>
