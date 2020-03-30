@@ -28,8 +28,8 @@
 	cursor: pointer;
 }
 .reika-danger{
-	/*background: orange;*/
-	color: red;
+	background: orange;
+	color: white;
 	padding: 3px;
 	font-weight: bold;
 	line-height: 70%;
