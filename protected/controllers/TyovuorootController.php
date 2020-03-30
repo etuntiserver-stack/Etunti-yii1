@@ -2134,8 +2134,8 @@ class TyovuorootController extends Controller
 			return $return;
 		}
 		$lisateksti = '';
-		//if($arvo->piilota_mobiilista == 1)
-			//$lisateksti .= '<br><span class="text-primary">Ei mobiili</span>';
+		if(isset($arvo->kohteet->id) and $arvo->kohteet->aktiivinen != 1)
+			$lisateksti .= '<br><span class="text-danger">Kohde passiivinen</span>';
 		if($arvo->laskutettu == 1)
 			$lisateksti .= '<br><span class="text-primary">Laskutettu</span>';
 		if($arvo->peruutettu == 1)

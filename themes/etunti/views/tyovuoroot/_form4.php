@@ -127,7 +127,10 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 		<?php
        		$criteria = new CDbCriteria();
 	        $criteria->order = " osoite ";
-		$criteria->condition = " aktiivinen=1 ";
+		if($create_update == 'create')
+			$criteria->condition = " aktiivinen=1 ";
+		if($create_update == 'update')
+			$criteria->condition = " aktiivinen=1 or id='".$model->kohde."' ";
 
 		// <-- TyoryhmatHelper
 		$arr = $site[0]->TyoryhmatHelper();
