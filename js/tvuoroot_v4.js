@@ -580,7 +580,7 @@ window.addEventListener('message', function(e) {
 	   data: doWhat,
            success: function(data){
 		data = JSON.parse(data);
-		//console.log(data);
+		console.log(data);
 
 		if( data['poistettu'] ){
   			$( data['poistettu'] ).each(function(index, tv_id) {

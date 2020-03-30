@@ -3250,7 +3250,7 @@ class TyovuorootController extends Controller
 			return false;
 
 		$updater = [];
-		foreach($edelliset_tyoparit as $tv_id => $tid)
+		foreach($edelliset_tyoparit as $tv_id => $tid){
 			if( isset($removedArr[$tid]) ){
 				$rm_model = Tyovuoroot::model()->findByPk($tv_id);
 				if( isset($rm_model->id) ){
@@ -3260,12 +3260,13 @@ class TyovuorootController extends Controller
 			} else {
 				$updater[$tv_id] = $tid;
 			}
-		foreach($updater as $tv_id => $tid)
+		}
+		foreach($updater as $tv_id => $tid){
 			if( count($updater) == 1 )
 				Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => ''));
 			else
 				Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => json_encode($updater)));
-
+		}
 		return true;
 	}
 
