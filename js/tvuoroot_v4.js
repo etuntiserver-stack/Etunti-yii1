@@ -98,7 +98,7 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 					if( last_loppu > 0 )
 					this_ero = parseInt(tv_edit['alku'])-last_loppu;
 					if( this_ero > 0 )
-					all_tv_edit 	+= '<p class="reika-danger">Reika ' + (this_ero/60) + ' min.</p>';
+					all_tv_edit 	+= '<p class="text-center reika-danger"><i class="fa fa-clock-o"></i> Aika: ' + $.sprint(this_ero) + '</p>';
 
 					tv_kesto	+= tv_edit['tv_kesto'];
 					all_tv_edit 	+= '<p>' + tv_edit['tv_edit'] + '</p>';
