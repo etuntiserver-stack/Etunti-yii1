@@ -1390,14 +1390,38 @@ class TyovuorootController extends Controller
 	public function actionVm_next()
 	{
 		$asetukset = Asetukset::model()->findByPk(1);
-		$migration_status = $asetukset->virtual_migration_status ?? 0;
+		$curstep = $asetukset->virtual_migration_status ?? 0;
 
 		// AJAX results displayed on the page.
-		$next = $migration_status;
-		$text = '';
-		$finish_text = '';
+		$results = [
+			'finished' => false,
+			'next' => $curstep,
+			'text' => '',
+			'finish_text' => ''
+		];
 
-		switch ($migration_status) {
+		// Helper for updating results, for shorter code.
+		$setnext = function($next = -1, $text = '', $finish_text = '') use ($curstep, &$results) {
+			if ($next < 0)
+				$next = $curstep;
+			$results = [
+				'next' => $next,
+				'text' => $text,
+				'finish_text' => !empty($finish_text) ? $finish_text : $text
+			];
+		};
+
+		// Helpers for session variable for count (mysql limit & select).
+		$getCount = function($step = -1, $default = 0) use ($curstep) {
+			$step = $step >= 0 ? $step : $curstep;
+			return Yii::app()->session["virtual_migration_step{$step}_count"] ?? $default;
+		};
+		$setCount = function($value, $step = -1) use ($curstep) {
+			$step = $step >= 0 ? $step : $curstep;
+			Yii::app()->session["virtual_migration_step{$step}_count"] = $value;
+		};
+
+		switch ($curstep) {
 
 			case 0:
 				//? OPTIMIZATION: OPTIMIZE TABLE is almost never worth doing on InnoDB tables.
@@ -1405,52 +1429,37 @@ class TyovuorootController extends Controller
 				//? the tables are re-created and analyzed instead.
 				// Yii::app()->db1->createCommand("OPTIMIZE TABLE sivex_tvuoro")->execute();
 				// Yii::app()->db1->createCommand("OPTIMIZE TABLE toistuvat_tyovuorot")->execute();
-				$next = 1;
-				$text = $finish_text = 'Migration started, tables optimized.';
-				Yii::app()->session['vm_stage1_count'] = 0;
+				$setnext(1, 'Migration started, tables optimized.');
 				break;
 
 			case 1:
-				$count = Yii::app()->session['vm_stage1_count'] ?? 0;
-				Yii::app()->session['vm_stage1_count'] = ++$count;
-				$text = "Count: $count";
-
-				if ($count >= 10) {
-					$next = 2;
-					$finish_text = "Test finish.";
-				}
-
+				$count = $getCount();
+				$setCount(++$count);
+				$setnext($count >= 10 ? 2 : -1, "Count: $count", "Test finish.");
 				break;
 
 			case 2:
-				$next = 3;
-				$text = "";
+				$setnext(3);
 				break;
 		}
 
-		// If next step has been specified, update status.
-		if ($next != $migration_status) {
-			$asetukset->virtual_migration_status = $next;
+		// If next step has been specified, update status (step finished).
+		if ($results['next'] != $curstep) {
+			$asetukset->virtual_migration_status = $results['next'];
 			$asetukset->save();
+			$results['finished'] = true;
 
-			$finish_text_final = "Step $migration_status finished";
-			if (!empty($finish_text))
-				$finish_text_final .= ": $finish_text";
+			// Reset next step count from session variables, in case of a mix-up.
+			$setCount(0, $results['next']);
 
-			echo json_encode([
-				'finished' => true,
-				'finish_text' => $finish_text_final,
-				'next' => $next,
-				'text' => $text
-			]);
-		} else {
-			echo json_encode([
-				'finished' => false,
-				'finish_text' => "",
-				'next' => $next,
-				'text' => $text
-			]);
+			// Prepend finish text with default text ("Step finished").
+			$finish_text_final = "Step $curstep finished";
+			if (!empty($results['finish_text']))
+				$finish_text_final .= ": " . $results['finish_text'];
+			$results['finish_text'] = $finish_text_final;
 		}
+
+		echo json_encode($results);
 	}
 
 	public function actionBeta($kohteet_siivous = [], $kohde = '', $asiakas = '', $mode = null, $stage = null)
