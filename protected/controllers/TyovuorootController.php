@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall'),
+				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vm_next', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -1369,6 +1369,88 @@ class TyovuorootController extends Controller
 				Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
 			}
 
+	}
+
+	/**
+	 * Page for virtual migration script requests.
+	 */
+	public function actionVirtual_migration()
+	{
+		$asetukset = Asetukset::model()->findByPk(1);
+		$this->render('virtual_migration', [
+			'status' => $asetukset->virtual_migration_status ?? 0
+		]);
+	}
+
+	/**
+	 * New migration script, based on actionBeta (per stage mass modifications),
+	 * modified to loop per chain and do all work on a single chain at once.
+	 * Called by AJAX from actionVirtual_migration() and associated view.
+	 */
+	public function actionVm_next()
+	{
+		$asetukset = Asetukset::model()->findByPk(1);
+		$migration_status = $asetukset->virtual_migration_status ?? 0;
+
+		// AJAX results displayed on the page.
+		$next = $migration_status;
+		$text = '';
+		$finish_text = '';
+
+		switch ($migration_status) {
+
+			case 0:
+				//? OPTIMIZATION: OPTIMIZE TABLE is almost never worth doing on InnoDB tables.
+				//? Leaving the code here just in case. Tables in our database don't support optimize;
+				//? the tables are re-created and analyzed instead.
+				// Yii::app()->db1->createCommand("OPTIMIZE TABLE sivex_tvuoro")->execute();
+				// Yii::app()->db1->createCommand("OPTIMIZE TABLE toistuvat_tyovuorot")->execute();
+				$next = 1;
+				$text = $finish_text = 'Migration started, tables optimized.';
+				Yii::app()->session['vm_stage1_count'] = 0;
+				break;
+
+			case 1:
+				$count = Yii::app()->session['vm_stage1_count'] ?? 0;
+				Yii::app()->session['vm_stage1_count'] = ++$count;
+				$text = "Count: $count";
+
+				if ($count >= 10) {
+					$next = 2;
+					$finish_text = "Test finish.";
+				}
+
+				break;
+
+			case 2:
+				$next = 3;
+				$text = "";
+				break;
+		}
+
+		// If next step has been specified, update status.
+		if ($next != $migration_status) {
+			$asetukset->virtual_migration_status = $next;
+			$asetukset->save();
+
+			$finish_text_final = "Step $migration_status finished";
+			if (!empty($finish_text))
+				$finish_text_final .= ": $finish_text";
+
+			echo json_encode([
+				'finished' => true,
+				'finish_text' => $finish_text_final,
+				'next' => $next,
+				'text' => $text
+			]);
+		} else {
+			echo json_encode([
+				'finished' => false,
+				'finish_text' => "",
+				'next' => $next,
+				'text' => $text
+			]);
+		}
 	}
 
 	public function actionBeta($kohteet_siivous = [], $kohde = '', $asiakas = '', $mode = null, $stage = null)
