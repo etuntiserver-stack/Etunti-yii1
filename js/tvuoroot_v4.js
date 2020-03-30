@@ -85,6 +85,8 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 	var kesto_yht 	= [];
 	var yht		= 0;
 	var tids	= [];
+	var last_loppu  = 0;
+	var this_ero	= 0;
 	$.each(tv_arr, function( tid, value ) {
 		yht = 0;
 		tids.push(tid);
@@ -93,8 +95,14 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 			tv_kesto	= 0;
 			$.each(v, function( i2, laatikko ) {
 				$.each(laatikko, function( i3, tv_edit ) {
+					if( last_loppu > 0 )
+					this_ero = parseInt(tv_edit['alku'])-last_loppu;
+					if( this_ero > 0 )
+					all_tv_edit 	+= '<p class="reika-danger">Reika ' + (this_ero/60) + ' min.</p>';
+
 					tv_kesto	+= tv_edit['tv_kesto'];
 					all_tv_edit 	+= '<p>' + tv_edit['tv_edit'] + '</p>';
+					last_loppu	= parseInt(tv_edit['loppu']);
 				});
 			});
 			pvm_muutos = pvm.split(".");

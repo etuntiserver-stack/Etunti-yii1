@@ -2172,7 +2172,7 @@ class TyovuorootController extends Controller
 		} else {
 			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$asiakasNakyvissa.$osoite.$lisateksti.'</span>';
 		}
-		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto, 'alku' => $arvo->alku, 'loppu' => $arvo->loppu];
+		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto, 'alku' => strtotime($arvo->alku), 'loppu' => strtotime($arvo->loppu)];
 		return $return;
 	}
 
