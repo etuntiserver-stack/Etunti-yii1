@@ -3297,11 +3297,9 @@ class TyovuorootController extends Controller
 		$model->tid = $tid;
 		if($model->save()){
 
-			$this_id = ($toistuva)? $this->this_id_builder($model->id, $model->pvm, $tid) : $model->id;
-
 			// <-- PushNotify
 			if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
-				$this->pushNotifySending($this_id);
+				$this->pushNotifySending($model->id);
 			// PushNotify -->
 
 			// <-- LOG
