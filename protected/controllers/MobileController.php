@@ -1822,45 +1822,71 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$to = date("Y-m-d", strtotime($to));
 
 		if($tilanne == 'luetut' or $tilanne == 'toteutuneet'){
-       		$criteria = new CDbCriteria();
-	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
-			AND kohdenID IN(
-				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
-			)
-			AND status='3'
-			AND deleted=0
-		";
-		if($tilanne == 'toteutuneet'){
-		$criteria->addCondition(" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
-		}
-		$luetut = Mobile::model()->findAll($criteria);
 
-       		$criteria = new CDbCriteria();
-	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
-			AND kohdenID IN(
-				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
-			)
-			AND status='3'
-			AND deleted=0
-		";
-		$toteutuneet = Toteutuneet::model()->findAll($criteria);
+	       		$criteria = new CDbCriteria();
+		        $criteria->condition = " 
+				aloitan!='' AND loppui!=''
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
+				AND status='3'
+				AND deleted=0
+			";
+			if( $asiakas_id > 0 ){
+			        $criteria->addCondition (" 
+					kohdenID IN(
+						SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
+					)
+				");
+			}
+			if($tilanne == 'toteutuneet')
+				$criteria->addCondition(" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
+
+			$luetut = Mobile::model()->findAll($criteria);
+
+       			$criteria = new CDbCriteria();
+		        $criteria->condition = " 
+				aloitan!='' AND loppui!=''
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
+				AND status='3'
+				AND deleted=0
+			";
+			if( $asiakas_id > 0 ){
+			        $criteria->addCondition (" 
+					kohdenID IN(
+						SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
+					)
+				");
+			}
+			$toteutuneet = Toteutuneet::model()->findAll($criteria);
 		}
 
 		if($tilanne == 'suunnitelut'){
-       		$criteria = new CDbCriteria();
-	        $criteria->condition = " 
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
-			AND kohde IN(
-				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
-			)
-			AND status='3'
-			AND peruutettu=0
-		";
-		$suunnitelut = Tyovuoroot::model()->findAll($criteria);
+
+			$tids 		= [];
+			$with		= ['data','kohteet'];
+
+			$haku_criteria = [];
+			if( $asiakas_id > 0 ){
+				$haku_criteria[] = "
+					kohde IN(
+						SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
+					)
+				";
+			}
+			$haku_criteria[] = "
+				status='3'
+				AND (peruutettu=0 OR peruutettu IS NULL)
+			";
+
+			$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+			$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, $with);
+			$suunnitelut 	= $dataAll;
+
+			/*
+			echo '<pre>';
+			print_r( $dataAll );
+			echo '</pre>';
+			exit;
+			*/
 		}
 
 		if( $tilanne == 'suunnitelut'){
@@ -3146,23 +3172,24 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 
 		$criteria = new CDbCriteria();
-		if(isset($_GET['yrityksen_nimi'])){
-		$criteria->condition = " 
-			yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
-		";
+		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])){
+			$criteria->condition = " 
+				yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
+			";
 		}
 		if(isset($_GET['asiakas_id'])){
-		$criteria->condition = " 
-			id='".$_GET['asiakas_id']."'
-		";
+			$criteria->condition = " 
+				id='".$_GET['asiakas_id']."'
+			";
 		}
-		if(isset($_GET['yrityksen_nimi']) or isset($_GET['asiakas_id'])){
+		if((isset($_GET['yrityksen_nimi'])  and !empty($_GET['yrityksen_nimi'])) or isset($_GET['asiakas_id'])){
 			$asiakas = Asiakkaat::model()->find($criteria);
 		}
 
 		$this->render('ayhteenveto', array(
 			'from' => $from,
 			'to' => $to,
+			'asiakas_id' => (isset($asiakas->id))?$asiakas->id:'',
 			'asiakas' => (isset($asiakas->id))?$asiakas:'',
 		));
 	}
