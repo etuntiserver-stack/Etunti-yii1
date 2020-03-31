@@ -91,10 +91,14 @@ $(document).ready(function(){
                           <label class="field">
    <?php
     $lounas = '';
-    $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
     $matka = '';
-    $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
-
+    if( isset($_GET['ilman']) ){
+	foreach($_GET['ilman'] as $t)
+		if($t == 'MATKA')
+			$matka = 'selected';
+		if($t == 'Lounastauko')
+			$lounas = 'selected';
+    }
     echo '<select name="ilman[]" class="ilman"  multiple="multiple">';
     echo '<option value="Lounastauko" '.$lounas.'>'.Yii::t('main', 'Lounastauko').'</option>';
     echo '<option value="MATKA" '.$matka.'>'.Yii::t('main', 'Matka').'</option>';
@@ -214,7 +218,13 @@ $(document).ready(function(){
 	$matkatunnit	= (isset($getAll[$data->tid]['matkatunnit']['kaikki']))? $getAll[$data->tid]['matkatunnit']['kaikki'] : 0;
 	$loun		= (isset($getAll[$data->tid]['lounaat']['kaikki']))? $getAll[$data->tid]['lounaat']['kaikki'] : 0;
 
-	$tot_sun = $tyotunnit;
+	$suunn = $tyotunnit;
+	if($matka != 'selected')
+		$suunn += $matkatunnit;
+	if($lounas != 'selected')
+		$suunn += $loun;
+
+	$tot_sun = $suunn;
 	$total_sunniteltu += $tot_sun;
 
 	$return = $this->toteutu($data->tid,"yhteenveto",$from,$to);
