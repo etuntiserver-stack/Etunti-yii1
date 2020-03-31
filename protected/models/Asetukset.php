@@ -15,8 +15,6 @@
  * @property int $procountor_refresh_time Time when Procountor access token was last refreshed.
  * @property int $procountor_expires_in Expiration time of Procountor access token, usually 300 seconds.
  * @property int $procountor_invalid If 1, Procountor access token expired and refreshing failed.
- * @property int $virtual_migration_status
- *	Performed migration status, as described in TyovuorootController::actionVirtual_migration().
  */
 class Asetukset extends DB2ActiveRecord
 {
@@ -187,7 +185,6 @@ class Asetukset extends DB2ActiveRecord
 					'procountor_refresh_time' => 'int(11) DEFAULT 0',           // Time when access token was last refreshed.
 					'procountor_expires_in' => 'int(6) DEFAULT 0',              // Expiration time of access token, usually 300 seconds.
 					'procountor_invalid' => 'int(1) DEFAULT 0',                 // If 1, access token expired and refreshing failed.
-					'virtual_migration_status' => 'int(3) DEFAULT 0',           // Performed migration status, as described in TyovuorootController::actionVirtual_migration().
 		    );
 
 		    foreach($table_structure as $key=>$value)
