@@ -2149,10 +2149,11 @@ class TyovuorootController extends Controller
 			foreach($with as $k=>$v)
 				$new_with[$v] = $v;
 
-			$return['this_id']  = $this_id;
-			$return['this_pvm'] = $this_pvm;
-			$return['this_tid'] = $this_tid;
-			$return['toistuva'] = $toistuva;
+			$return['this_id']  	= $this_id;
+			$return['kohde']  	= $arvo->kohde;
+			$return['this_pvm'] 	= $this_pvm;
+			$return['this_tid'] 	= $this_tid;
+			$return['toistuva'] 	= $toistuva;
 
 			if(isset($new_with['data']))
 				$return['data'] = $arvo;
