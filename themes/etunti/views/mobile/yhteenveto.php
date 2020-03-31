@@ -56,7 +56,7 @@ $(document).ready(function(){
 </script>
 
 
-   	    <form id="yhtveto" action="#" class="form-inline" method="POST">
+   	    <form id="yhtveto" action="#" class="form-inline" method="GET">
    	    <input type="hidden" name="yhtvetoform">
 
             <div class="admin-form">
@@ -76,7 +76,7 @@ $(document).ready(function(){
 					'Tekija', // name
 					'mult', // class
 					'tyontekijat', // id
-					Yii::app()->session['Tekija'], //selected
+					(isset($_GET['Tekija']))?$_GET['Tekija']:'', //selected
 					Yii::app()->request->getParam('aktiivinen') // aktiivinen
 				);
 				echo $tyontekiatLista;
@@ -189,13 +189,32 @@ $(document).ready(function(){
   $yht[2] = 0;
   $yht[3] = 0;
 
+  $tids = [];
+  foreach($model as $data)
+ 	$tids[$data->tid] = $data->tid;
+
+  $tyovuorot = Yii::app()->createController('Tyovuoroot');
+  $getAll = $tyovuorot[0]->TidfromtoTyovuoroWithVirtual(date("Y-m-d", strtotime($from)), date("Y-m-d", strtotime($to)), $tids, false, false, null);
+/*
+  echo '<pre>';
+  print_r($getAll);
+  echo '<pre>';
+  exit;
+*/
+
   foreach($model as $data)
   {
 	$tids[] = $data->tid;
         $total_lu += $data->l_tunnit;
 	$tp = $this->Tp($data->tid,$from,$to);
 	$totalTp += $tp;
-	$tot_sun = $this->renderPartial('//mobile/suunniteltu',array('id'=>$data->tid,'kohde_tid'=>'tid','from'=>$from,'to'=>$to),true);
+	
+	// Suunnittellut
+	$tyotunnit	= (isset($getAll[$data->tid]['tyotunnit']['kaikki']))? $getAll[$data->tid]['tyotunnit']['kaikki'] : 0;
+	$matkatunnit	= (isset($getAll[$data->tid]['matkatunnit']['kaikki']))? $getAll[$data->tid]['matkatunnit']['kaikki'] : 0;
+	$loun		= (isset($getAll[$data->tid]['lounaat']['kaikki']))? $getAll[$data->tid]['lounaat']['kaikki'] : 0;
+
+	$tot_sun = $tyotunnit;
 	$total_sunniteltu += $tot_sun;
 
 	$return = $this->toteutu($data->tid,"yhteenveto",$from,$to);

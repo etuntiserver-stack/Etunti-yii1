@@ -88,7 +88,8 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 	var last_loppu  = 0;
 	var this_ero	= 0;
 	$.each(tv_arr, function( tid, value ) {
-		yht = 0;
+		yht 		= 0;
+		last_loppu  	= 0;
 		tids.push(tid);
 		$.each(value, function( pvm, v ) {
 			all_tv_edit 	= '';
