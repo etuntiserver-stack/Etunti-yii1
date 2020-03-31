@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vm_next', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall'),
+				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'vmigrate_ajax_texts', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -1376,9 +1376,10 @@ class TyovuorootController extends Controller
 	 */
 	public function actionVirtual_migration()
 	{
-		$asetukset = Asetukset::model()->findByPk(1);
+		$vmigrate = Yii::createComponent('VirtualMigration');
+		// $vmigrate->setSessionVar("step", 0);
 		$this->render('virtual_migration', [
-			'status' => $asetukset->virtual_migration_status ?? 0
+			'step' => $vmigrate->getSessionVar("step", 0),
 		]);
 	}
 
@@ -1387,79 +1388,16 @@ class TyovuorootController extends Controller
 	 * modified to loop per chain and do all work on a single chain at once.
 	 * Called by AJAX from actionVirtual_migration() and associated view.
 	 */
-	public function actionVm_next()
+	public function actionVmigrate_ajax_next()
 	{
-		$asetukset = Asetukset::model()->findByPk(1);
-		$curstep = $asetukset->virtual_migration_status ?? 0;
+		$vmigrate = Yii::createComponent('VirtualMigration');
+		$results = $vmigrate->doNextStep();
+		print_r(json_encode($results));
+	}
 
-		// AJAX results displayed on the page.
-		$results = [
-			'finished' => false,
-			'next' => $curstep,
-			'text' => '',
-			'finish_text' => ''
-		];
-
-		// Helper for updating results, for shorter code.
-		$setnext = function($next = -1, $text = '', $finish_text = '') use ($curstep, &$results) {
-			if ($next < 0)
-				$next = $curstep;
-			$results = [
-				'next' => $next,
-				'text' => $text,
-				'finish_text' => !empty($finish_text) ? $finish_text : $text
-			];
-		};
-
-		// Helpers for session variable for count (mysql limit & select).
-		$getCount = function($step = -1, $default = 0) use ($curstep) {
-			$step = $step >= 0 ? $step : $curstep;
-			return Yii::app()->session["virtual_migration_step{$step}_count"] ?? $default;
-		};
-		$setCount = function($value, $step = -1) use ($curstep) {
-			$step = $step >= 0 ? $step : $curstep;
-			Yii::app()->session["virtual_migration_step{$step}_count"] = $value;
-		};
-
-		switch ($curstep) {
-
-			case 0:
-				//? OPTIMIZATION: OPTIMIZE TABLE is almost never worth doing on InnoDB tables.
-				//? Leaving the code here just in case. Tables in our database don't support optimize;
-				//? the tables are re-created and analyzed instead.
-				// Yii::app()->db1->createCommand("OPTIMIZE TABLE sivex_tvuoro")->execute();
-				// Yii::app()->db1->createCommand("OPTIMIZE TABLE toistuvat_tyovuorot")->execute();
-				$setnext(1, 'Migration started, tables optimized.');
-				break;
-
-			case 1:
-				$count = $getCount();
-				$setCount(++$count);
-				$setnext($count >= 10 ? 2 : -1, "Count: $count", "Test finish.");
-				break;
-
-			case 2:
-				$setnext(3);
-				break;
-		}
-
-		// If next step has been specified, update status (step finished).
-		if ($results['next'] != $curstep) {
-			$asetukset->virtual_migration_status = $results['next'];
-			$asetukset->save();
-			$results['finished'] = true;
-
-			// Reset next step count from session variables, in case of a mix-up.
-			$setCount(0, $results['next']);
-
-			// Prepend finish text with default text ("Step finished").
-			$finish_text_final = "Step $curstep finished";
-			if (!empty($results['finish_text']))
-				$finish_text_final .= ": " . $results['finish_text'];
-			$results['finish_text'] = $finish_text_final;
-		}
-
-		echo json_encode($results);
+	public function actionVmigrate_ajax_texts(int $step = 0)
+	{
+		print_r(json_encode(VirtualMigration::stepTexts($step)));
 	}
 
 	public function actionBeta($kohteet_siivous = [], $kohde = '', $asiakas = '', $mode = null, $stage = null)

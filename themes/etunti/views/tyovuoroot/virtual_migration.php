@@ -3,7 +3,7 @@
 </div>
 
 <!-- Current status and controls -->
-<a id="lbl-stage" href="#" class="btn btn-info btn-lg disabled" tabindex="-1" role="button" aria-disabled="true">Current status: <?= $status ?? 0 ?></a>
+<a id="lbl-stage" href="#" class="btn btn-info btn-lg disabled" tabindex="-1" role="button" aria-disabled="true">Current status: <?= $step ?? 0 ?></a>
 <a id="btn-next" href="#" class="btn btn-primary btn-lg" tabindex="-1" role="button">Next Step</a><br><br>
 
 <!-- Stage finish output -->
@@ -28,7 +28,7 @@
 			var finished = false;
 
 			$.ajax({
-				url: location.protocol + "//" + location.host + "/index.php/tyovuoroot/vm_next",
+				url: location.protocol + "//" + location.host + "/index.php/tyovuoroot/vmigrate_ajax_next",
 				type: 'GET',
 
 				// type: 'POST',
@@ -36,18 +36,27 @@
 				// 	"var": t
 				// },
 
+				error: function(xhr, status, error) {
+					var err = eval("(" + xhr.responseText + ")");
+					alert(err.Message);
+				},
+
 				success: function(data) {
-					result = JSON.parse(data);
-					$("#output").prepend(`<p>${result['text']}</p>`);
-					$("#lbl-stage").text(`Current status: ${result['next']}`);
-					if (result['finished']) {
+					var result = JSON.parse(data);
+
+					$.each(result['output'], function(index, item) {
+						$("#output").prepend(`<p>${item['time']} (${item['verbosity']}) (Step: ${result['step']}:${result['cycle']}): ${item['text']}</p>`);
+					});
+					$.each(result['errors'], function(index, item) {
+						$("#output").prepend(`<p class="text-danger">${item['time']} (ERROR) (${item['verbosity']}) (Step: ${result['step']}:${result['cycle']}): ${item['text']}</p>`);
+					});
+
+					$("#lbl-stage").text(`Current status: ${result['next']} (${result['cycle']})`);
+					$('#finish-text').text(`Step ${result['step']}, cycle ${result['cycle']}`);
+
+					if (result['step'] != result['next']) {
 						finished = true;
-						if (result['finish_text']) {
-							$('#finish-text').text(result['finish_text']);
-							$('#output').prepend(`<p><b>${result['finish_text']}</b></p>`);
-						} else {
-							$('#finish-text').text(result['text']);
-						}
+						$("#output").prepend(`<p><b>${result['time']} - Step ${result['step']} done.</b></p>`);
 					}
 				},
 
