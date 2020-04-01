@@ -2157,6 +2157,10 @@ class TyovuorootController extends Controller
 
 			if(isset($new_with['data']))
 				$return['data'] = $arvo;
+			if(isset($new_with['status']))
+				$return['status'] = $arvo->status;
+			if(isset($new_with['tyoajanlaatu']))
+				$return['tyoajanlaatu'] = $arvo->tyoajanlaatu;
 			if(isset($new_with['tv_kesto']))
 				$return['tv_kesto'] = $tv_kesto;
 			if(isset($new_with['kpl_maara']))

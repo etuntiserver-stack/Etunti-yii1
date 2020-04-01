@@ -3,6 +3,7 @@
 /* @var $dataProvider CActiveDataProvider */
 ini_set('memory_limit','256M');
 ini_set("max_execution_time", "60");
+$tyovuoroot = Yii::app()->createController('Tyovuoroot');
 ?>
 
 
@@ -1063,52 +1064,42 @@ ini_set("max_execution_time", "60");
 <!-- Työvuorojen määrä ajanjaksolla -->
 <?php if(isset($_GET['haku']) and $_GET['haku'] == 'tyovuorojen_maara'): ?>
 <?php
-	$tyovuoroot = Yii::app()->createController('Tyovuoroot');
-
 	$categories = array();
 	$begin = new DateTime( date("Y-m-d", strtotime($from)) );
 	$end = new DateTime( date("Y-m-d", strtotime($to)) );
 	$end = $end->modify( '+1 month' );
 	$interval = DateInterval::createFromDateString('1 month');
 	$period = new DatePeriod($begin, $interval, $end);
-	$data_arr = array();
+	$data_arr = [];
 	foreach($period as $dt) {
 		$categories[$dt->format( "Ym" )] = $dt->format( "Y" ).', '.$months[$dt->format( "n" )];
 	}
 
-	$criteria = new CDbCriteria();
-       	$criteria->order = " COUNT(status) DESC ";
-       	$criteria->group = " status ";
-       	$criteria->select = "
-		COUNT(*) as count, t.*
-	";
-        $criteria->condition = " 
-		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
-		AND status!=''
-	";
-	$asiakkaat = Tyovuoroot::model()->findAll($criteria);
-
-	$arr_new = array();
-	$arr = array();
-	$i = 0;
-	foreach($asiakkaat as $v){
+	$tids 		= [];
+	$with		= ['status'];
+	$haku_criteria	= [];
+	$dataAll = $tyovuoroot[0]->FromToSuunnitellutAll(date("Y-m-d", strtotime($from)), date("Y-m-d", strtotime($to." +1 month")), $tids, $haku_criteria, $with);
+	$ym_arr = [];
+	foreach($dataAll as $arr){
+		if( !isset($ym_arr[ date("Ym", strtotime($arr['this_pvm'])) ][$arr['status']]) )
+			$ym_arr[ date("Ym", strtotime($arr['this_pvm'])) ][$arr['status']] = 1;
+		else
+			$ym_arr[ date("Ym", strtotime($arr['this_pvm'])) ][$arr['status']] += 1;
+	}
+	/*
+	echo '<pre>';
+	print_r( $ym_arr );
+	echo '</pre>';
+	exit;
+	*/
+	$arr_new 	= [];
+	$i 		= 0;
+	foreach($tyovuoroot[0]->tilanteet() as $k => $v){
 		$i++;
-		$arr_new[$i] = array('name' => $tyovuoroot[0]->tilanteet()[$v->status] );
+		$arr_new[$i] = array('name' => $v );
 		$arr_new[$i]['data'] = array();
-		foreach($categories as $k_cat => $item_cat){
-
-			$criteria = new CDbCriteria();
-		       	$criteria->select = "
-				COUNT(status) as count
-			";
-		        $criteria->condition = " 
-				DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m')='".$k_cat."'
-				AND status='".$v->status."'
-			";
-			$asiakkaat_month = Tyovuoroot::model()->find($criteria);
-
-			$arr_new[$i]['data'][] = (int)$asiakkaat_month->count;
-		}
+		foreach($categories as $k_cat => $item_cat)
+			$arr_new[$i]['data'][] = (isset($ym_arr[$k_cat][$k]))? (int)$ym_arr[$k_cat][$k]:0;
 	}
 ?>
 
@@ -1158,7 +1149,7 @@ Highcharts.chart('container', {
 	foreach($period as $dt) {
 		$categories[$dt->format( "Ym" )] = $dt->format( "Y" ).', '.$months[$dt->format( "n" )];
 	}
-
+/*
 	$criteria = new CDbCriteria();
        	$criteria->order = " tyoajanlaatu ";
        	$criteria->group = " tyoajanlaatu ";
@@ -1173,29 +1164,37 @@ Highcharts.chart('container', {
 	        $criteria->addCondition (" tid='".$_GET['tyontekija']."' ");
 	}
 	$tv = Tyovuoroot::model()->findAll($criteria);
+*/
+	$tids 		= [];
+	if( isset($_GET['tyontekija']) and $_GET['tyontekija'] !== 'kaikki' and $_GET['tyontekija'] > 0 )
+	        $tids[$_GET['tyontekija']] = $_GET['tyontekija'];
 
-	$arr_new = array();
-	$arr = array();
-	$i = 0;
-	foreach($tv as $v){
+	$with		= ['tyoajanlaatu'];
+	$haku_criteria	= "tyoajanlaatu!=''";
+	$dataAll = $tyovuoroot[0]->FromToSuunnitellutAll(date("Y-m-d", strtotime($from)), date("Y-m-d", strtotime($to." +1 month")), $tids, $haku_criteria, $with);
+	$ym_arr = [];
+	foreach($dataAll as $arr){
+		if( !isset($ym_arr[ date("Ym", strtotime($arr['this_pvm'])) ][$arr['tyoajanlaatu']]) )
+			$ym_arr[ date("Ym", strtotime($arr['this_pvm'])) ][$arr['tyoajanlaatu']] = 1;
+		else
+			$ym_arr[ date("Ym", strtotime($arr['this_pvm'])) ][$arr['tyoajanlaatu']] += 1;
+	}
+	$tyoajanlaadut = [];
+	foreach($ym_arr as $k=>$v)
+		foreach($v as $k1=>$v1)
+			$tyoajanlaadut[$k1] = $k1;
+
+	/* echo '<pre>'; print_r( $tyoajanlaadut ); echo '</pre>'; exit; */
+
+	$arr_new 	= [];
+	$i 		= 0;
+	foreach($tyoajanlaadut as $v){
 		$i++;
-		$name_expl = explode("/", $v->tyoajanlaatu);
+		$name_expl = explode("/", $v);
 		$arr_new[$i] = array('name' => ((isset($name_expl[0]))?$name_expl[0]:'') );
 		$arr_new[$i]['data'] = array();
-		foreach($categories as $k_cat => $item_cat){
-
-			$criteria = new CDbCriteria();
-		       	$criteria->select = "
-				COUNT(tyoajanlaatu) as count
-			";
-		        $criteria->condition = " 
-				DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m')='".$k_cat."'
-				AND tyoajanlaatu='".$v->tyoajanlaatu."'
-			";
-			$asiakkaat_month = Tyovuoroot::model()->find($criteria);
-
-			$arr_new[$i]['data'][] = (int)$asiakkaat_month->count;
-		}
+		foreach($categories as $k_cat => $item_cat)
+			$arr_new[$i]['data'][] = (isset($ym_arr[$k_cat][$v]))? (int)$ym_arr[$k_cat][$v]:0;
 	}
 ?>
 
