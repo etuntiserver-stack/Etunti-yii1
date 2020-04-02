@@ -33,10 +33,8 @@ class VirtualMigration extends CComponent
 		$this->cycle = static::getSessionVar("cycle", 1, $this->step);
 
 		// Check that transaction is still there.
-		if ($this->step !== 0 && !$this->transaction && !($this->transaction = Yii::app()->db1->getCurrentTransaction())) {
-			$this->cout(1, "The transaction object has disappeared during migration.");
-			return $this->cdone(-3);
-		}
+		if ($this->step !== 0 && !$this->transaction && !($this->transaction = Yii::app()->db1->getCurrentTransaction()))
+			return $this->cdone(-3, [1, "The transaction object has disappeared during migration."]);
 
 		// Do step.
 		switch ($this->step) {
@@ -47,14 +45,16 @@ class VirtualMigration extends CComponent
 				// optimization is almost never worth doing on InnoDB tables.
 				// Yii::app()->db1->createCommand("OPTIMIZE TABLE sivex_tvuoro")->execute();
 				// Yii::app()->db1->createCommand("OPTIMIZE TABLE toistuvat_tyovuorot")->execute();
-	
+
 				$this->cout("Cleared previous migration session variables.");
-	
+
 				// Init transaction (transaction disabled for now, until caching works.)
-				// if ($this->transaction || Yii::app()->db1->getCurrentTransaction())
-				// 	return $this->cdone(-2, "Transaction already exists.", "Active transaction found when trying to start migration.");
-				// $this->cout("Creating main transaction object.");
-				// $this->transaction = Yii::app()->db1->beginTransaction();
+				if ($this->transaction || Yii::app()->db1->getCurrentTransaction())
+					return $this->cdone(-2, [2, "Transaction object already exists."]);
+
+				$this->cout(4, "Creating main transaction object.");
+				static::setSessionVar("transaction", $this->transaction = Yii::app()->db1->beginTransaction());
+				return $this->cdone(1);
 
 			case 1: // Step 1: Scan for problems
 
@@ -84,24 +84,26 @@ class VirtualMigration extends CComponent
 				//* ---- Errors ----
 
 
-			// case -2: // Starting migration but transaction already exists. Rollback and clear old transaction and return to step 0.
-			// 	$this->cout(3, "Clearing old transaction object.");
+			case -2: // Starting migration but transaction already exists.
 
-			// 	if (!$this->transaction && !($this->transaction = Yii::app()->db1->getCurrentTransaction())) {
-			// 		$this->cout(4, "Transaction no longer exists; no action required.");
-			// 	} else {
-			// 		$this->transaction->rollback();
-			// 		unset($this->transaction);
-			// 		$this->cout("Rolled back and cleared old transaction object.");
-			// 	}
+				// Rollback and clear old transaction and return to step 0.
+				$this->cout(3, "Clearing old transaction object.");
+				if (!$this->transaction && !($this->transaction = Yii::app()->db1->getCurrentTransaction())) {
+					$this->cout(4, "Transaction no longer exists; no action required.");
+				} else {
+					$this->cout("Rolling back existing transaction object.");
+					$this->transaction->rollback();
+					unset($this->transaction);
+				}
+				return $this->cdone(0);
 
-			// 	return $this->cdone(0);
 
+			case -3: // Migration in progress but no transaction.
 
-			// case -3: // Migration in progress but no transaction. Return to step 0 to restart transaction.
-			// 	$this->cout("Transaction object disappeared during previous cycle. Was the database surely locked for the migration?");
-			// 	$this->cout("The migration has to be started again from where the transaction is first needed.");
-			// 	return $this->cdone(0);
+				// Return to step 0 to restart transaction.
+				$this->cout("Transaction object disappeared during previous cycle. Was the database surely locked for the migration?");
+				$this->cout("The migration has to be started again from where the transaction is first needed.");
+				return $this->cdone(0);
 
 
 			default:
@@ -114,7 +116,7 @@ class VirtualMigration extends CComponent
 	{
 		$time = date('H:i:s', time());
 		if (is_array($type_or_data)) {
-			foreach($type_or_data as $item) {
+			foreach ($type_or_data as $item) {
 				$this->output[] = [
 					'time' => $time,
 					'text' => $item['text'],
@@ -138,39 +140,24 @@ class VirtualMigration extends CComponent
 
 	private function couts(array ...$entries)
 	{
-		$time = date('H:i:s', time());
-		foreach ($entries as $entry) {
-			if (is_array($entry[0])) {
-				foreach ($entry[0] as $sube) {
-					$this->output[] = [
-						'time' => $time,
-						'type' => max(1, min(5, ($sube[0]))),
-						'text' => $sube[1],
-					];
-				}
-			} else {
-				$this->output[] = [
-					'time' => $time,
-					'type' => max(1, min(5, ($entry[0]))),
-					'text' => $entry[1],
-				];
-			}
-		}
+		foreach ($entries as $entry)
+			$this->cout(max(1, min(5, ($entry[0]))), $entry[1]);
 	}
 
-	private function cdone(?int $next_step = null, array ...$moreout)
+	private function cdone(?int $next_step = null, array ...$entries)
 	{
-		$this->couts($moreout);
+		foreach ($entries as $entry)
+			$this->cout(max(1, min(5, ($entry[0]))), $entry[1]);
 
 		static::setSessionVar("step", $next_step);
 		static::setSessionVar("cycle", $this->cycle + 1, $this->step);
 
 		return [
+			'time' => date('H:i:s', time()),
 			'step' => $this->step,
 			'cycle' => $this->cycle,
 			'next' => $next_step ?: $this->step,
-			'output' => $this->output,
-			'time' => date('H:i:s', time())
+			'output' => $this->output
 		];
 	}
 
@@ -189,10 +176,12 @@ class VirtualMigration extends CComponent
 	private static function addSessionKey(string $final_key)
 	{
 		$key = static::getKey("keys");
-		if (!isset(Yii::app()->session[$key]) || !is_array(Yii::app()->session[$key]))
-			Yii::app()->session[$key] = [];
-		if (!in_array($final_key, Yii::app()->session[$key]))
-			Yii::app()->session[$key][] = $final_key;
+		$session_keys = Yii::app()->session[$key] ?? [];
+		if (!is_array($session_keys))
+			$session_keys = [$final_key];
+		elseif (!in_array($final_key, $session_keys))
+			$session_keys[] = $final_key;
+		Yii::app()->session[$key] = $session_keys;
 	}
 
 	private static function removeSessionKey(string $final_key)

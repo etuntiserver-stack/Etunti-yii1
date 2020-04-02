@@ -1377,10 +1377,8 @@ class TyovuorootController extends Controller
 	public function actionVirtual_migration()
 	{
 		$vmigrate = Yii::createComponent('VirtualMigration');
-		// $vmigrate->setSessionVar("step", 0);
-		$this->render('virtual_migration', [
-			'step' => $vmigrate->getSessionVar("step", 0),
-		]);
+		$vmigrate->clearSessionVars();
+		$this->render('virtual_migration');
 	}
 
 	/**
