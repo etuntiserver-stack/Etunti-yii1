@@ -85,30 +85,29 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 	var kesto_yht 	= [];
 	var yht		= 0;
 	var tids	= [];
-	var last_loppu  = 0;
+	var last_loppu  = [];
 	var this_ero	= 0;
 	$.each(tv_arr, function( tid, value ) {
 		yht 		= 0;
-		last_loppu  	= 0;
 		tids.push(tid);
 		$.each(value, function( pvm, v ) {
 			all_tv_edit 	= '';
 			tv_kesto	= 0;
 			$.each(v, function( i2, laatikko ) {
 				$.each(laatikko, function( i3, tv_edit ) {
-					if( last_loppu > 0 )
-					this_ero = parseInt(tv_edit['alku'])-last_loppu;
+					if( last_loppu[i3] > 0 )
+						this_ero = parseInt(tv_edit['alku'])-last_loppu[i3];
 					if( this_ero > 0 )
 					all_tv_edit 	+= '<p class="text-center reika-danger"><i class="fa fa-clock-o"></i> Aika: ' + $.sprint(this_ero) + '</p>';
 
 					tv_kesto	+= tv_edit['tv_kesto'];
 					all_tv_edit 	+= '<p>' + tv_edit['tv_edit'] + '</p>';
-					last_loppu	= parseInt(tv_edit['loppu']);
+					last_loppu[i3]	= parseInt(tv_edit['loppu']);
 				});
 			});
+			//console.log(last_loppu);
 			pvm_muutos = pvm.split(".");
 			did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
-			//console.log(all_tv_edit);
 			if( $("#" + did).length > 0 )
 				$("#" + did).html(all_tv_edit + '<div class="pull-right pvm_yht">' + $.sprint(tv_kesto) + '</div>');
 			yht += tv_kesto;
