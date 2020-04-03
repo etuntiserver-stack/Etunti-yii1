@@ -863,11 +863,11 @@ $(document).ready(function(){
 		</p>
 	<?php endif; ?>
 	<div class="panel-footer text-right">
-		<?php 
+		<?php /*
 		if(isset($model->id) and $toistuva and $poista == 1 ){
 			echo '<span class="btn btn-danger tvpoisto" tilanne="poista_ketju_kokonaan">Poista kaikki. '.( (is_array($tyopaari) and count($tyopaari) > 0)? 'Työparit - '.(count($tyopaari)-1).'kpl' : '' ).'</span>';
 		}
-		 ?>
+		*/ ?>
 		<?php /* echo CHtml::Button('Reload',array('class'=>'btn btn-default reload')); */ ?>
 		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
 		<?php 
