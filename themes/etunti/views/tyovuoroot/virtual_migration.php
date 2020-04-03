@@ -1,20 +1,20 @@
 <div class="page-header">
-	<h1>Virtual migration script</h1>
+	<h1>Virtuaalisten Työvuorojen Migraatio</h1>
 </div>
 
 <!-- Current status and controls -->
-<a id="lbl-stage" href="#" class="btn btn-info btn-lg disabled" tabindex="-1" role="button" aria-disabled="true">Current status: 0</a>
-<a id="btn-next" href="#" class="btn btn-primary btn-lg" tabindex="-1" role="button">Next Step</a><br><br>
+<a id="lbl-stage" href="#" class="btn btn-info btn-lg disabled" tabindex="-1" role="button" aria-disabled="true">Tämänhetkinen Vaihe: 0</a>
+<a id="btn-next" href="#" class="btn btn-primary btn-lg" tabindex="-1" role="button">Aloita Seuraava Vaihe</a><br><br>
 
 <!-- Stage finish output -->
-<div class="well well-sm"><b style="float:left">Last:&nbsp;</b>
+<div class="well well-sm"><b style="float:left">Viimeisin Tilanne:&nbsp;</b>
 	<strong>
 		<div id="finish-text">&nbsp;</div>
 	</strong>
 </div>
 
 <!-- Full AJAX output -->
-<div class="well well-sm" id="output"></div>
+<div class="well well-sm overflow-auto" id="output"></div>
 
 
 <script>
@@ -35,49 +35,48 @@
 
 		var output = function(o) {
 
-			let tags = [];
 			let args = [o['time'], o['step'], o['cycle'], o['text']];
-			let s = '';
+			let cls, s = '';
+			let bold = false;
 
-			switch (o['type']) {
+			switch (Math.abs(o['type'])) {
 				case 1:
-					tags.push([ 'p',    { 'class': 'text-danger font-weight-bold' } ],
-										[	'b',    {                                          } ],
-										[ 'span', {                                         } ]);
 					s = '{1} ({2}:{3}) (ERROR): {4}'.f(args);
+					cls = 'text-danger';
+					bold = true;
 					break;
 				case 2:
-					tags.push([ 'p',    { 'class': 'text-warning font-weight-bold' } ],
-										[	'b',    {                                          } ],
-										[ 'span', {                                          } ]);
 					s = '{1} ({2}:{3}) (PROBLEM): {4}'.f(args);
+					cls = 'text-warning';
+					bold = true;
 					break;
+				case 0:
 				case 3:
-					tags.push([ 'p',    { 'class': 'text-primary font-weight-bold' } ],
-										[	'b',    {                                          } ],
-										[ 'span', {                                          } ]);
 					s = '{1} ({2}:{3}): {4}'.f(args);
+					cls = 'text-primary';
+					bold = true;
 					break;
 				case 5:
-					tags.push([ 'p',    { } ],
-										[ 'span', { } ]);
 					s = '(debug) {1} ({2}:{3}): {4}'.f(args);
 					break;
 				default:
-					tags.push([ 'p',    { } ],
-										[ 'span', { } ]);
 					s = ' - {4}'.f(args);
 					break;
 			}
 
-			for (let i = tags.length - 1; i >= 0; i--) {
-				let attrs = '';
-				for (let attr in tags[i][1])
-					attrs += ' {1}="{2}"'.f(attr, tags[i][1][attr]);
-				s = '<{1}{2}>{3}</{1}>'.f(tags[i][0], attrs, s);
-			}
+			if (cls)
+				cls = ' class="{1}"'.f(cls);
+			if (bold)
+				s = `<b>${s}</b>`;
 
-			$("#output").prepend(s);
+			if (o['type'] <= 0)
+				$("#finish-text").html(`<span${cls}>${s}</span>`);
+
+			s = `<p${cls}>${s}</p>`;
+
+			if (o['type'] != 0)
+				$("#output").prepend(s);
+
 			return s;
 		};
 
@@ -90,11 +89,6 @@
 		};
 
 		var next = function(break_counter = 0) {
-			if (break_counter >= 1000) {
-				$("#output").prepend('<p>Break on 1000 iterations.</p>');
-				return false;
-			}
-
 			var stop = false;
 
 			$.ajax({
@@ -104,32 +98,36 @@
 				error: function(xhr, status, error) {
 					stop = true;
 					alert(xhr.responseText);
-					// var err = eval("(" + xhr.responseText + ")");
-					// alert(err.Message);
 				},
 
 				success: function(data) {
 					var result = JSON.parse(data);
-					stop = result['stop'];
 
 					$.each(result['output'], function(index, item) {
 						var o = $.extend(result, item);
 						output(o);
 					});
 
-					$("#lbl-stage").text(`Current status: ${result['next']} (${result['cycle']})`);
-					$('#finish-text').text(`Step ${result['step']}, cycle ${result['cycle']}`);
+					$("#lbl-stage").text(`Vaihe: ${result['next']} (${result['cycle']})`);
 
-					if (result['next'] == 99) {
-						$("#output").prepend("<p class='text-success'><b><span>Migration finished.</span></b></p>".f(result['next']));
-						$("#btn-next").attr("disabled", true);
+					if (result['errors'] || result['next'] < 0) {
 						stop = true;
+						outputm(3, result, "Pysäytetty virheiden takia");
+						$("#btn-next").html("Jatka");
+						$("#btn-next").removeClass("disabled");
+						$("#btn-next").attr("aria-disabled", false);
+					} else if (result['next'] == 99) {
+						stop = true;
+						$("#output").prepend("<p class='text-success'><b><span>Migraatio Valmis.</span></b></p>".f(result['next']));
+						$("#btn-next").html("Migraatio Valmis");
+						$("#btn-next").addClass("disabled");
+						$("#btn-next").attr("aria-disabled", true);
 					} else if (result['step'] != result['next'] && result['next'] >= 0) {
-						$("#output").prepend("<p class='text-success'><b><span>Step finished, next step: {1}</span></b></p>".f(result['next']));
 						stop = true;
-					} else if (stop || result['next'] < 0) {
-						outputm(3, result, "Stopped");
-						stop = true;
+						$("#output").prepend("<p class='text-success'><b><span>Vaihe valmis, seuraava: {1}</span></b></p>".f(result['next']));
+						$("#btn-next").html("Aloita Seuraava Vaihe: ({1})".f(result['next']));
+						$("#btn-next").removeClass("disabled");
+						$("#btn-next").attr("aria-disabled", false);
 					}
 				},
 
@@ -139,8 +137,15 @@
 			});
 		};
 
-		$("#btn-next").on("click", function() {
+		$("#btn-next").on("click", function(e) {
 			// outputPreviewAll();
+			e.preventDefault();
+
+			$(this).html("Prosessoidaan ...");
+			$(this).addClass("disabled");
+			$(this).attr("aria-disabled", true);
+
+			$("#output").prepend("<p class='text-primary'><b><span>Aloitettiin seuraava vaihe</span></b></p>");
 			next();
 		});
 	});

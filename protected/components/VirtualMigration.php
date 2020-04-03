@@ -50,7 +50,7 @@ class VirtualMigration extends CComponent
 				// Yii::app()->db1->createCommand("OPTIMIZE TABLE sivex_tvuoro")->execute();
 				// Yii::app()->db1->createCommand("OPTIMIZE TABLE toistuvat_tyovuorot")->execute();
 
-				$this->cout("Cleared previous migration session variables.");
+				$this->cout("Puhdistettiin aikaisemmat sessiomuuttujat.");
 
 				// Init transaction (transaction disabled for now, until caching works.)
 				// if ($this->transaction || Yii::app()->db1->getCurrentTransaction())
@@ -59,12 +59,11 @@ class VirtualMigration extends CComponent
 				// $this->cout(4, "Creating main transaction object.");
 				// static::setSessionVar("transaction", $this->transaction = Yii::app()->db1->beginTransaction());
 				// $this->transaction->active = true;
+
+				// Skip stage 1; Do changes to main table for now, for testing on staging.
 				return $this->cdone(2);
 
 			case 1: // Clone tables to temporary table with suffix: _migrate
-
-				// Do changes to main table for now, for testing on staging.
-				return $this->cdone(2, "Cloning tables is disabled for now. Changes will be made to main tables.");
 
 				$tables = ['sivex_tvuoro', 'toistuvat_tyovuorot'];
 				$cmd_existing_table_check = Yii::app()->db->createCommand("SHOW TABLES LIKE ':tn'");
@@ -89,82 +88,86 @@ class VirtualMigration extends CComponent
 					$params = [':tn' => $target_name, ':sn' => $table_name];
 
 					try {
-						$this->cout(4, "Cloning $table_name table structure to $target_name");
+						$this->cout(4, "Kloonataan $table_name rakenne tauluun $target_name");
 						$cmd_table_clone->query($params);
-						$this->cout(4, "Inserting data to $target_name from $table_name");
+						$this->cout(4, "Siiretään tiedot taulusta $target_name tauluun $table_name");
 						$cmd_table_insert->query($params);
 					} catch (\Exception $ex) {
-						$this->cout(1, "Error: " . $ex->getMessage());
+						$this->cout(1, "Virhe: " . $ex->getMessage());
 						return $this->cdone();
 					}
 				}
 
-				return $this->cdone(2, "Clone tables: sivex_tvuoro_migrate, toistuvat_tyovuorot_migrate");
+				return $this->cdone(2, "Uudet taulut: sivex_tvuoro_migrate, toistuvat_tyovuorot_migrate");
 
 			case 2:
-				$tvr = Yii::app()->db1->createCommand()
-					//->limit("100")
-					->select("id, tid, pvm, toistuva_id")
-					->from("sivex_tvuoro")
-					->group("toistuva_id")
-					->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) ASC")
-					// <-- Etsitään aktiivisiä ketjua
-					->where("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '{$this->startday}' AND '" . date("Y-m-d", strtotime($this->startday . " +1 month")) . "'")
-					->andWhere("toistuva_id!=0")
-					->queryAll();
+				$tvr = static::getSessionVar("tvr", null, 2);
+				$toist_arr = static::getSessionVar("toist_arr", null, 2);
+				if (!$tvr || !$toist_arr) {
+					$tvr = Yii::app()->db1->createCommand()
+						//->limit("100")
+						->select("id, tid, pvm, toistuva_id")
+						->from("sivex_tvuoro")
+						->group("toistuva_id")
+						->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) ASC")
+						// <-- Etsitään aktiivisiä ketjua
+						->where("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '{$this->startday}' AND '" . date("Y-m-d", strtotime($this->startday . " +1 month")) . "'")
+						->andWhere("toistuva_id!=0")
+						->queryAll();
 
-				$toistuvat = Yii::app()->db1->createCommand()
-					->select("id,tid,tyopaari")
-					->from("toistuvat_tyovuorot")
-					//->where()
-					->queryAll();
+					$toistuvat = Yii::app()->db1->createCommand()
+						->select("id,tid,tyopaari")
+						->from("toistuvat_tyovuorot")
+						//->where()
+						->queryAll();
+					$toist_arr = [];
+					foreach ($toistuvat as $item)
+						$toist_arr[$item['id']] = $item;
 
-				$toist_arr = [];
-				foreach ($toistuvat as $item)
-					$toist_arr[$item['id']] = $item;
+					static::setSessionVar("tvr", $tvr, 2);
+					static::setSessionVar("toist_arr", $toist_arr, 2);
+					return $this->cdone(null, [3, "Total: " . count($tvr)]);
+				}
 
-				$korjattu = 0;
-				$stop = false;
-				$this->cout(4, "Total: " . count($tvr));
-				foreach ($tvr as $item) {
-					$toistuva_id = $item['toistuva_id'];
-					if (isset($toist_arr[$toistuva_id])) {
-						$tids = [];
-						$tids[$toist_arr[$toistuva_id]['tid']] = $toist_arr[$toistuva_id]['tid'];
-						foreach (json_decode($toist_arr[$toistuva_id]['tyopaari'], true) as $tid)
-							$tids[$tid] = $tid;
+				$item = array_shift($tvr);
+				$toistuva_id = $item['toistuva_id'];
 
-						if (!in_array($item['tid'], $tids)) {
+				if (isset($toist_arr[$toistuva_id])) {
+					$tids = [];
+					$tids[$toist_arr[$toistuva_id]['tid']] = $toist_arr[$toistuva_id]['tid'];
+					foreach (json_decode($toist_arr[$toistuva_id]['tyopaari'], true) as $tid)
+						$tids[$tid] = $tid;
 
-							// <-- Jos EI työparia
-							if (empty($toist_arr[$toistuva_id]['tyopaari'])) {
-								// ONGELMA 
+					if (!in_array($item['tid'], $tids)) {
 
-								ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('tid' => $item['tid'], 'pfrom' => date("d.m.Y", strtotime($item['pvm'] . " this week monday"))));
-								$this->cout(2, "TID ongelma, Ketju " . $toistuva_id . ", Uusi TID on - " . $item['tid'] . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
-								$this->updateAndDelete($toistuva_id, $item);
-							} else {
+						// <-- Jos EI työparia
+						if (empty($toist_arr[$toistuva_id]['tyopaari'])) {
+							// ONGELMA 
 
-								ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('pfrom' => date("d.m.Y", strtotime($item['pvm'] . " this week monday"))));
-								$this->cout(2, "Ketju " . $toistuva_id . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
-								$this->updateAndDelete($toistuva_id, $item);
-							}
+							ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('tid' => $item['tid'], 'pfrom' => date("d.m.Y", strtotime($item['pvm'] . " this week monday"))));
+							$this->cout(2, "TID ongelma, Ketju " . $toistuva_id . ", Uusi TID on - " . $item['tid'] . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
+							$this->updateAndDelete($toistuva_id, $item);
 						} else {
 
 							ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('pfrom' => date("d.m.Y", strtotime($item['pvm'] . " this week monday"))));
-							$this->cout(2, "Ketju " . $toistuva_id . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
+							$this->cout(4, "Ketju " . $toistuva_id . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
 							$this->updateAndDelete($toistuva_id, $item);
 						}
 					} else {
-						$this->cout(2, 'Ketjussa: ' . $toistuva_id . ' ONGELMA');
-						$stop = true;
+
+						ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('pfrom' => date("d.m.Y", strtotime($item['pvm'] . " this week monday"))));
+						$this->cout(4, "Ketju " . $toistuva_id . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
+						$this->updateAndDelete($toistuva_id, $item);
 					}
+				} else {
+					$this->cout(2, 'Ketjussa: ' . $toistuva_id . ' ONGELMA');
 				}
 
-				if ($stop)
-					return $this->cdone(null, [1, "-"]);
+				static::setSessionVar("tvr", $tvr, 2);
+				if (count($tvr) > 0)
+					return $this->cdone(null, [0, "Jäljellä: " . count($tvr)]);
 				else
-					return $this->cdone(3, "Fixed $korjattu kpl");
+					return $this->cdone(3);
 
 
 			case 3:
@@ -387,20 +390,20 @@ class VirtualMigration extends CComponent
 				$this->output[] = [
 					'time' => $time,
 					'text' => $item['text'],
-					'type' => max(1, min(5, ($item['type'] ?? 3)))
+					'type' => max(-2, min(5, ($item['type'] ?? 3)))
 				];
 			}
 		} elseif (is_numeric($type_or_data) && is_string($other_one)) {
 			$this->output[] = [
 				'time' => $time,
 				'text' => $other_one,
-				'type' => max(1, min(5, ($type_or_data ?? 3)))
+				'type' => max(-2, min(5, ($type_or_data ?? 3)))
 			];
 		} else {
 			$this->output[] = [
 				'time' => $time,
 				'text' => $type_or_data,
-				'type' => max(1, min(5, ($other_one ?? 3)))
+				'type' => max(-2, min(5, ($other_one ?? 3)))
 			];
 		}
 	}
@@ -408,17 +411,18 @@ class VirtualMigration extends CComponent
 	private function couts(array ...$entries)
 	{
 		foreach ($entries as $entry)
-			$this->cout(max(1, min(5, ($entry[0]))), $entry[1]);
+			$this->cout(max(-2, min(5, ($entry[0]))), $entry[1]);
 	}
 
 	private function cdone(?int $next_step = null, ...$entries)
 	{
-		$stop = $next_step < 0 || $next_step != $this->step;
+		$next_step = $next_step ?: $this->step;
+		$errors = false;
 		foreach ($entries as $entry) {
 			if (is_array($entry)) {
-				$l = max(1, min(5, ($entry[0])));
+				$l = max(-2, min(5, ($entry[0])));
 				$this->cout($l, $entry[1]);
-				if ($l <= 2) $stop = true;
+				if (abs($l) == 1) $errors = true;
 			} else {
 				$this->cout($entry, ($next_step < 0) ? 1 : 3);
 			}
@@ -428,15 +432,15 @@ class VirtualMigration extends CComponent
 		$log_text = "";
 
 		foreach ($this->output as $entry) {
-			$log_text .= sprintf("%s (%s): %s\n", $entry['time'], $entry['type'], $entry['text']);
-			if ($entry['type'] <= 2) $stop = true;
+			$log_text .= sprintf("%s (%s): %s\n", $entry['time'], abs($entry['type']), $entry['text']);
+			if (abs($entry['type']) == 1) $errors = true;
 		}
 
 		try {
 			$log = fopen($this->log_path, "a");
 			fwrite($log, $log_text);
 		} catch (\Exception $ex) {
-			$this->cout(1, sprintf("Unable to write log file %s: %s", $this->log_path, $ex->getMessage()));
+			$this->cout(1, sprintf("Lokitiedoston (%s) kirjoittaminen epäonnistui: %s", $this->log_path, $ex->getMessage()));
 		} finally {
 			fclose($log);
 		}
@@ -450,7 +454,7 @@ class VirtualMigration extends CComponent
 			'cycle' => $this->cycle,
 			'next' => $next_step ?: $this->step,
 			'output' => $this->output,
-			'stop' => $stop
+			'errors' => $errors
 		];
 	}
 
