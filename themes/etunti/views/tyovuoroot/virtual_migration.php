@@ -68,7 +68,6 @@
 				s = '<{1}{2}>{3}</{1}>'.f(tags[i][0], attrs, s);
 			}
 
-			alert(s);
 			return s;
 		};
 

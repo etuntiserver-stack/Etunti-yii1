@@ -378,7 +378,7 @@ class VirtualMigration extends CComponent
 			$this->cout(max(1, min(5, ($entry[0]))), $entry[1]);
 	}
 
-	private function cdone(?int $next_step = null, array ...$entries)
+	private function cdone(?int $next_step = null, ...$entries)
 	{
 		$stop = $next_step < 0 || $next_step != $this->step;
 		foreach ($entries as $entry) {
@@ -402,9 +402,10 @@ class VirtualMigration extends CComponent
 		try {
 			$log = fopen($this->log_path, "a");
 			fwrite($log, $log_text);
+		} catch (\Exception $ex) {
+			$this->cout(1, sprintf("Unable to write log file %s: %s", $this->log_path, $ex->getMessage()));
 		} finally {
 			fclose($log);
-			$this->cout(1, "Unable to write log file " . $this->log_path);
 		}
 
 		static::setSessionVar("step", $next_step);
