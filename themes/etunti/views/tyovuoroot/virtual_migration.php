@@ -86,14 +86,14 @@
 				return false;
 			}
 
-			var stop = finished = false;
+			var stop = false;
 
 			$.ajax({
 				url: location.protocol + "//" + location.host + "/index.php/tyovuoroot/vmigrate_ajax_next",
 				type: 'GET',
 
 				error: function(xhr, status, error) {
-					stop = true; finished = false;
+					stop = true;
 					alert(xhr.responseText);
 					// var err = eval("(" + xhr.responseText + ")");
 					// alert(err.Message);
@@ -101,44 +101,37 @@
 
 				success: function(data) {
 					var result = JSON.parse(data);
+					stop = result['stop'];
 
 					$.each(result['output'], function(index, item) {
 						var o = $.extend(result, item);
-						item['type'] = 1;
-						$("#output").prepend("<p>" + output(o) + "</p>");
-						item['type'] = 2;
-						$("#output").prepend("<p>" + output(o) + "</p>");
-						item['type'] = 3;
-						$("#output").prepend("<p>" + output(o) + "</p>");
-						item['type'] = 4;
-						$("#output").prepend("<p>" + output(o) + "</p>");
-						item['type'] = 5;
-						$("#output").prepend("<p>" + output(o) + "</p>");
-
-						stop = true; finished = false;
+						$("#output").prepend(output(o));
 					});
 
 					$("#lbl-stage").text(`Current status: ${result['next']} (${result['cycle']})`);
 					$('#finish-text').text(`Step ${result['step']}, cycle ${result['cycle']}`);
 
-					if (stop || result['next'] < 0) {
-						stop = true; finished = false;
-						$("#output").prepend(`<p>${result['time']}: Paused on ${result['step']}:${result['cycle']} due to errors/problems.</p>`);
+					if (result['next'] == 99) {
+						$("#output").prepend(`<p><b>${result['time']} - FINISHED</b></p>`);
+						stop = true;
+					} else if (result['stop']) {
+						$("#output").prepend(`<p>${result['time']}: Stopped on ${result['step']}:${result['cycle']}.</p>`);
+						stop = true;
 					} else if (result['step'] != result['next']) {
-						stop = true; finished = true;
 						$("#output").prepend(`<p><b>${result['time']} - Step ${result['step']} done.</b></p>`);
+						stop = true;
 					}
 				},
 
 				complete: function() {
-					return finished ? true : next(++break_counter);
+					return stop ? true : next(++break_counter);
 				}
 			});
 		};
 
 		$("#btn-next").on("click", function() {
-			outputPreviewAll();
-			// next();
+			// outputPreviewAll();
+			next();
 		});
 	});
 </script>
