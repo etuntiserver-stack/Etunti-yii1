@@ -10,7 +10,7 @@
  */
 class VirtualMigration extends CComponent
 {
-	private $transaction;
+	// private $transaction;
 	private $step;
 	private $output;
 	private $cycle;
@@ -19,7 +19,7 @@ class VirtualMigration extends CComponent
 
 	public function __construct(bool $reset = false)
 	{
-		$this->transaction = static::getSessionVar("transaction");
+		// $this->transaction = static::getSessionVar("transaction");
 		$this->step = static::getSessionVar("step", 0);
 		$this->output = [];
 		$this->log_path = Yii::app()->user->domain . '_migration.log';
@@ -37,8 +37,8 @@ class VirtualMigration extends CComponent
 		$this->cycle = static::getSessionVar("cycle", 1, $this->step);
 
 		// Check that transaction is still there.
-		if ($this->step !== 0 && !$this->transaction && !($this->transaction = Yii::app()->db1->getCurrentTransaction()))
-			return $this->cdone(-3, [1, "The transaction object has disappeared during migration."]);
+		// if ($this->step !== 0 && !$this->transaction && !($this->transaction = Yii::app()->db1->getCurrentTransaction()))
+		// 	return $this->cdone(-3, [1, "The transaction object has disappeared during migration."]);
 
 		// Do step.
 		switch ($this->step) {
@@ -53,14 +53,19 @@ class VirtualMigration extends CComponent
 				$this->cout("Cleared previous migration session variables.");
 
 				// Init transaction (transaction disabled for now, until caching works.)
-				if ($this->transaction || Yii::app()->db1->getCurrentTransaction())
-					return $this->cdone(-2, [2, "Transaction object already exists."]);
+				// if ($this->transaction || Yii::app()->db1->getCurrentTransaction())
+				// 	return $this->cdone(-2, [2, "Transaction object already exists."]);
 
-				$this->cout(4, "Creating main transaction object.");
-				static::setSessionVar("transaction", $this->transaction = Yii::app()->db1->beginTransaction());
-				return $this->cdone(1);
+				// $this->cout(4, "Creating main transaction object.");
+				// static::setSessionVar("transaction", $this->transaction = Yii::app()->db1->beginTransaction());
+				// $this->transaction->active = true;
+				return $this->cdone(2);
 
 			case 1: // Clone tables to temporary table with suffix: _migrate
+
+				// Do changes to main table for now, for testing on staging.
+				return $this->cdone(2, "Cloning tables is disabled for now. Changes will be made to main tables.");
+
 				$tables = ['sivex_tvuoro', 'toistuvat_tyovuorot'];
 				$cmd_existing_table_check = Yii::app()->db->createCommand("SHOW TABLES LIKE ':tn'");
 				$cmd_table_clone = Yii::app()->db->createCommand("CREATE TABLE :tn LIKE :sn");
@@ -182,7 +187,7 @@ class VirtualMigration extends CComponent
 					$toist_arr[$item['id']] = $item;
 
 				$korjattu = 0;
-				$this->cout(4, '<h3>Yhteensä ' . count($tvr) . '</h3>');
+				$this->cout(4, 'Yhteensä ' . count($tvr));
 				foreach ($tvr as $item) {
 					$toistuva_id = $item['toistuva_id'];
 					if (isset($toist_arr[$toistuva_id])) {
@@ -310,40 +315,68 @@ class VirtualMigration extends CComponent
 				Yii::app()->db1->createCommand("UPDATE sivex_tvuoro SET toistuva_id='0' WHERE toistuva_id!='0'")
 					->execute();
 
-				return $this->cdone(6);
-
-			case 6:
-				$this->cout(3, "Commiting transaction");
-				$this->transaction->commit();
-				return $this->cdone(99, "Success");
+				return $this->cdone(99);
 
 
-			case -2: // Starting migration but transaction already exists.
+			// TRANSACTIONS DISABLED DUE TO MALFUNCTION -_-
 
-				// Rollback and clear old transaction and return to step 0.
-				$this->cout(3, "Clearing old transaction object.");
-				if (!$this->transaction && !($this->transaction = Yii::app()->db1->getCurrentTransaction())) {
-					$this->cout(4, "Transaction no longer exists; no action required.");
-				} else {
-					$this->cout("Rolling back existing transaction object.");
-					$this->transaction->rollback();
-					unset($this->transaction);
-				}
-				return $this->cdone(0);
+			// case 6:
+			// 	$this->cout(3, "Commiting transaction");
+			// 	$this->transaction->commit();
+			// 	return $this->cdone(99, "Success");
 
 
-			case -3: // Migration in progress but no transaction.
+			// case -2: // Starting migration but transaction already exists.
+			// 	// Rollback and clear old transaction and return to step 0.
+			// 	$this->cout(3, "Clearing old transaction object.");
+			// 	if (!$this->transaction && !($this->transaction = Yii::app()->db1->getCurrentTransaction())) {
+			// 		$this->cout(4, "Transaction no longer exists; no action required.");
+			// 	} else {
+			// 		$this->cout("Rolling back existing transaction object.");
+			// 		$this->transaction->rollback();
+			// 		unset($this->transaction);
+			// 	}
+			// 	return $this->cdone(0);
 
-				// Return to step 0 to restart transaction.
-				$this->cout("Transaction object disappeared during previous cycle. Was the database surely locked for the migration?");
-				$this->cout("The migration has to be started again from where the transaction is first needed.");
-				return $this->cdone(0);
+
+			// case -3: // Migration in progress but no transaction.
+			// 	// Return to step 0 to restart transaction.
+			// 	$this->cout("Transaction object disappeared during previous cycle. Was the database surely locked for the migration?");
+			// 	$this->cout("The migration has to be started again from where the transaction is first needed.");
+			// 	return $this->cdone(0);
 
 
 			default:
-				$this->cerr("Encountered unknown " . ($this->step >= 0 ? "step number" : "error code") . " {$this->step}. Returning to step 0.");
-				return $this->cdone(0);
+				return $this->cdone(99);
 		}
+	}
+
+	private function updateAndDelete($toistuva_id, $item)
+	{
+		// Delete
+		$criteria = new CDbCriteria;
+		$criteria->select = "id";
+		$criteria->condition = " 
+			DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '" . date("Y-m-d", strtotime($item['pvm'] . " this week monday")) . "' 
+			AND toistuva_id='" . $toistuva_id . "' 
+		";
+		$tvdel = Tyovuoroot::model()->findAll($criteria);
+
+		$this->cout(4, "POISTETAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " ja PVM >= " . date("Y-m-d", strtotime($item['pvm'] . " this week monday")));
+
+		foreach ($tvdel as $v)
+			Tyovuoroot::model()->deletebypk($v->id);
+
+		// Update
+		$criteria = new CDbCriteria;
+		$criteria->select = "id";
+		$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
+		$tvupd = Tyovuoroot::model()->findAll($criteria);
+
+		$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+
+		foreach ($tvupd as $v)
+			Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
 	}
 
 	private function cout($type_or_data = null, $other_one = null)
@@ -495,26 +528,51 @@ class VirtualMigration extends CComponent
 			];
 		}
 
-		switch (($step && is_numeric($step) ? $step : $this->step)) {
+		switch ($step) {
 
 				// Steps
 			case 0:
 				$result['label'] = 'Initialization';
 				$result['action'] = 'Clear previous session variables and initialize transaction.';
+				break;
 			case 1:
-				$result['label'] = 'Problem Scan';
-				$result['action'] = 'Scan for general problems in all chains.';
-			case 999:
-				$result['label'] = 'Migration Finish';
+				$result['label'] = 'Clone Tables';
+				$result['action'] = 'Create tables sivex_tvuoro_migrate and toistuvat_tyovuorot_migrate with identical data.';
+				break;
+			case 2:
+				$result['label'] = 'Roman Stage 2';
+				$result['action'] = 'Muutetaan toistuvien työvuorojen ketjut alkamaan tästä päivästä.';
+				break;
+			case 3:
+				$result['label'] = 'Roman Stage 3';
+				$result['action'] = '';
+				break;
+			case 4:
+				$result['label'] = 'Roman Stage 4';
+				$result['action'] = '';
+				break;
+			case 5:
+				$result['label'] = 'Roman Stage 5';
+				$result['action'] = '';
+				break;
+			case 6:
+				$result['label'] = 'Transaction Commit';
 				$result['action'] = 'Commit transaction and finish.';
+				break;
+			case 99:
+				$result['label'] = 'Migration Finish';
+				$result['action'] = 'Finished.';
+				break;
 
 				// Errors
 			case -2:
 				$result['problem'] = 'Migration was started but a transaction object already exists.';
 				$result['action'] = 'Rollback and clear old transaction.';
+				break;
 			case -3:
 				$result['problem'] = 'Migration in progress but no transaction.';
 				$result['action'] = 'Restart migration due to missing transaction object.';
+				break;
 		}
 
 		return $result;
