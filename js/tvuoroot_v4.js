@@ -98,8 +98,7 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 					if( last_loppu[i3] > 0 )
 						this_ero = parseInt(tv_edit['alku'])-last_loppu[i3];
 					if( this_ero > 0 )
-					all_tv_edit 	+= '<p class="text-center reika-danger"><i class="fa fa-clock-o"></i> Aika: ' + $.sprint(this_ero) + '</p>';
-
+						all_tv_edit += '<p class="text-center reika-danger"><i class="fa fa-clock-o"></i> Aika: ' + $.sprint(this_ero) + '</p>';
 					tv_kesto	+= tv_edit['tv_kesto'];
 					all_tv_edit 	+= '<p>' + tv_edit['tv_edit'] + '</p>';
 					last_loppu[i3]	= parseInt(tv_edit['loppu']);
