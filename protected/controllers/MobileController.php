@@ -1822,45 +1822,71 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$to = date("Y-m-d", strtotime($to));
 
 		if($tilanne == 'luetut' or $tilanne == 'toteutuneet'){
-       		$criteria = new CDbCriteria();
-	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
-			AND kohdenID IN(
-				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
-			)
-			AND status='3'
-			AND deleted=0
-		";
-		if($tilanne == 'toteutuneet'){
-		$criteria->addCondition(" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
-		}
-		$luetut = Mobile::model()->findAll($criteria);
 
-       		$criteria = new CDbCriteria();
-	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
-			AND kohdenID IN(
-				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
-			)
-			AND status='3'
-			AND deleted=0
-		";
-		$toteutuneet = Toteutuneet::model()->findAll($criteria);
+	       		$criteria = new CDbCriteria();
+		        $criteria->condition = " 
+				aloitan!='' AND loppui!=''
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
+				AND status='3'
+				AND deleted=0
+			";
+			if( $asiakas_id > 0 ){
+			        $criteria->addCondition (" 
+					kohdenID IN(
+						SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
+					)
+				");
+			}
+			if($tilanne == 'toteutuneet')
+				$criteria->addCondition(" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
+
+			$luetut = Mobile::model()->findAll($criteria);
+
+       			$criteria = new CDbCriteria();
+		        $criteria->condition = " 
+				aloitan!='' AND loppui!=''
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
+				AND status='3'
+				AND deleted=0
+			";
+			if( $asiakas_id > 0 ){
+			        $criteria->addCondition (" 
+					kohdenID IN(
+						SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
+					)
+				");
+			}
+			$toteutuneet = Toteutuneet::model()->findAll($criteria);
 		}
 
 		if($tilanne == 'suunnitelut'){
-       		$criteria = new CDbCriteria();
-	        $criteria->condition = " 
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
-			AND kohde IN(
-				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
-			)
-			AND status='3'
-			AND peruutettu=0
-		";
-		$suunnitelut = Tyovuoroot::model()->findAll($criteria);
+
+			$tids 		= [];
+			$with		= ['data','kohteet'];
+
+			$haku_criteria = [];
+			if( $asiakas_id > 0 ){
+				$haku_criteria[] = "
+					kohde IN(
+						SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
+					)
+				";
+			}
+			$haku_criteria[] = "
+				status='3'
+				AND (peruutettu=0 OR peruutettu IS NULL)
+			";
+
+			$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+			$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, $with);
+			$suunnitelut 	= $dataAll;
+
+			/*
+			echo '<pre>';
+			print_r( $dataAll );
+			echo '</pre>';
+			exit;
+			*/
 		}
 
 		if( $tilanne == 'suunnitelut'){
@@ -2412,43 +2438,17 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	public function actionYhteenveto()
 	{
 
-
-		//unset(Yii::app()->session['Tekija']);
-		if(Yii::app()->request->getPost('Tekija'))
-		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
-
-
-		if(isset($_POST['yhtvetoform']))
-		{
-		unset(Yii::app()->session['Lounastauko']);
-		unset(Yii::app()->session['MATKA']);
+		if(isset($_GET['yhtvetoform'])){
+			unset(Yii::app()->session['Lounastauko']);
+			unset(Yii::app()->session['MATKA']);
 		}
 
-		if(isset($_POST['ilman']))
-		{
-		  foreach($_POST['ilman'] as $val){
-			if($val == 'Lounastauko')
-			Yii::app()->session['Lounastauko'] = 10;
+		$from 	= date("d.m.Y");
+		$to 	= date("d.m.Y");
 
-			if($val == 'MATKA')
-			Yii::app()->session['MATKA'] = 2;
-		  }
-		}
-
-/*
-		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
-
-		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
-*/		
-
-		$from = date("d.m.Y");
-		$to = date("d.m.Y");
-
-		if(isset($_POST['from']) and isset($_POST['to'])){
-		$from 	= $_POST['from'];
-		$to 	= $_POST['to'];
+		if(isset($_GET['from']) and isset($_GET['to'])){
+			$from 	= $_GET['from'];
+			$to 	= $_GET['to'];
 		}
 
 
@@ -2467,29 +2467,21 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 
 
-		if(Yii::app()->session['Tekija']){
-		  if(count(Yii::app()->session['Tekija']) > 1)
-		    $ids = implode(",",Yii::app()->session['Tekija']);
-		  else
-		    $ids = Yii::app()->session['Tekija'][0];
-
-	        $criteria->addCondition ('tid IN ('.$ids.') ');
+		if(isset($_GET['Tekija']) and count($_GET['Tekija']) > 1){
+			$ids = implode(",",$_GET['Tekija']);
+			$criteria->addCondition ('tid IN ('.$ids.') ');
 		}
 
-		if(Yii::app()->session['Lounastauko'])
-	        $criteria->addCondition (" status != '10' ");
+		if(isset($_GET['ilman'])){
+			foreach($_GET['ilman'] as $val){
+				if($val == 'Lounastauko')
+					$criteria->addCondition (" status != '10' ");
 
-		if(Yii::app()->session['MATKA'])
-	        $criteria->addCondition (" status != '2' ");
+				if($val == 'MATKA')
+					$criteria->addCondition (" status != '2' ");
+			}
+		}
 
-
-
-		/*
-		$dataProvider=new CActiveDataProvider('Mobile', array(
-			'criteria'=>$criteria,
-			'pagination'=>false
-		));
-		*/
 		$model = Mobile::model()->findAll($criteria);
 
 		if(Yii::app()->request->getPost('tulosta'))
@@ -3146,23 +3138,24 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 
 		$criteria = new CDbCriteria();
-		if(isset($_GET['yrityksen_nimi'])){
-		$criteria->condition = " 
-			yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
-		";
+		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])){
+			$criteria->condition = " 
+				yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
+			";
 		}
 		if(isset($_GET['asiakas_id'])){
-		$criteria->condition = " 
-			id='".$_GET['asiakas_id']."'
-		";
+			$criteria->condition = " 
+				id='".$_GET['asiakas_id']."'
+			";
 		}
-		if(isset($_GET['yrityksen_nimi']) or isset($_GET['asiakas_id'])){
+		if((isset($_GET['yrityksen_nimi'])  and !empty($_GET['yrityksen_nimi'])) or isset($_GET['asiakas_id'])){
 			$asiakas = Asiakkaat::model()->find($criteria);
 		}
 
 		$this->render('ayhteenveto', array(
 			'from' => $from,
 			'to' => $to,
+			'asiakas_id' => (isset($asiakas->id))?$asiakas->id:'',
 			'asiakas' => (isset($asiakas->id))?$asiakas:'',
 		));
 	}

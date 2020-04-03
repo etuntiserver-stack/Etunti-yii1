@@ -147,6 +147,19 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
                 return $return;
         }
 
+        public function getosoiteById(){
+		$return = '';
+		if(!empty($this->kohde) and empty($this->osoite)){
+			$k = Kohteet::model()->findByPk($this->kohde);
+			if( isset($k->id) ){
+				$return = $k->osoite;
+			}
+		} elseif(!empty($this->osoite)){
+			$return = $this->osoite;
+		}
+                return $return;
+        }
+
         public function getTyopaariFunc(){
 		$site = Yii::app()->createController('Site');
 		$return = '';

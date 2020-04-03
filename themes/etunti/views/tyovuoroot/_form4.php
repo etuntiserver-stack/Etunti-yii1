@@ -863,11 +863,11 @@ $(document).ready(function(){
 		</p>
 	<?php endif; ?>
 	<div class="panel-footer text-right">
-		<?php /*
-		if(isset($model->id) and $toistuva and $poista == 1 ){
+		<?php 
+		if(isset($model->id) and $toistuva and $poista == 1 and date("Ymd", strtotime($model->pfrom)) >= date("Ymd")){
 			echo '<span class="btn btn-danger tvpoisto" tilanne="poista_ketju_kokonaan">Poista kaikki. '.( (is_array($tyopaari) and count($tyopaari) > 0)? 'Työparit - '.(count($tyopaari)-1).'kpl' : '' ).'</span>';
 		}
-		*/ ?>
+		 ?>
 		<?php /* echo CHtml::Button('Reload',array('class'=>'btn btn-default reload')); */ ?>
 		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
 		<?php 
@@ -1207,39 +1207,6 @@ $(document).ready(function(){
 		return false;
 	}
 	// tarkistetaan tietoja -->
-
-	// <-- tarkistetaan ajaat päällekäin
-	if( e.target[0].value === '')
-	{
-	var tid		= $('#<?=$java_prefix?>_tid').val();
-	var pvm		= $('#<?=$java_prefix?>_pvm').val();
-	var alku 	= $("#alku").val();
-	var loppu 	= $("#loppu").val();
-	var count	= 0;
-	  $.ajax({
-		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/check_paallekkain',
-		  data:{ tid : tid, pvm : pvm, alku : alku, loppu : loppu },
-		  type:'POST',
-		  async: false,
-		  success:function(data){
-			data = JSON.parse(data);
-			//console.log(data);
-			if(data > 0)
-			count = data;
-	   	},
-		error:function(data){
-			console.log(data);
-	    	}
-	  });
-	  if(count > 0){
-		var r = confirm('Aika päällekkäin, haluatko jatkaa');
-		if(!r){
-			$('#submitButton').show();
-			return false;
-		}
-	  }
-	}
-	//     tarkistetaan ajaat päällekäin -->
 
 	var str = '';
 	$('#virheilmoitus').html('').hide();

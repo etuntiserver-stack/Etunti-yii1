@@ -1156,6 +1156,7 @@ $xml = '
 			'dataProvider' => $dataProvider, 
 			'perSivu' => $perSivu,
 			'netvisor' => $netvisor,
+			'site' => $site
 		));
 	}
 

@@ -14,6 +14,8 @@
 	<?php echo CHtml::link('<i class="fa fa-share-square"></i>', array('kaikki_netvisoriin'), array('class'=>'btn btn-default','data-toggle'=>'tooltip', 'data-placement'=>'top', 'title' => Yii::t('main', 'Siirrä kaikki netvisoriin') )); ?>
 	<?php endif; ?>
 
+	<?php $checkOikeus = "asiakkaat_5_".Yii::app()->user->adminStatus; ?>
+	<?php if($site[0]->checkOikeusFields($checkOikeus) == 1): ?>
 	 <div class="pull-right">
 	  <form action="<?=Yii::app()->request->baseUrl?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="excel_list" value="true">
@@ -22,6 +24,7 @@
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
 	  </form>
 	 </div>
+	<?php endif; ?>
 
 <script type="text/javascript">
 $(document).ready(function() {

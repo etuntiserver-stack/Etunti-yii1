@@ -2147,13 +2147,18 @@ class TyovuorootController extends Controller
 			foreach($with as $k=>$v)
 				$new_with[$v] = $v;
 
-			$return['this_id']  = $this_id;
-			$return['this_pvm'] = $this_pvm;
-			$return['this_tid'] = $this_tid;
-			$return['toistuva'] = $toistuva;
+			$return['this_id']  	= $this_id;
+			$return['kohde']  	= $arvo->kohde;
+			$return['this_pvm'] 	= $this_pvm;
+			$return['this_tid'] 	= $this_tid;
+			$return['toistuva'] 	= $toistuva;
 
 			if(isset($new_with['data']))
 				$return['data'] = $arvo;
+			if(isset($new_with['status']))
+				$return['status'] = $arvo->status;
+			if(isset($new_with['tyoajanlaatu']))
+				$return['tyoajanlaatu'] = $arvo->tyoajanlaatu;
 			if(isset($new_with['tv_kesto']))
 				$return['tv_kesto'] = $tv_kesto;
 			if(isset($new_with['kpl_maara']))
