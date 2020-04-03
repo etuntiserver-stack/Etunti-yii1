@@ -1208,39 +1208,6 @@ $(document).ready(function(){
 	}
 	// tarkistetaan tietoja -->
 
-	// <-- tarkistetaan ajaat päällekäin
-	if( e.target[0].value === '')
-	{
-	var tid		= $('#<?=$java_prefix?>_tid').val();
-	var pvm		= $('#<?=$java_prefix?>_pvm').val();
-	var alku 	= $("#alku").val();
-	var loppu 	= $("#loppu").val();
-	var count	= 0;
-	  $.ajax({
-		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/check_paallekkain',
-		  data:{ tid : tid, pvm : pvm, alku : alku, loppu : loppu },
-		  type:'POST',
-		  async: false,
-		  success:function(data){
-			data = JSON.parse(data);
-			//console.log(data);
-			if(data > 0)
-			count = data;
-	   	},
-		error:function(data){
-			console.log(data);
-	    	}
-	  });
-	  if(count > 0){
-		var r = confirm('Aika päällekkäin, haluatko jatkaa');
-		if(!r){
-			$('#submitButton').show();
-			return false;
-		}
-	  }
-	}
-	//     tarkistetaan ajaat päällekäin -->
-
 	var str = '';
 	$('#virheilmoitus').html('').hide();
 	// <-- Viimeinen kysymys
