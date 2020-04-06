@@ -1687,7 +1687,7 @@ class TyovuorootController extends Controller
 
 			echo '<h3>Yhteensä '.count($tstv).'</h3>';
 			foreach($tstv as $item){
-				echo 'Ketju: '.$item['id'].', Pfrom: '.$item['pfrom'].', Pto: '.$item['pto'].'<br>';
+				//echo 'Ketju: '.$item['id'].', Pfrom: '.$item['pfrom'].', Pto: '.$item['pto'].'<br>';
 
 				$toistuva_id = $item['id'];
 				ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
@@ -1717,7 +1717,7 @@ class TyovuorootController extends Controller
 			echo '<h3>Yhteensä '.count($tstv).'</h3>';
 			foreach($tstv as $item){
 				$toistuva_id = $item['id'];
-				echo 'Ketju: '.$item['id'].', Pfrom: '.$item['pfrom'].', Pto: '.$item['pto'].'<br>';
+				//echo 'Ketju: '.$item['id'].', Pfrom: '.$item['pfrom'].', Pto: '.$item['pto'].'<br>';
 				ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
 				$mytext = "Ketju ".$toistuva_id.", POISTETAAN, koska ketjusta ei löytyi yhtään työvuoroa \r\n";
 				fwrite($fp, $mytext);
@@ -1756,7 +1756,7 @@ class TyovuorootController extends Controller
 				$new_poistettu_pvm = [];
 				foreach ($tids as $tid) {
 					foreach ($poistetut_pvms as $k => $v) {
-						if ( date("Ymd", strtotime($v)) > date("Ymd")) // Oikein
+						if ( date("Ymd", strtotime($v)) > date("Ymd", strtotime($startday))) // Oikein
 							$new_poistettu_pvm[$tid][$v] = ['tid' => $tid, 'pvm' => $v, 'syy' => ['text' => '', 'user' => '', 'date' => '']];
 					}
 				}
