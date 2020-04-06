@@ -1528,6 +1528,39 @@ class TyovuorootController extends Controller
 				$toistuva_id = $item['toistuva_id'];
 				if(isset($toist_arr[$toistuva_id])){
 
+					if( date("Ymd", strtotime($toist_arr[$toistuva_id]['pfrom'])) > date("Ymd", strtotime($startday)) ){
+
+						// Delete
+						$criteria=new CDbCriteria;
+						$criteria->select = "id";
+						$criteria->condition = " 
+							DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom']))."' 
+							AND toistuva_id='".$toistuva_id."' 
+						";
+						$tvdel = Tyovuoroot::model()->findAll($criteria);
+
+						$mytext = "POISTETAAN Työvuorot jolla toistuva_id=".$toistuva_id." ja PVM >= kun ketjun alkamispäivä - ".date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom']))." \r\n";
+						fwrite($fp, $mytext);
+						echo $mytext.'<br>';
+
+						foreach ($tvdel as $v)
+							Tyovuoroot::model()->deletebypk($v->id);
+
+						// Update
+						$criteria=new CDbCriteria;
+						$criteria->select = "id";
+						$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
+						$tvupd = Tyovuoroot::model()->findAll($criteria);
+
+						$mytext = "MUOKATAAN Työvuorot jolla toistuva_id=".$toistuva_id." --> toistuva_id=0 \r\n";
+						fwrite($fp, $mytext);
+						echo $mytext.'<br>';
+
+						foreach ($tvupd as $v)
+							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+
+					}
+
 					if( date("Ymd", strtotime($toist_arr[$toistuva_id]['pto'])) < date("Ymd", strtotime($startday)) ){
 
 						ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
@@ -1543,9 +1576,9 @@ class TyovuorootController extends Controller
 						$mytext = "MUOKATAAN Työvuorot jolla toistuva_id=".$toistuva_id." --> toistuva_id=0 \r\n";
 						fwrite($fp, $mytext);
 
-						foreach ($tvupd as $v) {
+						foreach ($tvupd as $v)
 							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
-						}
+
 
 					} else {
 
@@ -1572,7 +1605,49 @@ class TyovuorootController extends Controller
 
 						} else {
 
-								echo 'Ei selkeä ongelma '.$toistuva_id.'<br>';
+							$criteria=new CDbCriteria;
+							$criteria->order = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) ASC";
+							$criteria->select = "pvm";
+							$criteria->limit = "1";
+							$criteria->condition = " 
+								toistuva_id='".$toistuva_id."' 
+							";
+							$tvm = Tyovuoroot::model()->find($criteria);
+							if( isset($tvm->pvm) and date("Ymd", strtotime($tvm->pvm)) > date("Ymd", strtotime($startday)) ){
+
+								ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('pfrom' => $tvm->pvm));
+
+								// Delete
+								$criteria=new CDbCriteria;
+								$criteria->select = "id";
+								$criteria->condition = " 
+									DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '".date("Y-m-d", strtotime($tvm->pvm))."' 
+									AND toistuva_id='".$toistuva_id."' 
+								";
+								$tvdel = Tyovuoroot::model()->findAll($criteria);
+
+								$mytext = "POISTETAAN Työvuorot jolla toistuva_id=".$toistuva_id." ja PVM >= kun ketjun alkamispäivä - ".date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom']))." \r\n";
+								fwrite($fp, $mytext);
+								echo $mytext.'<br>';
+
+								foreach ($tvdel as $v)
+									Tyovuoroot::model()->deletebypk($v->id);
+
+								// Update
+								$criteria=new CDbCriteria;
+								$criteria->select = "id";
+								$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
+								$tvupd = Tyovuoroot::model()->findAll($criteria);
+
+								$mytext = "MUOKATAAN Työvuorot jolla toistuva_id=".$toistuva_id." --> toistuva_id=0 \r\n";
+								fwrite($fp, $mytext);
+								echo $mytext.'<br>';
+
+								foreach ($tvupd as $v)
+									Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+
+								echo '&nbsp;&nbsp; '.$tvm->pvm.'<br>';
+							}
 						}
 
 					}
