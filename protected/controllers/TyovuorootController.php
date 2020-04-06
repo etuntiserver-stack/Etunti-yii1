@@ -1654,18 +1654,18 @@ class TyovuorootController extends Controller
 
 				} else {
 
-							// Update
-							$criteria=new CDbCriteria;
-							$criteria->select = "id";
-							$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
-							$tvupd = Tyovuoroot::model()->findAll($criteria);
+					// Update
+					$criteria=new CDbCriteria;
+					$criteria->select = "id";
+					$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
+					$tvupd = Tyovuoroot::model()->findAll($criteria);
 
-							$mytext = "MUOKATAAN Työvuorot jolla toistuva_id=".$toistuva_id." --> toistuva_id=0 \r\n";
-							fwrite($fp, $mytext);
+					$mytext = "MUOKATAAN Työvuorot jolla toistuva_id=".$toistuva_id." --> toistuva_id=0 \r\n";
+					fwrite($fp, $mytext);
 
-							foreach ($tvupd as $v) {
-								Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
-							}
+					foreach ($tvupd as $v)
+						Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+
 				}
 
 			}
@@ -1675,8 +1675,60 @@ class TyovuorootController extends Controller
 			exit;
 		}
 
+		if ( $stage == 4 ) {
+
+			$fp = fopen(Yii::app()->user->domain.'_migratio.log', "a");
+
+			$tstv = Yii::app()->db1->createCommand()
+				->select("id, pfrom, pto")
+				->from("toistuvat_tyovuorot")
+				->where("DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '$startday' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) < '$startday'")
+				->queryAll();
+
+			echo '<h3>Yhteensä '.count($tstv).'</h3>';
+			foreach($tstv as $item){
+				echo 'Ketju: '.$item['id'].', Pfrom: '.$item['pfrom'].', Pto: '.$item['pto'].'<br>';
+
+				$toistuva_id = $item['id'];
+				ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
+				$mytext = "Ketju ".$toistuva_id.", POISTETAAN, koska ketjun lopetuspäivä ajemmin kun ".date("d.m.Y", strtotime($startday))." \r\n";
+				fwrite($fp, $mytext);
+
+				// Update
+				$criteria=new CDbCriteria;
+				$criteria->select = "id";
+				$criteria->condition = " toistuva_id!=0 AND toistuva_id='".$toistuva_id."' ";
+				$tvupd = Tyovuoroot::model()->findAll($criteria);
+
+				$mytext = "MUOKATAAN Työvuorot jolla toistuva_id=".$toistuva_id." --> toistuva_id=0 \r\n";
+				fwrite($fp, $mytext);
+
+				foreach ($tvupd as $v)
+					Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+			}
+
+			$tstv = Yii::app()->db1->createCommand()
+				->select("id, pfrom, pto")
+				->from("toistuvat_tyovuorot")
+				->where("DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '$startday'")
+				->andWhere("id NOT IN(SELECT toistuva_id FROM sivex_tvuoro)")
+				->queryAll();
+
+			echo '<h3>Yhteensä '.count($tstv).'</h3>';
+			foreach($tstv as $item){
+				$toistuva_id = $item['id'];
+				echo 'Ketju: '.$item['id'].', Pfrom: '.$item['pfrom'].', Pto: '.$item['pto'].'<br>';
+				ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
+				$mytext = "Ketju ".$toistuva_id.", POISTETAAN, koska ketjusta ei löytyi yhtään työvuoroa \r\n";
+				fwrite($fp, $mytext);
+			}
+
+			echo CHtml::link('<h4>Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 5));
+			exit;
+		}
+
 		// <-- Poistettu_pvm redirect to another field
-		if ($stage == 4) {
+		if ($stage == 5) {
 			$fp = fopen(Yii::app()->user->domain.'_migratio.log', "a");
 
 			$tvr = Yii::app()->db1->createCommand()
@@ -1723,11 +1775,11 @@ class TyovuorootController extends Controller
 
 			}
 
-			echo CHtml::link('<h4>STAGE valmis. Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 5));
+			echo CHtml::link('<h4>STAGE valmis. Seuraava</h4>', array('beta', 'mode' => $mode, 'stage' => 6));
 			exit;
 		}
 
-		if ($stage == 5) {
+		if ($stage == 6) {
 			$fp = fopen(Yii::app()->user->domain.'_migratio.log', "a");
 
 			Yii::app()->db1->createCommand(
