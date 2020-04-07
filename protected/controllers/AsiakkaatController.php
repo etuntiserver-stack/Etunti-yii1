@@ -1714,7 +1714,14 @@ $xml = '
 		$from 		= date("Y-m-d", strtotime($from));
 		$to 		= date("Y-m-d", strtotime($to));
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
-		$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], [], ['data']);
+		$haku_criteria	= "
+			kohde IN
+			(
+				SELECT id FROM sivex_kohdet
+				WHERE asiakas_id IN(SELECT id FROM asiakkaat WHERE id='".$model->id."')
+			)
+		";
+		$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data']);
 
 		$bod = '';
 		$asetukset=Asetukset::model()->findByPk(1);
