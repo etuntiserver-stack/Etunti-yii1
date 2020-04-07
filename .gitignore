@@ -45,4 +45,7 @@ access.log
 error.log
 robots.txt
 .htpasswd
-protected/config/main.php
+
+# main.php added back to repository; sensitive information is contained in main.pw.php.
+#protected/config/main.php
+protected/config/main.pw.php

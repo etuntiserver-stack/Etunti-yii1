@@ -1,4 +1,5 @@
 <?php
+
 error_reporting(E_ALL & ~E_WARNING);
 session_start();
 
@@ -8,43 +9,41 @@ session_start();
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 
-/*
-  if(
-	(isset($_GET['dom']) and strtolower($_GET['dom']) == 'demo')
-	or (isset($_GET['dom']) and strtolower($_GET['dom']) == 'sivex')
-    ){
-    header("Access-Control-Allow-Origin: *");
-    $url = "https://etunti.com".$_SERVER['REQUEST_URI'];
-    $params = array(
-        'http' => array(
-            'method' => 'POST',
-            'content' => http_build_query($_POST)
-        )
-    );
-    //if (!is_null($params)) {
-        $params['http']['header'] = '';
-        foreach ($headers as $k => $v) {
-            $params['http']['header'] .= "$k: $v\n";
-        }
-    //}
-    $ctx = stream_context_create($params);
-    $fp = @fopen($url, 'rb', false, $ctx);
-    if ($fp) {
-        echo @stream_get_contents($fp);
-        exit;
-    } else {
-        // Error
-        throw new Exception("Error loading '$url', $php_errormsg");
-    }
-    exit;
-  }
-*/
 
-if (isset($_GET['dom']) and empty(trim($_GET['dom']))) {
-    //$_GET['dom'] = 'demo';
-    //echo json_encode(array('error' => 'Domain ei saa olla tyhja'));
-    //exit;
+// <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
+$server_name = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
+$get_domain = trim(strtolower($_GET['dom'] ?? $_GET['domain'] ?? ''));
+
+if (in_array($server_name, ['app.etunti.fi', 'etunti.com']) && $get_domain == 'demo') {
+    header("Access-Control-Allow-Origin: *");
+    $url = "https://apps.etunti.fi" . $_SERVER['REQUEST_URI'];
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $_POST);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    header('Content-Type: text/html');
+    echo curl_exec($ch);
+    exit;
 }
+
+if (isset($_POST['UserLogin']['domain']) and trim(strtolower($_POST['UserLogin']['domain'])) == 'demo') {
+    echo '
+	<!DOCTYPE html>
+	<html>
+	    <body onload="document.forms[0].submit()">
+	        <form action="https://apps.etunti.fi/index.php/user/login" method="post">
+			<input type="hidden" name="UserLogin[domain]" value="' . $_POST['UserLogin']['domain'] . '">
+			<input type="hidden" name="UserLogin[username]" value="' . $_POST['UserLogin']['username'] . '">
+			<input type="hidden" name="UserLogin[password]" value="' . $_POST['UserLogin']['password'] . '">
+	        </form>
+	    </body>
+	</html>';
+    exit;
+}
+//    Redirect Domain -->
+
+
 if (
     isset($_SERVER['REQUEST_URI'])
     and
@@ -68,7 +67,7 @@ if (
     //die("IP: ".$_SERVER['REMOTE_ADDR']);
 }
 
-if (in_array($_SERVER['REMOTE_ADDR'] ?? '', ['5.8.8.200', '103.224.81.80'])) {
+if (isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '5.8.8.200' or $_SERVER['REMOTE_ADDR'] == '103.224.81.80')) {
     //header('Location: https://www.google.com/');
     exit;
     //mail('laptopsr@gmail.com', 'Blocked IP', 'IP '.$_SERVER['REMOTE_ADDR']);
@@ -84,15 +83,6 @@ if (
     $_SESSION['domain'] = trim(strtolower($_POST['UserLogin']['domain']));
 }
 
-/*
-if(isset($_POST['domain'])) {
-    $_SESSION['domain'] = $_POST['domain'];
-}
-if(isset($_POST['imei']))
-    $_SESSION['imei'] = $_POST['imei'];
-*/
-
-//var_dump($_SERVER);
 if (isset($_GET['lang']))
     $_SESSION['lang'] = $_GET['lang'];
 
@@ -109,29 +99,39 @@ $lang = 'fi';
 if (isset($_SESSION['lang']) and !empty($_SESSION['lang']))
     $lang = $_SESSION['lang'];
 
-// <-- LOG
-$domain = $_SESSION['domain'] ?? 'Ei esitetty';
-$refer = $_SERVER['HTTP_REFERER'] ?? '';
-$post = isset($_POST) ? json_encode($_POST) : '';
+if (isset($_SESSION['domain'])) $domain = $_SESSION['domain'];
+else $domain = 'Ei esitetty';
+if (isset($_SERVER['HTTP_REFERER'])) $refer = $_SERVER['HTTP_REFERER'];
+else $refer = '';
+if (isset($_POST)) $post = json_encode($_POST);
+else $post = '';
 
-if (in_array($_SERVER['REMOTE_ADDR'] ?? '', ['::1', '127.0.0.1'])) {
+
+
+// <-- LOG
+if (
+    isset($_SERVER['REMOTE_ADDR']) and
+    ($_SERVER['REMOTE_ADDR'] == '::1'
+        or $_SERVER['REMOTE_ADDR'] == '127.0.0.1')
+) {
+
     $for_log = array(
         array(
             'class' => 'CFileLogRoute',
             'levels' => 'error, warning', //'trace, info, error, warning, vardump'
             'enabled' => YII_DEBUG,
             //'categories'=>'system.*',
-        ),
-        /* array(
-            'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
-            'ipFilters'=>array('*'),//'ipFilters'=>array('::1','127.0.0.1','192.168.10.73'),
-        ),*/
-        /* array(
-            'class'=>'CEmailLogRoute',
-            'levels'=>'error', //'trace, info, error, warning, vardump'
-            'emails'=>'laptopsr@gmail.com',
-            'subject'=>'Email Log File Message (DEV). Domain: '.$domain,
-        ),*/
+        ), /*
+            			array(
+			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
+			                'ipFilters'=>array('*'),//'ipFilters'=>array('::1','127.0.0.1','192.168.10.73'),
+				),*/ /*
+			        array(
+				        'class'=>'CEmailLogRoute',
+                			'levels'=>'error', //'trace, info, error, warning, vardump'
+					'emails'=>'laptopsr@gmail.com',
+					'subject'=>'Email Log File Message (DEV). Domain: '.$domain,
+			        ),*/
         array(
             'class' => 'CWebLogRoute',
             'levels' => 'error, warning', //'trace, info, error, warning, vardump'
@@ -166,15 +166,12 @@ if (in_array($_SERVER['REMOTE_ADDR'] ?? '', ['::1', '127.0.0.1'])) {
 }
 //     LOG -->
 
-$db = 'etuntifw';
-$db_host = '';
-$etuntifw_user = '';
-$etuntifw_pass = '';
 
+// db host|user|pw are defined in main.pw.php (not in repository).
+require('main.pw.php');
+
+$db = 'etuntifw';
 $db2 = '';
-$db2_host = '';
-$db2_user = '';
-$db2_pass = '';
 
 if (isset($_SESSION['domain'])) {
     $db2 = $_SESSION['domain'];
@@ -191,6 +188,14 @@ if (isset($_GET['dom'])) {
     }
 }
 
+$url = sprintf(
+    '%s://%s%s/%s',
+    $_SERVER['SERVER_PORT'] == 80 ? 'http' : 'https',
+    $_SERVER['SERVER_NAME'],
+    rtrim(dirname($_SERVER['PHP_SELF']), '/'),
+);
+header("Location: $url");
+
 return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
     'name' => 'Etunti',
@@ -198,7 +203,9 @@ return array(
     // preloading 'log' component
     'preload' => array('log'), //'log'
     'language' => $lang,
+
     //'theme' => $theme,
+
     'import' => array(
         'application.models.*',
         'application.components.*',
@@ -251,11 +258,14 @@ return array(
             // If removed, Gii defaults to localhost only. Edit carefully to taste.
             'ipFilters' => array('127.0.0.1', '::1'),
             'generatorPaths' => array('ext.mpgii'), //this line does the trick
+
         ),
+
     ),
 
     // application components
     'components' => array(
+
 
         /* pdf */
         'ePdf' => array(
@@ -296,6 +306,7 @@ return array(
             ),
         ),
         /* pdf */
+
 
         'urlManager' => array(
             'urlFormat' => 'path',
@@ -345,6 +356,7 @@ return array(
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ),
         ),
+
 
         'clientScript' => array(
             'scriptMap' => array(
@@ -433,6 +445,8 @@ return array(
             ),
         ),
 
+
+
         //'chartjs' => array('class' => 'chartjs.components.ChartJs'),
 
         'session' => array(
@@ -518,9 +532,13 @@ return array(
             },
           ),
 */
+
     ),
 
     'aliases' => array(
         'RestfullYii' => realpath(__DIR__ . '/../extensions/starship/RestfullYii'),
     ),
+
+
+
 );
