@@ -93,8 +93,8 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 		$.each(value, function( pvm, v ) {
 			all_tv_edit 	= '';
 			tv_kesto	= 0;
-			this_ero	= 0;
 			$.each(v, function( i2, laatikko ) {
+				this_ero = 0;
 				$.each(laatikko, function( i3, tv_edit ) {
 					if( last_loppu[pvm +'_'+ tid] > 0 )
 						this_ero = parseInt(tv_edit['alku'])-last_loppu[pvm +'_'+ tid];
