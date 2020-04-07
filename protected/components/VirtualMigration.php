@@ -3,25 +3,23 @@
 /**
  * Worker for migration to virtual shifts.
  *
- * @property CDbTransaction $transaction
  * @property int $step Step number.
- * @property array $output Output for one cycle.
  * @property int $cycle Cycle number.
+ * @property array $output Output for one cycle.
+ * @property string $log_path
+ * @property string $startday
  */
 class VirtualMigration extends CComponent
 {
-	// private $transaction;
 	private $step;
-	private $output;
 	private $cycle;
+	private $output;
 	private $log_path;
 	private $startday;
 
 	public function __construct(bool $reset = false)
 	{
-		// $this->transaction = static::getSessionVar("transaction");
 		$this->step = static::getSessionVar("step", 0);
-		$this->output = [];
 		$this->log_path = Yii::app()->user->domain . '_migration.log';
 		$this->startday = date("Y-m-d", strtotime("next monday"));
 	}
@@ -33,77 +31,59 @@ class VirtualMigration extends CComponent
 			static::clearSessionVars();
 
 		// Init cycle.
-		$this->output = [];
 		$this->cycle = static::getSessionVar("cycle", 1, $this->step);
-
-		// Check that transaction is still there.
-		// if ($this->step !== 0 && !$this->transaction && !($this->transaction = Yii::app()->db1->getCurrentTransaction()))
-		// 	return $this->cdone(-3, [1, "The transaction object has disappeared during migration."]);
+		$this->output = [];
 
 		// Do step.
 		switch ($this->step) {
 
 			case 0: // Step 0: Initialization.
-				// Table optimization: disabled. Tables in our database don't support
-				// optimize; the tables are re-created and analyzed instead.
-				// optimization is almost never worth doing on InnoDB tables.
+
+				// Table optimization: disabled. Tables in our database don't support optimize; the tables
+				// are re-created and analyzed instead. Optimization is almost never worth doing on InnoDB tables.
 				// Yii::app()->db1->createCommand("OPTIMIZE TABLE sivex_tvuoro")->execute();
 				// Yii::app()->db1->createCommand("OPTIMIZE TABLE toistuvat_tyovuorot")->execute();
 
 				$this->cout("Puhdistettiin aikaisemmat sessiomuuttujat.");
 
-				// Init transaction (transaction disabled for now, until caching works.)
-				// if ($this->transaction || Yii::app()->db1->getCurrentTransaction())
-				// 	return $this->cdone(-2, [2, "Transaction object already exists."]);
-
-				// $this->cout(4, "Creating main transaction object.");
-				// static::setSessionVar("transaction", $this->transaction = Yii::app()->db1->beginTransaction());
-				// $this->transaction->active = true;
+				$toistuvat = Yii::app()->db1->createCommand()
+					->select("id,tid, tyopaari, pfrom, pto")
+					->from("toistuvat_tyovuorot")
+					//->where()
+					->queryAll();
+				$toist_arr = [];
+				foreach ($toistuvat as $item)
+					$toist_arr[$item['id']] = $item;
+				static::setSessionVar("toist_arr", $toist_arr);
 
 				// Skip stage 1; Do changes to main table for now, for testing on staging.
-				return $this->cdone(2);
+				return $this->continue(2);
 
-			case 1: // Clone tables to temporary table with suffix: _migrate
-
-				$tables = ['sivex_tvuoro', 'toistuvat_tyovuorot'];
-				$cmd_existing_table_check = Yii::app()->db->createCommand("SHOW TABLES LIKE ':tn'");
-				$cmd_table_clone = Yii::app()->db->createCommand("CREATE TABLE :tn LIKE :sn");
-				$cmd_table_insert = Yii::app()->db->createCommand("INSERT :tn SELECT * FROM :sn");
-
-				$tables_exist = false;
-				foreach ($tables as $table_name) {
-					$target_name = "{$table_name}_migrate";
-					if (!empty($cmd_existing_table_check->query([':tn' => $target_name]))) {
-						$this->cout(2, sprintf("Target table %s already exists.", $target_name));
-						$tables_exist = true;
-					}
-				}
-
-				if ($tables_exist) {
-					return $this->cdone(-3, "Target tables exist and must be dropped.");
-				}
-
-				foreach ($tables as $table_name) {
-					$target_name = "{$table_name}_migrate";
-					$params = [':tn' => $target_name, ':sn' => $table_name];
-
-					try {
-						$this->cout(4, "Kloonataan $table_name rakenne tauluun $target_name");
-						$cmd_table_clone->query($params);
-						$this->cout(4, "Siiretään tiedot taulusta $target_name tauluun $table_name");
-						$cmd_table_insert->query($params);
-					} catch (\Exception $ex) {
-						$this->cout(1, "Virhe: " . $ex->getMessage());
-						return $this->cdone();
-					}
-				}
-
-				return $this->cdone(2, "Uudet taulut: sivex_tvuoro_migrate, toistuvat_tyovuorot_migrate");
+			// case 1: // Clone tables to temporary table with suffix: _migrate
+			// 	$tables = [
+			// 		'sivex_tvuoro' => 'sivex_tvuoro_migrate',
+			// 		'toistuvat_tyovuorot' => 'toistuvat_tyovuorot_migrate'
+			// 	];
+			// 	foreach ($tables as $table_name => $target_name) {
+			// 		$params = [':src' => $table_name, ':tgt' => $target_name];
+			// 		try {
+			// 			if (!empty(Yii::app()->db->createCommand("SHOW TABLES LIKE ':tgt'")->query($params))) {
+			// 				$this->cout(2, sprintf("Kohde taulu %s on jo olemassa; pudotetaan taulu.", $target_name));
+			// 				Yii::app()->db->createCommand("DROP TABLE IF EXISTS ':tgt'")->query($params);
+			// 			}
+			// 			$this->cout(4, "Kloonataan $table_name rakenne tauluun $target_name");
+			// 			Yii::app()->db->createCommand("CREATE TABLE :tgt LIKE :src")->query($params);
+			// 			$this->cout(4, "Siiretään tiedot taulusta $target_name tauluun $table_name");
+			// 			Yii::app()->db->createCommand("INSERT :tgt SELECT * FROM :src")->query($params);
+			// 		} catch (\Exception $ex) {
+			// 			$this->cout(1, "Virhe: " . $ex->getMessage());
+			// 			return $this->cdone();
+			// 		}
+			// 	}
+			// 	return $this->cdone(2, "Uudet taulut luotu.");
 
 			case 2:
-				$tvr = static::getSessionVar("tvr", null, 2);
-				$toist_arr = static::getSessionVar("toist_arr", null, 2);
-				if (!$tvr || !$toist_arr) {
+				if (!$tvr = static::getSessionVar("tvr", null, $this->step)) {
 					$tvr = Yii::app()->db1->createCommand()
 						//->limit("100")
 						->select("id, tid, pvm, toistuva_id")
@@ -115,21 +95,20 @@ class VirtualMigration extends CComponent
 						->andWhere("toistuva_id!=0")
 						->queryAll();
 
-					$toistuvat = Yii::app()->db1->createCommand()
-						->select("id,tid,tyopaari")
-						->from("toistuvat_tyovuorot")
-						//->where()
-						->queryAll();
-					$toist_arr = [];
-					foreach ($toistuvat as $item)
-						$toist_arr[$item['id']] = $item;
-
-					static::setSessionVar("tvr", $tvr, 2);
-					static::setSessionVar("toist_arr", $toist_arr, 2);
-					return $this->cdone(null, [3, "Total: " . count($tvr)]);
+					static::setSessionVar("tvr", array_values($tvr), $this->step);
+					$this->cout(3, "Total: " . count($tvr));
+					return $this->continue();
 				}
 
-				$item = array_shift($tvr);
+				$current = static::getSessionVar("current", 0, $this->step);
+				$toist_arr = static::getSessionVar("toist_arr");
+
+				if (!isset($tvr[$current])) {
+					$this->cout(1, "Koodissa virhe; tvr array muuttunut ajon aikana.");
+					return $this->continue();
+				}
+
+				$item = $tvr[$current];
 				$toistuva_id = $item['toistuva_id'];
 
 				if (isset($toist_arr[$toistuva_id])) {
@@ -163,80 +142,57 @@ class VirtualMigration extends CComponent
 					$this->cout(2, 'Ketjussa: ' . $toistuva_id . ' ONGELMA');
 				}
 
-				static::setSessionVar("tvr", $tvr, 2);
-				if (count($tvr) > 0)
-					return $this->cdone(null, [0, "Jäljellä: " . count($tvr)]);
-				else
-					return $this->cdone(3);
-
+				static::setSessionVar("current", ++$current, $this->step);
+				if ($current >= count($tvr)) {
+					return $this->continue(3);
+				} else {
+					$this->cout(0, "Jäljellä: " . (count($tvr) - $current));
+					return $this->continue();
+				}
 
 			case 3:
-				$tvr = Yii::app()->db1->createCommand()
-					->select("id, tid, pvm, toistuva_id")
-					->from("sivex_tvuoro")
-					->group("toistuva_id")
-					->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) DESC")
-					->andWhere("toistuva_id!=0")
-					->queryAll();
+				if (!$tvr = static::getSessionVar("tvr", null, $this->step)) {
+					$tvr = Yii::app()->db1->createCommand()
+						->select("id, tid, pvm, toistuva_id")
+						->from("sivex_tvuoro")
+						->group("toistuva_id")
+						->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) DESC")
+						->andWhere("toistuva_id!=0")
+						->queryAll();
 
-				$toistuvat = Yii::app()->db1->createCommand()
-					->select("id,tid,tyopaari, pfrom, pto")
-					->from("toistuvat_tyovuorot")
-					//->where()
-					->queryAll();
+					static::setSessionVar("tvr", array_values($tvr), $this->step);
+					$this->cout(3, "Total: " . count($tvr));
+					return $this->continue();
+				}
 
-				$toist_arr = [];
-				foreach ($toistuvat as $item)
-					$toist_arr[$item['id']] = $item;
+				$current = static::getSessionVar("current", 0, $this->step);
+				$toist_arr = static::getSessionVar("toist_arr");
 
-				$korjattu = 0;
-				$this->cout(4, 'Yhteensä ' . count($tvr));
-				foreach ($tvr as $item) {
-					$toistuva_id = $item['toistuva_id'];
-					if (isset($toist_arr[$toistuva_id])) {
+				if (!isset($tvr[$current])) {
+					$this->cout(1, "Koodissa virhe; tvr array muuttunut ajon aikana.");
+					return $this->continue();
+				}
 
-						if (date("Ymd", strtotime($toist_arr[$toistuva_id]['pto'])) < date("Ymd", strtotime($this->startday))) {
+				$item = $tvr[$current];
+				$toistuva_id = $item['toistuva_id'];
 
-							ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
-							$this->cout(4, "Ketju " . $toistuva_id . ", POISTETAAN, koska ketjun lopetuspäivä ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
+				if (isset($toist_arr[$toistuva_id])) {
 
-							// Update
-							$criteria = new CDbCriteria;
-							$criteria->select = "id";
-							$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
-							$tvupd = Tyovuoroot::model()->findAll($criteria);
+					if (date("Ymd", strtotime($toist_arr[$toistuva_id]['pfrom'])) > date("Ymd", strtotime($this->startday))) {
 
-							$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+						$this->cout(4, "POISTETAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " ja PVM >= kun ketjun alkamispäivä - " . date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom'])));
 
-							foreach ($tvupd as $v) {
-								Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
-							}
-						} else {
+						// Delete
+						$criteria = new CDbCriteria;
+						$criteria->select = "id";
+						$criteria->condition = "
+							DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '" . date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom'])) . "' 
+							AND toistuva_id='" . $toistuva_id . "' 
+						";
+						$tvdel = Tyovuoroot::model()->findAll($criteria);
 
-							// Toistuva pto on > startday
-							if (date("Ymd", strtotime($item['pvm'])) < date("Ymd", strtotime($this->startday))) {
-
-								ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
-
-								$this->cout(4, "Ketju " . $toistuva_id . ", POISTETAAN, koska viimeinen työvuoro oli ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
-
-								// Update
-								$criteria = new CDbCriteria;
-								$criteria->select = "id";
-								$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
-								$tvupd = Tyovuoroot::model()->findAll($criteria);
-
-								$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
-
-								foreach ($tvupd as $v) {
-									Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
-								}
-							} else {
-
-								$this->cout(4, 'Ei selkeä ongelma ' . $toistuva_id);
-							}
-						}
-					} else {
+						foreach ($tvdel as $v)
+							Tyovuoroot::model()->deletebypk($v->id);
 
 						// Update
 						$criteria = new CDbCriteria;
@@ -246,51 +202,227 @@ class VirtualMigration extends CComponent
 
 						$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
 
-						foreach ($tvupd as $v) {
+						foreach ($tvupd as $v)
 							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+					}
+
+					if (date("Ymd", strtotime($toist_arr[$toistuva_id]['pto'])) < date("Ymd", strtotime($this->startday))) {
+
+						ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
+						$this->cout(4, "Ketju " . $toistuva_id . ", POISTETAAN, koska ketjun lopetuspäivä ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
+
+						// Update
+						$criteria = new CDbCriteria;
+						$criteria->select = "id";
+						$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
+						$tvupd = Tyovuoroot::model()->findAll($criteria);
+
+						$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+
+						foreach ($tvupd as $v)
+							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+					} else {
+
+						// Toistuva pto on > startday
+						if (date("Ymd", strtotime($item['pvm'])) < date("Ymd", strtotime($this->startday))) {
+
+							$this->cout(4, "Ketju " . $toistuva_id . ", POISTETAAN, koska viimeinen työvuoro oli ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
+							ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
+
+							// Update
+							$criteria = new CDbCriteria;
+							$criteria->select = "id";
+							$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
+							$tvupd = Tyovuoroot::model()->findAll($criteria);
+
+							$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+							foreach ($tvupd as $v) {
+								Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+							}
+						} else {
+
+							$criteria = new CDbCriteria;
+							$criteria->order = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) ASC";
+							$criteria->select = "pvm";
+							$criteria->limit = "1";
+							$criteria->condition = "toistuva_id='$toistuva_id'";
+							$tvm = Tyovuoroot::model()->find($criteria);
+							if (isset($tvm->pvm) and date("Ymd", strtotime($tvm->pvm)) > date("Ymd", strtotime($this->startday))) {
+
+								ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('pfrom' => $tvm->pvm));
+
+								// Delete
+								$criteria = new CDbCriteria;
+								$criteria->select = "id";
+								$criteria->condition = " 
+									DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '" . date("Y-m-d", strtotime($tvm->pvm)) . "' 
+									AND toistuva_id='" . $toistuva_id . "' 
+								";
+								$tvdel = Tyovuoroot::model()->findAll($criteria);
+
+								$this->cout(4, "POISTETAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " ja PVM >= kun ketjun alkamispäivä - " . date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom'])));
+								foreach ($tvdel as $v)
+									Tyovuoroot::model()->deletebypk($v->id);
+
+								// Update
+								$criteria = new CDbCriteria;
+								$criteria->select = "id";
+								$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
+								$tvupd = Tyovuoroot::model()->findAll($criteria);
+
+								$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+								foreach ($tvupd as $v)
+									Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+								$this->cout(5, '&nbsp;&nbsp; ' . $tvm->pvm);
+							}
 						}
 					}
+				} else {
+
+					// Update
+					$criteria = new CDbCriteria;
+					$criteria->select = "id";
+					$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
+					$tvupd = Tyovuoroot::model()->findAll($criteria);
+
+					$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+					foreach ($tvupd as $v)
+						Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
 				}
 
-				return $this->cdone(4);
+				static::setSessionVar("current", ++$current, $this->step);
+				if ($current >= count($tvr)) {
+					return $this->continue(4);
+				} else {
+					$this->cout(0, "Jäljellä: " . (count($tvr) - $current));
+					return $this->continue();
+				}
 
 
 			case 4:
-				$tvr = Yii::app()->db1->createCommand()
-					->select("poistettu_pvm,id,tyopaari,tid")
-					->from("toistuvat_tyovuorot")
-					->where("poistettu_pvm!='' AND new_poistettu_pvm IS NULL")
-					->queryAll();
-				$i = 0;
-				foreach ($tvr as $arvo) {
-					$i++;
-					$poistetut_pvms = json_decode($arvo['poistettu_pvm'], true);
-					if (count($poistetut_pvms) == 0)
-						continue;
+				if (!static::getSessionVar("cdone", null, $this->step)) {
+					if (!$tstv = static::getSessionVar("tstv", null, $this->step)) {
+						$tstv = Yii::app()->db1->createCommand()
+							->select("id, pfrom, pto")
+							->from("toistuvat_tyovuorot")
+							->where("DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '{$this->startday}' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) < '{$this->startday}'")
+							->queryAll();
 
+						static::setSessionVar("tstv", array_values($tstv), $this->step);
+						$this->cout(3, "Total: " . count($tstv));
+						return $this->continue();
+					}
+
+					$current = static::getSessionVar("current", 0, $this->step);
+
+					if (!isset($tstv[$current])) {
+						$this->cout(1, "Koodissa virhe; tstv array muuttunut ajon aikana.");
+						return $this->continue();
+					}
+
+					$item = $tstv[$current];
+					$toistuva_id = $item['id'];
+
+					//echo 'Ketju: '.$item['id'].', Pfrom: '.$item['pfrom'].', Pto: '.$item['pto'].'<br>';
+
+					ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
+					$this->cout(4, "Ketju " . $toistuva_id . ", POISTETAAN, koska ketjun lopetuspäivä ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
+
+					// Update
+					$criteria = new CDbCriteria;
+					$criteria->select = "id";
+					$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
+					$tvupd = Tyovuoroot::model()->findAll($criteria);
+
+					$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+					foreach ($tvupd as $v)
+						Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+
+					static::setSessionVar("current", ++$current, $this->step);
+					if ($current >= count($tstv)) {
+						static::setSessionVar("current", 0, $this->step);
+						static::setSessionVar("cdone", true, $this->step);
+						return $this->continue();
+					} else {
+						$this->cout(4, "Jäljellä: " . (count($tvr) - $current));
+						return $this->continue();
+					}
+				} else {
+					if (!$tstv = static::getSessionVar("tstv", null, $this->step)) {
+						$tstv = Yii::app()->db1->createCommand()
+							->select("id, pfrom, pto")
+							->from("toistuvat_tyovuorot")
+							->where("DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '{$this->startday}'")
+							->andWhere("id NOT IN(SELECT toistuva_id FROM sivex_tvuoro)")
+							->queryAll();
+
+						static::setSessionVar("tstv", array_values($tstv), $this->step);
+						$this->cout(3, "Total: " . count($tstv));
+						return $this->continue();
+					}
+
+					$current = static::getSessionVar("current", 0, $this->step);
+
+					if (!isset($tstv[$current])) {
+						$this->cout(1, "Koodissa virhe; tstv array muuttunut ajon aikana.");
+						return $this->continue();
+					}
+
+					$item = $tstv[$current];
+					$toistuva_id = $item['id'];
+					//echo 'Ketju: '.$item['id'].', Pfrom: '.$item['pfrom'].', Pto: '.$item['pto'].'<br>';
+					ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
+					$this->cout(4, "Ketju " . $toistuva_id . ", POISTETAAN, koska ketjusta ei löytyi yhtään työvuoroa");
+
+					static::setSessionVar("current", ++$current, $this->step);
+					if ($current >= count($tstv)) {
+						return $this->continue(5);
+					} else {
+						$this->cout(0, "Jäljellä: " . (count($tstv) - $current));
+						return $this->continue();
+					}
+				}
+
+			case 5:
+
+				if (!$tvr = static::getSessionVar("tvr", null, $this->step)) {
+					$tvr = Yii::app()->db1->createCommand()
+						->select("poistettu_pvm,id,tyopaari,tid")
+						->from("toistuvat_tyovuorot")
+						->where("poistettu_pvm!='' AND new_poistettu_pvm IS NULL")
+						->queryAll();
+
+					static::setSessionVar("tvr", array_values($tvr), $this->step);
+					$this->cout(3, "Total: " . count($tvr));
+					return $this->continue();
+				}
+
+				$current = static::getSessionVar("current", 0, $this->step);
+
+				if (!isset($tvr[$current])) {
+					$this->cout(1, "Koodissa virhe; tvr array muuttunut ajon aikana.");
+					return $this->continue();
+				}
+
+				$item = $tvr[$current];
+
+				$poistetut_pvms = json_decode($item['poistettu_pvm'], true);
+				if (count($poistetut_pvms) != 0) {
 					// <-- Tids
 					$tids = [];
-					if (!empty($arvo['tyopaari'])) {
-						foreach (json_decode($arvo['tyopaari'], true) as $tid) {
+					if (!empty($item['tyopaari'])) {
+						foreach (json_decode($item['tyopaari'], true) as $tid) {
 							$tids[$tid] = $tid;
 						}
-						$tids[$arvo['tid']] = $arvo['tid'];
+						$tids[$item['tid']] = $item['tid'];
 					} else {
-						$tids[$arvo['tid']] = $arvo['tid'];
+						$tids[$item['tid']] = $item['tid'];
 					}
 					$new_poistettu_pvm = [];
 					foreach ($tids as $tid) {
 						foreach ($poistetut_pvms as $k => $v) {
-							if (date("Ymd", strtotime($v)) > date("Ymd")) // Oikein
-								$new_poistettu_pvm[$tid][$v] = [
-									'tid' => $tid,
-									'pvm' => $v,
-									'syy' => [
-										'text' => '',
-										'user' => '',
-										'date' => ''
-									]
-								];
+							if (date("Ymd", strtotime($v)) > date("Ymd", strtotime($this->startday))) // Oikein
+								$new_poistettu_pvm[$tid][$v] = ['tid' => $tid, 'pvm' => $v, 'syy' => ['text' => '', 'user' => '', 'date' => '']];
 						}
 					}
 					$result = [];
@@ -304,53 +436,64 @@ class VirtualMigration extends CComponent
 					}
 					$new_poistettu_pvm_arvo = (count($clearing) > 0) ? json_encode(array_values($clearing)) : '';
 					//echo 'Clearning: '.$new_poistettu_pvm_arvo.'<br>';
-					ToistuvatTyovuorot::model()->updatebypk($arvo['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm' => $new_poistettu_pvm_arvo));
+					ToistuvatTyovuorot::model()->updatebypk($item['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm' => $new_poistettu_pvm_arvo));
 				}
 
-				return $this->cdone(5);
+				static::setSessionVar("current", ++$current, $this->step);
+				if ($current >= count($tvr)) {
+					return $this->continue(6);
+				} else {
+					$this->cout(4, "Jäljellä: " . (count($tvr) - $current));
+					return $this->continue();
+				}
 
-			case 5:
-				Yii::app()->db1->createCommand(
-					"DELETE FROM sivex_tvuoro WHERE toistuva_id!='0' AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '" . date("Y-m-d", strtotime($this->startday)) . "'"
-				)
-					->execute();
+			case 6:
 
-				Yii::app()->db1->createCommand("UPDATE sivex_tvuoro SET toistuva_id='0' WHERE toistuva_id!='0'")
-					->execute();
-
-				return $this->cdone(99);
-
-
-			// TRANSACTIONS DISABLED DUE TO MALFUNCTION -_-
-
-			// case 6:
-			// 	$this->cout(3, "Commiting transaction");
-			// 	$this->transaction->commit();
-			// 	return $this->cdone(99, "Success");
-
-
-			// case -2: // Starting migration but transaction already exists.
-			// 	// Rollback and clear old transaction and return to step 0.
-			// 	$this->cout(3, "Clearing old transaction object.");
-			// 	if (!$this->transaction && !($this->transaction = Yii::app()->db1->getCurrentTransaction())) {
-			// 		$this->cout(4, "Transaction no longer exists; no action required.");
-			// 	} else {
-			// 		$this->cout("Rolling back existing transaction object.");
-			// 		$this->transaction->rollback();
-			// 		unset($this->transaction);
-			// 	}
-			// 	return $this->cdone(0);
-
-
-			// case -3: // Migration in progress but no transaction.
-			// 	// Return to step 0 to restart transaction.
-			// 	$this->cout("Transaction object disappeared during previous cycle. Was the database surely locked for the migration?");
-			// 	$this->cout("The migration has to be started again from where the transaction is first needed.");
-			// 	return $this->cdone(0);
-
+				switch (static::getSessionVar("istep", 0, $this->step)) {
+					case 0:
+						$this->cout(3, "Poistetaan tulevaisuuden työvuorot joilla toistuva_id != 0.");
+						$this->cout(3, "Kaikkien menneiden työvuorojen toistuva_id asetetaan = 0.");
+						static::setSessionVar("istep", 1, $this->step);
+						return $this->continue();
+					case 1:
+						$count = static::getSessionVar("count", 0, $this->step);
+						$date_ymd = date("Y-m-d", strtotime($this->startday));
+						if (!Yii::app()->db1->createCommand("DELETE FROM sivex_tvuoro WHERE toistuva_id != '0' AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '$date_ymd' LIMIT 25")->execute()) {
+							static::setSessionVar("istep", 2, $this->step);
+							$this->cout(0, "Tulevaisuuden ketjuihin kuuluvat työvuorot poistettu.");
+							$this->cout(4, "Päivitetään toistuva_id=0 kaikille työvuoroille.");
+						} else {
+							static::setSessionVar("count", $count, $this->step);
+							$this->cout(0, "Poistettu: " . ($count += 25) . " kpl");
+						}
+						return $this->continue();
+					case 2:
+						Yii::app()->db1->createCommand("UPDATE sivex_tvuoro SET toistuva_id='0' WHERE toistuva_id!='0'")->execute();
+						return $this->continue(7);
+				}
 
 			default:
-				return $this->cdone(99);
+				return $this->continue(99);
+		}
+	}
+
+	private function transaction(callable $action)
+	{
+		$this->cout(4, "TRANSACTION: Begin");
+		$transaction = Yii::app()->db1->beginTransaction();
+		$commit = false;
+		try {
+			$commit = $action();
+		} catch (\Exception $ex) {
+			$this->cout(1, "Error during transaction: " . $ex->getMessage());
+		} finally {
+			if ($commit) {
+				$this->cout(4, "TRANSACTION: Commit");
+				$transaction->commit();
+			} else {
+				$this->cout(4, "TRANSACTION: Rollback");
+				$transaction->rollback();
+			}
 		}
 	}
 
@@ -408,13 +551,7 @@ class VirtualMigration extends CComponent
 		}
 	}
 
-	private function couts(array ...$entries)
-	{
-		foreach ($entries as $entry)
-			$this->cout(max(-2, min(5, ($entry[0]))), $entry[1]);
-	}
-
-	private function cdone(?int $next_step = null, ...$entries)
+	private function continue(?int $next_step = null, ...$entries)
 	{
 		$next_step = $next_step ?: $this->step;
 		$errors = false;
@@ -457,7 +594,6 @@ class VirtualMigration extends CComponent
 			'errors' => $errors
 		];
 	}
-
 
 	//****************************************************************************
 	//* Static Helpers
