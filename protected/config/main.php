@@ -12,9 +12,10 @@ session_start();
 
 // <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
 $server_name = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
+$is_production = in_array($server_name, ['app.etunti.fi', 'etunti.com']);
 $get_domain = trim(strtolower($_GET['dom'] ?? $_GET['domain'] ?? ''));
 
-if (in_array($server_name, ['app.etunti.fi', 'etunti.com']) && $get_domain == 'demo') {
+if ($is_production && $get_domain == 'demo') {
     header("Access-Control-Allow-Origin: *");
     $url = "https://apps.etunti.fi" . $_SERVER['REQUEST_URI'];
     $ch = curl_init($url);
@@ -27,7 +28,7 @@ if (in_array($server_name, ['app.etunti.fi', 'etunti.com']) && $get_domain == 'd
     exit;
 }
 
-if (isset($_POST['UserLogin']['domain']) and trim(strtolower($_POST['UserLogin']['domain'])) == 'demo') {
+if ($is_production && isset($_POST['UserLogin']['domain']) and trim(strtolower($_POST['UserLogin']['domain'])) == 'demo') {
     echo '
 	<!DOCTYPE html>
 	<html>
