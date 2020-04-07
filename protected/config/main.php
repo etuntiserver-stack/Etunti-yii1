@@ -10,40 +10,39 @@ session_start();
 // CWebApplication properties can be configured here.
 
 
-// <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
 $server_name = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
 $is_production = in_array($server_name, ['app.etunti.fi', 'etunti.com']);
 $get_domain = trim(strtolower($_GET['dom'] ?? $_GET['domain'] ?? ''));
 
-if ($is_production && $get_domain == 'demo') {
-    header("Access-Control-Allow-Origin: *");
-    $url = "https://apps.etunti.fi" . $_SERVER['REQUEST_URI'];
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $_POST);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    header('Content-Type: text/html');
-    echo curl_exec($ch);
-    exit;
-}
-
-if ($is_production && isset($_POST['UserLogin']['domain']) and trim(strtolower($_POST['UserLogin']['domain'])) == 'demo') {
-    echo '
-	<!DOCTYPE html>
-	<html>
-	    <body onload="document.forms[0].submit()">
-	        <form action="https://apps.etunti.fi/index.php/user/login" method="post">
-			<input type="hidden" name="UserLogin[domain]" value="' . $_POST['UserLogin']['domain'] . '">
-			<input type="hidden" name="UserLogin[username]" value="' . $_POST['UserLogin']['username'] . '">
-			<input type="hidden" name="UserLogin[password]" value="' . $_POST['UserLogin']['password'] . '">
-	        </form>
-	    </body>
-	</html>';
-    exit;
+// <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
+if ($is_production) {
+    if ($get_domain == 'demo') {
+        header("Access-Control-Allow-Origin: *");
+        $url = "https://apps.etunti.fi" . $_SERVER['REQUEST_URI'];
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $_POST);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        header('Content-Type: text/html');
+        echo curl_exec($ch);
+        exit;
+    } elseif (isset($_POST['UserLogin']['domain']) and trim(strtolower($_POST['UserLogin']['domain'])) == 'demo') {
+        echo '
+        <!DOCTYPE html>
+        <html>
+            <body onload="document.forms[0].submit()">
+                <form action="https://apps.etunti.fi/index.php/user/login" method="post">
+                <input type="hidden" name="UserLogin[domain]" value="' . $_POST['UserLogin']['domain'] . '">
+                <input type="hidden" name="UserLogin[username]" value="' . $_POST['UserLogin']['username'] . '">
+                <input type="hidden" name="UserLogin[password]" value="' . $_POST['UserLogin']['password'] . '">
+                </form>
+            </body>
+        </html>';
+        exit;
+    }
 }
 //    Redirect Domain -->
-
 
 if (
     isset($_SERVER['REQUEST_URI'])
@@ -107,6 +106,12 @@ else $refer = '';
 if (isset($_POST)) $post = json_encode($_POST);
 else $post = '';
 
+
+// Add 'staging_' prefix to domain on staging server.
+if (strpos($server_name, "staging") === 0) {
+    $_SESSION['domain'] = "staging_" . $_SESSION['domain'];
+    $domain = "staging_$domain";
+}
 
 
 // <-- LOG
