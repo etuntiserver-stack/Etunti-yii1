@@ -42,7 +42,7 @@ ini_set('memory_limit', '512M');
  </th>
  <?php
  foreach($tt as $tid=>$item){
-	echo '<th class="bg-default" style="z-index: 999;"><div class="text-center laatiko_td">
+	echo '<th class="bg-default small" style="z-index: 999;"><div class="text-center laatiko_td">
 		<div class="row">
 		  <div class="col-sm-12">
 		    	<a href="#" class="getTekijanTiedot" for="'.$tid.'">';
@@ -82,7 +82,7 @@ ini_set('memory_limit', '512M');
 		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Erikoislauantai').'"></i>';
 	}
 	echo '<tr class="'.$tr_pyhat.'">';
-	echo '<td class="bg-default" style="z-index: 999; min-width: 100px"><div class="text-center laatiko_td"><b>'.$arrDate[$explColDate[0]].'</b>, '.$explColDate[1].$ispyha.'</b></div></td>';
+	echo '<td class="bg-default p15" style="z-index: 999;"><div class="text-center laatiko_td"><b>'.$arrDate[$explColDate[0]].'</b><br>'.$explColDate[1].$ispyha.'</b></div></td>';
 		// <-- VARAUKSET
 		echo '<td>';
 		echo '<div id="'.$did.'_0" class="latikkoAsetukset" pvm="'.$f.'" tid="0"><span class="odotus">'.$odotus_ikooni.'</span></div>';

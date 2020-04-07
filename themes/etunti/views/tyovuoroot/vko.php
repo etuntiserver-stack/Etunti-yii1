@@ -40,7 +40,7 @@ ini_set('memory_limit', '512M');
  <table class="table table-bordered" id="fixTable">
  <thead>
  <tr>
- <th class="bg-default text-center" width="1"><?php echo CHtml::button(Yii::t('main', 'Valitse kaikki'),array('target'=>'_blank','class'=>'btn btn-default valitseKaikkiLahetettavaksi')); ?></th>
+ <th class="bg-default text-center" width="1"><i class="link fa fa-check valitseKaikkiLahetettavaksi"></i></th>
  <?php
  $f 		= date("d.m.Y", strtotime($from));
  $did_sunday 	= date("Ymd", strtotime($year.'W'.$week.'7'));
@@ -59,7 +59,7 @@ ini_set('memory_limit', '512M');
 	if(isset($pyhapaivat[$f]['el'])){
 		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Erikoislauantai').'"></i>';
 	}
-	echo '<th class="bg-default text-center '.$tr_pyhat.'" style="z-index: 999;">
+	echo '<th class="small bg-default text-center '.$tr_pyhat.'" style="z-index: 999;">
 		<div class="laatiko_td"><b>'.$arrDate[$explColDate[0]].'</b>, '.$explColDate[1].$ispyha.'</b></div>
 	</th>';
 	$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
@@ -95,7 +95,7 @@ ini_set('memory_limit', '512M');
  <!-- VARAUKSET -->
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
-	<td class="bg-default" style="z-index: 999; max-width: 150px; white-space: normal;">
+	<td class="bg-default td_tyontekija" style="z-index: 999; max-width: 150px; white-space: normal; font-size: 90%;">
 	<div class="m15 text-center">
 
 		<?php
