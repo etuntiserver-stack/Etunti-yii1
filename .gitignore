@@ -49,3 +49,5 @@ robots.txt
 # main.php added back to repository; sensitive information is contained in main.pw.php.
 #protected/config/main.php
 protected/config/main.pw.php
+
+/*migrati*.log
