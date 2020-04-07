@@ -81,6 +81,10 @@ if (
     and trim($_POST['UserLogin']['domain']) != 'superadmin'
 ) {
     $_SESSION['domain'] = trim(strtolower($_POST['UserLogin']['domain']));
+
+    // Add 'staging_' prefix to domain on staging server.
+    if (strpos($server_name, "staging") === 0)
+        $_SESSION['domain'] = "staging_" . $_SESSION['domain'];
 }
 
 if (isset($_GET['lang']))
@@ -105,13 +109,6 @@ if (isset($_SERVER['HTTP_REFERER'])) $refer = $_SERVER['HTTP_REFERER'];
 else $refer = '';
 if (isset($_POST)) $post = json_encode($_POST);
 else $post = '';
-
-
-// Add 'staging_' prefix to domain on staging server.
-if (strpos($server_name, "staging") === 0) {
-    $_SESSION['domain'] = "staging_" . $_SESSION['domain'];
-    $domain = "staging_$domain";
-}
 
 
 // <-- LOG
@@ -180,7 +177,6 @@ if (isset($_SESSION['domain'])) {
     $db2 = $_SESSION['domain'];
 }
 if (isset($_GET['dom'])) {
-    $db = "etuntifw";
     $conn = mysqli_connect($db_host, $etuntifw_user, $etuntifw_pass, $db);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
