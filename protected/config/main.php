@@ -171,9 +171,6 @@ if (
 // db host|user|pw are defined in main.pw.php (not in repository).
 require('main.pw.php');
 
-$db = 'etuntifw';
-$db2 = '';
-
 if (isset($_SESSION['domain'])) {
     $db2 = $_SESSION['domain'];
 }
