@@ -88,20 +88,21 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 	var last_loppu  = [];
 	var this_ero	= 0;
 	$.each(tv_arr, function( tid, value ) {
-		yht 		= 0;
+		yht = 0;
 		tids.push(tid);
 		$.each(value, function( pvm, v ) {
 			all_tv_edit 	= '';
 			tv_kesto	= 0;
+			this_ero	= 0;
 			$.each(v, function( i2, laatikko ) {
 				$.each(laatikko, function( i3, tv_edit ) {
-					if( last_loppu[i3] > 0 )
-						this_ero = parseInt(tv_edit['alku'])-last_loppu[i3];
+					if( last_loppu[pvm +'_'+ tid] > 0 )
+						this_ero = parseInt(tv_edit['alku'])-last_loppu[pvm +'_'+ tid];
 					if( this_ero > 0 )
 						all_tv_edit += '<p class="text-center reika-danger"><i class="fa fa-clock-o"></i> Aika: ' + $.sprint(this_ero) + '</p>';
 					tv_kesto	+= tv_edit['tv_kesto'];
 					all_tv_edit 	+= '<p>' + tv_edit['tv_edit'] + '</p>';
-					last_loppu[i3]	= parseInt(tv_edit['loppu']);
+					last_loppu[pvm +'_'+ tid] = parseInt(tv_edit['loppu']);
 				});
 			});
 			//console.log(last_loppu);
