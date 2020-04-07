@@ -909,7 +909,13 @@ public function actionImei($dom)
 			$sel .= '<option value=>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
 			foreach($dataAll as $arr){
 				$data = $arr['data'];
-				$sel .= '<option value="'.(int)$data->kohde.'" id="'.$arr['this_id'].'" tv_id="'.$arr['this_id'].'" status="'.$data->status.'" alku="'.$data->alku.'" loppu="'.$data->loppu.'">'.$data->osoite.'</option>';
+				$dosoite = $data->osoite;
+				if( $data->status == 2 )
+					$dosoite = 'MATKA';
+				if( $data->status == 10 )
+					$dosoite = 'Lounastauko';
+				if( $arr['this_tid'] == $ttekija->id )
+				$sel .= '<option value="'.(int)$data->kohde.'" id="'.$arr['this_id'].'" tv_id="'.$arr['this_id'].'" status="'.$data->status.'" alku="'.$data->alku.'" loppu="'.$data->loppu.'">'.$dosoite.'</option>';
 			}
 			$sel .= '</select>';
 
