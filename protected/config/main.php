@@ -188,13 +188,6 @@ if (isset($_GET['dom'])) {
     }
 }
 
-$url = sprintf(
-    '%s://%s%s/%s',
-    $_SERVER['SERVER_PORT'] == 80 ? 'http' : 'https',
-    $_SERVER['SERVER_NAME'],
-    rtrim(dirname($_SERVER['PHP_SELF']), '/'),
-);
-header("Location: $url");
 
 return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
