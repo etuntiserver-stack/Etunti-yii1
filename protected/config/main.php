@@ -9,17 +9,18 @@ session_start();
 // CWebApplication properties can be configured here.
 
 
-$server_name 	= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
-$is_production 	= in_array($server_name, ['app.etunti.fi', 'etunti.com']); //
-$get_domain 	= trim(strtolower($_GET['dom'] ?? $_GET['domain'] ?? ''));
+$server_name     = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
+$is_production   = in_array($server_name, ['app.etunti.fi', 'etunti.com']);
+$get_domain      = trim(strtolower($_GET['dom'] ?? $_GET['domain'] ?? ''));
 $siirto_domainit = ['demo'];
 
 // <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
 if ($is_production) {
-    if( isset($_SESSION['domain']) and in_array($_SESSION['domain'], $siirto_domainit) ){
-	header('Location: https://'.$_SERVER['HTTP_HOST'].'/index.php/site/logout'); exit;
+    if (isset($_SESSION['domain']) and in_array($_SESSION['domain'], $siirto_domainit)) {
+        header('Location: https://' . $_SERVER['HTTP_HOST'] . '/index.php/site/logout');
+        exit;
     }
-    if ( in_array($get_domain, $siirto_domainit) ) {
+    if (in_array($get_domain, $siirto_domainit)) {
         header("Access-Control-Allow-Origin: *");
         $url = "https://apps.etunti.fi" . $_SERVER['REQUEST_URI'];
         $ch = curl_init($url);
@@ -131,7 +132,7 @@ if (
             'class' => 'CWebLogRoute',
             'levels' => 'error, warning', //'trace, info, error, warning, vardump'
         ],
-/*
+        /*
         [
             // lists execution time of every marked code block
             // report can also be set to callstack
