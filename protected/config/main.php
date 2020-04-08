@@ -15,7 +15,6 @@ $is_production = in_array($server_name, ['app.etunti.fi', 'etunti.com']);
 $get_domain = trim(strtolower($_GET['dom'] ?? $_GET['domain'] ?? ''));
 
 // <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
-/*
 if ($is_production) {
     if ($get_domain == 'demo') {
         header("Access-Control-Allow-Origin: *");
@@ -43,7 +42,6 @@ if ($is_production) {
         exit;
     }
 }
-*/
 //    Redirect Domain -->
 
 if (
