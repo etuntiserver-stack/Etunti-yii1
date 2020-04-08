@@ -1,5 +1,4 @@
 <?php
-
 error_reporting(E_ALL & ~E_WARNING);
 session_start();
 
@@ -128,12 +127,14 @@ if (
             'class' => 'CWebLogRoute',
             'levels' => 'error, warning', //'trace, info, error, warning, vardump'
         ],
+	/*
         [
             // lists execution time of every marked code block
             // report can also be set to callstack
             'class' => 'CProfileLogRoute',
             'report' => 'summary'
         ]
+	*/
     ];
 } else {
 
