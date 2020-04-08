@@ -13,7 +13,8 @@ $server_name 	= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
 $is_production 	= in_array($server_name, ['app.etunti.fi', 'etunti.com', 'staging.etunti.com']);
 $get_domain 	= trim(strtolower($_GET['dom'] ?? $_GET['domain'] ?? ''));
 $siirto_domainit = ['demo'];
-
+echo $_SESSION['domain'];
+exit;
 // <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
 if ($is_production) {
     if( isset($_SESSION['domain']) and in_array($_SESSION['domain'], $siirto_domainit) ){
