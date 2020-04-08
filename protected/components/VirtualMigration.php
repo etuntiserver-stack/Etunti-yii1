@@ -1,12 +1,27 @@
 <?php
 
+// Output constants; some can be used as type:status, where they behave differently, depending on the view.
+defined('VMO_ERROR')   or define('VMO_ERROR',   1); // manually or automatically fixable errors/exceptions; if status: step or operation has failed, requires intervention
+defined('VMO_WARNING') or define('VMO_WARNING', 2); // warnings that dont stop execution; if status: warning status (require verification to continue)
+defined('VMO_SUCCESS') or define('VMO_SUCCESS', 3); // command success; if status: success status (generally step finished)
+defined('VMO_PRIMARY') or define('VMO_PRIMARY', 4); // highlighted progress; if status: progress status, e.g. remaining items
+defined('VMO_NOTICE')  or define('VMO_NOTICE',  5); // significant information, but not primary
+defined('VMO_INFO')    or define('VMO_INFO',    6); // item listing or less important info
+defined('VMO_DEBUG')   or define('VMO_DEBUG',   7); // debug info, barely used, spam a lot of stuff
+
+// Output type flags; specifies where the output is displayed or printed.
+defined('VMOT_LOG')    or define('VMOT_LOG',    1<<0); // written to the log as a log entry
+defined('VMOT_OUTPUT') or define('VMOT_OUTPUT', 1<<1); // general output, written to UI log
+defined('VMOT_STATUS') or define('VMOT_STATUS', 1<<2); // set as latest status update
+defined('VMOT_ALL')    or define('VMOT_ALL',    VMOT_LOG | VMOT_OUTPUT | VMOT_STATUS);
+
 /**
  * Worker for migration to virtual shifts.
  *
  * @property int $step Step number.
  * @property int $cycle Cycle number.
  * @property array $output Output for one cycle.
- * @property string $log_path
+ * @property string $logpath
  * @property string $startday
  */
 class VirtualMigration extends CComponent
@@ -14,13 +29,13 @@ class VirtualMigration extends CComponent
 	private $step;
 	private $cycle;
 	private $output;
-	private $log_path;
+	private $logpath;
 	private $startday;
 
-	public function __construct(bool $reset = false)
+	public function __construct(?int $step = null)
 	{
-		$this->step = static::getSessionVar("step", 0);
-		$this->log_path = Yii::app()->user->domain . '_migration.log';
+		$this->step = ($step !== null) ? $step : static::getSessionVar("step", 0);
+		$this->logpath = Yii::app()->user->domain . '_migration.log';
 		$this->startday = date("Y-m-d", strtotime("next monday"));
 	}
 
@@ -44,7 +59,7 @@ class VirtualMigration extends CComponent
 				// Yii::app()->db1->createCommand("OPTIMIZE TABLE sivex_tvuoro")->execute();
 				// Yii::app()->db1->createCommand("OPTIMIZE TABLE toistuvat_tyovuorot")->execute();
 
-				$this->cout("Puhdistettiin aikaisemmat sessiomuuttujat.");
+				$this->c4primary("Puhdistettiin aikaisemmat sessiomuuttujat.");
 
 				$toistuvat = Yii::app()->db1->createCommand()
 					->select("id,tid, tyopaari, pfrom, pto")
@@ -56,8 +71,7 @@ class VirtualMigration extends CComponent
 					$toist_arr[$item['id']] = $item;
 				static::setSessionVar("toist_arr", $toist_arr);
 
-				// Skip stage 1; Do changes to main table for now, for testing on staging.
-				return $this->continue(2);
+				return $this->stepFinished();
 
 			// case 1: // Clone tables to temporary table with suffix: _migrate
 			// 	$tables = [
@@ -68,22 +82,23 @@ class VirtualMigration extends CComponent
 			// 		$params = [':src' => $table_name, ':tgt' => $target_name];
 			// 		try {
 			// 			if (!empty(Yii::app()->db->createCommand("SHOW TABLES LIKE ':tgt'")->query($params))) {
-			// 				$this->cout(2, sprintf("Kohde taulu %s on jo olemassa; pudotetaan taulu.", $target_name));
+			// 				$this->output_final(2, sprintf("Kohde taulu %s on jo olemassa; pudotetaan taulu.", $target_name));
 			// 				Yii::app()->db->createCommand("DROP TABLE IF EXISTS ':tgt'")->query($params);
 			// 			}
-			// 			$this->cout(4, "Kloonataan $table_name rakenne tauluun $target_name");
+			// 			$this->output_final(4, "Kloonataan $table_name rakenne tauluun $target_name");
 			// 			Yii::app()->db->createCommand("CREATE TABLE :tgt LIKE :src")->query($params);
-			// 			$this->cout(4, "Siiretään tiedot taulusta $target_name tauluun $table_name");
+			// 			$this->output_final(4, "Siiretään tiedot taulusta $target_name tauluun $table_name");
 			// 			Yii::app()->db->createCommand("INSERT :tgt SELECT * FROM :src")->query($params);
 			// 		} catch (\Exception $ex) {
-			// 			$this->cout(1, "Virhe: " . $ex->getMessage());
+			// 			$this->output_final(1, "Virhe: " . $ex->getMessage());
 			// 			return $this->cdone();
 			// 		}
 			// 	}
 			// 	return $this->cdone(2, "Uudet taulut luotu.");
 
 			case 2:
-				if (!$tvr = static::getSessionVar("tvr", null, $this->step)) {
+
+				$item = $this->dataItemHelper(function() {
 					$tvr = Yii::app()->db1->createCommand()
 						//->limit("100")
 						->select("id, tid, pvm, toistuva_id")
@@ -94,21 +109,18 @@ class VirtualMigration extends CComponent
 						->where("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '{$this->startday}' AND '" . date("Y-m-d", strtotime($this->startday . " +1 month")) . "'")
 						->andWhere("toistuva_id!=0")
 						->queryAll();
+					$this->c6debug("Total: " . count($tvr));
+					return $tvr;
+				});
 
-					static::setSessionVar("tvr", array_values($tvr), $this->step);
-					$this->cout(3, "Total: " . count($tvr));
+				if ($item === true) {
+					return $this->stepFinished();
+				} elseif ($item === false) {
+					$this->output_final(1, "Koodissa virhe; tvr array muuttunut ajon aikana.");
 					return $this->continue();
 				}
 
-				$current = static::getSessionVar("current", 0, $this->step);
 				$toist_arr = static::getSessionVar("toist_arr");
-
-				if (!isset($tvr[$current])) {
-					$this->cout(1, "Koodissa virhe; tvr array muuttunut ajon aikana.");
-					return $this->continue();
-				}
-
-				$item = $tvr[$current];
 				$toistuva_id = $item['toistuva_id'];
 
 				if (isset($toist_arr[$toistuva_id])) {
@@ -124,34 +136,29 @@ class VirtualMigration extends CComponent
 							// ONGELMA 
 
 							ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('tid' => $item['tid'], 'pfrom' => date("d.m.Y", strtotime($item['pvm'] . " this week monday"))));
-							$this->cout(2, "TID ongelma, Ketju " . $toistuva_id . ", Uusi TID on - " . $item['tid'] . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
+							$this->output_final(2, "TID ongelma, Ketju " . $toistuva_id . ", Uusi TID on - " . $item['tid'] . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
 							$this->updateAndDelete($toistuva_id, $item);
 						} else {
 
 							ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('pfrom' => date("d.m.Y", strtotime($item['pvm'] . " this week monday"))));
-							$this->cout(4, "Ketju " . $toistuva_id . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
+							$this->output_final(4, "Ketju " . $toistuva_id . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
 							$this->updateAndDelete($toistuva_id, $item);
 						}
 					} else {
 
 						ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('pfrom' => date("d.m.Y", strtotime($item['pvm'] . " this week monday"))));
-						$this->cout(4, "Ketju " . $toistuva_id . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
+						$this->output_final(4, "Ketju " . $toistuva_id . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
 						$this->updateAndDelete($toistuva_id, $item);
 					}
 				} else {
-					$this->cout(2, 'Ketjussa: ' . $toistuva_id . ' ONGELMA');
+					$this->output_final(2, 'Ketjussa: ' . $toistuva_id . ' ONGELMA');
 				}
 
-				static::setSessionVar("current", ++$current, $this->step);
-				if ($current >= count($tvr)) {
-					return $this->continue(3);
-				} else {
-					$this->cout(0, "Jäljellä: " . (count($tvr) - $current));
-					return $this->continue();
-				}
+				return $this->continue();
 
 			case 3:
-				if (!$tvr = static::getSessionVar("tvr", null, $this->step)) {
+
+				$item = $this->dataItemHelper(function() {
 					$tvr = Yii::app()->db1->createCommand()
 						->select("id, tid, pvm, toistuva_id")
 						->from("sivex_tvuoro")
@@ -159,28 +166,25 @@ class VirtualMigration extends CComponent
 						->order("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) DESC")
 						->andWhere("toistuva_id!=0")
 						->queryAll();
+					$this->output_final(3, "Total: " . count($tvr));
+					return $tvr;
+				});
 
-					static::setSessionVar("tvr", array_values($tvr), $this->step);
-					$this->cout(3, "Total: " . count($tvr));
+				if ($item === true) {
+					return $this->stepFinished();
+				} elseif ($item === false) {
+					$this->output_final(1, "Koodissa virhe; tvr array muuttunut ajon aikana.");
 					return $this->continue();
 				}
 
-				$current = static::getSessionVar("current", 0, $this->step);
 				$toist_arr = static::getSessionVar("toist_arr");
-
-				if (!isset($tvr[$current])) {
-					$this->cout(1, "Koodissa virhe; tvr array muuttunut ajon aikana.");
-					return $this->continue();
-				}
-
-				$item = $tvr[$current];
 				$toistuva_id = $item['toistuva_id'];
 
 				if (isset($toist_arr[$toistuva_id])) {
 
 					if (date("Ymd", strtotime($toist_arr[$toistuva_id]['pfrom'])) > date("Ymd", strtotime($this->startday))) {
 
-						$this->cout(4, "POISTETAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " ja PVM >= kun ketjun alkamispäivä - " . date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom'])));
+						$this->output_final(4, "POISTETAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " ja PVM >= kun ketjun alkamispäivä - " . date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom'])));
 
 						// Delete
 						$criteria = new CDbCriteria;
@@ -200,7 +204,7 @@ class VirtualMigration extends CComponent
 						$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
 						$tvupd = Tyovuoroot::model()->findAll($criteria);
 
-						$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+						$this->output_final(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
 
 						foreach ($tvupd as $v)
 							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
@@ -209,7 +213,7 @@ class VirtualMigration extends CComponent
 					if (date("Ymd", strtotime($toist_arr[$toistuva_id]['pto'])) < date("Ymd", strtotime($this->startday))) {
 
 						ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
-						$this->cout(4, "Ketju " . $toistuva_id . ", POISTETAAN, koska ketjun lopetuspäivä ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
+						$this->output_final(4, "Ketju " . $toistuva_id . ", POISTETAAN, koska ketjun lopetuspäivä ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
 
 						// Update
 						$criteria = new CDbCriteria;
@@ -217,7 +221,7 @@ class VirtualMigration extends CComponent
 						$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
 						$tvupd = Tyovuoroot::model()->findAll($criteria);
 
-						$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+						$this->output_final(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
 
 						foreach ($tvupd as $v)
 							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
@@ -226,7 +230,7 @@ class VirtualMigration extends CComponent
 						// Toistuva pto on > startday
 						if (date("Ymd", strtotime($item['pvm'])) < date("Ymd", strtotime($this->startday))) {
 
-							$this->cout(4, "Ketju " . $toistuva_id . ", POISTETAAN, koska viimeinen työvuoro oli ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
+							$this->output_final(4, "Ketju " . $toistuva_id . ", POISTETAAN, koska viimeinen työvuoro oli ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
 							ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
 
 							// Update
@@ -235,7 +239,7 @@ class VirtualMigration extends CComponent
 							$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
 							$tvupd = Tyovuoroot::model()->findAll($criteria);
 
-							$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+							$this->output_final(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
 							foreach ($tvupd as $v) {
 								Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
 							}
@@ -260,7 +264,7 @@ class VirtualMigration extends CComponent
 								";
 								$tvdel = Tyovuoroot::model()->findAll($criteria);
 
-								$this->cout(4, "POISTETAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " ja PVM >= kun ketjun alkamispäivä - " . date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom'])));
+								$this->output_final(4, "POISTETAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " ja PVM >= kun ketjun alkamispäivä - " . date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom'])));
 								foreach ($tvdel as $v)
 									Tyovuoroot::model()->deletebypk($v->id);
 
@@ -270,10 +274,10 @@ class VirtualMigration extends CComponent
 								$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
 								$tvupd = Tyovuoroot::model()->findAll($criteria);
 
-								$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+								$this->output_final(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
 								foreach ($tvupd as $v)
 									Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
-								$this->cout(5, '&nbsp;&nbsp; ' . $tvm->pvm);
+								$this->output_final(5, '&nbsp;&nbsp; ' . $tvm->pvm);
 							}
 						}
 					}
@@ -285,48 +289,41 @@ class VirtualMigration extends CComponent
 					$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
 					$tvupd = Tyovuoroot::model()->findAll($criteria);
 
-					$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+					$this->output_final(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
 					foreach ($tvupd as $v)
 						Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
 				}
 
-				static::setSessionVar("current", ++$current, $this->step);
-				if ($current >= count($tvr)) {
-					return $this->continue(4);
-				} else {
-					$this->cout(0, "Jäljellä: " . (count($tvr) - $current));
-					return $this->continue();
-				}
+				return $this->continue();
 
 
 			case 4:
 				if (!static::getSessionVar("cdone", null, $this->step)) {
-					if (!$tstv = static::getSessionVar("tstv", null, $this->step)) {
+
+					$item = $this->dataItemHelper(function() {
 						$tstv = Yii::app()->db1->createCommand()
 							->select("id, pfrom, pto")
 							->from("toistuvat_tyovuorot")
 							->where("DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '{$this->startday}' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) < '{$this->startday}'")
 							->queryAll();
+						$this->output_final(3, "Total: " . count($tstv));
+						return $tstv;
+					});
 
-						static::setSessionVar("tstv", array_values($tstv), $this->step);
-						$this->cout(3, "Total: " . count($tstv));
+					if ($item === true) {
+						static::setSessionVar("cdone", true, $this->step);
+						return $this->continue();
+					} elseif ($item === false) {
+						$this->output_final(1, "Koodissa virhe; tstv array muuttunut ajon aikana.");
 						return $this->continue();
 					}
 
-					$current = static::getSessionVar("current", 0, $this->step);
-
-					if (!isset($tstv[$current])) {
-						$this->cout(1, "Koodissa virhe; tstv array muuttunut ajon aikana.");
-						return $this->continue();
-					}
-
-					$item = $tstv[$current];
 					$toistuva_id = $item['id'];
 
 					//echo 'Ketju: '.$item['id'].', Pfrom: '.$item['pfrom'].', Pto: '.$item['pto'].'<br>';
 
 					ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
-					$this->cout(4, "Ketju " . $toistuva_id . ", POISTETAAN, koska ketjun lopetuspäivä ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
+					$this->output_final(4, "Ketju " . $toistuva_id . ", POISTETAAN, koska ketjun lopetuspäivä ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
 
 					// Update
 					$criteria = new CDbCriteria;
@@ -334,77 +331,55 @@ class VirtualMigration extends CComponent
 					$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
 					$tvupd = Tyovuoroot::model()->findAll($criteria);
 
-					$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+					$this->output_final(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
 					foreach ($tvupd as $v)
 						Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
-
-					static::setSessionVar("current", ++$current, $this->step);
-					if ($current >= count($tstv)) {
-						static::setSessionVar("current", 0, $this->step);
-						static::setSessionVar("cdone", true, $this->step);
-						return $this->continue();
-					} else {
-						$this->cout(4, "Jäljellä: " . (count($tvr) - $current));
-						return $this->continue();
-					}
+					return $this->continue();
 				} else {
-					if (!$tstv = static::getSessionVar("tstv", null, $this->step)) {
+
+					$item = $this->dataItemHelper(function() {
 						$tstv = Yii::app()->db1->createCommand()
 							->select("id, pfrom, pto")
 							->from("toistuvat_tyovuorot")
 							->where("DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) < '{$this->startday}'")
 							->andWhere("id NOT IN(SELECT toistuva_id FROM sivex_tvuoro)")
 							->queryAll();
+						$this->output_final(3, "Total: " . count($tstv));
+						return $tstv;
+					});
 
-						static::setSessionVar("tstv", array_values($tstv), $this->step);
-						$this->cout(3, "Total: " . count($tstv));
+					if ($item === true) {
+						return $this->stepFinished();
+					} elseif ($item === false) {
+						$this->output_final(1, "Koodissa virhe; tstv array muuttunut ajon aikana.");
 						return $this->continue();
 					}
 
-					$current = static::getSessionVar("current", 0, $this->step);
-
-					if (!isset($tstv[$current])) {
-						$this->cout(1, "Koodissa virhe; tstv array muuttunut ajon aikana.");
-						return $this->continue();
-					}
-
-					$item = $tstv[$current];
 					$toistuva_id = $item['id'];
 					//echo 'Ketju: '.$item['id'].', Pfrom: '.$item['pfrom'].', Pto: '.$item['pto'].'<br>';
 					ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
-					$this->cout(4, "Ketju " . $toistuva_id . ", POISTETAAN, koska ketjusta ei löytyi yhtään työvuoroa");
-
-					static::setSessionVar("current", ++$current, $this->step);
-					if ($current >= count($tstv)) {
-						return $this->continue(5);
-					} else {
-						$this->cout(0, "Jäljellä: " . (count($tstv) - $current));
-						return $this->continue();
-					}
+					$this->output_final(4, "Ketju " . $toistuva_id . ", POISTETAAN, koska ketjusta ei löytyi yhtään työvuoroa");
+					return $this->continue();
 				}
 
 			case 5:
 
-				if (!$tvr = static::getSessionVar("tvr", null, $this->step)) {
+				$item = $this->dataItemHelper(function() {
 					$tvr = Yii::app()->db1->createCommand()
 						->select("poistettu_pvm,id,tyopaari,tid")
 						->from("toistuvat_tyovuorot")
 						->where("poistettu_pvm!='' AND new_poistettu_pvm IS NULL")
 						->queryAll();
+					$this->output_final(3, "Total: " . count($tvr));
+					return $tvr;
+				});
 
-					static::setSessionVar("tvr", array_values($tvr), $this->step);
-					$this->cout(3, "Total: " . count($tvr));
+				if ($item === true) {
+					return $this->stepFinished();
+				} elseif ($item === false) {
+					$this->output_final(1, "Koodissa virhe; tvr array muuttunut ajon aikana.");
 					return $this->continue();
 				}
-
-				$current = static::getSessionVar("current", 0, $this->step);
-
-				if (!isset($tvr[$current])) {
-					$this->cout(1, "Koodissa virhe; tvr array muuttunut ajon aikana.");
-					return $this->continue();
-				}
-
-				$item = $tvr[$current];
 
 				$poistetut_pvms = json_decode($item['poistettu_pvm'], true);
 				if (count($poistetut_pvms) != 0) {
@@ -439,20 +414,14 @@ class VirtualMigration extends CComponent
 					ToistuvatTyovuorot::model()->updatebypk($item['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm' => $new_poistettu_pvm_arvo));
 				}
 
-				static::setSessionVar("current", ++$current, $this->step);
-				if ($current >= count($tvr)) {
-					return $this->continue(6);
-				} else {
-					$this->cout(4, "Jäljellä: " . (count($tvr) - $current));
-					return $this->continue();
-				}
+				return $this->continue();
 
 			case 6:
 
 				switch (static::getSessionVar("istep", 0, $this->step)) {
 					case 0:
-						$this->cout(3, "Poistetaan tulevaisuuden työvuorot joilla toistuva_id != 0.");
-						$this->cout(3, "Kaikkien menneiden työvuorojen toistuva_id asetetaan = 0.");
+						$this->output_final(3, "Poistetaan tulevaisuuden työvuorot joilla toistuva_id != 0.");
+						$this->output_final(3, "Kaikkien menneiden työvuorojen toistuva_id asetetaan = 0.");
 						static::setSessionVar("istep", 1, $this->step);
 						return $this->continue();
 					case 1:
@@ -460,16 +429,16 @@ class VirtualMigration extends CComponent
 						$date_ymd = date("Y-m-d", strtotime($this->startday));
 						if (!Yii::app()->db1->createCommand("DELETE FROM sivex_tvuoro WHERE toistuva_id != '0' AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '$date_ymd' LIMIT 25")->execute()) {
 							static::setSessionVar("istep", 2, $this->step);
-							$this->cout(0, "Tulevaisuuden ketjuihin kuuluvat työvuorot poistettu.");
-							$this->cout(4, "Päivitetään toistuva_id=0 kaikille työvuoroille.");
+							$this->output_final(0, "Tulevaisuuden ketjuihin kuuluvat työvuorot poistettu.");
+							$this->output_final(4, "Päivitetään toistuva_id=0 kaikille työvuoroille.");
 						} else {
 							static::setSessionVar("count", $count, $this->step);
-							$this->cout(0, "Poistettu: " . ($count += 25) . " kpl");
+							$this->output_final(0, "Poistettu: " . ($count += 25) . " kpl");
 						}
 						return $this->continue();
 					case 2:
 						Yii::app()->db1->createCommand("UPDATE sivex_tvuoro SET toistuva_id='0' WHERE toistuva_id!='0'")->execute();
-						return $this->continue(7);
+						return $this->stepFinished();
 				}
 
 			default:
@@ -477,21 +446,46 @@ class VirtualMigration extends CComponent
 		}
 	}
 
+	private function dataItemHelper(string $name, callable $initializer)
+	{
+		$key_data = "data_{$name}";
+		$key_current = "{$key_data}_current";
+
+		$data = static::getSessionVar($key_data, null, $this->step);
+		$current = static::getSessionVar($key_current, 0, $this->step);
+
+		if ($data == null) {
+			$this->c6debug("Initializing data: $name");
+			$data = array_values($initializer());
+			static::setSessionVar($key_data, $data, $this->step);
+			$current = 0;
+			$this->c5info(sprintf()
+		}
+		if ($current >= count($data))
+			return true;
+		elseif (!isset($data[$current]))
+			return false;
+		$next = $data[$current];
+		$this->output_final(0, "Jäljellä: " . (count($data) - $current));
+		static::setSessionVar($key_current, ++$current, $this->step);
+		return $next;
+	}
+
 	private function transaction(callable $action)
 	{
-		$this->cout(4, "TRANSACTION: Begin");
+		$this->output_final(4, "TRANSACTION: Begin");
 		$transaction = Yii::app()->db1->beginTransaction();
 		$commit = false;
 		try {
 			$commit = $action();
 		} catch (\Exception $ex) {
-			$this->cout(1, "Error during transaction: " . $ex->getMessage());
+			$this->output_final(1, "Error during transaction: " . $ex->getMessage());
 		} finally {
 			if ($commit) {
-				$this->cout(4, "TRANSACTION: Commit");
+				$this->output_final(4, "TRANSACTION: Commit");
 				$transaction->commit();
 			} else {
-				$this->cout(4, "TRANSACTION: Rollback");
+				$this->output_final(4, "TRANSACTION: Rollback");
 				$transaction->rollback();
 			}
 		}
@@ -508,7 +502,7 @@ class VirtualMigration extends CComponent
 		";
 		$tvdel = Tyovuoroot::model()->findAll($criteria);
 
-		$this->cout(4, "POISTETAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " ja PVM >= " . date("Y-m-d", strtotime($item['pvm'] . " this week monday")));
+		$this->output_final(4, "POISTETAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " ja PVM >= " . date("Y-m-d", strtotime($item['pvm'] . " this week monday")));
 
 		foreach ($tvdel as $v)
 			Tyovuoroot::model()->deletebypk($v->id);
@@ -519,36 +513,24 @@ class VirtualMigration extends CComponent
 		$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
 		$tvupd = Tyovuoroot::model()->findAll($criteria);
 
-		$this->cout(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+		$this->output_final(4, "MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
 
 		foreach ($tvupd as $v)
 			Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
 	}
 
-	private function cout($type_or_data = null, $other_one = null)
+	private function stepFinished($text = null)
 	{
-		$time = date('H:i:s', time());
-		if (is_array($type_or_data)) {
-			foreach ($type_or_data as $item) {
-				$this->output[] = [
-					'time' => $time,
-					'text' => $item['text'],
-					'type' => max(-2, min(5, ($item['type'] ?? 3)))
-				];
-			}
-		} elseif (is_numeric($type_or_data) && is_string($other_one)) {
-			$this->output[] = [
-				'time' => $time,
-				'text' => $other_one,
-				'type' => max(-2, min(5, ($type_or_data ?? 3)))
-			];
-		} else {
-			$this->output[] = [
-				'time' => $time,
-				'text' => $type_or_data,
-				'type' => max(-2, min(5, ($other_one ?? 3)))
-			];
+		static $step_skips = [ 2 ];
+		if (!empty($text))
+			$this->output_final(3, $text);
+		$this->output_final(-3, "Step {$this->step} finished");
+		$next_step = $this->step + 1;
+		while (in_array($next_step, $step_skips)) {
+			$this->output_final(4, "Skipping step " . $next_step . " (configured)");
+			$next_step++;
 		}
+		$this->continue($next_step);
 	}
 
 	private function continue(?int $next_step = null, ...$entries)
@@ -558,10 +540,10 @@ class VirtualMigration extends CComponent
 		foreach ($entries as $entry) {
 			if (is_array($entry)) {
 				$l = max(-2, min(5, ($entry[0])));
-				$this->cout($l, $entry[1]);
+				$this->output_final($l, $entry[1]);
 				if (abs($l) == 1) $errors = true;
 			} else {
-				$this->cout($entry, ($next_step < 0) ? 1 : 3);
+				$this->output_final($entry, ($next_step < 0) ? 1 : 3);
 			}
 		}
 
@@ -574,10 +556,10 @@ class VirtualMigration extends CComponent
 		}
 
 		try {
-			$log = fopen($this->log_path, "a");
+			$log = fopen($this->logpath, "a");
 			fwrite($log, $log_text);
 		} catch (\Exception $ex) {
-			$this->cout(1, sprintf("Lokitiedoston (%s) kirjoittaminen epäonnistui: %s", $this->log_path, $ex->getMessage()));
+			$this->output_final(1, sprintf("Lokitiedoston (%s) kirjoittaminen epäonnistui: %s", $this->logpath, $ex->getMessage()));
 		} finally {
 			fclose($log);
 		}
@@ -594,6 +576,114 @@ class VirtualMigration extends CComponent
 			'errors' => $errors
 		];
 	}
+
+	/**
+	 * Append to output (status: primary header, not output to console.)
+	 *
+	 * Type:
+	 *   VMO_ERROR        1    manually or automatically fixable errors/exceptions; if status: step or operation has failed, requires intervention
+	 *   VMO_WARNING      2    warnings that dont stop execution; if status: warning status (require verification to continue)
+	 *   VMO_SUCCESS      3    command success; if status: success status (generally step finished)
+	 *   VMO_PRIMARY      4    highlighted progress; if status: progress status, e.g. remaining items
+	 *   VMO_NOTICE       5    significant information, but not primary
+	 *   VMO_INFO         6    item listing or less important info
+	 *   VMO_DEBUG        7    debug info, barely used, spam a lot of stuff
+	 * Flags:
+	 *   VMOT_LOG',    1<<0    written to the log as a log entry
+	 *   VMOT_OUTPUT', 1<<1    general output, written to UI log
+	 *   VMOT_STATUS', 1<<2    set as latest status update
+	 */
+	private function output_final(array $entry, string $fmt, ...$args)
+	{
+		$time = time();
+		$time_fmt = date('H:i:s', $time);
+		$defaults = [
+			'timestamp' => $time,
+			'time' = $time_fmt,
+			'type' => VMO_NOTICE,
+			'is_status' = false,
+			'text' => ''
+		];
+
+		try {
+			array_unshift($args, $fmt);
+			if (!empty($text = call_user_func_array('sprintf', $args)))
+				$defaults['text'] = $text;
+			else
+				$this->c6debug("Output: unable to format text. Format: %s, params: %s", $fmt, $args);
+		} catch (\Exception $ex) {
+			$this->c2warning("Error while trying to format output string. Format: %s, params: %s, error: ", $fmt, $args, $ex->getMessage());
+		}
+
+		foreach ($entry as $key => $value) {
+			switch ($key) {
+				case 'timestamp':
+					$this->c6debug("Provided output entry: Manually defining timestamp is disabled. At %s, incoming value: %s", $time, $value);
+					break;
+				case 'time':
+					$this->c6debug("Provided output entry: Manually defining time is disabled. At %s, incoming value: %s", $time_fmt, $value);
+					break;
+				case 'type':
+					if (!is_numeric($value)) {
+						$this->c6debug("Provided output entry: 'type' value (%s) is not a numeric value . Defaulting to VMO_NOTICE (5).", $value);
+					} elseif ($value < 1 || 7 < $value) {
+						$this->c6debug("Provided output entry: 'type' value (%d) out of bounds (1-7). Defaulting to VMO_NOTICE (5).", $value);
+					} else {
+						$defaults[$key] = $value;
+					}
+					break;
+				case 'is_status':
+					if (!is_bool($value)) {
+						$this->c6debug("Provided output entry: 'is_status' value (%s) is not a boolean value . Defaulting to FALSE.", $value);
+					} else {
+						$defaults[$key] = $value;
+					}
+					break;
+				case 'text':
+					if (empty($value)) {
+						$this->c6debug("Provided output entry: 'text' value is empty. Defaulting to formatted string.");
+					} else {
+						$defaults[$key] = $value;
+					}
+					break;
+				default:
+					if (!isset($defaults[$key]))
+						$this->c6debug("Unknown key %s in incoming entry array while generating output. Entry: %s", $key, json_encode($entry));
+					$defaults[$key] = $value;
+			}
+
+			if (!isset($defaults['text'])) {
+				$this->c6debug("Output: 'text' field is empty at end of processing; skipping entry.");
+				return false;
+			}
+		}
+
+		$this->output[] = $defaults;
+	}
+
+	private function output(int $type, bool $is_status, string $fmt, ...$args) {
+		array_unshift($args, ['type' => $type, 'is_status' => $is_status], $fmt);
+		call_user_func_array([$this, 'output_final'], $args);
+	}
+
+
+	//****************************************************************************
+	//* SHORTCUTS ( because convenience and clean code =) )
+	//****************************************************************************
+
+	private function cssuccess(string $fmt, ...$args) { $this->output(VMO_SUCCESS, true, $fmt, $args); }
+	private function cswarning(string $fmt, ...$args) { $this->output(VMO_WARNING, true, $fmt, $args); }
+	private function cserror(string $fmt, ...$args)   { $this->output(VMO_ERROR,   true, $fmt, $args); }
+	private function csprimary(string $fmt, ...$args) { $this->output(VMO_PRIMARY, true, $fmt, $args); }
+	private function c1error(string $fmt, ...$args)   { $this->output(VMO_ERROR,   false, $fmt, $args); }
+	private function c2warning(string $fmt, ...$args) { $this->output(VMO_WARNING, false, $fmt, $args); }
+	private function c3success(string $fmt, ...$args) { $this->output(VMO_SUCCESS, false, $fmt, $args); }
+	private function c4primary(string $fmt, ...$args) { $this->output(VMO_PRIMARY, false, $fmt, $args); }
+	private function c5info(string $fmt, ...$args)    { $this->output(VMO_INFO,    false, $fmt, $args); }
+	private function c6debug(string $fmt, ...$args)   { $this->output(VMO_DEBUG,   false, $fmt, $args); }
+	private function setStepVar(string $key, $value)          { return static::setSessionVar($key, $value, $this->step);         }
+	private function getStepVar(string $key, $default = null) { return static::getSessionVar($key, $default, $this->step, true); }
+
 
 	//****************************************************************************
 	//* Static Helpers
@@ -643,6 +733,7 @@ class VirtualMigration extends CComponent
 		static::addSessionKey($final_key);
 		return $value;
 	}
+
 
 	public static function clearSessionVars()
 	{
