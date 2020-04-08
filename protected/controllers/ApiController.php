@@ -1,4 +1,5 @@
 <?php
+defined('YII_DEBUG') or define('YII_DEBUG',false);
 if( isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1')){
 	header("Access-Control-Allow-Origin: *");
 }
