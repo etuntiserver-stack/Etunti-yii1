@@ -16,6 +16,9 @@ $siirto_domainit = ['demo'];
 
 // <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
 if ($is_production) {
+    if( isset($_SESSION['domain']) and in_array($_SESSION['domain'], $siirto_domainit) ){
+	header('Location: https://'.$_SERVER['HTTP_HOST'].'/index.php/site/logout'); exit;
+    }
     if ( in_array($get_domain, $siirto_domainit) ) {
         header("Access-Control-Allow-Origin: *");
         $url = "https://apps.etunti.fi" . $_SERVER['REQUEST_URI'];
