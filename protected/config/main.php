@@ -10,7 +10,7 @@ session_start();
 
 
 $server_name 	= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
-$is_production 	= in_array($server_name, ['app.etunti.fi', 'etunti.com']); // , 'staging.etunti.com'
+$is_production 	= in_array($server_name, ['app.etunti.fi', 'etunti.com', 'staging.etunti.com']);
 $get_domain 	= trim(strtolower($_GET['dom'] ?? $_GET['domain'] ?? ''));
 $siirto_domainit = ['demo'];
 
