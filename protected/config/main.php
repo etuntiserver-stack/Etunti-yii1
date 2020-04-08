@@ -9,13 +9,14 @@ session_start();
 // CWebApplication properties can be configured here.
 
 
-$server_name = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
-$is_production = in_array($server_name, ['app.etunti.fi', 'etunti.com']);
-$get_domain = trim(strtolower($_GET['dom'] ?? $_GET['domain'] ?? ''));
+$server_name 	= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
+$is_production 	= in_array($server_name, ['app.etunti.fi', 'etunti.com']);
+$get_domain 	= trim(strtolower($_GET['dom'] ?? $_GET['domain'] ?? ''));
+$siirto_domainit = ['demo'];
 
 // <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
 if ($is_production) {
-    if ($get_domain == 'demo') {
+    if ( in_array($get_domain, $siirto_domainit) ) {
         header("Access-Control-Allow-Origin: *");
         $url = "https://apps.etunti.fi" . $_SERVER['REQUEST_URI'];
         $ch = curl_init($url);
@@ -26,7 +27,7 @@ if ($is_production) {
         header('Content-Type: text/html');
         echo curl_exec($ch);
         exit;
-    } elseif (isset($_POST['UserLogin']['domain']) and trim(strtolower($_POST['UserLogin']['domain'])) == 'demo') {
+    } elseif (isset($_POST['UserLogin']['domain']) and in_array(trim(strtolower($_POST['UserLogin']['domain'])), $siirto_domainit)) {
         echo '
         <!DOCTYPE html>
         <html>
