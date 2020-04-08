@@ -117,30 +117,24 @@ if (
     ($_SERVER['REMOTE_ADDR'] == '::1'
         or $_SERVER['REMOTE_ADDR'] == '127.0.0.1')
 ) {
-
-    $for_log = array(
-        array(
+    $for_log = [
+        [
             'class' => 'CFileLogRoute',
             'levels' => 'error, warning', //'trace, info, error, warning, vardump'
             'enabled' => YII_DEBUG,
             //'categories'=>'system.*',
-        ), /*
-            			array(
-			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
-			                'ipFilters'=>array('*'),//'ipFilters'=>array('::1','127.0.0.1','192.168.10.73'),
-				),*/ /*
-			        array(
-				        'class'=>'CEmailLogRoute',
-                			'levels'=>'error', //'trace, info, error, warning, vardump'
-					'emails'=>'laptopsr@gmail.com',
-					'subject'=>'Email Log File Message (DEV). Domain: '.$domain,
-			        ),*/
-        array(
+        ],
+        [
             'class' => 'CWebLogRoute',
             'levels' => 'error, warning', //'trace, info, error, warning, vardump'
-
-        )
-    );
+        ],
+        [
+            // lists execution time of every marked code block
+            // report can also be set to callstack
+            'class' => 'CProfileLogRoute',
+            'report' => 'summary'
+        ]
+    ];
 } else {
 
     $remote_addr = '';
