@@ -1374,11 +1374,13 @@ class TyovuorootController extends Controller
 	/**
 	 * Page for virtual migration script requests.
 	 */
-	public function actionVirtual_migration($step = null)
+	public function actionVirtual_migration($reset = null)
 	{
-		// $vmigrate = Yii::createComponent('VirtualMigration');
-		// $vmigrate->clearSessionVars();
-		$this->render('virtual_migration', ['step' => $step]);
+		if ($reset) {
+			$vmigrate = Yii::createComponent('VirtualMigration');
+			$vmigrate->clearSessionVars();
+		}
+		$this->render('virtual_migration');
 	}
 
 	/**
@@ -1386,9 +1388,9 @@ class TyovuorootController extends Controller
 	 * modified to loop per chain and do all work on a single chain at once.
 	 * Called by AJAX from actionVirtual_migration() and associated view.
 	 */
-	public function actionVmigrate_ajax_next($step = null)
+	public function actionVmigrate_ajax_next()
 	{
-		$vmigrate = Yii::createComponent('VirtualMigration', $step);
+		$vmigrate = Yii::createComponent('VirtualMigration');
 		$results = $vmigrate->doNextStep();
 		print_r(json_encode($results));
 	}

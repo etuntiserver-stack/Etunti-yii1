@@ -50,8 +50,13 @@
 					cls = 'text-warning';
 					bold = true;
 					break;
-				case 0:
 				case 3:
+					s = '{1} ({2}:{3}) (DONE): {4}'.f(args);
+					cls = 'text-success';
+					bold = true;
+					break;
+				case 0:
+				case 4:
 					s = '{1} ({2}:{3}): {4}'.f(args);
 					cls = 'text-primary';
 					bold = true;
@@ -81,9 +86,10 @@
 		};
 
 		var outputPreviewAll = function() {
-			output({'type': 5, 'time': '15:31:12', 'step': 1, 'cycle': 1,  'text': 'Debug (5) information: examining something at startup, variables.'});
-			output({'type': 4, 'time': '15:31:12', 'step': 2, 'cycle': 23, 'text': 'General (4) information or listing during a cycle, e.g. modified chains.'});
-			output({'type': 3, 'time': '15:31:12', 'step': 3, 'cycle': 1,  'text': 'Primary (3) notification; Third step with init.'});
+			output({'type': 6, 'time': '15:31:12', 'step': 1, 'cycle': 1,  'text': 'Debug (6) information: examining something at startup, variables.'});
+			output({'type': 5, 'time': '15:31:12', 'step': 2, 'cycle': 23, 'text': 'General (5) information or listing during a cycle, e.g. modified chains.'});
+			output({'type': 4, 'time': '15:31:12', 'step': 3, 'cycle': 1,  'text': 'Primary (4) notification; Third step with init.'});
+			output({'type': 3, 'time': '15:31:12', 'step': 3, 'cycle': 1,  'text': 'Success (3) notification.'});
 			output({'type': 2, 'time': '15:31:12', 'step': 4, 'cycle': 1,  'text': 'Problem (2) (or warning) in step 4 first cycle.'});
 			output({'type': 1, 'time': '15:31:12', 'step': 4, 'cycle': 41, 'text': 'Error (1) happened during step 4 and stopped.'});
 		};

@@ -475,26 +475,6 @@ class VirtualMigration extends CComponent
 		return $next;
 	}
 
-	// private function transaction(callable $action)
-	// {
-	// 	$this->out_info("TRANSACTION: Begin");
-	// 	$transaction = Yii::app()->db1->beginTransaction();
-	// 	$commit = false;
-	// 	try {
-	// 		$commit = $action();
-	// 	} catch (\Exception $ex) {
-	// 		$this->out_error("Error during transaction: " . $ex->getMessage());
-	// 	} finally {
-	// 		if ($commit) {
-	// 			$this->out_info("TRANSACTION: Commit");
-	// 			$transaction->commit();
-	// 		} else {
-	// 			$this->out_info("TRANSACTION: Rollback");
-	// 			$transaction->rollback();
-	// 		}
-	// 	}
-	// }
-
 	/**
 	 * Continue to next cycle or step.
 	 */
@@ -590,26 +570,6 @@ class VirtualMigration extends CComponent
 		return "vmigrate_{$domain}{$stepstr}{$key}";
 	}
 
-	private static function addSessionKey(string $final_key)
-	{
-		$key = static::getKey("keys");
-		$session_keys = Yii::app()->session[$key] ?? [];
-		if (!is_array($session_keys))
-			$session_keys = [$final_key];
-		elseif (!in_array($final_key, $session_keys))
-			$session_keys[] = $final_key;
-		Yii::app()->session[$key] = $session_keys;
-	}
-
-	private static function removeSessionKey(string $final_key)
-	{
-		$key = static::getKey("keys");
-		if (!isset(Yii::app()->session[$key]) || !is_array(Yii::app()->session[$key]))
-			Yii::app()->session[$key] = [];
-		if ($index = array_search($final_key, Yii::app()->session[$key]))
-			unset(Yii::app()->session[$key][$index]);
-	}
-
 	public static function getSessionVar(string $key, $default = null, ?int $step = null, bool $set_default = true)
 	{
 		$final_key = static::getKey($key, $step);
@@ -624,82 +584,23 @@ class VirtualMigration extends CComponent
 	{
 		$final_key = static::getKey($key, $step);
 		Yii::app()->session[$final_key] = $value;
-		static::addSessionKey($final_key);
+
+		$session_keys_key = static::getKey("keys");
+		$session_keys = Yii::app()->session[$session_keys_key] ?? [];
+		if (!is_array($session_keys))
+			$session_keys = [$final_key];
+		elseif (!in_array($final_key, $session_keys))
+			$session_keys[] = $final_key;
+		Yii::app()->session[$session_keys_key] = $session_keys;
+
 		return $value;
 	}
 
-
 	public static function clearSessionVars()
 	{
-		foreach (Yii::app()->session[static::getKey("keys")] as $k) {
-			Yii::app()->session[$k] = null;
-			static::removeSessionKey($k);
-		}
-	}
-
-	public static function stepTexts(int $step = 0)
-	{
-		if ($step >= 0) {
-			$result = [
-				'label' => 'Undefined',
-				'action' => '',
-				'problem' => '',
-			];
-		} else {
-			$result = [
-				'label' => "Unexpected Problems Fix",
-				'action' => "Attempt to fix previously encountered errors/problems.",
-				'problem' => '',
-			];
-		}
-
-		switch ($step) {
-
-				// Steps
-			case 0:
-				$result['label'] = 'Initialization';
-				$result['action'] = 'Clear previous session variables and initialize transaction.';
-				break;
-			case 1:
-				$result['label'] = 'Clone Tables';
-				$result['action'] = 'Create tables sivex_tvuoro_migrate and toistuvat_tyovuorot_migrate with identical data.';
-				break;
-			case 2:
-				$result['label'] = 'Roman Stage 2';
-				$result['action'] = 'Muutetaan toistuvien työvuorojen ketjut alkamaan tästä päivästä.';
-				break;
-			case 3:
-				$result['label'] = 'Roman Stage 3';
-				$result['action'] = '';
-				break;
-			case 4:
-				$result['label'] = 'Roman Stage 4';
-				$result['action'] = '';
-				break;
-			case 5:
-				$result['label'] = 'Roman Stage 5';
-				$result['action'] = '';
-				break;
-			case 6:
-				$result['label'] = 'Transaction Commit';
-				$result['action'] = 'Commit transaction and finish.';
-				break;
-			case 99:
-				$result['label'] = 'Migration Finish';
-				$result['action'] = 'Finished.';
-				break;
-
-				// Errors
-			case -2:
-				$result['problem'] = 'Migration was started but a transaction object already exists.';
-				$result['action'] = 'Rollback and clear old transaction.';
-				break;
-			case -3:
-				$result['problem'] = 'Migration in progress but no transaction.';
-				$result['action'] = 'Restart migration due to missing transaction object.';
-				break;
-		}
-
-		return $result;
+		$key = static::getKey("keys");
+		foreach (Yii::app()->session[$key] ?? [] as $k)
+			Yii::app()->session[$k] = 0;
+		Yii::app()->session[$key] = [];
 	}
 }
