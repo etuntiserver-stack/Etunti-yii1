@@ -20,72 +20,67 @@ class VirtualMigration extends CComponent
 	public function __construct(?int $step = null)
 	{
 		$this->step = ($step !== null) ? $step : static::getSessionVar("step", 0);
+		$this->cycle = 1;
+		$this->output = [];
 		$this->logpath = Yii::app()->user->domain . '_migration.log';
 		$this->startday = date("Y-m-d", strtotime("next monday"));
 	}
 
 	public function doNextStep()
 	{
-		// Clear previous session variables when starting fresh.
-		if ($this->step === 0)
+		// Step 0: Initialization: Clear previous session variables when starting fresh.
+		if ($this->step === 0) {
+			$this->out(4, "Aloitetaan migraatio.");
+			$this->out(5, "Puhdistetaan aikaisemmat sessiomuuttujat.");
 			static::clearSessionVars();
+			$this->out(5, "Haetaan toist_arr tiedot seuraavia vaiheita varten.");
+			$toistuvat = Yii::app()->db1->createCommand()
+				->select("id,tid, tyopaari, pfrom, pto")
+				->from("toistuvat_tyovuorot")
+				//->where()
+				->queryAll();
+			$toist_arr = [];
+			foreach ($toistuvat as $item)
+				$toist_arr[$item['id']] = $item;
+			static::setSessionVar("toist_arr", $toist_arr);
+			return $this->finishCycle(1);
+		}
 
 		// Init cycle.
-		$this->cycle = static::getSessionVar("cycle", 1, $this->step);
-		$this->output = [];
-
-		if ($this->step > 0 && $this->cycle == 1) {
-			$this->out([0, 4], "Aloitettiin vaihe %s.", $this->step);
+		if (($this->cycle = static::getSessionVar("cycle", 1, $this->step)) == 1) {
+			$this->out([0, 4], "Aloitetaan vaihe " . $this->step);
+			if ($this->step === 1)
+				$this->out(4, "Luodaan backup taulut. Jos jompikumpi taulu on jo olemassa, scriptiä ei jatketa.");
 			return $this->finishCycle();
 		}
 
 		// Do step.
 		switch ($this->step) {
 
-			case 0: // Step 0: Initialization.
+			case 1:
 
-				// Table optimization: disabled. Tables in our database don't support optimize; the tables
-				// are re-created and analyzed instead. Optimization is almost never worth doing on InnoDB tables.
-				// Yii::app()->db1->createCommand("OPTIMIZE TABLE sivex_tvuoro")->execute();
-				// Yii::app()->db1->createCommand("OPTIMIZE TABLE toistuvat_tyovuorot")->execute();
+				foreach (['sivex_tvuoro', 'toistuvat_tyovuorot'] as $table_name) {
+					$target_name = "{$table_name}_vanha";
+					if (Yii::app()->db1->schema->getTable($target_name) != null) {
+						$this->out(1, "Kohde taulu %s on jo olemassa. Ajoa ei voida jatkaa.", $target_name);
+						return $this->finishCycle();
+					}
+				}
 
-				$this->out(4, "Puhdistettiin aikaisemmat sessiomuuttujat.");
-				$this->out(4, "Aloitetaan migraatio.");
-
-				$toistuvat = Yii::app()->db1->createCommand()
-					->select("id,tid, tyopaari, pfrom, pto")
-					->from("toistuvat_tyovuorot")
-					//->where()
-					->queryAll();
-				$toist_arr = [];
-				foreach ($toistuvat as $item)
-					$toist_arr[$item['id']] = $item;
-				static::setSessionVar("toist_arr", $toist_arr);
+				foreach (['sivex_tvuoro', 'toistuvat_tyovuorot'] as $table_name) {
+					$target_name = "{$table_name}_vanha";
+					try {
+						$this->out(5, "Kloonataan taulu $table_name => $target_name");
+						Yii::app()->db1->createCommand("CREATE TABLE $target_name LIKE $table_name")->query();
+						Yii::app()->db1->createCommand("INSERT $target_name SELECT * FROM $table_name")->query();
+					} catch (\Exception $ex) {
+						$this->out(1, "Virhe: " . $ex->getMessage());
+						return $this->finishCycle();
+					}
+				}
 
 				return $this->finishCycle(2);
 
-			// case 1: // Clone tables to temporary table with suffix: _migrate
-			// 	$tables = [
-			// 		'sivex_tvuoro' => 'sivex_tvuoro_migrate',
-			// 		'toistuvat_tyovuorot' => 'toistuvat_tyovuorot_migrate'
-			// 	];
-			// 	foreach ($tables as $table_name => $target_name) {
-			// 		$params = [':src' => $table_name, ':tgt' => $target_name];
-			// 		try {
-			// 			if (!empty(Yii::app()->db->createCommand("SHOW TABLES LIKE ':tgt'")->query($params))) {
-			// 				$this->out(2, sprintf("Kohde taulu %s on jo olemassa; pudotetaan taulu.", $target_name));
-			// 				Yii::app()->db->createCommand("DROP TABLE IF EXISTS ':tgt'")->query($params);
-			// 			}
-			// 			$this->out(5, "Kloonataan $table_name rakenne tauluun $target_name");
-			// 			Yii::app()->db->createCommand("CREATE TABLE :tgt LIKE :src")->query($params);
-			// 			$this->out(5, "Siiretään tiedot taulusta $target_name tauluun $table_name");
-			// 			Yii::app()->db->createCommand("INSERT :tgt SELECT * FROM :src")->query($params);
-			// 		} catch (\Exception $ex) {
-			// 			$this->out(1, "Virhe: " . $ex->getMessage());
-			// 			return $this->cdone();
-			// 		}
-			// 	}
-			// 	return $this->cdone(2, "Uudet taulut luotu.");
 
 			case 2:
 
