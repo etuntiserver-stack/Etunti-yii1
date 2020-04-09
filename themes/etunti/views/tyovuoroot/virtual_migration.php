@@ -38,22 +38,18 @@
 
 			let s = '{1} ({2}:{3})';
 			let cls = '';
-			let bold = false;
 
 			switch (Math.abs(o['type'])) {
 				case 1:
 					s += ' (VIRHE)';
 					cls = 'text-danger';
-					bold = true;
 					break;
 				case 2:
 					s += ' (ONGELMA)';
 					cls = 'text-warning';
-					bold = true;
 					break;
 				case 3:
 					cls = 'text-success';
-					bold = true;
 					break;
 				case 5:
 					break;
@@ -62,7 +58,6 @@
 					break;
 				default:
 					cls = 'text-primary';
-					bold = true;
 					break;
 			}
 
@@ -71,8 +66,7 @@
 
 			if (cls)
 				cls = ' class="{1}"'.f(cls);
-			if (bold)
-				s = `<b>${s}</b>`;
+			s = `<b>${s}</b>`;
 
 			if (o['type'] <= 0)
 				$("#finish-text").html(`<span${cls}>${s}</span>`);
@@ -123,7 +117,7 @@
 					if (result['errors']) {
 						stop = true;
 						outputm(0, "Pysäytetty virheiden takia");
-						outputm(2, "Pysäytetty virheiden takia");
+						outputm(1, "Pysäytetty virheiden takia");
 					} else if (result['next'] >= 99) {
 						stop = true;
 						outputm(0, "Migraatio Valmis");
