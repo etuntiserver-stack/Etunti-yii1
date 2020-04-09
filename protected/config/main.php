@@ -21,7 +21,6 @@ if ($is_production) {
         exit;
     }
     if (in_array($get_domain, $siirto_domainit)) {
-	exit;
         header("Access-Control-Allow-Origin: *");
         $url = "https://apps.etunti.fi" . $_SERVER['REQUEST_URI'];
         $ch = curl_init($url);
@@ -33,7 +32,6 @@ if ($is_production) {
         echo curl_exec($ch);
         exit;
     } elseif (isset($_POST['UserLogin']['domain']) and in_array(trim(strtolower($_POST['UserLogin']['domain'])), $siirto_domainit)) {
-	exit;
         echo '
         <!DOCTYPE html>
         <html>
