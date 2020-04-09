@@ -2096,7 +2096,8 @@ class TyovuorootController extends Controller
 		$viralliset_pyhapaivat 	= [];
 		$erikoislauantai 	= [];
 		while (strtotime($f) <= strtotime($to)){
-			if( in_array($f, array_values($vp), true) )
+echo $f.'<br>';
+			if( in_array($f, array_values($vp)) )
 				$result[$f]['vp'] = true;
 			if( in_array($f, array_values($el), true) )
 				$result[$f]['el'] = true;
@@ -2104,6 +2105,11 @@ class TyovuorootController extends Controller
 				$result[$f]['su'] = true;
 			$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
 		}
+
+		echo '<pre>';
+		print_r( $result );
+		echo '</pre>';
+		exit;
 
 		return $result;
 	}
