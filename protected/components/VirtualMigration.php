@@ -50,7 +50,7 @@ class VirtualMigration extends CComponent
 		if (($this->cycle = static::getSessionVar("cycle", 1, $this->step)) == 1) {
 			$this->out([0, 4], "Aloitetaan vaihe " . $this->step);
 			if ($this->step === 1)
-				$this->out(4, "Luodaan backup taulut. Jos jompikumpi taulu on jo olemassa, scriptiä ei jatketa.");
+				$this->out(4, "Luodaan backup taulut.");
 			return $this->finishCycle();
 		}
 
@@ -62,13 +62,9 @@ class VirtualMigration extends CComponent
 				foreach (['sivex_tvuoro', 'toistuvat_tyovuorot'] as $table_name) {
 					$target_name = "{$table_name}_vanha";
 					if (Yii::app()->db1->schema->getTable($target_name) != null) {
-						$this->out(1, "Kohde taulu %s on jo olemassa. Ajoa ei voida jatkaa.", $target_name);
-						return $this->finishCycle();
+						$this->out(2, "Kohde taulu %s on jo olemassa. Tietoja EI siirretä uudelleen.", $target_name);
+						continue;
 					}
-				}
-
-				foreach (['sivex_tvuoro', 'toistuvat_tyovuorot'] as $table_name) {
-					$target_name = "{$table_name}_vanha";
 					try {
 						$this->out(5, "Kloonataan taulu $table_name => $target_name");
 						Yii::app()->db1->createCommand("CREATE TABLE $target_name LIKE $table_name")->query();
