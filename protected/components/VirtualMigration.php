@@ -83,7 +83,7 @@ class VirtualMigration extends CComponent
 
 			case 2:
 
-				$item = $this->dataItemHelper("tvr", function() {
+				$next = $this->dataItemHelper("tvr", 5, function() {
 					return Yii::app()->db1->createCommand()
 						//->limit("100")
 						->select("id, tid, pvm, toistuva_id")
@@ -96,51 +96,54 @@ class VirtualMigration extends CComponent
 						->queryAll();
 				});
 
-				if ($item === true) {
+				if ($next === true) {
 					return $this->continue(3);
-				} elseif ($item === false) {
+				} elseif ($next === false) {
 					return $this->continue();
 				}
 
 				$toist_arr = static::getSessionVar("toist_arr");
-				$toistuva_id = $item['toistuva_id'];
 
-				if (isset($toist_arr[$toistuva_id])) {
-					$tids = [];
-					$tids[$toist_arr[$toistuva_id]['tid']] = $toist_arr[$toistuva_id]['tid'];
-					foreach (json_decode($toist_arr[$toistuva_id]['tyopaari'], true) as $tid)
-						$tids[$tid] = $tid;
-
-					if (!in_array($item['tid'], $tids)) {
-
-						// <-- Jos EI työparia
-						if (empty($toist_arr[$toistuva_id]['tyopaari'])) {
-							// ONGELMA 
-
-							ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('tid' => $item['tid'], 'pfrom' => date("d.m.Y", strtotime($item['pvm'] . " this week monday"))));
-							$this->out_warning("TID ongelma, Ketju " . $toistuva_id . ", Uusi TID on - " . $item['tid'] . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
-							$this->updateAndDelete($toistuva_id, $item);
+				foreach ($next as $item) {
+					$toistuva_id = $item['toistuva_id'];
+	
+					if (isset($toist_arr[$toistuva_id])) {
+						$tids = [];
+						$tids[$toist_arr[$toistuva_id]['tid']] = $toist_arr[$toistuva_id]['tid'];
+						foreach (json_decode($toist_arr[$toistuva_id]['tyopaari'], true) as $tid)
+							$tids[$tid] = $tid;
+	
+						if (!in_array($item['tid'], $tids)) {
+	
+							// <-- Jos EI työparia
+							if (empty($toist_arr[$toistuva_id]['tyopaari'])) {
+								// ONGELMA 
+	
+								ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('tid' => $item['tid'], 'pfrom' => date("d.m.Y", strtotime($item['pvm'] . " this week monday"))));
+								$this->out_warning("TID ongelma, Ketju " . $toistuva_id . ", Uusi TID on - " . $item['tid'] . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
+								$this->updateAndDelete($toistuva_id, $item);
+							} else {
+	
+								ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('pfrom' => date("d.m.Y", strtotime($item['pvm'] . " this week monday"))));
+								$this->out_info("Ketju " . $toistuva_id . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
+								$this->updateAndDelete($toistuva_id, $item);
+							}
 						} else {
-
+	
 							ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('pfrom' => date("d.m.Y", strtotime($item['pvm'] . " this week monday"))));
 							$this->out_info("Ketju " . $toistuva_id . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
 							$this->updateAndDelete($toistuva_id, $item);
 						}
 					} else {
-
-						ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('pfrom' => date("d.m.Y", strtotime($item['pvm'] . " this week monday"))));
-						$this->out_info("Ketju " . $toistuva_id . ", Uusi aloituspäivä: " . date("d.m.Y", strtotime($item['pvm'] . " this week monday")));
-						$this->updateAndDelete($toistuva_id, $item);
+						$this->out_warning('Ketjussa: ' . $toistuva_id . ' ONGELMA');
 					}
-				} else {
-					$this->out_warning('Ketjussa: ' . $toistuva_id . ' ONGELMA');
 				}
 
 				return $this->continue();
 
 			case 3:
 
-				$item = $this->dataItemHelper("tvr", function() {
+				$next = $this->dataItemHelper("tvr", 5, function() {
 					return Yii::app()->db1->createCommand()
 						->select("id, tid, pvm, toistuva_id")
 						->from("sivex_tvuoro")
@@ -150,127 +153,130 @@ class VirtualMigration extends CComponent
 						->queryAll();
 				});
 
-				if ($item === true) {
+				if ($next === true) {
 					return $this->continue(4);
-				} elseif ($item === false) {
+				} elseif ($next === false) {
 					return $this->continue();
 				}
 
 				$toist_arr = static::getSessionVar("toist_arr");
-				$toistuva_id = $item['toistuva_id'];
 
-				if (isset($toist_arr[$toistuva_id])) {
-
-					if (date("Ymd", strtotime($toist_arr[$toistuva_id]['pfrom'])) > date("Ymd", strtotime($this->startday))) {
-
-						$this->out_info("POISTETAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " ja PVM >= kun ketjun alkamispäivä - " . date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom'])));
-
-						// Delete
-						$criteria = new CDbCriteria;
-						$criteria->select = "id";
-						$criteria->condition = "
-							DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '" . date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom'])) . "' 
-							AND toistuva_id='" . $toistuva_id . "' 
-						";
-						$tvdel = Tyovuoroot::model()->findAll($criteria);
-
-						foreach ($tvdel as $v)
-							Tyovuoroot::model()->deletebypk($v->id);
-
-						// Update
-						$criteria = new CDbCriteria;
-						$criteria->select = "id";
-						$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
-						$tvupd = Tyovuoroot::model()->findAll($criteria);
-
-						$this->out_info("MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
-
-						foreach ($tvupd as $v)
-							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
-					}
-
-					if (date("Ymd", strtotime($toist_arr[$toistuva_id]['pto'])) < date("Ymd", strtotime($this->startday))) {
-
-						ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
-						$this->out_info("Ketju " . $toistuva_id . ", POISTETAAN, koska ketjun lopetuspäivä ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
-
-						// Update
-						$criteria = new CDbCriteria;
-						$criteria->select = "id";
-						$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
-						$tvupd = Tyovuoroot::model()->findAll($criteria);
-
-						$this->out_info("MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
-
-						foreach ($tvupd as $v)
-							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
-					} else {
-
-						// Toistuva pto on > startday
-						if (date("Ymd", strtotime($item['pvm'])) < date("Ymd", strtotime($this->startday))) {
-
-							$this->out_info("Ketju " . $toistuva_id . ", POISTETAAN, koska viimeinen työvuoro oli ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
-							ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
-
+				foreach ($next as $item) {
+					$toistuva_id = $item['toistuva_id'];
+	
+					if (isset($toist_arr[$toistuva_id])) {
+	
+						if (date("Ymd", strtotime($toist_arr[$toistuva_id]['pfrom'])) > date("Ymd", strtotime($this->startday))) {
+	
+							$this->out_info("POISTETAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " ja PVM >= kun ketjun alkamispäivä - " . date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom'])));
+	
+							// Delete
+							$criteria = new CDbCriteria;
+							$criteria->select = "id";
+							$criteria->condition = "
+								DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '" . date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom'])) . "' 
+								AND toistuva_id='" . $toistuva_id . "' 
+							";
+							$tvdel = Tyovuoroot::model()->findAll($criteria);
+	
+							foreach ($tvdel as $v)
+								Tyovuoroot::model()->deletebypk($v->id);
+	
 							// Update
 							$criteria = new CDbCriteria;
 							$criteria->select = "id";
 							$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
 							$tvupd = Tyovuoroot::model()->findAll($criteria);
-
+	
 							$this->out_info("MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
-							foreach ($tvupd as $v) {
+	
+							foreach ($tvupd as $v)
 								Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
-							}
-						} else {
-
+						}
+	
+						if (date("Ymd", strtotime($toist_arr[$toistuva_id]['pto'])) < date("Ymd", strtotime($this->startday))) {
+	
+							ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
+							$this->out_info("Ketju " . $toistuva_id . ", POISTETAAN, koska ketjun lopetuspäivä ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
+	
+							// Update
 							$criteria = new CDbCriteria;
-							$criteria->order = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) ASC";
-							$criteria->select = "pvm";
-							$criteria->limit = "1";
-							$criteria->condition = "toistuva_id='$toistuva_id'";
-							$tvm = Tyovuoroot::model()->find($criteria);
-							if (isset($tvm->pvm) and date("Ymd", strtotime($tvm->pvm)) > date("Ymd", strtotime($this->startday))) {
-
-								ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('pfrom' => $tvm->pvm));
-
-								// Delete
-								$criteria = new CDbCriteria;
-								$criteria->select = "id";
-								$criteria->condition = " 
-									DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '" . date("Y-m-d", strtotime($tvm->pvm)) . "' 
-									AND toistuva_id='" . $toistuva_id . "' 
-								";
-								$tvdel = Tyovuoroot::model()->findAll($criteria);
-
-								$this->out_info("POISTETAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " ja PVM >= kun ketjun alkamispäivä - " . date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom'])));
-								foreach ($tvdel as $v)
-									Tyovuoroot::model()->deletebypk($v->id);
-
+							$criteria->select = "id";
+							$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
+							$tvupd = Tyovuoroot::model()->findAll($criteria);
+	
+							$this->out_info("MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+	
+							foreach ($tvupd as $v)
+								Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+						} else {
+	
+							// Toistuva pto on > startday
+							if (date("Ymd", strtotime($item['pvm'])) < date("Ymd", strtotime($this->startday))) {
+	
+								$this->out_info("Ketju " . $toistuva_id . ", POISTETAAN, koska viimeinen työvuoro oli ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
+								ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
+	
 								// Update
 								$criteria = new CDbCriteria;
 								$criteria->select = "id";
 								$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
 								$tvupd = Tyovuoroot::model()->findAll($criteria);
-
+	
 								$this->out_info("MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
-								foreach ($tvupd as $v)
+								foreach ($tvupd as $v) {
 									Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
-								$this->out_debug('&nbsp;&nbsp; ' . $tvm->pvm);
+								}
+							} else {
+	
+								$criteria = new CDbCriteria;
+								$criteria->order = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) ASC";
+								$criteria->select = "pvm";
+								$criteria->limit = "1";
+								$criteria->condition = "toistuva_id='$toistuva_id'";
+								$tvm = Tyovuoroot::model()->find($criteria);
+								if (isset($tvm->pvm) and date("Ymd", strtotime($tvm->pvm)) > date("Ymd", strtotime($this->startday))) {
+	
+									ToistuvatTyovuorot::model()->updatebypk($toistuva_id, array('pfrom' => $tvm->pvm));
+	
+									// Delete
+									$criteria = new CDbCriteria;
+									$criteria->select = "id";
+									$criteria->condition = " 
+										DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '" . date("Y-m-d", strtotime($tvm->pvm)) . "' 
+										AND toistuva_id='" . $toistuva_id . "' 
+									";
+									$tvdel = Tyovuoroot::model()->findAll($criteria);
+	
+									$this->out_info("POISTETAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " ja PVM >= kun ketjun alkamispäivä - " . date("Y-m-d", strtotime($toist_arr[$toistuva_id]['pfrom'])));
+									foreach ($tvdel as $v)
+										Tyovuoroot::model()->deletebypk($v->id);
+	
+									// Update
+									$criteria = new CDbCriteria;
+									$criteria->select = "id";
+									$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
+									$tvupd = Tyovuoroot::model()->findAll($criteria);
+	
+									$this->out_info("MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+									foreach ($tvupd as $v)
+										Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+									$this->out_debug('&nbsp;&nbsp; ' . $tvm->pvm);
+								}
 							}
 						}
+					} else {
+	
+						// Update
+						$criteria = new CDbCriteria;
+						$criteria->select = "id";
+						$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
+						$tvupd = Tyovuoroot::model()->findAll($criteria);
+	
+						$this->out_info("MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+						foreach ($tvupd as $v)
+							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
 					}
-				} else {
-
-					// Update
-					$criteria = new CDbCriteria;
-					$criteria->select = "id";
-					$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
-					$tvupd = Tyovuoroot::model()->findAll($criteria);
-
-					$this->out_info("MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
-					foreach ($tvupd as $v)
-						Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
 				}
 
 				return $this->continue();
@@ -279,7 +285,7 @@ class VirtualMigration extends CComponent
 			case 4:
 				if (!static::getSessionVar("cdone", null, $this->step)) {
 
-					$item = $this->dataItemHelper("tstv", function() {
+					$next = $this->dataItemHelper("tstv", 5, function() {
 						return Yii::app()->db1->createCommand()
 							->select("id, pfrom, pto")
 							->from("toistuvat_tyovuorot")
@@ -287,33 +293,36 @@ class VirtualMigration extends CComponent
 							->queryAll();
 					});
 
-					if ($item === true) {
+					if ($next === true) {
 						static::setSessionVar("cdone", true, $this->step);
 						return $this->continue();
-					} elseif ($item === false) {
+					} elseif ($next === false) {
 						return $this->continue();
 					}
 
-					$toistuva_id = $item['id'];
+					foreach ($next as $item) {
+						$toistuva_id = $item['id'];
+	
+						//echo 'Ketju: '.$item['id'].', Pfrom: '.$item['pfrom'].', Pto: '.$item['pto'].'<br>';
+	
+						ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
+						$this->out_info("Ketju " . $toistuva_id . ", POISTETAAN, koska ketjun lopetuspäivä ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
+	
+						// Update
+						$criteria = new CDbCriteria;
+						$criteria->select = "id";
+						$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
+						$tvupd = Tyovuoroot::model()->findAll($criteria);
+	
+						$this->out_info("MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
+						foreach ($tvupd as $v)
+							Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
+					}
 
-					//echo 'Ketju: '.$item['id'].', Pfrom: '.$item['pfrom'].', Pto: '.$item['pto'].'<br>';
-
-					ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
-					$this->out_info("Ketju " . $toistuva_id . ", POISTETAAN, koska ketjun lopetuspäivä ajemmin kun " . date("d.m.Y", strtotime($this->startday)));
-
-					// Update
-					$criteria = new CDbCriteria;
-					$criteria->select = "id";
-					$criteria->condition = " toistuva_id!=0 AND toistuva_id='" . $toistuva_id . "' ";
-					$tvupd = Tyovuoroot::model()->findAll($criteria);
-
-					$this->out_info("MUOKATAAN Työvuorot jolla toistuva_id=" . $toistuva_id . " --> toistuva_id=0");
-					foreach ($tvupd as $v)
-						Tyovuoroot::model()->updatebypk($v->id, array('toistuva_id' => '0'));
 					return $this->continue();
 				} else {
 
-					$item = $this->dataItemHelper("tstv", function() {
+					$next = $this->dataItemHelper("tstv", 5, function() {
 						return Yii::app()->db1->createCommand()
 							->select("id, pfrom, pto")
 							->from("toistuvat_tyovuorot")
@@ -322,22 +331,25 @@ class VirtualMigration extends CComponent
 							->queryAll();
 					});
 
-					if ($item === true) {
+					if ($next === true) {
 						return $this->continue(5);
-					} elseif ($item === false) {
+					} elseif ($next === false) {
 						return $this->continue();
 					}
 
-					$toistuva_id = $item['id'];
-					//echo 'Ketju: '.$item['id'].', Pfrom: '.$item['pfrom'].', Pto: '.$item['pto'].'<br>';
-					ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
-					$this->out_info("Ketju " . $toistuva_id . ", POISTETAAN, koska ketjusta ei löytyi yhtään työvuoroa");
+					foreach ($next as $item) {
+						$toistuva_id = $item['id'];
+						//echo 'Ketju: '.$item['id'].', Pfrom: '.$item['pfrom'].', Pto: '.$item['pto'].'<br>';
+						ToistuvatTyovuorot::model()->deletebypk($toistuva_id);
+						$this->out_info("Ketju " . $toistuva_id . ", POISTETAAN, koska ketjusta ei löytyi yhtään työvuoroa");
+					}
+
 					return $this->continue();
 				}
 
 			case 5:
 
-				$item = $this->dataItemHelper("tvr", function() {
+				$next = $this->dataItemHelper("tvr", 5, function() {
 					return Yii::app()->db1->createCommand()
 						->select("poistettu_pvm,id,tyopaari,tid")
 						->from("toistuvat_tyovuorot")
@@ -345,43 +357,45 @@ class VirtualMigration extends CComponent
 						->queryAll();
 				});
 
-				if ($item === true) {
+				if ($next === true) {
 					return $this->continue(6);
-				} elseif ($item === false) {
+				} elseif ($next === false) {
 					return $this->continue();
 				}
 
-				$poistetut_pvms = json_decode($item['poistettu_pvm'], true);
-				if (count($poistetut_pvms) != 0) {
-					// <-- Tids
-					$tids = [];
-					if (!empty($item['tyopaari'])) {
-						foreach (json_decode($item['tyopaari'], true) as $tid) {
-							$tids[$tid] = $tid;
+				foreach ($next as $item) {
+					$poistetut_pvms = json_decode($item['poistettu_pvm'], true);
+					if (count($poistetut_pvms) != 0) {
+						// <-- Tids
+						$tids = [];
+						if (!empty($item['tyopaari'])) {
+							foreach (json_decode($item['tyopaari'], true) as $tid) {
+								$tids[$tid] = $tid;
+							}
+							$tids[$item['tid']] = $item['tid'];
+						} else {
+							$tids[$item['tid']] = $item['tid'];
 						}
-						$tids[$item['tid']] = $item['tid'];
-					} else {
-						$tids[$item['tid']] = $item['tid'];
-					}
-					$new_poistettu_pvm = [];
-					foreach ($tids as $tid) {
-						foreach ($poistetut_pvms as $k => $v) {
-							if (date("Ymd", strtotime($v)) > date("Ymd", strtotime($this->startday))) // Oikein
-								$new_poistettu_pvm[$tid][$v] = ['tid' => $tid, 'pvm' => $v, 'syy' => ['text' => '', 'user' => '', 'date' => '']];
+						$new_poistettu_pvm = [];
+						foreach ($tids as $tid) {
+							foreach ($poistetut_pvms as $k => $v) {
+								if (date("Ymd", strtotime($v)) > date("Ymd", strtotime($this->startday))) // Oikein
+									$new_poistettu_pvm[$tid][$v] = ['tid' => $tid, 'pvm' => $v, 'syy' => ['text' => '', 'user' => '', 'date' => '']];
+							}
 						}
+						$result = [];
+						foreach ($new_poistettu_pvm as $k => $v)
+							foreach ($v as $k2 => $v2)
+								$result[] = $v2;
+						$clearing = [];
+						foreach ($result as $key => $value) {
+							if (!in_array($value, $clearing))
+								$clearing[] = $value;
+						}
+						$new_poistettu_pvm_arvo = (count($clearing) > 0) ? json_encode(array_values($clearing)) : '';
+						//echo 'Clearning: '.$new_poistettu_pvm_arvo.'<br>';
+						ToistuvatTyovuorot::model()->updatebypk($item['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm' => $new_poistettu_pvm_arvo));
 					}
-					$result = [];
-					foreach ($new_poistettu_pvm as $k => $v)
-						foreach ($v as $k2 => $v2)
-							$result[] = $v2;
-					$clearing = [];
-					foreach ($result as $key => $value) {
-						if (!in_array($value, $clearing))
-							$clearing[] = $value;
-					}
-					$new_poistettu_pvm_arvo = (count($clearing) > 0) ? json_encode(array_values($clearing)) : '';
-					//echo 'Clearning: '.$new_poistettu_pvm_arvo.'<br>';
-					ToistuvatTyovuorot::model()->updatebypk($item['id'], array('poistettu_pvm' => '', 'new_poistettu_pvm' => $new_poistettu_pvm_arvo));
 				}
 
 				return $this->continue();
@@ -447,7 +461,7 @@ class VirtualMigration extends CComponent
 	/**
 	 * Create data for step and return next item for cycle.
 	 */
-	private function dataItemHelper(string $name, callable $initializer)
+	private function dataItemHelper(string $name, int $count = 5, callable $initializer)
 	{
 		$key_data = "data_{$name}";
 		$key_current = "{$key_data}_current";
@@ -470,8 +484,8 @@ class VirtualMigration extends CComponent
 		}
 
 		$this->out_progress("Jäljellä: %d", (count($data) - $current));
-		$next = $data[$current];
-		static::setSessionVar($key_current, ++$current, $this->step);
+		$next = array_slice($data, $current, $count);
+		static::setSessionVar($key_current, ($current + $count), $this->step);
 		return $next;
 	}
 

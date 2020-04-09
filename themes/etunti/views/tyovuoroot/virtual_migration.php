@@ -55,17 +55,16 @@
 					cls = 'text-success';
 					bold = true;
 					break;
-				case 0:
-				case 4:
-					s = '{1} ({2}:{3}): {4}'.f(args);
-					cls = 'text-primary';
-					bold = true;
-					break;
 				case 5:
+					s = ' - {4}'.f(args);
+					break;
+				case 6:
 					s = '(debug) {1} ({2}:{3}): {4}'.f(args);
 					break;
 				default:
-					s = ' - {4}'.f(args);
+					s = '{1} ({2}:{3}): {4}'.f(args);
+					cls = 'text-primary';
+					bold = true;
 					break;
 			}
 
