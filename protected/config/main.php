@@ -17,7 +17,7 @@ $siirto_domainit = ['demo','sivex'];
 // <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
 if ($is_production) {
     if (isset($_SESSION['domain']) and in_array($_SESSION['domain'], $siirto_domainit)) {
-        header('Location: https://' . $_SERVER['HTTP_HOST'] . '/index.php/site/logout');
+        unset($_SESSION['domain']);
         exit;
     }
     if (in_array($get_domain, $siirto_domainit)) {
