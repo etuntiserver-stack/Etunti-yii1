@@ -12,7 +12,7 @@ session_start();
 $server_name     = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
 $is_production   = in_array($server_name, ['app.etunti.fi', 'etunti.com']);
 $get_domain      = trim(strtolower($_GET['dom'] ?? $_GET['domain'] ?? ''));
-$siirto_domainit = ['demo'];
+$siirto_domainit = ['demo','sivex'];
 
 // <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
 if ($is_production) {
@@ -21,6 +21,7 @@ if ($is_production) {
         exit;
     }
     if (in_array($get_domain, $siirto_domainit)) {
+	exit;
         header("Access-Control-Allow-Origin: *");
         $url = "https://apps.etunti.fi" . $_SERVER['REQUEST_URI'];
         $ch = curl_init($url);
@@ -32,6 +33,7 @@ if ($is_production) {
         echo curl_exec($ch);
         exit;
     } elseif (isset($_POST['UserLogin']['domain']) and in_array(trim(strtolower($_POST['UserLogin']['domain'])), $siirto_domainit)) {
+	exit;
         echo '
         <!DOCTYPE html>
         <html>
