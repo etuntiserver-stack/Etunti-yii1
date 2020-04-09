@@ -18,7 +18,6 @@ $siirto_domainit = ['demo','sivex'];
 if ($is_production) {
     if (isset($_SESSION['domain']) and in_array($_SESSION['domain'], $siirto_domainit)) {
         unset($_SESSION['domain']);
-        exit;
     }
     if (in_array($get_domain, $siirto_domainit)) {
         header("Access-Control-Allow-Origin: *");
