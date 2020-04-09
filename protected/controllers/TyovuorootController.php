@@ -1388,9 +1388,9 @@ class TyovuorootController extends Controller
 	 * modified to loop per chain and do all work on a single chain at once.
 	 * Called by AJAX from actionVirtual_migration() and associated view.
 	 */
-	public function actionVmigrate_ajax_next()
+	public function actionVmigrate_ajax_next(?int $step = null)
 	{
-		$vmigrate = Yii::createComponent('VirtualMigration');
+		$vmigrate = Yii::createComponent('VirtualMigration', $step);
 		$results = $vmigrate->doNextStep();
 		print_r(json_encode($results));
 	}

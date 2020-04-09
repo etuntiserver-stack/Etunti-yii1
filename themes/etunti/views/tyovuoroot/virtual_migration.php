@@ -4,7 +4,9 @@
 
 <!-- Current status and controls -->
 <a id="lbl-stage" href="#" class="btn btn-info btn-lg disabled" tabindex="-1" role="button" aria-disabled="true">Tämänhetkinen Vaihe: 0</a>
-<a id="btn-next" href="#" class="btn btn-primary btn-lg" tabindex="-1" role="button">Aloita Seuraava Vaihe</a><br><br>
+<a id="btn-next" href="#" class="btn btn-primary btn-lg" tabindex="-1" role="button">Seuraava</a>
+<a id="btn-stop" href="#" class="btn btn-danger btn-lg" tabindex="-1" role="button">Pysäytä</a>
+<a id="btn-reset" href="#" class="btn btn-warning btn-lg" tabindex="-1" role="button">Resetoi</a><br><br>
 
 <!-- Stage finish output -->
 <div class="well well-sm"><b style="float:left">Viimeisin Tilanne:&nbsp;</b>
@@ -14,7 +16,7 @@
 </div>
 
 <!-- Full AJAX output -->
-<div class="well well-sm overflow-auto" id="output"></div>
+<div class="well well-sm" style="height:550px;overflow-y:scroll;" id="output"></div>
 
 
 <script>
@@ -29,45 +31,43 @@
 			return s;
 		};
 
-		var outputm = function(type, result, text) {
-			return output({ 'type': type, 'time': result['time'], 'step': result['step'], 'cycle': result['cycle'], 'text': text });
-		}
+		var running = false;
+		var stop = false;
 
 		var output = function(o) {
 
-			let args = [o['time'], o['step'], o['cycle'], o['text']];
-			let cls, s = '';
+			let s = '{1} ({2}:{3})';
+			let cls = '';
 			let bold = false;
 
 			switch (Math.abs(o['type'])) {
 				case 1:
-					s = '{1} ({2}:{3}) (ERROR): {4}'.f(args);
+					s += ' (VIRHE)';
 					cls = 'text-danger';
 					bold = true;
 					break;
 				case 2:
-					s = '{1} ({2}:{3}) (PROBLEM): {4}'.f(args);
+					s += ' (ONGELMA)';
 					cls = 'text-warning';
 					bold = true;
 					break;
 				case 3:
-					s = '{1} ({2}:{3}) (DONE): {4}'.f(args);
 					cls = 'text-success';
 					bold = true;
 					break;
-				case 0:
-				case 4:
-					s = '{1} ({2}:{3}): {4}'.f(args);
+				case 5:
+					break;
+				case 6:
+					s = '(debug) ' + s;
+					break;
+				default:
 					cls = 'text-primary';
 					bold = true;
 					break;
-				case 5:
-					s = '(debug) {1} ({2}:{3}): {4}'.f(args);
-					break;
-				default:
-					s = ' - {4}'.f(args);
-					break;
 			}
+
+			s += ': {4}';
+			s = s.f([o['time'], o['step'], o['cycle'], o['text']]);
 
 			if (cls)
 				cls = ' class="{1}"'.f(cls);
@@ -85,29 +85,33 @@
 			return s;
 		};
 
-		var outputPreviewAll = function() {
-			output({'type': 6, 'time': '15:31:12', 'step': 1, 'cycle': 1,  'text': 'Debug (6) information: examining something at startup, variables.'});
-			output({'type': 5, 'time': '15:31:12', 'step': 2, 'cycle': 23, 'text': 'General (5) information or listing during a cycle, e.g. modified chains.'});
-			output({'type': 4, 'time': '15:31:12', 'step': 3, 'cycle': 1,  'text': 'Primary (4) notification; Third step with init.'});
-			output({'type': 3, 'time': '15:31:12', 'step': 3, 'cycle': 1,  'text': 'Success (3) notification.'});
-			output({'type': 2, 'time': '15:31:12', 'step': 4, 'cycle': 1,  'text': 'Problem (2) (or warning) in step 4 first cycle.'});
-			output({'type': 1, 'time': '15:31:12', 'step': 4, 'cycle': 41, 'text': 'Error (1) happened during step 4 and stopped.'});
-		};
+		var outputm = function(type, text) {
+			return output({ 'type': type, 'time': "00:00:00", 'step': 0, 'cycle': 0, 'text': text });
+		}
 
-		var next = function(break_counter = 0) {
-			var stop = false;
+		var next = function(step = -1) {
+			var step_str = (step >= 0) ? ("?step=" + step) : "";
 
 			$.ajax({
-				url: location.protocol + "//" + location.host + "/index.php/tyovuoroot/vmigrate_ajax_next",
+				url: location.protocol + "//" + location.host + "/index.php/tyovuoroot/vmigrate_ajax_next" + step_str,
 				type: 'GET',
 
 				error: function(xhr, status, error) {
-					stop = true;
-					alert(xhr.responseText);
+					outputm(1, xhr.responseText);
+					if (!confirm("Virhe, jatketaanko? " + xhr.responseText))
+						stop = true;
 				},
 
 				success: function(data) {
-					var result = JSON.parse(data);
+					var result;
+					try {
+						result = JSON.parse(data);
+					}
+					catch (e) {
+						console.log("error: "+e);
+						stop = true;
+						return false;
+					};
 
 					$.each(result['output'], function(index, item) {
 						var o = $.extend(result, item);
@@ -116,43 +120,58 @@
 
 					$("#lbl-stage").text(`Vaihe: ${result['next']} (${result['cycle']})`);
 
-					if (result['errors'] || result['next'] < 0) {
+					if (result['errors']) {
 						stop = true;
-						outputm(3, result, "Pysäytetty virheiden takia");
-						$("#btn-next").html("Jatka");
-						$("#btn-next").removeClass("disabled");
-						$("#btn-next").attr("aria-disabled", false);
-					} else if (result['next'] == 99) {
+						outputm(0, "Pysäytetty virheiden takia");
+						outputm(2, "Pysäytetty virheiden takia");
+					} else if (result['next'] >= 99) {
 						stop = true;
-						$("#output").prepend("<p class='text-success'><b><span>Migraatio Valmis.</span></b></p>".f(result['next']));
-						$("#btn-next").html("Migraatio Valmis");
-						$("#btn-next").addClass("disabled");
-						$("#btn-next").attr("aria-disabled", true);
-					} else if (result['step'] != result['next'] && result['next'] >= 0) {
+						outputm(0, "Migraatio Valmis");
+						outputm(3, "Migraatio Valmis");
+					} else if (result['step'] != result['next']) {
 						stop = true;
-						$("#output").prepend("<p class='text-success'><b><span>Vaihe valmis, seuraava: {1}</span></b></p>".f(result['next']));
-						$("#btn-next").html("Aloita Seuraava Vaihe: ({1})".f(result['next']));
-						$("#btn-next").removeClass("disabled");
-						$("#btn-next").attr("aria-disabled", false);
+						outputm(0, "Vaihe valmis, seuraava: {1}".f(result['next']));
+						outputm(3, "Vaihe valmis, seuraava: {1}".f(result['next']));
 					}
 				},
 
 				complete: function() {
-					return stop ? true : next(++break_counter);
+					if (stop) {
+						running = false;
+						stop = false;
+						$("#btn-next, #btn-reset").removeClass("disabled");
+						$("#btn-next, #btn-reset").attr("aria-disabled", false);
+						return true;
+					} else {
+						return next();
+					}
 				}
 			});
 		};
 
+		var start = function(step = -1) {
+			if (!running) {
+				$("#btn-next, #btn-reset").addClass("disabled");
+				$("#btn-next, #btn-reset").attr("aria-disabled", true);
+				running = true;
+				stop = false;
+				next(step);
+			}
+		};
+
 		$("#btn-next").on("click", function(e) {
-			// outputPreviewAll();
 			e.preventDefault();
+			start();
+		});
 
-			$(this).html("Prosessoidaan ...");
-			$(this).addClass("disabled");
-			$(this).attr("aria-disabled", true);
+		$("#btn-stop").on("click", function(e) {
+			e.preventDefault();
+			stop = true;
+		});
 
-			$("#output").prepend("<p class='text-primary'><b><span>Aloitettiin seuraava vaihe</span></b></p>");
-			next();
+		$("#btn-reset").on("click", function(e) {
+			e.preventDefault();
+			start(0);
 		});
 	});
 </script>
