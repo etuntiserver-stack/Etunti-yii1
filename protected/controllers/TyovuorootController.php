@@ -2090,27 +2090,28 @@ class TyovuorootController extends Controller
 		$result = [];
 
 		$asetuksetForAll 	= AsetuksetForAll::model()->findbypk(1);
-		$vp 			= explode("\n",$asetuksetForAll->viralliset_pyhapaivat);
-		$el 			= explode("\n",$asetuksetForAll->erikoislauantai);
+		$vp = explode("\n",$asetuksetForAll->viralliset_pyhapaivat);
+		$vp_pvms = [];
+		foreach($vp as $vp_pvm)
+			$vp_pvms[trim($vp_pvm)] = trim($vp_pvm);
+
+		$el = explode("\n",$asetuksetForAll->erikoislauantai);
+		$el_pvms = [];
+		foreach($el as $vp_pvm)
+			$el_pvms[trim($vp_pvm)] = trim($vp_pvm);
+
 		$f = date("d.m.Y", strtotime($from));
 		$viralliset_pyhapaivat 	= [];
 		$erikoislauantai 	= [];
 		while (strtotime($f) <= strtotime($to)){
-echo $f.'<br>';
-			if( in_array($f, array_values($vp)) )
+			if( isset($vp_pvms[$f]) )
 				$result[$f]['vp'] = true;
-			if( in_array($f, array_values($el), true) )
+			if( isset($el_pvms[$f]) )
 				$result[$f]['el'] = true;
 			if( date("N", strtotime($f)) == 7 )
 				$result[$f]['su'] = true;
 			$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
 		}
-
-		echo '<pre>';
-		print_r( $result );
-		echo '</pre>';
-		exit;
-
 		return $result;
 	}
 
