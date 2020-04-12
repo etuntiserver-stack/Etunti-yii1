@@ -40,7 +40,7 @@ ini_set('memory_limit', '512M');
  <table class="table table-bordered" id="fixTable">
  <thead>
  <tr>
- <th class="bg-default text-center" width="1"><i class="link fa fa-check valitseKaikkiLahetettavaksi"></i></th>
+ <th class="bg-default text-center" width="1"><span class="link small valitseKaikkiLahetettavaksi">Valitse kaikki</span></th>
  <?php
  $f 		= date("d.m.Y", strtotime($from));
  $did_sunday 	= date("Ymd", strtotime($year.'W'.$week.'7'));
