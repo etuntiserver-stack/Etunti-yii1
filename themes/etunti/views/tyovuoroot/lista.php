@@ -26,7 +26,7 @@
 	   ?>
 	 </span>
 
-	 <i class="glyphicon glyphicon-envelope"></i> <?=Yii::t('main', 'Lista suunnitelluista työvuoroista')?> 
+	 <i class="glyphicon glyphicon-envelope"></i> <?=((isset($_GET['uusi_tilaus']) and $_GET['uusi_tilaus'] == 1)? Yii::t('main', 'Tilaukset'):Yii::t('main', 'Lista suunnitelluista työvuoroista'))?> 
 
 	</h2>
 
