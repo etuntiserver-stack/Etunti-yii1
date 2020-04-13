@@ -971,8 +971,7 @@ public function actionImei($dom)
 			$from = date("Y-m-d");
 			$dataAll = $tv_controller[0]->FromToSuunnitellutAll($from, $aikaVali, $tids, $haku_criteria, ['data']);
 			/*
-			$return = ["return" => $val];
-			$this->_sendResponse(200, CJSON::encode($return));
+			$this->_sendResponse(200, CJSON::encode($dataAll));
 			exit;
 			*/
 			if(count($dataAll) == 0){
@@ -988,6 +987,10 @@ public function actionImei($dom)
 			$sel = '<h2>'.Yii::t('app', 'Työvuorot').'</h2>';
 
 			foreach($dataAll as $arr){
+
+				if( $arr['this_tid'] != $ttekija->id )
+					continue;
+
 				$val = $arr['data'];
 				$osoite = '';
 				$kohde = Kohteet::model()->findbypk($val->kohde);
