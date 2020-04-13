@@ -908,6 +908,10 @@ public function actionImei($dom)
 			$sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
 			$sel .= '<option value=>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
 			foreach($dataAll as $arr){
+
+				if( $arr['this_tid'] != $ttekija->id )
+					continue;
+
 				$data = $arr['data'];
 				$dosoite = $data->osoite;
 				if( $data->status == 2 )
