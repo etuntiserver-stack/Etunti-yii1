@@ -2934,9 +2934,15 @@ class TyovuorootController extends Controller
 			} else {
 				$toistuva 	= false;
 				$model		= Tyovuoroot::model()->findByPk($this_id);
-				$tid 		= $model->tid;
-				$pvm 		= $model->pvm;
+				if( isset($model->id) ){
+					$tid 		= $model->tid;
+					$pvm 		= $model->pvm;
+				} else {
+					echo json_encode( 'Työvuoro id: '.$this_id.' ei löydy' );
+					exit;
+				}
 			}
+
 		//echo json_encode( $pvm .' '.$tid.' '.$model->id );
 		//exit;
 		return ['model' => $model, 'toistuva' => $toistuva, 'pvm' => $pvm, 'tid' => $tid];
