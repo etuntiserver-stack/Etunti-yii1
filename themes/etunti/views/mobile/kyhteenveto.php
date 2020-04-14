@@ -160,7 +160,10 @@ $this->breadcrumbs=array(
 	$suunniteltu 	= 0;
 	$thisday	= date("Y-m-d");
 	$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
-	$haku_criteria	= "(peruutettu=0 OR peruutettu IS NULL)";
+	$haku_criteria	= [];
+	$haku_criteria[]= "(peruutettu=0 OR peruutettu IS NULL)";
+	if( isset($_GET['osoite']) and !empty($_GET['osoite']) )
+	$haku_criteria[]= "kohde IN(SELECT id FROM sivex_kohdet WHERE osoite LIKE '%".$_GET['osoite']."%')";
 	$getAll 	= $tyovuorot[0]->tv_arr(date("Y-m-d", strtotime($from)), date("Y-m-d", strtotime($to)), [], $haku_criteria, false, ['tv_kesto']);
 	
 	$result = [];
@@ -172,6 +175,7 @@ $this->breadcrumbs=array(
 						$result[$arr2['kohde']] = $arr2['tv_kesto'];
 					else
 						$result[$arr2['kohde']] += $arr2['tv_kesto'];
+
 	/*
 	echo '<pre>';
 	print_r($result);
