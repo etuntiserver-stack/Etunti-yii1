@@ -64,9 +64,10 @@ $paivat=array(
 	$pvm_to = date("Y-m-d", strtotime($year ."W". $week .'7'));
 	$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, $haku_criteria, false, ['this_id','data']);
 	$tids_after = [];
-	foreach($tv_arr as $t => $arr)
-		$tids_after[] = $t;
-
+	foreach($tv_arr as $t => $arr){
+		if(in_array($t, $tids))
+			$tids_after[] = $t;
+	}
 ?>
 
 <?php $ids = ''; ?>
@@ -86,7 +87,7 @@ $ids .= $tt->id.',';
 array_push($kenelleLahetetaan, $this->etuSukunimi($tt->id));
 }
 ?>
-<h2 class="form-inline"><?php echo $this->etuSukunimi($tt->id); ?>
+<h2 class="form-inline"><?=((isset($tt->id))?$this->etuSukunimi($tt->id):'')?>
 <?php if($tulosta != 'lista') : ?>
   <form action="#" class="form-group" method="POST">
     <input type="hidden" name="kuka" value="<?php echo $tid; ?>">
