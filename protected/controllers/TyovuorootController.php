@@ -2815,7 +2815,7 @@ class TyovuorootController extends Controller
 		{
 			$alku = date("Ymd", strtotime($ts->alku));
 
-			if($pvm >= $alku and empty($ts->loppu))
+			if( date("Ymd", strtotime($pvm)) >= date("Ymd", strtotime($alku)) and empty($ts->loppu))
 			$oikeus = '';
 			elseif($pvm >= $alku and !empty($ts->loppu) and $pvm <= date("Ymd", strtotime($ts->loppu)))
 			$oikeus = '';
