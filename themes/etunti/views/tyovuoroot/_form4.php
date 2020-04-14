@@ -898,6 +898,10 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
 
+  setTimeout(function() {
+	$('#hovertietoja').html('').hide();
+  }, 1000);
+
   $(".sw").bootstrapSwitch({
 	size: "small",
 	onColor: "primary",
