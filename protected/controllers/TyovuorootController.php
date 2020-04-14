@@ -2115,12 +2115,12 @@ class TyovuorootController extends Controller
 		return $result;
 	}
 
-	protected function statukset(){
+	protected function statukset($piilota_mobiilista){
 		$status = [];
-		$status[10] = '<i class="tvikooni fa fa-cutlery text-success"></i>';
-		$status[2] = '<i class="tvikooni fa fa-bus text-warning"></i>';
-		$status[3] = '<i class="tvikooni fa fa-hourglass text-info"></i>';
-		$status[11] = '<i class="tvikooni fa fa-clock-o text-info"></i>';
+		$status[10] = '<i class="tvikooni fa fa-cutlery '.(($piilota_mobiilista == 0)?'text-success':'text-danger').'"></i>';
+		$status[2] = '<i class="tvikooni fa fa-bus '.(($piilota_mobiilista == 0)?'text-warning':'text-danger').'"></i>';
+		$status[3] = '<i class="tvikooni fa fa-hourglass '.(($piilota_mobiilista == 0)?'text-info':'text-danger').'"></i>';
+		$status[11] = '<i class="tvikooni fa fa-clock-o '.(($piilota_mobiilista == 0)?'text-info':'text-danger').'"></i>';
 		return $status;
 	}
 
@@ -2254,7 +2254,7 @@ class TyovuorootController extends Controller
 
 	protected function laatikkorakenne($arvo, $this_pvm, $this_tid, $toistuva, $laatikkomuoto, $with, $asiakas_tyovuorossa){
 		// <-- Status
-		$status = $this->statukset();
+		$status = $this->statukset($arvo->piilota_mobiilista);
 		// Status -->
 
 		$return 	= [];
