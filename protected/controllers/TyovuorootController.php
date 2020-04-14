@@ -782,7 +782,7 @@ class TyovuorootController extends Controller
 		}
 		//
 
-		  $this->redirect('beta');
+		  $this->redirect(['beta', 'mode' => 'vko']);
 
 		} else {
 		  $this->render('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>false));
