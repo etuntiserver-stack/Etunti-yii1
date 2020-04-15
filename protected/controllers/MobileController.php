@@ -483,8 +483,8 @@ class MobileController extends Controller
 			$newarr 	= [];
 			foreach($dataAll as $k => $arr){
 				$data 	= $arr['data'];
-				if($data->status == 3 or $data->status == 0){
-					$tt 	= $arr['tt'];
+				if( isset($data->tt) and $data->status == 3 or $data->status == 0 ){
+					$tt 	= $data->tt;
 					$pvm 	= date("Ymd", strtotime($data->pvm));
 					$tn	= trim($tt->$tt_order_1.' '.$tt->$tt_order_2);
 					if(!isset($newarr[$pvm][$tn][$data->tid][$data->osoite]))
@@ -3916,8 +3916,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	$r .= '<td style="width:18%">'.(($data->status == 3)?$data->kohde_kannasta:'').(($data->status == 10)?'LOUNASTAUKO':'').(($data->status == 2)?'MATKA':'').'</td>';
 	$r .= '<td style="width:10%">'.date("H:i",strtotime($data->aloitan)).'</td>';
 	$r .= '<td style="width:10%">'.date("H:i",strtotime($data->loppui)).'</td>';
-	$r .= '<td style="width:10%">'.sprint($kesto).'</td>'; //<br><b>('.num($kesto).')</b>
-	$r .= '<td style="width:10%">'.num($kesto).'</td>'; //<br><b>('.num($kesto).')</b>
+	$r .= '<td style="width:10%">'.$this->sprint($kesto).'</td>'; //<br><b>('.num($kesto).')</b>
+	$r .= '<td style="width:10%">'.$this->num($kesto).'</td>'; //<br><b>('.num($kesto).')</b>
 	$r .= '<td style="width:10%">'.$this->statusMuutosNimeksi($data->status).'</td>';
 	$r .= '</tr>';
 	return $r;
