@@ -514,13 +514,7 @@ $('.multTyoryhma').multiselect({
 	    <?php endif; ?>
 
       </ul>
-<!--
-      <form class="navbar-form navbar-left navbar-search" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Haku...">
-        </div>
-      </form>
--->
+
       <ul class="nav navbar-nav navbar-right">
 <?php /*
         <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Uusimmat viestit'); ?>">
