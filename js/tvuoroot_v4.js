@@ -109,7 +109,7 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 			pvm_muutos = pvm.split(".");
 			did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
 			if( $("#" + did).length > 0 )
-				$("#" + did).html(all_tv_edit + '<div class="pull-right pvm_yht">' + $.sprint(tv_kesto) + '</div>');
+				$("#" + did).html(all_tv_edit + '<div class="pvm_kesto"><span>' + $.sprint(tv_kesto) + '</span></div>');
 			yht += tv_kesto;
 		});
 	});

@@ -72,12 +72,22 @@ td .latikkoAsetukset p{
 	margin-right: 3px;
 	cursor: pointer;
 }
+.pvm_kesto{
+	position: absolute; top:4px; right:3px;
+	z-index: 1;
+}
+.pvm_kesto span{
+	padding: 4px 7px;
+	border: 1px #ddd solid;
+	background : white;
+}
 .latikkolisatiedot_paa{
 	position: absolute; top: 0; right: 0;
+	z-index: 2;
 }
 .latikkolisatiedot{
 	background: #fff;
-	padding: 2px 5px;
+	padding: 4px 7px;
 	border: 1px #ddd solid;
 	color: orange;
 	z-index: 999;
