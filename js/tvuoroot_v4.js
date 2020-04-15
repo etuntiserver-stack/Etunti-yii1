@@ -442,7 +442,7 @@ $(document).delegate(".latikkoAsetukset p","contextmenu",function(e){
         .css({top: event.pageY + "px", left: event.pageX + "px"});
 });
 
-$(document).bind("click", function(event) {
+$(document).delegate(".close_context_menu","click",function(){
 	$("div.custom-menu").hide();
 });
 

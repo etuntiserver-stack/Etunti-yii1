@@ -3055,10 +3055,10 @@ class TyovuorootController extends Controller
 
 		if( $toistuva )
 			$return .= '<span class="text-danger">Huomio!<p>Tämä muokaus irrotta päivä toistuvasta ketjusta ja tilalle luodaan yksittyinen työvuoro.</p></span>';
-		$return .= '<div class="row form_lomake" toistuva="'.(($toistuva)? 'true':'false').'">';
+		$return .= '<div class="form_lomake" toistuva="'.(($toistuva)? 'true':'false').'">';
 
         	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
-		$return .= '<div class="col-sm-12">
+		$return .= '<div class="row"><div class="col-sm-12">
 		'.$form->labelEx($model,'tyoajanmerkinta').
 		'<select name="Tyovuoroot_[tyoajanmerkinta]" class="form-control" id="tyoajanmerkinta">';
 			if(!empty($model->tyoajanmerkinta)){
@@ -3076,22 +3076,24 @@ class TyovuorootController extends Controller
 			   if($v->value != 'Normaali/' and $v->value != 'Ei lasketa/red')
 			   $return .= '<option style="color:'.$color.'" value="'.$v->value.'">'.$value.'</option>';
 			}
-		$return .= '</select></div>';
+		$return .= '</select></div></div>';
 
 		$list = $this->peruutettuArray();
-		$return .= '<div class="col-sm-12">
+		$return .= '<div class="row"><div class="col-sm-12">
 		'.$form->labelEx($model,'peruutettu').'
 		'.$form->dropDownList($model,"peruutettu", $list, 
 		array("empty"=>"", "class"=>"form-control", "id" => "peruutettu")).'
-		</div>';
+		</div></div>';
 
 		$list = array(0 => 'Ei laskutettu', 1 => 'Laskutettu');
-		$return .= '<div class="col-sm-12">
+		$return .= '<div class="row"><div class="col-sm-12">
 		'.$form->labelEx($model,'laskutettu').'
 		'.$form->dropDownList($model,"laskutettu", $list, 
 		array("class"=>"form-control", "id" => "laskutettu")).'
-		</div>';
-
+		</div></div>';
+		$return .= '<br>';
+		$return .= '<div class="row">';
+		$return .= '<div class="col-sm-12"><p><button class="close_context_menu btn btn-primary btn-block">Sulje</button></p></div>';
 		$return .= '</div>';
 
 		$this->endWidget();
