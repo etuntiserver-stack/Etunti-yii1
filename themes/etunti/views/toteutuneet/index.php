@@ -10,6 +10,7 @@ $asetukset=Asetukset::model()->findbypk(1);
 $netvisor_kaytto = $asetukset->netvisor_kaytto;
 $netvisor_mita_onkayttossa = $asetukset->netvisor_mita_onkayttossa;
 ?>
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v4.css">
 <style>
 .fullRivi{
 	height: 100%;
@@ -30,8 +31,11 @@ table { width: 100%; }
 .tdw1, .tdw2, .tdw3, .tdw4{
 	width: 25%;
 }
+td .latikkoAsetukset{
+	max-height: none;
+}
 </style>
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v4.css">
+
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
