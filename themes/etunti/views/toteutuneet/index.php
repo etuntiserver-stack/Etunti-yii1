@@ -11,6 +11,8 @@ $netvisor_kaytto = $asetukset->netvisor_kaytto;
 $netvisor_mita_onkayttossa = $asetukset->netvisor_mita_onkayttossa;
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v4.css">
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot_v4.js"></script>
 <style>
 .fullRivi{
 	height: 100%;
