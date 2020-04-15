@@ -337,16 +337,10 @@ if( $curpage == 'tyovuoroot/beta' )
 		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.$nextWeek.'&year='.$nextYear.'&mode='.((isset($_GET['mode']))?$_GET['mode']:''); ?>">
 				<i class="fa fa-arrow-right btn btn-default btn-group" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Seuraava viikko'); ?>"></i>
 			</a> 
-
+			<button class="btn btn-default fa fa-calendar-check-o" id="vkolopput" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Viikonloput'); ?>"></button>
                </div>
               </div>
         </li>
-
-        <li class="p10" data-toggle="tooltip">
-              <div class="form-group">
-	 	<div class="btn btn-default fa fa-calendar-check-o" id="vkolopput" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Viikonloput'); ?>"></div>
-	      </div>
-	</li>
 	<?php endif; ?>
 	<!-- Viikonloput -->
 
@@ -354,6 +348,7 @@ if( $curpage == 'tyovuoroot/beta' )
 	<!-- Tilaus -->
         <li class="p10" data-toggle="tooltip">
 		<button class="btn btn-default fa fa-shopping-cart" id="uusiTilaus" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Uusi tilaus'); ?>"></button>
+		<button class="btn btn-default fa fa-angle-double-down tvasetus <?=((isset($_SESSION['skrollaus']))?'btn-success':'')?>" for="skrollaus" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Skrollaus'); ?>"></button>
         </li>
 	<!-- Tilaus -->
 
@@ -448,6 +443,22 @@ $("#uusiTilaus").click(function(){
 	type:'POST',
 	success:function(data){
 		$('#showres').modal().html(data);
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+
+});
+$(".tvasetus").click(function(){
+   var whatfor = $(this).attr('for');
+   $.ajax({
+	url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/tvasetus?whatfor=' + whatfor,
+	success:function(data){
+		console.log(data);
+		data = JSON.parse(data);
+		if( data['skrollaus'] )
+			window.location.reload();
    	},
 	error:function(data){
 		console.log(data);

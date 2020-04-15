@@ -4,6 +4,10 @@ ini_set('memory_limit', '512M');
 //exit;
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v4.css">
+<?php
+if( !isset($_SESSION['skrollaus']) )
+	echo '<style>td .latikkoAsetukset{max-height: none;}</style>';
+?>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot_v4.js"></script>
 <?php echo CHtml::button(Yii::t('main', 'Lähetä'),array('class'=>'btn btn-lg btn-success','id'=>'lahetaTyovuoroja', 'style' => 'display: none; position:fixed; bottom: 0; left: 0; margin: 10px')); ?>
