@@ -4889,10 +4889,6 @@ class TyovuorootController extends Controller
 		$to = date("d.m.Y", strtotime($_GET['to']));
 
 		$haku_criteria = [];
-		if(isset($_GET['tekijaPaaSivulla'])){
-			$impl = implode(",", $_GET['tekijaPaaSivulla']);
-	        	$haku_criteria[] = " tid IN ($impl) ";
-		}
 
 		if(isset($_GET['laskutettu']) and !empty($_GET['laskutettu'])){
 	        	$haku_criteria[] = " laskutettu='".$_GET['laskutettu']."' ";
@@ -4902,7 +4898,7 @@ class TyovuorootController extends Controller
 		if(isset($_GET['peruutettu']) and $_GET['peruutettu'] == 1){
 	        	$haku_criteria[] = " peruutettu!='0' ";
 		} else {
-	        	$haku_criteria[] = " peruutettu='0' ";
+	        	$haku_criteria[] = " peruutettu='0' OR peruutettu IS NULL";
 		}
 		if(isset($_GET['uusi_tilaus']) and !empty($_GET['uusi_tilaus'])){
 	        	$haku_criteria['uusi_tilaus'] = " t.uusi_tilaus='".$_GET['uusi_tilaus']."' ";
@@ -4926,7 +4922,7 @@ class TyovuorootController extends Controller
 		}
 
 		$perSivu = 50;
-		$tids = [];
+		$tids = (isset($_GET['tekijaPaaSivulla']))?$_GET['tekijaPaaSivulla']:[];
 		$with	= ['data'];
 		$dataAll = $this->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, $with);
 
@@ -4941,20 +4937,32 @@ class TyovuorootController extends Controller
 
 	public function FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, $with)
 	{
+
+		if( count($tids) == 0 ){
+			$tt = Tyontekijat::model()->findAll("aktiivinen=1");
+			$arr_tids = [];
+			foreach($tt as $item)
+				$arr_tids[$item->id] = $item->id;
+			$tids = $arr_tids;
+		}
+
 		$data = [];
 		$pvm_from = date("Y-m-d", strtotime($from));
 		$pvm_to = ($to !== null)?date("Y-m-d", strtotime($to)):null;
 		$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, $haku_criteria, false, $with);
 
+		/*
 		$tids_after = [];
 		foreach($tv_arr as $t => $arr)
 			$tids_after[] = $t;
+		*/
 
 		// <-- Sort by PVM
 		$sort = [];
-		foreach($tids_after as $tid)
-			foreach($tv_arr[$tid] as $k => $v)
-				$sort[strtotime($k)][$tid][] = $v;
+		foreach($tids as $tid)
+			if(isset($tv_arr[$tid]))
+				foreach($tv_arr[$tid] as $k => $v)
+					$sort[strtotime($k)][$tid][] = $v;
 		ksort($sort);
 
 		foreach($sort as $k => $v)
@@ -4964,12 +4972,12 @@ class TyovuorootController extends Controller
 						foreach($v3 as $k4 => $v4)
 							$data[] = $v4;
 
-/*
+		/*
 		echo '<pre>';
-		print_r( $data );
+		print_r( $tv_arr );
 		echo '</pre>';
 		exit;
-*/
+		*/
 	
 		return $data;
 	}

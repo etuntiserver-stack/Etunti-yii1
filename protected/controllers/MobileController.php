@@ -761,13 +761,13 @@ class MobileController extends Controller
 
 		$model = Tyontekijat::model()->findAll($criteria);
 
-		//$dataProvider->pagination->pageSize = 50;
+		$tids = (isset($_GET['tekijaPaaSivulla']))?array_values($_GET['tekijaPaaSivulla']):[];
 		$dataAll = [];
 		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Suunnitellut'){
 			$tyovuorot = Yii::app()->createController('Tyovuoroot');
 			$haku_criteria = [];
 			if($kohde_id > 0){ $haku_criteria[] = " kohde='".$kohde_id."' "; }
-			$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data', 'tv_kesto']);
+			$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, ['data', 'tv_kesto']);
 		}
 
 		$this->render('raportit_taulu', array(
@@ -776,7 +776,7 @@ class MobileController extends Controller
 			'to' => $to,
 			'kohde_id' => $kohde_id,
 			'mob_or_tv' => $mob_or_tv,
-			'dataAll' => $dataAll
+			'dataAll' => $dataAll,
 		));
 
 

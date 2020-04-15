@@ -14,12 +14,13 @@
 	if( $mob_or_tv == 'tv' and isset($val['data']) ){
 		$data = $val['data'];
 		$tv_kesto = $val['tv_kesto'];
+		$pvm = $val['this_pvm'];
+		$tid = $val['this_tid'];
 		$val = $data;
 		$val->l_tunnit = $tv_kesto;
-		$pvm = $val->pvm;
 		$aloitus = $val->alku;
 		$lopetus = $val->loppu;
-		$tyontekijan_nimi = $this->etuSukunimi($data->tid);
+		$tyontekijan_nimi = $this->etuSukunimi($tid);
 	}
 ?>
 <tr>
