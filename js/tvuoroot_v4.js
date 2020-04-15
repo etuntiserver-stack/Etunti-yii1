@@ -294,9 +294,9 @@ $(document).delegate(".muistin","click",function(){
 		if( data['varoitus_tyopaari'] || data['varoitus_toistuva'] ){
 			alertti = "Huomio!\n\n";
 			if( data['varoitus_tyopaari'] )
-				alertti += "Siirtäessä tai poistaessa irotat " + data['varoitus_tyopaari']['alku'] + "-" + data['varoitus_tyopaari']['loppu'] + ", " + data['varoitus_tyopaari']['osoite'] + " työvuoro olevasta työparista";
+				alertti += "Siirtäessä tai poistaessa irrotat " + data['varoitus_tyopaari']['alku'] + "-" + data['varoitus_tyopaari']['loppu'] + ", " + data['varoitus_tyopaari']['osoite'] + " työvuoro olevasta työparista";
 			if( data['varoitus_toistuva'] )
-				alertti += "Siirtäessä tai poistaessa irotat " + data['varoitus_toistuva']['alku'] + "-" + data['varoitus_toistuva']['loppu'] + ", " + data['varoitus_toistuva']['osoite'] + " työvuoro toistuvasta ketjusta.";
+				alertti += "Siirtäessä tai poistaessa irrotat " + data['varoitus_toistuva']['alku'] + "-" + data['varoitus_toistuva']['loppu'] + ", " + data['varoitus_toistuva']['osoite'] + " työvuoro toistuvasta ketjusta.";
 			alert(alertti);
 		}
 	  	muisti();
@@ -479,9 +479,9 @@ $(document).delegate(".valitseKokopaiva","click",function(){
 			if( value['varoitus_tyopaari'] || value['varoitus_toistuva'] ){
 				alertti = "Huomio!\n\n";
 				if( value['varoitus_tyopaari'] )
-					alertti += "Siirtäessä tai poistaessa irotat " + value['varoitus_tyopaari']['alku'] + "-" + value['varoitus_tyopaari']['loppu'] + ", " + value['varoitus_tyopaari']['osoite'] + " työvuoro olevasta työparista.\n\r";
+					alertti += "Siirtäessä tai poistaessa irrotat " + value['varoitus_tyopaari']['alku'] + "-" + value['varoitus_tyopaari']['loppu'] + ", " + value['varoitus_tyopaari']['osoite'] + " työvuoro olevasta työparista.\n\r";
 				if( value['varoitus_toistuva'] )
-					alertti += "Siirtäessä tai poistaessa irotat " + value['varoitus_toistuva']['alku'] + "-" + value['varoitus_toistuva']['loppu'] + ", " + value['varoitus_toistuva']['osoite'] + " työvuoro toistuvasta ketjusta.\n\r";
+					alertti += "Siirtäessä tai poistaessa irrotat " + value['varoitus_toistuva']['alku'] + "-" + value['varoitus_toistuva']['loppu'] + ", " + value['varoitus_toistuva']['osoite'] + " työvuoro toistuvasta ketjusta.\n\r";
 				alert(alertti);
 			}
 		});
