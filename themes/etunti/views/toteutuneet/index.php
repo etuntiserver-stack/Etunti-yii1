@@ -437,7 +437,7 @@ $dateDiff = dateDiff($from, $to);
 		ksort($tv_arr[$tid][$date]);
 		foreach($tv_arr[$tid][$date] as $k => $v)
 			foreach($v as $v2){
-				$didoResult .= '<p>'.$v2['tv_edit'].'</p>';
+				$didoResult .= '<p><span class="pull-right">'.$this->sprint($v2['tv_kesto']).'</span>'.$v2['tv_edit'].'</p>';
 				$suunnittelut += $v2['tv_kesto'];
 		}
 		$didoResult .= '</div>';
@@ -866,7 +866,7 @@ $(document).ready(function(){
  }
 
 
- $('.tv_edit').append('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:-10px; font-size: 130%; z-index: 99999999" data-toggle="tooltip" data-placement="left" title="Siirrä toteutuun"></i>');
+ $('.tv_edit').append('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:2px; font-size: 130%; z-index: 99999999" data-toggle="tooltip" data-placement="left" title="Siirrä toteutuun"></i>');
 
 
  $( ".sirraToteutuun" ).tooltip({
