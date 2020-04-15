@@ -273,6 +273,15 @@ $(document).ready(function(){
 		<?php echo $form->error($model,'arvioitu_kesto'); ?>
 	</div>
 
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+	  $('#Kohteet_arvioitu_kesto').mask('00:00',{
+	        placeholder: "__:__"
+	  });
+	});
+	</script>
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kohteen_neliot'); ?>
 		<?php echo $form->numberField($model,'kohteen_neliot',array('maxlength'=>5,'class'=>'form-control', 'step' => "any")); ?>
@@ -287,15 +296,6 @@ $(document).ready(function(){
 	echo CHtml::link('Luo avain', array('/avaimet/create', 'asiakas_id' => $model->asiakas_id, 'kohde_id' => $model->id), array('class'=>'btn btn-default btn-block')); 
 	}
 	?>
-
-	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
-	<script type="text/javascript">
-	$(document).ready(function(){
-	  $('#Kohteet_arvioitu_kesto').mask('00:00',{
-	        placeholder: "__:__"
-	  });
-	});
-	</script>
 
   </div><div class="col-sm-6">
 
