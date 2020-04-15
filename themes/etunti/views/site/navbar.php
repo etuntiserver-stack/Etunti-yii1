@@ -348,7 +348,7 @@ if( $curpage == 'tyovuoroot/beta' )
 	<!-- Tilaus -->
         <li class="p10" data-toggle="tooltip">
 		<button class="btn btn-default fa fa-shopping-cart" id="uusiTilaus" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Uusi tilaus'); ?>"></button>
-		<button class="btn btn-default fa fa-angle-double-down tvasetus <?=((isset($_SESSION['skrollaus']))?'btn-success':'')?>" for="skrollaus" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Skrollaus'); ?>"></button>
+		<button class="btn btn-default fa fa-angle-double-down tvasetus <?=((!isset($_SESSION['skrollaus']))?'btn-success':'')?>" for="skrollaus" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Skrollaus'); ?>"></button>
         </li>
 	<!-- Tilaus -->
 
