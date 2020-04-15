@@ -4925,7 +4925,7 @@ class TyovuorootController extends Controller
 			$impl_status = implode(",", $_GET['status']);
 	        	$haku_criteria[] = " status IN ($impl_status) ";
 		}
-		if(isset($_GET['yrityksen_nimi'])){
+		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])){
 	        	$haku_criteria[] = " kohde IN (SELECT id FROM sivex_kohdet WHERE 
 				asiakas_id IN (
 					SELECT id FROM asiakkaat WHERE
@@ -4978,19 +4978,21 @@ class TyovuorootController extends Controller
 		foreach($tids as $tid)
 			if(isset($tv_arr[$tid]))
 				foreach($tv_arr[$tid] as $k => $v)
-					$sort[strtotime($k)][$tid][] = $v;
+					foreach($v as $k1 => $v1)
+						foreach($v1 as $k2 => $v2)
+							$sort[strtotime($v2['this_pvm'].' '.$v2['data']['alku'])][$tid][] = $v1;
+
 		ksort($sort);
 
 		foreach($sort as $k => $v)
 			foreach($v as $k1 => $v1)
 				foreach($v1 as $k2 => $v2)
 					foreach($v2 as $k3 => $v3)
-						foreach($v3 as $k4 => $v4)
-							$data[] = $v4;
+						$data[] = $v3;
 
 		/*
 		echo '<pre>';
-		print_r( $tv_arr );
+		print_r( $data );
 		echo '</pre>';
 		exit;
 		*/
