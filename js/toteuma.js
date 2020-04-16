@@ -523,11 +523,14 @@ $(document).delegate(".poistaRivit","click",function(){
 
 
  $(document).delegate(".sirraToteutuun","click",function(){
-
+	var r = confirm('Oletko varmaa?');
+	if(!r){
+		return false;
+	}
 	$(this).hide();
 	$(this).closest('p').addClass('bg-success');
 	var laatikot = '';
-      	var this_id = $(this).closest('.tv_edit').attr('id');
+      	var this_id = $(this).closest('p').find('.tv_edit').attr('id');
         $.ajax({
            url: 'siirra_toteutuun?this_id=' + this_id,
            //type: "POST",
@@ -544,7 +547,6 @@ $(document).delegate(".poistaRivit","click",function(){
 		}
            }
         });
-
  });
 
 

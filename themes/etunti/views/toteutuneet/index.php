@@ -868,7 +868,7 @@ $(document).ready(function(){
  }
 
 
- $('.tv_edit').append('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:2px; font-size: 130%; z-index: 99999999" data-toggle="tooltip" data-placement="left" title="Siirrä toteutuun"></i>');
+ $('.tv_edit').after('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:2px; font-size: 130%; z-index: 99999999" data-toggle="tooltip" data-placement="left" title="Siirrä toteutuun"></i>');
 
 
  $( ".sirraToteutuun" ).tooltip({
