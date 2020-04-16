@@ -137,9 +137,13 @@ $this->menu=array(
 	$alv = 0;
  foreach($model as $data)
  {
-	$veroton += $data->yhteensa_total_veroton;
-	$alv += $data->yhteensa_total_verot;
-	$saldo += $data->yhteensa_total;
+	if( $data->yhteensa_total < 0 ){
+		$data->yhteensa_total_veroton = (0-$data->yhteensa_total_veroton);
+		$data->yhteensa_total_verot = (0-$data->yhteensa_total_verot);
+	}
+	$veroton += (float)$data->yhteensa_total_veroton;
+	$alv += (float)$data->yhteensa_total_verot;
+	$saldo += (float)$data->yhteensa_total;
 	$this->renderPartial('_paivakirja',array('data'=>$data));
  }
  ?>
