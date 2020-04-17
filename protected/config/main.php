@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL & ~E_WARNING);
 session_start();
+error_reporting(E_ALL & ~E_WARNING);
 
 // uncomment the following to define a path alias
 // Yii::setPathOfAlias('local','path/to/local-folder');
