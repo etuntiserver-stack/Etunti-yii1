@@ -230,15 +230,22 @@ class MobileController extends Controller
 
 	public function actionGet_tyovuorot_day($id)
 	{
-		$model = Tyovuoroot::model()->findbypk($id);
-		if(isset($model->pvm))
-		{
+		$return = [];
+		$tyovuorot = Yii::app()->createController('Tyovuoroot');
+		$get_id 	= $tyovuorot[0]->this_id($id);
+		if(isset($get_id['pvm'])){
 			$return = array(
-				'week'=>date("W", strtotime($model->pvm)),
-				'year'=>date("Y", strtotime($model->pvm)),
+				'week'=>date("W", strtotime($get_id['pvm'])),
+				'year'=>date("Y", strtotime($get_id['pvm'])),
+				'tid'=>$get_id['tid'],
 			);
 			echo json_encode($return);
+			exit;
+		} else {
+			$return['error'] = true;
 		}
+		echo json_encode($return);
+		exit;
 	}
 
 	public function actionRaportit()

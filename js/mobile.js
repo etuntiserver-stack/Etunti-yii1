@@ -122,16 +122,16 @@ $(document).delegate(".poistaKohde","click",function(){
 
 });
 
-$(document).delegate(".latikkoAsetukset .fullRivi","click",function(){
-   	var thisId = $(this).attr('id').split("_");
+$(document).delegate(".latikkoAsetukset .tv_edit","click",function(){
+   	var thisId = $(this).attr('id');
         $.ajax({
            url: 'get_tyovuorot_day',
            type: "GET",
-           data: { "id" : thisId[0] },
+           data: { "id" : thisId },
            success: function(html){
 		html = JSON.parse(html);
-		console.log(html)
-		window.location.href= location.protocol + "//" + location.host + "/index.php/tyovuoroot/index?week="+html['week']+"&year="+html['year']+"&tid="+thisId[2];
+		//console.log(html)
+		window.location.href= location.protocol + "//" + location.host + "/index.php/tyovuoroot/beta?mode=vko&week="+html['week']+"&year="+html['year']+"&tid="+html['tid'];
            }
         });
 });
