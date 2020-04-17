@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus'),
+				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -1409,7 +1409,71 @@ class TyovuorootController extends Controller
 		$vmigrate = Yii::createComponent('VirtualMigration', $step);
 		$results = $vmigrate->doNextStep();
 		print_r(json_encode($results));
-	}
+  }
+
+  public function actionFind_past_chains()
+  {
+    if (!($_POST['find_past_chains_begin'] ?? false)) {
+      return $this->render('find_past_chains');
+    }
+
+    $current = 0;
+    $total = 0;
+    $created = 0;
+    $deleted = 0;
+
+    $yield = function(string $text, int $type = 0) use (&$current, &$total, &$created, &$deleted) {
+      echo json_encode([
+        'text' => $text,
+        'type' => min(1, max(-1, $type)),
+        'current' => $current,
+        'total' => $total,
+        'created' => $created,
+        'deleted' => $deleted
+      ]);
+      ob_flush();
+      flush();
+    };
+
+    /** @var \CDbConnection */
+    $db = Yii::app()->db1;
+
+    $tvr = $db->createCommand(
+      "SELECT * FROM sivex_tvuoro WHERE pvm IS NOT NULL AND
+      IFNULL(STR_TO_DATE(pvm, '%d.%m.%Y'), DATE(pvm)) < '2020-04-10'
+      ORDER BY IFNULL(STR_TO_DATE(pvm, '%d.%m.%Y'), DATE(pvm)) ASC"
+    )->queryAll();
+
+    $total = count($tvr);
+    $yield("Haettiin menneet työvuorot. Yhteensä: $total");
+
+    sleep(2);
+
+    $created = 1;
+    $deleted = 33;
+    $total -= 33;
+    $current = 2;
+    $yield("Luotiin ketju 33 työvuorosta", 1);
+
+    sleep(1);
+
+    $current = $total;
+    return;
+
+    for ($i = 1; $i <= 100; $i++) {
+      echo json_encode([
+        'text' => "Current: $i",
+        'type' => 0,
+        'current' => $i,
+        'total' => 100,
+        'created' => 0,
+        'deleted' => 0
+      ]);
+      ob_flush();
+      flush();
+      usleep(200000);
+    }
+  }
 
 	public function actionBeta($kohteet_siivous = [], $kohde = '', $asiakas = '', $mode = null, $stage = null)
 	{
