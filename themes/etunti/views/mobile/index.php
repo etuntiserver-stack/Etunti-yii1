@@ -3,8 +3,12 @@
 /* @var $dataProvider CActiveDataProvider */
 
 ?>
-
-<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot.css">
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v4.css">
+<style>
+td .latikkoAsetukset{
+	max-height: none;
+}
+</style>
 
         <!-- begin: .tray-center -->
         <div class="tray-center">
@@ -284,6 +288,7 @@ $(document).delegate(".show_erittelyt", "click", function(){
 	  	  	//console.log(data);
 	      	},
 	  	error:function(data){
+	  	  	//console.log(data);
 			window.location.href=location.protocol + "//" + location.host + '/index.php';
 	  	}
 	});
@@ -325,7 +330,8 @@ $(document).delegate(".show_erittelyt", "click", function(){
 			$('.myBgColors').addClass(localStorage.getItem('headerSkin'));
 	      	},
 	  	error:function(data){
-			window.location.href=location.protocol + "//" + location.host + '/index.php';
+	  	  	console.log(data);
+			//window.location.href=location.protocol + "//" + location.host + '/index.php';
 	  	}
 	});
 

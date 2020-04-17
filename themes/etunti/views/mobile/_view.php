@@ -2,8 +2,15 @@
 /* @var $this MobileController */
 /* @var $data Mobile */
 
-  	$class = '';
+// <-- adminPaketti
+$tas = explode(",",Yii::app()->user->adminPaketti);
+// <-- adminPaketti
 
+$date 	= date("d.m.Y",strtotime($data->aloitan));
+$tid 	= $data->tid;
+
+
+$class = '';
 // <-- Jos sivu on laskutettu
 if( isset($sivu) and $sivu == 'laskutettu' )
 {
@@ -115,16 +122,6 @@ if( isset($sivu) and $sivu == 'laskutettu' )
  $objcts = '';
  $osoite = '';
 
- // <-- adminPaketti
- $obtrue = false;
- $tas = explode(",",Yii::app()->user->adminPaketti);
- if(in_array('2',$tas) and isset($data->tid) and !empty($apvmForSu[$data->id])){
-	  $su = Tyovuoroot::model()->find(" tid='".$data->tid."' and pvm='".$apvmForSu[$data->id]."' ");
-	  if(isset($su['id']))
-	  $obtrue = true;
- }
- // <-- adminPaketti 
-
  $diff = 0;
  if(date('Y-m-d H:i', strtotime($data->aloitan.'+4 hour')) < date('Y-m-d H:i') and empty($data->loppui)){
   	$diff = strtotime(date('Y-m-d H:i'))-strtotime($data->aloitan);
@@ -168,51 +165,40 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 	<td><?php echo $karttaA." ".$karttaL; ?></td>
 
 	<td>
-	<!--
-	  <div class="col-sm-2">
-	  <?php 
-	     $filename = "../../img/tekijat/".Yii::app()->user->domain."/".$data->tid.".jpg";
-	     if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$data->tid.".jpg"))
-	     echo '<img src="'.$filename.'" class="img-thumbnail">';
-	     else
-	     echo '<img src="../../img/tekijat/noname.jpg" class="img-responsive">';
-	  ?>
-	  </div>
-	 -->
 	  <?php echo CHtml::link(' ','/index.php/viestinta/create?tid='.$data->tid,array('target'=>'_blank','class'=>'link fa fa-envelope')); ?>&nbsp;
 	  <?php echo CHtml::link($this->etuSukunimi($data->tid),'/index.php/tyontekijat/update?id='.$data->tid,array('target'=>'_blank','style'=>'color: #0A98DC;')); ?>
 	</td>
 	<td><?=$erittelyt?></td>
+
 	<!-- adminPaketti -->
-	<?php if( in_array('2',$tas) and isset($sivu) and $sivu == 'index' ) : ?>
-	<?php
-	$did = date("Ymd",strtotime($apvm[$data->id]));
-	?>
+	<?php if( in_array('2',$tas) ) : ?>
 	<td>
-	  <!--<span class="link vietyovuoroon" pvmtid="<?php echo $did.'_'.$data->tid; ?>"><i class="fa fa-table"></i></span>-->
-	<?php  if($obtrue == true):  ?>
+		<?php if( isset($sivu) and $sivu == 'index' and isset($tv_arr[$tid][$date]) ): ?>
+		<span class="link" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>">
+		<span class="fa fa-list-alt"></span>
+		</span>
 
-	  <span class="link" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>">
-	  <span class="fa fa-list-alt"></span>
-	  </a>
-
-	    <div style="position:absolute;width:300px;z-index: 2;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
-	     <div class="row">
-	      <div class="panel col-sm-12">
-	     <?php 
-		$did = '';
-		$did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili'), true); 
-		echo json_decode($did, true);
-	     ?>
-	      </div>
-	     </div>
-	    </div>
-
-	<?php endif; ?>
+		<div style="position:absolute;width:300px;z-index: 2;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
+		<div class="row">
+		<div class="panel col-sm-12">
+		<?php 
+		$did 		= date("Ymd",strtotime($date));
+		$didoResult 	= '';
+		$didoResult 	.= '<div id="suun_'.$did.'_'.$tid.'" class="latikkoAsetukset" pvm="'.$date.'" tid="'.$tid.'">';
+		ksort($tv_arr[$tid][$date]);
+		foreach($tv_arr[$tid][$date] as $k => $v)
+			foreach($v as $v2)
+				$didoResult .= '<p><span class="pull-right">'.$this->sprint($v2['tv_kesto']).'</span>'.$v2['tv_edit'].'</p>';
+		$didoResult 	.= '</div>';
+		echo $didoResult;
+		?>
+		</div>
+		</div>
+		</div>
+		<?php endif; ?>
 	</td>
 	<?php endif; ?>
 	<!-- adminPaketti -->
-
 
 	<td>
 	  <span class="link" data-toggle="collapse" data-target="<?php echo '#tagshow_'.$data->id; ?>">

@@ -1592,9 +1592,26 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		$dataProvider->pagination->pageSize = 50;
 
+		// <-- Tyovuorot
+		$pvms = [];
+		$tids = [];
+		foreach($dataProvider->getData() as $item){
+			$pvms[strtotime($item->aloitan)] = strtotime($item->aloitan);
+			$tids[$item->tid] = $item->tid;
+		}
+		$haku_criteria 	= " peruutettu='0' OR peruutettu IS NULL";
+		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+		$tv_arr 	= $tyovuorot[0]->tv_arr(date("Y-m-d", min($pvms)), date("Y-m-d", max($pvms)), $tids, $haku_criteria, true, []);
+		//     Tyovuorot -->
+/*
+		echo '<pre>';
+		print_r($tv_arr);
+		echo '</pre>';
+		exit;
+*/
 		if(isset($_POST['index_ajax']))
 		{
-			echo $this->renderPartial('index_a', array('dataProvider' => $dataProvider));
+			echo $this->renderPartial('index_a', array('dataProvider' => $dataProvider, 'tv_arr' => $tv_arr));
 			exit;
 		} else {
 			echo $this->render('index', array('dataProvider' => $dataProvider));
