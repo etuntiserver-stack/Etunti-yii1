@@ -71,37 +71,32 @@
 
     $("#btn-start-toggle").on("click", function(e) {
       e.preventDefault();
+      if (running)
+        return;
+      running = true;
+      $("#btn-start-toggle").addClass("disabled").attr("aria-disabled", true).text("Aloitettu");
 
-      if (!running) {
-        $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/find_past_chains?run=1`, {
-          type: 'POST',
-          data: { find_past_chains_begin: true },
-          xhrFields: {
-            onprogress: function(e) {
-              let response = e.currentTarget.response.substring(previousLength);
-              previousLength = e.currentTarget.response.length;
-              console.log(response);
-              let parsed = JSON.parse(response);
-              if (parsed.text.length > 0)
-                output(parsed.text, parsed.type);
-              $("#status").text("Käsitelty: {1}/{2}".f(parsed.current, parsed.total));
-              if (parsed.created > 0) {
-                $("#status-created").text("Ketjuja luotu: {1} (poistettu {2} työvuoroa)".f(parsed.created, parsed.deleted));
-              }
-            }
+      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/find_past_chains`, {
+        type: 'POST',
+        data: { find_past_chains_start: true },
+        xhrFields: {
+          onprogress: function(e) {
+            let response = e.currentTarget.response.substring(previousLength);
+            previousLength = e.currentTarget.response.length;
+            // console.log(response);
+            let parsed = JSON.parse(response);
+            parsed.lines.forEach(function(line) { output(line.text, line.type); });
+            $("#status").text("Käsitelty: {1}/{2}".f(parsed.current, parsed.total));
+            $("#status-created").text("Ketjuja luotu: {1} (poistettu {2} työvuoroa)".f(parsed.created, parsed.deleted));
           }
-        }).success(function(data) {
-          output("Toiminto suoritettu.", 1);
-        }).error(function(xhr, status, error) {
-          output("Toiminto keskeytetty, virhe: " + xhr.responseText, -1);
-        }).complete(function() {
-          $("#btn-start-toggle").removeClass("btn-danger").addClass("btn-success").text("Aloita");
-        });
-        running = true;
-        $("#btn-start-toggle").removeClass("btn-success").addClass("btn-danger").text("Pysäytä");
-      } else {
-        alert("Pysäytys ei vielä toiminnassa");
-      }
+        }
+      }).success(function(data) {
+        output("Toiminto lopetettu.", 0);
+      }).error(function(xhr, status, error) {
+        output("Toiminto keskeytetty, virhe: " + xhr.responseText, -1);
+      }).complete(function() {
+        $("#btn-start-toggle").removeClass("disabled").attr("aria-disabled", false).text("Aloita");
+      });
     });
   });
 </script>

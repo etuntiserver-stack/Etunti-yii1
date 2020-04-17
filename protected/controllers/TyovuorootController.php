@@ -1413,65 +1413,116 @@ class TyovuorootController extends Controller
 
   public function actionFind_past_chains()
   {
-    if (!($_POST['find_past_chains_begin'] ?? false)) {
+    if (!isset($_POST['find_past_chains_start'])) {
       return $this->render('find_past_chains');
     }
 
-    $current = 0;
-    $total = 0;
-    $created = 0;
-    $deleted = 0;
+    /** @var object Current status */
+    $s = (object)[
+      'current' => 0,
+      'total' => 0,
+      'created' => 0,
+      'deleted' => 0
+    ];
 
-    $yield = function(string $text, int $type = 0) use (&$current, &$total, &$created, &$deleted) {
-      echo json_encode([
-        'text' => $text,
-        'type' => min(1, max(-1, $type)),
-        'current' => $current,
-        'total' => $total,
-        'created' => $created,
-        'deleted' => $deleted
-      ]);
-      ob_flush();
-      flush();
+    /** @var array Output buffer */
+    $buffer = [];
+
+    /** @var array Previous flush time (hrtime, sec::microsec), to limit output flush interval. */
+    $previous_flush = [0, 0];
+
+    /**
+     * Add output to the buffer.
+     * @param int $type
+     * Specify -1 for error or 1 for primary output. Otherwise, normal output.
+     * Use -2 or 2 to force output flush even if time has not exceeded.
+     * @param string $fmt
+     * Text format for the output (sprintf).
+     * @param mixed ...$args
+     * Optional args for sprintf.
+     */
+    $output = function (int $type, string $fmt = null, ...$args) use (&$buffer, &$s, &$previous_flush) {
+      if (!empty($fmt)) {
+        array_unshift($args, $fmt);
+        $buffer[] = [
+          'text' => call_user_func_array('sprintf', $args),
+          'type' => min(1, max(-1, $type))
+        ];
+      }
+
+      $flush = abs($type) >= 2;
+      if (!$flush) {
+        $ctime = hrtime();
+        $pftime = $previous_flush;
+        if ($pftime[1] > $ctime[1]) { $pftime[0]++; $pftime[1] = -$pftime[1]; }
+        $flush = ($ctime[0] != $pftime[0] || $ctime[1] - $pftime[1] > 500000000);
+      }
+
+      if ($flush) {
+        echo json_encode([
+          'lines' => $buffer,
+          'current' => $s->current + 1,
+          'total' => $s->total,
+          'created' => $s->created,
+          'deleted' => $s->deleted
+        ]);
+
+        $previous_flush = $ctime;
+        $buffer = [];
+        ob_flush();
+        flush();
+      }
+
+      return ($type >= 0);
     };
 
     /** @var \CDbConnection */
     $db = Yii::app()->db1;
 
+    /** @var array Zero indexed past shifts array */
     $tvr = $db->createCommand(
       "SELECT * FROM sivex_tvuoro WHERE pvm IS NOT NULL AND
       IFNULL(STR_TO_DATE(pvm, '%d.%m.%Y'), DATE(pvm)) < '2020-04-10'
       ORDER BY IFNULL(STR_TO_DATE(pvm, '%d.%m.%Y'), DATE(pvm)) ASC"
     )->queryAll();
 
-    $total = count($tvr);
-    $yield("Haettiin menneet työvuorot. Yhteensä: $total");
+    $s->total = count($tvr);
+    $output(0, "Haettiin menneet työvuorot. Yhteensä: %d", $s->total);
 
-    sleep(2);
+    /** @var CDbSchema */
+    $schema = $db->getSchema();
 
-    $created = 1;
-    $deleted = 33;
-    $total -= 33;
-    $current = 2;
-    $yield("Luotiin ketju 33 työvuorosta", 1);
+    /** @var CDbTableSchema */
+    $table = $schema->getTable('sivex_tvuoro');
+    if (!$table)
+      return $output(-2, 'Taulua %s ei löytynyt.', 'sivex_tvuoro');
 
-    sleep(1);
+    /** @var array List of column names to compare */
+    $columns = array_diff($table->getColumnNames(), ['id', 'time', 'pvm', 'alku']);
+    if (empty($columns))
+      return $output(-2, 'Sarake array on tyhjä.');
 
-    $current = $total;
-    return;
+    // Start looping shifts from the earliest one.
+    for ($s->current; $s->current < $s->total - 1; $s->current++) {
+      $item = (object)$tvr[$s->current];
+      $matches = [];
 
-    for ($i = 1; $i <= 100; $i++) {
-      echo json_encode([
-        'text' => "Current: $i",
-        'type' => 0,
-        'current' => $i,
-        'total' => 100,
-        'created' => 0,
-        'deleted' => 0
-      ]);
-      ob_flush();
-      flush();
-      usleep(200000);
+      for ($i = $s->current + 1; $i < $s->total; $i++) {
+        $next = (object)$tvr[$i];
+        $match = true;
+        foreach ($columns as $column) {
+          if ($next->$column != $item->$column) {
+            $match = false;
+            break;
+          }
+        }
+        if ($match)
+          $matches[] = $next;
+      }
+
+      $output(count($matches) > 0, "Työvuoro ID %s (tid %s, pvm %s): %d vastaavaa työvuoroa", $item->id, $item->tid, $item->pvm, count($matches));
+      if ($s->current > 50)
+        return;
     }
   }
 
