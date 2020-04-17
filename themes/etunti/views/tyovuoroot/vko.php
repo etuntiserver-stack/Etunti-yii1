@@ -1,7 +1,9 @@
 <?php
 ini_set('memory_limit', '512M');
-//print_r($_SESSION['muistin']);
-//exit;
+if(isset($_SESSION['muistin'])){
+	//print_r($_SESSION['muistin']);
+	//exit;
+}
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v4.css">
 <?php

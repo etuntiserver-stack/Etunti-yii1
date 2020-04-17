@@ -515,7 +515,7 @@ $('.multTyoryhma').multiselect({
 	     </a>
 	    </li>
 	    <li class="muokkausLi" style="display:none">
-	     <a href="#" class="trash fa fa-trash-o" style="font-size: 150%" data-toggle="tooltip" data-placement="bottom" title="Poista valinnut työvuorot">
+	     <a href="#" class="trash fa fa-trash-o" style="font-size: 150%" data-toggle="tooltip" data-placement="bottom" title="Poista valitut työvuorot">
 	     </a>
 	    </li>
 	    <li class="muokkausLi" style="display:none">
