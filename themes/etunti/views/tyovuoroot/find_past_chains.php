@@ -20,6 +20,7 @@
 
 <!-- Full debug output -->
 <h4>Täysi tuloste:</h4>
+<label class="checkbox-inline"><input id="show-debug" type="checkbox" value="">Debug</label>
 <div id="output-full" class="well well-sm output"></div>
 
 
@@ -49,18 +50,25 @@
 
       // Output text with specific format.
       switch (type) {
-        case -1:
-          s = '<p class="text-danger"><b>{1} (VIRHE): {2}</b></p>'.f(timeStr, text);
-          $("#output-primary").prepend(s);
+        case 1:
+          s = '<p class="text-secondary">{1}: {2}</p>'.f(timeStr, text);
           $("#output-full").prepend(s);
           return s;
-        case 1:
+        case 2:
           s = '<p class="text-primary"><b>{1}: {2}</b></p>'.f(timeStr, text);
           $("#output-primary").prepend(s);
           $("#output-full").prepend(s);
           return s;
+        case 3:
+          s = '<p class="text-danger"><b>{1} (VIRHE): {2}</b></p>'.f(timeStr, text);
+          $("#output-primary").prepend(s);
+          $("#output-full").prepend(s);
+          return s;
         default:
-          s = '<p class="text-secondary">{1}: {2}</p>'.f(timeStr, text);
+          if ($('#show-debug').is(':checked'))
+            s = '<p class="text-secondary debug-output">{1}</p>'.f(text);
+          else
+            s = '<p class="text-secondary debug-output" style="display:none;">{1}</p>'.f(text);
           $("#output-full").prepend(s);
           return s;
       }
@@ -91,12 +99,20 @@
           }
         }
       }).success(function(data) {
-        output("Toiminto lopetettu.", 0);
+        output("Toiminto lopetettu.", 1);
       }).error(function(xhr, status, error) {
-        output("Toiminto keskeytetty, virhe: " + xhr.responseText, -1);
+        output("Toiminto keskeytetty, virhe: " + xhr.responseText, 3);
       }).complete(function() {
         $("#btn-start-toggle").removeClass("disabled").attr("aria-disabled", false).text("Aloita");
       });
+    });
+
+    $("#show-debug").change(function() {
+      if (this.checked) {
+        $('p.debug-output').css('display', 'block');
+      } else {
+        $('p.debug-output').css('display', 'none');
+      }
     });
   });
 </script>

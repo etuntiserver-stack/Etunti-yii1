@@ -1426,54 +1426,65 @@ class TyovuorootController extends Controller
     ];
 
     /** @var array Output buffer */
-    $buffer = [];
+    $output_buffer = [];
 
     /** @var array Previous flush time (hrtime, sec::microsec), to limit output flush interval. */
     $previous_flush = [0, 0];
 
     /**
      * Add output to the buffer.
-     * @param int $type
-     * Specify -1 for error or 1 for primary output. Otherwise, normal output.
-     * Use -2 or 2 to force output flush even if time has not exceeded.
-     * @param string $fmt
-     * Text format for the output (sprintf).
-     * @param mixed ...$args
-     * Optional args for sprintf.
+     * @param int $type      0:debug, 1:default, 2:primary/modification, 3:error
+     * @param string $fmt    Format for sprintf.
+     * @param mixed ...$args Optional args for sprintf.
      */
-    $output = function (int $type, string $fmt = null, ...$args) use (&$buffer, &$s, &$previous_flush) {
+    $fnbuffer = function (int $type, string $fmt = null, ...$args) use (&$output_buffer) {
+      array_unshift($args, $fmt);
+      $output_buffer[] = [
+        'text' => call_user_func_array('sprintf', $args),
+        'type' => min(3, max(0, $type))
+      ];
+    };
+
+    /**
+     * Flush output buffer and optionally add output to the buffer first.
+     * @param int $type      0:debug, 1:default, 2:primary/modification, 3:error
+     * @param string $fmt    Format for sprintf.
+     * @param mixed ...$args Optional args for sprintf.
+     */
+    $fnflush = function(int $type = 0, string $fmt = null, ...$args) use (&$output_buffer, &$s, &$previous_flush, $fnbuffer) {
       if (!empty($fmt)) {
-        array_unshift($args, $fmt);
-        $buffer[] = [
-          'text' => call_user_func_array('sprintf', $args),
-          'type' => min(1, max(-1, $type))
-        ];
+        array_unshift($args, $type, $fmt);
+        call_user_func_array($fnbuffer, $args);
       }
+      echo json_encode([
+        'lines' => $output_buffer,
+        'current' => $s->current,
+        'total' => $s->total,
+        'created' => $s->created,
+        'deleted' => $s->deleted
+      ]);
+      $previous_flush = hrtime();
+      $output_buffer = [];
+      ob_flush();
+      flush();
+    };
 
-      $flush = abs($type) >= 2;
-      if (!$flush) {
-        $ctime = hrtime();
-        $pftime = $previous_flush;
-        if ($pftime[1] > $ctime[1]) { $pftime[0]++; $pftime[1] = -$pftime[1]; }
-        $flush = ($ctime[0] != $pftime[0] || $ctime[1] - $pftime[1] > 500000000);
-      }
-
-      if ($flush) {
-        echo json_encode([
-          'lines' => $buffer,
-          'current' => $s->current + 1,
-          'total' => $s->total,
-          'created' => $s->created,
-          'deleted' => $s->deleted
-        ]);
-
-        $previous_flush = $ctime;
-        $buffer = [];
-        ob_flush();
-        flush();
-      }
-
-      return ($type >= 0);
+    /**
+     * Add output to the buffer and flush if elapsed time exceeds cutoff.
+     * @param int $type      0:debug, 1:default, 2:primary/modification, 3:error
+     * @param string $fmt    Format for sprintf.
+     * @param mixed ...$args Optional args for sprintf.
+     */
+    $fnout = function (int $type, string $fmt = null, ...$args) use (&$output_buffer, &$s, $previous_flush, $fnflush, $fnbuffer) {
+      // 1. Get current hrtime and adjust for negative calc.
+      // 2. Compare to previous flush time to check if elapsed time has exceeded cutoff.
+      // 3. Add type and fmt to args array, and call flush if time has exceeded cutoff; otherwise, buffer.
+      static $cutoff = 500000000; // 0.5 sec
+      $time = hrtime();
+      if ($previous_flush[1] > $time[1]) { $previous_flush[0]++; $previous_flush[1] = -$previous_flush[1]; }
+      $cutoff_exceeded = ($time[0] != $previous_flush[0] || $time[1] - $previous_flush[1] > $cutoff);
+      array_unshift($args, $type, $fmt);
+      call_user_func_array(($cutoff_exceeded ? $fnflush : $fnbuffer), $args);
     };
 
     /** @var \CDbConnection */
@@ -1487,7 +1498,7 @@ class TyovuorootController extends Controller
     )->queryAll();
 
     $s->total = count($tvr);
-    $output(0, "Haettiin menneet työvuorot. Yhteensä: %d", $s->total);
+    $fnout(1, "Haettiin menneet työvuorot. Yhteensä: %d", $s->total);
 
     /** @var CDbSchema */
     $schema = $db->getSchema();
@@ -1495,15 +1506,20 @@ class TyovuorootController extends Controller
     /** @var CDbTableSchema */
     $table = $schema->getTable('sivex_tvuoro');
     if (!$table)
-      return $output(-2, 'Taulua %s ei löytynyt.', 'sivex_tvuoro');
+      return $fnflush(3, 'Taulua sivex_tvuoro ei löytynyt.');
 
     /** @var array List of column names to compare */
     $columns = array_diff($table->getColumnNames(), ['id', 'time', 'pvm', 'alku']);
     if (empty($columns))
-      return $output(-2, 'Sarake array on tyhjä.');
+      return $fnflush(3, 'Sarake array on tyhjä.');
 
     // Start looping shifts from the earliest one.
     for ($s->current; $s->current < $s->total - 1; $s->current++) {
+      if ($s->current > 50) {
+        $fnflush();
+        return;
+      }
+
       $item = (object)$tvr[$s->current];
       $matches = [];
 
@@ -1520,9 +1536,12 @@ class TyovuorootController extends Controller
           $matches[] = $next;
       }
 
-      $output(count($matches) > 0, "Työvuoro ID %s (tid %s, pvm %s): %d vastaavaa työvuoroa", $item->id, $item->tid, $item->pvm, count($matches));
-      if ($s->current > 50)
-        return;
+      if (count($matches) == 0) {
+        $fnout(0, "Some debug info!");
+        continue;
+      }
+
+      $fnout(count($matches) > 0 ? 2 : 1, "{$s->current}: Työvuoro ID %s (tid %s, pvm %s): %d vastaavaa työvuoroa", $item->id, $item->tid, $item->pvm, count($matches));
     }
   }
 
