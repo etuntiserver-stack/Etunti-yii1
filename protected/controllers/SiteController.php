@@ -1829,6 +1829,7 @@ $(document).ready(function(){
 		if( !$this->isEtuntiAdmin() ){ 	$this->redirect('index'); }
 
 		// <-- Tyoryhmat
+		/*
 		$site = Yii::app()->createController('Site');
 		$arr = $site[0]->TyoryhmatHelper();
 		$ids = implode(",", $arr);
@@ -1837,9 +1838,10 @@ $(document).ready(function(){
 		} else {
 			$this->render('etusivu');
 		}
+		*/
 		//    Tyoryhmat -->
 
-
+		$this->render('etusivu');
 
 	}
 
