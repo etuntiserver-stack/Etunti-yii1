@@ -865,7 +865,7 @@ $(document).ready(function(){
 	<div class="panel-footer text-right">
 		<?php 
 		if(isset($model->id) and $toistuva and $poista == 1 and date("Ymd", strtotime($model->pfrom)) >= date("Ymd")){
-			echo '<span class="btn btn-danger tvpoisto" tilanne="poista_ketju_kokonaan">Poista kaikki. '.( (is_array($tyopaari) and count($tyopaari) > 0)? 'Työparit - '.(count($tyopaari)-1).'kpl' : '' ).'</span>';
+			echo '<span class="btn btn-danger tvpoisto" style="display:none" tilanne="poista_ketju_kokonaan">Poista kaikki. '.( (is_array($tyopaari) and count($tyopaari) > 0)? 'Työparit - '.(count($tyopaari)-1).'kpl' : '' ).'</span>';
 		}
 		 ?>
 		<?php /* echo CHtml::Button('Reload',array('class'=>'btn btn-default reload')); */ ?>
@@ -960,6 +960,7 @@ $(document).ready(function(){
 		if( $('#pto').val() === '' )
 			$('#pto').addClass('bg-danger');
 		$('.ilmoitus_pvm_muuttosta, #toistuvaAll').show();
+		$('.tvpoisto').show();
 	} else {
 		toistuva = false;
 		$('#toistuvaAll').removeClass('in');
@@ -967,6 +968,7 @@ $(document).ready(function(){
 		$('.ilmoitus_pvm_muuttosta').hide();
 		$('.tvpoisto, #tekijanVaihdo_huomio').hide();
 		$(".mult").multiselect("enable");
+		$('.tvpoisto').hide();
 	}
 
   });
