@@ -1298,28 +1298,13 @@ $(document).ready(function(){
   }
 
   function dids_before(){
-	var didlink = 'did4';
 	var dids = [];
-	$.ajax({
-		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/' + didlink + '?from=<?=$haku_from?>&to=<?=$haku_to?>',
-		type: 'POST',
-		async: false,
-		data: { tids : getAllTids() },
-		success:function(data){
-			data = JSON.parse(data);
-			//console.log(data);
-			$.each(data, function( tid, value ) {
-				$.each(value, function( pvm, v ) {
-					pvm_muutos = pvm.split(".");
-					did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
-					dids.push(did);
-				});
-			});
-
-		},error:function(data){
-		  	console.log(data);
-			//window.location.href=location.protocol + "//" + location.host + '/index.php';
-		}
+	$.each(getAllTids(), function( tid, value ) {
+		$("div[id$='_"+ value +"']").each(function() {
+			if( $(this).hasClass('latikkoAsetukset') ){
+				dids.push( $(this).attr('id') );
+			}
+		});
 	});
 	return dids;
   }
@@ -1327,10 +1312,8 @@ $(document).ready(function(){
   var dids_before_arr = dids_before();
 
   function laatikonPaivays(){
-	var didlink = 'did4';
-	//if(parent.location.href.match(/tv3/)){ didlink = 'did3'; }
 	$.ajax({
-		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/' + didlink + '?from=<?=$haku_from?>&to=<?=$haku_to?>',
+		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did4?from=<?=$haku_from?>&to=<?=$haku_to?>',
 		type: 'POST',
 		data: { tids : getAllTids() },
 		success:function(data){
@@ -1339,6 +1322,7 @@ $(document).ready(function(){
 			// <-- Tyhjenna kaikki kuluvia laatikot
 			$.each(dids_before_arr, function( i, v ) {
 				$("#" + v).html('');
+				//console.log(v);
 			});
 			$.tv_arr_update(data);
 		  	$('#showres').modal('hide');
