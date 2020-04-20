@@ -40,7 +40,7 @@
 		?>
 	</td>
 	<td>
-		<p><?php echo $data->pvm; ?></p>
+		<p><?php echo $arr['this_pvm']; ?></p>
 		<p><?php echo $data->alku; ?> - <?php echo $data->loppu; ?></p>
 		<p><?php if(isset($tt->id)) { echo $this->etuSukunimi($tt->id); } ?></p>
 	</td>
