@@ -102,25 +102,23 @@ if( isset($_SESSION['skrollaus']) )
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
 	<td class="bg-default td_tyontekija" style="z-index: 999; max-width: 150px; white-space: normal; font-size: 90%;">
-	<div class="m15 text-center">
+	<div class="m10 text-center">
 
 		<?php
 		echo '
-		<div class="row">
-		  <div class="col-sm-12">
+		<div class="text-center">
 		    	<a href="#" class="getTekijanTiedot" for="'.$tid.'">';
 			// <-- Kuva
 			if(
 				isset(Yii::app()->user->domain) 
 				and file_exists(dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$tid.".jpg") 
 			){
-				echo '<img src="../../img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$tid.".jpg".'" alt="avatar" class="mw50 br64 mr15">';
+				echo '<img src="../../img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$tid.".jpg".'" alt="avatar" class="mw40 br64 mr5">';
 			} else {
-				echo '<img src="../../img/tekijat/noname.jpg" alt="avatar" class="mw50 br64 mr15">';
+				echo '<img src="../../img/tekijat/noname.jpg" alt="avatar" class="mw40 br64 mr5">';
 			}
 			//     Kuva -->
 			echo '<br> '.$item['etusukunimi'].'</a>
-		  </div>
 		</div>';
 		?>
 
