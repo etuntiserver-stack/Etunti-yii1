@@ -1,0 +1,491 @@
+<?php
+
+/** Freshdesk API manager. */
+class Freshdesk extends CComponent
+{
+  /** @var string Default production API URL, without trailing slash. */
+  private const API_URL = '';
+  /** @var string Default production API key. */
+  private const API_KEY = '';
+  /** @var string Default testing API URL, without trailing slash. */
+  private const TEST_API_URL = 'https://santelo.freshdesk.com/api/v2';
+  /** @var string Default testing API key. */
+  private const TEST_API_KEY = 'DSoSK72c321RokLStzw4';
+
+  /** @var string API key. */
+  private $key;
+  /** @var string API URL, without trailing slash. */
+  private $url;
+
+  /**
+   * Initialize Freshdesk.
+   *
+   * @param bool $testing
+   * If true or false, force testing/production environment. If null, testing
+   * environment is used when remote address is localhost (::1 or 127.0.0.1).
+   */
+  public function __construct($testing = null)
+  {
+    // Specify base url and api key for actions.
+    if ((is_bool($testing) && $testing) || (!is_bool($testing) && in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']))) {
+      $this->key = static::TEST_API_KEY;
+      $this->url = static::TEST_API_URL;
+    } else {
+      $this->key = static::API_KEY;
+      $this->url = static::API_URL;
+    }
+  }
+
+  //*------------------------------------------------------------------------------------------------
+  //* Helper/Log Functions
+  //*------------------------------------------------------------------------------------------------
+
+  /**
+   * Create and execute a cURL request.
+   *
+   * @param string $target
+   * URL after / (API function name).
+   * @param array $post_fields
+   * Optional post field data.
+   * @param bool $return_headers
+   * If true, headers are requested aswell. Headers are not decoded.
+   * @param array $tags
+   * Tags ( [ OPTION => VALUE, OPTION2 => VALUE2 ... ] )
+   * @return mixed
+   * Decoded response, or array with header (index 0) and decoded body (index 1).
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
+  private function request(string $target, array $post_fields = [], bool $return_headers = false, array $tags = [])
+  {
+    if (empty($target)) {
+      $this->logError("request() was called with null target.", $post_fields);
+      return false;
+    }
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "{$this->url}/$target");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_USERPWD, "{$this->key}:x");
+    curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, 'Content-Type: application/json');
+    if (!empty($post_fields))
+      curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_fields));
+    foreach ($tags as $tag => $value)
+      curl_setopt($ch, $tag, $value);
+
+    if ($return_headers) {
+
+      // Execute request and parse response into headers and response body.
+      curl_setopt($ch, CURLOPT_HEADER, 1);
+      $response = curl_exec($ch);
+      $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+      $header = substr($response, 0, $header_size);
+      $body = json_decode(substr($response, $header_size), true);
+
+      // Log possible errors.
+      if (isset($body['errors'])) {
+        $error_headers = !empty($header) ? ['headers' => $header] : [];
+        $this->logRequestError($target, $body, $post_fields, $error_headers);
+      }
+
+      return [$header, $body];
+    } else {
+
+      // Execute request.
+      $response = json_decode(curl_exec($ch), true);
+
+      // Log possible errors.
+      if (isset($response['errors'])) {
+        $this->logRequestError($target, $response, $post_fields);
+      }
+
+      return $response;
+    }
+  }
+
+  /** Shortcut to request() with CURLOPT_CUSTOMREQUEST = 'GET'. */
+  private function requestPost(string $target, array $post_fields = [], bool $return_headers = false, array $tags = [])
+  {
+    $tags[CURLOPT_POST] = true;
+    return $this->request($target, $post_fields, $return_headers, $tags);
+  }
+
+  /** Shortcut to request() with CURLOPT_CUSTOMREQUEST = 'GET'. */
+  private function requestGet(string $target, bool $return_headers = false, array $tags = [])
+  {
+    $tags[CURLOPT_CUSTOMREQUEST] = 'GET';
+    return $this->request($target, [], $return_headers, $tags);
+  }
+
+  /** Shortcut to request() with CURLOPT_CUSTOMREQUEST = 'PUT'. */
+  private function requestPut(string $target, array $post_fields = [], bool $return_headers = false, array $tags = [])
+  {
+    $tags[CURLOPT_CUSTOMREQUEST] = 'PUT';
+    return $this->request($target, $post_fields, $return_headers, $tags);
+  }
+
+  /**
+   * Get time string from timestamp that is compatible with the API.
+   *
+   * @param int $timestamp
+   * Timestamp in UTC or Europe/Helsinki timezone.
+   * @param bool $adjust_tz
+   * If true, the timestamp is assumed to be in Europe/Helsinki timezone.
+   * Otherwise, it is assumed to be UTC.
+   * @return string
+   * Formatted string ready for an API request.
+   */
+  private function getTimeString(int $timestamp, bool $adjust_tz = true)
+  {
+    if (!$adjust_tz)
+      return date('Y-m-d\TH:i:s\Z', $timestamp);
+    $d = new DateTime('now', new DateTimeZone('Europe/Helsinki'));
+    $d->setTimestamp($timestamp);
+    return $d->format('Y-m-d\TH:i:sP');
+  }
+
+  /**
+   * Log error in an API request, usually when 'errors' is defined in results.
+   *
+   * Depending on server configuration, this may send error email to admin.
+   *
+   * @param string $request
+   * Requested API call.
+   * @param array $response
+   * Results array returned by the API function.
+   * @param array $request_params
+   * Parameters used in the request.
+   * @param array $other_params
+   * Additional parameters, like ['uid' => 123]. If not empty, the whole array
+   * is appended to the log message in JSON encoded format.
+   * @param bool $stacktrace
+   * If true, automatic stacktrace from built-in \Exception is added to the end.
+   */
+  public function logRequestError(string $request, array $response, array $request_params = [], array $other_params = [], bool $stacktrace = true)
+  {
+    if (empty($request)) {
+      $message = 'Error in unspecified API request.';
+      $stacktrace = true;
+    } else {
+      $message = "Error in API request $request.";
+    }
+
+    if (!empty($response)) {
+      $message .= "\nResponse: " . json_encode($response);
+    }
+
+    if (!empty($request_params)) {
+      $message .= "\nRequest parameters: " . json_encode($request_params);
+    }
+
+    if (!empty($other_params)) {
+      $message .= "\nOther parameters: " . json_encode($other_params);
+    }
+
+    $this->logError($message, [], $stacktrace);
+  }
+
+  /**
+   * Log error with the Freshdesk component, whether with an API response, or
+   * with how the component is used. If a request returns an error, the
+   * logRequestError function should generally be used.
+   *
+   * Depending on server configuration, this may send error email to admin.
+   *
+   * @param string $message
+   * Main message to be logged.
+   * @param array $params
+   * Additional parameters, like ['uid' => 123]. If not empty, the whole array
+   * is appended to the log message in JSON encoded format.
+   * @param bool $stacktrace
+   * If true, automatic stacktrace from built-in \Exception is added to the end.
+   */
+  public function logError(string $message, array $params = [], bool $stacktrace = true)
+  {
+    if (empty($message)) {
+      $message = 'Freshdesk error: No message provided.';
+      $stacktrace = true;
+    } else {
+      $message = "Freshdesk error: $message";
+    }
+
+    if (!empty($params)) {
+      $message .= "\nParameters: " . json_encode($params);
+    }
+
+    if ($stacktrace) {
+      $message .= "\nStacktrace: " . (new \Exception())->getTraceAsString();
+    }
+
+    Yii::getLogger()->log($message, 'error', 'freshdesk');
+  }
+
+  //*------------------------------------------------------------------------------------------------
+  //* API Functions
+  //*------------------------------------------------------------------------------------------------
+
+  /**
+   * Call api /tickets (POST) - create ticket.
+   *
+   * @param array $opts
+   * name (string): Name of the requester
+   * requester_id (number): User ID of the requester. For existing contacts, the requester_id can be passed instead of the requester's email. (Any of the five attributes is mandatory)
+   * email (string): Email address of the requester. If no contact exists with this email address in Freshdesk, it will be added as a new contact. (Any of the five attributes is mandatory)
+   * facebook_id (string): Facebook ID of the requester. If no contact exists with this facebook_id, then a new contact will be created. (Any of the five attributes is mandatory)
+   * phone (string): Phone number of the requester. If no contact exists with this phone number in Freshdesk, it will be added as a new contact. If the phone number is set and the email address is not, then the name attribute is mandatory. (Any of the five attributes is mandatory)
+   * twitter_id (string): Twitter handle of the requester. If no contact exists with this handle in Freshdesk, it will be added as a new contact. (Any of the five attributes is mandatory)
+   * unique_external_id (string): External ID of the requester. If no contact exists with this external ID in Freshdesk, they will be added as a new contact. (Any of the five attributes is mandatory)
+   * subject (string): Subject of the ticket. The default Value is null.
+   * type (string): Helps categorize the ticket according to the different kinds of issues your support team deals with. The default Value is null.
+   * status (number): Status of the ticket. The default Value is 2. (Refer Ticket properties table for supported values)
+   * priority (number): Priority of the ticket. The default value is 1. (Refer Ticket properties table for supported values)
+   * description (string): HTML content of the ticket.
+   * responder_id (number): ID of the agent to whom the ticket has been assigned
+   * attachments (array of objects): Ticket attachments. The total size of these attachments cannot exceed 15MB.
+   * cc_emails (array of strings): Email address added in the 'cc' field of the incoming ticket email
+   * custom_fields (dictionary): Key value pairs containing the names and values of custom fields. Read more here
+   * due_by (datetime): Timestamp that denotes when the ticket is due to be resolved
+   * email_config_id (number): ID of email config which is used for this ticket. (i.e., support@yourcompany.com/sales@yourcompany.com)
+   * If (product_id): is given and email_config_id is not given, product's primary email_config_id will be set
+   * fr_due_by (datetime): Timestamp that denotes when the first response is due
+   * group_id (number): ID of the group to which the ticket has been assigned. The default value is the ID of the group that is associated with the given email_config_id
+   * product_id (number): ID of the product to which the ticket is associated.
+   * It (will): be ignored if the email_config_id attribute is set in the request.
+   * source (number): The channel through which the ticket was created. The default value is 2. (Refer Ticket properties table for supported values)
+   * tags (array of strings): Tags that have been associated with the ticket
+   * company_id (number): Company ID of the requester. This attribute can only be set if the Multiple Companies feature is enabled (Estate plan and above)
+   *
+   * Ticket properties:
+   * Every ticket uses certain fixed numerical values to denote its Source, Status, and Priorities.
+   * These numerical values along with their meanings are given below:
+   *   - SOURCE: Email 1, Portal 2, Phone 3, Chat 7, Mobihelp 8, Feedback Widget 9, Outbound Email 10
+   *   - STATUS: Open 2, Pending 3, Resolved 4, Closed 5
+   *   - PRIORITY: Low 1, Medium 2, High 3, Urgent 4
+   *
+   * @return mixed
+   * Decoded response. Additional headers are requested, as the headers include
+   * link to created ticket, so if successful, return value is an array with
+   * first item being the headers and second item the return body.
+   *
+   * Body contents if successful:
+   * {
+   *   "cc_emails" : ["ram@freshdesk.com", "diana@freshdesk.com"],
+   *   "fwd_emails" : [ ],
+   *   "reply_cc_emails" : ["ram@freshdesk.com", "diana@freshdesk.com"],
+   *   "email_config_id" : null,
+   *   "group_id" : null,
+   *   "priority" : 1,
+   *   "requester_id" : 129,
+   *   "responder_id" : null,
+   *   "source" : 2,
+   *   "status" : 2,
+   *   "subject" : "Support needed..",
+   *   "company_id" : 1,
+   *   "id" : 1,
+   *   "type" : "Question",
+   *   "to_emails" : null,
+   *   "product_id" : null,
+   *   "fr_escalated" : false,
+   *   "spam" : false,
+   *   "urgent" : false,
+   *   "is_escalated" : false,
+   *   "created_at" : "2015-07-09T13:08:06Z",
+   *   "updated_at" : "2015-07-23T04:41:12Z",
+   *   "due_by" : "2015-07-14T13:08:06Z",
+   *   "fr_due_by" : "2015-07-10T13:08:06Z",
+   *   "description_text" : "Some details on the issue ...",
+   *   "description" : "<div>Some details on the issue ..</div>",
+   *   "tags" : [ ],
+   *   "attachments" : [ ]
+   * }
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
+  public function createTicket($opts)
+  {
+    return $this->request('tickets', $opts, true);
+  }
+
+  /**
+   * Call API /tickets/[id] (GET) - get ticket details.
+   *
+   * @param int $id
+   * Ticket ID.
+   *
+   * @param array $additional_details
+   * By default, certain fields such as conversations, company name and requester email will not be
+   * included in the response. They can be retrieved via the embedding functionality. Options:
+   *
+   * - conversations:
+   *     Will return up to ten conversations sorted by "created_at" in ascending order. Including
+   *     conversations will consume two API calls. In order to access more than ten conversations
+   *     belonging to a ticket, use the List All Conversations of a Ticket API.
+   * - requester:
+   *     Will return the requester's email, id, mobile, name, and phone.
+   * - company:
+   *     Will return the company's id and name.
+   * - stats:
+   *     Will return the ticket’s closed_at, resolved_at and first_responded_at time
+   *
+   * @return mixed
+   * Decoded response.
+   *
+   * Body contents if successful:
+   * {
+   *   "cc_emails" : ["user@cc.com"],
+   *   "fwd_emails" : [ ],
+   *   "reply_cc_emails" : ["user@cc.com"],
+   *   "email_config_id" : null,
+   *   "fr_escalated" : false,
+   *   "group_id" : null,
+   *   "priority" : 1,
+   *   "requester_id" : 1,
+   *   "responder_id" : null,
+   *   "source" : 2,
+   *   "spam" : false,
+   *   "status" : 2,
+   *   "subject" : "",
+   *   "company_id" : 1,
+   *   "id" : 20,
+   *   "type" : null,
+   *   "to_emails" : null,
+   *   "product_id" : null,
+   *   "created_at" : "2015-08-24T11:56:51Z",
+   *   "updated_at" : "2015-08-24T11:59:05Z",
+   *   "due_by" : "2015-08-27T11:30:00Z",
+   *   "fr_due_by" : "2015-08-25T11:30:00Z",
+   *   "is_escalated" : false,
+   *   "association_type" : null,
+   *   "description_text" : "Not given.",
+   *   "description" : "<div>Not given.</div>",
+   *   "custom_fields" : {
+   *     "category" : "Primary"
+   *   },
+   *   "tags" : [ ],
+   *   "attachments" : [ ]
+   * }
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
+  public function viewTicket(int $id, array $additional_details = [])
+  {
+    $query_str = '';
+    if (!empty($additional_details)) {
+      static $valid_options = ['conversations', 'requester', 'company', 'stats'];
+      $first = true;
+      foreach ($additional_details as $a) {
+        if (!in_array($a, $valid_options)) {
+          $this->logError("Invalid option $a for additional details of viewing a ticket");
+          continue;
+        } elseif ($first) {
+          $query_str .= "?include=$a";
+          $first = false;
+        } else {
+          $query_str .= ",$a";
+        }
+      }
+    }
+
+    return $this->requestGet("tickets/{$id}{$query_str}");
+  }
+
+  //*------------------------------------------------------------------------------------------------
+  //* Static
+  //*------------------------------------------------------------------------------------------------
+
+  /**
+   * Get additional information on error code.
+   *
+   * @param string $error_code
+   * Error code from API request response.
+   * @return string
+   * Text explaining the error that has happened.
+   */
+  public static function errorCodeText(string $error_code)
+  {
+    switch ($error_code) {
+      case 'missing_field': return 'A mandatory attribute is missing. For example, calling Create a Contact without the mandatory email field in the request will result in this error.';
+      case 'invalid_value': return 'This code indicates that a request contained an incorrect or blank value, or was in an invalid format.';
+      case 'duplicate_value': return 'Indicates that this value already exists. This error is applicable to fields that require unique values such as the email address in a contact or the name in a company.';
+      case 'datatype_mismatch': return 'Indicates that the field value doesn\'t match the expected data type. Entering text in a numerical field would trigger this error.';
+      case 'invalid_field': return 'An unexpected field was part of the request. If any additional field is included in the request payload (other than what is specified in the API documentation), this error will occur.';
+      case 'invalid_json': return 'Request parameter is not a valid JSON. We recommend that you validate the JSON payload with a JSON validator before firing the API request.';
+      case 'invalid_credentials': return 'Incorrect or missing API credentials. As the name suggests, it indicates that the API request was made with invalid credentials. Forgetting to apply Base64 encoding on the API key is a common cause of this error.';
+      case 'access_denied': return 'Insufficient privileges to perform this action. An agent attempting to access admin APIs will result in this error.';
+      case 'require_feature': return 'Not allowed as a specific feature has to be enabled in your Freshdesk portal for you to perform this action.';
+      case 'account_suspended': return 'Account has been suspended.';
+      case 'ssl_required': return 'HTTPS is required in the API URL.';
+      case 'readonly_field': return 'Read only field cannot be altered.';
+      case 'inconsistent_state': return 'An email should be associated with the contact before converting the contact to an agent.';
+      case 'max_agents_reached': return 'The account has reached the maximum number of agents.';
+      case 'password_lockout': return 'The agent has reached the maximum number of failed login attempts.';
+      case 'password_expired': return 'The agent\'s password has expired.';
+      case 'no_content_required': return 'No JSON data required.';
+      case 'inaccessible_field': return 'The agent is not authorized to update this field.';
+      case 'incompatible_field': return 'The field cannot be updated due to the current state of the record.';
+      default: return 'Unknown error code.';
+    }
+  }
+
+  /**
+   * Get information on error based on HTTP status code.
+   *
+   * @param int $error_status
+   * HTTP status code from API request response.
+   * @return string
+   * Text explaining the error that has happened.
+   */
+  public static function errorStatusCodeText(int $error_status)
+  {
+    switch ($error_status) {
+      case 400: return 'Client or Validation Error: The request body/query string is not in the correct format. For example, the Create a ticket API requires the requester_id field to be sent as part of the request and if it is missing, this status code is returned.';
+      case 401: return 'Authentication Failure: Indicates that the Authorization header is either missing or incorrect. You can learn more about the Authorization header here.';
+      case 403: return 'Access Denied: This indicates that the agent whose credentials were used in making this request was not authorized to perform this API call. It could be that this API call requires admin level credentials or perhaps the Freshdesk portal doesn\'t have the corresponding feature enabled. It could also indicate that the user has reached the maximum number of failed login attempts or that the account has reached the maximum number of agents';
+      case 404: return 'Requested Resource not Found: This status code is returned when the request contains invalid ID/Freshdesk domain in the URL or an invalid URL itself. For example, an API call to retrieve a ticket with an invalid ID will return a HTTP 404 status code to let you know that no such ticket exists.';
+      case 405: return 'Method not allowed: This API request used the wrong HTTP verb/method. For example an API PUT request on /api/v2/tickets endpoint will return a HTTP 405 as /api/v2/tickets allows only GET and POST requests.';
+      case 406: return 'Unsupported Accept Header: Only application/json and */* are supported. When uploading files multipart/form-data is supported.';
+      case 409: return 'Inconsistent/Conflicting State: The resource that is being created/updated is in an inconsistent or conflicting state. For example, if you attempt to Create a Contact with an email that is already associated with an existing user, this code will be returned.';
+      case 415: return 'Unsupported Content-type: Content type application/xml is not supported. Only application/json is supported.';
+      case 429: return 'Rate Limit Exceeded: The API rate limit allotted for your Freshdesk domain has been exhausted.';
+      case 500: return 'Unexpected Server Error: Phew!! You can\'t do anything more here. This indicates an error at Freshdesk\'s side. Please email us your API script along with the response headers. We will reach you out to you and fix this ASAP.';
+      default: return 'Unknown error code.';
+    }
+  }
+}
