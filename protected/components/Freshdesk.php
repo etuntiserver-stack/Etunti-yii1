@@ -12,6 +12,8 @@ class Freshdesk extends CComponent
   /** @var string Default testing API key. */
   private const TEST_API_KEY = 'DSoSK72c321RokLStzw4';
 
+  /** @var bool Whether this component is using the testing environment. */
+  private $testing;
   /** @var string API key. */
   private $key;
   /** @var string API URL, without trailing slash. */
@@ -26,8 +28,13 @@ class Freshdesk extends CComponent
    */
   public function __construct($testing = null)
   {
+    if (is_bool($testing))
+      $this->testing = $testing;
+    else
+      $this->testing = in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']);
+
     // Specify base url and api key for actions.
-    if ((is_bool($testing) && $testing) || (!is_bool($testing) && in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']))) {
+    if ($this->testing) {
       $this->key = static::TEST_API_KEY;
       $this->url = static::TEST_API_URL;
     } else {
@@ -37,7 +44,7 @@ class Freshdesk extends CComponent
   }
 
   //*------------------------------------------------------------------------------------------------
-  //* Helper/Log Functions
+  //* cURL Functions
   //*------------------------------------------------------------------------------------------------
 
   /**
@@ -71,7 +78,7 @@ class Freshdesk extends CComponent
   private function request(string $target, array $post_fields = [], bool $return_headers = false, array $tags = [])
   {
     if (empty($target)) {
-      $this->logError("request() was called with null target.", $post_fields);
+      static::logStaticError("request() was called with null target.", $post_fields);
       return false;
     }
 
@@ -116,126 +123,129 @@ class Freshdesk extends CComponent
     }
   }
 
-  /** Shortcut to request() with CURLOPT_CUSTOMREQUEST = 'GET'. */
+  /**
+   * Create and execute a cURL request.
+   *
+   * Shortcut to request() with CURLOPT_POST = true.
+   *
+   * @param string $target
+   * URL after / (API function name).
+   * @param array $post_fields
+   * Optional post field data.
+   * @param bool $return_headers
+   * If true, headers are requested aswell. Headers are not decoded.
+   * @param array $tags
+   * Tags ( [ OPTION => VALUE, OPTION2 => VALUE2 ... ] )
+   * @return mixed
+   * Decoded response, or array with header (index 0) and decoded body (index 1).
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
   private function requestPost(string $target, array $post_fields = [], bool $return_headers = false, array $tags = [])
   {
     $tags[CURLOPT_POST] = true;
     return $this->request($target, $post_fields, $return_headers, $tags);
   }
 
-  /** Shortcut to request() with CURLOPT_CUSTOMREQUEST = 'GET'. */
-  private function requestGet(string $target, bool $return_headers = false, array $tags = [])
+  /**
+   * Create and execute a cURL request.
+   *
+   * Shortcut to request() with CURLOPT_CUSTOMREQUEST = 'GET'.
+   *
+   * @param string $target
+   * URL after / (API function name).
+   * @param array $query_params
+   * Optional parameters for the query string. If not empty, query string is
+   * formed using http_build_query. Empty strings are removed first.
+   * @param bool $return_headers
+   * If true, headers are requested aswell. Headers are not decoded.
+   * @param array $tags
+   * Tags ( [ OPTION => VALUE, OPTION2 => VALUE2 ... ] )
+   * @return mixed
+   * Decoded response, or array with header (index 0) and decoded body (index 1).
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
+  private function requestGet(string $target, array $query_params = [], bool $return_headers = false, array $tags = [])
   {
+    // Remove empty strings from query params.
+    foreach ($query_params as $k => $v) {
+      if (is_string($v) && empty($v))
+        unset($query_params($k));
+    }
+
+    // Create query string.
+    $query_str = http_build_query($query_params);
+    if (!empty($query_str))
+      $query_str = '?' . $query_str;
+
+    // Create and execute request.
     $tags[CURLOPT_CUSTOMREQUEST] = 'GET';
-    return $this->request($target, [], $return_headers, $tags);
+    return $this->request($target . $query_str, [], $return_headers, $tags);
   }
 
-  /** Shortcut to request() with CURLOPT_CUSTOMREQUEST = 'PUT'. */
+  /**
+   * Create and execute a cURL request.
+   *
+   * Shortcut to request() with CURLOPT_CUSTOMREQUEST = 'PUT'.
+   *
+   * @param string $target
+   * URL after / (API function name).
+   * @param bool $return_headers
+   * If true, headers are requested aswell. Headers are not decoded.
+   * @param array $tags
+   * Tags ( [ OPTION => VALUE, OPTION2 => VALUE2 ... ] )
+   * @return mixed
+   * Decoded response, or array with header (index 0) and decoded body (index 1).
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
   private function requestPut(string $target, array $post_fields = [], bool $return_headers = false, array $tags = [])
   {
     $tags[CURLOPT_CUSTOMREQUEST] = 'PUT';
     return $this->request($target, $post_fields, $return_headers, $tags);
   }
 
-  /**
-   * Get time string from timestamp that is compatible with the API.
-   *
-   * @param int $timestamp
-   * Timestamp in UTC or Europe/Helsinki timezone.
-   * @param bool $adjust_tz
-   * If true, the timestamp is assumed to be in Europe/Helsinki timezone.
-   * Otherwise, it is assumed to be UTC.
-   * @return string
-   * Formatted string ready for an API request.
-   */
-  private function getTimeString(int $timestamp, bool $adjust_tz = true)
-  {
-    if (!$adjust_tz)
-      return date('Y-m-d\TH:i:s\Z', $timestamp);
-    $d = new DateTime('now', new DateTimeZone('Europe/Helsinki'));
-    $d->setTimestamp($timestamp);
-    return $d->format('Y-m-d\TH:i:sP');
-  }
-
-  /**
-   * Log error in an API request, usually when 'errors' is defined in results.
-   *
-   * Depending on server configuration, this may send error email to admin.
-   *
-   * @param string $request
-   * Requested API call.
-   * @param array $response
-   * Results array returned by the API function.
-   * @param array $request_params
-   * Parameters used in the request.
-   * @param array $other_params
-   * Additional parameters, like ['uid' => 123]. If not empty, the whole array
-   * is appended to the log message in JSON encoded format.
-   * @param bool $stacktrace
-   * If true, automatic stacktrace from built-in \Exception is added to the end.
-   */
-  public function logRequestError(string $request, array $response, array $request_params = [], array $other_params = [], bool $stacktrace = true)
-  {
-    if (empty($request)) {
-      $message = 'Error in unspecified API request.';
-      $stacktrace = true;
-    } else {
-      $message = "Error in API request $request.";
-    }
-
-    if (!empty($response)) {
-      $message .= "\nResponse: " . json_encode($response);
-    }
-
-    if (!empty($request_params)) {
-      $message .= "\nRequest parameters: " . json_encode($request_params);
-    }
-
-    if (!empty($other_params)) {
-      $message .= "\nOther parameters: " . json_encode($other_params);
-    }
-
-    $this->logError($message, [], $stacktrace);
-  }
-
-  /**
-   * Log error with the Freshdesk component, whether with an API response, or
-   * with how the component is used. If a request returns an error, the
-   * logRequestError function should generally be used.
-   *
-   * Depending on server configuration, this may send error email to admin.
-   *
-   * @param string $message
-   * Main message to be logged.
-   * @param array $params
-   * Additional parameters, like ['uid' => 123]. If not empty, the whole array
-   * is appended to the log message in JSON encoded format.
-   * @param bool $stacktrace
-   * If true, automatic stacktrace from built-in \Exception is added to the end.
-   */
-  public function logError(string $message, array $params = [], bool $stacktrace = true)
-  {
-    if (empty($message)) {
-      $message = 'Freshdesk error: No message provided.';
-      $stacktrace = true;
-    } else {
-      $message = "Freshdesk error: $message";
-    }
-
-    if (!empty($params)) {
-      $message .= "\nParameters: " . json_encode($params);
-    }
-
-    if ($stacktrace) {
-      $message .= "\nStacktrace: " . (new \Exception())->getTraceAsString();
-    }
-
-    Yii::getLogger()->log($message, 'error', 'freshdesk');
-  }
-
   //*------------------------------------------------------------------------------------------------
   //* API Functions
   //*------------------------------------------------------------------------------------------------
+  #region API Functions
 
   /**
    * Call api /tickets (POST) - create ticket.
@@ -406,29 +416,184 @@ class Freshdesk extends CComponent
    */
   public function viewTicket(int $id, array $additional_details = [])
   {
-    $query_str = '';
-    if (!empty($additional_details)) {
-      static $valid_options = ['conversations', 'requester', 'company', 'stats'];
-      $first = true;
-      foreach ($additional_details as $a) {
-        if (!in_array($a, $valid_options)) {
-          $this->logError("Invalid option $a for additional details of viewing a ticket");
-          continue;
-        } elseif ($first) {
-          $query_str .= "?include=$a";
-          $first = false;
-        } else {
-          $query_str .= ",$a";
-        }
+    $query_params = [];
+
+    // Remove invalid values from additional details.
+    static $valid_options = ['conversations', 'requester', 'company', 'stats'];
+    $additional_details = array_values($additional_details);
+    for ($i = 0; $i < count($additional_details); $i++) {
+      if (!in_array($additional_details[$i], $valid_options)) {
+        static::logStaticError("Invalid option {$additional_details[$i]} for additional details of viewing a ticket");
+        unset($additional_details[$i]);
       }
     }
 
-    return $this->requestGet("tickets/{$id}{$query_str}");
+    return $this->requestGet("tickets/$id", ['include' => implode(',', $additional_details)]);
   }
 
+  #endregion
+
   //*------------------------------------------------------------------------------------------------
-  //* Static
+  //* Log
   //*------------------------------------------------------------------------------------------------
+  #region Log
+
+  /**
+   * Log error with the Freshdesk component, whether with an API response, or
+   * with how the component is used. If a request returns an error, the
+   * logRequestError function should generally be used.
+   *
+   * This non-static version of the logging function includes local data in
+   * $params automatically (e.g. base API URL).
+   *
+   * Depending on server configuration, this may send error email to admin.
+   *
+   * @param string $message
+   * Main message to be logged.
+   * @param array $params
+   * Additional parameters, like ['uid' => 123]. If not empty, the whole array
+   * is appended to the log message in JSON encoded format.
+   * @param bool $stacktrace
+   * If true, automatic stacktrace from built-in \Exception is added to the end.
+   */
+  public function logError(string $message, array $params = [], bool $stacktrace = true)
+  {
+    return static::logStaticError($message, $this->getLocals(true) + $params, $stacktrace);
+  }
+
+  /**
+   * Log error in an API request, usually when 'errors' is defined in results.
+   *
+   * This non-static version of the logging function includes local data in
+   * $params automatically (e.g. base API URL).
+   *
+   * Depending on server configuration, this may send error email to admin.
+   *
+   * @param string $request
+   * Requested API call.
+   * @param array $response
+   * Results array returned by the API function.
+   * @param array $request_params
+   * Parameters used in the request.
+   * @param array $other_params
+   * Additional parameters, like ['uid' => 123]. If not empty, the whole array
+   * is appended to the log message in JSON encoded format.
+   * @param bool $stacktrace
+   * If true, automatic stacktrace from built-in \Exception is added to the end.
+   */
+  public function logRequestError(string $request, array $response, array $request_params = [], array $other_params = [], bool $stacktrace = true)
+  {
+    return static::logStaticRequestError($request, $response, $request_params, $this->getLocals(true) + $other_params, $stacktrace);
+  }
+
+  /**
+   * Log error with the Freshdesk component, whether with an API response, or
+   * with how the component is used. If a request returns an error, the
+   * logRequestError function should generally be used.
+   *
+   * Depending on server configuration, this may send error email to admin.
+   *
+   * @param string $message
+   * Main message to be logged.
+   * @param array $params
+   * Additional parameters, like ['uid' => 123]. If not empty, the whole array
+   * is appended to the log message in JSON encoded format.
+   * @param bool $stacktrace
+   * If true, automatic stacktrace from built-in \Exception is added to the end.
+   */
+  public static function logStaticError(string $message, array $params = [], bool $stacktrace = true)
+  {
+    if (empty($message)) {
+      $message = 'Freshdesk error: No message provided.';
+      $stacktrace = true;
+    } else {
+      $message = "Freshdesk error: $message";
+    }
+
+    if (!empty($params)) {
+      $message .= "\nParameters: " . json_encode($params);
+    }
+
+    if ($stacktrace) {
+      $message .= "\nStacktrace: " . (new \Exception())->getTraceAsString();
+    }
+
+    Yii::getLogger()->log($message, 'error', 'freshdesk');
+  }
+
+  /**
+   * Log error in an API request, usually when 'errors' is defined in results.
+   *
+   * Depending on server configuration, this may send error email to admin.
+   *
+   * @param string $request
+   * Requested API call.
+   * @param array $response
+   * Results array returned by the API function.
+   * @param array $request_params
+   * Parameters used in the request.
+   * @param array $other_params
+   * Additional parameters, like ['uid' => 123]. If not empty, the whole array
+   * is appended to the log message in JSON encoded format.
+   * @param bool $stacktrace
+   * If true, automatic stacktrace from built-in \Exception is added to the end.
+   */
+  public static function logStaticRequestError(string $request, array $response, array $request_params = [], array $other_params = [], bool $stacktrace = true)
+  {
+    if (empty($request)) {
+      $message = 'Error in unspecified API request.';
+      $stacktrace = true;
+    } else {
+      $message = "Error in API request $request.";
+    }
+
+    if (!empty($response)) {
+      $message .= "\nResponse: " . json_encode($response);
+    }
+
+    if (!empty($request_params)) {
+      $message .= "\nRequest parameters: " . json_encode($request_params);
+    }
+
+    if (!empty($other_params)) {
+      $message .= "\nOther parameters: " . json_encode($other_params);
+    }
+
+    return static::logStaticError($message, [], $stacktrace);
+  }
+
+  #endregion
+
+  //*------------------------------------------------------------------------------------------------
+  //* Other Functions
+  //*------------------------------------------------------------------------------------------------
+  #region Other Functions
+
+  /**
+   * Get local variables, generally for log parameters. Note that the non-static
+   * logging methods include this information by default.
+   *
+   * @param bool $json
+   * If true, locals are encoded to JSON, and return value is a single-item
+   * associative array like: ['locals' => '<json>'].
+   *
+   * @return array
+   * Essential information from local attributes. If $json = true, the returned
+   * array contains a single item 'locals' with JSON data. Data includes:
+   * {
+   *   "environment" : str("testing"/"production")
+   *   "api_base_url" : str
+   * }
+   */
+  public function getLocals(bool $json = true)
+  {
+    $locals = [
+      'environment' => $this->testing ? 'testing' : 'production',
+      'api_base_url' => $this->url
+    ];
+
+    return $json ? ['locals' => json_encode($locals)] : $locals;
+  }
 
   /**
    * Get additional information on error code.
@@ -488,4 +653,26 @@ class Freshdesk extends CComponent
       default: return 'Unknown error code.';
     }
   }
+
+  /**
+   * Get time string from timestamp that is compatible with the API.
+   *
+   * @param int $timestamp
+   * Timestamp in UTC or Europe/Helsinki timezone.
+   * @param bool $adjust_tz
+   * If true, the timestamp is assumed to be in Europe/Helsinki timezone.
+   * Otherwise, it is assumed to be UTC.
+   * @return string
+   * Formatted string ready for an API request.
+   */
+  private static function getTimeString(int $timestamp, bool $adjust_tz = true)
+  {
+    if (!$adjust_tz)
+      return date('Y-m-d\TH:i:s\Z', $timestamp);
+    $d = new DateTime('now', new DateTimeZone('Europe/Helsinki'));
+    $d->setTimestamp($timestamp);
+    return $d->format('Y-m-d\TH:i:sP');
+  }
+
+  #endregion
 }
