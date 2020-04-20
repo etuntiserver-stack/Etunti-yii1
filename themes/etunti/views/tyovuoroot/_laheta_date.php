@@ -62,7 +62,7 @@
 		$osoite = $t->osoite;
 	} elseif(isset($t->kohteet->id) and empty($t->osoite)){
 		$osoite = $t->kohteet->osoite;
-	} elseif(!isset($k->id) and $t->status != 0 and $t->status != 3){
+	} elseif($t->status != 3){
 		$osoite = $this->tilanteet()[$t->status];
 	}
 
@@ -118,7 +118,16 @@
 
 	// <-- Tietoja
 	if( !empty($t->tietoja) ){
-		echo '<p><b>'.$t->osoite.':</b> <br>'.str_replace("\n", "<br>", $t->tietoja).'</p>';
+		// <-- osoite
+		$osoite = '';
+		if(!empty($t->osoite)){
+			$osoite = $t->osoite;
+		} elseif(isset($t->kohteet->id) and empty($t->osoite)){
+			$osoite = $t->kohteet->osoite;
+		} elseif($t->status != 3){
+			$osoite = $this->tilanteet()[$t->status];
+		}
+		echo '<p><b>'.$osoite.':</b> <br>'.str_replace("\n", "<br>", $t->tietoja).'</p>';
 	}
 	// Tietoja -->
   }
