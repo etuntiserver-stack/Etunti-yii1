@@ -54,7 +54,7 @@ if( isset($_SESSION['skrollaus']) )
 				isset(Yii::app()->user->domain) 
 				and file_exists(dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$tid.".jpg") 
 			){
-				echo '<img src="../../img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$tid.".jpg".'" alt="avatar" class="mw50 br64 mr15">';
+				echo '<img src="../../img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$tid.".jpg".'" alt="avatar" class="mw40 br64 mr15">';
 			} else {
 				echo '<img src="../../img/tekijat/noname.jpg" alt="avatar" class="mw40 br64 mr5">';
 			}
