@@ -46,7 +46,7 @@ if( isset($_SESSION['skrollaus']) )
  <table class="table table-bordered" id="fixTable">
  <thead>
  <tr>
- <th class="bg-default text-center" width="1"><span class="link small valitseKaikkiLahetettavaksi">Valitse kaikki</span></th>
+ <th class="bg-default text-center small" width="1"><span class="link small valitseKaikkiLahetettavaksi">Valitse kaikki</span></th>
  <?php
  $f 		= date("d.m.Y", strtotime($from));
  $did_sunday 	= date("Ymd", strtotime($year.'W'.$week.'7'));
