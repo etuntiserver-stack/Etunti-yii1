@@ -47,8 +47,7 @@ if( isset($_SESSION['skrollaus']) )
  <?php
  foreach($tt as $tid=>$item){
 	echo '<th class="bg-default small" style="z-index: 999;"><div class="text-center laatiko_td">
-		<div class="row">
-		  <div class="col-sm-12">
+		<div>
 		    	<a href="#" class="getTekijanTiedot" for="'.$tid.'">';
 			// <-- Kuva
 			if(
@@ -57,12 +56,10 @@ if( isset($_SESSION['skrollaus']) )
 			){
 				echo '<img src="../../img/tekijat/'.strtolower(Yii::app()->user->domain).'/'.$tid.".jpg".'" alt="avatar" class="mw50 br64 mr15">';
 			} else {
-				echo '<img src="../../img/tekijat/noname.jpg" alt="avatar" class="mw50 br64 mr15">';
+				echo '<img src="../../img/tekijat/noname.jpg" alt="avatar" class="mw40 br64 mr5">';
 			}
 			//     Kuva -->
-			echo '<br> '.$item['etusukunimi'].'</a>
-		  </div>
-		</div>
+			echo ' <span class="small">'.$item['etusukunimi'].'</span></a>
 		</div>
 	</th>';
  }
