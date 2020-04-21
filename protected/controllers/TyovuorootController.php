@@ -2520,7 +2520,7 @@ class TyovuorootController extends Controller
 		exit;
 	}
 
-	protected function tv_arrJava($from, $to, $haku_criteria, $haku_tids){
+	protected function tv_arrJava($from, $to, $haku_criteria, $haku_tids, $taulu){
 		$hk = json_encode($haku_criteria);
 		/*
 		// <-- Kaikki kerrallaan
@@ -2580,9 +2580,10 @@ class TyovuorootController extends Controller
 		    });
 
 		    setTimeoutConst = setTimeout(function() {
-			$.vkolaskenta('".json_encode($haku_tids)."');
+			if('".$taulu."' == 'vko')
+				$.vkolaskenta('".json_encode($haku_tids)."');
 		   	$.hovertietoja();
-		    }, 5000);
+		    }, 2000);
 		});
 		</script>";
 	}
