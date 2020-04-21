@@ -3179,8 +3179,14 @@ class TyovuorootController extends Controller
 		$toistuva 	= $get_id['toistuva'];
 		$pvm 		= $get_id['pvm'];
 		$tid 		= $get_id['tid'];
+		$etusukunimi	= $this->etuSukunimi($tid);
 
-		$return = "";
+		if(!isset($model->id)){
+			echo 'error';
+			exit;
+		}
+
+		$return = '<p><center><h5>'.$etusukunimi.'</h5><h5>'.$model->osoiteById.'</h5>'.$model->alku.'-'.$model->loppu.'</center></p><br>';
 
 		$form=$this->beginWidget('CActiveForm', array(
 			'id'=>'tyovuoroot-form',
