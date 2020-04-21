@@ -722,6 +722,47 @@ class Freshdesk extends CComponent
     return $this->requestGet('search/tickets', ['query' => $query]);
   }
 
+  /**
+   * Call API /tickets/[id] (DELETE) - deletes a ticket by ID.
+   *
+   * Note: Rest assured. When deleted, tickets are not cast into the fiery
+   * volcanoes of Mount Doom. You can retrieve them using the Restore Ticket API.
+   *
+   * response: HTTP Status: 204 No Content
+   *
+   * @param int $id
+   * Ticket ID to delete.
+   *
+   * @return mixed
+   * Decoded response.
+   *
+   * Body contents if successful:
+   * HTTP Status: 204 No Content
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
+  public function deleteTicket(int $id)
+  {
+    if ($id <= 0) {
+      $this->logError("Zero or negative ID in deleteTicket(): $id");
+      return null;
+    } else {
+      return $this->request("tickets/$id", [], false, [CURLOPT_CUSTOMREQUEST => 'delete']);
+    }
+  }
+
   #endregion
 
   //*------------------------------------------------------------------------------------------------
