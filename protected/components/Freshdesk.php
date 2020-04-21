@@ -338,6 +338,7 @@ class Freshdesk extends CComponent
    */
   public function createTicket($opts)
   {
+    // Create and execute request.
     return $this->request('tickets', $opts, true);
   }
 
@@ -428,7 +429,184 @@ class Freshdesk extends CComponent
       }
     }
 
+    // Create and execute request.
     return $this->requestGet("tickets/$id", ['include' => implode(',', $additional_details)]);
+  }
+
+  /**
+   * Call API /tickets (GET) - list tickets.
+   *
+   * Use filters to view only specific tickets (those which match the criteria that you choose). By
+   * default, only tickets that have not been deleted or marked as spam will be returned, unless you
+   * use the 'deleted' filter.
+   *
+   * Note:
+   * 1. By default, only tickets that have been created within the past 30 days will be returned. For older tickets, use the updated_since filter
+   * 2. A maximum of 300 pages (9000 tickets) will be returned.
+   * 3. When using filters, the query string must be URL encoded - see example
+   * 4. Use 'include' to embed additional details in the response. Each include will consume an additional 2 credits. For example if you embed the stats information you will be charged a total of 3 API credits for the call.
+   * 5. For accounts created after 2018-11-30, you will have to use include to get description.
+   *
+   * Search by company ID is not included as companies are not used (yet).
+   *
+   * @param array $filters
+   * The various filters available are: new_and_my_open, watching, spam, deleted.
+   *
+   * @param mixed $requester
+   * Requester ID (int) or requester email (string). Null to disable.
+   *
+   * @param int $page
+   * Page number if paginating the results. Recommended when searching all data.
+   * Disable with -1 (return full result set).
+   *
+   * @param int $per_page
+   * Items per page when $page > 0. Defaults to 10 when paginating.
+   *
+   * @param string $updated_since
+   * Time string from @see Freshdesk::getTimeString().
+   *
+   * Formats accepted by the API:
+   *   YYYY-MM-DD
+   *   YYYY-MM-DDTHH:MM
+   *   YYYY-MM-DDTHH:MMZ
+   *   YYYY-MM-DDTHH:MM:SS
+   *   YYYY-MM-DDTHH:MM:SSZ
+   *   YYYY-MM-DDTHH:MM:SS±hh:mm
+   *   YYYY-MM-DDTHH:MM:SS±hh
+   *   YYYY-MM-DDTHH:MM:SS±hhmm
+   *
+   * @param array $embed
+   * stats: Will return the ticket’s closed_at, resolved_at and first_responded_at time
+   * requester: Will return the requester's email, id, mobile, name, and phone.
+   * description: Will return the ticket description and description_text.
+   *
+   * @param string $order_by
+   * Sort by option. Options: created_at, due_by, updated_at, status
+   * Default sort order is created_at
+   *
+   * @param string $order_type
+   * Order of possible specified sort option. Options: asc, desc
+   * Default sort order type is desc
+   *
+   * @return mixed
+   * Decoded response.
+   *
+   * Body contents if successful:
+   * [
+   *   {
+   *     "cc_emails" : ["user@cc.com", "user2@cc.com"],
+   *     "fwd_emails" : [ ],
+   *     "reply_cc_emails" : ["user@cc.com", "user2@cc.com"],
+   *     "fr_escalated" : false,
+   *     "spam" : false,
+   *     "email_config_id" : null,
+   *     "group_id" : 2,
+   *     "priority" : 1,
+   *     "requester_id" : 5,
+   *     "responder_id" : 1,
+   *     "source" : 2,
+   *     "status" : 2,
+   *     "subject" : "Please help",
+   *     "to_emails" : null,
+   *     "product_id" : null,
+   *     "id" : 18,
+   *     "type" : Lead,
+   *     "created_at" : "2015-08-17T12:02:50Z",
+   *     "updated_at" : "2015-08-17T12:02:51Z",
+   *     "due_by" : "2015-08-20T11:30:00Z",
+   *     "fr_due_by" : "2015-08-18T11:30:00Z",
+   *     "is_escalated" : false,
+   *     "custom_fields" : {
+   *       "category" : "Default"
+   *     }
+   *   },
+   *   ...
+   * ]
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
+  public function listTickets(array $filters = [], $requester = null, int $page = -1, int $per_page = -1, string $updated_since = null, array $embed = [], string $order_by = 'created_at', string $order_type = 'desc')
+  {
+    $query_params = [];
+
+    // Filters: remove invalid filters and add to query parameters.
+    if (!empty($filters)) {
+      static $valid_filters = ['new_and_my_open', 'watching', 'spam', 'deleted'];
+      $filters = array_values($filters);
+      for ($i = 0; $i < count($filters); $i++) {
+        if (!in_array($filters[$i], $valid_filters)) {
+          static::logStaticError("Invalid option {$filters[$i]} for filters of listTickets() (/tickets GET).");
+          unset($filters[$i]);
+        }
+      }
+      $query_params['filter'] = implode(',', $filters);
+    }
+
+    // Requester: if int, set requester_id, or if string, set email.
+    if (is_int($requester))
+      $query_params['requester_id'] = $requester;
+    elseif (is_string($requester))
+      $query_params['email'] = $requester;
+
+    // Set pagination.
+    if ($page > 0) {
+      $query_params['page'] = $page;
+      $query_params['per_page'] = $per_page > 0 ? $per_page : 10;
+    }
+
+    // Updated since: check that time string is valid and add to query parameters.
+    if (!empty($updated_since)) {
+      if (!static::validateTimeString($updated_since))
+        $this->logError("Invalid date string for listTickets(): $updated_since");
+      else
+        $query_params['updated_since'] = $updated_since;
+    }
+
+    // Embed: remove invalid values and add to query parameters.
+    if (!empty($embed)) {
+      static $valid_embed_options = ['stats', 'requester', 'description'];
+      $embed = array_values($embed);
+      for ($i = 0; $i < count($embed); $i++) {
+        if (!in_array($embed[$i], $valid_embed_options)) {
+          $this->logError('Invalid embed option for listTickets(): ' . $embed[$i]);
+          unset($embed[$i]);
+        }
+      }
+      $query_params['include'] = implode(',', $embed);
+    }
+
+    // Order by: check that value is valid and add to query parameters.
+    if (!empty($order_by)) {
+      static $valid_order_by_options = ['created_at', 'due_by', 'updated_at', 'status'];
+      if (!in_array($order_by, $valid_order_by_options))
+        $this->logError("Invalid order by option for listTickets(): $order_by");
+      else
+        $query_params['order_by'] = $order_by;
+    }
+
+    // Order type: check that value is valid and add to query parameters.
+    if (!empty($order_type)) {
+      static $valid_order_types = ['asc', 'desc'];
+      if (!in_array($order_type, $valid_order_types))
+        $this->logError("Invalid order type for listTickets(): $order_type");
+      else
+        $query_params['order_type'] = $order_type;
+    }
+
+    // Create and execute request.
+    return $this->requestGet('tickets', $query_params);
   }
 
   #endregion
@@ -657,6 +835,16 @@ class Freshdesk extends CComponent
   /**
    * Get time string from timestamp that is compatible with the API.
    *
+   * Formats accepted by the API:
+   *   YYYY-MM-DD
+   *   YYYY-MM-DDTHH:MM
+   *   YYYY-MM-DDTHH:MMZ
+   *   YYYY-MM-DDTHH:MM:SS
+   *   YYYY-MM-DDTHH:MM:SSZ
+   *   YYYY-MM-DDTHH:MM:SS±hh:mm
+   *   YYYY-MM-DDTHH:MM:SS±hh
+   *   YYYY-MM-DDTHH:MM:SS±hhmm
+   *
    * @param int $timestamp
    * Timestamp in UTC or Europe/Helsinki timezone.
    * @param bool $adjust_tz
@@ -672,6 +860,33 @@ class Freshdesk extends CComponent
     $d = new DateTime('now', new DateTimeZone('Europe/Helsinki'));
     $d->setTimestamp($timestamp);
     return $d->format('Y-m-d\TH:i:sP');
+  }
+
+  /**
+   * Performs a quick regex match on the specified time string to check if it
+   * follows the syntax of the time string format required by the API.
+   *
+   * Formats accepted by the API:
+   *   YYYY-MM-DD
+   *   YYYY-MM-DDTHH:MM
+   *   YYYY-MM-DDTHH:MMZ
+   *   YYYY-MM-DDTHH:MM:SS
+   *   YYYY-MM-DDTHH:MM:SSZ
+   *   YYYY-MM-DDTHH:MM:SS±hh:mm
+   *   YYYY-MM-DDTHH:MM:SS±hh
+   *   YYYY-MM-DDTHH:MM:SS±hhmm
+   */
+  private static function validateTimeString(string $time_string) :bool
+  {
+    // Quick regex to match all the example time strings and nothing else. This
+    // effectively checks if a time string is formatted correctly for the API.
+    $result = preg_match('/^[\d]{4}-[\d]{2}-[\d]{2}(?:T[\d]{2}:[\d]{2}(?::[\d]{2})?(?:[\+-][\d]{2}(?:[:]?[\d]{2})?)?[Z]?)?$/', $time_string);
+    if (is_bool($result) && !$result) {
+      static::logStaticError('Error in preg_match inside validateTimeString() (return value FALSE).');
+      return false;
+    } else {
+      return ($result == 1);
+    }
   }
 
   #endregion
