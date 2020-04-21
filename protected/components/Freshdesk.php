@@ -1078,6 +1078,107 @@ class Freshdesk extends CComponent
     }
   }
 
+  /**
+   * Call API /contacts (GET) - List contacts.
+   *
+   * Use filters to view only specific contacts (those which match the criteria
+   * that you choose). The filters listed in the table below can also be combined.
+   *
+   * Note:
+   * 1. When using filters, the query string must be URL encoded.
+   *    => The request function encodes the query string automatically.
+   * 2. All unblocked and undeleted contacts will be returned by default.
+   *
+   * @param array $filter_by
+   * Key & value pairs. Key options: email, mobile, phone. Example:
+   *   [ 'mobile' => 7654367287 ]
+   *
+   * @param string $state
+   * State of the contact. Options: blocked, deleted, unverified, verified
+   *
+   * @param string $updated_since
+   * Time string to list contacts that have been updated since specific date.
+   *
+   * @return mixed
+   * Decoded response.
+   *
+   * Body contents if successful:
+   * [
+   *   {
+   *     "active":false,
+   *     "address":null,
+   *     "company_id":null,
+   *     "description":null,
+   *     "email":"rachel@freshdesk.com",
+   *     "id":2,
+   *     "job_title":null,
+   *     "language":"en",
+   *     "mobile":null,
+   *     "name":"Rachel",
+   *     "phone":null,
+   *     "time_zone":"Chennai",
+   *     "twitter_id":null,
+   *     "created_at":"2015-08-18T16:18:14Z",
+   *     "updated_at":"2015-08-24T09:25:19Z",
+   *     "custom_fields":{
+   *       "department": "Admin"
+   *       "fb_profile": null,
+   *       "permanent": true
+   *     }
+   *   },
+   *   ...
+   * ]
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
+  public function listContacts(array $filter_by = [], string $state = null, string $updated_since = null)
+  {
+    $query_params = [];
+
+    // Validate provided filter by values and add to query parameters.
+    foreach ($filter_by as $key => $value) {
+      if ($key == 'email') {
+        $query_params['email'] = $value;
+      } elseif (in_array($key, ['mobile', 'phone'])) {
+        if (!is_numeric($value))
+          $this->logError("Invalid number for filter by $key in listContacts: $value");
+        else
+          $query_params[$key] = $value;
+      }
+    }
+
+    // Check that state is valid and add to query parameters.
+    if (!empty($state)) {
+      static $valid_states = ['blocked', 'deleted', 'unverified', 'verified'];
+      if (!in_array($state, $valid_states))
+        $this->logError("Invalid state in listContacts: $state");
+      else
+        $query_params['state'] = $state;
+    }
+
+    // Validate updated since date string and add to query parameters.
+    if (!empty($updated_since)) {
+      if (!static::validateTimeString($updated_since))
+        $this->logError("Invalid updated since date string in listContacts: $updated_since");
+      else
+        $query_params['updated_since'] = $updated_since;
+    }
+
+    return $this->requestGet('contacts', $query_params);
+  }
+
   #endregion
 
   //*------------------------------------------------------------------------------------------------
