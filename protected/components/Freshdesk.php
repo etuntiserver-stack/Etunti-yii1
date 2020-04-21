@@ -609,6 +609,119 @@ class Freshdesk extends CComponent
     return $this->requestGet('tickets', $query_params);
   }
 
+  /**
+   * Call API /search/tickets?query=[query] (GET) - filter (search) tickets.
+   *
+   * Use custom ticket fields that you have created in your account to filter through the tickets
+   * and get a list of tickets matching the specified ticket fields.
+   *
+   * Format - "(ticket_field:integer OR ticket_field:'string') AND ticket_field:boolean"
+   *
+   * Note:
+   * 1. Archived tickets will not be included in the results
+   * 2. The query must be URL encoded
+   * 3. Query can be framed using the name of the ticket fields, which can be obtained from Ticket Fields endpoint. Ticket Fields are case sensitive
+   * 4. Query string must be enclosed between a pair of double quotes and can have up to 512 characters
+   * 5. Logical operators AND, OR along with parentheses () can be used to group conditions
+   * 6. Relational operators greater than or equal to :> and less than or equal to :< can be used along with date fields and numeric fields
+   * 7. Input for date fields should be in UTC Format
+   * 8. The number of objects returned per page is 30 also the total count of the results will be returned along with the result
+   * 9. To scroll through the pages add page parameter to the url. The page number starts with 1 and should not exceed 10
+   * 10. To filter for fields with no values assigned, use the null keyword
+   * 11. Please note that the updates will take a few minutes to get indexed, after which it will be available through API
+   *
+   * Supported Ticket Fields
+   * - agent_id (integer): ID of the agent to whom the ticket has been assigned
+   * - group_id (integer): ID of the group to which the ticket has been assigned
+   * - priority (integer): Priority of the ticket
+   * - status (integer): Status of the ticket
+   * - tag (string): Tag that has been associated to the tickets
+   * - type (string): Type of issue that has been associated to the tickets
+   * - due_by (date): Date (YYYY-MM-DD) when the ticket is due to be resolved
+   * - fr_due_by (date): Date (YYYY-MM-DD) when the first response is due
+   * - created_at (date): Ticket creation date (YYYY-MM-DD)
+   * - updated_at (date): Date (YYYY-MM-DD) when the ticket was last updated
+   *
+   * Custom Fields
+   * - Single line text (string)
+   * - Number (integer)
+   * - Checkbox (boolean)
+   * - Dropdown (string)
+   *
+   * @link https://developers.freshdesk.com/api/?_ga=2.172412835.1040340892.1587407475-922287059.1587407475#filter_tickets
+   *
+   * @param string $query
+   * Query string. Provide query string without encoding, e.g.:
+   *   "priority:4 OR priority:3"
+   * ..instead of..
+   *   "priority:4%20OR%20priority:3"
+   *
+   * @return mixed
+   * Decoded response.
+   *
+   * Body contents if successful:
+   * {
+   *   "total":49,
+   *   "results":[
+   *     {
+   *       "cc_emails":["clark.kent@kryptonspace.com"],
+   *       "fwd_emails":[ ],
+   *       "reply_cc_emails":[ ],
+   *       "fr_escalated":false,
+   *       "spam":false,
+   *       "email_config_id":17,
+   *       "group_id":156,
+   *       "priority":3,
+   *       "requester_id":6007738334,
+   *       "responder_id":6001263404,
+   *       "source":2,
+   *       "company_id":2,
+   *       "status":2,
+   *       "subject":"Sample Title",
+   *       "to_emails":null,
+   *       "product_id":null,
+   *       "id":47,
+   *       "type":null,
+   *       "due_by":"2016-02-23T16:00:00Z",
+   *       "fr_due_by":"2016-02-22T17:00:00Z",
+   *       "is_escalated":true,
+   *       "description":"<div>Sample description</div>",
+   *       "description_text":"Sample description",
+   *       "created_at":"2016-02-20T09:16:58Z",
+   *       "updated_at":"2016-02-23T16:14:57Z",
+   *       "custom_fields":{
+   *         "sector_no":7,
+   *         "locked":true
+   *       }
+   *     },
+   *     ...
+   *   ]
+   * }
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
+  public function filterTickets(string $query = null)
+  {
+    if (empty($query))
+      $this->logError('Empty query string in filterTickets().');
+
+    // Create and execute cURL request. If query is empty, execute anyway, so
+    // that the resulting API error is returned.
+    return $this->requestGet('search/tickets', ['query' => $query]);
+  }
+
   #endregion
 
   //*------------------------------------------------------------------------------------------------
