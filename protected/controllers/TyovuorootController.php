@@ -2557,7 +2557,6 @@ class TyovuorootController extends Controller
 		<script type=\"text/javascript\">
 		$(document).ready(function(){
 		    $.each(JSON.parse('".json_encode(array_chunk($haku_tids, $arvo))."'), function( index, value ) {
-			ret = false;
 			//console.log( value );
 			var from = '$from';
 			var to = '$to';
