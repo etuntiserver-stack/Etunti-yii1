@@ -2227,8 +2227,23 @@ class TyovuorootController extends Controller
 		$tids		= (isset($_POST['tids']))?json_decode($_POST['tids'], true):[];
 		$vko_from 	= date("Y-m-d", strtotime($this_sunday.' this week monday'));
 		$vko_to 	= date("Y-m-d", strtotime($this_sunday));
-		$vkoAll		= $this->TidfromtoTyovuoroWithVirtual($vko_from, $vko_to, $tids, true, false, null);
-		$return 	= ['vkoAll'=>$vkoAll, 'did'=>date("Ymd", strtotime($this_sunday))];
+		$getAll 	= $this->tv_arr($vko_from, $vko_to, $tids, [], false, ['tv_kesto']);
+		$result = [];
+		foreach($getAll as $k => $v)
+			foreach($v as $unix => $dayarr)
+				foreach($dayarr as $key => $arr)
+					foreach($arr as $arr2)
+						if(!isset($result[$arr2['this_tid']]))
+							$result[$arr2['this_tid']] = $arr2['tv_kesto'];
+						else
+							$result[$arr2['this_tid']] += $arr2['tv_kesto'];
+
+		$return 	= ['vkoAll'=>$result, 'did'=>date("Ymd", strtotime($this_sunday))];
+		/*
+		echo '<pre>';
+		print_r($return);
+		echo '</pre>';
+		*/
 		echo json_encode($return);
 		exit;
 	}
@@ -2507,6 +2522,8 @@ class TyovuorootController extends Controller
 
 	protected function tv_arrJava($from, $to, $haku_criteria, $haku_tids){
 		$hk = json_encode($haku_criteria);
+		/*
+		// <-- Kaikki kerrallaan
 		return "
 		<script type=\"text/javascript\">
 		$(document).ready(function(){
@@ -2530,6 +2547,42 @@ class TyovuorootController extends Controller
 				}
 			});
 		
+		});
+		</script>";
+		*/
+
+		// <-- Per arvo KPL
+		$arvo = 5;
+		return "
+		<script type=\"text/javascript\">
+		$(document).ready(function(){
+		    $.each(JSON.parse('".json_encode(array_chunk($haku_tids, $arvo))."'), function( index, value ) {
+			ret = false;
+			//console.log( value );
+			var from = '$from';
+			var to = '$to';
+			var tids = JSON.stringify(value);
+			var haku_criteria = JSON.parse('".json_encode($haku_criteria)."');
+			$.ajax({
+				url: location.protocol + \"//\" + location.host + \"/index.php/tyovuoroot/did4?from=\" + from + \"&to=\" + to,
+				type: \"POST\",
+				data: { tids : tids, haku_criteria : haku_criteria },
+				//async: false,
+				success:function(data){
+					data = JSON.parse(data);
+					//console.log(data);
+					$.tv_arr_update(data);
+					$(\".odotus\").remove();
+				},error:function(data){
+				  	console.log(data);
+				}
+			});
+		    });
+
+		    setTimeoutConst = setTimeout(function() {
+			$.vkolaskenta('".json_encode($haku_tids)."');
+		   	$.hovertietoja();
+		    }, 5000);
 		});
 		</script>";
 	}

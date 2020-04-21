@@ -113,17 +113,12 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 			yht += tv_kesto;
 		});
 	});
-	vkolaskenta(tids);
-	hovertietoja();
 }
-function vkolaskenta(tids){
-   if( $(".sunday").length > 0 ){
+jQuery.vkolaskenta = function vkolaskenta(tids){
+     //console.log(tids);
+     if( $(".sunday").length > 0 ){
 	$.each($(".sunday"), function( ) {
 		this_sunday 	= $(this).attr('sunday');
-		if(tids !== null)
-			tds = tids;
-		else
-			tds = $(this).attr('tids');
         	$.ajax({
         	   url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/getsumbyweekall?this_sunday='+this_sunday,
 		   type: 'POST',
@@ -141,10 +136,11 @@ function vkolaskenta(tids){
 		   }
 	        });
 	});
-   }
+     }
+     console.log('vkolaskenta loaded.');
 }
 
-function hovertietoja(){
+jQuery.hovertietoja = function hovertietoja(){
      var delay=1000, setTimeoutConst;
      $('.tv_edit').hover(function(){
 	if( !$(this).hasClass('muistissa') && !$(this).prev('i').hasClass('muistissa') ){
@@ -163,6 +159,7 @@ function hovertietoja(){
 	$('#hovertietoja').html('').hide();
 	clearTimeout(setTimeoutConst);
      });
+     console.log('hovertietoja loaded.');
 }
 
 function hv_tiedot(this_id){
