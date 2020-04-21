@@ -245,7 +245,7 @@ class Freshdesk extends CComponent
   //*------------------------------------------------------------------------------------------------
   //* API Functions
   //*------------------------------------------------------------------------------------------------
-  #region API Functions
+  #region Tickets
 
   /**
    * Call api /tickets (POST) - create ticket.
@@ -336,7 +336,7 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  public function createTicket($opts)
+  public function createTicket(array $opts)
   {
     // Create and execute request.
     return $this->request('tickets', $opts, true);
@@ -816,7 +816,7 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  public function updateTicket(int $id, $opts)
+  public function updateTicket(int $id, array $opts)
   {
     if ($id <= 0) {
       $this->logError("Zero or negative ID in deleteTicket(): $id");
@@ -864,6 +864,217 @@ class Freshdesk extends CComponent
       return null;
     } else {
       return $this->request("tickets/$id", [], false, [CURLOPT_CUSTOMREQUEST => 'delete']);
+    }
+  }
+
+  /**
+   * Call API tickets/[id]/conversations (GET) - List ticket conversations.
+   *
+   * @param int $id
+   * Ticket ID to list conversations for.
+   *
+   * @param int $page
+   * If the ticket's conversation has more than 30 entries, only 30 are returned
+   * per page. Defaults to page 1. Use 2 to return entries from 31 to 60.
+   *
+   * @return mixed
+   * Decoded response.
+   *
+   * Body contents if successful:
+   * [
+   *   {
+   *     "body_text" : "Please reply as soon as possible.",
+   *     "body" : "<div>Please reply as soon as possible.</div>",
+   *     "id" : 3,
+   *     "incoming" : false,
+   *     "private" : true,
+   *     "user_id" : 1,
+   *     "support_email" : null,
+   *     "source" : 2,
+   *     "ticket_id" : 20,
+   *     "created_at" : "2015-08-24T11:59:05Z",
+   *     "updated_at" : "2015-08-24T11:59:05Z",
+   *     "from_email" : "agent2@yourcompany.com",
+   *     "to_emails" : ["agent1@yourcompany.com"],
+   *     "cc_emails": ["example@ccemail.com"],
+   *     "bcc_emails": ["example@bccemail.com"],
+   *     "attachments" : [ ]
+   *   },
+   *   ...
+   * ]
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
+  public function listTicketConversations(int $id, int $page = 1)
+  {
+    if ($id <= 0) {
+      $this->logError("Zero or negative ID in listTicketConversations(): $id");
+      return null;
+    } else {
+      return $this->requestGet("tickets/$id/conversations", $page > 1 ? ['page' => $page] : []);
+    }
+  }
+
+  #endregion
+  #region Contacts
+
+  /**
+   * Call API /contacts (POST) - Create a contact.
+   *
+   * @param array $opts
+   * name (mandatory) (string) Name of the contact
+   * email * (unique) (string) Primary email address of the contact. If you want to associate additional email(s) with this contact, use the other_emails attribute.
+   * phone * (string) Telephone number of the contact
+   * mobile * (number) Mobile number of the contact
+   * twitter_id * (unique) (string) Twitter handle of the contact
+   * unique_external_id * (unique) (string) External ID of the contact
+   * other_emails (array of strings) Additional emails associated with the contact
+   * company_id (number): ID of the primary company to which this contact belongs
+   * view_all_tickets (boolean): Set to true if the contact can see all the tickets that are associated with the company to which he belong
+   * other_companies (array of hashes): Additional companies associated with the contact. This attribute can only be set if the Multiple Companies feature is enabled (Estate plan and above)
+   * address (string): Address of the contact.
+   * avatar (object): Avatar image of the contact The maximum file size is 5MB and the supported file types are .jpg, .jpeg, .jpe, and .png
+   * custom_fields (dictionary): Key value pairs containing the name and value of the custom field. Only dates in the format YYYY-MM-DD are accepted as input for custom date fields. Read more here
+   * description (string): A small description of the contact
+   * job_title (string): Job title of the contact
+   * language (string): Language of the contact. Default language is "en". This attribute can only be set if the Multiple Language feature is enabled (Garden plan and above)
+   * tags (array of strings): Tags associated with this contact
+   * time_zone (string): Time zone of the contact. Default value is the time zone of the domain. This attribute can only be set if the Multiple Time Zone feature is enabled (Garden plan and above)
+   *
+   * * One of these five attributes is mandatory
+   *
+   * @return mixed
+   * Decoded response.
+   *
+   * Body contents if successful:
+   * {
+   *   "active": false,
+   *   "address": null,
+   *   "company_id":23,
+   *   "view_all_tickets":false,
+   *   "deleted": false,
+   *   "description": null,
+   *   "email": "superman@freshdesk.com",
+   *   "id": 432,
+   *   "job_title": null,
+   *   "language": "en",
+   *   "mobile": null,
+   *   "name": "Super Man",
+   *   "phone": null,
+   *   "time_zone": "Chennai",
+   *   "twitter_id": null,
+   *   "other_emails":["lex@freshdesk.com","louis@freshdesk.com"],
+   *   "other_companies":[
+   *     { "company_id":25, "view_all_tickets":true },
+   *     { "company_id":26, "view_all_tickets":false }
+   *   ],
+   *   "created_at": "2015-08-28T09:08:16Z",
+   *   "updated_at": "2015-08-28T09:08:16Z",
+   *   "tags": [ ],
+   *   "avatar": null
+   * }
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
+  public function createContact(array $opts)
+  {
+    return $this->requestPost('contacts', $opts);
+  }
+
+  /**
+   * Call API /contacts/[id] (GET) - View contact.
+   *
+   * @param int $id
+   * Contact ID to view.
+   *
+   * @return mixed
+   * Decoded response.
+   *
+   * Body contents if successful:
+   * {
+   *   "active": false,
+   *   "address": null,
+   *   "company_id":23,
+   *   "view_all_tickets":false,
+   *   "description": null,
+   *   "email": "greenlantern@freshdesk.com",
+   *   "id": 434,
+   *   "job_title": null,
+   *   "language": "en",
+   *   "mobile": null,
+   *   "name": "Green Lantern",
+   *   "phone": null,
+   *   "time_zone": "Chennai",
+   *   "twitter_id": null,
+   *   "other_emails": [],
+   *   "other_companies":[
+   *     { "company_id":25, "view_all_tickets":true },
+   *     { "company_id":26, "view_all_tickets":false }
+   *   ],
+   *   "created_at": "2015-08-28T10:27:58Z",
+   *   "updated_at": "2015-08-28T10:27:58Z",
+   *   "custom_fields": {
+   *     "department": "Operations"
+   *     "fb_profile": null,
+   *     "permanent": false
+   *   },
+   *   "tags": [],
+   *   "avatar": {
+   *     "avatar_url": "<AVATAR_URL>",
+   *     "content_type": "application/octet-stream",
+   *     "id": 4,
+   *     "name": "rails.png",
+   *     "size": 13036,
+   *     "created_at": "2015-08-28T10:27:58Z",
+   *     "updated_at": "2015-08-28T10:27:58Z"
+   *   }
+   * }
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
+  public function viewContact(int $id)
+  {
+    if ($id <= 0) {
+      $this->logError("Zero or negative ID in viewContact(): $id");
+      return null;
+    } else {
+      return $this->requestGet("contacts/$id");
     }
   }
 
