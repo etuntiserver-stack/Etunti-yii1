@@ -723,6 +723,110 @@ class Freshdesk extends CComponent
   }
 
   /**
+   * Call api /tickets/[id] (PUT) - update a ticket.
+   *
+   * Note: Unlike normal tickets, the subject and description of outbound
+   * tickets cannot be updated. More information on the difference between
+   * normal and outbound tickets can be found here:
+   *
+   * @link https://support.freshdesk.com/support/solutions/articles/211975-the-differences-between-an-outbound-ticket-and-a-normal-ticket
+   *
+   * @param int $id
+   * Ticket ID to update.
+   *
+   * @param array $opts
+   * name (string): Name of the requester
+   * requester_id (number): User ID of the requester. For existing contacts, the requester_id can be passed instead of the requester's email.
+   * email (string): Email address of the requester. If no contact exists with this email address in Freshdesk, it will be added as a new contact.
+   * facebook_id (string): Facebook ID of the requester. A contact should exist with this facebook_id in Freshdesk.
+   * phone (string): Phone number of the requester. If no contact exists with this phone number in Freshdesk, it will be added as a new contact. If the phone number is set and the email address is not, then the name attribute is mandatory.
+   * twitter_id (string): Twitter handle of the requester. If no contact exists with this handle in Freshdesk, it will be added as a new contact.
+   * unique_external_id (string): External ID of the requester. If no contact exists with this external ID in Freshdesk, they will be added as a new contact.
+   * subject (string): Subject of the ticket. The default Value is null.
+   * type (string): Helps categorize the ticket according to the different kinds of issues your support team deals with. The default Value is null.
+   * status (number): Status of the ticket. The default Value is 2. (Refer Ticket properties table for supported values)
+   * priority (number): Priority of the ticket. The default value is 1. (Refer Ticket properties table for supported values)
+   * description (string): HTML content of the ticket.
+   * responder_id (number): ID of the agent to whom the ticket has been assigned
+   * attachments (array): of objects	Ticket attachments. The total size of these attachments cannot exceed 15MB.
+   * custom_fields (dictionary): Key value pairs containing the names and values of custom fields. Read more here
+   * due_by (datetime): Timestamp that denotes when the ticket is due to be resolved
+   * email_config_id (number): ID of email config which is used for this ticket. (i.e., support@yourcompany.com/sales@yourcompany.com)
+   * If (the): product_id is changed and the current email_config_id doesn't belong to that product, then this value will be automatically updated to the selected product's primary email_config_id
+   * fr_due_by (datetime): Timestamp that denotes when the first response is due
+   * group_id (number): ID of the group to which the ticket has been assigned. The default value is the ID of the group that is associated with the given email_config_id
+   * product_id (number): ID of the product to which the ticket is associated.
+   * source (number): The channel through which the ticket was created. The default value is 2. (Refer Ticket properties table for supported values)
+   * tags (array of strings):	Tags that have been associated with the ticket
+   * company_id (number): Company ID of the requester. This attribute can only be updated if the Multiple Companies feature is enabled (Estate plan and above)
+   *
+   * Ticket properties:
+   * Every ticket uses certain fixed numerical values to denote its Source, Status, and Priorities.
+   * These numerical values along with their meanings are given below.
+   *   - SOURCE: Email 1, Portal 2, Phone 3, Chat 7, Mobihelp 8, Feedback Widget 9, Outbound Email 10
+   *   - STATUS: Open 2, Pending 3, Resolved 4, Closed 5
+   *   - PRIORITY: Low 1, Medium 2, High 3, Urgent 4
+   *
+   * @return mixed
+   * Decoded response. Additional headers are requested, as the headers include
+   * link to created ticket, so if successful, return value is an array with
+   * first item being the headers and second item the return body.
+   *
+   * Body contents if successful:
+   * {
+   *   "cc_emails" : [ ],
+   *   "fwd_emails" : [ ],
+   *   "reply_cc_emails" : [ ],
+   *   "description_text" : "Not given.",
+   *   "description" : "<div>Not given.</div>",
+   *   "spam" : false,
+   *   "email_config_id" : null,
+   *   "fr_escalated" : false,
+   *   "group_id" : null,
+   *   "priority" : 2,
+   *   "requester_id" : 1,
+   *   "responder_id" : null,
+   *   "source" : 3,
+   *   "status" : 3,
+   *   "subject" : "",
+   *   "id" : 20,
+   *   "type" : null,
+   *   "to_emails" : null,
+   *   "product_id" : null,
+   *   "attachments" : [ ],
+   *   "is_escalated" : false,
+   *   "tags" : [ ],
+   *   "created_at" : "2015-08-24T11:56:51Z",
+   *   "updated_at" : "2015-08-24T11:59:05Z",
+   *   "due_by" : "2015-08-27T11:30:00Z",
+   *   "fr_due_by" : "2015-08-25T11:30:00Z"
+   * }
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
+  public function updateTicket(int $id, $opts)
+  {
+    if ($id <= 0) {
+      $this->logError("Zero or negative ID in deleteTicket(): $id");
+      return null;
+    } else {
+      return $this->requestPut("tickets/$id", $opts);
+    }
+  }
+
+  /**
    * Call API /tickets/[id] (DELETE) - deletes a ticket by ID.
    *
    * Note: Rest assured. When deleted, tickets are not cast into the fiery
