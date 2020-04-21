@@ -88,6 +88,7 @@ class Freshdesk extends CComponent
     curl_setopt($ch, CURLOPT_USERPWD, "{$this->key}:x");
     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
     curl_setopt($ch, CURLOPT_HTTPHEADER, 'Content-Type: application/json');
+
     if (!empty($post_fields))
       curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_fields));
     foreach ($tags as $tag => $value)
@@ -193,10 +194,7 @@ class Freshdesk extends CComponent
   private function requestGet(string $target, array $query_params = [], bool $return_headers = false, array $tags = [])
   {
     // Remove empty strings from query params.
-    foreach ($query_params as $k => $v) {
-      if (is_string($v) && empty($v))
-        unset($query_params($k));
-    }
+    $query_params = array_filter($query_params, function ($v, $k) { return (!is_string($v) || !empty($v)); }, ARRAY_FILTER_USE_BOTH);
 
     // Create query string.
     $query_str = http_build_query($query_params);
@@ -449,7 +447,7 @@ class Freshdesk extends CComponent
    *
    * Search by company ID is not included as companies are not used (yet).
    *
-   * @param array $filters
+   * @param string $filter
    * The various filters available are: new_and_my_open, watching, spam, deleted.
    *
    * @param mixed $requester
@@ -537,21 +535,18 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  public function listTickets(array $filters = [], $requester = null, int $page = -1, int $per_page = -1, string $updated_since = null, array $embed = [], string $order_by = 'created_at', string $order_type = 'desc')
+  public function listTickets(string $filter = null, $requester = null, int $page = -1, int $per_page = -1, string $updated_since = null, array $embed = [], string $order_by = 'created_at', string $order_type = 'desc')
   {
     $query_params = [];
 
-    // Filters: remove invalid filters and add to query parameters.
-    if (!empty($filters)) {
+    // Filter: check for valid filter and add to query parameters.
+    if (!empty($filter)) {
       static $valid_filters = ['new_and_my_open', 'watching', 'spam', 'deleted'];
-      $filters = array_values($filters);
-      for ($i = 0; $i < count($filters); $i++) {
-        if (!in_array($filters[$i], $valid_filters)) {
-          static::logStaticError("Invalid option {$filters[$i]} for filters of listTickets() (/tickets GET).");
-          unset($filters[$i]);
-        }
+      if (!in_array($filter, $valid_filters)) {
+        static::logStaticError("Invalid option {$filter} for filters of listTickets() (/tickets GET).");
+        $filter = '';
       }
-      $query_params['filter'] = implode(',', $filters);
+      $query_params['filter'] = $filter;
     }
 
     // Requester: if int, set requester_id, or if string, set email.

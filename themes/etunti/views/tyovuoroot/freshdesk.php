@@ -1,0 +1,414 @@
+<?php
+
+?>
+
+<style>
+  .ticket {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    transition: 0.3s;
+    border-radius: 5px;
+  }
+
+  .ticket-label {
+    padding-top: 10px;
+  }
+
+  .ticket-description {
+    min-height: 40px;
+    margin-bottom: 6px;
+    padding: 0px 6px;
+  }
+
+  .ticket:hover {
+    cursor: pointer;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
+  }
+
+  /* #ticket-container {
+    min-width: 100rem;
+    width: 90%;
+    max-width: 130rem;
+    margin-left: auto;
+    margin-right: auto;
+  } */
+
+  /* .progress {
+    height: 16px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    background: none;
+  }
+  .progress-bar {
+    background: -webkit-linear-gradient(left, #33156d 0%,#f282bc 100%);
+    border: 2px solid #ffffff;
+    border-radius: 25px;
+  } */
+
+  #ticket-container {
+    min-width: 100rem;
+    width: 90%;
+    max-width: 130rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .progbar-outer-box {
+    position:fixed;
+    width:1200px;
+    height:22px;
+    bottom:80px;
+    left:calc(50% - 480px);
+    z-index: 999;
+  }
+
+  .progbar-inner-box {
+    width: 50%;
+    height: 22px;
+    margin: 0px auto;
+    background: none;
+    opacity: 90%;
+  }
+
+  .progbar {
+    background: -webkit-linear-gradient(left, #33156d 0%, #f282bc 100%);
+    border: 2px solid #151414;
+    border-radius: 25px;
+    display: none;
+  }
+</style>
+
+<div style="display:none">
+  <div class="ticket" id="ticket-base">
+    <div class="ticket-body caption text-center" onclick="">
+      <!-- onclick="location.href='/index.php/tyovuoroot/freshdesk/id" -->
+      <h4 class="ticket-label"><a class="ticket-title" href="#" target="_blank">
+          <!-- Title --></a></h4>
+      <p><i class="glyphicon glyphicon-user light-red lighter bigger-120"></i>&nbsp;<a class="ticket-customer-link" href="#" target="_blank" style="color:inherit;">
+          <!-- Customer Name --></a></p>
+      <div class="ticket-description smaller">
+        <!-- Description -->
+      </div>
+    </div>
+    <div class="ticket-footer caption card-footer text-center">
+      <!-- bg-[color] based on status -->
+      <ul class="ticket-footer-list list-inline">
+        <!-- text-dark if not answered -->
+        <li><i class="people lighter"></i>&nbsp;<i class="ticket-status">
+            <!-- Answered/Not Answered, Date --></i></li>
+        <li></li>
+        <li><i class="glyphicon glyphicon-envelope lighter"></i>&nbsp;<a href="#" style="color:inherit">Vastaa</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Progress bar absolute -->
+<!-- <div style="position:relative">
+  <div style="position:absolute;width:100%;height:18px;transform:translateY(2500%)">
+    <div class="progbar-inner-box">
+      <div class="progbar progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- Progress bar fixed -->
+<div class="progbar-outer-box">
+  <div class="progbar-inner-box">
+    <div class="progbar progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+    </div>
+  </div>
+</div>
+
+<div id="ticket-container">
+  <div class="row space-16"></div>
+  <div class="row">
+    <div class="col-md-11">
+      <div class="col-md-4">
+        <div id="ticket-row-1">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div id="ticket-row-2">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div id="ticket-row-3">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-1">&nbsp;</div>
+  </div>
+</div>
+
+<script>
+  $(function() {
+    var rowHeights = [0, 0, 0];
+
+    var drawTicket = function(id, customer, customer_id, status, updated_date, title, description) {
+      let obj = $('#ticket-base').clone();
+      obj.find('.ticket-title').text('Tukipyyntö: ' + title);
+      obj.find('.ticket-customer-link').attr('href', `/index.php/asiakkaat/update?id=${customer_id}`).text(customer);
+      obj.find('.ticket-description').text(description);
+      // obj.find('.ticket-body').attr('onclick', `location.href='/index.php/tyovuoroot/freshdesk/${id}'`);
+
+      switch (status) {
+        case 2: // Open
+          obj.find('.ticket-footer').addClass('bg-warning');
+          obj.find('.ticket-footer-list').addClass('text-dark');
+          obj.find('.ticket-status').text(`Auki ${updated_date}`);
+          break;
+        case 3: // Pending
+          obj.find('.ticket-footer').addClass('bg-primary');
+          obj.find('.ticket-status').text(`Vastattu ${updated_date}`);
+          break;
+        case 4: // Resolved
+          obj.find('.ticket-footer').addClass('bg-success');
+          obj.find('.ticket-status').text(`Ratkaistu ${updated_date}`);
+          break;
+        case 5: // Closed
+          obj.find('.ticket-footer').addClass('bg-secondary');
+          obj.find('.ticket-status').text(`Suljettu ${updated_date}`);
+          break;
+      }
+
+      let row = 1;
+      if (rowHeights[1] < rowHeights[0])
+        row = 2;
+      if (rowHeights[2] < rowHeights[row - 1])
+        row = 3;
+      $('#ticket-row-' + row).append(obj);
+      rowHeights[row - 1] += obj.height();
+    };
+
+    let list_request_underway = false,
+        list_previous_page = 0,
+        list_end_reached = false;
+
+    var list = async function(page = 0) {
+      if (list_request_underway || list_end_reached) return;
+      if (page <= 0)
+        page = list_previous_page + 1;
+      progbar();
+
+      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/fdajax_list_tickets?page=${page}`, {
+
+        // xhrFields: {
+        //   onprogress: function(e) {
+        //     let response = e.currentTarget.response.substring(list_previous_length);
+        //     list_previous_length = e.currentTarget.response.length; // let list_previous_length = 0;
+        //     console.log(response);
+        //     let parsed = JSON.parse(response);
+        //     let customer_id = Math.floor(Math.random() * 10000); // TEMP, internal, for link.
+        //     $.each(parsed, function(i, t) {
+        //       drawTicket(t.id, t.requester.name, customer_id, t.status, formatUtcString(t.updated_at), t.subject, t.description_text);
+        //     });
+        //   }
+        // },
+
+        error: function(xhr, status, error) {
+          console.log(xhr.responseText);
+          alert(xhr.responseText);
+        },
+
+        success: function(data) {
+          // console.log(data);
+          parsed = JSON.parse(data);
+
+          if (parsed.length == 0) {
+            list_end_reached = true;
+            console.log("Reached end of ticket data");
+            return true;
+          }
+
+          $.each(JSON.parse(data), function(i, t) {
+            let customer_id = Math.floor(Math.random() * 10000); // TEMP
+            drawTicket(t.id, t.requester.name, customer_id, t.status, formatUtcString(t.updated_at), t.subject, t.description_text);
+          });
+        },
+
+        complete: function() {
+          (async() => { await new Promise(r => setTimeout(r, 3250)); })();
+          if (list_end_reached || !listFetchIfScrolled())
+            progbarStop();
+          list_request_underway = false;
+          list_previous_page = page;
+        }
+      });
+    };
+
+    /**
+     * Format UTC string to a more eye-friendly date string.
+     */
+    var formatUtcString = function(utc) {
+      let time = Date.parse(utc);
+      const timeFormat = new Intl.DateTimeFormat('fi-FI', {
+        timeZone: 'Europe/Helsinki',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      });
+      let [{
+        value: mo
+      }, , {
+        value: da
+      }, , {
+        value: ye
+      }, , {
+        value: ho
+      }, , {
+        value: mi
+      }] = timeFormat.formatToParts(time);
+      return `${da}.${mo}.${ye} ${ho}:${mi}`;
+    };
+
+    /**
+     * Request next page of tickets if a request is not currently active and
+     * window is scrolled to bottom.
+     */
+    var listFetchIfScrolled = function() {
+      if (!list_request_underway && $(window).scrollTop() == $(document).height() - $(window).height()) {
+        list();
+        return true;
+      }
+      return false;
+    };
+
+    /**
+     * Hook scroll to a check of if it's time to request more tickets.
+     */
+    $(window).scroll(function() {
+      listFetchIfScrolled();
+    });
+
+    //*--------------------------------------------------------------------------
+    //* Progress Bar
+    //*--------------------------------------------------------------------------
+
+    /** Sleeps for ms milliseconds. Use with await. */
+    var sleep = function(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    };
+
+    /** @type {boolean} Indicates if the progress bar is currently active. */
+    var progbar_is_active = false;
+
+    /** @type {boolean} Can be set to true to tell progress bar to exit early. */
+    var progbar_should_stop = false;
+
+    /** @type {number} Elapsed milliseconds during previous animation. */
+    var progbar_last_elapsed = 0;
+
+    /**
+     * Activate progress bar and grow it to 100 in approximately 10 seconds.
+     * Counts up until it reaches near 100 or is stopped. After finishing, the
+     * bar is hidden again.
+     */
+    var progbar = async function() {
+      if (progbar_is_active) return;
+
+      progbarClean(true);
+      let startTime = (new Date()).getTime();
+      // console.log("progbar() started, time: " + startTime);
+
+      let n = 0, ival = 0;
+      while (1 - n > 0.01) {
+        if (progbar_should_stop)
+          break;
+        n += (1 - n) / 10 * (1 - n);
+        ival = Math.trunc(n * 100);
+        $('div.progbar').attr('aria-valuenow', ival).css('width', ival + '%');
+        await new Promise(r => setTimeout(r, 50));
+      }
+
+      $('div.progbar').attr('aria-valuenow', 100).css('width', '100%');
+      $('div.progbar').fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+
+      progbar_last_elapsed = ((new Date()).getTime() - startTime);
+      progbar_is_active = false;
+      progbarClean(false);
+      // console.log("progbar() finished, elapsed: " + elapsed);
+    };
+
+    /**
+     * Tells the progress bar to stop if it's active.
+     */
+    var progbarStop = function() {
+      // console.log('progbarStop() called, time: ' + (new Date()).getTime());
+      progbar_should_stop = (progbar_is_active == true);
+    };
+
+    /**
+     * Resets progress bar to base state of active or stopped.
+     * @param {boolean} active Whether to set the bar as active or stopped.
+     */
+    var progbarClean = function(active = false) {
+      if (active) {
+        if (!progbar_is_active) {
+          progbar_is_active = true;
+          progbar_should_stop = false;
+          $('div.progbar')
+            .css({width: 0, display: 'block', border: '2px solid #151414'})
+            .attr('aria-valuenow', 0)
+            .position();
+        }
+      } else if (progbar_is_active) {
+        progbar_should_stop = true;
+      } else {
+        progbar_is_active = false;
+        progbar_should_stop = false;
+        $('div.progbar')
+          .css({width: 0, display: 'none', border: 'none'})
+          .attr('aria-valuenow', 0);
+      }
+    };
+
+
+    //*--------------------------------------------------------------------------
+    //* Initialized
+    //*--------------------------------------------------------------------------
+
+    /** Populate the ticket rows with random data to preview. */
+    var ticketPreviewPopulate = function(count = 20) {
+
+      // Test ticket data. Each array has 8 different values, which form
+      // combinations for random tickets.
+      const TEST_NAMES = ['Testiasiakas A', 'Ossi Meikäläinen', 'Jouni A.', 'Antero Mertasaari', 'Jokupulju Oy', 'Tuntematon', 'Ninja Warrior', 'Crokodile Dundee'];
+      const TEST_DATES = ['09.01.2019 11:36', '06.03.2019 15:34', '07.05.2019 16:25', '18.08.2019 09:27', '04.09.2019 17:32', '01.01.2020 18:55', '15.01.2020 17:41', '03.04.2020 08:24'];
+      const TEST_TITLES = ['Lorem ipsum dolor sit amet', 'Phasellus rhoncus erat sed', 'Ut rutrum, arcu sed', 'Sed pretium nisi dui', 'Quisque bibendum, dui non', 'In lacinia felis et mi.', 'Suspendisse quis quam velit.', 'In vehicula commodo augue', ];
+      const TEST_TEXTS = [
+        'mollis justo. Maecenas maximu id, dapibus eu arcu. parturient montes, nascetur ridiculus mus. Ut viverra molestie mi, accumsan dignissim odio suscipit ac. Nullam at blandit dolor, sit amet commodo nibh.',
+        'Praesent lacinia cursus sem quis hendrerit. Duis in mi auctor, tincidunt elit et, ondimentum dui, non hendndrerit at urna sit amet, aliquet finibus diam.',
+        'libero arcu finibus ipsum, eu convallis leo metus ut velit. Aliquam pellentesque tempus nisl sed egestas. Proin a purus a elit fermentum laoreet. Nullam non risus sit amet orci pellentesque mattis ac a neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam ultricies tortor dolor, a laoreet ex tincidunt quis.',
+        'justo convallis vitae. Nulla sed nulla elit. Etiam ultricies sodales mattis. Donec euismod, odio quis dignimi, quis pellentesque tellus ante nec lectus. Donec sem neque, eleifend malesuada nibh eu, efficitur vehicula lectus. Sed accumsan, eros viverra sodales accumsan, ex ex posuere nisi, vitae euismod arcu eros ultrices sapien.',
+        'ullamcorper lobortis enim urna at ipsum. Integer vel aliquet ligula, ac accumsan neque. Cras cursus sodales erat quis consectetur. Cras vestibulum ultricies orci congue porta. In posuere velit magna, nec venenatis urna suscipit sed. Vestibulum congue libero mi, in consectetur nulla gravida blandit. Vivamus sollicitudin felis dignissim faucibus aliquam. Nullam eros lectus, ornare quiss lacus a tempus.',
+        'Mauris posuere urna posuere, vulputate elit id, gravida nisl. Nullam purus risus, vulputate nec libero ut, faucibus lobortis diam. Curabitur vel sem eu ex efficitur egestas ac ut diam. Donec ut tempor nisi. Vivamus orci dui, elementum ut nunc vitae, imperdiet semper mauris. Vivamus porttitor elementum lorem, nec volutpat justo cursus vel. Praesent nec nulla et lorem varius bibendum. Quisque at semaesent rutrum magna nulla, vitae fermentum turpis ultrices vitae.',
+        'rhoncus felis tempor vitae. Nulla euismod nisl quis diam fringilla dignissim. Ut felis magna, fermentum sit amet felis ac, varius fringilla dui. Mauris vitae tortor lacinia, semper mi nec, mollis quam. Etiam luctus ligula ac ligula elementum, ornare faucibus nisi pulvinar. Etiam orci lectus, faucibus sed sollicitudin et, luctus ac massa. In rhoncus vitae dolor quis laoreet. Praesent tincidunt tula tristique. Donec lectus felis, eleifend vitae libero eu, vestibulum consequat enim.',
+        'turpis at purus tempus pellentesque id id lorem. Ut a quam ornare, hendrerit felis e dignissim ut. Curabitur ultrices interdum purus, quis fringilla enim condimentum sed. '
+      ];
+
+      for (let i = 0; i < count; i++) {
+        let rand = Math.random(),
+          customer = TEST_NAMES[Math.floor(rand * 8)],
+          title = TEST_TITLES[Math.floor(rand * 8)],
+          desc = TEST_TEXTS[Math.floor(rand * 8)],
+          date = TEST_DATES[Math.floor(rand * 8)];
+        drawTicket(i, customer, Math.floor(rand * 5000), Math.floor(rand * 4) + 2, date, title, desc);
+      }
+    };
+
+    list();
+    // ticketPreviewPopulate();
+
+    (async () => {
+      // let timeout = setTimeout(() => progbarStop(), 2500);
+      // await progbar();
+      // clearTimeout(timeout);
+    })();
+  });
+</script>

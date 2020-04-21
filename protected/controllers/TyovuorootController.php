@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus'),
+				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'freshdesk', 'fdajax_list_tickets', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -1543,6 +1543,37 @@ class TyovuorootController extends Controller
 
       $fnout(count($matches) > 0 ? 2 : 1, "{$s->current}: Työvuoro ID %s (tid %s, pvm %s): %d vastaavaa työvuoroa", $item->id, $item->tid, $item->pvm, count($matches));
     }
+  }
+
+  public function actionFreshdesk()
+  {
+    /** @var Freshdesk */
+    $freshdesk = Yii::createComponent('Freshdesk');
+
+    return $this->render('freshdesk', [
+      'freshdesk' => $freshdesk,
+      'tickets' => Yii::app()->session['freshdesk_open_tickets']
+    ]);
+  }
+
+  public function actionFdajax_list_tickets($page = 1, $per_page = 15)
+  {
+    /** @var Freshdesk */
+    $freshdesk = Yii::createComponent('Freshdesk');
+
+    // Temporarily cached here
+    $tickets = [];
+    if (!empty(Yii::app()->session["freshdesk_open_tickets"]))
+      $tickets = Yii::app()->session["freshdesk_open_tickets"];
+
+    $requested = array_splice($tickets, ($page-1)*$per_page, $per_page);
+    if (count($requested) != $per_page) {
+      $requested = $freshdesk->listTickets(null, null, $page, $per_page, null, ['requester', 'description'], 'updated_at', 'desc');
+      $tickets = array_merge(array_splice($tickets, 0, ($page-1)*$per_page), $requested, array_splice($tickets, $page*$per_page));
+      Yii::app()->session["freshdesk_open_tickets"] = $tickets;
+    }
+
+    echo json_encode($requested);
   }
 
 	public function actionBeta($kohteet_siivous = [], $kohde = '', $asiakas = '', $mode = null, $stage = null)
