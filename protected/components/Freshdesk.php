@@ -867,6 +867,9 @@ class Freshdesk extends CComponent
     }
   }
 
+  #endregion
+  #region Conversations
+
   /**
    * Call API tickets/[id]/conversations (GET) - List ticket conversations.
    *
@@ -924,6 +927,81 @@ class Freshdesk extends CComponent
       return null;
     } else {
       return $this->requestGet("tickets/$id/conversations", $page > 1 ? ['page' => $page] : []);
+    }
+  }
+
+  /**
+   * Call API /tickets/[id]/reply (POST) - Create a reply.
+   *
+   * @param int $id
+   * Ticket ID to create a reply to.
+   *
+   * @param array $opts
+   * body (string) Content of the note in HTML format (mandatory)
+   * attachments (array of attachment objects): Attachments. The total size of all the ticket's attachments (not just this note) cannot exceed 15MB.
+   * from_email (string): The email address from which the reply is sent. By default the global support email will be used.
+   * user_id (number): ID of the agent who is adding the note
+   * cc_emails (array of strings): Email address added in the 'cc' field of the outgoing ticket email.
+   * bcc_emails (array of strings): Email address added in the 'bcc' field of the outgoing ticket email.
+   *
+   * @return mixed
+   * Decoded response. Additional headers are requested, as the headers include
+   * link to created ticket, so if successful, return value is an array with
+   * first item being the headers and second item the return body.
+   *
+   * Body contents if successful:
+   * {
+   *   "cc_emails" : ["ram@freshdesk.com", "diana@freshdesk.com"],
+   *   "fwd_emails" : [ ],
+   *   "reply_cc_emails" : ["ram@freshdesk.com", "diana@freshdesk.com"],
+   *   "email_config_id" : null,
+   *   "group_id" : null,
+   *   "priority" : 1,
+   *   "requester_id" : 129,
+   *   "responder_id" : null,
+   *   "source" : 2,
+   *   "status" : 2,
+   *   "subject" : "Support needed..",
+   *   "company_id" : 1,
+   *   "id" : 1,
+   *   "type" : "Question",
+   *   "to_emails" : null,
+   *   "product_id" : null,
+   *   "fr_escalated" : false,
+   *   "spam" : false,
+   *   "urgent" : false,
+   *   "is_escalated" : false,
+   *   "created_at" : "2015-07-09T13:08:06Z",
+   *   "updated_at" : "2015-07-23T04:41:12Z",
+   *   "due_by" : "2015-07-14T13:08:06Z",
+   *   "fr_due_by" : "2015-07-10T13:08:06Z",
+   *   "description_text" : "Some details on the issue ...",
+   *   "description" : "<div>Some details on the issue ..</div>",
+   *   "tags" : [ ],
+   *   "attachments" : [ ]
+   * }
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
+  public function createReply(int $id, array $opts = [])
+  {
+    if ($id <= 0) {
+      $this->logError("Zero or negative ID in viewContact(): $id");
+      return null;
+    } else {
+      return $this->request("tickets/$id/reply", $opts);
     }
   }
 
