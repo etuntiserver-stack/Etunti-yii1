@@ -2536,8 +2536,6 @@ class TyovuorootController extends Controller
 					//console.log(data);
 					$.tv_arr_update(data);
 					$(\".odotus\").remove();
-					//var numItems = $('.tv_edit').length;
-					//$(\"#yht_tv\").text(numItems);
 				},error:function(data){
 				  	console.log(data);
 				}
@@ -2546,7 +2544,7 @@ class TyovuorootController extends Controller
 			setTimeoutConst = setTimeout(function() {
 				$.vkolaskenta('".json_encode($haku_tids)."');
 			   	$.hovertietoja();
-			}, 3000);
+			}, 7000);
 		});
 		</script>";
 
