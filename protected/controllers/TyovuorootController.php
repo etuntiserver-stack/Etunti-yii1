@@ -2518,7 +2518,7 @@ class TyovuorootController extends Controller
 
 	protected function tv_arrJava($from, $to, $haku_criteria, $haku_tids, $taulu){
 		$hk = json_encode($haku_criteria);
-		/*
+
 		// <-- Kaikki kerrallaan
 		return "
 		<script type=\"text/javascript\">
@@ -2542,12 +2542,17 @@ class TyovuorootController extends Controller
 				  	console.log(data);
 				}
 			});
-		
+
+			setTimeoutConst = setTimeout(function() {
+				$.vkolaskenta('".json_encode($haku_tids)."');
+			   	$.hovertietoja();
+			}, 3000);
 		});
 		</script>";
-		*/
+
 
 		// <-- Per arvo KPL
+		/*
 		$arvo = 5;
 		return "
 		<script type=\"text/javascript\">
@@ -2579,6 +2584,7 @@ class TyovuorootController extends Controller
 			}, 3000);
 		});
 		</script>";
+		*/
 	}
 
 	public function actionHovertietoja($this_id) {
