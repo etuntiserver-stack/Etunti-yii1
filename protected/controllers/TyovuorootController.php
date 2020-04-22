@@ -3488,6 +3488,7 @@ class TyovuorootController extends Controller
 		){
 			$model->attributes 	= $edellinen_model;
 			$model->pto 		= date("d.m.Y", strtotime($laatikko_pvm . " -1 day"));
+			$model->ilmoitus_paattymisesta = 1;
 
 			// <-- Poistetut päivät siirto, JOS vaihdettu henkilö
 			$all_new_tids = [$post['tid'] => $post['tid']];
