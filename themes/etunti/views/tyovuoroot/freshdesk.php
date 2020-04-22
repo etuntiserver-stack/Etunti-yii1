@@ -54,7 +54,7 @@
     border: 2px solid #151414;
     border-radius: 25px;
     display: none;
-    transition-duration:10ms;
+    transition-duration: 10ms;
   }
 </style>
 
@@ -264,7 +264,7 @@
      * Hook scroll to a check of if it's time to request more tickets.
      */
     $(window).scroll(function() {
-      // listFetchIfScrolled();
+      listFetchIfScrolled();
     });
 
     //*--------------------------------------------------------------------------
@@ -294,68 +294,44 @@
       if (progbar_is_active) return;
       progbarClean(true);
 
-      const interval = 15;
+      // increment: ms / (ms/interval) * (100/ms) / 100  : (bring to 0-1 float value).
       let startTime = (new Date()).getTime(),
-          n = 0,
-          ival = 0,
+          reps_total = progbar_last_elapsed / 15,
+          increment = progbar_last_elapsed / reps_total * (100 / progbar_last_elapsed) / 100,
+          adjusted = 0
           reps = 0,
-          adjusted = 0,
-          adjusted_at = 0;
+          n = 0;
 
-      // ms / (ms/interval) * (100/ms) / 100  : (bring to 0-1 float value).
-      let reps_total = progbar_last_elapsed / interval;
-      let increment = progbar_last_elapsed / reps_total * (100 / progbar_last_elapsed) / 100;
+      console.log(`previous time: ${progbar_last_elapsed}, increment: ${increment} (interval 15ms)`);
 
-      console.log(`previous time: ${progbar_last_elapsed}, increment: ${increment} (interval ${interval}ms)`);
       while (1 - n > 0.01) {
         if (progbar_should_stop)
           break;
-        // n += (1 - n) / 10 * (1 - n);
-        // ival = Math.trunc(n * 100);
 
-        if (n - adjusted_at > 0.01 && n < 0.75) {
-          adjusted_at = n;
-          let reps_pct = reps / reps_total,
-              diff = 0;
-          if (n > reps_pct) {
-            diff = n - reps_pct;
-            if (diff > 0.02) {
-              // console.log(`increment before adjust: ${increment}`);
-              increment *= (1+diff);
-              // console.log(`adjusted increment by *= (1+${diff}) (reps_pct ${reps_pct} < prog ${n})`);
-            }
-          } else {
-            diff = reps_pct - n;
-            if (diff > 0.01) {
-              // console.log(`increment before adjust: ${increment}`);
-              increment *= (1-diff);
-              // console.log(`adjusted increment to ${increment} by *= (1-${diff}) (reps_pct ${reps_pct} > prog ${n})`);
-            }
-          }
+        // Slow down increment because time taken per request is not predictable.
+        switch (true) {
+          case (adjusted == 0 && n > 0.40): increment /= 1.20; adjusted++; break;
+          case (adjusted == 1 && n > 0.45): increment /= 1.20; adjusted++; break;
+          case (adjusted == 2 && n > 0.50): increment /= 1.20; adjusted++; break;
+          case (adjusted == 3 && n > 0.55): increment /= 1.20; adjusted++; break;
+          case (adjusted == 4 && n > 0.60): increment /= 1.30; adjusted++; break;
+          case (adjusted == 5 && n > 0.65): increment /= 1.30; adjusted++; break;
+          case (adjusted == 6 && n > 0.70): increment /= 1.30; adjusted++; break;
+          case (adjusted == 7 && n > 0.75): increment /= 1.50; adjusted++; break;
+          case (adjusted == 8 && n > 0.80): increment /= 2.50; adjusted++; break;
+          case (adjusted == 9 && n > 0.85): increment /= 3.50; adjusted++; break;
+          case (adjusted == 10 && n > 0.90): increment /= 4.50; adjusted++; break;
+          case (adjusted == 11 && n > 0.95): increment  = 0.0; adjusted++; break;
         }
 
-        // Slow down at very end in case of delayed call.
-        if (adjusted == 0 && n > 0.78) {
-          increment /= 1.07; adjusted++;
-        } else if (adjusted == 1 && n > 0.83) {
-          increment /= 1.11; adjusted++;
-        } else if (adjusted == 2 && n > 0.88) {
-          increment /= 1.17; adjusted++;
-        } else if (adjusted == 3 && n > 0.92) {
-          increment /= 1.23; adjusted++;
-        } else if (adjusted == 4 && n > 0.95) {
-          increment = 0; adjusted++;
-        }
-
-        n += increment;
         reps++;
-        ival = Math.trunc(n * 100);
-        // console.log(n);
+        n += increment;
+        let ival = Math.trunc(n * 100);
         $('div.progbar').attr('aria-valuenow', ival).css('width', ival + '%');
-        await new Promise(r => setTimeout(r, interval));
+        await new Promise(r => setTimeout(r, 15));
       }
 
-      progbar_last_elapsed = ((new Date()).getTime() - startTime);
+      progbar_last_elapsed = Math.max(200, ((new Date()).getTime() - startTime));
       progbar_is_active = false;
       await progbarClean(false);
     };
@@ -364,7 +340,6 @@
      * Tells the progress bar to stop if it's active.
      */
     var progbarStop = function() {
-      // console.log('progbarStop() called, time: ' + (new Date()).getTime());
       progbar_should_stop = (progbar_is_active == true);
     };
 
@@ -377,44 +352,48 @@
         if (!progbar_is_active) {
           progbar_is_active = true;
           progbar_should_stop = false;
-          $('div.progbar')
-            .css({
-              width: 0,
-              display: 'block',
-              border: '2px solid #151414'
-            })
-            .attr('aria-valuenow', 0)
-            .position();
+          $('div.progbar').attr('aria-valuenow', 0).css({
+            width: 0,
+            display: 'block',
+            border: '2px solid #151414'
+          });
         }
       } else if (progbar_is_active) {
         progbar_should_stop = true;
       } else {
+        $('div.progbar').css({
+          width: 0,
+          display: 'none',
+          border: 'none'
+        });
         progbar_is_active = false;
         progbar_should_stop = false;
-        $('div.progbar')
-          .css({
-            width: 0,
-            display: 'none',
-            border: 'none'
-          })
-          .attr('aria-valuenow', 0);
       }
     };
 
+    //*--------------------------------------------------------------------------
+    //* Tests
+    //*--------------------------------------------------------------------------
 
-    //*--------------------------------------------------------------------------
-    //* Initialized
-    //*--------------------------------------------------------------------------
+    /** Tests progress bar with various timeouts (10 total). */
+    var progbarTest = async function() {
+      const msarr = [1600, 400, 890, 3100, 890, 990, 100, 750, 2100, 1550];
+      let timeout = null;
+      for (let i = 0; i < msarr.length; i++) {
+        timeout = setTimeout(() => progbarStop(), msarr[i]);
+        await progbar();
+        clearTimeout(timeout);
+      }
+    };
 
     /** Populate the ticket rows with random data to preview. */
     var ticketPreviewPopulate = function(count = 20) {
 
-      // Test ticket data. Each array has 8 different values, which form
-      // combinations for random tickets.
-      const TEST_NAMES = ['Testiasiakas A', 'Ossi Meikäläinen', 'Jouni A.', 'Antero Mertasaari', 'Jokupulju Oy', 'Tuntematon', 'Ninja Warrior', 'Crokodile Dundee'];
-      const TEST_DATES = ['09.01.2019 11:36', '06.03.2019 15:34', '07.05.2019 16:25', '18.08.2019 09:27', '04.09.2019 17:32', '01.01.2020 18:55', '15.01.2020 17:41', '03.04.2020 08:24'];
-      const TEST_TITLES = ['Lorem ipsum dolor sit amet', 'Phasellus rhoncus erat sed', 'Ut rutrum, arcu sed', 'Sed pretium nisi dui', 'Quisque bibendum, dui non', 'In lacinia felis et mi.', 'Suspendisse quis quam velit.', 'In vehicula commodo augue', ];
-      const TEST_TEXTS = [
+      // Test ticket data. 8 items each, forming random ticket properties.
+      const TICKET_TEST_NAMES = ['Testiasiakas A', 'Ossi Meikäläinen', 'Jouni A.', 'Antero Mertasaari', 'Jokupulju Oy', 'Tuntematon', 'Ninja Warrior', 'Crokodile Dundee'];
+      const TICKET_TEST_DATES = ['09.01.2019 11:36', '06.03.2019 15:34', '07.05.2019 16:25', '18.08.2019 09:27', '04.09.2019 17:32', '01.01.2020 18:55', '15.01.2020 17:41', '03.04.2020 08:24'];
+      const TICKET_TEST_TITLES = ['Lorem ipsum dolor sit amet', 'Phasellus rhoncus erat sed', 'Ut rutrum, arcu sed', 'Sed pretium nisi dui', 'Quisque bibendum, dui non', 'In lacinia felis et mi.', 'Suspendisse quis quam velit.', 'In vehicula commodo augue', ];
+      const TICKET_TEST_TEXTS = [
         'mollis justo. Maecenas maximu id, dapibus eu arcu. parturient montes, nascetur ridiculus mus. Ut viverra molestie mi, accumsan dignissim odio suscipit ac. Nullam at blandit dolor, sit amet commodo nibh.',
         'Praesent lacinia cursus sem quis hendrerit. Duis in mi auctor, tincidunt elit et, ondimentum dui, non hendndrerit at urna sit amet, aliquet finibus diam.',
         'libero arcu finibus ipsum, eu convallis leo metus ut velit. Aliquam pellentesque tempus nisl sed egestas. Proin a purus a elit fermentum laoreet. Nullam non risus sit amet orci pellentesque mattis ac a neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam ultricies tortor dolor, a laoreet ex tincidunt quis.',
@@ -425,40 +404,26 @@
         'turpis at purus tempus pellentesque id id lorem. Ut a quam ornare, hendrerit felis e dignissim ut. Curabitur ultrices interdum purus, quis fringilla enim condimentum sed. '
       ];
 
+
+      // Pick random elements from each test array and form tickets.
       for (let i = 0; i < count; i++) {
         let rand = Math.random(),
-          customer = TEST_NAMES[Math.floor(rand * 8)],
-          title = TEST_TITLES[Math.floor(rand * 8)],
-          desc = TEST_TEXTS[Math.floor(rand * 8)],
-          date = TEST_DATES[Math.floor(rand * 8)];
+          customer = TICKET_TEST_NAMES[Math.floor(rand * 8)],
+          title = TICKET_TEST_TITLES[Math.floor(rand * 8)],
+          desc = TICKET_TEST_TEXTS[Math.floor(rand * 8)],
+          date = TICKET_TEST_DATES[Math.floor(rand * 8)];
         drawTicket(i, customer, Math.floor(rand * 5000), Math.floor(rand * 4) + 2, date, title, desc);
       }
     };
 
-    // list();
-    // ticketPreviewPopulate();
+    //*--------------------------------------------------------------------------
+    //* Initialized
+    //*--------------------------------------------------------------------------
 
-    (async () => {
-      let timeout = null;
-      console.log("Test");
-      for(let i = 0; i < 10; i++) {
-        let timeout = 12345678;
-        switch (i) {
-          case 0: timeout = 1600; break;
-          case 1: timeout = 400; break;
-          case 2: timeout = 890; break;
-          case 3: timeout = 3100; break;
-          case 4: timeout = 890; break;
-          case 5: timeout = 990; break;
-          case 6: timeout = 100; break;
-          case 7: timeout = 750; break;
-          case 8: timeout = 2100; break;
-          case 9: timeout = 1550; break;
-        }
-        timeout = setTimeout(() => progbarStop(), timeout);
-        await progbar();
-        clearTimeout(timeout);
-      }
-    })();
+
+    // Fetch first set of tickets.
+    list();
+    // ticketPreviewPopulate();
+    // progbarTest();
   });
 </script>
