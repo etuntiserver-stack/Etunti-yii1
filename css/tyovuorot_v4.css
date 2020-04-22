@@ -1,6 +1,9 @@
 .mennytPaivat{
 	opacity: 0.4;
 }
+.odotusweeklaskennan{
+	display:block;
+}
 #fixTable td,th{
 	margin:0;
 	padding:0;
