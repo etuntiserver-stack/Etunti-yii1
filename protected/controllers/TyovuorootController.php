@@ -2164,8 +2164,9 @@ class TyovuorootController extends Controller
 		}
 
 		// <-- Tyontekijat
-		$tt = [];
-		$haku_tids = [];
+		$tt 		= [];
+		$haku_tids 	= [];
+		$haku_tids[0] 	= 0; // Varaus
 		$tyontekijat = Tyontekijat::model()->findAll($criteria);
 		foreach ($tyontekijat as $item) {
 			$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1 . ' ' . $item->$tt_order_2);
@@ -2310,7 +2311,7 @@ class TyovuorootController extends Controller
 		$tids_criteria = '';
 		if( count($haku_tids) > 0 ){
 		      	$ids = implode(",", $haku_tids);
-		        $criteria->addCondition('tid IN ('.$ids.') OR tid=0');
+		        $criteria->addCondition('tid IN ('.$ids.')');
 		}
 	        $criteria->addCondition($haku_criteria);
 		$tv = Tyovuoroot::model()->findAll($criteria);
@@ -2321,21 +2322,16 @@ class TyovuorootController extends Controller
 
 		// <-- toistuvat
        		$criteria = new CDbCriteria();
-		if( $haku_to === null ){
-			$criteria->condition = "
-				DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$haku_from'
-			";
-		} else {
-			$criteria->condition = "
-				DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) <= '$haku_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$haku_from'
-			";
-		}
+		if( $haku_to === null )
+			$criteria->condition = "DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$haku_from'";
+		else
+			$criteria->condition = "DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) <= '$haku_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$haku_from'";
+
 		$tids_criteria = '';
 		if( count($haku_tids) > 0 ){
-			$tt_ret = [0 => 0];
-			foreach($haku_tids as $k => $v){
+			//$tt_ret = [0 => 0];
+			foreach($haku_tids as $k => $v)
 				$tt_ret[$v] = $v;
-			}
 		      	$ids = implode(",", $tt_ret);
 			$tyopaari = "tyopaari LIKE '%\"".implode("\"%' OR tyopaari LIKE'%\"", $tt_ret)."\"%'";
 		        $criteria->addCondition('tid IN ('.$ids.') OR ('.$tyopaari.')');
@@ -2556,33 +2552,32 @@ class TyovuorootController extends Controller
 		return "
 		<script type=\"text/javascript\">
 		$(document).ready(function(){
-		    $.each(JSON.parse('".json_encode(array_chunk($haku_tids, $arvo))."'), function( index, value ) {
-			//console.log( value );
-			var from = '$from';
-			var to = '$to';
-			var tids = JSON.stringify(value);
-			var haku_criteria = JSON.parse('".json_encode($haku_criteria)."');
-			$.ajax({
-				url: location.protocol + \"//\" + location.host + \"/index.php/tyovuoroot/did4?from=\" + from + \"&to=\" + to,
-				type: \"POST\",
-				data: { tids : tids, haku_criteria : haku_criteria },
-				//async: false,
-				success:function(data){
-					data = JSON.parse(data);
-					//console.log(data);
-					$.tv_arr_update(data);
-					$(\".odotus\").remove();
-				},error:function(data){
-				  	console.log(data);
-				}
+			$.each(JSON.parse('".json_encode(array_chunk($haku_tids, $arvo))."'), function( index, value ) {
+				//console.log( value );
+				var from = '$from';
+				var to = '$to';
+				var tids = JSON.stringify(value);
+				var haku_criteria = JSON.parse('".json_encode($haku_criteria)."');
+				$.ajax({
+					url: location.protocol + \"//\" + location.host + \"/index.php/tyovuoroot/did4?from=\" + from + \"&to=\" + to,
+					type: \"POST\",
+					data: { tids : tids, haku_criteria : haku_criteria },
+					//async: false,
+					success:function(data){
+						data = JSON.parse(data);
+						console.log(data);
+						$.tv_arr_update(data);
+						$(\".odotus\").remove();
+					},error:function(data){
+					  	console.log(data);
+					}
+				});
 			});
-		    });
-
-		    setTimeoutConst = setTimeout(function() {
-			if('".$taulu."' == 'vko')
-				$.vkolaskenta('".json_encode($haku_tids)."');
-		   	$.hovertietoja();
-		    }, 2000);
+			setTimeoutConst = setTimeout(function() {
+				if('".$taulu."' == 'vko')
+					$.vkolaskenta('".json_encode($haku_tids)."');
+			   	$.hovertietoja();
+			}, 2000);
 		});
 		</script>";
 	}
