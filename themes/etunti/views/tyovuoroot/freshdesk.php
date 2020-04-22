@@ -113,6 +113,30 @@
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
   }
 
+  #freshdesk-container {
+    width: 100%;
+  }
+
+  #spopup-container {
+    position: relative;
+    width: inherit;
+  }
+
+  #spopup {
+    position: fixed;
+    width: inherit;
+    /* min-height: 520px; */
+    z-index: 9998;
+    background-color: whitesmoke;
+    /* border: 1px solid #ddd; */
+    border: 2px solid #99b7bd;
+    margin: 16px 0px;
+    padding: 4px;
+    border-radius: 5px;
+    text-align: center;
+    transition: 0.5s;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
+  }
 </style>
 
 <div style="display:none">
@@ -140,6 +164,7 @@
   </div>
 </div>
 
+
 <!-- Error alert popup (top-right) -->
 <div style="position:relative">
   <div id="alert-container" class="alert fade in bg-danger">
@@ -156,57 +181,67 @@
   </div>
 </div>
 
-<div class="row">
-
-  <!-- Container for ticket rows -->
-  <div class="col-md-11">
-    <div class="row">
-      <div class="col-md-4">
-        <div id="ticket-row-1">
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div id="ticket-row-2">
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div id="ticket-row-3">
-        </div>
-      </div>
+<div id="freshdesk-container">
+  <!-- Full screen popup -->
+  <div id="spopup-container">
+    <div id="spopup" class="collapse">
+      <h3 id="spopup-header">&nbsp;</h3>
+      <p id="spopup-text">&nbsp;</p>
     </div>
   </div>
+  <div class="row">
 
-  <!-- Right space for popup buttons -->
-  <div class="col-md-1">
-
-    <div class="row">
-      <div class="col-md-12">
-
-        <!-- Menu popup button -->
-        <button id="btn-settings-popup" class="btn-primary pull-right" data-toggle="collapse" data-target="#toggle-menu" aria-expanded="false" aria-controls="toggle-menu">
-          <div style="width:75%;float:left;overflow:hidden;font-weight:bold">A</div><div style="width:25%;float:left"><span class="glyphicon glyphicon-cog"></span></div>
-        </button>
-
+    <!-- Container for ticket rows -->
+    <div class="col-md-11">
+      <div class="row">
+        <div class="col-md-4">
+          <div id="ticket-row-1">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div id="ticket-row-2">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div id="ticket-row-3">
+          </div>
+        </div>
       </div>
     </div>
 
+    <!-- Right space for popup buttons -->
+    <div class="col-md-1">
 
-    <!-- Spacing between settings button and menu -->
-    <!-- <div class="row"><div class="col-md-12">&nbsp;</div></div> -->
+      <div class="row">
+        <div class="col-md-12">
 
+          <!-- Menu popup button -->
+          <button id="btn-settings-popup" class="btn-primary pull-right" data-toggle="collapse" data-target="#toggle-menu" aria-expanded="false" aria-controls="toggle-menu">
+            <div style="width:75%;float:left;overflow:hidden;font-weight:bold">A</div>
+            <div style="width:25%;float:left"><span class="glyphicon glyphicon-cog"></span></div>
+          </button>
 
-    <div class="row">
-      <div class="col-md-12">
-
-        <!-- Settings menu popup -->
-        <div id="toggle-menu-container">
-          <div id="toggle-menu" class="collapse">
-            <button id="btn-export-customers" class="btn-settings btn-warning" type="button">
-              <b>Vie asiakkaat Freshdeskiin&nbsp;<span class="glyphicon glyphicon-user"></span></b>
-            </button>
-          </div>
         </div>
+      </div>
 
+
+      <!-- Spacing between settings button and menu -->
+      <!-- <div class="row"><div class="col-md-12">&nbsp;</div></div> -->
+
+
+      <div class="row">
+        <div class="col-md-12">
+
+          <!-- Settings menu popup -->
+          <div id="toggle-menu-container">
+            <div id="toggle-menu" class="collapse">
+              <button id="btn-export-customers" class="btn-settings btn-warning" type="button">
+                <b>Vie asiakkaat Freshdeskiin&nbsp;<span class="glyphicon glyphicon-user"></span></b>
+              </button>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
@@ -222,6 +257,11 @@
       obj.find('.ticket-customer-link').attr('href', `/index.php/asiakkaat/update?id=${customer_id}`).text(customer);
       obj.find('.ticket-description').text(description);
       // obj.find('.ticket-body').attr('onclick', `location.href='/index.php/tyovuoroot/freshdesk/${id}'`);
+      // obj.find('.ticket-body').attr('onclick', `alert(${list_tickets[id]})`);
+      obj.find('.ticket-body').on('click', function(e) {
+        $('#spopup-text').html(`<pre>${list_tickets[id]}</pre>`);
+        $('#spopup').collapse("show");
+      });
 
       switch (status) {
         case 2: // Open
@@ -252,7 +292,8 @@
       rowHeights[row - 1] += obj.height();
     };
 
-    let list_request_underway = false,
+    let list_tickets = {},
+      list_request_underway = false,
       list_previous_page = 0,
       list_end_reached = false;
 
@@ -315,6 +356,7 @@
               } else {
                 let customer_id = Math.floor(Math.random() * 10000); // TEMP
                 drawTicket(t.id, t.requester.name, customer_id, t.status, formatUtcString(t.updated_at), t.subject, t.description_text);
+                list_tickets[t.id] = data;
               }
             });
           }
@@ -378,6 +420,22 @@
      */
     $(window).scroll(function() {
       listFetchIfScrolled();
+    });
+
+    var adjustDynamicElements = function() {
+      let containerWidth = $('#freshdesk-container').width();
+      $('#spopup')
+        .css('transition', '0s')
+        .width(containerWidth * 0.8 + 'px')
+        .css({
+          'margin-left': containerWidth * 0.1 + 'px',
+          'height': Math.max(document.documentElement.clientHeight, window.innerHeight || 0) * 0.7 + 'px',
+          'transition': '0.5s'
+        });
+    };
+
+    $(window).on('resize', function() {
+      adjustDynamicElements();
     });
 
     // /** Focus on the first element in options menu after transition (500ms). */
@@ -583,6 +641,7 @@
     //* Initialized
     //*--------------------------------------------------------------------------
 
+    adjustDynamicElements();
 
     // Fetch first set of tickets.
     list();
