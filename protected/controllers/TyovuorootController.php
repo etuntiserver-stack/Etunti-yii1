@@ -2565,7 +2565,7 @@ class TyovuorootController extends Controller
 					//async: false,
 					success:function(data){
 						data = JSON.parse(data);
-						console.log(data);
+						//console.log(data);
 						$.tv_arr_update(data);
 						$(\".odotus\").remove();
 					},error:function(data){
