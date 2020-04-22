@@ -90,18 +90,18 @@
 
 				<?php 
 				$a = Valikkoot::model()->findAll(" select_type='aktiivinen' ");
-		        	$tal = '';
+		        	$tal = [];
 				foreach($a as $v){
 				$exV = explode("/",$v->value);
 				   if(isset($exV[0]) and isset($exV[1]))
 				   $tal[$exV[1]] = $exV[0];
 				}
-				$selectedValues = 1;
+				$selectedValues = array(1 => Array('selected' => 'selected'));
 				if(isset($_GET['aktiivinen']))
-				$selectedValues = array($_GET['aktiivinen']=> Array('selected' => 'selected'));
-		
+					$selectedValues = array($_GET['aktiivinen'] => Array('selected' => 'selected'));
+
 				echo CHtml::dropDownList('aktiivinen','aktiivinen', $tal, 
-				array('class'=>'gui-input aktiivinen','options' => $selectedValues)) 
+					array('class'=>'gui-input aktiivinen','options' => $selectedValues)) 
 				?>
 
                             <i class="arrow double"></i>

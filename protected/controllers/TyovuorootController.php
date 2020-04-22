@@ -2276,8 +2276,9 @@ class TyovuorootController extends Controller
 		}
 
 		// <-- Tyontekijat
-		$tt = [];
-		$haku_tids = [];
+		$tt 		= [];
+		$haku_tids 	= [];
+		$haku_tids[0] 	= 0; // Varaus
 		$tyontekijat = Tyontekijat::model()->findAll($criteria);
 		foreach ($tyontekijat as $item) {
 			$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1 . ' ' . $item->$tt_order_2);
@@ -2339,8 +2340,23 @@ class TyovuorootController extends Controller
 		$tids		= (isset($_POST['tids']))?json_decode($_POST['tids'], true):[];
 		$vko_from 	= date("Y-m-d", strtotime($this_sunday.' this week monday'));
 		$vko_to 	= date("Y-m-d", strtotime($this_sunday));
-		$vkoAll		= $this->TidfromtoTyovuoroWithVirtual($vko_from, $vko_to, $tids, true, false, null);
-		$return 	= ['vkoAll'=>$vkoAll, 'did'=>date("Ymd", strtotime($this_sunday))];
+		$getAll 	= $this->tv_arr($vko_from, $vko_to, $tids, [], false, ['tv_kesto']);
+		$result = [];
+		foreach($getAll as $k => $v)
+			foreach($v as $unix => $dayarr)
+				foreach($dayarr as $key => $arr)
+					foreach($arr as $arr2)
+						if(!isset($result[$arr2['this_tid']]))
+							$result[$arr2['this_tid']] = $arr2['tv_kesto'];
+						else
+							$result[$arr2['this_tid']] += $arr2['tv_kesto'];
+
+		$return 	= ['vkoAll'=>$result, 'did'=>date("Ymd", strtotime($this_sunday))];
+		/*
+		echo '<pre>';
+		print_r($return);
+		echo '</pre>';
+		*/
 		echo json_encode($return);
 		exit;
 	}
@@ -2407,7 +2423,7 @@ class TyovuorootController extends Controller
 		$tids_criteria = '';
 		if( count($haku_tids) > 0 ){
 		      	$ids = implode(",", $haku_tids);
-		        $criteria->addCondition('tid IN ('.$ids.') OR tid=0');
+		        $criteria->addCondition('tid IN ('.$ids.')');
 		}
 	        $criteria->addCondition($haku_criteria);
 		$tv = Tyovuoroot::model()->findAll($criteria);
@@ -2418,26 +2434,21 @@ class TyovuorootController extends Controller
 
 		// <-- toistuvat
        		$criteria = new CDbCriteria();
-		if( $haku_to === null ){
-			$criteria->condition = "
-				DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$haku_from'
-			";
-		} else {
-			$criteria->condition = "
-				DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) <= '$haku_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$haku_from'
-			";
-		}
+		if( $haku_to === null )
+			$criteria->condition = "DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$haku_from'";
+		else
+			$criteria->condition = "DATE(STR_TO_DATE(pfrom, '%d.%m.%Y')) <= '$haku_to' AND DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= '$haku_from'";
+
 		$tids_criteria = '';
 		if( count($haku_tids) > 0 ){
-			$tt_ret = [0 => 0];
-			foreach($haku_tids as $k => $v){
+			//$tt_ret = [0 => 0];
+			foreach($haku_tids as $k => $v)
 				$tt_ret[$v] = $v;
-			}
 		      	$ids = implode(",", $tt_ret);
 			$tyopaari = "tyopaari LIKE '%\"".implode("\"%' OR tyopaari LIKE'%\"", $tt_ret)."\"%'";
 		        $criteria->addCondition('tid IN ('.$ids.') OR ('.$tyopaari.')');
 		}
-		if( count($haku_criteria) > 0 ){
+		if( is_array($haku_criteria) and count($haku_criteria) > 0 ){
 			if(isset($haku_criteria['uusi_tilaus']))
 				unset($haku_criteria['uusi_tilaus']);
 		}
@@ -2617,8 +2628,10 @@ class TyovuorootController extends Controller
 		exit;
 	}
 
-	protected function tv_arrJava($from, $to, $haku_criteria, $haku_tids){
+	protected function tv_arrJava($from, $to, $haku_criteria, $haku_tids, $taulu){
 		$hk = json_encode($haku_criteria);
+
+		// <-- Kaikki kerrallaan
 		return "
 		<script type=\"text/javascript\">
 		$(document).ready(function(){
@@ -2635,15 +2648,54 @@ class TyovuorootController extends Controller
 					//console.log(data);
 					$.tv_arr_update(data);
 					$(\".odotus\").remove();
-					//var numItems = $('.tv_edit').length;
-					//$(\"#yht_tv\").text(numItems);
 				},error:function(data){
 				  	console.log(data);
 				}
 			});
-		
+
+			setTimeoutConst = setTimeout(function() {
+				$.vkolaskenta('".json_encode($haku_tids)."');
+			   	$.hovertietoja();
+			}, 7000);
 		});
 		</script>";
+
+
+		// <-- Per arvo KPL
+		// EI TOIMII kunnolla. jotkut laatikkot ei ladataan  JOSKUS, ja joskus on
+		/*
+		$arvo = 5;
+		return "
+		<script type=\"text/javascript\">
+		$(document).ready(function(){
+			$.each(JSON.parse('".json_encode(array_chunk($haku_tids, $arvo))."'), function( index, value ) {
+				//console.log( value );
+				var from = '$from';
+				var to = '$to';
+				var tids = JSON.stringify(value);
+				var haku_criteria = JSON.parse('".json_encode($haku_criteria)."');
+				$.ajax({
+					url: location.protocol + \"//\" + location.host + \"/index.php/tyovuoroot/did4?from=\" + from + \"&to=\" + to,
+					type: \"POST\",
+					data: { tids : tids, haku_criteria : haku_criteria },
+					//async: false,
+					success:function(data){
+						data = JSON.parse(data);
+						//console.log(data);
+						$.tv_arr_update(data);
+						$(\".odotus\").remove();
+					},error:function(data){
+					  	console.log(data);
+					}
+				});
+			});
+			setTimeoutConst = setTimeout(function() {
+				$.vkolaskenta('".json_encode($haku_tids)."');
+			   	$.hovertietoja();
+			}, 3000);
+		});
+		</script>";
+		*/
 	}
 
 	public function actionHovertietoja($this_id) {
@@ -3291,8 +3343,14 @@ class TyovuorootController extends Controller
 		$toistuva 	= $get_id['toistuva'];
 		$pvm 		= $get_id['pvm'];
 		$tid 		= $get_id['tid'];
+		$etusukunimi	= $this->etuSukunimi($tid);
 
-		$return = "";
+		if(!isset($model->id)){
+			echo 'error';
+			exit;
+		}
+
+		$return = '<p><center><h5>'.$etusukunimi.'</h5><h5>'.$model->osoiteById.'</h5>'.$model->alku.'-'.$model->loppu.'</center></p><br>';
 
 		$form=$this->beginWidget('CActiveForm', array(
 			'id'=>'tyovuoroot-form',
@@ -3441,11 +3499,6 @@ class TyovuorootController extends Controller
 		else
 			$post = $_POST['Tyovuoroot'];
 
-		// <-- PushNotify
-		if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
-			$this->pushNotifySending($this_id);
-		// PushNotify -->
-
 		// <-- Variables
 		//$post['pvm'] 		= date("d.m.Y",strtotime($laatikko_pvm)); Kun siirretaan tyoparit muu paivaan.. sitten se ei onnistuu
 		$edellinen_model 	= $model->attributes;
@@ -3488,6 +3541,13 @@ class TyovuorootController extends Controller
 			if(!$model->save()){
 				echo json_encode($model->getErrors());
 			} else {
+
+				// <-- PushNotify
+				$this_id = $this->this_id_builder($model->id, $laatikko_pvm, $laatikko_tid);
+				if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+					$this->pushNotifySending($this_id);
+				// PushNotify -->
+
 				$return = ['return' => 'uusi_ketju_ok'];
 				echo json_encode($return);
 			}
@@ -3507,6 +3567,13 @@ class TyovuorootController extends Controller
 			if(!$model->save()){
 				echo json_encode($model->getErrors());
 			} else {
+
+				// <-- PushNotify
+				$this_id = $model->id;
+				if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+					$this->pushNotifySending($this_id);
+				// PushNotify -->
+
 				// <-- Poisto PVM/Henkilo ketjusta
 				$u		= Yii::app()->user->nimi;
 				$d		= date("d.m.Y");
@@ -3538,6 +3605,7 @@ class TyovuorootController extends Controller
 		){
 			$model->attributes 	= $edellinen_model;
 			$model->pto 		= date("d.m.Y", strtotime($laatikko_pvm . " -1 day"));
+			$model->ilmoitus_paattymisesta = 1;
 
 			// <-- Poistetut päivät siirto, JOS vaihdettu henkilö
 			$all_new_tids = [$post['tid'] => $post['tid']];
@@ -3565,6 +3633,13 @@ class TyovuorootController extends Controller
 			//     Poistetut päivät siirto, JOS vaihdettu henkilö -->
 
 			if($model->save()){
+
+				// <-- PushNotify
+				$this_id = $this->this_id_builder($model->id, $laatikko_pvm, $laatikko_tid);
+				if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+					$this->pushNotifySending($this_id);
+				// PushNotify -->
+
 				$new_toistuva = new ToistuvatTyovuorot;
 				$new_toistuva->attributes = $post;
 				$this->model_json_converter($post, $new_toistuva, $toistuva);
@@ -3572,6 +3647,13 @@ class TyovuorootController extends Controller
 				if(!$new_toistuva->save()){
 					echo json_encode($new_toistuva->getErrors());
 				} else {
+
+					// <-- PushNotify
+					$this_id = $this->this_id_builder($new_toistuva->id, $laatikko_pvm, $laatikko_tid);
+					if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+						$this->pushNotifySending($this_id);
+					// PushNotify -->
+
 					$return = ['return' => 'pfrom_muutos_ok'];
 					echo json_encode($return);
 				}
@@ -3585,6 +3667,12 @@ class TyovuorootController extends Controller
 		$updated_tp = json_decode($model->tyopaari, true);
 
 		if($model->save()){
+
+			// <-- PushNotify
+			$this_id = ($toistuva)? $this->this_id_builder($model->id, $laatikko_pvm, $laatikko_tid) : $model->id;
+			if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+				$this->pushNotifySending($this_id);
+			// PushNotify -->
 
 			$current_model = $model;
 			// <-- LOG
@@ -3800,7 +3888,7 @@ class TyovuorootController extends Controller
 			".$m->tietoja;
 
 		Domainit::sendGCM($tid,"Hei ".$t->tekijan_nimi,$pushviesti, null);
-		exit;
+		return true;
 	}
 
 	protected function hinnastoHintaat($tp, $asiakkaat, $kohteet)
@@ -5360,14 +5448,17 @@ class TyovuorootController extends Controller
 				$tuotteet[$item->tuoteID] = 0;
 			else
 				$tuotteet[$item->tuoteID] += 1;
+
 			$dec = json_decode($item->lisa_tuotteet, true);
-			foreach($dec as $k => $v){
-				if($k == 'tuote'){
-					foreach($v as $k1 => $v1){
-						if(!isset($lisa_tuotteet[$v1]))
-							$lisa_tuotteet[$v1] = 1;
-						else
-							$lisa_tuotteet[$v1] += 1;
+			if( is_array($dec) ){
+				foreach($dec as $k => $v){
+					if($k == 'tuote'){
+						foreach($v as $k1 => $v1){
+							if(!isset($lisa_tuotteet[$v1]))
+								$lisa_tuotteet[$v1] = 1;
+							else
+								$lisa_tuotteet[$v1] += 1;
+						}
 					}
 				}
 			}

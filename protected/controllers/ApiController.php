@@ -913,7 +913,7 @@ public function actionImei($dom)
 					continue;
 
 				$data = $arr['data'];
-				$dosoite = $data->osoite;
+				$dosoite = $data->osoiteById;
 				if( $data->status == 2 )
 					$dosoite = 'MATKA';
 				if( $data->status == 10 )

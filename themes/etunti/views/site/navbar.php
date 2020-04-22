@@ -124,7 +124,7 @@ if( $curpage == 'tyovuoroot/beta' )
 	     <legend><?php echo Yii::t('main','Haku'); ?></legend>
 
               <div class="form-group">
-		<?php if($curpage == 'tyovuoroot/beta') : ?>
+		<?php if($curpage == 'tyovuoroot/beta' and isset($_GET['mode']) and $_GET['mode'] == 'tt') : ?>
 		    <label><?php echo Yii::t('main','Aikaväli'); ?></label>
 			<div class="row">
 			 <div class="col-sm-6">

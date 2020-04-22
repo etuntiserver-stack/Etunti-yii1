@@ -113,17 +113,12 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 			yht += tv_kesto;
 		});
 	});
-	vkolaskenta(tids);
-	hovertietoja();
 }
-function vkolaskenta(tids){
-   if( $(".sunday").length > 0 ){
+jQuery.vkolaskenta = function vkolaskenta(tids){
+     //console.log(tids);
+     if( $(".sunday").length > 0 ){
 	$.each($(".sunday"), function( ) {
 		this_sunday 	= $(this).attr('sunday');
-		if(tids !== null)
-			tds = tids;
-		else
-			tds = $(this).attr('tids');
         	$.ajax({
         	   url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/getsumbyweekall?this_sunday='+this_sunday,
 		   type: 'POST',
@@ -135,16 +130,17 @@ function vkolaskenta(tids){
 				$("#vko_" + d['did'] +'_' + tid).html($.sprint(seconds));
 			});
 			$('.odotusweeklaskennan').remove();
+			console.log('vkolaskenta loaded.');
         	   },
 		   error:function(data){
 			console.log(data)
 		   }
 	        });
 	});
-   }
+     }
 }
 
-function hovertietoja(){
+jQuery.hovertietoja = function hovertietoja(){
      var delay=1000, setTimeoutConst;
      $('.tv_edit').hover(function(){
 	if( !$(this).hasClass('muistissa') && !$(this).prev('i').hasClass('muistissa') ){
@@ -163,6 +159,7 @@ function hovertietoja(){
 	$('#hovertietoja').html('').hide();
 	clearTimeout(setTimeoutConst);
      });
+     console.log('hovertietoja loaded.');
 }
 
 function hv_tiedot(this_id){
@@ -434,15 +431,28 @@ $(document).delegate(".latikkoAsetukset p","contextmenu",function(e){
 	    	console.log(XMLHttpRequest);
  	   }
         });
+
+	ylhalta_px 	= $( window ).height()-event.pageY;
+	oikealta_px 	= $( window ).width()-event.pageX;
+	top_px 		= event.pageY;
+	left_px 	= event.pageX;
+	if( oikealta_px < 300 )
+		left_px = event.pageX-300;
+
 	$("div.custom-menu").remove();
 	$('<div class="custom-menu" for="' + this_id + '">' + 
 		valinnat +
-	"</div>")
-        .appendTo("body")
-        .css({top: event.pageY + "px", left: event.pageX + "px"});
+	"</div>").appendTo("body");
+
+	laatikko_height	= $(".custom-menu").height();	
+	if( (ylhalta_px-laatikko_height) < 0 ){
+		//alert((ylhalta_px-laatikko_height))
+		top_px = (ylhalta_px-laatikko_height)+event.pageY-30;
+	}
+        $("div.custom-menu").css({top: top_px + "px", left: left_px + "px"});
 });
 
-$(document).delegate(".close_context_menu","click",function(){
+$(document).delegate(".close_context_menu, table","click",function(){
 	$("div.custom-menu").hide();
 });
 
