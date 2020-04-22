@@ -171,7 +171,7 @@
         page = list_previous_page + 1;
       progbar();
 
-      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/fdajax_list_tickets?page=${page}`, {
+      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/freshdesk?page=${page}`, {
 
         // xhrFields: {
         //   onprogress: function(e) {
@@ -192,7 +192,7 @@
         },
 
         success: function(data) {
-          // console.log(data);
+          console.log(data);
           parsed = JSON.parse(data);
 
           if (parsed.length == 0) {

@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'freshdesk', 'fdajax_list_tickets', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus'),
+				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'freshdesk', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -1545,35 +1545,76 @@ class TyovuorootController extends Controller
     }
   }
 
-  public function actionFreshdesk()
+  /**
+   * Main action for the Freshdesk view.
+   *
+   * Renders the view normally unless some of the parameters are provided. If
+   * any parameter is provided, then this action is considered an AJAX action,
+   * which will echo the results in JSON encoded format.
+   *
+   * If parameters are provided for more than one API request, then the first
+   * one takes priority and the other ones are ignored.
+   *
+   * @param int $ticket_id
+   * If not null, and positive int, that ticket ID is returned (encoded echo).
+   *
+   * @param int $page
+   * If not null, that page in list of tickets is returned.
+   *
+   * @param int $per_page
+   * Specifies the amount of items per page when $page is specified. The maximum
+   * seems to be either 100 or 300; however, it's better to do smaller batches.
+   *
+   * @return mixed
+   * Freshdesk view, or null with echoed results if parameters are provided.
+   */
+  public function actionFreshdesk($ticket_id = null, $page = null, $per_page = 10)
   {
     /** @var Freshdesk */
     $freshdesk = Yii::createComponent('Freshdesk');
 
-    return $this->render('freshdesk', [
-      'freshdesk' => $freshdesk,
-      'tickets' => Yii::app()->session['freshdesk_open_tickets']
-    ]);
-  }
-
-  public function actionFdajax_list_tickets($page = 1, $per_page = 15)
-  {
-    /** @var Freshdesk */
-    $freshdesk = Yii::createComponent('Freshdesk');
-
-    // Temporarily cached here
-    $tickets = [];
-    if (!empty(Yii::app()->session["freshdesk_open_tickets"]))
-      $tickets = Yii::app()->session["freshdesk_open_tickets"];
-
-    $requested = array_splice($tickets, ($page-1)*$per_page, $per_page);
-    if (count($requested) != $per_page) {
-      $requested = $freshdesk->listTickets(null, null, $page, $per_page, null, ['requester', 'description'], 'updated_at', 'desc');
-      $tickets = array_merge(array_splice($tickets, 0, ($page-1)*$per_page), $requested, array_splice($tickets, $page*$per_page));
-      Yii::app()->session["freshdesk_open_tickets"] = $tickets;
+    if (is_numeric($ticket_id)) {
+      // TODO
+      echo json_encode(['errors' => 'not yet implemented']);
+      return;
     }
 
-    echo json_encode($requested);
+    // If $page is provided, get a list of tickets.
+    elseif (is_numeric($page)) {
+
+      // Tickets are temporarily cached here
+      $per_page = is_numeric($per_page) ? $per_page : 10;
+      $tickets = Yii::app()->session['freshdesk_open_tickets'] ?? [];
+      $requested = array_splice($tickets, ($page - 1) * $per_page, $per_page);
+      $end_reached = Yii::app()->session['freshdesk_list_end_reached'] ?? false;
+
+      // If not enough items from array_splice, either this data has not yet
+      // been fetched, or end has been reached.
+      if (count($requested) != $per_page && !$end_reached) {
+        $requested = $freshdesk->listTickets(null, null, $page, $per_page, null, ['requester', 'description'], 'updated_at', 'desc');
+
+        // Check if end of data, so that repeat requests are not made.
+        if (count($requested) != $per_page) {
+          $freshdesk::log("Page %s requested, and end of data reached. (%d items received).", $page, count($requested));
+          Yii::app()->session['freshdesk_list_end_reached'] = true;
+          Yii::app()->session["freshdesk_open_tickets"] = array_merge($tickets, $requested);
+        } else {
+          $freshdesk::log("Page %s requested (%d items), saving to session.", $page, count($requested));
+          $tickets = array_merge(array_splice($tickets, 0, ($page - 1) * $per_page), $requested, array_splice($tickets, $page * $per_page));
+          Yii::app()->session["freshdesk_open_tickets"] = $tickets;
+        }
+      } else {
+        $freshdesk::log("Page %s loaded from session (%d items%s).", $page, count($requested), count($requested) < $per_page ? '; end of data' : '');
+      }
+
+      echo json_encode($requested);
+      return;
+    } else {
+      return $this->render('freshdesk', [
+        'freshdesk' => $freshdesk,
+        'tickets' => Yii::app()->session['freshdesk_open_tickets']
+      ]);
+    }
   }
 
 	public function actionBeta($kohteet_siivous = [], $kohde = '', $asiakas = '', $mode = null, $stage = null)

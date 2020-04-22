@@ -126,6 +126,12 @@ if (
             'levels' => 'error, warning', //'trace, info, error, warning, vardump'
             'enabled' => YII_DEBUG,
             //'categories'=>'system.*',
+        ], [
+          'class' => 'CFileLogRoute',
+          'levels' => 'trace, info, vardump', //'trace, info, error, warning, vardump'
+          'enabled' => YII_DEBUG,
+          'categories'=>'freshdesk',
+          'logFile' => 'freshdesk.log'
         ],
         [
             'class' => 'CWebLogRoute',

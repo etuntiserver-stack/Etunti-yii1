@@ -78,7 +78,7 @@ class Freshdesk extends CComponent
   private function request(string $target, array $post_fields = [], bool $return_headers = false, array $tags = [])
   {
     if (empty($target)) {
-      static::logStaticError("request() was called with null target.", $post_fields);
+      static::logError("request() was called with null target.", $post_fields);
       return false;
     }
 
@@ -106,7 +106,7 @@ class Freshdesk extends CComponent
       // Log possible errors.
       if (isset($body['errors'])) {
         $error_headers = !empty($header) ? ['headers' => $header] : [];
-        $this->logRequestError($target, $body, $post_fields, $error_headers);
+        $this->logLocalRequestError($target, $body, $post_fields, $error_headers);
       }
 
       return [$header, $body];
@@ -117,7 +117,7 @@ class Freshdesk extends CComponent
 
       // Log possible errors.
       if (isset($response['errors'])) {
-        $this->logRequestError($target, $response, $post_fields);
+        $this->logLocalRequestError($target, $response, $post_fields);
       }
 
       return $response;
@@ -422,7 +422,7 @@ class Freshdesk extends CComponent
     $additional_details = array_values($additional_details);
     for ($i = 0; $i < count($additional_details); $i++) {
       if (!in_array($additional_details[$i], $valid_options)) {
-        static::logStaticError("Invalid option {$additional_details[$i]} for additional details of viewing a ticket");
+        static::logError("Invalid option {$additional_details[$i]} for additional details of viewing a ticket");
         unset($additional_details[$i]);
       }
     }
@@ -543,7 +543,7 @@ class Freshdesk extends CComponent
     if (!empty($filter)) {
       static $valid_filters = ['new_and_my_open', 'watching', 'spam', 'deleted'];
       if (!in_array($filter, $valid_filters)) {
-        static::logStaticError("Invalid option {$filter} for filters of listTickets() (/tickets GET).");
+        static::logError("Invalid option {$filter} for filters of listTickets() (/tickets GET).");
         $filter = '';
       }
       $query_params['filter'] = $filter;
@@ -564,7 +564,7 @@ class Freshdesk extends CComponent
     // Updated since: check that time string is valid and add to query parameters.
     if (!empty($updated_since)) {
       if (!static::validateTimeString($updated_since))
-        $this->logError("Invalid date string for listTickets(): $updated_since");
+        $this->logLocalError("Invalid date string for listTickets(): $updated_since");
       else
         $query_params['updated_since'] = $updated_since;
     }
@@ -575,7 +575,7 @@ class Freshdesk extends CComponent
       $embed = array_values($embed);
       for ($i = 0; $i < count($embed); $i++) {
         if (!in_array($embed[$i], $valid_embed_options)) {
-          $this->logError('Invalid embed option for listTickets(): ' . $embed[$i]);
+          $this->logLocalError('Invalid embed option for listTickets(): ' . $embed[$i]);
           unset($embed[$i]);
         }
       }
@@ -586,7 +586,7 @@ class Freshdesk extends CComponent
     if (!empty($order_by)) {
       static $valid_order_by_options = ['created_at', 'due_by', 'updated_at', 'status'];
       if (!in_array($order_by, $valid_order_by_options))
-        $this->logError("Invalid order by option for listTickets(): $order_by");
+        $this->logLocalError("Invalid order by option for listTickets(): $order_by");
       else
         $query_params['order_by'] = $order_by;
     }
@@ -595,7 +595,7 @@ class Freshdesk extends CComponent
     if (!empty($order_type)) {
       static $valid_order_types = ['asc', 'desc'];
       if (!in_array($order_type, $valid_order_types))
-        $this->logError("Invalid order type for listTickets(): $order_type");
+        $this->logLocalError("Invalid order type for listTickets(): $order_type");
       else
         $query_params['order_type'] = $order_type;
     }
@@ -710,7 +710,7 @@ class Freshdesk extends CComponent
   public function filterTickets(string $query = null)
   {
     if (empty($query))
-      $this->logError('Empty query string in filterTickets().');
+      $this->logLocalError('Empty query string in filterTickets().');
 
     // Create and execute cURL request. If query is empty, execute anyway, so
     // that the resulting API error is returned.
@@ -814,7 +814,7 @@ class Freshdesk extends CComponent
   public function updateTicket(int $id, array $opts)
   {
     if ($id <= 0) {
-      $this->logError("Zero or negative ID in deleteTicket(): $id");
+      $this->logLocalError("Zero or negative ID in deleteTicket(): $id");
       return null;
     } else {
       return $this->requestPut("tickets/$id", $opts);
@@ -855,7 +855,7 @@ class Freshdesk extends CComponent
   public function deleteTicket(int $id)
   {
     if ($id <= 0) {
-      $this->logError("Zero or negative ID in deleteTicket(): $id");
+      $this->logLocalError("Zero or negative ID in deleteTicket(): $id");
       return null;
     } else {
       return $this->request("tickets/$id", [], false, [CURLOPT_CUSTOMREQUEST => 'delete']);
@@ -918,7 +918,7 @@ class Freshdesk extends CComponent
   public function listTicketConversations(int $id, int $page = 1)
   {
     if ($id <= 0) {
-      $this->logError("Zero or negative ID in listTicketConversations(): $id");
+      $this->logLocalError("Zero or negative ID in listTicketConversations(): $id");
       return null;
     } else {
       return $this->requestGet("tickets/$id/conversations", $page > 1 ? ['page' => $page] : []);
@@ -993,7 +993,7 @@ class Freshdesk extends CComponent
   public function createReply(int $id, array $opts = [])
   {
     if ($id <= 0) {
-      $this->logError("Zero or negative ID in viewContact(): $id");
+      $this->logLocalError("Zero or negative ID in viewContact(): $id");
       return null;
     } else {
       return $this->request("tickets/$id/reply", $opts);
@@ -1144,7 +1144,7 @@ class Freshdesk extends CComponent
   public function viewContact(int $id)
   {
     if ($id <= 0) {
-      $this->logError("Zero or negative ID in viewContact(): $id");
+      $this->logLocalError("Zero or negative ID in viewContact(): $id");
       return null;
     } else {
       return $this->requestGet("contacts/$id");
@@ -1226,7 +1226,7 @@ class Freshdesk extends CComponent
         $query_params['email'] = $value;
       } elseif (in_array($key, ['mobile', 'phone'])) {
         if (!is_numeric($value))
-          $this->logError("Invalid number for filter by $key in listContacts: $value");
+          $this->logLocalError("Invalid number for filter by $key in listContacts: $value");
         else
           $query_params[$key] = $value;
       }
@@ -1236,7 +1236,7 @@ class Freshdesk extends CComponent
     if (!empty($state)) {
       static $valid_states = ['blocked', 'deleted', 'unverified', 'verified'];
       if (!in_array($state, $valid_states))
-        $this->logError("Invalid state in listContacts: $state");
+        $this->logLocalError("Invalid state in listContacts: $state");
       else
         $query_params['state'] = $state;
     }
@@ -1244,7 +1244,7 @@ class Freshdesk extends CComponent
     // Validate updated since date string and add to query parameters.
     if (!empty($updated_since)) {
       if (!static::validateTimeString($updated_since))
-        $this->logError("Invalid updated since date string in listContacts: $updated_since");
+        $this->logLocalError("Invalid updated since date string in listContacts: $updated_since");
       else
         $query_params['updated_since'] = $updated_since;
     }
@@ -1260,9 +1260,26 @@ class Freshdesk extends CComponent
   #region Log
 
   /**
+   * Log a regular non-error message without stacktrace.
+   *
+   * This non-static version of the logging function includes local data in
+   * $params automatically (e.g. base API URL).
+   *
+   * @param string $format
+   * Format for sprintf.
+   * @param array $args
+   * Possible args for sprintf.
+   */
+  public function logLocal(string $format = null, ...$args)
+  {
+    array_unshift($args, $format);
+    return call_user_func_array(['Freshdesk', 'logStatic'], $args);
+  }
+
+  /**
    * Log error with the Freshdesk component, whether with an API response, or
    * with how the component is used. If a request returns an error, the
-   * logRequestError function should generally be used.
+   * logLocalRequestError function should generally be used.
    *
    * This non-static version of the logging function includes local data in
    * $params automatically (e.g. base API URL).
@@ -1277,9 +1294,9 @@ class Freshdesk extends CComponent
    * @param bool $stacktrace
    * If true, automatic stacktrace from built-in \Exception is added to the end.
    */
-  public function logError(string $message, array $params = [], bool $stacktrace = true)
+  public function logLocalError(string $message, array $params = [], bool $stacktrace = true)
   {
-    return static::logStaticError($message, $this->getLocals(true) + $params, $stacktrace);
+    return static::logError($message, $this->getLocals(true) + $params, $stacktrace);
   }
 
   /**
@@ -1302,15 +1319,33 @@ class Freshdesk extends CComponent
    * @param bool $stacktrace
    * If true, automatic stacktrace from built-in \Exception is added to the end.
    */
-  public function logRequestError(string $request, array $response, array $request_params = [], array $other_params = [], bool $stacktrace = true)
+  public function logLocalRequestError(string $request, array $response, array $request_params = [], array $other_params = [], bool $stacktrace = true)
   {
-    return static::logStaticRequestError($request, $response, $request_params, $this->getLocals(true) + $other_params, $stacktrace);
+    return static::logRequestError($request, $response, $request_params, $this->getLocals(true) + $other_params, $stacktrace);
+  }
+
+  /**
+   * Log a regular non-error message without stacktrace.
+   *
+   * @param string $format
+   * Format for sprintf.
+   * @param array $args
+   * Possible args for sprintf.
+   */
+  public static function log(string $format = null, ...$args)
+  {
+    if (!empty($format)) {
+      $format = sprintf('(uid %d@%s): %s', Yii::app()->user->getId(), Yii::app()->user->domain, $format);
+      array_unshift($args, $format);
+      $message = call_user_func_array('sprintf', $args);
+      Yii::getLogger()->log($message, 'info', 'freshdesk');
+    }
   }
 
   /**
    * Log error with the Freshdesk component, whether with an API response, or
    * with how the component is used. If a request returns an error, the
-   * logRequestError function should generally be used.
+   * logLocalRequestError function should generally be used.
    *
    * Depending on server configuration, this may send error email to admin.
    *
@@ -1322,7 +1357,7 @@ class Freshdesk extends CComponent
    * @param bool $stacktrace
    * If true, automatic stacktrace from built-in \Exception is added to the end.
    */
-  public static function logStaticError(string $message, array $params = [], bool $stacktrace = true)
+  public static function logError(string $message, array $params = [], bool $stacktrace = true)
   {
     if (empty($message)) {
       $message = 'Freshdesk error: No message provided.';
@@ -1339,6 +1374,7 @@ class Freshdesk extends CComponent
       $message .= "\nStacktrace: " . (new \Exception())->getTraceAsString();
     }
 
+    $message = sprintf('(user %s@%s): %s', Yii::app()->user->getName(), Yii::app()->user->domain, $message);
     Yii::getLogger()->log($message, 'error', 'freshdesk');
   }
 
@@ -1359,7 +1395,7 @@ class Freshdesk extends CComponent
    * @param bool $stacktrace
    * If true, automatic stacktrace from built-in \Exception is added to the end.
    */
-  public static function logStaticRequestError(string $request, array $response, array $request_params = [], array $other_params = [], bool $stacktrace = true)
+  public static function logRequestError(string $request, array $response, array $request_params = [], array $other_params = [], bool $stacktrace = true)
   {
     if (empty($request)) {
       $message = 'Error in unspecified API request.';
@@ -1380,7 +1416,7 @@ class Freshdesk extends CComponent
       $message .= "\nOther parameters: " . json_encode($other_params);
     }
 
-    return static::logStaticError($message, [], $stacktrace);
+    return static::logError($message, [], $stacktrace);
   }
 
   #endregion
@@ -1525,7 +1561,7 @@ class Freshdesk extends CComponent
     // effectively checks if a time string is formatted correctly for the API.
     $result = preg_match('/^[\d]{4}-[\d]{2}-[\d]{2}(?:T[\d]{2}:[\d]{2}(?::[\d]{2})?(?:[\+-][\d]{2}(?:[:]?[\d]{2})?)?[Z]?)?$/', $time_string);
     if (is_bool($result) && !$result) {
-      static::logStaticError('Error in preg_match inside validateTimeString() (return value FALSE).');
+      static::logError('Error in preg_match inside validateTimeString() (return value FALSE).');
       return false;
     } else {
       return ($result == 1);
