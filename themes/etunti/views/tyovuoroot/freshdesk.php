@@ -83,6 +83,21 @@
   </div>
 </div>
 
+
+<?php if (Yii::app()->user->hasFlash('success')) : ?>
+  <div class="flash-success">
+    <?php echo Yii::app()->user->getFlash('success'); ?>
+  </div>
+<?php endif; ?>
+
+<?php
+Yii::app()->clientScript->registerScript(
+  'hideEffect',
+  '$(".flash-success").animate({opacity: 1.0}, 3000).fadeOut("slow");',
+  CClientScript::POS_READY
+);
+?>
+
 <!-- Progress bar absolute -->
 <!-- <div style="position:relative">
   <div style="position:absolute;width:100%;height:18px;transform:translateY(2500%)">
@@ -192,19 +207,41 @@
         },
 
         success: function(data) {
-          console.log(data);
-          parsed = JSON.parse(data);
+          console.log(`Received response, length: ${data.length}`);
+          let parsed = null;
 
-          if (parsed.length == 0) {
-            list_end_reached = true;
-            console.log("Reached end of ticket data");
-            return true;
+          try {
+            parsed = JSON.parse(data);
+          } catch (e) {
+            console.log(`Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
           }
 
-          $.each(JSON.parse(data), function(i, t) {
-            let customer_id = Math.floor(Math.random() * 10000); // TEMP
-            drawTicket(t.id, t.requester.name, customer_id, t.status, formatUtcString(t.updated_at), t.subject, t.description_text);
-          });
+          if (typeof(parsed) != "object") {
+            console.log("Parsed data is unusable (not an object).");
+
+          } else if (parsed.length == 0) {
+            list_end_reached = true;
+            console.log("Reached end of ticket data");
+
+          } else if ("errors" in parsed) {
+            console.log(`Errors in response: ${parsed.errors}\nResponse data: ${data}`);
+            if ("eod" in parsed && parsed.eod)
+              list_end_reached = true;
+
+          } else if ("eod" in parsed && parsed.eod) {
+            console.log(`Received \{eod=true\}, assuming end of data. Response: ${data}`);
+            list_end_reached = true;
+
+          } else {
+            $.each(JSON.parse(data), function(i, t) {
+              if (typeof(t) != "object") {
+                console.log("Invalid content inside response data (not an object): " + t);
+              } else {
+                let customer_id = Math.floor(Math.random() * 10000); // TEMP
+                drawTicket(t.id, t.requester.name, customer_id, t.status, formatUtcString(t.updated_at), t.subject, t.description_text);
+              }
+            });
+          }
         },
 
         complete: function() {
@@ -277,13 +314,13 @@
     };
 
     /** @type {boolean} Indicates if the progress bar is currently active. */
-    var progbar_is_active = false;
+    var progbarActive = false;
 
     /** @type {boolean} Can be set to true to tell progress bar to exit early. */
-    var progbar_should_stop = false;
+    var progbarShouldStop = false;
 
     /** @type {number} Elapsed milliseconds during previous animation. */
-    var progbar_last_elapsed = 1000;
+    var progbarPrevElapsed = 1000;
 
     /**
      * Activate progress bar and grow it to 100 in approximately 10 seconds.
@@ -291,48 +328,88 @@
      * bar is hidden again.
      */
     var progbar = async function() {
-      if (progbar_is_active) return;
+      if (progbarActive) return;
       progbarClean(true);
 
       // increment: ms / (ms/interval) * (100/ms) / 100  : (bring to 0-1 float value).
-      let startTime = (new Date()).getTime(),
-          reps_total = progbar_last_elapsed / 15,
-          increment = progbar_last_elapsed / reps_total * (100 / progbar_last_elapsed) / 100,
-          adjusted = 0
-          reps = 0,
-          n = 0;
+      let n = 0,
+        startTime = (new Date()).getTime(),
+        repeatsTotal = progbarPrevElapsed / 15,
+        repeats = 0,
+        elapsedTime = 0,
+        delayedTime = 0, // time set after hitting 90%
+        increment = progbarPrevElapsed / repeatsTotal * (100 / progbarPrevElapsed) / 100,
+        adjusted = 0;
 
-      console.log(`previous time: ${progbar_last_elapsed}, increment: ${increment} (interval 15ms)`);
+      console.log(`previous time: ${progbarPrevElapsed}, increment: ${increment} (interval 15ms)`);
 
       while (1 - n > 0.01) {
-        if (progbar_should_stop)
+        if (progbarShouldStop)
           break;
+        elapsedTime = new Date().getTime - startTime;
 
         // Slow down increment because time taken per request is not predictable.
         switch (true) {
-          case (adjusted == 0 && n > 0.40): increment /= 1.20; adjusted++; break;
-          case (adjusted == 1 && n > 0.45): increment /= 1.20; adjusted++; break;
-          case (adjusted == 2 && n > 0.50): increment /= 1.20; adjusted++; break;
-          case (adjusted == 3 && n > 0.55): increment /= 1.20; adjusted++; break;
-          case (adjusted == 4 && n > 0.60): increment /= 1.30; adjusted++; break;
-          case (adjusted == 5 && n > 0.65): increment /= 1.30; adjusted++; break;
-          case (adjusted == 6 && n > 0.70): increment /= 1.30; adjusted++; break;
-          case (adjusted == 7 && n > 0.75): increment /= 1.50; adjusted++; break;
-          case (adjusted == 8 && n > 0.80): increment /= 2.50; adjusted++; break;
-          case (adjusted == 9 && n > 0.85): increment /= 3.50; adjusted++; break;
-          case (adjusted == 10 && n > 0.90): increment /= 4.50; adjusted++; break;
-          case (adjusted == 11 && n > 0.95): increment  = 0.0; adjusted++; break;
+          // case (adjusted == 0 && n > 0.40):
+          //   increment /= 1.20;
+          //   adjusted++;
+          //   break;
+          // case (adjusted == 1 && n > 0.45):
+          //   increment /= 1.20;
+          //   adjusted++;
+          //   break;
+          // case (adjusted == 2 && n > 0.50):
+          //   increment /= 1.20;
+          //   adjusted++;
+          //   break;
+          // case (adjusted == 3 && n > 0.55):
+          //   increment /= 1.20;
+          //   adjusted++;
+          //   break;
+          // case (adjusted == 4 && n > 0.60):
+          //   increment /= 1.30;
+          //   adjusted++;
+          //   break;
+          // case (adjusted == 5 && n > 0.65):
+          //   increment /= 1.30;
+          //   adjusted++;
+          //   break;
+          // case (adjusted == 6 && n > 0.70):
+          //   increment /= 1.30;
+          //   adjusted++;
+          //   break;
+          // case (adjusted == 7 && n > 0.75):
+          //   increment /= 1.50;
+          //   adjusted++;
+          //   break;
+          // case (adjusted == 8 && n > 0.80):
+          //   increment /= 2.50;
+          //   adjusted++;
+          //   break;
+          // case (adjusted == 9 && n > 0.85):
+          //   increment /= 3.50;
+          //   adjusted++;
+          //   break;
+          case (adjusted == 0 && n > 0.90):
+            increment /= 4.50;
+            adjusted++;
+            delayedTime = new Date().getTime();
+            break;
+          case (n > 0.92 && elapsedTime - delayedTime > 6000):
+            console.log(`progbar exiting due to delay; 6 seconds elapsed after 90%, total elapsed: ${elapsedTime}`);
+            progbarStop();
+            break;
         }
 
-        reps++;
-        n += increment;
+        repeats++;
+        n += increment - (increment * n / 2);
         let ival = Math.trunc(n * 100);
         $('div.progbar').attr('aria-valuenow', ival).css('width', ival + '%');
         await new Promise(r => setTimeout(r, 15));
       }
 
-      progbar_last_elapsed = Math.max(200, ((new Date()).getTime() - startTime));
-      progbar_is_active = false;
+      progbarPrevElapsed = Math.max(200, ((new Date()).getTime() - startTime));
+      progbarActive = false;
       await progbarClean(false);
     };
 
@@ -340,7 +417,7 @@
      * Tells the progress bar to stop if it's active.
      */
     var progbarStop = function() {
-      progbar_should_stop = (progbar_is_active == true);
+      progbarShouldStop = (progbarActive == true);
     };
 
     /**
@@ -349,25 +426,25 @@
      */
     var progbarClean = async function(active = false) {
       if (active) {
-        if (!progbar_is_active) {
-          progbar_is_active = true;
-          progbar_should_stop = false;
+        if (!progbarActive) {
+          progbarActive = true;
+          progbarShouldStop = false;
           $('div.progbar').attr('aria-valuenow', 0).css({
             width: 0,
             display: 'block',
             border: '2px solid #151414'
           });
         }
-      } else if (progbar_is_active) {
-        progbar_should_stop = true;
+      } else if (progbarActive) {
+        progbarShouldStop = true;
       } else {
         $('div.progbar').css({
           width: 0,
           display: 'none',
           border: 'none'
         });
-        progbar_is_active = false;
-        progbar_should_stop = false;
+        progbarActive = false;
+        progbarShouldStop = false;
       }
     };
 

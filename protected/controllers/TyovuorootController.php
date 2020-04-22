@@ -1594,7 +1594,7 @@ class TyovuorootController extends Controller
       // var_dump($tickets_eod, $first_index + count($requested));exit;
       if ($tickets_eod != 0 && $tickets_eod < $first_index + count($requested)) {
         Freshdesk::log('Empty page requested: %d', $page);
-        echo json_encode(['errors' => 'Empty page requested.']);
+        echo json_encode(['eod' => true, 'errors' => 'Empty page requested.']);
         return;
       }
 
@@ -1624,7 +1624,8 @@ class TyovuorootController extends Controller
         // Check if end of data, so that repeat requests are not made.
         if (empty($requested)) {
           Freshdesk::log('Empty page requested: %d', $page);
-          echo json_encode(['errors' => 'Empty page requested.']);
+          echo json_encode(['eod' => true, 'errors' => 'Empty page requested.']);
+          return;
         } elseif (count($requested) != $per_page) {
           Freshdesk::log("Page %s requested, and end of data reached. (%d items received).", $page, count($requested));
           Yii::app()->session["freshdesk_tickets"] = array_merge($tickets, $requested);
