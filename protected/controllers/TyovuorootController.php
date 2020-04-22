@@ -2336,7 +2336,7 @@ class TyovuorootController extends Controller
 			$tyopaari = "tyopaari LIKE '%\"".implode("\"%' OR tyopaari LIKE'%\"", $tt_ret)."\"%'";
 		        $criteria->addCondition('tid IN ('.$ids.') OR ('.$tyopaari.')');
 		}
-		if( count($haku_criteria) > 0 ){
+		if( is_array($haku_criteria) and count($haku_criteria) > 0 ){
 			if(isset($haku_criteria['uusi_tilaus']))
 				unset($haku_criteria['uusi_tilaus']);
 		}
@@ -5331,14 +5331,17 @@ class TyovuorootController extends Controller
 				$tuotteet[$item->tuoteID] = 0;
 			else
 				$tuotteet[$item->tuoteID] += 1;
+
 			$dec = json_decode($item->lisa_tuotteet, true);
-			foreach($dec as $k => $v){
-				if($k == 'tuote'){
-					foreach($v as $k1 => $v1){
-						if(!isset($lisa_tuotteet[$v1]))
-							$lisa_tuotteet[$v1] = 1;
-						else
-							$lisa_tuotteet[$v1] += 1;
+			if( is_array($dec) ){
+				foreach($dec as $k => $v){
+					if($k == 'tuote'){
+						foreach($v as $k1 => $v1){
+							if(!isset($lisa_tuotteet[$v1]))
+								$lisa_tuotteet[$v1] = 1;
+							else
+								$lisa_tuotteet[$v1] += 1;
+						}
 					}
 				}
 			}
