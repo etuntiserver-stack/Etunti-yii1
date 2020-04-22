@@ -1584,27 +1584,67 @@ class TyovuorootController extends Controller
 
       // Tickets are temporarily cached here
       $per_page = is_numeric($per_page) ? $per_page : 10;
-      $tickets = Yii::app()->session['freshdesk_open_tickets'] ?? [];
-      $requested = array_splice($tickets, ($page - 1) * $per_page, $per_page);
-      $end_reached = Yii::app()->session['freshdesk_list_end_reached'] ?? false;
+      $first_index = ($page - 1) * $per_page;
+      $tickets = Yii::app()->session['freshdesk_tickets'] ?? [];
+      $tickets_eod = Yii::app()->session['freshdesk_tickets_eod'] ?? 0;
+      $update_times = Yii::app()->session['freshdesk_tickets_update_times'] ?? [];
+      $requested = array_splice($tickets, $first_index, $per_page);
+      $old_tickets_on_page = false;
+
+      // var_dump($tickets_eod, $first_index + count($requested));exit;
+      if ($tickets_eod != 0 && $tickets_eod < $first_index + count($requested)) {
+        Freshdesk::log('Empty page requested: %d', $page);
+        echo json_encode(['errors' => 'Empty page requested.']);
+        return;
+      }
+
+      $fn_index_loop = function (bool $check_exists, callable $fn) use ($tickets, $first_index, $per_page) {
+        foreach (range($first_index, $first_index + $per_page - 1) as $index)
+          if (($check_exists && !isset($tickets[$index])) || false === call_user_func($fn, $index))
+            break;
+      };
+
+      $fn_index_loop(true, function ($index) use ($page, $update_times, &$old_tickets_on_page) {
+        if (time() - ($update_times[$index] ?? 0) > 900) { // 900 seconds = 15 minutes
+          $time_str = $update_times[$index] ?? 0 <= 0 ? '' : ' Previously updated: ' . date('Y-m-d H:i:s', $update_times[$index]);
+          Freshdesk::log('Some tickets on page %s are old. Requesting fresh data from Freshdesk.%s', $page, $time_str);
+          $old_tickets_on_page = true;
+          return false;
+        }
+      });
 
       // If not enough items from array_splice, either this data has not yet
       // been fetched, or end has been reached.
-      if (count($requested) != $per_page && !$end_reached) {
+      $is_eod = ($tickets_eod != 0 && $tickets_eod == $first_index + count($requested));
+      if ($old_tickets_on_page || (count($requested) != $per_page && !$is_eod)) {
+
         $requested = $freshdesk->listTickets(null, null, $page, $per_page, null, ['requester', 'description'], 'updated_at', 'desc');
+        $updated = false;
 
         // Check if end of data, so that repeat requests are not made.
-        if (count($requested) != $per_page) {
-          $freshdesk::log("Page %s requested, and end of data reached. (%d items received).", $page, count($requested));
-          Yii::app()->session['freshdesk_list_end_reached'] = true;
-          Yii::app()->session["freshdesk_open_tickets"] = array_merge($tickets, $requested);
+        if (empty($requested)) {
+          Freshdesk::log('Empty page requested: %d', $page);
+          echo json_encode(['errors' => 'Empty page requested.']);
+        } elseif (count($requested) != $per_page) {
+          Freshdesk::log("Page %s requested, and end of data reached. (%d items received).", $page, count($requested));
+          Yii::app()->session["freshdesk_tickets"] = array_merge($tickets, $requested);
+          Yii::app()->session['freshdesk_tickets_eod'] = $first_index + count($requested);
+          $updated = true;
         } else {
-          $freshdesk::log("Page %s requested (%d items), saving to session.", $page, count($requested));
-          $tickets = array_merge(array_splice($tickets, 0, ($page - 1) * $per_page), $requested, array_splice($tickets, $page * $per_page));
-          Yii::app()->session["freshdesk_open_tickets"] = $tickets;
+          Freshdesk::log("Page %s requested (%d items), saving to session.", $page, count($requested));
+          $tickets = array_merge(array_splice($tickets, 0, $first_index), $requested, array_splice($tickets, $page * $per_page));
+          Yii::app()->session["freshdesk_tickets"] = $tickets;
+          $updated = true;
+        }
+
+        if ($updated) {
+          // Set updated times.
+          $fn_index_loop(false, function($index) use (&$update_times) { $update_times[$index] = time(); });
+          Yii::app()->session['freshdesk_tickets_update_times'] = $update_times;
+          Freshdesk::log('Updated times for tickets on page %s with %d items. Valid for 900 seconds (15 minutes).', $page, count($requested));
         }
       } else {
-        $freshdesk::log("Page %s loaded from session (%d items%s).", $page, count($requested), count($requested) < $per_page ? '; end of data' : '');
+        Freshdesk::log("Page %s loaded from session (%d items%s).", $page, count($requested), $is_eod ? '; end of data' : '');
       }
 
       echo json_encode($requested);
@@ -1612,7 +1652,7 @@ class TyovuorootController extends Controller
     } else {
       return $this->render('freshdesk', [
         'freshdesk' => $freshdesk,
-        'tickets' => Yii::app()->session['freshdesk_open_tickets']
+        'tickets' => Yii::app()->session['freshdesk_tickets']
       ]);
     }
   }
