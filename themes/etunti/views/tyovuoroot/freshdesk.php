@@ -24,41 +24,20 @@
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
   }
 
-  /* #ticket-container {
-    min-width: 100rem;
-    width: 90%;
-    max-width: 130rem;
-    margin-left: auto;
-    margin-right: auto;
-  } */
-
-  /* .progress {
-    height: 16px;
-    width: 50%;
-    margin-left: auto;
-    margin-right: auto;
-    background: none;
-  }
-  .progress-bar {
-    background: -webkit-linear-gradient(left, #33156d 0%,#f282bc 100%);
-    border: 2px solid #ffffff;
-    border-radius: 25px;
-  } */
-
   #ticket-container {
-    min-width: 100rem;
+    min-width: 800;
     width: 90%;
-    max-width: 130rem;
+    max-width: 1400px;
     margin-left: auto;
     margin-right: auto;
   }
 
   .progbar-outer-box {
-    position:fixed;
-    width:1200px;
-    height:22px;
-    bottom:80px;
-    left:calc(50% - 480px);
+    position: fixed;
+    width: 1200px;
+    height: 22px;
+    bottom: 80px;
+    left: calc(50% - 480px);
     z-index: 999;
   }
 
@@ -75,6 +54,7 @@
     border: 2px solid #151414;
     border-radius: 25px;
     display: none;
+    transition-duration:10ms;
   }
 </style>
 
@@ -122,9 +102,8 @@
 </div>
 
 <div id="ticket-container">
-  <div class="row space-16"></div>
   <div class="row">
-    <div class="col-md-11">
+    <div class="col-md-10">
       <div class="col-md-4">
         <div id="ticket-row-1">
         </div>
@@ -138,7 +117,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-1">&nbsp;</div>
+    <div class="col-md-2">&nbsp;</div>
   </div>
 </div>
 
@@ -183,8 +162,8 @@
     };
 
     let list_request_underway = false,
-        list_previous_page = 0,
-        list_end_reached = false;
+      list_previous_page = 0,
+      list_end_reached = false;
 
     var list = async function(page = 0) {
       if (list_request_underway || list_end_reached) return;
@@ -229,7 +208,9 @@
         },
 
         complete: function() {
-          (async() => { await new Promise(r => setTimeout(r, 3250)); })();
+          (async () => {
+            await new Promise(r => setTimeout(r, 3250));
+          })();
           if (list_end_reached || !listFetchIfScrolled())
             progbarStop();
           list_request_underway = false;
@@ -283,7 +264,7 @@
      * Hook scroll to a check of if it's time to request more tickets.
      */
     $(window).scroll(function() {
-      listFetchIfScrolled();
+      // listFetchIfScrolled();
     });
 
     //*--------------------------------------------------------------------------
@@ -302,7 +283,7 @@
     var progbar_should_stop = false;
 
     /** @type {number} Elapsed milliseconds during previous animation. */
-    var progbar_last_elapsed = 0;
+    var progbar_last_elapsed = 1000;
 
     /**
      * Activate progress bar and grow it to 100 in approximately 10 seconds.
@@ -311,28 +292,72 @@
      */
     var progbar = async function() {
       if (progbar_is_active) return;
-
       progbarClean(true);
-      let startTime = (new Date()).getTime();
-      // console.log("progbar() started, time: " + startTime);
 
-      let n = 0, ival = 0;
+      const interval = 15;
+      let startTime = (new Date()).getTime(),
+          n = 0,
+          ival = 0,
+          reps = 0,
+          adjusted = 0,
+          adjusted_at = 0;
+
+      // ms / (ms/interval) * (100/ms) / 100  : (bring to 0-1 float value).
+      let reps_total = progbar_last_elapsed / interval;
+      let increment = progbar_last_elapsed / reps_total * (100 / progbar_last_elapsed) / 100;
+
+      console.log(`previous time: ${progbar_last_elapsed}, increment: ${increment} (interval ${interval}ms)`);
       while (1 - n > 0.01) {
         if (progbar_should_stop)
           break;
-        n += (1 - n) / 10 * (1 - n);
-        ival = Math.trunc(n * 100);
-        $('div.progbar').attr('aria-valuenow', ival).css('width', ival + '%');
-        await new Promise(r => setTimeout(r, 50));
-      }
+        // n += (1 - n) / 10 * (1 - n);
+        // ival = Math.trunc(n * 100);
 
-      $('div.progbar').attr('aria-valuenow', 100).css('width', '100%');
-      $('div.progbar').fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+        if (n - adjusted_at > 0.01 && n < 0.75) {
+          adjusted_at = n;
+          let reps_pct = reps / reps_total,
+              diff = 0;
+          if (n > reps_pct) {
+            diff = n - reps_pct;
+            if (diff > 0.02) {
+              // console.log(`increment before adjust: ${increment}`);
+              increment *= (1+diff);
+              // console.log(`adjusted increment by *= (1+${diff}) (reps_pct ${reps_pct} < prog ${n})`);
+            }
+          } else {
+            diff = reps_pct - n;
+            if (diff > 0.01) {
+              // console.log(`increment before adjust: ${increment}`);
+              increment *= (1-diff);
+              // console.log(`adjusted increment to ${increment} by *= (1-${diff}) (reps_pct ${reps_pct} > prog ${n})`);
+            }
+          }
+        }
+
+        // Slow down at very end in case of delayed call.
+        if (adjusted == 0 && n > 0.78) {
+          increment /= 1.07; adjusted++;
+        } else if (adjusted == 1 && n > 0.83) {
+          increment /= 1.11; adjusted++;
+        } else if (adjusted == 2 && n > 0.88) {
+          increment /= 1.17; adjusted++;
+        } else if (adjusted == 3 && n > 0.92) {
+          increment /= 1.23; adjusted++;
+        } else if (adjusted == 4 && n > 0.95) {
+          increment = 0; adjusted++;
+        }
+
+        n += increment;
+        reps++;
+        ival = Math.trunc(n * 100);
+        // console.log(n);
+        $('div.progbar').attr('aria-valuenow', ival).css('width', ival + '%');
+        await new Promise(r => setTimeout(r, interval));
+      }
 
       progbar_last_elapsed = ((new Date()).getTime() - startTime);
       progbar_is_active = false;
-      progbarClean(false);
-      // console.log("progbar() finished, elapsed: " + elapsed);
+      await progbarClean(false);
     };
 
     /**
@@ -347,13 +372,17 @@
      * Resets progress bar to base state of active or stopped.
      * @param {boolean} active Whether to set the bar as active or stopped.
      */
-    var progbarClean = function(active = false) {
+    var progbarClean = async function(active = false) {
       if (active) {
         if (!progbar_is_active) {
           progbar_is_active = true;
           progbar_should_stop = false;
           $('div.progbar')
-            .css({width: 0, display: 'block', border: '2px solid #151414'})
+            .css({
+              width: 0,
+              display: 'block',
+              border: '2px solid #151414'
+            })
             .attr('aria-valuenow', 0)
             .position();
         }
@@ -363,7 +392,11 @@
         progbar_is_active = false;
         progbar_should_stop = false;
         $('div.progbar')
-          .css({width: 0, display: 'none', border: 'none'})
+          .css({
+            width: 0,
+            display: 'none',
+            border: 'none'
+          })
           .attr('aria-valuenow', 0);
       }
     };
@@ -402,13 +435,30 @@
       }
     };
 
-    list();
+    // list();
     // ticketPreviewPopulate();
 
     (async () => {
-      // let timeout = setTimeout(() => progbarStop(), 2500);
-      // await progbar();
-      // clearTimeout(timeout);
+      let timeout = null;
+      console.log("Test");
+      for(let i = 0; i < 10; i++) {
+        let timeout = 12345678;
+        switch (i) {
+          case 0: timeout = 1600; break;
+          case 1: timeout = 400; break;
+          case 2: timeout = 890; break;
+          case 3: timeout = 3100; break;
+          case 4: timeout = 890; break;
+          case 5: timeout = 990; break;
+          case 6: timeout = 100; break;
+          case 7: timeout = 750; break;
+          case 8: timeout = 2100; break;
+          case 9: timeout = 1550; break;
+        }
+        timeout = setTimeout(() => progbarStop(), timeout);
+        await progbar();
+        clearTimeout(timeout);
+      }
     })();
   });
 </script>
