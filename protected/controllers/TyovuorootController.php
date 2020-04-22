@@ -1995,7 +1995,7 @@ class TyovuorootController extends Controller
         		$criteria->select = "id,tekijan_nimi";
         		$criteria->condition = " aktiivinen = '1' ";
 
-		    	if(count(Yii::app()->session['tyontekijat'] > 1))
+		    	if(count(Yii::app()->session['tyontekijat']) > 1)
 		      	$ids = implode(",", Yii::app()->session['tyontekijat']);
 		    	else
 		      	$ids = Yii::app()->session['tyontekijat'][0];
@@ -5125,7 +5125,7 @@ class TyovuorootController extends Controller
         		$criteria->select = "id,tekijan_nimi, sukunimi, tyoryhma";
         		$criteria->condition = " aktiivinen = '1' ";
 
-		    	if(count(Yii::app()->session['tyontekijat'] > 1))
+		    	if(count(Yii::app()->session['tyontekijat']) > 1)
 		      	$ids = implode(",", Yii::app()->session['tyontekijat']);
 		    	else
 		      	$ids = Yii::app()->session['tyontekijat'][0];
