@@ -2550,6 +2550,7 @@ class TyovuorootController extends Controller
 
 
 		// <-- Per arvo KPL
+		// EI TOIMII kunnolla. jotkut laatikkot ei ladataan  JOSKUS, ja joskus on
 		/*
 		$arvo = 5;
 		return "
