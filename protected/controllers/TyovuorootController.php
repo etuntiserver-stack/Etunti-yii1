@@ -2576,7 +2576,7 @@ class TyovuorootController extends Controller
 			setTimeoutConst = setTimeout(function() {
 				$.vkolaskenta('".json_encode($haku_tids)."');
 			   	$.hovertietoja();
-			}, 2000);
+			}, 3000);
 		});
 		</script>";
 	}
@@ -3741,7 +3741,7 @@ class TyovuorootController extends Controller
 			".$m->tietoja;
 
 		Domainit::sendGCM($tid,"Hei ".$t->tekijan_nimi,$pushviesti, null);
-		exit;
+		return true;
 	}
 
 	protected function hinnastoHintaat($tp, $asiakkaat, $kohteet)
