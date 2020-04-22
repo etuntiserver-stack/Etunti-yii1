@@ -2574,8 +2574,7 @@ class TyovuorootController extends Controller
 				});
 			});
 			setTimeoutConst = setTimeout(function() {
-				if('".$taulu."' == 'vko')
-					$.vkolaskenta('".json_encode($haku_tids)."');
+				$.vkolaskenta('".json_encode($haku_tids)."');
 			   	$.hovertietoja();
 			}, 2000);
 		});

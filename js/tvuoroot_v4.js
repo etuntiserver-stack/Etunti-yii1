@@ -130,6 +130,7 @@ jQuery.vkolaskenta = function vkolaskenta(tids){
 				$("#vko_" + d['did'] +'_' + tid).html($.sprint(seconds));
 			});
 			$('.odotusweeklaskennan').remove();
+			console.log('vkolaskenta loaded.');
         	   },
 		   error:function(data){
 			console.log(data)
@@ -137,7 +138,6 @@ jQuery.vkolaskenta = function vkolaskenta(tids){
 	        });
 	});
      }
-     console.log('vkolaskenta loaded.');
 }
 
 jQuery.hovertietoja = function hovertietoja(){
