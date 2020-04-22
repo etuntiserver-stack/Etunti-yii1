@@ -3382,11 +3382,6 @@ class TyovuorootController extends Controller
 		else
 			$post = $_POST['Tyovuoroot'];
 
-		// <-- PushNotify
-		if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
-			$this->pushNotifySending($this_id);
-		// PushNotify -->
-
 		// <-- Variables
 		//$post['pvm'] 		= date("d.m.Y",strtotime($laatikko_pvm)); Kun siirretaan tyoparit muu paivaan.. sitten se ei onnistuu
 		$edellinen_model 	= $model->attributes;
@@ -3429,6 +3424,13 @@ class TyovuorootController extends Controller
 			if(!$model->save()){
 				echo json_encode($model->getErrors());
 			} else {
+
+				// <-- PushNotify
+				$this_id = $this->this_id_builder($model->id, $laatikko_pvm, $laatikko_tid);
+				if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+					$this->pushNotifySending($this_id);
+				// PushNotify -->
+
 				$return = ['return' => 'uusi_ketju_ok'];
 				echo json_encode($return);
 			}
@@ -3448,6 +3450,13 @@ class TyovuorootController extends Controller
 			if(!$model->save()){
 				echo json_encode($model->getErrors());
 			} else {
+
+				// <-- PushNotify
+				$this_id = $model->id;
+				if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+					$this->pushNotifySending($this_id);
+				// PushNotify -->
+
 				// <-- Poisto PVM/Henkilo ketjusta
 				$u		= Yii::app()->user->nimi;
 				$d		= date("d.m.Y");
@@ -3506,6 +3515,13 @@ class TyovuorootController extends Controller
 			//     Poistetut päivät siirto, JOS vaihdettu henkilö -->
 
 			if($model->save()){
+
+				// <-- PushNotify
+				$this_id = $this->this_id_builder($model->id, $laatikko_pvm, $laatikko_tid);
+				if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+					$this->pushNotifySending($this_id);
+				// PushNotify -->
+
 				$new_toistuva = new ToistuvatTyovuorot;
 				$new_toistuva->attributes = $post;
 				$this->model_json_converter($post, $new_toistuva, $toistuva);
@@ -3513,6 +3529,13 @@ class TyovuorootController extends Controller
 				if(!$new_toistuva->save()){
 					echo json_encode($new_toistuva->getErrors());
 				} else {
+
+					// <-- PushNotify
+					$this_id = $this->this_id_builder($new_toistuva->id, $laatikko_pvm, $laatikko_tid);
+					if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+						$this->pushNotifySending($this_id);
+					// PushNotify -->
+
 					$return = ['return' => 'pfrom_muutos_ok'];
 					echo json_encode($return);
 				}
@@ -3526,6 +3549,12 @@ class TyovuorootController extends Controller
 		$updated_tp = json_decode($model->tyopaari, true);
 
 		if($model->save()){
+
+			// <-- PushNotify
+			$this_id = ($toistuva)? $this->this_id_builder($model->id, $laatikko_pvm, $laatikko_tid) : $model->id;
+			if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+				$this->pushNotifySending($this_id);
+			// PushNotify -->
 
 			$current_model = $model;
 			// <-- LOG
