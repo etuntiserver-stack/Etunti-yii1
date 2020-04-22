@@ -24,14 +24,6 @@
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
   }
 
-  #ticket-container {
-    min-width: 800;
-    width: 90%;
-    max-width: 1400px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
   .progbar-outer-box {
     position: fixed;
     width: 1200px;
@@ -56,6 +48,71 @@
     display: none;
     transition-duration: 10ms;
   }
+
+  #alert-container {
+    position: fixed;
+    width: 500px;
+    top: 85px;
+    right: 25px;
+    height: 55px;
+    z-index: 9999;
+    border-right: 1.5pt solid black;
+    border-bottom: 1.5pt solid black;
+    border-radius: 25px;
+    opacity: 0.8;
+    text-align: center;
+    transition: 0.2s;
+    display: none;
+  }
+
+  #alert-container:hover {
+    cursor: pointer;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
+    opacity: 1;
+  }
+
+  #alert-container button.close {
+    color: white;
+    opacity: 0.6;
+    transition: 0.1s;
+  }
+
+  #alert-container button.close:hover {
+    color: black;
+    opacity: 1;
+  }
+
+  #btn-settings-popup {
+    width: 100%;
+    border: 2px solid black;
+    border-radius: 25px;
+  }
+
+  .btn-settings {
+    padding: 4px;
+  }
+
+  #toggle-menu-container {
+    position: relative;
+  }
+
+  #toggle-menu {
+    position: absolute;
+    right: 4px;
+    width: 280px;
+    /* min-height: 520px; */
+    z-index: 9998;
+    background-color: whitesmoke;
+    /* border: 1px solid #ddd; */
+    border: 2px solid #99b7bd;
+    margin: 12px 0;
+    padding: 12px 8px;
+    border-radius: 5px;
+    text-align: center;
+    transition: 0.5s;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
+  }
+
 </style>
 
 <div style="display:none">
@@ -83,30 +140,13 @@
   </div>
 </div>
 
-
-<?php if (Yii::app()->user->hasFlash('success')) : ?>
-  <div class="flash-success">
-    <?php echo Yii::app()->user->getFlash('success'); ?>
+<!-- Error alert popup (top-right) -->
+<div style="position:relative">
+  <div id="alert-container" class="alert fade in bg-danger">
+    <button class="close light" data-dismiss="alert">×</button>
+    Tukipyyntöjen haussa tapahtui virhe. Paina tästä lisätiedot.
   </div>
-<?php endif; ?>
-
-<?php
-Yii::app()->clientScript->registerScript(
-  'hideEffect',
-  '$(".flash-success").animate({opacity: 1.0}, 3000).fadeOut("slow");',
-  CClientScript::POS_READY
-);
-?>
-
-<!-- Progress bar absolute -->
-<!-- <div style="position:relative">
-  <div style="position:absolute;width:100%;height:18px;transform:translateY(2500%)">
-    <div class="progbar-inner-box">
-      <div class="progbar progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-      </div>
-    </div>
-  </div>
-</div> -->
+</div>
 
 <!-- Progress bar fixed -->
 <div class="progbar-outer-box">
@@ -116,9 +156,11 @@ Yii::app()->clientScript->registerScript(
   </div>
 </div>
 
-<div id="ticket-container">
-  <div class="row">
-    <div class="col-md-10">
+<div class="row">
+
+  <!-- Container for ticket rows -->
+  <div class="col-md-11">
+    <div class="row">
       <div class="col-md-4">
         <div id="ticket-row-1">
         </div>
@@ -132,7 +174,41 @@ Yii::app()->clientScript->registerScript(
         </div>
       </div>
     </div>
-    <div class="col-md-2">&nbsp;</div>
+  </div>
+
+  <!-- Right space for popup buttons -->
+  <div class="col-md-1">
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <!-- Menu popup button -->
+        <button id="btn-settings-popup" class="btn-primary pull-right" data-toggle="collapse" data-target="#toggle-menu" aria-expanded="false" aria-controls="toggle-menu">
+          <div style="width:75%;float:left;overflow:hidden;font-weight:bold">A</div><div style="width:25%;float:left"><span class="glyphicon glyphicon-cog"></span></div>
+        </button>
+
+      </div>
+    </div>
+
+
+    <!-- Spacing between settings button and menu -->
+    <!-- <div class="row"><div class="col-md-12">&nbsp;</div></div> -->
+
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <!-- Settings menu popup -->
+        <div id="toggle-menu-container">
+          <div id="toggle-menu" class="collapse">
+            <button id="btn-export-customers" class="btn-settings btn-warning" type="button">
+              <b>Vie asiakkaat Freshdeskiin&nbsp;<span class="glyphicon glyphicon-user"></span></b>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 </div>
 
@@ -304,6 +380,16 @@ Yii::app()->clientScript->registerScript(
       listFetchIfScrolled();
     });
 
+    // /** Focus on the first element in options menu after transition (500ms). */
+    // $('#btn-settings-popup').on('click', function(e) {
+    //   setTimeout(() => $('#btn-export-customers').focus(), 600);
+    // });
+
+    // /** Hide options menu when focus is lost. */
+    // $('#toggle-menu > *').blur(function() {
+    //   $('#toggle-menu').collapse("hide");
+    // });
+
     //*--------------------------------------------------------------------------
     //* Progress Bar
     //*--------------------------------------------------------------------------
@@ -350,46 +436,46 @@ Yii::app()->clientScript->registerScript(
 
         // Slow down increment because time taken per request is not predictable.
         switch (true) {
-          // case (adjusted == 0 && n > 0.40):
-          //   increment /= 1.20;
-          //   adjusted++;
-          //   break;
-          // case (adjusted == 1 && n > 0.45):
-          //   increment /= 1.20;
-          //   adjusted++;
-          //   break;
-          // case (adjusted == 2 && n > 0.50):
-          //   increment /= 1.20;
-          //   adjusted++;
-          //   break;
-          // case (adjusted == 3 && n > 0.55):
-          //   increment /= 1.20;
-          //   adjusted++;
-          //   break;
-          // case (adjusted == 4 && n > 0.60):
-          //   increment /= 1.30;
-          //   adjusted++;
-          //   break;
-          // case (adjusted == 5 && n > 0.65):
-          //   increment /= 1.30;
-          //   adjusted++;
-          //   break;
-          // case (adjusted == 6 && n > 0.70):
-          //   increment /= 1.30;
-          //   adjusted++;
-          //   break;
-          // case (adjusted == 7 && n > 0.75):
-          //   increment /= 1.50;
-          //   adjusted++;
-          //   break;
-          // case (adjusted == 8 && n > 0.80):
-          //   increment /= 2.50;
-          //   adjusted++;
-          //   break;
-          // case (adjusted == 9 && n > 0.85):
-          //   increment /= 3.50;
-          //   adjusted++;
-          //   break;
+          case (adjusted == 0 && n > 0.40):
+            increment /= 1.20;
+            adjusted++;
+            break;
+          case (adjusted == 1 && n > 0.45):
+            increment /= 1.20;
+            adjusted++;
+            break;
+          case (adjusted == 2 && n > 0.50):
+            increment /= 1.20;
+            adjusted++;
+            break;
+          case (adjusted == 3 && n > 0.55):
+            increment /= 1.20;
+            adjusted++;
+            break;
+          case (adjusted == 4 && n > 0.60):
+            increment /= 1.30;
+            adjusted++;
+            break;
+          case (adjusted == 5 && n > 0.65):
+            increment /= 1.30;
+            adjusted++;
+            break;
+          case (adjusted == 6 && n > 0.70):
+            increment /= 1.30;
+            adjusted++;
+            break;
+          case (adjusted == 7 && n > 0.75):
+            increment /= 1.50;
+            adjusted++;
+            break;
+          case (adjusted == 8 && n > 0.80):
+            increment /= 2.50;
+            adjusted++;
+            break;
+          case (adjusted == 9 && n > 0.85):
+            increment /= 3.50;
+            adjusted++;
+            break;
           case (adjusted == 0 && n > 0.90):
             increment /= 4.50;
             adjusted++;
