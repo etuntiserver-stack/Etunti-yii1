@@ -83,7 +83,7 @@
   }
 
   #btn-settings-popup {
-    width: 100%;
+    width: 32px;
     border: 2px solid black;
     border-radius: 25px;
   }
@@ -109,7 +109,7 @@
     padding: 12px 8px;
     border-radius: 5px;
     text-align: center;
-    transition: 0.5s;
+    transition: 0.2s;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
   }
 
@@ -125,6 +125,7 @@
   #spopup {
     position: fixed;
     width: inherit;
+    height: 80%;
     /* min-height: 520px; */
     z-index: 9998;
     background-color: whitesmoke;
@@ -133,9 +134,16 @@
     margin: 16px 0px;
     padding: 4px;
     border-radius: 5px;
-    text-align: center;
-    transition: 0.5s;
+    text-align: left;
+    transition: 0.1s;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    overflow-wrap: break-word;
+  }
+
+  #spopup-header {
+    margin: 4px 0 10px;
   }
 </style>
 
@@ -185,8 +193,21 @@
   <!-- Full screen popup -->
   <div id="spopup-container">
     <div id="spopup" class="collapse">
-      <h3 id="spopup-header">&nbsp;</h3>
-      <p id="spopup-text">&nbsp;</p>
+      <div class="row">
+        <div class="col-md-11">
+          <h4 id="spopup-header">&nbsp;</h4>
+        </div>
+        <div class="col-md-1">
+          <button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div id="spopup-body">&nbsp;</div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row">
@@ -217,8 +238,9 @@
 
           <!-- Menu popup button -->
           <button id="btn-settings-popup" class="btn-primary pull-right" data-toggle="collapse" data-target="#toggle-menu" aria-expanded="false" aria-controls="toggle-menu">
-            <div style="width:75%;float:left;overflow:hidden;font-weight:bold">A</div>
-            <div style="width:25%;float:left"><span class="glyphicon glyphicon-cog"></span></div>
+            <!-- <div style="width:75%;float:left;overflow:hidden;font-weight:bold">A</div> -->
+            <!-- <div style="width:25%;float:left"><span class="glyphicon glyphicon-cog"></span></div> -->
+            <span class="glyphicon glyphicon-cog"></span>
           </button>
 
         </div>
@@ -237,6 +259,9 @@
             <div id="toggle-menu" class="collapse">
               <button id="btn-export-customers" class="btn-settings btn-warning" type="button">
                 <b>Vie asiakkaat Freshdeskiin&nbsp;<span class="glyphicon glyphicon-user"></span></b>
+              </button>
+              <button class="btn-settings btn-primary" type="button">
+                <b>Testi&nbsp;<span class="glyphicon glyphicon-user"></span></b>
               </button>
             </div>
           </div>
@@ -259,7 +284,41 @@
       // obj.find('.ticket-body').attr('onclick', `location.href='/index.php/tyovuoroot/freshdesk/${id}'`);
       // obj.find('.ticket-body').attr('onclick', `alert(${list_tickets[id]})`);
       obj.find('.ticket-body').on('click', function(e) {
-        $('#spopup-text').html(`<pre>${list_tickets[id]}</pre>`);
+        let data = '',
+          val = '',
+          emptyKeys = [];
+        $.each(Object.keys(list_tickets[id]), function(i, key) {
+          val = list_tickets[id][key];
+          if (val != null && val.length > 0) {
+            // console.log(`${key}: ${val}`);
+            if (typeof(val) == "object") {
+              val = JSON.stringify(val);
+            } else {
+              val = val
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+            }
+
+            data += `<b>${key}:</b> ${val}<br>`;
+          } else {
+            emptyKeys.push(key);
+          }
+        });
+
+        if (emptyKeys.length > 0) {
+          emptyKeys = emptyKeys.join(', ');
+          // console.log(`Empty keys: ${emptyKeys}`);
+          data += `<br>Empty keys: ${emptyKeys}`;
+        }
+
+        let subject = ("subject" in list_tickets[id]) ?
+          list_tickets[id].subject : '(ei otsikkoa)';
+
+        $('#spopup-header').html(`Tukipyyntö ${id}: ${subject}`);
+        $('#spopup-body').html(`<p>${data}</p>`);
         $('#spopup').collapse("show");
       });
 
@@ -356,7 +415,7 @@
               } else {
                 let customer_id = Math.floor(Math.random() * 10000); // TEMP
                 drawTicket(t.id, t.requester.name, customer_id, t.status, formatUtcString(t.updated_at), t.subject, t.description_text);
-                list_tickets[t.id] = data;
+                list_tickets[t.id] = t;
               }
             });
           }
@@ -430,7 +489,7 @@
         .css({
           'margin-left': containerWidth * 0.1 + 'px',
           'height': Math.max(document.documentElement.clientHeight, window.innerHeight || 0) * 0.7 + 'px',
-          'transition': '0.5s'
+          'transition': '0.2s'
         });
     };
 
@@ -438,15 +497,30 @@
       adjustDynamicElements();
     });
 
-    // /** Focus on the first element in options menu after transition (500ms). */
+    $('#spopup button.close').on('click', function(e) {
+      $('#spopup').collapse("hide");
+    });
+
+    /** Focus on the first element in options menu after transition (500ms). */
     // $('#btn-settings-popup').on('click', function(e) {
     //   setTimeout(() => $('#btn-export-customers').focus(), 600);
     // });
 
-    // /** Hide options menu when focus is lost. */
+    /** Hide options menu when focus is lost. */
     // $('#toggle-menu > *').blur(function() {
-    //   $('#toggle-menu').collapse("hide");
+    //   alert($(this).parent().attr('id'));
+    //   // $('#toggle-menu').collapse("hide");
     // });
+
+    /** Hide collapsibles when clicked elsewhere. */
+    $(document).mouseup(function(e) {
+      var options_div = $('#toggle-menu');
+      if (options_div.attr('aria-expanded') && !options_div.is(e.target) && options_div.has(e.target).length === 0)
+        options_div.collapse("hide");
+      var spopup_div = $('#spopup');
+      if (spopup_div.attr('aria-expanded') && !spopup_div.is(e.target) && spopup_div.has(e.target).length === 0 && $(e.target).parents('.ticket-body').length == 0)
+        spopup_div.collapse("hide");
+    });
 
     //*--------------------------------------------------------------------------
     //* Progress Bar

@@ -1565,10 +1565,15 @@ class TyovuorootController extends Controller
    * Specifies the amount of items per page when $page is specified. The maximum
    * seems to be either 100 or 300; however, it's better to do smaller batches.
    *
+   * @param int $export
+   * Exports customers to Freshdesk. If 'all' (string), all customers are
+   * exported. If int or array of ints, customers by those ID are exported. If
+   * customer already exists in Freshdesk, it is updated with new data.
+   *
    * @return mixed
    * Freshdesk view, or null with echoed results if parameters are provided.
    */
-  public function actionFreshdesk($ticket_id = null, $page = null, $per_page = 10)
+  public function actionFreshdesk($ticket_id = null, $page = null, $per_page = 10, $export = null)
   {
     /** @var Freshdesk */
     $freshdesk = Yii::createComponent('Freshdesk');
@@ -1605,7 +1610,7 @@ class TyovuorootController extends Controller
       };
 
       $fn_index_loop(true, function ($index) use ($page, $update_times, &$old_tickets_on_page) {
-        if (time() - ($update_times[$index] ?? 0) > 900) { // 900 seconds = 15 minutes
+        if (time() - ($update_times[$index] ?? 0) > 1800) { // 1800 seconds = 30 minutes
           $time_str = $update_times[$index] ?? 0 <= 0 ? '' : ' Previously updated: ' . date('Y-m-d H:i:s', $update_times[$index]);
           Freshdesk::log('Some tickets on page %s are old. Requesting fresh data from Freshdesk.%s', $page, $time_str);
           $old_tickets_on_page = true;
@@ -1642,7 +1647,7 @@ class TyovuorootController extends Controller
           // Set updated times.
           $fn_index_loop(false, function($index) use (&$update_times) { $update_times[$index] = time(); });
           Yii::app()->session['freshdesk_tickets_update_times'] = $update_times;
-          Freshdesk::log('Updated times for tickets on page %s with %d items. Valid for 900 seconds (15 minutes).', $page, count($requested));
+          Freshdesk::log('Updated times for tickets on page %s with %d items. Valid for 1800 seconds (30 minutes).', $page, count($requested));
         }
       } else {
         Freshdesk::log("Page %s loaded from session (%d items%s).", $page, count($requested), $is_eod ? '; end of data' : '');
@@ -1650,7 +1655,167 @@ class TyovuorootController extends Controller
 
       echo json_encode($requested);
       return;
-    } else {
+    }
+
+    // If $export is provided, export customers to Freshdesk.
+    elseif (is_numeric($export) || is_array($export) || $export == 'all') {
+
+      $error_array = [];
+
+      $error = function(string $text, string $description, array $errors = [], $headers = null, $asiakas = null) use (&$error_array) {
+        $push = ['text' => $text, 'description' => $description, 'errors' => $errors, 'headers' => $headers];
+
+        if ($asiakas) {
+          $push['asiakas_id'] = $asiakas->id;
+          $push['asiakas'] = $asiakas->yhteyshenkilo ?: $asiakas->sahkoposti ?: $asiakas->id;
+        }
+
+        $error_array[] = $push;
+      };
+
+      if (is_numeric($export)) {
+
+        if (!$asiakkaat = Asiakkaat::model()->findByPk($export))
+          $error('Sisäinen virhe: asiakasta ei löytynyt', "(local) Customer by ID $export was not found");
+        else
+          $asiakkaat = [$asiakkaat]; // findByPk returns single model
+
+      } elseif (is_array($export)) {
+
+        // Check that array contains only integers.
+        $filtered_non_numeric = array_filter($export, function($v,$k) { return !is_numeric($v); }, ARRAY_FILTER_USE_BOTH);
+        if (!empty($filtered_non_numeric))
+          $error('Sisäinen virhe: asiakkaita ei löytynyt', '(local) Invalid primary key(s) inside export array: ' . implode(', ', $filtered_non_numeric));
+        elseif (!$asiakkaat = Asiakkaat::model()->findAllByPk($export))
+          $error('Sisäinen virhe: asiakkaita ei löytynyt', '(local) No customers found by ID(s) ' . implode(', ', $export));
+
+      } elseif (!$asiakkaat = Asiakkaat::model()->findAll()) {
+        $error('Sisäinen virhe: asiakkaita ei löytynyt', '(local) No customers found');
+      }
+
+      if (empty($error_array)) {
+
+        $freshdesk_contacts = $freshdesk->listContacts();
+        $updated_count = 0;
+        $created_count = 0;
+
+        foreach ($asiakkaat as $a) {
+
+          $name = $a->yhteyshenkilo;
+          if (empty($name)) {
+            if (empty($a->sahkoposti)) {
+              $error(
+                'Sisäinen virhe: vaadittu tieto (nimi) puuttuu',
+                '(local) Cannot fill required value \'name\': fields \'yhteyshenkilo\' and \'sahkoposti\' are empty',
+                [], null, $a
+              );
+              continue;
+            }
+
+            $name = $a->sahkoposti;
+          }
+  
+          $opts = [
+            'name' => $name,                //? (mandatory) (string) Name of the contact
+            // 'email' => '',               //? * (unique) (string) Primary email address of the contact. If you want to associate additional email(s) with this contact, use the other_emails attribute.
+            // 'phone' => 0,                //? * (string) Telephone number of the contact
+            // 'mobile' => 0,               //? * (number) Mobile number of the contact
+            // 'twitter_id' => '',          //? * (unique) (string) Twitter handle of the contact
+            'unique_external_id' => $a->id, //? * (unique) (string) External ID of the contact
+                                            //? * = One of these five attributes is mandatory (when creating, not updating).
+            // 'other_emails' => [],        //? (array of strings) Additional emails associated with the contact
+            // 'company_id' => 0,           //? (number) ID of the primary company to which this contact belongs
+            // 'view_all_tickets' => true,  //? (boolean) Set to true if the contact can see all the tickets that are associated with the company to which he belong
+            // 'other_companies' => [],     //? (array of hashes) Additional companies associated with the contact. This attribute can only be set if the Multiple Companies feature is enabled (Estate plan and above)
+            // 'address' => '',             //? (string) Address of the contact.
+            // 'avatar' => null,            //? (object) Avatar image of the contact The maximum file size is 5MB and the supported file types are .jpg, .jpeg, .jpe, and .png
+            // 'custom_fields' => [],       //? (dictionary) Key value pairs containing the name and value of the custom field. Only dates in the format YYYY-MM-DD are accepted as input for custom date fields. Read more here
+            // 'description' => '',         //? (string) A small description of the contact
+            // 'job_title' => '',           //? (string) Job title of the contact
+            // 'language' => 'fi',          //? (string) Language of the contact. Default language is "en". This attribute can only be set if the Multiple Language feature is enabled (Garden plan and above)
+            // 'tags' => [],                //? (array of strings) Tags associated with this contact
+            // 'time_zone' => ''            //? (string) Time zone of the contact. Default value is the time zone of the domain. This attribute can only be set if the Multiple Time Zone feature is enabled (Garden plan and above)
+          ];
+
+          if (filter_var($a->sahkoposti, FILTER_VALIDATE_EMAIL)) {
+            $opts['email'] = $a->sahkoposti;
+          }
+
+          if (!empty($a->puhelin) && preg_match('/^\+[\d ]+$/', $a->puhelin)) {
+            $opts['phone'] = $a->puhelin;
+            $opts['mobile'] = $a->puhelin;
+          }
+
+          if (!empty($a->osoite)) {
+            $opts['address'] = $a->osoite;
+          }
+
+          // Check for duplicate, in which case, update existing contact.
+          $is_duplicate = false;
+          foreach ($freshdesk_contacts as $f) {
+            if ($f['unique_external_id'] == $a->id || $f['email'] == $a->sahkoposti) {
+              $is_duplicate = true;
+              break;
+            }
+          }
+  
+          $headers = "";
+          if ($is_duplicate) {
+            $results = $freshdesk->updateContact($a->id, $opts, $headers);
+
+            if (!empty($results['errors']))
+              $error('Olemassaolevan asiakkaan päivittämisessä tapahtui virhe', $results['description'] ?? '', $results['errors'], $headers, $a);
+            else
+              $updated_count++;
+          } else {
+            $results = $freshdesk->createContact($opts, $headers, true);
+
+            if (!empty($results['errors'])) {
+
+              // If code duplicate_value, call updateContact(). This can happen when a contact with
+              // same info has been deleted but not deleted forever (in "trash can").
+              if (
+                count($results['errors']) == 1 &&
+                ($results['errors'][0]['code'] ?? '') == 'duplicate_value' &&
+                !empty($results['errors'][0]['additional_info']['user_id'])
+              ) {
+                $results = $freshdesk->updateContact($results['errors'][0]['additional_info']['user_id'], $opts, $headers);
+
+                if (!empty($results['errors'])) {
+                  $error('Olemassaolevan asiakkaan päivittämisessä tapahtui virhe', $results['description'] ?? '', $results['errors'], $headers, $a);
+                } else {
+                  $updated_count++;
+                }
+              } else {
+                $error('Asiakkaan luonnissa tapahtui virhe', $results['description'] ?? '', $results['errors'], $headers, $a);
+              }
+
+            } else {
+              $created_count++;
+            }
+          }
+
+          if (!empty($results['id'])) {
+            $a->freshdesk_id = $results['id'];
+            $a->save();
+          }
+
+          // var_dump("<pre>" . print_r($headers, true) . "</pre>");
+          // var_dump("<pre>" . print_r($results, true) . "</pre>");
+          // exit;
+        }
+      }
+
+      echo json_encode([
+        'updated_count' => $updated_count,
+        'created_count' => $created_count,
+        'errors' => $error_array
+      ]);
+      return;
+    }
+
+    // No parameters, move to Freshdesk ticket view.
+    else {
       return $this->render('freshdesk', [
         'freshdesk' => $freshdesk,
         'tickets' => Yii::app()->session['freshdesk_tickets']

@@ -54,12 +54,12 @@ class Freshdesk extends CComponent
    * URL after / (API function name).
    * @param array $post_fields
    * Optional post field data.
-   * @param bool $return_headers
-   * If true, headers are requested aswell. Headers are not decoded.
    * @param array $tags
    * Tags ( [ OPTION => VALUE, OPTION2 => VALUE2 ... ] )
+   * @param mixed $headers
+   * If provided, possible headers returned by the request are assigned here.
    * @return mixed
-   * Decoded response, or array with header (index 0) and decoded body (index 1).
+   * Decoded response.
    *
    * If an error occurs, and the returned array includes "errors", the error is
    * automatically logged. However, the results are returned as is. General
@@ -75,9 +75,9 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  private function request(string $target, array $post_fields = [], bool $return_headers = false, array $tags = [])
+  private function request(string $target, array $post_fields = [], array $tags = [], &$headers = null, $ignore_errors = false)
   {
-    if (empty($target)) {
+    if (empty($target) && !$ignore_errors) {
       static::logError("request() was called with null target.", $post_fields);
       return false;
     }
@@ -87,39 +87,43 @@ class Freshdesk extends CComponent
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_USERPWD, "{$this->key}:x");
     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, 'Content-Type: application/json');
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
 
     if (!empty($post_fields))
       curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_fields));
     foreach ($tags as $tag => $value)
       curl_setopt($ch, $tag, $value);
 
-    if ($return_headers) {
+    if ($headers !== null) {
 
       // Execute request and parse response into headers and response body.
-      curl_setopt($ch, CURLOPT_HEADER, 1);
+      curl_setopt($ch, CURLOPT_HEADER, true);
       $response = curl_exec($ch);
       $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
       $header = substr($response, 0, $header_size);
       $body = json_decode(substr($response, $header_size), true);
+      // $info = curl_getinfo($ch);
 
       // Log possible errors.
-      if (isset($body['errors'])) {
+      if (isset($body['errors']) && !$ignore_errors) {
         $error_headers = !empty($header) ? ['headers' => $header] : [];
         $this->logLocalRequestError($target, $body, $post_fields, $error_headers);
       }
 
-      return [$header, $body];
+      $headers = $header;
+      curl_close($ch);
+      return $body;
     } else {
 
       // Execute request.
       $response = json_decode(curl_exec($ch), true);
 
       // Log possible errors.
-      if (isset($response['errors'])) {
+      if (isset($response['errors']) && !$ignore_errors) {
         $this->logLocalRequestError($target, $response, $post_fields);
       }
 
+      curl_close($ch);
       return $response;
     }
   }
@@ -133,12 +137,12 @@ class Freshdesk extends CComponent
    * URL after / (API function name).
    * @param array $post_fields
    * Optional post field data.
-   * @param bool $return_headers
-   * If true, headers are requested aswell. Headers are not decoded.
    * @param array $tags
    * Tags ( [ OPTION => VALUE, OPTION2 => VALUE2 ... ] )
+   * @param mixed $headers
+   * If provided, possible headers returned by the request are assigned here.
    * @return mixed
-   * Decoded response, or array with header (index 0) and decoded body (index 1).
+   * Decoded response.
    *
    * If an error occurs, and the returned array includes "errors", the error is
    * automatically logged. However, the results are returned as is. General
@@ -154,10 +158,10 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  private function requestPost(string $target, array $post_fields = [], bool $return_headers = false, array $tags = [])
+  private function requestPost(string $target, array $post_fields = [], array $tags = [], &$headers = null, $ignore_errors = false)
   {
-    $tags[CURLOPT_POST] = true;
-    return $this->request($target, $post_fields, $return_headers, $tags);
+    $tags["CURLOPT_POST"] = 1;
+    return $this->request($target, $post_fields, $tags, $headers, $ignore_errors);
   }
 
   /**
@@ -170,12 +174,12 @@ class Freshdesk extends CComponent
    * @param array $query_params
    * Optional parameters for the query string. If not empty, query string is
    * formed using http_build_query. Empty strings are removed first.
-   * @param bool $return_headers
-   * If true, headers are requested aswell. Headers are not decoded.
    * @param array $tags
    * Tags ( [ OPTION => VALUE, OPTION2 => VALUE2 ... ] )
+   * @param mixed $headers
+   * If provided, possible headers returned by the request are assigned here.
    * @return mixed
-   * Decoded response, or array with header (index 0) and decoded body (index 1).
+   * Decoded response.
    *
    * If an error occurs, and the returned array includes "errors", the error is
    * automatically logged. However, the results are returned as is. General
@@ -191,7 +195,7 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  private function requestGet(string $target, array $query_params = [], bool $return_headers = false, array $tags = [])
+  private function requestGet(string $target, array $query_params = [], array $tags = [], &$headers = null, $ignore_errors = false)
   {
     // Remove empty strings from query params.
     $query_params = array_filter($query_params, function ($v, $k) { return (!is_string($v) || !empty($v)); }, ARRAY_FILTER_USE_BOTH);
@@ -203,7 +207,7 @@ class Freshdesk extends CComponent
 
     // Create and execute request.
     $tags[CURLOPT_CUSTOMREQUEST] = 'GET';
-    return $this->request($target . $query_str, [], $return_headers, $tags);
+    return $this->request($target . $query_str, [], $tags, $headers, $ignore_errors);
   }
 
   /**
@@ -213,12 +217,12 @@ class Freshdesk extends CComponent
    *
    * @param string $target
    * URL after / (API function name).
-   * @param bool $return_headers
-   * If true, headers are requested aswell. Headers are not decoded.
    * @param array $tags
    * Tags ( [ OPTION => VALUE, OPTION2 => VALUE2 ... ] )
+   * @param mixed $headers
+   * If provided, possible headers returned by the request are assigned here.
    * @return mixed
-   * Decoded response, or array with header (index 0) and decoded body (index 1).
+   * Decoded response.
    *
    * If an error occurs, and the returned array includes "errors", the error is
    * automatically logged. However, the results are returned as is. General
@@ -234,10 +238,10 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  private function requestPut(string $target, array $post_fields = [], bool $return_headers = false, array $tags = [])
+  private function requestPut(string $target, array $post_fields = [], array $tags = [], &$headers = null, $ignore_errors = false)
   {
     $tags[CURLOPT_CUSTOMREQUEST] = 'PUT';
-    return $this->request($target, $post_fields, $return_headers, $tags);
+    return $this->request($target, $post_fields, $tags, $headers, $ignore_errors);
   }
 
   //*------------------------------------------------------------------------------------------------
@@ -284,9 +288,7 @@ class Freshdesk extends CComponent
    *   - PRIORITY: Low 1, Medium 2, High 3, Urgent 4
    *
    * @return mixed
-   * Decoded response. Additional headers are requested, as the headers include
-   * link to created ticket, so if successful, return value is an array with
-   * first item being the headers and second item the return body.
+   * Decoded response. Additional headers include link to created ticket.
    *
    * Body contents if successful:
    * {
@@ -334,10 +336,10 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  public function createTicket(array $opts)
+  public function createTicket(array $opts, &$headers = null)
   {
     // Create and execute request.
-    return $this->request('tickets', $opts, true);
+    return $this->request('tickets', $opts, [], $headers);
   }
 
   /**
@@ -413,7 +415,7 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  public function viewTicket(int $id, array $additional_details = [])
+  public function viewTicket(int $id, array $additional_details = [], &$headers = null)
   {
     $query_params = [];
 
@@ -428,7 +430,7 @@ class Freshdesk extends CComponent
     }
 
     // Create and execute request.
-    return $this->requestGet("tickets/$id", ['include' => implode(',', $additional_details)]);
+    return $this->requestGet("tickets/$id", ['include' => implode(',', $additional_details)], [], $headers);
   }
 
   /**
@@ -535,7 +537,7 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  public function listTickets(string $filter = null, $requester = null, int $page = -1, int $per_page = -1, string $updated_since = null, array $embed = [], string $order_by = 'created_at', string $order_type = 'desc')
+  public function listTickets(string $filter = null, $requester = null, int $page = -1, int $per_page = -1, string $updated_since = null, array $embed = [], string $order_by = 'created_at', string $order_type = 'desc', &$headers = null)
   {
     $query_params = [];
 
@@ -601,7 +603,7 @@ class Freshdesk extends CComponent
     }
 
     // Create and execute request.
-    return $this->requestGet('tickets', $query_params);
+    return $this->requestGet('tickets', $query_params, [], $headers);
   }
 
   /**
@@ -707,14 +709,14 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  public function filterTickets(string $query = null)
+  public function filterTickets(string $query = null, &$headers = null)
   {
     if (empty($query))
       $this->logLocalError('Empty query string in filterTickets().');
 
     // Create and execute cURL request. If query is empty, execute anyway, so
     // that the resulting API error is returned.
-    return $this->requestGet('search/tickets', ['query' => $query]);
+    return $this->requestGet('search/tickets', ['query' => $query], [], $headers);
   }
 
   /**
@@ -811,13 +813,13 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  public function updateTicket(int $id, array $opts)
+  public function updateTicket(int $id, array $opts, &$headers = null)
   {
     if ($id <= 0) {
       $this->logLocalError("Zero or negative ID in deleteTicket(): $id");
       return null;
     } else {
-      return $this->requestPut("tickets/$id", $opts);
+      return $this->requestPut("tickets/$id", $opts, [], $headers);
     }
   }
 
@@ -852,13 +854,13 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  public function deleteTicket(int $id)
+  public function deleteTicket(int $id, &$headers = null)
   {
     if ($id <= 0) {
       $this->logLocalError("Zero or negative ID in deleteTicket(): $id");
       return null;
     } else {
-      return $this->request("tickets/$id", [], false, [CURLOPT_CUSTOMREQUEST => 'delete']);
+      return $this->request("tickets/$id", [], [CURLOPT_CUSTOMREQUEST => 'delete'], $headers);
     }
   }
 
@@ -915,13 +917,13 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  public function listTicketConversations(int $id, int $page = 1)
+  public function listTicketConversations(int $id, int $page = 1, &$headers = null)
   {
     if ($id <= 0) {
       $this->logLocalError("Zero or negative ID in listTicketConversations(): $id");
       return null;
     } else {
-      return $this->requestGet("tickets/$id/conversations", $page > 1 ? ['page' => $page] : []);
+      return $this->requestGet("tickets/$id/conversations", $page > 1 ? ['page' => $page] : [], [], $headers);
     }
   }
 
@@ -990,13 +992,13 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  public function createReply(int $id, array $opts = [])
+  public function createReply(int $id, array $opts = [], &$headers = null)
   {
     if ($id <= 0) {
       $this->logLocalError("Zero or negative ID in viewContact(): $id");
       return null;
     } else {
-      return $this->request("tickets/$id/reply", $opts);
+      return $this->request("tickets/$id/reply", $opts, [], $headers);
     }
   }
 
@@ -1073,9 +1075,9 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  public function createContact(array $opts)
+  public function createContact(array $opts, &$headers = null, $ignore_errors = false)
   {
-    return $this->requestPost('contacts', $opts);
+    return $this->requestPost('contacts', $opts, [], $headers, $ignore_errors);
   }
 
   /**
@@ -1141,13 +1143,13 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  public function viewContact(int $id)
+  public function viewContact(int $id, &$headers = null)
   {
     if ($id <= 0) {
       $this->logLocalError("Zero or negative ID in viewContact(): $id");
       return null;
     } else {
-      return $this->requestGet("contacts/$id");
+      return $this->requestGet("contacts/$id", [], [], $headers);
     }
   }
 
@@ -1216,7 +1218,7 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  public function listContacts(array $filter_by = [], string $state = null, string $updated_since = null)
+  public function listContacts(array $filter_by = [], string $state = null, string $updated_since = null, &$headers = null)
   {
     $query_params = [];
 
@@ -1249,7 +1251,85 @@ class Freshdesk extends CComponent
         $query_params['updated_since'] = $updated_since;
     }
 
-    return $this->requestGet('contacts', $query_params);
+    return $this->requestGet('contacts', $query_params, [], $headers);
+  }
+
+  /**
+   * Call API /contacts/[id] (PUT) - Update a contact by ID.
+   *
+   * @param array $opts
+   * name (string): Name of the contact
+   * email (unique) (string): Primary email address of the contact. If you want to associate additional email(s) with this contact, use the other_emails attribute.
+   * phone (string): Telephone number of the contact
+   * mobile (number): Mobile number of the contact
+   * twitter_id (unique) (string): Twitter handle of the contact
+   * unique_external_id (unique) (string): External ID of the contact
+   * other_emails (array of strings): Additional emails associated with the contact
+   * company_id (number): ID of the primary company to which this contact belongs
+   * view_all_tickets (boolean): Set to true if the contact can see all the tickets that are associated with the company to which he belong
+   * other_companies (array of hashes): Additional companies associated with the contact. This attribute can only be updated if the Multiple Companies feature is enabled (Estate plan and above)
+   * address (string): Address of the contact.
+   * avatar (object): Avatar image of the contact The maximum file size is 5MB and the supported file types are .jpg, .jpeg, .jpe, and .png
+   * custom_fields (dictionary): Key value pairs containing the name and value of the custom field. Only dates in the format YYYY-MM-DD are accepted as input for custom date fields. Read more here
+   * description (string): A small description of the contact
+   * job_title (string): Job title of the contact
+   * language (string): Language of the contact. Default language is "en". This attribute can only be updated if the Multiple Language feature is enabled (Garden plan and above)
+   * tags (array of strings): Tags associated with this contact
+   * time_zone (string): Time zone of the contact. Default value is the time zone of the domain. This attribute can only be updated if the Multiple Time Zone feature is enabled (Garden plan and above)
+   *
+   * @return mixed
+   * Decoded response.
+   *
+   * Body contents if successful:
+   * {
+   *   "active":false,
+   *   "address":null,
+   *   "company_id":23,
+   *   "view_all_tickets":false,
+   *   "deleted":false,
+   *   "description":null,
+   *   "email":"superman@freshdesk.com",
+   *   "id":432,
+   *   "job_title":"Journalist",
+   *   "language":"en",
+   *   "mobile":null,
+   *   "name":"Clark Kent",
+   *   "phone":null,
+   *   "time_zone":"Chennai",
+   *   "twitter_id":null,
+   *   "other_emails":["louis@freshdesk.com","jonathan.kent@freshdesk.com"],
+   *   "other_companies":[
+   *     { "company_id":25, "view_all_tickets":true },
+   *     { "company_id":26, "view_all_tickets":false }
+   *   ],
+   *   "created_at":"2015-08-28T09:08:16Z",
+   *   "updated_at":"2015-08-28T11:37:05Z",
+   *   "tags":[],
+   *   "avatar":null
+   * }
+   *
+   * If an error occurs, and the returned array includes "errors", the error is
+   * automatically logged. However, the results are returned as is. General
+   * error result format:
+   * {
+   *   "description":"Validation failed",
+   *   "errors":[
+   *     {
+   *       "field":"name",
+   *       "message":"Mandatory attribute missing",
+   *       "code":"missing_field"
+   *     }
+   *   ]
+   * }
+   */
+  public function updateContact(int $id, array $opts, &$headers = null)
+  {
+    if ($id <= 0) {
+      $this->logLocalError("Zero or negative ID in updateContact(): $id");
+      return null;
+    } else {
+      return $this->requestPut("contacts/$id", $opts, [], $headers);
+    }
   }
 
   #endregion
