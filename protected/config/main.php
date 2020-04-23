@@ -9,13 +9,17 @@ error_reporting(E_ALL & ~E_WARNING);
 // CWebApplication properties can be configured here.
 
 
-$server_name     = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
-$is_production   = in_array($server_name, ['app.etunti.fi', 'etunti.com']);
-$get_domain      = trim(strtolower($_GET['dom'] ?? $_GET['domain'] ?? ''));
+$server_name	= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
+$is_production	= in_array($server_name, ['app.etunti.fi', 'etunti.com']);
+$get_domain	= trim(strtolower($_GET['dom'] ?? $_GET['domain'] ?? ''));
+$actual_link	= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$path 		= parse_url($actual_link);
+$oinlinevaraus 	= ( isset($path['path']) and strpos($path['path'], "onlinevaraus") !== false )? true: false;
+
 $siirto_domainit = ['demo','sivex'];
 
 // <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
-if ($is_production and empty($_FILES)) {
+if ($is_production and empty($_FILES) and(!$oinlinevaraus)) {
     if (isset($_SESSION['domain']) and in_array($_SESSION['domain'], $siirto_domainit)) {
         unset($_SESSION['domain']);
     }
