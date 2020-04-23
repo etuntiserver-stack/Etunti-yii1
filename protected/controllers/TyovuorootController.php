@@ -2515,8 +2515,8 @@ class TyovuorootController extends Controller
 	}
 
 	protected function tv_arrJava($from, $to, $haku_criteria, $haku_tids, $taulu){
-		$hk = json_encode($haku_criteria);
 
+		$hk = json_encode($haku_criteria);
 		// <-- Kaikki kerrallaan
 		return "
 		<script type=\"text/javascript\">
@@ -2544,43 +2544,6 @@ class TyovuorootController extends Controller
 			}, 7000);
 		});
 		</script>";
-
-
-		// <-- Per arvo KPL
-		// EI TOIMII kunnolla. jotkut laatikkot ei ladataan  JOSKUS, ja joskus on
-		/*
-		$arvo = 5;
-		return "
-		<script type=\"text/javascript\">
-		$(document).ready(function(){
-			$.each(JSON.parse('".json_encode(array_chunk($haku_tids, $arvo))."'), function( index, value ) {
-				//console.log( value );
-				var from = '$from';
-				var to = '$to';
-				var tids = JSON.stringify(value);
-				var haku_criteria = JSON.parse('".json_encode($haku_criteria)."');
-				$.ajax({
-					url: location.protocol + \"//\" + location.host + \"/index.php/tyovuoroot/did4?from=\" + from + \"&to=\" + to,
-					type: \"POST\",
-					data: { tids : tids, haku_criteria : haku_criteria },
-					//async: false,
-					success:function(data){
-						data = JSON.parse(data);
-						//console.log(data);
-						$.tv_arr_update(data);
-						$(\".odotus\").remove();
-					},error:function(data){
-					  	console.log(data);
-					}
-				});
-			});
-			setTimeoutConst = setTimeout(function() {
-				$.vkolaskenta('".json_encode($haku_tids)."');
-			   	$.hovertietoja();
-			}, 3000);
-		});
-		</script>";
-		*/
 	}
 
 	public function actionHovertietoja($this_id) {
