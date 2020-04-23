@@ -1023,7 +1023,7 @@ class TyovuorootController extends Controller
 			}
 
 			$tv_arr = $this->tv_arr($haku_from, $haku_to, $tids, [], true, []);
-			$return = ['tv_arr' => $tv_arr];
+			$return = ['tv_arr' => $tv_arr, 'tids' => $tids];
 			echo json_encode($return);
 			exit;
 
@@ -1082,7 +1082,7 @@ class TyovuorootController extends Controller
 			} // foreach
 
 			$tv_arr = $this->tv_arr($haku_from, $haku_to, $tids, [], true, []);
-			$return = ['poistettu' => $_SESSION['muistin'], 'tv_arr' => $tv_arr];
+			$return = ['poistettu' => $_SESSION['muistin'], 'tv_arr' => $tv_arr, 'tids' => $tids];
 			echo json_encode($return);
 			exit;
 		}
@@ -2079,8 +2079,8 @@ class TyovuorootController extends Controller
 			unset(Yii::app()->session['year']);
 			unset(Yii::app()->session['week']);
 			unset(Yii::app()->session['vkolopput']);
-			unset(Yii::app()->session['asiakas']);
-			unset(Yii::app()->session['kohde']);
+			unset($_SESSION['haku_asiakas']);
+			unset($_SESSION['haku_kohde']);
 			unset(Yii::app()->session['tyontekijat']);
 			unset(Yii::app()->session['tyo_toimialue']);
 			unset(Yii::app()->session['kohteiden_tyonimike']);
@@ -2123,17 +2123,17 @@ class TyovuorootController extends Controller
 				unset(Yii::app()->session['tyoryhma']);
 
 			// <-- Asiakas
-			if (isset($_POST['asiakas']) and !empty($_POST['asiakas']))
-				Yii::app()->session['asiakas'] = $_POST['asiakas'];
-			if (isset($_POST['asiakas']) and empty($_POST['asiakas']))
-				unset(Yii::app()->session['asiakas']);
+			if (isset($_POST['haku_asiakas']) and !empty($_POST['haku_asiakas']))
+				$_SESSION['haku_asiakas'] = $_POST['haku_asiakas'];
+			if (isset($_POST['haku_asiakas']) and empty($_POST['haku_asiakas']))
+				unset($_SESSION['haku_asiakas']);
 			// Asiakas -->
 
 			// <-- Kohde
-			if (isset($_POST['kohde']) and !empty($_POST['kohde']))
-				Yii::app()->session['kohde'] = $_POST['kohde'];
-			if (isset($_POST['kohde']) and empty($_POST['kohde']))
-				unset(Yii::app()->session['kohde']);
+			if (isset($_POST['haku_kohde']) and !empty($_POST['haku_kohde']))
+				$_SESSION['haku_kohde'] = $_POST['haku_kohde'];
+			if (isset($_POST['haku_kohde']) and empty($_POST['haku_kohde']))
+				unset($_SESSION['haku_kohde']);
 			// Kohde -->
 
 			// <-- tyontekijat
@@ -2184,11 +2184,6 @@ class TyovuorootController extends Controller
 		//    VKO MODE -->
 
 		// <-- HAKU
-		if (isset(Yii::app()->session['asiakas']))
-			$asiakas = Yii::app()->session['asiakas'];
-		if (isset(Yii::app()->session['kohde']))
-			$kohde = Yii::app()->session['kohde'];
-
 		$haku_criteria 	= [];
 
 		// <-- kohteiden_tyonimike
@@ -2205,7 +2200,8 @@ class TyovuorootController extends Controller
 		}
 		//   kohteiden_tyonimike -->
 
-		if (isset($asiakas) and !empty($asiakas)) {
+		if (isset($_SESSION['haku_asiakas']) and !empty($_SESSION['haku_asiakas'])) {
+			$asiakas = $_SESSION['haku_asiakas'];
 			$haku_criteria[] = '
 			kohde IN (
 			    SELECT id FROM sivex_kohdet WHERE asiakas_id IN
@@ -2217,12 +2213,12 @@ class TyovuorootController extends Controller
 			    )
 			)';
 		}
-		if (isset($kohde) and !empty($kohde)) {
+		if (isset($_SESSION['haku_kohde']) and !empty($_SESSION['haku_kohde'])) {
+			$kohde = $_SESSION['haku_kohde'];
 			$haku_criteria[] = '
 			kohde IN (
 			    SELECT id FROM sivex_kohdet WHERE 
-				osoite LIKE "%' . $kohde . '%" 
-				OR puh_nro LIKE "%' . $kohde . '%"
+				osoite LIKE "%' . $kohde . '%"
 		       )';
 		}
 		if (isset($kohteet_siivous) and count($kohteet_siivous) > 0) {
@@ -2250,20 +2246,20 @@ class TyovuorootController extends Controller
 
 		// <-- tyo_toimialue
 		if(isset(Yii::app()->session['tyo_toimialue'])){
-		   $arr = [];
-		   foreach(Yii::app()->session['tyo_toimialue'] as $it){
-			$arr[] = str_replace("\\", "\\\\\\\\", json_encode($it));
-		   }
-		   $tyo_toimialue_like = "tyo_toimialue LIKE '%".implode("%' OR tyo_toimialue LIKE '%", $arr)."%'";
-	           $criteria->addCondition ($tyo_toimialue_like);
+			$arr = [];
+			foreach(Yii::app()->session['tyo_toimialue'] as $it)
+				$arr[] = str_replace("\\", "\\\\\\\\", json_encode($it));
+
+			$tyo_toimialue_like = "tyo_toimialue LIKE '%".implode("%' OR tyo_toimialue LIKE '%", $arr)."%'";
+			$criteria->addCondition ($tyo_toimialue_like);
 		}
 		//   tyo_toimialue -->
 
 		// <-- tyoryhma
 		if(isset(Yii::app()->session['tyoryhma']))
 		{
-			$tt = Yii::app()->createController('Tyontekijat');
-			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(Yii::app()->session['tyoryhma']);
+			$tt_contr = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt_contr[0]->TyoryhmatTyontekijatHelper(Yii::app()->session['tyoryhma']);
 			$ids = implode(",", $tt_arr);
 			if( count($tt_arr) > 0 ){
 		        	$criteria->addCondition (" id IN ($ids) ");
@@ -2287,10 +2283,8 @@ class TyovuorootController extends Controller
 		}
 		//     Tyontekijat -->
 
-		// Taulun rakennus
 		$haku_from 	= date("Y-m-d", strtotime(Yii::app()->session['from']));
 		$haku_to 	= date("Y-m-d", strtotime(Yii::app()->session['to']));
-		//$tv_arr = $this->tv_arr($haku_from, $haku_to, $haku_tids, $haku_criteria, true);
 
 		// Työsuhteet
 		$tyosuhteet = Tyosuhdet::model()->findAll(" tid IN(" . implode(",", $haku_tids) . ") ");
@@ -2630,8 +2624,8 @@ class TyovuorootController extends Controller
 	}
 
 	protected function tv_arrJava($from, $to, $haku_criteria, $haku_tids, $taulu){
-		$hk = json_encode($haku_criteria);
 
+		$hk = json_encode($haku_criteria);
 		// <-- Kaikki kerrallaan
 		return "
 		<script type=\"text/javascript\">
@@ -2656,47 +2650,9 @@ class TyovuorootController extends Controller
 
 			setTimeoutConst = setTimeout(function() {
 				$.vkolaskenta('".json_encode($haku_tids)."');
-			   	$.hovertietoja();
 			}, 7000);
 		});
 		</script>";
-
-
-		// <-- Per arvo KPL
-		// EI TOIMII kunnolla. jotkut laatikkot ei ladataan  JOSKUS, ja joskus on
-		/*
-		$arvo = 5;
-		return "
-		<script type=\"text/javascript\">
-		$(document).ready(function(){
-			$.each(JSON.parse('".json_encode(array_chunk($haku_tids, $arvo))."'), function( index, value ) {
-				//console.log( value );
-				var from = '$from';
-				var to = '$to';
-				var tids = JSON.stringify(value);
-				var haku_criteria = JSON.parse('".json_encode($haku_criteria)."');
-				$.ajax({
-					url: location.protocol + \"//\" + location.host + \"/index.php/tyovuoroot/did4?from=\" + from + \"&to=\" + to,
-					type: \"POST\",
-					data: { tids : tids, haku_criteria : haku_criteria },
-					//async: false,
-					success:function(data){
-						data = JSON.parse(data);
-						//console.log(data);
-						$.tv_arr_update(data);
-						$(\".odotus\").remove();
-					},error:function(data){
-					  	console.log(data);
-					}
-				});
-			});
-			setTimeoutConst = setTimeout(function() {
-				$.vkolaskenta('".json_encode($haku_tids)."');
-			   	$.hovertietoja();
-			}, 3000);
-		});
-		</script>";
-		*/
 	}
 
 	public function actionHovertietoja($this_id) {

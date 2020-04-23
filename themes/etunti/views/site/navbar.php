@@ -100,8 +100,8 @@ if( $curpage == 'tyovuoroot/beta' )
 	<?php
 		$hakuPainike = "";
 	if(
-		isset(Yii::app()->session['asiakas'])
-		or isset(Yii::app()->session['kohde'])
+		isset($_SESSION['haku_asiakas'])
+		or isset($_SESSION['haku_kohde'])
 		or isset(Yii::app()->session['tyo_toimialue'])
 		or isset(Yii::app()->session['kohteiden_tyonimike'])
 		or isset(Yii::app()->session['tyoryhma'])
@@ -196,13 +196,13 @@ if( $curpage == 'tyovuoroot/beta' )
 
               <div class="form-group">
 		    <label><?php echo Yii::t('main','Asiakas'); ?></label>
-		      <input type="text" class="form-control" name="asiakas" id="asiakasHakussa" placeholder="<?php echo Yii::t('main','Yritys, Yhteyshenkilö, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['asiakas'])) echo Yii::app()->session['asiakas']; ?>" AUTOCOMPLETE="off">
+		      <input type="text" class="form-control" name="haku_asiakas" id="asiakasHakussa" placeholder="<?php echo Yii::t('main','Yritys, Yhteyshenkilö, Puhelin'); ?>..." value="<?php if(isset($_SESSION['haku_asiakas'])) echo $_SESSION['haku_asiakas']; ?>" AUTOCOMPLETE="off">
 			<div id="asiakasAutocompleteResultHakussa"></div>
 	      </div>
 
               <div class="form-group">
 		    <label><?php echo Yii::t('main','Kohde'); ?></label>
-		      <input type="text" class="form-control" name="kohde" id="kohdeHakussa" placeholder="<?php echo Yii::t('main','Osoite, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['kohde'])) echo Yii::app()->session['kohde']; ?>" AUTOCOMPLETE="off">
+		      <input type="text" class="form-control" name="haku_kohde" id="kohdeHakussa" placeholder="<?php echo Yii::t('main','Osoite, Puhelin'); ?>..." value="<?php if(isset($_SESSION['haku_kohde'])) echo $_SESSION['haku_kohde']; ?>" AUTOCOMPLETE="off">
 			<div id="kohdeAutocompleteResultHakussa"></div>
 	      </div>
 

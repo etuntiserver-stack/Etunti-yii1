@@ -113,6 +113,9 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 			yht += tv_kesto;
 		});
 	});
+
+	$.hovertietoja();
+	console.log('tv_arr_update loaded');
 }
 jQuery.vkolaskenta = function vkolaskenta(tids){
      //console.log(tids);
@@ -608,7 +611,9 @@ window.addEventListener('message', function(e) {
 		if( data['tv_arr'] ){
 			$.tv_arr_update(data['tv_arr']);
 		}
-
+		if( data['tids'] ){
+			$.vkolaskenta(data['tids']);
+		}
 		jQuery.clearKaikki();
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
