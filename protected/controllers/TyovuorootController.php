@@ -1966,8 +1966,8 @@ class TyovuorootController extends Controller
 			unset(Yii::app()->session['year']);
 			unset(Yii::app()->session['week']);
 			unset(Yii::app()->session['vkolopput']);
-			unset(Yii::app()->session['asiakas']);
-			unset(Yii::app()->session['kohde']);
+			unset($_SESSION['haku_asiakas']);
+			unset($_SESSION['haku_kohde']);
 			unset(Yii::app()->session['tyontekijat']);
 			unset(Yii::app()->session['tyo_toimialue']);
 			unset(Yii::app()->session['kohteiden_tyonimike']);
@@ -2010,17 +2010,17 @@ class TyovuorootController extends Controller
 				unset(Yii::app()->session['tyoryhma']);
 
 			// <-- Asiakas
-			if (isset($_POST['asiakas']) and !empty($_POST['asiakas']))
-				Yii::app()->session['asiakas'] = $_POST['asiakas'];
-			if (isset($_POST['asiakas']) and empty($_POST['asiakas']))
-				unset(Yii::app()->session['asiakas']);
+			if (isset($_POST['haku_asiakas']) and !empty($_POST['haku_asiakas']))
+				$_SESSION['haku_asiakas'] = $_POST['haku_asiakas'];
+			if (isset($_POST['haku_asiakas']) and empty($_POST['haku_asiakas']))
+				unset($_SESSION['haku_asiakas']);
 			// Asiakas -->
 
 			// <-- Kohde
-			if (isset($_POST['kohde']) and !empty($_POST['kohde']))
-				Yii::app()->session['kohde'] = $_POST['kohde'];
-			if (isset($_POST['kohde']) and empty($_POST['kohde']))
-				unset(Yii::app()->session['kohde']);
+			if (isset($_POST['haku_kohde']) and !empty($_POST['haku_kohde']))
+				$_SESSION['haku_kohde'] = $_POST['haku_kohde'];
+			if (isset($_POST['haku_kohde']) and empty($_POST['haku_kohde']))
+				unset($_SESSION['haku_kohde']);
 			// Kohde -->
 
 			// <-- tyontekijat
@@ -2071,11 +2071,6 @@ class TyovuorootController extends Controller
 		//    VKO MODE -->
 
 		// <-- HAKU
-		if (isset(Yii::app()->session['asiakas']))
-			$asiakas = Yii::app()->session['asiakas'];
-		if (isset(Yii::app()->session['kohde']))
-			$kohde = Yii::app()->session['kohde'];
-
 		$haku_criteria 	= [];
 
 		// <-- kohteiden_tyonimike
@@ -2092,7 +2087,8 @@ class TyovuorootController extends Controller
 		}
 		//   kohteiden_tyonimike -->
 
-		if (isset($asiakas) and !empty($asiakas)) {
+		if (isset($_SESSION['haku_asiakas']) and !empty($_SESSION['haku_asiakas'])) {
+			$asiakas = $_SESSION['haku_asiakas'];
 			$haku_criteria[] = '
 			kohde IN (
 			    SELECT id FROM sivex_kohdet WHERE asiakas_id IN
@@ -2104,12 +2100,12 @@ class TyovuorootController extends Controller
 			    )
 			)';
 		}
-		if (isset($kohde) and !empty($kohde)) {
+		if (isset($_SESSION['haku_kohde']) and !empty($_SESSION['haku_kohde'])) {
+			$kohde = $_SESSION['haku_kohde'];
 			$haku_criteria[] = '
 			kohde IN (
 			    SELECT id FROM sivex_kohdet WHERE 
-				osoite LIKE "%' . $kohde . '%" 
-				OR puh_nro LIKE "%' . $kohde . '%"
+				osoite LIKE "%' . $kohde . '%"
 		       )';
 		}
 		if (isset($kohteet_siivous) and count($kohteet_siivous) > 0) {
