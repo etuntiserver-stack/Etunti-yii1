@@ -1327,6 +1327,7 @@ $(document).ready(function(){
 				//console.log(v);
 			});
 			$.tv_arr_update(data);
+			$.vkolaskenta(getAllTids());
 		  	$('#showres').modal('hide');
 		},error:function(data){
 		  	console.log(data);

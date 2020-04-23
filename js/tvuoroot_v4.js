@@ -608,7 +608,9 @@ window.addEventListener('message', function(e) {
 		if( data['tv_arr'] ){
 			$.tv_arr_update(data['tv_arr']);
 		}
-
+		if( data['tids'] ){
+			$.vkolaskenta(data['tids']);
+		}
 		jQuery.clearKaikki();
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {

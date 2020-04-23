@@ -1023,7 +1023,7 @@ class TyovuorootController extends Controller
 			}
 
 			$tv_arr = $this->tv_arr($haku_from, $haku_to, $tids, [], true, []);
-			$return = ['tv_arr' => $tv_arr];
+			$return = ['tv_arr' => $tv_arr, 'tids' => $tids];
 			echo json_encode($return);
 			exit;
 
@@ -1082,7 +1082,7 @@ class TyovuorootController extends Controller
 			} // foreach
 
 			$tv_arr = $this->tv_arr($haku_from, $haku_to, $tids, [], true, []);
-			$return = ['poistettu' => $_SESSION['muistin'], 'tv_arr' => $tv_arr];
+			$return = ['poistettu' => $_SESSION['muistin'], 'tv_arr' => $tv_arr, 'tids' => $tids];
 			echo json_encode($return);
 			exit;
 		}
