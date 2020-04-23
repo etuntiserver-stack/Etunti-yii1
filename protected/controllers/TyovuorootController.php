@@ -2543,7 +2543,6 @@ class TyovuorootController extends Controller
 
 			setTimeoutConst = setTimeout(function() {
 				$.vkolaskenta('".json_encode($haku_tids)."');
-			   	$.hovertietoja();
 			}, 7000);
 		});
 		</script>";

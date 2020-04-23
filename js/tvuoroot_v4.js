@@ -113,6 +113,9 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 			yht += tv_kesto;
 		});
 	});
+
+	$.hovertietoja();
+	console.log('tv_arr_update loaded');
 }
 jQuery.vkolaskenta = function vkolaskenta(tids){
      //console.log(tids);
