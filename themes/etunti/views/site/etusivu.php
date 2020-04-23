@@ -1,7 +1,4 @@
 <?php
-echo 'TERVE Veiko';
-exit;
-
 	$ylittaneetMyohastyneet = $this->ylittaneetMyohastyneet();
 
 	// <-- Change password to bcrypt
