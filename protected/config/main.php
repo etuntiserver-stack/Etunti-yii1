@@ -19,7 +19,7 @@ $oinlinevaraus 	= ( isset($path['path']) and strpos($path['path'], "onlinevaraus
 $siirto_domainit = ['demo','sivex'];
 
 // <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
-if ($is_production and empty($_FILES) and(!$oinlinevaraus)) {
+if ($is_production and empty($_FILES) and !$oinlinevaraus) {
     if (isset($_SESSION['domain']) and in_array($_SESSION['domain'], $siirto_domainit)) {
         unset($_SESSION['domain']);
     }
