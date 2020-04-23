@@ -1164,6 +1164,12 @@ class Freshdesk extends CComponent
    *    => The request function encodes the query string automatically.
    * 2. All unblocked and undeleted contacts will be returned by default.
    *
+   * @param int $page
+   * Page number.
+   *
+   * @param int $per_page
+   * Items per page (max 100).
+   *
    * @param array $filter_by
    * Key & value pairs. Key options: email, mobile, phone. Example:
    *   [ 'mobile' => 7654367287 ]
@@ -1218,9 +1224,12 @@ class Freshdesk extends CComponent
    *   ]
    * }
    */
-  public function listContacts(array $filter_by = [], string $state = null, string $updated_since = null, &$headers = null)
+  public function listContacts(int $page = 1, int $per_page = 30, array $filter_by = [], string $state = null, string $updated_since = null, &$headers = null)
   {
-    $query_params = [];
+    $query_params = [
+      'page' => max(1, $page),
+      'per_page' => min(100, max(5, $per_page))
+    ];
 
     // Validate provided filter by values and add to query parameters.
     foreach ($filter_by as $key => $value) {

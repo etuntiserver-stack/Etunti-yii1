@@ -1,5 +1,12 @@
 <?php
 
+$criteria = new CDbCriteria();
+$criteria->select = 'id, tyyppi, yrityksen_nimi, yhteyshenkilo, sahkoposti';
+$criteria->condition = "(tyyppi = 'yritys' AND (yrityksen_nimi != '' OR sahkoposti != '')) OR (tyyppi = 'henkilo' AND (yhteyshenkilo != '' OR sahkoposti != ''))";
+$customers_results = Asiakkaat::model()->findAll($criteria);
+foreach ($customers_results as $c)
+  $customers[$c->id] = ($c->tyyppi == 'yritys' ? $c->yrityksen_nimi : $c->yhteyshenkilo) ?: $c->sahkoposti;
+
 ?>
 
 <style>
@@ -52,14 +59,14 @@
   #alert-container {
     position: fixed;
     width: 500px;
-    top: 85px;
-    right: 25px;
+    top: 70px;
+    left: 240px;
     height: 55px;
     z-index: 9999;
     border-right: 1.5pt solid black;
     border-bottom: 1.5pt solid black;
     border-radius: 25px;
-    opacity: 0.8;
+    opacity: 1;
     text-align: center;
     transition: 0.2s;
     display: none;
@@ -176,8 +183,8 @@
 <!-- Error alert popup (top-right) -->
 <div style="position:relative">
   <div id="alert-container" class="alert fade in bg-danger">
-    <button class="close light" data-dismiss="alert">×</button>
-    Tukipyyntöjen haussa tapahtui virhe. Paina tästä lisätiedot.
+    <button class="close pull-left light" data-dismiss="alert">×</button>
+    <span id="alert-text">Tukipyyntöjen haussa tapahtui virhe. Paina tästä lisätiedot.</span>
   </div>
 </div>
 
@@ -233,39 +240,44 @@
     <!-- Right space for popup buttons -->
     <div class="col-md-1">
 
+      <!-- Menu popup button -->
       <div class="row">
         <div class="col-md-12">
-
-          <!-- Menu popup button -->
           <button id="btn-settings-popup" class="btn-primary pull-right" data-toggle="collapse" data-target="#toggle-menu" aria-expanded="false" aria-controls="toggle-menu">
             <!-- <div style="width:75%;float:left;overflow:hidden;font-weight:bold">A</div> -->
             <!-- <div style="width:25%;float:left"><span class="glyphicon glyphicon-cog"></span></div> -->
             <span class="glyphicon glyphicon-cog"></span>
           </button>
-
         </div>
       </div>
 
-
-      <!-- Spacing between settings button and menu -->
-      <!-- <div class="row"><div class="col-md-12">&nbsp;</div></div> -->
-
-
+      <!-- Settings menu popup -->
       <div class="row">
         <div class="col-md-12">
-
-          <!-- Settings menu popup -->
           <div id="toggle-menu-container">
             <div id="toggle-menu" class="collapse">
-              <button id="btn-export-customers" class="btn-settings btn-warning" type="button">
-                <b>Vie asiakkaat Freshdeskiin&nbsp;<span class="glyphicon glyphicon-user"></span></b>
-              </button>
-              <button class="btn-settings btn-primary" type="button">
-                <b>Testi&nbsp;<span class="glyphicon glyphicon-user"></span></b>
-              </button>
+              <div class="row">
+                <div class="col-md-12">
+                  <button id="btn-export-customers" class="btn-settings btn-warning" type="button">
+                    <b>Vie asiakkaat Freshdeskiin&nbsp;<span class="glyphicon glyphicon-user"></span></b>
+                  </button>
+                </div>
+              </div>
+              <div class="row options-row">
+                <div class="col-md-12">
+                  <label class="field select">
+                    <select id="export-customers-list" class="gui-input">
+                      <option value="all" selected>(Kaikki)</option>
+                      <?php foreach ($customers as $id => $name) : ?>
+                        <option value="<?= $id ?>"><?= $name ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                    <i class="arrow double"></i>
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -422,9 +434,6 @@
         },
 
         complete: function() {
-          (async () => {
-            await new Promise(r => setTimeout(r, 3250));
-          })();
           if (list_end_reached || !listFetchIfScrolled())
             progbarStop();
           list_request_underway = false;
@@ -481,6 +490,24 @@
       listFetchIfScrolled();
     });
 
+    var errorText = '',
+      errorData = '';
+
+    var showError = function(header, text, data = '') {
+      errorText = text;
+      errorData = data;
+      $('#alert-text').text((header.length > 0) ? header : 'Pyynnössä tapahtui virhe.');
+      $('#alert-container').css('display', 'block');
+    };
+
+    $('#alert-container').on('click', function(e) {
+      e.preventDefault();
+      if (errorText != null && errorText.length > 0)
+        console.log(errorText);
+      if (errorData != null && errorData.length > 0)
+        console.log(errorData);
+    });
+
     var adjustDynamicElements = function() {
       let containerWidth = $('#freshdesk-container').width();
       $('#spopup')
@@ -501,17 +528,6 @@
       $('#spopup').collapse("hide");
     });
 
-    /** Focus on the first element in options menu after transition (500ms). */
-    // $('#btn-settings-popup').on('click', function(e) {
-    //   setTimeout(() => $('#btn-export-customers').focus(), 600);
-    // });
-
-    /** Hide options menu when focus is lost. */
-    // $('#toggle-menu > *').blur(function() {
-    //   alert($(this).parent().attr('id'));
-    //   // $('#toggle-menu').collapse("hide");
-    // });
-
     /** Hide collapsibles when clicked elsewhere. */
     $(document).mouseup(function(e) {
       var options_div = $('#toggle-menu');
@@ -520,6 +536,59 @@
       var spopup_div = $('#spopup');
       if (spopup_div.attr('aria-expanded') && !spopup_div.is(e.target) && spopup_div.has(e.target).length === 0 && $(e.target).parents('.ticket-body').length == 0)
         spopup_div.collapse("hide");
+    });
+
+    $('#btn-export-customers').on('click', function(e) {
+      e.preventDefault();
+      let selection = $('#export-customers-list').val();
+      if (selection.length == 0)
+        return;
+      $(this).attr('disabled', 'disabled');
+      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/freshdesk`, {
+
+        type: 'POST',
+        data: {
+          export: selection
+        },
+
+        error: function(xhr, status, error) {
+          console.log(xhr.responseText);
+          showError('Virhe asiakkaiden lähettämisessä Freshdeskiin.', '', xhr.responseText);
+        },
+
+        success: function(data) {
+          console.log(data);
+          let parsed = null;
+
+          try {
+            parsed = JSON.parse(data);
+          } catch (e) {
+            showError('Virhe asiakkaiden lähettämisessä Freshdeskiin.', `Failed to parse response JSON.`, e);
+          }
+
+          if (typeof(parsed) != "object" || parsed == null) {
+            showError('Virhe asiakkaiden lähettämisessä Freshdeskiin.', 'Parsed data is unusable (not an object).', parsed);
+
+          } else if ("errors" in parsed && parsed.errors.length > 0) {
+            let error_text = `Asiakkaiden viemisessä Freshdeskiin tapahtui virheitä. Asiakkaita luotu: ${parsed.created_count}, päivitetty: ${parsed.updated_count}\n\nVirheet:\n`;
+
+            $.each(parsed.errors, function(k,v) {
+              if ("asiakas_id" in v)
+                error_text += `(asiakas ${v.asiakas_id}: ${v.asiakas}): `;
+              error_text += `${v.text} (${v.description})\n`;
+            });
+
+            error_text += "\n\n\nEdistynyt tieto:\n" + data;
+            alert(error_text);
+
+          } else {
+            alert(`Asiakkaita luotu: ${parsed.created_count}, päivitetty: ${parsed.updated_count}`);
+          }
+        },
+        complete: function() {
+          $('#btn-export-customers').removeAttr('disabled');
+        }
+      });
     });
 
     //*--------------------------------------------------------------------------

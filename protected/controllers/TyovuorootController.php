@@ -1578,6 +1578,15 @@ class TyovuorootController extends Controller
     /** @var Freshdesk */
     $freshdesk = Yii::createComponent('Freshdesk');
 
+    if (isset($_POST['ticket_id']))
+      $ticket_id = $_POST['ticket_id'];
+    if (isset($_POST['page']))
+      $page = $_POST['page'];
+    if (isset($_POST['per_page']))
+      $per_page = $_POST['per_page'];
+    if (isset($_POST['export']))
+      $export = $_POST['export'];
+
     if (is_numeric($ticket_id)) {
       // TODO
       echo json_encode(['errors' => 'not yet implemented']);
@@ -1676,7 +1685,7 @@ class TyovuorootController extends Controller
       if (is_numeric($export)) {
 
         if (!$asiakkaat = Asiakkaat::model()->findByPk($export))
-          $error('Sisäinen virhe: asiakasta ei löytynyt', "(local) Customer by ID $export was not found");
+          $error('Sisäinen virhe: asiakasta ei löytynyt', "Customer by ID $export was not found");
         else
           $asiakkaat = [$asiakkaat]; // findByPk returns single model
 
@@ -1685,17 +1694,30 @@ class TyovuorootController extends Controller
         // Check that array contains only integers.
         $filtered_non_numeric = array_filter($export, function($v,$k) { return !is_numeric($v); }, ARRAY_FILTER_USE_BOTH);
         if (!empty($filtered_non_numeric))
-          $error('Sisäinen virhe: asiakkaita ei löytynyt', '(local) Invalid primary key(s) inside export array: ' . implode(', ', $filtered_non_numeric));
+          $error('Sisäinen virhe: asiakkaita ei löytynyt', 'Invalid primary key(s) inside export array: ' . implode(', ', $filtered_non_numeric));
         elseif (!$asiakkaat = Asiakkaat::model()->findAllByPk($export))
-          $error('Sisäinen virhe: asiakkaita ei löytynyt', '(local) No customers found by ID(s) ' . implode(', ', $export));
+          $error('Sisäinen virhe: asiakkaita ei löytynyt', 'No customers found by ID(s) ' . implode(', ', $export));
 
       } elseif (!$asiakkaat = Asiakkaat::model()->findAll()) {
-        $error('Sisäinen virhe: asiakkaita ei löytynyt', '(local) No customers found');
+        $error('Sisäinen virhe: asiakkaita ei löytynyt', 'No customers found');
       }
 
       if (empty($error_array)) {
 
-        $freshdesk_contacts = $freshdesk->listContacts();
+        $freshdesk_contacts = [];
+        $page = 1;
+
+        while (true) {
+          $next = $freshdesk->listContacts($page++, 100);
+          if (isset($next['errors'])) {
+            $error('Olemassaolevien asiakkaiden haku epäonnistui', 'Contact list API request failed', $next['errors']);
+            break;
+          }
+          $freshdesk_contacts = array_merge($freshdesk_contacts, $next);
+          if (count($next) != 100)
+            break;
+        }
+
         $updated_count = 0;
         $created_count = 0;
 
@@ -1706,7 +1728,7 @@ class TyovuorootController extends Controller
             if (empty($a->sahkoposti)) {
               $error(
                 'Sisäinen virhe: vaadittu tieto (nimi) puuttuu',
-                '(local) Cannot fill required value \'name\': fields \'yhteyshenkilo\' and \'sahkoposti\' are empty',
+                'Cannot fill required value \'name\': fields \'yhteyshenkilo\' and \'sahkoposti\' are empty',
                 [], null, $a
               );
               continue;
@@ -1741,7 +1763,7 @@ class TyovuorootController extends Controller
             $opts['email'] = $a->sahkoposti;
           }
 
-          if (!empty($a->puhelin) && preg_match('/^\+[\d ]+$/', $a->puhelin)) {
+          if (!empty($a->puhelin) && preg_match('/^\+?[\d ]+$/', $a->puhelin)) {
             $opts['phone'] = $a->puhelin;
             $opts['mobile'] = $a->puhelin;
           }
@@ -1752,16 +1774,20 @@ class TyovuorootController extends Controller
 
           // Check for duplicate, in which case, update existing contact.
           $is_duplicate = false;
+          $duplicate_id = 0;
           foreach ($freshdesk_contacts as $f) {
             if ($f['unique_external_id'] == $a->id || $f['email'] == $a->sahkoposti) {
               $is_duplicate = true;
+              $duplicate_id = $f['id'];
               break;
             }
           }
   
           $headers = "";
+          $results = null;
+
           if ($is_duplicate) {
-            $results = $freshdesk->updateContact($a->id, $opts, $headers);
+            $results = $freshdesk->updateContact($duplicate_id, $opts, $headers);
 
             if (!empty($results['errors']))
               $error('Olemassaolevan asiakkaan päivittämisessä tapahtui virhe', $results['description'] ?? '', $results['errors'], $headers, $a);
@@ -1796,6 +1822,7 @@ class TyovuorootController extends Controller
           }
 
           if (!empty($results['id'])) {
+            // var_dump($a->id, $a->yhteyshenkilo, $results);exit;
             $a->freshdesk_id = $results['id'];
             $a->save();
           }
