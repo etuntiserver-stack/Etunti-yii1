@@ -182,9 +182,5 @@ if( isset($_SESSION['skrollaus']) )
         </div>
 </div>
 
-<?php
-echo 'TERVE Veiko';
-exit;
-?>
 <!-- Täytetään tauluu -->
 <?php echo $this->tv_arrJava($from, $to, $haku_criteria, $haku_tids, 'vko'); ?>
