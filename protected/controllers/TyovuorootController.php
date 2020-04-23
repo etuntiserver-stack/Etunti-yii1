@@ -2137,20 +2137,20 @@ class TyovuorootController extends Controller
 
 		// <-- tyo_toimialue
 		if(isset(Yii::app()->session['tyo_toimialue'])){
-		   $arr = [];
-		   foreach(Yii::app()->session['tyo_toimialue'] as $it){
-			$arr[] = str_replace("\\", "\\\\\\\\", json_encode($it));
-		   }
-		   $tyo_toimialue_like = "tyo_toimialue LIKE '%".implode("%' OR tyo_toimialue LIKE '%", $arr)."%'";
-	           $criteria->addCondition ($tyo_toimialue_like);
+			$arr = [];
+			foreach(Yii::app()->session['tyo_toimialue'] as $it)
+				$arr[] = str_replace("\\", "\\\\\\\\", json_encode($it));
+
+			$tyo_toimialue_like = "tyo_toimialue LIKE '%".implode("%' OR tyo_toimialue LIKE '%", $arr)."%'";
+			$criteria->addCondition ($tyo_toimialue_like);
 		}
 		//   tyo_toimialue -->
 
 		// <-- tyoryhma
 		if(isset(Yii::app()->session['tyoryhma']))
 		{
-			$tt = Yii::app()->createController('Tyontekijat');
-			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(Yii::app()->session['tyoryhma']);
+			$tt_contr = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt_contr[0]->TyoryhmatTyontekijatHelper(Yii::app()->session['tyoryhma']);
 			$ids = implode(",", $tt_arr);
 			if( count($tt_arr) > 0 ){
 		        	$criteria->addCondition (" id IN ($ids) ");
@@ -2174,10 +2174,8 @@ class TyovuorootController extends Controller
 		}
 		//     Tyontekijat -->
 
-		// Taulun rakennus
 		$haku_from 	= date("Y-m-d", strtotime(Yii::app()->session['from']));
 		$haku_to 	= date("Y-m-d", strtotime(Yii::app()->session['to']));
-		//$tv_arr = $this->tv_arr($haku_from, $haku_to, $haku_tids, $haku_criteria, true);
 
 		// Työsuhteet
 		$tyosuhteet = Tyosuhdet::model()->findAll(" tid IN(" . implode(",", $haku_tids) . ") ");
