@@ -366,7 +366,7 @@ return array(
                 'jquery' => array(                             // set the new jquery
                     'baseUrl' => 'js/',
                     'js' => array(
-                        'jquery-1.11.2.min.js',
+                        'jquery-3.4.1.min.js',
                         'jquery-ui.min.js',
                         'moment-with-locales.js',
                         'bootstrap-select.js',
