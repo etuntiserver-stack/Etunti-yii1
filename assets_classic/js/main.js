@@ -36,7 +36,7 @@ $(document).ready(function($) {
   	$('.bg_parallax').parallax("50%", .12);
 
   	//=================================== Loader =====================================//
-	jQuery(window).on('load', function() {
+	jQuery(window).load(function() {
 		jQuery(".status").fadeOut();
 	    jQuery(".preloader").delay(1000).fadeOut("slow");
 	})
