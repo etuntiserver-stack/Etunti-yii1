@@ -339,7 +339,8 @@ $dateDiff = dateDiff($from, $to);
 
   $haku_from 	= date("Y-m-d", strtotime($from));
   $haku_to 	= date("Y-m-d", strtotime($to));
-  $tv_arr 	= $tyovuoroot[0]->tv_arr($haku_from, $haku_to, [$tid], [], true, []);
+  $haku_criteria = ["status!=11"];
+  $tv_arr 	= $tyovuoroot[0]->tv_arr($haku_from, $haku_to, [$tid], $haku_criteria, true, []);
 
   for ($i = 0; $i <= $dateDiff; $i++) 
   {
