@@ -330,8 +330,8 @@ $(document).delegate(".show_erittelyt", "click", function(){
 			$('.myBgColors').addClass(localStorage.getItem('headerSkin'));
 	      	},
 	  	error:function(data){
-	  	  	//console.log(data);
-			window.location.href=location.protocol + "//" + location.host + '/index.php';
+	  	  	console.log(data);
+			//window.location.href=location.protocol + "//" + location.host + '/index.php';
 	  	}
 	});
 
@@ -394,8 +394,8 @@ $(document).delegate(".show_erittelyt", "click", function(){
 		$("#dataChange").val(data);
            },
 	   error:function(data){
-			//console.log('domain error');
-			window.location.href=location.protocol + "//" + location.host + '/index.php';
+			console.log('domain error');
+			//window.location.href=location.protocol + "//" + location.host + '/index.php';
 	   }
         });
     };
