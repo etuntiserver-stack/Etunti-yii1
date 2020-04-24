@@ -1,6 +1,4 @@
-
-  $(function() {
-
+$(document).ready(function(){
 
 /*
     $( ".datepicker" ).datepicker({
@@ -38,14 +36,5 @@
     $( ".datetimepicker2" ).datetimepicker({
          format : 'YYYY.MM.DD HH:mm',
     });
-
-
-  });
-
-
-
-$(document).ready(function(){
-
-
 
 });
