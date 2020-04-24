@@ -128,7 +128,7 @@ if( isset($_SESSION['skrollaus']) )
 		if (file_exists($path.'/'.$file)){
 			// <-- file_safe_opener
 			$filepath = 'emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file;
-			echo '<p>'.CHtml::link(Yii::t('main', ' Lähetetty'),
+			echo '<p class="text-center">'.CHtml::link(Yii::t('main', ' Lähetetty'),
 				array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
 				array('target'=>'_blank','class'=>'text-danger'
 			)).'</p>';
