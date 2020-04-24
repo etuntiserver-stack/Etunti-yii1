@@ -7,6 +7,8 @@ $customers_results = Asiakkaat::model()->findAll($criteria);
 foreach ($customers_results as $c)
   $customers[$c->id] = ($c->tyyppi == 'yritys' ? $c->yrityksen_nimi : $c->yhteyshenkilo) ?: $c->sahkoposti;
 
+$freshdesk_domain = 'santelo'; // TEMP
+
 ?>
 
 <style>
@@ -89,6 +91,11 @@ foreach ($customers_results as $c)
     opacity: 1;
   }
 
+  .btn-settings {
+    width: 100%;
+    margin: 4px 0px;
+  }
+
   #btn-settings-popup {
     width: 32px;
     border: 2px solid black;
@@ -158,8 +165,7 @@ foreach ($customers_results as $c)
   <div class="ticket" id="ticket-base">
     <div class="ticket-body caption text-center" onclick="">
       <!-- onclick="location.href='/index.php/tyovuoroot/freshdesk/id" -->
-      <h4 class="ticket-label"><a class="ticket-title" href="#" target="_blank">
-          <!-- Title --></a></h4>
+      <h4 class="ticket-label"><a class="ticket-title" href="#" target="_blank"></a></h4>
       <p><i class="glyphicon glyphicon-user light-red lighter bigger-120"></i>&nbsp;<a class="ticket-customer-link" href="#" target="_blank" style="color:inherit;">
           <!-- Customer Name --></a></p>
       <div class="ticket-description smaller">
@@ -170,10 +176,9 @@ foreach ($customers_results as $c)
       <!-- bg-[color] based on status -->
       <ul class="ticket-footer-list list-inline">
         <!-- text-dark if not answered -->
-        <li><i class="people lighter"></i>&nbsp;<i class="ticket-status">
-            <!-- Answered/Not Answered, Date --></i></li>
+        <li><i class="people lighter"></i>&nbsp;<i class="ticket-status"></i></li>
         <li></li>
-        <li><i class="glyphicon glyphicon-envelope lighter"></i>&nbsp;<a href="#" style="color:inherit">Vastaa</a></li>
+        <li><i class="glyphicon glyphicon-envelope lighter"></i>&nbsp;<a class="ticket-respond-link" href="#" target="_blank" style="color:inherit">Vastaa</a></li>
       </ul>
     </div>
   </div>
@@ -258,12 +263,19 @@ foreach ($customers_results as $c)
             <div id="toggle-menu" class="collapse">
               <div class="row">
                 <div class="col-md-12">
+                  <button id="btn-refresh" class="btn-settings btn-primary" type="button">
+                    <b>Päivitä tukipyynnöt&nbsp;<span class="glyphicon glyphicon-refresh"></span></b>
+                  </button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
                   <button id="btn-export-customers" class="btn-settings btn-warning" type="button">
                     <b>Vie asiakkaat Freshdeskiin&nbsp;<span class="glyphicon glyphicon-user"></span></b>
                   </button>
                 </div>
               </div>
-              <div class="row options-row">
+              <div class="row">
                 <div class="col-md-12">
                   <label class="field select">
                     <select id="export-customers-list" class="gui-input">
@@ -290,22 +302,34 @@ foreach ($customers_results as $c)
 
     var drawTicket = function(id, customer, customer_id, status, updated_date, title, description) {
       let obj = $('#ticket-base').clone();
-      obj.find('.ticket-title').text('Tukipyyntö: ' + title);
-      obj.find('.ticket-customer-link').attr('href', `/index.php/asiakkaat/update?id=${customer_id}`).text(customer);
+      let ticketLink = 'https://<?= $freshdesk_domain ?>.freshdesk.com/a/tickets/' + id;
+
+      // let priorityText = (function(p) {
+      //   switch(p) {
+      //     case 1: return ''
+      //   }
+      // })(priority);
+
+      obj.attr('id', 'ticket-' + id);
+      obj.find('.ticket-title').text('Tukipyyntö: ' + title).attr('href', ticketLink);
+      if (customer_id > 0)
+        obj.find('.ticket-customer-link').attr('href', `/index.php/asiakkaat/update?id=${customer_id}`).text(customer);
+      else
+        obj.find('.ticket-customer-link').attr('href', '#').removeAttr('target').text(customer);
       obj.find('.ticket-description').text(description);
+      obj.find('.ticket-respond-link').attr('href', ticketLink);
       // obj.find('.ticket-body').attr('onclick', `location.href='/index.php/tyovuoroot/freshdesk/${id}'`);
-      // obj.find('.ticket-body').attr('onclick', `alert(${list_tickets[id]})`);
       obj.find('.ticket-body').on('click', function(e) {
         let data = '',
           val = '',
           emptyKeys = [];
         $.each(Object.keys(list_tickets[id]), function(i, key) {
           val = list_tickets[id][key];
-          if (val != null && val.length > 0) {
+          if (val != null && (typeof(val) != "string" || val.length > 0) && (typeof(val) != "object" || val.length > 0)) {
             // console.log(`${key}: ${val}`);
             if (typeof(val) == "object") {
               val = JSON.stringify(val);
-            } else {
+            } else if (typeof(val) == "string") {
               val = val
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
@@ -338,7 +362,7 @@ foreach ($customers_results as $c)
         case 2: // Open
           obj.find('.ticket-footer').addClass('bg-warning');
           obj.find('.ticket-footer-list').addClass('text-dark');
-          obj.find('.ticket-status').text(`Auki ${updated_date}`);
+          obj.find('.ticket-status').text(`Vastaamatta ${updated_date}`);
           break;
         case 3: // Pending
           obj.find('.ticket-footer').addClass('bg-primary');
@@ -352,6 +376,12 @@ foreach ($customers_results as $c)
           obj.find('.ticket-footer').addClass('bg-secondary');
           obj.find('.ticket-status').text(`Suljettu ${updated_date}`);
           break;
+        case 6: // Waiting on customer
+          obj.find('.ticket-footer').addClass('bg-primary');
+          obj.find('.ticket-status').text(`Odottaa Asiakasta ${updated_date}`);
+        case 7: // Waiting for third party
+          obj.find('.ticket-footer').addClass('bg-primary');
+          obj.find('.ticket-status').text(`Odottaa Tietoa ${updated_date}`);
       }
 
       let row = 1;
@@ -366,15 +396,19 @@ foreach ($customers_results as $c)
     let list_tickets = {},
       list_request_underway = false,
       list_previous_page = 0,
-      list_end_reached = false;
+      list_end_reached = false,
+      list_throwaway = false;
 
-    var list = async function(page = 0) {
+    var list = async function(page = 0, refresh = false) {
       if (list_request_underway || list_end_reached) return;
       if (page <= 0)
         page = list_previous_page + 1;
       progbar();
 
-      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/freshdesk?page=${page}`, {
+      let queryPage = (refresh) ? -page : page;
+      console.log(`${location.protocol}//${location.host}/index.php/tyovuoroot/freshdesk?page=${queryPage}`);
+
+      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/freshdesk?page=${queryPage}`, {
 
         // xhrFields: {
         //   onprogress: function(e) {
@@ -391,13 +425,17 @@ foreach ($customers_results as $c)
 
         error: function(xhr, status, error) {
           console.log(xhr.responseText);
-          alert(xhr.responseText);
+          if (!list_throwaway)
+            alert(xhr.responseText);
         },
 
         success: function(data) {
           console.log(`Received response, length: ${data.length}`);
-          let parsed = null;
 
+          if (list_throwaway)
+            return;
+
+          let parsed = null;
           try {
             parsed = JSON.parse(data);
           } catch (e) {
@@ -425,7 +463,7 @@ foreach ($customers_results as $c)
               if (typeof(t) != "object") {
                 console.log("Invalid content inside response data (not an object): " + t);
               } else {
-                let customer_id = Math.floor(Math.random() * 10000); // TEMP
+                let customer_id = ("unique_external_id" in t) ? t.unique_external_id : 0;
                 drawTicket(t.id, t.requester.name, customer_id, t.status, formatUtcString(t.updated_at), t.subject, t.description_text);
                 list_tickets[t.id] = t;
               }
@@ -434,10 +472,16 @@ foreach ($customers_results as $c)
         },
 
         complete: function() {
-          if (list_end_reached || !listFetchIfScrolled())
+          if (list_throwaway) {
             progbarStop();
-          list_request_underway = false;
-          list_previous_page = page;
+            list_request_underway = false;
+            list_throwaway = false;
+          } else {
+            if (list_end_reached || !listFetchIfScrolled())
+              progbarStop();
+            list_request_underway = false;
+            list_previous_page = page;
+          }
         }
       });
     };
@@ -572,7 +616,7 @@ foreach ($customers_results as $c)
           } else if ("errors" in parsed && parsed.errors.length > 0) {
             let error_text = `Asiakkaiden viemisessä Freshdeskiin tapahtui virheitä. Asiakkaita luotu: ${parsed.created_count}, päivitetty: ${parsed.updated_count}\n\nVirheet:\n`;
 
-            $.each(parsed.errors, function(k,v) {
+            $.each(parsed.errors, function(k, v) {
               if ("asiakas_id" in v)
                 error_text += `(asiakas ${v.asiakas_id}: ${v.asiakas}): `;
               error_text += `${v.text} (${v.description})\n`;
@@ -589,6 +633,23 @@ foreach ($customers_results as $c)
           $('#btn-export-customers').removeAttr('disabled');
         }
       });
+    });
+
+    $('#btn-refresh').on('click', function(e) {
+      e.preventDefault();
+      if (list_request_underway)
+        list_throwaway = true;
+
+      rowHeights = [0, 0, 0];
+      list_tickets = {};
+      list_request_underway = false;
+      list_previous_page = 0;
+      list_end_reached = false;
+
+      $('#ticket-row-1').empty();
+      $('#ticket-row-2').empty();
+      $('#ticket-row-3').empty();
+      list(0, true);
     });
 
     //*--------------------------------------------------------------------------

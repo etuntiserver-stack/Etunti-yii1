@@ -1559,7 +1559,8 @@ class TyovuorootController extends Controller
    * If not null, and positive int, that ticket ID is returned (encoded echo).
    *
    * @param int $page
-   * If not null, that page in list of tickets is returned.
+   * If not null, that page in list of tickets is returned. Use negative number
+   * to force refresh data (e.g. -1 for first page, -3 for third page).
    *
    * @param int $per_page
    * Specifies the amount of items per page when $page is specified. The maximum
@@ -1597,6 +1598,8 @@ class TyovuorootController extends Controller
     elseif (is_numeric($page)) {
 
       // Tickets are temporarily cached here
+      $force_refresh = ($page < 0);
+      $page = abs($page);
       $per_page = is_numeric($per_page) ? $per_page : 10;
       $first_index = ($page - 1) * $per_page;
       $tickets = Yii::app()->session['freshdesk_tickets'] ?? [];
@@ -1630,7 +1633,7 @@ class TyovuorootController extends Controller
       // If not enough items from array_splice, either this data has not yet
       // been fetched, or end has been reached.
       $is_eod = ($tickets_eod != 0 && $tickets_eod == $first_index + count($requested));
-      if ($old_tickets_on_page || (count($requested) != $per_page && !$is_eod)) {
+      if ($force_refresh || $old_tickets_on_page || (count($requested) != $per_page && !$is_eod)) {
 
         $requested = $freshdesk->listTickets(null, null, $page, $per_page, null, ['requester', 'description'], 'updated_at', 'desc');
         $updated = false;
@@ -1646,6 +1649,18 @@ class TyovuorootController extends Controller
           Yii::app()->session['freshdesk_tickets_eod'] = $first_index + count($requested);
           $updated = true;
         } else {
+          // foreach (array_keys($requested) as $k) {
+          //   $ticket = $requested[$k];
+          //   if (empty($ticket['requester_id']))
+          //     continue;
+          //   $criteria = new CDbCriteria();
+          //   $criteria->select = 'id';
+          //   $criteria->condition = 'freshdesk_id=' . $ticket['requester_id'];
+          //   $aid = Asiakkaat::model()->find($criteria);
+          //   if ($aid)
+          //     $requested[$k]['unique_external_id'] = $aid->id;
+          // }
+
           Freshdesk::log("Page %s requested (%d items), saving to session.", $page, count($requested));
           $tickets = array_merge(array_splice($tickets, 0, $first_index), $requested, array_splice($tickets, $page * $per_page));
           Yii::app()->session["freshdesk_tickets"] = $tickets;
@@ -1660,6 +1675,18 @@ class TyovuorootController extends Controller
         }
       } else {
         Freshdesk::log("Page %s loaded from session (%d items%s).", $page, count($requested), $is_eod ? '; end of data' : '');
+      }
+
+      foreach (array_keys($requested) as $k) {
+        $ticket = $requested[$k];
+        if (empty($ticket['requester_id']))
+          continue;
+        $criteria = new CDbCriteria();
+        $criteria->select = 'id';
+        $criteria->condition = 'freshdesk_id=' . $ticket['requester_id'];
+        $aid = Asiakkaat::model()->find($criteria);
+        if ($aid)
+          $requested[$k]['unique_external_id'] = $aid->id;
       }
 
       echo json_encode($requested);
