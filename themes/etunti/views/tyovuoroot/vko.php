@@ -102,7 +102,7 @@ if( isset($_SESSION['skrollaus']) )
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
 	<td class="bg-default td_tyontekija" style="z-index: 999; max-width: 150px; white-space: normal; font-size: 90%;">
-	<div class="m10 text-center">
+	<div class="m10">
 
 		<?php
 		echo '
@@ -134,11 +134,17 @@ if( isset($_SESSION['skrollaus']) )
 			)).'</p>';
 			//     file_safe_opener -->
 		}
-		echo '<b id="vko_'.$did_sunday.'_'.$tid.'""><span class="odotusweeklaskennan">'.$odotus_ikooni.'</span></b>';
+		echo '<br><b id="vko_'.$did_sunday.'_'.$tid.'""><span class="odotusweeklaskennan">'.$odotus_ikooni.'</span></b>';
 		if(isset($vktyoaika[$tid]))
-			echo ' ('.$vktyoaika[$tid].')';
+			echo '-'.$vktyoaika[$tid];
+		else
+			echo '-00:00';
 		?>
-		<p><input type="checkbox" class="lahetettava_checkbox" for="<?=$tid?>" data-toggle="tooltip" data-placement="bottom" title="<?=Yii::t('main', 'Määrittele lähetettäväksi')?>"></p>
+		<div class="mt5">
+		   <div class="form-inline">
+			<b class="form-group">Lähetä: </b> <input type="checkbox" style="margin-top:-1px" class="form-group lahetettava_checkbox" for="<?=$tid?>" data-toggle="tooltip" data-placement="bottom" title="<?=Yii::t('main', 'Määrittele lähetettäväksi')?>">
+		   </div>
+		</div>
 	</div>
 	</td>
 	<?php
