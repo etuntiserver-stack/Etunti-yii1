@@ -379,9 +379,11 @@ $freshdesk_domain = 'santelo'; // TEMP
         case 6: // Waiting on customer
           obj.find('.ticket-footer').addClass('bg-primary');
           obj.find('.ticket-status').text(`Odottaa Asiakasta ${updated_date}`);
+          break;
         case 7: // Waiting for third party
           obj.find('.ticket-footer').addClass('bg-primary');
           obj.find('.ticket-status').text(`Odottaa Tietoa ${updated_date}`);
+          break;
       }
 
       let row = 1;
