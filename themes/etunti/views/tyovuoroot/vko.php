@@ -101,7 +101,7 @@ if( isset($_SESSION['skrollaus']) )
  <!-- VARAUKSET -->
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
-	<td class="bg-default td_tyontekija" style="z-index: 999; width: 160px; white-space: normal; font-size: 90%;">
+	<td class="bg-default td_tyontekija" style="z-index: 999; width: 160px; max-width: 160px; white-space: normal; font-size: 90%;">
 	<div class="m10">
 
 		<?php
