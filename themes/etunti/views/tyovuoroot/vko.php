@@ -101,7 +101,7 @@ if( isset($_SESSION['skrollaus']) )
  <!-- VARAUKSET -->
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
-	<td class="bg-default td_tyontekija" style="z-index: 999; max-width: 150px; white-space: normal; font-size: 90%;">
+	<td class="bg-default td_tyontekija" style="z-index: 999; width: 160px; white-space: normal; font-size: 90%;">
 	<div class="m10">
 
 		<?php
@@ -134,7 +134,9 @@ if( isset($_SESSION['skrollaus']) )
 			)).'</p>';
 			//     file_safe_opener -->
 		}
-		echo '<br><b id="vko_'.$did_sunday.'_'.$tid.'""><span class="odotusweeklaskennan">'.$odotus_ikooni.'</span></b>';
+		echo '<br>
+		<span class="text-center odotusweeklaskennan" style="display:block">'.$odotus_ikooni.'</span>
+		<b id="vko_'.$did_sunday.'_'.$tid.'"">00:00</b>';
 		if(isset($vktyoaika[$tid]))
 			echo '-'.$vktyoaika[$tid];
 		else
