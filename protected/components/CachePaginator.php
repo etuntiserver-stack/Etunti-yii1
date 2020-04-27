@@ -27,15 +27,6 @@ class CachePaginator extends CComponent
   public $callback;
 
   /**
-   * @var callable
-   * Optional filter function that takes one parameter (the item) and returns
-   * true if the item is wanted, otherwise false. This can be used to filter the
-   * results on a page. Behind the scenes, the paginator will request more pages
-   * from the callback function until there are enough items, or EOD is reached.
-   */
-  public $selector = null;
-
-  /**
    * Construct CachePaginator.
    *
    * @param string $id
