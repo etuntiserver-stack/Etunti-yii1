@@ -1657,5 +1657,30 @@ class Freshdesk extends CComponent
     }
   }
 
+  /**
+   * Get a configured cache paginator for ticket listing.
+   *
+   * This function should be used instead of manually creating paginator, so
+   * that all places which require tickets use the same cache key. Use
+   * {@see CachePaginator::filtered()} for filtering the tickets.
+   *
+   * @param int $per_page
+   * Items per page.
+   *
+   * @return CachePaginator
+   * CachePaginator object with configured cache key ID and callback.
+   */
+  public function getTicketPaginator(int $per_page = 10)
+  {
+    /** @var CachePaginator object. */
+    $paginator = Yii::createComponent('CachePaginator', 'freshdesk_tickets');
+    $paginator->logCategory = 'freshdesk';
+    $paginator->pageSize = $per_page;
+    $paginator->callback = function($page, $page_size) {
+      return $this->listTickets(null, null, $page, $page_size, null, ['requester', 'description'], 'updated_at', 'desc');
+    };
+    return $paginator;
+  }
+
   #endregion
 }
