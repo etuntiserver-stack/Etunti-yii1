@@ -462,6 +462,20 @@ return array(
             'allowAutoLogin' => true,
             'loginUrl' => array('/user/login'),
         ),
+
+        'cache' => [
+          'class' => 'system.caching.CMemCache',
+          'servers' => [
+            ['host' => 'localhost', 'port' => 11211, 'weight' => 60]
+          ],
+          'useMemcached' => true
+        ],
+
+        // Käytä tätä ottaaksesi cache pois käytöstä, tai jos memcached ei asennettu:
+        // 'cache' => [
+        //   'class' => 'system.caching.CDummyCache'
+        // ],
+
         // uncomment the following to enable URLs in path-format
         /*
 		'urlManager'=>array(
