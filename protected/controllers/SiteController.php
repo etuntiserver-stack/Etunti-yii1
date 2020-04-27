@@ -1662,31 +1662,26 @@ class SiteController extends Controller
 
 	public function actionValiko()
 	{
-
-$mod = '
-	<input type="hidden" id="select_type" value="'.$_POST['select_type'].'">
-	<div id="result"></div>';
-
-
-$mod .= '
-<script type="text/javascript">
-$(document).ready(function(){
-
-
-        $.ajax({
-           url: location.protocol + "//" + location.host + "/index.php/site/valiko_ajax",
-           type: "POST",
-           data: { "select_type" : $("#select_type").val() },
-           success: function(data){
-		//console.log(data);
-		$("#result").html(data);
-           }
-        });
-
-});
-</script>';
-
+		$mod = '
+		<input type="hidden" id="select_type" value="'.$_POST['select_type'].'">
+		<div id="result"></div>';
+		$mod .= '
+		<script type="text/javascript">
+		$(document).ready(function(){
+		        $.ajax({
+		           url: location.protocol + "//" + location.host + "/index.php/site/valiko_ajax",
+		           type: "POST",
+		           data: { "select_type" : $("#select_type").val() },
+		           success: function(data){
+				//console.log(data);
+				$("#result").html(data);
+				return false;
+		           }
+		        });
+		});
+		</script>';
 		echo json_encode($mod);
+		exit;
 	}
 
 	public function actionValiko_ajax()
@@ -1696,7 +1691,40 @@ $(document).ready(function(){
 		$this->checkOikeus($checkOikeus, true);
 		//  Oikeudet -->
 
+		// muokka
+		if(isset($_POST['muokkaSelects']) and isset($_POST['id'])){
+			$value2	= '';
+			if( isset($_POST['value2']) and $_POST['select_type'] == 'tyoryhma' )
+			$value2	= json_encode($_POST['value2']);
+			Valikkoot::model()->updatebypk($_POST['id'], 
+				array(
+					'value'=>$_POST['value'],
+					'value2'=>$value2
+				)
+			);
+		}
+		// deleteFromSelect
+		if(isset($_POST['deleteFromSelect']) and $_POST['deleteFromSelect'] == "true"){
+	       		$criteria = new CDbCriteria();
+			$criteria->condition = " select_type = '".$_POST['select_type']."' ";
+			$v = Valikkoot::model()->findAll($criteria);	
+			if( count($v) > 1 )
+			   Valikkoot::model()->deletebypk($_POST['id']);
+			else
+			    echo '<script>alert("Viimeinen rivi ei voidaan poistaa");</script>';	
+		}
+		// uusi
+		if(isset($_POST['uusiRiviSelects']) and  $_POST['uusiRiviSelects']){
+			$v = new Valikkoot;
+			$v->value=$_POST['value'];
+			$v->select_type=$_POST['select_type'];
+			if(!$v->save()){
+				print_r($v->getErrors());
+				exit;
+			}
+		}
 		$this->renderPartial('valiko_ajax');
+		exit;
 	}
 
 

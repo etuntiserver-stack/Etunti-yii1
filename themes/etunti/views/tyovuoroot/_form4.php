@@ -255,27 +255,34 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 
 		<div class="input-group">
 		<?php
-        	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
-		echo '<select name="'.$java_prefix.'[tyoajanmerkinta]" class="form-control lomake_valinta" id="'.$java_prefix.'_tyoajanmerkinta">';
-
-		 if(!empty($model->tyoajanmerkinta)){
-		   $expl = explode("/",$model->tyoajanmerkinta);
-		   $value = (isset($expl[0])) ? $expl[0] : '';
-		   echo '<option value="'.$model->tyoajanmerkinta.'">'.$value.'</option>';
-		 }
-
-		   echo '<option style="color:" value="Normaali/">Normaali</option>';
-		   echo '<option style="color:red" value="Ei lasketa/red">Ei lasketa</option>';
-
-		 foreach($tal as $v)
-		 {
-		   $expl = explode("/",$v->value);
-		   $color = (isset($expl[1])) ? $expl[1] : '';
-		   $value = (isset($expl[0])) ? $expl[0] : '';
-		   if($v->value != 'Normaali/' and $v->value != 'Ei lasketa/red')
-		   echo '<option style="color:'.$color.'" value="'.$v->value.'">'.$value.'</option>';
-		 }
-		echo '</select>';
+			$l1 = array(
+				'Ei lasketa/red' => 'Ei lasketa', 
+				'Varallaolo/#c67520' => 'Varallaolo'
+			);
+			$valikkoot = Valikkoot::model()->findAll("select_type = 'tyoajanmerkinta'");
+			$l2 = array();
+			foreach($valikkoot as $vl){
+    				$expl = explode("/",$vl->value);
+				if(isset($expl[0]) and isset($expl[1])){
+					$l2[$expl[0].'/'.$expl[1]] = $expl[0];
+				}
+			}
+			$list = array_merge($l1, $l2);
+			echo '<select name="'.$java_prefix.'[tyoajanmerkinta]" class="form-control lomake_valinta" id="'.$java_prefix.'_tyoajanmerkinta">';
+				if(!empty($model->tyoajanmerkinta)){
+					$expl = explode("/",$model->tyoajanmerkinta);
+					$value = (isset($expl[0])) ? $expl[0] : '';
+					echo '<option value="'.$model->tyoajanmerkinta.'">'.$value.'</option>';
+				} else {
+					echo '<option style="color:" value="Normaali/">Normaali</option>';
+				}
+				$list = array_merge($l1, $l2);
+				foreach($list as $key => $val){
+					$expl 	= explode("/",$key);
+					$color = (isset($expl[1])) ? $expl[1] : '';
+					echo '<option style="color:'.$color.'" value="'.$key.'">'.$val.'</option>';
+				}
+			echo '</select>';
         	?>
 
 		<span class="input-group-btn">
@@ -289,20 +296,6 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 <script type="text/javascript">
 $(document).ready(function(){
 
-
-/* valikot */
-$(".muokaValiko").click(function() {
-    var thisFor = $(this).attr("for");
-        $.ajax({
-           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
-	   type:'POST',
-	   data: { "select_type" : thisFor },
-           success: function(data){
-		//console.log(data);
-		$('#showres').modal().html(JSON.parse(data));
-           }
-        });
-});
 
   $(document).delegate(".muokaTaulunLatiko","click",function(){
 
