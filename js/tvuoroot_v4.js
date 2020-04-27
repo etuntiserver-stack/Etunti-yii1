@@ -668,7 +668,6 @@ $("#viikkonhyppaminen, #vuodenhyppaminen").change(function() {
 	window.location.href=thisVal;
 	return false;
 });
-
 $("#yhtveto").on('submit',function(e){
 	var from = $("#from").val();
 	var to = $("#to").val();
@@ -682,7 +681,19 @@ $("#yhtveto").on('submit',function(e){
         	return false;
 	}
 });
-
+/* valikot */
+$(document).delegate(".muokaValiko","click",function(){
+    var thisFor = $(this).attr("for");
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
+	   type:'POST',
+	   data: { "select_type" : thisFor },
+           success: function(data){
+		//console.log(data);
+		$('#showres').modal().html(JSON.parse(data));
+           }
+        });
+});
 
 
 

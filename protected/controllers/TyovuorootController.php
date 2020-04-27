@@ -3799,7 +3799,7 @@ class TyovuorootController extends Controller
 					if( strtotime($val['pvm']) >= strtotime($post['pfrom']) and in_array($val['tid'], $all_new_tids, true) ){
 						$poistettu_pvms_fornew[] = $val;
 					}
-					if( strtotime($val['pvm']) < strtotime($post['pfrom']) and isset($edelliset_tyoparit_updater[$val['tid']]) ){
+					if( strtotime($val['pvm']) < strtotime($post['pfrom']) ){ // Oli ongelma MArtan kanssa - and isset($edelliset_tyoparit_updater[$val['tid']])
 						$poistettu_pvms_fororigin[] = $val;
 					}
 				}
@@ -5492,7 +5492,10 @@ class TyovuorootController extends Controller
 				foreach($tv_arr[$tid] as $k => $v)
 					foreach($v as $k1 => $v1)
 						foreach($v1 as $k2 => $v2)
-							$sort[strtotime($v2['this_pvm'].' '.$v2['data']['alku'])][$tid][] = $v1;
+							if(isset($v2['data']))
+								$sort[strtotime($v2['this_pvm'].' '.$v2['data']['alku'])][$tid][] = $v1;
+							else
+								$sort[strtotime($v2['this_pvm'])][$tid][] = $v1;
 
 		ksort($sort);
 

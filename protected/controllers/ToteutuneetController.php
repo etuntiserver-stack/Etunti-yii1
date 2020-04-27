@@ -1614,21 +1614,19 @@ $xml = '
 
 	protected function vuosilomaCheckerBetween($from, $to, $tid)
 	{
-		$from = date("Y-m-d", strtotime($from));
-		$to = date("Y-m-d", strtotime($to));
 
 		$set = [];
-	       	$criteria = new CDbCriteria();
-		$criteria->condition = " 
-			tid = '".$tid."' 
-			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$from' AND '$to'
-			AND status=11
-			AND tyoajanlaatu!=''
-		";
-		$tv = Tyovuoroot::model()->findAll($criteria);
-		foreach($tv as $item){
-			$arr = explode("/", $item->tyoajanlaatu);
-			if(isset($arr[1])){ $set[date("d.m.Y", strtotime($item->pvm))][] = '<h3 style="color:'.$arr[1].'">'.$arr[0].'</h3>'; }
+		$tyovuoroot 	= Yii::app()->createController('Tyovuoroot');
+		$haku_criteria	= [];
+		$haku_criteria[] = "status=11 AND tyoajanlaatu!=''";
+		$with		= ['data'];
+		$from 		= date("Y-m-d", strtotime($from));
+		$to 		= date("Y-m-d", strtotime($to));
+		$dataAll 	= $tyovuoroot[0]->FromToSuunnitellutAll($from, $to, [$tid], $haku_criteria, $with);
+		foreach($dataAll as $arr){
+			$item = $arr['data'];
+			$expl = explode("/", $item->tyoajanlaatu);
+			if(isset($expl[1])){ $set[date("d.m.Y", strtotime($arr['this_pvm']))][] = '<h3 style="color:'.$expl[1].'">'.$expl[0].'</h3>'; }
 		}
 
 		return $set;

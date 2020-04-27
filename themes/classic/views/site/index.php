@@ -15,7 +15,7 @@
      <div class="row">
 
       <?php if(isset($_GET['aloita'])) : ?>
-      <script src='https://www.google.com/recaptcha/api.js'></script>
+
 
       <div class="col-sm-12">
 	<legend><h3 class="text-info"><?php echo Yii::t('main', 'Ota käyttöön'); ?></h3></legend>

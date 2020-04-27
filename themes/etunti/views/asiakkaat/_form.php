@@ -728,7 +728,7 @@ $(document).ready(function(){
 
 <?php $this->endWidget(); ?>
 
-
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/select_valiko.js"></script>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 
@@ -770,7 +770,7 @@ $(".muokaValiko").click(function() {
 	   type:'POST',
 	   data: { "select_type" : thisFor },
            success: function(data){
-		console.log(data);
+		//console.log(data);
 		$('#showres').modal().html(JSON.parse(data));
            }
         });
