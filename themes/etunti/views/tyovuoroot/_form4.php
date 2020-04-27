@@ -1433,7 +1433,7 @@ $(document).ready(function(){
 	var this_id = '<?=$this_id?>';
 	if(toistuva == true){
 		if( tilanne == 'poista_ketju_kokonaan' )
-			var r = confirm('Poistaa kaikki ketjun kuluvat työvuorot ja työparit.');
+			var r = confirm('Poista kaikki ketjuun kuuluvat työvuorot ja työparit.');
 	} else {
 		var r = confirm('Haluatko varmasti poistaa?');
 	}
