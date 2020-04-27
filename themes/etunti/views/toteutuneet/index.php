@@ -771,7 +771,7 @@ $(document).ready(function(){
         $('#to').css({"border" : "2px #f14010 solid"}).focus();
         return false;
     }
-    if (!nimi) {
+    if (nimi === 'kaikki') {
         $('#nimi').css({"border" : "2px #f14010 solid"}).focus();
         return false;
     }
