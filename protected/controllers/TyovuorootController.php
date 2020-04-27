@@ -5160,7 +5160,10 @@ class TyovuorootController extends Controller
 				foreach($tv_arr[$tid] as $k => $v)
 					foreach($v as $k1 => $v1)
 						foreach($v1 as $k2 => $v2)
-							$sort[strtotime($v2['this_pvm'].' '.$v2['data']['alku'])][$tid][] = $v1;
+							if(isset($v2['data']))
+								$sort[strtotime($v2['this_pvm'].' '.$v2['data']['alku'])][$tid][] = $v1;
+							else
+								$sort[strtotime($v2['this_pvm'])][$tid][] = $v1;
 
 		ksort($sort);
 
