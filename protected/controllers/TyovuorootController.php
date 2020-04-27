@@ -3467,7 +3467,7 @@ class TyovuorootController extends Controller
 					if( strtotime($val['pvm']) >= strtotime($post['pfrom']) and in_array($val['tid'], $all_new_tids, true) ){
 						$poistettu_pvms_fornew[] = $val;
 					}
-					if( strtotime($val['pvm']) < strtotime($post['pfrom']) and isset($edelliset_tyoparit_updater[$val['tid']]) ){
+					if( strtotime($val['pvm']) < strtotime($post['pfrom']) ){ // Oli ongelma MArtan kanssa - and isset($edelliset_tyoparit_updater[$val['tid']])
 						$poistettu_pvms_fororigin[] = $val;
 					}
 				}
