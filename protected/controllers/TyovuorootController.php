@@ -3239,6 +3239,14 @@ class TyovuorootController extends Controller
 		'.$form->dropDownList($model,"laskutettu", $list, 
 		array("class"=>"form-control", "id" => "laskutettu")).'
 		</div></div>';
+
+        	$list = array(0=>'Kyllä',1=>'Ei');
+		$return .= '<div class="row"><div class="col-sm-12">
+		'.$form->labelEx($model,'piilota_mobiilista').'
+		'.$form->dropDownList($model,'piilota_mobiilista', $list, 
+		array("class"=>"form-control", "id" => "piilota_mobiilista" )).'
+		</div></div>';
+
 		$return .= '<br>';
 		$return .= '<div class="row">';
 		$return .= '<div class="col-sm-12"><p><button class="close_context_menu btn btn-primary btn-block">Sulje</button></p></div>';

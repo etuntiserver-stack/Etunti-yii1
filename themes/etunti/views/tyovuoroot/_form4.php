@@ -207,7 +207,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 				}
 			}
 			$list = array_merge($l1, $l2);
-			
+
 			echo '<select name="'.$java_prefix.'[tyoajanlaatu]" class="form-control lomake_valinta" id="'.$java_prefix.'_tyoajanlaatu">';
 			foreach($list as $key => $val){
 				$bg 		= '#fff';
@@ -268,6 +268,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 				}
 			}
 			$list = array_merge($l1, $l2);
+			ksort($list);
 			echo '<select name="'.$java_prefix.'[tyoajanmerkinta]" class="form-control lomake_valinta" id="'.$java_prefix.'_tyoajanmerkinta">';
 				if(!empty($model->tyoajanmerkinta)){
 					$expl = explode("/",$model->tyoajanmerkinta);
