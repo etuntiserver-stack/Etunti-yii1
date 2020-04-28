@@ -382,30 +382,13 @@ $(document).ready(function(){
 <?php $this->endWidget(); ?>
 
 
-
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/select_valiko.js"></script>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 
 
 <script type="text/javascript">
 $(document).ready(function(){
-
-/* valikot */
-$(".muokaValiko").click(function() {
-    var thisFor = $(this).attr("for");
-        $.ajax({
-           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
-	   type:'POST',
-	   data: { "select_type" : thisFor },
-           success: function(data){
-		//console.log(data);
-		$('#showres').modal().html(JSON.parse(data));
-           }
-        });
-});
-/* valikot */
-
-
 
 	var avainOn = $( "#Kohteet_avaimen_sijainti option:selected" ).val();
 	if(avainOn !== '3')

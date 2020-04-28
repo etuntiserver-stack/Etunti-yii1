@@ -453,7 +453,7 @@ $(document).ready(function(){
 	<div id="kortitVoimassaolot"></div>
 
 
-
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/select_valiko.js"></script>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
 
 <script type="text/javascript">
@@ -749,23 +749,6 @@ $(document).ready(function(){
   $('#Tyontekijat_aktiivinen').change(function() {
 	alert('Muista täyttää työsuhteen päättymispäivämäärä.');
   });
-
-
-/* valikot */
-$(".muokaValiko").click(function() {
-    var thisFor = $(this).attr("for");
-        $.ajax({
-           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
-	   type:'POST',
-	   data: { "select_type" : thisFor },
-           success: function(data){
-		//console.log(data);
-		$('#showres').modal().html(JSON.parse(data));
-           }
-        });
-});
-/* valikot */
-
   $(".sw").bootstrapSwitch({
 	size: "small",
 	onColor: "success",

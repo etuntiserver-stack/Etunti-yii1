@@ -681,20 +681,6 @@ $("#yhtveto").on('submit',function(e){
         	return false;
 	}
 });
-/* valikot */
-$(document).delegate(".muokaValiko","click",function(){
-    var thisFor = $(this).attr("for");
-        $.ajax({
-           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
-	   type:'POST',
-	   data: { "select_type" : thisFor },
-           success: function(data){
-		//console.log(data);
-		$('#showres').modal().html(JSON.parse(data));
-           }
-        });
-});
-
 
 
 });
