@@ -3308,7 +3308,7 @@ class TyovuorootController extends Controller
 					<span aria-hidden="true">&times;</span>
 				</button>
 			<span class="panel-title"><i class="fa fa-clock-o"></i> 
-				'.Yii::t('main', 'Työvuoron suunnittelu').' '.(($toistuva)?'ketju: ':'').' #'.$model->id.' <span class="kohteen_lisatiedot"></span> '.$tekijan_nimi.'
+				'.Yii::t('main', 'Työvuoron suunnittelu').' '.(($toistuva)?'ketju: ':'').' #'.$model->id.' '.$tekijan_nimi.'
 			</span>
 	            </div>
 	            <!-- end .panel-heading section -->

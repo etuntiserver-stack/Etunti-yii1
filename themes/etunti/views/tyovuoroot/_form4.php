@@ -96,7 +96,6 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 
 <div class="section">
 	<div id="huomio_yllaosa" class="text-center"></div>
-
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'tyovuoroot-form',
 	'enableAjaxValidation'=>false,
@@ -123,7 +122,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 		<div id="asiakasAutocompleteResult"></div>
   </div>
   <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'kohde'); ?>
+		<label for="Tyovuoroot_kohde">Kohde <span class="kohteen_lisatiedot"></span></label>
 		<?php
        		$criteria = new CDbCriteria();
 	        $criteria->order = " osoite ";
@@ -1514,7 +1513,7 @@ $(document).ready(function(){
 				$('#arvioitu_kesto').html('00:00');
 			}
 
-			$(".kohteen_lisatiedot").html('<span class="pull-right link avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'">Kohteen listätietoja </span><div class="collapse" id="open_kohde_'+ thisID +'">Puh.: '+ d[7] +'<br>Sähköposti: '+ d[8] +'</div>');
+			$(".kohteen_lisatiedot").html('<span style="position:absolute;right: 10px;top:-12px" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'"></span><div style="position:absolute;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div>');
 
 	   	},
 		error:function(data){
@@ -1568,7 +1567,7 @@ $(document).ready(function(){
 				$('#arvioitu_kesto').html('00:00');
 			}
 
-			$(".kohteen_lisatiedot").html('<span class="pull-right link avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'">Kohteen listätietoja </span><div class="collapse" id="open_kohde_'+ thisID +'">Puh.: '+ d[7] +'<br>Sähköposti: '+ d[8] +'</div>');
+			$(".kohteen_lisatiedot").html('<span style="position:absolute;right: 10px;top:-12px" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'"></span><div style="position:absolute;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div>');
 
 	   	},
 		error:function(data){
