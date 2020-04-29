@@ -18,6 +18,8 @@ class Freshdesk extends CComponent
   private $key;
   /** @var string API URL, without trailing slash. */
   private $url;
+  /** @var bool Flag true if invalid domain and not in testing environment */
+  private $disabled = false;
 
   /**
    * Initialize Freshdesk.
@@ -28,18 +30,21 @@ class Freshdesk extends CComponent
    */
   public function __construct($testing = null)
   {
+    $domain = Yii::app()->user->domain;
     if (is_bool($testing))
       $this->testing = $testing;
     else
-      $this->testing = in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']);
+      $this->testing = in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']) || $domain == 'demo';
 
     // Specify base url and api key for actions.
     if ($this->testing) {
       $this->key = static::TEST_API_KEY;
       $this->url = static::TEST_API_URL;
-    } else {
+    } elseif ($domain == 'kotipuhtaaksi') {
       $this->key = static::API_KEY;
       $this->url = static::API_URL;
+    } else {
+      $this->disabled = true;
     }
   }
 
@@ -77,6 +82,11 @@ class Freshdesk extends CComponent
    */
   private function request(string $target, array $post_fields = [], array $tags = [], &$headers = null, $ignore_errors = false)
   {
+    if ($this->disabled) {
+      $this->logError('Request from invalid domain');
+      return [];
+    }
+
     if (empty($target) && !$ignore_errors) {
       static::logError("request() was called with null target.", $post_fields);
       return false;
