@@ -1812,8 +1812,10 @@ class TyovuorootController extends Controller
 
   /**
    * Get an array containing ticket IDs per customer.
+   * @param array $status_ignore
+   * Ticket statuses to ignore; Open 2, Pending 3, Resolved 4, Closed 5
    */
-  public function freshdeskCustomerTickets()
+  public function freshdeskCustomerTickets($status_ignore = [4, 5])
   {
     /** @var Freshdesk object */
     $freshdesk = Yii::createComponent('Freshdesk');
@@ -1837,9 +1839,10 @@ class TyovuorootController extends Controller
     // map results to list of customer ids that have open tickets
     $customer_tickets = [];
     foreach ($tickets as $ticket) {
-      if ($cid = array_search($ticket['requester_id'], $freshdesk_ids)) {
+      if (in_array($ticket['status'] ?? 0, $status_ignore))
+        continue;
+      if ($cid = array_search($ticket['requester_id'], $freshdesk_ids))
         $customer_tickets[$cid][] = $ticket['id'];
-      }
     }
 
     return $customer_tickets;
