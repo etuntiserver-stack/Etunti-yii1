@@ -98,7 +98,8 @@ class CachePaginator extends CComponent
 
     if (!$force_refresh && $data['eod'] != 0 && $data['eod'] < $first_index + count($requested)) {
       $this->log('info', $key_suffix, 'Empty page requested: %d', $page);
-      return false;
+      // return false;
+      return [];
     }
 
     foreach ($index_range as $index) {
@@ -122,18 +123,21 @@ class CachePaginator extends CComponent
         // Data needs to be refreshed. Call the specified callback function.
         $requested_raw = $this->callback($page, $page_size);
       } catch (\Exception $ex) {
-        $this->log('error', $key_suffix, 'Error while refreshing page %d with page size %d: $s', $page, $page_size, $ex->getMessage());
-        return false;
+        $this->log('info', $key_suffix, 'Error while refreshing page %d with page size %d: $s', $page, $page_size, $ex->getMessage());
+        // return false;
+        return [];
       }
 
       if (false === $requested_raw) {
         // Error occured in the callback function.
-        $this->log('error', $key_suffix, 'Callback function returned false (error).');
-        return false;
+        $this->log('info', $key_suffix, 'Callback function returned false (error).');
+        // return false;
+        return [];
       } elseif (!is_array($requested_raw)) {
         // Callback function must return an array (unless an error occured).
-        $this->log('error', $key_suffix, 'Callback function return value is not an array. Returned type: %s', gettype($requested_raw));
-        return false;
+        $this->log('info', $key_suffix, 'Callback function return value is not an array. Returned type: %s', gettype($requested_raw));
+        // return false;
+        return [];
       } else {
         // Set indexes for requested items.
         $requested_raw = array_values($requested_raw);
@@ -146,7 +150,8 @@ class CachePaginator extends CComponent
       // Check if end of data, so that repeat requests are not made.
       if (empty($requested)) {
         $this->log('info', $key_suffix, 'Empty page requested: %d', $page);
-        return false;
+        // return false;
+        return [];
       } elseif (count($requested) != $page_size) {
         $this->log('info', $key_suffix, 'Page %d refreshed with %d items, end of data reached.', $page, count($requested));
         $data['items'] = array_replace($data['items'], $requested);
