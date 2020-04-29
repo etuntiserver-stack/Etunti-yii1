@@ -733,6 +733,7 @@ $(document).ready(function(){
 	if(isset($tvt->id)){
     		$viikkoja = $tvt->viikkoja;
     		$viikko_paivat = json_decode($tvt->viikko_paivat, true);
+    		$pfrom = $tvt->pfrom;
     		$pto = $tvt->pto;
     		$toistuvaID =  '<span id="toistuvaID">'.$model->toistuva_id.'</span>';
 	}
@@ -747,7 +748,7 @@ $(document).ready(function(){
    <div class="panel-footer">
 	<div class="row" id="alkaen_loppuen">
 	  <div class="col-sm-4">
-		<label><?php echo Yii::t('main', 'Alkaen'); ?> </label>
+		<label><?php echo Yii::t('main', 'Alkaen'); ?></label>
 		<input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pfrom]" id="pfrom" value="<?php echo date('d.m.Y', strtotime($laatikko_pvm)); ?>">
 	  </div>
 	  <div class="col-sm-4">
@@ -773,7 +774,9 @@ $(document).ready(function(){
 		</select>
 	  </div>
 	</div>
-
+		<?php if($toistuva and !empty($pfrom)):?>
+		<p class="p10 bg-info">Tämän ketjun oletus alkamispäivämäärä on <b><?=$pfrom?></b>.<br>Muokkaamalla tämän lomakkeen tiedot aikavälissä <b><?=$pfrom?>-<?=date('d.m.Y', strtotime($laatikko_pvm." -1 day"))?></b> ei pysty muokkaamaan.</p>
+		<?php endif; ?>
 	<br>
 	<div class="row" id="vikoPvm">
 	  <div class="col-sm-12 text-center">
