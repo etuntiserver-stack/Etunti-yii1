@@ -775,7 +775,7 @@ $(document).ready(function(){
 	  </div>
 	</div>
 		<?php if($toistuva and !empty($pfrom)):?>
-		<p class="p10 bg-info">Tämän ketjun oletus alkamispäivämäärä on <b><?=$pfrom?></b>.<br>Muokkaamalla tämän lomakkeen tiedot aikavälissä <b><?=$pfrom?>-<?=date('d.m.Y', strtotime($laatikko_pvm." -1 day"))?></b> ei pysty muokkaamaan.</p>
+		<p class="p10 bg-info">Tämä toistuva työvuoro on alkanut ennen nykyistä ajankohtaa. Uudet muutokset tehdään tästä päivästä eteenpäin ja siitä syntyy uusi toistuva työvuoro sekä vanha toistuva työvuoro jää samanlaiseksi tähän päivään saakka.</p>
 		<?php endif; ?>
 	<br>
 	<div class="row" id="vikoPvm">
