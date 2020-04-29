@@ -3,12 +3,16 @@
 /** Freshdesk API manager. */
 class Freshdesk extends CComponent
 {
+  /** @var string Base URL for Freshdesk services. */
+  private const BASE_URL = 'https://<domain>.freshdesk.com';
   /** @var string Default production API URL, without trailing slash. */
-  private const API_URL = '';
+  private const API_URL = BASE_URL . '/api/v2';
   /** @var string Default production API key. */
   private const API_KEY = '';
+  /** @var string Base URL for Freshdesk services. */
+  private const TEST_BASE_URL = 'https://santelo.freshdesk.com';
   /** @var string Default testing API URL, without trailing slash. */
-  private const TEST_API_URL = 'https://santelo.freshdesk.com/api/v2';
+  private const TEST_API_URL = TEST_BASE_URL . '/api/v2';
   /** @var string Default testing API key. */
   private const TEST_API_KEY = 'DSoSK72c321RokLStzw4';
 
@@ -16,6 +20,8 @@ class Freshdesk extends CComponent
   private $testing;
   /** @var string API key. */
   private $key;
+  /** @var string Base URL for Freshdesk services. */
+  private $baseUrl;
   /** @var string API URL, without trailing slash. */
   private $url;
   /** @var bool Flag true if invalid domain and not in testing environment */
@@ -39,9 +45,11 @@ class Freshdesk extends CComponent
     // Specify base url and api key for actions.
     if ($this->testing) {
       $this->key = static::TEST_API_KEY;
+      $this->baseUrl = static::TEST_BASE_URL;:
       $this->url = static::TEST_API_URL;
     } elseif ($domain == 'kotipuhtaaksi') {
       $this->key = static::API_KEY;
+      $this->baseUrl = static::BASE_URL;
       $this->url = static::API_URL;
     } else {
       $this->disabled = true;
@@ -1690,6 +1698,19 @@ class Freshdesk extends CComponent
       return $this->listTickets(null, null, $page, $page_size, null, ['requester', 'description'], 'updated_at', 'desc');
     };
     return $paginator;
+  }
+
+  /**
+   * Get URL for customer page.
+   *
+   * @param int $freshdesk_id
+   * Customer ID.
+   * @return string
+   * URL for customer page.
+   */
+  public function getCustomerUrl(int $freshdesk_id)
+  {
+    return $this->baseUrl . '/a/contacts/' . $freshdesk_id;
   }
 
   #endregion
