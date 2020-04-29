@@ -5,14 +5,10 @@ class Freshdesk extends CComponent
 {
   /** @var string Base URL for Freshdesk services. */
   private const BASE_URL = 'https://<domain>.freshdesk.com';
-  /** @var string Default production API URL, without trailing slash. */
-  private const API_URL = BASE_URL . '/api/v2';
   /** @var string Default production API key. */
   private const API_KEY = '';
   /** @var string Base URL for Freshdesk services. */
   private const TEST_BASE_URL = 'https://santelo.freshdesk.com';
-  /** @var string Default testing API URL, without trailing slash. */
-  private const TEST_API_URL = TEST_BASE_URL . '/api/v2';
   /** @var string Default testing API key. */
   private const TEST_API_KEY = 'DSoSK72c321RokLStzw4';
 
@@ -45,12 +41,12 @@ class Freshdesk extends CComponent
     // Specify base url and api key for actions.
     if ($this->testing) {
       $this->key = static::TEST_API_KEY;
-      $this->baseUrl = static::TEST_BASE_URL;:
-      $this->url = static::TEST_API_URL;
+      $this->baseUrl = static::TEST_BASE_URL;
+      $this->url = static::TEST_BASE_URL . '/api/v2';
     } elseif ($domain == 'kotipuhtaaksi') {
       $this->key = static::API_KEY;
       $this->baseUrl = static::BASE_URL;
-      $this->url = static::API_URL;
+      $this->url = static::BASE_URL . '/api/v2';
     } else {
       $this->disabled = true;
     }
@@ -1708,9 +1704,16 @@ class Freshdesk extends CComponent
    * @return string
    * URL for customer page.
    */
-  public function getCustomerUrl(int $freshdesk_id)
+  public function getCustomerUrl(int $local_id)
   {
-    return $this->baseUrl . '/a/contacts/' . $freshdesk_id;
+    $criteria = new CDbCriteria();
+    $criteria->select = 'freshdesk_id';
+    $criteria->condition = "id = $local_id";
+    $fid = Asiakkaat::model()->find($criteria);
+    if (!empty($fid->freshdesk_id ?? 0))
+      return $this->baseUrl . '/a/contacts/' . $fid->freshdesk_id;
+    else
+      return $this->baseUrl . '/a/contacts';
   }
 
   #endregion
