@@ -134,7 +134,7 @@
        </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-info paivita" select_type="'.$_POST['select_type'].'">Päivitä ikkuna</button>
+        <!--<button type="button" class="btn btn-info paivita" select_type="'.$_POST['select_type'].'">Päivitä ikkuna</button>-->
         <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
         <button type="button" class="btn btn-primary tallenna">Tallenna muutokset</button>
 

@@ -493,8 +493,8 @@ $(document).ready(function(){
       <br>
     </form>
 
-      <div class="row">
-       <div class="col-sm-12">
+      <div class="row mt30">
+       <div class="col-sm-12 mt30">
         <div class="pull-right">
     	  <button class="btn btn-primary myBgColors submitPrintSivutotEro"><i class="fa fa-print" aria-hidden="true"></i></button>
     	  <button class="btn btn-primary myBgColors submitExceltotEro"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>

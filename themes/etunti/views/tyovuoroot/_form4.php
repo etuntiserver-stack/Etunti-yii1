@@ -109,7 +109,6 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 
 <div class="section">
 	<div id="huomio_yllaosa" class="text-center"></div>
-
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'tyovuoroot-form',
 	'enableAjaxValidation'=>false,
@@ -136,7 +135,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 		<div id="asiakasAutocompleteResult"></div>
   </div>
   <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'kohde'); ?>
+		<label for="Tyovuoroot_kohde">Kohde <span class="kohteen_lisatiedot"></span></label>
 		<?php
        		$criteria = new CDbCriteria();
 	        $criteria->order = " osoite ";
@@ -220,7 +219,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 				}
 			}
 			$list = array_merge($l1, $l2);
-			
+
 			echo '<select name="'.$java_prefix.'[tyoajanlaatu]" class="form-control lomake_valinta" id="'.$java_prefix.'_tyoajanlaatu">';
 			foreach($list as $key => $val){
 				$bg 		= '#fff';
@@ -281,6 +280,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 				}
 			}
 			$list = array_merge($l1, $l2);
+			ksort($list);
 			echo '<select name="'.$java_prefix.'[tyoajanmerkinta]" class="form-control lomake_valinta" id="'.$java_prefix.'_tyoajanmerkinta">';
 				if(!empty($model->tyoajanmerkinta)){
 					$expl = explode("/",$model->tyoajanmerkinta);
@@ -746,6 +746,7 @@ $(document).ready(function(){
 	if(isset($tvt->id)){
     		$viikkoja = $tvt->viikkoja;
     		$viikko_paivat = json_decode($tvt->viikko_paivat, true);
+    		$pfrom = $tvt->pfrom;
     		$pto = $tvt->pto;
     		$toistuvaID =  '<span id="toistuvaID">'.$model->toistuva_id.'</span>';
 	}
@@ -760,7 +761,7 @@ $(document).ready(function(){
    <div class="panel-footer">
 	<div class="row" id="alkaen_loppuen">
 	  <div class="col-sm-4">
-		<label><?php echo Yii::t('main', 'Alkaen'); ?> </label>
+		<label><?php echo Yii::t('main', 'Alkaen'); ?></label>
 		<input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pfrom]" id="pfrom" value="<?php echo date('d.m.Y', strtotime($laatikko_pvm)); ?>">
 	  </div>
 	  <div class="col-sm-4">
@@ -786,7 +787,9 @@ $(document).ready(function(){
 		</select>
 	  </div>
 	</div>
-
+		<?php if($toistuva and !empty($pfrom)):?>
+		<p class="p10 bg-info">Tämä toistuva työvuoro on alkanut ennen nykyistä ajankohtaa. Uudet muutokset tehdään tästä päivästä eteenpäin ja siitä syntyy uusi toistuva työvuoro sekä vanha toistuva työvuoro jää samanlaiseksi tähän päivään saakka.</p>
+		<?php endif; ?>
 	<br>
 	<div class="row" id="vikoPvm">
 	  <div class="col-sm-12 text-center">
@@ -1526,7 +1529,7 @@ $(document).ready(function(){
 				$('#arvioitu_kesto').html('00:00');
 			}
 
-			$(".kohteen_lisatiedot").html('<span class="pull-right link avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'">Kohteen listätietoja </span><div class="collapse" id="open_kohde_'+ thisID +'">Puh.: '+ d[7] +'<br>Sähköposti: '+ d[8] +'</div>');
+			$(".kohteen_lisatiedot").html('<span style="position:absolute;right: 10px;top:-12px" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'"></span><div style="position:absolute;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div>');
 
 	   	},
 		error:function(data){
@@ -1580,7 +1583,7 @@ $(document).ready(function(){
 				$('#arvioitu_kesto').html('00:00');
 			}
 
-			$(".kohteen_lisatiedot").html('<span class="pull-right link avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'">Kohteen listätietoja </span><div class="collapse" id="open_kohde_'+ thisID +'">Puh.: '+ d[7] +'<br>Sähköposti: '+ d[8] +'</div>');
+			$(".kohteen_lisatiedot").html('<span style="position:absolute;right: 10px;top:-12px" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'"></span><div style="position:absolute;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div>');
 
 	   	},
 		error:function(data){
