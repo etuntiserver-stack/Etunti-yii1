@@ -632,7 +632,7 @@ public function actionLogin($domain)
 					{
 						$k = Kohteet::model()->findByPk($tv->kohde);
 						$peruutettu = 0;
-						$r = $this->dateDifference(date("Y-m-d", strtotime($tv->pvm)), date("Y-m-d") );
+						$r = $this->dateDifference(date("Y-m-d", strtotime($pvm)), date("Y-m-d") );
 						$asetukset=Asetukset::model()->findByPk(1);
 						if( $asetukset->peruutta_paiva_ennen > 0 and $r > $asetukset->peruutta_paiva_ennen )
 						{
@@ -675,7 +675,7 @@ public function actionLogin($domain)
 							<body>';
 
 							$message .= '<br>Hei, <p>Tilauksesi on peruutettu.</p>';
-							$message .= '<p><b>'.$k->osoite.'</b>, '.$tv->pvm.' '.$tv->alku.'-'.$tv->loppu.'</p>';
+							$message .= '<p><b>'.$k->osoite.'</b>, '.$pvm.' '.$tv->alku.'-'.$tv->loppu.'</p>';
 							if($peruutettu == 2)
 							{
 								$message .= '<h3>Peruutusehdot</h3>';
