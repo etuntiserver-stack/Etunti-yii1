@@ -192,4 +192,4 @@ if( isset($_SESSION['skrollaus']) )
 </div>
 
 <!-- Täytetään tauluu -->
-<?php echo $this->tv_arrJava($from, $to, $haku_criteria, $haku_tids, 'vko'); ?>
+<?php echo $this->tv_arrJava($from, $to, $haku_criteria, $haku_tids, 'vko', $customer_tickets ?? []); ?>

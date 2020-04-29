@@ -2451,7 +2451,46 @@ class TyovuorootController extends Controller
 		print_r( $pyhapaivat );
 		echo '</pre>';
 		exit;
-		*/
+    */
+
+    /** @var Freshdesk object */
+    $freshdesk = Yii::createComponent('Freshdesk');
+    $freshdesk_pager = $freshdesk->getTicketPaginator(10);
+    $criteria = new CDbCriteria();
+    $criteria->select = 'id, freshdesk_id';
+    $criteria->condition = 'freshdesk_id != 0';
+
+    // get freshdesk id for each customer
+    $freshdesk_ids = [];
+    foreach (Asiakkaat::model()->findAll($criteria) as $result) {
+      if (!empty($result->freshdesk_id))
+        $freshdesk_ids[$result->id] = $result->freshdesk_id;
+    }
+
+    // get tickets associated with any customer with defined freshdesk id
+    $tickets = $freshdesk_pager->filtered(1, function ($item) use ($freshdesk_ids) {
+      return (in_array($item['requester_id'] ?? 0, $freshdesk_ids));
+    }, 100);
+
+    // map results to list of customer ids that have open tickets
+    $customer_tickets = [];
+    foreach ($tickets as $ticket) {
+      if ($cid = array_search($ticket['requester_id'], $freshdesk_ids)) {
+        $customer_tickets[$cid][] = $ticket['id'];
+      }
+    }
+
+    // previous method (repeated requests)
+    // Filter cached tickets to find which customers have open tickets
+    // foreach (Asiakkaat::model()->findAll($criteria) as $result) {
+    //   if (!empty($freshdesk_pager->filtered(1, function ($item) use ($result) {
+    //     return ($item['requester_id'] ?? 0) == ($result->freshdesk_id ?? -1);
+    //   }, 50, null, 1))) { // limit 1
+    //     $customer_tickets[] = $result['id'];
+    //   }
+    // }
+    // echo "<pre>" . print_r($customer_tickets, true) . "</pre>";exit;
+
 		if ($mode == 'tt') {
 			$this->render('tt', array(
 				'tt'		=> $tt,
@@ -2462,7 +2501,8 @@ class TyovuorootController extends Controller
 				'vktyoaika'	=> $vktyoaika,
 				'haku_tids'	=> $haku_tids,
 				'pyhapaivat'	=> $pyhapaivat,
-				'haku_criteria' => $haku_criteria
+        'haku_criteria' => $haku_criteria,
+        'customer_tickets' => $customer_tickets
 			));
 		}
 		if ($mode == 'vko') {
@@ -2477,7 +2517,8 @@ class TyovuorootController extends Controller
 				'vktyoaika'	=> $vktyoaika,
 				'haku_tids'	=> $haku_tids,
 				'pyhapaivat'	=> $pyhapaivat,
-				'haku_criteria' => $haku_criteria
+				'haku_criteria' => $haku_criteria,
+        'customer_tickets' => $customer_tickets
 			));
 		}
 	}
@@ -2549,7 +2590,7 @@ class TyovuorootController extends Controller
 		return $status;
 	}
 
-	public function tv_arr($haku_from, $haku_to, $haku_tids, $haku_criteria, $laatikkomuoto, $with){
+	public function tv_arr($haku_from, $haku_to, $haku_tids, $haku_criteria, $laatikkomuoto, $with, $customer_tickets = []){
 
 		$asetukset 		= Asetukset::model()->findByPk(1);
 		$asiakas_tyovuorossa 	= ($asetukset->asiakas_tyovuorossa == 1)? true:false;
@@ -2575,7 +2616,7 @@ class TyovuorootController extends Controller
 	        $criteria->addCondition($haku_criteria);
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		foreach($tv as $arvo){
-			$return = $this->laatikkorakenne($arvo, $arvo->pvm, $arvo->tid, false, $laatikkomuoto, $with, $asiakas_tyovuorossa);
+			$return = $this->laatikkorakenne($arvo, $arvo->pvm, $arvo->tid, false, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets);
 			$tv_arr[$arvo->tid][$arvo->pvm][strtotime($arvo->alku)][] = $return;
 		}
 
@@ -2645,7 +2686,7 @@ class TyovuorootController extends Controller
 						foreach($tids as $tid){
 							if( isset($poistettu_pvms[$tid][$this_pvm]) )
 								continue;
-							$return = $this->laatikkorakenne($arvo, $this_pvm, $tid, true, $laatikkomuoto, $with, $asiakas_tyovuorossa);
+							$return = $this->laatikkorakenne($arvo, $this_pvm, $tid, true, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets);
 							$tv_arr[$tid][$this_pvm][strtotime($arvo->alku)][] = $return;
 						}
 
@@ -2672,7 +2713,7 @@ class TyovuorootController extends Controller
 		return (int)'99999999'.str_pad($id, 8, '0', STR_PAD_LEFT).''.$this_pvm.''.$this_tid;
 	}
 
-	protected function laatikkorakenne($arvo, $this_pvm, $this_tid, $toistuva, $laatikkomuoto, $with, $asiakas_tyovuorossa){
+	protected function laatikkorakenne($arvo, $this_pvm, $this_tid, $toistuva, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets = []){
 		// <-- Status
 		$status = $this->statukset($arvo->piilota_mobiilista);
 		// Status -->
@@ -2685,7 +2726,8 @@ class TyovuorootController extends Controller
 		$osoite 	= ( isset($arvo->osoite) and !empty($arvo->osoite))?$arvo->osoite:'';
 		$ikoonit	= ((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon;
 		$tv_kesto	= 0;
-		$eilasketa 	= $this->eiLasketaSubStr($arvo->tyoajanmerkinta);
+    $eilasketa 	= $this->eiLasketaSubStr($arvo->tyoajanmerkinta);
+    $has_tickets = (isset($customer_tickets[$this_tid]));
 		if($eilasketa != true)
 			$tv_kesto = strtotime($arvo->loppu)-strtotime($arvo->alku);
 
@@ -2702,7 +2744,8 @@ class TyovuorootController extends Controller
 			$return['kohde']  	= $arvo->kohde;
 			$return['this_pvm'] 	= $this_pvm;
 			$return['this_tid'] 	= $this_tid;
-			$return['toistuva'] 	= $toistuva;
+      $return['toistuva'] 	= $toistuva;
+      $return['has_tickets'] = $has_tickets;
 
 			if(isset($new_with['data']))
 				$return['data'] = $arvo;
@@ -2726,7 +2769,9 @@ class TyovuorootController extends Controller
 		if($arvo->peruutettu == 2)
 			$lisateksti .= '<br><span class="text-danger">'. $this->peruutettuArray()[2] .'</span>';
 		if($arvo->tyopaari != '')
-			$ikoonit .= ' <i class="fa fa-male text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i> ';
+      $ikoonit .= ' <i class="fa fa-male text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i> ';
+    if ($has_tickets)
+      $ikoonit .= ' <i class="fa fa-question text-primary" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Avoimia Tukipyyntöɉä').'"></i> ';
 
 		$asiakasNakyvissa = '';
 		if( $asiakas_tyovuorossa ){
@@ -2763,8 +2808,9 @@ class TyovuorootController extends Controller
 		$from 		= date("Y-m-d", strtotime($from));
 		$to 		= date("Y-m-d", strtotime($to));
 		$tids 		= (isset($_POST['tids']))?json_decode($_POST['tids'], true):[];
-		$haku_criteria	= (isset($_POST['haku_criteria']))?$_POST['haku_criteria']:[];
-		$tv_arr = $this->tv_arr($from, $to, $tids, $haku_criteria, true, []);
+    $haku_criteria	= (isset($_POST['haku_criteria']))?$_POST['haku_criteria']:[];
+    $customer_tickets = (isset($_POST['customer_tickets']) ? json_decode($_POST['customer_tickets'], true) : []);
+		$tv_arr = $this->tv_arr($from, $to, $tids, $haku_criteria, true, [], $customer_tickets);
 		/*
 		echo '<pre>';
 		print_r( $tv_arr );
@@ -2775,7 +2821,7 @@ class TyovuorootController extends Controller
 		exit;
 	}
 
-	protected function tv_arrJava($from, $to, $haku_criteria, $haku_tids, $taulu){
+	protected function tv_arrJava($from, $to, $haku_criteria, $haku_tids, $taulu, $customer_tickets = []){
 
 		$hk = json_encode($haku_criteria);
 		// <-- Kaikki kerrallaan
@@ -2785,11 +2831,12 @@ class TyovuorootController extends Controller
 			var from = '$from';
 			var to = '$to';
 			var tids = '".json_encode($haku_tids)."';
-			var haku_criteria = $hk;
+      var haku_criteria = $hk;
+      var customer_tickets = '" . json_encode($customer_tickets) . "';
 			$.ajax({
 				url: location.protocol + \"//\" + location.host + \"/index.php/tyovuoroot/did4?from=\" + from + \"&to=\" + to,
 				type: \"POST\",
-				data: { tids : tids, haku_criteria : haku_criteria },
+				data: { tids : tids, haku_criteria : haku_criteria, customer_tickets: customer_tickets },
 				success:function(data){
 					data = JSON.parse(data);
 					//console.log(data);
