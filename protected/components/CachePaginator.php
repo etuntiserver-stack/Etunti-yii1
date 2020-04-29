@@ -148,7 +148,7 @@ class CachePaginator extends CComponent
         $this->log('info', $key_suffix, 'Empty page requested: %d', $page);
         return false;
       } elseif (count($requested) != $page_size) {
-        $this->log('info', $key_suffix, 'Refreshed page %d (%d items), end of data reached.', $page, count($requested));
+        $this->log('info', $key_suffix, 'Page %d refreshed with %d items, end of data reached.', $page, count($requested));
         $data['items'] = array_replace($data['items'], $requested);
         ksort($data['items']);
         $data['eod'] = $first_index + count($requested);
@@ -156,7 +156,7 @@ class CachePaginator extends CComponent
           $data['times'][$index] = time();
         Yii::app()->cache->set($cache_key, $data, $this->expire * 2);
       } else {
-        $this->log('info', $key_suffix, 'Refreshed page %d (%d items).', $page, count($requested));
+        $this->log('info', $key_suffix, 'Page %d refreshed with %d items.', $page, count($requested));
         $data['items'] = array_replace($data['items'], $requested);
         ksort($data['items']);
         foreach ($index_range as $index)
@@ -189,8 +189,10 @@ class CachePaginator extends CComponent
    * @param string $key_suffix
    * Appended to cache key if specified, so that the same paginator can be used
    * for multiple listings.
+   * @param int $limit
+   * If > 0, limit results to that many items.
    */
-  public function filtered(int $page, callable $selector, bool $force_refresh = false, int $page_size = 0, string $key_suffix = null)
+  public function filtered(int $page, callable $selector, int $page_size = 0, string $key_suffix = null, int $limit = 0)
   {
     $page = max(1, $page);
     $page_size = ($page_size > 0) ? $page_size : $this->pageSize;
@@ -207,12 +209,10 @@ class CachePaginator extends CComponent
 
     $requested_page_reached = ($page == 1);
     $current_index = 0;
-    $refreshed = false;
     while (count($requested) < $page_size) {
 
-      if (($force_refresh && !$refreshed) || !isset($data['items'][$current_index])) {
-        $data['items'] = $this->getPage((int) floor($current_index / $page_size) + 1, $force_refresh, $page_size, $key_suffix);
-        $refreshed = true;
+      if (!isset($data['items'][$current_index])) {
+        $data['items'] = array_replace($data['items'], $this->getPage((int) floor($current_index / $page_size) + 1, false, $page_size, $key_suffix));
       }
 
       if (!isset($data['items'][$current_index])) {
@@ -230,6 +230,8 @@ class CachePaginator extends CComponent
       }
 
       $current_index++;
+      if ($limit > 0 && count($requested) >= $limit)
+        break;
     }
 
     return $requested;
