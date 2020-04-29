@@ -21,6 +21,7 @@ if(
 }
 //     Check tunnit jos ilmainen -->
 
+
 $today = date("d.m.Y");
 if(isset($_GET['tid'])){ $model->tid = $_GET['tid']; }
 if(!isset($laatikko_pvm)){ $laatikko_pvm = ''; }
@@ -33,6 +34,18 @@ if(!empty($laatikko_tid))
 	$model->tid = $laatikko_tid;
 
 $tyopaari = json_decode($model->tyopaari, true);
+
+// Alert on open freshdesk tickets
+$customer_tickets = $this->freshdeskCustomerTickets();
+if (isset($customer_tickets[$model->kohteet->asiakas_id ?? 0])) {
+
+  /** @var Freshdesk obj */
+  $fd = Yii::createComponent('Freshdesk');
+  $link = $fd->getCustomerUrl($model->kohteet->asiakas_id ?? 0);
+  echo '<div id="freshdesk-notice" class="section alert bg-warning">';
+  echo CHtml::link(Yii::t('main', 'Tällä asiakkaalla on avoimia tukipyyntöjä Freshdeskissä. Avaa painamalla tästä.'), $link, ['class' => 'text-dark', 'target' => '_blank']);
+  echo '</div>';
+}
 
 $ohje = '';
 if(isset($model->id)){
