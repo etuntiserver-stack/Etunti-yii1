@@ -120,6 +120,8 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   $from = date("Y-m-d", strtotime($year.'-'.$month.' first day of this month'));
   $to = date("Y-m-d", strtotime($year.'-'.$month.' last day of this month'));
   $tyotunnit_all = $mob[0]->TidfromtoMobiiliAll($from, $to, $v->id, array(3), 2, false, 0, true);
+print_r($tyotunnit_all);
+exit;
    for ($i = 1; $i <= $number; $i++) 
    {
      $thisDate = $year.'-'.$month.'-'.$i;
