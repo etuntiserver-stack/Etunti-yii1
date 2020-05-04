@@ -37,16 +37,11 @@
 			)); ?></p>
 
 		    	<p><?= CHtml::link('<i class="fa fa-file-pdf-o pull-right" aria-hidden="true"></i> eDico mobiilisovellus', 
-				Yii::app()->request->baseUrl."/lib/pdf/.pdf", array(
+				Yii::app()->request->baseUrl."/lib/pdf/eDico-kayttoonotto_03_2018.pdf", array(
 				'target' => '_blank',
 				'class' => 'btn btn-primary btn-lg btn-block myBgColors'
 			)); ?></p>
 
-		    	<p><?= CHtml::link('<i class="fa fa-file-pdf-o pull-right" aria-hidden="true"></i> eDico käyttöehdotmalli', 
-				Yii::app()->request->baseUrl."/lib/pdf/.pdf", array(
-				'target' => '_blank',
-				'class' => 'btn btn-primary btn-lg btn-block myBgColors'
-			)); ?></p>
 
                       </div>
 
