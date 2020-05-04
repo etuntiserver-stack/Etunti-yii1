@@ -74,7 +74,7 @@ foreach($k as $item){
                         </div>
                         <div class="section">
                           <label class="field select">
-				Aikaväli työvuorojen laskemiseen varten.
+				Aikaväli työvuorojen laskemista varten.
                           </label>
                         </div>
                       </div>
