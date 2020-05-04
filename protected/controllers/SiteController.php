@@ -1454,6 +1454,7 @@ class SiteController extends Controller
 
 		Yii::app()->db1->setActive(false);
 		Yii::app()->db1->connectionString = 'mysql:host='.$this->dbhost().';dbname='.$model->domain;
+		Yii::app()->db1->setActive(true);
 
 		$this->render('etunnin_asiakas_kk',array(
 			'id'=>$id,

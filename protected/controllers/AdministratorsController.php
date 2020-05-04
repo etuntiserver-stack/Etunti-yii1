@@ -157,9 +157,9 @@ class AdministratorsController extends Controller
 
 		if(isset($_POST['Administrators']))
 		{
-
-			$vaihdo = false;
 			$vanha_salasana = $model->adm_salasana;
+			$model->attributes=$_POST['Administrators'];
+			$vaihdo = false;
 			if($vanha_salasana != $_POST['Administrators']['adm_salasana'] 
 				and !empty($_POST['Administrators']['adm_salasana'])
 				and !empty($_POST['Administrators']['adm_salasana_repeat'])
@@ -167,9 +167,9 @@ class AdministratorsController extends Controller
 			)
 			{
 				$vaihdo = true;
+				$model->token='';
 			} 	
 
-			$model->attributes=$_POST['Administrators'];
 			if($vaihdo == false)
 				$model->adm_salasana=$vanha_salasana;
 			else

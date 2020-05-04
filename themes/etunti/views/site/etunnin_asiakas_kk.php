@@ -122,7 +122,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   $tyotunnit_all = $mob[0]->TidfromtoMobiiliAll($from, $to, $v->id, array(3), 2, false, 0, true);
    for ($i = 1; $i <= $number; $i++) 
    {
-     $thisDate = $year.'-'.$month.'-'.$i;
+     $thisDate = date("Y-m-d", strtotime($year.'-'.$month.'-'.$i));
      $date = $i.'.'.$month;
 
 
