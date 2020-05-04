@@ -134,8 +134,8 @@ $site = Yii::app()->createController('Site');
               <div class="panel heading-border">
                 <div class="panel-body">
 		<p class="text-danger">Huomio! Poistetut ketjussa olevat päivät tulee saajallekin poistettuna.</p>
-		<p class="text-danger">Huomio! Aloitus päivä voi muutetta. Tämä johtuu työvuorojen viikkoväleistä</p>
-		<p class="text-danger">Huomio! Menneisyydessä olevat ketjut lopetetaan <?=date("d.m.Y",strtotime($alkaen.' -1 day'))?> päivässä</p>
+		<p class="text-danger">Huomio! Aloitus päivä voi muuttua. Tämä johtuu työvuorojen viikkoväleistä</p>
+		<p class="text-danger">Huomio! Menneisyydessä olevat ketjut päättyvät <?=date("d.m.Y",strtotime($alkaen.' -1 day'))?> päivässä</p>
 		<table class="table table-striped table-bordered">
 		<tr>
 		<th><?=Yii::t('main', 'Aloitus')?></th>
