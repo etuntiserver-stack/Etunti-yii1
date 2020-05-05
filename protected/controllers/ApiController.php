@@ -1517,7 +1517,6 @@ public function actionImei($dom)
 			$save = 'ok';
 			if( $new_login ){
 				$return = [
-					"tyo_erittelyt" => $mobupdate->tyo_erittelyt,
 					"tilanne_" => $ms,
 					"id" => $mobupdate->id,
 					"status" => $mobupdate->status,
