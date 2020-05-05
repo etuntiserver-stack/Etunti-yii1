@@ -902,7 +902,13 @@ public function actionImei($dom)
 			$tids = [$ttekija->id];
 			$from = date("Y-m-d", strtotime($pvm));
 			$to = date("Y-m-d", strtotime($pvm));
-			$dataAll = $tv_controller[0]->FromToSuunnitellutAll($from, $to, $tids, [], ['data']);
+			$haku_criteria = [];
+			$haku_criteria[] = " 
+				piilota_mobiilista!=1
+				AND (peruutettu=0 OR peruutettu IS NULL)
+				AND kohde IN(SELECT id FROM sivex_kohdet WHERE aktiivinen=1 AND asiakas_id IN(SELECT id FROM asiakkaat WHERE aktiivinen=1))
+			";
+			$dataAll = $tv_controller[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, ['data']);
 
 			$sel = '';
 			$sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
@@ -966,6 +972,7 @@ public function actionImei($dom)
 			$haku_criteria[] = " 
 				piilota_mobiilista!=1
 				AND (peruutettu=0 OR peruutettu IS NULL)
+				AND kohde IN(SELECT id FROM sivex_kohdet WHERE aktiivinen=1 AND asiakas_id IN(SELECT id FROM asiakkaat WHERE aktiivinen=1))
 			";
 			if( isset($asetukset->app_naytta_sairauslomat) and $asetukset->app_naytta_sairauslomat == 0 ){
 				//$haku_criteria[] = " tyoajanlaatu NOT LIKE '%(SPL)%' AND tyoajanlaatu NOT LIKE '%(SL)%' ";
