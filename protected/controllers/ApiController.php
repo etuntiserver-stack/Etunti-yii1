@@ -1441,9 +1441,6 @@ public function actionImei($dom)
 			$mobupdate->tyo_erittelyt = '';
 		}
 
-		$this->_sendResponse(200, CJSON::encode($_POST));
-		exit;
-
 		$vanhaViesti = '';
 		if($mobupdate->viesti != '')
 		$vanhaViesti = $mobupdate->viesti."\n";
