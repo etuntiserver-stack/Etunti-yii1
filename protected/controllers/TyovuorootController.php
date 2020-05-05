@@ -870,9 +870,9 @@ class TyovuorootController extends Controller
 		$model 		= $get_id['model'];
 		$toistuva 	= $get_id['toistuva'];
 		if( !$toistuva and is_array(json_decode($model->tyopaari, true)) and count(json_decode($model->tyopaari, true)) > 0 )
-			$return['varoitus_tyopaari'] = ['alku' => $model->alku, 'loppu' => $model->loppu, 'osoite' => $model->osoite];
+			$return['varoitus_tyopaari'] = ['alku' => $model->alku, 'loppu' => $model->loppu, 'osoite' => $model->OsoiteById];
 		if( $toistuva )
-			$return['varoitus_toistuva'] = ['alku' => $model->alku, 'loppu' => $model->loppu, 'osoite' => $model->osoite];
+			$return['varoitus_toistuva'] = ['alku' => $model->alku, 'loppu' => $model->loppu, 'osoite' => $model->OsoiteById];
 		return $return;
 	}
 
