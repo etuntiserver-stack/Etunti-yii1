@@ -1435,8 +1435,8 @@ public function actionImei($dom)
 		$log_old = $mobupdate->attributes;
                 $mobupdate->loppui = date("d.m.Y H:i:s");
 
-		if( isset($_POST['tyo_erittelyt']) and is_array($_POST['tyo_erittelyt']) and count($_POST['tyo_erittelyt']) > 0 ){
-			$mobupdate->tyo_erittelyt = json_encode($_POST['tyo_erittelyt']);
+		if( isset($_POST['tyo_erittelyt']) and !empty($_POST['tyo_erittelyt']) ){
+			$mobupdate->tyo_erittelyt = $_POST['tyo_erittelyt'];
 		} else {
 			$mobupdate->tyo_erittelyt = '';
 		}
@@ -1517,7 +1517,7 @@ public function actionImei($dom)
 			$save = 'ok';
 			if( $new_login ){
 				$return = [
-					"tyo_erittelyt" => $_POST['tyo_erittelyt'],
+					"tyo_erittelyt" => $mobupdate->tyo_erittelyt,
 					"tilanne_" => $ms,
 					"id" => $mobupdate->id,
 					"status" => $mobupdate->status,
