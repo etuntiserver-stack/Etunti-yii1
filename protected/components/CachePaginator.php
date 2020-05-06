@@ -123,7 +123,7 @@ class CachePaginator extends CComponent
         // Data needs to be refreshed. Call the specified callback function.
         $requested_raw = $this->callback($page, $page_size);
       } catch (\Exception $ex) {
-        $this->log('info', $key_suffix, 'Error while refreshing page %d with page size %d: $s', $page, $page_size, $ex->getMessage());
+        $this->log('info', $key_suffix, 'Error while refreshing page %d with page size %d: %s', $page, $page_size, $ex->getMessage());
         // return false;
         return [];
       }
