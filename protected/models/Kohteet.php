@@ -206,6 +206,8 @@ class Kohteet extends DB2ActiveRecord
 			'hinnasto_id'=> Yii::t('main', 'Hinnasto'),
 			'tyo_erittelyt' => Yii::t('main', 'Työerittelyt'),
 			'kohteen_neliot' => Yii::t('main', 'Kohteen neliöt'),
+			'arvioitu_kello_alku' => Yii::t('main', 'Arvioitu aloitusaika'),
+			'arvioitu_kello_loppu' => Yii::t('main', 'Arvioitu lopetusaika'),
 		);
 	}
 
