@@ -308,11 +308,35 @@ $(document).ready(function(){
 		<?php echo $form->error($model,'arvioitu_kesto'); ?>
 	</div>
 
+	<div class="section fill mb5">
+	  <div class="row">
+	   <div class="col-sm-6">
+		<?php echo $form->labelEx($model,'arvioitu_kello_alku'); ?>
+		<?php echo $form->textField($model,'arvioitu_kello_alku',array('maxlength'=>5,'class'=>'form-control automask')); ?>
+		<?php echo $form->error($model,'arvioitu_kello_alku'); ?>
+	   </div>
+	   <div class="col-sm-6">
+		<?php echo $form->labelEx($model,'arvioitu_kello_loppu'); ?>
+		<?php echo $form->textField($model,'arvioitu_kello_loppu',array('maxlength'=>5,'class'=>'form-control automask')); ?>
+		<?php echo $form->error($model,'arvioitu_kello_loppu'); ?>
+	   </div>
+	  </div>
+	</div>
+
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
-	  $('#Kohteet_arvioitu_kesto').mask('00:00',{
+	  $('#Kohteet_arvioitu_kesto, #Kohteet_arvioitu_kello_alku, #Kohteet_arvioitu_kello_loppu').mask('00:00',{
 	        placeholder: "__:__"
+	  });
+	  $('.automask').blur(function(){
+		var thisval = $(this).val().split(':');
+		if(!thisval[1] & $(this).val() !== '')
+		{
+			var h = $(this).val() ^ 0 ;
+			var m = 0 ^ 0 ;
+			$(this).val((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));
+		}
 	  });
 	});
 	</script>
