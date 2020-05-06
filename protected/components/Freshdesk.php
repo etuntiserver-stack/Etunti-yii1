@@ -12,6 +12,9 @@ class Freshdesk extends CComponent
   /** @var string Default testing API key. */
   private const TEST_API_KEY = 'DSoSK72c321RokLStzw4';
 
+  /** @var int Amount of seconds until next request when request limit is reached. */
+  private static $retryAfter = 0;
+
   /** @var bool Whether this component is using the testing environment. */
   private $testing;
   /** @var string API key. */
@@ -96,6 +99,17 @@ class Freshdesk extends CComponent
       return false;
     }
 
+    if (static::$retryAfter > 0) {
+      $this->log('Waiting on request %s (retryAfter=%d; rate limit reached).', $target, static::$retryAfter);
+      sleep(static::$retryAfter + 1);
+      static::$retryAfter = 0;
+    }
+
+    $this->logLocal('Request: %s (params: %s)', $target, json_encode($post_fields));
+
+    if ($headers === null)
+      $headers = [];
+
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, "{$this->url}/$target");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -108,38 +122,37 @@ class Freshdesk extends CComponent
     foreach ($tags as $tag => $value)
       curl_setopt($ch, $tag, $value);
 
-    if ($headers !== null) {
+    // Execute request and get header size to separate headers and body.
+    curl_setopt($ch, CURLOPT_HEADER, true);
+    $response = curl_exec($ch);
+    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    curl_close($ch);
 
-      // Execute request and parse response into headers and response body.
-      curl_setopt($ch, CURLOPT_HEADER, true);
-      $response = curl_exec($ch);
-      $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-      $header = substr($response, 0, $header_size);
-      $body = json_decode(substr($response, $header_size), true);
-      // $info = curl_getinfo($ch);
-
-      // Log possible errors.
-      if (isset($body['errors']) && !$ignore_errors) {
-        $error_headers = !empty($header) ? ['headers' => $header] : [];
-        $this->logLocalRequestError($target, $body, $post_fields, $error_headers);
+    // Parse headers
+    if (!empty($header_string = substr($response, 0, $header_size))) {
+      foreach (explode("\r\n", $header_string) as $i => $line) {
+        if (!empty($line) && !ctype_space($line)) {
+          if ($i === 0)
+            $headers['http_code'] = $line;
+          elseif (($split = explode(': ', $line, 2)) !== false)
+            $headers[strtolower($split[0])] = $split[1];
+        }
       }
-
-      $headers = $header;
-      curl_close($ch);
-      return $body;
-    } else {
-
-      // Execute request.
-      $response = json_decode(curl_exec($ch), true);
-
-      // Log possible errors.
-      if (isset($response['errors']) && !$ignore_errors) {
-        $this->logLocalRequestError($target, $response, $post_fields);
-      }
-
-      curl_close($ch);
-      return $response;
     }
+
+    // Parse and decode body, and log possible errors.
+    $body = json_decode(substr($response, $header_size), true);
+    if (isset($body['errors']) && !$ignore_errors) {
+      $this->logLocalRequestError($target, $body, $post_fields, $headers);
+    }
+
+    // Check if rate limit was reached.
+    if (isset($headers['retry-after'])) {
+      static::$retryAfter = $headers['retry-after'];
+      $this->log('Request limit reached, retry-after: %d', $headers['retry-after']);
+    }
+
+    return $body;
   }
 
   /**
@@ -212,7 +225,9 @@ class Freshdesk extends CComponent
   private function requestGet(string $target, array $query_params = [], array $tags = [], &$headers = null, $ignore_errors = false)
   {
     // Remove empty strings from query params.
-    $query_params = array_filter($query_params, function ($v, $k) { return (!is_string($v) || !empty($v)); }, ARRAY_FILTER_USE_BOTH);
+    $query_params = array_filter($query_params, function ($v, $k) {
+      return (!is_string($v) || !empty($v));
+    }, ARRAY_FILTER_USE_BOTH);
 
     // Create query string.
     $query_str = http_build_query($query_params);
@@ -375,7 +390,7 @@ class Freshdesk extends CComponent
    * - company:
    *     Will return the company's id and name.
    * - stats:
-   *     Will return the ticket’s closed_at, resolved_at and first_responded_at time
+   *     Will return the ticket's closed_at, resolved_at and first_responded_at time
    *
    * @return mixed
    * Decoded response.
@@ -490,7 +505,7 @@ class Freshdesk extends CComponent
    *   YYYY-MM-DDTHH:MM:SS±hhmm
    *
    * @param array $embed
-   * stats: Will return the ticket’s closed_at, resolved_at and first_responded_at time
+   * stats: Will return the ticket's closed_at, resolved_at and first_responded_at time
    * requester: Will return the requester's email, id, mobile, name, and phone.
    * description: Will return the ticket description and description_text.
    *
@@ -1375,8 +1390,9 @@ class Freshdesk extends CComponent
    */
   public function logLocal(string $format = null, ...$args)
   {
-    array_unshift($args, $format);
-    return call_user_func_array(['Freshdesk', 'logStatic'], $args);
+    $args[] = $this->getLocals(true)['locals'] ?? '';
+    array_unshift($args, $format . ' (locals: %s)');
+    return call_user_func_array(['Freshdesk', 'log'], $args);
   }
 
   /**
@@ -1438,7 +1454,7 @@ class Freshdesk extends CComponent
   public static function log(string $format = null, ...$args)
   {
     if (!empty($format)) {
-      $format = sprintf('(uid %d@%s): %s', Yii::app()->user->getId(), Yii::app()->user->domain, $format);
+      $format = sprintf('%s (from uid %d@%s)', $format, Yii::app()->user->getId(), Yii::app()->user->domain);
       array_unshift($args, $format);
       $message = call_user_func_array('sprintf', $args);
       Yii::getLogger()->log($message, 'info', 'freshdesk');
@@ -1566,26 +1582,46 @@ class Freshdesk extends CComponent
   public static function errorCodeText(string $error_code)
   {
     switch ($error_code) {
-      case 'missing_field': return 'A mandatory attribute is missing. For example, calling Create a Contact without the mandatory email field in the request will result in this error.';
-      case 'invalid_value': return 'This code indicates that a request contained an incorrect or blank value, or was in an invalid format.';
-      case 'duplicate_value': return 'Indicates that this value already exists. This error is applicable to fields that require unique values such as the email address in a contact or the name in a company.';
-      case 'datatype_mismatch': return 'Indicates that the field value doesn\'t match the expected data type. Entering text in a numerical field would trigger this error.';
-      case 'invalid_field': return 'An unexpected field was part of the request. If any additional field is included in the request payload (other than what is specified in the API documentation), this error will occur.';
-      case 'invalid_json': return 'Request parameter is not a valid JSON. We recommend that you validate the JSON payload with a JSON validator before firing the API request.';
-      case 'invalid_credentials': return 'Incorrect or missing API credentials. As the name suggests, it indicates that the API request was made with invalid credentials. Forgetting to apply Base64 encoding on the API key is a common cause of this error.';
-      case 'access_denied': return 'Insufficient privileges to perform this action. An agent attempting to access admin APIs will result in this error.';
-      case 'require_feature': return 'Not allowed as a specific feature has to be enabled in your Freshdesk portal for you to perform this action.';
-      case 'account_suspended': return 'Account has been suspended.';
-      case 'ssl_required': return 'HTTPS is required in the API URL.';
-      case 'readonly_field': return 'Read only field cannot be altered.';
-      case 'inconsistent_state': return 'An email should be associated with the contact before converting the contact to an agent.';
-      case 'max_agents_reached': return 'The account has reached the maximum number of agents.';
-      case 'password_lockout': return 'The agent has reached the maximum number of failed login attempts.';
-      case 'password_expired': return 'The agent\'s password has expired.';
-      case 'no_content_required': return 'No JSON data required.';
-      case 'inaccessible_field': return 'The agent is not authorized to update this field.';
-      case 'incompatible_field': return 'The field cannot be updated due to the current state of the record.';
-      default: return 'Unknown error code.';
+      case 'missing_field':
+        return 'A mandatory attribute is missing. For example, calling Create a Contact without the mandatory email field in the request will result in this error.';
+      case 'invalid_value':
+        return 'This code indicates that a request contained an incorrect or blank value, or was in an invalid format.';
+      case 'duplicate_value':
+        return 'Indicates that this value already exists. This error is applicable to fields that require unique values such as the email address in a contact or the name in a company.';
+      case 'datatype_mismatch':
+        return 'Indicates that the field value doesn\'t match the expected data type. Entering text in a numerical field would trigger this error.';
+      case 'invalid_field':
+        return 'An unexpected field was part of the request. If any additional field is included in the request payload (other than what is specified in the API documentation), this error will occur.';
+      case 'invalid_json':
+        return 'Request parameter is not a valid JSON. We recommend that you validate the JSON payload with a JSON validator before firing the API request.';
+      case 'invalid_credentials':
+        return 'Incorrect or missing API credentials. As the name suggests, it indicates that the API request was made with invalid credentials. Forgetting to apply Base64 encoding on the API key is a common cause of this error.';
+      case 'access_denied':
+        return 'Insufficient privileges to perform this action. An agent attempting to access admin APIs will result in this error.';
+      case 'require_feature':
+        return 'Not allowed as a specific feature has to be enabled in your Freshdesk portal for you to perform this action.';
+      case 'account_suspended':
+        return 'Account has been suspended.';
+      case 'ssl_required':
+        return 'HTTPS is required in the API URL.';
+      case 'readonly_field':
+        return 'Read only field cannot be altered.';
+      case 'inconsistent_state':
+        return 'An email should be associated with the contact before converting the contact to an agent.';
+      case 'max_agents_reached':
+        return 'The account has reached the maximum number of agents.';
+      case 'password_lockout':
+        return 'The agent has reached the maximum number of failed login attempts.';
+      case 'password_expired':
+        return 'The agent\'s password has expired.';
+      case 'no_content_required':
+        return 'No JSON data required.';
+      case 'inaccessible_field':
+        return 'The agent is not authorized to update this field.';
+      case 'incompatible_field':
+        return 'The field cannot be updated due to the current state of the record.';
+      default:
+        return 'Unknown error code.';
     }
   }
 
@@ -1600,17 +1636,28 @@ class Freshdesk extends CComponent
   public static function errorStatusCodeText(int $error_status)
   {
     switch ($error_status) {
-      case 400: return 'Client or Validation Error: The request body/query string is not in the correct format. For example, the Create a ticket API requires the requester_id field to be sent as part of the request and if it is missing, this status code is returned.';
-      case 401: return 'Authentication Failure: Indicates that the Authorization header is either missing or incorrect. You can learn more about the Authorization header here.';
-      case 403: return 'Access Denied: This indicates that the agent whose credentials were used in making this request was not authorized to perform this API call. It could be that this API call requires admin level credentials or perhaps the Freshdesk portal doesn\'t have the corresponding feature enabled. It could also indicate that the user has reached the maximum number of failed login attempts or that the account has reached the maximum number of agents';
-      case 404: return 'Requested Resource not Found: This status code is returned when the request contains invalid ID/Freshdesk domain in the URL or an invalid URL itself. For example, an API call to retrieve a ticket with an invalid ID will return a HTTP 404 status code to let you know that no such ticket exists.';
-      case 405: return 'Method not allowed: This API request used the wrong HTTP verb/method. For example an API PUT request on /api/v2/tickets endpoint will return a HTTP 405 as /api/v2/tickets allows only GET and POST requests.';
-      case 406: return 'Unsupported Accept Header: Only application/json and */* are supported. When uploading files multipart/form-data is supported.';
-      case 409: return 'Inconsistent/Conflicting State: The resource that is being created/updated is in an inconsistent or conflicting state. For example, if you attempt to Create a Contact with an email that is already associated with an existing user, this code will be returned.';
-      case 415: return 'Unsupported Content-type: Content type application/xml is not supported. Only application/json is supported.';
-      case 429: return 'Rate Limit Exceeded: The API rate limit allotted for your Freshdesk domain has been exhausted.';
-      case 500: return 'Unexpected Server Error: Phew!! You can\'t do anything more here. This indicates an error at Freshdesk\'s side. Please email us your API script along with the response headers. We will reach you out to you and fix this ASAP.';
-      default: return 'Unknown error code.';
+      case 400:
+        return 'Client or Validation Error: The request body/query string is not in the correct format. For example, the Create a ticket API requires the requester_id field to be sent as part of the request and if it is missing, this status code is returned.';
+      case 401:
+        return 'Authentication Failure: Indicates that the Authorization header is either missing or incorrect. You can learn more about the Authorization header here.';
+      case 403:
+        return 'Access Denied: This indicates that the agent whose credentials were used in making this request was not authorized to perform this API call. It could be that this API call requires admin level credentials or perhaps the Freshdesk portal doesn\'t have the corresponding feature enabled. It could also indicate that the user has reached the maximum number of failed login attempts or that the account has reached the maximum number of agents';
+      case 404:
+        return 'Requested Resource not Found: This status code is returned when the request contains invalid ID/Freshdesk domain in the URL or an invalid URL itself. For example, an API call to retrieve a ticket with an invalid ID will return a HTTP 404 status code to let you know that no such ticket exists.';
+      case 405:
+        return 'Method not allowed: This API request used the wrong HTTP verb/method. For example an API PUT request on /api/v2/tickets endpoint will return a HTTP 405 as /api/v2/tickets allows only GET and POST requests.';
+      case 406:
+        return 'Unsupported Accept Header: Only application/json and */* are supported. When uploading files multipart/form-data is supported.';
+      case 409:
+        return 'Inconsistent/Conflicting State: The resource that is being created/updated is in an inconsistent or conflicting state. For example, if you attempt to Create a Contact with an email that is already associated with an existing user, this code will be returned.';
+      case 415:
+        return 'Unsupported Content-type: Content type application/xml is not supported. Only application/json is supported.';
+      case 429:
+        return 'Rate Limit Exceeded: The API rate limit allotted for your Freshdesk domain has been exhausted.';
+      case 500:
+        return 'Unexpected Server Error: Phew!! You can\'t do anything more here. This indicates an error at Freshdesk\'s side. Please email us your API script along with the response headers. We will reach you out to you and fix this ASAP.';
+      default:
+        return 'Unknown error code.';
     }
   }
 
@@ -1658,7 +1705,7 @@ class Freshdesk extends CComponent
    *   YYYY-MM-DDTHH:MM:SS±hh
    *   YYYY-MM-DDTHH:MM:SS±hhmm
    */
-  private static function validateTimeString(string $time_string) :bool
+  private static function validateTimeString(string $time_string): bool
   {
     // Quick regex to match all the example time strings and nothing else. This
     // effectively checks if a time string is formatted correctly for the API.
@@ -1690,8 +1737,20 @@ class Freshdesk extends CComponent
     $paginator = Yii::createComponent('CachePaginator', 'freshdesk_tickets');
     $paginator->logCategory = 'freshdesk';
     $paginator->pageSize = $per_page;
-    $paginator->callback = function($page, $page_size) {
+    $paginator->callback = function ($page, $page_size) {
       return $this->listTickets(null, null, $page, $page_size, null, ['requester', 'description'], 'updated_at', 'desc');
+    };
+    return $paginator;
+  }
+
+  public function getContactPaginator(int $per_page = 10)
+  {
+    /** @var CachePaginator object. */
+    $paginator = Yii::createComponent('CachePaginator', 'freshdesk_contacts');
+    $paginator->logCategory = 'freshdesk';
+    $paginator->pageSize = $per_page;
+    $paginator->callback = function ($page, $page_size) {
+      return $this->listContacts($page, $page_size);
     };
     return $paginator;
   }
@@ -1714,6 +1773,204 @@ class Freshdesk extends CComponent
       return $this->baseUrl . '/a/contacts/' . $fid->freshdesk_id;
     else
       return $this->baseUrl . '/a/contacts';
+  }
+
+  /**
+   * Check whether Freshdesk functionality should be disabled.
+   */
+  public function isDisabled()
+  {
+    return $this->disabled;
+  }
+
+  /**
+   * Export customer by ID to Freshdesk. If contact already exists, Freshdesk
+   * will detect it and update existing contact instead.
+   *
+   * @param mixed $customer_id
+   * Customer ID, or 'all' to export _ALL_ customers (not only new ones). Can
+   * also be an array of multiple IDs.
+   * @return array
+   * [
+   *   'updated_count' => 0,
+   *   'created_count' => 0,
+   *   'errors' => []
+   * ]
+   */
+  public function exportContact($customer_id, $xhr = false)
+  {
+    $error_array = [];
+    $this->logLocal('Exporting contact(s): %s', is_array($customer_id) ? json_encode($customer_id) : $customer_id);
+
+    $error = function (string $text, string $description, array $errors = [], $headers = null, $asiakas = null) use (&$error_array) {
+      $push = ['text' => $text, 'description' => $description, 'errors' => $errors, 'headers' => $headers];
+
+      if ($asiakas) {
+        $push['asiakas_id'] = $asiakas->id;
+        $push['asiakas'] = $asiakas->yhteyshenkilo ?: $asiakas->sahkoposti ?: $asiakas->id;
+      }
+
+      $error_array[] = $push;
+      $this->logLocalError('Error in exportContact()', $push, true);
+    };
+
+    if (!is_numeric($customer_id) && !is_array($customer_id) && $customer_id != 'all') {
+      $error(sprintf('Invalid customer ID for export: %s', $customer_id), '');
+      return ['updated_count' => 0, 'created_count' => 0, 'errors' => $error_array];
+    }
+
+    if (is_numeric($customer_id)) {
+
+      if (!$asiakkaat = Asiakkaat::model()->findByPk($customer_id))
+        $error('Sisäinen virhe: asiakasta ei löytynyt', "Customer by ID $customer_id was not found");
+      else
+        $asiakkaat = [$asiakkaat]; // findByPk returns single model
+
+    } elseif (is_array($customer_id)) {
+
+      // Check that array contains only integers.
+      $filtered_non_numeric = array_filter($customer_id, function ($v, $k) {
+        return !is_numeric($v);
+      }, ARRAY_FILTER_USE_BOTH);
+      if (!empty($filtered_non_numeric))
+        $error('Sisäinen virhe: asiakkaita ei löytynyt', 'Invalid primary key(s) inside export array: ' . implode(', ', $filtered_non_numeric));
+      elseif (!$asiakkaat = Asiakkaat::model()->findAllByPk($customer_id))
+        $error('Sisäinen virhe: asiakkaita ei löytynyt', 'No customers found by ID(s) ' . implode(', ', $customer_id));
+    } elseif (!$asiakkaat = Asiakkaat::model()->findAll()) {
+      $error('Sisäinen virhe: asiakkaita ei löytynyt', 'No customers found');
+    }
+
+    if (empty($error_array)) {
+
+      $pager = $this->getContactPaginator(100);
+      $updated_count = 0;
+      $created_count = 0;
+      $processed_count = 0;
+      foreach ($asiakkaat as $a) {
+
+        $name = $a->yhteyshenkilo;
+        if (empty($name)) {
+          if (empty($a->sahkoposti)) {
+            // $error(
+            //   'Sisäinen virhe: vaadittu tieto (nimi) puuttuu',
+            //   'Cannot fill required value \'name\': fields \'yhteyshenkilo\' and \'sahkoposti\' are empty',
+            //   [], null, $a
+            // );
+            continue;
+          }
+
+          $name = $a->sahkoposti;
+        }
+
+        $opts = [
+          'name' => $name,                //? (mandatory) (string) Name of the contact
+          // 'email' => '',               //? * (unique) (string) Primary email address of the contact. If you want to associate additional email(s) with this contact, use the other_emails attribute.
+          // 'phone' => 0,                //? * (string) Telephone number of the contact
+          // 'mobile' => 0,               //? * (number) Mobile number of the contact
+          // 'twitter_id' => '',          //? * (unique) (string) Twitter handle of the contact
+          'unique_external_id' => $a->id, //? * (unique) (string) External ID of the contact
+          //? * = One of these five attributes is mandatory (when creating, not updating).
+          // 'other_emails' => [],        //? (array of strings) Additional emails associated with the contact
+          // 'company_id' => 0,           //? (number) ID of the primary company to which this contact belongs
+          // 'view_all_tickets' => true,  //? (boolean) Set to true if the contact can see all the tickets that are associated with the company to which he belong
+          // 'other_companies' => [],     //? (array of hashes) Additional companies associated with the contact. This attribute can only be set if the Multiple Companies feature is enabled (Estate plan and above)
+          // 'address' => '',             //? (string) Address of the contact.
+          // 'avatar' => null,            //? (object) Avatar image of the contact The maximum file size is 5MB and the supported file types are .jpg, .jpeg, .jpe, and .png
+          // 'custom_fields' => [],       //? (dictionary) Key value pairs containing the name and value of the custom field. Only dates in the format YYYY-MM-DD are accepted as input for custom date fields. Read more here
+          // 'description' => '',         //? (string) A small description of the contact
+          // 'job_title' => '',           //? (string) Job title of the contact
+          // 'language' => 'fi',          //? (string) Language of the contact. Default language is "en". This attribute can only be set if the Multiple Language feature is enabled (Garden plan and above)
+          // 'tags' => [],                //? (array of strings) Tags associated with this contact
+          // 'time_zone' => ''            //? (string) Time zone of the contact. Default value is the time zone of the domain. This attribute can only be set if the Multiple Time Zone feature is enabled (Garden plan and above)
+        ];
+
+        if (filter_var($a->sahkoposti, FILTER_VALIDATE_EMAIL)) {
+          $opts['email'] = $a->sahkoposti;
+        } else {
+          continue; // require email data for creating contact
+        }
+
+        if (!empty($a->puhelin) && preg_match('/^\+?[\d ]+$/', $a->puhelin)) {
+          $opts['phone'] = $a->puhelin;
+          $opts['mobile'] = $a->puhelin;
+        }
+
+        if (!empty($a->osoite)) {
+          $opts['address'] = $a->osoite;
+        }
+
+        // Check for duplicate, in which case, update existing contact.
+        $is_duplicate = false;
+        $duplicate_id = 0;
+        $filtered = $pager->filtered(1, function ($item) use ($a) {
+          return (($item['unique_external_id'] ?? 0) == ($a->id ?? -1) || ($item['email'] ?? '<>') == ($a->sahkoposti ?? ''));
+        }, 100, null, 1);
+        if (!empty($filtered)) {
+          $is_duplicate = true;
+          $duplicate_id = $filtered[0]['id'];
+        }
+
+        $headers = [];
+        $results = null;
+
+        if ($is_duplicate) {
+          $results = $this->updateContact($duplicate_id, $opts, $headers);
+
+          if (!empty($results['errors'])) {
+            // $error('Olemassaolevan asiakkaan päivittämisessä tapahtui virhe', $results['description'] ?? '', $results['errors'], $headers, $a);
+          } else {
+            $updated_count++;
+          }
+        } else {
+          $results = $this->createContact($opts, $headers, true);
+
+          if (!empty($results['errors'])) {
+
+            // If code duplicate_value, call updateContact(). This can happen when a contact with
+            // same info has been deleted but not deleted forever (in "trash can").
+            if (
+              count($results['errors']) == 1 &&
+              ($results['errors'][0]['code'] ?? '') == 'duplicate_value' &&
+              !empty($results['errors'][0]['additional_info']['user_id'])
+            ) {
+              $results = $this->updateContact($results['errors'][0]['additional_info']['user_id'], $opts, $headers);
+
+              if (!empty($results['errors'])) {
+                // $error('Olemassaolevan asiakkaan päivittämisessä tapahtui virhe', $results['description'] ?? '', $results['errors'], $headers, $a);
+              } else {
+                $updated_count++;
+              }
+            } else {
+              // $error('Asiakkaan luonnissa tapahtui virhe', $results['description'] ?? '', $results['errors'], $headers, $a);
+            }
+          } else {
+            $created_count++;
+          }
+        }
+
+        if (!empty($results['id'])) {
+          // var_dump($a->id, $a->yhteyshenkilo, $results);exit;
+          // saveAttributes skips onAfterSave() event to avoid infinite loop.
+          $a->saveAttributes(['freshdesk_id' => $results['id']]);
+        }
+
+        // var_dump("<pre>" . print_r($headers, true) . "</pre>");
+        // var_dump("<pre>" . print_r($results, true) . "</pre>");
+        // exit;
+
+        if ($xhr && ++$processed_count % 3 == 2) {
+          echo json_encode(['current' => $processed_count, 'total' => count($asiakkaat)]);
+          ob_flush();
+          flush();
+        }
+      }
+    }
+
+    return [
+      'updated_count' => $updated_count,
+      'created_count' => $created_count,
+      'errors' => $error_array
+    ];
   }
 
   #endregion
