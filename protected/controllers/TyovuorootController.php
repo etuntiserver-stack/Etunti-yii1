@@ -3292,11 +3292,13 @@ class TyovuorootController extends Controller
 		$criteria->condition = "aktiivinen=1";
 	  	$t = Tyontekijat::model()->findAll($criteria);
 		$tekijan_nimi = '<select id="tekijanVaihdo" class="form-control">';
+		if($tid == 0)
+			$tekijan_nimi .= '<option value="0" selected>VARAUS</option>';
 		foreach($t as $tekijanData){
 			if($tekijanData->id == $tid)
-			$tekijan_nimi .= '<option value="'.$tekijanData->id.'" selected>'.$tekijanData->$tt_order_1.' '.$tekijanData->$tt_order_2.'</option>';
+				$tekijan_nimi .= '<option value="'.$tekijanData->id.'" selected>'.$tekijanData->$tt_order_1.' '.$tekijanData->$tt_order_2.'</option>';
 			else
-			$tekijan_nimi .= '<option value="'.$tekijanData->id.'">'.$tekijanData->$tt_order_1.' '.$tekijanData->$tt_order_2.'</option>';
+				$tekijan_nimi .= '<option value="'.$tekijanData->id.'">'.$tekijanData->$tt_order_1.' '.$tekijanData->$tt_order_2.'</option>';
 		}
 		$tekijan_nimi .= '</select>';
 		$form_content = '';
