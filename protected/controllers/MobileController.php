@@ -2249,7 +2249,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		return count($vl);
 	}
 */
-	protected function TidfromtoVuosilomaBetween($from, $to, $tids, $tila)
+	protected function TidfromtoVuosilomaBetween($from, $to, $tids, $tila, $by_pvm=false)
 	{
 		$set 		= [];
 		$from 		= date("Y-m-d", strtotime($from));
@@ -2260,10 +2260,17 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, $with);
 		foreach($dataAll as $arr){
 			$item = $arr['data'];
-			if(!isset($set[$item->tid]))
-				$set[$item->tid] = 1;
-			else
-				$set[$item->tid] += 1;
+			if($by_pvm){
+				if(!isset($set[$arr['this_pvm']][$arr['this_tid']]))
+					$set[$arr['this_pvm']][$arr['this_tid']] = 1;
+				else
+					$set[$arr['this_pvm']][$arr['this_tid']] += 1;
+			} else {
+				if(!isset($set[$arr['this_tid']]))
+					$set[$arr['this_tid']] = 1;
+				else
+					$set[$arr['this_tid']] += 1;
+			}
 		}
 		return $set;
 	}

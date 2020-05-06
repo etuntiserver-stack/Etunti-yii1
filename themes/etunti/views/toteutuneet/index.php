@@ -322,12 +322,12 @@ $dateDiff = dateDiff($from, $to);
   }
 
   // <-- SPL, SL, LS, VL, VKL, AP
-  $sl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'SL',true); // Palkallinen
-  $spl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'SPL',true); // Palkaton
-  $ls_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'LS',true); // Lapsen sairaus
-  $vl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'VL',true); // Vuosiloma
-  $vkl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'VKL',true); // Viikkolomapaiva  ( Poistettu kaytosta )
-  $ap_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'AP',true); // Arkipaiva
+  $sl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'SL',true); // Palkallinen
+  $spl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'SPL',true); // Palkaton
+  $ls_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'LS',true); // Lapsen sairaus
+  $vl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'VL',true); // Vuosiloma
+  $vkl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'VKL',true); // Viikkolomapaiva  ( Poistettu kaytosta )
+  $ap_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'AP',true); // Arkipaiva
   //     SPL, SL, LS, VL, VKL, AP -->
 
   $luetut_laatikot = json_decode($this->LuetutPvmTidBetween($from,$to,$tid), true);
