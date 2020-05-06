@@ -159,6 +159,10 @@ $freshdesk_domain = 'santelo'; // TEMP
   #spopup-header {
     margin: 4px 0 10px;
   }
+
+  #export-customers-progress {
+    display: none;
+  }
 </style>
 
 <div style="display:none">
@@ -288,6 +292,11 @@ $freshdesk_domain = 'santelo'; // TEMP
                   </label>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="well well-sm" id="export-customers-progress"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -304,21 +313,18 @@ $freshdesk_domain = 'santelo'; // TEMP
       let obj = $('#ticket-base').clone();
       let ticketLink = 'https://<?= $freshdesk_domain ?>.freshdesk.com/a/tickets/' + id;
 
-      // let priorityText = (function(p) {
-      //   switch(p) {
-      //     case 1: return ''
-      //   }
-      // })(priority);
-
       obj.attr('id', 'ticket-' + id);
       obj.find('.ticket-title').text('Tukipyyntö: ' + title).attr('href', ticketLink);
+
       if (customer_id > 0)
         obj.find('.ticket-customer-link').attr('href', `/index.php/asiakkaat/update?id=${customer_id}`).text(customer);
       else
         obj.find('.ticket-customer-link').attr('href', '#').removeAttr('target').text(customer);
+
       obj.find('.ticket-description').text(description);
       obj.find('.ticket-respond-link').attr('href', ticketLink);
       // obj.find('.ticket-body').attr('onclick', `location.href='/index.php/tyovuoroot/freshdesk/${id}'`);
+
       obj.find('.ticket-body').on('click', function(e) {
         let data = '',
           val = '',
@@ -411,19 +417,6 @@ $freshdesk_domain = 'santelo'; // TEMP
       console.log(`${location.protocol}//${location.host}/index.php/tyovuoroot/freshdesk?page=${queryPage}`);
 
       $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/freshdesk?page=${queryPage}`, {
-
-        // xhrFields: {
-        //   onprogress: function(e) {
-        //     let response = e.currentTarget.response.substring(list_previous_length);
-        //     list_previous_length = e.currentTarget.response.length; // let list_previous_length = 0;
-        //     console.log(response);
-        //     let parsed = JSON.parse(response);
-        //     let customer_id = Math.floor(Math.random() * 10000); // TEMP, internal, for link.
-        //     $.each(parsed, function(i, t) {
-        //       drawTicket(t.id, t.requester.name, customer_id, t.status, formatUtcString(t.updated_at), t.subject, t.description_text);
-        //     });
-        //   }
-        // },
 
         error: function(xhr, status, error) {
           console.log(xhr.responseText);
@@ -590,11 +583,35 @@ $freshdesk_domain = 'santelo'; // TEMP
       if (selection.length == 0)
         return;
       $(this).attr('disabled', 'disabled');
+      let previous_length = 0;
+      $('#export-customers-progress').css('display', 'block');
       $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/freshdesk`, {
 
         type: 'POST',
         data: {
           export: selection
+        },
+
+        xhrFields: {
+          onprogress: function(e) {
+            if (selection != 'all')
+              return;
+            let response = e.currentTarget.response.substring(previous_length);
+            previous_length = e.currentTarget.response.length;
+            console.log(response);
+            let parsed = null;
+
+            try {
+              parsed = JSON.parse(response);
+            } catch (e) {
+              console.log("Unable to parse output: " + response);
+              return;
+            }
+
+            if ('current' in parsed) {
+              $('#export-customers-progress').text(`Viety: ${parsed['current']} / ${parsed['total']}`);
+            }
+          }
         },
 
         error: function(xhr, status, error) {
@@ -604,6 +621,11 @@ $freshdesk_domain = 'santelo'; // TEMP
 
         success: function(data) {
           console.log(data);
+          $('#export-customers-progress').text = `Valmis`;
+
+          let response = data.substring(previous_length);
+          previous_length = data.length;
+          console.log(response);
           let parsed = null;
 
           try {
