@@ -102,6 +102,8 @@ class Kohteet extends DB2ActiveRecord
                      'avaimen_sijainti' => 'int(1) DEFAULT 0',
                      'tarvittavien_tyontekijoiden_maara' => 'int(3) DEFAULT 0',
                      'arvioitu_kesto' => 'varchar(100) DEFAULT NULL',
+                     'arvioitu_kello_alku' => 'varchar(100) DEFAULT NULL',
+                     'arvioitu_kello_loppu' => 'varchar(100) DEFAULT NULL',
                      'uusi_tilaus' => 'int(1) DEFAULT 0',
 		     'hinnasto_id' => 'int(11) DEFAULT 0',
                      'alv' => 'int(2) DEFAULT 0',
@@ -141,7 +143,7 @@ class Kohteet extends DB2ActiveRecord
 			array('email', 'length', 'max'=>72),
 			array('ryhma, viivastyskorko, hinta', 'length', 'max'=>10),
 			array('avain, lasku_tiedot', 'length', 'max'=>255),
-			array('siivous, etu_suku_nimet, arvioitu_kesto, verot', 'length', 'max'=>100),
+			array('siivous, etu_suku_nimet, arvioitu_kesto, arvioitu_kello_alku, arvioitu_kello_loppu, verot', 'length', 'max'=>100),
 			array('aikataulu, hinnoittelu, muut, toimenpiteet, tietoja, tyo_erittelyt', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -204,6 +206,8 @@ class Kohteet extends DB2ActiveRecord
 			'hinnasto_id'=> Yii::t('main', 'Hinnasto'),
 			'tyo_erittelyt' => Yii::t('main', 'Työerittelyt'),
 			'kohteen_neliot' => Yii::t('main', 'Kohteen neliöt'),
+			'arvioitu_kello_alku' => Yii::t('main', 'Arvioitu aloitusaika'),
+			'arvioitu_kello_loppu' => Yii::t('main', 'Arvioitu lopetusaika'),
 		);
 	}
 

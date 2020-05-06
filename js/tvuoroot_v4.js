@@ -294,9 +294,9 @@ $(document).delegate(".muistin","click",function(){
 		if( data['varoitus_tyopaari'] || data['varoitus_toistuva'] ){
 			alertti = "Huomio!\n\n";
 			if( data['varoitus_tyopaari'] )
-				alertti += "Siirtäessä tai poistaessa irrotat " + data['varoitus_tyopaari']['alku'] + "-" + data['varoitus_tyopaari']['loppu'] + ", " + data['varoitus_tyopaari']['osoite'] + " työvuoro olevasta työparista";
+				alertti += "Siirtäessä tai poistaessa irrotat " + data['varoitus_tyopaari']['osoite'] + " " + data['varoitus_tyopaari']['alku'] + "-" + data['varoitus_tyopaari']['loppu'] + ", työvuoron olevasta työparista";
 			if( data['varoitus_toistuva'] )
-				alertti += "Siirtäessä tai poistaessa irrotat " + data['varoitus_toistuva']['alku'] + "-" + data['varoitus_toistuva']['loppu'] + ", " + data['varoitus_toistuva']['osoite'] + " työvuoro toistuvasta ketjusta.";
+				alertti += "Siirtäessä tai poistaessa irrotat " + data['varoitus_toistuva']['osoite'] + " " + data['varoitus_toistuva']['alku'] + "-" + data['varoitus_toistuva']['loppu'] + ", työvuoron toistuvasta ketjusta.";
 			alert(alertti);
 		}
 	  	muisti();

@@ -149,13 +149,17 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 
         public function getosoiteById(){
 		$return = '';
-		if(!empty($this->kohde) and empty($this->osoite)){
+		if(empty($this->osoite) and $this->status != '2' and $this->status != '10'){
 			$k = Kohteet::model()->findByPk($this->kohde);
 			if( isset($k->id) ){
 				$return = $k->osoite;
 			}
-		} elseif(!empty($this->osoite)){
+		} elseif(!empty($this->osoite) and $this->status != '2' and $this->status != '10'){
 			$return = $this->osoite;
+		} elseif($this->status == '2'){
+			$return = 'MATKA';
+		} elseif($this->status == '10'){
+			$return = 'Lounastauko';
 		}
                 return $return;
         }

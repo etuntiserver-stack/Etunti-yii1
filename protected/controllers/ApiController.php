@@ -902,7 +902,12 @@ public function actionImei($dom)
 			$tids = [$ttekija->id];
 			$from = date("Y-m-d", strtotime($pvm));
 			$to = date("Y-m-d", strtotime($pvm));
-			$dataAll = $tv_controller[0]->FromToSuunnitellutAll($from, $to, $tids, [], ['data']);
+			$haku_criteria = [];
+			$haku_criteria[] = " 
+				piilota_mobiilista!=1
+				AND (peruutettu=0 OR peruutettu IS NULL)
+			";
+			$dataAll = $tv_controller[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, ['data']);
 
 			$sel = '';
 			$sel .= '<select id="list" class="form-control input-lg list_tyovuorosta">';
@@ -913,6 +918,9 @@ public function actionImei($dom)
 					continue;
 
 				$data = $arr['data'];
+				if(isset($data->kohteet->asiakkaat->id) and ($data->kohteet->aktiivinen != 1 or $data->kohteet->asiakkaat->aktiivinen != 1))
+					continue;
+
 				$dosoite = $data->osoiteById;
 				if( $data->status == 2 )
 					$dosoite = 'MATKA';
@@ -995,9 +1003,12 @@ public function actionImei($dom)
 				if( $arr['this_tid'] != $ttekija->id )
 					continue;
 
-				$val = $arr['data'];
+				$data = $arr['data'];
+				if(isset($data->kohteet->asiakkaat->id) and ($data->kohteet->aktiivinen != 1 or $data->kohteet->asiakkaat->aktiivinen != 1))
+					continue;
+
 				$osoite = '';
-				$kohde = Kohteet::model()->findbypk($val->kohde);
+				$kohde = Kohteet::model()->findbypk($data->kohde);
 				if(isset($kohde->osoite)){
 					$osoite = '';
 					if(!empty($kohde->osoite))
@@ -1009,8 +1020,8 @@ public function actionImei($dom)
 				}
 
 				$tyopaari = array();
-				if(!empty($val->tyopaari))
-					$tyopaari = json_decode($val->tyopaari, true);
+				if(!empty($data->tyopaari))
+					$tyopaari = json_decode($data->tyopaari, true);
 				$tplista = '';
 				foreach($tyopaari as $tp){
 					if($tp != $ttekija->id){
@@ -1024,12 +1035,12 @@ public function actionImei($dom)
 				if(!empty($tplista)){ $tplista = '<hr>'.$tplista; }
 
 				$alkLop = '';
-				if($val->alku > 0 and $val->loppu > 0)
-					$alkLop = $val->alku.'-'.$val->loppu.' ';
+				if($data->alku > 0 and $data->loppu > 0)
+					$alkLop = $data->alku.'-'.$data->loppu.' ';
 
 				$color = '';
-				if(!empty($val->tyoajanlaatu) and empty($osoite)){
-					$expl1 = explode("/",$val->tyoajanlaatu);
+				if(!empty($data->tyoajanlaatu) and empty($osoite)){
+					$expl1 = explode("/",$data->tyoajanlaatu);
 					$color = (isset($expl1[1])) ? $expl1[1] : '';
 					$osoite = (isset($expl1[0])) ? $expl1[0] : '';
 				}
@@ -1087,15 +1098,15 @@ public function actionImei($dom)
 
 				$tvController = Yii::app()->createController('Tyovuoroot');
 				$tilanteet = $tvController[0]->tilanteet();
-				if( isset($tilanteet[$val->status]) and $tilanteet[$val->status] != "0" ){
-					$sel .= '<h3 class="text-center">'. $tilanteet[$val->status].' '.(($arr['toistuva'])?'<i class="fa fa-repeat text-success"></i>':'').'</h3>';
+				if( isset($tilanteet[$data->status]) and $tilanteet[$data->status] != "0" ){
+					$sel .= '<h3 class="text-center">'. $tilanteet[$data->status].' '.(($arr['toistuva'])?'<i class="fa fa-repeat text-success"></i>':'').'</h3>';
 				}
 
 				$sel .= '<h3 class="text" style="color:'.$color.'">'.$osoite.'</h3><p><b>'.$this->vkopaiva($arr['this_pvm']).', '.$arr['this_pvm'].'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'</p>';
 
-				if( isset($val->tyo_erittelyt) and is_array(json_decode($val->tyo_erittelyt, true))){
+				if( isset($data->tyo_erittelyt) and is_array(json_decode($data->tyo_erittelyt, true))){
 					$sel .= '<p><label>Työ-erittelyt:</label><ul>';
-					foreach(json_decode($val->tyo_erittelyt, true) as $k => $v){
+					foreach(json_decode($data->tyo_erittelyt, true) as $k => $v){
 						$sel .= '<li>'.$v.'</li>';
 					}
 					$sel .= '</ul></p><hr>';
@@ -1110,8 +1121,8 @@ public function actionImei($dom)
 					</p>';
 				}
 
-				if(!empty($val->tietoja)){
-					$sel .= '<hr><div class="text-small">'.str_replace("\n", "<br>", $val->tietoja).'</div>';
+				if(!empty($data->tietoja)){
+					$sel .= '<hr><div class="text-small">'.str_replace("\n", "<br>", $data->tietoja).'</div>';
 				}
 
 				$sel .= $tplista;
@@ -1424,8 +1435,8 @@ public function actionImei($dom)
 		$log_old = $mobupdate->attributes;
                 $mobupdate->loppui = date("d.m.Y H:i:s");
 
-		if( isset($_POST['tyo_erittelyt']) and is_array($_POST['tyo_erittelyt']) and count($_POST['tyo_erittelyt']) > 0 ){
-			$mobupdate->tyo_erittelyt = json_encode($_POST['tyo_erittelyt']);
+		if( isset($_POST['tyo_erittelyt']) and !is_array($_POST['tyo_erittelyt']) and !empty($_POST['tyo_erittelyt']) ){
+			$mobupdate->tyo_erittelyt = $_POST['tyo_erittelyt'];
 		} else {
 			$mobupdate->tyo_erittelyt = '';
 		}

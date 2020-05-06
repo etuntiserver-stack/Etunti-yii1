@@ -2249,42 +2249,27 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		return count($vl);
 	}
 */
-	protected function TidfromtoVuosilomaBetween($from, $to, $tids, $tila, $by_pvm = false)
+	protected function TidfromtoVuosilomaBetween($from, $to, $tids, $tila, $by_pvm=false)
 	{
-		$set = [];
-		if (is_array($tids)) {
-			foreach($tids as $tid)
-				$set[$tid] = 0;
-			$tids = implode(", ", $tids);
-		} else {
-			$set[$tids] = 0;
-		}
-
-		$from 	= date("Y-m-d", strtotime($from));
-		$to 	= date("Y-m-d", strtotime($to));
-
-		$result = 0;
-       		$criteria = new CDbCriteria();
-		if($by_pvm){
-			$criteria->group = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y'))";
-			$criteria->select = "pvm, tid, COUNT(*) as count";
-		} else {
-			$criteria->group = "tid";
-			$criteria->select = "tid, COUNT(*) as count";
-		}
-		$criteria->condition = "
-			DATE(STR_TO_DATE(pvm, '%d.%m.%Y'))
-			BETWEEN '".$from."' AND '".$to."' 
-			AND tid IN ($tids)
-			AND tyoajanlaatu LIKE '%(".$tila.")%'
-		";
-
-		$tv = Tyovuoroot::model()->findAll($criteria);
-		foreach($tv as $item){
+		$set 		= [];
+		$from 		= date("Y-m-d", strtotime($from));
+		$to 		= date("Y-m-d", strtotime($to));
+		$haku_criteria	= ["tyoajanlaatu LIKE '%(".$tila.")%'"];
+		$with		= ['data'];
+		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+		$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, $with);
+		foreach($dataAll as $arr){
+			$item = $arr['data'];
 			if($by_pvm){
-				$set[date("Y-m-d", strtotime($item->pvm))][$item->tid] = $item->count;
+				if(!isset($set[$arr['this_pvm']][$arr['this_tid']]))
+					$set[$arr['this_pvm']][$arr['this_tid']] = 1;
+				else
+					$set[$arr['this_pvm']][$arr['this_tid']] += 1;
 			} else {
-				$set[$item->tid] = $item->count;
+				if(!isset($set[$arr['this_tid']]))
+					$set[$arr['this_tid']] = 1;
+				else
+					$set[$arr['this_tid']] += 1;
 			}
 		}
 		return $set;

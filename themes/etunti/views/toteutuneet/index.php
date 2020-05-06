@@ -322,12 +322,12 @@ $dateDiff = dateDiff($from, $to);
   }
 
   // <-- SPL, SL, LS, VL, VKL, AP
-  $sl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'SL',true); // Palkallinen
-  $spl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'SPL',true); // Palkaton
-  $ls_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'LS',true); // Lapsen sairaus
-  $vl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'VL',true); // Vuosiloma
-  $vkl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'VKL',true); // Viikkolomapaiva  ( Poistettu kaytosta )
-  $ap_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'AP',true); // Arkipaiva
+  $sl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'SL',true); // Palkallinen
+  $spl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'SPL',true); // Palkaton
+  $ls_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'LS',true); // Lapsen sairaus
+  $vl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'VL',true); // Vuosiloma
+  $vkl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'VKL',true); // Viikkolomapaiva  ( Poistettu kaytosta )
+  $ap_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'AP',true); // Arkipaiva
   //     SPL, SL, LS, VL, VKL, AP -->
 
   $luetut_laatikot = json_decode($this->LuetutPvmTidBetween($from,$to,$tid), true);
@@ -354,6 +354,7 @@ $dateDiff = dateDiff($from, $to);
     $did = date("Ymd",strtotime($date));
 
     $pvm		= date("Y-m-d", strtotime($date));
+    $pvmF		= date("d.m.Y", strtotime($date));
     $tyotunnit		= (isset($tyotunnit_all[$pvm][$tid]))? $tyotunnit_all[$pvm][$tid] : 0;
     $hyv_tyotunnit 	= (isset($hyv_tyotunnit_all[$pvm][$tid]))? $hyv_tyotunnit_all[$pvm][$tid] : 0;
     $lounaat 		= (isset($lounaat_all[$pvm][$tid]))? $lounaat_all[$pvm][$tid] : 0;
@@ -365,12 +366,12 @@ $dateDiff = dateDiff($from, $to);
     $erikoislauantai_tunnit = (isset($erikoislauantai_all[$pvm][$tid]))? $erikoislauantai_all[$pvm][$tid] : 0;
 
     // <-- SPL, SL, LS, VL, VKL, AP
-    $sl 		= (isset($sl_all[$pvm][$tid]))? $sl_all[$pvm][$tid] : 0; // Palkallinen
-    $spl 		= (isset($spl_all[$pvm][$tid]))? $spl_all[$pvm][$tid] : 0; // Palkaton
-    $ls 		= (isset($ls_all[$pvm][$tid]))? $ls_all[$pvm][$tid] : 0; // Lapsen sairaus
-    $vl 		= (isset($vl_all[$pvm][$tid]))? $vl_all[$pvm][$tid] : 0; // Vuosiloma
-    $vkl 		= (isset($vkl_all[$pvm][$tid]))? $vkl_all[$pvm][$tid] : 0; // Viikkolomapaiva  ( Poistettu kaytosta )
-    $ap 		= (isset($ap_all[$pvm][$tid]))? $ap_all[$pvm][$tid] : 0; // Arkipaiva
+    $sl 		= (isset($sl_all[$pvmF][$tid]))? $sl_all[$pvmF][$tid] : 0; // Palkallinen
+    $spl 		= (isset($spl_all[$pvmF][$tid]))? $spl_all[$pvmF][$tid] : 0; // Palkaton
+    $ls 		= (isset($ls_all[$pvmF][$tid]))? $ls_all[$pvmF][$tid] : 0; // Lapsen sairaus
+    $vl 		= (isset($vl_all[$pvmF][$tid]))? $vl_all[$pvmF][$tid] : 0; // Vuosiloma
+    $vkl 		= (isset($vkl_all[$pvmF][$tid]))? $vkl_all[$pvmF][$tid] : 0; // Viikkolomapaiva  ( Poistettu kaytosta )
+    $ap 		= (isset($ap_all[$pvmF][$tid]))? $ap_all[$pvmF][$tid] : 0; // Arkipaiva
     //     SPL, SL, LS, VL, VKL, AP -->
 
     $yhtTyotunnit 	+= $tyotunnit;

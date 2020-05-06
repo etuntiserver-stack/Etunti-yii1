@@ -870,9 +870,9 @@ class TyovuorootController extends Controller
 		$model 		= $get_id['model'];
 		$toistuva 	= $get_id['toistuva'];
 		if( !$toistuva and is_array(json_decode($model->tyopaari, true)) and count(json_decode($model->tyopaari, true)) > 0 )
-			$return['varoitus_tyopaari'] = ['alku' => $model->alku, 'loppu' => $model->loppu, 'osoite' => $model->osoite];
+			$return['varoitus_tyopaari'] = ['alku' => $model->alku, 'loppu' => $model->loppu, 'osoite' => $model->OsoiteById];
 		if( $toistuva )
-			$return['varoitus_toistuva'] = ['alku' => $model->alku, 'loppu' => $model->loppu, 'osoite' => $model->osoite];
+			$return['varoitus_toistuva'] = ['alku' => $model->alku, 'loppu' => $model->loppu, 'osoite' => $model->OsoiteById];
 		return $return;
 	}
 
@@ -1341,8 +1341,8 @@ class TyovuorootController extends Controller
 		}
 		if(!empty($m->muut))
 		  $ohje .= "<br>Muut: ".$m->muut;
-		echo json_encode(array($ohje,$tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt,$m->puh_nro,$m->email));
-	
+		echo json_encode(array($ohje,$tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt,$m->puh_nro,$m->email,$m->arvioitu_kello_alku,$m->arvioitu_kello_loppu));
+		exit;
 	}
 
 	public function actionView($id)
@@ -3615,11 +3615,13 @@ class TyovuorootController extends Controller
 		$criteria->condition = "aktiivinen=1";
 	  	$t = Tyontekijat::model()->findAll($criteria);
 		$tekijan_nimi = '<select id="tekijanVaihdo" class="form-control">';
+		if($tid == 0)
+			$tekijan_nimi .= '<option value="0" selected>VARAUS</option>';
 		foreach($t as $tekijanData){
 			if($tekijanData->id == $tid)
-			$tekijan_nimi .= '<option value="'.$tekijanData->id.'" selected>'.$tekijanData->$tt_order_1.' '.$tekijanData->$tt_order_2.'</option>';
+				$tekijan_nimi .= '<option value="'.$tekijanData->id.'" selected>'.$tekijanData->$tt_order_1.' '.$tekijanData->$tt_order_2.'</option>';
 			else
-			$tekijan_nimi .= '<option value="'.$tekijanData->id.'">'.$tekijanData->$tt_order_1.' '.$tekijanData->$tt_order_2.'</option>';
+				$tekijan_nimi .= '<option value="'.$tekijanData->id.'">'.$tekijanData->$tt_order_1.' '.$tekijanData->$tt_order_2.'</option>';
 		}
 		$tekijan_nimi .= '</select>';
 		$form_content = '';
