@@ -292,5 +292,27 @@ class Asiakkaat extends DB2ActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
-	}
+  }
+
+  /**
+   * Attach event handler for onAfterSave event for every created model.
+   */
+  public function init()
+  {
+    $this->attachEventHandler('onAfterSave', [$this, 'onAfterSave']);
+  }
+
+  /**
+   * Update Freshdesk customer after save.
+   */
+  public function onAfterSave($event)
+  {
+    /** @var Freshdesk */
+    $fd = Yii::createComponent('Freshdesk');
+    if ($fd->isDisabled())
+      return;
+    $asiakas = $event->sender;
+    if (!empty($asiakas->id))
+      $fd->exportContact($asiakas->id);
+  }
 }
