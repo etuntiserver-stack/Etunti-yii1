@@ -1341,8 +1341,8 @@ class TyovuorootController extends Controller
 		}
 		if(!empty($m->muut))
 		  $ohje .= "<br>Muut: ".$m->muut;
-		echo json_encode(array($ohje,$tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt,$m->puh_nro,$m->email));
-	
+		echo json_encode(array($ohje,$tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt,$m->puh_nro,$m->email,$m->arvioitu_kello_alku,$m->arvioitu_kello_loppu));
+		exit;
 	}
 
 	public function actionView($id)

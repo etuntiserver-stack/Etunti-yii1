@@ -1520,7 +1520,7 @@ $(document).ready(function(){
 
 	   	},
 		error:function(data){
-		console.log(data);
+			console.log(data);
 	    	}
 	  });
   }
@@ -1564,13 +1564,17 @@ $(document).ready(function(){
 			$("#erittelynlista").html('<div class="col-sm-6 erittelynlista_laatiko"><legend>Työerittelyt</legend>' + tyo_erittelyt + '</div>');
 			//    tyo_erittelyt -->
 
-			if(d[2] !== ''){
+			if(d[2] !== '')
 				$('#arvioitu_kesto').html(d[2]);
-			} else {
+			else
 				$('#arvioitu_kesto').html('00:00');
-			}
 
 			$(".kohteen_lisatiedot").html('<span style="position:absolute;right: 10px;top:-12px" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'"></span><div style="position:absolute;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div>');
+
+			if(d[9] !== '')
+				$('#alku').val(d[9]);
+			if(d[10] !== '')
+				$('#loppu').val(d[10]);
 
 	   	},
 		error:function(data){
