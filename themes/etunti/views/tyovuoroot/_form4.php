@@ -538,7 +538,7 @@ $(document).ready(function(){
   <div class="col-sm-3">
 		<div id="viesti_mobiili_div">
 		<?php 
-		$t = Tyontekijat::model()->findbypk($model->tid);
+		$t = Tyontekijat::model()->findbypk($laatikko_tid);
 		if(!empty($t->gcm_reg_id)) :
 		?>
   		<div class="section">
@@ -553,7 +553,7 @@ $(document).ready(function(){
 <?php
 	$criteria = new CDbCriteria();
         $criteria->order = " id DESC ";
-	$criteria->condition = " tv_id!=0 AND tv_id='".$model->id."' AND tid='".$model->tid."' ";
+	$criteria->condition = " tv_id!=0 AND tv_id='".$model->id."' AND tid='".$laatikko_tid."' ";
 	$mobile = Mobile::model()->find($criteria);
 ?>
 <div class="row">
