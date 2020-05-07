@@ -883,12 +883,7 @@ $(document).ready(function(){
 			  }
 	 	});
   }
-/*
-  function disable_kentaat(tilanne){
-	$('.lomake_kenta').prop('readonly', tilanne);
-	$('.lomake_valinta, .lomake_btn, #tekijanVaihdo').prop('disabled', tilanne);
-  }
-*/
+
   var toistuva 	= ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
   $('#is_toistuva').on('switchChange.bootstrapSwitch', function(event, state) {
 	if(state === true){
@@ -1300,7 +1295,6 @@ $(document).ready(function(){
 
 	if( thisVal.length >= 2 )
 	{
-
 	  	 $.ajax({
 			url: 'asiakas_autocomplete',
 			type:'GET',
@@ -1323,50 +1317,45 @@ $(document).ready(function(){
 					$('#asiakasAutocompleteResult').html('');
 	}
 
+	$('.asiakasSelecter').click(function(){
+		var thisVal = $(this).attr('for');
+		var thisAsiakas = $(this).text();
+		  	 $.ajax({
+				url: 'getKohdeByAsiakas',
+				type:'GET',
+				data: { "id" : thisVal },
+				  success:function(data){
+					data = JSON.parse(data);
+				  	//console.log(data);
+					$('#<?=$java_prefix?>_kohde').html(data);
+					$('#asiakasAutocompleteResult').html('').hide();
+					$('#asiakas').val(thisAsiakas);
+				  },
+				  error:function(data){
+				  	console.log(data);
+				  }
+		 	});
+	});
 
-     $('.asiakasSelecter').click(function(){
-	var thisVal = $(this).attr('for');
-	var thisAsiakas = $(this).text();
-	  	 $.ajax({
-			url: 'getKohdeByAsiakas',
-			type:'GET',
-			data: { "id" : thisVal },
-			  success:function(data){
-				data = JSON.parse(data);
-			  	//console.log(data);
-				$('#<?=$java_prefix?>_kohde').html(data);
-				$('#asiakasAutocompleteResult').html('').hide();
-				$('#asiakas').val(thisAsiakas);
-
-			  },
-			  error:function(data){
-			  	console.log(data);
-			  }
-	 	});
-     });
-
-     $('.kohteenSelecter').click(function(){
-	var thisVal = $(this).attr('for');
-	var thisAsiakas = $(this).text();
-	  	 $.ajax({
-			url: 'getKohdeById',
-			type:'GET',
-			data: { "id" : thisVal },
-			  success:function(data){
-				data = JSON.parse(data);
-			  	//console.log(data);
-				$('#<?=$java_prefix?>_kohde').html(data);
-				$('#asiakasAutocompleteResult').html('').hide();
-				$('#asiakas').val(thisAsiakas);
-
-			  },
-			  error:function(data){
-			  	console.log(data);
-			  }
-	 	});
-     });
-
-
+	$('.kohteenSelecter').click(function(){
+		var thisVal = $(this).attr('for');
+		var thisAsiakas = $(this).text();
+		  	 $.ajax({
+				url: 'getKohdeById',
+				type:'GET',
+				data: { "id" : thisVal },
+				  success:function(data){
+					data = JSON.parse(data);
+				  	//console.log(data);
+					$('#<?=$java_prefix?>_kohde').html(data);
+					$('#asiakasAutocompleteResult').html('').hide();
+					$('#asiakas').val(thisAsiakas);
+				  },
+				  error:function(data){
+				  	console.log(data);
+				  }
+		 	});
+	});
   });
 
   $('.timeVuorot').mask('00:00',{
@@ -1400,9 +1389,7 @@ $(document).ready(function(){
  	   }
         });
 	}
-
   });
-
 
   $('#alku').blur(function(){
 	$(this).removeClass('bg-danger');
@@ -1428,20 +1415,7 @@ $(document).ready(function(){
 	}
   });
 
-
-  $('#alku').keyup(function(){
-	laskePituus();
-  });
-
-  $('#loppu').keyup(function(){
-	laskePituus();
-  });
-
-  $('#alku').change(function(){
-	laskePituus();
-  });
-
-  $('#loppu').change(function(){
+  $('#alku, #loppu').on('keyup, change', function(){
 	laskePituus();
   });
 
@@ -1545,6 +1519,7 @@ $(document).ready(function(){
     }
     $(".erittelynlista_laatiko input:last").focus();
   });
+
   $(document).delegate(".poislistasta","click",function(){
    $(this).closest(".row").remove();
   });
@@ -1575,7 +1550,6 @@ $(document).ready(function(){
   });
 
   linkkiKohteeseen();
-
   function linkkiKohteeseen(){
 	var thisID = $('#<?=$java_prefix?>_kohde option:selected').val();
 	var thisText = $('#<?=$java_prefix?>_kohde option:selected').text();
@@ -1586,15 +1560,15 @@ $(document).ready(function(){
   }
 
   // <-- modal siirtaminen
-	$("#modal-form").find(".panel-heading").hover(function() {
+  $("#modal-form").find(".panel-heading").hover(function() {
 	    $(this).css('cursor','pointer');
 	}, function() {
 	    $(this).css('cursor','auto');
-	});
-        $('#modal-form').draggable({
+  });
+  $('#modal-form').draggable({
             handle: ".panel-heading",
 	    revert:"invalid",
-        });
+  });
   // modal siirtaminen -->
 
 
