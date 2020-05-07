@@ -273,7 +273,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 			if(!empty($model->tyoajanmerkinta)){
 				$expl = explode("/",$model->tyoajanmerkinta);
 				$value = (isset($expl[0])) ? $expl[0] : '';
-				$maaritetty[$model->tyoajanmerkinta] = '<option value="'.$model->tyoajanmerkinta.'">'.$value.'</option>';
+				$maaritetty[$model->tyoajanmerkinta] = '<option value="'.$model->tyoajanmerkinta.'" selected>'.$value.'</option>';
 			}
 			echo '<select name="'.$java_prefix.'[tyoajanmerkinta]" class="form-control lomake_valinta" id="'.$java_prefix.'_tyoajanmerkinta">';
 				$list = array_merge($l1, $l2);
@@ -281,8 +281,8 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 					$expl 	= explode("/",$key);
 					$color = (isset($expl[1])) ? $expl[1] : '';
 
-					if(isset($maaritetty[$val]))
-						echo $maaritetty[$val];
+					if(isset($maaritetty[$key]))
+						echo $maaritetty[$key];
 					else
 						echo '<option style="color:'.$color.'" value="'.$key.'">'.$val.'</option>';
 				}
