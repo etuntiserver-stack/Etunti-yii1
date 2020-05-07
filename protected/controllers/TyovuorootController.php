@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus'),
+				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -5247,46 +5247,6 @@ class TyovuorootController extends Controller
 		    $return = true;
 		}
 		return $return;
-	}
-
-	public function actionVlupdater($id,$txt)
-	{
-
-	
-	   if($id == 'new' and $txt == '')
-	   {
-		$model=new Vuosilomat;
-		if(isset($_POST['Vuosilomat']))
-		{
-			$model->attributes=$_POST['Vuosilomat'];
-			if($model->save()){
-				echo $model->id.'//'.$model->tid.'//'.$model->pvm.'//'.$model->status;
-
-			//$valikkoot = Valikkoot::model()->find(" select_type='tyoajanlaatu' and value like '%".$lat."%' ");
-			$tv = new Tyovuoroot;
-			$tv->tid=$model->tid;
-			$tv->pvm=date("d.m.Y",strtotime($model->pvm));
-			$tv->tyoajanlaatu=$_POST['Vuosilomat']['tyoajanlaatu'];
-			$tv->alku='00:00';
-			$tv->loppu='00:00';
-			$tv->pituus='00:00';
-			$tv->tietoja=$_POST['Vuosilomat']['tietoja'];
-			$tv->save();
-			} else {
-				print_r($_POST);
-			}
-		}
-
-	   } else {
-		//Tyovuoroot::model()->deleteAll(" tid = '".$_POST['Vuosilomat']['tid']."' and pvm='".date("d.m.Y",strtotime($_POST['Vuosilomat']['pvm']))."' and tyoajanlaatu like '%".$txt."%' ");
-		//$this->loadModel($id)->delete();
-		// pois kaytosta 06.06.2019
-				echo 'removed';
-	   }
-
-
-		//$this->renderPartial('vlupdater');
-
 	}
 
 	public function tvlaskentaPerTuoteet($from, $to){

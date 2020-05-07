@@ -296,63 +296,6 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 <script type="text/javascript">
 $(document).ready(function(){
 
-
-  $(document).delegate(".muokaTaulunLatiko","click",function(){
-
-    $(this).css({"background" : "#ccc"});
-
-    var thisID = $(this).attr("id");
-    var thisDate = $(this).attr("thisdate");
-    var thisTid = parseInt($(this).attr("thistid"));
-    var thisTXT = $(this).text();
-    var id = $(this).attr("method");
-    var thisStatus = $(".valikot input:radio:checked").val();
-    var lat1 = thisStatus.split("//");
-    var lat = '('+lat1[0]+') '+lat1[2]+'/'+lat1[1];
-    var vapaateksti = $('.vapaateksti').val();
-
-    var postdata = {
-	tid 	: thisTid,
-	pvm 	: thisDate,
-	status 	: thisStatus,
-	tietoja	: vapaateksti,
-	tyoajanlaatu : lat,
-    }
-
-        $.ajax({
-           url: 'vlupdater?id='+id+'&txt='+thisTXT,
-	   type: 'POST',
-	   data: { Vuosilomat : postdata },
-           success: function(data){
-		console.log(data);
-
-		var spData  = data.split("//");
-
-		if(spData[3] != '' && data != 'removed'){
-		   $("#"+thisID).attr("method",spData[0]);
-		   $("#"+thisID).removeClass("myBgColors bg-info");
-		   $("#"+thisID).attr("style","background:"+spData[4]+";color:white;");
-		   $("#"+thisID).html('<div class="link laatikot">'+ spData[3] +'</div>');
-		}
-
-		if(data == 'removed')
-		{
-		   $("#"+thisID).attr("method", "new");
-		   $("#"+thisID).html('<div class="link laatikot"></div>');
-		}
-    
-
-           },
-	   error:function(data){
-		console.log(data);
-		/*window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";*/
-	   }
-        });
-
-
-  });
-/* valikot */
-
  $('#<?=$java_prefix?>_tyoajanlaatu').change(function(){
 	if($('option:selected', this).val() !== ''){
 		$('#<?=$java_prefix?>_kohde').val('');
