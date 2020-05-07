@@ -255,6 +255,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 		<div class="input-group">
 		<?php
 			$l1 = array(
+				'Normaali/' => 'Normaali', 
 				'Ei lasketa/red' => 'Ei lasketa', 
 				'Varallaolo/#c67520' => 'Varallaolo'
 			);
@@ -268,19 +269,22 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 			}
 			$list = array_merge($l1, $l2);
 			ksort($list);
+			$maaritetty = [];
+			if(!empty($model->tyoajanmerkinta)){
+				$expl = explode("/",$model->tyoajanmerkinta);
+				$value = (isset($expl[0])) ? $expl[0] : '';
+				$maaritetty[$model->tyoajanmerkinta] = '<option value="'.$model->tyoajanmerkinta.'">'.$value.'</option>';
+			}
 			echo '<select name="'.$java_prefix.'[tyoajanmerkinta]" class="form-control lomake_valinta" id="'.$java_prefix.'_tyoajanmerkinta">';
-				if(!empty($model->tyoajanmerkinta)){
-					$expl = explode("/",$model->tyoajanmerkinta);
-					$value = (isset($expl[0])) ? $expl[0] : '';
-					echo '<option value="'.$model->tyoajanmerkinta.'">'.$value.'</option>';
-				} else {
-					echo '<option style="color:" value="Normaali/">Normaali</option>';
-				}
 				$list = array_merge($l1, $l2);
 				foreach($list as $key => $val){
 					$expl 	= explode("/",$key);
 					$color = (isset($expl[1])) ? $expl[1] : '';
-					echo '<option style="color:'.$color.'" value="'.$key.'">'.$val.'</option>';
+
+					if(isset($maaritetty[$val]))
+						echo $maaritetty[$val];
+					else
+						echo '<option style="color:'.$color.'" value="'.$key.'">'.$val.'</option>';
 				}
 			echo '</select>';
         	?>
