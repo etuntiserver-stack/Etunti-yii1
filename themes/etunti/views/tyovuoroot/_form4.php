@@ -1452,7 +1452,7 @@ $(document).ready(function(){
 	var tv_id = '<?php if(isset($model->id)){ echo $model->id; } ?>';
 	linkkiKohteeseen();
 
-	  $.ajax({
+	$.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+ thisID +'&tv_id='+ tv_id,
 		  success:function(data){
 			//console.log(data);
@@ -1493,18 +1493,17 @@ $(document).ready(function(){
 			if(d[10] !== '')
 				$('#loppu').val(d[10]);
 
-	   	},
-		error:function(data){
-		console.log(data);
-	    	}
-	  });
+		}, error:function(data){
+			console.log(data);
+		}
+	});
   });
   $(".uusierittely").click(function(){
-    var er_lista = $("#erittelynlista").text().trim();
-    if( er_lista == '' ){
-    $("#erittelynlista").append('<div class="col-sm-6 erittelynlista_laatiko"><legend>Työerittelyt</legend>');
-    }
-    $(".erittelynlista_laatiko").append('' +
+	var er_lista = $("#erittelynlista").text().trim();
+	if( er_lista == '' )
+		$("#erittelynlista").append('<div class="col-sm-6 erittelynlista_laatiko"><legend>Työerittelyt</legend>');
+
+	$(".erittelynlista_laatiko").append('' +
 		 '<div class="row">' +
 		  '<div class="col-sm-11">' +
 		   '<input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control input-sm">' +
@@ -1513,24 +1512,23 @@ $(document).ready(function(){
 		   '<span class="link text-danger fa fa-trash poislistasta"></span>' +
 		  '</div>' +
  		 '</div>'
-    );
-    if( er_lista == '' ){
-    $(".erittelynlista_laatiko").append('</div>');
-    }
-    $(".erittelynlista_laatiko input:last").focus();
+	);
+	if( er_lista == '' )
+		$(".erittelynlista_laatiko").append('</div>');
+
+	$(".erittelynlista_laatiko input:last").focus();
   });
 
   $(document).delegate(".poislistasta","click",function(){
-   $(this).closest(".row").remove();
+	$(this).closest(".row").remove();
   });
 
   $(".uusimuistinpanno").click(function(){
-    var mp_lista = $("#muistiinpanolista").text().trim();
-    if( mp_lista == '' ){
-    $("#muistiinpanolista").append('<p><div class="row panel-footer"><div class="col-sm-12 muistiinpanolista_laatiko"><legend>Muistiinpanot</legend>');
-    }
+	var mp_lista = $("#muistiinpanolista").text().trim();
+	if( mp_lista == '' )
+		$("#muistiinpanolista").append('<p><div class="row panel-footer"><div class="col-sm-12 muistiinpanolista_laatiko"><legend>Muistiinpanot</legend>');
 
-    $(".muistiinpanolista_laatiko").append('' +
+	$(".muistiinpanolista_laatiko").append('' +
 		 '<div class="row">' +
 		  '<div class="col-sm-11">' +
 		   '<textarea name="Tyovuoroot[muistiinpano][]" class="form-control"></textarea>' +
@@ -1539,14 +1537,14 @@ $(document).ready(function(){
 		   '<span class="link text-danger fa fa-trash pois_muistiinpano"></span>' +
 		  '</div>' +
  		 '</div>'
-    );
-    if( mp_lista == '' ){
-    $(".muistiinpanolista_laatiko").append('</div></div></p>');
-    }
-    $(".muistiinpanolista_laatiko textarea:last").val('<?=date("d.m.Y H:i")?> - <?=Yii::app()->user->nimi?>:\n').focus();
+	);
+	if( mp_lista == '' )
+		$(".muistiinpanolista_laatiko").append('</div></div></p>');
+
+	$(".muistiinpanolista_laatiko textarea:last").val('<?=date("d.m.Y H:i")?> - <?=Yii::app()->user->nimi?>:\n').focus();
   });
   $(document).delegate(".pois_muistiinpano","click",function(){
-   $(this).closest(".row").remove();
+	$(this).closest(".row").remove();
   });
 
   linkkiKohteeseen();
