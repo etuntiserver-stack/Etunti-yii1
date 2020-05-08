@@ -1332,7 +1332,9 @@ $(document).ready(function(){
 				  success:function(data){
 					data = JSON.parse(data);
 				  	//console.log(data);
-					$('#<?=$java_prefix?>_kohde').html(data);
+					$('#<?=$java_prefix?>_kohde').html(data['options']);
+					$('#<?=$java_prefix?>_kohde').val(data['first']);
+					OsoiteVaihto(data['first']);
 					$('#asiakasAutocompleteResult').html('').hide();
 					$('#asiakas').val(thisAsiakas);
 				  },
@@ -1448,15 +1450,17 @@ $(document).ready(function(){
   }
 
   $(document).delegate("#<?=$java_prefix?>_kohde","change",function(){
+	var thisID = $(this, 'option:selected').val();
+	OsoiteVaihto(thisID);
+  });
+  function OsoiteVaihto(thisID){
 	$("#kohteen_lisatiedot").html('');
 	$('#<?=$java_prefix?>_status').val('3').css({"border" : "1px green solid"});
 	$('#<?=$java_prefix?>_tyoajanlaatu').val('');
-	$(this).removeClass('bg-danger');
-	var thisID = $(this, 'option:selected').val();
+	$("#<?=$java_prefix?>_kohde").removeClass('bg-danger');
 	var tyo_erittelyt = '';
 	var tv_id = '<?php if(isset($model->id)){ echo $model->id; } ?>';
 	linkkiKohteeseen();
-
 	$.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+ thisID +'&tv_id='+ tv_id,
 		  success:function(data){
@@ -1505,7 +1509,7 @@ $(document).ready(function(){
 			console.log(data);
 		}
 	});
-  });
+  }
   $(".uusierittely").click(function(){
 	var er_lista = $("#erittelynlista").text().trim();
 	if( er_lista == '' )

@@ -369,14 +369,18 @@ class TyovuorootController extends Controller
 
 	public function actionGetKohdeByAsiakas($id)
 	{
+		$return = [];
 		$model = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
-			$bd = '';
-			$bd .= '<option value="0">Valitse osoite</option>';
-			foreach($model as $k)
-			$bd .= '<option value="'.$k->id.'">'.$k->osoite.'</option>';
+		$options = '';
+		$options .= '<option value="0">Valitse osoite</option>';
+		$ids = [];
+		foreach($model as $k){
+			$ids[$k->id] = $k->id;
+			$options .= '<option value="'.$k->id.'">'.$k->osoite.'</option>';
+		}
+		$return = ['first' => array_shift($ids), 'options' => $options];
 
-
-		echo json_encode($bd);	
+		echo json_encode($return);	
 	}
 
 	public function actionGetKohdeById($id)
