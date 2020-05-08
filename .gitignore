@@ -20,8 +20,6 @@ backup/*
 tiedostot/*
 files/*
 tiedostot
-ohjevideot/*
-ohjevideot
 !tiedostot/templates/mallit/*
 !tiedostot/etusivu/*
 !tiedostot/trust/*
