@@ -68,16 +68,20 @@ class OhjevideotController extends Controller
 
         public function init()
         {
-
-                if (Yii::app()->user->isAdmin())
-		{
+		/*
+                if (Yii::app()->user->isAdmin()){
                         Yii::app()->theme = 'admin';
-                } elseif ($this->isDigisten())
-		{
+                } elseif ($this->isDigisten()){
                         Yii::app()->theme = 'etunti';
                 } else {
                         Yii::app()->theme = 'classic';
 		}
+		*/
+		if ($this->isDigisten())
+                        Yii::app()->theme = 'etunti';
+                else
+                        die('Ei sallittu. Error');
+
                 parent::init();
         }
 
@@ -151,12 +155,11 @@ class OhjevideotController extends Controller
 			$model->tiedoston_nimi = $tiedoston_nimi !== null ? $tiedoston_nimi->getName() : $original_tiedosto;
             		if($model->save()){
 
-			    if (!empty($tiedoston_nimi))
-			    {
-		                $path=Yii::getPathOfAlias('webroot').'/ohjevideot/'.$tiedoston_nimi->getName();
-		                $tiedoston_nimi->saveAs($path);
+				if (!empty($tiedoston_nimi)){
+		           	     $path=Yii::getPathOfAlias('webroot').'/ohjevideot/'.$tiedoston_nimi->getName();
+		          	      $tiedoston_nimi->saveAs($path);
+				}
 				$this->redirect(array('//site/ohjevideot'));
-			    }
 
 		        } else {
 				var_dump($model->getErrors());
@@ -191,6 +194,7 @@ class OhjevideotController extends Controller
 	/**
 	 * Lists all models.
 	 */
+/*
 	public function actionIndex()
 	{
 		$dataProvider=new CActiveDataProvider('Ohjevideot');
@@ -198,7 +202,7 @@ class OhjevideotController extends Controller
 			'dataProvider'=>$dataProvider,
 		));
 	}
-
+*/
 	/**
 	 * Manages all models.
 	 */
