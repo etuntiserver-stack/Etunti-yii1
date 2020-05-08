@@ -1355,6 +1355,7 @@ $(document).ready(function(){
 					data = JSON.parse(data);
 				  	//console.log(data);
 					$('#<?=$java_prefix?>_kohde').html(data);
+					OsoiteVaihto(thisVal);
 					$('#asiakasAutocompleteResult').html('').hide();
 					$('#asiakas').val(thisAsiakas);
 				  },

@@ -387,7 +387,6 @@ class TyovuorootController extends Controller
 	{
 		$model = Kohteet::model()->findByPk($id);
 			$bd = '';
-			$bd .= '<option value>'.Yii::t('main', 'Valitse kohde').'</option>';
 			$bd .= '<option value="'.$model->id.'">'.$model->osoite.'</option>';
 
 
