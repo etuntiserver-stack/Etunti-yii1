@@ -1,6 +1,7 @@
 tmp/*
 img/*
 lib/defdb.sql
+lib/video/*
 dev
 dev/
 asiakas/plugins/

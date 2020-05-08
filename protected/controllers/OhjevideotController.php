@@ -102,11 +102,6 @@ class OhjevideotController extends Controller
 	 */
 	public function actionCreate()
 	{
-
-		if (!file_exists(Yii::app()->basePath."/../ohjevideot")) {
-  			mkdir(Yii::app()->basePath."/../ohjevideot", 0777, true);
-  		}
-
 		$model=new Ohjevideot;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -117,7 +112,7 @@ class OhjevideotController extends Controller
 			$model->attributes=$_POST['Ohjevideot'];
             		$model->tiedoston_nimi=CUploadedFile::getInstance($model,'tiedoston_nimi');
             		if($model->save()){
-		                $path=Yii::getPathOfAlias('webroot').'/ohjevideot/'.$model->tiedoston_nimi->getName();
+		                $path=Yii::getPathOfAlias('webroot').'/lib/video/'.$model->tiedoston_nimi->getName();
 		                $model->tiedoston_nimi->saveAs($path);
 				$this->redirect(array('view','id'=>$model->id));
 		        } else {
@@ -138,10 +133,6 @@ class OhjevideotController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		if (!file_exists(Yii::app()->basePath."/../ohjevideot")) {
-  			mkdir(Yii::app()->basePath."/../ohjevideot", 0777, true);
-  		}
-
 		$model=$this->loadModel($id);
 		$original_tiedosto = $model->tiedoston_nimi;
 
@@ -156,7 +147,7 @@ class OhjevideotController extends Controller
             		if($model->save()){
 
 				if (!empty($tiedoston_nimi)){
-		           	     $path=Yii::getPathOfAlias('webroot').'/ohjevideot/'.$tiedoston_nimi->getName();
+		           	     $path=Yii::getPathOfAlias('webroot').'/lib/video/'.$tiedoston_nimi->getName();
 		          	      $tiedoston_nimi->saveAs($path);
 				}
 				$this->redirect(array('//site/ohjevideot'));
@@ -181,7 +172,7 @@ class OhjevideotController extends Controller
 	{
 		$mod = $this->loadModel($id);
 		$this->loadModel($id)->delete();
-		$file=Yii::getPathOfAlias('webroot').'/ohjevideot/'.$mod->tiedoston_nimi;
+		$file=Yii::getPathOfAlias('webroot').'/lib/video/'.$mod->tiedoston_nimi;
 
 		if(file_exists($file))
 		unlink($file);
