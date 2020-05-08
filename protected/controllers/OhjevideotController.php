@@ -102,6 +102,11 @@ class OhjevideotController extends Controller
 	 */
 	public function actionCreate()
 	{
+
+		if (!file_exists(Yii::app()->basePath."/../lib/video")) {
+  			mkdir(Yii::app()->basePath."/../lib/video", 0777, true);
+  		}
+
 		$model=new Ohjevideot;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -133,6 +138,10 @@ class OhjevideotController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+		if (!file_exists(Yii::app()->basePath."/../lib/video")) {
+  			mkdir(Yii::app()->basePath."/../lib/video", 0777, true);
+  		}
+
 		$model=$this->loadModel($id);
 		$original_tiedosto = $model->tiedoston_nimi;
 
