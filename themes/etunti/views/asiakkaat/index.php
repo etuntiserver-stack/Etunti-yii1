@@ -535,7 +535,7 @@ $(document).ready(function(){
  });
  // <-- Huonot symbolit hakussa
  $("input").keyup(function(){
-	var specialChars = "<>@!#$%^&*()_+[]{}?:;|'\"\\,./~`=";
+	var specialChars = "<>!#$%^&*()_+[]{}?:;|'\"\\/~`=";
 	var checkForSpecialChar = function(string){
 	 for(i = 0; i < specialChars.length;i++){
 	   if(string.indexOf(specialChars[i]) > -1){
