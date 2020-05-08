@@ -16,7 +16,7 @@
    <?php
 	Yii::app()->db1->setActive(true);
 	if(!isset($_GET['id'])){
-		$gr = Ohjevideot::model()->findAll(array('group'=>'ohjevideo_ryhma'));
+		$gr = Ohjevideot::model()->findAll(array('group'=>'ohjevideo_ryhma')); // gr
 		foreach($gr as $item){
 
 			echo '<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#ryhma_'.$item->id.'"><h3>'.$item->ohjevideo_ryhma.'&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>';
