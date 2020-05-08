@@ -95,6 +95,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 
 
 <div class="section">
+	<div id="kohteen_lisatiedot" class="pull-right"></div>
 	<div id="huomio_yllaosa" class="text-center"></div>
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'tyovuoroot-form',
@@ -122,7 +123,6 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 		<div id="asiakasAutocompleteResult"></div>
   </div>
   <div class="col-sm-3">
-		<span class="kohteen_lisatiedot"></span>
 		<label for="Tyovuoroot_kohde">Kohde</label>
 		<?php
        		$criteria = new CDbCriteria();
@@ -1438,7 +1438,7 @@ $(document).ready(function(){
 				$('#arvioitu_kesto').html('00:00');
 			}
 
-			$(".kohteen_lisatiedot").html('<div style="position:relative; width:100%"><span style="position:absolute;right: 0px;top:-12px" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'"></span><div style="position:absolute;top:20px;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div></div>');
+			$("#kohteen_lisatiedot").html('<span style="" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'"></span><div style="position:relative;"><div style="position:absolute;top:5px;right: 20px;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div></div>');
 
 	   	},
 		error:function(data){
@@ -1448,7 +1448,7 @@ $(document).ready(function(){
   }
 
   $(document).delegate("#<?=$java_prefix?>_kohde","change",function(){
-
+	$("#kohteen_lisatiedot").html('');
 	$('#<?=$java_prefix?>_status').val('3').css({"border" : "1px green solid"});
 	$('#<?=$java_prefix?>_tyoajanlaatu').val('');
 	$(this).removeClass('bg-danger');
@@ -1492,7 +1492,7 @@ $(document).ready(function(){
 				$('#arvioitu_kesto').html('00:00');
 			}
 
-			$(".kohteen_lisatiedot").html('<div style="position:relative; width:100%"><span style="position:absolute;right: 0px;top:-12px" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'"></span><div style="position:absolute;top:20px;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div></div>');
+			$("#kohteen_lisatiedot").html('<span style="" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'"></span><div style="position:relative;"><div style="position:absolute;top:5px;right: 20px;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div></div>');
 
 			if(d[9] !== ''){
 				$('#alku').val(d[9]);

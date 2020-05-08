@@ -371,6 +371,7 @@ class TyovuorootController extends Controller
 	{
 		$model = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
 			$bd = '';
+			$bd .= '<option value="0">Valitse osoite</option>';
 			foreach($model as $k)
 			$bd .= '<option value="'.$k->id.'">'.$k->osoite.'</option>';
 
