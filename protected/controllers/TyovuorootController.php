@@ -3435,12 +3435,15 @@ class TyovuorootController extends Controller
 				$u		= Yii::app()->user->nimi;
 				$d		= date("d.m.Y");
 				$poisto_syy	= ['text'=>'ByUpdateChangeToYksittyinen', 'user'=>$u, 'date'=>$d];
+				/* Else oli väärin. $laatikko_tid on aina poistettava ketjusta
 				if(count(json_decode($model->tyopaari, true)) > 1){
 					foreach(json_decode($model->tyopaari, true) as $tp_tid )
 						$this->toistuvaDeletePvm($edellinen_model['id'], $laatikko_pvm, $tp_tid, $poisto_syy);
 				} else {
 					$this->toistuvaDeletePvm($edellinen_model['id'], $laatikko_pvm, $laatikko_tid, $poisto_syy);
 				}
+				*/
+				$this->toistuvaDeletePvm($edellinen_model['id'], $laatikko_pvm, $laatikko_tid, $poisto_syy);
 				//     Poisto PVM/Henkilo ketjusta -->
 
 				// <-- jos on tyopaari
