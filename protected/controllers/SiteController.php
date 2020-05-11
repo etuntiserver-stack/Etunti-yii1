@@ -2090,7 +2090,7 @@ class SiteController extends Controller
 		$criteria = new CDbCriteria();
         	$criteria->condition = "
 			status=3 AND tekija='toimisto'
-			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
+			AND DATE(STR_TO_DATE(time, '%Y-%m-%d')) = CURDATE()
 		";
 	  	$v = Viestinta::model()->findAll($criteria);
 	  	$viestit = count($v);
