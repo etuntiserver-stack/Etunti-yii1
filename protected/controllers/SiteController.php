@@ -2110,7 +2110,7 @@ $(document).ready(function(){
 	  	$viestit = 0;
 		$criteria = new CDbCriteria();
         	$criteria->condition = "
-			status=0 AND tekija='toimisto'
+			status=3 AND tekija='toimisto'
 			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
 		";
 	  	$v = Viestinta::model()->findAll($criteria);
