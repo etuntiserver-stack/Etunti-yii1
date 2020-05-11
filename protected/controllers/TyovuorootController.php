@@ -1205,6 +1205,29 @@ class TyovuorootController extends Controller
 		exit;
 	}
 
+	protected function checkNextTv($this_id)
+	{
+		$return 	= [];
+		$get_id 	= $this->this_id($this_id);
+		$model 		= $get_id['model'];
+		$pvm 		= $get_id['pvm'];
+		$tid 		= $get_id['tid'];
+
+		if(isset($model->kohde)){
+			$with		= ['data'];
+			$from		= date("Y-m-d", strtotime($pvm." +1 day"));
+			$to		= date("Y-m-d", strtotime($from." +1 month"));
+			$haku_criteria 	= ["kohde='".$model->kohde."' AND alku='".$model->alku."' AND loppu='".$model->loppu."' AND status='".$model->status."'"];
+			$dataAll 	= $this->FromToSuunnitellutAll($from, $to, [$tid], $haku_criteria, $with);
+			foreach($dataAll as $arr){
+				$data 	= $arr['data'];
+				$return	= $data;
+				break;
+			}
+		}
+		return $return;
+	}
+
 	protected function checkOlemassaTv($toistuva, $pvm, $tid){
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 

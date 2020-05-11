@@ -26,6 +26,7 @@ if(isset($_GET['tid'])){ $model->tid = $_GET['tid']; }
 if(!isset($laatikko_pvm)){ $laatikko_pvm = ''; }
 if(!isset($laatikko_tid)){ $laatikko_tid = ''; }
 if(!isset($laatiko_etusukunimi)){ $laatiko_etusukunimi = ''; }
+$nextTv = $this->checkNextTv($this_id);
 
 if(!empty($laatikko_pvm))
 	$model->pvm = $laatikko_pvm;
@@ -92,6 +93,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 	<?php echo Yii::t('main', 'Tämä kohde on eDicosta.'); ?>
 	</div>
 	<?php endif; ?>
+	<?=(isset($nextTv->pvm))?'<div class="alert bg-info">Seuraava vuoro: '.$nextTv->pvm.'</div>':''?>
 
 
 <div class="section">
