@@ -326,6 +326,10 @@ $freshdesk_domain = 'santelo'; // TEMP
       // obj.find('.ticket-body').attr('onclick', `location.href='/index.php/tyovuoroot/freshdesk/${id}'`);
 
       obj.find('.ticket-body').on('click', function(e) {
+        // window.location.href = ticketLink;
+        var win = window.open(ticketLink, '_blank');
+        win.focus();
+        return;
         let data = '',
           val = '',
           emptyKeys = [];
