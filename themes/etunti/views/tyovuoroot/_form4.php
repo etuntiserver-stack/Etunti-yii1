@@ -93,7 +93,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 	<?php echo Yii::t('main', 'Tämä kohde on eDicosta.'); ?>
 	</div>
 	<?php endif; ?>
-	<?=(isset($nextTv->pvm))?'<div class="alert bg-info">Seuraava vuoro: '.$nextTv->pvm.'</div>':''?>
+	<?=(!empty($nextTv))?'<div class="alert bg-info">Seuraava vuoro: '.$nextTv.'</div>':''?>
 
 
 <div class="section">

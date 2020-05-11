@@ -1207,7 +1207,7 @@ class TyovuorootController extends Controller
 
 	protected function checkNextTv($this_id)
 	{
-		$return 	= [];
+		$return 	= '';
 		$get_id 	= $this->this_id($this_id);
 		$model 		= $get_id['model'];
 		$pvm 		= $get_id['pvm'];
@@ -1220,8 +1220,7 @@ class TyovuorootController extends Controller
 			$haku_criteria 	= ["kohde='".$model->kohde."' AND alku='".$model->alku."' AND loppu='".$model->loppu."' AND status='".$model->status."'"];
 			$dataAll 	= $this->FromToSuunnitellutAll($from, $to, [$tid], $haku_criteria, $with);
 			foreach($dataAll as $arr){
-				$data 	= $arr['data'];
-				$return	= $data;
+				$return	= $arr['this_pvm'];
 				break;
 			}
 		}
