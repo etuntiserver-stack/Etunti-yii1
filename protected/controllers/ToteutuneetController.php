@@ -72,11 +72,20 @@ class ToteutuneetController extends Controller
         public function init()
         {
 
-	// <-- Oikeudet
-	   $checkOikeus = "tuntienhallinta_4_".Yii::app()->user->adminStatus;
-	   $site = Yii::app()->createController('Site');
-	   $site[0]->checkOikeus($checkOikeus);
-	//  Oikeudet -->
+		if(!isset(Yii::app()->user->adminID))
+		{
+			//die('login error');
+		  	echo '<script type="text/javascript">
+				window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";
+			</script>';
+			exit;
+		}
+
+		// <-- Oikeudet
+		$checkOikeus = "tuntienhallinta_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		$site[0]->checkOikeus($checkOikeus);
+		//  Oikeudet -->
 
                 if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
                         Yii::app()->theme = 'etunti';

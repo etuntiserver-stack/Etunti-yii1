@@ -1044,6 +1044,10 @@ public function actionImei($dom)
 					$color = (isset($expl1[1])) ? $expl1[1] : '';
 					$osoite = (isset($expl1[0])) ? $expl1[0] : '';
 				}
+				if(!empty($data->tyoajanmerkinta)){
+					$expl1 = explode("/",$data->tyoajanmerkinta);
+					$color = (isset($expl1[1])) ? $expl1[1] : '';
+				}
 
 				// <-- Nayta asiakas
 				$nm = '';

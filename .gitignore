@@ -1,6 +1,7 @@
 tmp/*
 img/*
 lib/defdb.sql
+lib/video/*
 dev
 dev/
 asiakas/plugins/
@@ -20,8 +21,6 @@ backup/*
 tiedostot/*
 files/*
 tiedostot
-ohjevideot/*
-ohjevideot
 !tiedostot/templates/mallit/*
 !tiedostot/etusivu/*
 !tiedostot/trust/*

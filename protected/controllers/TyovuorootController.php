@@ -27,8 +27,8 @@ class TyovuorootController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'freshdesk', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'vlupdater', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus'),
+      array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'freshdesk', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -369,21 +369,24 @@ class TyovuorootController extends Controller
 
 	public function actionGetKohdeByAsiakas($id)
 	{
+		$return = [];
 		$model = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
-			$bd = '';
-			$bd .= '<option value>'.Yii::t('main', 'Valitse kohde').'</option>';
-			foreach($model as $k)
-			$bd .= '<option value="'.$k->id.'">'.$k->osoite.'</option>';
+		$options = '';
+		$options .= '<option value="0">Valitse osoite</option>';
+		$ids = [];
+		foreach($model as $k){
+			$ids[$k->id] = $k->id;
+			$options .= '<option value="'.$k->id.'">'.$k->osoite.'</option>';
+		}
+		$return = ['first' => array_shift($ids), 'options' => $options];
 
-
-		echo json_encode($bd);	
+		echo json_encode($return);	
 	}
 
 	public function actionGetKohdeById($id)
 	{
 		$model = Kohteet::model()->findByPk($id);
 			$bd = '';
-			$bd .= '<option value>'.Yii::t('main', 'Valitse kohde').'</option>';
 			$bd .= '<option value="'.$model->id.'">'.$model->osoite.'</option>';
 
 
@@ -1200,6 +1203,29 @@ class TyovuorootController extends Controller
 		}
 
 		exit;
+	}
+
+	protected function checkNextTv($this_id)
+	{
+		$return 	= [];
+		$get_id 	= $this->this_id($this_id);
+		$model 		= $get_id['model'];
+		$pvm 		= $get_id['pvm'];
+		$tid 		= $get_id['tid'];
+
+		if(isset($model->kohde)){
+			$with		= ['data'];
+			$from		= date("Y-m-d", strtotime($pvm." +1 day"));
+			$to		= date("Y-m-d", strtotime($from." +1 month"));
+			$haku_criteria 	= ["kohde='".$model->kohde."' AND alku='".$model->alku."' AND loppu='".$model->loppu."' AND status='".$model->status."'"];
+			$dataAll 	= $this->FromToSuunnitellutAll($from, $to, [$tid], $haku_criteria, $with);
+			foreach($dataAll as $arr){
+				$data 	= $arr['data'];
+				$return	= $data;
+				break;
+			}
+		}
+		return $return;
 	}
 
 	protected function checkOlemassaTv($toistuva, $pvm, $tid){
@@ -3606,12 +3632,15 @@ class TyovuorootController extends Controller
 				$u		= Yii::app()->user->nimi;
 				$d		= date("d.m.Y");
 				$poisto_syy	= ['text'=>'ByUpdateChangeToYksittyinen', 'user'=>$u, 'date'=>$d];
+				/* Else oli väärin. $laatikko_tid on aina poistettava ketjusta
 				if(count(json_decode($model->tyopaari, true)) > 1){
 					foreach(json_decode($model->tyopaari, true) as $tp_tid )
 						$this->toistuvaDeletePvm($edellinen_model['id'], $laatikko_pvm, $tp_tid, $poisto_syy);
 				} else {
 					$this->toistuvaDeletePvm($edellinen_model['id'], $laatikko_pvm, $laatikko_tid, $poisto_syy);
 				}
+				*/
+				$this->toistuvaDeletePvm($edellinen_model['id'], $laatikko_pvm, $laatikko_tid, $poisto_syy);
 				//     Poisto PVM/Henkilo ketjusta -->
 
 				// <-- jos on tyopaari
@@ -5422,46 +5451,6 @@ class TyovuorootController extends Controller
 		    $return = true;
 		}
 		return $return;
-	}
-
-	public function actionVlupdater($id,$txt)
-	{
-
-	
-	   if($id == 'new' and $txt == '')
-	   {
-		$model=new Vuosilomat;
-		if(isset($_POST['Vuosilomat']))
-		{
-			$model->attributes=$_POST['Vuosilomat'];
-			if($model->save()){
-				echo $model->id.'//'.$model->tid.'//'.$model->pvm.'//'.$model->status;
-
-			//$valikkoot = Valikkoot::model()->find(" select_type='tyoajanlaatu' and value like '%".$lat."%' ");
-			$tv = new Tyovuoroot;
-			$tv->tid=$model->tid;
-			$tv->pvm=date("d.m.Y",strtotime($model->pvm));
-			$tv->tyoajanlaatu=$_POST['Vuosilomat']['tyoajanlaatu'];
-			$tv->alku='00:00';
-			$tv->loppu='00:00';
-			$tv->pituus='00:00';
-			$tv->tietoja=$_POST['Vuosilomat']['tietoja'];
-			$tv->save();
-			} else {
-				print_r($_POST);
-			}
-		}
-
-	   } else {
-		//Tyovuoroot::model()->deleteAll(" tid = '".$_POST['Vuosilomat']['tid']."' and pvm='".date("d.m.Y",strtotime($_POST['Vuosilomat']['pvm']))."' and tyoajanlaatu like '%".$txt."%' ");
-		//$this->loadModel($id)->delete();
-		// pois kaytosta 06.06.2019
-				echo 'removed';
-	   }
-
-
-		//$this->renderPartial('vlupdater');
-
 	}
 
 	public function tvlaskentaPerTuoteet($from, $to){

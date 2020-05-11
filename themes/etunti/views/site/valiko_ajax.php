@@ -27,6 +27,7 @@
 	elseif($_POST['select_type'] == 'tarjous_tarvikkeet') $selType = 'Tarvikkeet';
 	elseif($_POST['select_type'] == 'kategoria') $selType = 'Kategoriat';
 	elseif($_POST['select_type'] == 'lopetuksen_syy') $selType = 'Lopetuksen syy';
+	elseif($_POST['select_type'] == 'ohjevideo_ryhma') $selType = 'Ohjevideo ryhmä';
 	else $selType = $r->select_type;
 
 	$maxlength = "150";

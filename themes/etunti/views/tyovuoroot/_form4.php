@@ -27,6 +27,7 @@ if(isset($_GET['tid'])){ $model->tid = $_GET['tid']; }
 if(!isset($laatikko_pvm)){ $laatikko_pvm = ''; }
 if(!isset($laatikko_tid)){ $laatikko_tid = ''; }
 if(!isset($laatiko_etusukunimi)){ $laatiko_etusukunimi = ''; }
+$nextTv = $this->checkNextTv($this_id);
 
 if(!empty($laatikko_pvm))
 	$model->pvm = $laatikko_pvm;
@@ -105,9 +106,11 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 	<?php echo Yii::t('main', 'Tämä kohde on eDicosta.'); ?>
 	</div>
 	<?php endif; ?>
+	<?=(isset($nextTv->pvm))?'<div class="alert bg-info">Seuraava vuoro: '.$nextTv->pvm.'</div>':''?>
 
 
 <div class="section">
+	<div id="kohteen_lisatiedot" class="pull-right"></div>
 	<div id="huomio_yllaosa" class="text-center"></div>
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'tyovuoroot-form',
@@ -135,7 +138,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 		<div id="asiakasAutocompleteResult"></div>
   </div>
   <div class="col-sm-3">
-		<label for="Tyovuoroot_kohde">Kohde <span class="kohteen_lisatiedot"></span></label>
+		<label for="Tyovuoroot_kohde">Kohde</label>
 		<?php
        		$criteria = new CDbCriteria();
 	        $criteria->order = " osoite ";
@@ -268,6 +271,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 		<div class="input-group">
 		<?php
 			$l1 = array(
+				'Normaali/' => 'Normaali', 
 				'Ei lasketa/red' => 'Ei lasketa', 
 				'Varallaolo/#c67520' => 'Varallaolo'
 			);
@@ -281,19 +285,22 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 			}
 			$list = array_merge($l1, $l2);
 			ksort($list);
+			$maaritetty = [];
+			if(!empty($model->tyoajanmerkinta)){
+				$expl = explode("/",$model->tyoajanmerkinta);
+				$value = (isset($expl[0])) ? $expl[0] : '';
+				$maaritetty[$model->tyoajanmerkinta] = '<option value="'.$model->tyoajanmerkinta.'" selected>'.$value.'</option>';
+			}
 			echo '<select name="'.$java_prefix.'[tyoajanmerkinta]" class="form-control lomake_valinta" id="'.$java_prefix.'_tyoajanmerkinta">';
-				if(!empty($model->tyoajanmerkinta)){
-					$expl = explode("/",$model->tyoajanmerkinta);
-					$value = (isset($expl[0])) ? $expl[0] : '';
-					echo '<option value="'.$model->tyoajanmerkinta.'">'.$value.'</option>';
-				} else {
-					echo '<option style="color:" value="Normaali/">Normaali</option>';
-				}
 				$list = array_merge($l1, $l2);
 				foreach($list as $key => $val){
 					$expl 	= explode("/",$key);
 					$color = (isset($expl[1])) ? $expl[1] : '';
-					echo '<option style="color:'.$color.'" value="'.$key.'">'.$val.'</option>';
+
+					if(isset($maaritetty[$key]))
+						echo $maaritetty[$key];
+					else
+						echo '<option style="color:'.$color.'" value="'.$key.'">'.$val.'</option>';
 				}
 			echo '</select>';
         	?>
@@ -308,63 +315,6 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 
 <script type="text/javascript">
 $(document).ready(function(){
-
-
-  $(document).delegate(".muokaTaulunLatiko","click",function(){
-
-    $(this).css({"background" : "#ccc"});
-
-    var thisID = $(this).attr("id");
-    var thisDate = $(this).attr("thisdate");
-    var thisTid = parseInt($(this).attr("thistid"));
-    var thisTXT = $(this).text();
-    var id = $(this).attr("method");
-    var thisStatus = $(".valikot input:radio:checked").val();
-    var lat1 = thisStatus.split("//");
-    var lat = '('+lat1[0]+') '+lat1[2]+'/'+lat1[1];
-    var vapaateksti = $('.vapaateksti').val();
-
-    var postdata = {
-	tid 	: thisTid,
-	pvm 	: thisDate,
-	status 	: thisStatus,
-	tietoja	: vapaateksti,
-	tyoajanlaatu : lat,
-    }
-
-        $.ajax({
-           url: 'vlupdater?id='+id+'&txt='+thisTXT,
-	   type: 'POST',
-	   data: { Vuosilomat : postdata },
-           success: function(data){
-		console.log(data);
-
-		var spData  = data.split("//");
-
-		if(spData[3] != '' && data != 'removed'){
-		   $("#"+thisID).attr("method",spData[0]);
-		   $("#"+thisID).removeClass("myBgColors bg-info");
-		   $("#"+thisID).attr("style","background:"+spData[4]+";color:white;");
-		   $("#"+thisID).html('<div class="link laatikot">'+ spData[3] +'</div>');
-		}
-
-		if(data == 'removed')
-		{
-		   $("#"+thisID).attr("method", "new");
-		   $("#"+thisID).html('<div class="link laatikot"></div>');
-		}
-    
-
-           },
-	   error:function(data){
-		console.log(data);
-		/*window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";*/
-	   }
-        });
-
-
-  });
-/* valikot */
 
  $('#<?=$java_prefix?>_tyoajanlaatu').change(function(){
 	if($('option:selected', this).val() !== ''){
@@ -953,12 +903,7 @@ $(document).ready(function(){
 			  }
 	 	});
   }
-/*
-  function disable_kentaat(tilanne){
-	$('.lomake_kenta').prop('readonly', tilanne);
-	$('.lomake_valinta, .lomake_btn, #tekijanVaihdo').prop('disabled', tilanne);
-  }
-*/
+
   var toistuva 	= ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
   $('#is_toistuva').on('switchChange.bootstrapSwitch', function(event, state) {
 	if(state === true){
@@ -1370,7 +1315,6 @@ $(document).ready(function(){
 
 	if( thisVal.length >= 2 )
 	{
-
 	  	 $.ajax({
 			url: 'asiakas_autocomplete',
 			type:'GET',
@@ -1393,50 +1337,48 @@ $(document).ready(function(){
 					$('#asiakasAutocompleteResult').html('');
 	}
 
+	$('.asiakasSelecter').click(function(){
+		var thisVal = $(this).attr('for');
+		var thisAsiakas = $(this).text();
+		  	 $.ajax({
+				url: 'getKohdeByAsiakas',
+				type:'GET',
+				data: { "id" : thisVal },
+				  success:function(data){
+					data = JSON.parse(data);
+				  	//console.log(data);
+					$('#<?=$java_prefix?>_kohde').html(data['options']);
+					$('#<?=$java_prefix?>_kohde').val(data['first']);
+					OsoiteVaihto(data['first']);
+					$('#asiakasAutocompleteResult').html('').hide();
+					$('#asiakas').val(thisAsiakas);
+				  },
+				  error:function(data){
+				  	console.log(data);
+				  }
+		 	});
+	});
 
-     $('.asiakasSelecter').click(function(){
-	var thisVal = $(this).attr('for');
-	var thisAsiakas = $(this).text();
-	  	 $.ajax({
-			url: 'getKohdeByAsiakas',
-			type:'GET',
-			data: { "id" : thisVal },
-			  success:function(data){
-				data = JSON.parse(data);
-			  	//console.log(data);
-				$('#<?=$java_prefix?>_kohde').html(data);
-				$('#asiakasAutocompleteResult').html('').hide();
-				$('#asiakas').val(thisAsiakas);
-
-			  },
-			  error:function(data){
-			  	console.log(data);
-			  }
-	 	});
-     });
-
-     $('.kohteenSelecter').click(function(){
-	var thisVal = $(this).attr('for');
-	var thisAsiakas = $(this).text();
-	  	 $.ajax({
-			url: 'getKohdeById',
-			type:'GET',
-			data: { "id" : thisVal },
-			  success:function(data){
-				data = JSON.parse(data);
-			  	//console.log(data);
-				$('#<?=$java_prefix?>_kohde').html(data);
-				$('#asiakasAutocompleteResult').html('').hide();
-				$('#asiakas').val(thisAsiakas);
-
-			  },
-			  error:function(data){
-			  	console.log(data);
-			  }
-	 	});
-     });
-
-
+	$('.kohteenSelecter').click(function(){
+		var thisVal = $(this).attr('for');
+		var thisAsiakas = $(this).text();
+		  	 $.ajax({
+				url: 'getKohdeById',
+				type:'GET',
+				data: { "id" : thisVal },
+				  success:function(data){
+					data = JSON.parse(data);
+				  	//console.log(data);
+					$('#<?=$java_prefix?>_kohde').html(data);
+					OsoiteVaihto(thisVal);
+					$('#asiakasAutocompleteResult').html('').hide();
+					$('#asiakas').val(thisAsiakas);
+				  },
+				  error:function(data){
+				  	console.log(data);
+				  }
+		 	});
+	});
   });
 
   $('.timeVuorot').mask('00:00',{
@@ -1470,9 +1412,7 @@ $(document).ready(function(){
  	   }
         });
 	}
-
   });
-
 
   $('#alku').blur(function(){
 	$(this).removeClass('bg-danger');
@@ -1498,20 +1438,7 @@ $(document).ready(function(){
 	}
   });
 
-
-  $('#alku').keyup(function(){
-	laskePituus();
-  });
-
-  $('#loppu').keyup(function(){
-	laskePituus();
-  });
-
-  $('#alku').change(function(){
-	laskePituus();
-  });
-
-  $('#loppu').change(function(){
+  $('#alku, #loppu').on('keyup, change', function(){
 	laskePituus();
   });
 
@@ -1529,7 +1456,7 @@ $(document).ready(function(){
 				$('#arvioitu_kesto').html('00:00');
 			}
 
-			$(".kohteen_lisatiedot").html('<span style="position:absolute;right: 10px;top:-12px" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'"></span><div style="position:absolute;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div>');
+			$("#kohteen_lisatiedot").html('<span style="" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'"></span><div style="position:relative;"><div style="position:absolute;top:5px;right: 20px;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div></div>');
 
 	   	},
 		error:function(data){
@@ -1539,16 +1466,18 @@ $(document).ready(function(){
   }
 
   $(document).delegate("#<?=$java_prefix?>_kohde","change",function(){
-
+	var thisID = $(this, 'option:selected').val();
+	OsoiteVaihto(thisID);
+  });
+  function OsoiteVaihto(thisID){
+	$("#kohteen_lisatiedot").html('');
 	$('#<?=$java_prefix?>_status').val('3').css({"border" : "1px green solid"});
 	$('#<?=$java_prefix?>_tyoajanlaatu').val('');
-	$(this).removeClass('bg-danger');
-	var thisID = $(this, 'option:selected').val();
+	$("#<?=$java_prefix?>_kohde").removeClass('bg-danger');
 	var tyo_erittelyt = '';
 	var tv_id = '<?php if(isset($model->id)){ echo $model->id; } ?>';
 	linkkiKohteeseen();
-
-	  $.ajax({
+	$.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+ thisID +'&tv_id='+ tv_id,
 		  success:function(data){
 			//console.log(data);
@@ -1577,30 +1506,32 @@ $(document).ready(function(){
 			$("#erittelynlista").html('<div class="col-sm-6 erittelynlista_laatiko"><legend>Työerittelyt</legend>' + tyo_erittelyt + '</div>');
 			//    tyo_erittelyt -->
 
-			if(d[2] !== '')
+			if(d[2] !== ''){
 				$('#arvioitu_kesto').html(d[2]);
-			else
+			} else {
 				$('#arvioitu_kesto').html('00:00');
+			}
 
-			$(".kohteen_lisatiedot").html('<span style="position:absolute;right: 10px;top:-12px" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'"></span><div style="position:absolute;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div>');
+			$("#kohteen_lisatiedot").html('<span style="" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'"></span><div style="position:relative;"><div style="position:absolute;top:5px;right: 20px;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div></div>');
 
-			if(d[9] !== '')
+			if(d[9] !== ''){
 				$('#alku').val(d[9]);
-			if(d[10] !== '')
+			}
+			if(d[10] !== ''){
 				$('#loppu').val(d[10]);
+			}
 
-	   	},
-		error:function(data){
-		console.log(data);
-	    	}
-	  });
-  });
+		}, error:function(data){
+			console.log(data);
+		}
+	});
+  }
   $(".uusierittely").click(function(){
-    var er_lista = $("#erittelynlista").text().trim();
-    if( er_lista == '' ){
-    $("#erittelynlista").append('<div class="col-sm-6 erittelynlista_laatiko"><legend>Työerittelyt</legend>');
-    }
-    $(".erittelynlista_laatiko").append('' +
+	var er_lista = $("#erittelynlista").text().trim();
+	if( er_lista == '' )
+		$("#erittelynlista").append('<div class="col-sm-6 erittelynlista_laatiko"><legend>Työerittelyt</legend>');
+
+	$(".erittelynlista_laatiko").append('' +
 		 '<div class="row">' +
 		  '<div class="col-sm-11">' +
 		   '<input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control input-sm">' +
@@ -1609,23 +1540,23 @@ $(document).ready(function(){
 		   '<span class="link text-danger fa fa-trash poislistasta"></span>' +
 		  '</div>' +
  		 '</div>'
-    );
-    if( er_lista == '' ){
-    $(".erittelynlista_laatiko").append('</div>');
-    }
-    $(".erittelynlista_laatiko input:last").focus();
+	);
+	if( er_lista == '' )
+		$(".erittelynlista_laatiko").append('</div>');
+
+	$(".erittelynlista_laatiko input:last").focus();
   });
+
   $(document).delegate(".poislistasta","click",function(){
-   $(this).closest(".row").remove();
+	$(this).closest(".row").remove();
   });
 
   $(".uusimuistinpanno").click(function(){
-    var mp_lista = $("#muistiinpanolista").text().trim();
-    if( mp_lista == '' ){
-    $("#muistiinpanolista").append('<p><div class="row panel-footer"><div class="col-sm-12 muistiinpanolista_laatiko"><legend>Muistiinpanot</legend>');
-    }
+	var mp_lista = $("#muistiinpanolista").text().trim();
+	if( mp_lista == '' )
+		$("#muistiinpanolista").append('<p><div class="row panel-footer"><div class="col-sm-12 muistiinpanolista_laatiko"><legend>Muistiinpanot</legend>');
 
-    $(".muistiinpanolista_laatiko").append('' +
+	$(".muistiinpanolista_laatiko").append('' +
 		 '<div class="row">' +
 		  '<div class="col-sm-11">' +
 		   '<textarea name="Tyovuoroot[muistiinpano][]" class="form-control"></textarea>' +
@@ -1634,18 +1565,17 @@ $(document).ready(function(){
 		   '<span class="link text-danger fa fa-trash pois_muistiinpano"></span>' +
 		  '</div>' +
  		 '</div>'
-    );
-    if( mp_lista == '' ){
-    $(".muistiinpanolista_laatiko").append('</div></div></p>');
-    }
-    $(".muistiinpanolista_laatiko textarea:last").val('<?=date("d.m.Y H:i")?> - <?=Yii::app()->user->nimi?>:\n').focus();
+	);
+	if( mp_lista == '' )
+		$(".muistiinpanolista_laatiko").append('</div></div></p>');
+
+	$(".muistiinpanolista_laatiko textarea:last").val('<?=date("d.m.Y H:i")?> - <?=Yii::app()->user->nimi?>:\n').focus();
   });
   $(document).delegate(".pois_muistiinpano","click",function(){
-   $(this).closest(".row").remove();
+	$(this).closest(".row").remove();
   });
 
   linkkiKohteeseen();
-
   function linkkiKohteeseen(){
 	var thisID = $('#<?=$java_prefix?>_kohde option:selected').val();
 	var thisText = $('#<?=$java_prefix?>_kohde option:selected').text();
@@ -1656,15 +1586,15 @@ $(document).ready(function(){
   }
 
   // <-- modal siirtaminen
-	$("#modal-form").find(".panel-heading").hover(function() {
+  $("#modal-form").find(".panel-heading").hover(function() {
 	    $(this).css('cursor','pointer');
 	}, function() {
 	    $(this).css('cursor','auto');
-	});
-        $('#modal-form').draggable({
+  });
+  $('#modal-form').draggable({
             handle: ".panel-heading",
 	    revert:"invalid",
-        });
+  });
   // modal siirtaminen -->
 
 

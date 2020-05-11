@@ -16,24 +16,34 @@
    <?php
 	Yii::app()->db1->setActive(true);
 	if(!isset($_GET['id'])){
-		$model = Ohjevideot::model()->findAll(array('order'=>'id DESC'));
-		echo '<table class="table table-bordered">';
-		echo '<tr>';
-		echo '<th>Kuvaus</th>';
-		echo '<th>Video</th>';
-		echo '</tr>';
-	   	foreach($model as $data){
+		$gr = Ohjevideot::model()->findAll(array('group'=>'ohjevideo_ryhma')); // gr
+		foreach($gr as $item){
+
+			echo '<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#ryhma_'.$item->id.'"><h3>'.$item->ohjevideo_ryhma.'&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>';
+			echo '<div class="collapse" id="ryhma_'.$item->id.'">';
+       			$criteria = new CDbCriteria();
+			$criteria->order = "id DESC";
+			$criteria->condition="ohjevideo_ryhma='".$item->ohjevideo_ryhma."'";
+			$model = Ohjevideot::model()->findAll($criteria);
+			echo '<table class="table table-bordered">';
 			echo '<tr>';
-			echo '<td width="50%">' . CHtml::link('<h2>'.$data->otsiko.'</h2><br>'.$data->kuvaus, array('ohjevideot', 'id' => $data->id)).'</td>';
-			echo '
-			<td>
-				<video class="img-thumbnail" controls="controls" style="width:100%">
-				  <source src="../../ohjevideot/'.$data->tiedoston_nimi.'" type="video/mp4">
-				</video>
-			</td>';
+			echo '<th>Kuvaus</th>';
+			echo '<th>Video</th>';
 			echo '</tr>';
-	   	}
-		echo '</table>';
+		   	foreach($model as $data){
+				echo '<tr>';
+				echo '<td width="50%">' . CHtml::link('<h2>'.$data->otsiko.'</h2><br>'.$data->kuvaus, array('ohjevideot', 'id' => $data->id)).'</td>';
+				echo '
+				<td>
+					<video class="img-thumbnail" controls="controls" style="width:100%">
+					  <source src="../../ohjevideot/'.$data->tiedoston_nimi.'" type="video/mp4">
+					</video>
+				</td>';
+				echo '</tr>';
+		   	}
+			echo '</table>';
+			echo '</div>';
+		}
 	} else {
 		$model = Ohjevideot::model()->findByPk($_GET['id']);
 		if(isset($model->id)){
