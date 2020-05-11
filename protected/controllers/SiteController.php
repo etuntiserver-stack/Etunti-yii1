@@ -2111,7 +2111,7 @@ $(document).ready(function(){
 		$criteria = new CDbCriteria();
         	$criteria->condition = "
 			status=3 AND tekija='toimisto'
-			AND DATE(STR_TO_DATE(time, '%Y-%m-%d')) = CURDATE()
+			AND DATE(time) = CURDATE()
 		";
 	  	$v = Viestinta::model()->findAll($criteria);
 	  	$viestit = count($v);
