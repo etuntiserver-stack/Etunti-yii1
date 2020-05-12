@@ -581,6 +581,25 @@ $freshdesk_domain = 'santelo'; // TEMP
         spopup_div.collapse("hide");
     });
 
+    var exportCustomersFinish = function(result) {
+      $('#export-customers-progress').css('display', 'none');
+      if ("errors" in result && result.errors.length > 0) {
+        let error_text = `Asiakkaiden viemisessä Freshdeskiin tapahtui virheitä. Asiakkaita luotu: ${result.created_count}, päivitetty: ${result.updated_count}\n\nVirheet:\n`;
+
+        $.each(result.errors, function(k, v) {
+          if ("asiakas_id" in v)
+            error_text += `(asiakas ${v.asiakas_id}: ${v.asiakas}): `;
+          error_text += `${v.text} (${v.description})\n`;
+        });
+
+        error_text += "\n\n\nEdistynyt tieto:\n" + data;
+        alert(error_text);
+
+      } else {
+        alert(`Asiakkaita luotu: ${result.created_count}, päivitetty: ${result.updated_count}`);
+      }
+    }
+
     $('#btn-export-customers').on('click', function(e) {
       e.preventDefault();
       let selection = $('#export-customers-list').val();
@@ -605,6 +624,9 @@ $freshdesk_domain = 'santelo'; // TEMP
             console.log(response);
             let parsed = null;
 
+            if (response.length == 0)
+              return;
+
             try {
               parsed = JSON.parse(response);
             } catch (e) {
@@ -612,7 +634,9 @@ $freshdesk_domain = 'santelo'; // TEMP
               return;
             }
 
-            if ('current' in parsed) {
+            if ('created_count' in parsed) {
+              exportCustomersFinish(parsed);
+            } else if ('current' in parsed) {
               $('#export-customers-progress').text(`Viety: ${parsed['current']} / ${parsed['total']}`);
             }
           }
@@ -632,29 +656,18 @@ $freshdesk_domain = 'santelo'; // TEMP
           console.log(response);
           let parsed = null;
 
+          if (response.length == 0)
+            return;
+
           try {
-            parsed = JSON.parse(data);
+            parsed = JSON.parse(response);
           } catch (e) {
-            showError('Virhe asiakkaiden lähettämisessä Freshdeskiin.', `Failed to parse response JSON.`, e);
+            console.log("Unable to parse output: " + data);
+            return;
           }
 
-          if (typeof(parsed) != "object" || parsed == null) {
-            showError('Virhe asiakkaiden lähettämisessä Freshdeskiin.', 'Parsed data is unusable (not an object).', parsed);
-
-          } else if ("errors" in parsed && parsed.errors.length > 0) {
-            let error_text = `Asiakkaiden viemisessä Freshdeskiin tapahtui virheitä. Asiakkaita luotu: ${parsed.created_count}, päivitetty: ${parsed.updated_count}\n\nVirheet:\n`;
-
-            $.each(parsed.errors, function(k, v) {
-              if ("asiakas_id" in v)
-                error_text += `(asiakas ${v.asiakas_id}: ${v.asiakas}): `;
-              error_text += `${v.text} (${v.description})\n`;
-            });
-
-            error_text += "\n\n\nEdistynyt tieto:\n" + data;
-            alert(error_text);
-
-          } else {
-            alert(`Asiakkaita luotu: ${parsed.created_count}, päivitetty: ${parsed.updated_count}`);
+          if (parsed != null && typeof(parsed) == "object") {
+            exportCustomersFinish(parsed);
           }
         },
         complete: function() {

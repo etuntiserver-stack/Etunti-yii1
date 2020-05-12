@@ -1842,10 +1842,12 @@ class Freshdesk extends CComponent
 
     if (empty($error_array)) {
 
+      list($prevflush_m, $prevflush_s) = explode(' ', microtime());
       $pager = $this->getContactPaginator(100);
       $updated_count = 0;
       $created_count = 0;
       $processed_count = 0;
+
       foreach ($asiakkaat as $a) {
 
         $name = $a->yhteyshenkilo;
@@ -1886,82 +1888,92 @@ class Freshdesk extends CComponent
 
         if (filter_var($a->sahkoposti, FILTER_VALIDATE_EMAIL)) {
           $opts['email'] = $a->sahkoposti;
-        } else {
-          continue; // require email data for creating contact
-        }
 
-        if (!empty($a->puhelin) && preg_match('/^\+?[\d ]+$/', $a->puhelin)) {
-          $opts['phone'] = $a->puhelin;
-          $opts['mobile'] = $a->puhelin;
-        }
-
-        if (!empty($a->osoite)) {
-          $opts['address'] = $a->osoite;
-        }
-
-        // Check for duplicate, in which case, update existing contact.
-        $is_duplicate = false;
-        $duplicate_id = 0;
-        $filtered = $pager->filtered(1, function ($item) use ($a) {
-          return (($item['unique_external_id'] ?? 0) == ($a->id ?? -1) || ($item['email'] ?? '<>') == ($a->sahkoposti ?? ''));
-        }, 100, null, 1);
-        if (!empty($filtered)) {
-          $is_duplicate = true;
-          $duplicate_id = $filtered[0]['id'];
-        }
-
-        $headers = [];
-        $results = null;
-
-        if ($is_duplicate) {
-          $results = $this->updateContact($duplicate_id, $opts, $headers);
-
-          if (!empty($results['errors'])) {
-            // $error('Olemassaolevan asiakkaan päivittämisessä tapahtui virhe', $results['description'] ?? '', $results['errors'], $headers, $a);
-          } else {
-            $updated_count++;
+          if (!empty($a->puhelin) && preg_match('/^\+?[\d ]+$/', $a->puhelin)) {
+            $opts['phone'] = $a->puhelin;
+            $opts['mobile'] = $a->puhelin;
           }
-        } else {
-          $results = $this->createContact($opts, $headers, true);
 
-          if (!empty($results['errors'])) {
+          if (!empty($a->osoite)) {
+            $opts['address'] = $a->osoite;
+          }
 
-            // If code duplicate_value, call updateContact(). This can happen when a contact with
-            // same info has been deleted but not deleted forever (in "trash can").
-            if (
-              count($results['errors']) == 1 &&
-              ($results['errors'][0]['code'] ?? '') == 'duplicate_value' &&
-              !empty($results['errors'][0]['additional_info']['user_id'])
-            ) {
-              $results = $this->updateContact($results['errors'][0]['additional_info']['user_id'], $opts, $headers);
+          // Check for duplicate, in which case, update existing contact.
+          $is_duplicate = false;
+          $duplicate_id = 0;
+          $filtered = $pager->filtered(1, function ($item) use ($a) {
+            return (($item['unique_external_id'] ?? 0) == ($a->id ?? -1) || ($item['email'] ?? '<>') == ($a->sahkoposti ?? ''));
+          }, 100, null, 1);
+          if (!empty($filtered)) {
+            $is_duplicate = true;
+            $duplicate_id = $filtered[0]['id'];
+          }
 
-              if (!empty($results['errors'])) {
-                // $error('Olemassaolevan asiakkaan päivittämisessä tapahtui virhe', $results['description'] ?? '', $results['errors'], $headers, $a);
-              } else {
-                $updated_count++;
-              }
+          $headers = [];
+          $results = null;
+
+          if ($is_duplicate) {
+            $results = $this->updateContact($duplicate_id, $opts, $headers);
+
+            if (!empty($results['errors'])) {
+              // $error('Olemassaolevan asiakkaan päivittämisessä tapahtui virhe', $results['description'] ?? '', $results['errors'], $headers, $a);
             } else {
-              // $error('Asiakkaan luonnissa tapahtui virhe', $results['description'] ?? '', $results['errors'], $headers, $a);
+              $updated_count++;
             }
           } else {
-            $created_count++;
+            $results = $this->createContact($opts, $headers, true);
+
+            if (!empty($results['errors'])) {
+
+              // If code duplicate_value, call updateContact(). This can happen when a contact with
+              // same info has been deleted but not deleted forever (in "trash can").
+              if (
+                count($results['errors']) == 1 &&
+                ($results['errors'][0]['code'] ?? '') == 'duplicate_value' &&
+                !empty($results['errors'][0]['additional_info']['user_id'])
+              ) {
+                $results = $this->updateContact($results['errors'][0]['additional_info']['user_id'], $opts, $headers);
+
+                if (!empty($results['errors'])) {
+                  // $error('Olemassaolevan asiakkaan päivittämisessä tapahtui virhe', $results['description'] ?? '', $results['errors'], $headers, $a);
+                } else {
+                  $updated_count++;
+                }
+              } else {
+                // $error('Asiakkaan luonnissa tapahtui virhe', $results['description'] ?? '', $results['errors'], $headers, $a);
+              }
+            } else {
+              $created_count++;
+            }
           }
+
+          if (!empty($results['id'])) {
+            // var_dump($a->id, $a->yhteyshenkilo, $results);exit;
+            // saveAttributes skips onAfterSave() event to avoid infinite loop.
+            $a->saveAttributes(['freshdesk_id' => $results['id']]);
+          }
+
+          // var_dump("<pre>" . print_r($headers, true) . "</pre>");
+          // var_dump("<pre>" . print_r($results, true) . "</pre>");
+          // exit;
         }
 
-        if (!empty($results['id'])) {
-          // var_dump($a->id, $a->yhteyshenkilo, $results);exit;
-          // saveAttributes skips onAfterSave() event to avoid infinite loop.
-          $a->saveAttributes(['freshdesk_id' => $results['id']]);
-        }
-
-        // var_dump("<pre>" . print_r($headers, true) . "</pre>");
-        // var_dump("<pre>" . print_r($results, true) . "</pre>");
-        // exit;
-
-        if ($xhr && ++$processed_count % 3 == 2) {
-          echo json_encode(['current' => $processed_count, 'total' => count($asiakkaat)]);
-          ob_flush();
-          flush();
+        $processed_count++;
+        if ($xhr && $processed_count < (count($asiakkaat) - 3)) {
+          $temp_m = $prevflush_m;
+          $temp_s = $prevflush_s;
+          list($now_m, $now_s) = explode(' ', microtime());
+          if ($temp_m > $now_m) {
+            $temp_s++;
+            $temp_m = -$temp_m;
+          }
+          if ($now_s - $temp_s > 0) {
+            $prevflush_m = $now_m;
+            $prevflush_s = $now_s;
+            echo json_encode(['current' => $processed_count, 'total' => count($asiakkaat)]);
+            ob_flush();
+            flush();
+          }
         }
       }
     }
