@@ -98,12 +98,12 @@ if( isset($_SESSION['skrollaus']) )
  <!-- VARAUKSET -->
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
-	<td class="bg-default td_tyontekija" style="z-index: 999; width: 160px; max-width: 160px; white-space: normal; font-size: 90%;">
-	<div class="m10">
+	<td class="bg-default td_tyontekija" style="z-index: 999; min-width: 100px; max-width: 160px; white-space: normal; font-size: 90%;">
+	<div class="m10 text-center">
 
 		<?php
 		echo '
-		<div class="text-center">
+		<div>
 		    	<a href="#" class="getTekijanTiedot" for="'.$tid.'">';
 			// <-- Kuva
 			if(
