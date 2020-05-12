@@ -1769,10 +1769,20 @@ class Freshdesk extends CComponent
     $criteria->select = 'freshdesk_id';
     $criteria->condition = "id = $local_id";
     $fid = Asiakkaat::model()->find($criteria);
-    if (!empty($fid->freshdesk_id ?? 0))
-      return $this->baseUrl . '/a/contacts/' . $fid->freshdesk_id;
-    else
-      return $this->baseUrl . '/a/contacts';
+    return $this->getFreshdeskCustomerUrl($fid->freshdesk_id ?? 0);
+  }
+
+  public function getFreshdeskCustomerUrl(int $freshdesk_id)
+  {
+    $url = $this->baseUrl . '/a/contacts';
+    if ($freshdesk_id > 0)
+      $url .= "/$freshdesk_id";
+    return $url;
+  }
+
+  public function getTicketUrl(int $ticket_id)
+  {
+    return $this->baseUrl . '/a/tickets/' . $ticket_id;
   }
 
   /**
@@ -1983,6 +1993,31 @@ class Freshdesk extends CComponent
       'created_count' => $created_count,
       'errors' => $error_array
     ];
+  }
+
+  public static function getStatusText(int $status)
+  {
+    switch ($status) {
+      case 3: // Pending
+        return Yii::t('main', 'Vastattu');
+        break;
+      case 4: // Resolved
+        return Yii::t('main', 'Ratkaistu');
+        break;
+      case 5: // Closed
+        return Yii::t('main', 'Suljettu');
+        break;
+      case 6: // Waiting on customer
+        return Yii::t('main', 'Odottaa Asiakasta');
+        break;
+      case 7: // Waiting for third party
+        return Yii::t('main', 'Odottaa Tietoa');
+        break;
+      case 2: // Open
+      default:
+        return Yii::t('main', 'Vastaamatta');
+        break;
+    }
   }
 
   #endregion

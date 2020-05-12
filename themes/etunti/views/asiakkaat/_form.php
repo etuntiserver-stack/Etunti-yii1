@@ -77,6 +77,34 @@ if(!isset($model->id) and isset($asetukset->id)){
 	<?php echo $form->hiddenField($model,'vinkki_id'); ?>
 	<?php echo $form->errorSummary($model); ?>
 
+
+<!-- Freshdesk Header (notice) -->
+<?php
+
+/** @var Freshdesk object */
+$freshdesk = Yii::createComponent('Freshdesk');
+
+if (!$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
+  $freshdesk_id = $model->freshdesk_id;
+  $freshdesk_pager = $freshdesk->getTicketPaginator(10);
+  $freshdesk_tickets = $freshdesk_pager->filtered(1, function ($item) use ($freshdesk_id) {
+    return ($item['requester_id'] == $freshdesk_id);
+  });
+  foreach ($freshdesk_tickets as $ticket) {
+    if (!in_array($ticket['status'] ?? 0, [4, 5])) {
+      $freshdesk_link = $freshdesk->getFreshdeskCustomerUrl($freshdesk_id);
+      echo '<div id="freshdesk-notice" class="section alert bg-warning">';
+      echo CHtml::link(Yii::t('main', 'Tällä asiakkaalla on avoimia tukipyyntöjä Freshdeskissä. Avaa painamalla tästä.'), $freshdesk_link, ['class' => 'text-dark', 'target' => '_blank']);
+      echo '</div>';
+      break;
+    }
+  }
+}
+
+?>
+<!-- Freshdesk // -->
+
+
 <div class="row">
   <div class="col-sm-3">
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
@@ -720,6 +748,54 @@ $(document).ready(function(){
 });
 </script>
 <!-- Muistiinpanot //-->
+
+
+<!-- Freshdesk -->
+<?php
+
+if (!$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0 && !empty($freshdesk_tickets)) {
+  echo '<legend><h3>' . Yii::t('main', 'Freshdesk Tukipyynnöt') . '</h3></legend>';
+  foreach ($freshdesk_tickets as $ticket) {
+    $ticket_link = $freshdesk->getTicketUrl($ticket['id'] ?? 0);
+    $ticket_link_text = '';
+    if (!empty($ticket['status'])) {
+      $ticket_status_text = $freshdesk->getStatusText($ticket['status']);
+      switch ($ticket['status']) {
+        // case 3:9
+        //   return Yii::t('main', 'Vastattu');
+        //   break;
+        // case 4: // Resolved
+        //   return Yii::t('main', 'Ratkaistu');
+        //   break;
+        // case 5: // Closed
+        //   return Yii::t('main', 'Suljettu');
+        //   break;
+        // case 6: // Waiting on customer
+        //   return Yii::t('main', 'Odottaa Asiakasta');
+        //   break;
+        // case 7: // Waiting for third party
+        //   return Yii::t('main', 'Odottaa Tietoa');
+        //   break;
+        // case 2: // Open
+        // default:
+        //   return Yii::t('main', 'Vastaamatta');
+        //   break;
+      }
+      $ticket_link_text .= "($ticket_status_text)";
+    }
+    if (!empty($ticket['created_at']))
+      $ticket_link_text .= date('d.m.Y H:i:s', strtotime($ticket['created_at'])) . ' - ';
+    if (!empty($ticket['subject']))
+      $ticket_link_text .= $ticket['subject'];
+    if (!empty($ticket['id']))
+      $ticket_link_text .= " ({$ticket['id']})";
+    echo CHtml::link($ticket_link_text, $ticket_link, ['class' => 'text-dark', 'target' => '_blank']) . '<br>';
+  }
+}
+
+?>
+<!-- Freshdesk // -->
+
 
 	<div class="section">
 		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('main', 'Luo') : Yii::t('main', 'Tallenna'),array('class'=>'btn btn-primary myBgColors luoTallennaAsiakas')); ?>
