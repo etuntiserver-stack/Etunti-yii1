@@ -2615,7 +2615,7 @@ class TyovuorootController extends Controller
 		$ikoonit	= ((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon;
 		$tv_kesto	= 0;
     $eilasketa 	= $this->eiLasketaSubStr($arvo->tyoajanmerkinta);
-    $has_tickets = (isset($customer_tickets[$this_tid]));
+    $has_tickets = (isset($customer_tickets[$arvo->kohteet->asiakkaat->id ?? 0]));
 		if($eilasketa != true)
 			$tv_kesto = strtotime($arvo->loppu)-strtotime($arvo->alku);
 
