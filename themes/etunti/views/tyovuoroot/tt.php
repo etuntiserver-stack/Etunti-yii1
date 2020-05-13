@@ -47,7 +47,7 @@ if( isset($_SESSION['skrollaus']) )
  </th>
  <?php
  foreach($tt as $tid=>$item){
-	echo '<th class="bg-default small" style="z-index: 999; vertical-align: middle;"><div class="text-center laatiko_td">
+	echo '<th class="bg-default small '.((isset($tyosuhteet[$tid]['loppu']) and !empty($tyosuhteet[$tid]['loppu']) and date("Ymd", strtotime($tyosuhteet[$tid]['loppu'])) < date("Ymd"))? 'bg-danger' : '').'" style="z-index: 999; vertical-align: middle;"><div class="text-center laatiko_td">
 		<div>
 		    	<a href="#" class="getTekijanTiedot" for="'.$tid.'">';
 			// <-- Kuva

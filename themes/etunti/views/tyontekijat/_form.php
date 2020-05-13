@@ -180,6 +180,32 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
+	<?php
+		$tv_controller 	= Yii::app()->createController('Tyovuoroot');
+		$with		= ['data'];
+		$from		= date("Y-m-d");
+		$dataAll 	= $tv_controller[0]->FromToSuunnitellutAll($from, null, [$model->id], [], $with);
+		/*
+		echo '<pre>';
+		print_r( $dataAll );
+		echo '</pre>';
+		exit;
+		*/
+	?>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'naytta_tyovuorossa'); ?>
+		<?php 
+        	$tal = array(
+			1=>'Kyllä'
+		);
+		if(count($dataAll) == 0)
+			$tal[0] = 'Ei';
+
+		echo $form->dropDownList($model,'naytta_tyovuorossa', $tal, 
+		array('class'=>'form-control')) ?>
+		<?=(count($dataAll) > 0)? '<p class="text-danger">Työntekijällä on työvuoroja.</p>' : ''?>
+		<?php echo $form->error($model,'naytta_tyovuorossa'); ?>
+	</div>
 
 <?php if(isset($model->id)) : ?>
 <script type="text/javascript">

@@ -97,7 +97,11 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 }
 ?>
 
-	<?php if(isset($ov->id) and $model->osoiteOnline == 2) : ?>
+	<?php if($model->osoiteOnline == 1) : ?>
+	<div class="section alert bg-warning">
+	<?php echo Yii::t('main', 'Online varaus prosessissa.'); ?>
+	</div>
+	<?php elseif(isset($ov->id) and $model->osoiteOnline == 2): ?>
 	<div class="section alert bg-warning">
 	<?php echo Yii::t('main', 'Tämä kohde on onlinevarauksesta.'); ?>
 	</div>
@@ -106,7 +110,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 	<?php echo Yii::t('main', 'Tämä kohde on eDicosta.'); ?>
 	</div>
 	<?php endif; ?>
-	<?=(isset($nextTv->pvm))?'<div class="alert bg-info">Seuraava vuoro: '.$nextTv->pvm.'</div>':''?>
+	<?=(!empty($nextTv))?'<div class="alert bg-info">Seuraava vuoro: '.$nextTv.'</div>':''?>
 
 
 <div class="section">

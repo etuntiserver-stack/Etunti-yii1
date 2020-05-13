@@ -102,7 +102,8 @@ class Tyontekijat extends DB2ActiveRecord
                      'ammattinimike' => 'varchar(255) DEFAULT NULL',
                      'onlinevaraus_tuotteet' => 'text DEFAULT NULL',
                      'app_naytta_osoitekenta' => 'int(1) DEFAULT 0',
-		     'muistiinpano' => 'text DEFAULT NULL'
+		     'muistiinpano' => 'text DEFAULT NULL',
+		     'naytta_tyovuorossa' => 'int(1) DEFAULT 1',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -143,7 +144,7 @@ class Tyontekijat extends DB2ActiveRecord
 		return array(
 			array('tekijan_nimi, aktiivinen, sukunimi', 'required'),
 			array('tekijan_pankkitili, tekijan_konttori, ammattinimike, tekijan_henkilotunnus', 'netvisorCheck', 'on'=>'insert, update'),
-			array('online_varauksen_valmina, ilmoitus_merkkipaivasta_vuosi, tyontekijan_numero, mobiili, app_naytta_osoitekenta', 'numerical', 'integerOnly'=>true),
+			array('online_varauksen_valmina, ilmoitus_merkkipaivasta_vuosi, tyontekijan_numero, mobiili, app_naytta_osoitekenta, naytta_tyovuorossa', 'numerical', 'integerOnly'=>true),
 			array('imei', 'length', 'max'=>100),
 			array('laiten_puh, tekijan_nimi, tekijan_katuosoite, tekijan_pankkitili, salasana', 'length', 'max'=>100),
 			array('tekijan_henkilotunnus, tekijan_puh, tekijan_lanka_puh', 'length', 'max'=>20),
@@ -207,6 +208,7 @@ class Tyontekijat extends DB2ActiveRecord
 			'sukunimi' => Yii::t('main', 'Sukunimi'),
 			'ammattinimike' => Yii::t('main', 'Ammattinimike'),
 			'app_naytta_osoitekenta'=>Yii::t('main', 'Näytä osoite sovelluksessa'),
+			'naytta_tyovuorossa' => Yii::t('main', 'Näytä työvuorosuunnittelussa'),
 		);
 	}
 
