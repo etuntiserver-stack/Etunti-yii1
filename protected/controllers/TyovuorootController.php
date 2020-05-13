@@ -1982,14 +1982,12 @@ class TyovuorootController extends Controller
 		//     Ketjun kasikorjaus -->
 		// ------------------------------------------------
 
-		if( !isset(Yii::app()->session['ov_poisto']) ){
-			$this->poistaminenOnlineVarauksetJokaMeniOhi();
-			Yii::app()->session['ov_poisto'] = 'suorittu';
-		}
-
 		$site = Yii::app()->createController('Site');
 		$arrDate = array(1 => "Ma", 2 => "Ti", 3 => "Ke", 4 => "To", 5 => "Pe", 6 => "La", 7 => "Su");
 		$asetukset = Asetukset::model()->findByPk(1);
+
+		// <-- Onlinevaraus autopoisttaminen
+		$this->poistaminenOnlineVarauksetJokaMeniOhi($asetukset->onlinevaraus_autoremove);
 
 		// <-- Reset
 		if (isset($_GET['reset'])) {
@@ -2491,9 +2489,9 @@ class TyovuorootController extends Controller
 		if($arvo->peruutettu == 2)
 			$lisateksti .= '<br><span class="text-danger">'. $this->peruutettuArray()[2] .'</span>';
 		if($arvo->osoiteOnline == 1)
-			$lisateksti .= '<br><span class="text-danger">Online varaus prosessissa</span>';
+			$lisateksti .= '<br><span class="text-danger">Onlinevaraus kesken</span>';
 		if($arvo->osoiteOnline == 2)
-			$lisateksti .= '<br><span class="text-success">Online varaus maksettu</span>';
+			$lisateksti .= '<br><span class="text-success">Onlinevaraus maksettu</span>';
 		if($arvo->osoiteOnline == 3)
 			$lisateksti .= '<br><span class="text-warning">eDico varaus</span>';
 		if($arvo->tyopaari != '')
@@ -4489,372 +4487,37 @@ class TyovuorootController extends Controller
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 	}
 
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		if( !isset(Yii::app()->session['ov_poisto']) ){
-			$this->poistaminenOnlineVarauksetJokaMeniOhi();
-			Yii::app()->session['ov_poisto'] = 'suorittu';
-		}
-		$kohteet_siivous = array();
-
-		// <-- Reset
-		if(isset($_GET['reset']))
-		{
-			unset(Yii::app()->session['year']);
-			unset(Yii::app()->session['week']);
-			unset(Yii::app()->session['vkolopput']);
-			unset(Yii::app()->session['asiakas']);
-			unset(Yii::app()->session['kohde']);
-			unset(Yii::app()->session['tyontekijat']);
-			unset(Yii::app()->session['tyo_toimialue']);
-			unset(Yii::app()->session['kohteiden_tyonimike']);
-			unset(Yii::app()->session['tyoryhma']);
-
-			$this->redirect(array('index'));
-		}
-		//     Reset -->
-
-
-		// <-- GET haku
-		if(isset($_GET['year']) or isset($_GET['week'])){
-			if(isset($_GET['year']) and !empty($_GET['year']))
-				Yii::app()->session['year'] = $_GET['year'];
-			
-			if(isset($_GET['week']) and !empty($_GET['week']))
-				Yii::app()->session['week'] = $_GET['week'];
-
-			if(isset($_GET['tid']) and !empty($_GET['tid']))
-				Yii::app()->session['tyontekijat'] = array($_GET['tid']);
-
-			if(isset($_GET['tv_id'])){ $this->redirect(array('index', 'tv_id' => $_GET['tv_id'])); } 
-			$this->redirect(array('index'));
-		}		
-		//  GET haku -->
-
-
-		// <-- Post haku
-		if(isset($_POST['haku']))
-		{
-
-			if(isset($_POST['kohteiden_tyonimike']) and !empty($_POST['kohteiden_tyonimike']))
-				Yii::app()->session['kohteiden_tyonimike'] = $_POST['kohteiden_tyonimike'];
-			if(isset($_POST['kohteiden_tyonimike']) and empty($_POST['kohteiden_tyonimike']))
-				unset(Yii::app()->session['kohteiden_tyonimike']);
-
-			if(isset($_POST['tyo_toimialue']) and !empty($_POST['tyo_toimialue']))
-				Yii::app()->session['tyo_toimialue'] = $_POST['tyo_toimialue'];
-			if(!isset($_POST['tyo_toimialue']))
-				unset(Yii::app()->session['tyo_toimialue']);
-
-			if(isset($_POST['tyoryhma']) and !empty($_POST['tyoryhma']))
-				Yii::app()->session['tyoryhma'] = $_POST['tyoryhma'];
-			if(!isset($_POST['tyoryhma']))
-				unset(Yii::app()->session['tyoryhma']);
-
-			// <-- Asiakas
-			if(isset($_POST['asiakas']) and !empty($_POST['asiakas']))
-				Yii::app()->session['asiakas'] = $_POST['asiakas'];
-			if(isset($_POST['asiakas']) and empty($_POST['asiakas']))
-				unset(Yii::app()->session['asiakas']);
-			// Asiakas -->
-	
-			// <-- Kohde
-			if(isset($_POST['kohde']) and !empty($_POST['kohde']))
-				Yii::app()->session['kohde'] = $_POST['kohde'];
-			if(isset($_POST['kohde']) and empty($_POST['kohde']))
-				unset(Yii::app()->session['kohde']);
-			// Kohde -->
-	
-			// <-- tyontekijat
-			if(isset($_POST['tyontekijat']) and !empty($_POST['tyontekijat']))
-				Yii::app()->session['tyontekijat'] = $_POST['tyontekijat'];
-			if(!isset($_POST['tyontekijat']))
-				unset(Yii::app()->session['tyontekijat']);
-			//  tyontekijat -->
-
-			if(isset($_POST['year']) and !empty($_POST['year']))
-				Yii::app()->session['year'] = $_POST['year'];
-			
-			if(isset($_POST['week']) and !empty($_POST['week']))
-				Yii::app()->session['week'] = $_POST['week'];
-
-
-
-
-
-			$this->redirect(array('index'));
-		}		
-		//  Post haku -->
-
-
-		// <-- Year Week
-		if(!isset(Yii::app()->session['year']))
-			Yii::app()->session['year'] = date("Y", strtotime('this week sunday'));
-
-		if(!isset(Yii::app()->session['week']))
-			Yii::app()->session['week'] = date("W", strtotime('this week sunday'));
-
-		$year = Yii::app()->session['year'];
-		$week = sprintf("%02d", Yii::app()->session['week']);
-		Yii::app()->session['week'] = $week;
-		//    Year Week -->
-
-
-		if(!isset(Yii::app()->session['vkolopput']))
-			$numDays = 5;
-		else
-			$numDays = 7;
-
-
-		Yii::app()->session['from'] = date("Y-m-d", strtotime($year ."W". $week.'1'));
-		Yii::app()->session['to'] = date("Y-m-d", strtotime($year ."W". $week . $numDays));
-
-
-       		$criteria = new CDbCriteria();
-
-		// <-- Oletus arvot
-		if(!isset(Yii::app()->session['tyontekijat']))
-		{
-
-			// <-- Return order etu ja sukunimella
-			$site = Yii::app()->createController('Site');
-			$criteria = $site[0]->etuSukunimiCriteria($criteria);
-			//     Return order etu ja sukunimella -->
-
-	        	$criteria->select = "id,tekijan_nimi, sukunimi";
-	        	$criteria->condition = ' aktiivinen=1 ';
-
-			// <-- Tyoryhmat
-			$tt = Yii::app()->createController('Tyontekijat');
-			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-			$ids = implode(",", $tt_arr);
-			if( count($tt_arr) > 0 ){
-		        	$criteria->addCondition (" id IN ($ids) ");
-			} 
-			//    Tyoryhmat -->
-
-			$tt = Tyontekijat::model()->findAll($criteria);
-			$tekijatOletuksena = array();
-			foreach($tt as $t)
-			$tekijatOletuksena[] = $t->id;
-	
-			Yii::app()->session['tyontekijat'] = $tekijatOletuksena;
-		}
-		// Oletus arvot -->
-
-
-
-		if(Yii::app()->session['tyontekijat'])
-		{
-
-			// <-- Return order etu ja sukunimella
-			$site = Yii::app()->createController('Site');
-			$criteria = $site[0]->etuSukunimiCriteria($criteria);
-			//     Return order etu ja sukunimella -->
-
-
-        		$criteria->select = "id,tekijan_nimi, sukunimi, tyoryhma";
-        		$criteria->condition = " aktiivinen = '1' ";
-
-		    	if(count(Yii::app()->session['tyontekijat'] > 1))
-		      	$ids = implode(",", Yii::app()->session['tyontekijat']);
-		    	else
-		      	$ids = Yii::app()->session['tyontekijat'][0];
-
-
-	        	$criteria->addCondition ('id IN ('.$ids.') ');
-		}
-
-
-		// <-- kohteiden_tyonimike
-		if(isset(Yii::app()->session['kohteiden_tyonimike']))
-		{
-	           $criteria->addCondition ("
-		   id IN (  
-		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-		       AND kohde IN 
-		       (
-			    SELECT id FROM sivex_kohdet WHERE siivous LIKE '%".Yii::app()->session['kohteiden_tyonimike']."%'
-		       )
-		   )
-		   ");
-
-			$criteriaK = new CDbCriteria();
-	       		$criteriaK->select = "id";
-	       		$criteriaK->condition = " 
-				siivous LIKE '%".Yii::app()->session['kohteiden_tyonimike']."%' 
-				AND id IN(
-					SELECT kohde FROM sivex_tvuoro 
-					WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-		     			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-				)
-			";
-			$k = Kohteet::model()->findAll($criteriaK);
-			foreach($k as $kohde)
-			 $kohteet_siivous[] = $kohde->id;
-
-		}
-		//   kohteiden_tyonimike -->
-
-
-		// <-- tyo_toimialue
-		if(isset(Yii::app()->session['tyo_toimialue']))
-		{
-
-		   $arr = array();
-		   foreach(Yii::app()->session['tyo_toimialue'] as $it)
-		   {
-			$arr[] = str_replace("\\", "\\\\\\\\", json_encode($it));
-		   }
-
-		   $tyo_toimialue_like = "tyo_toimialue LIKE '%".implode("%' OR tyo_toimialue LIKE '%", $arr)."%'";
-	           $criteria->addCondition ("
-		   id IN (  
-		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-		   )
-		   AND ($tyo_toimialue_like)
-		   ");
-		}
-		//   tyo_toimialue -->
-
-		// <-- tyoryhma
-		if(isset(Yii::app()->session['tyoryhma']))
-		{
-			$tt = Yii::app()->createController('Tyontekijat');
-			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(Yii::app()->session['tyoryhma']);
-			$ids = implode(",", $tt_arr);
-			if( count($tt_arr) > 0 ){
-		        	$criteria->addCondition (" id IN ($ids) ");
-			}
-		}
-		//   tyoryhma -->
-
-		// <-- Asiakas
-		if(isset(Yii::app()->session['asiakas']))
-
-		{
-	           $criteria->addCondition ("
-		   id IN (  
-		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-		       AND kohde IN 
-		       (
-			    SELECT id FROM sivex_kohdet WHERE asiakas_id IN
-   			    (
-			       SELECT id FROM asiakkaat WHERE yrityksen_nimi 
-					LIKE '%".Yii::app()->session['asiakas']."%' 
-					OR yhteyshenkilo LIKE '%".Yii::app()->session['asiakas']."%' 
-					OR puhelin LIKE '%".Yii::app()->session['asiakas']."%'
-			    )
-		       )
-		   )
-		   ");
-		}
-		// Asiakas -->
-
-		// <-- Kohde
-		if(isset(Yii::app()->session['kohde']))
-		{
-	           $criteria->addCondition ("
-		   id IN (  
-		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-		       AND kohde IN 
-		       (
-			    SELECT id FROM sivex_kohdet WHERE osoite 
-					LIKE '%".Yii::app()->session['kohde']."%' 
-					OR puh_nro LIKE '%".Yii::app()->session['kohde']."%'
-		       )
-		   )
-		   ");
-		}
-		//  Kohde -->
-
-		$tyontekijat_model = Tyontekijat::model()->findAll($criteria);
-
-		(isset(Yii::app()->session['asiakas'])) ? 	$asiakas = Yii::app()->session['asiakas'] : $asiakas ='';
-		(isset(Yii::app()->session['kohde'])) ? 	$kohde = Yii::app()->session['kohde'] : $kohde ='';
-
-		$this->render('index', array(
-			'tyontekijat_model'	=>$tyontekijat_model,
-			'tyontekijat'		=>Yii::app()->session['tyontekijat'],
-			'year'			=>$year,
-			'week'			=>$week,
-			'numDays'		=>$numDays,
-			'kohteet_siivous'	=>$kohteet_siivous,
-			'asiakas'		=>$asiakas,
-			'kohde'			=>$kohde,
-			//'wkMaara'		=>$wkMaara,
-		));
-
-	}
-
 	public function actionTv_kohteet()
 	{
 		$this->poistaminenOnlineVarauksetJokaMeniOhi();
 		$this->render('tv_kohteet');
 	}
 
-	protected function poistaminenOnlineVarauksetJokaMeniOhi()
+	protected function poistaminenOnlineVarauksetJokaMeniOhi($interval)
 	{
-
-		$asetukset = Asetukset::model()->findByPk(1);
 		// <-- Poistaminen
 		$criteria=new CDbCriteria;
 		$criteria->order= " id DESC "; 
 		$criteria->condition= " 
-			(time + INTERVAL ".$asetukset->onlinevaraus_autoremove." MINUTE) < NOW()
+			(time + INTERVAL $interval MINUTE) < NOW()
 			AND osoiteOnline=1
 		";
-		$poistaminen = Tyovuoroot::model()->findAll($criteria);
-
-		foreach($poistaminen as $item){
-
-				$tv = Tyovuoroot::model()->findByPk($item->id);
+		$tv = Tyovuoroot::model()->findAll($criteria);
+		foreach($tv as $item){
+			$tv = Tyovuoroot::model()->findbypk($item->id);
+			if(isset($tv->id)){
 				// <-- LOG
 				$model_log 	= 'Tyovuoroot';
 				$name_log 	= 'Työvuorot';
-				$status_log 	= 'Auto Delete';
-	
-					$old_values = json_encode($tv->attributes);
-					$new_values = null;
-					$site = Yii::app()->createController('Site');
-					$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				$status_log 	= 'Onlinevaraus Autoremove';
+				$old_values = json_encode($tv->attributes);
+				$new_values = null;
+				$site = Yii::app()->createController('Site');
+				$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 				//     LOG -->
+				$this->loadModel($tv->id)->delete();
+			}
 		}
-
-		$criteria=new CDbCriteria;
-		$criteria->order= " id DESC "; 
-		$criteria->condition= " 
-			(time + INTERVAL ".$asetukset->onlinevaraus_autoremove." MINUTE) < NOW()
-			AND osoiteOnline=1
-		";
-		$tv_pois = Tyovuoroot::model()->findAll($criteria);
-
-						foreach($tv_pois as $item){
-							$tv = Tyovuoroot::model()->findbypk($item->id);
-							if(isset($tv->id)){
-							// <-- LOG
-							$model_log 	= 'Tyovuoroot';
-							$name_log 	= 'Työvuorot';
-							$status_log 	= 'Auto Delete';
-	
-							$old_values = json_encode($tv->attributes);
-							$new_values = null;
-							$site = Yii::app()->createController('Site');
-							$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-							//     LOG -->
-							$this->loadModel($tv->id)->delete();
-							}
-						}
-
-		// Poistaminen -->
-
 	}
 
 	/**
