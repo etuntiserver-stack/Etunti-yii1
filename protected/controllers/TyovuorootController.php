@@ -2156,7 +2156,7 @@ class TyovuorootController extends Controller
 		$criteria->select = "id, $tt_order_1, $tt_order_2";
 		$criteria->order = "$tt_order_1 ASC";
 		$criteria->condition = "
-			aktiivinen=1
+			aktiivinen=1 and naytta_tyovuorossa=1
 		";
 
 		// <-- tyo_toimialue
