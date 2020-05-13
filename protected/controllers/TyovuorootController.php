@@ -2202,11 +2202,10 @@ class TyovuorootController extends Controller
 		$haku_to 	= date("Y-m-d", strtotime(Yii::app()->session['to']));
 
 		// Työsuhteet
-		$tyosuhteet = Tyosuhdet::model()->findAll(" tid IN(" . implode(",", $haku_tids) . ") ");
-		$vktyoaika = [];
-		foreach ($tyosuhteet as $item)
-			if (!empty($item->vktyoaika))
-				$vktyoaika[$item->tid] = $item->vktyoaika;
+		$ts = Tyosuhdet::model()->findAll(" tid IN(" . implode(",", $haku_tids) . ") ");
+		$tyosuhteet = [];
+		foreach ($ts as $item)
+			$tyosuhteet[$item->tid] = ['vktyoaika' => $item->vktyoaika, 'loppu' => $item->loppu];
 		// Pyhapaivat
 		$pyhapaivat = $this->pyhapaivatAll($haku_from, $haku_to);
 		/*
@@ -2222,7 +2221,7 @@ class TyovuorootController extends Controller
 				'to'		=> $haku_to,
 				'arrDate'	=> $arrDate,
 				'site'		=> $site,
-				'vktyoaika'	=> $vktyoaika,
+				'tyosuhteet'	=> $tyosuhteet,
 				'haku_tids'	=> $haku_tids,
 				'pyhapaivat'	=> $pyhapaivat,
 				'haku_criteria' => $haku_criteria
@@ -2237,7 +2236,7 @@ class TyovuorootController extends Controller
 				'site'		=> $site,
 				'week'		=> $week,
 				'year'		=> $year,
-				'vktyoaika'	=> $vktyoaika,
+				'tyosuhteet'	=> $tyosuhteet,
 				'haku_tids'	=> $haku_tids,
 				'pyhapaivat'	=> $pyhapaivat,
 				'haku_criteria' => $haku_criteria

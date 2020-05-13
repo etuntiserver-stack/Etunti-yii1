@@ -98,9 +98,8 @@ if( isset($_SESSION['skrollaus']) )
  <!-- VARAUKSET -->
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
-	<td class="bg-default td_tyontekija" style="z-index: 999; min-width: 100px; max-width: 160px; white-space: normal; font-size: 90%;">
+	<td class="bg-default td_tyontekija <?=((isset($tyosuhteet[$tid]['loppu']) and !empty($tyosuhteet[$tid]['loppu']) and date("Ymd", strtotime($tyosuhteet[$tid]['loppu'])) < date("Ymd"))? 'bg-danger' : '')?>" style="z-index: 999; min-width: 100px; max-width: 160px; white-space: normal; font-size: 90%;">
 	<div class="m10 text-center">
-
 		<?php
 		echo '
 		<div>
@@ -134,8 +133,8 @@ if( isset($_SESSION['skrollaus']) )
 		echo '<br>
 		<span class="text-center odotusweeklaskennan" style="display:block">'.$odotus_ikooni.'</span>
 		<b id="vko_'.$did_sunday.'_'.$tid.'"">00:00</b>';
-		if(isset($vktyoaika[$tid]))
-			echo '-'.$vktyoaika[$tid];
+		if(isset($tyosuhteet[$tid]['vktyoaika']) and !empty($tyosuhteet[$tid]['vktyoaika']))
+			echo '-'.$tyosuhteet[$tid]['vktyoaika'];
 		else
 			echo '-00:00';
 		?>
