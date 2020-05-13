@@ -2485,6 +2485,12 @@ class TyovuorootController extends Controller
 			$lisateksti .= '<br><span class="text-danger">'. $this->peruutettuArray()[1] .'</span>';
 		if($arvo->peruutettu == 2)
 			$lisateksti .= '<br><span class="text-danger">'. $this->peruutettuArray()[2] .'</span>';
+		if($arvo->osoiteOnline == 1)
+			$lisateksti .= '<br><span class="text-danger">Online varaus prosessissa</span>';
+		if($arvo->osoiteOnline == 2)
+			$lisateksti .= '<br><span class="text-success">Online varaus maksettu</span>';
+		if($arvo->osoiteOnline == 3)
+			$lisateksti .= '<br><span class="text-warning">eDico varaus</span>';
 		if($arvo->tyopaari != '')
 			$ikoonit .= ' <i class="fa fa-male text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i> ';
 
