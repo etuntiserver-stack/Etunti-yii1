@@ -1982,6 +1982,11 @@ class TyovuorootController extends Controller
 		//     Ketjun kasikorjaus -->
 		// ------------------------------------------------
 
+		if( !isset(Yii::app()->session['ov_poisto']) ){
+			$this->poistaminenOnlineVarauksetJokaMeniOhi();
+			Yii::app()->session['ov_poisto'] = 'suorittu';
+		}
+
 		$site = Yii::app()->createController('Site');
 		$arrDate = array(1 => "Ma", 2 => "Ti", 3 => "Ke", 4 => "To", 5 => "Pe", 6 => "La", 7 => "Su");
 		$asetukset = Asetukset::model()->findByPk(1);
