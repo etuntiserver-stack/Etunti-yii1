@@ -2000,7 +2000,7 @@ class TyovuorootController extends Controller
 			unset(Yii::app()->session['tyo_toimialue']);
 			unset(Yii::app()->session['kohteiden_tyonimike']);
 			unset(Yii::app()->session['tyoryhma']);
-
+			unset($_SESSION['haku_criteria_tv']);
 			$this->redirect(array('beta', 'mode' => $mode));
 		}
 		//     Reset -->
@@ -2022,6 +2022,9 @@ class TyovuorootController extends Controller
 
 		// <-- Post haku
 		if (isset($_POST['haku'])) {
+
+			unset($_SESSION['haku_criteria_tv']);
+
 			if (isset($_POST['kohteiden_tyonimike']) and !empty($_POST['kohteiden_tyonimike']))
 				Yii::app()->session['kohteiden_tyonimike'] = $_POST['kohteiden_tyonimike'];
 			if (isset($_POST['kohteiden_tyonimike']) and empty($_POST['kohteiden_tyonimike']))
@@ -2140,6 +2143,7 @@ class TyovuorootController extends Controller
 			$impl = implode(',', $kohteet_siivous);
 			$haku_criteria[] = " kohde IN ($impl) ";
 		}
+		$_SESSION['haku_criteria_tv'] = $haku_criteria;
 		//     HAKU -->
 
 		// <-- Order tyontekijat
@@ -2531,7 +2535,7 @@ class TyovuorootController extends Controller
 		$from 		= date("Y-m-d", strtotime($from));
 		$to 		= date("Y-m-d", strtotime($to));
 		$tids 		= (isset($_POST['tids']))?json_decode($_POST['tids'], true):[];
-		$haku_criteria	= (isset($_POST['haku_criteria']))?$_POST['haku_criteria']:[];
+		$haku_criteria	= (isset($_SESSION['haku_criteria_tv']))?$_SESSION['haku_criteria_tv']:[];
 		$tv_arr = $this->tv_arr($from, $to, $tids, $haku_criteria, true, []);
 		/*
 		echo '<pre>';
