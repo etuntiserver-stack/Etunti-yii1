@@ -168,7 +168,7 @@ $freshdesk_domain = 'santelo'; // TEMP
 <div style="display:none">
   <div class="ticket" id="ticket-base">
     <div class="ticket-body caption text-center" onclick="">
-      <!-- onclick="location.href='/index.php/tyovuoroot/freshdesk/id" -->
+      <!-- onclick="location.href='/index.php/asiakkaat/freshdesk/id" -->
       <h4 class="ticket-label"><a class="ticket-title" href="#" target="_blank"></a></h4>
       <p><i class="glyphicon glyphicon-user light-red lighter bigger-120"></i>&nbsp;<a class="ticket-customer-link" href="#" target="_blank" style="color:inherit;">
           <!-- Customer Name --></a></p>
@@ -323,7 +323,7 @@ $freshdesk_domain = 'santelo'; // TEMP
 
       obj.find('.ticket-description').text(description);
       obj.find('.ticket-respond-link').attr('href', ticketLink);
-      // obj.find('.ticket-body').attr('onclick', `location.href='/index.php/tyovuoroot/freshdesk/${id}'`);
+      // obj.find('.ticket-body').attr('onclick', `location.href='/index.php/asiakkaat/freshdesk/${id}'`);
 
       obj.find('.ticket-body').on('click', function(e) {
         // window.location.href = ticketLink;
@@ -418,9 +418,9 @@ $freshdesk_domain = 'santelo'; // TEMP
       progbar();
 
       let queryPage = (refresh) ? -page : page;
-      console.log(`${location.protocol}//${location.host}/index.php/tyovuoroot/freshdesk?page=${queryPage}`);
+      console.log(`${location.protocol}//${location.host}/index.php/asiakkaat/freshdesk?page=${queryPage}`);
 
-      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/freshdesk?page=${queryPage}`, {
+      $.ajax(`${location.protocol}//${location.host}/index.php/asiakkaat/freshdesk?page=${queryPage}`, {
 
         error: function(xhr, status, error) {
           console.log(xhr.responseText);
@@ -608,7 +608,7 @@ $freshdesk_domain = 'santelo'; // TEMP
       $(this).attr('disabled', 'disabled');
       let previous_length = 0;
       $('#export-customers-progress').css('display', 'block');
-      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/freshdesk`, {
+      $.ajax(`${location.protocol}//${location.host}/index.php/asiakkaat/freshdesk`, {
 
         type: 'POST',
         data: {

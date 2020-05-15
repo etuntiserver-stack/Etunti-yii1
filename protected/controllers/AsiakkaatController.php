@@ -40,7 +40,7 @@ class AsiakkaatController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus', 'kaikki_netvisoriin'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus', 'kaikki_netvisoriin', 'freshdesk'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -2183,4 +2183,110 @@ $xml = '
                 return $return;
         }
 
+  //*------------------------------------------------------------------------------------------------
+  //* Freshdesk
+  //*------------------------------------------------------------------------------------------------
+  #region Freshdesk
+
+  /**
+   * Main action for the Freshdesk view.
+   *
+   * Renders the view normally unless some of the parameters are provided. If
+   * any parameter is provided, then this action is considered an AJAX action,
+   * which will echo the results in JSON encoded format.
+   *
+   * If parameters are provided for more than one API request, then the first
+   * one takes priority and the other ones are ignored.
+   *
+   * @param int $ticket_id
+   * If not null, and positive int, that ticket ID is returned (encoded echo).
+   *
+   * @param int $page
+   * If not null, that page in list of tickets is returned. Use negative number
+   * to force refresh data (e.g. -1 for first page, -3 for third page).
+   *
+   * @param int $per_page
+   * Specifies the amount of items per page when $page is specified. The maximum
+   * seems to be either 100 or 300; however, it's better to do smaller batches.
+   *
+   * @param int $export
+   * Exports customers to Freshdesk. If 'all' (string), all customers are
+   * exported. If int or array of ints, customers by those ID are exported. If
+   * customer already exists in Freshdesk, it is updated with new data.
+   *
+   * @return mixed
+   * Freshdesk view, or null with echoed results if parameters are provided.
+   */
+  public function actionFreshdesk($ticket_id = null, $page = null, $per_page = 10, $export = null)
+  {
+    /** @var Freshdesk */
+    $freshdesk = Yii::createComponent('Freshdesk');
+
+    if ($freshdesk->isDisabled()) {
+      throw new \Exception('Freshdesk on pois päältä tällä domainilla.');
+    }
+
+    if (isset($_POST['ticket_id']))
+      $ticket_id = $_POST['ticket_id'];
+    if (isset($_POST['page']))
+      $page = $_POST['page'];
+    if (isset($_POST['per_page']))
+      $per_page = $_POST['per_page'];
+    if (isset($_POST['export']))
+      $export = $_POST['export'];
+
+    if (is_numeric($ticket_id)) {
+      // TODO
+      echo json_encode(['errors' => 'not yet implemented']);
+      return;
+    }
+
+    // If $page is provided, get a list of tickets.
+    elseif (is_numeric($page)) {
+
+      $refresh = ($page < 0);
+      $page = abs($page);
+      $per_page = is_numeric($per_page) ? $per_page : 10;
+      $pager = $freshdesk->getTicketPaginator();
+      if ($refresh)
+        $pager->delete();
+      $requested = $pager->getPage($page);
+
+      if (false === $requested) {
+        echo json_encode(['eod' => true, 'errors' => 'Empty page requested.']);
+        return;
+      }
+
+      foreach (array_keys($requested) as $k) {
+        $ticket = $requested[$k];
+        if (empty($ticket['requester_id']))
+          continue;
+        $criteria = new CDbCriteria();
+        $criteria->select = 'id';
+        $criteria->condition = 'freshdesk_id=' . $ticket['requester_id'];
+        $aid = Asiakkaat::model()->find($criteria);
+        if ($aid)
+          $requested[$k]['unique_external_id'] = $aid->id;
+      }
+
+      echo json_encode($requested);
+      return;
+    }
+
+    // If $export is provided, export customers to Freshdesk.
+    elseif (is_numeric($export) || is_array($export) || $export == 'all') {
+      echo json_encode($freshdesk->exportContact($export, true));
+      return;
+    }
+
+    // No parameters, move to Freshdesk ticket view.
+    else {
+      return $this->render('freshdesk', [
+        'freshdesk' => $freshdesk,
+        'tickets' => Yii::app()->session['freshdesk_tickets']
+      ]);
+    }
+  }
+
+  #endregion
 }
