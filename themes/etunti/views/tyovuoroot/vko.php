@@ -98,12 +98,12 @@ if( isset($_SESSION['skrollaus']) )
  <!-- VARAUKSET -->
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
-	<td class="bg-default td_tyontekija <?=((isset($tyosuhteet[$tid]['loppu']) and !empty($tyosuhteet[$tid]['loppu']) and date("Ymd", strtotime($tyosuhteet[$tid]['loppu'])) < date("Ymd"))? 'bg-danger' : '')?>" style="z-index: 999; min-width: 100px; max-width: 160px; white-space: normal; font-size: 90%;">
+	<td class="bg-default td_tyontekija" style="z-index: 999; min-width: 100px; max-width: 160px; white-space: normal; font-size: 90%;">
 	<div class="m10 text-center">
 		<?php
 		echo '
 		<div>
-		    	<a href="#" class="getTekijanTiedot" for="'.$tid.'">';
+		    	<a href="#" class="getTekijanTiedot '.((isset($tyosuhteet[$tid]['loppu']) and !empty($tyosuhteet[$tid]['loppu']) and date("Ymd", strtotime($tyosuhteet[$tid]['loppu'])) < date("Ymd"))? 'text-danger' : '').'" for="'.$tid.'">';
 			// <-- Kuva
 			if(
 				isset(Yii::app()->user->domain) 

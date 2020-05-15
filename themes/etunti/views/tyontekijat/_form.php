@@ -181,6 +181,7 @@ if(empty($model->position) and isset($model->id))
 	</div>
 
 	<?php
+	if(isset($model->id)){
 		$tv_controller 	= Yii::app()->createController('Tyovuoroot');
 		$with		= ['data'];
 		$from		= date("Y-m-d");
@@ -191,6 +192,7 @@ if(empty($model->position) and isset($model->id))
 		echo '</pre>';
 		exit;
 		*/
+	}
 	?>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'naytta_tyovuorossa'); ?>
@@ -198,12 +200,12 @@ if(empty($model->position) and isset($model->id))
         	$tal = array(
 			1=>'Kyllä'
 		);
-		if(count($dataAll) == 0)
+		if(isset($dataAll) and count($dataAll) == 0)
 			$tal[0] = 'Ei';
 
 		echo $form->dropDownList($model,'naytta_tyovuorossa', $tal, 
 		array('class'=>'form-control')) ?>
-		<?=(count($dataAll) > 0)? '<p class="text-danger">Työntekijällä on työvuoroja.</p>' : ''?>
+		<?=(isset($dataAll) and count($dataAll) > 0)? '<p class="text-danger">Työntekijällä on työvuoroja.</p>' : ''?>
 		<?php echo $form->error($model,'naytta_tyovuorossa'); ?>
 	</div>
 
