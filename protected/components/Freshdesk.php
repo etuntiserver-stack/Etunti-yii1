@@ -893,6 +893,75 @@ class Freshdesk extends CComponent
     }
   }
 
+  /**
+   * Get arrays of ticket IDs indexed by local customer ID (not freshdesk ID).
+   *
+   * This function gets a list of tickets, and for each ticket, finds a local
+   * customer with a freshdesk_id value that matches the customer ID value on
+   * the ticket. If the customer ID on the ticket is not specified on any local
+   * customer's freshdesk_id field, that ticket is not included at all.
+   *
+   * All this results in an associative array of customer IDs, with each index
+   * containing an array of ticket IDs. This can be used to find the amount of
+   * open tickets for a customer, for example.
+   *
+   * This function uses the {@see CachePaginator} object created by
+   * {@see getTicketPaginator()} to obtain the list of tickets.
+   *
+   * @param array $status_ignore
+   * Ticket statuses to ignore; Open 2, Pending 3, Resolved 4, Closed 5
+   *
+   * @return array
+   * Array indexed by local customer IDs, with each index containing an array of
+   * customer IDs. If a customer doesn't have any matching tickets, they are not
+   * included in this array, so there are no empty arrays in the resulting set.
+   */
+  public function ticketsByCustomerId($status_ignore = [4, 5])
+  {
+    if ($this->isDisabled()) {
+      return [];
+    }
+
+    $freshdesk_pager = $this->getTicketPaginator(10);
+    $criteria = new CDbCriteria();
+    $criteria->select = 'id, freshdesk_id';
+    $criteria->condition = 'freshdesk_id != 0';
+
+    // get freshdesk id for each customer
+    $freshdesk_ids = [];
+    foreach (Asiakkaat::model()->findAll($criteria) as $result) {
+      if (!empty($result->freshdesk_id))
+        $freshdesk_ids[$result->id] = $result->freshdesk_id;
+    }
+
+    // get tickets associated with any customer with defined freshdesk id
+    $tickets = $freshdesk_pager->filtered(1, function ($item) use ($freshdesk_ids) {
+      return (in_array($item['requester_id'] ?? 0, $freshdesk_ids));
+    }, 100);
+
+    // map results to list of customer ids that have open tickets
+    $customer_tickets = [];
+    foreach ($tickets as $ticket) {
+      if (in_array($ticket['status'] ?? 0, $status_ignore))
+        continue;
+      if ($cid = array_search($ticket['requester_id'], $freshdesk_ids))
+        $customer_tickets[$cid][] = $ticket['id'];
+    }
+
+    // previous method (repeated requests)
+    // Filter cached tickets to find which customers have open tickets
+    // foreach (Asiakkaat::model()->findAll($criteria) as $result) {
+    //   if (!empty($freshdesk_pager->filtered(1, function ($item) use ($result) {
+    //     return ($item['requester_id'] ?? 0) == ($result->freshdesk_id ?? -1);
+    //   }, 50, null, 1))) { // limit 1
+    //     $customer_tickets[] = $result['id'];
+    //   }
+    // }
+    // echo "<pre>" . print_r($customer_tickets, true) . "</pre>";exit;
+
+    return $customer_tickets;
+  }
+
   #endregion
   #region Conversations
 

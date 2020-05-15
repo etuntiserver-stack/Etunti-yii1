@@ -36,13 +36,15 @@ if(!empty($laatikko_tid))
 
 $tyopaari = json_decode($model->tyopaari, true);
 
-// Alert on open freshdesk tickets
-$customer_tickets = $this->freshdeskCustomerTickets();
-if (isset($customer_tickets[$model->kohteet->asiakas_id ?? 0])) {
+/** @var Freshdesk object. */
+$freshdesk = Yii::createComponent('Freshdesk');
 
-  /** @var Freshdesk obj */
-  $fd = Yii::createComponent('Freshdesk');
-  $link = $fd->getCustomerUrl($model->kohteet->asiakas_id ?? 0);
+// Get tickets per customer (ignore resolved (4) and closed (5) tickets).
+$customer_tickets = $freshdesk->ticketsByCustomerId([4, 5]);
+
+// Alert on open freshdesk tickets
+if (isset($customer_tickets[$model->kohteet->asiakas_id ?? 0])) {
+  $link = $freshdesk->getCustomerUrl($model->kohteet->asiakas_id ?? 0);
   echo '<div id="freshdesk-notice" class="section alert bg-warning">';
   echo CHtml::link(Yii::t('main', 'Tällä asiakkaalla on avoimia tukipyyntöjä Freshdeskissä. Avaa painamalla tästä.'), $link, ['class' => 'text-dark', 'target' => '_blank']);
   echo '</div>';

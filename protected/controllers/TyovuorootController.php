@@ -1670,60 +1670,6 @@ class TyovuorootController extends Controller
     }
   }
 
-  /**
-   * Get an array containing ticket IDs per customer.
-   * @param array $status_ignore
-   * Ticket statuses to ignore; Open 2, Pending 3, Resolved 4, Closed 5
-   */
-  public function freshdeskCustomerTickets($status_ignore = [4, 5])
-  {
-    /** @var Freshdesk object */
-    $freshdesk = Yii::createComponent('Freshdesk');
-
-    if ($freshdesk->isDisabled()) {
-      return [];
-    }
-
-    $freshdesk_pager = $freshdesk->getTicketPaginator(10);
-    $criteria = new CDbCriteria();
-    $criteria->select = 'id, freshdesk_id';
-    $criteria->condition = 'freshdesk_id != 0';
-
-    // get freshdesk id for each customer
-    $freshdesk_ids = [];
-    foreach (Asiakkaat::model()->findAll($criteria) as $result) {
-      if (!empty($result->freshdesk_id))
-        $freshdesk_ids[$result->id] = $result->freshdesk_id;
-    }
-
-    // get tickets associated with any customer with defined freshdesk id
-    $tickets = $freshdesk_pager->filtered(1, function ($item) use ($freshdesk_ids) {
-      return (in_array($item['requester_id'] ?? 0, $freshdesk_ids));
-    }, 100);
-
-    // map results to list of customer ids that have open tickets
-    $customer_tickets = [];
-    foreach ($tickets as $ticket) {
-      if (in_array($ticket['status'] ?? 0, $status_ignore))
-        continue;
-      if ($cid = array_search($ticket['requester_id'], $freshdesk_ids))
-        $customer_tickets[$cid][] = $ticket['id'];
-    }
-
-    // previous method (repeated requests)
-    // Filter cached tickets to find which customers have open tickets
-    // foreach (Asiakkaat::model()->findAll($criteria) as $result) {
-    //   if (!empty($freshdesk_pager->filtered(1, function ($item) use ($result) {
-    //     return ($item['requester_id'] ?? 0) == ($result->freshdesk_id ?? -1);
-    //   }, 50, null, 1))) { // limit 1
-    //     $customer_tickets[] = $result['id'];
-    //   }
-    // }
-    // echo "<pre>" . print_r($customer_tickets, true) . "</pre>";exit;
-
-    return $customer_tickets;
-  }
-
 	public function actionBeta($kohteet_siivous = [], $kohde = '', $asiakas = '', $mode = null, $stage = null)
 	{
 		// <-- Ketjun kasikorjaus
@@ -2384,6 +2330,12 @@ class TyovuorootController extends Controller
     // }
     // echo "<pre>" . print_r($customer_tickets, true) . "</pre>";exit;
 
+    /** @var Freshdesk object. */
+    $freshdesk = Yii::createComponent('Freshdesk');
+
+    // Get tickets per customer (ignore resolved (4) and closed (5) tickets).
+    $freshdesk_customer_tickets = $freshdesk->ticketsByCustomerId([4, 5]);
+
 		if ($mode == 'tt') {
 			$this->render('tt', array(
 				'tt'		=> $tt,
@@ -2395,7 +2347,7 @@ class TyovuorootController extends Controller
 				'haku_tids'	=> $haku_tids,
 				'pyhapaivat'	=> $pyhapaivat,
         'haku_criteria' => $haku_criteria,
-        'customer_tickets' => $this->freshdeskCustomerTickets()
+        'customer_tickets' => $freshdesk_customer_tickets
 			));
 		}
 		if ($mode == 'vko') {
@@ -2410,8 +2362,8 @@ class TyovuorootController extends Controller
 				'tyosuhteet'	=> $tyosuhteet,
 				'haku_tids'	=> $haku_tids,
 				'pyhapaivat'	=> $pyhapaivat,
-				'haku_criteria' => $haku_criteria,
-        'customer_tickets' => $this->freshdeskCustomerTickets()
+        'haku_criteria' => $haku_criteria,
+        'customer_tickets' => $freshdesk_customer_tickets
 			));
 		}
 	}
