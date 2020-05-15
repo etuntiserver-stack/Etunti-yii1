@@ -294,9 +294,11 @@ $(document).delegate(".muistin","click",function(){
 		if( data['varoitus_tyopaari'] || data['varoitus_toistuva'] ){
 			alertti = "Huomio!\n\n";
 			if( data['varoitus_tyopaari'] )
-				alertti += "Siirtäessä tai poistaessa irrotat " + data['varoitus_tyopaari']['osoite'] + " " + data['varoitus_tyopaari']['alku'] + "-" + data['varoitus_tyopaari']['loppu'] + ", työvuoron olevasta työparista";
+				alertti += "Siirtäessä tai poistaessa irrotat " + data['varoitus_tyopaari']['osoite'] + " " + data['varoitus_tyopaari']['alku'] + "-" + data['varoitus_tyopaari']['loppu'] + ", työvuoron olevasta työparista\n\n";
 			if( data['varoitus_toistuva'] )
-				alertti += "Siirtäessä tai poistaessa irrotat " + data['varoitus_toistuva']['osoite'] + " " + data['varoitus_toistuva']['alku'] + "-" + data['varoitus_toistuva']['loppu'] + ", työvuoron toistuvasta ketjusta.";
+				alertti += "Siirtäessä tai poistaessa irrotat " + data['varoitus_toistuva']['osoite'] + " " + data['varoitus_toistuva']['alku'] + "-" + data['varoitus_toistuva']['loppu'] + ", työvuoron toistuvasta ketjusta.\n\n";
+
+			alertti += "Työparit eivät tule siirrossa mukaan. Mikäli haluat työparit mukaan, avaa työvuoro ja siirrä henkilö, käyttäen ylävalikko.";
 			alert(alertti);
 		}
 	  	muisti();
