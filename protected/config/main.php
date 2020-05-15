@@ -16,7 +16,7 @@ $actual_link	= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https"
 $path 		= parse_url($actual_link);
 $oinlinevaraus 	= ( isset($path['path']) and strpos($path['path'], "onlinevaraus") !== false )? true: false;
 
-$siirto_domainit = ['demo','sivex'];
+$siirto_domainit = ['demo', 'sivex', 'bro_workers'];
 
 // <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
 if ($is_production and empty($_FILES) and !$oinlinevaraus) {
