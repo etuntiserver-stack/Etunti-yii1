@@ -1099,7 +1099,7 @@ public function actionImei($dom)
 					$kohteen_yhteyshenkilo = '<br>'.Yii::t('main', 'Kohteen yhteyshenkilö').': <b>'.$kohde->etu_suku_nimet.'</b>';
 				}
 				// app_naytetaanko_kohteen_yhteyshenkilo -->
-				$sel .= '<div class="well kohde_'.$data->kohteet->id.'">';
+				$sel .= '<div class="well kohde_'.((isset($data->kohteet->id))?$data->kohteet->id:'').'">';
 
 				$tvController = Yii::app()->createController('Tyovuoroot');
 				$tilanteet = $tvController[0]->tilanteet();
