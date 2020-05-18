@@ -12,52 +12,12 @@ $freshdesk_domain = 'santelo'; // TEMP
 ?>
 
 <style>
-  .ticket {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
-    transition: 0.3s;
-    border-radius: 5px;
-  }
 
-  .ticket-label {
-    padding-top: 10px;
-  }
+  /************************************************************************************************/
+  /* Alert Popup (Fixed Top-Left)                                                                 */
+  /************************************************************************************************/
 
-  .ticket-description {
-    min-height: 40px;
-    margin-bottom: 6px;
-    padding: 0px 6px;
-  }
-
-  .ticket:hover {
-    cursor: pointer;
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
-  }
-
-  .progbar-outer-box {
-    position: fixed;
-    width: 1200px;
-    height: 22px;
-    bottom: 80px;
-    left: calc(50% - 480px);
-    z-index: 999;
-  }
-
-  .progbar-inner-box {
-    width: 50%;
-    height: 22px;
-    margin: 0px auto;
-    background: none;
-    opacity: 90%;
-  }
-
-  .progbar {
-    background: -webkit-linear-gradient(left, #33156d 0%, #f282bc 100%);
-    border: 2px solid #151414;
-    border-radius: 25px;
-    display: none;
-    transition-duration: 10ms;
-  }
-
+  /* Container for top-left alert popup. */
   #alert-container {
     position: fixed;
     width: 500px;
@@ -74,76 +34,43 @@ $freshdesk_domain = 'santelo'; // TEMP
     display: none;
   }
 
+  /* Highlight alert popup on hover. */
   #alert-container:hover {
     cursor: pointer;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
     opacity: 1;
   }
 
+  /* Close button for the top-left alert popup. */
   #alert-container button.close {
     color: white;
     opacity: 0.6;
     transition: 0.1s;
   }
 
+  /* Highlight the close button of the alert popup on hover. */
   #alert-container button.close:hover {
     color: black;
     opacity: 1;
   }
 
-  .btn-settings {
-    width: 100%;
-    margin: 4px 0px;
-  }
+  /************************************************************************************************/
+  /* Fullscreen Popup (Fixed Center Screen)                                                      */
+  /************************************************************************************************/
 
-  #btn-settings-popup {
-    width: 32px;
-    border: 2px solid black;
-    border-radius: 25px;
-  }
-
-  .btn-settings {
-    padding: 4px;
-  }
-
-  #toggle-menu-container {
-    position: relative;
-  }
-
-  #toggle-menu {
-    position: absolute;
-    right: 4px;
-    width: 280px;
-    /* min-height: 520px; */
-    z-index: 9998;
-    background-color: whitesmoke;
-    /* border: 1px solid #ddd; */
-    border: 2px solid #99b7bd;
-    margin: 12px 0;
-    padding: 12px 8px;
-    border-radius: 5px;
-    text-align: center;
-    transition: 0.2s;
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
-  }
-
-  #freshdesk-container {
-    width: 100%;
-  }
-
-  #spopup-container {
+  /* Container for the fullscreen popup (css trick; relative div containing fixed div). */
+  #fullscreen-popup-container {
     position: relative;
     width: inherit;
   }
 
-  #spopup {
+  /* Fullscreen popup fixed div. */
+  #fullscreen-popup {
     position: fixed;
     width: inherit;
     height: 80%;
-    /* min-height: 520px; */
     z-index: 9998;
     background-color: whitesmoke;
-    /* border: 1px solid #ddd; */
     border: 2px solid #99b7bd;
     margin: 16px 0px;
     padding: 4px;
@@ -156,15 +83,146 @@ $freshdesk_domain = 'santelo'; // TEMP
     overflow-wrap: break-word;
   }
 
-  #spopup-header {
+  /* Fullscreen popup header. */
+  #fullscreen-popup-header {
     margin: 4px 0 10px;
   }
 
+  /************************************************************************************************/
+  /* Progress Bar (Fixed Bottom-Center)                                                           */
+  /************************************************************************************************/
+
+  /* Fixed div for progress bar container. */
+  .progress-bar-outer {
+    position: fixed;
+    width: 1200px;
+    height: 22px;
+    bottom: 80px;
+    left: calc(50% - 480px);
+    z-index: 999;
+  }
+
+  /* Progress bar container. */
+  .progress-bar-inner {
+    width: 50%;
+    height: 22px;
+    margin: 0px auto;
+    background: none;
+    opacity: 90%;
+  }
+
+  /* Progress bar. */
+  .progress-bar {
+    background: -webkit-linear-gradient(left, #33156d 0%, #f282bc 100%);
+    border: 2px solid #151414;
+    border-radius: 25px;
+    display: none;
+    transition-duration: 10ms;
+  }
+
+  /************************************************************************************************/
+  /* Main Container (Top Bar & Tickets)                                                           */
+  /************************************************************************************************/
+
+  /* Main container for top controls bar and tickets etc. */
+  #main-container {
+    width: 100%;
+  }
+
+  /************************************************************************************************/
+  /* Top Controls Bar                                                                             */
+  /************************************************************************************************/
+
+  /* Top controls bar */
+  #top-bar {
+    border: 1px solid #99b7bd;
+    border-radius: 5px;
+    height: 28px;
+    background-color: whitesmoke;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 1);
+    width:95%;
+    height:38px;
+    float: left;
+  }
+
+  /************************************************************************************************/
+  /* Top-Right Popup Menu                                                                         */
+  /************************************************************************************************/
+
+  /* Top right settings button */
+  #menu-open-button {
+    width: 3%;
+    height: 38px;
+    border: 2px solid black;
+    border-radius: 25px;
+  }
+
+  /* Container for the popup menu. */
+  #menu-container {
+    position: relative;
+    margin-top: 32px;
+  }
+
+  /* Popup menu. */
+  #menu {
+    position: absolute;
+    right: 4px;
+    width: 280px;
+    z-index: 9998;
+    background-color: whitesmoke;
+    border: 2px solid #99b7bd;
+    margin: 12px 0;
+    padding: 12px 8px;
+    border-radius: 5px;
+    text-align: center;
+    transition: 0.2s;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
+  }
+
+  /* Button inside the popup menu. */
+  .menu-button {
+    width: 100%;
+    margin: 4px 0px;
+    padding: 4px;
+  }
+
+  /* Progress text for the export customers function. */
   #export-customers-progress {
     display: none;
   }
+
+  /************************************************************************************************/
+  /* Tickets                                                                                      */
+  /************************************************************************************************/
+
+  /* Ticket container. */
+  .ticket {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    transition: 0.3s;
+    border-radius: 5px;
+  }
+
+  /* Highlight tickets on hover. */
+  .ticket:hover {
+    cursor: pointer;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
+  }
+
+  /* Ticket label. */
+  .ticket-label {
+    padding-top: 10px;
+  }
+
+  /* Ticket summary. */
+  .ticket-summary {
+    min-height: 40px;
+    margin-bottom: 6px;
+    padding: 0px 6px;
+  }
+
 </style>
 
+<!-- Base structure for a ticket, which will be cloned into actual tickets. -->
 <div style="display:none">
   <div class="ticket" id="ticket-base">
     <div class="ticket-body caption text-center" onclick="">
@@ -172,7 +230,7 @@ $freshdesk_domain = 'santelo'; // TEMP
       <h4 class="ticket-label"><a class="ticket-title" href="#" target="_blank"></a></h4>
       <p><i class="glyphicon glyphicon-user light-red lighter bigger-120"></i>&nbsp;<a class="ticket-customer-link" href="#" target="_blank" style="color:inherit;">
           <!-- Customer Name --></a></p>
-      <div class="ticket-description smaller">
+      <div class="ticket-summary smaller">
         <!-- Description -->
       </div>
     </div>
@@ -188,8 +246,7 @@ $freshdesk_domain = 'santelo'; // TEMP
   </div>
 </div>
 
-
-<!-- Error alert popup (top-right) -->
+<!-- Top-left popup error -->
 <div style="position:relative">
   <div id="alert-container" class="alert fade in bg-danger">
     <button class="close pull-left light" data-dismiss="alert">×</button>
@@ -197,21 +254,23 @@ $freshdesk_domain = 'santelo'; // TEMP
   </div>
 </div>
 
-<!-- Progress bar fixed -->
-<div class="progbar-outer-box">
-  <div class="progbar-inner-box">
-    <div class="progbar progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+<!-- Bottom-center progress bar (fixed) -->
+<div class="progress-bar-outer">
+  <div class="progress-bar-inner">
+    <div class="progress-bar progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
     </div>
   </div>
 </div>
 
-<div id="freshdesk-container">
-  <!-- Full screen popup -->
-  <div id="spopup-container">
-    <div id="spopup" class="collapse">
+<!-- Primary container for controls and tickets. -->
+<div id="main-container">
+
+  <!-- Fullscreen popup -->
+  <div id="fullscreen-popup-container">
+    <div id="fullscreen-popup" class="collapse">
       <div class="row">
         <div class="col-md-11">
-          <h4 id="spopup-header">&nbsp;</h4>
+          <h4 id="fullscreen-popup-header">&nbsp;</h4>
         </div>
         <div class="col-md-1">
           <button type="button" class="close" aria-label="Close">
@@ -221,60 +280,39 @@ $freshdesk_domain = 'santelo'; // TEMP
       </div>
       <div class="row">
         <div class="col-md-12">
-          <div id="spopup-body">&nbsp;</div>
+          <div id="fullscreen-popup-body">&nbsp;</div>
         </div>
       </div>
     </div>
   </div>
+
   <div class="row">
+    <div class="col-md-12">
 
-    <!-- Container for ticket rows -->
-    <div class="col-md-11">
-      <div class="row">
-        <div class="col-md-4">
-          <div id="ticket-row-1">
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div id="ticket-row-2">
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div id="ticket-row-3">
-          </div>
-        </div>
+      <!-- Top controls bar  -->
+      <div id="top-bar">
       </div>
-    </div>
-
-    <!-- Right space for popup buttons -->
-    <div class="col-md-1">
 
       <!-- Menu popup button -->
-      <div class="row">
-        <div class="col-md-12">
-          <button id="btn-settings-popup" class="btn-primary pull-right" data-toggle="collapse" data-target="#toggle-menu" aria-expanded="false" aria-controls="toggle-menu">
-            <!-- <div style="width:75%;float:left;overflow:hidden;font-weight:bold">A</div> -->
-            <!-- <div style="width:25%;float:left"><span class="glyphicon glyphicon-cog"></span></div> -->
-            <span class="glyphicon glyphicon-cog"></span>
-          </button>
-        </div>
-      </div>
+      <button id="menu-open-button" class="btn-primary pull-right" data-toggle="collapse" data-target="#menu" aria-expanded="false" aria-controls="menu">
+        <!-- <div style="width:75%;float:left;overflow:hidden;font-weight:bold">A</div> -->
+        <!-- <div style="width:25%;float:left"><span class="glyphicon glyphicon-cog"></span></div> -->
+        <span class="glyphicon glyphicon-cog"></span>
+      </button>
 
       <!-- Settings menu popup -->
-      <div class="row">
-        <div class="col-md-12">
-          <div id="toggle-menu-container">
-            <div id="toggle-menu" class="collapse">
+          <div id="menu-container">
+            <div id="menu" class="collapse">
               <div class="row">
                 <div class="col-md-12">
-                  <button id="btn-refresh" class="btn-settings btn-primary" type="button">
+                  <button id="btn-refresh" class="menu-button btn-primary" type="button">
                     <b>Päivitä tukipyynnöt&nbsp;<span class="glyphicon glyphicon-refresh"></span></b>
                   </button>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-12">
-                  <button id="btn-export-customers" class="btn-settings btn-warning" type="button">
+                  <button id="btn-export-customers" class="menu-button btn-warning" type="button">
                     <b>Vie asiakkaat Freshdeskiin&nbsp;<span class="glyphicon glyphicon-user"></span></b>
                   </button>
                 </div>
@@ -299,6 +337,24 @@ $freshdesk_domain = 'santelo'; // TEMP
               </div>
             </div>
           </div>
+    </div>
+  </div>
+  <div class="row">
+
+    <!-- Container for ticket rows -->
+    <div class="col-md-11">
+      <div class="row">
+        <div class="col-md-4">
+          <div id="ticket-row-1">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div id="ticket-row-2">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div id="ticket-row-3">
+          </div>
         </div>
       </div>
     </div>
@@ -321,7 +377,7 @@ $freshdesk_domain = 'santelo'; // TEMP
       else
         obj.find('.ticket-customer-link').attr('href', '#').removeAttr('target').text(customer);
 
-      obj.find('.ticket-description').text(description);
+      obj.find('.ticket-summary').text(description);
       obj.find('.ticket-respond-link').attr('href', ticketLink);
       // obj.find('.ticket-body').attr('onclick', `location.href='/index.php/asiakkaat/freshdesk/${id}'`);
 
@@ -363,9 +419,9 @@ $freshdesk_domain = 'santelo'; // TEMP
         let subject = ("subject" in list_tickets[id]) ?
           list_tickets[id].subject : '(ei otsikkoa)';
 
-        $('#spopup-header').html(`Tukipyyntö ${id}: ${subject}`);
-        $('#spopup-body').html(`<p>${data}</p>`);
-        $('#spopup').collapse("show");
+        $('#fullscreen-popup-header').html(`Tukipyyntö ${id}: ${subject}`);
+        $('#fullscreen-popup-body').html(`<p>${data}</p>`);
+        $('#fullscreen-popup').collapse("show");
       });
 
       switch (status) {
@@ -552,8 +608,8 @@ $freshdesk_domain = 'santelo'; // TEMP
     });
 
     var adjustDynamicElements = function() {
-      let containerWidth = $('#freshdesk-container').width();
-      $('#spopup')
+      let containerWidth = $('#main-container').width();
+      $('#fullscreen-popup')
         .css('transition', '0s')
         .width(containerWidth * 0.8 + 'px')
         .css({
@@ -567,18 +623,18 @@ $freshdesk_domain = 'santelo'; // TEMP
       adjustDynamicElements();
     });
 
-    $('#spopup button.close').on('click', function(e) {
-      $('#spopup').collapse("hide");
+    $('#fullscreen-popup button.close').on('click', function(e) {
+      $('#fullscreen-popup').collapse("hide");
     });
 
     /** Hide collapsibles when clicked elsewhere. */
     $(document).mouseup(function(e) {
-      var options_div = $('#toggle-menu');
+      var options_div = $('#menu');
       if (options_div.attr('aria-expanded') && !options_div.is(e.target) && options_div.has(e.target).length === 0)
         options_div.collapse("hide");
-      var spopup_div = $('#spopup');
-      if (spopup_div.attr('aria-expanded') && !spopup_div.is(e.target) && spopup_div.has(e.target).length === 0 && $(e.target).parents('.ticket-body').length == 0)
-        spopup_div.collapse("hide");
+      var full_popup_div = $('#fullscreen-popup');
+      if (full_popup_div.attr('aria-expanded') && !full_popup_div.is(e.target) && full_popup_div.has(e.target).length === 0 && $(e.target).parents('.ticket-body').length == 0)
+        full_popup_div.collapse("hide");
     });
 
     var exportCustomersFinish = function(result) {
@@ -793,7 +849,7 @@ $freshdesk_domain = 'santelo'; // TEMP
         repeats++;
         n += increment - (increment * n / 2);
         let ival = Math.trunc(n * 100);
-        $('div.progbar').attr('aria-valuenow', ival).css('width', ival + '%');
+        $('div.progress-bar').attr('aria-valuenow', ival).css('width', ival + '%');
         await new Promise(r => setTimeout(r, 15));
       }
 
@@ -818,7 +874,7 @@ $freshdesk_domain = 'santelo'; // TEMP
         if (!progbarActive) {
           progbarActive = true;
           progbarShouldStop = false;
-          $('div.progbar').attr('aria-valuenow', 0).css({
+          $('div.progress-bar').attr('aria-valuenow', 0).css({
             width: 0,
             display: 'block',
             border: '2px solid #151414'
@@ -827,7 +883,7 @@ $freshdesk_domain = 'santelo'; // TEMP
       } else if (progbarActive) {
         progbarShouldStop = true;
       } else {
-        $('div.progbar').css({
+        $('div.progress-bar').css({
           width: 0,
           display: 'none',
           border: 'none'
