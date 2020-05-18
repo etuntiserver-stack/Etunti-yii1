@@ -1099,7 +1099,7 @@ public function actionImei($dom)
 					$kohteen_yhteyshenkilo = '<br>'.Yii::t('main', 'Kohteen yhteyshenkilö').': <b>'.$kohde->etu_suku_nimet.'</b>';
 				}
 				// app_naytetaanko_kohteen_yhteyshenkilo -->
-				$sel .= '<div class="well tvlaatikko" id="'.$arr['this_id'].'">';
+				$sel .= '<div class="well kohde_'.$data->kohteet->id.'">';
 
 				$tvController = Yii::app()->createController('Tyovuoroot');
 				$tilanteet = $tvController[0]->tilanteet();
@@ -1140,7 +1140,7 @@ public function actionImei($dom)
 							$pdf = file_get_contents($filepath);
 							//echo $pdf; // TOIMII
 							//exit;
-							$tyonkuvaukset[basename($file)] = ['tv_id' => $arr['this_id'], 'pdf' => base64_encode($pdf)];
+							$tyonkuvaukset[basename($file)] = ['kohde_id' => $data->kohteet->id, 'pdf' => base64_encode($pdf)];
 						} else {
 							continue;
 						}
