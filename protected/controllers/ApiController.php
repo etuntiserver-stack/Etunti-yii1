@@ -1135,15 +1135,15 @@ public function actionImei($dom)
 
 				if(isset($data->kohteet->id)){
 					foreach(array_reverse(glob('tiedostot/kohteet/'.strtolower($dom).'/tyonkuvaukset/'.$data->kohteet->id.'_*.*')) as $file) {
-						//if(!isset($tyonkuvaukset[basename($file)])){
+						if(!isset($tyonkuvaukset[basename($file)])){
 							$filepath = Yii::getPathOfAlias('webroot').'/'.$file;
 							$pdf = file_get_contents($filepath);
 							//echo $pdf; // TOIMII
 							//exit;
 							$tyonkuvaukset[basename($file)] = ['tv_id' => $arr['this_id'], 'pdf' => base64_encode($pdf)];
-						//} else {
-						//	continue;
-						//}
+						} else {
+							continue;
+						}
 					}
 				}
 			}
