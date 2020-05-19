@@ -374,10 +374,6 @@ $(document).ready(function(){
 </div>
 </div><!-- 1 tila -->
 
-<div class="row text-center">
-	<div id="kohteen_tiedostot"></div>
-</div>
-<br>
 <div class="row">
   <div class="col-sm-3">
 		<label><?php echo Yii::t('main', 'Työpari'); ?></label><br>
@@ -697,6 +693,11 @@ $(document).ready(function(){
 
     }
 ?>
+<br>
+<div class="row text-center">
+	<div id="kohteen_tiedostot"></div>
+</div>
+
 
 <div id="toistuvaAll" class="collapse">
  <br><h4><?php echo Yii::t('main','Toistuvan työvuoroketjun asetukset'); ?></h4></p>
