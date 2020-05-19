@@ -1891,9 +1891,15 @@ class Freshdesk extends CComponent
     $paginator = Yii::createComponent('CachePaginator', $id);
     $paginator->logCategory = 'freshdesk';
     $paginator->pageSize = $per_page;
-    $paginator->callback = function ($page, $page_size) {
-      return $this->listTickets(null, null, $page, $page_size, null, ['requester', 'description'], 'updated_at', 'desc');
-    };
+
+    if ($callback == null || !is_callable($callback)) {
+      $paginator->callback = function ($page, $page_size) {
+        return $this->listTickets(null, null, $page, $page_size, null, ['requester', 'description'], 'updated_at', 'desc');
+      };
+    } else {
+      $paginator->callback = $callback;
+    }
+
     return $paginator;
   }
 

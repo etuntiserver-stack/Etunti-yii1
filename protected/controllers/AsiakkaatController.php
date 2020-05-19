@@ -2239,21 +2239,21 @@ $xml = '
       throw new \Exception('Freshdesk on pois päältä tällä domainilla.');
     }
 
-    if (isset($_POST['ticket_id']) && is_int($_POST['ticket_id']))
+    if (isset($_POST['ticket_id']) && is_numeric($_POST['ticket_id']))
       $ticket_id = $_POST['ticket_id'];
-    if (isset($_POST['page']) && is_int($_POST['page']))
+    if (isset($_POST['page']) && is_numeric($_POST['page']))
       $page = $_POST['page'];
-    if (isset($_POST['per_page']) && is_int($_POST['per_page']))
+    if (isset($_POST['per_page']) && is_numeric($_POST['per_page']))
       $per_page = $_POST['per_page'];
 
-    if (isset($_POST['filter_statuses']) && is_string($_POST['filter_statuses']))
+    if (isset($_POST['filter_statuses']))
       $filter_statuses = $_POST['filter_statuses'];
     if (!empty($filter_statuses))
-      $filter_statuses = array_unique(json_decode($filter_statuses, true) ?: []);
+      $filter_statuses = array_unique(json_decode($filter_statuses, true));
 
-    if (isset($_POST['order_by']) && is_string($_POST['order_by']))
+    if (isset($_POST['order_by']) && !empty($_POST['order_by']))
       $order_by = $_POST['order_by'];
-    if (isset($_POST['order_type']) && is_string($_POST['order_type']))
+    if (isset($_POST['order_type']) && !empty($_POST['order_type']))
       $order_type = $_POST['order_type'];
     if (isset($_POST['export']))
       $export = $_POST['export'];

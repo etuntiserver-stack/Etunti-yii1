@@ -4,6 +4,49 @@ $(function () {
   //*------------------------------------------------------------------------------------------------
   //* Variables
   //*------------------------------------------------------------------------------------------------
+  //#region Variable Update Helpers
+
+  /**
+   * Get selected statuses in the top-bar filter by status -selection as JSON.
+   *
+   * This might not always reflect the currently active filter, as it returns
+   * current selection whether or not it has been applied.
+   *
+   * @return {String}
+   * Selections encoded with JSON, or empty string on no selections/failure.
+   */
+  var getTicketFilterStatusSelection = function () {
+    const statuses = $('#filter-status-multiselect').val();
+    return (statuses != null && statuses.length > 0 ? JSON.stringify(statuses) : '');
+  };
+
+  /**
+   * Get selected order by value in the top-bar.
+   *
+   * This might not always reflect the currently active selection, as it returns
+   * current selection whether or not it has been applied.
+   *
+   * @return {String}
+   * Current selection in the order by -selection in the top-bar.
+   */
+  var getTicketOrderBySelection = function () {
+    return $('#order-by-select').val();
+  };
+
+  /**
+   * Get selected order type value in the top-bar.
+   *
+   * This might not always reflect the currently active selection, as it returns
+   * current selection whether or not it has been applied.
+   *
+   * @return {String}
+   * Current selection in the order type -selection in the top-bar.
+   */
+  var getTicketOrderTypeSelection = function () {
+    return $('#order-type-select').val();
+  };
+
+  //#endregion
   //#region General Variables
 
   /**
@@ -36,6 +79,26 @@ $(function () {
    * @type {Object}
    */
   let rowHeights = [0, 0, 0];
+
+  /**
+   * JSON array representing the statuses to request. When changed, tickets
+   * should be reset.
+   * @type {String}
+   */
+  let listTicketsFilterStatuses = getTicketFilterStatusSelection();
+
+  /**
+   * JSON array representing the statuses to request. When changed, tickets
+   * should be reset.
+   * @type {String}
+   */
+  let listTicketsOrderBy = getTicketOrderBySelection();
+
+  /**
+   * Tickets order type (desc/asc). When changed, tickets should be reset.
+   * @type {String}
+   */
+  let listTicketsOrderType = getTicketOrderTypeSelection();
 
   /**
    * Last page number requested by listTickets().
@@ -77,7 +140,7 @@ $(function () {
    * @param {Boolean} refresh
    * Whether to force refresh data over API.
    */
-  var listTickets = async function (page = 0, refresh = false, statuses = [], orderBy = 'updated_at', orderType = 'desc') {
+  var listTickets = async function (page = 0, refresh = false) {
 
     // Return if already requesting or if end has been reached.
     if (listTicketsRequesting || listTicketsEndReached)
@@ -94,14 +157,14 @@ $(function () {
     progressBar();
 
     // Request tickets from the Freshdesk action.
-    $.ajax(`${location.protocol}//${location.host}/index.php/asiakkaat/freshdesk?page=${queryPage}`, {
+    $.ajax(`${location.protocol}//${location.host}/index.php/asiakkaat/freshdesk`, {
 
       type: 'POST',
       data: {
         page: queryPage,
-        filter_statuses: (Array.isArray(statuses) ? JSON.stringify(statuses) : ''),
-        order_by: orderBy,
-        order_type: orderType
+        filter_statuses: listTicketsFilterStatuses,
+        order_by: listTicketsOrderBy,
+        order_type: listTicketsOrderType
       },
 
       error: function (xhr, status, error) {
@@ -120,6 +183,7 @@ $(function () {
           return;
         }
 
+        // console.log(data);
         console.log(`Received response, length: ${data.length}`);
 
         // Try parse response JSON.
@@ -419,15 +483,13 @@ $(function () {
   $('#controls-update-button').on('click', function (e) {
     e.preventDefault();
     listTicketsReset();
-    const statuses = $('#filter-status-multiselect').val();
-    const statusesJson = (statuses != null && statuses.length > 0 ? JSON.stringify(statuses) : '');
-    console.log($('#order-by-select').val());
-    console.log($('#order-type-select').val());
-    return;
-    // filter-status-multiselect
-    // order-by-select
-    // order-type-select
-    listTickets(0, true, [], statusesJson, $('#order-by-select').val(), $('#order-type-select').val());
+    listTicketsFilterStatuses = getTicketFilterStatusSelection();
+    listTicketsOrderBy = getTicketOrderBySelection();
+    listTicketsOrderType = getTicketOrderTypeSelection();
+    // console.log(listTicketsFilterStatuses);
+    // console.log(listTicketsOrderBy);
+    // console.log(listTicketsOrderType);
+    listTickets(1);
   });
 
   /** Click handler for the Refresh Tickets -button. */
@@ -668,11 +730,7 @@ $(function () {
   //*------------------------------------------------------------------------------------------------
   //* Events
   //*------------------------------------------------------------------------------------------------
-  //#region UI Events
-
-
-  //#endregion
-  //#region Other Events
+  //#region Events
 
   /**
    * Show an error with the top-left error popup.
@@ -1116,8 +1174,8 @@ $(function () {
   adjustDynamicElements();
 
   // Fetch first set of tickets.
-  // listTickets();
-  testTickets();
+  listTickets();
+  // testTickets();
   // testProgressBar();
 
   //#endregion
