@@ -54,7 +54,7 @@ $(function () {
    * The domain should be provided for the view from PHP.
    * @type {String}
    */
-  const freshdeskUrl = 'https://' + $('#domain-label').val() + '.freshdesk.com/a';
+  const freshdeskUrl = 'https://' + $('#domain-label').text() + '.freshdesk.com/a';
 
   //#endregion
   //#region Error popup variables
@@ -476,7 +476,8 @@ $(function () {
       }
     }
   });
-  $('#filter-status-multiselect').multiselect('selectAll', false);
+  // $('#filter-status-multiselect').multiselect('selectAll', false);
+  for (let i = 2; i <= 7; i++) { if (i != 5) $('#filter-status-multiselect').multiselect('select', i); }
   $('#filter-status-multiselect').multiselect('updateButtonText');
 
   /** Click handler for the top-bar update -button to apply filters/order. */
@@ -620,12 +621,6 @@ $(function () {
       $(this).data('clicked', true);
     }
 
-    // Open ticket link in new tab.
-    return openNewTab(ticketLink);
-
-
-    //* Code for opening debug information; leaving code here for future reference.
-
     // Get JSON ticket data from the hidden div.
     const ticketDataJson = $(this).find('.ticket-hidden-data').text();
     let ticketData = null;
@@ -646,6 +641,22 @@ $(function () {
     // Get raw ID data from the hidden div and try parse int.
     const rawId = $(this).find('.ticket-hidden-id').text();
     let id = parseInt(rawId);
+
+    // Check for invalid data.
+    if (isNaN(id) || typeof (id) !== 'number') {
+
+      // Parsing failed.
+      console.log(`Ticket with missing ID found with subject: ${ticketData.subject}.`);
+      return false;
+    } else {
+
+      // ID was parsed. Open ticket link in new tab.
+      const ticketLink = `${freshdeskUrl}/tickets/${ticketData.id}`;
+      console.log(`Opening ticket to new window: ${ticketLink}`);
+      return openNewTab(ticketLink);
+    }
+
+    //* Code for opening debug information; leaving code here for future reference.
 
     // Check for invalid data.
     if (isNaN(id) || typeof (id) !== 'number') {
