@@ -2291,7 +2291,8 @@ $xml = '
       // No parameters, move to Freshdesk ticket view.
       return $this->render('freshdesk', [
         'freshdesk' => $freshdesk,
-        'tickets' => Yii::app()->session['freshdesk_tickets']
+        'tickets' => Yii::app()->session['freshdesk_tickets'],
+        'domain' => 'santelo' // temp
       ]);
     }
   }

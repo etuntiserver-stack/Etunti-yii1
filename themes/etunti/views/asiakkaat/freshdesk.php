@@ -7,8 +7,6 @@ $customers_results = Asiakkaat::model()->findAll($criteria);
 foreach ($customers_results as $c)
   $customers[$c->id] = ($c->tyyppi == 'yritys' ? $c->yrityksen_nimi : $c->yhteyshenkilo) ?: $c->sahkoposti;
 
-$freshdesk_domain = 'santelo'; // TEMP
-
 ?>
 
 <!-- Base structure for a ticket, which will be cloned into actual tickets. -->
@@ -82,7 +80,7 @@ $freshdesk_domain = 'santelo'; // TEMP
 
       <!-- Top controls bar  -->
       <div id="top-bar">
-        <div id="domain-label" class="pull-right"><?= $freshdesk_domain ?></div>
+        <div id="domain-label" class="pull-right"><?= $domain ?? '' ?></div>
       </div>
 
       <!-- Menu popup button -->
