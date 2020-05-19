@@ -2288,11 +2288,20 @@ $xml = '
       $js_path = sprintf('%1$s%2$sjs%2$sfreshdesk.js', $base_url, DIRECTORY_SEPARATOR); // path to js
       $cs->registerScriptFile($js_path, CClientScript::POS_END); // register js for the view
 
+      // Get customers list for the view.
+      $criteria = new CDbCriteria();
+      $criteria->select = 'id, tyyppi, yrityksen_nimi, yhteyshenkilo, sahkoposti';
+      $criteria->condition = "(tyyppi = 'yritys' AND (yrityksen_nimi != '' OR sahkoposti != '')) OR (tyyppi = 'henkilo' AND (yhteyshenkilo != '' OR sahkoposti != ''))";
+      $customer_results = Asiakkaat::model()->findAll($criteria);
+      foreach ($customer_results as $c)
+        $customers[$c->id] = ($c->tyyppi == 'yritys' ? $c->yrityksen_nimi : $c->yhteyshenkilo) ?: $c->sahkoposti;
+
       // No parameters, move to Freshdesk ticket view.
       return $this->render('freshdesk', [
         'freshdesk' => $freshdesk,
         'tickets' => Yii::app()->session['freshdesk_tickets'],
-        'domain' => 'santelo' // temp
+        'domain' => 'santelo', // temp
+        'customers' => $customers
       ]);
     }
   }

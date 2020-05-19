@@ -1,14 +1,3 @@
-<?php
-
-$criteria = new CDbCriteria();
-$criteria->select = 'id, tyyppi, yrityksen_nimi, yhteyshenkilo, sahkoposti';
-$criteria->condition = "(tyyppi = 'yritys' AND (yrityksen_nimi != '' OR sahkoposti != '')) OR (tyyppi = 'henkilo' AND (yhteyshenkilo != '' OR sahkoposti != ''))";
-$customers_results = Asiakkaat::model()->findAll($criteria);
-foreach ($customers_results as $c)
-  $customers[$c->id] = ($c->tyyppi == 'yritys' ? $c->yrityksen_nimi : $c->yhteyshenkilo) ?: $c->sahkoposti;
-
-?>
-
 <!-- Base structure for a ticket, which will be cloned into actual tickets. -->
 <div style="display:none">
   <div class="ticket" id="ticket-base">
@@ -112,7 +101,7 @@ foreach ($customers_results as $c)
               <label class="field select">
                 <select id="export-customers-list" class="gui-input">
                   <option value="all" selected>(Kaikki)</option>
-                  <?php foreach ($customers as $id => $name) : ?>
+                  <?php foreach ($customers ?? [] as $id => $name) : ?>
                     <option value="<?= $id ?>"><?= $name ?></option>
                   <?php endforeach; ?>
                 </select>
