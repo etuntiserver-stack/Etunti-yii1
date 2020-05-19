@@ -2277,10 +2277,18 @@ $xml = '
     elseif (is_numeric($export) || is_array($export) || $export == 'all') {
       echo json_encode($freshdesk->exportContact($export, true));
       return;
-    }
 
-    // No parameters, move to Freshdesk ticket view.
-    else {
+    } else {
+
+      /** @var CClientScript object. */
+      $cs = Yii::app()->getClientScript(); // get clientscript to register css/js
+      $base_url = rtrim(Yii::app()->baseUrl, DIRECTORY_SEPARATOR); // trim trailing directory separator just in case
+      $css_path = sprintf('%1$s%2$scss%2$sfreshdesk.css', $base_url, DIRECTORY_SEPARATOR); // path to css
+      $cs->registerCssFile($css_path); // register css for the view
+      $js_path = sprintf('%1$s%2$sjs%2$sfreshdesk.js', $base_url, DIRECTORY_SEPARATOR); // path to js
+      $cs->registerScriptFile($js_path, CClientScript::POS_END); // register js for the view
+
+      // No parameters, move to Freshdesk ticket view.
       return $this->render('freshdesk', [
         'freshdesk' => $freshdesk,
         'tickets' => Yii::app()->session['freshdesk_tickets']

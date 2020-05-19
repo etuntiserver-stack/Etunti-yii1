@@ -1,0 +1,207 @@
+
+/************************************************************************************************/
+/** Alert Popup (Fixed Top-Left)                                                                */
+/************************************************************************************************/
+
+/* Container for top-left alert popup. */
+#alert-container {
+  position: fixed;
+  width: 500px;
+  top: 70px;
+  left: 240px;
+  height: 55px;
+  z-index: 9999;
+  border-right: 1.5pt solid black;
+  border-bottom: 1.5pt solid black;
+  border-radius: 25px;
+  opacity: 1;
+  text-align: center;
+  transition: 0.2s;
+  display: none;
+}
+
+/* Highlight alert popup on hover. */
+#alert-container:hover {
+  cursor: pointer;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
+  opacity: 1;
+}
+
+/* Close button for the top-left alert popup. */
+#alert-container button.close {
+  color: white;
+  opacity: 0.6;
+  transition: 0.1s;
+}
+
+/* Highlight the close button of the alert popup on hover. */
+#alert-container button.close:hover {
+  color: black;
+  opacity: 1;
+}
+
+/************************************************************************************************/
+/** Fullscreen Popup (Fixed Center Screen)                                                     */
+/************************************************************************************************/
+
+/* Container for the fullscreen popup (css trick; relative div containing fixed div). */
+#fullscreen-popup-container {
+  position: relative;
+  width: inherit;
+}
+
+/* Fullscreen popup fixed div. */
+#fullscreen-popup {
+  position: fixed;
+  width: inherit;
+  height: 80%;
+  z-index: 9998;
+  background-color: whitesmoke;
+  border: 2px solid #99b7bd;
+  margin: 16px 0px;
+  padding: 4px;
+  border-radius: 5px;
+  text-align: left;
+  transition: 0.1s;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  overflow-wrap: break-word;
+}
+
+/* Fullscreen popup header. */
+#fullscreen-popup-header {
+  margin: 4px 0 10px;
+}
+
+/************************************************************************************************/
+/** Progress Bar (Fixed Bottom-Center)                                                          */
+/************************************************************************************************/
+
+/* Fixed div for progress bar container. */
+.progress-bar-outer {
+  position: fixed;
+  width: 1200px;
+  height: 22px;
+  bottom: 80px;
+  left: calc(50% - 480px);
+  z-index: 999;
+}
+
+/* Progress bar container. */
+.progress-bar-inner {
+  width: 50%;
+  height: 22px;
+  margin: 0px auto;
+  background: none;
+  opacity: 90%;
+}
+
+/* Progress bar. */
+.progress-bar {
+  background: -webkit-linear-gradient(left, #33156d 0%, #f282bc 100%);
+  border: 2px solid #151414;
+  border-radius: 25px;
+  display: none;
+  transition-duration: 10ms;
+}
+
+/************************************************************************************************/
+/** Main Container (Top Bar & Tickets)                                                          */
+/************************************************************************************************/
+
+/* Main container for top controls bar and tickets etc. */
+#main-container {
+  width: 100%;
+}
+
+/************************************************************************************************/
+/** Top Controls Bar                                                                            */
+/************************************************************************************************/
+
+/* Top controls bar */
+#top-bar {
+  border: 1px solid #99b7bd;
+  border-radius: 5px;
+  height: 28px;
+  background-color: whitesmoke;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 1);
+  width:95%;
+  height:38px;
+  float: left;
+}
+
+/************************************************************************************************/
+/** Top-Right Popup Menu                                                                        */
+/************************************************************************************************/
+
+/* Top right settings button */
+#menu-open-button {
+  width: 3%;
+  height: 38px;
+  border: 2px solid black;
+  border-radius: 25px;
+}
+
+/* Container for the popup menu. */
+#menu-container {
+  position: relative;
+  margin-top: 32px;
+}
+
+/* Popup menu. */
+#menu {
+  position: absolute;
+  right: 4px;
+  width: 280px;
+  z-index: 9998;
+  background-color: whitesmoke;
+  border: 2px solid #99b7bd;
+  margin: 12px 0;
+  padding: 12px 8px;
+  border-radius: 5px;
+  text-align: center;
+  transition: 0.2s;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
+}
+
+/* Button inside the popup menu. */
+.menu-button {
+  width: 100%;
+  margin: 4px 0px;
+  padding: 4px;
+}
+
+/* Progress text for the export customers function. */
+#export-customers-progress {
+  display: none;
+}
+
+/************************************************************************************************/
+/** Tickets                                                                                     */
+/************************************************************************************************/
+
+/* Ticket container. */
+.ticket {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+/* Highlight tickets on hover. */
+.ticket:hover {
+  cursor: pointer;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 1);
+}
+
+/* Ticket label. */
+.ticket-label {
+  padding-top: 10px;
+}
+
+/* Ticket summary. */
+.ticket-summary {
+  min-height: 40px;
+  margin-bottom: 6px;
+  padding: 0px 6px;
+}
