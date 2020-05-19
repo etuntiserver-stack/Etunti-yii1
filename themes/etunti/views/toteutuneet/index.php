@@ -314,12 +314,15 @@ $dateDiff = dateDiff($from, $to);
   $sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 3, true);
 
   if(!$ilman_matkat){
-  	$pyhapaivat_all		= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 4, true);
+  	$pyhapaivat_all		= $mobile[0]->TidfromtoMobiiliAll($from, $from, $tid, array(2,3), 2, false, 4, true);
 	$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 5, true);
   } else {
   	$pyhapaivat_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 4, true);
 	$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 5, true);
   }
+
+  // Pyhapaivat
+  $pyhapaivat = $tyovuoroot[0]->pyhapaivatAll($from, $from);
 
   // <-- SPL, SL, LS, VL, VKL, AP
   $sl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'SL',true); // Palkallinen
@@ -401,13 +404,12 @@ $dateDiff = dateDiff($from, $to);
     }
 
     $ispyha = '';
-    if($pyhapaivat_tunnit > 0){
+    if( isset($pyhapaivat[$date]['su']) or isset($pyhapaivat[$date]['vp']) or isset($pyhapaivat[$date]['el']) ){
 	$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>';
     }
-    if($erikoislauantai_tunnit > 0){
+    if(isset($pyhapaivat[$date]['el'])){
 	$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Erikoislauantai').'"></i>';
     }
-
     echo '<tr><td class="text-left" colspan="4">'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$ispyha.'</td></tr>';
 
     if($netvisor_kaytto == 1){

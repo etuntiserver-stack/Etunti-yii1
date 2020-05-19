@@ -200,7 +200,7 @@ if(empty($model->position) and isset($model->id))
         	$tal = array(
 			1=>'Kyllä'
 		);
-		if(isset($dataAll) and count($dataAll) == 0)
+		if(isset($dataAll) and count($dataAll) == 0 or (!isset($model->id)))
 			$tal[0] = 'Ei';
 
 		echo $form->dropDownList($model,'naytta_tyovuorossa', $tal, 

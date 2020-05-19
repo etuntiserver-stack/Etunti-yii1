@@ -49,7 +49,7 @@ if( isset($_SESSION['skrollaus']) )
  foreach($tt as $tid=>$item){
 	echo '<th class="bg-default small" style="z-index: 999; vertical-align: middle;"><div class="text-center laatiko_td">
 		<div>
-		    	<a href="#" class="getTekijanTiedot '.((isset($tyosuhteet[$tid]['loppu']) and !empty($tyosuhteet[$tid]['loppu']) and date("Ymd", strtotime($tyosuhteet[$tid]['loppu'])) < date("Ymd"))? 'bg-danger' : '').'" for="'.$tid.'">';
+		    	<a href="#" class="getTekijanTiedot '.((isset($tyosuhteet[$tid]['loppu']) and !empty($tyosuhteet[$tid]['loppu']) and date("Ymd", strtotime($tyosuhteet[$tid]['loppu'])) < date("Ymd"))? 'text-danger' : '').'" for="'.$tid.'">';
 			// <-- Kuva
 			if(
 				isset(Yii::app()->user->domain) 

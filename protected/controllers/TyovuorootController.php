@@ -1366,7 +1366,27 @@ class TyovuorootController extends Controller
 		}
 		if(!empty($m->muut))
 		  $ohje .= "<br>Muut: ".$m->muut;
-		echo json_encode(array($ohje,$tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt,$m->puh_nro,$m->email,$m->arvioitu_kello_alku,$m->arvioitu_kello_loppu));
+
+		// <-- Tiedostot
+		$tiedostot = '';
+		foreach(array_reverse(glob('tiedostot/kohteet/'.Yii::app()->user->domain.'/tyonkuvaukset/'.$m->id.'_*.*')) as $file) {
+			$ext = pathinfo(basename($file), PATHINFO_EXTENSION);
+		 	$tiedostot .= '
+			  <div class="col-sm-4">';
+				// <-- file_safe_opener
+				$filepath = Yii::getPathOfAlias('application').'/../'.$file;
+				$tiedostot .= CHtml::link(basename($file),
+					array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
+					array(
+						'target'=>'_blank',
+						'class'=>'link'
+				));
+				//     file_safe_opener// -->
+			$tiedostot .= '</div>';
+		}
+
+
+		echo json_encode(array($ohje,$tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt,$m->puh_nro,$m->email,$m->arvioitu_kello_alku,$m->arvioitu_kello_loppu, $tiedostot));
 		exit;
 	}
 

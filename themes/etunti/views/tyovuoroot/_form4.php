@@ -389,7 +389,6 @@ $(document).ready(function(){
 </div>
 </div><!-- 1 tila -->
 
-
 <div class="row">
   <div class="col-sm-3">
 		<label><?php echo Yii::t('main', 'Työpari'); ?></label><br>
@@ -709,6 +708,11 @@ $(document).ready(function(){
 
     }
 ?>
+<br>
+<div class="row text-center">
+	<div id="kohteen_tiedostot"></div>
+</div>
+
 
 <div id="toistuvaAll" class="collapse">
  <br><h4><?php echo Yii::t('main','Toistuvan työvuoroketjun asetukset'); ?></h4></p>
@@ -1464,6 +1468,8 @@ $(document).ready(function(){
 
 			$("#kohteen_lisatiedot").html('<span style="" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'"></span><div style="position:relative;"><div style="position:absolute;top:5px;right: 20px;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div></div>');
 
+			if(d[11])
+				$('#kohteen_tiedostot').html(d[11]);
 	   	},
 		error:function(data){
 			console.log(data);
@@ -1476,6 +1482,7 @@ $(document).ready(function(){
 	OsoiteVaihto(thisID);
   });
   function OsoiteVaihto(thisID){
+	$('#kohteen_tiedostot').html('');
 	$("#kohteen_lisatiedot").html('');
 	$('#<?=$java_prefix?>_status').val('3').css({"border" : "1px green solid"});
 	$('#<?=$java_prefix?>_tyoajanlaatu').val('');
@@ -1520,13 +1527,12 @@ $(document).ready(function(){
 
 			$("#kohteen_lisatiedot").html('<span style="" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +'"></span><div style="position:relative;"><div style="position:absolute;top:5px;right: 20px;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div></div>');
 
-			if(d[9] !== ''){
+			if(d[9] !== '')
 				$('#alku').val(d[9]);
-			}
-			if(d[10] !== ''){
+			if(d[10] !== '')
 				$('#loppu').val(d[10]);
-			}
-
+			if(d[11])
+				$('#kohteen_tiedostot').html(d[11]);
 		}, error:function(data){
 			console.log(data);
 		}
