@@ -39,7 +39,7 @@ class Freshdesk extends CComponent
     if (is_bool($testing))
       $this->testing = $testing;
     else
-      $this->testing = in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']) || $domain == 'demo';
+      $this->testing = in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']) || $domain == 'demo' || $domain == 'staging_demo';
 
     // Specify base url and api key for actions.
     if ($this->testing) {
