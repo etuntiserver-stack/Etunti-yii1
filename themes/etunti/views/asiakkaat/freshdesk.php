@@ -84,17 +84,16 @@
         <!-- Order by selection. -->
         <p>Järjestys:</p>
         <select id="order-by-select" class="custom-select top-bar-select">
-          <option value="0">(oletus)</option>
-          <option value="1">Luontipäivä</option>
-          <option value="2">Erääntymispäivä</option>
-          <option value="3">Viimeksi päivitetty</option>
-          <option value="4">Tila</option>
+          <option value="updated_at">Viimeksi päivitetty</option>
+          <option value="created_at">Luontipäivä</option>
+          <option value="due_by">Erääntymispäivä</option>
+          <option value="status">Tila</option>
         </select>
 
         <!-- Order type selection. -->
         <select id="order-type-select" class="custom-select top-bar-select">
-          <option value="0">Laskeva</option>
-          <option value="1">Nouseva</option>
+          <option value="desc">Laskeva</option>
+          <option value="asc">Nouseva</option>
         </select>
 
         <!-- Top-bar update button (applies new filter and ordering). -->

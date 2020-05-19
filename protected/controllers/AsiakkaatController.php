@@ -2209,6 +2209,19 @@ $xml = '
    * Specifies the amount of items per page when $page is specified. The maximum
    * seems to be either 100 or 300; however, it's better to do smaller batches.
    *
+   * @param array $filter_statuses
+   * If not null, this array represents the possible statuses that are requested.
+   *   2: Open, 3: Pending, 4: Resolved, 5: Closed,
+   *   6: Waiting on customer, 7: Waiting for third party
+   *
+   * @param string $order_by
+   * Sort by option. Options: created_at, due_by, updated_at, status
+   * Default sort order is created_at
+   *
+   * @param string $order_type
+   * Order of possible specified sort option. Options: asc, desc
+   * Default sort order type is desc
+   *
    * @param int $export
    * Exports customers to Freshdesk. If 'all' (string), all customers are
    * exported. If int or array of ints, customers by those ID are exported. If
@@ -2217,7 +2230,7 @@ $xml = '
    * @return mixed
    * Freshdesk view, or null with echoed results if parameters are provided.
    */
-  public function actionFreshdesk($ticket_id = null, $page = null, $per_page = 10, $export = null)
+  public function actionFreshdesk($ticket_id = null, $page = null, $per_page = 10, $filter_statuses = null, $order_by = null, $order_type = null, $export = null)
   {
     /** @var Freshdesk */
     $freshdesk = Yii::createComponent('Freshdesk');
@@ -2226,12 +2239,22 @@ $xml = '
       throw new \Exception('Freshdesk on pois päältä tällä domainilla.');
     }
 
-    if (isset($_POST['ticket_id']))
+    if (isset($_POST['ticket_id']) && is_int($_POST['ticket_id']))
       $ticket_id = $_POST['ticket_id'];
-    if (isset($_POST['page']))
+    if (isset($_POST['page']) && is_int($_POST['page']))
       $page = $_POST['page'];
-    if (isset($_POST['per_page']))
+    if (isset($_POST['per_page']) && is_int($_POST['per_page']))
       $per_page = $_POST['per_page'];
+
+    if (isset($_POST['filter_statuses']) && is_string($_POST['filter_statuses']))
+      $filter_statuses = $_POST['filter_statuses'];
+    if (!empty($filter_statuses))
+      $filter_statuses = array_unique(json_decode($filter_statuses, true) ?: []);
+
+    if (isset($_POST['order_by']) && is_string($_POST['order_by']))
+      $order_by = $_POST['order_by'];
+    if (isset($_POST['order_type']) && is_string($_POST['order_type']))
+      $order_type = $_POST['order_type'];
     if (isset($_POST['export']))
       $export = $_POST['export'];
 
@@ -2247,10 +2270,43 @@ $xml = '
       $refresh = ($page < 0);
       $page = abs($page);
       $per_page = is_numeric($per_page) ? $per_page : 10;
-      $pager = $freshdesk->getTicketPaginator();
+
+      if (!in_array($order_by, ['created_at', 'due_by', 'updated_at', 'status']))
+        $order_by = 'updated_at';
+      if (!in_array($order_type, ['asc', 'desc']))
+        $order_type = 'desc';
+
+      $pager_id = "freshdesk_tickets_orderby_{$order_by}_{$order_type}";
+
+      // if (is_array($filter_statuses)) {
+      //   $hash = 0;
+      //   foreach ($filter_statuses as $status) {
+      //     switch ($status) {
+      //       case 2: $hash += 1 << 0; break;
+      //       case 3: $hash += 1 << 1; break;
+      //       case 4: $hash += 1 << 2; break;
+      //       case 5: $hash += 1 << 3; break;
+      //       case 6: $hash += 1 << 4; break;
+      //       case 7: $hash += 1 << 5; break;
+      //     }
+      //   }
+      //   $pager_id .= "_filter$hash";
+      // }
+
+      $pager = $freshdesk->getTicketPaginator($per_page, $pager_id, function ($page, $page_size) use ($freshdesk, $order_by, $order_type) {
+        return $freshdesk->listTickets(null, null, $page, $page_size, null, ['requester', 'description'], $order_by, $order_type);
+      });
+
       if ($refresh)
         $pager->delete();
-      $requested = $pager->getPage($page);
+
+      if (is_array($filter_statuses)) {
+        $requested = $pager->filtered($page, function ($item) use ($filter_statuses) {
+          return in_array($item['status'], $filter_statuses);
+        });
+      } else {
+        $requested = $pager->getPage($page);
+      }
 
       if (false === $requested) {
         echo json_encode(['eod' => true, 'errors' => 'Empty page requested.']);

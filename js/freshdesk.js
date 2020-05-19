@@ -35,7 +35,7 @@ $(function () {
    * Array of heights for each row, for inserting tickets to correct position.
    * @type {Object}
    */
-  const rowHeights = [0, 0, 0];
+  let rowHeights = [0, 0, 0];
 
   /**
    * Last page number requested by listTickets().
@@ -77,7 +77,7 @@ $(function () {
    * @param {Boolean} refresh
    * Whether to force refresh data over API.
    */
-  var listTickets = async function (page = 0, refresh = false) {
+  var listTickets = async function (page = 0, refresh = false, statuses = [], orderBy = 'updated_at', orderType = 'desc') {
 
     // Return if already requesting or if end has been reached.
     if (listTicketsRequesting || listTicketsEndReached)
@@ -95,6 +95,14 @@ $(function () {
 
     // Request tickets from the Freshdesk action.
     $.ajax(`${location.protocol}//${location.host}/index.php/asiakkaat/freshdesk?page=${queryPage}`, {
+
+      type: 'POST',
+      data: {
+        page: queryPage,
+        filter_statuses: (Array.isArray(statuses) ? JSON.stringify(statuses) : ''),
+        order_by: orderBy,
+        order_type: orderType
+      },
 
       error: function (xhr, status, error) {
 
@@ -183,6 +191,22 @@ $(function () {
       }
     });
   };
+
+  /** Empty the tickets container. */
+  var listTicketsReset = async function () {
+    if (listTicketsRequesting) {
+      listTicketsShouldDump = true;
+    }
+
+    rowHeights = [0, 0, 0];
+    listTicketsLastPage = 0;
+    listTicketsRequesting = false;
+    listTicketsEndReached = false;
+
+    $('#ticket-row-1').empty();
+    $('#ticket-row-2').empty();
+    $('#ticket-row-3').empty();
+  }
 
   /**
    * Request next page of tickets if a request is not currently active and
@@ -362,21 +386,54 @@ $(function () {
     $('#fullscreen-popup').collapse("hide");
   });
 
+  /** Initialize the status filter multiselect. */
+  $('#filter-status-multiselect').multiselect({
+    includeSelectAllOption: true,
+    buttonClass: 'btn btn-default top-bar-select',
+    selectAllText: 'Valitse kaikki',
+    buttonText: function (options, select) {
+      switch (true) {
+        case (options.length === 0):
+          return '(valitse)';
+        case (options.length === 6):
+          return '(kaikki tilat)';
+        case (options.length > 3):
+          return `(${options.length} tilaa valittu)`;
+        default:
+          let labels = [];
+          options.each(function () {
+            if ($(this).attr('label') !== undefined) {
+              labels.push($(this).attr('label'));
+            } else {
+              labels.push($(this).html());
+            }
+          });
+          return labels.join(', ') + '';
+      }
+    }
+  });
+  $('#filter-status-multiselect').multiselect('selectAll', false);
+  $('#filter-status-multiselect').multiselect('updateButtonText');
+
+  /** Click handler for the top-bar update -button to apply filters/order. */
+  $('#controls-update-button').on('click', function (e) {
+    e.preventDefault();
+    listTicketsReset();
+    const statuses = $('#filter-status-multiselect').val();
+    const statusesJson = (statuses != null && statuses.length > 0 ? JSON.stringify(statuses) : '');
+    console.log($('#order-by-select').val());
+    console.log($('#order-type-select').val());
+    return;
+    // filter-status-multiselect
+    // order-by-select
+    // order-type-select
+    listTickets(0, true, [], statusesJson, $('#order-by-select').val(), $('#order-type-select').val());
+  });
+
   /** Click handler for the Refresh Tickets -button. */
   $('#btn-refresh').on('click', function (e) {
     e.preventDefault();
-    if (listTicketsRequesting)
-      listTicketsShouldDump = true;
-
-    rowHeights = [0, 0, 0];
-    listTicketsRequesting = false;
-    listTicketsLastPage = 0;
-    listTicketsEndReached = false;
-
-    $('#ticket-row-1').empty();
-    $('#ticket-row-2').empty();
-    $('#ticket-row-3').empty();
-
+    listTicketsReset();
     listTickets(0, true);
   });
 
@@ -605,35 +662,6 @@ $(function () {
     $('#fullscreen-popup-body').html(`<p>${popupData}</p>`);
     $('#fullscreen-popup').collapse("show");
   });
-
-  /** Initialize the status filter multiselect. */
-  $('#filter-status-multiselect').multiselect({
-    includeSelectAllOption: true,
-    buttonClass: 'btn btn-default top-bar-select',
-    selectAllText: 'Valitse kaikki',
-    buttonText: function (options, select) {
-      switch (true) {
-        case (options.length === 0):
-          return '(valitse)';
-        case (options.length === 6):
-          return '(kaikki tilat)';
-        case (options.length > 3):
-          return `(${options.length} tilaa valittu)`;
-        default:
-          let labels = [];
-          options.each(function () {
-            if ($(this).attr('label') !== undefined) {
-              labels.push($(this).attr('label'));
-            } else {
-              labels.push($(this).html());
-            }
-          });
-          return labels.join(', ') + '';
-      }
-    }
-  });
-  $('#filter-status-multiselect').multiselect('selectAll', false);
-  $('#filter-status-multiselect').multiselect('updateButtonText');
 
   //#endregion
 

@@ -1873,13 +1873,22 @@ class Freshdesk extends CComponent
    * @param int $per_page
    * Items per page.
    *
+   * @param string $id
+   * ID for the CachePaginator object. This should be unique among use cases, as
+   * the cache items are prefixed with this.
+   *
+   * @param mixed $callback
+   * Optional callback function which takes 2 parameters: page, page_size, and
+   * returns the requested list of items. If not provided, default callback is
+   * used.
+   *
    * @return CachePaginator
    * CachePaginator object with configured cache key ID and callback.
    */
-  public function getTicketPaginator(int $per_page = 10)
+  public function getTicketPaginator(int $per_page = 10, $id = 'freshdesk_tickets', $callback = null)
   {
     /** @var CachePaginator object. */
-    $paginator = Yii::createComponent('CachePaginator', 'freshdesk_tickets');
+    $paginator = Yii::createComponent('CachePaginator', $id);
     $paginator->logCategory = 'freshdesk';
     $paginator->pageSize = $per_page;
     $paginator->callback = function ($page, $page_size) {
