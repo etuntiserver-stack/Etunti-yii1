@@ -313,8 +313,15 @@ class Freshdesk extends CComponent
    * Every ticket uses certain fixed numerical values to denote its Source, Status, and Priorities.
    * These numerical values along with their meanings are given below:
    *   - SOURCE: Email 1, Portal 2, Phone 3, Chat 7, Mobihelp 8, Feedback Widget 9, Outbound Email 10
-   *   - STATUS: Open 2, Pending 3, Resolved 4, Closed 5
    *   - PRIORITY: Low 1, Medium 2, High 3, Urgent 4
+   *
+   * Ticket status:
+   *   Open 2,
+   *   Pending 3,
+   *   Resolved 4,
+   *   Closed 5,
+   *   Waiting on customer 6,
+   *   Waiting for third party 7
    *
    * @return mixed
    * Decoded response. Additional headers include link to created ticket.
@@ -350,6 +357,14 @@ class Freshdesk extends CComponent
    *   "tags" : [ ],
    *   "attachments" : [ ]
    * }
+   *
+   * Ticket status:
+   *   Open 2,
+   *   Pending 3,
+   *   Resolved 4,
+   *   Closed 5,
+   *   Waiting on customer 6,
+   *   Waiting for third party 7
    *
    * If an error occurs, and the returned array includes "errors", the error is
    * automatically logged. However, the results are returned as is. General
@@ -429,6 +444,14 @@ class Freshdesk extends CComponent
    *   "tags" : [ ],
    *   "attachments" : [ ]
    * }
+   *
+   * Ticket status:
+   *   Open 2,
+   *   Pending 3,
+   *   Resolved 4,
+   *   Closed 5,
+   *   Waiting on customer 6,
+   *   Waiting for third party 7
    *
    * If an error occurs, and the returned array includes "errors", the error is
    * automatically logged. However, the results are returned as is. General
@@ -513,6 +536,14 @@ class Freshdesk extends CComponent
    * Sort by option. Options: created_at, due_by, updated_at, status
    * Default sort order is created_at
    *
+   * Ticket status:
+   *   Open 2,
+   *   Pending 3,
+   *   Resolved 4,
+   *   Closed 5,
+   *   Waiting on customer 6,
+   *   Waiting for third party 7
+   *
    * @param string $order_type
    * Order of possible specified sort option. Options: asc, desc
    * Default sort order type is desc
@@ -551,6 +582,14 @@ class Freshdesk extends CComponent
    *   },
    *   ...
    * ]
+   *
+   * Ticket status:
+   *   Open 2,
+   *   Pending 3,
+   *   Resolved 4,
+   *   Closed 5,
+   *   Waiting on customer 6,
+   *   Waiting for third party 7
    *
    * If an error occurs, and the returned array includes "errors", the error is
    * automatically logged. However, the results are returned as is. General
@@ -668,6 +707,14 @@ class Freshdesk extends CComponent
    * - created_at (date): Ticket creation date (YYYY-MM-DD)
    * - updated_at (date): Date (YYYY-MM-DD) when the ticket was last updated
    *
+   * Ticket status:
+   *   Open 2,
+   *   Pending 3,
+   *   Resolved 4,
+   *   Closed 5,
+   *   Waiting on customer 6,
+   *   Waiting for third party 7
+   *
    * Custom Fields
    * - Single line text (string)
    * - Number (integer)
@@ -723,6 +770,14 @@ class Freshdesk extends CComponent
    *     ...
    *   ]
    * }
+   *
+   * Ticket status:
+   *   Open 2,
+   *   Pending 3,
+   *   Resolved 4,
+   *   Closed 5,
+   *   Waiting on customer 6,
+   *   Waiting for third party 7
    *
    * If an error occurs, and the returned array includes "errors", the error is
    * automatically logged. However, the results are returned as is. General
@@ -790,8 +845,15 @@ class Freshdesk extends CComponent
    * Every ticket uses certain fixed numerical values to denote its Source, Status, and Priorities.
    * These numerical values along with their meanings are given below.
    *   - SOURCE: Email 1, Portal 2, Phone 3, Chat 7, Mobihelp 8, Feedback Widget 9, Outbound Email 10
-   *   - STATUS: Open 2, Pending 3, Resolved 4, Closed 5
    *   - PRIORITY: Low 1, Medium 2, High 3, Urgent 4
+   *
+   * Ticket status:
+   *   Open 2,
+   *   Pending 3,
+   *   Resolved 4,
+   *   Closed 5,
+   *   Waiting on customer 6,
+   *   Waiting for third party 7
    *
    * @return mixed
    * Decoded response. Additional headers are requested, as the headers include
@@ -827,6 +889,14 @@ class Freshdesk extends CComponent
    *   "due_by" : "2015-08-27T11:30:00Z",
    *   "fr_due_by" : "2015-08-25T11:30:00Z"
    * }
+   *
+   * Ticket status:
+   *   Open 2,
+   *   Pending 3,
+   *   Resolved 4,
+   *   Closed 5,
+   *   Waiting on customer 6,
+   *   Waiting for third party 7
    *
    * If an error occurs, and the returned array includes "errors", the error is
    * automatically logged. However, the results are returned as is. General
@@ -909,7 +979,13 @@ class Freshdesk extends CComponent
    * {@see getTicketPaginator()} to obtain the list of tickets.
    *
    * @param array $status_ignore
-   * Ticket statuses to ignore; Open 2, Pending 3, Resolved 4, Closed 5
+   * Ticket statuses to ignore:
+   *   Open 2,
+   *   Pending 3,
+   *   Resolved 4,
+   *   Closed 5,
+   *   Waiting on customer 6,
+   *   Waiting for third party 7
    *
    * @return array
    * Array indexed by local customer IDs, with each index containing an array of
