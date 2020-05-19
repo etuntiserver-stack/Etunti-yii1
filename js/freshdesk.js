@@ -310,27 +310,21 @@ $(function () {
   //#endregion
 
   //*------------------------------------------------------------------------------------------------
-  //* Events
+  //* UI
   //*------------------------------------------------------------------------------------------------
-  //#region UI Events
+  //#region UI
 
-  /**
-   * Adjust dynamic elements when the window is resized.
-   */
+  /** Adjust dynamic elements when the window is resized. */
   $(window).on('resize', function () {
     adjustDynamicElements();
   });
 
-  /**
-   * Check if more tickets should be requested when the page is scrolled.
-   */
+  /** Check if more tickets should be requested when the page is scrolled. */
   $(window).scroll(function () {
     listTicketsIfScrolled();
   });
 
-  /**
-   * Hide collapsibles when clicked elsewhere.
-   */
+  /** Hide collapsibles when clicked elsewhere. */
   $(document).mouseup(function (e) {
     const optionsPopup = $('#menu');
     const optionsPopupShouldHide =
@@ -354,9 +348,7 @@ $(function () {
     }
   });
 
-  /**
-   * Click handler for the alert popup; log extra data on click.
-   */
+  /** Click handler for the alert popup; log extra data on click. */
   $('#alert-container').on('click', function (e) {
     e.preventDefault();
     if (errorText != null && errorText.length > 0)
@@ -365,16 +357,12 @@ $(function () {
       console.log(errorData);
   });
 
-  /**
-   * Click handler for the close button on the fullscreen popup.
-   */
+  /** Click handler for the close button on the fullscreen popup. */
   $('#fullscreen-popup button.close').on('click', function (e) {
     $('#fullscreen-popup').collapse("hide");
   });
 
-  /**
-   * Click handler for the Refresh Tickets -button.
-   */
+  /** Click handler for the Refresh Tickets -button. */
   $('#btn-refresh').on('click', function (e) {
     e.preventDefault();
     if (listTicketsRequesting)
@@ -392,9 +380,7 @@ $(function () {
     listTickets(0, true);
   });
 
-  /**
-   * Click handler for the Export Customers -button.
-   */
+  /** Click handler for the Export Customers -button. */
   $('#btn-export-customers').on('click', function (e) {
     e.preventDefault();
 
@@ -619,6 +605,43 @@ $(function () {
     $('#fullscreen-popup-body').html(`<p>${popupData}</p>`);
     $('#fullscreen-popup').collapse("show");
   });
+
+  /** Initialize the status filter multiselect. */
+  $('#filter-status-multiselect').multiselect({
+    includeSelectAllOption: true,
+    buttonClass: 'btn btn-default top-bar-select',
+    selectAllText: 'Valitse kaikki',
+    buttonText: function (options, select) {
+      switch (true) {
+        case (options.length === 0):
+          return '(valitse)';
+        case (options.length === 6):
+          return '(kaikki tilat)';
+        case (options.length > 3):
+          return `(${options.length} tilaa valittu)`;
+        default:
+          let labels = [];
+          options.each(function () {
+            if ($(this).attr('label') !== undefined) {
+              labels.push($(this).attr('label'));
+            } else {
+              labels.push($(this).html());
+            }
+          });
+          return labels.join(', ') + '';
+      }
+    }
+  });
+  $('#filter-status-multiselect').multiselect('selectAll', false);
+  $('#filter-status-multiselect').multiselect('updateButtonText');
+
+  //#endregion
+
+  //*------------------------------------------------------------------------------------------------
+  //* Events
+  //*------------------------------------------------------------------------------------------------
+  //#region UI Events
+
 
   //#endregion
   //#region Other Events

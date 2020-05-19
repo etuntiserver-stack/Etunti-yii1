@@ -69,7 +69,39 @@
 
       <!-- Top controls bar  -->
       <div id="top-bar">
-        <div id="domain-label" class="pull-right"><?= $domain ?? '' ?></div>
+
+        <!-- Filter status selection. -->
+        <p>Tila:</p>
+        <select id="filter-status-multiselect" class="mdb-select md-form" multiple>
+          <option value="2">Avoin/Vastaamatta</option>
+          <option value="3">Vastattu</option>
+          <option value="4">Ratkaistu</option>
+          <option value="5">Suljettu</option>
+          <option value="6">Odottaa asiakasta</option>
+          <option value="7">Odottaa kolmatta osapuolta</option>
+        </select>
+
+        <!-- Order by selection. -->
+        <p>Järjestys:</p>
+        <select id="order-by-select" class="custom-select top-bar-select">
+          <option value="0">(oletus)</option>
+          <option value="1">Luontipäivä</option>
+          <option value="2">Erääntymispäivä</option>
+          <option value="3">Viimeksi päivitetty</option>
+          <option value="4">Tila</option>
+        </select>
+
+        <!-- Order type selection. -->
+        <select id="order-type-select" class="custom-select top-bar-select">
+          <option value="0">Laskeva</option>
+          <option value="1">Nouseva</option>
+        </select>
+
+        <!-- Top-bar update button (applies new filter and ordering). -->
+        <button id="controls-update-button" class="btn-save btn btn-primary btn-sm">Tallenna</button>
+
+        <!-- Domain label; also required by freshdesk.js to get domain for URL. -->
+        <p id="domain-label" class="pull-right"><?= $domain ?? '' ?></p>
       </div>
 
       <!-- Menu popup button -->
@@ -121,7 +153,7 @@
   <div class="row">
 
     <!-- Container for ticket rows -->
-    <div class="col-md-11">
+    <div class="col-md-12">
       <div class="row">
         <div class="col-md-4">
           <div id="ticket-row-1">
