@@ -1133,7 +1133,7 @@ public function actionImei($dom)
 				$sel .= $tplista;
 				$sel .= '</div>';
 
-				if(isset($data->kohteet->id)){
+				if(isset($data->kohteet->id) and $data->kohteet->tyonkuvaus_tiedostot_mobiilissa == 1){
 					foreach(array_reverse(glob('tiedostot/kohteet/'.strtolower($dom).'/tyonkuvaukset/'.$data->kohteet->id.'_*.*')) as $file) {
 						if(!isset($tyonkuvaukset[basename($file)])){
 							$filepath = Yii::getPathOfAlias('webroot').'/'.$file;
