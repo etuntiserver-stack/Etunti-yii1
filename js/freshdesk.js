@@ -601,6 +601,13 @@ $(function () {
     });
   });
 
+  /** When customer link is clicked, prevent parent .ticket body click event. */
+  $('div').delegate('.ticket-customer-link', 'click', function (e) {
+    e.stopImmediatePropagation();
+    // e.preventDefault();
+    // openNewTab($(this).attr('href'));
+  });
+
   /**
    * Open ticket in Freshdesk when ticket body is clicked. When in testing
    * environment, debug information should be opened instead (TODO).
