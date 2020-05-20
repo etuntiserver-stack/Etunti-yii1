@@ -759,72 +759,16 @@ if (
   && !empty($freshdesk_tickets)
 ) {
   // Freshdesk tickets header
-  echo '<legend><h3>' . Yii::t('main', 'Freshdesk Tukipyynnöt') . '</h3></legend>';
+  echo '<legend class="mb5"><h3>' . Yii::t('main', 'Freshdesk Tukipyynnöt') . '</h3></legend>';
+  echo '<p class="mb20 text-muted">Paina pyyntöä avataksesi tarkemmat tiedot</p>';
 
+  // Loop ticket listing and draw a collapsible box for each one.
   foreach ($freshdesk_tickets as $ticket) {
-
-    // Generate a link to the given ticket in Freshdesk.
-    $ticket_link = $freshdesk->getTicketUrl($ticket['id'] ?? 0);
-
-    // Build text for this row, i.e. subject, dates and status.
-    $ticket_link_text = '';
-
-    // Add ticket subject.
-    if (!empty($ticket['subject']))
-      $ticket_link_text .= "<b>{$ticket['subject']}</b>";
-
-    // Continue prefix with ticket ID. (not necessary)
-    // if (!empty($ticket['id']))
-    //   $ticket_link_text .= " ({$ticket['id']})";
-
-    // Add status to the link text (avoid obscure errors with this check).
-    if (!empty($ticket['status'])) {
-
-      // Get unified status text for this status from the Freshdesk component.
-      $ticket_status_text = $freshdesk->getStatusText($ticket['status']);
-
-      switch ($ticket['status']) {
-
-        // Open
-        case 2:
-          $ticket_link_text .= " <span class='text text-warning'><b>($ticket_status_text)</b></span>";
-          break;
-
-        // Resolved
-        case 4:
-          $ticket_link_text .= " <span class='text text-success'>($ticket_status_text)</span>";
-          break;
-
-        // Closed
-        case 5:
-          $ticket_link_text .= " <span class='text text-dark'>($ticket_status_text)</span>";
-          break;
-
-        // Answered (3), Waiting on customer (6), Waiting for third party (7)
-        default:
-          $ticket_link_text .= " <span class='text text-primary'>($ticket_status_text)</span>";
-      }
-    }
-
-    // If available, format the created_at date.
-    $fd_suffix_opened = false;
-    if (!empty($ticket['created_at'])) {
-      $ticket_link_text .= ' (' . date('d.m.Y', strtotime($ticket['created_at']));
-      $fd_suffix_opened = true;
-    }
-
-    // If available, format the updated_at date.
-    if (!empty($ticket['updated_at'])) {
-      $ticket_link_text .= $fd_suffix_opened ? ', ' : ' (';
-      $ticket_link_text .= 'päivitetty: ' . date('d.m.Y H:i', strtotime($ticket['updated_at']));
-      $fd_suffix_opened = true;
-    }
-
-    if ($fd_suffix_opened) {
-      $ticket_link_text .= ')';
-    }
-
-    echo CHtml::link($ticket_link_text, $ticket_link, ['target' => '_blank', 'style' => 'color:inherit;']) . '<br>';
+    // $this->actionFreshdesk_ticket($ticket, 'collapse');
+    $this->render('freshdesk_ticket', [
+      'ticket' => $ticket,
+      'style' => 'collapse'
+    ]);
   }
 }
 

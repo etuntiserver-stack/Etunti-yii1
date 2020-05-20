@@ -40,7 +40,7 @@ class AsiakkaatController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus', 'kaikki_netvisoriin', 'freshdesk'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus', 'kaikki_netvisoriin', 'freshdesk', 'freshdesk_ticket'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -2198,9 +2198,6 @@ $xml = '
    * If parameters are provided for more than one API request, then the first
    * one takes priority and the other ones are ignored.
    *
-   * @param int $ticket_id
-   * If not null, and positive int, that ticket ID is returned (encoded echo).
-   *
    * @param int $page
    * If not null, that page in list of tickets is returned. Use negative number
    * to force refresh data (e.g. -1 for first page, -3 for third page).
@@ -2230,7 +2227,7 @@ $xml = '
    * @return mixed
    * Freshdesk view, or null with echoed results if parameters are provided.
    */
-  public function actionFreshdesk($ticket_id = null, $page = null, $per_page = 10, $filter_statuses = null, $order_by = null, $order_type = null, $export = null)
+  public function actionFreshdesk($page = null, $per_page = 10, $filter_statuses = null, $order_by = null, $order_type = null, $export = null)
   {
     /** @var Freshdesk */
     $freshdesk = Yii::createComponent('Freshdesk');
@@ -2239,8 +2236,6 @@ $xml = '
       throw new \Exception('Freshdesk on pois päältä tällä domainilla.');
     }
 
-    if (isset($_POST['ticket_id']) && is_numeric($_POST['ticket_id']))
-      $ticket_id = $_POST['ticket_id'];
     if (isset($_POST['page']) && is_numeric($_POST['page']))
       $page = $_POST['page'];
     if (isset($_POST['per_page']) && is_numeric($_POST['per_page']))
@@ -2257,12 +2252,6 @@ $xml = '
       $order_type = $_POST['order_type'];
     if (isset($_POST['export']))
       $export = $_POST['export'];
-
-    if (is_numeric($ticket_id)) {
-      // TODO
-      echo json_encode(['errors' => 'not yet implemented']);
-      return;
-    }
 
     // If $page is provided, get a list of tickets.
     elseif (is_numeric($page)) {
@@ -2358,6 +2347,148 @@ $xml = '
         'tickets' => Yii::app()->session['freshdesk_tickets'],
         'domain' => 'santelo', // temp
         'customers' => $customers
+      ]);
+    }
+  }
+
+  /**
+   * Partial view for a Freshdesk ticket, with styles to fit requesting view.
+   *
+   * ---- when $style is 'collapse': ----
+   * $ticket must contain partial ticket data from ticket listing. This is used
+   * to form header text and initial information before requesting full data.
+   * This style requests ticket data later when clicked, so response includes:
+   *   'partial_ticket' : partial ticket data from ticket listing. full data is
+   *                      requested if needed when the ticket is clicked.
+   *            'style' : requested style.
+   *
+   * ---- when $style is 'raw': ----
+   * If request is successful, response include:
+   *       'ticket' : ticket data array as specified in {@see Freshdesk} class.
+   *      'headers' : headers returned by the server.
+   * Otherwise, if there's an error, response includes:
+   *     'response' : raw response; can be empty, like on 404.
+   *      'headers' : headers returned by the server
+   *   'error_text' : pre-formed error text, if possible
+   *
+   * @param mixed $ticket
+   * Ticket ID or partial ticket data from ticket listing. If using a style that
+   * doesn't request full ticket data right away, like 'collapse', partial
+   * ticket data is required to form title, etc.
+   *
+   * @param string $style
+   * Style/behavior of the returned data. Options:
+   *
+   * 'raw':
+   * Returns server response as is; usually ticket and headers. Server response
+   * is echoed out as JSON. This is usually for AJAX requests.
+   *
+   * 'collapse':
+   * Renders a flat link (text) that opens details on click. Ticket data is not
+   * requested from API until clicked. Provides a conversation listing with
+   * stacked boxes, and additional information like dates, and direct links.
+   * This requires partial ticket data to be provided in $ticket.
+   */
+  public function actionFreshdesk_ticket($ticket = null, $style = null)
+  {
+    /** @var Freshdesk */
+    $freshdesk = Yii::createComponent('Freshdesk');
+
+    if ($freshdesk->isDisabled()) {
+      throw new \Exception('Freshdesk on pois päältä tällä domainilla.');
+    }
+
+    // Get POST values.
+    if (isset($_POST['ticket']))
+      $ticket = $_POST['ticket'];
+    if (isset($_POST['style']) && !empty($_POST['style']))
+      $style = $_POST['style'];
+
+    // echo json_encode(print_r($ticket, true) . ' --- ' . print_r($style, true)); exit;
+
+    // Specify default and valid styles. This list will be appended to later.
+    static $default_style = 'raw';
+    static $valid_styles = [
+      'raw',      // default, server response is echoed as JSON.
+      'collapse'  // ticket is rendered inside a collapsible AJAX box.
+    ];
+
+    // Default to 'raw' (JSON output) when style is not specified or invalid.
+    if (!in_array($style, $valid_styles))
+      $style = $default_style;
+
+    // If style is 'collapse', proceed to the view.
+    if ($style == 'collapse') {
+
+      // Ensure that partial ticket data was provided.
+      if (!is_array($ticket) || !isset($ticket['id']))
+        throw new \Exception('Viallinen pyyntö: tukipyynnön tiedot puuttuu.');
+
+      // Render view.
+      return $this->render('freshdesk_ticket', [
+        'partial_ticket' => $ticket,
+        'style' => $style
+      ]);
+    }
+
+
+    // Ticket data is requested; fetch it from the API. First, validate ID.
+    if (!is_numeric($ticket) || $ticket < 0)
+      throw new \Exception('Viallinen pyyntö: tukipyynnön ID ei annettu.');
+
+    $headers = null;
+    $response = $freshdesk->viewTicket($ticket, ['conversations', 'requester'], $headers);
+    $has_errors = false;
+    $error_text = null;
+
+    // Check for errors in the response.
+    if (isset($response['errors'])) {
+
+      // Errors in response; build error text.
+      $error_text = "Tukipyynnön tietojen hakeminen epäonnistui. Palvelimen palauttamat viestit: '{$response['description']}'";
+      $has_errors = true;
+
+      // Errors are usually in an array; make sure to avoid errors.
+      if (is_array($response['errors'])) {
+        $error_text .= "\n\nVirheet:\n";
+
+        // Create a line per each error.
+        foreach ($response['errors'] as $error) {
+          if (!empty($error['message']))
+            $error_text .= "{$error['message']}";
+          if (!empty($error['field']))
+            $error_text .= " ({$error['field']})";
+          if (!empty($error['code']))
+            $error_text .= " -- Virhekoodi: {$error['code']}";
+          $error_text .= "\n";
+        }
+      }
+    }
+
+    // Check if the server returned 404, meaning that the ticket was not found.
+    if (false !== strpos($headers['http_code'] ?? '', '404')) {
+
+      // Ticket not found; set error text.
+      $error_text = "Tukipyyntöä ei löytynyt Freshdeskistä. Annettu tunniste on viallinen.";
+      $has_errors = true;
+    }
+
+
+    // Render ticket when style != 'raw' (not required yet).
+    // if ($style != 'raw')
+    //   return $this->render('freshdesk_ticket', [...]);
+
+    // Output results.
+    if ($has_errors) {
+      echo json_encode([
+        'headers' => $headers,
+        'response' => $response,
+        'error_text' => $error_text
+      ]);
+    } else {
+      echo json_encode([
+        'headers' => $headers,
+        'ticket' => $response
       ]);
     }
   }
