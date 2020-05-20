@@ -298,7 +298,12 @@ $dateDiff = dateDiff($from, $to);
   if($ilman_lounastaukot)
 	unset($hyv_arr[2]);
   $hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, $hyv_arr, 3, false, 0, true);
-
+/*
+echo '<pre>';
+print_r($hyv_tyotunnit_all);
+echo '</pre>';
+exit;
+*/
   if(!$ilman_lounastaukot)
   $lounaat_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), 2, false, 0, true);
 
