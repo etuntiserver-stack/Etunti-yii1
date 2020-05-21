@@ -764,9 +764,8 @@ if (
 
   // Loop ticket listing and draw a collapsible box for each one.
   foreach ($freshdesk_tickets as $ticket) {
-    // $this->actionFreshdesk_ticket($ticket, 'collapse');
-    $this->render('freshdesk_ticket', [
-      'ticket' => $ticket,
+    $this->renderPartial('freshdesk_ticket', [
+      'partial_ticket' => $ticket,
       'style' => 'collapse'
     ]);
   }

@@ -1,28 +1,32 @@
 <?php
 
-// Check for errors; partial ticket data is required when style is 'collapse'.
-if ($style == 'collapse') {
-  if (empty($partial_ticket['id'])) { // ensure that partial ticket data was provided
-    $style = 'error';
-    $error_text = (!empty($error_text)) ? $error_text :
-      "virhe: tukipyynnön tiedot puuttuvat. jos vika jatkuu, ota yhteys ylläpitoon.";
-    echo '<p><b>(virhe: tukipyynnön tiedot puuttuvat. jos vika jatkuu, ota yhteys ylläpitoon.)</b></p>';
-    $style = null;
-  }
-} else {
-  if (empty($ticket_id) || !is_numeric($ticket_id)) { // ensure that ticket ID was provided
-    echo '<p><b>(virhe: annettu tukipyynnön tunniste (id) on viallinen. jos vika jatkuu, ota yhteys ylläpitoon.)</b></p>';
-    $style = null;
-  }
+/** @var Freshdesk */
+$freshdesk = Yii::createComponent('Freshdesk');
+
+if ($freshdesk->isDisabled()) {
+  throw new \Exception('Freshdesk on pois päältä tällä domainilla.');
 }
 
-// var_dump($ticket_id ?? 0, $partial_ticket ?? []);exit;
+// Specify default and valid styles. This list will be appended to later.
+$style = empty($style) ? null : $style;
+static $default_style = 'collapse';
 
-// Draw default style 'collapse' (conversation listing with stacked boxes.)
+// ---- Valid styles ----
+// 'collapse': ticket is rendered inside a collapsible AJAX box.
+// 'raw' (disabled): server response echoed as JSON.
+$valid_styles = ['collapse'];
+
+// Default to 'collapse' (JSON output) when style is not specified or invalid.
+if (!in_array($style, $valid_styles))
+  $style = $default_style;
+
+// If style is 'collapse', ticket data is fetched only when ticket is clicked.
+// Otherwise, ticket data should be fetched now.
 if ($style == 'collapse') {
 
-  /** @var Freshdesk object */
-  $freshdesk = Yii::createComponent('Freshdesk');
+  // Ensure that partial ticket data was provided.
+  if (empty($partial_ticket['id']))
+    throw new \Exception("virhe: tukipyynnön tiedot puuttuvat. jos vika jatkuu, ota yhteys ylläpitoon.");
 
   // Generate a link to the given ticket in Freshdesk.
   // $ticket_link = $freshdesk->getTicketUrl($ticket_id);
@@ -91,26 +95,19 @@ if ($style == 'collapse') {
   // Previous link; safekeeping it here.
   // echo CHtml::link($ticket_link_text, $ticket_link, ['target' => '_blank', 'style' => 'color:inherit;']) . '<br>';
 
-?>
+  ?>
 
-  <!-- Output collapse button with the formed text. -->
-  <button type="button" data-toggle="collapse" data-target="#<?= $div_id; ?>"><?= $ticket_link_text ?></button>
+    <!-- Output collapse button with the formed text. -->
+    <button type="button" data-toggle="collapse" data-target="#<?= $div_id; ?>"><?= $ticket_link_text ?></button>
 
-  <!-- Form the hidden box. When collapsed, ticket data is fetched via AJAX. -->
-  <div id="<?= $div_id; ?>" class="collapse">
-    <div class="well well-sm">
-      <!-- htmlentities(json_encode($partial_ticket)); -->
+    <!-- Form the hidden box. When collapsed, ticket data is fetched via AJAX. -->
+    <div id="<?= $div_id; ?>" class="collapse">
+      <div class="well well-sm">
+        <!-- htmlentities(json_encode($partial_ticket)); -->
+      </div>
     </div>
-  </div>
 
-<?php
-}
-
-// Notify about possible errors.
-if ($style == 'error') {
-  if (!empty($error_text)) $error_text = rtrim($error_text, ". \t\n\r\0\x0B");
-  if (empty($error_text)) $error_text = 'tukipyynnön haku epäonnistui';
-  echo "<p><b>(virhe: $error_text. jos vika jatkuu, ota yhteys ylläpitoon.)</b></p>";
+  <?php
 }
 
 ?>
@@ -124,17 +121,16 @@ if ($style == 'error') {
 
       const ticketId = '<?= $partial_ticket['id']; ?>';
       const ticketDivId = '<?= $div_id; ?>';
-      return;
 
       $.ajax(`${location.protocol}//${location.host}/index.php/asiakkaat/freshdesk_ticket`, {
 
         type: 'POST',
         data: {
-          ticket: ticketId
+          id: ticketId
         },
 
         error: function (xhr, status, error) {
-          $(`#${ticketDivId} .well`).html(`(pyynnössä tapahtui virhe: ${xhr.responseText})`);
+          $(`#${ticketDivId} .well`).html(`Pyynnössä tapahtui virhe: ${xhr.responseText}`);
           console.log(`(Ticket ID ${ticketId} request) Error: ${xhr.responseText}`);
         },
 
@@ -170,7 +166,7 @@ if ($style == 'error') {
 
             // Everything is normal; output received ticket data.
             console.log(`(Ticket ID ${ticketId} request) Request finished without problems.`);
-            $(`#${ticketDivId} .well`).html(`<p>${parsed.subject}</p>`);
+            $(`#${ticketDivId} .well`).html(`<p>${parsed.ticket.subject}</p>`);
 
             // $.each(parsed, function (i, t) {
             //   if (typeof (t) != "object") {
@@ -185,3 +181,74 @@ if ($style == 'error') {
     });
   });
 </script>
+
+
+
+<?php
+
+//* Previous code for loading ticket through the API; keeping this code here
+//* in case it is needed again. For now, this view is using another controller
+//* action through AJAX to get the ticket data when required.
+
+// Ensure that ticket ID was provided.
+// if (empty($ticket_id) || !is_numeric($ticket_id)) {
+  //   throw new \Exception('Viallinen pyyntö: tukipyynnön ID ei annettu.');
+  // echo '<p><b>(virhe: annettu tukipyynnön tunniste (id) on viallinen. jos vika jatkuu, ota yhteys ylläpitoon.)</b></p>';
+  // $style = null;
+// }
+
+// // Ticket data is requested; fetch it using the API.
+// $headers = null;
+// $response = $freshdesk->viewTicket($ticket, ['conversations', 'requester'], $headers);
+// $has_errors = false;
+// $error_text = null;
+
+// // Check for errors in the response.
+// if (isset($response['errors'])) {
+
+//   // Errors in response; build error text.
+//   $error_text = "Tukipyynnön tietojen hakeminen epäonnistui. Palvelimen palauttamat viestit: '{$response['description']}'";
+//   $has_errors = true;
+
+//   // Errors are usually in an array; make sure to avoid errors.
+//   if (is_array($response['errors'])) {
+//     $error_text .= "\n\nVirheet:\n";
+
+//     // Create a line per each error.
+//     foreach ($response['errors'] as $error) {
+//       if (!empty($error['message']))
+//         $error_text .= "{$error['message']}";
+//       if (!empty($error['field']))
+//         $error_text .= " ({$error['field']})";
+//       if (!empty($error['code']))
+//         $error_text .= " -- Virhekoodi: {$error['code']}";
+//       $error_text .= "\n";
+//     }
+//   }
+// }
+
+// // Check if the server returned 404, meaning that the ticket was not found.
+// if (false !== strpos($headers['http_code'] ?? '', '404')) {
+
+//   // Ticket not found; set error text.
+//   $error_text = "Tukipyyntöä ei löytynyt Freshdeskistä. Annettu tunniste on viallinen.";
+//   $has_errors = true;
+// }
+
+// // Render ticket when style != 'raw' (not required yet).
+// // if ($style != 'raw')
+// //   return $this->render('freshdesk_ticket', [...]);
+
+// // Output results.
+// if ($has_errors) {
+//   echo json_encode([
+//     'headers' => $headers,
+//     'response' => $response,
+//     'error_text' => $error_text
+//   ]);
+// } else {
+//   echo json_encode([
+//     'headers' => $headers,
+//     'ticket' => $response
+//   ]);
+// }

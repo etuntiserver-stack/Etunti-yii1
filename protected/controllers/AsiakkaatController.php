@@ -2352,44 +2352,23 @@ $xml = '
   }
 
   /**
-   * Partial view for a Freshdesk ticket, with styles to fit requesting view.
-   *
-   * ---- when $style is 'collapse': ----
-   * $ticket must contain partial ticket data from ticket listing. This is used
-   * to form header text and initial information before requesting full data.
-   * This style requests ticket data later when clicked, so response includes:
-   *   'partial_ticket' : partial ticket data from ticket listing. full data is
-   *                      requested if needed when the ticket is clicked.
-   *            'style' : requested style.
-   *
-   * ---- when $style is 'raw': ----
-   * If request is successful, response include:
-   *       'ticket' : ticket data array as specified in {@see Freshdesk} class.
-   *      'headers' : headers returned by the server.
-   * Otherwise, if there's an error, response includes:
-   *     'response' : raw response; can be empty, like on 404.
-   *      'headers' : headers returned by the server
-   *   'error_text' : pre-formed error text, if possible
-   *
-   * @param mixed $ticket
-   * Ticket ID or partial ticket data from ticket listing. If using a style that
-   * doesn't request full ticket data right away, like 'collapse', partial
-   * ticket data is required to form title, etc.
-   *
-   * @param string $style
-   * Style/behavior of the returned data. Options:
-   *
-   * 'raw':
+   * Fetches a single ticket from Freshdesk with full (essential) information.
    * Returns server response as is; usually ticket and headers. Server response
    * is echoed out as JSON. This is usually for AJAX requests.
    *
-   * 'collapse':
-   * Renders a flat link (text) that opens details on click. Ticket data is not
-   * requested from API until clicked. Provides a conversation listing with
-   * stacked boxes, and additional information like dates, and direct links.
-   * This requires partial ticket data to be provided in $ticket.
+   * If request is successful, response includes:
+   *       'ticket' : ticket data array as specified in {@see Freshdesk} class
+   *      'headers' : headers returned by the server
+   *
+   * When there's an error, response includes:
+   *     'response' : raw response; can be empty, like when 404
+   *      'headers' : headers returned by the server
+   *   'error_text' : pre-formed error text, if possible
+   *
+   * @param mixed $id
+   * Remote ID of the ticket that is to be loaded.
    */
-  public function actionFreshdesk_ticket($ticket = null, $style = null)
+  public function actionFreshdesk_ticket($id = null)
   {
     /** @var Freshdesk */
     $freshdesk = Yii::createComponent('Freshdesk');
@@ -2399,45 +2378,15 @@ $xml = '
     }
 
     // Get POST values.
-    if (isset($_POST['ticket']))
-      $ticket = $_POST['ticket'];
-    if (isset($_POST['style']) && !empty($_POST['style']))
-      $style = $_POST['style'];
-
-    // echo json_encode(print_r($ticket, true) . ' --- ' . print_r($style, true)); exit;
-
-    // Specify default and valid styles. This list will be appended to later.
-    static $default_style = 'raw';
-    static $valid_styles = [
-      'raw',      // default, server response is echoed as JSON.
-      'collapse'  // ticket is rendered inside a collapsible AJAX box.
-    ];
-
-    // Default to 'raw' (JSON output) when style is not specified or invalid.
-    if (!in_array($style, $valid_styles))
-      $style = $default_style;
-
-    // If style is 'collapse', proceed to the view.
-    if ($style == 'collapse') {
-
-      // Ensure that partial ticket data was provided.
-      if (!is_array($ticket) || !isset($ticket['id']))
-        throw new \Exception('Viallinen pyyntö: tukipyynnön tiedot puuttuu.');
-
-      // Render view.
-      return $this->render('freshdesk_ticket', [
-        'partial_ticket' => $ticket,
-        'style' => $style
-      ]);
-    }
-
+    if (isset($_POST['id']))
+      $id = $_POST['id'];
 
     // Ticket data is requested; fetch it from the API. First, validate ID.
-    if (!is_numeric($ticket) || $ticket < 0)
+    if (!is_numeric($id) || $id < 0)
       throw new \Exception('Viallinen pyyntö: tukipyynnön ID ei annettu.');
 
     $headers = null;
-    $response = $freshdesk->viewTicket($ticket, ['conversations', 'requester'], $headers);
+    $response = $freshdesk->viewTicket($id, ['conversations', 'requester'], $headers);
     $has_errors = false;
     $error_text = null;
 
@@ -2472,7 +2421,6 @@ $xml = '
       $error_text = "Tukipyyntöä ei löytynyt Freshdeskistä. Annettu tunniste on viallinen.";
       $has_errors = true;
     }
-
 
     // Render ticket when style != 'raw' (not required yet).
     // if ($style != 'raw')
