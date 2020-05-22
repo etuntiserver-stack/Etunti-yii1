@@ -2170,7 +2170,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		switch ($hyvaksytty) {
 				// Case 3 falls through due to no break statement, this is intentional.
 			case 3:
-				$criteria->addCondition("hyvaksytty!='' AND hyvaksytty IS NOT NULL");
+				$criteria->addCondition("hyvaksytty!=''");
 			case '':
 			case 2:
 				$criteria->addCondition("id NOT IN (SELECT kid FROM sivexkuitti_repaired)");
@@ -2186,7 +2186,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			$criteria = new CDbCriteria();
 			$buildCriteria($criteria);
 			if ($hyvaksytty == 3)
-				$criteria->addCondition("hyvaksytty!='' AND hyvaksytty IS NOT NULL");
+				$criteria->addCondition("hyvaksytty!=''");
 			$tot = Toteutuneet::model()->findAll($criteria);
 		}
 
