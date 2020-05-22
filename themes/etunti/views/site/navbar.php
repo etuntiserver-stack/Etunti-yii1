@@ -1162,7 +1162,7 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
 			Yii::app()->user->domain == 'demo' 
 			|| Yii::app()->user->domain == 'sivex' 
 			|| Yii::app()->user->domain == 'kotipuhtaaksi'
-			|| Yii::app()->user->domain == 'staging_kotipuhtaaksi' 
+			|| Yii::app()->user->domain == 'staging_kotipuhtaaksi' //test
 	      ): ?>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/auto">
