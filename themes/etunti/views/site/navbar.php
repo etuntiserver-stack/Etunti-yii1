@@ -1139,7 +1139,7 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
             </ul>
           </li>
 	<?php endif; ?>
-<?=Yii::app()->user->domain?>
+
 	<?php if(in_array('3',$tas) || Yii::app()->user->domain == 'staging_kotipuhtaaksi') : ?>
           <li>
             <a class="accordion-toggle laskutuksenHallinta" href="#">
@@ -1189,7 +1189,7 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
-              <li>
+              <li><?=Yii::app()->user->domain?>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/paivakirja">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Lasku päiväkirjа'); ?></a>
               </li>
