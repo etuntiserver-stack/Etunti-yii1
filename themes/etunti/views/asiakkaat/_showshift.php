@@ -22,7 +22,7 @@
 	echo '<tr class="'.(($data->peruutettu != 0)? 'text-danger':'').'">';
 	echo '<td>
 	'.CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
-				array('/tyovuoroot/beta?year='.date("Y", strtotime($data->pvm)).'&week='.date("W", strtotime($data->pvm)).'&tv_id='.$this_id), 
+				array('/tyovuoroot/beta?mode=vko&year='.date("Y", strtotime($data->pvm)).'&week='.date("W", strtotime($data->pvm)).'&tv_id='.$this_id), 
 				array(
 					'class'=>'btn btn-primary myBgColors', 
 					'style'=>'color:white', 
