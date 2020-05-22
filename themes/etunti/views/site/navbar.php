@@ -1139,7 +1139,7 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
             </ul>
           </li>
 	<?php endif; ?>
-
+<?=Yii::app()->user->domain?>
 	<?php if(in_array('3',$tas) || Yii::app()->user->domain == 'staging_kotipuhtaaksi') : ?>
           <li>
             <a class="accordion-toggle laskutuksenHallinta" href="#">
