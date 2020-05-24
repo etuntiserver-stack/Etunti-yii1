@@ -2254,7 +2254,7 @@ $xml = '
       $export = $_POST['export'];
 
     // If $page is provided, get a list of tickets.
-    elseif (is_numeric($page)) {
+    if (is_numeric($page)) {
 
       $refresh = ($page < 0);
       $page = abs($page);
