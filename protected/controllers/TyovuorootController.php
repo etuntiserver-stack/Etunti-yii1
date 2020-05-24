@@ -2206,6 +2206,18 @@ class TyovuorootController extends Controller
 		}
 		//   tyoryhma -->
 
+		if(!isset(Yii::app()->session['tyontekijat']))
+		{
+			// <-- Tyoryhmat
+			$tt = Yii::app()->createController('Tyontekijat');
+			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+			$ids = implode(",", $tt_arr);
+			if( count($tt_arr) > 0 ){
+		        	$criteria->addCondition (" id IN ($ids) ");
+			} 
+			//    Tyoryhmat -->
+		}
+
 		if (isset(Yii::app()->session['tyontekijat']) and count(Yii::app()->session['tyontekijat'] > 0)) {
 			$ids = implode(",", Yii::app()->session['tyontekijat']);
 			$criteria->addCondition('id IN (' . $ids . ') ');

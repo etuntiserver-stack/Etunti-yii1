@@ -25,7 +25,7 @@ foreach($attributes as $str){
 
   } else {
 
-	$asiakas_hyvaksy = '';
+  $asiakas_hyvaksy = '';
   if(isset($ashyv) and !empty($ashyv)){
     $exp = explode("_", $ashyv);
       if(isset($exp[0]) and $exp[0] == 0)
@@ -36,22 +36,15 @@ foreach($attributes as $str){
 	$asiakas_hyvaksy = '<b class="glyphicon glyphicon-warning-sign pull-right text-danger"></b>';
   }
 
-  $m = Mobile::model()->findbypk($idKid,array("select"=>"hyvaksytty,admin"));
+  $admin = '';
+  if(isset($str['admin']) and $str['admin'] == 1)
+	$admin = 'text-danger text-uppercase';
 
-    $admin = '';
-  if(isset($m->admin) and $m->admin == 1)
-  {
-    $admin = 'text-danger text-uppercase';
-  }
+  $chk[$rivi] = '';
+  if(!empty($str['hyvaksytty']))
+	$chk[$rivi] = 'checked';
 
-    $chk[$rivi] = '';
-  if(!empty($m->hyvaksytty))
-  {
-    $chk[$rivi] = 'checked';
-  }
-
-    $mod = '';
-
+  $mod = '';
   if(isset($muutos) and $muutos == true  and !isset($_POST['tulosta'])){
     $mod = 'update';
     $ap = ' <i class="link text-danger fa fa-refresh poistaTot" rivi="'.$rivi.'" for="'.$did.'_'.$tid.'" data-toggle="tooltip" title="'.Yii::t('main', 'Palauta alkuperäinen').'" aria-hidden="true"></i>';

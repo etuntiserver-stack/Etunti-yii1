@@ -148,7 +148,9 @@
 	foreach($dataAll as $arr){
 		$tv = $this->renderPartial('_showshift',array(
 			'data' => $arr['data'],
-			'this_id' => $arr['this_id']
+			'this_id' => $arr['this_id'],
+			'this_pvm' => $arr['this_pvm'],
+			'this_tid' => $arr['this_tid']
 		), true);
 		echo $tv;
 	}
