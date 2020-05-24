@@ -1,31 +1,36 @@
 <?php
-/* @var $this OhjevideotController */
-/* @var $model Ohjevideot */
 
-$this->breadcrumbs=array(
-	'Ohjevideots'=>array('index'),
-	$model->id,
-);
-
-$this->menu=array(
-	array('label'=>'List Ohjevideot', 'url'=>array('index')),
-	array('label'=>'Create Ohjevideot', 'url'=>array('create')),
-	array('label'=>'Update Ohjevideot', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete Ohjevideot', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Ohjevideot', 'url'=>array('admin')),
-);
 ?>
 
-<h1>View Ohjevideot #<?php echo $model->id; ?></h1>
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
 
-<?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
-		'id',
-		'time',
-		'otsiko',
-		'kuvaus',
-		'tiedoston_nimi',
-		'sort',
-	),
-)); ?>
+	   <h2 class="myBgColors p10"> <i class="fa fa-file-video-o"></i> <?php echo Yii::t('main', 'Katso video'); ?> </h2>
+
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+
+			<?php $this->widget('zii.widgets.CDetailView', array(
+				'data'=>$model,
+				'attributes'=>array(
+					'id',
+					'time',
+					'otsiko',
+					'embed',
+					'kuvaus',
+					//'tiedoston_nimi',
+					//'sort',
+				),
+			)); ?>
+
+                 </div>
+                </div>
+              </div>
+            </div>
+
+        <!-- loppu: .tray-center -->
+        </div>
+
