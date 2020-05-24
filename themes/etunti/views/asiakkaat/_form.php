@@ -85,11 +85,27 @@ if(!isset($model->id) and isset($asetukset->id)){
 $freshdesk = Yii::createComponent('Freshdesk');
 
 if (!$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
+
   $freshdesk_id = $model->freshdesk_id;
-  $freshdesk_pager = $freshdesk->getTicketPaginator(10);
+
+  // $fd_order_by = 'updated_at';
+  // $fd_order_type = 'desc';
+  // if (!in_array($fd_order_by, ['created_at', 'due_by', 'updated_at', 'status']))
+  //   $fd_order_by = 'updated_at';
+  // if (!in_array($fd_order_type, ['asc', 'desc']))
+  //   $fd_order_type = 'desc';
+  // $fd_pager_id = "freshdesk_tickets_orderby_{$fd_order_by}_{$fd_order_type}";
+  $fd_pager_id = "freshdesk_tickets_orderby_updated_at_desc";
+
+  // $freshdesk_pager = $freshdesk->getTicketPaginator(10);
+  $freshdesk_pager = $freshdesk->getTicketPaginator(10, $fd_pager_id, function ($page, $page_size) use ($freshdesk, $fd_order_by, $fd_order_type) {
+    return $freshdesk->listTickets(null, null, $page, $page_size, null, ['requester', 'description'], $fd_order_by, $fd_order_type);
+  });
+
   $freshdesk_tickets = $freshdesk_pager->filtered(1, function ($item) use ($freshdesk_id) {
     return ($item['requester_id'] == $freshdesk_id);
   });
+
   foreach ($freshdesk_tickets as $ticket) {
     if (!in_array($ticket['status'] ?? 0, [4, 5])) {
       $freshdesk_link = $freshdesk->getFreshdeskCustomerUrl($freshdesk_id);
