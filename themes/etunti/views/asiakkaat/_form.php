@@ -98,8 +98,8 @@ if (!$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
   $fd_pager_id = "freshdesk_tickets_orderby_updated_at_desc";
 
   // $freshdesk_pager = $freshdesk->getTicketPaginator(10);
-  $freshdesk_pager = $freshdesk->getTicketPaginator(10, $fd_pager_id, function ($page, $page_size) use ($freshdesk, $fd_order_by, $fd_order_type) {
-    return $freshdesk->listTickets(null, null, $page, $page_size, null, ['requester', 'description'], $fd_order_by, $fd_order_type);
+  $freshdesk_pager = $freshdesk->getTicketPaginator(10, $fd_pager_id, function ($page, $page_size) use ($freshdesk) {
+    return $freshdesk->listTickets(null, null, $page, $page_size, null, ['requester', 'description'], 'updated_at', 'desc');
   });
 
   $freshdesk_tickets = $freshdesk_pager->filtered(1, function ($item) use ($freshdesk_id) {
