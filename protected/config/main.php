@@ -32,11 +32,11 @@ $siirto_domainit = [
 "beauty", // ok
 "blue_tower_oy",
 "bro_workers", // ok
+"camofin_oy", // ok
+"city_saukko_oy", // ok
+"cleana", // ok
+"cleana_oy", // ok
 /*
-"camofin_oy",
-"city_saukko_oy",
-"cleana",
-"cleana_oy",
 "cleanmarin_oy",
 "costan_kotihoito",
 "cutiopalvelut_oy",
