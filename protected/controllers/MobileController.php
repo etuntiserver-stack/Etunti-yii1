@@ -550,7 +550,7 @@ class MobileController extends Controller
 			foreach($dataAll as $k => $arr){
 				$data 	= $arr['data'];
 				if($data->status == 11){
-					$tt 	= $arr['tt'];
+					$tt 	= $data->tt;
 					$pvm 	= date("Ymd", strtotime($data->pvm));
 					$tn	= trim($tt->$tt_order_1.' '.$tt->$tt_order_2);
 					if(!isset($newarr[$pvm][$tn][$data->tid][$data->tyoajanlaatu]))
