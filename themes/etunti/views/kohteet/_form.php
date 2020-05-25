@@ -347,7 +347,7 @@ $(document).ready(function(){
 		<?php echo $form->error($model,'kohteen_neliot'); ?>
 	</div>
 
-	<div class="section fill mb5 bg-primary p5">
+	<div class="section fill mb5 bg-info p5">
 	<?php 
 	if(isset($model->id) and isset($model->avaimet) and count($model->avaimet) > 0){
 		echo '<table class="table">';
