@@ -39,17 +39,17 @@ $siirto_domainit = [
 "cleanmarin_oy", // ok
 "costan_kotihoito", // ok
 "cutiopalvelut_oy", // ok
+"derram_oy", // ok
+"eiole_oy", // ok
+"elamyspalvelu_kolmipyora", // ok
+"electric_shark_tmi", // ok
+"elevent_group_oy", // ok
+"esittely", // ok
+"finndiiling_oy", // ok
+"fritec_oy", // ok
+// "goldenshine", // 
+"greenwitch_oy", // ok
 /*
-"derram_oy",
-"eiole_oy",
-"elamyspalvelu_kolmipyora",
-"electric_shark_tmi",
-"elevent_group_oy",
-"esittely",
-"finndiiling_oy",
-"fritec_oy",
-"goldenshine",
-"greenwitch_oy",
 "hammslaboratorio_pure_art_oy",
 "happy_bowling_oy",
 "helin_siivouspalvelu",
