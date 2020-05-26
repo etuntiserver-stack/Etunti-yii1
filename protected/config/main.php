@@ -36,10 +36,10 @@ $siirto_domainit = [
 "city_saukko_oy", // ok
 "cleana", // ok
 "cleana_oy", // ok
+"cleanmarin_oy", // ok
+"costan_kotihoito", // ok
+"cutiopalvelut_oy", // ok
 /*
-"cleanmarin_oy",
-"costan_kotihoito",
-"cutiopalvelut_oy",
 "derram_oy",
 "eiole_oy",
 "elamyspalvelu_kolmipyora",
