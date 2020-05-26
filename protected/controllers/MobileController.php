@@ -154,14 +154,19 @@ class MobileController extends Controller
 
 		if($ext == 'pdf' or $ext == 'doc')
 		{
-		$c .= '<table id="ylataulu">
-		 <tr><td>
-		  <img src="'.$asetukset->logon_polkku.'" height="'.$asetukset->logon_korkeus.'">
-		 </td><td align="right">
-		    '.$header.'
-		 </td>
-		 </tr>
-		</table>';
+			$img = $asetukset->logon_polkku;
+			$type = pathinfo($path, PATHINFO_EXTENSION);
+			$data = file_get_contents($img);
+			$base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+
+			$c .= '<table id="ylataulu">
+			 <tr><td>
+			  <img src="'.$base64.'" height="'.$asetukset->logon_korkeus.'">
+			 </td><td align="right">
+			    '.$header.'
+			 </td>
+			 </tr>
+			</table>';
 		}
 
 		$c .= preg_replace("/(?=\>\s+\n|\n)+(\s+)/", '', $html_content);
