@@ -63,20 +63,20 @@ $siirto_domainit = [
 "kivat_pihat", // ok
 "kmvkotipalvelut_oy", // ok
 "kortipalvelu_raikastuuli_profit_dealers_oy", // ok
+"koti1_palvelut_oy", // ok
+"kotipalvelu_pajunkissa", // ok
+"kotipalvelu_sydankapy_oy", // ok
+"kotipari_oy", // ok
+"koti_consulting_oy", // ok
+"koti_puhtaaksi_oy", // suljettu
+"koti_puhtaaksi_testi", // ok
+"kototiimi_oy", // ok
+"kotova_oy", // ok
+"krassat_oy", // ok
+"kuljetus_pennanen", // ok
+"kuljetus_vkujala_oy", // ok
 /*
-"koti1_palvelut_oy",
-"kotipalvelu_pajunkissa",
-"kotipalvelu_sydankapy_oy",
-"kotipari_oy",
-"koti_consulting_oy",
-"koti_puhtaaksi_oy",
-"koti_puhtaaksi_testi",
-"kototiimi_oy",
-"kotova_oy",
-"krassat_oy",
-"kuljetus_pennanen",
-"kuljetus_vkujala_oy",
-"kvhpalvelut",
+"kvhpalvelut", //
 "kvkoneurakointi_oy",
 "k__m_elokuvat_oy",
 "labsense_oy",
