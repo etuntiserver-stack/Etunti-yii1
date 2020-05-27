@@ -75,10 +75,10 @@ $siirto_domainit = [
 "krassat_oy", // ok
 "kuljetus_pennanen", // ok
 "kuljetus_vkujala_oy", // ok
+"kvhpalvelut", // ok
+"kvkoneurakointi_oy", // ok
+"k__m_elokuvat_oy", // ok
 /*
-"kvhpalvelut", //
-"kvkoneurakointi_oy",
-"k__m_elokuvat_oy",
 "labsense_oy",
 "lecator_oy",
 "leenan_puhdistuspalvelu_oy",
