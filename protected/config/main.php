@@ -82,22 +82,22 @@ $siirto_domainit = [
 "lecator_oy", // ok
 "leenan_puhdistuspalvelu_oy", // ok
 "luminous_palvelut_oy", // ok
-"majatalo_kupittaa_oy", // ok
+"majatalo_kupittaa_oy", // ok Oli paljon tyovuoroja
+"ma_testaan_tuttavalle_tsaana", // suljettu
+"mitoka", // ok
+"moppimuija", // ok
+"mukanas", // ok
+"multivision_tmi", // ok
+"muuble_oy", // ok
+"myhelp", // ok
+"nixisiivous", // ok
+"oiva_kotisiivous", // ok
+"oma_yritys", // suljettu
+"onnellisten_tiimi", // ok
+"opepooli_oy", // ok
+"oxline_oy", // ok
+"paakaupunkiseudun_spsiivous_oy", // ok
 /*
-"ma_testaan_tuttavalle_tsaana",
-"mitoka",
-"moppimuija",
-"mukanas",
-"multivision_tmi",
-"muuble_oy",
-"myhelp",
-"nixisiivous",
-"oiva_kotisiivous",
-"oma_yritys",
-"onnellisten_tiimi",
-"opepooli_oy",
-"oxline_oy",
-"paakaupunkiseudun_spsiivous_oy",
 "perustettava_yhtio",
 "pesiola_oy",
 "petax_oy",
