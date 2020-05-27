@@ -49,21 +49,21 @@ $siirto_domainit = [
 "fritec_oy", // ok
 // "goldenshine", // 
 "greenwitch_oy", // ok
+"hammslaboratorio_pure_art_oy", // ok
+"happy_bowling_oy", // ok
+"helin_siivouspalvelu", // suljettu
+"hm_tasoite_oy", // ok
+"hoitokoti", // ok
+"inkan_kotitalouspalvelut_oy", // ok
+"jani_malmberg", // ok
+"jarvo_oy", // ok
+"katinala_av_oy", // ok
+"kaveko_oy", // ok
+"kiurun_kuriiri_oy", // ok
+"kivat_pihat", // ok
+"kmvkotipalvelut_oy", // ok
+"kortipalvelu_raikastuuli_profit_dealers_oy", // ok
 /*
-"hammslaboratorio_pure_art_oy",
-"happy_bowling_oy",
-"helin_siivouspalvelu",
-"hm_tasoite_oy",
-"hoitokoti",
-"inkan_kotitalouspalvelut_oy",
-"jani_malmberg",
-"jarvo_oy",
-"katinala_av_oy",
-"kaveko_oy",
-"kiurun_kuriiri_oy",
-"kivat_pihat",
-"kmvkotipalvelut_oy",
-"kortipalvelu_raikastuuli_profit_dealers_oy",
 "koti1_palvelut_oy",
 "kotipalvelu_pajunkissa",
 "kotipalvelu_sydankapy_oy",
