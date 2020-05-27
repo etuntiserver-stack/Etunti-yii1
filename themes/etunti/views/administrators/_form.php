@@ -7,7 +7,7 @@
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'administrators-form',
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>true,
 )); ?>
 
 
