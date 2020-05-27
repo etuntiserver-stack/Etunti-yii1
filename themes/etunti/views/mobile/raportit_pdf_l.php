@@ -32,7 +32,7 @@ window.onload = function () {
 
 
 
-  <p><?php $site = Yii::app()->createController('Site'); echo $site[0]->logoShower(null); ?></p>
+  <?php /* <p><?php $site = Yii::app()->createController('Site'); echo $site[0]->logoShower(null); ?></p> */ ?>
   
   <?php if(isset(Yii::app()->session['from']) and isset(Yii::app()->session['to'])) : ?>
     <p><b><?php echo Yii::t('main', $tyyppi); ?> <?php echo date("d.m.Y",strtotime(Yii::app()->session['from'])).'-'.date("d.m.Y",strtotime(Yii::app()->session['to'])); ?></b></p>

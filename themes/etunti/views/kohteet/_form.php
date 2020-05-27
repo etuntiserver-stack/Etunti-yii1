@@ -347,14 +347,21 @@ $(document).ready(function(){
 		<?php echo $form->error($model,'kohteen_neliot'); ?>
 	</div>
 
+	<div class="section fill mb5 bg-info p5">
 	<?php 
 	if(isset($model->id) and isset($model->avaimet) and count($model->avaimet) > 0){
-	echo CHtml::link('Avaimet', array('/avaimet/index', 'osoite' => $model->osoite), array('class'=>'btn btn-default btn-block')); 
+		echo '<table class="table">';
+		echo '<tr><th>Avainnumero</th><th>Sijainti</th></tr>';
+		foreach($model->avaimet as $avain){
+			echo '<tr><td>'.$avain->avainnumero.'</td><td>'.$avain->sijainti.'</td></tr>';
+		}
+		echo '</table>';
+		echo CHtml::link('Avaimet sivulle', array('/avaimet/index', 'osoite' => $model->osoite), array('class'=>'btn btn-default btn-block')); 
 	}
-	if(isset($model->id) and isset($model->avaimet) and count($model->avaimet) == 0){
-	echo CHtml::link('Luo avain', array('/avaimet/create', 'asiakas_id' => $model->asiakas_id, 'kohde_id' => $model->id), array('class'=>'btn btn-default btn-block')); 
-	}
+	if(isset($model->id))
+		echo CHtml::link('Luo avain', array('/avaimet/create', 'asiakas_id' => $model->asiakas_id, 'kohde_id' => $model->id), array('class'=>'btn btn-default btn-block')); 
 	?>
+	</div>
 
   </div><div class="col-sm-6">
 

@@ -115,11 +115,13 @@ class OhjevideotController extends Controller
 		if(isset($_POST['Ohjevideot']))
 		{
 			$model->attributes=$_POST['Ohjevideot'];
-            		$model->tiedoston_nimi=CUploadedFile::getInstance($model,'tiedoston_nimi');
+            		//$model->tiedoston_nimi=CUploadedFile::getInstance($model,'tiedoston_nimi');
             		if($model->save()){
+				/*
 		                $path=Yii::getPathOfAlias('webroot').'/lib/video/'.$model->tiedoston_nimi->getName();
 		                $model->tiedoston_nimi->saveAs($path);
-				$this->redirect(array('view','id'=>$model->id));
+				*/
+				$this->redirect(array('//site/ohjevideot'));
 		        } else {
 				print_r($model->getErrors());
 			}
@@ -152,13 +154,14 @@ class OhjevideotController extends Controller
 		{
 			$model->attributes=$_POST['Ohjevideot'];
 			$tiedoston_nimi = CUploadedFile::getInstance($model, 'tiedoston_nimi');
-			$model->tiedoston_nimi = $tiedoston_nimi !== null ? $tiedoston_nimi->getName() : $original_tiedosto;
+			//$model->tiedoston_nimi = $tiedoston_nimi !== null ? $tiedoston_nimi->getName() : $original_tiedosto;
             		if($model->save()){
-
+				/*
 				if (!empty($tiedoston_nimi)){
 		           	     $path=Yii::getPathOfAlias('webroot').'/lib/video/'.$tiedoston_nimi->getName();
 		          	      $tiedoston_nimi->saveAs($path);
 				}
+				*/
 				$this->redirect(array('//site/ohjevideot'));
 
 		        } else {

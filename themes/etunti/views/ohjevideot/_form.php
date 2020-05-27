@@ -55,11 +55,17 @@
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'embed'); ?>
+		<?php echo $form->textArea($model,'embed',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'embed'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kuvaus'); ?>
 		<?php echo $form->textArea($model,'kuvaus',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'kuvaus'); ?>
 	</div>
-
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tiedoston_nimi'); ?>
 		<?php echo $form->FileField($model,'tiedoston_nimi', array('class'=>'form-control')); ?>
@@ -71,7 +77,7 @@
 		<?php echo $form->numberField($model,'sort',array('size'=>60,'maxlength'=>3, 'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'sort'); ?>
 	</div>
-
+*/ ?>
 	<div class="section fill mb5">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna', array('class'=>'btn btn-primary')); ?>
 	</div>

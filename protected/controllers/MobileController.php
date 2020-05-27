@@ -154,14 +154,19 @@ class MobileController extends Controller
 
 		if($ext == 'pdf' or $ext == 'doc')
 		{
-		$c .= '<table id="ylataulu">
-		 <tr><td>
-		  <img src="'.$asetukset->logon_polkku.'" height="'.$asetukset->logon_korkeus.'">
-		 </td><td align="right">
-		    '.$header.'
-		 </td>
-		 </tr>
-		</table>';
+			$img = $asetukset->logon_polkku;
+			$type = pathinfo($path, PATHINFO_EXTENSION);
+			$data = file_get_contents($img);
+			$base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+
+			$c .= '<table id="ylataulu">
+			 <tr><td>
+			  <img src="'.$base64.'" height="'.$asetukset->logon_korkeus.'">
+			 </td><td align="right">
+			    '.$header.'
+			 </td>
+			 </tr>
+			</table>';
 		}
 
 		$c .= preg_replace("/(?=\>\s+\n|\n)+(\s+)/", '', $html_content);
@@ -550,7 +555,7 @@ class MobileController extends Controller
 			foreach($dataAll as $k => $arr){
 				$data 	= $arr['data'];
 				if($data->status == 11){
-					$tt 	= $arr['tt'];
+					$tt 	= $data->tt;
 					$pvm 	= date("Ymd", strtotime($data->pvm));
 					$tn	= trim($tt->$tt_order_1.' '.$tt->$tt_order_2);
 					if(!isset($newarr[$pvm][$tn][$data->tid][$data->tyoajanlaatu]))

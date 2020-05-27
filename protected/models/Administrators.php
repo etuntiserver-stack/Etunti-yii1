@@ -85,6 +85,7 @@ public $adm_salasana_repeat;
 		// will receive user inputs.
 		return array(
 			array('adm_login, adm_email, adm_nimi', 'required'),
+			array('adm_login', 'unique'),
 			//array('adm_salasana', 'required', 'on'=>'create'),
 			//array('adm_salasana', 'compare', 'compareAttribute'=>'adm_salasana_repeat' , 'on'=>'update'),
 			array('status', 'numerical', 'integerOnly'=>true),

@@ -31,6 +31,7 @@ class Ohjevideot extends CActiveRecord
 			'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
 			'ohjevideo_ryhma' => 'varchar(255) DEFAULT NULL',
 			'otsiko' => 'varchar(500) DEFAULT NULL',
+			'embed' => 'text DEFAULT NULL',
 			'kuvaus' => 'text DEFAULT NULL',
 			'tiedoston_nimi' => 'varchar(255) DEFAULT NULL',
 			'sort' => 'int(3) DEFAULT 0',
@@ -53,7 +54,7 @@ class Ohjevideot extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('otsiko, kuvaus', 'required'),
+			array('otsiko, embed, kuvaus', 'required'),
 			array('sort', 'numerical', 'integerOnly'=>true),
 			array('otsiko, tiedoston_nimi, ohjevideo_ryhma', 'length', 'max'=>500),
 			//array('tiedoston_nimi', 'required','on'=>array('create')),

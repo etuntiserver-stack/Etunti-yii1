@@ -86,7 +86,7 @@ class AdministratorsController extends Controller
 		$model=new Administrators('create');
 
 		// Uncomment the following line if AJAX validation is needed
-		//$this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Administrators']))
 		{

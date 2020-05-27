@@ -35,9 +35,7 @@
 				echo '<td width="50%">' . CHtml::link('<h2>'.$data->otsiko.'</h2><br>'.$data->kuvaus, array('ohjevideot', 'id' => $data->id)).'</td>';
 				echo '
 				<td>
-					<video class="img-thumbnail" controls="controls" style="width:100%">
-					  <source src="../../ohjevideot/'.$data->tiedoston_nimi.'" type="video/mp4">
-					</video>
+					'.$data->embed.'
 				</td>';
 				echo '</tr>';
 		   	}
