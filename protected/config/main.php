@@ -128,26 +128,26 @@ $siirto_domainit = [
 "sinun_avuksi_oy", // ok
 "sirius_media_oy", // ok
 "sisustussuunnittelu_jonita_raikko", // ok
+"sk_puhtaaksi_oy", // ok
+"soittolinja_oy", // ok
+"staffone_oy", // ok
+"stone_partners_oy", // ok
+"stt_sahko_mikkeli_oy", // ok
+"stvalmennus_oy", // ok
+"suomen_art_ry", // ok
+"swappie_oy", // ok
+"sysman_autoservis_oy", // ok
+"takomee_tmi", // ok
+"taloke_tmi", // ok
+"talouspaja_oy", // ok
+"tampereen_siivous", // suljettu
+"the_process__health__performance_oy", // ok
+"tietohallintomaisterit_oy", // ok
+"tmi_ari_paatelainen", // ok
+"tmi_hannan_kotiapu", // ok
+"tmi_maisa_kuhno", // ok
 /*
-"sk_puhtaaksi_oy", //
-"soittolinja_oy",
-"staffone_oy",
-"stone_partners_oy",
-"stt_sahko_mikkeli_oy",
-"stvalmennus_oy",
-"suomen_art_ry",
-"swappie_oy",
-"sysman_autoservis_oy",
-"takomee_tmi",
-"taloke_tmi",
-"talouspaja_oy",
-"tampereen_siivous",
-"the_process__health__performance_oy",
-"tietohallintomaisterit_oy",
-"tmi_ari_paatelainen",
-"tmi_hannan_kotiapu",
-"tmi_maisa_kuhno",
-"tulola_oy",
+"tulola_oy", // 
 "turvapalvelut_salminen",
 "upsteam_oy",
 "vaakkutech_oy",
