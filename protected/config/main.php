@@ -120,16 +120,16 @@ $siirto_domainit = [
 "siivousliike_puuninki", // ok paljon tyovuoroja
 "siivouspalvelu_forssan_ilona_oy", // ok
 "siivouspalvelu_humalajoki_oy", // ok
+"siivouspalvelu_jelppi_", // ok
+"siivouspalvelu_minhof", // ok
+"siivouspalvelu_tiina_vidgren", // ok
+"siivouspro", // ok
+"siivoussissit", // suljettu
+"sinun_avuksi_oy", // ok
+"sirius_media_oy", // ok
+"sisustussuunnittelu_jonita_raikko", // ok
 /*
-"siivouspalvelu_jelppi_",
-"siivouspalvelu_minhof",
-"siivouspalvelu_tiina_vidgren",
-"siivouspro",
-"siivoussissit",
-"sinun_avuksi_oy",
-"sirius_media_oy",
-"sisustussuunnittelu_jonita_raikko",
-"sk_puhtaaksi_oy",
+"sk_puhtaaksi_oy", //
 "soittolinja_oy",
 "staffone_oy",
 "stone_partners_oy",
