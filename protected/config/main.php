@@ -155,7 +155,23 @@ $siirto_domainit = [
 "vlp", // suljettu
 "yleissiivous_oy", // ok
 // Maksulliset
+"must", // suljettu
 "malli", // ok
+"kiffel_oy", // suljettu
+"unelmaworks", // suljettu
+"tehopro", // suljettu
+"talonmiehet", // suljettu
+"soukan", // suljettu
+"qclean", // suljettu
+"pian_siivous_ja_kotiapu", // suljettu
+"mrtiimi", // suljettu
+"monessa", // suljettu
+"mlpuhdistuspalvelu", // suljettu
+"lindaclean", // suljettu
+"lakaisupalvelu", // suljettu
+"korkea_tekniikka_oy", // ok
+"kifsaa", // suljettu
+
 /*
 "alueenykkosketju",
 "asennesiivous",
@@ -163,36 +179,21 @@ $siirto_domainit = [
 "etunti",
 "etunti_testi",
 "kairen",
-"kiffel_oy",
-"kifsaa",
 "klaara",
-"korkea_tekniikka_oy",
 "koti1",
 "kotipalvelu_aura_oy",
 "kotipuhtaaksi",
-"lakaisupalvelu",
-"lindaclean",
 "loimaa",
-"mlpuhdistuspalvelu",
-"monessa",
 "moppi",
-"mrtiimi",
-"must", // suljettu
-"pian_siivous_ja_kotiapu",
-"qclean",
 "realclean",
 "siivouspalvelukota",
 "siivouspalvelu_loiste_oy",
-"soukan",
 "talentas_oy",
-"talonmiehet",
 "tamsii",
-"tehopro",
 "testi",
 "toimiva",
 "tomuttamo_oy",
 "tunti",
-"unelmaworks",
 "vayla_ry",
 "washup",
 */
