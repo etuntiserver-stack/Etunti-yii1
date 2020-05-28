@@ -21,7 +21,7 @@ $siirto_domainit = [
 	// Ilmaiset
 "amazing_city_oy", // ok
 "amazone", // suljettu
-//"arjen_avuxi_oy", bisi
+"arjen_avuxi_oy", // ok
 "arkkitiimi_osuuskunta__huoltopojat", // ok
 "askeleet_polulle", // ok
 "ateljee_kuvastin_oy", // ok
