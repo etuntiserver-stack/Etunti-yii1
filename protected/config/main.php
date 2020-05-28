@@ -109,16 +109,16 @@ $siirto_domainit = [
 "rlkotipalvelut_oy", // ok
 "rlyhtiot_oy_", // ok
 "royal_clean_oy", // ok
+"rt_work_oy", // ok
+"rvk_palvelut_oy", // ok
+"saaristo_kotipalvelu", // ok
+"santelo", // ok
+"sapindus_oy", // ok
+"saronia_oy", // ok
+"seoptimi_oy", // ok
+"siiivouspalvelu_kuura_oy", // ok
+"siivousliike_puuninki", // ok paljon tyovuoroja
 /*
-"rt_work_oy",
-"rvk_palvelut_oy",
-"saaristo_kotipalvelu",
-"santelo",
-"sapindus_oy",
-"saronia_oy",
-"seoptimi_oy",
-"siiivouspalvelu_kuura_oy",
-"siivousliike_puuninki",
 "siivouspalvelu_forssan_ilona_oy",
 "siivouspalvelu_humalajoki_oy",
 "siivouspalvelu_jelppi_",
