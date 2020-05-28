@@ -97,15 +97,15 @@ $siirto_domainit = [
 "opepooli_oy", // ok
 "oxline_oy", // ok
 "paakaupunkiseudun_spsiivous_oy", // ok
+"perustettava_yhtio", // ok
+"pesiola_oy", // ok
+"petax_oy", // ok
+"pirkanmaan_aluesiivous_oy", // ok
+"planca_oy", // ok
+"pohjanmaan_kotisiivous", // ok
+"puhdas_unelma_oy", // ok
 /*
-"perustettava_yhtio",
-"pesiola_oy",
-"petax_oy",
-"pirkanmaan_aluesiivous_oy",
-"planca_oy",
-"pohjanmaan_kotisiivous",
-"puhdas_unelma_oy",
-"puskapromotion",
+"puskapromotion", //
 "remaster",
 "rlkotipalvelut_oy",
 "rlyhtiot_oy_",
