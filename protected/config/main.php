@@ -146,15 +146,14 @@ $siirto_domainit = [
 "tmi_ari_paatelainen", // ok
 "tmi_hannan_kotiapu", // ok
 "tmi_maisa_kuhno", // ok
-/*
-"tulola_oy", // 
-"turvapalvelut_salminen",
-"upsteam_oy",
-"vaakkutech_oy",
-"vbe_service_oy",
-"vlp",
-"yleissiivous_oy",
-*/
+"tulola_oy", // ok
+"turvapalvelut_salminen", // ok
+"upsteam_oy", // ok
+"vaakkutech_oy", // ok
+"vbe_service_oy", // ok
+"vlp", // suljettu
+"yleissiivous_oy", // ok
+
 ];
 
 // <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
