@@ -171,16 +171,17 @@ $siirto_domainit = [
 "lakaisupalvelu", // suljettu
 "korkea_tekniikka_oy", // ok
 "kifsaa", // suljettu
+"koti1", // ok
+"etunti_testi", // ok
+"testi", // ok
+"tunti", // suljettu
 
 /*
 "alueenykkosketju",
 "asennesiivous",
-"brosiivous",
 "etunti",
-"etunti_testi",
 "kairen",
 "klaara",
-"koti1",
 "kotipalvelu_aura_oy",
 "kotipuhtaaksi",
 "loimaa",
@@ -190,10 +191,8 @@ $siirto_domainit = [
 "siivouspalvelu_loiste_oy",
 "talentas_oy",
 "tamsii",
-"testi",
 "toimiva",
 "tomuttamo_oy",
-"tunti",
 "vayla_ry",
 "washup",
 */
