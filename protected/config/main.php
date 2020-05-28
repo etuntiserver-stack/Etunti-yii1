@@ -104,12 +104,12 @@ $siirto_domainit = [
 "planca_oy", // ok
 "pohjanmaan_kotisiivous", // ok
 "puhdas_unelma_oy", // ok
+"puskapromotion", // ok
+"remaster", // ok
+"rlkotipalvelut_oy", // ok
+"rlyhtiot_oy_", // ok
+"royal_clean_oy", // ok
 /*
-"puskapromotion", //
-"remaster",
-"rlkotipalvelut_oy",
-"rlyhtiot_oy_",
-"royal_clean_oy",
 "rt_work_oy",
 "rvk_palvelut_oy",
 "saaristo_kotipalvelu",
