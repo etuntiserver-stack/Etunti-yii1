@@ -523,10 +523,10 @@ $(document).delegate(".poistaRivit","click",function(){
 
 
  $(document).delegate(".sirraToteutuun","click",function(){
-	var r = confirm('Oletko varmaa?');
+	/* var r = confirm('Oletko varmaa?');
 	if(!r){
 		return false;
-	}
+	} */
 	$(this).hide();
 	$(this).closest('p').addClass('bg-success');
 	var laatikot = '';
