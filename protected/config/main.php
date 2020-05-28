@@ -31,7 +31,7 @@ $siirto_domainit = [
 "baltic_palvelu", // ok
 "beauty", // ok
 "blue_tower_oy",
-"bro_workers", // ok
+"brosiivous", // ok
 "camofin_oy", // ok
 "city_saukko_oy", // ok
 "cleana", // ok
@@ -47,7 +47,7 @@ $siirto_domainit = [
 "esittely", // ok
 "finndiiling_oy", // ok
 "fritec_oy", // ok
-// "goldenshine", // 
+"goldenshine", // suljettu
 "greenwitch_oy", // ok
 "hammslaboratorio_pure_art_oy", // ok
 "happy_bowling_oy", // ok
