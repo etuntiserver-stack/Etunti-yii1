@@ -16,9 +16,10 @@ $actual_link	= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https"
 $path 		= parse_url($actual_link);
 $oinlinevaraus 	= ( isset($path['path']) and strpos($path['path'], "onlinevaraus") !== false )? true: false;
 
+// 27.05.2020
 $siirto_domainit = [
 	"demo", "sivex", "digisten",
-	// Ilmaiset
+// Ilmaiset
 "amazing_city_oy", // ok
 "amazone", // suljettu
 "arjen_avuxi_oy", // ok
@@ -153,7 +154,48 @@ $siirto_domainit = [
 "vbe_service_oy", // ok
 "vlp", // suljettu
 "yleissiivous_oy", // ok
-
+// Maksulliset
+"malli", // ok
+/*
+"alueenykkosketju",
+"asennesiivous",
+"brosiivous",
+"etunti",
+"etunti_testi",
+"kairen",
+"kiffel_oy",
+"kifsaa",
+"klaara",
+"korkea_tekniikka_oy",
+"koti1",
+"kotipalvelu_aura_oy",
+"kotipuhtaaksi",
+"lakaisupalvelu",
+"lindaclean",
+"loimaa",
+"mlpuhdistuspalvelu",
+"monessa",
+"moppi",
+"mrtiimi",
+"must", // suljettu
+"pian_siivous_ja_kotiapu",
+"qclean",
+"realclean",
+"siivouspalvelukota",
+"siivouspalvelu_loiste_oy",
+"soukan",
+"talentas_oy",
+"talonmiehet",
+"tamsii",
+"tehopro",
+"testi",
+"toimiva",
+"tomuttamo_oy",
+"tunti",
+"unelmaworks",
+"vayla_ry",
+"washup",
+*/
 ];
 
 // <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
