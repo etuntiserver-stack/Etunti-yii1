@@ -16,12 +16,13 @@ $actual_link	= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https"
 $path 		= parse_url($actual_link);
 $oinlinevaraus 	= ( isset($path['path']) and strpos($path['path'], "onlinevaraus") !== false )? true: false;
 
+// 27.05.2020
 $siirto_domainit = [
 	"demo", "sivex", "digisten",
-	// Ilmaiset
+// Ilmaiset
 "amazing_city_oy", // ok
 "amazone", // suljettu
-//"arjen_avuxi_oy", bisi
+"arjen_avuxi_oy", // ok
 "arkkitiimi_osuuskunta__huoltopojat", // ok
 "askeleet_polulle", // ok
 "ateljee_kuvastin_oy", // ok
@@ -31,7 +32,7 @@ $siirto_domainit = [
 "baltic_palvelu", // ok
 "beauty", // ok
 "blue_tower_oy",
-"bro_workers", // ok
+"brosiivous", // ok
 "camofin_oy", // ok
 "city_saukko_oy", // ok
 "cleana", // ok
@@ -47,113 +48,153 @@ $siirto_domainit = [
 "esittely", // ok
 "finndiiling_oy", // ok
 "fritec_oy", // ok
-// "goldenshine", // 
+"goldenshine", // suljettu
 "greenwitch_oy", // ok
+"hammslaboratorio_pure_art_oy", // ok
+"happy_bowling_oy", // ok
+"helin_siivouspalvelu", // suljettu
+"hm_tasoite_oy", // ok
+"hoitokoti", // ok
+"inkan_kotitalouspalvelut_oy", // ok
+"jani_malmberg", // ok
+"jarvo_oy", // ok
+"katinala_av_oy", // ok
+"kaveko_oy", // ok
+"kiurun_kuriiri_oy", // ok
+"kivat_pihat", // ok
+"kmvkotipalvelut_oy", // ok
+"kortipalvelu_raikastuuli_profit_dealers_oy", // ok
+"koti1_palvelut_oy", // ok
+"kotipalvelu_pajunkissa", // ok
+"kotipalvelu_sydankapy_oy", // ok
+"kotipari_oy", // ok
+"koti_consulting_oy", // ok
+"koti_puhtaaksi_oy", // suljettu
+"koti_puhtaaksi_testi", // ok
+"kototiimi_oy", // ok
+"kotova_oy", // ok
+"krassat_oy", // ok
+"kuljetus_pennanen", // ok
+"kuljetus_vkujala_oy", // ok
+"kvhpalvelut", // ok
+"kvkoneurakointi_oy", // ok
+"k__m_elokuvat_oy", // ok
+"labsense_oy", // ok
+"lecator_oy", // ok
+"leenan_puhdistuspalvelu_oy", // ok
+"luminous_palvelut_oy", // ok
+"majatalo_kupittaa_oy", // ok Oli paljon tyovuoroja
+"ma_testaan_tuttavalle_tsaana", // suljettu
+"mitoka", // ok
+"moppimuija", // ok
+"mukanas", // ok
+"multivision_tmi", // ok
+"muuble_oy", // ok
+"myhelp", // ok
+"nixisiivous", // ok
+"oiva_kotisiivous", // ok
+"oma_yritys", // suljettu
+"onnellisten_tiimi", // ok
+"opepooli_oy", // ok
+"oxline_oy", // ok
+"paakaupunkiseudun_spsiivous_oy", // ok
+"perustettava_yhtio", // ok
+"pesiola_oy", // ok
+"petax_oy", // ok
+"pirkanmaan_aluesiivous_oy", // ok
+"planca_oy", // ok
+"pohjanmaan_kotisiivous", // ok
+"puhdas_unelma_oy", // ok
+"puskapromotion", // ok
+"remaster", // ok
+"rlkotipalvelut_oy", // ok
+"rlyhtiot_oy_", // ok
+"royal_clean_oy", // ok
+"rt_work_oy", // ok
+"rvk_palvelut_oy", // ok
+"saaristo_kotipalvelu", // ok
+"santelo", // ok
+"sapindus_oy", // ok
+"saronia_oy", // ok
+"seoptimi_oy", // ok
+"siiivouspalvelu_kuura_oy", // ok
+"siivousliike_puuninki", // ok paljon tyovuoroja
+"siivouspalvelu_forssan_ilona_oy", // ok
+"siivouspalvelu_humalajoki_oy", // ok
+"siivouspalvelu_jelppi_", // ok
+"siivouspalvelu_minhof", // ok
+"siivouspalvelu_tiina_vidgren", // ok
+"siivouspro", // ok
+"siivoussissit", // suljettu
+"sinun_avuksi_oy", // ok
+"sirius_media_oy", // ok
+"sisustussuunnittelu_jonita_raikko", // ok
+"sk_puhtaaksi_oy", // ok
+"soittolinja_oy", // ok
+"staffone_oy", // ok
+"stone_partners_oy", // ok
+"stt_sahko_mikkeli_oy", // ok
+"stvalmennus_oy", // ok
+"suomen_art_ry", // ok
+"swappie_oy", // ok
+"sysman_autoservis_oy", // ok
+"takomee_tmi", // ok
+"taloke_tmi", // ok
+"talouspaja_oy", // ok
+"tampereen_siivous", // suljettu
+"the_process__health__performance_oy", // ok
+"tietohallintomaisterit_oy", // ok
+"tmi_ari_paatelainen", // ok
+"tmi_hannan_kotiapu", // ok
+"tmi_maisa_kuhno", // ok
+"tulola_oy", // ok
+"turvapalvelut_salminen", // ok
+"upsteam_oy", // ok
+"vaakkutech_oy", // ok
+"vbe_service_oy", // ok
+"vlp", // suljettu
+"yleissiivous_oy", // ok
+// Maksulliset
+"must", // suljettu
+"malli", // ok
+"kiffel_oy", // suljettu
+"unelmaworks", // suljettu
+"tehopro", // suljettu
+"talonmiehet", // suljettu
+"soukan", // suljettu
+"qclean", // suljettu
+"pian_siivous_ja_kotiapu", // suljettu
+"mrtiimi", // suljettu
+"monessa", // suljettu
+"mlpuhdistuspalvelu", // suljettu
+"lindaclean", // suljettu
+"lakaisupalvelu", // suljettu
+"korkea_tekniikka_oy", // ok
+"kifsaa", // suljettu
+"koti1", // ok
+"etunti_testi", // ok
+"testi", // ok
+"tunti", // suljettu
+
 /*
-"hammslaboratorio_pure_art_oy",
-"happy_bowling_oy",
-"helin_siivouspalvelu",
-"hm_tasoite_oy",
-"hoitokoti",
-"inkan_kotitalouspalvelut_oy",
-"jani_malmberg",
-"jarvo_oy",
-"katinala_av_oy",
-"kaveko_oy",
-"kiurun_kuriiri_oy",
-"kivat_pihat",
-"kmvkotipalvelut_oy",
-"kortipalvelu_raikastuuli_profit_dealers_oy",
-"koti1_palvelut_oy",
-"kotipalvelu_pajunkissa",
-"kotipalvelu_sydankapy_oy",
-"kotipari_oy",
-"koti_consulting_oy",
-"koti_puhtaaksi_oy",
-"koti_puhtaaksi_testi",
-"kototiimi_oy",
-"kotova_oy",
-"krassat_oy",
-"kuljetus_pennanen",
-"kuljetus_vkujala_oy",
-"kvhpalvelut",
-"kvkoneurakointi_oy",
-"k__m_elokuvat_oy",
-"labsense_oy",
-"lecator_oy",
-"leenan_puhdistuspalvelu_oy",
-"luminous_palvelut_oy",
-"majatalo_kupittaa_oy",
-"ma_testaan_tuttavalle_tsaana",
-"mitoka",
-"moppimuija",
-"mukanas",
-"multivision_tmi",
-"muuble_oy",
-"myhelp",
-"nixisiivous",
-"oiva_kotisiivous",
-"oma_yritys",
-"onnellisten_tiimi",
-"opepooli_oy",
-"oxline_oy",
-"paakaupunkiseudun_spsiivous_oy",
-"perustettava_yhtio",
-"pesiola_oy",
-"petax_oy",
-"pirkanmaan_aluesiivous_oy",
-"planca_oy",
-"pohjanmaan_kotisiivous",
-"puhdas_unelma_oy",
-"puskapromotion",
-"remaster",
-"rlkotipalvelut_oy",
-"rlyhtiot_oy_",
-"royal_clean_oy",
-"rt_work_oy",
-"rvk_palvelut_oy",
-"saaristo_kotipalvelu",
-"santelo",
-"sapindus_oy",
-"saronia_oy",
-"seoptimi_oy",
-"siiivouspalvelu_kuura_oy",
-"siivousliike_puuninki",
-"siivouspalvelu_forssan_ilona_oy",
-"siivouspalvelu_humalajoki_oy",
-"siivouspalvelu_jelppi_",
-"siivouspalvelu_minhof",
-"siivouspalvelu_tiina_vidgren",
-"siivouspro",
-"siivoussissit",
-"sinun_avuksi_oy",
-"sirius_media_oy",
-"sisustussuunnittelu_jonita_raikko",
-"sk_puhtaaksi_oy",
-"soittolinja_oy",
-"staffone_oy",
-"stone_partners_oy",
-"stt_sahko_mikkeli_oy",
-"stvalmennus_oy",
-"suomen_art_ry",
-"swappie_oy",
-"sysman_autoservis_oy",
-"takomee_tmi",
-"taloke_tmi",
-"talouspaja_oy",
-"tampereen_siivous",
-"the_process__health__performance_oy",
-"tietohallintomaisterit_oy",
-"tmi_ari_paatelainen",
-"tmi_hannan_kotiapu",
-"tmi_maisa_kuhno",
-"tulola_oy",
-"turvapalvelut_salminen",
-"upsteam_oy",
-"vaakkutech_oy",
-"vbe_service_oy",
-"vlp",
-"yleissiivous_oy",
+"alueenykkosketju",
+"asennesiivous",
+"etunti",
+"kairen",
+"klaara",
+"kotipalvelu_aura_oy",
+"kotipuhtaaksi",
+"loimaa",
+"moppi",
+"realclean",
+"siivouspalvelukota",
+"siivouspalvelu_loiste_oy",
+"talentas_oy",
+"tamsii",
+"toimiva",
+"tomuttamo_oy",
+"vayla_ry",
+"washup",
 */
 ];
 
