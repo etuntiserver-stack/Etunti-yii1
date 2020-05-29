@@ -597,6 +597,15 @@ public function actionImei($dom)
     {
         // Get an instance of the respective model
         case 'mob':
+
+		$domainit = Domainit::model()->find(" domain='".strtolower($dom)."' ");
+		if(isset($domainit->huoltokatko) and $domainit->huoltokatko == 1)
+		{
+			$return = ['error' => 'Huoltokatko'];
+        		$this->_sendResponse(200, CJSON::encode($return));
+			exit;
+		}
+
 		// <-- kokeiluversion
 		if(!$this->checkKokeiluversion($dom))
 		{
