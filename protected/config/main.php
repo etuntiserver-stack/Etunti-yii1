@@ -182,10 +182,9 @@ $siirto_domainit = [
 "etunti", // ok
 "kairen", // ok
 "klaara", // ok
+"kotipalvelu_aura_oy", // ok
 
 /*
-
-"kotipalvelu_aura_oy",
 "loimaa",
 "moppi",
 "realclean",
