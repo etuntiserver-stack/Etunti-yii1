@@ -176,6 +176,7 @@ $siirto_domainit = [
 "testi", // ok
 "tunti", // suljettu
 "kotipuhtaaksi", // ok
+"siivouspalvelukota", // ok
 
 /*
 "alueenykkosketju",
@@ -187,7 +188,6 @@ $siirto_domainit = [
 "loimaa",
 "moppi",
 "realclean",
-"siivouspalvelukota",
 "siivouspalvelu_loiste_oy",
 "talentas_oy",
 "tamsii",
