@@ -188,9 +188,9 @@ $siirto_domainit = [
 "realclean", // ok
 "siivouspalvelu_loiste_oy", // ok
 "talentas_oy", // ok
+"tamsii", // ok
 
 /*
-"tamsii",
 "toimiva",
 "tomuttamo_oy",
 "vayla_ry",
