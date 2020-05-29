@@ -177,9 +177,9 @@ $siirto_domainit = [
 "tunti", // suljettu
 "kotipuhtaaksi", // ok
 "siivouspalvelukota", // ok
+"alueenykkosketju", // ok
 
 /*
-"alueenykkosketju",
 "asennesiivous",
 "etunti",
 "kairen",
