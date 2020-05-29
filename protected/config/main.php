@@ -186,9 +186,9 @@ $siirto_domainit = [
 "loimaa", // suljettu
 "moppi", // ok
 "realclean", // ok
+"siivouspalvelu_loiste_oy", // ok
 
 /*
-"siivouspalvelu_loiste_oy",
 "talentas_oy",
 "tamsii",
 "toimiva",
