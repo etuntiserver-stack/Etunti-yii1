@@ -178,10 +178,11 @@ $siirto_domainit = [
 "kotipuhtaaksi", // ok
 "siivouspalvelukota", // ok
 "alueenykkosketju", // ok
-"asennesiivous", // ok
+"asennesiivous", // suljettu
+"etunti", // ok
 
 /*
-"etunti",
+
 "kairen",
 "klaara",
 "kotipalvelu_aura_oy",
