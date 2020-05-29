@@ -189,9 +189,9 @@ $siirto_domainit = [
 "siivouspalvelu_loiste_oy", // ok
 "talentas_oy", // ok
 "tamsii", // ok
+"toimiva", // ok
 
 /*
-"toimiva",
 "tomuttamo_oy",
 "vayla_ry",
 "washup",
