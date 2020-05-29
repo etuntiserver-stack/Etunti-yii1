@@ -180,10 +180,11 @@ $siirto_domainit = [
 "alueenykkosketju", // ok
 "asennesiivous", // suljettu
 "etunti", // ok
+"kairen", // ok
 
 /*
 
-"kairen",
+
 "klaara",
 "kotipalvelu_aura_oy",
 "loimaa",
