@@ -192,10 +192,7 @@ $siirto_domainit = [
 "toimiva", // suljettu
 "tomuttamo_oy", // ok
 "vayla_ry", // ok
-
-/*
-"washup",
-*/
+"washup", // ok
 ];
 
 // <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
