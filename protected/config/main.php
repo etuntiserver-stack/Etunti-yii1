@@ -8,7 +8,8 @@ error_reporting(E_ALL & ~E_WARNING);
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 
-
+/*
+// <-- Redirect Domain
 $server_name	= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
 $is_production	= in_array($server_name, ['app.etunti.fi', 'etunti.com']);
 $get_domain	= trim(strtolower($_GET['dom'] ?? $_GET['domain'] ?? ''));
@@ -17,185 +18,8 @@ $path 		= parse_url($actual_link);
 $oinlinevaraus 	= ( isset($path['path']) and strpos($path['path'], "onlinevaraus") !== false )? true: false;
 
 // 27.05.2020
-$siirto_domainit = [
-	"demo", "sivex", "digisten",
-// Ilmaiset
-"amazing_city_oy", // ok
-"amazone", // suljettu
-"arjen_avuxi_oy", // ok
-"arkkitiimi_osuuskunta__huoltopojat", // ok
-"askeleet_polulle", // ok
-"ateljee_kuvastin_oy", // ok
-"awareness_recreated_oy", // ok
-"badbaado_ry", // ok
-"bado_palvelut_oy", // ok
-"baltic_palvelu", // ok
-"beauty", // ok
-"blue_tower_oy",
-"brosiivous", // ok
-"camofin_oy", // ok
-"city_saukko_oy", // ok
-"cleana", // ok
-"cleana_oy", // ok
-"cleanmarin_oy", // ok
-"costan_kotihoito", // ok
-"cutiopalvelut_oy", // ok
-"derram_oy", // ok
-"eiole_oy", // ok
-"elamyspalvelu_kolmipyora", // ok
-"electric_shark_tmi", // ok
-"elevent_group_oy", // ok
-"esittely", // ok
-"finndiiling_oy", // ok
-"fritec_oy", // ok
-"goldenshine", // suljettu
-"greenwitch_oy", // ok
-"hammslaboratorio_pure_art_oy", // ok
-"happy_bowling_oy", // ok
-"helin_siivouspalvelu", // suljettu
-"hm_tasoite_oy", // ok
-"hoitokoti", // ok
-"inkan_kotitalouspalvelut_oy", // ok
-"jani_malmberg", // ok
-"jarvo_oy", // ok
-"katinala_av_oy", // ok
-"kaveko_oy", // ok
-"kiurun_kuriiri_oy", // ok
-"kivat_pihat", // ok
-"kmvkotipalvelut_oy", // ok
-"kortipalvelu_raikastuuli_profit_dealers_oy", // ok
-"koti1_palvelut_oy", // ok
-"kotipalvelu_pajunkissa", // ok
-"kotipalvelu_sydankapy_oy", // ok
-"kotipari_oy", // ok
-"koti_consulting_oy", // ok
-"koti_puhtaaksi_oy", // suljettu
-"koti_puhtaaksi_testi", // ok
-"kototiimi_oy", // ok
-"kotova_oy", // ok
-"krassat_oy", // ok
-"kuljetus_pennanen", // ok
-"kuljetus_vkujala_oy", // ok
-"kvhpalvelut", // ok
-"kvkoneurakointi_oy", // ok
-"k__m_elokuvat_oy", // ok
-"labsense_oy", // ok
-"lecator_oy", // ok
-"leenan_puhdistuspalvelu_oy", // ok
-"luminous_palvelut_oy", // ok
-"majatalo_kupittaa_oy", // ok Oli paljon tyovuoroja
-"ma_testaan_tuttavalle_tsaana", // suljettu
-"mitoka", // ok
-"moppimuija", // ok
-"mukanas", // ok
-"multivision_tmi", // ok
-"muuble_oy", // ok
-"myhelp", // ok
-"nixisiivous", // ok
-"oiva_kotisiivous", // ok
-"oma_yritys", // suljettu
-"onnellisten_tiimi", // ok
-"opepooli_oy", // ok
-"oxline_oy", // ok
-"paakaupunkiseudun_spsiivous_oy", // ok
-"perustettava_yhtio", // ok
-"pesiola_oy", // ok
-"petax_oy", // ok
-"pirkanmaan_aluesiivous_oy", // ok
-"planca_oy", // ok
-"pohjanmaan_kotisiivous", // ok
-"puhdas_unelma_oy", // ok
-"puskapromotion", // ok
-"remaster", // ok
-"rlkotipalvelut_oy", // ok
-"rlyhtiot_oy_", // ok
-"royal_clean_oy", // ok
-"rt_work_oy", // ok
-"rvk_palvelut_oy", // ok
-"saaristo_kotipalvelu", // ok
-"santelo", // ok
-"sapindus_oy", // ok
-"saronia_oy", // ok
-"seoptimi_oy", // ok
-"siiivouspalvelu_kuura_oy", // ok
-"siivousliike_puuninki", // ok paljon tyovuoroja
-"siivouspalvelu_forssan_ilona_oy", // ok
-"siivouspalvelu_humalajoki_oy", // ok
-"siivouspalvelu_jelppi_", // ok
-"siivouspalvelu_minhof", // ok
-"siivouspalvelu_tiina_vidgren", // ok
-"siivouspro", // ok
-"siivoussissit", // suljettu
-"sinun_avuksi_oy", // ok
-"sirius_media_oy", // ok
-"sisustussuunnittelu_jonita_raikko", // ok
-"sk_puhtaaksi_oy", // ok
-"soittolinja_oy", // ok
-"staffone_oy", // ok
-"stone_partners_oy", // ok
-"stt_sahko_mikkeli_oy", // ok
-"stvalmennus_oy", // ok
-"suomen_art_ry", // ok
-"swappie_oy", // ok
-"sysman_autoservis_oy", // ok
-"takomee_tmi", // ok
-"taloke_tmi", // ok
-"talouspaja_oy", // ok
-"tampereen_siivous", // suljettu
-"the_process__health__performance_oy", // ok
-"tietohallintomaisterit_oy", // ok
-"tmi_ari_paatelainen", // ok
-"tmi_hannan_kotiapu", // ok
-"tmi_maisa_kuhno", // ok
-"tulola_oy", // ok
-"turvapalvelut_salminen", // ok
-"upsteam_oy", // ok
-"vaakkutech_oy", // ok
-"vbe_service_oy", // ok
-"vlp", // suljettu
-"yleissiivous_oy", // ok
-// Maksulliset
-"must", // suljettu
-"malli", // ok
-"kiffel_oy", // suljettu
-"unelmaworks", // suljettu
-"tehopro", // suljettu
-"talonmiehet", // suljettu
-"soukan", // suljettu
-"qclean", // suljettu
-"pian_siivous_ja_kotiapu", // suljettu
-"mrtiimi", // suljettu
-"monessa", // suljettu
-"mlpuhdistuspalvelu", // suljettu
-"lindaclean", // suljettu
-"lakaisupalvelu", // suljettu
-"korkea_tekniikka_oy", // ok
-"kifsaa", // suljettu
-"koti1", // ok
-"etunti_testi", // ok
-"testi", // ok
-"tunti", // suljettu
-"kotipuhtaaksi", // ok
-"siivouspalvelukota", // ok
-"alueenykkosketju", // ok
-"asennesiivous", // suljettu
-"etunti", // ok
-"kairen", // ok
-"klaara", // ok
-"kotipalvelu_aura_oy", // ok
-"loimaa", // suljettu
-"moppi", // ok
-"realclean", // ok
-"siivouspalvelu_loiste_oy", // ok
-"talentas_oy", // ok
-"tamsii", // ok
-"toimiva", // suljettu
-"tomuttamo_oy", // ok
-"vayla_ry", // ok
-"washup", // ok
-];
+$siirto_domainit = ['demo'];
 
-// <-- Redirect Domain; app.etunti.fi|etunti.com => apps.etunti.fi
 if ($is_production and empty($_FILES) and !$oinlinevaraus) {
     if (isset($_SESSION['domain']) and in_array($_SESSION['domain'], $siirto_domainit)) {
         unset($_SESSION['domain']);
@@ -227,6 +51,7 @@ if ($is_production and empty($_FILES) and !$oinlinevaraus) {
     }
 }
 //    Redirect Domain -->
+*/
 
 if (
     isset($_SERVER['REQUEST_URI'])
