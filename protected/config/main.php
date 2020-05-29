@@ -181,11 +181,10 @@ $siirto_domainit = [
 "asennesiivous", // suljettu
 "etunti", // ok
 "kairen", // ok
+"klaara", // ok
 
 /*
 
-
-"klaara",
 "kotipalvelu_aura_oy",
 "loimaa",
 "moppi",
