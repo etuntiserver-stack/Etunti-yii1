@@ -818,6 +818,8 @@ $(document).ready(function(){
 	<?php endif; ?>
 	<div class="panel-footer text-right">
 		<?php 
+		if(isset($model->id))
+			echo '<span class="btn btn-danger tvpoisto" tilanne="poista_pvm">POISTA: '.$laatiko_etusukunimi.' ('.$laatikko_pvm.')</span>';
 		if(isset($model->id) and $toistuva and $poista == 1 and date("Ymd", strtotime($model->pfrom)) >= date("Ymd")){
 			echo '<span class="btn btn-danger tvpoisto" style="display:none" tilanne="poista_ketju_kokonaan">Poista kaikki. '.( (is_array($tyopaari) and count($tyopaari) > 0)? 'Työparit - '.(count($tyopaari)-1).'kpl' : '' ).'</span>';
 		}

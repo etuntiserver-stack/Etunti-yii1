@@ -920,11 +920,20 @@ class TyovuorootController extends Controller
 		$u		= Yii::app()->user->nimi;
 		$d		= date("d.m.Y");
 		$poisto_syy	= ['text'=>'ByPoistaTv', 'user'=>$u, 'date'=>$d];
-		if( $toistuva and $_POST['tilanne'] == 'poista_pvm'){
-			if($this->toistuvaDeletePvm($model->id, $pvm, $tid, $poisto_syy))
-				$return = ['return' => 'ok'];
-			else
-				$return = ['return' => 'error'];
+		if( $_POST['tilanne'] == 'poista_pvm')
+		{
+			if( $toistuva ){
+				$u		= Yii::app()->user->nimi;
+				$d		= date("d.m.Y");
+				$poisto_syy	= ['text'=>'ByTVcard', 'user'=>$u, 'date'=>$d];
+				$this->toistuvaDeletePvm($model->id, $pvm, $tid, $poisto_syy);
+			}
+			if( !$toistuva ){
+				if( !$this->tyopari_poisto($model, [$model->tid => $model->tid]) ){
+					$this->tvDeleteLog($model);
+					$model->deleteByPk($model->id);
+				}
+			}
 		}
 		if( $toistuva and $_POST['tilanne'] == 'poista_ketju_kokonaan'){
 			ToistuvatTyovuorot::model()->deleteByPk($model->id);
