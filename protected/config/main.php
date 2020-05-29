@@ -191,9 +191,9 @@ $siirto_domainit = [
 "tamsii", // ok
 "toimiva", // suljettu
 "tomuttamo_oy", // ok
+"vayla_ry", // ok
 
 /*
-"vayla_ry",
 "washup",
 */
 ];
