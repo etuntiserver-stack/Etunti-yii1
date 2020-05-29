@@ -56,7 +56,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 if(isset(Yii::app()->user->domain))
 {
   $domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
-  if(isset($domainit->huoltokatko) and $domainit->huoltokatko == 1)
+  if(Yii::app()->user->username != 'etunti' and isset($domainit->huoltokatko) and $domainit->huoltokatko == 1)
   {
 	echo '
 
