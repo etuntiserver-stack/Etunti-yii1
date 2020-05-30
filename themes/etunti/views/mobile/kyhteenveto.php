@@ -45,7 +45,7 @@ $this->breadcrumbs=array(
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
 	  </form>
-     	  <button class="btn btn-primary btn-sm btn-group myBgColors" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Ekstrat'); ?> <b class="caret"></b></button>
+     	  <!-- en tieda<button class="btn btn-primary btn-sm btn-group myBgColors" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Ekstrat'); ?> <b class="caret"></b></button>-->
     </div>
    </div>
    <!-- tulostus -->
@@ -156,10 +156,37 @@ $this->breadcrumbs=array(
   $toteutuneetYht 	= 0;
   $kplyht 		= 0;
   $kpl			= 0;
+
+	$suunniteltu 	= 0;
+	$thisday	= date("Y-m-d");
+	$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+	$haku_criteria	= [];
+	$haku_criteria[]= "(peruutettu=0 OR peruutettu IS NULL)";
+	if( isset($_GET['osoite']) and !empty($_GET['osoite']) )
+	$haku_criteria[]= "kohde IN(SELECT id FROM sivex_kohdet WHERE osoite LIKE '%".$_GET['osoite']."%')";
+	$getAll 	= $tyovuorot[0]->tv_arr(date("Y-m-d", strtotime($from)), date("Y-m-d", strtotime($to)), [], $haku_criteria, false, ['tv_kesto']);
+	
+	$result = [];
+	foreach($getAll as $k => $v)
+		foreach($v as $unix => $dayarr)
+			foreach($dayarr as $key => $arr)
+				foreach($arr as $arr2)
+					if(!isset($result[$arr2['kohde']]))
+						$result[$arr2['kohde']] = $arr2['tv_kesto'];
+					else
+						$result[$arr2['kohde']] += $arr2['tv_kesto'];
+
+	/*
+	echo '<pre>';
+	print_r($result);
+	echo '<pre>';
+	exit;
+	*/
+
   foreach($lu as $key=>$val)
   {
 	// <-- sunniteltu
-	$sunniteltu = $this->renderPartial('//mobile/suunniteltu',array('id'=>$val['kohdenID'],'kohde_tid'=>'kohde','from'=>$from,'to'=>$to),true);
+	$sunniteltu = (isset($result[$val['kohdenID']]))?$result[$val['kohdenID']]:0;
         $sunYht += $sunniteltu;
 	// sunniteltu -->
 

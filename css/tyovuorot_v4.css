@@ -1,19 +1,22 @@
 .mennytPaivat{
 	opacity: 0.4;
 }
+.odotusweeklaskennan{
+	/*display:block;*/
+}
 #fixTable td,th{
 	margin:0;
 	padding:0;
 	/*background: #fff;*/
 }
 #fixTable td{
-	white-space: nowrap;
+
 }
 #fixTable td:hover{
 	/*background: #fff;*/
 }
-.ajanreika{
-	background: orange;
+.bg-default{
+	background: #ddd;
 }
 .hover_well{
 	padding: 7px;
@@ -27,17 +30,14 @@
 	margin-right: 3px;
 	cursor: pointer;
 }
-.reika{
-	color: #fff;
-	padding: 3px;
-	font-size: 90%;
-	font-weight: bold;
-}
-.reika-success{
-	background: #28a745;
-}
-.reika-warning{
+.reika-danger{
 	background: orange;
+	color: white;
+	padding: 3px;
+	font-weight: bold;
+	line-height: 70%;
+	font-size: smaller;
+	border: none !important;
 }
 .dropdown-menu{
 	z-index: 999;
@@ -75,25 +75,41 @@ td .latikkoAsetukset p{
 	margin-right: 3px;
 	cursor: pointer;
 }
+.pvm_kesto{
+	position: absolute; top:4px; right:3px;
+	z-index: 1;
+}
+.pvm_kesto span{
+	padding: 4px 7px;
+	border: 1px #ddd solid;
+	background : white;
+}
 .latikkolisatiedot_paa{
 	position: absolute; top: 0; right: 0;
-	float: right;
-	background: #fff;
+	z-index: 2;
 }
 .latikkolisatiedot{
-	padding: 2px 5px;
+	background: #fff;
+	padding: 4px 7px;
+	border: 1px #ddd solid;
 	color: orange;
 	z-index: 999;
 }
 td .latikkoAsetukset{
 	position: relative;
 	font-family: ibm-plex-sans, sans-serif;
-	/*font-size: 80%;*/
-	width: 260px;
-	min-width: 190px;
+	font-size: 90%;
+	min-width: 250px;
 	padding: 5px 7px;
 	min-height: 40px;
-	max-height: 200px; overflow-y: auto;
+	max-height: 210px; overflow-y: auto;
+	white-space: normal;
+}
+.tr_pyhat{
+	background: #ddd;
+}
+.tr_pyhat .latikkoAsetukset p{
+	border: 1px #fff solid;
 }
 td span.nimi{
 	color: #333;
@@ -138,5 +154,18 @@ td span.nimi{
     	vertical-align: top;
 }
 .table{
-    height: 100%;
+	height: 100%;
+}
+
+/* toistuva calendar */
+.valittu_pvm{
+	background: #ededed;
+}
+.custom-menu {
+	width: 300px;
+	z-index:1000;
+	position: absolute;
+	background-color: #ededed;
+	border: 1px solid #ddd;
+	padding: 10px 20px;
 }

@@ -10,6 +10,9 @@ $asetukset=Asetukset::model()->findbypk(1);
 $netvisor_kaytto = $asetukset->netvisor_kaytto;
 $netvisor_mita_onkayttossa = $asetukset->netvisor_mita_onkayttossa;
 ?>
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v4.css">
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot_v4.js"></script>
 <style>
 .fullRivi{
 	height: 100%;
@@ -29,6 +32,9 @@ $netvisor_mita_onkayttossa = $asetukset->netvisor_mita_onkayttossa;
 table { width: 100%; }
 .tdw1, .tdw2, .tdw3, .tdw4{
 	width: 25%;
+}
+td .latikkoAsetukset{
+	max-height: none;
 }
 </style>
 
@@ -255,6 +261,7 @@ $dateDiff = dateDiff($from, $to);
   $yhteensaToteutuneet 	= 0;
 
   $mobile = Yii::app()->createController('Mobile');
+  $tyovuoroot = Yii::app()->createController('Tyovuoroot');
   $yhtSPLWeek	= 0;
   $yhtSLWeek	= 0;
   $yhtLSWeek	= 0;
@@ -291,7 +298,12 @@ $dateDiff = dateDiff($from, $to);
   if($ilman_lounastaukot)
 	unset($hyv_arr[2]);
   $hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, $hyv_arr, 3, false, 0, true);
-
+/*
+echo '<pre>';
+print_r($hyv_tyotunnit_all);
+echo '</pre>';
+exit;
+*/
   if(!$ilman_lounastaukot)
   $lounaat_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), 2, false, 0, true);
 
@@ -307,20 +319,23 @@ $dateDiff = dateDiff($from, $to);
   $sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 3, true);
 
   if(!$ilman_matkat){
-  	$pyhapaivat_all		= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 4, true);
+  	$pyhapaivat_all		= $mobile[0]->TidfromtoMobiiliAll($from, $from, $tid, array(2,3), 2, false, 4, true);
 	$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 5, true);
   } else {
   	$pyhapaivat_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 4, true);
 	$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 5, true);
   }
 
+  // Pyhapaivat
+  $pyhapaivat = $tyovuoroot[0]->pyhapaivatAll($from, $from);
+
   // <-- SPL, SL, LS, VL, VKL, AP
-  $sl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'SL',true); // Palkallinen
-  $spl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'SPL',true); // Palkaton
-  $ls_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'LS',true); // Lapsen sairaus
-  $vl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'VL',true); // Vuosiloma
-  $vkl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'VKL',true); // Viikkolomapaiva  ( Poistettu kaytosta )
-  $ap_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,$tid,'AP',true); // Arkipaiva
+  $sl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'SL',true); // Palkallinen
+  $spl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'SPL',true); // Palkaton
+  $ls_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'LS',true); // Lapsen sairaus
+  $vl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'VL',true); // Vuosiloma
+  $vkl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'VKL',true); // Viikkolomapaiva  ( Poistettu kaytosta )
+  $ap_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'AP',true); // Arkipaiva
   //     SPL, SL, LS, VL, VKL, AP -->
 
   $luetut_laatikot = json_decode($this->LuetutPvmTidBetween($from,$to,$tid), true);
@@ -329,12 +344,11 @@ $dateDiff = dateDiff($from, $to);
   $vuosilomachecker	= $this->vuosilomaCheckerBetween($from, $to, $tid);
   $hyvaksymmattomat_t	= $this->hyvaksyttamatTunnitBetween($from, $to, $tid);
 
-/*
-echo '<pre>';
-print_r($vuosilomachecker);
-echo '<pre>';
-exit;
-*/
+
+  $haku_from 	= date("Y-m-d", strtotime($from));
+  $haku_to 	= date("Y-m-d", strtotime($to));
+  $haku_criteria = ["status!=11"];
+  $tv_arr 	= $tyovuoroot[0]->tv_arr($haku_from, $haku_to, [$tid], $haku_criteria, true, []);
 
   for ($i = 0; $i <= $dateDiff; $i++) 
   {
@@ -348,6 +362,7 @@ exit;
     $did = date("Ymd",strtotime($date));
 
     $pvm		= date("Y-m-d", strtotime($date));
+    $pvmF		= date("d.m.Y", strtotime($date));
     $tyotunnit		= (isset($tyotunnit_all[$pvm][$tid]))? $tyotunnit_all[$pvm][$tid] : 0;
     $hyv_tyotunnit 	= (isset($hyv_tyotunnit_all[$pvm][$tid]))? $hyv_tyotunnit_all[$pvm][$tid] : 0;
     $lounaat 		= (isset($lounaat_all[$pvm][$tid]))? $lounaat_all[$pvm][$tid] : 0;
@@ -359,12 +374,12 @@ exit;
     $erikoislauantai_tunnit = (isset($erikoislauantai_all[$pvm][$tid]))? $erikoislauantai_all[$pvm][$tid] : 0;
 
     // <-- SPL, SL, LS, VL, VKL, AP
-    $sl 		= (isset($sl_all[$pvm][$tid]))? $sl_all[$pvm][$tid] : 0; // Palkallinen
-    $spl 		= (isset($spl_all[$pvm][$tid]))? $spl_all[$pvm][$tid] : 0; // Palkaton
-    $ls 		= (isset($ls_all[$pvm][$tid]))? $ls_all[$pvm][$tid] : 0; // Lapsen sairaus
-    $vl 		= (isset($vl_all[$pvm][$tid]))? $vl_all[$pvm][$tid] : 0; // Vuosiloma
-    $vkl 		= (isset($vkl_all[$pvm][$tid]))? $vkl_all[$pvm][$tid] : 0; // Viikkolomapaiva  ( Poistettu kaytosta )
-    $ap 		= (isset($ap_all[$pvm][$tid]))? $ap_all[$pvm][$tid] : 0; // Arkipaiva
+    $sl 		= (isset($sl_all[$pvmF][$tid]))? $sl_all[$pvmF][$tid] : 0; // Palkallinen
+    $spl 		= (isset($spl_all[$pvmF][$tid]))? $spl_all[$pvmF][$tid] : 0; // Palkaton
+    $ls 		= (isset($ls_all[$pvmF][$tid]))? $ls_all[$pvmF][$tid] : 0; // Lapsen sairaus
+    $vl 		= (isset($vl_all[$pvmF][$tid]))? $vl_all[$pvmF][$tid] : 0; // Vuosiloma
+    $vkl 		= (isset($vkl_all[$pvmF][$tid]))? $vkl_all[$pvmF][$tid] : 0; // Viikkolomapaiva  ( Poistettu kaytosta )
+    $ap 		= (isset($ap_all[$pvmF][$tid]))? $ap_all[$pvmF][$tid] : 0; // Arkipaiva
     //     SPL, SL, LS, VL, VKL, AP -->
 
     $yhtTyotunnit 	+= $tyotunnit;
@@ -394,13 +409,12 @@ exit;
     }
 
     $ispyha = '';
-    if($pyhapaivat_tunnit > 0){
+    if( isset($pyhapaivat[$date]['su']) or isset($pyhapaivat[$date]['vp']) or isset($pyhapaivat[$date]['el']) ){
 	$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>';
     }
-    if($erikoislauantai_tunnit > 0){
+    if(isset($pyhapaivat[$date]['el'])){
 	$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Erikoislauantai').'"></i>';
     }
-
     echo '<tr><td class="text-left" colspan="4">'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$ispyha.'</td></tr>';
 
     if($netvisor_kaytto == 1){
@@ -427,26 +441,20 @@ exit;
     echo '</tr>';
     }
     echo '<tr class="su_lu_tot">';
-  
-
-	$dido = '';
-	$dido = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$tid,'from'=>'mobiili','yhteensa'=>true),true);
-	
-	$dido = explode("//", json_decode($dido, true));
-	if(isset($dido[1]))
-	{
-		$didoResult = $dido[0];
-
-		$suunnittelut = 0;
-		$suunnittelut = $dido[1];
-		$yhtSuunnittelut += $suunnittelut;
-	} else {
-		$didoResult = 0;
+	$suunnittelut = 0;
+	$didoResult = '';
+	if( isset($tv_arr[$tid][$date]) ){
+		$didoResult .= '<div id="suun_'.$did.'_'.$tid.'" class="latikkoAsetukset" pvm="'.$date.'" tid="'.$tid.'">';
+		ksort($tv_arr[$tid][$date]);
+		foreach($tv_arr[$tid][$date] as $k => $v)
+			foreach($v as $v2){
+				$didoResult .= '<p><span class="pull-right">'.$this->sprint($v2['tv_kesto']).'</span>'.$v2['tv_edit'].'</p>';
+				$suunnittelut += $v2['tv_kesto'];
+		}
+		$didoResult .= '</div>';
 	}
-
-    	echo '<td>'.$didoResult.'</td>';
-
-
+	$yhtSuunnittelut += $suunnittelut;
+    echo '<td>'.$didoResult.'</td>';
     echo '<td>';
     if(isset($luetut_laatikot['laatikkot'][$date])){
     	echo '<div class="small" style="opacity:0.6">';
@@ -456,14 +464,15 @@ exit;
     }
     echo '</td>';
 
-    echo '<td id="'.$did.'_'.$tid.'" ilman_lounastaukot="'.$ilman_lounastaukot.'" ilman_matkat="'.$ilman_matkat.'">';
+    echo '<td id="'.$did.'_'.$tid.'">';
     if(isset($toteutuneet_laatikot[$date])){
     	echo '<div class="small">';
 	   foreach($toteutuneet_laatikot[$date] as $item)
 		echo $item;
-    	echo '<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
+
     	echo '</div>';
     }
+    echo '<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
     echo '</td>';
 
 
@@ -735,7 +744,7 @@ exit;
 
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
-	<?php Yii::app()->clientScript->registerPackage('tyovuoroot'); ?>
+	<?php /* Yii::app()->clientScript->registerPackage('tyovuoroot'); */ ?>
 	<?php Yii::app()->clientScript->registerPackage('toteuma'); ?>
 
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/totrivi_poista.js"></script>
@@ -770,7 +779,7 @@ $(document).ready(function(){
         $('#to').css({"border" : "2px #f14010 solid"}).focus();
         return false;
     }
-    if (!nimi) {
+    if (nimi === 'kaikki') {
         $('#nimi').css({"border" : "2px #f14010 solid"}).focus();
         return false;
     }
@@ -868,7 +877,7 @@ $(document).ready(function(){
  }
 
 
- $('.tyovuoro').append('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:-15px;  font-size: 130%" data-toggle="tooltip" data-placement="top" title="Siirrä toteutuun"></i>');
+ $('.tv_edit').after('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:2px; font-size: 130%; z-index: 99999999" data-toggle="tooltip" data-placement="left" title="Siirrä toteutuun"></i>');
 
 
  $( ".sirraToteutuun" ).tooltip({

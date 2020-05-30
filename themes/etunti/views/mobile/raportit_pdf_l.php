@@ -114,7 +114,7 @@ window.onload = function () {
     <th></th>
     <th></th>
     <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
-    <th><?php echo sprint($kkesto); ?><!--<b>(<?php echo num($kkesto); ?>)</b>--></th>
+    <th><?php echo $this->sprint($kkesto); ?></th>
     <th></th>
     <th></th>
   </tr>

@@ -230,11 +230,16 @@ $iban				= $asetukset->iban;
 			$kohteet 	= $mob['kohteet'];
 		}
 		if( isset($mob['tyovuoroot']) ){
-			$tyovuoroot[$asiakas_nimi] = $mob['tyovuoroot'];
-			$kohteet 	= $mob['kohteet'];
-			$mobile 	= $mob['mobile'];
-			$toteutuneet 	= $mob['toteutuneet'];
-			//$tyontekijan_nimi = $mobile['tekijan_nimi'];
+			$tv_pvm				= $mob['this_pvm'];
+			$tv_tid				= $mob['this_tid'];
+			$tv_kesto			= $mob['tv_kesto'];
+
+			$toistuva[$asiakas_nimi] 	= $mob['toistuva'];
+			$this_id[$asiakas_nimi] 	= $mob['this_id'];
+			$tyovuoroot[$asiakas_nimi] 	= $mob['tyovuoroot'];
+			$kohteet 			= $mob['kohteet'];
+			$mobile 			= $mob['mobile'];
+			$toteutuneet 			= $mob['toteutuneet'];
 		}
 		?>
 		<?php $key++; ?>
@@ -254,10 +259,10 @@ $iban				= $asetukset->iban;
 				$r 		= $this->hinnastoHintaat($mob_tunnit_tyovuoroot['tuoteID'], $item, $kohteet, $t, $rivi_kpl); // MOB
 			}
 			if( isset($tyovuoroot[$asiakas_nimi]['kohde']) ){
-				$tv_id		= $tyovuoroot[$asiakas_nimi]['id'];
-				$t 		= $this->num(strtotime($tyovuoroot[$asiakas_nimi]['loppu'])-strtotime($tyovuoroot[$asiakas_nimi]['alku']));
+				$tv_id		= $this_id[$asiakas_nimi];
+				$t 		= $this->num($tv_kesto);
 				$r 		= $this->hinnastoHintaat($tyovuoroot[$asiakas_nimi]['tuoteID'], $asiakas, $kohteet, $t, $rivi_kpl); // TV
-				$tv_vertailu	= $this->TyovuoroMobileVertailu($tyovuoroot[$asiakas_nimi]['kohde'], $tyovuoroot[$asiakas_nimi]['id'], $tyovuoroot[$asiakas_nimi]['pvm']);
+				$tv_vertailu	= $this->TyovuoroMobileVertailu($tyovuoroot[$asiakas_nimi]['kohde'], $tyovuoroot[$asiakas_nimi]['id'], $tv_pvm);
 			}
 
 			if( isset($r['tp_id']) ){ $tp_id = $r['tp_id']; }
@@ -293,9 +298,9 @@ $iban				= $asetukset->iban;
 				}
 			}
 			// <-- TV
-			if( isset($tyovuoroot[$asiakas_nimi]['pvm']) and isset($kohteet['osoite']) ){
+			if( isset($tyovuoroot[$asiakas_nimi]['id']) and isset($kohteet['osoite']) ){
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-					$nimike_append .= $tyovuoroot[$asiakas_nimi]['pvm'];
+					$nimike_append .= $tv_pvm;
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
 					if(!empty($nimike_append)){ $nimike_append .= ', '; }
@@ -440,10 +445,10 @@ $iban				= $asetukset->iban;
 				}
 			}
 			// <-- TV
-			if( isset($tyovuoroot[$asiakas_nimi]['pvm']) and isset($kohteet['osoite']) ){
+			if( isset($tyovuoroot[$asiakas_nimi]['id']) and isset($kohteet['osoite']) ){
 				$nimike_append = ' ';
 				if(isset($_GET['viestikenta']) and in_array('pvm', $_GET['viestikenta'])){
-					$nimike_append .= $tyovuoroot[$asiakas_nimi]['pvm'];
+					$nimike_append .= $tv_pvm;
 				}
 				if(isset($_GET['viestikenta']) and in_array('osoite', $_GET['viestikenta'])){
 					if(!empty($nimike_append)){ $nimike_append .= ', '; }
@@ -522,10 +527,16 @@ $iban				= $asetukset->iban;
 		<!-- / Lisatuote -->
 
 		<!-- Update tyovuoro -->
-		<?php if( $is_ok_lasku and $laheta !== null and isset($lasku->id) and $tv_id > 0 ){
-			$tl = Tyovuoroot::model()->findByPk($tv_id);
-			if( isset($tl->id) ){
-			   Tyovuoroot::model()->updateByPk($tl->id, array('lasku_id' => $lasku->id));
+		<?php if( $is_ok_lasku and $laheta !== null and isset($lasku->id) and isset($tyovuoroot[$asiakas_nimi]['id'])){
+			if(!$toistuva[$asiakas_nimi]){
+				$tl = Tyovuoroot::model()->findByPk($tv_id);
+				if( isset($tl->id) )
+					Tyovuoroot::model()->updateByPk($tl->id, array('lasku_id' => $lasku->id));
+			} else {
+
+				$tilanne 	= ['laskutettu' => 1, 'lasku_id' => $lasku->id];
+				$poisto_by	= 'ByAutolaskutus';
+				$tv_controller[0]->VirtualtoTV($tyovuoroot[$asiakas_nimi]['id'], $tv_tid, $tv_pvm, $tilanne, $poisto_by);
 			}
 		} ?>
 		<!-- / Update tyovuoro -->
@@ -648,6 +659,7 @@ $iban				= $asetukset->iban;
 $(document).ready(function(){
 
   $(".ajax_lahetys").click(function(e){
+	$(this).remove();
 	e.preventDefault();
 	if(!confirm('Oletko varma')){
 		return false;
@@ -669,6 +681,7 @@ $(document).ready(function(){
   });
 
   $(".lahetakaikki").click(function(e){
+	$(this).remove();
 	e.preventDefault();
 	if(!confirm('Oletko varma')){
 		return false;

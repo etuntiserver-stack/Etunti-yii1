@@ -258,56 +258,29 @@ class AsiakkaatController extends Controller
 	public function actionShowshift($id)
 	{
 
-       		$criteria = new CDbCriteria();
-	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
-/*
-        	$criteria->condition = "DATE(paivays) BETWEEN 
-			asiakas_id='".$id."'
-		";
-*/
 		$from = date("Y-m-d");
 		$to = date("Y-m-d", strtotime("+1 month"));
-
-		if(isset($_POST['from']) and isset($_POST['to'])){
-		$from 	= date("Y-m-d",strtotime($_POST['from']));
-		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		if(isset($_GET['from']) and isset($_GET['to'])){
+			$from 	= date("Y-m-d",strtotime($_GET['from']));
+			$to 	= date("Y-m-d",strtotime($_GET['to']));
 		}
-
-
-        	$criteria->condition = "
+        	$haku_criteria = "
 			kohde IN 
 			(SELECT id FROM sivex_kohdet 
 			   WHERE asiakas_id='".$id."'
 			)
-			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		";
 
-
-		$model=Tyovuoroot::model()->findAll($criteria);
-
-		if(isset($_POST['tulosta'])){
-
-	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('showshift', 
-			array(
-			'model'=>$model,
-			'from'=>$from,
-			'to'=>$to,
-			'id'=>$id,
-			),true));
-	          $html2pdf->Output();
-
-		} else {
+		$tyovuorot = Yii::app()->createController('Tyovuoroot');
+		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data']);
 
 		$this->render('showshift',array(
-			'model'=>$model,
-			'from'=>$from,
-			'to'=>$to,
-			'id'=>$id,
+				'dataAll' => $dataAll,
+				'from' => $from,
+				'to' => $to,
+				'id' => $id,
 		));
 
-		}
 	}
 
 	public function actionView_edico($id)
@@ -1738,41 +1711,33 @@ $xml = '
 	protected function tyovuorotCRM($model, $from, $to)
 	{
 
-		$criteria=new CDbCriteria;
-		$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
-		$criteria->condition = " 
+		$from 		= date("Y-m-d", strtotime($from));
+		$to 		= date("Y-m-d", strtotime($to));
+		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+		$haku_criteria	= "
 			kohde IN
 			(
 				SELECT id FROM sivex_kohdet
 				WHERE asiakas_id IN(SELECT id FROM asiakkaat WHERE id='".$model->id."')
-			) 
-			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
+			)
 		";
+		$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data']);
 
-		if(!empty($from) and !empty($to))
-		{
-		$criteria->addCondition (" 
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-		");
-		}
-
-		$tar = Tyovuoroot::model()->findAll($criteria);
 		$bod = '';
-
-		if(isset($tar[0])){
-
 		$asetukset=Asetukset::model()->findByPk(1);
 
-			foreach($tar as $data)
-			{
+		foreach($dataAll as $arr){
+
+				$data = $arr['data'];
+
 				$kesto = strtotime($data->loppu)-strtotime($data->alku);
 				$k = Kohteet::model()->findbypk($data->kohde);
 				if(isset($k->id)) $osoite = $k->osoite; else $osoite = '';
-				$tt = Tyontekijat::model()->findbypk($data->tid);
+				$tt = Tyontekijat::model()->findbypk($arr['this_tid']);
 				if(isset($tt->id)) $tekijan_nimi = $tt->tekijan_nimi; else $tekijan_nimi = '';
 			  	$bod .= '
 				<table class="table table-bordered">
-					<tr><td colspan="2"><h3>'.date("d.m.Y", strtotime($data->pvm)).', '.$osoite.'</h3></td></tr>
+					<tr><td colspan="2"><h3>'.date("d.m.Y", strtotime($arr['this_pvm'])).', '.$osoite.'</h3></td></tr>
 					<tr><td>'.Yii::t('main', 'Työntekijä').'</td><td>'.$tekijan_nimi.'</td></tr>
 					<tr><td>'.Yii::t('main', 'Aloitus').'</td><td>'.$data->alku.'</td></tr>
 					<tr><td>'.Yii::t('main', 'Lopetus').'</td><td>'.$data->loppu.'</td></tr>
@@ -1804,7 +1769,7 @@ $xml = '
 				}
 				// peruutus -->
 
-				if($data->peruutettu ==1){
+				if($data->peruutettu == 1){
 			  	$bod .= '<td></td><td><span class="text-danger">'.Yii::t('main', 'Peruutettu').'</span></td></tr>';
 				} elseif($data->peruutettu ==2){
 			  	$bod .= '<td></td><td><span class="text-danger">'.Yii::t('main', 'Peruutettu laskutettava').'</span></td></tr>';
@@ -1812,14 +1777,13 @@ $xml = '
 			  	$bod .= '<td></td>
 						<td>
 							<div id="peruutusehdot" style="display:none">'.$asetukset->peruutusehdot.'</div>
-							<button class="btn btn-danger peruuttaa" for="'.$data->id.'" peruutus_tilanne="'.$peruutettu.'">'.Yii::t('main', 'Peruuta').'</button>
+							<button class="btn btn-danger peruuttaa" for="'.$arr['this_id'].'" peruutus_tilanne="'.$peruutettu.'">'.Yii::t('main', 'Peruuta').'</button>
 						</td></tr>';
 				}
 			  	$bod .= '
 				</table><br>';
-		  	}
-
 		}
+
 
 		return $bod;
 	}

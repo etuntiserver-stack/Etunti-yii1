@@ -1,27 +1,40 @@
 <?php
-  if( !isset($tyosuhteet_checker[$tt->id]) and isset($ts->loppu) and !empty($ts->loppu) and strtotime($ts->loppu) < strtotime($date) )
+  if( !isset($tyosuhteet_checker[$tid]) and isset($ts->loppu) and !empty($ts->loppu) and strtotime($ts->loppu) < strtotime($date) )
   {
-	$tyosuhteet_checker[$tt->id] = array('nimi' => $this->etuSukunimi($tt->id), 'tsloppu' => $ts->loppu );
+	$tyosuhteet_checker[$tid] = array('nimi' => $this->etuSukunimi($tid), 'tsloppu' => $ts->loppu );
   }
 
-  $criteria = new CDbCriteria();
-  $criteria->order = " alku ASC "; 
-  $criteria->condition = "  
-  tid = '".$tt->id."'
-  AND pvm = '$date' 
-  AND peruutettu=0
-  ";
-  if(isset($_POST['P'])){
-  $criteria->Addcondition ( " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%w') IN (".implode(",",$_POST['P']).") ");
-  }
-  $tv = Tyovuoroot::model()->findAll($criteria);
-  if( count($tv) > 0 ){
   echo '<tr><td colspan="2"><h2><b>'.$paivat[date('N',$d)].' '.$date.'</b></h2></td></tr>';
   echo '<tr><td valign="top" style="width:390px; vertical-align: top"><h3>Aika/Kohde</h3>';
 
   $yht = 0;
-  foreach($tv as $t)
-  {
+  foreach($date_arr as $arr){
+	$this_id = 0;
+	foreach($arr as $v2){
+		if( isset($v2['this_id']) ){
+			$t =  (object)$v2['data'];
+			$this_id = $v2['this_id'];
+		}
+	}
+	if(!isset($t->alku))
+		continue;
+	if(isset($_POST['pdf_email']) and $this_id > 0){
+
+		$get_id 	= $this->this_id($this_id);
+		$model 		= $get_id['model'];
+		$toistuva 	= $get_id['toistuva'];
+		if(!$toistuva){
+			Tyovuoroot::model()->updateByPk($model->id, ['piilota_mobiilista'=>'0']);
+		} else {
+			// Poistetaan PVM per henkilö toistuvasta ketjusta
+			// Tilalle Tavallinen työvuoro
+			if( $model['piilota_mobiilista'] == 1 ){
+				$model['piilota_mobiilista'] = 0;
+				$this->newTvFromToistuva($model, $get_id['pvm'], $get_id['tid'], 'ByLahetysOnPiilotaMobiilistaChanger');
+			}
+		}
+	}
+
 	// <-- Asiakas Tiedot
 	$asiakasTiedot = '';
 	if(isset($t->kohteet->asiakas_id)){
@@ -49,7 +62,7 @@
 		$osoite = $t->osoite;
 	} elseif(isset($t->kohteet->id) and empty($t->osoite)){
 		$osoite = $t->kohteet->osoite;
-	} elseif(!isset($k->id) and $t->status != 0 and $t->status != 3){
+	} elseif($t->status != 3){
 		$osoite = $this->tilanteet()[$t->status];
 	}
 
@@ -95,23 +108,28 @@
   echo '<h4>'.Yii::t('main','Yhteensä: ').$this->sprint($yht).'</h4>';
   echo '</td><td valign="top" style="width:400px;border-left: 1px #ccc solid; vertical-align: top"><h3>Tietoja</h3>';
 
-  foreach($tv as $tvPvm)
-  {
-	// <-- Osoite
-	$osoite = '';
-	if(!empty($tvPvm->osoite)){
-		$osoite = $tvPvm->osoite;
-	} elseif(empty($tvPvm->osoite) and isset($tvPvm->kohteet->osoite)){
-		$osoite = $tvPvm->kohteet->osoite;
-	}
-	// Osoite -->
+  foreach($date_arr as $arr){
+
+	foreach($arr as $v2)
+		if( isset($v2['this_id']) )
+			$t =  (object)$v2['data'];
+	if(!isset($t->osoite))
+		continue;
 
 	// <-- Tietoja
-	if( !empty($tvPvm->tietoja) ){
-		echo '<p><b>'.$osoite.':</b> <br>'.str_replace("\n", "<br>", $tvPvm->tietoja).'</p>';
+	if( !empty($t->tietoja) ){
+		// <-- osoite
+		$osoite = '';
+		if(!empty($t->osoite)){
+			$osoite = $t->osoite;
+		} elseif(isset($t->kohteet->id) and empty($t->osoite)){
+			$osoite = $t->kohteet->osoite;
+		} elseif($t->status != 3){
+			$osoite = $this->tilanteet()[$t->status];
+		}
+		echo '<p><b>'.$osoite.':</b> <br>'.str_replace("\n", "<br>", $t->tietoja).'</p>';
 	}
 	// Tietoja -->
   }
   echo '</td></tr>';
-  } // if count > 0
 ?>

@@ -23,7 +23,8 @@
  */
 class ToistuvatTyovuorot extends DB2ActiveRecord
 {
-	public $peruutettu, $count;
+	public $uusi_tilaus, $osoiteOnline, $count, $l_tunnit;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -79,7 +80,9 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 		     'muistiinpano' => 'text DEFAULT NULL',
                      'tyoajanlaatu' => 'varchar(50) DEFAULT NULL',
                      'korjattu_poista_tama' => 'int(1) DEFAULT 0',
+		     'new_poistettu_pvm' => 'text DEFAULT NULL',
                      'peruutettu' => 'int(1) DEFAULT 0',
+		     'laskutettu' => 'int(1) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -102,13 +105,13 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('time, pfrom, pto, viikkoja, viikko_paivat, tid, kohde, pvm, alku, loppu, kesto, tyoajanmerkinta, status, tietoja, tyopaari', 'required'),
-			array('viikkoja, tid, kohde, status, ilmoitus_paattymisesta, piilota_mobiilista, tuoteID, peruutettu', 'numerical', 'integerOnly'=>true),
+			array('viikkoja, tid, kohde, status, ilmoitus_paattymisesta, peruutettu, piilota_mobiilista, laskutettu, tuoteID', 'numerical', 'integerOnly'=>true),
 			array('osoite, postinumero, postitoimipaikka, tyoajanlaatu, korjattu_poista_tama', 'length', 'max'=>255),
 			array('pfrom, pto, pvm', 'length', 'max'=>50),
 			array('alku, loppu, pituus, kesto', 'length', 'max'=>10),
 			array('tyoajanmerkinta', 'length', 'max'=>100),
 			array('tietoja', 'length', 'max'=>10000),
-			array('tyopaari, tvuoro_ids, poistettu_pvm, lisa_tuotteet, tyo_erittelyt, muistiinpano', 'safe'),
+			array('tyopaari, tvuoro_ids, poistettu_pvm, lisa_tuotteet, tyo_erittelyt, muistiinpano, viikko_paivat, new_poistettu_pvm', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, pfrom, pto, viikkoja, viikko_paivat, tid, kohde, pvm, alku, loppu, kesto, tyoajanmerkinta, status, tietoja, tyopaari', 'safe', 'on'=>'search'),
@@ -125,6 +128,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 		return array(
 		        'kohteet' => array(self::BELONGS_TO, 'Kohteet', 'kohde'),
 		        'tt' => array(self::BELONGS_TO, 'Tyontekijat', 'tid'),
+		        'avaimet' => array(self::HAS_MANY, 'Avaimet', array('kohde'=>'kohde')),
 		);
 	}
 
@@ -140,6 +144,23 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 			$return = $this->kohteet->osoite;
 		elseif( !empty($this->osoite) )
 			$return = $this->osoite;
+                return $return;
+        }
+
+        public function getosoiteById(){
+		$return = '';
+		if(empty($this->osoite) and $this->status != '2' and $this->status != '10'){
+			$k = Kohteet::model()->findByPk($this->kohde);
+			if( isset($k->id) ){
+				$return = $k->osoite;
+			}
+		} elseif(!empty($this->osoite) and $this->status != '2' and $this->status != '10'){
+			$return = $this->osoite;
+		} elseif($this->status == '2'){
+			$return = 'MATKA';
+		} elseif($this->status == '10'){
+			$return = 'Lounastauko';
+		}
                 return $return;
         }
 
@@ -174,9 +195,14 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 			'status' => 'Status',
 			'tietoja' => 'Tietoja',
 			'tyopaari' => 'Tyopaari',
-
+			'piilota_mobiilista'=>Yii::t('main', 'Näytä mobiilissa'),
 		);
 	}
+
+        public function getToistuva_id(){
+		$return = $this->id;
+                return $return;
+        }
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.

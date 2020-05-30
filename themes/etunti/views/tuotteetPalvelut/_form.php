@@ -86,28 +86,12 @@ $model->kategoria = json_decode($model->kategoria, true);
 		<?php echo $form->error($model,'hinta_alv_sis'); ?>
 	</div>
 
-
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/select_valiko.js"></script>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 
 <script type="text/javascript">
 $(document).ready(function(){
-
-/* valikot */
-$(".muokaValiko").click(function() {
-    var thisFor = $(this).attr("for");
-
-        $.ajax({
-           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
-	   type:'POST',
-	   data: { "select_type" : thisFor },
-           success: function(data){
-		//console.log(data);
-		$('#showres').modal().html(JSON.parse(data));
-           }
-        });
-});
-/* valikot */
 
  $('input[name="TuotteetPalvelut[alvsis]"], #TuotteetPalvelut_alv, #TuotteetPalvelut_hinta_alv_0, #TuotteetPalvelut_hinta_alv_sis').on("change keyup paste", function(){
 	lasketa();

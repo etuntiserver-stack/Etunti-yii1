@@ -190,7 +190,7 @@ $(document).ready(function(){
 </head>
 
 <body class="<?php if(isset(Yii::app()->user->currentBody)) echo Yii::app()->user->currentBody; ?>">
-<div id="hovertietoja"></div>
+<div id="hovertietoja" style="display:none"></div>
 
 <?php  if($curpage == 'tyovuoroot/index' and isset($_GET['fullscreen']) and $_GET['fullscreen'] == true) : ?>
 	<?php echo ''; ?>

@@ -1,6 +1,8 @@
 <?php
-//		AND toistuva_id IN( SELECT toistuva_id FROM sivex_tvuoro WHERE EXTRACT( YEAR_MONTH FROM STR_TO_DATE(pvm, '%d.%m.%Y') )=201912 ORDER BY id DESC )
 
+exit;
+
+/*
 	// <-- toistuvat
 	$start_haku = '2019-11-15';
 	$stop_haku = '2020-02-01';
@@ -118,6 +120,7 @@
 	}
 	echo '</table>';
 	echo $i;
+*/
 
 /*
 		$startday	= date("Y-m-d", strtotime($attr->pfrom));

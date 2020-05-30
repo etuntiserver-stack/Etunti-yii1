@@ -100,8 +100,8 @@ if( $curpage == 'tyovuoroot/beta' )
 	<?php
 		$hakuPainike = "";
 	if(
-		isset(Yii::app()->session['asiakas'])
-		or isset(Yii::app()->session['kohde'])
+		isset($_SESSION['haku_asiakas'])
+		or isset($_SESSION['haku_kohde'])
 		or isset(Yii::app()->session['tyo_toimialue'])
 		or isset(Yii::app()->session['kohteiden_tyonimike'])
 		or isset(Yii::app()->session['tyoryhma'])
@@ -124,7 +124,7 @@ if( $curpage == 'tyovuoroot/beta' )
 	     <legend><?php echo Yii::t('main','Haku'); ?></legend>
 
               <div class="form-group">
-		<?php if($curpage == 'tyovuoroot/tv2' or $curpage == 'tyovuoroot/tv3' or $curpage == 'tyovuoroot/beta') : ?>
+		<?php if($curpage == 'tyovuoroot/beta' and isset($_GET['mode']) and $_GET['mode'] == 'tt') : ?>
 		    <label><?php echo Yii::t('main','Aikaväli'); ?></label>
 			<div class="row">
 			 <div class="col-sm-6">
@@ -135,7 +135,7 @@ if( $curpage == 'tyovuoroot/beta' )
 			</div>
 		<?php endif; ?>
 
-		<?php if($curpage == 'tyovuoroot/index' or $curpage == 'tyovuoroot/tv3' or $curpage == 'tyovuoroot/beta') : ?>
+		<?php if( $curpage == 'tyovuoroot/beta' and isset($_GET['mode']) and $_GET['mode'] == 'vko' ) : ?>
 			<div class="row">
 			 <div class="col-sm-5">
 		    	  <label><?php echo Yii::t('main','Vuosi'); ?></label>
@@ -196,13 +196,13 @@ if( $curpage == 'tyovuoroot/beta' )
 
               <div class="form-group">
 		    <label><?php echo Yii::t('main','Asiakas'); ?></label>
-		      <input type="text" class="form-control" name="asiakas" id="asiakasHakussa" placeholder="<?php echo Yii::t('main','Yritys, Yhteyshenkilö, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['asiakas'])) echo Yii::app()->session['asiakas']; ?>" AUTOCOMPLETE="off">
+		      <input type="text" class="form-control" name="haku_asiakas" id="asiakasHakussa" placeholder="<?php echo Yii::t('main','Yritys, Yhteyshenkilö, Puhelin'); ?>..." value="<?php if(isset($_SESSION['haku_asiakas'])) echo $_SESSION['haku_asiakas']; ?>" AUTOCOMPLETE="off">
 			<div id="asiakasAutocompleteResultHakussa"></div>
 	      </div>
 
               <div class="form-group">
 		    <label><?php echo Yii::t('main','Kohde'); ?></label>
-		      <input type="text" class="form-control" name="kohde" id="kohdeHakussa" placeholder="<?php echo Yii::t('main','Osoite, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['kohde'])) echo Yii::app()->session['kohde']; ?>" AUTOCOMPLETE="off">
+		      <input type="text" class="form-control" name="haku_kohde" id="kohdeHakussa" placeholder="<?php echo Yii::t('main','Osoite, Puhelin'); ?>..." value="<?php if(isset($_SESSION['haku_kohde'])) echo $_SESSION['haku_kohde']; ?>" AUTOCOMPLETE="off">
 			<div id="kohdeAutocompleteResultHakussa"></div>
 	      </div>
 
@@ -295,7 +295,7 @@ if( $curpage == 'tyovuoroot/beta' )
 		<div class="row">
 		 <div class="col-sm-12">
 		        <button type="submit" class="col-sm-10 btn btn-primary" name="haku" controller="<?php echo $curpage; ?>" type="button"><?php echo Yii::t('main','Hae'); ?></button>
-			<a class="col-sm-2 btn btn-default" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/<?php echo $curpage; ?>?reset"><i class="fa fa-remove"></i></a>
+			<a class="col-sm-2 btn btn-default" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/<?php echo $curpage; ?>?reset<?=((isset($_GET['mode']))?'&mode='.$_GET['mode']:'')?>"><i class="fa fa-remove"></i></a>
 		 </div>
 		</div>
 	      </span>
@@ -306,22 +306,12 @@ if( $curpage == 'tyovuoroot/beta' )
         </li>
 	<!-- Haku -->
 
-	<!-- Viikonloput -->
-	<?php if($curpage == 'tyovuoroot/beta') : ?>
-        <li class="p10" data-toggle="tooltip">
-        <li class="p10" data-toggle="tooltip">
-              <div class="form-group">
-	 	<div class="btn btn-default fa fa-calendar-check-o" id="vkolopput" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Viikonloput'); ?>"></div>
-	      </div>
-	</li>
-	<?php endif; ?>
-
-	<?php if($curpage == 'tyovuoroot/index') : ?>
+	<?php if( $curpage == 'tyovuoroot/beta' and isset($_GET['mode']) and $_GET['mode'] == 'vko' ) : ?>
         <li class="p10" data-toggle="tooltip">
               <div class="form-group">
                <div class="form-inline">
 
-		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.$previousWeek.'&year='.$previousYear; ?>">
+		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.$previousWeek.'&year='.$previousYear.'&mode='.((isset($_GET['mode']))?$_GET['mode']:''); ?>">
 				<i class="fa fa-arrow-left btn btn-default btn-group" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Edellinen viikko'); ?>"></i>
 			</a>
 
@@ -336,7 +326,7 @@ if( $curpage == 'tyovuoroot/beta' )
 			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">'.Yii::t('main', 'Viikko').': '.date('W', strtotime($year ."W". $week . '1')).', '.Yii::t('main', 'Vuosi').': '.date('Y', strtotime($year ."W". $week . '1')).', '.date('d.m', strtotime($year ."W". $week . '1')).' - '.date('d.m', strtotime($year ."W". $week . '7')).'</option>';
 
 			while (date('Y', $nextMonday) == $year) {
-			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday).'&year='.$year.'">'.Yii::t('main', 'Viikko').': '.date('W', $nextMonday).', '.Yii::t('main', 'Vuosi').': '.date('Y', $nextMonday).', '.date('d.m', $nextMonday).' - '.date('d.m', $nextSunday).'</option>';
+			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday).'&year='.$year.'&mode='.((isset($_GET['mode']))?$_GET['mode']:'').'">'.Yii::t('main', 'Viikko').': '.date('W', $nextMonday).', '.Yii::t('main', 'Vuosi').': '.date('Y', $nextMonday).', '.date('d.m', $nextMonday).' - '.date('d.m', $nextSunday).'</option>';
 	
 			    $nextMonday = strtotime('+1 week', $nextMonday);
 			    $nextSunday = strtotime('+1 week', $nextSunday);
@@ -344,19 +334,13 @@ if( $curpage == 'tyovuoroot/beta' )
 			?>
 			</select>
 
-		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.$nextWeek.'&year='.$nextYear; ?>">
+		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.$nextWeek.'&year='.$nextYear.'&mode='.((isset($_GET['mode']))?$_GET['mode']:''); ?>">
 				<i class="fa fa-arrow-right btn btn-default btn-group" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Seuraava viikko'); ?>"></i>
 			</a> 
-
+			<button class="btn btn-default fa fa-calendar-check-o" id="vkolopput" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Viikonloput'); ?>"></button>
                </div>
               </div>
         </li>
-
-        <li class="p10" data-toggle="tooltip">
-              <div class="form-group">
-	 	<div class="btn btn-default fa fa-calendar-check-o" id="vkolopput" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Viikonloput'); ?>"></div>
-	      </div>
-	</li>
 	<?php endif; ?>
 	<!-- Viikonloput -->
 
@@ -364,6 +348,7 @@ if( $curpage == 'tyovuoroot/beta' )
 	<!-- Tilaus -->
         <li class="p10" data-toggle="tooltip">
 		<button class="btn btn-default fa fa-shopping-cart" id="uusiTilaus" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Uusi tilaus'); ?>"></button>
+		<button class="btn btn-default fa fa-angle-double-down tvasetus <?=((!isset($_SESSION['skrollaus']))?'btn-success':'')?>" for="skrollaus" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Skrollaus'); ?>"></button>
         </li>
 	<!-- Tilaus -->
 
@@ -465,6 +450,22 @@ $("#uusiTilaus").click(function(){
     });
 
 });
+$(".tvasetus").click(function(){
+   var whatfor = $(this).attr('for');
+   $.ajax({
+	url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/tvasetus?whatfor=' + whatfor,
+	success:function(data){
+		console.log(data);
+		data = JSON.parse(data);
+		if( data['skrollaus'] )
+			window.location.reload();
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+
+});
 
 $('.multTyontekijat').multiselect({
 	//inheritClass: true,
@@ -508,31 +509,23 @@ $('.multTyoryhma').multiselect({
 });
 </script>
 
-
-
 	    <li class="muokkausLi" style="display:none">
 	     <a href="#" class="bg-warning">
 	        <span class="mr10">Muokkaus tila</span>
 	     </a>
 	    </li>
 	    <li class="muokkausLi" style="display:none">
-	     <a href="#" class="trash fa fa-trash-o" style="font-size: 150%">
+	     <a href="#" class="trash fa fa-trash-o" style="font-size: 150%" data-toggle="tooltip" data-placement="bottom" title="Poista valitut työvuorot">
 	     </a>
 	    </li>
 	    <li class="muokkausLi" style="display:none">
-	     <a href="#" class="clear fa fa-circle-o-notch" style="font-size: 150%">
+	     <a href="#" class="clear fa fa-circle-o-notch" style="font-size: 150%" data-toggle="tooltip" data-placement="bottom" title="Keskeytä">
 	     </a>
 	    </li>
 	    <?php endif; ?>
 
       </ul>
-<!--
-      <form class="navbar-form navbar-left navbar-search" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Haku...">
-        </div>
-      </form>
--->
+
       <ul class="nav navbar-nav navbar-right">
 <?php /*
         <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Uusimmat viestit'); ?>">
@@ -1109,12 +1102,11 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
 	      <!-- Nakyma -->
               <li class="p10" data-toggle="tooltip">
 	      <select class="form-control tvchange" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Valitse näkymä'); ?>">
- 	        <?php if($curpage != 'tyovuoroot/index' and $curpage != 'tyovuoroot/tv3' and $curpage != 'tyovuoroot/beta'): ?>
+ 	        <?php if($curpage != 'tyovuoroot/beta'): ?>
 		<option value=><?php echo Yii::t('main', 'Työvuoro näkymä'); ?></option>
 		<?php endif; ?>
- 	        <option value="index" <?php if($curpage == 'tyovuoroot/index') echo 'selected'; ?>><?php echo Yii::t('main', 'VIIKKO'); ?></option>
- 	        <option value="tv3" <?php if($curpage == 'tyovuoroot/tv3') echo 'selected'; ?>><?php echo Yii::t('main', 'TYÖNTEKIJÄ'); ?></option>
- 	        <option value="beta" <?php if($curpage == 'tyovuoroot/beta') echo 'selected'; ?>><?php echo Yii::t('main', 'Työvuorot ( NOPEA )'); ?></option>
+ 	        <option value="beta?mode=vko" <?php if($curpage == 'tyovuoroot/beta' and isset($_GET['mode']) and $_GET['mode'] == 'vko') echo 'selected'; ?>><?php echo Yii::t('main', 'VIIKKO'); ?></option>
+ 	        <option value="beta?mode=tt" <?php if($curpage == 'tyovuoroot/beta' and isset($_GET['mode']) and $_GET['mode'] == 'tt') echo 'selected'; ?>><?php echo Yii::t('main', 'TYÖNTEKIJÄ'); ?></option>
 	      </select>
               </li>
 	      <!-- Nakyma -->
@@ -1131,7 +1123,7 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Lista työvuoroista'); ?></a>
               </li>
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/viikkottain">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/beta?mode=vko">
                   <span class="fa fa-paper-plane"></span> <?php echo Yii::t('main', 'Työvuorojen lähetys'); ?></a>
               </li>
               <li>
@@ -1148,7 +1140,7 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
           </li>
 	<?php endif; ?>
 
-	<?php if(in_array('3',$tas)) : ?>
+	<?php if(in_array('3',$tas) || Yii::app()->user->domain == 'staging_kotipuhtaaksi') : ?>
           <li>
             <a class="accordion-toggle laskutuksenHallinta" href="#">
               <span class="glyphicon glyphicon-barcode"></span>
@@ -1169,7 +1161,8 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
 	      <?php if( 
 			Yii::app()->user->domain == 'demo' 
 			|| Yii::app()->user->domain == 'sivex' 
-			|| Yii::app()->user->domain == 'kotipuhtaaksi' 
+			|| Yii::app()->user->domain == 'kotipuhtaaksi'
+			|| Yii::app()->user->domain == 'staging_kotipuhtaaksi'
 	      ): ?>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/auto">

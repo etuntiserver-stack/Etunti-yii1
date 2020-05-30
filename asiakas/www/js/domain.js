@@ -23,7 +23,7 @@
     }
 
     // <-- Palvelin
-    if(developer){ var server = '../../'; }
+    if(developer){ var server = 'http://etunti.local/'; }
     var url = server+"index.php/dico/asiakkaat";
     var versio = "";
     // Palvelin -->

@@ -7,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap.min.css">
 <script>
 window.onload = function () {
-    //window.print();
+    window.print();
 }
 </script>
 <?php else : ?>
@@ -19,10 +19,7 @@ window.onload = function () {
 <div style="100%">
 
 <table id="ylataulu" class="table">
- <tr><td style="width:60%">
-  <?php $asetukset=Asetukset::model()->find("id=1"); ?>
-  <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
- </td><td valign="right" style="width:20%">
+ <tr><td valign="right" style="width:20%">
   <?php echo Yii::t('main', 'Lomat ja poissaolot'); ?>
   <?php if(isset($_POST['from']) and isset($_POST['to'])) : ?>
     <?php echo date("d.m.Y",strtotime($_POST['from'])).'-'.date("d.m.Y",strtotime($_POST['to'])); ?>
@@ -49,18 +46,23 @@ window.onload = function () {
   <?php
   $kplYht	= 0;
   ?>
-  <?php foreach($model as $data) : ?>
-
-  <?php
-	$expl = explode("/",$data->tyoajanlaatu);
-  	$kplYht	+= $data->kpl;
-  ?>
-  <tr>
-    <td style="text-align:left"><?php echo $this->etuSukunimi($data->tid); ?></td>
-    <td style="text-align:left; color:<?=$expl[1]?>"><?php echo $expl[0]; ?></td>
-    <td><?php echo $data->kpl; ?></td>
-  </tr>
-
+  <?php foreach($dataAll as $pvm => $tids) : ?>
+  <?php $date = date("Y-m-d", strtotime($pvm)) ?>
+  	<?php foreach($tids as $nimi => $tids) : ?>
+	  	<?php foreach($tids as $tid => $arr) : ?>
+		  	<?php foreach($arr as $tyoajanlaatu => $kpl) : ?>
+			<?php
+				$expl = explode("/",$tyoajanlaatu);
+			  	$kplYht	+= $kpl;
+			?>
+			<tr>
+			<td style="text-align:left"><?=$nimi?></td>
+			<td style="text-align:left; color:<?=$expl[1]?>"><?php echo $expl[0]; ?></td>
+			<td><?=$kpl?></td>
+			</tr>
+			<?php endforeach; ?>
+		<?php endforeach; ?>
+	<?php endforeach; ?>
   <?php endforeach; ?>
   </tbody>
   <tfoot>

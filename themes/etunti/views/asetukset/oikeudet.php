@@ -26,16 +26,16 @@
 	'tyoryhmat'=>array(4=>'Työryhmät järjestelmänvalvoja'),
 	'tuntienhallinta'=>array(4=>'Tuntien hallinta'),
 	'pudotusvalikot'=>array(4=>'Pudotusvalikot'),
-	'yrityksentiedot'=>array(0=>null,1=>null,2=>'Muokaa yrityksentiedot',3=>null),
+	'yrityksentiedot'=>array(0=>null,1=>null,2=>'Muokkaa yrityksentiedot',3=>null),
 	'henkilotunnukset'=>array(0=>null,1=>null,2=>'Henkilötunnukset',3=>null),
-	'ryhmat'=>array(0=>'Käyttöoikeusryhmät taulu',1=>'Luo käyttöoikeusryhmä',2=>'Muokaa käyttöoikeusryhmiä',3=>null),
-	'asiakkaat'=>array(0=>'Asiakkaat taulu',1=>'Luo asiakas',2=>'Muokaa asiakas',3=>'Poista asiakas',4=>'Massamuokkaus asiakas',5=>'Asiakaslistojen tulostus'),
-	'kohteet'=>array(0=>'Kohteet taulu',1=>'Luo kohde',2=>'Muokaa kohde',3=>'Poista kohde',4=>'Massamuokkaus kohde'),
-	'tyontekijat'=>array(0=>'Työntekijät taulu',1=>'Luo työntekijä',2=>'Muokaa työntekijä',3=>'Poista työntekijä',4=>'Työntekijät laaja'),
-	'viestinta'=>array(0=>'Viestinta taulu',1=>'Luo viesti',2=>'Muokaa viesti',3=>'Poista viesti'),
-	'administrators'=>array(0=>'Järjestelmänvalvoja taulu',1=>'Luo järjestelmänvalvoja',2=>'Muokaa järjestelmänvalvoja',3=>'Poista järjestelmänvalvoja'),
+	'ryhmat'=>array(0=>'Käyttöoikeusryhmät taulu',1=>'Luo käyttöoikeusryhmä',2=>'Muokkaa käyttöoikeusryhmiä',3=>null),
+	'asiakkaat'=>array(0=>'Asiakkaat taulu',1=>'Luo asiakas',2=>'Muokkaa asiakas',3=>'Poista asiakas',4=>'Massamuokkaus asiakas',5=>'Asiakaslistojen tulostus'),
+	'kohteet'=>array(0=>'Kohteet taulu',1=>'Luo kohde',2=>'Muokkaa kohde',3=>'Poista kohde',4=>'Massamuokkaus kohde'),
+	'tyontekijat'=>array(0=>'Työntekijät taulu',1=>'Luo työntekijä',2=>'Muokkaa työntekijä',3=>'Poista työntekijä',4=>'Työntekijät laaja'),
+	'viestinta'=>array(0=>'Viestinta taulu',1=>'Luo viesti',2=>'Muokkaa viesti',3=>'Poista viesti'),
+	'administrators'=>array(0=>'Järjestelmänvalvoja taulu',1=>'Luo järjestelmänvalvoja',2=>'Muokkaa järjestelmänvalvoja',3=>'Poista järjestelmänvalvoja'),
 	'mallitiedostot'=>array(0=>null,1=>null,2=>'Mallitiedostot',3=>null),
-	'lasku'=>array(0=>'Laskutus taulu',1=>'Luo lasku',2=>'Muokaa lasku',3=>'Poista lasku'),
+	'lasku'=>array(0=>'Laskutus taulu',1=>'Luo lasku',2=>'Muokkaa lasku',3=>'Poista lasku'),
 	'management'=>array(0=>null,1=>null,2=>'Management köyttöoikeus',3=>null),
 	);
 	ksort($array);
@@ -47,17 +47,17 @@
 
 	if(isset(Yii::app()->user->adminID) and in_array('2',$tas))
 	{
-		$tyovuorot = array(0=>null,1=>'Luo työvuoro',2=>'Muokaa työvuoro',3=>'Poista työvuoro');
+		$tyovuorot = array(0=>null,1=>'Luo työvuoro',2=>'Muokkaa työvuoro',3=>'Poista työvuoro');
 		$array['tyovuorot'] = $tyovuorot;
 	}
 	if(isset(Yii::app()->user->adminID) and in_array('3',$tas))
 	{
-		$tuotteet = array(0=>'Tuotteet ja palvelut',1=>'Luo tuote',2=>'Muoka tuote',3=>'Poista tuote');
+		$tuotteet = array(0=>'Tuotteet ja palvelut',1=>'Luo tuote',2=>'Muokka tuote',3=>'Poista tuote');
 		$array['onlineTuotteet'] = $tuotteet;
 	}
 	if(isset(Yii::app()->user->adminID) and in_array('5',$tas))
 	{
-		$yhteystiedot = array(0=>'Yhteystiedot taulu',1=>'Luo yhteystieto',2=>'Muokaa yhteystieto',3=>'Poista yhteystieto');
+		$yhteystiedot = array(0=>'Yhteystiedot taulu',1=>'Luo yhteystieto',2=>'Muokkaa yhteystieto',3=>'Poista yhteystieto');
 		$array['yhteystiedot'] = $yhteystiedot;
 	}
 

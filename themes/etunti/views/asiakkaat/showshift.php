@@ -18,25 +18,44 @@
 
         <!-- begin: .tray-center -->
         <div class="tray-center">
-
-   <!-- tulostus -->
-   <div class="pull-right">
-     <form action="#" method="POST">
-      <input type="hidden" name="from" value="<?php echo $from; ?>">
-      <input type="hidden" name="to" value="<?php echo $to; ?>">
-      <input type="submit" name="tulosta" class="btn btn-primary btn-sm myBgColors" value="PDF">
-     </form>
-   </div>
-   <!-- tulostus -->
-
-
-        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Työvuorot').' - '.$animi.', '.$sahkoposti; ?> 
+        <h2 class="myBgColors p15"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Työvuorot').' - '.$animi.', '.$sahkoposti; ?> 
+	<!-- tulostus -->
+	<div class="pull-right">
+	 <div class="form-inline">
+	  <form action="../mobile/tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="ext" value="doc">
+	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
+	  </form>
+	  <form action="../mobile/tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="ext" value="xls">
+	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+	  </form>
+	  <form action="../mobile/tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="header" value="<?=$from?>-<?=$to?>">
+	    <input type="hidden" name="ext" value="pdf">
+	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+	  </form>
+	 </div>
+	</div>
+	<!-- tulostus -->
 	</h2>
 
 
 
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
-   	    <input type="hidden" name="mob_hae">
+   	    <form id="mobForm" action="#" class="form-inline" method="GET">
+   	    <input type="hidden" name="id" value="<?=$id?>">
 
             <div class="admin-form">
               <div class="panel heading-border">
@@ -112,7 +131,7 @@
   <div class="panel heading-border">
    <div class="panel-body">
 
-<div class="table-responsive tb">
+<div class="table-responsive tb" id="tableContent">
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
@@ -126,49 +145,15 @@
   </tr>
   </thead>
   <?php 
-  foreach($model as $data)
-  {
-	$k=Kohteet::model()->findbypk($data->kohde);
-	if(isset($k->id)) $osoite = $k->osoite; else $osoite = '';
-
-	$tt=Tyontekijat::model()->findbypk($data->tid);
-	if(isset($tt->id)) $tekijan_nimi = $this->etuSukunimi($tt->id); else $tekijan_nimi = '';
-
-
-  	$path = Yii::app()->basePath.'/../img/tekijat/'.Yii::app()->user->domain.'/'. $data->tid.'.jpg';
-  	if (file_exists($path) and isset($_POST['tulosta'])){
-		$img =  '<img src="img/tekijat/'.Yii::app()->user->domain.'/'. $data->tid.'.jpg" height="30">';
-  	} elseif (file_exists($path) and !isset($_POST['tulosta'])){
-		$img =  '<img src="'.Yii::app()->request->baseUrl.'/img/tekijat/'.Yii::app()->user->domain.'/'. $data->tid.'.jpg" height="60">
-			<p>'.$tekijan_nimi.'</p>';
-	} else {
-		$img =  $tekijan_nimi;
+	foreach($dataAll as $arr){
+		$tv = $this->renderPartial('_showshift',array(
+			'data' => $arr['data'],
+			'this_id' => $arr['this_id'],
+			'this_pvm' => $arr['this_pvm'],
+			'this_tid' => $arr['this_tid']
+		), true);
+		echo $tv;
 	}
-
-	$kesto = strtotime($data->loppu)-strtotime($data->alku);
-
-	echo '<tr class="'.(($data->peruutettu != 0)? 'text-danger':'').'">';
-	echo '<td>
-	'.CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
-				array('/tyovuoroot/index?year='.date("Y", strtotime($data->pvm)).'&week='.date("W", strtotime($data->pvm)).'&tv_id='.$data->id), 
-				array(
-					'class'=>'btn btn-primary myBgColors', 
-					'style'=>'color:white', 
-					'data-toggle'=>'tooltip', 
-					'data-placement'=>'top', 
-					'title'=>Yii::t('main', 'Muokkaa'),
-					'target' => '_blank'
-				)
-			).
-	'</td>';
-	echo '<td class="col1">'.$data->pvm.'</td>';
-	echo '<td class="col2">'.$data->alku.'-'.$data->loppu.'</td>';
-	echo '<td class="col1">'.$this->sprint($kesto).'</td>';
-	echo '<td class="col3">'.$osoite.'</td>';
-	echo '<td class="col4">'.$img.'</td>';
-	echo '<td class="col1">'.$data->tietoja.'</td>';
-	echo '</tr>';
-  }
   ?>
   </table>
 </div>
@@ -176,3 +161,13 @@
    </div>
   </div>
 
+<script type="text/javascript">
+$(document).ready(function(){
+  $(".submitForm").on('click', function(e){
+	$('.mobileTable').addClass('table-bordered');
+	$(this).prev('textarea').val($('#tableContent').html());
+	$(this).closest('form').submit();
+	e.preventDefault();
+  });
+});
+</script>

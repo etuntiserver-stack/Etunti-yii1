@@ -617,25 +617,43 @@ public function actionLogin($domain)
 		   if(isset($model->id))
 		   {
 
-
-
 				// <-- Peruuttaa tyovuoroa
-				if(isset($_POST['peruuttaa_tyovuoroa']))
-				{
-					$tv = Tyovuoroot::model()->findByPk($_POST['id']);
+				if(isset($_POST['peruuttaa_tyovuoroa'])){
+
+					$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+					$get_id 	= $tyovuorot[0]->this_id($_POST['id']);
+					$tv 		= $get_id['model'];
+					$toistuva 	= $get_id['toistuva'];
+					$pvm 		= $get_id['pvm'];
+					$tid 		= $get_id['tid'];
+
+
 					if( isset($tv->id) )
 					{
 						$k = Kohteet::model()->findByPk($tv->kohde);
 						$peruutettu = 0;
-						$r = $this->dateDifference(date("Y-m-d", strtotime($tv->pvm)), date("Y-m-d") );
+						$r = $this->dateDifference(date("Y-m-d", strtotime($pvm)), date("Y-m-d") );
 						$asetukset=Asetukset::model()->findByPk(1);
 						if( $asetukset->peruutta_paiva_ennen > 0 and $r > $asetukset->peruutta_paiva_ennen )
 						{
 							$peruutettu = 1;
-							Tyovuoroot::model()->updateByPk($tv->id, array('peruutettu'=>1));
+							if($toistuva){
+								$tilanne 	= ['peruutettu' => $peruutettu];
+								$poisto_by	= 'ByEDICOPeruutettu';
+								$tyovuorot[0]->VirtualtoTV($tv->id, $tid, $pvm, $tilanne, $poisto_by);
+							} else {
+								Tyovuoroot::model()->updateByPk($tv->id, array('peruutettu'=>$peruutettu));
+							}
+
 						} else {
 							$peruutettu = 2;
-							Tyovuoroot::model()->updateByPk($tv->id, array('peruutettu'=>2));
+							if($toistuva){
+								$tilanne 	= ['peruutettu' => $peruutettu];
+								$poisto_by	= 'ByEDICOPeruutettu';
+								$tyovuorot[0]->VirtualtoTV($tv->id, $tid, $pvm, $tilanne, $poisto_by);
+							} else {
+								Tyovuoroot::model()->updateByPk($tv->id, array('peruutettu'=>$peruutettu));
+							}
 						}
 
 
@@ -657,7 +675,7 @@ public function actionLogin($domain)
 							<body>';
 
 							$message .= '<br>Hei, <p>Tilauksesi on peruutettu.</p>';
-							$message .= '<p><b>'.$k->osoite.'</b>, '.$tv->pvm.' '.$tv->alku.'-'.$tv->loppu.'</p>';
+							$message .= '<p><b>'.$k->osoite.'</b>, '.$pvm.' '.$tv->alku.'-'.$tv->loppu.'</p>';
 							if($peruutettu == 2)
 							{
 								$message .= '<h3>Peruutusehdot</h3>';

@@ -235,29 +235,38 @@ class MobileController extends Controller
 
 	public function actionGet_tyovuorot_day($id)
 	{
-		$model = Tyovuoroot::model()->findbypk($id);
-		if(isset($model->pvm))
-		{
+		$return = [];
+		$tyovuorot = Yii::app()->createController('Tyovuoroot');
+		$get_id 	= $tyovuorot[0]->this_id($id);
+		if(isset($get_id['pvm'])){
 			$return = array(
-				'week'=>date("W", strtotime($model->pvm)),
-				'year'=>date("Y", strtotime($model->pvm)),
+				'week'=>date("W", strtotime($get_id['pvm'])),
+				'year'=>date("Y", strtotime($get_id['pvm'])),
+				'tid'=>$get_id['tid'],
 			);
 			echo json_encode($return);
+			exit;
+		} else {
+			$return['error'] = true;
 		}
+		echo json_encode($return);
+		exit;
 	}
 
 	public function actionRaportit()
 	{
+		$asetukset = Asetukset::model()->findByPk(1);
+		$tyovuorot = Yii::app()->createController('Tyovuoroot');
 
-function num($val){
-    if($val > 0)
-	return  number_format((float)$val/3600, 2, '.', '');
-}
-
-	function sprint($val){
-	    if($val > 0)
-		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
-	}
+		// <-- Order tyontekijat
+		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+			$tt_order_1 = "tekijan_nimi";
+			$tt_order_2 = "sukunimi";
+		} else {
+			$tt_order_1 = "sukunimi";
+			$tt_order_2 = "tekijan_nimi";
+		}
+		// Order tyontekijat -->
 
 		function allSess(){
 
@@ -467,149 +476,118 @@ function num($val){
 		//  Toteutuneet -->
 
 		// <-- Toteutuneen ja suunnitellun työn erot
-		  if(Yii::app()->request->getPost('method') == 'LuetutToteutuneetEro')
-		  {
-
-		       	$criteria = new CDbCriteria();
-		       	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m.%d'),( SELECT tekijan_nimi FROM sivex_ttekijat WHERE t.tid=id ) ";
-		       	$criteria->group = " CONCAT(pvm,kohde,tid) ";
-		       	$criteria->select = " 
-				( SELECT osoite FROM sivex_kohdet WHERE t.kohde=id ) as osoite, 
-				( SELECT kaupunki FROM sivex_kohdet WHERE t.kohde=id ) as kaupunki, 
-				( SELECT tekijan_nimi FROM sivex_ttekijat WHERE t.tid=id ) as tekijan_nimi, 
-
-				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-				DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as suunnittellut,
-				t.* 
-			";
-
-			if(isset($_POST['from']) and isset($_POST['to']))
-			{
-
-			$site = Yii::app()->createController('Site');
-			$eilasketa = $site[0]->eiLasketa();
-
-	        		$criteria->addCondition ("
-					DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-					BETWEEN '".date("Y-m-d", strtotime($_POST['from']))."' AND '".date("Y-m-d", strtotime($_POST['to']))."' 
-					AND $eilasketa
-					AND kohde!=''
-				");
-
-			}
-
-
-			$tids = array();
+		if(Yii::app()->request->getPost('method') == 'LuetutToteutuneetEro'){
+			$from 	= date("Y-m-d", strtotime($_POST['from']));
+			$to 	= date("Y-m-d", strtotime($_POST['to']));
+			$haku_criteria 	= [];
+			$tids 		= [];
 			if(false != Yii::app()->request->getPost('tekija') and is_array(Yii::app()->request->getPost('tekija')) )
-			{
-				$tids = "tid='".implode("' OR tid='", Yii::app()->request->getPost('tekija'))."'";
-	        		$criteria->addCondition ($tids);
-			}
-
+				$tids = Yii::app()->request->getPost('tekija');
 
 			if(isset($_POST['kohteet']) and  $_POST['kohteet'] != 'kaikki')
-	        	$criteria->addCondition (" kohde = '".$_POST['kohteet']."'");
+		        	$haku_criteria[] = "kohde = '".$_POST['kohteet']."'";
 
 			if(isset($_POST['siivousPaaSivulla']) and !empty($_POST['siivousPaaSivulla']))
-	        	$criteria->addCondition (" kohde IN ( SELECT id FROM sivex_kohdet WHERE siivous LIKE '%".$_POST['siivousPaaSivulla']."%' ) ");
+		        	$haku_criteria[] = " kohde IN ( SELECT id FROM sivex_kohdet WHERE siivous LIKE '%".$_POST['siivousPaaSivulla']."%' ) ";
 
-			$model = Tyovuoroot::model()->findAll($criteria); 
-
-
-
-			if(isset($_POST['luoPDF']))
-			{
-/*
-			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en', 'true', 'UTF-8', array(3,10,5,10));
-				$html2pdf->setDefaultFont('Arial');
-			        $html2pdf->WriteHTML($this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model, 'from'=>$_POST['from'],'to'=>$_POST['to']),true));
-			        $html2pdf->Output();
-
-*/
-				$content = $this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model, 'from'=>$_POST['from'],'to'=>$_POST['to']),true);
+			$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, ['data']);
+			$tids_after 	= [];
+			$newarr 	= [];
+			foreach($dataAll as $k => $arr){
+				$data 	= $arr['data'];
+				if( isset($data->tt) and $data->status == 3 or $data->status == 0 ){
+					$tt 	= $data->tt;
+					$pvm 	= date("Ymd", strtotime($data->pvm));
+					$tn	= trim($tt->$tt_order_1.' '.$tt->$tt_order_2);
+					if(!isset($newarr[$pvm][$tn][$data->tid][$data->osoite]))
+						$newarr[$pvm][$tn][$data->tid][$data->osoite] = 0;
+					$newarr[$pvm][$tn][$data->tid][$data->osoite] += strtotime($data->loppu)-strtotime($data->alku);
+					$tids_after[$data->tid] = $data->tid;
+				}
+			}
+			ksort($newarr);
+			$hyv_tyotunnit_all = $this->TidfromtoMobiiliAll($from, $to, $tids_after, [3], 3, false, 0, true);
+			/*
+			echo '<pre>';
+			print_r( $newarr );
+			echo '</pre>';
+			exit;
+			*/
+			if(isset($_POST['luoPDF'])){
+				$content = $this->renderPartial('luetut_toteutuneet_ero_pdf', ['dataAll' => $newarr, 'from'=>$_POST['from'],'to'=>$_POST['to'], 'hyv_tyotunnit_all' => $hyv_tyotunnit_all],true);
 				$header = '';
 				$this->transformHtmlTo($header, $content, 'pdf');
 			        exit;
 			}
-
-			if(isset($_POST['luoExcel']))
-			{
-			        $html = $this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model, 'from'=>$_POST['from'],'to'=>$_POST['to']),true);
-				//preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
-				//$this->htmlToXls($match[0][0], 'LuetutToteutuneetEro');
+			if(isset($_POST['luoExcel'])){
+			        $html = $this->renderPartial('luetut_toteutuneet_ero_pdf', ['dataAll' => $newarr, 'from'=>$_POST['from'],'to'=>$_POST['to'], 'hyv_tyotunnit_all' => $hyv_tyotunnit_all],true);
 				$header = '';
 				$this->transformHtmlTo($header, $html, 'xls');
 			        exit;
 			}
-
-			if(isset($_POST['luoPrintSivu']))
-			{
+			if(isset($_POST['luoPrintSivu'])){
 				$html = '';
-			        $html .= $this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model, 'from'=>$_POST['from'],'to'=>$_POST['to']),true);
+			        $html .= $this->renderPartial('luetut_toteutuneet_ero_pdf', ['dataAll' => $newarr, 'from'=>$_POST['from'],'to'=>$_POST['to'], 'hyv_tyotunnit_all' => $hyv_tyotunnit_all],true);
 				echo $html;
 			        exit;
 			}
 
-		  }
+		}
 		// Toteutuneen ja suunnitellun työn erot -->
 
 		// <-- lomat Ja Poissaolot
 		  if(Yii::app()->request->getPost('method') == 'lomatJaPoissaolot')
 		  {
-		       	$criteria = new CDbCriteria();
-			$criteria->group = " tid, tyoajanlaatu ";
-			$criteria->select = "COUNT(tyoajanlaatu) as kpl, t.*";
-			if(isset($_POST['from']) and isset($_POST['to']))
-			{
+			$from 	= date("Y-m-d", strtotime($_POST['from']));
+			$to 	= date("Y-m-d", strtotime($_POST['to']));
+			$haku_criteria 	= [];
+			$tids 		= [];
+			if(false != Yii::app()->request->getPost('tekija') and is_array(Yii::app()->request->getPost('tekija')) )
+				$tids = Yii::app()->request->getPost('tekija');
 
-	        		$criteria->addCondition ("
-					DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-					BETWEEN '".date("Y-m-d", strtotime($_POST['from']))."' AND '".date("Y-m-d", strtotime($_POST['to']))."' 
-				");
-
-			}
-
-			if(isset($_POST['tekija']) and  $_POST['tekija'] != 'kaikki')
-	        	$criteria->addCondition (" tid = '".$_POST['tekija']."'");
-
-
-			if(isset($_POST['status']) and !empty($_POST['status']))
-			{
+			if(isset($_POST['status']) and !empty($_POST['status'])){
 				$impl = "tyoajanlaatu LIKE '%(". implode(")%' OR tyoajanlaatu LIKE '%(", $_POST['status']).")%'";
-	        		$criteria->addCondition ($impl);
+	        		$haku_criteria = $impl;
 			}
 
-			$model = Tyovuoroot::model()->findAll($criteria); 
+			$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, ['data']);
+			$newarr 	= [];
+			foreach($dataAll as $k => $arr){
+				$data 	= $arr['data'];
+				if($data->status == 11){
+					$tt 	= $data->tt;
+					$pvm 	= date("Ymd", strtotime($data->pvm));
+					$tn	= trim($tt->$tt_order_1.' '.$tt->$tt_order_2);
+					if(!isset($newarr[$pvm][$tn][$data->tid][$data->tyoajanlaatu]))
+						$newarr[$pvm][$tn][$data->tid][$data->tyoajanlaatu] = 0;
+					$newarr[$pvm][$tn][$data->tid][$data->tyoajanlaatu] += 1;
+				}
+			}
+			ksort($newarr);
+			/*
+			echo '<pre>';
+			print_r( $newarr );
+			echo '</pre>';
+			exit;
+			*/
 
-
-			if(isset($_POST['luoPDF']))
-			{
-/*
-			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-				$html2pdf->setDefaultFont('Arial');
-			        $html2pdf->WriteHTML($this->renderPartial('vuosilomat_pdf', array('model' => $model),true));
-			        $html2pdf->Output();
-*/
-				$content = $this->renderPartial('vuosilomat_pdf', array('model' => $model),true);
+			if(isset($_POST['luoPDF'])){
+				$content = $this->renderPartial('vuosilomat_pdf', array('dataAll' => $newarr),true);
 				$header = '';
 				$this->transformHtmlTo($header, $content, 'pdf');
 			        exit;
 			}
 
-			if(isset($_POST['luoExcel']))
-			{
-			        $html = $this->renderPartial('vuosilomat_pdf', array('model' => $model),true);
-				//preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
-				//$this->htmlToXls($match[0][0], 'lomatJaPoissaolot');
+			if(isset($_POST['luoExcel'])){
+			        $html = $this->renderPartial('vuosilomat_pdf', array('dataAll' => $newarr),true);
 				$header = '';
 				$this->transformHtmlTo($header, $html, 'xls');
 			        exit;
 			}
 
-			if(isset($_POST['luoPrintSivu']))
-			{
+			if(isset($_POST['luoPrintSivu'])){
 				$html = '';
-			        $html .= $this->renderPartial('vuosilomat_pdf', array('model' => $model),true);
+			        $html .= $this->renderPartial('vuosilomat_pdf', array('dataAll' => $newarr),true);
 				echo $html;
 			        exit;
 			}
@@ -750,30 +728,25 @@ function num($val){
 
 	public function actionRaportit_taulu()
 	{
+
 		$kohde_id = 0;
 		$mob_or_tv = '';
-		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Luetut'){
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Luetut')
 			$mob_or_tv = 'mob';
-		}
-		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksynta'){
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksynta')
 			$mob_or_tv = 'mob';
-		}
-		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksytyt'){
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksytyt')
 			$mob_or_tv = 'mob';
-		}
-		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Suunnitellut'){
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Suunnitellut')
 			$mob_or_tv = 'tv';
-		}
 
 		$from = date("d.m.Y", strtotime('first day of this month'));
 		$to = date("d.m.Y");
 
-		if(isset($_GET['from'])){
+		if(isset($_GET['from']))
 			$from = date("d.m.Y", strtotime($_GET['from']));
-		}
-		if(isset($_GET['to'])){
+		if(isset($_GET['to']))
 			$to = date("d.m.Y", strtotime($_GET['to']));
-		}
 
 		$criteria = new CDBCriteria;
 		if( $mob_or_tv == 'mob' ){
@@ -785,41 +758,37 @@ function num($val){
 			";
 		}
 
-		if(isset($_GET['tekijaPaaSivulla']))
-		{
+		if(isset($_GET['tekijaPaaSivulla'])){
 			$impl = implode(",", $_GET['tekijaPaaSivulla']);
 	        	$criteria->addCondition (" id IN ($impl) ");
 		} else {
 	        	$criteria->addCondition (" id=0 ");
 		}
 
-		if(isset($_GET['osoite']) and !empty($_GET['osoite']))
-		{
+		if(isset($_GET['osoite']) and !empty($_GET['osoite'])){
 			$k = Kohteet::model()->find(" osoite='".$_GET['osoite']."' ");
 			if(isset($k->id)){ $kohde_id = $k->id; }
-			/*
-		        $criteria->addCondition (" 
-				id IN ( SELECT tid FROM sivexkuitti
-					WHERE kohde_kannasta LIKE '%".$_GET['osoite']."%'
-				) OR
-				id IN ( SELECT tid FROM sivexkuitti_repaired
-					WHERE kohde_kannasta LIKE '%".$_GET['osoite']."%'
-				)
-			");
-			*/
 		}
 
 
 		$model = Tyontekijat::model()->findAll($criteria);
 
-		//$dataProvider->pagination->pageSize = 50;
+		$tids = (isset($_GET['tekijaPaaSivulla']))?array_values($_GET['tekijaPaaSivulla']):[];
+		$dataAll = [];
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Suunnitellut'){
+			$tyovuorot = Yii::app()->createController('Tyovuoroot');
+			$haku_criteria = [];
+			if($kohde_id > 0){ $haku_criteria[] = " kohde='".$kohde_id."' "; }
+			$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, ['data', 'tv_kesto']);
+		}
 
 		$this->render('raportit_taulu', array(
 			'model' => $model,
 			'from' => $from,
 			'to' => $to,
 			'kohde_id' => $kohde_id,
-			'mob_or_tv' => $mob_or_tv
+			'mob_or_tv' => $mob_or_tv,
+			'dataAll' => $dataAll,
 		));
 
 
@@ -906,37 +875,6 @@ function num($val){
 
   			foreach($tot as $data){
 				$model[strtotime($data->aloitan)] = $data;
-			}
-
-			if(count($model) > 0)
-			ksort($model);
-
-		return $model;
-	}
-
-	protected function tidFromTo_suunnitellut($tid, $from, $to, $kohde_id)
-	{
-
-			$model = array();
-
-			/* lu */
-		       	$criteria = new CDbCriteria();
-        		$criteria->select = "
-			TIME_TO_SEC(TIMEDIFF(loppu, alku)) as l_tunnit, t.*
-			";
-
-			$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
-			$criteria->condition = "  
-				tid='".$tid."'
-				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-			";
-
-			if($kohde_id > 0){ $criteria->addCondition (" kohde='".$kohde_id."' "); }
-
-			$lu = Tyovuoroot::model()->findAll($criteria);
-  			foreach($lu as $data){
-				$model[strtotime($data->pvm)] = $data;
 			}
 
 			if(count($model) > 0)
@@ -1666,9 +1604,26 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		$dataProvider->pagination->pageSize = 50;
 
+		// <-- Tyovuorot
+		$pvms = [];
+		$tids = [];
+		foreach($dataProvider->getData() as $item){
+			$pvms[strtotime($item->aloitan)] = strtotime($item->aloitan);
+			$tids[$item->tid] = $item->tid;
+		}
+		$haku_criteria 	= " peruutettu='0' OR peruutettu IS NULL";
+		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+		$tv_arr 	= $tyovuorot[0]->tv_arr(date("Y-m-d", min($pvms)), date("Y-m-d", max($pvms)), $tids, $haku_criteria, true, []);
+		//     Tyovuorot -->
+/*
+		echo '<pre>';
+		print_r($tv_arr);
+		echo '</pre>';
+		exit;
+*/
 		if(isset($_POST['index_ajax']))
 		{
-			echo $this->renderPartial('index_a', array('dataProvider' => $dataProvider));
+			echo $this->renderPartial('index_a', array('dataProvider' => $dataProvider, 'tv_arr' => $tv_arr));
 			exit;
 		} else {
 			echo $this->render('index', array('dataProvider' => $dataProvider));
@@ -1896,45 +1851,71 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$to = date("Y-m-d", strtotime($to));
 
 		if($tilanne == 'luetut' or $tilanne == 'toteutuneet'){
-       		$criteria = new CDbCriteria();
-	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
-			AND kohdenID IN(
-				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
-			)
-			AND status='3'
-			AND deleted=0
-		";
-		if($tilanne == 'toteutuneet'){
-		$criteria->addCondition(" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
-		}
-		$luetut = Mobile::model()->findAll($criteria);
 
-       		$criteria = new CDbCriteria();
-	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
-			AND kohdenID IN(
-				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
-			)
-			AND status='3'
-			AND deleted=0
-		";
-		$toteutuneet = Toteutuneet::model()->findAll($criteria);
+	       		$criteria = new CDbCriteria();
+		        $criteria->condition = " 
+				aloitan!='' AND loppui!=''
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
+				AND status='3'
+				AND deleted=0
+			";
+			if( $asiakas_id > 0 ){
+			        $criteria->addCondition (" 
+					kohdenID IN(
+						SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
+					)
+				");
+			}
+			if($tilanne == 'toteutuneet')
+				$criteria->addCondition(" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
+
+			$luetut = Mobile::model()->findAll($criteria);
+
+       			$criteria = new CDbCriteria();
+		        $criteria->condition = " 
+				aloitan!='' AND loppui!=''
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
+				AND status='3'
+				AND deleted=0
+			";
+			if( $asiakas_id > 0 ){
+			        $criteria->addCondition (" 
+					kohdenID IN(
+						SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
+					)
+				");
+			}
+			$toteutuneet = Toteutuneet::model()->findAll($criteria);
 		}
 
 		if($tilanne == 'suunnitelut'){
-       		$criteria = new CDbCriteria();
-	        $criteria->condition = " 
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
-			AND kohde IN(
-				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
-			)
-			AND status='3'
-			AND peruutettu=0
-		";
-		$suunnitelut = Tyovuoroot::model()->findAll($criteria);
+
+			$tids 		= [];
+			$with		= ['data','kohteet'];
+
+			$haku_criteria = [];
+			if( $asiakas_id > 0 ){
+				$haku_criteria[] = "
+					kohde IN(
+						SELECT id FROM sivex_kohdet WHERE asiakas_id='".$asiakas_id."'
+					)
+				";
+			}
+			$haku_criteria[] = "
+				status='3'
+				AND (peruutettu=0 OR peruutettu IS NULL)
+			";
+
+			$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+			$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, $with);
+			$suunnitelut 	= $dataAll;
+
+			/*
+			echo '<pre>';
+			print_r( $dataAll );
+			echo '</pre>';
+			exit;
+			*/
 		}
 
 		if( $tilanne == 'suunnitelut'){
@@ -2194,7 +2175,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		switch ($hyvaksytty) {
 				// Case 3 falls through due to no break statement, this is intentional.
 			case 3:
-				$criteria->addCondition("hyvaksytty!='' ");
+				$criteria->addCondition("hyvaksytty!=''");
 			case '':
 			case 2:
 				$criteria->addCondition("id NOT IN (SELECT kid FROM sivexkuitti_repaired)");
@@ -2210,7 +2191,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			$criteria = new CDbCriteria();
 			$buildCriteria($criteria);
 			if ($hyvaksytty == 3)
-				$criteria->addCondition(" hyvaksytty!='' ");
+				$criteria->addCondition("hyvaksytty!=''");
 			$tot = Toteutuneet::model()->findAll($criteria);
 		}
 
@@ -2273,42 +2254,27 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		return count($vl);
 	}
 */
-	protected function TidfromtoVuosilomaBetween($from, $to, $tids, $tila, $by_pvm = false)
+	protected function TidfromtoVuosilomaBetween($from, $to, $tids, $tila, $by_pvm=false)
 	{
-		$set = [];
-		if (is_array($tids)) {
-			foreach($tids as $tid)
-				$set[$tid] = 0;
-			$tids = implode(", ", $tids);
-		} else {
-			$set[$tids] = 0;
-		}
-
-		$from 	= date("Y-m-d", strtotime($from));
-		$to 	= date("Y-m-d", strtotime($to));
-
-		$result = 0;
-       		$criteria = new CDbCriteria();
-		if($by_pvm){
-			$criteria->group = "DATE(STR_TO_DATE(pvm, '%d.%m.%Y'))";
-			$criteria->select = "pvm, tid, COUNT(*) as count";
-		} else {
-			$criteria->group = "tid";
-			$criteria->select = "tid, COUNT(*) as count";
-		}
-		$criteria->condition = "
-			DATE(STR_TO_DATE(pvm, '%d.%m.%Y'))
-			BETWEEN '".$from."' AND '".$to."' 
-			AND tid IN ($tids)
-			AND tyoajanlaatu LIKE '%(".$tila.")%'
-		";
-
-		$tv = Tyovuoroot::model()->findAll($criteria);
-		foreach($tv as $item){
+		$set 		= [];
+		$from 		= date("Y-m-d", strtotime($from));
+		$to 		= date("Y-m-d", strtotime($to));
+		$haku_criteria	= ["tyoajanlaatu LIKE '%(".$tila.")%'"];
+		$with		= ['data'];
+		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+		$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, $with);
+		foreach($dataAll as $arr){
+			$item = $arr['data'];
 			if($by_pvm){
-				$set[date("Y-m-d", strtotime($item->pvm))][$item->tid] = $item->count;
+				if(!isset($set[$arr['this_pvm']][$arr['this_tid']]))
+					$set[$arr['this_pvm']][$arr['this_tid']] = 1;
+				else
+					$set[$arr['this_pvm']][$arr['this_tid']] += 1;
 			} else {
-				$set[$item->tid] = $item->count;
+				if(!isset($set[$arr['this_tid']]))
+					$set[$arr['this_tid']] = 1;
+				else
+					$set[$arr['this_tid']] += 1;
 			}
 		}
 		return $set;
@@ -2367,71 +2333,18 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	        	$criteria->addCondition ('id IN ('.$ids.') ');
 		}
 
-/*
-		$dataProvider=new CActiveDataProvider('Mobile', array(
-			'criteria'=>$criteria,
-			'pagination'=>false
-		));
-*/
 		$model = Tyontekijat::model()->findAll($criteria);
 
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 
-		if(isset($_GET['tulosta_pdf']))
-		{
-/*
-	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
-		  $html2pdf->setDefaultFont('Arial');
-		  $html2pdf->setTestTdInOnePage(false);
-	          $html2pdf->WriteHTML($this->renderPartial('tulosta_palkkataulukko', array(
-			'model' => $model,
-			'from' => $from,
-			'to' => $to
-		  ),true));
-	          $html2pdf->Output();
-*/
-		} elseif(isset($_GET['tulosta_xls']))
-		{
-/*
-			if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
-			 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
-			}
-
-		        $html = $this->renderPartial('tulosta_palkkataulukko', array(
-				'model' => $model,
-				'from' => $from,
-				'to' => $to
-			),true);
-
-			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
-			$tiedosto = 'palkkatauluko';
-			file_put_contents($path.$tiedosto.'.html', $html);
-
-			exec('pandoc -s '.$path.$tiedosto.'.html -o '.$path.$tiedosto.'.xls', $output, $return);
-		        if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xls' ))
-			{
-				header("Content-Length: " . filesize ( $path.$tiedosto.'.xls' ) ); 
-		                header("Content-type: application/vnd.ms-excel;"); 
-		                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.xls'));
-		                header('Expires: 0');
-		                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		                readfile($path.$tiedosto.'.xls');
-				unlink($path.$tiedosto.'.html');
-				unlink($path.$tiedosto.'.xls');
-				exit;
-			}
-*/
-		} else {
-		  //$dataProvider->pagination->pageSize = 50;
-		  $this->render('palkkataulukko', array(
+		$this->render('palkkataulukko', array(
 			'model' => $model,
 			'from' => $from,
 			'to' => $to,
 			'tt_order_1' => $tt_order_1,
 			'tt_order_2' => $tt_order_2
-		  ));
-		}
+		));
 	}
 
 	protected function TP($tid,$from,$to){
@@ -2539,43 +2452,17 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	public function actionYhteenveto()
 	{
 
-
-		//unset(Yii::app()->session['Tekija']);
-		if(Yii::app()->request->getPost('Tekija'))
-		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
-
-
-		if(isset($_POST['yhtvetoform']))
-		{
-		unset(Yii::app()->session['Lounastauko']);
-		unset(Yii::app()->session['MATKA']);
+		if(isset($_GET['yhtvetoform'])){
+			unset(Yii::app()->session['Lounastauko']);
+			unset(Yii::app()->session['MATKA']);
 		}
 
-		if(isset($_POST['ilman']))
-		{
-		  foreach($_POST['ilman'] as $val){
-			if($val == 'Lounastauko')
-			Yii::app()->session['Lounastauko'] = 10;
+		$from 	= date("d.m.Y");
+		$to 	= date("d.m.Y");
 
-			if($val == 'MATKA')
-			Yii::app()->session['MATKA'] = 2;
-		  }
-		}
-
-/*
-		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
-
-		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
-*/		
-
-		$from = date("d.m.Y");
-		$to = date("d.m.Y");
-
-		if(isset($_POST['from']) and isset($_POST['to'])){
-		$from 	= $_POST['from'];
-		$to 	= $_POST['to'];
+		if(isset($_GET['from']) and isset($_GET['to'])){
+			$from 	= $_GET['from'];
+			$to 	= $_GET['to'];
 		}
 
 
@@ -2594,29 +2481,21 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 
 
-		if(Yii::app()->session['Tekija']){
-		  if(count(Yii::app()->session['Tekija']) > 1)
-		    $ids = implode(",",Yii::app()->session['Tekija']);
-		  else
-		    $ids = Yii::app()->session['Tekija'][0];
-
-	        $criteria->addCondition ('tid IN ('.$ids.') ');
+		if(isset($_GET['Tekija']) and count($_GET['Tekija']) > 1){
+			$ids = implode(",",$_GET['Tekija']);
+			$criteria->addCondition ('tid IN ('.$ids.') ');
 		}
 
-		if(Yii::app()->session['Lounastauko'])
-	        $criteria->addCondition (" status != '10' ");
+		if(isset($_GET['ilman'])){
+			foreach($_GET['ilman'] as $val){
+				if($val == 'Lounastauko')
+					$criteria->addCondition (" status != '10' ");
 
-		if(Yii::app()->session['MATKA'])
-	        $criteria->addCondition (" status != '2' ");
+				if($val == 'MATKA')
+					$criteria->addCondition (" status != '2' ");
+			}
+		}
 
-
-
-		/*
-		$dataProvider=new CActiveDataProvider('Mobile', array(
-			'criteria'=>$criteria,
-			'pagination'=>false
-		));
-		*/
 		$model = Mobile::model()->findAll($criteria);
 
 		if(Yii::app()->request->getPost('tulosta'))
@@ -3273,23 +3152,24 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 
 		$criteria = new CDbCriteria();
-		if(isset($_GET['yrityksen_nimi'])){
-		$criteria->condition = " 
-			yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
-		";
+		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])){
+			$criteria->condition = " 
+				yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
+			";
 		}
 		if(isset($_GET['asiakas_id'])){
-		$criteria->condition = " 
-			id='".$_GET['asiakas_id']."'
-		";
+			$criteria->condition = " 
+				id='".$_GET['asiakas_id']."'
+			";
 		}
-		if(isset($_GET['yrityksen_nimi']) or isset($_GET['asiakas_id'])){
+		if((isset($_GET['yrityksen_nimi'])  and !empty($_GET['yrityksen_nimi'])) or isset($_GET['asiakas_id'])){
 			$asiakas = Asiakkaat::model()->find($criteria);
 		}
 
 		$this->render('ayhteenveto', array(
 			'from' => $from,
 			'to' => $to,
+			'asiakas_id' => (isset($asiakas->id))?$asiakas->id:'',
 			'asiakas' => (isset($asiakas->id))?$asiakas:'',
 		));
 	}
@@ -4050,8 +3930,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	$r .= '<td style="width:18%">'.(($data->status == 3)?$data->kohde_kannasta:'').(($data->status == 10)?'LOUNASTAUKO':'').(($data->status == 2)?'MATKA':'').'</td>';
 	$r .= '<td style="width:10%">'.date("H:i",strtotime($data->aloitan)).'</td>';
 	$r .= '<td style="width:10%">'.date("H:i",strtotime($data->loppui)).'</td>';
-	$r .= '<td style="width:10%">'.sprint($kesto).'</td>'; //<br><b>('.num($kesto).')</b>
-	$r .= '<td style="width:10%">'.num($kesto).'</td>'; //<br><b>('.num($kesto).')</b>
+	$r .= '<td style="width:10%">'.$this->sprint($kesto).'</td>'; //<br><b>('.num($kesto).')</b>
+	$r .= '<td style="width:10%">'.$this->num($kesto).'</td>'; //<br><b>('.num($kesto).')</b>
 	$r .= '<td style="width:10%">'.$this->statusMuutosNimeksi($data->status).'</td>';
 	$r .= '</tr>';
 	return $r;

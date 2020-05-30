@@ -1,4 +1,5 @@
 <?php
+/*
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 
@@ -23,4 +24,5 @@
 	  	$su = Tyovuoroot::model()->find($criteria);
 
 		echo $su->l_tunnit;
+*/
 ?>

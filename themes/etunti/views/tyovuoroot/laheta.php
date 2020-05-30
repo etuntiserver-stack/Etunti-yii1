@@ -107,21 +107,37 @@ $paivat=array(
 <br>
 <table class="table table-bordered LahetettyTable" cellspacing="0" cellpadding="0">
 <?php
+	$haku_criteria = [" peruutettu=0 OR peruutettu IS NULL "];
+	$pvm_from = date("Y-m-d", strtotime($year ."W". $week .'1'));
+	$pvm_to = date("Y-m-d", strtotime($year ."W". $week .'7'));
+	$tv_arr = $this->tv_arr($pvm_from, $pvm_to, [$tt->id], $haku_criteria, false, ['this_id','data']);
+	$tids_after = [];
+	foreach($tv_arr as $t => $arr)
+		$tids_after[] = $t;
 
-for($day= 1; $day <= 7; $day++) {
-  $d = strtotime($year ."W". $week . $day);
-  $date = date('d.m.Y',$d);
-  $this->renderPartial('_laheta_date', array(
-		'site' => $site,
-		'asetukset' => $asetukset,
-		'tt' => $tt,
-		'd' => $d,	
-		'date' => $date,
-		'paivat' => $paivat,
-		'year' => $year,
-		'week' => $week
-  ));
-}
+	for($day= 1; $day <= 7; $day++) {
+		$d = strtotime($year ."W". $week . $day);
+		$date = date('d.m.Y',$d);
+		if(isset($_POST['P']) and !in_array(date("N", strtotime($date)), $_POST['P'])){
+			continue;
+		}
+		$date_arr = [];
+		if(isset($tv_arr[$tid][$date])){
+			ksort($tv_arr[$tid][$date]);
+			$date_arr = $tv_arr[$tid][$date];
+			$this->renderPartial('_laheta_date', array(
+				'site' => $site,
+				'asetukset' => $asetukset,
+				'tid' => $tt->id,
+				'd' => $d,	
+				'date' => $date,
+				'paivat' => $paivat,
+				'year' => $year,
+				'week' => $week,
+				'date_arr' => $date_arr
+			));
+		}
+	}
 
 $totalWeek = '';
 $totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tid,'viikko'=>$week,'year'=>$year),true);

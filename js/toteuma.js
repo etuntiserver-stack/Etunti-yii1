@@ -523,13 +523,16 @@ $(document).delegate(".poistaRivit","click",function(){
 
 
  $(document).delegate(".sirraToteutuun","click",function(){
-
+	/* var r = confirm('Oletko varmaa?');
+	if(!r){
+		return false;
+	} */
 	$(this).hide();
-	$(this).closest('.fullRivi').addClass('bg-success');
+	$(this).closest('p').addClass('bg-success');
 	var laatikot = '';
-      	var forThis = $(this).prevAll('.tv_edit').attr('id').split("_");
+      	var this_id = $(this).closest('p').find('.tv_edit').attr('id');
         $.ajax({
-           url: 'siirra_toteutuun?id=' + forThis[1],
+           url: 'siirra_toteutuun?this_id=' + this_id,
            //type: "POST",
 	   //data: { id : forThis[1] },
            success: function(data){
@@ -544,21 +547,31 @@ $(document).delegate(".poistaRivit","click",function(){
 		}
            }
         });
-
  });
 
 
   function blockUpdater(divID){
 
 		var thisDID = divID[0]+'_'+divID[1];
-		var ilman_lounastaukot = $("#" + thisDID).attr('ilman_lounastaukot');
-		var ilman_matkat = $("#" + thisDID).attr('ilman_matkat');
+		var ilman_lounastaukot = true;
+		var ilman_matkat = true;
+		var s = [];
+		s = $('.ilman').val();
+		var ret = [];
+		if( s !== null ){
+			$.each(s, function( i, value ) {
+				if( value == "MATKA" )
+					ilman_matkat = false;
+				if( value == "Lounastauko" )
+					ilman_lounastaukot = false;
+			});
+		}
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/totpvmtid',
 			type:'GET',
 			data: { "pvm" : divID[0], "tid" : divID[1], ilman_lounastaukot : ilman_lounastaukot, ilman_matkat : ilman_matkat },
 			  success:function(data){
-			  //console.log(data);
+			  console.log(data);
 			  data = JSON.parse(data);
 				//$.each(data, function( index, value ) {
 					dataUpdater(thisDID, data);

@@ -98,13 +98,20 @@ ini_set("max_execution_time", "60");
 
 
 
-<?php if(isset($_GET['yrityksen_nimi']) or isset($_GET['asiakas_id']) and $from and $to) : ?>
+<?php if(isset($_GET['from']) and isset($_GET['to'])) : ?>
 
 <div class="admin-form">
   <div class="panel heading-border">
    <div class="panel-body">
 
-  <p id="forTulostus"><?php if($asiakas->tyyppi == 'yritys'){ echo $asiakas->yrityksen_nimi; } if($asiakas->tyyppi == 'henkilo'){ echo $asiakas->yhteyshenkilo; } ?>, <?=$from?>-<?=$to?></p>
+  <p id="forTulostus">
+	<?php 
+		$asiakas_nimi = '<h3 class="text-danger">Asiakas ei esitetty</h3>';
+		if(isset($asiakas->id) and $asiakas->tyyppi == 'yritys'){ $asiakas_nimi = $asiakas->yrityksen_nimi; } 
+		if(isset($asiakas->id) and $asiakas->tyyppi == 'henkilo'){ $asiakas_nimi = $asiakas->yhteyshenkilo; } 
+	?>
+	<?=$asiakas_nimi?>, <?=$from?>-<?=$to?>
+  </p>
 
   <table class="table table-bordered table-striped small" cellspacing="0" cellpadding="0" id="tunnit_taulu">
   <thead class="myBgColors">
@@ -121,17 +128,18 @@ ini_set("max_execution_time", "60");
   $toteutuneetYht = 0;
   $date = $from;
 
-  $suunnitelut = $this->AsiakasPvmLuTotSuunArray($asiakas->id, $from, $to, 'suunnitelut');
-  $luetut = $this->AsiakasPvmLuTotSuunArray($asiakas->id, $from, $to, 'luetut');
-  $toteutuneet = $this->AsiakasPvmLuTotSuunArray($asiakas->id, $from, $to, 'toteutuneet');
+  $suunnitelut = $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'suunnitelut');
+  $luetut = $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'luetut');
+  $toteutuneet = $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'toteutuneet');
   $period = new DatePeriod(new DateTime(date("Y-m-d",strtotime($from))), new DateInterval('P1D'), new DateTime(date("Y-m-d",strtotime($to))));
 
   foreach($period as $d) {
 	$date = $d->format("d.m.Y");
 	$yht_s = 0;
 	$body_suunnitelut = '';
-	foreach($suunnitelut as $item){
-	    if($item->pvm == $date){
+	foreach($suunnitelut as $arr){
+	    $item = $arr['data'];
+	    if($arr['this_pvm'] == $date){
 		$body_suunnitelut .= '<div class="row"><div class="col-sm-12">
 		'.$item->osoiteById.' <div class="pull-right"><b>'.date("H:i", strtotime($item->alku)).'-'.date("H:i", strtotime($item->loppu)).' 
 		<span class="text-success">('.$this->sprint(strtotime($item->loppu)-strtotime($item->alku)).')</span></b>

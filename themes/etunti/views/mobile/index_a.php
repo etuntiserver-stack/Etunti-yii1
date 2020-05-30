@@ -30,7 +30,7 @@
   <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
-	'viewData' => array("sivu" => "index" ),
+	'viewData' => array("sivu" => "index", "tv_arr" => $tv_arr),
   	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
 
 

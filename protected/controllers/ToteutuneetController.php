@@ -72,11 +72,20 @@ class ToteutuneetController extends Controller
         public function init()
         {
 
-	// <-- Oikeudet
-	   $checkOikeus = "tuntienhallinta_4_".Yii::app()->user->adminStatus;
-	   $site = Yii::app()->createController('Site');
-	   $site[0]->checkOikeus($checkOikeus);
-	//  Oikeudet -->
+		if(!isset(Yii::app()->user->adminID))
+		{
+			//die('login error');
+		  	echo '<script type="text/javascript">
+				window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";
+			</script>';
+			exit;
+		}
+
+		// <-- Oikeudet
+		$checkOikeus = "tuntienhallinta_4_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		$site[0]->checkOikeus($checkOikeus);
+		//  Oikeudet -->
 
                 if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
                         Yii::app()->theme = 'etunti';
@@ -100,9 +109,37 @@ class ToteutuneetController extends Controller
 
 
 
-	public function actionSiirra_toteutuun($id)
+	public function actionSiirra_toteutuun($this_id)
 	{
-		$tv = Tyovuoroot::model()->findByPk($id);
+		$tyovuoroot = Yii::app()->createController('Tyovuoroot');
+		$get_id 	= $tyovuoroot[0]->this_id($this_id);
+		$model 		= $get_id['model'];
+		$toistuva 	= $get_id['toistuva'];
+		$pvm 		= $get_id['pvm'];
+		$tid 		= $get_id['tid'];
+
+		if( $toistuva ){
+			$u		= Yii::app()->user->nimi;
+			$d		= date("d.m.Y");
+			$poisto_syy	= ['text' => 'ByHyvaksyntaSiirto', 'user'=>$u, 'date'=>$d];
+			$tyovuoroot[0]->toistuvaDeletePvm($model->id, $pvm, $tid, $poisto_syy);
+
+			$tv_new = new Tyovuoroot;
+			$cleared_attr = $tyovuoroot[0]->compareToistuvaAttributes($tv_new->attributes, $model->attributes);
+			$tv_new->attributes = $cleared_attr;
+			$tv_new->pvm = date("d.m.Y",strtotime($pvm));
+			$tv_new->tid = $tid;
+			$tv_new->tyopaari = '';
+			if($tv_new->save()){
+				$tv = $tv_new;
+			} else {
+				echo json_encode($tv_new->getErrors());
+				exit;
+			}
+		} else {
+			$tv = $model;
+		}
+
 		if(isset($tv->id))
 		{
 
@@ -125,8 +162,7 @@ class ToteutuneetController extends Controller
 				else
 					$mobiili->status = $tv->status;
 
-				if($mobiili->save())
-				{
+				if($mobiili->save()){
 					$did = $tv->id.'_'.date("Ymd", strtotime($tv->pvm)).'_'.$tv->tid;
 					echo json_encode(array('OK'=>$mobiili, 'did'=>$did));
 				} else {
@@ -580,6 +616,12 @@ $xml = '
 
 	public function actionTotpvmtid($pvm,$tid,$ilman_lounastaukot,$ilman_matkat)
 	{
+		// <-- For toteuma.js
+		if( $ilman_lounastaukot == "true" ) $ilman_lounastaukot = true;
+		if( $ilman_lounastaukot == "false" ) $ilman_lounastaukot = false;
+		if( $ilman_matkat == "true" ) $ilman_matkat = true;
+		if( $ilman_matkat == "false" ) $ilman_matkat = false;
+
 		$pvm			= date("Y-m-d", strtotime($pvm));
 		$mobile = Yii::app()->createController('Mobile');
 
@@ -1581,21 +1623,19 @@ $xml = '
 
 	protected function vuosilomaCheckerBetween($from, $to, $tid)
 	{
-		$from = date("Y-m-d", strtotime($from));
-		$to = date("Y-m-d", strtotime($to));
 
 		$set = [];
-	       	$criteria = new CDbCriteria();
-		$criteria->condition = " 
-			tid = '".$tid."' 
-			AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) BETWEEN '$from' AND '$to'
-			AND status=11
-			AND tyoajanlaatu!=''
-		";
-		$tv = Tyovuoroot::model()->findAll($criteria);
-		foreach($tv as $item){
-			$arr = explode("/", $item->tyoajanlaatu);
-			if(isset($arr[1])){ $set[date("d.m.Y", strtotime($item->pvm))][] = '<h3 style="color:'.$arr[1].'">'.$arr[0].'</h3>'; }
+		$tyovuoroot 	= Yii::app()->createController('Tyovuoroot');
+		$haku_criteria	= [];
+		$haku_criteria[] = "status=11 AND tyoajanlaatu!=''";
+		$with		= ['data'];
+		$from 		= date("Y-m-d", strtotime($from));
+		$to 		= date("Y-m-d", strtotime($to));
+		$dataAll 	= $tyovuoroot[0]->FromToSuunnitellutAll($from, $to, [$tid], $haku_criteria, $with);
+		foreach($dataAll as $arr){
+			$item = $arr['data'];
+			$expl = explode("/", $item->tyoajanlaatu);
+			if(isset($expl[1])){ $set[date("d.m.Y", strtotime($arr['this_pvm']))][] = '<h3 style="color:'.$expl[1].'">'.$expl[0].'</h3>'; }
 		}
 
 		return $set;

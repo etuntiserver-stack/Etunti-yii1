@@ -390,6 +390,18 @@ $(document).ready(function(){
 		<?php echo $form->error($model,'toimenpiteet'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyonkuvaus_tiedostot_mobiilissa'); ?>
+		<?php
+		if(!isset($model->id)) $model->aktiivinen = 1;
+		if(empty($model->aktiivinen)) $model->aktiivinen = 0;
+
+		$list = array(0=>'Ei', 1=>'Kyllä');
+        	echo $form->dropDownList($model, 'tyonkuvaus_tiedostot_mobiilissa', $list,
+		array('class'=>'form-control'));
+        	?>
+		<?php echo $form->error($model,'tyonkuvaus_tiedostot_mobiilissa'); ?>
+	</div>
 
 	<div class="section fill mb5">
         <?php
@@ -689,28 +701,13 @@ window.initialize = function() {
 </html>
 <?php endif; ?>
 
-
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/select_valiko.js"></script>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 
 
 <script type="text/javascript">
 $(document).ready(function(){
-
-/* valikot */
-$(".muokaValiko").click(function() {
-    var thisFor = $(this).attr("for");
-        $.ajax({
-           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
-	   type:'POST',
-	   data: { "select_type" : thisFor },
-           success: function(data){
-		//console.log(data);
-		$('#showres').modal().html(JSON.parse(data));
-           }
-        });
-});
-/* valikot */
 
 });
 </script>

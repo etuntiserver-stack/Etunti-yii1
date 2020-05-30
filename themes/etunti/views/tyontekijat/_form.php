@@ -180,6 +180,34 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
+	<?php
+	if(isset($model->id)){
+		$tv_controller 	= Yii::app()->createController('Tyovuoroot');
+		$with		= ['data'];
+		$from		= date("Y-m-d");
+		$dataAll 	= $tv_controller[0]->FromToSuunnitellutAll($from, null, [$model->id], [], $with);
+		/*
+		echo '<pre>';
+		print_r( $dataAll );
+		echo '</pre>';
+		exit;
+		*/
+	}
+	?>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'naytta_tyovuorossa'); ?>
+		<?php 
+        	$tal = array(
+			1=>'Kyllä'
+		);
+		if(isset($dataAll) and count($dataAll) == 0 or (!isset($model->id)))
+			$tal[0] = 'Ei';
+
+		echo $form->dropDownList($model,'naytta_tyovuorossa', $tal, 
+		array('class'=>'form-control')) ?>
+		<?=(isset($dataAll) and count($dataAll) > 0)? '<p class="text-danger">Työntekijällä on työvuoroja.</p>' : ''?>
+		<?php echo $form->error($model,'naytta_tyovuorossa'); ?>
+	</div>
 
 <?php if(isset($model->id)) : ?>
 <script type="text/javascript">
@@ -453,7 +481,7 @@ $(document).ready(function(){
 	<div id="kortitVoimassaolot"></div>
 
 
-
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/select_valiko.js"></script>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
 
 <script type="text/javascript">
@@ -749,23 +777,6 @@ $(document).ready(function(){
   $('#Tyontekijat_aktiivinen').change(function() {
 	alert('Muista täyttää työsuhteen päättymispäivämäärä.');
   });
-
-
-/* valikot */
-$(".muokaValiko").click(function() {
-    var thisFor = $(this).attr("for");
-        $.ajax({
-           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
-	   type:'POST',
-	   data: { "select_type" : thisFor },
-           success: function(data){
-		//console.log(data);
-		$('#showres').modal().html(JSON.parse(data));
-           }
-        });
-});
-/* valikot */
-
   $(".sw").bootstrapSwitch({
 	size: "small",
 	onColor: "success",

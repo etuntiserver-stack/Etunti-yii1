@@ -19,15 +19,6 @@ class Ohjevideot extends CActiveRecord
 	{
 		$tb_name = 'ohjevideot';
 		$check_this_table = true;
-		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
-		if(!isset(Yii::app()->session[$tb_name]))
-		{
-			Yii::app()->session[$tb_name] = true;
-			$check_this_table = true;
-		}
-
-		if($check_this_table)
-		{
 		$table = Yii::app()->db->schema->getTable($tb_name);
 		if(!isset($table->columns['id'])) {
 
@@ -37,11 +28,13 @@ class Ohjevideot extends CActiveRecord
 		}
 
 		$table_structure = array(
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
-                     'otsiko' => 'varchar(500) DEFAULT NULL',
-                     'kuvaus' => 'text DEFAULT NULL',
-                     'tiedoston_nimi' => 'varchar(255) DEFAULT NULL',
-                     'sort' => 'int(3) DEFAULT 0',
+			'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+			'ohjevideo_ryhma' => 'varchar(255) DEFAULT NULL',
+			'otsiko' => 'varchar(500) DEFAULT NULL',
+			'embed' => 'text DEFAULT NULL',
+			'kuvaus' => 'text DEFAULT NULL',
+			'tiedoston_nimi' => 'varchar(255) DEFAULT NULL',
+			'sort' => 'int(3) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -50,7 +43,6 @@ class Ohjevideot extends CActiveRecord
 				Yii::app()->db->createCommand()->addColumn($tb_name, $key, $value);
 			}
 		}	
-		} // if($check_this_table)
 		return $tb_name;
 	}
 
@@ -62,9 +54,9 @@ class Ohjevideot extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('otsiko, kuvaus', 'required'),
+			array('otsiko, embed, kuvaus', 'required'),
 			array('sort', 'numerical', 'integerOnly'=>true),
-			array('otsiko, tiedoston_nimi', 'length', 'max'=>500),
+			array('otsiko, tiedoston_nimi, ohjevideo_ryhma', 'length', 'max'=>500),
 			//array('tiedoston_nimi', 'required','on'=>array('create')),
 		        //array('tiedoston_nimi', 'file', 'types'=>'mp4'),
 			// The following rule is used by search().

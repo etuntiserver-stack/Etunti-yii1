@@ -290,9 +290,8 @@ class SiteController extends Controller
 		 	mkdir( Yii::app()->basePath.'/../tmp/'.Yii::app()->user->domain, 0777, true );
 		}
 
-		$newfile = basename($filepath);
-		if (copy($filepath, $newfile))
-		{
+		$newfile = 'tmp/'.Yii::app()->user->domain.'/'.basename($filepath);
+		if (copy($filepath, $newfile)){
 				header("Content-Length: " . filesize ( $newfile ) );
 		                header("Content-type: application/octet-stream");
 		                header("Content-disposition: attachment; filename=".basename($newfile));
@@ -542,17 +541,20 @@ class SiteController extends Controller
 			$tids = Yii::app()->user->TyoryhmatTyontekijatHelperArray;
 		}
 		//    Tyoryhmat -->
-
-		$criteria_array = array(
-			"pvm" => date("d.m.Y"),
-			"status" => 3,
-			"peruutettu" => 0,
-		);
-		if( count($tids) > 0 )
-			$criteria_array['tid'] = $tids;
 		$s = 0;
-		$s = Tyovuoroot::model()->countByAttributes($criteria_array);
+		$thisday	= date("Y-m-d");
+		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+		$haku_criteria	= "status=3 AND peruutettu=0";
+		$getAll 	= $tyovuorot[0]->tv_arr($thisday, $thisday, $tids, $haku_criteria, false, ['kpl_maara']);
+		$count = [];
+		foreach($getAll as $k => $v)
+			foreach($v as $unix => $dayarr)
+				foreach($dayarr as $key => $arr)
+					foreach($arr as $kpl_maara)
+						$count[] = $kpl_maara;
 
+		$s = count($count);
+		// -------------- //
 		$criteria = new CDbCriteria();
 		$criteria->select = "  COUNT(*) as count ";
 		$criteria->condition = " DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) = CURDATE() AND status=1 ";
@@ -654,65 +656,10 @@ class SiteController extends Controller
 		exit;
 	}
 
-	public function actionSuunniteltulistatanaan()
-	{
-	/*
-		$bd = '
-                  <table class="table mbn tc-med-1 tc-bold-last">
-                    <thead>
-                      <tr class="hidden">
-                        <th>#</th>
-                        <th>First Name</th>
-                      </tr>
-                    </thead>
-                    <tbody>';
-
-       		    $criteria = new CDbCriteria();
-       		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i') ASC";
-       		    $criteria->condition = "
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
-			AND alku!='00:00'
-			AND peruutettu=0
-		    ";
-
-		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-        		$criteria->addCondition (" tid IN ($ids)");
-		}
-		//    Tyoryhmat -->
-
-		    $m = Tyovuoroot::model()->findAll($criteria);
-		    if(isset($m[0]))
-		    {
-
-			foreach($m as $data)
-			{
-			     $bd .= '<tr>
-	                        <td>
-	                          '.$data->alku.'-'.$data->loppu.'</td>
-	                        <td>'.$this->etuSukunimi($data->tid).'<br>'.(isset($data->kohteet->osoite)? $data->kohteet->osoite: '').'</td>
-	                      </tr>
-				  ';
-			}
-
-		    }
-
-		$bd .= '
-                    </tbody>
-                  </table>';
-	*/
-		echo json_encode(0);
-	}
-
 	public function actionMail_template()
 	{
 		$this->renderPartial('mail_template');
 	}
-
-
 
 	protected function tasot($num)
 	{
@@ -1716,31 +1663,26 @@ class SiteController extends Controller
 
 	public function actionValiko()
 	{
-
-$mod = '
-	<input type="hidden" id="select_type" value="'.$_POST['select_type'].'">
-	<div id="result"></div>';
-
-
-$mod .= '
-<script type="text/javascript">
-$(document).ready(function(){
-
-
-        $.ajax({
-           url: location.protocol + "//" + location.host + "/index.php/site/valiko_ajax",
-           type: "POST",
-           data: { "select_type" : $("#select_type").val() },
-           success: function(data){
-		//console.log(data);
-		$("#result").html(data);
-           }
-        });
-
-});
-</script>';
-
+		$mod = '
+		<input type="hidden" id="select_type" value="'.$_POST['select_type'].'">
+		<div id="result"></div>';
+		$mod .= '
+		<script type="text/javascript">
+		$(document).ready(function(){
+		        $.ajax({
+		           url: location.protocol + "//" + location.host + "/index.php/site/valiko_ajax",
+		           type: "POST",
+		           data: { "select_type" : $("#select_type").val() },
+		           success: function(data){
+				//console.log(data);
+				$("#result").html(data);
+				return false;
+		           }
+		        });
+		});
+		</script>';
 		echo json_encode($mod);
+		exit;
 	}
 
 	public function actionValiko_ajax()
@@ -1750,7 +1692,40 @@ $(document).ready(function(){
 		$this->checkOikeus($checkOikeus, true);
 		//  Oikeudet -->
 
+		// muokka
+		if(isset($_POST['muokkaSelects']) and isset($_POST['id'])){
+			$value2	= '';
+			if( isset($_POST['value2']) and $_POST['select_type'] == 'tyoryhma' )
+			$value2	= json_encode($_POST['value2']);
+			Valikkoot::model()->updatebypk($_POST['id'], 
+				array(
+					'value'=>$_POST['value'],
+					'value2'=>$value2
+				)
+			);
+		}
+		// deleteFromSelect
+		if(isset($_POST['deleteFromSelect']) and $_POST['deleteFromSelect'] == "true"){
+	       		$criteria = new CDbCriteria();
+			$criteria->condition = " select_type = '".$_POST['select_type']."' ";
+			$v = Valikkoot::model()->findAll($criteria);	
+			if( count($v) > 1 )
+			   Valikkoot::model()->deletebypk($_POST['id']);
+			else
+			    echo '<script>alert("Viimeinen rivi ei voidaan poistaa");</script>';	
+		}
+		// uusi
+		if(isset($_POST['uusiRiviSelects']) and  $_POST['uusiRiviSelects']){
+			$v = new Valikkoot;
+			$v->value=$_POST['value'];
+			$v->select_type=$_POST['select_type'];
+			if(!$v->save()){
+				print_r($v->getErrors());
+				exit;
+			}
+		}
 		$this->renderPartial('valiko_ajax');
+		exit;
 	}
 
 
@@ -2079,29 +2054,33 @@ $(document).ready(function(){
 
 	public function actionSuunnitteltutunnittanaan()
 	{
+		$tids 		= [];
+
 		// <-- Tyoryhmat
 		$tyoryhmat_criteria = '';
 		if( isset(Yii::app()->user->TyoryhmatTyontekijatHelperArray) ){
-			$impl = implode(",", Yii::app()->user->TyoryhmatTyontekijatHelperArray);
-			$tyoryhmat_criteria = "tid IN ($impl)";
+			$tids = Yii::app()->user->TyoryhmatTyontekijatHelperArray;
 		}
 		//    Tyoryhmat -->
 
-		$suunniteltu = 0;
+		$suunniteltu 	= 0;
+		$thisday	= date("Y-m-d");
+		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+		$haku_criteria	= "status=3 AND (peruutettu=0 OR peruutettu IS NULL)";
+		$getAll 	= $tyovuorot[0]->tv_arr($thisday, $thisday, $tids, $haku_criteria, false, ['tv_kesto']);
+		/*
+		echo '<pre>';
+		print_r($getAll);
+		echo '<pre>';
+		*/
+		$result = 0;
+		foreach($getAll as $k => $v)
+			foreach($v as $unix => $dayarr)
+				foreach($dayarr as $key => $arr)
+					foreach($arr as $arr2)
+						$result += $arr2['tv_kesto'];
 
-		$query = Yii::app()->db1->createCommand()
-			->select("SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit")
-			->from("sivex_tvuoro")
-			->where("DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE() AND loppu!='' and alku!='' AND peruutettu=0 AND ".$this->eiLasketa())
-			->andwhere($tyoryhmat_criteria)
-			->queryRow();
-
-		$suunniteltu = '00:00';
-		if(isset($query['l_tunnit'])){
-			$suunniteltu = $this->sprint($query['l_tunnit']);
-		}
-
-                echo json_encode($suunniteltu);
+                echo json_encode($this->sprint($result));
 		exit;
 	}
 

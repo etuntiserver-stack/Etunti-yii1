@@ -2,32 +2,7 @@
 /* @var $this KohteetController */
 /* @var $dataProvider CActiveDataProvider */
 // <--Konvertointi pois käytöstä 1.04.2018 jälkeen
-/*
-$k = LaskutusTuotteet::model()->findAll("netvisorkey!=''");
-foreach($k as $item){
-	echo $item->id.'<br>';
-	
-	$a = new TuotteetPalvelut;
-	$a->nimike = $item->tuotenimi;
-	$a->hinta_alv_0 = $item->hinta_alv_0;
-	$a->hinta_alv_sis = $item->hinta_alv_sis;
-	$a->alv = $item->alv;
-	$a->yksikko = $item->yksikko;
-	$a->netvisorkey = $item->netvisorkey;
-	$a->aktiivinen = $item->is_active;
-	$a->varastoitava = $item->varastoitava;
-	$a->myyntituote = $item->myyntituote;
-	if(!$a->save()){
-		print_r($a->getErrors());
-	} else {
-
-	}
-
-}
-*/
-// <--Konvertointi -->
 ?>
-
 
         <!-- begin: .tray-center -->
         <div class="tray-center">

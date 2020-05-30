@@ -728,7 +728,7 @@ $(document).ready(function(){
 
 <?php $this->endWidget(); ?>
 
-
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/select_valiko.js"></script>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 
@@ -760,35 +760,18 @@ $(document).ready(function(){
     }
     $('#asiakkaat-form').submit();
   });
-
-
-/* valikot */
-$(".muokaValiko").click(function() {
-    var thisFor = $(this).attr("for");
-        $.ajax({
-           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
-	   type:'POST',
-	   data: { "select_type" : thisFor },
-           success: function(data){
-		console.log(data);
-		$('#showres').modal().html(JSON.parse(data));
-           }
-        });
-});
-/* valikot */
-
-$("#Asiakkaat_tyyppi").each(function() {
+  $("#Asiakkaat_tyyppi").each(function() {
     var value = $(this).val();
     if(value !== '')
       laskutusTyyppi(value);
     else
       openAll();
 
-});
-
-$("#Asiakkaat_sopimustyyppi").change(function() {
+  });
+  $("#Asiakkaat_sopimustyyppi").change(function() {
 	sopimustyyppi();
-});
+  });
+
 sopimustyyppi();
 function sopimustyyppi(){
 	if( $('#Asiakkaat_sopimustyyppi option:selected').val() == '3' ){

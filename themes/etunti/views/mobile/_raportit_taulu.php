@@ -2,21 +2,29 @@
 /* @var $this ViestintaController */
 /* @var $data Viestinta */
 ?>
-<?php foreach($m as $k=>$val): ?>
+<?php foreach($m as $val): ?>
 <?php
+	$tyontekijan_nimi = '';
 	if( $mob_or_tv == 'mob' ){
 		$pvm = date("d.m.Y", strtotime($val->aloitan));
 		$aloitus = $val->aloitan;
 		$lopetus = $val->loppui;
+		$tyontekijan_nimi = $this->etuSukunimi($val->id);
 	}
-	if( $mob_or_tv == 'tv' ){
-		$pvm = $val->pvm;
+	if( $mob_or_tv == 'tv' and isset($val['data']) ){
+		$data = $val['data'];
+		$tv_kesto = $val['tv_kesto'];
+		$pvm = $val['this_pvm'];
+		$tid = $val['this_tid'];
+		$val = $data;
+		$val->l_tunnit = $tv_kesto;
 		$aloitus = $val->alku;
 		$lopetus = $val->loppu;
+		$tyontekijan_nimi = $this->etuSukunimi($tid);
 	}
 ?>
 <tr>
-	<td><?=$this->etuSukunimi($data->id)?></td>
+	<td><?=$tyontekijan_nimi?></td>
 	<td><?=$this->statusMuutosNimeksi($val->status)?></td>
 	<td><?=((isset($val->kohteet->osoite))?$val->kohteet->osoite:'');?></td>
 	<td><?=$pvm?></td>

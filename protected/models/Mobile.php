@@ -66,6 +66,8 @@ class Mobile extends DB2ActiveRecord
 			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
 			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
 			")->execute();
+		} else {
+
 		}
 
 		$table_structure = array(
@@ -105,6 +107,9 @@ class Mobile extends DB2ActiveRecord
 
 		foreach($table_structure as $key=>$value)
 		{
+			if($key == 'tv_id' and $table->columns[$key]->dbType != 'int(100)'){
+				Yii::app()->db1->createCommand()->alterColumn($tb_name, 'tv_id', 'int(100)' );
+			}
 			if (!isset($table->columns[$key])) {
 				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
 			}

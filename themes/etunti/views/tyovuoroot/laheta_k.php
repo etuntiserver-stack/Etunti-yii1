@@ -57,37 +57,29 @@ $paivat=array(
 <?php endif; ?>
 
 <?php
-  $site = Yii::app()->createController('Site');
-
-  $criteria = new CDbCriteria();
-  $criteria->order = " alku ASC "; 
-  $criteria->group = " tid "; 
-  $criteria->condition = "  
-  DATE(STR_TO_DATE(pvm, '%d.%m.%Y'))  
-  BETWEEN  '".date('Y-m-d',strtotime($year ."W". $week .'1'))."' AND '".date('Y-m-d',strtotime($year ."W". $week .'7'))."' 
-  AND pvm!='' 
-  AND peruutettu=0
-  ";
-
-  if(isset($_GET['check']) and !empty($_GET['check']))
-  {
-    $trimCheck = rtrim($_GET['check'], ",");
-    $criteria->addCondition (" tid IN ($trimCheck) ");  	
-  }
-
-  $tv = Tyovuoroot::model()->findAll($criteria);
+	$site = Yii::app()->createController('Site');
+	$tids = explode(",", $_GET['check']);
+	$haku_criteria = [" peruutettu=0 OR peruutettu IS NULL "];
+	$pvm_from = date("Y-m-d", strtotime($year ."W". $week .'1'));
+	$pvm_to = date("Y-m-d", strtotime($year ."W". $week .'7'));
+	$tv_arr = $this->tv_arr($pvm_from, $pvm_to, $tids, $haku_criteria, false, ['this_id','data']);
+	$tids_after = [];
+	foreach($tv_arr as $t => $arr){
+		if(in_array($t, $tids))
+			$tids_after[] = $t;
+	}
 ?>
 
 <?php $ids = ''; ?>
 <?php 
 $tyosuhteet_checker = array();
 $kenelleLahetetaan = array();
-foreach ($tv as $t) { 
+foreach ($tids_after as $tid) { 
 ?>
 <br>
 <?php
-$tt = Tyontekijat::model()->findbypk($t->tid);
-$ts = Tyosuhdet::model()->find(" tid='".$t->tid."' ");
+$tt = Tyontekijat::model()->findbypk($tid);
+$ts = Tyosuhdet::model()->find(" tid='".$tid."' ");
 
 
 if(isset($tt->tekijan_email)){
@@ -95,10 +87,10 @@ $ids .= $tt->id.',';
 array_push($kenelleLahetetaan, $this->etuSukunimi($tt->id));
 }
 ?>
-<h2 class="form-inline"><?php echo $this->etuSukunimi($tt->id); ?>
+<h2 class="form-inline"><?=((isset($tt->id))?$this->etuSukunimi($tt->id):'')?>
 <?php if($tulosta != 'lista') : ?>
   <form action="#" class="form-group" method="POST">
-    <input type="hidden" name="kuka" value="<?php echo $t->tid; ?>">
+    <input type="hidden" name="kuka" value="<?php echo $tid; ?>">
     <input type="submit" class="btn btn-success btn-sm" name="pdf" value="PDF">
   </form>
 <?php endif; ?>
@@ -107,19 +99,24 @@ array_push($kenelleLahetetaan, $this->etuSukunimi($tt->id));
 <table class="table table-bordered LahetettyTable" cellspacing="0" cellpadding="0">
 <?php
 for($day= 1; $day <= 7; $day++) {
-
-  $d = strtotime($year ."W". $week . $day);
-  $date = date('d.m.Y',$d);
-  $this->renderPartial('_laheta_date', array(
-		'site' => $site,
-		'asetukset' => $asetukset,
-		'tt' => $tt,
-		'd' => $d,	
-		'date' => $date,
-		'paivat' => $paivat,
-		'year' => $year,
-		'week' => $week
-  ));
+	$d = strtotime($year ."W". $week . $day);
+	$date = date('d.m.Y',$d);
+	$date_arr = [];
+	if(isset($tv_arr[$tid][$date])){
+		ksort($tv_arr[$tid][$date]);
+		$date_arr = $tv_arr[$tid][$date];
+		$this->renderPartial('_laheta_date', array(
+			'site' => $site,
+			'asetukset' => $asetukset,
+			'tid' => $tid,
+			'd' => $d,	
+			'date' => $date,
+			'paivat' => $paivat,
+			'year' => $year,
+			'week' => $week,
+			'date_arr' => $date_arr
+		));
+	}
 }
 $totalWeek = '';
 $totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tt->id,'viikko'=>$week,'year'=>$year),true);
