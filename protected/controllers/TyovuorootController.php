@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus'),
+				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -1599,6 +1599,10 @@ class TyovuorootController extends Controller
     }
   }
 
+	public function actionTv2()
+	{
+		die('Tämä sivu on poistettu käytöstä!<br> Ohjelman vaseman reunassa löydät uudet sivut työvuoroihiin.');
+	}
 	public function actionIndex()
 	{
 		die('Tämä sivu on poistettu käytöstä!<br> Ohjelman vaseman reunassa löydät uudet sivut työvuoroihiin.');
