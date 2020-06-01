@@ -194,8 +194,9 @@ $iban				= $asetukset->iban;
 
 		<?php
 		$hyv_lista = array();
-		if( isset($autolahetteet_asids[$asiakas['id']]) and is_array(json_decode($autolahetteet_asids[$asiakas['id']], true)) ){
-			$hyv_lista = json_decode($autolahetteet_asids[$asiakas['id']], true);
+		if( isset($autolahetteet_asids[$asiakas['id']]['tab_array']) and is_array(json_decode($autolahetteet_asids[$asiakas['id']]['tab_array'], true)) ){
+			$hyv_lista 	= json_decode($autolahetteet_asids[$asiakas['id']]['tab_array'], true);
+			$al_id		= $autolahetteet_asids[$asiakas['id']]['al_id'];
 		} else {
 			$hyv_lista = $item;
 		}
@@ -241,6 +242,15 @@ $iban				= $asetukset->iban;
 			$mobile 			= $mob['mobile'];
 			$toteutuneet 			= $mob['toteutuneet'];
 		}
+		// <-- Autolahetteet
+		if( isset($al_id) and isset($mob['tv_id']) and !isset($mob['mob_tunnit']) and !isset($mob['tyovuoroot'])){
+			$al_tv_id[$asiakas_nimi] 	= $mob['tv_id'];
+			$get_id 			= $tv_controller[0]->this_id($mob['tv_id']);
+			$toistuva[$asiakas_nimi] 	= $get_id['toistuva'];
+			$tyovuoroot[$asiakas_nimi] 	= $get_id['model'];
+			$tv_pvm				= $get_id['pvm'];
+			$tv_tid				= $get_id['tid'];
+		}
 		?>
 		<?php $key++; ?>
 		<?php
@@ -258,7 +268,7 @@ $iban				= $asetukset->iban;
 				$t 		= $this->num(strtotime($mob_tunnit['loppui'])-strtotime($mob_tunnit['aloitan']));
 				$r 		= $this->hinnastoHintaat($mob_tunnit_tyovuoroot['tuoteID'], $item, $kohteet, $t, $rivi_kpl); // MOB
 			}
-			if( isset($tyovuoroot[$asiakas_nimi]['kohde']) ){
+			if( !isset($al_tv_id[$asiakas_nimi]) and isset($tyovuoroot[$asiakas_nimi]['kohde']) ){
 				$tv_id		= $this_id[$asiakas_nimi];
 				$t 		= $this->num($tv_kesto);
 				$r 		= $this->hinnastoHintaat($tyovuoroot[$asiakas_nimi]['tuoteID'], $asiakas, $kohteet, $t, $rivi_kpl); // TV
@@ -417,7 +427,7 @@ $iban				= $asetukset->iban;
 				$rivi_kpl 	= json_decode($mob_tunnit_tyovuoroot['lisa_tuotteet'], true)['maara'][$k];
 			}
 			// <-- TV
-			if( isset($tyovuoroot[$asiakas_nimi]['kohde'])){
+			if( !isset($al_tv_id[$asiakas_nimi]) and isset($tyovuoroot[$asiakas_nimi]['kohde'])){
 				$t 		= json_decode($tyovuoroot[$asiakas_nimi]['lisa_tuotteet'], true)['maara'][$k];
 				$rivi_kpl 	= json_decode($tyovuoroot[$asiakas_nimi]['lisa_tuotteet'], true)['maara'][$k];
 			}
@@ -527,16 +537,18 @@ $iban				= $asetukset->iban;
 		<!-- / Lisatuote -->
 
 		<!-- Update tyovuoro -->
-		<?php if( $is_ok_lasku and $laheta !== null and isset($lasku->id) and isset($tyovuoroot[$asiakas_nimi]['id'])){
-			if(!$toistuva[$asiakas_nimi]){
-				$tl = Tyovuoroot::model()->findByPk($tv_id);
-				if( isset($tl->id) )
-					Tyovuoroot::model()->updateByPk($tl->id, array('laskutettu' => 1, 'lasku_id' => $lasku->id));
-			} else {
-
-				$tilanne 	= ['laskutettu' => 1, 'lasku_id' => $lasku->id];
-				$poisto_by	= 'ByAutolaskutus';
-				$tv_controller[0]->VirtualtoTV($tyovuoroot[$asiakas_nimi]['id'], $tv_tid, $tv_pvm, $tilanne, $poisto_by);
+		<?php if( $is_ok_lasku and $laheta !== null and isset($lasku->id)){
+			if(isset($tyovuoroot[$asiakas_nimi]['id']) or isset($al_tv_id[$asiakas_nimi])){
+				if($toistuva[$asiakas_nimi])
+				{
+					$tilanne 	= ['laskutettu' => 1, 'lasku_id' => $lasku->id];
+					$poisto_by	= 'ByAutolaskutus';
+					$tv_controller[0]->VirtualtoTV($tyovuoroot[$asiakas_nimi]['id'], $tv_tid, $tv_pvm, $tilanne, $poisto_by);
+				} else {
+					$tl = Tyovuoroot::model()->findByPk($tv_id);
+					if( isset($tl->id) )
+						Tyovuoroot::model()->updateByPk($tl->id, array('laskutettu' => 1, 'lasku_id' => $lasku->id));
+				}
 			}
 		} ?>
 		<!-- / Update tyovuoro -->
@@ -566,8 +578,8 @@ $iban				= $asetukset->iban;
 		// Lahetys Trust -->
 
 		// <-- Update autolahetteet
-		if( $is_ok_lasku and $laheta !== null and isset($lasku->id) and isset($al->id) ){
-			Autolahetteet::model()->updateByPk($al->id, array('lasku_id' => $lasku->id, 'laskutettu' => 1));
+		if( $is_ok_lasku and $laheta !== null and isset($lasku->id) and isset($al_id) ){
+			Autolahetteet::model()->updateByPk($al_id, array('lasku_id' => $lasku->id, 'laskutettu' => 1));
 		}
 		// Update autolahetteet -->
 

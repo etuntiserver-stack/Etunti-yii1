@@ -164,7 +164,7 @@ class LaskuController extends Controller
 		$al = Autolahetteet::model()->findAll(" from_date='".$from."' AND to_date='".$to."' AND laskutettu=0 AND tab_array!=''");
 		$autolahetteet_asids = [];
 		foreach($al as $item)
-			$autolahetteet_asids[$item->asiakas_id] = $item->tab_array;
+			$autolahetteet_asids[$item->asiakas_id] = ['al_id' => $item->id, 'tab_array' => $item->tab_array];
 
 		if( $tunnit == 'mob' ){
 		   $hyv_lista_all = $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, $criteria->condition);
