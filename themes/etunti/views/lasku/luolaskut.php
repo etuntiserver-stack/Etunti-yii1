@@ -531,7 +531,7 @@ $iban				= $asetukset->iban;
 			if(!$toistuva[$asiakas_nimi]){
 				$tl = Tyovuoroot::model()->findByPk($tv_id);
 				if( isset($tl->id) )
-					Tyovuoroot::model()->updateByPk($tl->id, array('lasku_id' => $lasku->id));
+					Tyovuoroot::model()->updateByPk($tl->id, array('laskutettu' => 1, 'lasku_id' => $lasku->id));
 			} else {
 
 				$tilanne 	= ['laskutettu' => 1, 'lasku_id' => $lasku->id];
