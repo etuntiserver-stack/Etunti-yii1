@@ -8,6 +8,14 @@ error_reporting(E_ALL & ~E_WARNING);
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 
+// <-- APPSista kaikki pois
+$server_name	= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
+$is_production	= in_array($server_name, ['apps.etunti.fi']);
+if ($is_production) {
+	header('Location: https://app.etunti.fi/');
+	exit;
+}
+
 /*
 // <-- Redirect Domain
 $server_name	= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
