@@ -1601,7 +1601,7 @@ class TyovuorootController extends Controller
 
 	public function actionIndex()
 	{
-		die('Tämä sivu on poistettu käytöstä!<br> Ohjelman vasemareunassa löydät uudet sivut työvuoroihiin.');
+		die('Tämä sivu on poistettu käytöstä!<br> Ohjelman vaseman reunassa löydät uudet sivut työvuoroihiin.');
 	}
 
 	public function actionBeta($kohteet_siivous = [], $kohde = '', $asiakas = '', $mode = null, $stage = null)
