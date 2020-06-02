@@ -38,7 +38,7 @@
 		<?php echo $data->laskunumero; ?>
 	</td>
 	<td>
-		<?php echo $asiakas; ?>
+		<?php echo '#'.$data->as_nro.' '.$asiakas; ?>
 	</td>
 	<td>
 		<?php echo $data->osoite; ?>
