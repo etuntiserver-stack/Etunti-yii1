@@ -1084,7 +1084,7 @@ $(document).ready(function(){
 	var new_pfrom = new Date(+valinnut_pfrom[1]+"/"+valinnut_pfrom[0]+"/"+valinnut_pfrom[2]);
 	var valinnut_pto = $('#pto').val().split('.');
 	var new_pto = new Date(+valinnut_pto[1]+"/"+valinnut_pto[0]+"/"+valinnut_pto[2]);
-	if(new_pfrom.setHours(0,0,0,0) >= new_pto.setHours(0,0,0,0)) {
+	if(new_pfrom.setHours(0,0,0,0) > new_pto.setHours(0,0,0,0)) {
 		return false;
 	}
 	return true;
