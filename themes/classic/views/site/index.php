@@ -2,7 +2,7 @@
 	if(isset($_SESSION['domain'])){ unset($_SESSION['domain']); }
 ?>
 <br><br>
-
+<script src="https://www.google.com/recaptcha/api.js"></script>
 <div class="container">
 
 
