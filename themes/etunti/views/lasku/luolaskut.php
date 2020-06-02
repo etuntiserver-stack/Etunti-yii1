@@ -421,18 +421,22 @@ $iban				= $asetukset->iban;
 		<?php
 			if( isset($mob_tunnit_tyovuoroot['id']) and isset($tp_lisatuotteet[$mob_tunnit_tyovuoroot['tyopaari']][$mob_tunnit_tyovuoroot['pvm']][$v]) ){ continue; }
 			if( isset($tyovuoroot[$asiakas_nimi]['kohde']) and isset($tp_lisatuotteet[$tyovuoroot[$asiakas_nimi]['tyopaari']][$tyovuoroot[$asiakas_nimi]['pvm']][$v]) ){ continue; }
+
+			$r		= [];
+
 			// <-- MOB
 			if( isset($mob_tunnit_tyovuoroot['id'])){
 				$t 		= json_decode($mob_tunnit_tyovuoroot['lisa_tuotteet'], true)['maara'][$k];
 				$rivi_kpl 	= json_decode($mob_tunnit_tyovuoroot['lisa_tuotteet'], true)['maara'][$k];
+				$r 		= $this->hinnastoHintaat($v, $item, $kohteet, $t, $rivi_kpl);
 			}
 			// <-- TV
 			if( !isset($al_tv_id[$asiakas_nimi]) and isset($tyovuoroot[$asiakas_nimi]['kohde'])){
 				$t 		= json_decode($tyovuoroot[$asiakas_nimi]['lisa_tuotteet'], true)['maara'][$k];
 				$rivi_kpl 	= json_decode($tyovuoroot[$asiakas_nimi]['lisa_tuotteet'], true)['maara'][$k];
+				$r 		= $this->hinnastoHintaat($v, $item, $kohteet, $t, $rivi_kpl);
 			}
-			$r		= [];
-			$r 		= $this->hinnastoHintaat($v, $item, $kohteet, $t, $rivi_kpl);
+
 			$tp_id		= (( isset($r['tp_id']) )? $r['tp_id']:0);
 			$nimike		= (( isset($r['tp_nimike']) )? $r['tp_nimike']:'');
 			$kpl 		= (( isset($r['kpl']) )? $r['kpl']:0);
