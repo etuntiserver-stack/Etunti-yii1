@@ -1176,7 +1176,7 @@ class TyovuorootController extends Controller
 		// <-- Tids
 		$tids = [];
 		$tids[$tid] = $tid;
-		if( is_array(json_decode($toistuva->tyopaari, true)) ){
+		if( isset($toistuva->tyopaari) and is_array(json_decode($toistuva->tyopaari, true)) ){
 			foreach(json_decode($toistuva->tyopaari, true) as $tp_tid)
 				$tids[$tp_tid] = $tp_tid;
 		}
