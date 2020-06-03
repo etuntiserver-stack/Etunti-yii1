@@ -1095,20 +1095,42 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 	}
 
 	protected function getTyovuorot($post_pvm){
+
+		$criteria=new CDbCriteria;
+		$criteria->condition = "
+			aktiivinen=1
+			AND online_varauksen_valmina=1 
+		";
+		if(!empty($tyo_toimialue))
+		{
+			$criteria->addCondition ("
+				tyo_toimialue LIKE '%".$tyo_toimialue."%'
+			");
+		}
+		if(!empty($sopiiva_tuotteet))
+		{
+			$criteria->addCondition ("
+				onlinevaraus_tuotteet LIKE '%\"".$sopiiva_tuotteet."\"%'
+			");
+		}
+		$tyontekijat = Tyontekijat::model()->findAll($criteria);
+		$tids = [];
+		foreach($tyontekijat as $item)
+			$tids[$item->id] = $item->id;
+
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
 		$from		= date('Y-m-d', strtotime("first day of this month"));
 		$to		= date('Y-m-d', strtotime($from. " last day of this month"));
-		$haku_criteria	= "tid IN ( SELECT id FROM sivex_ttekijat WHERE aktiivinen=1 AND online_varauksen_valmina=1 )";
-		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data']);
-		$return = [];
+		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, [], ['data']);
+		$returnData = [];
 		foreach($dataAll as $arr){
 			if(strtotime($post_pvm) != strtotime($arr['this_pvm']))
 				continue;
 
 			$data = $arr['data'];
-			$return[$arr['this_tid']][] = ['alku' => $data->alku, 'loppu' => $data->loppu];
+			$returnData[$arr['this_tid']][] = ['alku' => $data->alku, 'loppu' => $data->loppu];
 		}
-		return $return;
+		return ['returnData' => $returnData, 'tids' => $tids];
 	}
 
 	protected function pmvCalNew($date)
@@ -1149,34 +1171,16 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 		$countStop 		= strtotime($onlinevaraus_loppu.":00");
 
 		// <-- Täysin vapaana
-		if(count($getTyovuorot) == 0){
-			$criteria=new CDbCriteria;
-			$criteria->condition = "
-				aktiivinen=1
-				AND online_varauksen_valmina=1 
-			";
-			if(!empty($tyo_toimialue))
-			{
-				$criteria->addCondition ("
-					tyo_toimialue LIKE '%".$tyo_toimialue."%'
-				");
-			}
-			if(!empty($sopiiva_tuotteet))
-			{
-				$criteria->addCondition ("
-					onlinevaraus_tuotteet LIKE '%\"".$_SESSION['onlinevaraus']['paapalvelu']."\"%'
-				");
-			}
-			$tyontekijat = Tyontekijat::model()->findAll($criteria);
-			foreach($tyontekijat as $t)
-			{
+		foreach($getTyovuorot['tids'] as $tid)
+		{
+			if(!isset($getTyovuorot['returnData'][$tid])){
 			   	$on = 'vapaa';
-				$tekija = $this->loopForAjaat($t->id, $start, $stop, $date, $sumTuntiMin, $countStop, $tekija);
+				$tekija = $this->loopForAjaat($tid, $start, $stop, $date, $sumTuntiMin, $countStop, $tekija);
 			}
 		}
 		// Täysin vapaana -->
 
-		foreach($getTyovuorot as $tid => $ajaat_arr)
+		foreach($getTyovuorot['returnData'] as $tid => $ajaat_arr)
 		{
 			foreach($ajaat_arr as $al_lop_arr){
 				if(isset($last_loppu) and strtotime($al_lop_arr['alku']) > $last_loppu and (strtotime($al_lop_arr['alku'])-$last_loppu-($aikavali*2)) >= $sumTuntiSec){
