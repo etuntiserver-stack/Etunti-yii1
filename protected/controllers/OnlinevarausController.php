@@ -1148,10 +1148,37 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 		$stop 			= date("H:i",strtotime($start." +".$sumTuntiMin." minutes"));
 		$countStop 		= strtotime($onlinevaraus_loppu.":00");
 
-		foreach($getTyovuorot as $tid => $ajaat_arr){
-			foreach($ajaat_arr as $al_lop_arr){
-				echo $al_lop_arr['alku'].' '.$al_lop_arr['loppu'].'<br>';
+		// <-- Täysin vapaana
+		if(count($getTyovuorot) == 0){
+			$criteria=new CDbCriteria;
+			$criteria->condition = "
+				aktiivinen=1
+				AND online_varauksen_valmina=1 
+			";
+			if(!empty($tyo_toimialue))
+			{
+				$criteria->addCondition ("
+					tyo_toimialue LIKE '%".$tyo_toimialue."%'
+				");
+			}
+			if(!empty($sopiiva_tuotteet))
+			{
+				$criteria->addCondition ("
+					onlinevaraus_tuotteet LIKE '%\"".$_SESSION['onlinevaraus']['paapalvelu']."\"%'
+				");
+			}
+			$tyontekijat = Tyontekijat::model()->findAll($criteria);
+			foreach($tyontekijat as $t)
+			{
+			   	$on = 'vapaa';
+				$tekija = $this->loopForAjaat($t->id, $start, $stop, $date, $sumTuntiMin, $countStop, $tekija);
+			}
+		}
+		// Täysin vapaana -->
 
+		foreach($getTyovuorot as $tid => $ajaat_arr)
+		{
+			foreach($ajaat_arr as $al_lop_arr){
 				if(isset($last_loppu) and strtotime($al_lop_arr['alku']) > $last_loppu and (strtotime($al_lop_arr['alku'])-$last_loppu-($aikavali*2)) >= $sumTuntiSec){
 					$alku 	= $last_loppu+$aikavali;
 					$loppu 	= $alku+$sumTuntiSec;
