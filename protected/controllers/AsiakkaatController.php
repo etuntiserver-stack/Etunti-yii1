@@ -2340,6 +2340,7 @@ $xml = '
       $customer_results = Asiakkaat::model()->findAll($criteria);
       foreach ($customer_results as $c)
         $customers[$c->id] = ($c->tyyppi == 'yritys' ? $c->yrityksen_nimi : $c->yhteyshenkilo) ?: $c->sahkoposti;
+      sort($customers);
 
       // No parameters, move to Freshdesk ticket view.
       return $this->render('freshdesk', [
