@@ -120,14 +120,14 @@
               </button>
             </div>
           </div>
-          <div class="row">
+          <div class="row" style="display:none">
             <div class="col-md-12">
               <button id="btn-export-customers" class="menu-button btn-warning" type="button">
                 <b>Vie asiakkaat Freshdeskiin&nbsp;<span class="glyphicon glyphicon-user"></span></b>
               </button>
             </div>
           </div>
-          <div class="row">
+          <div class="row" style="display:none">
             <div class="col-md-12">
               <label class="field select">
                 <select id="export-customers-list" class="gui-input">
