@@ -1389,9 +1389,12 @@ $(document).ready(function(){
 	if(toistuva == true){
 		if( tilanne == 'poista_ketju_kokonaan' )
 			var r = confirm('Poista kaikki ketjuun kuuluvat työvuorot ja työparit.');
+		if( tilanne == 'poista_pvm' )
+			var r = confirm('Poistetaanko tämä päivä ja hänkilö ketjusta?.');
 	} else {
 		var r = confirm('Haluatko varmasti poistaa?');
 	}
+
 	if(r)
 	{
         $.ajax({
