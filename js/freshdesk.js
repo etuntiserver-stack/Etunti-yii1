@@ -336,8 +336,27 @@ $(function () {
     // Set ID for this ticket div.
     obj.attr('id', 'ticket-' + id);
 
+    // Get ticket type text and translate.
+    const typeText = (function(type) {
+      switch(type) {
+        case 'Question':
+          return 'Kysymys';
+        case 'Incident':
+          return 'Sattumus';
+        case 'Problem':
+          return 'Ongelma';
+        case 'Feature Request':
+          return 'Toimintopyyntö';
+        case 'Refund':
+          return 'Hyvitys';
+        case 'Request':
+        default:
+          return 'Tukipyyntö';
+      }
+    })(ticket.type);
+
     // Set subject and description text, and respond link.
-    obj.find('.ticket-subject').text('Tukipyyntö: ' + ticket.subject).attr('href', ticketLink);
+    obj.find('.ticket-subject').text(`${ticket.subject}`).attr('href', ticketLink);
     obj.find('.ticket-summary').text(ticket.description_text);
     obj.find('.ticket-respond-link').attr('href', ticketLink);
 
@@ -359,27 +378,27 @@ $(function () {
       case 2: // Open
         obj.find('.ticket-footer').addClass('bg-warning');
         obj.find('.ticket-footer-list').addClass('text-dark');
-        obj.find('.ticket-status').text(`Vastaamatta ${updatedDate}`);
+        obj.find('.ticket-status').text(`Vastaamatta ${updatedDate} (${typeText})`);
         break;
       case 3: // Pending
         obj.find('.ticket-footer').addClass('bg-primary');
-        obj.find('.ticket-status').text(`Vastattu ${updatedDate}`);
+        obj.find('.ticket-status').text(`Vastattu ${updatedDate} (${typeText})`);
         break;
       case 4: // Resolved
         obj.find('.ticket-footer').addClass('bg-success');
-        obj.find('.ticket-status').text(`Ratkaistu ${updatedDate}`);
+        obj.find('.ticket-status').text(`Ratkaistu ${updatedDate} (${typeText})`);
         break;
       case 5: // Closed
         obj.find('.ticket-footer').addClass('bg-secondary');
-        obj.find('.ticket-status').text(`Suljettu ${updatedDate}`);
+        obj.find('.ticket-status').text(`Suljettu ${updatedDate} (${typeText})`);
         break;
       case 6: // Waiting on customer
         obj.find('.ticket-footer').addClass('bg-primary');
-        obj.find('.ticket-status').text(`Odottaa Asiakasta ${updatedDate}`);
+        obj.find('.ticket-status').text(`Odottaa Asiakasta ${updatedDate} (${typeText})`);
         break;
       case 7: // Waiting for third party
         obj.find('.ticket-footer').addClass('bg-primary');
-        obj.find('.ticket-status').text(`Odottaa Tietoa ${updatedDate}`);
+        obj.find('.ticket-status').text(`Odottaa Tietoa ${updatedDate} (${typeText})`);
         break;
     }
 
