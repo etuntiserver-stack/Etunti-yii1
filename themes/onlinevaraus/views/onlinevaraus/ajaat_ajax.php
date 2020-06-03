@@ -54,7 +54,7 @@
    }
 
 
-   $tekijat = $this->pmvCal($_POST['pvm'])[1];
+   $tekijat = $this->pmvCalNew($_POST['pvm'])[1];
    $body .= '<div class="table-responsive">';
    $body .= '<table class="table table-hover">';
    foreach($tekijat as $key=>$value)

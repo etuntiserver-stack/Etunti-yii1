@@ -1,6 +1,30 @@
 <?php
 /* index
 */
+function tr($vapaaTid, $pvm, $sta, $sto, $kuva)
+{
+   	$return = '
+	<tr class="link ajaanClick" tid="'.$vapaaTid.'" pvm="'.date("d.m.Y",strtotime('2020-06-08')).'" alku="'.$sta.'" loppu="'.$sto.'">
+	<td class="col-xs-2">'.$kuva.'</td>
+	<td>'.$sta.' - '.$sto.'</td>
+	</tr>';
+	return $return;
+}
+
+	$_SESSION['onlinevaraus']['sumTunti'] = 3600*3;
+
+	$tekijat = $this->pmvCalNew('2020-06-08')[1];
+	$body = '';
+	$body .= '<div class="table-responsive">';
+	$body .= '<table class="table table-hover">';
+	foreach($tekijat as $key=>$value)
+	{
+		$body .= tr($value[0], $value[1], $value[2], $value[3], null);
+	}
+	$body .= '</table>';
+	$body .= '</div>';
+	echo $body;
+	exit;
 ?>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_onlinevaraus/js/onlinevaraus_index.js"></script>
 <input type="hidden" id="valinnuPvm">
