@@ -4,9 +4,9 @@
 class Freshdesk extends CComponent
 {
   /** @var string Base URL for Freshdesk services. */
-  private const BASE_URL = 'https://<domain>.freshdesk.com';
+  private const BASE_URL = 'https://kotipuhtaaksi.freshdesk.com';
   /** @var string Default production API key. */
-  private const API_KEY = '';
+  private const API_KEY = 'zhyJbMtxnYcaDjaY0wr';
   /** @var string Base URL for Freshdesk services. */
   private const TEST_BASE_URL = 'https://santelo.freshdesk.com';
   /** @var string Default testing API key. */
@@ -46,7 +46,7 @@ class Freshdesk extends CComponent
       $this->key = static::TEST_API_KEY;
       $this->baseUrl = static::TEST_BASE_URL;
       $this->url = static::TEST_BASE_URL . '/api/v2';
-    } elseif ($domain == 'kotipuhtaaksi') {
+    } elseif ($domain == 'kotipuhtaaksi' || $domain == 'staging_kotipuhtaaksi') {
       $this->key = static::API_KEY;
       $this->baseUrl = static::BASE_URL;
       $this->url = static::BASE_URL . '/api/v2';
