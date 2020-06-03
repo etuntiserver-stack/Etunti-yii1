@@ -2149,15 +2149,11 @@ class TyovuorootController extends Controller
 		if($arvo->osoiteOnline == 3)
 			$lisateksti .= '<br><span class="text-warning">eDico varaus</span>';
 		if($arvo->tyopaari != '')
-<<<<<<< HEAD
-      $ikoonit .= ' <i class="fa fa-male text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i> ';
-    if ($has_tickets)
-      $ikoonit .= ' <i class="fa fa-question text-primary" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Avoimia Tukipyyntöɉä').'"></i> ';
-=======
 			$ikoonit .= ' <i class="fa fa-male text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i> ';
 		if(isset($arvo->avaimet) and count($arvo->avaimet) > 0)
 			$ikoonit .=  ' <i class="tvikooni fa fa-key text-warning"></i> ';
->>>>>>> master
+    if ($has_tickets)
+      $ikoonit .= ' <i class="fa fa-question text-primary" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Avoimia Tukipyyntöɉä').'"></i> ';
 
 		$asiakasNakyvissa = '';
 		if( $asiakas_tyovuorossa ){
