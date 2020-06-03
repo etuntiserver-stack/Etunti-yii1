@@ -1032,7 +1032,6 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
                $calendar .= "</tr><tr>";
 
           }
-
 	  $on = $this->pmvCalNew($date)[0];
 	  if($numOfWeek == 5 and ( date("N",strtotime($date)) == 7 or date("N",strtotime($date)) == 6 ))
 	  $on = 'kiinni';
@@ -1083,8 +1082,6 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
      }
      
      $calendar .= "</tr>";
-
-
      $calendar .= "</table>";
 
      return $calendar;
@@ -1098,12 +1095,6 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 	}
 
 	protected function getTyovuorot($post_pvm){
-		$month = date('m');
-		$year = date('Y');
-
-		$month_next = date('m',strtotime("last day of +1 month"));
-		$year_next = date('Y',strtotime("last day of +1 month"));
-
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
 		$from		= date('Y-m-d', strtotime("first day of this month"));
 		$to		= date('Y-m-d', strtotime($from. " last day of this month"));
@@ -1120,13 +1111,15 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 		return $return;
 	}
 
-	protected function pmvCalNew($date, $getTyovuorot)
+	protected function pmvCalNew($date)
 	{
-		$_SESSION['onlinevaraus']['sumTunti'] = 3; // poistetaan
+		//$_SESSION['onlinevaraus']['sumTunti'] = 1; // poistetaan
 		if( !isset($_SESSION['onlinevaraus']['sumTunti']) ){
 			echo json_encode('sumTunti Error');
 			exit;
 		}
+
+		$getTyovuorot = $this->getTyovuorot($date);
 
 		$tyo_toimialue = '';
 		if(isset($_SESSION['onlinevaraus']['tyo_toimialue']) and !empty($_SESSION['onlinevaraus']['tyo_toimialue']))
@@ -1137,7 +1130,7 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 		$sopiiva_tuotteet = $_SESSION['onlinevaraus']['paapalvelu'];
 
 
-		$tekija 		= array();
+		$tekija 		= [];
 		$on 			= 'kiinni';
 
 		$asetukset 		= Asetukset::model()->findbypk(1);
@@ -1156,14 +1149,31 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 		$countStop 		= strtotime($onlinevaraus_loppu.":00");
 
 		foreach($getTyovuorot as $tid => $ajaat_arr){
-			echo '<h3>'.$tid.'</h3>';
 			foreach($ajaat_arr as $al_lop_arr){
 				echo $al_lop_arr['alku'].' '.$al_lop_arr['loppu'].'<br>';
+
+				if(isset($last_loppu) and strtotime($al_lop_arr['alku']) > $last_loppu and (strtotime($al_lop_arr['alku'])-$last_loppu-($aikavali*2)) >= $sumTuntiSec){
+					$alku 	= $last_loppu+$aikavali;
+					$loppu 	= $alku+$sumTuntiSec;
+					$on = 'vapaa';
+
+	  				$tekija = $this->loopForAjaat(
+					$tid,
+					date("H:i",$alku), 
+					date("H:i",$loppu), 
+					$date,
+					$sumTuntiMin,
+					((strtotime($al_lop_arr['alku'])-$aikavali) > strtotime("18:00"))? strtotime("18:00") : strtotime($al_lop_arr['alku'])-$aikavali, // countStop
+					$tekija
+					);
+
+				}
+
 				$last_alku 	= strtotime($al_lop_arr['alku']);
 				$last_loppu 	= strtotime($al_lop_arr['loppu']);
 			}
 
-
+			// <-- REIKÄ ennen EKA alku
 			$first = array_shift($ajaat_arr);
 			if(isset($first['alku']) and strtotime($first['alku']) > strtotime($start) and (strtotime($first['alku'])-strtotime($start)-$aikavali) >= $sumTuntiSec){
 				$alku 	= strtotime($start);
@@ -1176,11 +1186,11 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 				date("H:i",$loppu), 
 				$date,
 				$sumTuntiMin,
-				strtotime($first['alku']), // countStop
+				strtotime($first['alku'])-$aikavali, // countStop
 				$tekija
 				);
 			}
-
+			// <-- REIKÄ viimeisen jälkeen
 			if(isset($last_loppu) and $countStop > $last_loppu and ($countStop-$last_loppu+$aikavali) >= $sumTuntiSec){
 				$alku 	= $last_loppu+$aikavali;
 				$loppu 	= $alku+$sumTuntiSec;
@@ -1198,17 +1208,17 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 			}
 		}
 		ksort($tekija);
-		$return = [];
+		$return_tulos = [];
 		foreach($tekija as $tulos)
 			foreach($tulos as $t1)
-				$return[] = $t1;
+				$return_tulos[] = $t1;
 /*
 		echo '<pre>';
 		print_r($return);
 		echo '</pre>';
 		exit;
 */
-		$return = array($on, $return);
+		$return = array($on, $return_tulos);
 		return $return;
 	}
 

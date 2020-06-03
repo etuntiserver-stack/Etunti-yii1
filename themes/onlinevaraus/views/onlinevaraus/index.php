@@ -1,7 +1,7 @@
 <?php
 /* index
 */
-
+/*
 function tr($vapaaTid, $pvm, $sta, $sto, $kuva)
 {
    	$return = '
@@ -14,11 +14,6 @@ function tr($vapaaTid, $pvm, $sta, $sto, $kuva)
 
 	$post_pvm	= '2020-06-08';
 	$getTyovuorot 	= $this->getTyovuorot($post_pvm);
-	/*
-	echo '<pre>';
-	print_r($getTyovuorot);
-	echo '</pre>';
-	*/
 	$tekijat = $this->pmvCalNew($post_pvm, $getTyovuorot)[1];
 	echo '<br><h1>TULOS</h1>';
 	$body = '';
@@ -32,6 +27,7 @@ function tr($vapaaTid, $pvm, $sta, $sto, $kuva)
 	$body .= '</div>';
 	echo $body;
 	exit;
+*/
 ?>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_onlinevaraus/js/onlinevaraus_index.js"></script>
 <input type="hidden" id="valinnuPvm">

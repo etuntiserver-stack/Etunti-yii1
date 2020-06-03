@@ -271,7 +271,8 @@ function kaksiKalenteria()
 	data:{ "nothing" : "true" },
 	type:'POST',
 	success:function(data){
-		data = JSON.parse(data);
+		console.log(data);
+		//data = JSON.parse(data);
 
 		count1 += -1;
 		var time = count1*15;

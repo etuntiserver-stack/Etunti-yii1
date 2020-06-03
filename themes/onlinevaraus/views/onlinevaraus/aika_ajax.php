@@ -53,5 +53,5 @@
 
  }
 
-     echo json_encode($body);
+     echo $body;
 ?>
