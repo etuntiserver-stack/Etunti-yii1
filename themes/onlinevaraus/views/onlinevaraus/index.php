@@ -1,19 +1,26 @@
 <?php
 /* index
 */
+
 function tr($vapaaTid, $pvm, $sta, $sto, $kuva)
 {
    	$return = '
-	<tr class="link ajaanClick" tid="'.$vapaaTid.'" pvm="'.date("d.m.Y",strtotime('2020-06-08')).'" alku="'.$sta.'" loppu="'.$sto.'">
+	<tr class="link ajaanClick" tid="'.$vapaaTid.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" alku="'.$sta.'" loppu="'.$sto.'">
 	<td class="col-xs-2">'.$kuva.'</td>
-	<td>'.$sta.' - '.$sto.'</td>
+	<td><b>'.$vapaaTid.'</b> '.$sta.' - '.$sto.'</td>
 	</tr>';
 	return $return;
 }
 
-	$_SESSION['onlinevaraus']['sumTunti'] = 3600*3;
-
-	$tekijat = $this->pmvCalNew('2020-06-08')[1];
+	$post_pvm	= '2020-06-08';
+	$getTyovuorot 	= $this->getTyovuorot($post_pvm);
+	/*
+	echo '<pre>';
+	print_r($getTyovuorot);
+	echo '</pre>';
+	*/
+	$tekijat = $this->pmvCalNew($post_pvm, $getTyovuorot)[1];
+	echo '<br><h1>TULOS</h1>';
 	$body = '';
 	$body .= '<div class="table-responsive">';
 	$body .= '<table class="table table-hover">';
