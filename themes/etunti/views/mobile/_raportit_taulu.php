@@ -9,7 +9,7 @@
 		$pvm = date("d.m.Y", strtotime($val->aloitan));
 		$aloitus = $val->aloitan;
 		$lopetus = $val->loppui;
-		$tyontekijan_nimi = $this->etuSukunimi($val->id);
+		$tyontekijan_nimi = $this->etuSukunimi($val->tid);
 	}
 	if( $mob_or_tv == 'tv' and isset($val['data']) ){
 		$data = $val['data'];

@@ -3,7 +3,6 @@
 /** Procountor API manager. */
 class Procountor extends CComponent
 {
-  private $settings;
   private $redirect_uri;
   private $api_base_url;
   private $client_id;
@@ -12,8 +11,6 @@ class Procountor extends CComponent
   /** Initialize Procountor. */
   public function __construct()
   {
-    $this->settings = Asetukset::model()->findByPk(1);
-
     // If localhost, use testing environment.
     if (in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1'])) {
       $this->redirect_uri  = 'http://etunti.local/index.php/asetukset/procountor_auth';
@@ -242,9 +239,10 @@ class Procountor extends CComponent
    */
   public function getAccessToken($force = false)
   {
-    $access_token = $this->settings->procountor_access_token;
-    $refresh_time = $this->settings->procountor_refresh_time;
-    $expires_in = $this->settings->procountor_expires_in;
+    $settings = Asetukset::model()->findByPk(1);
+    $access_token = $settings->procountor_access_token;
+    $refresh_time = $settings->procountor_refresh_time;
+    $expires_in = $settings->procountor_expires_in;
 
     // Check if current access token is valid.
     if (!$force && !empty($access_token) && !empty($expires_in) && !empty($refresh_time))
@@ -252,7 +250,7 @@ class Procountor extends CComponent
 
     // Access token has expired and needs to be refreshed. If refresh token is
     // unavailable, return now to avoid errors.
-    if (empty($refresh_token = $this->settings->procountor_refresh_token))
+    if (empty($refresh_token = $settings->procountor_refresh_token))
       return false;
 
     // POST https://api-test.procountor.com/api/oauth/token

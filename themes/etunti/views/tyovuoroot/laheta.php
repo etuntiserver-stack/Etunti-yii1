@@ -140,7 +140,7 @@ $paivat=array(
 	}
 
 $totalWeek = '';
-$totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tid,'viikko'=>$week,'year'=>$year),true);
+//$totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tid,'viikko'=>$week,'year'=>$year),true);
 ?>
  <tr>
  <th align="left"><?php echo Yii::t('','Yhteensä').' '. $totalWeek; ?></th>

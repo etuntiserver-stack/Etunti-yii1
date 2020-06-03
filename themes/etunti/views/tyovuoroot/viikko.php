@@ -1,5 +1,5 @@
 <?php
-
+/*
 	$site = Yii::app()->createController('Site');
 	$eilasketa = $site[0]->eiLasketa();
 
@@ -15,6 +15,6 @@
 
 	$tv = Tyovuoroot::model()->find($criteria); 
 	echo $this->sprint($tv['l_tunnit']);
-
+*/
 ?>
 

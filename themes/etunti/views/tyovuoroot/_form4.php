@@ -1099,7 +1099,7 @@ $(document).ready(function(){
 	var new_pfrom = new Date(+valinnut_pfrom[1]+"/"+valinnut_pfrom[0]+"/"+valinnut_pfrom[2]);
 	var valinnut_pto = $('#pto').val().split('.');
 	var new_pto = new Date(+valinnut_pto[1]+"/"+valinnut_pto[0]+"/"+valinnut_pto[2]);
-	if(new_pfrom.setHours(0,0,0,0) >= new_pto.setHours(0,0,0,0)) {
+	if(new_pfrom.setHours(0,0,0,0) > new_pto.setHours(0,0,0,0)) {
 		return false;
 	}
 	return true;
@@ -1404,9 +1404,12 @@ $(document).ready(function(){
 	if(toistuva == true){
 		if( tilanne == 'poista_ketju_kokonaan' )
 			var r = confirm('Poista kaikki ketjuun kuuluvat työvuorot ja työparit.');
+		if( tilanne == 'poista_pvm' )
+			var r = confirm('Poistetaanko tämä päivä ja hänkilö ketjusta?.');
 	} else {
 		var r = confirm('Haluatko varmasti poistaa?');
 	}
+
 	if(r)
 	{
         $.ajax({
