@@ -8,6 +8,8 @@ error_reporting(E_ALL & ~E_WARNING);
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 
+$is_local = (isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1'))? true : false;
+
 // <-- APPSista kaikki pois
 $server_name	= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
 $is_production	= in_array($server_name, ['apps.etunti.fi']);
@@ -206,6 +208,18 @@ if (isset($_GET['dom'])) {
     }
 }
 
+// Käytä tätä ottaaksesi cache pois käytöstä, tai jos memcached ei asennettu:
+if($is_local){
+        $cache = ['class' => 'system.caching.CDummyCache'];
+} else {
+        $cache = [
+       	  'class' => 'system.caching.CMemCache',
+       	  'servers' => [
+       	    ['host' => 'localhost', 'port' => 11211, 'weight' => 60]
+       	  ],
+       	  'useMemcached' => true
+       	];
+}
 
 return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
@@ -472,7 +486,8 @@ return array(
             'allowAutoLogin' => true,
             'loginUrl' => array('/user/login'),
         ),
-
+	'cache' => $cache,
+/*
         'cache' => [
           'class' => 'system.caching.CMemCache',
           'servers' => [
@@ -485,6 +500,7 @@ return array(
         // 'cache' => [
         //   'class' => 'system.caching.CDummyCache'
         // ],
+*/
 
         // uncomment the following to enable URLs in path-format
         /*
