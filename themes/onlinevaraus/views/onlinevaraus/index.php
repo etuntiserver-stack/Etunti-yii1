@@ -11,7 +11,7 @@ function tr($vapaaTid, $pvm, $sta, $sto, $kuva)
 	</tr>';
 	return $return;
 }
-
+	//$_SESSION['onlinevaraus']['sumTunti'] = 1; // poistetaan
 	$post_pvm	= '2020-06-08';
 	$getTyovuorot 	= $this->getTyovuorot($post_pvm);
 	$tekijat = $this->pmvCalNew($post_pvm, $getTyovuorot)[1];

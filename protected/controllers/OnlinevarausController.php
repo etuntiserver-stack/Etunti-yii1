@@ -1135,7 +1135,6 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 
 	protected function pmvCalNew($date)
 	{
-		//$_SESSION['onlinevaraus']['sumTunti'] = 1; // poistetaan
 		if( !isset($_SESSION['onlinevaraus']['sumTunti']) ){
 			echo json_encode('sumTunti Error');
 			exit;
@@ -1227,15 +1226,17 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 				$loppu 	= $alku+$sumTuntiSec;
 				$on = 'vapaa';
 
-  				$tekija = $this->loopForAjaat(
-				$tid,
-				date("H:i",$alku), 
-				date("H:i",$loppu), 
-				$date,
-				$sumTuntiMin,
-				$countStop,
-				$tekija
-				);
+				if($countStop >= $loppu){
+  					$tekija = $this->loopForAjaat(
+					$tid,
+					date("H:i",$alku), 
+					date("H:i",$loppu), 
+					$date,
+					$sumTuntiMin,
+					$countStop,
+					$tekija
+					);
+				}
 			}
 		}
 		ksort($tekija);
