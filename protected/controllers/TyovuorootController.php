@@ -3249,12 +3249,14 @@ class TyovuorootController extends Controller
 					$arr 		= array_diff( $updated_tp, $edelliset_tyoparit );
 					foreach($rm as $tid)
 						$removed[$tid] = $tid;
-					foreach($edelliset_tyoparit as $tv_id => $tid){
-						if(isset($removed[$tid])){
-							Tyovuoroot::model()->deleteByPk($tv_id);
-							continue;
-						} else {
-							$luotu[$tv_id] = $tid;
+					if(!isset($edelliset_tyoparit[0])){
+						foreach($edelliset_tyoparit as $tv_id => $tid){
+							if(isset($removed[$tid])){
+								Tyovuoroot::model()->deleteByPk($tv_id);
+								continue;
+							} else {
+								$luotu[$tv_id] = $tid;
+							}
 						}
 					}
 					foreach($arr as $tid){
