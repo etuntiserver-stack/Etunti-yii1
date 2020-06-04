@@ -2,30 +2,71 @@
 /* index
 */
 /*
-function tr($vapaaTid, $pvm, $sta, $sto, $kuva)
-{
-   	$return = '
-	<tr class="link ajaanClick" tid="'.$vapaaTid.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" alku="'.$sta.'" loppu="'.$sto.'">
-	<td class="col-xs-2">'.$kuva.'</td>
-	<td><b>'.$vapaaTid.'</b> '.$sta.' - '.$sto.'</td>
-	</tr>';
-	return $return;
-}
-	//$_SESSION['onlinevaraus']['sumTunti'] = 1; // poistetaan
-	$post_pvm	= '2020-06-08';
-	$getTyovuorot 	= $this->getTyovuorot($post_pvm);
-	$tekijat = $this->pmvCalNew($post_pvm, $getTyovuorot)[1];
-	echo '<br><h1>TULOS</h1>';
-	$body = '';
-	$body .= '<div class="table-responsive">';
-	$body .= '<table class="table table-hover">';
-	foreach($tekijat as $key=>$value)
-	{
-		$body .= tr($value[0], $value[1], $value[2], $value[3], null);
-	}
-	$body .= '</table>';
-	$body .= '</div>';
-	echo $body;
+Array
+(
+    [returnData] => Array
+        (
+            [08.06.2020] => Array
+                (
+                    [11] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [alku] => 08:00
+                                    [loppu] => 09:00
+                                )
+
+                            [1] => Array
+                                (
+                                    [alku] => 13:00
+                                    [loppu] => 14:00
+                                )
+
+                        )
+
+                )
+
+            [09.06.2020] => Array
+                (
+                    [11] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [alku] => 08:00
+                                    [loppu] => 09:00
+                                )
+
+                        )
+
+                )
+
+            [10.06.2020] => Array
+                (
+                    [11] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [alku] => 08:00
+                                    [loppu] => 09:00
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [tids] => Array
+        (
+            [10] => 10
+            [11] => 11
+        )
+
+)
+	$getTyovuorot = $this->getTyovuorot2months();
+	echo '<pre>';
+	print_r($getTyovuorot);
+	echo '</pre>';
 	exit;
 */
 ?>

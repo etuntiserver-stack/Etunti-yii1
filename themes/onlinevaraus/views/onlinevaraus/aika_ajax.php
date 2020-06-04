@@ -40,15 +40,17 @@
 	$hidden_second = '';
      }
 
+     $getTyovuorot = $this->getTyovuorot2months();
+
      $body .= "<div id='ensimmainen_kk' class='text-center $hidden_first'>";
      $body .= "<h3><i class='fa fa-angle-double-right pull-right link next_kk' kalenteri_year_month='".$year_next."_".$month_next."'></i> ".$months[$month]." $year</h3>";
-     $body .= $this->build_calendar($month, $year, $dateArray, $asetukset->onlinevaraus_aikaisintaan_paivamaara, $numOfWeek);
+     $body .= $this->build_calendar($month, $year, $dateArray, $asetukset->onlinevaraus_aikaisintaan_paivamaara, $numOfWeek, $getTyovuorot);
      $body .= "</div>";
 
 
      $body .= "<div id='toinen_kk' class='text-center $hidden_second'>";
      $body .= "<h3><i class='fa fa-angle-double-left pull-left link prev_kk' kalenteri_year_month='".$year."_".$month."'></i> ".$months[$month_next]." $year_next</h3>";
-     $body .= $this->build_calendar($month_next, $year_next, $dateArray, $asetukset->onlinevaraus_aikaisintaan_paivamaara, $numOfWeek);
+     $body .= $this->build_calendar($month_next, $year_next, $dateArray, $asetukset->onlinevaraus_aikaisintaan_paivamaara, $numOfWeek, $getTyovuorot);
      $body .= "</div>";
 
  }

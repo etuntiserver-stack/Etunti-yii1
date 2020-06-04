@@ -968,7 +968,7 @@ class OnlinevarausController extends Controller
 	}
 
 
-protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWeek) {
+protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWeek, $getTyovuorot) {
 
      // Create array containing abbreviations of days of week.
      $daysOfWeek = array('Ma','Ti','Ke','To','Pe','La','Su');
@@ -1032,7 +1032,8 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
                $calendar .= "</tr><tr>";
 
           }
-	  $on = $this->pmvCalNew($date)[0];
+	  $fromTyovuorot = (isset($getTyovuorot['returnData'][$date]))? $getTyovuorot['returnData'][$date] : [];
+	  $on = $this->pmvCalNew($date, $fromTyovuorot, $getTyovuorot['tids'])[0];
 	  if($numOfWeek == 5 and ( date("N",strtotime($date)) == 7 or date("N",strtotime($date)) == 6 ))
 	  $on = 'kiinni';
 
@@ -1094,7 +1095,7 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
-	protected function getTyovuorot($post_pvm){
+	protected function getTyovuorot2months(){
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = "
@@ -1120,36 +1121,22 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
 		$from		= date('Y-m-d', strtotime("first day of this month"));
-		$to		= date('Y-m-d', strtotime($from. " last day of this month"));
+		$to		= date('Y-m-d', strtotime($from. " last day of next month"));
 		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, [], ['data']);
 		$returnData = [];
 		foreach($dataAll as $arr){
-			if(strtotime($post_pvm) != strtotime($arr['this_pvm']))
-				continue;
-
 			$data = $arr['data'];
-			$returnData[$arr['this_tid']][] = ['alku' => $data->alku, 'loppu' => $data->loppu];
+			$returnData[date('Y-m-d', strtotime($arr['this_pvm']))][$arr['this_tid']][] = ['alku' => $data->alku, 'loppu' => $data->loppu];
 		}
 		return ['returnData' => $returnData, 'tids' => $tids];
 	}
 
-	protected function pmvCalNew($date)
+	protected function pmvCalNew($date, $fromTyovuorot, $tids)
 	{
 		if( !isset($_SESSION['onlinevaraus']['sumTunti']) ){
 			echo json_encode('sumTunti Error');
 			exit;
 		}
-
-		$getTyovuorot = $this->getTyovuorot($date);
-
-		$tyo_toimialue = '';
-		if(isset($_SESSION['onlinevaraus']['tyo_toimialue']) and !empty($_SESSION['onlinevaraus']['tyo_toimialue']))
-		$tyo_toimialue 	= $_SESSION['onlinevaraus']['tyo_toimialue'];
-
-		$sopiiva_tuotteet = '';
-		if(isset($_SESSION['onlinevaraus']['paapalvelu']) and !empty($_SESSION['onlinevaraus']['paapalvelu']))
-		$sopiiva_tuotteet = $_SESSION['onlinevaraus']['paapalvelu'];
-
 
 		$tekija 		= [];
 		$on 			= 'kiinni';
@@ -1170,16 +1157,16 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 		$countStop 		= strtotime($onlinevaraus_loppu.":00");
 
 		// <-- Täysin vapaana
-		foreach($getTyovuorot['tids'] as $tid)
+		foreach($tids as $tid)
 		{
-			if(!isset($getTyovuorot['returnData'][$tid])){
+			if(!isset($fromTyovuorot[$tid])){
 			   	$on = 'vapaa';
 				$tekija = $this->loopForAjaat($tid, $start, $stop, $date, $sumTuntiMin, $countStop, $tekija);
 			}
 		}
 		// Täysin vapaana -->
 
-		foreach($getTyovuorot['returnData'] as $tid => $ajaat_arr)
+		foreach($fromTyovuorot as $tid => $ajaat_arr)
 		{
 			foreach($ajaat_arr as $al_lop_arr){
 				if(isset($last_loppu) and strtotime($al_lop_arr['alku']) > $last_loppu and (strtotime($al_lop_arr['alku'])-$last_loppu-($aikavali*2)) >= $sumTuntiSec){
