@@ -1,6 +1,74 @@
 <?php
 /* index
 */
+/*
+Array
+(
+    [returnData] => Array
+        (
+            [08.06.2020] => Array
+                (
+                    [11] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [alku] => 08:00
+                                    [loppu] => 09:00
+                                )
+
+                            [1] => Array
+                                (
+                                    [alku] => 13:00
+                                    [loppu] => 14:00
+                                )
+
+                        )
+
+                )
+
+            [09.06.2020] => Array
+                (
+                    [11] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [alku] => 08:00
+                                    [loppu] => 09:00
+                                )
+
+                        )
+
+                )
+
+            [10.06.2020] => Array
+                (
+                    [11] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [alku] => 08:00
+                                    [loppu] => 09:00
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [tids] => Array
+        (
+            [10] => 10
+            [11] => 11
+        )
+
+)
+	$getTyovuorot = $this->getTyovuorot2months();
+	echo '<pre>';
+	print_r($getTyovuorot);
+	echo '</pre>';
+	exit;
+*/
 ?>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_onlinevaraus/js/onlinevaraus_index.js"></script>
 <input type="hidden" id="valinnuPvm">

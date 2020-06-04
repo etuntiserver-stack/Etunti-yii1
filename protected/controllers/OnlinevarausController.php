@@ -968,7 +968,7 @@ class OnlinevarausController extends Controller
 	}
 
 
-protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWeek) {
+protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWeek, $getTyovuorot) {
 
      // Create array containing abbreviations of days of week.
      $daysOfWeek = array('Ma','Ti','Ke','To','Pe','La','Su');
@@ -1032,8 +1032,8 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
                $calendar .= "</tr><tr>";
 
           }
-
-	  $on = $this->pmvCal($date)[0];
+	  $fromTyovuorot = (isset($getTyovuorot['returnData'][$date]))? $getTyovuorot['returnData'][$date] : [];
+	  $on = $this->pmvCalNew($date, $fromTyovuorot, $getTyovuorot['tids'])[0];
 	  if($numOfWeek == 5 and ( date("N",strtotime($date)) == 7 or date("N",strtotime($date)) == 6 ))
 	  $on = 'kiinni';
 
@@ -1083,8 +1083,6 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
      }
      
      $calendar .= "</tr>";
-
-
      $calendar .= "</table>";
 
      return $calendar;
@@ -1097,7 +1095,180 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
+	protected function getTyovuorot2months(){
 
+		$criteria=new CDbCriteria;
+		$criteria->condition = "
+			aktiivinen=1
+			AND online_varauksen_valmina=1 
+		";
+		if(!empty($tyo_toimialue))
+		{
+			$criteria->addCondition ("
+				tyo_toimialue LIKE '%".$tyo_toimialue."%'
+			");
+		}
+		if(!empty($sopiiva_tuotteet))
+		{
+			$criteria->addCondition ("
+				onlinevaraus_tuotteet LIKE '%\"".$sopiiva_tuotteet."\"%'
+			");
+		}
+		$tyontekijat = Tyontekijat::model()->findAll($criteria);
+		$tids = [];
+		foreach($tyontekijat as $item)
+			$tids[$item->id] = $item->id;
+
+		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+		$from		= date('Y-m-d', strtotime("first day of this month"));
+		$to		= date('Y-m-d', strtotime($from. " last day of next month"));
+		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, [], ['data']);
+		$returnData = [];
+		foreach($dataAll as $arr){
+			$data = $arr['data'];
+			$returnData[date('Y-m-d', strtotime($arr['this_pvm']))][$arr['this_tid']][] = ['alku' => $data->alku, 'loppu' => $data->loppu];
+		}
+		return ['returnData' => $returnData, 'tids' => $tids];
+	}
+
+	protected function pmvCalNew($date, $fromTyovuorot, $tids)
+	{
+		if( !isset($_SESSION['onlinevaraus']['sumTunti']) ){
+			echo json_encode('sumTunti Error');
+			exit;
+		}
+
+		$tekija 		= [];
+		$on 			= 'kiinni';
+
+		$asetukset 		= Asetukset::model()->findbypk(1);
+		$aikavali 		= $asetukset->onlinevaraus_aikavali*3600;
+		$onlinevaraus_alku	= sprintf('%02d', $asetukset->onlinevaraus_alku);
+		$onlinevaraus_loppu	= sprintf('%02d', $asetukset->onlinevaraus_loppu);
+
+		$alkuAstetuksesta 	= strtotime($onlinevaraus_alku.":00");
+		$loppuAstetuksesta 	= strtotime($onlinevaraus_loppu.":00");
+
+   		$sumTunti 		= (float)$_SESSION['onlinevaraus']['sumTunti'];
+		$sumTuntiMin 		= $sumTunti*60;
+		$sumTuntiSec 		= $sumTunti*3600;
+		$start 			= $onlinevaraus_alku.":00";
+		$stop 			= date("H:i",strtotime($start." +".$sumTuntiMin." minutes"));
+		$countStop 		= strtotime($onlinevaraus_loppu.":00");
+
+		// <-- Täysin vapaana
+		foreach($tids as $tid)
+		{
+			if(!isset($fromTyovuorot[$tid])){
+			   	$on = 'vapaa';
+				$tekija = $this->loopForAjaat($tid, $start, $stop, $date, $sumTuntiMin, $countStop, $tekija);
+			}
+		}
+		// Täysin vapaana -->
+
+		foreach($fromTyovuorot as $tid => $ajaat_arr)
+		{
+			foreach($ajaat_arr as $al_lop_arr){
+				if(isset($last_loppu) and strtotime($al_lop_arr['alku']) > $last_loppu and (strtotime($al_lop_arr['alku'])-$last_loppu-($aikavali*2)) >= $sumTuntiSec){
+					$alku 	= $last_loppu+$aikavali;
+					$loppu 	= $alku+$sumTuntiSec;
+					$on = 'vapaa';
+
+	  				$tekija = $this->loopForAjaat(
+					$tid,
+					date("H:i",$alku), 
+					date("H:i",$loppu), 
+					$date,
+					$sumTuntiMin,
+					((strtotime($al_lop_arr['alku'])-$aikavali) > strtotime("18:00"))? strtotime("18:00") : strtotime($al_lop_arr['alku'])-$aikavali, // countStop
+					$tekija
+					);
+
+				}
+
+				$last_alku 	= strtotime($al_lop_arr['alku']);
+				$last_loppu 	= strtotime($al_lop_arr['loppu']);
+			}
+
+			// <-- REIKÄ ennen EKA alku
+			$first = array_shift($ajaat_arr);
+			if(isset($first['alku']) and strtotime($first['alku']) > strtotime($start) and (strtotime($first['alku'])-strtotime($start)-$aikavali) >= $sumTuntiSec){
+				$alku 	= strtotime($start);
+				$loppu 	= $alku+$sumTuntiSec;
+				$on = 'vapaa';
+
+  				$tekija = $this->loopForAjaat(
+				$tid,
+				date("H:i",$alku), 
+				date("H:i",$loppu), 
+				$date,
+				$sumTuntiMin,
+				strtotime($first['alku'])-$aikavali, // countStop
+				$tekija
+				);
+			}
+			// <-- REIKÄ viimeisen jälkeen
+			if(isset($last_loppu) and $countStop > $last_loppu and ($countStop-$last_loppu-$aikavali) >= $sumTuntiSec){
+				$alku 	= $last_loppu+$aikavali;
+				$loppu 	= $alku+$sumTuntiSec;
+				$on = 'vapaa';
+
+  				$tekija = $this->loopForAjaat(
+				$tid,
+				date("H:i",$alku), 
+				date("H:i",$loppu), 
+				$date,
+				$sumTuntiMin,
+				$countStop,
+				$tekija
+				);
+			}
+		}
+		ksort($tekija);
+		$return_tulos = [];
+		foreach($tekija as $tulos)
+			foreach($tulos as $t1)
+				$return_tulos[] = $t1;
+/*
+		echo '<pre>';
+		print_r($return);
+		echo '</pre>';
+		exit;
+*/
+		$return = array($on, $return_tulos);
+		return $return;
+	}
+
+	protected function loopForAjaat($tid, $start, $stop, $date, $sumTuntiMin, $countStop, $tekija)
+	{
+
+		   for ($i = 1; $i <= 24; $i++) 
+		   {
+		   	$int = 0;
+		   	if(!isset($sta[$tid]) and !isset($sto[$tid]))
+		   	{
+				$sta = array();
+				$sto = array();
+				$sta[$tid] = $start;
+				$sto[$tid] = $stop;
+		   	}
+
+
+			$tekija[$tid][] = array($tid, $date, $sta[$tid], $sto[$tid]);
+
+		   	$int += $sumTuntiMin;
+		   	$sta[$tid] = date("H:i",strtotime($sta[$tid]." +$int minutes"));
+		   	$sto[$tid] = date("H:i",strtotime($sto[$tid]." +$int minutes"));
+		
+		   	if(strtotime($sta[$tid]." +$int minutes") > $countStop)
+		   	break;
+
+		   }
+		   return $tekija;
+
+	}
+
+/*
 	protected function pmvCal($date)
 	{
 		if( !isset($_SESSION['onlinevaraus']['sumTunti']) ){
@@ -1293,54 +1464,15 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 			}
 			//     Viimeinen ja sen ennen reikoja -->
 	
-			/*
-			if(isset($el)){
-	   		   $on 		= 'vapaa';
-			   $tekija[] = array($t->tid, '', '', $el); // for test
-			   break;
-			}
-			*/
 
 		}
 		// Reika vuoron välillä -->
-
-
 
 		ksort($tekija);
 		$return = array($on,$tekija);
 		return $return;
 	}
-
-
-	protected function loopForAjaat($tid, $start, $stop, $date, $sumTuntiMin, $countStop, $tekija)
-	{
-
-		   for ($i = 1; $i <= 24; $i++) 
-		   {
-		   	$int = 0;
-		   	if(!isset($sta[$tid]) and !isset($sto[$tid]))
-		   	{
-				$sta = array();
-				$sto = array();
-				$sta[$tid] = $start;
-				$sto[$tid] = $stop;
-		   	}
-
-
-			$tekija[strtotime($sta[$tid]).$tid] = array($tid, $date, $sta[$tid], $sto[$tid]);
-
-		   	$int += $sumTuntiMin;
-		   	$sta[$tid] = date("H:i",strtotime($sta[$tid]." +$int minutes"));
-		   	$sto[$tid] = date("H:i",strtotime($sto[$tid]." +$int minutes"));
-		
-		   	if(strtotime($sta[$tid]." +$int minutes") > $countStop)
-		   	break;
-
-		   }
-		   return $tekija;
-
-	}
-
+*/
 
 	protected function pyhatCheck($date){
 
