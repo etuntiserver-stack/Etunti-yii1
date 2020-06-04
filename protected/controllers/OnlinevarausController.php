@@ -1221,22 +1221,20 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 				);
 			}
 			// <-- REIKÄ viimeisen jälkeen
-			if(isset($last_loppu) and $countStop > $last_loppu and ($countStop-$last_loppu+$aikavali) >= $sumTuntiSec){
+			if(isset($last_loppu) and $countStop > $last_loppu and ($countStop-$last_loppu-$aikavali) >= $sumTuntiSec){
 				$alku 	= $last_loppu+$aikavali;
 				$loppu 	= $alku+$sumTuntiSec;
 				$on = 'vapaa';
 
-				if($countStop >= $loppu){
-  					$tekija = $this->loopForAjaat(
-					$tid,
-					date("H:i",$alku), 
-					date("H:i",$loppu), 
-					$date,
-					$sumTuntiMin,
-					$countStop,
-					$tekija
-					);
-				}
+  				$tekija = $this->loopForAjaat(
+				$tid,
+				date("H:i",$alku), 
+				date("H:i",$loppu), 
+				$date,
+				$sumTuntiMin,
+				$countStop,
+				$tekija
+				);
 			}
 		}
 		ksort($tekija);
