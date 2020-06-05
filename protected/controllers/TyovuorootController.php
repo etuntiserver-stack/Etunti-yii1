@@ -3236,7 +3236,7 @@ class TyovuorootController extends Controller
 			//     LOG -->
 
 			// <-- TV tyopaari
-			if( !$toistuva and !isset($edelliset_tyoparit[0])){
+			if( !$toistuva and !isset($edelliset_tyoparit[0]) ){ // jos $edelliset_tyoparit[0] on niin ongelma
 				$site = Yii::app()->createController('Site');
 				// <-- Lisataan tyoparia silloin kun ei ollut yhtaan
 				if( count($edelliset_tyoparit) == 0 and count($post_tyopaari) > 0 )
@@ -3251,7 +3251,12 @@ class TyovuorootController extends Controller
 						$removed[$tid] = $tid;
 					foreach($edelliset_tyoparit as $tv_id => $tid){
 						if(isset($removed[$tid])){
-							Tyovuoroot::model()->deleteByPk($tv_id);
+							$tvmodel = Tyovuoroot::model()->findByPk($tv_id);
+							// <-- TV poisto
+							if(isset($tvmodel->id)){
+								$tvmodel->deleteByPk($tvmodel->id);
+								$this->tvDeleteLog($tvmodel);
+							}
 							continue;
 						} else {
 							$luotu[$tv_id] = $tid;
@@ -3279,10 +3284,16 @@ class TyovuorootController extends Controller
 				// <-- Poistetaan kaikki tyoparit ja puhdistaan kentaa
 				if( count($edelliset_tyoparit) > 0 and count($post_tyopaari) == 0 ){
 					foreach($edelliset_tyoparit as $tv_id => $tid)
-						if( $tid == $model->tid )
+						if( $tid == $model->tid ){
 							Tyovuoroot::model()->updatebypk($model->id, array('tyopaari' => ''));
-						else
-							Tyovuoroot::model()->deleteByPk($tv_id);
+						} else {
+							$tvmodel = Tyovuoroot::model()->findByPk($tv_id);
+							// <-- TV poisto
+							if(isset($tvmodel->id)){
+								$tvmodel->deleteByPk($tvmodel->id);
+								$this->tvDeleteLog($tvmodel);
+							}
+						}
 				}
 			}
 			//     TV tyopaari -->
