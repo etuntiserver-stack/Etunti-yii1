@@ -3236,7 +3236,7 @@ class TyovuorootController extends Controller
 			//     LOG -->
 
 			// <-- TV tyopaari
-			if( !$toistuva ){
+			if( !$toistuva and !isset($edelliset_tyoparit[0])){
 				$site = Yii::app()->createController('Site');
 				// <-- Lisataan tyoparia silloin kun ei ollut yhtaan
 				if( count($edelliset_tyoparit) == 0 and count($post_tyopaari) > 0 )
@@ -3249,14 +3249,12 @@ class TyovuorootController extends Controller
 					$arr 		= array_diff( $updated_tp, $edelliset_tyoparit );
 					foreach($rm as $tid)
 						$removed[$tid] = $tid;
-					if(!isset($edelliset_tyoparit[0])){
-						foreach($edelliset_tyoparit as $tv_id => $tid){
-							if(isset($removed[$tid])){
-								Tyovuoroot::model()->deleteByPk($tv_id);
-								continue;
-							} else {
-								$luotu[$tv_id] = $tid;
-							}
+					foreach($edelliset_tyoparit as $tv_id => $tid){
+						if(isset($removed[$tid])){
+							Tyovuoroot::model()->deleteByPk($tv_id);
+							continue;
+						} else {
+							$luotu[$tv_id] = $tid;
 						}
 					}
 					foreach($arr as $tid){
@@ -3320,23 +3318,28 @@ class TyovuorootController extends Controller
 			return false;
 
 		$updater = [];
-		foreach($edelliset_tyoparit as $tv_id => $tid){
-			if( isset($removedArr[$tid]) ){
-				$rm_model = Tyovuoroot::model()->findByPk($tv_id);
-				if( isset($rm_model->id) ){
-					$this->tvDeleteLog($rm_model);
-					$rm_model->deleteByPk($rm_model->id);
+
+		// <-- Normaali updater, eli kun array keyissa löydy TV id ( {"22":"10","21":"11"} )
+		if(!isset($edelliset_tyoparit[0])){
+			foreach($edelliset_tyoparit as $tv_id => $tid){
+				if( isset($removedArr[$tid]) ){
+					$rm_model = Tyovuoroot::model()->findByPk($tv_id);
+					if( isset($rm_model->id) ){
+						$this->tvDeleteLog($rm_model);
+						$rm_model->deleteByPk($rm_model->id);
+					}
+				} else {
+					$updater[$tv_id] = $tid;
 				}
-			} else {
-				$updater[$tv_id] = $tid;
+			}
+			foreach($updater as $tv_id => $tid){
+				if( count($updater) == 1 )
+					Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => ''));
+				else
+					Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => json_encode($updater)));
 			}
 		}
-		foreach($updater as $tv_id => $tid){
-			if( count($updater) == 1 )
-				Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => ''));
-			else
-				Tyovuoroot::model()->updatebypk($tv_id, array('tyopaari' => json_encode($updater)));
-		}
+
 		return true;
 	}
 
