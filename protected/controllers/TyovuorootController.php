@@ -1617,22 +1617,24 @@ class TyovuorootController extends Controller
 			tyopaari LIKE '%[\"%' AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) > '2020-06-01'
 		";
 		$tv_etstiminen = Tyovuoroot::model()->findAll($criteria);
-		foreach($tv_etstiminen as $arvo){
-			$tp_arr = json_decode($arvo->tyopaari, true);
-			if(isset($tp_arr[0])){
-		      		$criteria = new CDbCriteria();
-				$criteria->condition = "
-					kohde!=0 and tyopaari!='' and pvm='".$arvo->pvm."' and kohde='".$arvo->kohde."' and alku='".$arvo->alku."' and loppu='".$arvo->loppu."' and status='".$arvo->status."'
-				";
-				$ongelma_tvs = Tyovuoroot::model()->findAll($criteria);
-				if(count($ongelma_tvs) > 0){
-					$new_tp_json = [];
-					foreach($ongelma_tvs as $ong_itm)
-						$new_tp_json[$ong_itm->id] = $ong_itm->tid; 
+		if(count($tv_etstiminen) > 0){
+			foreach($tv_etstiminen as $arvo){
+				$tp_arr = json_decode($arvo->tyopaari, true);
+				if(isset($tp_arr[0])){
+			      		$criteria = new CDbCriteria();
+					$criteria->condition = "
+						kohde!=0 and tyopaari!='' and pvm='".$arvo->pvm."' and kohde='".$arvo->kohde."' and alku='".$arvo->alku."' and loppu='".$arvo->loppu."' and status='".$arvo->status."'
+					";
+					$ongelma_tvs = Tyovuoroot::model()->findAll($criteria);
+					if(count($ongelma_tvs) > 0){
+						$new_tp_json = [];
+						foreach($ongelma_tvs as $ong_itm)
+							$new_tp_json[$ong_itm->id] = $ong_itm->tid; 
 
-					foreach($ongelma_tvs as $ong_itm)
-						Tyovuoroot::model()->updateByPk($ong_itm->id, ['tyopaari' => json_encode($new_tp_json)]);
+						foreach($ongelma_tvs as $ong_itm)
+							Tyovuoroot::model()->updateByPk($ong_itm->id, ['tyopaari' => json_encode($new_tp_json)]);
 
+					}
 				}
 			}
 		}
