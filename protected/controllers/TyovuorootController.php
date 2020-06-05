@@ -1610,6 +1610,35 @@ class TyovuorootController extends Controller
 
 	public function actionBeta($kohteet_siivous = [], $kohde = '', $asiakas = '', $mode = null, $stage = null)
 	{
+
+		// <-- Tyopaari korjaus SIIRTO takia
+      		$criteria = new CDbCriteria(); // AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) > '2020-06-01'
+		$criteria->condition = "
+			tyopaari LIKE '%[\"%' AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) > '2020-06-01'
+		";
+		$tv_etstiminen = Tyovuoroot::model()->findAll($criteria);
+		foreach($tv_etstiminen as $arvo){
+			$tp_arr = json_decode($arvo->tyopaari, true);
+			if(isset($tp_arr[0])){
+		      		$criteria = new CDbCriteria();
+				$criteria->condition = "
+					kohde!=0 and tyopaari!='' and pvm='".$arvo->pvm."' and kohde='".$arvo->kohde."' and alku='".$arvo->alku."' and loppu='".$arvo->loppu."' and status='".$arvo->status."'
+				";
+				$ongelma_tvs = Tyovuoroot::model()->findAll($criteria);
+				if(count($ongelma_tvs) > 0){
+					$new_tp_json = [];
+					foreach($ongelma_tvs as $ong_itm)
+						$new_tp_json[$ong_itm->id] = $ong_itm->tid; 
+
+					foreach($ongelma_tvs as $ong_itm)
+						Tyovuoroot::model()->updateByPk($ong_itm->id, ['tyopaari' => json_encode($new_tp_json)]);
+
+				}
+			}
+		}
+		//     Tyopaari korjaus SIIRTO takia -->
+
+
 		$site = Yii::app()->createController('Site');
 		$arrDate = array(1 => "Ma", 2 => "Ti", 3 => "Ke", 4 => "To", 5 => "Pe", 6 => "La", 7 => "Su");
 		$asetukset = Asetukset::model()->findByPk(1);
@@ -2156,16 +2185,6 @@ class TyovuorootController extends Controller
 		if ($has_tickets)
 			$ikoonit .= ' <i class="fa fa-question text-primary" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Avoimia Tukipyyntöɉä').'"></i> ';
 
-		// Tyopaari korjaus SIIRTO takia
-/*
-		if(is_array(json_decode($arvo->tyopaari, true))){
-			$tp_arr = json_decode($arvo->tyopaari, true);
-			if(isset($tp_arr[0])){
-				$lisateksti .= '<br><span class="text-danger">Ongelma</span>';
-
-			}
-		}
-*/
 		$asiakasNakyvissa = '';
 		if( $asiakas_tyovuorossa ){
 			$name = '';
@@ -3232,19 +3251,10 @@ class TyovuorootController extends Controller
 				$this->pushNotifySending($this_id);
 			// PushNotify -->
 
-			$current_model = $model;
-			// <-- LOG
-			$model_log 	= 'Tyovuoroot';
-			$name_log 	= 'Työvuorot';
-			$status_log 	= 'Update';
-			if(isset($_POST[$model_log]))
-			{
-				$old_values = json_encode($current_model->attributes);
-				$new_values = json_encode($_POST[$model_log]);
-				$site = Yii::app()->createController('Site');
-				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-			}
-			//     LOG -->
+			// <-- UPDATE LOG
+			$model_log 	= ( $toistuva )? 'ToistuvatTyovuorot' : 'Tyovuoroot' ;
+			$name_log	= ( $toistuva )? 'Toistuvat työvuorot' : 'Työvuorot' ;
+			$this->tvUpdateLog($edellinen_model, $model->attributes, $model_log, $name_log); // old, new, model name, model nimike
 
 			// <-- TV tyopaari
 			if( !$toistuva and !isset($edelliset_tyoparit[0]) ){ // jos $edelliset_tyoparit[0] on niin ongelma
@@ -3316,6 +3326,17 @@ class TyovuorootController extends Controller
 			echo json_encode($model->getErrors());
 		}
 		exit;
+	}
+
+	protected function tvUpdateLog($old_model, $new_model, $model_log, $name_log)
+	{
+		// <-- LOG
+		$status_log 	= 'Update';
+		$old_values = json_encode($old_model);
+		$new_values = json_encode($new_model);
+		$site = Yii::app()->createController('Site');
+		$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+		//     LOG -->
 	}
 
 	protected function tvDeleteLog($model)
