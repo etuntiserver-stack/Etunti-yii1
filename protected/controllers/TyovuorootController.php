@@ -2100,13 +2100,14 @@ class TyovuorootController extends Controller
 		$osoite 	= ( isset($arvo->osoite) and !empty($arvo->osoite))?$arvo->osoite:'';
 		$ikoonit	= ((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon;
 		$tv_kesto	= 0;
-    $eilasketa 	= $this->eiLasketaSubStr($arvo->tyoajanmerkinta);
-    $has_tickets = (isset($customer_tickets[$arvo->kohteet->asiakkaat->id ?? 0]));
+		$eilasketa 	= $this->eiLasketaSubStr($arvo->tyoajanmerkinta);
+		$has_tickets 	= (isset($customer_tickets[$arvo->kohteet->asiakkaat->id ?? 0]));
 		if($eilasketa != true)
 			$tv_kesto = strtotime($arvo->loppu)-strtotime($arvo->alku);
 
 		if(empty($osoite) and isset($arvo->kohteet->osoite))
 			$osoite = $arvo->kohteet->osoite;
+
 		// <-- Return Array
 		if( !$laatikkomuoto ){
 			$arvo->pvm 	= $this_pvm;
@@ -2118,8 +2119,8 @@ class TyovuorootController extends Controller
 			$return['kohde']  	= $arvo->kohde;
 			$return['this_pvm'] 	= $this_pvm;
 			$return['this_tid'] 	= $this_tid;
-      $return['toistuva'] 	= $toistuva;
-      $return['has_tickets'] = $has_tickets;
+      			$return['toistuva'] 	= $toistuva;
+			$return['has_tickets'] 	= $has_tickets;
 
 			if(isset($new_with['data']))
 				$return['data'] = $arvo;
@@ -2152,9 +2153,19 @@ class TyovuorootController extends Controller
 			$ikoonit .= ' <i class="fa fa-male text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i> ';
 		if(isset($arvo->avaimet) and count($arvo->avaimet) > 0)
 			$ikoonit .=  ' <i class="tvikooni fa fa-key text-warning"></i> ';
-    if ($has_tickets)
-      $ikoonit .= ' <i class="fa fa-question text-primary" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Avoimia Tukipyyntöɉä').'"></i> ';
+		if ($has_tickets)
+			$ikoonit .= ' <i class="fa fa-question text-primary" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Avoimia Tukipyyntöɉä').'"></i> ';
 
+		// Tyopaari korjaus SIIRTO takia
+/*
+		if(is_array(json_decode($arvo->tyopaari, true))){
+			$tp_arr = json_decode($arvo->tyopaari, true);
+			if(isset($tp_arr[0])){
+				$lisateksti .= '<br><span class="text-danger">Ongelma</span>';
+
+			}
+		}
+*/
 		$asiakasNakyvissa = '';
 		if( $asiakas_tyovuorossa ){
 			$name = '';
