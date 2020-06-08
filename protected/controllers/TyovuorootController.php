@@ -3305,18 +3305,17 @@ class TyovuorootController extends Controller
 					}
 				}
 				// <-- Poistetaan kaikki tyoparit ja puhdistaan kentaa
-				if( count($edelliset_tyoparit) > 0 and count($post_tyopaari) == 0 ){
-					foreach($edelliset_tyoparit as $tv_id => $tid)
-						if( $tid == $model->tid ){
-							Tyovuoroot::model()->updatebypk($model->id, array('tyopaari' => ''));
-						} else {
-							$tvmodel = Tyovuoroot::model()->findByPk($tv_id);
-							// <-- TV poisto
-							if(isset($tvmodel->id)){
-								$tvmodel->deleteByPk($tvmodel->id);
-								$this->tvDeleteLog($tvmodel);
-							}
+				if( count($edelliset_tyoparit) > 0 and count($post_tyopaari) == 0 )
+				{
+					Tyovuoroot::model()->updatebypk($model->id, array('tyopaari' => ''));
+					foreach($edelliset_tyoparit as $tv_id => $tid){
+						$tvmodel = Tyovuoroot::model()->findByPk($tv_id);
+						// <-- TV poisto
+						if(isset($tvmodel->id) and $tvmodel->id != $model->id){
+							$tvmodel->deleteByPk($tvmodel->id);
+							$this->tvDeleteLog($tvmodel);
 						}
+					}
 				}
 			}
 			//     TV tyopaari -->
