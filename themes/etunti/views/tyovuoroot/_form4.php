@@ -1405,7 +1405,7 @@ $(document).ready(function(){
 		if( tilanne == 'poista_ketju_kokonaan' )
 			var r = confirm('Poista kaikki ketjuun kuuluvat työvuorot ja työparit.');
 		if( tilanne == 'poista_pvm' )
-			var r = confirm('Poistetaanko tämä päivä ja hänkilö ketjusta?.');
+			var r = confirm('Poistaanko tämä päivä/henkilö ketjusta?');
 	} else {
 		var r = confirm('Haluatko varmasti poistaa?');
 	}
