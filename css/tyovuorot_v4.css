@@ -63,6 +63,12 @@
 td .latikkoAsetukset p:hover{
 	/*background: #ddd;*/
 }
+.table-bordered{
+	border: 1px solid #333;
+}
+.table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+	border: 1px solid #333;
+}
 td .latikkoAsetukset p{
 	border: 1px #ddd solid;
 	border-radius: 2px;
