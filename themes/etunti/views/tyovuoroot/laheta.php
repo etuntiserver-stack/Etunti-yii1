@@ -110,11 +110,12 @@ $paivat=array(
 	$haku_criteria = [" peruutettu=0 OR peruutettu IS NULL "];
 	$pvm_from = date("Y-m-d", strtotime($year ."W". $week .'1'));
 	$pvm_to = date("Y-m-d", strtotime($year ."W". $week .'7'));
-	$tv_arr = $this->tv_arr($pvm_from, $pvm_to, [$tt->id], $haku_criteria, false, ['this_id','data']);
+	$tv_arr = $this->tv_arr($pvm_from, $pvm_to, [$tt->id], $haku_criteria, false, ['this_id','data','tv_kesto']);
 	$tids_after = [];
 	foreach($tv_arr as $t => $arr)
 		$tids_after[] = $t;
 
+	$tv_kesto = 0;
 	for($day= 1; $day <= 7; $day++) {
 		$d = strtotime($year ."W". $week . $day);
 		$date = date('d.m.Y',$d);
@@ -125,6 +126,13 @@ $paivat=array(
 		if(isset($tv_arr[$tid][$date])){
 			ksort($tv_arr[$tid][$date]);
 			$date_arr = $tv_arr[$tid][$date];
+			foreach($date_arr as $arr){
+				foreach($arr as $v2){
+					if( isset($v2['tv_kesto']) ){
+						$tv_kesto += $v2['tv_kesto'];
+					}
+				}
+			}
 			$this->renderPartial('_laheta_date', array(
 				'site' => $site,
 				'asetukset' => $asetukset,
@@ -139,7 +147,7 @@ $paivat=array(
 		}
 	}
 
-$totalWeek = '';
+	$totalWeek = $this->sprint($tv_kesto);
 //$totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tid,'viikko'=>$week,'year'=>$year),true);
 ?>
  <tr>
