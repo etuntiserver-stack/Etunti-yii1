@@ -858,7 +858,7 @@ class SiteController extends Controller
 				{
 					Yii::app()->user->setFlash('success', "Kiitoksia tilauksesta.<br> Palvelun käyttöön tarvittavat tunnukset on lähetty sähköpostiisi.<br> Näillä tunnuksilla voit heti aloittaa palvelun käyttämisen.");
 					//Yii::app()->session->destroy();
-					$this->redirect(array('index', 'aloita' => 'ok', 'kirjautumistunnus' => $kirjautumistunnus, 'email' => $_POST['sahkoposti']));
+					$this->redirect(array('index'));
 				}
 
 
