@@ -449,6 +449,8 @@ class SiteController extends Controller
 	public function digistenTunnitYhteensa($start_date, $end_date)
 	{
 
+			$from 	= date( "Y-m-d", strtotime($start_date));
+			$to 	= date( "Y-m-d", strtotime($end_date));
 
 			$result = 0;
 			$mob_result = 0;
@@ -500,27 +502,19 @@ class SiteController extends Controller
 					$mob_result += $mobile;
 				}
 
-
-				// <-- tyovuorot
-		       		$criteria = new CDbCriteria();
-			        $criteria->select = "
-					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i'),
-					DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i')))) as l_tunnit
-				";
-				$criteria->condition = "
-					alku!='' AND loppu!=''
-					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
-					AND status=3
-					AND peruutettu='0'
-				";
-				$tv = Tyovuoroot::model()->find($criteria);
-
-				if(isset($tv->l_tunnit))
-				$tyovuorot_result += $tv->l_tunnit;
-				//     tyovuorot -->
-
-
 			}
+
+
+			$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+			$haku_criteria	= "status=3 AND (peruutettu=0 OR peruutettu IS NULL)";
+			$getAll 	= $tyovuorot[0]->tv_arr($from, $to, [], $haku_criteria, false, ['tv_kesto']);
+			$tyovuorot_result = 0;
+			foreach($getAll as $k => $v)
+				foreach($v as $unix => $dayarr)
+					foreach($dayarr as $key => $arr)
+						foreach($arr as $arr2)
+							$tyovuorot_result += $arr2['tv_kesto'];
+
 
 			if($mob_result > $tyovuorot_result)
 			$result = $mob_result;
@@ -2080,7 +2074,10 @@ class SiteController extends Controller
 					foreach($arr as $arr2)
 						$result += $arr2['tv_kesto'];
 
-                echo json_encode($this->sprint($result));
+		if($result > 0)
+	                echo json_encode($this->sprint($result));
+		else
+	                echo json_encode('00:00');
 		exit;
 	}
 
