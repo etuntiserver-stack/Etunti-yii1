@@ -449,81 +449,45 @@ class SiteController extends Controller
 	public function digistenTunnitYhteensa($start_date, $end_date)
 	{
 
-			$from 	= date( "Y-m-d", strtotime($start_date));
-			$to 	= date( "Y-m-d", strtotime($end_date));
+       		$criteria = new CDbCriteria();
+		$criteria->select = "id";
+        	$criteria->condition = " aktiivinen=1 "; 
+		$tt = Tyontekijat::model()->findAll($criteria);
 
-			$result = 0;
-			$mob_result = 0;
-			$tyovuorot_result = 0;
+		$tids = [];
+		foreach ($tt as $data)
+			$tids[] = $data->id;
 
-			while (strtotime($start_date) <= strtotime($end_date))
-			{
-				$mobile = 0;
-				$pvm = date( "Y-m-d", strtotime($start_date));
-				$start_date = date ("Y-m-d", strtotime($start_date. " +1 day"));
+		$from 			= date( "Y-m-d", strtotime($start_date));
+		$to 			= date( "Y-m-d", strtotime($end_date));
+		$result 		= 0;
+		$mob_result 		= 0;
+		$tyovuorot_result 	= 0;
 
+		// <-- Mobiili
+		$mobile = Yii::app()->createController('Mobile');
+		$tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 2, true, 0);
 
-				// <-- Ensin katsotaan mobile taulusta toteutuneet
-		       		$criteria = new CDbCriteria();
-		        	$criteria->select = "
-					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'),
-					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-				";
-			        $criteria->condition = "
-					aloitan!='' AND loppui!=''
-					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
-					AND status=3
-					AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
-				";
-				$lu = Mobile::model()->find($criteria);
+		foreach($tyotunnit_all as $tid => $arvo)
+			$mob_result += $arvo;
 
+		// <-- Tyovuoro
+		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
+		$haku_criteria	= "status=3 AND (peruutettu=0 OR peruutettu IS NULL)";
+		$getAll 	= $tyovuorot[0]->tv_arr($from, $to, $tids, $haku_criteria, false, ['tv_kesto']);
+		$tyovuorot_result = 0;
+		foreach($getAll as $k => $v)
+			foreach($v as $unix => $dayarr)
+				foreach($dayarr as $key => $arr)
+					foreach($arr as $arr2)
+						$tyovuorot_result += $arr2['tv_kesto'];
 
-		       		$criteria = new CDbCriteria();
-		        	$criteria->select = "
-					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'),
-					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-				";
-			        $criteria->condition = "
-					aloitan!='' AND loppui!=''
-					AND status=3
-					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
-				";
-				$tot = Toteutuneet::model()->find($criteria);
-
-				if(isset($lu->l_tunnit))
-				$mobile += $lu->l_tunnit;
-
-				if(isset($tot->l_tunnit))
-				$mobile += $tot->l_tunnit;
-				// Ensin katsotaan mobile taulusta toteutuneet -->
-
-				if( $mobile > 0 )
-				{
-					$mob_result += $mobile;
-				}
-
-			}
-
-
-			$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
-			$haku_criteria	= "status=3 AND (peruutettu=0 OR peruutettu IS NULL)";
-			$getAll 	= $tyovuorot[0]->tv_arr($from, $to, [], $haku_criteria, false, ['tv_kesto']);
-			$tyovuorot_result = 0;
-			foreach($getAll as $k => $v)
-				foreach($v as $unix => $dayarr)
-					foreach($dayarr as $key => $arr)
-						foreach($arr as $arr2)
-							$tyovuorot_result += $arr2['tv_kesto'];
-
-
-			if($mob_result > $tyovuorot_result)
+		if($mob_result > $tyovuorot_result)
 			$result = $mob_result;
-			if($mob_result < $tyovuorot_result)
+		if($mob_result < $tyovuorot_result)
 			$result = $tyovuorot_result;
 
-			$sum_result = $result/3600;
-
-			return $sum_result;
+		return $this->num($result);
 	}
 
 	public function actionTyot_tanaan()
