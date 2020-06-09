@@ -942,18 +942,21 @@ $(document).ready(function(){
   var pto 	= $("#pto").val();
   var tekijanVaihdo 	= $('#tekijanVaihdo option:selected').val();
 
-  $('#tekijanVaihdo').change(function(){
+  $('#tekijanVaihdo, #tyopaari').change(function(){
+	tyopaari_exists_checker();
+  });
+  function tyopaari_exists_checker(){
 	if($('#tyopaari').val() !== null){
 		$($('#tyopaari').val()).each(function( index, val ) {
 			if( $('#tekijanVaihdo option:selected').val() == val ){
 				alert('Tämä henkilö on jo työparina.');
-				$('#tekijanVaihdo').val(tekijanVaihdo)
+				$('#tekijanVaihdo').val(tekijanVaihdo).css({'border' : '1px red solid'});
 				return false;
 			}
 		});
 	}
 	$('#<?=$java_prefix?>_tid').val( $('#tekijanVaihdo option:selected').val() );
-  });
+  }
   $('.reload').click(function(){
 	tarkistusLista('<?=$this_id?>');
   });
