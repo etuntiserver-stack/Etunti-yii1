@@ -6,7 +6,14 @@ if(isset($_GET['id']))
 // Procountor invoice creation and approval.
 if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
   $l = Lasku::model()->findbypk($_GET['id']);
+
+  // Establish notes section (lisätiedot -kenttä).
   $hyvitys = $l->laskun_nimetys == 'Hyvityslasku';
+  $notes = $l->freetext ?? ''; // default to actual freetext field
+  if (empty($notes) && ($l->laskun_nimetys ?? '') == 'Hyvityslasku') {
+    $notes = 'Hyvityslasku';
+  }
+
   $local = in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']);
 
   // var_dump($l->attributes);
@@ -199,7 +206,7 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
       "invoiceChannel" => $channel,     // (string) Channel of distribution for the invoice. Values EDIFACT and PAPER_INVOICE are not allowed for new invoices.
       "penaltyPercent" => 0,            // (number) Penal interest rate. Scale: 2.
       "language" => "FINNISH",          // (string) Language of the invoice. Required for sales invoices, otherwise ignored.
-      "additionalInformation" => $hyvitys ? 'Hyvityslasku' : "", // (string) Invoice notes containing additional information. Visible on the invoice. Use \n as line break.
+      "additionalInformation" => $notes, // (string) Invoice notes containing additional information. Visible on the invoice. Use \n as line break.
       "vatCountry" => "FINLAND",        // (string) Country code describing which country is VAT standards are being used. Usage of foreign VAT settings must be agreed on separately with Procountor. Required if the company uses foreign VATs. Example value: SWEDEN.See Address.country in POST /invoices for a list of allowable values
       "notes" => $hyvitys ? 'Hyvityslasku' : "", // (string) Invoice notes (seller's/buyer's notes). Not visible on the invoice. Use \n as line break.
       // "factoringContractId" => 0,    // (int) SALES_INVOICE only. ID for external financing agreement. The bankAccount.accountNumber specified must match the one used by the specified financing agreement. Financing agreements cannot be used with cash payments.
