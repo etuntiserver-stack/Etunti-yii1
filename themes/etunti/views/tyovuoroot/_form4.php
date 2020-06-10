@@ -851,7 +851,7 @@ $(document).ready(function(){
 		if(!isset($model->id) and $luo == 1)
 		echo CHtml::submitButton('Luo',array('class'=>'btn btn-primary','id'=>'submitButton'));
 		elseif(isset($model->id) and $tallenna == 1)
-		echo CHtml::submitButton('Tallenna',array('class'=>'btn btn-primary','id'=>'submitButton')); 
+		echo CHtml::submitButton('Tallenna',array('class'=>'btn btn-primary','id'=>'submitButton', 'style' => 'display:none')); 
 		?>
 
 		<div id="virheilmoitus" class="alert bg-danger" style="display:none"></div>
@@ -868,6 +868,20 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  $(document).delegate("input, textarea","keyup",function(){
+	$('#submitButton').show();
+  });
+  $(document).delegate("select","change",function(){
+	if( $(this).attr('id') != 'cal_peruutettu' ){
+		$('#submitButton').show();
+	}
+  });
+  $('.sw').on('switchChange.bootstrapSwitch', function(event, state) {
+	if( $(this).attr('id') != 'is_toistuva' ){
+		$('#submitButton').show();
+	}
+  });
 
   setTimeout(function() {
 	$('#hovertietoja').html('').hide();
@@ -1052,8 +1066,6 @@ $(document).ready(function(){
 			$('#submitButton').hide();
 			$('#sopivatPaivat').html(data['error']).show();
 			return false;
-		} else {
-			$('#submitButton').show();
 		}
 		//console.log(data);
 		$('#sopivatPaivat').html('');
