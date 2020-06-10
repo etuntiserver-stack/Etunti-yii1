@@ -955,7 +955,8 @@ $(document).ready(function(){
 			}
 		});
 	}
-	$('#<?=$java_prefix?>_tid').val( $('#tekijanVaihdo option:selected').val() );
+	if('<?=$model->id?>' !== '')
+		$('#<?=$java_prefix?>_tid').val( $('#tekijanVaihdo option:selected').val() );
   }
   $('.reload').click(function(){
 	tarkistusLista('<?=$this_id?>');
@@ -1209,7 +1210,7 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			//console.log(data);
+			console.log(data);
 			laatikonPaivays();
 			return false;
 	   	  },
