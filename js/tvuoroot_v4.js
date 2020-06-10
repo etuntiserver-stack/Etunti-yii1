@@ -275,8 +275,7 @@ $(document).delegate(".palauta_kejuun","click",function(){
 	var pvm = $(this).attr('pvm');
 	pvm_muutos = pvm.split(".");
 	var did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
-	var r = confirm('Haluatko varmasti palauttaa tämän?');
-	if(r){
+
 	// <-- Puhdistetaan laatiko per pvm ja tid
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/palauta_pvm_kejuun',
@@ -302,7 +301,6 @@ $(document).delegate(".palauta_kejuun","click",function(){
 	    	console.log(XMLHttpRequest);
  	   }
         });
-	}
 });
 
 $(document).delegate(".muistin","click",function(){

@@ -2594,6 +2594,13 @@ class TyovuorootController extends Controller
 			}
 			$return .= '</div>';
 		}
+
+		if(is_array(json_decode($model->tyopaari, true))){
+			$new = array_diff( $_POST['post_tids'], json_decode($model->tyopaari, true) );
+			//edelliset poistetut tanne
+			//$return .= json_encode($new);
+		}
+
 		echo json_encode($return);
 		exit;
 	}

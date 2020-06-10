@@ -839,7 +839,7 @@ $(document).ready(function(){
 			echo '<span class="btn btn-danger tvpoisto" style="display:none" tilanne="poista_ketju_kokonaan">Poista ketju ja työparit: '.$model->pfrom.'-'.$model->pto.'</span>';
 		}
 		 ?>
-		<?php /* echo CHtml::Button('Reload',array('class'=>'btn btn-default reload')); */ ?>
+		<?php  echo CHtml::Button('Reload',array('class'=>'btn btn-default reload'));  ?>
 		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
 		<?php 
 	   	$checkLuo = "tyovuorot_1_".Yii::app()->user->adminStatus;
