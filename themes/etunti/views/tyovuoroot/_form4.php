@@ -870,15 +870,17 @@ $(document).ready(function(){
 $(document).ready(function(){
 
   $(document).delegate("input, textarea","keyup",function(){
-	$('#submitButton').show();
+	if( $(this).attr('id') != 'tp_mukaan' ){
+		$('#submitButton').show();
+	}
   });
   $(document).delegate("select","change",function(){
-	if( $(this).attr('id') != 'cal_peruutettu' ){
+	if( $(this).attr('id') != 'cal_peruutettu' && $(this).attr('id') != 'tp_mukaan' ){
 		$('#submitButton').show();
 	}
   });
   $('.sw').on('switchChange.bootstrapSwitch', function(event, state) {
-	if( $(this).attr('id') != 'is_toistuva' ){
+	if( $(this).attr('id') != 'is_toistuva' && $(this).attr('id') != 'tp_mukaan' ){
 		$('#submitButton').show();
 	}
   });
