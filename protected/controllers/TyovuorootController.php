@@ -1152,15 +1152,23 @@ class TyovuorootController extends Controller
 
 	}
 
-	public function actionPois_pvm_ketjusta($toistuva_id, $tid, $pvm, $peruuttaminen)
+	public function actionPois_pvm_ketjusta($toistuva_id, $tid, $pvm, $peruuttaminen, $tyopaari_mukaan=null)
 	{
 
+		if(is_array(json_decode($tyopaari_mukaan, true))){
+			$tyopaari_mukaan = json_decode($tyopaari_mukaan, true);
+		}
 		if( (int)$peruuttaminen > 0 ){
 
 			$tilanne 	= ['peruutettu' => (int)$peruuttaminen];
 			$poisto_by	= 'ByCalendarPeruutettu';
-			$this->VirtualtoTV($toistuva_id, $tid, $pvm, $tilanne, $poisto_by);
 
+			if(is_array($tyopaari_mukaan) and count($tyopaari_mukaan) > 0){
+				foreach($tyopaari_mukaan as $k => $v)
+					$this->VirtualtoTV($toistuva_id, $k, $v, $tilanne, $poisto_by);
+			} else {
+				$this->VirtualtoTV($toistuva_id, $tid, $pvm, $tilanne, $poisto_by);
+			}
 
 		} else {
 
@@ -1168,8 +1176,13 @@ class TyovuorootController extends Controller
 			$u		= Yii::app()->user->nimi;
 			$d		= date("d.m.Y");
 			$poisto_syy	= ['text'=> $poisto_by, 'user' => $u, 'date' => $d];
-			$this->toistuvaDeletePvm($toistuva_id, $pvm, $tid, $poisto_syy);
 
+			if(is_array($tyopaari_mukaan) and count($tyopaari_mukaan) > 0){
+				foreach($tyopaari_mukaan as $k => $v)
+					$this->toistuvaDeletePvm($toistuva_id, $v, $k, $poisto_syy);
+			} else {
+				$this->toistuvaDeletePvm($toistuva_id, $pvm, $tid, $poisto_syy);
+			}
 		}
 
 		$toistuva = ToistuvatTyovuorot::model()->findbypk($toistuva_id);
@@ -1181,8 +1194,8 @@ class TyovuorootController extends Controller
 				$tids[$tp_tid] = $tp_tid;
 		}
 
-		$pvm_from 	= date("Y-m-d", strtotime($pvm));
-		$pvm_to 	= date("Y-m-d", strtotime($pvm));
+		$pvm_from 	= date("Y-m-d", strtotime($pvm." -1 day"));
+		$pvm_to 	= date("Y-m-d", strtotime($pvm." +1 day"));
 		$tv_arr 	= $this->tv_arr($pvm_from, $pvm_to, $tids, [], true, []);
 		echo json_encode(['return' => 'ok', 'tv_arr' => $tv_arr]);
 		exit;

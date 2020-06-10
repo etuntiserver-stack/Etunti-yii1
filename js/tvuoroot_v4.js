@@ -206,7 +206,8 @@ $(document).delegate(".cal_tilanne","click",function(){
 		'<option value="2">Peruutettu laskutettava</option>' +
 		'</select>' +
 		'<p class="text-danger">Huomio! Tämä työvuoro poistetaan ketjusta. Voit luoda tilalle peruutetun työvuoron valitsemalla ylläolevasta listasta.</p>' +
-		'<br><p><span class="btn btn-block btn-danger" id="cal_poista_paiva_ketjusta">Poista päivä ketjusta</span></p>' +
+		'<br><p><input id="tp_mukaan" type="checkbox" checked> Työpaari mukaan</p>' +
+		'<br><p><span class="btn btn-block btn-danger" id="cal_poista_paiva_ketjusta" pvm="' + cal_pvm + '">Poista päivä ketjusta</span></p>' +
 		'</div></div></div>'
 	);
 	$("#cal_sulje").click(function(){
@@ -220,20 +221,44 @@ $(document).delegate("#cal_poista_paiva_ketjusta","click",function(){
 		var r = confirm('Haluatko varmasti poistaa tämä päivä ketjusta?');
 	else
 		var r = confirm('Haluatko varmasti poistaa tämä päivä ketjusta ja luoda yksittäinen peruutettu työvuoro?');
+
+	var tyopaari_mukaan = {};
+	if ($('#tp_mukaan').prop('checked')) {
+		$(".cal_tilanne").each(function(){
+			if(cal_pvm == $(this).attr('pvm')){
+				pvm = $(this).attr('pvm');
+				tyopaari_mukaan[$(this).attr('tid')] = $(this).attr('pvm');
+			}
+		});
+	}
+	//console.log(tyopaari_mukaan);
+
 	if(r){
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pois_pvm_ketjusta',
 	   type:'GET',
-	   data: { toistuva_id : cal_toistuva_id, tid : cal_tid, pvm : cal_pvm, peruuttaminen : peruuttaminen },
+	   data: { toistuva_id : cal_toistuva_id, tid : cal_tid, pvm : cal_pvm, peruuttaminen : peruuttaminen, tyopaari_mukaan : JSON.stringify(tyopaari_mukaan) },
            success: function(data){
 		data = JSON.parse(data);
         	console.log(data);
 		if( data['return'] && data['return'] == 'ok' ){
-			cal_this_item.closest('td').removeClass('bg-success').addClass('bg-warning');
-			cal_this_item.removeClass('fa-gear cal_tilanne').addClass('fa-recycle palauta_kejuun');
-			$("#" + cal_this_id).closest('p').remove();
-			$.tv_arr_update(data['tv_arr']);
+
+			if ($('#tp_mukaan').prop('checked')) {
+				$(".cal_tilanne").each(function(){
+					if(cal_pvm == $(this).attr('pvm')){
+						$(this).closest('td').removeClass('bg-success').addClass('bg-warning');
+						$(this).removeClass('fa-gear cal_tilanne').addClass('fa-recycle palauta_kejuun');
+						$("#" + $(this).attr('this_id')).closest('p').remove();
+					}
+				});
+			} else {
+				cal_this_item.closest('td').removeClass('bg-success').addClass('bg-warning');
+				cal_this_item.removeClass('fa-gear cal_tilanne').addClass('fa-recycle palauta_kejuun');
+				$("#" + cal_this_id).closest('p').remove();
+			}
+
 			$("#cal_tilanne").remove();
+			$.tv_arr_update(data['tv_arr']);
 		}
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
