@@ -2575,7 +2575,7 @@ class TyovuorootController extends Controller
 				}
 			}
 		}
-			$return .= json_encode($poistettu_pvms_upd);
+
 		// <-- Update poistetut
 		//$return .= json_encode($poistettu_pvms_upd);
 		if(isset($model->id))
