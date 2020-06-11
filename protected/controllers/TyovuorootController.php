@@ -2541,7 +2541,8 @@ class TyovuorootController extends Controller
 		$poistettu_pvms 	= [];
 		$poistettu_pvms_upd	= [];
 		$tids_for_poistetut 	= [];
-		$tids_for_poistetut[$model->tid] = $model->tid;
+		if(isset($model->tid))
+			$tids_for_poistetut[$model->tid] = $model->tid;
 		if(is_array(json_decode($model->tyopaari, true))){
 			foreach(json_decode($model->tyopaari, true) as $key => $val)
 				$tids_for_poistetut[$val] = $val;
