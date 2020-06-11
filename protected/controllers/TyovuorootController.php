@@ -2565,7 +2565,17 @@ class TyovuorootController extends Controller
 				}
 			}
 		}
-
+		if(isset($model->tyopaari) and empty($model->tyopaari) and isset($_POST['tyopaari_laatikko']) and count($_POST['tyopaari_laatikko']) > 0){
+			foreach($_POST['tyopaari_laatikko'] as $k => $ntid){
+				foreach($poistettu_pvms as $ptid => $parr){
+					foreach($parr as $ppvm => $syy){
+						$poistettu_pvms[$ntid][$ppvm] = $syy;
+						$poistettu_pvms_upd[] = ['tid' => $ntid, 'pvm' => $ppvm, 'syy' => $syy];
+					}
+				}
+			}
+		}
+			$return .= json_encode($poistettu_pvms_upd);
 		// <-- Update poistetut
 		//$return .= json_encode($poistettu_pvms_upd);
 		if(isset($model->id))
