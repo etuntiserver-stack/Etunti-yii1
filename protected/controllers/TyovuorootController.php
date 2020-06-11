@@ -2538,13 +2538,30 @@ class TyovuorootController extends Controller
 		}
 
  		// <-- Poistettu_pvms
+/*
+		if(is_array(json_decode($model->tyopaari, true))){
+			$rmtp = array_diff( json_decode($model->tyopaari, true), $_POST['post_tids'] );
+			//foreach($rmtp as $k => $rtid)
+				$return .= json_encode($rmtp);
+
+		}
+*/
 		$poistettu_pvms = [];
 		if( $this_id != 'null' and !empty($model->new_poistettu_pvm) ){
 			foreach(json_decode($model->new_poistettu_pvm, true) as $key => $val)
 				if( isset($val['tid']) and isset($val['pvm']) and isset($val['syy']) )
 					$poistettu_pvms[$val['tid']][$val['pvm']] = $val['syy'];
 		}
-
+/*
+		if(is_array(json_decode($model->tyopaari, true))){
+			$addtp = array_diff( $_POST['post_tids'], json_decode($model->tyopaari, true) );
+			foreach($addtp as $k => $ntid)
+				foreach($poistettu_pvms as $ptid => $parr)
+					foreach($parr as $ppvm => $syy)
+						$poistettu_pvms[$ntid][$ppvm] = $syy;
+			//$return .= json_encode($ptid);
+		}
+*/
 		$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
 		$date->modify('this week monday');
 		$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
@@ -2593,12 +2610,6 @@ class TyovuorootController extends Controller
 				$return .= '</div>';
 			}
 			$return .= '</div>';
-		}
-
-		if(is_array(json_decode($model->tyopaari, true))){
-			$new = array_diff( $_POST['post_tids'], json_decode($model->tyopaari, true) );
-			//edelliset poistetut tanne
-			//$return .= json_encode($new);
 		}
 
 		echo json_encode($return);
