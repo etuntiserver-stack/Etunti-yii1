@@ -1532,7 +1532,7 @@ $(document).ready(function(){
 			  tyo_erittelyt += '' +
 				 '<div class="row">' +
 				  '<div class="col-sm-11">' +
-				   '<input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control input-sm" value="'+ value +'">' +
+				   '<input type="text" name="<?=$java_prefix?>[tyo_erittelyt][]" class="form-control input-sm" value="'+ value +'">' +
 				  '</div>' +
 				  '<div class="col-sm-1 text-right">' +
 				   '<span class="link text-danger fa fa-trash poislistasta"></span>' +
@@ -1570,7 +1570,7 @@ $(document).ready(function(){
 	$(".erittelynlista_laatiko").append('' +
 		 '<div class="row">' +
 		  '<div class="col-sm-11">' +
-		   '<input type="text" name="Tyovuoroot[tyo_erittelyt][]" class="form-control input-sm">' +
+		   '<input type="text" name="<?=$java_prefix?>[tyo_erittelyt][]" class="form-control input-sm">' +
 		  '</div>' +
 		  '<div class="col-sm-1 text-right">' +
 		   '<span class="link text-danger fa fa-trash poislistasta"></span>' +
