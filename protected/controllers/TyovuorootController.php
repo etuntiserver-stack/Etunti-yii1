@@ -2543,18 +2543,18 @@ class TyovuorootController extends Controller
 		$tids_for_poistetut 	= [];
 		if(isset($model->tid))
 			$tids_for_poistetut[$model->tid] = $model->tid;
-		if(is_array(json_decode($model->tyopaari, true))){
+		if(isset($model->tyopaari) and is_array(json_decode($model->tyopaari, true))){
 			foreach(json_decode($model->tyopaari, true) as $key => $val)
 				$tids_for_poistetut[$val] = $val;
 		}
-		if( $this_id != 'null' and !empty($model->new_poistettu_pvm) ){
+		if( $this_id != 'null' and count($tids_for_poistetut) > 0 and !empty($model->new_poistettu_pvm) ){
 			foreach(json_decode($model->new_poistettu_pvm, true) as $key => $val)
 				if( isset($val['tid']) and isset($tids_for_poistetut[$val['tid']]) and isset($val['pvm']) and isset($val['syy']) ){
 					$poistettu_pvms[$val['tid']][$val['pvm']] = $val['syy'];
 					$poistettu_pvms_upd[$key] = $val;
 				}
 		}
-		if(is_array(json_decode($model->tyopaari, true)) and isset($_POST['post_tids'])){
+		if(isset($model->tyopaari) and is_array(json_decode($model->tyopaari, true)) and isset($_POST['post_tids'])){
 			$addtp = array_diff( $_POST['post_tids'], json_decode($model->tyopaari, true) );
 			foreach($addtp as $k => $ntid){
 				foreach($poistettu_pvms as $ptid => $parr){
@@ -2568,7 +2568,8 @@ class TyovuorootController extends Controller
 
 		// <-- Update poistetut
 		//$return .= json_encode($poistettu_pvms_upd);
-		ToistuvatTyovuorot::model()->updatebypk($model->id, ['new_poistettu_pvm' => ((count($poistettu_pvms_upd) > 0)? json_encode($poistettu_pvms_upd) : '')]);
+		if(isset($model->id))
+			ToistuvatTyovuorot::model()->updatebypk($model->id, ['new_poistettu_pvm' => ((count($poistettu_pvms_upd) > 0)? json_encode($poistettu_pvms_upd) : '')]);
 
 
 		$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
