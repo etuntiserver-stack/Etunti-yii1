@@ -77,7 +77,7 @@ $(document).ready(function(){
 					'mult', // class
 					'tyontekijat', // id
 					(isset($_GET['Tekija']))?$_GET['Tekija']:'', //selected
-					Yii::app()->request->getParam('aktiivinen') // aktiivinen
+					1 // aktiivinen
 				);
 				echo $tyontekiatLista;
 				?>
