@@ -2540,16 +2540,9 @@ class TyovuorootController extends Controller
  		// <-- Poistettu_pvms
 		$poistettu_pvms 	= [];
 		$poistettu_pvms_upd	= [];
-		$tids_for_poistetut 	= [];
-		if(isset($model->tid))
-			$tids_for_poistetut[$model->tid] = $model->tid;
-		if(isset($model->tyopaari) and is_array(json_decode($model->tyopaari, true))){
-			foreach(json_decode($model->tyopaari, true) as $key => $val)
-				$tids_for_poistetut[$val] = $val;
-		}
-		if( $this_id != 'null' and count($tids_for_poistetut) > 0 and !empty($model->new_poistettu_pvm) ){
+		if( $this_id != 'null' and count($tids) > 0 and !empty($model->new_poistettu_pvm) ){
 			foreach(json_decode($model->new_poistettu_pvm, true) as $key => $val)
-				if( isset($val['tid']) and isset($tids_for_poistetut[$val['tid']]) and isset($val['pvm']) and isset($val['syy']) ){
+				if( isset($val['tid']) and isset($tids[$val['tid']]) and isset($val['pvm']) and isset($val['syy']) ){
 					$poistettu_pvms[$val['tid']][$val['pvm']] = $val['syy'];
 					$poistettu_pvms_upd[$key] = $val;
 				}
@@ -2578,8 +2571,8 @@ class TyovuorootController extends Controller
 
 		// <-- Update poistetut
 		//$return .= json_encode($poistettu_pvms_upd);
-		if(isset($model->id))
-			ToistuvatTyovuorot::model()->updatebypk($model->id, ['new_poistettu_pvm' => ((count($poistettu_pvms_upd) > 0)? json_encode($poistettu_pvms_upd) : '')]);
+		//if(isset($model->id))
+			//ToistuvatTyovuorot::model()->updatebypk($model->id, ['new_poistettu_pvm' => ((count($poistettu_pvms_upd) > 0)? json_encode($poistettu_pvms_upd) : '')]);
 
 
 		$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
