@@ -4664,6 +4664,12 @@ class TyovuorootController extends Controller
 					foreach($v2 as $k3 => $v3)
 						$data[] = $v3;
 
+		$clearing = []; // Otetaan pois jos on samanlainen
+		foreach ($data as $key => $value){
+		  if(!in_array($value, $clearing))
+		    $clearing[] = $value;
+		}
+
 		/*
 		echo '<pre>';
 		print_r( $data );
@@ -4671,7 +4677,7 @@ class TyovuorootController extends Controller
 		exit;
 		*/
 	
-		return $data;
+		return $clearing;
 	}
 
 	public function actionSiirto($kenelta=null, $kenelle=null, $alkaen=null)
