@@ -976,9 +976,6 @@ $(document).ready(function(){
 	if('<?=$model->id?>' !== '')
 		$('#<?=$java_prefix?>_tid').val( $('#tekijanVaihdo option:selected').val() );
   }
-  $('.reload').click(function(){
-	tarkistusLista('<?=$this_id?>');
-  });
   $('#pfrom').on('blur change', function(){
 	if(toistuva && !pfrom_and_laatikkopvm_check()){
 		alert('Toistuvan työvuoron aloituspäivämäärää ei voida muokata alkamaan ajemmin kun: ' + pfrom);
@@ -1027,6 +1024,12 @@ $(document).ready(function(){
     	  }
 	});
 	}
+  });
+  $(document).delegate("#cal_poista_paiva_ketjusta, .palauta_kejuun","click",function(){
+	tarkistusLista('<?=$this_id?>');
+  });
+  $('.reload').click(function(){
+	tarkistusLista('<?=$this_id?>');
   });
   $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari, #tekijanVaihdo, #alku, #loppu, #ToistuvatTyovuorot_kohde').on('blur change select', function(){
 	tarkistusLista('<?=$this_id?>');
@@ -1500,7 +1503,6 @@ $(document).ready(function(){
 	    	}
 	  });
   }
-
   $(document).delegate("#<?=$java_prefix?>_kohde","change",function(){
 	var thisID = $(this, 'option:selected').val();
 	OsoiteVaihto(thisID);

@@ -246,14 +246,14 @@ $(document).delegate("#cal_poista_paiva_ketjusta","click",function(){
 			if ($('#tp_mukaan').prop('checked')) {
 				$(".cal_tilanne").each(function(){
 					if(cal_pvm == $(this).attr('pvm')){
-						$(this).closest('td').removeClass('bg-success').addClass('bg-warning');
-						$(this).removeClass('fa-gear cal_tilanne').addClass('fa-recycle palauta_kejuun');
+						//$(this).closest('td').removeClass('bg-success').addClass('bg-warning');
+						//$(this).removeClass('fa-gear cal_tilanne').addClass('fa-recycle palauta_kejuun');
 						$("#" + $(this).attr('this_id')).closest('p').remove();
 					}
 				});
 			} else {
-				cal_this_item.closest('td').removeClass('bg-success').addClass('bg-warning');
-				cal_this_item.removeClass('fa-gear cal_tilanne').addClass('fa-recycle palauta_kejuun');
+				//cal_this_item.closest('td').removeClass('bg-success').addClass('bg-warning');
+				//cal_this_item.removeClass('fa-gear cal_tilanne').addClass('fa-recycle palauta_kejuun');
 				$("#" + cal_this_id).closest('p').remove();
 			}
 
@@ -288,6 +288,7 @@ $(document).delegate(".palauta_kejuun","click",function(){
 			alert('Huomio!\nTämä päivä ei saa palauttaa, koska löytyy yksittäinen työvuoro saman tiedon mukaan.');
 			return false;
 		}
+/*
 		if( data['return'] && data['return'] == 'ok' ){
 			if( $("#" + did).length > 0 )
 				$("#" + did).html('');
@@ -296,6 +297,8 @@ $(document).delegate(".palauta_kejuun","click",function(){
 	        	console.log(data);
 			$.tv_arr_update(data['tv_arr']);
 		}
+*/
+			$.tv_arr_update(data['tv_arr']);
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	console.log(XMLHttpRequest);
