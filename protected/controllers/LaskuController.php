@@ -1670,9 +1670,9 @@ exit;
 		$from = date("Y-m-d");
 		$to = date("Y-m-d");
 
-		if(isset($_POST['from']) and isset($_POST['to'])){
-		$from 	= date("Y-m-d",strtotime($_POST['from']));
-		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		if(isset($_GET['from']) and isset($_GET['to'])){
+		$from 	= date("Y-m-d",strtotime($_GET['from']));
+		$to 	= date("Y-m-d",strtotime($_GET['to']));
 		}
 
 
@@ -1693,17 +1693,17 @@ exit;
 			'".$from."' AND '".$to."' 
 		");
 
-		if(isset($_POST['laskunumero']) and !empty(trim($_POST['laskunumero'])))
-	        $criteria->addCondition (" laskunumero LIKE '%".$_POST['laskunumero']."%' ");
+		if(isset($_GET['laskunumero']) and !empty(trim($_GET['laskunumero'])))
+	        $criteria->addCondition (" laskunumero LIKE '%".$_GET['laskunumero']."%' ");
 
-		if(isset($_POST['viitenumero']) and !empty(trim($_POST['viitenumero'])))
-	        $criteria->addCondition (" viitenumero LIKE '%".$_POST['viitenumero']."%' ");
+		if(isset($_GET['viitenumero']) and !empty(trim($_GET['viitenumero'])))
+	        $criteria->addCondition (" viitenumero LIKE '%".$_GET['viitenumero']."%' ");
 
-		if(isset($_POST['laskuosoite']) and !empty(trim($_POST['laskuosoite'])))
-	        $criteria->addCondition (" osoite LIKE '%".$_POST['laskuosoite']."%' ");
+		if(isset($_GET['laskuosoite']) and !empty(trim($_GET['laskuosoite'])))
+	        $criteria->addCondition (" osoite LIKE '%".$_GET['laskuosoite']."%' ");
 
 		// <-- Luotu
-		if( isset($_POST['tilaLaskulle']) and !empty($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 0 )
+		if( isset($_GET['tilaLaskulle']) and !empty($_GET['tilaLaskulle']) and $_GET['tilaLaskulle'] == 0 )
 		{
 			$criteria->addCondition (" tilanne=0 ");
 		}
@@ -1711,7 +1711,7 @@ exit;
 
 
 		// <-- Lahetamattomat hyväksyttyt
-		if( (isset($_POST['tilaLaskulle']) and !empty($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 1) or (isset($_GET['lahettamattomat'])) )
+		if( (isset($_GET['tilaLaskulle']) and !empty($_GET['tilaLaskulle']) and $_GET['tilaLaskulle'] == 1) or (isset($_GET['lahettamattomat'])) )
 		{
 		$criteria->addCondition (" 
 			tilanne=1 AND postita_jobid='' AND trust_jobid='' AND netvisorkey=0 
@@ -1722,7 +1722,7 @@ exit;
 
 
 		// POSTITA Lahetetty
-		if(isset($_POST['tilaLaskulle']) and !empty($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 1)
+		if(isset($_GET['tilaLaskulle']) and !empty($_GET['tilaLaskulle']) and $_GET['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 1)
 		{
 		$criteria->addCondition ("
 		id in (SELECT lid FROM 
@@ -1734,7 +1734,7 @@ exit;
 		}
 
 		// POSTITA Maksettu
-		if(isset($_POST['tilaLaskulle']) and !empty($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 3 and $asetukset->palvelu_tyyppi == 1)
+		if(isset($_GET['tilaLaskulle']) and !empty($_GET['tilaLaskulle']) and $_GET['tilaLaskulle'] == 3 and $asetukset->palvelu_tyyppi == 1)
 		{
 		$criteria->addCondition ("
 		id in (SELECT lid FROM 
@@ -1747,7 +1747,7 @@ exit;
 
 
 		// Trust Lahetetty
-		if(isset($_POST['tilaLaskulle']) and !empty($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 2)
+		if(isset($_GET['tilaLaskulle']) and !empty($_GET['tilaLaskulle']) and $_GET['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 2)
 		{
 		$criteria->addCondition ("
 		id in (SELECT lid FROM 
@@ -1760,7 +1760,7 @@ exit;
 		}
 
 		// Trust Maksettu
-		if(isset($_POST['tilaLaskulle']) and !empty($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 3 and $asetukset->palvelu_tyyppi == 2)
+		if(isset($_GET['tilaLaskulle']) and !empty($_GET['tilaLaskulle']) and $_GET['tilaLaskulle'] == 3 and $asetukset->palvelu_tyyppi == 2)
 		{
 		$criteria->addCondition ("
 		id in (SELECT lid FROM 
@@ -1772,7 +1772,7 @@ exit;
 		}
 
 		// LOCAL Lahetetty
-		if(isset($_POST['tilaLaskulle']) and !empty($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 3)
+		if(isset($_GET['tilaLaskulle']) and !empty($_GET['tilaLaskulle']) and $_GET['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 3)
 		{
 		$criteria->addCondition ("
 		id in (SELECT lid FROM 

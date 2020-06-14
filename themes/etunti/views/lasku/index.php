@@ -39,7 +39,7 @@
 
 
 
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <form id="mobForm" action="#" class="form-inline" method="GET">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
@@ -63,8 +63,8 @@
 
         	$a = Asiakkaat::model()->findAll($criteria);
 
-		if(isset($_POST['asiakasLaskulle']))
-			$asiakasLaskulle = $_POST['asiakasLaskulle']; 
+		if(isset($_GET['asiakasLaskulle']))
+			$asiakasLaskulle = $_GET['asiakasLaskulle']; 
 		else 
 			$asiakasLaskulle = '';
 
@@ -94,8 +94,8 @@
                          <label class="field select">
 
 				<?php
-				if(isset($_POST['tilaLaskulle']))
-				echo '<input type="hidden" id="getTila" value="'.$_POST['tilaLaskulle'].'">';
+				if(isset($_GET['tilaLaskulle']))
+				echo '<input type="hidden" id="getTila" value="'.$_GET['tilaLaskulle'].'">';
 				?>
 
 				<select name="tilaLaskulle" id="tilaLaskulle" class="gui-input">
@@ -130,7 +130,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="laskuosoite" value="<?php if(isset($_POST['laskuosoite'])) echo $_POST['laskuosoite']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>">
+   			    <input type="text" class="gui-input" name="laskuosoite" value="<?php if(isset($_GET['laskuosoite'])) echo $_GET['laskuosoite']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-bookmark"></i>
@@ -156,7 +156,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="laskunumero" value="<?php if(isset($_POST['laskunumero'])) echo $_POST['laskunumero']; ?>" placeholder="Laskunumero..">
+   			    <input type="text" class="gui-input" name="laskunumero" value="<?php if(isset($_GET['laskunumero'])) echo $_GET['laskunumero']; ?>" placeholder="Laskunumero..">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-bookmark"></i>
@@ -168,7 +168,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="viitenumero"  class="gui-input" value="<?php if(isset($_POST['viitenumero'])) echo $_POST['viitenumero']; ?>" placeholder="Viitenumero..">
+   			    <input type="text" name="viitenumero"  class="gui-input" value="<?php if(isset($_GET['viitenumero'])) echo $_GET['viitenumero']; ?>" placeholder="Viitenumero..">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-bookmark"></i>
                             </label>
