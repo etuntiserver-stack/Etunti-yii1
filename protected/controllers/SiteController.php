@@ -448,18 +448,11 @@ class SiteController extends Controller
 
 	public function digistenTunnitYhteensa($start_date, $end_date)
 	{
-
-       		$criteria = new CDbCriteria();
-		$criteria->select = "id";
-        	$criteria->condition = " aktiivinen=1 "; 
-		$tt = Tyontekijat::model()->findAll($criteria);
+		$tt = Tyontekijat::model()->findAll();
 
 		$tids = [];
 		foreach ($tt as $data)
 			$tids[] = $data->id;
-
-		if( count($tids) == 0 )
-			return 0;
 
 		$from 			= date( "Y-m-d", strtotime($start_date));
 		$to 			= date( "Y-m-d", strtotime($end_date));
