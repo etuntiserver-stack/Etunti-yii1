@@ -1,13 +1,5 @@
 <?php
 ini_set('memory_limit', '512M');
-
-$site = Yii::app()->createController('Site');
-			$start_date = date( "Y-m-d", strtotime('first day of last month') );
-			$end_date = date("Y-m-d", strtotime('last day of last month') );
-			$sum_result = $site[0]->digistenTunnitYhteensa($start_date, $end_date);
-echo $sum_result;
-exit;
-
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v4.css">
 <?php
