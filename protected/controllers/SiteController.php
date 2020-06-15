@@ -458,8 +458,11 @@ class SiteController extends Controller
 		foreach ($tt as $data)
 			$tids[] = $data->id;
 
-		$from 			= $start_date;
-		$to 			= $end_date;
+		if( count($tids) == 0 )
+			return 0;
+
+		$from 			= date( "Y-m-d", strtotime($start_date));
+		$to 			= date( "Y-m-d", strtotime($end_date));
 		$result 		= 0;
 		$mob_result 		= 0;
 		$tyovuorot_result 	= 0;
