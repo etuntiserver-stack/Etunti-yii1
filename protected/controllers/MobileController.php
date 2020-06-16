@@ -1940,10 +1940,13 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$set = [];
 		if (is_array($tids)) {
 			foreach($tids as $tid)
-				$set[$tid] = 0;
+				if(!$by_aloitan)
+					$set[$tid] = 0;
+
 			$tids = implode(", ", $tids);
 		} else {
-			$set[$tids] = 0;
+			if(!$by_aloitan)
+				$set[$tids] = 0;
 		}
 
 		// <-- Pyhapaivat
@@ -2000,7 +2003,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		   $criteria->group = "tid";
 
 		// Helper function to avoid duplicate code (doesn't handle 'hyvaksytty' as it differs)
-		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $palkanlaskentaan, $time, $by_aloitan, $pyhapaivat_str, $erikoislauantai_str) {
+		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $palkanlaskentaan, $time, $by_aloitan, $pyhapaivat_str, $erikoislauantai_str, $kohde) {
 			if($by_aloitan)
 			   $criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))";
 			else
@@ -2164,6 +2167,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				AND tid IN ($tids)
 				AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) BETWEEN '$from' AND '$to'
 				AND deleted=0";
+			if ($kohde > 0) $criteria->addCondition("kohdenID='".$kohde."'");
 			if ($status) $criteria->addCondition($status);
 			if ($palkanlaskentaan) $criteria->addCondition("palkanlaskentaan=1");
 		};

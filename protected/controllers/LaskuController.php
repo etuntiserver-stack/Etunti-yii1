@@ -927,6 +927,9 @@ exit;
 	public function actionPerpvmkohde($from, $to, $kohteet)
 	{
 
+		$from 	= date ("Y-m-d", strtotime($from));
+		$to 	= date ("Y-m-d", strtotime($to));
+		$return = [];
 		if(!empty($kohteet)){
 			$kohteet_arr 	= explode(",", $kohteet);
 			$tt 		= Tyontekijat::model()->findAll();
@@ -937,10 +940,14 @@ exit;
 			$mobile = Yii::app()->createController('Mobile');
 			if(count($kohteet_arr) > 0){
 				foreach($kohteet_arr as $kohde)
-					$hyv_tyotunnit_all[] = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 3, false, 0, true, $kohde);
+					$hyv_tyotunnit_all[$kohde] = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 3, false, 0, true, $kohde);
+				foreach($hyv_tyotunnit_all as $kohde => $arr)
+					foreach($arr as $pvm => $arr2)
+						foreach($arr2 as $k => $v)
+							$return[$pvm][$kohde] = $v;
 			}
 			echo '<pre>';
-			print_r($hyv_tyotunnit_all);
+			print_r($return);
 			echo '</pre>';
 		}
 		exit;
