@@ -514,6 +514,18 @@ $('.ryhmat').multiselect({
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'rivien_teko'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Rivi per kohde',
+			1=>'Rivi per Pvm/Kohde'
+		);
+		echo $form->dropDownList($model,'rivien_teko', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'rivien_teko'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tilinumero'); ?>
 		<?php echo $form->textField($model,'tilinumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tilinumero'); ?>

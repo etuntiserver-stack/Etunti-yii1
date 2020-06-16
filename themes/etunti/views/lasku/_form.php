@@ -1523,7 +1523,7 @@ $(".luoRiviTunti").click(function() {
 	var tuotePalvelu = $(this).closest(".panel-body").find('.valitseTuote option:selected').val();
 	var tuotePalveluFor = $(this).closest(".panel-body").find('.etsikohde_alasvetovaliko option:selected').attr('for');
 	var tuotteet_palvelut_muoto = parseInt($("#Lasku_tuotteet_palvelut_muoto").val());
-
+	var rivien_teko = ('<=$asetukset->rivien_teko?>' == 0)? 'perkohde' : 'perpvmkohde';
 	//console.log(tuotePalvelu);
 
 	if (from  === '' && jakso == 'tunti') 
@@ -1553,7 +1553,22 @@ $(".luoRiviTunti").click(function() {
 
 	} 
 
-	    pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palvelut_muoto,tuotePalveluFor);
+	if(rivien_teko == 'perpvmkohde')
+	{
+		console.log('perpvmkohde?from='+from+'&to='+to+'&kohteet='+kohteet)
+	        $.ajax({
+	           url: 'perpvmkohde?from='+from+'&to='+to+'&kohteet='+kohteet,
+	           success: function(data){
+	               	console.log(data);
+	           },
+	           error: function(XMLHttpRequest, textStatus, errorThrown){
+	               	console.log(XMLHttpRequest);
+		   }
+	        });
+
+	} else {
+		pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palvelut_muoto,tuotePalveluFor);
+	}
 });
 
 function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palvelut_muoto,tuotePalveluFor){

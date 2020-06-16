@@ -27,7 +27,7 @@ class LaskuController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_procountor', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_procountor', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet', 'perpvmkohde'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow',  // allow all users to perform 'index' and 'view' actions
@@ -924,6 +924,28 @@ exit;
 		echo 1;
 	}
 
+	public function actionPerpvmkohde($from, $to, $kohteet)
+	{
+
+		if(!empty($kohteet)){
+			$kohteet_arr 	= explode(",", $kohteet);
+			$tt 		= Tyontekijat::model()->findAll();
+			$tids 		= [];
+			foreach ($tt as $data)
+				$tids[] = $data->id;
+
+			$mobile = Yii::app()->createController('Mobile');
+			if(count($kohteet_arr) > 0){
+				foreach($kohteet_arr as $kohde)
+					$hyv_tyotunnit_all[] = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 3, false, 0, true, $kohde);
+			}
+			echo '<pre>';
+			print_r($hyv_tyotunnit_all);
+			echo '</pre>';
+		}
+		exit;
+	}
+
 	public function actionLuoKohteista($id, $for)
 	{
 
@@ -947,25 +969,13 @@ exit;
 		$criteria->select = "
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as t_tunnit, COUNT(*) as count ";
 		$criteria->condition = $toteutuneet;
-		$tot = Toteutuneet::model()->find($criteria); 
-	
+		$tot = Toteutuneet::model()->find($criteria);
 	
 	       	$criteria = new CDbCriteria();
 		$criteria->select = "
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, COUNT(*) as count ";
 		$criteria->condition = $luetut;	
 		$lu = Mobile::model()->find($criteria); 
-
-
-
-	
-/*
-		$kk_kpl = 0;
-		$date1 = new DateTime(date("Y-m-d", strtotime($_POST['from'])));
-		$date2 = new DateTime(date("Y-m-d", strtotime($_POST['to'])));
-		$interval = date_diff($date1, $date2);
-		$kk_kpl =  $interval->m + ($interval->y * 12);
-*/
 
 		$tunnit = 0;
 		$rivi_kpl = 0;

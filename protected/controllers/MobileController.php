@@ -1935,7 +1935,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	 * @param mixed $tids Array of tids, or single tid in string or int format.
 	 * @param int $time Lookup time, 0 = day, 1 = evening, 2 = nighttime, 3 = sunday, 4 = pyhapaivat
 	 */
-	public function TidfromtoMobiiliAll($from, $to, $tids, $status = array(), $hyvaksytty = '', $palkanlaskentaan = false, $time = 0, $by_aloitan = false)
+	public function TidfromtoMobiiliAll($from, $to, $tids, $status=[], $hyvaksytty='', $palkanlaskentaan=false, $time=0, $by_aloitan=false, $kohde=null)
 	{
 		$set = [];
 		if (is_array($tids)) {

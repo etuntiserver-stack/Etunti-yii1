@@ -86,7 +86,7 @@ class Lasku extends DB2ActiveRecord
 
 		$table_structure = array(
                      'lid' => 'int(11) DEFAULT 0',
-										 'yid' => 'int(11) DEFAULT 0',
+		     'yid' => 'int(11) DEFAULT 0',
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
                      'tyyppi' => 'varchar(100) DEFAULT NULL',
                      'yritys' => 'varchar(100) DEFAULT NULL',

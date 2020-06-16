@@ -253,15 +253,15 @@ $this->breadcrumbs=array(
 	$tids[] = $data->id;
 
   $tyopaivia 	= $this->TPBetweenMobAll($from, $to, $tids, true);
-  $tyotunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 0);
-  $iltatunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 1);
-  $yotunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 2);
-  $matkaIlta 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(2), $_GET['lu_tai_tot'], true, 1);
-  $matkatunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(2), $_GET['lu_tai_tot'], true, 0);
-  $loun 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(10), $_GET['lu_tai_tot'], true, 0);
-  $sutunnit	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 3);
-  $pyhapaivat	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(2,3), $_GET['lu_tai_tot'], true, 4);
-  $erikoislauantai	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(2,3), $_GET['lu_tai_tot'], true, 5);
+  $tyotunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 0, false, null);
+  $iltatunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 1, false, null);
+  $yotunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 2, false, null);
+  $matkaIlta 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(2), $_GET['lu_tai_tot'], true, 1, false, null);
+  $matkatunnit 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(2), $_GET['lu_tai_tot'], true, 0, false, null);
+  $loun 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(10), $_GET['lu_tai_tot'], true, 0, false, null);
+  $sutunnit	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 3, false, null);
+  $pyhapaivat	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(2,3), $_GET['lu_tai_tot'], true, 4, false, null);
+  $erikoislauantai	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(2,3), $_GET['lu_tai_tot'], true, 5, false, null);
 
   // <-- SPL, SL, LS, VL, VKL, AP
   $sl_all 		= $this->TidfromtoVuosilomaBetween($from,$to,$tids,'SL'); // Palkallinen

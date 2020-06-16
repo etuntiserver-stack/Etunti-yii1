@@ -290,14 +290,14 @@ $dateDiff = dateDiff($from, $to);
   }
 
 
-  $tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 0, true);
+  $tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 0, true, null);
 
   $hyv_arr = array(3,2,10);
   if($ilman_matkat)
 	unset($hyv_arr[1]);
   if($ilman_lounastaukot)
 	unset($hyv_arr[2]);
-  $hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, $hyv_arr, 3, false, 0, true);
+  $hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, $hyv_arr, 3, false, 0, true, null);
 /*
 echo '<pre>';
 print_r($hyv_tyotunnit_all);
@@ -305,25 +305,25 @@ echo '</pre>';
 exit;
 */
   if(!$ilman_lounastaukot)
-  $lounaat_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), 2, false, 0, true);
+  $lounaat_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), 2, false, 0, true, null);
 
   if(!$ilman_matkat)
-  $matkatunnit_all = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2), 2, false, 0, true);
+  $matkatunnit_all = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2), 2, false, 0, true, null);
 
   if($ilman_matkat)
-  $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 1, true);
+  $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 1, true, null);
   else
-  $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 1, true);
+  $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 1, true, null);
 
-  $yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 2, true);
-  $sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 3, true);
+  $yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 2, true, null);
+  $sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 3, true, null);
 
   if(!$ilman_matkat){
-  	$pyhapaivat_all		= $mobile[0]->TidfromtoMobiiliAll($from, $from, $tid, array(2,3), 2, false, 4, true);
-	$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 5, true);
+  	$pyhapaivat_all		= $mobile[0]->TidfromtoMobiiliAll($from, $from, $tid, array(2,3), 2, false, 4, true, null);
+	$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 5, true, null);
   } else {
-  	$pyhapaivat_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 4, true);
-	$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 5, true);
+  	$pyhapaivat_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 4, true, null);
+	$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 5, true, null);
   }
 
   // Pyhapaivat
