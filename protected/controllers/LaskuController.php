@@ -1034,7 +1034,7 @@ exit;
 			$return['hinta'] 	= $asiakas->hinta;
 			$return['alv'] 		= $asiakas->alv;
 			$return['kpl'] 		= ($_POST['rivien_teko'] == 'perpvmkohde')? $tunnit: 1;
-			$return['yksikko'] 	= 'kk';
+			$return['yksikko'] 	= ($_POST['rivien_teko'] == 'perpvmkohde')? 'h': 'kk';
 			$return['free_text'] 	= (($_POST['rivien_teko'] == 'perpvmkohde')? date("d.m.Y", strtotime($_POST['from'])):$return['fromto'].' '.$asiakas->osoite.', '.$asiakas->kaupunki.' '.$asiakas->postinumero);
 			}
 			echo json_encode($return);
