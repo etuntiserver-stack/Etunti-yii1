@@ -2031,9 +2031,9 @@ exit;
 
 		$yht_euro = $data->yhteensa_total;
 		if(isset($l->yht_euro))
-		$yht_euro = $l->yht_euro;
+			$yht_euro = $l->yht_euro;
 
-            	return $yht_euro;
+            	return (float)$yht_euro;
 	}
 
 	public function actionGet_historia()
