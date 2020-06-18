@@ -374,7 +374,7 @@ $(document).ready(function(){
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinnoittelu'); ?>
 		<?php echo $form->textArea($model,'hinnoittelu',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
-
+		<p>(tämä tieto kuvaillaan laskutusnäkymässä)</p>
 		<?php echo $form->error($model,'hinnoittelu'); ?>
 	</div>
 
