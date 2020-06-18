@@ -433,8 +433,78 @@ if (!$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'puhelin'); ?> <?php if(!empty($model->puhelin)): ?><a href="tel:<?php echo $model->puhelin; ?>">***soita***</a><?php endif; ?>
 		<?php echo $form->textField($model,'puhelin',array('size'=>60,'maxlength'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'puhelin'); ?>
-	</div>
+    <?php echo $form->error($model,'puhelin'); ?>
+    <div id="puhelin-varoitus" class="alert alert-danger text-dark" style="display:none"><ul></ul></div>
+  </div>
+
+  <!-- Enable phone number validation only when Freshdesk is enabled.
+       Freshdesk requires phone numbers to have the area code (e.g. +358).
+       If Freshdesk is inactive in this domain, the format doesn't matter. -->
+  <?php if (!$freshdesk->isDisabled()): ?>
+  <script>
+    $(function() {
+
+      /**
+       * Validate phone number for Freshdesk.
+       *
+       * Freshdesk requires phone numbers to contain area code (e.g. +358) and
+       * no whitespace between digits.
+       *
+       * Instead of directly preventing "invalid" data, which might break
+       * something else, we give notice and hide the submit button until data is
+       * valid for Freshdesk.
+       *
+       * This should only be used when Freshdesk is enabled on the domain.
+       */
+      const validatePhoneNumber = function() {
+
+        const val = $('#Asiakkaat_puhelin').val();
+        let errors = [];
+
+        // Check that the phone number contains area code.
+        if (!/^\+.*$/.test(val)) {
+          errors.push('Aluekoodi vaaditaan (esim. +358).');
+        }
+
+        // Check for spaces in the number.
+        if (/\s+/.test(val)) {
+          errors.push('Puhelinnumero ei saa sisältää välilyöntejä.');
+        }
+
+        if (errors.length > 0) {
+          let text = 'Korjaa seuraavat tiedot puhelinnumerossa:<br><ul>';
+          errors.forEach((item, index) => { text += `<li>${item}</li>`; });
+          text += '<li>Laita muut tiedot sekä numerot allaolevaan "toissijainen puhelinnumero" kenttään.</li></ul>';
+          $('#puhelin-varoitus').html(text).show();
+          $('#puhelin-submitvaroitus').show();
+          $('#asiakas-submit').attr('disabled', 'disabled');
+          return false;
+        } else {
+          $('#puhelin-varoitus').html('').hide();
+          $('#puhelin-submitvaroitus').hide();
+          $('#asiakas-submit').removeAttr('disabled');
+          return true;
+        }
+      };
+
+      /**
+       * Hook phone number validation to keyup event on the number field.
+       */
+      $('#Asiakkaat_puhelin').keyup(function() {
+        validatePhoneNumber();
+      });
+
+      /**
+       * Hook phone number validation to form submission.
+       */
+      $('#asiakkaat-form').on('submit', function(e) {
+        if (!validatePhoneNumber()) {
+          e.preventDefault();
+        }
+      });
+    });
+  </script>
+  <?php endif; ?>
 
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'toissijainen_puhelinnumero'); ?>
@@ -793,7 +863,8 @@ if (
 
 
 	<div class="section">
-		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('main', 'Luo') : Yii::t('main', 'Tallenna'),array('class'=>'btn btn-primary myBgColors luoTallennaAsiakas')); ?>
+    <?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('main', 'Luo') : Yii::t('main', 'Tallenna'),array('id' => 'asiakas-submit', 'class'=>'btn btn-primary myBgColors luoTallennaAsiakas')); ?>
+    <p id="puhelin-submitvaroitus" class="text-alert" style="display:none">Korjaa puhelinnumero ennen tallentamista.</p>
 	</div>
 
 
