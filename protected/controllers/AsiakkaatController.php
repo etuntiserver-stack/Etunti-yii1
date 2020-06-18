@@ -40,7 +40,7 @@ class AsiakkaatController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus', 'kaikki_netvisoriin', 'freshdesk', 'freshdesk_ticket'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus', 'kaikki_netvisoriin', 'freshdesk', 'freshdesk_ticket', 'puhnro_korjaus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -2443,4 +2443,94 @@ $xml = '
   }
 
   #endregion
+
+  /**
+   * Find customers with invalid phone numbers on their profile, and fix where
+   * possible. Output as CSV the ones that were not automatically fixed.
+   */
+  public function actionPuhnro_korjaus()
+  {
+    // Get all customers with no plus sign in front of the phone number. Divide
+    // these into valid (starting with 0) and unknown (the rest, which will not
+    // be automatically fixed).
+    $criteria = new CDbCriteria();
+    $criteria->select = 'id, yrityksen_nimi, yhteyshenkilo, puhelin';
+    $criteria->condition = "TRIM(puhelin) != '' AND TRIM(puhelin) NOT LIKE '+%'"; // no area code (not beginning with +)
+    $results = Asiakkaat::model()->findAll($criteria);
+
+    // Specify lists for entries to be written to csv after operation.
+    $list_direct_changes = [];  // direct modifications (no extra data).
+    $list_extra_data = [];      // modified numbers with extra data moved to the second field.
+    $list_unknown_format = [];  // invalid numbers that must be fixed manually.
+
+    foreach ($results as $customer) {
+      // Trim phone number, then remove all whitespace between digits. This only
+      // matches a single whitespace character between two digits.
+      // (?<= and ?= : positive lookbehind and lookahead)
+      $phone_no = preg_replace('/(?<=\d)\s(?=\d)/', '', trim($customer->puhelin));
+
+      // If the number starts with a 0, it can be replaced with the area code.
+      // Do not check for extra data yet; match the resulting (trimmed) number
+      // afterwards to the desired format, and fix those that match directly.
+      if (preg_match('/^0/', $phone_no)) { // starts with a 0
+        $phone_no = '+358' . substr($phone_no, 1); // remove first char (0) and prepend area code
+      }
+
+      // Number is trimmed, whitespace between digits removed and area code is
+      // added if the number started with 0. Now check that the number matches
+      // the desired format; if not, the rest of the work must be done manually.
+
+      // Base csv entry line for all outputs:
+      $line = [$customer->id, $customer->yrityksen_nimi, $customer->yhteyshenkilo, $customer->puhelin];
+
+      $matches = [];  // Match the prefixed number and anything else following
+      // it, into separate match arrays, in order to save extra
+      // data to toissijainen_puhelinnumero field.
+
+      // Match +num and everything else after a possible number.
+      preg_match('/^(\+\d+)(.*)$/', $phone_no, $matches);
+
+      // If matches doesn't contain the first capture group, the number is
+      // invalid. Otherwise, $matches[1] contains the number with correct format
+      // and $matches[2] contains any extra data. Therefore, if there is no
+      // extra data, the number can be directly fixed.
+      if (empty($matches[1])) {
+        // Invalid number.
+        $list_unknown_format[] = array_merge($line, [$phone_no]);
+      } elseif (!empty($matches[2])) {
+        // Number has extra data in it; contained in $matches[2].
+        $list_extra_data[] = array_merge($line, [$matches[1], trim($matches[2])]);
+      } else {
+        // Number is valid and was directly modified (TODO).
+        $list_direct_changes[] = array_merge($line, [$matches[1]]);
+        $list_direct_changes = [$customer->id, $customer->yrityksen_nimi, $customer->yhteyshenkilo, $customer->puhelin, $matches[1]];
+      }
+
+      // if (preg_match('/^\+\d+$/', $phone_no)) {
+      //   // echo "<p>{$customer->id} || {$customer->yrityksen_nimi} || {$customer->yhteyshenkilo} || {$customer->puhelin} || $phone_no</p><br>";
+      //   $list_direct_changes[] = [$customer->id, $customer->yrityksen_nimi, $customer->yhteyshenkilo, $customer->puhelin, $phone_no];
+      // } else {
+      //   // echo "<p><b>INVALID</b>: {$customer->id} || {$customer->yrityksen_nimi} || {$customer->yhteyshenkilo} || {$customer->puhelin} || $phone_no</p><br>";
+      //   $list_unknown_format[] = [$customer->id, $customer->yrityksen_nimi, $customer->yhteyshenkilo, $customer->puhelin, $phone_no];
+      // }
+    }
+
+    // Specify file targets and loop entries into them.
+    $targets = [
+      'puhnrokorjaus_direct_changes.csv' => $list_direct_changes,
+      'puhnrokorjaus_extra_data.csv' => $list_extra_data,
+      'puhnrokorjaus_unknown_format.csv' => $list_unknown_format
+    ];
+
+    foreach ($targets as $file => $lines) {
+      $fh = fopen($file, 'w');
+
+      // Print header line and entries.
+      fputcsv($fh, ['id', 'yrityksen_nimi', 'yhteyshenkilo', 'puhelin_vanha', 'puhelin_muutettu', 'lisatietokenttaan']);
+      foreach ($lines as $line)
+        fputcsv($fh, $line);
+
+      fclose($fh);
+    }
+  }
 }
