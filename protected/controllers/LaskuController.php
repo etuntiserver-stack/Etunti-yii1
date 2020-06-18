@@ -941,7 +941,7 @@ exit;
 			if(count($valinnat_arr) > 0)
 			{
 				foreach($valinnat_arr as $kohde)
-					$hyv_tyotunnit_all[$kohde] = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 3, false, 0, false, $kohde, null);
+					$hyv_tyotunnit_all[$kohde] = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 3, false, 0, true, $kohde, null);
 				foreach($hyv_tyotunnit_all as $kohde => $arr)
 					foreach($arr as $pvm => $arr2)
 						foreach($arr2 as $k => $v)
