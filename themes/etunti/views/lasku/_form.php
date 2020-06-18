@@ -1629,7 +1629,7 @@ function RivienLuonti(index, value, rivien_teko, from, to, yhteensa, jakso, kuuk
 					alv : data['alv'],
 					hinnasto_rivi_id : data['hinnasto_rivi_id'],
 					yksikko : data['yksikko'],
-					free_text : (rivien_teko == 'perpvmkohde')? data['free_text'] : '',
+					free_text : data['free_text'],
 					rivi_lisays : data['free_text'],
 					tuotePalvelu : tuotePalvelu,
 					tuotteet_palvelut_muoto : tuotteet_palvelut_muoto

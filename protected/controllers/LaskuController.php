@@ -1056,7 +1056,7 @@ exit;
 		if(isset($k->id))
 		{
 			$return['osoite'] 	= $k->osoite;
-			$return['free_text'] 	= (($_POST['rivien_teko'] == 'perpvmkohde')? date("d.m.Y", strtotime($_POST['from'])):'').' '.$k->osoite.', '.$k->kaupunki.' '.$k->pnumero;
+			$return['free_text'] 	= (($_POST['rivien_teko'] == 'perpvmkohde')? date("d.m.Y", strtotime($_POST['from'])):$return['fromto']).' '.$k->osoite.', '.$k->kaupunki.' '.$k->pnumero;
 		}
 
 		echo json_encode($return);
