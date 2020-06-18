@@ -2503,7 +2503,6 @@ $xml = '
       } else {
         // Number is valid and was directly modified (TODO).
         $list_direct_changes[] = array_merge($line, [$matches[1]]);
-        $list_direct_changes = [$customer->id, $customer->yrityksen_nimi, $customer->yhteyshenkilo, $customer->puhelin, $matches[1]];
       }
 
       // if (preg_match('/^\+\d+$/', $phone_no)) {
