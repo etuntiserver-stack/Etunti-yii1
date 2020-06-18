@@ -506,7 +506,7 @@ class MobileController extends Controller
 				}
 			}
 			ksort($newarr);
-			$hyv_tyotunnit_all = $this->TidfromtoMobiiliAll($from, $to, $tids_after, [3], 3, false, 0, true);
+			$hyv_tyotunnit_all = $this->TidfromtoMobiiliAll($from, $to, $tids_after, [3], 3, false, 0, true, null, null);
 			/*
 			echo '<pre>';
 			print_r( $newarr );

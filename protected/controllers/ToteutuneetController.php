@@ -625,28 +625,28 @@ $xml = '
 		$pvm			= date("Y-m-d", strtotime($pvm));
 		$mobile = Yii::app()->createController('Mobile');
 
-		$tyotunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksynta*/ 2, false, 0, true);
+		$tyotunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksynta*/ 2, false, 0, true, null, null);
 
 		$hyv_arr = array(3,2,10);
 		if($ilman_matkat)
 			unset($hyv_arr[1]);
 		if($ilman_lounastaukot)
 			unset($hyv_arr[2]);
-		$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, $hyv_arr, 3, false, 0, true);
+		$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, $hyv_arr, 3, false, 0, true, null, null);
 
 		if(!$ilman_lounastaukot)
-		$lounaat_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(10), 2, false, 0, true);
+		$lounaat_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(10), 2, false, 0, true, null, null);
 
 		if(!$ilman_matkat)
-		$matkatunnit_all = $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(2), 2, false, 0, true);
+		$matkatunnit_all = $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(2), 2, false, 0, true, null, null);
 
 		if($ilman_matkat)
-		$iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 1, true);
+		$iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 1, true, null, null);
 		else
-		$iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(2,3), /*hyvaksytyt*/ 2, false, 1, true);
+		$iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(2,3), /*hyvaksytyt*/ 2, false, 1, true, null, null);
 
-		$yotunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 2, true);
-		$sutunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 3, true);
+		$yotunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 2, true, null, null);
+		$sutunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 3, true, null, null);
 
 		$laatikot = $this->TotPvmTidBetween($pvm,$pvm,$tid,$ilman_lounastaukot,$ilman_matkat);
 		echo json_encode(array(
