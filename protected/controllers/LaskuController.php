@@ -946,6 +946,7 @@ exit;
 					foreach($arr as $pvm => $arr2)
 						foreach($arr2 as $k => $v)
 							$return[$pvm][$kohde] = $this->num($v);
+				ksort($return);
 			}
 			/*
 			echo '<pre>';

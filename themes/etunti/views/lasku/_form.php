@@ -711,7 +711,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<TH class="col-sm-2">Tuote/Palvelu</TH>
 	<TH class="col-sm-1">Määrä</TH>
 	<TH class="col-sm-1">Yksikkö <span class="btn btn-primary btn-xs myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span></TH>
-	<TH class="col-sm-2">Hinta</TH>
+	<TH class="col-sm-1">Hinta</TH>
 	<TH class="col-sm-1">ALV %</TH>
 	<TH class="col-sm-1">ALV</TH>
 	<TH class="col-sm-1">Ale %</TH>
@@ -1608,7 +1608,7 @@ function RivienLuonti(index, value, rivien_teko, from, to, yhteensa, jakso, kuuk
 		   type: 'POST',
 		   data: postdata,
 	           success: function(data){
-	               	console.log(data);
+	               	//console.log(data);
 			data = JSON.parse(data);
 
 			if(tuotteet_palvelut_muoto == 0 && parseInt(data['rivi_kpl']) == 0 && data['yksikko'] !== 'kk')
