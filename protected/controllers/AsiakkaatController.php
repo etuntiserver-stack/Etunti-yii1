@@ -2459,8 +2459,8 @@ $xml = '
     $results = Asiakkaat::model()->findAll($criteria);
 
     // Specify lists for entries to be written to csv after operation.
-    $list_direct_changes = [];  // direct modifications (no extra data).
-    $list_extra_data = [];      // modified numbers with extra data moved to the second field.
+    // $list_direct_changes = [];  // direct modifications (no extra data).
+    // $list_extra_data = [];      // modified numbers with extra data moved to the second field.
     $list_unknown_format = [];  // invalid numbers that must be fixed manually.
 
     foreach ($results as $customer) {
@@ -2499,10 +2499,19 @@ $xml = '
         $list_unknown_format[] = array_merge($line, [$phone_no]);
       } elseif (!empty($matches[2])) {
         // Number has extra data in it; contained in $matches[2].
-        $list_extra_data[] = array_merge($line, [$matches[1], trim($matches[2])]);
+        // $list_extra_data[] = array_merge($line, [$matches[1], trim($matches[2])]);
+        $a = Asiakkaat::model()->findByPk($customer->id);
+        $a->saveAttributes([
+          'puhelin' => $matches[1],
+          'toissijainen_puhelinnumero' => trim($matches[2])
+        ]);
       } else {
         // Number is valid and was directly modified (TODO).
-        $list_direct_changes[] = array_merge($line, [$matches[1]]);
+        // $list_direct_changes[] = array_merge($line, [$matches[1]]);
+        $a = Asiakkaat::model()->findByPk($customer->id);
+        $a->saveAttributes([
+          'puhelin' => $matches[1]
+        ]);
       }
 
       // if (preg_match('/^\+\d+$/', $phone_no)) {
@@ -2516,8 +2525,8 @@ $xml = '
 
     // Specify file targets and loop entries into them.
     $targets = [
-      'puhnrokorjaus_direct_changes.csv' => $list_direct_changes,
-      'puhnrokorjaus_extra_data.csv' => $list_extra_data,
+      // 'puhnrokorjaus_direct_changes.csv' => $list_direct_changes,
+      // 'puhnrokorjaus_extra_data.csv' => $list_extra_data,
       'puhnrokorjaus_unknown_format.csv' => $list_unknown_format
     ];
 
