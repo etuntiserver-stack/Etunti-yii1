@@ -2496,7 +2496,7 @@ $xml = '
       // extra data, the number can be directly fixed.
       if (empty($matches[1])) {
         // Invalid number.
-        $list_unknown_format[] = array_merge($line, [$phone_no]);
+        $list_unknown_format[] = array_merge($line, ['']);
       } elseif (!empty($matches[2])) {
         // Number has extra data in it; contained in $matches[2].
         // $list_extra_data[] = array_merge($line, [$matches[1], trim($matches[2])]);
