@@ -711,7 +711,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<TH class="col-sm-2">Tuote/Palvelu</TH>
 	<TH class="col-sm-1">Määrä</TH>
 	<TH class="col-sm-1">Yksikkö <span class="btn btn-primary btn-xs myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span></TH>
-	<TH class="col-sm-2">Hinta</TH>
+	<TH class="col-sm-1">Hinta</TH>
 	<TH class="col-sm-1">ALV %</TH>
 	<TH class="col-sm-1">ALV</TH>
 	<TH class="col-sm-1">Ale %</TH>
@@ -1519,11 +1519,11 @@ $(".luoRiviTunti").click(function() {
 	var kuukausi = $(this).closest('.panel-body').find("#kuukausi").val();
 	var from = $(this).closest('.panel-body').find("#from").val();
 	var to = $(this).closest('.panel-body').find("#to").val();
-	var kohteet = $(this).closest('.panel-body').find('.etsikohde_alasvetovaliko').val();
+	var valinnat = $(this).closest('.panel-body').find('.etsikohde_alasvetovaliko').val();
 	var tuotePalvelu = $(this).closest(".panel-body").find('.valitseTuote option:selected').val();
 	var tuotePalveluFor = $(this).closest(".panel-body").find('.etsikohde_alasvetovaliko option:selected').attr('for');
-	var tuotteet_palvelut_muoto = parseInt($("#Lasku_tuotteet_palvelut_muoto").val());
 
+	var rivien_teko = ('<?=$asetukset->rivien_teko?>' == '0')? 'perkohde' : 'perpvmkohde';
 	//console.log(tuotePalvelu);
 
 	if (from  === '' && jakso == 'tunti') 
@@ -1546,41 +1546,69 @@ $(".luoRiviTunti").click(function() {
 	     $(this).closest(".panel-body").find('.valitseTuote').css({"border" : "2px #f14010 solid"}).focus();
 	     return false;
 	}
-	if (!kohteet) 
+	if (!valinnat) 
 	{ 
 	    alert('Valitse kohde')
 	    return false;
 
 	} 
 
-	    pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palvelut_muoto,tuotePalveluFor);
+	if(rivien_teko == 'perpvmkohde' && tuotePalveluFor == 'kohde')
+	{
+		console.log('perpvmkohde?from='+from+'&to='+to+'&for='+tuotePalveluFor+'&valinnat='+valinnat)
+	        $.ajax({
+	           url: 'perpvmkohde?from='+from+'&to='+to+'&for='+tuotePalveluFor+'&valinnat='+valinnat,
+	           success: function(data){
+	               	//console.log(data);
+			data = JSON.parse(data);
+			index = 0;
+			$.each(data, function( pvm, kohde_arr ) {
+				$.each(kohde_arr, function( kohde_id, yhteensa ) {
+					index += 1;
+					RivienLuonti(index, kohde_id, rivien_teko, pvm, pvm, yhteensa, jakso, kuukausi, tuotePalvelu, tuotePalveluFor)
+				});
+			});
+	           },
+	           error: function(XMLHttpRequest, textStatus, errorThrown){
+	               	console.log(XMLHttpRequest);
+		   }
+	        });
+
+	} else {
+		pyyntoRiville(jakso, kuukausi, valinnat, rivien_teko, from, to, tuotePalvelu, tuotteet_palvelut_muoto, tuotePalveluFor);
+	}
 });
 
-function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palvelut_muoto,tuotePalveluFor){
-
-
+function pyyntoRiville(jakso,kuukausi,valinnat,rivien_teko,from,to,tuotePalvelu,tuotteet_palvelut_muoto,tuotePalveluFor){
 	$("#tuntienTulos").removeClass("alert bg-danger").html('');
-	var asiakasnumero = $("#Lasku_as_nro option:selected").val();
 	var kpl = 1;
 	var yksikko = 'kpl';
 	var hinta = 0;
+	$.each(valinnat, function( index, value ) {
+		RivienLuonti(index, value, rivien_teko, from, to, 0, jakso, kuukausi, tuotePalvelu, tuotePalveluFor)
+	});
+	jumpToPageBottom();
+}
 
-	    $.each(kohteet, function( index, value ) {
+function RivienLuonti(index, value, rivien_teko, from, to, yhteensa, jakso, kuukausi, tuotePalvelu, tuotePalveluFor){
+
+		var tuotteet_palvelut_muoto = parseInt($("#Lasku_tuotteet_palvelut_muoto").val());
 
 		var postdata = { 
+			rivien_teko : rivien_teko,
 			jakso : jakso, 
 			kuukausi : kuukausi, 
-			asiakasnumero : asiakasnumero, 
+			asiakasnumero : $("#Lasku_as_nro option:selected").val(), 
 			from : from, to : to, 
 			tuotePalvelu : tuotePalvelu, 
 			tuotteet_palvelut_muoto : tuotteet_palvelut_muoto
 		};
 	        $.ajax({
-	           url: 'luoKohteista?id='+value+'&for='+tuotePalveluFor,
+	           url: 'luoKohteista?id='+value+'&for='+tuotePalveluFor+'&tunnit='+yhteensa,
 		   type: 'POST',
 		   data: postdata,
 	           success: function(data){
-	               	console.log(data);
+	               	//console.log(data);
 			data = JSON.parse(data);
 
 			if(tuotteet_palvelut_muoto == 0 && parseInt(data['rivi_kpl']) == 0 && data['yksikko'] !== 'kk')
@@ -1601,8 +1629,7 @@ function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palv
 					alv : data['alv'],
 					hinnasto_rivi_id : data['hinnasto_rivi_id'],
 					yksikko : data['yksikko'],
-					// free_text : data['free_text'],
-					free_text : '',
+					free_text : data['free_text'],
 					rivi_lisays : data['free_text'],
 					tuotePalvelu : tuotePalvelu,
 					tuotteet_palvelut_muoto : tuotteet_palvelut_muoto
@@ -1633,10 +1660,6 @@ function pyyntoRiville(jakso,kuukausi,kohteet,from,to,tuotePalvelu,tuotteet_palv
 	               	console.log(XMLHttpRequest);
 		   }
 	        });
-	    });
-
-	    jumpToPageBottom();
-
 }
 
 $("#Lasku_yid").change(function() {
@@ -1658,9 +1681,6 @@ $("#Lasku_yid").change(function() {
 	   }
         });
 });
-
-
-
 
 $("#Lasku_tyyppi").change(function() {
     var value = $(this).val();

@@ -27,7 +27,7 @@ class LaskuController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_procountor', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_procountor', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet', 'perpvmkohde'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow',  // allow all users to perform 'index' and 'view' actions
@@ -924,7 +924,42 @@ exit;
 		echo 1;
 	}
 
-	public function actionLuoKohteista($id, $for)
+	public function actionPerpvmkohde($from=null, $to=null, $valinnat)
+	{
+
+		$from 	= date ("Y-m-d", strtotime($from));
+		$to 	= date ("Y-m-d", strtotime($to));
+		$return = [];
+		if(!empty($valinnat)){
+			$valinnat_arr 	= explode(",", $valinnat);
+			$tt 		= Tyontekijat::model()->findAll();
+			$tids 		= [];
+			foreach ($tt as $data)
+				$tids[] = $data->id;
+
+			$mobile = Yii::app()->createController('Mobile');
+			if(count($valinnat_arr) > 0)
+			{
+				foreach($valinnat_arr as $kohde)
+					$hyv_tyotunnit_all[$kohde] = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 3, false, 0, true, $kohde, null);
+				foreach($hyv_tyotunnit_all as $kohde => $arr)
+					foreach($arr as $pvm => $arr2)
+						foreach($arr2 as $k => $v)
+							$return[$pvm][$kohde] = $this->num($v);
+				ksort($return);
+			}
+			/*
+			echo '<pre>';
+			print_r($hyv_tyotunnit_all);
+			echo '</pre>';
+			exit;
+			*/
+		}
+		echo json_encode($return);
+		exit;
+	}
+
+	public function actionLuoKohteista($id, $for, $tunnit = 0, $rivi_kpl = 0)
 	{
 
 		if(isset($_POST['from']) and isset($_POST['to']))
@@ -938,44 +973,19 @@ exit;
 			$from = date("Y-m-d",strtotime($_POST['kuukausi'].' first day of this month'));
 			$to = date("Y-m-d",strtotime($from.' last day of this month'));
 		}
-
-		$crit = $this->criteriaKohdeLasku($id, $from, $to);
-		$luetut= $crit['lu'];
-		$toteutuneet = $crit['tot'];
-
-       		$criteria = new CDbCriteria();
-		$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as t_tunnit, COUNT(*) as count ";
-		$criteria->condition = $toteutuneet;
-		$tot = Toteutuneet::model()->find($criteria); 
-	
-	
-	       	$criteria = new CDbCriteria();
-		$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, COUNT(*) as count ";
-		$criteria->condition = $luetut;	
-		$lu = Mobile::model()->find($criteria); 
-
-
-
-	
-/*
-		$kk_kpl = 0;
-		$date1 = new DateTime(date("Y-m-d", strtotime($_POST['from'])));
-		$date2 = new DateTime(date("Y-m-d", strtotime($_POST['to'])));
-		$interval = date_diff($date1, $date2);
-		$kk_kpl =  $interval->m + ($interval->y * 12);
-*/
-
-		$tunnit = 0;
-		$rivi_kpl = 0;
-
-		if(isset($lu->l_tunnit) or isset($tot->t_tunnit))
+		if( $_POST['rivien_teko'] == 'perkohde' )
 		{
-			$tunnit = $this->num($lu->l_tunnit+$tot->t_tunnit);
-			$rivi_kpl = $lu->count+$tot->count;
-		}
+			$tt 		= Tyontekijat::model()->findAll();
+			$tids 		= [];
+			foreach ($tt as $data)
+				$tids[] = $data->id;
 
+			$mobile 		= Yii::app()->createController('Mobile');
+			$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 3, false, 0, false, $id, null);
+			foreach($hyv_tyotunnit_all as $tid => $sec)
+					$tunnit += $this->num($sec);
+
+		}
 		$return = array(
 			'from' => $from,
 			'to' => $to,
@@ -1006,38 +1016,36 @@ exit;
 		//     Palvelu Muoto 1 / Asiakas -->
 
 		// <-- Hinnastot
-		$kohteet = Kohteet::model()->findByPk($id);
-
-
+		$k = Kohteet::model()->findByPk($id);
 		$return['hinnasto_rivi_id'] 	= 0;
 		$return['hinta'] 	= 0;
 		$return['alv'] 		= 0;
 		$return['kpl'] 		= 0;
 		$return['yksikko'] 	= 'kpl';
 
-		$r = $this->hinnastoHintaat($_POST['tuotePalvelu'], $_POST['asiakasnumero'], $kohteet, $tunnit, $rivi_kpl);
+		$r = $this->hinnastoHintaat($_POST['tuotePalvelu'], $_POST['asiakasnumero'], $k, $tunnit, $rivi_kpl);
 		$return['kpl'] 		= (isset($r['kpl']))? $r['kpl'] : '';
 		$return['hinta'] 	= (isset($r['hinta']))? $r['hinta'] : '';
 		$return['alv'] 		= (isset($r['alv']))? $r['alv'] : '';
 		$return['yksikko']	= (isset($r['yksikko']))? $r['yksikko'] : '';
 
 		// <-- Asiakkaan muoto
-		if( isset($kohteet->id) and isset($_POST['tuotteet_palvelut_muoto']) and $_POST['tuotteet_palvelut_muoto'] == 1){
+		if( isset($k->id) and isset($_POST['tuotteet_palvelut_muoto']) and $_POST['tuotteet_palvelut_muoto'] == 1){
 	
-				$return['hinta'] 	= $kohteet->hinta;
-				$return['alv'] 		= $kohteet->alv;
+				$return['hinta'] 	= $k->hinta;
+				$return['alv'] 		= $k->alv;
 
-				if($kohteet->hinta_tyyppi == '1')
+				if($k->hinta_tyyppi == '1')
 				{
 					$return['kpl'] = $tunnit;
 					$return['yksikko'] = 'h';
 				}
-				if($kohteet->hinta_tyyppi == '2')
+				if($k->hinta_tyyppi == '2')
 				{
 					$return['kpl'] = 1;
 					$return['yksikko'] = 'kk';
 				}
-				if($kohteet->hinta_tyyppi == '3')
+				if($k->hinta_tyyppi == '3')
 				{
 					$return['kpl'] = $rivi_kpl;
 					$return['yksikko'] = 'kpl';
@@ -1045,10 +1053,10 @@ exit;
 		}
 		// Asiakkaan muoto -->
 
-		if(isset($kohteet->id))
+		if(isset($k->id))
 		{
-			$return['osoite'] = $kohteet->osoite;
-			$return['free_text'] 	= $return['fromto'].' '.$kohteet->osoite.', '.$kohteet->kaupunki.' '.$kohteet->pnumero;
+			$return['osoite'] 	= $k->osoite;
+			$return['free_text'] 	= (($_POST['rivien_teko'] == 'perpvmkohde')? date("d.m.Y", strtotime($_POST['from'])):$return['fromto']).' '.$k->osoite.', '.$k->kaupunki.' '.$k->pnumero;
 		}
 
 		echo json_encode($return);

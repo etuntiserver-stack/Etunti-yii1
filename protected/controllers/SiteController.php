@@ -462,7 +462,7 @@ class SiteController extends Controller
 
 		// <-- Mobiili
 		$mobile = Yii::app()->createController('Mobile');
-		$tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 2, true, 0);
+		$tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 2, true, 0, false, null, null);
 
 		foreach($tyotunnit_all as $tid => $arvo)
 			$mob_result += $arvo;
