@@ -924,16 +924,11 @@ exit;
 		echo 1;
 	}
 
-	public function actionPerpvmkohde($from=null, $to=null, $for, $valinnat, $jakso, $kuukausi)
+	public function actionPerpvmkohde($from=null, $to=null, $valinnat)
 	{
 
 		$from 	= date ("Y-m-d", strtotime($from));
 		$to 	= date ("Y-m-d", strtotime($to));
-		if( $jakso == 'kk' )
-		{
-			$from = date("Y-m-d",strtotime($kuukausi.' first day of this month'));
-			$to = date("Y-m-d",strtotime($from.' last day of this month'));
-		}
 		$return = [];
 		if(!empty($valinnat)){
 			$valinnat_arr 	= explode(",", $valinnat);
@@ -943,25 +938,14 @@ exit;
 				$tids[] = $data->id;
 
 			$mobile = Yii::app()->createController('Mobile');
-			if(count($valinnat_arr) > 0){
-				if($for == 'kohde')
-				{
-					foreach($valinnat_arr as $kohde)
-						$hyv_tyotunnit_all[$kohde] = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 3, false, 0, true, $kohde, null);
-					foreach($hyv_tyotunnit_all as $kohde => $arr)
-						foreach($arr as $pvm => $arr2)
-							foreach($arr2 as $k => $v)
-								$return[$pvm][$kohde] = $this->num($v);
-				}
-				if($for == 'asiakas')
-				{
-					foreach($valinnat_arr as $asiakas)
-						$hyv_tyotunnit_all[$asiakas] = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 3, false, 0, true, null, $asiakas);
-					foreach($hyv_tyotunnit_all as $asiakas => $arr)
-						foreach($arr as $pvm => $arr2)
-							foreach($arr2 as $k => $v)
-								$return[$pvm][$asiakas] = $this->num($v);
-				}
+			if(count($valinnat_arr) > 0)
+			{
+				foreach($valinnat_arr as $kohde)
+					$hyv_tyotunnit_all[$kohde] = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 3, false, 0, false, $kohde, null);
+				foreach($hyv_tyotunnit_all as $kohde => $arr)
+					foreach($arr as $pvm => $arr2)
+						foreach($arr2 as $k => $v)
+							$return[$pvm][$kohde] = $this->num($v);
 			}
 			/*
 			echo '<pre>';
@@ -988,31 +972,19 @@ exit;
 			$from = date("Y-m-d",strtotime($_POST['kuukausi'].' first day of this month'));
 			$to = date("Y-m-d",strtotime($from.' last day of this month'));
 		}
-/*
-		$crit = $this->criteriaKohdeLasku($id, $from, $to);
-		$luetut= $crit['lu'];
-		$toteutuneet = $crit['tot'];
-
-       		$criteria = new CDbCriteria();
-		$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as t_tunnit, COUNT(*) as count ";
-		$criteria->condition = $toteutuneet;
-		$tot = Toteutuneet::model()->find($criteria);
-	
-	       	$criteria = new CDbCriteria();
-		$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, COUNT(*) as count ";
-		$criteria->condition = $luetut;	
-		$lu = Mobile::model()->find($criteria); 
-*/
-
-/*
-		if(isset($lu->l_tunnit) or isset($tot->t_tunnit))
+		if( $_POST['rivien_teko'] == 'perkohde' )
 		{
-			$tunnit = $this->num($lu->l_tunnit+$tot->t_tunnit);
-			$rivi_kpl = $lu->count+$tot->count;
+			$tt 		= Tyontekijat::model()->findAll();
+			$tids 		= [];
+			foreach ($tt as $data)
+				$tids[] = $data->id;
+
+			$mobile 		= Yii::app()->createController('Mobile');
+			$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 3, false, 0, false, $id, null);
+			foreach($hyv_tyotunnit_all as $tid => $sec)
+					$tunnit += $this->num($sec);
+
 		}
-*/
 		$return = array(
 			'from' => $from,
 			'to' => $to,
@@ -1033,9 +1005,9 @@ exit;
 			{
 			$return['hinta'] 	= $asiakas->hinta;
 			$return['alv'] 		= $asiakas->alv;
-			$return['kpl'] 		= ($_POST['rivien_teko'] == 'perpvmkohde')? $tunnit: 1;
-			$return['yksikko'] 	= ($_POST['rivien_teko'] == 'perpvmkohde')? 'h': 'kk';
-			$return['free_text'] 	= (($_POST['rivien_teko'] == 'perpvmkohde')? date("d.m.Y", strtotime($_POST['from'])):$return['fromto'].' '.$asiakas->osoite.', '.$asiakas->kaupunki.' '.$asiakas->postinumero);
+			$return['kpl'] 		= 1;
+			$return['yksikko'] 	= 'kk';
+			$return['free_text'] 	= $return['fromto'].' '.$asiakas->osoite.', '.$asiakas->kaupunki.' '.$asiakas->postinumero;
 			}
 			echo json_encode($return);
 			exit;
@@ -1044,8 +1016,6 @@ exit;
 
 		// <-- Hinnastot
 		$k = Kohteet::model()->findByPk($id);
-
-
 		$return['hinnasto_rivi_id'] 	= 0;
 		$return['hinta'] 	= 0;
 		$return['alv'] 		= 0;

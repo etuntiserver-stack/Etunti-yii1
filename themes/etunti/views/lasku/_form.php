@@ -1523,7 +1523,7 @@ $(".luoRiviTunti").click(function() {
 	var tuotePalvelu = $(this).closest(".panel-body").find('.valitseTuote option:selected').val();
 	var tuotePalveluFor = $(this).closest(".panel-body").find('.etsikohde_alasvetovaliko option:selected').attr('for');
 
-	var rivien_teko = ('<=$asetukset->rivien_teko?>' == 0)? 'perkohde' : 'perpvmkohde';
+	var rivien_teko = ('<?=$asetukset->rivien_teko?>' == '0')? 'perkohde' : 'perpvmkohde';
 	//console.log(tuotePalvelu);
 
 	if (from  === '' && jakso == 'tunti') 
@@ -1553,11 +1553,11 @@ $(".luoRiviTunti").click(function() {
 
 	} 
 
-	if(rivien_teko == 'perpvmkohde')
+	if(rivien_teko == 'perpvmkohde' && tuotePalveluFor == 'kohde')
 	{
-		console.log('perpvmkohde?from='+from+'&to='+to+'&for='+tuotePalveluFor+'&valinnat='+valinnat+'&jakso='+jakso+'&kuukausi='+kuukausi)
+		console.log('perpvmkohde?from='+from+'&to='+to+'&for='+tuotePalveluFor+'&valinnat='+valinnat)
 	        $.ajax({
-	           url: 'perpvmkohde?from='+from+'&to='+to+'&for='+tuotePalveluFor+'&valinnat='+valinnat+'&jakso='+jakso+'&kuukausi='+kuukausi,
+	           url: 'perpvmkohde?from='+from+'&to='+to+'&for='+tuotePalveluFor+'&valinnat='+valinnat,
 	           success: function(data){
 	               	//console.log(data);
 			data = JSON.parse(data);
@@ -1608,7 +1608,7 @@ function RivienLuonti(index, value, rivien_teko, from, to, yhteensa, jakso, kuuk
 		   type: 'POST',
 		   data: postdata,
 	           success: function(data){
-	               	//console.log(data);
+	               	console.log(data);
 			data = JSON.parse(data);
 
 			if(tuotteet_palvelut_muoto == 0 && parseInt(data['rivi_kpl']) == 0 && data['yksikko'] !== 'kk')

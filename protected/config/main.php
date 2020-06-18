@@ -13,10 +13,14 @@ $is_local = (isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1
 // <-- APPSista kaikki pois
 $server_name	= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
 $is_production	= in_array($server_name, ['apps.etunti.fi']);
+// APPS on auki nyt
+/*
 if ($is_production) {
 	header('Location: https://app.etunti.fi/');
 	exit;
 }
+*/
+
 
 /*
 // <-- Redirect Domain
