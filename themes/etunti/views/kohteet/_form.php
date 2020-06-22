@@ -363,6 +363,12 @@ $(document).ready(function(){
 	?>
 	</div>
 
+  <?php
+  if (isset($model->id)) {
+    $this->renderPartial('omasiistijat', ['kohde_id' => $model->id]);
+  }
+  ?>
+
   </div><div class="col-sm-6">
 
 	<div class="section fill mb5">
