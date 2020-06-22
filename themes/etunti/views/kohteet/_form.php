@@ -365,6 +365,7 @@ $(document).ready(function(){
 
   <?php
   if (isset($model->id)) {
+    echo '<br>';
     $this->renderPartial('omasiistijat', ['kohde_id' => $model->id]);
   }
   ?>

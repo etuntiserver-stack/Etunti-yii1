@@ -755,7 +755,8 @@ $(document).ready(function(){
 		   echo '<div class="section fill mb5">
 		   <h3 class="glyphicon glyphicon-home"></h3>&nbsp;&nbsp;&nbsp; 
 		   '.CHtml::link($v->osoite,'/index.php/kohteet/update?id='.$v->id,array('class'=>'link')).'	       	  
-		   </div>';
+       </div>';
+       $this->renderPartial('//kohteet/omasiistijat', ['kohde_id' => $v->id]);
 		}	
         	?>
 	</div>

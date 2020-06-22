@@ -95,7 +95,6 @@ $div_id = "omasiistijat_{$kohde_id}";
 </style>
 
 <!-- Output collapse button with the formed text. -->
-<br>
 <?php if (empty($workers_query)): ?>
 <button class="omasiistijat-painike" type="button" disabled="disabled"><b>Ei omasiistijöitä</b></button>
 <?php else: ?>
