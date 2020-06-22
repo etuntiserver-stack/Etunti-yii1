@@ -552,6 +552,76 @@ $(document).ready(function(){
 </div>
 
 
+<!-- #region Omasiistijät -->
+<br>
+<div class="row">
+
+  <!--
+    Omasiistijät listataan ulkoisesta näkymästä joka hakee työntekijät AJAXilla
+    ja vaatii kohteen ID sitä varten. Koska työvuoronäkymässä kohde on vaihtuva
+    (lista, josta voidaan valita kohde), tämä kohde ID täytyy antaa
+    omasiistijänäkymälle dynaamisesti.
+
+    Ensiksi, annetaan esitäytetty arvo placeholder kenttään (placeholder_id).
+    Kun kohde muutetaan, vaihdetaan myös omasiistijälistan kohde ID
+  -->
+
+  <?php
+  $omasiistijat_div_id = 'omasiistijat_lista'; // itse omasiistijälistan id
+  $omasiistijat_placeholder_id = 'omasiistijat_kohde'; // piilotetun placeholderkentän id
+  ?>
+
+  <!-- Alue omasiistijälistalle oikeassa alanurkassa työvuoronäkymässä. -->
+  <div class="col-sm-5">
+    <?= $this->renderPartial('//kohteet/omasiistijat', [
+      'kohde_id' => 0,
+      'div_id' => $omasiistijat_div_id,
+      'placeholder_id' => $omasiistijat_placeholder_id
+    ]); ?>
+  </div>
+
+  <script>
+
+    /**
+     * Sivun ladatessa, asetetaan kohde ID omasiistijälistalle ja rekisteröidään
+     * eventti kohdelistan valinnan muutokseen, joka päivittää tämän ID:n.
+     */
+    $(function() {
+
+      // Määritetään kohdelistan ID, joka vaihtuu jos työvuoro on osa toistuvaa ketjua.
+      const selectId = '<?= $toistuva ? 'ToistuvatTyovuorot_kohde' : 'Tyovuoroot_kohde' ?>'; 
+
+      /**
+       * Funktio joka resetoi omasiistijälistan ja asettaa tämänhetkisen valitun
+       * kohteen sen uudeksi ID:ksi, jonka perusteella omasiistijät haetaan kun
+       * kyseinen lista avataan.
+       */
+      const paivitaOmasiistijaLista = function() {
+
+        // Piilotetaan mahdollisesti auki oleva lista.
+        $('#<?= $omasiistijat_div_id ?>.in').collapse('hide');
+
+        // Haetaan valittu arvo kohdelistasta.
+        const valittuKohde = $(`#${selectId} option:selected`).val();
+
+        // Asetetaan omasiistijänäkymän piilotettuun kenttään uusi ID, jonka
+        // avulla omasiistijänäkymä hakee omasiistijät listalleen.
+        $('#<?= $omasiistijat_placeholder_id ?>').text(valittuKohde);
+      };
+
+      // Vaihdetaan omasiistijälistan tila aina kun kohde vaihdetaan.
+      $(`#${selectId}`).on('change', function(e) {
+        paivitaOmasiistijaLista();
+      });
+
+      // Asetetaan kohde omasiistijälistalle heti työvuoroa avatessa.
+      paivitaOmasiistijaLista();
+    });
+  </script>
+
+  <!-- #endregion Omasiistijät -->
+</div>
+
 <div class="row">
 	<div id="lisapalvelu_lista">
 	<?php $lisa_tuotteet = json_decode($model->lisa_tuotteet, true); ?>

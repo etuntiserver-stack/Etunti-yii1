@@ -6,15 +6,15 @@
  */
 
 // Require valid target ID.
-if (empty($kohde_id)) {
+if (!isset($kohde_id)) {
   throw new \Exception("virhe: kohdetta ei ole määritetty. jos vika jatkuu, ota yhteys ylläpitoon.");
 }
 
+// If div id is specified, use it instead of the default one. It should always be unique anyway.
+$div_id = (!empty($div_id)) ? $div_id : "omasiistijat_{$kohde_id}";
+
 // Check if custom placeholder div ID is provided. Otherwise, use default.
 $placeholder_id = (!empty($placeholder_id)) ? $placeholder_id : 'omasiistijat_kohde';
-
-// Specify ID for the div. This should be unique as there may be many locations on a page.
-$div_id = "omasiistijat_{$kohde_id}";
 
 ?>
 
