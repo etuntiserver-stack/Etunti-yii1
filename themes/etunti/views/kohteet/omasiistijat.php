@@ -5,72 +5,13 @@
  * kortille ja asiakkaan/työvuoron kortille.
  */
 
-
-//?   /*
-//?    * Tässä laajennettuna SQL haku joka suoritetaan myöhemmin, jolla haetaan
-//?    * työntekijät joilla on hyväksyttyjä tunteja kyseisessä kohteessa.
-//?    *
-//?    * Haetaan tiedot niiltä työntekijöiltä, jotka koskee hakua. Alempana
-//?    * tehtävä ID rajaus rajaa työntekijät vain niihin, joilla on hyväksyttyjä
-//?    * tunteja kyseisessä kohteessa.
-//?    */
-//=
-//=   SET @kohde_id = 2654;
-//=   SELECT id, tekijan_nimi, sukunimi
-//=   FROM sivex_ttekijat
-//=
-//?   /* Vain aktiiviset työntekijät (1:aktiivinen, 2:passiivinen, 3:epäaktiivinen) */
-//=   WHERE aktiivinen = 1
-//=
-//?   /* Rajataan työntekijät vain niihin, joilla on allaolevan haun perusteella hyväksyttyjä tunteja kohteessa. */
-//=   AND id IN
-//=   (
-//?     /* Haetaan työntekijä ID lista kohteen hyväksytyistä tunneista. */
-//=     SELECT tid FROM
-//=     (
-//=       SELECT tid FROM sivexkuitti
-//=         WHERE kohdenID = @kohde_id AND hyvaksytty != ''
-//=       UNION ALL
-//=       SELECT tid FROM sivexkuitti_repaired
-//=         WHERE kohdenID = @kohde_id AND hyvaksytty != ''
-//=     ) t
-//?     /* Groupataan, jotta päällekkäiset ID:t katoavat (jokainen tt vain kerran listalla) */
-//=     GROUP BY tid
-//=   );
-
-
-
 // Require valid target ID.
-if (empty($kohde_id))
+if (empty($kohde_id)) {
   throw new \Exception("virhe: kohdetta ei ole määritetty. jos vika jatkuu, ota yhteys ylläpitoon.");
+}
 
-/** @var CDbConnection */
-$connection = Yii::app()->db1;
-
-// Get list of workers that have been to this target.
-// See top of file for explanation.
-$workers_query = $connection->createCommand("
-  SELECT id, tekijan_nimi, sukunimi
-    FROM sivex_ttekijat
-    WHERE aktiivinen = 1
-    AND id IN
-    (
-      SELECT tid FROM
-      (
-        SELECT tid
-          FROM sivexkuitti
-          WHERE kohdenID = :kohde_id
-          AND hyvaksytty != ''
-        UNION ALL
-        SELECT tid
-          FROM sivexkuitti_repaired
-          WHERE kohdenID = :kohde_id
-          AND hyvaksytty != ''
-      ) t
-      GROUP BY tid
-    )")
-  ->bindValue(':kohde_id', $kohde_id)
-  ->queryAll(false);
+// Check if custom placeholder div ID is provided. Otherwise, use default.
+$placeholder_id = (!empty($placeholder_id)) ? $placeholder_id : 'omasiistijat_kohde';
 
 // Specify ID for the div. This should be unique as there may be many locations on a page.
 $div_id = "omasiistijat_{$kohde_id}";
@@ -95,20 +36,85 @@ $div_id = "omasiistijat_{$kohde_id}";
 </style>
 
 <!-- Output collapse button with the formed text. -->
-<?php if (empty($workers_query)): ?>
-<button class="omasiistijat-painike" type="button" disabled="disabled"><b>Ei omasiistijöitä</b></button>
-<?php else: ?>
 <button class="omasiistijat-painike" type="button" data-toggle="collapse" data-target="#<?= $div_id; ?>"><b>Näytä omasiistijät</b></button>
 <br><br>
 
+<!-- Hidden element that holds the target location (kohde) ID. This is initially
+     provided from the renderPartial call, but may be modified externally in
+     order to change the target, e.g. in shift view (työvuoronäkymä). -->
+<div id="<?= $placeholder_id ?>" style="display:none"><?= $kohde_id ?></div>
+
 <!-- Form the hidden box containing the workers that have been to this location. -->
-<div id="<?= $div_id; ?>" class="collapse">
+<div id="<?= $div_id; ?>" class="omasiistijat-collapse collapse">
   <div class="well well-sm">
       <?php
-      foreach ($workers_query as $result) {
-        echo CHtml::link("{$result[1]} {$result[2]}", ['tyontekijat/update', 'id' => $result[0]]) . '<br>';
-      }
+      // foreach ($workers_query as $result) {
+      //   echo CHtml::link("{$result[1]} {$result[2]}", ['tyontekijat/update', 'id' => $result[0]]) . '<br>';
+      // }
       ?>
   </div>
 </div>
-<?php endif; ?>
+
+<script>
+  $(function() {
+
+    // Hook to the 'show.bs.collapse' event of .collapse element to load workers
+    // via AJAX when the element is clicked and opened.
+    $('#<?= $div_id; ?>').on('show.bs.collapse', function(e) {
+
+      // Hide any other collapsed list.
+      $('.omasiistijat-collapse.collapse.in').collapse('hide');
+
+      const targetId = $('#<?= $placeholder_id ?>').text();
+      const workersDivId = '<?= $div_id; ?>';
+
+      // Request list of workers that have been to this location.
+      $.ajax(`${location.protocol}//${location.host}/index.php/kohteet/omasiistijat_ajax`, {
+
+        type: 'POST',
+        data: {
+          id: targetId
+        },
+
+        error: function(xhr, status, error) {
+          $(`#${workersDivId} .well`).html(`Pyynnössä tapahtui virhe: ${xhr.responseText}`);
+          console.log(`(Omasiistijähaku kohteelle ${targetId}) Error: ${xhr.responseText}`);
+        },
+
+        success: function(data) {
+
+          console.log(`(Omasiistijähaku kohteelle ${targetId}) Received response, length: ${data.length}`);
+
+          // Try parse response JSON.
+          let parsed = null;
+          try {
+            parsed = JSON.parse(data);
+          } catch (e) {
+            console.log(`(Omasiistijähaku kohteelle ${targetId}) Error: Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
+            return;
+          }
+
+          if (typeof(parsed) != "object") {
+
+            // Parsing failed. Notify log and let it go.
+            console.log(`(Omasiistijähaku kohteelle ${targetId}) Error: Parsed data is unusable (not an object).`);
+
+          } else if (parsed.length == 0) {
+
+            // Data is empty. Notify user.
+            $(`#${workersDivId} .well`).empty();
+            $(`#${workersDivId} .well`).text('Tällä kohteella ei ole omasiistijöitä.');
+
+          } else {
+
+            // Everything is normal; output received workers list.
+            $(`#${workersDivId} .well`).empty();
+            parsed.forEach((item, index) => {
+              $(`#${workersDivId} .well`).append($(`<a href="/index.php/tyontekijat/update?id=${item[0]}">${item[1]} ${item[2]}</a><br>`));
+            });
+          }
+        }
+      })
+    });
+  });
+</script>

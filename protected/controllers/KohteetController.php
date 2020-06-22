@@ -32,7 +32,7 @@ class KohteetController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index', 'view','osoite', 'autotaytaminen', 'createfromasiakas', 'googlemap', 'googlemap_k', 'massamuokkaus'),
+				'actions'=>array('admin','delete','create','update','index', 'view','osoite', 'autotaytaminen', 'createfromasiakas', 'googlemap', 'googlemap_k', 'massamuokkaus', 'omasiistijat_ajax'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -600,7 +600,86 @@ class KohteetController extends Controller
 		$this->render('admin',array(
 			'model'=>$model,
 		));
-	}
+  }
+
+  /**
+   * Get list of workers that have approved shifts/cycles in a target location.
+   *
+   * Tässä laajennettuna SQL haku joka suoritetaan myöhemmin, jolla haetaan
+   * työntekijät joilla on hyväksyttyjä tunteja kyseisessä kohteessa.
+   *
+   * Haetaan tiedot niiltä työntekijöiltä, jotka koskee hakua. Alempana tehtävä
+   * ID rajaus rajaa työntekijät vain niihin, joilla on hyväksyttyjä tunteja
+   * kyseisessä kohteessa.
+   *
+   * SET @kohde_id = 2654;
+   * SELECT id, tekijan_nimi, sukunimi
+   * FROM sivex_ttekijat
+   *
+   * // Vain aktiiviset työntekijät (1:aktiivinen, 2:passiivinen, 3:epäaktiivinen)
+   * WHERE aktiivinen = 1
+   *
+   * // Rajataan työntekijät vain niihin, joilla on allaolevan haun perusteella hyväksyttyjä tunteja kohteessa.
+   * AND id IN (
+   *   // Haetaan työntekijä ID lista kohteen hyväksytyistä tunneista.
+   *   SELECT tid FROM (
+   *     SELECT tid FROM sivexkuitti
+   *     WHERE kohdenID = @kohde_id AND hyvaksytty != ''
+   *     UNION ALL
+   *     SELECT tid FROM sivexkuitti_repaired
+   *     WHERE kohdenID = @kohde_id AND hyvaksytty != ''
+   *   ) t
+   *   // Groupataan, jotta päällekkäiset ID:t katoavat (jokainen tt vain kerran listalla)
+   *   GROUP BY tid
+   * );
+   *
+   * @param int $id
+   * ID of the location (kohde).
+   */
+  public function actionOmasiistijat_ajax($id = null)
+  {
+    // Get possible POST value for ID.
+    if (isset($_POST['id']) && is_numeric($_POST['id'])) {
+      $id = (int)$_POST['id'];
+    }
+
+    // Require valid ID.
+    if (empty($id) || !is_numeric($id)) {
+      throw new \Exception('Kohteen ID ei annettu omasiistijälistaa varten.');
+    }
+
+    /** @var CDbConnection */
+    $connection = Yii::app()->db1;
+
+    // Get list of workers that have been to this target.
+    // See function documentation for explanation.
+    $workers = $connection->createCommand("
+      SELECT id, tekijan_nimi, sukunimi
+        FROM sivex_ttekijat
+        WHERE aktiivinen = 1
+        AND id IN
+        (
+          SELECT tid FROM
+          (
+            SELECT tid
+              FROM sivexkuitti
+              WHERE kohdenID = :kohde_id
+              AND hyvaksytty != ''
+
+            UNION ALL
+
+            SELECT tid
+              FROM sivexkuitti_repaired
+              WHERE kohdenID = :kohde_id
+              AND hyvaksytty != ''
+          ) t
+          GROUP BY tid
+      )")
+      ->bindValue(':kohde_id', $id)
+      ->queryAll(false);
+
+    echo json_encode($workers);
+  }
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
