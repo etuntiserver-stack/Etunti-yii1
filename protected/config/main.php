@@ -8,7 +8,7 @@ error_reporting(E_ALL & ~E_WARNING);
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 
-$is_local = (isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1'))? true : false;
+$is_local = in_array($_SERVER['REMOTE_ADDR'] ?? '', ['::1', '127.0.0.1']);
 
 // <-- APPSista kaikki pois
 $server_name	= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
