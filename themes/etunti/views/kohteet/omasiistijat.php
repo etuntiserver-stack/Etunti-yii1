@@ -1,21 +1,18 @@
+<!--
+  Piilotettu lista kohteen omasiistijöistä, joka voidaan sijoittaa kohteen
+  kortille ja asiakkaan/työvuoron kortille.
+
+  Vaaditaan kohde ID; muuten, ei tehdä mitään.
+-->
+
+<?php if (isset($kohde_id)): ?>
+
 <?php
-
-/**
- * Piilotettu lista kohteen omasiistijöistä, joka voidaan sijoittaa kohteen
- * kortille ja asiakkaan/työvuoron kortille.
- */
-
-// Require valid target ID.
-if (!isset($kohde_id)) {
-  throw new \Exception("virhe: kohdetta ei ole määritetty. jos vika jatkuu, ota yhteys ylläpitoon.");
-}
-
 // If div id is specified, use it instead of the default one. It should always be unique anyway.
 $div_id = (!empty($div_id)) ? $div_id : "omasiistijat_{$kohde_id}";
 
 // Check if custom placeholder div ID is provided. Otherwise, use default.
 $placeholder_id = (!empty($placeholder_id)) ? $placeholder_id : 'omasiistijat_kohde';
-
 ?>
 
 <style>
@@ -118,3 +115,5 @@ $placeholder_id = (!empty($placeholder_id)) ? $placeholder_id : 'omasiistijat_ko
     });
   });
 </script>
+
+<?php endif; ?>
