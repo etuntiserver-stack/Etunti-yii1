@@ -645,7 +645,7 @@ class KohteetController extends Controller
 
     // Require valid ID.
     if (empty($id) || !is_numeric($id)) {
-      throw new \Exception('Kohteen ID ei annettu omasiistijälistaa varten.');
+      //throw new \Exception('Kohteen ID ei annettu omasiistijälistaa varten.');
     }
 
     /** @var CDbConnection */
