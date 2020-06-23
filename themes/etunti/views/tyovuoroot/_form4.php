@@ -664,14 +664,21 @@ $(document).ready(function(){
       const omasiistijaTarkistus = function() {
         let siistijat = [];
         let omasiistijaValittu = false;
-        $('#tyopari-container .multiselect-container li.active a label input').each(function() {
-          if (omasiistijat.includes(this.value)) {
-            console.log(this.value);
-            console.log(omasiistijat);
-            omasiistijaValittu = true;
-            return false; // break
-          }
-        });
+
+        // Tarkistetaan, onko päätekijä (yläreunan valikko) omasiistijöissä. Jos
+        // ei ole, loopataan valitut tekijät työparilistalla tarkistusta varten.
+        if (omasiistijat.includes($('#tekijanVaihdo option:selected').val())) {
+          omasiistijaValittu = true;
+        } else {
+          $('#tyopari-container .multiselect-container li.active a label input').each(function() {
+            if (omasiistijat.includes(this.value)) {
+              omasiistijaValittu = true;
+              return false; // break
+            }
+          });
+        }
+
+        // Näytetään/piilotetaan varoitus valintojen perusteella.
         if (omasiistijaValittu === true) {
           $('#omasiistija-varoitus').hide();
         } else {
@@ -685,9 +692,10 @@ $(document).ready(function(){
         kohteenVaihto();
       });
 
-      // Aina kun työparilistalta valitaan työntekijä, tarkistetaan omasiistijän
-      // tilanne uusiksi, jotta varoitus voidaan näyttää/piilottaa.
-      $('#tyopari-container .mult').change(function() {
+      // Aina kun työntekijä vaihdetaan yläreunan valikosta, tarkistetaan
+      // omasiistijän tilanne uusiksi, jotta varoitus voidaan näyttää/piilottaa.
+      // Sama tehdään kun valintoja muutetaan työparilistalla.
+      $('#tekijanVaihdo, #tyopari-container .mult').change(function() {
         omasiistijaTarkistus();
       });
 
