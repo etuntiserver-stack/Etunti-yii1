@@ -905,7 +905,7 @@ $(document).ready(function(){
 		  success:function(data){
 			thisDataReturn = JSON.parse(data);
 			console.log(data);
-			laatikonPaivays(thisDataReturn);
+			laatikonPaivays();
 			if( thisDataReturn['sahkoposti'] ){
 				alert(thisDataReturn['sahkoposti']);
 				return false;
@@ -924,55 +924,39 @@ $(document).ready(function(){
 	});
 
 
+  function laatikonPaivays(){
+	$.ajax({
+		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did4?from=<?=$haku_from?>&to=<?=$haku_to?>',
+		type: 'POST',
+		data: { tids : getAllTids() },
+		success:function(data){
+			data = JSON.parse(data);
+			//console.log(data);
+			$.tv_arr_update(data);
+			$.vkolaskenta(getAllTids());
+		  	$('#showres').modal('hide');
+		},error:function(data){
+		  	console.log(data);
+			//window.location.href=location.protocol + "//" + location.host + '/index.php';
+		}
+	});
+  }
 
-function laatikonPaivays(thisDataReturn){
-
-		var splDID = [];
-		var did = '';
-		var ilmoitus = '';
-		$(thisDataReturn).each(function( iarr, arr ) {
-		 $(arr).each(function( i, d ) {
-		 //console.log(d['pvm']);
-
-	  	    $.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
-			type:'GET',
-			data: { "pvm" : d['pvm'], "tid" : d['tid'], kohde : '', "from" : "ajax" },
-			  success:function(data){
-			  console.log(data);
-
-
-			  if( $('#'+d['ymd']+'_'+d['tid']).length )
-			  {
-			    $('#'+d['ymd']+'_'+d['tid']).html(JSON.parse(data));
-			    if(parent.location.href.match(/index/))
-			    {
-				var ThisHeight = $('#'+d['ymd']+'_'+d['tid']).height();
-				var FirstHeight = $('#first_'+d['tid']).height(ThisHeight);
-			    }
-			    if(parent.location.href.match(/tv2/))
-			    {
-				var ThisHeight = $('#'+d['ymd']+'_'+d['tid']).height();
-				var FirstHeight = $('#first_'+d['ymd']).height(ThisHeight);
-			    }
-
-
-			  }
-
-
-			  },
-			  error:function(data){
-			  console.log(data);
-			  }
-	 	    });
-
-		 });
+  function getAllTids(){
+	var tids = [];
+	tids.push($('#Tyovuoroot_tid option:selected').val());
+	/* Työpari */
+	var tyopaari = $('#tyopaari').val();
+	if(tyopaari !== null){
+		//console.log('Uudet työparit: ' + tyopaari);
+		$(tyopaari).each(function( index, val ) {
+			tids.push(val);
 		});
-
-
-
-}
-
+	}
+	/* Työpari */
+	//console.log('Tids joille päivitetään laatikko: ' + tids);
+	return tids;
+  }
 
   function laskePituus(){
 

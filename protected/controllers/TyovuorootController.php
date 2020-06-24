@@ -4246,8 +4246,12 @@ class TyovuorootController extends Controller
 
 	if(!isset($_POST['Tyovuoroot']))
 	{
+		$haku_from = date("Y-m-d", strtotime(Yii::app()->session['from']));
+		$haku_to = date("Y-m-d", strtotime(Yii::app()->session['to']));
 		$this->renderPartial('uusitilaus',array(
 			'model'=>$model,
+			'haku_from' => $haku_from,
+			'haku_to' => $haku_to
 		));
 	?>
           </div>
