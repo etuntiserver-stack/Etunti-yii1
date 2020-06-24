@@ -2,14 +2,28 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
-//print_r(Yii::app()->getSession()->getSessionId());
+$criteria = new CDbCriteria();
+$criteria->condition = "
+	DATE(STR_TO_DATE(pto, '%d.%m.%Y')) < DATE(STR_TO_DATE(pfrom, '%d.%m.%Y'))
+";
+$tv = ToistuvatTyovuorot::model()->findAll($criteria);
+echo '<h3>Väärät aloitus ja lopetus päivät: '.count($tv).'</h3>';
+foreach($tv as $item){
+	echo 'ID: '.$item->id.'<b> '.$item->pfrom.'-'.$item->pto.', viikkoja-'.$item->viikkoja.' , Osoite-'.$item->osoite.'</b><br>';
+}
 
-//phpinfo();
+$criteria = new CDbCriteria();
+$criteria->condition = "
+	length(new_poistettu_pvm) > 2000
+";
+$tv = ToistuvatTyovuorot::model()->findAll($criteria);
+echo '<h3>Liika poistetut päivät: '.count($tv).'</h3>';
+foreach($tv as $item){
+	echo 'ID: '.$item->id.' <b>'.$item->pfrom.'-'.$item->pto.', viikkoja-'.$item->viikkoja.' , Osoite-'.$item->osoite.'</b><br>';
+}
+exit;
 
-//echo '<pre>';
-//print_r($arr);
-//echo '</pre>';
-echo date("H:i");
+
 
 if(isset($_GET['mail'])){
 	$m = $_GET['mail'];
@@ -25,8 +39,6 @@ if(isset($_GET['mail'])){
 	}
 }
 
-//echo dirname(Yii::app()->getBasePath()).'/img/tekijat/'.strtolower(Yii::app()->user->domain);
-phpinfo();
 
 $this->breadcrumbs=array(
 	Yii::t('main', 'Viestintä')=>array('index'),

@@ -1625,6 +1625,7 @@ class TyovuorootController extends Controller
 	{
 
 		// <-- Tyopaari korjaus SIIRTO takia
+		/*
       		$criteria = new CDbCriteria(); // AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) > '2020-06-01'
 		$criteria->condition = "
 			tyopaari LIKE '%[\"%' AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) > '2020-06-01'
@@ -1651,6 +1652,7 @@ class TyovuorootController extends Controller
 				}
 			}
 		}
+		*/
 		//     Tyopaari korjaus SIIRTO takia -->
 
 
