@@ -4747,84 +4747,96 @@ class TyovuorootController extends Controller
     // Check variables and do all validation first. If anything is wrong even in
     // one action, later in the list of actions, cancel all operations. Do
     // changes only if everything is well.
+    $errors = [];
 
     // Require list of ID(s).
     if (!isset($_POST['ids']) || !is_array($_POST['ids'])) {
-      echo 'Virhe: Massamuokkaus vaatii listan työvuoroista (ID) joille toiminto suoritetaan. Toimintoja ei ole suoritettu.';
-      return;
+      $errors[] = 'Massamuokkaus vaatii listan työvuoroista (ID) joille toiminto suoritetaan.';
     } else {
       $ids = $_POST['ids'];
-    }
 
-    // Validate ID(s) (numeric).
-    foreach ($ids as $id) {
-      if (!is_numeric($id)) {
-        echo 'Virhe: Yksi tai useampi massamuokkaukselle annettu työvuoron ID on virheellinen. Toimintoja ei ole suoritettu.';
-        return;
+      // Validate ID(s) (numeric).
+      foreach ($ids as $id) {
+        if (!is_numeric($id)) {
+          $errors[] = 'Yksi tai useampi massamuokkaukselle annettu työvuoron ID on virheellinen.';
+          break;
+        }
       }
     }
 
     // Require list of action(s).
     if (!isset($_POST['actions']) || !is_array($_POST['actions'])) {
-      echo 'Virhe: Yksi tai useampi massamuokkaukselle annettu toiminto on virheellinen. Toimintoja ei ole suoritettu.';
-      return;
+      $errors[] = 'Yksi tai useampi massamuokkaukselle annettu toiminto on virheellinen.';
     } else {
       $actions = $_POST['actions'];
+
+      // Validate list of action(s).
+      $validated_actions = []; // temp list to avoid duplicate checks and duplicate final actions.
+                               // this should be used when looping and performing actions instead.
+      foreach ($actions as $action) {
+
+        // Avoid duplicate actions.
+        if (in_array($action, $validated_actions)) {
+          continue;
+        }
+
+        // Check that value is a string.
+        if (!is_string($action)) {
+          $errors[] = 'Yksi tai useampi massamuokkaukselle annettu toiminto on virheellinen.';
+          break;
+        }
+
+        // Do action-specific validation.
+        switch ($action) {
+          case 'cancel':
+
+            // Require cancel_type parameter.
+            if (!isset($_POST['cancel_type'])) {
+              $errors[] = 'Peruuttaminen (cancel) vaatii peruuttamistyypin valinnan (cancel_type).';
+              break;
+            } else {
+              $cancel_type = $_POST['cancel_type'];
+            }
+
+            // Validate cancel_type parameter.
+            if (!is_numeric($cancel_type)) {
+              $errors[] = 'Peruuttamistyypin valinta on viallinen. Sallitut arvot: 1 (peruutettu), 2 (peruutettu laskutettava).';
+              break;
+            }
+
+            break;
+
+            // If action was not handled, choice is invalid; return error.
+          default:
+            $errors[] = "Virhe: Massamuokkaukselle annettu toiminto '$action' on virheellinen/ei tuettu.";
+            break;
+        }
+
+        $validated_actions[] = $action;
+      }
     }
 
-    // Validate list of action(s).
-    $validated_actions = []; // temp list to avoid duplicate checks and duplicate final actions.
-    // this should be used when looping and performing actions instead.
-    foreach ($actions as $action) {
-
-      // Avoid duplicate actions.
-      if (in_array($action, $validated_actions)) {
-        continue;
-      }
-
-      // Check that value is a string.
-      if (!is_string($action)) {
-        echo 'Virhe: Yksi tai useampi massamuokkaukselle annettu toiminto on virheellinen. Toimintoja ei ole suoritettu.';
-        return;
-      }
-
-      // Do action-specific validation.
-      switch ($action) {
-        case 'cancel':
-
-          // Require cancel_type parameter.
-          if (isset($_POST['cancel_type'])) {
-            echo 'Virhe: Peruuttaminen (cancel) vaatii peruuttamistyypin valinnan (cancel_type). Toimintoja ei ole suoritettu.';
-            return;
-          } else {
-            $cancel_type = $_POST['cancel_type'];
-          }
-
-          // Validate cancel_type parameter.
-          if (!is_numeric($cancel_type)) {
-            echo 'Virhe: Peruuttamistyypin valinta on viallinen. Sallitut arvot: 1 (peruutettu), 2 (peruutettu laskutettava). Toimintoja ei ole suoritettu.';
-            return;
-          }
-
-          break;
-
-          // If action was not handled, choice is invalid; return error.
-        default:
-          echo "Virhe: Massamuokkaukselle annettu toiminto '$action' on virheellinen/ei tuettu. Toimintoja ei ole suoritettu.";
-          return;
-      }
-
-      $validated_actions[] = $action;
+    // Return if any validation errors occured.
+    if (!empty($errors)) {
+      echo json_encode(['errors' => $errors]);
+      return;
     }
 
     // All is good; perform actions.
+    $results = [];
     foreach ($validated_actions as $action) {
       switch ($action) {
         case 'cancel':
           // TODO
-          echo 'Peruutettu';
+          $results[] = 'Vuorot merkitty peruutetuiksi.';
           break;
       }
+    }
+
+    if (!empty($errors)) {
+      echo json_encode(['results' => $results, 'errors' => $errors]);
+    } else {
+      echo json_encode(['results' => $results]);
     }
   }
 

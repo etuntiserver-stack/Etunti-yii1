@@ -124,7 +124,7 @@
                     <option value="2">Peruutettu laskutettava</option>
                   </select>
                   <input id="massedit-cancel-btn" type="button" class="btn btn-warning btn-lg haemob btn-block myBgColors" value="Merkitse peruutetuksi" disabled="disabled">
-                  <span id="massedit-cancel-result" class="text-success" style="display:none"></span>
+                  <div id="massedit-cancel-results" class="well well-sm" style="display:none"></div>
                 </div>
               </div>
           </div>
@@ -249,53 +249,102 @@ $(document).ready(function(){
     // Prevent default action, if any.
     e.preventDefault();
 
-    // Hide possible previous result text.
-    $('#massedit-cancel-result').css('display', 'none');
+    // Empty and hide possible previous results and disable the operation button.
+    $('#massedit-cancel-results').css('display', 'none').empty();
+    $('#massedit-cancel-btn').prop('disabled', true);
 
     // Get all checked selector checkboxes, map their value and convert to array.
     const ids = $(':checkbox.massedit-checkbox:checked').map((i,e) => { return $(e).val(); }).toArray();
 
-    // Set cancel type, which should be 1 (peruutettu) or 2 (peruutettu laskutettava).
+    // Get cancel type, which should be 1 (peruutettu) or 2 (peruutettu laskutettava).
     const cancelType = $('#massedit-cancel-type').val();
-    if (!(cancelType in [1, 2])) {
-      console.log(`Invalid choice ${cancelType} when trying to mass cancel.`);
-      alert('Viallinen valinta massaperuutukselle.');
+
+    // Validate ids and type before performing request.
+    if (ids.length == 0) {
+      console.log(`Error before mass edit operation: ids array is empty (could not find checked boxes).`);
+      $('#massedit-cancel-results')
+        .append(`<span class="text-danger">Virhe: Ei valittuja työvuoroja. Jos tämä ei pidä paikkaansa, ota yhteys ylläpitoon.</span><br>`)
+        .append('<span class="text-alert">Ei suoritettuja toimintoja. Tarkista virheet.</span><br>')
+        .css('display', 'block');
+      $('#massedit-cancel-btn').prop('disabled', false);
       return;
-    }
+    } else if ($.inArray(cancelType, ['1', '2']) == -1) {
+      console.log(`Error before mass edit operation: cancel type "${cancelType}" is invalid (not 1 or 2).`);
+      $('#massedit-cancel-results')
+        .append(`<span class="text-danger">Virhe: Viallinen valinta massaperuutukselle.</span><br>`)
+        .append('<span class="text-alert">Ei suoritettuja toimintoja. Tarkista virheet.</span><br>')
+        .css('display', 'block');
+      $('#massedit-cancel-btn').prop('disabled', false);
+      return;
+    } else {
 
-    // Disable send button before AJAX request.
-    $('#massedit-cancel-btn').prop('disabled', true);
+      // Request mass edit via AJAX.
+      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/massedit`, {
 
-    // Request mass edit via AJAX.
-    $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/massedit`, {
+        type: 'POST',
+        data: {
+          actions: ['cancel'],
+          cancel_type: $('#massedit-cancel-type').val(),
+          ids: ids
+        },
 
-      type: 'POST',
-      data: {
-        actions: ['cancel'],
-        cancel_type: $('#massedit-cancel-type').val(),
-        ids: ids
-      },
+        error: function (xhr, status, error) {
+          console.log(xhr.responseText);
+          $('#massedit-cancel-results').append(`<span class="text-danger">Sisäinen virhe: ${xhr.responseText}. Jos vika jatkuu, ota yhteys ylläpitoon.</span><br>`);
+        },
 
-      error: function (xhr, status, error) {
-        alert(xhr.responseText);
-        console.log(xhr.responseText);
-      },
+        success: function (data) {
 
-      success: function (data) {
-
-        if (data.length == 0) {
-          // Data is empty; this means something is very wrong. TODO
-          console.log("Invalid response (empty response).");
-        } else {
           console.log(`Received response, length: ${data.length}:\n${data}`);
 
-          // Output result and enable button again.
-          $('#massedit-cancel-result').text(data);
-          $('#massedit-cancel-result').css('display', 'inline');
+          // Try parse response JSON.
+          let parsed = null;
+          try {
+            parsed = JSON.parse(data);
+          } catch (e) {
+            console.log(`Failed to parse response JSON. Error: ${e}`);
+          }
+
+          if (typeof (parsed) != "object") {
+
+            // Parsing failed. Notify log and let it go.
+            console.log("Parsed data is unusable (not an object).");
+
+          } else if (parsed.length == 0) {
+
+            // Data is empty; this means something is very wrong. TODO
+            console.log("Invalid response (empty response).");
+
+          } else {
+
+            // Parsed data is usable. First, notify about any errors.
+            if ("errors" in parsed) {
+              parsed.errors.forEach((val, index) => {
+                console.log(`Error from mass edit operation: ${val}`);
+                $('#massedit-cancel-results').append(`<span class="text-danger">Virhe: ${val}</span><br>`);
+              });
+            }
+
+            // Notify about performed actions, even if errors occured.
+            if ("results" in parsed) {
+              parsed.results.forEach((val, index) => {
+                console.log(`Result from mass edit operation: ${val}`);
+                $('#massedit-cancel-results').append(`<span class="text-success">${val}</span><br>`);
+              });
+            } else {
+              // Notify if no actions were performed.
+              $('#massedit-cancel-results').append('<span class="text-alert">Ei suoritettuja toimintoja. Tarkista virheet.</span><br>');
+            }
+          }
+        },
+
+        complete: function() {
+          // Show results div and re-enable the operation button.
+          $('#massedit-cancel-results').css('display', 'block');
           $('#massedit-cancel-btn').prop('disabled', false);
         }
-      },
-    });
+      });
+    }
   });
 
   // Initialize the massedit menu toggle, so that collapse(hide) does not
