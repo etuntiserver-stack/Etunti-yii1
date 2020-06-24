@@ -93,9 +93,12 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 		$.each(value, function( pvm, v ) {
 			all_tv_edit 	= '';
 			tv_kesto	= 0;
+			varoitus_klo 	= false;
 			$.each(v, function( i2, laatikko ) {
-				this_ero = 0;
+				this_ero 	= 0;
 				$.each(laatikko, function( i3, tv_edit ) {
+					if( parseInt(tv_edit['alku']) < last_loppu[pvm +'_'+ tid] )
+						varoitus_klo = true;
 					if( last_loppu[pvm +'_'+ tid] > 0 )
 						this_ero = parseInt(tv_edit['alku'])-last_loppu[pvm +'_'+ tid];
 					if( this_ero > 0 )
@@ -108,8 +111,11 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 			//console.log(last_loppu);
 			pvm_muutos = pvm.split(".");
 			did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
-			if( $("#" + did).length > 0 )
+			if( $("#" + did).length > 0 ){
 				$("#" + did).html(all_tv_edit + '<div class="pvm_kesto"><span>' + $.sprint(tv_kesto) + '</span></div>');
+				if(varoitus_klo)
+					$("#" + did).before('<div class="text-center bg-danger p5 mr5">Tarkista kellonajat</div>');
+			}
 			yht += tv_kesto;
 		});
 	});
