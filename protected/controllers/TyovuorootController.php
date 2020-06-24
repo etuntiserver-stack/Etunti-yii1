@@ -4822,6 +4822,7 @@ class TyovuorootController extends Controller
       switch ($action) {
         case 'cancel':
           // TODO
+          echo 'Peruutettu';
           break;
       }
     }

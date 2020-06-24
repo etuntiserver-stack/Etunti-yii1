@@ -290,7 +290,7 @@ $(document).ready(function(){
           console.log(`Received response, length: ${data.length}:\n${data}`);
 
           // Output result and enable button again.
-          $('#massedit-cancel-result').text(parsed);
+          $('#massedit-cancel-result').text(data);
           $('#massedit-cancel-result').css('display', 'inline');
           $('#massedit-cancel-btn').prop('disabled', false);
         }
