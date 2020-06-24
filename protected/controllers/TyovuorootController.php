@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus'),
+				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'massedit'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -4725,7 +4725,107 @@ class TyovuorootController extends Controller
 			'alkaen' => $alkaen,
 			'tilanteet' => $tilanteet
 		));
-	}
+  }
+
+  /**
+   * Mass edit function for shifts, which is used via AJAX with POST data.
+   *
+   * Possible POST parameters:
+   *
+   * - ids (array of ints) (REQUIRED):
+   *     List of shift (työvuoro) IDs to operate on.
+   * - actions (array of strings) (REQUIRED):
+   *     Action to perform on list of shifts. Possible values (for now):
+   *       - cancel - Mass cancellation (peruutus)
+   *           requires parameters: cancel_type
+   * - cancel_type (int):
+   *     Cancellation type for action 'cancel'. Possible values:
+   *       1: Peruutettu, 2: Peruutettu laskutettava
+   */
+  public function actionMassedit()
+  {
+    // Check variables and do all validation first. If anything is wrong even in
+    // one action, later in the list of actions, cancel all operations. Do
+    // changes only if everything is well.
+
+    // Require list of ID(s).
+    if (!isset($_POST['ids']) || !is_array($_POST['ids'])) {
+      echo 'Virhe: Massamuokkaus vaatii listan työvuoroista (ID) joille toiminto suoritetaan. Toimintoja ei ole suoritettu.';
+      return;
+    } else {
+      $ids = $_POST['ids'];
+    }
+
+    // Validate ID(s) (numeric).
+    foreach ($ids as $id) {
+      if (!is_numeric($id)) {
+        echo 'Virhe: Yksi tai useampi massamuokkaukselle annettu työvuoron ID on virheellinen. Toimintoja ei ole suoritettu.';
+        return;
+      }
+    }
+
+    // Require list of action(s).
+    if (!isset($_POST['actions']) || !is_array($_POST['actions'])) {
+      echo 'Virhe: Yksi tai useampi massamuokkaukselle annettu toiminto on virheellinen. Toimintoja ei ole suoritettu.';
+      return;
+    } else {
+      $actions = $_POST['actions'];
+    }
+
+    // Validate list of action(s).
+    $validated_actions = []; // temp list to avoid duplicate checks and duplicate final actions.
+    // this should be used when looping and performing actions instead.
+    foreach ($actions as $action) {
+
+      // Avoid duplicate actions.
+      if (in_array($action, $validated_actions)) {
+        continue;
+      }
+
+      // Check that value is a string.
+      if (!is_string($action)) {
+        echo 'Virhe: Yksi tai useampi massamuokkaukselle annettu toiminto on virheellinen. Toimintoja ei ole suoritettu.';
+        return;
+      }
+
+      // Do action-specific validation.
+      switch ($action) {
+        case 'cancel':
+
+          // Require cancel_type parameter.
+          if (isset($_POST['cancel_type'])) {
+            echo 'Virhe: Peruuttaminen (cancel) vaatii peruuttamistyypin valinnan (cancel_type). Toimintoja ei ole suoritettu.';
+            return;
+          } else {
+            $cancel_type = $_POST['cancel_type'];
+          }
+
+          // Validate cancel_type parameter.
+          if (!is_numeric($cancel_type)) {
+            echo 'Virhe: Peruuttamistyypin valinta on viallinen. Sallitut arvot: 1 (peruutettu), 2 (peruutettu laskutettava). Toimintoja ei ole suoritettu.';
+            return;
+          }
+
+          break;
+
+          // If action was not handled, choice is invalid; return error.
+        default:
+          echo "Virhe: Massamuokkaukselle annettu toiminto '$action' on virheellinen/ei tuettu. Toimintoja ei ole suoritettu.";
+          return;
+      }
+
+      $validated_actions[] = $action;
+    }
+
+    // All is good; perform actions.
+    foreach ($validated_actions as $action) {
+      switch ($action) {
+        case 'cancel':
+          // TODO
+          break;
+      }
+    }
+  }
 
 	protected function getKohde($id)
 	{
