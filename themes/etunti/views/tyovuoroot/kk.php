@@ -171,7 +171,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
 	echo '<td>';
 	if(!empty($tot[$i]))
-	echo '<span class="link text-small '.$cl.'" tyle="font-size:90%" pvm="'.date("Y-m-d", strtotime($thisDate)).'" tid="'.$v.'">'.$this->num($tot[$i]).'</span>';
+	echo '<span class="link text-small '.$cl.'" tyle="font-size:90%" pvm="'.date("Y-m-d", strtotime($thisDate)).'" did="'.date("Ymd", strtotime($thisDate)).'_'.$v.'" tid="'.$v.'">'.$this->num($tot[$i]).'</span>';
 	echo '</td>';
 
    }
@@ -189,8 +189,9 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
             </div>
 
 
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v4.css">
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot_v4.js"></script>
 
      <div id="temaus-modal" class="modal fade" tabindex="-1" role="dialog">
         <!-- Admin Form Popup -->
@@ -228,16 +229,18 @@ $(document).ready(function() {
   $(".link").click(function(){
 
 	var pvm = $(this).attr('pvm');
-	var tid = $(this).attr('tid');
-
+	var did = $(this).attr('did');
+	var tids = [];
+	tids.push($(this).attr('tid'));
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did?pvm='+pvm+'&tid='+tid+'&from=ajax',
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did4?from='+pvm+'&to='+pvm,
            type: "POST",
-	   //data: { hyvaksy : "kylla", kuka : kuka },
+	   data: { tids : tids },
            success: function(data){
 		data = JSON.parse(data);
 		console.log(data);
-		$('#temaus-modal').modal().find('.panel-body').html(data);
+		$('#temaus-modal').modal().find('.panel-body').html('<div id="' + did + '"></div>');
+		$.tv_arr_update(data);
            }
         });
 
