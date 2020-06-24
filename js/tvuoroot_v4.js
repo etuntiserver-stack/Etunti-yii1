@@ -113,8 +113,10 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 			did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
 			if( $("#" + did).length > 0 ){
 				$("#" + did).html(all_tv_edit + '<div class="pvm_kesto"><span>' + $.sprint(tv_kesto) + '</span></div>');
+				if( $("#varoitus_klo_" + did).length > 0 )
+					$("#varoitus_klo_" + did).remove();
 				if(varoitus_klo)
-					$("#" + did).before('<div class="text-center bg-danger p5 mr5">Tarkista kellonajat</div>');
+					$("#" + did).before('<div id="varoitus_klo_'+did+'" class="text-center bg-danger p5 mr5">Tarkista kellonajat</div>');
 			}
 			yht += tv_kesto;
 		});
