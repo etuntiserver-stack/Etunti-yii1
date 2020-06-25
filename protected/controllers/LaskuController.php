@@ -1692,29 +1692,24 @@ exit;
 
        		$criteria = new CDbCriteria();
 	        $criteria->order = "  id DESC ";
-
-
-		if(Yii::app()->request->getPost('asiakasLaskulle'))
-       		$criteria->addCondition ( " as_nro='".Yii::app()->request->getPost('asiakasLaskulle')."' " );
-
         	$criteria->addCondition ("DATE(paivays) BETWEEN 
 			'".$from."' AND '".$to."' 
 		");
 
+		if(isset($_GET['asiakasLaskulle']) and !empty(trim($_GET['asiakasLaskulle'])))
+       			$criteria->addCondition ( " as_nro='".$_GET['asiakasLaskulle']."' " );
 		if(isset($_GET['laskunumero']) and !empty(trim($_GET['laskunumero'])))
-	        $criteria->addCondition (" laskunumero LIKE '%".$_GET['laskunumero']."%' ");
+	        	$criteria->addCondition (" laskunumero LIKE '%".$_GET['laskunumero']."%' ");
 
 		if(isset($_GET['viitenumero']) and !empty(trim($_GET['viitenumero'])))
-	        $criteria->addCondition (" viitenumero LIKE '%".$_GET['viitenumero']."%' ");
+	        	$criteria->addCondition (" viitenumero LIKE '%".$_GET['viitenumero']."%' ");
 
 		if(isset($_GET['laskuosoite']) and !empty(trim($_GET['laskuosoite'])))
-	        $criteria->addCondition (" osoite LIKE '%".$_GET['laskuosoite']."%' ");
+	        	$criteria->addCondition (" osoite LIKE '%".$_GET['laskuosoite']."%' ");
 
 		// <-- Luotu
 		if( isset($_GET['tilaLaskulle']) and !empty($_GET['tilaLaskulle']) and $_GET['tilaLaskulle'] == 0 )
-		{
 			$criteria->addCondition (" tilanne=0 ");
-		}
 		//  Luotu -->
 
 
