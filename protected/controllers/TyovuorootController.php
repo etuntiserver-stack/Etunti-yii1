@@ -2229,7 +2229,7 @@ class TyovuorootController extends Controller
 		} else {
 			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$asiakasNakyvissa.$osoite.$lisateksti.'</span>';
 		}
-		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto, 'alku' => strtotime($arvo->alku), 'loppu' => strtotime($arvo->loppu)];
+		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto, 'alku' => strtotime($arvo->alku), 'loppu' => strtotime($arvo->loppu), 'peruutettu' => (int)$arvo->peruutettu];
 		return $return;
 	}
 
@@ -2237,7 +2237,7 @@ class TyovuorootController extends Controller
 		$from 		= date("Y-m-d", strtotime($from));
 		$to 		= date("Y-m-d", strtotime($to));
 		$tids 		= (isset($_POST['tids']))?json_decode($_POST['tids'], true):[];
-    $customer_tickets = (isset($_POST['customer_tickets']) ? json_decode($_POST['customer_tickets'], true) : []);
+		$customer_tickets = (isset($_POST['customer_tickets']) ? json_decode($_POST['customer_tickets'], true) : []);
 		$haku_criteria	= (isset($_SESSION['haku_criteria_tv']))?$_SESSION['haku_criteria_tv']:[];
 		$tv_arr = $this->tv_arr($from, $to, $tids, $haku_criteria, true, [], $customer_tickets);
 		/*

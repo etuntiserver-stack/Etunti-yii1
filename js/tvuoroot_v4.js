@@ -94,10 +94,11 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 			all_tv_edit 	= '';
 			tv_kesto	= 0;
 			varoitus_klo 	= false;
+			last_not_peruutettu = 0;
 			$.each(v, function( i2, laatikko ) {
 				this_ero 	= 0;
 				$.each(laatikko, function( i3, tv_edit ) {
-					if( parseInt(tv_edit['alku']) < last_loppu[pvm +'_'+ tid] )
+					if( last_not_peruutettu != 0 && parseInt(tv_edit['alku']) < last_not_peruutettu )
 						varoitus_klo = true;
 					if( last_loppu[pvm +'_'+ tid] > 0 )
 						this_ero = parseInt(tv_edit['alku'])-last_loppu[pvm +'_'+ tid];
@@ -106,6 +107,8 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 					tv_kesto	+= tv_edit['tv_kesto'];
 					all_tv_edit 	+= '<p>' + tv_edit['tv_edit'] + '</p>';
 					last_loppu[pvm +'_'+ tid] = parseInt(tv_edit['loppu']);
+					if(parseInt(tv_edit['peruutettu']) == 0)
+						last_not_peruutettu = parseInt(tv_edit['loppu']);
 				});
 			});
 			//console.log(last_loppu);
