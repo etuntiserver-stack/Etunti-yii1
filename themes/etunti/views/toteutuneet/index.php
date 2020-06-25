@@ -327,7 +327,7 @@ exit;
   }
 
   // Pyhapaivat
-  $pyhapaivat = $tyovuoroot[0]->pyhapaivatAll($from, $from);
+  $pyhapaivat = $tyovuoroot[0]->pyhapaivatAll($from, $to);
 
   // <-- SPL, SL, LS, VL, VKL, AP
   $sl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'SL',true); // Palkallinen
