@@ -36,16 +36,14 @@
 
 
   echo <<<EOC
-  <tr class="(($data->peruutettu != 0)? 'text-danger':'')">
-    <td><input class="massedit-checkbox" type="checkbox" value="$this_id" /></td>
-    <td>$link</td>
-    <td class="col1">$this_pvm</td>
-    <td class="col2">$data->alku-$data->loppu</td>
-    <td class="col1">$kesto_formated</td>
-    <td class="col3">$osoite</td>
-    <td class="col4">$img</td>
-    <td class="col1">$data->tietoja</td>
-  </tr>
-  EOC;
-
-?>
+<tr class="(($data->peruutettu != 0)? 'text-danger':'')">
+  <td><input class="massedit-checkbox" type="checkbox" value="$this_id" /></td>
+  <td>$link</td>
+  <td class="col1">$this_pvm</td>
+  <td class="col2">$data->alku-$data->loppu</td>
+  <td class="col1">$kesto_formated</td>
+  <td class="col3">$osoite</td>
+  <td class="col4">$img</td>
+  <td class="col1">$data->tietoja</td>
+</tr>
+EOC;
