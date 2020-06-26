@@ -939,6 +939,61 @@ class TyovuorootController extends Controller
 			ToistuvatTyovuorot::model()->deleteByPk($model->id);
 			$return = ['return' => 'ok'];
 		}
+		if( $toistuva and $_POST['tilanne'] == 'poista_alkaen'){
+			$laatikko_pvm = $_POST['laatikko_pvm'];
+			$laatikko_tid = $_POST['laatikko_tid'];
+			$tids_new = [];
+			$tids_new[$laatikko_tid] = $laatikko_tid;
+			foreach(json_decode($model->tyopaari, true) as $tid_origin)
+				$tids_new[$tid_origin] = $tid_origin;
+			ksort($tids_new);
+			unset($tids_new[$laatikko_tid]);
+
+			// < --poistettu_pvms_for_poistettava
+			$poistettu_pvms_for_poistettava = [];
+			foreach(json_decode($model->new_poistettu_pvm, true) as $key => $val){
+				if( isset($val['tid']) and $val['tid'] == $laatikko_tid and isset($val['pvm']) and isset($val['syy']) ){
+					$poistettu_pvms_for_poistettava[] = ['tid' => $val['tid'], 'pvm' => $val['pvm'], 'syy' => $val['syy']];
+				}
+			}
+			$clearing_for_poistettava = []; // Otetaan pois jos on samanlainen
+			foreach ($poistettu_pvms_for_poistettava as $key => $value){
+			  if(!in_array($value, $clearing_for_poistettava))
+			    $clearing_for_poistettava[] = $value;
+			}
+
+			// < --poistettu_pvms_for_old
+			$poistettu_pvms_for_old = [];
+			foreach(json_decode($model->new_poistettu_pvm, true) as $key => $val){
+				if( isset($val['tid']) and $val['tid'] != $laatikko_tid and isset($val['pvm']) and isset($val['syy']) ){
+					$poistettu_pvms_for_old[] = ['tid' => $val['tid'], 'pvm' => $val['pvm'], 'syy' => $val['syy']];
+				}
+			}
+			$clearing_for_old = []; // Otetaan pois jos on samanlainen
+			foreach ($poistettu_pvms_for_old as $key => $value){
+			  if(!in_array($value, $clearing_for_old))
+			    $clearing_for_old[] = $value;
+			}
+
+			$new_tv_for_poistettavahenkilo = new ToistuvatTyovuorot;
+			$new_tv_for_poistettavahenkilo->attributes = $model->attributes;
+			$new_tv_for_poistettavahenkilo->tid = $laatikko_tid;
+			$new_tv_for_poistettavahenkilo->tyopaari = '';
+			$new_tv_for_poistettavahenkilo->new_poistettu_pvm = (count($clearing_for_poistettava) > 0)? json_encode($clearing_for_poistettava): '';
+			$new_tv_for_poistettavahenkilo->pto = date("d.m.Y", strtotime($laatikko_pvm." -1 day"));
+			if( date("Ymd", strtotime($laatikko_pvm." -1 day")) >= date("Ymd", strtotime($new_tv_for_poistettavahenkilo->pfrom)))
+				$new_tv_for_poistettavahenkilo->save();
+
+			if( count($tids_new) > 0 ){
+				$model->tid = array_shift($tids_new);
+				$model->tyopaari = (count($tids_new) > 1)? json_encode($tids_new) : '';
+				$model->new_poistettu_pvm = (count($clearing_for_old) > 0)? json_encode($clearing_for_old): '';
+				$model->save();
+			} else {
+				$model->delete();
+			}
+			$return = ['return' => 'ok'];
+		}
 
 		echo json_encode($return);
 		exit;
@@ -2452,7 +2507,7 @@ class TyovuorootController extends Controller
 			$tids_origin[$get_id['tid']] = $get_id['tid'];
 			foreach(json_decode($model->tyopaari, true) as $tid_origin)
 				$tids_origin[$tid_origin] = $tid_origin;
-			ksort($tid_origin);
+			ksort($tids_origin);
 		}
 
 		if($toistuva and !isset($model->id)){
@@ -2556,7 +2611,14 @@ class TyovuorootController extends Controller
 		$ero_miinus 		= array_diff( $tids_before, $_POST['post_tids'] );
 
 		if( $this_id != 'null' and count($tids) > 0 and !empty($model->new_poistettu_pvm) ){
-			foreach(json_decode($model->new_poistettu_pvm, true) as $key => $val){
+
+			$clearing_before = []; // Otetaan pois jos on samanlainen
+			foreach (json_decode($model->new_poistettu_pvm, true) as $key => $value){
+			  if(!in_array($value, $clearing_before))
+			    $clearing_before[] = $value;
+			}
+
+			foreach($clearing_before as $key => $val){
 				if( isset($val['tid']) and isset($tids[$val['tid']]) and isset($val['pvm']) and isset($val['syy']) ){
 					$poistettu_pvms[$val['tid']][$val['pvm']] = $val['syy'];
 					$poistettu_pvms_upd[] = ['tid' => $val['tid'], 'pvm' => $val['pvm'], 'syy' => $val['syy']];
@@ -3320,6 +3382,7 @@ class TyovuorootController extends Controller
 		$model->attributes 	= $post;
 		$this->model_json_converter($post, $model, $toistuva);
 		$updated_tp = json_decode($model->tyopaari, true);
+		$model->new_poistettu_pvm = $this->poistetutClearning($model);
 
 		if($model->save()){
 
@@ -3403,6 +3466,23 @@ class TyovuorootController extends Controller
 			echo json_encode($model->getErrors());
 		}
 		exit;
+	}
+
+	protected function poistetutClearning($model)
+	{
+		$clearing = [];
+		if(!empty($model->new_poistettu_pvm) ){
+			foreach (json_decode($model->new_poistettu_pvm, true) as $key => $value){
+			  if(!in_array($value, $clearing))
+			    $clearing[] = $value;
+			}
+		}
+		if(count($clearing) > 0)
+			$return = json_encode($clearing);
+		else
+			$return = '';
+
+		return $return;
 	}
 
 	protected function tvUpdateLog($old_model, $new_model, $model_log, $name_log)
