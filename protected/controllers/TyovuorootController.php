@@ -3382,7 +3382,8 @@ class TyovuorootController extends Controller
 		$model->attributes 	= $post;
 		$this->model_json_converter($post, $model, $toistuva);
 		$updated_tp = json_decode($model->tyopaari, true);
-		$model->new_poistettu_pvm = $this->poistetutClearning($model);
+		if($toistuva)
+			$model->new_poistettu_pvm = $this->poistetutClearning($model);
 
 		if($model->save()){
 
