@@ -992,10 +992,11 @@ $(document).ready(function(){
 	<div class="panel-footer text-right">
 		<?php 
 		if(isset($model->id))
-			echo '<span class="btn btn-danger tvpoisto mr5" tilanne="poista_pvm">POISTA: '.$laatiko_etusukunimi.' ('.$laatikko_pvm.')</span>';
-		if(isset($model->id) and $toistuva and $poista == 1 and date("Ymd", strtotime($model->pfrom)) >= date("Ymd")){
-			echo '<span class="btn btn-danger tvpoisto" style="display:none" tilanne="poista_ketju_kokonaan">Poista ketju ja työparit: '.$model->pfrom.'-'.$model->pto.'</span>';
-		}
+			echo '<span class="btn btn-danger tvpoisto mr5" tilanne="poista_pvm">POISTA: '.$laatikko_pvm.' ('.$laatiko_etusukunimi.')</span>';
+		if(isset($model->id) and $toistuva and $poista == 1 and date("Ymd", strtotime($model->pfrom)) >= date("Ymd"))
+			echo '<span class="btn btn-danger tvpoisto mr5" style="display:none" tilanne="poista_ketju_kokonaan">POISTA KAIKKI: '.$model->pfrom.'-'.$model->pto.'</span>';
+		if(isset($model->id) and $toistuva and $poista == 1 and date("Ymd", strtotime($laatikko_pvm)) >= date("Ymd"))
+			echo '<span class="btn btn-danger tvpoisto mr5" style="display:none" tilanne="poista_alkaen">POISTA ALKAEN: '.$laatikko_pvm.' ('.$laatiko_etusukunimi.')</span>';
 		 ?>
 		<?php /* echo CHtml::Button('Reload',array('class'=>'btn btn-default reload')); */ ?>
 		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
@@ -1586,6 +1587,8 @@ $(document).ready(function(){
 			var r = confirm('Poista kaikki ketjuun kuuluvat työvuorot ja työparit.');
 		if( tilanne == 'poista_pvm' )
 			var r = confirm('Poistaanko tämä päivä/henkilö ketjusta?');
+		if( tilanne == 'poista_alkaen' )
+			var r = confirm('Poistaanko tästä päivästä alkaen kaikki <?=$laatiko_etusukunimi?> työvuorot');
 	} else {
 		var r = confirm('Haluatko varmasti poistaa?');
 	}
@@ -1595,7 +1598,7 @@ $(document).ready(function(){
         $.ajax({
            url: 'poistaTv?this_id=' + this_id,
 	   type:'POST',
-	   data: { tilanne : tilanne, pfrom : $('#pfrom').val(), pto : $('#pto').val() },
+	   data: { tilanne : tilanne, pfrom : $('#pfrom').val(), pto : $('#pto').val(), laatikko_pvm : '<?=$laatikko_pvm?>', laatikko_tid : '<?=$laatikko_tid?>' },
            success: function(data){
 		data = JSON.parse(data);
 		laatikonPaivays();
