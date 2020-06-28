@@ -2200,7 +2200,46 @@ class TyovuorootController extends Controller
 		if(isset($arvo->avaimet) and count($arvo->avaimet) > 0)
 			$ikoonit .=  ' <i class="tvikooni fa fa-key text-warning"></i> ';
 		if ($has_tickets)
-			$ikoonit .= ' <i class="fa fa-question text-primary" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Avoimia Tukipyyntöɉä').'"></i> ';
+      $ikoonit .= ' <i class="fa fa-question text-primary" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Avoimia Tukipyyntöjä').'"></i> ';
+
+    // OMASIISTIJÄT TARKISTUS - Enabled only on kotipuhtaaksi, for now.
+    // TODO: Asetuksiin valinta, jolla voidaan enable/disable
+    $omasiistijat_varoitus = false;
+    if (in_array(Yii::app()->user->domain, ['demo', 'staging_demo', 'kotipuhtaaksi', 'staging_kotipuhtaaksi'])) {
+      if (!empty($arvo->kohteet->id)) {
+
+        // When kohde is selected, set the warning enabled by default, and disable
+        // it further down once worker ID is found.
+        $omasiistijat_varoitus = true;
+
+        /** @var KohteetController */
+        $kk = Yii::app()->createController('Kohteet')[0];
+        $omasiistijat = $kk->omasiistijat($arvo->kohteet->id, false);
+        $tyoparit = (!empty($arvo->tyopaari)) ? json_decode($arvo->tyopaari) : [];
+
+        // throw new \Exception(sprintf("%s: %s", $arvo->kohteet->id, json_encode($omasiistijat)));exit;
+        // throw new \Exception(sprintf("%s,  %s", $arvo->tid, $arvo->tyopaari));exit;
+
+        foreach ($omasiistijat as $omasiistija_arr) {
+
+          if (empty($omasiistija_arr[0])) {
+            continue;
+          }
+
+          if ($arvo->tid == $omasiistija_arr[0]) {
+            $omasiistijat_varoitus = false;
+            break;
+          }
+
+          foreach ($tyoparit as $tpid) {
+            if ($tpid == $omasiistija_arr[0]) {
+              $omasiistijat_varoitus = false;
+              break 2;
+            }
+          }
+        }
+      }
+    }
 
 		$asiakasNakyvissa = '';
 		if( $asiakas_tyovuorossa ){
@@ -2229,7 +2268,7 @@ class TyovuorootController extends Controller
 		} else {
 			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$asiakasNakyvissa.$osoite.$lisateksti.'</span>';
 		}
-		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto, 'alku' => strtotime($arvo->alku), 'loppu' => strtotime($arvo->loppu), 'peruutettu' => (int)$arvo->peruutettu];
+		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto, 'alku' => strtotime($arvo->alku), 'loppu' => strtotime($arvo->loppu), 'peruutettu' => (int)$arvo->peruutettu, 'omasiistijat_varoitus' => $omasiistijat_varoitus];
 		return $return;
 	}
 

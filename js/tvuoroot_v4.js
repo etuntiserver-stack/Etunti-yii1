@@ -104,8 +104,18 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 						this_ero = parseInt(tv_edit['alku'])-last_loppu[pvm +'_'+ tid];
 					if( this_ero > 0 )
 						all_tv_edit += '<p class="text-center reika-danger"><i class="fa fa-clock-o"></i> Aika: ' + $.sprint(this_ero) + '</p>';
-					tv_kesto	+= tv_edit['tv_kesto'];
-					all_tv_edit 	+= '<p>' + tv_edit['tv_edit'] + '</p>';
+          tv_kesto	+= tv_edit['tv_kesto'];
+
+          // Box styling. Enable red border when omasiistijä is not selected (when configured to do so).
+          let style='';
+          if (tv_edit['omasiistijat_varoitus']) {
+            style += 'border: 1px solid red;';
+          }
+          if (style.length > 0) {
+            style = ` style="${style}"`;
+          }
+
+          all_tv_edit += `<p ${style}>${tv_edit['tv_edit']}</p>`;
 					last_loppu[pvm +'_'+ tid] = parseInt(tv_edit['loppu']);
 					if(parseInt(tv_edit['peruutettu']) == 0)
 						last_not_peruutettu = parseInt(tv_edit['loppu']);
