@@ -605,6 +605,39 @@ class KohteetController extends Controller
   /**
    * Get list of workers that have approved shifts/cycles in a target location.
    *
+   * Calls KohteetController::omasiistijat() with relevant data.
+   *
+   * @param int $id
+   * ID of the location (kohde).
+   *
+   * @param bool $force_refresh
+   * If true, cache results are ignored and data is force refreshed.
+   *
+   * @return null
+   * Outputs results as a JSON array of IDs.
+   */
+  public function actionOmasiistijat_ajax($id = null, $force_refresh = false)
+  {
+    // Get possible POST value for ID.
+    if (isset($_POST['id']) && is_numeric($_POST['id'])) {
+      $id = (int)$_POST['id'];
+    }
+
+    if (empty($id) || !is_numeric($id)) {
+
+      // Invalid/empty ID; output empty array (TODO: log).
+      echo '[]'; // json_encode([]) (empty array).
+    } else {
+
+      // Get results array and output as JSON for the view.
+      $force_refresh = ($force_refresh || ($_POST['force_refresh'] ?? '') == 1);
+      echo json_encode($this->omasiistijat($id, $force_refresh));
+    }
+  }
+
+  /**
+   * Get list of workers that have approved shifts/cycles in a target location.
+   *
    * Tässä laajennettuna SQL haku joka suoritetaan myöhemmin, jolla haetaan
    * työntekijät joilla on hyväksyttyjä tunteja kyseisessä kohteessa.
    *
@@ -635,18 +668,19 @@ class KohteetController extends Controller
    *
    * @param int $id
    * ID of the location (kohde).
+   *
+   * @param bool $force_refresh
+   * If true, cache results are ignored and data is force refreshed.
+   *
+   * @return array
+   * Array of IDs of matching workers.
    */
-  public function actionOmasiistijat_ajax($id = null, $force_refresh = false)
+  public function omasiistijat($id, $force_refresh = false)
   {
-    // Get possible POST value for ID.
-    if (isset($_POST['id']) && is_numeric($_POST['id'])) {
-      $id = (int)$_POST['id'];
-    }
-
     // Require valid ID.
     if (empty($id) || !is_numeric($id)) {
       //throw new \Exception('Kohteen ID ei annettu omasiistijälistaa varten.');
-      echo '[]'; // json_encode([]) (empty array).
+      return [];
     }
 
     /**** CACHING ****/
@@ -656,7 +690,7 @@ class KohteetController extends Controller
     // If cached results JSON object is empty, or force_refresh parameter is
     // provided, get fresh results and save cached results with random expire
     // duration of between 10 and 20 minutes, to stagger refreshes.
-    if (empty($workers) || (($_POST['force_refresh'] ?? '') == 1)) {
+    if (empty($workers) || $force_refresh) {
 
       /** @var CDbConnection */
       $connection = Yii::app()->db1;
@@ -689,11 +723,10 @@ class KohteetController extends Controller
         ->queryAll(false);
 
       // Refresh between 10 and 20 minutes to stagger refreshes between results.
-      Yii::app()->cache->set($cache_id, json_encode($workers), rand(600, 1200));
+      Yii::app()->cache->set($cache_id, $workers, rand(600, 1200));
     }
 
-    // Cached results are already JSON encoded; echo directly.
-    echo $workers;
+    return $workers;
   }
 
 	/**
