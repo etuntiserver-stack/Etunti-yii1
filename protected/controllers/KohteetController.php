@@ -636,7 +636,7 @@ class KohteetController extends Controller
    * @param int $id
    * ID of the location (kohde).
    */
-  public function actionOmasiistijat_ajax($id = null)
+  public function actionOmasiistijat_ajax($id = null, $force_refresh = false)
   {
     // Get possible POST value for ID.
     if (isset($_POST['id']) && is_numeric($_POST['id'])) {
@@ -646,39 +646,54 @@ class KohteetController extends Controller
     // Require valid ID.
     if (empty($id) || !is_numeric($id)) {
       //throw new \Exception('Kohteen ID ei annettu omasiistijälistaa varten.');
+      echo '[]'; // json_encode([]) (empty array).
     }
 
-    /** @var CDbConnection */
-    $connection = Yii::app()->db1;
+    /**** CACHING ****/
+    $cache_id = sprintf("%s_omasiistijat_%s", Yii::app()->user->domain, $id);
+    $workers = Yii::app()->cache->get($cache_id);
 
-    // Get list of workers that have been to this target.
-    // See function documentation for explanation.
-    $workers = $connection->createCommand("
-      SELECT id, tekijan_nimi, sukunimi
-        FROM sivex_ttekijat
-        WHERE aktiivinen = 1
-        AND id IN
-        (
-          SELECT tid FROM
+    // If cached results JSON object is empty, or force_refresh parameter is
+    // provided, get fresh results and save cached results with random expire
+    // duration of between 10 and 20 minutes, to stagger refreshes.
+    if (empty($workers) || (($_POST['force_refresh'] ?? '') == 1)) {
+
+      /** @var CDbConnection */
+      $connection = Yii::app()->db1;
+
+      // Get list of workers that have been to this target.
+      // See function documentation for explanation.
+      $workers = $connection->createCommand("
+        SELECT id, tekijan_nimi, sukunimi
+          FROM sivex_ttekijat
+          WHERE aktiivinen = 1
+          AND id IN
           (
-            SELECT tid
-              FROM sivexkuitti
-              WHERE kohdenID = :kohde_id
-              AND hyvaksytty != ''
+            SELECT tid FROM
+            (
+              SELECT tid
+                FROM sivexkuitti
+                WHERE kohdenID = :kohde_id
+                AND hyvaksytty != ''
 
-            UNION ALL
+              UNION ALL
 
-            SELECT tid
-              FROM sivexkuitti_repaired
-              WHERE kohdenID = :kohde_id
-              AND hyvaksytty != ''
-          ) t
-          GROUP BY tid
-      )")
-      ->bindValue(':kohde_id', $id)
-      ->queryAll(false);
+              SELECT tid
+                FROM sivexkuitti_repaired
+                WHERE kohdenID = :kohde_id
+                AND hyvaksytty != ''
+            ) t
+            GROUP BY tid
+        )")
+        ->bindValue(':kohde_id', $id)
+        ->queryAll(false);
 
-    echo json_encode($workers);
+      // Refresh between 10 and 20 minutes to stagger refreshes between results.
+      Yii::app()->cache->set($cache_id, json_encode($workers), rand(600, 1200));
+    }
+
+    // Cached results are already JSON encoded; echo directly.
+    echo $workers;
   }
 
 	/**
