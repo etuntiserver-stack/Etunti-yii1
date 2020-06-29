@@ -27,7 +27,7 @@ class LaskuController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_procountor', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet', 'perpvmkohde', 'laskuttettavatAsiakkaat'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_procountor', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet', 'perpvmkohde', 'l_asiakkaat'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow',  // allow all users to perform 'index' and 'view' actions
@@ -167,7 +167,7 @@ class LaskuController extends Controller
 			$autolahetteet_asids[$item->asiakas_id] = ['al_id' => $item->id, 'tab_array' => $item->tab_array];
 
 		if( $tunnit == 'mob' ){
-		   $hyv_lista_all = $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, $criteria->condition);
+		   $hyv_lista_all = $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, true, $criteria->condition);
 		   $asiakkaat_ids = [];
 		   $attr = [];
 		   foreach($hyv_lista_all as $item){
@@ -246,7 +246,7 @@ exit;
 		));
 	}
 
-	protected function hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, $asiakas_condition){
+	protected function hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, $tvid_checker=false, $asiakas_condition){
 
 	    $lista = array();
 
@@ -257,17 +257,20 @@ exit;
 			AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
 			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
 			AND status='3'
-			AND sairaus!=1
 			AND hyvaksytty!=''
 			AND kohdenID > 0
-			AND tv_id IS NOT NULL AND tv_id > 0
-			AND tv_id IN (
-				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
-			)
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 			AND deleted=0
 			AND laskutetaan=1
 		";
+		if($tvid_checker){
+			$criteria->addCondition("
+			tv_id IS NOT NULL AND tv_id > 0
+			AND tv_id IN (
+				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
+			)
+			");
+		}
 		if(!empty($asiakas_condition)){
 			$criteria->addCondition("
 			kohdenID IN(SELECT id FROM sivex_kohdet
@@ -286,16 +289,19 @@ exit;
 			AND DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
 			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
 			AND status='3'
-			AND sairaus!=1
 			AND hyvaksytty!=''
 			AND kohdenID > 0
-			AND tv_id IS NOT NULL AND tv_id > 0
-			AND tv_id IN (
-				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
-			)
 			AND deleted=0
 			AND laskutetaan=1
 		";
+		if($tvid_checker){
+			$criteria->addCondition("
+			tv_id IS NOT NULL AND tv_id > 0
+			AND tv_id IN (
+				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
+			)
+			");
+		}
 		if(!empty($asiakas_condition)){
 			$criteria->addCondition("
 			kohdenID IN(SELECT id FROM sivex_kohdet
@@ -348,12 +354,7 @@ exit;
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
 			AND status='3'
-			AND sairaus!=1
 			AND hyvaksytty!=''
-			AND tv_id IS NOT NULL AND tv_id > 0
-			AND tv_id IN (
-				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
-			)
 			AND kohdenID IN (
 				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$id."'
 			)
@@ -370,12 +371,7 @@ exit;
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
 			AND status='3'
-			AND sairaus!=1
 			AND hyvaksytty!=''
-			AND tv_id IS NOT NULL AND tv_id > 0
-			AND tv_id IN (
-				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
-			)
 			AND kohdenID IN (
 				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$id."'
 			)
@@ -1655,9 +1651,25 @@ exit;
 			$this->redirect(array('index'));
 	}
 
-	public function actionLaskuttettavatAsiakkaat($kk=null)
+	public function actionL_asiakkaat($kk=null)
 	{
 
+		if($kk !== null)
+		{
+			$from 		= date("Y-m-d", strtotime($kk." first day of this month"));
+			$to 		= date("Y-m-d", strtotime($kk." last day of this month"));
+			$asiakas_condition = '';
+			$lista = [];
+			$getall = $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, false, $asiakas_condition);
+			foreach($getall as $item)
+				$lista[$item->kohdenID][] = ['pvm' => $item->aloitan, 'kesto' => strtotime($item->loppui)-strtotime($item->aloitan)];
+			ksort($lista);
+			//foreach($lista as $k => $v)
+			echo '<pre>';
+			print_r($lista);
+			echo '</pre>';
+			exit;
+		}
 		$this->render('la_asiakkaat', array(
 				'kk'=>$kk, 
 		));
