@@ -10,6 +10,10 @@
 		<?php echo $asiakas.' #'.$data->id; ?>
 	</td>
 	<td class="p15">
+		<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse_id_<?=$data->id?>" aria-expanded="false" aria-controls="collapseExample">
+	    	<?=Yii::t('main', 'Näytä rivit')?> <i class="caret"></i>
+		</button>
+		<div class="collapse" id="collapse_id_<?=$data->id?>">
 		<?php
 		$li = [];
 		if(isset($lista[$data->id]))
@@ -40,6 +44,7 @@
 			echo '</table>';
 		}
 		?>
+		</div>
 	</td>
 	<td class="text-right">
 		<?php
