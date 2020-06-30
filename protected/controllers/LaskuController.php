@@ -262,6 +262,7 @@ exit;
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 			AND deleted=0
 			AND laskutetaan=1
+			AND laskutettu=0
 		";
 		if($tvid_checker){
 			$criteria->addCondition("
@@ -293,6 +294,7 @@ exit;
 			AND kohdenID > 0
 			AND deleted=0
 			AND laskutetaan=1
+			AND laskutettu=0
 		";
 		if($tvid_checker){
 			$criteria->addCondition("
@@ -1469,18 +1471,16 @@ exit;
 				if(isset($_POST['hinnasto_rivi_id'][$key]))
 					$lr->hinnasto_rivi_id = $_POST['hinnasto_rivi_id'][$key];
 
-				/*
-				if(	isset($as->id) 
-					and (int)$as->vinkki_tunnit > 0 
-					and $_POST['ale'][$key] > 0
-					and $_POST['yksikko'][$key] == 'h'
-				)
-				{
-					$vinkki_tunnit = '';
-					$vinkki_tunnit = (int)$as->vinkki_tunnit-$_POST['kpl'][$key];
-					Asiakkaat::model()->updatebypk($as->id, array('vinkki_tunnit'=>$vinkki_tunnit));
+				// <-- Mobile update
+				if(isset($_POST['tunnit_id'][$key]) and isset($_POST['tunnit_from'][$key]) and $_POST['tunnit_from'][$key] == 'mobiili'){
+					$m = Mobile::model()->findbypk($_POST['tunnit_id'][$key]);
+					if(isset($m->id))
+						Mobile::model()->updateByPk($m->id, ['laskutettu' => 1]);
+
+					$t = Toteutuneet::model()->find("kid='".$_POST['tunnit_id'][$key]."'");
+					if(isset($t->id))
+						Mobile::model()->updateByPk($t->id, ['laskutettu' => 1]);
 				}
-				*/
 
 				$lr->veroton	=$_POST['veroton'][$key];
 				$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
@@ -1703,7 +1703,9 @@ exit;
 				//    Tyoryhmat -->
 				$criteria->addCondition(" 
 					id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id IN(SELECT kohdenID FROM sivexkuitti WHERE 
-						status='3'
+						DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
+						BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+						AND status='3'
 						AND deleted=0
 						AND laskutetaan=1
 						AND hyvaksytty!=''
@@ -1730,15 +1732,19 @@ exit;
 						foreach($getall as $item){
 							if(isset($item->kohteet->asiakkaat->id) and $item->kohteet->asiakkaat->id == $aid){
 								$l[strtotime($item->aloitan)] = [
-										'kohde' => $item->kohteet->id, 
-										'osoite' => $item->kohteet->osoite, 
+										'tekijan_nimi' => $item->tekijan_nimi,
+										'tunnit_from' => 'mobiili',
+										'id' => $item->id,
+										'kohde' => $item->kohteet->id,
+										'osoite' => $item->kohteet->osoite,
 										'maara' => strtotime($item->loppui)-strtotime($item->aloitan)
 								];
 							}
 						}
 
 						ksort($l);
-						$lista[$aid] = $l;
+						if(count($l) > 0)
+							$lista[$aid] = $l;
 					}
 					/*
 					echo '<pre>';

@@ -745,7 +745,12 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 
 		foreach(json_decode($_POST['tr_rivit'], true) as $arr){ 
 			$num++;
-			echo $this->renderPartial("//lasku/tr_rivit_tyhja",array('num'=>$num, 'arr'=>$arr, 'hinnat' => $hinnat, 'tuotePalvelu' => $_POST['tp_palvelu']));
+			echo $this->renderPartial("//lasku/tr_rivit_tyhja",[
+				'num'=>$num, 
+				'arr'=>$arr, 
+				'hinnat' => $hinnat, 
+				'tuotePalvelu' => $_POST['tp_palvelu']
+			]);
 		}
 	}
      ?>
@@ -1324,7 +1329,7 @@ $(document).delegate('#rivit input[type="number"]','keyup',function(){
 
 var getkohdeT = '';
 $("#Lasku_as_nro").change(function() {
-
+    var l_asiakkaat = '<?=((isset($_GET["l_asiakkaat"]))? "true" : "false") ?>';
     var asiakas = $("#Lasku_as_nro option:selected").val();
     var asiakas_id = $("#Lasku_as_nro option:selected").attr('asiakas_id');
     if(!asiakas)
@@ -1332,11 +1337,13 @@ $("#Lasku_as_nro").change(function() {
 	alert("Asiakasnumero puuttuu");
 	return false;
     }
-	
-	$("#kalut").show('slow');
+	if(l_asiakkaat == "false")
+		$("#kalut").show('slow');
+
 	$("#tuotteet_palvelut_muoto").show('slow');
 	palvelu_muoto();
 
+	if(l_asiakkaat == "false"){
         $.ajax({
            url: 'etsikohde?asiakasnumero='+asiakas,
 	   async : false,
@@ -1365,6 +1372,7 @@ $("#Lasku_as_nro").change(function() {
                	console.log(XMLHttpRequest);
 	   }
         });
+	} // l_asiakkaat
 
         $.ajax({
            url: 'etsiasiakas?id='+asiakas_id,

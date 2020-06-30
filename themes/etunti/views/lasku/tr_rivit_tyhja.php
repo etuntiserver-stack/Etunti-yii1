@@ -3,6 +3,8 @@
 		$num = $_POST['num'];
 	}
 
+	$tunnit_from 	= '';
+	$tunnit_id 	= '';
 	$tuoteID = '';
 	$tuote = '';
 	$hinta = '';
@@ -30,6 +32,9 @@
 			$tuoteID	= $tp->id;
 			$tuote 		= $tp->nimike;
 		}
+
+		$tunnit_from 	= $arr['tunnit_from'];
+		$tunnit_id 	= $arr['id'];
 		$maara 		= $arr['maara'];
 		$free_text 	= $arr['freetext'];
 		$yksikkot 	= $this->yksikkot('h');
@@ -45,6 +50,8 @@
 	<TD>
 
 	<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control" value="<?php echo $tuoteID; ?>">
+	<input type="hidden" size="1" name="tunnit_from[<?php echo $num; ?>]" id="tunnit_from_<?php echo $num; ?>" class="form-control" value="<?php echo $tunnit_from; ?>">
+	<input type="hidden" size="1" name="tunnit_id[<?php echo $num; ?>]" id="tunnit_id_<?php echo $num; ?>" class="form-control" value="<?php echo $tunnit_id; ?>">
 	<input type="hidden" size="1" name="hinnasto_rivi_id[<?php echo $num; ?>]" id="hinnasto_rivi_id_<?php echo $num; ?>" class="form-control">
 	<div class="row">
 	  <div class="col-lg-4">
