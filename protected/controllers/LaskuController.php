@@ -1155,6 +1155,27 @@ exit;
 		return $return; 
 	}
 
+	protected function getHintaForKohde($id)
+	{
+		$a = Asetukset::model()->findbypk(1);
+		$k = Kohteet::model()->findbypk($id);
+		$return 		= [];
+		$return['hinta'] 	= 0;
+		$return['alv'] 		= 24;
+		// <-- Asiakkaan muoto
+		if( isset($k->id) and $a->tuotteet_palvelut_muoto == 1)
+		{
+			if($k->hinta_tyyppi == '1')
+			{
+				$return['hinta'] 	= $k->hinta;
+				$return['alv'] 		= $k->alv;
+			}
+		}
+		// Asiakkaan muoto -->
+
+		return $return;
+	}
+
 	protected function criteriaKohdeLasku($id, $from, $to)
 	{
 
@@ -1654,24 +1675,86 @@ exit;
 	public function actionL_asiakkaat($kk=null)
 	{
 
+		$dataProvider 	= [];
+		$lista 		= [];
+		$tuotteet_lista = '';
 		if($kk !== null)
 		{
+			$criteria = new CDbCriteria();
+	       		$criteria->order = " oletustuote DESC,nimike ";
+	       		$criteria->condition = " 
+				hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0 AND yksikko='h'
+			";
+			$tuotteet_lista = CHtml::dropdownList('tp_palvelu','tp_palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
+			array('class'=>'form-control'));
+
 			$from 		= date("Y-m-d", strtotime($kk." first day of this month"));
 			$to 		= date("Y-m-d", strtotime($kk." last day of this month"));
-			$asiakas_condition = '';
-			$lista = [];
-			$getall = $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, false, $asiakas_condition);
-			foreach($getall as $item)
-				$lista[$item->kohdenID][] = ['pvm' => $item->aloitan, 'kesto' => strtotime($item->loppui)-strtotime($item->aloitan)];
-			ksort($lista);
-			//foreach($lista as $k => $v)
-			echo '<pre>';
-			print_r($lista);
-			echo '</pre>';
-			exit;
+
+			if(isset($_GET['tilanne']) and $_GET['tilanne'] == 'laskutettavat_m'){
+		       		$criteria = new CDbCriteria();
+				// <-- Tyoryhmat
+				$site = Yii::app()->createController('Site');
+				$arr = $site[0]->TyoryhmatHelper();
+				$ids = implode(",", $arr);
+				if( count($arr) > 0 ){
+					$criteria->condition = " tyoryhma IN ($ids) ";
+				}
+				//    Tyoryhmat -->
+				$criteria->addCondition(" 
+					id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id IN(SELECT kohdenID FROM sivexkuitti WHERE 
+						status='3'
+						AND deleted=0
+						AND laskutetaan=1
+						AND hyvaksytty!=''
+						AND laskutettu=0
+					))
+				");
+				$dataProvider=new CActiveDataProvider('Asiakkaat', array(
+					'criteria'=>$criteria,
+					//'pagination'=>true
+				));
+				$dataProvider->pagination->pageSize = 50;
+
+				$a_ids = [];
+				foreach($dataProvider->data as $data)
+					$a_ids[$data->id] = $data->id;
+
+				if(count($a_ids) > 0){
+					$impl = implode(",", $a_ids);
+					$asiakas_condition = "id IN($impl)";
+					$getall = $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, false, $asiakas_condition);
+					foreach($a_ids as $aid)
+					{
+						$l = [];
+						foreach($getall as $item){
+							if(isset($item->kohteet->asiakkaat->id) and $item->kohteet->asiakkaat->id == $aid){
+								$l[strtotime($item->aloitan)] = [
+										'kohde' => $item->kohteet->id, 
+										'osoite' => $item->kohteet->osoite, 
+										'maara' => strtotime($item->loppui)-strtotime($item->aloitan)
+								];
+							}
+						}
+
+						ksort($l);
+						$lista[$aid] = $l;
+					}
+					/*
+					echo '<pre>';
+					print_r($lista);
+					echo '</pre>';
+					exit;
+					*/
+				}
+			}
+
 		}
 		$this->render('la_asiakkaat', array(
-				'kk'=>$kk, 
+			'kk'=>$kk,
+			'tuotteet_lista' => $tuotteet_lista,
+			'lista' => $lista,
+			'dataProvider' => $dataProvider,
 		));
 	}
 

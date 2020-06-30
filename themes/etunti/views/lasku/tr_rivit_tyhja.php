@@ -2,11 +2,14 @@
 	if(isset($_POST['num'])){
 		$num = $_POST['num'];
 	}
-	
+
+	$tuoteID = '';
 	$tuote = '';
 	$hinta = '';
 	$maara = '';
 	$yksikkot = $this->yksikkot(null);
+	$alv = $this->alv(null);
+	$free_text = '';
 
 	if(isset($_POST['digisten_tunnit_id'])){
 		$digisten_tunnit_id = $_POST['digisten_tunnit_id'];
@@ -21,13 +24,27 @@
 		}
 
 	}
+	if(isset($arr['maara'])){
+		$tp = TuotteetPalvelut::model()->findbypk($tuotePalvelu);
+		if(isset($tp->id)){
+			$tuoteID	= $tp->id;
+			$tuote 		= $tp->nimike;
+		}
+		$maara 		= $arr['maara'];
+		$free_text 	= $arr['freetext'];
+		$yksikkot 	= $this->yksikkot('h');
+		if(isset($hinnat[$arr['kohde']])){
+			$hinta = $hinnat[$arr['kohde']]['hinta'];
+			$alv = $alv = $this->alv($hinnat[$arr['kohde']]['alv']);
+		}
+	}
 ?>
 
      <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
 	<TD><span class="link text-danger poista" for="poista_<?php echo $num; ?>" style="font-size:150%"><i class="fa fa-times"></i></span></TD>
 	<TD>
 
-	<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control">
+	<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control" value="<?php echo $tuoteID; ?>">
 	<input type="hidden" size="1" name="hinnasto_rivi_id[<?php echo $num; ?>]" id="hinnasto_rivi_id_<?php echo $num; ?>" class="form-control">
 	<div class="row">
 	  <div class="col-lg-4">
@@ -64,12 +81,12 @@
 	</TD>
 	<TD>
 		<select type="text" name="alv[<?php echo $num; ?>]" id="alv_<?php echo $num; ?>" class="form-control">
-		<?php echo $this->alv(null); ?>
+		<?php echo $alv; ?>
 		</select>
 	</TD>
 	<TD><input class="yhteensa_total_verot form-control" size="10" type="text" name="hinta_alv[<?php echo $num; ?>]" id="hinta_alv_<?php echo $num; ?>" value="0.00" readonly></TD>
 	<TD><input type="text" size="10" name="ale[<?php echo $num; ?>]" id="ale_<?php echo $num; ?>" value="0" class="onlyDigits form-control"><span class="errmsg"></span></TD>
 	<TD><input class="yhteensa_total_veroton form-control" type="text" size="10" name="veroton[<?php echo $num; ?>]" id="veroton_<?php echo $num; ?>" value="0.00" readonly></TD>
 	<TD><input class="yhteensa_total form-control" type="text" size="10" name="yhteensa_alv[<?php echo $num; ?>]" id="yhteensa_alv_<?php echo $num; ?>" value="0.00" readonly></TD>
-	<TD><input type="text" size="5" name="free_text[<?php echo $num; ?>]" id="free_text_<?php echo $num; ?>" class="form-control"></TD>
+	<TD><input type="text" size="5" name="free_text[<?php echo $num; ?>]" id="free_text_<?php echo $num; ?>" class="form-control" value="<?=$free_text?>" data-toggle="tooltip" data-placement="bottom" title="<?php echo $free_text; ?>"></TD>
      </TR>
