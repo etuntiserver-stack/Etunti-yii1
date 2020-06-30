@@ -34,7 +34,7 @@ $months=array(
 				<option value=""><?php echo Yii::t('main', 'Valitse kuukausi'); ?></option>
 				<?php
 				$i = 1;
-				$month = strtotime(date("Y-m-d", strtotime("first day of last month")));
+				$month = strtotime(date("Y-m-d", strtotime("first day of this month")));
 				while($i <= 24)
 				{
 				    $month_name = date('n', $month);
