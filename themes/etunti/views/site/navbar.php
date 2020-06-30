@@ -1165,6 +1165,10 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
 			|| Yii::app()->user->domain == 'staging_kotipuhtaaksi'
 	      ): ?>
               <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/l_asiakkaat">
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Laskuttettavat asiakkaat'); ?></a>
+              </li>
+              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/auto">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Laskutuksen automaatio'); ?></a>
               </li>
