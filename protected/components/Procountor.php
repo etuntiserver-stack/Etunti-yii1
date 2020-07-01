@@ -73,6 +73,43 @@ class Procountor extends CComponent
   }
 
   /**
+   * Log general debug information (as WARNING to include results in the same
+   * common log route) for solving some obscure problems.
+   *
+   * @param string $request
+   * Requested API call, e.g. "createInvoice".
+   * @param string $message
+   * Main log message text.
+   * @param array $results
+   * Possible results array returned by an API function, if logging results.
+   * @param array $params
+   * Additional parameters, like ['uid' => 123] (included before stacktrace).
+   */
+  public function logDebugWarning(string $request, string $message, array $results, array $params = [])
+  {
+    $message = "(Procountor debug :: /$request): $message";
+
+    // Append request results when logging results.
+    if (!empty($results)) {
+      $message .= sprintf("\nResponse: %s", json_encode($results));
+    }
+
+    // Append possible parameters.
+    if (!empty($params) && is_array($results)) {
+      $params_str = "";
+      foreach ($params as $param => $value)
+        $params_str .= "$param: $value\n";
+      $message .= sprintf("\n%s", $params_str);
+    }
+
+    // Append stacktrace.
+    $message .= sprintf("Stack trace:\n%s", (new \Exception())->getTraceAsString());
+
+    // Pass message to the logger.
+    Yii::getLogger()->log($message, 'warning', 'procountor');
+  }
+
+  /**
    * Create cURL request.
    *
    * @param string $target
@@ -401,6 +438,15 @@ class Procountor extends CComponent
     $target = 'bankaccounts';
     if (!empty($query = http_build_query($data)))
       $target .= "&$query";
+
+    // Pass information to the temp log for solving some obscure error.
+    $this->logDebugWarning('bankaccounts', 'Requesting bank accounts.', [], [
+      'data' => json_encode($data),
+      'query' => json_encode($query),
+      'final_target' => json_encode($target),
+      'domain' => Yii::app()->user->domain
+    ]);
+
     return $this->requestGet($target);
   }
 

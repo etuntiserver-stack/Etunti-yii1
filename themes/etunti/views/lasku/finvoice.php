@@ -22,6 +22,7 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
   // var_dump($lr);
   // exit;
 
+  /** @var Procountor */
   $pc = Yii::createComponent('Procountor');
 
   // Check that authorization is valid.
