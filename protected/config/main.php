@@ -148,6 +148,12 @@ if (
           'enabled' => YII_DEBUG,
           'categories'=>'freshdesk',
           'logFile' => 'freshdesk.log'
+        ], [
+          'class' => 'CFileLogRoute',
+          'levels' => 'trace, info, vardump', //'trace, info, error, warning, vardump'
+          'enabled' => YII_DEBUG,
+          'categories'=>'procountor',
+          'logFile' => 'procountor.log'
         ],
         [
             'class' => 'CWebLogRoute',
@@ -174,7 +180,13 @@ if (
             'levels' => 'error', //'trace, info, error, warning, vardump'
             'enabled' => YII_DEBUG,
             //'categories'=>'system.*',
-        ),
+        ), [
+          'class' => 'CFileLogRoute',
+          'levels' => 'trace, info, vardump', //'trace, info, error, warning, vardump'
+          'enabled' => YII_DEBUG,
+          'categories'=>'procountor',
+          'logFile' => 'procountor.log'
+        ],
         array(
             'class' => 'CWebLogRoute',
             'levels' => 'error, warning', //'trace, info, error, warning, vardump'

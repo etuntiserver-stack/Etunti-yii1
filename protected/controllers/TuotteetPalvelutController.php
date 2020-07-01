@@ -267,10 +267,7 @@ class TuotteetPalvelutController extends Controller
 	//  Oikeudet -->
 
 		if(isset($_POST['oletustuote'])){
-			$t = TuotteetPalvelut::model()->find("oletustuote=2");
-			if(isset($t->id)){
-				TuotteetPalvelut::model()->updatebypk($t->id, array('oletustuote' => 1));
-			}
+			TuotteetPalvelut::model()->updateAll(array('oletustuote'=>'0'));
 			TuotteetPalvelut::model()->updatebypk($_POST['oletustuote'], array('oletustuote' => 2));
 			echo $_POST['oletustuote'];
 			exit;

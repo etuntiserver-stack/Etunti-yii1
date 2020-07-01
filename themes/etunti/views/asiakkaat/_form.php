@@ -84,7 +84,7 @@ if(!isset($model->id) and isset($asetukset->id)){
 /** @var Freshdesk object */
 $freshdesk = Yii::createComponent('Freshdesk');
 
-if (!$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
+if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 
   $freshdesk_id = $model->freshdesk_id;
 

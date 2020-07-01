@@ -701,6 +701,11 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
         <?php endif; ?>
 	<!-- Digisten -->
 
+	<!-- l_asiakkaat -->
+        <?php if(isset($_GET['asiakasnumero']) and $_GET['asiakasnumero'] > 0) : ?>
+		<input type="hidden" id="asiakasnumero" value="<?=$_GET['asiakasnumero']?>">
+        <?php endif; ?>
+	<!-- l_asiakkaat -->
 
 <div id="rivit" class="table-responsive">
 <TABLE class="table well" id="TableRivit">
@@ -722,20 +727,33 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
      </TR>
 
      <tbody>
-     <?php if(isset($model->id)) : ?> 
-<?php /*
-     	<div class="tr_rivit"></div>
-     <?php else : ?>
-*/ ?>
      <?php 
 	$num = 0;
-	foreach($laskunRivit as $rivi){ 
-	$num++;
-	echo $this->renderPartial("//lasku/tr_rivi_update",array('num'=>$num,'rivi'=>$rivi));
+	if(isset($model->id)){
+		foreach($laskunRivit as $rivi){ 
+			$num++;
+			echo $this->renderPartial("//lasku/tr_rivi_update",array('num'=>$num,'rivi'=>$rivi));
+		}
+	}
+	if(isset($_POST['tr_rivit'])){
+		$kohde_ids = [];
+		foreach(json_decode($_POST['tr_rivit'], true) as $arr)
+			$kohde_ids[$arr['kohde']] = $arr['kohde']; 
+		$hinnat = [];
+		foreach($kohde_ids as $kohde)
+			$hinnat[$kohde] = $this->getHintaForKohde($kohde);
+
+		foreach(json_decode($_POST['tr_rivit'], true) as $arr){ 
+			$num++;
+			echo $this->renderPartial("//lasku/tr_rivit_tyhja",[
+				'num'=>$num, 
+				'arr'=>$arr, 
+				'hinnat' => $hinnat, 
+				'tuotePalvelu' => $_POST['tp_palvelu']
+			]);
+		}
 	}
      ?>
-
-     <?php endif; ?>
      </tbody>
 
      <tfoot>
@@ -1095,7 +1113,7 @@ if($("#modelID").val() != '1'){
 		console.log(d);
 		if(d['asiakas_id'] && d['asiakas_id'] > 0)
 		{
-			$('#Lasku_as_nro').val(d['asiakas_id']).trigger('change');;
+			$('#Lasku_as_nro').val(d['asiakas_id']).trigger('change');
 		}
            }
         });
@@ -1115,6 +1133,7 @@ if($("#modelID").val() != '1'){
 
     }
     /*   Edisco Tilaus --> */
+
 
 }
 
@@ -1173,7 +1192,7 @@ $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 
 		if(sp['id'])
 		{
-			$("#kpl_"+num).val(1);
+			//$("#kpl_"+num).val(1);
 			$("#tkoodi_"+num).val(sp['tuotenimi']);
 			$("#hinta_"+num).val(parseFloat(sp['hinta_alv_0']));
 			$("#hinnasto_rivi_id_"+num).val(sp['hinnasto_rivi_id']);
@@ -1310,7 +1329,7 @@ $(document).delegate('#rivit input[type="number"]','keyup',function(){
 
 var getkohdeT = '';
 $("#Lasku_as_nro").change(function() {
-
+    var l_asiakkaat = '<?=((isset($_GET["l_asiakkaat"]))? "true" : "false") ?>';
     var asiakas = $("#Lasku_as_nro option:selected").val();
     var asiakas_id = $("#Lasku_as_nro option:selected").attr('asiakas_id');
     if(!asiakas)
@@ -1318,11 +1337,13 @@ $("#Lasku_as_nro").change(function() {
 	alert("Asiakasnumero puuttuu");
 	return false;
     }
-	
-	$("#kalut").show('slow');
+	if(l_asiakkaat == "false")
+		$("#kalut").show('slow');
+
 	$("#tuotteet_palvelut_muoto").show('slow');
 	palvelu_muoto();
 
+	if(l_asiakkaat == "false"){
         $.ajax({
            url: 'etsikohde?asiakasnumero='+asiakas,
 	   async : false,
@@ -1351,6 +1372,7 @@ $("#Lasku_as_nro").change(function() {
                	console.log(XMLHttpRequest);
 	   }
         });
+	} // l_asiakkaat
 
         $.ajax({
            url: 'etsiasiakas?id='+asiakas_id,
@@ -1839,6 +1861,11 @@ $(".muokaValiko").click(function() {
 });
 /* valikot */
 
+    /*  <-- l_asiakkaat */
+    if( $('#asiakasnumero').length )
+    {
+	$('#Lasku_as_nro').val($('#asiakasnumero').val()).trigger('change');
+    }
 
 });
 </script>
