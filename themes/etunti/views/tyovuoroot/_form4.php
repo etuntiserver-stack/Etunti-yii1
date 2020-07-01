@@ -650,11 +650,11 @@ $(document).ready(function(){
             } else {
               parsed.forEach((item, index) => { omasiistijat.push(item[0]); });
             }
+
+            // Kohteen vaihdon/initialisaation yhteydessä tarkistetaan omasiistijät.
+            omasiistijaTarkistus();
           }
         });
-
-        // Kohteen vaihdon/initialisaation yhteydessä tarkistetaan omasiistijät.
-        omasiistijaTarkistus();
       };
 
       /**
