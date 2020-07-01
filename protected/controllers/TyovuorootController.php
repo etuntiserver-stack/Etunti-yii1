@@ -4880,7 +4880,7 @@ class TyovuorootController extends Controller
             }
 
             // Validate cancel_type parameter.
-            if (!is_numeric($cancel_type)) {
+            if (!is_numeric($cancel_type) || !in_array($cancel_type, [1, 2])) {
               $errors[] = 'Peruuttamistyypin valinta on viallinen. Sallitut arvot: 1 (peruutettu), 2 (peruutettu laskutettava).';
               break;
             }
