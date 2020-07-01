@@ -85,7 +85,7 @@ class Procountor extends CComponent
    * @param array $params
    * Additional parameters, like ['uid' => 123] (included before stacktrace).
    */
-  public function logDebugWarning(string $request, string $message, array $results, array $params = [])
+  public function logDebug(string $request, string $message, array $results, array $params = [])
   {
     $message = "(Procountor debug :: /$request): $message";
 
@@ -106,7 +106,7 @@ class Procountor extends CComponent
     $message .= sprintf("Stack trace:\n%s", (new \Exception())->getTraceAsString());
 
     // Pass message to the logger.
-    Yii::getLogger()->log($message, 'warning', 'procountor');
+    Yii::getLogger()->log($message, 'info', 'procountor');
   }
 
   /**
@@ -440,7 +440,7 @@ class Procountor extends CComponent
       $target .= "&$query";
 
     // Pass information to the temp log for solving some obscure error.
-    $this->logDebugWarning('bankaccounts', 'Requesting bank accounts.', [], [
+    $this->logDebug('bankaccounts', 'Requesting bank accounts.', [], [
       'data' => json_encode($data),
       'query' => json_encode($query),
       'final_target' => json_encode($target),
