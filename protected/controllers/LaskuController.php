@@ -980,15 +980,20 @@ exit;
 
 			$mobile 		= Yii::app()->createController('Mobile');
 			$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 3, false, 0, false, $id, null);
-			foreach($hyv_tyotunnit_all as $tid => $sec)
+
+			foreach($hyv_tyotunnit_all as $tid => $sec){
+				if($sec > 0){
+					$rivi_kpl++;
 					$tunnit += $this->num($sec);
+				}
+			}
 
 		}
 		$return = array(
 			'from' => $from,
 			'to' => $to,
 			'tunnit' => $tunnit,
-			'rivi_kpl' =>$rivi_kpl,
+			'rivi_kpl' => $rivi_kpl,
 			'fromto' => date("d.m.Y", strtotime($from)).' - '.date("d.m.Y", strtotime($to)),
 			'kohde_id' => 0,
 			'asiakas_id' => 0,

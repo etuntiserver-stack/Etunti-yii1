@@ -1192,7 +1192,7 @@ $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 
 		if(sp['id'])
 		{
-			$("#kpl_"+num).val(1);
+			//$("#kpl_"+num).val(1);
 			$("#tkoodi_"+num).val(sp['tuotenimi']);
 			$("#hinta_"+num).val(parseFloat(sp['hinta_alv_0']));
 			$("#hinnasto_rivi_id_"+num).val(sp['hinnasto_rivi_id']);
