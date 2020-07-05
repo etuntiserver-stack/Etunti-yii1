@@ -103,7 +103,7 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
         "identifier" => $l->y_tunnus,             // (string) SALES_INVOICE and PURCHASE_INVOICE only. Business ID or national identification number.
         "taxCode" => "",                          // (string) SALES_INVOICE only. Tax code of the customer.
         "customerNumber" => $l->as_nro,           // (string) SALES_INVOICE and PURCHASE_INVOICE only. Customer number.
-        "email" => $l->sahkoposti,                // (string) SALES_INVOICE only. Email address of the buyer. Required if invoicing channel is EMAIL, otherwise not visible on the UI.
+        "email" => trim($l->sahkoposti),          // (string) SALES_INVOICE only. Email address of the buyer. Required if invoicing channel is EMAIL, otherwise not visible on the UI.
 
         // Intermediary bank name and address.
         "counterPartyAddress" => (object) [
