@@ -247,7 +247,10 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
         "discountPercent" => $lr->ale,  // (number) Product discount percentage.
         "vatPercent" => $lr->alv,       // (number) Product VAT percentage. Must be a percentage currently in use for the company.
         //"vatStatus" => 1,             // (int) Product VAT status.
-        "comment" => $lr->tkoodi        // (string) Invoice row comment. Visible on the invoice. Use \ as line break.
+
+        // Free text fix 06.07.2020; replace tkoodi with free_text (this model needs to be cleaned).
+        // "comment" => $lr->tkoodi     // (string) Invoice row comment. Visible on the invoice. Use \ as line break.
+        "comment" => $lr->free_text     // (string) Invoice row comment. Visible on the invoice. Use \ as line break.
       ];
     }
 
