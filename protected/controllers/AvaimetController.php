@@ -281,69 +281,121 @@ class AvaimetController extends Controller
 		));
 	}
 
+  public function actionAvaimet_tyontekijalle()
+  {
+    // Don't search unless some criteria are provided, in order to not lock up
+    // the whole system when the page is initially opened, loading EVERYTHING.
+    // Flag as TRUE to indicate a search once a criteria is processed.
+    $search = false;
 
-	public function actionAvaimet_tyontekijalle()
-	{
+    // Check for actions to be performed.
+    if (isset($_POST['avaimet'])) {
+      foreach ($_POST['avaimet'] as $avain_id) {
+        $avaimet_old = Avaimet::model()->findByPk($avain_id);
+        Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti'], 'tid' => $_POST['tyontekija']));
+        $avaimet_new = Avaimet::model()->findByPk($avain_id);
 
-		if(isset($_POST['avaimet'])){
-			foreach($_POST['avaimet'] as $avain_id){
-				$avaimet_old = Avaimet::model()->findByPk($avain_id);
-				Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti'], 'tid' => $_POST['tyontekija']));
-				$avaimet_new = Avaimet::model()->findByPk($avain_id);
+        // <-- LOG
+        $model_log   = 'Avaimet';
+        $name_log   = 'Avaimet';
+        $status_log   = 'Move';
 
-				// <-- LOG
-				$model_log 	= 'Avaimet';
-				$name_log 	= 'Avaimet';
-				$status_log 	= 'Move';
-	
-					$old_values = json_encode($avaimet_old->attributes);
-					$new_values = json_encode($avaimet_new->attributes);
-					$site = Yii::app()->createController('Site');
-					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-				//     LOG -->
-			}
-		}
-		if(isset($_POST['asiakkaatPerSivu'])){
-			Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);
-			echo json_encode($_POST['asiakkaatPerSivu']);
-			exit;
-		}
-		$from = date("Y-m-d");
-		$to = date("Y-m-d", strtotime($from.' +1 month'));
-		if(isset($_GET['from']) and isset($_GET['to'])){
-			$from = date("Y-m-d", strtotime($_GET['from']));
-			$to = date("Y-m-d", strtotime($_GET['to']));
-		}
-		$haku_criteria = [];
-		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])){
-			$haku_criteria[] = " 
-			kohde IN ( SELECT id FROM sivex_kohdet
-				WHERE asiakas_id IN ( SELECT id FROM asiakkaat
-					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'
-				)
-			)";
-		}
-		if(isset($_GET['osoite']) and !empty($_GET['osoite'])){
-			$haku_criteria[] = " 
-			kohde IN ( SELECT id FROM sivex_kohdet
-				WHERE osoite LIKE '%".$_GET['osoite']."%'
-			)";
-		}
-		if(isset($_GET['tekijan_nimi']) and !empty($_GET['tekijan_nimi'])){
-			$haku_criteria[] = " tid IN (
-			SELECT id FROM sivex_ttekijat WHERE CONCAT(tekijan_nimi, ' ', sukunimi)  LIKE '%".$_GET['tekijan_nimi']."%' 
-			)";
-		}
-		$tyovuorot = Yii::app()->createController('Tyovuoroot');
-		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data']);
-		$perSivu = 50;
-		$this->render('avaimet_tyontekijalle', array(
-			'dataAll' => $dataAll, 
-			'perSivu' => $perSivu,
-			'from' => $from,
-			'to' => $to,
-		));
-	}
+        $old_values = json_encode($avaimet_old->attributes);
+        $new_values = json_encode($avaimet_new->attributes);
+        $site = Yii::app()->createController('Site');
+        $criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+        //     LOG -->
+      }
+    }
+
+    if (isset($_POST['asiakkaatPerSivu'])) {
+      Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);
+      echo json_encode($_POST['asiakkaatPerSivu']);
+      exit;
+    }
+
+    // Set default criteria in case a search is performed.
+    $from = date("Y-m-d");
+    $to = date("Y-m-d", strtotime($from . ' +1 month'));
+    $perSivu = 50;
+    $haku_criteria = [];
+
+
+    // Search criteria: Dates (päivämäärät)
+    if (isset($_GET['from']) and isset($_GET['to'])) {
+
+      // Update dates based on user choice.
+      $from = date("Y-m-d", strtotime($_GET['from']));
+      $to = date("Y-m-d", strtotime($_GET['to']));
+
+      // Tell the action to perform the search.
+      $search = true;
+    }
+
+    // Search criteria: Customer (asiakas)
+    if (isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])) {
+
+      // Add criteria for the specified customer.
+      $haku_criteria[] = "
+        kohde IN (
+          SELECT id FROM sivex_kohdet WHERE asiakas_id IN (
+            SELECT id FROM asiakkaat WHERE
+              yrityksen_nimi LIKE '%{$_GET['yrityksen_nimi']}%' OR
+              yhteyshenkilo LIKE '%{$_GET['yrityksen_nimi']}%'
+				  )
+        )
+      ";
+
+      // Tell the action to perform the search.
+      $search = true;
+    }
+
+    // Search criteria: Address (kohde)
+    if (isset($_GET['osoite']) and !empty($_GET['osoite'])) {
+
+      // Add criteria for the specified address.
+      $haku_criteria[] = "kohde IN (SELECT id FROM sivex_kohdet WHERE osoite LIKE '%{$_GET['osoite']}%')";
+
+      // Tell the action to perform the search.
+      $search = true;
+    }
+
+    // Search criteria: Worker (työntekijä)
+    if (isset($_GET['tekijan_nimi']) and !empty($_GET['tekijan_nimi'])) {
+
+      // Add criteria for the specified worker.
+      $haku_criteria[] = "tid IN (SELECT id FROM sivex_ttekijat WHERE CONCAT(tekijan_nimi, ' ', sukunimi) LIKE '%{$_GET['tekijan_nimi']}%')";
+
+      // Tell the action to perform the search.
+      $search = true;
+    }
+
+    // Only search when criteria are passed from the form by the user.
+    // Otherwise, render search form without initial results.
+    if (true === $search) {
+
+      // Perform search.
+      $tyovuorot = Yii::app()->createController('Tyovuoroot')[0];
+      $dataAll = $tyovuorot->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data']);
+
+      // Render results and search form.
+      $this->render('avaimet_tyontekijalle', array(
+        'dataAll' => $dataAll,
+        'perSivu' => $perSivu,
+        'from' => $from,
+        'to' => $to,
+      ));
+    } else {
+
+      // Render search form without any results.
+      $this->render('avaimet_tyontekijalle', array(
+        'dataAll' => [],
+        'perSivu' => $perSivu,
+        'from' => $from,
+        'to' => $to,
+      ));
+    }
+  }
 
 	/**
 	 * Manages all models.
