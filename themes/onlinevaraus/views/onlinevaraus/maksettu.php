@@ -1,391 +1,383 @@
 <?php
-require YiiBase::getPathOfAlias('webroot').'/lib/CheckoutFinland/Response.php';
+error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 1);
+echo '<br>';
+
+require YiiBase::getPathOfAlias('webroot') . '/lib/CheckoutFinland/Response.php';
+
 use CheckoutFinland\Response;
 
-error_reporting(E_ALL|E_STRICT);
-ini_set('display_errors', 1);
-?>
-<br>
-<?php
-if(!isset($_GET['check']))
-{
-
-
-
 $asetukset = Asetukset::model()->findbypk(1);
-if(!empty($asetukset->checkout_salasana))
-$demo_merchant_secret = $asetukset->checkout_salasana;
-else
-echo 'merchant_secret error';
+$onlinevaraus_palvelu = $asetukset->onlinevaraus_palvelu;
+$is_bambora = ($onlinevaraus_palvelu == 1);
 
-$response = new Response($demo_merchant_secret);
+if (!isset($_GET['check'])) {
 
-$response->setRequestParams($_GET);
+  $status_string = '';
+  $status_ok = false;
+  $reference = '';
 
-$status_string = '';
+  if ($is_bambora) {
+    require dirname(__FILE__) . '/../../../../lib/bambora-payform/bambora_payform_loader.php';
+    $private_key = $asetukset->bambora_private_key ?? '';
+    $api_key = $asetukset->bambora_api_key ?? '';
 
-try {
-    if($response->validate()) {
+    if (empty($private_key) || empty($api_key)) {
+      echo 'Bambora Payform tunnukset puuttuvat!';
+      exit;
+    }
+
+    $payForm = new Bambora\PayForm($api_key, $private_key);
+
+    try {
+      $result = $payForm->checkReturn($_GET);
+
+      if ($result->RETURN_CODE == 0) {
+        // $payment_return = 'Payment succeeded';
+        $status_ok = true;
+        $reference = $result->ORDER_NUMBER;
+        Onlinevaraus::model()->updateByPk($_SESSION['onlinevaraus']['onlinevarausID'], ['maksun_onnistu_koodi' => $result->AUTHCODE]);
+      } else {
+        // $payment_return = 'Payment failed (RETURN_CODE: ' . $result->RETURN_CODE . ')';
+
+        switch ($result->RETURN_CODE) {
+          case 1:
+            $status_string = 'Payment failed. Customer did not successfully finish the payment.';
+            break;
+          case 4:
+            $status_string = 'Transaction status could not be updated after customer returned from the web page of a bank. Please use the merchant UI to resolve the payment status.';
+            break;
+          case 10:
+            $status_string = 'Maintenance break. The transaction is not created and the user has been notified and transferred back to the cancel address.';
+            break;
+        }
+      }
+    } catch (Bambora\PayFormException $e) {
+      exit('Got the following exception: ' . $e->getMessage());
+    }
+  } else {
+    if (!empty($asetukset->checkout_salasana))
+      $demo_merchant_secret = $asetukset->checkout_salasana;
+    else
+      echo 'merchant_secret error';
+
+    $response = new Response($demo_merchant_secret);
+    $response->setRequestParams($_GET);
+
+    try {
+      if ($response->validate()) {
         // we have a valid response, now check the status
 
         // the status codes are listed in the api documentation of Checkout Finland
-        switch($response->getStatus())
-        {
-            case '2':
-            case '5':
-            case '6':
-            case '8':
-            case '9':
-            case '10':
-                // These are paid and we can ship the product
-                $status_string = 'PAID';
-                break;
-            case '7':
-            case '3':
-            case '4':
-                // Payment delayed or it is not known yet if the payment was completed 
-                 $status_string = 'DELAYED';
-                break;
-            case '-1':
-                 $status_string = 'CANCELLED BY USER';
-                 break;
-            case '-2':
-            case '-3':
-            case '-4':
-            case '-10':
-                // Cancelled by banks, Checkout Finland, time out e.g. 
-                 $status_string = 'CANCELLED';
-                break;
+        switch ($response->getStatus()) {
+          case '2':
+          case '5':
+          case '6':
+          case '8':
+          case '9':
+          case '10':
+            // These are paid and we can ship the product
+            $status_string = 'PAID';
+            break;
+          case '7':
+          case '3':
+          case '4':
+            // Payment delayed or it is not known yet if the payment was completed 
+            $status_string = 'DELAYED';
+            break;
+          case '-1':
+            $status_string = 'CANCELLED BY USER';
+            break;
+          case '-2':
+          case '-3':
+          case '-4':
+          case '-10':
+            // Cancelled by banks, Checkout Finland, time out e.g. 
+            $status_string = 'CANCELLED';
+            break;
+        }
+      } else {
+        // something went wrong with the validation, perhaps the user changed the return parameters
+      }
+    } catch (MacMismatchException $ex) {
+      echo 'Mac mismatch';
+    } catch (UnsupportedAlgorithmException $ex) {
+      echo 'Unsupported algorithm';
+    }
+
+    if ($status_string == 'PAID' and !isset($_GET['check'])) {
+      $status_ok = true;
+      $reference = $_GET['REFERENCE'];
+    }
+  }
+
+  if ($status_ok) {
+
+    $ov = Onlinevaraus::model()->find("id='$reference' and tila=0");
+    if (isset($ov->id)) {
+      $tv = Tyovuoroot::model()->find("onlinevaraus_id='{$ov->id}'");
+    }
+
+    if (isset($ov->id) and isset($tv->id)) {
+
+      // <-- Uusi asiakas ja kohde
+      if (!isset($_SESSION['onlinevaraus']['asiakas_id']) and !isset($_SESSION['onlinevaraus']['kohde_id'])) {
+
+        $criteria = new CDbCriteria();
+        $criteria->order = " cast(asiakasnumero as unsigned) DESC  ";
+        $anum = Asiakkaat::model()->find($criteria);
+
+        $asiakkaat = new Asiakkaat;
+        if (isset($anum->id) and $asetukset->lasku_asiakasnumero == 0) {
+          $asiakkaat->asiakasnumero = $anum->asiakasnumero + 1;
+        }
+        $asiakkaat->kaupunki = $ov->kaupunki;
+        $asiakkaat->postinumero = $ov->postinumero;
+        $asiakkaat->osoite = $ov->osoite;
+        $asiakkaat->puhelin = $ov->puhelin;
+        $asiakkaat->sahkoposti = $ov->sahkoposti;
+        $asiakkaat->tyyppi = $ov->tyyppi;
+        $asiakkaat->yrityksen_nimi = $ov->yrityksen_nimi;
+        $asiakkaat->y_tunnus = $ov->y_tunnus;
+        $asiakkaat->yhteyshenkilo = $ov->yhteyshenkilo;
+        $asiakkaat->onlinevarauksen_asiakas = 1;
+        $asiakkaat->aktiivinen = 1;
+
+        if ($asiakkaat->save()) {
+
+          Onlinevaraus::model()->updateByPk($ov->id, array('asiakas_id' => $asiakkaat->id));
+
+          $kohteet = new Kohteet;
+          $kohteet->asiakas_id = $asiakkaat->id;
+          $kohteet->etu_suku_nimet = $asiakkaat->yhteyshenkilo;
+          $kohteet->osoite = $asiakkaat->osoite;
+          $kohteet->pnumero = $asiakkaat->postinumero;
+          $kohteet->kaupunki = $asiakkaat->kaupunki;
+          $kohteet->puh_nro = $asiakkaat->puhelin;
+          $kohteet->email = $asiakkaat->sahkoposti;
+          $kohteet->muut = "Onlinevaraus " . date("d.m.Y");
+          $kohteet->tietoja = $ov->lisatietoja;
+          $kohteet->aktiivinen = 1;
+
+          if (!$kohteet->save()) {
+            echo json_encode(var_dump($kohteet->errors));
+            exit;
+          } else {
+            Onlinevaraus::model()->updateByPk($ov->id, array('kohde_id' => $kohteet->id));
+            Tyovuoroot::model()->updateByPk($tv->id, array('kohde' => $kohteet->id));
+          }
+        } else {
+          echo json_encode(var_dump($asiakkaat->errors));
+          exit;
+        }
+      }
+      // Uusi asiakas ja kohde -->
+
+      // <-- Kuvat siirretaan templatesta kohteeseen
+      if (isset($_SESSION['onlinevaraus']['kuvat'])) {
+        if (!file_exists(Yii::app()->basePath . "/../img/uploadedfromphone/" . Yii::app()->user->domain)) {
+          mkdir(Yii::app()->basePath . "/../img/uploadedfromphone/" . Yii::app()->user->domain, 0777, true);
+        }
+        $uploaddir = Yii::app()->basePath . '/../img/uploadedfromphone/' . Yii::app()->user->domain . '/';
+        $ov_updated = Onlinevaraus::model()->findByPk($ov->id);
+
+        $kuvatArr = array();
+        foreach (array_reverse(glob('tiedostot/onlinevaraus_temp/' . Yii::app()->user->domain . '/' . $_SESSION['onlinevaraus']['kuvat'] . '_*.*')) as $file) {
+          $kuvatArr[] = $file;
+          $explNimi = explode("/", $file);
+          $newname = $ov_updated->kohde_id . "_" . end($explNimi);
+          rename($file, $uploaddir . $newname);
+          $kuvk = new KuviaKohteesta;
+          $kuvk->kohde_id = $ov_updated->kohde_id;
+          $kuvk->tid = 0;
+          $kuvk->osoite = $ov->osoite;
+          $kuvk->tekijan_nimi = $ov->yhteyshenkilo;
+          $kuvk->tiedosto = $newname;
+          $kuvk->kuvaus = Yii::t('main', 'Tämä kuva saapunut onlinevarauksesta');
+          if (!$kuvk->save())
+            print_r($kuvk->getErrors());
+        }
+        Onlinevaraus::model()->updateByPk($ov->id, array('valokuvat' => json_encode($kuvatArr)));
+      }
+      //     Kuvat siirretaan templatesta kohteeseen -->
+
+      if (isset($_SESSION['onlinevaraus']['kupongi'])) {
+        $kup = Kupongit::model()->findbypk($_SESSION['onlinevaraus']['kupongi']);
+        if (isset($kup->id) and $kup->jatkuva == 0) {
+          Kupongit::model()->updatebypk($kup->id, array('status' => 1)); // nyt on kaytetty
+        }
+      }
+
+      $message = '';
+      $message .= '
+<section class="esittely">
+  <div class="paddings">
+    <div class="container-fluid">
+      <style>
+        table { width:90%; }
+        td { line-height: 170%; width:50%; }
+      </style>
+      <p><h1 class="title-subtitle text-left"><span>Kiitos tilauksestasi!</span></h1></p>
+      <p><h4 class="title-subtitle text-left">Olemme vastaanottaneet tilauksesi ja tästä voit tulostaa tilausvahvistuksen.</h4></p>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <tr><td>Nimi</td><td>' . $ov->yhteyshenkilo . '</td></tr>
+          <tr><td>Osoite</td><td>' . $ov->osoite . '</td></tr>
+          <tr><td>Puhelin</td><td>' . $ov->puhelin . '</td></tr>
+          <tr><td>S-posti</td><td>' . $ov->sahkoposti . '</td></tr>';
+
+      if (!empty($ov->yrityksen_nimi))
+        $message .= '<tr><td>Yritys</td><td>' . $ov->yrityksen_nimi . '</td></tr>';
+      if (!empty($ov->y_tunnus))
+        $message .= '<tr><td>Y-tunnus</td><td>' . $ov->y_tunnus . '</td></tr>';
+
+      $message .= '
+        </table>
+        <div>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <tr><td>Tilausnumero</td><td>' . $ov->id . '</td></tr>';
+
+      $tilauksen_kuvaus = json_decode($ov->tilauksen_kuvaus, true);
+      $kuvaus = '';
+      if (isset($tilauksen_kuvaus['paa']) and is_array($tilauksen_kuvaus['paa'])) {
+
+        $message .= '<tr><td valign="top">Tilattu tuote</td><td>';
+        $kuvaus .= "Tilattu tuote\n";
+        foreach ($tilauksen_kuvaus['paa'] as $k => $v) {
+
+          $message .=  $k;
+          $kuvaus .=  $k;
+          if (!empty($v)) {
+            $message .=  ', ' . $v;
+            $kuvaus .=  ', ' . $v;
+          }
+
+          $message .=  '<br>';
+          $kuvaus .=  "\n";
         }
 
-    } else {
-        // something went wrong with the validation, perhaps the user changed the return parameters
+        if (isset($tilauksen_kuvaus['lisa']) and is_array($tilauksen_kuvaus['lisa'])) {
+          foreach ($tilauksen_kuvaus['lisa'] as $k => $v) {
+            $message .=  $k . ', ' . $v . 'h<br>';
+            $kuvaus .=  $k . ", " . $v . "h\n";
+          }
+        }
+        $message .= '<br></td></tr>';
+      }
+
+      $kuvaus .=  Yii::t('main', 'Lisätietoja') . ': ' . $ov->lisatietoja . "\n";
+
+      $message .= '
+              <tr><td>Ajankohta</td><td>' . $tv->pvm . '</td></tr>
+              <tr><td>Aika</td><td>KLO ' . $tv->alku . '-' . $tv->loppu . '</td></tr>				
+              <tr><td>Paikka</td><td>' . $ov->osoite . ', ' . $ov->postinumero . ' ' . $ov->kaupunki . '</td></tr>
+              <tr><td>Hinta</td><td>' . number_format($ov->veroton_hinta, 2, ',', '') . ' &euro;</td></tr>
+              <tr><td>ALV</td><td>' . number_format(($ov->hinta - $ov->veroton_hinta), 2, ',', '') . ' &euro;</td></tr>
+              <tr><td>Yhteeensä</td><td>' . number_format($ov->hinta, 2, ',', '') . ' &euro;</td></tr>
+              <tr><td>Maksu</td><td>Maksu on vahvistettu</td></tr>
+            </table>
+          </div>
+          <p><span>' . $asetukset->tilausvahvistus . '</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>';
+
+      //echo $message;
+      //exit;
+
+      $_SESSION['onlinevaraus']['message'] = $message;
+      $firmanTiedot = FirmanTiedot::model()->findbypk(1);
+
+      // <-- Lähetetään asiakkaalle
+      $mail = new YiiMailer();
+      $mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+      $mail->addReplyTo($firmanTiedot->sahkoposti, $firmanTiedot->tyonantaja);
+      $mail->setTo($ov->sahkoposti);
+      $mail->setSubject('Online varaus');
+      $mail->setBody($message);
+      if ($mail->send()) {
+        // <-- LOG
+        $log = new Log;
+        $log->log_category   = 1; // 1-email
+        $log->email_to     = $ov->sahkoposti;
+        $log->email_subject  = 'Online varaus';
+        $log->email_message  = json_encode($message);
+        $log->save();
+        //     LOG -->
+      }
+      // Lähetetään asiakkaalle -->
+
+
+      // <-- Lähetetään toimistoon
+      if (isset($firmanTiedot->sahkoposti) and !empty($firmanTiedot->sahkoposti)) {
+        $message .= '<p><h3>Kopio</h3></p>';
+        $mail = new YiiMailer();
+        $mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+        $mail->addReplyTo($firmanTiedot->sahkoposti, $firmanTiedot->tyonantaja);
+        $mail->setTo($firmanTiedot->sahkoposti);
+        $mail->setSubject('Online varaus');
+        $mail->setBody($message);
+        if ($mail->send()) {
+          // <-- LOG
+          $log = new Log;
+          $log->log_category   = 1; // 1-email
+          $log->email_to     = $firmanTiedot->sahkoposti;
+          $log->email_subject  = 'Online varaus';
+          $log->email_message  = json_encode($message);
+          $log->save();
+          //     LOG -->
+        }
+      }
+      // Lähetetään toimistoon -->
+
+      $t = Tyovuoroot::model()->findbypk($tv->id);
+      $t->osoiteOnline = 2;
+      $t->tietoja = $kuvaus;
+      $t->save();
+
+      // <-- LOG
+      if (isset($t->id)) {
+        $t = Tyovuoroot::model()->findbypk($t->id);
+        $model_log   = 'Tyovuoroot';
+        $name_log   = 'Työvuorot';
+        $status_log   = 'Luo työvuoro onlinevarauksen kautta';
+
+        $old_values = null;
+        $new_values = json_encode($t->attributes);
+        $site = Yii::app()->createController('Site');
+        $criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+      }
+      //     LOG -->
+
+      $o = Onlinevaraus::model()->findbypk($ov->id);
+      $o->tila = 1;
+      $o->save();
+
+      // <-- LOG
+      if (isset($o->id)) {
+        $o = Onlinevaraus::model()->findbypk($o->id);
+        $model_log   = 'Onlinevaraus';
+        $name_log   = 'Onlinevaraus';
+        $status_log   = 'Create';
+
+        $old_values = null;
+        $new_values = json_encode($o->attributes);
+        $site = Yii::app()->createController('Site');
+        $criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+      }
+      //     LOG -->
+
+      $this->redirect(Yii::app()->request->baseUrl . '/index.php/onlinevaraus/maksettu?check=ok');
+      //echo $_SESSION['onlinevaraus']['message'];
+
     }
-} catch(MacMismatchException $ex) {
-    echo 'Mac mismatch';
-} catch(UnsupportedAlgorithmException $ex) {
-    echo 'Unsupported algorithm';
-}
-
-
-
-if($status_string == 'PAID' and !isset($_GET['check'])){
-$ov = Onlinevaraus::model()->find(" id='".$_GET['REFERENCE']."' and tila=0 ");
-if(isset($ov->id)){ $tv = Tyovuoroot::model()->find(" onlinevaraus_id='".$ov->id."' "); }
-
-if(isset($ov->id) and isset($tv->id)){
-
-
-
-	// <-- Uusi asiakas ja kohde
-	if(!isset($_SESSION['onlinevaraus']['asiakas_id']) and !isset($_SESSION['onlinevaraus']['kohde_id']))
-	{
-
-
-		  $criteria = new CDbCriteria();
-		  $criteria->order = " cast(asiakasnumero as unsigned) DESC  ";
-		  $anum = Asiakkaat::model()->find($criteria);
-
-		  $asiakkaat = new Asiakkaat;
-		  if(isset($anum->id) and $asetukset->lasku_asiakasnumero == 0){
-		  	$asiakkaat->asiakasnumero = $anum->asiakasnumero+1;
-		  }
-		  $asiakkaat->kaupunki = $ov->kaupunki;
-		  $asiakkaat->postinumero = $ov->postinumero;
-		  $asiakkaat->osoite = $ov->osoite;
-		  $asiakkaat->puhelin = $ov->puhelin;
-		  $asiakkaat->sahkoposti = $ov->sahkoposti;
-		  $asiakkaat->tyyppi = $ov->tyyppi;
-		  $asiakkaat->yrityksen_nimi = $ov->yrityksen_nimi;
-		  $asiakkaat->y_tunnus = $ov->y_tunnus;
-		  $asiakkaat->yhteyshenkilo = $ov->yhteyshenkilo;
-		  $asiakkaat->onlinevarauksen_asiakas=1;
-		  $asiakkaat->aktiivinen = 1;
-
-		  if($asiakkaat->save())
-		  {
-
-			Onlinevaraus::model()->updateByPk($ov->id, array('asiakas_id'=>$asiakkaat->id));
-
-			$kohteet = new Kohteet;
-			$kohteet->asiakas_id = $asiakkaat->id;
-			$kohteet->etu_suku_nimet = $asiakkaat->yhteyshenkilo;
-			$kohteet->osoite = $asiakkaat->osoite;
-			$kohteet->pnumero = $asiakkaat->postinumero;
-			$kohteet->kaupunki = $asiakkaat->kaupunki;
-			$kohteet->puh_nro = $asiakkaat->puhelin;
-			$kohteet->email = $asiakkaat->sahkoposti;
-			$kohteet->muut = "Onlinevaraus ".date("d.m.Y");
-			$kohteet->tietoja = $ov->lisatietoja;
-			$kohteet->aktiivinen = 1;
-
-			if(!$kohteet->save()) {
-				echo json_encode(var_dump($kohteet->errors));
-				exit;
-			} else {
-				Onlinevaraus::model()->updateByPk($ov->id, array('kohde_id'=>$kohteet->id));
-				Tyovuoroot::model()->updateByPk($tv->id, array('kohde'=>$kohteet->id));
-			}
-
-
-		  } else {
-			echo json_encode(var_dump($asiakkaat->errors));
-			exit;
-		  }
-
-
-	} 
-	// Uusi asiakas ja kohde -->
-
-
-
-	// <-- Kuvat siirretaan templatesta kohteeseen
-	if(isset($_SESSION['onlinevaraus']['kuvat']))
-	{
-			if (!file_exists(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain)) {
-			  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain, 0777, true);
-			}
-			$uploaddir = Yii::app()->basePath.'/../img/uploadedfromphone/'.Yii::app()->user->domain.'/';
-			$ov_updated = Onlinevaraus::model()->findByPk($ov->id);
-
-			$kuvatArr = array();
-			foreach(array_reverse(glob('tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/'.$_SESSION['onlinevaraus']['kuvat'].'_*.*')) as $file) 
-			{
-				$kuvatArr[] = $file;
-				$explNimi = explode("/",$file);
-				$newname = $ov_updated->kohde_id."_".end($explNimi);
-				rename($file, $uploaddir.$newname);
-				$kuvk = new KuviaKohteesta;
-				$kuvk->kohde_id = $ov_updated->kohde_id;
-				$kuvk->tid = 0;
-				$kuvk->osoite = $ov->osoite;
-				$kuvk->tekijan_nimi = $ov->yhteyshenkilo;
-				$kuvk->tiedosto = $newname;
-				$kuvk->kuvaus = Yii::t('main', 'Tämä kuva saapunut onlinevarauksesta');
-				if(!$kuvk->save())
-				print_r($kuvk->getErrors());
-			}
-			Onlinevaraus::model()->updateByPk($ov->id, array('valokuvat'=>json_encode($kuvatArr)));
-	}
-	//     Kuvat siirretaan templatesta kohteeseen -->
-
-
-	if(isset($_SESSION['onlinevaraus']['kupongi']))
-	{
-		$kup = Kupongit::model()->findbypk($_SESSION['onlinevaraus']['kupongi']);
-        	if(isset($kup->id) and $kup->jatkuva == 0)
-		{
-			Kupongit::model()->updatebypk($kup->id, array('status'=>1)); // nyt on kaytetty
-		}
-	}
-
-$message = '';
-$message .= '
-
-        <section class="esittely">
-            <div class="paddings">
-                <div class="container-fluid">
-<style>
-table{ 
-	width:90%;
-}
-td{
-	line-height: 170%;
-	width:50%;
-}
-</style>
-
-
-<p><h1 class="title-subtitle text-left"><span>Kiitos tilauksestasi!</span></h1></p>
-
-<p><h4 class="title-subtitle text-left">
-Olemme vastaanottaneet tilauksesi ja tästä voit tulostaa tilausvahvistuksen. 
-</h4></p>
-
-
-<div class="table-responsive">
-<table class="table table-striped">
-<tr><td>Nimi</td><td>'.$ov->yhteyshenkilo.'</td></tr>
-<tr><td>Osoite</td><td>'.$ov->osoite.'</td></tr>
-<tr><td>Puhelin</td><td>'.$ov->puhelin.'</td></tr>
-<tr><td>S-posti</td><td>'.$ov->sahkoposti.'</td></tr>';
-
-if(!empty($ov->yrityksen_nimi))
-$message .= '<tr><td>Yritys</td><td>'.$ov->yrityksen_nimi.'</td></tr>';
-if(!empty($ov->y_tunnus))
-$message .= '<tr><td>Y-tunnus</td><td>'.$ov->y_tunnus.'</td></tr>';
-
-$message .= '
-</table>
-<div>
-<div class="table-responsive">
-<table class="table table-striped">
-<tr><td>Tilausnumero</td><td>'.$ov->id.'</td></tr>';
-
-
-$tilauksen_kuvaus = json_decode($ov->tilauksen_kuvaus, true);
-$kuvaus = '';
-if(isset($tilauksen_kuvaus['paa']) and is_array($tilauksen_kuvaus['paa']))
-{
-
-  $message .= '<tr><td valign="top">Tilattu tuote</td><td>';
-  $kuvaus .= "Tilattu tuote\n";
-  foreach($tilauksen_kuvaus['paa'] as $k=>$v){
-
-	$message .=  $k;
-	$kuvaus .=  $k;
-	if(!empty($v)){
-		$message .=  ', '.$v;
-		$kuvaus .=  ', '.$v;
-	}
-
-	$message .=  '<br>';
-	$kuvaus .=  "\n";
   }
-
-  if(isset($tilauksen_kuvaus['lisa']) and is_array($tilauksen_kuvaus['lisa']))
-  {
-     foreach($tilauksen_kuvaus['lisa'] as $k=>$v){
-	$message .=  $k.', '.$v.'h<br>';
-	$kuvaus .=  $k.", ".$v."h\n";
-     }
+} elseif ($_GET['check'] == 'ok') {
+  if (isset($_SESSION['onlinevaraus'])) {
+    echo $_SESSION['onlinevaraus']['message'];
+    unset($_SESSION['onlinevaraus']);
   }
-  $message .= '<br></td></tr>';
 }
-
-$kuvaus .=  Yii::t('main', 'Lisätietoja').': '.$ov->lisatietoja."\n";
-
-
-$message .= '
-<tr><td>Ajankohta</td><td>'.$tv->pvm.'</td></tr>
-<tr><td>Aika</td><td>KLO '.$tv->alku.'-'.$tv->loppu.'</td></tr>				
-<tr><td>Paikka</td><td>'.$ov->osoite.', '.$ov->postinumero.' '.$ov->kaupunki.'</td></tr>
-<tr><td>Hinta</td><td>'.number_format($ov->veroton_hinta, 2, ',', '').' &euro;</td></tr>
-<tr><td>ALV</td><td>'.number_format( ($ov->hinta-$ov->veroton_hinta) , 2, ',', '').' &euro;</td></tr>
-<tr><td>Yhteeensä</td><td>'.number_format($ov->hinta, 2, ',', '').' &euro;</td></tr>
-<tr><td>Maksu</td><td>Maksu on vahvistettu</td></tr>
-</table>
-</div>
-
-			<p><span>'.$asetukset->tilausvahvistus.'</span></p>
-
-                </div>
-            </div>
-        </section>';
-
-//echo $message;
-//exit;
-
-			$_SESSION['onlinevaraus']['message'] = $message;
-			$firmanTiedot = FirmanTiedot::model()->findbypk(1);
-
-
-			// <-- Lähetetään asiakkaalle
-	          	$mail = new YiiMailer();
-			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-			$mail->addReplyTo($firmanTiedot->sahkoposti, $firmanTiedot->tyonantaja);
-			$mail->setTo($ov->sahkoposti);
-			$mail->setSubject('Online varaus');
-			$mail->setBody($message);
-			if($mail->send()){
-							// <-- LOG
-							$log=new Log;
-							$log->log_category 	= 1; // 1-email
-							$log->email_to 		= $ov->sahkoposti;
-							$log->email_subject	= 'Online varaus';
-							$log->email_message	= json_encode($message);
-							$log->save();
-							//     LOG -->
-			}
-			// Lähetetään asiakkaalle -->
-
-
-			// <-- Lähetetään toimistoon
-			if(isset($firmanTiedot->sahkoposti) and !empty($firmanTiedot->sahkoposti))
-			{
-			$message .= '<p><h3>Kopio</h3></p>';
-	          	$mail = new YiiMailer();
-			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-			$mail->addReplyTo($firmanTiedot->sahkoposti, $firmanTiedot->tyonantaja);
-			$mail->setTo($firmanTiedot->sahkoposti);
-			$mail->setSubject('Online varaus');
-			$mail->setBody($message);
-			if($mail->send()){
-							// <-- LOG
-							$log=new Log;
-							$log->log_category 	= 1; // 1-email
-							$log->email_to 		= $firmanTiedot->sahkoposti;
-							$log->email_subject	= 'Online varaus';
-							$log->email_message	= json_encode($message);
-							$log->save();
-							//     LOG -->
-			}
-			}
-			// Lähetetään toimistoon -->
-
-
-			
-			$t = Tyovuoroot::model()->findbypk($tv->id);
-			$t->osoiteOnline=2;
-			$t->tietoja=$kuvaus;
-			$t->save();
-
-
-				// <-- LOG
-				if( isset($t->id) ){
-				$t = Tyovuoroot::model()->findbypk($t->id);
-				$model_log 	= 'Tyovuoroot';
-				$name_log 	= 'Työvuorot';
-				$status_log 	= 'Luo työvuoro onlinevarauksen kautta';
-
-					$old_values = null;
-					$new_values = json_encode($t->attributes);
-					$site = Yii::app()->createController('Site');
-					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-				}
-				//     LOG -->
-
-			$o = Onlinevaraus::model()->findbypk($ov->id);
-			$o->tila=1;
-			$o->save();
-
-
-				// <-- LOG
-				if( isset($o->id) ){
-				$o = Onlinevaraus::model()->findbypk($o->id);
-				$model_log 	= 'Onlinevaraus';
-				$name_log 	= 'Onlinevaraus';
-				$status_log 	= 'Create';
-
-					$old_values = null;
-					$new_values = json_encode($o->attributes);
-					$site = Yii::app()->createController('Site');
-					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-				}
-				//     LOG -->
-
-			$this->redirect(Yii::app()->request->baseUrl.'/index.php/onlinevaraus/maksettu?check=ok');
-			//echo $_SESSION['onlinevaraus']['message'];
-
-}
-
-
-}
-} // check
-
-
-
-
-	if(isset($_GET['check']) and $_GET['check'] == 'ok')
-	{
-		if(isset($_SESSION['onlinevaraus']))
-		{
-			echo $_SESSION['onlinevaraus']['message'];
-			unset($_SESSION['onlinevaraus']);
-		}
-
-	}
-?>
-
-
-
