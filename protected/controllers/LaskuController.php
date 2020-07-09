@@ -971,8 +971,8 @@ exit;
 			$from = date("Y-m-d",strtotime($_POST['kuukausi'].' first day of this month'));
 			$to = date("Y-m-d",strtotime($from.' last day of this month'));
 		}
-		if( $_POST['rivien_teko'] == 'perkohde' )
-		{
+		//if( $_POST['rivien_teko'] == 'perkohde' )
+		//{
 			$tt 		= Tyontekijat::model()->findAll();
 			$tids 		= [];
 			foreach ($tt as $data)
@@ -990,7 +990,7 @@ exit;
 				}
 			}
 
-		}
+		//}
 		$return = array(
 			'from' => $from,
 			'to' => $to,

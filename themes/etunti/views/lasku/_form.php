@@ -1581,7 +1581,7 @@ $(".luoRiviTunti").click(function() {
 	        $.ajax({
 	           url: 'perpvmkohde?from='+from+'&to='+to+'&for='+tuotePalveluFor+'&valinnat='+valinnat,
 	           success: function(data){
-	               	//console.log(data);
+	               	console.log(data);
 			data = JSON.parse(data);
 			index = 0;
 			$.each(data, function( pvm, kohde_arr ) {
