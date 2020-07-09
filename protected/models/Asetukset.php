@@ -185,7 +185,10 @@ class Asetukset extends DB2ActiveRecord
 		     'procountor_expires_in' => 'int(6) DEFAULT 0',              // Expiration time of access token, usually 300 seconds.
           	     'procountor_invalid' => 'int(1) DEFAULT 0',                 // If 1, access token expired and refreshing failed.
           	     'freshdesk_active' => 'int(1) DEFAULT 0',
-		     'rivien_teko' => 'int(1) DEFAULT 0',
+         'rivien_teko' => 'int(1) DEFAULT 0',
+         'onlinevaraus_palvelu' => 'int(1) DEFAULT 0',               // 0: checkout, 1: bambora
+         'bambora_private_key' => 'varchar(128) DEFAULT NULL',
+         'bambora_api_key' => 'varchar(128) DEFAULT NULL',
 		    );
 
 		    foreach($table_structure as $key=>$value)
@@ -209,10 +212,10 @@ class Asetukset extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id, johtaja', 'required'),
-			array('id, show_name, app_show_phone, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero, ilmoitus_avoimista_kohteesta_sahkopostiin, ilmoitus_myohastyneista_kohteesta_sahkopostiin, netvisor_kaytto, asiakas_tyovuorossa, onlinevaraus_aikaisintaan_paivamaara, onlinevaraus_alku, onlinevaraus_loppu, paikkakunta_tyovuorossa, app_lopettaa_vain_tagilla, ilmoitus_toistuvien_tyovuorojen_paattymisesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen, tyovuorolahetys_naytetaanko_asiakas, tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka, ilmoitus_merkkipaivasta, tyontekijan_etunimi_sukunimi_jarjestys, app_hyvaksytyt_tyot_vkomaara, app_naytetaanko_hyvaksyttyt_tunnit, app_naytta_avain, tapaturmavakuutus, ryhmahenkivakuutus, tyottomyysvakuutusmaksu, sosiaaliturvamaksu, tyel_maksun_osuus_palkkansummasta, app_naytetaanko_kohteen_yhteyshenkilo, onlinevaraus_viikonlopput, maksullinen, ilmainen_versio_kayttotunnit, alennus_max_euro, alennus_max_prosentti, peruutta_paiva_ennen, lasketaanko_lounastauko, apuaika_meneeko_laskutukseen, netvisor_lahetetaanko_tyontekija, tuote_tyovuorossa, app_matka_osoite, app_lounastauko_osoite, tuotteet_palvelut_muoto, onlinevaraus_aikavali, onlinevaraus_autoremove, tyoryhmat, tyoryhmat_kohde, tyoryhmat_tyontekijat, tietosuoja_vinkki_sailyttaminen, app_auto_hyvaksyminen, app_hyvaksynnan_peruste, app_auto_hyvaksyminen_aikavali, app_auto_hyvaksyminen_tvmukaan, netvisor_mita_onkayttossa, lasku_laskunumero, asiakas_kirjeenluokka, asiakas_viivastyskorko, asiakas_maksuehto, asiakas_myyja, asiakas_tyoryhma, asiakas_alv, app_naytta_osoitekenta, app_naytta_sairauslomat, rivien_teko', 'numerical', 'integerOnly'=>true),
+			array('id, show_name, app_show_phone, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero, ilmoitus_avoimista_kohteesta_sahkopostiin, ilmoitus_myohastyneista_kohteesta_sahkopostiin, netvisor_kaytto, asiakas_tyovuorossa, onlinevaraus_aikaisintaan_paivamaara, onlinevaraus_alku, onlinevaraus_loppu, onlinevaraus_palvelu, paikkakunta_tyovuorossa, app_lopettaa_vain_tagilla, ilmoitus_toistuvien_tyovuorojen_paattymisesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen, tyovuorolahetys_naytetaanko_asiakas, tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka, ilmoitus_merkkipaivasta, tyontekijan_etunimi_sukunimi_jarjestys, app_hyvaksytyt_tyot_vkomaara, app_naytetaanko_hyvaksyttyt_tunnit, app_naytta_avain, tapaturmavakuutus, ryhmahenkivakuutus, tyottomyysvakuutusmaksu, sosiaaliturvamaksu, tyel_maksun_osuus_palkkansummasta, app_naytetaanko_kohteen_yhteyshenkilo, onlinevaraus_viikonlopput, maksullinen, ilmainen_versio_kayttotunnit, alennus_max_euro, alennus_max_prosentti, peruutta_paiva_ennen, lasketaanko_lounastauko, apuaika_meneeko_laskutukseen, netvisor_lahetetaanko_tyontekija, tuote_tyovuorossa, app_matka_osoite, app_lounastauko_osoite, tuotteet_palvelut_muoto, onlinevaraus_aikavali, onlinevaraus_autoremove, tyoryhmat, tyoryhmat_kohde, tyoryhmat_tyontekijat, tietosuoja_vinkki_sailyttaminen, app_auto_hyvaksyminen, app_hyvaksynnan_peruste, app_auto_hyvaksyminen_aikavali, app_auto_hyvaksyminen_tvmukaan, netvisor_mita_onkayttossa, lasku_laskunumero, asiakas_kirjeenluokka, asiakas_viivastyskorko, asiakas_maksuehto, asiakas_myyja, asiakas_tyoryhma, asiakas_alv, app_naytta_osoitekenta, app_naytta_sairauslomat, rivien_teko', 'numerical', 'integerOnly'=>true),
 
 			array('paivan_uutinen, logon_polkku, netvisor_host', 'length', 'max'=>500),
-			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id, trust_ws_cid, trust_ws_salasana, netvisor_acceptancestatus, edico_tehdyt_tyot, asiakas_hinta_tyyppi, auto_hyvaksynta_klo', 'length', 'max'=>100),
+			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id, trust_ws_cid, trust_ws_salasana, netvisor_acceptancestatus, edico_tehdyt_tyot, asiakas_hinta_tyyppi, auto_hyvaksynta_klo, bambora_private_key, bambora_api_key', 'length', 'max'=>100),
 			array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier, merkkipaivailmoitukset_sahkoposti, netvisor_mita_lahetetaan, gtm, apuaika_palkkalaji, app_version_playmarket, asiakas_laskutus_kanava, asiakas_ryhma, netvisor_accountingaccountsuggestion', 'length', 'max'=>255),
 			array('viikonloppulisa_la, viikonloppulisa_su', 'length', 'max'=>10),
 			array('aikavali_halytys', 'length', 'max'=>3),
@@ -342,7 +345,10 @@ class Asetukset extends DB2ActiveRecord
 			'netvisor_accountingaccountsuggestion' => Yii::t('main', 'Myyntilaskut kirjanpidon oletustili'),
 			'auto_hyvaksynta_klo' => Yii::t('main', 'Hyväksyminen aika'),
 			'netvisor_lahetetaanko_tyontekija' => Yii::t('main', 'Lähetä työntekijä'),
-			'app_naytta_sairauslomat' => Yii::t('main', 'Näytetäänkö sairauslomat'),
+      'app_naytta_sairauslomat' => Yii::t('main', 'Näytetäänkö sairauslomat'),
+      'onlinevaraus_palvelu' => Yii::t('main', 'Onlinevaraus Palvelu'),
+      'bambora_private_key' => Yii::t('main', 'Bambora Yksityisavain'),
+      'bambora_api_key' => Yii::t('main', 'Bambora Api-avain'),
 		);
 	}
 
