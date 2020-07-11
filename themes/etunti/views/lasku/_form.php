@@ -1577,11 +1577,11 @@ $(".luoRiviTunti").click(function() {
 
 	if(rivien_teko == 'perpvmkohde' && tuotePalveluFor == 'kohde')
 	{
-		console.log('perpvmkohde?from='+from+'&to='+to+'&for='+tuotePalveluFor+'&valinnat='+valinnat)
+		//console.log('perpvmkohde?from='+from+'&to='+to+'&for='+tuotePalveluFor+'&valinnat='+valinnat)
 	        $.ajax({
 	           url: 'perpvmkohde?from='+from+'&to='+to+'&for='+tuotePalveluFor+'&valinnat='+valinnat,
 	           success: function(data){
-	               	console.log(data);
+	               	//console.log(data);
 			data = JSON.parse(data);
 			index = 0;
 			$.each(data, function( pvm, kohde_arr ) {
@@ -1626,11 +1626,11 @@ function RivienLuonti(index, value, rivien_teko, from, to, yhteensa, jakso, kuuk
 			tuotteet_palvelut_muoto : tuotteet_palvelut_muoto
 		};
 	        $.ajax({
-	           url: 'luoKohteista?id='+value+'&for='+tuotePalveluFor+'&tunnit='+yhteensa,
+	           url: 'luoKohteista?id='+value+'&for='+tuotePalveluFor, // +'&tunnit='+yhteensa
 		   type: 'POST',
 		   data: postdata,
 	           success: function(data){
-	               	//console.log(data);
+	               	console.log(data);
 			data = JSON.parse(data);
 
 			if(tuotteet_palvelut_muoto == 0 && parseInt(data['rivi_kpl']) == 0 && data['yksikko'] !== 'kk')

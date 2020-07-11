@@ -957,8 +957,9 @@ exit;
 		exit;
 	}
 
-	public function actionLuoKohteista($id, $for, $tunnit = 0, $rivi_kpl = 0)
+	public function actionLuoKohteista($id, $for, $rivi_kpl = 0) // $tunnit = 0,
 	{
+		$tunnit = 0;
 
 		if(isset($_POST['from']) and isset($_POST['to']))
 		{
