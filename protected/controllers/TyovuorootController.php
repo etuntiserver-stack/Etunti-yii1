@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijavaroitus_current', 'omasiistijavaroitus_toggle'),
+				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijavaroitus_current', 'omasiistijavaroitus_toggle', 'omasiistijavaroitus_disabled_tids'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -4896,6 +4896,35 @@ class TyovuorootController extends Controller
 
     Tyontekijat::model()->updateByPk($id, ['omasiistijavaroitukset' => $value]);
     echo Yii::t('Main', $value ? "Omasiistijävaroitukset aktivoitu" : "Omasiistijävaroitukset piiloitettu");
+  }
+
+  /**
+   * Get an array of worker IDs for which omasiistijavaroitus is disabled.
+   *
+   * For AJAX.
+   *
+   * @return null
+   * Echoed JSON array or worker IDs.
+   */
+  public function actionOmasiistijavaroitus_disabled_tids()
+  {
+    // Enabled only on Kotipuhtaaksi domain. Otherwise, empty array (no warnings).
+    if (!in_array(Yii::app()->user->domain, ['demo', 'staging_demo', 'kotipuhtaaksi', 'staging_kotipuhtaaksi'])) {
+      echo json_encode([]);
+      return;
+    }
+
+    // Find tids for which warning should be enabled.
+    $criteria = new CDbCriteria();
+    $criteria->select = 'id';
+    $criteria->condition = 'omasiistijavaroitukset = 0';
+    $results = Tyontekijat::model()->findAll($criteria);
+
+    // Format into simple array of IDs and echo as JSON.
+    $tids = [];
+    foreach ($results as $tt)
+      $tids[] = $tt->id;
+    echo json_encode($tids);
   }
 
 	protected function getKohde($id)
