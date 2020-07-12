@@ -4895,7 +4895,7 @@ class TyovuorootController extends Controller
     }
 
     Tyontekijat::model()->updateByPk($id, ['omasiistijavaroitukset' => $value]);
-    echo Yii::t('Main', $value ? "Omasiistijävaroitukset aktivoitu" : "Omasiistijävaroitukset piiloitettu");
+    echo Yii::t('Main', $value ? "Omasiistijävaroitukset aktivoitu - päivitä sivu." : "Omasiistijävaroitukset piiloitettu - päivitä sivu.");
   }
 
   /**

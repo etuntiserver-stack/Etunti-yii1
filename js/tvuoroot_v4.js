@@ -66,6 +66,9 @@ $(document).delegate(".getTekijanTiedot","click",function(e){
       // Save worker ID into hidden field for changing omasiistijavaroitus via AJAX.
       $('#temaus-modal #tekija-id').val(id);
 
+      // Clear previous success notify from changing warning status.
+      $('#temaus-modal #omasiistija-valinta-result').empty().attr('hidden');
+
       // Get current selection for omasiistijavaroitus
       $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijavaroitus_current`, {
         type: 'POST',
@@ -95,7 +98,7 @@ $(document).delegate('#omasiistija-valinta', 'change', function(e) {
     type: 'POST',
     data: { 'id': id, 'value': value },
     success: function(data) {
-      alert(data);
+      $('#temaus-modal #omasiistija-valinta-result').html(`<b>${data}</b>`).removeAttr('hidden');
     }
   });
 });
