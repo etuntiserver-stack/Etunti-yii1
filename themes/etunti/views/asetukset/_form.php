@@ -673,6 +673,18 @@ $('.ryhmat').multiselect({
     <legend><h2><?php echo Yii::t('main','Onlinevaraus'); ?></h2></legend>
 
 	<div class="section fill mb5">
+    <?php
+    echo $form->labelEx($model,'onlinevaraus_palvelu');
+    echo $form->dropDownList($model,
+      'onlinevaraus_palvelu',
+      array(0=>'CHECKOUT.FI',1=>'BAMBORA PAYFORM'), 
+      array('empty'=>'Valitse palvelu','class'=>'form-control','id'=>'osoite')
+    );
+    echo $form->error($model,'onlinevaraus_palvelu');
+    ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'checkout_id'); ?>
 		<?php echo $form->textField($model,'checkout_id',array('size'=>20,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'checkout_id'); ?>
@@ -688,7 +700,23 @@ $('.ryhmat').multiselect({
 		<?php echo $form->labelEx($model,'gtm'); ?>
 		<?php echo $form->textField($model,'gtm',array('size'=>20,'maxlength'=>255,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'gtm'); ?>
-	</div>
+  </div>
+  
+
+  <!-- // Bambora -->
+  <br>
+  <legend><h2><?php echo Yii::t('main','Bambora tunnukset'); ?></h2></legend>
+  <div class="section fill mb5">
+    <?php echo $form->labelEx($model,'bambora_private_key'); ?>
+    <?php echo $form->textField($model,'bambora_private_key',array('size'=>20,'maxlength'=>255,'class'=>'form-control')); ?>
+    <?php echo $form->error($model,'bambora_private_key'); ?>
+  </div>
+  <div class="section fill mb5">
+    <?php echo $form->labelEx($model,'bambora_api_key'); ?>
+    <?php echo $form->textField($model,'bambora_api_key',array('size'=>20,'maxlength'=>255,'class'=>'form-control')); ?>
+    <?php echo $form->error($model,'bambora_api_key'); ?>
+  </div>
+  <!-- Bambora // -->
 
 	<br>
 	<div class="section fill mb5">

@@ -103,7 +103,7 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
         "identifier" => $l->y_tunnus,             // (string) SALES_INVOICE and PURCHASE_INVOICE only. Business ID or national identification number.
         "taxCode" => "",                          // (string) SALES_INVOICE only. Tax code of the customer.
         "customerNumber" => $l->as_nro,           // (string) SALES_INVOICE and PURCHASE_INVOICE only. Customer number.
-        "email" => $l->sahkoposti,                // (string) SALES_INVOICE only. Email address of the buyer. Required if invoicing channel is EMAIL, otherwise not visible on the UI.
+        "email" => trim($l->sahkoposti),          // (string) SALES_INVOICE only. Email address of the buyer. Required if invoicing channel is EMAIL, otherwise not visible on the UI.
 
         // Intermediary bank name and address.
         "counterPartyAddress" => (object) [
@@ -247,7 +247,10 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
         "discountPercent" => $lr->ale,  // (number) Product discount percentage.
         "vatPercent" => $lr->alv,       // (number) Product VAT percentage. Must be a percentage currently in use for the company.
         //"vatStatus" => 1,             // (int) Product VAT status.
-        "comment" => $lr->tkoodi        // (string) Invoice row comment. Visible on the invoice. Use \ as line break.
+
+        // Free text fix 06.07.2020; replace tkoodi with free_text (this model needs to be cleaned).
+        // "comment" => $lr->tkoodi     // (string) Invoice row comment. Visible on the invoice. Use \ as line break.
+        "comment" => $lr->free_text     // (string) Invoice row comment. Visible on the invoice. Use \ as line break.
       ];
     }
 

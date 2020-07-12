@@ -957,8 +957,9 @@ exit;
 		exit;
 	}
 
-	public function actionLuoKohteista($id, $for, $tunnit = 0, $rivi_kpl = 0)
+	public function actionLuoKohteista($id, $for, $rivi_kpl = 0) // $tunnit = 0,
 	{
+		$tunnit = 0;
 
 		if(isset($_POST['from']) and isset($_POST['to']))
 		{
@@ -971,24 +972,31 @@ exit;
 			$from = date("Y-m-d",strtotime($_POST['kuukausi'].' first day of this month'));
 			$to = date("Y-m-d",strtotime($from.' last day of this month'));
 		}
-		if( $_POST['rivien_teko'] == 'perkohde' )
-		{
+		//if( $_POST['rivien_teko'] == 'perkohde' )
+		//{
 			$tt 		= Tyontekijat::model()->findAll();
 			$tids 		= [];
 			foreach ($tt as $data)
 				$tids[] = $data->id;
 
 			$mobile 		= Yii::app()->createController('Mobile');
-			$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 3, false, 0, false, $id, null);
-			foreach($hyv_tyotunnit_all as $tid => $sec)
-					$tunnit += $this->num($sec);
+			$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tids, [3], 3, false, 0, true, $id, null);
 
-		}
+			foreach($hyv_tyotunnit_all as $pvm => $arr){
+				foreach($arr as $kohde => $sec){
+					if($sec > 0){
+						$rivi_kpl++;
+						$tunnit += $this->num($sec);
+					}
+				}
+			}
+
+		//}
 		$return = array(
 			'from' => $from,
 			'to' => $to,
 			'tunnit' => $tunnit,
-			'rivi_kpl' =>$rivi_kpl,
+			'rivi_kpl' => $rivi_kpl,
 			'fromto' => date("d.m.Y", strtotime($from)).' - '.date("d.m.Y", strtotime($to)),
 			'kohde_id' => 0,
 			'asiakas_id' => 0,
