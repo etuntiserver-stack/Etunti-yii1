@@ -178,6 +178,14 @@ if( isset($_SESSION['skrollaus']) )
             <form method="post" action="/" id="comment">
               <div class="panel-body p25">
               </div>
+              <input type="hidden" id="tekija-id" name="tekija-id">
+              <div class="form-group p25">
+                <label for="omasiistija-valinta">Omasiistijävaroitukset:</label>
+                <select class="form-control" id="omasiistija-valinta">
+                  <option value="1">Näytetään</option>
+                  <option value="0">Ei näytetä</option>
+                </select>
+              </div>
               <div class="panel-footer">
 		<button type="button" class="button btn-default" data-dismiss="modal" aria-label="Close">Sulje</button>
               </div>

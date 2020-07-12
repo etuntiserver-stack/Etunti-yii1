@@ -61,12 +61,43 @@ $(document).delegate(".getTekijanTiedot","click",function(e){
 
 		if( data['bd'] ){
 			$('#temaus-modal').find('.panel-title').html('<i class="fa fa-male"></i>'+data['etusuku']);
-			$('#temaus-modal').modal().find('.panel-body').html(data['bd']);
+      $('#temaus-modal').modal().find('.panel-body').html(data['bd']);
+
+      // Save worker ID into hidden field for changing omasiistijavaroitus via AJAX.
+      $('#temaus-modal #tekija-id').val(id);
+
+      // Get current selection for omasiistijavaroitus
+      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijavaroitus_current`, {
+        type: 'POST',
+        data: { 'id': id },
+        success: function(data) {
+          if (data == '0') {
+            $('#temaus-modal #omasiistija-valinta').val(0);
+          } else if (data == '1') {
+            $('#temaus-modal #omasiistija-valinta').val(1);
+          } else {
+            console.log(`Error retrieving omasiistijavaroitus data; received response: ${data}`);
+          }
+        }
+      });
 		}
 
            }
         });
 
+});
+
+// Hook into the change event of the selection list for enabling/disabling omasiistijavaroitus.
+$(document).delegate('#omasiistija-valinta', 'change', function(e) {
+  let id = $('#temaus-modal #tekija-id').val();
+  let value = $(this).val();
+  $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijavaroitus_toggle`, {
+    type: 'POST',
+    data: { 'id': id, 'value': value },
+    success: function(data) {
+      alert(data);
+    }
+  });
 });
 
 $(document).delegate("#showres","click",function(){
