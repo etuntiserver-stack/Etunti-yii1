@@ -4848,7 +4848,6 @@ class TyovuorootController extends Controller
   }
 
   /**
-<<<<<<< HEAD
    * Mass edit function for shifts, which is used via AJAX with POST data.
    *
    * Possible POST parameters:
@@ -4959,7 +4958,8 @@ class TyovuorootController extends Controller
     } else {
       echo json_encode(['results' => $results]);
     }
-=======
+
+  /**
    * Hakee nykyisen valinnan omasiistijävaroitusten näyttämisestä.
    * Get whether or not warnings about regular workers is enabled.
    *
@@ -5037,7 +5037,6 @@ class TyovuorootController extends Controller
     foreach ($results as $tt)
       $tids[] = $tt->id;
     echo json_encode($tids);
->>>>>>> master
   }
 
 	protected function getKohde($id)
