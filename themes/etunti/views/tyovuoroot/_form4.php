@@ -880,7 +880,8 @@ $(document).ready(function(){
 	<div class="row" id="alkaen_loppuen">
 	  <div class="col-sm-4">
 		<label><?php echo Yii::t('main', 'Alkaen'); ?></label>
-		<input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pfrom]" id="pfrom" value="<?php echo date('d.m.Y', strtotime($laatikko_pvm)); ?>">
+    <input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pfrom]" id="pfrom" value="<?php echo date('d.m.Y', strtotime($laatikko_pvm)); ?>">
+    <input type="hidden" id="pfromNew" name="ToistuvatTyovuorot[pfromNew]" value="<?php echo date('d.m.Y', strtotime($laatikko_pvm)); ?>">
 	  </div>
 	  <div class="col-sm-4">
 		<label><?php echo Yii::t('main', 'Loppuen'); ?></label>
@@ -1366,6 +1367,7 @@ $(document).ready(function(){
 	// <-- Viimeinen kysymys
 
 	if( '<?=$create_update?>' == 'update'){
+    $('#pfromNew').val($('#pfrom').val());
 		$.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update4?this_id=<?=$this_id?>&laatikko_pvm=<?=$laatikko_pvm?>&laatikko_tid=<?=$laatikko_tid?>',
 		  data:$(this).serialize(),

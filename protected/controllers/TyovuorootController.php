@@ -3254,7 +3254,7 @@ class TyovuorootController extends Controller
 		if( $toistuva )
 			$post = $_POST['ToistuvatTyovuorot'];
 		else
-			$post = $_POST['Tyovuoroot'];
+      $post = $_POST['Tyovuoroot'];
 
 		// <-- Variables
 		//$post['pvm'] 		= date("d.m.Y",strtotime($laatikko_pvm)); Kun siirretaan tyoparit muu paivaan.. sitten se ei onnistuu
@@ -3354,10 +3354,17 @@ class TyovuorootController extends Controller
 		}
 		//     Luodaan yksittainen toistuvasta. -->
 
-		// <-- Toistuva Alkamispaiva siirto.
+    // <-- Toistuva Alkamispaiva siirto.
+    if ($toistuva) {
+      $test = $post['pfromNew'];
+      $test2 = strtotime($post['pfromNew']);
+      $test3 = strtotime($laatikko_pvm);
+    }
 		if( 
+			// $toistuva and isset($edellinen_model['id']) and isset($post['is_toistuva'])
+			// and strtotime($edellinen_model['pfrom']) != strtotime($laatikko_pvm) 
 			$toistuva and isset($edellinen_model['id']) and isset($post['is_toistuva'])
-			and strtotime($edellinen_model['pfrom']) != strtotime($laatikko_pvm) 
+			and isset($post['pfromNew']) and strtotime($post['pfromNew']) != strtotime($laatikko_pvm)
 		){
 			$model->attributes 	= $edellinen_model;
 			$model->pto 		= date("d.m.Y", strtotime($laatikko_pvm . " -1 day"));
