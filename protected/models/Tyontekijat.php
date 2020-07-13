@@ -103,7 +103,8 @@ class Tyontekijat extends DB2ActiveRecord
                      'onlinevaraus_tuotteet' => 'text DEFAULT NULL',
                      'app_naytta_osoitekenta' => 'int(1) DEFAULT 0',
 		     'muistiinpano' => 'text DEFAULT NULL',
-		     'naytta_tyovuorossa' => 'int(1) DEFAULT 1',
+         'naytta_tyovuorossa' => 'int(1) DEFAULT 1',
+         'omasiistijavaroitukset' => 'int(1) DEFAULT 1', // 1: näytetään omasiistijävaroitukset työvuorotaulussa
 		);
 
 		foreach($table_structure as $key=>$value)

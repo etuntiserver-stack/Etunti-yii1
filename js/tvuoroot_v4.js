@@ -61,12 +61,46 @@ $(document).delegate(".getTekijanTiedot","click",function(e){
 
 		if( data['bd'] ){
 			$('#temaus-modal').find('.panel-title').html('<i class="fa fa-male"></i>'+data['etusuku']);
-			$('#temaus-modal').modal().find('.panel-body').html(data['bd']);
+      $('#temaus-modal').modal().find('.panel-body').html(data['bd']);
+
+      // Save worker ID into hidden field for changing omasiistijavaroitus via AJAX.
+      $('#temaus-modal #tekija-id').val(id);
+
+      // Clear previous success notify from changing warning status.
+      $('#temaus-modal #omasiistija-valinta-result').empty().attr('hidden');
+
+      // Get current selection for omasiistijavaroitus
+      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijavaroitus_current`, {
+        type: 'POST',
+        data: { 'id': id },
+        success: function(data) {
+          if (data == '0') {
+            $('#temaus-modal #omasiistija-valinta').val(0);
+          } else if (data == '1') {
+            $('#temaus-modal #omasiistija-valinta').val(1);
+          } else {
+            console.log(`Error retrieving omasiistijavaroitus data; received response: ${data}`);
+          }
+        }
+      });
 		}
 
            }
         });
 
+});
+
+// Hook into the change event of the selection list for enabling/disabling omasiistijavaroitus.
+$(document).delegate('#omasiistija-valinta', 'change', function(e) {
+  let id = $('#temaus-modal #tekija-id').val();
+  let value = $(this).val();
+  $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijavaroitus_toggle`, {
+    type: 'POST',
+    data: { 'id': id, 'value': value },
+    success: function(data) {
+      $('#temaus-modal #omasiistija-valinta-result').html(`<b>${data}</b>`).removeAttr('hidden');
+    }
+  });
 });
 
 $(document).delegate("#showres","click",function(){
@@ -86,57 +120,80 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 	var yht		= 0;
 	var tids	= [];
 	var last_loppu  = [];
-	var this_ero	= 0;
-	$.each(tv_arr, function( tid, value ) {
-		yht = 0;
-		tids.push(tid);
-		$.each(value, function( pvm, v ) {
-			all_tv_edit 	= '';
-			tv_kesto	= 0;
-			varoitus_klo 	= false;
-			last_not_peruutettu = 0;
-			$.each(v, function( i2, laatikko ) {
-				this_ero 	= 0;
-				$.each(laatikko, function( i3, tv_edit ) {
-					if( last_not_peruutettu != 0 && parseInt(tv_edit['alku']) < last_not_peruutettu )
-						varoitus_klo = true;
-					if( last_loppu[pvm +'_'+ tid] > 0 )
-						this_ero = parseInt(tv_edit['alku'])-last_loppu[pvm +'_'+ tid];
-					if( this_ero > 0 )
-						all_tv_edit += '<p class="text-center reika-danger"><i class="fa fa-clock-o"></i> Aika: ' + $.sprint(this_ero) + '</p>';
-          tv_kesto	+= tv_edit['tv_kesto'];
+  var this_ero	= 0;
 
-          // Box styling. Enable red border when omasiistijä is not selected (when configured to do so).
-          let style='';
-          if (tv_edit['omasiistijat_varoitus']) {
-            style += 'border: 1px solid red;';
+  // Get list of tids where omasiistijavaroitus is disabled. After this, draw boxes accordingly.
+  let warning_disabled_tids = [];
+  $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijavaroitus_disabled_tids`, {
+
+    error: function (xhr, status, error) {
+      console.log(xhr.responseText);
+    },
+
+    success: function(data) {
+
+      // Parse list of tids, if possible.
+      try {
+        JSON.parse(data).forEach((tid) => { warning_disabled_tids.push(tid); });
+        console.log(`(omasiistijavaroitus_enabled_tids): ${data}`);
+      } catch (e) {
+        console.log(`(omasiistijavaroitus_enabled_tids) Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
+      }
+
+      // List of tids where warning is enabled is acquired; continue drawing boxes via AJAX.
+      $.each(tv_arr, function( tid, value ) {
+        yht = 0;
+        tids.push(tid);
+        let disable_warning = (warning_disabled_tids.includes(tid));
+        $.each(value, function( pvm, v ) {
+          all_tv_edit 	= '';
+          tv_kesto	= 0;
+          varoitus_klo 	= false;
+          last_not_peruutettu = 0;
+          $.each(v, function( i2, laatikko ) {
+            this_ero 	= 0;
+            $.each(laatikko, function( i3, tv_edit ) {
+              if( last_not_peruutettu != 0 && parseInt(tv_edit['alku']) < last_not_peruutettu )
+                varoitus_klo = true;
+              if( last_loppu[pvm +'_'+ tid] > 0 )
+                this_ero = parseInt(tv_edit['alku'])-last_loppu[pvm +'_'+ tid];
+              if( this_ero > 0 )
+                all_tv_edit += '<p class="text-center reika-danger"><i class="fa fa-clock-o"></i> Aika: ' + $.sprint(this_ero) + '</p>';
+              tv_kesto	+= tv_edit['tv_kesto'];
+    
+              // Box styling. Enable red border when omasiistijä is not selected (when configured to do so).
+              let style='';
+              if (!disable_warning && tv_edit['omasiistijat_varoitus']) {
+                style += 'border: 1px solid red;';
+              }
+              if (style.length > 0) {
+                style = ` style="${style}"`;
+              }
+    
+              all_tv_edit += `<p ${style}>${tv_edit['tv_edit']}</p>`;
+              last_loppu[pvm +'_'+ tid] = parseInt(tv_edit['loppu']);
+              if(parseInt(tv_edit['peruutettu']) == 0)
+                last_not_peruutettu = parseInt(tv_edit['loppu']);
+            });
+          });
+          //console.log(last_loppu);
+          pvm_muutos = pvm.split(".");
+          did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
+          if( $("#" + did).length > 0 ){
+            $("#" + did).html(all_tv_edit + '<div class="pvm_kesto"><span>' + $.sprint(tv_kesto) + '</span></div>');
+            if( $("#varoitus_klo_" + did).length > 0 )
+              $("#varoitus_klo_" + did).remove();
+            if(varoitus_klo)
+              $("#" + did).before('<div id="varoitus_klo_'+did+'" class="text-center bg-danger p5 mr5">Tarkista kellonajat</div>');
           }
-          if (style.length > 0) {
-            style = ` style="${style}"`;
-          }
-
-          all_tv_edit += `<p ${style}>${tv_edit['tv_edit']}</p>`;
-					last_loppu[pvm +'_'+ tid] = parseInt(tv_edit['loppu']);
-					if(parseInt(tv_edit['peruutettu']) == 0)
-						last_not_peruutettu = parseInt(tv_edit['loppu']);
-				});
-			});
-			//console.log(last_loppu);
-			pvm_muutos = pvm.split(".");
-			did = pvm_muutos[2] + '' + pvm_muutos[1] + '' +pvm_muutos[0] + '_' + tid;
-			if( $("#" + did).length > 0 ){
-				$("#" + did).html(all_tv_edit + '<div class="pvm_kesto"><span>' + $.sprint(tv_kesto) + '</span></div>');
-				if( $("#varoitus_klo_" + did).length > 0 )
-					$("#varoitus_klo_" + did).remove();
-				if(varoitus_klo)
-					$("#" + did).before('<div id="varoitus_klo_'+did+'" class="text-center bg-danger p5 mr5">Tarkista kellonajat</div>');
-			}
-			yht += tv_kesto;
-		});
-	});
-
-	$.hovertietoja();
-	console.log('tv_arr_update loaded');
+          yht += tv_kesto;
+        });
+      });
+    
+      $.hovertietoja();
+      console.log('tv_arr_update loaded');
+    }
+  });
 }
 jQuery.vkolaskenta = function vkolaskenta(tids){
      //console.log(tids);
