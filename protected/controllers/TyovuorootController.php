@@ -3355,6 +3355,11 @@ class TyovuorootController extends Controller
 		//     Luodaan yksittainen toistuvasta. -->
 
     // <-- Toistuva Alkamispaiva siirto.
+    if ($toistuva) {
+      $test = $post['pfromNew'];
+      $test2 = strtotime($post['pfromNew']);
+      $test3 = strtotime($laatikko_pvm);
+    }
 		if( 
 			// $toistuva and isset($edellinen_model['id']) and isset($post['is_toistuva'])
 			// and strtotime($edellinen_model['pfrom']) != strtotime($laatikko_pvm) 
