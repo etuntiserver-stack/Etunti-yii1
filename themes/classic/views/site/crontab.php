@@ -396,15 +396,13 @@ foreach ($list as $d) {
 	}
 	// merkkipaivailmoitukset -->
 
-
-
 	// <-- lmoitus toistuvien työvuorojen päättymisestä
 	if (isset($asetukset->ilmoitus_toistuvien_tyovuorojen_paattymisesta) and $asetukset->ilmoitus_toistuvien_tyovuorojen_paattymisesta == 1) {
 		$criteria = new CDbCriteria;
 		//$criteria->select = "";
 		$criteria->condition = " 
-		DATE(STR_TO_DATE(pto, '%d.%m.%Y')) 
-		BETWEEN (CURDATE() - INTERVAL '" . $asetukset->ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen . "' DAY) AND CURDATE()
+		DATE(STR_TO_DATE(pto, '%d.%m.%Y')) >= CURDATE()
+		AND DATEDIFF(DATE(STR_TO_DATE(pto, '%d.%m.%Y')), CURDATE()) < ".(int)$asetukset->ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen."
 		AND ilmoitus_paattymisesta!=1
 		";
 		$toistuvat = ToistuvatTyovuorot::model()->findAll($criteria);
