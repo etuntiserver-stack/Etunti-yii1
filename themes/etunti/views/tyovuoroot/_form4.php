@@ -563,165 +563,184 @@ $(document).ready(function(){
 
 <!-- #region Omasiistijät -->
 <br>
+
 <div class="row">
+  <div class="col-md-6">
+    <!-- Varoitus jos ei ole omasiistijää. -->
+    <div class="row">
+      <div id="omasiistija-varoitus" class="col-sm-12 text-danger mb5" style="display:none;border:2px solid red;border-radius:4px;text-align:center;height:25px;padding-top:3px">
+        <b>Varoitus: Omasiistijää ei ole valittuna!</b>
+      </div>
+    </div>
 
-  <!--
-    Omasiistijät listataan ulkoisesta näkymästä joka hakee työntekijät AJAXilla
-    ja vaatii kohteen ID sitä varten. Koska työvuoronäkymässä kohde on vaihtuva
-    (lista, josta voidaan valita kohde), tämä kohde ID täytyy antaa
-    omasiistijänäkymälle dynaamisesti.
+    <!-- Avattava omasiistijälista -->
+    <div class="row">
 
-    Ensiksi, annetaan esitäytetty arvo placeholder kenttään (placeholder_id).
-    Kun kohde muutetaan, vaihdetaan myös omasiistijälistan kohde ID
-  -->
+      <!--
+        Omasiistijät listataan ulkoisesta näkymästä joka hakee työntekijät AJAXilla
+        ja vaatii kohteen ID sitä varten. Koska työvuoronäkymässä kohde on vaihtuva
+        (lista, josta voidaan valita kohde), tämä kohde ID täytyy antaa
+        omasiistijänäkymälle dynaamisesti.
 
-  <?php
-  $omasiistijat_div_id = 'omasiistijat_lista'; // itse omasiistijälistan id
-  $omasiistijat_placeholder_id = 'omasiistijat_kohde'; // piilotetun placeholderkentän id
-  ?>
+        Ensiksi, annetaan esitäytetty arvo placeholder kenttään (placeholder_id).
+        Kun kohde muutetaan, vaihdetaan myös omasiistijälistan kohde ID
+      -->
 
-  <!-- Alue omasiistijälistalle oikeassa alanurkassa työvuoronäkymässä. -->
-  <div class="col-sm-5">
-    <?= $this->renderPartial('//kohteet/omasiistijat', [
-      'kohde_id' => 0,
-      'div_id' => $omasiistijat_div_id,
-      'placeholder_id' => $omasiistijat_placeholder_id
-    ]); ?>
+      <?php
+      $omasiistijat_div_id = 'omasiistijat_lista'; // itse omasiistijälistan id
+      $omasiistijat_placeholder_id = 'omasiistijat_kohde'; // piilotetun placeholderkentän id
+      ?>
+
+      <!-- Alue omasiistijälistalle oikeassa alanurkassa työvuoronäkymässä. -->
+      <div class="col-sm-12">
+        <?= $this->renderPartial('//kohteet/omasiistijat', [
+          'kohde_id' => 0,
+          'div_id' => $omasiistijat_div_id,
+          'placeholder_id' => $omasiistijat_placeholder_id
+        ]); ?>
+      </div>
+    </div>
   </div>
-
-  <!-- Varoitus jos ei ole omasiistijää. -->
-  <div id="omasiistija-varoitus" class="col-sm-5 text-danger" style="display:none;border:2px solid red;border-radius:4px;text-align:center;height:25px;padding-top:3px">
-    <b>Varoitus: Omasiistijää ei ole valittuna!</b>
+  <div class="col-md-6" id="omasiistija-toiminnot">
+    <div class="col-sm-12"><b>Omasiistijöistä ilmoittaminen</b></div>
+    <div class="col-sm-12">
+      <button type="button" class="btn btn-sm btn-primary" id="omasiistijat-ilmoita"><b>Lähetä asiakkaalle ilmoitus</b></button>
+      <button type="button" class="btn btn-sm btn-success" id="omasiistijat-merkitse"><b>Merkitse jo ilmoitetuksi</b></button>
+    </div>
   </div>
-
-  <script>
-
-    /**
-     * Sivun ladatessa, asetetaan kohde ID omasiistijälistalle ja rekisteröidään
-     * eventti kohdelistan valinnan muutokseen, joka päivittää tämän ID:n.
-     */
-    $(function() {
-
-      // Määritetään kohdelistan ID, joka vaihtuu jos työvuoro on osa toistuvaa ketjua.
-      const selectId = '<?= $toistuva ? 'ToistuvatTyovuorot_kohde' : 'Tyovuoroot_kohde' ?>';
-
-      // Tallennetut omasiistijät tarkistusta varten.
-      let omasiistijat = [];
-
-      /**
-       * Ajetaan tämä funktio aina kun kohde vaihdetaan, tai kun sivu ladataan
-       * ensimmäistä kertaa. Tämä hakee omasiistijät ja tarkistaa että ainakin
-       * yksi valituista siistijöistä on käynyt kohteessa; muuten, näytetään
-       * varoitus. Samalla kerrotaan omasiistijänäkymälle mikä kohde kyseessä.
-       */
-      const kohteenVaihto = function() {
-
-        // Piilotetaan mahdollisesti auki oleva lista.
-        $('#<?= $omasiistijat_div_id ?>.in').collapse('hide');
-
-        // Haetaan valittu arvo kohdelistasta.
-        const valittuKohde = $(`#${selectId} option:selected`).val();
-
-        // Asetetaan omasiistijänäkymän piilotettuun kenttään uusi ID, jonka
-        // avulla omasiistijänäkymä hakee omasiistijät listalleen.
-        $('#<?= $omasiistijat_placeholder_id ?>').text(valittuKohde);
-
-        // Kohde vaihdettu, tai kortti juuri avattu. Haetaan omasiistijälista.
-        // Haetaan omasiistijät, jotta voidaan näyttää varoitus jos ei ole valittuna.
-        omasiistijat = [];
-        $.ajax(`${location.protocol}//${location.host}/index.php/kohteet/omasiistijat_ajax`, {
-
-          type: 'POST',
-          data: {
-            id: valittuKohde
-          },
-
-          error: function(xhr, status, error) {
-            $(`#${workersDivId} .well`).html(`Pyynnössä tapahtui virhe: ${xhr.responseText}`);
-            console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: ${xhr.responseText}`);
-          },
-
-          success: function(data) {
-
-            console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Received response, length: ${data.length}`);
-            let parsed = null;
-            try {
-              parsed = JSON.parse(data);
-            } catch (e) {
-              console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
-              return;
-            }
-
-            if (typeof(parsed) != "object") {
-              console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: Parsed data is unusable (not an object).`);
-            } else {
-              parsed.forEach((item, index) => { omasiistijat.push(item[0]); });
-            }
-
-            // Kohteen vaihdon/initialisaation yhteydessä tarkistetaan omasiistijät.
-            omasiistijaTarkistus();
-          }
-        });
-      };
-
-      /**
-      * Tarkistetaan että valituissa työntekijöissä on vähintään yksi joka on
-      * käynyt kohteessa aiemmin (omasiistijä).
-      */
-      const omasiistijaTarkistus = function() {
-        let siistijat = [];
-        let omasiistijaValittu = false;
-
-        // Tarkistetaan, onko päätekijä (yläreunan valikko) omasiistijöissä. Jos
-        // ei ole, loopataan valitut tekijät työparilistalla tarkistusta varten.
-        if (omasiistijat.includes($('#tekijanVaihdo option:selected').val())) {
-          omasiistijaValittu = true;
-        } else {
-          $('#tyopari-container .multiselect-container li.active a label input').each(function() {
-            if (omasiistijat.includes(this.value)) {
-              omasiistijaValittu = true;
-              return false; // break
-            }
-          });
-        }
-
-        // Näytetään/piilotetaan varoitus valintojen perusteella.
-        let warningsDisabled = ($('.omasiistijavaroitus-toggle').val() == 0);
-        if (warningsDisabled || omasiistijaValittu === true) {
-          $('#omasiistija-varoitus').hide();
-        } else {
-          $('#omasiistija-varoitus').show();
-        }
-      };
-
-
-      // Vaihdetaan omasiistijälistan tila aina kun kohde vaihdetaan.
-      $(`#${selectId}`).on('change', function(e) {
-        kohteenVaihto();
-      });
-
-      // Aina kun työntekijä vaihdetaan yläreunan valikosta, tarkistetaan
-      // omasiistijän tilanne uusiksi, jotta varoitus voidaan näyttää/piilottaa.
-      // Sama tehdään kun valintoja muutetaan työparilistalla.
-      $('#tekijanVaihdo, #tyopari-container .mult').change(function() {
-        omasiistijaTarkistus();
-      });
-
-      // Asetetaan kohde omasiistijälistalle heti työvuoroa avatessa.
-      kohteenVaihto();
-
-      // Show/hide warning and selections when selection is changed.
-      $('.omasiistijavaroitus-toggle').on('change', function(e) {
-        if ($(this).val() == 0) {
-          $('#omasiistija-varoitus').hide();
-        } else {
-          $('#omasiistija-varoitus').show();
-        }
-      });
-    });
-  </script>
-
 </div>
+
+
+
+
+<script>
+
+/**
+ * Sivun ladatessa, asetetaan kohde ID omasiistijälistalle ja rekisteröidään
+ * eventti kohdelistan valinnan muutokseen, joka päivittää tämän ID:n.
+ */
+$(function() {
+
+  // Määritetään kohdelistan ID, joka vaihtuu jos työvuoro on osa toistuvaa ketjua.
+  const selectId = '<?= $toistuva ? 'ToistuvatTyovuorot_kohde' : 'Tyovuoroot_kohde' ?>';
+
+  // Tallennetut omasiistijät tarkistusta varten.
+  let omasiistijat = [];
+
+  /**
+   * Ajetaan tämä funktio aina kun kohde vaihdetaan, tai kun sivu ladataan
+   * ensimmäistä kertaa. Tämä hakee omasiistijät ja tarkistaa että ainakin
+   * yksi valituista siistijöistä on käynyt kohteessa; muuten, näytetään
+   * varoitus. Samalla kerrotaan omasiistijänäkymälle mikä kohde kyseessä.
+   */
+  const kohteenVaihto = function() {
+
+    // Piilotetaan mahdollisesti auki oleva lista.
+    $('#<?= $omasiistijat_div_id ?>.in').collapse('hide');
+
+    // Haetaan valittu arvo kohdelistasta.
+    const valittuKohde = $(`#${selectId} option:selected`).val();
+
+    // Asetetaan omasiistijänäkymän piilotettuun kenttään uusi ID, jonka
+    // avulla omasiistijänäkymä hakee omasiistijät listalleen.
+    $('#<?= $omasiistijat_placeholder_id ?>').text(valittuKohde);
+
+    // Kohde vaihdettu, tai kortti juuri avattu. Haetaan omasiistijälista.
+    // Haetaan omasiistijät, jotta voidaan näyttää varoitus jos ei ole valittuna.
+    omasiistijat = [];
+    $.ajax(`${location.protocol}//${location.host}/index.php/kohteet/omasiistijat_ajax`, {
+
+      type: 'POST',
+      data: {
+        id: valittuKohde
+      },
+
+      error: function(xhr, status, error) {
+        $(`#${workersDivId} .well`).html(`Pyynnössä tapahtui virhe: ${xhr.responseText}`);
+        console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: ${xhr.responseText}`);
+      },
+
+      success: function(data) {
+
+        console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Received response, length: ${data.length}`);
+        let parsed = null;
+        try {
+          parsed = JSON.parse(data);
+        } catch (e) {
+          console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
+          return;
+        }
+
+        if (typeof(parsed) != "object") {
+          console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: Parsed data is unusable (not an object).`);
+        } else {
+          parsed.forEach((item, index) => { omasiistijat.push(item[0]); });
+        }
+
+        // Kohteen vaihdon/initialisaation yhteydessä tarkistetaan omasiistijät.
+        omasiistijaTarkistus();
+      }
+    });
+  };
+
+  const showOmasiistijaElements = function(show) {
+    if (show) {
+      $('#omasiistija-varoitus').show();
+      $('#omasiistija-toiminnot').show();
+    } else {
+      $('#omasiistija-varoitus').hide();
+      $('#omasiistija-toiminnot').hide();
+    }
+  };
+
+  /**
+  * Tarkistetaan että valituissa työntekijöissä on vähintään yksi joka on
+  * käynyt kohteessa aiemmin (omasiistijä).
+  */
+  const omasiistijaTarkistus = function() {
+    let siistijat = [];
+    let omasiistijaValittu = false;
+
+    // Tarkistetaan, onko päätekijä (yläreunan valikko) omasiistijöissä. Jos
+    // ei ole, loopataan valitut tekijät työparilistalla tarkistusta varten.
+    if (omasiistijat.includes($('#tekijanVaihdo option:selected').val())) {
+      omasiistijaValittu = true;
+    } else {
+      $('#tyopari-container .multiselect-container li.active a label input').each(function() {
+        if (omasiistijat.includes(this.value)) {
+          omasiistijaValittu = true;
+          return false; // break
+        }
+      });
+    }
+
+    // Näytetään/piilotetaan varoitus valintojen perusteella.
+    let warningsDisabled = ($('.omasiistijavaroitus-toggle').val() == 0);
+    showOmasiistijaElements(!warningsDisabled && omasiistijaValittu !== true);
+  };
+
+
+  // Vaihdetaan omasiistijälistan tila aina kun kohde vaihdetaan.
+  $(`#${selectId}`).on('change', function(e) {
+    kohteenVaihto();
+  });
+
+  // Aina kun työntekijä vaihdetaan yläreunan valikosta, tarkistetaan
+  // omasiistijän tilanne uusiksi, jotta varoitus voidaan näyttää/piilottaa.
+  // Sama tehdään kun valintoja muutetaan työparilistalla.
+  $('#tekijanVaihdo, #tyopari-container .mult').change(function() {
+    omasiistijaTarkistus();
+  });
+
+  // Asetetaan kohde omasiistijälistalle heti työvuoroa avatessa.
+  kohteenVaihto();
+
+  // Show/hide warning and selections when selection is changed.
+  $('.omasiistijavaroitus-toggle').on('change', function(e) {
+    showOmasiistijaElements($(this).val() != 0);
+  });
+});
+</script>
 <!-- #endregion Omasiistijät -->
 
 
