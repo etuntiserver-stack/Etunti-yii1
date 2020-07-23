@@ -549,6 +549,13 @@ $(document).ready(function(){
       </span>
     </div>  
   </div>
+  <div class="col-sm-3">
+    <?= $form->labelEx($model,'omasiistijavaroitus'); ?>
+		<?= $form->dropDownList($model,'omasiistijavaroitus', [
+      0 => Yii::t('main', 'Piilotettu'),
+      1 => Yii::t('main', 'Näytetään')
+    ], ['class'=>'form-control lomake_valinta']); ?>
+  </div>
 </div>
 
 

@@ -21,7 +21,7 @@
  * @property string $tietoja
  * @property string $tyopaari
  * @property int $omasiistijavaroitus
- *   0: Disabled, 1: Enabled, 2: Customer notified
+ *   0: Disabled, 1: Enabled
  */
 class ToistuvatTyovuorot extends DB2ActiveRecord
 {
