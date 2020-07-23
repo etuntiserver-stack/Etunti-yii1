@@ -554,7 +554,7 @@ $(document).ready(function(){
 		<?= $form->dropDownList($model,'omasiistijavaroitus', [
       0 => Yii::t('main', 'Piilotettu'),
       1 => Yii::t('main', 'Näytetään'),
-    ], ['class'=>'form-control lomake_valinta']); ?>
+    ], ['class'=>'form-control lomake_valinta omasiistijavaroitus-toggle']); ?>
   </div>
 </div>
 
@@ -686,7 +686,8 @@ $(document).ready(function(){
         }
 
         // Näytetään/piilotetaan varoitus valintojen perusteella.
-        if (omasiistijaValittu === true) {
+        let warningsDisabled = ($('.omasiistijavaroitus-toggle').val() == 0);
+        if (warningsDisabled || omasiistijaValittu === true) {
           $('#omasiistija-varoitus').hide();
         } else {
           $('#omasiistija-varoitus').show();
@@ -708,6 +709,15 @@ $(document).ready(function(){
 
       // Asetetaan kohde omasiistijälistalle heti työvuoroa avatessa.
       kohteenVaihto();
+
+      // Show/hide warning and selections when selection is changed.
+      $('.omasiistijavaroitus-toggle').on('change', function(e) {
+        if ($(this).val() == 0) {
+          $('#omasiistija-varoitus').hide();
+        } else {
+          $('#omasiistija-varoitus').show();
+        }
+      });
     });
   </script>
 
@@ -752,20 +762,6 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
-
-  // Hide omasiistija warning based on selection.
-  if ($('#<?= $java_prefix ?>_omasiistijavaroitus').val() == 0) {
-    $('#omasiistija-varoitus').hide();
-  }
-
-  // Show/hide warning and selections when selection is changed.
-  $('#<?= $java_prefix ?>_omasiistijavaroitus').on('change', function(e) {
-    if ($(this).val() == 0) {
-      $('#omasiistija-varoitus').hide();
-    } else {
-      $('#omasiistija-varoitus').show();
-    }
-  });
 
   $('.plus_lisapalvelu').click(function(){
 	var lisapalvelu_tuote = $('#lisapalvelu_tuote option:selected').val();
