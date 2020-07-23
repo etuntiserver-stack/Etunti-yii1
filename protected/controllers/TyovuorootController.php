@@ -2267,29 +2267,34 @@ class TyovuorootController extends Controller
         // it further down once worker ID is found.
         $omasiistijat_varoitus = true;
 
-        /** @var KohteetController */
-        $kk = Yii::app()->createController('Kohteet')[0];
-        $omasiistijat = $kk->omasiistijat($arvo->kohteet->id, false);
-        $tyoparit = (!empty($arvo->tyopaari)) ? json_decode($arvo->tyopaari) : [];
+        // Check if model has notifications disabled.
+        if (($arvo->omasiistijavaroitus ?? -1) == 0) {
+          $omasiistijat_varoitus = false;
+        } else {
+          /** @var KohteetController */
+          $kk = Yii::app()->createController('Kohteet')[0];
+          $omasiistijat = $kk->omasiistijat($arvo->kohteet->id, false);
+          $tyoparit = (!empty($arvo->tyopaari)) ? json_decode($arvo->tyopaari) : [];
 
-        // throw new \Exception(sprintf("%s: %s", $arvo->kohteet->id, json_encode($omasiistijat)));exit;
-        // throw new \Exception(sprintf("%s,  %s", $arvo->tid, $arvo->tyopaari));exit;
+          // throw new \Exception(sprintf("%s: %s", $arvo->kohteet->id, json_encode($omasiistijat)));exit;
+          // throw new \Exception(sprintf("%s,  %s", $arvo->tid, $arvo->tyopaari));exit;
 
-        foreach ($omasiistijat as $omasiistija_arr) {
+          foreach ($omasiistijat as $omasiistija_arr) {
 
-          if (empty($omasiistija_arr[0])) {
-            continue;
-          }
+            if (empty($omasiistija_arr[0])) {
+              continue;
+            }
 
-          if ($arvo->tid == $omasiistija_arr[0]) {
-            $omasiistijat_varoitus = false;
-            break;
-          }
-
-          foreach ($tyoparit as $tpid) {
-            if ($tpid == $omasiistija_arr[0]) {
+            if ($arvo->tid == $omasiistija_arr[0]) {
               $omasiistijat_varoitus = false;
-              break 2;
+              break;
+            }
+
+            foreach ($tyoparit as $tpid) {
+              if ($tpid == $omasiistija_arr[0]) {
+                $omasiistijat_varoitus = false;
+                break 2;
+              }
             }
           }
         }
