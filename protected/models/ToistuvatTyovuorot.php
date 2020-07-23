@@ -20,6 +20,8 @@
  * @property integer $status
  * @property string $tietoja
  * @property string $tyopaari
+ * @property int $omasiistijavaroitus
+ *   0: Disabled, 1: Enabled, 2: Customer notified
  */
 class ToistuvatTyovuorot extends DB2ActiveRecord
 {
@@ -83,6 +85,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 		     'new_poistettu_pvm' => 'text DEFAULT NULL',
                      'peruutettu' => 'int(1) DEFAULT 0',
 		     'laskutettu' => 'int(1) DEFAULT 0',
+         'omasiistijavaroitus' => 'int(1) DEFAULT 1'
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -105,7 +108,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('time, pfrom, pto, viikkoja, viikko_paivat, tid, kohde, pvm, alku, loppu, kesto, tyoajanmerkinta, status, tietoja, tyopaari', 'required'),
-			array('viikkoja, tid, kohde, status, ilmoitus_paattymisesta, peruutettu, piilota_mobiilista, laskutettu, tuoteID', 'numerical', 'integerOnly'=>true),
+			array('viikkoja, tid, kohde, status, ilmoitus_paattymisesta, peruutettu, piilota_mobiilista, laskutettu, tuoteID, omasiistijavaroitus', 'numerical', 'integerOnly'=>true),
 			array('osoite, postinumero, postitoimipaikka, tyoajanlaatu, korjattu_poista_tama', 'length', 'max'=>255),
 			array('pfrom, pto, pvm', 'length', 'max'=>50),
 			array('alku, loppu, pituus, kesto', 'length', 'max'=>10),
@@ -196,6 +199,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 			'tietoja' => 'Tietoja',
 			'tyopaari' => 'Tyopaari',
 			'piilota_mobiilista'=>Yii::t('main', 'Näytä mobiilissa'),
+      'omasiistijavaroitus' => Yii::t('main', 'Omasiistijävaroitukset'),
 		);
 	}
 

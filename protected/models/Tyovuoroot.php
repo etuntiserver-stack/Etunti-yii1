@@ -19,6 +19,8 @@
  * @property string $tyoajanmerkinta
  * @property string $tietoja
  * @property string $osoiteOnline
+ * @property int $omasiistijavaroitus
+ *   0: Disabled, 1: Enabled, 2: Customer notified
  */
 class Tyovuoroot extends DB2ActiveRecord
 {
@@ -93,7 +95,8 @@ class Tyovuoroot extends DB2ActiveRecord
 		     'toimenpiteet' => 'TEXT DEFAULT NULL',
 		     'uusi_tilaus' => 'int(1) DEFAULT 0',
 		     'tyo_erittelyt' => 'text DEFAULT NULL',
-		     'muistiinpano' => 'text DEFAULT NULL'
+         'muistiinpano' => 'text DEFAULT NULL',
+         'omasiistijavaroitus' => 'int(1) DEFAULT 1'
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -124,7 +127,7 @@ class Tyovuoroot extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('kohde, pvm, alku, loppu, pituus, tyoajanlaatu, tyoajanmerkinta', 'required'),
-			array('tid, onlinevaraus_id, status, toistuva_id, ilmoitus_avoimista_kohteesta, ilmoitus_myohastyneista_kohteesta, piilota_mobiilista, peruutettu, apuaika, laskutettu, tuoteID, lasku_id, uusi_tilaus', 'numerical', 'integerOnly'=>true),
+			array('tid, onlinevaraus_id, status, toistuva_id, ilmoitus_avoimista_kohteesta, ilmoitus_myohastyneista_kohteesta, piilota_mobiilista, peruutettu, apuaika, laskutettu, tuoteID, lasku_id, uusi_tilaus, omasiistijavaroitus', 'numerical', 'integerOnly'=>true),
 			array('kohde, osoite, postinumero, postitoimipaikka', 'length', 'max'=>255),
 			array('pvm', 'length', 'max'=>20),
 			array('alku, loppu, pituus, alku_r, kesto', 'length', 'max'=>10),
@@ -183,7 +186,8 @@ class Tyovuoroot extends DB2ActiveRecord
 			'status' => Yii::t('main', 'Tilanne'),
 			'piilota_mobiilista'=>Yii::t('main', 'Näytä mobiilissa'),
 			'tuoteID' => Yii::t('main', 'Tuote/palvelu'),
-			'tyoajanlaatu' => Yii::t('main', 'Lomat ja poissaolot'),
+      'tyoajanlaatu' => Yii::t('main', 'Lomat ja poissaolot'),
+      'omasiistijavaroitus' => Yii::t('main', 'Omasiistijävaroitukset'),
 		);
 	}
 
