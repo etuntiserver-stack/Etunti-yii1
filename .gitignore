@@ -50,3 +50,5 @@ robots.txt
 protected/config/main.pw.php
 
 /*migrati*.log
+
+/.vscode
