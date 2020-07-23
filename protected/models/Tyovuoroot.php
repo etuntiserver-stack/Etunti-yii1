@@ -99,7 +99,7 @@ class Tyovuoroot extends DB2ActiveRecord
 		     'tyo_erittelyt' => 'text DEFAULT NULL',
          'muistiinpano' => 'text DEFAULT NULL',
          'omasiistijavaroitus' => 'int(1) DEFAULT 1',
-         'omasiistijailmoitus' => 'int(1) DEFAULT 1'
+         'omasiistijailmoitus' => 'int(1) DEFAULT 0'
 		);
 
 		foreach($table_structure as $key=>$value)

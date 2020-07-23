@@ -610,6 +610,7 @@ $(document).ready(function(){
   <div class="col-md-6" id="omasiistija-toiminnot">
     <div class="col-sm-12"><b>Omasiistijöistä ilmoittaminen</b></div>
     <div class="col-sm-12">
+      <span id="omasiistijat-ilmoitettu" class="text-success" hidden>Omasiistijöistä on jo ilmoitettu asiakkaalle.</span>
       <button type="button" class="btn btn-sm btn-primary" id="omasiistijat-ilmoita"><b>Lähetä asiakkaalle ilmoitus</b></button>
       <button type="button" class="btn btn-sm btn-success" id="omasiistijat-merkitse"><b>Merkitse jo ilmoitetuksi</b></button>
     </div>
@@ -718,10 +719,14 @@ $(function() {
     } else {
 
       // Tarkistetaan onko asiasta jo ilmoitettu asiakkaalle.
-
-
-      $('#omasiistija-varoitus').show();
-      $('#omasiistija-toiminnot').show();
+      if ($('#Tyovuoroot_omasiistijailmoitus').val() == 1) {
+        $('#omasiistija-varoitus').show().text("Omasiistijää ei ole valittuna (ilmoitettu asiakkaalle)");
+        $('#omasiistijat-ilmoitettu').show();
+        $('#omasiistija-toiminnot').hide();
+      } else {
+        $('#omasiistija-varoitus').show();
+        $('#omasiistija-toiminnot').show();
+      }
     }
   };
 

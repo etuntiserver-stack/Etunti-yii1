@@ -22,6 +22,8 @@
  * @property string $tyopaari
  * @property int $omasiistijavaroitus
  *   0: Disabled, 1: Enabled
+ * @property int $omasiistijailmoitus
+ *   0: Not notified, 1: Notified
  */
 class ToistuvatTyovuorot extends DB2ActiveRecord
 {
@@ -85,7 +87,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 		     'new_poistettu_pvm' => 'text DEFAULT NULL',
                      'peruutettu' => 'int(1) DEFAULT 0',
 		     'laskutettu' => 'int(1) DEFAULT 0',
-         'omasiistijavaroitus' => 'int(1) DEFAULT 1'
+         'omasiistijavaroitus' => 'int(1) DEFAULT 1',
 		);
 
 		foreach($table_structure as $key=>$value)
