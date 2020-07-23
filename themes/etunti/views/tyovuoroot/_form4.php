@@ -554,10 +554,16 @@ $(document).ready(function(){
 		<?= $form->dropDownList($model,'omasiistijavaroitus', [
       0 => Yii::t('main', 'Piilotettu'),
       1 => Yii::t('main', 'Näytetään'),
-    ], ['class'=>'form-control lomake_valinta omasiistijavaroitus-toggle']); ?>
+    ], ['class'=>'form-control lomake_valinta']); ?>
   </div>
 </div>
-
+<div hidden>
+  <?= $form->labelEx($model,'omasiistijailmoitus'); ?>
+  <?= $form->dropDownList($model,'omasiistijailmoitus', [
+    0 => Yii::t('main', 'Ei ilmoitettu'),
+    1 => Yii::t('main', 'Ilmoitettu'),
+  ], ['class'=>'form-control lomake_valinta']); ?>
+</div>
 
 
 
@@ -683,16 +689,6 @@ $(function() {
     });
   };
 
-  const showOmasiistijaElements = function(show) {
-    if (show) {
-      $('#omasiistija-varoitus').show();
-      $('#omasiistija-toiminnot').show();
-    } else {
-      $('#omasiistija-varoitus').hide();
-      $('#omasiistija-toiminnot').hide();
-    }
-  };
-
   /**
   * Tarkistetaan että valituissa työntekijöissä on vähintään yksi joka on
   * käynyt kohteessa aiemmin (omasiistijä).
@@ -715,8 +711,18 @@ $(function() {
     }
 
     // Näytetään/piilotetaan varoitus valintojen perusteella.
-    let warningsDisabled = ($('.omasiistijavaroitus-toggle').val() == 0);
-    showOmasiistijaElements(!warningsDisabled && omasiistijaValittu !== true);
+    let warningsDisabled = ($('#<?= $java_prefix ?>_omasiistijavaroitus').val() == 0);
+    if (warningsDisabled || omasiistijaValittu === true) {
+      $('#omasiistija-varoitus').hide();
+      $('#omasiistija-toiminnot').hide();
+    } else {
+
+      // Tarkistetaan onko asiasta jo ilmoitettu asiakkaalle.
+
+
+      $('#omasiistija-varoitus').show();
+      $('#omasiistija-toiminnot').show();
+    }
   };
 
 
@@ -736,8 +742,8 @@ $(function() {
   kohteenVaihto();
 
   // Show/hide warning and selections when selection is changed.
-  $('.omasiistijavaroitus-toggle').on('change', function(e) {
-    showOmasiistijaElements($(this).val() != 0);
+  $('#<?= $java_prefix ?>_omasiistijavaroitus').on('change', function(e) {
+    omasiistijaTarkistus();
   });
 });
 </script>
