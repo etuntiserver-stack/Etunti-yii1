@@ -752,6 +752,21 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  // Hide omasiistija warning based on selection.
+  if ($('#<?= $java_prefix ?>_omasiistijavaroitus').val() == 0) {
+    $('#omasiistija-varoitus').hide();
+  }
+
+  // Show/hide warning and selections when selection is changed.
+  $('#<?= $java_prefix ?>_omasiistijavaroitus').on('change', function(e) {
+    if ($(this).val() == 0) {
+      $('#omasiistija-varoitus').hide();
+    } else {
+      $('#omasiistija-varoitus').show();
+    }
+  });
+
   $('.plus_lisapalvelu').click(function(){
 	var lisapalvelu_tuote = $('#lisapalvelu_tuote option:selected').val();
 	var lisapalvelu_yksikko = $('#lisapalvelu_tuote option:selected').attr('yksikko');
