@@ -1758,7 +1758,7 @@ $(document).ready(function(){
 	$(".muistiinpanolista_laatiko").append('' +
 		 '<div class="row">' +
 		  '<div class="col-sm-11">' +
-		   '<textarea name="Tyovuoroot[muistiinpano][]" class="form-control"></textarea>' +
+		   '<textarea name="<?=$java_prefix?>[muistiinpano][]" class="form-control"></textarea>' +
 		  '</div>' +
 		  '<div class="col-sm-1 text-right">' +
 		   '<span class="link text-danger fa fa-trash pois_muistiinpano"></span>' +

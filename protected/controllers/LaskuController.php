@@ -3154,16 +3154,18 @@ $xml .= '
 			$procountor_results = $pc->searchInvoices($params);
 			if (isset($procountor_results['errors'])) {
 
-				// Log request results and set a notification for the user.
-				$pc->logError(
-					'searchInvoices',
-					$procountor_results,
-					['Search dates' => "{$params->createdStartDate} - {$params->createdEndDate}"],
-					'Failed to get bank accounts from Procountor.'
-				);
+        // Log request results and set a notification for the user.
+        // Error disabled as per request @ 13.7.2020
+				// $pc->logError(
+				// 	'searchInvoices',
+				// 	$procountor_results,
+				// 	['Search dates' => "{$params->createdStartDate} - {$params->createdEndDate}"],
+				// 	'Failed to get bank accounts from Procountor.'
+				// );
 
 				$is_error = true;
-				return '<p>Laskujen haku Procountorista epäonnistui. Viasta on ilmoitettu ylläpidolle.</p>';
+				// return '<p>Laskujen haku Procountorista epäonnistui. Viasta on ilmoitettu ylläpidolle.</p>';
+				return '<p>Laskujen haku Procountorista epäonnistui. Tarkista kirjautuminen asetuksista. Jos vika jatkuu, ota yhteys ylläpitoon.</p>';
 			}
 
 			foreach($procountor_results['results'] ?? [] as $remote_invoice) {

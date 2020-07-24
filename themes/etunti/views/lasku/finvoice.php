@@ -42,7 +42,7 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
     $bank_account_results = $pc->getBankAccounts();
 
     if (isset($bank_account_results['errors']) || !isset($bank_account_results['results'])) {
-      $pc->logError('getBankAccounts', $bank_account_results, ['Lasku ID' => $l->id], 'Failed to get bank accounts from Procountor.');
+      // $pc->logError('getBankAccounts', $bank_account_results, ['Lasku ID' => $l->id], 'Failed to get bank accounts from Procountor.');
       Yii::app()->user->setFlash('danger', 'Pankkitilien haku Procountorista epäonnistui.');
       $this->redirect(array('update','id'=>$id));
     }

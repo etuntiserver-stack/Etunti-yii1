@@ -2648,23 +2648,30 @@ class TyovuorootController extends Controller
 		$poistettu_pvms_upd	= [];
 		$ero_plus 		= array_diff( $_POST['post_tids'], $tids_before );
 		$ero_miinus 		= array_diff( $tids_before, $_POST['post_tids'] );
+		$clearing_before 	= []; // Otetaan pois jos on samanlainen
 
 		if( $this_id != 'null' and count($tids) > 0 and !empty($model->new_poistettu_pvm) ){
 
-			$clearing_before = []; // Otetaan pois jos on samanlainen
 			foreach (json_decode($model->new_poistettu_pvm, true) as $key => $value){
 			  if(!in_array($value, $clearing_before))
 			    $clearing_before[] = $value;
 			}
 
 			foreach($clearing_before as $key => $val){
-				if( isset($val['tid']) and isset($tids[$val['tid']]) and isset($val['pvm']) and isset($val['syy']) ){
+				if( 
+					isset($val['tid']) and isset($tids[$val['tid']]) and isset($val['pvm']) and isset($val['syy']) 
+					and date("Ymd", strtotime($val['pvm'])) >= date("Ymd", strtotime($laatikko_pvm))
+				){
 					$poistettu_pvms[$val['tid']][$val['pvm']] = $val['syy'];
 					$poistettu_pvms_upd[] = ['tid' => $val['tid'], 'pvm' => $val['pvm'], 'syy' => $val['syy']];
 				}
 				foreach($ero_miinus as $miinus_tid){
 					foreach($ero_plus as $plus_tid){
-						if( isset($val['tid']) and isset($val['pvm']) and isset($val['syy']) ){
+						if( 
+							isset($val['tid']) and isset($val['pvm']) 
+							and date("Ymd", strtotime($val['pvm'])) >= date("Ymd", strtotime($laatikko_pvm)) 
+							and isset($val['syy']) )
+						{
 							$poistettu_pvms[$plus_tid][$val['pvm']] = $val['syy'];
 							$poistettu_pvms_upd[] = ['tid' => $plus_tid, 'pvm' => $val['pvm'], 'syy' => $val['syy']];
 						}
@@ -2677,8 +2684,11 @@ class TyovuorootController extends Controller
 			foreach($addtp as $k => $ntid){
 				foreach($poistettu_pvms as $ptid => $parr){
 					foreach($parr as $ppvm => $syy){
-						$poistettu_pvms[$ntid][$ppvm] = $syy;
-						$poistettu_pvms_upd[] = ['tid' => $ntid, 'pvm' => $ppvm, 'syy' => $syy];
+						if(date("Ymd", strtotime($ppvm)) >= date("Ymd", strtotime($laatikko_pvm)))
+						{
+							$poistettu_pvms[$ntid][$ppvm] = $syy;
+							$poistettu_pvms_upd[] = ['tid' => $ntid, 'pvm' => $ppvm, 'syy' => $syy];
+						}
 					}
 				}
 			}
@@ -2687,8 +2697,11 @@ class TyovuorootController extends Controller
 			foreach($_POST['tyopaari_laatikko'] as $k => $ntid){
 				foreach($poistettu_pvms as $ptid => $parr){
 					foreach($parr as $ppvm => $syy){
-						$poistettu_pvms[$ntid][$ppvm] = $syy;
-						$poistettu_pvms_upd[] = ['tid' => $ntid, 'pvm' => $ppvm, 'syy' => $syy];
+						if(date("Ymd", strtotime($ppvm)) >= date("Ymd", strtotime($laatikko_pvm)))
+						{
+							$poistettu_pvms[$ntid][$ppvm] = $syy;
+							$poistettu_pvms_upd[] = ['tid' => $ntid, 'pvm' => $ppvm, 'syy' => $syy];
+						}
 					}
 				}
 			}
@@ -2700,12 +2713,19 @@ class TyovuorootController extends Controller
 		    $clearing[] = $value;
 		}
 
+		$for_update = (isset($model->new_poistettu_pvm))? $model->new_poistettu_pvm : '' ;
+		if(count($poistettu_pvms_upd) > 0)
+			$for_update = json_encode($poistettu_pvms_upd);
+		else
+			if(count($clearing_before) > 0)
+				$for_update = json_encode($clearing_before);
+
 		// <-- Update poistetut
 		//$return .= json_encode($ero_plus).'<br>';
 		//$return .= json_encode($ero_miinus).'<br>';
 		//$return .= json_encode($clearing);
 		if(isset($model->id))
-			ToistuvatTyovuorot::model()->updatebypk($model->id, ['new_poistettu_pvm' => ((count($poistettu_pvms_upd) > 0)? json_encode($poistettu_pvms_upd) : '')]);
+			ToistuvatTyovuorot::model()->updatebypk($model->id, ['new_poistettu_pvm' => $for_update]);
 
 
 		$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
