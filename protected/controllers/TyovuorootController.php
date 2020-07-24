@@ -5061,12 +5061,16 @@ class TyovuorootController extends Controller
 
     // Form mail text.
     $mail_text = <<<EOD
-    Hei! Valitettavasti omasiistijänne on estynyt seuraavalla siivouskäynnillä.
-    Lupasimme ilmoittaa asiasta etukäteen.
-    Teille on tulossa {$namestr}.
-
-    Ystävällisin Terveisin, <a href="https://www.kotipuhtaaksi.fi">Koti Puhtaaksi</a>
-    <a href="mailto:asiakaspalvelu@kotipuhtaaksi.fi">asiakaspalvelu@kotipuhtaaksi.fi</a>
+    Hei!<br>
+    <br>
+    Valitettavasti omasiistijänne on estynyt seuraavalla siivouskäynnillä. Lupasimme ilmoittaa asiasta etukäteen.<br>
+    Teille on tulossa {$namestr}.<br>
+    <br>
+    Ystävällisin Terveisin,<br>
+    <a href="https://www.kotipuhtaaksi.fi">Koti Puhtaaksi</a><br>
+    <a href="mailto:asiakaspalvelu@kotipuhtaaksi.fi">asiakaspalvelu@kotipuhtaaksi.fi</a><br>
+    <br>
+    (Vastaukset tähän sähköpostiin menee suoraan asiakastukilaatikkoomme. Vastaamme mahdollisimman pian!)
     EOD;
 
     // Attempt to send mail.
