@@ -4959,46 +4959,109 @@ class TyovuorootController extends Controller
    *
    * @param int $customer_id
    * ID of the customer. Email (or phone number) is fetched from here.
-   * @param array $worker_names
+   * @param array $names
    * Names of workers going for the shift.
-   * @return null
-   * Echoed result.
+   * @return bool
+   * Echoed result, and true if mail was sent, or false if error occured.
+   * JSON result set format: [
+   *   'success': true/false
+   *   'message': success message or error message
+   * ]
    */
-  public function actionOmasiistijat_ilmoitus($customer_id = null, $worker_names = null)
+  public function actionOmasiistijat_ilmoitus($customer_id = null, $names = null)
   {
+    // Get possible POST value for customer ID.
     if (is_numeric($_POST['customer_id'] ?? '')) {
       $customer_id = $_POST['customer_id'];
     }
 
-    if (isset($_POST['worker_names'])) {
-      $worker_names_temp = json_decode($_POST['worker_names'], true);
-      if (is_array($worker_names_temp)) {
-        $worker_names = $worker_names_temp;
+    // Get possible POST value for list of JSON encoded worker names.
+    if (isset($_POST['names'])) {
+      $names_temp = json_decode($_POST['names'], true); // decode to temp var for checking
+      if (is_array($names_temp)) {
+        $names = array_values($names_temp);
       }
     }
 
-    $results = [
-      'success' => false,
-      'message' => ''
-    ];
-
+    // Check for empty or invalid customer id.
     if (empty($customer_id) || !is_numeric($customer_id)) {
-      $results['message'] = 'Viallinen asiakas ID.';
-    } elseif (empty($asiakas = Asiakkaat::model()->findByPk($customer_id))) {
-      $results['message'] = "Asiakasta ei löydy (ID: $customer_id";
-    } elseif (empty($sposti = trim($asiakas->sahkoposti ?? ''))) {
-      $results['message'] = "Asiakkaan $customer_id sähköposti on tyhjä.";
-    } elseif (!is_array($worker_names)) {
-      $results['message'] = "Vuorolle menevien siistijöiden listan vastaanottaminen epäonnistui.";
-    } elseif (empty($worker_names)) {
-      $results['message'] = "Vuorolle menevien siistijöiden lista on tyhjä.";
-    } else {
-      //TODO, all good
-      $results['success'] = true;
-      $results['message'] = "Asiakkaalle ilmoitettu osoitteeseen $sposti " . implode(', ', $worker_names);
+      echo json_encode([
+        'success' => false,
+        'message' => sprintf('Viallinen asiakas ID "%s".', json_encode($customer_id))
+      ]);
+      return false;
     }
 
-    echo json_encode($results);
+    // Check for non-existent customer.
+    if (empty($asiakas = Asiakkaat::model()->findByPk($customer_id))) {
+      echo json_encode([
+        'success' => false,
+        'message' => sprintf('Asiakasta ID "%d" ei löydetty.', $customer_id)
+      ]);
+      return false;
+    }
+
+    // Check that the customer has an email specified. (TODO: validate?)
+    if (empty($sposti = trim($asiakas->sahkoposti ?? ''))) {
+      echo json_encode([
+        'success' => false,
+        'message' => sprintf('Asiakkaan ID %d sähköposti ei ole määritelty tai on viallinen.', $customer_id)
+      ]);
+      return false;
+    }
+
+    // Ensure that a list of names of workers is provided.
+    if (!is_array($names)) {
+      echo json_encode([
+        'success' => false,
+        'message' => 'Sisäinen virhe: Siistijöiden listan vastaanottaminen epäonnistui. Jos vika jatkuu, ilmoita asiasta ylläpidolle.'
+      ]);
+      return false;
+    }
+
+    // Check that the list is actually populated, to avoid logic errors.
+    if (empty($names)) {
+      echo json_encode([
+        'success' => false,
+        'message' => 'Sisäinen virhe: Vastaanotettu siistijöiden lista on tyhjä. Tämä voi johtua yhteydestä. Jos vika jatkuu, ilmoita asiasta ylläpidolle.'
+      ]);
+      return false;
+    }
+
+    // All checks done, ready to form message and mail. Initial mail base, from Henri.
+    $namestr = '';
+    $namecount = count($names);
+
+    // Loop names list (could be 1 or 3, usually 2) and form cohesive wording.
+    for ($i = 0; $i < $namecount; $i++) {
+      switch (true) {
+        case ($i == 0):            $namestr .= $names[$i];         break;
+        case ($i == $namecount-1): $namestr .= " ja {$names[$i]}"; break;
+        default:                   $namestr .= ", {$names[$i]}";   break;
+      }
+    }
+
+    // Form mail text.
+    $mail_text = <<<EOD
+    Hei! Valitettavasti omasiistijänne on estynyt seuraavalla siivouskäynnillä.
+    Lupasimme ilmoittaa asiasta etukäteen.
+    Teille on tulossa {$namestr}.
+    Ystävällisin Terveisin, Koti Puhtaaksi
+    EOD;
+
+    // Attempt to send mail.
+    $mail = new YiiMailer();
+    $mail->setFrom('asiakaspalvelu@kotipuhtaaksi.fi');
+    $mail->setTo($sposti);
+    $mail->setSubject('Omasiistijänne estyneet seuraavalla siivouskäynnillä.');
+    $mail->setBody($mail_text);
+    $mail->send();
+
+    // Return to the caller with good news.
+    echo json_encode([
+      'success' => true,
+      'message' => sprintf('Ilmoitus omasiistijöistä lähetetty asiakkaalle %d osoitteeseen %s.', $customer_id, $sposti)
+      ]);
   }
 
 	protected function getKohde($id)

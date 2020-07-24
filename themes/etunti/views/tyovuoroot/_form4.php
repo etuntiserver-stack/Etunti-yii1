@@ -800,7 +800,7 @@ $(function() {
       type: 'POST',
       data: {
         'customer_id': <?= $model->kohteet->asiakas_id; ?>,
-        'worker_names': workersJson
+        'names': workersJson
       },
 
       // Error handling just in case.
