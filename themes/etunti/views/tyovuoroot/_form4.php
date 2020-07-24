@@ -758,6 +758,15 @@ $(function() {
       $('#omasiistijat-ilmoita').attr('disabled', 'disabled');
     }
   });
+
+  // Omasiistijät ilmoita -painike - prevent sending when toistuva is selected.
+  $('#omasiistijat-ilmoita').on('click', function(e) {
+    e.preventDefault();
+    let toistuvaToggled = ($('#is_toistuva').bootstrapSwitch('state') === true);
+    if (toistuvaToggled) {
+      alert('Omasiistijöistä ilmoittaminen vaatii työvuoron irroittamista ketjusta. Ota "Toistuva Työvuoro" valinta.');
+    }
+  });
 });
 </script>
 <!-- #endregion Omasiistijät -->
