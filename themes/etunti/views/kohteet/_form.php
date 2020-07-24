@@ -364,7 +364,7 @@ $(document).ready(function(){
 	</div>
 
   <?php
-  if (isset($model->id)) {
+  if (Yii::app()->user->kp && isset($model->id)) {
     echo '<br>';
     $this->renderPartial('omasiistijat', ['kohde_id' => $model->id]);
   }

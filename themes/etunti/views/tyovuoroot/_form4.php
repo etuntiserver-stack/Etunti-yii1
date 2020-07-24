@@ -729,7 +729,7 @@ $(function() {
     } else {
 
       // Tarkistetaan onko asiasta jo ilmoitettu asiakkaalle.
-      if ($('#Tyovuoroot_omasiistijailmoitus').val() == 1) {
+      if ($('#<?= $java_prefix ?>_omasiistijailmoitus').val() == 1) {
         $('#omasiistija-varoitus').show().html("<b>Omasiistijää ei ole valittuna (ilmoitettu asiakkaalle)</b>");
         $('#omasiistijat-ilmoita').attr('disabled', 'disabled');
         $('#omasiistija-toiminnot').show();
@@ -776,7 +776,7 @@ $(function() {
     e.preventDefault();
     let toistuvaToggled = ($('#is_toistuva').bootstrapSwitch('state') === true);
     if (toistuvaToggled) {
-      alert('Omasiistijöistä ilmoittaminen vaatii työvuoron irroittamista ketjusta. Ota "Toistuva Työvuoro" valinta.');
+      alert('Omasiistijäilmoitus on tehtävä työvuorokohtaisesti, jolloin vuoro poistuu ketjusta. Ota pois valinta kohdasta "Toistuva Työvuoro".');
       return false;
     }
 
@@ -1460,6 +1460,17 @@ $(document).ready(function(){
   $('#tyovuoroot-form').on('submit',function(e) {
 	var pvmTarkistus = $('#submitButton').attr('pvmTarkistus');
 	toistuva = ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
+
+  <?php if (Yii::app()->user->kp): ?>
+  // If omasiistijavaroitus is selected as sent, and toistuva selected, prevent submit
+  if (toistuva) {
+    if ($('#<?= $java_prefix ?>_omasiistijailmoitus').val() == 1) {
+      alert("Omasiistijäilmoitusta ei voida asettaa lähetetyksi koko ketjulle.");
+      $('#<?= $java_prefix ?>_omasiistijailmoitus').css('border', '2px solid red').focus();
+      return false;
+    }
+  }
+  <?php endif; ?>
 
 	/* <-- Tarkistetaan Aloitus/Lopetus Klo ja status */
 	if( $('#<?=$java_prefix?>_status option:selected').val() === '' )
