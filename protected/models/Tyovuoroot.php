@@ -191,7 +191,7 @@ class Tyovuoroot extends DB2ActiveRecord
 			'tuoteID' => Yii::t('main', 'Tuote/palvelu'),
       'tyoajanlaatu' => Yii::t('main', 'Lomat ja poissaolot'),
       'omasiistijavaroitus' => Yii::t('main', 'Omasiistijävaroitukset'),
-      'omasiistijailmoitus' => Yii::t('main', 'Omasiistijöistä ilmoitettu'),
+      'omasiistijailmoitus' => Yii::t('main', 'Ilmoitus asiakkaalle omasiistijöistä'),
 		);
 	}
 
