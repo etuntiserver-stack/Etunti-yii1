@@ -185,6 +185,12 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->error($model,'y_tunnus'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'henkilotunnus'); ?>
+		<?php echo $form->textField($model,'henkilotunnus',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'henkilotunnus'); ?>
+	</div>
+
 	<div class="section fill mb5 nimi ashidd">
 		<?php echo $form->labelEx($model,'yhteyshenkilo'); ?>
 		<?php echo $form->textField($model,'yhteyshenkilo',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
