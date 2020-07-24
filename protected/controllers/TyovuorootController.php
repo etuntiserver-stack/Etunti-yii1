@@ -5085,7 +5085,7 @@ class TyovuorootController extends Controller
     // Return to the caller with good news.
     echo json_encode([
       'success' => true,
-      'message' => sprintf('Ilmoitus omasiistijöistä lähetetty asiakkaalle %d osoitteeseen %s.', $customer_id, $sposti)
+      'message' => sprintf('Ilmoitus omasiistijöistä lähetetty asiakkaalle %d osoitteeseen %s. Odota hetki kun työvuoro tallennetaan ja avataan uudelleen..', $customer_id, $sposti)
       ]);
   }
 
