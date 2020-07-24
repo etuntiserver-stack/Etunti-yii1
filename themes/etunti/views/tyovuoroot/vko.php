@@ -179,7 +179,7 @@ if( isset($_SESSION['skrollaus']) )
               <div class="panel-body p25">
               </div>
               <input type="hidden" id="tekija-id" name="tekija-id">
-              <?php if (in_array(Yii::app()->user->domain, ['demo', 'staging_demo', 'kotipuhtaaksi', 'staging_kotipuhtaaksi'])): ?>
+              <?php if (Yii::app()->user->kp): ?>
               <div class="form-group p25">
                 <label for="omasiistija-valinta">Omasiistijävaroitukset:</label>
                 <select class="form-control" id="omasiistija-valinta">

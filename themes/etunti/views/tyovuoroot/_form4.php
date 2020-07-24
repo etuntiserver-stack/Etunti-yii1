@@ -549,6 +549,7 @@ $(document).ready(function(){
       </span>
     </div>  
   </div>
+  <?php if (Yii::app()->user->kp): ?>
   <div class="col-sm-3">
     <?= $form->labelEx($model,'omasiistijavaroitus'); ?>
 		<?= $form->dropDownList($model,'omasiistijavaroitus', [
@@ -556,12 +557,14 @@ $(document).ready(function(){
       1 => Yii::t('main', 'Näytetään'),
     ], ['class'=>'form-control lomake_valinta']); ?>
   </div>
+  <?php endif; ?>
 </div>
 
 
 <!-- #region Omasiistijät -->
-<br>
+<?php if (Yii::app()->user->kp): ?>
 
+<br>
 <div class="row">
   <div class="col-md-6">
     <!-- Varoitus jos ei ole omasiistijää. -->
@@ -619,9 +622,6 @@ $(document).ready(function(){
   <?php endif; ?>
 
 </div>
-
-
-
 
 <script>
 
@@ -867,6 +867,8 @@ $(function() {
   });
 });
 </script>
+
+<?php endif; ?>
 <!-- #endregion Omasiistijät -->
 
 
@@ -1654,8 +1656,9 @@ $(document).ready(function(){
 			$.tv_arr_update(data);
 			$.vkolaskenta(getAllTids());
         $('#showres').modal('hide');
-      
-      if (submitRedirectBack && newCreatedTvId > 0) {
+
+      // Redirect back to modal when doing real-time changes like sending omasiistijävaroitus.
+      if (typeof(submitRedirectBack) !== 'undefined' && submitRedirectBack && newCreatedTvId > 0) {
         let dYear = <?= date('Y', strtotime($laatikko_pvm)); ?> // build return URL year
         let dWeek = <?= date('W', strtotime($laatikko_pvm)); ?> // build return URL week
         let tempNewId = newCreatedTvId;                         // set new created id to temporary variable for redirect

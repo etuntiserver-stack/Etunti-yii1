@@ -2260,7 +2260,7 @@ class TyovuorootController extends Controller
     // OMASIISTIJÄT TARKISTUS - Enabled only on kotipuhtaaksi, for now.
     // TODO: Asetuksiin valinta, jolla voidaan enable/disable
     $omasiistijat_varoitus = false;
-    if (in_array(Yii::app()->user->domain, ['demo', 'staging_demo', 'kotipuhtaaksi', 'staging_kotipuhtaaksi'])) {
+    if (Yii::app()->user->kp) {
       if (!empty($arvo->kohteet->id)) {
 
         // When kohde is selected, set the warning enabled by default, and disable
@@ -4885,6 +4885,11 @@ class TyovuorootController extends Controller
    */
   public function actionOmasiistijavaroitus_current($id = null)
   {
+    // If not kp or testing, just echo 0 (disabled).
+    if (!Yii::app()->user->kp) {
+      echo 0;
+    }
+
     if (is_numeric($_POST['id'] ?? '')) {
       $id = $_POST['id'];
     }
@@ -4907,6 +4912,11 @@ class TyovuorootController extends Controller
    */
   public function actionOmasiistijavaroitus_toggle($id = null, $value = null)
   {
+    // If not kp or testing, just return blank. Should not be called.
+    if (!Yii::app()->user->kp) {
+      echo Yii::t('main', 'Tämä ominaisuus ei ole käytössä ympäristössäsi.');
+    }
+
     if (is_numeric($_POST['id'] ?? '')) {
       $id = $_POST['id'];
     }
@@ -4934,7 +4944,7 @@ class TyovuorootController extends Controller
   public function actionOmasiistijavaroitus_disabled_tids()
   {
     // Enabled only on Kotipuhtaaksi domain. Otherwise, empty array (no warnings).
-    if (!in_array(Yii::app()->user->domain, ['demo', 'staging_demo', 'kotipuhtaaksi', 'staging_kotipuhtaaksi'])) {
+    if (!Yii::app()->user->kp) {
       echo json_encode([]);
       return;
     }
@@ -4970,6 +4980,14 @@ class TyovuorootController extends Controller
    */
   public function actionOmasiistijat_ilmoitus($customer_id = null, $names = null)
   {
+    // If not kp or testing, cancel action.
+    if (!Yii::app()->user->kp) {
+      echo json_encode([
+        'success' => false,
+        'message' => 'Tämä ominaisuus ei ole käytössä ympäristössäsi.'
+      ]);
+    }
+
     // Get possible POST value for customer ID.
     if (is_numeric($_POST['customer_id'] ?? '')) {
       $customer_id = $_POST['customer_id'];
