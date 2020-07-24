@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijavaroitus_current', 'omasiistijavaroitus_toggle', 'omasiistijavaroitus_disabled_tids'),
+				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijavaroitus_current', 'omasiistijavaroitus_toggle', 'omasiistijavaroitus_disabled_tids', 'omasiistijat_ilmoitus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -4950,6 +4950,42 @@ class TyovuorootController extends Controller
     foreach ($results as $tt)
       $tids[] = $tt->id;
     echo json_encode($tids);
+  }
+
+  /**
+   * Notifies customer about omasiistijät (for lack of an english word).
+   *
+   * FOR AJAX.
+   *
+   * @param int $asiakas_id
+   * ID of the customer. Email (or phone number) is fetched from here.
+   * @return null
+   * Echoed result.
+   */
+  public function actionOmasiistijat_ilmoitus($asiakas_id = null)
+  {
+    if (is_numeric($_POST['asiakas_id'] ?? '')) {
+      $asiakas_id = $_POST['asiakas_id'];
+    }
+
+    $results = [
+      'success' => false,
+      'message' => ''
+    ];
+
+    if (empty($asiakas_id) || !is_numeric($asiakas_id)) {
+      $results['message'] = 'Viallinen asiakas ID.';
+    } elseif (empty($asiakas = Asiakkaat::model()->findByPk($asiakas_id))) {
+      $results['message'] = "Asiakasta ei löydy (ID: $asiakas_id";
+    } elseif (empty($sposti = trim($asiakas->sahkoposti ?? ''))) {
+      $results['message'] = "Asiakkaan $asiakas_id sähköposti on tyhjä.";
+    } else {
+      //TODO, all good
+      $results['success'] = true;
+      $results['message'] = "Asiakkaalle ilmoitettu osoitteeseen $sposti";
+    }
+
+    echo json_encode($results);
   }
 
 	protected function getKohde($id)

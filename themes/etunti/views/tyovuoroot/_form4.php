@@ -768,6 +768,62 @@ $(function() {
       return false;
     }
 
+    // Perform notification.
+    $.ajax({
+      url: `${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijat_ilmoitus`,
+      type: 'POST',
+      data: { asiakas_id: <?= $model->kohteet->asiakas_id; ?> },
+      error: function (xhr, status, error) {
+        alert(xhr.responseText);
+        console.log(xhr.responseText);
+      },
+      success: function (data) {
+        console.log(data);
+
+        // Try parse response JSON.
+        let parsed = null;
+        try {
+          parsed = JSON.parse(data);
+        } catch (e) {
+          console.log(`Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
+          alert("Omasiistijäilmoituksen lähetyksessä tapahtui virhe: palvelin palautti viallisen tuloksen.");
+          return false;
+        }
+
+        // Check if parsing failed. Notify log and let it go.
+        if (typeof (parsed) != "object") {
+          console.log("Parsed data is unusable (not an object).");
+          alert("Omasiistijäilmoituksen lähetyksessä tapahtui virhe: palvelin palautti viallisen tuloksen.");
+          return false;
+        }
+
+        // Check if data is empty, which means possible server error.
+        if (parsed.length == 0) {
+          console.log("Empty response received.");
+          alert("Omasiistijäilmoituksen lähetyksessä tapahtui virhe: tyhjä vastaus vastaanotettu palvelimelta.");
+          return false;
+        }
+
+        // Check if empty message, meaning logical fault.
+        if (!('message' in parsed) || parsed.message.length == 0) {
+          alert(`Omasiistijäilmoituksen lähetyksessä tapahtui virhe: palvelin ei palauttanut vastausta.`);
+          return false;
+        }
+
+        // Check if operation failed.
+        if (!('success' in parsed) || parsed.success != true) {
+          alert(`Omasiistijäilmoituksen lähetyksessä tapahtui virhe: ${parsed.message}`);
+          return false;
+        }
+
+        // Everything is normal; notification has been sent. Update list
+        // selection to "notified", notify user and then save the model, which
+        // will detach it from a possible cyclic shift.
+        alert(parsed.message);
+        $('#<?= $java_prefix ?>_omasiistijailmoitus').val(1);
+      }
+    })
+
   });
 });
 </script>
