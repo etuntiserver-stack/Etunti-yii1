@@ -600,6 +600,7 @@ $(document).ready(function(){
     </div>
   </div>
 
+  <?php if ($create_update == 'update'): ?>
   <div class="col-md-6" id="omasiistija-toiminnot">
     <div class="col-sm-12">
       <?php echo $form->labelEx($model, 'omasiistijailmoitus', ['style' => 'font-weight: bold']); ?>
@@ -614,12 +615,20 @@ $(document).ready(function(){
       </span>
     </div>
   </div>
+  <?php endif; ?>
+
 </div>
 
 
 
 
 <script>
+
+// Flag for when omasiistijä email is sent and form is submitted, for the
+// submit function to redirect back to the form. This is so that the shift may
+// be removed from a cyclic shift (toistuvasta irroittaminen).
+// This has to be before document.ready for it to work, in this case.
+var submitRedirectBack = false;
 
 /**
  * Sivun ladatessa, asetetaan kohde ID omasiistijälistalle ja rekisteröidään
@@ -632,6 +641,7 @@ $(function() {
 
   // Tallennetut omasiistijät tarkistusta varten.
   let omasiistijat = [];
+
 
   /**
    * Ajetaan tämä funktio aina kun kohde vaihdetaan, tai kun sivu ladataan
@@ -846,6 +856,9 @@ $(function() {
 
         // The model needs to be saved, whether it is cyclic or not. If cyclic,
         // the shift must be removed from it (toistuvasta irroittaminen).
+        // Set flag for submit so it knows to redirect BACK to this form.
+        submitRedirectBack = true;
+        $('#tyovuoroot-form').submit();
       }
     })
 
@@ -1439,6 +1452,7 @@ $(document).ready(function(){
   });
 
   /* on submit */
+  var newCreatedTvId = -1;
   $('#tyovuoroot-form').on('submit',function(e) {
 	var pvmTarkistus = $('#submitButton').attr('pvmTarkistus');
 	toistuva = ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
@@ -1519,14 +1533,28 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			console.log(data);
-			laatikonPaivays();
-			return false;
-			//window.location.reload();
-	   	  },
+        console.log(data);
+
+        // Try parse JSON to get new ID for the new tv.
+        try {
+          let parsed = JSON.parse(data);
+          // actionUpdate4 is kinda messy, and sometimes echoes valid JSON array, and sometimes a JSON object INSIDE an array. Check here.
+          if ('id' in parsed) {
+            newCreatedTvId = parsed.id
+          } else if ($.isArray(parsed) && 'id' in parsed[0]) {
+            newCreatedTvId = parsed[0].id;
+          }
+        } catch {
+          console.log("Unable to parse received data.");
+        }
+
+        laatikonPaivays();
+        return false;
+        //window.location.reload();
+	   	},
 		  error: function(xhr, status, error) {
 			$('#virheilmoitus').html('Virheilmoitus: \n\n' + xhr.responseText).show();
-	    	  }
+          }
 		});
 	}
 	if( '<?=$create_update?>' == 'create'){
@@ -1623,7 +1651,16 @@ $(document).ready(function(){
 			});
 			$.tv_arr_update(data);
 			$.vkolaskenta(getAllTids());
-		  	$('#showres').modal('hide');
+        $('#showres').modal('hide');
+      
+      if (submitRedirectBack && newCreatedTvId > 0) {
+        let dYear = <?= date('Y', strtotime($laatikko_pvm)); ?> // build return URL year
+        let dWeek = <?= date('W', strtotime($laatikko_pvm)); ?> // build return URL week
+        let tempNewId = newCreatedTvId;                         // set new created id to temporary variable for redirect
+        newCreatedTvId = -1;                                    // reset new created ID aswell to avoid bugs
+        submitRedirectBack = false;                             // disable further redirect
+        window.location.href = `${location.protocol}//${location.host}/index.php/tyovuoroot/beta?mode=vko&year=${dYear}&week=${dWeek}&tv_id=${tempNewId}`;
+      }
 		},error:function(data){
 		  	console.log(data);
 			//window.location.href=location.protocol + "//" + location.host + '/index.php';

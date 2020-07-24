@@ -3330,7 +3330,7 @@ class TyovuorootController extends Controller
 					$this->pushNotifySending($this_id);
 				// PushNotify -->
 
-				$return = ['return' => 'uusi_ketju_ok'];
+				$return = ['return' => 'uusi_ketju_ok', 'id' => $this_id];
 				echo json_encode($return);
 			}
 			exit;
@@ -3435,7 +3435,7 @@ class TyovuorootController extends Controller
 						$this->pushNotifySending($this_id);
 					// PushNotify -->
 
-					$return = ['return' => 'pfrom_muutos_ok'];
+					$return = ['return' => 'pfrom_muutos_ok', 'id' => $this_id];
 					echo json_encode($return);
 				}
 			}
@@ -3524,7 +3524,7 @@ class TyovuorootController extends Controller
 			}
 			//     TV tyopaari -->
 
-			$return = ['return' => 'muokattu'];
+			$return = ['return' => 'muokattu', 'id' => $this_id];
 			echo json_encode($return);
 
 		} else { // model save 
