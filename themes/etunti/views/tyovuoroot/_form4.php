@@ -557,14 +557,6 @@ $(document).ready(function(){
     ], ['class'=>'form-control lomake_valinta']); ?>
   </div>
 </div>
-<div hidden>
-  <?= $form->labelEx($model,'omasiistijailmoitus'); ?>
-  <?= $form->dropDownList($model,'omasiistijailmoitus', [
-    0 => Yii::t('main', 'Ei ilmoitettu'),
-    1 => Yii::t('main', 'Ilmoitettu'),
-  ], ['class'=>'form-control lomake_valinta']); ?>
-</div>
-
 
 
 <!-- #region Omasiistijät -->
@@ -607,12 +599,19 @@ $(document).ready(function(){
       </div>
     </div>
   </div>
+
   <div class="col-md-6" id="omasiistija-toiminnot">
-    <div class="col-sm-12"><b>Omasiistijöistä ilmoittaminen</b></div>
     <div class="col-sm-12">
-      <span id="omasiistijat-ilmoitettu" class="text-success" hidden>Omasiistijöistä on jo ilmoitettu asiakkaalle.</span>
-      <button type="button" class="btn btn-sm btn-primary" id="omasiistijat-ilmoita"><b>Lähetä asiakkaalle ilmoitus</b></button>
-      <button type="button" class="btn btn-sm btn-success" id="omasiistijat-merkitse"><b>Merkitse jo ilmoitetuksi</b></button>
+      <?php echo $form->labelEx($model, 'omasiistijailmoitus', ['style' => 'font-weight: bold']); ?>
+    </div>
+    <div class="col-sm-12 input-group">
+        <?= $form->dropDownList($model, 'omasiistijailmoitus', [
+          0 => Yii::t('main', 'Ei ilmoitettu'),
+          1 => Yii::t('main', 'Ilmoitettu'),
+        ], ['class'=>'form-control lomake_valinta']); ?>
+      <span class="input-group-btn">
+        <button type="button" class="form-control btn btn-sm btn-primary" id="omasiistijat-ilmoita"><span class="fa fa-share-square"></span> Ilmoita
+      </span>
     </div>
   </div>
 </div>
@@ -720,11 +719,11 @@ $(function() {
 
       // Tarkistetaan onko asiasta jo ilmoitettu asiakkaalle.
       if ($('#Tyovuoroot_omasiistijailmoitus').val() == 1) {
-        $('#omasiistija-varoitus').show().text("Omasiistijää ei ole valittuna (ilmoitettu asiakkaalle)");
-        $('#omasiistijat-ilmoitettu').show();
-        $('#omasiistija-toiminnot').hide();
+        $('#omasiistija-varoitus').show().html("<b>Omasiistijää ei ole valittuna (ilmoitettu asiakkaalle)</b>");
+        $('#omasiistijat-ilmoita').attr('disabled', 'disabled');
       } else {
         $('#omasiistija-varoitus').show();
+        $('#omasiistijat-ilmoita').removeAttr('disabled')
         $('#omasiistija-toiminnot').show();
       }
     }
