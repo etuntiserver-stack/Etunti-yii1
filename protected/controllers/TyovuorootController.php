@@ -5051,10 +5051,11 @@ class TyovuorootController extends Controller
 
     // Attempt to send mail.
     $mail = new YiiMailer();
-    $mail->setFrom('asiakaspalvelu@kotipuhtaaksi.fi');
+    $mail->setFrom('no-reply@etunti.fi');
     $mail->setTo($sposti);
     $mail->setSubject('Omasiistijänne estyneet seuraavalla siivouskäynnillä.');
     $mail->setBody($mail_text);
+    $mail->addReplyTo('asiakaspalvelu@kotipuhtaaksi.fi');
     $mail->send();
 
     // Return to the caller with good news.
