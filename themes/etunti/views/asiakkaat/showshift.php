@@ -176,6 +176,7 @@
   <th><?php echo Yii::t('main', 'Osoite'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'Tietoja'); ?></th>
+  <th><?php echo Yii::t('main', 'Peruutettu'); ?></th>
   </tr>
   </thead>
   <?php 
