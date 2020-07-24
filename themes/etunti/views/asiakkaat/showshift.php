@@ -14,6 +14,17 @@
 	$sahkoposti = '';
 ?>
 
+<style>
+  #massedit-menu {
+    position: absolute;
+    margin-top: 8px;
+    padding: 8px 8px;
+    z-index: 999;
+    background-color: whitesmoke;
+    border: 2px solid #b3b3b3
+  }
+</style>
+
 <?php if(!isset($_POST['tulosta'])) : ?>
 
         <!-- begin: .tray-center -->
@@ -96,6 +107,29 @@
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="Hae">
 		      </div>
 
+          <!-- Shift mass edit menu button. -->
+          <div class="col-md-3">
+            <!-- <button class="btn-info" data-toggle="collapse" data-target="#massedit-menu" aria-expanded="false" aria-controls="toggle-menu">Muokkaa valittuja vuoroja</button> -->
+            <input id="massedit-menu-btn" type="button" class="btn btn-info btn-lg haemob btn-block myBgColors" value="Muokkaa valittuja vuoroja"
+              disabled="disabled" data-toggle="collapse" data-target="#massedit-menu" aria-expanded="false" aria-controls="toggle-menu"
+              title="Avaa tästä massamuokkausvalikko, jolla voit tehdä muokkauksia kaikille valituille vuoroille samanaikaisesti.">
+
+
+              <div style="position:relative">
+                <div id="massedit-menu" class="collapse">
+                  <label for="Tyovuoroot_peruutettu">Merkitse peruutetuksi</label>
+                  <select id="massedit-cancel-type" class="form-control" style="width:100%">
+                    <option value="">Valitse</option>
+                    <option value="0">Ei peruutettu</option>
+                    <option value="1">Peruutettu</option>
+                    <option value="2">Peruutettu laskutettava</option>
+                  </select>
+                  <input id="massedit-cancel-btn" type="button" class="btn btn-warning btn-lg haemob btn-block myBgColors" value="Merkitse peruutetuksi" disabled="disabled">
+                  <div id="massedit-cancel-results" class="well well-sm" style="display:none"></div>
+                </div>
+              </div>
+          </div>
+
                     </div>
 
 
@@ -135,6 +169,7 @@
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
+  <th><input id="showshift-select-all" type="checkbox" title="<?= Yii::t('Main', 'Valitse kaikki') ?>" /></th>
   <th><?php echo Yii::t('main', 'Muokkaa'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Aika'); ?></th>
@@ -142,6 +177,7 @@
   <th><?php echo Yii::t('main', 'Osoite'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'Tietoja'); ?></th>
+  <th><?php echo Yii::t('main', 'Peruutettu'); ?></th>
   </tr>
   </thead>
   <?php 
@@ -169,5 +205,168 @@ $(document).ready(function(){
 	$(this).closest('form').submit();
 	e.preventDefault();
   });
+
+  /** Select/unselect all for mass disabling and other mass edits. */
+  $(':checkbox#showshift-select-all').change(function() {
+
+    // Also enable or disable mass edit button here instead of triggering the onChange event for each checkbox.
+    if (this.checked) {
+      $(':checkbox.massedit-checkbox').prop('checked', true);
+      $('#massedit-menu-btn').prop('disabled', false);
+    } else {
+      $(':checkbox.massedit-checkbox').prop('checked', false);
+      $('#massedit-menu-btn').prop('disabled', true);
+      $('#massedit-menu').collapse('hide');
+    }
+  });
+
+  /**
+   * If checkbox is checked, enable mass edit button. If unchecked, check if
+   * there are any checked boxes, and if not, disable the button.
+   */
+  $(':checkbox.massedit-checkbox').change(function(e) {
+
+    if (this.checked) {
+      // Enable mass edit menu button.
+      $('#massedit-menu-btn').prop('disabled', false);
+    } else {
+      // Check each checkbox. If none are checked, disable mass edit button. Otherwise, enable it.
+      if ($(':checkbox.massedit-checkbox:checked').length <= 0) {
+        $('#massedit-menu-btn').prop('disabled', true);
+        $('#massedit-menu').collapse('hide');
+      }
+    }
+
+    // Mass check/uncheck should not fire this event, but just in case, stop further triggers.
+    e.stopImmediatePropagation();
+  });
+
+  /** Enable/disable mass cancel button based on choice (none = disabled). */
+  $('#massedit-cancel-type').change(function() {
+    $('#massedit-cancel-btn').prop('disabled', $(this).val() == '');
+  });
+
+  /** Send mass cancel request. */
+  $('#massedit-cancel-btn').click(function(e) {
+    // Prevent default action, if any.
+    e.preventDefault();
+
+    // Empty and hide possible previous results and disable the operation button.
+    $('#massedit-cancel-results').css('display', 'none').empty();
+    $('#massedit-cancel-btn').prop('disabled', true);
+
+    // Get all checked selector checkboxes, map their value and convert to array.
+    const ids = $(':checkbox.massedit-checkbox:checked').map((i,e) => { return $(e).val(); }).toArray();
+
+    // Get cancel type, which should be 1 (peruutettu) or 2 (peruutettu laskutettava).
+    const cancelType = $('#massedit-cancel-type').val();
+
+    // Validate ids and type before performing request.
+    if (ids.length == 0) {
+      console.log(`Error before mass edit operation: ids array is empty (could not find checked boxes).`);
+      $('#massedit-cancel-results')
+        .append(`<span class="text-danger">Virhe: Ei valittuja työvuoroja. Jos tämä ei pidä paikkaansa, ota yhteys ylläpitoon.</span><br>`)
+        .append('<span class="text-alert">Ei suoritettuja toimintoja. Tarkista virheet.</span><br>')
+        .css('display', 'block');
+      $('#massedit-cancel-btn').prop('disabled', false);
+      return;
+    } else if ($.inArray(cancelType, ['0', '1', '2']) == -1) {
+      console.log(`Error before mass edit operation: cancel type "${cancelType}" is invalid (not 1 or 2).`);
+      $('#massedit-cancel-results')
+        .append(`<span class="text-danger">Virhe: Viallinen valinta massaperuutukselle.</span><br>`)
+        .append('<span class="text-alert">Ei suoritettuja toimintoja. Tarkista virheet.</span><br>')
+        .css('display', 'block');
+      $('#massedit-cancel-btn').prop('disabled', false);
+      return;
+    } else {
+
+      // Request mass edit via AJAX.
+      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/massedit`, {
+
+        type: 'POST',
+        data: {
+          actions: ['cancel'],
+          cancel_type: $('#massedit-cancel-type').val(),
+          ids: ids
+        },
+
+        error: function (xhr, status, error) {
+          console.log(xhr.responseText);
+          $('#massedit-cancel-results').append(`<span class="text-danger">Sisäinen virhe: ${xhr.responseText}. Jos vika jatkuu, ota yhteys ylläpitoon.</span><br>`);
+        },
+
+        success: function (data) {
+
+          console.log(`Received response, length: ${data.length}:\n${data}`);
+
+          // Try parse response JSON.
+          let parsed = null;
+          try {
+            parsed = JSON.parse(data);
+          } catch (e) {
+            console.log(`Failed to parse response JSON. Error: ${e}`);
+          }
+
+          if (typeof (parsed) != "object") {
+
+            // Parsing failed. Notify log and let it go.
+            console.log("Parsed data is unusable (not an object).");
+
+          } else if (parsed.length == 0) {
+
+            // Data is empty; this means something is very wrong. TODO
+            console.log("Invalid response (empty response).");
+
+          } else {
+
+            // Parsed data is usable. First, notify about any errors.
+            if ("errors" in parsed) {
+              parsed.errors.forEach((val, index) => {
+                console.log(`Error from mass edit operation: ${val}`);
+                $('#massedit-cancel-results').append(`<span class="text-danger">Virhe: ${val}</span><br>`);
+              });
+            }
+
+            // Notify about performed actions, even if errors occured.
+            if ("results" in parsed) {
+              parsed.results.forEach((val, index) => {
+                console.log(`Result from mass edit operation: ${val}`);
+                $('#massedit-cancel-results').append(`<span class="text-success">${val}</span><br>`);
+              });
+            } else {
+              // Notify if no actions were performed.
+              $('#massedit-cancel-results').append('<span class="text-alert">Ei suoritettuja toimintoja. Tarkista virheet.</span><br>');
+            }
+          }
+        },
+
+        complete: function() {
+          // Show results div and re-enable the operation button.
+          $('#massedit-cancel-results').css('display', 'block');
+          $('#massedit-cancel-btn').prop('disabled', true);
+          $('#showshift-select-all').prop('checked', false);
+          $(':checkbox.massedit-checkbox').prop('checked', false);
+
+          ids.forEach((val) => {
+            switch ($('#massedit-cancel-type').val()) {
+              case '1':
+                $(`#massedit-${val} td.peruutettu span b`).text('Peruutettu');
+                break;
+              case '2':
+                $(`#massedit-${val} td.peruutettu span b`).text('Laskutettava');
+                break;
+              default:
+                $(`#massedit-${val} td.peruutettu`).empty();
+                break;
+            }
+          });
+        }
+      });
+    }
+  });
+
+  // Initialize the massedit menu toggle, so that collapse(hide) does not
+  // initialize it, therefore showing it.
+  $('#massedit-menu').collapse({toggle: false});
 });
 </script>

@@ -17,28 +17,39 @@
 		$img =  $tekijan_nimi;
 	}
 
-	$kesto = strtotime($data->loppu)-strtotime($data->alku);
+  $kesto = strtotime($data->loppu)-strtotime($data->alku);
+  $kesto_formated = $this->sprint($kesto);
 
-	echo '<tr class="'.(($data->peruutettu != 0)? 'text-danger':'').'">';
-	echo '<td>
-	'.CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
-				array('/tyovuoroot/beta?mode=vko&year='.date("Y", strtotime($this_pvm)).'&week='.date("W", strtotime($this_pvm)).'&tv_id='.$this_id), 
-				array(
-					'class'=>'btn btn-primary myBgColors', 
-					'style'=>'color:white', 
-					'data-toggle'=>'tooltip', 
-					'data-placement'=>'top', 
-					'title'=>Yii::t('main', 'Muokkaa'),
-					'target' => '_blank'
-				)
-			).
-	'</td>';
-	echo '<td class="col1">'.$this_pvm.'</td>';
-	echo '<td class="col2">'.$data->alku.'-'.$data->loppu.'</td>';
-	echo '<td class="col1">'.$this->sprint($kesto).'</td>';
-	echo '<td class="col3">'.$osoite.'</td>';
-	echo '<td class="col4">'.$img.'</td>';
-	echo '<td class="col1">'.$data->tietoja.'</td>';
-	echo '</tr>';
+  $link = CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></input>',
+    [
+      sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s', date("Y", strtotime($this_pvm)), date("W", strtotime($this_pvm)), $this_id)
+    ],
+    [
+      'class' => 'btn btn-primary myBgColors',
+      'style' => 'color:white',
+      'data-toggle' => 'tooltip',
+      'data-placement' => 'top',
+      'title' => Yii::t('main', 'Muokkaa'),
+      'target' => '_blank'
+    ]
+  );
 
-?>
+  switch ($data->peruutettu) {
+    case 1: $peruutettu_text = 'Peruutettu'; break;
+    case 2: $peruutettu_text = 'Laskutettava'; break;
+    default: $peruutettu_text = ''; break;
+  }
+
+  echo <<<EOC
+<tr id="massedit-$this_id" class="(($data->peruutettu != 0)? 'text-danger':'')">
+  <td><input class="massedit-checkbox" type="checkbox" value="$this_id" /></td>
+  <td>$link</td>
+  <td class="col1">$this_pvm</td>
+  <td class="col2">$data->alku-$data->loppu</td>
+  <td class="col1">$kesto_formated</td>
+  <td class="col3">$osoite</td>
+  <td class="col4">$img</td>
+  <td class="col1">$data->tietoja</td>
+  <td class="peruutettu"><span class="text-danger"><b>$peruutettu_text</b></span></td>
+</tr>
+EOC;
