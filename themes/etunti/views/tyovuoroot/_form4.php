@@ -749,6 +749,15 @@ $(function() {
   $('#<?= $java_prefix ?>_omasiistijavaroitus').on('change', function(e) {
     omasiistijaTarkistus();
   });
+
+  // (omasiistijäilmoitus) Enable/disable send notification button when selection is changed whether or not it has been sent.
+  $('#<?= $java_prefix ?>_omasiistijailmoitus').on('change', function(e) {
+    if ($(this).val() == 0) {
+      $('#omasiistijat-ilmoita').removeAttr('disabled')
+    } else {
+      $('#omasiistijat-ilmoita').attr('disabled', 'disabled');
+    }
+  });
 });
 </script>
 <!-- #endregion Omasiistijät -->
