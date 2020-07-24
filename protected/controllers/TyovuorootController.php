@@ -4957,15 +4957,24 @@ class TyovuorootController extends Controller
    *
    * FOR AJAX.
    *
-   * @param int $asiakas_id
+   * @param int $customer_id
    * ID of the customer. Email (or phone number) is fetched from here.
+   * @param array $worker_names
+   * Names of workers going for the shift.
    * @return null
    * Echoed result.
    */
-  public function actionOmasiistijat_ilmoitus($asiakas_id = null)
+  public function actionOmasiistijat_ilmoitus($customer_id = null, $worker_names = null)
   {
-    if (is_numeric($_POST['asiakas_id'] ?? '')) {
-      $asiakas_id = $_POST['asiakas_id'];
+    if (is_numeric($_POST['customer_id'] ?? '')) {
+      $customer_id = $_POST['customer_id'];
+    }
+
+    if (isset($_POST['worker_names'])) {
+      $worker_names_temp = json_decode($_POST['worker_names'], true);
+      if (is_array($worker_names_temp)) {
+        $worker_names = $worker_names_temp;
+      }
     }
 
     $results = [
@@ -4973,16 +4982,20 @@ class TyovuorootController extends Controller
       'message' => ''
     ];
 
-    if (empty($asiakas_id) || !is_numeric($asiakas_id)) {
+    if (empty($customer_id) || !is_numeric($customer_id)) {
       $results['message'] = 'Viallinen asiakas ID.';
-    } elseif (empty($asiakas = Asiakkaat::model()->findByPk($asiakas_id))) {
-      $results['message'] = "Asiakasta ei löydy (ID: $asiakas_id";
+    } elseif (empty($asiakas = Asiakkaat::model()->findByPk($customer_id))) {
+      $results['message'] = "Asiakasta ei löydy (ID: $customer_id";
     } elseif (empty($sposti = trim($asiakas->sahkoposti ?? ''))) {
-      $results['message'] = "Asiakkaan $asiakas_id sähköposti on tyhjä.";
+      $results['message'] = "Asiakkaan $customer_id sähköposti on tyhjä.";
+    } elseif (!is_array($worker_names)) {
+      $results['message'] = "Vuorolle menevien siistijöiden listan vastaanottaminen epäonnistui.";
+    } elseif (empty($worker_names)) {
+      $results['message'] = "Vuorolle menevien siistijöiden lista on tyhjä.";
     } else {
       //TODO, all good
       $results['success'] = true;
-      $results['message'] = "Asiakkaalle ilmoitettu osoitteeseen $sposti";
+      $results['message'] = "Asiakkaalle ilmoitettu osoitteeseen $sposti " . implode(', ', $worker_names);
     }
 
     echo json_encode($results);

@@ -768,15 +768,36 @@ $(function() {
       return false;
     }
 
+    // Build list of worker names for the notification.
+    let workers = [];
+    workers.push($('#tekijanVaihdo option:selected').text());
+    $('#tyopari-container .multiselect-container li.active a label').each(function() {
+      workers.push($(this).text());
+    });
+
+    // Just check in case there are some changes to the form.
+    if (workers.length == 0) {
+      alert("Siistijöiden listan rakentaminen ilmoitusta varten epäonnistui. Ota yhteys ylläpitoon.");
+      return false;
+    }
+    let workersJson = JSON.stringify(workers);
+
     // Perform notification.
-    $.ajax({
-      url: `${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijat_ilmoitus`,
+    $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijat_ilmoitus`, {
+
       type: 'POST',
-      data: { asiakas_id: <?= $model->kohteet->asiakas_id; ?> },
+      data: {
+        'customer_id': <?= $model->kohteet->asiakas_id; ?>,
+        'worker_names': workersJson
+      },
+
+      // Error handling just in case.
       error: function (xhr, status, error) {
-        alert(xhr.responseText);
+        alert(`Omasiistijäilmoituksen lähetyksessä tapahtui sisäinen virhe: ${xhr.responseText}`);
         console.log(xhr.responseText);
       },
+
+      // Success, parse received JSON.
       success: function (data) {
         console.log(data);
 
@@ -816,11 +837,15 @@ $(function() {
           return false;
         }
 
-        // Everything is normal; notification has been sent. Update list
-        // selection to "notified", notify user and then save the model, which
-        // will detach it from a possible cyclic shift.
+        // Everything is normal; notification has been sent. Notify the user
+        // with the returned result message, update the selection box and
+        // disable the button for sending the notification.
         alert(parsed.message);
         $('#<?= $java_prefix ?>_omasiistijailmoitus').val(1);
+        $('#omasiistijat-ilmoita').attr('disabled', 'disabled');
+
+        // The model needs to be saved, whether it is cyclic or not. If cyclic,
+        // the shift must be removed from it (toistuvasta irroittaminen).
       }
     })
 
