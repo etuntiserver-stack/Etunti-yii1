@@ -614,6 +614,7 @@ $(document).ready(function(){
         <button type="button" class="form-control btn btn-sm btn-primary" id="omasiistijat-ilmoita"><span class="fa fa-share-square"></span> Ilmoita
       </span>
     </div>
+    <!-- <span class="text-secondary">Huom. Kun ilmoitus lähetetään, tämä työvuoro irroitetaan mahdollisesta ketjusta ja avataan uudelleen.</span> -->
   </div>
   <?php endif; ?>
 
@@ -731,6 +732,7 @@ $(function() {
       if ($('#Tyovuoroot_omasiistijailmoitus').val() == 1) {
         $('#omasiistija-varoitus').show().html("<b>Omasiistijää ei ole valittuna (ilmoitettu asiakkaalle)</b>");
         $('#omasiistijat-ilmoita').attr('disabled', 'disabled');
+        $('#omasiistija-toiminnot').show();
       } else {
         $('#omasiistija-varoitus').show();
         $('#omasiistijat-ilmoita').removeAttr('disabled')
