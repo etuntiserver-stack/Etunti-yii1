@@ -100,7 +100,10 @@ class LoginController extends Controller
 			    Yii::app()->user->setState('adminStatus', $mod->status);
 			    Yii::app()->user->setState('username', $mod->adm_login);
 			    Yii::app()->user->setState('nimi', $mod->adm_nimi);
-			    Yii::app()->user->setState('domain', $domain);
+          Yii::app()->user->setState('domain', $domain);
+
+          // Whether or not kotipuhtaaksi -specific features are enabled or being tested.
+          Yii::app()->user->setState('kp', (in_array($domain, ['kotipuhtaaksi', 'staging_kotipuhtaaksi', 'demo', 'staging_demo'])));
 
 
 			    $domainit=Domainit::model()->find(" domain = '".$domain."' ");
