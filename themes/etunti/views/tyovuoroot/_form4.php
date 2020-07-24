@@ -651,6 +651,9 @@ $(function() {
    * varoitus. Samalla kerrotaan omasiistijänäkymälle mikä kohde kyseessä.
    */
   const kohteenVaihto = function() {
+    <?php if ($create_update != 'update'): ?>
+      return;
+    <?php endif; ?>
 
     // Piilotetaan mahdollisesti auki oleva lista.
     $('#<?= $omasiistijat_div_id ?>.in').collapse('hide');
@@ -705,6 +708,10 @@ $(function() {
   * käynyt kohteessa aiemmin (omasiistijä).
   */
   const omasiistijaTarkistus = function() {
+    <?php if ($create_update != 'update'): ?>
+      return;
+    <?php endif; ?>
+
     let siistijat = [];
     let omasiistijaValittu = false;
 
