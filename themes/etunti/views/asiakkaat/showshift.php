@@ -342,7 +342,9 @@ $(document).ready(function(){
         complete: function() {
           // Show results div and re-enable the operation button.
           $('#massedit-cancel-results').css('display', 'block');
-          $('#massedit-cancel-btn').prop('disabled', false);
+          $('#massedit-cancel-btn').prop('disabled', true);
+          $('#showshift-select-all').prop('checked', false);
+          $(':checkbox.massedit-checkbox').prop('checked', false);
         }
       });
     }
