@@ -765,7 +765,9 @@ $(function() {
     let toistuvaToggled = ($('#is_toistuva').bootstrapSwitch('state') === true);
     if (toistuvaToggled) {
       alert('Omasiistijöistä ilmoittaminen vaatii työvuoron irroittamista ketjusta. Ota "Toistuva Työvuoro" valinta.');
+      return false;
     }
+
   });
 });
 </script>
