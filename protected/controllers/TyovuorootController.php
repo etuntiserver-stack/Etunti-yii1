@@ -4967,7 +4967,27 @@ class TyovuorootController extends Controller
     foreach ($validated_actions as $action) {
       switch ($action) {
         case 'cancel':
-          // TODO
+          foreach ($ids as $id) {
+
+            // Get info on the shift, whether virtual or not.
+            $tvinfo   = $this->this_id($id);
+            $model    = $tvinfo['model'];
+            $toistuva = $tvinfo['toistuva'];
+            $pvm      = $tvinfo['pvm'];
+            $tid      = $tvinfo['tid'];
+
+            // Operate differently based on whether this is virtual shift or not.
+            if ($toistuva) {
+              $tilanne = ['peruutettu' => $cancel_type];
+              $this->VirtualtoTV($model->id, $tid, $pvm, $tilanne, 'CancelByMassEdit');
+            } else {
+              $model->peruutettu = $cancel_type;
+              $model->save();
+            }
+
+            // TODO?: Remember $this->pushNotifySending(id) : notify cleaner about change
+          }
+
           $results[] = 'Vuorot merkitty peruutetuiksi.';
           break;
       }
@@ -4978,6 +4998,7 @@ class TyovuorootController extends Controller
     } else {
       echo json_encode(['results' => $results]);
     }
+  }
 
   /**
    * Hakee nykyisen valinnan omasiistijävaroitusten näyttämisestä.
