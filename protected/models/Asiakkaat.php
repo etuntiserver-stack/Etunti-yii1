@@ -109,7 +109,6 @@ class Asiakkaat extends DB2ActiveRecord
 		     'lisatietoja_laskutuksesta' => 'text DEFAULT NULL',
                      'sopimustyyppi' => 'int(1) DEFAULT 1',
                      'freshdesk_id' => 'BIGINT(11) DEFAULT 0',
-
                      //'vinkki_tunnit' => 'varchar(10)',
                      //'vinkki_prosentti' => 'varchar(10)',
 

@@ -2,27 +2,25 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
-$criteria = new CDbCriteria();
-$criteria->condition = "
-	DATE(STR_TO_DATE(pto, '%d.%m.%Y')) < DATE(STR_TO_DATE(pfrom, '%d.%m.%Y'))
-";
-$tv = ToistuvatTyovuorot::model()->findAll($criteria);
-echo '<h3>Väärät aloitus ja lopetus päivät: '.count($tv).'</h3>';
+/* Asiakas siirto 
+$tv = Asiakkaat::model()->findAll();
 foreach($tv as $item){
-	echo 'ID: '.$item->id.'<b> '.$item->pfrom.'-'.$item->pto.', viikkoja-'.$item->viikkoja.' , Osoite-'.$item->osoite.'</b><br>';
+
+	echo $item->yhteyshenkilo.'<br>';
+	$k = new Kohteet;
+	$k->asiakas_id = $item->id;
+	$k->etu_suku_nimet = $item->yhteyshenkilo;
+	$k->osoite = $item->osoite;
+	$k->kaupunki = $item->kaupunki;
+	$k->pnumero = $item->postinumero;
+	$k->email = $item->sahkoposti;
+	$k->puh_nro = $item->puhelin;
+	$k->aktiivinen = 1;
+	$k->save();
 }
 
-$criteria = new CDbCriteria();
-$criteria->condition = "
-	length(new_poistettu_pvm) > 2000
-";
-$tv = ToistuvatTyovuorot::model()->findAll($criteria);
-echo '<h3>Liika poistetut päivät: '.count($tv).'</h3>';
-foreach($tv as $item){
-	echo 'ID: '.$item->id.' <b>'.$item->pfrom.'-'.$item->pto.', viikkoja-'.$item->viikkoja.' , Osoite-'.$item->osoite.'</b><br>';
-}
 exit;
-
+*/
 
 
 if(isset($_GET['mail'])){
