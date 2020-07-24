@@ -120,6 +120,7 @@
                   <label for="Tyovuoroot_peruutettu">Merkitse peruutetuksi</label>
                   <select id="massedit-cancel-type" class="form-control" style="width:100%">
                     <option value="">Valitse</option>
+                    <option value="0">Ei peruutettu</option>
                     <option value="1">Peruutettu</option>
                     <option value="2">Peruutettu laskutettava</option>
                   </select>
@@ -269,7 +270,7 @@ $(document).ready(function(){
         .css('display', 'block');
       $('#massedit-cancel-btn').prop('disabled', false);
       return;
-    } else if ($.inArray(cancelType, ['1', '2']) == -1) {
+    } else if ($.inArray(cancelType, ['0', '1', '2']) == -1) {
       console.log(`Error before mass edit operation: cancel type "${cancelType}" is invalid (not 1 or 2).`);
       $('#massedit-cancel-results')
         .append(`<span class="text-danger">Virhe: Viallinen valinta massaperuutukselle.</span><br>`)
