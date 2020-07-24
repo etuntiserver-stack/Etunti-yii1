@@ -345,6 +345,20 @@ $(document).ready(function(){
           $('#massedit-cancel-btn').prop('disabled', true);
           $('#showshift-select-all').prop('checked', false);
           $(':checkbox.massedit-checkbox').prop('checked', false);
+
+          ids.forEach((val) => {
+            switch ($('#massedit-cancel-type').val()) {
+              case '1':
+                $(`#massedit-${val} td.peruutettu span b`).text('Peruutettu');
+                break;
+              case '2':
+                $(`#massedit-${val} td.peruutettu span b`).text('Laskutettava');
+                break;
+              default:
+                $(`#massedit-${val} td.peruutettu`).empty();
+                break;
+            }
+          });
         }
       });
     }

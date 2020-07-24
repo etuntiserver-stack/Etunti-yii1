@@ -35,13 +35,13 @@
   );
 
   switch ($data->peruutettu) {
-    case 1: $peruutettu_text = '<span class="text-danger"><b>Peruutettu</b></span>'; break;
-    case 2: $peruutettu_text = '<span class="text-danger"><b>Laskutettava</b></span>'; break;
+    case 1: $peruutettu_text = 'Peruutettu'; break;
+    case 2: $peruutettu_text = 'Laskutettava'; break;
     default: $peruutettu_text = ''; break;
   }
 
   echo <<<EOC
-<tr class="(($data->peruutettu != 0)? 'text-danger':'')">
+<tr id="massedit-$this_id" class="(($data->peruutettu != 0)? 'text-danger':'')">
   <td><input class="massedit-checkbox" type="checkbox" value="$this_id" /></td>
   <td>$link</td>
   <td class="col1">$this_pvm</td>
@@ -50,6 +50,6 @@
   <td class="col3">$osoite</td>
   <td class="col4">$img</td>
   <td class="col1">$data->tietoja</td>
-  <td class="col1">$peruutettu_text</td>
+  <td class="peruutettu"><span class="text-danger"><b>$peruutettu_text</b></span></td>
 </tr>
 EOC;
