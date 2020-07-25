@@ -4951,6 +4951,10 @@ class TyovuorootController extends Controller
 
             break;
 
+            // Nothing to do with delete operation; allow it.
+          case 'delete':
+            break;
+
             // If action was not handled, choice is invalid; return error.
           default:
             $errors[] = "Virhe: Massamuokkaukselle annettu toiminto '$action' on virheellinen/ei tuettu.";
@@ -4999,6 +5003,38 @@ class TyovuorootController extends Controller
             default: $result = 'Valittujen vuorojen peruutus poistettu.'; break;
           }
 
+          break;
+
+        case 'delete':
+          $deleted_count = 0;
+          foreach ($ids as $id) {
+
+            // Get info on the shift, whether virtual or not.
+            $tvinfo   = $this->this_id($id);
+            $model    = $tvinfo['model'];
+            $toistuva = $tvinfo['toistuva'];
+            $pvm      = $tvinfo['pvm'];
+            $tid      = $tvinfo['tid'];
+
+            // Operate differently based on whether this is virtual shift or not.
+            if ($toistuva) {
+              if (!$this->toistuvaDeletePvm($model->id, $pvm, $tid, 'MassapoistoAsiakkaanTyovuorolistalta')) {
+                $errors[] = sprintf('Työvuoroa ID %d ei voitu poistaa toistuvasta ketjusta.', $model->id);
+              } else {
+                $deleted_count++;
+              }
+            } else {
+              if (!$model->delete()) {
+                $errors[] = sprintf('Työvuoroa ID %d ei voitu poistaa.', $model->id);
+              } else {
+                $deleted_count++;
+              }
+            }
+
+            // TODO?: Remember $this->pushNotifySending(id) : notify cleaner about change
+          }
+
+          $result = sprintf('%d työvuoroa poistettu onnistuneesti.', $deleted_count);
           break;
       }
     }

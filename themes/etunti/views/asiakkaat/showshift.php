@@ -125,9 +125,13 @@
                     <option value="2">Peruutettu laskutettava</option>
                   </select>
                   <input id="massedit-cancel-btn" type="button" class="mt5 btn btn-primary btn-lg haemob btn-block myBgColors" value="Päivitä peruutettu-tila" disabled="disabled">
-                  <div id="massedit-cancel-results" class="well well-sm" style="display:none"></div>
                 </div>
               </div>
+          </div>
+
+          <div class="col-md-3">
+            <input id="massedit-delete-btn" type="button" class="btn btn-danger btn-lg haemob btn-block myBgColors" value="Poista valitut vuorot" disabled="disabled"
+              title="Valitut työvuorot merkitään poistetuiksi mahdollisissa ketjuissa, ja tavalliset työvuorot poistetaan kokonaan.">
           </div>
 
                     </div>
@@ -206,6 +210,9 @@ $(document).ready(function(){
 	e.preventDefault();
   });
 
+  /** @type (Object) List of selected IDs, populated when an action is fired. */
+  let ids = [];
+
   /** Select/unselect all for mass disabling and other mass edits. */
   $(':checkbox#showshift-select-all').change(function() {
 
@@ -229,11 +236,13 @@ $(document).ready(function(){
     if (this.checked) {
       // Enable mass edit menu button.
       $('#massedit-menu-btn').prop('disabled', false);
+      $('#massedit-delete-btn').prop('disabled', false);
     } else {
       // Check each checkbox. If none are checked, disable mass edit button. Otherwise, enable it.
       if ($(':checkbox.massedit-checkbox:checked').length <= 0) {
         $('#massedit-menu-btn').prop('disabled', true);
         $('#massedit-menu').collapse('hide');
+        $('#massedit-delete-btn').prop('disabled', true);
       }
     }
 
@@ -246,38 +255,110 @@ $(document).ready(function(){
     $('#massedit-cancel-btn').prop('disabled', $(this).val() == '');
   });
 
-  /** Send mass cancel request. */
+  /**
+   * Start an action like mass cancel or delete. This does specific actions like
+   * disabling action buttons when another action is underway.
+   *
+   * When starting action, this function also builds the list of selected IDs,
+   * and validates it, not continuing if no selections are made, or other error.
+   *
+   * @returns (Boolean) True if action was started; otherwise, false (like when no selections).
+   */
+  const startAction = function() {
+
+    // Get all checked selector checkboxes, map their value and convert to array.
+    ids = $(':checkbox.massedit-checkbox:checked').map((i,e) => { return $(e).val(); }).toArray();
+
+    // Validate ids and type before performing request.
+    if (ids.length == 0) {
+      // No selected IDs. This could be form modification that broke the code, has to be checked.
+      console.log(`Error before mass edit operation: ids array is empty (could not find checked boxes).`);
+      alert('Virhe: Ei valittuja työvuoroja. Jos tämä ei pidä paikkaansa, ota yhteys ylläpitoon.');
+      return false;
+    } else {
+      // Everything is well, disable action buttons.
+      $('#massedit-cancel-btn').prop('disabled', true);
+      $('#massedit-delete-btn').prop('disabled', true);
+      return true;
+    }
+  };
+
+  /**
+   * Stops an action like mass cancel or delete. This does specific actions like
+   * re-enabling the action buttons and de-selecting all selected checkboxes.
+   *
+   * Based on the operation, the right side result text is also updated.
+   *
+   * @param (Boolean) finished If true, view should be updated based on the other parameters.
+   * @param (String) action Performed action (currently: cancel, delete).
+   */
+  const stopAction = function(finished = false, action = null) {
+    
+    // Check if the operation finished or not. If it did, the selections are reset
+    // and action buttons are disabled. Otherwise, selections are preserved.
+    if (finished === true) {
+
+      // Operation finished. Clear selections and disable operation buttons.
+      $('#showshift-select-all').prop('checked', false);
+      $(':checkbox.massedit-checkbox').prop('checked', false);
+      $('#massedit-cancel-btn').prop('disabled', true);
+      $('#massedit-delete-btn').prop('disabled', true);
+
+      // Hide the dialog menu in case it's open, whatever the action.
+      $('#massedit-menu').collapse('hide');
+
+      // Update the result text on the right side of each row.
+      if (action == 'cancel') {
+        let cancelResultText = (function(type) {
+          switch (type) {
+            case '1': return 'Peruutettu';
+            case '2': return 'Peruutettu Laskutettava';
+            default: return '';
+          }
+        })($('#massedit-cancel-type').val());
+        ids.forEach((val) => {
+          $(`#massedit-${val} td.peruutettu span b`).text(cancelResultText);
+        });
+      } else if (action == 'delete') {
+        ids.forEach((val) => {
+          $(`#massedit-${val}`).hide();
+        });
+      } else {
+        alert("Sisäinen virhe: Annettu toiminto on viallinen toiminnon päätösvaiheessa. Näkymää ei voida päivittää.");
+      }
+
+      // Empty the global id array to avoid caching bugs
+      ids = [];
+    } else {
+
+      // Operation didn't finish, the selections are not reset. Re-enable buttons.
+      $('#massedit-cancel-btn').prop('disabled', false);
+      $('#massedit-delete-btn').prop('disabled', false);
+    }
+  };
+
+  /**
+   * Send mass cancel request.
+   */
   $('#massedit-cancel-btn').click(function(e) {
     // Prevent default action, if any.
     e.preventDefault();
 
-    // Empty and hide possible previous results and disable the operation button.
-    $('#massedit-cancel-results').css('display', 'none').empty();
-    $('#massedit-cancel-btn').prop('disabled', true);
+    // Disable the operations buttons and populate selected IDs.
+    if (!startAction()) {
+      return;
+    }
 
-    // Get all checked selector checkboxes, map their value and convert to array.
-    const ids = $(':checkbox.massedit-checkbox:checked').map((i,e) => { return $(e).val(); }).toArray();
-
-    // Get cancel type, which should be 1 (peruutettu) or 2 (peruutettu laskutettava).
+    // Get cancel type, which should be between 0 and 2. (0: not canceled, 1: canceled, 2: canceled & to be billed)
     const cancelType = $('#massedit-cancel-type').val();
 
-    // Validate ids and type before performing request.
-    if (ids.length == 0) {
-      console.log(`Error before mass edit operation: ids array is empty (could not find checked boxes).`);
-      $('#massedit-cancel-results')
-        .append(`<span class="text-danger">Virhe: Ei valittuja työvuoroja. Jos tämä ei pidä paikkaansa, ota yhteys ylläpitoon.</span><br>`)
-        .append('<span class="text-alert">Ei suoritettuja toimintoja. Tarkista virheet.</span><br>')
-        .css('display', 'block');
-      $('#massedit-cancel-btn').prop('disabled', false);
-      return;
-    } else if ($.inArray(cancelType, ['0', '1', '2']) == -1) {
-      console.log(`Error before mass edit operation: cancel type "${cancelType}" is invalid (not 1 or 2).`);
-      $('#massedit-cancel-results')
-        .append(`<span class="text-danger">Virhe: Viallinen valinta massaperuutukselle.</span><br>`)
-        .append('<span class="text-alert">Ei suoritettuja toimintoja. Tarkista virheet.</span><br>')
-        .css('display', 'block');
-      $('#massedit-cancel-btn').prop('disabled', false);
-      return;
+    // Validate type before performing request.
+    if ($.inArray(cancelType, ['0', '1', '2']) == -1) {
+      // Invalid selection. Operation is not performed, and action is canceled.
+      console.log(`Error before mass edit operation: cancel type "${cancelType}" is invalid (must be between 0 and 2).`);
+      alert('Virhe: Viallinen valinta massaperuutukselle.');
+      stopAction(false);
+      return false;
     } else {
 
       // Request mass edit via AJAX.
@@ -285,14 +366,14 @@ $(document).ready(function(){
 
         type: 'POST',
         data: {
-          actions: ['cancel'],
-          cancel_type: $('#massedit-cancel-type').val(),
-          ids: ids
+          'actions': ['cancel'],
+          'cancel_type': cancelType,
+          'ids': ids
         },
 
         error: function (xhr, status, error) {
           console.log(xhr.responseText);
-          $('#massedit-cancel-results').append(`<span class="text-danger">Sisäinen virhe: ${xhr.responseText}. Jos vika jatkuu, ota yhteys ylläpitoon.</span><br>`);
+          alert(`Sisäinen virhe: ${xhr.responseText}. Jos vika jatkuu, ota yhteys ylläpitoon.`);
         },
 
         success: function (data) {
@@ -321,46 +402,101 @@ $(document).ready(function(){
 
             // Parsed data is usable. First, notify about any errors.
             if ("errors" in parsed) {
-              parsed.errors.forEach((val, index) => {
-                console.log(`Error from mass edit operation: ${val}`);
-                $('#massedit-cancel-results').append(`<span class="text-danger">Virhe: ${val}</span><br>`);
-              });
+              let errors = parsed.errors.join("\r\n");
+              console.log(`Errors from mass edit operation: ${errors}`);
+              alert(`Toiminnossa tapahtui virhe:\r\n${errors}`);
             }
 
             // Notify about performed actions, even if errors occured.
             if ("result" in parsed) {
               console.log(`Result from mass edit operation: ${parsed.result}`);
-              $('#massedit-cancel-results').html(`<span class="text-alert">${parsed.result}</span><br>`);
-            } else {
-              // Notify if no actions were performed.
-              $('#massedit-cancel-results').append('<span class="text-alert">Ei suoritettuja toimintoja. Tarkista virheet.</span><br>');
+              alert(parsed.result);
             }
           }
         },
 
         complete: function() {
-          // Show results div and re-enable the operation button.
-          $('#massedit-cancel-results').css('display', 'block');
-          $('#massedit-cancel-btn').prop('disabled', true);
-          $('#showshift-select-all').prop('checked', false);
-          $(':checkbox.massedit-checkbox').prop('checked', false);
-
-          ids.forEach((val) => {
-            switch ($('#massedit-cancel-type').val()) {
-              case '1':
-                $(`#massedit-${val} td.peruutettu span b`).text('Peruutettu');
-                break;
-              case '2':
-                $(`#massedit-${val} td.peruutettu span b`).text('Laskutettava');
-                break;
-              default:
-                $(`#massedit-${val} td.peruutettu`).empty();
-                break;
-            }
-          });
+          // Stop the action, which enables the buttons and de-selects all IDs.
+          stopAction(true, 'cancel');
         }
       });
     }
+  });
+
+  /**
+   * Send mass delete request.
+   */
+  $('#massedit-delete-btn').click(function(e) {
+    // Prevent default action, if any.
+    e.preventDefault();
+
+    // Disable the operations buttons and populate selected IDs.
+    if (!startAction()) {
+      return;
+    }
+
+    if (!confirm('<?= Yii::t('main', 'Haluatko varmasti poistaa valitut työvuorot?') ?>')) {
+      return false;
+    }
+
+    // Request mass delete via AJAX. This uses the same method, as all mass "edits".
+    $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/massedit`, {
+
+      type: 'POST',
+      data: {
+        'actions': ['delete'],
+        'ids': ids
+      },
+
+      error: function (xhr, status, error) {
+        console.log(xhr.responseText);
+        alert(`Sisäinen virhe: ${xhr.responseText}. Jos vika jatkuu, ota yhteys ylläpitoon.`);
+      },
+
+      success: function (data) {
+
+        console.log(`Received response, length: ${data.length}:\n${data}`);
+
+        // Try parse response JSON.
+        let parsed = null;
+        try {
+          parsed = JSON.parse(data);
+        } catch (e) {
+          console.log(`Failed to parse response JSON. Error: ${e}`);
+        }
+
+        if (typeof (parsed) != "object") {
+
+          // Parsing failed. Notify log and let it go.
+          console.log("Parsed data is unusable (not an object).");
+
+        } else if (parsed.length == 0) {
+
+          // Data is empty; this means something is very wrong. TODO
+          console.log("Invalid response (empty response).");
+
+        } else {
+
+          // Parsed data is usable. First, notify about any errors.
+          if ("errors" in parsed) {
+            let errors = parsed.errors.join("\r\n");
+            console.log(`Errors from mass delete operation: ${errors}`);
+            alert(`Toiminnossa tapahtui virhe:\r\n${errors}`);
+          }
+
+          // Notify about performed actions, even if errors occured.
+          if ("result" in parsed) {
+            console.log(`Result from mass delete operation: ${parsed.result}`);
+            alert(parsed.result);
+          }
+        }
+      },
+
+      complete: function() {
+        // Stop the action, which enables the buttons and de-selects all IDs.
+        stopAction(true, 'delete');
+      }
+    });
   });
 
   // Initialize the massedit menu toggle, so that collapse(hide) does not
