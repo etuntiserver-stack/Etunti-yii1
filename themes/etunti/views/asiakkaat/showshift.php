@@ -117,14 +117,14 @@
 
               <div style="position:relative">
                 <div id="massedit-menu" class="collapse">
-                  <label for="Tyovuoroot_peruutettu">Merkitse peruutetuksi</label>
+                  <label for="Tyovuoroot_peruutettu">Peruutettu Merkintä</label>
                   <select id="massedit-cancel-type" class="form-control" style="width:100%">
                     <option value="">Valitse</option>
                     <option value="0">Ei peruutettu</option>
                     <option value="1">Peruutettu</option>
                     <option value="2">Peruutettu laskutettava</option>
                   </select>
-                  <input id="massedit-cancel-btn" type="button" class="btn btn-warning btn-lg haemob btn-block myBgColors" value="Merkitse peruutetuksi" disabled="disabled">
+                  <input id="massedit-cancel-btn" type="button" class="mt5 btn btn-primary btn-lg haemob btn-block myBgColors" value="Päivitä peruutettu-tila" disabled="disabled">
                   <div id="massedit-cancel-results" class="well well-sm" style="display:none"></div>
                 </div>
               </div>
@@ -328,11 +328,9 @@ $(document).ready(function(){
             }
 
             // Notify about performed actions, even if errors occured.
-            if ("results" in parsed) {
-              parsed.results.forEach((val, index) => {
-                console.log(`Result from mass edit operation: ${val}`);
-                $('#massedit-cancel-results').append(`<span class="text-success">${val}</span><br>`);
-              });
+            if ("result" in parsed) {
+              console.log(`Result from mass edit operation: ${parsed.result}`);
+              $('#massedit-cancel-results').html(`<span class="text-alert">${parsed.result}</span><br>`);
             } else {
               // Notify if no actions were performed.
               $('#massedit-cancel-results').append('<span class="text-alert">Ei suoritettuja toimintoja. Tarkista virheet.</span><br>');

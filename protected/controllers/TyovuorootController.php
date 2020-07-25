@@ -4968,7 +4968,7 @@ class TyovuorootController extends Controller
     }
 
     // All is good; perform actions.
-    $results = [];
+    $result = '';
     foreach ($validated_actions as $action) {
       switch ($action) {
         case 'cancel':
@@ -4993,15 +4993,20 @@ class TyovuorootController extends Controller
             // TODO?: Remember $this->pushNotifySending(id) : notify cleaner about change
           }
 
-          $results[] = 'Vuorot merkitty peruutetuiksi.';
+          switch ($cancel_type) {
+            case 1: $result = 'Valitut vuorot merkitty peruutetuiksi.'; break;
+            case 2: $result = 'Valituille vuoroille merkitty Peruutettu Laskutettava.'; break;
+            default: $result = 'Valittujen vuorojen peruutus poistettu.'; break;
+          }
+
           break;
       }
     }
 
     if (!empty($errors)) {
-      echo json_encode(['results' => $results, 'errors' => $errors]);
+      echo json_encode(['result' => $result, 'errors' => $errors]);
     } else {
-      echo json_encode(['results' => $results]);
+      echo json_encode(['result' => $result]);
     }
   }
 
