@@ -60,6 +60,7 @@ class Asiakkaat extends DB2ActiveRecord
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
                      'yrityksen_nimi' => 'varchar(100) DEFAULT NULL',
                      'y_tunnus' => 'varchar(50) DEFAULT NULL',
+                     'henkilotunnus' => 'varchar(50) DEFAULT NULL',
                      'yhteyshenkilo' => 'varchar(100) DEFAULT NULL',
                      'osoite' => 'varchar(255) DEFAULT NULL',
                      'kaupunki' => 'varchar(100) DEFAULT NULL',
@@ -108,7 +109,6 @@ class Asiakkaat extends DB2ActiveRecord
 		     'lisatietoja_laskutuksesta' => 'text DEFAULT NULL',
                      'sopimustyyppi' => 'int(1) DEFAULT 1',
                      'freshdesk_id' => 'BIGINT(11) DEFAULT 0',
-
                      //'vinkki_tunnit' => 'varchar(10)',
                      //'vinkki_prosentti' => 'varchar(10)',
 
@@ -138,7 +138,7 @@ class Asiakkaat extends DB2ActiveRecord
                         array('asiakasnumero','unique', 'message'=>'Tämä asiakasnumero on jo olemassa!'),
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
 			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot, hinnasto_id, alv, tyoryhma, sopimustyyppi', 'numerical', 'integerOnly'=>true),
-			array('myyja, postinumero, k_postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, k_kaupunki, sahkoposti', 'length', 'max'=>100),
+			array('myyja, postinumero, k_postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, henkilotunnus, kaupunki, k_kaupunki, sahkoposti', 'length', 'max'=>100),
 			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma, sahkopostilaskuosoite, token', 'length', 'max'=>255),
 			array('maksuehto, viivastyskorko, hinta, hinta_sis_alv', 'length', 'max'=>20),
 			array('puhelin', 'length', 'max'=>50),
@@ -187,6 +187,7 @@ class Asiakkaat extends DB2ActiveRecord
 			'yhteyshenkilo' => Yii::t('main', 'Yhteyshenkilö'),
 			'yrityksen_nimi' => Yii::t('main', 'Yrityksen Nimi'),
 			'y_tunnus' => Yii::t('main', 'Y-tunnus'),
+			'henkilotunnus' => Yii::t('main', 'Henkilötunnus'),
 			'osoite' => Yii::t('main', 'Osoite'),
 			'k_osoite' => Yii::t('main', 'Osoite'),
 			'kaupunki' => Yii::t('main', 'Postitoimipaikka'),
