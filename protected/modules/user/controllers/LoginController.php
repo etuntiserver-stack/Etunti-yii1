@@ -7,7 +7,7 @@ class LoginController extends Controller
         public function init()
         {
 
-		if( isset($_POST['UserLogin']) )
+		if( isset($_POST['UserLogin']['domain']) )
 		{
 		    $domainit = Domainit::model()->find(" domain!='".$_POST['UserLogin']['domain']."' AND kirjautumistunnus='".$_POST['UserLogin']['domain']."' ");
 		    if(isset($domainit->domain))
