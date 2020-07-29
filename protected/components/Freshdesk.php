@@ -46,7 +46,7 @@ class Freshdesk extends CComponent
       $this->key = static::TEST_API_KEY;
       $this->baseUrl = static::TEST_BASE_URL;
       $this->url = static::TEST_BASE_URL . '/api/v2';
-    } elseif ($domain == 'kotipuhtaaksi' || $domain == 'staging_kotipuhtaaksi') {
+    } elseif ($domain == 'kotipuhtaaksi') {
       $this->key = static::API_KEY;
       $this->baseUrl = static::BASE_URL;
       $this->url = static::BASE_URL . '/api/v2';
