@@ -181,7 +181,7 @@
   <th><?php echo Yii::t('main', 'Osoite'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'Tietoja'); ?></th>
-  <th><?php echo Yii::t('main', 'Peruutettu'); ?></th>
+  <th><?php echo Yii::t('main', 'Tila'); ?></th>
   </tr>
   </thead>
   <?php 
@@ -220,9 +220,11 @@ $(document).ready(function(){
     if (this.checked) {
       $(':checkbox.massedit-checkbox').prop('checked', true);
       $('#massedit-menu-btn').prop('disabled', false);
+      $('#massedit-delete-btn').prop('disabled', false);
     } else {
       $(':checkbox.massedit-checkbox').prop('checked', false);
       $('#massedit-menu-btn').prop('disabled', true);
+      $('#massedit-delete-btn').prop('disabled', true);
       $('#massedit-menu').collapse('hide');
     }
   });
