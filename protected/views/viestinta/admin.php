@@ -27,7 +27,8 @@ foreach($tv as $item){
 
 exit;
 */
-
+phpinfo();
+exit;
 
 if(isset($_GET['mail'])){
 	$m = $_GET['mail'];
