@@ -772,6 +772,7 @@ $(function() {
   });
 
   // Omasiistijät ilmoita -painike - prevent sending when toistuva is selected.
+  <?php if (isset($model->kohteet->asiakas_id)): ?>
   $('#omasiistijat-ilmoita').on('click', function(e) {
     e.preventDefault();
     let toistuvaToggled = ($('#is_toistuva').bootstrapSwitch('state') === true);
@@ -865,6 +866,7 @@ $(function() {
     })
 
   });
+  <?php endif; ?>
 });
 </script>
 
