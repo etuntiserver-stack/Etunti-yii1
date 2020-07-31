@@ -631,6 +631,15 @@ class KohteetController extends Controller
 
       // Get results array and output as JSON for the view.
       $force_refresh = ($force_refresh || ($_POST['force_refresh'] ?? '') == 1);
+      $omasiistijat = $this->omasiistijat($id, $force_refresh);
+
+      // Convert objects into arrays.
+      array_walk($omasiistijat, function(&$item) {
+        if (is_object($item)) {
+          $item = get_object_vars($item);
+        }
+      });
+
       echo json_encode($this->omasiistijat($id, $force_refresh));
     }
   }
@@ -690,7 +699,7 @@ class KohteetController extends Controller
     // If cached results JSON object is empty, or force_refresh parameter is
     // provided, get fresh results and save cached results with random expire
     // duration of between 10 and 20 minutes, to stagger refreshes.
-    if (empty($workers) || $force_refresh) {
+    if (empty($workers)) {
 
       /** @var CDbConnection */
       $connection = Yii::app()->db1;
@@ -720,7 +729,7 @@ class KohteetController extends Controller
             GROUP BY tid
         )")
         ->bindValue(':kohde_id', $id)
-        ->queryAll(false);
+        ->queryAll(true);
 
       // Refresh between 10 and 20 minutes to stagger refreshes between results.
       Yii::app()->cache->set($cache_id, $workers, rand(600, 1200));
