@@ -691,7 +691,7 @@ $(function() {
         if (typeof(parsed) != "object") {
           console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: Parsed data is unusable (not an object).`);
         } else {
-          parsed.forEach((item, index) => { omasiistijat.push(item[0]); });
+          parsed.forEach((item, index) => { omasiistijat.push(item['id']); });
         }
 
         // Kohteen vaihdon/initialisaation yhteydessä tarkistetaan omasiistijät.

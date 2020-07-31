@@ -107,7 +107,7 @@ $placeholder_id = (!empty($placeholder_id)) ? $placeholder_id : 'omasiistijat_ko
             // Everything is normal; output received workers list.
             $(`#${workersDivId} .well`).empty();
             parsed.forEach((item, index) => {
-              $(`#${workersDivId} .well`).append($(`<a href="/index.php/tyontekijat/update?id=${item[0]}">${item[1]} ${item[2]}</a><br>`));
+              $(`#${workersDivId} .well`).append($(`<a href="/index.php/tyontekijat/update?id=${item['id']}">${item['tekijan_nimi']} ${item['sukunimi']}</a><br>`));
             });
           }
         }
