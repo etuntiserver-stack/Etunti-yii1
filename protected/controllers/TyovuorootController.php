@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijavaroitus_current', 'omasiistijavaroitus_toggle', 'omasiistijavaroitus_disabled_tids', 'omasiistijat_ilmoitus', 'massedit'),
+				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijavaroitus_current', 'omasiistijavaroitus_toggle', 'omasiistijavaroitus_disabled_tids', 'omasiistijat_ilmoitus', 'omasiistijat_lista', 'massedit'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -2259,88 +2259,7 @@ class TyovuorootController extends Controller
 
     // OMASIISTIJÄT TARKISTUS - Enabled only on kotipuhtaaksi, for now.
     // TODO: Asetuksiin valinta, jolla voidaan enable/disable
-    $omasiistijat_varoitus = false;
-    if (Yii::app()->user->kp && !empty($arvo->kohteet->id)) {
-
-      // When kohde is selected, set the warning enabled by default, and disable
-      // it further down once worker ID is found.
-      $omasiistijat_varoitus = true;
-
-      // Do special structure conditional switch for more organized documentation.
-      switch (true) {
-
-        // 1. Check if model has notifications disabled.
-        case (($arvo->omasiistijavaroitus ?? -1) == 0):
-          $omasiistijat_varoitus = false;
-          break;
-
-        // 1b: Check if notification already sent.
-        case (($arvo->omasiistijailmoitus ?? 0) == 1):
-          $omasiistijat_varoitus = false;
-          break;
-
-        // 2. If this shift is NOT part of a repeating chain (toistuva ketju),
-        // disable warnings.
-        // - TODO: Previous clients? Maybe this needs to be taken into account
-        case (!$toistuva):
-          $omasiistijat_varoitus = false;
-          break;
-
-        // 3. If this shift IS part of a repeating chain (toistuva ketju), Check
-        // if this is first shift of a repeating (toistuva) chain. If so,
-        // warnings are also disabled, obviously because nobody has been there.
-        // - TODO: Previous customer, but new chain? Not taken into account here
-        case ($toistuva && ($arvo->pfrom ?? '') == $this_pvm):
-          $omasiistijat_varoitus = false;
-          break;
-
-        // 4. Check if this shift is canceled, in which case, disable warning.
-        case (($arvo->peruutettu ?? -1) > 0):
-          $omasiistijat_varoitus = false;
-          break;
-
-        // 5. All other checks indicate that this shift is a part of a repeating
-        // chain (toistuva ketju), not the first shift of that chain and also not
-        // canceled. Scan cleaners who have been to the target, and check if at
-        // least one of those are selected as worker/pair (tt/työpari).
-        //
-        // Only cleaners who are active and have approved hours in the target
-        // location (kohde) are accounted for. Cleaners that are inactive or
-        // have only unapproved hours at this location are ignored.
-        default:
-
-          /** @var KohteetController */
-          $kk = Yii::app()->createController('Kohteet')[0];
-
-          // Get list of active cleaners with approved hours at this location.
-          // Default information includes id,tekijan_nimi and sukunimi. We only
-          // need ID's, so let's quicken the search by about half a microsecond.
-          $omasiistijat = $kk->omasiistijat($arvo->kohteet->id, false);
-
-          // Decode possible selected worker pairs from the shift.
-          $tyoparit = (!empty($arvo->tyopaari)) ? json_decode($arvo->tyopaari) : [];
-
-          $omasiistijat_tids = array_column($omasiistijat, 'id');
-
-          // Loop omasiistijat and check if at least one is selected as primary
-          // worker or pair in the database.
-            foreach ($omasiistijat_tids as $os_tid) {
-              if ($arvo->tid == $os_tid) {
-                $omasiistijat_varoitus = false;
-                break;
-              } else {
-                foreach ($tyoparit as $tp_tid) {
-                  if ($arvo->tid == $tp_tid) {
-                    $omasiistijat_varoitus = false;
-                    break 2;
-                  }
-                }
-              }
-            }
-
-          break;
-      }
-    }
+    $omasiistijat_varoitus = $this->omasiistijavaroitus($arvo, $toistuva, $this_pvm);
 
 		$asiakasNakyvissa = '';
 		if( $asiakas_tyovuorossa ){
@@ -2388,7 +2307,7 @@ class TyovuorootController extends Controller
 		*/
 		echo json_encode($tv_arr);
 		exit;
-	}
+  }
 
 	protected function tv_arrJava($from, $to, $haku_criteria, $haku_tids, $taulu, $customer_tickets = []){
 
@@ -5087,6 +5006,9 @@ class TyovuorootController extends Controller
     }
   }
 
+  #region Omasiistijät
+  /* /// Omasiistijät */
+
   /**
    * Hakee nykyisen valinnan omasiistijävaroitusten näyttämisestä.
    * Get whether or not warnings about regular workers is enabled.
@@ -5156,26 +5078,26 @@ class TyovuorootController extends Controller
    * @return null
    * Echoed JSON array or worker IDs.
    */
-  public function actionOmasiistijavaroitus_disabled_tids()
-  {
-    // Enabled only on Kotipuhtaaksi domain. Otherwise, empty array (no warnings).
-    if (!Yii::app()->user->kp) {
-      echo json_encode([]);
-      return;
-    }
+  // public function actionOmasiistijavaroitus_disabled_tids()
+  // {
+  //   // Enabled only on Kotipuhtaaksi domain. Otherwise, empty array (no warnings).
+  //   if (!Yii::app()->user->kp) {
+  //     echo json_encode([]);
+  //     return;
+  //   }
 
-    // Find tids for which warning should be enabled.
-    $criteria = new CDbCriteria();
-    $criteria->select = 'id';
-    $criteria->condition = 'omasiistijavaroitukset = 0';
-    $results = Tyontekijat::model()->findAll($criteria);
+  //   // Find tids for which warning should be enabled.
+  //   $criteria = new CDbCriteria();
+  //   $criteria->select = 'id';
+  //   $criteria->condition = 'omasiistijavaroitukset = 0';
+  //   $results = Tyontekijat::model()->findAll($criteria);
 
-    // Format into simple array of IDs and echo as JSON.
-    $tids = [];
-    foreach ($results as $tt)
-      $tids[] = $tt->id;
-    echo json_encode($tids);
-  }
+  //   // Format into simple array of IDs and echo as JSON.
+  //   $tids = [];
+  //   foreach ($results as $tt)
+  //     $tids[] = $tt->id;
+  //   echo json_encode($tids);
+  // }
 
   /**
    * Notifies customer about omasiistijät (for lack of an english word).
@@ -5303,6 +5225,474 @@ class TyovuorootController extends Controller
       'message' => sprintf('Ilmoitus omasiistijöistä lähetetty asiakkaalle %d osoitteeseen %s. Odota hetki kun työvuoro tallennetaan ja avataan uudelleen..', $customer_id, $sposti)
       ]);
   }
+
+  /**
+   * Get list of workers that have approved shifts/cycles in a target location.
+   * Calls TyovuorootController::regulartt_list() with relevant data.
+   *
+   * Either $kohde_id or $tv_id is required.
+   *
+   * @param mixed $model
+   * Tyovuoroot or ToistuvatTyovuorot -model, or a mimic with the required info:
+   * 
+   * Model from the form or mass view; Tyovuoroot or ToistuvatTyovuorot. If
+   * provided, then $kohde_id value is ignored. This can also come from the
+   * shift edit form via $(this).serialize().
+   *
+   * @param int $target
+   * Target from which the checks are made. This must either be a number
+   * representing
+   * ID of the location (kohde) when not doing the shift checks.
+   *
+  //  * @param int $tv_id
+  //  * ID of the shift when looking up via that route.
+   *
+  //  * @param mixed $toistuva
+  //  * true or 1 if the shift is virtual (cyclic); otherwise, false or 0. Even
+  //  * though the model is provided, update the warning dynamically.
+   *
+  //  * @param string $tv_date
+  //  * Date of the current looped or opened shift. This is unavailable from the , which can come from various places, like
+  //  * extracted from the ID of a virtual shift.
+  //  * !! Required if $tv_model is provided and $toistuva == TRUE.
+   *
+   * @param bool $force_refresh
+   * If true, cache results are ignored and data is force refreshed.
+   *
+   * @return null
+   * Outputs results as a JSON array of IDs.
+   */
+  public function actionOmasiistijat_lista($tvuoro_model = null, $kohde_id = null, $force_refresh = false)
+  {
+    // Get kohde model ID, if provided.
+    if (isset($_POST['kohde_id']) && is_numeric($_POST['kohde_id'])) {
+      $kohde_id = (int)$_POST['kohde_id'];
+    }
+
+    // Get serialized shift model mimic. If provided, overrides kohde_id.
+    if (isset($_POST['tvuoro_model']) && is_numeric($_POST['tvuoro_model'])) {
+      $tvuoro_model = (int)$_POST['tvuoro_model'];
+    }
+
+    // Get definitive value for whether to force refresh the results.
+    $force_refresh = ($force_refresh || ($_POST['force_refresh'] ?? '') == 1);
+
+
+
+    // Get POST values in case of a shift.
+    if (!empty($_POST['tv_model'])) {
+
+      // This is a request from a shift. The model provides essential info.
+      $tv_model = json_decode($_POST['tv_model'], true);
+
+      // Ensure the data is provided in valid JSON.
+      if ($tv_model === null) {
+        return sprintf('[]%s', PHP_EOL); // "[]\n" == json_encode([]).
+      }
+
+      // Get required values 'toistuva' and 'tv_date'.
+      if (isset($_POST['toistuva'])) {
+
+        // Get value for $toistuva.
+        if (is_numeric($_POST['toistuva'])) {
+          $toistuva = ($toistuva == 1); // swap to boolean type just in case.
+        } elseif (is_bool($_POST['toistuva'])) {
+          $toistuva = $_POST['toistuva'];
+        }
+
+        // Get value for $tv_date.
+        if (!empty($_POST['tv_date']) && is_string($_POST['tv_date'] ?? null)) {
+          $tv_date = $_POST['tv_date'];
+        } else {
+          // required date value missing; return with empty results.
+          return sprintf('[]%s', PHP_EOL); // "[]\n" == json_encode([]).
+        }
+      }
+    }
+
+    // Action will be attempted, unless required values are missing. The end is
+    // the same whether from tv or not, so make it a function to not duplicate
+    // code too much.
+    $fn_get_results = function($tv_id) use ($force_refresh) {
+
+      /** @var TyovuorootController */
+      $tv_ctrl = Yii::app()->createController('Tyovuoroot')[0];
+
+      // Get results array, which are objects as they are from Yii db service.
+      // Therefore, convert the objects into arrays recursively first.
+      $omasiistijat = $tv_ctrl->regulartt_list($tv_id, $force_refresh);
+      array_walk($omasiistijat, function(&$item) { $item = get_object_vars($item); });
+      return json_encode($omasiistijat);
+    };
+
+    // If the model is provided, do shift-specific checks.
+    if (!empty($tv_model)) {
+
+      // If the model is provided, it must be validated now. Kohteet relation only
+      // exists in the two correct models, Tyovuoroot and ToistuvatTyovuorot.
+      if (empty($tv_model->kohteet->id)) {
+        return sprintf('[]%s', PHP_EOL); // "[]\n" == json_encode([]).
+      }
+
+      // Do the check using the ready function used in the mass view.
+      if (!$this->omasiistijavaroitus($tv_model, $toistuva, $tv_date)) {
+        return sprintf('[]%s', PHP_EOL); // "[]\n" == json_encode([]).
+      } else {
+        return $fn_get_results($tv_model->id ?? -1);
+      }
+    }
+
+    // Regular check, like inside a customers card, only if ID is provided.
+    if (is_numeric($kohde_id ?? null)) {
+      $results = $fn_get_results($kohde_id);
+      return print($results . PHP_EOL);
+    }
+  }
+
+  /**
+   * Get list of workers that have approved shifts/cycles in a target location.
+   *
+   * TODO: Logging.
+   *
+   * @param int $location_id
+   * ID of the target location (model: Kohteet).
+   *
+   * @param bool $force_refresh
+   * Whether to refresh cached results if they exist.
+   *
+   * @return array
+   * Array of active records with attr: "id", "tekijan_nimi" and "sukunimi"
+   */
+  public function regulartt_list($location_id, $force_refresh = false)
+  {
+    // This feature is limited to kotipuhtaaksi (and demo for testing).
+    if (!Yii::app()->user->kp) {
+      return [];
+    }
+
+    // Require valid ID.
+    if (empty($location_id) || !is_numeric($location_id)) {
+      return [];
+    }
+
+    // Initialize cache and load possible data if not force refreshing.
+    $cache_id = sprintf("%s_regulartt_tids_%s", Yii::app()->user->domain, $location_id);
+    $results = $force_refresh ? [] : Yii::app()->cache->get($cache_id);
+
+    // If cache has expired or force refreshing, get fresh results and save
+    // to cache with random expire of 10-20 minutes, to stagger refreshes.
+    if (empty($results)) {
+
+      /** @var CDbConnection */
+      $connection = Yii::app()->db1;
+
+      // Get list of workers that have been to this target.
+      // See function documentation for explanation.
+      $results = $connection->createCommand("
+        SELECT id, tekijan_nimi, sukunimi
+          FROM sivex_ttekijat
+          WHERE aktiivinen = 1
+          AND id IN
+          (
+            SELECT tid FROM
+            (
+              SELECT tid
+                FROM sivexkuitti
+                WHERE kohdenID = :kohde_id
+                AND hyvaksytty != ''
+
+              UNION ALL
+
+              SELECT tid
+                FROM sivexkuitti_repaired
+                WHERE kohdenID = :kohde_id
+                AND hyvaksytty != ''
+            ) t
+            GROUP BY tid
+        )")
+        ->bindValue(':kohde_id', $location_id)
+        ->queryAll(true);
+
+      // Refresh between 5 and 10 minutes to stagger refreshes between results.
+      Yii::app()->cache->set($cache_id, $results, rand(300, 600));
+    }
+
+    return $results;
+  }
+
+
+  /**
+   * Function for either or both listing or checking if a warning should be
+   * displayed.
+   *
+   * @param mixed $target
+   * 1. Tyovuoroot or ToistuvatTyovuorot -model, or object with same properties:
+   *   - kohteet->id (kohteet: object, relation in the model)
+   *   - omasiistijavaroitus, omasiistijailmoitus, pfrom, peruutettu, tyopaari
+   * 2. Array with a model ID and type ("kohde" or "tyovuoro"):
+   *   - ['type' => 'kohde', 'id' => 51515]
+   * Unless an array with type "kohde" is provided, additional checks are made
+   * that should affect whether or not the warnings are displayed, based on
+   * information on the object.
+   *
+   * @param object $tt_model
+   * The model in question, probably from this_id() function. Can be manually
+   * formed, and must contain the following parameters:
+   * @param bool $toistuva
+   * Whether the shift in question is virtual (cyclic) or not.
+   * @param string $date
+   * Required if $toistuva = TRUE: Shift date as string, with format "d.m.Y".
+   * @return bool
+   * True if warnings should be displayed; otherwise, false.
+   */
+  public function omasiistijavaroitus($target, bool $toistuva, string $date = null) {
+
+    $omasiistijat_varoitus = false;
+    if (Yii::app()->user->kp && !empty($tt_model->kohteet->id)) {
+
+      // When kohde is selected, set the warning enabled by default, and disable
+      // it further down once worker ID is found.
+      $omasiistijat_varoitus = true;
+
+      // Do special structure conditional switch for more organized documentation.
+      switch (true) {
+
+        // 1. Check if model has notifications disabled.
+        case (($tt_model->omasiistijavaroitus ?? -1) == 0):
+          $omasiistijat_varoitus = false;
+          break;
+
+        // 1b: Check if notification already sent.
+        case (($tt_model->omasiistijailmoitus ?? 0) == 1):
+          $omasiistijat_varoitus = false;
+          break;
+
+        // 2. If this shift is NOT part of a repeating chain (toistuva ketju),
+        // disable warnings.
+        // - TODO: Previous clients? Maybe this needs to be taken into account
+        case (!$toistuva):
+          $omasiistijat_varoitus = false;
+          break;
+
+        // 3. If this shift IS part of a repeating chain (toistuva ketju), Check
+        // if this is first shift of a repeating (toistuva) chain. If so,
+        // warnings are also disabled, obviously because nobody has been there.
+        // - TODO: Previous customer, but new chain? Not taken into account here
+        case ($toistuva && ($tt_model->pfrom ?? '') == $date):
+          $omasiistijat_varoitus = false;
+          break;
+
+        // 4. Check if this shift is canceled, in which case, disable warning.
+        case (($tt_model->peruutettu ?? -1) > 0):
+          $omasiistijat_varoitus = false;
+          break;
+
+        // 5. All other checks indicate that this shift is a part of a repeating
+        // chain (toistuva ketju), not the first shift of that chain and also not
+        // canceled. Scan cleaners who have been to the target, and check if at
+        // least one of those are selected as worker/pair (tt/työpari).
+        //
+        // Only cleaners who are active and have approved hours in the target
+        // location (kohde) are accounted for. Cleaners that are inactive or
+        // have only unapproved hours at this location are ignored.
+        default:
+
+          // Get list of active cleaners with approved hours at this location.
+          // Default information includes id,tekijan_nimi and sukunimi. We only
+          // need ID's, so let's quicken the search by about half a microsecond.
+          $omasiistijat = $this->regulartt_list($tt_model->kohteet->id, false);
+
+          // Decode possible selected worker pairs from the shift.
+          $tyoparit = (!empty($tt_model->tyopaari)) ? json_decode($tt_model->tyopaari) : [];
+
+          $omasiistijat_tids = array_column($omasiistijat, 'id');
+
+          // Loop omasiistijat and check if at least one is selected as primary
+          // worker or pair in the database.
+            foreach ($omasiistijat_tids as $os_tid) {
+              if ($tt_model->tid == $os_tid) {
+                $omasiistijat_varoitus = false;
+                break;
+              } else {
+                foreach ($tyoparit as $tp_tid) {
+                  if ($tt_model->tid == $tp_tid) {
+                    $omasiistijat_varoitus = false;
+                    break 2;
+                  }
+                }
+              }
+            }
+
+          break;
+      }
+    }
+    return $omasiistijat_varoitus;
+  }
+
+  /**
+   * Forms a list of shift (työvuoro) ids that do not need to show a warning.
+   * This could be for any decided reason, like that a shift is cancelled, or it
+   * is a single order instead of virtual (cyclic).
+   *
+   * @param array $shift_ids
+   * List of model ID's for Tyovuoroot/ToistuvatTyovuorot entries. The required
+   * information is gathered from {@see this_id()} and the model itself.
+   *
+   * @param array $data_override
+   * Override data from the found model. Any of the this_id() result set or the
+   * used model attributes can be included in this array. A valid target is
+   * always still needed, as for now at least.
+   *
+   * In order to have dynamic changes, like in edit form, provide an array that
+   * provides the same information as {@see this_id()}:
+   *   'model' (object): Tyovuoroot/ToistuvatTyovuorot model instance.
+   *   'toistuva' (bool): Whether the shift is virtual (cyclic) or not.
+   *   'pvm' (string): Date of this shift (format: "d.m.Y").
+   *   'tid' (int): Primary worker ID.
+   *
+   * @param bool $force_refresh
+   * Whether to force refresh cached data. This should not be used in a loop.
+   *
+   * @return array
+   * List of shift IDs where the warning can be disabled. In case of an error,
+   * an empty list is returned and (TODO) errors logged.
+   */
+  public function regulartt_warn_disabled_shift_ids(array $shift_ids, array $data_override = [], bool $force_refresh = false)
+  {
+    // This feature is limited to kotipuhtaaksi (and demo for testing).
+    if (!Yii::app()->user->kp) { return []; }
+
+    // Don't waste time with empty requests?
+    if (empty($shift_ids)) { return []; }
+
+    // Load cache if enabled and available.
+    /** @var CCache */
+    $cache = Yii::app()->cache;
+    $cache_id = sprintf("%s_regulartt_disabled_tvids", Yii::app()->user->domain);
+    $cache_data = $force_refresh ? [] : $cache->get($cache_id);
+
+    // Store found and unprocessed ids, just in case cache is partly loaded.
+    $tvids_results = [];
+    $unprocessed_ids = [];
+
+    // Check the cache for data that was requested.
+    array_walk($shift_ids, function($tvid, $index) use ($cache_data, &$tvids_results, &$unprocessed_ids) {
+      if (isset($cache_data[$tvid])) {
+        $tvids_results[$tvid] = $cache_data[$tvid];
+      } else {
+        $unprocessed_ids[] = $tvid;
+      }
+    });
+
+    // Return possible cached data.
+    if (!empty($cache_data)) {
+      return $cache_data;
+    }
+
+    // -
+    // -- Initialize & Check
+    // -
+
+
+    // Get database connection for lookups.
+    /** @var CDbConnection */
+    $connection = Yii::app()->db1;
+
+    // Load data by the given ID: ['model', 'toistuva', 'pvm', 'tid']
+    $sdata = $this->this_id($tv_id);
+
+    // Check that the model is found. If not, return.
+    if (!is_object($sdata['model'] ?? '') || !in_array(get_class($sdata['model']), ['Tyovuoroot', 'ToistuvatTyovuorot'])) {
+      return $results;
+    }
+
+    //-
+    //-- Cleaners: Manual Disable
+    //-
+
+    // Build and execute a simple query for a list of worker IDs.
+    /** @var CDbCommand */
+    $tids_disabled_cmd = Yii::app()->db1->createCommand(); // separated for intellisense
+    $tids_disabled_cmd
+      ->select('id')
+      ->from('sivex_ttekijat t')
+      ->where('omasiistijavaroitukset = 0')
+      ->queryAll(false);
+
+    // Modify into list of IDs.
+    $tids_disabled = is_array($tids_disabled_cmd) ? array_column($tids_disabled_cmd, 'id') : [];
+
+    // -
+    // -- Cleaners: Logged Hours
+    // -
+
+    // Ensure that location is accessible.
+    if (empty($sdata['model']->kohteet->id)) {
+      // TODO: log
+    } else {
+
+      // Get list of active cleaners with approved hours at the target location.
+      $regulars_list = $this->regulartt_list($sdata['model']->kohteet->id, $force_refresh);
+
+      // Alter results into a list of IDs instead of active record objects.
+      $tids_regular = array_column($regulars_list, 'id');
+
+      // Add any results to the result set.
+      $results = array_merge($results, )
+      if (!empty($tids_regulars)) {
+        $tids_regulars
+      }
+      
+      // Add matches to the result set.
+    }
+
+    // Get active workers with approved hours at the target location.
+    $tids_approved_hours = $connection->createCommand("
+      SELECT id, tekijan_nimi, sukunimi
+        FROM sivex_ttekijat
+        WHERE aktiivinen = 1
+        AND id IN
+        (
+          SELECT tid FROM
+          (
+            SELECT tid
+              FROM sivexkuitti
+              WHERE kohdenID = :kohde_id
+              AND hyvaksytty != ''
+
+            UNION ALL
+
+            SELECT tid
+              FROM sivexkuitti_repaired
+              WHERE kohdenID = :kohde_id
+              AND hyvaksytty != ''
+          ) t
+          GROUP BY tid
+      )")
+      ->bindValue(':kohde_id', $sdata['model']->kohteet->id)
+      ->queryAll(true);
+
+    // Add possible results to the final set.
+    if (is_array($tids_approved_hours)) {
+      $results = array_merge($results, )
+    }
+
+
+
+
+    
+    
+    // -
+    // -- Cache & Return
+    // -
+
+    // Refresh between 10 and 20 minutes to stagger refreshes between results.
+    Yii::app()->cache->set($cache_id, $workers, rand(600, 1200));
+  }
+
+  /* Omasiistijät /// */
+  #endregion
+
 
 	protected function getKohde($id)
 	{

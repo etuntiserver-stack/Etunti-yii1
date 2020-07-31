@@ -70,7 +70,8 @@ $placeholder_id = (!empty($placeholder_id)) ? $placeholder_id : 'omasiistijat_ko
 
         type: 'POST',
         data: {
-          id: targetId
+          'id': targetId,
+          'force_refresh': false, // TODO: selection
         },
 
         error: function(xhr, status, error) {

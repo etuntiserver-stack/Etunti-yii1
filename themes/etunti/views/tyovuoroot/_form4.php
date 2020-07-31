@@ -665,11 +665,16 @@ $(function() {
     // Kohde vaihdettu, tai kortti juuri avattu. Haetaan omasiistijälista.
     // Haetaan omasiistijät, jotta voidaan näyttää varoitus jos ei ole valittuna.
     omasiistijat = [];
+    let toistuvaToggled = ($('#is_toistuva').bootstrapSwitch('state') === true);
     $.ajax(`${location.protocol}//${location.host}/index.php/kohteet/omasiistijat_ajax`, {
 
       type: 'POST',
       data: {
-        id: valittuKohde
+        'id': '<?= $this_id; ?>',
+        'force_refresh': false, // TODO: selection
+        // 'tv_model': $(this).serialize(),
+        'toistuva': toistuvaToggled,
+        // 'tv_date': '<?= $laatikko_pvm; ?>'
       },
 
       error: function(xhr, status, error) {
