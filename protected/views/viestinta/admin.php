@@ -6,7 +6,12 @@
 $tv = Asiakkaat::model()->findAll();
 foreach($tv as $item){
 
-	echo $item->yhteyshenkilo.'<br>';
+	echo $item->yhteyshenkilo.' '.$item->y_tunnus.' '.$item->tyyppi.'<br>';
+	//if(!empty($item->y_tunnus))
+	//	Asiakkaat::model()->updatebypk($item->id, ['tyyppi' => 'yritys']);
+	//else
+	//	Asiakkaat::model()->updatebypk($item->id, ['tyyppi' => 'henkilo']);
+
 	$k = new Kohteet;
 	$k->asiakas_id = $item->id;
 	$k->etu_suku_nimet = $item->yhteyshenkilo;
@@ -17,11 +22,13 @@ foreach($tv as $item){
 	$k->puh_nro = $item->puhelin;
 	$k->aktiivinen = 1;
 	$k->save();
+
 }
 
 exit;
 */
-
+phpinfo();
+exit;
 
 if(isset($_GET['mail'])){
 	$m = $_GET['mail'];
