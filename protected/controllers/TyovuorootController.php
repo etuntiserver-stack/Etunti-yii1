@@ -2260,44 +2260,85 @@ class TyovuorootController extends Controller
     // OMASIISTIJÄT TARKISTUS - Enabled only on kotipuhtaaksi, for now.
     // TODO: Asetuksiin valinta, jolla voidaan enable/disable
     $omasiistijat_varoitus = false;
-    if (Yii::app()->user->kp) {
-      if (!empty($arvo->kohteet->id)) {
+    if (Yii::app()->user->kp && !empty($arvo->kohteet->id)) {
 
-        // When kohde is selected, set the warning enabled by default, and disable
-        // it further down once worker ID is found.
-        $omasiistijat_varoitus = true;
+      // When kohde is selected, set the warning enabled by default, and disable
+      // it further down once worker ID is found.
+      $omasiistijat_varoitus = true;
 
-        // Check if model has notifications disabled.
-        if (($arvo->omasiistijavaroitus ?? -1) == 0) {
+      // Do special structure conditional switch for more organized documentation.
+      switch (true) {
+
+        // 1. Check if model has notifications disabled.
+        case (($arvo->omasiistijavaroitus ?? -1) == 0):
           $omasiistijat_varoitus = false;
-        } else {
+          break;
+
+        // 1b: Check if notification already sent.
+        case (($arvo->omasiistijailmoitus ?? 0) == 1):
+          $omasiistijat_varoitus = false;
+          break;
+
+        // 2. If this shift is NOT part of a repeating chain (toistuva ketju),
+        // disable warnings.
+        // - TODO: Previous clients? Maybe this needs to be taken into account
+        case (!$toistuva):
+          $omasiistijat_varoitus = false;
+          break;
+
+        // 3. If this shift IS part of a repeating chain (toistuva ketju), Check
+        // if this is first shift of a repeating (toistuva) chain. If so,
+        // warnings are also disabled, obviously because nobody has been there.
+        // - TODO: Previous customer, but new chain? Not taken into account here
+        case ($toistuva && ($arvo->pfrom ?? '') == $this_pvm):
+          $omasiistijat_varoitus = false;
+          break;
+
+        // 4. Check if this shift is canceled, in which case, disable warning.
+        case (($arvo->peruutettu ?? -1) > 0):
+          $omasiistijat_varoitus = false;
+          break;
+
+        // 5. All other checks indicate that this shift is a part of a repeating
+        // chain (toistuva ketju), not the first shift of that chain and also not
+        // canceled. Scan cleaners who have been to the target, and check if at
+        // least one of those are selected as worker/pair (tt/työpari).
+        //
+        // Only cleaners who are active and have approved hours in the target
+        // location (kohde) are accounted for. Cleaners that are inactive or
+        // have only unapproved hours at this location are ignored.
+        default:
+
           /** @var KohteetController */
           $kk = Yii::app()->createController('Kohteet')[0];
+
+          // Get list of active cleaners with approved hours at this location.
+          // Default information includes id,tekijan_nimi and sukunimi. We only
+          // need ID's, so let's quicken the search by about half a microsecond.
           $omasiistijat = $kk->omasiistijat($arvo->kohteet->id, false);
+
+          // Decode possible selected worker pairs from the shift.
           $tyoparit = (!empty($arvo->tyopaari)) ? json_decode($arvo->tyopaari) : [];
 
-          // throw new \Exception(sprintf("%s: %s", $arvo->kohteet->id, json_encode($omasiistijat)));exit;
-          // throw new \Exception(sprintf("%s,  %s", $arvo->tid, $arvo->tyopaari));exit;
+          $omasiistijat_tids = array_column($omasiistijat, 'id');
 
-          foreach ($omasiistijat as $omasiistija_arr) {
-
-            if (empty($omasiistija_arr[0])) {
-              continue;
-            }
-
-            if ($arvo->tid == $omasiistija_arr[0]) {
-              $omasiistijat_varoitus = false;
-              break;
-            }
-
-            foreach ($tyoparit as $tpid) {
-              if ($tpid == $omasiistija_arr[0]) {
+          // Loop omasiistijat and check if at least one is selected as primary
+          // worker or pair in the database.
+            foreach ($omasiistijat_tids as $os_tid) {
+              if ($arvo->tid == $os_tid) {
                 $omasiistijat_varoitus = false;
-                break 2;
+                break;
+              } else {
+                foreach ($tyoparit as $tp_tid) {
+                  if ($arvo->tid == $tp_tid) {
+                    $omasiistijat_varoitus = false;
+                    break 2;
+                  }
+                }
               }
             }
-          }
-        }
+
+          break;
       }
     }
 
