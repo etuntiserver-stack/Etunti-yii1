@@ -5141,7 +5141,6 @@ class TyovuorootController extends Controller
     Hei!<br>
     <br>
     Valitettavasti omasiistijänne on estynyt seuraavalla siivouskäynnillä. Lupasimme ilmoittaa asiasta etukäteen.<br>
-    Teille on tulossa {$namestr}.<br>
     <br>
     Ystävällisin Terveisin,<br>
     <a href="https://www.kotipuhtaaksi.fi">Koti Puhtaaksi</a><br>
