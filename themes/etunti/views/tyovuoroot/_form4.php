@@ -795,6 +795,10 @@ $(function() {
   <?php if (isset($model->kohteet->asiakas_id)): ?>
   $('#omasiistijat-ilmoita').on('click', function(e) {
     e.preventDefault();
+    if (!confirm(`Haluatko varmasti lähettää ilmoituksen asiakkaan sähköpostiin? Huom. sivu päitivvyy lähettämisen jälkeen, jossa saattaa mennä hetki.`)) {
+      return false;
+    }
+
     let toistuvaToggled = ($('#is_toistuva').bootstrapSwitch('state') === true);
     if (toistuvaToggled) {
       alert('Omasiistijäilmoitus on tehtävä työvuorokohtaisesti, jolloin vuoro poistuu ketjusta. Ota pois valinta kohdasta "Toistuva Työvuoro".');
@@ -873,7 +877,8 @@ $(function() {
         // Everything is normal; notification has been sent. Notify the user
         // with the returned result message, update the selection box and
         // disable the button for sending the notification.
-        alert(parsed.message);
+        console.log(parsed.message);
+        // alert(parsed.message);
         $('#<?= $java_prefix ?>_omasiistijailmoitus').val(1);
         $('#omasiistijat-ilmoita').attr('disabled', 'disabled');
 
