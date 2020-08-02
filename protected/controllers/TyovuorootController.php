@@ -5565,38 +5565,65 @@ class TyovuorootController extends Controller
     // Don't waste time with empty requests?
     if (empty($shift_ids)) { return []; }
 
-    // Load cache if enabled and available.
+    // Load cache if enabled and available. Establish cache keys.
     /** @var CCache */
-    $cache = Yii::app()->cache;
-    $cache_id = sprintf("%s_regulartt_disabled_tvids", Yii::app()->user->domain);
-    $cache_data = $force_refresh ? [] : $cache->get($cache_id);
+    $cc = Yii::app()->cache;
+    $cid_results = sprintf("%s_regulartt_disabled_tvids", Yii::app()->user->domain);
+    $cid_tids_disabled = sprintf("%s_regulartt_tids_disabled", Yii::app()->user->domain);
+    $cdata = $force_refresh ? [] : $cc->get($cid_results);
 
     // Store found and unprocessed ids, just in case cache is partly loaded.
     $tvids_results = [];
     $unprocessed_ids = [];
 
     // Check the cache for data that was requested.
-    array_walk($shift_ids, function($tvid, $index) use ($cache_data, &$tvids_results, &$unprocessed_ids) {
-      if (isset($cache_data[$tvid])) {
-        $tvids_results[$tvid] = $cache_data[$tvid];
+    array_walk($shift_ids, function($tvid, $index) use ($cdata, &$tvids_results, &$unprocessed_ids) {
+      if (isset($cdata[$tvid])) {
+        $tvids_results[$tvid] = $cdata[$tvid];
       } else {
         $unprocessed_ids[] = $tvid;
       }
     });
 
     // Return possible cached data.
-    if (!empty($cache_data)) {
-      return $cache_data;
+    if (!empty($cdata)) {
+      return $cdata;
     }
-
-    // -
-    // -- Initialize & Check
-    // -
-
 
     // Get database connection for lookups.
     /** @var CDbConnection */
     $connection = Yii::app()->db1;
+
+    //-
+    //-- Cleaners: Manual Disable
+    //-
+
+    // Check if this info is cached.
+    $cid_tids_disabled = sprintf("%s_regulartt_tids_disabled", Yii::app()->user->domain);
+    $tids_disabled = $force_refresh ? [] : $cc->get($cid_tids_disabled);
+
+    // TODO: Enable caching, must also reset cache when changes are made.
+    if (empty($tids_disabled) && false) {
+
+      // Build and execute a simple query for a list of worker IDs.
+      /** @var CDbCommand */
+      $tids_disabled_cmd = Yii::app()->db1->createCommand(); // separated for intellisense
+      $tids_disabled_cmd
+        ->select('id')
+        ->from('sivex_ttekijat t')
+        ->where('omasiistijavaroitukset = 0')
+        ->queryAll(false);
+  
+      // Modify into list of IDs.
+      $tids_disabled = is_array($tids_disabled_cmd) ? array_column($tids_disabled_cmd, 'id') : [];
+
+      // Refresh between 10 and 20 minutes to stagger refreshes between results.
+      Yii::app()->cache->set($cid_tids_disabled, $tids_disabled, rand(600, 1200));
+    }
+
+    // -
+    // -- Process Shifts
+    // -
 
     // Load data by the given ID: ['model', 'toistuva', 'pvm', 'tid']
     $sdata = $this->this_id($tv_id);
@@ -5606,21 +5633,6 @@ class TyovuorootController extends Controller
       return $results;
     }
 
-    //-
-    //-- Cleaners: Manual Disable
-    //-
-
-    // Build and execute a simple query for a list of worker IDs.
-    /** @var CDbCommand */
-    $tids_disabled_cmd = Yii::app()->db1->createCommand(); // separated for intellisense
-    $tids_disabled_cmd
-      ->select('id')
-      ->from('sivex_ttekijat t')
-      ->where('omasiistijavaroitukset = 0')
-      ->queryAll(false);
-
-    // Modify into list of IDs.
-    $tids_disabled = is_array($tids_disabled_cmd) ? array_column($tids_disabled_cmd, 'id') : [];
 
     // -
     // -- Cleaners: Logged Hours
@@ -5687,7 +5699,7 @@ class TyovuorootController extends Controller
     // -
 
     // Refresh between 10 and 20 minutes to stagger refreshes between results.
-    Yii::app()->cache->set($cache_id, $workers, rand(600, 1200));
+    Yii::app()->cache->set($cid_results, $workers, rand(600, 1200));
   }
 
   /* Omasiistijät /// */
