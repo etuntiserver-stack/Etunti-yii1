@@ -66,11 +66,11 @@ $placeholder_id = (!empty($placeholder_id)) ? $placeholder_id : 'omasiistijat_ko
       const workersDivId = '<?= $div_id; ?>';
 
       // Request list of workers that have been to this location.
-      $.ajax(`${location.protocol}//${location.host}/index.php/kohteet/omasiistijat_ajax`, {
+      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijat_lista`, {
 
         type: 'POST',
         data: {
-          'id': targetId,
+          'location_id': targetId,
           'force_refresh': false, // TODO: selection
         },
 

@@ -666,14 +666,15 @@ $(function() {
     // Haetaan omasiistijät, jotta voidaan näyttää varoitus jos ei ole valittuna.
     omasiistijat = [];
     let toistuvaToggled = ($('#is_toistuva').bootstrapSwitch('state') === true);
-    $.ajax(`${location.protocol}//${location.host}/index.php/kohteet/omasiistijat_ajax`, {
+    $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijat_lista`, {
 
       type: 'POST',
       data: {
-        'id': '<?= $this_id; ?>',
+        // 'location_id': '<?= $this_id; ?>',
+        'location_id': valittuKohde,
         'force_refresh': false, // TODO: selection
         // 'tv_model': $(this).serialize(),
-        'toistuva': toistuvaToggled,
+        // 'toistuva': toistuvaToggled,
         // 'tv_date': '<?= $laatikko_pvm; ?>'
       },
 

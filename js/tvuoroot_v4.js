@@ -70,7 +70,7 @@ $(document).delegate(".getTekijanTiedot","click",function(e){
       $('#temaus-modal #omasiistija-valinta-result').empty().attr('hidden');
 
       // Get current selection for omasiistijavaroitus
-      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijavaroitus_current`, {
+      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijat_siistijakohtainen_varoitus`, {
         type: 'POST',
         data: { 'id': id },
         success: function(data) {
@@ -94,7 +94,7 @@ $(document).delegate(".getTekijanTiedot","click",function(e){
 $(document).delegate('#omasiistija-valinta', 'change', function(e) {
   let id = $('#temaus-modal #tekija-id').val();
   let value = $(this).val();
-  $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijavaroitus_toggle`, {
+  $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijat_siistijakohtainen_varoitus`, {
     type: 'POST',
     data: { 'id': id, 'value': value },
     success: function(data) {
@@ -124,7 +124,10 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 
   // Get list of tids where omasiistijavaroitus is disabled. After this, draw boxes accordingly.
   let warning_disabled_tids = [];
-  $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijavaroitus_disabled_tids`, {
+  $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijat_siistijakohtainen_varoitus`, {
+
+    type: 'POST',
+    data: {'id': 0},
 
     error: function (xhr, status, error) {
       console.log(xhr.responseText);
