@@ -8,6 +8,7 @@
 $site = Yii::app()->createController('Site');
 $checkPoista = "tyovuorot_3_".Yii::app()->user->adminStatus;
 $poista = $site[0]->checkOikeusFields($checkPoista);
+$omasiistijavaroitus = isset($omasiistijavaroitus) ? $omasiistijavaroitus : false;
 
 if(
 	!isset($model->id) 
@@ -670,12 +671,8 @@ $(function() {
 
       type: 'POST',
       data: {
-        // 'location_id': '<?= $this_id; ?>',
         'location_id': valittuKohde,
         'force_refresh': false, // TODO: selection
-        // 'tv_model': $(this).serialize(),
-        // 'toistuva': toistuvaToggled,
-        // 'tv_date': '<?= $laatikko_pvm; ?>'
       },
 
       error: function(xhr, status, error) {
@@ -711,42 +708,59 @@ $(function() {
   * käynyt kohteessa aiemmin (omasiistijä).
   */
   const omasiistijaTarkistus = function() {
-    let siistijat = [];
-    let omasiistijaValittu = false;
 
-    // Tarkistetaan, onko päätekijä (yläreunan valikko) omasiistijöissä. Jos
-    // ei ole, loopataan valitut tekijät työparilistalla tarkistusta varten.
-    if (omasiistijat.includes($('#tekijanVaihdo option:selected').val())) {
-      omasiistijaValittu = true;
-    } else {
-      $('#tyopari-container .multiselect-container li.active a label input').each(function() {
-        if (omasiistijat.includes(this.value)) {
-          omasiistijaValittu = true;
-          return false; // break
+    let showWarning = false;
+    let warningsDisabled = ($('#<?= $java_prefix ?>_omasiistijavaroitus').val() == 0);
+    let toistuva = <?= $toistuva ? 1 : 0; ?>
+
+    // Get current selected worker and pairs.
+    let tid = $('#tekijanVaihdo option:selected').val();
+    let tyoparit = [];
+    $('#tyopari-container .multiselect-container li.active a label input').each(function() {
+      tyoparit.push(this.value);
+    });
+
+    // Do checks only if virtual, as otherwise no warnings are shown.
+    if (!warningsDisabled && toistuva) {
+      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijat_tarkistus`, {
+
+        type: 'POST',
+        data: {
+          'shift_id': '<?= $this_id ?>',
+          'toistuva': true,
+          'tid': tid,
+          'tyoparit': JSON.stringify(tyoparit),
+          'date': '<?= $laatikko_pvm; ?>',
+        },
+
+        error: function(xhr, status, error) {
+          console.log(`(Omasiistijävaroituksen tarkastus epäonnistui. Virhe: ${xhr.responseText}`);
+        },
+
+        success: function(data) {
+          console.log(`(Omasiistijävaroituksen tarkastus: Received response: ${data}`);
+
+          // Output 1 means warnings should be shown; in any other case,
+          // including error cases, hide the warnings.
+          if (data == 1) {
+            // Check if customer has already been notified.
+            if ($('#<?= $java_prefix ?>_omasiistijailmoitus').val() == 1) {
+              $('#omasiistija-varoitus').show().html("<b>Omasiistijää ei ole valittuna (ilmoitettu asiakkaalle)</b>");
+              $('#omasiistijat-ilmoita').attr('disabled', 'disabled');
+              $('#omasiistija-toiminnot').show();
+            } else {
+              $('#omasiistija-varoitus').show();
+              $('#omasiistijat-ilmoita').removeAttr('disabled')
+              $('#omasiistija-toiminnot').show();
+            }
+          } else {
+            $('#omasiistija-varoitus').hide();
+            $('#omasiistija-toiminnot').hide();
+          }
         }
       });
     }
-
-    // Näytetään/piilotetaan varoitus valintojen perusteella.
-    let warningsDisabled = ($('#<?= $java_prefix ?>_omasiistijavaroitus').val() == 0);
-    if (warningsDisabled || omasiistijaValittu === true) {
-      $('#omasiistija-varoitus').hide();
-      $('#omasiistija-toiminnot').hide();
-    } else {
-
-      // Tarkistetaan onko asiasta jo ilmoitettu asiakkaalle.
-      if ($('#<?= $java_prefix ?>_omasiistijailmoitus').val() == 1) {
-        $('#omasiistija-varoitus').show().html("<b>Omasiistijää ei ole valittuna (ilmoitettu asiakkaalle)</b>");
-        $('#omasiistijat-ilmoita').attr('disabled', 'disabled');
-        $('#omasiistija-toiminnot').show();
-      } else {
-        $('#omasiistija-varoitus').show();
-        $('#omasiistijat-ilmoita').removeAttr('disabled')
-        $('#omasiistija-toiminnot').show();
-      }
-    }
   };
-
 
   // Vaihdetaan omasiistijälistan tila aina kun kohde vaihdetaan.
   $(`#${selectId}`).on('change', function(e) {

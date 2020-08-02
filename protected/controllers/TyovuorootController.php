@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijat_lista', 'omasiistijat_tarkistus', 'omasiistijat_ilmoitus', 'omasiistijat_siistijakohtainen_varoitus', 'massedit'),
+				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijat_lista', 'omasiistijat_tarkistus', 'omasiistijat_ilmoitus', 'omasiistijat_tarkistus', 'omasiistijat_siistijakohtainen_varoitus', 'massedit'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -3172,7 +3172,10 @@ class TyovuorootController extends Controller
 			$tt_order_1 = "sukunimi";
 			$tt_order_2 = "tekijan_nimi";
 		}
-		// Order tyontekijat -->
+    // Order tyontekijat -->
+
+    // Omasiistijävaroitus
+    $omasiistijavaroitus = $this->regulars_warning_check($model, $toistuva, $pvm);
 
        		$criteria = new CDbCriteria();
 		$criteria->select = "id, $tt_order_1, $tt_order_2";
@@ -3215,7 +3218,8 @@ class TyovuorootController extends Controller
 					'laatikko_pvm' 	=> $pvm, 
 					'laatikko_tid' 	=> $tid, 
 					'laatiko_etusukunimi' => $etusukunimi,
-					'create_update'	=> 'update',
+          'create_update'	=> 'update',
+          'omasiistijavaroitus' => $omasiistijavaroitus,
 				), true).'
 	              </div>
 	          </div>
@@ -5231,6 +5235,58 @@ class TyovuorootController extends Controller
           echo Yii::t('Main', $value ? "Omasiistijävaroitukset aktivoitu - päivitä sivu." : "Omasiistijävaroitukset piiloitettu - päivitä sivu.");
         }
       }
+    }
+  }
+
+  /**
+   * Check if warnings about regular cleaners should be shown.
+   *
+   * Uses serialization feature of jQuery for dynamic changes in tv edit form.
+   *
+   * @param mixed $shift_id
+   * ID of the open shift.
+   *
+   * @param bool $toistuva
+   * Whether the shift is virtual or not. (optional; override model)
+   *
+   * @param string $date
+   * Date string of the opened box in format "d.m.Y" (optional; override model)
+   *
+   * @return bool
+   * True or false; result is also echoed as 1: show and 0: hide warning.
+   */
+  public function actionOmasiistijat_tarkistus($shift_id = null, $toistuva = false, $date = null)
+  {
+    $shift_id = $_POST['shift_id'];
+    $sdata = $this->this_id($shift_id);
+
+    if (isset($_POST['toistuva'])) {
+      $toistuva = $_POST['toistuva'];
+    } else {
+      $toistuva = $toistuva ?: $sdata['toistuva'];
+    }
+
+    if (isset($_POST['date'])) {
+      $date = $_POST['date'];
+    } else {
+      $date = $date ?: $sdata['pvm'];
+    }
+
+    if (is_numeric($_POST['tid'] ?? '')) {
+      $sdata['model']->tid = $_POST['tid'];
+    }
+
+    if (isset($_POST['tyoparit'])) {
+      $sdata['model']->tyopaari = $_POST['tyoparit'];
+    }
+
+    // echo '<script>console.log('.json_encode($_POST).');</script>';
+    if ($this->regulars_warning_check($sdata['model'], $toistuva, $date)) {
+      echo 1;
+      return true;
+    } else {
+      echo 0;
+      return false;
     }
   }
 
