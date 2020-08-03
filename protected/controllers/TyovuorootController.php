@@ -2953,7 +2953,9 @@ class TyovuorootController extends Controller
 			$post 	= $_POST['Tyovuoroot'];
 		}
 
-		if(isset($post)){
+		if(isset($post))
+		{
+			$PushNotify = (isset($post['PushNotify']) and $post['PushNotify'] == 'on')? true : false;
 			$cleared_attr = $this->compareToistuvaAttributes($model->attributes, $post);
 			$model->attributes = $cleared_attr;
 			$this->model_json_converter($post, $model, $toistuva);
@@ -2970,13 +2972,13 @@ class TyovuorootController extends Controller
 				$this_id = ($toistuva)? $this->this_id_builder($model->id, $laatikko_pvm, $laatikko_tid) : $model->id;
 
 				// <-- PushNotify
-				if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+				if($PushNotify and count(json_decode($model->tyopaari, true)) == 0)
 					$this->pushNotifySending($this_id);
 				// PushNotify -->
 
 				// <-- jos on tyopaari
 				if(!$toistuva and count(json_decode($model->tyopaari, true)) > 1)
-					$this->tyopari_luonti($model);
+					$this->tyopari_luonti($model, $post);
 				// jos on tyopaari -->
 
 				// <-- LOG
@@ -3276,6 +3278,8 @@ class TyovuorootController extends Controller
 		else
 			$post = $_POST['Tyovuoroot'];
 
+		$PushNotify = (isset($post['PushNotify']) and $post['PushNotify'] == 'on')? true : false;
+
 		// <-- Variables
 		//$post['pvm'] 		= date("d.m.Y",strtotime($laatikko_pvm)); Kun siirretaan tyoparit muu paivaan.. sitten se ei onnistuu
 		$edellinen_model 	= $model->attributes;
@@ -3321,7 +3325,7 @@ class TyovuorootController extends Controller
 
 				// <-- PushNotify
 				$this_id = $this->this_id_builder($model->id, $laatikko_pvm, $laatikko_tid);
-				if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+				if($PushNotify)
 					$this->pushNotifySending($this_id);
 				// PushNotify -->
 
@@ -3347,7 +3351,7 @@ class TyovuorootController extends Controller
 
 				// <-- PushNotify
 				$this_id = $model->id;
-				if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+				if($PushNotify and count(json_decode($model->tyopaari, true)) == 0)
 					$this->pushNotifySending($this_id);
 				// PushNotify -->
 
@@ -3364,7 +3368,7 @@ class TyovuorootController extends Controller
 
 				// <-- jos on tyopaari
 				if(count(json_decode($model->tyopaari, true)) > 1)
-					$this->tyopari_luonti($model);
+					$this->tyopari_luonti($model, $post);
 				// jos on tyopaari -->
 
 				$return[] = ['return' => 'luottu_uusi_tyovuoro', 'id' => $model->id];
@@ -3412,7 +3416,7 @@ class TyovuorootController extends Controller
 
 				// <-- PushNotify
 				$this_id = $this->this_id_builder($model->id, $laatikko_pvm, $laatikko_tid);
-				if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+				if($PushNotify)
 					$this->pushNotifySending($this_id);
 				// PushNotify -->
 
@@ -3448,7 +3452,7 @@ class TyovuorootController extends Controller
 
 			// <-- PushNotify
 			$this_id = ($toistuva)? $this->this_id_builder($model->id, $laatikko_pvm, $laatikko_tid) : $model->id;
-			if(isset($post['PushNotify']) and $post['PushNotify'] == 'on')
+			if($PushNotify)
 				$this->pushNotifySending($this_id);
 			// PushNotify -->
 
@@ -3462,7 +3466,7 @@ class TyovuorootController extends Controller
 				$site = Yii::app()->createController('Site');
 				// <-- Lisataan tyoparia silloin kun ei ollut yhtaan
 				if( count($edelliset_tyoparit) == 0 and count($post_tyopaari) > 0 )
-					$this->tyopari_luonti($model);
+					$this->tyopari_luonti($model, $post);
 				// <-- Lisataan tyoparia jos edellisessa olisi jotakin ja esiteltu tyoparia
 				if( count($edelliset_tyoparit) > 0 and count($post_tyopaari) > 0 ){
 					$removed 	= [];
@@ -3485,7 +3489,7 @@ class TyovuorootController extends Controller
 						}
 					}
 					foreach($arr as $tid){
-						$arr = $this->add_TV_tid($model, $tid, $site);
+						$arr = $this->add_TV_tid($model, $tid, $site, []); // post - ei anna sopiva
 						if(isset($arr['id']))
 							$luotu[$arr['id']] = $arr['tid'];
 					}
@@ -3603,7 +3607,7 @@ class TyovuorootController extends Controller
 		return true;
 	}
 
-	protected function tyopari_luonti($current_model)
+	protected function tyopari_luonti($current_model, $post)
 	{
 		$site = Yii::app()->createController('Site');
 		$tids 		= json_decode($current_model->tyopaari, true);
@@ -3613,7 +3617,7 @@ class TyovuorootController extends Controller
 				$luotu[$current_model->id] = $current_model->tid;
 				continue;
 			}
-			$arr = $this->add_TV_tid($current_model, $tid, $site);
+			$arr = $this->add_TV_tid($current_model, $tid, $site, $post);
 			if(isset($arr['id']))
 				$luotu[$arr['id']] = $arr['tid'];
 		}
@@ -3623,7 +3627,7 @@ class TyovuorootController extends Controller
 		return true;
 	}
 
-	protected function add_TV_tid($current_model, $tid, $site)
+	protected function add_TV_tid($current_model, $tid, $site, $post)
 	{
 		$arr = [];
 		$model = new Tyovuoroot;
@@ -3688,18 +3692,34 @@ class TyovuorootController extends Controller
 		$pvm 		= $get_id['pvm'];
 		$tid 		= $get_id['tid'];
 
-		$m = $model;
-		$t = Tyontekijat::model()->findbypk($tid);
+		// <-- Tids
+		$tids = [];
+		$tids[$tid] = $tid;
+		if(isset($model->tyopaari) and is_array(json_decode($model->tyopaari, true))){
+			foreach(json_decode($model->tyopaari, true) as $tp_tid){
+				$tids[$tp_tid] = $tp_tid;
+			}
+		}
+
+		if($toistuva){
+			$nextTv = $this->checkNextTv($this_id);
+			if(!empty($nextTv))
+				$pvm = $nextTv;
+		}
+
 		$osoite = $model->osoite;
 		if(empty($osoite) and isset($model->kohteet->osoite))
 			$osoite = $model->kohteet->osoite;
 
-		$pushviesti = "Työvuorosi on muuttunut. Alta löydät uudet tiedot:\n
-			".$pvm."
-			".$m->alku."-".$model->loppu." ".$osoite."
-			".$m->tietoja;
+		foreach($tids as $tid){
+			$t = Tyontekijat::model()->findbypk($tid);
+			$pushviesti = "Työvuorosi on muuttunut. Alta löydät uudet tiedot:\n
+				".$pvm."
+				".$model->alku."-".$model->loppu." ".$osoite."
+				".$model->tietoja;
 
-		Domainit::sendGCM($tid,"Hei ".$t->tekijan_nimi,$pushviesti, null);
+			Domainit::sendGCM($tid,"Hei ".$t->tekijan_nimi,$pushviesti, null);
+		}
 		return true;
 	}
 
