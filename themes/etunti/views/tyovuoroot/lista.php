@@ -230,14 +230,12 @@
 
 <div class="admin-form">
   <div class="panel-header">
-
-<?php /*
       <div class="row">
        <div class="col-sm-12">
         <div class="pull-right">
          <div class="form-inline">
     	  <!--<button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>-->
-	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="GET">
+	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="doc">
 	    <input type="hidden" name="fileName" value="Tyovuorot">
 	    <input type="hidden" name="from" value="<?=$from?>">
@@ -245,7 +243,7 @@
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
 	  </form>
-	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="GET">
+	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="xls">
 	    <input type="hidden" name="fileName" value="Tyovuorot">
 	    <input type="hidden" name="from" value="<?=$from?>">
@@ -253,7 +251,7 @@
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
 	  </form>
-	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="GET">
+	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="pdf">
 	    <input type="hidden" name="fileName" value="Tyovuorot">
 	    <input type="hidden" name="from" value="<?=$from?>">
@@ -267,8 +265,6 @@
       </div>
       <br>
   </div>
-*/ ?>
-
 
   <div class="panel heading-border">
 
