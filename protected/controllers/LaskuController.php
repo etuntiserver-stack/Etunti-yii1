@@ -639,22 +639,18 @@ exit;
 		$asiakas=Asiakkaat::model()->find(" asiakasnumero='".$lasku->as_nro."' ");
 		$erapaiva = date("Y-m-d", strtotime("+14 day"));
 		if(!empty($asiakas->maksuehto))
-		$erapaiva = date("Y-m-d",strtotime("+$asiakas->maksuehto day"));
-
-		// <-- Jos netvisor niin laskunumero on seurava
-		if($asetukset->palvelu_tyyppi == 4)
-		{
-       			$criteria = new CDbCriteria();
-	       		$criteria->order = " laskunumero!='' DESC,id DESC ";
-			$vm = Lasku::model()->find($criteria);
-			if(isset($vm->id) and empty($model->laskunumero))
-			$lasku->laskunumero = $vm->laskunumero+1;
-		}
-		//     Jos netvisor niin laskunumero on seurava -->
+			$erapaiva = date("Y-m-d",strtotime("+$asiakas->maksuehto day"));
 
 
 		$model=new Lasku;
 		$model->attributes=$lasku->attributes;
+
+		$criteria = new CDbCriteria();
+       		$criteria->select = " id, MAX(ABS(laskunumero)) as laskunumero ";
+		$vm = Lasku::model()->find($criteria);
+		if( isset($vm->id) and $asetukset->lasku_laskunumero == 1)
+			$model->laskunumero = $vm->laskunumero+1;
+
 		$model->hyvityslasku=$lasku->id;
 		$model->laskun_nimetys="Hyvityslasku";
 		$model->yhteensa_total='-'.$lasku->yhteensa_total;
@@ -664,33 +660,32 @@ exit;
 		$model->tilanne=0;
 		if($model->save()){
 
-		$laskunRivit=LaskunRivit::model()->findAll("lid='".$lasku->id."'");
-		foreach($laskunRivit as $rivit)
-		{
-		$lm=new LaskunRivit;
-		$lm->attributes=$rivit->attributes;
-		$lm->lid=$model->id;
-		//$lm->hinta='-'.$rivit->hinta;
-		$lm->kpl='-'.$rivit->kpl;
-		$lm->hinta_alv='-'.$rivit->hinta_alv;
-		$lm->veroton='-'.$rivit->veroton;
-		$lm->yhteensa_alv='-'.$rivit->yhteensa_alv;
-		$lm->save();
-		}
+			$laskunRivit=LaskunRivit::model()->findAll("lid='".$lasku->id."'");
+			foreach($laskunRivit as $rivit)
+			{
+				$lm=new LaskunRivit;
+				$lm->attributes=$rivit->attributes;
+				$lm->lid=$model->id;
+				//$lm->hinta='-'.$rivit->hinta;
+				$lm->kpl='-'.$rivit->kpl;
+				$lm->hinta_alv='-'.$rivit->hinta_alv;
+				$lm->veroton='-'.$rivit->veroton;
+				$lm->yhteensa_alv='-'.$rivit->yhteensa_alv;
+				$lm->save();
+			}
 
+			// Lasku historia
+			$historia = new LaskuHistoria;
+			$historia->lid = $model->id;
+			$historia->status = 'HYVITYSLASKU';
+			$historia->palvelu = "local";
+			$historia->yht_euro = $model->yhteensa_total;
+			$historia->save();
 
-		// Lasku historia
-		$historia = new LaskuHistoria;
-		$historia->lid = $model->id;
-		$historia->status = 'HYVITYSLASKU';
-		$historia->palvelu = "local";
-		$historia->yht_euro = $model->yhteensa_total;
-		$historia->save();
-
-		$this->redirect(array('update','id'=>$model->id));
+			$this->redirect(array('update','id'=>$model->id));
 
 		} else {
-		var_dump($model->getErrors());
+			var_dump($model->getErrors());
 		}
 
 
