@@ -91,7 +91,7 @@ if( !isset($model->id) and isset($_GET['asiakas_id']) and isset($_GET['kohde_id'
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'sijainti_omatekstti'); ?>
 		<?php
-			$list = [0 => 'Valikkon mukaan', 1 => 'Kirjoittamalla oma sijainti'];
+			$list = [0 => 'Valikon mukaan', 1 => 'Kirjoittamalla oma sijainti'];
         		echo $form->dropDownList($model, 'sijainti_omatekstti', $list,
 			array('class'=>'form-control'));	
         	?>

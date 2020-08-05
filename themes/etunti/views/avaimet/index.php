@@ -195,7 +195,7 @@ if(count($k) > 0){
 	     <div class="form-group">
 		<select class="form-control" name="sijainti_omatekstti" id="Avaimet_sijainti_omatekstti">
 		<option value="1">Kirjoittamalla oma sijainti</option>
-		<option value="0">Valikkon mukaan</option>
+		<option value="0">Valikon mukaan</option>
 		</select>
 	     </div>
 	     <div class="form-group">

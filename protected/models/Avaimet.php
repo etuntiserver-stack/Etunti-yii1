@@ -101,7 +101,7 @@ class Avaimet extends CActiveRecord
 			'tid' => Yii::t('main', 'Työntekijä'),
 			'sijainti' => 'Sijainti',
 			'lisatiedot' => Yii::t('main', 'Lisätiedot'),
-			'sijainti_omatekstti' => Yii::t('main', 'Sijaintin vaihtoehto'),
+			'sijainti_omatekstti' => Yii::t('main', 'Sijannin vaihtoehto'),
 			'status' => 'Status',
 		);
 	}
