@@ -11,8 +11,9 @@
   		$avain_tyontekijalla[] = $this->etuSukunimi($avain->tid);
 		$lisays = '';
 		if($avain->sijainti_omatekstti == 0 and $avain->sijainti == 2)
-				$lisays = '<br>'. $avain->palautetu_asiakkaalle_pvm;
-			
+				$lisays .= '<br>'. $avain->palautetu_asiakkaalle_pvm;
+		if(!empty($avain->ovikoodi))
+				$lisays .= '<br><b>Ovikoodi:</b>'. $avain->ovikoodi;	
 		$avain_sijainti[] = $this->sijaintiText($avain->id).$lisays;
 	   }
 	}

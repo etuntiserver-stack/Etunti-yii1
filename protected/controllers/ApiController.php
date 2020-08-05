@@ -1088,6 +1088,7 @@ public function actionImei($dom)
 						$avaimet .= '<tr>';
 						$avaimet .= '<th>'.Yii::t('main', 'Avain').'</th>';
 						$avaimet .= '<th>'.Yii::t('main', 'Työntekijä').'</th>';
+						$avaimet .= '<th>'.Yii::t('main', 'Ovikoodi').'</th>';
 						$avaimet .= '<th>'.Yii::t('main', 'Sijainti').'</th>';
 						$avaimet .= '</tr>';
 						foreach($kohde->avaimet as $avain){
@@ -1096,6 +1097,7 @@ public function actionImei($dom)
 							<tr>
 							<td>'.$avain->avainnumero.'</td>
 							<td>'.$this->etuSukunimi($avain->tid).'</td>
+							<td>'.$avain->ovikoodi.'</td>
 							<td>'.$avainController[0]->sijaintiText($avain->id).'</td>
 							</tr>';
 						}

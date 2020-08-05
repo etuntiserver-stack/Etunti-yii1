@@ -111,6 +111,12 @@ if( !isset($model->id) and isset($_GET['asiakas_id']) and isset($_GET['kohde_id'
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'ovikoodi'); ?>
+		<?php echo $form->textField($model,'ovikoodi',array('size'=>60,'maxlength'=>255, 'class' => 'form-control')); ?>
+		<?php echo $form->error($model,'ovikoodi'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'lisatiedot'); ?>
 		<?php echo $form->textArea($model,'lisatiedot',array('rows'=>6, 'cols'=>50, 'class' => 'form-control')); ?>
 		<?php echo $form->error($model,'lisatiedot'); ?>

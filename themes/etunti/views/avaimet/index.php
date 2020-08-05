@@ -280,6 +280,7 @@ $(document).ready(function(){
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Kohde'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'Ovikoodi'); ?></th>
   <th><?php echo Yii::t('main', 'Sijainti'); ?></th>
   </tr>
   </thead>

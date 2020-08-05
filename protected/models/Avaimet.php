@@ -44,6 +44,7 @@ class Avaimet extends CActiveRecord
 		  'lisatiedot' => 'text DEFAULT NULL',
 		  'status' => 'int(11) DEFAULT NULL',
 		  'palautetu_asiakkaalle_pvm' => 'varchar(50) DEFAULT NULL',
+		  'ovikoodi' => 'varchar(255) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -67,7 +68,7 @@ class Avaimet extends CActiveRecord
 			array('avainnumero, kohde, sijainti', 'required'),
                         array('avainnumero','unique', 'message'=>'Tämä avainnumero on jo olemassa!'),
 			array('kohde, tid, status, asiakas_id, sijainti_omatekstti', 'numerical', 'integerOnly'=>true),
-			array('avainnumero, sijainti, palautetu_asiakkaalle_pvm', 'length', 'max'=>255),
+			array('avainnumero, sijainti, palautetu_asiakkaalle_pvm, ovikoodi', 'length', 'max'=>255),
 			array('lisatiedot', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

@@ -46,6 +46,9 @@
 		<?php echo $this->etuSukunimi($data->tid); ?>
 	</td>
 	<td>
+		<?php echo $data->ovikoodi; ?>
+	</td>
+	<td>
 		  <?php if(empty($data->sijainti)) : ?>
 		  	---
 		  <?php else: ?>
