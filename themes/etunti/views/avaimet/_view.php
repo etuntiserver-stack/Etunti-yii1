@@ -49,7 +49,11 @@
 		  <?php if(empty($data->sijainti)) : ?>
 		  	---
 		  <?php else: ?>
-		  	<?=$data->sijainti ?>
+		  	<?=$this->sijaintiText($data->id)?>
+			<?php
+			if($data->sijainti_omatekstti == 0 and $data->sijainti == 2)
+				echo '<br>'. $data->palautetu_asiakkaalle_pvm;
+			?>
 		  <?php endif; ?>
 
 	</td>
