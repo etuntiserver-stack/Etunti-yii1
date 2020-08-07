@@ -108,7 +108,7 @@ $(document).delegate(".poistaKohde","click",function(){
 
 	var forRivi = $(this).attr("for");
 	var riviid = $(this).attr("for").split("_");
-	if(confirm('Oletko varma?'))
+	if(confirm('Oletko varmaa?'))
 	{
         $.ajax({
            url: 'poistaKohde',
