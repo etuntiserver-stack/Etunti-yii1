@@ -394,11 +394,13 @@ $(document).ready(function(){
 
             // Parsing failed. Notify log and let it go.
             console.log("Parsed data is unusable (not an object).");
+            alert('Pyynnössä tapahtui virhe. Palvelimen palauttamaa vastausta ei voitu lukea (viallinen JSON). Jos vika jatkuu, ota yhteys ylläpitoon.');
 
           } else if (parsed.length == 0) {
 
             // Data is empty; this means something is very wrong. TODO
             console.log("Invalid response (empty response).");
+            alert('Pyynnössä tapahtui virhe. Palvelimen palauttama vastaus on viallinen (tyhjä). Jos vika jatkuu, ota yhteys ylläpitoon.');
 
           } else {
 
@@ -415,6 +417,8 @@ $(document).ready(function(){
               alert(parsed.result);
             }
           }
+
+          location.reload();
         },
 
         complete: function() {
@@ -471,11 +475,13 @@ $(document).ready(function(){
 
           // Parsing failed. Notify log and let it go.
           console.log("Parsed data is unusable (not an object).");
+          alert('Pyynnössä tapahtui virhe. Palvelimen palauttamaa vastausta ei voitu lukea (viallinen JSON). Jos vika jatkuu, ota yhteys ylläpitoon.');
 
         } else if (parsed.length == 0) {
 
           // Data is empty; this means something is very wrong. TODO
           console.log("Invalid response (empty response).");
+          alert('Pyynnössä tapahtui virhe. Palvelimen palauttama vastaus on viallinen (tyhjä). Jos vika jatkuu, ota yhteys ylläpitoon.');
 
         } else {
 
@@ -492,6 +498,8 @@ $(document).ready(function(){
             alert(parsed.result);
           }
         }
+
+        location.reload();
       },
 
       complete: function() {
