@@ -5440,17 +5440,17 @@ class TyovuorootController extends Controller
       return false;
     }
 
-    // If this shift IS part of a repeating chain (toistuva ketju), Check if
-    // this is first shift of a repeating (toistuva) chain. If so, warnings are
-    // also disabled, obviously because nobody has been there.
-    // - TODO: Previous customer, but new chain? Not taken into account here
-    if (($target->pfrom ?? '') == $date) {
-      return false;
-    }
-
     // Get list of active cleaners with approved hours at this location. Only
     // Cleaners that are inactive are ignored.
     $omasiistijat = $this->regulars_list($target->kohteet->id, false);
+
+    // If this shift IS part of a repeating chain (toistuva ketju), Check if
+    // this is first shift of a repeating (toistuva) chain. If so, warnings are
+    // disabled only if the target has no regulars (first time at the location).
+    // If there are regulars, then warnings should be shown as normal.
+    if (empty($omasiistijat) && ($target->pfrom ?? '') == $date) {
+      return false;
+    }
 
     // Transform array of active records into simple list of worker IDs.
     $omasiistijat_tids = array_column($omasiistijat, 'id');
