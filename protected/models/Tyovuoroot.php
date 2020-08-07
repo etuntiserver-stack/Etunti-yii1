@@ -189,7 +189,8 @@ class Tyovuoroot extends DB2ActiveRecord
 			'status' => Yii::t('main', 'Tilanne'),
 			'piilota_mobiilista'=>Yii::t('main', 'Näytä mobiilissa'),
 			'tuoteID' => Yii::t('main', 'Tuote/palvelu'),
-      'tyoajanlaatu' => Yii::t('main', 'Lomat ja poissaolot'),
+			'tyoajanlaatu' => Yii::t('main', 'Lomat ja poissaolot'),
+			'toimenpiteet' => Yii::t('main', 'Työ-ohjeet'),
       'omasiistijavaroitus' => Yii::t('main', 'Omasiistijävaroitukset'),
       'omasiistijailmoitus' => Yii::t('main', 'Ilmoitus asiakkaalle omasiistijöistä'),
 		);

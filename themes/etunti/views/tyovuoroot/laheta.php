@@ -172,7 +172,7 @@ $(document).ready(function(){
 */
 
 $(".laheta").click(function(){
-        var r=confirm("Oletko varma?")
+        var r=confirm("Oletko varmaa?")
         if (!r){
 	   return false;
 	} else {

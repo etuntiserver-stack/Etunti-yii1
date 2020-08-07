@@ -887,7 +887,7 @@ $(document).ready(function(){
  });
 
  $(".hyvaksyminen").click(function(){
-	if(!confirm('Oletko varma?')){ return false; }
+	if(!confirm('Oletko varmaa?')){ return false; }
         $.ajax({
            url: 'index',
            type: "POST",

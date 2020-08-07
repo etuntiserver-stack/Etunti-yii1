@@ -20,7 +20,7 @@ if( !isset($model->id) and isset($_GET['asiakas_id']) and isset($_GET['kohde_id'
 
 	<?php echo $form->errorSummary($model); ?>
 <div class="row form">
- <div class="col-sm-3">
+ <div class="col-sm-4">
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'avainnumero'); ?>
@@ -89,9 +89,31 @@ if( !isset($model->id) and isset($_GET['asiakas_id']) and isset($_GET['kohde_id'
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'sijainti_omatekstti'); ?>
+		<?php
+			$list = [0 => 'Valikon mukaan', 1 => 'Kirjoittamalla oma sijainti'];
+        		echo $form->dropDownList($model, 'sijainti_omatekstti', $list,
+			array('class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'asiakas_id'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'sijainti'); ?>
-		<?php echo $form->textField($model,'sijainti',array('size'=>60,'maxlength'=>255, 'class' => 'form-control')); ?>
+		<div id="sijainti_rakenne"></div>
 		<?php echo $form->error($model,'sijainti'); ?>
+	</div>
+
+	<div class="section fill mb5 palautetu_asiakkaalle_pvm" style="display:none">
+		<?php echo $form->labelEx($model,'palautetu_asiakkaalle_pvm'); ?>
+		<?php echo $form->textField($model,'palautetu_asiakkaalle_pvm',array('size'=>60,'maxlength'=>50, 'class' => 'form-control datepickerFI')); ?>
+		<?php echo $form->error($model,'palautetu_asiakkaalle_pvm'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'ovikoodi'); ?>
+		<?php echo $form->textField($model,'ovikoodi',array('size'=>60,'maxlength'=>255, 'class' => 'form-control')); ?>
+		<?php echo $form->error($model,'ovikoodi'); ?>
 	</div>
 
 	<div class="section fill mb5">
@@ -132,8 +154,40 @@ if( !isset($model->id) and isset($_GET['asiakas_id']) and isset($_GET['kohde_id'
 
 <script type="text/javascript">
 $(document).ready(function(){
-
-
+ function sijainti(){
+	if( $('#Avaimet_sijainti_omatekstti').val() == '0' ){
+		$('#sijainti_rakenne').html('' +
+			'<select class="form-control" name="Avaimet[sijainti]" id="Avaimet_sijainti">' +
+			'<option value="1">Toimistolla</option>' +
+			'<option value="2">Palautettu asiakkaalle</option>' +
+			'<option value="3">Työntekijällä</option>' +
+			'</select>' 
+		);
+		$('#Avaimet_sijainti').val('<?=$model->sijainti?>');
+	}
+	if( $('#Avaimet_sijainti_omatekstti').val() == '1' ){
+		$('#sijainti_rakenne').html('' +
+			'<input size="60" maxlength="255" class="form-control" name="Avaimet[sijainti]" id="Avaimet_sijainti" type="text" value="<?=$model->sijainti?>" />' 
+		);
+	}
+	if( $("#Avaimet_sijainti").val() == '2' ){
+		$('.palautetu_asiakkaalle_pvm').show(370);
+	} else {
+		$('.palautetu_asiakkaalle_pvm').hide(370);
+	}
+ }
+ sijainti();
+ $('#Avaimet_sijainti_omatekstti').change(function(){
+	sijainti();
+	$('#Avaimet_sijainti').val('');
+ });
+ $(document).delegate("#Avaimet_sijainti","change",function(){
+	if( $(this).val() == '2' ){
+		$('.palautetu_asiakkaalle_pvm').show(370);
+	} else {
+		$('.palautetu_asiakkaalle_pvm').hide(370);
+	}
+ });
  $('#Avaimet_asiakas_id').change(function(){
 
 	var thisVal = $(this).val();

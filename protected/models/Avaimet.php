@@ -40,8 +40,11 @@ class Avaimet extends CActiveRecord
 		  'kohde' => 'int(11) DEFAULT 0',
 		  'tid' => 'int(11) DEFAULT 0',
 		  'sijainti' => 'varchar(255) DEFAULT NULL',
+		  'sijainti_omatekstti' => 'int(11) DEFAULT 1',
 		  'lisatiedot' => 'text DEFAULT NULL',
 		  'status' => 'int(11) DEFAULT NULL',
+		  'palautetu_asiakkaalle_pvm' => 'varchar(50) DEFAULT NULL',
+		  'ovikoodi' => 'varchar(255) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -62,10 +65,10 @@ class Avaimet extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('avainnumero, kohde', 'required'),
+			array('avainnumero, kohde, sijainti', 'required'),
                         array('avainnumero','unique', 'message'=>'Tämä avainnumero on jo olemassa!'),
-			array('kohde, tid, status, asiakas_id', 'numerical', 'integerOnly'=>true),
-			array('avainnumero, sijainti', 'length', 'max'=>255),
+			array('kohde, tid, status, asiakas_id, sijainti_omatekstti', 'numerical', 'integerOnly'=>true),
+			array('avainnumero, sijainti, palautetu_asiakkaalle_pvm, ovikoodi', 'length', 'max'=>255),
 			array('lisatiedot', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -99,6 +102,7 @@ class Avaimet extends CActiveRecord
 			'tid' => Yii::t('main', 'Työntekijä'),
 			'sijainti' => 'Sijainti',
 			'lisatiedot' => Yii::t('main', 'Lisätiedot'),
+			'sijainti_omatekstti' => Yii::t('main', 'Sijannin vaihtoehto'),
 			'status' => 'Status',
 		);
 	}

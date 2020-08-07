@@ -175,7 +175,13 @@ virtual TV takia
 		?>
 	     </div>
 	     <div class="form-group">
-		<input type="text" name="sijainti" class="form-control" placeholder="Sijainti">
+		<select class="form-control" name="sijainti_omatekstti" id="Avaimet_sijainti_omatekstti">
+		<option value="1">Kirjoittamalla oma sijainti</option>
+		<option value="0">Valikon mukaan</option>
+		</select>
+	     </div>
+	     <div class="form-group">
+		<div id="sijainti_rakenne"></div>
 	     </div>
 	     <div class="form-group">
 		<input type="submit" class="btn btn-primary btn-block submitFormTwo myBgColors" value="<?php echo Yii::t('main', 'Tallenna'); ?>">
@@ -189,6 +195,39 @@ virtual TV takia
 
 <script type="text/javascript">
 $(document).ready(function(){
+ function sijainti(){
+	if( $('#Avaimet_sijainti_omatekstti').val() == '0' ){
+		$('#sijainti_rakenne').html('' +
+			'<select class="form-control" name="sijainti" id="Avaimet_sijainti">' +
+			'<option value="1">Toimistolla</option>' +
+			'<option value="2">Palautettu asiakkaalle</option>' +
+			'<option value="3">Työntekijällä</option>' +
+			'</select>' 
+		);
+	}
+	if( $('#Avaimet_sijainti_omatekstti').val() == '1' ){
+		$('#sijainti_rakenne').html('' +
+			'<input size="30" maxlength="255" class="form-control" name="sijainti" id="Avaimet_sijainti" type="text" placeholder="Kirjoita sijainti.."/>' 
+		);
+	}
+	if( $("#Avaimet_sijainti").val() == '2' ){
+		$('.palautetu_asiakkaalle_pvm').show(370);
+	} else {
+		$('.palautetu_asiakkaalle_pvm').hide(370);
+	}
+ }
+ sijainti();
+ $('#Avaimet_sijainti_omatekstti').change(function(){
+	sijainti();
+ });
+ $(document).delegate("#Avaimet_sijainti","change",function(){
+	if( $(this).val() == '2' ){
+		$('.palautetu_asiakkaalle_pvm').show(370);
+	} else {
+		$('.palautetu_asiakkaalle_pvm').hide(370);
+	}
+ });
+
  $(".submitFormTwo").click(function(e){
 	e.preventDefault();
 	var checked = false;

@@ -452,8 +452,8 @@ $('td').hover(function()
 	'<div class="latikkolisatiedot_paa">' +
 		'<div class="latikkolisatiedot">' +
 		 '<div class="form-inline">' +
-			   '<i class="form-group valitseKokopaiva link glyphicon glyphicon-th-large" did_tid="' + did_tid + '"></i>' +
-			   '<i class="form-group plussa link fa fa-plus luominen" pvm="' + pvm + '" tid="' + tid + '"></i>' +
+			   '<i class="form-group valitseKokopaiva link glyphicon glyphicon-th-large" did_tid="' + did_tid + '" data-toggle="tooltip" data-placement="top" title="Valitse koko päivä"></i>' +
+			   '<i class="form-group plussa link fa fa-plus luominen" pvm="' + pvm + '" tid="' + tid + '" data-toggle="tooltip" data-placement="top" title="Luo uusi työvuoro"></i>' +
 			'</div>' +
 		 '</div>' +
 		'</div>' +
@@ -461,8 +461,8 @@ $('td').hover(function()
      );
      if(localStorage.getItem("muistissa")){
      $(this).find('.latikkolisatiedot .form-inline').append('' +
-		   	   '<i class="form-group mcut fa fa-exchange" id="forCut_' + did_tid + '"></i>' +
-		   	   '<i class="form-group mplus fa fa-copy" id="forCopy_' + did_tid + '"></i> '
+		   	   '<i class="form-group mcut fa fa-exchange" id="forCut_' + did_tid + '" data-toggle="tooltip" data-placement="top" title="Siirrä"></i>' +
+		   	   '<i class="form-group mplus fa fa-copy" id="forCopy_' + did_tid + '" data-toggle="tooltip" data-placement="top" title="Kopioi"></i> '
      );
      }
 

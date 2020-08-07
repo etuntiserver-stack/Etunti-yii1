@@ -1079,6 +1079,7 @@ public function actionImei($dom)
 				// Nayta kohteen puhelinnumero -->
 
 				// <-- Nayta kohteen avaimet
+				$avainController = Yii::app()->createController('Avaimet');
 				$avaimet = '';
 				if(isset($kohde->id) and isset($asetukset->app_naytta_avain) and $asetukset->app_naytta_avain == 1 ){
 					if(isset($kohde->avaimet) and count($kohde->avaimet) > 0){
@@ -1087,14 +1088,17 @@ public function actionImei($dom)
 						$avaimet .= '<tr>';
 						$avaimet .= '<th>'.Yii::t('main', 'Avain').'</th>';
 						$avaimet .= '<th>'.Yii::t('main', 'Työntekijä').'</th>';
+						$avaimet .= '<th>'.Yii::t('main', 'Ovikoodi').'</th>';
 						$avaimet .= '<th>'.Yii::t('main', 'Sijainti').'</th>';
 						$avaimet .= '</tr>';
 						foreach($kohde->avaimet as $avain){
+							if($avain->sijainti_omatekstti == 0 and $avain->sijainti != 3){ continue; }
 							$avaimet .= '
 							<tr>
 							<td>'.$avain->avainnumero.'</td>
 							<td>'.$this->etuSukunimi($avain->tid).'</td>
-							<td>'.$avain->sijainti.'</td>
+							<td>'.$avain->ovikoodi.'</td>
+							<td>'.$avainController[0]->sijaintiText($avain->id).'</td>
 							</tr>';
 						}
 						$avaimet .= '</table>';

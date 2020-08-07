@@ -593,6 +593,7 @@ $(document).ready(function(){
 
   </div>
   <div class="col-sm-6">
+		<i class="pull-left fa fa-star text-danger"></i>
 		<?php echo $form->labelEx($model,'tietoja'); ?>
 		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tietoja'); ?>

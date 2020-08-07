@@ -371,9 +371,10 @@ $(document).ready(function(){
  }
 });
 </script>
-
+<br>
 <div class="row">
   <div class="col-sm-6">
+		<i class="pull-left fa fa-star text-danger"></i>
 		<?php echo $form->labelEx($model,'tietoja'); ?>
 		<?php 
 		echo $form->textarea($model,'tietoja',array('rows'=>5,'class'=>'form-control lomake_kenta', 'placeholder'=>'Esim. Avainten tiedot tai kohteesa olevat rajoitukset.')); 

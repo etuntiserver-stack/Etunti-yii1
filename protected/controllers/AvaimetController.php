@@ -159,6 +159,19 @@ class AvaimetController extends Controller
 		));
 	}
 
+	public function sijaintiText($id){
+		$arr = [1 => 'Toimistolla', 2 => 'Palautettu asiakkaalle', 3 => 'Työntekijällä'];
+		$text = '';
+		$avain = Avaimet::model()->findByPk($id);
+		if( isset($avain->id) ){
+			if($avain->sijainti_omatekstti == 0 and isset($arr[$avain->sijainti]))
+				$text = $arr[$avain->sijainti];
+			if($avain->sijainti_omatekstti == 1)
+				$text = $avain->sijainti;
+		}
+		return $text;
+	}
+
 	/**
 	 * Deletes a particular model.
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
@@ -199,7 +212,7 @@ class AvaimetController extends Controller
 			{
 
 				$avaimet_old = Avaimet::model()->findByPk($avain_id);
-				Avaimet::model()->updateByPk($avain_id, array('sijainti' => $_POST['sijainti'], 'tid' => $_POST['tyontekija']));
+				Avaimet::model()->updateByPk($avain_id, array('sijainti_omatekstti' => $_POST['sijainti_omatekstti'], 'sijainti' => $_POST['sijainti'], 'tid' => $_POST['tyontekija']));
 				$avaimet_new = Avaimet::model()->findByPk($avain_id);
 
 				// <-- LOG

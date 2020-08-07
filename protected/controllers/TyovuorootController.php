@@ -342,7 +342,7 @@ class TyovuorootController extends Controller
 		{
 			$model = Asiakkaat::model()->find(" yhteyshenkilo LIKE '%".Yii::app()->request->getPost('yhteyshenkilo')."' ");
 			if(isset($model->id))
-			$bd = Yii::t('main', 'Asiakas löyty tietokannasta');	
+			$bd = Yii::t('main', 'Asiakas löytyi tietokannasta');	
 		}
 		echo json_encode($bd);
 		exit;
@@ -355,13 +355,13 @@ class TyovuorootController extends Controller
 		{
 			$model = Asiakkaat::model()->find(" yrityksen_nimi LIKE '%".Yii::app()->request->getPost('yrityksen_nimi')."' ");
 			if(isset($model->id))
-			$bd .= Yii::t('main', 'Asiakas löyty tietokannasta');	
+			$bd .= Yii::t('main', 'Asiakas löytyi tietokannasta');	
 		}
 		if(Yii::app()->request->getPost('sahkoposti'))
 		{
 			$model = Asiakkaat::model()->find(" sahkoposti LIKE '%".Yii::app()->request->getPost('sahkoposti')."' ");
 			if(isset($model->id))
-			$bd .= Yii::t('main', 'Asiakas löyty tietokannasta');	
+			$bd .= Yii::t('main', 'Asiakas löytyi tietokannasta');	
 		}
 		echo json_encode($bd);
 		exit;
@@ -2058,10 +2058,10 @@ class TyovuorootController extends Controller
 
 	protected function statukset($piilota_mobiilista){
 		$status = [];
-		$status[10] = '<i class="tvikooni fa fa-cutlery '.(($piilota_mobiilista == 0)?'text-success':'text-danger').'"></i>';
-		$status[2] = '<i class="tvikooni fa fa-bus '.(($piilota_mobiilista == 0)?'text-warning':'text-danger').'"></i>';
-		$status[3] = '<i class="tvikooni fa fa-hourglass '.(($piilota_mobiilista == 0)?'text-info':'text-danger').'"></i>';
-		$status[11] = '<i class="tvikooni fa fa-clock-o '.(($piilota_mobiilista == 0)?'text-info':'text-danger').'"></i>';
+		$status[10] = '<i class="tvikooni fa fa-cutlery '.(($piilota_mobiilista == 0)?'text-success':'text-danger').'" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Lounastauko').'"></i>';
+		$status[2] = '<i class="tvikooni fa fa-bus '.(($piilota_mobiilista == 0)?'text-warning':'text-danger').'" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Matka').'"></i>';
+		$status[3] = '<i class="tvikooni fa fa-hourglass '.(($piilota_mobiilista == 0)?'text-info':'text-danger').'" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työ').'"></i>';
+		$status[11] = '<i class="tvikooni fa fa-clock-o '.(($piilota_mobiilista == 0)?'text-info':'text-danger').'" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Vapaa päivä').'"></i>';
 		return $status;
 	}
 
@@ -2196,7 +2196,7 @@ class TyovuorootController extends Controller
 		$return 	= [];
 		$tv_edit	= [];
 		$this_id 	= ($toistuva)? $this->this_id_builder($arvo->id, $this_pvm, $this_tid) : $arvo->id;
-		$toistuva_icon 	= ($toistuva)? '<i class="text-success fa fa-repeat"></i> ' : '';
+		$toistuva_icon 	= ($toistuva)? '<i class="text-success fa fa-repeat" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Toistuva työ').'"></i> ' : '';
 		$mennytPaivat	= (strtotime($this_pvm) < strtotime(date("Y-m-d")))? 'mennytPaivat' : '';
 		$osoite 	= ( isset($arvo->osoite) and !empty($arvo->osoite))?$arvo->osoite:'';
 		$ikoonit	= ((isset($status[$arvo->status]))?$status[$arvo->status]:'').$toistuva_icon;
@@ -2253,7 +2253,7 @@ class TyovuorootController extends Controller
 		if($arvo->tyopaari != '')
 			$ikoonit .= ' <i class="fa fa-male text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i> ';
 		if(isset($arvo->avaimet) and count($arvo->avaimet) > 0)
-			$ikoonit .=  ' <i class="tvikooni fa fa-key text-warning"></i> ';
+			$ikoonit .=  ' <i class="tvikooni fa fa-key text-warning" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Avain').'"></i> ';
 		if ($has_tickets)
       $ikoonit .= ' <i class="fa fa-question text-primary" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Avoimia Tukipyyntöjä').'"></i> ';
 
