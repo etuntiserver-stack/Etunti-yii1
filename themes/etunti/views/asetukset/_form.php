@@ -490,7 +490,42 @@ $('.ryhmat').multiselect({
 <?php endif; ?>
 <!-- Työvuorot -->
 
+<!-- Omasiistijäjärjestelmä -->
+<?php if (Yii::app()->user->kp): ?>
 
+<br>
+<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#omasiistija-asetukset">
+  <h3><?php echo Yii::t('main', 'Omasiistijäjärjestelmän Asetukset'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3>
+</div>
+<div class="row form collapse" id="omasiistija-asetukset">
+  <div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main', 'Omasiistijäjärjestelmä'); ?></h2></legend>
+
+    <!-- Käyttööonotto (ei vielä voimassa) -->
+    <div class="section fill mb10">
+    <?php
+      /** @var CActiveForm $form */
+      echo $form->labelEx($model, 'omasiistijat_enabled');
+      echo $form->dropDownList($model, 'omasiistijat_enabled', [1 => 'Käytössä', 0 => 'Ei käytössä'], ['class' => 'form-control']);
+      echo $form->error($model, 'omasiistijat_enabled');
+    ?>
+    </div>
+
+    <!-- Sähköposti-ilmoituksen teksti -->
+    <div class="section fill mb10">
+    <?php
+      /** @var CActiveForm $form */
+      echo $form->labelEx($model, 'omasiistijat_email_text');
+      echo $form->textArea($model, 'omasiistijat_email_text', ['rows' => 10, 'maxlength' => 8192, 'class' => 'form-control']);
+      echo $form->error($model, 'omasiistijat_email_text');
+    ?>
+    <p>Sähköpostiteksti tulee olla HTML -muodossa. Käytä &lt;br&gt; rivien lopussa rivivaihtona. Normaalit rivivaihdot tekstissä eivät vaikuta lopulliseen sähköpostiin.</p>
+    </div>
+  </div>
+</div>
+
+<?php endif; ?>
+<!-- /// Omasiistijäjärjestelmä -->
 
 <?php if(in_array('3',$tas)) : ?>
 <br>

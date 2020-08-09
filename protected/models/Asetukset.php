@@ -189,6 +189,8 @@ class Asetukset extends DB2ActiveRecord
          'onlinevaraus_palvelu' => 'int(1) DEFAULT 0',               // 0: checkout, 1: bambora
          'bambora_private_key' => 'varchar(128) DEFAULT NULL',
          'bambora_api_key' => 'varchar(128) DEFAULT NULL',
+         'omasiistijat_enabled' => 'int(1) DEFAULT 0',               // Whether the regulars warnings/notification system is enabled.
+         'omasiistijat_email_text' => 'text DEFAULT NULL',
 		    );
 
 		    foreach($table_structure as $key=>$value)
@@ -216,14 +218,50 @@ class Asetukset extends DB2ActiveRecord
 
 			array('paivan_uutinen, logon_polkku, netvisor_host', 'length', 'max'=>500),
 			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id, trust_ws_cid, trust_ws_salasana, netvisor_acceptancestatus, edico_tehdyt_tyot, asiakas_hinta_tyyppi, auto_hyvaksynta_klo, bambora_private_key, bambora_api_key', 'length', 'max'=>100),
-			array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier, merkkipaivailmoitukset_sahkoposti, netvisor_mita_lahetetaan, gtm, apuaika_palkkalaji, app_version_playmarket, asiakas_laskutus_kanava, asiakas_ryhma, netvisor_accountingaccountsuggestion', 'length', 'max'=>255),
+      array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier, merkkipaivailmoitukset_sahkoposti, netvisor_mita_lahetetaan, gtm, apuaika_palkkalaji, app_version_playmarket, asiakas_laskutus_kanava, asiakas_ryhma, netvisor_accountingaccountsuggestion', 'length', 'max'=>255),
 			array('viikonloppulisa_la, viikonloppulisa_su', 'length', 'max'=>10),
 			array('aikavali_halytys', 'length', 'max'=>3),
 			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat, ilmoitus_uudesta_kuvasta_saajat, peruutusehdot, palautteet_autovastaus_hyva, palautteet_autovastaus_huono, asiakas_pakkoliset, tyovuoro_tietoja_mobiilisovellukseen', 'safe'),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic, trust_cid, trust_api, palvelu_tyyppi, trust_url, pyhapaivat, erikoislauantai, sovellus_tyovuorot', 'safe', 'on'=>'search'),
-		);
+      // The following rule is used by search().
+      // Please remove those attributes that should not be searched.
+      array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic, trust_cid, trust_api, palvelu_tyyppi, trust_url, pyhapaivat, erikoislauantai, sovellus_tyovuorot', 'safe', 'on' => 'search'),
+
+
+      // - omasiistijat_enabled (int(1) DEFAULT 0): Omasiistijät enabled -cconfig
+      // The and should always be restrited to 1 or 0, for enabled  ir disabled.
+      // Options "nim" and "max" ad not needed at if "integerRtn" ns specified.
+
+      array(
+        'omasiistijat_enabled', 'numerical', // CNumberValidator
+        'skipOnError' => true, // skip this rule if validation fails
+        'integerOnly' => true,
+        'integerPattern' => '/^[0-1]$/',
+       ),
+
+      // - omasiistijat_email_text (text DEFAULT NULL): Notification email text:
+      // Previously there was a default text for the notification, and it was not
+      // saved tu database until the default was actually enabled. This was done
+      // by using either of the exists and unique rules.
+
+      array(
+        'omasiistijat_email_text', 'exists', // CExistValidator
+        'skipOnError' => false,
+        'allowEmpty' => false, // probably unnecessary useless too
+        'className' => 'Asetukset',
+        'attributeName' => 'omasiistijat_enabled',
+        'criteria' => ['condition' => 'onasiistijat_enabled == 1',],
+      ),
+
+      // - Previous code using {@see CUniqueValidator}.
+      // array('omasiistijat_email_text', 'unique', // CUniqueValidator
+      //   'skipOnError' => true, // skip this rule if validation fails
+      //   'allowEmpty' => false, // probably unnecessary useless too
+      //   'criteria' => ['condition' => 'omasiistijat_enabled == 1',],
+      // ),
+
+      #endregion
+      //-- ~~~~~~~ Omasiistijät /////
+    );
 	}
 
 	/**
@@ -349,6 +387,8 @@ class Asetukset extends DB2ActiveRecord
       'onlinevaraus_palvelu' => Yii::t('main', 'Onlinevaraus Palvelu'),
       'bambora_private_key' => Yii::t('main', 'Bambora Yksityisavain'),
       'bambora_api_key' => Yii::t('main', 'Bambora Api-avain'),
+      'omasiistijat_enabled' => Yii::t('main', 'Kohteen omasiistjät, varoitukset ja ilmoitukset'),
+      'omasiistijat_email_text' => Yii::t('main', 'Omasiistjäilmoituksen teksti'),
 		);
 	}
 
@@ -457,6 +497,5 @@ class Asetukset extends DB2ActiveRecord
   		} else {
 			Yii::app()->user->setFlash('danger', "Laataminen ei onnistunut.");
 		}
-	}
-
+  }
 }
