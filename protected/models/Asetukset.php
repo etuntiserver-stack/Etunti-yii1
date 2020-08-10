@@ -240,24 +240,11 @@ class Asetukset extends DB2ActiveRecord
 
       // - omasiistijat_email_text (text DEFAULT NULL): Notification email text:
       // Previously there was a default text for the notification, and it was not
-      // saved tu database until the default was actually enabled. This was done
-      // by using either of the exists and unique rules.
-
-      array(
-        'omasiistijat_email_text', 'exists', // CExistValidator
-        'skipOnError' => false,
-        'allowEmpty' => false, // probably unnecessary useless too
-        'className' => 'Asetukset',
-        'attributeName' => 'omasiistijat_enabled',
-        'criteria' => ['condition' => 'onasiistijat_enabled == 1',],
-      ),
-
-      // - Previous code using {@see CUniqueValidator}.
-      // array('omasiistijat_email_text', 'unique', // CUniqueValidator
-      //   'skipOnError' => true, // skip this rule if validation fails
-      //   'allowEmpty' => false, // probably unnecessary useless too
-      //   'criteria' => ['condition' => 'omasiistijat_enabled == 1',],
-      // ),
+      // saved in database until the default was actually enabled. This was done
+      // by using one of the following exists and unique rules (code condensed)
+      // to fit on one line instead of keeping long blocks of commented code):
+      // [ 'omasiistijat_email_text','exists','skipOnError'=>false,'allowEmpty'=>false,'className'=>'Asetukset','attributeName'=>'omasiistijat_enabled','criteria'=>['condition'=>'onasiistijat_enabled==1'] ],
+      // [ 'omasiistijat_email_text','unique','skipOnError'=>true,'allowEmpty'=>false,'criteria'=>['condition'=>'omasiistijat_enabled == 1'] ],
 
       #endregion
       //-- ~~~~~~~ Omasiistijät /////

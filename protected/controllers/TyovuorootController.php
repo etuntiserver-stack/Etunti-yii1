@@ -5083,6 +5083,19 @@ class TyovuorootController extends Controller
         'success' => false,
         'message' => 'Tämä ominaisuus ei ole käytössä ympäristössäsi.'
       ]);
+      return false;
+    }
+
+    // Get email text and verify it's not empty.
+    $asetukset = Asetukset::model()->findByPk(1);
+    $mail_text = $asetukset->omasiistijat_email_text ?? '';
+
+    if (empty($mail_text)) {
+      echo json_encode([
+        'success' => false,
+        'message' => 'Asetuksissa määritettävä omasiistijäilmoituksen teksti puuttuu.'
+      ]);
+      return false;
     }
 
     // Get possible POST value for customer ID.
@@ -5156,33 +5169,62 @@ class TyovuorootController extends Controller
       }
     }
 
+    // Get domain's company name and mail from the shared database.
+    $dm = Domainit::model()->find("domain='" . Yii::app()->user->domain .  "'");
+    $sender_name = $dm->yritys ?? '';
+    $replyto_email = $dm->sahkoposti ?? '';
+
+    // When kotipuhtaaksi, replace sender (KP already checked at top, but it will soon change).
+    if (Yii::app()->user->kp) {
+      $sender_name = 'Koti Puhtaaksi Oy';
+      $replyto_email = 'asiakaspalvelu@kotipuhtaaksi.fi';
+    }
+
+    if (empty($sender_name)) {
+      echo json_encode([
+        'success' => false,
+        'message' => 'Sisäinen virhe: Yrityksen nimen haku yhteisestä kannasta epäonnistui. Jos vika jatkuu, ota yhteys ylläpitoon.'
+      ]);
+      return false;
+    }
+
+    if (empty($replyto_email)) {
+      echo json_encode([
+        'success' => false,
+        'message' => 'Sisäinen virhe: Yrityksen sähköpostiosoite ei ole määritetty. Jos vika jatkuu, ota yhteys ylläpitoon.'
+      ]);
+      return false;
+    }
+
     // Form mail text.
-    $mail_text = <<<EOD
-    Hei!<br>
-    <br>
-    Valitettavasti omasiistijänne on estynyt seuraavalla siivouskäynnillä. Lupasimme ilmoittaa asiasta etukäteen.<br>
-    <br>
-    Ystävällisin Terveisin,<br>
-    <a href="https://www.kotipuhtaaksi.fi">Koti Puhtaaksi</a><br>
-    <a href="mailto:asiakaspalvelu@kotipuhtaaksi.fi">asiakaspalvelu@kotipuhtaaksi.fi</a><br>
-    <br>
-    (Vastaukset tähän sähköpostiin menee suoraan asiakastukilaatikkoomme. Vastaamme mahdollisimman pian!)
-    EOD;
+    // $mail_text = <<<EOD
+    // Hei!<br>
+    // <br>
+    // Valitettavasti omasiistijänne on estynyt seuraavalla siivouskäynnillä. Lupasimme ilmoittaa asiasta etukäteen.<br>
+    // <br>
+    // Ystävällisin Terveisin,<br>
+    // <a href="https://www.kotipuhtaaksi.fi">Koti Puhtaaksi</a><br>
+    // <a href="mailto:asiakaspalvelu@kotipuhtaaksi.fi">asiakaspalvelu@kotipuhtaaksi.fi</a><br>
+    // <br>
+    // (Vastaukset tähän sähköpostiin menee suoraan asiakastukilaatikkoomme. Vastaamme mahdollisimman pian!)
+    // EOD;
 
     // Attempt to send mail.
     $mail = new YiiMailer();
-    $mail->setFrom('no-reply@etunti.fi', 'Koti Puhtaaksi Oy');
+    $mail->setFrom('no-reply@etunti.fi', $sender_name);
     $mail->setTo($sposti);
     $mail->setSubject('Omasiistijänne estyneet seuraavalla siivouskäynnillä.');
     $mail->setBody($mail_text);
-    $mail->addReplyTo('asiakaspalvelu@kotipuhtaaksi.fi');
+    $mail->addReplyTo($replyto_email);
     $mail->send();
 
     // Return to the caller with good news.
+    $customer = $asiakas->sahkoposti ?? "ID $customer_id";
     echo json_encode([
       'success' => true,
-      'message' => sprintf('Ilmoitus omasiistijöistä lähetetty asiakkaalle %d osoitteeseen %s. Odota hetki kun työvuoro tallennetaan ja avataan uudelleen..', $customer_id, $sposti)
-      ]);
+      'message' => "Ilmoitus lähetetään asiakkaalle $customer osoitteeseen $sposti. " .
+                   "Odota hetki kun työvuoro tallennetaan ja avataan uudelleen..",
+    ]);
   }
 
   /**
