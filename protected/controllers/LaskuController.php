@@ -1715,6 +1715,9 @@ exit;
 						AND laskutettu=0
 					))
 				");
+				if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
+			        	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'");
+
 				$dataProvider=new CActiveDataProvider('Asiakkaat', array(
 					'criteria'=>$criteria,
 					//'pagination'=>true
