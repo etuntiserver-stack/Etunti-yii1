@@ -71,7 +71,7 @@
                             </label>
                           </label>
                         </div>
-
+			<p class="text-danger">Työryhmässä näytetään siihen kuuluvat työntekijät</p>
                         <div class="section">
                           <label class="field">
                             <div id="tekijat_result"> 
@@ -242,7 +242,7 @@
   <tbody>
   <?php
   $yhteensa = 0;
-
+  $yhteensa_laskusumma = 0;
 /*
   if( count($model) == 0 ){
 	$data->id = 0;
@@ -280,6 +280,7 @@
 				$aloitus = $val->alku;
 				$lopetus = $val->loppu;
 			}
+			$yhteensa_laskusumma += (isset($val->laskurivi->hinta))? $val->laskurivi->hinta : 0;
 			$yhteensa += strtotime($lopetus)-strtotime($aloitus);
 		}
 	}
@@ -295,6 +296,7 @@
 	<td></td>
 	<td><b><?=Yii::t('main', 'Yhteensä')?></b></td>
 	<td><?=($yhteensa > 0)?$this->sprint($yhteensa).'&nbsp;|&nbsp'.$this->num($yhteensa):''?></td>
+	<td><?=($yhteensa_laskusumma > 0)?$this->sprint($yhteensa_laskusumma):''?></td>
    </tr>
   </tfoot>
   </table>
