@@ -72,7 +72,28 @@ $months=array(
                           </label>
                         </div>
                       </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
 
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Asiakkaat';
+				$sarake = 'yrityksen_nimi';
+				$placeholder = 'Asiakas';
+				if(isset($_GET[$sarake])) 			$postvalue = $_GET[$sarake]; 
+				else $postvalue='';				
+		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
                       <div class="col-md-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
