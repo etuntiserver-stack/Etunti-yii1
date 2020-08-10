@@ -64,7 +64,7 @@
 				}
 */		
 				echo CHtml::dropDownList('tyoryhma','tyoryhma', $tal, 
-				array('class'=>'gui-input tyoryhma'));
+				array('empty' => 'Valitse työryhmä', 'class'=>'gui-input tyoryhma'));
 				?>
 
                             <i class="arrow double"></i>
