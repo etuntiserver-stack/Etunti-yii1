@@ -296,7 +296,7 @@
 	<td></td>
 	<td><b><?=Yii::t('main', 'Yhteensä')?></b></td>
 	<td><?=($yhteensa > 0)?$this->sprint($yhteensa).'&nbsp;|&nbsp'.$this->num($yhteensa):''?></td>
-	<td><?=($yhteensa_laskusumma > 0)?$this->sprint($yhteensa_laskusumma):''?></td>
+	<td><?=($yhteensa_laskusumma > 0)?$this->num($yhteensa_laskusumma):''?></td>
    </tr>
   </tfoot>
   </table>
