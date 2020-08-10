@@ -148,6 +148,7 @@ class Toteutuneet extends DB2ActiveRecord
 		return array(
 		        'kohteet' => array(self::BELONGS_TO, 'Kohteet', 'kohdenID'),
 		        'tyovuoroot' => array(self::BELONGS_TO, 'Tyovuoroot', 'tv_id'),
+		        'laskurivi' => array(self::BELONGS_TO, 'LaskunRivit', 'laskurivi_id'),
 		);
 	}
 

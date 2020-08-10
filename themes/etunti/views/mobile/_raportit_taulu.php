@@ -31,6 +31,7 @@
 	<td data-order="<?=strtotime($aloitus)?>"><?=date("H:i", strtotime($aloitus))?></td>
 	<td data-order="<?=strtotime($lopetus)?>"><?=date("H:i", strtotime($lopetus))?></td>
 	<td><?php if($val->l_tunnit > 0): ?><?=$this->sprint($val->l_tunnit);?>&nbsp;|&nbsp;<?=$this->num($val->l_tunnit);?><?php endif; ?></td>
+	<td><?=((isset($val->laskurivi->hinta))?$val->laskurivi->hinta:'');?></td>
 </tr>
 <?php endforeach; ?>
 

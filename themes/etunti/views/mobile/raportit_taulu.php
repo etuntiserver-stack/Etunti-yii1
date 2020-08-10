@@ -236,6 +236,7 @@
   <th><?=Yii::t('main', 'Aloitus')?></th>
   <th><?=Yii::t('main', 'Lopetus')?></th>
   <th><?=Yii::t('main', 'Kesto')?></th>
+  <th><?=Yii::t('main', '&euro;')?></th>
   </tr>
   </thead>
   <tbody>
