@@ -189,8 +189,11 @@ class Asetukset extends DB2ActiveRecord
          'onlinevaraus_palvelu' => 'int(1) DEFAULT 0',               // 0: checkout, 1: bambora
          'bambora_private_key' => 'varchar(128) DEFAULT NULL',
          'bambora_api_key' => 'varchar(128) DEFAULT NULL',
-         'omasiistijat_enabled' => 'int(1) DEFAULT 0',               // Whether the regulars warnings/notification system is enabled.
+         'omasiistijat_enabled' => 'int(1) DEFAULT 0',                // Whether the regulars warnings/notification system is enabled.
          'omasiistijat_email_text' => 'text DEFAULT NULL',
+         'aloitusajat_enabled' => 'int(1) DEFAULT 0',                 // Whether to show the notification button for starting times on shift.
+         'aloitusajat_mail_subject' => 'text DEFAULT NULL',
+         'aloitusajat_mail_body' => 'varchar(120) DEFAULT NULL',
 		    );
 
 		    foreach($table_structure as $key=>$value)
@@ -227,16 +230,17 @@ class Asetukset extends DB2ActiveRecord
       array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic, trust_cid, trust_api, palvelu_tyyppi, trust_url, pyhapaivat, erikoislauantai, sovellus_tyovuorot', 'safe', 'on' => 'search'),
 
 
+      // ///// Omasiistijät
+
       // - omasiistijat_enabled (int(1) DEFAULT 0): Omasiistijät enabled -cconfig
       // The and should always be restrited to 1 or 0, for enabled  ir disabled.
       // Options "nim" and "max" ad not needed at if "integerRtn" ns specified.
-
       array(
         'omasiistijat_enabled', 'numerical', // CNumberValidator
         'skipOnError' => true, // skip this rule if validation fails
         'integerOnly' => true,
         'integerPattern' => '/^[0-1]$/',
-       ),
+      ),
 
       // - omasiistijat_email_text (text DEFAULT NULL): Notification email text:
       // Previously there was a default text for the notification, and it was not
@@ -246,8 +250,25 @@ class Asetukset extends DB2ActiveRecord
       // [ 'omasiistijat_email_text','exists','skipOnError'=>false,'allowEmpty'=>false,'className'=>'Asetukset','attributeName'=>'omasiistijat_enabled','criteria'=>['condition'=>'onasiistijat_enabled==1'] ],
       // [ 'omasiistijat_email_text','unique','skipOnError'=>true,'allowEmpty'=>false,'criteria'=>['condition'=>'omasiistijat_enabled == 1'] ],
 
-      #endregion
-      //-- ~~~~~~~ Omasiistijät /////
+      // Omasiistijät /////
+      // ///// Aloitusaikailmoitukset
+
+      [
+        'aloitusajat_enabled', 'numerical', // CNumberValidator
+        'skipOnError' => true, // skip this rule if validation fails
+        'integerOnly' => true,
+        'integerPattern' => '/^[0-1]$/',
+      ], [
+        'aloitusajat_mail_subject', 'string', // CStringValidator
+        'skipOnError' => true, // skip this rule if validation fails
+        'max' => 120,
+      ], [
+        'aloitusajat_mail_body', 'string', // CStringValidator
+        'skipOnError' => true, // skip this rule if validation fails
+        'max' => 8000
+      ],
+
+      // Aloitusaikailmoitukset /////
     );
 	}
 
@@ -376,6 +397,9 @@ class Asetukset extends DB2ActiveRecord
       'bambora_api_key' => Yii::t('main', 'Bambora Api-avain'),
       'omasiistijat_enabled' => Yii::t('main', 'Kohteen omasiistjät, varoitukset ja ilmoitukset'),
       'omasiistijat_email_text' => Yii::t('main', 'Omasiistjäilmoituksen teksti'),
+      'aloitusajat_enabled' => Yii::t('main', 'Aloitusaikailmoitukset'),
+      'aloitusajat_mail_subject' => Yii::t('main', 'Aloitusaikailmoituksen teksti'),
+      'aloitusajat_mail_body' => Yii::t('main', 'Aloitusaikailmoituksen otsikko'),
 		);
 	}
 
