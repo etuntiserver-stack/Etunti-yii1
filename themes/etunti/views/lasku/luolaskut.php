@@ -291,7 +291,7 @@ $iban				= $asetukset->iban;
 			if( isset($mob['freetext']) ){ $freetext = $mob['freetext']; }
 
 			// <-- TV
-			if( isset($tyovuoroot[$asiakas_nimi]['tuoteID']) ){ $tp_id = $tyovuoroot[$asiakas_nimi]['tuoteID']; }
+			if( !isset($al_tv_id[$asiakas_nimi]) and isset($tyovuoroot[$asiakas_nimi]['tuoteID']) ){ $tp_id = $tyovuoroot[$asiakas_nimi]['tuoteID']; }
 
 			if( isset($r['alvsis']) and $r['alvsis'] == 'nolla'){ $alvsis = 0; }
 			if( isset($r['hinta_sis']) and isset($r['alvsis']) and $r['alvsis'] == 'sis'){ $alvsis = 1; $hinta = $r['hinta_sis']; }
@@ -393,7 +393,7 @@ $iban				= $asetukset->iban;
 		}
 		?>
 		<tr class="<?=((isset($tv_vertailu) and $tv_vertailu == true)?'text-success':'')?><?=((isset($tv_vertailu) and $tv_vertailu == false)?'text-danger':'')?>">
-		<td class="input_nimike" tp_id="<?=$tp_id?>" tv_id="<?=$tv_id?>"><?=$nimike?></td>
+		<td class="input_nimike" tp_id="<?=$tp_id?>" tv_id="<?=$tv_id?>">(<?=$tp_id?>) <?=$nimike?></td>
 		<td class="input_hinta"><?=number_format($hinta, $decimal, ',', ' ')?></td>
 		<td class="input_yksikko"><?=$yksikko?></td>
 		<td class="input_kpl"><?=$kpl?></td>
@@ -515,7 +515,7 @@ $iban				= $asetukset->iban;
 	        ?>
 		<?php if( $tp_id != 0 and $laheta == null ) : ?>
 		<tr>
-		<td class="input_nimike" tp_id="<?=$tp_id?>" tv_id="<?=$tv_id?>"><?=$nimike?></td>
+		<td class="input_nimike" tp_id="<?=$tp_id?>" tv_id="<?=$tv_id?>">(<?=$tp_id?>) <?=$nimike?></td>
 		<td class="input_hinta"><?=number_format($hinta, $decimal, ',', ' ')?></td>
 		<td class="input_yksikko"><?=$yksikko?></td>
 		<td class="input_kpl"><?=$kpl?></td>
@@ -690,6 +690,8 @@ $(document).ready(function(){
 			$('#' + result).next('.painikkeet').remove();
 			$('#' + result).replaceWith('<tr><td class="bg-success"><h4>' + asiakas_nimi + ' - Lähetetty</h4></td><td></td></tr>');
 	  		console.log( result );
+		} else {
+			console.log(parsedResponse);
 		}
            }
     	  });
