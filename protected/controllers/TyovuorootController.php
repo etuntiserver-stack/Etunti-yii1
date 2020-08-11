@@ -5136,7 +5136,7 @@ class TyovuorootController extends Controller
     }
 
     // Check that the customer has an email specified. (TODO: validate?)
-    if (empty($sposti = trim($asiakas->sahkoposti ?? ''))) {
+    if (empty($client_email = trim($asiakas->sahkoposti ?? ''))) {
       echo json_encode([
         'success' => false,
         'message' => sprintf('Asiakkaan ID %d sähköposti ei ole määritelty tai on viallinen.', $customer_id)
@@ -5218,7 +5218,7 @@ class TyovuorootController extends Controller
     // Attempt to send mail.
     $mail = new YiiMailer();
     $mail->setFrom('no-reply@etunti.fi', $sender_name);
-    $mail->setTo($sposti);
+    $mail->setTo($client_email);
     $mail->setSubject('Omasiistijänne estyneet seuraavalla siivouskäynnillä.');
     $mail->setBody($mail_text);
     $mail->addReplyTo($replyto_email);
@@ -5228,7 +5228,7 @@ class TyovuorootController extends Controller
     $customer = $asiakas->sahkoposti ?? "ID $customer_id";
     echo json_encode([
       'success' => true,
-      'message' => "Ilmoitus lähetetään asiakkaalle $customer osoitteeseen $sposti. " .
+      'message' => "Ilmoitus lähetetään asiakkaalle $customer osoitteeseen $client_email. " .
                    "Odota hetki kun työvuoro tallennetaan ja avataan uudelleen..",
     ]);
   }
@@ -5524,6 +5524,129 @@ class TyovuorootController extends Controller
   /* Omasiistijät /// */
   #endregion
 
+  /**
+   * Output results as JSON.
+   *
+   * Generates JSON results array with standard success and message, useful for
+   * returning from an AJAX handler function:
+   * ```
+   * return $this->outfmt(1, 'Message.');
+   * ```
+   *
+   * @param bool $result
+   * Whether the request is successful.
+   *
+   * @param string $message
+   * Custom message to output along with $result.
+   *
+   * @return bool
+   * Specified {@see $result}.
+   */
+  protected function outfmt(bool $result, string $message, ...$args) :bool
+  {
+    // Format message if $args provided.
+    if (!empty($b)) {
+      array_unshift($args, $message);
+      $message = call_user_func_array('sprintf', $b);
+    }
+
+    // Output result as JSON.
+    echo json_encode([
+      'success' => $result,
+      'message' => $message
+    ]);
+
+    return $result;
+  }
+
+  /**
+   * Notifies customer about shift starting times.
+   *
+   * FOR AJAX.
+   *
+   * @param $. (POST)
+   * Values for the notification:
+   *     asiakas_id, kohde_id, pvm, aloitusaika, lopetusaika
+   *
+   * @return bool
+   * Echoed result, and true if mail was sent, or false if error occured.
+   * JSON result set format: [
+   *   'success': true/false
+   *   'message': success message or error message
+   * ]
+   */
+  public function actionAloitusaikojen_ilmoitus()
+  {
+    // If not kp or testing, cancel action.
+    if (!Yii::app()->user->kp)
+      return $this->outfmt(0, 'Tämä ominaisuus ei ole käytössä ympäristössäsi.');
+
+    // Get email subject and body from settings and verify they're not empty.
+    $asetukset = Asetukset::model()->findByPk(1);
+    if (empty($mail_subject = $asetukset->aloitusajat_mail_subject ?? ''))
+      return $this->outfmt(0, 'Asetuksissa määritettävä aloitusaikailmoituksen otsikko puuttuu.');
+    if (empty($mail_text = $asetukset->aloitusajat_mail_body ?? ''))
+      return $this->outfmt(0, 'Asetuksissa määritettävä aloitusaikailmoituksen teksti puuttuu.');
+
+    // Check and assign required POST values.
+    $errfmt = 'Sisäinen virhe: Vaadittu arvo (%s) ei tunnistettu/puuttuu.';
+    if (empty($pvm = $_POST['pvm']))
+      return $this->outfmt(0, $errfmt, 'pvm');
+    if (empty($aloitusaika = $_POST['aloitusaika']))
+      return $this->outfmt(0, $errfmt, 'aloitusaika');
+    if (empty($lopetusaika = $_POST['lopetusaika']))
+      return $this->outfmt(0, $errfmt, 'lopetusaika');
+
+    // Check for non-existent customer.
+    if (!is_numeric($asiakas_id = $_POST['asiakas_id']))
+      return $this->outfmt(0, $errfmt, 'asiakas_id');
+    elseif (empty($asiakas = Asiakkaat::model()->findByPk($asiakas_id)))
+      return $this->outfmt(0, 'Asiakasta ID "%d" ei löydetty.', $asiakas_id);
+
+    // Check that the customer has an email specified. (TODO: validate?)
+    if (empty($client_email = trim($asiakas->sahkoposti ?? '')))
+      return $this->outfmt('Asiakkaan ID %d sähköposti ei ole määritelty tai on viallinen.', $asiakas_id);
+
+    // Check for non-existent location.
+    if (!is_numeric($kohde_id = $_POST['kohde_id']))
+      return $this->outfmt(0, $errfmt, 'kohde_id');
+    elseif (empty($kohde = Kohteet::model()->findByPk($kohde_id)))
+      return $this->outfmt(0, 'Kohde ID "%d" ei löydetty.', $kohde_id);
+
+    // Replace any placeholders in the subject/body with variables. Format dates
+    // as d.m.Y (20.02.2020) and times H:i (13:00). Placeholders:
+    //   %osoite%, %pvm%, %aloitus%, %lopetus%
+    $placeholders = [
+      'osoite' => $kohde->osoite,
+      'pvm' => $pvm,
+      'aloitus' => $aloitusaika,
+      'lopetus' => $lopetusaika
+    ];
+
+    foreach ($placeholders as $placeholder => $replacement) {
+      $mail_subject = str_replace("%{$placeholder}%", $replacement, $mail_subject);
+      $mail_text = str_replace("%{$placeholder}%", $replacement, $mail_text);
+    }
+
+    // Attempt to send mail.
+    $sender_name = 'Koti Puhtaaksi Oy';
+    $replyto_email = 'asiakaspalvelu@kotipuhtaaksi.fi';
+    $mail = new YiiMailer();
+    $mail->setFrom('no-reply@etunti.fi', $sender_name);
+    $mail->setTo($client_email);
+    $mail->setSubject($mail_subject);
+    $mail->setBody($mail_text);
+    $mail->addReplyTo($replyto_email);
+    $mail->send();
+
+    // Return to the caller with good news.
+    $customer = $asiakas->sahkoposti ?? "ID $asiakas_id";
+    echo json_encode([
+      'success' => true,
+      'message' => "Ilmoitus lähetetään asiakkaalle $customer osoitteeseen $client_email. " .
+                   "Odota hetki kun työvuoro tallennetaan ja avataan uudelleen..",
+    ]);
+  }
 
 	protected function getKohde($id)
 	{
