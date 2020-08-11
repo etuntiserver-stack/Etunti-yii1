@@ -460,7 +460,31 @@ $('.ryhmat').multiselect({
 		echo $form->dropDownList($model,'tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka', $l, 
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka'); ?>
-	</div>
+  </div>
+
+  <?php if (Yii::app()->user->kp): ?>
+  <div class="section fill mb5">
+    <div class="col-sm-12">
+      <legend><h2><?php echo Yii::t('main','Aloitusaikailmoitukset'); ?></h2></legend>
+      <?php
+      /** @var CActiveForm $form */
+      echo $form->labelEx($model, 'aloitusajat_enabled');
+      echo $form->dropDownList($model, 'aloitusajat_enabled',
+        [0 => 'Ei', 1 => 'Kyllä'], array('class'=>'form-control'));
+
+      echo $form->labelEx($model, 'aloitusajat_email_subject');
+      echo $form->textArea($model, 'aloitusajat_email_subject', ['rows' => 10, 'maxlength' => 8192, 'class' => 'form-control']);
+      echo $form->error($model, 'aloitusajat_email_subject');
+
+      echo $form->labelEx($model, 'aloitusajat_email_text');
+      echo $form->textArea($model, 'aloitusajat_email_text', ['rows' => 10, 'maxlength' => 8192, 'class' => 'form-control']);
+      echo $form->error($model, 'aloitusajat_email_text');
+      ?>
+      <p>Sähköpostiteksti tulee olla HTML -muodossa. Käytä &lt;br&gt; rivien lopussa rivivaihtona. Normaalit rivivaihdot tekstissä eivät vaikuta lopulliseen sähköpostiin.</p>
+      <p>Muuttujat: %osoite%, %pvm%;, %aloitus%, %lopetus% (pvm tulostuu muodossa "31.01.2020" ja kellonajat "13:00")</p>
+    </div>
+  </div>
+  <?php endif; ?>
 
    </div>
 
