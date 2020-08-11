@@ -5269,7 +5269,7 @@ class TyovuorootController extends Controller
         echo 1;
       }
 
-      return;
+      return false;
     }
 
     // Get list of cleaners if id = 0.
@@ -5291,6 +5291,7 @@ class TyovuorootController extends Controller
       } else {
         if (!in_array($value, [0, 1])) {
           echo Yii::t('main', 'Viallinen valinta omasiistijävaroitukselle.');
+          return false;
         } else {
           Tyontekijat::model()->updateByPk($id, ['omasiistijavaroitukset' => $value]);
           echo Yii::t('Main', $value ? "Omasiistijävaroitukset aktivoitu - päivitä sivu." : "Omasiistijävaroitukset piiloitettu - päivitä sivu.");
