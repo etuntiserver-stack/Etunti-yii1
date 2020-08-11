@@ -1286,6 +1286,12 @@ class TyovuorootController extends Controller
 	{
 		$return 	= '';
 		$get_id 	= $this->this_id($this_id);
+
+    // Lisätty 11.08.2020: Seuraava $model aiheutti virheen @actionCreate4_form.
+    if (empty($get_id)) {
+      return false;
+    }
+
 		$model 		= $get_id['model'];
 		$pvm 		= $get_id['pvm'];
 		$tid 		= $get_id['tid'];
