@@ -319,6 +319,46 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
   </div>
 </div>
 
+<div class="row">
+
+<?php if ($create_update == 'update'): ?>
+  <!-- TEMP -->
+  <!-- <div class="col-md-6" id="omasiistija-toiminnot">
+    <div class="col-sm-12">
+      <?php /* echo $form->labelEx($model, 'omasiistijailmoitus', ['style' => 'font-weight: bold']); */ ?>
+    </div>
+    <div class="col-sm-12 input-group">
+        <?php /* echo $form->dropDownList($model, 'omasiistijailmoitus', [
+          0 => Yii::t('main', 'Ei ilmoitettu'),
+          1 => Yii::t('main', 'Ilmoitettu'),
+        ], ['class'=>'form-control lomake_valinta']); */ ?>
+      <span class="input-group-btn">
+        <button type="button" class="form-control btn btn-sm btn-primary" id="omasiistijat-ilmoita"><span class="fa fa-share-square"></span> Ilmoita
+      </span>
+    </div>
+  </div> -->
+  <div class="col-sm-3">
+    <div class="col-sm-10" style="padding-left: 0px; padding-right: 0px">
+      <?php
+      echo $form->dropDownList($model, 'aloitusaikailmoitus', [
+        0 => Yii::t('main', 'Ei ilmoitettu'),
+        1 => Yii::t('main', 'Ilmoitettu'),
+        2 => Yii::t('main', 'Ei ilmoiteta/piilossa')
+      ], [
+        'class' => 'form-control lomake_valinta',
+        'style' => 'height: 24px; padding-top: 0px; padding-bottom: 0px; font-size:smaller;'
+      ]);
+      ?>
+    </div>
+    <div class="col-sm-2" style="padding-left: 0px; padding-right: 0px">
+      <button type="button" style="height: 24px; padding-top: 0px; padding-bottom: 0px;"
+        class="form-control btn btn-sm btn-primary" id="aloitusajat-ilmoita">
+      <span class="fa fa-share-square" title="Ilmoita"></span>
+    </div>
+  </div>
+</div>
+<?php endif; ?>
+
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -564,7 +604,7 @@ $(document).ready(function(){
 
 
 <!-- #region Omasiistijät -->
-<?php if (Yii::app()->user->kp): ?>
+<?php if (isset($model->id) && $toistuva && Yii::app()->user->kp): ?>
 
 <br>
 <div class="row">
