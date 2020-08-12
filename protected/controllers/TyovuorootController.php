@@ -1679,38 +1679,6 @@ class TyovuorootController extends Controller
 	public function actionBeta($kohteet_siivous = [], $kohde = '', $asiakas = '', $mode = null, $stage = null)
 	{
 
-		// <-- Tyopaari korjaus SIIRTO takia
-		/*
-      		$criteria = new CDbCriteria(); // AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) > '2020-06-01'
-		$criteria->condition = "
-			tyopaari LIKE '%[\"%' AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) > '2020-06-01'
-		";
-		$tv_etstiminen = Tyovuoroot::model()->findAll($criteria);
-		if(count($tv_etstiminen) > 0){
-			foreach($tv_etstiminen as $arvo){
-				$tp_arr = json_decode($arvo->tyopaari, true);
-				if(isset($tp_arr[0])){
-			      		$criteria = new CDbCriteria();
-					$criteria->condition = "
-						kohde!=0 and tyopaari!='' and pvm='".$arvo->pvm."' and kohde='".$arvo->kohde."' and alku='".$arvo->alku."' and loppu='".$arvo->loppu."' and status='".$arvo->status."'
-					";
-					$ongelma_tvs = Tyovuoroot::model()->findAll($criteria);
-					if(count($ongelma_tvs) > 0){
-						$new_tp_json = [];
-						foreach($ongelma_tvs as $ong_itm)
-							$new_tp_json[$ong_itm->id] = $ong_itm->tid; 
-
-						foreach($ongelma_tvs as $ong_itm)
-							Tyovuoroot::model()->updateByPk($ong_itm->id, ['tyopaari' => json_encode($new_tp_json)]);
-
-					}
-				}
-			}
-		}
-		*/
-		//     Tyopaari korjaus SIIRTO takia -->
-
-
 		$site = Yii::app()->createController('Site');
 		$arrDate = array(1 => "Ma", 2 => "Ti", 3 => "Ke", 4 => "To", 5 => "Pe", 6 => "La", 7 => "Su");
 		$asetukset = Asetukset::model()->findByPk(1);
@@ -1832,6 +1800,41 @@ class TyovuorootController extends Controller
 
 		// <-- HAKU
 		$haku_criteria 	= [];
+		$haku_from 	= date("Y-m-d", strtotime(Yii::app()->session['from']));
+		$haku_to 	= date("Y-m-d", strtotime(Yii::app()->session['to']));
+
+		// <-- VAPAAT Tyontekijat
+		if(isset($_GET['vapaat'])){
+			$tt_all = Tyontekijat::model()->findAll("aktiivinen=1 and naytta_tyovuorossa=1");
+			$tids_all = [];
+			foreach($tt_all as $item)
+				$tids_all[$item->id] = $item->id;
+
+			$with	= ['data'];
+			$dataAll = $this->FromToSuunnitellutAll($haku_from, $haku_to, $tids_all, $haku_criteria, $with);
+			$pvm_tids = [];
+			foreach($dataAll as $k => $data){
+				$pvm_tids[$data['this_pvm']][$data['this_tid']] = $data['this_tid'];
+			}
+
+			$period = new DatePeriod(
+			     new DateTime($haku_from),
+			     new DateInterval('P1D'),
+			     new DateTime($haku_to)
+			);
+			$vapaat = [];
+			foreach($tids_all as $tid){
+				foreach ($period as $key => $value) {
+					if(!isset($pvm_tids[$value->format('d.m.Y')][$tid]))
+						$vapaat[] = $tid;
+				}
+			}
+
+			Yii::app()->session['tyontekijat'] = $vapaat;
+			$this->redirect(array('beta', 'mode' => 'vko'));
+
+		}
+		//     VAPAAT Tyontekijat -->
 
 		// <-- kohteiden_tyonimike
 		if(isset(Yii::app()->session['kohteiden_tyonimike'])){
@@ -1942,9 +1945,6 @@ class TyovuorootController extends Controller
 			$haku_tids[$item->id] = $item->id;
 		}
 		//     Tyontekijat -->
-
-		$haku_from 	= date("Y-m-d", strtotime(Yii::app()->session['from']));
-		$haku_to 	= date("Y-m-d", strtotime(Yii::app()->session['to']));
 
 		// Työsuhteet
 		$ts = Tyosuhdet::model()->findAll(" tid IN(" . implode(",", $haku_tids) . ") ");
@@ -2354,8 +2354,8 @@ class TyovuorootController extends Controller
 			var from = '$from';
 			var to = '$to';
 			var tids = '".json_encode($haku_tids)."';
-      var haku_criteria = $hk;
-      var customer_tickets = '" . json_encode($customer_tickets) . "';
+			var haku_criteria = $hk;
+			var customer_tickets = '" . json_encode($customer_tickets) . "';
 			$.ajax({
 				url: location.protocol + \"//\" + location.host + \"/index.php/tyovuoroot/did4?from=\" + from + \"&to=\" + to,
 				type: \"POST\",
