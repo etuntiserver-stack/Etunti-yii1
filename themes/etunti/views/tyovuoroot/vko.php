@@ -38,7 +38,7 @@ if( isset($_SESSION['skrollaus']) )
 <!-- TV laatiko -->
 <div id="showres" class="modal" aria-hidden="true" data-backdrop="static" data-keyboard="false"></div>
 <!-- TV laatiko -->
-<?=((isset($_GET['vapaat']))?'<marquee class="text-danger">Huomio! Olet tilassa jolloin valitsemalla viikkoja, saat aina vapaat työntekijät. Käyttämällä HAKUa siirrät tavalliseen VIIKKO tauluun.</marquee>':'')?>
+<?=((isset($_GET['vapaat']))?'<marquee class="text-danger">HUOMIO! OLET TILASSA, VIIKON VAPAAT AJAT JA NÄET TÄLLÄ AINA TYÖNTEKIJÖIDEN VAPAAT AJAT, KÄYTÄMÄLLÄ HAKU TOIMINTO, SIIRRYT AUTOMAATTISESTI VIIKKO TAULUUN.</marquee>':'')?>
 <div id="yht_tv"></div>
 <div class="" id="parent">
  <table class="table table-bordered" id="fixTable">
