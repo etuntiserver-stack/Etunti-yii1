@@ -461,31 +461,6 @@ $('.ryhmat').multiselect({
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka'); ?>
   </div>
-
-  <?php if (Yii::app()->user->kp): ?>
-  <div class="section fill mb5">
-    <div class="col-sm-12">
-      <legend><h2><?php echo Yii::t('main','Aloitusaikailmoitukset'); ?></h2></legend>
-      <?php
-      /** @var CActiveForm $form */
-      echo $form->labelEx($model, 'aloitusajat_enabled');
-      echo $form->dropDownList($model, 'aloitusajat_enabled',
-        [0 => 'Ei', 1 => 'Kyllä'], array('class'=>'form-control'));
-
-      echo $form->labelEx($model, 'aloitusajat_email_subject');
-      echo $form->textField($model, 'aloitusajat_email_subject', ['maxlength' => 120, 'class' => 'form-control']);
-      echo $form->error($model, 'aloitusajat_email_subject');
-
-      echo $form->labelEx($model, 'aloitusajat_email_body');
-      echo $form->textArea($model, 'aloitusajat_email_body', ['rows' => 10, 'maxlength' => 8000, 'class' => 'form-control']);
-      echo $form->error($model, 'aloitusajat_email_body');
-      ?>
-      <p>Sähköpostiteksti tulee olla HTML -muodossa. Käytä &lt;br&gt; rivien lopussa rivivaihtona. Normaalit rivivaihdot tekstissä eivät vaikuta lopulliseen sähköpostiin.</p>
-      <p>Muuttujat: %osoite%, %pvm%;, %aloitus%, %lopetus% (pvm tulostuu muodossa "31.01.2020" ja kellonajat "13:00")</p>
-    </div>
-  </div>
-  <?php endif; ?>
-
    </div>
 
    <div class="col-sm-3">
@@ -514,25 +489,24 @@ $('.ryhmat').multiselect({
 <?php endif; ?>
 <!-- Työvuorot -->
 
-<!-- Omasiistijäjärjestelmä -->
+<!-- Sähköposti-ilmoitukset -->
 <?php if (Yii::app()->user->kp): ?>
 
 <br>
-<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#omasiistija-asetukset">
-  <h3><?php echo Yii::t('main', 'Omasiistijäjärjestelmän Asetukset'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3>
+<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#sahkoposti-ilmoitukset">
+  <h3><?php echo Yii::t('main', 'Sähköposti-ilmoitukset'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3>
 </div>
-<div class="row form collapse" id="omasiistija-asetukset">
-  <div class="col-sm-4">
+<div class="row form collapse" id="sahkoposti-ilmoitukset">
+  <div class="col-sm-6">
     <legend><h2><?php echo Yii::t('main', 'Omasiistijäjärjestelmä'); ?></h2></legend>
 
     <!-- Käyttööonotto (ei vielä voimassa) -->
     <div class="section fill mb10">
-    <?php
-      /** @var CActiveForm $form */
+      <?php
       echo $form->labelEx($model, 'omasiistijat_enabled');
       echo $form->dropDownList($model, 'omasiistijat_enabled', [1 => 'Käytössä', 0 => 'Ei käytössä'], ['class' => 'form-control']);
       echo $form->error($model, 'omasiistijat_enabled');
-    ?>
+      ?>
     </div>
 
     <!-- Sähköposti-ilmoituksen teksti -->
@@ -547,7 +521,35 @@ $('.ryhmat').multiselect({
       echo $form->textArea($model, 'omasiistijat_email_body', ['rows' => 10, 'maxlength' => 8000, 'class' => 'form-control']);
       echo $form->error($model, 'omasiistijat_email_body');
       ?>
-      <p>Sähköpostiteksti tulee olla HTML -muodossa. Käytä &lt;br&gt; rivien lopussa rivivaihtona. Normaalit rivivaihdot tekstissä eivät vaikuta lopulliseen sähköpostiin.</p>
+      <p><i>Sähköpostiteksti tulee olla HTML -muodossa. Käytä &lt;br&gt; rivien lopussa rivivaihtona. Normaalit rivivaihdot tekstissä eivät vaikuta lopulliseen sähköpostiin.</i></p>
+    </div>
+  </div>
+
+  <div class="col-sm-6">
+    <legend><h2><?php echo Yii::t('main','Aloitusaikailmoitukset'); ?></h2></legend>
+
+    <div class="section fill mb10">
+      <?php
+      echo $form->labelEx($model, 'aloitusajat_enabled');
+      echo $form->dropDownList($model, 'aloitusajat_enabled', [1 => 'Käytössä', 0 => 'Ei käytössä'], ['class' => 'form-control']);
+      echo $form->error($model, 'aloitusajat_enabled');
+      ?>
+    </div>
+    <div class="section fill mb10">
+      <?php
+      echo $form->labelEx($model, 'aloitusajat_email_subject');
+      echo $form->textField($model, 'aloitusajat_email_subject', ['maxlength' => 120, 'class' => 'form-control']);
+      echo $form->error($model, 'aloitusajat_email_subject');
+      ?>
+    </div>
+    <div class="section fill mb10">
+      <?php
+      echo $form->labelEx($model, 'aloitusajat_email_body');
+      echo $form->textArea($model, 'aloitusajat_email_body', ['rows' => 10, 'maxlength' => 8000, 'class' => 'form-control']);
+      echo $form->error($model, 'aloitusajat_email_body');
+      ?>
+      <p><i>Sähköpostiteksti tulee olla HTML -muodossa. Käytä &lt;br&gt; rivien lopussa rivivaihtona. Normaalit rivivaihdot tekstissä eivät vaikuta lopulliseen sähköpostiin.
+        Muuttujat: <em>%osoite%</em>, %pvm%, %aloitus%, %lopetus% (pvm tulostuu muodossa "31.01.2020" ja kellonajat "13:00")</i></p>
     </div>
   </div>
 </div>
