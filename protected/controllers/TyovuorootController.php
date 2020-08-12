@@ -1712,8 +1712,10 @@ class TyovuorootController extends Controller
 				Yii::app()->session['tyontekijat'] = array($_GET['tid']);
 			if (isset($_GET['tv_id']))
 				$this->redirect(array('beta', 'mode' => $mode, 'tv_id' => $_GET['tv_id']));
-
-			$this->redirect(array('beta', 'mode' => $mode));
+			if(isset($_GET['vapaat']))
+				$this->redirect(array('beta', 'mode' => $mode, 'vapaat' => 'true'));
+			else
+				$this->redirect(array('beta', 'mode' => $mode));
 		}
 		//  GET haku -->
 
@@ -1831,7 +1833,7 @@ class TyovuorootController extends Controller
 			}
 
 			Yii::app()->session['tyontekijat'] = $vapaat;
-			$this->redirect(array('beta', 'mode' => 'vko'));
+			//$this->redirect(array('beta', 'mode' => 'vko'));
 
 		}
 		//     VAPAAT Tyontekijat -->

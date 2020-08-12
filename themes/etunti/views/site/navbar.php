@@ -311,7 +311,7 @@ if( $curpage == 'tyovuoroot/beta' )
               <div class="form-group">
                <div class="form-inline">
 
-		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.$previousWeek.'&year='.$previousYear.'&mode='.((isset($_GET['mode']))?$_GET['mode']:''); ?>">
+		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.$previousWeek.'&year='.$previousYear.'&mode='.((isset($_GET['mode']))?$_GET['mode']:'').((isset($_GET['vapaat']))?'&vapaat=true':''); ?>">
 				<i class="fa fa-arrow-left btn btn-default btn-group" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Edellinen viikko'); ?>"></i>
 			</a>
 
@@ -326,7 +326,7 @@ if( $curpage == 'tyovuoroot/beta' )
 			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">'.Yii::t('main', 'Viikko').': '.date('W', strtotime($year ."W". $week . '1')).', '.Yii::t('main', 'Vuosi').': '.date('Y', strtotime($year ."W". $week . '1')).', '.date('d.m', strtotime($year ."W". $week . '1')).' - '.date('d.m', strtotime($year ."W". $week . '7')).'</option>';
 
 			while (date('Y', $nextMonday) == $year) {
-			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday).'&year='.$year.'&mode='.((isset($_GET['mode']))?$_GET['mode']:'').'">'.Yii::t('main', 'Viikko').': '.date('W', $nextMonday).', '.Yii::t('main', 'Vuosi').': '.date('Y', $nextMonday).', '.date('d.m', $nextMonday).' - '.date('d.m', $nextSunday).'</option>';
+			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday).'&year='.$year.'&mode='.((isset($_GET['mode']))?$_GET['mode']:'').((isset($_GET['vapaat']))?'&vapaat=true':'').'">'.Yii::t('main', 'Viikko').': '.date('W', $nextMonday).', '.Yii::t('main', 'Vuosi').': '.date('Y', $nextMonday).', '.date('d.m', $nextMonday).' - '.date('d.m', $nextSunday).'</option>';
 	
 			    $nextMonday = strtotime('+1 week', $nextMonday);
 			    $nextSunday = strtotime('+1 week', $nextSunday);
@@ -334,7 +334,7 @@ if( $curpage == 'tyovuoroot/beta' )
 			?>
 			</select>
 
-		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.$nextWeek.'&year='.$nextYear.'&mode='.((isset($_GET['mode']))?$_GET['mode']:''); ?>">
+		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.$nextWeek.'&year='.$nextYear.'&mode='.((isset($_GET['mode']))?$_GET['mode']:'').((isset($_GET['vapaat']))?'&vapaat=true':''); ?>">
 				<i class="fa fa-arrow-right btn btn-default btn-group" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Seuraava viikko'); ?>"></i>
 			</a> 
 			<button class="btn btn-default fa fa-calendar-check-o" id="vkolopput" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Viikonloput'); ?>"></button>
