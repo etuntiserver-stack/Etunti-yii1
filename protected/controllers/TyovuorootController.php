@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijat_lista', 'omasiistijat_tarkistus', 'omasiistijat_ilmoitus', 'omasiistijat_tarkistus', 'omasiistijat_siistijakohtainen_varoitus', 'massedit'),
+				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijat_lista', 'omasiistijat_tarkistus', 'omasiistijat_ilmoitus', 'omasiistijat_tarkistus', 'omasiistijat_siistijakohtainen_varoitus', 'massedit', 'aloitusaikojen_ilmoitus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -5094,9 +5094,16 @@ class TyovuorootController extends Controller
 
     // Get email text and verify it's not empty.
     $asetukset = Asetukset::model()->findByPk(1);
-    $mail_text = $asetukset->omasiistijat_email_text ?? '';
+    $email_subject = $asetukset->omasiistijat_email_subject ?? '';
+    $email_body = $asetukset->omasiistijat_email_body ?? '';
 
-    if (empty($mail_text)) {
+    if (empty($email_subject)) {
+      echo json_encode([
+        'success' => false,
+        'message' => 'Asetuksissa määritettävä omasiistijäilmoituksen otsikon teksti puuttuu.'
+      ]);
+      return false;
+    } elseif (empty($email_body)) {
       echo json_encode([
         'success' => false,
         'message' => 'Asetuksissa määritettävä omasiistijäilmoituksen teksti puuttuu.'
@@ -5203,7 +5210,7 @@ class TyovuorootController extends Controller
     }
 
     // Form mail text.
-    // $mail_text = <<<EOD
+    // $email_body = <<<EOD
     // Hei!<br>
     // <br>
     // Valitettavasti omasiistijänne on estynyt seuraavalla siivouskäynnillä. Lupasimme ilmoittaa asiasta etukäteen.<br>
@@ -5219,8 +5226,8 @@ class TyovuorootController extends Controller
     $mail = new YiiMailer();
     $mail->setFrom('no-reply@etunti.fi', $sender_name);
     $mail->setTo($client_email);
-    $mail->setSubject('Omasiistijänne estyneet seuraavalla siivouskäynnillä.');
-    $mail->setBody($mail_text);
+    $mail->setSubject($email_subject);
+    $mail->setBody($email_body);
     $mail->addReplyTo($replyto_email);
     $mail->send();
 
@@ -5545,9 +5552,9 @@ class TyovuorootController extends Controller
   protected function outfmt(bool $result, string $message, ...$args) :bool
   {
     // Format message if $args provided.
-    if (!empty($b)) {
+    if (!empty($args)) {
       array_unshift($args, $message);
-      $message = call_user_func_array('sprintf', $b);
+      $message = call_user_func_array('sprintf', $args);
     }
 
     // Output result as JSON.
@@ -5579,39 +5586,39 @@ class TyovuorootController extends Controller
   {
     // If not kp or testing, cancel action.
     if (!Yii::app()->user->kp)
-      return $this->outfmt(0, 'Tämä ominaisuus ei ole käytössä ympäristössäsi.');
+      return $this->outfmt(false, 'Tämä ominaisuus ei ole käytössä ympäristössäsi.');
 
     // Get email subject and body from settings and verify they're not empty.
     $asetukset = Asetukset::model()->findByPk(1);
-    if (empty($mail_subject = $asetukset->aloitusajat_mail_subject ?? ''))
-      return $this->outfmt(0, 'Asetuksissa määritettävä aloitusaikailmoituksen otsikko puuttuu.');
-    if (empty($mail_text = $asetukset->aloitusajat_mail_body ?? ''))
-      return $this->outfmt(0, 'Asetuksissa määritettävä aloitusaikailmoituksen teksti puuttuu.');
+    if (empty($email_subject = $asetukset->aloitusajat_email_subject ?? ''))
+      return $this->outfmt(false, 'Asetuksissa määritettävä aloitusaikailmoituksen otsikko puuttuu.');
+    if (empty($email_body = $asetukset->aloitusajat_email_body ?? ''))
+      return $this->outfmt(false, 'Asetuksissa määritettävä aloitusaikailmoituksen teksti puuttuu.');
 
     // Check and assign required POST values.
     $errfmt = 'Sisäinen virhe: Vaadittu arvo (%s) ei tunnistettu/puuttuu.';
     if (empty($pvm = $_POST['pvm']))
-      return $this->outfmt(0, $errfmt, 'pvm');
-    if (empty($aloitusaika = $_POST['aloitusaika']))
-      return $this->outfmt(0, $errfmt, 'aloitusaika');
-    if (empty($lopetusaika = $_POST['lopetusaika']))
-      return $this->outfmt(0, $errfmt, 'lopetusaika');
+      return $this->outfmt(false, $errfmt, 'pvm');
+    if (empty($aloitusaika = $_POST['alku']))
+      return $this->outfmt(false, $errfmt, 'alku');
+    if (empty($lopetusaika = $_POST['loppu']))
+      return $this->outfmt(false, $errfmt, 'loppu');
 
     // Check for non-existent customer.
     if (!is_numeric($asiakas_id = $_POST['asiakas_id']))
-      return $this->outfmt(0, $errfmt, 'asiakas_id');
+      return $this->outfmt(false, $errfmt, 'asiakas_id');
     elseif (empty($asiakas = Asiakkaat::model()->findByPk($asiakas_id)))
-      return $this->outfmt(0, 'Asiakasta ID "%d" ei löydetty.', $asiakas_id);
+      return $this->outfmt(false, 'Asiakasta ID "%d" ei löydetty.', $asiakas_id);
 
     // Check that the customer has an email specified. (TODO: validate?)
     if (empty($client_email = trim($asiakas->sahkoposti ?? '')))
-      return $this->outfmt('Asiakkaan ID %d sähköposti ei ole määritelty tai on viallinen.', $asiakas_id);
+      return $this->outfmt(false, 'Asiakkaan ID %d sähköposti ei ole määritelty tai on viallinen.', $asiakas_id);
 
     // Check for non-existent location.
     if (!is_numeric($kohde_id = $_POST['kohde_id']))
-      return $this->outfmt(0, $errfmt, 'kohde_id');
+      return $this->outfmt(false, $errfmt, 'kohde_id');
     elseif (empty($kohde = Kohteet::model()->findByPk($kohde_id)))
-      return $this->outfmt(0, 'Kohde ID "%d" ei löydetty.', $kohde_id);
+      return $this->outfmt(false, 'Kohde ID "%d" ei löydetty.', $kohde_id);
 
     // Replace any placeholders in the subject/body with variables. Format dates
     // as d.m.Y (20.02.2020) and times H:i (13:00). Placeholders:
@@ -5624,8 +5631,8 @@ class TyovuorootController extends Controller
     ];
 
     foreach ($placeholders as $placeholder => $replacement) {
-      $mail_subject = str_replace("%{$placeholder}%", $replacement, $mail_subject);
-      $mail_text = str_replace("%{$placeholder}%", $replacement, $mail_text);
+      $email_subject = str_replace("%{$placeholder}%", $replacement, $email_subject);
+      $email_body = str_replace("%{$placeholder}%", $replacement, $email_body);
     }
 
     // Attempt to send mail.
@@ -5634,8 +5641,8 @@ class TyovuorootController extends Controller
     $mail = new YiiMailer();
     $mail->setFrom('no-reply@etunti.fi', $sender_name);
     $mail->setTo($client_email);
-    $mail->setSubject($mail_subject);
-    $mail->setBody($mail_text);
+    $mail->setSubject($email_subject);
+    $mail->setBody($email_body);
     $mail->addReplyTo($replyto_email);
     $mail->send();
 
@@ -5645,6 +5652,7 @@ class TyovuorootController extends Controller
       'success' => true,
       'message' => "Ilmoitus lähetetään asiakkaalle $customer osoitteeseen $client_email. " .
                    "Odota hetki kun työvuoro tallennetaan ja avataan uudelleen..",
+      // 'message' => "$email_subject: $email_body"
     ]);
   }
 

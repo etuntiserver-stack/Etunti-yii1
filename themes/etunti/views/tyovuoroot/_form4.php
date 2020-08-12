@@ -321,7 +321,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 
 <div class="row">
 
-<?php if ($create_update == 'update'): ?>
+<?php if ($create_update == 'update' && isset($model->kohteet->asiakas_id)): ?>
   <!-- TEMP -->
   <!-- <div class="col-md-6" id="omasiistija-toiminnot">
     <div class="col-sm-12">
@@ -357,6 +357,126 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
     </div>
   </div>
 </div>
+<script>
+$(function() {
+  const aloitusAikaIlmoitusUpdate = function() {
+    if ($('#<?= $java_prefix ?>_aloitusaikailmoitus').val() == 0) {
+      $('#aloitusajat-ilmoita').removeAttr('disabled');
+    } else {
+      $('#aloitusajat-ilmoita').attr('disabled', 'disabled');
+    }
+  };
+
+  $('#<?= $java_prefix ?>_aloitusaikailmoitus').on('change', function(e) {
+    aloitusAikaIlmoitusUpdate();
+  });
+
+  // Aloitusaikailmoitus -
+  $('#aloitusajat-ilmoita').on('click', function(e) {
+
+    if ($('#<?= $java_prefix ?>_aloitusaikailmoitus').val() == 1) {
+      if (!confirm('Ilmoitus on jo lähetetty tämän vuoron osalta. Jatketaanko silti?')) {
+        return false;
+      }
+    }
+
+    // asiakas_id, kohde_id, pvm, aloitusaika, lopetusaika
+    const asiakasId = <?= $model->kohteet->asiakas_id ?? 0; ?>;
+    const kohdeId = <?= $model->kohteet->id ?? 0; ?>;
+    const pvm = $('#<?= $java_prefix ?>_pvm').val();
+    const alku = $('#alku').val();
+    const loppu = $('#loppu').val();
+
+    if (!confirm(`
+      Asiakas: <?= $model->kohteet->asiakkaat->yhteyshenkilo ?? ''; ?>\n
+      Kohde: <?= $model->kohteet->osoite ?? ''; ?> (ID ${kohdeId})\n
+      Aika: ${pvm} klo ${alku} - ${loppu}\n
+      Huom. Jos asiakasta vaihdetaan, vuoro tulee tallentaa ennen ilmoituksen lähettämistä.\n
+      Jos tiedot on väärin tai puuttuu, paina EI ja päivitä sivu.\n\n
+      Ilmoitetaanko ajat sähköpostiin <?= $model->kohteet->asiakkaat->sahkoposti ?? ''; ?>?\n
+      (Lähettäessä ilmoitusta, odota kun sivu päivittyy ja työvuoro avataan uudestaan)
+    `)) {
+      return false;
+    }
+
+    // Perform notification.
+    $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/aloitusaikojen_ilmoitus`, {
+
+      type: 'POST',
+      data: {
+        'asiakas_id': asiakasId,
+        'kohde_id': kohdeId,
+        'pvm': pvm,
+        'alku': alku,
+        'loppu': loppu
+      },
+
+      // Error handling just in case.
+      error: function (xhr, status, error) {
+        alert(`Aloitusaikailmoituksen lähetyksessä tapahtui sisäinen virhe: ${xhr.responseText}`);
+        console.log(xhr.responseText);
+      },
+
+      // Success, parse received JSON.
+      success: function (data) {
+        console.log(data);
+
+        // Try parse response JSON.
+        let parsed = null;
+        try {
+          parsed = JSON.parse(data);
+        } catch (e) {
+          console.log(`Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
+          alert("Aloitusaikailmoituksen lähetyksessä tapahtui virhe: palvelin palautti viallisen tuloksen.");
+          return false;
+        }
+
+        // Check if parsing failed. Notify log and let it go.
+        if (typeof (parsed) != "object") {
+          console.log("Parsed data is unusable (not an object).");
+          alert("Aloitusaikailmoituksen lähetyksessä tapahtui virhe: palvelin palautti viallisen tuloksen.");
+          return false;
+        }
+
+        // Check if data is empty, which means possible server error.
+        if (parsed.length == 0) {
+          console.log("Empty response received.");
+          alert("Aloitusaikailmoituksen lähetyksessä tapahtui virhe: tyhjä vastaus vastaanotettu palvelimelta.");
+          return false;
+        }
+
+        // Check if empty message, meaning logical fault.
+        if (!('message' in parsed) || parsed.message.length == 0) {
+          alert(`Aloitusaikailmoituksen lähetyksessä tapahtui virhe: palvelin ei palauttanut vastausta.`);
+          return false;
+        }
+
+        // Check if operation failed.
+        if (!('success' in parsed) || parsed.success != true) {
+          alert(`Aloitusaikailmoituksen lähetyksessä tapahtui virhe: ${parsed.message}`);
+          return false;
+        }
+
+        // Everything is normal; notification has been sent. Notify the user
+        // with the returned result message, update the selection box and
+        // disable the button for sending the notification.
+        console.log(parsed.message);
+        // alert(parsed.message);
+        $('#<?= $java_prefix ?>_aloitusaikailmoitus').val(1);
+        $('#aloitusajat-ilmoita').attr('disabled', 'disabled');
+
+        // The model needs to be saved, whether it is cyclic or not. If cyclic,
+        // the shift must be removed from it (toistuvasta irroittaminen).
+        // Set flag for submit so it knows to redirect BACK to this form.
+        submitRedirectBack = true;
+        $('#tyovuoroot-form').submit();
+      }
+    })
+  });
+
+  aloitusAikaIlmoitusUpdate();
+});
+</script>
 <?php endif; ?>
 
 

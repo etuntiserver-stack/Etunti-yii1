@@ -473,12 +473,12 @@ $('.ryhmat').multiselect({
         [0 => 'Ei', 1 => 'Kyllä'], array('class'=>'form-control'));
 
       echo $form->labelEx($model, 'aloitusajat_email_subject');
-      echo $form->textArea($model, 'aloitusajat_email_subject', ['rows' => 10, 'maxlength' => 8192, 'class' => 'form-control']);
+      echo $form->textField($model, 'aloitusajat_email_subject', ['maxlength' => 120, 'class' => 'form-control']);
       echo $form->error($model, 'aloitusajat_email_subject');
 
-      echo $form->labelEx($model, 'aloitusajat_email_text');
-      echo $form->textArea($model, 'aloitusajat_email_text', ['rows' => 10, 'maxlength' => 8192, 'class' => 'form-control']);
-      echo $form->error($model, 'aloitusajat_email_text');
+      echo $form->labelEx($model, 'aloitusajat_email_body');
+      echo $form->textArea($model, 'aloitusajat_email_body', ['rows' => 10, 'maxlength' => 8000, 'class' => 'form-control']);
+      echo $form->error($model, 'aloitusajat_email_body');
       ?>
       <p>Sähköpostiteksti tulee olla HTML -muodossa. Käytä &lt;br&gt; rivien lopussa rivivaihtona. Normaalit rivivaihdot tekstissä eivät vaikuta lopulliseen sähköpostiin.</p>
       <p>Muuttujat: %osoite%, %pvm%;, %aloitus%, %lopetus% (pvm tulostuu muodossa "31.01.2020" ja kellonajat "13:00")</p>
@@ -537,13 +537,17 @@ $('.ryhmat').multiselect({
 
     <!-- Sähköposti-ilmoituksen teksti -->
     <div class="section fill mb10">
-    <?php
+      <?php
       /** @var CActiveForm $form */
-      echo $form->labelEx($model, 'omasiistijat_email_text');
-      echo $form->textArea($model, 'omasiistijat_email_text', ['rows' => 10, 'maxlength' => 8192, 'class' => 'form-control']);
-      echo $form->error($model, 'omasiistijat_email_text');
-    ?>
-    <p>Sähköpostiteksti tulee olla HTML -muodossa. Käytä &lt;br&gt; rivien lopussa rivivaihtona. Normaalit rivivaihdot tekstissä eivät vaikuta lopulliseen sähköpostiin.</p>
+      echo $form->labelEx($model, 'omasiistijat_email_subject');
+      echo $form->textField($model, 'omasiistijat_email_subject', ['maxlength' => 120, 'class' => 'form-control']);
+      echo $form->error($model, 'omasiistijat_email_subject');
+
+      echo $form->labelEx($model, 'omasiistijat_email_body');
+      echo $form->textArea($model, 'omasiistijat_email_body', ['rows' => 10, 'maxlength' => 8000, 'class' => 'form-control']);
+      echo $form->error($model, 'omasiistijat_email_body');
+      ?>
+      <p>Sähköpostiteksti tulee olla HTML -muodossa. Käytä &lt;br&gt; rivien lopussa rivivaihtona. Normaalit rivivaihdot tekstissä eivät vaikuta lopulliseen sähköpostiin.</p>
     </div>
   </div>
 </div>
