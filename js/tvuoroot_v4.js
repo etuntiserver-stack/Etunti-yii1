@@ -161,7 +161,7 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
               if( last_loppu[pvm +'_'+ tid] > 0 )
                 this_ero = parseInt(tv_edit['alku'])-last_loppu[pvm +'_'+ tid];
               if( this_ero > 0 )
-                all_tv_edit += '<p class="text-center reika-danger"><i class="fa fa-clock-o"></i> Aika: ' + $.sprint(this_ero) + '</p>';
+                all_tv_edit += '<p class="text-center reika-danger" title="Kahden työvuoron välinen aika"><i class="fa fa-clock-o"></i> Aika: ' + $.sprint(this_ero) + '</p>';
               tv_kesto	+= tv_edit['tv_kesto'];
     
               // Box styling. Enable red border when omasiistijä is not selected (when configured to do so).
@@ -229,7 +229,7 @@ jQuery.hovertietoja = function hovertietoja(){
      $('.tv_edit').hover(function(){
 	if( !$(this).hasClass('muistissa') && !$(this).prev('i').hasClass('muistissa') ){
 	   if( !$(this).prev('i').hasClass('muistin') ){
-		$(this).before('<i class="fa fa-pencil-square-o muistin" for="' + $(this).attr('id') + '"></i>');
+		$(this).before('<i class="fa fa-pencil-square-o muistin" for="' + $(this).attr('id') + '" title="Aktivoi tämä työvuoro siirto/kopio/poisto varten"></i>');
 	   }
 	}
 	this_id = $(this).attr('id');

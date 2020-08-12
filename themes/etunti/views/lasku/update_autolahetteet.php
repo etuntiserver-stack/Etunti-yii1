@@ -60,6 +60,7 @@
 		?>
 		<?php foreach(json_decode($model->tab_array, true) as $mob) : ?>
 		<?php
+			if( isset($mob['tp_id']) ){ $tp_id = $mob['tp_id']; }
 			if( isset($mob['nimike']) ){ $nimike = $mob['nimike']; }
 			if( isset($mob['kpl']) ){ $kpl = $mob['kpl']; }
 			if( isset($mob['hinta']) ){ $hinta = $mob['hinta']; }
@@ -92,6 +93,7 @@
 			$yhteensa_total += $yht;
 		?>
 		<tr>
+		<td class="input_tp_id"><?=$tp_id?></td>
 		<td class="input_nimike"><?=$nimike?></td>
 		<td class="input_hinta"><?=number_format($hinta, 2, ',', ' ')?></td>
 		<td class="input_yksikko"><?=$yksikko?></td>
