@@ -13,6 +13,7 @@ $is_local = in_array($_SERVER['REMOTE_ADDR'] ?? '', ['::1', '127.0.0.1']);
 // <-- APPSista kaikki pois
 $server_name	= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
 $is_production	= in_array($server_name, ['apps.etunti.fi']);
+$is_staging = (false !== strpos($server_name, 'staging'));
 if ($is_production) {
 	header('Location: https://app.etunti.fi/');
 	exit;
@@ -195,6 +196,7 @@ if (
         array(
             'class' => 'CEmailLogRoute',
             'levels' => 'error', //'trace, info, error, warning, vardump'
+            'enabled' => !$is_staging,
             'emails' => 'laptopsr@gmail.com', // vikailmoitusetunti@gmail.com pass: Otto5566
             'subject' => 'Log File Message. Domain: ' . $domain . ', IP: ' . $remote_addr . ', SID: ' . session_id() . ', refer: ' . $refer . ', post: ' . $post,
         )
