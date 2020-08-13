@@ -1812,8 +1812,9 @@ class TyovuorootController extends Controller
 			foreach($tt_all as $item)
 				$tids_all[$item->id] = $item->id;
 
-			$with	= ['data'];
-			$dataAll = $this->FromToSuunnitellutAll($haku_from, $haku_to, $tids_all, $haku_criteria, $with);
+			$with			= ['data'];
+			$vapaat_criteria 	= "status!=11";
+			$dataAll = $this->FromToSuunnitellutAll($haku_from, $haku_to, $tids_all, $vapaat_criteria, $with);
 			$pvm_tids = [];
 			foreach($dataAll as $k => $data){
 				$pvm_tids[$data['this_pvm']][$data['this_tid']] = $data['this_tid'];
@@ -1824,17 +1825,53 @@ class TyovuorootController extends Controller
 			     new DateInterval('P1D'),
 			     new DateTime($haku_to)
 			);
+			// <-- Täysin vapaa päivä
 			$vapaat = [];
 			foreach($tids_all as $tid){
 				foreach ($period as $key => $value) {
 					if(!isset($pvm_tids[$value->format('d.m.Y')][$tid]))
-						$vapaat[] = $tid;
+						$vapaat[$tid] = $tid;
 				}
 			}
 
-			Yii::app()->session['tyontekijat'] = $vapaat;
-			//$this->redirect(array('beta', 'mode' => 'vko'));
-
+			$janos = array_diff( $tids_all, $vapaat );
+			$tid_pvm = [];
+			foreach($dataAll as $k => $arr){
+				if(in_array($arr['this_tid'], $janos)){
+					$data = $arr['data'];
+					//echo $arr['this_tid'].' '.$data->alku.' '.$data->status.'<br>';
+					$tid_pvm[$arr['this_pvm']][$arr['this_tid']][] = ['alku' => $data->alku, 'loppu' => $data->loppu];
+				}
+			}
+			ksort($tid_pvm);
+			// <-- Etsitään reikoja
+			$max_time 		= 3600*4; // 4h
+			$tids_with_reika	= [];
+			foreach($tid_pvm as $pvm => $tid_arr){
+				foreach($tid_arr as $tid => $ajaat_arr){
+					if(isset($tids_with_reika[$tid]))
+						continue;
+					$last_loppu 	= 0;
+					foreach($ajaat_arr as $k2 => $aika)
+					{
+						$this_alku 	= strtotime($aika['alku']);
+						if($last_loppu != 0 and ($this_alku-$last_loppu) > $max_time){
+							$tids_with_reika[$tid]	= $tid;
+							break;
+						}
+						//echo $finder.' '.$aika['alku'].' '.$aika['loppu'].'<br>';
+						$last_loppu = strtotime($aika['loppu']);
+					}
+				}
+			}
+			$result = array_merge($vapaat, $tids_with_reika);
+			/*
+			echo '<pre>';
+			print_r($result);
+			echo '<pre>';
+			exit;
+			*/
+			Yii::app()->session['tyontekijat'] = $result;
 		}
 		//     VAPAAT Tyontekijat -->
 
