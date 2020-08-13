@@ -1859,7 +1859,7 @@ class TyovuorootController extends Controller
 							$tids_with_reika[$tid]	= $tid;
 							break;
 						}
-						//echo $finder.' '.$aika['alku'].' '.$aika['loppu'].'<br>';
+						//echo '.$aika['alku'].' '.$aika['loppu'].'<br>';
 						$last_loppu = strtotime($aika['loppu']);
 					}
 				}
