@@ -2321,10 +2321,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$to = date("d.m.Y");
 
 		if(isset($_GET['from']) and !empty($_GET['from'])){ $from = $_GET['from']; }
-		if(isset($_GET['to']) and !empty($_GET['to'])){ $to = $_GET['to']; }
+    if(isset($_GET['to']) and !empty($_GET['to'])){ $to = $_GET['to']; }
 
-       		$criteria = new CDbCriteria();
-		$criteria->select = " id, tekijan_nimi, sukunimi ";
+    $criteria = new CDbCriteria();
+    $criteria->select = " id, tekijan_nimi, sukunimi, tyoryhma";
 
 		// <-- Return order etu ja sukunimella
 		$site = Yii::app()->createController('Site');
@@ -2338,13 +2338,21 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	        	$criteria->addCondition ('id IN ('.$ids.') ');
 		}
 
-		$model = Tyontekijat::model()->findAll($criteria);
-
+    $model = Tyontekijat::model()->findAll($criteria);
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 
+    // Työryhmät: trim non-matching cleaners from results.
+    if (!empty($tyoryhmat = $_GET['tyoryhmat'] ?? [])) {
+      $trs = array_column(Valikkoot::model()->findAllByPk($tyoryhmat), 'value', 'id');
+      $model = array_filter($model, function ($m) use ($trs) {
+        return (count(array_intersect(json_decode($m->tyoryhma ?? ''), $trs)) > 0);
+      }, ARRAY_FILTER_USE_BOTH);
+    }
+
 		$this->render('palkkataulukko', array(
-			'model' => $model,
+      'model' => $model,
+      'tyoryhmat' => $trs ?? [],
 			'from' => $from,
 			'to' => $to,
 			'tt_order_1' => $tt_order_1,

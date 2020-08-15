@@ -105,6 +105,42 @@
                 </div>
               </div>
 
+              <!-- Työryhmät -->
+              <div class="col-md-2">
+                <div class="section">
+                    <select class="gui-input tyoryhmatMulti" name="tyoryhmat[]" multiple title="Työryhmät">
+                      <?php
+
+                      $tyoryhmat = $tyoryhmat ?? [];
+                      $tyoryhmat_kaikki = [];
+                      foreach (Valikkoot::model()->findAll("select_type='tyoryhma'") as $tr)
+                        $tyoryhmat_kaikki[$tr->id] = $tr->value;
+
+                      foreach ($tyoryhmat_kaikki as $id => $name) {
+                        $sel = (isset($tyoryhmat[$id]) ? ' selected' : '');
+                        echo "<option value=\"{$id}\"{$sel}>{$name}</option>";
+                      }
+
+                      ?>
+                    </select>
+                    <i class="arrow double"></i>
+                  <script>
+                    $(function() {
+                      $('.tyoryhmatMulti').multiselect({
+                        includeSelectAllOption: true,
+                        nonSelectedText: '<?php echo Yii::t("main", "Työryhmät"); ?>',
+                        selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+                        allSelectedText: '<?php echo Yii::t("main", "Kaikki työryhmät"); ?>',
+                        nSelectedText: '<?php echo Yii::t("main", "työryhmää valittu"); ?>',
+                        numberDisplayed: 1,
+                        buttonWidth: '100%',
+                        maxHeight: 300,
+                      });
+                    });
+                  </script>
+                </div>
+              </div>
+
               <div class="col-md-2">
                 <div class="section">
                   <label class="field">
@@ -123,7 +159,7 @@
                 </div>
               </div>
 
-              <div class="col-md-2  col-md-offset-2">
+              <div class="col-md-2">
                 <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
               </div>
 
