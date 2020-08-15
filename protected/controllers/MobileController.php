@@ -2345,9 +2345,17 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
     // Työryhmät: trim non-matching cleaners from results.
     if (!empty($tyoryhmat = $_GET['tyoryhmat'] ?? [])) {
       $trs = array_column(Valikkoot::model()->findAllByPk($tyoryhmat), 'value', 'id');
-      $model = array_filter($model, function ($m) use ($trs) {
-        return (count(array_intersect(json_decode($m->tyoryhma ?? ''), $trs)) > 0);
-      }, ARRAY_FILTER_USE_BOTH);
+      if (in_array(0, $tyoryhmat))
+        $trs[0] = 'Tyoryhmättömät';
+
+      // If 0 ("Työryhmättömät") is not selected, and the model has no value
+      // in tyoryhma attribute, remove the model from results. Otherwise,
+      // remove model if it's not in any of the selected $trs.
+      for ($i = 0; $i < count($model); $i++) {
+        $tr = json_decode($model[$i]->tyoryhma ?? ''); // NULL if empty.
+        if ((empty($tr)) ? !isset($trs[0]) : empty(array_intersect($tr, $trs)))
+          unset($model[$i]);
+      }
     }
 
 		$this->render('palkkataulukko', array(

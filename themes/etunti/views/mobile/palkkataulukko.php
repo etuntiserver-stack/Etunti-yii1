@@ -112,7 +112,7 @@
                       <?php
 
                       $tyoryhmat = $tyoryhmat ?? [];
-                      $tyoryhmat_kaikki = [];
+                      $tyoryhmat_kaikki = ['0' => 'Työryhmättömät'];
                       foreach (Valikkoot::model()->findAll("select_type='tyoryhma'") as $tr)
                         $tyoryhmat_kaikki[$tr->id] = $tr->value;
 
