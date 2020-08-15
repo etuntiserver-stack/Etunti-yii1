@@ -252,6 +252,10 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'alku'); ?> <span style="color:red">*</span>
 		<input type="text" name="<?=$java_prefix?>[alku]" class="form-control laske timeVuorot lomake_kenta" id="alku" value="<?php echo $model->alku; ?>" autofocus>
+
+    <button type="button" style="height: 24px; padding-top: 0px; padding-bottom: 0px;"
+        class="form-control btn btn-sm btn-primary" id="aloitusajat-ilmoita">
+      <span class="fa fa-share-square" title="Ilmoita"></span>
   </div>
 
   <div class="col-sm-3">
@@ -337,45 +341,25 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
       </span>
     </div>
   </div> -->
-  <div class="col-sm-3">
-    <div class="col-sm-10" style="padding-left: 0px; padding-right: 0px">
-      <?php
-      echo $form->dropDownList($model, 'aloitusaikailmoitus', [
-        0 => Yii::t('main', 'Ei ilmoitettu'),
-        1 => Yii::t('main', 'Ilmoitettu'),
-        2 => Yii::t('main', 'Ei ilmoiteta/piilossa')
-      ], [
-        'class' => 'form-control lomake_valinta',
-        'style' => 'height: 24px; padding-top: 0px; padding-bottom: 0px; font-size:smaller;'
-      ]);
-      ?>
-    </div>
-    <div class="col-sm-2" style="padding-left: 0px; padding-right: 0px">
-      <button type="button" style="height: 24px; padding-top: 0px; padding-bottom: 0px;"
-        class="form-control btn btn-sm btn-primary" id="aloitusajat-ilmoita">
-      <span class="fa fa-share-square" title="Ilmoita"></span>
-    </div>
-  </div>
 </div>
 <script>
 $(function() {
-  const aloitusAikaIlmoitusUpdate = function() {
-    if ($('#<?= $java_prefix ?>_aloitusaikailmoitus').val() == 0) {
-      $('#aloitusajat-ilmoita').removeAttr('disabled');
-    } else {
-      $('#aloitusajat-ilmoita').attr('disabled', 'disabled');
-    }
-  };
 
-  $('#<?= $java_prefix ?>_aloitusaikailmoitus').on('change', function(e) {
-    aloitusAikaIlmoitusUpdate();
-  });
+  // Updating on list selection change is disabled for now. Button only shown if 
+  // the correct value "Ilmoita aloitusaika/green" is selected when opening.
+  //\  => "Ilmoita aloitusaika/green" || "Aloitusaika ilmoitettu/"
+  if ($('#<?=$java_prefix?>_tyoajanmerkinta').val() == "Ilmoita aloitusaika/green") {
+    $('#aloitusajat-ilmoita').removeAttr('disabled').show();
+  } else {
+    $('#aloitusajat-ilmoita').attr('disabled', 'disabled').hide();
+  }
 
   // Aloitusaikailmoitus -
   $('#aloitusajat-ilmoita').on('click', function(e) {
 
-    if ($('#<?= $java_prefix ?>_aloitusaikailmoitus').val() == 1) {
-      if (!confirm('Ilmoitus on jo lähetetty tämän vuoron osalta. Jatketaanko silti?')) {
+    // "Ilmoita aloitusaika/green" || "Aloitusaika ilmoitettu/"
+    if ($('#<?=$java_prefix?>_tyoajanmerkinta').val() != "Ilmoita aloitusaika/green") {
+      if (!confirm('Työvuoron aloitusaikaa ei ole merkitty ilmoitettavaksi. Lähetetäänkö ilmoitus silti?')) {
         return false;
       }
     }
@@ -462,7 +446,7 @@ $(function() {
         // disable the button for sending the notification.
         console.log(parsed.message);
         // alert(parsed.message);
-        $('#<?= $java_prefix ?>_aloitusaikailmoitus').val(1);
+        $('#<?=$java_prefix?>_tyoajanmerkinta').val("Aloitusaika ilmoitettu/");
         $('#aloitusajat-ilmoita').attr('disabled', 'disabled');
 
         // The model needs to be saved, whether it is cyclic or not. If cyclic,
@@ -474,7 +458,6 @@ $(function() {
     })
   });
 
-  aloitusAikaIlmoitusUpdate();
 });
 </script>
 <?php endif; ?>
