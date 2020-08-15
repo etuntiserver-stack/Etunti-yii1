@@ -354,6 +354,11 @@ $(function() {
     $('#aloitusajat-ilmoita').attr('disabled', 'disabled').hide();
   }
 
+  // Hide the notify button on ANY relevant changes.
+  $('#<?=$java_prefix?>_pvm, #asiakas, #<?=$java_prefix?>_osoite, #<?=$java_prefix?>_kohde, #<?=$java_prefix?>_alku, #<?=$java_prefix?>_loppu').on('change', function(e) {
+    $('#aloitusajat-ilmoita').attr('disabled', 'disabled').hide();
+  });
+
   // Aloitusaikailmoitus -
   $('#aloitusajat-ilmoita').on('click', function(e) {
 
