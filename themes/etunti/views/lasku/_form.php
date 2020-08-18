@@ -25,7 +25,11 @@ if(!isset($model->id) and isset($asetukset->id)){
 }
 
 ?>
-
+<style>
+#TableRivit.table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+	padding: 0;
+}
+</style>
 
 
 <?php $form=$this->beginWidget('CActiveForm', array(

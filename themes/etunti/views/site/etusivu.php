@@ -321,10 +321,11 @@ $months=array(
 	      <?php if($this->laskuri() !== false and isset(Yii::app()->user->ilmainen_kayttotunnit)) : ?>
 
 	      <?php
+		$asetuksetForAll = AsetuksetForAll::model()->findbypk(1);
 		$sum_laskuri = Yii::app()->user->ilmainen_kayttotunnit; //tuntien laskuri mobiili + tyovuorot
 		$prosentti = 0;
 		if( $sum_laskuri > 0 )
-		$prosentti = ($sum_laskuri*100)/500;
+		$prosentti = ($sum_laskuri*100)/$asetuksetForAll->max_ilmaiset_tunnit;
 
 		$pr_class = 'success';
 		if( $prosentti > 100 ){
