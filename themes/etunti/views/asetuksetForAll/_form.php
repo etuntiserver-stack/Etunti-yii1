@@ -33,6 +33,12 @@ if( isset($model->id) and !empty($model->app_ilmoitus_voimassa_asti)){
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'max_ilmaiset_tunnit'); ?>
+		<?php echo $form->numberField($model,'max_ilmaiset_tunnit',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'max_ilmaiset_tunnit'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'session_aikamaara'); ?>
 		<?php
 		$list = array();

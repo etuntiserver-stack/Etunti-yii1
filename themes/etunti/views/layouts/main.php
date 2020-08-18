@@ -171,7 +171,7 @@ if(
 			isset(Yii::app()->user->ilmainen) 
 			and Yii::app()->user->ilmainen == true
 			and isset(Yii::app()->user->ilmainen_kayttotunnit) 
-			and Yii::app()->user->ilmainen_kayttotunnit > 500)
+			and Yii::app()->user->ilmainen_kayttotunnit > $asetukset_forall->max_ilmaiset_tunnit)
 		: ?>
 <script type="text/javascript">
 $(document).ready(function(){

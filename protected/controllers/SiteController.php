@@ -424,7 +424,8 @@ class SiteController extends Controller
 
 	public function ilmainenIlmoitus()
 	{
-		return 'Ilmainen käyttö on mahdoton jos tunnit enemmään kun 500';
+		$asetuksetForAll = AsetuksetForAll::model()->findbypk(1);
+		return 'Ilmainen käyttö on mahdoton jos tunnit enemmään kun '. $asetuksetForAll->max_ilmaiset_tunnit;
 	}
 
 	public function laskuriForCron($domain)
