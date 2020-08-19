@@ -801,6 +801,14 @@ $(function() {
    */
   const kohteenVaihto = function() {
 
+    $(".sw").bootstrapSwitch({
+	size: "small",
+	onColor: "primary",
+	offColor: "danger",
+	onText: "Kyllä",
+	offText: "Ei"
+    });
+
     // Piilotetaan mahdollisesti auki oleva lista.
     $('#<?= $omasiistijat_div_id ?>.in').collapse('hide');
 
