@@ -323,9 +323,8 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
   </div>
 </div>
 
-<div class="row">
-
 <?php if ($create_update == 'update' && isset($model->kohteet->asiakas_id)): ?>
+<div class="row">
   <!-- TEMP -->
   <!-- <div class="col-md-6" id="omasiistija-toiminnot">
     <div class="col-sm-12">
