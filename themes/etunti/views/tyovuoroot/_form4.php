@@ -253,9 +253,9 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 		<?php echo $form->labelEx($model,'alku'); ?> <span style="color:red">*</span>
 		<input type="text" name="<?=$java_prefix?>[alku]" class="form-control laske timeVuorot lomake_kenta" id="alku" value="<?php echo $model->alku; ?>" autofocus>
 
-    <button type="button" style="height: 24px; padding-top: 0px; padding-bottom: 0px;"
-        class="form-control btn btn-sm btn-primary" id="aloitusajat-ilmoita">
-      <span class="fa fa-share-square" title="Ilmoita"></span>
+		<button type="button" style="height: 24px; padding-top: 0px; padding-bottom: 0px;" class="form-control btn btn-sm btn-primary" id="aloitusajat-ilmoita">
+			<span class="fa fa-share-square" title="Ilmoita"></span>
+		</button>
   </div>
 
   <div class="col-sm-3">
