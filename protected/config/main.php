@@ -184,7 +184,7 @@ if (
         ), [
           'class' => 'CFileLogRoute',
           'levels' => 'trace, info, vardump', //'trace, info, error, warning, vardump'
-          'enabled' => YII_DEBUG,
+          'enabled' => true,
           'categories'=>'procountor',
           'logFile' => 'procountor.log'
         ],
