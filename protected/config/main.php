@@ -179,7 +179,7 @@ if (
         array(
             'class' => 'CFileLogRoute',
             'levels' => 'error', //'trace, info, error, warning, vardump'
-            'enabled' => YII_DEBUG,
+            'enabled' => true,
             //'categories'=>'system.*',
         ), [
           'class' => 'CFileLogRoute',
