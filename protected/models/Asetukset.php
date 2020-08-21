@@ -179,8 +179,8 @@ class Asetukset extends DB2ActiveRecord
                      //'edico_laatutaso_2' => 'text ',
                      //'edico_laatutaso_3' => 'text ',
                      //'edico_muut_kulut' => 'text ',
-		     'procountor_access_token' => 'varchar(128) DEFAULT NULL',   // Access token, usually valid only temporarily.
-		     'procountor_refresh_token' => 'varchar(128) DEFAULT NULL',  // For refreshing the access token.
+		     'procountor_access_token' => 'varchar(500) DEFAULT NULL',   // Access token, usually valid only temporarily.
+		     'procountor_refresh_token' => 'varchar(500) DEFAULT NULL',  // For refreshing the access token.
 		     'procountor_refresh_time' => 'int(11) DEFAULT 0',           // Time when access token was last refreshed.
 		     'procountor_expires_in' => 'int(6) DEFAULT 0',              // Expiration time of access token, usually 300 seconds.
           	     'procountor_invalid' => 'int(1) DEFAULT 0',                 // If 1, access token expired and refreshing failed.
