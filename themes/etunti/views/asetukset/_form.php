@@ -663,11 +663,12 @@ $('.ryhmat').multiselect({
 		<?php $redirect = Yii::createComponent('Procountor')->getRedirectUri(); ?>
 		<p><?php echo CHtml::link('Kirjaudu Procountoriin', "https://api.procountor.com/login?response_type=code&client_id=etuntiClient&redirect_uri=$redirect&state=" .strtolower(Yii::app()->user->domain), ['class' => 'btn btn-lg btn-primary myBgColors']); ?></p>
 		<?php 
+			$is_local = in_array($_SERVER['REMOTE_ADDR'] ?? '', ['::1', '127.0.0.1']);
 			/* Testi tunnukset */ 
 			//	etunti.test
 			//	Elias2011!
-
-			//<p><?php echo CHtml::link('Kirjaudu Procountoriin TEST', "https://api-test.procountor.com/login?response_type=code&client_id=etuntiTestClient&redirect_uri=$redirect&state=" .strtolower(Yii::app()->user->domain), ['class' => 'btn btn-lg btn-primary myBgColors']); ?></p>
+			if($is_local)
+			echo '<p>'. CHtml::link('Kirjaudu Procountoriin TEST', "https://api-test.procountor.com/login?response_type=code&client_id=etuntiTestClient&redirect_uri=$redirect&state=" .strtolower(Yii::app()->user->domain), ['class' => 'btn btn-lg btn-primary myBgColors']).'</p>';
 		?>
 		<!-- https://api-test.procountor.com/login?response_type=code&client_id=etuntiTestClient&redirect_uri=$redirect&state=" . strtolower(Yii::app()->user->domain) -->
 	</div>
