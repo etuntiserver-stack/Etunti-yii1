@@ -166,7 +166,7 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
     
               // Box styling. Enable red border when omasiistijä is not selected (when configured to do so).
               let style='';
-              if (!disable_warning && tv_edit['omasiistijat_varoitus']) {
+              if (!disable_warning && tv_edit['omasiistijavaroitus']) {
                 style += 'border: 1px solid red;';
               }
               if (style.length > 0) {
