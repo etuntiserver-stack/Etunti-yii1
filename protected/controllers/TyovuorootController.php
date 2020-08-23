@@ -5494,21 +5494,18 @@ class TyovuorootController extends Controller
    */
   public function regulars_warning_check($target)
   {
-    // Require kotipuhtaaksi -environment, and valid target that's not canceled.
-    if (!Yii::app()->user->kp || !is_object($target) || $target->peruutettu > 0)
-      return false;
+    switch (true) {
+      case (!Yii::app()->user->kp):
+      case (!is_object($target->kohteet)): // Require valid location for regulars list.
+      case (isset($target->peruutettu) && $target->peruutettu != 0): // Non-cancelled only
+        return false;
 
-    // Hide warnings if specified, or if the customer has been notified.
-    if ($target->omasiistijavaroitus == 0 || $target->omasiistijailmoitus > 0)
-      return false;
-
-    // Check if primary cleaner exists, and has warnings disabled.
-    if (is_object($target->tt) && $target->tt->omasiistijavaroitukset > 0)
-      return false;
-
-    // Require valid location for regulars list.
-    if (!is_object($target->kohteet))
-      return false;
+      // Hide warnings if specified, or if the customer has been notified.
+      case (isset($target->omasiistijavaroitus) && $target->omasiistijavaroitus == 0):
+      case (isset($target->omasiistijailmoitus) && $target->omasiistijailmoitus != 0):
+      case (isset($target->tt->omasiistijavaroitukset) && $target->tt->omasiistijavaroitukset != 0):
+        return false;
+    }
 
     // Get list of active cleaners with approved hours at this location.
     // Cleaners that are inactive are ignored. If none, warnings are hidden.
