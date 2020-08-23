@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijat_lista', 'omasiistijat_tarkistus', 'omasiistijat_ilmoitus', 'omasiistijat_siistijakohtainen_varoitus', 'massedit', 'aloitusaikojen_ilmoitus'),
+				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijat_lista', 'omasiistijat_tarkistus', 'omasiistijat_ilmoitus', 'omasiistijat_siistijakohtainen_varoitus', 'clearOsCache', 'massedit', 'aloitusaikojen_ilmoitus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -5430,11 +5430,14 @@ class TyovuorootController extends Controller
     // Require kotipuhtaaksi -environment, and valid ID.
     if (Yii::app()->user->kp || is_numeric($location_id) && $location_id > 0) {
 
+      /** @var CMemCache */
+      $cc = Yii::app()->cache;
+
       // Establish cache key. Load possible cached data if not force refreshing.
-      $server_name = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
-      $cache_id = sprintf("%s_%s_omasiistijat_%s", $server_name, Yii::app()->user->domain, $location_id);
+      $prefix = sprintf("%s_%s", ($_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? ''), Yii::app()->user->domain);
+      $cache_id = sprintf("%s_omasiistijat_%s", $prefix, $location_id);
       if (!$force_refresh)
-        $results = Yii::app()->cache->get($cache_id);
+        $results = $cc->get($cache_id);
 
       // If cache has expired or force refreshing, get fresh results and save
       // to cache with random expire of 10-20 minutes, to stagger refreshes.
@@ -5470,6 +5473,12 @@ class TyovuorootController extends Controller
 
         // Refresh between 5 and 10 minutes to stagger refreshes between results.
         Yii::app()->cache->set($cache_id, $results, rand(300, 600));
+        $index_cache_id = sprintf("%s_omasiistijat_keys", $prefix);
+        $indexes = $cc->get($index_cache_id);
+        if (!is_array($indexes))
+          $indexes = [];
+        $indexes[] = $cache_id;
+        $cc->set($index_cache_id, $indexes, 0);
         Yii::log(sprintf('Saved list of regulars for location ID %d (count: %d) to cache.', $location_id, count($results)), CLogger::LEVEL_INFO, 'cache');
       } else {
         Yii::log(sprintf('Loaded cached list of regulars for location ID %d (count: %d).', $location_id, count($results)), CLogger::LEVEL_INFO, 'cache');
@@ -5520,6 +5529,22 @@ class TyovuorootController extends Controller
     // Decode possible additional cleaners from worker pairs (tyoparit).
     // there are any common values, then the warnings should not be shown.
     return (empty(($tp = json_decode($target->tyopaari))) || empty(array_intersect($os, $tp)));
+  }
+
+  public function actionClearOsCache()
+  {
+    /** @var CMemCache */
+    $c = Yii::app()->cache;
+
+    $prefix = sprintf("%s_%s", ($_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? ''), Yii::app()->user->domain);
+    $index_cache_id = sprintf("%s_omasiistijat_keys", $prefix);
+    $indexes = $c->get($index_cache_id);
+
+    $result = array_filter($indexes, function($v, $k) use (&$c) {
+      return ($c->offsetExists($v) && $c->delete($v));
+    }, ARRAY_FILTER_USE_BOTH);
+
+    $c->set($index_cache_id, $result, 0);
   }
 
   /* Omasiistijät /// */
