@@ -1978,6 +1978,7 @@ $(document).ready(function(){
     // Assign overrides.
     omasiistijatOverride['tid'] = tid;
     omasiistijatOverride['tyopaari'] = JSON.stringify(tyoparit);
+    omasiistijatOverride['peruutettu'] = $('#<?= $java_prefix; ?>_peruutettu').val();
     omasiistijatOverride['omasiistijavaroitus'] = $('#<?= $java_prefix ?>_omasiistijavaroitus').val();
     // omasiistijatOverride['omasiistijailmoitus'] = $('#<?= $java_prefix ?>_omasiistijailmoitus').val();
 
@@ -2010,7 +2011,8 @@ $(document).ready(function(){
   // Aina kun työntekijä vaihdetaan yläreunan valikosta, tarkistetaan
   // omasiistijän tilanne uusiksi, jotta varoitus voidaan näyttää/piilottaa.
   // Sama tehdään kun valintoja muutetaan työparilistalla.
-  $('#tekijanVaihdo, #tyopari-container .mult, #<?= $java_prefix ?>_omasiistijavaroitus, #<?= $java_prefix ?>_omasiistijailmoitus').change(function() {
+  $('#tekijanVaihdo, #tyopari-container .mult, #<?= $java_prefix; ?>_omasiistijavaroitus, ' +
+    '#<?= $java_prefix; ?>_omasiistijailmoitus, #<?= $java_prefix; ?>_peruutettu').change(function() {
     omasiistijaTarkistus();
   });
 
