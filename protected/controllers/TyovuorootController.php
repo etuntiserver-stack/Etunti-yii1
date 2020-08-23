@@ -5539,11 +5539,16 @@ class TyovuorootController extends Controller
     $prefix = sprintf("%s_%s", ($_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? ''), Yii::app()->user->domain);
     $index_cache_id = sprintf("%s_omasiistijat_keys", $prefix);
     $indexes = $c->get($index_cache_id);
+    $cleared = [];
 
-    $result = array_filter($indexes, function($v, $k) use (&$c) {
-      return ($c->offsetExists($v) && $c->delete($v));
+    $result = array_filter($indexes, function($v, $k) use (&$c, &$cleared) {
+      if (!$c->offsetExists($v) || !$c->delete($v))
+        return false;
+      $cleared[] = $v;
+      return true;
     }, ARRAY_FILTER_USE_BOTH);
 
+    Yii::log(sprintf('Emptied %d items from cached regulars list: %s', count($cleared), json_encode($cleared)), CLogger::LEVEL_INFO, 'cache');
     $c->set($index_cache_id, $result, 0);
   }
 
