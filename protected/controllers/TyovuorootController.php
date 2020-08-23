@@ -5431,7 +5431,8 @@ class TyovuorootController extends Controller
     if (Yii::app()->user->kp || is_numeric($location_id) && $location_id > 0) {
 
       // Establish cache key. Load possible cached data if not force refreshing.
-      $cache_id = sprintf("%s_regulartt_tids_%s", Yii::app()->user->domain, $location_id);
+      $server_name = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
+      $cache_id = sprintf("%s_%s_omasiistijat_%s", $server_name, Yii::app()->user->domain, $location_id);
       if (!$force_refresh)
         $results = Yii::app()->cache->get($cache_id);
 
