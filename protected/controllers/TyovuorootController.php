@@ -5510,9 +5510,9 @@ class TyovuorootController extends Controller
         return false;
 
       // Hide warnings if specified, or if the customer has been notified.
-      case (isset($target->omasiistijavaroitus) && $target->omasiistijavaroitus == 0):
+      case (!isset($target->omasiistijavaroitus) || $target->omasiistijavaroitus == 0):
       case (isset($target->omasiistijailmoitus) && $target->omasiistijailmoitus != 0):
-      case (isset($target->tt->omasiistijavaroitukset) && $target->tt->omasiistijavaroitukset != 0):
+      case (!isset($target->tt->omasiistijavaroitukset) || $target->tt->omasiistijavaroitukset == 0):
         return false;
     }
 
