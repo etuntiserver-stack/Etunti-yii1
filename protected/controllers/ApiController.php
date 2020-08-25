@@ -467,8 +467,8 @@ public function actionTiedosto($dom)
 		}
 
 	  	if(isset($ttekija->id)){
-
-		$tiedosto = $_POST['kohdenID']."_".$ttekija->id."_".date("YmdHi").".jpg";
+		$gen_random = rand(5, 1000);
+		$tiedosto = $_POST['kohdenID']."_".$ttekija->id."_".date("YmdHi")."_".$gen_random.".jpg";
     	 	if (move_uploaded_file($_FILES['file']['tmp_name'], Yii::app()->basePath."/../img/uploadedfromphone/".$dom."/".$tiedosto)) 
 		{
 
