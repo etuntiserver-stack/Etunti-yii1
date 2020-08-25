@@ -1,12 +1,8 @@
 <?php
 
-// check if we're in development (local/staging) environment.
-$is_local = (in_array($_SERVER['REMOTE_ADDR'] ?? '', ['::1', '127.0.0.1']));
-$is_staging = (false !== strpos($_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '', 'staging'));
-$development_environment = ($is_local || $is_staging) && false === strpos($_SERVER['HTTP_REFERER'] ?? null, "api/mob");
-
-//$development_environment = in_array($_SERVER['REMOTE_ADDR'] ?? null, ['::1', '127.0.0.1'])
-//                        && strpos($_SERVER['HTTP_REFERER'] ?? null, "api/mob") === false;
+// check if we're in development (local) environment.
+$development_environment = in_array($_SERVER['REMOTE_ADDR'] ?? null, ['::1', '127.0.0.1'])
+                        && strpos($_SERVER['HTTP_REFERER'] ?? null, "api/mob") === false;
 
 // enable debug mode in development environments.
 defined('YII_DEBUG') or define('YII_DEBUG', $development_environment);

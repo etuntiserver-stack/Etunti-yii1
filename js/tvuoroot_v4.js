@@ -138,9 +138,9 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
       // Parse list of tids, if possible.
       try {
         JSON.parse(data).forEach((tid) => { warning_disabled_tids.push(tid); });
-        console.log(`(omasiistijavaroitus_disabled_tids): ${data}`);
+        console.log(`(omasiistijavaroitus_enabled_tids): ${data}`);
       } catch (e) {
-        console.log(`(omasiistijavaroitus_disabled_tids) Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
+        console.log(`(omasiistijavaroitus_enabled_tids) Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
       }
 
       // List of tids where warning is enabled is acquired; continue drawing boxes via AJAX.
@@ -166,7 +166,7 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
     
               // Box styling. Enable red border when omasiistijä is not selected (when configured to do so).
               let style='';
-              if (!disable_warning && tv_edit['omasiistijavaroitus']) {
+              if (!disable_warning && tv_edit['omasiistijat_varoitus']) {
                 style += 'border: 1px solid red;';
               }
               if (style.length > 0) {

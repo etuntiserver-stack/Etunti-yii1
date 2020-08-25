@@ -132,32 +132,31 @@ else $post = '';
 
 
 // <-- LOG
-if ($is_staging or $is_local) {
+if (
+    isset($_SERVER['REMOTE_ADDR']) and
+    ($_SERVER['REMOTE_ADDR'] == '::1'
+        or $_SERVER['REMOTE_ADDR'] == '127.0.0.1')
+) {
     $for_log = [
         [
             'class' => 'CFileLogRoute',
             'levels' => 'error, warning', //'trace, info, error, warning, vardump'
-            'enabled' => true,
+            'enabled' => YII_DEBUG,
             //'categories'=>'system.*',
         ], [
           'class' => 'CFileLogRoute',
-          'levels' => 'trace, infoo, error, warning, vardump', //'trace, info, error, warning, vardump'
-          'enabled' => true,
+          'levels' => 'trace, info, vardump', //'trace, info, error, warning, vardump'
+          'enabled' => YII_DEBUG,
           'categories'=>'freshdesk',
           'logFile' => 'freshdesk.log'
         ], [
           'class' => 'CFileLogRoute',
-          'levels' => 'trace, infoo, error, warning, vardump', //'trace, info, error, warning, vardump'
-          'enabled' => true,
+          'levels' => 'trace, info, vardump', //'trace, info, error, warning, vardump'
+          'enabled' => YII_DEBUG,
           'categories'=>'procountor',
           'logFile' => 'procountor.log'
-        ], [
-          'class' => 'CFileLogRoute',
-          'levels' => 'trace, info, vardump, error, warning',
-          'enabled' => true,
-          'categories'=>'cache',
-          'logFile' => 'cache.log'
-	], [
+        ],
+        [
             'class' => 'CWebLogRoute',
             'levels' => 'error, warning', //'trace, info, error, warning, vardump'
         ],
