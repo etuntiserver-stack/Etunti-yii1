@@ -504,8 +504,11 @@ public function actionTiedosto($dom)
 				else
 					$saajat = $asetukset->ilmoitus_uudesta_kuvasta_saajat;
 
+				$kuvienmaara = 1;
+				if(isset($_POST['kuvienMaara']))
+					$kuvienmaara = $_POST['kuvienMaara'];
 
-				$message = Yii::t('main', 'Hei. Valokuva on saapunut kohteista: ').$k->osoite;
+				$message = Yii::t('main', 'Hei. '.$kuvienmaara.' kpl. valokuva(a) on saapunut kohteista: ').$k->osoite;
 				$headers = "From:  no-reply@etunti.fi";
 				$subject = Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$this->etuSukunimi($ttekija->id);
 				mail($saajat,$subject,$message,$headers);
