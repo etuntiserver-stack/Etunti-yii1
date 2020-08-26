@@ -490,7 +490,10 @@ public function actionTiedosto($dom)
 
 		$firma = FirmanTiedot::model()->findbypk(1);
 		$asetukset = Asetukset::model()->findbypk(1);
-		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
+		if(
+			isset($firma->sahkoposti) and !empty($firma->sahkoposti)
+			and ( !isset($_POST['emailNotify']) or (isset($_POST['emailNotify']) and $_POST['emailNotify'] == 'true') )
+		)
 		{
 			
 			if(!empty($asetukset->ilmoitus_uudesta_kuvasta_saajat))
