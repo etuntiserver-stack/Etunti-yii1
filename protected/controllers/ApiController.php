@@ -1135,6 +1135,15 @@ public function actionImei($dom)
 					$sel .= '</ul></p><hr>';
 				}
 
+				$urls = $tvController[0]->getTVUrls($data->url_linkkit);
+				if( count($urls) > 0 ){
+					$sel .= '<p><label>URL linkit:</label><ul>';
+			 		foreach($urls as $k => $v){
+						$sel .= '<li><a href="'.$v.'">'.$k.'</a></li>';
+					}
+					$sel .= '</ul></p><hr>';
+				}
+
 				if(!empty($nm) or !empty($puh_nro) or !empty($avaimet) or !empty($kohteen_yhteyshenkilo)){
 					$sel .= '<br><p>
 					'.$nm.'

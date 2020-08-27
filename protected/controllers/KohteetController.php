@@ -227,6 +227,11 @@ class KohteetController extends Controller
 			} else {
 				$model->tyo_erittelyt = '';
 			}
+			if( is_array($model->url_linkkit) and count($model->url_linkkit) > 0 ){
+				$model->url_linkkit = json_encode($model->url_linkkit, JSON_FORCE_OBJECT);
+			} else {
+				$model->url_linkkit = '';
+			}
 			if($model->save())
 			{
 
@@ -284,6 +289,11 @@ class KohteetController extends Controller
 			} else {
 				$model->tyo_erittelyt = '';
 			}
+			if( is_array($model->url_linkkit) and count($model->url_linkkit) > 0 ){
+				$model->url_linkkit = json_encode($model->url_linkkit, JSON_FORCE_OBJECT);
+			} else {
+				$model->url_linkkit = '';
+			}
 			if($model->save())
 			{
 				// <-- LOG
@@ -328,6 +338,11 @@ class KohteetController extends Controller
 				$model->tyo_erittelyt = json_encode($model->tyo_erittelyt);
 			} else {
 				$model->tyo_erittelyt = '';
+			}
+			if( is_array($model->url_linkkit) and count($model->url_linkkit) > 0 ){
+				$model->url_linkkit = json_encode($model->url_linkkit, JSON_FORCE_OBJECT);
+			} else {
+				$model->url_linkkit = '';
 			}
 			if($model->save())
 			{
@@ -430,6 +445,11 @@ class KohteetController extends Controller
 			} else {
 				$model->tyo_erittelyt = '';
 			}
+			if( is_array($model->url_linkkit) and count($model->url_linkkit) > 0 ){
+				$model->url_linkkit = json_encode($model->url_linkkit, JSON_FORCE_OBJECT);
+			} else {
+				$model->url_linkkit = '';
+			}
 			if($model->save())
 			{
 
@@ -452,6 +472,30 @@ class KohteetController extends Controller
 		$this->render('update',array(
 			'model'=>$model,
 		));
+	}
+
+	public function getKohdeUrls($url_linkkit)
+	{
+		$ready 	= [];
+		if(is_array(json_decode($url_linkkit, true)))
+		{
+			$arr 	= json_decode($url_linkkit, true);
+			$urls 	= [];
+	 		foreach($arr as $k => $v){
+		 		foreach($v as $k1 => $v1){
+					if($k == 'url')
+						$urls[$k1] = $v1;
+				}
+			}
+	 		foreach($arr as $k => $v){
+		 		foreach($v as $k1 => $v1){
+					if($k == 'nimike' and isset($urls[$k1]))
+						$ready[$v1] = $urls[$k1];
+				}
+			}
+		}	
+
+		return $ready;
 	}
 
 	protected function getlatlong($address)

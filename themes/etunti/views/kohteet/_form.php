@@ -469,26 +469,75 @@ $(document).ready(function(){
 		</p>
 		<?php echo $form->error($model,'tyo_erittelyt'); ?>
 	</div>
-
-<script type="text/javascript">
-$(document).ready(function(){
- $(".uusierittely").click(function(){
-  $("#erittelynlista").append('' +
-		 '<div class="row">' +
-		  '<div class="col-sm-8 col-sm-offset-3">' +
-		   '<input type="text" name="Kohteet[tyo_erittelyt][]" class="form-control">' +
-		  '</div>' +
-		  '<div class="col-sm-1 text-right">' +
-		   '<span class="btn btn-danger fa fa-trash poislistasta"></span>' +
-		  '</div>' +
- 		 '</div>'
-  );
- });
- $(document).delegate(".poislistasta","click",function(){
-  $(this).closest(".row").remove();
- });
-});
-</script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+	 $(".uusierittely").click(function(){
+	  $("#erittelynlista").append('' +
+			 '<div class="row">' +
+			  '<div class="col-sm-8 col-sm-offset-3">' +
+			   '<input type="text" name="Kohteet[tyo_erittelyt][]" class="form-control">' +
+			  '</div>' +
+			  '<div class="col-sm-1 text-right">' +
+			   '<span class="btn btn-danger fa fa-trash poislistasta"></span>' +
+			  '</div>' +
+	 		 '</div>'
+	  );
+	 });
+	 $(document).delegate(".poislistasta","click",function(){
+	  $(this).closest(".row").remove();
+	 });
+	});
+	</script>
+	<div class="section">
+		<?php echo $form->labelEx($model,'url_linkkit'); ?>:&nbsp;&nbsp;&nbsp;&nbsp;<span class="btn btn-success fa fa-plus uusilinkki"></span>
+		<p>
+		<div id="linkkilista">
+		<?php
+		$urls = $this->getKohdeUrls($model->url_linkkit);
+		if( count($urls) > 0 )
+		{
+	 		foreach($urls as $k => $v){
+			echo '
+			 <div class="row">
+			  <div class="col-sm-4">
+			   <input type="text" name="Kohteet[url_linkkit][nimike][]" class="form-control" value="'.$k.'" placeholder="URL nimike">
+			  </div>
+			  <div class="col-sm-4">
+			   <input type="text" name="Kohteet[url_linkkit][url][]" class="form-control" value="'.$v.'" placeholder="http osoite">
+			  </div>
+			  <div class="col-sm-1 text-right">
+			   <span class="btn btn-danger fa fa-trash poislistasta"></span>
+			  </div>
+	 		 </div>';
+			}
+		}
+		?>
+ 		</div>
+		</p>
+		<?php echo $form->error($model,'url_linkkit'); ?>
+	</div>
+	<script type="text/javascript">
+	$(document).ready(function(){
+	 $(".uusilinkki").click(function(){
+	  $("#linkkilista").append('' +
+			 '<div class="row">' +
+			  '<div class="col-sm-4">' +
+			   '<input type="text" name="Kohteet[url_linkkit][nimike][]" class="form-control" placeholder="URL nimike">' +
+			  '</div>' +
+			  '<div class="col-sm-4">' +
+			   '<input type="text" name="Kohteet[url_linkkit][url][]" class="form-control" placeholder="http osoite">' +
+			  '</div>' +
+			  '<div class="col-sm-1 text-right">' +
+			   '<span class="btn btn-danger fa fa-trash poislistasta"></span>' +
+			  '</div>' +
+	 		 '</div>'
+	  );
+	 });
+	 $(document).delegate(".poislistasta","click",function(){
+	  $(this).closest(".row").remove();
+	 });
+	});
+	</script>
 
   </div>
 </div><!-- form -->

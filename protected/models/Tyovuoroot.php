@@ -95,9 +95,10 @@ class Tyovuoroot extends DB2ActiveRecord
 		     'toimenpiteet' => 'TEXT DEFAULT NULL',
 		     'uusi_tilaus' => 'int(1) DEFAULT 0',
 		     'tyo_erittelyt' => 'text DEFAULT NULL',
-         'muistiinpano' => 'text DEFAULT NULL',
-         'omasiistijavaroitus' => 'int(1) DEFAULT 1', // 0: Disabled, 1: Enabled
-         'omasiistijailmoitus' => 'int(1) DEFAULT 0', // 0: Not notified, 1: Notified
+		     'url_linkkit' => 'text DEFAULT NULL',
+		     'muistiinpano' => 'text DEFAULT NULL',
+		     'omasiistijavaroitus' => 'int(1) DEFAULT 1', // 0: Disabled, 1: Enabled
+		     'omasiistijailmoitus' => 'int(1) DEFAULT 0', // 0: Not notified, 1: Notified
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -134,7 +135,7 @@ class Tyovuoroot extends DB2ActiveRecord
 			array('alku, loppu, pituus, alku_r, kesto', 'length', 'max'=>10),
 			array('ruokatauko, tyoajanlaatu, tyoajanmerkinta', 'length', 'max'=>50),
 			array('osoiteOnline', 'length', 'max'=>100),
-			array('tyopaari, tietoja, lisa_tuotteet, tilausviesti, toimenpiteet, tyo_erittelyt, muistiinpano', 'safe'),
+			array('tyopaari, tietoja, lisa_tuotteet, tilausviesti, toimenpiteet, tyo_erittelyt, muistiinpano, url_linkkit', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, tid, time, kohde, pvm, alku, loppu, pituus, ruokatauko, alku_r, kesto, tyoajanlaatu, tyoajanmerkinta, tietoja, osoiteOnline, tekijan_nimi, toimenpiteet, osoite', 'safe', 'on'=>'search'),
@@ -189,9 +190,10 @@ class Tyovuoroot extends DB2ActiveRecord
 			'tuoteID' => Yii::t('main', 'Tuote/palvelu'),
 			'tyoajanlaatu' => Yii::t('main', 'Lomat ja poissaolot'),
 			'toimenpiteet' => Yii::t('main', 'Työ-ohjeet'),
-      'omasiistijavaroitus' => Yii::t('main', 'Omasiistijävaroitukset'),
-      'omasiistijailmoitus' => Yii::t('main', 'Ilmoitus asiakkaalle omasiistijöistä'),
+			'omasiistijavaroitus' => Yii::t('main', 'Omasiistijävaroitukset'),
+			'omasiistijailmoitus' => Yii::t('main', 'Ilmoitus asiakkaalle omasiistijöistä'),
 			'tilausviesti' => Yii::t('main', 'Tilausviesti asiakkaalle'),
+			'url_linkkit' => Yii::t('main', 'URL linkit'),
 		);
 	}
 

@@ -684,6 +684,14 @@ $(document).ready(function(){
   </div>
   <div class="col-sm-3">
     <div class="input-group">
+      <span class="form-control lomake_kenta"><?php echo Yii::t('main','URL linkit'); ?></span>
+      <span class="input-group-btn">
+        <button class="btn btn-primary uusilinkki lomake_btn <?=(isset($mobile->id) and is_array(json_decode($mobile->url_linkkit, true)))?'disabled':''?>" type="button"><i class="fa fa-plus"></i></button>
+      </span>
+    </div>  
+  </div>
+  <div class="col-sm-3">
+    <div class="input-group">
       <span class="form-control lomake_kenta"><?php echo Yii::t('main','Työerittely'); ?></span>
       <span class="input-group-btn">
         <button class="btn btn-primary uusierittely lomake_btn <?=(isset($mobile->id) and is_array(json_decode($mobile->tyo_erittelyt, true)))?'disabled':''?>" type="button"><i class="fa fa-plus"></i></button>
@@ -698,6 +706,9 @@ $(document).ready(function(){
       </span>
     </div>  
   </div>
+</div>
+<br>
+<div class="row">
   <?php if (Yii::app()->user->kp): ?>
   <div class="col-sm-3">
     <?= $form->labelEx($model,'omasiistijavaroitus'); ?>
@@ -1056,7 +1067,7 @@ $(function() {
 
 
 
-
+<br>
 <div class="row">
 	<div id="lisapalvelu_lista">
 	<?php $lisa_tuotteet = json_decode($model->lisa_tuotteet, true); ?>
@@ -1142,6 +1153,33 @@ $(document).ready(function(){
   });
 });
 </script>
+	<!-- Url linkit -->
+	<div id="linkkilista">
+	<?php
+		$urls = $this->getTVUrls($model->url_linkkit);
+		if( count($urls) > 0 ){
+			echo '
+			<div class="col-sm-6 linkkilista_laatiko">
+			<legend>'.Yii::t('main','URL linkit').'</legend>';
+	 		foreach($urls as $k => $v){
+			echo '
+			 <div class="row">
+			  <div class="col-sm-5">
+			   <input type="text" name="'.$java_prefix.'[url_linkkit][nimike][]" class="form-control" value="'.$k.'" placeholder="URL nimike">
+			  </div>
+			  <div class="col-sm-5">
+			   <input type="text" name="'.$java_prefix.'[url_linkkit][url][]" class="form-control" value="'.$v.'" placeholder="http osoite">
+			  </div>
+			  <div class="col-sm-1 text-right">
+			   <span class="btn btn-danger fa fa-trash poislistasta"></span>
+			  </div>
+	 		 </div>';
+			}
+			echo '</div>';
+		}
+	?>
+	</div>
+	<!-- Url linkit / -->
 
 	<div id="erittelynlista">
 	 <?php if(is_array(json_decode($model->tyo_erittelyt, true))): ?>
@@ -2058,8 +2096,9 @@ $(document).ready(function(){
 	$('#<?=$java_prefix?>_status').val('3').css({"border" : "1px green solid"});
 	$('#<?=$java_prefix?>_tyoajanlaatu').val('');
 	$("#<?=$java_prefix?>_kohde").removeClass('bg-danger');
-	var tyo_erittelyt = '';
-	var tv_id = '<?php if(isset($model->id)){ echo $model->id; } ?>';
+	var tyo_erittelyt 	= '';
+	var url_links 		= '';
+	var tv_id 		= '<?php if(isset($model->id)){ echo $model->id; } ?>';
 	linkkiKohteeseen();
 	$.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+ thisID +'&tv_id='+ tv_id,
@@ -2074,6 +2113,7 @@ $(document).ready(function(){
 			$('#<?=$java_prefix?>_postitoimipaikka').val(d[5]);
 
 			// <-- tyo_erittelyt 
+			$("#erittelynlista").html('');
 			if($.isArray(d[6])){
 			$.each(d[6], function( index, value ) {
 			  tyo_erittelyt += '' +
@@ -2089,6 +2129,27 @@ $(document).ready(function(){
 			}
 			$("#erittelynlista").html('<div class="col-sm-6 erittelynlista_laatiko"><legend>Työerittelyt</legend>' + tyo_erittelyt + '</div>');
 			//    tyo_erittelyt -->
+
+			// <-- url linkit 
+			$("#linkkilista").html('');
+			if(d[12]){
+			$.each(d[12], function( index, value ) {
+			  url_links += '' +
+			 '<div class="row">' +
+			  '<div class="col-sm-5">' +
+			   '<input type="text" name="<?=$java_prefix?>[url_linkkit][nimike][]" class="form-control" placeholder="URL nimike" value="'+ index +'">' +
+			  '</div>' +
+			  '<div class="col-sm-5">' +
+			   '<input type="text" name="<?=$java_prefix?>[url_linkkit][url][]" class="form-control" placeholder="http osoite" value="'+ value +'">' +
+			  '</div>' +
+			  '<div class="col-sm-1 text-right">' +
+			   '<span class="btn btn-danger fa fa-trash poislistasta"></span>' +
+			  '</div>' +
+	 		 '</div>';
+			});
+			}
+			$("#linkkilista").html('<div class="col-sm-6 linkkilista_laatiko"><legend>URL linkit</legend>' + url_links + '</div>');
+			//    url linkit -->
 
 			if(d[2] !== ''){
 				$('#arvioitu_kesto').html(d[2]);
@@ -2129,7 +2190,29 @@ $(document).ready(function(){
 
 	$(".erittelynlista_laatiko input:last").focus();
   });
+  $(".uusilinkki").click(function(){
+	var url_lista = $("#linkkilista").text().trim();
+	if( url_lista == '' )
+		$("#linkkilista").append('<div class="col-sm-6 linkkilista_laatiko"><legend>URL linkit</legend>');
 
+	$(".linkkilista_laatiko").append('' +
+			 '<div class="row">' +
+			  '<div class="col-sm-5">' +
+			   '<input type="text" name="<?=$java_prefix?>[url_linkkit][nimike][]" class="form-control" placeholder="URL nimike">' +
+			  '</div>' +
+			  '<div class="col-sm-5">' +
+			   '<input type="text" name="<?=$java_prefix?>[url_linkkit][url][]" class="form-control" placeholder="http osoite">' +
+			  '</div>' +
+			  '<div class="col-sm-1 text-right">' +
+			   '<span class="btn btn-danger fa fa-trash poislistasta"></span>' +
+			  '</div>' +
+	 		 '</div>'
+	);
+	if( url_lista == '' )
+		$(".linkkilista_laatiko").append('</div>');
+
+	$(".linkkilista_laatiko input:last").focus();
+  });
   $(document).delegate(".poislistasta","click",function(){
 	$(this).closest(".row").remove();
   });
