@@ -3,14 +3,14 @@
 // Define global environment variables on first session launch.
 if (!defined('DEV_ENV')) {
 
-  /** @var LOCAL True if request is from local host. */
-  define('LOCAL', in_array($_SERVER['REMOTE_ADDR'] ?? '', ['::1', '127.0.0.1']));
+  /** @var IS_LOCAL True if request is from local host. */
+  define('IS_LOCAL', in_array($_SERVER['REMOTE_ADDR'] ?? '', ['::1', '127.0.0.1']));
 
-  /** @var STAGING True if "staging" in host name; "staging_" prefixed to db. */
-  define('STAGING', false !== strpos($_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '', 'staging'));
+  /** @var IS_STAGING True if "staging" in host name; "staging_" is prefixed to db. */
+  define('IS_STAGING', strpos($_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '', 'staging') === 0);
 
   /** @var DEV_ENV True if this is dev environment and debug mode is enabled. */
-  define('DEV_ENV', (LOCAL || STAGING) && strpos($_SERVER['HTTP_REFERER'] ?? '', "api/mob") === false);
+  define('DEV_ENV', (IS_LOCAL || IS_STAGING) && strpos($_SERVER['HTTP_REFERER'] ?? '', "api/mob") === false);
 }
 
 // enable debug mode in development environments.

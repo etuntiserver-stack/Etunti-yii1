@@ -8,17 +8,6 @@ error_reporting(E_ALL & ~E_WARNING);
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 
-$is_local = in_array($_SERVER['REMOTE_ADDR'] ?? '', ['::1', '127.0.0.1']);
-
-// <-- APPSista kaikki pois
-$server_name	= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
-$is_production	= in_array($server_name, ['apps.etunti.fi']);
-$is_staging = (false !== strpos($server_name, 'staging'));
-if ($is_production) {
-	header('Location: https://app.etunti.fi/');
-	exit;
-}
-
 /*
 // <-- Redirect Domain
 $server_name	= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
@@ -103,8 +92,8 @@ if (
     $_SESSION['domain'] = trim(strtolower($_POST['UserLogin']['domain']));
 
     // Add 'staging_' prefix to domain on staging server.
-    if (strpos($server_name, "staging") === 0)
-        $_SESSION['domain'] = "staging_" . $_SESSION['domain'];
+    if (IS_STAGING)
+      $_SESSION['domain'] = "staging_" . $_SESSION['domain'];
 }
 
 if (isset($_GET['lang']))
@@ -132,76 +121,59 @@ else $post = '';
 
 
 // <-- LOG
-if ($is_staging or $is_local) {
-    $for_log = [
-        [
-            'class' => 'CFileLogRoute',
-            'levels' => 'error, warning', //'trace, info, error, warning, vardump'
-            'enabled' => true,
-            //'categories'=>'system.*',
-        ], [
-          'class' => 'CFileLogRoute',
-          'levels' => 'trace, infoo, error, warning, vardump', //'trace, info, error, warning, vardump'
-          'enabled' => true,
-          'categories'=>'freshdesk',
-          'logFile' => 'freshdesk.log'
-        ], [
-          'class' => 'CFileLogRoute',
-          'levels' => 'trace, infoo, error, warning, vardump', //'trace, info, error, warning, vardump'
-          'enabled' => true,
-          'categories'=>'procountor',
-          'logFile' => 'procountor.log'
-        ], [
-          'class' => 'CFileLogRoute',
-          'levels' => 'trace, info, vardump, error, warning',
-          'enabled' => true,
-          'categories'=>'cache',
-          'logFile' => 'cache.log'
-	], [
-            'class' => 'CWebLogRoute',
-            'levels' => 'error, warning', //'trace, info, error, warning, vardump'
-        ],
-        /*
-        [
-            // lists execution time of every marked code block
-            // report can also be set to callstack
-            'class' => 'CProfileLogRoute',
-            'report' => 'summary'
-        ]
-*/
-    ];
+if (IS_LOCAL) {
+  $for_log = [
+    [
+      'class' => 'CFileLogRoute',
+      'levels' => 'error, warning', //'trace, info, error, warning, vardump'
+      'enabled' => YII_DEBUG,
+      //'categories'=>'system.*',
+    ], [
+      'class' => 'CFileLogRoute',
+      'levels' => 'trace, info, vardump', //'trace, info, error, warning, vardump'
+      'enabled' => YII_DEBUG,
+      'categories'=>'freshdesk',
+      'logFile' => 'freshdesk.log'
+    ], [
+      'class' => 'CFileLogRoute',
+      'levels' => 'trace, info, vardump', //'trace, info, error, warning, vardump'
+      'enabled' => YII_DEBUG,
+      'categories'=>'procountor',
+      'logFile' => 'procountor.log'
+    ], [
+      'class' => 'CWebLogRoute',
+      'levels' => 'error, warning', //'trace, info, error, warning, vardump'
+    ],
+  ];
 } else {
 
-    $remote_addr = '';
-    if (isset($_SERVER['REMOTE_ADDR']))
-        $remote_addr = $_SERVER['REMOTE_ADDR'];
+  $remote_addr = '';
+  if (isset($_SERVER['REMOTE_ADDR']))
+      $remote_addr = $_SERVER['REMOTE_ADDR'];
 
-    $for_log = array(
-        array(
-            'class' => 'CFileLogRoute',
-            'levels' => 'error', //'trace, info, error, warning, vardump'
-            'enabled' => true,
-            //'categories'=>'system.*',
-        ), [
-          'class' => 'CFileLogRoute',
-          'levels' => 'trace, info, vardump', //'trace, info, error, warning, vardump'
-          'enabled' => true,
-          'categories'=>'procountor',
-          'logFile' => 'procountor.log'
-        ],
-        array(
-            'class' => 'CWebLogRoute',
-            'levels' => 'error, warning', //'trace, info, error, warning, vardump'
-
-        ),
-        array(
-            'class' => 'CEmailLogRoute',
-            'levels' => 'error', //'trace, info, error, warning, vardump'
-            'enabled' => !$is_staging,
-            'emails' => 'laptopsr@gmail.com', // vikailmoitusetunti@gmail.com pass: Otto5566
-            'subject' => 'Log File Message. Domain: ' . $domain . ', IP: ' . $remote_addr . ', SID: ' . session_id() . ', refer: ' . $refer . ', post: ' . $post,
-        )
-    );
+  $for_log = [
+    [
+      'class' => 'CFileLogRoute',
+      'levels' => 'error', //'trace, info, error, warning, vardump'
+      'enabled' => true,
+      //'categories'=>'system.*',
+    ], [
+      'class' => 'CFileLogRoute',
+      'levels' => 'trace, info, vardump', //'trace, info, error, warning, vardump'
+      'enabled' => true,
+      'categories'=>'procountor',
+      'logFile' => 'procountor.log'
+    ], [
+      'class' => 'CWebLogRoute',
+      'levels' => 'error, warning', //'trace, info, error, warning, vardump'
+    ], [
+      'class' => 'CEmailLogRoute',
+      'levels' => 'error', //'trace, info, error, warning, vardump'
+      'enabled' => !IS_STAGING,
+      'emails' => 'laptopsr@gmail.com', // vikailmoitusetunti@gmail.com pass: Otto5566
+      'subject' => 'Log File Message. Domain: ' . $domain . ', IP: ' . $remote_addr . ', SID: ' . session_id() . ', refer: ' . $refer . ', post: ' . $post,
+    ]
+  ];
 }
 //     LOG -->
 
@@ -224,7 +196,7 @@ if (isset($_GET['dom'])) {
 }
 
 // Käytä tätä ottaaksesi cache pois käytöstä, tai jos memcached ei asennettu:
-if($is_local){
+if(IS_LOCAL){
         $cache = ['class' => 'system.caching.CDummyCache'];
 } else {
         $cache = [
