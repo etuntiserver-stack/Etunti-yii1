@@ -490,7 +490,10 @@ public function actionTiedosto($dom)
 
 		$firma = FirmanTiedot::model()->findbypk(1);
 		$asetukset = Asetukset::model()->findbypk(1);
-		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
+		if(
+			isset($firma->sahkoposti) and !empty($firma->sahkoposti)
+			and ( !isset($_POST['emailNotify']) or (isset($_POST['emailNotify']) and $_POST['emailNotify'] == 'true') )
+		)
 		{
 			
 			if(!empty($asetukset->ilmoitus_uudesta_kuvasta_saajat))
@@ -501,8 +504,11 @@ public function actionTiedosto($dom)
 				else
 					$saajat = $asetukset->ilmoitus_uudesta_kuvasta_saajat;
 
+				$kuvienmaara = 1;
+				if(isset($_POST['kuvienMaara']))
+					$kuvienmaara = $_POST['kuvienMaara'];
 
-				$message = Yii::t('main', 'Hei. Valokuva on saapunut kohteista: ').$k->osoite;
+				$message = Yii::t('main', 'Hei. '.$kuvienmaara.' kpl. valokuva(a) on saapunut kohteista: ').$k->osoite;
 				$headers = "From:  no-reply@etunti.fi";
 				$subject = Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$this->etuSukunimi($ttekija->id);
 				mail($saajat,$subject,$message,$headers);
