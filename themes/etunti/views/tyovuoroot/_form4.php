@@ -8,7 +8,7 @@
 $site = Yii::app()->createController('Site');
 $checkPoista = "tyovuorot_3_".Yii::app()->user->adminStatus;
 $poista = $site[0]->checkOikeusFields($checkPoista);
-$omasiistijavaroitus = isset($omasiistijavaroitus) ? $omasiistijavaroitus : false;
+$omasiistijavaroitus = (isset($omasiistijavaroitus) ? $omasiistijavaroitus : false);
 
 if(
 	!isset($model->id) 
@@ -343,6 +343,12 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 </div>
 <script>
 $(function() {
+
+  // Flag for when omasiistijä email is sent and form is submitted, for the
+  // submit function to redirect back to the form. This is so that the shift may
+  // be removed from a cyclic shift (toistuvasta irroittaminen).
+  // This has to be before document.ready for it to work, in this case.
+  var submitRedirectBack = false;
 
   // Updating on list selection change is disabled for now. Button only shown if 
   // the correct value "Ilmoita aloitusaika/green" is selected when opening.
@@ -700,18 +706,20 @@ $(document).ready(function(){
   </div>
   <?php if (Yii::app()->user->kp): ?>
   <div class="col-sm-3">
-    <?= $form->labelEx($model,'omasiistijavaroitus'); ?>
-		<?= $form->dropDownList($model,'omasiistijavaroitus', [
-      0 => Yii::t('main', 'Piilotettu'),
-      1 => Yii::t('main', 'Näytetään'),
-    ], ['class'=>'form-control lomake_valinta']); ?>
+    <?php
+    // echo $form->labelEx($model,'omasiistijavaroitus');
+    echo $form->dropDownList($model,'omasiistijavaroitus', [
+      0 => Yii::t('main', 'Omasiistijävaroitus piilossa'),
+      1 => Yii::t('main', 'Varoita omasiistijöistä'),
+    ], ['class'=>'form-control lomake_valinta']);
+    ?>
   </div>
   <?php endif; ?>
 </div>
 
 
 <!-- #region Omasiistijät -->
-<?php if (isset($model->id) && $toistuva && Yii::app()->user->kp): ?>
+<?php if (isset($model->id) && Yii::app()->user->kp): ?>
 
 <br>
 <div class="row">
@@ -772,289 +780,8 @@ $(document).ready(function(){
 
 </div>
 
-<script>
-
-// Flag for when omasiistijä email is sent and form is submitted, for the
-// submit function to redirect back to the form. This is so that the shift may
-// be removed from a cyclic shift (toistuvasta irroittaminen).
-// This has to be before document.ready for it to work, in this case.
-var submitRedirectBack = false;
-
-/**
- * Sivun ladatessa, asetetaan kohde ID omasiistijälistalle ja rekisteröidään
- * eventti kohdelistan valinnan muutokseen, joka päivittää tämän ID:n.
- */
-$(function() {
-
-  // Määritetään kohdelistan ID, joka vaihtuu jos työvuoro on osa toistuvaa ketjua.
-  const selectId = '<?= $toistuva ? 'ToistuvatTyovuorot_kohde' : 'Tyovuoroot_kohde' ?>';
-
-  // Tallennetut omasiistijät tarkistusta varten.
-  let omasiistijat = [];
-
-
-  /**
-   * Ajetaan tämä funktio aina kun kohde vaihdetaan, tai kun sivu ladataan
-   * ensimmäistä kertaa. Tämä hakee omasiistijät ja tarkistaa että ainakin
-   * yksi valituista siistijöistä on käynyt kohteessa; muuten, näytetään
-   * varoitus. Samalla kerrotaan omasiistijänäkymälle mikä kohde kyseessä.
-   */
-  const kohteenVaihto = function() {
-
-    $(".sw").bootstrapSwitch({
-	size: "small",
-	onColor: "primary",
-	offColor: "danger",
-	onText: "Kyllä",
-	offText: "Ei"
-    });
-
-    // Piilotetaan mahdollisesti auki oleva lista.
-    $('#<?= $omasiistijat_div_id ?>.in').collapse('hide');
-
-    // Haetaan valittu arvo kohdelistasta.
-    const valittuKohde = $(`#${selectId} option:selected`).val();
-
-    // Asetetaan omasiistijänäkymän piilotettuun kenttään uusi ID, jonka
-    // avulla omasiistijänäkymä hakee omasiistijät listalleen.
-    $('#<?= $omasiistijat_placeholder_id ?>').text(valittuKohde);
-
-    // Kohde vaihdettu, tai kortti juuri avattu. Haetaan omasiistijälista.
-    // Haetaan omasiistijät, jotta voidaan näyttää varoitus jos ei ole valittuna.
-    omasiistijat = [];
-    let toistuvaToggled = ($('#is_toistuva').bootstrapSwitch('state') === true);
-    $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijat_lista`, {
-
-      type: 'POST',
-      data: {
-        'location_id': valittuKohde,
-        'force_refresh': false, // TODO: selection
-      },
-
-      error: function(xhr, status, error) {
-        $(`#${workersDivId} .well`).html(`Pyynnössä tapahtui virhe: ${xhr.responseText}`);
-        console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: ${xhr.responseText}`);
-      },
-
-      success: function(data) {
-
-        console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Received response, length: ${data.length}`);
-        let parsed = null;
-        try {
-          parsed = JSON.parse(data);
-        } catch (e) {
-          console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
-          return;
-        }
-
-        if (typeof(parsed) != "object") {
-          console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: Parsed data is unusable (not an object).`);
-        } else {
-          parsed.forEach((item, index) => { omasiistijat.push(item['id']); });
-        }
-
-        // Kohteen vaihdon/initialisaation yhteydessä tarkistetaan omasiistijät.
-        omasiistijaTarkistus();
-      }
-    });
-  };
-
-  /**
-  * Tarkistetaan että valituissa työntekijöissä on vähintään yksi joka on
-  * käynyt kohteessa aiemmin (omasiistijä).
-  */
-  const omasiistijaTarkistus = function() {
-
-    let showWarning = false;
-    let warningsDisabled = ($('#<?= $java_prefix ?>_omasiistijavaroitus').val() == 0);
-    let toistuva = <?= $toistuva ? 1 : 0; ?>
-
-    // Get current selected worker and pairs.
-    let tid = $('#tekijanVaihdo option:selected').val();
-    let tyoparit = [];
-    $('#tyopari-container .multiselect-container li.active a label input').each(function() {
-      tyoparit.push(this.value);
-    });
-
-    // Do checks only if virtual, as otherwise no warnings are shown.
-    if (!warningsDisabled && toistuva) {
-      $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijat_tarkistus`, {
-
-        type: 'POST',
-        data: {
-          'shift_id': '<?= $this_id ?>',
-          'toistuva': true,
-          'tid': tid,
-          'tyoparit': JSON.stringify(tyoparit),
-          'date': '<?= $laatikko_pvm; ?>',
-        },
-
-        error: function(xhr, status, error) {
-          console.log(`(Omasiistijävaroituksen tarkastus epäonnistui. Virhe: ${xhr.responseText}`);
-        },
-
-        success: function(data) {
-          console.log(`(Omasiistijävaroituksen tarkastus: Received response: ${data}`);
-
-          // Output 1 means warnings should be shown; in any other case,
-          // including error cases, hide the warnings.
-          if (data == 1) {
-            // Check if customer has already been notified.
-            if ($('#<?= $java_prefix ?>_omasiistijailmoitus').val() == 1) {
-              $('#omasiistija-varoitus').show().html("<b>Omasiistijää ei ole valittuna (ilmoitettu asiakkaalle)</b>");
-              $('#omasiistijat-ilmoita').attr('disabled', 'disabled');
-              $('#omasiistija-toiminnot').show();
-            } else {
-              $('#omasiistija-varoitus').show();
-              $('#omasiistijat-ilmoita').removeAttr('disabled')
-              $('#omasiistija-toiminnot').show();
-            }
-          } else {
-            $('#omasiistija-varoitus').hide();
-            $('#omasiistija-toiminnot').hide();
-          }
-        }
-      });
-    }
-  };
-
-  // Vaihdetaan omasiistijälistan tila aina kun kohde vaihdetaan.
-  $(`#${selectId}`).on('change', function(e) {
-    kohteenVaihto();
-  });
-
-  // Aina kun työntekijä vaihdetaan yläreunan valikosta, tarkistetaan
-  // omasiistijän tilanne uusiksi, jotta varoitus voidaan näyttää/piilottaa.
-  // Sama tehdään kun valintoja muutetaan työparilistalla.
-  $('#tekijanVaihdo, #tyopari-container .mult').change(function() {
-    omasiistijaTarkistus();
-  });
-
-  // Asetetaan kohde omasiistijälistalle heti työvuoroa avatessa.
-  kohteenVaihto();
-
-  // Show/hide warning and selections when selection is changed.
-  $('#<?= $java_prefix ?>_omasiistijavaroitus').on('change', function(e) {
-    omasiistijaTarkistus();
-  });
-
-  // (omasiistijäilmoitus) Enable/disable send notification button when selection is changed whether or not it has been sent.
-  $('#<?= $java_prefix ?>_omasiistijailmoitus').on('change', function(e) {
-    if ($(this).val() == 0) {
-      $('#omasiistijat-ilmoita').removeAttr('disabled')
-    } else {
-      $('#omasiistijat-ilmoita').attr('disabled', 'disabled');
-    }
-  });
-
-  // Omasiistijät ilmoita -painike - prevent sending when toistuva is selected.
-  <?php if (isset($model->kohteet->asiakas_id)): ?>
-  $('#omasiistijat-ilmoita').on('click', function(e) {
-    e.preventDefault();
-    if (!confirm(`Haluatko varmasti lähettää ilmoituksen asiakkaan sähköpostiin? Huom. sivu päitivvyy lähettämisen jälkeen, jossa saattaa mennä hetki.`)) {
-      return false;
-    }
-
-    let toistuvaToggled = ($('#is_toistuva').bootstrapSwitch('state') === true);
-    if (toistuvaToggled) {
-      alert('Omasiistijäilmoitus on tehtävä työvuorokohtaisesti, jolloin vuoro poistuu ketjusta. Ota pois valinta kohdasta "Toistuva Työvuoro".');
-      return false;
-    }
-
-    // Build list of worker names for the notification.
-    let workers = [];
-    workers.push($('#tekijanVaihdo option:selected').text());
-    $('#tyopari-container .multiselect-container li.active a label').each(function() {
-      workers.push($(this).text());
-    });
-
-    // Just check in case there are some changes to the form.
-    if (workers.length == 0) {
-      alert("Siistijöiden listan rakentaminen ilmoitusta varten epäonnistui. Ota yhteys ylläpitoon.");
-      return false;
-    }
-    let workersJson = JSON.stringify(workers);
-
-    // Perform notification.
-    $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijat_ilmoitus`, {
-
-      type: 'POST',
-      data: {
-        'customer_id': <?= $model->kohteet->asiakas_id; ?>,
-        'names': workersJson
-      },
-
-      // Error handling just in case.
-      error: function (xhr, status, error) {
-        alert(`Omasiistijäilmoituksen lähetyksessä tapahtui sisäinen virhe: ${xhr.responseText}`);
-        console.log(xhr.responseText);
-      },
-
-      // Success, parse received JSON.
-      success: function (data) {
-        console.log(data);
-
-        // Try parse response JSON.
-        let parsed = null;
-        try {
-          parsed = JSON.parse(data);
-        } catch (e) {
-          console.log(`Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
-          alert("Omasiistijäilmoituksen lähetyksessä tapahtui virhe: palvelin palautti viallisen tuloksen.");
-          return false;
-        }
-
-        // Check if parsing failed. Notify log and let it go.
-        if (typeof (parsed) != "object") {
-          console.log("Parsed data is unusable (not an object).");
-          alert("Omasiistijäilmoituksen lähetyksessä tapahtui virhe: palvelin palautti viallisen tuloksen.");
-          return false;
-        }
-
-        // Check if data is empty, which means possible server error.
-        if (parsed.length == 0) {
-          console.log("Empty response received.");
-          alert("Omasiistijäilmoituksen lähetyksessä tapahtui virhe: tyhjä vastaus vastaanotettu palvelimelta.");
-          return false;
-        }
-
-        // Check if empty message, meaning logical fault.
-        if (!('message' in parsed) || parsed.message.length == 0) {
-          alert(`Omasiistijäilmoituksen lähetyksessä tapahtui virhe: palvelin ei palauttanut vastausta.`);
-          return false;
-        }
-
-        // Check if operation failed.
-        if (!('success' in parsed) || parsed.success != true) {
-          alert(`Omasiistijäilmoituksen lähetyksessä tapahtui virhe: ${parsed.message}`);
-          return false;
-        }
-
-        // Everything is normal; notification has been sent. Notify the user
-        // with the returned result message, update the selection box and
-        // disable the button for sending the notification.
-        console.log(parsed.message);
-        // alert(parsed.message);
-        $('#<?= $java_prefix ?>_omasiistijailmoitus').val(1);
-        $('#omasiistijat-ilmoita').attr('disabled', 'disabled');
-
-        // The model needs to be saved, whether it is cyclic or not. If cyclic,
-        // the shift must be removed from it (toistuvasta irroittaminen).
-        // Set flag for submit so it knows to redirect BACK to this form.
-        submitRedirectBack = true;
-        $('#tyovuoroot-form').submit();
-      }
-    })
-
-  });
-  <?php endif; ?>
-});
-</script>
-
 <?php endif; ?>
 <!-- #endregion Omasiistijät -->
-
-
 
 
 <div class="row">
@@ -2198,3 +1925,270 @@ $(document).ready(function(){
 */
 });
 </script>
+
+
+<!-- #region Omasiistijät JS -->
+<?php if (isset($model->id) && Yii::app()->user->kp): ?>
+<script>
+
+  // Hide the selection and notification button until warnings are shown.
+  $('#omasiistija-toiminnot').hide();
+  
+  // Tallennetut omasiistijät tarkistusta varten.
+  let omasiistijat = [],
+      omasiistijaVaroitusTila = false,
+      omasiistijatOverride = {};
+
+  /**
+   * Toggle the regulars warning display.
+   */
+  const omasiistijaVaroitusToggle = function(val = null) {
+    if ((val !== null ? (val !== false) : !omasiistijaVaroitusTila)) {
+      $('#omasiistija-toiminnot').show();
+      if ($('#<?= $java_prefix ?>_omasiistijailmoitus').val() > 0) {
+        $('#omasiistijat-ilmoita').attr('disabled', 'disabled');
+        $('#omasiistija-varoitus').hide();
+        omasiistijaVaroitusTila = false;
+      } else {
+        $('#omasiistijat-ilmoita').removeAttr('disabled')
+        $('#omasiistija-varoitus').show();
+        omasiistijaVaroitusTila = true
+      }
+    } else {
+      $('#omasiistijat-ilmoita').attr('disabled', 'disabled');
+      $('#omasiistija-varoitus').hide();
+      omasiistijaVaroitusTila = false;
+    }
+    return omasiistijaVaroitusTila;
+  };
+
+  /**
+  * Tarkistetaan että valituissa työntekijöissä on vähintään yksi joka on
+  * käynyt kohteessa aiemmin (omasiistijä).
+  */
+  const omasiistijaTarkistus = function() {
+
+    // Get current selected worker and pairs.
+    let tid = $('#tekijanVaihdo option:selected').val();
+    let tyoparit = [];
+    $('#tyopari-container .multiselect-container li.active a label input').each(function() {
+      tyoparit.push(this.value);
+    });
+
+    // Assign overrides.
+    omasiistijatOverride['tid'] = tid;
+    omasiistijatOverride['tyopaari'] = JSON.stringify(tyoparit);
+    omasiistijatOverride['peruutettu'] = $('#<?= $java_prefix; ?>_peruutettu').val();
+    omasiistijatOverride['omasiistijavaroitus'] = $('#<?= $java_prefix ?>_omasiistijavaroitus').val();
+    // omasiistijatOverride['omasiistijailmoitus'] = $('#<?= $java_prefix ?>_omasiistijailmoitus').val();
+
+    // Do checks only if virtual, as otherwise no warnings are shown.
+    if (omasiistijatOverride['omasiistijavaroitus'] == 0) {
+      omasiistijaVaroitusToggle(false);
+      return false;
+    }
+
+    $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijat_tarkistus`, {
+
+      type: 'POST',
+      data: {
+        'shift_id': '<?= $this_id ?>',
+        'override': JSON.stringify(omasiistijatOverride)
+      },
+
+      error: function(xhr, status, error) {
+        console.log(`(Omasiistijävaroituksen tarkastus epäonnistui. Virhe: ${xhr.responseText}`);
+      },
+
+      success: function(data) {
+        // Output 1 means warnings should be shown; in any other case, hide the warnings.
+        console.log(`(Omasiistijävaroituksen tarkastus: Received response: ${data}`);
+        omasiistijaVaroitusToggle(data == 1);
+      }
+    });
+  };
+
+  // Aina kun työntekijä vaihdetaan yläreunan valikosta, tarkistetaan
+  // omasiistijän tilanne uusiksi, jotta varoitus voidaan näyttää/piilottaa.
+  // Sama tehdään kun valintoja muutetaan työparilistalla.
+  $('#tekijanVaihdo, #tyopari-container .mult, #<?= $java_prefix; ?>_omasiistijavaroitus, ' +
+    '#<?= $java_prefix; ?>_omasiistijailmoitus, #<?= $java_prefix; ?>_peruutettu').change(function() {
+    omasiistijaTarkistus();
+  });
+
+  /**
+   * Ajetaan tämä funktio aina kun kohde vaihdetaan, tai kun sivu ladataan
+   * ensimmäistä kertaa. Tämä hakee omasiistijät ja tarkistaa että ainakin
+   * yksi valituista siistijöistä on käynyt kohteessa; muuten, näytetään
+   * varoitus. Samalla kerrotaan omasiistijänäkymälle mikä kohde kyseessä.
+   */
+  const kohteenVaihto = function() {
+
+    $(".sw").bootstrapSwitch({
+      size: "small",
+      onColor: "primary",
+      offColor: "danger",
+      onText: "Kyllä",
+      offText: "Ei"
+    });
+
+    // Piilotetaan mahdollisesti auki oleva lista.
+    $('#<?= $omasiistijat_div_id ?>.in').collapse('hide');
+
+    // Haetaan valittu arvo kohdelistasta.
+    const valittuKohde = $(`#<?= ($toistuva ? 'ToistuvatTyovuorot' : 'Tyovuoroot'); ?>_kohde option:selected`).val();
+
+    // Asetetaan omasiistijänäkymän piilotettuun kenttään uusi ID, jonka
+    // avulla omasiistijänäkymä hakee omasiistijät listalleen.
+    $('#<?= $omasiistijat_placeholder_id ?>').text(valittuKohde);
+
+    // Kohde vaihdettu, tai kortti juuri avattu. Haetaan omasiistijälista.
+    // Haetaan omasiistijät, jotta voidaan näyttää varoitus jos ei ole valittuna.
+    omasiistijat = [];
+    $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijat_lista`, {
+
+      type: 'POST',
+      data: {
+        'location_id': valittuKohde,
+        'force_refresh': false, // TODO: selection
+      },
+
+      error: function(xhr, status, error) {
+        $(`#${workersDivId} .well`).html(`Pyynnössä tapahtui virhe: ${xhr.responseText}`);
+        console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: ${xhr.responseText}`);
+      },
+
+      success: function(data) {
+
+        console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Received response, length: ${data.length}`);
+        let parsed = null;
+        try {
+          parsed = JSON.parse(data);
+        } catch (e) {
+          console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
+          return;
+        }
+
+        if (typeof(parsed) != "object") {
+          console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: Parsed data is unusable (not an object).`);
+        } else {
+          parsed.forEach((item, index) => { omasiistijat.push(item['id']); });
+        }
+
+        // Kohteen vaihdon/initialisaation yhteydessä tarkistetaan omasiistijät.
+        omasiistijatOverride['kohde'] = valittuKohde;
+        omasiistijaTarkistus();
+      }
+    });
+  };
+
+  // Vaihdetaan omasiistijälistan tila aina kun kohde vaihdetaan.
+  $('#<?= ($toistuva ? 'ToistuvatTyovuorot' : 'Tyovuoroot'); ?>_kohde').on('change', function(e) {
+    kohteenVaihto();
+  });
+
+  // Asetetaan kohde omasiistijälistalle heti työvuoroa avatessa.
+  kohteenVaihto();
+
+  // Omasiistijät ilmoita -painike.
+  <?php if (isset($model->kohteet->asiakas_id)): ?>
+  $('#omasiistijat-ilmoita').on('click', function(e) {
+    e.preventDefault();
+    if (!confirm(`Haluatko varmasti lähettää ilmoituksen asiakkaan sähköpostiin? Huom. sivu päitivvyy lähettämisen jälkeen, jossa saattaa mennä hetki.`)) {
+      return false;
+    }
+
+    if ($('#is_toistuva').bootstrapSwitch('state') === true) {
+      alert('Omasiistijäilmoitus on tehtävä työvuorokohtaisesti, jolloin vuoro poistuu ketjusta. Ota pois valinta kohdasta "Toistuva Työvuoro".');
+      return false;
+    }
+
+    // Build list of worker names for the notification.
+    let workers = [];
+    workers.push($('#tekijanVaihdo option:selected').text());
+    $('#tyopari-container .multiselect-container li.active a label').each(function() {
+      workers.push($(this).text());
+    });
+
+    // Just check in case there are some changes to the form.
+    if (workers.length == 0) {
+      alert("Siistijöiden listan rakentaminen ilmoitusta varten epäonnistui. Ota yhteys ylläpitoon.");
+      return false;
+    }
+    let workersJson = JSON.stringify(workers);
+
+    // Perform notification.
+    $.ajax(`${location.protocol}//${location.host}/index.php/tyovuoroot/omasiistijat_ilmoitus`, {
+
+      type: 'POST',
+      data: {
+        'customer_id': <?= $model->kohteet->asiakas_id; ?>,
+        'names': workersJson
+      },
+
+      // Error handling just in case.
+      error: function (xhr, status, error) {
+        alert(`Omasiistijäilmoituksen lähetyksessä tapahtui sisäinen virhe: ${xhr.responseText}`);
+        console.log(xhr.responseText);
+      },
+
+      // Success, parse received JSON.
+      success: function (data) {
+        console.log(data);
+
+        // Try parse response JSON.
+        let parsed = null;
+        try {
+          parsed = JSON.parse(data);
+        } catch (e) {
+          console.log(`Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
+          alert("Omasiistijäilmoituksen lähetyksessä tapahtui virhe: palvelin palautti viallisen tuloksen.");
+          return false;
+        }
+
+        // Check if parsing failed. Notify log and let it go.
+        if (typeof (parsed) != "object") {
+          console.log("Parsed data is unusable (not an object).");
+          alert("Omasiistijäilmoituksen lähetyksessä tapahtui virhe: palvelin palautti viallisen tuloksen.");
+          return false;
+        }
+
+        // Check if data is empty, which means possible server error.
+        if (parsed.length == 0) {
+          console.log("Empty response received.");
+          alert("Omasiistijäilmoituksen lähetyksessä tapahtui virhe: tyhjä vastaus vastaanotettu palvelimelta.");
+          return false;
+        }
+
+        // Check if empty message, meaning logical fault.
+        if (!('message' in parsed) || parsed.message.length == 0) {
+          alert(`Omasiistijäilmoituksen lähetyksessä tapahtui virhe: palvelin ei palauttanut vastausta.`);
+          return false;
+        }
+
+        // Check if operation failed.
+        if (!('success' in parsed) || parsed.success != true) {
+          alert(`Omasiistijäilmoituksen lähetyksessä tapahtui virhe: ${parsed.message}`);
+          return false;
+        }
+
+        // Everything is normal; notification has been sent. Notify the user
+        // with the returned result message, update the selection box and
+        // disable the button for sending the notification.
+        console.log(parsed.message);
+        // alert(parsed.message);
+        $('#<?= $java_prefix ?>_omasiistijailmoitus').val(1);
+        $('#omasiistijat-ilmoita').attr('disabled', 'disabled');
+
+        // The model needs to be saved, whether it is cyclic or not. If cyclic,
+        // the shift must be removed from it (toistuvasta irroittaminen).
+        // Set flag for submit so it knows to redirect BACK to this form.
+        submitRedirectBack = true;
+        $('#tyovuoroot-form').submit();
+      }
+    })
+  });
+  <?php endif; ?>
+</script>
+<?php endif; ?>
+<!-- #endregion -->
