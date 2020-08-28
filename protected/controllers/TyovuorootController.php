@@ -69,17 +69,16 @@ class TyovuorootController extends Controller
 		}
 	}
 
-        public function init()
-        {
-                if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
-                        Yii::app()->theme = 'etunti';
-                } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
-                        Yii::app()->theme = Yii::app()->user->user_theme;
-                } else {
-                        Yii::app()->theme = 'classic';
-                }
-                parent::init();
-        }
+  /** {@inheritdoc} */
+  public function init()
+  {
+    $this->attachBehavior('os', 'application.extensions.OSBehavior');
+    if (Yii::app()->controller->isEtuntiAdmin())
+      Yii::app()->theme = Yii::app()->user->user_theme ?? 'etunti';
+    else
+      Yii::app()->theme = 'classic';
+    parent::init();
+  }
 
 	protected function sprint($val){
 	   	    if($val > 0)
