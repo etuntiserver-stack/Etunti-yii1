@@ -1069,9 +1069,9 @@ public function actionImei($dom)
 				if(isset($kohde->id) and isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->asiakas_id != 0){
 					$asiakas = Asiakkaat::model()->findbypk($kohde->asiakas_id);
 				if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
-					$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yrityksen_nimi.'</b>';
+					$nm = '<b>'.Yii::t('main', 'Asiakas').':</b> '.$asiakas->yrityksen_nimi;
 				} elseif(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and !empty($asiakas->yhteyshenkilo)){
-					$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yhteyshenkilo.'</b>';
+					$nm = '<b>'.Yii::t('main', 'Asiakas').':</b> '.$asiakas->yhteyshenkilo;
 				}
 				}
 				// Nayta asiakas -->
@@ -1079,7 +1079,7 @@ public function actionImei($dom)
 				// <-- Nayta kohteen puhelinnumero
 				$puh_nro = '';
 				if(isset($kohde->id) and isset($asetukset->app_show_phone) and $asetukset->app_show_phone == 1 and $kohde->puh_nro != ''){
-		      			$puh_nro = '<br>'.Yii::t('main', 'Kohteen puhelinnumero').': <b><a href="tel:'.$kohde->puh_nro.'">'.$kohde->puh_nro.'</a></b>';
+		      			$puh_nro = '<br><b>'.Yii::t('main', 'Kohteen puhelinnumero').':</b> <a href="tel:'.$kohde->puh_nro.'">'.$kohde->puh_nro.'</a>';
 				}
 				// Nayta kohteen puhelinnumero -->
 
@@ -1114,7 +1114,7 @@ public function actionImei($dom)
 				// <-- app_naytetaanko_kohteen_yhteyshenkilo
 				$kohteen_yhteyshenkilo = '';
 				if(isset($kohde->id) and isset($asetukset->app_naytetaanko_kohteen_yhteyshenkilo) and $asetukset->app_naytetaanko_kohteen_yhteyshenkilo == 1 and $kohde->etu_suku_nimet != ''){
-					$kohteen_yhteyshenkilo = '<br>'.Yii::t('main', 'Kohteen yhteyshenkilö').': <b>'.$kohde->etu_suku_nimet.'</b>';
+					$kohteen_yhteyshenkilo = '<br><b>'.Yii::t('main', 'Kohteen yhteyshenkilö').':</b> '.$kohde->etu_suku_nimet;
 				}
 				// app_naytetaanko_kohteen_yhteyshenkilo -->
 				$sel .= '<div class="well kohde_'.((isset($data->kohteet->id))?$data->kohteet->id:'').'">';
@@ -1131,6 +1131,15 @@ public function actionImei($dom)
 					$sel .= '<p><label>Työ-erittelyt:</label><ul>';
 					foreach(json_decode($data->tyo_erittelyt, true) as $k => $v){
 						$sel .= '<li>'.$v.'</li>';
+					}
+					$sel .= '</ul></p><hr>';
+				}
+
+				$urls = $tvController[0]->getTVUrls($data->url_linkkit);
+				if( count($urls) > 0 ){
+					$sel .= '<p><label>URL linkit:</label><ul>';
+			 		foreach($urls as $k => $v){
+						$sel .= '<li><a href="'.$v.'">'.$k.'</a></li>';
 					}
 					$sel .= '</ul></p><hr>';
 				}

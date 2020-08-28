@@ -80,15 +80,16 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
                      'tvuoro_ids' => 'text DEFAULT NULL',
                      'poistettu_pvm' => 'text DEFAULT NULL',
 		     'tyo_erittelyt' => 'text DEFAULT NULL',
+		     'url_linkkit' => 'text DEFAULT NULL',
 		     'muistiinpano' => 'text DEFAULT NULL',
                      'tyoajanlaatu' => 'varchar(50) DEFAULT NULL',
                      'korjattu_poista_tama' => 'int(1) DEFAULT 0',
 		     'new_poistettu_pvm' => 'text DEFAULT NULL',
                      'peruutettu' => 'int(1) DEFAULT 0',
 		     'laskutettu' => 'int(1) DEFAULT 0',
-         'omasiistijavaroitus' => 'int(1) DEFAULT 1', // 0: Disabled, 1: Enabled
-         'omasiistijailmoitus' => 'int(1) DEFAULT 0', // 0: Not notified, 1: Notified
-         'aloitusaikailmoitus' => 'int(1) DEFAULT 0', // 0: Not notified, 1: Notified, 2: Hide
+		     'omasiistijavaroitus' => 'int(1) DEFAULT 1', // 0: Disabled, 1: Enabled
+		     'omasiistijailmoitus' => 'int(1) DEFAULT 0', // 0: Not notified, 1: Notified
+		     'aloitusaikailmoitus' => 'int(1) DEFAULT 0', // 0: Not notified, 1: Notified, 2: Hide
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -117,7 +118,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 			array('alku, loppu, pituus, kesto', 'length', 'max'=>10),
 			array('tyoajanmerkinta', 'length', 'max'=>100),
 			array('tietoja', 'length', 'max'=>10000),
-			array('tyopaari, tvuoro_ids, poistettu_pvm, lisa_tuotteet, tyo_erittelyt, muistiinpano, viikko_paivat, new_poistettu_pvm', 'safe'),
+			array('tyopaari, tvuoro_ids, poistettu_pvm, lisa_tuotteet, tyo_erittelyt, muistiinpano, viikko_paivat, new_poistettu_pvm, url_linkkit', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, pfrom, pto, viikkoja, viikko_paivat, tid, kohde, pvm, alku, loppu, kesto, tyoajanmerkinta, status, tietoja, tyopaari', 'safe', 'on'=>'search'),
@@ -202,9 +203,10 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 			'tietoja' => 'Tietoja',
 			'tyopaari' => 'Tyopaari',
 			'piilota_mobiilista'=>Yii::t('main', 'Näytä mobiilissa'),
-      'omasiistijavaroitus' => Yii::t('main', 'Omasiistijävaroitukset'),
-      'omasiistijailmoitus' => Yii::t('main', 'Ilmoitus asiakkaalle omasiistijöistä'),
-      'aloitusaikailmoitus' => Yii::t('main', 'Aloitusajan ilmoittaminen'),
+			'omasiistijavaroitus' => Yii::t('main', 'Omasiistijävaroitukset'),
+			'omasiistijailmoitus' => Yii::t('main', 'Ilmoitus asiakkaalle omasiistijöistä'),
+			'aloitusaikailmoitus' => Yii::t('main', 'Aloitusajan ilmoittaminen'),
+			'url_linkkit' => Yii::t('main', 'URL linkit'),
 		);
 	}
 

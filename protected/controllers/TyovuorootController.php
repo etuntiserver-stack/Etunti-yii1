@@ -1433,6 +1433,14 @@ class TyovuorootController extends Controller
 				$tyo_erittelyt = json_decode($tv->tyo_erittelyt, true);
 			}
 		}
+		$kohteet = Yii::app()->createController('Kohteet');
+		$url_linkit = $kohteet[0]->getKohdeUrls($m->url_linkkit);
+		if($tv_id !== null){
+			$tv = Tyovuoroot::model()->find(" id='".$tv_id."' AND kohde='".$id."' ");
+			if(isset($tv->id)){
+				$url_linkit = $this->getTVUrls($tv->url_linkkit);
+			}
+		}
 
 		  $ohje = '';
 		if(isset($k[1]))
@@ -1469,8 +1477,32 @@ class TyovuorootController extends Controller
 		}
 
 
-		echo json_encode(array($ohje,$tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt,$m->puh_nro,$m->email,$m->arvioitu_kello_alku,$m->arvioitu_kello_loppu, $tiedostot));
+		echo json_encode(array($ohje,$tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt,$m->puh_nro,$m->email,$m->arvioitu_kello_alku,$m->arvioitu_kello_loppu, $tiedostot, $url_linkit));
 		exit;
+	}
+
+	public function getTVUrls($url_linkkit)
+	{
+		$ready 	= [];
+		if(is_array(json_decode($url_linkkit, true)))
+		{
+			$arr 	= json_decode($url_linkkit, true);
+			$urls 	= [];
+	 		foreach($arr as $k => $v){
+		 		foreach($v as $k1 => $v1){
+					if($k == 'url')
+						$urls[$k1] = $v1;
+				}
+			}
+	 		foreach($arr as $k => $v){
+		 		foreach($v as $k1 => $v1){
+					if($k == 'nimike' and isset($urls[$k1]))
+						$ready[$v1] = $urls[$k1];
+				}
+			}
+		}	
+
+		return $ready;
 	}
 
 	public function actionView($id)
@@ -3695,6 +3727,11 @@ class TyovuorootController extends Controller
 			$model->tyo_erittelyt = json_encode($model->tyo_erittelyt, JSON_FORCE_OBJECT);
 		else
 			$model->tyo_erittelyt = '';
+
+		if( is_array($model->url_linkkit) and count($model->url_linkkit) > 0 )
+			$model->url_linkkit = json_encode($model->url_linkkit, JSON_FORCE_OBJECT);
+		else
+			$model->url_linkkit = '';
 
 		if( is_array($model->muistiinpano) and count($model->muistiinpano) > 0 )
 			$model->muistiinpano = json_encode($model->muistiinpano, JSON_FORCE_OBJECT);

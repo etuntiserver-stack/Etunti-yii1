@@ -543,7 +543,7 @@ $(document).ready(function(){
   </div>
 </div>
 </div><!-- 1 tila -->
-
+<br>
 <div class="row">
   <div class="col-sm-3" id="tyopari-container">
 		<label><?php echo Yii::t('main', 'Työpari'); ?></label><br>
@@ -618,7 +618,7 @@ $(document).ready(function(){
 </div>
 <br>
 
-<div class="row" id="lisapalvelut_valinta">
+<div class="row">
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'tuoteID'); ?>
 		<?php
@@ -672,7 +672,7 @@ $(document).ready(function(){
 		</div>
   </div>
 </div>
-
+<br>
 <?php
 	$criteria = new CDbCriteria();
         $criteria->order = " id DESC ";
@@ -685,6 +685,14 @@ $(document).ready(function(){
       <span><?php echo Yii::t('main','Toistuva työvuoro'); ?></span>
       <span class="input-group-btn">
         <input type="checkbox" name="<?=$java_prefix?>[is_toistuva]" class="sw" id="is_toistuva" <?=(( strtotime($laatikko_pvm) < strtotime(date("Y-m-d")) )? 'disabled': '')?>>
+      </span>
+    </div>  
+  </div>
+  <div class="col-sm-3">
+    <div class="input-group">
+      <span class="form-control lomake_kenta"><?php echo Yii::t('main','URL linkit'); ?></span>
+      <span class="input-group-btn">
+        <button class="btn btn-primary uusilinkki lomake_btn" type="button"><i class="fa fa-plus"></i></button>
       </span>
     </div>  
   </div>
@@ -704,6 +712,9 @@ $(document).ready(function(){
       </span>
     </div>  
   </div>
+</div>
+<br>
+<div class="row">
   <?php if (Yii::app()->user->kp): ?>
   <div class="col-sm-3">
     <?php
@@ -784,6 +795,8 @@ $(document).ready(function(){
 <!-- #endregion Omasiistijät -->
 
 
+
+<br>
 <div class="row">
 	<div id="lisapalvelu_lista">
 	<?php $lisa_tuotteet = json_decode($model->lisa_tuotteet, true); ?>
@@ -817,58 +830,33 @@ $(document).ready(function(){
 	<?php endif; ?>
 	</div>
 
-<script type="text/javascript">
-$(document).ready(function(){
-
-  $('.plus_lisapalvelu').click(function(){
-	var lisapalvelu_tuote = $('#lisapalvelu_tuote option:selected').val();
-	var lisapalvelu_yksikko = $('#lisapalvelu_tuote option:selected').attr('yksikko');
-	var lisapalvelu_maara = $('#lisapalvelu_maara').val();
-	if( lisapalvelu_tuote === '' ){
-		$('#lisapalvelu_tuote').css({'border' : '1px red solid'}).focus();
-		return false;
-	}
-	if( lisapalvelu_maara === '' ){
-		$('#lisapalvelu_maara').css({'border' : '1px red solid'}).focus();
-		return false;
-	}
-
-	var lp_lista = $("#lisapalvelu_lista").text().trim();
-	if( lp_lista == '' ){
-		$("#lisapalvelu_lista").append('<div class="col-sm-4 lisapalvelu_laatiko"><legend>Lisäpalvelut</legend>');
-	}
-
-	$('.lisapalvelu_laatiko').append('' +
-	'<div class="row">' +
-	 '<div class="col-sm-11">' +
-		$('#lisapalvelu_tuote option:selected').text() + ': <b>' + $('#lisapalvelu_maara').val() + ' '+ lisapalvelu_yksikko +'</b>' +
-		'<input type="hidden" name="<?=$java_prefix?>[lisa_tuotteet][tuote][]" value="'+ $('#lisapalvelu_tuote option:selected').val() +'">' +
-	 '</div>' +
-	 '<div class="col-sm-1">' +
-		'<div class="pull-right">' + 
-			'<span class="link fa fa-trash text-danger poista_lisa"></span>' +
-		'</div>' +
-		'<input type="hidden" name="<?=$java_prefix?>[lisa_tuotteet][maara][]" value="'+ $('#lisapalvelu_maara').val() +'">' +
-	 '</div>' +
-	'</div>' );
-
-	if( lp_lista == '' ){
-		$(".lisapalvelu_laatiko").append('</div>');
-	}
-
-
-	$('#lisapalvelu_tuote').css({'border' : '1px green solid'}).val('');
-	$('#lisapalvelu_maara').css({'border' : '1px green solid'}).val('');
-  });
-
-  $(document).delegate(".poista_lisa","click",function(){
-	$(this).closest('.row').remove();
-  });
-  $("#lisapalvelu_tuote").change(function(){
-	$("#lisapalvelu_maara").css({'border' : '1px red solid'}).focus();
-  });
-});
-</script>
+	<!-- Url linkit -->
+	<div id="linkkilista">
+	<?php
+		$urls = $this->getTVUrls($model->url_linkkit);
+		if( count($urls) > 0 ){
+			echo '
+			<div class="col-sm-6 linkkilista_laatiko">
+			<legend>'.Yii::t('main','URL linkit').'</legend>';
+	 		foreach($urls as $k => $v){
+			echo '
+			 <div class="row">
+			  <div class="col-sm-5">
+			   <input type="text" name="'.$java_prefix.'[url_linkkit][nimike][]" class="form-control" value="'.$k.'" placeholder="URL nimike">
+			  </div>
+			  <div class="col-sm-5">
+			   <input type="text" name="'.$java_prefix.'[url_linkkit][url][]" class="form-control" value="'.$v.'" placeholder="http osoite">
+			  </div>
+			  <div class="col-sm-1 text-right">
+			   <span class="btn btn-danger fa fa-trash poislistasta"></span>
+			  </div>
+	 		 </div>';
+			}
+			echo '</div>';
+		}
+	?>
+	</div>
+	<!-- Url linkit / -->
 
 	<div id="erittelynlista">
 	 <?php if(is_array(json_decode($model->tyo_erittelyt, true))): ?>
@@ -1785,8 +1773,9 @@ $(document).ready(function(){
 	$('#<?=$java_prefix?>_status').val('3').css({"border" : "1px green solid"});
 	$('#<?=$java_prefix?>_tyoajanlaatu').val('');
 	$("#<?=$java_prefix?>_kohde").removeClass('bg-danger');
-	var tyo_erittelyt = '';
-	var tv_id = '<?php if(isset($model->id)){ echo $model->id; } ?>';
+	var tyo_erittelyt 	= '';
+	var url_links 		= '';
+	var tv_id 		= '<?php if(isset($model->id)){ echo $model->id; } ?>';
 	linkkiKohteeseen();
 	$.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+ thisID +'&tv_id='+ tv_id,
@@ -1801,6 +1790,7 @@ $(document).ready(function(){
 			$('#<?=$java_prefix?>_postitoimipaikka').val(d[5]);
 
 			// <-- tyo_erittelyt 
+			$("#erittelynlista").html('');
 			if($.isArray(d[6])){
 			$.each(d[6], function( index, value ) {
 			  tyo_erittelyt += '' +
@@ -1816,6 +1806,27 @@ $(document).ready(function(){
 			}
 			$("#erittelynlista").html('<div class="col-sm-6 erittelynlista_laatiko"><legend>Työerittelyt</legend>' + tyo_erittelyt + '</div>');
 			//    tyo_erittelyt -->
+
+			// <-- url linkit 
+			$("#linkkilista").html('');
+			if(d[12]){
+			$.each(d[12], function( index, value ) {
+			  url_links += '' +
+			 '<div class="row">' +
+			  '<div class="col-sm-5">' +
+			   '<input type="text" name="<?=$java_prefix?>[url_linkkit][nimike][]" class="form-control" placeholder="URL nimike" value="'+ index +'">' +
+			  '</div>' +
+			  '<div class="col-sm-5">' +
+			   '<input type="text" name="<?=$java_prefix?>[url_linkkit][url][]" class="form-control" placeholder="http osoite" value="'+ value +'">' +
+			  '</div>' +
+			  '<div class="col-sm-1 text-right">' +
+			   '<span class="btn btn-danger fa fa-trash poislistasta"></span>' +
+			  '</div>' +
+	 		 '</div>';
+			});
+			}
+			$("#linkkilista").html('<div class="col-sm-6 linkkilista_laatiko"><legend>URL linkit</legend>' + url_links + '</div>');
+			//    url linkit -->
 
 			if(d[2] !== ''){
 				$('#arvioitu_kesto').html(d[2]);
@@ -1836,6 +1847,54 @@ $(document).ready(function(){
 		}
 	});
   }
+  // <-- lisapalvelu_tuote
+  $('.plus_lisapalvelu').click(function(){
+	var lisapalvelu_tuote = $('#lisapalvelu_tuote option:selected').val();
+	var lisapalvelu_yksikko = $('#lisapalvelu_tuote option:selected').attr('yksikko');
+	var lisapalvelu_maara = $('#lisapalvelu_maara').val();
+	if( lisapalvelu_tuote === '' ){
+		$('#lisapalvelu_tuote').css({'border' : '1px red solid'}).focus();
+		return false;
+	}
+	if( lisapalvelu_maara === '' ){
+		$('#lisapalvelu_maara').css({'border' : '1px red solid'}).focus();
+		return false;
+	}
+
+	var lp_lista = $("#lisapalvelu_lista").text().trim();
+	if( lp_lista == '' ){
+		$("#lisapalvelu_lista").append('<div class="col-sm-6 lisapalvelu_laatiko"><legend>Lisäpalvelut</legend>');
+	}
+
+	$('.lisapalvelu_laatiko').append('' +
+	'<div class="row">' +
+	 '<div class="col-sm-11">' +
+		$('#lisapalvelu_tuote option:selected').text() + ': <b>' + $('#lisapalvelu_maara').val() + ' '+ lisapalvelu_yksikko +'</b>' +
+		'<input type="hidden" name="<?=$java_prefix?>[lisa_tuotteet][tuote][]" value="'+ $('#lisapalvelu_tuote option:selected').val() +'">' +
+	 '</div>' +
+	 '<div class="col-sm-1">' +
+		'<div class="pull-right">' + 
+			'<span class="link fa fa-trash text-danger poista_lisa"></span>' +
+		'</div>' +
+		'<input type="hidden" name="<?=$java_prefix?>[lisa_tuotteet][maara][]" value="'+ $('#lisapalvelu_maara').val() +'">' +
+	 '</div>' +
+	'</div>' );
+
+	if( lp_lista == '' ){
+		$(".lisapalvelu_laatiko").append('</div>');
+	}
+
+
+	$('#lisapalvelu_tuote').css({'border' : '1px green solid'}).val('');
+	$('#lisapalvelu_maara').css({'border' : '1px green solid'}).val('');
+  });
+  $(document).delegate(".poista_lisa","click",function(){
+	$(this).closest('.row').remove();
+  });
+  $("#lisapalvelu_tuote").change(function(){
+	$("#lisapalvelu_maara").css({'border' : '1px red solid'}).focus();
+  });
+  // lisapalvelu_tuote -->
   $(".uusierittely").click(function(){
 	var er_lista = $("#erittelynlista").text().trim();
 	if( er_lista == '' )
@@ -1856,7 +1915,29 @@ $(document).ready(function(){
 
 	$(".erittelynlista_laatiko input:last").focus();
   });
+  $(".uusilinkki").click(function(){
+	var url_lista = $("#linkkilista").text().trim();
+	if( url_lista == '' )
+		$("#linkkilista").append('<div class="col-sm-6 linkkilista_laatiko"><legend>URL linkit</legend>');
 
+	$(".linkkilista_laatiko").append('' +
+			 '<div class="row">' +
+			  '<div class="col-sm-5">' +
+			   '<input type="text" name="<?=$java_prefix?>[url_linkkit][nimike][]" class="form-control" placeholder="URL nimike">' +
+			  '</div>' +
+			  '<div class="col-sm-5">' +
+			   '<input type="text" name="<?=$java_prefix?>[url_linkkit][url][]" class="form-control" placeholder="http osoite">' +
+			  '</div>' +
+			  '<div class="col-sm-1 text-right">' +
+			   '<span class="btn btn-danger fa fa-trash poislistasta"></span>' +
+			  '</div>' +
+	 		 '</div>'
+	);
+	if( url_lista == '' )
+		$(".linkkilista_laatiko").append('</div>');
+
+	$(".linkkilista_laatiko input:last").focus();
+  });
   $(document).delegate(".poislistasta","click",function(){
 	$(this).closest(".row").remove();
   });
