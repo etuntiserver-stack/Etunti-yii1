@@ -686,7 +686,7 @@ $(document).ready(function(){
     <div class="input-group">
       <span class="form-control lomake_kenta"><?php echo Yii::t('main','URL linkit'); ?></span>
       <span class="input-group-btn">
-        <button class="btn btn-primary uusilinkki lomake_btn <?=(isset($mobile->id) and is_array(json_decode($mobile->url_linkkit, true)))?'disabled':''?>" type="button"><i class="fa fa-plus"></i></button>
+        <button class="btn btn-primary uusilinkki lomake_btn" type="button"><i class="fa fa-plus"></i></button>
       </span>
     </div>  
   </div>
