@@ -537,7 +537,7 @@ $(document).ready(function(){
   </div>
 </div>
 </div><!-- 1 tila -->
-
+<br>
 <div class="row">
   <div class="col-sm-3" id="tyopari-container">
 		<label><?php echo Yii::t('main', 'Työpari'); ?></label><br>
@@ -612,7 +612,7 @@ $(document).ready(function(){
 </div>
 <br>
 
-<div class="row" id="lisapalvelut_valinta">
+<div class="row">
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'tuoteID'); ?>
 		<?php
@@ -666,7 +666,7 @@ $(document).ready(function(){
 		</div>
   </div>
 </div>
-
+<br>
 <?php
 	$criteria = new CDbCriteria();
         $criteria->order = " id DESC ";
@@ -1101,58 +1101,6 @@ $(function() {
 	<?php endif; ?>
 	</div>
 
-<script type="text/javascript">
-$(document).ready(function(){
-
-  $('.plus_lisapalvelu').click(function(){
-	var lisapalvelu_tuote = $('#lisapalvelu_tuote option:selected').val();
-	var lisapalvelu_yksikko = $('#lisapalvelu_tuote option:selected').attr('yksikko');
-	var lisapalvelu_maara = $('#lisapalvelu_maara').val();
-	if( lisapalvelu_tuote === '' ){
-		$('#lisapalvelu_tuote').css({'border' : '1px red solid'}).focus();
-		return false;
-	}
-	if( lisapalvelu_maara === '' ){
-		$('#lisapalvelu_maara').css({'border' : '1px red solid'}).focus();
-		return false;
-	}
-
-	var lp_lista = $("#lisapalvelu_lista").text().trim();
-	if( lp_lista == '' ){
-		$("#lisapalvelu_lista").append('<div class="col-sm-4 lisapalvelu_laatiko"><legend>Lisäpalvelut</legend>');
-	}
-
-	$('.lisapalvelu_laatiko').append('' +
-	'<div class="row">' +
-	 '<div class="col-sm-11">' +
-		$('#lisapalvelu_tuote option:selected').text() + ': <b>' + $('#lisapalvelu_maara').val() + ' '+ lisapalvelu_yksikko +'</b>' +
-		'<input type="hidden" name="<?=$java_prefix?>[lisa_tuotteet][tuote][]" value="'+ $('#lisapalvelu_tuote option:selected').val() +'">' +
-	 '</div>' +
-	 '<div class="col-sm-1">' +
-		'<div class="pull-right">' + 
-			'<span class="link fa fa-trash text-danger poista_lisa"></span>' +
-		'</div>' +
-		'<input type="hidden" name="<?=$java_prefix?>[lisa_tuotteet][maara][]" value="'+ $('#lisapalvelu_maara').val() +'">' +
-	 '</div>' +
-	'</div>' );
-
-	if( lp_lista == '' ){
-		$(".lisapalvelu_laatiko").append('</div>');
-	}
-
-
-	$('#lisapalvelu_tuote').css({'border' : '1px green solid'}).val('');
-	$('#lisapalvelu_maara').css({'border' : '1px green solid'}).val('');
-  });
-
-  $(document).delegate(".poista_lisa","click",function(){
-	$(this).closest('.row').remove();
-  });
-  $("#lisapalvelu_tuote").change(function(){
-	$("#lisapalvelu_maara").css({'border' : '1px red solid'}).focus();
-  });
-});
-</script>
 	<!-- Url linkit -->
 	<div id="linkkilista">
 	<?php
@@ -2170,6 +2118,54 @@ $(document).ready(function(){
 		}
 	});
   }
+  // <-- lisapalvelu_tuote
+  $('.plus_lisapalvelu').click(function(){
+	var lisapalvelu_tuote = $('#lisapalvelu_tuote option:selected').val();
+	var lisapalvelu_yksikko = $('#lisapalvelu_tuote option:selected').attr('yksikko');
+	var lisapalvelu_maara = $('#lisapalvelu_maara').val();
+	if( lisapalvelu_tuote === '' ){
+		$('#lisapalvelu_tuote').css({'border' : '1px red solid'}).focus();
+		return false;
+	}
+	if( lisapalvelu_maara === '' ){
+		$('#lisapalvelu_maara').css({'border' : '1px red solid'}).focus();
+		return false;
+	}
+
+	var lp_lista = $("#lisapalvelu_lista").text().trim();
+	if( lp_lista == '' ){
+		$("#lisapalvelu_lista").append('<div class="col-sm-6 lisapalvelu_laatiko"><legend>Lisäpalvelut</legend>');
+	}
+
+	$('.lisapalvelu_laatiko').append('' +
+	'<div class="row">' +
+	 '<div class="col-sm-11">' +
+		$('#lisapalvelu_tuote option:selected').text() + ': <b>' + $('#lisapalvelu_maara').val() + ' '+ lisapalvelu_yksikko +'</b>' +
+		'<input type="hidden" name="<?=$java_prefix?>[lisa_tuotteet][tuote][]" value="'+ $('#lisapalvelu_tuote option:selected').val() +'">' +
+	 '</div>' +
+	 '<div class="col-sm-1">' +
+		'<div class="pull-right">' + 
+			'<span class="link fa fa-trash text-danger poista_lisa"></span>' +
+		'</div>' +
+		'<input type="hidden" name="<?=$java_prefix?>[lisa_tuotteet][maara][]" value="'+ $('#lisapalvelu_maara').val() +'">' +
+	 '</div>' +
+	'</div>' );
+
+	if( lp_lista == '' ){
+		$(".lisapalvelu_laatiko").append('</div>');
+	}
+
+
+	$('#lisapalvelu_tuote').css({'border' : '1px green solid'}).val('');
+	$('#lisapalvelu_maara').css({'border' : '1px green solid'}).val('');
+  });
+  $(document).delegate(".poista_lisa","click",function(){
+	$(this).closest('.row').remove();
+  });
+  $("#lisapalvelu_tuote").change(function(){
+	$("#lisapalvelu_maara").css({'border' : '1px red solid'}).focus();
+  });
+  // lisapalvelu_tuote -->
   $(".uusierittely").click(function(){
 	var er_lista = $("#erittelynlista").text().trim();
 	if( er_lista == '' )
