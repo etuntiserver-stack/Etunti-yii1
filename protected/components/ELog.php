@@ -37,7 +37,7 @@ class ELog extends \CApplicationComponent
         // TODO: LOG
         // TODO: LOG
         // TODO: LOG
-        // TODO: LOG  
+        // TODO: LOG  gitj
 
 
 

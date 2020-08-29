@@ -251,7 +251,7 @@ class Omasiistijat extends \CApplicationComponent
         var_dump(1);
         $abort = true;
 
-      } elseif (isset($this->cc[$this->cid])) {
+      } elseif (isset($this->cc[$this->cid])) {                               
 
         // Request full cache data.
         $this->tracef('cache', "Omasiistijat (ID %d): Load from main cache (%s)", $id, $this->cname);
