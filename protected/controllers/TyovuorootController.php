@@ -1,5 +1,7 @@
 <?php
 
+use application\components\etunti\Omasiistijat;
+
 class TyovuorootController extends Controller
 {
 	/**
@@ -69,10 +71,9 @@ class TyovuorootController extends Controller
 		}
 	}
 
-  /** {@inheritdoc} */
   public function init()
   {
-    $this->attachBehavior('os', 'application.extensions.OSBehavior');
+    $this->attachBehavior('os', new \application\components\Omasiistijat);
     if (Yii::app()->controller->isEtuntiAdmin())
       Yii::app()->theme = Yii::app()->user->user_theme ?? 'etunti';
     else
@@ -2335,7 +2336,10 @@ class TyovuorootController extends Controller
 
     // OMASIISTIJÄT TARKISTUS - Enabled only on kotipuhtaaksi, for now.
     // TODO: Asetuksiin valinta, jolla voidaan enable/disable
-    $omasiistijavaroitus = $this->regulars_warning_check($arvo);
+    if (Yii::app()->user->kp)
+      $omasiistijavaroitus = Yii::app()->os->check_warning($arvo);
+    else
+      $omasiistijavaroitus = false;
 
 		$asiakasNakyvissa = '';
 		if( $asiakas_tyovuorossa ){
@@ -3253,7 +3257,10 @@ class TyovuorootController extends Controller
     // Order tyontekijat -->
 
     // Omasiistijävaroitus
-    $omasiistijavaroitus = $this->regulars_warning_check($model);
+    if (Yii::app()->user->kp)
+      $omasiistijavaroitus = Yii::app()->os->check_warning($model);
+    else
+      $omasiistijavaroitus = false;
 
        		$criteria = new CDbCriteria();
 		$criteria->select = "id, $tt_order_1, $tt_order_2";
@@ -5470,221 +5477,6 @@ class TyovuorootController extends Controller
     }
   }
 
-  /**
-   * Get list of workers that have approved shifts/cycles in a target location.
-   *
-   * TODO: Logging.
-   *
-   * @param int $location_id
-   * ID of the target location (model: Kohteet).
-   *
-   * @param bool $force_refresh
-   * Whether to refresh cached results if they exist.
-   *
-   * @return array
-   * Array of active records with attr: "id", "tekijan_nimi" and "sukunimi"
-   */
-  public function regulars_list($id)
-  {
-    // Abort flag, used to prevent repeated requests after failed cache load.
-    // Default to user->kp, to mark upcoming requests as abort straight away.
-    static $abort = !Yii::app()->user->kp;
-
-    // Return if the function was already aborted before in this request.
-    if (isset($abort) && $abort)
-      return [];
-
-    // Declare static variables. Use static for local cache, in order to try
-    // prevent repeated read/write operations; one per request.
-    /** @var CMemCache $cobj */
-    static $cobj;   // Primary cache controller.
-    static $ckey;   // Cache key for the main data array.
-    static $cdata;  // Items, each with created "time" and "ids" array.
-
-    // Check if cache object not initialized, then this is the first pass.
-    if (!isset($cobj)) {
-
-      // Initialize static variables on first pass of the request.
-      $cobj = Yii::app()->cache;
-      $ckey = $this->cachekey('omasiistijat');
-      $cdata = [];
-      $ccls = get_class($cobj);
-
-      // Check that cache provider is available to use.
-      if ($ccls === false) {
-
-        // Cache not enabled, or an error happened.
-        $this->logf(4, 'cache', "Omasiistijat ID %d: Cache component unavailable. Aborting.", $id);
-        $abort = true;
-
-      } elseif ($ccls === 'CDummyCache') {
-
-        // Allow CDummyCache in development environment.
-        $this->tracef('cache', "Omasiistijat ID %d: CDummyCache is valid in dev env. Otherwise, aborting.", $id);
-        $abort = !DEV_ENV;
-
-      } elseif (isset($cobj[$ckey])) {
-
-        // Request full cache data.
-        $this->tracef('cache', "Omasiistijat ID %d: Loading main cache from %s.", $id, $ccls);
-        $cdata = $cobj->get($ckey);
-      }
-    }
-
-    // If loading from cache failed or invalid data, abort.
-    if (!is_array($cdata)) {
-      $this->logf(4, 'cache', "Omasiistijat: Main cache is not an array. Deleting.");
-      $cobj->delete($ckey);
-      $abort = true;
-    }
-
-    // Reset local statics and return if aborting.
-    if ($abort) {
-      $this->tracef('cache', "Omasiistijat: Aborting due to previous error.");
-      $cobj = $cdata = null;
-      return [];
-    }
-
-    // Check if requested ID is loaded in cache.
-    if (isset($cdata[$id])) {
-
-      $data = $cdata[$id]['data'];
-      $time = $cdata[$id]['time'];
-      $age = time() - $time;
-
-      if ($age < 7200) {
-        $fmt = "Omasiistijat ID %d: Load cache (#:%d %ds old)";
-        $this->tracef('cache', $fmt, $id, count($data), $age);
-        return $data;
-      }
-    }
-
-    // Get list of cleaners with approved hours in target location.
-    $data = Yii::app()->db1->createCommand("
-      SELECT id, tekijan_nimi, sukunimi
-      FROM sivex_ttekijat
-      WHERE aktiivinen = 1
-      AND id IN
-      (
-        SELECT tid FROM sivexkuitti
-          WHERE hyvaksytty != ''
-          AND kohdenID == :id
-        UNION DISTINCT
-        SELECT tid FROM sivexkuitti_repaired
-          WHERE hyvaksytty != ''
-          AND kohdenID == :id
-      )
-      ORDER BY id ASC
-    ")->queryAll(true, [':id' => $id]);
-
-    // Check that data is valid.
-    if (!is_array($data)) {
-      $abort = true;
-      $this->logf(4, 'cache', "Omasiistijat ID %d: Refreshed data is not an array. Aborting.", $id);
-      return [];
-    }
-
-    // Save data to cache with 4h expiration time.
-    $cdata[$id] = ['time' => time(), 'data' => $data];
-    $cobj->set($ckey, $cdata, 14400);
-    $this->tracef('cache', "Omasiistijat ID %d: Refresh (#%d)", $id, count($data));
-    return $data;
-  }
-
-  /**
-   * Checks if the cleaners on a shift are not regulars, and warnings are on.
-   *
-   * Additional checks are made that should affect whether or not the warnings
-   * are displayed, based on information on the object.
-   *
-   * @param mixed $tt
-   * Tyovuoroot/ToistuvatTyovuorot model or any object with same properties.
-   * Properties that are checked for:
-   *
-   *   "kohteet"->id   "omasiistijailmoitus"
-   *   "peruutettu"    "omasiistijavaroitus"
-   *   "tyopaari"      "tt->omasiistijavaroitukset"
-   *
-   * @return bool
-   * True if warnings should be displayed; otherwise, false.
-   */
-  public function regulars_warning_check($tt)
-  {
-    static $kp = (Yii::app()->user->kp);
-
-    switch (true) {
-      case (!$kp):
-      case (!isset($tt->kohteet->id)):
-      case (isset($tt->peruutettu) && $tt->peruutettu != 0):
-      case (isset($tt->omasiistijailmoitus) && $tt->omasiistijailmoitus != 0):
-      case (isset($tt->omasiistijavaroitus) && $tt->omasiistijavaroitus == 0):
-      case (isset($tt->tt->omasiistijavaroitukset) && $tt->tt->omasiistijavaroitukset == 0):
-        return false;
-    }
-
-    // Get list of active cleaners with approved hours at this location.
-    // Transform array of active records into a simple regular cleaner IDs list.
-    // Hide warnings if there are no regulars, or if primary cleaner is regular.
-    $os = array_column($this->regulars_list($tt->kohteet->id), 'id');
-    if (empty($os) || in_array($tt->tid, $os))
-      return false;
-
-    // Decode possible additional cleaners from worker pairs (tyoparit). Check
-    // for any common values, in which case, the warnings should not be shown.
-    return empty(array_intersect($os, json_decode($tt->tyopaari) ?: []));
-  }
-
-  /**
-   * Clear Omasiistijat -cache for this domain.
-   */
-  public function actionClearOsCache()
-  {
-    if (Yii::app()->user->kp) {
-      $k = $this->cachekey('omasiistijat');
-      $d = Yii::app()->cache->get($k);
-      Yii::app()->cache->set($k, [], 14400);
-
-      $count = (is_countable($d) ? count($d) : -1);
-      $fmt = 'Omasiistijat: Cleared %d items (debug type: %s).';
-      $this->tracef('cache', $fmt, $k, $count, gettype($d));
-    }
-  }
-
-  /**
-   * Format a message and log as info-level entry.
-   * @param int $level Log level: 1=vardump 2:trace 3:info 4:warning 5:error
-   * @param string $ch Log channel/category (e.g. 'system.web').
-   * @param string $fmt Format string for {@see sprintf()}.
-   * @param mixed ...$args Args for {@see sprintf()}.
-   */
-  protected function logf(int $level = 3, string $ch='application', string $fmt=null, ...$args)
-  {
-    switch ($level) {
-      case 1: $ls = 'vardump'; break;
-      case 2: $ls = 'trace'; break;
-      case 4: $ls = 'warning'; break;
-      case 5: $ls = 'error'; break;
-      default: $ls = 'info'; break;
-    }
-
-    if (count($args) != 0 && array_unshift($args, $fmt))
-      $fmt = call_user_func_array('sprintf', $args);
-    Yii::log($fmt, $ls, $ch);
-  }
-
-  /**
-   * Format a message and log as trace-level entry.
-   * @param string $ch Logger channel/category (e.g. 'system.web').
-   * @param string $fmt Format string for {@see sprintf()}.
-   * @param array ...$args Args for {@see sprintf()}.
-   */
-  protected function tracef(string $ch='application', string $fmt=null, ...$args)
-  {
-    if (count($args) != 0 && array_unshift($args, $fmt))
-      $fmt = call_user_func_array('sprintf', $args);
-    Yii::log($fmt, 'trace', $ch);
-  }
-
   /* Omasiistijät /// */
   #endregion
 
@@ -5700,7 +5492,7 @@ class TyovuorootController extends Controller
    * @param bool $result
    * Whether the request is successful.
    *
-   * @param string $message
+   * @param string $message 
    * Custom message to output along with $result.
    *
    * @return bool

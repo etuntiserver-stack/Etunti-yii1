@@ -1,18 +1,16 @@
 <?php
 
-namespace application\components\etunti;
-
 use CCache;
 
-class Omasiistijat extends \CApplicationComponent
+class Omasiistijat extends CApplicationComponent
 {
   // Declare static variables. Use static for local cache, in order to try
   // prevent repeated read/write operations; one per request.
 
   /** @var bool $kp Check and limit active environment. */
-  private $kp = (\Yii::app()->user->kp);
+  private $kp = (Yii::app()->user->kp);
 
-  /** @var \CCache|null $cc Primary cache controller. */
+  /** @var CCache|null $cc Primary cache controller. */
   private $cc;
 
   /** @var string|false $cname */
@@ -114,7 +112,7 @@ class Omasiistijat extends \CApplicationComponent
     }
 
     // Get list of cleaners with approved hours in target location.
-    $data = \Yii::app()->db1->createCommand("
+    $data = Yii::app()->db1->createCommand("
       SELECT id, tekijan_nimi, sukunimi
       FROM sivex_ttekijat
       WHERE aktiivinen = 1
@@ -185,7 +183,7 @@ class Omasiistijat extends \CApplicationComponent
    */
   public function check_warning($tt)
   {
-    static $kp = (\Yii::app()->user->kp);
+    static $kp = (Yii::app()->user->kp);
     if ($kp === false)
       return false;
 
