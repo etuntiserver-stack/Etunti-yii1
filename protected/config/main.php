@@ -535,6 +535,10 @@ return array(
             'class' => 'CLogRouter',
             'routes' => $for_log,
         ),
+
+        'elog' => [
+          'class' => 'ELog'
+        ]
     ),
 
     // application-level parameters that can be accessed
