@@ -891,11 +891,17 @@ class TyovuorootController extends Controller
 
 	public function actionMuistissa()
 	{
-		if(isset($_SESSION['muistin']))
-		   echo json_encode($_SESSION['muistin']);
-		else
-		   echo json_encode('muistityhja');
-
+		if(isset($_SESSION['muistin'])){
+			$clearing = []; // Otetaan pois jos on samanlainen
+			foreach ($_SESSION['muistin'] as $key => $value){
+			  if(!in_array($value, $clearing))
+			    $clearing[] = $value;
+			}
+			$_SESSION['muistin'] = $clearing;
+			echo json_encode($_SESSION['muistin']);
+		} else {
+			echo json_encode('muistityhja');
+		}
 		exit;
 	}
 
@@ -905,6 +911,7 @@ class TyovuorootController extends Controller
 			echo json_encode($_SESSION['muistin']);
 			unset($_SESSION['muistin']);
 		}
+		exit;
 	}
 
 	public function actionPoistaTv($this_id)
