@@ -71,6 +71,11 @@ if(empty($model->tietoja))
 		<option value="yritys"><?php echo Yii::t('main', 'Yritys'); ?></option>
 		</select>
     </div>
+    <div class="section">
+		<label><?php echo Yii::t('main', 'Henkilötunnus'); ?></label>
+		<input type="text" name="Asiakkaat[henkilotunnus]" id="henkilotunnus" class="form-control">
+		<div id="yrityksen_nimi_error"></div>
+    </div>
     <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Onko kokeilusiivous?'); ?> </label><br>
 		<input type="radio" name="onkoKokeilusiivous" class="onkoKokeilusiivous" value="Kyllä"> <?php echo Yii::t('main', 'Kyllä'); ?><br>
@@ -209,7 +214,7 @@ $(document).ready(function(){
   $("#yrityksen_nimi").blur(function() {
     var value = $(this).val();
 	  $.ajax({
-		  url: 'is_asiakas',
+		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/is_asiakas',
 		  data:{ yrityksen_nimi : value },
 		  type:'POST',
 		  success:function(data){
@@ -229,7 +234,7 @@ $(document).ready(function(){
   $("#Asiakas_sahkoposti").blur(function() {
     var value = $(this).val();
 	  $.ajax({
-		  url: 'is_asiakas',
+		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/is_asiakas',
 		  data:{ sahkoposti : value },
 		  type:'POST',
 		  success:function(data){
@@ -255,7 +260,7 @@ $(document).ready(function(){
   $("#Asiakas_yhteyshenkilo").blur(function() {
     var value = $(this).val();
 	  $.ajax({
-		  url: 'is_yhteyshenkilo',
+		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/is_yhteyshenkilo',
 		  data:{ yhteyshenkilo : value },
 		  type:'POST',
 		  success:function(data){
@@ -692,7 +697,7 @@ $(document).ready(function(){
 	{
 
 	  	 $.ajax({
-			url: 'asiakas_autocomplete',
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/asiakas_autocomplete',
 			type:'GET',
 			async : false,
 			data: { "key" : thisVal },
@@ -718,13 +723,14 @@ $(document).ready(function(){
 	var thisVal = $(this).attr('for');
 	var thisAsiakas = $(this).text();
 	  	 $.ajax({
-			url: 'getKohdeByAsiakas',
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/getKohdeByAsiakas',
 			type:'GET',
 			data: { "id" : thisVal },
 			  success:function(data){
 				data = JSON.parse(data);
 			  	//console.log(data);
-				$('#Tyovuoroot_kohde').html(data);
+				if(data['options'])
+					$('#Tyovuoroot_kohde').html(data['options']);
 				$('#asiakasAutocompleteResult').html('').hide();
 				$('#asiakas').val(thisAsiakas);
 
@@ -739,7 +745,6 @@ $(document).ready(function(){
 	var thisVal = $(this).attr('for');
 	var thisAsiakas = $(this).text();
 	  	 $.ajax({
-			url: 'getKohdeById',
 			type:'GET',
 			data: { "id" : thisVal },
 			  success:function(data){
@@ -808,7 +813,7 @@ $(document).ready(function(){
 	offText: "Ei"
   });
 
-	$('#submitButton').click(function(){
+  $('#submitButton').click(function(){
 	   if( $("#uusi_asiakas").hasClass("in") ){
 		if( $('#Asiakas_yhteyshenkilo').val() === '' )
 		{
@@ -906,7 +911,9 @@ $(document).ready(function(){
 		  success:function(data){
 			thisDataReturn = JSON.parse(data);
 			console.log(data);
-			laatikonPaivays();
+			if(getUrlVars()["mode"]){ // Kun olet TV taulussa
+				laatikonPaivays();
+			}
 			if( thisDataReturn['sahkoposti'] ){
 				alert(thisDataReturn['sahkoposti']);
 				return false;
@@ -918,12 +925,17 @@ $(document).ready(function(){
 		console.log(data);
 	    	}
 	  });
-
-
-
 	e.preventDefault(); 
-	});
+  });
 
+  function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+  }
 
   function laatikonPaivays(){
 	$.ajax({

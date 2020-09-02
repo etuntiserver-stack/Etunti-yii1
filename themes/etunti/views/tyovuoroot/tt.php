@@ -8,7 +8,6 @@ ini_set('memory_limit', '512M');
 if( isset($_SESSION['skrollaus']) )
 	echo '<style>td .latikkoAsetukset{max-height: none;}</style>';
 ?>
-<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot_v4.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/select_valiko.js"></script>
 <?php echo CHtml::button(Yii::t('main', 'Lähetä'),array('class'=>'btn btn-lg btn-success','id'=>'lahetaTyovuoroja', 'style' => 'display: none; position:fixed; bottom: 0; right: 0')); ?>
@@ -33,9 +32,6 @@ if( isset($_SESSION['skrollaus']) )
 </script>
 <!-- Fixed Table -->
 <?php $odotus_ikooni = '<img src="../../lib/img/etusivu/odotus.gif" height="20px">'; ?>
-<!-- TV laatiko -->
-<div id="showres" class="modal" aria-hidden="true" data-backdrop="static" data-keyboard="false"></div>
-<!-- TV laatiko -->
 <div id="yht_tv"></div>
 <div class="" id="parent">
  <table class="table table-bordered" id="fixTable">
