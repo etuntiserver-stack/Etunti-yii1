@@ -1,39 +1,60 @@
 <?php
 
-use CCache;
-
+/**
+ * Main component for Omasiistijät -system (hard translared, so let it be).
+ *
+ * Static variables are used heavily to substitute local short-term caching, as
+ * there are repeated calls to functions per every request.
+ *
+ *
+ * @property bool $kp = Yii::app()->user->kp
+ * Check and limit active environment.
+ *
+ * @property CCache|null $cc
+ * Primary cache controller.
+ *
+ * @property int $cid
+ * Cache ID for the main data array. Provide without passing through cachekey
+ * manually, as that would request in faulty key. Default:
+ *
+ * @property array $this->cachekey
+ * Abba 2 array int
+ *
+ * @property array|null $cdata
+ * Cached items, each with array "time" (for expiration) and ids "data" array.
+ * Empty until {@see list()} is called, which populates the list.
+ *
+ * @property bool $abort
+ * Flag to set for blocking following requests after an error. q))
+ *
+ * @internal
+ * Cached data has the following format. Timestamp for when the entry was
+ * created is stored in "time" index, while "data" holds the main IDs array.
+ *
+ * ```php
+ * $cdata => [
+ *   // [ time => (int)   ids => [(int), ...] ],
+ *   [ time=1598677615, data=[35,51,89] ], // <-- Real data
+ *   // ...
+ * ];
+ *
+ * $this->cachekey('omasiistijat'); // cache id is computed automatically
+ * ```
+ */
 class Omasiistijat extends CApplicationComponent
 {
-  // Declare static variables. Use static for local cache, in order to try
-  // prevent repeated read/write operations; one per request.
-
-  /** @var bool $kp Check and limit active environment. */
-  private $kp = (Yii::app()->user->kp);
-
-  /** @var CCache|null $cc Primary cache controller. */
+  private static $kp = Yii::app()->user->kp;
   private $cc;
-
-  /** @var string|false $cname */
   private $cname;
-
-  /** @var int $cid Cache ID for the main data array. */
   private $cid = $this->cachekey('omasiistijat');
-
-  /** @var array|null $cdata Items, each with created "time" and "ids" array. */
   private $cdata = [];
-
-  /** @var bool Flag to stop operations on error. */
   private $abort = false;
 
-  /**
-   * Get all entries from cache so far. Empty until {@see list()} called.
-   */
-  // public function getall()
-  // {
-  //   if (!is_array($this->cdata))
-  //     $this->cdata = [];
-  //   return $this->cdata;
-  // }
+  /** {@inheritdoc} */
+  public function init()
+  {
+    $this->attachBehavior('log')
+  }
 
   /**
    * Get list of workers that have approved shifts/cycles in a target location.
@@ -229,7 +250,7 @@ class Omasiistijat extends CApplicationComponent
     return $this;
   }
 
-  private function init_cache($id):
+  private function init_cache($id)
   {
     static $initialized = false;
     if ($initialized)
@@ -285,5 +306,16 @@ class Omasiistijat extends CApplicationComponent
     $fmt = 'Omasiistijat: Cleared %d items (debug type: %s).';
     $this->tracef('cache', $fmt, $id, $count, gettype($data));
     return $this;
+  }
+
+  /**
+   * Get all entries from cache so far.
+   * Empty until {@see list()} called.
+   */
+  public function getall()
+  {
+    if (in_array($id, $this->cc[$this->cid]) && !is_array($this->cdata))
+      $this->cc->delete($this->cid);
+    return $this->cdata;
   }
 }

@@ -1,7 +1,6 @@
 <?php
 
-use application\components\etunti\Omasiistijat;
-
+/** {@inheritdoc/} */
 class TyovuorootController extends Controller
 {
 	/**
@@ -46,8 +45,6 @@ class TyovuorootController extends Controller
 	public function isEtuntiAdmin() {
 
 		if(!isset(Yii::app()->user->adminID))
-		{
-			//die('login error');
 		  	echo '<script type="text/javascript">
 				window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";
 			</script>';
@@ -73,7 +70,7 @@ class TyovuorootController extends Controller
 
   public function init()
   {
-    $this->attachBehavior('os', new \application\components\Omasiistijat);
+    $this->attachBehavior('os', new Omasiistijat);
     if (Yii::app()->controller->isEtuntiAdmin())
       Yii::app()->theme = Yii::app()->user->user_theme ?? 'etunti';
     else
@@ -5129,6 +5126,7 @@ class TyovuorootController extends Controller
    */
   protected function cachekey(string $fmt, ...$args) :bool
   {
+                                                                                                                                                                                                                                                                       
     static $prefix;
 
     // Format prefix on first request.
