@@ -177,6 +177,18 @@ if (IS_LOCAL) {
 }
 //     LOG -->
 
+// Käytä tätä ottaaksesi cache pois käytöstä, tai jos memcached ei asennettu:
+if(IS_LOCAL){
+  $cache = ['class' => 'system.caching.CDummyCache'];
+} else {
+  $cache = [
+     'class' => 'system.caching.CMemCache',
+     'servers' => [
+       ['host' => 'localhost', 'port' => 11211, 'weight' => 60]
+     ],
+     'useMemcached' => true
+   ];
+}
 
 // db host|user|pw are defined in main.pw.php (not in repository).
 require('main.pw.php');
@@ -193,19 +205,6 @@ if (isset($_GET['dom'])) {
     if ($row = mysqli_fetch_array($sql)) {
         $db2 = $row['domain'];
     }
-}
-
-// Käytä tätä ottaaksesi cache pois käytöstä, tai jos memcached ei asennettu:
-if(IS_LOCAL){
-        $cache = ['class' => 'system.caching.CDummyCache'];
-} else {
-        $cache = [
-       	  'class' => 'system.caching.CMemCache',
-       	  'servers' => [
-       	    ['host' => 'localhost', 'port' => 11211, 'weight' => 60]
-       	  ],
-       	  'useMemcached' => true
-       	];
 }
 
 return array(
@@ -535,10 +534,6 @@ return array(
             'class' => 'CLogRouter',
             'routes' => $for_log,
         ),
-
-        'elog' => [
-          'class' => 'ELog'
-        ]
     ),
 
     // application-level parameters that can be accessed
