@@ -73,7 +73,7 @@ if(isset($model->id)){
 		if(!empty($m->toimenpiteet))
 		  $ohje .= "\nToimenpiteet: ".str_replace("\n","<br>",$m->toimenpiteet)."<br>";
 		if(!empty($m->tietoja))
-		  $ohje .= "\nTietoja: ".$m->tietoja;
+		  $ohje .= "\nTietoja mobiilisovellukseen: ".$m->tietoja;
 		if(!empty($m->muut))
 		  $ohje .= "\nMuut: ".$m->muut;
 
@@ -1476,7 +1476,7 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			console.log(data);
+			//console.log(data);
 			laatikonPaivays();
 			return false;
 	   	  },

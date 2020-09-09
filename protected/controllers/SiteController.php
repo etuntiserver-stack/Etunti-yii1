@@ -450,6 +450,8 @@ class SiteController extends Controller
 	public function digistenTunnitYhteensa($start_date, $end_date)
 	{
 		$tt = Tyontekijat::model()->findAll();
+		if(count($tt) == 0)
+			return 0;
 
 		$tids = [];
 		foreach ($tt as $data)

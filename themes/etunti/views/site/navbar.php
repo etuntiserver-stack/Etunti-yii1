@@ -347,7 +347,7 @@ if( $curpage == 'tyovuoroot/beta' )
 
 	<!-- Tilaus -->
         <li class="p10" data-toggle="tooltip">
-		<button class="btn btn-default fa fa-shopping-cart" id="uusiTilaus" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Uusi tilaus'); ?>"></button>
+		<button class="btn btn-default fa fa-shopping-cart uusiTilaus" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Uusi tilaus'); ?>"></button>
 		<button class="btn btn-default fa fa-angle-double-down tvasetus <?=((!isset($_SESSION['skrollaus']))?'btn-success':'')?>" for="skrollaus" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Skrollaus'); ?>"></button>
         </li>
 	<!-- Tilaus -->
@@ -432,24 +432,6 @@ $(document).ready(function(){
   });
 // Kohde Autocomplete -->
 
-
-
-
-$("#uusiTilaus").click(function(){
-
-   $.ajax({
-	url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/uusitilaus',
-	data:$(this).serialize(),
-	type:'POST',
-	success:function(data){
-		$('#showres').modal().html(data);
-   	},
-	error:function(data){
-		console.log(data);
-    	}
-    });
-
-});
 $(".tvasetus").click(function(){
    var whatfor = $(this).attr('for');
    $.ajax({
@@ -613,23 +595,27 @@ $('.multTyoryhma').multiselect({
           <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
             <li class="list-group-item">
               <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/create" class="animated animated-short fadeInUp">
-                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Asiakas'); ?> </a>
+                <span class="fa fa-plus"></span> <?php echo Yii::t('main','Asiakas'); ?> </a>
             </li>
             <li class="list-group-item">
               <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/create" class="animated animated-short fadeInUp">
-                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Kohde'); ?> </a>
+                <span class="fa fa-plus"></span> <?php echo Yii::t('main','Kohde'); ?> </a>
             </li>
             <li class="list-group-item">
               <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/create" class="animated animated-short fadeInUp">
-                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Työntekijä'); ?> </a>
+                <span class="fa fa-plus"></span> <?php echo Yii::t('main','Työntekijä'); ?> </a>
             </li>
             <li class="list-group-item">
               <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/viestinta/create" class="animated animated-short fadeInUp">
-                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Viesti'); ?> </a>
+                <span class="fa fa-plus"></span> <?php echo Yii::t('main','Viesti'); ?> </a>
             </li>
             <li class="list-group-item">
               <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/create" class="animated animated-short fadeInUp">
-                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Lasku'); ?> </a>
+                <span class="fa fa-plus"></span> <?php echo Yii::t('main','Lasku'); ?> </a>
+            </li>
+            <li class="list-group-item">
+              <a href="#" class="animated animated-short fadeInUp uusiTilaus">
+                <span class="fa fa-plus"></span> <?php echo Yii::t('main','Uusi tilaus'); ?> </a>
             </li>
           </ul>
         </li>
@@ -1712,10 +1698,28 @@ nyt ne ovat etusivu.php ssa
 
 
 
+  <!-- MODAL laatiko -->
+  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+  <div id="showres" class="modal" aria-hidden="true" data-backdrop="static" data-keyboard="false"></div>
+  <!-- MODAL laatiko -->
 
   <script type="text/javascript">
   jQuery(document).ready(function() {
 
+    $(".uusiTilaus").click(function(){
+	   $.ajax({
+		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/uusitilaus',
+		data:$(this).serialize(),
+		type:'POST',
+		success:function(data){
+			//console.log(data);
+			$('#showres').modal().html(data);
+	   	},
+		error:function(data){
+			console.log(data);
+	    	}
+	    });
+    });
     $('.tvchange').change(function(){
 	var thisVal = $(this).val();
 	window.location.href= location.protocol + "//" + location.host + '/index.php/tyovuoroot/' + thisVal;

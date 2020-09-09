@@ -120,7 +120,7 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
 	var yht		= 0;
 	var tids	= [];
 	var last_loppu  = [];
-  var this_ero	= 0;
+	var this_ero	= 0;
 
   // Get list of tids where omasiistijavaroitus is disabled. After this, draw boxes accordingly.
   let warning_disabled_tids = [];
@@ -187,7 +187,7 @@ jQuery.tv_arr_update = function tv_arr_update(tv_arr){
             if( $("#varoitus_klo_" + did).length > 0 )
               $("#varoitus_klo_" + did).remove();
             if(varoitus_klo)
-              $("#" + did).before('<div id="varoitus_klo_'+did+'" class="text-center bg-danger p5 mr5">Tarkista kellonajat</div>');
+              $("#" + did).before('<div id="varoitus_klo_'+did+'" class="varoitus_klo text-center bg-danger p5 mr5">Tarkista kellonajat</div>');
           }
           yht += tv_kesto;
         });
@@ -389,7 +389,7 @@ $(document).delegate(".palauta_kejuun","click",function(){
 
 $(document).delegate(".muistin","click",function(){
 	$('.latikkolisatiedot_paa').remove();
-	var thisvar = $(this).remove();
+	$(this).remove();
 	var thisFor = $(this).attr('for');
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/muistin',
@@ -423,8 +423,7 @@ function muisti(){
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/muistissa',
            success: function(data){
 		data = JSON.parse(data);
-        	//console.log(data);
-	
+        	console.log(data);
 		if(data != 'muistityhja'){
 			$(data).each(function(index, tv_id) {
 				if( $('#'+tv_id).hasClass('ei_saa_muokata') ){ return true; }
@@ -435,7 +434,6 @@ function muisti(){
 			localStorage.setItem("muistissa", data);
 			$(".mcut, .mplus").css({"display":"block !important"});
 		}
-		return false;
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	console.log(XMLHttpRequest);
@@ -632,6 +630,7 @@ jQuery.clearKaikki = function clearKaikki(){
 		$(".muokkausLi").hide();
 		$(".latikkolisatiedot_paa").remove();
 		localStorage.clear("muistissa");
+		console.log('Muisti cleared');
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	console.log(XMLHttpRequest);
@@ -698,10 +697,11 @@ window.addEventListener('message', function(e) {
 			//console.log(check_toistuva);
 		}
 		var lisa_teksti = '';
-		if(check_toistuva)
+		if(check_toistuva){
 			lisa_teksti = "Olet irroittamassa työvuoron toistuvasta ketjusta. Haluatko varmasti siirtää tämän?\nHuomaa, että voit palauttaa työvuoron tähän ketjuun työvuorokortilla olevasta kalenterista.\n\n";
-		var r = confirm( lisa_teksti + 'Oletko varmaa?' );
-		if(!r){	jQuery.clearKaikki(); return false; }
+			var r = confirm( lisa_teksti + 'Oletko varmaa?' );
+			if(!r){	jQuery.clearKaikki(); return false; }
+		}
 	}
 
         $.ajax({
@@ -710,10 +710,11 @@ window.addEventListener('message', function(e) {
 	   data: doWhat,
            success: function(data){
 		data = JSON.parse(data);
-		console.log(data);
-
+		//console.log(data);
+		jQuery.clearKaikki();
 		if( data['poistettu'] ){
   			$( data['poistettu'] ).each(function(index, tv_id) {
+				$('#'+tv_id).closest('td').find('.pvm_kesto, .varoitus_klo').remove();
 				$('#'+tv_id).closest('p').remove();
 			});
 		}
@@ -723,7 +724,6 @@ window.addEventListener('message', function(e) {
 		if( data['tids'] ){
 			$.vkolaskenta(data['tids']);
 		}
-		jQuery.clearKaikki();
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	console.log(XMLHttpRequest);
