@@ -1356,6 +1356,7 @@ $(document).ready(function(){
   /* on submit */
   var newCreatedTvId = -1;
   $('#tyovuoroot-form').on('submit',function(e) {
+    $('#submitButton').attr('disabled', 'disabled');
 	var pvmTarkistus = $('#submitButton').attr('pvmTarkistus');
 	toistuva = ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
 
@@ -1365,6 +1366,7 @@ $(document).ready(function(){
     if ($('#<?= $java_prefix ?>_omasiistijailmoitus').val() == 1) {
       alert("Omasiistijäilmoitusta ei voida asettaa lähetetyksi koko ketjulle.");
       $('#<?= $java_prefix ?>_omasiistijailmoitus').css('border', '2px solid red').focus();
+      $('#submitButton').removeAttr('disabled');
       return false;
     }
   }
@@ -1374,14 +1376,17 @@ $(document).ready(function(){
 	if( $('#<?=$java_prefix?>_status option:selected').val() === '' )
 	{
 		$('#<?=$java_prefix?>_status').addClass('bg-danger').focus();
+    $('#submitButton').removeAttr('disabled');
 		return false;
 	}
 	if( $('#alku').val() === '' ){
 		$('#alku').addClass('bg-danger').focus();
+    $('#submitButton').removeAttr('disabled');
 		return false;
 	}
 	if( $('#loppu').val() === '' ){
 		$('#loppu').addClass('bg-danger').focus();
+    $('#submitButton').removeAttr('disabled');
 		return false;
 	}
 	/*     Tarkistetaan Aloitus/Lopetus Klo ja status --> */
@@ -1398,19 +1403,23 @@ $(document).ready(function(){
 		}
 		if(pto !=='' & pto < pfrom){
 			alert('Toistuvan työvuoron lopetuspäivämäärä ei voi olla ennen toistuvan työvuoron aloituspäivämäärää.');
+      $('#submitButton').removeAttr('disabled');
 			return false;
 		}
 		if( $('#pfrom').val() === '' ){
 			$('#pfrom').addClass('bg-danger').focus();
+      $('#submitButton').removeAttr('disabled');
 			return false;
 		}
 		if( $('#pto').val() === '' ){
 			$('#pto').addClass('bg-danger').focus();
+      $('#submitButton').removeAttr('disabled');
 			return false;
 		}
 
 		if(!pfrom_and_today_check()){
 			alert('Toistuvan työvuoron aloituspäivämäärää ei voida aloita alkamaan menneisyydestä.');
+      $('#submitButton').removeAttr('disabled');
 			return false;
 		}
 		var vkopvmswitch_check = false;
@@ -1422,6 +1431,7 @@ $(document).ready(function(){
 		});
 		if(!vkopvmswitch_check){ 
 			alert('Valitse viikko päivä');
+      $('#submitButton').removeAttr('disabled');
 			return false;
 		}
 	}
@@ -1432,6 +1442,7 @@ $(document).ready(function(){
 	var raja = 10000;
 	if(leng > raja){
 		alert('Tietoja mobiilisovellukseen kentän merkkimäärä ei voi ylittää '+raja+' rajaa');
+    $('#submitButton').removeAttr('disabled');
 		return false;
 	}
 	// tarkistetaan tietoja -->
@@ -1467,6 +1478,7 @@ $(document).ready(function(){
 	   	},
 		  error: function(xhr, status, error) {
 			$('#virheilmoitus').html('Virheilmoitus: \n\n' + xhr.responseText).show();
+      $('#submitButton').removeAttr('disabled');
           }
 		});
 	}
@@ -1482,6 +1494,7 @@ $(document).ready(function(){
 	   	  },
 		  error: function(xhr, status, error) {
 			$('#virheilmoitus').html('Virheilmoitus: \n\n' + xhr.responseText).show();
+      $('#submitButton').removeAttr('disabled');
 	    	  }
 		});
 	}
