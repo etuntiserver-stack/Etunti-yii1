@@ -490,7 +490,7 @@ $('.ryhmat').multiselect({
 <!-- Työvuorot -->
 
 <!-- Sähköposti-ilmoitukset -->
-<?php if (Yii::app()->user->kp): ?>
+<?php if (!empty(Yii::app()->user->kp)): ?>
 
 <br>
 <div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#sahkoposti-ilmoitukset">

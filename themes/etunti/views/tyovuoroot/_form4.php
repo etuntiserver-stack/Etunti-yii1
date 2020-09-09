@@ -715,7 +715,7 @@ $(document).ready(function(){
 </div>
 <br>
 <div class="row">
-  <?php if (Yii::app()->user->kp): ?>
+  <?php if (!empty(Yii::app()->user->kp)): ?>
   <div class="col-sm-3">
     <?php
     // echo $form->labelEx($model,'omasiistijavaroitus');
@@ -730,7 +730,7 @@ $(document).ready(function(){
 
 
 <!-- #region Omasiistijät -->
-<?php if (isset($model->id) && Yii::app()->user->kp): ?>
+<?php if (isset($model->id) && !empty(Yii::app()->user->kp)): ?>
 
 <br>
 <div class="row">
@@ -1360,7 +1360,7 @@ $(document).ready(function(){
 	var pvmTarkistus = $('#submitButton').attr('pvmTarkistus');
 	toistuva = ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
 
-  <?php if (Yii::app()->user->kp): ?>
+  <?php if (!empty(Yii::app()->user->kp)): ?>
   // If omasiistijavaroitus is selected as sent, and toistuva selected, prevent submit
   if (toistuva) {
     if ($('#<?= $java_prefix ?>_omasiistijailmoitus').val() == 1) {
@@ -2022,7 +2022,7 @@ $(document).ready(function(){
 
 
 <!-- #region Omasiistijät JS -->
-<?php if (isset($model->id) && Yii::app()->user->kp): ?>
+<?php if (isset($model->id) && !empty(Yii::app()->user->kp)): ?>
 <script>
 
   // Hide the selection and notification button until warnings are shown.

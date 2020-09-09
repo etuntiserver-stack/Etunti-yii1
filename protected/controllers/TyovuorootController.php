@@ -3258,7 +3258,7 @@ class TyovuorootController extends Controller
     // Order tyontekijat -->
 
     // Omasiistijävaroitus
-    if (Yii::app()->user->kp) {
+    if (!empty(Yii::app()->user->kp)) {
       $osv = $this->os_check_warning($model);
       $omasiistijavaroitus = !empty($osv[$model->id]);
     } else {
@@ -5194,7 +5194,7 @@ class TyovuorootController extends Controller
   public function actionOmasiistijat_ilmoitus($customer_id = null, $names = null)
   {
     // If not kp or testing, cancel action.
-    if (!Yii::app()->user->kp) {
+    if (empty(Yii::app()->user->kp)) {
       echo json_encode([
         'success' => false,
         'message' => 'Tämä ominaisuus ei ole käytössä ympäristössäsi.'
@@ -5304,7 +5304,7 @@ class TyovuorootController extends Controller
     $replyto_email = $dm->sahkoposti ?? '';
 
     // When kotipuhtaaksi, replace sender (KP already checked at top, but it will soon change).
-    if (Yii::app()->user->kp) {
+    if (!empty(Yii::app()->user->kp)) {
       $sender_name = 'Koti Puhtaaksi Oy';
       $replyto_email = 'asiakaspalvelu@kotipuhtaaksi.fi';
     }
@@ -5387,7 +5387,7 @@ class TyovuorootController extends Controller
     }
 
     // If not kp or testing, return with appropriate output.
-    if (!Yii::app()->user->kp) {
+    if (empty(Yii::app()->user->kp)) {
       if ($value !== null) {
         if ($value == 0) {
           echo json_encode([]);
@@ -5471,7 +5471,7 @@ class TyovuorootController extends Controller
 
   public function actionOs_cache_clear()
   {
-    if (Yii::app()->user->kp === false)
+    if (empty(Yii::app()->user->kp))
       return false;
 
     /** @var CCache $cc */
@@ -5504,7 +5504,7 @@ class TyovuorootController extends Controller
     if (!is_array($shifts))
       $shifts = [$shifts];
 
-    if (Yii::app()->user->kp === false) {
+    if (empty(Yii::app()->user->kp)) {
       $t = [];
       foreach ($shifts as $s)
         $results[(is_object($s) ? $s->id : $s)] = false;
@@ -5610,7 +5610,7 @@ class TyovuorootController extends Controller
         }
 
         $this->tracef('cache', "Omasiistijat: Cache refreshed with %d items.", count($data));
-        $cc->set($cid, $data, 300);
+        $cc->set($cid, $data, 86400);
       }
     }
 
@@ -5690,7 +5690,7 @@ class TyovuorootController extends Controller
   public function actionAloitusaikojen_ilmoitus()
   {
     // If not kp or testing, cancel action.
-    if (!Yii::app()->user->kp)
+    if (empty(Yii::app()->user->kp))
       return $this->outfmt(false, 'Tämä ominaisuus ei ole käytössä ympäristössäsi.');
 
     // Get email subject and body from settings and verify they're not empty.
