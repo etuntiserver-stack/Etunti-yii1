@@ -2073,7 +2073,7 @@ $(document).ready(function(){
 
       type: 'POST',
       data: {
-        'shift_id': '<?= $this_id ?>',
+        'shift_ids': '<?= $this_id ?>',
         'override': JSON.stringify(omasiistijatOverride)
       },
 
@@ -2153,7 +2153,8 @@ $(document).ready(function(){
         if (typeof(parsed) != "object") {
           console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: Parsed data is unusable (not an object).`);
         } else {
-          parsed.forEach((item, index) => { omasiistijat.push(item['id']); });
+          $.each(parsed, (index, item) => { omasiistijat.push(item['id']); });
+          //parsed.forEach((item, index) => { omasiistijat.push(item['id']); });
         }
 
         // Kohteen vaihdon/initialisaation yhteydessä tarkistetaan omasiistijät.

@@ -18,7 +18,7 @@ class TyovuorootController extends Controller
 			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
 		);
-	}
+  }
 
 	/**
 	 * Specifies the access control rules.
@@ -29,7 +29,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijat_lista', 'omasiistijat_tarkistus', 'omasiistijat_ilmoitus', 'omasiistijat_siistijakohtainen_varoitus', 'clearOsCache', 'massedit', 'aloitusaikojen_ilmoitus'),
+				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijat_lista', 'omasiistijat_tarkistus', 'omasiistijat_ilmoitus', 'omasiistijat_siistijakohtainen_varoitus', 'os_cache_clear', 'massedit', 'aloitusaikojen_ilmoitus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -44,7 +44,7 @@ class TyovuorootController extends Controller
 
 	public function isEtuntiAdmin() {
 
-		if(!isset(Yii::app()->user->adminID))
+		if(!isset(Yii::app()->user->adminID)) {
 		  	echo '<script type="text/javascript">
 				window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";
 			</script>';
@@ -70,7 +70,6 @@ class TyovuorootController extends Controller
 
   public function init()
   {
-    $this->attachBehavior('os', new Omasiistijat);
     if (Yii::app()->controller->isEtuntiAdmin())
       Yii::app()->theme = Yii::app()->user->user_theme ?? 'etunti';
     else
@@ -2163,9 +2162,11 @@ class TyovuorootController extends Controller
 		        $criteria->addCondition('tid IN ('.$ids.')');
 		}
 	        $criteria->addCondition($haku_criteria);
-		$tv = Tyovuoroot::model()->findAll($criteria);
+    $tv = Tyovuoroot::model()->findAll($criteria);
+    $osv = $this->os_check_warning($tv);
 		foreach($tv as $arvo){
-			$return = $this->laatikkorakenne($arvo, $arvo->pvm, $arvo->tid, false, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets);
+      $osvaroitus = (isset($osv[$arvo->id]) ? $osv[$arvo->id] : false);
+			$return = $this->laatikkorakenne($arvo, $arvo->pvm, $arvo->tid, false, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets, $osvaroitus);
 			$tv_arr[$arvo->tid][$arvo->pvm][strtotime($arvo->alku)][] = $return;
 		}
 
@@ -2190,8 +2191,11 @@ class TyovuorootController extends Controller
 				unset($haku_criteria['uusi_tilaus']);
 		}
 	        $criteria->addCondition($haku_criteria);
-		$t = ToistuvatTyovuorot::model()->findAll($criteria);
+    $t = ToistuvatTyovuorot::model()->findAll($criteria);
+    $osvt = $this->os_check_warning($t);
 		foreach($t as $arvo){
+      $ostvaroitus = (isset($osvt[$arvo->id]) ? $osvt[$arvo->id] : false);
+
 			// <-- Tids
 			$tids = [];
 			if( !empty($arvo->tyopaari) ){
@@ -2235,7 +2239,7 @@ class TyovuorootController extends Controller
 						foreach($tids as $tid){
 							if( isset($poistettu_pvms[$tid][$this_pvm]) )
 								continue;
-							$return = $this->laatikkorakenne($arvo, $this_pvm, $tid, true, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets);
+							$return = $this->laatikkorakenne($arvo, $this_pvm, $tid, true, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets, $ostvaroitus);
 							$tv_arr[$tid][$this_pvm][strtotime($arvo->alku)][] = $return;
 						}
 
@@ -2262,7 +2266,7 @@ class TyovuorootController extends Controller
 		return (int)'99999999'.str_pad($id, 8, '0', STR_PAD_LEFT).''.$this_pvm.''.$this_tid;
 	}
 
-	protected function laatikkorakenne($arvo, $this_pvm, $this_tid, $toistuva, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets = []){
+	protected function laatikkorakenne($arvo, $this_pvm, $this_tid, $toistuva, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets = [], $os_warning = false){
 		// <-- Status
 		$status = $this->statukset($arvo->piilota_mobiilista);
 		// Status -->
@@ -2331,13 +2335,6 @@ class TyovuorootController extends Controller
 		if ($has_tickets)
       $ikoonit .= ' <i class="fa fa-question text-primary" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Avoimia Tukipyyntöjä').'"></i> ';
 
-    // OMASIISTIJÄT TARKISTUS - Enabled only on kotipuhtaaksi, for now.
-    // TODO: Asetuksiin valinta, jolla voidaan enable/disable
-    if (Yii::app()->user->kp)
-      $omasiistijavaroitus = Yii::app()->os->check_warning($arvo);
-    else
-      $omasiistijavaroitus = false;
-
 		$asiakasNakyvissa = '';
 		if( $asiakas_tyovuorossa ){
 			$name = '';
@@ -2365,7 +2362,7 @@ class TyovuorootController extends Controller
 		} else {
 			$tv_edit = '<span class="tv_edit '.$mennytPaivat.'" id="'.$this_id.'" style="'.$bgcol.'">'.$ikoonit.''.$arvo->alku.'-'.$arvo->loppu.'<br> '.$asiakasNakyvissa.$osoite.$lisateksti.'</span>';
 		}
-		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto, 'alku' => strtotime($arvo->alku), 'loppu' => strtotime($arvo->loppu), 'peruutettu' => (int)$arvo->peruutettu, 'omasiistijavaroitus' => $omasiistijavaroitus];
+		$return = ['tv_edit' => $tv_edit, 'tv_kesto' => $tv_kesto, 'alku' => strtotime($arvo->alku), 'loppu' => strtotime($arvo->loppu), 'peruutettu' => (int)$arvo->peruutettu, 'omasiistijavaroitus' => $os_warning];
 		return $return;
 	}
 
@@ -3254,10 +3251,12 @@ class TyovuorootController extends Controller
     // Order tyontekijat -->
 
     // Omasiistijävaroitus
-    if (Yii::app()->user->kp)
-      $omasiistijavaroitus = Yii::app()->os->check_warning($model);
-    else
+    if (Yii::app()->user->kp) {
+      $osv = $this->os_check_warning($model);
+      $omasiistijavaroitus = !empty($osv[$model->id]);
+    } else {
       $omasiistijavaroitus = false;
+    }
 
        		$criteria = new CDbCriteria();
 		$criteria->select = "id, $tt_order_1, $tt_order_2";
@@ -5124,9 +5123,8 @@ class TyovuorootController extends Controller
   /**
    * Gets a domain (and server) specific key for caching.
    */
-  protected function cachekey(string $fmt, ...$args) :bool
-  {
-                                                                                                                                                                                                                                                                       
+  protected function cachekey(string $fmt, ...$args) :string
+  {                                                                                                                                                                                                                                                            
     static $prefix;
 
     // Format prefix on first request.
@@ -5149,32 +5147,25 @@ class TyovuorootController extends Controller
   }
 
   #region Omasiistijät
-  /* /// Omasiistijät */
+  /* ((( Omasiistijät */
 
   /**
-   * Get list of workers that have approved shifts/cycles in a target location.
-   * Calls TyovuorootController::regulars_list() with relevant data.
+   * Get list of workers that have approved shifts/cycles in a target location,
+   * and echoes the list as JSON.
+   * Calls TyovuorootController::os_full_data() with relevant data.
    *
    * @param int $location_id
    * ID of the target location.
    *
-   * @param bool $force_refresh
-   * If true, cache results are ignored and data is force refreshed.
-   *
    * @return null
    * Outputs results as a JSON array of IDs.
    */
-  public function actionOmasiistijat_lista($location_id = null, $force_refresh = false)
+  public function actionOmasiistijat_lista($location_id = null)
   {
-    // Get kohde model ID, if provided.
-    if (is_numeric($_POST['location_id'] ?? '')) {
+    if (is_numeric($_POST['location_id'] ?? ''))
       $location_id = (int)$_POST['location_id'];
-    }
-
-    // Get definitive value for whether to force refresh the results.
-    $force_refresh = ($force_refresh || ($_POST['force_refresh'] ?? '') == 1);
-
-    echo json_encode($this->regulars_list($location_id, $force_refresh));
+    $os = $this->os_full_data();
+    echo json_encode(isset($os[$location_id]) ? $os[$location_id] : []);
   }
 
   /**
@@ -5436,7 +5427,7 @@ class TyovuorootController extends Controller
    *
    * Uses serialization feature of jQuery for dynamic changes in tv edit form.
    *
-   * @param mixed $shift_id
+   * @param mixed $shift_ids
    * ID of the open shift.
    *
    * @param array $override
@@ -5445,38 +5436,198 @@ class TyovuorootController extends Controller
    * @return bool
    * True or false; result is also echoed as 1: show and 0: hide warning.
    */
-  public function actionOmasiistijat_tarkistus($shift_id = null, $override = null)
+  public function actionOmasiistijat_tarkistus($shift_ids = null, $override = null)
   {
-    $shift_id = $_POST['shift_id'];
-    $sdata = $this->this_id($shift_id);
+    if (isset($_POST['shift_ids']))
+      $shift_ids = $_POST['shift_ids'];
 
-    if (!empty($override = json_decode(($_POST['override'] ?? $override) ?: [], true))) {
-      foreach ($override as $key => $val)
-        $sdata['model']->$key = $val;
-    }
+    if (!is_numeric($shift_ids)) {
 
-    // if (isset($_POST['tid']))
-    //   $tid = $_POST['tid'];
-    // if (!empty($tid))
-    //   $sdata['model']->tid = $tid;
+      foreach (json_decode($shift_ids) as $id)
+        $shifts[] = $this->this_id($id)['model'];
+      echo json_encode($this->os_check_warning($shifts));
 
-    // if (isset($_POST['tyoparit']))
-    //   $tyoparit = $_POST['tyoparit'];
-    // if (!empty($tyoparit))
-    //   $sdata['model']->tyopaari = $_POST['tyoparit'];
-
-    // echo '<script>console.log('.json_encode($_POST).');</script>';
-    if ($this->regulars_warning_check($sdata['model'])) {
-      echo 1;
-      return true;
     } else {
-      echo 0;
-      return false;
+
+      $sdata = $this->this_id($shift_ids);
+      $sid = $sdata['model']->id;
+
+      if (!empty($override = json_decode(($_POST['override'] ?? $override) ?: [], true))) {
+        foreach ($override as $key => $val)
+          $sdata['model']->$key = $val;
+      }
+
+      $check_results = $this->os_check_warning($sdata['model']);
+      echo (!empty($check_results[$sid]) ? 1 : 0);
     }
   }
 
-  /* Omasiistijät /// */
+  public function actionOs_cache_clear()
+  {
+    if (Yii::app()->user->kp === false)
+      return false;
+
+    /** @var CCache $cc */
+    $cc = Yii::app()->cache;
+    $id = $this->cachekey('omasiistijat');
+    $data = $cc->get($id);
+    $cc->delete($id);
+
+    $count = (is_countable($data) ? count($data) : -1);
+    $fmt = 'Omasiistijat: Cleared %d items (debug type: %s).';
+    $this->tracef('cache', $fmt, $count, gettype($data));
+  }
+
+  /**
+   * Checks if the cleaners on a shift are not regulars, and warnings are on.
+   *
+   * Additional checks are made that should affect whether or not the warnings
+   * are displayed, based on information on the object.
+   *
+   * @param mixed $shifts
+   * Single value or an array. Values must be Tyovuoroot/ToistuvatTyovuorot
+   * objects (or any object with same properties), or shift IDs.
+   *
+   * @return bool
+   * Array of boolean values indexed by model IDs: True if warnings should be
+   * displayed; otherwise, false.
+   */
+  public function os_check_warning($shifts)
+  {
+    if (!is_array($shifts))
+      $shifts = [$shifts];
+
+    if (Yii::app()->user->kp === false) {
+      $t = [];
+      foreach ($shifts as $s)
+        $results[(is_object($s) ? $s->id : $s)] = false;
+      return $t;
+    }
+
+    $os = $this->os_full_data();
+    $results = [];
+
+    foreach ($shifts as $s) {
+
+      if (is_object($s)) {
+        $tv = $s;
+        $sid = $tv->id;
+      } else {
+        $tv = $this->this_id($s)['model'];
+        $sid = $s;
+      }
+
+      $results[$sid] = false;
+
+      if (empty($tv->kohde))
+        continue;
+
+      $kid = $tv->kohde;
+      if ($kid == 0 || !isset($os[$kid]))
+        continue;
+
+      // Check primary cleaner.
+      if (isset($os[$kid][$tv->tid]))
+        continue;
+
+      // Decode possible additional cleaners from worker pairs (tyoparit). Check
+      // for any common values, in which case, the warnings should not be shown.
+      if (!empty($tv->tyopaari)) {
+        foreach (json_decode($tv->tyopaari) as $tp) {
+          if (isset($os[$kid][$tp]))
+            continue 2;
+        }
+      }
+
+      if (isset($tv->peruutettu) && $tv->peruutettu != 0) continue;
+      if (isset($tv->omasiistijailmoitus) && $tv->omasiistijailmoitus != 0) continue;
+      if (isset($tv->omasiistijavaroitus) && $tv->omasiistijavaroitus == 0) continue;
+      if (isset($tv->tt->omasiistijavaroitukset) && $tv->tt->omasiistijavaroitukset == 0) continue;
+
+      $results[$sid] = true;
+    }
+
+    return $results;
+  }
+
+  /**
+   * Get list of workers that have approved shifts/cycles in any location.
+   *
+   * @return array
+   * Arrays with attr: "id", "tekijan_nimi", "sukunimi", indexed by location ID.
+   */
+  public function os_full_data()
+  {
+    static $data;
+
+    if (!isset($data)) {
+
+      /** @var CCache $cc */
+      $cc = Yii::app()->cache;
+      $cid = $this->cachekey('omasiistijat');
+      $data = $cc->get($cid);
+
+      if (false === $data) {
+
+        // Get list of cleaners with approved hours in target location.
+        $dbresults = Yii::app()->db1->createCommand("
+          SELECT s.kohdenID, s.tid, t.tekijan_nimi, t.sukunimi
+          FROM sivex_ttekijat t
+          INNER JOIN
+          (
+            SELECT tid, kohdenID
+            FROM sivexkuitti
+            WHERE hyvaksytty!=''
+            UNION DISTINCT
+            SELECT tid, kohdenID
+            FROM sivexkuitti_repaired
+            WHERE hyvaksytty!=''
+          ) s
+          ON s.tid = t.id
+          WHERE s.kohdenID != 0
+          AND t.aktiivinen = 1
+          ORDER BY s.kohdenID, t.sukunimi
+        ")->queryAll();
+
+        $data = [];
+        foreach ($dbresults as $row) {
+          $kid = $row['kohdenID'];
+          $tid = $row['tid'];
+          if (!key_exists($kid, $data))
+            $data[$kid] = [];
+          $data[$kid][$tid] = [
+            'id' => $tid,
+            'tekijan_nimi' => $row['tekijan_nimi'],
+            'sukunimi' => $row['sukunimi']
+          ];
+        }
+
+        $this->tracef('cache', "Omasiistijat: Cache refreshed with %d items.", count($data));
+        $cc->set($cid, $data, 300);
+      }
+    }
+
+    $this->tracef('cache', "Omasiistijat: All data requested (count: %d).", count($data));
+    return $data;
+  }
+
+  /* Omasiistijät ))) */
   #endregion
+
+  /**
+   * Writes a formatted trace message.
+   * This method will only log a message when the application is in debug mode.
+   * @param string $category  Category of the message. It is case-insensitive.
+   * @param string $fmt       Message format for {@link vsprintf}.
+   * @param mixed ...$args    Optional args for formatting the message.
+   * @return string           Final message that was passed to {@link Yii::trace}
+   */
+  public function tracef($category = null, $fmt, ...$args)
+  {
+    $msg = vsprintf($fmt, $args);
+    Yii::trace($msg, $category);
+    return $msg;
+  }
 
   /**
    * Output results as JSON.
