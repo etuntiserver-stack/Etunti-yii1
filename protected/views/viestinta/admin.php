@@ -1,7 +1,7 @@
 <?php
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
-
+/*
 if( Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy' ){
    $tv = Asiakkaat::model()->findAll();
    foreach($tv as $item){
@@ -37,7 +37,7 @@ if( Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy' ){
 	}
    }
 }
-
+*/
 /* Asiakas siirto 
 $tv = Asiakkaat::model()->findAll();
 foreach($tv as $item){
