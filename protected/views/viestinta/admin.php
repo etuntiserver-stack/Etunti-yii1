@@ -2,6 +2,31 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
+$tv = Asiakkaat::model()->findAll();
+foreach($tv as $item){
+
+	//if(!empty($item->y_tunnus))
+	//	Asiakkaat::model()->updatebypk($item->id, ['tyyppi' => 'yritys']);
+	//else
+	//	Asiakkaat::model()->updatebypk($item->id, ['tyyppi' => 'henkilo']);
+
+	$k = Kohteet::model()->find(" asiakas_id='".$item->id."' ");
+	if(!isset($k->id))
+		echo $item->yhteyshenkilo.' '.$item->y_tunnus.' '.$item->tyyppi.'<br>';
+/*
+	$k = new Kohteet;
+	$k->asiakas_id = $item->id;
+	$k->etu_suku_nimet = $item->yhteyshenkilo;
+	$k->osoite = $item->osoite;
+	$k->kaupunki = $item->kaupunki;
+	$k->pnumero = $item->postinumero;
+	$k->email = $item->sahkoposti;
+	$k->puh_nro = $item->puhelin;
+	$k->aktiivinen = 1;
+	$k->save();
+*/
+}
+
 /* Asiakas siirto 
 $tv = Asiakkaat::model()->findAll();
 foreach($tv as $item){
