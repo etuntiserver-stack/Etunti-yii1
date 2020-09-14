@@ -113,8 +113,8 @@
 	foreach($arr as $v2)
 		if( isset($v2['this_id']) )
 			$t =  (object)$v2['data'];
-	if(!isset($t->osoite))
-		continue;
+	//if(!isset($t->osoite))
+		//continue;
 
 	// <-- Tietoja
 	if( !empty($t->tietoja) ){
