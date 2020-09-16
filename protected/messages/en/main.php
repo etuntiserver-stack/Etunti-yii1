@@ -176,6 +176,7 @@ return array(
 'Kartta' => 'Map',
 'Työntekijä' => 'Employee',
 'Työvuoroot' => 'Shifts',
+'Työ' => 'Work',
 'TAG' => 'TAG',
 'Osoite/Matka' => 'Address/Travel',
 'Aloitus' => 'Start',

@@ -70,6 +70,7 @@ class Tyontekijat extends DB2ActiveRecord
 
 		$table_structure = array(
                      'imei' => 'varchar(100) DEFAULT NULL',
+                     'app_lang' => 'varchar(10) DEFAULT \'fi\'',
                      'laiten_puh' => 'varchar(100) DEFAULT NULL',
                      'tekijan_nimi' => 'varchar(100) DEFAULT NULL',
                      'tekijan_henkilotunnus' => 'varchar(20) DEFAULT NULL',
@@ -103,8 +104,8 @@ class Tyontekijat extends DB2ActiveRecord
                      'onlinevaraus_tuotteet' => 'text DEFAULT NULL',
                      'app_naytta_osoitekenta' => 'int(1) DEFAULT 0',
 		     'muistiinpano' => 'text DEFAULT NULL',
-         'naytta_tyovuorossa' => 'int(1) DEFAULT 1',
-         'omasiistijavaroitukset' => 'int(1) DEFAULT 1', // 1: näytetään omasiistijävaroitukset työvuorotaulussa
+		     'naytta_tyovuorossa' => 'int(1) DEFAULT 1',
+		     'omasiistijavaroitukset' => 'int(1) DEFAULT 1', // 1: näytetään omasiistijävaroitukset työvuorotaulussa
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -152,7 +153,7 @@ class Tyontekijat extends DB2ActiveRecord
 			array('tekijan_email, tekijan_ptoimipaikka, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_konttori, aktiivinen', 'length', 'max'=>50),
 			array('tekijan_pnumero', 'length', 'max'=>7),
 			array('ammattinimike, token', 'length', 'max'=>255),
-			array('ayjasenyys', 'length', 'max'=>10),
+			array('ayjasenyys, app_lang', 'length', 'max'=>10),
 			array('kortit, tekijan_muisti, tekijan_tietoja, tietoja_onlinevarauksen, muistiinpano, tyo_toimialue', 'safe'),
 			array('gcm_reg_id, position, kortit_voimassaolo, tyoryhma', 'length', 'max'=>500),
 			array('onlinevaraus_tuotteet', 'safe'),

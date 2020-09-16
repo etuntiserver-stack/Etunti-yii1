@@ -361,6 +361,14 @@ public function actionLang($dom)
 
 	    if(isset($_POST['lang']))
 	    {
+
+		if( isset($_POST['tid']) ){
+			$ttekija = Tyontekijat::model()->findByPk($_POST['tid']);
+			if( isset($ttekija->id) ){
+				Tyontekijat::model()->updateByPk($ttekija->id, ['app_lang' => $_POST['lang']]);
+			}
+		}
+
 	  	$_SESSION['lang'] = $_POST['lang'];
 		Yii::app()->language = $_POST['lang'];
 		$lang = array(
@@ -637,8 +645,8 @@ public function actionImei($dom)
 	}
 
 
-	if(isset($_POST['lang']))
-	$_SESSION['lang'] = $_POST['lang'];
+	//if(isset($_POST['lang']))
+	//$_SESSION['lang'] = $_POST['lang'];
 
 	(isset($_POST['versio']))? $versio = $_POST['versio']: $versio = '';
 	(isset($_POST['platform']))? $platform = $_POST['platform']: $platform = '';
@@ -667,6 +675,10 @@ public function actionImei($dom)
 		exit;
 	}
 	//     Check Tyontekija -->
+
+	// <-- Kieli / Lang
+	Yii::app()->language = $ttekija->app_lang;
+
 	$my_location = (isset($_POST['my_location']))?str_replace("/",",",$_POST['my_location']):'';
 	$asetukset = Asetukset::model()->findbypk(1);
 	$get_osoite 		= '';
