@@ -13,13 +13,13 @@
 		}
 
 		if($iltatunnit != 0){
-			$iltatunnit_tyotjamatkat = '<b>Työt</b>:<br>'.$this->num($iltatunnit);
+			$iltatunnit_tyotjamatkat = '<b>Työt</b>:<br>'.number_format($this->num($iltatunnit), 2, ',', '');
 	        } else {
 			$iltatunnit = '';
 	  	}
 
 		if($matkaIlta != 0){
-			$matkaIlta = '<br><b>Matkat</b>:<br>'.$this->num($matkaIlta);
+			$matkaIlta = '<br><b>Matkat</b>:<br>'.number_format($this->num($matkaIlta), 2, ',', '');
 	        } else {
 			$matkaIlta = '';
 		}
