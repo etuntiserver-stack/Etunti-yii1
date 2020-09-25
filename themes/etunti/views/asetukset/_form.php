@@ -348,7 +348,7 @@ $('.ryhmat').multiselect({
 <div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#tyovuoroAsetukset"><h3><?php echo Yii::t('main','Työvuorot'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
 
   <div class="row form collapse" id="tyovuoroAsetukset">
-   <div class="col-sm-3">
+   <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','Työvuorot asetukset'); ?></h2></legend>
 
 	<div class="section fill mb5">
@@ -407,7 +407,7 @@ $('.ryhmat').multiselect({
 
    </div>
 
-   <div class="col-sm-3">
+   <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','Toistuvat työvuorot'); ?></h2></legend>
 
 	<div class="section fill mb5">
@@ -436,7 +436,7 @@ $('.ryhmat').multiselect({
    </div>
 
 
-   <div class="col-sm-3">
+   <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','Työvuorojen lähetys'); ?></h2></legend>
 
 	<div class="section fill mb5">
@@ -464,6 +464,7 @@ $('.ryhmat').multiselect({
   </div>
    </div>
 
+<?php /*
    <div class="col-sm-3">
     <legend><h2><?php echo Yii::t('main','Apuaika'); ?></h2></legend>
 
@@ -484,7 +485,9 @@ $('.ryhmat').multiselect({
 		<?php echo $form->textField($model,'apuaika_palkkalaji',array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'apuaika_palkkalaji'); ?>
 	</div>
+
    </div>
+*/ ?>
 
   </div>
 <?php endif; ?>
