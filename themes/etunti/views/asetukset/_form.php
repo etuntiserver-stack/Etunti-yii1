@@ -1265,6 +1265,11 @@ $('.ryhmat').multiselect({
 		<?php echo $form->numberField($model,'peruutta_paiva_ennen',array('maxlength'=>10,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'peruutta_paiva_ennen'); ?>
 	</div>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tietosuoja_vinkki_sailyttaminen'); ?>
+		<?php echo $form->numberField($model,'tietosuoja_vinkki_sailyttaminen',array('maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tietosuoja_vinkki_sailyttaminen'); ?>
+	</div>
    </div>
 
    <div class="col-sm-4">
@@ -1444,36 +1449,6 @@ $(document).ready(function(){
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'app_auto_hyvaksyminen_tvmukaan'); ?>
 	</div>
-
-   </div>
-  </div>
-
-<br>
-<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#tietosuoja"><h3><?php echo Yii::t('main','Tietosuoja'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
-
-  <div class="row form collapse" id="tietosuoja">
-
-   <div class="col-sm-4">
-
-	<legend><h2><?php echo Yii::t('main','Tietosuoja'); ?></h2></legend>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tietosuoja_vinkki_sailyttaminen'); ?>
-		<?php echo $form->numberField($model,'tietosuoja_vinkki_sailyttaminen',array('maxlength'=>10,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tietosuoja_vinkki_sailyttaminen'); ?>
-	</div>
-
-   </div>
-
-   <div class="col-sm-4">
-
-	<legend><h2><?php echo Yii::t('main','Tietosuoja'); ?></h2></legend>
-
-   </div>
-
-   <div class="col-sm-4">
-	<legend><h2><?php echo Yii::t('main','Tietosuoja'); ?></h2></legend>
-
 
    </div>
   </div>
