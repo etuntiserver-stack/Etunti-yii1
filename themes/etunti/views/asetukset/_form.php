@@ -621,7 +621,7 @@ $('.ryhmat').multiselect({
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'palvelu_tyyppi'); ?>
 		<?php
-			$tal = array(1=>'POSTITA',2=>'TRUST',3=>'MANUAL',4=>'NETVISOR',5=>'PROCOUNTOR');
+			$tal = array(1=>'POSTITA',2=>'Ropo24',3=>'MANUAL',4=>'NETVISOR',5=>'PROCOUNTOR');
 		echo $form->dropDownList($model,'palvelu_tyyppi', $tal, 
 		array('empty'=>'Valitse palvelu','class'=>'form-control','id'=>'osoite')) ?>
 		<?php echo $form->error($model,'palvelu_tyyppi'); ?>
@@ -694,7 +694,7 @@ $('.ryhmat').multiselect({
 	?>
   </div>
 	<div class="col-sm-4">
-    <legend><h2><?php echo Yii::t('main','TRUST.FI tunnukset'); ?></h2></legend>
+    <legend><h2><?php echo Yii::t('main','Ropo24 tunnukset'); ?></h2></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'trust_url'); ?>
 		<?php echo $form->textField($model,'trust_url',array('size'=>20,'maxlength'=>255,'class'=>'form-control')); ?>
