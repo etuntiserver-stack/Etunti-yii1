@@ -1613,7 +1613,7 @@ public function actionImei($dom)
 		//     Matka, Lounastauko ja Osoite mukaan -->
 
 		// <-- Check is this Virtuaalinen toistuva
-		if( isset($_POST['tv_id']) and $_POST['tv_id'] > 0 ){
+		if( $_POST['status'] == 1 and isset($_POST['tv_id']) and $_POST['tv_id'] > 0 ){
 			$tv_controller = Yii::app()->createController('Tyovuoroot');
 			$get_id = $tv_controller[0]->this_id($_POST['tv_id']);
 			if(isset($get_id['toistuva']) and $get_id['toistuva'] == true){
