@@ -22,11 +22,22 @@
 		$lopetus = $val->loppu;
 		$tyontekijan_nimi = $this->etuSukunimi($tid);
 	}
+	// <-- Asiakas
+	$asiakas = '';
+	if(isset($val->kohteet->asiakkaat) and $val->kohteet->asiakkaat->tyyppi == 'henkilo')
+		$asiakas = $val->kohteet->asiakkaat->yhteyshenkilo;
+	if(isset($val->kohteet->asiakkaat) and $val->kohteet->asiakkaat->tyyppi == 'yritys')
+		$asiakas = $val->kohteet->asiakkaat->yrityksen_nimi;
+	// <-- Osoite
+	$osoite = '';
+	if(isset($val->kohteet->osoite))
+		$osoite = $val->kohteet->osoite;
 ?>
 <tr>
 	<td><?=$tyontekijan_nimi?></td>
 	<td><?=$this->statusMuutosNimeksi($val->status)?></td>
-	<td><?=((isset($val->kohteet->osoite))?$val->kohteet->osoite:'');?></td>
+	<td data-order="<?=$asiakas?>"><?=$asiakas?></td>
+	<td data-order="<?=$osoite?>"><?=$osoite?></td>
 	<td><?=$pvm?></td>
 	<td data-order="<?=strtotime($aloitus)?>"><?=date("H:i", strtotime($aloitus))?></td>
 	<td data-order="<?=strtotime($lopetus)?>"><?=date("H:i", strtotime($lopetus))?></td>

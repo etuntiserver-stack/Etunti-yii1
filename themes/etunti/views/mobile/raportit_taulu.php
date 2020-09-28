@@ -231,6 +231,7 @@
   <tr>
   <th><?=Yii::t('main', 'Työntekijä')?></th>
   <th><?=Yii::t('main', 'Tilanne')?></th>
+  <th><?=Yii::t('main', 'Asiakas')?></th>
   <th><?=Yii::t('main', 'Kohde')?></th>
   <th><?=Yii::t('main', 'Pvm')?></th>
   <th><?=Yii::t('main', 'Aloitus')?></th>
