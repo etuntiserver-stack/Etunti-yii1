@@ -16,6 +16,7 @@
 		<div class="collapse" id="collapse_id_<?=$data->id?>">
 		<?php
 		$li = [];
+		$yht_tunnit = 0;
 		if(isset($lista[$data->id]))
 		{
 			echo '<table class="table table-striped">';
@@ -27,6 +28,7 @@
 			echo '</tr>';
 			foreach($lista[$data->id] as $k => $v)
 			{
+				$yht_tunnit += $v['maara'];
 				$li[] = [
 					'tunnit_from' => $v['tunnit_from'],
 					'id' => $v['id'],
@@ -46,6 +48,7 @@
 		?>
 		</div>
 	</td>
+	<td class="text-center"><?=$this->sprint($yht_tunnit)?></td>
 	<td class="text-right">
 		<?php
 		if(count($li) > 0){

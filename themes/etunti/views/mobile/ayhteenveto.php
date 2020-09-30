@@ -105,32 +105,42 @@ ini_set("max_execution_time", "60");
    <div class="panel-body">
 
   <p id="forTulostus">
-	<?php 
-		$asiakas_nimi = '<h3 class="text-danger">Asiakas ei esitetty</h3>';
-		if(isset($asiakas->id) and $asiakas->tyyppi == 'yritys'){ $asiakas_nimi = $asiakas->yrityksen_nimi; } 
-		if(isset($asiakas->id) and $asiakas->tyyppi == 'henkilo'){ $asiakas_nimi = $asiakas->yhteyshenkilo; } 
-	?>
-	<?=$asiakas_nimi?>, <?=$from?>-<?=$to?>
+	<?=$from?>-<?=$to?>
   </p>
 
   <table class="table table-bordered table-striped small" cellspacing="0" cellpadding="0" id="tunnit_taulu">
   <thead class="myBgColors">
   <tr>
-  <th class="tdw1"><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
+  <th class="tdw1"><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th class="tdw2"><?php echo Yii::t('main', 'Suunniteltut tunnit'); ?></th>
   <th class="tdw3"><?php echo Yii::t('main', 'Luetut tunnit'); ?></th>
-  <th class="tdw4"><?php echo Yii::t('main', 'Hyväksytyt tunnit'); ?></th>
+  <th class="tdw4"><?php echo Yii::t('main', 'Hyväksyntä'); ?></th>
+  <th class="tdw4"><?php echo Yii::t('main', 'Hyväksytyt tunnit <br>laskutettavaksi'); ?></th>
   </tr>
   </thead>
   <?php
-  $sunYht = 0;
-  $luetutYht = 0;
-  $toteutuneetYht = 0;
-  $date = $from;
-
   $suunnitelut = $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'suunnitelut');
-  $luetut = $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'luetut');
-  $toteutuneet = $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'toteutuneet');
+  $luetut 	= $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'luetut');
+  $hyvaksynta 	= $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'hyvaksynta');
+  $hyvaksytyt 	= $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'hyvaksytyt');
+
+  foreach($asiakkaat as $asiakasnimi => $asiakas){
+
+	$s = (isset($suunnitelut[$asiakas->id]))? $suunnitelut[$asiakas->id] : 0 ;
+	$l = (isset($luetut[$asiakas->id]))? $luetut[$asiakas->id] : 0 ;
+	$t = (isset($hyvaksynta[$asiakas->id]))? $hyvaksynta[$asiakas->id] : 0 ;
+	$h = (isset($hyvaksytyt[$asiakas->id]))? $hyvaksytyt[$asiakas->id] : 0 ;
+
+	echo '<tr>';
+	echo '<td><h4>'.$asiakasnimi.'</h4></td>';
+	echo '<td class="text-center">'.$this->sprint($s).'</td>';
+	echo '<td class="text-center">'.$this->sprint($l).'</td>';
+	echo '<td class="text-center">'.$this->sprint($t).'</td>';
+	echo '<td class="text-center">'.$this->sprint($h).'</td>';
+	echo '</tr>';
+  }
+
+/*
   $period = new DatePeriod(new DateTime(date("Y-m-d",strtotime($from))), new DateInterval('P1D'), new DateTime(date("Y-m-d",strtotime($to))));
 
   foreach($period as $d) {
@@ -185,6 +195,7 @@ ini_set("max_execution_time", "60");
 	echo '<td><div class="pull-right">'.Yii::t('main', 'Yhteensä').': <span class="text-success">('.$this->sprint($yht_t).')</span></div></td>';
 	echo '</tr>';
   }
+*/
   ?>
 <?php /*
   <tfoot>

@@ -120,6 +120,7 @@ $months=array(
 	  <tr>
 	  <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
 	  <th><?php echo Yii::t('main', 'Lasku'); ?></th>
+	  <th><?php echo Yii::t('main', 'Yhteensä tunnit'); ?></th>
 	  <th></th>
 	  </tr>
 	  </thead>

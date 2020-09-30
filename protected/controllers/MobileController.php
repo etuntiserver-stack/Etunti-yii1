@@ -1850,7 +1850,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 
-		if($tilanne == 'luetut' or $tilanne == 'toteutuneet'){
+		if($tilanne == 'luetut' or $tilanne == 'hyvaksynta'  or $tilanne == 'hyvaksytyt'){
 
 	       		$criteria = new CDbCriteria();
 		        $criteria->condition = " 
@@ -1866,8 +1866,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 					)
 				");
 			}
-			if($tilanne == 'toteutuneet')
+			if($tilanne == 'hyvaksynta')
 				$criteria->addCondition(" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
+			if($tilanne == 'hyvaksytyt')
+				$criteria->addCondition (" hyvaksytty!='' AND laskutetaan=1 ");
 
 			$luetut = Mobile::model()->findAll($criteria);
 
@@ -1878,6 +1880,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				AND status='3'
 				AND deleted=0
 			";
+			if($tilanne == 'hyvaksytyt')
+				$criteria->addCondition (" hyvaksytty!='' AND laskutetaan=1 ");
+
 			if( $asiakas_id > 0 ){
 			        $criteria->addCondition (" 
 					kohdenID IN(
@@ -1909,25 +1914,35 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
 			$dataAll 	= $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, $with);
 			$suunnitelut 	= $dataAll;
-
-			/*
-			echo '<pre>';
-			print_r( $dataAll );
-			echo '</pre>';
-			exit;
-			*/
 		}
 
+		$asiakkaat_arr = [];
 		if( $tilanne == 'suunnitelut'){
-			$result = $suunnitelut; 
+			$result = $suunnitelut;
+			foreach($result as $got){
+				$r = $got['data'];
+				if(isset($r->kohteet->asiakkaat)){
+					if(!isset($asiakkaat_arr[$r->kohteet->asiakkaat->id]))
+						$asiakkaat_arr[$r->kohteet->asiakkaat->id] = strtotime($r->loppu)-strtotime($r->alku);
+					else
+						$asiakkaat_arr[$r->kohteet->asiakkaat->id] += strtotime($r->loppu)-strtotime($r->alku);
+				}
+			}
 		}
-		if( $tilanne == 'luetut'){
-			$result = $luetut; 
+
+		if( $tilanne == 'luetut' or $tilanne == 'hyvaksynta' or $tilanne == 'hyvaksytyt'){
+			$result = array_merge($luetut, $toteutuneet);
+			foreach($result as $r){
+				if(isset($r->kohteet->asiakkaat)){
+					if(!isset($asiakkaat_arr[$r->kohteet->asiakkaat->id]))
+						$asiakkaat_arr[$r->kohteet->asiakkaat->id] = strtotime($r->loppui)-strtotime($r->aloitan);
+					else
+						$asiakkaat_arr[$r->kohteet->asiakkaat->id] += strtotime($r->loppui)-strtotime($r->aloitan);
+				}
+			}
 		}
-		if( $tilanne == 'toteutuneet'){
-			$result = array_merge($luetut, $toteutuneet); 
-		}
-		return $result;
+
+		return $asiakkaat_arr;
 	}
 
 	/**
@@ -3161,34 +3176,47 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	public function actionAyhteenveto()
 	{
 
-		$from = date("d.m.Y");
-		$to = date("d.m.Y");
+		$from 	= date("d.m.Y");
+		$to 	= date("d.m.Y");
 
 		if(isset($_GET['from']) and isset($_GET['to'])){
-		$from 	= $_GET['from'];
-		$to 	= $_GET['to'];
+			$from 	= $_GET['from'];
+			$to 	= $_GET['to'];
 		}
 
 		$criteria = new CDbCriteria();
+		$criteria->addCondition(" 
+			id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id IN(SELECT kohdenID FROM sivexkuitti WHERE 
+				DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
+				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+				AND status='3'
+				AND deleted=0
+			))
+		");
+
 		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])){
-			$criteria->condition = " 
+			$criteria->addCondition(" 
 				yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
-			";
+			");
 		}
 		if(isset($_GET['asiakas_id'])){
 			$criteria->condition = " 
 				id='".$_GET['asiakas_id']."'
 			";
 		}
-		if((isset($_GET['yrityksen_nimi'])  and !empty($_GET['yrityksen_nimi'])) or isset($_GET['asiakas_id'])){
-			$asiakas = Asiakkaat::model()->find($criteria);
-		}
+
+		$asiakkaat = Asiakkaat::model()->findAll($criteria);
+		$sort = [];
+		foreach($asiakkaat as $asiakas)
+			$sort[$asiakas->Fullname] = $asiakas;
+
+		ksort($sort);
 
 		$this->render('ayhteenveto', array(
 			'from' => $from,
 			'to' => $to,
-			'asiakas_id' => (isset($asiakas->id))?$asiakas->id:'',
-			'asiakas' => (isset($asiakas->id))?$asiakas:'',
+			'asiakkaat' => $sort,
+			'asiakas_id' => (isset($_GET['asiakas_id']))? $_GET['asiakas_id']: '',
 		));
 	}
 
