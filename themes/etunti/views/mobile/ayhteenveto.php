@@ -5,15 +5,8 @@
 ini_set("max_execution_time", "60");
 ?>
 
-
-
-
         <!-- begin: .tray-center -->
         <div class="tray-center">
-
-	   <div class="pull-right">
-	     <button class="btn btn-primary btn-sm myBgColors tulostataulun"><?php echo Yii::t('main', 'Tulosta'); ?></button>
-	   </div>
             <h2 class="myBgColors p10"> <i class="fa fa-home"></i> <?php echo Yii::t('main', 'Tuntiyhteenveto asiakkaat'); ?> </h2>
 
    	    <form id="yhtveto" action="#" class="form-inline" method="GET">
@@ -101,120 +94,102 @@ ini_set("max_execution_time", "60");
 <?php if(isset($_GET['from']) and isset($_GET['to'])) : ?>
 
 <div class="admin-form">
+  <div class="panel-header">
+      <div class="row">
+       <div class="col-sm-12">
+        <div class="pull-right">
+         <div class="form-inline">
+    	  <!--<button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>-->
+	  <form action="tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="ext" value="doc">
+	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
+	  </form>
+	  <form action="tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="ext" value="xls">
+	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+	  </form>
+	  <form action="tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="header" value="<?=$from?>-<?=$to?>">
+	    <input type="hidden" name="ext" value="pdf">
+	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+	  </form>
+         </div>
+        </div>
+       </div>
+      </div>
+      <br>
+  </div>
   <div class="panel heading-border">
    <div class="panel-body">
 
-  <p id="forTulostus">
-	<?=$from?>-<?=$to?>
-  </p>
+	<div class="row">
+	 <div class="table-responsive raporti_taulu" id="tableContent">
+	  <?=$from?>-<?=$to?>
+	  <table class="table table-bordered table-striped small" cellspacing="0" cellpadding="0" id="mobileTable">
+	  <thead class="myBgColors">
+	  <tr>
+	  <th class="tdw1"><?php echo Yii::t('main', 'Asiakas'); ?></th>
+	  <th class="tdw2"><?php echo Yii::t('main', 'Suunniteltut tunnit'); ?></th>
+	  <th class="tdw3"><?php echo Yii::t('main', 'Luetut tunnit'); ?></th>
+	  <th class="tdw4"><?php echo Yii::t('main', 'Hyväksyntä'); ?></th>
+	  <th class="tdw4"><?php echo Yii::t('main', 'Hyväksytyt tunnit <br>laskutettavaksi'); ?></th>
+	  </tr>
+	  </thead>
+	  <?php
+	  $suunnitelut = $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'suunnitelut');
+	  $luetut 	= $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'luetut');
+	  $hyvaksynta 	= $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'hyvaksynta');
+	  $hyvaksytyt 	= $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'hyvaksytyt');
 
-  <table class="table table-bordered table-striped small" cellspacing="0" cellpadding="0" id="tunnit_taulu">
-  <thead class="myBgColors">
-  <tr>
-  <th class="tdw1"><?php echo Yii::t('main', 'Asiakas'); ?></th>
-  <th class="tdw2"><?php echo Yii::t('main', 'Suunniteltut tunnit'); ?></th>
-  <th class="tdw3"><?php echo Yii::t('main', 'Luetut tunnit'); ?></th>
-  <th class="tdw4"><?php echo Yii::t('main', 'Hyväksyntä'); ?></th>
-  <th class="tdw4"><?php echo Yii::t('main', 'Hyväksytyt tunnit <br>laskutettavaksi'); ?></th>
-  </tr>
-  </thead>
-  <?php
-  $suunnitelut = $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'suunnitelut');
-  $luetut 	= $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'luetut');
-  $hyvaksynta 	= $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'hyvaksynta');
-  $hyvaksytyt 	= $this->AsiakasPvmLuTotSuunArray($asiakas_id, $from, $to, 'hyvaksytyt');
+	  foreach($asiakkaat as $asiakasnimi => $asiakas){
 
-  foreach($asiakkaat as $asiakasnimi => $asiakas){
+		$s = (isset($suunnitelut[$asiakas->id]))? $suunnitelut[$asiakas->id] : 0 ;
+		$l = (isset($luetut[$asiakas->id]))? $luetut[$asiakas->id] : 0 ;
+		$t = (isset($hyvaksynta[$asiakas->id]))? $hyvaksynta[$asiakas->id] : 0 ;
+		$h = (isset($hyvaksytyt[$asiakas->id]))? $hyvaksytyt[$asiakas->id] : 0 ;
 
-	$s = (isset($suunnitelut[$asiakas->id]))? $suunnitelut[$asiakas->id] : 0 ;
-	$l = (isset($luetut[$asiakas->id]))? $luetut[$asiakas->id] : 0 ;
-	$t = (isset($hyvaksynta[$asiakas->id]))? $hyvaksynta[$asiakas->id] : 0 ;
-	$h = (isset($hyvaksytyt[$asiakas->id]))? $hyvaksytyt[$asiakas->id] : 0 ;
-
-	echo '<tr>';
-	echo '<td><h4>'.$asiakasnimi.'</h4></td>';
-	echo '<td class="text-center">'.$this->sprint($s).'</td>';
-	echo '<td class="text-center">'.$this->sprint($l).'</td>';
-	echo '<td class="text-center">'.$this->sprint($t).'</td>';
-	echo '<td class="text-center">'.$this->sprint($h).'</td>';
-	echo '</tr>';
-  }
-
-/*
-  $period = new DatePeriod(new DateTime(date("Y-m-d",strtotime($from))), new DateInterval('P1D'), new DateTime(date("Y-m-d",strtotime($to))));
-
-  foreach($period as $d) {
-	$date = $d->format("d.m.Y");
-	$yht_s = 0;
-	$body_suunnitelut = '';
-	foreach($suunnitelut as $arr){
-	    $item = $arr['data'];
-	    if($arr['this_pvm'] == $date){
-		$body_suunnitelut .= '<div class="row"><div class="col-sm-12">
-		'.$item->osoiteById.' <div class="pull-right"><b>'.date("H:i", strtotime($item->alku)).'-'.date("H:i", strtotime($item->loppu)).' 
-		<span class="text-success">('.$this->sprint(strtotime($item->loppu)-strtotime($item->alku)).')</span></b>
-		</div></div></div>';
-		$yht_s += strtotime($item->loppu)-strtotime($item->alku);
-	    }
-	}
-	$yht_l = 0;
-	$body_luetut = '';
-	foreach($luetut as $item){
-	    if(date("d.m.Y", strtotime($item->aloitan)) == $date){
-		$body_luetut .= '<div class="row"><div class="col-sm-12">
-		'.$item->kohde_kannasta.' <div class="pull-right"><b>'.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).' 
-		<span class="text-success">('.$this->sprint(strtotime($item->loppui)-strtotime($item->aloitan)).')</span></b>
-		</div></div></div>';
-		$yht_l += strtotime($item->loppui)-strtotime($item->aloitan);
-	    }
-	}
-	$yht_t = 0;
-	$body_toteutuneet = '';
-	foreach($toteutuneet as $item){
-	    if(date("d.m.Y", strtotime($item->aloitan)) == $date){
-		$body_toteutuneet .= '<div class="row"><div class="col-sm-12">
-		'.$item->kohde_kannasta.' <div class="pull-right"><b>'.date("H:i", strtotime($item->aloitan)).'-'.date("H:i", strtotime($item->loppui)).' 
-		<span class="text-success">('.$this->sprint(strtotime($item->loppui)-strtotime($item->aloitan)).')</span></b>
-		</div></div></div>';
-		$yht_t += strtotime($item->loppui)-strtotime($item->aloitan);
-	    }
-	}
-	if(empty($body_suunnitelut) and empty($body_luetut) and empty($body_toteutuneet)){ continue; }
-
-	echo '<tr>';
-	echo '<td><h4>'.$date.'</h4></td>';
-	echo '<td style="vertical-align: top">'.$body_suunnitelut.'</td>';
-	echo '<td style="vertical-align: top">'.$body_luetut.'</td>';
-	echo '<td style="vertical-align: top">'.$body_toteutuneet.'</td>';
-	echo '</tr>';
-
-	echo '<tr>';
-	echo '<td></td>';
-	echo '<td><div class="pull-right">'.Yii::t('main', 'Yhteensä').': <span class="text-success">('.$this->sprint($yht_s).')</span></div></td>';
-	echo '<td><div class="pull-right">'.Yii::t('main', 'Yhteensä').': <span class="text-success">('.$this->sprint($yht_l).')</span></div></td>';
-	echo '<td><div class="pull-right">'.Yii::t('main', 'Yhteensä').': <span class="text-success">('.$this->sprint($yht_t).')</span></div></td>';
-	echo '</tr>';
-  }
-*/
-  ?>
-<?php /*
-  <tfoot>
-  <tr>
-  <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
-  <th><?php echo $this->sprint($sunYht); ?></th>
-  <th><?php echo $this->sprint($luetutYht); ?></th>
-  <th><?php echo $this->sprint($toteutuneetYht); ?></th>
-  </tr>
-  </tfoot>
-*/ ?>
-  </table>
-
+		echo '<tr>';
+		echo '<td><h4>'.$asiakasnimi.'</h4></td>';
+		echo '<td class="text-center"><table class="table table-bordered"><td>'.$this->sprint($s).'</td><th>'.number_format($this->num($s), 2, ',', '').'</th></table></td>';
+		echo '<td class="text-center"><table class="table table-bordered"><td>'.$this->sprint($l).'</td><th>'.number_format($this->num($l), 2, ',', '').'</th></table></td>';
+		echo '<td class="text-center"><table class="table table-bordered"><td>'.$this->sprint($t).'</td><th>'.number_format($this->num($t), 2, ',', '').'</th></table></td>';
+		echo '<td class="text-center"><table class="table table-bordered"><td>'.$this->sprint($h).'</td><th>'.number_format($this->num($h), 2, ',', '').'</th></table></td>';
+		echo '</tr>';
+	  }
+	  ?>
+	  </table>
+	 </div>
+	</div>
 
    </div>
   </div>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $(".submitForm").on('click', function(e){
+	$('.mobileTable').addClass('table-bordered');
+	$(this).prev('textarea').val($('#tableContent').html());
+	$(this).closest('form').submit();
+	e.preventDefault();
+  });
+});
+</script>
 <?php endif; ?>
 
+<?php /*
 <script>
 $(document).ready(function(){
 
@@ -249,3 +224,5 @@ $(document).delegate(".tulostataulun","click",function(){
 
 });
 </script>
+
+*/ ?>

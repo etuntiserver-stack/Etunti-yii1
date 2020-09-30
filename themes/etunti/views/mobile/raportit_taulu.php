@@ -220,7 +220,6 @@
       <br>
   </div>
   <div class="panel heading-border">
-
    <div class="panel-body">
 
 <div class="row">

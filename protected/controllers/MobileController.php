@@ -1866,7 +1866,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 					)
 				");
 			}
-			if($tilanne == 'hyvaksynta')
+			if($tilanne == 'hyvaksynta' or $tilanne == 'hyvaksytyt')
 				$criteria->addCondition(" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
 			if($tilanne == 'hyvaksytyt')
 				$criteria->addCondition (" hyvaksytty!='' AND laskutetaan=1 ");
@@ -1929,8 +1929,18 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				}
 			}
 		}
-
-		if( $tilanne == 'luetut' or $tilanne == 'hyvaksynta' or $tilanne == 'hyvaksytyt'){
+		if( $tilanne == 'luetut'){
+			$result = $luetut;
+			foreach($result as $r){
+				if(isset($r->kohteet->asiakkaat)){
+					if(!isset($asiakkaat_arr[$r->kohteet->asiakkaat->id]))
+						$asiakkaat_arr[$r->kohteet->asiakkaat->id] = strtotime($r->loppui)-strtotime($r->aloitan);
+					else
+						$asiakkaat_arr[$r->kohteet->asiakkaat->id] += strtotime($r->loppui)-strtotime($r->aloitan);
+				}
+			}
+		}
+		if( $tilanne == 'hyvaksynta' or $tilanne == 'hyvaksytyt'){
 			$result = array_merge($luetut, $toteutuneet);
 			foreach($result as $r){
 				if(isset($r->kohteet->asiakkaat)){
