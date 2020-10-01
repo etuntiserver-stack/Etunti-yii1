@@ -1552,9 +1552,9 @@ public function actionImei($dom)
 			exit;
 		}
 
+$mobinsert->app_lopetus_destination_checker = '1';
 		// <-- GPS checker
 		if($mobupdate->tv_id > 0){
-$mobinsert->app_lopetus_destination_checker = 1;
 			$tvuoro = Tyovuoroot::model()->findByPk($mobupdate->tv_id);
 			if(isset($tvuoro->id)){
 				$dist = $this->DestinationChecker($my_location, $tvuoro, $asetuksetForAll);
