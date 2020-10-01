@@ -1684,8 +1684,21 @@ public function actionImei($dom)
 
 			if(isset($tvuoro->id)){
 				// GPS sijainti
-				//$this->_sendResponse(200, CJSON::encode($tvuoro->id));
-				//exit;
+				$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
+				if(
+					!empty($my_location) and isset($tvuoro->kohteet->gps_sijainti) 
+					and isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey)
+				){
+					$must_be_location = $tvuoro->kohteet->gps_sijainti;
+					$url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=$my_location&destinations=$must_be_location&key=". $asetuksetForAll->googlemaps_apikey;
+
+		        		$json = @file_get_contents($url);
+		        		$data = json_decode($json);
+				        if (isset($data->status) and $data->status == "OK")
+					        $mobinsert->app_aloitus_destination_checker = $json;
+				}
+
+				// <-- Timer
 				$loppu = date("d.m.Y H:i",strtotime($tvuoro->pvm." ".$tvuoro->loppu));
 				$sekForSignal = strtotime($tvuoro->pvm." ".$tvuoro->loppu)-time();
 			}

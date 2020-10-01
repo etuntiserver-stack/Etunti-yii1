@@ -33,7 +33,7 @@ if(empty($model->tietoja))
 
   <div class="col-sm-3">
 
-		<?php echo $form->textField($model,'gps_sijainti',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->hiddenField($model,'gps_sijainti',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
