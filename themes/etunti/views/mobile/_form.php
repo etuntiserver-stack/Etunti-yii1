@@ -136,8 +136,13 @@ if(isset($model->tietoja))
 
 	<div class="section">
 		<?php echo $form->labelEx($model,'app_aloitus_destination_checker'); ?>
-		<?php echo $form->textarea($model,'app_aloitus_destination_checker',array('class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'app_aloitus_destination_checker',array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'app_aloitus_destination_checker'); ?>
+	</div>
+	<div class="section">
+		<?php echo $form->labelEx($model,'app_lopetus_destination_checker'); ?>
+		<?php echo $form->textField($model,'app_lopetus_destination_checker',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'app_lopetus_destination_checker'); ?>
 	</div>
 	<div class="section">
 		<?php echo $form->labelEx($model,'tid'); ?>

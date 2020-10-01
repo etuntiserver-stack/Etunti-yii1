@@ -1552,6 +1552,16 @@ public function actionImei($dom)
 			exit;
 		}
 
+		// <-- GPS checker
+		if($mobupdate->tv_id > 0){
+			$tvuoro = Tyovuoroot::model()->findByPk($mobupdate->tv_id);
+			if(isset($tvuoro->id)){
+				$dist = $this->DestinationChecker($my_location, $tvuoro, $asetuksetForAll);
+				$mobinsert->app_lopetus_destination_checker = round($dist, 2);
+			}
+		}
+		//     GPS checker --> 
+
 		$save = '';
 		if($mobupdate->save()){
 			// <-- Auto hyvaksynta
@@ -1683,38 +1693,11 @@ public function actionImei($dom)
 			$tvuoro = Tyovuoroot::model()->find($criteria);
 
 			if(isset($tvuoro->id)){
-				// GPS sijainti
-				//$my_location = '61.157604,22.9610618';
-				if(
-					!empty($my_location) and isset($tvuoro->kohteet->gps_sijainti) 
-					and isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey)
-				){
 
-					$ex_app = explode(",", $my_location);
-					$ex_tv = explode(",", $tvuoro->kohteet->gps_sijainti);
-					if(isset($ex_app[1]) and isset($ex_tv[1]))
-					{
-					        $lat_app = $ex_app[0];
-					        $lng_app = $ex_app[1];
-					        $lat_tv = $ex_tv[0];
-					        $lng_tv = $ex_tv[1];
-
-						$dist = $this->distance($lat_app, $lng_app, $lat_tv, $lng_tv);
-						$mobinsert->app_aloitus_destination_checker = round($dist, 2);
-					}
-
-/*
-					$must_be_location = $tvuoro->kohteet->gps_sijainti;
-					$url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=$my_location&destinations=$must_be_location&key=". $asetuksetForAll->googlemaps_apikey;
-
-		        		$json = @file_get_contents($url);
-		        		$data = json_decode($json);
-				        if (isset($data->status) and $data->status == "OK")
-					        $mobinsert->app_aloitus_destination_checker = $json;
-					//else
-					        //$mobinsert->app_aloitus_destination_checker = 'ERROR: '. $json;
-*/
-				}
+				// <-- GPS checker
+				$dist = $this->DestinationChecker($my_location, $tvuoro, $asetuksetForAll);
+				$mobinsert->app_aloitus_destination_checker = round($dist, 2);
+				//     GPS checker -->
 
 				// <-- Timer
 				$loppu = date("d.m.Y H:i",strtotime($tvuoro->pvm." ".$tvuoro->loppu));
@@ -1773,6 +1756,29 @@ public function actionImei($dom)
     }
 
 }
+
+	protected function DestinationChecker($my_location, $tvuoro, $asetuksetForAll){
+		//$my_location = '61.157604,22.9610618';
+		$return = 0;
+		if(
+			!empty($my_location) and isset($tvuoro->kohteet->gps_sijainti) and !empty($tvuoro->kohteet->gps_sijainti) 
+			and isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey)
+		){
+
+			$ex_app = explode(",", $my_location);
+			$ex_tv = explode(",", $tvuoro->kohteet->gps_sijainti);
+			if(isset($ex_app[1]) and isset($ex_tv[1]))
+			{
+			        $lat_app = $ex_app[0];
+			        $lng_app = $ex_app[1];
+			        $lat_tv = $ex_tv[0];
+			        $lng_tv = $ex_tv[1];
+
+				$return = $this->distance($lat_app, $lng_app, $lat_tv, $lng_tv);
+			}
+		}
+		return $return;
+	}
 
 	protected function distance($lat1, $lon1, $lat2, $lon2) {
 

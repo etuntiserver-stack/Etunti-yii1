@@ -104,13 +104,17 @@ class Mobile extends DB2ActiveRecord
 		     'tyo_erittelyt' => 'text DEFAULT NULL',
 		     'palkanlaskentaan' => 'int(1) DEFAULT 1',
 		     'laskurivi_id' => 'int(11) DEFAULT 0',
-		     'app_aloitus_destination_checker' => 'text DEFAULT NULL',
+		     'app_aloitus_destination_checker' => 'varchar(10) DEFAULT NULL',
+		     'app_lopetus_destination_checker' => 'varchar(10) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)
 		{
 			if($key == 'tv_id' and $table->columns[$key]->dbType != 'int(100)'){
 				Yii::app()->db1->createCommand()->alterColumn($tb_name, 'tv_id', 'int(100)' );
+			}
+			if($key == 'app_aloitus_destination_checker' and $table->columns[$key]->dbType != 'varchar(10)'){
+				Yii::app()->db1->createCommand()->alterColumn($tb_name, 'app_aloitus_destination_checker', 'varchar(10)' );
 			}
 			if (!isset($table->columns[$key])) {
 				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
@@ -133,7 +137,7 @@ class Mobile extends DB2ActiveRecord
 			array('requests, kohdenID, tid, status, admin, sairaus, laskutetaan, tuoteID, tv_id, deleted, palkanlaskentaan, laskurivi_id', 'numerical', 'integerOnly'=>true),
 			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id, tekijan_nimi', 'length', 'max'=>50),
 			array('domain, asiakas_hyvaksy, imei, sim_serial_number, kohde_kannasta, hyvaksytty', 'length', 'max'=>100),
-			array('my_location, tietoja, tyo_erittelyt, app_aloitus_destination_checker', 'safe'),
+			array('my_location, tietoja, tyo_erittelyt, app_aloitus_destination_checker, app_lopetus_destination_checker', 'safe'),
 			array('osoite', 'length', 'max'=>255),
 			array('aloitan, loppui, etaisyys', 'length', 'max'=>20),
 			array('viesti', 'length', 'max'=>250),
