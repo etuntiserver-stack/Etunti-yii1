@@ -1700,7 +1700,7 @@ public function actionImei($dom)
 					        $lng_tv = $ex_tv[1];
 
 						$dist = $this->distance($lat_app, $lng_app, $lat_tv, $lng_tv);
-						$mobinsert->app_aloitus_destination_checker = $dist;
+						$mobinsert->app_aloitus_destination_checker = round($dist, 2);
 					}
 
 /*
