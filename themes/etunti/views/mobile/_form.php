@@ -135,6 +135,11 @@ if(isset($model->tietoja))
     <div class="col-sm-4">
 
 	<div class="section">
+		<?php echo $form->labelEx($model,'gps_enabled'); ?>
+		<?php echo $form->textField($model,'gps_enabled',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'gps_enabled'); ?>
+	</div>
+	<div class="section">
 		<?php echo $form->labelEx($model,'app_aloitus_destination_checker'); ?>
 		<?php echo $form->textField($model,'app_aloitus_destination_checker',array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'app_aloitus_destination_checker'); ?>
