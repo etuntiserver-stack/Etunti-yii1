@@ -1696,8 +1696,8 @@ public function actionImei($dom)
 		        		$data = json_decode($json);
 				        if (isset($data->status) and $data->status == "OK")
 					        $mobinsert->app_aloitus_destination_checker = $json;
-					else
-					        $mobinsert->app_aloitus_destination_checker = 'ERROR: '. $json;
+					//else
+					        //$mobinsert->app_aloitus_destination_checker = 'ERROR: '. $json;
 				}
 
 				// <-- Timer
