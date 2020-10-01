@@ -5,7 +5,7 @@
   <th><?php echo Yii::t('main', 'T'); ?></th>
   <th><?php echo Yii::t('main', 'Versio <br> GPS'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
-  <th><?php echo Yii::t('main', 'Kartta'); ?></th>
+  <th><?php echo Yii::t('main', 'Kartta <br> Dist(km)'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'Er.'); ?></th>
 
