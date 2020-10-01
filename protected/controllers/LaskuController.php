@@ -3243,7 +3243,7 @@ $xml .= '
 				$history_entry->status = $pc->translateProcountorStatus($remote_invoice['status']);
 				$history_entry->procountor_statuscode = $remote_invoice['status'];
 				$history_entry->palvelu = "procountor";
-				$history_entry->yht_euro = number_format($total_price, 2);
+				$history_entry->yht_euro = $total_price;
 
 				// <-- onko sama olemassa
 		       		$criteria = new CDbCriteria();
