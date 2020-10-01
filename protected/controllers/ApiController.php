@@ -1668,6 +1668,30 @@ public function actionImei($dom)
 			$mobinsert->tyo_erittelyt = '';
 		}
 
+
+		// <-- Timer AND Position Checker
+		$loppu 		= '';
+		$sekForSignal 	= '';
+		if( $post_tv_id > 0 ){
+			$criteria = new CDbCriteria();
+			$criteria->order = "alku DESC"; 
+			$criteria->condition = " 
+				tid = '".$ttekija->id."' 
+				AND id='".$post_tv_id."'
+				AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
+			";
+			$tvuoro = Tyovuoroot::model()->find($criteria);
+
+			if(isset($tvuoro->id)){
+				// GPS sijainti
+				//$this->_sendResponse(200, CJSON::encode($tvuoro->id));
+				//exit;
+				$loppu = date("d.m.Y H:i",strtotime($tvuoro->pvm." ".$tvuoro->loppu));
+				$sekForSignal = strtotime($tvuoro->pvm." ".$tvuoro->loppu)-time();
+			}
+		}
+		// Timer AND Position Checker -->
+
                 if($mobinsert->save()){
 			// <-- LOG
 			if( isset($mobinsert->id) ){
@@ -1681,26 +1705,6 @@ public function actionImei($dom)
 			$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 			}
 			//     LOG -->
-
-			$loppu 		= '';
-			$sekForSignal 	= '';
-			// <-- Timer
-			if( $post_tv_id > 0 ){
-				$criteria = new CDbCriteria();
-				$criteria->order = "alku DESC"; 
-				$criteria->condition = " 
-					tid = '".$ttekija->id."' 
-					AND id='".$post_tv_id."'
-					AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) = CURDATE()
-				";
-				$tvuoro = Tyovuoroot::model()->find($criteria);
-
-				if(isset($tvuoro->id)){
-					$loppu = date("d.m.Y H:i",strtotime($tvuoro->pvm." ".$tvuoro->loppu));
-					$sekForSignal = strtotime($tvuoro->pvm." ".$tvuoro->loppu)-time();
-				}
-			}
-			// Timer -->
 
 			if( $new_login ){
 				$return = [

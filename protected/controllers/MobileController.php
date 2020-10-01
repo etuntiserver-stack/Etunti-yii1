@@ -2134,8 +2134,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 							TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) >= '18:00:00'
 						THEN CASE
 							WHEN
-								TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > '23:00:00' ||
-								DATE(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) != DATE(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))
+								(TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) < '23:00:00') &&
+								(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > '23:00:00' ||
+								DATE(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) != DATE(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')))
 							THEN
 								TIME_TO_SEC(TIMEDIFF('23:00:00', TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
 							WHEN
@@ -2199,8 +2200,15 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 									TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) <= '23:00:00'
 								THEN
 									TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), '00:00:00')) + 3600
-								ELSE
-									TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
+								ELSE CASE
+									WHEN
+										DATE(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) > DATE(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))
+									THEN
+										TIME_TO_SEC(TIMEDIFF('23:59:59', TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))+1+
+										TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), '00:00:00'))
+									ELSE
+										TIME_TO_SEC(TIMEDIFF(TIME(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')), TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))))
+									END
 								END
 							ELSE CASE
 								WHEN
