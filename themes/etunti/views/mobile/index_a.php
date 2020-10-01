@@ -3,7 +3,7 @@
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'T'); ?></th>
-  <th><?php echo Yii::t('main', 'Versio'); ?></th>
+  <th><?php echo Yii::t('main', 'Versio <br> GPS'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Kartta'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>

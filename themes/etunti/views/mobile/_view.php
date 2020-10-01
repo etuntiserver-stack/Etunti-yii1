@@ -48,8 +48,8 @@ if( isset($sivu) and $sivu == 'laskutettu' )
  $t = explode("_",$data->asiakas_num);
  if(isset($t[1]) and $t[1] != 000000){ $tag = $t[1]; } else { $tag = Yii::t('main', 'TAG ei ollut käytetty'); }
 
- $versio = '';
- if(isset($t[0])){ $versio = $t[0]; }
+ $versio = '---';
+ if(isset($t[0]) and !empty($t[0])){ $versio = $t[0]; }
 
  $karttaA = '';
  $karttaL = '';
@@ -160,7 +160,7 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 		<?php endif; ?>
 	</td>
 
-	<td><?php echo $versio; ?></td>
+	<td class="text-center"><?=$versio?><br><?=$data->gps_enabled?></td>
 	<td><b><?php echo CHtml::encode(date("d.m.Y",strtotime($data->aloitan))); ?></b></td>
 	<td><?php echo $karttaA." ".$karttaL; ?></td>
 
