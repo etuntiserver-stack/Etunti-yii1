@@ -1685,7 +1685,7 @@ public function actionImei($dom)
 			if(isset($tvuoro->id)){
 				// GPS sijainti
 				$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
-$mobinsert->app_aloitus_destination_checker = 'test';
+$mobinsert->app_aloitus_destination_checker = $my_location;
 				if(
 					!empty($my_location) and isset($tvuoro->kohteet->gps_sijainti) 
 					and isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey)
