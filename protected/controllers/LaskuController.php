@@ -2149,7 +2149,7 @@ exit;
 
 		$yht_euro = $data->yhteensa_total;
 		if(isset($l->yht_euro))
-			$yht_euro = $l->yht_euro;
+			$yht_euro = str_replace(",",".", $l->yht_euro);
 
             	return (float)$yht_euro;
 	}
