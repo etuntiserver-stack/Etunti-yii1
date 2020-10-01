@@ -114,7 +114,7 @@ class Mobile extends DB2ActiveRecord
 			if($key == 'tv_id' and $table->columns[$key]->dbType != 'int(100)'){
 				Yii::app()->db1->createCommand()->alterColumn($tb_name, 'tv_id', 'int(100)' );
 			}
-			if($key == 'app_aloitus_destination_checker' and $table->columns[$key]->dbType != 'varchar(10)'){
+			if($key == 'app_aloitus_destination_checker' and isset($table->columns[$key]) and $table->columns[$key]->dbType != 'varchar(10)'){
 				Yii::app()->db1->createCommand()->alterColumn($tb_name, 'app_aloitus_destination_checker', 'varchar(10)' );
 			}
 			if (!isset($table->columns[$key])) {
