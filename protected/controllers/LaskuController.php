@@ -3238,14 +3238,31 @@ $xml .= '
 
 				// Update history.
 				$history_entry = new LaskuHistoria;
-				$history_entry->time = date("Y-m-d H:i:s", time());
+				//$history_entry->time = date("Y-m-d H:i:s", time());
 				$history_entry->lid = $local_invoice->id;
 				$history_entry->status = $pc->translateProcountorStatus($remote_invoice['status']);
 				$history_entry->procountor_statuscode = $remote_invoice['status'];
 				$history_entry->palvelu = "procountor";
 				$history_entry->yht_euro = number_format($total_price, 2);
-				$history_entry->save();
-				$procountor_updated = true;
+
+				// <-- onko sama olemassa
+		       		$criteria = new CDbCriteria();
+			        $criteria->order = " id DESC ";
+			        $criteria->condition = " lid='".$local_invoice->id."' ";
+				$h = LaskuHistoria::model()->find($criteria);
+				$is_olemassa = false;
+				if(isset($h->id)){
+					$last_attr = $h->attributes;
+					unset($last_attr['id'], $last_attr['time']);
+					$new_attr = $history_entry->attributes;
+					$diff = array_diff($last_attr, $new_attr);
+					if( count($diff) == 0 )
+						$is_olemassa = true;
+				}
+				if(!$is_olemassa){
+					$history_entry->save();
+					$procountor_updated = true;
+				}
 			}
 
 			if ($procountor_updated)
