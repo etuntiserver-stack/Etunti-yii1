@@ -1651,7 +1651,7 @@ public function actionImei($dom)
 			}
 		}
 
-                $mobinsert = new Mob;
+                $mobinsert = new Mobile;
                 $mobinsert->attributes = $_POST;
 
 		if($_POST['status'] == 2)
