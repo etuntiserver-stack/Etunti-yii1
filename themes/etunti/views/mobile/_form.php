@@ -134,7 +134,6 @@ if(isset($model->tietoja))
   <div class="row">
     <div class="col-sm-4">
 
-
 	<div class="section">
 		<?php echo $form->labelEx($model,'app_aloitus_destination_checker'); ?>
 		<?php echo $form->textarea($model,'app_aloitus_destination_checker',array('class'=>'form-control')); ?>

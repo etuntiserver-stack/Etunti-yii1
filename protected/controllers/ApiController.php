@@ -681,6 +681,7 @@ public function actionImei($dom)
 
 	$my_location = (isset($_POST['my_location']))?str_replace("/",",",$_POST['my_location']):'';
 	$asetukset = Asetukset::model()->findbypk(1);
+	$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
 	$get_osoite 		= '';
 	$kohdenID 		= 0;
 	$list_tyovuorosta 	= '';
@@ -690,7 +691,6 @@ public function actionImei($dom)
 		// <-- CHECK sendLocation, versio, platform
 		if($_POST['check'] == 'sendLocation'){
 			Tyontekijat::model()->updatebypk($ttekija->id, array('position'=>$_POST['my_location']."//".date("d.m.Y H:i")));
-			$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
 			if( $new_login ){
 				$ilmoitus_kaikkille = '';
 				if( 
@@ -1684,11 +1684,26 @@ public function actionImei($dom)
 
 			if(isset($tvuoro->id)){
 				// GPS sijainti
-				$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
+				//$my_location = '61.157604,22.9610618';
 				if(
 					!empty($my_location) and isset($tvuoro->kohteet->gps_sijainti) 
 					and isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey)
 				){
+
+					$ex_app = explode(",", $my_location);
+					$ex_tv = explode(",", $tvuoro->kohteet->gps_sijainti);
+					if(isset($ex_app[1]) and isset($ex_tv[1]))
+					{
+					        $lat_app = $ex_app[0];
+					        $lng_app = $ex_app[1];
+					        $lat_tv = $ex_tv[0];
+					        $lng_tv = $ex_tv[1];
+
+						$dist = $this->distance($lat_app, $lng_app, $lat_tv, $lng_tv);
+						$mobinsert->app_aloitus_destination_checker = $dist;
+					}
+
+/*
 					$must_be_location = $tvuoro->kohteet->gps_sijainti;
 					$url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=$my_location&destinations=$must_be_location&key=". $asetuksetForAll->googlemaps_apikey;
 
@@ -1698,6 +1713,7 @@ public function actionImei($dom)
 					        $mobinsert->app_aloitus_destination_checker = $json;
 					//else
 					        //$mobinsert->app_aloitus_destination_checker = 'ERROR: '. $json;
+*/
 				}
 
 				// <-- Timer
@@ -1757,6 +1773,18 @@ public function actionImei($dom)
     }
 
 }
+
+	protected function distance($lat1, $lon1, $lat2, $lon2) {
+
+		$theta = $lon1 - $lon2;
+		$dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+		$dist = acos($dist);
+		$dist = rad2deg($dist);
+		$miles = $dist * 60 * 1.1515;
+
+		return ($miles * 1.609344);
+
+	}
 
 	protected function sp_1($mobCheck, $my_location)
 	{
