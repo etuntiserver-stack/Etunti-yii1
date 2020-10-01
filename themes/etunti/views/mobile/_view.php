@@ -162,7 +162,7 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 
 	<td class="text-center"><?=$versio?><br><?=$data->gps_enabled?></td>
 	<td><b><?php echo CHtml::encode(date("d.m.Y",strtotime($data->aloitan))); ?></b></td>
-	<td><?php echo $karttaA." ".$karttaL; ?></td>
+	<td><?php echo $karttaA." ".$karttaL; ?><br><?=$data->app_aloitus_destination_checker?>|<?=$data->app_lopetus_destination_checker?></td>
 
 	<td>
 	  <?php echo CHtml::link(' ','/index.php/viestinta/create?tid='.$data->tid,array('target'=>'_blank','class'=>'link fa fa-envelope')); ?>&nbsp;
