@@ -2151,7 +2151,7 @@ exit;
 		if(isset($l->yht_euro))
 			$yht_euro = $l->yht_euro;
 
-            	return (float)$yht_euro;
+            	return str_replace(",",".", $yht_euro);
 	}
 
 	public function actionGet_historia()
