@@ -172,8 +172,8 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 				$data->app_lopetus_destination_checker = 0;
 		?>
 		<table class="table table-bordered">
-		<td><?=(empty($data->app_aloitus_destination_checker))? '0' : $data->app_aloitus_destination_checker?></td>
-		<td><?=(empty($data->app_lopetus_destination_checker))? '0' : $data->app_lopetus_destination_checker?></td>
+		<td><?=(empty($data->app_aloitus_destination_checker) or $data->app_aloitus_destination_checker == 0)? '0.00' : $data->app_aloitus_destination_checker?></td>
+		<td><?=(empty($data->app_lopetus_destination_checker) or $data->app_lopetus_destination_checker == 0)? '0.00' : $data->app_lopetus_destination_checker?></td>
 		</table>
 		<?php endif; ?>
 	</td>
