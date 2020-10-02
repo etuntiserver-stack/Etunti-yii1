@@ -165,6 +165,12 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 	<td class="text-center">
 		<?php echo $karttaA." ".$karttaL; ?>
 		<?php if($data->tv_id > 0) : ?>
+		<?php
+			if($data->app_aloitus_destination_checker > 1000)
+				$data->app_aloitus_destination_checker = 0;
+			if($data->app_lopetus_destination_checker > 1000)
+				$data->app_lopetus_destination_checker = 0;
+		?>
 		<table class="table table-bordered">
 		<td><?=(empty($data->app_aloitus_destination_checker))? '0' : $data->app_aloitus_destination_checker?></td>
 		<td><?=(empty($data->app_lopetus_destination_checker))? '0' : $data->app_lopetus_destination_checker?></td>
