@@ -163,7 +163,7 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 	<td class="text-center"><?=$versio?><br>GPS:<?=$data->gps_enabled?><br><?=$data->app_platform?></td>
 	<td><b><?php echo CHtml::encode(date("d.m.Y",strtotime($data->aloitan))); ?></b></td>
 	<td class="text-center">
-		<?php echo $karttaA." ".$karttaL; ?>
+		<div data-toggle="tooltip" title="Näytä karttalla"><?= $karttaA." ".$karttaL ?></div>
 		<?php if($data->tv_id > 0) : ?>
 		<?php
 			if($data->app_aloitus_destination_checker > 1000)
@@ -172,8 +172,8 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 				$data->app_lopetus_destination_checker = 0;
 		?>
 		<table class="table table-bordered">
-		<td><?=(empty($data->app_aloitus_destination_checker) or $data->app_aloitus_destination_checker == 0)? '0.00' : $data->app_aloitus_destination_checker?></td>
-		<td><?=(empty($data->app_lopetus_destination_checker) or $data->app_lopetus_destination_checker == 0)? '0.00' : $data->app_lopetus_destination_checker?></td>
+		<td data-toggle="tooltip" title="Aloitus kilometri määrä"><?=(empty($data->app_aloitus_destination_checker) or $data->app_aloitus_destination_checker == 0)? '0.00' : $data->app_aloitus_destination_checker?></td>
+		<td data-toggle="tooltip" title="Lopetus kilometri määrä"><?=(empty($data->app_lopetus_destination_checker) or $data->app_lopetus_destination_checker == 0)? '0.00' : $data->app_lopetus_destination_checker?></td>
 		</table>
 		<?php endif; ?>
 	</td>
