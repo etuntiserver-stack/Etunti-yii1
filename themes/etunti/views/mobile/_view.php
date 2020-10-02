@@ -163,7 +163,7 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 	<td class="text-center"><?=$versio?><br>GPS:<?=$data->gps_enabled?><br><?=$data->app_platform?></td>
 	<td><b><?php echo CHtml::encode(date("d.m.Y",strtotime($data->aloitan))); ?></b></td>
 	<td class="text-center">
-		<div data-toggle="tooltip" title="Näytä karttalla"><?= $karttaA." ".$karttaL ?></div>
+		<div data-toggle="tooltip" data-placement="top" title="Näytä karttalla"><?= $karttaA." ".$karttaL ?></div>
 		<?php if($data->tv_id > 0) : ?>
 		<?php
 			if($data->app_aloitus_destination_checker > 1000)
