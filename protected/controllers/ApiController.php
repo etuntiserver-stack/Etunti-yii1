@@ -649,7 +649,7 @@ public function actionImei($dom)
 	//$_SESSION['lang'] = $_POST['lang'];
 
 	(isset($_POST['versio']))? $versio = $_POST['versio']: $versio = '';
-	(isset($_POST['platform']))? $platform = $_POST['platform']: $platform = '';
+	(isset($_POST['app_platform']))? $platform = $_POST['platform']: $platform = '';
 	(isset($_POST['newlogin']))? $new_login = true: $new_login = false;
 	if(isset($_POST['newlogin'])){ unset($_POST['newlogin']); }
 	if(isset($_POST['avoinID'])) $avoinID = $_POST['avoinID']; else $avoinID = 0;
@@ -705,6 +705,14 @@ public function actionImei($dom)
 					if( in_array(strtolower($dom), $app_ilmoitus_vastaanottajat) )
 						$ilmoitus_kaikkille = '<div class="alert alert-warning">'.str_replace("/n", "<br>", $asetuksetForAll->app_ilmoitus_kaikkille).'</div>';
 				}
+
+				$package='fi.etunti.local';
+				$html = @file_get_contents('https://play.google.com/store/apps/details?id='.$package.'&hl=en');
+				preg_match_all('/<span class="htlgb"><div class="IQ1z0d"><span class="htlgb">(.*?)<\/span><\/div><\/span>/s', $html, $output);
+				if( $platform == 'Android' and isset($output[1][3]) and $versio != $output[1][3]){
+					$ilmoitus_kaikkille .= '<div class="alert alert-warning"></div>';
+				}
+
 				$return = [
 					"tid" => $ttekija->id,
 					"ilmoitus_kaikkille" => $ilmoitus_kaikkille
