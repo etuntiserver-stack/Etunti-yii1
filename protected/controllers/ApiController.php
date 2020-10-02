@@ -649,7 +649,7 @@ public function actionImei($dom)
 	//$_SESSION['lang'] = $_POST['lang'];
 
 	(isset($_POST['versio']))? $versio = $_POST['versio']: $versio = '';
-	(isset($_POST['app_platform']))? $platform = $_POST['platform']: $platform = '';
+	(isset($_POST['app_platform']))? $platform = $_POST['app_platform']: $platform = '';
 	(isset($_POST['newlogin']))? $new_login = true: $new_login = false;
 	if(isset($_POST['newlogin'])){ unset($_POST['newlogin']); }
 	if(isset($_POST['avoinID'])) $avoinID = $_POST['avoinID']; else $avoinID = 0;
