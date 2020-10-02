@@ -188,7 +188,7 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 				$varoitus = 'bg-danger';
 
 		echo '
-			<table class="table table-bordered '.$varoitus.'">
+			<table class="'.$varoitus.'" width="100%">
 			<td data-toggle="tooltip" title="Aloitus kilometri määrä">'.((empty($data->app_aloitus_destination_checker) or $data->app_aloitus_destination_checker == 0)? '0.00' : $data->app_aloitus_destination_checker).'</td>
 			<td data-toggle="tooltip" title="Lopetus kilometri määrä">'.((empty($data->app_lopetus_destination_checker) or $data->app_lopetus_destination_checker == 0)? '0.00' : $data->app_lopetus_destination_checker).'</td>
 			</table>';
