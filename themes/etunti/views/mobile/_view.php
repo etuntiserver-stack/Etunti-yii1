@@ -167,10 +167,7 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 		<?php 
 		if(
 			$data->tv_id > 0 
-			and (
-				($data->status == 1 and $data->app_aloitus_destination_checker > 0)
-				or ($data->status == 3 and $data->app_lopetus_destination_checker > 0)
-			)
+
 		){
 
 			if($data->app_aloitus_destination_checker > 1000)
