@@ -706,12 +706,14 @@ public function actionImei($dom)
 						$ilmoitus_kaikkille = '<div class="alert alert-warning">'.str_replace("/n", "<br>", $asetuksetForAll->app_ilmoitus_kaikkille).'</div>';
 				}
 
+				// <-- Version checker
 				$package='fi.etunti.local';
 				$html = @file_get_contents('https://play.google.com/store/apps/details?id='.$package.'&hl=en');
 				preg_match_all('/<span class="htlgb"><div class="IQ1z0d"><span class="htlgb">(.*?)<\/span><\/div><\/span>/s', $html, $output);
 				if( $platform == 'Android' and isset($output[1][3]) and $versio != $output[1][3]){
-					$ilmoitus_kaikkille .= '<div class="alert alert-warning"></div>';
+					$ilmoitus_kaikkille .= '<div class="alert alert-warning">Uusi versio on ladattavissa Google Play -kaupasta.</div>';
 				}
+				//     Version checker -->
 
 				$return = [
 					"tid" => $ttekija->id,
