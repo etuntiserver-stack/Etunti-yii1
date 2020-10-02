@@ -181,8 +181,14 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 			if($data->app_lopetus_destination_checker > 1000)
 				$data->app_lopetus_destination_checker = 0;
 
+			$varoitus = '';
+			if($data->app_aloitus_destination_checker > 3 and $data->app_aloitus_destination_checker < 100)
+				$varoitus = 'bg-danger';
+			if($data->app_lopetus_destination_checker > 3 and $data->app_lopetus_destination_checker < 100)
+				$varoitus = 'bg-danger';
+
 		echo '
-			<table class="table table-bordered">
+			<table class="table table-bordered '.$varoitus.'">
 			<td data-toggle="tooltip" title="Aloitus kilometri määrä">'.((empty($data->app_aloitus_destination_checker) or $data->app_aloitus_destination_checker == 0)? '0.00' : $data->app_aloitus_destination_checker).'</td>
 			<td data-toggle="tooltip" title="Lopetus kilometri määrä">'.((empty($data->app_lopetus_destination_checker) or $data->app_lopetus_destination_checker == 0)? '0.00' : $data->app_lopetus_destination_checker).'</td>
 			</table>';
