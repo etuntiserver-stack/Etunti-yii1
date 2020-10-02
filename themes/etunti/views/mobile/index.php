@@ -328,6 +328,7 @@ $(document).delegate(".show_erittelyt", "click", function(){
 	  	  	//console.log(data);
 		  	$('#tb').html(data);
 			$('.myBgColors').addClass(localStorage.getItem('headerSkin'));
+			$('body').tooltip({selector: '[data-toggle="tooltip"]'})
 	      	},
 	  	error:function(data){
 	  	  	console.log(data);

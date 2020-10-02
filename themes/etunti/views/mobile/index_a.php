@@ -5,7 +5,7 @@
   <th><?php echo Yii::t('main', 'T'); ?></th>
   <th><?php echo Yii::t('main', 'Versio / GPS'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
-  <th class="text-center" data-toggle="tooltip" title="Tästä näkyy aloitus ja lopetus etäisyydet kilometri tarkuudella suunnitteluista työvuoroista.."><?php echo Yii::t('main', '<i class="fa  fa-question-circle"></i>'); ?></th>
+  <th class="text-center" data-toggle="tooltip" title="Tästä näkyy aloitus ja lopetus etäisyydet kilometri tarkkuudella merkitystä työkohteesta."><?php echo Yii::t('main', '<i class="fa  fa-question-circle"></i>'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'Er.'); ?></th>
 
