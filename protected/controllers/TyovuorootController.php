@@ -2779,9 +2779,8 @@ class TyovuorootController extends Controller
 		$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
 		$pvms = [];
 		while ($date->getTimestamp() <= $date_end){
-			//$loop_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
-			$this_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
-			if ( $this_week_sunday >= date("YW", strtotime($cal_start.' this week sunday')) ){ // Tama pitaa testata
+			//$this_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
+			//if ( $this_week_sunday >= date("YW", strtotime($cal_start.' this week sunday')) ){ // Tama pitaa testata
 				foreach($viikko_paivat as $viikko_paiva) {
 					$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
 					$paiva->modify("+" . ($viikko_paiva - 1) . "day");
@@ -2803,7 +2802,7 @@ class TyovuorootController extends Controller
 							$pvms[$cal_pvm][$tid] = [ 'html' => '<br><i class="link fa fa-gear cal_tilanne" toistuva_id="'.$model_id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => false ];
 					}
 				}
-			}
+			//}
 			$date->modify("+{$viikkoja}week");
 		}
 		$m_start = new DateTime($cal_start);
