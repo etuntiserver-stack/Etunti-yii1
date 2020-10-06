@@ -170,10 +170,8 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 		<?php 
 		if(
 			$data->tv_id > 0 
-			and (
-				($data->status == 1 and $data->app_aloitus_destination_checker > 0)
-				or ($data->status == 3 and $data->app_lopetus_destination_checker > 0)
-			)
+			and ( $data->status == 1 or $data->status == 3 )
+			and ( $data->app_aloitus_destination_checker > 0 or $data->app_lopetus_destination_checker > 0 )
 		){
 
 			if($data->app_aloitus_destination_checker > 1000)
@@ -188,9 +186,9 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 				$varoitus = 'bg-danger';
 
 		echo '
-			<table class="'.$varoitus.'" width="100%">
-			<td data-toggle="tooltip" title="Aloitus kilometri määrä">'.((empty($data->app_aloitus_destination_checker) or $data->app_aloitus_destination_checker == 0)? '0.00' : $data->app_aloitus_destination_checker).'</td>
-			<td data-toggle="tooltip" title="Lopetus kilometri määrä">'.((empty($data->app_lopetus_destination_checker) or $data->app_lopetus_destination_checker == 0)? '0.00' : $data->app_lopetus_destination_checker).'</td>
+			<table class="table '.$varoitus.'" width="100%" border="1">
+			<td width="50%" data-toggle="tooltip" title="Aloitus kilometri määrä">'.((empty($data->app_aloitus_destination_checker) or $data->app_aloitus_destination_checker == 0)? '0.00' : $data->app_aloitus_destination_checker).'</td>
+			<td width="50%" data-toggle="tooltip" title="Lopetus kilometri määrä">'.((empty($data->app_lopetus_destination_checker) or $data->app_lopetus_destination_checker == 0)? '0.00' : $data->app_lopetus_destination_checker).'</td>
 			</table>';
 		}
 		?>
