@@ -55,6 +55,7 @@ return array(
 	'Näytä kartalla' => 'Show on the map',
 	'Tehdyt työt ajanjaksolla' => 'Work done during given timeperiod',
 	'Muista lopettaa klo.' => 'Remember to finish at',
+	'Päivitä sovellus' => 'Update APP',
 );
 
 ?>
