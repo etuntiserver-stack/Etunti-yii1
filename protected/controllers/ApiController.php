@@ -715,6 +715,10 @@ public function actionImei($dom)
 				}
 				//     Version checker -->
 
+				if( strtolower($dom) == 'demo' ){
+					$ilmoitus_kaikkille .= 'TEST';
+				}
+
 				$return = [
 					"tid" => $ttekija->id,
 					"ilmoitus_kaikkille" => $ilmoitus_kaikkille
