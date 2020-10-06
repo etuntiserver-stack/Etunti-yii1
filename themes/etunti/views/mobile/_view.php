@@ -187,8 +187,8 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 
 		echo '
 			<table class="table '.$varoitus.'" width="100%" border="1">
-			<td width="50%" data-toggle="tooltip" title="Aloitus kilometri määrä">'.((empty($data->app_aloitus_destination_checker) or $data->app_aloitus_destination_checker == 0)? '0.00' : $data->app_aloitus_destination_checker).'</td>
-			<td width="50%" data-toggle="tooltip" title="Lopetus kilometri määrä">'.((empty($data->app_lopetus_destination_checker) or $data->app_lopetus_destination_checker == 0)? '0.00' : $data->app_lopetus_destination_checker).'</td>
+			<td style="padding: 3px 5px" width="50%" data-toggle="tooltip" title="Aloitus kilometri määrä">'.((empty($data->app_aloitus_destination_checker) or $data->app_aloitus_destination_checker == 0)? '0.00' : $data->app_aloitus_destination_checker).'</td>
+			<td style="padding: 3px 5px" width="50%" data-toggle="tooltip" title="Lopetus kilometri määrä">'.((empty($data->app_lopetus_destination_checker) or $data->app_lopetus_destination_checker == 0)? '0.00' : $data->app_lopetus_destination_checker).'</td>
 			</table>';
 		}
 		?>
