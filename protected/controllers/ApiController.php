@@ -714,7 +714,7 @@ public function actionImei($dom)
 				$html = @file_get_contents('https://play.google.com/store/apps/details?id='.$package.'&hl=en');
 				preg_match_all('/<span class="htlgb"><div class="IQ1z0d"><span class="htlgb">(.*?)<\/span><\/div><\/span>/s', $html, $output);
 				if( isset($ttekija->app_platform) and $ttekija->app_platform == 'Android' and isset($output[1][3]) and $versio != $output[1][3]){
-					$ilmoitus_kaikkille .= '<div class="alert alert-danger text-center">Uusi versio on ladattavissa Google Play -kaupasta.</div>';
+					$ilmoitus_kaikkille .= '<div class="alert alert-danger text-center">'.Yii::t('app', 'VersionMuutos').'</div>';
 				}
 				//     Version checker -->
 

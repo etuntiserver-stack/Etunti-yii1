@@ -51,6 +51,7 @@ return array(
 
 	'Valitse kohde työvuorosta' => 'Select object',
 	'Valitse osoite' => 'Select address',
+	'VersionMuutos' => 'Download new version from Google Play store.',
 );
 
 ?>

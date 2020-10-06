@@ -47,7 +47,7 @@ return array(
 
 	'Valitse kohde työvuorosta' => 'Valitse kohde työvuorosta',
 	'Valitse osoite' => 'Valitse osoite',
-
+	'VersionMuutos' => 'Uusi versio on ladattavissa Google Play -kaupasta.',
 );
 
 ?>
