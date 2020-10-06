@@ -860,7 +860,7 @@ public function actionImei($dom)
 			$lu = Mobile::model()->find($criteria);
 			$ajaanjaksolla = '';
 			if( isset($lu->l_tunnit) ){
-				$ajaanjaksolla = '<h5>Tehdyt työt ajanjaksolla '.$this->sprint($lu->l_tunnit).'</h5>';
+				$ajaanjaksolla = '<h5>'.Yii::t('app', 'Tehdyt työt ajanjaksolla').' '.$this->sprint($lu->l_tunnit).'</h5>';
 			}
 			//    Ajaanjaksolla -->
 

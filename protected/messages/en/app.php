@@ -25,7 +25,7 @@ return array(
 	'Lähetä viesti toimistoon' => 'Send message',
 
 	/* Työvuorot */
-	'Työvuorot' => 'Shift',
+	'Työvuorot' => 'Schedule',
 
 	/* Tehty */
 	'Tänään tekemasi työt' => 'Your works',
@@ -52,6 +52,8 @@ return array(
 	'Valitse kohde työvuorosta' => 'Select object',
 	'Valitse osoite' => 'Select address',
 	'VersionMuutos' => 'Download new version from Google Play store.',
+	'Näytä kartalla' => 'Show on the map',
+	'Tehdyt työt ajanjaksolla' => 'Work done during given timeperiod',
 );
 
 ?>
