@@ -245,7 +245,7 @@ public function actionPaivita_tiedot($dom)
 			$token = $_POST['token'];
 			Tyontekijat::model()->updatebypk($ttekija->id, array('gcm_reg_id'=>$token));
 
-			if(isset($_POST['app_platform']))
+			if(isset($_POST['app_platform']) and !empty($_POST['app_platform']))
 				Tyontekijat::model()->updatebypk($ttekija->id, array('app_platform' => $_POST['app_platform']));
 
         		$this->_sendResponse(200, CJSON::encode('token updated'));
