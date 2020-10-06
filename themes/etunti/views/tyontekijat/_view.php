@@ -62,7 +62,8 @@
 		?>
 	</td>
 	<td>
-		<?php echo $versio; ?>
+		<?php echo $versio; ?><br>
+		<?php echo $data->app_platform; ?>
 	</td>
 	<td class="lahetys">
 		<?php echo CHtml::link(Yii::t('main', 'Lähetä tunnukset työntekijälle'), 
