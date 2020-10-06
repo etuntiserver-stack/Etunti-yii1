@@ -54,6 +54,7 @@ return array(
 	'VersionMuutos' => 'Download new version from Google Play store.',
 	'Näytä kartalla' => 'Show on the map',
 	'Tehdyt työt ajanjaksolla' => 'Work done during given timeperiod',
+	'Muista lopettaa klo.' => 'Remember to finish at',
 );
 
 ?>
