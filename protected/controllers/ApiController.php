@@ -716,7 +716,7 @@ public function actionImei($dom)
 				//     Version checker -->
 
 				if( strtolower($dom) == 'demo' ){
-					$ilmoitus_kaikkille .= 'TEST';
+					$ilmoitus_kaikkille .= $platform;
 				}
 
 				$return = [
