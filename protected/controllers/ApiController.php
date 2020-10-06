@@ -710,14 +710,10 @@ public function actionImei($dom)
 				$package='fi.etunti.local';
 				$html = @file_get_contents('https://play.google.com/store/apps/details?id='.$package.'&hl=en');
 				preg_match_all('/<span class="htlgb"><div class="IQ1z0d"><span class="htlgb">(.*?)<\/span><\/div><\/span>/s', $html, $output);
-				if( $platform == 'Android' and isset($output[1][3]) and $versio != $output[1][3]){
+				if( isset($ttekija->app_platform) and $ttekija->app_platform == 'Android' and isset($output[1][3]) and $versio != $output[1][3]){
 					$ilmoitus_kaikkille .= '<div class="alert alert-warning">Uusi versio on ladattavissa Google Play -kaupasta.</div>';
 				}
 				//     Version checker -->
-
-				if( strtolower($dom) == 'demo' ){
-					$ilmoitus_kaikkille .= $platform;
-				}
 
 				$return = [
 					"tid" => $ttekija->id,
@@ -1620,6 +1616,10 @@ public function actionImei($dom)
 
 	// <-- uusi rivi
 	if(isset($ttekija->id) and !empty($_POST['aloitan']) and empty($_POST['loppui'])){
+
+		// <-- Platform updater
+		if(!empty($platform))
+			Tyontekijat::model()->updatebypk($ttekija->id, array('app_platform' => $platform));
 
 		// <-- Matka, Lounastauko ja Osoite mukaan
 		if($_POST['status'] == 2 and $asetukset->app_matka_osoite != 1 and (!empty($_POST['kohdenID']) or !empty($_POST['kohde_kannasta'])))

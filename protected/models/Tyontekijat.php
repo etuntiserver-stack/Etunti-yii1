@@ -106,6 +106,7 @@ class Tyontekijat extends DB2ActiveRecord
 		     'muistiinpano' => 'text DEFAULT NULL',
 		     'naytta_tyovuorossa' => 'int(1) DEFAULT 1',
 		     'omasiistijavaroitukset' => 'int(1) DEFAULT 1', // 1: näytetään omasiistijävaroitukset työvuorotaulussa
+		     'app_platform' => 'varchar(100) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -148,7 +149,7 @@ class Tyontekijat extends DB2ActiveRecord
 			array('tekijan_pankkitili, tekijan_konttori, ammattinimike, tekijan_henkilotunnus', 'netvisorCheck', 'on'=>'insert, update'),
 			array('online_varauksen_valmina, ilmoitus_merkkipaivasta_vuosi, tyontekijan_numero, mobiili, app_naytta_osoitekenta, naytta_tyovuorossa', 'numerical', 'integerOnly'=>true),
 			array('imei', 'length', 'max'=>100),
-			array('laiten_puh, tekijan_nimi, tekijan_katuosoite, tekijan_pankkitili, salasana', 'length', 'max'=>100),
+			array('laiten_puh, tekijan_nimi, tekijan_katuosoite, tekijan_pankkitili, salasana, app_platform', 'length', 'max'=>100),
 			array('tekijan_henkilotunnus, tekijan_puh, tekijan_lanka_puh', 'length', 'max'=>20),
 			array('tekijan_email, tekijan_ptoimipaikka, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_konttori, aktiivinen', 'length', 'max'=>50),
 			array('tekijan_pnumero', 'length', 'max'=>7),
