@@ -1826,7 +1826,7 @@ public function actionImei($dom)
 			$json = file_get_contents($json_url);
 			$obj = json_decode($json);
 			if( isset($obj->results[0]->geometry->location->lat) ){
-				$kartta = '<p><a href="geo:'.$obj->results[0]->geometry->location->lat.",".$obj->results[0]->geometry->location->lng.'">'.Yii::t('main', 'Näytä kartalla').'</a></p>';
+				$kartta = '<p><a href="geo:'.$obj->results[0]->geometry->location->lat.",".$obj->results[0]->geometry->location->lng.'">'.Yii::t('app', 'Näytä kartalla').'</a></p>';
 			}
 		}
 
