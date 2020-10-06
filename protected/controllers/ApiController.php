@@ -718,6 +718,10 @@ public function actionImei($dom)
 				}
 				//     Version checker -->
 
+				if( $dom == 'demo' ){
+					$ilmoitus_kaikkille .=  '<a class="btn btn-warning btn-block" href="https://play.google.com/store/apps/details?id=fi.etunti.local&gl=FI">'.Yii::t('app', 'Päivitä sovellus').'</a>'
+				}
+
 				$return = [
 					"tid" => $ttekija->id,
 					"ilmoitus_kaikkille" => $ilmoitus_kaikkille,
