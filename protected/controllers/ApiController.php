@@ -717,11 +717,11 @@ public function actionImei($dom)
 					$ilmoitus_kaikkille .= '<div class="alert alert-danger text-center">'.Yii::t('app', 'VersionMuutos').'</div>';
 				}
 				//     Version checker -->
-/*
+
 				if( $dom == 'demo' ){
-					$ilmoitus_kaikkille .=  '<a class="btn btn-warning btn-block" href="https://play.google.com/store/apps/details?id=fi.etunti.local&gl=FI">'.Yii::t('app', 'Päivitä sovellus').'</a>'
+					$ilmoitus_kaikkille .=  '<a class="btn btn-warning btn-block" href="https://play.google.com/store/apps/details?id=fi.etunti.local&gl=FI">'.Yii::t('app', 'Päivitä sovellus').'</a>';
 				}
-*/
+
 				$return = [
 					"tid" => $ttekija->id,
 					"ilmoitus_kaikkille" => $ilmoitus_kaikkille,
