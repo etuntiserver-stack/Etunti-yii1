@@ -1161,7 +1161,7 @@ public function actionImei($dom)
 				if( count($urls) > 0 ){
 					$sel .= '<p><label>URL linkit:</label><ul>';
 			 		foreach($urls as $k => $v){
-						$sel .= '<li><a href="'.$v.'" onclick="window.open(\''.$v.'\', \'_system\'); return false;">'.$k.'</a></li>';
+						$sel .= '<li><a href="'.$v.'">'.$k.'</a></li>';
 					}
 					$sel .= '</ul></p><hr>';
 				}
