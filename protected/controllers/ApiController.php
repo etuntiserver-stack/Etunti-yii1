@@ -692,7 +692,7 @@ public function actionImei($dom)
 		if($_POST['check'] == 'sendLocation'){
 			Tyontekijat::model()->updatebypk($ttekija->id, array('position'=>$_POST['my_location']."//".date("d.m.Y H:i")));
 			// <-- Platform updater
-			if(isset($_POST['app_platform']) and !empty($_POST['app_platform']))
+			if(!empty($platform))
 				Tyontekijat::model()->updatebypk($ttekija->id, array('app_platform' => $_POST['app_platform']));
 			if( $new_login ){
 				$ilmoitus_kaikkille = '';
@@ -720,7 +720,8 @@ public function actionImei($dom)
 
 				$return = [
 					"tid" => $ttekija->id,
-					"ilmoitus_kaikkille" => $ilmoitus_kaikkille
+					"ilmoitus_kaikkille" => $ilmoitus_kaikkille,
+					"platform" => $platform
 				];
 				$this->_sendResponse(200, CJSON::encode($return));
 			} else {
