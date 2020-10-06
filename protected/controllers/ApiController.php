@@ -1621,7 +1621,7 @@ public function actionImei($dom)
 	// <-- uusi rivi
 	if(isset($ttekija->id) and !empty($_POST['aloitan']) and empty($_POST['loppui'])){
 
-		// <-- Platform updater
+		// <-- Platform updater TAMA POISTETAAN JOS yli 650 versio on kaikkialla, koska sendlocation tekee sita
 		if(!empty($platform))
 			Tyontekijat::model()->updatebypk($ttekija->id, array('app_platform' => $platform));
 
