@@ -210,7 +210,7 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 		</table></div>
 	</td>
 
-	<td>
+	<td style="white-space: nowrap;">
 	  <?php echo CHtml::link(' ','/index.php/viestinta/create?tid='.$data->tid,array('target'=>'_blank','class'=>'link fa fa-envelope')); ?>&nbsp;
 	  <?php echo CHtml::link($this->etuSukunimi($data->tid),'/index.php/tyontekijat/update?id='.$data->tid,array('target'=>'_blank','style'=>'color: #0A98DC;')); ?>
 	</td>
