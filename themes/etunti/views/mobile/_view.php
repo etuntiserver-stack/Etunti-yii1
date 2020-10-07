@@ -166,9 +166,9 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 		<p class="small"><?=$versio?></p>
 		<?php
 		if($data->gps_enabled == 'enabled') 
-			'<div><i class="glyphicon glyphicon-map-marker text-success"></i><span class="small">'.$data->app_platform.'</span></div>';
+			echo '<div><i class="glyphicon glyphicon-map-marker text-success"></i><span class="small">'.$data->app_platform.'</span></div>';
  		if($data->gps_enabled == 'disabled') 
-			'<div><i class="glyphicon glyphicon-map-marker text-default"></i><span class="small">'.$data->app_platform.'</span></div>';
+			echo '<div><i class="glyphicon glyphicon-map-marker text-default"></i><span class="small">'.$data->app_platform.'</span></div>';
 		?>
 	</td>
 	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
