@@ -172,10 +172,6 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 	</td>
 	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
 	<td class="text-center">
-		<div><?= 
-			'<span data-toggle="tooltip" data-placement="top" title="Aloitus karttalla">'.$karttaA.'</span>
-			<span data-toggle="tooltip" data-placement="top" title="Lopetus karttalla">'.$karttaL 
-		?></div>
 		<?php 
 		if(
 			$data->tv_id > 0 
@@ -197,8 +193,14 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 
 		echo '<div class="row">
 			<table class="table" width="100%">
-			<td class="'.$varoitus_al.'" style="padding: 3px 5px" width="50%" data-toggle="tooltip" title="Aloitus kilometri määrä"><b>'.((empty($data->app_aloitus_destination_checker) or $data->app_aloitus_destination_checker == 0)? '0.00' : $data->app_aloitus_destination_checker).'</b></td>
-			<td class="'.$varoitus_lp.'" style="padding: 3px 5px" width="50%" data-toggle="tooltip" title="Lopetus kilometri määrä"><b>'.((empty($data->app_lopetus_destination_checker) or $data->app_lopetus_destination_checker == 0)? '0.00' : $data->app_lopetus_destination_checker).'</b></td>
+			<td class="'.$varoitus_al.'" style="padding: 3px 5px" width="50%">
+				<span data-toggle="tooltip" data-placement="top" title="Aloitus karttalla">'.$karttaA.'</span>
+				<b data-toggle="tooltip" title="Aloitus kilometri määrä">'.((empty($data->app_aloitus_destination_checker) or $data->app_aloitus_destination_checker == 0)? '0.00' : $data->app_aloitus_destination_checker).'</b>
+			</td>
+			<td class="'.$varoitus_lp.'" style="padding: 3px 5px" width="50%">
+				<span data-toggle="tooltip" data-placement="top" title="Lopetus karttalla">'.$karttaL.'</span>
+				<b data-toggle="tooltip" title="Lopetus kilometri määrä">'.((empty($data->app_lopetus_destination_checker) or $data->app_lopetus_destination_checker == 0)? '0.00' : $data->app_lopetus_destination_checker).'</b>
+			</td>
 			</table></div>';
 		}
 		?>
