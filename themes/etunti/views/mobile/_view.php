@@ -160,8 +160,13 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 		<?php endif; ?>
 	</td>
 
-	<td class="text-center"><?=$versio?><?=($data->gps_enabled == 'enabled')? '<i class="glyphicon glyphicon-map-marker text-success fa-2x"></i>' : ''?><br><?=$data->app_platform?></td>
-	<td><b><?php echo CHtml::encode(date("d.m.Y",strtotime($data->aloitan))); ?></b></td>
+	<td class="text-center">
+		<div class="small"><?=$versio?></div>
+		<?=($data->gps_enabled == 'enabled')? 
+			'<div><i class="glyphicon glyphicon-map-marker text-success"></i><span class="small">'.$data->app_platform.'</span></div>' : 
+			'<div><i class="glyphicon glyphicon-map-marker text-default"></i><span class="small">'.$data->app_platform.'</span></div>' ?>
+	</td>
+	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
 	<td class="text-center">
 		<div><?= 
 			'<span data-toggle="tooltip" data-placement="top" title="Aloitus karttalla">'.$karttaA.'</span>

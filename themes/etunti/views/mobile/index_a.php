@@ -4,7 +4,7 @@
   <th></th>
   <th><?php echo Yii::t('main', 'T'); ?></th>
   <th><?php echo Yii::t('main', 'Versio / GPS'); ?></th>
-  <th><?php echo Yii::t('main', 'Päivä'); ?></th>
+  <th><?php echo Yii::t('main', 'Pvm'); ?></th>
   <th class="text-center" data-toggle="tooltip" title="Tästä näkyy aloitus ja lopetus etäisyydet kilometri tarkkuudella merkitystä työkohteesta."><?php echo Yii::t('main', '<i class="fa  fa-question-circle"></i>'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'Er.'); ?></th>
@@ -13,11 +13,11 @@
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas)) : 
   ?>
-  <th><?php echo Yii::t('main', 'Työvuorot'); ?></th>
+  <th class="text-center" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Työvuorot'); ?>"><?php echo Yii::t('main', '<i class="fa  fa-question-circle"></i>'); ?></th>
   <?php endif; ?>
 
 
-  <th><?php echo Yii::t('main', 'TAG'); ?></th>
+  <th class="text-center" data-toggle="tooltip" title="<?php echo Yii::t('main', 'NFC TAG'); ?>"><?php echo Yii::t('main', '<i class="fa  fa-question-circle"></i>'); ?></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Osoite'); ?></th>
   <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
