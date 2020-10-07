@@ -162,8 +162,8 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 		<?php endif; ?>
 	</td>
 
-	<td class="text-center">
-		<div class="small"><?=$versio?></div>
+	<td style="white-space: nowrap;" class="text-center">
+		<p class="small"><?=$versio?></p>
 		<?=($data->gps_enabled == 'enabled')? 
 			'<div><i class="glyphicon glyphicon-map-marker text-success"></i><span class="small">'.$data->app_platform.'</span></div>' : 
 			'<div><i class="glyphicon glyphicon-map-marker text-default"></i><span class="small">'.$data->app_platform.'</span></div>' ?>
