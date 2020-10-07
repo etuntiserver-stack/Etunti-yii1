@@ -49,7 +49,7 @@ if( isset($sivu) and $sivu == 'laskutettu' )
  if(isset($t[1]) and $t[1] != 000000){ $tag = $t[1]; } else { $tag = Yii::t('main', 'TAG ei ollut käytetty'); }
 
  $versio = '';
- if(isset($t[0]) and !empty($t[0])){ $versio = $t[0].'<br>'; }
+ if(isset($t[0]) and !empty($t[0])){ $versio = $t[0]; }
 
  $karttaA = '';
  $karttaL = '';
@@ -134,8 +134,7 @@ if( isset($sivu) and $sivu == 'laskutettu' )
  if( isset($data->tyovuoroot->tyo_erittelyt) and !empty($data->tyovuoroot->tyo_erittelyt)){
 	$erittelyt = '<i class="link fa fa-list show_erittelyt" tv_id="'.$data->tyovuoroot->id.'" mob_id="'.$data->id.'"></i>';
  }
-
-//$data->app_platform = 'Android';
+$versio = '0.0.650';
 ?>
 
 <tr style="<?php echo $class; ?>" id="rivi_<?php echo $data->id; ?>">
@@ -163,13 +162,13 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 	</td>
 
 	<td style="white-space: nowrap;" class="text-center">
-		<p class="small"><?=$versio?></p>
 		<?php
 		if($data->gps_enabled == 'enabled') 
 			echo '<div><i class="glyphicon glyphicon-map-marker text-success"></i><span class="small">'.$data->app_platform.'</span></div>';
  		if($data->gps_enabled == 'disabled') 
 			echo '<div><i class="glyphicon glyphicon-map-marker text-default"></i><span class="small">'.$data->app_platform.'</span></div>';
 		?>
+		<span class="small"><?=$versio?></span>
 	</td>
 	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
 	<td class="text-center">
@@ -189,16 +188,17 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 			if($data->app_lopetus_destination_checker > 1000)
 				$data->app_lopetus_destination_checker = 0;
 
-			$varoitus = '';
+			$varoitus_al = '';
+			$varoitus_lp = '';
 			if($data->app_aloitus_destination_checker > 3 and $data->app_aloitus_destination_checker < 100)
-				$varoitus = 'bg-danger';
+				$varoitus_al = 'text-danger';
 			if($data->app_lopetus_destination_checker > 3 and $data->app_lopetus_destination_checker < 100)
-				$varoitus = 'bg-danger';
+				$varoitus_lp = 'text-danger';
 
-		echo '<div>
-			<table class="table '.$varoitus.'" width="100%" border="1">
-			<td style="padding: 3px 5px" width="50%" data-toggle="tooltip" title="Aloitus kilometri määrä">'.((empty($data->app_aloitus_destination_checker) or $data->app_aloitus_destination_checker == 0)? '0.00' : $data->app_aloitus_destination_checker).'</td>
-			<td style="padding: 3px 5px" width="50%" data-toggle="tooltip" title="Lopetus kilometri määrä">'.((empty($data->app_lopetus_destination_checker) or $data->app_lopetus_destination_checker == 0)? '0.00' : $data->app_lopetus_destination_checker).'</td>
+		echo '<div class="row">
+			<table class="table" width="100%">
+			<td class="'.$varoitus_al.'" style="padding: 3px 5px" width="50%" data-toggle="tooltip" title="Aloitus kilometri määrä"><b>'.((empty($data->app_aloitus_destination_checker) or $data->app_aloitus_destination_checker == 0)? '0.00' : $data->app_aloitus_destination_checker).'</b></td>
+			<td class="'.$varoitus_lp.'" style="padding: 3px 5px" width="50%" data-toggle="tooltip" title="Lopetus kilometri määrä"><b>'.((empty($data->app_lopetus_destination_checker) or $data->app_lopetus_destination_checker == 0)? '0.00' : $data->app_lopetus_destination_checker).'</b></td>
 			</table></div>';
 		}
 		?>

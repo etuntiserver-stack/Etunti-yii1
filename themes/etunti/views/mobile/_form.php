@@ -150,6 +150,11 @@ if(isset($model->tietoja))
 		<?php echo $form->error($model,'app_lopetus_destination_checker'); ?>
 	</div>
 	<div class="section">
+		<?php echo $form->labelEx($model,'app_platform'); ?>
+		<?php echo $form->textField($model,'app_platform',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'app_platform'); ?>
+	</div>
+	<div class="section">
 		<?php echo $form->labelEx($model,'tid'); ?>
 		<?php
 			$site = Yii::app()->createController('Site');
