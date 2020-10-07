@@ -134,6 +134,8 @@ if( isset($sivu) and $sivu == 'laskutettu' )
  if( isset($data->tyovuoroot->tyo_erittelyt) and !empty($data->tyovuoroot->tyo_erittelyt)){
 	$erittelyt = '<i class="link fa fa-list show_erittelyt" tv_id="'.$data->tyovuoroot->id.'" mob_id="'.$data->id.'"></i>';
  }
+
+//$data->app_platform = 'Android';
 ?>
 
 <tr style="<?php echo $class; ?>" id="rivi_<?php echo $data->id; ?>">
