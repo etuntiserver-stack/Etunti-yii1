@@ -132,9 +132,11 @@ if( isset($_SESSION['skrollaus']) )
 		else
 			$ts_aika = '00:00';
 
+		$decTime = 0;
 		$timeArr = explode(':',$ts_aika);
-		$decTime = ($timeArr[0]*3600) + ($timeArr[1]);
-
+		if(isset($timeArr[1])){
+			$decTime = ($timeArr[0]*3600) + ($timeArr[1]);
+		}
 		echo '<br>
 		<span class="text-center odotusweeklaskennan" style="display:block">'.$odotus_ikooni.'</span>
 		<div><b id="vko_'.$did_sunday.'_'.$tid.'"" ts_aika="'.$decTime.'">00:00</b>-'.$ts_aika.'</div>';
