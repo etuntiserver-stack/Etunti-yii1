@@ -127,13 +127,17 @@ if( isset($_SESSION['skrollaus']) )
 			)).'</p>';
 			//     file_safe_opener -->
 		}
+		if(isset($tyosuhteet[$tid]['vktyoaika']) and !empty($tyosuhteet[$tid]['vktyoaika']))
+			$ts_aika = $tyosuhteet[$tid]['vktyoaika'];
+		else
+			$ts_aika = '00:00';
+
+		$timeArr = explode(':',$ts_aika);
+		$decTime = ($timeArr[0]*3600) + ($timeArr[1]);
+
 		echo '<br>
 		<span class="text-center odotusweeklaskennan" style="display:block">'.$odotus_ikooni.'</span>
-		<b id="vko_'.$did_sunday.'_'.$tid.'"">00:00</b>';
-		if(isset($tyosuhteet[$tid]['vktyoaika']) and !empty($tyosuhteet[$tid]['vktyoaika']))
-			echo '-'.$tyosuhteet[$tid]['vktyoaika'];
-		else
-			echo '-00:00';
+		<div><b id="vko_'.$did_sunday.'_'.$tid.'"" ts_aika="'.$decTime.'">00:00</b>-'.$ts_aika.'</div>';
 		?>
 		<div class="mt5">
 		   <div class="form-inline">

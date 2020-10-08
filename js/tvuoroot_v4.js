@@ -211,7 +211,13 @@ jQuery.vkolaskenta = function vkolaskenta(tids){
 			d = JSON.parse(data);
 			//console.log(d);
 			$.each(d['vkoAll'], function( tid, seconds ) {
+				ts_aika = $("#vko_" + d['did'] +'_' + tid).attr('ts_aika');
 				$("#vko_" + d['did'] +'_' + tid).html($.sprint(seconds));
+				if( seconds > ts_aika ){
+					$("#vko_" + d['did'] +'_' + tid).closest('div').addClass('bg-danger');
+				} else {
+					$("#vko_" + d['did'] +'_' + tid).closest('div').removeClass('bg-danger');
+				}
 			});
 			$('.odotusweeklaskennan').remove();
 			console.log('vkolaskenta loaded.');
