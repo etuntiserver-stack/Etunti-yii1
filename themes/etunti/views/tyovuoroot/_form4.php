@@ -284,7 +284,8 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 			$l1 = array(
 				'Normaali/' => 'Normaali', 
 				'Ei lasketa/red' => 'Ei lasketa', 
-				'Varallaolo/#c67520' => 'Varallaolo'
+				'Varallaolo/#c67520' => 'Varallaolo',
+				'Ehdollinen varallaolo/blue' => 'Ehdollinen varallaolo'
 			);
 			$valikkoot = Valikkoot::model()->findAll("select_type = 'tyoajanmerkinta'");
 			$l2 = array();

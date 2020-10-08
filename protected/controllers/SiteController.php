@@ -2404,7 +2404,7 @@ class SiteController extends Controller
 	public function eiLasketa()
 	{
 		$return = "
-		(tyoajanmerkinta NOT LIKE '%Ei lasketa%' AND tyoajanmerkinta NOT LIKE '%Varallaolo%')
+		(tyoajanmerkinta NOT LIKE '%Ei lasketa%' AND tyoajanmerkinta NOT LIKE '%Varallaolo%' AND tyoajanmerkinta NOT LIKE '%Ehdollinen varallaolo%')
 		";
 
 		return $return;
@@ -2414,7 +2414,7 @@ class SiteController extends Controller
 	{
 
 		$return = false;
-		if (strpos($val, 'Ei lasketa') !== false or strpos($val, 'Varallaolo') !== false) {
+		if (strpos($val, 'Ei lasketa') !== false or strpos($val, 'Varallaolo') !== false or strpos($val, 'Ehdollinen varallaolo') !== false) {
 		    $return = true;
 		}
 		return $return;
