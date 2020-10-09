@@ -1080,8 +1080,7 @@ public function actionImei($dom)
 				if(!empty($tplista)){ $tplista = '<hr>'.$tplista; }
 
 				$alkLop = '';
-				if($data->alku > 0 and $data->loppu > 0)
-					$alkLop = $data->alku.'-'.$data->loppu.' ';
+				$alkLop = $data->alku.'-'.$data->loppu.' ';
 
 				$color = '';
 				if(!empty($data->tyoajanlaatu) and empty($osoite)){
