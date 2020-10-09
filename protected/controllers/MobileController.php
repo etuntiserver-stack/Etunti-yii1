@@ -2006,34 +2006,22 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			$result = $suunnitelut;
 			foreach($result as $got){
 				$r = $got['data'];
-				if(isset($r->kohteet->asiakkaat)){
-					if(!isset($asiakkaat_arr[$r->kohteet->asiakkaat->id]))
-						$asiakkaat_arr[$r->kohteet->asiakkaat->id] = strtotime($r->loppu)-strtotime($r->alku);
-					else
-						$asiakkaat_arr[$r->kohteet->asiakkaat->id] += strtotime($r->loppu)-strtotime($r->alku);
-				}
+				if(isset($r->kohteet->asiakkaat))
+					$asiakkaat_arr[$r->kohteet->asiakkaat->id][] = strtotime($r->loppu)-strtotime($r->alku);
 			}
 		}
 		if( $tilanne == 'luetut'){
 			$result = $luetut;
 			foreach($result as $r){
-				if(isset($r->kohteet->asiakkaat)){
-					if(!isset($asiakkaat_arr[$r->kohteet->asiakkaat->id]))
-						$asiakkaat_arr[$r->kohteet->asiakkaat->id] = strtotime($r->loppui)-strtotime($r->aloitan);
-					else
-						$asiakkaat_arr[$r->kohteet->asiakkaat->id] += strtotime($r->loppui)-strtotime($r->aloitan);
-				}
+				if(isset($r->kohteet->asiakkaat))
+					$asiakkaat_arr[$r->kohteet->asiakkaat->id][] = strtotime($r->loppui)-strtotime($r->aloitan);
 			}
 		}
 		if( $tilanne == 'hyvaksynta' or $tilanne == 'hyvaksytyt'){
 			$result = array_merge($luetut, $toteutuneet);
 			foreach($result as $r){
-				if(isset($r->kohteet->asiakkaat)){
-					if(!isset($asiakkaat_arr[$r->kohteet->asiakkaat->id]))
-						$asiakkaat_arr[$r->kohteet->asiakkaat->id] = strtotime($r->loppui)-strtotime($r->aloitan);
-					else
-						$asiakkaat_arr[$r->kohteet->asiakkaat->id] += strtotime($r->loppui)-strtotime($r->aloitan);
-				}
+				if(isset($r->kohteet->asiakkaat))
+					$asiakkaat_arr[$r->kohteet->asiakkaat->id][] = strtotime($r->loppui)-strtotime($r->aloitan);
 			}
 		}
 

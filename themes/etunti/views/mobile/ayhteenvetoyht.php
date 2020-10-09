@@ -156,17 +156,22 @@ ini_set("max_execution_time", "60");
 	  <?php
 	  foreach($asiakkaat as $asiakasnimi => $asiakas){
 
-		$s = (isset($suunnitelut[$asiakas->id]))? $suunnitelut[$asiakas->id] : 0 ;
-		$l = (isset($luetut[$asiakas->id]))? $luetut[$asiakas->id] : 0 ;
-		$t = (isset($hyvaksynta[$asiakas->id]))? $hyvaksynta[$asiakas->id] : 0 ;
-		$h = (isset($hyvaksytyt[$asiakas->id]))? $hyvaksytyt[$asiakas->id] : 0 ;
+		$s = (isset($suunnitelut[$asiakas->id]))? array_sum($suunnitelut[$asiakas->id]) : 0 ;
+		$l = (isset($luetut[$asiakas->id]))? array_sum($luetut[$asiakas->id]) : 0 ;
+		$t = (isset($hyvaksynta[$asiakas->id]))? array_sum($hyvaksynta[$asiakas->id]) : 0 ;
+		$h = (isset($hyvaksytyt[$asiakas->id]))? array_sum($hyvaksytyt[$asiakas->id]) : 0 ;
+
+		$s_kpl = (isset($suunnitelut[$asiakas->id]))? count($suunnitelut[$asiakas->id]) : 0 ;
+		$l_kpl = (isset($luetut[$asiakas->id]))? count($luetut[$asiakas->id]) : 0 ;
+		$t_kpl = (isset($hyvaksynta[$asiakas->id]))? count($hyvaksynta[$asiakas->id]) : 0 ;
+		$h_kpl = (isset($hyvaksytyt[$asiakas->id]))? count($hyvaksytyt[$asiakas->id]) : 0 ;
 
 		echo '<tr>';
 		echo '<td><h4>'.$asiakasnimi.'</h4></td>';
-		echo '<td class="text-center"><table class="table table-bordered"><td>'.$this->sprint($s).'</td><th>'.number_format($this->num($s), 2, ',', '').'</th></table></td>';
-		echo '<td class="text-center"><table class="table table-bordered"><td>'.$this->sprint($l).'</td><th>'.number_format($this->num($l), 2, ',', '').'</th></table></td>';
-		echo '<td class="text-center"><table class="table table-bordered"><td>'.$this->sprint($t).'</td><th>'.number_format($this->num($t), 2, ',', '').'</th></table></td>';
-		echo '<td class="text-center"><table class="table table-bordered"><td>'.$this->sprint($h).'</td><th>'.number_format($this->num($h), 2, ',', '').'</th></table></td>';
+		echo '<td class="text-center"><table class="table table-bordered"><td width="33%">'.$this->sprint($s).'</td><th width="33%">'.number_format($this->num($s), 2, ',', '').'</th><th width="33%">'.$s_kpl.'kpl</th></table></td>';
+		echo '<td class="text-center"><table class="table table-bordered"><td width="33%">'.$this->sprint($l).'</td><th width="33%">'.number_format($this->num($l), 2, ',', '').'</th><th width="33%">'.$l_kpl.'kpl</th></table></td>';
+		echo '<td class="text-center"><table class="table table-bordered"><td width="33%">'.$this->sprint($t).'</td><th width="33%">'.number_format($this->num($t), 2, ',', '').'</th><th width="33%">'.$t_kpl.'kpl</th></table></td>';
+		echo '<td class="text-center"><table class="table table-bordered"><td width="33%">'.$this->sprint($h).'</td><th width="33%">'.number_format($this->num($h), 2, ',', '').'</th><th width="33%">'.$h_kpl.'kpl</th></table></td>';
 		echo '</tr>';
 	  }
 	  ?>
