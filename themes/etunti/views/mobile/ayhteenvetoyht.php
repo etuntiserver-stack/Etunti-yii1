@@ -140,19 +140,20 @@ ini_set("max_execution_time", "60");
 	  <table class="table table-bordered table-striped small" cellspacing="0" cellpadding="0" id="mobileTable">
 	  <thead class="myBgColors">
 	  <tr>
-	  <th class="tdw1"><?php echo Yii::t('main', 'Asiakas'); ?></th>
-	  <th class="tdw2"><?php echo Yii::t('main', 'Suunniteltut tunnit'); ?></th>
-	  <th class="tdw3"><?php echo Yii::t('main', 'Luetut tunnit'); ?></th>
-	  <th class="tdw4"><?php echo Yii::t('main', 'Hyväksyntä'); ?></th>
-	  <th class="tdw4"><?php echo Yii::t('main', 'Hyväksytyt tunnit <br>laskutettavaksi'); ?></th>
-	  </tr>
-	  </thead>
 	  <?php
-	  $suunnitelut = $this->AsiakasPvmLuTotSuunArrayYht($asiakas_id, $from, $to, 'suunnitelut');
+	  $suunnitelut 	= $this->AsiakasPvmLuTotSuunArrayYht($asiakas_id, $from, $to, 'suunnitelut');
 	  $luetut 	= $this->AsiakasPvmLuTotSuunArrayYht($asiakas_id, $from, $to, 'luetut');
 	  $hyvaksynta 	= $this->AsiakasPvmLuTotSuunArrayYht($asiakas_id, $from, $to, 'hyvaksynta');
 	  $hyvaksytyt 	= $this->AsiakasPvmLuTotSuunArrayYht($asiakas_id, $from, $to, 'hyvaksytyt');
-
+	  ?>
+	  <th class="tdw1"><?php echo Yii::t('main', 'Asiakas'); ?></th>
+	  <th class="tdw2"><?php echo Yii::t('main', 'Suunniteltut tunnit'); ?> (<?=count($suunnitelut)?>kpl)</th>
+	  <th class="tdw3"><?php echo Yii::t('main', 'Luetut tunnit'); ?> (<?=count($luetut)?>kpl)</th>
+	  <th class="tdw4"><?php echo Yii::t('main', 'Hyväksyntä'); ?> (<?=count($hyvaksynta)?>kpl)</th>
+	  <th class="tdw4"><?php echo Yii::t('main', 'Hyväksytyt tunnit <br>laskutettavaksi'); ?> (<?=count($hyvaksytyt)?>kpl)</th>
+	  </tr>
+	  </thead>
+	  <?php
 	  foreach($asiakkaat as $asiakasnimi => $asiakas){
 
 		$s = (isset($suunnitelut[$asiakas->id]))? $suunnitelut[$asiakas->id] : 0 ;
