@@ -410,6 +410,7 @@ class AsiakkaatController extends Controller
 		   $asiakkaat = Asiakkaat::model()->findAll("netvisorkey=0 AND aktiivinen=1");
 		   $virhe_response = [];
 		   foreach($asiakkaat as $model){
+			$nimi = '';
 			if($model->tyyppi == 'yritys'){
 				$nimi = $model->yrityksen_nimi;
 			}
