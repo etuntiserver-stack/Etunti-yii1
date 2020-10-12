@@ -968,6 +968,8 @@ Yritys '.$yr.'
 	$ryhma = $r->value;
 
 	$isprivatecustomer = '1';
+	$customerfinvoicedetails = '';
+
 	if($model->tyyppi == 'yritys')
 	{
 		$isprivatecustomer = '0';
