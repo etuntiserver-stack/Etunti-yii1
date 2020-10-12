@@ -967,6 +967,7 @@ Yritys '.$yr.'
 	if(isset($r->id))
 	$ryhma = $r->value;
 
+	$isprivatecustomer = '1';
 	if($model->tyyppi == 'yritys')
 	{
 		$isprivatecustomer = '0';
