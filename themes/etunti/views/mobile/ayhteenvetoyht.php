@@ -7,7 +7,7 @@ ini_set("max_execution_time", "60");
 
         <!-- begin: .tray-center -->
         <div class="tray-center">
-            <h2 class="myBgColors p10"> <i class="fa fa-home"></i> <?php echo Yii::t('main', 'Tuntiyhteenveto asiakkaat'); ?> </h2>
+            <h2 class="myBgColors p10"> <i class="fa fa-home"></i> <?php echo Yii::t('main', 'Tunnit yhteensä asiakkaat'); ?> </h2>
 
    	    <form id="yhtveto" action="#" class="form-inline" method="GET">
 
@@ -165,6 +165,8 @@ ini_set("max_execution_time", "60");
 		$l_kpl = (isset($luetut[$asiakas->id]))? count($luetut[$asiakas->id]) : 0 ;
 		$t_kpl = (isset($hyvaksynta[$asiakas->id]))? count($hyvaksynta[$asiakas->id]) : 0 ;
 		$h_kpl = (isset($hyvaksytyt[$asiakas->id]))? count($hyvaksytyt[$asiakas->id]) : 0 ;
+
+		if($s_kpl == 0 and $l_kpl == 0 and $t_kpl == 0 and $h_kpl == 0) { continue; }
 
 		echo '<tr>';
 		echo '<td><h4>'.$asiakasnimi.'</h4></td>';

@@ -3310,6 +3310,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 
 		$criteria = new CDbCriteria();
+/*
 		$criteria->addCondition(" 
 			id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id IN(SELECT kohdenID FROM sivexkuitti WHERE 
 				DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
@@ -3318,7 +3319,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				AND deleted=0
 			))
 		");
-
+*/
 		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])){
 			$criteria->addCondition(" 
 				yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
