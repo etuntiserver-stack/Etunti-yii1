@@ -5770,7 +5770,7 @@ class TyovuorootController extends Controller
 	public function eiLasketaSubStr($val)
 	{
 		$return = false;
-		if (strpos($val, 'Ei lasketa') !== false or strpos($val, 'Varallaolo') !== false) {
+		if (strpos($val, 'Ei lasketa') !== false or strpos($val, 'Varallaolo') !== false or strpos($val, 'Ehdollinen varallaolo') !== false) {
 		    $return = true;
 		}
 		return $return;
