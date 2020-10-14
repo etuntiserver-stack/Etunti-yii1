@@ -1,13 +1,5 @@
 <?php
 	if(isset($_SESSION['domain'])){ unset($_SESSION['domain']); }
-
-header("Access-Control-Allow-Origin: *");
-if(isset($_GET['testi'])){
-	echo $_GET['testi'];
-}
-if(isset($_POST['testi'])){
-	echo $_POST['testi'];
-}
 ?>
 <br><br>
 <script src="https://www.google.com/recaptcha/api.js"></script>
