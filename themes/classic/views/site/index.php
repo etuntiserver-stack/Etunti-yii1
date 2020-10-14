@@ -1,5 +1,8 @@
 <?php
 	if(isset($_SESSION['domain'])){ unset($_SESSION['domain']); }
+if(isset($_POST['testi'])){
+	echo $_POST['testi'];
+}
 ?>
 <br><br>
 <script src="https://www.google.com/recaptcha/api.js"></script>
