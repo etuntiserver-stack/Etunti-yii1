@@ -1326,7 +1326,7 @@ function yhteensaTotal(){
 }
 
 
-$(document).delegate('#rivit input[type="number"]','keyup',function(){
+$(document).delegate('#rivit input[type="number"]','keyup, change',function(){
   	eachLaskenta();
     	yhteensaTotal();
 });
