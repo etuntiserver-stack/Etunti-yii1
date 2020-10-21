@@ -472,7 +472,7 @@ class SiteController extends Controller
 
 		// <-- Tyovuoro
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
-		$haku_criteria	= "status=3 AND (peruutettu=0 OR peruutettu IS NULL)";
+		$haku_criteria	= "(".$this->eiLasketa().") AND status=3 AND (peruutettu=0 OR peruutettu IS NULL)";
 		$getAll 	= $tyovuorot[0]->tv_arr($from, $to, $tids, $haku_criteria, false, ['tv_kesto']);
 		$tyovuorot_result = 0;
 		foreach($getAll as $k => $v)

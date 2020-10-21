@@ -326,7 +326,7 @@ class TyovuorootController extends Controller
 
 	public function eiLasketa(){
 		$return = "
-		(tyoajanmerkinta NOT LIKE '%Ei lasketa%' AND tyoajanmerkinta NOT LIKE '%Varallaolo%')
+		(tyoajanmerkinta NOT LIKE '%Ei lasketa%' AND tyoajanmerkinta NOT LIKE '%Varallaolo%' AND tyoajanmerkinta NOT LIKE '%Ehdollinen varallaolo%')
 		";
 		return $return;
 	}
