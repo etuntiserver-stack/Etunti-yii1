@@ -148,7 +148,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   $from = date("Y-m-d", strtotime($year.'-'.$month.' first day of this month'));
   $to = date("Y-m-d", strtotime($year.'-'.$month.' last day of this month'));
   $getAll = $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids, true, true, [3]);
-
+  $summ_all = 0;
   foreach($tids as $v)
   {
   $yht = 0;
@@ -170,8 +170,10 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 	$cl = "btn btn-xs btn-danger";
 
 	echo '<td>';
-	if(!empty($tot[$i]))
-	echo '<span class="link text-small '.$cl.'" tyle="font-size:90%" pvm="'.date("Y-m-d", strtotime($thisDate)).'" did="'.date("Ymd", strtotime($thisDate)).'_'.$v.'" tid="'.$v.'">'.$this->num($tot[$i]).'</span>';
+	if(!empty($tot[$i])){
+		echo '<span class="link text-small '.$cl.'" tyle="font-size:90%" pvm="'.date("Y-m-d", strtotime($thisDate)).'" did="'.date("Ymd", strtotime($thisDate)).'_'.$v.'" tid="'.$v.'">'.$this->num($tot[$i]).'</span>';
+		$summ_all += $this->num($tot[$i]);
+	}
 	echo '</td>';
 
    }
@@ -181,7 +183,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   ?>
   </TABLE>
 </div>
-
+Yhteensä: <?=$summ_all?>
 
                  </div>
                 </div>
