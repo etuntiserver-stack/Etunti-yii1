@@ -1,6 +1,10 @@
 <?php
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
+
+		$site = Yii::app()->createController('Site');
+		echo $site[0]->digistenTunnitYhteensa('2020-09-01', '2020-09-30');
+		
 /*
 if( Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy' ){
    $tv = Asiakkaat::model()->findAll();
