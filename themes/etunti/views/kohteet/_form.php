@@ -9,11 +9,7 @@
 
 
 $site = Yii::app()->createController('Site');
-$ismobile = $site[0]->check_user_agent();
 
-if($ismobile and !empty($model->puh_nro)) {
-
-}
 if(!isset($model->id)){ $model->alv = 24; }
 $asetukset = Asetukset::model()->findbypk(1);
 $tietoja = $asetukset->tyovuoro_tietoja_mobiilisovellukseen;
@@ -252,7 +248,6 @@ $(document).ready(function(){
 		<?php echo $form->labelEx($model,'tyoryhma'); ?>
 		<?php
 		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-		$site = Yii::app()->createController('Site');
 	       	$criteria = new CDbCriteria();
 		$criteria->order = " value ";
 		$criteria->condition = "select_type='tyoryhma'";

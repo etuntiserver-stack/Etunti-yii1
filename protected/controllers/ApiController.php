@@ -1386,7 +1386,7 @@ public function actionImei($dom)
 
 			$criteria = new CDbCriteria();
 			$criteria->order = " osoite ";
-			$criteria->condition = " osoite like '%".$_POST['thisKey']."%' ";
+			$criteria->condition = " aktiivinen=1 AND osoite like '%".$_POST['thisKey']."%' ";
 			$kohteet = Kohteet::model()->findAll($criteria);
 
 			$sel = '<select id="list" class="form-control input-lg list_osoitevaihto">';
