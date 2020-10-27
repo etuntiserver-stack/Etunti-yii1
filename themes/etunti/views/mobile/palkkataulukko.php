@@ -218,7 +218,8 @@
                     <th><?php echo Yii::t('main', 'Iltamatka+<br>Iltatunnit yht'); ?></th>
                     <th><?php echo Yii::t('main', 'Lounas'); ?></th>
                     <th><?php echo Yii::t('main', 'Yö'); ?></th>
-                    <th><?php echo Yii::t('main', 'Su'); ?></th>
+                    <th><?php echo Yii::t('main', 'Su T'); ?></th>
+                    <th><?php echo Yii::t('main', 'Su M'); ?></th>
                     <th><?php echo Yii::t('main', 'PY'); ?></th>
                     <th><?php echo Yii::t('main', 'EL'); ?></th>
                     <th><?php echo Yii::t('main', 'SL'); ?></th>
@@ -257,6 +258,7 @@
                 $yht[1]   = 0;
                 $yht[2]   = 0;
                 $yht[3]   = 0;
+				$yht[4]   = 0;
                 $mPlusTYht  = 0;
                 $matkaIltaYht = 0;
                 $iltaMatkaPlusIltatunnitYht = 0;
@@ -275,6 +277,7 @@
                 $matkatunnit   = $this->TidfromtoMobiiliAll($from, $to, $tids, array(2), $_GET['lu_tai_tot'], true, 0, false, null, null);
                 $loun   = $this->TidfromtoMobiiliAll($from, $to, $tids, array(10), $_GET['lu_tai_tot'], true, 0, false, null, null);
                 $sutunnit  = $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $_GET['lu_tai_tot'], true, 3, false, null, null);
+                $su_matkat  = $this->TidfromtoMobiiliAll($from, $to, $tids, array(2), $_GET['lu_tai_tot'], true, 3, false, null, null);
                 $pyhapaivat  = $this->TidfromtoMobiiliAll($from, $to, $tids, array(2, 3), $_GET['lu_tai_tot'], true, 4, false, null, null);
                 $erikoislauantai  = $this->TidfromtoMobiiliAll($from, $to, $tids, array(2, 3), $_GET['lu_tai_tot'], true, 5, false, null, null);
 
@@ -315,6 +318,7 @@
                   $yht[1]   += $iltatunnit[$data->id];
                   $yht[2]   += $yotunnit[$data->id];
                   $yht[3]   += $sutunnit[$data->id];
+				  $yht[4]   += $su_matkat[$data->id];
                   $matkaYht   += $matkatunnit[$data->id];
                   $mPlusTYht   += $tyotunnit[$data->id] + $matkatunnit[$data->id];
                   $iltaMatkaPlusIltatunnitYht += $iltatunnit_ja_iltamatka;
@@ -342,7 +346,8 @@
                     'iltatunnit' => $iltatunnit[$data->id],
                     'matkaIlta' => $matkaIlta[$data->id],
                     'iltatunnit_ja_iltamatka' => $iltatunnit_ja_iltamatka,
-                    'sutunnit' => $sutunnit[$data->id]
+                    'sutunnit' => $sutunnit[$data->id],
+                    'su_matkat' => $su_matkat[$data->id]
                   ));
                 }
 
@@ -364,6 +369,7 @@
                     <td><?php echo $this->num($lounYht); ?></td>
                     <td><?php echo $this->num($yht[2]); ?></td>
                     <td><?php echo $this->num($yht[3]); ?></td>
+                    <td><?php echo $this->num($yht[4]); ?></td>
                     <td><?php echo $this->num($pyhatYht); ?></td>
                     <td><?php echo $this->num($elYht); ?></td>
                     <td><?= ($slYht > 0) ? $slYht : '' ?></td>

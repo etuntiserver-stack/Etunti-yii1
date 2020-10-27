@@ -8,10 +8,12 @@
 		$iltatunnit_tyotjamatkat = '';
 		$sum 	= 0;
 
-		if($sutunnit != 0){
+		if($sutunnit != 0)
 			$sutunnit = $this->num($sutunnit);
-		}
 
+		if($su_matkat != 0)
+			$su_matkat = $this->num($su_matkat);
+			
 		if($iltatunnit != 0){
 			$iltatunnit_tyotjamatkat = '<b>Työt</b>:<br>'.number_format($this->num($iltatunnit), 2, ',', '');
 	        } else {
@@ -60,6 +62,7 @@
 	<td class="col8"><?php echo number_format($this->num($loun), 2, ',', ''); ?></td>
 	<td class="col8"><?=number_format($this->num($yotunnit), 2, ',', '')?></td>
 	<td class="col9"><?php if($sutunnit != 0) echo number_format($sutunnit, 2, ',', ''); ?></td>
+	<td class="col9"><?php if($su_matkat != 0) echo number_format($su_matkat, 2, ',', ''); ?></td>
 	<td class="col10"><?php echo number_format($this->num($pyhat), 2, ',', ''); ?></td>
 	<td class="col10"><?php echo number_format($this->num($el), 2, ',', ''); ?></td>
 	<td class="col10"><?php if($sl > 0) echo number_format($sl, 2, ',', ''); ?></td>
