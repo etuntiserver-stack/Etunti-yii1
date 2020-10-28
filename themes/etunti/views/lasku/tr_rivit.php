@@ -60,7 +60,7 @@
 		<?php echo $this->yksikkot(null); ?>
 		</select>
 	</TD>
-	<TD>
+	<TD style="width:10%">
 	  <div class="input-group">
 	   <input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $hinta; ?>" step="any"> 
 	   <span class="input-group-btn">

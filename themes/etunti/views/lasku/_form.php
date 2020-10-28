@@ -719,13 +719,13 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<TH style="width:1%"><span id="uusiRivi" class="link" style="font-size: 150%;"><i class="fa fa-plus-square"></i></span></TH>
 	<TH class="col-sm-2">Tuote/Palvelu</TH>
 	<TH class="col-sm-1">Määrä</TH>
-	<TH class="col-sm-1">Yksikkö <span class="btn btn-primary btn-xs myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span></TH>
+	<TH class="col-sm-1">Y <span class="btn btn-primary btn-xs myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span></TH>
 	<TH class="col-sm-1">Hinta</TH>
 	<TH class="col-sm-1">ALV %</TH>
 	<TH class="col-sm-1">ALV</TH>
 	<TH class="col-sm-1">Ale %</TH>
 	<TH class="col-sm-1">Veroton</TH>
-	<TH class="col-sm-1">Yhteensä</TH>
+	<TH class="col-sm-1">Yht</TH>
 	<TH class="col-sm-1">Viesti</TH>
      </thead>
      </TR>

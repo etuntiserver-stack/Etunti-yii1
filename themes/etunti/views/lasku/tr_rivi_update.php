@@ -1,5 +1,5 @@
 <?php
-	$hinnaston_otsikko = Yii::t('main', 'Hinnastoa ei määritetty');
+	$hinnaston_otsikko = '<span class="btn btn-default fa fa-money" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hinnastoa ei määritetty').'"></span>';
 	$hr = HinnastotRivi::model()->findByPk($rivi['hinnasto_rivi_id']);
 	if(isset($hr->id))
 	{
@@ -25,7 +25,7 @@
 		<?php echo $this->yksikkot(null); ?>
 		</select>
 	</TD>
-	<TD>
+	<TD  style="width:10%">
 	  <div class="input-group">
 	   <input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $rivi['hinta']; ?>" step="any"> 
 	   <span class="input-group-btn">
