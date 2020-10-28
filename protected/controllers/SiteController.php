@@ -2455,7 +2455,7 @@ class SiteController extends Controller
 		$url		= $http."://".$a->netvisor_host;
 		$host 		= $a->netvisor_host;
 
-		$sender 	= $fm->tyonantaja;
+		$sender 	= Yii::app()->user->domain;
 		$customerId	= $a->netvisor_customer_id;
 		$partnerId	= $a->netvisor_partner_id;
 		$timestamp	=  date("Y-m-d H:i:s");
