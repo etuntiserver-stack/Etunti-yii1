@@ -169,7 +169,7 @@ ini_set("max_execution_time", "60");
 		if($s_kpl == 0 and $l_kpl == 0 and $t_kpl == 0 and $h_kpl == 0) { continue; }
 
 		echo '<tr>';
-		echo '<td><h4>'.$asiakasnimi.'</h4></td>';
+		echo '<td><h4>'.$asiakasnimi.' #'.$asiakas->id.'</h4></td>';
 		echo '<td class="text-center"><table class="table table-bordered"><td width="33%">'.$this->sprint($s).'</td><th width="33%">'.number_format($this->num($s), 2, ',', '').'</th><th width="33%">'.$s_kpl.'kpl</th></table></td>';
 		echo '<td class="text-center"><table class="table table-bordered"><td width="33%">'.$this->sprint($l).'</td><th width="33%">'.number_format($this->num($l), 2, ',', '').'</th><th width="33%">'.$l_kpl.'kpl</th></table></td>';
 		echo '<td class="text-center"><table class="table table-bordered"><td width="33%">'.$this->sprint($t).'</td><th width="33%">'.number_format($this->num($t), 2, ',', '').'</th><th width="33%">'.$t_kpl.'kpl</th></table></td>';
