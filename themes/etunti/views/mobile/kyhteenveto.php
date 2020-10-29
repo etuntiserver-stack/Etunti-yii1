@@ -135,7 +135,8 @@ $this->breadcrumbs=array(
   <table class="table table-striped small" id="this_table">
   <thead class="myBgColors">
   <tr>
-  <th><?php echo Yii::t('main', 'Osoite'); ?></th>
+  <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
+  <th><?php echo Yii::t('main', 'Osoite (kohde)'); ?> <button class="pull-right btn btn-sm btn-primary ava_kaikki"><i class="fa fa-plus"></i> Ava kaikki</button></th>
 
   <?php
   $tas = explode(",",Yii::app()->user->adminPaketti);
@@ -237,6 +238,7 @@ $this->breadcrumbs=array(
 	// kpl -->
 
 	$this->renderPartial('_kyhteenveto',array(
+		'asiakas'=> $val['asiakas'],
 		'luetut'=>$luetut,
 		'toteutuneet'=>$toteutuneet,
 		'sunniteltu'=>$sunniteltu, 
@@ -317,28 +319,29 @@ $("#yhtveto").on('submit',function(e){
     }
 
 });
-
-
+$(".ava_kaikki").click(function(){
+	$(this).text('Odota..');
+	$(".showKuka").click();
+});
 $(".showKuka").click(function(){
-	
 	var thisID = $(this).attr("id").split("_");
 	var kohde_kannasta = $(this).attr("for").split("_");
 	var from = $("#from").val();
 	var to = $("#to").val();
 
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/mobile/tyobykohde',
-           type: "GET",
-	   data: { kohdenID : kohde_kannasta[1], from : from, to : to, asiakkalle : 0 },
-           success: function(data){
-		data = JSON.parse(data);
-		//console.log(data);
-		$("#showtyo_"+thisID[1]).html(data);
-		$.bootstrapSortable({ applyLast: true }); //bootstrap-sortable.js
-           }
-        });
+	$.ajax({
+		url: location.protocol + "//" + location.host + '/index.php/mobile/tyobykohde',
+		type: "GET",
+		data: { kohdenID : kohde_kannasta[1], from : from, to : to, asiakkalle : 0 },
+		success: function(data){
+			$(".ava_kaikki").remove();
+			data = JSON.parse(data);
+			//console.log(data);
+			$("#showtyo_"+thisID[1]).html(data);
+			$.bootstrapSortable({ applyLast: true }); //bootstrap-sortable.js
+		}
+	});
 	
-
 });
 
 });

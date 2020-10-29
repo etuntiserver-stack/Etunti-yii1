@@ -3399,7 +3399,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$lu = array();
 		foreach($model as $d){
 			if(isset($d->kohteet->id)){
-				$lu[$d->kohteet->osoite] = array('kohdenID' => $d->kohdenID, 'l_tunnit' => $d->l_tunnit, 'count' => $d->count);
+				$lu[$d->kohteet->osoite] = [
+					'asiakas' => (isset($d->kohteet->asiakkaat)? $d->kohteet->asiakkaat->Fullname : ''),
+					'kohdenID' => $d->kohdenID,
+					'l_tunnit' => $d->l_tunnit,
+					'count' => $d->count
+				];
 			}
 		}
 
@@ -3437,7 +3442,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 					$d->l_tunnit += $lu[$d->kohteet->osoite]['l_tunnit'];
 					$d->count += $lu[$d->kohteet->osoite]['count'];
 				}
-				$lu[$d->kohteet->osoite] = array('kohdenID' => $d->kohdenID, 'l_tunnit' => $d->l_tunnit, 'count' => $d->count);
+				$lu[$d->kohteet->osoite] = [
+						'asiakas' => (isset($d->kohteet->asiakkaat)? $d->kohteet->asiakkaat->Fullname : ''),
+						'kohdenID' => $d->kohdenID,
+						'l_tunnit' => $d->l_tunnit,
+						'count' => $d->count
+				];
 			}
 		}
 

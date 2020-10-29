@@ -5,7 +5,7 @@
 ?>
 
 <tr>
-
+	<td class="col5"><?=$asiakas?></td>
 	<td class="col1">
 		<b class="link fa fa-caret-square-o-down showKuka text-danger" data-toggle="collapse" id="<?php echo 'kohde_'.$kohdenID; ?>" for="<?php echo 'kohde_'.$kohdenID; ?>" data-target="<?php echo '#kohdeshow_'.$kohdenID; ?>"></b>&nbsp;
 
