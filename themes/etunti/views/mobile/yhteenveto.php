@@ -13,7 +13,7 @@ $this->breadcrumbs=array(
 
         <!-- begin: .tray-center -->
         <div class="tray-center">
-
+<?php /*
    <!-- tulostus -->
    <div class="pull-right">
      <form action="#" target="_blank" method="POST">
@@ -23,7 +23,7 @@ $this->breadcrumbs=array(
      </form>
    </div>
    <!-- tulostus -->
-
+*/ ?>
         <h2 class="myBgColors p10"> 
 	<div class="form-inline">
 	 <div class="form-group">
@@ -154,15 +154,52 @@ $(document).ready(function(){
 
 
 <div class="admin-form">
+  <div class="panel-header">
+      <div class="row">
+       <div class="col-sm-12">
+        <div class="pull-right">
+         <div class="form-inline">
+    	  <!--<button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>-->
+	  <form action="tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="ext" value="doc">
+	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
+	  </form>
+	  <form action="tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="ext" value="xls">
+	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+	  </form>
+	  <form action="tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="header" value="<?=$from?>-<?=$to?>">
+	    <input type="hidden" name="ext" value="pdf">
+	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+	  </form>
+         </div>
+        </div>
+       </div>
+      </div>
+      <br>
+  </div>
   <div class="panel heading-border">
    <div class="panel-body">
 
 <div class="row">
- <div class="table-responsive">
+ <div id="tableContent">
   <table class="table table-striped">
   <thead class="myBgColors">
   <tr>
-  <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'Työntekijä'); ?> <button class="pull-right btn btn-sm btn-primary ava_kaikki"><i class="fa fa-plus"></i> Ava kaikki</button></th>
 
   <?php
   $tas = explode(",",Yii::app()->user->adminPaketti);
@@ -270,28 +307,29 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
 
+$(".submitForm").on('click', function(e){
+	$('.mobileTable').addClass('table-bordered');
+	$(this).prev('textarea').val($('#tableContent').html());
+	$(this).closest('form').submit();
+	e.preventDefault();
+});
+$(".ava_kaikki").click(function(){
+	$(this).text('Odota..');
+	$(".showKuka").click();
+});
 $(".haemob").click(function(){
 	$("#yhtveto").submit();
 });
-
-
 $('.selectpicker').selectpicker({
       style: 'btn-default btn-sm',
       //size: 4
 });
-
 $('#deselAll').click(function(){
    $('#tyontekijat').selectpicker('deselectAll');
 });
-
-
 $('#selAll').click(function(){
    $('#tyontekijat').selectpicker('selectAll');
 });
-
-
-
-
 $("#yhtveto").on('submit',function(e){
 
   var from = $("#from").val();
@@ -308,8 +346,6 @@ $("#yhtveto").on('submit',function(e){
 
 });
 
-
-
 $(".showKuka").click(function(){
 	
 	var thisID = $(this).attr("id").split("_");
@@ -317,15 +353,16 @@ $(".showKuka").click(function(){
 	var from = $("#from").val();
 	var to = $("#to").val();
 
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/mobile/kohdebytekija',
-           type: "GET",
-	   data: { tid : k[1], from : from, to : to },
-           success: function(data){
-		console.log(data);
-		$("#showtyo_"+thisID[1]).html(data);
-           }
-        });
+	$.ajax({
+		url: location.protocol + "//" + location.host + '/index.php/mobile/kohdebytekija',
+		type: "GET",
+		data: { tid : k[1], from : from, to : to },
+		success: function(data){
+			$(".ava_kaikki").remove();
+			console.log(data);
+			$("#showtyo_"+thisID[1]).html(data);
+		}
+	});
 	
 
 });
