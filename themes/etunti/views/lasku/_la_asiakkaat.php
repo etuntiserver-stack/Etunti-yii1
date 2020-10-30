@@ -53,7 +53,7 @@
 		<?php
 		if(count($li) > 0){
 
-			echo '<form action="create?l_asiakkaat=true&asiakasnumero='.$data->asiakasnumero.'" method="POST">';
+			echo '<form action="create?l_asiakkaat=true&asiakasnumero='.$data->asiakasnumero.'" method="POST" target="_blank">';
 			echo $tuotteet_lista;
 			echo '<textarea style="display:none" name="tr_rivit">'.json_encode($li).'</textarea>';
 			echo '<input type="submit" class="btn btn-warning btn-block" value="Luo lasku">';
