@@ -2,8 +2,22 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
-		$site = Yii::app()->createController('Site');
-		echo $site[0]->digistenTunnitYhteensa('2020-09-01', '2020-09-30');
+if(isset($_GET['mail'])){
+	$m = $_GET['mail'];
+	$ft = FirmanTiedot::model()->findByPk(1);
+	$mail = new YiiMailer();
+	$mail->setFrom('no-reply@etunti.com');
+	$mail->setTo($m);
+	$mail->setSubject('test');
+	$mail->setBody('testi');
+	if($mail->send())
+	{
+		echo 'sähköposti lähetetty ok '.$m;
+	}
+}
+
+//$site = Yii::app()->createController('Site');
+//echo $site[0]->digistenTunnitYhteensa('2020-09-01', '2020-09-30');
 		
 /*
 if( Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy' ){
@@ -69,20 +83,6 @@ exit;
 */
 phpinfo();
 exit;
-
-if(isset($_GET['mail'])){
-	$m = $_GET['mail'];
-	$ft = FirmanTiedot::model()->findByPk(1);
-	$mail = new YiiMailer();
-	$mail->setFrom('no-reply@etunti.com');
-	$mail->setTo($m);
-	$mail->setSubject('test');
-	$mail->setBody('testi');
-	if($mail->send())
-	{
-		echo 'sähköposti lähetetty ok '.$m;
-	}
-}
 
 
 $this->breadcrumbs=array(
