@@ -3860,31 +3860,35 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 
 
-	public function actionKohdebytekija($tid,$from,$to)
+	public function actionKohdebytekija($tid, $from, $to, $kohdenID=null)
 	{
 
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "COUNT(*) as count,
+		$criteria = new CDbCriteria();
+		if($kohdenID == null){
+			$criteria->select = "COUNT(*) as count,
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,
-			kohde_kannasta
+			kohde_kannasta, kohdenID, tid
+			";
+		}
+		$criteria->condition = "  
+		tid = '".$tid."' and aloitan!='' and loppui!=''
+		AND id NOT IN(select kid from sivexkuitti_repaired)
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+		AND deleted=0
 		";
+		if($kohdenID != null)
+			$criteria->addCondition("kohdenID='$kohdenID'");
+		else
+			$criteria->group = "kohde_kannasta";
 
-        	$criteria->condition = "  
-			tid = '".$tid."' and aloitan!='' and loppui!=''
-			AND id NOT IN(select kid from sivexkuitti_repaired)
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
-			AND deleted=0
-		";
-        	$criteria->group = "kohde_kannasta";
+		if(Yii::app()->session['Lounastauko'])
+			$criteria->addCondition (" status != '10' ");
 
-			if(Yii::app()->session['Lounastauko'])
-		        $criteria->addCondition (" status != '10' ");
-	
-			if(Yii::app()->session['MATKA'])
-		        $criteria->addCondition (" status != '2' ");
+		if(Yii::app()->session['MATKA'])
+			$criteria->addCondition (" status != '2' ");
 
 		$lu = Mobile::model()->findAll($criteria);
 
@@ -3905,28 +3909,47 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		    if(!isset($c[$t->kohde_kannasta])) { $c[$t->kohde_kannasta] = 0; }
 		    $c[$t->kohde_kannasta] += $t->count;
 
-		    $return[$t->kohde_kannasta] = array($t->kohde_kannasta, $t->count, null);
+			if($kohdenID == null){
+				$return[$t->kohde_kannasta] = [
+						'tid' => $t->tid,
+						'kohdenID' => $t->kohdenID,
+						'kohde_kannasta' => $t->kohde_kannasta,
+						'count' => $t->count,
+						'muokattu' => null
+				];
+		    } else {
+				$return[] = [
+						'pvm' => date("d.m.Y", strtotime($t->aloitan)),
+						'aloitan' => date("H:i", strtotime($t->aloitan)),
+						'loppui' => date("H:i", strtotime($t->loppui)),
+						'kesto' => strtotime($t->loppui)-strtotime($t->aloitan),
+				];
+		    }
 		}
 
 
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "COUNT(*) as count, 
+   		$criteria = new CDbCriteria();
+   		if($kohdenID == null){
+			$criteria->select = "COUNT(*) as count, 
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as t_tunnit,
-			kohde_kannasta
+			kohde_kannasta, kohdenID, tid
+			";
+		}
+    	$criteria->condition = "  
+		tid = '".$tid."' and aloitan!='' and loppui!=''
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+		AND deleted=0
 		";
+		if($kohdenID != null)
+			$criteria->addCondition("kohdenID='$kohdenID'");
+		else
+    		$criteria->group = "kohde_kannasta";
 
-        	$criteria->condition = "  
-			tid = '".$tid."' and aloitan!='' and loppui!=''
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
-			AND deleted=0
-		";
-        	$criteria->group = "kohde_kannasta";
+		if(Yii::app()->session['Lounastauko'])
+	        $criteria->addCondition (" status != '10' ");
 
-			if(Yii::app()->session['Lounastauko'])
-		        $criteria->addCondition (" status != '10' ");
-	
-			if(Yii::app()->session['MATKA'])
-		        $criteria->addCondition (" status != '2' ");
+		if(Yii::app()->session['MATKA'])
+	        $criteria->addCondition (" status != '2' ");
 
 		$tot = Toteutuneet::model()->findAll($criteria);
 		    $return2 = array();
@@ -3943,30 +3966,77 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		    if(!isset($c[$t->kohde_kannasta])) { $c[$t->kohde_kannasta] = 0; }
 		    $c[$t->kohde_kannasta] += $t->count;
 
-		    $return[$t->kohde_kannasta] = array($t->kohde_kannasta, $t->count, 'muokattu');
+			if($kohdenID == null){
+				$return[$t->kohde_kannasta] = [
+						'tid' => $t->tid,
+						'kohdenID' => $t->kohdenID,
+						'kohde_kannasta' => $t->kohde_kannasta,
+						'count' => $t->count,
+						'muokattu' => 'muokattu'
+				];
+		    } else {
+				$return[] = [
+						'pvm' => date("d.m.Y", strtotime($t->aloitan)),
+						'aloitan' => date("H:i", strtotime($t->aloitan)),
+						'loppui' => date("H:i", strtotime($t->loppui)),
+						'kesto' => strtotime($t->loppui)-strtotime($t->aloitan),
+				];
+		    }
 		}
 
-		$model = $return;
 		//ksort($return);
 		//array_sum($ks);
+		$i = 0;
 
-		foreach($model as $k=>$result)
-		{
-
-		    $muokattu = '';
-		    if($result[2] == 'muokattu')
-		    $muokattu = 'text-danger';
-
-			echo 
-			'<div class="row">
-			   <div class="col-sm-6 text-right '.$muokattu.'">'.$result[0].'</div>
-			   <div class="col-sm-6">kesto: <b> '.$this->sprint($ks[$k]).' ('.$this->num($ks[$k]).')</b>, kerta: '.$c[$k].'</div>
-			</div>';
-
+		if($kohdenID == null){
+			echo '<table class="table table-bordered">';
+			echo '
+				<tr>
+					<th></th>
+					<th>Kohde</th>
+					<th>Kesto</th>
+					<th>Kerta</th>
+				</tr>
+			';
 		}
-
-		echo '<h3 class="pull-right">'.Yii::t('main','Yhteensä').' '.$this->sprint($sum).' ('.$this->num($sum).')</h3>';
-
+		foreach($return as $k=>$result)
+		{
+			$i++;
+		    $muokattu = '';
+		    if(isset($result['muokattu']) and $result['muokattu'] == 'muokattu')
+		    	$muokattu = 'text-danger';
+		    	
+			if(isset($result['kohde_kannasta']) and $kohdenID == null){
+				echo 
+				'<tr>
+					<td width="1" class="text-center">
+						<span style="vertical-align: center;" class="link showKukaSub text-danger" kohde="'.$result['kohdenID'].'" tid="'.$result['tid'].'"><i class="fa fa-2x fa-caret-square-o-down"></i></span>
+					</td>
+					<td>
+					   <span class="col-sm-6 text-right '.$muokattu.'">'.$result['kohde_kannasta'].'</span>
+					</td>
+					<td>'.$this->sprint($ks[$k]).' ('.$this->num($ks[$k]).')</td>
+					<td>'.$c[$k].'</td>
+				</tr>';
+			} elseif(isset($result['pvm'])) {
+				echo 
+				'<tr>
+					<td></td>
+					<td>'.$result['pvm'].'</td>
+					<td>'.$result['aloitan'].'</td>
+					<td>'.$result['loppui'].'</td>
+					<td>'.$this->sprint($result['kesto']).'</td>
+				</tr>';
+			}
+		}
+		if($kohdenID == null){
+			echo '<tr>
+				<td>'.Yii::t('main','Yhteensä').'</td>
+				<td><b>'.$this->sprint($sum).' ('.$this->num($sum).')</b></td>
+			</tr>';
+			echo '</table>';
+		}
+		exit;
 	}
 
 

@@ -352,21 +352,49 @@ $(".showKuka").click(function(){
 	var k = $(this).attr("for").split("_");
 	var from = $("#from").val();
 	var to = $("#to").val();
-
 	$.ajax({
 		url: location.protocol + "//" + location.host + '/index.php/mobile/kohdebytekija',
 		type: "GET",
 		data: { tid : k[1], from : from, to : to },
 		success: function(data){
 			$(".ava_kaikki").remove();
-			console.log(data);
+			//console.log(data);
 			$("#showtyo_"+thisID[1]).html(data);
 		}
 	});
-	
-
 });
-
+$(document).delegate(".showKukaSub","click",function(){
+	var thisButton = $(this).text('odota..');
+	var kohdenID = $(this).attr("kohde");
+	if($('.pvms_' + kohdenID).hasClass('in')){
+		$('.pvms_' + kohdenID).hide('slow').removeClass('in');
+		setTimeout(function(){ $('.pvms_' + kohdenID).remove(); }, 1000);
+		thisButton.html('<i class="fa fa-2x fa-caret-square-o-down"></i>');
+		return false;
+	}
+	
+	var closestTR = $(this).closest('tr');
+	var tid = $(this).attr("tid");
+	var from = $("#from").val();
+	var to = $("#to").val();
+	if( parseInt(kohdenID) > 0){
+		$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/mobile/kohdebytekija',
+			type: "GET",
+			data: { tid : tid, from : from, to : to, kohdenID : kohdenID },
+			success: function(data){
+				$(".ava_kaikki").remove();
+				//console.log(data);
+				closestTR.after('<td colspan="4" class="pvms in pvms_' + kohdenID + '"><table class="table table-striped">' +
+					'<tr><th width="50%"></th><th>Pvm</th><th>Alku</th><th>Loppu</th><th>Kesto</th></tr>' +
+					data +
+					'</table></td>'
+				);
+				thisButton.html('<i class="fa fa-2x fa-caret-square-o-down"></i>');
+			}
+		});
+	}
+});
 
 /*
 $('.mult').selectpicker({

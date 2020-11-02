@@ -9,17 +9,16 @@
 
 <tr>
 
-	<td class="col-sm-5 col1">
-		<b class="link fa fa-caret-square-o-down showKuka text-danger" data-toggle="collapse" id="<?php echo 'tid_'.$data->tid; ?>" for="<?php echo 'tid_'.$data->tid; ?>" data-target="<?php echo '#tyotShow_'.$data->tid; ?>"></b>&nbsp;
+	<td class="col1">
+		<i style="vertical-align: middle;" class="link fa fa-2x fa-caret-square-o-down showKuka text-danger" data-toggle="collapse" id="<?php echo 'tid_'.$data->tid; ?>" for="<?php echo 'tid_'.$data->tid; ?>" data-target="<?php echo '#tyotShow_'.$data->tid; ?>"></i>&nbsp;
 
 		<?php 
 			$tnimi = Tyontekijat::model()->findbypk($data->tid); 
 			echo $this->etuSukunimi($tnimi->id);
 		?>
 
-		<div class="collapse col-sm-offset-1" id="<?php echo 'tyotShow_'.$data->tid; ?>">
-		<br>
-		<div id="<?php echo 'showtyo_'.$data->tid; ?>"></div>
+		<div class="collapse" id="<?php echo 'tyotShow_'.$data->tid; ?>">
+			<div id="<?php echo 'showtyo_'.$data->tid; ?>"></div>
 		</div>
 	</td>
 
