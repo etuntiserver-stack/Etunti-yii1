@@ -3860,17 +3860,17 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 
 
-	public function actionKohdebytekija($tid, $from, $to, $kohdenID=null)
+	public function actionKohdebytekija($tid, $from, $to, $kohde_kannasta=null, $status=0, $row_id=null)
 	{
 
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 
 		$criteria = new CDbCriteria();
-		if($kohdenID == null){
+		if($row_id == null){
 			$criteria->select = "COUNT(*) as count,
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,
-			kohde_kannasta, kohdenID, tid
+			kohde_kannasta, kohdenID, tid, status, id
 			";
 		}
 		$criteria->condition = "  
@@ -3879,9 +3879,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		AND deleted=0
 		";
-		if($kohdenID != null)
-			$criteria->addCondition("kohdenID='$kohdenID'");
-		else
+		
+		if($row_id != null and $status == 3)
+			$criteria->addCondition("kohde_kannasta='$kohde_kannasta'");
+		elseif($row_id != null and $status != 0)
+			$criteria->addCondition("status=$status");
+		elseif($row_id == null)
 			$criteria->group = "kohde_kannasta";
 
 		if(Yii::app()->session['Lounastauko'])
@@ -3899,6 +3902,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		foreach($lu as $t)
 		{
+			if($t->status == 2)
+				$t->kohde_kannasta = 'MATKA';
+			if($t->status == 10)
+				$t->kohde_kannasta = 'Lounastauko';
+				
 		    $kesto = '';
 		    $kesto = $t->l_tunnit;
 		    $sum += $t->l_tunnit;
@@ -3909,10 +3917,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		    if(!isset($c[$t->kohde_kannasta])) { $c[$t->kohde_kannasta] = 0; }
 		    $c[$t->kohde_kannasta] += $t->count;
 
-			if($kohdenID == null){
+			if($row_id == null){
 				$return[$t->kohde_kannasta] = [
+						'row_id' => $t->id.strtotime($t->aloitan),
 						'tid' => $t->tid,
 						'kohdenID' => $t->kohdenID,
+						'status' => $t->status,
 						'kohde_kannasta' => $t->kohde_kannasta,
 						'count' => $t->count,
 						'muokattu' => null
@@ -3929,10 +3939,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 
    		$criteria = new CDbCriteria();
-   		if($kohdenID == null){
+   		if($row_id == null){
 			$criteria->select = "COUNT(*) as count, 
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as t_tunnit,
-			kohde_kannasta, kohdenID, tid
+			kohde_kannasta, kohdenID, tid, status, id
 			";
 		}
     	$criteria->condition = "  
@@ -3940,10 +3950,13 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		AND deleted=0
 		";
-		if($kohdenID != null)
-			$criteria->addCondition("kohdenID='$kohdenID'");
-		else
-    		$criteria->group = "kohde_kannasta";
+
+		if($row_id != null and $status == 3)
+			$criteria->addCondition("kohde_kannasta='$kohde_kannasta'");
+		elseif($row_id != null and $status != 0)
+			$criteria->addCondition("status=$status");
+		elseif($row_id == null)
+			$criteria->group = "kohde_kannasta";
 
 		if(Yii::app()->session['Lounastauko'])
 	        $criteria->addCondition (" status != '10' ");
@@ -3956,6 +3969,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		foreach($tot as $t)
 		{
+			if($t->status == 2)
+				$t->kohde_kannasta = 'MATKA';
+			if($t->status == 10)
+				$t->kohde_kannasta = 'Lounastauko';
+				
 		    $kesto = '';
 		    $kesto = $t->t_tunnit;
 		    $sum += $t->t_tunnit;
@@ -3966,10 +3984,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		    if(!isset($c[$t->kohde_kannasta])) { $c[$t->kohde_kannasta] = 0; }
 		    $c[$t->kohde_kannasta] += $t->count;
 
-			if($kohdenID == null){
+			if($row_id == null){
 				$return[$t->kohde_kannasta] = [
+						'row_id' => $t->id.strtotime($t->aloitan),
 						'tid' => $t->tid,
 						'kohdenID' => $t->kohdenID,
+						'status' => $t->status,
 						'kohde_kannasta' => $t->kohde_kannasta,
 						'count' => $t->count,
 						'muokattu' => 'muokattu'
@@ -3988,7 +4008,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		//array_sum($ks);
 		$i = 0;
 
-		if($kohdenID == null){
+		if($row_id == null){
 			echo '<table class="table table-bordered">';
 			echo '
 				<tr>
@@ -4006,11 +4026,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		    if(isset($result['muokattu']) and $result['muokattu'] == 'muokattu')
 		    	$muokattu = 'text-danger';
 		    	
-			if(isset($result['kohde_kannasta']) and $kohdenID == null){
+			if(isset($result['row_id']) and $row_id == null){
 				echo 
 				'<tr>
 					<td width="1" class="text-center">
-						<span style="vertical-align: center;" class="link showKukaSub text-danger" kohde="'.$result['kohdenID'].'" tid="'.$result['tid'].'"><i class="fa fa-2x fa-caret-square-o-down"></i></span>
+						<span style="vertical-align: center;" class="link showKukaSub text-danger" row_id="'.$result['row_id'].'" status="'.$result['status'].'" kohde="'.$result['kohdenID'].'" tid="'.$result['tid'].'"><i class="fa fa-2x fa-caret-square-o-down"></i></span>
 					</td>
 					<td>
 					   <span class="col-sm-6 text-right '.$muokattu.'">'.$result['kohde_kannasta'].'</span>
@@ -4018,7 +4038,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 					<td>'.$this->sprint($ks[$k]).' ('.$this->num($ks[$k]).')</td>
 					<td>'.$c[$k].'</td>
 				</tr>';
-			} elseif(isset($result['pvm'])) {
+			} elseif(isset($result['pvm']) and $row_id != null) {
 				echo 
 				'<tr>
 					<td></td>
@@ -4029,7 +4049,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				</tr>';
 			}
 		}
-		if($kohdenID == null){
+		if($row_id == null){
 			echo '<tr>
 				<td>'.Yii::t('main','Yhteensä').'</td>
 				<td><b>'.$this->sprint($sum).' ('.$this->num($sum).')</b></td>
