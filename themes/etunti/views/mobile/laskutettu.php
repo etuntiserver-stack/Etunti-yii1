@@ -212,23 +212,33 @@
 
 <div class="row">
  <div class="table-responsive">
-  <table class="table table-striped" id="mobileTable">
+  <table class="table table-bordered table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'T'); ?></th>
-  <th><?php echo Yii::t('main', 'Versio'); ?></th>
-  <th><?php echo Yii::t('main', 'Päivä'); ?></th>
-  <th><?php echo Yii::t('main', 'Kartta'); ?></th>
-  <th class="col-sm-4"><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'Versio / GPS'); ?></th>
+  <th><?php echo Yii::t('main', 'Pvm'); ?></th>
+  <th class="text-center" data-toggle="tooltip" title="Tästä näkyy aloitus ja lopetus etäisyydet kilometri tarkkuudella merkitystä työkohteesta."><?php echo Yii::t('main', '<i class="fa  fa-question-circle"></i>'); ?></th>
+  <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'Er.'); ?></th>
-  <th><?php echo Yii::t('main', 'TAG'); ?></th>
+
+  <?php
+  $tas = explode(",",Yii::app()->user->adminPaketti);
+  if(in_array('2',$tas)) : 
+  ?>
+  <th class="text-center" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Työvuorot'); ?>"><?php echo Yii::t('main', '<i class="fa  fa-question-circle"></i>'); ?></th>
+  <?php endif; ?>
+  
+  <th class="text-center" data-toggle="tooltip" title="<?php echo Yii::t('main', 'NFC TAG'); ?>"><?php echo Yii::t('main', '<i class="fa  fa-question-circle"></i>'); ?></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
-  <th class="col-sm-4"><?php echo Yii::t('main', 'Osoite'); ?></th>
-  <th class="col-sm-2"><?php echo Yii::t('main', 'Aloitus'); ?></th>
-  <th class="col-sm-2"><?php echo Yii::t('main', 'Lopetus'); ?></th>
+  <th><?php echo Yii::t('main', 'Osoite'); ?></th>
+  <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
+  <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
+  <th class="text-center" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Hyväksytty'); ?>"><?php echo Yii::t('main', '<i class="fa  fa-question-circle"></i>'); ?></th>
   <th><center><?php echo Yii::t('main', 'Laskutettu'); ?> <input type="checkbox" id="valitsekaikki"></center></th>
+  <th class="text-center" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Poista'); ?>"><?php echo Yii::t('main', '<i class="fa  fa-question-circle"></i>'); ?></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

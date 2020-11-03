@@ -339,14 +339,6 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 
 	<td><span id="kesto_<?php echo $data->id; ?>"><?php echo $this->sprint($kesto[$data->id]); ?></span></td>
 
-	<?php if( isset($sivu) and $sivu == 'laskutettu' ) : ?>
-	<td><center>
-	    <input type="checkbox" class="chckbxHyvaksynta" id="laskutettu_<?php echo $data->id; ?>" tot="<?php echo $toteutuneet; ?>" <?php echo $checked; ?>> 
-	    </center>
-	</td>
-	<?php endif; ?>
-
-	<?php if( isset($sivu) and $sivu == 'index' ) : ?>
 	<td><center>
 		<?php 
 		if( empty($data->hyvaksytty) ){ 
@@ -372,8 +364,13 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 		}
 		?>
 	</center></td>
-	<td><center><span class="link glyphicon glyphicon-trash text-danger poistaKohde" for="rivi_<?php echo $data->id; ?>"></span></center></td>
-	<?php endif; ?>
 
+	<?php if( isset($sivu) and $sivu == 'laskutettu' ) : ?>
+	<td><center>
+	    <input type="checkbox" class="chckbxHyvaksynta" id="laskutettu_<?php echo $data->id; ?>" tot="<?php echo $toteutuneet; ?>" <?php echo $checked; ?>> 
+	    </center>
+	</td>
+	<?php endif; ?>
+	<td><center><span class="link glyphicon glyphicon-trash text-danger poistaKohde" for="rivi_<?php echo $data->id; ?>"></span></center></td>
 
 </tr>
