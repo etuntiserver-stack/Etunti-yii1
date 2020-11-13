@@ -3251,13 +3251,12 @@ $xml .= '
 				$history_entry->palvelu = "procountor";
 				if(isset($h->id) and (int)$h->yht_euro >= $total_price and $local_invoice->tilanne == 3){
 					$history_entry->yht_euro = (float)$h->yht_euro-$total_price;
-					echo 'dd';
 				} else {
 					$history_entry->yht_euro = $total_price;
 				}
 				
 				if( Yii::app()->user->username == 'etunti' ){
-					echo (float)'9999999'-$total_price.'<br>';
+					//echo (float)$h->yht_euro-$total_price.'<br>';
 				}
 				
 				$is_olemassa = false;
@@ -3269,14 +3268,14 @@ $xml .= '
 					if( count($diff) == 0 )
 						$is_olemassa = true;
 				}
-				/*
+				
 				if(!$is_olemassa){
 					$history_entry->save();
 					$procountor_updated = true;
 				}
-				*/
+				
 			}
-			exit;
+
 			if ($procountor_updated)
 				$return .= '<p>Procountor laskut on päivitetty.</p>';
 		}
