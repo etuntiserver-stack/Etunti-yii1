@@ -3257,7 +3257,8 @@ $xml .= '
 				}
 				
 				if( Yii::app()->user->username == 'etunti' ){
-					echo $history_entry->yht_euro;				
+					echo $history_entry->yht_euro;
+					exit;		
 				}
 				
 				$is_olemassa = false;
