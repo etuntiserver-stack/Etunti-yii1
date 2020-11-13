@@ -3256,7 +3256,7 @@ $xml .= '
 					$history_entry->yht_euro = $total_price;
 				}
 				
-				if( Yii::app()->user->username == 'etunti' ){
+				if( $history_entry->lid == 1316 and Yii::app()->user->username == 'etunti' ){
 					echo $history_entry->yht_euro;
 					exit;		
 				}
