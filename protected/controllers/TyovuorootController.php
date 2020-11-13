@@ -749,7 +749,8 @@ class TyovuorootController extends Controller
 		$ft = FirmanTiedot::model()->findbypk(1);
 		if(isset($ft->sahkoposti) and !empty($ft->sahkoposti))
 		{
-			$saaja = $ft->sahkoposti;
+			$explode = explode(",", $ft->sahkoposti);
+			$saaja = $explode;
 
 			$html = '<meta charset="UTF-8">';
 			$html .= $this->renderPartial('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>'lista'),true);
