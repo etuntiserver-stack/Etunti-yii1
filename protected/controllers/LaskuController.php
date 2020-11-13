@@ -2141,17 +2141,17 @@ exit;
     	protected function avoinnaCheck($data,$row)
 	{ 
 
-       		$criteria = new CDbCriteria();
-       		$criteria->select = " yht_euro ";
-       		$criteria->order = " id DESC ";
-       		$criteria->condition = " lid='".$data->id."' AND yht_euro!='' ";
+		$criteria = new CDbCriteria();
+		$criteria->select = " yht_euro ";
+		$criteria->order = " id DESC ";
+		$criteria->condition = " lid='".$data->id."' "; // AND yht_euro!=''
 		$l = LaskuHistoria::model()->find($criteria);
 
 		$yht_euro = $data->yhteensa_total;
 		if(isset($l->yht_euro))
 			$yht_euro = str_replace(",",".", $l->yht_euro);
 
-            	return (float)$yht_euro;
+		return (float)$yht_euro;
 	}
 
 	public function actionGet_historia()
