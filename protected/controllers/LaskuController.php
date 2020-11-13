@@ -3236,6 +3236,12 @@ $xml .= '
 						break;
 				}
 
+				// <-- onko sama olemassa
+	       		$criteria = new CDbCriteria();
+		        $criteria->order = " id DESC ";
+		        $criteria->condition = " lid='".$local_invoice->id."' ";
+				$h = LaskuHistoria::model()->find($criteria);
+				
 				// Update history.
 				$history_entry = new LaskuHistoria;
 				//$history_entry->time = date("Y-m-d H:i:s", time());
@@ -3243,13 +3249,11 @@ $xml .= '
 				$history_entry->status = $pc->translateProcountorStatus($remote_invoice['status']);
 				$history_entry->procountor_statuscode = $remote_invoice['status'];
 				$history_entry->palvelu = "procountor";
-				$history_entry->yht_euro = $total_price;
+				if(isset($h->id) and (float) $h->yht_euro >= $total_price and $local_invoice->tilanne == 3)
+					$history_entry->yht_euro = (float) $h->yht_euro-$total_price;
+				else
+					$history_entry->yht_euro = $total_price;
 
-				// <-- onko sama olemassa
-		       		$criteria = new CDbCriteria();
-			        $criteria->order = " id DESC ";
-			        $criteria->condition = " lid='".$local_invoice->id."' ";
-				$h = LaskuHistoria::model()->find($criteria);
 				$is_olemassa = false;
 				if(isset($h->id)){
 					$last_attr = $h->attributes;
