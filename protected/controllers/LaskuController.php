@@ -3256,9 +3256,8 @@ $xml .= '
 					$history_entry->yht_euro = $total_price;
 				}
 				
-				if( $history_entry->lid == 1316 and Yii::app()->user->username == 'etunti' ){
-					echo $history_entry->yht_euro;
-					exit;		
+				if( Yii::app()->user->username == 'etunti' ){
+					echo $local_invoice->id.' '.$history_entry->yht_euro.'<br>';
 				}
 				
 				$is_olemassa = false;
@@ -3270,12 +3269,14 @@ $xml .= '
 					if( count($diff) == 0 )
 						$is_olemassa = true;
 				}
+				/*
 				if(!$is_olemassa){
 					$history_entry->save();
 					$procountor_updated = true;
 				}
+				*/
 			}
-
+			exit;
 			if ($procountor_updated)
 				$return .= '<p>Procountor laskut on päivitetty.</p>';
 		}
