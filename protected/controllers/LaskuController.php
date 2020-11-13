@@ -3257,7 +3257,7 @@ $xml .= '
 				}
 				
 				if( Yii::app()->user->username == 'etunti' ){
-					echo $local_invoice->id.' '.$history_entry->yht_euro.'<br>';
+					echo (float)'9999999'-$total_price.'<br>';
 				}
 				
 				$is_olemassa = false;
