@@ -3249,8 +3249,8 @@ $xml .= '
 				$history_entry->status = $pc->translateProcountorStatus($remote_invoice['status']);
 				$history_entry->procountor_statuscode = $remote_invoice['status'];
 				$history_entry->palvelu = "procountor";
-				if(isset($h->id) and (float) $h->yht_euro >= $total_price and $local_invoice->tilanne == 3){
-					$history_entry->yht_euro = (float) $h->yht_euro-$total_price;
+				if(isset($h->id) and (int)$h->yht_euro >= $total_price and $local_invoice->tilanne == 3){
+					$history_entry->yht_euro = (float)$h->yht_euro-$total_price;
 					echo 'dd';
 				} else {
 					$history_entry->yht_euro = $total_price;
