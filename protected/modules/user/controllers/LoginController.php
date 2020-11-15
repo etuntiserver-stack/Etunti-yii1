@@ -42,6 +42,10 @@ class LoginController extends Controller
 		if (Yii::app()->user->isGuest) {
 			$model=new UserLogin;
 			// collect user input data
+			if(isset($_POST['UserLogin']) and !isset($_POST['UserLogin']['domain']) and isset($_SERVER['REMOTE_ADDR'])){
+				echo $_SERVER['REMOTE_ADDR'].'. Your IP is saved';
+				exit;
+			}
 			if(
 				isset($_POST['UserLogin'])
 				and trim($_POST['UserLogin']['domain']) != 'superadmin'
