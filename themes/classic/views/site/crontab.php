@@ -37,22 +37,11 @@ try {
 foreach ($list as $d) {
 	if ($mysqli->select_db($d->domain) === false) { continue; }
 	$_SESSION['domain'] = $d->domain;
-	//echo $d->domain . "\n";
-	
+	echo $d->domain . "\n";
 	Yii::app()->db1->setActive(false);
 	Yii::app()->db1->connectionString = 'mysql:host=' . $db_host. ';dbname=' . $d->domain;
 	Yii::app()->db1->setActive(true);
 
-
-	if(empty($d->domain))
-		continue;
-		
-	$asiakkaat = Asiakkaat::model()->findByPk(1);
-	if(!isset($asiakkaat->id)){
-		echo $d->domain . "\n";
-		continue;
-	}
-	
 	$asetukset = Asetukset::model()->findByPk(1);
 	$tyovuoroot = Yii::app()->createController('Tyovuoroot');
 
@@ -200,7 +189,7 @@ foreach ($list as $d) {
 		}
 	}
 	// Ilmoitus määräajan ylittäneistä kohteista -->
-
+continue;
 	// <-- ilmoitus_myohastyneista_kohteesta
 	$criteria = new CDbCriteria;
 	$criteria->condition = " 
