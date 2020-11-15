@@ -49,6 +49,8 @@ foreach ($list as $d) {
 	if (!empty($asetukset->aikavali_halytys))
 		$aikavali_halytys = $asetukset->aikavali_halytys;
 
+	$asiakkaat = new Asiakkaat; // For get all columns
+	
 	$ft = FirmanTiedot::model()->findByPk(1);
 	$dh = DigistenHinnasto::model()->findByPk(1);
 	$domainit = Domainit::model()->findByPk($d->id);
