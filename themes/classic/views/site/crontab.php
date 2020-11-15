@@ -42,6 +42,8 @@ foreach ($list as $d) {
 	Yii::app()->db1->connectionString = 'mysql:host=' . $db_host. ';dbname=' . $d->domain;
 	Yii::app()->db1->setActive(true);
 
+	$asiakkaat = Asiakkaat::model()->find("id=1"); // For get all columns
+	
 	$asetukset = Asetukset::model()->findByPk(1);
 	$tyovuoroot = Yii::app()->createController('Tyovuoroot');
 
@@ -49,8 +51,7 @@ foreach ($list as $d) {
 	if (!empty($asetukset->aikavali_halytys))
 		$aikavali_halytys = $asetukset->aikavali_halytys;
 
-	$asiakkaat = new Asiakkaat; // For get all columns
-	
+
 	$ft = FirmanTiedot::model()->findByPk(1);
 	$dh = DigistenHinnasto::model()->findByPk(1);
 	$domainit = Domainit::model()->findByPk($d->id);
