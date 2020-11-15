@@ -47,10 +47,10 @@ foreach ($list as $d) {
 	if(empty($d->domain))
 		continue;
 		
-	$asiakkaat = Asiakkaat::model()->find();
+	$asiakkaat = Asiakkaat::model()->findByPk(1);
 	if(!isset($asiakkaat->id)){
 		echo $d->domain . "\n";
-		break;
+		continue;
 	}
 	
 	$asetukset = Asetukset::model()->findByPk(1);
