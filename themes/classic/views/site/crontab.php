@@ -48,7 +48,6 @@ foreach ($list as $d) {
 		continue;
 		
 	$asiakkaat = Asiakkaat::model()->find("id=1");
-	continue;
 	
 	$asetukset = Asetukset::model()->findByPk(1);
 	$tyovuoroot = Yii::app()->createController('Tyovuoroot');
