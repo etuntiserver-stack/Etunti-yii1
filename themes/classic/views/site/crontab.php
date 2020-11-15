@@ -39,15 +39,17 @@ foreach ($list as $d) {
 	$_SESSION['domain'] = $d->domain;
 	echo $d->domain . "\n";
 	
+	Yii::app()->db1->setActive(false);
+	Yii::app()->db1->connectionString = 'mysql:host=' . $db_host. ';dbname=' . $d->domain;
+	Yii::app()->db1->setActive(true);
+
+
 	if(empty($d->domain))
 		continue;
 		
 	$asiakkaat = Asiakkaat::model()->find("id=1");
 	continue;
-	Yii::app()->db1->setActive(false);
-	Yii::app()->db1->connectionString = 'mysql:host=' . $db_host. ';dbname=' . $d->domain;
-	Yii::app()->db1->setActive(true);
-
+	
 	$asetukset = Asetukset::model()->findByPk(1);
 	$tyovuoroot = Yii::app()->createController('Tyovuoroot');
 
