@@ -41,7 +41,7 @@ class Asiakkaat extends DB2ActiveRecord
 
 		$table = Yii::app()->db1->schema->getTable($tb_name);
 		if(!isset($table->columns['id'])) {
-
+			echo $tb_name. "\n";
 			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
 			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
 			")->execute();
