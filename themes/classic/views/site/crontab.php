@@ -47,7 +47,11 @@ foreach ($list as $d) {
 	if(empty($d->domain))
 		continue;
 		
-	$asiakkaat = Asiakkaat::model()->find("id=1");
+	$asiakkaat = Asiakkaat::model()->find();
+	if(!isset($asiakkaat->id)){
+		echo $d->domain . "\n";
+		break;
+	}
 	
 	$asetukset = Asetukset::model()->findByPk(1);
 	$tyovuoroot = Yii::app()->createController('Tyovuoroot');
