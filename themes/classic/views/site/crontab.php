@@ -50,7 +50,7 @@ foreach ($list as $d) {
 	$asiakkaat = Asiakkaat::model()->findAll();
 	if(count($asiakkaat) == 0){
 		echo $d->domain . "\n";
-		continue;
+		break;
 	}
 	
 	$asetukset = Asetukset::model()->findByPk(1);
