@@ -39,6 +39,9 @@ foreach ($list as $d) {
 	$_SESSION['domain'] = $d->domain;
 	echo $d->domain . "\n";
 	
+	if(empty($d->domain))
+		continue;
+		
 	$asiakkaat = Asiakkaat::model()->find("id=1");
 	continue;
 	Yii::app()->db1->setActive(false);
