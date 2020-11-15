@@ -45,9 +45,6 @@ class Asiakkaat extends DB2ActiveRecord
 			$check_this_table = true;
 		}
 
-
-		if($check_this_table)
-		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
 		if(!isset($table->columns['id'])) {
 
@@ -121,7 +118,7 @@ class Asiakkaat extends DB2ActiveRecord
 				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
 			}
 		}	
-		} // if($check_this_table)
+
 		return $tb_name;
 	}
 
