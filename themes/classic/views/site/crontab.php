@@ -189,7 +189,7 @@ foreach ($list as $d) {
 		}
 	}
 	// Ilmoitus määräajan ylittäneistä kohteista -->
-continue;
+
 	// <-- ilmoitus_myohastyneista_kohteesta
 	$criteria = new CDbCriteria;
 	$criteria->condition = " 
@@ -274,7 +274,7 @@ continue;
 		}
 	}
 	// ilmoitus_myohastyneista_kohteesta -->
-
+continue;
 	// <-- merkkipaivailmoitukset
 	$message   = '';
 	$arr     = array();
