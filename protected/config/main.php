@@ -80,7 +80,7 @@ if (
 if (isset($_SERVER['REMOTE_ADDR']) 
 	and (
 		$_SERVER['REMOTE_ADDR'] == '45.227.253.36'
-		or $_SERVER['REMOTE_ADDR'] == '172.68.11.26'
+		or $_SERVER['REMOTE_ADDR'] == '172.69.10.5'
 	)
 ) {
 	echo 'Fuck OFF';
