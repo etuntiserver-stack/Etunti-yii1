@@ -15,10 +15,10 @@ if(isset($_GET['mail'])){
 		echo 'sähköposti lähetetty ok '.$m;
 	}
 }
-
+/*
 $site = Yii::app()->createController('Site');
 echo $site[0]->digistenTunnitYhteensa('2020-10-01', '2020-10-31');
-		
+*/	
 /*
 if( Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy' ){
    $tv = Asiakkaat::model()->findAll();
