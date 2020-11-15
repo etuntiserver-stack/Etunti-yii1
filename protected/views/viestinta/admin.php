@@ -16,8 +16,8 @@ if(isset($_GET['mail'])){
 	}
 }
 
-//$site = Yii::app()->createController('Site');
-//echo $site[0]->digistenTunnitYhteensa('2020-09-01', '2020-09-30');
+$site = Yii::app()->createController('Site');
+echo $site[0]->digistenTunnitYhteensa('2020-10-01', '2020-10-31');
 		
 /*
 if( Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy' ){
