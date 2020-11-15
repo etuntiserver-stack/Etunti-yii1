@@ -37,7 +37,7 @@ try {
 foreach ($list as $d) {
 	if ($mysqli->select_db($d->domain) === false) { continue; }
 	$_SESSION['domain'] = $d->domain;
-	echo $d->domain . "\n";
+	//echo $d->domain . "\n";
 	
 	Yii::app()->db1->setActive(false);
 	Yii::app()->db1->connectionString = 'mysql:host=' . $db_host. ';dbname=' . $d->domain;
@@ -47,8 +47,8 @@ foreach ($list as $d) {
 	if(empty($d->domain))
 		continue;
 		
-	$asiakkaat = Asiakkaat::model()->findByPk(1);
-	if(!isset($asiakkaat->id)){
+	$asiakkaat = Asiakkaat::model()->findAll();
+	if(count($asiakkaat) == 0){
 		echo $d->domain . "\n";
 		continue;
 	}
