@@ -38,19 +38,17 @@ foreach ($list as $d) {
 	if ($mysqli->select_db($d->domain) === false) { continue; }
 	$_SESSION['domain'] = $d->domain;
 	echo $d->domain . "\n";
+	continue;
 	Yii::app()->db1->setActive(false);
 	Yii::app()->db1->connectionString = 'mysql:host=' . $db_host. ';dbname=' . $d->domain;
 	Yii::app()->db1->setActive(true);
 
-	$asiakkaat = Asiakkaat::model()->find("id=1"); // For get all columns
-	
 	$asetukset = Asetukset::model()->findByPk(1);
 	$tyovuoroot = Yii::app()->createController('Tyovuoroot');
 
 	$aikavali_halytys = 15;
 	if (!empty($asetukset->aikavali_halytys))
 		$aikavali_halytys = $asetukset->aikavali_halytys;
-
 
 	$ft = FirmanTiedot::model()->findByPk(1);
 	$dh = DigistenHinnasto::model()->findByPk(1);
@@ -441,7 +439,7 @@ foreach ($list as $d) {
 
 			if($data->status == 3) {
 				$m .= '<hr><b>' . $tyovuoroot[0]->tilanteet()[$data->status] . '</b><br>';
-				if(isset($data->kohteet->asiakkaat))
+				if(isset($data->kohteet->asiakkaat->Fullname))
 					$m .= '<b>' . Yii::t('main', 'Asiakas') . ':</b> ' . $data->kohteet->asiakkaat->Fullname . '<br>';
 					
 				$m .= '<b>' . Yii::t('main', 'Osoite') . ':</b> ' . $osoite . '<br>';
