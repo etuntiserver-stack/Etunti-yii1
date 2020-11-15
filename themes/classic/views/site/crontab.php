@@ -38,6 +38,8 @@ foreach ($list as $d) {
 	if ($mysqli->select_db($d->domain) === false) { continue; }
 	$_SESSION['domain'] = $d->domain;
 	echo $d->domain . "\n";
+	
+	$asiakkaat = Asiakkaat::model()->find("id=1");
 	continue;
 	Yii::app()->db1->setActive(false);
 	Yii::app()->db1->connectionString = 'mysql:host=' . $db_host. ';dbname=' . $d->domain;
