@@ -274,7 +274,7 @@ foreach ($list as $d) {
 		}
 	}
 	// ilmoitus_myohastyneista_kohteesta -->
-continue;
+
 	// <-- merkkipaivailmoitukset
 	$message   = '';
 	$arr     = array();
@@ -507,7 +507,7 @@ continue;
 
 	}
 	// lmoitus toistuvien työvuorojen päätymisestä -->
-
+continue;
 	// <-- Vinkkit autopoistaminen
 	if (isset($asetukset->tietosuoja_vinkki_sailyttaminen)) {
 		$criteria = new CDbCriteria;
