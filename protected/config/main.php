@@ -77,8 +77,13 @@ if (
     //die("IP: ".$_SERVER['REMOTE_ADDR']);
 }
 
-if (isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '45.227.253.36')) {
-	echo 'Police';
+if (isset($_SERVER['REMOTE_ADDR']) 
+	and (
+		$_SERVER['REMOTE_ADDR'] == '45.227.253.36'
+		or $_SERVER['REMOTE_ADDR'] == '172.68.11.26'
+	)
+) {
+	echo 'Fuck OFF';
     //header('Location: https://www.google.com/');
     exit;
     //mail('laptopsr@gmail.com', 'Blocked IP', 'IP '.$_SERVER['REMOTE_ADDR']);
