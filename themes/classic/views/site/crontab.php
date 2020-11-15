@@ -507,7 +507,7 @@ foreach ($list as $d) {
 
 	}
 	// lmoitus toistuvien työvuorojen päätymisestä -->
-continue;
+
 	// <-- Vinkkit autopoistaminen
 	if (isset($asetukset->tietosuoja_vinkki_sailyttaminen)) {
 		$criteria = new CDbCriteria;
