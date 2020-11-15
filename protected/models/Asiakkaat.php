@@ -19,7 +19,7 @@
 class Asiakkaat extends DB2ActiveRecord
 {
 
-	public $count, $filter_postitoimipaikka, $filter_tyoryhma, $filter_asiakasryhma, $filter_tyyppi;
+	public $count, $filter_postitoimipaikka, $filter_tyoryhma, $filter_asiakasryhma, $filter_tyyppi, $freshdesk_id;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -38,12 +38,6 @@ class Asiakkaat extends DB2ActiveRecord
 	{
 
 		$tb_name = 'asiakkaat';
-		$check_this_table = true;
-		if(!isset(Yii::app()->session[$tb_name]))
-		{
-			Yii::app()->session[$tb_name] = true;
-			$check_this_table = true;
-		}
 
 		$table = Yii::app()->db1->schema->getTable($tb_name);
 		if(!isset($table->columns['id'])) {
