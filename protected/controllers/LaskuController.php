@@ -3151,9 +3151,13 @@ $xml .= '
 			// Get search results and check for errors.
 			$procountor_results = $pc->searchInvoices($params);
 			if (isset($procountor_results['errors'])) {
-
-        // Log request results and set a notification for the user.
-        // Error disabled as per request @ 13.7.2020
+				/*
+				echo '<pre>';
+				print_r($procountor_results);
+				echo '<pre>';
+				*/
+				// Log request results and set a notification for the user.
+				// Error disabled as per request @ 13.7.2020
 				// $pc->logError(
 				// 	'searchInvoices',
 				// 	$procountor_results,
@@ -3163,7 +3167,8 @@ $xml .= '
 
 				$is_error = true;
 				// return '<p>Laskujen haku Procountorista epäonnistui. Viasta on ilmoitettu ylläpidolle.</p>';
-				return '<p>Laskujen haku Procountorista epäonnistui. Tarkista kirjautuminen asetuksista. Jos vika jatkuu, ota yhteys ylläpitoon.</p>';
+				return '<p>Laskujen haku Procountorista epäonnistui. Tarkista kirjautuminen asetuksista. Jos vika jatkuu, ota yhteys ylläpitoon.</p>' .
+						json_encode($procountor_results['errors']);
 			}
 
 			foreach($procountor_results['results'] ?? [] as $remote_invoice) {

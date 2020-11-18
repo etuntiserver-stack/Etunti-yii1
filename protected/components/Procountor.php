@@ -276,6 +276,9 @@ class Procountor extends CComponent
    */
   public function getAccessToken($force = false)
   {
+  
+	//  AINA TARKISTA SARAKKEEN PITUUS  VARCHAR 500
+  
     $settings = Asetukset::model()->findByPk(1);
     $access_token = $settings->procountor_access_token;
     $refresh_time = $settings->procountor_refresh_time;
