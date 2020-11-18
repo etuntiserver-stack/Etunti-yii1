@@ -5744,7 +5744,7 @@ class TyovuorootController extends Controller
     $sender_name = 'Koti Puhtaaksi Oy';
     $replyto_email = 'asiakaspalvelu@kotipuhtaaksi.fi';
     $mail = new YiiMailer();
-    $mail->setFrom('no-reply@etunti.fi', $sender_name);
+    $mail->setFrom('asiakaspalvelu@kotipuhtaaksi.fi', $sender_name);
     $mail->setTo($client_email);
     $mail->setSubject($email_subject);
     $mail->setBody($email_body);
