@@ -1067,9 +1067,7 @@ $xml = '
 			}
 
 		}
-		if(Yii::app()->user->username == 'veiko'){
-			print_r($tt_arr);
-		}
+
 	   	return $tt_arr;
 	}
 
