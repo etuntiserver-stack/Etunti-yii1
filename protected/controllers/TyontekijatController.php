@@ -732,8 +732,8 @@ class TyontekijatController extends Controller
                 Yii::app()->session['aktiivinen']=$_GET['aktiivinen']; 
 
 
-       	$criteria = new CDbCriteria();
-		$criteria->select = " t.*, REPLACE(REPLACE(tyoryhma,'\\\u00f6','ö'), '\\\u00e4', 'ä') as tyoryhma ";
+       		$criteria = new CDbCriteria();
+		//$criteria->select = " t.*, REPLACE(REPLACE(tyoryhma,'\\\u00f6','ö'), '\\\u00e4', 'ä') as tyoryhma ";
 		// <-- Return order etu ja sukunimella
 		$criteria = $site[0]->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
@@ -1067,7 +1067,9 @@ $xml = '
 			}
 
 		}
-
+		if(Yii::app()->user->username == 'veiko'){
+			print_r($tt_arr);
+		}
 	   	return $tt_arr;
 	}
 
