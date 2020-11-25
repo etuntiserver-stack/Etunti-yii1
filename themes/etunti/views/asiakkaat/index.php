@@ -177,23 +177,22 @@ $(document).ready(function() {
 		        <?php if(isset($_GET['tyoryhma'])) echo '<input type="hidden" id="tyoryhma" value="'.$_GET['tyoryhma'].'">'; ?>
                         <div class="section">
                           <label class="field select">
-			  <?php
-					$list = array();
-			      		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
-					foreach($l as $v)
-					$list[$v->id] = $v->value;
-			
-					if(count($list) > 0)
-					{
-			        	echo CHtml::dropDownList('tyoryhma', 'tyoryhma', $list,
-					array('empty'=>'Valitse työryhmä','class'=>'form-control form-group', 'id'=>'tyoryhmaSelect'));
-					}
-			  ?>
+						  <?php
+								$list = array();
+							  		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
+								foreach($l as $v)
+								$list[$v->id] = $v->value;
+						
+								if(count($list) > 0)
+								{
+									echo CHtml::dropDownList('tyoryhma', 'tyoryhma', $list,
+								array('empty'=>'Valitse työryhmä','class'=>'form-control form-group', 'id'=>'tyoryhmaSelect'));
+								}
+						  ?>
                             <i class="arrow double"></i>
                             </label>
                           </label>
                         </div>
-
                       </div>
                       <div class="col-md-2">
                         <div class="section">

@@ -1718,6 +1718,11 @@ exit;
 				if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
 			        	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'");
 
+				if(isset($_GET['tyoryhma']) and is_array($_GET['tyoryhma'])){
+						$impl = 'tyoryhma='.implode(' OR tyoryhma=', $_GET['tyoryhma']);
+						$criteria->addCondition ($impl);
+				}
+		
 				$dataProvider=new CActiveDataProvider('Asiakkaat', array(
 					'criteria'=>$criteria,
 					//'pagination'=>true

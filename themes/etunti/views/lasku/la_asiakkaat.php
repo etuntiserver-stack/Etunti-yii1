@@ -30,22 +30,22 @@ $months=array(
                       <div class="col-md-2">
                         <div class="section">
                          <label class="field select">
-				<select name="kk" id="kk" class="gui-input">
-				<option value=""><?php echo Yii::t('main', 'Valitse kuukausi'); ?></option>
-				<?php
-				$i = 1;
-				$month = strtotime(date("Y-m-d", strtotime("first day of this month")));
-				while($i <= 24)
-				{
-				    $month_name = date('n', $month);
-				    $year 	= date('Y', $month);
-				    (isset($_GET['kk']) and $_GET['kk'] == $year.'-'.$month_name)? $selected = 'selected' : $selected = '';
-				    echo '<option value="'.$year.'-'. $month_name.'" '.$selected.'>'.$months[$month_name].' '.$year.'</option>';
-				    $month = strtotime('-1 month', $month);
-				    $i++;
-				}
-				?>
-				</select>
+							<select name="kk" id="kk" class="gui-input">
+							<option value=""><?php echo Yii::t('main', 'Valitse kuukausi'); ?></option>
+							<?php
+							$i = 1;
+							$month = strtotime(date("Y-m-d", strtotime("first day of this month")));
+							while($i <= 24)
+							{
+								$month_name = date('n', $month);
+								$year 	= date('Y', $month);
+								(isset($_GET['kk']) and $_GET['kk'] == $year.'-'.$month_name)? $selected = 'selected' : $selected = '';
+								echo '<option value="'.$year.'-'. $month_name.'" '.$selected.'>'.$months[$month_name].' '.$year.'</option>';
+								$month = strtotime('-1 month', $month);
+								$i++;
+							}
+							?>
+							</select>
                             <i class="arrow double"></i>
                             </label>
                           </label>
@@ -54,20 +54,53 @@ $months=array(
                       <div class="col-md-2">
                         <div class="section">
                          <label class="field select">
-				<select name="tilanne" id="tilanne" class="gui-input">
-				<option value=""><?php echo Yii::t('main', 'Valitse tilanne'); ?></option>
-				<?php 
-				$arr = [
-					'laskutettavat_m' => Yii::t('main', 'Laskutettavat Mobiili'),
-					//'laskuttamattomat_m' => Yii::t('main', 'Laskuttamattomat Mobiili'),
-					//'laskutettavat_tv' => Yii::t('main', 'Laskutettavat Työvuorot'),
-					//'laskuttamattomat_tv' => Yii::t('main', 'Laskuttamattomat Työvuorot'),
-				]; 
-				foreach($arr as $k => $v)
-					echo '<option value="'.$k.'" '.((isset($_GET['tilanne']) and $_GET['tilanne'] == $k)? 'selected' : '' ).'>'.$v.'</option>';
-				?>
-				</select>
+							<select name="tilanne" id="tilanne" class="gui-input">
+							<option value=""><?php echo Yii::t('main', 'Valitse tilanne'); ?></option>
+							<?php 
+							$arr = [
+								'laskutettavat_m' => Yii::t('main', 'Laskutettavat Mobiili'),
+								//'laskuttamattomat_m' => Yii::t('main', 'Laskuttamattomat Mobiili'),
+								//'laskutettavat_tv' => Yii::t('main', 'Laskutettavat Työvuorot'),
+								//'laskuttamattomat_tv' => Yii::t('main', 'Laskuttamattomat Työvuorot'),
+							]; 
+							foreach($arr as $k => $v)
+								echo '<option value="'.$k.'" '.((isset($_GET['tilanne']) and $_GET['tilanne'] == $k)? 'selected' : '' ).'>'.$v.'</option>';
+							?>
+							</select>
                             <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+							<?php
+								$list = array();
+								$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
+								foreach($l as $v)
+									$list[$v->id] = $v->value;
+
+								$selected = [];
+								if(isset($_GET['tyoryhma']) and is_array($_GET['tyoryhma'])){
+										foreach($_GET['tyoryhma'] as $rnum){
+											$selected[$rnum] = ['selected'=>true];
+										}
+								}
+				
+								if(count($list) > 0)
+								{
+									echo CHtml::dropDownList('tyoryhma', 'tyoryhma[]', $list,
+									array(
+										'empty'=>'Valitse työryhmä',
+										'class'=>'form-control form-group selectpicker', 
+										'id'=>'tyoryhmaSelect', 
+										'multiple' => 'yes', 
+										'options' => $selected
+										)
+									);
+								}
+							?>
                             </label>
                           </label>
                         </div>
@@ -76,17 +109,17 @@ $months=array(
                         <div class="section">
                           <label class="field prepend-icon">
 
-			    <!-- Autocomplete -->
-			    <?php
-	   			$site = Yii::app()->createController('Site');
-				$mod = 'Asiakkaat';
-				$sarake = 'yrityksen_nimi';
-				$placeholder = 'Asiakas';
-				if(isset($_GET[$sarake])) 			$postvalue = $_GET[$sarake]; 
-				else $postvalue='';				
-		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
-			    ?>
-			    <!-- Autocomplete -->
+								<!-- Autocomplete -->
+								<?php
+					   			$site = Yii::app()->createController('Site');
+								$mod = 'Asiakkaat';
+								$sarake = 'yrityksen_nimi';
+								$placeholder = 'Asiakas';
+								if(isset($_GET[$sarake])) 			$postvalue = $_GET[$sarake]; 
+								else $postvalue='';				
+						 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
+								?>
+								<!-- Autocomplete -->
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>
