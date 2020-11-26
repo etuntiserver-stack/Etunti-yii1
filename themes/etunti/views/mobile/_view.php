@@ -170,7 +170,7 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 		?>
 		<span class="small"><?=$versio?></span>
 	</td>
-	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
+	<td><b><?php echo CHtml::encode(date("d.m.Y",strtotime($data->aloitan))); ?></b></td>
 	<td class="text-center">
 
 		<div class="row">
