@@ -295,7 +295,7 @@ $this->breadcrumbs=array(
 			'loun'=>$loun,
 			'yotunnit' => $yotunnit,
 			'iltatunnit' => $iltatunnit,
-			'sutunnit' => $sutunnit[$data->id]
+			'sutunnit' => $sutunnit
 		));
   }
 
