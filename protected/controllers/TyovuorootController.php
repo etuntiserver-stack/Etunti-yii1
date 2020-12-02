@@ -2707,7 +2707,7 @@ class TyovuorootController extends Controller
 			foreach($clearing_before as $key => $val){
 				if( 
 					isset($val['tid']) and isset($tids[$val['tid']]) and isset($val['pvm']) and isset($val['syy']) 
-					and date("Ymd", strtotime($val['pvm'])) >= date("Ymd", strtotime($laatikko_pvm))
+					// and date("Ymd", strtotime($val['pvm'])) >= date("Ymd", strtotime($laatikko_pvm)) tule tuplana edelisen viikolle
 				){
 					$poistettu_pvms[$val['tid']][$val['pvm']] = $val['syy'];
 					$poistettu_pvms_upd[] = ['tid' => $val['tid'], 'pvm' => $val['pvm'], 'syy' => $val['syy']];
