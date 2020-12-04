@@ -205,6 +205,12 @@ if(isset($model->tietoja))
 		<?php echo $form->error($model,'tv_id'); ?>
 	</div>
 	<?php endif; ?>
+	
+	<div class="section">
+		<?php echo $form->labelEx($model,'laskurivi_id'); ?>
+		<?php echo $form->textField($model,'laskurivi_id',array('class'=>'form-control', 'readonly' => 'yes')); ?>
+		<?php echo $form->error($model,'laskurivi_id'); ?>
+	</div>
 <br>
 
 	<div class="section">
