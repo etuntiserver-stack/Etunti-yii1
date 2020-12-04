@@ -1480,9 +1480,10 @@ exit;
 					// <-- Mobile update
 					if(isset($_POST['tunnit_id'][$key]) and isset($_POST['tunnit_from'][$key]) and $_POST['tunnit_from'][$key] == 'mobiili'){
 						$m = Mobile::model()->findbypk($_POST['tunnit_id'][$key]);
-						if(isset($m->id))
+						if(isset($m->id)){
 							Mobile::model()->updateByPk($m->id, ['laskutettu' => 1, 'laskurivi_id' => $lr->id]);
-
+							LaskunRivit::model()->updateByPk($lr->id, ['mobile_id' => $m->id]);
+						}
 						$t = Toteutuneet::model()->find("kid='".$_POST['tunnit_id'][$key]."'");
 						if(isset($t->id))
 							Mobile::model()->updateByPk($t->id, ['laskutettu' => 1, 'laskurivi_id' => $lr->id]);
@@ -1610,7 +1611,9 @@ exit;
 					$lr->tuoteID = $_POST['tuoteID'][$key];
 				if(isset($_POST['hinnasto_rivi_id']))
 					$lr->hinnasto_rivi_id = $_POST['hinnasto_rivi_id'][$key];
-
+				if(isset($_POST['tunnit_id']))
+					$lr->mobile_id = $_POST['tunnit_id'][$key];
+					
 				$lr->veroton	=$_POST['veroton'][$key];
 				$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
 				$lr->save();

@@ -51,22 +51,23 @@ class LaskunRivit extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
-                     'lid' => 'int(11) DEFAULT 0',
-                     'rivi' => 'int(11) DEFAULT 0',
-                     'tkoodi' => 'varchar(255) DEFAULT NULL',
-                     'nimike' => 'varchar(100) DEFAULT NULL',
-                     'kpl' => 'varchar(20) DEFAULT NULL',
-                     'yksikko' => 'varchar(20) DEFAULT NULL',
-                     'hinta' => 'varchar(20) DEFAULT NULL',
-                     'alv' => 'varchar(20) DEFAULT NULL',
-                     'hinta_alv' => 'varchar(20) DEFAULT NULL',
-                     'ale' => 'varchar(20) DEFAULT NULL',
-                     'veroton' => 'varchar(20) DEFAULT NULL',
-                     'yhteensa_alv' => 'varchar(20) DEFAULT NULL',
-                     'tuoteID' => 'int(11) DEFAULT 0',
-                     'free_text' => 'varchar(250) DEFAULT NULL',
-		     'hinnasto_rivi_id' => 'int(11) DEFAULT 0',
+			'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+			'lid' => 'int(11) DEFAULT 0',
+			'rivi' => 'int(11) DEFAULT 0',
+			'tkoodi' => 'varchar(255) DEFAULT NULL',
+			'nimike' => 'varchar(100) DEFAULT NULL',
+			'kpl' => 'varchar(20) DEFAULT NULL',
+			'yksikko' => 'varchar(20) DEFAULT NULL',
+			'hinta' => 'varchar(20) DEFAULT NULL',
+			'alv' => 'varchar(20) DEFAULT NULL',
+			'hinta_alv' => 'varchar(20) DEFAULT NULL',
+			'ale' => 'varchar(20) DEFAULT NULL',
+			'veroton' => 'varchar(20) DEFAULT NULL',
+			'yhteensa_alv' => 'varchar(20) DEFAULT NULL',
+			'tuoteID' => 'int(11) DEFAULT 0',
+			'free_text' => 'varchar(250) DEFAULT NULL',
+			'hinnasto_rivi_id' => 'int(11) DEFAULT 0',
+			'mobile_id' => 'int(11) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -89,7 +90,7 @@ class LaskunRivit extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('lid, rivi, tkoodi, kpl, alv', 'required'),
-			array('lid, rivi, tuoteID, hinnasto_rivi_id', 'numerical', 'integerOnly'=>true),
+			array('lid, rivi, tuoteID, hinnasto_rivi_id, mobile_id', 'numerical', 'integerOnly'=>true),
 			array('nimike,kpl', 'length', 'max'=>100),
 			array('tkoodi, nimike, free_text', 'length', 'max'=>255),
 			array('yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv', 'length', 'max'=>20),

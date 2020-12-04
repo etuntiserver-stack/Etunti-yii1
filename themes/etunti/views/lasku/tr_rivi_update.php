@@ -1,4 +1,5 @@
 <?php
+	$tunnit_id 	= '';
 	$hinnaston_otsikko = '<span class="btn btn-default fa fa-money" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hinnastoa ei määritetty').'"></span>';
 	$hr = HinnastotRivi::model()->findByPk($rivi['hinnasto_rivi_id']);
 	if(isset($hr->id))
@@ -15,6 +16,7 @@
 	<TD>
 		<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" value="<?php echo $rivi['tuoteID']; ?>">
 		<input type="hidden" size="1" name="hinnasto_rivi_id[<?php echo $num; ?>]" id="hinnasto_rivi_id_<?php echo $num; ?>" value="<?php echo $rivi['hinnasto_rivi_id']; ?>">
+		<input type="hidden" size="1" name="tunnit_id[<?php echo $num; ?>]" id="tunnit_id_<?php echo $num; ?>" class="form-control" value="<?php echo $rivi['mobile_id']; ?>">
 		<input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control" value="<?php echo $rivi['tkoodi']; ?>">
 	</TD>
 
