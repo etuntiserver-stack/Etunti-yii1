@@ -12,14 +12,17 @@ $this->menu=array(
         <div class="tray-center">
 
 	   <div class="pull-right">
-	   <?php
-		echo CHtml::link("poista", '#', array(
-		'submit'=>array('delete', "id"=>$model->id), 
-		'confirm' => 'Haluatko varmaasti poistaa laskun?',
-		'class'=>'btn btn-primary myBgColors'
-		));
-
-	   ?>
+		<?php
+			$lr = LaskunRivit::model()->find("mobile_id!=0 AND lid='".$model->id."'");
+			if(!isset($lr->id))
+			{
+				echo CHtml::link("poista", '#', array(
+					'submit'=>array('delete', "id"=>$model->id), 
+					'confirm' => 'Haluatko varmaasti poistaa laskun?',
+					'class'=>'btn btn-primary myBgColors'
+				));
+			}
+		?>
 	   </div>
 
 	   <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo $model->laskun_nimetys; ?> <?php echo $model->laskunumero; ?> </h2>

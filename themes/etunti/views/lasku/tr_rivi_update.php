@@ -12,7 +12,12 @@
 ?>
 
      <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
-	<TD><b class="link text-danger poista" for="poista_<?php echo $num; ?>" style="font-size:150%"><i class="fa fa-times"></i></b></TD>
+	<td>
+		<?php
+		if($rivi['mobile_id'] == 0)
+			echo '<b class="link text-danger poista" for="poista_<?php echo $num; ?>" style="font-size:150%"><i class="fa fa-times"></i></b>';
+		?>
+	</td>
 	<TD>
 		<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" value="<?php echo $rivi['tuoteID']; ?>">
 		<input type="hidden" size="1" name="hinnasto_rivi_id[<?php echo $num; ?>]" id="hinnasto_rivi_id_<?php echo $num; ?>" value="<?php echo $rivi['hinnasto_rivi_id']; ?>">
