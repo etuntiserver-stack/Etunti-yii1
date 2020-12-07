@@ -205,6 +205,19 @@ if(isset($model->tietoja))
 		<?php echo $form->error($model,'tv_id'); ?>
 	</div>
 	<?php endif; ?>
+
+	<br>
+	<legend>Laskutus tilanne</legend>
+	<div class="section">
+		<?php echo $form->labelEx($model,'laskutettu'); ?>
+		<?php 
+		      $list = array(0 => Yii::t('main','Ei laskutettu'), 1 => Yii::t('main','Laskutettu'));
+		      echo $form->dropDownList($model,'laskutettu', 
+			 	$list, 
+				array('class'=>'form-control'));
+		?>
+		<?php echo $form->error($model,'laskutettu'); ?>
+	</div>
 	
 	<div class="section">
 		<?php echo $form->labelEx($model,'laskurivi_id'); ?>
