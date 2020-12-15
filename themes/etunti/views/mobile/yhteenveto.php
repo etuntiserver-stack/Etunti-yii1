@@ -109,7 +109,7 @@ $(document).ready(function(){
                         </div>
                       </div>
 
-                      <div class="col-md-2 admin-form">
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
 	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php echo $from; ?>">
@@ -120,7 +120,7 @@ $(document).ready(function(){
                         </div>
                       </div>
 
-                      <div class="col-md-2 admin-form">
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
    	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php echo $to; ?>">
@@ -130,10 +130,21 @@ $(document).ready(function(){
                           </label>
                         </div>
                       </div>
-
-                      <div class="col-md-2 col-md-offset-2">
-        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
-		      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+								<select name="raporti_tyyppi">
+								 <option value="Hyvaksynta" <?=(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksynta')?'selected':''?>><?=Yii::t('main', 'Hyväksyntä')?></option>
+								 <option value="Hyvaksytyt" <?=(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksytyt')?'selected':''?>><?=Yii::t('main', 'Hyväksytyt')?></option>
+								</select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+        	        	<input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
+		      		  </div>
                     </div>
 
 
@@ -352,10 +363,11 @@ $(".showKuka").click(function(){
 	var k = $(this).attr("for").split("_");
 	var from = $("#from").val();
 	var to = $("#to").val();
+	var raportti_tyyppi = '<?=((isset($_GET['raportti_tyyppi']))? $_GET['raportti_tyyppi'] : "")?>';
 	$.ajax({
 		url: location.protocol + "//" + location.host + '/index.php/mobile/kohdebytekija',
 		type: "GET",
-		data: { tid : k[1], from : from, to : to },
+		data: { tid : k[1], from : from, to : to, kohde_kannasta : null, status : null, row_id : null, raportti_tyyppi : raportti_tyyppi },
 		success: function(data){
 			$(".ava_kaikki").remove();
 			//console.log(data);
@@ -368,6 +380,7 @@ $(document).delegate(".showKukaSub","click",function(){
 	var row_id = $(this).attr("row_id");
 	var kohdenID = $(this).attr("kohde");
 	var kohde_kannasta = $(this).attr("kohde_kannasta");
+	var raportti_tyyppi = '<?=((isset($_GET['raportti_tyyppi']))? $_GET['raportti_tyyppi'] : "")?>';
 	var status = $(this).attr("status");
 	if($('.pvms_' + row_id).hasClass('in')){
 		$('.pvms_' + row_id).hide('slow').removeClass('in');
@@ -384,7 +397,7 @@ $(document).delegate(".showKukaSub","click",function(){
 		$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/mobile/kohdebytekija',
 			type: "GET",
-			data: { tid : tid, from : from, to : to, kohde_kannasta : kohde_kannasta, status : status, row_id : row_id },
+			data: { tid : tid, from : from, to : to, kohde_kannasta : kohde_kannasta, status : status, row_id : row_id, raportti_tyyppi : raportti_tyyppi },
 			success: function(data){
 				$(".ava_kaikki").remove();
 				console.log(data);

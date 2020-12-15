@@ -2593,19 +2593,21 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 
 
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,tid
-		";
+   		$criteria = new CDbCriteria();
+    	$criteria->select = "
+	SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,tid
+	";
 
-        	$criteria->order = "tekijan_nimi"; //"SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))"
-        	$criteria->group = 'tid';
-        	$criteria->condition = " 
+    	$criteria->order = "tekijan_nimi"; //"SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))"
+    	$criteria->group = 'tid';
+    	$criteria->condition = " 
 			aloitan !='' and loppui !='' 
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date('Y-m-d',strtotime($from))."' AND '".date('Y-m-d',strtotime($to))."' 
 			AND deleted=0
 		";
-
+		if( isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksytyt')
+			$criteria->addCondition ("hyvaksytty!=''");
+			
 		if(isset($_GET['Tekija']) and count($_GET['Tekija']) > 0){
 			$ids = implode(",",$_GET['Tekija']);
 			$criteria->addCondition ('tid IN ('.$ids.') ');
@@ -3860,7 +3862,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 
 
-	public function actionKohdebytekija($tid, $from, $to, $kohde_kannasta=null, $status=0, $row_id=null)
+	public function actionKohdebytekija($tid, $from, $to, $kohde_kannasta, $status, $row_id, $raportti_tyyppi)
 	{
 
 		$from = date("Y-m-d", strtotime($from));
@@ -3874,11 +3876,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			";
 		}
 		$criteria->condition = "  
-		tid = '".$tid."' and aloitan!='' and loppui!=''
-		AND id NOT IN(select kid from sivexkuitti_repaired)
-		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
-		AND deleted=0
+			tid = '".$tid."' and aloitan!='' and loppui!=''
+			AND id NOT IN(select kid from sivexkuitti_repaired)
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+			AND deleted=0
 		";
+		if($raportti_tyyppi == 'Hyvaksytyt'){ $criteria->addCondition (" hyvaksytty!='' "); }
 		
 		if($row_id != null and $status == 3)
 			$criteria->addCondition("kohde_kannasta='$kohde_kannasta'");
@@ -3946,10 +3949,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			";
 		}
     	$criteria->condition = "  
-		tid = '".$tid."' and aloitan!='' and loppui!=''
-		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
-		AND deleted=0
+			tid = '".$tid."' and aloitan!='' and loppui!=''
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+			AND deleted=0
 		";
+		if($raportti_tyyppi == 'Hyvaksytyt'){ $criteria->addCondition (" hyvaksytty!='' "); }
 
 		if($row_id != null and $status == 3)
 			$criteria->addCondition("kohde_kannasta='$kohde_kannasta'");
