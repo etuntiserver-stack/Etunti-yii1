@@ -367,6 +367,7 @@ $(document).delegate(".showKukaSub","click",function(){
 	var thisButton = $(this).text('odota..');
 	var row_id = $(this).attr("row_id");
 	var kohdenID = $(this).attr("kohde");
+	var kohde_kannasta = $(this).attr("kohde_kannasta");
 	var status = $(this).attr("status");
 	if($('.pvms_' + row_id).hasClass('in')){
 		$('.pvms_' + row_id).hide('slow').removeClass('in');
@@ -383,7 +384,7 @@ $(document).delegate(".showKukaSub","click",function(){
 		$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/mobile/kohdebytekija',
 			type: "GET",
-			data: { tid : tid, from : from, to : to, kohdenID : kohdenID, status : status, row_id : row_id },
+			data: { tid : tid, from : from, to : to, kohde_kannasta : kohde_kannasta, status : status, row_id : row_id },
 			success: function(data){
 				$(".ava_kaikki").remove();
 				console.log(data);

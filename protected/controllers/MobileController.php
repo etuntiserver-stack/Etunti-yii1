@@ -4030,7 +4030,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				echo 
 				'<tr>
 					<td width="1" class="text-center">
-						<span style="vertical-align: center;" class="link showKukaSub text-danger" row_id="'.$result['row_id'].'" status="'.$result['status'].'" kohde="'.$result['kohdenID'].'" tid="'.$result['tid'].'"><i class="fa fa-2x fa-caret-square-o-down"></i></span>
+						<span style="vertical-align: center;" class="link showKukaSub text-danger" row_id="'.$result['row_id'].'" status="'.$result['status'].'" kohde="'.$result['kohdenID'].'" tid="'.$result['tid'].'" kohde_kannasta="'.$result['kohde_kannasta'].'"><i class="fa fa-2x fa-caret-square-o-down"></i></span>
 					</td>
 					<td>
 					   <span class="col-sm-6 text-right '.$muokattu.'">'.$result['kohde_kannasta'].'</span>
