@@ -524,7 +524,7 @@ if(isset($_GET['finvoiceTrust']) or isset($_GET['hyvityslasku']) or isset($finvo
         $rowsArray[] =  array(
                         "productid" => $rivi->id, # tuotenro
                         "desc" => $rivi->tkoodi,
-                        "freetext" => "",
+                        "freetext" => $rivi->free_text,
                         "count" => $rivi->kpl, # määrä
                         "amount" => $rivi->hinta, # yksikköhinta
                         "totalitemprice" => $rivi->yhteensa_alv, # verollinen yksikköhinta
