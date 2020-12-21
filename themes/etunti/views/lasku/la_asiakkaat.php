@@ -55,7 +55,6 @@ $months=array(
                         <div class="section">
                          <label class="field select">
 							<select name="tilanne" id="tilanne" class="gui-input">
-							<option value=""><?php echo Yii::t('main', 'Valitse tilanne'); ?></option>
 							<?php 
 							$arr = [
 								'laskutettavat_m' => Yii::t('main', 'Laskutettavat Mobiili'),

@@ -1717,6 +1717,15 @@ exit;
 						AND hyvaksytty!=''
 						AND laskutettu=0
 					))
+					OR id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id IN(SELECT kohdenID FROM sivexkuitti_repaired WHERE 
+						DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
+						BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+						AND status='3'
+						AND deleted=0
+						AND laskutetaan=1
+						AND hyvaksytty!=''
+						AND laskutettu=0
+					))
 				");
 				if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
 			        	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'");
