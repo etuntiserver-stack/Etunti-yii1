@@ -1478,15 +1478,31 @@ exit;
 				$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
 				if($lr->save()){
 					// <-- Mobile update
-					if(isset($_POST['tunnit_id'][$key]) and isset($_POST['tunnit_from'][$key]) and $_POST['tunnit_from'][$key] == 'mobiili'){
+					if(isset($_POST['tunnit_id'][$key]) and isset($_POST['tunnit_from'][$key]) and $_POST['tunnit_from'][$key] == 'sivexkuitti')
+					{
 						$m = Mobile::model()->findbypk($_POST['tunnit_id'][$key]);
-						if(isset($m->id)){
+						if(isset($m->id))
+						{
 							Mobile::model()->updateByPk($m->id, ['laskutettu' => 1, 'laskurivi_id' => $lr->id]);
+							$t = Toteutuneet::model()->find("kid='".$m->id."'");
+							if(isset($t->id))
+								Toteutuneet::model()->updateByPk($t->id, ['laskutettu' => 1, 'laskurivi_id' => $lr->id]);
+								
 							LaskunRivit::model()->updateByPk($lr->id, ['mobile_id' => $m->id]);
 						}
-						$t = Toteutuneet::model()->find("kid='".$_POST['tunnit_id'][$key]."'");
+					}
+					if(isset($_POST['tunnit_id'][$key]) and isset($_POST['tunnit_from'][$key]) and $_POST['tunnit_from'][$key] == 'sivexkuitti_repaired')
+					{
+						$t = Toteutuneet::model()->findbypk($_POST['tunnit_id'][$key]);
 						if(isset($t->id))
-							Mobile::model()->updateByPk($t->id, ['laskutettu' => 1, 'laskurivi_id' => $lr->id]);
+						{
+							Toteutuneet::model()->updateByPk($t->id, ['laskutettu' => 1, 'laskurivi_id' => $lr->id]);
+							$m = Mobile::model()->findByPk($t->kid);
+							if(isset($m->id)){
+								Mobile::model()->updateByPk($m->id, ['laskutettu' => 1, 'laskurivi_id' => $lr->id]);
+								LaskunRivit::model()->updateByPk($lr->id, ['mobile_id' => $m->id]);
+							}
+						}
 					}
 				}
 			}
@@ -1756,7 +1772,7 @@ exit;
 							if(isset($item->kohteet->asiakkaat->id) and $item->kohteet->asiakkaat->id == $aid){
 								$l[strtotime($item->aloitan)] = [
 										'tekijan_nimi' => $item->tekijan_nimi,
-										'tunnit_from' => 'mobiili',
+										'tunnit_from' => (isset($item->kid) and $item->kid > 0)? 'sivexkuitti_repaired' : 'sivexkuitti',
 										'id' => $item->id,
 										'kohde' => $item->kohteet->id,
 										'osoite' => $item->kohteet->osoite,
