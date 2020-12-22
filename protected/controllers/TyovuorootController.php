@@ -2233,8 +2233,8 @@ class TyovuorootController extends Controller
 			$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
 
 			while ($date->getTimestamp() <= $date_end){
-				$this_week_sunday = date("YW", strtotime($date->format("d.m.Y").' last week sunday'));
-				if ( $this_week_sunday >= date("YW", strtotime($haku_from)) ){ // Jotta ei saada pitkä array päivästä
+				$this_week_sunday = date("YW", strtotime($date->format("d.m.Y").' last month first day'));
+				//if ( $this_week_sunday >= date("YW", strtotime($haku_from)) ){ // Jotta ei saada pitkä array päivästä
 					foreach(json_decode($arvo->viikko_paivat, true) as $viikko_paiva) {
 						$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
 						$paiva->modify("+" . ($viikko_paiva - 1) . "day");
@@ -2252,7 +2252,7 @@ class TyovuorootController extends Controller
 						}
 
 					}
-				}
+				//}
 				$date->modify("+{$arvo->viikkoja}week");
 			}
 		}
