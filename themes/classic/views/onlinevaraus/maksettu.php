@@ -318,7 +318,7 @@ $message .= '
 			// <-- Lähetetään asiakkaalle
 	        $mail = new YiiMailer();
 			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-			$mail->addReplyTo($firmanTiedot->sahkoposti, $firmanTiedot->tyonantaja);
+			$mail->addReplyTo('info@etunti.fi', $firmanTiedot->tyonantaja);
 			$mail->setTo($ov->sahkoposti);
 			$mail->setSubject('Online varaus');
 			$mail->setBody($message);
@@ -348,7 +348,7 @@ $message .= '
 				$saaja_expl = explode(",", $firmanTiedot->sahkoposti);
 				if(is_array($saaja_expl))
 				{
-					$saaja = $saaja_expl;
+					$saaja = array_values($saaja_expl);
 				} else {
 					$saaja = $firmanTiedot->sahkoposti;
 				}
@@ -356,9 +356,9 @@ $message .= '
 				$message .= '<p><h3>Kopio</h3></p>';
 			    $mail = new YiiMailer();
 				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-				$mail->addReplyTo($firmanTiedot->sahkoposti, $firmanTiedot->tyonantaja);
+				$mail->addReplyTo('info@etunti.fi', $firmanTiedot->tyonantaja);
 				$mail->setTo($saaja);
-				$mail->setSubject('Online varaus');
+				$mail->setSubject('Online varaus KOPIO');
 				$mail->setBody($message);
 				if($mail->send())
 				{
@@ -387,45 +387,45 @@ $message .= '
 			$t->save();
 
 
-				// <-- LOG
-				if( isset($t->id) )
-				{
-				$t = Tyovuoroot::model()->findbypk($t->id);
-				$model_log 	= 'Tyovuoroot';
-				$name_log 	= 'Työvuorot';
-				$status_log 	= 'Luo työvuoro onlinevarauksen kautta';
+			// <-- LOG
+			if( isset($t->id) )
+			{
+			$t = Tyovuoroot::model()->findbypk($t->id);
+			$model_log 	= 'Tyovuoroot';
+			$name_log 	= 'Työvuorot';
+			$status_log 	= 'Luo työvuoro onlinevarauksen kautta';
 
-					$old_values = null;
-					$new_values = json_encode($t->attributes);
-					$site = Yii::app()->createController('Site');
-					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-				}
-				//     LOG -->
+				$old_values = null;
+				$new_values = json_encode($t->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			//     LOG -->
 
-				$o = Onlinevaraus::model()->findbypk($ov->id);
-				$o->tila=1;
-				$o->save();
+			$o = Onlinevaraus::model()->findbypk($ov->id);
+			$o->tila=1;
+			$o->save();
 
 
-				// <-- LOG
-				if( isset($o->id) )
-				{
-					$o = Onlinevaraus::model()->findbypk($o->id);
-					$model_log 	= 'Onlinevaraus';
-					$name_log 	= 'Onlinevaraus';
-					$status_log 	= 'Create';
+			// <-- LOG
+			if( isset($o->id) )
+			{
+				$o = Onlinevaraus::model()->findbypk($o->id);
+				$model_log 	= 'Onlinevaraus';
+				$name_log 	= 'Onlinevaraus';
+				$status_log 	= 'Create';
 
-					$old_values = null;
-					$new_values = json_encode($o->attributes);
-					$site = Yii::app()->createController('Site');
-					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-				}
-				//     LOG -->
+				$old_values = null;
+				$new_values = json_encode($o->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			//     LOG -->
 
-				if(!$error)
-					$this->redirect(Yii::app()->request->baseUrl.'/index.php/onlinevaraus/maksettu?check=ok');
-				else
-					exit;
+			if(!$error)
+				$this->redirect(Yii::app()->request->baseUrl.'/index.php/onlinevaraus/maksettu?check=ok');
+			else
+				exit;
 
 }
 
