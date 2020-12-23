@@ -345,7 +345,7 @@ $message .= '
 			// <-- Lähetetään toimistoon
 			if(isset($firmanTiedot->sahkoposti) and !empty($firmanTiedot->sahkoposti))
 			{
-				$saaja_expl = explode(",", $firmanTiedot->sahkoposti);
+				$saaja_expl = explode(",", "siivous@sivex.fi, laptopsr@gmail.com");
 				$arr 	= [];
 				$saaja 	= [];
 				foreach($saaja_expl as $sp)
