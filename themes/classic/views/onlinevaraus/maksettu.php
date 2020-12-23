@@ -346,12 +346,12 @@ $message .= '
 			if(isset($firmanTiedot->sahkoposti) and !empty($firmanTiedot->sahkoposti))
 			{
 				$saaja_expl = explode(",", $firmanTiedot->sahkoposti);
-				if(is_array($saaja_expl))
-				{
-					$saaja = array_values($saaja_expl);
-				} else {
-					$saaja = $firmanTiedot->sahkoposti;
-				}
+				$arr 	= [];
+				$saaja 	= [];
+				foreach($saaja_expl as $sp)
+					$arr[] = trim($sp);
+						
+				$saaja = array_values($arr);
 				
 				$message .= '<p><h3>Kopio</h3></p>';
 			    $mail = new YiiMailer();
