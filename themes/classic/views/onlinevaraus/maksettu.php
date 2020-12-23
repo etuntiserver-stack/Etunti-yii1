@@ -313,9 +313,10 @@ $message .= '
 			$_SESSION['onlinevaraus']['message'] = $message;
 			$firmanTiedot = FirmanTiedot::model()->findbypk(1);
 
-
+			$error = false;
+			
 			// <-- Lähetetään asiakkaalle
-	          	$mail = new YiiMailer();
+	        $mail = new YiiMailer();
 			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 			$mail->addReplyTo($firmanTiedot->sahkoposti, $firmanTiedot->tyonantaja);
 			$mail->setTo($ov->sahkoposti);
@@ -331,6 +332,11 @@ $message .= '
 							$log->email_message	= json_encode($message);
 							$log->save();
 							//     LOG -->
+			} else {
+				echo '<pre>';
+				var_dump($mail->getError());
+				echo '</pre>';
+				$error = true;
 			}
 
 			// Lähetetään asiakkaalle -->
@@ -364,6 +370,11 @@ $message .= '
 								$log->email_message	= json_encode($message);
 								$log->save();
 								//     LOG -->
+				} else {
+					echo '<pre>';
+					var_dump($mail->getError());
+					echo '</pre>';
+					$error = true;
 				}
 			}
 			// Lähetetään toimistoon -->
@@ -391,18 +402,18 @@ $message .= '
 				}
 				//     LOG -->
 
-			$o = Onlinevaraus::model()->findbypk($ov->id);
-			$o->tila=1;
-			$o->save();
+				$o = Onlinevaraus::model()->findbypk($ov->id);
+				$o->tila=1;
+				$o->save();
 
 
 				// <-- LOG
 				if( isset($o->id) )
 				{
-				$o = Onlinevaraus::model()->findbypk($o->id);
-				$model_log 	= 'Onlinevaraus';
-				$name_log 	= 'Onlinevaraus';
-				$status_log 	= 'Create';
+					$o = Onlinevaraus::model()->findbypk($o->id);
+					$model_log 	= 'Onlinevaraus';
+					$name_log 	= 'Onlinevaraus';
+					$status_log 	= 'Create';
 
 					$old_values = null;
 					$new_values = json_encode($o->attributes);
@@ -411,8 +422,10 @@ $message .= '
 				}
 				//     LOG -->
 
-			$this->redirect(Yii::app()->request->baseUrl.'/index.php/onlinevaraus/maksettu?check=ok');
-	
+				if(!$error)
+					$this->redirect(Yii::app()->request->baseUrl.'/index.php/onlinevaraus/maksettu?check=ok');
+				else
+					exit;
 
 }
 
