@@ -313,12 +313,21 @@ if (!isset($_GET['check'])) {
 
       // <-- Lähetetään toimistoon
       if (isset($firmanTiedot->sahkoposti) and !empty($firmanTiedot->sahkoposti)) {
+      
+		$saaja_expl = explode(",", $firmanTiedot->sahkoposti);
+		$arr 	= [];
+		$saaja 	= [];
+		foreach($saaja_expl as $sp)
+			$arr[] = trim($sp);
+				
+		$saaja = array_values($arr);
+		
         $message .= '<p><h3>Kopio</h3></p>';
         $mail = new YiiMailer();
         $mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
         $mail->addReplyTo($firmanTiedot->sahkoposti, $firmanTiedot->tyonantaja);
-        $mail->setTo($firmanTiedot->sahkoposti);
-        $mail->setSubject('Online varaus');
+        $mail->setTo($saaja);
+        $mail->setSubject('Online varaus KOPIO');
         $mail->setBody($message);
         if ($mail->send()) {
           // <-- LOG
