@@ -384,8 +384,8 @@ $message .= '
 					$error = true;
 			}
 			// Lähetetään toimistoon -->
-echo $firmanTiedot->sahkoposti;
-exit;
+//echo $firmanTiedot->sahkoposti;
+//exit;
 
 			
 			$t = Tyovuoroot::model()->findbypk($tv->id);
