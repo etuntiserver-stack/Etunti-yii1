@@ -340,9 +340,9 @@ $message .= '
 			if(isset($firmanTiedot->sahkoposti) and !empty($firmanTiedot->sahkoposti))
 			{
 				$saaja_expl = explode(",", $firmanTiedot->sahkoposti);
-				if(count($saaja_expl) > 0)
+				if(is_array($saaja_expl))
 				{
-					$saaja = array_values($saaja_expl);
+					$saaja = $saaja_expl;
 				} else {
 					$saaja = $firmanTiedot->sahkoposti;
 				}
