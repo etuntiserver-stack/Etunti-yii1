@@ -376,6 +376,12 @@ $message .= '
 					echo '</pre>';
 					$error = true;
 				}
+				
+			} else {
+					echo '<pre>';
+					'Firman sähköposti ei löydy';
+					echo '</pre>';
+					$error = true;
 			}
 			// Lähetetään toimistoon -->
 
