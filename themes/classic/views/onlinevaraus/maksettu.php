@@ -345,7 +345,7 @@ $message .= '
 			// <-- Lähetetään toimistoon
 			if(isset($firmanTiedot->sahkoposti) and !empty($firmanTiedot->sahkoposti))
 			{
-				$saaja_expl = explode(",", "siivous@sivex.fi, laptopsr@gmail.com");
+				$saaja_expl = explode(",", $firmanTiedot->sahkoposti);
 				$arr 	= [];
 				$saaja 	= [];
 				foreach($saaja_expl as $sp)
@@ -366,7 +366,7 @@ $message .= '
 								$log=new Log;
 								$log->log_category 	= 1; // 1-email
 								$log->email_to 		= $firmanTiedot->sahkoposti;
-								$log->email_subject	= 'Online varaus';
+								$log->email_subject	= 'Online varaus KOPIO';
 								$log->email_message	= json_encode($message);
 								$log->save();
 								//     LOG -->
@@ -384,7 +384,8 @@ $message .= '
 					$error = true;
 			}
 			// Lähetetään toimistoon -->
-
+echo $firmanTiedot->sahkoposti;
+exit;
 
 			
 			$t = Tyovuoroot::model()->findbypk($tv->id);
