@@ -339,24 +339,32 @@ $message .= '
 			// <-- Lähetetään toimistoon
 			if(isset($firmanTiedot->sahkoposti) and !empty($firmanTiedot->sahkoposti))
 			{
-			$message .= '<p><h3>Kopio</h3></p>';
-	          	$mail = new YiiMailer();
-			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-			$mail->addReplyTo($firmanTiedot->sahkoposti, $firmanTiedot->tyonantaja);
-			$mail->setTo($firmanTiedot->sahkoposti);
-			$mail->setSubject('Online varaus');
-			$mail->setBody($message);
-			if($mail->send())
-			{
-							// <-- LOG
-							$log=new Log;
-							$log->log_category 	= 1; // 1-email
-							$log->email_to 		= $firmanTiedot->sahkoposti;
-							$log->email_subject	= 'Online varaus';
-							$log->email_message	= json_encode($message);
-							$log->save();
-							//     LOG -->
-			}
+				$saaja_expl = explode(",", $firmanTiedot->sahkoposti);
+				if(count($saaja_expl) > 0)
+				{
+					$saaja = array_values($saaja_expl);
+				} else {
+					$saaja = $firmanTiedot->sahkoposti;
+				}
+				
+				$message .= '<p><h3>Kopio</h3></p>';
+			    $mail = new YiiMailer();
+				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+				$mail->addReplyTo($firmanTiedot->sahkoposti, $firmanTiedot->tyonantaja);
+				$mail->setTo($saaja);
+				$mail->setSubject('Online varaus');
+				$mail->setBody($message);
+				if($mail->send())
+				{
+								// <-- LOG
+								$log=new Log;
+								$log->log_category 	= 1; // 1-email
+								$log->email_to 		= $firmanTiedot->sahkoposti;
+								$log->email_subject	= 'Online varaus';
+								$log->email_message	= json_encode($message);
+								$log->save();
+								//     LOG -->
+				}
 			}
 			// Lähetetään toimistoon -->
 
