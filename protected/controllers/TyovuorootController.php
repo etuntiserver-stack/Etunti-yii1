@@ -1824,9 +1824,9 @@ class TyovuorootController extends Controller
 		// <-- VKO MODE
 		if ($mode == 'vko') {
 			if (!isset(Yii::app()->session['year']))
-				Yii::app()->session['year'] = date("Y", strtotime('this week sunday'));
+				Yii::app()->session['year'] = date("Y", strtotime('this week monday')); // oli sunday ja oli ongelma vuoden vihdessa
 			if (!isset(Yii::app()->session['week']))
-				Yii::app()->session['week'] = date("W", strtotime('this week sunday'));
+				Yii::app()->session['week'] = date("W", strtotime('this week monday')); // oli sunday ja oli ongelma vuoden vihdessa
 
 			$year = Yii::app()->session['year'];
 			$week = sprintf("%02d", Yii::app()->session['week']);
