@@ -1770,7 +1770,7 @@ exit;
 						$l = [];
 						foreach($getall as $item){
 							if(isset($item->kohteet->asiakkaat->id) and $item->kohteet->asiakkaat->id == $aid){
-								$l[strtotime($item->aloitan)] = [
+								$l[strtotime($item->aloitan)][] = [
 										'tekijan_nimi' => $item->tekijan_nimi,
 										'tunnit_from' => (isset($item->kid) and $item->kid > 0)? 'sivexkuitti_repaired' : 'sivexkuitti',
 										'id' => $item->id,

@@ -26,22 +26,25 @@
 			echo '<th>'.Yii::t('main', 'Osoite').'</th>';
 			echo '<th>'.Yii::t('main', 'Tunnit').'</th>';
 			echo '</tr>';
-			foreach($lista[$data->id] as $k => $v)
+			foreach($lista[$data->id] as $aika => $items)
 			{
-				$yht_tunnit += $v['maara'];
-				$li[] = [
-					'tunnit_from' => $v['tunnit_from'],
-					'id' => $v['id'],
-					'freetext' => date("d.m.Y", $k).' '.$v['osoite'], 
-					'maara' => $this->num($v['maara']),
-					'kohde' => $v['kohde']
-				];
-				echo '<tr>';
-				echo '<td>'.$v['tekijan_nimi'].'</td>';
-				echo '<td>'.date("d.m.Y", $k).'</td>';
-				echo '<td>'.$v['osoite'].'</td>';
-				echo '<td>'.$this->num($v['maara']).'</td>';
-				echo '</tr>';
+				foreach($items as $k => $v)
+				{
+					$yht_tunnit += $v['maara'];
+					$li[] = [
+						'tunnit_from' => $v['tunnit_from'],
+						'id' => $v['id'],
+						'freetext' => date("d.m.Y", $aika).' '.$v['osoite'], 
+						'maara' => $this->num($v['maara']),
+						'kohde' => $v['kohde']
+					];
+					echo '<tr>';
+					echo '<td>'.$v['tekijan_nimi'].'</td>';
+					echo '<td>'.date("d.m.Y", $aika).'</td>';
+					echo '<td>'.$v['osoite'].'</td>';
+					echo '<td>'.$this->num($v['maara']).'</td>';
+					echo '</tr>';
+				}
 			}
 			echo '</table>';
 		}
