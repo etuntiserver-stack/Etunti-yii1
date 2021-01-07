@@ -363,11 +363,11 @@ $(".showKuka").click(function(){
 	var k = $(this).attr("for").split("_");
 	var from = $("#from").val();
 	var to = $("#to").val();
-	var raportti_tyyppi = '<?=((isset($_GET['raportti_tyyppi']))? $_GET['raportti_tyyppi'] : "")?>';
+	var raporti_tyyppi = '<?=((isset($_GET['raporti_tyyppi']))? $_GET['raporti_tyyppi'] : "")?>';
 	$.ajax({
 		url: location.protocol + "//" + location.host + '/index.php/mobile/kohdebytekija',
 		type: "GET",
-		data: { tid : k[1], from : from, to : to, kohde_kannasta : null, status : null, row_id : null, raportti_tyyppi : raportti_tyyppi },
+		data: { tid : k[1], from : from, to : to, kohde_kannasta : null, status : null, row_id : null, raporti_tyyppi : raporti_tyyppi },
 		success: function(data){
 			$(".ava_kaikki").remove();
 			//console.log(data);
@@ -380,7 +380,7 @@ $(document).delegate(".showKukaSub","click",function(){
 	var row_id = $(this).attr("row_id");
 	var kohdenID = $(this).attr("kohde");
 	var kohde_kannasta = $(this).attr("kohde_kannasta");
-	var raportti_tyyppi = '<?=((isset($_GET['raportti_tyyppi']))? $_GET['raportti_tyyppi'] : "")?>';
+	var raporti_tyyppi = '<?=((isset($_GET['raporti_tyyppi']))? $_GET['raporti_tyyppi'] : "")?>';
 	var status = $(this).attr("status");
 	if($('.pvms_' + row_id).hasClass('in')){
 		$('.pvms_' + row_id).hide('slow').removeClass('in');
@@ -397,7 +397,7 @@ $(document).delegate(".showKukaSub","click",function(){
 		$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/mobile/kohdebytekija',
 			type: "GET",
-			data: { tid : tid, from : from, to : to, kohde_kannasta : kohde_kannasta, status : status, row_id : row_id, raportti_tyyppi : raportti_tyyppi },
+			data: { tid : tid, from : from, to : to, kohde_kannasta : kohde_kannasta, status : status, row_id : row_id, raporti_tyyppi : raporti_tyyppi },
 			success: function(data){
 				$(".ava_kaikki").remove();
 				console.log(data);
