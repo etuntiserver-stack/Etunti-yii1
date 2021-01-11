@@ -1728,6 +1728,12 @@ $(document).ready(function(){
   $('#alku').blur(function(){
 	$(this).removeClass('bg-danger');
 	var alku = $("#alku").val().split(':');
+	if((alku[1] && alku[1] > 59) || (alku[0] && alku[0] > 23))
+	{
+		$("#alku").val('');
+		alert('Tarkista aika.');
+		return false;
+	}
 	if(!alku[1] & $("#alku").val() !== '')
 	{
 		var h = $("#alku").val() ^ 0 ;
@@ -1739,8 +1745,14 @@ $(document).ready(function(){
 
   $('#loppu').blur(function(){
 	$(this).removeClass('bg-danger');
-	var alku = $("#loppu").val().split(':');
-	if(!alku[1])
+	var loppu = $("#loppu").val().split(':');
+	if((loppu[1] && loppu[1] > 59) || (loppu[0] && loppu[0] > 23))
+	{
+		$("#loppu").val('');
+		alert('Tarkista aika.');
+		return false;
+	}
+	if(!loppu[1])
 	{
 		var h = $("#loppu").val() ^ 0 ;
 		var m = 0 ^ 0 ;
