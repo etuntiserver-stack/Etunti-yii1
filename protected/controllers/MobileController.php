@@ -3634,7 +3634,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3) {
 			$criteria->addCondition (" hyvaksytty!='' ");
 		}
-
+		if(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksytyt') {
+			$criteria->addCondition (" hyvaksytty!='' ");
+		}
+		
 		if($sivu == 'palkkataulukko'){ 	$criteria->addCondition (" status = '3' AND palkanlaskentaan=1 "); }
 
 		if($sivu == 'yhteenveto')
@@ -3681,7 +3684,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3) {
 			$criteria->addCondition (" hyvaksytty!='' ");
 		}
-
+		if(isset($_GET['raporti_tyyppi']) and $_GET['raporti_tyyppi'] == 'Hyvaksytyt') {
+			$criteria->addCondition (" hyvaksytty!='' ");
+		}
+		
 		if($sivu == 'palkkataulukko'){ $criteria->addCondition (" status = '3' AND palkanlaskentaan=1 "); }
 		if($sivu == 'yhteenveto')
 		{
