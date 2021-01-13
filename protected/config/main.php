@@ -109,9 +109,14 @@ if (isset($_GET['lang']))
 if (isset($_GET['dom']))
     $_SESSION['domain'] = trim(strtolower($_GET['dom']));
 
-if (isset($_GET['domain']))
+if (isset($_GET['domain'])){
+	if(isset($_SESSION['domain']) and trim(strtolower($_SESSION['domain'])) != trim(strtolower($_GET['domain'])))
+	{
+		// Destroy sessions
+		$_SESSION = array();
+	}
     $_SESSION['domain'] = trim(strtolower($_GET['domain']));
-
+}
 if (isset($_POST['domain']))
     $_SESSION['domain'] = trim(strtolower($_POST['domain']));
 
