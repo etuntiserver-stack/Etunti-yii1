@@ -570,7 +570,7 @@ class TyontekijatController extends Controller
 							$log->save();
 							//     LOG -->
 
-				Yii::app()->user->setFlash('success', "Lähetys onnistunnut!");
+				Yii::app()->user->setFlash('success', "Lähetys onnistui!");
 				$this->redirect(array('index'));
 		}
 		//     Tunnukset lahetys -->
