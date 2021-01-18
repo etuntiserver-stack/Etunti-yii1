@@ -15,7 +15,7 @@ if(isset($_GET['mail'])){
 		echo 'sähköposti lähetetty ok '.$m;
 	}
 }
-if(isset($_GET['kk_yhteensta']) and isset($_GET['kk_yhteensta_from']) and and isset($_GET['kk_yhteensta_to']))
+if(isset($_GET['kk_yhteensta']) and isset($_GET['kk_yhteensta_from']) and isset($_GET['kk_yhteensta_to']))
 {
 	$site = Yii::app()->createController('Site');
 	echo $site[0]->digistenTunnitYhteensa($_GET['kk_yhteensta_from'], $_GET['kk_yhteensta_to']);
