@@ -405,7 +405,7 @@ class SiteController extends Controller
 
 			$start_date = date( "Y-m-d", strtotime('first day of this month') );
 			$end_date = date("Y-m-d", strtotime('last day of this month') );
-			$sum_result = $this->digistenTunnitYhteensa($start_date, $end_date);
+			$sum_result = $this->digistenTunnitYhteensa($start_date, $end_date, 'kesto');
 
 			if($domainit->ilmainen_versio_kayttotunnit != $sum_result)
 				Domainit::model()->updateByPk($domainit->id, array('ilmainen_versio_kayttotunnit'=>$sum_result));
@@ -437,7 +437,7 @@ class SiteController extends Controller
 
 			$start_date = date( "Y-m-d", strtotime('first day of last month') );
 			$end_date = date("Y-m-d", strtotime('last day of last month') );
-			$sum_result = $this->digistenTunnitYhteensa($start_date, $end_date);
+			$sum_result = $this->digistenTunnitYhteensa($start_date, $end_date, 'kesto');
 
 			return $sum_result;
 
@@ -447,7 +447,7 @@ class SiteController extends Controller
 
 	}
 
-	public function digistenTunnitYhteensa($start_date, $end_date)
+	public function digistenTunnitYhteensa($start_date, $end_date, $return_muoto)
 	{
 		$tt = Tyontekijat::model()->findAll();
 		if(count($tt) == 0)
@@ -473,20 +473,68 @@ class SiteController extends Controller
 		// <-- Tyovuoro
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
 		$haku_criteria	= "(".$this->eiLasketa().") AND status=3 AND (peruutettu=0 OR peruutettu IS NULL)";
-		$getAll 	= $tyovuorot[0]->tv_arr($from, $to, $tids, $haku_criteria, false, ['tv_kesto']);
-		$tyovuorot_result = 0;
-		foreach($getAll as $k => $v)
-			foreach($v as $unix => $dayarr)
-				foreach($dayarr as $key => $arr)
-					foreach($arr as $arr2)
-						$tyovuorot_result += $arr2['tv_kesto'];
+		if($return_muoto == 'kesto')
+		{
+			$getAll 	= $tyovuorot[0]->tv_arr($from, $to, $tids, $haku_criteria, false, ['tv_kesto']);
+			$tyovuorot_result = 0;
+			foreach($getAll as $k => $v)
+				foreach($v as $unix => $dayarr)
+					foreach($dayarr as $key => $arr)
+						foreach($arr as $arr2)
+							$tyovuorot_result += $arr2['tv_kesto'];
 
-		if($mob_result > $tyovuorot_result)
-			$result = $mob_result;
-		if($mob_result < $tyovuorot_result)
-			$result = $tyovuorot_result;
 
-		return $this->num($result);
+			if($mob_result > $tyovuorot_result)
+				$result = $mob_result;
+			if($mob_result < $tyovuorot_result)
+				$result = $tyovuorot_result;
+
+			return $this->num($result);
+		}
+		
+		
+		if($return_muoto == 'table')
+		{
+			$getAll 	= $tyovuorot[0]->tv_arr($from, $to, $tids, $haku_criteria, false, ['tv_kesto', 'data']);
+			$yht_sum 	= 0;
+			$table 		= '<table class="table">
+			<tr>
+			<th>Pvm</th>
+			<th>Osoite</th>
+			<th>Klo</th>
+			<th>Kesto</th>
+			</tr>';
+			foreach($getAll as $k => $v)
+			{
+				foreach($v as $unix => $dayarr)
+				{
+					foreach($dayarr as $key => $arr)
+					{
+						foreach($arr as $arr2)
+						{
+							$yht_sum += $arr2['tv_kesto'];
+							$table .= '<tr>';
+							$data = $arr2['data'];
+							$table .= '
+									<td>'.$arr2['this_pvm'].'</td>
+									<td>'.(isset($data->kohteet->osoite)? $data->kohteet->osoite : '').'</td>
+									<td>'.$data->alku.'-'.$data->loppu.'</td>
+									<td>'.$this->num($arr2['tv_kesto']).'</td>';
+							$table .= '</tr>';
+						}
+					}
+				}
+			}
+			$table .= '<tr>
+			<th></th>
+			<th></th>
+			<th>Yhteensä</th>
+			<th>'.$this->num($yht_sum).'</th>
+			</tr>';
+			$table .= '</table>';
+			return $table;
+		}
+		
 	}
 
 	public function actionTyot_tanaan()
