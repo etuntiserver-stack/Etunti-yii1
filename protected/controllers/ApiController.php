@@ -596,7 +596,7 @@ protected function checkKokeiluversion($domain)
 		{
 			$start_date = date( "Y-m-d", strtotime('first day of this month') );
 			$end_date = date("Y-m-d", strtotime('last day of this month') );
-			$sum_result = $site[0]->digistenTunnitYhteensa($start_date, $end_date);
+			$sum_result = $site[0]->digistenTunnitYhteensa($start_date, $end_date, 'kesto');
 
 			if($domainit->ilmainen_versio_kayttotunnit != $sum_result)
 				Domainit::model()->updateByPk($domainit->id, array('ilmainen_versio_kayttotunnit'=>$sum_result));
