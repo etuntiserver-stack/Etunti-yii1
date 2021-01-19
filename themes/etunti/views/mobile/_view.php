@@ -79,10 +79,21 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 	$pikkuviesti = '';
  }
 
+$criteria = new CDbCriteria();
+$criteria->condition = " kid='".$data->id."' ";
+$tot = Toteutuneet::model()->find($criteria);
  if(!empty($data->aloitan)){
- $at[$data->id] = date("H:i",strtotime($data->aloitan));
- $apvm[$data->id] = date("d.m.Y",strtotime($data->aloitan));
- $apvmForSu[$data->id] = date("d.m.Y",strtotime($data->aloitan));
+	 // show sivexkuitti_repaired time if it exists
+	 if(isset($tot->aloitan)) {
+		$at[$data->id] = date("H:i",strtotime($tot->aloitan));
+		$apvm[$data->id] = date("d.m.Y",strtotime($tot->aloitan));
+		$apvmForSu[$data->id] = date("d.m.Y",strtotime($tot->aloitan));
+	 } else {
+		$at[$data->id] = date("H:i",strtotime($data->aloitan));
+		$apvm[$data->id] = date("d.m.Y",strtotime($data->aloitan));
+		$apvmForSu[$data->id] = date("d.m.Y",strtotime($data->aloitan));
+	}
+
  } else {
  $at[$data->id] = '';
  $apvm[$data->id] = '';
@@ -90,8 +101,14 @@ if( isset($sivu) and $sivu == 'laskutettu' )
  }
 
  if(!empty($data->loppui)){
- $lt[$data->id] = date("H:i",strtotime($data->loppui));
- $lpvm[$data->id] = date("d.m.Y",strtotime($data->loppui));
+	 // show sivexkuitti_repaired time if it exists
+	 if(isset($tot->loppui)) {
+		$lt[$data->id] = date("H:i",strtotime($tot->loppui));
+		$lpvm[$data->id] = date("d.m.Y",strtotime($tot->loppui));
+	 } else {
+		$lt[$data->id] = date("H:i",strtotime($data->loppui));
+		$lpvm[$data->id] = date("d.m.Y",strtotime($data->loppui));
+	 }
  } else {
  $lt[$data->id] = '';
  $lpvm[$data->id] = '';
