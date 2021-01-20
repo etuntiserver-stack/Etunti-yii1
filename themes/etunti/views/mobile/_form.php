@@ -13,12 +13,14 @@ if(isset($model->tietoja))
   $kohde_kannasta = $model->kohde_kannasta;
   $aloitan = $model->aloitan;
   $loppui = $model->loppui;
+  $viesti = $model->viesti;
 
   $tot = Toteutuneet::model()->find(" kid = '".$model->id."' ");
   if(isset($tot->id)){
   $kohde_kannasta = $tot->kohde_kannasta;
   $aloitan = $tot->aloitan;
   $loppui = $tot->loppui;
+  $viesti = $tot->viesti;
   }
 
 
@@ -103,7 +105,7 @@ if(isset($model->tietoja))
 						<li class="list-group-item"  style="height:172px">
 							<?php echo $form->labelEx($model,'viesti'); ?>
 							<br>
-							<strong><?php echo str_replace("\n","<br>",$model->viesti); ?></strong>
+							<strong><?php echo str_replace("\n","<br>",$viesti); ?></strong>
 						</li>
 					</ul>
                 </div>

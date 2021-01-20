@@ -42,6 +42,17 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 }
 // Jos sivu on laskutettu -->
 
+$criteria = new CDbCriteria();
+$criteria->condition = " kid='".$data->id."' ";
+$tot = Toteutuneet::model()->find($criteria);
+$old_id = $data->id;
+if(isset($tot->id)) {
+	// show updated data if it exists
+	$data = $tot;
+	// don't replace the ID though
+	$data->id = $old_id;
+}
+
 
 /* TAG */
  $tag = '';
@@ -79,20 +90,10 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 	$pikkuviesti = '';
  }
 
-$criteria = new CDbCriteria();
-$criteria->condition = " kid='".$data->id."' ";
-$tot = Toteutuneet::model()->find($criteria);
  if(!empty($data->aloitan)){
-	 // show sivexkuitti_repaired time if it exists
-	 if(isset($tot->aloitan)) {
-		$at[$data->id] = date("H:i",strtotime($tot->aloitan));
-		$apvm[$data->id] = date("d.m.Y",strtotime($tot->aloitan));
-		$apvmForSu[$data->id] = date("d.m.Y",strtotime($tot->aloitan));
-	 } else {
-		$at[$data->id] = date("H:i",strtotime($data->aloitan));
-		$apvm[$data->id] = date("d.m.Y",strtotime($data->aloitan));
-		$apvmForSu[$data->id] = date("d.m.Y",strtotime($data->aloitan));
-	}
+	$at[$data->id] = date("H:i",strtotime($data->aloitan));
+	$apvm[$data->id] = date("d.m.Y",strtotime($data->aloitan));
+	$apvmForSu[$data->id] = date("d.m.Y",strtotime($data->aloitan));
 
  } else {
  $at[$data->id] = '';
@@ -101,14 +102,8 @@ $tot = Toteutuneet::model()->find($criteria);
  }
 
  if(!empty($data->loppui)){
-	 // show sivexkuitti_repaired time if it exists
-	 if(isset($tot->loppui)) {
-		$lt[$data->id] = date("H:i",strtotime($tot->loppui));
-		$lpvm[$data->id] = date("d.m.Y",strtotime($tot->loppui));
-	 } else {
-		$lt[$data->id] = date("H:i",strtotime($data->loppui));
-		$lpvm[$data->id] = date("d.m.Y",strtotime($data->loppui));
-	 }
+	$lt[$data->id] = date("H:i",strtotime($data->loppui));
+	$lpvm[$data->id] = date("d.m.Y",strtotime($data->loppui));
  } else {
  $lt[$data->id] = '';
  $lpvm[$data->id] = '';
