@@ -138,7 +138,7 @@ class Mobile extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('asiakas_num, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, hyvaksytty', 'required'),
-			array('requests, kohdenID, tid, status, admin, sairaus, laskutetaan, tuoteID, tv_id, deleted, palkanlaskentaan, laskurivi_id', 'numerical', 'integerOnly'=>true),
+			array('requests, kohdenID, tid, status, admin, sairaus, laskutetaan, tuoteID, tv_id, deleted, palkanlaskentaan, laskurivi_id, laskutettu', 'numerical', 'integerOnly'=>true),
 			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id, tekijan_nimi', 'length', 'max'=>50),
 			array('domain, asiakas_hyvaksy, imei, sim_serial_number, kohde_kannasta, hyvaksytty, gps_enabled, app_platform', 'length', 'max'=>100),
 			array('my_location, tietoja, tyo_erittelyt, app_aloitus_destination_checker, app_lopetus_destination_checker', 'safe'),
