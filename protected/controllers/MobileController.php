@@ -3933,6 +3933,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 						'kohdenID' => $t->kohdenID,
 						'status' => $t->status,
 						'kohde_kannasta' => $t->kohde_kannasta,
+						'kustannuspaikka_nro' => (isset($t->kohteet->kustannuspaikka_nro))? $t->kohteet->kustannuspaikka_nro : '',
 						'count' => $t->count,
 						'muokattu' => null
 				];
@@ -4001,6 +4002,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 						'kohdenID' => $t->kohdenID,
 						'status' => $t->status,
 						'kohde_kannasta' => $t->kohde_kannasta,
+						'kustannuspaikka_nro' => (isset($t->kohteet->kustannuspaikka_nro))? $t->kohteet->kustannuspaikka_nro : '',
 						'count' => $t->count,
 						'muokattu' => 'muokattu'
 				];
@@ -4024,6 +4026,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 				<tr>
 					<th></th>
 					<th>Kohde</th>
+					<th>Kustannuspaikka</th>
 					<th>Kesto</th>
 					<th>Kerta</th>
 				</tr>
@@ -4045,6 +4048,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 					<td>
 					   <span class="col-sm-6 text-right '.$muokattu.'">'.$result['kohde_kannasta'].'</span>
 					</td>
+					<td>'.$result['kustannuspaikka_nro'].'</td>
 					<td>'.$this->sprint($ks[$k]).' ('.$this->num($ks[$k]).')</td>
 					<td>'.$c[$k].'</td>
 				</tr>';

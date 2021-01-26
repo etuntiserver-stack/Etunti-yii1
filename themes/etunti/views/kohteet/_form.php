@@ -211,6 +211,12 @@ $(document).ready(function(){
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'kustannuspaikka_nro'); ?>
+		<?php echo $form->textField($model,'kustannuspaikka_nro',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'kustannuspaikka_nro'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'siivous'); ?>
 
 	   <div class="input-group">
