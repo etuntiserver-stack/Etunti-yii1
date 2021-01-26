@@ -48,6 +48,8 @@ if(isset($_GET['users_siirto']))
 		{
 			$admin->adm_email = clearMail($admin->adm_email);
 
+			if($admin->adm_login == 'etunti') continue;
+			
 			if(empty($admin->adm_email))
 			{
 				$ei_siirrettyt[] = '<b>'.$d->domain.'</b> domainissa, Adminilla: '.$admin->adm_nimi. ' Sähköposti PUUTUU';
