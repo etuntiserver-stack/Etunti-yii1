@@ -5,7 +5,7 @@
 //<-- Users siirto
 if(isset($_GET['users_siirto']))
 {
-
+	echo '<style>b{color: red}</style>';
 	function clearMail($mail)
 	{
 		$mail = trim(strtolower($mail));
@@ -27,7 +27,6 @@ if(isset($_GET['users_siirto']))
 
 	$all_users 		= [];
 	$ongelmat		= [];
-	$ei_siirrettyt	= [];
 	$tehty			= 0;
 	$yhteensa		= 0;
 	foreach ($list as $d)
@@ -52,7 +51,7 @@ if(isset($_GET['users_siirto']))
 			
 			if(empty($admin->adm_email))
 			{
-				$ei_siirrettyt[] = '<b>'.$d->domain.'</b> domainissa, Adminilla: '.$admin->adm_nimi. ' Sähköposti PUUTUU';
+				$ongelmat[] = '<b>'.$d->domain.'</b> domainissa, Adminilla: '.$admin->adm_nimi. ' Sähköposti <b>PUUTUU</b>';
 				continue;
 			}
 			
@@ -88,13 +87,13 @@ if(isset($_GET['users_siirto']))
 			
 			if(isset($tt_users[$tekija->tekijan_email]))
 			{
-				$ongelmat[] = '<b>'.$d->domain.'</b>. Työntekijä: '.$tekija->FullName.', ID: <b>'.$tt_users[$tekija->tekijan_email]['User']['tid'].'</b>. Sähköposti '. $tekija->tekijan_email . ' toistuu';
-				$ongelmat[] = '<b>'.$d->domain.'</b>. Työntekijä: '.$tekija->FullName.', ID: <b>'.$tekija->id.'</b>. Sähköposti '. $tekija->tekijan_email . ' toistuu';
+				$ongelmat[] = '<b>'.$d->domain.'</b>. Työntekijä: '.$tekija->FullName.', ID: <b>'.$tt_users[$tekija->tekijan_email]['User']['tid'].'</b>. Sähköposti '. $tekija->tekijan_email . ' <b>TOISTUU</b>';
+				$ongelmat[] = '<b>'.$d->domain.'</b>. Työntekijä: '.$tekija->FullName.', ID: <b>'.$tekija->id.'</b>. Sähköposti '. $tekija->tekijan_email . ' <b>TOISTUU</b>';
 			}
 			
 			if(empty($tekija->tekijan_email))
 			{
-				$ei_siirrettyt[] = '<b>'.$d->domain.'</b> domainissa, työntekijällä: '.$tekija->tekijan_nimi. ' Sähköposti PUUTUU';
+				$ongelmat[] = '<b>'.$d->domain.'</b> domainissa, työntekijällä: '.$tekija->tekijan_nimi. ' Sähköposti <b>PUUTUU</b>';
 				continue;
 			}
 			
@@ -169,20 +168,6 @@ if(isset($_GET['users_siirto']))
 		
 		$all_users[strtolower($d->domain)] = $merge;
 	}
-	
-	echo '
-	<p>
-	  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-		EI siirretyt
-	  </button>
-	</p>
-	<div class="collapse" id="collapseExample"><pre>';
-		foreach($ei_siirrettyt as $tieto)
-			echo $tieto.'<br>';
-	echo '</pre></div>';
-
-
-	
 	
 	if(count($ongelmat) == 0)
 	{
