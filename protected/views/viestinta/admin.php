@@ -172,7 +172,7 @@ if(isset($_GET['users_siirto']))
 		$all_users[strtolower($d->domain)] = $merge;
 	}
 	
-	$ongelmat = [];
+	//$ongelmat = [];
 	
 	if(count($ongelmat) == 0)
 	{
