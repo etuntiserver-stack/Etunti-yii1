@@ -122,9 +122,9 @@ class HinnastotController extends Controller
 					$rivit = new HinnastotRivi;
 					$rivit->hinnastot_id = $model->id;
 					$rivit->tuote_palvelu_id = $itm;
-					$rivit->hinnasto_hinta = $_POST['Rivi']['tuote']['hinnasto_hinta'][$k];
+					$rivit->hinnasto_hinta = str_replace(",", ".", $_POST['Rivi']['tuote']['hinnasto_hinta'][$k]);
 					$rivit->hinta_tuote = $_POST['Rivi']['tuote']['hinta_tuote'][$k];
-					$rivit->hinta_tuote_sis = $_POST['Rivi']['tuote']['hinta_tuote_sis'][$k];
+					$rivit->hinta_tuote_sis = str_replace(",", ".", $_POST['Rivi']['tuote']['hinta_tuote_sis'][$k]);
 					$rivit->hinnasto_alv = $_POST['Rivi']['tuote']['hinnasto_alv'][$k];
 					$rivit->hinnasto_yksikko = $_POST['Rivi']['tuote']['yksikko'][$k];
 					$rivit->hinnasto_yht = $_POST['Rivi']['tuote']['hinnasto_yht'][$k];
@@ -179,9 +179,9 @@ class HinnastotController extends Controller
 					$rivit = new HinnastotRivi;
 					$rivit->hinnastot_id = $model->id;
 					$rivit->tuote_palvelu_id = $itm;
-					$rivit->hinnasto_hinta = $_POST['Rivi']['tuote']['hinnasto_hinta'][$k];
+					$rivit->hinnasto_hinta = str_replace(",", ".", $_POST['Rivi']['tuote']['hinnasto_hinta'][$k]);
 					$rivit->hinta_tuote = $_POST['Rivi']['tuote']['hinta_tuote'][$k];
-					$rivit->hinta_tuote_sis = $_POST['Rivi']['tuote']['hinta_tuote_sis'][$k];
+					$rivit->hinta_tuote_sis = str_replace(",", ".", $_POST['Rivi']['tuote']['hinta_tuote_sis'][$k]);
 					$rivit->hinnasto_alv = $_POST['Rivi']['tuote']['hinnasto_alv'][$k];
 					$rivit->hinnasto_yksikko = $_POST['Rivi']['tuote']['yksikko'][$k];
 					$rivit->hinnasto_yht = $_POST['Rivi']['tuote']['hinnasto_yht'][$k];

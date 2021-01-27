@@ -216,8 +216,8 @@ $(document).ready(function(){
   });
 
   $(document).delegate(".tuotevalikko","change",function(){
-	var hinta_alv_0 = $('option:selected', this).attr('hinta_alv_0');
-	var hinta_alv_sis = $('option:selected', this).attr('hinta_alv_sis');
+	var hinta_alv_0 = $('option:selected', this).attr('hinta_alv_0').replace(/,/g, '.');
+	var hinta_alv_sis = $('option:selected', this).attr('hinta_alv_sis').replace(/,/g, '.');
 	var hinnasto_alv = $('option:selected', this).attr('alv');
 	var yksikko = $('option:selected', this).attr('yksikko');
 	$(this).closest('tr').find('.hinta_alv_0').val(hinta_alv_0);
@@ -231,8 +231,8 @@ $(document).ready(function(){
   $(document).delegate(".hinnasto_hinta","keyup",function(){
 	var alvsis = $('input[name=alvsis]:checked').val();
 	if( alvsis == 'nolla'){
-		var hinnasto_hinta = parseFloat($(this).closest('tr').find('.hinnasto_hinta').val());
-		var alv = $(this).closest('tr').find('.hinnasto_alv option:selected').val();
+		var hinnasto_hinta = parseFloat($(this).closest('tr').find('.hinnasto_hinta').val().replace(/,/g, '.'));
+		var alv = $(this).closest('tr').find('.hinnasto_alv option:selected').val().replace(/,/g, '.');
 		var yht = hinnasto_hinta/100*alv;
 		var summ = hinnasto_hinta+yht;
 		$(this).closest('tr').find('.hinnasto_yht').val(summ.toFixed(2));
