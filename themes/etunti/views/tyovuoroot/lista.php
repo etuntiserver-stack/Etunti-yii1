@@ -276,6 +276,7 @@
   <table class="table table-striped" id="mobileTable">
   <thead>
   <tr>
+  <th><?= Yii::t('main', 'Muokkaa'); ?></th>
   <th><?=Yii::t('main', 'Työntekijä')?></th>
   <th><?=Yii::t('main', 'Päivämäärä')?></th>
   <th><?=Yii::t('main', 'Klo')?></th>

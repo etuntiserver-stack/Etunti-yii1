@@ -61,12 +61,13 @@ if(isset($_GET['users_siirto']))
 				$admin_users[$admin->adm_email] = [
 						'User' => [
 							'id' => $id,
+							'confirmed_at' => time(),
+							'domain' => $d->domain,
 							'adminID' => $admin->id,
 							'username' => $admin->adm_email,
 							'email' => $admin->adm_email,
 							'password_hash' => $admin->adm_salasana,
 							'status' => $admin->status,
-							'domain' => $d->domain,
 							'role_admin' => true,
 							'role_tyontekija' => false,
 							'tid' => 0,
@@ -105,12 +106,13 @@ if(isset($_GET['users_siirto']))
 					$tt_users[$tekija->tekijan_email] = [
 						'User' => [
 							'id' => $id,
+							'confirmed_at' => time(),
+							'domain' => $d->domain,
 							'adminID' => $admin_users[$tekija->tekijan_email]['User']['adminID'],
 							'username' => $tekija->tekijan_email,
 							'email' => $tekija->tekijan_email,
 							'password_hash' => $admin_users[$tekija->tekijan_email]['User']['password_hash'],
 							'status' => $admin_users[$tekija->tekijan_email]['User']['status'],
-							'domain' => $d->domain,
 							'role_admin' => 'true',
 							'role_tyontekija' => 'true',
 							'tid' => $tekija->id,
@@ -126,13 +128,14 @@ if(isset($_GET['users_siirto']))
 					$tt_users[$tekija->tekijan_email] = [
 						'User' => [
 							'id' => $id,
+							'confirmed_at' => time(),
+							'domain' => $d->domain,
 							'adminID' => 0,
 							'username' => $tekija->tekijan_email,
 							'email' => $tekija->tekijan_email,
 							'password_hash' => $tekija->salasana,
 							//'password_hash' => password_hash($tekija->salasana, PASSWORD_DEFAULT),
 							'status' => 0,
-							'domain' => $d->domain,
 							'role_admin' => 'false',
 							'role_tyontekija' => 'true',
 							'tid' => $tekija->id,
@@ -169,6 +172,8 @@ if(isset($_GET['users_siirto']))
 		$all_users[strtolower($d->domain)] = $merge;
 	}
 	
+	$ongelmat = [];
+	
 	if(count($ongelmat) == 0)
 	{
 		$repaired_users = [];
@@ -199,22 +204,23 @@ if(isset($_GET['users_siirto']))
 			$profiles[] = $arr['Profile'];
 		}
 
-		/*
+		
 		// Poistetaan ensin kaikki
 		Yii::app()->db->createCommand()->delete('user');
+		Yii::app()->db->createCommand()->delete('profile');
 		$builder 	= Yii::app()->db->schema->commandBuilder;
 		$builder->createMultipleInsertCommand('user', $users)->execute();
 		$builder->createMultipleInsertCommand('profile', $profiles)->execute();
-		*/
+		
 		
 		echo 'Yhteensä '.$yhteensa.'<br>';
 		echo 'tehty_hash: '.$tehty;
 
-		/*
+		
 		echo '<pre>';
 		print_r($users);
 		echo '</pre>';
-		*/
+		
 		
 	} else {
 

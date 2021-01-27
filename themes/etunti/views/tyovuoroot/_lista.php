@@ -22,6 +22,23 @@
 
 <tr>
 	<td>
+	<?=
+		CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>',
+		[
+		  sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s', date("Y", strtotime($arr['this_pvm'])), date("W", strtotime($arr['this_pvm'])), $arr['this_id'])
+		],
+		[
+		  'class' => 'btn btn-primary myBgColors',
+		  'style' => 'color:white',
+		  'data-toggle' => 'tooltip',
+		  'data-placement' => 'top',
+		  'title' => Yii::t('main', 'Muokkaa'),
+		  'target' => '_blank'
+		]
+		)
+	?>
+	</td>
+	<td>
 		<?php if($data->tid == 0): ?>
 		<?=Yii::t('main', 'VARAUS')?>
 		<?php else: ?>
