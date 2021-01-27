@@ -158,7 +158,7 @@ if(isset($_GET['users_siirto']))
 		}
 		
 		$merge = array_merge($admin_users, $tt_users);
-		
+		/*
 		foreach($all_users as $domain => $arr)
 		{
 			foreach($arr as $email => $tiedot)
@@ -168,7 +168,7 @@ if(isset($_GET['users_siirto']))
 				}
 			}
 		}
-		
+		*/
 		$all_users[strtolower($d->domain)] = $merge;
 	}
 	
