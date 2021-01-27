@@ -172,7 +172,7 @@ if(isset($_GET['users_siirto']))
 		$all_users[strtolower($d->domain)] = $merge;
 	}
 	
-	$ongelmat = [];
+	//$ongelmat = [];
 	
 	if(count($ongelmat) == 0)
 	{
@@ -204,14 +204,14 @@ if(isset($_GET['users_siirto']))
 			$profiles[] = $arr['Profile'];
 		}
 
-		
+		/*
 		// Poistetaan ensin kaikki
 		Yii::app()->db->createCommand()->delete('user');
 		Yii::app()->db->createCommand()->delete('profile');
 		$builder 	= Yii::app()->db->schema->commandBuilder;
 		$builder->createMultipleInsertCommand('user', $users)->execute();
 		$builder->createMultipleInsertCommand('profile', $profiles)->execute();
-		
+		*/
 		
 		echo 'Yhteensä '.$yhteensa.'<br>';
 		echo 'tehty_hash: '.$tehty;
