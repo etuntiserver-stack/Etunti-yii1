@@ -1,3 +1,55 @@
+<div id="myModalAloitus" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg modal-dialog-center">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><?=Yii::t('main', 'Olet aloittamassa Etunnin laajennetun käytön.')?></h4>
+      </div>
+      <div class="modal-body" id="body-aloita">
+        <p class="small">
+<p>Laajennettu Etunti-ohjelma mahdollistaa yli 500 työtunnin suunnittelun ja toteuman. Lisäksi saat kattavamman käyttäjätuen käyttöösi. Sinulla on myös mahdollisuus muokata palvelupakettiasi haluamaasi kokoonpanoon. Tutustu lisäosiin <?php echo CHtml::link('tästä',"https://etunti.fi", array('target' => '_blank')); ?>.</p>
+ 
+<p>Laajennetun version hinta perustuu suunniteltuihin tai toteutuneisiin työtunteihin, riippuen siitä, kumpien yhteenlaskettu summa on suurempi. Työtunti tarkoittaa joko suunniteltua tai leimattua työtuntia. Työtunnit eivät sisällä matkoja eivätkä lounaita. Maksat siis vain työtuntien mukaan. Katso tarkempi hinnasto <?php echo CHtml::link('täältä',array('asetukset/yrityksentiedot', 'id' => 1), array('target' => '_blank')); ?>.</p>
+ 
+<p>Huom! Kun olet ottanut käyttöön maksullisen version, ei sitä voi enää palauttaa ilmaisversioksi.</p>
+ 
+ 
+<p>Valitse Laajennetun palvelun kokonaisuus tästä:</p>
+
+<div class="row">
+ <div class="col-sm-offset-1 col-sm-6">
+	<input type="checkbox" name="eTyo" value="eTyo" class="modal_checkbox" checked disabled> 
+		<span class="modaltxt">eTyö (Sisältyy)</span>
+	<br>
+	<input type="checkbox" name="eLasku" class="modal_checkbox val" value="3"> 
+		<span class="modaltxt">eLasku</span>
+	<br>
+	<input type="checkbox" name="eOnline" class="modal_checkbox val" value="4"> 
+		<span class="modaltxt">eOnline</span>
+	<br>
+	<input type="checkbox" name="eDico" class="modal_checkbox val" value="5"> 
+		<span class="modaltxt">eDico</span>
+
+ </div>
+</div>
+
+
+	</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
+        <button type="button" class="btn btn-primary aloitan_maksullinen"><?=Yii::t('main', 'Aloita Laajennettu käyttö')?></button>
+	<?php echo CHtml::link('Kirjaudu ulos',"/index.php/user/logout",array(
+		"class"=>"btn btn-primary hidden",
+		"id" => "ulospainike"
+	)); ?>
+      </div>
+    </div>
+
+  </div>
+</div>
 <?php
 	$ylittaneetMyohastyneet = $this->ylittaneetMyohastyneet();
 
@@ -354,9 +406,9 @@ $months=array(
 		      </tr>
                     </tbody>
                   </table>
-		<center><a href="#" data-toggle="modal" data-target="#myModalAloitus">
-		<?=Yii::t('main', 'Aloita Laajennettu käyttö')?>
-		</a></center>
+					<center><a href="#" id="avaaloitusmodal">
+					<?=Yii::t('main', 'Aloita Laajennettu käyttö')?>
+					</a></center>
                 </div>
               </div>
 	      <?php endif; ?>
@@ -385,63 +437,18 @@ $months=array(
   font-size:120%;
 }
 </style>
-<div id="myModalAloitus" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg modal-dialog-center">
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title"><?=Yii::t('main', 'Olet aloittamassa Etunnin laajennetun käytön.')?></h4>
-      </div>
-      <div class="modal-body" id="body-aloita">
-        <p class="small">
-<p>Laajennettu Etunti-ohjelma mahdollistaa yli 500 työtunnin suunnittelun ja toteuman. Lisäksi saat kattavamman käyttäjätuen käyttöösi. Sinulla on myös mahdollisuus muokata palvelupakettiasi haluamaasi kokoonpanoon. Tutustu lisäosiin <?php echo CHtml::link('tästä',"https://etunti.fi", array('target' => '_blank')); ?>.</p>
- 
-<p>Laajennetun version hinta perustuu suunniteltuihin tai toteutuneisiin työtunteihin, riippuen siitä, kumpien yhteenlaskettu summa on suurempi. Työtunti tarkoittaa joko suunniteltua tai leimattua työtuntia. Työtunnit eivät sisällä matkoja eivätkä lounaita. Maksat siis vain työtuntien mukaan. Katso tarkempi hinnasto <?php echo CHtml::link('täältä',array('asetukset/yrityksentiedot', 'id' => 1), array('target' => '_blank')); ?>.</p>
- 
-<p>Huom! Kun olet ottanut käyttöön maksullisen version, ei sitä voi enää palauttaa ilmaisversioksi.</p>
- 
- 
-<p>Valitse Laajennetun palvelun kokonaisuus tästä:</p>
-
-<div class="row">
- <div class="col-sm-offset-1 col-sm-6">
-	<input type="checkbox" name="eTyo" value="eTyo" class="modal_checkbox" checked disabled> 
-		<span class="modaltxt">eTyö (Sisältyy)</span>
-	<br>
-	<input type="checkbox" name="eLasku" class="modal_checkbox val" value="3"> 
-		<span class="modaltxt">eLasku</span>
-	<br>
-	<input type="checkbox" name="eOnline" class="modal_checkbox val" value="4"> 
-		<span class="modaltxt">eOnline</span>
-	<br>
-	<input type="checkbox" name="eDico" class="modal_checkbox val" value="5"> 
-		<span class="modaltxt">eDico</span>
-
- </div>
-</div>
-
-
-	</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
-        <button type="button" class="btn btn-primary aloitan_maksullinen"><?=Yii::t('main', 'Aloita Laajennettu käyttö')?></button>
-	<?php echo CHtml::link('Kirjaudu ulos',"/index.php/user/logout",array(
-		"class"=>"btn btn-primary hidden",
-		"id" => "ulospainike"
-	)); ?>
-      </div>
-    </div>
-
-  </div>
-</div>
 
 <script>
 $( document ).ready(function() {
-  $(".aloitan_maksullinen").click(function(){
 
+	$("#avaaloitusmodal").click(function(e){
+		e.preventDefault();
+		$("#myModalAloitus").modal("show");
+	});
+	
+  $(".aloitan_maksullinen").click(function(){
+	
     $(".aloitan_maksullinen").text('Odota..');
     var paketti = [];
     $( ".modal_checkbox.val" ).each(function(index) {
