@@ -78,7 +78,7 @@ $(document).ready(function(){
 			$site = Yii::app()->createController('Site');
 			$start_date = date( "Y-m-d", strtotime('first day of this month') );
 			$end_date = date("Y-m-d", strtotime('last day of this month') );
-			$sum_result = $site[0]->digistenTunnitYhteensa($start_date, $end_date);
+			$sum_result = $site[0]->digistenTunnitYhteensa($start_date, $end_date, 'kesto');
 		?>
 		<p><h2>Arvio työtunneista tässä kuussa: <?=(int)$sum_result; ?></h2></p>
 		<!-- laskuri -->
