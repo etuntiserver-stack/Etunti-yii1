@@ -228,13 +228,15 @@ class PalautteetController extends Controller
 		
 			if(isset($ft->sahkoposti) and !empty($ft->sahkoposti))
 			{
-			$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
-			$mail = new YiiMailer();
-			$mail->setFrom('no-reply@etunti.fi');
-			$mail->setTo($ft->sahkoposti);
-			$mail->setSubject($subject);
-			$mail->setBody($message);
-			$mail->send();
+				$sp_arr = explode(",", $ft->sahkoposti);
+
+				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
+				$mail = new YiiMailer();
+				$mail->setFrom('no-reply@etunti.fi');
+				$mail->setTo([$sp_arr]);
+				$mail->setSubject($subject);
+				$mail->setBody($message);
+				$mail->send();
 
 				// <-- LOG
 				$log=new Log;
