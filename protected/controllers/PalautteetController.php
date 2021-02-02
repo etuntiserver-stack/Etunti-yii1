@@ -233,7 +233,7 @@ class PalautteetController extends Controller
 				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
 				$mail = new YiiMailer();
 				$mail->setFrom('no-reply@etunti.fi');
-				$mail->setTo([$sp_arr]);
+				$mail->setTo(array_values($sp_arr));
 				$mail->setSubject($subject);
 				$mail->setBody($message);
 				$mail->send();
