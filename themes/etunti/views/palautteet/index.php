@@ -14,7 +14,7 @@
 
 
 
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <form id="mobForm" action="#" class="form-inline" method="GET">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
@@ -112,7 +112,7 @@ $(".muokaValiko").click(function() {
 				$mod = 'Asiakkaat';
 				$sarake = 'yrityksen_nimi';
 				$placeholder = 'Yritys / Yhteyshenkilö';
-				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
+				if(isset($_GET[$sarake])) 			$postvalue = $_GET[$sarake]; 
 				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
 				else $postvalue='';				
 		 	        $site[0]->autocompleteFor($mod, array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);

@@ -396,9 +396,9 @@ class PalautteetController extends Controller
 		}
 		//    Tyoryhmat -->
 
-		if(isset($_POST['yrityksen_nimi']) and !empty($_POST['yrityksen_nimi']))
+		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
 		{
-			$asiakaat = Asiakkaat::model()->findAll(" yrityksen_nimi LIKE '%".$_POST['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_POST['yrityksen_nimi']."%' ");
+			$asiakaat = Asiakkaat::model()->findAll(" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%' ");
 			$as_id = array();
 			foreach($asiakaat as $itm)
 				$as_id[] = $itm->id;
@@ -413,9 +413,9 @@ class PalautteetController extends Controller
 		$from = date("d.m.Y", strtotime("-1 month"));
 		$to = date("d.m.Y");
 
-		if(isset($_POST['from']) and isset($_POST['to'])){
-		$from 	= date("Y-m-d",strtotime($_POST['from']));
-		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		if(isset($_GET['from']) and isset($_GET['to'])){
+		$from 	= date("Y-m-d",strtotime($_GET['from']));
+		$to 	= date("Y-m-d",strtotime($_GET['to']));
 		}
 
 	        $criteria->addCondition (" DATE(time) BETWEEN '".date("Y-m-d",strtotime($from))."' AND '".date("Y-m-d",strtotime($to))."' ");
