@@ -84,25 +84,22 @@ if(isset($_GET['users_siirto']))
 			{
 				$domains = [
 					$d->domain => [
-						'default' => 1,
+						'default' => isset($all_users[$admin->adm_email])? 0 : 1,
 						'aktiivinen' => 1,
 						'adminID' => $admin->id, 
 						'tid' => 0, 
-						'oikeusryhmat' => json_encode([$admin->status])
+						'oikeusryhmat' => [$admin->status]
 						]
 					];
 							
-				if(isset($all_users[$admin->adm_email]))
+				if(isset($all_users[$admin->adm_email]['User']))
 				{
-					foreach($all_users[$admin->adm_email] as $key => $tiedot)
-					{
-						$domains = array_merge($tiedot['User']['domains'], $domains);
-						$all_users[$admin->adm_email][$key]['User']['domains'] = $domains;
-						continue 2;
-					}
+					$domains = array_merge($all_users[$admin->adm_email]['User']['domains'], $domains);
+					$all_users[$admin->adm_email]['User']['domains'] = $domains;
+					continue;
 				}
 					
-				$all_users[$admin->adm_email][] = [
+				$all_users[$admin->adm_email] = [
 						'User' => [
 							'id' => 0,
 							'confirmed_at' => time(),
@@ -158,38 +155,39 @@ if(isset($_GET['users_siirto']))
 			{
 				$domains = [
 					$d->domain => [
-						'default' => 1,
+						'default' => isset($all_users[$tekija->tekijan_email])? 0 : 1,
 						'aktiivinen' => $tekija->aktiivinen,
 						'adminID' => 0, 
 						'tid' => $tekija->id, 
-						'oikeusryhmat' => json_encode([$ryhma_id])
+						'oikeusryhmat' => [$ryhma_id]
 						]
 				];
-							
-				if(isset($all_users[$tekija->tekijan_email]))
+						
+				if(isset($all_users[$tekija->tekijan_email]['User']))
 				{
-					foreach($all_users[$tekija->tekijan_email] as $key => $tiedot)
+					foreach($all_users[$tekija->tekijan_email] as $tiedot)
 					{
-						if(isset($tiedot['User']['domains'][$d->domain]['adminID']) and $tiedot['User']['domains'][$d->domain]['adminID'] > 0)
+						if(isset($tiedot['domains'][$d->domain]))
 						{
 							$domains = [
 								$d->domain => [
-									'default' => $tiedot['User']['domains'][$d->domain]['default'],
-									'aktiivinen' => $tiedot['User']['domains'][$d->domain]['aktiivinen'],
-									'adminID' => $tiedot['User']['domains'][$d->domain]['adminID'], 
+									'default' => $tiedot['domains'][$d->domain]['default'],
+									'aktiivinen' => $tiedot['domains'][$d->domain]['aktiivinen'],
+									'adminID' => $tiedot['domains'][$d->domain]['adminID'], 
 									'tid' => $tekija->id, 
-									'oikeusryhmat' => json_encode(array_merge(json_decode($tiedot['User']['domains'][$d->domain]['oikeusryhmat'], true), [$ryhma_id]))
+									'oikeusryhmat' => array_merge($tiedot['domains'][$d->domain]['oikeusryhmat'], [$ryhma_id])
 									]
 							];
+
+							$domains = array_merge($tiedot['domains'], $domains);
+							$all_users[$tekija->tekijan_email]['User']['domains'] = $domains;
+							continue 2;
 						}
-						
-						$domains = array_merge($tiedot['User']['domains'], $domains);
-						$all_users[$tekija->tekijan_email][$key]['User']['domains'] = $domains;
-						continue 2;
 					}
 				}
 
-				$all_users[$tekija->tekijan_email][] = [
+
+				$all_users[$tekija->tekijan_email] = [
 					'User' => [
 						'id' => 0,
 						'confirmed_at' => time(),
@@ -215,7 +213,7 @@ if(isset($_GET['users_siirto']))
 		}
 	}
 
-	$ongelmat = [];
+	//$ongelmat = [];
 /*
 	echo '<pre>';
 	print_r($all_users);
@@ -228,28 +226,28 @@ if(isset($_GET['users_siirto']))
 		$profiles 	= [];
 		$i = 0;
 		
-		foreach($all_users as $email => $arr)
+		foreach($all_users as $attributes)
 		{
-			foreach($arr as $attributes)
-			{
-				$i++;
-				$attributes['User']['id'] = $i;
-				$attributes['Profile']['user_id'] = $i;
+			$i++;
+			$attributes['User']['id'] = $i;
+			$attributes['Profile']['user_id'] = $i;
+			$attributes['User']['domains'] = json_encode($attributes['User']['domains']);
 
-				$tehty++;
-				$users[] = $attributes['User'];
-				$profiles[] = $attributes['Profile'];
-			}
+			$tehty++;
+			$users[] = $attributes['User'];
+			$profiles[] = $attributes['Profile'];
 		}
 		
 		
 		// Poistetaan ensin kaikki
-		//Yii::app()->db->createCommand()->delete('user');
-		//Yii::app()->db->createCommand()->delete('profile');
-		//$builder 	= Yii::app()->db->schema->commandBuilder;
-		//$builder->createMultipleInsertCommand('user', $users)->execute();
-		//$builder->createMultipleInsertCommand('profile', $profiles)->execute();
 		
+		Yii::app()->db->createCommand()->delete('user');
+		Yii::app()->db->createCommand()->delete('profile');
+		/*
+		$builder 	= Yii::app()->db->schema->commandBuilder;
+		$builder->createMultipleInsertCommand('user', $users)->execute();
+		$builder->createMultipleInsertCommand('profile', $profiles)->execute();
+		*/
 		
 		echo 'Yhteensä '.$yhteensa.'<br>';
 		echo 'tehty_hash: '.$tehty;
