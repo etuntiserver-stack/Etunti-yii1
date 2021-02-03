@@ -43,17 +43,22 @@ if(isset($_GET['users_siirto']))
 		$yhteensa			+= count($administrators);
 		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='Sisäänkirjautunut käyttäjä'");
 		
-		$ryhma_id = 0;
+		$ryhma_id 		= 0;
+		$ryhma_nimike 	= '';
 		if(!isset($OikeusRyhmat->nimike))
 		{
 			$new_ryhma = new OikeusRyhmat;
 			$new_ryhma->nimike = 'Sisäänkirjautunut käyttäjä';
-			if($new_ryhma->save())
-				$ryhma_id = $new_ryhma->id;
+			if($new_ryhma->save()){
+				$ryhma_id 		= $new_ryhma->id;
+				$ryhma_nimike 	= $new_ryhma->nimike;
+			}
 		} else {
-			$ryhma_id = $OikeusRyhmat->id;
+			$ryhma_id 		= $OikeusRyhmat->id;
+			$ryhma_nimike 	= $OikeusRyhmat->nimike;
 		}
 		
+		$toisto_checker 	= [];
 		foreach($administrators as $admin)
 		{
 			$admin->adm_email = clearMail($admin->adm_email);
@@ -66,14 +71,24 @@ if(isset($_GET['users_siirto']))
 				continue;
 			}
 
+			if(isset($toisto_checker[$admin->adm_email][$d->domain]))
+			{
+				$ongelmat[] = '<b>'.$d->domain.'</b>. ADMIN: '.$toisto_checker[$admin->adm_email][$d->domain]['nimi'].', ID: <b>'.$toisto_checker[$admin->adm_email][$d->domain]['id'].'</b>. Sähköposti '. $admin->adm_email . ' <b>TOISTUU</b>';
+				$ongelmat[] = '<b>'.$d->domain.'</b>. ADMIN: '.$admin->adm_nimi.', ID: <b>'.$admin->id.'</b>. Sähköposti '. $admin->adm_email . ' <b>TOISTUU</b>';
+
+				continue;
+			}
+			$toisto_checker[$admin->adm_email][$d->domain] = ['nimi' => $admin->adm_nimi, 'id' => $admin->id];
+			
 			if(!empty($admin->adm_email))
 			{
 				$domains = [
 					$d->domain => [
 						'default' => 1,
+						'aktiivinen' => 1,
 						'adminID' => $admin->id, 
 						'tid' => 0, 
-						'oikeusryhma_id' => $admin->status
+						'oikeusryhmat' => json_encode([$admin->status])
 						]
 					];
 							
@@ -81,27 +96,23 @@ if(isset($_GET['users_siirto']))
 				{
 					foreach($all_users[$admin->adm_email] as $key => $tiedot)
 					{
-						$domains = array_merge(
-										$tiedot['User']['domains'], 
-										$domains
-						);
-						unset($all_users[$admin->adm_email][$key]);
+						$domains = array_merge($tiedot['User']['domains'], $domains);
+						$all_users[$admin->adm_email][$key]['User']['domains'] = $domains;
+						continue 2;
 					}
 				}
 					
-				$id = 0;
 				$all_users[$admin->adm_email][] = [
 						'User' => [
-							'id' => $id,
+							'id' => 0,
 							'confirmed_at' => time(),
 							'domains' => $domains,
 							'username' => $admin->adm_email,
 							'email' => $admin->adm_email,
-							'password_hash' => $admin->adm_salasana,
-							'aktiivinen' => 1
+							'password_hash' => $admin->adm_salasana
 						],
 						'Profile' => [
-									'user_id' => $id,
+									'user_id' => 0,
 									'etunimi' => $admin->adm_nimi,
 									'sukunimi' => ''
 								]
@@ -122,18 +133,20 @@ if(isset($_GET['users_siirto']))
 		$yhteensa			+= count($tyontekijat)+count($administrators);
 		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='Sisäänkirjautunut käyttäjä'");
 		$ryhma_id 			= $OikeusRyhmat->id;
+		$toisto_checker		= [];
 		
 		foreach($tyontekijat as $tekija)
 		{
 			$tekija->tekijan_email = clearMail($tekija->tekijan_email);
 			
-			//if(isset($all_users[$tekija->tekijan_email]['User']['domains'][$d->domain]))
-			//{
-				//$ongelmat[] = '<b>'.$d->domain.'</b>. Työntekijä: '.$tekija->FullName.', ID: <b>'.$all_users[$tekija->tekijan_email]['User']['tid'].'</b>. Sähköposti '. $tekija->tekijan_email . ' <b>TOISTUU</b>';
-				//$ongelmat[] = '<b>'.$d->domain.'</b>. Työntekijä: '.$tekija->FullName.', ID: <b>'.$tekija->id.'</b>. Sähköposti '. $tekija->tekijan_email . ' <b>TOISTUU</b>';
+			if(isset($toisto_checker[$tekija->tekijan_email][$d->domain]))
+			{
+				$ongelmat[] = '<b>'.$d->domain.'</b>. Työntekijä: '.$toisto_checker[$tekija->tekijan_email][$d->domain]['nimi'].', ID: <b>'.$toisto_checker[$tekija->tekijan_email][$d->domain]['id'].'</b>. Sähköposti '. $tekija->tekijan_email . ' <b>TOISTUU</b>';
+				$ongelmat[] = '<b>'.$d->domain.'</b>. Työntekijä: '.$tekija->FullName.', ID: <b>'.$tekija->id.'</b>. Sähköposti '. $tekija->tekijan_email . ' <b>TOISTUU</b>';
 
-				//continue;
-			//}
+				continue;
+			}
+			$toisto_checker[$tekija->tekijan_email][$d->domain] = ['nimi' => $tekija->FullName, 'id' => $tekija->id];
 
 			if(empty($tekija->tekijan_email))
 			{
@@ -146,9 +159,10 @@ if(isset($_GET['users_siirto']))
 				$domains = [
 					$d->domain => [
 						'default' => 1,
+						'aktiivinen' => $tekija->aktiivinen,
 						'adminID' => 0, 
 						'tid' => $tekija->id, 
-						'oikeusryhma_id' => $ryhma_id
+						'oikeusryhmat' => json_encode([$ryhma_id])
 						]
 				];
 							
@@ -161,36 +175,32 @@ if(isset($_GET['users_siirto']))
 							$domains = [
 								$d->domain => [
 									'default' => $tiedot['User']['domains'][$d->domain]['default'],
+									'aktiivinen' => $tiedot['User']['domains'][$d->domain]['aktiivinen'],
 									'adminID' => $tiedot['User']['domains'][$d->domain]['adminID'], 
 									'tid' => $tekija->id, 
-									'oikeusryhma_id' => [$tiedot['User']['domains'][$d->domain]['oikeusryhma_id'], $ryhma_id]
+									'oikeusryhmat' => json_encode(array_merge(json_decode($tiedot['User']['domains'][$d->domain]['oikeusryhmat'], true), [$ryhma_id]))
 									]
 							];
 						}
 						
-						$domains = array_merge(
-										$tiedot['User']['domains'], 
-										$domains
-						);
-						unset($all_users[$tekija->tekijan_email][$key]);
+						$domains = array_merge($tiedot['User']['domains'], $domains);
+						$all_users[$tekija->tekijan_email][$key]['User']['domains'] = $domains;
+						continue 2;
 					}
 				}
-			
-				$id = 0;
 
 				$all_users[$tekija->tekijan_email][] = [
 					'User' => [
-						'id' => $id,
+						'id' => 0,
 						'confirmed_at' => time(),
 						'domains' => $domains,
 						'username' => $tekija->tekijan_email,
 						'email' => $tekija->tekijan_email,
 						'password_hash' => $tekija->salasana,
 						//'password_hash' => password_hash($tekija->salasana, PASSWORD_DEFAULT),
-						'aktiivinen' => $tekija->aktiivinen
 					],
 					'Profile' => [
-								'user_id' => $id,
+								'user_id' => 0,
 								'name' => $tekija->tekijan_nimi,
 								'sukunimi' => $tekija->sukunimi
 							]
@@ -205,7 +215,7 @@ if(isset($_GET['users_siirto']))
 		}
 	}
 
-	$ongelmat = [];
+	//$ongelmat = [];
 /*
 	echo '<pre>';
 	print_r($all_users);
