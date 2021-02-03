@@ -11,7 +11,14 @@
 	<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/asiakkaat/create',array('class'=>'btn btn-default fa fa-plus','data-toggle'=>'tooltip', 'data-placement'=>'top', 'title' => Yii::t('main', 'Lisää asiakas') )); ?>
 	<?php echo CHtml::link('<i class="fa fa-edit"></i>',Yii::app()->request->baseUrl.'/index.php/asiakkaat/massamuokkaus',array('class'=>'btn btn-default','data-toggle'=>'tooltip', 'data-placement'=>'top', 'title' => Yii::t('main', 'Muokkaa kaikkia kerrallaan') )); ?>
 	<?php if($netvisor): ?>
-	<?php echo CHtml::link('<i class="fa fa-share-square"></i>', array('kaikki_netvisoriin'), array('class'=>'btn btn-default','data-toggle'=>'tooltip', 'data-placement'=>'top', 'title' => Yii::t('main', 'Siirrä kaikki netvisoriin') )); ?>
+	<?php
+		echo '
+		<span data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Siirrä kaikki netvisoriin').'">
+			<button id="netvisor-modal-toggle" class="btn btn-default">
+				<i class="fa fa-share-square"></i>
+			</button>
+		</span>';
+	?>
 	<?php endif; ?>
 
 	<?php $checkOikeus = "asiakkaat_5_".Yii::app()->user->adminStatus; ?>
@@ -35,6 +42,10 @@ $(document).ready(function() {
 	e.preventDefault();
   });
 
+  $("#netvisor-modal-toggle").on('click', function(e) {
+	$("#netvisor-modal").modal();
+  });
+
 });
 </script>
 
@@ -54,7 +65,24 @@ $(document).ready(function() {
 	   ?>
 	 </div>
 	</h2>
-
+	<div id="netvisor-modal" class="modal fade" aria-hidden="true" role="dialog" tabindex="-1">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="modal-title">
+						<h2 class="modal-title">Oletko varma, että haluat lisätä Netvisoriin kaikki yhteystiedot?</h2>
+					</div>
+				</div>
+				<div class="modal-body">
+					<p>Tämä ominaisuus saattaa luoda duplikaatteja Netvisoriin niistä asiakkaista, jotka eivät ole jo siellä. </p>
+				</div>
+				<div class="modal-footer">
+				<?php echo CHtml::link('Kyllä', array('kaikki_netvisoriin'), array('class'=>'btn btn-success' )); ?>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Sulje</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
    	    <form id="mobForm" action="#" class="form-inline" method="GET">
