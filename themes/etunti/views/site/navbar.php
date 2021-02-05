@@ -701,7 +701,11 @@ $('.multTyoryhma').multiselect({
             </li>
             <li class="list-group-item">
               <a href="https://app.etunti.fi/lib/pdf/etunti_ko.pdf" target="_blank" class="animated animated-short fadeInUp">
-                <span class="fa fa-gear"></span> <?php echo Yii::t('main', 'Lue ohjeet (PDF)'); ?> </a>
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main', 'Lue ohjeet'); ?> </a>
+            </li>
+            <li class="list-group-item">
+              <a href="https://app.etunti.fi/lib/pdf/etunti_mob.pdf" target="_blank" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main', 'Mobiilisovelluksen käyttöohje'); ?> </a>
             </li>
             <li class="list-group-item">
               <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/ohjevideot" class="animated animated-short fadeInUp">

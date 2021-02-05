@@ -39,16 +39,19 @@ if(isset($_GET['users_siirto']))
 		//Yii::app()->db1->charset = 'utf8';
 		Yii::app()->db1->setActive(true);
 		
+		$asetukset 			= Asetukset::model()->findByPk(1);
 		$administrators 	= Administrators::model()->findAll();
 		$yhteensa			+= count($administrators);
-		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='Sisäänkirjautunut käyttäjä'");
+		
+		OikeusRyhmat::model()->delete("nimike='Sisäänkirjautunut käyttäjä'");
+		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='Mobiili'");
 		
 		$ryhma_id 		= 0;
 		$ryhma_nimike 	= '';
 		if(!isset($OikeusRyhmat->nimike))
 		{
 			$new_ryhma = new OikeusRyhmat;
-			$new_ryhma->nimike = 'Sisäänkirjautunut käyttäjä';
+			$new_ryhma->nimike = 'Mobiili';
 			if($new_ryhma->save()){
 				$ryhma_id 		= $new_ryhma->id;
 				$ryhma_nimike 	= $new_ryhma->nimike;
@@ -57,6 +60,17 @@ if(isset($_GET['users_siirto']))
 			$ryhma_id 		= $OikeusRyhmat->id;
 			$ryhma_nimike 	= $OikeusRyhmat->nimike;
 		}
+
+		// < oikeudet
+		$as_oikeudet = json_decode($asetukset->oikeudet, true);
+		$merge_oikeudet = array_merge($as_oikeudet, ["mobiili_0_1","mobiili_0_".$ryhma_id,"mobiili_1_1","mobiili_1_".$ryhma_id]);
+		$clear = [];
+		foreach($merge_oikeudet as $oikeus)
+			$clear[$oikeus] = $oikeus;
+			
+		$asetukset->oikeudet = json_encode(array_values($clear));
+		$asetukset->save();
+		
 		
 		$toisto_checker 	= [];
 		foreach($administrators as $admin)
@@ -128,7 +142,7 @@ if(isset($_GET['users_siirto']))
 		
 		$tyontekijat 		= Tyontekijat::model()->findAll();
 		$yhteensa			+= count($tyontekijat)+count($administrators);
-		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='Sisäänkirjautunut käyttäjä'");
+		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='Mobiili'");
 		$ryhma_id 			= $OikeusRyhmat->id;
 		$toisto_checker		= [];
 		
