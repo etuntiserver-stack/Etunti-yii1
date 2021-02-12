@@ -98,10 +98,10 @@ if(isset($_GET['users_siirto']))
 			{
 				$domains = [
 					$d->domain => [
-						'default' => isset($all_users[$admin->adm_email])? 0 : 1,
-						'aktiivinen' => 1,
+						'default' => isset($all_users[$admin->adm_email])? "0" : "1",
+						'aktiivinen' => "1",
 						'adminID' => $admin->id, 
-						'tid' => 0, 
+						'tid' => "0", 
 						'oikeusryhmat' => [$admin->status]
 						]
 					];
@@ -171,7 +171,7 @@ if(isset($_GET['users_siirto']))
 					$d->domain => [
 						'default' => isset($all_users[$tekija->tekijan_email])? 0 : 1,
 						'aktiivinen' => $tekija->aktiivinen,
-						'adminID' => 0, 
+						'adminID' => "0", 
 						'tid' => $tekija->id, 
 						'oikeusryhmat' => [$ryhma_id]
 						]

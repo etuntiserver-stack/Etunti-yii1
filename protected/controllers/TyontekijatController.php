@@ -320,12 +320,18 @@ class TyontekijatController extends Controller
 
 	public function actionTulosta($id)
 	{
-			$model = Tyontekijat::model()->findbypk($id); 
-	
-		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-			$html2pdf->setDefaultFont('Arial');
-		        $html2pdf->WriteHTML($this->renderPartial('tulosta_pdf', array('model' => $model),true));
-		        $html2pdf->Output();
+		$model = Tyontekijat::model()->findbypk($id); 
+		/*
+		$html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		$html2pdf->setDefaultFont('Arial');
+		$html2pdf->WriteHTML();
+		$html2pdf->Output();
+		*/
+		
+		$mobile = Yii::app()->createController('Mobile');
+		$html	= $this->renderPartial('tulosta_pdf', array('model' => $model), true);
+		$mobile[0]->transformHtmlTo('', $html, 'pdf');
+		exit;
 	}
 
 	/**
