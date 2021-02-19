@@ -44,11 +44,14 @@ if(count($k) > 0){
 	   ($perSivu == 10) ? $defcl10 = 'btn-success' : $defcl10 = 'btn-default';
 	   ($perSivu == 50) ? $defcl50 = 'btn-success' : $defcl50 = 'btn-default';
 	   ($perSivu == 100) ? $defcl00 = 'btn-success' : $defcl00 = 'btn-default';
+	   ($perSivu == 2000) ? $defcl2000 = 'btn-success' : $defcl2000 = 'btn-default';
+	   ($perSivu == 4000) ? $defcl4000 = 'btn-success' : $defcl4000 = 'btn-default';
 
 	   echo '<button class="btn '.$defcl10.' kpl" kpl="10" data-toggle="tooltip" title="'.Yii::t('main', 'Näytä').' 10 '.Yii::t('main', 'asiakasta sivulla').'">10</button>';
 	   echo '<button class="btn '.$defcl50.' kpl" kpl="50" data-toggle="tooltip" title="'.Yii::t('main', 'Näytä').' 50 '.Yii::t('main', 'asiakasta sivulla').'">50</button>';
 	   echo '<button class="btn '.$defcl00.' kpl" kpl="100" data-toggle="tooltip" title="'.Yii::t('main', 'Näytä').' 100 '.Yii::t('main', 'asiakasta sivulla').'">100</button>';
-	   echo '<button class="btn '.$defcl00.' kpl" kpl="2000" data-toggle="tooltip" title="'.Yii::t('main', 'Näytä').' 2000 '.Yii::t('main', 'asiakasta sivulla').'">2000</button>';
+	   echo '<button class="btn '.$defcl2000.' kpl" kpl="2000" data-toggle="tooltip" title="'.Yii::t('main', 'Näytä').' 2000 '.Yii::t('main', 'asiakasta sivulla').'">2000</button>';
+	   echo '<button class="btn '.$defcl4000.' kpl" kpl="4000" data-toggle="tooltip" title="'.Yii::t('main', 'Näytä').' 4000 '.Yii::t('main', 'asiakasta sivulla').'">4000</button>';
 	   ?>
 	 </div>
 	</h2>
