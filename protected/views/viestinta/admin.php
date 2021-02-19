@@ -8,8 +8,7 @@ if(isset($_GET['users_siirto']))
 	echo '<style>b{color: red}</style>';
 	function clearMail($mail)
 	{
-		$mail = trim(strtolower($mail));
-		
+		$mail = trim(strtolower($mail));	
 		return $mail;
 	}
 	
@@ -26,11 +25,11 @@ if(isset($_GET['users_siirto']))
 	}
 
 	$all_users 		= [];
-	$admin_users 	= [];
-	$tt_users 		= [];
 	$ongelmat		= [];
 	$tehty			= 0;
 	$yhteensa		= 0;
+	
+	// <-- Admins
 	foreach ($list as $d)
 	{
 		if ($mysqli->select_db($d->domain) === false) { continue; }
@@ -43,7 +42,9 @@ if(isset($_GET['users_siirto']))
 		$administrators 	= Administrators::model()->findAll();
 		$yhteensa			+= count($administrators);
 		
-		OikeusRyhmat::model()->delete("nimike='Sisäänkirjautunut käyttäjä'");
+		$del = OikeusRyhmat::model()->find("nimike='Sisäänkirjautunut käyttäjä'");
+		if($del !== null) $del->delete();
+		
 		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='Mobiili'");
 		
 		$ryhma_id 		= 0;
@@ -63,7 +64,7 @@ if(isset($_GET['users_siirto']))
 
 		// < oikeudet
 		$as_oikeudet = json_decode($asetukset->oikeudet, true);
-		$merge_oikeudet = array_merge($as_oikeudet, ["mobiili_0_1","mobiili_0_".$ryhma_id,"mobiili_1_1","mobiili_1_".$ryhma_id]);
+		$merge_oikeudet = array_merge($as_oikeudet, ["mobiili_0_1","mobiili_0_".$ryhma_id]);
 		$clear = [];
 		foreach($merge_oikeudet as $oikeus)
 			$clear[$oikeus] = $oikeus;
@@ -101,7 +102,8 @@ if(isset($_GET['users_siirto']))
 						'default' => isset($all_users[$admin->adm_email])? "0" : "1",
 						'aktiivinen' => "1",
 						'adminID' => $admin->id, 
-						'tid' => "0", 
+						'tid' => "0",
+						'aid' => "0",
 						'oikeusryhmat' => [$admin->status]
 						]
 					];
@@ -131,7 +133,8 @@ if(isset($_GET['users_siirto']))
 			}
 		}
 	}
-
+	
+	// <-- Tyontekijat
 	foreach ($list as $d)
 	{
 		if ($mysqli->select_db($d->domain) === false) { continue; }
@@ -148,38 +151,41 @@ if(isset($_GET['users_siirto']))
 		
 		foreach($tyontekijat as $tekija)
 		{
-			$tekija->tekijan_email = clearMail($tekija->tekijan_email);
+			$sahkoposti = clearMail($tekija->tekijan_email);
+			if(strpos($sahkoposti, '@') === false) continue;
+			$nimi		= $tekija->FullName;
+
+			if(empty($sahkoposti))
+			{
+				$ongelmat[] = '<b>'.$d->domain.'</b> domainissa, työntekijällä: '.$sahkoposti. ' Sähköposti <b>PUUTUU</b>';
+				continue;
+			}
 			
-			if(isset($toisto_checker[$tekija->tekijan_email][$d->domain]))
+			if(isset($toisto_checker[$sahkoposti][$d->domain]))
 			{
-				$ongelmat[] = '<b>'.$d->domain.'</b>. Työntekijä: '.$toisto_checker[$tekija->tekijan_email][$d->domain]['nimi'].', ID: <b>'.$toisto_checker[$tekija->tekijan_email][$d->domain]['id'].'</b>. Sähköposti '. $tekija->tekijan_email . ' <b>TOISTUU</b>';
-				$ongelmat[] = '<b>'.$d->domain.'</b>. Työntekijä: '.$tekija->FullName.', ID: <b>'.$tekija->id.'</b>. Sähköposti '. $tekija->tekijan_email . ' <b>TOISTUU</b>';
+				$ongelmat[] = '<b>'.$d->domain.'</b>. Työntekijä: '.$toisto_checker[$sahkoposti][$d->domain]['nimi'].', ID: <b>'.$toisto_checker[$sahkoposti][$d->domain]['id'].'</b>. Sähköposti '. $sahkoposti . ' <b>TOISTUU</b>';
+				$ongelmat[] = '<b>'.$d->domain.'</b>. Työntekijä: '.$nimi.', ID: <b>'.$tekija->id.'</b>. Sähköposti '. $sahkoposti . ' <b>TOISTUU</b>';
 
 				continue;
 			}
-			$toisto_checker[$tekija->tekijan_email][$d->domain] = ['nimi' => $tekija->FullName, 'id' => $tekija->id];
+			$toisto_checker[$sahkoposti][$d->domain] = ['nimi' => $nimi, 'id' => $tekija->id];
 
-			if(empty($tekija->tekijan_email))
-			{
-				$ongelmat[] = '<b>'.$d->domain.'</b> domainissa, työntekijällä: '.$tekija->tekijan_nimi. ' Sähköposti <b>PUUTUU</b>';
-				continue;
-			}
-
-			if(strpos($tekija->tekijan_email, '@') !== false)
+			if(!empty($sahkoposti))
 			{
 				$domains = [
 					$d->domain => [
-						'default' => isset($all_users[$tekija->tekijan_email])? 0 : 1,
+						'default' => isset($all_users[$sahkoposti])? 0 : 1,
 						'aktiivinen' => $tekija->aktiivinen,
 						'adminID' => "0", 
-						'tid' => $tekija->id, 
+						'tid' => $tekija->id,
+						'aid' => "0",
 						'oikeusryhmat' => [$ryhma_id]
 						]
 				];
 						
-				if(isset($all_users[$tekija->tekijan_email]['User']))
+				if(isset($all_users[$sahkoposti]['User']))
 				{
-					foreach($all_users[$tekija->tekijan_email] as $tiedot)
+					foreach($all_users[$sahkoposti] as $tiedot)
 					{
 						if(isset($tiedot['domains'][$d->domain]))
 						{
@@ -188,26 +194,26 @@ if(isset($_GET['users_siirto']))
 									'default' => $tiedot['domains'][$d->domain]['default'],
 									'aktiivinen' => $tiedot['domains'][$d->domain]['aktiivinen'],
 									'adminID' => $tiedot['domains'][$d->domain]['adminID'], 
-									'tid' => $tekija->id, 
+									'tid' => $tekija->id,
+									'aid' => "0",
 									'oikeusryhmat' => array_merge($tiedot['domains'][$d->domain]['oikeusryhmat'], [$ryhma_id])
 									]
 							];
 
 							$domains = array_merge($tiedot['domains'], $domains);
-							$all_users[$tekija->tekijan_email]['User']['domains'] = $domains;
+							$all_users[$sahkoposti]['User']['domains'] = $domains;
 							continue 2;
 						}
 					}
 				}
 
-
-				$all_users[$tekija->tekijan_email] = [
+				$all_users[$sahkoposti] = [
 					'User' => [
 						'id' => 0,
 						'confirmed_at' => time(),
 						'domains' => $domains,
-						'username' => $tekija->tekijan_email,
-						'email' => $tekija->tekijan_email,
+						'username' => $sahkoposti,
+						'email' => $sahkoposti,
 						'password_hash' => $tekija->salasana,
 						//'password_hash' => password_hash($tekija->salasana, PASSWORD_DEFAULT),
 					],
@@ -221,18 +227,139 @@ if(isset($_GET['users_siirto']))
 			} else {
 				if($tekija->aktiivinen != 1) continue;
 				
-				$ei_siirrettyt[] = '<b>'.$d->domain.'</b> domainissa, työntekijällä: '.$tekija->tekijan_nimi. ' Sähköposti on: ' . $tekija->tekijan_email;
+				$ei_siirrettyt[] = '<b>'.$d->domain.'</b> domainissa, työntekijällä: '.$tekija->tekijan_nimi. ' Sähköposti on: ' . $sahkoposti;
 				continue;
 			}
 		}
 	}
 
-	//$ongelmat = [];
-/*
+	// <-- Asiakkaat
+	foreach ($list as $d)
+	{
+		if ($mysqli->select_db($d->domain) === false) { continue; }
+		Yii::app()->db1->setActive(false);
+		Yii::app()->db1->connectionString = 'mysql:host=' . $db_host. ';dbname=' . $d->domain;
+		//Yii::app()->db1->charset = 'utf8';
+		Yii::app()->db1->setActive(true);
+		
+		$asetukset 			= Asetukset::model()->findByPk(1);
+		$asiakkaat 			= Asiakkaat::model()->findAll("sahkoposti!='' AND salasana!=''");
+		$yhteensa			+= count($asiakkaat);		
+		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='eDico'");
+		
+		$ryhma_id 		= 0;
+		$ryhma_nimike 	= '';
+		if(!isset($OikeusRyhmat->nimike))
+		{
+			$new_ryhma = new OikeusRyhmat;
+			$new_ryhma->nimike = 'eDico';
+			if($new_ryhma->save()){
+				$ryhma_id 		= $new_ryhma->id;
+				$ryhma_nimike 	= $new_ryhma->nimike;
+			}
+		} else {
+			$ryhma_id 		= $OikeusRyhmat->id;
+			$ryhma_nimike 	= $OikeusRyhmat->nimike;
+		}
+
+		// < oikeudet
+		$as_oikeudet = json_decode($asetukset->oikeudet, true);
+		$merge_oikeudet = array_merge($as_oikeudet, ["edico_0_1","edico_0_".$ryhma_id]);
+		$clear = [];
+		foreach($merge_oikeudet as $oikeus){
+			if(strpos($oikeus, 'customers') !== false) continue;
+			$clear[$oikeus] = $oikeus;
+		}
+			
+		$asetukset->oikeudet = json_encode(array_values($clear));
+		$asetukset->save();
+		
+		$toisto_checker 	= [];
+		foreach($asiakkaat as $asiakas)
+		{
+			$sahkoposti = clearMail($asiakas->sahkoposti);
+			if(strpos($sahkoposti, '@') === false) continue;
+			$nimi		= $asiakas->Fullname;
+			
+			if(empty($sahkoposti))
+			{
+				$ongelmat[] = '<b>'.$d->domain.'</b> domainissa, Asiakas: '.$nimi. ' Sähköposti <b>PUUTUU</b>';
+				continue;
+			}
+
+			if(isset($toisto_checker[$sahkoposti][$d->domain]))
+			{
+				$ongelmat[] = '<b>'.$d->domain.'</b>. Asiakas: '.$toisto_checker[$sahkoposti][$d->domain]['nimi'].', ID: <b>'.$toisto_checker[$sahkoposti][$d->domain]['id'].'</b>. Sähköposti '. $sahkoposti . ' <b>TOISTUU</b>';
+				$ongelmat[] = '<b>'.$d->domain.'</b>. Asiakas: '.$nimi.', ID: <b>'.$asiakas->id.'</b>. Sähköposti '. $sahkoposti . ' <b>TOISTUU</b>';
+
+				continue;
+			}
+			$toisto_checker[$sahkoposti][$d->domain] = ['nimi' => $nimi, 'id' => $asiakas->id];
+			
+			if(!empty($sahkoposti))
+			{
+				$domains = [
+					$d->domain => [
+						'default' => isset($all_users[$sahkoposti])? "0" : "1",
+						'aktiivinen' => "1",
+						'adminID' => "0",
+						'tid' => "0", 
+						'aid' => $asiakas->id,
+						'oikeusryhmat' => [$ryhma_id]
+						]
+					];
+
+				if(isset($all_users[$sahkoposti]['User']))
+				{
+					foreach($all_users[$sahkoposti] as $tiedot)
+					{
+						if(isset($tiedot['domains'][$d->domain]))
+						{
+							$domains = [
+								$d->domain => [
+									'default' => $tiedot['domains'][$d->domain]['default'],
+									'aktiivinen' => $tiedot['domains'][$d->domain]['aktiivinen'],
+									'adminID' => $tiedot['domains'][$d->domain]['adminID'], 
+									'tid' => $tiedot['domains'][$d->domain]['tid'], 
+									'aid' => $asiakas->id,
+									'oikeusryhmat' => array_merge($tiedot['domains'][$d->domain]['oikeusryhmat'], [$ryhma_id])
+									]
+							];
+
+							$domains = array_merge($tiedot['domains'], $domains);
+							$all_users[$sahkoposti]['User']['domains'] = $domains;
+							continue 2;
+						}
+					}
+				}					
+					
+				$all_users[$sahkoposti] = [
+						'User' => [
+							'id' => 0,
+							'confirmed_at' => time(),
+							'domains' => $domains,
+							'username' => $sahkoposti,
+							'email' => $sahkoposti,
+							'password_hash' => $asiakas->salasana
+						],
+						'Profile' => [
+									'user_id' => 0,
+									'etunimi' => $nimi,
+									'sukunimi' => ''
+								]
+						];
+			}
+		}
+	}
+	
+	$ongelmat = [];
+	
+	/*
 	echo '<pre>';
 	print_r($all_users);
 	echo '</pre>';
-*/
+	exit;
+	*/
 	
 	if(count($ongelmat) == 0)
 	{
@@ -251,18 +378,25 @@ if(isset($_GET['users_siirto']))
 			$users[] = $attributes['User'];
 			$profiles[] = $attributes['Profile'];
 		}
-		
-		
-		// Poistetaan ensin kaikki
-		
-		Yii::app()->db->createCommand()->delete('user');
-		Yii::app()->db->createCommand()->delete('profile');
-		/*
-		$builder 	= Yii::app()->db->schema->commandBuilder;
-		$builder->createMultipleInsertCommand('user', $users)->execute();
-		$builder->createMultipleInsertCommand('profile', $profiles)->execute();
-		*/
-		
+
+		try{
+/*
+			// Poistetaan ensin kaikki
+			Yii::app()->db->createCommand()->delete('user');
+			Yii::app()->db->createCommand()->delete('profile');
+			$builder 	= Yii::app()->db->schema->commandBuilder;
+			$builder->createMultipleInsertCommand('user', $users)->execute();
+			$builder->createMultipleInsertCommand('profile', $profiles)->execute();
+*/
+		}
+
+		catch (Exception $e){
+
+			var_dump($e->getMessage());
+			die();
+
+		}
+
 		echo 'Yhteensä '.$yhteensa.'<br>';
 		echo 'tehty_hash: '.$tehty;
 
