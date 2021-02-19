@@ -3,6 +3,7 @@
 /* @var $model Viestinta */
 
 //<-- Users siirto
+$developer = false;
 if(isset($_GET['users_siirto']))
 {
 	echo '<style>b{color: red}</style>';
@@ -49,7 +50,7 @@ if(isset($_GET['users_siirto']))
 		
 		$ryhma_id 		= 0;
 		$ryhma_nimike 	= '';
-		if(!isset($OikeusRyhmat->nimike))
+		if($developer and !isset($OikeusRyhmat->nimike))
 		{
 			$new_ryhma = new OikeusRyhmat;
 			$new_ryhma->nimike = 'Mobiili';
@@ -249,7 +250,7 @@ if(isset($_GET['users_siirto']))
 		
 		$ryhma_id 		= 0;
 		$ryhma_nimike 	= '';
-		if(!isset($OikeusRyhmat->nimike))
+		if($developer and !isset($OikeusRyhmat->nimike))
 		{
 			$new_ryhma = new OikeusRyhmat;
 			$new_ryhma->nimike = 'eDico';
@@ -352,7 +353,7 @@ if(isset($_GET['users_siirto']))
 		}
 	}
 	
-	$ongelmat = [];
+	//$ongelmat = [];
 	
 	/*
 	echo '<pre>';
@@ -380,14 +381,15 @@ if(isset($_GET['users_siirto']))
 		}
 
 		try{
-/*
-			// Poistetaan ensin kaikki
-			Yii::app()->db->createCommand()->delete('user');
-			Yii::app()->db->createCommand()->delete('profile');
-			$builder 	= Yii::app()->db->schema->commandBuilder;
-			$builder->createMultipleInsertCommand('user', $users)->execute();
-			$builder->createMultipleInsertCommand('profile', $profiles)->execute();
-*/
+			if($developer)
+			{
+				// Poistetaan ensin kaikki
+				Yii::app()->db->createCommand()->delete('user');
+				Yii::app()->db->createCommand()->delete('profile');
+				$builder 	= Yii::app()->db->schema->commandBuilder;
+				$builder->createMultipleInsertCommand('user', $users)->execute();
+				$builder->createMultipleInsertCommand('profile', $profiles)->execute();
+			}
 		}
 
 		catch (Exception $e){
