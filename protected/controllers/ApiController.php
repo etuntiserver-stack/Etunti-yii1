@@ -1209,7 +1209,7 @@ public function actionImei($dom)
 				}
 			}
 
-			if( $new_login and !empty($sel)){
+			if( $new_login ){
 				$return = ["return" => $sel, 'tyonkuvaukset' => $tyonkuvaukset];
 				$this->_sendResponse(200, CJSON::encode($return));
 			} else {
