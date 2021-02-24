@@ -1065,8 +1065,8 @@ public function actionImei($dom)
 						$osoite .= $kohde->osoite;
 					if(!empty($kohde->pnumero))
 						$osoite .= ', '.$kohde->pnumero;
-					if(!empty($kohde->kaupunki))
-						$osoite .= ', '.$kohde->kaupunki;
+					if(!empty(htmlspecialchars($kohde->kaupunki)))
+						$osoite .= ', '.htmlspecialchars($kohde->kaupunki);
 				}
 
 				$tyopaari = array();
@@ -1147,8 +1147,8 @@ public function actionImei($dom)
 
 				// <-- app_naytetaanko_kohteen_yhteyshenkilo
 				$kohteen_yhteyshenkilo = '';
-				if(isset($kohde->id) and isset($asetukset->app_naytetaanko_kohteen_yhteyshenkilo) and $asetukset->app_naytetaanko_kohteen_yhteyshenkilo == 1 and $kohde->etu_suku_nimet != ''){
-					$kohteen_yhteyshenkilo = '<br><b>'.Yii::t('main', 'Kohteen yhteyshenkilö').':</b> '.$kohde->etu_suku_nimet;
+				if(isset($kohde->id) and isset($asetukset->app_naytetaanko_kohteen_yhteyshenkilo) and $asetukset->app_naytetaanko_kohteen_yhteyshenkilo == 1 and htmlspecialchars($kohde->etu_suku_nimet) != ''){
+					$kohteen_yhteyshenkilo = '<br><b>'.Yii::t('main', 'Kohteen yhteyshenkilö').':</b> ' . htmlspecialchars($kohde->etu_suku_nimet);
 				}
 				// app_naytetaanko_kohteen_yhteyshenkilo -->
 				$sel .= '<div class="well kohde_'.((isset($data->kohteet->id))?$data->kohteet->id:'').'">';
