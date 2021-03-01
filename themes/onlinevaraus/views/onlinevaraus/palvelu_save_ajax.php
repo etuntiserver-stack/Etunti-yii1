@@ -15,23 +15,23 @@
   {
 	$kup = Kupongit::model()->findbypk($_SESSION['onlinevaraus']['kupongi']);
 
-        if(isset($kup->id))
+	if(isset($kup->id))
 	{
 
-	if($kup->maara_tyyppi == 'euro')
-	$kup_maara = '-'.$kup->euro_maara.' &euro;';
-	if($kup->maara_tyyppi == 'prosentti')
-	$kup_maara = '-'.$kup->prosentti_maara.'%';
+		if($kup->maara_tyyppi == 'euro')
+		$kup_maara = '-'.$kup->euro_maara.' &euro;';
+		if($kup->maara_tyyppi == 'prosentti')
+		$kup_maara = '-'.$kup->prosentti_maara.'%';
 
-	$blockKupongi .= '
-	<div class="row">
-	 <div class="col-xs-2">
-		<i class="fa fa-star fa-2x" aria-hidden="true"></i>
-	 </div><div class="col-xs-10">
-		'.Yii::t('main', 'Alennuskoodi').': '.$kup_maara.'
-	 </div>
-	</div>
- 	';
+		$blockKupongi .= '
+		<div class="row">
+			<div class="col-xs-2">
+				<i class="fa fa-star fa-2x" aria-hidden="true"></i>
+				</div><div class="col-xs-10">
+				'.Yii::t('main', 'Alennuskoodi').': '.$kup_maara.'
+			</div>
+		</div>
+		';
 	}
   }
   //     Kupongi -->

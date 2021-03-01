@@ -14,8 +14,8 @@ $(document).delegate(".kupongi_add","click",function(){
 		if(data !== '')
 		{
 			$(".kupongi_result").html('<span class="text-success">Alennuskoodi on voimassa.</span>');
-			//ajaaPalveluSave();
-			window.location.reload();
+			ajaaPalveluSave();
+			//window.location.reload();
 
 		} else {
 			$(".kupongi_result").html('<span class="text-danger">Alennuskoodi ei ole voimassa.</span>');
@@ -34,11 +34,12 @@ $(document).delegate(".kupongi_add_p","click",function(){
 	type:'GET',
 	success:function(data){
 		console.log(data);
-		if(data !== '')
+		if(parseInt(data) > 0)
 		{
 			$(".kupongi_result_p").html('<span class="text-success">Alennuskoodi on voimassa.</span>');
-			//ajaaPalveluSave();
-			window.location.reload();
+			ajaaPalveluSave();
+			//window.location.reload();
+			//$("#hinta").text( parseInt(data) );
 
 		} else {
 			$(".kupongi_result_p").html('<span class="text-danger">Alennuskoodi ei ole voimassa.</span>');

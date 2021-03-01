@@ -2,67 +2,6 @@
 /* index
 */
 /*
-Array
-(
-    [returnData] => Array
-        (
-            [08.06.2020] => Array
-                (
-                    [11] => Array
-                        (
-                            [0] => Array
-                                (
-                                    [alku] => 08:00
-                                    [loppu] => 09:00
-                                )
-
-                            [1] => Array
-                                (
-                                    [alku] => 13:00
-                                    [loppu] => 14:00
-                                )
-
-                        )
-
-                )
-
-            [09.06.2020] => Array
-                (
-                    [11] => Array
-                        (
-                            [0] => Array
-                                (
-                                    [alku] => 08:00
-                                    [loppu] => 09:00
-                                )
-
-                        )
-
-                )
-
-            [10.06.2020] => Array
-                (
-                    [11] => Array
-                        (
-                            [0] => Array
-                                (
-                                    [alku] => 08:00
-                                    [loppu] => 09:00
-                                )
-
-                        )
-
-                )
-
-        )
-
-    [tids] => Array
-        (
-            [10] => 10
-            [11] => 11
-        )
-
-)
 	$getTyovuorot = $this->getTyovuorot2months();
 	echo '<pre>';
 	print_r($getTyovuorot);
@@ -294,30 +233,28 @@ Array
 		<br>
 
 		<?php
-		  // <-- Kupongi
-		  if(isset($_SESSION['onlinevaraus']['kupongi']))
-		  {
+		// <-- Kupongi
+		if(isset($_SESSION['onlinevaraus']['kupongi']))
+		{
 			$kup = Kupongit::model()->findbypk($_SESSION['onlinevaraus']['kupongi']);
-
-		        if(isset($kup->id))
+			if(isset($kup->id))
 			{
-	
-			if($kup->maara_tyyppi == 'euro')
-			$kup_maara = '-'.$kup->euro_maara.' &euro;';
-			if($kup->maara_tyyppi == 'prosentti')
-			$kup_maara = '-'.$kup->prosentti_maara.'%';
+				if($kup->maara_tyyppi == 'euro')
+				$kup_maara = '-'.$kup->euro_maara.' &euro;';
+				if($kup->maara_tyyppi == 'prosentti')
+				$kup_maara = '-'.$kup->prosentti_maara.'%';
 
-			echo '
-			<div class="row">
-			 <div class="col-xs-2">
-				<i class="fa fa-star fa-2x" aria-hidden="true"></i>
-			 </div><div class="col-xs-10">
-				'.Yii::t('main', 'Alennuskoodi').': '.$kup_maara.'
-			 </div>
-			</div>
-		 	';
+				echo '
+				<div class="row">
+				 <div class="col-xs-2">
+					<i class="fa fa-star fa-2x" aria-hidden="true"></i>
+				 </div><div class="col-xs-10">
+					'.Yii::t('main', 'Alennuskoodi').': '.$kup_maara.'
+				 </div>
+				</div>
+				';
 			}
-		  }
+		}
 		?>
 
 		<?php if(!isset($_SESSION['onlinevaraus']['kupongi'])) : ?>

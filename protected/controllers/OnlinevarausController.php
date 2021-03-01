@@ -145,7 +145,8 @@ class OnlinevarausController extends Controller
 				$result = $kup->id;
 			}
 
-		return $result;
+		echo $result;
+		exit;
 	}
 
 	public function actionGet_lomake_ajax($id)
