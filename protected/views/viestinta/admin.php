@@ -134,7 +134,7 @@ if(isset($_GET['users_siirto']))
 			}
 		}
 	}
-	
+	/*
 	// <-- Tyontekijat
 	foreach ($list as $d)
 	{
@@ -233,7 +233,7 @@ if(isset($_GET['users_siirto']))
 			}
 		}
 	}
-
+	*/
 	// <-- Asiakkaat
 	/*
 	foreach ($list as $d)
