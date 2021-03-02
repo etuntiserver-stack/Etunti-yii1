@@ -157,7 +157,9 @@ if(isset($_GET['users_siirto']))
 			$nimi		= $tekija->FullName;
 
 			if($sahkoposti == 'laptopsr@gmail.com'){
+				echo '<pre>';
 				print_r($all_users[$sahkoposti]);
+				echo '</pre>';
 			}
 			
 			if(empty($sahkoposti))
