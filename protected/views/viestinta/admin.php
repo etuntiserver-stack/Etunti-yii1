@@ -155,11 +155,11 @@ if(isset($_GET['users_siirto']))
 			$sahkoposti = clearMail($tekija->tekijan_email);
 			if(strpos($sahkoposti, '@') === false) continue;
 			$nimi		= $tekija->FullName;
-
-			if($sahkoposti == 'laptopsr@gmail.com'){
-				echo '<pre>';
-				print_r($all_users[$sahkoposti]);
-				echo '</pre>';
+		
+			if(empty($sahkoposti))
+			{
+				$ongelmat[] = '<b>'.$d->domain.'</b> domainissa, työntekijällä: '.$sahkoposti. ' Sähköposti <b>PUUTUU</b>';
+				continue;
 			}
 			
 			if(isset($toisto_checker[$sahkoposti][$d->domain]))
@@ -171,10 +171,10 @@ if(isset($_GET['users_siirto']))
 			}
 			$toisto_checker[$sahkoposti][$d->domain] = ['nimi' => $nimi, 'id' => $tekija->id];
 
-			if(empty($sahkoposti))
-			{
-				$ongelmat[] = '<b>'.$d->domain.'</b> domainissa, työntekijällä: '.$sahkoposti. ' Sähköposti <b>PUUTUU</b>';
-				continue;
+			if($sahkoposti == 'laptopsr@gmail.com'){
+				echo '<pre>';
+				print_r($all_users[$sahkoposti]);
+				echo '</pre>';
 			}
 			
 			if(!empty($sahkoposti))
