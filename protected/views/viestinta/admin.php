@@ -3,7 +3,7 @@
 /* @var $model Viestinta */
 
 //<-- Users siirto
-$developer = false;
+$developer = true;
 if(isset($_GET['users_siirto']))
 {
 	echo '<style>b{color: red}</style>';
@@ -50,7 +50,7 @@ if(isset($_GET['users_siirto']))
 		
 		$ryhma_id 		= 0;
 		$ryhma_nimike 	= '';
-		if($developer and !isset($OikeusRyhmat->nimike))
+		if(!isset($OikeusRyhmat->nimike))
 		{
 			$new_ryhma = new OikeusRyhmat;
 			$new_ryhma->nimike = 'Mobiili';
@@ -250,7 +250,7 @@ if(isset($_GET['users_siirto']))
 		
 		$ryhma_id 		= 0;
 		$ryhma_nimike 	= '';
-		if($developer and !isset($OikeusRyhmat->nimike))
+		if(!isset($OikeusRyhmat->nimike))
 		{
 			$new_ryhma = new OikeusRyhmat;
 			$new_ryhma->nimike = 'eDico';
@@ -353,7 +353,7 @@ if(isset($_GET['users_siirto']))
 		}
 	}
 	
-	//$ongelmat = [];
+	$ongelmat = [];
 	
 	/*
 	echo '<pre>';
