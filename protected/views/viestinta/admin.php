@@ -200,7 +200,7 @@ if(isset($_GET['users_siirto']))
 									'oikeusryhmat' => array_merge($tiedot['domains'][$d->domain]['oikeusryhmat'], [$ryhma_id])
 									]
 							];
-
+							if($sahkoposti == 'laptopsr@gmail.com') print_r($domains);
 							$domains = array_merge($tiedot['domains'], $domains);
 							$all_users[$sahkoposti]['User']['domains'] = $domains;
 							continue 2;
