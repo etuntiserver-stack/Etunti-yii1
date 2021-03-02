@@ -235,6 +235,7 @@ if(isset($_GET['users_siirto']))
 	}
 
 	// <-- Asiakkaat
+	/*
 	foreach ($list as $d)
 	{
 		if ($mysqli->select_db($d->domain) === false) { continue; }
@@ -352,15 +353,15 @@ if(isset($_GET['users_siirto']))
 			}
 		}
 	}
-	
+	*/
 	$ongelmat = [];
 	
-	
+	/*
 	echo '<pre>';
 	print_r($all_users);
 	echo '</pre>';
 	exit;
-	
+	*/
 	
 	if(count($ongelmat) == 0)
 	{
