@@ -353,7 +353,7 @@ if(isset($_GET['users_siirto']))
 		}
 	}
 	
-	$ongelmat = [];
+	//$ongelmat = [];
 	
 	/*
 	echo '<pre>';
