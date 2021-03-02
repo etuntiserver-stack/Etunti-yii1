@@ -238,10 +238,6 @@ if(isset($_GET['users_siirto']))
 			}
 		}
 	}
-
-				echo '<pre>';
-				print_r($all_users['laptopsr@gmail.com']);
-				echo '</pre>';
 				
 	// <-- Asiakkaat
 	foreach ($list as $d)
@@ -336,6 +332,11 @@ if(isset($_GET['users_siirto']))
 									]
 							];
 
+							$domains = array_merge($tiedot['domains'], $domains);
+							$all_users[$sahkoposti]['User']['domains'] = $domains;
+							continue 2;
+						} else {
+						
 							$domains = array_merge($tiedot['domains'], $domains);
 							$all_users[$sahkoposti]['User']['domains'] = $domains;
 							continue 2;
