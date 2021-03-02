@@ -170,12 +170,6 @@ if(isset($_GET['users_siirto']))
 				continue;
 			}
 			$toisto_checker[$sahkoposti][$d->domain] = ['nimi' => $nimi, 'id' => $tekija->id];
-
-			if($sahkoposti == 'laptopsr@gmail.com'){
-				echo '<pre>';
-				print_r($all_users[$sahkoposti]);
-				echo '</pre>';
-			}
 			
 			if(!empty($sahkoposti))
 			{
@@ -212,7 +206,11 @@ if(isset($_GET['users_siirto']))
 						}
 					}
 				}
-
+			if($sahkoposti == 'laptopsr@gmail.com'){
+				echo '<pre>';
+				print_r($all_users[$sahkoposti]);
+				echo '</pre>';
+			}
 				$all_users[$sahkoposti] = [
 					'User' => [
 						'id' => 0,
