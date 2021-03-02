@@ -353,14 +353,14 @@ if(isset($_GET['users_siirto']))
 		}
 	}
 	
-	//$ongelmat = [];
+	$ongelmat = [];
 	
-	/*
+	
 	echo '<pre>';
 	print_r($all_users);
 	echo '</pre>';
 	exit;
-	*/
+	
 	
 	if(count($ongelmat) == 0)
 	{
