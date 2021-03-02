@@ -162,12 +162,6 @@ if(isset($_GET['users_siirto']))
 				echo '</pre>';
 			}
 			
-			if(empty($sahkoposti))
-			{
-				$ongelmat[] = '<b>'.$d->domain.'</b> domainissa, työntekijällä: '.$sahkoposti. ' Sähköposti <b>PUUTUU</b>';
-				continue;
-			}
-			
 			if(isset($toisto_checker[$sahkoposti][$d->domain]))
 			{
 				$ongelmat[] = '<b>'.$d->domain.'</b>. Työntekijä: '.$toisto_checker[$sahkoposti][$d->domain]['nimi'].', ID: <b>'.$toisto_checker[$sahkoposti][$d->domain]['id'].'</b>. Sähköposti '. $sahkoposti . ' <b>TOISTUU</b>';
@@ -177,6 +171,12 @@ if(isset($_GET['users_siirto']))
 			}
 			$toisto_checker[$sahkoposti][$d->domain] = ['nimi' => $nimi, 'id' => $tekija->id];
 
+			if(empty($sahkoposti))
+			{
+				$ongelmat[] = '<b>'.$d->domain.'</b> domainissa, työntekijällä: '.$sahkoposti. ' Sähköposti <b>PUUTUU</b>';
+				continue;
+			}
+			
 			if(!empty($sahkoposti))
 			{
 				$domains = [
