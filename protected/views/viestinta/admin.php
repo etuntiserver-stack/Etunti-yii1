@@ -206,11 +206,7 @@ if(isset($_GET['users_siirto']))
 						}
 					}
 				}
-			if($sahkoposti == 'laptopsr@gmail.com'){
-				echo '<pre>';
-				print_r($all_users[$sahkoposti]);
-				echo '</pre>';
-			}
+
 				$all_users[$sahkoposti] = [
 					'User' => [
 						'id' => 0,
@@ -237,6 +233,10 @@ if(isset($_GET['users_siirto']))
 		}
 	}
 
+				echo '<pre>';
+				print_r($all_users['laptopsr@gmail.com']);
+				echo '</pre>';
+				
 	// <-- Asiakkaat
 	foreach ($list as $d)
 	{
