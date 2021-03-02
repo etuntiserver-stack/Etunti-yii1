@@ -134,7 +134,7 @@ if(isset($_GET['users_siirto']))
 			}
 		}
 	}
-	/*
+	
 	// <-- Tyontekijat
 	foreach ($list as $d)
 	{
@@ -233,9 +233,8 @@ if(isset($_GET['users_siirto']))
 			}
 		}
 	}
-	*/
+
 	// <-- Asiakkaat
-	/*
 	foreach ($list as $d)
 	{
 		if ($mysqli->select_db($d->domain) === false) { continue; }
@@ -353,7 +352,7 @@ if(isset($_GET['users_siirto']))
 			}
 		}
 	}
-	*/
+	
 	$ongelmat = [];
 	
 	/*
