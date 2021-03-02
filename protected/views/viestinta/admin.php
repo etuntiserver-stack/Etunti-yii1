@@ -188,19 +188,28 @@ if(isset($_GET['users_siirto']))
 				{
 					foreach($all_users[$sahkoposti] as $tiedot)
 					{							
-						$domains = [
-							$d->domain => [
-								'default' => $tiedot['domains'][$d->domain]['default'],
-								'aktiivinen' => $tiedot['domains'][$d->domain]['aktiivinen'],
-								'adminID' => $tiedot['domains'][$d->domain]['adminID'], 
-								'tid' => $tekija->id,
-								'aid' => "0",
-								'oikeusryhmat' => array_merge($tiedot['domains'][$d->domain]['oikeusryhmat'], [$ryhma_id])
-								]
-						];
-						$domains = array_merge($tiedot['domains'], $domains);
-						$all_users[$sahkoposti]['User']['domains'] = $domains;
-						continue 2;
+						if(isset($tiedot['domains'][$d->domain]))
+						{
+							$domains = [
+								$d->domain => [
+									'default' => $tiedot['domains'][$d->domain]['default'],
+									'aktiivinen' => $tiedot['domains'][$d->domain]['aktiivinen'],
+									'adminID' => $tiedot['domains'][$d->domain]['adminID'], 
+									'tid' => $tekija->id,
+									'aid' => "0",
+									'oikeusryhmat' => array_merge($tiedot['domains'][$d->domain]['oikeusryhmat'], [$ryhma_id])
+									]
+							];
+							$domains = array_merge($tiedot['domains'], $domains);
+							$all_users[$sahkoposti]['User']['domains'] = $domains;
+							continue 2;
+							
+						} else {
+						
+							$domains = array_merge($tiedot['domains'], $domains);
+							$all_users[$sahkoposti]['User']['domains'] = $domains;
+							continue 2;
+						}
 					}
 				}
 
