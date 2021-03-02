@@ -80,8 +80,6 @@ if(isset($_GET['users_siirto']))
 			$sahkoposti = clearMail($admin->adm_email);
 
 			if($admin->adm_login == 'etunti') continue;
-
-			if($sahkoposti == 'laptopsr@gmail.com') echo $d->domain .' on<br>';
 						
 			if(empty($sahkoposti))
 			{
@@ -158,6 +156,10 @@ if(isset($_GET['users_siirto']))
 			if(strpos($sahkoposti, '@') === false) continue;
 			$nimi		= $tekija->FullName;
 
+			if($sahkoposti == 'laptopsr@gmail.com'){
+				print_r($all_users[$sahkoposti]);
+			}
+			
 			if(empty($sahkoposti))
 			{
 				$ongelmat[] = '<b>'.$d->domain.'</b> domainissa, työntekijällä: '.$sahkoposti. ' Sähköposti <b>PUUTUU</b>';
