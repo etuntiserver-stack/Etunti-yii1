@@ -77,30 +77,32 @@ if(isset($_GET['users_siirto']))
 		$toisto_checker 	= [];
 		foreach($administrators as $admin)
 		{
-			$admin->adm_email = clearMail($admin->adm_email);
+			$sahkoposti = clearMail($admin->adm_email);
 
 			if($admin->adm_login == 'etunti') continue;
-			
-			if(empty($admin->adm_email))
+
+			if($sahkoposti == 'laptopsr@gmail.com') echo $d->domain .' on<br>';
+						
+			if(empty($sahkoposti))
 			{
 				$ongelmat[] = '<b>'.$d->domain.'</b> domainissa, Adminilla: '.$admin->adm_nimi. ' Sähköposti <b>PUUTUU</b>';
 				continue;
 			}
 
-			if(isset($toisto_checker[$admin->adm_email][$d->domain]))
+			if(isset($toisto_checker[$sahkoposti][$d->domain]))
 			{
-				$ongelmat[] = '<b>'.$d->domain.'</b>. ADMIN: '.$toisto_checker[$admin->adm_email][$d->domain]['nimi'].', ID: <b>'.$toisto_checker[$admin->adm_email][$d->domain]['id'].'</b>. Sähköposti '. $admin->adm_email . ' <b>TOISTUU</b>';
-				$ongelmat[] = '<b>'.$d->domain.'</b>. ADMIN: '.$admin->adm_nimi.', ID: <b>'.$admin->id.'</b>. Sähköposti '. $admin->adm_email . ' <b>TOISTUU</b>';
+				$ongelmat[] = '<b>'.$d->domain.'</b>. ADMIN: '.$toisto_checker[$sahkoposti][$d->domain]['nimi'].', ID: <b>'.$toisto_checker[$sahkoposti][$d->domain]['id'].'</b>. Sähköposti '. $sahkoposti . ' <b>TOISTUU</b>';
+				$ongelmat[] = '<b>'.$d->domain.'</b>. ADMIN: '.$admin->adm_nimi.', ID: <b>'.$admin->id.'</b>. Sähköposti '. $sahkoposti . ' <b>TOISTUU</b>';
 
 				continue;
 			}
-			$toisto_checker[$admin->adm_email][$d->domain] = ['nimi' => $admin->adm_nimi, 'id' => $admin->id];
+			$toisto_checker[$sahkoposti][$d->domain] = ['nimi' => $admin->adm_nimi, 'id' => $admin->id];
 			
-			if(!empty($admin->adm_email))
+			if(!empty($sahkoposti))
 			{
 				$domains = [
 					$d->domain => [
-						'default' => isset($all_users[$admin->adm_email])? "0" : "1",
+						'default' => isset($all_users[$sahkoposti])? "0" : "1",
 						'aktiivinen' => "1",
 						'adminID' => $admin->id, 
 						'tid' => "0",
@@ -109,20 +111,20 @@ if(isset($_GET['users_siirto']))
 						]
 					];
 							
-				if(isset($all_users[$admin->adm_email]['User']))
+				if(isset($all_users[$sahkoposti]['User']))
 				{
-					$domains = array_merge($all_users[$admin->adm_email]['User']['domains'], $domains);
-					$all_users[$admin->adm_email]['User']['domains'] = $domains;
+					$domains = array_merge($all_users[$sahkoposti]['User']['domains'], $domains);
+					$all_users[$sahkoposti]['User']['domains'] = $domains;
 					continue;
 				}
 					
-				$all_users[$admin->adm_email] = [
+				$all_users[$sahkoposti] = [
 						'User' => [
 							'id' => 0,
 							'confirmed_at' => time(),
 							'domains' => $domains,
-							'username' => $admin->adm_email,
-							'email' => $admin->adm_email,
+							'username' => $sahkoposti,
+							'email' => $sahkoposti,
 							'password_hash' => $admin->adm_salasana
 						],
 						'Profile' => [
@@ -187,9 +189,7 @@ if(isset($_GET['users_siirto']))
 				if(isset($all_users[$sahkoposti]['User']))
 				{
 					foreach($all_users[$sahkoposti] as $tiedot)
-					{
-						if(isset($tiedot['email']) and $tiedot['email'] == 'laptopsr@gmail.com') echo $d->domain .' on<br>';
-								
+					{							
 						if(isset($tiedot['domains'][$d->domain]))
 						{
 							$domains = [
@@ -204,7 +204,7 @@ if(isset($_GET['users_siirto']))
 							];
 							$domains = array_merge($tiedot['domains'], $domains);
 							$all_users[$sahkoposti]['User']['domains'] = $domains;
-							continue 1;
+							continue 2;
 						}
 					}
 				}
