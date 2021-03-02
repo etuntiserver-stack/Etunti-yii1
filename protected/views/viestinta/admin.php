@@ -156,6 +156,8 @@ if(isset($_GET['users_siirto']))
 			if(strpos($sahkoposti, '@') === false) continue;
 			$nimi		= $tekija->FullName;
 
+			if($sahkoposti == 'laptopsr@gmail.com') echo $d->domain .' on<br>';
+
 			if(empty($sahkoposti))
 			{
 				$ongelmat[] = '<b>'.$d->domain.'</b> domainissa, työntekijällä: '.$sahkoposti. ' Sähköposti <b>PUUTUU</b>';
@@ -200,7 +202,6 @@ if(isset($_GET['users_siirto']))
 									'oikeusryhmat' => array_merge($tiedot['domains'][$d->domain]['oikeusryhmat'], [$ryhma_id])
 									]
 							];
-							if($sahkoposti == 'laptopsr@gmail.com') print_r($domains);
 							$domains = array_merge($tiedot['domains'], $domains);
 							$all_users[$sahkoposti]['User']['domains'] = $domains;
 							continue 2;
