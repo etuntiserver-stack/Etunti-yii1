@@ -31,7 +31,7 @@ if(isset($_GET['users_siirto']))
 	$yhteensa		= 0;
 	
 	// <-- Admins
-	foreach ($list as $d)
+	foreach($list as $d)
 	{
 		if ($mysqli->select_db($d->domain) === false) { continue; }
 		Yii::app()->db1->setActive(false);
@@ -204,7 +204,7 @@ if(isset($_GET['users_siirto']))
 							];
 							$domains = array_merge($tiedot['domains'], $domains);
 							$all_users[$sahkoposti]['User']['domains'] = $domains;
-							continue 2;
+							continue 1;
 						}
 					}
 				}
