@@ -177,7 +177,7 @@
 
 	if(isset($model->kotitalousvahennys) and !empty($model->kotitalousvahennys))
 	{
-		$s = $sum-(($sum*(int)$model->kotitalousvahennys)/100);
+		$s = $sum-($sum-(($sum*(int)$model->kotitalousvahennys)/100));
 		$kotitalousvahennys = '<br><span>Kotitalousvähennys: '.number_format($s, 2, ',', '').'</span> &euro;';
 		$tilauksenKuvaus['KotitalousVahennys'] = number_format($s, 2, ',', '');
 	}
