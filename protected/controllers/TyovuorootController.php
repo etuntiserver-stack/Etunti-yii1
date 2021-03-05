@@ -3420,7 +3420,7 @@ class TyovuorootController extends Controller
 
 				$this->toistuvaDeletePvm($edellinen_model['id'], $laatikko_pvm, $laatikko_tid, $poisto_syy);
 				// <-- Kun ketjussa oli työparia ja nyt ei yhtään (Asennettu 14.08.2020)
-				if(count($edelliset_tyoparit) > 0 and empty($model->tyopaari))
+				if(count($edelliset_tyoparit) > 0) // and empty($model->tyopaari) / otettu pois 05.03.2021
 				{
 					foreach($edelliset_tyoparit as $tptid)
 						$this->toistuvaDeletePvm($edellinen_model['id'], $laatikko_pvm, $tptid, $poisto_syy);
