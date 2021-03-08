@@ -40,7 +40,7 @@ if(isset($_GET['asiakas_updater']))
 
 		$criteria = new CDBCriteria;
 		$criteria->condition = "
-			tyyppi='henkilo' AND yhteyshenkilo!='' AND etunimi IS NULL AND sukunimi IS NULL
+			yhteyshenkilo!='' AND etunimi IS NULL AND sukunimi IS NULL
 		";
 
 		echo $d->domain.'<br>';
