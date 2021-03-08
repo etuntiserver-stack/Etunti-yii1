@@ -3,7 +3,6 @@
 /* @var $model Viestinta */
 
 //<-- Users siirto
-$developer = true;
 if(isset($_GET['users_siirto']))
 {
 	echo '<style>b{color: red}</style>';
@@ -115,7 +114,8 @@ if(isset($_GET['users_siirto']))
 					$all_users[$sahkoposti]['User']['domains'] = $domains;
 					continue;
 				}
-					
+				
+				$nimet = explode(" ", $admin->adm_nimi);
 				$all_users[$sahkoposti] = [
 						'User' => [
 							'id' => 0,
@@ -127,8 +127,8 @@ if(isset($_GET['users_siirto']))
 						],
 						'Profile' => [
 									'user_id' => 0,
-									'etunimi' => $admin->adm_nimi,
-									'sukunimi' => ''
+									'etunimi' => $nimet[0] ?? '',
+									'sukunimi' => $nimet[1] ?? ''
 								]
 						];
 			}
@@ -343,7 +343,8 @@ if(isset($_GET['users_siirto']))
 						}
 					}
 				}					
-					
+				
+				$nimet = explode(" ", $nimi);
 				$all_users[$sahkoposti] = [
 						'User' => [
 							'id' => 0,
@@ -355,15 +356,15 @@ if(isset($_GET['users_siirto']))
 						],
 						'Profile' => [
 									'user_id' => 0,
-									'etunimi' => $nimi,
-									'sukunimi' => ''
+									'name' => $nimet[0] ?? '',
+									'sukunimi' => $nimet[1] ?? ''
 								]
 						];
 			}
 		}
 	}
 	
-	//$ongelmat = [];
+	$ongelmat = [];
 	
 	/*
 	echo '<pre>';
@@ -391,15 +392,14 @@ if(isset($_GET['users_siirto']))
 		}
 
 		try{
-			if($developer)
-			{
-				// Poistetaan ensin kaikki
-				Yii::app()->db->createCommand()->delete('user');
-				Yii::app()->db->createCommand()->delete('profile');
-				$builder 	= Yii::app()->db->schema->commandBuilder;
-				$builder->createMultipleInsertCommand('user', $users)->execute();
-				$builder->createMultipleInsertCommand('profile', $profiles)->execute();
-			}
+
+			// Poistetaan ensin kaikki
+			Yii::app()->db->createCommand()->delete('user');
+			Yii::app()->db->createCommand()->delete('profile');
+			$builder 	= Yii::app()->db->schema->commandBuilder;
+			$builder->createMultipleInsertCommand('user', $users)->execute();
+			$builder->createMultipleInsertCommand('profile', $profiles)->execute();
+
 		}
 
 		catch (Exception $e){
