@@ -1,7 +1,7 @@
 <?php
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
-
+/*
 if(isset($_GET['asiakas_updater']))
 {
 	$db_host = 'localhost';
@@ -60,7 +60,7 @@ if(isset($_GET['asiakas_updater']))
 		}
 	}
 }
-
+*/
 //<-- Users siirto
 if(isset($_GET['users_siirto']))
 {
