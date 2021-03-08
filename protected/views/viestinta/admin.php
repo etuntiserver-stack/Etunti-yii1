@@ -2,6 +2,65 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
+if(isset($_GET['asiakas_updater']))
+{
+	$db_host = 'localhost';
+	$site = Yii::app()->createController('Site');
+	$conn = $site[0]->dbConnectArr();
+	$list = Domainit::model()->findAll(" aktiivinen=1 ");
+
+	try {
+		$mysqli = new mysqli($conn['host'], $conn['username'], $conn['password']);
+	} catch (\Exception $e) {
+		echo $e->getMessage(), PHP_EOL;
+		exit;
+	}
+
+	// <-- Asiakkaat Etunimi ja sukunimi updater
+	foreach ($list as $d)
+	{
+		if ($mysqli->select_db($d->domain) === false) { continue; }
+		Yii::app()->db1->setActive(false);
+		Yii::app()->db1->connectionString = 'mysql:host=' . $db_host. ';dbname=' . $d->domain;
+		//Yii::app()->db1->charset = 'utf8';
+		Yii::app()->db1->setActive(true);
+
+		$tb_name = 'asiakkaat';
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		$table_structure = array(
+			'etunimi' => 'varchar(255) DEFAULT NULL',
+			'sukunimi' => 'varchar(255) DEFAULT NULL',
+		);
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+
+		$criteria = new CDBCriteria;
+		$criteria->condition = "
+			tyyppi='henkilo' AND yhteyshenkilo!='' AND etunimi IS NULL AND sukunimi IS NULL
+		";
+
+		echo $d->domain.'<br>';
+		try {
+			$asiakkaat 	= Asiakkaat::model()->findAll($criteria);
+		} catch (\Exception $e) {
+			echo $e->getMessage(), PHP_EOL;
+			exit;
+		}
+
+		foreach($asiakkaat as $item)
+		{
+			$nimet = explode(" ", $item->yhteyshenkilo);
+			$etunimi = $nimet[0] ?? '';
+			$sukunimi = $nimet[1] ?? '';
+			Asiakkaat::model()->updateByPk($item->id, ['etunimi' => trim($etunimi), 'sukunimi' => trim($sukunimi)]);
+		}
+	}
+}
+
 //<-- Users siirto
 if(isset($_GET['users_siirto']))
 {
