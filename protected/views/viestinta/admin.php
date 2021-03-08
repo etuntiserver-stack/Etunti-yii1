@@ -127,7 +127,7 @@ if(isset($_GET['users_siirto']))
 						],
 						'Profile' => [
 									'user_id' => 0,
-									'etunimi' => $nimet[0] ?? '',
+									'name' => $nimet[0] ?? '',
 									'sukunimi' => $nimet[1] ?? ''
 								]
 						];
