@@ -175,7 +175,7 @@ if(isset($_GET['users_siirto']))
 			{
 				$domains = [
 					$d->domain => [
-						'default' => isset($all_users[$sahkoposti])? 0 : 1,
+						'default' => isset($all_users[$sahkoposti])? "0" : "1",
 						'aktiivinen' => $tekija->aktiivinen,
 						'adminID' => "0", 
 						'tid' => $tekija->id,
@@ -373,7 +373,7 @@ if(isset($_GET['users_siirto']))
 	exit;
 	*/
 	
-	if(count($ongelmat) == 0)
+	if(count($ongelmat) == 0 || isset($_GET['pakko']))
 	{
 		$users 		= [];
 		$profiles 	= [];
