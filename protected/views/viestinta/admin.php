@@ -2,7 +2,8 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 /*
-if(isset($_GET['asiakas_updater']))
+ON AJETTU
+if(isset($_GET['asiakas_updater'])) 
 {
 	$db_host = 'localhost';
 	$site = Yii::app()->createController('Site');
@@ -166,14 +167,20 @@ if(isset($_GET['users_siirto']))
 						'oikeusryhmat' => [$admin->status]
 						]
 					];
-							
-				if(isset($all_users[$sahkoposti]['User']))
+
+				if(isset($all_users[$sahkoposti]['User']['domains'][$d->domain]) and $all_users[$sahkoposti]['User']['domains'][$d->domain]['adminID'] == 0)
+				{
+					$all_users[$sahkoposti]['User']['domains'][$d->domain]['adminID'] = $admin->id;
+					$all_users[$sahkoposti]['User']['domains'][$d->domain]['oikeusryhmat'][] = $admin->status;
+					continue;
+				}
+				if(isset($all_users[$sahkoposti]['User']['domains']) and !isset($all_users[$sahkoposti]['User']['domains'][$d->domain]))
 				{
 					$domains = array_merge($all_users[$sahkoposti]['User']['domains'], $domains);
 					$all_users[$sahkoposti]['User']['domains'] = $domains;
 					continue;
 				}
-				
+
 				$nimet = explode(" ", $admin->adm_nimi);
 				$all_users[$sahkoposti] = [
 						'User' => [
@@ -242,34 +249,18 @@ if(isset($_GET['users_siirto']))
 						'oikeusryhmat' => [$ryhma_id]
 						]
 				];
-						
-				if(isset($all_users[$sahkoposti]['User']))
+
+				if(isset($all_users[$sahkoposti]['User']['domains'][$d->domain]) and $all_users[$sahkoposti]['User']['domains'][$d->domain]['tid'] == 0)
 				{
-					foreach($all_users[$sahkoposti] as $tiedot)
-					{							
-						if(isset($tiedot['domains'][$d->domain]))
-						{
-							$domains = [
-								$d->domain => [
-									'default' => $tiedot['domains'][$d->domain]['default'],
-									'aktiivinen' => $tiedot['domains'][$d->domain]['aktiivinen'],
-									'adminID' => $tiedot['domains'][$d->domain]['adminID'], 
-									'tid' => $tekija->id,
-									'aid' => "0",
-									'oikeusryhmat' => array_merge($tiedot['domains'][$d->domain]['oikeusryhmat'], [$ryhma_id])
-									]
-							];
-							$domains = array_merge($tiedot['domains'], $domains);
-							$all_users[$sahkoposti]['User']['domains'] = $domains;
-							continue 2;
-							
-						} else {
-						
-							$domains = array_merge($tiedot['domains'], $domains);
-							$all_users[$sahkoposti]['User']['domains'] = $domains;
-							continue 2;
-						}
-					}
+					$all_users[$sahkoposti]['User']['domains'][$d->domain]['tid'] = $tekija->id;
+					$all_users[$sahkoposti]['User']['domains'][$d->domain]['oikeusryhmat'][] = $ryhma_id;
+					continue;
+				}
+				if(isset($all_users[$sahkoposti]['User']['domains']) and !isset($all_users[$sahkoposti]['User']['domains'][$d->domain]))
+				{
+					$domains = array_merge($all_users[$sahkoposti]['User']['domains'], $domains);
+					$all_users[$sahkoposti]['User']['domains'] = $domains;
+					continue;
 				}
 
 				$all_users[$sahkoposti] = [
@@ -374,33 +365,17 @@ if(isset($_GET['users_siirto']))
 						]
 					];
 
-				if(isset($all_users[$sahkoposti]['User']))
+				if(isset($all_users[$sahkoposti]['User']['domains'][$d->domain]) and $all_users[$sahkoposti]['User']['domains'][$d->domain]['aid'] == 0)
 				{
-					foreach($all_users[$sahkoposti] as $tiedot)
-					{
-						if(isset($tiedot['domains'][$d->domain]))
-						{
-							$domains = [
-								$d->domain => [
-									'default' => $tiedot['domains'][$d->domain]['default'],
-									'aktiivinen' => $tiedot['domains'][$d->domain]['aktiivinen'],
-									'adminID' => $tiedot['domains'][$d->domain]['adminID'], 
-									'tid' => $tiedot['domains'][$d->domain]['tid'], 
-									'aid' => $asiakas->id,
-									'oikeusryhmat' => array_merge($tiedot['domains'][$d->domain]['oikeusryhmat'], [$ryhma_id])
-									]
-							];
-
-							$domains = array_merge($tiedot['domains'], $domains);
-							$all_users[$sahkoposti]['User']['domains'] = $domains;
-							continue 2;
-						} else {
-						
-							$domains = array_merge($tiedot['domains'], $domains);
-							$all_users[$sahkoposti]['User']['domains'] = $domains;
-							continue 2;
-						}
-					}
+					$all_users[$sahkoposti]['User']['domains'][$d->domain]['aid'] = $asiakas->id;
+					$all_users[$sahkoposti]['User']['domains'][$d->domain]['oikeusryhmat'][] = $ryhma_id;
+					continue;
+				}
+				if(isset($all_users[$sahkoposti]['User']['domains']) and !isset($all_users[$sahkoposti]['User']['domains'][$d->domain]))
+				{
+					$domains = array_merge($all_users[$sahkoposti]['User']['domains'], $domains);
+					$all_users[$sahkoposti]['User']['domains'] = $domains;
+					continue;
 				}					
 				
 				$nimet = explode(" ", $nimi);
