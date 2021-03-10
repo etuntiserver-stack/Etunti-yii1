@@ -103,10 +103,8 @@ class PalautteetController extends Controller
 			$as = Asiakkaat::model()->findbypk($p->asiakas_id);
 			$firma = FirmanTiedot::model()->findbypk(1);
 
-			if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi))
-			$nimi = $as->yrityksen_nimi;
-			elseif(isset($as->yhteyshenkilo) and !empty($as->yhteyshenkilo))
-			$nimi = $as->yhteyshenkilo;
+			if(isset($as->id))
+				$nimi = $as->Fullname;
 
 			if(isset(Yii::app()->user->asiakas))
 				$model->teksti = '<b>'.$nimi.'</b>: '.$model->teksti;
@@ -202,10 +200,8 @@ class PalautteetController extends Controller
 		$ft = FirmanTiedot::model()->findbypk(1);
 							
 		$nimi = '';
-		if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi))
-		$nimi = $as->yrityksen_nimi;
-		elseif(isset($as->yhteyshenkilo) and !empty($as->yhteyshenkilo))
-		$nimi = $as->yhteyshenkilo;
+		if(isset($as->id))
+			$nimi = $as->Fullname;
 
 		$mod->attributes=$post['Palautteet'];
 		$mod->teksti = '<div><b>'.$nimi.'</b>: '.$mod->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div></div>';
@@ -270,10 +266,8 @@ class PalautteetController extends Controller
 			$ft = FirmanTiedot::model()->findbypk(1);
 				
 			$nimi = '';
-			if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi))
-			$nimi = $as->yrityksen_nimi;
-			elseif(isset($as->yhteyshenkilo) and !empty($as->yhteyshenkilo))
-			$nimi = $as->yhteyshenkilo;
+			if(isset($as->id))
+				$nimi = $as->Fullname;
 
 			$model->attributes = $_POST['Palautteet'];
 			$model->teksti = '<b>'.$nimi.'</b>: '.$model->teksti;
@@ -398,7 +392,7 @@ class PalautteetController extends Controller
 
 		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
 		{
-			$asiakaat = Asiakkaat::model()->findAll(" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%' ");
+			$asiakaat = Asiakkaat::model()->findAll(" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%' ");
 			$as_id = array();
 			foreach($asiakaat as $itm)
 				$as_id[] = $itm->id;

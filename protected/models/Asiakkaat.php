@@ -220,29 +220,38 @@ class Asiakkaat extends DB2ActiveRecord
 			'lisatietoja_laskutuksesta' => Yii::t('main', 'Lisätietoja laskutuksesta'),
 		);
 	}
-
-        public function getFullname(){
+	// Fullname
+    public function getFullname(){
 		$return = '';
-		if( !empty($this->yrityksen_nimi) and !empty($this->tyyppi) and $this->tyyppi == 'yritys' ){
+		if( !empty($this->yrityksen_nimi) and $this->tyyppi == 'yritys' ){
 			$return = $this->yrityksen_nimi;
 		}
-		if( !empty($this->yhteyshenkilo) and !empty($this->tyyppi) and $this->tyyppi == 'henkilo' ){
-			$return = $this->yhteyshenkilo;
+		if( !empty($this->etunimi) and $this->tyyppi == 'henkilo' ){
+			$return = $this->etunimi.' '.$this->sukunimi;
 		}
 		if( empty($this->yrityksen_nimi) and empty($this->yhteyshenkilo)){
 			$return = 'Asiakas id: '.$this->id;
 		}
-                return $return;
-        }
+		return trim($return);
+    }
 
-        public function getValikkotyoryhma(){
+	// Etusukunimi
+    public function getEtusukunimi(){
+		$return = '';
+		if( !empty($this->etunimi) )
+			$return = $this->etunimi.' '.$this->sukunimi;
+
+		return trim($return);
+    }
+
+    public function getValikkotyoryhma(){
 		$return = $this->tyoryhma;
 		if( !empty($this->tyoryhma)){
 			$vlk = Valikkoot::model()->findByPk($this->tyoryhma);
 			if( isset($vlk->id)){ $return = $vlk->value; }
 		}
-                return $return;
-        }
+		return $return;
+    }
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.

@@ -9,11 +9,8 @@
 	$get_kohde = Kohteet::model()->findByPk($data->kohde);
 	if(isset($get_kohde->asiakkaat))
 	{
-		if( $get_kohde->asiakkaat->tyyppi == 'yritys' ){
-			$asiakas = $get_kohde->asiakkaat->yrityksen_nimi;
-		} elseif( $get_kohde->asiakkaat->tyyppi == 'henkilo' ){
-			$asiakas = $get_kohde->asiakkaat->yhteyshenkilo;
-		}
+		$asiakas = $get_kohde->asiakkaat->Fullname;
+		
 		if( $get_kohde->asiakkaat->puhelin != '' ){
 			$call = '&nbsp;&nbsp;<a href="tel:'.$get_kohde->asiakkaat->puhelin.'"><i class="fa fa-2x fa-phone"></i></a>';
 		}

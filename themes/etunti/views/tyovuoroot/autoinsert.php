@@ -94,7 +94,7 @@
 		<?php 
 
 		$criteria=new CDbCriteria;
-		$criteria->order =" yrityksen_nimi!='' DESC,yhteyshenkilo!='' DESC";
+		$criteria->order =" yrityksen_nimi!='' DESC,etunimi!='' DESC";
 		$criteria->condition =" aktiivinen=1 ";
 
  		$as = Asiakkaat::model()->findAll($criteria);
@@ -104,12 +104,7 @@
 				echo '<option value="">'.Yii::t('main', 'Valitse asiakas').'</option>';
 			foreach($as as $a)
 			{
-				if(!empty($a->yrityksen_nimi))
-				$nm = $a->yrityksen_nimi;
-				elseif(!empty($a->yhteyshenkilo))
-				$nm = $a->yhteyshenkilo;
-				else
-				$nm = Yii::t('main', 'Asiakas ID:').$a->id;
+				$nm = $a->Fullname;
 
 				echo '<option value="'.$a->id.'">'.$nm.'</option>';
 			}

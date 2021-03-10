@@ -3,10 +3,8 @@
 		$as = Asiakkaat::model()->findbypk($model->asiakas_id);
 			
 		$nimi = '';
-		if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi))
-		$nimi = $as->yrityksen_nimi;
-		elseif(isset($as->yhteyshenkilo) and !empty($as->yhteyshenkilo))
-		$nimi = $as->yhteyshenkilo;
+		if(isset($as->id))
+			$nimi = $as->Fullname;
 ?>
 
         <!-- begin: .tray-center -->

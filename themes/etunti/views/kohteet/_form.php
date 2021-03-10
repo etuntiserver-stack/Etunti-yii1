@@ -35,8 +35,7 @@ if(empty($model->tietoja))
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
     		<?php 
        		$criteria = new CDbCriteria();
-		//$criteria->select = " COALESCE(NULLIF(yhteyshenkilo,yhteyshenkilo),'gg') AS yht ";
-		$criteria->order = " yhteyshenkilo ";
+		$criteria->order = " etunimi ";
 
         	$a = Asiakkaat::model()->findAll($criteria);
 		echo '<select name="Kohteet[asiakas_id]" class="form-control" id="Kohteet_asiakas_id">';
@@ -46,12 +45,7 @@ if(empty($model->tietoja))
         	  $aon = Asiakkaat::model()->findbypk($model->asiakas_id);
 		  if(isset($aon->id))
 		  {
-		  if(!empty($aon->yrityksen_nimi))
-		    echo '<option value="'.$aon->id.'">'.$aon->yrityksen_nimi.'</option>';
-		  elseif(empty($aon->yhteyshenkilo) and empty($aon->yrityksen_nimi))
-		    echo '<option value="'.$aon->id.'">nimet puutuu '.$aon->id.'</option>';
-		  else
-		    echo '<option value="'.$aon->id.'">'.$aon->yhteyshenkilo.'</option>';
+		    echo '<option value="'.$aon->id.'">'.$aon->Fullname.'</option>';
 		  }
 
 		} else {
@@ -60,12 +54,7 @@ if(empty($model->tietoja))
 
 		foreach($a as $aa)
 		{
-		  if(!empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->id.'">'.$aa->yrityksen_nimi.'</option>';
-		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->id.'">nimet puutuu '.$aa->id.'</option>';
-		  else
-		    echo '<option value="'.$aa->id.'">'.$aa->yhteyshenkilo.'</option>';
+		    echo '<option value="'.$aa->id.'">'.$aa->Fullname.'</option>';
 		}
 		echo '</select>';
 		?>

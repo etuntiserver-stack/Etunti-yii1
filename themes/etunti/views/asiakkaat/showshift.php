@@ -1,12 +1,10 @@
 <?php
 
 	$a=Asiakkaat::model()->findbypk($id);
-	if(isset($a->id) and !empty($a->yrityksen_nimi))
-	$animi = $a->yrityksen_nimi;
-	elseif(isset($a->id) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
-	$animi = $a->yhteyshenkilo;
+	if(isset($a->id))
+		$animi = $a->Fullname;
 	else
-	$animi = '';
+		$animi = '';
 
 	if(isset($a->id) and !empty($a->sahkoposti))
 	$sahkoposti = $a->sahkoposti;

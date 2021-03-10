@@ -14,10 +14,8 @@ $cl = 'alert alert-danger';
 
 $asiakas = '';
 $a = Asiakkaat::model()->findbypk($data->asiakas_id);
-if(isset($a->yrityksen_nimi) and !empty($a->yrityksen_nimi))
-$asiakas = $a->yrityksen_nimi;
-elseif(isset($a->yhteyshenkilo) and !empty($a->yhteyshenkilo))
-$asiakas = $a->yhteyshenkilo;
+if(isset($a->id))
+$asiakas = $a->Fullname;
 else
 $asiakas = $data->asiakas_id;
 

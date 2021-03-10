@@ -51,12 +51,10 @@
 				$placeholder = 'Asiakas';
 				if(isset($_GET['asiakas_id']))
 				{
-			      		$la = Asiakkaat::model()->findByPk($_GET['asiakas_id']);
+			      	$la = Asiakkaat::model()->findByPk($_GET['asiakas_id']);
 
-					if(isset($la->id) and $la->tyyppi == 'yritys')
-					$postvalue = $la->yrityksen_nimi; 
-					elseif(isset($la->id) and $la->tyyppi == 'henkilo')
-					$postvalue = $la->yhteyshenkilo; 
+					if(isset($la->id))
+						$postvalue = $la->Fullname; 
 
 				} else {
 					$postvalue='';

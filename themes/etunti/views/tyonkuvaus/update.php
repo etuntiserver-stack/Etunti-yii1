@@ -1,10 +1,8 @@
 <?php
 	$head = '';
 	$as = Asiakkaat::model()->findbypk($model->asiakas_id);
-	if(!empty($as->yrityksen_nimi) and empty($as->yhteyshenkilo))
-	$head= $as->yrityksen_nimi;
-	elseif(empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo))
-	$head = $as->yhteyshenkilo;
+	if(isset($as->id))
+		$head= $as->Fullname;
 ?>
 
         <!-- begin: .tray-center -->

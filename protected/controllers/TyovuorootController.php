@@ -336,7 +336,7 @@ class TyovuorootController extends Controller
 		$bd = '';
 		if(Yii::app()->request->getPost('yhteyshenkilo'))
 		{
-			$model = Asiakkaat::model()->find(" yhteyshenkilo LIKE '%".Yii::app()->request->getPost('yhteyshenkilo')."' ");
+			$model = Asiakkaat::model()->find(" etunimi LIKE '%".Yii::app()->request->getPost('yhteyshenkilo')."' OR sukunimi LIKE '%".Yii::app()->request->getPost('yhteyshenkilo')."'");
 			if(isset($model->id))
 			$bd = Yii::t('main', 'Asiakas löytyi tietokannasta');	
 		}
@@ -474,13 +474,7 @@ class TyovuorootController extends Controller
 		  $a = Asiakkaat::model()->findbypk($k->asiakas_id);
 		   if(isset($a->id))
 		   {
-			if(!empty($a->yrityksen_nimi))
-				$asiakas = $a->yrityksen_nimi;
-			else if(!empty($a->yhteyshenkilo) and empty($a->yrityksen_nimi))
-				$asiakas = $a->yhteyshenkilo;
-			else
-				$asiakas = $a->osoite;
-
+				$asiakas = $a->Fullname;
 		    	echo json_encode($asiakas);
 		   }
 	}
@@ -1193,10 +1187,8 @@ class TyovuorootController extends Controller
 		$kuka = '';
 		if(isset(Yii::app()->user->asiakas)){
 			$a = Asiakkaat::model()->findbypk(Yii::app()->user->asiakas);
-			if( isset($a->id) and $a->tyyppi == 'yritys' )
-				$kuka = $a->yrityksen_nimi;
-			if( isset($a->id) and $a->tyyppi == 'henkilo' )
-				$kuka = $a->yhteyshenkilo;
+			if( isset($a->id) )
+				$kuka = $a->Fullname;
 		}
 		if(isset(Yii::app()->user->nimi))
 			$kuka = Yii::app()->user->nimi;
@@ -1939,7 +1931,8 @@ class TyovuorootController extends Controller
    			    (
 			       SELECT id FROM asiakkaat WHERE 
 				yrityksen_nimi LIKE "%' . $asiakas . '%" 
-				OR yhteyshenkilo LIKE "%' . $asiakas . '%" 
+				OR etunimi LIKE "%' . $asiakas . '%"
+				OR sukunimi LIKE "%' . $asiakas . '%" 
 				OR puhelin LIKE "%' . $asiakas . '%"
 			    )
 			)';
@@ -2346,10 +2339,9 @@ class TyovuorootController extends Controller
 		$asiakasNakyvissa = '';
 		if( $asiakas_tyovuorossa ){
 			$name = '';
-			if(isset($arvo->kohteet->asiakkaat) and $arvo->kohteet->asiakkaat->tyyppi == 'yritys')
-				$name = $arvo->kohteet->asiakkaat->yrityksen_nimi;
-			if(isset($arvo->kohteet->asiakkaat) and $arvo->kohteet->asiakkaat->tyyppi == 'henkilo')
-				$name = $arvo->kohteet->asiakkaat->yhteyshenkilo;
+			if(isset($arvo->kohteet->asiakkaat))
+				$name = $arvo->kohteet->asiakkaat->Fullname;
+				
 			if(!empty($name))
 				$asiakasNakyvissa = $name.'<br>';
 		}
@@ -2494,11 +2486,9 @@ class TyovuorootController extends Controller
 		$asiakasNakyvissa = '';
 		if($asetukset_new['asiakas_tyovuorossa'] == 1){
 		$name = '';
-		if(isset($tvVal->kohteet->asiakkaat) and $tvVal->kohteet->asiakkaat->tyyppi == 'yritys')
-		$name = $tvVal->kohteet->asiakkaat->yrityksen_nimi;
-		if(isset($tvVal->kohteet->asiakkaat) and $tvVal->kohteet->asiakkaat->tyyppi == 'henkilo')
-		$name = $tvVal->kohteet->asiakkaat->yhteyshenkilo;
-		if(!empty($name)){ $asiakasNakyvissa = '<b>Asiakas:</b> '.$name.'<br>'; }
+		if(isset($tvVal->kohteet->asiakkaat))
+			$name = $tvVal->kohteet->asiakkaat->Fullname;
+			if(!empty($name)){ $asiakasNakyvissa = '<b>Asiakas:</b> '.$name.'<br>'; }
 		}
 		//  Asiakas nakyvissa -->
 
@@ -3957,7 +3947,7 @@ class TyovuorootController extends Controller
 				   {
 					$message = '<div>';
 					$message .= '
-					Asiakas: '.$asiakkaat->yhteyshenkilo.'<br>
+					Asiakas: '.$asiakkaat->Etusukunimi.'<br>
 					Työvuorot:  '.$model->pvm.', '.$model->alku.'-'.$model->loppu.'<br>';
 					$message .= '<style>.lahetys_taulu table {border-collapse: collapse; border: 1px solid grey;} .lahetys_taulu th, .lahetys_taulu td{border: 1px solid grey; padding: 7px 15px;}</style>';
 
@@ -4167,10 +4157,8 @@ class TyovuorootController extends Controller
 			$kohteet->uusi_tilaus = 1;
 			$kohteet->aktiivinen = 1;
 
-			if(!empty($asiakkaat->yrityksen_nimi))
-				$kohteet->etu_suku_nimet =$asiakkaat->yrityksen_nimi;
-			elseif(empty($asiakkaat->yrityksen_nimi) and !empty($asiakkaat->yhteyshenkilo))
-				$kohteet->etu_suku_nimet = $asiakkaat->yhteyshenkilo;
+			if(isset($asiakkaat->id))
+				$kohteet->etu_suku_nimet = $asiakkaat->Fullname;
 
 			if($_POST['onkoAsOsoiteSamaKunKohde'] == 'ei')
 				$kohteet->osoite = $_POST['kohteenOsoite'];
@@ -4289,7 +4277,7 @@ class TyovuorootController extends Controller
 				   {
 					$message = '<div>';
 					$message .= '
-					Asiakas: '.$asiakkaat->yhteyshenkilo.'<br>
+					Asiakas: '.$asiakkaat->Etusukunimi.'<br>
 					Työvuorot:  '.$model->pvm.', '.$model->alku.'-'.$model->loppu.'<br>';
 					$message .= '<style>.lahetys_taulu table {border-collapse: collapse; border: 1px solid grey;} .lahetys_taulu th, .lahetys_taulu td{border: 1px solid grey; padding: 7px 15px;}</style>';
 
@@ -4629,7 +4617,7 @@ class TyovuorootController extends Controller
 	{
 
 		$criteria=new CDbCriteria;
-		$criteria->order =" yrityksen_nimi!='' DESC,yhteyshenkilo!='' DESC";
+		$criteria->order =" yrityksen_nimi!='' DESC,etunimi!='' DESC";
 
 		// <-- Tyoryhmat
 		$site = Yii::app()->createController('Site');
@@ -4642,7 +4630,7 @@ class TyovuorootController extends Controller
 
 		$criteria->addCondition (" 
 			aktiivinen=1 
-			AND (yrityksen_nimi LIKE '%".$key."%' OR yhteyshenkilo LIKE '%".$key."%' OR osoite LIKE '%".$key."%' )	
+			AND (yrityksen_nimi LIKE '%".$key."%' OR etunimi LIKE '%".$key."%' OR sukunimi LIKE '%".$key."%' OR osoite LIKE '%".$key."%' )	
 		");
 
  		$as = Asiakkaat::model()->findAll($criteria);
@@ -4656,13 +4644,7 @@ class TyovuorootController extends Controller
 		{
 			foreach($as as $a)
 			{
-				if(!empty($a->yrityksen_nimi))
-				$nm = array($a->yrityksen_nimi, $a->id);
-				elseif(!empty($a->yhteyshenkilo))
-				$nm = array($a->yhteyshenkilo, $a->id);
-				else
-				$nm = array($a->osoite, $a->id);
-				
+				$nm = array($a->Fullname, $a->id);
 				$return .= '<a href="#" class="list-group-item asiakasSelecter" for="'.$nm[1].'">'.$nm[0].'</a>';
 			}
 		}
@@ -4832,7 +4814,7 @@ class TyovuorootController extends Controller
 	        	$haku_criteria[] = " kohde IN (SELECT id FROM sivex_kohdet WHERE 
 				asiakas_id IN (
 					SELECT id FROM asiakkaat WHERE
-					yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'
+					yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%'
 				)
 			) ";
 		}

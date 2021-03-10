@@ -383,7 +383,7 @@ $(function() {
     const loppu = $('#loppu').val();
 
     if (!confirm(`
-      Asiakas: <?= $model->kohteet->asiakkaat->yhteyshenkilo ?? ''; ?>\n
+      Asiakas: <?= $model->kohteet->asiakkaat->Etusukunimi ?? ''; ?>\n
       Kohde: <?= $model->kohteet->osoite ?? ''; ?> (ID ${kohdeId})\n
       Aika: ${pvm} klo ${alku} - ${loppu}\n
       Huom. Jos asiakasta vaihdetaan, vuoro tulee tallentaa ennen ilmoituksen lähettämistä.\n

@@ -89,8 +89,7 @@ th{
 
     		<?php 
        		$criteria = new CDbCriteria();
-		//$criteria->select = " COALESCE(NULLIF(yhteyshenkilo,yhteyshenkilo),'gg') AS yht ";
-		$criteria->order = " yhteyshenkilo ";
+		$criteria->order = " etunimi ";
 		$criteria->condition = " asiakasnumero!=0 and asiakasnumero!='' ";
 
         	$a = Asiakkaat::model()->findAll($criteria);
@@ -101,12 +100,7 @@ th{
         	  $aon = Asiakkaat::model()->find(" asiakasnumero='".$_POST['asiakasLaskulle']."' ");
 		  if(isset($aon->id) and !empty($aon->asiakasnumero))
 		  {
-		  if(!empty($aon->yrityksen_nimi))
-		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yrityksen_nimi.'</option>';
-		  elseif(empty($aon->yhteyshenkilo) and empty($aon->yrityksen_nimi))
-		    echo '<option value="'.$aon->asiakasnumero.'">nimet puutuu '.$aon->id.'</option>';
-		  else
-		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yhteyshenkilo.'</option>';
+			echo '<option value="'.$aon->asiakasnumero.'">'.$aon->Fullname.'</option>';
 		  }
 
 		} else {
@@ -117,12 +111,7 @@ th{
 		{
 		  if(isset($aa->id))
 		  {
-		  if(!empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->yrityksen_nimi.'</option>';
-		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->asiakasnumero.'">nimet puutuu '.$aa->id.'</option>';
-		  else
-		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->yhteyshenkilo.'</option>';
+		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->Fullname.'</option>';
 		  }
 
 		}
@@ -214,10 +203,8 @@ th{
  {
 	$asiakas='';
 	$a = Asiakkaat::model()->findbypk($data->as_nro);
-	if(isset($a->id) and !empty($a->yrityksen_nimi))
-	$asiakas = $a->yrityksen_nimi;
-	if(isset($a->id) and empty($a->yrityksen_nimi))
-	$asiakas = $a->yhteyshenkilo;
+	if(isset($a->id))
+		$asiakas = $a->Fullname;
 
 
 	$saldo += $data->yhteensa_total;

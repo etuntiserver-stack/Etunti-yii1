@@ -72,7 +72,7 @@
 		<?php echo $data->kaupunki; ?>
 	</td>
 	<td>
-		<?php echo $data->yhteyshenkilo; ?>
+		<?php echo $data->Etusukunimi; ?>
 	</td>
 	<td>
 		<?php echo $data->puhelin; ?>

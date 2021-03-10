@@ -95,7 +95,7 @@ if(isset($ov->id) and isset($tv->id))
 		  $asiakkaat->tyyppi = $ov->tyyppi;
 		  $asiakkaat->yrityksen_nimi = $ov->yrityksen_nimi;
 		  $asiakkaat->y_tunnus = $ov->y_tunnus;
-		  $asiakkaat->yhteyshenkilo = $ov->yhteyshenkilo;
+		  $asiakkaat->etunimi = $ov->yhteyshenkilo;
 		  $asiakkaat->onlinevarauksen_asiakas=1;
 		  $asiakkaat->aktiivinen = 1;
 
@@ -106,7 +106,7 @@ if(isset($ov->id) and isset($tv->id))
 
 			$kohteet = new Kohteet;
 			$kohteet->asiakas_id = $asiakkaat->id;
-			$kohteet->etu_suku_nimet = $asiakkaat->yhteyshenkilo;
+			$kohteet->etu_suku_nimet = $asiakkaat->etunimi;
 			$kohteet->osoite = $asiakkaat->osoite;
 			$kohteet->pnumero = $asiakkaat->postinumero;
 			$kohteet->kaupunki = $asiakkaat->kaupunki;

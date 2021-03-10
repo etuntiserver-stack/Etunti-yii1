@@ -37,7 +37,6 @@ if(isset($_GET['vinkki_id']))
 	if(isset($vinkki->id))
 	{
 		$model->vinkki_id = $_GET['vinkki_id'];
-		$model->yhteyshenkilo = $vinkki->nimi;
 		$model->tyyppi = 'henkilo';
 		$model->sahkoposti = $vinkki->sahkoposti;
 		$model->puhelin = $vinkki->puhelin;
@@ -203,12 +202,6 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->error($model,'sukunimi'); ?>
 	</div>
 	
-	<div class="section fill mb5 nimi ashidd">
-		<?php echo $form->labelEx($model,'yhteyshenkilo'); ?>
-		<?php echo $form->textField($model,'yhteyshenkilo',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'yhteyshenkilo'); ?>
-	</div>
-
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'sahkoposti'); ?>
 		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
@@ -909,9 +902,9 @@ $(document).ready(function(){
   $(".luoTallennaAsiakas").click(function(e) {
     e.preventDefault()
     var tyyppi = $('#Asiakkaat_tyyppi option:selected').val();
-    if( tyyppi == 'henkilo' && $('#Asiakkaat_yhteyshenkilo').val() == '' ){
-	$('#Asiakkaat_yhteyshenkilo').focus();
-	alert('Yksityisasiakkaalle yhteyshenkilö on pakollinen tieto.');
+    if( tyyppi == 'henkilo' && $('#Asiakkaat_etunimi').val() == '' ){
+	$('#Asiakkaat_etunimi').focus();
+	alert('Yksityisasiakkaalle etunimi on pakollinen tieto.');
 	return false;
     }
     if( tyyppi == 'yritys' && $('#Asiakkaat_yrityksen_nimi').val() == '' ){

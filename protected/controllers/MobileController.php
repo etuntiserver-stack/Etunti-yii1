@@ -927,7 +927,7 @@ class MobileController extends Controller
 			kohdenID IN ( 
 			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
 				( SELECT id FROM asiakkaat 
-					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'
+					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%'
 				)
 			)
 		");
@@ -959,7 +959,7 @@ class MobileController extends Controller
 			kohdenID IN ( 
 			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
 				( SELECT id FROM asiakkaat 
-					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'
+					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%'
 				)
 			)
 		");
@@ -1401,7 +1401,7 @@ class MobileController extends Controller
 			kohdenID IN ( 
 			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
 				( SELECT id FROM asiakkaat 
-					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'
+					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%'
 				)
 			)
 		");
@@ -1574,7 +1574,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			kohdenID IN ( 
 			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
 				( SELECT id FROM asiakkaat 
-					WHERE yrityksen_nimi LIKE '%".Yii::app()->session['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".Yii::app()->session['yrityksen_nimi']."%'
+					WHERE yrityksen_nimi LIKE '%".Yii::app()->session['yrityksen_nimi']."%' OR etunimi LIKE '%".Yii::app()->session['yrityksen_nimi']."%' OR sukunimi LIKE '%".Yii::app()->session['yrityksen_nimi']."%'
 				)
 			)
 		");
@@ -3280,7 +3280,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$criteria = new CDbCriteria();
 		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])){
 			$criteria->condition = " 
-				yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
+				yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR etunimi='".$_GET['yrityksen_nimi']."' OR sukunimi='".$_GET['yrityksen_nimi']."'
 			";
 		}
 		if(isset($_GET['asiakas_id'])){
@@ -3324,7 +3324,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 */
 		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])){
 			$criteria->addCondition(" 
-				yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
+				yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR etunimi='".$_GET['yrityksen_nimi']."' OR sukunimi='".$_GET['yrityksen_nimi']."'
 			");
 		}
 		if(isset($_GET['asiakas_id'])){

@@ -137,7 +137,7 @@ class LaskuController extends Controller
 		}
 
 		if( $yrityksen_nimi !== null and !empty($yrityksen_nimi) ){
-	        $criteria->addCondition ("  yrityksen_nimi='".$yrityksen_nimi."' OR yhteyshenkilo='".$yrityksen_nimi."' ");
+	        $criteria->addCondition ("  yrityksen_nimi='".$yrityksen_nimi."' OR etunimi='".$yrityksen_nimi."' OR sukunimi='".$yrityksen_nimi."'  ");
 		}
 		if( $asiakas_id !== null ){
 	        $criteria->addCondition ("  id='".$asiakas_id."' ");
@@ -171,9 +171,7 @@ class LaskuController extends Controller
 		   $asiakkaat_ids = [];
 		   $attr = [];
 		   foreach($hyv_lista_all as $item){
-			$nimi = '';
-			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'henkilo'){ $nimi = $item->kohteet->asiakkaat->yhteyshenkilo; }
-			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'yritys'){ $nimi = $item->kohteet->asiakkaat->yrityksen_nimi; }
+			$nimi = $item->kohteet->asiakkaat->Fullname;
 			if (isset($item->kohteet->asiakkaat) and !array_key_exists($nimi, $attr)) $attr[$nimi] = $item->kohteet->asiakkaat->attributes;
 			$asiakkaat_ids[$nimi][$item->id] = [
 				'mob_tunnit' => (isset($item->attributes))? $item->attributes : '',
@@ -195,9 +193,7 @@ class LaskuController extends Controller
 		   $attr = [];
 		   foreach($hyv_lista_all as $d){
 			$item = $d['data'];
-			$nimi = '';
-			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'henkilo'){ $nimi = $item->kohteet->asiakkaat->yhteyshenkilo; }
-			if(isset($item->kohteet->asiakkaat) and $item->kohteet->asiakkaat->tyyppi == 'yritys'){ $nimi = $item->kohteet->asiakkaat->yrityksen_nimi; }
+			$nimi = $item->kohteet->asiakkaat->Fullname;
 			if (isset($item->kohteet->asiakkaat) and !array_key_exists($nimi, $attr)) $attr[$nimi] = $item->kohteet->asiakkaat->attributes;
 			$asiakkaat_ids[$nimi][$d['this_id']] = [
 				'this_id' => $d['this_id'],
@@ -461,10 +457,7 @@ exit;
 
 	protected function asiakasmuutos($asiakas)
 	{
-		if($asiakas->tyyppi == 'yritys')
-		return $asiakas->yrityksen_nimi;
-		if($asiakas->tyyppi == 'henkilo')
-		return $asiakas->yhteyshenkilo;
+		return $asiakas->Fullname;
 	}
 
 	public function actionTr_rivit_jarjestelmavalvojat()
@@ -1309,11 +1302,11 @@ exit;
 		$k = Kohteet::model()->findAll(" asiakas_id='".$id."' AND aktiivinen=1 ");
 
 		$tyyppi = '';
-		if(!empty($a->yrityksen_nimi))
+		if(isset($a->id) and $a->tyyppi == 'yritys')
 		$tyyppi = "yritys**".$a->yrityksen_nimi."**".$a->y_tunnus;
 
-		if(empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
-		$tyyppi = "henkilo**".$a->yhteyshenkilo;
+		if(isset($a->id) and $a->tyyppi == 'henkilo')
+		$tyyppi = "henkilo**".$a->Etusukunimi;
 
 		$kodeOn = 0;
 		if(isset($k[0]))
@@ -1329,7 +1322,7 @@ exit;
 		else
 			$sahkoposti = $a->sahkoposti;
 
-		echo json_encode($a->laskutus_kanava."//".$a->maksuehto."//".$tyyppi."//".$a->osoite."//".$a->postinumero."//".$a->kaupunki."//".$a->yhteyshenkilo."//".$a->puhelin."//".$kodeOn."//".$erapaiva."//".$a->valittajan_tunnus."//".$a->verkkolaskuosoite."//".$a->muistutuslasku_auto."//".$a->kirjeenluokka."//".$sahkoposti."//".$a->viivastyskorko."//".$a->netvisor_dimension_name."//".$a->netvisor_dimension_item);
+		echo json_encode($a->laskutus_kanava."//".$a->maksuehto."//".$tyyppi."//".$a->osoite."//".$a->postinumero."//".$a->kaupunki."//".$a->Etusukunimi."//".$a->puhelin."//".$kodeOn."//".$erapaiva."//".$a->valittajan_tunnus."//".$a->verkkolaskuosoite."//".$a->muistutuslasku_auto."//".$a->kirjeenluokka."//".$sahkoposti."//".$a->viivastyskorko."//".$a->netvisor_dimension_name."//".$a->netvisor_dimension_item);
 	}
 
 
@@ -1744,7 +1737,7 @@ exit;
 					))
 				");
 				if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
-			        	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'");
+			        	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%'");
 
 				if(isset($_GET['tyoryhma']) and is_array($_GET['tyoryhma'])){
 						$impl = 'tyoryhma='.implode(' OR tyoryhma=', $_GET['tyoryhma']);

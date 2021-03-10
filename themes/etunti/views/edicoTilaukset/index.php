@@ -37,10 +37,8 @@
 				$asiakas = EdicoTilaukset::model()->findAll($criteria);
 				foreach($asiakas as $item)
 				{
-				  if(isset($item->asiakkaat->id) and $item->asiakkaat->tyyppi == 'yritys')
-				    echo '<option value="'.$item->asiakkaat->id.'">'.$item->asiakkaat->yrityksen_nimi.'</option>';
-				  if(isset($item->asiakkaat->id) and $item->asiakkaat->tyyppi == 'henkilo')
-				    echo '<option value="'.$item->asiakkaat->id.'">'.$item->asiakkaat->yhteyshenkilo.'</option>';
+				  if(isset($item->asiakkaat->id))
+				    echo '<option value="'.$item->asiakkaat->id.'">'.$item->asiakkaat->Fullname.'</option>';
 				}
 			    ?>
 			   </select>

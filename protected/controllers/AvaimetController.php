@@ -251,7 +251,7 @@ class AvaimetController extends Controller
 	        $criteria->addCondition (" 
 			kohde IN ( SELECT id FROM sivex_kohdet
 				WHERE asiakas_id IN ( SELECT id FROM asiakkaat
-					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%'
+					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%'
 				)
 			)
 		");
@@ -353,8 +353,9 @@ class AvaimetController extends Controller
         kohde IN (
           SELECT id FROM sivex_kohdet WHERE asiakas_id IN (
             SELECT id FROM asiakkaat WHERE
-              yrityksen_nimi LIKE '%{$_GET['yrityksen_nimi']}%' OR
-              yhteyshenkilo LIKE '%{$_GET['yrityksen_nimi']}%'
+              yrityksen_nimi LIKE '%{$_GET['yrityksen_nimi']}%'
+              OR etunimi LIKE '%{$_GET['yrityksen_nimi']}%'
+              OR sukunimi LIKE '%{$_GET['yrityksen_nimi']}%'
 				  )
         )
       ";

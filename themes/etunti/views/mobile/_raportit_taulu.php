@@ -24,10 +24,9 @@
 	}
 	// <-- Asiakas
 	$asiakas = '';
-	if(isset($val->kohteet->asiakkaat) and $val->kohteet->asiakkaat->tyyppi == 'henkilo')
-		$asiakas = $val->kohteet->asiakkaat->yhteyshenkilo;
-	if(isset($val->kohteet->asiakkaat) and $val->kohteet->asiakkaat->tyyppi == 'yritys')
-		$asiakas = $val->kohteet->asiakkaat->yrityksen_nimi;
+	if(isset($val->kohteet->asiakkaat))
+		$asiakas = $val->kohteet->asiakkaat->Fullname;
+		
 	// <-- Osoite
 	$osoite = '';
 	if(isset($val->kohteet->osoite))

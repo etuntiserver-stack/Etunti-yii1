@@ -195,11 +195,11 @@ class KohteetController extends Controller
 		$ryhma = 0;
 		if($m->ryhma != 0)
 		{
-		$l = Valikkoot::model()->findbypk($m->ryhma);
-		$ryhma = $l['id']."-".$l['value'];
+			$l = Valikkoot::model()->findbypk($m->ryhma);
+			$ryhma = $l['id']."-".$l['value'];
 		}
 
-		echo $m->yhteyshenkilo."//".$m->kaupunki."//".$m->postinumero."//".$m->sahkoposti."//".$m->puhelin."//".$ryhma;
+		echo $m->Etusukunimi."//".$m->kaupunki."//".$m->postinumero."//".$m->sahkoposti."//".$m->puhelin."//".$ryhma;
 	}
 
 	public function actionView($id)
@@ -611,7 +611,7 @@ class KohteetController extends Controller
 	        	$criteria->addCondition (" 
 				asiakas_id IN (
 					SELECT id FROM asiakkaat 
-					WHERE yrityksen_nimi LIKE '%".$_POST['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_POST['yrityksen_nimi']."%'
+					WHERE yrityksen_nimi LIKE '%".$_POST['yrityksen_nimi']."%' OR etunimi LIKE '%".$_POST['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_POST['yrityksen_nimi']."%'
 				)		
 			");
 		}
@@ -676,44 +676,31 @@ class KohteetController extends Controller
 	}
 
 
-    	protected function asiakasMuutos($data,$row)
+	protected function asiakasMuutos($data,$row)
 	{ 
 		$return = '';
+		$a = Asiakkaat::model()->findbypk($data->asiakas_id);
 
-		    $a = Asiakkaat::model()->findbypk($data->asiakas_id);
-		    if(isset($a->yrityksen_nimi) and !empty($a->yrityksen_nimi))
-		    $return = $a->yrityksen_nimi;
-		    elseif(isset($a->yhteyshenkilo) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
-		    $return = $a->yhteyshenkilo;
-		    else
-		    $return = $data->asiakas_id;
+		if(isset($a->tyyppi) and $a->tyyppi == 'henkilo')
+			$return = '<b class="text-warning">Yhteyshenkilö</b><br>'.$a->Etusukunimi;
+		elseif(isset($a->tyyppi) and $a->tyyppi == 'yritys')
+			$return = '<b class="text-success">Yritys</b><br>'.$a->yrityksen_nimi;
 
-		    if(isset($a->tyyppi) and !empty($a->tyyppi) and $a->tyyppi == 'henkilo')
-		    $return = '<b class="text-warning">Yhteyshenkilö</b><br>'.$return;
-		    elseif(isset($a->tyyppi) and !empty($a->tyyppi) and $a->tyyppi == 'yritys')
-		    $return = '<b class="text-success">Yritys</b><br>'.$return;
-
-            	return $return;
+		return $return;
 	}
 
-    	protected function asiakasMuutosTheme($as)
+	protected function asiakasMuutosTheme($as)
 	{ 
 		$return = '';
 
-		    $a = Asiakkaat::model()->findbypk($as);
-		    if(isset($a->yrityksen_nimi) and !empty($a->yrityksen_nimi))
-		    $return = $a->yrityksen_nimi;
-		    elseif(isset($a->yhteyshenkilo) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
-		    $return = $a->yhteyshenkilo;
-		    else
-		    $return = $as;
+		$a = Asiakkaat::model()->findbypk($as);
 
-		    if(isset($a->tyyppi) and !empty($a->tyyppi) and $a->tyyppi == 'henkilo')
-		    $return = '<b class="text-warning">Yhteyshenkilö</b><br>'.$return;
-		    elseif(isset($a->tyyppi) and !empty($a->tyyppi) and $a->tyyppi == 'yritys')
-		    $return = '<b class="text-success">Yritys</b><br>'.$return;
+		if(isset($a->tyyppi) and $a->tyyppi == 'henkilo')
+			$return = '<b class="text-warning">Yhteyshenkilö</b><br>'.$a->Etusukunimi;
+		elseif(isset($a->tyyppi) and $a->tyyppi == 'yritys')
+			$return = '<b class="text-success">Yritys</b><br>'.$a->yrityksen_nimi;
 
-            	return $return;
+		return $return;
 	}
 
     	protected function onkoKuva($data,$row)

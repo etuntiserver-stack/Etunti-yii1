@@ -1102,11 +1102,9 @@ public function actionImei($dom)
 				$nm = '';
 				if(isset($kohde->id) and isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->asiakas_id != 0){
 					$asiakas = Asiakkaat::model()->findbypk($kohde->asiakas_id);
-				if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
-					$nm = '<b>'.Yii::t('main', 'Asiakas').':</b> '.$asiakas->yrityksen_nimi;
-				} elseif(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and !empty($asiakas->yhteyshenkilo)){
-					$nm = '<b>'.Yii::t('main', 'Asiakas').':</b> '.$asiakas->yhteyshenkilo;
-				}
+					if(isset($asiakas->id)){
+						$nm = '<b>'.Yii::t('main', 'Asiakas').':</b> '.$asiakas->Fullname;
+					}
 				}
 				// Nayta asiakas -->
 
