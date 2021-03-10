@@ -57,6 +57,7 @@ $('.search-form form').submit(function(){
 		'y_tunnus',
 		'etunimi',
 		'osoite',
+		'yhteyshenkilo',
 		//'kaupunki',
   
                array(
