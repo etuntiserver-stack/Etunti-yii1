@@ -330,11 +330,8 @@ class AsiakkaatController extends Controller
 		if( isset($_GET['esikatselu'])){
 			$lista = array();
 			foreach($as_all as $model){
-				$nimi = '';
-				if($model->tyyppi == 'henkilo'){ $nimi = $model->yhteyshenkilo; }
-				if($model->tyyppi == 'yritys'){ $nimi = $model->yrityksen_nimi; }
-				if( empty($nimi) ){ continue; }
-				$lista[] = array('nimi' => $nimi);
+				if( empty($model->Fullname) ){ continue; }
+				$lista[] = array('nimi' => $model->Fullname);
 			}
 			$return = array('lista' => $lista, 'countlista' => count($lista));
 			echo json_encode($return);
@@ -382,9 +379,8 @@ class AsiakkaatController extends Controller
 					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 				//     LOG -->
 			} else {
-				if($model->tyyppi == 'henkilo'){ $nimi = $model->yhteyshenkilo; }
-				if($model->tyyppi == 'yritys'){ $nimi = $model->yrityksen_nimi; }
-				$kiere .= '<h3>ID: '.$model->id.',  Nimi: '.$nimi.'</h3>';
+
+				$kiere .= '<h3>ID: '.$model->id.',  Nimi: '.$model->Fullname.'</h3>';
 				foreach($model->getErrors() as $err){
 					$kiere .= $err[0].'<br>';
 				}
@@ -410,14 +406,7 @@ class AsiakkaatController extends Controller
 		   $asiakkaat = Asiakkaat::model()->findAll("netvisorkey=0 AND aktiivinen=1");
 		   $virhe_response = [];
 		   foreach($asiakkaat as $model){
-			$nimi = '';
-			if($model->tyyppi == 'yritys'){
-				$nimi = $model->yrityksen_nimi;
-			}
-			if($model->tyyppi == 'henkilo'){
-				$nimi = $model->yhteyshenkilo;
-			}
-
+			$nimi = $model->Fullname;
 			if($this->netvisorCustomer("add", $model) !== true){
 				$virhe_response[] = '<h3>Asiakas: '.$nimi.'</h3>'.$this->netvisorCustomer("add", $model);
 			}
@@ -546,11 +535,7 @@ class AsiakkaatController extends Controller
 				if(isset($ft->tyonantaja))
 				$yr =  $ft->tyonantaja;
 
-				$asiakas = '';
-				if($model->tyyppi == 'yritys')
-					$asiakas = $model->yrityksen_nimi;
-				if($model->tyyppi == 'henkilo')
-					$asiakas = $model->yhteyshenkilo;
+				$asiakas = $model->Fullname;
 
 				$token = sha1(uniqid(time().$model->id, true));
 				Asiakkaat::model()->updateByPk($model->id, array('token' => $token));
@@ -957,11 +942,7 @@ Yritys '.$yr.'
 	; 
 	
 	
-	$name = 'Ei tietoja';
-	if(!empty($model->yrityksen_nimi) and $model->tyyppi == 'yritys')
-	$name = $model->yrityksen_nimi;
-	elseif(!empty($model->yhteyshenkilo) and $model->tyyppi == 'henkilo')
-	$name = $model->yhteyshenkilo;
+	$name = $model->Fullname;
 
 	$ryhma = '';
 	$r = Valikkoot::model()->findbypk($model->ryhma);
@@ -1109,7 +1090,7 @@ $xml = '
 		}
 
 		if(isset($_GET['yrityksen_nimi']) and !empty(trim($_GET['yrityksen_nimi']))){
-	        	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%' ");
+	        	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%' ");
 		}
 		if(isset($_GET['ryhma']) and !empty(trim($_GET['ryhma']))){
 		        $criteria->addCondition (" ryhma LIKE '%".$_GET['ryhma']."%' ");
@@ -1221,7 +1202,7 @@ $xml = '
 	        $criteria->addCondition (" aktiivinen=1 ");
 
 		if(isset($_GET['yrityksen_nimi']) and !empty(trim($_GET['yrityksen_nimi'])))
-	        $criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_GET['yrityksen_nimi']."%' ");
+	        $criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%'");
 
 		if(isset($_GET['ryhma']) and !empty(trim($_GET['ryhma'])))
 	        $criteria->addCondition (" ryhma LIKE '%".$_GET['ryhma']."%' ");
@@ -1319,24 +1300,18 @@ $xml = '
 	}
 
 
-    	protected function asiakasMuutosTheme($as)
+	protected function asiakasMuutosTheme($as)
 	{ 
 		$return = '';
 
-		    $a = Asiakkaat::model()->findbypk($as);
-		    if(isset($a->yrityksen_nimi) and !empty($a->yrityksen_nimi))
-		    $return = $a->yrityksen_nimi;
-		    elseif(isset($a->yhteyshenkilo) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
-		    $return = $a->yhteyshenkilo;
-		    else
-		    $return = $as;
+		$a = Asiakkaat::model()->findbypk($as);
 
-		    if(isset($a->tyyppi) and !empty($a->tyyppi) and $a->tyyppi == 'henkilo')
-		    $return = '<b class="text-warning">Yhteyshenkilö</b><br>'.$return;
-		    elseif(isset($a->tyyppi) and !empty($a->tyyppi) and $a->tyyppi == 'yritys')
-		    $return = '<b class="text-success">Yritys</b><br>'.$return;
+		if(isset($a->tyyppi) and $a->tyyppi == 'henkilo')
+			$return = '<b class="text-warning">Yhteyshenkilö</b><br>'.$a->Etusukunimi;
+		elseif(isset($a->tyyppi) and $a->tyyppi == 'yritys')
+			$return = '<b class="text-success">Yritys</b><br>'.$a->yrityksen_nimi;
 
-            	return $return;
+		return $return;
 	}
 
 	protected function tas($tasnro)
@@ -1945,10 +1920,8 @@ $xml = '
 			$as = Asiakkaat::model()->findbypk($p->asiakas_id);
 			$firma = FirmanTiedot::model()->findbypk(1);
 
-			if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi))
-			$nimi = $as->yrityksen_nimi;
-			elseif(isset($as->yhteyshenkilo) and !empty($as->yhteyshenkilo))
-			$nimi = $as->yhteyshenkilo;
+			if(isset($as->id))
+				$nimi = $as->Fullname;
 
 			if(isset(Yii::app()->user->asiakas))
 				$model->teksti = '<div class="'.$is_sisainen.'"><b>'.$nimi.'</b>: '.$model->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div></div>';
@@ -2160,14 +2133,11 @@ $xml = '
 		}
 		//    Tyoryhmat -->
 
-      		$l = Asiakkaat::model()->findAll($criteria);
+		$l = Asiakkaat::model()->findAll($criteria);
 		$as_arr = array();
 		foreach($l as $v)
 		{
-			if($v->tyyppi == 'yritys')
-			$as_arr[$v->yrityksen_nimi] = $v->id;
-			if($v->tyyppi == 'henkilo')
-			$as_arr[$v->yhteyshenkilo] = $v->id;
+			$as_arr[$v->Fullname] = $v->id;
 		}
 		ksort($as_arr);
 		foreach($as_arr as $k=>$v)
@@ -2339,11 +2309,10 @@ $xml = '
 
       // Get customers list for the view.
       $criteria = new CDbCriteria();
-      $criteria->select = 'id, tyyppi, yrityksen_nimi, yhteyshenkilo, sahkoposti';
-      $criteria->condition = "(tyyppi = 'yritys' AND (yrityksen_nimi != '' OR sahkoposti != '')) OR (tyyppi = 'henkilo' AND (yhteyshenkilo != '' OR sahkoposti != ''))";
+      $criteria->condition = "(tyyppi = 'yritys' AND (yrityksen_nimi != '' OR sahkoposti != '')) OR (tyyppi = 'henkilo' AND (etunimi != '' OR sahkoposti != ''))";
       $customer_results = Asiakkaat::model()->findAll($criteria);
       foreach ($customer_results as $c)
-        $customers[$c->id] = ($c->tyyppi == 'yritys' ? $c->yrityksen_nimi : $c->yhteyshenkilo) ?: $c->sahkoposti;
+        $customers[$c->id] = ($c->tyyppi == 'yritys' ? $c->yrityksen_nimi : $c->Etusukunimi) ?: $c->sahkoposti;
       asort($customers);
 
       // No parameters, move to Freshdesk ticket view.
@@ -2458,7 +2427,7 @@ $xml = '
     // these into valid (starting with 0) and unknown (the rest, which will not
     // be automatically fixed).
     $criteria = new CDbCriteria();
-    $criteria->select = 'id, yrityksen_nimi, yhteyshenkilo, puhelin';
+    $criteria->select = 'id, yrityksen_nimi, etunimi, puhelin';
     $criteria->condition = "TRIM(puhelin) != '' AND TRIM(puhelin) NOT LIKE '+%'"; // no area code (not beginning with +)
     $results = Asiakkaat::model()->findAll($criteria);
 
@@ -2485,7 +2454,7 @@ $xml = '
       // the desired format; if not, the rest of the work must be done manually.
 
       // Base csv entry line for all outputs:
-      $line = [$customer->id, $customer->yrityksen_nimi, $customer->yhteyshenkilo, $customer->puhelin];
+      $line = [$customer->id, $customer->yrityksen_nimi, $customer->Etusukunimi, $customer->puhelin];
 
       $matches = [];  // Match the prefixed number and anything else following
       // it, into separate match arrays, in order to save extra
@@ -2518,13 +2487,6 @@ $xml = '
         ]);
       }
 
-      // if (preg_match('/^\+\d+$/', $phone_no)) {
-      //   // echo "<p>{$customer->id} || {$customer->yrityksen_nimi} || {$customer->yhteyshenkilo} || {$customer->puhelin} || $phone_no</p><br>";
-      //   $list_direct_changes[] = [$customer->id, $customer->yrityksen_nimi, $customer->yhteyshenkilo, $customer->puhelin, $phone_no];
-      // } else {
-      //   // echo "<p><b>INVALID</b>: {$customer->id} || {$customer->yrityksen_nimi} || {$customer->yhteyshenkilo} || {$customer->puhelin} || $phone_no</p><br>";
-      //   $list_unknown_format[] = [$customer->id, $customer->yrityksen_nimi, $customer->yhteyshenkilo, $customer->puhelin, $phone_no];
-      // }
     }
 
     // Specify file targets and loop entries into them.
@@ -2538,7 +2500,7 @@ $xml = '
       $fh = fopen($file, 'w');
 
       // Print header line and entries.
-      fputcsv($fh, ['id', 'yrityksen_nimi', 'yhteyshenkilo', 'puhelin_vanha', 'puhelin_muutettu', 'lisatietokenttaan']);
+      fputcsv($fh, ['id', 'yrityksen_nimi', 'etunimi', 'puhelin_vanha', 'puhelin_muutettu', 'lisatietokenttaan']);
       foreach ($lines as $line)
         fputcsv($fh, $line);
 

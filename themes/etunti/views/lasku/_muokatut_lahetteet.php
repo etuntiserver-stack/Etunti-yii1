@@ -18,11 +18,8 @@
 	<td><?=date("d.m.Y H:i", strtotime($data->time))?></td>
 	<td>
 	<?php
-	if(isset($data->asiakkaat->id) and $data->asiakkaat->tyyppi == 'yritys'){
-		echo $data->asiakkaat->yrityksen_nimi;
-	}
-	if(isset($data->asiakkaat->id) and $data->asiakkaat->tyyppi == 'henkilo'){
-		echo $data->asiakkaat->yhteyshenkilo;
+	if(isset($data->asiakkaat->id)){
+		echo $data->asiakkaat->Fullname;
 	}
 	?>
 	</td>

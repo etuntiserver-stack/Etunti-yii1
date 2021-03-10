@@ -31,7 +31,6 @@ if(!isset($model->id)){ $model->alv = 24; }
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
     		<?php 
        		$criteria = new CDbCriteria();
-		//$criteria->select = " COALESCE(NULLIF(yhteyshenkilo,yhteyshenkilo),'gg') AS yht ";
         	$criteria->condition = " id='$asiakas->id' ";
 
         	$a = Asiakkaat::model()->findAll($criteria);
@@ -39,12 +38,7 @@ if(!isset($model->id)){ $model->alv = 24; }
 
 		foreach($a as $aa)
 		{
-		  if(!empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->id.'">'.$aa->yrityksen_nimi.'</option>';
-		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->id.'">nimet puutuu '.$aa->id.'</option>';
-		  else
-		    echo '<option value="'.$aa->id.'">'.$aa->yhteyshenkilo.'</option>';
+		    echo '<option value="'.$aa->id.'">'.$aa->Fullname.'</option>';
 		}
 		echo '</select>';
 		?>
@@ -52,7 +46,7 @@ if(!isset($model->id)){ $model->alv = 24; }
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'etu_suku_nimet'); ?>
-		<?php echo $form->textField($model,'etu_suku_nimet',array('value'=>$asiakas->yhteyshenkilo,'size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'etu_suku_nimet',array('value'=>$asiakas->Etusukunimi,'size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'etu_suku_nimet'); ?>
 	</div>
 

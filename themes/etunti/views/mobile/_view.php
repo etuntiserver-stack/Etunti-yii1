@@ -280,10 +280,8 @@ if(isset($tot->id)) {
 		if(isset($k->asiakas_id))
 		{
 			$a = Asiakkaat::model()->findbypk($k->asiakas_id);
-			if(isset($a->id) and !empty($a->yrityksen_nimi))
-			$asiakas = $a->yrityksen_nimi;
-			elseif(isset($a->id) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
-			$asiakas = $a->yhteyshenkilo;
+			if(isset($a->id))
+				$asiakas = $a->Fullname;
 		}
 	  }
 	  echo $asiakas;

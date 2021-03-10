@@ -97,7 +97,7 @@ $('.search-form form').submit(function(){
 		//'y_tunnus',
 		//'osoite',
 		//'nimi',
-		//'yhteyshenkilo',
+		//'etunimi',
 		//'as_nro',
 	array(
         'header'  => 'Tilanne',

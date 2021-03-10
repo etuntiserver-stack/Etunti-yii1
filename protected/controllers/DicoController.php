@@ -54,11 +54,7 @@ public function actionLogin($domain)
 				$_POST['salasana'] = $l['new_salasana'];
 
 				$asetukset=Asetukset::model()->findByPk(1);
-				$asiakasNimi = '';
-				if(!empty($model->yrityksen_nimi))
-				$asiakasNimi = $model->yrityksen_nimi;
-				elseif(empty($model->yrityksen_nimi) and !empty($model->yhteyshenkilo))
-				$asiakasNimi = $model->yhteyshenkilo;
+				$asiakasNimi = $model->Fullname;
 
 				$domainit=Domainit::model()->find(" domain = '".$domain."' ");
 				(isset($domainit->paketti))? $paketti = $domainit->paketti: $paketti = '';
@@ -662,10 +658,7 @@ public function actionLogin($domain)
 							$firma = FirmanTiedot::model()->findbypk(1);
 							$get_css = file_get_contents(Yii::app()->request->baseUrl.'css/email_send_table.css');
 
-							if($model->tyyppi == 'yritys')
-							$asiakas = $model->yrityksen_nimi;
-							if($model->tyyppi == 'henkilo')
-							$asiakas = $model->yhteyshenkilo;
+							$asiakas = $model->Fullname;
 	
 							$message = '<html xmlns="http://www.w3.org/1999/xhtml">
 							<head>
@@ -745,11 +738,7 @@ public function actionLogin($domain)
 							$firma = FirmanTiedot::model()->findbypk(1);
 							$get_css = file_get_contents(Yii::app()->request->baseUrl.'css/email_send_table.css');
 
-
-		if($model->tyyppi == 'yritys')
-		$asiakas = $model->yrityksen_nimi;
-		if($model->tyyppi == 'henkilo')
-		$asiakas = $model->yhteyshenkilo;
+		$asiakas = $model->Fullname;
 
 		$message = '<html xmlns="http://www.w3.org/1999/xhtml">
 		<head>

@@ -3,10 +3,8 @@
 /* @var $data Tarjouslaskenta */
 	$asiakas='';
 	$a = Asiakkaat::model()->findbypk($data->asiakas_id);
-	if(isset($a->id) and $a->tyyppi == 'yritys')
-	$asiakas = $a->yrityksen_nimi;
-	elseif(isset($a->id) and $a->tyyppi == 'henkilo')
-	$asiakas = $a->yhteyshenkilo;
+	if(isset($a->id))
+	$asiakas = $a->Fullname;
 
 	$y = Yhteystiedot::model()->findbypk($data->yhteystiedot_id);
 	if(isset($y->id) and !empty($y->yrityksen_nimi))

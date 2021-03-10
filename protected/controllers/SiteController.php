@@ -202,7 +202,7 @@ class SiteController extends Controller
 		$criteria = new CDbCriteria();
 		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])){
 		$criteria->condition = "
-			yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR yhteyshenkilo='".$_GET['yrityksen_nimi']."'
+			yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR etunimi='".$_GET['yrityksen_nimi']."' OR sukunimi='".$_GET['yrityksen_nimi']."'
 		";
 		$asiakas = Asiakkaat::model()->find($criteria);
 		}
@@ -913,241 +913,6 @@ class SiteController extends Controller
 		}
 	}
 
-/*
-	protected function cPanelConnect($host, $user, $token, $c_panel_user)
-	{
-
-		// token estromfi : N5YBXZSXX245H3IL38U0CPGOMT7XGBTB
-		$query = $host."json-api/create_user_session?api.version=1&user=".$c_panel_user."&service=cpaneld&locale=en&app=awstats";
-
-		$curl = curl_init();
-		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,0);
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,0);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
-
-		$header[0] = "Authorization: whm $user:$token";
-		curl_setopt($curl,CURLOPT_HTTPHEADER,$header);
-		curl_setopt($curl, CURLOPT_URL, $query);
-		$result = curl_exec($curl);
-
-		$result = curl_exec($curl);
-		if ($result == false) {
-		    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";
-
-		}
-		curl_close($curl);
-
-		return $result;
-
-	}
-
-
-	protected function cPanelDropDb($session, $host, $user, $token, $c_panel_user, $yritystunnus)
-	{
-
-			if(empty($yritystunnus))
-				return false;
-
-			$query = $host.$session."/json-api/cpanel?cpanel_jsonapi_user=".$c_panel_user."&cpanel_jsonapi_apiversion=2&cpanel_jsonapi_module=MysqlFE&cpanel_jsonapi_func=deletedb&db=".$yritystunnus;
-
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,0);
-			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,0);
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
-
-			$header[0] = "Authorization: whm $user:$token";
-			curl_setopt($curl,CURLOPT_HTTPHEADER,$header);
-			curl_setopt($curl, CURLOPT_URL, $query);
-			$result = curl_exec($curl);
-			if ($result == false) {
-			    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";
-
-			}
-			curl_close($curl);
-
-			return true;
-	}
-
-
-	protected function cPanelCreateDb($session, $host, $user, $token, $c_panel_user, $yritystunnus)
-	{
-
-			$query = $host.$session."/json-api/cpanel?cpanel_jsonapi_user=".$c_panel_user."&cpanel_jsonapi_apiversion=2&cpanel_jsonapi_module=MysqlFE&cpanel_jsonapi_func=createdb&db=".$yritystunnus;
-
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,0);
-			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,0);
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
-
-			$header[0] = "Authorization: whm $user:$token";
-			curl_setopt($curl,CURLOPT_HTTPHEADER,$header);
-			curl_setopt($curl, CURLOPT_URL, $query);
-			$result = curl_exec($curl);
-			if ($result == false) {
-			    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";
-
-			}
-			curl_close($curl);
-
-			$decode_result = json_decode($result, true);
-			if(
-				isset($decode_result['cpanelresult']['event']['result'])
-				and $decode_result['cpanelresult']['event']['result'] == 1
-			)
-			{
-
-
-				$query = $host.$session."/json-api/cpanel?cpanel_jsonapi_user=".$c_panel_user."&cpanel_jsonapi_apiversion=2&cpanel_jsonapi_module=MysqlFE&cpanel_jsonapi_func=setdbuserprivileges&db=".$yritystunnus."&dbuser=mulgikapsas&privileges=ALL PRIVILEGES";
-
-				$curl = curl_init();
-				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,0);
-				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,0);
-				curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
-
-				$header[0] = "Authorization: whm $user:$token";
-				curl_setopt($curl,CURLOPT_HTTPHEADER,$header);
-				curl_setopt($curl, CURLOPT_URL, $query);
-				$result_privelegies = curl_exec($curl);
-				if ($result_privelegies == false) {
-				    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";
-
-				}
-				curl_close($curl);
-
-				$decode_result_pr = json_decode($result_privelegies, true);
-				if(
-					isset($decode_result_pr['cpanelresult']['event']['result'])
-					and $decode_result_pr['cpanelresult']['event']['result'] == 1
-				)
-				{
-					return true;
-				} else {
-					echo '<pre>';
-					print_r(json_decode($result_privelegies, true));
-					echo '</pre>';
-				}
-
-			} else {
-				echo '<pre>';
-				print_r(json_decode($result, true));
-				echo '</pre>';
-			}
-
-		return false;
-
-	}
-
-	protected function importDump($yritystunnus, $servername, $username, $password)
-	{
-
-			$url = 'https://staging.etunti.fi/index.php/site/defdb_dump?domain=defdb&pass=Estrom2016!';
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $url);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-			if(curl_exec($ch) === false)
-			{
-				echo 'Error curl: ' . curl_error($ch);
-			} else {
-				$out = curl_exec($ch);
-
-				if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp' )) {
-			 		mkdir( Yii::app()->basePath.'/../tiedostot/temp', 0777, true );
-				}
-				$defdb = file_put_contents('tiedostot/temp/defdb.sql.gz', $out);
-
-				$file_name = 'tiedostot/temp/defdb.sql.gz';
-				$buffer_size = 4096;
-				$out_file_name = str_replace('.gz', '', $file_name);
-				$file = gzopen($file_name, 'rb');
-				$out_file = fopen($out_file_name, 'wb');
-				while (!gzeof($file)) {
-				    fwrite($out_file, gzread($file, $buffer_size));
-				}
-				fclose($out_file);
-				gzclose($file);
-				//echo $out;
-
-
-				$connection = mysql_connect($servername,$username,$password)
-				or die("Database Connection Failed");
-				$selectdb = mysql_select_db($yritystunnus, $connection) or die("Database could not be selected");
-
-
-				$filename = 'tiedostot/temp/defdb.sql';
-				$handle = fopen($filename, "r+");
-				$contents = fread($handle, filesize($filename));
-
-				$sql = explode(";",$contents);//
-	                            foreach($sql as $query){
-        	                        $result=mysql_query($query, $connection) or die(mysql_error());
-        	                        if ($result){
-
-        	                        // echo '<tr><td><BR></td></tr>';
-        	                        // echo '<tr><td>' . $query . ' <b>SUCCESS</b></td></tr>';
-        	                        // echo '<tr><td><BR></td></tr>';
-
-        	                        }
-        	                    }
-				fclose($handle);
-
-			}
-    			curl_close($ch);
-
-
-				Yii::app()->db->setActive(false);
-				Yii::app()->db->connectionString = 'mysql:host=localhost;dbname=etuntifw';
-				Yii::app()->db->setActive(true);
-
-				Yii::app()->db1->setActive(false);
-				Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$yritystunnus;
-				Yii::app()->db1->setActive(true);
-
-				$chk_domain = Domainit::model()->find(" domain='".$yritystunnus."' ");
-				if(!isset($chk_domain->id))
-				{
-					$new_domain = new Domainit;
-					$new_domain->domain = $yritystunnus;
-					$new_domain->yritys = $_POST['yrityksen_nimi'];
-					$new_domain->paketti = '1,2,3,4,5,6';
-					$new_domain->sahkoposti = $_POST['sahkoposti'];
-					$new_domain->aktiivinen = 1;
-					$new_domain->save();
-				}
-
-				$adm = Administrators::model()->findByPk(1);
-				if(isset($adm->id))
-				{
-					Administrators::model()->updateByPk($adm->id, array(
-						'adm_login' => $_POST['username'],
-						'adm_salasana' => password_hash($_POST['password'], PASSWORD_BCRYPT),
-						'adm_email' => $_POST['sahkoposti'],
-						'adm_nimi' => $_POST['yhteyshenkilo'],
-					));
-
-				}
-				$ft = FirmanTiedot::model()->findByPk(1);
-				if(isset($ft->id))
-				{
-					FirmanTiedot::model()->updateByPk($ft->id, array(
-						'tyonantaja' => $_POST['yrityksen_nimi'],
-						'osoite' => $_POST['osoite'],
-						'postinumero' => $_POST['postinumero'],
-						'postitoimipaikka' => $_POST['postitoimipaikka'],
-						'johtaja' => $_POST['yhteyshenkilo'],
-						'y_tunnus' => $_POST['yritys_tunnus'],
-						'puhelin' => $_POST['puhelinnumero'],
-						'sahkoposti' => $_POST['sahkoposti'],
-					));
-				}
-
-
-			return true;
-	}
-*/
-
-
 	public function actionUlkonaky()
 	{
 		$ad = Administrators::model()->findByPk(Yii::app()->user->adminID);
@@ -1585,8 +1350,8 @@ class SiteController extends Controller
 	public function actionGetasiakasidbynimi($nimi)
 	{
 
-       		$criteria = new CDbCriteria();
-       		$criteria->condition = " yrityksen_nimi='".$nimi."' OR yhteyshenkilo='".$nimi."' ";
+		$criteria = new CDbCriteria();
+		$criteria->condition = " yrityksen_nimi='".$nimi."' OR etunimi='".$nimi."' OR sukunimi='".$nimi."'";
 		$a = Asiakkaat::model()->find($criteria);
 		if(isset($a->id))
 			echo $a->id;
@@ -1624,7 +1389,7 @@ class SiteController extends Controller
 				$data[] = array(
 					'Asiakkaat',
 					$asiakas->yrityksen_nimi,
-					$asiakas->yhteyshenkilo,
+					$asiakas->Etusukunimi,
 					$asiakas->osoite,
 					$asiakas->kaupunki,
 					$asiakas->puhelin,
@@ -1650,7 +1415,7 @@ class SiteController extends Controller
 				$data[] = array(
 					'Yhteystiedot',
 					$asiakas->yrityksen_nimi,
-					$asiakas->yhteyshenkilo,
+					$asiakas->Etusukunimi,
 					$asiakas->osoite,
 					$asiakas->postitoimipaikka,
 					$asiakas->puhelin,
@@ -2617,8 +2382,8 @@ class SiteController extends Controller
 		    } else if($model == 'Asiakkaat' and $data->tyyppi == 'henkilo' and $sarake != 'osoite' and $sarake != 'kaupunki' and $sarake != 'postinumero')
 		    {
 		    $arr[] = array(
-		        'label'=>$data->yhteyshenkilo,
-		        'value'=>$data->yhteyshenkilo,
+		        'label'=>$data->Etusukunimi,
+		        'value'=>$data->Etusukunimi,
 		        'id'=>$data->id,
         	    );
 		    } else if($model == 'Tyontekijat' and is_array(json_decode($sarake, true)))
@@ -2863,11 +2628,8 @@ class SiteController extends Controller
 		$k = Kohteet::model()->findbypk($kohde_id);
   		$tiedosto = $tyyppi;
 
-			if(isset($a->id) and $a->tyyppi == 'yritys')
-				$tiedosto .= '_'.$a->yrityksen_nimi;
-			elseif(isset($a->id) and $a->tyyppi == 'henkilo')
-				$tiedosto .= '_'.$a->yhteyshenkilo;
-
+			if(isset($a->id))
+				$tiedosto .= '_'.$a->Fullname;
 			if(isset($k->osoite))
 				$tiedosto .= '_'.$k->osoite;
 

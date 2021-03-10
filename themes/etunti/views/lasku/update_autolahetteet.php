@@ -13,11 +13,8 @@
   <div class="col-sm-3">
 	<legend><h3><?php echo Yii::t('main', 'Muoka lähete'); ?></h3>
 	<?php
-	if(isset($model->asiakkaat->id) and $model->asiakkaat->tyyppi == 'yritys'){
-		echo $model->asiakkaat->yrityksen_nimi;
-	}
-	if(isset($model->asiakkaat->id) and $model->asiakkaat->tyyppi == 'henkilo'){
-		echo $model->asiakkaat->yhteyshenkilo;
+	if(isset($model->asiakkaat->id)){
+		echo $model->asiakkaat->Fullname;
 	}
 	?></legend>
 

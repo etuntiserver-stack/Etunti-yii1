@@ -332,7 +332,7 @@ $('.ryhmat').multiselect({
 				$selected[$item] = array('selected' => 'selected');
 			}
 		}
-		unset($list['id'], $list['time'], $list['yrityksen_nimi'], $list['y_tunnus'], $list['yhteyshenkilo'], $list['aktiivinen'], $list['vinkki_tunnit'], $list['vinkki_prosentti'], $list['netvisorkey'], $list['k_osoite'], $list['k_postinumero'], $list['k_kaupunki'], $list['onlinevarauksen_asiakas'], $list['asiakastila'], $list['vinkki_id'], $list['alennuskoodit'], $list['app_kayttoehdot'], $list['gcm_reg_id'], $list['lopetuksen_pvm'], $list['lopetuksen_syy'], $list['netvisor_dimension_item']);
+		unset($list['id'], $list['time'], $list['yrityksen_nimi'], $list['y_tunnus'], $list['etunimi'], $list['aktiivinen'], $list['vinkki_tunnit'], $list['vinkki_prosentti'], $list['netvisorkey'], $list['k_osoite'], $list['k_postinumero'], $list['k_kaupunki'], $list['onlinevarauksen_asiakas'], $list['asiakastila'], $list['vinkki_id'], $list['alennuskoodit'], $list['app_kayttoehdot'], $list['gcm_reg_id'], $list['lopetuksen_pvm'], $list['lopetuksen_syy'], $list['netvisor_dimension_item']);
         	echo $form->dropDownList($model, 'asiakas_pakkoliset', $list,
 		array('empty'=>'Valitse kentät','class'=>'form-control selectpicker', 'multiple' => 'true', 'options' => $selected));	
         	?>

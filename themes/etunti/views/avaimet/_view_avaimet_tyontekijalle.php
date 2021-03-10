@@ -30,10 +30,8 @@
 		<?php
 		if(isset($kohteet->id)){
 			$as = Asiakkaat::model()->findByPk($kohteet->asiakas_id);
-			if(isset($as->id) and $as->tyyppi == 'yritys')
-				echo $as->yrityksen_nimi;
-			if(isset($as->id) and $as->tyyppi == 'henkilo')
-				echo $as->yhteyshenkilo;
+			if(isset($as->id))
+				echo $as->Fullname;
 		}
 		?>
 	</td>

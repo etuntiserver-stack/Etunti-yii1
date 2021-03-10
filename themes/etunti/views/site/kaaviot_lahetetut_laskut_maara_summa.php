@@ -25,7 +25,7 @@ $chart_type = $_POST['lahetetut_laskut_maara_summa_type'] ?? 'line';
 $from_formated = date("d.m.Y", strtotime($from));
 $to_formated = date("d.m.Y", strtotime($to));
 $customer = !empty($customer_name)
-  ? Asiakkaat::model()->find("yrityksen_nimi='$customer_name' OR yhteyshenkilo='$customer_name'")
+  ? Asiakkaat::model()->find("yrityksen_nimi='$customer_name' OR etunimi='$customer_name' OR sukunimi='$customer_name'")
   : null;
 
 // <-- Laskut

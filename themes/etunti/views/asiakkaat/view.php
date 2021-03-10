@@ -20,7 +20,7 @@
 		//'time',
 		'yrityksen_nimi',
 		'y_tunnus',
-		'yhteyshenkilo',
+		'etunimi',
 		'osoite',
 		'kaupunki',
 		'postinumero',

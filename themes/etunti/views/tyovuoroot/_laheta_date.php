@@ -39,11 +39,9 @@
 	$asiakasTiedot = '';
 	if(isset($t->kohteet->asiakas_id)){
 		$as = Asiakkaat::model()->findbypk($t->kohteet->asiakas_id);
-		if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi) and $asetukset->tyovuorolahetys_naytetaanko_asiakas == 1){
-			$asiakasTiedot = '<b>'.Yii::t('main', 'Asiakas').':</b> '.$as->yrityksen_nimi;
-		} else if(isset($as->yhteyshenkilo) and empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo) and $asetukset->tyovuorolahetys_naytetaanko_asiakas == 1){
-			$asiakasTiedot = '<b>'.Yii::t('main', 'Asiakas').':</b> '.$as->yhteyshenkilo;
-		}
+		if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi) and $asetukset->tyovuorolahetys_naytetaanko_asiakas == 1)
+			$asiakasTiedot = '<b>'.Yii::t('main', 'Asiakas').':</b> '.$as->Fullname;
+
 		if($asetukset->tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka == 1){
 			$asiakasTiedot .= '<br><b>'.Yii::t('main', 'Kohteen postitoimipaikka').':</b> '.$t->kohteet->kaupunki;
 		}

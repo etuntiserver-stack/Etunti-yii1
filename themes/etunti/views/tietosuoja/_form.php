@@ -85,8 +85,7 @@
 		$asiakas_id = '';
 		$kohde_id = $k->id;
 
-		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'yritys'){$nimi = $k->asiakkaat->yrityksen_nimi;}
-		if(isset($k->asiakkaat) and $k->asiakkaat->tyyppi == 'henkilo'){$nimi = $k->asiakkaat->yhteyshenkilo;}
+		if(isset($k->asiakkaat)){$nimi = $k->asiakkaat->Fullname;}
 		if(isset($k->asiakkaat)){
 			$puhelin = $k->asiakkaat->puhelin;
 			$asiakas_id = $k->asiakkaat->id;

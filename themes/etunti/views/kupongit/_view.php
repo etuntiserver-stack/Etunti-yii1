@@ -16,10 +16,7 @@
 		    if(isset($a->id))
 		    {
 
-			if($a->tyyppi == 'yritys')
-			   $asiakas = $a->yrityksen_nimi;
-			if($a->tyyppi == 'henkilo')
-			   $asiakas = $a->yhteyshenkilo;
+			   $asiakas = $a->Fullname;
 
 			$asiakas_lista .= CHtml::link($i.'. '.$asiakas, 
 				array('/asiakkaat/update', 'id'=>$a->id), 

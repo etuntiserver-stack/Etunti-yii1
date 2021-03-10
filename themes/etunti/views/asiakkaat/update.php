@@ -1,12 +1,5 @@
 <?php
-$head = '';
-
-if(!empty($model->yrityksen_nimi))
-$head = $model->yrityksen_nimi;
-elseif(empty($model->yrityksen_nimi) and !empty($model->yhteyshenkilo))
-$head = $model->yhteyshenkilo;
-else
-$head = $model->osoite;
+$head = $model->Fullname;
 
 $asetukset = Asetukset::model()->findbypk(1);
 ?>

@@ -24,10 +24,8 @@ if($asetukset->palvelu_tyyppi == 2)
 
 	$asiakas='';
 	$a = Asiakkaat::model()->find( " asiakasnumero='".$data->as_nro."' ");
-	if(isset($a->id) and $a->tyyppi == 'yritys')
-	$asiakas = $a->yrityksen_nimi;
-	if(isset($a->id) and $a->tyyppi == 'henkilo')
-	$asiakas = $a->yhteyshenkilo;
+	if(isset($a->id))
+		$asiakas = $a->Fullname;
 ?>
 
 <tr>

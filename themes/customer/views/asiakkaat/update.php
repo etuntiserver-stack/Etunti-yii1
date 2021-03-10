@@ -1,8 +1,8 @@
 <?php
 $head = '';
 
-if(!empty($model->yhteyshenkilo))
-$head = $model->yhteyshenkilo;
+if(!empty($model->Etusukunimi))
+$head = $model->Etusukunimi;
 else
 $head = $model->osoite;
 

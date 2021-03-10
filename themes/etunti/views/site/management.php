@@ -1957,11 +1957,8 @@ Highcharts.chart('container', {
 			}
 			$lasku = Lasku::model()->findAll($criteria);
 			foreach($lasku as $item){
-					if( isset($item->asiakkaat->tyyppi) and $item->asiakkaat->tyyppi == 'yritys' ){ 
-						$asiakas = $item->asiakkaat->yrityksen_nimi; 
-					}
-					if( isset($item->asiakkaat->tyyppi) and $item->asiakkaat->tyyppi == 'henkilo' ){ 
-						$asiakas = $item->asiakkaat->yhteyshenkilo; 
+					if( isset($item->asiakkaat->tyyppi) ){ 
+						$asiakas = $item->asiakkaat->Fullname; 
 					}
 					$per[] = array("name" => $this->clean($asiakas), "y" => (int)$item->yhteensa_total_veroton);
 					$tuote[$dt->format( "Ym" )][$item->as_nro][] = $item->as_nro;

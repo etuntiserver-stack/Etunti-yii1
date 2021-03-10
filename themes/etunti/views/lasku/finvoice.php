@@ -87,7 +87,7 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
       ];
     }
 
-    $name = $l->tyyppi == 'yritys' ? $l->yritys : $l->yhteyshenkilo;
+    $name = $l->tyyppi == 'yritys' ? $l->yritys : $l->Etusukunimi;
     $channel = ($l->laskutus == 'verkkolasku') ? 'ELECTRONIC_INVOICE' : ($l->laskutus == 'posti' ? 'MAIL' : 'EMAIL');
 
     $params = [
@@ -99,7 +99,7 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
       // This object holds information about the counterparty of the invoice. With sales invoices, it is the buyer. With
       // purchase invoices, it is the seller. With travel and expense invoices, it is the reporter of the expenses
       "counterParty" => (object) [
-        "contactPersonName" => $l->yhteyshenkilo, // (string) Name of the contact person.
+        "contactPersonName" => $l->Etusukunimi, // (string) Name of the contact person.
         "identifier" => $l->y_tunnus,             // (string) SALES_INVOICE and PURCHASE_INVOICE only. Business ID or national identification number.
         "taxCode" => "",                          // (string) SALES_INVOICE only. Tax code of the customer.
         "customerNumber" => $l->as_nro,           // (string) SALES_INVOICE and PURCHASE_INVOICE only. Customer number.

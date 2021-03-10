@@ -42,7 +42,7 @@ $this->menu=array(
 
     	<?php 
        		$criteria = new CDbCriteria();
-		$criteria->order = " yhteyshenkilo ";
+		$criteria->order = " etunimi ";
 
         	$a = Asiakkaat::model()->findAll($criteria);
 		echo '<select name="asiakas" class="gui-input">';
@@ -51,12 +51,7 @@ $this->menu=array(
 
 		foreach($a as $aa)
 		{
-		  if(!empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->id.'">'.$aa->yrityksen_nimi.'</option>';
-		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->id.'">nimet puutuu '.$aa->id.'</option>';
-		  else
-		    echo '<option value="'.$aa->id.'">'.$aa->yhteyshenkilo.' ID:'.$aa->id.'</option>';
+		    echo '<option value="'.$aa->id.'">'.$aa->Fullname.'</option>';
 		}
 		echo '</select>';
 	?>

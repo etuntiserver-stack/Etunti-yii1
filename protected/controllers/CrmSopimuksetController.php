@@ -96,14 +96,7 @@ class CrmSopimuksetController extends Controller
       		$l = Asiakkaat::model()->findAll($criteria);
 		$list = array();
 		foreach($l as $v)
-		{
-			if($v->tyyppi == 'yritys' and !empty($v->yrityksen_nimi))
-			$list[$v->id] = $v->yrityksen_nimi;
-			elseif($v->tyyppi == 'henkilo' and !empty($v->yhteyshenkilo))
-			$list[$v->id] = $v->yhteyshenkilo;
-			else
-			$list[$v->id] = 'Asiakasnumero: '.$v->asiakasnumero;
-		}
+			$list[$v->id] = $v->Fullname;
 
 		if(count($list) > 0)
 		{
@@ -542,10 +535,8 @@ Ystävällisin terveisin.
 			$as = Asiakkaat::model()->findbypk($model->asiakas_id);
 			if(isset($as->id))
 			{
-				if(isset($as->id) and !empty($as->yrityksen_nimi))
-				   $asiakas = $as->yrityksen_nimi;
-				elseif(isset($as->id) and empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo)) 
-				   $asiakas = $as->yhteyshenkilo;
+				if(isset($as->id))
+				   $asiakas = $as->Fullname;
 				else
 				   $asiakas = '';
 

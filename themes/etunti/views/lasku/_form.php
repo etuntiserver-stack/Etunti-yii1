@@ -152,12 +152,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		$a_sort = array();
 		foreach($a as $aa)
 		{
-		  if(!empty($aa->yrityksen_nimi) and $aa->tyyppi == 'yritys'){
-		    $a_sort[$aa->yrityksen_nimi] = array('asiakasnumero' => $aa->asiakasnumero, 'asiakas_id' => $aa->id);
-		  }
-		  if(!empty($aa->yhteyshenkilo) and $aa->tyyppi == 'henkilo'){
-		    $a_sort[$aa->yhteyshenkilo] = array('asiakasnumero' => $aa->asiakasnumero, 'asiakas_id' => $aa->id);
-		  }
+		    $a_sort[$aa->Fullname] = array('asiakasnumero' => $aa->asiakasnumero, 'asiakas_id' => $aa->id);
 		}
 		ksort($a_sort);
 
@@ -167,12 +162,8 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		if(isset($model->asiakas_id) and !empty($model->asiakas_id))
 		{
         	  $aon = Asiakkaat::model()->findbypk($model->asiakas_id);
-		  if(isset($aon->id) and !empty($aon->asiakasnumero) and !empty($aon->yrityksen_nimi) and $aon->tyyppi == 'yritys'){
-		    echo '<option value="'.$aon->asiakasnumero.'" asiakas_id="'.$aon->id.'">'.$aon->yrityksen_nimi.'</option>';
-		  }
-		  if(isset($aon->id) and !empty($aon->asiakasnumero) and !empty($aon->yhteyshenkilo) and $aon->tyyppi == 'henkilo'){
-		    echo '<option value="'.$aon->asiakasnumero.'" asiakas_id="'.$aon->id.'">'.$aon->yhteyshenkilo.'</option>';
-		  }
+			  if(isset($aon->id))
+				echo '<option value="'.$aon->asiakasnumero.'" asiakas_id="'.$aon->id.'">'.$aon->Fullname.'</option>';
 		}
 
 		foreach($a_sort as $k => $v)

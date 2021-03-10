@@ -57,8 +57,7 @@
 
     		<?php 
        		$criteria = new CDbCriteria();
-		//$criteria->select = " COALESCE(NULLIF(yhteyshenkilo,yhteyshenkilo),'gg') AS yht ";
-		$criteria->order = " yhteyshenkilo ";
+		$criteria->order = " etunimi ";
 
 
         	$a = Asiakkaat::model()->findAll($criteria);
@@ -73,12 +72,7 @@
 		echo '<option value=>'.Yii::t('main', 'Valitse asiakas').'</option>';
 		foreach($a as $aa)
 		{
-		  if(!empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->yrityksen_nimi.'</option>';
-		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->asiakasnumero.'">nimet puutuu '.$aa->id.'</option>';
-		  else
-		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->yhteyshenkilo.' ID:'.$aa->id.'</option>';
+		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->Fullname.'</option>';
 		}
 		echo '</select>';
 		?>

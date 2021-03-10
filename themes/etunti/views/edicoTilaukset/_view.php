@@ -22,12 +22,8 @@
 		<?php echo date("d.m.Y  H:i",strtotime($data->time)); ?>
 	</td>
 	<td>
-		<?php if(isset($data->asiakkaat->id) and $data->asiakkaat->tyyppi == 'yritys') : ?>
-		<?php echo $data->asiakkaat->yrityksen_nimi; ?>
-		<?php endif; ?>
-
-		<?php if(isset($data->asiakkaat->id) and $data->asiakkaat->tyyppi == 'henkilo') : ?>
-		<?php echo $data->asiakkaat->yhteyshenkilo; ?>
+		<?php if(isset($data->asiakkaat->id)) : ?>
+		<?php echo $data->asiakkaat->Fullname; ?>
 		<?php endif; ?>
 	</td>
 	<td>
