@@ -33,17 +33,17 @@ td .latikkoAsetukset{
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
-				<?php
-		   		$site = Yii::app()->createController('Site');
-		   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
-						'tekijaPaaSivulla', // name
-						'gui-input', //class
-						null, // id
-						Yii::app()->session['tekijaPaaSivulla'], //selected
-						1 // aktiivinen
-				);
-				echo $tyontekiatLista;
-				?>
+							<?php
+					   		$site = Yii::app()->createController('Site');
+					   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
+									'tekijaPaaSivulla', // name
+									'gui-input', //class
+									null, // id
+									Yii::app()->session['tekijaPaaSivulla'], //selected
+									1 // aktiivinen
+							);
+							echo $tyontekiatLista;
+							?>
                             <i class="arrow double"></i>
                             </label>
                           </label>
@@ -53,18 +53,18 @@ td .latikkoAsetukset{
                         <div class="section">
                           <label class="field prepend-icon">
 
-			    <!-- Autocomplete -->
-			    <?php
-	   			$site = Yii::app()->createController('Site');
-				$mod = 'Asiakkaat';
-				$sarake = 'yrityksen_nimi';
-				$placeholder = 'Asiakas';
-				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
-				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
-				else $postvalue='';				
-		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','etunimi','sukunimi'), $placeholder, $postvalue);
-			    ?>
-			    <!-- Autocomplete -->
+							<!-- Autocomplete -->
+							<?php
+				   			$site = Yii::app()->createController('Site');
+							$mod = 'Asiakkaat';
+							$sarake = 'yrityksen_nimi';
+							$placeholder = 'Asiakas';
+							if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
+							else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
+							else $postvalue='';				
+					 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','etunimi','sukunimi'), $placeholder, $postvalue);
+							?>
+							<!-- Autocomplete -->
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>
@@ -78,18 +78,18 @@ td .latikkoAsetukset{
                         <div class="section">
                           <label class="field prepend-icon">
 
-			    <!-- Autocomplete -->
-			    <?php
-	   			$site = Yii::app()->createController('Site');
-				$mod = 'Kohteet';
-				$sarake = 'osoite';
-				$placeholder = 'Osoite';
-				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
-				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
-				else $postvalue='';				
-		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
-			    ?>
-			    <!-- Autocomplete -->
+							<!-- Autocomplete -->
+							<?php
+				   			$site = Yii::app()->createController('Site');
+							$mod = 'Kohteet';
+							$sarake = 'osoite';
+							$placeholder = 'Osoite';
+							if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
+							else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
+							else $postvalue='';				
+					 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+							?>
+							<!-- Autocomplete -->
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>

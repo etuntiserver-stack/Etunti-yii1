@@ -274,16 +274,9 @@ if(isset($tot->id)) {
 	<td>
 	  <?php 
 	  $asiakas = '';
-	  if(!empty($data->kohdenID))
-	  {
-		$k = Kohteet::model()->findbypk($data->kohdenID);
-		if(isset($k->asiakas_id))
-		{
-			$a = Asiakkaat::model()->findbypk($k->asiakas_id);
-			if(isset($a->id))
-				$asiakas = $a->Fullname;
-		}
-	  }
+	  if(!empty($data->kohdenID) and isset($data->kohteet->asiakkaat->id))
+		$asiakas = $data->kohteet->asiakkaat->Fullname;
+
 	  echo $asiakas;
 	  ?>
 	</td>
