@@ -1,14 +1,14 @@
 <?php
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
-/*
-ON AJETTU
+
+
 if(isset($_GET['asiakas_updater'])) 
 {
 	$db_host = 'localhost';
 	$site = Yii::app()->createController('Site');
 	$conn = $site[0]->dbConnectArr();
-	$list = Domainit::model()->findAll(" aktiivinen=1 ");
+	$list = Domainit::model()->findAll(" domain='sivex' and aktiivinen=1 ");
 
 	try {
 		$mysqli = new mysqli($conn['host'], $conn['username'], $conn['password']);
@@ -41,7 +41,7 @@ if(isset($_GET['asiakas_updater']))
 
 		$criteria = new CDBCriteria;
 		$criteria->condition = "
-			yhteyshenkilo!='' AND etunimi IS NULL AND sukunimi IS NULL
+			yhteyshenkilo!=''
 		";
 
 		echo $d->domain.'<br>';
@@ -55,13 +55,14 @@ if(isset($_GET['asiakas_updater']))
 		foreach($asiakkaat as $item)
 		{
 			$nimet = explode(" ", $item->yhteyshenkilo);
-			$etunimi = $nimet[0] ?? '';
-			$sukunimi = $nimet[1] ?? '';
+			$etunimi = $nimet[1] ?? '';
+			$sukunimi = $nimet[0] ?? '';
 			Asiakkaat::model()->updateByPk($item->id, ['etunimi' => trim($etunimi), 'sukunimi' => trim($sukunimi)]);
+			echo $etunimi.' '.$sukunimi.'<br>';
 		}
 	}
 }
-*/
+
 //<-- Users siirto
 if(isset($_GET['users_siirto']))
 {

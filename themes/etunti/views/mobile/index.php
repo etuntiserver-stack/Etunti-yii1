@@ -62,7 +62,7 @@ td .latikkoAsetukset{
 				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
 				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
 				else $postvalue='';				
-		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
+		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','etunimi','sukunimi'), $placeholder, $postvalue);
 			    ?>
 			    <!-- Autocomplete -->
 

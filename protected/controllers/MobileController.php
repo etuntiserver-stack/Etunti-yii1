@@ -927,7 +927,7 @@ class MobileController extends Controller
 			kohdenID IN ( 
 			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
 				( SELECT id FROM asiakkaat 
-					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%'
+					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR CONCAT(etunimi , ' ' , sukunimi) LIKE '%".$_GET['yrityksen_nimi']."%'
 				)
 			)
 		");
@@ -959,7 +959,7 @@ class MobileController extends Controller
 			kohdenID IN ( 
 			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
 				( SELECT id FROM asiakkaat 
-					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%'
+					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR CONCAT(etunimi , ' ' , sukunimi) LIKE '%".$_GET['yrityksen_nimi']."%'
 				)
 			)
 		");
@@ -1401,7 +1401,7 @@ class MobileController extends Controller
 			kohdenID IN ( 
 			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
 				( SELECT id FROM asiakkaat 
-					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%'
+					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR CONCAT(etunimi , ' ' , sukunimi) LIKE '%".$_GET['yrityksen_nimi']."%'
 				)
 			)
 		");
