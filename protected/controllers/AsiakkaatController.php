@@ -1090,7 +1090,7 @@ $xml = '
 		}
 
 		if(isset($_GET['yrityksen_nimi']) and !empty(trim($_GET['yrityksen_nimi']))){
-	        	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%' ");
+	        	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR CONCAT(etunimi , ' ' , sukunimi) LIKE '%".$_GET['yrityksen_nimi']."%' ");
 		}
 		if(isset($_GET['ryhma']) and !empty(trim($_GET['ryhma']))){
 		        $criteria->addCondition (" ryhma LIKE '%".$_GET['ryhma']."%' ");
