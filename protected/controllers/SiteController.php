@@ -202,7 +202,7 @@ class SiteController extends Controller
 		$criteria = new CDbCriteria();
 		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])){
 		$criteria->condition = "
-			yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR etunimi='".$_GET['yrityksen_nimi']."' OR sukunimi='".$_GET['yrityksen_nimi']."'
+			yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR CONCAT(etunimi , ' ' , sukunimi)='".$_GET['yrityksen_nimi']."' 
 		";
 		$asiakas = Asiakkaat::model()->find($criteria);
 		}
@@ -1351,7 +1351,7 @@ class SiteController extends Controller
 	{
 
 		$criteria = new CDbCriteria();
-		$criteria->condition = " yrityksen_nimi='".$nimi."' OR etunimi='".$nimi."' OR sukunimi='".$nimi."'";
+		$criteria->condition = " yrityksen_nimi='".$nimi."' OR CONCAT(etunimi , ' ' , sukunimi)='".$nimi."' ";
 		$a = Asiakkaat::model()->find($criteria);
 		if(isset($a->id))
 			echo $a->id;
