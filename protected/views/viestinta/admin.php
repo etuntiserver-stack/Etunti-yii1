@@ -2,13 +2,13 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
-/*
+
 if(isset($_GET['asiakas_updater'])) 
 {
 	$db_host = 'localhost';
 	$site = Yii::app()->createController('Site');
 	$conn = $site[0]->dbConnectArr();
-	$list = Domainit::model()->findAll(" domain!='sivex' and aktiivinen=1 ");
+	$list = Domainit::model()->findAll(" domain='talentas_oy' and aktiivinen=1 ");
 
 	try {
 		$mysqli = new mysqli($conn['host'], $conn['username'], $conn['password']);
@@ -57,15 +57,15 @@ if(isset($_GET['asiakas_updater']))
 			$nimet = explode(" ", trim($item->yhteyshenkilo));
 			if(isset($nimet[0]))
 			{
-				$etunimi = $nimet[0];
-				$sukunimi = str_replace($nimet[0], "", $item->yhteyshenkilo);
+				$sukunimi = $nimet[0];
+				$etunimi = str_replace($nimet[0], "", $item->yhteyshenkilo);
 				Asiakkaat::model()->updateByPk($item->id, ['etunimi' => trim($etunimi), 'sukunimi' => trim($sukunimi)]);
 				//echo $item->id.'# '.$item->yhteyshenkilo.' - '.$etunimi.' '.$sukunimi.'<br>';
 			}
 		}
 	}
 }
-*/
+
 
 //<-- Users siirto
 if(isset($_GET['users_siirto']))
