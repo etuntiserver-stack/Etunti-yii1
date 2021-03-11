@@ -89,6 +89,9 @@
 	<td class="<?php echo $tauste; ?>" align="center">
 		<?php echo $tyyppi; ?>
 	</td>
+	<td>
+		<?php echo $data->Tunnit; ?>
+	</td>
 </tr>
 
 <?php

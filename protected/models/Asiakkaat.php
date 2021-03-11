@@ -253,6 +253,41 @@ class Asiakkaat extends DB2ActiveRecord
 		return $return;
     }
 
+	public function getTunnit() {
+		if($_GET["withhours"] ?? false) {
+
+			
+			$from = new \DateTime();
+			//$from->modify("-1 year");
+			$fromFormat = $from->format("Y-m-d");
+			$to = new \DateTime();
+			$to->modify("+1 year");
+			$toFormat = $to->format("Y-m-d");
+
+			$tyovuorot = Yii::app()->createController('Tyovuoroot');
+			$haku_criteria[] = " kohde IN (SELECT id FROM sivex_kohdet WHERE asiakas_id='".$this->id."' )";
+			$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($fromFormat, $toFormat, [], $haku_criteria, ["data"]);
+			
+			$tunnit = 0;
+			foreach($dataAll as $k => $arr) {
+				
+				$data = $arr["data"];
+				$alku = $data["alku"];
+				$loppu = $data["loppu"];
+
+				$timeToAdd = (strtotime($loppu) - strtotime($alku));
+				$timeToAdd = $timeToAdd / 3600;
+				$tunnit += $timeToAdd;
+
+			}
+
+			return $tunnit . "h";
+		} else {
+			$link = $_SERVER["REQUEST_URI"] . "?withhours=true";
+			return '<a href="'.$link.'">Hae myös tunnit</a>';
+		}
+	}
+
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
