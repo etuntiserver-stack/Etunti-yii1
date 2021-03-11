@@ -8,7 +8,7 @@ if(isset($_GET['asiakas_updater']))
 	$db_host = 'localhost';
 	$site = Yii::app()->createController('Site');
 	$conn = $site[0]->dbConnectArr();
-	$list = Domainit::model()->findAll(" domain='puhdas_unelma_oy' and aktiivinen=1 ");
+	$list = Domainit::model()->findAll(" domain!='sivex' and aktiivinen=1 ");
 
 	try {
 		$mysqli = new mysqli($conn['host'], $conn['username'], $conn['password']);
@@ -60,7 +60,7 @@ if(isset($_GET['asiakas_updater']))
 				$etunimi = $nimet[0];
 				$sukunimi = str_replace($nimet[0], "", $item->yhteyshenkilo);
 				Asiakkaat::model()->updateByPk($item->id, ['etunimi' => trim($etunimi), 'sukunimi' => trim($sukunimi)]);
-				echo $item->id.'# '.$item->yhteyshenkilo.' - '.$etunimi.' '.$sukunimi.'<br>';
+				//echo $item->id.'# '.$item->yhteyshenkilo.' - '.$etunimi.' '.$sukunimi.'<br>';
 			}
 		}
 	}
