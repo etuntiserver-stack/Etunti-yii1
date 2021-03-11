@@ -497,6 +497,9 @@ $(document).ready(function() {
       ?>
   </th>
   <th><?php echo Yii::t('main', 'Tyyppi'); ?></th>
+  <th>
+	<?php echo Yii::t('main', "Suunnitellut tunnit");?>
+  </th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
