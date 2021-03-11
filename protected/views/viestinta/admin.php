@@ -8,7 +8,7 @@ if(isset($_GET['asiakas_updater']))
 	$db_host = 'localhost';
 	$site = Yii::app()->createController('Site');
 	$conn = $site[0]->dbConnectArr();
-	$list = Domainit::model()->findAll(" domain=' puhdas_unelma_oy' and aktiivinen=1 ");
+	$list = Domainit::model()->findAll(" domain='puhdas_unelma_oy' and aktiivinen=1 ");
 
 	try {
 		$mysqli = new mysqli($conn['host'], $conn['username'], $conn['password']);
