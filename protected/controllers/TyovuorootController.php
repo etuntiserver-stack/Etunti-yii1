@@ -4630,7 +4630,7 @@ class TyovuorootController extends Controller
 
 		$criteria->addCondition (" 
 			aktiivinen=1 
-			AND (yrityksen_nimi LIKE '%".$key."%' OR etunimi LIKE '%".$key."%' OR sukunimi LIKE '%".$key."%' OR osoite LIKE '%".$key."%' )	
+			AND (yrityksen_nimi LIKE '%".$key."%' OR CONCAT(etunimi,' ',sukunimi) LIKE '%".$key."%' OR osoite LIKE '%".$key."%' )	
 		");
 
  		$as = Asiakkaat::model()->findAll($criteria);
