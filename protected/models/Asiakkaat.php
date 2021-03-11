@@ -223,13 +223,13 @@ class Asiakkaat extends DB2ActiveRecord
 	// Fullname
     public function getFullname(){
 		$return = '';
-		if( !empty($this->yrityksen_nimi) and $this->tyyppi == 'yritys' ){
+		if($this->tyyppi == 'yritys' and !empty($this->yrityksen_nimi)){
 			$return = $this->yrityksen_nimi;
 		}
-		if( !empty($this->etunimi) and $this->tyyppi == 'henkilo' ){
+		if(empty($return) and !empty($this->etunimi)){
 			$return = $this->etunimi.' '.$this->sukunimi;
 		}
-		if( empty($return)){
+		if(empty($return)){
 			$return = 'Asiakas id: '.$this->id;
 		}
 		return trim($return);
