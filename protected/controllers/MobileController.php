@@ -1517,7 +1517,11 @@ class MobileController extends Controller
 		else if(isset($_POST['osoite']) and !empty($_POST['osoite']))
 			Yii::app()->session['osoite'] = Yii::app()->request->getPost('osoite');
 
-
+		if(!isset(Yii::app()->session['fromP']))
+			Yii::app()->session['fromP'] = date("Y-m-d",strtotime("-1 month"));
+		if(!isset(Yii::app()->session['toP']))
+			Yii::app()->session['toP'] = date("Y-m-d");
+			
 		if(Yii::app()->request->getPost('fromP'))
 		Yii::app()->session['fromP'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('fromP')));
 
@@ -1562,7 +1566,7 @@ class MobileController extends Controller
 			kohdenID IN ( 
 			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
 				( SELECT id FROM asiakkaat 
-					WHERE yrityksen_nimi LIKE '%".Yii::app()->session['yrityksen_nimi']."%' OR etunimi LIKE '%".Yii::app()->session['yrityksen_nimi']."%' OR sukunimi LIKE '%".Yii::app()->session['yrityksen_nimi']."%'
+					WHERE yrityksen_nimi LIKE '%".Yii::app()->session['yrityksen_nimi']."%' OR CONCAT(etunimi,' ',sukunimi) LIKE '%".Yii::app()->session['yrityksen_nimi']."%'
 				)
 			)
 		");
