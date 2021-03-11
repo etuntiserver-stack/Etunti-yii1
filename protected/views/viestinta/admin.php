@@ -57,9 +57,9 @@ if(isset($_GET['asiakas_updater']))
 			$nimet = explode(" ", $item->yhteyshenkilo);
 			if(isset($nimet[0]))
 			{
-				$etunimi = trim($nimet[0]);
-				$sukunimi = trim(str_replace($nimet[0], "", $item->yhteyshenkilo));
-				//Asiakkaat::model()->updateByPk($item->id, ['etunimi' => trim($etunimi), 'sukunimi' => trim($sukunimi)]);
+				$etunimi = $nimet[0];
+				$sukunimi = str_replace($nimet[0], "", $item->yhteyshenkilo);
+				Asiakkaat::model()->updateByPk($item->id, ['etunimi' => trim($etunimi), 'sukunimi' => trim($sukunimi)]);
 				echo $item->id.'# '.$item->yhteyshenkilo.' - '.$etunimi.' '.$sukunimi.'<br>';
 			}
 		}
