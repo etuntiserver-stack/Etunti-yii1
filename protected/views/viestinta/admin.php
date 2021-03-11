@@ -2,7 +2,7 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
-/*
+
 if(isset($_GET['asiakas_updater'])) 
 {
 	$db_host = 'localhost';
@@ -54,7 +54,7 @@ if(isset($_GET['asiakas_updater']))
 
 		foreach($asiakkaat as $item)
 		{
-			$nimet = explode(" ", $item->yhteyshenkilo);
+			$nimet = explode(" ", trim($item->yhteyshenkilo));
 			if(isset($nimet[0]))
 			{
 				$etunimi = $nimet[0];
@@ -65,7 +65,7 @@ if(isset($_GET['asiakas_updater']))
 		}
 	}
 }
-*/
+
 
 //<-- Users siirto
 if(isset($_GET['users_siirto']))
