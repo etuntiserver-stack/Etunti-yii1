@@ -32,7 +32,9 @@ if($_GET["to"] ?? false) {
     // and have no bills during a time period
     
     $criteria->condition = "
-        aktiivinen = 1 AND asiakasnumero NOT IN (SELECT as_nro FROM laskut
+        aktiivinen = 1 
+        AND lopetuksen_pvm = ''
+        AND asiakasnumero NOT IN (SELECT as_nro FROM laskut
         WHERE paivays BETWEEN '".date("Y-m-d", strtotime($fromFormat))."' 
         AND '".date("Y-m-d", strtotime($toFormat))."')
     ";
