@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow',
-				'actions'=>array('site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan', 'getasiakasidbynimi', 'otakaytoon', 'ohjeet', 'kaaviot', 'management', 'management_tunnit', 'management_hours'),
+				'actions'=>array('spendingclients', 'site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan', 'getasiakasidbynimi', 'otakaytoon', 'ohjeet', 'kaaviot', 'management', 'management_tunnit', 'management_hours', 'spendingclients'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow',
@@ -2835,5 +2835,14 @@ class SiteController extends Controller
 	
 		$return = ['host'=>$host, 'username'=>Yii::app()->db->username, 'password'=>Yii::app()->db->password];
 		return $return;
+	}
+
+	/**
+	 * This action is used to generate a list from last month
+	 * (timeframe subject to change)
+	 * from those clients that have been billed
+	 */
+	public function actionSpendingclients() {
+		$this->render("spending_clients");
 	}
 }
