@@ -2362,7 +2362,6 @@ class SiteController extends Controller
 			}
 		
 		}
-		print_r($cond);
 		//    Tyoryhmat -->
 
 		// <-- Tyoryhmat
