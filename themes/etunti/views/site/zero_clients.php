@@ -30,7 +30,7 @@ if($_GET["to"] ?? false) {
     $criteria = new CdbCriteria();
     // find clients that are active (aktiivinen = 1)
     // and have no bills during a time period
-    
+    /*
     $criteria->condition = "
         aktiivinen = 1 
         AND lopetuksen_pvm = ''
@@ -38,6 +38,25 @@ if($_GET["to"] ?? false) {
         WHERE paivays BETWEEN '".date("Y-m-d", strtotime($fromFormat))."' 
         AND '".date("Y-m-d", strtotime($toFormat))."')
     ";
+    */
+    // ne asiakkaat joiden kohteelle ei löydy työvuoroja X ajalla
+    // => ne asiakkaat joille ei ole työvuoroja X ajalla
+    $criteria->condition = "
+    aktiivinen = 1
+    AND lopetuksen_pvm = ''
+    AND id NOT IN (SELECT asiakas_id FROM sivex_kohdet WHERE id IN 
+    (SELECT kohde FROM sivex_tvuoro WHERE STR_TO_DATE(pvm, '%d.%m.%Y') BETWEEN '".date("Y-m-d", strtotime($fromFormat))."' 
+    AND '".date("Y-m-d", strtotime($toFormat))."'))
+    ";
+    
+    // view query
+    /*
+    $schema = Yii::app()->db1->schema;
+    $builder = $schema->commandBuilder;
+    $command = $builder->createFindCommand($schema->getTable('asiakkaat'), $criteria);
+    $results = $command->text;
+    echo $results;
+    */
     
     
     $asiakkaat = Asiakkaat::model()->findAll($criteria);
@@ -54,6 +73,7 @@ if($_GET["to"] ?? false) {
     </tr>
     <?php foreach($asiakkaat as $asiakas) : ?>
         <tr>
+
             <?= tableColumn($asiakas->Etusukunimi); ?>
             <?= tableColumn($asiakas->postinumero); ?>
             <?= tableColumn($asiakas->kaupunki); ?>
