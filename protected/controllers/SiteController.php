@@ -2323,7 +2323,15 @@ class SiteController extends Controller
 		{
 			$sarake_nimi = json_decode($sarake, true)[0];
 			$cond = '';
+			// model asiakkaat ja $term kaksiosainen
+			if($model == 'Asiakkaat' and count(explode(" ", $term)) > 1) {
+				$splitName = explode(" ", $term);
+				$etunimi = $splitName[0];
+				$sukunimi = $splitName[1];
+				$cond .= "(etunimi LIKE '%".$etunimi."%' AND sukunimi LIKE '%".$sukunimi."%') OR ";
+			}
 			$i = 0;
+			
 			foreach(json_decode($sarake, true) as $item)
 			{
 				if($i == 0)
@@ -2342,16 +2350,19 @@ class SiteController extends Controller
 			$criteria->group = " $sarake ";
 			$criteria->condition = " $sarake LIKE '%".$term."%' ";
 		}
-
+		
 		// <-- Tyoryhmat
 		if( $model == 'Asiakkaat' or $model == 'Kohteet' ){
-		$site = Yii::app()->createController('Site');
-		$arr = $site[0]->TyoryhmatHelper();
-		$ids = implode(",", $arr);
-		if( count($arr) > 0 ){
-			$criteria->condition = " tyoryhma IN ($ids) ";
+
+			$site = Yii::app()->createController('Site');
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			}
+		
 		}
-		}
+		print_r($cond);
 		//    Tyoryhmat -->
 
 		// <-- Tyoryhmat
