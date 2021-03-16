@@ -180,10 +180,15 @@ $('.ryhmat').multiselect({
 		<label><?php echo Yii::t('main', 'Y-tunnus'); ?></label>
 		<input type="text" name="Asiakkaat[y_tunnus]" class="form-control">
     </div>
-    <div class="section nimi ashidd">
-		<label><?php echo Yii::t('main', 'Yhteyshenkilö'); ?> <span class="required">*</span></label>
-		<input type="text" name="Asiakkaat[yhteyshenkilo]" id="Asiakas_yhteyshenkilo" class="form-control" required>
-		<div id="yhteyshenkilo_error"></div>
+    <div class="section">
+		<label><?php echo Yii::t('main', 'Etunimi'); ?> <span class="required">*</span></label>
+		<input type="text" name="Asiakkaat[etunimi]" id="Asiakas_etunimi" class="form-control" required>
+		<div id="etunimi_error"></div>
+    </div>
+    <div class="section">
+		<label><?php echo Yii::t('main', 'Sukunimi'); ?> <span class="required">*</span></label>
+		<input type="text" name="Asiakkaat[sukunimi]" id="Asiakas_sukunimi" class="form-control" required>
+		<div id="sukunimi_error"></div>
     </div>
     <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Asiakkaan osoite'); ?> <span class="required">*</span></label>
@@ -815,9 +820,9 @@ $(document).ready(function(){
 
   $('#submitButton').click(function(){
 	   if( $("#uusi_asiakas").hasClass("in") ){
-		if( $('#Asiakas_yhteyshenkilo').val() === '' )
+		if( $('#Asiakas_etunimi').val() === '' )
 		{
-			$('#Asiakas_yhteyshenkilo').css({"border":"2px red solid"}).focus();
+			$('#Asiakas_etunimi').css({"border":"2px red solid"}).focus();
 			return false;
 		}
 		if( $('#Asiakas_osoite').val() === '' )
