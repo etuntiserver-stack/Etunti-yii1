@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow',
-				'actions'=>array('spendingclients', 'site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan', 'getasiakasidbynimi', 'otakaytoon', 'ohjeet', 'kaaviot', 'management', 'management_tunnit', 'management_hours', 'spendingclients'),
+				'actions'=>array('zeroclients', 'site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan', 'getasiakasidbynimi', 'otakaytoon', 'ohjeet', 'kaaviot', 'management', 'management_tunnit', 'management_hours', 'spendingclients'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow',
@@ -2323,7 +2323,15 @@ class SiteController extends Controller
 		{
 			$sarake_nimi = json_decode($sarake, true)[0];
 			$cond = '';
+			// model asiakkaat ja $term kaksiosainen
+			if($model == 'Asiakkaat' and count(explode(" ", $term)) > 1) {
+				$splitName = explode(" ", $term);
+				$etunimi = $splitName[0];
+				$sukunimi = $splitName[1];
+				$cond .= "(etunimi LIKE '%".$etunimi."%' AND sukunimi LIKE '%".$sukunimi."%') OR ";
+			}
 			$i = 0;
+			
 			foreach(json_decode($sarake, true) as $item)
 			{
 				if($i == 0)
@@ -2342,15 +2350,17 @@ class SiteController extends Controller
 			$criteria->group = " $sarake ";
 			$criteria->condition = " $sarake LIKE '%".$term."%' ";
 		}
-
+		
 		// <-- Tyoryhmat
 		if( $model == 'Asiakkaat' or $model == 'Kohteet' ){
-		$site = Yii::app()->createController('Site');
-		$arr = $site[0]->TyoryhmatHelper();
-		$ids = implode(",", $arr);
-		if( count($arr) > 0 ){
-			$criteria->condition = " tyoryhma IN ($ids) ";
-		}
+
+			$site = Yii::app()->createController('Site');
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			}
+		
 		}
 		//    Tyoryhmat -->
 
@@ -2844,5 +2854,13 @@ class SiteController extends Controller
 	 */
 	public function actionSpendingclients() {
 		$this->render("spending_clients");
+	}
+
+	/**
+	 * This action is used to generate a list of clients
+	 * that are marked as active, but might not actually be active
+	 */
+	public function actionZeroclients() {
+		$this->render("zero_clients");
 	}
 }
