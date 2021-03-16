@@ -144,7 +144,9 @@ class KorvauksetController extends Controller
 
 	protected function netvisorPayrollperiodcollector($model)
 	{
-
+		$henkkari = '';
+		$tyontekija = Tyontekijat::model()->findByPk($model->tid);
+		if(isset($tyontekija->id)){ $henkkari = $tyontekija->tekijan_henkilotunnus; }
 		$asetukset = Asetukset::model()->findByPk(1);
 
 		$return = array();
@@ -201,7 +203,7 @@ $xml = '
 <root>
   <payrollperiodcollector>
     <date>'.date("Y-m-d", strtotime($model->pvm)).'</date>
-    <employeeidentifier type="number">'.$model->tid.'</employeeidentifier>
+    <employeeidentifier type="personalidentificationnumber" defaultdimensionhandlingtype="usedefault">'.$henkkari.'</employeeidentifier>
     <payrollratioline>
     	<amount>'.$model->korvaus.'</amount>
     	<payrollratio type="number">'.(int)$model->syy.'</payrollratio>
@@ -209,6 +211,7 @@ $xml = '
   </payrollperiodcollector>
 </root>';
 //  XML -->
+//    <employeeidentifier type="number">'.$model->tid.'</employeeidentifier>
 	
 
 		$optsPOST = array(
