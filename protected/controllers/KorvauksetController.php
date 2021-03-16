@@ -203,7 +203,7 @@ $xml = '
 <root>
   <payrollperiodcollector>
     <date>'.date("Y-m-d", strtotime($model->pvm)).'</date>
-    <employeeidentifier type="personalidentificationnumber" defaultdimensionhandlingtype="usedefault">'.$henkkari.'</employeeidentifier>
+    <employeeidentifier type="personalidentificationnumber">'.$henkkari.'</employeeidentifier>
     <payrollratioline>
     	<amount>'.$model->korvaus.'</amount>
     	<payrollratio type="number">'.(int)$model->syy.'</payrollratio>
