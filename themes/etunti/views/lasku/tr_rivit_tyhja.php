@@ -4,14 +4,15 @@
 	}
 
 	$tunnit_from 	= '';
-	$tunnit_id 	= '';
-	$tuoteID = '';
-	$tuote = '';
-	$hinta = '';
-	$maara = '';
-	$yksikkot = $this->yksikkot(null);
-	$alv = $this->alv(null);
-	$free_text = '';
+	$tunnit_id 		= '';
+	$tuoteID 		= '';
+	$tuote 			= '';
+	$hinta 			= '';
+	$maara 			= '';
+	$yksikkot 		= $this->yksikkot(null);
+	$alv 			= $this->alv(null);
+	$free_text 		= '';
+	$pikkuviesti 	= '';
 
 	if(isset($_POST['digisten_tunnit_id'])){
 		$digisten_tunnit_id = $_POST['digisten_tunnit_id'];
@@ -34,18 +35,24 @@
 		}
 
 		$tunnit_from 	= $arr['tunnit_from'];
-		$tunnit_id 	= $arr['id'];
-		$maara 		= $arr['maara'];
-		$free_text 	= $arr['freetext'];
-		$yksikkot 	= $this->yksikkot('h');
+		$tunnit_id 		= $arr['id'];
+		$maara 			= $arr['maara'];
+		$free_text 		= $arr['freetext'];
+		$pikkuviesti 	= $arr['pikkuviesti'];
+		$yksikkot 		= $this->yksikkot('h');
 		if(isset($hinnat[$arr['kohde']])){
 			$hinta = $hinnat[$arr['kohde']]['hinta'];
 			$alv = $alv = $this->alv($hinnat[$arr['kohde']]['alv']);
 		}
 	}
 ?>
-
-     <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
+<?php if(!empty($pikkuviesti)): ?>
+<tr>
+	<td colspan="7"></td>
+	<td colspan="5"><b class="text-danger">Viesti mobiilista: </b> <?=$pikkuviesti?></td>
+</tr>
+<?php endif; ?>
+<TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
 	<TD><span class="link text-danger poista" for="poista_<?php echo $num; ?>" style="font-size:150%"><i class="fa fa-times"></i></span></TD>
 	<TD>
 
@@ -96,4 +103,4 @@
 	<TD><input class="yhteensa_total_veroton form-control" type="text" size="10" name="veroton[<?php echo $num; ?>]" id="veroton_<?php echo $num; ?>" value="0.00" readonly></TD>
 	<TD><input class="yhteensa_total form-control" type="text" size="10" name="yhteensa_alv[<?php echo $num; ?>]" id="yhteensa_alv_<?php echo $num; ?>" value="0.00" readonly></TD>
 	<TD><input type="text" size="5" name="free_text[<?php echo $num; ?>]" id="free_text_<?php echo $num; ?>" class="form-control" value="<?=$free_text?>" data-toggle="tooltip" data-placement="bottom" title="<?php echo $free_text; ?>"></TD>
-     </TR>
+</TR>

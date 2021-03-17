@@ -1,13 +1,9 @@
 <?php
-	$asiakas = '';
-	if($data->tyyppi == 'henkilo')
-		$asiakas = $data->yhteyshenkilo;
-	if($data->tyyppi == 'yritys')
-		$asiakas = $data->yrityksen_nimi;
+
 ?>
 <tr>
 	<td>
-		<?php echo $asiakas.' #'.$data->id; ?>
+		<?php echo $data->Fullname.' #'.$data->id; ?>
 	</td>
 	<td class="p15">
 		<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse_id_<?=$data->id?>" aria-expanded="false" aria-controls="collapseExample">
@@ -25,6 +21,7 @@
 			echo '<th>'.Yii::t('main', 'Pvm.').'</th>';
 			echo '<th>'.Yii::t('main', 'Osoite').'</th>';
 			echo '<th>'.Yii::t('main', 'Tunnit').'</th>';
+			echo '<th>'.Yii::t('main', 'Viesti').'</th>';
 			echo '</tr>';
 			foreach($lista[$data->id] as $aika => $items)
 			{
@@ -32,17 +29,19 @@
 				{
 					$yht_tunnit += $v['maara'];
 					$li[] = [
-						'tunnit_from' => $v['tunnit_from'],
-						'id' => $v['id'],
-						'freetext' => date("d.m.Y", $aika).' '.$v['osoite'], 
-						'maara' => $this->num($v['maara']),
-						'kohde' => $v['kohde']
+						'tunnit_from' 	=> $v['tunnit_from'],
+						'id' 			=> $v['id'],
+						'freetext' 		=> date("d.m.Y", $aika).' '.$v['osoite'], 
+						'maara' 		=> $this->num($v['maara']),
+						'kohde' 		=> $v['kohde'],
+						'pikkuviesti' 	=> $v['pikkuviesti']
 					];
 					echo '<tr>';
 					echo '<td>'.$v['tekijan_nimi'].'</td>';
 					echo '<td>'.date("d.m.Y", $aika).'</td>';
 					echo '<td>'.$v['osoite'].'</td>';
 					echo '<td>'.$this->num($v['maara']).'</td>';
+					echo '<td>'.$v['pikkuviesti'].'</td>';
 					echo '</tr>';
 				}
 			}

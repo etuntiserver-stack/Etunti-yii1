@@ -1209,7 +1209,7 @@ exit;
 				$return['alv'] 		= $kohde->alv;
 				return $return;
 			}
-			$asiakas = Asiakkaat::findOne($kohde->asiakas_id);
+			$asiakas = Asiakkaat::model()->findByPk($kohde->asiakas_id);
 			if($asiakas->hinta_tyyppi == $hinta_tyyppi and $asiakas->hinta > 0)
 			{
 				$return['hinta'] 	= $asiakas->hinta;
@@ -1810,14 +1810,26 @@ exit;
 					{
 						$l = [];
 						foreach($getall as $item){
-							if(isset($item->kohteet->asiakkaat->id) and $item->kohteet->asiakkaat->id == $aid){
+							if(isset($item->kohteet->asiakkaat->id) and $item->kohteet->asiakkaat->id == $aid)
+							{
+								// <-- pikkuviesti
+								$pv = explode("\n", $item->viesti);
+								if(isset($pv[0]) and !empty($pv[0]) and strpos($pv[0], 'xxx') === false){
+									$pikkuviesti = $pv[0];
+								} elseif(isset($pv[1]) and !empty($pv[1]) and strpos($pv[1], 'xxx') === false){
+									$pikkuviesti = $pv[1];
+								} else {
+									$pikkuviesti = '';
+								}
+								
 								$l[strtotime($item->aloitan)][] = [
 										'tekijan_nimi' => $item->tekijan_nimi,
 										'tunnit_from' => (isset($item->kid) and $item->kid > 0)? 'sivexkuitti_repaired' : 'sivexkuitti',
 										'id' => $item->id,
 										'kohde' => $item->kohteet->id,
 										'osoite' => $item->kohteet->osoite,
-										'maara' => strtotime($item->loppui)-strtotime($item->aloitan)
+										'maara' => strtotime($item->loppui)-strtotime($item->aloitan),
+										'pikkuviesti' => $pikkuviesti
 								];
 							}
 						}
