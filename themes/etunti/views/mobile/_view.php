@@ -341,7 +341,7 @@ if(isset($tot->id)) {
 	</td>
 
 	<td><span id="kesto_<?php echo $data->id; ?>"><?php echo $this->sprint($kesto[$data->id]); ?></span></td>
-
+	<td><?=($data->laskutettu == 1)? 'Kyllä':'Ei'?></td>
 	<td><center>
 		<?php 
 		if( empty($data->hyvaksytty) ){ 

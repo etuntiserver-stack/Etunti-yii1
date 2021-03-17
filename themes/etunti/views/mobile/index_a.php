@@ -23,6 +23,7 @@
   <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
   <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
+  <th><?php echo Yii::t('main', 'Laskutettu'); ?></th>
   <th class="text-center" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Hyväksytty'); ?>"><?php echo Yii::t('main', '<i class="fa  fa-question-circle"></i>'); ?></th>
   <th class="text-center" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Poista'); ?>"><?php echo Yii::t('main', '<i class="fa  fa-question-circle"></i>'); ?></th>
   </tr>
