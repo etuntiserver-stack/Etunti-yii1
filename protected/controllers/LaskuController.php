@@ -1153,20 +1153,68 @@ exit;
 		return $return; 
 	}
 
-	protected function getHintaForKohde($id)
+	protected function getHintaForKohde($id, $tp_id, $yksikko)
 	{
-		$a = Asetukset::model()->findbypk(1);
-		$k = Kohteet::model()->findbypk($id);
-		$return 		= [];
+		//$a = Asetukset::getAll();
+		$kohde = Kohteet::model()->findByPk($id);
+		$return 			= [];
 		$return['hinta'] 	= 0;
 		$return['alv'] 		= 24;
-		// <-- Asiakkaan muoto
-		if( isset($k->id) and $a->tuotteet_palvelut_muoto == 1)
+
+		// <-- Hinnasto muoto
+		if( isset($kohde->id) and $tp_id > 0) // $a->tuotteet_palvelut_muoto == 0
 		{
-			if($k->hinta_tyyppi == '1')
+			if($kohde->hinnasto_id > 0)
 			{
-				$return['hinta'] 	= $k->hinta;
-				$return['alv'] 		= $k->alv;
+				$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$tp_id."' AND hinnastot_id='".$kohde->hinnasto_id."' AND hinnasto_yksikko='".$yksikko."'");
+				if(isset($hinnasto->id))
+				{
+					$return['hinta'] 	= $hinnasto->hinnasto_hinta;
+					$return['alv'] 		= $hinnasto->hinnasto_alv;
+					return $return;
+				}
+			}
+			$asiakas = Asiakkaat::model()->findByPk($kohde->asiakas_id);
+			if(isset($asiakas->id) and $asiakas->hinnasto_id > 0)
+			{
+				$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$tp_id."' AND hinnastot_id='".$asiakas->hinnasto_id."' AND hinnasto_yksikko='".$yksikko."'");
+				if(isset($hinnasto->id))
+				{
+					$return['hinta'] 	= $hinnasto->hinnasto_hinta;
+					$return['alv'] 		= $hinnasto->hinnasto_alv;
+					return $return;
+				}			
+			}
+			$tp = TuotteetPalvelut::model()->find("id='".$tp_id."' AND yksikko='".$yksikko."'");
+			if(isset($tp->id))
+			{
+					$return['hinta'] 	= $tp->hinta_alv_0;
+					$return['alv'] 		= $tp->alv;
+					return $return;
+			}
+			
+		}
+		// Hinnasto muoto -->
+		
+		// <-- Asiakkaan muoto
+		if( isset($kohde->id) and empty($tp_id)) // $a->tuotteet_palvelut_muoto == 1
+		{
+			$hinta_tyyppi = 0;
+			if($yksikko == 'h') 	$hinta_tyyppi = '1';
+			if($yksikko == 'kk') 	$hinta_tyyppi = '2';
+			if($yksikko == 'kpl') 	$hinta_tyyppi = '3';
+			if($kohde->hinta_tyyppi == $hinta_tyyppi and $kohde->hinta > 0)
+			{
+				$return['hinta'] 	= $kohde->hinta;
+				$return['alv'] 		= $kohde->alv;
+				return $return;
+			}
+			$asiakas = Asiakkaat::findOne($kohde->asiakas_id);
+			if($asiakas->hinta_tyyppi == $hinta_tyyppi and $asiakas->hinta > 0)
+			{
+				$return['hinta'] 	= $asiakas->hinta;
+				$return['alv'] 		= $asiakas->alv;
+				return $return;
 			}
 		}
 		// Asiakkaan muoto -->
@@ -1701,7 +1749,7 @@ exit;
 				hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0 AND yksikko='h'
 			";
 			$tuotteet_lista = CHtml::dropdownList('tp_palvelu','tp_palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
-			array('class'=>'form-control'));
+			array('prompt' => 'Asiakas / Kohde hintaan mukaan', 'class'=>'form-control'));
 
 			$from 		= date("Y-m-d", strtotime($kk." first day of this month"));
 			$to 		= date("Y-m-d", strtotime($kk." last day of this month"));

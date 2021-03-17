@@ -736,7 +736,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 			$kohde_ids[$arr['kohde']] = $arr['kohde']; 
 		$hinnat = [];
 		foreach($kohde_ids as $kohde)
-			$hinnat[$kohde] = $this->getHintaForKohde($kohde);
+			$hinnat[$kohde] = $this->getHintaForKohde($kohde, $_POST['tp_palvelu'], 'h');
 
 		foreach(json_decode($_POST['tr_rivit'], true) as $arr){ 
 			$num++;
