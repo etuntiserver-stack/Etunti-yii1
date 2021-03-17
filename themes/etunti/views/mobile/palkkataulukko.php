@@ -361,17 +361,17 @@
                   <tr>
                     <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
                     <td><?php if ($totalTp != 0) echo $totalTp; ?></td>
-                    <td><?php echo $this->num($matkaYht); ?></td>
-                    <td><?php echo $this->num($yht[0]); ?></td>
-                    <td><?php echo $this->num($mPlusTYht); ?></td>
-                    <td><?php if ($matkaIltaYht != 0 or $this->num($yht[1]) != 0) echo '<b>Työt</b>:<br>' . $this->num($yht[1]) . $matkaIltaYht; ?></td>
-                    <td><?php echo $this->num($iltaMatkaPlusIltatunnitYht); ?></td>
-                    <td><?php echo $this->num($lounYht); ?></td>
-                    <td><?php echo $this->num($yht[2]); ?></td>
-                    <td><?php echo $this->num($yht[3]); ?></td>
-                    <td><?php echo $this->num($yht[4]); ?></td>
-                    <td><?php echo $this->num($pyhatYht); ?></td>
-                    <td><?php echo $this->num($elYht); ?></td>
+                    <td><?php echo number_format($this->num($matkaYht), 2, ',', ''); ?></td>
+                    <td><?php echo number_format($this->num($yht[0]), 2, ',', ''); ?></td>
+                    <td><?php echo number_format($this->num($mPlusTYht), 2, ',', ''); ?></td>
+                    <td><?php if ($matkaIltaYht != 0 or $this->num($yht[1]) != 0) echo '<b>Työt</b>:<br>' . number_format($this->num($yht[1]), 2, ',', '') . $matkaIltaYht; ?></td>
+                    <td><?php echo number_format($this->num($iltaMatkaPlusIltatunnitYht), 2, ',', '') ?></td>
+                    <td><?php echo number_format($this->num($lounYht), 2, ',', ''); ?></td>
+                    <td><?php echo number_format($this->num($yht[2]), 2, ',', ''); ?></td>
+                    <td><?php echo number_format($this->num($yht[3]), 2, ',', ''); ?></td>
+                    <td><?php echo number_format($this->num($yht[4]), 2, ',', ''); ?></td>
+                    <td><?php echo number_format($this->num($pyhatYht), 2, ',', ''); ?></td>
+                    <td><?php echo number_format($this->num($elYht), 2, ',', ''); ?></td>
                     <td><?= ($slYht > 0) ? $slYht : '' ?></td>
                     <td><?= ($splYht > 0) ? $splYht : '' ?></td>
                     <td><?= ($lsYht > 0) ? $lsYht : '' ?></td>
