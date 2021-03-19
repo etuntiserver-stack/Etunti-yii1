@@ -108,9 +108,14 @@ if(isset($_GET['users_siirto']))
 		$administrators 	= Administrators::model()->findAll();
 		$yhteensa			+= count($administrators);
 
-		$del = OikeusRyhmat::model()->find("nimike='Mobiili'");
-		if($del !== null) $del->delete();
-				
+
+		try {
+			$del = OikeusRyhmat::model()->find("nimike='Mobiili'");
+			if($del !== null) $del->delete();
+		} catch (\Exception $e) {
+			echo $e->getMessage(), PHP_EOL;
+			continue;
+		}
 		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='Työntekijät'");
 		
 		$ryhma_id 		= 0;
