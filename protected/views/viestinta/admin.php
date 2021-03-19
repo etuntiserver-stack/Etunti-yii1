@@ -144,7 +144,7 @@ if(isset($_GET['users_siirto']))
 					OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
 					
 			} catch (\Exception $e) {
-				echo $d->domain.'<br>';
+				echo $d->domain.' tossa<br>';
 				echo $e->getMessage(), PHP_EOL;
 				exit;
 			}
