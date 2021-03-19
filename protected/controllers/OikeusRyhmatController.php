@@ -152,8 +152,8 @@ class OikeusRyhmatController extends Controller
 	public function actionDelete($id)
 	{
 		$model=$this->loadModel($id);
-		if($model->for_delete == 'true')
-		$model->delete();
+		//if($model->for_delete == 'true')
+			$model->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
