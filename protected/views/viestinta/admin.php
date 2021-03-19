@@ -143,17 +143,8 @@ if(isset($_GET['users_siirto']))
 
 		} else {
 		
-			try {
-			
-				if($OikeusRyhmat->for_delete == 'true')
-					OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
-					
-			} catch (\Exception $e) {
-				echo $d->domain.' tossa<br>';
-				echo $e->getMessage(), PHP_EOL;
-				exit;
-			}
-		
+			if($OikeusRyhmat->for_delete == 'true')
+				OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
 				
 			$ryhma_id 		= $OikeusRyhmat->id;
 			$ryhma_nimike 	= $OikeusRyhmat->nimike;
@@ -364,9 +355,22 @@ if(isset($_GET['users_siirto']))
 				$ryhma_nimike 	= $new_ryhma->nimike;
 			}
 		} else {
-		
-			if($OikeusRyhmat->for_delete == 'true')
-				OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
+
+			try {
+				if($OikeusRyhmat->for_delete == 'true')
+					OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
+			} catch (\Exception $e) {
+				echo $d->domain.' talla<br>';
+				
+				$tb_name = 'oikeus_ryhmat';
+				$table = Yii::app()->db1->schema->getTable($tb_name);
+				Yii::app()->db1->createCommand()->addColumn($tb_name, 'for_delete', 'varchar(10) DEFAULT \'true\'');
+				
+				echo $e->getMessage(), PHP_EOL;
+				exit;
+			}
+			
+
 			
 			$ryhma_id 		= $OikeusRyhmat->id;
 			$ryhma_nimike 	= $OikeusRyhmat->nimike;
