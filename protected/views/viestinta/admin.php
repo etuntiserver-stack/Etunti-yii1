@@ -222,7 +222,7 @@ if(isset($_GET['users_siirto']))
 			}
 		}
 	}
-	
+	exit;
 	// <-- Tyontekijat
 	foreach ($list as $d)
 	{
