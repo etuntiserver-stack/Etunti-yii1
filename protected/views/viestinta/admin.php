@@ -81,6 +81,7 @@ if(isset($_GET['users_siirto']))
 	$site = Yii::app()->createController('Site');
 	$conn = $site[0]->dbConnectArr();
 	$list = Domainit::model()->findAll(" domain!='defdb' AND aktiivinen=1 ");
+	//$list = Domainit::model()->findAll(" domain='demo' AND aktiivinen=1 ");
 
 	try {
 		$mysqli = new mysqli($conn['host'], $conn['username'], $conn['password']);
@@ -106,33 +107,43 @@ if(isset($_GET['users_siirto']))
 		$asetukset 			= Asetukset::model()->findByPk(1);
 		$administrators 	= Administrators::model()->findAll();
 		$yhteensa			+= count($administrators);
-		
-		$del = OikeusRyhmat::model()->find("nimike='Sisäänkirjautunut käyttäjä'");
+
+		$del = OikeusRyhmat::model()->find("nimike='Mobiili'");
 		if($del !== null) $del->delete();
-		
-		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='Mobiili'");
+				
+		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='Työntekijät'");
 		
 		$ryhma_id 		= 0;
 		$ryhma_nimike 	= '';
 		if(!isset($OikeusRyhmat->nimike))
 		{
 			$new_ryhma = new OikeusRyhmat;
-			$new_ryhma->nimike = 'Mobiili';
+			$new_ryhma->nimike 			= 'Työntekijät';
+			$OikeusRyhmat->for_delete 	= 'false';
 			if($new_ryhma->save()){
 				$ryhma_id 		= $new_ryhma->id;
 				$ryhma_nimike 	= $new_ryhma->nimike;
 			}
 		} else {
+
 			$ryhma_id 		= $OikeusRyhmat->id;
 			$ryhma_nimike 	= $OikeusRyhmat->nimike;
 		}
 
 		// < oikeudet
 		$as_oikeudet = json_decode($asetukset->oikeudet, true);
-		$merge_oikeudet = array_merge($as_oikeudet, ["mobiili_0_1","mobiili_0_".$ryhma_id]);
+		$merge_oikeudet = array_merge($as_oikeudet, ["tyontekijatstatic_0_1","tyontekijatstatic_0_".$ryhma_id]);
 		$clear = [];
 		foreach($merge_oikeudet as $oikeus)
+		{
+			if (strpos($oikeus, 'mobiili_0') !== false) {
+				continue;
+			}
+			if (strpos($oikeus, 'edico_0') !== false) {
+				continue;
+			}
 			$clear[$oikeus] = $oikeus;
+		}
 			
 		$asetukset->oikeudet = json_encode(array_values($clear));
 		$asetukset->save();
@@ -217,7 +228,7 @@ if(isset($_GET['users_siirto']))
 		
 		$tyontekijat 		= Tyontekijat::model()->findAll();
 		$yhteensa			+= count($tyontekijat)+count($administrators);
-		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='Mobiili'");
+		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='Työntekijät'");
 		$ryhma_id 			= $OikeusRyhmat->id;
 		$toisto_checker		= [];
 		
@@ -305,15 +316,20 @@ if(isset($_GET['users_siirto']))
 		
 		$asetukset 			= Asetukset::model()->findByPk(1);
 		$asiakkaat 			= Asiakkaat::model()->findAll("sahkoposti!='' AND salasana!=''");
-		$yhteensa			+= count($asiakkaat);		
-		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='eDico'");
+		$yhteensa			+= count($asiakkaat);
+		
+		$del = OikeusRyhmat::model()->find("nimike='eDico'");
+		if($del !== null) $del->delete();
+		
+		$OikeusRyhmat	= OikeusRyhmat::model()->find("nimike='Asiakkaat'");
 		
 		$ryhma_id 		= 0;
 		$ryhma_nimike 	= '';
 		if(!isset($OikeusRyhmat->nimike))
 		{
 			$new_ryhma = new OikeusRyhmat;
-			$new_ryhma->nimike = 'eDico';
+			$new_ryhma->nimike = 'Asiakkaat';
+			$OikeusRyhmat->for_delete 	= 'false';
 			if($new_ryhma->save()){
 				$ryhma_id 		= $new_ryhma->id;
 				$ryhma_nimike 	= $new_ryhma->nimike;
@@ -325,7 +341,7 @@ if(isset($_GET['users_siirto']))
 
 		// < oikeudet
 		$as_oikeudet = json_decode($asetukset->oikeudet, true);
-		$merge_oikeudet = array_merge($as_oikeudet, ["edico_0_1","edico_0_".$ryhma_id]);
+		$merge_oikeudet = array_merge($as_oikeudet, ["asiakasstatic_0_1","asiakasstatic_0_".$ryhma_id]);
 		$clear = [];
 		foreach($merge_oikeudet as $oikeus){
 			if(strpos($oikeus, 'customers') !== false) continue;

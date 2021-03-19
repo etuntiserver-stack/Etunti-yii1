@@ -34,7 +34,8 @@ class OikeusRyhmat extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-                     'nimike' => 'varchar(255) DEFAULT NULL',
+			'nimike' => 'varchar(255) DEFAULT NULL',
+			'for_delete' => 'varchar(10) DEFAULT "true"'
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -57,7 +58,7 @@ class OikeusRyhmat extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('nimike', 'required'),
-			array('nimike', 'length', 'max'=>255),
+			array('nimike, for_delete', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, nimike', 'safe', 'on'=>'search'),
