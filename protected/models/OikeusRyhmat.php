@@ -15,16 +15,7 @@ class OikeusRyhmat extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'oikeus_ryhmat';
-		$check_this_table = true;
-		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
-		if(!isset(Yii::app()->session[$tb_name]))
-		{
-			Yii::app()->session[$tb_name] = true;
-			$check_this_table = true;
-		}
 
-		if($check_this_table)
-		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
 		if(!isset($table->columns['id'])) {
 
@@ -35,7 +26,7 @@ class OikeusRyhmat extends DB2ActiveRecord
 
 		$table_structure = array(
 			'nimike' => 'varchar(255) DEFAULT NULL',
-			'for_delete' => 'varchar(10) DEFAULT "true"'
+			'for_delete' => 'varchar(10) DEFAULT \'true\''
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -44,7 +35,6 @@ class OikeusRyhmat extends DB2ActiveRecord
 				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
 			}
 		}	
-		} // if($check_this_table)
 
 		return $tb_name;
 	}

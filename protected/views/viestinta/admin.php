@@ -119,15 +119,23 @@ if(isset($_GET['users_siirto']))
 		{
 			$new_ryhma = new OikeusRyhmat;
 			$new_ryhma->nimike 			= 'Työntekijät';
-			//$OikeusRyhmat->for_delete 	= 'false';
-			if($new_ryhma->save()){
-				$ryhma_id 		= $new_ryhma->id;
-				$ryhma_nimike 	= $new_ryhma->nimike;
-			} else {
-				print_r($new_ryhma->getErrors());
-				echo $d->domain;
+			$OikeusRyhmat->for_delete 	= 'false';
+			
+			try {
+					if($new_ryhma->save()){
+						$ryhma_id 		= $new_ryhma->id;
+						$ryhma_nimike 	= $new_ryhma->nimike;
+					} else {
+						print_r($new_ryhma->getErrors());
+						echo $d->domain;
+						exit;
+					}
+			} catch (\Exception $e) {
+				echo $d->domain.'<br>';
+				echo $e->getMessage(), PHP_EOL;
 				exit;
 			}
+
 		} else {
 			if($OikeusRyhmat->for_delete == 'true')
 				OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
