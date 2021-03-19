@@ -347,6 +347,8 @@ if(isset($_GET['users_siirto']))
 		$ryhma_nimike 	= '';
 		if(!isset($OikeusRyhmat->nimike))
 		{
+
+			try {
 			$new_ryhma = new OikeusRyhmat;
 			$new_ryhma->nimike = 'Asiakkaat';
 			$OikeusRyhmat->for_delete 	= 'false';
@@ -354,11 +356,6 @@ if(isset($_GET['users_siirto']))
 				$ryhma_id 		= $new_ryhma->id;
 				$ryhma_nimike 	= $new_ryhma->nimike;
 			}
-		} else {
-
-			try {
-				if($OikeusRyhmat->for_delete == 'true')
-					OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
 			} catch (\Exception $e) {
 				echo $d->domain.' talla<br>';
 				
@@ -370,7 +367,12 @@ if(isset($_GET['users_siirto']))
 				exit;
 			}
 			
+		
 
+		} else {
+
+			if($OikeusRyhmat->for_delete == 'true')
+				OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
 			
 			$ryhma_id 		= $OikeusRyhmat->id;
 			$ryhma_nimike 	= $OikeusRyhmat->nimike;
