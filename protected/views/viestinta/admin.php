@@ -87,7 +87,7 @@ if(isset($_GET['users_siirto']))
 
 	$d_lista = '';
 	foreach($list as $item)
-		$d_lista += 'domain="'.$item->domain.'" OR '
+		$d_lista += 'domain="'.$item->domain.'" OR ';
 	
 	echo $d_lista;
 	exit;
