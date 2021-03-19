@@ -108,27 +108,28 @@ if(isset($_GET['users_siirto']))
 		$administrators 	= Administrators::model()->findAll();
 		$yhteensa			+= count($administrators);
 
-
-		try {
-			$del = OikeusRyhmat::model()->find("nimike='Mobiili'");
-			if($del !== null) $del->delete();
-		} catch (\Exception $e) {
-			echo $e->getMessage(), PHP_EOL;
-			continue;
-		}
+		$del = OikeusRyhmat::model()->find("nimike='Mobiili'");
+		if($del !== null) $del->delete();
+				
 		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='Työntekijät'");
 		
 		$ryhma_id 		= 0;
 		$ryhma_nimike 	= '';
 		if(!isset($OikeusRyhmat->nimike))
 		{
-			$new_ryhma = new OikeusRyhmat;
-			$new_ryhma->nimike 			= 'Työntekijät';
-			$OikeusRyhmat->for_delete 	= 'false';
-			if($new_ryhma->save()){
-				$ryhma_id 		= $new_ryhma->id;
-				$ryhma_nimike 	= $new_ryhma->nimike;
+			try {
+				$new_ryhma = new OikeusRyhmat;
+				$new_ryhma->nimike 			= 'Työntekijät';
+				$OikeusRyhmat->for_delete 	= 'false';
+				if($new_ryhma->save()){
+					$ryhma_id 		= $new_ryhma->id;
+					$ryhma_nimike 	= $new_ryhma->nimike;
+				}
+			} catch (\Exception $e) {
+				echo $d->domain.'<br>';
+				continue;
 			}
+
 		} else {
 			if($OikeusRyhmat->for_delete == 'true')
 				OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
