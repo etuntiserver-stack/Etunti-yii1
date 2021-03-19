@@ -121,7 +121,7 @@ if(isset($_GET['users_siirto']))
 		{
 			$new_ryhma = new OikeusRyhmat;
 			$new_ryhma->nimike 			= 'Työntekijät';
-			$OikeusRyhmat->for_delete 	= 'false';
+			//$OikeusRyhmat->for_delete 	= 'false';
 			
 			try {
 					if($new_ryhma->save()){
@@ -134,25 +134,13 @@ if(isset($_GET['users_siirto']))
 					}
 			} catch (\Exception $e) {
 				echo $d->domain.'<br>';
-				/*
-				$dom = Domainit::model()->findByPk($d->id);
-				Yii::app()->db1->setActive(false);
-				Yii::app()->db1->connectionString = 'mysql:host=' . $db_host. ';dbname=' . $dom->domain;
-				//Yii::app()->db1->charset = 'utf8';
-				Yii::app()->db1->setActive(true);
-				
-				$new_ryhma = new OikeusRyhmat;
-				$new_ryhma->nimike 			= 'Työntekijät';
-				$OikeusRyhmat->for_delete 	= 'false';
-				$new_ryhma->save();
-				*/
 				echo $e->getMessage(), PHP_EOL;
 				exit;
 			}
 
 		} else {
-			if($OikeusRyhmat->for_delete == 'true')
-				OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
+			//if($OikeusRyhmat->for_delete == 'true')
+				//OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
 				
 			$ryhma_id 		= $OikeusRyhmat->id;
 			$ryhma_nimike 	= $OikeusRyhmat->nimike;
@@ -357,15 +345,15 @@ if(isset($_GET['users_siirto']))
 		{
 			$new_ryhma = new OikeusRyhmat;
 			$new_ryhma->nimike = 'Asiakkaat';
-			$OikeusRyhmat->for_delete 	= 'false';
+			//$OikeusRyhmat->for_delete 	= 'false';
 			if($new_ryhma->save()){
 				$ryhma_id 		= $new_ryhma->id;
 				$ryhma_nimike 	= $new_ryhma->nimike;
 			}
 		} else {
 		
-			if($OikeusRyhmat->for_delete == 'true')
-				OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
+			//if($OikeusRyhmat->for_delete == 'true')
+				//OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
 			
 			$ryhma_id 		= $OikeusRyhmat->id;
 			$ryhma_nimike 	= $OikeusRyhmat->nimike;
