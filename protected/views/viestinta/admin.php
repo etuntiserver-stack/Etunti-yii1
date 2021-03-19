@@ -80,10 +80,8 @@ if(isset($_GET['users_siirto']))
 	$db_host = 'localhost';
 	$site = Yii::app()->createController('Site');
 	$conn = $site[0]->dbConnectArr();
-	$criteria = new CDbCriteria();
-	$criteria->condition = " domain!='defdb' AND aktiivinen=1 ";
-	$list = Domainit::model()->findAll($criteria);
-	//$list = Domainit::model()->findAll(" domain='demo' AND aktiivinen=1 ");
+	$list = Domainit::model()->findAll(" domain!='defdb' AND aktiivinen=1 ");
+	//$list = Domainit::model()->findAll("domain='demo'");
 
 	try {
 		$mysqli = new mysqli($conn['host'], $conn['username'], $conn['password']);
@@ -121,7 +119,7 @@ if(isset($_GET['users_siirto']))
 		{
 			$new_ryhma = new OikeusRyhmat;
 			$new_ryhma->nimike 			= 'Työntekijät';
-			//$OikeusRyhmat->for_delete 	= 'false';
+			$OikeusRyhmat->for_delete 	= 'false';
 			
 			try {
 					if($new_ryhma->save()){
@@ -139,8 +137,8 @@ if(isset($_GET['users_siirto']))
 			}
 
 		} else {
-			//if($OikeusRyhmat->for_delete == 'true')
-				//OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
+			if($OikeusRyhmat->for_delete == 'true')
+				OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
 				
 			$ryhma_id 		= $OikeusRyhmat->id;
 			$ryhma_nimike 	= $OikeusRyhmat->nimike;
@@ -345,15 +343,15 @@ if(isset($_GET['users_siirto']))
 		{
 			$new_ryhma = new OikeusRyhmat;
 			$new_ryhma->nimike = 'Asiakkaat';
-			//$OikeusRyhmat->for_delete 	= 'false';
+			$OikeusRyhmat->for_delete 	= 'false';
 			if($new_ryhma->save()){
 				$ryhma_id 		= $new_ryhma->id;
 				$ryhma_nimike 	= $new_ryhma->nimike;
 			}
 		} else {
 		
-			//if($OikeusRyhmat->for_delete == 'true')
-				//OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
+			if($OikeusRyhmat->for_delete == 'true')
+				OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
 			
 			$ryhma_id 		= $OikeusRyhmat->id;
 			$ryhma_nimike 	= $OikeusRyhmat->nimike;
