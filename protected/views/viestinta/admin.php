@@ -132,6 +132,11 @@ if(isset($_GET['users_siirto']))
 					}
 			} catch (\Exception $e) {
 				echo $d->domain.' talla<br>';
+				
+				$tb_name = 'oikeus_ryhmat';
+				$table = Yii::app()->db1->schema->getTable($tb_name);
+				Yii::app()->db1->createCommand()->addColumn($tb_name, 'for_delete', 'varchar(10) DEFAULT \'true\'');
+				
 				echo $e->getMessage(), PHP_EOL;
 				exit;
 			}
