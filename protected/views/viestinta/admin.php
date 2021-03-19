@@ -81,10 +81,17 @@ if(isset($_GET['users_siirto']))
 	$site = Yii::app()->createController('Site');
 	$conn = $site[0]->dbConnectArr();
 	$criteria = new CDbCriteria();
-	$criteria->condition = " domain!='defdb' AND aktiivinen=1 ";
+	$criteria->condition = " aktiivinen=1 ";
 	$list = Domainit::model()->findAll($criteria);
 	//$list = Domainit::model()->findAll(" domain='demo' AND aktiivinen=1 ");
 
+	$d_lista = '';
+	foreach($list as $item)
+		$d_lista += 'domain="'.$item->domain.'" OR '
+	
+	echo $d_lista;
+	exit;
+	
 	try {
 		$mysqli = new mysqli($conn['host'], $conn['username'], $conn['password']);
 	} catch (\Exception $e) {
