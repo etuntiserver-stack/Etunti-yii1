@@ -347,8 +347,6 @@ if(isset($_GET['users_siirto']))
 		$ryhma_nimike 	= '';
 		if(!isset($OikeusRyhmat->nimike))
 		{
-
-			try {
 			$new_ryhma = new OikeusRyhmat;
 			$new_ryhma->nimike = 'Asiakkaat';
 			$OikeusRyhmat->for_delete 	= 'false';
@@ -356,19 +354,6 @@ if(isset($_GET['users_siirto']))
 				$ryhma_id 		= $new_ryhma->id;
 				$ryhma_nimike 	= $new_ryhma->nimike;
 			}
-			} catch (\Exception $e) {
-				echo $d->domain.' talla<br>';
-				
-				$tb_name = 'oikeus_ryhmat';
-				$table = Yii::app()->db1->schema->getTable($tb_name);
-				Yii::app()->db1->createCommand()->addColumn($tb_name, 'for_delete', 'varchar(10) DEFAULT \'true\'');
-				
-				echo $e->getMessage(), PHP_EOL;
-				exit;
-			}
-			
-		
-
 		} else {
 
 			if($OikeusRyhmat->for_delete == 'true')
