@@ -563,9 +563,11 @@ Jos yritykselläsi ei ole Ropo Capital Oy:n kanssa sopimusta tunnuksista, lähet
 
 	protected function oikeudenOtsikot()
 	{
-		$model = OikeusRyhmat::model()->findAll();
+		$criteria = new CDbCriteria();
+		$criteria->order = "id=1 DESC,for_delete";
+		$model = OikeusRyhmat::model()->findAll($criteria);
 		foreach($model as $data)
-		$otsiko[$data->id] = $data->nimike;
+		$otsiko[$data->id] = ['nimike' => $data->nimike, 'for_delete' => $data->for_delete];
 		return $otsiko;
 	}
 

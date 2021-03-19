@@ -74,7 +74,7 @@
 $otsiko = $this->oikeudenOtsikot();
 foreach($otsiko as $v)
 {
-  echo '<th>'.$v.'</th>';
+  echo '<th>'.$v['nimike'].'</th>';
 }
 ?>
  </tr>
@@ -83,17 +83,20 @@ foreach($otsiko as $v)
 $r = $this->oikeudenOtsikot();
 foreach($array as $k=>$v)
 {
-   foreach($v as $k1=>$v1)
-   {
-	if($v1 != null)
+	foreach($v as $k1=>$v1)
 	{
 		echo '<tr><td>'.$v1.'</td>';
-   		foreach($r as $ryhma=>$value){
-		  	echo '<td><input type="checkbox" class="check '.(($ryhma == 1)?'disabled':'').'" id="'.$k.'_'.$k1.'_'.$ryhma.'" '.(($ryhma == 1)?'checked onclick="return false;"':'').'></td>';
+		foreach($r as $ryhma=>$value){
+			echo '<td>';
+			if($value['for_delete'] == 'false')
+		  		echo '<input type="checkbox" class="check disabled" id="'.$k.'_'.$k1.'_'.$ryhma.'" onclick="return false;">';			
+			else
+		  		echo '<input type="checkbox" class="check '.(($ryhma == 1)?'disabled':'').'" id="'.$k.'_'.$k1.'_'.$ryhma.'" '.(($ryhma == 1)?'checked onclick="return false;"':'').'>';
+		  	
+		  	echo '</td>';
 		}
 		echo '</tr>';
 	}
-   }
 
 	echo '
 	 <tr>
