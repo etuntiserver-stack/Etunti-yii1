@@ -80,8 +80,8 @@ if(isset($_GET['users_siirto']))
 	$db_host = 'localhost';
 	$site = Yii::app()->createController('Site');
 	$conn = $site[0]->dbConnectArr();
-	//$list = Domainit::model()->findAll(" domain!='defdb' AND aktiivinen=1 ");
-	$list = Domainit::model()->findAll("domain='moppimuija'");
+	$list = Domainit::model()->findAll(" domain!='defdb' AND aktiivinen=1 ");
+	//$list = Domainit::model()->findAll("domain='moppimuija'");
 
 	try {
 		$mysqli = new mysqli($conn['host'], $conn['username'], $conn['password']);
