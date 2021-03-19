@@ -81,10 +81,12 @@ if(isset($_GET['users_siirto']))
 	$site = Yii::app()->createController('Site');
 	$conn = $site[0]->dbConnectArr();
 	$criteria = new CDbCriteria();
-	$criteria->condition = " aktiivinen=1 ";
+	$criteria->condition = "
+domain IN('sivex,moppi,demo,defdb,etunti,kotipuhtaaksi,digisten,testi,siivouspalvelukota,realclean,kairen,klaara,malli,tamsii,vayla_ry,esittely,talentas_oy,baltic_palvelu,washup,oxline_oy,rlkotipalvelut_oy,paakaupunkiseudun_spsiivous_oy,siiivouspalvelu_kuura_oy,kivat_pihat,elevent_group_oy,majatalo_kupittaa_oy,kotipalvelu_aura_oy,vbe_service_oy,royal_clean_oy,fritec_oy,stone_partners_oy,moppimuija,siivouspalvelu_jelppi_,etunti_testi,rlyhtiot_oy_,stt_sahko_mikkeli_oy,kotipari_oy,kvkoneurakointi_oy,elamyspalvelu_kolmipyora,onnellisten_tiimi,saaristo_kotipalvelu,vaakkutech_oy,kvhpalvelut,siivousliike_puuninki,kmvkotipalvelut_oy,santelo,turvapalvelut_salminen,perustettava_yhtio,saronia_oy,finndiiling_oy,kototiimi_oy,siivouspalvelu_loiste_oy,badbaado_ry,k__m_elokuvat_oy,puhdas_unelma_oy,kuljetus_pennanen,tmi_ari_paatelainen,sysman_autoservis_oy,city_saukko_oy,katinala_av_oy,korkea_tekniikka_oy,seoptimi_oy,happy_bowling_oy,staffone_oy,muuble_oy,yleissiivous_oy,tomuttamo_oy,cleana_oy,taloke_tmi,takomee_tmi,arjen_avuxi_oy,greenwitch_oy,opepooli_oy,swappie_oy,soittolinja_oy,electric_shark_tmi,ateljee_kuvastin_oy,tietohallintomaisterit_oy,rt_work_oy,the_process__health__performance_oy,upsteam_oy,alueenykkosketju,inkan_kotitalouspalvelut_oy,pirkanmaan_aluesiivous_oy,koti_puhtaaksi_testi,kotipalvelu_sydankapy_oy,kaveko_oy,hammslaboratorio_pure_art_oy,hoitokoti,rvk_palvelut_oy,jarvo_oy,arkkitiimi_osuuskunta__huoltopojat,sisustussuunnittelu_jonita_raikko,sk_puhtaaksi_oy,multivision_tmi,pohjanmaan_kotisiivous,eiole_oy,talouspaja_oy,awareness_recreated_oy,kotipalvelu_pajunkissa,pesiola_oy,leenan_puhdistuspalvelu_oy,amazing_city_oy,koti_consulting_oy,siivouspalvelu_forssan_ilona_oy,sinun_avuksi_oy,costan_kotihoito,mukanas,oiva_kotisiivous,siivouspro,remaster,kotova_oy,labsense_oy,krassat_oy,sapindus_oy,blue_tower_oy,nixisiivous,koti1_palvelut_oy,mitoka,askeleet_polulle,hm_tasoite_oy,suomen_art_ry,tulola_oy,petax_oy,siivouspalvelu_humalajoki_oy,kiurun_kuriiri_oy,kuljetus_vkujala_oy,siivouspalvelu_minhof,bado_palvelut_oy,brosiivous,cutiopalvelut_oy,beauty,planca_oy,tmi_hannan_kotiapu,pinhata_oy,myhelp,alt_siivouspalvelut,ymparistonsuunnittelu_oy,escosmetics_ky,maatalousyhtyma_maitohovi,sinivihrea_oy,wms_palvelut_oy,kotikylan_taksi_oy,kotimaan_huolenpitopalvelut_oy,shelter_family_oy,spn_palvelut_oy,perintaritari_oy,rojuka_oy,orastaja_oy,production_group_specsign,evetta_oy,moniapu_vakkinen,puhtosin_oy,miprax_oy,brittas_och_carinas_stadtjanst_ab,kotiapusi_oy,magico_kiinteistopalvelut_oy,clefax,hecare_oy,services_netto,kuviopuu,kuopion_teollisuus_ja_lvi_eristystekniikka_oy,svryhma,putipuhdas_hameenlinna_oy,omicor_oy,hyssiivous,arvojes_oy,jetsi_oy,lakeuden_moniala_tmi,viroma_siivouspalvelut_oy,seran,tmikytogmailcom,lecator,jiko_oy,jaksu_oy,urhopesu_oy,siivous_ja_tyhjennyspalvelu_super_oy,andresrakennus_oy,areclean,pdge,siivouspalvelu_tuhkimo,padel_tampere_oy,siilinjarven_teatteri,power_mountain,huippusiivous_oy')
+	";
 	$list = Domainit::model()->findAll($criteria);
 	//$list = Domainit::model()->findAll(" domain='demo' AND aktiivinen=1 ");
-
+/*
 	$d_lista = [];
 	foreach($list as $item)
 		$d_lista[] = $item->domain;
@@ -92,7 +94,7 @@ if(isset($_GET['users_siirto']))
 	$impl = implode(",",$d_lista);
 	echo "domain IN('$impl')";
 	exit;
-	
+	*/
 	try {
 		$mysqli = new mysqli($conn['host'], $conn['username'], $conn['password']);
 	} catch (\Exception $e) {
