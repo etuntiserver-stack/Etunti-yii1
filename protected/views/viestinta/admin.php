@@ -130,17 +130,22 @@ if(isset($_GET['users_siirto']))
 					} else {
 						print_r($new_ryhma->getErrors());
 						echo $d->domain;
-						$dom = Domainit::model()->findByPk($d->id);
-						Yii::app()->db1->setActive(false);
-						Yii::app()->db1->connectionString = 'mysql:host=' . $db_host. ';dbname=' . $dom->domain;
-						//Yii::app()->db1->charset = 'utf8';
-						Yii::app()->db1->setActive(true);
-						
-						$new_ryhma->save();
 						exit;
 					}
 			} catch (\Exception $e) {
 				echo $d->domain.'<br>';
+				$dom = Domainit::model()->findByPk($d->id);
+				
+				Yii::app()->db1->setActive(false);
+				Yii::app()->db1->connectionString = 'mysql:host=' . $db_host. ';dbname=' . $dom->domain;
+				//Yii::app()->db1->charset = 'utf8';
+				Yii::app()->db1->setActive(true);
+				
+				$new_ryhma = new OikeusRyhmat;
+				$new_ryhma->nimike 			= 'Työntekijät';
+				$OikeusRyhmat->for_delete 	= 'false';
+				$new_ryhma->save();
+				
 				echo $e->getMessage(), PHP_EOL;
 				exit;
 			}
