@@ -125,7 +125,9 @@ if(isset($_GET['users_siirto']))
 				$ryhma_nimike 	= $new_ryhma->nimike;
 			}
 		} else {
-
+			if($OikeusRyhmat->for_delete == 'true')
+				OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
+				
 			$ryhma_id 		= $OikeusRyhmat->id;
 			$ryhma_nimike 	= $OikeusRyhmat->nimike;
 		}
@@ -335,6 +337,10 @@ if(isset($_GET['users_siirto']))
 				$ryhma_nimike 	= $new_ryhma->nimike;
 			}
 		} else {
+		
+			if($OikeusRyhmat->for_delete == 'true')
+				OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
+			
 			$ryhma_id 		= $OikeusRyhmat->id;
 			$ryhma_nimike 	= $OikeusRyhmat->nimike;
 		}
