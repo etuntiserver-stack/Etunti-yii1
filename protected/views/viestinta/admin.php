@@ -112,7 +112,7 @@ if(isset($_GET['users_siirto']))
 		if($del !== null) $del->delete();
 				
 		$OikeusRyhmat		= OikeusRyhmat::model()->find("nimike='Työntekijät'");
-		continue;
+		
 		$ryhma_id 		= 0;
 		$ryhma_nimike 	= '';
 		if(!isset($OikeusRyhmat->nimike))
@@ -222,7 +222,7 @@ if(isset($_GET['users_siirto']))
 			}
 		}
 	}
-	exit;
+	
 	// <-- Tyontekijat
 	foreach ($list as $d)
 	{
