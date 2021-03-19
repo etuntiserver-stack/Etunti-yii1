@@ -85,6 +85,7 @@ foreach($array as $k=>$v)
 {
 	foreach($v as $k1=>$v1)
 	{
+		if(empty(trim($v1))) continue;
 		echo '<tr><td>'.$v1.'</td>';
 		foreach($r as $ryhma=>$value){
 			echo '<td>';
