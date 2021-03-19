@@ -123,6 +123,10 @@ if(isset($_GET['users_siirto']))
 			if($new_ryhma->save()){
 				$ryhma_id 		= $new_ryhma->id;
 				$ryhma_nimike 	= $new_ryhma->nimike;
+			} else {
+				print_r($new_ryhma->getErrors());
+				echo $d->domain;
+				exit;
 			}
 		} else {
 			if($OikeusRyhmat->for_delete == 'true')
