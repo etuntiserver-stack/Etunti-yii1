@@ -137,8 +137,18 @@ if(isset($_GET['users_siirto']))
 			}
 
 		} else {
-			if($OikeusRyhmat->for_delete == 'true')
-				OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
+		
+			try {
+			
+				if($OikeusRyhmat->for_delete == 'true')
+					OikeusRyhmat::model()->updateByPk($OikeusRyhmat->id, ['for_delete' => 'false']);
+					
+			} catch (\Exception $e) {
+				echo $d->domain.'<br>';
+				echo $e->getMessage(), PHP_EOL;
+				exit;
+			}
+		
 				
 			$ryhma_id 		= $OikeusRyhmat->id;
 			$ryhma_nimike 	= $OikeusRyhmat->nimike;
