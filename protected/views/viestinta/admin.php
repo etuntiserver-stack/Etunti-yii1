@@ -131,7 +131,7 @@ if(isset($_GET['users_siirto']))
 						exit;
 					}
 			} catch (\Exception $e) {
-				echo $d->domain.'<br>';
+				echo $d->domain.' talla<br>';
 				echo $e->getMessage(), PHP_EOL;
 				exit;
 			}
