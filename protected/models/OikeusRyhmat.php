@@ -26,7 +26,7 @@ class OikeusRyhmat extends DB2ActiveRecord
 
 		$table_structure = array(
 			'nimike' => 'varchar(255) DEFAULT NULL',
-			//'for_delete' => 'varchar(10) DEFAULT \'true\''
+			'for_delete' => 'varchar(10) DEFAULT \'true\''
 		);
 
 		foreach($table_structure as $key=>$value)
