@@ -63,6 +63,22 @@ if(!isset($model->id) and isset($asetukset->id)){
 .hidd,.ashidd,.ashidd_a{
 	display:none;
 }
+.extra-contact-box {
+	box-shadow: 0 .25rem .5rem rgba(0,0,0,.15);
+	padding-top: 10px;
+	padding-bottom: 5px;
+	margin-bottom: 5px;
+	border-radius: 3px;
+	background-color: #eaf0f5;
+}
+
+#extra-contact-list p {
+	margin: 0;
+}
+
+#extra-contact-list > .row {
+	margin-bottom: 1rem;
+}
 </style>
 
 
@@ -207,6 +223,68 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'sahkoposti'); ?>
 	</div>
+
+	<!-- Extra contacts -->
+	<div class="row">
+			<div class="col-sm-12">
+				<?php // new contact input ?>
+					<div class="form-group">
+						<label class="control-label">
+							<?= Yii::t('main', 'Lisä yhteystiedot');?>
+						</label>
+						<span class="input-group-btn">
+							<button class="btn btn-primary new-extra-contact" type="button">
+								<i class="fa fa-plus"></i>
+							</button>
+						</span>
+					</div>
+				<?php // new contact input / ?>
+			</div>
+			<?php // old, already existing list ?>
+				<div class="col-sm-12">
+					<div id="extra-contact-list">
+						<div class="row">
+						<?php if(is_array(json_decode($model->extra_contacts, true))) : ?>
+							<?php foreach(json_decode($model->extra_contacts, true) as $k => $v): ?>
+								<div class="wholerow">
+								<?php $contact = json_decode($v, true); ?>
+									<div class="col-sm-10">
+										<p>
+											<?php 
+												echo $contact["etunimi"];
+												echo " ";
+												echo $contact["sukunimi"]; 
+											?>
+										</p>
+										<p><?= $contact["phone"]; ?></p>
+										<p><?= $contact["email"]; ?></p>
+										<p style="font-weight: bold;">
+											<?php 
+											// there's a chance that invoice could equal to "off", so let's make sure it's "on"
+											// "on" and "off" are the checkbox states in html
+											if(isset($contact["invoice"]) and $contact["invoice"] === "on") {
+												echo "Näytetään laskulla";
+											} ?>
+										</p>
+									</div>
+									<div class="col-sm-2">
+										<button type="button" class="btn btn-danger btn-sm remove-extra-contact">
+											<i class="fa fa-trash"></i>
+										</button>
+										<button type="button" class="btn btn-primary btn-sm edit-extra-contact">
+											<i class="fa fa-pencil"></i>
+											<input class="rowdata" type="hidden" name="Asiakkaat[extra_contacts][]" value='<?= $v ?>' />
+										</button>
+									</div>		
+								</div>
+							<?php endforeach; ?>
+						<?php endif; ?>
+						</div>
+					</div> <?php // extra-contact-list ?>
+				</div>	<?php // col-sm-12 ?>
+			<?php // old, already existing list / ?>
+		</div>
+		<!-- Extra contacts / -->
 
 	<div class="section fill mb5 ashidd_a">
 
@@ -1005,7 +1083,154 @@ $("#Asiakkaat_asiakasnumero").keyup(function() {
 	buttonWidth: '100%',
  });
 
+ // extra contact
+ $('.new-extra-contact').click(() => {
+        let contact_list = $('#extra-contact-list');
+        if(contact_list) {
+            contact_list.append(createNewContactBlock());
+        } else {
+            console.warn("Couldn't find extra-contact-list!");
+        }
+    });
 
+    // apparently the contents of an arrow function scope can't change
+    // so we'll need to use a normal function here
+    // (the value of $(this) will be wrong with an arrow function)
+    $(document).delegate(".remove-extra-contact", "click", function() {
+        $(this).closest(".wholerow").remove();
+    });
+
+    $(document).delegate(".edit-extra-contact", "click", function() {
+        // find our data
+        let rowData = $(this).find(".rowdata")[0].value;
+        // append extra-contact-list with a new creation form
+        let contact_list = $('#extra-contact-list');
+        if(contact_list) {
+            contact_list.append(createNewContactBlock(JSON.parse(rowData)));
+        } else {
+            console.warn("Couldn't find extra-contact-list!");
+        }
+        // remove the row being edited
+        $(this).closest(".wholerow").remove();
+    });
+
+    $(document).delegate(".cancel-extra-contact", "click", () => {
+        $("#extra-form").remove();
+    });
+
+    $(document).delegate(".save-extra-contact", "click", () => {
+        // find our form and get the data
+        const extraForm = document.forms["extra-contact-form"];
+        const data = Object.fromEntries(new FormData(extraForm).entries());
+
+        // validate email
+        if(data.email) {
+            // source: https://emailregex.com/
+            if(!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(data.email)) {
+                $("#extra-contact-email-error").append('<p style="color: red">Tarkista sähköposti</p>');
+                return;
+            } else {
+                // clear errors if OK
+                $("#extra-contact-email-error").empty();
+            }
+        }
+
+        // validate phone number
+        if(data.phone) {
+            if (!/^\+.*$/.test(data.phone)) {
+                $("#extra-contact-phone-error").append('<p style="color: red">Aluekoodi vaaditaan (esim. +358)</p>');
+                return;
+            } else {
+                // clear errors if OK
+                $("#extra-contact-phone-error").empty();
+            }
+        }
+        
+        // create fields that will be shown to the user,
+        // this will also create a hidden input with the form data
+        let extraList = $("#extra-contact-list").find(".row");
+        if(extraList) {
+            extraList.append(createDataRows(data));
+        } else {
+            console.warn("Couldn't find extra-contact-list!");
+        }
+        $("#extra-form").remove()
+    });
+
+    /**
+     * Creates a HTML block that shows the newly created extra contacts information
+     * also creates a hidden input which will be used to carry that data to the database
+     * when submitting the whole form.
+     * Data param is the extra contact creation form data in JSON format:
+     * {etunimi: "name", sukunimi: "name", phone: "123", email: "asd@asd.com"}
+     * @param {*} data 
+     * @returns 
+     */
+    function createDataRows(data) {
+       return `
+        <div class="wholerow">
+            <div class="col-sm-10">
+                <p>${data.etunimi} ${data.sukunimi}</p>
+                <p>${data.phone}</p>
+                <p>${data.email}</p>
+                <p style="font-weight: bold">${data.invoice ? "Näytetään laskulla" : ""}</p>
+            </div>
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-danger btn-sm remove-extra-contact">
+                    <i class="fa fa-trash"></i>
+                </button>
+                <button type="button" class="btn btn-primary btn-sm edit-extra-contact">
+                    <i class="fa fa-pencil"></i>
+                    <input class="rowdata" type="hidden" name="Asiakkaat[extra_contacts][]" value='${JSON.stringify(data)}' />
+                </button>
+            </div>
+        </div>
+       `;
+    }
+
+    // editObject contains the data of an extra contact
+    // the user wants to edit
+    // called from .edit-extra-contacts onClick event handler
+    //
+    // also called from .new-extra-contact onClick event handler
+    // without parameters
+    function createNewContactBlock(editObject) {
+
+        return `
+        <form name="extra-contact-form" id="extra-form">
+            <div class="row">
+                <div class="col-sm-12 extra-contact-box">
+                    <div class="form-group">
+                        <label class="control-label">Etunimi</label>
+                        <input name="etunimi" type="text" class="form-control" value="${editObject?.etunimi ?? ""}"></input>
+                        <label class="control-label">Sukunimi</label>
+                        <input name="sukunimi" type="text" class="form-control" value="${editObject?.sukunimi ?? ""}"></input>
+                        <label class="control-label">Sähköposti</label>
+                        <input name="email" type="text" class="form-control" value="${editObject?.email ?? ""}"></input>
+                        <div id="extra-contact-email-error"></div>
+                        <label class="control-label">Puhelinnumero</label>
+                        <input name="phone" type="text" class="form-control" value="${editObject?.phone ?? ""}"></input>
+                        <div id="extra-contact-phone-error"></div>
+                        <label class="control-label" for="invoice">Näytetään laskulla</label>
+                        <input name="invoice" id="invoice" type="checkbox" ${editObject?.invoice ? "checked" : ""}>
+                    </div>
+                    <button type="button" class="btn btn-success save-extra-contact">
+                        <i class="fa fa-save"></i>
+                    </button>
+                    ` // show cancel button only if not editing
+                      // the user can save even without making any changes
+                    + ( editObject ? `` :  
+                    `<button type="button" class="btn btn-danger cancel-extra-contact">
+                        <i class="fa fa-times"></i>
+                    </button>`)
+                    
+                    +
+                    `
+                </div>
+            </div>
+        </form>
+        `;
+    }
 
 });
 </script>

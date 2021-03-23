@@ -452,6 +452,12 @@ class AsiakkaatController extends Controller
 				$model->muistiinpano = '';
 			}
 
+			if(is_array($model->extra_contacts) and count($model->extra_contacts) > 0) {
+				$model->extra_contacts = json_encode($model->extra_contacts, JSON_FORCE_OBJECT);
+			} else {
+				$model->extra_contacts = "";
+			}
+
 			// <-- Dimension
 			if( isset($_POST['Asiakkaat']['netvisor_dimension_name']) ){
 			   $dimension = explode("//", $_POST['Asiakkaat']['netvisor_dimension_name']);
@@ -658,6 +664,12 @@ Yritys '.$yr.'
 				$model->muistiinpano = json_encode($model->muistiinpano, JSON_FORCE_OBJECT);
 			} else {
 				$model->muistiinpano = '';
+			}
+
+			if(is_array($model->extra_contacts) and count($model->extra_contacts) > 0) {
+				$model->extra_contacts = json_encode($model->extra_contacts, JSON_FORCE_OBJECT);
+			} else {
+				$model->extra_contacts = "";
 			}
 
 			// <-- Dimension
@@ -942,7 +954,7 @@ Yritys '.$yr.'
 	; 
 	
 	
-	$name = $model->Fullname;
+	$name = $model->AsiakasWithExtraContacts;
 
 	$ryhma = '';
 	$r = Valikkoot::model()->findbypk($model->ryhma);

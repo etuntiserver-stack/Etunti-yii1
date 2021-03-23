@@ -104,6 +104,7 @@ class Asiakkaat extends DB2ActiveRecord
 			//'vinkki_prosentti' => 'varchar(10)',
 			'etunimi' => 'varchar(255) DEFAULT NULL',
 			'sukunimi' => 'varchar(255) DEFAULT NULL',
+			'extra_contacts' => 'text DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -135,7 +136,7 @@ class Asiakkaat extends DB2ActiveRecord
 			array('maksuehto, viivastyskorko, hinta, hinta_sis_alv', 'length', 'max'=>20),
 			array('puhelin', 'length', 'max'=>50),
 			array('asiakasnumero, ovt_tunnus, valittajan_tunnus, hinta_tyyppi, verot, lopetuksen_pvm', 'length', 'max'=>100),
-			array('alennuskoodit, gcm_reg_id, lopetuksen_syy, netvisor_dimension_name, netvisor_dimension_item, toissijainen_puhelinnumero, muistiinpano, lisatietoja_laskutuksesta', 'safe'),
+			array('alennuskoodit, gcm_reg_id, lopetuksen_syy, netvisor_dimension_name, netvisor_dimension_item, toissijainen_puhelinnumero, muistiinpano, lisatietoja_laskutuksesta, extra_contacts', 'safe'),
 			array('sahkoposti','unique', 'message'=>'Tämä sähköposti on jo rekisteröity asiakkaalle.'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -218,8 +219,44 @@ class Asiakkaat extends DB2ActiveRecord
 			'lopetuksen_syy' => Yii::t('main', 'Syy'),
 			'netvisor_dimension_name' => Yii::t('main', 'Kustannuspaikka'),
 			'lisatietoja_laskutuksesta' => Yii::t('main', 'Lisätietoja laskutuksesta'),
+			'extra_contacts' => Yii::t('main', 'Lisä yhteystiedot'),
 		);
 	}
+
+	public function getNameWithExtraContacts() {
+		$name = $this->etunimi . ' ' . $this->sukunimi;
+		if(strlen($this->extra_contacts) > 0) {
+			$contacts = json_decode($this->extra_contacts, true);
+			// $contacts is an array full of json objects
+			foreach($contacts as $k => $contact) {
+				$contact = json_decode($contact, true);
+				if(isset($contact["invoice"]) and $contact["invoice"] === "on") {
+					$contactName = $contact["etunimi"] . " " . $contact["sukunimi"];
+					$name .= " ja " . $contactName;
+				}
+			}
+		}
+		return $name;
+	}
+
+	public function getAsiakasWithExtraContacts() {
+		$asiakas = '';
+    	if($this->tyyppi == 'henkilo')
+	    	$asiakas = self::getNameWithExtraContacts();
+		if($this->tyyppi == 'yritys')
+	    	$asiakas = $this->yrityksen_nimi;
+
+		// use ID as fallback
+		// we'll end up here only if:
+		// etunimi and sukunimi have not been set
+		// or yrityksen_nimi has not been set
+		if(strlen(trim($asiakas)) === 0) {
+			$asiakas = 'ID: ' . $this->id;
+		}
+
+    	return trim($asiakas);
+	}
+
 	// Fullname
     public function getFullname(){
 		$return = '';

@@ -171,7 +171,7 @@ class LaskuController extends Controller
 		   $asiakkaat_ids = [];
 		   $attr = [];
 		   foreach($hyv_lista_all as $item){
-			$nimi = $item->kohteet->asiakkaat->Fullname;
+			$nimi = $item->kohteet->asiakkaat->AsiakasWithExtraContacts;
 			if (isset($item->kohteet->asiakkaat) and !array_key_exists($nimi, $attr)) $attr[$nimi] = $item->kohteet->asiakkaat->attributes;
 			$asiakkaat_ids[$nimi][$item->id] = [
 				'mob_tunnit' => (isset($item->attributes))? $item->attributes : '',
@@ -193,7 +193,7 @@ class LaskuController extends Controller
 		   $attr = [];
 		   foreach($hyv_lista_all as $d){
 			$item = $d['data'];
-			$nimi = (isset($item->kohteet->asiakkaat->id))? $item->kohteet->asiakkaat->Fullname : 'Asiakas nimi puutuu';
+			$nimi = (isset($item->kohteet->asiakkaat->id))? $item->kohteet->asiakkaat->AsiakasWithExtraContacts : 'Asiakas nimi puutuu';
 			if (isset($item->kohteet->asiakkaat) and !array_key_exists($nimi, $attr)) $attr[$nimi] = $item->kohteet->asiakkaat->attributes;
 			$asiakkaat_ids[$nimi][$d['this_id']] = [
 				'this_id' => $d['this_id'],
