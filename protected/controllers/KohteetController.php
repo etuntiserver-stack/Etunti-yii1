@@ -611,7 +611,10 @@ class KohteetController extends Controller
 	        	$criteria->addCondition (" 
 				asiakas_id IN (
 					SELECT id FROM asiakkaat 
-					WHERE yrityksen_nimi LIKE '%".$_POST['yrityksen_nimi']."%' OR etunimi LIKE '%".$_POST['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_POST['yrityksen_nimi']."%'
+					WHERE yrityksen_nimi LIKE '%".$_POST['yrityksen_nimi']."%' 
+					OR etunimi LIKE '%".$_POST['yrityksen_nimi']."%' 
+					OR sukunimi LIKE '%".$_POST['yrityksen_nimi']."%'
+					OR CONCAT(etunimi, ' ', sukunimi) LIKE '%".$_POST['yrityksen_nimi']."%'
 				)		
 			");
 		}

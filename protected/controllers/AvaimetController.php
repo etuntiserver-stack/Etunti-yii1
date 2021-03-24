@@ -248,10 +248,13 @@ class AvaimetController extends Controller
 
 		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
 		{
+
 	        $criteria->addCondition (" 
 			kohde IN ( SELECT id FROM sivex_kohdet
 				WHERE asiakas_id IN ( SELECT id FROM asiakkaat
-					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%'
+					WHERE yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' 
+					OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%'
+					OR CONCAT(etunimi, ' ', sukunimi) LIKE '%".$_GET['yrityksen_nimi']."%'
 				)
 			)
 		");
@@ -347,7 +350,6 @@ class AvaimetController extends Controller
 
     // Search criteria: Customer (asiakas)
     if (isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])) {
-
       // Add criteria for the specified customer.
       $haku_criteria[] = "
         kohde IN (
@@ -356,7 +358,8 @@ class AvaimetController extends Controller
               yrityksen_nimi LIKE '%{$_GET['yrityksen_nimi']}%'
               OR etunimi LIKE '%{$_GET['yrityksen_nimi']}%'
               OR sukunimi LIKE '%{$_GET['yrityksen_nimi']}%'
-				  )
+			  OR CONCAT(etunimi, ' ', sukunimi) LIKE '%{$_GET['yrityksen_nimi']}%'
+			)
         )
       ";
 

@@ -2329,6 +2329,10 @@ class SiteController extends Controller
 				$etunimi = $splitName[0];
 				$sukunimi = $splitName[1];
 				$cond .= "(etunimi LIKE '%".$etunimi."%' AND sukunimi LIKE '%".$sukunimi."%') OR ";
+				$cond .= "(extra_contacts LIKE '%".$etunimi."%' OR extra_contacts LIKE '%.$sukunimi.%') OR ";
+			}
+			if($model == "Asiakkaat") {
+				$cond .= "extra_contacts LIKE '%".$term."%' OR ";
 			}
 			$i = 0;
 			
@@ -2392,7 +2396,7 @@ class SiteController extends Controller
 		    } else if($model == 'Asiakkaat' and $data->tyyppi == 'henkilo' and $sarake != 'osoite' and $sarake != 'kaupunki' and $sarake != 'postinumero')
 		    {
 		    $arr[] = array(
-		        'label'=>$data->Etusukunimi,
+		        'label'=>$data->EtusukunimiWithAllExtraContacts,
 		        'value'=>$data->Etusukunimi,
 		        'id'=>$data->id,
         	    );

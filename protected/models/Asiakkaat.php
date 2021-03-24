@@ -281,6 +281,20 @@ class Asiakkaat extends DB2ActiveRecord
 		return trim($return);
     }
 
+	public function getEtusukunimiWithAllExtraContacts() {
+		$return = $this->getEtusukunimi();
+		if(strlen($this->extra_contacts) > 0) {
+			$contacts = json_decode($this->extra_contacts, true);
+			// $contacts is an array full of json objects
+			foreach($contacts as $k => $contact) {
+				$contact = json_decode($contact, true);
+				$contactName = $contact["etunimi"] . " " . $contact["sukunimi"];
+				$return .= " ja " . $contactName;
+			}
+		}
+		return $return;
+	}
+
     public function getValikkotyoryhma(){
 		$return = $this->tyoryhma;
 		if( !empty($this->tyoryhma)){
