@@ -29,7 +29,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijat_lista', 'omasiistijat_tarkistus', 'omasiistijat_ilmoitus', 'omasiistijat_siistijakohtainen_varoitus', 'os_cache_clear', 'massedit', 'aloitusaikojen_ilmoitus'),
+				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijat_lista', 'omasiistijat_tarkistus', 'omasiistijat_ilmoitus', 'omasiistijat_siistijakohtainen_varoitus', 'os_cache_clear', 'massedit', 'aloitusaikojen_ilmoitus', 'tekijahovertietoja'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -2414,6 +2414,24 @@ class TyovuorootController extends Controller
 			}, 7000);
 		});
 		</script>";
+	}
+
+	public function actionTekijahovertietoja($id) {
+		$model = Tyontekijat::model()->findByPk($id);
+		$tyoryhmat = json_decode($model->tyoryhma, true);
+		$html = '
+		<div class="row">
+			<div class="col-sm-12">
+				<b>'.Yii::t('main', 'Nimi').': '.$this->etuSukunimi($model->id).'</b><br>
+				<b>'.Yii::t('main', 'Työpuhelin').': '.$model->laiten_puh.'</b><br>
+				<b>'.Yii::t('main', 'Oma puhelin').': '.$model->tekijan_puh.'</b><br>
+				<b>'.Yii::t('main', 'Sähköpostiosoite').': '.$model->tekijan_email.'</b><br>
+				<b>'.Yii::t('main', 'Kotiosoite').': '.$model->tekijan_katuosoite.'</b><br>
+				<b>'.Yii::t('main', 'Työryhmät').': '.implode(", ", $tyoryhmat).'</b><br>
+			</div>
+		</div>';
+		echo json_encode(["id" => $id, "html" => $html]);
+		return;
 	}
 
 	public function actionHovertietoja($this_id) {

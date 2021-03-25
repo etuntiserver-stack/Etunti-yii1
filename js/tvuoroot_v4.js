@@ -53,6 +53,7 @@ $("#lahetaTyovuoroja").click(function(){
 
 $(document).delegate(".getTekijanTiedot","click",function(e){
 	e.preventDefault();
+	$("#hovertiedot").html("").hide();
 	var id = $(this).attr('for');
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/get_tekijantiedot?id='+id,
@@ -228,6 +229,43 @@ jQuery.vkolaskenta = function vkolaskenta(tids){
 	        });
 	});
      }
+}
+
+let tekijaDelay = 500;
+let tekijaTimeout = undefined;
+$(".getTekijanTiedot").hover(function() {
+	let elem = $(this)[0];
+	let idVal = -1;
+	if(elem) {
+		idVal = $(elem).attr("for");
+	}
+	
+	tekijaTimeout = setTimeout(function() {
+		if(idVal >= 0) {
+			let info = tekija_hover(idVal);
+			$("#hovertietoja").html(info.html).show();
+		}
+	}, tekijaDelay);
+
+}, function() {
+	$("#hovertietoja").html("").hide();
+	clearTimeout(tekijaTimeout);
+})
+
+function tekija_hover(tekija_id) {
+	let info = "";
+	$.ajax({
+		url: location.protocol + "//" + location.host + "/index.php/tyovuoroot/tekijahovertietoja?id=" + tekija_id,
+		async: false,
+		success: function(data) {
+			dataJson = JSON.parse(data);
+			info = dataJson;
+		},
+		error: function(err) {
+			console.log("error while fetching hover", err);
+		}
+	});
+	return info;
 }
 
 jQuery.hovertietoja = function hovertietoja(){
