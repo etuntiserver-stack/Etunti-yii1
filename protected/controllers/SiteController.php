@@ -24,7 +24,7 @@ class SiteController extends Controller
 	public function filters()
 	{
 		return array(
-			//'accessControl', // perform access control for CRUD operations
+			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
@@ -2317,7 +2317,7 @@ class SiteController extends Controller
 	{
 
 		$term = trim($term);
-		$criteria = new CDBcriteria;
+		$criteria = new CDBcriteria();
 
 		if(is_array(json_decode($sarake, true)))
 		{
