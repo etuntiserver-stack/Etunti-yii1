@@ -3900,6 +3900,11 @@ class TyovuorootController extends Controller
 		} else {
 			$model->tyopaari = '';
 		}
+		if(is_array($model->url_linkkit) and count($model->url_linkkit) > 0) {
+			$model->url_linkkit = json_encode($model->url_linkkit);
+		} else {
+			$model->url_linkkit = "";
+		}
 
 		$model->kohde = $kohteet->id;
 		$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));

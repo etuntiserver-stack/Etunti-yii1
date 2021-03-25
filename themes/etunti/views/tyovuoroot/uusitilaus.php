@@ -545,6 +545,42 @@ $(document).ready(function(){
 <br>
 <p id="lisapalvelu_lista"></p>
 
+<div class="row">
+	<div class="col-sm-3">
+		<div class="input-group">
+			<span class="form-control lomake_kenta"><?php echo Yii::t('main','URL linkit'); ?></span>
+			<span class="input-group-btn">
+			<button class="btn btn-primary uusilinkki lomake_btn" type="button"><i class="fa fa-plus"></i></button>
+			</span>
+		</div>  
+	</div>
+</div>
+<br>
+<div id="linkkilista"></div>
+<br>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".uusilinkki").click(function(){
+	$("#linkkilista").append('' +
+		'<div class="row">' +
+			'<div class="col-sm-3">' +
+				'<input type="text" name="Tyovuoroot[url_linkkit][nimike][]" class="form-control" placeholder="URL nimike">' +
+			'</div>' +
+			'<div class="col-sm-3">' +
+				'<input type="text" name="Tyovuoroot[url_linkkit][url][]" class="form-control" placeholder="http osoite">' +
+			'</div>' +
+			'<div class="col-sm-1 text-right">' +
+				'<span class="btn btn-danger fa fa-trash poislistasta"></span>' +
+			'</div>' +
+		'</div>'
+		);
+	});
+	$(document).delegate(".poislistasta","click",function(){
+	$(this).closest(".row").remove();
+	});
+});
+</script>
 
 <script type="text/javascript">
 $(document).ready(function(){
