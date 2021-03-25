@@ -821,12 +821,11 @@ class OnlinevarausController extends Controller
 				// <-- LOG
 				$model_log 	= 'Tyovuoroot';
 				$name_log 	= 'Työvuorot';
-				$status_log 	= 'Auto Delete';
-	
-					$old_values = json_encode($tv->attributes);
-					$new_values = null;
-					$site = Yii::app()->createController('Site');
-					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				$status_log = 'Auto Delete';
+				$old_values = (isset($tv->attributes))? json_encode($tv->attributes) : '';
+				$new_values = null;
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 				//     LOG -->
 
 			Tyovuoroot::model()->deletebypk($_SESSION['onlinevaraus']['modelTV']);
