@@ -268,6 +268,7 @@ $dateDiff = dateDiff($from, $to);
   $yhtVLWeek	= 0;
   $yhtVKLWeek	= 0;
   $yhtAPWeek	= 0;
+  $yhtPVWeek	= 0;
 
   $yhtSPL	= 0;
   $yhtSL	= 0;
@@ -275,6 +276,7 @@ $dateDiff = dateDiff($from, $to);
   $yhtVL	= 0;
   $yhtVKL	= 0;
   $yhtAP	= 0;
+  $yhtPV	= 0;
 
   $ilman_lounastaukot 	= false;
   $ilman_matkat 	= false;
@@ -336,6 +338,7 @@ exit;
   $vl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'VL',true); // Vuosiloma
   $vkl_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'VKL',true); // Viikkolomapaiva  ( Poistettu kaytosta )
   $ap_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'AP',true); // Arkipaiva
+  $pv_all 		= $mobile[0]->TidfromtoVuosilomaBetween($from,$to,[$tid],'PV',true); // Palkaton vapaa
   //     SPL, SL, LS, VL, VKL, AP -->
 
   $luetut_laatikot = json_decode($this->LuetutPvmTidBetween($from,$to,$tid), true);
@@ -380,6 +383,7 @@ exit;
     $vl 		= (isset($vl_all[$pvmF][$tid]))? $vl_all[$pvmF][$tid] : 0; // Vuosiloma
     $vkl 		= (isset($vkl_all[$pvmF][$tid]))? $vkl_all[$pvmF][$tid] : 0; // Viikkolomapaiva  ( Poistettu kaytosta )
     $ap 		= (isset($ap_all[$pvmF][$tid]))? $ap_all[$pvmF][$tid] : 0; // Arkipaiva
+	$pv 		= (isset($pv_all[$pvmF][$tid]))? $pv_all[$pvmF][$tid] : 0; // Palkaton vapaa
     //     SPL, SL, LS, VL, VKL, AP -->
 
     $yhtTyotunnit 	+= $tyotunnit;
@@ -391,12 +395,13 @@ exit;
 
     $yhtPy 		+= $pyhapaivat_tunnit;
     $yhtEl 		+= $erikoislauantai_tunnit;
-    $yhtSPL 		+= $spl;
+    $yhtSPL 	+= $spl;
     $yhtSL 		+= $sl;
     $yhtLS 		+= $ls;
     $yhtVL 		+= $vl;
-    $yhtVKL 		+= $vkl;
+    $yhtVKL 	+= $vkl;
     $yhtAP 		+= $ap;
+	$yhtPV 		+= $pv;
 
     $korv = $this->korvauksetPvmTid(date("Y-m-d",strtotime($date)),$tid);
     if(!empty($korv))
@@ -531,23 +536,25 @@ exit;
 		   <th class="'.(($netvisor_kaytto == 1 and in_array('vl', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Vuosiloma').'">'.Yii::t('main', 'VL').'</th>
 		   <!--<th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Viikkolomapäivä').'">'.Yii::t('main', 'VKL').'</th>-->
 		   <th class="'.(($netvisor_kaytto == 1 and in_array('ap', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Arkipyhä').'">'.Yii::t('main', 'AP').'</th>
+		   <th class="'.(($netvisor_kaytto == 1 and in_array('pv', $netvisor_mita_lahetetaan, true))?'bg-success':'').'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Arkipyhä').'">'.Yii::t('main', 'PV').'</th>
 		  </tr>
 		 </thead>
 		  <tr>
-		   <td><span class="allaTyotunnit" total="'.(int)$tyotunnit.'">'.$this->sprint($tyotunnit).'</span></td>
-		   <td><span class="allaMatkat" total="'.(int)$matkatunnit.'">'.$this->sprint($matkatunnit).'</span></td>
-		   <td><span class="allaLounaat" total="'.(int)$lounaat.'">'.$this->sprint($lounaat).'</span></td>
-		   <td><span class="allaIlta" total="'.(int)$iltatunnit.'">'.$this->sprint($iltatunnit).'</span></td>
-		   <td><span class="allaYo" total="'.(int)$yotunnit.'">'.$this->sprint($yotunnit).'</span></td>
-		   <td><span class="allaSu" total="'.(int)$sutunnit.'">'.$this->sprint($sutunnit).'</span></td>
-		   <td>'.$this->sprint($pyhapaivat_tunnit).'</td>
-		   <td>'.$this->sprint($erikoislauantai_tunnit).'</td>
-		   <td><span class="allaSL" total="'.(int)$sl.'">'.$sl.'</span></td>
-		   <td><span class="allaSPL" total="'.(int)$spl.'">'.$spl.'</span></td>
-		   <td><span class="allaLS" total="'.(int)$ls.'">'.$ls.'</span></td>
-		   <td><span class="allaVL" total="'.(int)$vl.'">'.$vl.'</span></td>
-		   <!--<td><span class="allaVKL" total="'.(int)$vkl.'">'.$this->sprint($vkl).'</span></td>-->
-		   <td><span class="allaAP" total="'.(int)$ap.'">'.$ap.'</span></td>
+			<td><span class="allaTyotunnit" total="'.(int)$tyotunnit.'">'.$this->sprint($tyotunnit).'</span></td>
+			<td><span class="allaMatkat" total="'.(int)$matkatunnit.'">'.$this->sprint($matkatunnit).'</span></td>
+			<td><span class="allaLounaat" total="'.(int)$lounaat.'">'.$this->sprint($lounaat).'</span></td>
+			<td><span class="allaIlta" total="'.(int)$iltatunnit.'">'.$this->sprint($iltatunnit).'</span></td>
+			<td><span class="allaYo" total="'.(int)$yotunnit.'">'.$this->sprint($yotunnit).'</span></td>
+			<td><span class="allaSu" total="'.(int)$sutunnit.'">'.$this->sprint($sutunnit).'</span></td>
+			<td>'.$this->sprint($pyhapaivat_tunnit).'</td>
+			<td>'.$this->sprint($erikoislauantai_tunnit).'</td>
+			<td><span class="allaSL" total="'.(int)$sl.'">'.$sl.'</span></td>
+			<td><span class="allaSPL" total="'.(int)$spl.'">'.$spl.'</span></td>
+			<td><span class="allaLS" total="'.(int)$ls.'">'.$ls.'</span></td>
+			<td><span class="allaVL" total="'.(int)$vl.'">'.$vl.'</span></td>
+			<!--<td><span class="allaVKL" total="'.(int)$vkl.'">'.$this->sprint($vkl).'</span></td>-->
+			<td><span class="allaAP" total="'.(int)$ap.'">'.$ap.'</span></td>
+			<td><span class="allaPV" total="'.(int)$pv.'">'.$pv.'</span></td>
 		  </tr>';
 		 if($netvisor_kaytto == 1 and ($netvisor_mita_onkayttossa == 1 or $netvisor_mita_onkayttossa == 2)) { 
 		  echo ' 
@@ -569,6 +576,7 @@ exit;
 				ls		="'.(int)$ls.'"
 				vl		="'.(int)$vl.'"
 				ap		="'.(int)$ap.'"
+				pv		="'.(int)$pv.'"
 			></button>
 		   </td>
 		  </tr>';
@@ -601,7 +609,8 @@ exit;
     $yhtLSWeek 		+= $ls;
     $yhtVLWeek 		+= $vl;
     $yhtVKLWeek 	+= $vkl;
-    $yhtAPWeek 	+= $ap;
+    $yhtAPWeek 		+= $ap;
+	$yhtPVWeek 		+= $pv;
     $tid 		= $tid;
 
 	    if(date('N', strtotime($date)) == 7)
@@ -614,44 +623,46 @@ exit;
 		<table class="table everyviikko" cellspacing="0" cellpadding="0">
 		 <thead>
 		  <tr>
-		   <th>'.Yii::t('main', 'Suunn.').'</th>
-		   <th>'.Yii::t('main', 'Luetut').'</th>
-		   <th>'.Yii::t('main', 'Hyväksytyt').'</th>
-		   <th>'.Yii::t('main', 'Työtunnit').'</th>
-		   <th>'.Yii::t('main', 'Matkat').'</th>
-		   <th>'.Yii::t('main', 'Lounaat').'</th>
-		   <th>'.Yii::t('main', 'Ilta').'</th>
-		   <th>'.Yii::t('main', 'Yö').'</th>
-		   <th>'.Yii::t('main', 'Su').'</th>
-		   <th>'.Yii::t('main', 'Py').'</th>
-		   <th>'.Yii::t('main', 'El').'</th>
-		   <th>'.Yii::t('main', 'SL').'</th>
-		   <th>'.Yii::t('main', 'SPL').'</th>
-		   <th>'.Yii::t('main', 'LS').'</th>
-		   <th>'.Yii::t('main', 'VL').'</th>
-		   <!--<th>'.Yii::t('main', 'VKL').'</th>-->
-		   <th>'.Yii::t('main', 'AP').'</th>
+			<th>'.Yii::t('main', 'Suunn.').'</th>
+			<th>'.Yii::t('main', 'Luetut').'</th>
+			<th>'.Yii::t('main', 'Hyväksytyt').'</th>
+			<th>'.Yii::t('main', 'Työtunnit').'</th>
+			<th>'.Yii::t('main', 'Matkat').'</th>
+			<th>'.Yii::t('main', 'Lounaat').'</th>
+			<th>'.Yii::t('main', 'Ilta').'</th>
+			<th>'.Yii::t('main', 'Yö').'</th>
+			<th>'.Yii::t('main', 'Su').'</th>
+			<th>'.Yii::t('main', 'Py').'</th>
+			<th>'.Yii::t('main', 'El').'</th>
+			<th>'.Yii::t('main', 'SL').'</th>
+			<th>'.Yii::t('main', 'SPL').'</th>
+			<th>'.Yii::t('main', 'LS').'</th>
+			<th>'.Yii::t('main', 'VL').'</th>
+			<!--<th>'.Yii::t('main', 'VKL').'</th>-->
+			<th>'.Yii::t('main', 'AP').'</th>
+			<th>'.Yii::t('main', 'PV').'</th>
 		  </tr>
 		 </thead>
 		  <tr>
-		   <td class="suunnWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtSuunnittelut).'<br>'.$this->num($yhtSuunnittelut).'</td>
-		   <td class="luetutWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtLuetutpvmtid).'<br>'.$this->num($yhtLuetutpvmtid).'</td>
-		   <td class="totWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtTotpvmtid).'<br>'.$this->num($yhtTotpvmtid).'</td>
-		   <td class="tyotunnitWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtTyotunnitWeek).'<br>'.$this->num($yhtTyotunnitWeek).'</td>
-		   <td class="matkatWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtMatkaWeek).'<br>'.$this->num($yhtMatkaWeek).'</td>
-		   <td class="lounaatWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtLounaatWeek).'<br>'.$this->num($yhtLounaatWeek).'</td>
-		   <td class="iltaWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtIltaWeek).'<br>'.$this->num($yhtIltaWeek).'</td>
-		   <td class="yoWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtYoWeek).'<br>'.$this->num($yhtYoWeek).'</td>
-		   <td class="suWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtSuWeek).'<br>'.$this->num($yhtSuWeek).'</td>
-		   <td>'.$this->sprint($yhtPyWeek).'<br>'.$this->num($yhtPyWeek).'</td>
-		   <td>'.$this->sprint($yhtElWeek).'<br>'.$this->num($yhtElWeek).'</td>
+			<td class="suunnWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtSuunnittelut).'<br>'.$this->num($yhtSuunnittelut).'</td>
+			<td class="luetutWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtLuetutpvmtid).'<br>'.$this->num($yhtLuetutpvmtid).'</td>
+			<td class="totWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtTotpvmtid).'<br>'.$this->num($yhtTotpvmtid).'</td>
+			<td class="tyotunnitWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtTyotunnitWeek).'<br>'.$this->num($yhtTyotunnitWeek).'</td>
+			<td class="matkatWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtMatkaWeek).'<br>'.$this->num($yhtMatkaWeek).'</td>
+			<td class="lounaatWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtLounaatWeek).'<br>'.$this->num($yhtLounaatWeek).'</td>
+			<td class="iltaWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtIltaWeek).'<br>'.$this->num($yhtIltaWeek).'</td>
+			<td class="yoWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtYoWeek).'<br>'.$this->num($yhtYoWeek).'</td>
+			<td class="suWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtSuWeek).'<br>'.$this->num($yhtSuWeek).'</td>
+			<td>'.$this->sprint($yhtPyWeek).'<br>'.$this->num($yhtPyWeek).'</td>
+			<td>'.$this->sprint($yhtElWeek).'<br>'.$this->num($yhtElWeek).'</td>
 
-		   <td class="SLWeek_'.date("W",strtotime($date)).'">'.$yhtSLWeek.'</td>
-		   <td class="SPLWeek_'.date("W",strtotime($date)).'">'.$yhtSPLWeek.'</td>
-		   <td class="LSWeek_'.date("W",strtotime($date)).'">'.$yhtLSWeek.'</td>
-		   <td class="VLWeek_'.date("W",strtotime($date)).'">'.$yhtVLWeek.'</td>
-		   <!--<td class="VKLWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtVKLWeek).'</td>-->
-		   <td class="APWeek_'.date("W",strtotime($date)).'">'.$yhtAPWeek.'</td>
+			<td class="SLWeek_'.date("W",strtotime($date)).'">'.$yhtSLWeek.'</td>
+			<td class="SPLWeek_'.date("W",strtotime($date)).'">'.$yhtSPLWeek.'</td>
+			<td class="LSWeek_'.date("W",strtotime($date)).'">'.$yhtLSWeek.'</td>
+			<td class="VLWeek_'.date("W",strtotime($date)).'">'.$yhtVLWeek.'</td>
+			<!--<td class="VKLWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtVKLWeek).'</td>-->
+			<td class="APWeek_'.date("W",strtotime($date)).'">'.$yhtAPWeek.'</td>
+			<td class="PVWeek_'.date("W",strtotime($date)).'">'.$yhtPVWeek.'</td>
 		  </tr>
 		</table>
 	</td></tr>';
@@ -666,14 +677,15 @@ exit;
 		$yhtPyWeek 	= 0;
 		$yhtElWeek 	= 0;
 		$yhtTotpvmtid 	= 0;
-	 	$yhtLuetutpvmtid = 0;
+		$yhtLuetutpvmtid = 0;
 		$yhtSuunnittelut = 0;
-    		$yhtSLWeek 	= 0;
+		$yhtSLWeek 	= 0;
 		$yhtSPLWeek	= 0;
 		$yhtLSWeek 	= 0;
 		$yhtVLWeek 	= 0;
-		$yhtVKLWeek 	= 0;
+		$yhtVKLWeek = 0;
 		$yhtAPWeek	= 0;
+		$yhtPVWeek	= 0;
 	    }
 
 
@@ -687,45 +699,47 @@ exit;
 		<table class="table" cellspacing="0" cellpadding="0" id="yhteensaFooterTaulu" border="0">
 		 <thead class="myBgColors">
 		  <tr>
-		   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
-		   <th><?php echo Yii::t('main', 'Suunn.'); ?></th>
-		   <th><?php echo Yii::t('main', 'Luetut'); ?></th>
-		   <th><?php echo Yii::t('main', 'Hyväksytyt'); ?></th>
-		   <th><?php echo Yii::t('main', 'Työtunnit'); ?></th>
-		   <th><?php echo Yii::t('main', 'Matkat'); ?></th>
-		   <th><?php echo Yii::t('main', 'Lounaat'); ?></th>
-		   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
-		   <th><?php echo Yii::t('main', 'Yö'); ?></th>
-		   <th><?php echo Yii::t('main', 'Su'); ?></th>
-		   <th><?php echo Yii::t('main', 'Py'); ?></th>
-		   <th><?php echo Yii::t('main', 'El'); ?></th>
-		   <th><?php echo Yii::t('main', 'SL'); ?></th>
-		   <th><?php echo Yii::t('main', 'SPL'); ?></th>
-		   <th><?php echo Yii::t('main', 'LS'); ?></th>
-		   <th><?php echo Yii::t('main', 'VL'); ?></th>
-		   <!--<th><?php echo Yii::t('main', 'VKL'); ?></th>-->
-		   <th><?php echo Yii::t('main', 'AP'); ?></th>
+			<th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
+			<th><?php echo Yii::t('main', 'Suunn.'); ?></th>
+			<th><?php echo Yii::t('main', 'Luetut'); ?></th>
+			<th><?php echo Yii::t('main', 'Hyväksytyt'); ?></th>
+			<th><?php echo Yii::t('main', 'Työtunnit'); ?></th>
+			<th><?php echo Yii::t('main', 'Matkat'); ?></th>
+			<th><?php echo Yii::t('main', 'Lounaat'); ?></th>
+			<th><?php echo Yii::t('main', 'Ilta'); ?></th>
+			<th><?php echo Yii::t('main', 'Yö'); ?></th>
+			<th><?php echo Yii::t('main', 'Su'); ?></th>
+			<th><?php echo Yii::t('main', 'Py'); ?></th>
+			<th><?php echo Yii::t('main', 'El'); ?></th>
+			<th><?php echo Yii::t('main', 'SL'); ?></th>
+			<th><?php echo Yii::t('main', 'SPL'); ?></th>
+			<th><?php echo Yii::t('main', 'LS'); ?></th>
+			<th><?php echo Yii::t('main', 'VL'); ?></th>
+			<!--<th><?php echo Yii::t('main', 'VKL'); ?></th>-->
+			<th><?php echo Yii::t('main', 'AP'); ?></th>
+			<th><?php echo Yii::t('main', 'PV'); ?></th>
 		  </tr>
 		 </thead>
 		  <tr>
-		   <td></td>
-		   <td><span class="suunnFoot"><?php echo $this->sprint($yhtSuunnittelutWeek); ?><br><?php echo $this->num($yhtSuunnittelutWeek); ?></span></td>
-		   <td><?php echo $this->sprint($yhteensaLuetut); ?><br><?php echo $this->num($yhteensaLuetut); ?></td>
-		   <td><span class="totFoot"><?php echo $this->sprint($yhteensaToteutuneet); ?><br><?php echo $this->num($yhteensaToteutuneet); ?></span></td>
-		   <td><span class="tyotunnitFoot"><?php echo $this->sprint($yhtTyotunnit); ?><br><?php echo $this->num($yhtTyotunnit); ?></span></td>
-		   <td><span class="matkatFoot"><?php echo $this->sprint($yhtMatka); ?><br><?php echo $this->num($yhtMatka); ?></span></td>
-		   <td><span class="lounaatFoot"><?php echo $this->sprint($yhtLounaat); ?><br><?php echo $this->num($yhtLounaat); ?></span></td>
-		   <td><span class="iltaFoot"><?php echo $this->sprint($yhtIlta); ?><br><?php echo $this->num($yhtIlta); ?></span></td>
-		   <td><span class="yoFoot"><?php echo $this->sprint($yhtYo); ?><br><?php echo $this->num($yhtYo); ?></span></td>
-		   <td><span class="suFoot"><?php echo $this->sprint($yhtSu); ?><br><?php echo $this->num($yhtSu); ?></span></td>
-		   <td><?php echo $this->sprint($yhtPy); ?></td>
-		   <td><?php echo $this->sprint($yhtEl); ?></td>
-		   <td><span class="SLFoot"><?php echo $yhtSL; ?></span></td>
-		   <td><span class="SPLFoot"><?php echo $yhtSPL; ?></span></td>
-		   <td><span class="LSFoot"><?php echo $yhtLS; ?></span></td>
-		   <td><span class="VLFoot"><?php echo $yhtVL; ?></span></td>
-		   <td><span class="APFoot"><?php echo $yhtAP; ?></span></td>
-		   <!--<td><span class="VKLFoot"><?php echo $this->sprint($yhtVKL); ?></span></td>-->
+			<td></td>
+			<td><span class="suunnFoot"><?php echo $this->sprint($yhtSuunnittelutWeek); ?><br><?php echo $this->num($yhtSuunnittelutWeek); ?></span></td>
+			<td><?php echo $this->sprint($yhteensaLuetut); ?><br><?php echo $this->num($yhteensaLuetut); ?></td>
+			<td><span class="totFoot"><?php echo $this->sprint($yhteensaToteutuneet); ?><br><?php echo $this->num($yhteensaToteutuneet); ?></span></td>
+			<td><span class="tyotunnitFoot"><?php echo $this->sprint($yhtTyotunnit); ?><br><?php echo $this->num($yhtTyotunnit); ?></span></td>
+			<td><span class="matkatFoot"><?php echo $this->sprint($yhtMatka); ?><br><?php echo $this->num($yhtMatka); ?></span></td>
+			<td><span class="lounaatFoot"><?php echo $this->sprint($yhtLounaat); ?><br><?php echo $this->num($yhtLounaat); ?></span></td>
+			<td><span class="iltaFoot"><?php echo $this->sprint($yhtIlta); ?><br><?php echo $this->num($yhtIlta); ?></span></td>
+			<td><span class="yoFoot"><?php echo $this->sprint($yhtYo); ?><br><?php echo $this->num($yhtYo); ?></span></td>
+			<td><span class="suFoot"><?php echo $this->sprint($yhtSu); ?><br><?php echo $this->num($yhtSu); ?></span></td>
+			<td><?php echo $this->sprint($yhtPy); ?></td>
+			<td><?php echo $this->sprint($yhtEl); ?></td>
+			<td><span class="SLFoot"><?php echo $yhtSL; ?></span></td>
+			<td><span class="SPLFoot"><?php echo $yhtSPL; ?></span></td>
+			<td><span class="LSFoot"><?php echo $yhtLS; ?></span></td>
+			<td><span class="VLFoot"><?php echo $yhtVL; ?></span></td>
+			<td><span class="APFoot"><?php echo $yhtAP; ?></span></td>
+			<td><span class="PVFoot"><?php echo $yhtPV; ?></span></td>
+			<!--<td><span class="VKLFoot"><?php echo $this->sprint($yhtVKL); ?></span></td>-->
 		  </tr>
 		</table>
 	</td></tr>
