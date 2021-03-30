@@ -1934,6 +1934,7 @@ class TyovuorootController extends Controller
 				OR etunimi LIKE "%' . $asiakas . '%"
 				OR sukunimi LIKE "%' . $asiakas . '%" 
 				OR puhelin LIKE "%' . $asiakas . '%"
+				OR CONCAT(etunimi , " " , sukunimi) LIKE "%'.$asiakas.'%"
 			    )
 			)';
 		}
