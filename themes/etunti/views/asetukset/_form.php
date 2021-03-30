@@ -1196,6 +1196,7 @@ $('.ryhmat').multiselect({
 			'el'=>Yii::t('main', 'Erikoislauantait'),
 			'vl'=>Yii::t('main', 'Vuosilomat'),
 			'ap'=>Yii::t('main', 'Arkipyhä'),
+			'pv'=>Yii::t('main', 'Palkaton vapaa'),
 		);
 
 		$selected   = array();

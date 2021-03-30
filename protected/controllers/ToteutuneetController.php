@@ -369,6 +369,7 @@ class ToteutuneetController extends Controller
 		if($nimike == 'el') $collectorratio =  4;
 		if($nimike == 'vl') { $collectorratio =  11; $tunti = 1; }
 		if($nimike == 'ap') { $collectorratio =  12; $tunti = 1; }
+		if($nimike == 'pv') { $collectorratio =  13; $tunti = 1; }
 
 
 // <-- XML
