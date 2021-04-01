@@ -1157,7 +1157,7 @@ public function actionImei($dom)
 					$sel .= '<h3 class="text-center">'. $tilanteet[$data->status].' '.(($arr['toistuva'])?'<i class="fa fa-repeat text-success"></i>':'').'</h3>';
 				}
 
-				$sel .= '<h3 class="text" style="color:'.$color.'"><a href="'.urlencode($osoite).'">'.$osoite.'</a></h3><p><b>'.$this->vkopaiva($arr['this_pvm']).', '.$arr['this_pvm'].'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'</p>';
+				$sel .= '<h3 class="text" style="color:'.$color.'"><a href="'.urlencode("https://maps.google.com/?q=".$osoite).'">'.$osoite.'</a></h3><p><b>'.$this->vkopaiva($arr['this_pvm']).', '.$arr['this_pvm'].'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'</p>';
 
 				if( isset($data->tyo_erittelyt) and is_array(json_decode($data->tyo_erittelyt, true))){
 					$sel .= '<p><label>Työ-erittelyt:</label><ul>';
