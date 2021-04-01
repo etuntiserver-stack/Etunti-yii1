@@ -83,13 +83,26 @@ if(isset($tilauksen_kuvaus['paa']) and isset($tilauksen_kuvaus['lisa']))
 	</td>
 	<td>
 	<?php
-
 		$criteria = new CDbCriteria();
 		$criteria->condition = " kohde_id='".$data->kohde_id."'  ";
 		$kuvk = KuviaKohteesta::model()->findAll($criteria);
 
-		foreach($kuvk as $d) {
-	 	 echo '<a href="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$d->tiedosto.'">'.$d->tiedosto.'</a><br>';
+		foreach($kuvk as $d)
+		{
+			//echo '<a href="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$d->tiedosto.'">'.$d->tiedosto.'</a><br>';
+			// <-- file_safe_opener
+			$filepath = dirname(Yii::app()->getBasePath()).'/img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$d->tiedosto;
+
+			if( file_exists($filepath) ){
+			$imageData = base64_encode(file_get_contents($filepath));
+			$src = 'data: '.mime_content_type($filepath).';base64,'.$imageData;
+
+			echo CHtml::link('<img src="'.$src.'" class="img-responsive thumbnail" style="height:200px">',
+				array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
+				array('target'=>'_blank','class'=>'text-danger'
+			));
+			}
+			//     file_safe_opener -->
 		}
 	?>
 	</td>

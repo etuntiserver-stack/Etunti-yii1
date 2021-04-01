@@ -1121,7 +1121,7 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
 		$from		= date('Y-m-d', strtotime("first day of this month"));
-		$to		= date('Y-m-d', strtotime($from. " last day of next month"));
+		$to			= date('Y-m-d', strtotime($from. " last day of next month + 1 month"));
 		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, [], ['data']);
 		$returnData = [];
 		foreach($dataAll as $arr){
