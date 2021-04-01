@@ -1158,7 +1158,7 @@ public function actionImei($dom)
 				}
 				$osoiteLink = "https://maps.google.com/?q=".urlencode($osoite); 
 				if(isset($kohde->gps_sijainti)) {
-					$osoiteLink = "geo:".$kohde->gps_sijainti;
+					$osoiteLink = "geo:".$kohde->gps_sijainti."?q=".$kohde->gps_sijainti;
 				}
 				$sel .= '<h3 class="text" style="color:'.$color.'"><a href="'.$osoiteLink.'">'.$osoite.'</a></h3><p><b>'.$this->vkopaiva($arr['this_pvm']).', '.$arr['this_pvm'].'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'</p>';
 
