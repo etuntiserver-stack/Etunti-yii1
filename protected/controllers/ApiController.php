@@ -1831,7 +1831,7 @@ public function actionImei($dom)
 		$kartta = '';
 		if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey) and isset($mobCheck->kohteet->gps_sijainti) and !empty($mobCheck->kohteet->gps_sijainti)){
 		
-			$kartta = '<p><a href="geo:'.$mobCheck->kohteet->gps_sijainti.'">'.Yii::t('app', 'Näytä kartalla').'</a></p>';
+			$kartta = '<p><a href="geo:'.$mobCheck->kohteet->gps_sijainti.'?q='.$mobCheck->kohteet->gps_sijainti.'">'.Yii::t('app', 'Näytä kartalla').'</a></p>';
 			/*
 			$full_addr = $mobCheck->kohteet->osoite.' '.$mobCheck->kohteet->pnumero.' '.$mobCheck->kohteet->kaupunki;
 			$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($full_addr).'&language=fi&sensor=true&key='.$asetuksetForAll->googlemaps_apikey;
