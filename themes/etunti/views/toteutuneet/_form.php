@@ -46,6 +46,7 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 
 
 		<input type="hidden" name="forPVM" value="<?php echo $forPVM; ?>">
+		<?php echo $form->hiddenField($model,'asiakas_num',array('value'=>$s->asiakas_num)); ?>
 		<?php echo $form->hiddenField($model,'kid',array('value'=>$s->id)); ?>
 		<?php echo $form->hiddenField($model,'tid',array('value'=>$s->tid)); ?>
 		<?php echo $form->hiddenField($model,'tekijan_nimi',array('value'=>$s->tekijan_nimi)); ?>
