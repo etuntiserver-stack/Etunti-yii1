@@ -40,7 +40,7 @@ class AsiakkaatController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus', 'kaikki_netvisoriin', 'freshdesk', 'freshdesk_ticket', 'puhnro_korjaus'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus', 'kaikki_netvisoriin', 'freshdesk', 'freshdesk_ticket', 'puhnro_korjaus', 'email_history'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -2518,5 +2518,26 @@ $xml = '
 
       fclose($fh);
     }
+  }
+
+  public function actionEmail_history($recipient = null) {
+	if($recipient) {
+		$criteria = new CDbCriteria();
+		$criteria->condition = "
+		log_category = 1 AND
+		email_to = '$recipient'";
+		$logs = Log::model()->findAll($criteria);
+
+		$json_logs = [];
+		
+		foreach($logs as $log) {
+			$json_logs[] = ["time" => $log->time,
+				"email_to" => $log->email_to,
+				"email_subject" => $log->email_subject,
+				"email_message" => $log->email_message
+			];
+		}
+		echo json_encode($json_logs);
+	}
   }
 }

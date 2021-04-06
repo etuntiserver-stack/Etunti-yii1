@@ -5351,15 +5351,34 @@ class TyovuorootController extends Controller
     $mail->setSubject($email_subject);
     $mail->setBody($email_body);
     $mail->addReplyTo($replyto_email);
-    $mail->send();
 
-    // Return to the caller with good news.
-    $customer = $asiakas->sahkoposti ?? "ID $customer_id";
-    echo json_encode([
-      'success' => true,
-      'message' => "Ilmoitus lähetetään asiakkaalle $customer osoitteeseen $client_email. " .
-        "Odota hetki kun työvuoro tallennetaan ja avataan uudelleen..",
-    ]);
+	$customer = $asiakas->sahkoposti ?? "ID $customer_id";
+    if($mail->send()) {
+
+		// log success
+		$log=new Log;
+		$log->log_category 	= 1; // 1-email
+		$log->email_to 		= $client_email;
+		$log->email_subject	= $email_subject;
+		$log->email_message	= $email_body;
+		$log->save();
+
+		// Return to the caller with good news.
+		echo json_encode([
+		  'success' => true,
+		  'message' => "Ilmoitus lähetetään asiakkaalle $customer osoitteeseen $client_email. " .
+			"Odota hetki kun työvuoro tallennetaan ja avataan uudelleen..",
+		]);
+	} else {
+		// return to the caller with bad news
+		echo json_encode([
+			"success" => false,
+			"message" => "Virhe ilmoitusta lähettäessä asiakkaalle $customer osoitteeseen $client_email.",
+		]);
+		return false;
+	}
+
+    
   }
 
   /**
