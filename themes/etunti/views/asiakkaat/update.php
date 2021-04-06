@@ -130,6 +130,14 @@ $asetukset = Asetukset::model()->findbypk(1);
 	); 
 	?>
 
+	<?php
+	echo $this->renderPartial("asiakas_email_historia",
+		[
+			"model" => $model,
+		]
+	);
+	?>
+
 	
 
 <br><br>
