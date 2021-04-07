@@ -376,6 +376,7 @@ $(document).delegate('.month_muutos', "click", function() {
 		success:function(data){
 			data = JSON.parse(data);
 			$('#kalenterit').html(data);
+			console.log('#kalenterit - päivitetty');
 		},
 		error:function(data){
 			console.log(data);
