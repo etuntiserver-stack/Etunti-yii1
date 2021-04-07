@@ -767,6 +767,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
      </TR>
      </tfoot>
 </TABLE>
+<p><div id="lisatietoja_laskutuksesta"></div></p>
 </div>
 
 <br>
@@ -1339,89 +1340,91 @@ $("#Lasku_as_nro").change(function() {
 	palvelu_muoto();
 
 	if(l_asiakkaat == "false"){
-        $.ajax({
-           url: 'etsikohde?asiakasnumero='+asiakas,
-	   async : false,
-           success: function(data){
-		var spdata = JSON.parse(data);
-               	//console.log(spdata);
+		$.ajax({
+			url: 'etsikohde?asiakasnumero='+asiakas,
+			async : false,
+			success: function(data){
+				var spdata = JSON.parse(data);
+				//console.log(spdata);
 
-		if(spdata['is_true'] == true)
-		{
+				if(spdata['is_true'] == true)
+				{
 
-			asiakas_id = spdata['asiakas_id'];
-			$("#getkohdeT").html(spdata['kohteet']);
-			getkohdeT = spdata['kohteet'];
-			$("#getkohdeKK").html(spdata['kohteet']);
-			$("#tuntiKalut").show();
+					asiakas_id = spdata['asiakas_id'];
+					$("#getkohdeT").html(spdata['kohteet']);
+					getkohdeT = spdata['kohteet'];
+					$("#getkohdeKK").html(spdata['kohteet']);
+					$("#tuntiKalut").show();
 
-			multiselectLaatikko();
+					multiselectLaatikko();
 
-		} else {
-			$("#tuntiKalut").hide();
-			$("#kkKalut").hide();
-		}
+				} else {
+					$("#tuntiKalut").hide();
+					$("#kkKalut").hide();
+				}
 
-           },
-           error: function(XMLHttpRequest, textStatus, errorThrown){
-               	console.log(XMLHttpRequest);
-	   }
-        });
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+			   	console.log(XMLHttpRequest);
+			}
+		});
 	} // l_asiakkaat
 
-        $.ajax({
-           url: 'etsiasiakas?id='+asiakas_id,
-           success: function(data){
-               	//console.log(data);
-		var sp = JSON.parse(data).split("//");
-		$(".tyyppi").show('slow');
+	$.ajax({
+		url: 'etsiasiakas?id='+asiakas_id,
+		success: function(data){
+			//console.log(data);
+			var sp = JSON.parse(data).split("//");
+			$(".tyyppi").show('slow');
 
 
-		laskutus(sp[0]);
-		if(sp[0]){
-		  $("#Lasku_laskutus").val(sp[0]);
+			laskutus(sp[0]);
+			if(sp[0]){
+				$("#Lasku_laskutus").val(sp[0]);
+			}
+			if(sp[1]){
+				$("#Lasku_maksuehto").val(sp[1]);
+			}
+
+
+			if(sp[2])
+			{
+				var spR = sp[2].split("**");
+				$("#Lasku_tyyppi").val(spR[0]);
+
+				if(spR[0] =='yritys')
+				{
+					$("#Lasku_yritys").val(spR[1])
+					$("#Lasku_y_tunnus").val(spR[2])
+				}
+
+				if(spR[0] =='henkilo')
+				{
+					$("#Lasku_nimi").val(spR[1])
+				}
+			}
+
+
+			$("#Lasku_osoite").val(sp[3])
+			$("#Lasku_postinumero").val(sp[4])
+			$("#Lasku_toimipaikka").val(sp[5])
+			$("#Lasku_yhteyshenkilo").val(sp[6])
+			$("#Lasku_puhelin").val(sp[7])
+			$("#Lasku_erapaiva").val(sp[9])
+			$("#Lasku_v_tunnus").val(sp[10])
+			$("#Lasku_verkkolaskuosoite").val(sp[11])
+			$("#Lasku_muistutuslasku_auto").val(sp[12]);
+			$("#Lasku_kirjeenluokka").val(sp[13]);
+			$("#Lasku_sahkoposti").val(sp[14])
+			$("#Lasku_viivastyskorko").val(sp[15])
+			$("#Lasku_netvisor_dimension_name").val(sp[16] + '//' + sp[17]);
+			$("#lisatietoja_laskutuksesta").html(sp[18]);
+
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+		   	console.log(XMLHttpRequest);
 		}
-		if(sp[1]){
-		  $("#Lasku_maksuehto").val(sp[1]);
-		}
-
-
-		if(sp[2]){
-		  var spR = sp[2].split("**");
-		  $("#Lasku_tyyppi").val(spR[0]);
-		
-		  if(spR[0] =='yritys')
-		  {
-		    $("#Lasku_yritys").val(spR[1])
-		    $("#Lasku_y_tunnus").val(spR[2])
-		  }
-
-		  if(spR[0] =='henkilo')
-		  {
-		    $("#Lasku_nimi").val(spR[1])
-		  }
-		}
-
-
-		    $("#Lasku_osoite").val(sp[3])
-		    $("#Lasku_postinumero").val(sp[4])
-		    $("#Lasku_toimipaikka").val(sp[5])
-		    $("#Lasku_yhteyshenkilo").val(sp[6])
-		    $("#Lasku_puhelin").val(sp[7])
-		    $("#Lasku_erapaiva").val(sp[9])
-		    $("#Lasku_v_tunnus").val(sp[10])
-		    $("#Lasku_verkkolaskuosoite").val(sp[11])
-		    $("#Lasku_muistutuslasku_auto").val(sp[12]);
-		    $("#Lasku_kirjeenluokka").val(sp[13]);
-		    $("#Lasku_sahkoposti").val(sp[14])
-		    $("#Lasku_viivastyskorko").val(sp[15])
-		    $("#Lasku_netvisor_dimension_name").val(sp[16] + '//' + sp[17])
-
-           },
-           error: function(XMLHttpRequest, textStatus, errorThrown){
-               	console.log(XMLHttpRequest);
-	   }
-        });
+	});
 
 });
 
