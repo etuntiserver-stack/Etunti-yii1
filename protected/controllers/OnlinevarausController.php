@@ -968,126 +968,129 @@ class OnlinevarausController extends Controller
 	}
 
 
-protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWeek, $getTyovuorot) {
+	protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWeek)
+	{
+	
+		$getTyovuorot = $this->getTyovuorotThisMonth("$year-$month-01");
 
-     // Create array containing abbreviations of days of week.
-     $daysOfWeek = array('Ma','Ti','Ke','To','Pe','La','Su');
+		// Create array containing abbreviations of days of week.
+		$daysOfWeek = array('Ma','Ti','Ke','To','Pe','La','Su');
 
-     // What is the first day of the month in question?
-     $firstDayOfMonth = mktime(0,0,0,$month,7,$year);
+		// What is the first day of the month in question?
+		$firstDayOfMonth = mktime(0,0,0,$month,7,$year);
 
-     // How many days does this month contain?
-     $numberDays = date('t',$firstDayOfMonth);
+		// How many days does this month contain?
+		$numberDays = date('t',$firstDayOfMonth);
 
-     // Retrieve some information about the first day of the
-     // month in question.
-     $dateComponents = getdate($firstDayOfMonth);
+		// Retrieve some information about the first day of the
+		// month in question.
+		$dateComponents = getdate($firstDayOfMonth);
 
-     // What is the name of the month in question?
-     $monthName = $dateComponents['month'];
+		// What is the name of the month in question?
+		$monthName = $dateComponents['month'];
 
-     // What is the index value (0-6) of the first day of the
-     // month in question.
-     $dayOfWeek = $dateComponents['wday'];
+		// What is the index value (0-6) of the first day of the
+		// month in question.
+		$dayOfWeek = $dateComponents['wday'];
 
-     // Create the table tag opener and day headers
+		// Create the table tag opener and day headers
 
-     $calendar = "";
-     $calendar .= "<table class='table table-bordered'>";
-     $calendar .= "<tr>";
+		$calendar = "";
+		//$calendar .= json_encode($getTyovuorot);
+		$calendar .= "<table class='table table-bordered'>";
+		$calendar .= "<tr>";
 
-     // Create the calendar headers
+		// Create the calendar headers
 
-     foreach($daysOfWeek as $day) {
-          $calendar .= "<td class='header'>$day</td>";
-     } 
+		foreach($daysOfWeek as $day) {
+		  $calendar .= "<td class='header'>$day</td>";
+		} 
 
-     // Create the rest of the calendar
+		// Create the rest of the calendar
 
-     // Initiate the day counter, starting with the 1st.
+		// Initiate the day counter, starting with the 1st.
 
-     $currentDay = 1;
+		$currentDay = 1;
 
-     $calendar .= "</tr><tr>";
+		$calendar .= "</tr><tr>";
 
 
-     // The variable $dayOfWeek is used to
-     // ensure that the calendar
-     // display consists of exactly 7 columns.
+		// The variable $dayOfWeek is used to
+		// ensure that the calendar
+		// display consists of exactly 7 columns.
 
-     if ($dayOfWeek > 0) { 
-          $calendar .= "<td colspan='$dayOfWeek'>&nbsp;</td>"; 
-     }
-     
-     $month = str_pad($month, 2, "0", STR_PAD_LEFT);
-  
-     while ($currentDay <= $numberDays) {
+		if ($dayOfWeek > 0) { 
+		  $calendar .= "<td colspan='$dayOfWeek'>&nbsp;</td>"; 
+		}
 
-          $currentDayRel = str_pad($currentDay, 2, "0", STR_PAD_LEFT);         
-          $date = "$year-$month-$currentDayRel";
+		$month = str_pad($month, 2, "0", STR_PAD_LEFT);
 
-          if ($dayOfWeek == 7) {
+		while ($currentDay <= $numberDays) {
 
-               $dayOfWeek = 0;
-               $calendar .= "</tr><tr>";
+		  $currentDayRel = str_pad($currentDay, 2, "0", STR_PAD_LEFT);         
+		  $date = "$year-$month-$currentDayRel";
 
-          }
-	  $fromTyovuorot = (isset($getTyovuorot['returnData'][$date]))? $getTyovuorot['returnData'][$date] : [];
-	  $on = $this->pmvCalNew($date, $fromTyovuorot, $getTyovuorot['tids'])[0];
-	  if($numOfWeek == 5 and ( date("N",strtotime($date)) == 7 or date("N",strtotime($date)) == 6 ))
-	  $on = 'kiinni';
+		  if ($dayOfWeek == 7) {
 
-	  $pyhat = $this->pyhatCheck($date);
-	  if($pyhat == 'pyhat')
-	  {
-	     $tooltip = "data-toggle='tooltip' title='+100%'";
-	  } elseif($pyhat == 'lauantai'){
-	     $tooltip = "data-toggle='tooltip' title='+50%'";
-	  } else {
-	     $tooltip = "";
- 	  }
+			   $dayOfWeek = 0;
+			   $calendar .= "</tr><tr>";
 
-	  $tila = '';
-	  if($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and date("Y-m-d", strtotime($_SESSION['onlinevaraus']['valittuPVM'])) != date("Y-m-d", strtotime($date)))
+		  }
+		$fromTyovuorot = (isset($getTyovuorot['returnData'][$date]))? $getTyovuorot['returnData'][$date] : [];
+		$on = $this->pmvCalNew($date, $fromTyovuorot, $getTyovuorot['tids'])[0];
+		if($numOfWeek == 5 and ( date("N",strtotime($date)) == 7 or date("N",strtotime($date)) == 6 ))
+		$on = 'kiinni';
+
+		$pyhat = $this->pyhatCheck($date);
+		if($pyhat == 'pyhat')
+		{
+		 $tooltip = "data-toggle='tooltip' title='+100%'";
+		} elseif($pyhat == 'lauantai'){
+		 $tooltip = "data-toggle='tooltip' title='+50%'";
+		} else {
+		 $tooltip = "";
+		}
+
+		$tila = '';
+		if($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and date("Y-m-d", strtotime($_SESSION['onlinevaraus']['valittuPVM'])) != date("Y-m-d", strtotime($date)))
 		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
-	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and !isset($_SESSION['onlinevaraus']['valittuPVM']))
+		elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and !isset($_SESSION['onlinevaraus']['valittuPVM']))
 		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
-	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and date("Y-m-d", strtotime($_SESSION['onlinevaraus']['valittuPVM'])) == date("Y-m-d", strtotime($date)))
+		elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and date("Y-m-d", strtotime($_SESSION['onlinevaraus']['valittuPVM'])) == date("Y-m-d", strtotime($date)))
 		 $tila .= '<td class="day link orangeColor cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
-	  elseif($date < date("Y-m-d"))
+		elseif($date < date("Y-m-d"))
 		 $tila .= '<td class="day kiinni" >'.$currentDay.'</td>';
-	  else
+		else
 		$tila .= '<td class="day kiinni">'.$currentDay.'</td>';
 
 
 
 
-          $calendar .= $tila;
+		  $calendar .= $tila;
 
-          // Increment counters
- 
-          $currentDay++;
-          $dayOfWeek++;
+		  // Increment counters
 
-     }
-     
-     
+		  $currentDay++;
+		  $dayOfWeek++;
 
-     // Complete the row of the last week in month, if necessary
+		}
 
-     if ($dayOfWeek != $numOfWeek) { 
-     
-          $remainingDays = $numOfWeek - $dayOfWeek;
-          $calendar .= "<td colspan='$remainingDays'>&nbsp;</td>"; 
 
-     }
-     
-     $calendar .= "</tr>";
-     $calendar .= "</table>";
+		// Complete the row of the last week in month, if necessary
 
-     return $calendar;
+		if ($dayOfWeek != $numOfWeek) { 
 
-}
+		  $remainingDays = $numOfWeek - $dayOfWeek;
+		  $calendar .= "<td colspan='$remainingDays'>&nbsp;</td>"; 
+
+		}
+
+		$calendar .= "</tr>";
+		$calendar .= "</table>";
+
+		return $calendar;
+
+	}
 
 
 	protected function sprint($val){
@@ -1095,7 +1098,7 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
-	protected function getTyovuorot2months(){
+	protected function getTyovuorotThisMonth($date){
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = "
@@ -1120,8 +1123,8 @@ protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWee
 			$tids[$item->id] = $item->id;
 
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
-		$from		= date('Y-m-d', strtotime("first day of this month"));
-		$to			= date('Y-m-d', strtotime($from. " last day of next month + 1 month"));
+		$from		= date('Y-m-d', strtotime($date));
+		$to			= date('Y-m-d', strtotime($from. " last day of this month"));
 		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, [], ['data']);
 		$returnData = [];
 		foreach($dataAll as $arr){

@@ -54,7 +54,7 @@
 	}
 
 	$date		= $_POST['pvm'];
-	$getTyovuorot 	= $this->getTyovuorot2months();
+	$getTyovuorot 	= $this->getTyovuorotThisMonth($date);
 	$fromTyovuorot 	= (isset($getTyovuorot['returnData'][$date]))? $getTyovuorot['returnData'][$date] : [];
 	$tekijat 	= $this->pmvCalNew($date, $fromTyovuorot, $getTyovuorot['tids'])[1];
 	$body .= '<div class="table-responsive">';

@@ -340,32 +340,49 @@ $(document).delegate(".ajaanClick","click",function(){
 
 
 
-  clearInterval(aikoja);
-  $('#valinnuPvm').val('');
-  function aikoja()
-  {
+clearInterval(aikoja);
+$('#valinnuPvm').val('');
+function aikoja()
+{
 
-   if( $('#valinnuPvm').val() )
-   {
-   var pvm = $('#valinnuPvm').val();
-   $.ajax({
-	url: 'ajaat_ajax',
-	data:{ "pvm" : pvm },
-	type:'POST',
-	success:function(data){
-		data = JSON.parse(data);
-		//console.log(data);
-		$('#aikoja').html(data);
-		return false;
-   	},
-	error:function(data){
-		console.log(data);
-    	}
-    });
-    }
-  }
+	if( $('#valinnuPvm').val() )
+	{
+		var pvm = $('#valinnuPvm').val();
+		$.ajax({
+		url: 'ajaat_ajax',
+		data:{ "pvm" : pvm },
+		type:'POST',
+		success:function(data){
+			data = JSON.parse(data);
+			//console.log(data);
+			$('#aikoja').html(data);
+			return false;
+		},
+		error:function(data){
+			console.log(data);
+			}
+		});
+	}
+}
 
+$(document).delegate('.month_muutos', "click", function() {
 
+	$(this).remove();
+	var kalenteri_year_month = $(this).attr('kalenteri_year_month');
+	$.ajax({
+		url: 'aika_ajax',
+		data:{ kalenteri_year_month : kalenteri_year_month },
+		type:'POST',
+		success:function(data){
+			data = JSON.parse(data);
+			$('#kalenterit').html(data);
+		},
+		error:function(data){
+			console.log(data);
+		}
+	});
+
+});
 
  /* Osoite */
  $("#uploadKuva").submit(function(e){
@@ -718,62 +735,6 @@ function aika_summary(show_hide){
 }
 /* aika_summary */
 
-$(document).delegate('.ensimmainen_kk', "click", function() {
-	$('#ensimmainen_kk').removeClass('hidden');
-	$('#toinen_kk').addClass('hidden');
-	$('#kolmas_kk').addClass('hidden');
-	var kalenteri_year_month = $(this).attr('kalenteri_year_month');
 
-	   $.ajax({
-		url: 'aika_ajax',
-		data:{ kalenteri_year_month : kalenteri_year_month },
-		type:'POST',
-		success:function(data){
-			data = JSON.parse(data);
-	   	},
-		error:function(data){
-			console.log(data);
-	    	}
-	   });
-
-});
-
-$(document).delegate('.toinen_kk', "click", function() {
-	$('#ensimmainen_kk').addClass('hidden');
-	$('#toinen_kk').removeClass('hidden');
-	$('#kolmas_kk').addClass('hidden');
-	var kalenteri_year_month = $(this).attr('kalenteri_year_month');
-
-	   $.ajax({
-		url: 'aika_ajax',
-		data:{ kalenteri_year_month : kalenteri_year_month },
-		type:'POST',
-		success:function(data){
-			data = JSON.parse(data);
-	   	},
-		error:function(data){
-			console.log(data);
-	    	}
-	   });
-});
-
-$(document).delegate('.kolmas_kk', "click", function() {
-	$('#ensimmainen_kk').addClass('hidden');
-	$('#toinen_kk').addClass('hidden');
-	$('#kolmas_kk').removeClass('hidden');
-	var kalenteri_year_month = $(this).attr('kalenteri_year_month');
-
-	   $.ajax({
-		url: 'aika_ajax',
-		data:{ kalenteri_year_month : kalenteri_year_month },
-		type:'POST',
-		success:function(data){
-			data = JSON.parse(data);
-	   	},
-		error:function(data){
-			console.log(data);
-	    	}
-	   });
-});
 
 });
