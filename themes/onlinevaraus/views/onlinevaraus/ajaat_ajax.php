@@ -40,7 +40,7 @@
 			$kuva = '<img src="'.$src.'" class="img-thumbnail">';
 			*/
 			
-			$kuva = '<img src="'.$url.'" class="img-thumbnail">';
+			$kuva = '<img src="../../img/tekijat/'.Yii::app()->user->domain.'/'.$vapaaTid.'.jpg" class="img-thumbnail">';
 			
 		} else {
 			$kuva = '<img src="../../lib/img/noname.jpg" class="img-thumbnail">';
