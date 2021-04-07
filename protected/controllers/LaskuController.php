@@ -868,7 +868,7 @@ exit;
 	{
 		$tuote = TuotteetPalvelut::model()->findbypk($_POST['tuoteID']);
 		$asiakas = Asiakkaat::model()->find(" asiakasnumero='".$_POST['asiakas_nro']."' ");
-		if(isset($tuote->id)) $tuoteID = $tuote->id; else $tuoteID = '';
+		if(isset($tuote->id))
 		{
 			$arr = array(
 				'id' => $tuote->id,
