@@ -319,7 +319,6 @@ class ToteutuneetController extends Controller
 				<date format="ansi" method="'.$method.'">'.date("Y-m-d", strtotime($pvm)).'</date>
 				<employeeidentifier type="personalidentificationnumber" defaultdimensionhandlingtype="usedefault">'.$henkkari.'</employeeidentifier>';
 
-
 				if(in_array('tyotunnit', $mitaLahetetaan))
 					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyotunnit'], 3, 0, 'Työtunnit');
 
@@ -331,13 +330,13 @@ class ToteutuneetController extends Controller
 					
 				if(in_array('tyosu', $mitaLahetetaan))
 					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyosu'], 3, 3, 'Työtunnit sunnuntai');
-
 			
 				// <-- sl, spl, ls, vl, ap, pv
 				foreach($postData as $nimike => $hours)
 				{
 					if($hours > 0 and in_array($nimike,$mitaLahetetaan))
 					{
+						if($nimike == 'matka') $hours = $hours/3600;
 						$xml .= '
 						<workdayhour>
 							<hours>'.$hours.'</hours>
@@ -381,14 +380,14 @@ class ToteutuneetController extends Controller
 				else
 					$model = $m;
 
-				$model->pvm 		= date("Y-m-d", strtotime($_POST['json'][0]['pvm']));
-				$model->tid 		= $_POST['json'][0]['tid'];
-				$model->admin 		= Yii::app()->user->adminID;
-				$model->xml 		= json_encode($xml);
-				$model->response 	= json_encode($result);
+				$model->pvm 				= date("Y-m-d", strtotime($_POST['json'][0]['pvm']));
+				$model->tid 				= $_POST['json'][0]['tid'];
+				$model->admin 				= Yii::app()->user->adminID;
+				$model->xml 				= json_encode($xml);
+				$model->netvisor_ok_list	= json_encode($result);
 
 				if(!$model->save())
-					var_dump($model->getErrors());
+					return ['ERROR' => var_dump($model->getErrors())];
 				else
 					return ['OK' => 'Tiedot on lähetetty netvisoriin'];
 				

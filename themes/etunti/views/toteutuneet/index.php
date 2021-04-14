@@ -139,13 +139,20 @@ td .latikkoAsetukset{
                     </div>
 
 
-
-		    <?php if($netvisor_kaytto == 1 and isset($_GET['tekija'])) : ?>
-                    <p><div class="row">
-                      <div class="col-md-12">
-			<span class="btn btn-primary btn-lg lahetaKaikki btn-block myBgColors"><?php echo Yii::t('main', 'Lähetä kaikki netvisoriin'); ?></span>
-		      </div>
-                    </div></p>
+		    <?php if($netvisor_kaytto == 1 and $netvisor_lahetyksen_muoto == 0 and isset($_GET['tekija'])) : ?>
+			<p><div class="row">
+				<div class="col-md-12">
+					<span class="btn btn-primary btn-lg lahetaKaikki btn-block myBgColors"><?php echo Yii::t('main', 'Lähetä kaikki netvisoriin'); ?></span>
+				</div>
+			</div></p>
+		    <?php endif; ?>
+		    
+		    <?php if($netvisor_kaytto == 1 and $netvisor_lahetyksen_muoto == 1 and isset($_GET['tekija'])) : ?>
+			<p><div class="row">
+				<div class="col-md-12">
+					<span class="btn btn-primary btn-lg lahetaKaikki_erikseen btn-block myBgColors"><?php echo Yii::t('main', 'Lähetä kaikki netvisoriin'); ?></span>
+				</div>
+			</div></p>
 		    <?php endif; ?>
 
 		    <?php if(isset($_GET['tekija'])) : ?>
@@ -595,7 +602,6 @@ exit;
 							pvm="'.$date.'"
 							tid="'.$tid.'"
 							matka		="'.(int)$matkatunnit.'"
-							lounaat		="'.(int)$lounaat.'"
 							sl			="'.(int)$sl.'"
 							spl			="'.(int)$spl.'"
 							ls			="'.(int)$ls.'"
@@ -827,15 +833,21 @@ $(document).ready(function(){
 
  });
 
-
  $(".lahetaKaikki").click(function(){
-    $(".esittele_tyotunnit").each(function() {
-      if( $(this).attr('nvtilanne') !== '1') {
-		$(this).click();
-      }
-    });
-  });
+	$(".esittele_tyotunnit").each(function() {
+		if( $(this).attr('nvtilanne') !== '1') {
+			$(this).click();
+		}
+	});
+ });
 
+ $(".lahetaKaikki_erikseen").click(function(){
+	$(".esittele_tyotunnit_erikseen").each(function() {
+		if( $(this).attr('nvtilanne') !== '1') {
+			$(this).click();
+		}
+	});
+ });
 
  LahetaPainike();
  function LahetaPainike(){
