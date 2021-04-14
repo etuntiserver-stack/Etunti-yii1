@@ -1160,7 +1160,7 @@ public function actionImei($dom)
 				if($platform and strlen($platform) > 0) {
 					// ios doesn't support geo URI scheme
 					// and for some reason maps: URI scheme doesn't seem to work either
-					if($platform === "Android") {
+					if($platform == "Android") {
 						if(isset($kohde->gps_sijainti)) {
 							$osoiteLink = "geo:".$kohde->gps_sijainti."?q=".$kohde->gps_sijainti;
 						}
@@ -1837,17 +1837,17 @@ public function actionImei($dom)
 		$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
 		$kartta = '';
 		if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey) and isset($mobCheck->kohteet->gps_sijainti) and !empty($mobCheck->kohteet->gps_sijainti)){
-			$kartta = '<p><a href="geo:'.$mobCheck->kohteet->gps_sijainti.'?q='.$mobCheck->kohteet->gps_sijainti.'">'.Yii::t('app', 'Näytä kartalla').'</a></p>';
+			$full_addr = $mobCheck->kohteet->osoite.' '.$mobCheck->kohteet->pnumero.' '.$mobCheck->kohteet->kaupunki;
+			$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($full_addr).'&language=fi&sensor=true&key='.$asetuksetForAll->googlemaps_apikey;
+			$json = file_get_contents($json_url);
+			$obj = json_decode($json);
+			if( isset($obj->results[0]->geometry->location->lat) ){
+				$kartta = '<p><a href="geo:'.$obj->results[0]->geometry->location->lat.",".$obj->results[0]->geometry->location->lng.'">'.Yii::t('app', 'Näytä kartalla').'</a></p>';
+			}
 			// iOS doesn't support geo URI scheme
 			if($platform and strlen($platform) > 0) {
-				if($platform === "iOS") {
-					$full_addr = $mobCheck->kohteet->osoite.' '.$mobCheck->kohteet->pnumero.' '.$mobCheck->kohteet->kaupunki;
-					$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($full_addr).'&language=fi&sensor=true&key='.$asetuksetForAll->googlemaps_apikey;
-					$json = file_get_contents($json_url);
-					$obj = json_decode($json);
-					if( isset($obj->results[0]->geometry->location->lat) ){
-						$kartta = '<p><a href="geo:'.$obj->results[0]->geometry->location->lat.",".$obj->results[0]->geometry->location->lng.'">'.Yii::t('app', 'Näytä kartalla').'</a></p>';
-					}
+				if($platform == "Android") {
+					$kartta = '<p><a href="geo:'.$mobCheck->kohteet->gps_sijainti.'?q='.$mobCheck->kohteet->gps_sijainti.'">'.Yii::t('app', 'Näytä kartalla').'</a></p>';
 				}
 			}
 			
