@@ -1847,7 +1847,7 @@ public function actionImei($dom)
 			}
 			*/
 			$osoite = urlencode($mobCheck->kohteet->osoite);
-			$kartta = "https://maps.google.com/?q=".$osoite; 
+			$kartta = '<p><a href="https://maps.google.com/?q='.$osoite.'">'.Yii::t('app', 'Näytä kartalla').'</a></p>'; 
 			// iOS doesn't support geo URI scheme
 			if($platform and strlen($platform) > 0) {
 				if($platform == "Android") {
