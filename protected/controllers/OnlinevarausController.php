@@ -1123,8 +1123,8 @@ class OnlinevarausController extends Controller
 			$tids[$item->id] = $item->id;
 
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
-		$from		= date('Y-m-d', strtotime($date));
-		$to			= date('Y-m-d', strtotime($from. " last day of this month"));
+		$from		= date('Y-m-d', strtotime($date . " first day of this month"));
+		$to			= date('Y-m-d', strtotime($from . " last day of this month"));
 		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, [], ['data']);
 		$returnData = [];
 		foreach($dataAll as $arr){
