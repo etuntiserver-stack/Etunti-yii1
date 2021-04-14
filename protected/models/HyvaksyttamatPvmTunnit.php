@@ -34,6 +34,8 @@ class HyvaksyttamatPvmTunnit extends DB2ActiveRecord
                      'admin' => 'int(11) DEFAULT 0',
                      'json_arvot' => 'text DEFAULT NULL',
                      'netvisor_ok_list' => 'text DEFAULT NULL',
+                     'xml' => 'text DEFAULT NULL',
+                     'response' => 'text DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -57,7 +59,7 @@ class HyvaksyttamatPvmTunnit extends DB2ActiveRecord
 			array('pvm, tid, admin, json_arvot', 'required'),
 			array('tid, admin', 'numerical', 'integerOnly'=>true),
 			array('pvm', 'length', 'max'=>50),
-			array('netvisor_ok_list', 'length', 'max'=>3000),
+			array('netvisor_ok_list, xml, response', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, pvm, tid, admin, json_arvot', 'safe', 'on'=>'search'),

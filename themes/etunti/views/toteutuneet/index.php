@@ -7,8 +7,9 @@ $this->breadcrumbs=array(
 	Yii::t('main', 'Toteuma'),
 );
 $asetukset=Asetukset::model()->findbypk(1);
-$netvisor_kaytto = $asetukset->netvisor_kaytto;
-$netvisor_mita_onkayttossa = $asetukset->netvisor_mita_onkayttossa;
+$netvisor_kaytto 			= $asetukset->netvisor_kaytto;
+$netvisor_mita_onkayttossa 	= $asetukset->netvisor_mita_onkayttossa;
+$netvisor_lahetyksen_muoto	= $asetukset->netvisor_lahetyksen_muoto;
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v4.css">
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
@@ -18,7 +19,7 @@ $netvisor_mita_onkayttossa = $asetukset->netvisor_mita_onkayttossa;
 	height: 100%;
 	margin-bottom: 2px;
 	border:1px #ccc solid;
-	padding:3px 7px;
+	padding:5px 7px;
 	background: white;
 	border-radius:5px;
 	width: 100%;
@@ -90,17 +91,17 @@ td .latikkoAsetukset{
                         <div class="section">
                           <label class="field select">
 
-			   <?php
-			    $lounas = '';
-			    $lounas = (isset($_GET['ilman']) and in_array('Lounastauko', $_GET['ilman']))  ? 'selected' : '';
-			    $matka = '';
-			    $matka = (isset($_GET['ilman']) and in_array('MATKA', $_GET['ilman']))   ? 'selected' : '';
+						   <?php
+							$lounas = '';
+							$lounas = (isset($_GET['ilman']) and in_array('Lounastauko', $_GET['ilman']))  ? 'selected' : '';
+							$matka = '';
+							$matka = (isset($_GET['ilman']) and in_array('MATKA', $_GET['ilman']))   ? 'selected' : '';
 
-			    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="'.Yii::t('main', 'Ei lasketa').'">';
-			    echo '<option value="Lounastauko" '.$lounas.'>'.Yii::t('main', 'Lounastauko').'</option>';
-			    echo '<option value="MATKA" '.$matka.'>'.Yii::t('main', 'Matka').'</option>';
-			    echo '</select>';
-			   ?>
+							echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="'.Yii::t('main', 'Ei lasketa').'">';
+							echo '<option value="Lounastauko" '.$lounas.'>'.Yii::t('main', 'Lounastauko').'</option>';
+							echo '<option value="MATKA" '.$matka.'>'.Yii::t('main', 'Matka').'</option>';
+							echo '</select>';
+						   ?>
 
 
                           </label>
@@ -110,7 +111,7 @@ td .latikkoAsetukset{
                         <div class="section">
                           <label class="field prepend-icon">
 
-	   			<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=date('d.m.Y', strtotime($from))?>">
+	   						<input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?=date('d.m.Y', strtotime($from))?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -123,7 +124,7 @@ td .latikkoAsetukset{
                         <div class="section">
                           <label class="field prepend-icon">
 
-   	   			<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=date('d.m.Y', strtotime($to))?>">
+   	   						<input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?=date('d.m.Y', strtotime($to))?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -292,14 +293,14 @@ $dateDiff = dateDiff($from, $to);
   }
 
 
-  $tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 0, true, null, null);
+  $tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 0, true, null, null, false);
 
   $hyv_arr = array(3,2,10);
   if($ilman_matkat)
 	unset($hyv_arr[1]);
   if($ilman_lounastaukot)
 	unset($hyv_arr[2]);
-  $hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, $hyv_arr, 3, false, 0, true, null, null);
+  $hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, $hyv_arr, 3, false, 0, true, null, null, false);
 /*
 echo '<pre>';
 print_r($hyv_tyotunnit_all);
@@ -307,25 +308,25 @@ echo '</pre>';
 exit;
 */
   if(!$ilman_lounastaukot)
-  $lounaat_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), 2, false, 0, true, null, null);
+  $lounaat_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), 2, false, 0, true, null, null, false);
 
   if(!$ilman_matkat)
-  $matkatunnit_all = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2), 2, false, 0, true, null, null);
+  $matkatunnit_all = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2), 2, false, 0, true, null, null, false);
 
   if($ilman_matkat)
-  $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 1, true, null, null);
+  $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 1, true, null, null, false);
   else
-  $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 1, true, null, null);
+  $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 1, true, null, null, false);
 
-  $yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 2, true, null, null);
-  $sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 3, true, null, null);
+  $yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 2, true, null, null, false);
+  $sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 3, true, null, null, false);
 
   if(!$ilman_matkat){
-  	$pyhapaivat_all		= $mobile[0]->TidfromtoMobiiliAll($from, $from, $tid, array(2,3), 2, false, 4, true, null, null);
-	$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 5, true, null, null);
+  	$pyhapaivat_all		= $mobile[0]->TidfromtoMobiiliAll($from, $from, $tid, array(2,3), 2, false, 4, true, null, null, false);
+	$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 5, true, null, null, false);
   } else {
-  	$pyhapaivat_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 4, true, null, null);
-	$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 5, true, null, null);
+  	$pyhapaivat_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 4, true, null, null, false);
+	$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 5, true, null, null, false);
   }
 
   // Pyhapaivat
@@ -342,7 +343,7 @@ exit;
   //     SPL, SL, LS, VL, VKL, AP -->
 
   $luetut_laatikot = json_decode($this->LuetutPvmTidBetween($from,$to,$tid), true);
-  $toteutuneet_laatikot = $this->TotPvmTidBetween($from,$to,$tid);
+  $toteutuneet_laatikot = $this->TotPvmTidBetween($asetukset, $from,$to,$tid);
 
   $vuosilomachecker	= $this->vuosilomaCheckerBetween($from, $to, $tid);
   $hyvaksymmattomat_t	= $this->hyvaksyttamatTunnitBetween($from, $to, $tid);
@@ -556,30 +557,55 @@ exit;
 			<td><span class="allaAP" total="'.(int)$ap.'">'.$ap.'</span></td>
 			<td><span class="allaPV" total="'.(int)$pv.'">'.$pv.'</span></td>
 		  </tr>';
-		 if($netvisor_kaytto == 1 and ($netvisor_mita_onkayttossa == 1 or $netvisor_mita_onkayttossa == 2)) { 
-		  echo ' 
-		  <tr class="lahetys_netvisoriin">
-		   <td colspan="13">			
-			<button class="btn btn-default btn-sm btn-block esittele_tyotunnit" nvtilanne="'.$nvtilanne.'"
-				pvm="'.$date.'"
-				tid="'.$tid.'"
-				tyotunnit	="'.(int)$tyotunnit.'"
-				matka		="'.(int)$matkatunnit.'"
-				lounaat		="'.(int)$lounaat.'"
-				tyoilta		="'.(int)$iltatunnit.'"
-				tyoyo		="'.(int)$yotunnit.'"
-				tyosu		="'.(int)$sutunnit.'"
-				tyopy		="'.(int)$pyhapaivat_tunnit.'"
-				tyoel		="'.(int)$erikoislauantai_tunnit.'"
-				sl		="'.(int)$sl.'"
-				spl		="'.(int)$spl.'"
-				ls		="'.(int)$ls.'"
-				vl		="'.(int)$vl.'"
-				ap		="'.(int)$ap.'"
-				pv		="'.(int)$pv.'"
-			></button>
-		   </td>
-		  </tr>';
+		 if($netvisor_kaytto == 1 and ($netvisor_mita_onkayttossa == 1 or $netvisor_mita_onkayttossa == 2))
+		 {
+		 	if($netvisor_lahetyksen_muoto == 0)
+		 	{
+				echo ' 
+				<tr class="lahetys_netvisoriin">
+					<td colspan="14">			
+						<button class="btn btn-default btn-sm btn-block esittele_tyotunnit" nvtilanne="'.$nvtilanne.'"
+							pvm="'.$date.'"
+							tid="'.$tid.'"
+							tyotunnit	="'.(int)$tyotunnit.'"
+							matka		="'.(int)$matkatunnit.'"
+							lounaat		="'.(int)$lounaat.'"
+							tyoilta		="'.(int)$iltatunnit.'"
+							tyoyo		="'.(int)$yotunnit.'"
+							tyosu		="'.(int)$sutunnit.'"
+							tyopy		="'.(int)$pyhapaivat_tunnit.'"
+							tyoel		="'.(int)$erikoislauantai_tunnit.'"
+							sl			="'.(int)$sl.'"
+							spl			="'.(int)$spl.'"
+							ls			="'.(int)$ls.'"
+							vl			="'.(int)$vl.'"
+							ap			="'.(int)$ap.'"
+							pv			="'.(int)$pv.'"
+						></button>
+					</td>
+				</tr>';
+			}
+			
+		 	if($netvisor_lahetyksen_muoto == 1)
+		 	{
+				echo ' 
+				<tr class="lahetys_netvisoriin_erikseen">
+					<td colspan="14">			
+						<button class="btn btn-primary btn-sm btn-block esittele_tyotunnit_erikseen" nvtilanne="'.$nvtilanne.'"
+							pvm="'.$date.'"
+							tid="'.$tid.'"
+							matka		="'.(int)$matkatunnit.'"
+							lounaat		="'.(int)$lounaat.'"
+							sl			="'.(int)$sl.'"
+							spl			="'.(int)$spl.'"
+							ls			="'.(int)$ls.'"
+							vl			="'.(int)$vl.'"
+							ap			="'.(int)$ap.'"
+							pv			="'.(int)$pv.'"
+						></button>
+					</td>
+				</tr>';
+			}
 		  }
 
 		  echo '
@@ -820,51 +846,91 @@ $(document).ready(function(){
 		$(this).text('Lähetä').removeClass('btn-success');
       }
     });
- }
 
- $(".esittele_tyotunnit").click(function(){
-  var thisButton = this;
-  var json = new Array();
-  var object = {};
-  $(this).each(function() {
-    $.each(this.attributes, function() {
-      if(this.specified) {
-	if((this.name !== 'class') && (this.name !== 'nvtilanne')){
-		object[this.name] = this.value;
-	}
+    $(".esittele_tyotunnit_erikseen").each(function() {
+      if( $(this).attr('nvtilanne') === '1') {
+		$(this).text('Lähetetty').removeClass('btn-default').addClass('btn-success');
+      } else {
+		$(this).text('Lähetä').removeClass('btn-success');
       }
     });
-  });
+ }
+ 
+ $(".esittele_tyotunnit").click(function(){
+	var thisButton = this;
+	var json = new Array();
+	var object = {};
+	$(this).each(function() {
+		$.each(this.attributes, function() {
+			if(this.specified) {
+				if((this.name !== 'class') && (this.name !== 'nvtilanne')){
+					object[this.name] = this.value;
+				}
+			}
+		});
+	});
 	json.push(object);
-        //console.log( json );
+	//console.log( json );
 	//return false;	
 
-
-        $.ajax({
-           url: 'hyvaksy_pvm_tid',
-           type: "POST",
-	   data: { json : json },
-           success: function(data){
-		data = JSON.parse(data);
-		console.log(data);
-		if(data['netvisorOK'] ){
-			$(thisButton).after( '<div class="alert bg-success">' + data['netvisorOK'] + '</div>' );
-			$(thisButton).attr('NVtilanne', '1');
-			LahetaPainike();
-		} else if(data['TallennettuMuttaEiLahetetty'] ) {
-			$(thisButton).after( '<div class="alert bg-warning">' + data['TallennettuMuttaEiLahetetty'] + '</div>' );
-		} else if(data['statusError'] ) {
-			$(thisButton).after( '<div class="alert bg-danger">' + data + '</div>' );
-		} else {
-			$(thisButton).after( '<div class="alert bg-danger">' + JSON.stringify(data) + '</div>' );
+	$.ajax({
+		url: 'hyvaksy_pvm_tid',
+		type: "POST",
+		data: { json : json },
+		success: function(data){
+			data = JSON.parse(data);
+			console.log(data);
+			if(data['netvisorOK'] ){
+				$(thisButton).after( '<div class="alert bg-success">' + data['netvisorOK'] + '</div>' );
+				$(thisButton).attr('NVtilanne', '1');
+				LahetaPainike();
+			} else if(data['TallennettuMuttaEiLahetetty'] ) {
+				$(thisButton).after( '<div class="alert bg-warning">' + data['TallennettuMuttaEiLahetetty'] + '</div>' );
+			} else if(data['statusError'] ) {
+				$(thisButton).after( '<div class="alert bg-danger">' + data + '</div>' );
+			} else {
+				$(thisButton).after( '<div class="alert bg-danger">' + JSON.stringify(data) + '</div>' );
+			}
 		}
-           }
-        });
-
-
-
+	});
  });
 
+ $(".esittele_tyotunnit_erikseen").click(function(){
+
+	var thisButton = this;
+	var json = new Array();
+	var object = {};
+	$(this).each(function() {
+		$.each(this.attributes, function() {
+			if(this.specified) {
+				if((this.name !== 'class') && (this.name !== 'nvtilanne')){
+					object[this.name] = this.value;
+				}
+			}
+		});
+	});
+	json.push(object);
+	//console.log( json );
+	//return false;
+	
+	$.ajax({
+		url: 'lahetanetvisoriin',
+		type: "POST",
+		data: { json : json },
+		success: function(data){
+			data = JSON.parse(data);
+			console.log(data);
+
+			if(data['OK'] ){
+				$(thisButton).after( '<div class="alert bg-success">' + data['OK'] + '</div>' );
+				$(thisButton).attr('NVtilanne', '1');
+			}
+			if(data['ERROR'])
+				$(thisButton).after( '<div class="alert bg-danger">' + data['ERROR'] + '</div>' );
+		}
+	});
+
+ });
 
  $(".avaaModalFor").click(function(){
 

@@ -1179,6 +1179,18 @@ $('.ryhmat').multiselect({
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_lahetyksen_muoto'); ?>
+		<?php 
+        	$l = array(
+			0 => Yii::t('main', 'PVM summ tunnit'),
+			1 => Yii::t('main', 'Joka kirjaus erikseen')
+		);
+		echo $form->dropDownList($model,'netvisor_lahetyksen_muoto', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'netvisor_lahetyksen_muoto'); ?>
+	</div>
+	
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'netvisor_mita_lahetetaan'); ?>
 		<?php 
         	$l = array(
@@ -1186,7 +1198,7 @@ $('.ryhmat').multiselect({
 			'tyotunnit'=>Yii::t('main', 'Työtunnit'),
 			'tyoilta'=>Yii::t('main', 'Työtunnit ilta'),
 			'matka'=>Yii::t('main', 'Matkat'),
-			'lounaat'=>Yii::t('main', 'Lounastauot'),
+			//'lounaat'=>Yii::t('main', 'Lounastauot'),
 			'tyoyo'=>Yii::t('main', 'Työtunnit yö'),
 			'tyosu'=>Yii::t('main', 'Työtunnit sunnuntai'),
 			'sl'=>Yii::t('main', 'Sairausajan palkka'),

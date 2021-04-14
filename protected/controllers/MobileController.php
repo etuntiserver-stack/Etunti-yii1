@@ -2025,7 +2025,7 @@ class MobileController extends Controller
 	 * @param mixed $tids Array of tids, or single tid in string or int format.
 	 * @param int $time Lookup time, 0 = day, 1 = evening, 2 = nighttime, 3 = sunday, 4 = pyhapaivat
 	 */
-	public function TidfromtoMobiiliAll($from, $to, $tids, $status=[], $hyvaksytty='', $palkanlaskentaan=false, $time=0, $by_aloitan=false, $kohde=null, $asiakas=null)
+	public function TidfromtoMobiiliAll($from, $to, $tids, $status=[], $hyvaksytty='', $palkanlaskentaan=false, $time=0, $by_aloitan=false, $kohde=null, $asiakas=null, $withKohdenID=false)
 	{
 		$set = [];
 		if (is_array($tids)) {
@@ -2088,28 +2088,32 @@ class MobileController extends Controller
 		$status = "status='".implode("' OR status='", $status)."'";
 		$criteria = new CDbCriteria();
 		if($by_aloitan)
-		   $criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))";
+			$criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))";
+		elseif($withKohdenID)
+			$criteria->group = "tid, kohdenID";
 		else
-		   $criteria->group = "tid";
+			$criteria->group = "tid";
 
 		// Helper function to avoid duplicate code (doesn't handle 'hyvaksytty' as it differs)
-		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $palkanlaskentaan, $time, $by_aloitan, $pyhapaivat_str, $erikoislauantai_str, $kohde, $asiakas) {
+		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $palkanlaskentaan, $time, $by_aloitan, $pyhapaivat_str, $erikoislauantai_str, $kohde, $asiakas, $withKohdenID) {
 			if($by_aloitan)
-			   $criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))";
+				$criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))";
+			elseif($withKohdenID)
+				$criteria->group = "tid, kohdenID";
 			else
-			   $criteria->group = "tid";
+				$criteria->group = "tid";
 			// Select statements
 			switch ($time) {
 				case 0:
 					$criteria->select = "
-						tid, aloitan, SUM(TIME_TO_SEC(TIMEDIFF(
+						tid, aloitan, kohdenID, SUM(TIME_TO_SEC(TIMEDIFF(
 							STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'),
 							STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i')
 						))) as l_tunnit";
 					break;
 				case 1:
 					// Note: 18000 at end of query is equal to TIME_TO_SEC(TIMEDIFF('23:00:00', '18:00:00'))
-					$criteria->select = "tid, aloitan, SUM(CASE
+					$criteria->select = "tid, aloitan, kohdenID, SUM(CASE
 						WHEN
 							TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) >= '18:00:00'
 						THEN CASE
@@ -2142,7 +2146,7 @@ class MobileController extends Controller
 						END) AS l_tunnit";
 					break;
 				case 2:
-					$criteria->select = "tid, aloitan, SUM(CASE
+					$criteria->select = "tid, aloitan, kohdenID, SUM(CASE
 						WHEN
 							DATE(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) = DATE(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))
 						THEN CASE
@@ -2202,7 +2206,7 @@ class MobileController extends Controller
 						END) AS l_tunnit";
 					break;
 				case 3:
-					$criteria->select = "tid, aloitan, SUM(CASE
+					$criteria->select = "tid, aloitan, kohdenID, SUM(CASE
 						WHEN
 							DAYOFWEEK(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) = 1
 						THEN CASE
@@ -2223,7 +2227,7 @@ class MobileController extends Controller
 					break;
 				case 4:
 				if( !empty($pyhapaivat_str) ){
-					$criteria->select = "tid, aloitan, SUM(CASE
+					$criteria->select = "tid, aloitan, kohdenID, SUM(CASE
 						WHEN
 							$pyhapaivat_str
 						THEN CASE
@@ -2241,7 +2245,7 @@ class MobileController extends Controller
 					break;
 				case 5:
 				if( !empty($erikoislauantai_str) ){
-					$criteria->select = "tid, aloitan, SUM(CASE
+					$criteria->select = "tid, aloitan, kohdenID, SUM(CASE
 						WHEN
 							$erikoislauantai_str
 						THEN CASE
@@ -2311,10 +2315,27 @@ class MobileController extends Controller
 				}
 			}
 		} else {
-			foreach ($lu as $l)
-				$set[$l->tid] += $l->l_tunnit;
-			foreach ($tot as $t)
-				$set[$t->tid] += $t->l_tunnit;
+			if($withKohdenID)
+			{
+				$set = [];
+				foreach ($lu as $l)
+					if(!isset($set[$l->tid][$l->kohdenID]))
+						$set[$l->tid][$l->kohdenID] = $l->l_tunnit;
+					else
+						$set[$l->tid][$l->kohdenID] += $l->l_tunnit;
+						
+				foreach ($tot as $l)
+					if(!isset($set[$l->tid][$l->kohdenID]))
+						$set[$l->tid][$l->kohdenID] = $l->l_tunnit;
+					else
+						$set[$l->tid][$l->kohdenID] += $l->l_tunnit;
+					
+			} else {
+				foreach ($lu as $l)
+					$set[$l->tid] += $l->l_tunnit;
+				foreach ($tot as $t)
+					$set[$t->tid] += $t->l_tunnit;
+			}
 		}
 		return $set;
 	}
