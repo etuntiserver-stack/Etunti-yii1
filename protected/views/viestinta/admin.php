@@ -338,12 +338,15 @@ if(isset($_GET['users_siirto']))
 		$asiakkaat 			= Asiakkaat::model()->findAll("sahkoposti!='' AND salasana!=''");
 		$yhteensa			+= count($asiakkaat);
 		
+		// Sarake lisäys
+		/*
 		$tb_name 	= 'asiakkaat';
 		$column 	= 'extra_contacts';
 		$structure 	= 'text DEFAULT NULL';
 		$table 		= Yii::app()->db1->schema->getTable($tb_name);
 		if (!isset($table->columns[$column]))
 			Yii::app()->db1->createCommand()->addColumn($tb_name, $column, $structure);
+		*/
 				
 		$del = OikeusRyhmat::model()->find("nimike='eDico'");
 		if($del !== null) $del->delete();
