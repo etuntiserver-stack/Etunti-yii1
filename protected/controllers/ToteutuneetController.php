@@ -29,7 +29,7 @@ class ToteutuneetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index', 'view','luetutpvmtid', 'totpvmtid','al', 'yhteensapvm', 'deletebyajax', 'kk','hyvaksy', 'poista_luetut_toteutuneet', 'hyvaksy_pvm_tid', 'korvaus_ylitunnit_ennakko', 'siirra_toteutuun'),
+				'actions'=>array('admin','delete','create','update','index', 'view','luetutpvmtid', 'totpvmtid','al', 'yhteensapvm', 'deletebyajax', 'kk','hyvaksy', 'poista_luetut_toteutuneet', 'hyvaksy_pvm_tid', 'korvaus_ylitunnit_ennakko', 'siirra_toteutuun', 'lahetanetvisoriin'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -69,14 +69,14 @@ class ToteutuneetController extends Controller
 		}
 	}
 
-        public function init()
-        {
+	public function init()
+	{
 
 		if(!isset(Yii::app()->user->adminID))
 		{
 			//die('login error');
-		  	echo '<script type="text/javascript">
-				window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";
+			echo '<script type="text/javascript">
+			window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";
 			</script>';
 			exit;
 		}
@@ -87,15 +87,15 @@ class ToteutuneetController extends Controller
 		$site[0]->checkOikeus($checkOikeus);
 		//  Oikeudet -->
 
-                if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
-                        Yii::app()->theme = 'etunti';
-                } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
-                        Yii::app()->theme = Yii::app()->user->user_theme;
-                } else {
-                        Yii::app()->theme = 'classic';
-                }
-                parent::init();
-        }
+		if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
+				Yii::app()->theme = 'etunti';
+		} elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
+				Yii::app()->theme = Yii::app()->user->user_theme;
+		} else {
+				Yii::app()->theme = 'classic';
+		}
+		parent::init();
+	}
 
 	protected function sprint($val){
 	    //if($val > 0)
@@ -106,8 +106,6 @@ class ToteutuneetController extends Controller
 	    if($val > 0)
 		return  number_format((float)$val/3600, 2, '.', '');
 	}
-
-
 
 	public function actionSiirra_toteutuun($this_id)
 	{
@@ -186,6 +184,222 @@ class ToteutuneetController extends Controller
 		echo json_encode($return);
 	}
 
+	public function actionLahetanetvisoriin()
+	{			
+		$response = $this->netvisorWorkdayPerID($_POST['json']);
+		echo json_encode($response);
+		exit;
+	}
+
+	protected function netvisorWorkdayPerID($json)
+	{
+		$return 	= [];
+		$asetukset 	= Asetukset::model()->findByPk(1);
+
+		$postData	= $json[0];
+		$pvm 		= date("Y-m-d", strtotime($postData['pvm']));
+		$tid 		= $postData['tid'];
+		unset($postData['pvm'], $postData['tid']);
+		
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			tid='".$tid."'
+			AND pvm='".date("Y-m-d", strtotime($pvm))."'
+		";
+		$m = HyvaksyttamatPvmTunnit::model()->find($criteria);
+		
+		// <-- Henkari
+		$henkkari 	= '';
+		$tyontekija = Tyontekijat::model()->findByPk($tid);
+		if(isset($tyontekija->id))
+			$henkkari = $tyontekija->tekijan_henkilotunnus;
+
+		$site 	= Yii::app()->createController('Site');
+		$mobile = Yii::app()->createController('Mobile');
+		$n 		= $site[0]->netvisorYhteys();
+
+		if(isset($n[0]))
+		{
+
+			$url		= $n[0].'/workday.nv';
+			$host 		= $n[1];
+			$sender 	= $n[2];
+			$customerId	= $n[3];
+			$partnerId	= $n[4];
+			$timestamp	= $n[5];
+			$language	= $n[6];
+			$organisationIdentifier	= $n[7];
+			$transactionIdentifier	= $n[8];
+			$userKey 	= $n[9];
+			$partnerKey	= $n[10];
+
+			$getMAC = md5(
+			$url.'&'.
+			$sender.'&'.
+			$customerId.'&'.
+			$timestamp.'&'.
+			$language.'&'.
+			$organisationIdentifier.'&'.
+			$transactionIdentifier.'&'.
+			$userKey.'&'.
+			$partnerKey
+			);
+
+			$auth_data = 
+			"Host: $host\r\n".  
+			"X-Netvisor-Authentication-Sender: $sender\r\n".  
+			"X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
+			"X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
+			"X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
+			"X-Netvisor-Interface-Language: $language\r\n".
+			"X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
+			"X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
+			"X-Netvisor-Authentication-MAC: $getMAC\r\n"
+			; 
+
+			if(isset($m->id))
+				$method = 'replace';
+			else
+				$method = 'increment';
+
+			if(empty($asetukset->netvisor_acceptancestatus))
+				$acceptancestatus = 'confirmed';
+			else
+				$acceptancestatus = $asetukset->netvisor_acceptancestatus;
+
+
+			$collectorratio 				= [];
+			$collectorratio['tyotunnit'] 	= 1;
+			$collectorratio['tyoilta'] 		= 2;
+			$collectorratio['matka'] 		= 14;
+			$collectorratio['tyoyo'] 		= 3;
+			$collectorratio['tyosu'] 		= 5;
+			$collectorratio['sl'] 			= 8;
+			$collectorratio['spl'] 			= 10;
+			$collectorratio['ls'] 			= 9;
+			$collectorratio['py'] 			= 7;
+			$collectorratio['el'] 			= 4;
+			$collectorratio['vl'] 			= 11;
+			$collectorratio['ap'] 			= 12;
+			$collectorratio['pv'] 			= 13;
+
+			if(isset($asetukset->netvisor_mita_lahetetaan) and empty($asetukset->netvisor_mita_lahetetaan))
+				return ['ERROR' => 'Valitse asetuksessa mitä lähetetään'];
+
+			$mitaLahetetaan = json_decode($asetukset->netvisor_mita_lahetetaan, true);
+
+			function yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio, $status, $num, $description)
+			{
+				$body = '';
+					$data   				= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, [$tid], [$status], 3, true, $num, false, null, null, true);
+					foreach($data as $t_id => $arr)
+					{
+						if($t_id == $tid)
+						{
+							foreach($arr as $kohdenID => $sum)
+							{
+								if($sum > 0)
+								$body .= '
+								<workdayhour>
+									<hours>'.($sum/3600).'</hours>
+									<collectorratio type="number">'.$collectorratio.'</collectorratio>
+									<acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
+									<description>'.$description.', Kohde id#: '.$kohdenID.'</description>
+								</workdayhour>'; 
+							}
+						}
+					}
+				return $body;
+			}
+
+			// <-- XML
+			$xml = '
+			<root>
+				<workday>
+				<date format="ansi" method="'.$method.'">'.date("Y-m-d", strtotime($pvm)).'</date>
+				<employeeidentifier type="personalidentificationnumber" defaultdimensionhandlingtype="usedefault">'.$henkkari.'</employeeidentifier>';
+
+				if(in_array('tyotunnit', $mitaLahetetaan))
+					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyotunnit'], 3, 0, 'Työtunnit');
+
+				if(in_array('tyoilta', $mitaLahetetaan))
+					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyoilta'], 3, 1, 'Työtunnit ilta');
+
+				if(in_array('tyoyo', $mitaLahetetaan))
+					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyoyo'], 3, 2, 'Työtunnit yö');
+					
+				if(in_array('tyosu', $mitaLahetetaan))
+					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyosu'], 3, 3, 'Työtunnit sunnuntai');
+			
+				// <-- sl, spl, ls, vl, ap, pv
+				foreach($postData as $nimike => $hours)
+				{
+					if($hours > 0 and in_array($nimike,$mitaLahetetaan))
+					{
+						if($nimike == 'matka') $hours = $hours/3600;
+						$xml .= '
+						<workdayhour>
+							<hours>'.$hours.'</hours>
+							<collectorratio type="number">'.$collectorratio[$nimike].'</collectorratio>
+							<acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
+							<description>'.$nimike.'</description>
+						</workdayhour>';
+					}
+				}
+				
+				$xml .= '
+				</workday>
+			</root>';
+			//  XML -->
+
+			//echo $xml;
+			//exit;
+			
+			$optsPOST = array(
+			'http'=>array(
+				'method'=>"POST",
+				'header'=>"Accept: text/plain\r\n" .
+				"Content-Type: application/x-www-form-urlencoded\r\n".
+				"Content-Length: ".strlen($xml)."\r\n".
+				$auth_data,
+				'content'=> $xml
+			)
+			);
+
+			$context 	= stream_context_create($optsPOST);
+			$response 	= file_get_contents($url, false, $context);
+			$result 	= new SimpleXMLElement($response);
+			$array 		= json_decode(json_encode($result), true);
+
+			if($array['ResponseStatus']['Status'] == 'OK')
+			{
+				if(!isset($m->id))
+					$model = new HyvaksyttamatPvmTunnit;
+				else
+					$model = $m;
+
+				$model->pvm 				= date("Y-m-d", strtotime($_POST['json'][0]['pvm']));
+				$model->tid 				= $_POST['json'][0]['tid'];
+				$model->admin 				= Yii::app()->user->adminID;
+				$model->xml 				= json_encode($xml);
+				$model->netvisor_ok_list	= json_encode($result);
+
+				if(!$model->save())
+					return ['ERROR' => var_dump($model->getErrors())];
+				else
+					return ['OK' => 'Tiedot on lähetetty netvisoriin'];
+				
+			} else {
+				if(isset($array['ResponseStatus']['Status'][1]))
+					return ['ERROR' => $array['ResponseStatus']['Status'][1]];
+			}
+
+		} // if isset $n[0]
+
+		return ['ERROR' => 'Lähetys ei onnistunut'];
+
+	}
+
 	public function actionHyvaksy_pvm_tid()
 	{
 		/*
@@ -194,8 +408,6 @@ class ToteutuneetController extends Controller
 		echo '</pre>';
 		exit;
 		*/
-
-		$returnPayroll = '';
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
@@ -224,7 +436,6 @@ class ToteutuneetController extends Controller
 
 
 		}
-
 
 		// <-- Netvisor lahetys
 		$asetukset=Asetukset::model()->findbypk(1);
@@ -262,12 +473,12 @@ class ToteutuneetController extends Controller
 			if($update == true)
 			{
 				HyvaksyttamatPvmTunnit::model()->updateByPk($model->id, array('netvisor_ok_list'=>json_encode($lastArr)));
-				echo json_encode(array('netvisorOK'=>date("d.m.Y", strtotime($model->pvm)). ' - Tiedot on lähetetty netvisoriin '.$returnPayroll));
+				echo json_encode(array('netvisorOK'=>date("d.m.Y", strtotime($model->pvm)). ' - Tiedot on lähetetty netvisoriin'));
 				exit;
 			}
 
 		} elseif($asetukset->netvisor_kaytto == 1 and !empty($model->netvisor_ok_list)) {
-				echo json_encode('Tiedot ovat jo lähetetty '.$returnPayroll);
+				echo json_encode('Tiedot ovat jo lähetetty');
 				exit;
 		}
 		//     Netvisor lahetys -->
@@ -290,138 +501,132 @@ class ToteutuneetController extends Controller
 		$site = Yii::app()->createController('Site');
 		$n = $site[0]->netvisorYhteys();
 
-	if(isset($n[0]))
-	{
+		if(isset($n[0]))
+		{
 
-		$url		= $n[0].'/workday.nv';
+			$url		= $n[0].'/workday.nv';
+			$host 		= $n[1];
+			$sender 	= $n[2];
+			$customerId	= $n[3];
+			$partnerId	= $n[4];
+			$timestamp	= $n[5];
+			$language	= $n[6];
+			$organisationIdentifier	= $n[7];
+			$transactionIdentifier	= $n[8];
+			$userKey 	= $n[9];
+			$partnerKey	= $n[10];
 
-		$host 		= $n[1];
+			$getMAC = md5(
+			$url.'&'.
+			$sender.'&'.
+			$customerId.'&'.
+			$timestamp.'&'.
+			$language.'&'.
+			$organisationIdentifier.'&'.
+			$transactionIdentifier.'&'.
+			$userKey.'&'.
+			$partnerKey
+			);
 
-		$sender 	= $n[2];
-		$customerId	= $n[3];
-		$partnerId	= $n[4];
-		$timestamp	= $n[5];
-		$language	= $n[6];
-		$organisationIdentifier	= $n[7];
-		$transactionIdentifier	= $n[8];
-		$userKey 	= $n[9];
-		$partnerKey	= $n[10];
+			$auth_data = 
+			"Host: $host\r\n".  
+			"X-Netvisor-Authentication-Sender: $sender\r\n".  
+			"X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
+			"X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
+			"X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
+			"X-Netvisor-Interface-Language: $language\r\n".
+			"X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
+			"X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
+			"X-Netvisor-Authentication-MAC: $getMAC\r\n"
+			; 
 
-
-
-	$getMAC = md5(
-		$url.'&'.
-		$sender.'&'.
-		$customerId.'&'.
-		$timestamp.'&'.
-		$language.'&'.
-		$organisationIdentifier.'&'.
-		$transactionIdentifier.'&'.
-		$userKey.'&'.
-		$partnerKey
-	 	);
-	
-	$auth_data = 
-	    "Host: $host\r\n".  
-	    "X-Netvisor-Authentication-Sender: $sender\r\n".  
-	    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
-	    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
-	    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
-	    "X-Netvisor-Interface-Language: $language\r\n".
-	    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
-	    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
-	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
-	; 
-	
-		$netvisor_ok_list = array();
-		if( is_array(json_decode($model->netvisor_ok_list, true)) )
-		$netvisor_ok_list = json_decode($model->netvisor_ok_list, true);
+			$netvisor_ok_list = array();
+			if( is_array(json_decode($model->netvisor_ok_list, true)) )
+			$netvisor_ok_list = json_decode($model->netvisor_ok_list, true);
 
 
-		if(isset($netvisor_ok_list[$nimike]))
-		$method = 'replace';
-		else
-		$method = 'increment';
-
-		
-		//echo $method."\n";
-
-		/*
-		if(!isset($netvisor_ok_list[$nimike])){
-			$return = array('statusOK'=>$nimike);
-		}
-		*/
-
-		if(empty($asetukset->netvisor_acceptancestatus))
-			$acceptancestatus = 'confirmed';
-		else
-			$acceptancestatus = $asetukset->netvisor_acceptancestatus;
-
-		$collectorratio = 1;
-		if($nimike == 'tyoilta') $collectorratio =  2;
-		if($nimike == 'matka') $collectorratio =  1;
-		if($nimike == 'tyoyo') $collectorratio =  3;
-		if($nimike == 'tyosu') $collectorratio =  5;
-		if($nimike == 'sl') { $collectorratio =  8; $tunti = 1; }
-		if($nimike == 'spl') { $collectorratio =  10; $tunti = 1; }
-		if($nimike == 'ls') $collectorratio =  9;
-		if($nimike == 'py') $collectorratio =  7;
-		if($nimike == 'el') $collectorratio =  4;
-		if($nimike == 'vl') { $collectorratio =  11; $tunti = 1; }
-		if($nimike == 'ap') { $collectorratio =  12; $tunti = 1; }
-		if($nimike == 'pv') { $collectorratio =  13; $tunti = 1; }
+			if(isset($netvisor_ok_list[$nimike]))
+			$method = 'replace';
+			else
+			$method = 'increment';
 
 
-// <-- XML
-$xml = '
-<root>
-  <workday>
-    <date format="ansi" method="'.$method.'">'.date("Y-m-d", strtotime($model->pvm)).'</date>
-    <employeeidentifier type="personalidentificationnumber" defaultdimensionhandlingtype="usedefault">'.$henkkari.'</employeeidentifier>
-    <workdayhour>
-      <hours>'.$tunti.'</hours>
-      <collectorratio type="number">'.$collectorratio.'</collectorratio>
-      <acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
-      <description>'.$nimike.'</description>
-    </workdayhour>
-  </workday>
-</root>';
-//  XML -->
-	
+			//echo $method."\n";
 
-	$optsPOST = array(
-	  'http'=>array(
-	    'method'=>"POST",
-	    'header'=>"Accept: text/plain\r\n" .
-	              "Content-Type: application/x-www-form-urlencoded\r\n".
-	              "Content-Length: ".strlen($xml)."\r\n".
-		      $auth_data,
-	    'content'=> $xml
-	  )
-	);
-	
-	$context = stream_context_create($optsPOST);
-	
+			/*
+			if(!isset($netvisor_ok_list[$nimike])){
+				$return = array('statusOK'=>$nimike);
+			}
+			*/
 
-	$response = file_get_contents($url, false, $context);
-	$result = new SimpleXMLElement($response);
-	
-	
-	  if($result->ResponseStatus->Status == 'OK')
-	  {
-		if(!isset($netvisor_ok_list[$nimike])){
-			$return = array('statusOK'=>$nimike);
-		}
+			if(empty($asetukset->netvisor_acceptancestatus))
+				$acceptancestatus = 'confirmed';
+			else
+				$acceptancestatus = $asetukset->netvisor_acceptancestatus;
 
-	  } else {
-			$return = array('statusError'=>$model->pvm.'<br> '.json_encode($result).', nimike: '.$nimike.', collectorratio: '.$collectorratio);
-	  }
+			$collectorratio = 1;
+			if($nimike == 'tyoilta') $collectorratio =  2;
+			if($nimike == 'matka') $collectorratio =  1;
+			if($nimike == 'tyoyo') $collectorratio =  3;
+			if($nimike == 'tyosu') $collectorratio =  5;
+			if($nimike == 'sl') { $collectorratio =  8; $tunti = 1; }
+			if($nimike == 'spl') { $collectorratio =  10; $tunti = 1; }
+			if($nimike == 'ls') $collectorratio =  9;
+			if($nimike == 'py') $collectorratio =  7;
+			if($nimike == 'el') $collectorratio =  4;
+			if($nimike == 'vl') { $collectorratio =  11; $tunti = 1; }
+			if($nimike == 'ap') { $collectorratio =  12; $tunti = 1; }
+			if($nimike == 'pv') { $collectorratio =  13; $tunti = 1; }
 
 
-	   // $return = array('statusError'=>$nimike.' '.$collectorratio.' '.$sekuntti); // tarkistamiseksi
+			// <-- XML
+			$xml = '
+			<root>
+			<workday>
+			<date format="ansi" method="'.$method.'">'.date("Y-m-d", strtotime($model->pvm)).'</date>
+			<employeeidentifier type="personalidentificationnumber" defaultdimensionhandlingtype="usedefault">'.$henkkari.'</employeeidentifier>
+			<workdayhour>
+			<hours>'.$tunti.'</hours>
+			<collectorratio type="number">'.$collectorratio.'</collectorratio>
+			<acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
+			<description>'.$nimike.'</description>
+			</workdayhour>
+			</workday>
+			</root>';
+			//  XML -->
 
 
-	} // if isset $n[0]
+			$optsPOST = array(
+			'http'=>array(
+			'method'=>"POST",
+			'header'=>"Accept: text/plain\r\n" .
+					  "Content-Type: application/x-www-form-urlencoded\r\n".
+					  "Content-Length: ".strlen($xml)."\r\n".
+				  $auth_data,
+			'content'=> $xml
+			)
+			);
+
+			$context = stream_context_create($optsPOST);
+
+
+			$response = file_get_contents($url, false, $context);
+			$result = new SimpleXMLElement($response);
+
+
+			if($result->ResponseStatus->Status == 'OK')
+			{
+			if(!isset($netvisor_ok_list[$nimike])){
+				$return = array('statusOK'=>$nimike);
+			}
+
+			} else {
+				$return = array('statusError'=>$model->pvm.'<br> '.json_encode($result).', nimike: '.$nimike.', collectorratio: '.$collectorratio);
+			}
+
+			// $return = array('statusError'=>$nimike.' '.$collectorratio.' '.$sekuntti); // tarkistamiseksi
+
+		} // if isset $n[0]
 
 		return $return;
 
@@ -649,7 +854,8 @@ $xml = '
 		$yotunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 2, true, null, null);
 		$sutunnit_all 		= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, $tid, array(3), /*hyvaksytyt*/ 2, false, 3, true, null, null);
 
-		$laatikot = $this->TotPvmTidBetween($pvm,$pvm,$tid,$ilman_lounastaukot,$ilman_matkat);
+		$asetukset	= Asetukset::model()->findbypk(1);
+		$laatikot 	= $this->TotPvmTidBetween($asetukset, $pvm,$pvm,$tid,$ilman_lounastaukot,$ilman_matkat);
 		echo json_encode(array(
 			'laatikot' 	=> $laatikot,
 			'tyotunnit' 	=> (isset($tyotunnit_all[$pvm][$tid]))? $tyotunnit_all[$pvm][$tid] : 0,
@@ -663,7 +869,7 @@ $xml = '
 		exit;
 	}
 
-	protected function TotPvmTidBetween($from,$to,$tid,$ilman_lounastaukot=false,$ilman_matkat=false)
+	protected function TotPvmTidBetween($asetukset, $from,$to,$tid,$ilman_lounastaukot=false,$ilman_matkat=false)
 	{
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
@@ -683,7 +889,7 @@ $xml = '
 		  }
 		}
 
-	       	$criteria = new CDbCriteria();
+		$criteria = new CDbCriteria();
 		$criteria->order = "TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'))";
 		$criteria->condition = " 
 			tid = '".$tid."' 
@@ -707,7 +913,7 @@ $xml = '
 	
 		}
 
-	       	$criteria = new CDbCriteria();
+		$criteria = new CDbCriteria();
 		$criteria->order = "TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'))";
 		$criteria->condition = " 
 			tid = '".$tid."' 
@@ -732,7 +938,7 @@ $xml = '
 		ksort($get);
 		$laatikot = [];
 		foreach($get as $k=>$v){
-		      $laatikot[date("d.m.Y",strtotime($k))][] = $this->renderPartial('al',array('attributes'=>$v), true);
+		      $laatikot[date("d.m.Y",strtotime($k))][] = $this->renderPartial('al', ['attributes' => $v, 'asetukset' => $asetukset], true);
 		}
 	        return $laatikot;
 
