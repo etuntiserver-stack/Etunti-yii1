@@ -1177,7 +1177,7 @@ $('.ryhmat').multiselect({
 		<?php echo $form->textField($model,'netvisor_customer_id',array('maxlength'=>255,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'netvisor_customer_id'); ?>
 	</div>
-
+	<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'netvisor_lahetyksen_muoto'); ?>
 		<?php 
@@ -1189,6 +1189,7 @@ $('.ryhmat').multiselect({
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'netvisor_lahetyksen_muoto'); ?>
 	</div>
+	*/ ?>
 	
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'netvisor_mita_lahetetaan'); ?>
