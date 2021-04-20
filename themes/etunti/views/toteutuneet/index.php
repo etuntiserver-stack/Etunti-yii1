@@ -139,15 +139,15 @@ td .latikkoAsetukset{
                     </div>
 
 
-		    <?php if($netvisor_kaytto == 1 and $netvisor_lahetyksen_muoto == 0 and isset($_GET['tekija'])) : ?>
+		    <?php /* if($netvisor_kaytto == 1 and $netvisor_lahetyksen_muoto == 0 and isset($_GET['tekija'])) : ?>
 			<p><div class="row">
 				<div class="col-md-12">
 					<span class="btn btn-primary btn-lg lahetaKaikki btn-block myBgColors"><?php echo Yii::t('main', 'Lähetä kaikki netvisoriin'); ?></span>
 				</div>
 			</div></p>
-		    <?php endif; ?>
+		    <?php endif; */ ?>
 		    
-		    <?php if($netvisor_kaytto == 1 and $netvisor_lahetyksen_muoto == 1 and isset($_GET['tekija'])) : ?>
+		    <?php if($netvisor_kaytto == 1 and isset($_GET['tekija'])) : ?>
 			<p><div class="row">
 				<div class="col-md-12">
 					<span class="btn btn-primary btn-lg lahetaKaikki_erikseen btn-block myBgColors"><?php echo Yii::t('main', 'Lähetä kaikki netvisoriin'); ?></span>
@@ -566,6 +566,7 @@ exit;
 		  </tr>';
 		 if($netvisor_kaytto == 1 and ($netvisor_mita_onkayttossa == 1 or $netvisor_mita_onkayttossa == 2))
 		 {
+		 	/*
 		 	if($netvisor_lahetyksen_muoto == 0)
 		 	{
 				echo ' 
@@ -592,9 +593,9 @@ exit;
 					</td>
 				</tr>';
 			}
-			
-		 	if($netvisor_lahetyksen_muoto == 1)
-		 	{
+			*/
+		 	//if($netvisor_lahetyksen_muoto == 1)
+		 	//{
 				echo ' 
 				<tr class="lahetys_netvisoriin_erikseen">
 					<td colspan="14">			
@@ -611,7 +612,7 @@ exit;
 						></button>
 					</td>
 				</tr>';
-			}
+			//}
 		  }
 
 		  echo '

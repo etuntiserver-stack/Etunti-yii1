@@ -271,7 +271,7 @@ class ToteutuneetController extends Controller
 			$collectorratio 				= [];
 			$collectorratio['tyotunnit'] 	= 1;
 			$collectorratio['tyoilta'] 		= 2;
-			$collectorratio['matka'] 		= 1;
+			$collectorratio['matka'] 		= 14;
 			$collectorratio['tyoyo'] 		= 3;
 			$collectorratio['tyosu'] 		= 5;
 			$collectorratio['sl'] 			= 8;
@@ -357,12 +357,12 @@ class ToteutuneetController extends Controller
 			
 			$optsPOST = array(
 			'http'=>array(
-			'method'=>"POST",
-			'header'=>"Accept: text/plain\r\n" .
-					  "Content-Type: application/x-www-form-urlencoded\r\n".
-					  "Content-Length: ".strlen($xml)."\r\n".
-				  $auth_data,
-			'content'=> $xml
+				'method'=>"POST",
+				'header'=>"Accept: text/plain\r\n" .
+				"Content-Type: application/x-www-form-urlencoded\r\n".
+				"Content-Length: ".strlen($xml)."\r\n".
+				$auth_data,
+				'content'=> $xml
 			)
 			);
 
