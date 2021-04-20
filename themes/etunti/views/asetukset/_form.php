@@ -1195,7 +1195,7 @@ $('.ryhmat').multiselect({
 		<?php echo $form->labelEx($model,'netvisor_mita_lahetetaan'); ?>
 		<?php 
         	$l = array(
-			0=>Yii::t('main', 'Ei mitään'),
+			//0=>Yii::t('main', 'Ei mitään'),
 			'tyotunnit'=>Yii::t('main', 'Työtunnit'),
 			'tyoilta'=>Yii::t('main', 'Työtunnit ilta'),
 			'matka'=>Yii::t('main', 'Matkat'),

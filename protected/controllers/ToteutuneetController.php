@@ -366,9 +366,7 @@ class ToteutuneetController extends Controller
 			)
 			);
 
-			$context = stream_context_create($optsPOST);
-
-
+			$context 	= stream_context_create($optsPOST);
 			$response 	= file_get_contents($url, false, $context);
 			$result 	= new SimpleXMLElement($response);
 			$array 		= json_decode(json_encode($result), true);
