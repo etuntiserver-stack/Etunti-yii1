@@ -599,7 +599,7 @@ exit;
 				echo ' 
 				<tr class="lahetys_netvisoriin_erikseen">
 					<td colspan="14">			
-						<button class="btn btn-primary btn-sm btn-block esittele_tyotunnit_erikseen" nvtilanne="'.$nvtilanne.'"
+						<button class="btn btn-warning btn-sm btn-block esittele_tyotunnit_erikseen" nvtilanne="'.$nvtilanne.'"
 							pvm="'.$date.'"
 							tid="'.$tid.'"
 							matka		="'.(int)$matkatunnit.'"
