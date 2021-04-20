@@ -4,11 +4,8 @@
 
 
 	$asiakas='';
-	$a = Asiakkaat::model()->find( " asiakasnumero='".$data->as_nro."' ");
-	if(isset($a->id) and $a->tyyppi == 'yritys')
-	$asiakas = $a->yrityksen_nimi;
-	if(isset($a->id) and $a->tyyppi == 'henkilo')
-	$asiakas = $a->yhteyshenkilo;
+	if(isset($data->asiakkaat->id))
+		$asiakas = $data->asiakkaat->Fullname;
 
 ?>
 <tr>
