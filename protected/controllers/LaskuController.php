@@ -1530,6 +1530,9 @@ exit;
 								Toteutuneet::model()->updateByPk($t->id, ['laskutettu' => 1, 'laskurivi_id' => $lr->id]);
 								
 							LaskunRivit::model()->updateByPk($lr->id, ['mobile_id' => $m->id]);
+							
+							if($m->tv_id > 0)
+								Tyovuoroot::model()->updateByPk($m->tv_id, ['laskutettu' => 1]);
 						}
 					}
 					if(isset($_POST['tunnit_id'][$key]) and isset($_POST['tunnit_from'][$key]) and $_POST['tunnit_from'][$key] == 'sivexkuitti_repaired')
@@ -1542,6 +1545,8 @@ exit;
 							if(isset($m->id)){
 								Mobile::model()->updateByPk($m->id, ['laskutettu' => 1, 'laskurivi_id' => $lr->id]);
 								LaskunRivit::model()->updateByPk($lr->id, ['mobile_id' => $m->id]);
+								if($m->tv_id > 0)
+									Tyovuoroot::model()->updateByPk($m->tv_id, ['laskutettu' => 1]);
 							}
 						}
 					}
