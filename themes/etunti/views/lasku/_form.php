@@ -578,7 +578,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div>
 </div>
 
-<div class="row form kht" id="kalut">
+<div class="row form kht" id="kalut" style="z-index: 999999">
  <div class="col-sm-6" id="tuntiKalut">
   <div class="panel heading-border">
    <div class="panel-body">
@@ -625,7 +625,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
    </div>
   </div>
  </div>
- <div class="col-sm-6" id="kkKalut">
+ <div class="col-sm-6" id="kkKalut" style="z-index: 999999">
   <div class="panel heading-border">
    <div class="panel-body">
 
