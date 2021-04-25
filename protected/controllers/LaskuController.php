@@ -1260,7 +1260,7 @@ exit;
 		$asiakas = Asiakkaat::model()->find($criteria);
 
 		$kohteet = '';
-		$kohteet .= '<br><select class="selectpicker kohteet etsikohde_alasvetovaliko" multiple title="Valitse kohteet">';
+		$kohteet .= '<br><select class="selectpicker kohteet etsikohde_alasvetovaliko" multiple title="Valitse kohteet" style="z-index: 999999">';
 
 		// <-- Kohteet
        		$criteria = new CDbCriteria();
@@ -1294,7 +1294,7 @@ exit;
 		$asiakas = Asiakkaat::model()->find($criteria);
 
 		$kohteet = '';
-		$kohteet .= '<br><select class="selectpicker kohteet etsikohde_alasvetovaliko" multiple title="Valitse kohteet">';
+		$kohteet .= '<br><select class="selectpicker kohteet etsikohde_alasvetovaliko" multiple title="Valitse kohteet" style="z-index: 999999">';
 
 		// <-- Asiakas
 		if( $hinta_tyyppi == 2 )
