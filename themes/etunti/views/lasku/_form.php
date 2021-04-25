@@ -587,10 +587,10 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
       <div class="row section fill mb5">
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="from" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y',strtotime('first day of last month', time())); ?>">
+   		<input type="text" id="from" class="form-control form-group datepickerFI kalentteri" value="<?php echo date('d.m.Y',strtotime('first day of last month', time())); ?>">
 	</div><div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="to" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y',strtotime('last day of last month', time())); ?>">
+   		<input type="text" id="to" class="form-control form-group datepickerFI kalentteri" value="<?php echo date('d.m.Y',strtotime('last day of last month', time())); ?>">
 	</div>
       </div>
 
@@ -1453,6 +1453,15 @@ function palvelu_muoto(){
 	}
 }
 
+$(document).delegate(".kalentteri","click",function(){
+	if( getkohdeT !== '' ){	
+		$("#getkohdeT").html(getkohdeT);
+		$("#getkohdeKK").html(getkohdeT);
+		multiselectLaatikko();
+	}
+	$("#hinnoitelu").html('');
+});
+
 $(document).delegate(".for-muoto-1","change",function(){
 	etsiKohteetByYksikkoPalveluMuoto1($(this).val());
 });
@@ -1762,7 +1771,6 @@ $("#Lasku_toimitusosoite").change(function() {
     }
 });
 
-
 // hinnoitelu
 $(document).delegate(".etsikohde_alasvetovaliko","change",function(){
 
@@ -1776,27 +1784,26 @@ $(document).delegate(".etsikohde_alasvetovaliko","change",function(){
 
   if( $(this, 'option:selected').val() )
   {
-  $.each($(this, 'option:selected').val(), function( index, value ) {
+	$.each($(this, 'option:selected').val(), function( index, value ) {
 
 	var thisVal = value;
-        $.ajax({
-           url: 'kohteen_tieto?id='+ thisVal,
-	   type: 'POST',
-	   data: { jakso : jakso, kuukausi : kuukausi, from : from, to : to },
-           success: function(data){
-               	console.log(data);
-		var d = JSON.parse(data);
-		if(d['return']){
-		 $('#hinnoitelu').append(d['return']).show('370');
+	$.ajax({
+		url: 'kohteen_tieto?id='+ thisVal,
+		type: 'POST',
+		data: { jakso : jakso, kuukausi : kuukausi, from : from, to : to },
+		success: function(data){
+			console.log(data);
+			var d = JSON.parse(data);
+			if(d['return']){
+			 $('#hinnoitelu').append(d['return']).show('370');
+			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			console.log(XMLHttpRequest);
 		}
+	});
 
-           },
-           error: function(XMLHttpRequest, textStatus, errorThrown){
-               	console.log(XMLHttpRequest);
-	   }
-        });
-
-   });
+	});
    }
 });
 
