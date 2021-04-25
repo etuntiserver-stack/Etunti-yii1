@@ -2849,7 +2849,7 @@ $xml .= '
 			$response 	= file_get_contents($url, false, $context);
 			if(empty($response))
 			{
-				Yii::app()->user->setFlash('danger', "Netvisor on jumissa.");
+				Yii::app()->user->setFlash('danger', "Netvisor API yhteys ei toimii.");
 				$this->redirect(array('index'));
 			} else {
 				$return = new SimpleXMLElement($response);
