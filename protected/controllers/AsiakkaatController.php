@@ -822,78 +822,80 @@ Yritys '.$yr.'
 
 	protected function netvisorAsiakasNouto($netvisorkey)
 	{
-
-
 		$site = Yii::app()->createController('Site');
 		$n = $site[0]->netvisorYhteys();
 
 		if(isset($n[0]))
 		{
 
-		$url		= $n[0].'/getcustomer.nv?id='.$netvisorkey;
-		$host 		= $n[1];
+			$url		= $n[0].'/getcustomer.nv?id='.$netvisorkey;
+			$host 		= $n[1];
 
-		$sender 	= $n[2];
-		$customerId	= $n[3];
-		$partnerId	= $n[4];
-		$timestamp	= $n[5];
-		$language	= $n[6];
-		$organisationIdentifier	= $n[7];
-		$transactionIdentifier	= $n[8];
-		$userKey 	= $n[9];
-		$partnerKey	= $n[10];
+			$sender 	= $n[2];
+			$customerId	= $n[3];
+			$partnerId	= $n[4];
+			$timestamp	= $n[5];
+			$language	= $n[6];
+			$organisationIdentifier	= $n[7];
+			$transactionIdentifier	= $n[8];
+			$userKey 	= $n[9];
+			$partnerKey	= $n[10];
 
 
 
-	$getMAC = md5(
-		$url.'&'.
-		$sender.'&'.
-		$customerId.'&'.
-		$timestamp.'&'.
-		$language.'&'.
-		$organisationIdentifier.'&'.
-		$transactionIdentifier.'&'.
-		$userKey.'&'.
-		$partnerKey
-	 	);
-	
-	$auth_data = 
-	    "Host: $host\r\n".  
-	    "X-Netvisor-Authentication-Sender: $sender\r\n".  
-	    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
-	    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
-	    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
-	    "X-Netvisor-Interface-Language: $language\r\n".
-	    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
-	    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
-	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
-	; 
+			$getMAC = md5(
+			$url.'&'.
+			$sender.'&'.
+			$customerId.'&'.
+			$timestamp.'&'.
+			$language.'&'.
+			$organisationIdentifier.'&'.
+			$transactionIdentifier.'&'.
+			$userKey.'&'.
+			$partnerKey
+			);
 
-	$xml = '';
-	$optsPOST = array(
-	  'http'=>array(
-	    'method'=>"POST",
-	    'header'=>"Accept: text/plain\r\n" .
-	              "Content-Type: application/x-www-form-urlencoded\r\n".
-	              "Content-Length: ".strlen($xml)."\r\n".
-		      $auth_data
-	  )
-	);
-	
-	$context = stream_context_create($optsPOST);
-	
-	$response = file_get_contents($url, false, $context);
-	$result = new SimpleXMLElement($response);
-	
+			$auth_data = 
+			"Host: $host\r\n".  
+			"X-Netvisor-Authentication-Sender: $sender\r\n".  
+			"X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
+			"X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
+			"X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
+			"X-Netvisor-Interface-Language: $language\r\n".
+			"X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
+			"X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
+			"X-Netvisor-Authentication-MAC: $getMAC\r\n"
+			; 
 
-		//if($result->ResponseStatus->Status == 'OK')
-		//{
-			echo '<pre>';
-			print_r( $response );
-			echo '</pre>';
-			//exit;
-		//}
+			$xml = '';
+			$optsPOST = array(
+			'http'=>array(
+			'method'=>"POST",
+			'header'=>"Accept: text/plain\r\n" .
+			"Content-Type: application/x-www-form-urlencoded\r\n".
+			"Content-Length: ".strlen($xml)."\r\n".
+			$auth_data
+			)
+			);
 
+			$context = stream_context_create($optsPOST);
+
+			$response = file_get_contents($url, false, $context);
+			if(empty($response))
+			{
+				Yii::app()->user->setFlash('danger', "Netvisor on jumissa.");
+				$this->redirect(array('index'));
+			} else {
+				$result = new SimpleXMLElement($response);
+
+				//if($result->ResponseStatus->Status == 'OK')
+				//{
+				echo '<pre>';
+				print_r( $response );
+				echo '</pre>';
+				//exit;
+				//}
+			}
 		}
 
 	}
