@@ -1972,6 +1972,7 @@ class SiteController extends Controller
 
 	public function actionGetcityes()
 	{
+	/*
 		// <-- Tyoryhmat
 		$tyoryhmat_criteria = '';
 		if( isset(Yii::app()->user->TyoryhmatTyontekijatHelperArray) ){
@@ -2006,7 +2007,6 @@ class SiteController extends Controller
 				$toimipaikkaat[$l->kohteet->kaupunki][(int)date("m", strtotime($l->aloitan))] = array('kaupunki'=>$l->kohteet->kaupunki, 'count'=>$l->count);
 		}
 
-		/* ////////////////////////// */
 
        		$criteria = new CDbCriteria();
         	$criteria->select = " COUNT(*) as count, aloitan";
@@ -2031,6 +2031,10 @@ class SiteController extends Controller
 
 
 		echo json_encode(array('toimipaikkaat'=>$toimipaikkaat));
+		exit;
+		*/
+		
+		echo json_encode(array('toimipaikkaat'=>null));
 		exit;
 	}
 
