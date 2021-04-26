@@ -2020,7 +2020,7 @@ class Freshdesk extends CComponent
 
       foreach ($asiakkaat as $a) {
 
-        $name = $a->yhteyshenkilo;
+        $name = $a->Etusukunimi;
         if (empty($name)) {
           if (empty($a->sahkoposti)) {
             // $error(
