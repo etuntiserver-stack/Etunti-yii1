@@ -240,27 +240,28 @@ $months=array(
 	     */ ?>
 
               <!-- Bar Graph -->
+              <?php /*
               <div class="panel" id="p12">
                 <div class="panel-heading">
                   <span class="panel-title"><?php echo Yii::t('main', 'Toimipaikat'); ?></span>
-		  <?php 
-		    $month1 = $months[date("m")];
-		    $month2 = $months[date("m",strtotime("-1 month"))];
-		  ?>
+					  <?php 
+						$month1 = $months[date("m")];
+						$month2 = $months[date("m",strtotime("-1 month"))];
+					  ?>
                   <input type="hidden" id="month1" value="<?php echo $month1; ?>" m="<?php echo date('m'); ?>">
                   <input type="hidden" id="month2" value="<?php echo $month2; ?>" m="<?php echo date('m',strtotime('-1 month')); ?>">
                 </div>
                 <div class="panel-menu">
 
                   <div class="chart-legend" data-chart-id="#high-bars">
-		    <div id="toimipakat_bars"></div>
+		    		<div id="toimipakat_bars"></div>
                   </div>
                 </div>
                 <div class="panel-body pn">
                   <div id="high-bars" style="width: 100%; height: 140px; margin: 0 auto"></div>
                 </div>
               </div>
-
+			  */ ?>
 
 	<?php /*
               <!-- Country List -->
