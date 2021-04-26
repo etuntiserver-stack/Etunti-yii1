@@ -1986,7 +1986,6 @@ class SiteController extends Controller
 		$toimipaikkaat = array();
 
        		$criteria = new CDbCriteria();
-		$criteria->with=array('kohteet');
         	$criteria->select = " COUNT(*) as count, aloitan";
         	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))), kohteet.kaupunki ";
         	$criteria->condition = "
@@ -2003,13 +2002,13 @@ class SiteController extends Controller
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $l)
 		{
-			$toimipaikkaat[$l->kohteet->kaupunki][(int)date("m", strtotime($l->aloitan))] = array('kaupunki'=>$l->kohteet->kaupunki, 'count'=>$l->count);
+			if(isset($l->kohteet->id))
+				$toimipaikkaat[$l->kohteet->kaupunki][(int)date("m", strtotime($l->aloitan))] = array('kaupunki'=>$l->kohteet->kaupunki, 'count'=>$l->count);
 		}
 
 		/* ////////////////////////// */
 
        		$criteria = new CDbCriteria();
-		$criteria->with=array('kohteet');
         	$criteria->select = " COUNT(*) as count, aloitan";
         	$criteria->group = " EXTRACT(YEAR_MONTH FROM DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))), kohteet.kaupunki ";
         	$criteria->condition = "
@@ -2026,7 +2025,8 @@ class SiteController extends Controller
 		$tot = Toteutuneet::model()->findAll($criteria);
 		foreach($tot as $l)
 		{
-			$toimipaikkaat[$l->kohteet->kaupunki][(int)date("m", strtotime($l->aloitan))] = array('kaupunki'=>$l->kohteet->kaupunki, 'count'=>$l->count);
+			if(isset($l->kohteet->id))
+				$toimipaikkaat[$l->kohteet->kaupunki][(int)date("m", strtotime($l->aloitan))] = array('kaupunki'=>$l->kohteet->kaupunki, 'count'=>$l->count);
 		}
 
 
