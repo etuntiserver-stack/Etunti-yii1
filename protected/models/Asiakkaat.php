@@ -105,6 +105,7 @@ class Asiakkaat extends DB2ActiveRecord
 			'etunimi' => 'varchar(255) DEFAULT NULL',
 			'sukunimi' => 'varchar(255) DEFAULT NULL',
 			'extra_contacts' => 'text DEFAULT NULL',
+			'finnish_service_wish' => 'tinyint(3) DEFAULT 2',
 		);
 
 		foreach($table_structure as $key=>$value)
