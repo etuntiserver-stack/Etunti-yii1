@@ -224,6 +224,18 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->error($model,'sahkoposti'); ?>
 	</div>
 
+	<!-- Finnish service wish -->
+	<div class="section fill mb5">
+	<?php 
+	
+		echo $form->labelEx($model, 'finnish_service_wish');
+		$list = [2 => Yii::t("app", "Ei valittu"), 1 => Yii::t("app", "Haluaa"), 0 => Yii::t("app", "Ei väliä")];
+		echo $form->dropDownList($model, 'finnish_service_wish', $list,
+			array('class'=>'form-control'));
+	?>
+	</div>
+	<!-- /Finnish service wish -->
+
 	<!-- Extra contacts -->
 	<div class="row">
 			<div class="col-sm-12">

@@ -131,7 +131,7 @@ class Asiakkaat extends DB2ActiveRecord
 			array('asiakasnumero', 'length', 'max'=>9),
 			array('asiakasnumero','unique', 'message'=>'Tämä asiakasnumero on jo olemassa!'),
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
-			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot, hinnasto_id, alv, tyoryhma, sopimustyyppi, freshdesk_id', 'numerical', 'integerOnly'=>true),
+			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot, hinnasto_id, alv, tyoryhma, sopimustyyppi, freshdesk_id, finnish_service_wish', 'numerical', 'integerOnly'=>true),
 			array('etunimi, sukunimi, myyja, postinumero, k_postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, henkilotunnus, kaupunki, k_kaupunki, sahkoposti', 'length', 'max'=>100),
 			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma, sahkopostilaskuosoite, token', 'length', 'max'=>255),
 			array('maksuehto, viivastyskorko, hinta, hinta_sis_alv', 'length', 'max'=>20),
@@ -221,6 +221,7 @@ class Asiakkaat extends DB2ActiveRecord
 			'netvisor_dimension_name' => Yii::t('main', 'Kustannuspaikka'),
 			'lisatietoja_laskutuksesta' => Yii::t('main', 'Lisätietoja laskutuksesta'),
 			'extra_contacts' => Yii::t('main', 'Lisä yhteystiedot'),
+			'finnish_service_wish' => Yii::t('app', 'Palvelu suomeksi'),
 		);
 	}
 
