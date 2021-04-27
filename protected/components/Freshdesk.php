@@ -10,7 +10,7 @@ class Freshdesk extends CComponent
   /** @var string Base URL for Freshdesk services. */
   private const TEST_BASE_URL = 'https://santelo.freshdesk.com';
   /** @var string Default testing API key. */
-  private const TEST_API_KEY = 'DSoSK72c321RokLStzw4';
+  private const TEST_API_KEY = 'Ab4aA1ZpUWYG4f51Oze';
 
   /** @var int Amount of seconds until next request when request limit is reached. */
   private static $retryAfter = 0;
@@ -88,7 +88,7 @@ class Freshdesk extends CComponent
    * }
    */
   private function request(string $target, array $post_fields = [], array $tags = [], &$headers = null, $ignore_errors = false)
-  {
+  { 
     if ($this->disabled) {
       $this->logError('Request from invalid domain');
       return [];
@@ -1977,7 +1977,7 @@ class Freshdesk extends CComponent
 
       if ($asiakas) {
         $push['asiakas_id'] = $asiakas->id;
-        $push['asiakas'] = $asiakas->yhteyshenkilo ?: $asiakas->sahkoposti ?: $asiakas->id;
+        $push['asiakas'] = $asiakas->Etusukunimi ?: $asiakas->sahkoposti ?: $asiakas->id;
       }
 
       $error_array[] = $push;
@@ -2020,7 +2020,7 @@ class Freshdesk extends CComponent
 
       foreach ($asiakkaat as $a) {
 
-        $name = $a->yhteyshenkilo;
+        $name = $a->Etusukunimi;
         if (empty($name)) {
           if (empty($a->sahkoposti)) {
             // $error(
