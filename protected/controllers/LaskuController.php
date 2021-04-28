@@ -1153,13 +1153,14 @@ exit;
 		return $return; 
 	}
 
-	protected function getHintaForKohde($id, $tp_id, $yksikko)
+	protected function getHintaForKohde($id, $tp_id=null, $yksikko)
 	{
 		//$a = Asetukset::getAll();
 		$kohde = Kohteet::model()->findByPk($id);
 		$return 			= [];
 		$return['hinta'] 	= 0;
 		$return['alv'] 		= 24;
+		$return['nimike'] 	= '';
 
 		// <-- Hinnasto muoto
 		if( isset($kohde->id) and $tp_id > 0) // $a->tuotteet_palvelut_muoto == 0
@@ -1190,6 +1191,7 @@ exit;
 			{
 					$return['hinta'] 	= $tp->hinta_alv_0;
 					$return['alv'] 		= $tp->alv;
+					$return['nimike']	= $tp->nimike;
 					return $return;
 			}
 			
@@ -1197,7 +1199,7 @@ exit;
 		// Hinnasto muoto -->
 		
 		// <-- Asiakkaan muoto
-		if( isset($kohde->id) and empty($tp_id)) // $a->tuotteet_palvelut_muoto == 1
+		if( isset($kohde->id) and $tp_id == null) // $a->tuotteet_palvelut_muoto == 1
 		{
 			$hinta_tyyppi = 0;
 			if($yksikko == 'h') 	$hinta_tyyppi = '1';
@@ -1739,13 +1741,14 @@ exit;
 		if(!isset($_GET['ajax']))
 			$this->redirect(array('index'));
 	}
-
+	
 	public function actionL_asiakkaat($kk=null)
 	{
 
-		$dataProvider 	= [];
-		$lista 		= [];
-		$tuotteet_lista = '';
+		$dataProvider 		= [];
+		$lista 				= [];
+		$tuotteet_lista 	= '';
+		$ajanjakso			= '';
 		if($kk !== null)
 		{
 			$criteria = new CDbCriteria();
@@ -1753,111 +1756,176 @@ exit;
 	       		$criteria->condition = " 
 				hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0 AND yksikko='h'
 			";
-			$tuotteet_lista = CHtml::dropdownList('tp_palvelu','tp_palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
-			array('prompt' => 'Asiakas / Kohde hintaan mukaan', 'class'=>'form-control'));
 
 			$from 		= date("Y-m-d", strtotime($kk." first day of this month"));
 			$to 		= date("Y-m-d", strtotime($kk." last day of this month"));
+			$ajanjakso 	= date("d.m.Y", strtotime($from)).' - '.date("d.m.Y", strtotime($to));
 
-			if(isset($_GET['tilanne']) and $_GET['tilanne'] == 'laskutettavat_m'){
-		       		$criteria = new CDbCriteria();
-				// <-- Tyoryhmat
-				$site = Yii::app()->createController('Site');
-				$arr = $site[0]->TyoryhmatHelper();
-				$ids = implode(",", $arr);
-				if( count($arr) > 0 ){
-					$criteria->condition = " tyoryhma IN ($ids) ";
-				}
-				//    Tyoryhmat -->
-				$criteria->addCondition(" 
-					id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id IN(SELECT kohdenID FROM sivexkuitti WHERE 
-						DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
-						BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-						AND status='3'
-						AND deleted=0
-						AND laskutetaan=1
-						AND hyvaksytty!=''
-						AND laskutettu=0
-					))
-					OR id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id IN(SELECT kohdenID FROM sivexkuitti_repaired WHERE 
-						DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
-						BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-						AND status='3'
-						AND deleted=0
-						AND laskutetaan=1
-						AND hyvaksytty!=''
-						AND laskutettu=0
-					))
-				");
-				if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
-			        	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR etunimi LIKE '%".$_GET['yrityksen_nimi']."%' OR sukunimi LIKE '%".$_GET['yrityksen_nimi']."%'");
+	       	$criteria = new CDbCriteria();
+			// <-- Tyoryhmat
+			$site = Yii::app()->createController('Site');
+			$arr = $site[0]->TyoryhmatHelper();
+			$ids = implode(",", $arr);
+			if( count($arr) > 0 ){
+				$criteria->condition = " tyoryhma IN ($ids) ";
+			}
+			//    Tyoryhmat -->
+			$criteria->addCondition(" 
+				id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id IN(SELECT kohdenID FROM sivexkuitti WHERE 
+					DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
+					BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+					AND status='3'
+					AND deleted=0
+					AND laskutetaan=1
+					AND hyvaksytty!=''
+					AND laskutettu=0
+				))
+				OR id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id IN(SELECT kohdenID FROM sivexkuitti_repaired WHERE 
+					DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
+					BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+					AND status='3'
+					AND deleted=0
+					AND laskutetaan=1
+					AND hyvaksytty!=''
+					AND laskutettu=0
+				))
+				OR id IN(SELECT asiakas_id FROM sivex_kohdet WHERE 
+					(hinta_tyyppi=2 OR t.hinta_tyyppi=2)
+				)
+			");
+			if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
+		        	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR CONCAT(etunimi , ' ' , sukunimi) LIKE '%".$_GET['yrityksen_nimi']."%'");
 
-				if(isset($_GET['tyoryhma']) and is_array($_GET['tyoryhma'])){
-						$impl = 'tyoryhma='.implode(' OR tyoryhma=', $_GET['tyoryhma']);
-						$criteria->addCondition ($impl);
-				}
-		
-				$dataProvider=new CActiveDataProvider('Asiakkaat', array(
-					'criteria'=>$criteria,
-					//'pagination'=>true
-				));
-				$dataProvider->pagination->pageSize = 50;
+			if(isset($_GET['tyoryhma']) and is_array($_GET['tyoryhma'])){
+					$impl = 'tyoryhma='.implode(' OR tyoryhma=', $_GET['tyoryhma']);
+					$criteria->addCondition ($impl);
+			}
+	
+			$dataProvider=new CActiveDataProvider('Asiakkaat', array(
+				'criteria'=>$criteria,
+				//'pagination'=>true
+			));
+			$dataProvider->pagination->pageSize = 50;
 
-				$a_ids = [];
-				foreach($dataProvider->data as $data)
-					$a_ids[$data->id] = $data->id;
+			$a_ids = [];
+			foreach($dataProvider->data as $data)
+				$a_ids[$data->id] = $data->id;
 
-				if(count($a_ids) > 0){
-					$impl = implode(",", $a_ids);
-					$asiakas_condition = "id IN($impl)";
-					$getall = $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, false, $asiakas_condition);
-					foreach($a_ids as $aid)
-					{
-						$l = [];
-						foreach($getall as $item){
-							if(isset($item->kohteet->asiakkaat->id) and $item->kohteet->asiakkaat->id == $aid)
-							{
-								// <-- pikkuviesti
-								$pv = explode("\n", $item->viesti);
-								if(isset($pv[0]) and !empty($pv[0]) and strpos($pv[0], 'xxx') === false){
-									$pikkuviesti = $pv[0];
-								} elseif(isset($pv[1]) and !empty($pv[1]) and strpos($pv[1], 'xxx') === false){
-									$pikkuviesti = $pv[1];
-								} else {
-									$pikkuviesti = '';
-								}
-								
-								$l[strtotime($item->aloitan)][] = [
-										'tekijan_nimi' => $item->tekijan_nimi,
-										'tunnit_from' => (isset($item->kid) and $item->kid > 0)? 'sivexkuitti_repaired' : 'sivexkuitti',
-										'id' => $item->id,
-										'kohde' => $item->kohteet->id,
-										'osoite' => $item->kohteet->osoite,
-										'maara' => strtotime($item->loppui)-strtotime($item->aloitan),
-										'pikkuviesti' => $pikkuviesti
-								];
-							}
-						}
-
-						ksort($l);
-						if(count($l) > 0)
-							$lista[$aid] = $l;
-					}
-					/*
-					echo '<pre>';
-					print_r($lista);
-					echo '</pre>';
-					exit;
-					*/
+			// <-- KK logikka
+			$kohteet 		= Kohteet::model()->findAll("asiakas_id='".implode("' OR asiakas_id='", $a_ids)."'");
+			$kk_hinta 		= [];
+			foreach($kohteet as $item)
+			{
+				if($item->hinta_tyyppi == 2)
+				{
+					$kk_hinta[$item->asiakas_id][$item->id] = [
+							'tuote' 		=> $item->osoite,
+							'hinta' 		=> $item->hinta, 
+							'alv' 			=> $item->alv,
+							'free_text' 	=> $ajanjakso
+					];
+				} elseif($item->hinta_tyyppi != 2 and isset($item->asiakkaat->id) and $item->asiakkaat->hinta_tyyppi == 2)
+				{
+					$kk_hinta[$item->asiakas_id][$item->id] = [
+							'tuote' 		=> $item->osoite,
+							'hinta' 		=> $item->asiakkaat->hinta, 
+							'alv' 			=> $item->asiakkaat->alv,
+							'free_text' 	=> $ajanjakso
+					];
 				}
 			}
 
+			if(count($a_ids) > 0)
+			{
+				$impl 				= implode(",", $a_ids);
+				$asiakas_condition 	= "id IN($impl)";
+				$getall 			= $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, false, $asiakas_condition);
+				$kk_hinnat 			= [];
+				
+				foreach($a_ids as $aid)
+				{
+					$l = [];
+					foreach($getall as $item)
+					{
+						if(isset($item->kohteet->asiakkaat->id) and $item->kohteet->asiakkaat->id == $aid)
+						{
+							// <-- pikkuviesti
+							$pv = explode("\n", $item->viesti);
+							if(isset($pv[0]) and !empty($pv[0]) and strpos($pv[0], 'xxx') === false){
+								$pikkuviesti = $pv[0];
+							} elseif(isset($pv[1]) and !empty($pv[1]) and strpos($pv[1], 'xxx') === false){
+								$pikkuviesti = $pv[1];
+							} else {
+								$pikkuviesti = '';
+							}
+
+							// <-- Työvuoroista Tuote/Palvelu mukaan logikka
+							$tyovuoro_tuotteet = [];
+							if($item->tv_id > 0 and $item->kohdenID > 0)
+							{
+								if(isset($item->tyovuoroot->id))
+								{
+									if($item->tyovuoroot->tuoteID > 0)
+									{
+										$return = $this->getHintaForKohde($item->kohdenID, $item->tyovuoroot->tuoteID, 'h');
+										$tyovuoro_tuotteet['paa_tuote']['tuoteID'] 	= $item->tyovuoroot->tuoteID;
+										$tyovuoro_tuotteet['paa_tuote']['tv_pvm'] 	= $item->tyovuoroot->pvm;
+										$tyovuoro_tuotteet['paa_tuote']['nimike'] 	= $return['nimike'];
+										$tyovuoro_tuotteet['paa_tuote']['hinta'] 	= $return['hinta'];
+										$tyovuoro_tuotteet['paa_tuote']['alv'] 		= $return['alv'];
+									}
+									if($item->tyovuoroot->lisa_tuotteet != null)
+									{
+										$lisa_tuotteet = json_decode($item->tyovuoroot->lisa_tuotteet, true);
+										foreach($lisa_tuotteet['tuote'] as $key => $tuote_id)
+										{
+											$tuotteet = TuotteetPalvelut::model()->findByPk($tuote_id);
+											if(isset($tuotteet->id))
+											{
+												$tyovuoro_tuotteet['lisa_tuotteet'][] = [
+													'tv_pvm'	=> $item->tyovuoroot->pvm,
+													'tuoteID' 	=> $tuote_id,
+													'nimike' 	=> $tuotteet->nimike,
+													'hinta' 	=> $tuotteet->hinta_alv_0,
+													'alv' 		=> $tuotteet->alv,
+													'maara' 	=> $lisa_tuotteet['maara'][$key]
+												];
+											}
+										}
+									}
+								}
+							}
+				
+							$l[strtotime($item->aloitan)][] = [
+								'attributes' 		=> $item->attributes,
+								'tunnit_from' 		=> (isset($item->kid) and $item->kid > 0)? 'sivexkuitti_repaired' : 'sivexkuitti',
+								'maara' 			=> strtotime($item->loppui)-strtotime($item->aloitan),
+								'pikkuviesti' 		=> $pikkuviesti,
+								'tyovuoro_tuotteet' => $tyovuoro_tuotteet
+							];
+						}
+					}
+
+					ksort($l);
+					if(count($l) > 0)
+						$lista[$aid] = $l;
+
+				}
+			}
 		}
+		
+		/*
+		echo '<pre>';
+		print_r($kk_hinta);
+		echo '</pre>';
+		exit;
+		*/
+				
 		$this->render('la_asiakkaat', array(
-			'kk'=>$kk,
-			'tuotteet_lista' => $tuotteet_lista,
-			'lista' => $lista,
-			'dataProvider' => $dataProvider,
+			'kk' 			=> $kk,
+			'lista' 		=> $lista,
+			'kk_hinta' 		=> $kk_hinta,
+			'dataProvider' 	=> $dataProvider,
 		));
 	}
 

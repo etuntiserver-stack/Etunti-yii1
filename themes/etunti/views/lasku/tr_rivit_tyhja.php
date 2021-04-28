@@ -3,14 +3,13 @@
 		$num = $_POST['num'];
 	}
 
-	$tunnit_from 	= '';
-	$tunnit_id 		= '';
+	$tv_id 			= 0;
 	$tuoteID 		= '';
 	$tuote 			= '';
-	$hinta 			= '';
-	$maara 			= '';
+	$hinta 			= 0;
+	$maara 			= 0;
 	$yksikkot 		= $this->yksikkot(null);
-	$alv 			= $this->alv(null);
+	$alv 			= $this->alv(24);
 	$free_text 		= '';
 	$pikkuviesti 	= '';
 
@@ -27,23 +26,31 @@
 		}
 
 	}
-	if(isset($arr['maara'])){
-		$tp = TuotteetPalvelut::model()->findbypk($tuotePalvelu);
-		if(isset($tp->id)){
-			$tuoteID	= $tp->id;
-			$tuote 		= $tp->nimike;
-		}
 
-		$tunnit_from 	= $arr['tunnit_from'];
-		$tunnit_id 		= $arr['id'];
-		$maara 			= $arr['maara'];
-		$free_text 		= $arr['freetext'];
-		$pikkuviesti 	= $arr['pikkuviesti'];
+	if(isset($la_asiakkaat_kk))
+	{
+		$tuote			= $la_asiakkaat_kk['tuote'];
+		$maara			= 1;
+		$hinta 			= $la_asiakkaat_kk['hinta'];
+		$free_text 		= '';
+		$yksikkot 		= $this->yksikkot('kk');
+		$alv 			= $this->alv($la_asiakkaat_kk['alv']);
+		$free_text 		= $la_asiakkaat_kk['free_text'];
+	}
+	
+	if(isset($la_asiakkaat_mobiili))
+	{
+		if(isset($la_asiakkaat_mobiili['pikkuviesti']))
+			$pikkuviesti 	= $la_asiakkaat_mobiili['pikkuviesti'];
+		
+		$tuote			= $la_asiakkaat_mobiili['tuote'];
+		$tuoteID		= $la_asiakkaat_mobiili['tuoteID'];
+		$tv_id 			= $la_asiakkaat_mobiili['tv_id'];
+		$maara 			= $la_asiakkaat_mobiili['maara'];
+		$hinta 			= $la_asiakkaat_mobiili['hinta'];
 		$yksikkot 		= $this->yksikkot('h');
-		if(isset($hinnat[$arr['kohde']])){
-			$hinta = $hinnat[$arr['kohde']]['hinta'];
-			$alv = $alv = $this->alv($hinnat[$arr['kohde']]['alv']);
-		}
+		$alv 			= $this->alv($la_asiakkaat_mobiili['alv']);
+		$free_text 		= $la_asiakkaat_mobiili['free_text'];
 	}
 ?>
 <?php if(!empty($pikkuviesti)): ?>
@@ -57,19 +64,19 @@
 	<TD>
 
 	<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control" value="<?php echo $tuoteID; ?>">
-	<input type="hidden" size="1" name="tunnit_from[<?php echo $num; ?>]" id="tunnit_from_<?php echo $num; ?>" class="form-control" value="<?php echo $tunnit_from; ?>">
-	<input type="hidden" size="1" name="tunnit_id[<?php echo $num; ?>]" id="tunnit_id_<?php echo $num; ?>" class="form-control" value="<?php echo $tunnit_id; ?>">
+	<input type="hidden" size="1" name="tv_id[<?php echo $num; ?>]" id="tv_id_<?php echo $num; ?>" class="form-control" value="<?php echo $tv_id; ?>">
 	<input type="hidden" size="1" name="hinnasto_rivi_id[<?php echo $num; ?>]" id="hinnasto_rivi_id_<?php echo $num; ?>" class="form-control">
 	<div class="row">
 	  <div class="col-lg-4">
 		<?php
 		$criteria = new CDbCriteria();
-       		$criteria->order = " nimike ";
-       		$criteria->condition = " 
+		$criteria->order = " nimike ";
+		$criteria->condition = " 
 			hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0
 		";
 		echo CHtml::dropdownList('','palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
-		array('empty'=>'','class'=>'form-control valitseTuote','id'=>'lt_'.$num,'num'=>$num));
+			['empty'=>'','class'=>'form-control valitseTuote', 'id'=>'lt_'.$num,'num'=>$num, 'options' => [$tuoteID => ['selected'=>true]] ]
+		);
 		?>
 	  </div><div class="col-lg-8">
 	      <input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control form-group" value="<?=$tuote?>">

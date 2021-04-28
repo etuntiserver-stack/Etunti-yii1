@@ -722,33 +722,36 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
      </TR>
 
      <tbody>
-     <?php 
-	$num = 0;
-	if(isset($model->id)){
-		foreach($laskunRivit as $rivi){ 
-			$num++;
-			echo $this->renderPartial("//lasku/tr_rivi_update",array('num'=>$num,'rivi'=>$rivi));
+		<?php 
+		$num = 0;
+		if(isset($model->id)){
+			foreach($laskunRivit as $rivi){ 
+				$num++;
+				echo $this->renderPartial("//lasku/tr_rivi_update",array('num'=>$num,'rivi'=>$rivi));
+			}
 		}
-	}
-	if(isset($_POST['tr_rivit'])){
-		$kohde_ids = [];
-		foreach(json_decode($_POST['tr_rivit'], true) as $arr)
-			$kohde_ids[$arr['kohde']] = $arr['kohde']; 
-		$hinnat = [];
-		foreach($kohde_ids as $kohde)
-			$hinnat[$kohde] = $this->getHintaForKohde($kohde, $_POST['tp_palvelu'], 'h');
-
-		foreach(json_decode($_POST['tr_rivit'], true) as $arr){ 
-			$num++;
-			echo $this->renderPartial("//lasku/tr_rivit_tyhja",[
-				'num'=>$num, 
-				'arr'=>$arr, 
-				'hinnat' => $hinnat, 
-				'tuotePalvelu' => $_POST['tp_palvelu']
-			]);
+		if(isset($_POST['la_asiakkaat_kk']) and ($_POST['with_mobile'] == 1 or $_POST['with_mobile'] == 3))
+		{
+			foreach(json_decode($_POST['la_asiakkaat_kk'], true) as $arr){ 
+				$num++;
+				echo $this->renderPartial("//lasku/tr_rivit_tyhja",[
+					'num' 				=> $num,
+					'la_asiakkaat_kk' 	=> $arr
+				]);
+			}
 		}
-	}
-     ?>
+		if(isset($_POST['la_asiakkaat_mobiili']) and ($_POST['with_mobile'] == 1 or $_POST['with_mobile'] == 2))
+		{
+			foreach(json_decode($_POST['la_asiakkaat_mobiili'], true) as $arr)
+			{
+				$num++;
+				echo $this->renderPartial("//lasku/tr_rivit_tyhja",[
+					'num'					=> $num, 
+					'la_asiakkaat_mobiili' 	=> $arr
+				]);
+			}
+		}
+		?>
      </tbody>
 
      <tfoot>
