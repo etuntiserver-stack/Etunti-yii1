@@ -92,78 +92,13 @@ if(!isset($model->id)){ $model->alv = 24; }
 	<legend><?php echo Yii::t('main','Laskutus'); ?></legend>
 	</div>
 
-
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
-		<?php
-		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
-        	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
-		array('empty'=>Yii::t('main', 'Valitse'),'class'=>'form-control'));	
-        	?>
-		<?php echo $form->error($model,'hinta_tyyppi'); ?>
+		<?php echo $form->labelEx($model,'tuote'); ?>
+		<?php echo $form->dropDownList($model, 'tuote', CHtml::listData(TuotteetPalvelut::model()->findAll(), 'id', 'nimike'), 
+		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
+		<?php echo $form->error($model,'tuote'); ?>
 	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'alv'); ?>
-		<?php
-        	$l = array(0=>0,10=>10,14=>14,24=>24);
-
-        	echo $form->dropDownList($model, 'alv', $l,
-		array('empty'=>'Valitse','class'=>'form-control')
-		);
-        	?>
-		<?php echo $form->error($model,'alv'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta'); ?>
-		<?php echo $form->numberField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
-		<?php echo $form->error($model,'hinta'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'verot'); ?>
-		<?php echo $form->numberField($model,'verot',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
-		<?php echo $form->error($model,'verot'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_sis_alv'); ?>
-		<?php echo $form->numberField($model,'hinta_sis_alv',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
-		<?php echo $form->error($model,'hinta_sis_alv'); ?>
-	</div>
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-  laskurin();
-
-  $("#Kohteet_alv").change(function() {
-	laskurin();
-  });
-  $("#Kohteet_hinta").keyup(function() {
-	laskurin();
-  });
-  $("#Kohteet_hinta_sis_alv").keyup(function() {
-	var hinta_sis_alv = parseFloat($(this).val());
-	var alv = parseFloat($("#Kohteet_alv").val());
-	var result = hinta_sis_alv/(1+(alv/100));
-	$("#Kohteet_hinta").val(result.toFixed(2));
-	$("#Kohteet_verot").val((hinta_sis_alv-result).toFixed(2));
-  });
-
-  function laskurin()
-  {
-	var alv = parseFloat($("#Kohteet_alv").val());
-	var hinta = parseFloat($("#Kohteet_hinta").val());
-	var hinta_sis_alv = ((alv/100)*hinta)+hinta;
-	$("#Kohteet_hinta_sis_alv").val(hinta_sis_alv.toFixed(2));
-	$("#Kohteet_verot").val((hinta_sis_alv-hinta).toFixed(2));
-  }
-
-});
-</script>
-
+	
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinnasto_id'); ?>
 		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 

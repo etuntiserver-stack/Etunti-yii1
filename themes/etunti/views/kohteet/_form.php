@@ -109,7 +109,24 @@ if(empty($model->tietoja))
 	<legend><?php echo Yii::t('main','Laskutus'); ?></legend>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tuote'); ?>
+		<?php echo $form->dropDownList($model, 'tuote', CHtml::listData(TuotteetPalvelut::model()->findAll(), 'id', 'nimike'), 
+		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
+		<?php echo $form->error($model,'tuote'); ?>
+	</div>
+	
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'hinnasto_id'); ?>
+		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
+		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
+		<?php echo $form->error($model,'hinnasto_id'); ?>
+	</div>
 
+<?php if(isset($model->id)) : ?>
+<br>
+<legend><h4 class="text-danger">Nämät kentäät ei käytetään enää.</h4></legend>
+<div class="alert alert-danger">
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
 		<?php
@@ -149,6 +166,7 @@ if(empty($model->tietoja))
 		<?php echo $form->numberField($model,'hinta_sis_alv',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'hinta_sis_alv'); ?>
 	</div>
+</div>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -180,13 +198,7 @@ $(document).ready(function(){
 
 });
 </script>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinnasto_id'); ?>
-		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
-		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
-		<?php echo $form->error($model,'hinnasto_id'); ?>
-	</div>
+<?php endif; ?>
 	<?php endif; ?>
 
 

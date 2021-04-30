@@ -622,7 +622,7 @@ $(document).ready(function(){
 
 <div class="row">
   <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'tuoteID'); ?>
+		<?php echo $form->labelEx($model,'tuoteID'); ?> <span style="color:red">*</span>
 		<?php
 		$criteria = new CDbCriteria();
        		$criteria->order = " nimike ";
@@ -1374,21 +1374,28 @@ $(document).ready(function(){
   }
   <?php endif; ?>
 
+	if( $('#<?=$java_prefix?>_tuoteID').val() == null )
+	{
+		$('#<?=$java_prefix?>_tuoteID').addClass('bg-danger').focus();
+    	$('#submitButton').removeAttr('disabled');
+		return false;
+	}
+
 	/* <-- Tarkistetaan Aloitus/Lopetus Klo ja status */
 	if( $('#<?=$java_prefix?>_status option:selected').val() === '' )
 	{
 		$('#<?=$java_prefix?>_status').addClass('bg-danger').focus();
-    $('#submitButton').removeAttr('disabled');
+    	$('#submitButton').removeAttr('disabled');
 		return false;
 	}
 	if( $('#alku').val() === '' ){
 		$('#alku').addClass('bg-danger').focus();
-    $('#submitButton').removeAttr('disabled');
+    	$('#submitButton').removeAttr('disabled');
 		return false;
 	}
 	if( $('#loppu').val() === '' ){
 		$('#loppu').addClass('bg-danger').focus();
-    $('#submitButton').removeAttr('disabled');
+    	$('#submitButton').removeAttr('disabled');
 		return false;
 	}
 	/*     Tarkistetaan Aloitus/Lopetus Klo ja status --> */
@@ -1869,6 +1876,9 @@ $(document).ready(function(){
 				$('#loppu').val(d[10]);
 			if(d[11])
 				$('#kohteen_tiedostot').html(d[11]);
+			if(d[13])
+				$('#<?=$java_prefix?>_tuoteID').val(d[13]);
+
 		}, error:function(data){
 			console.log(data);
 		}

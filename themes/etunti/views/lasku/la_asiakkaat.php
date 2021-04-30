@@ -120,8 +120,6 @@
 	  <tr>
 	  <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
 	  <th><?php echo Yii::t('main', 'Lasku'); ?></th>
-	  <th><?php echo Yii::t('main', 'KK summ.'); ?></th>
-	  <th><?php echo Yii::t('main', 'Yhteensä tunnit'); ?></th>
 	  <th></th>
 	  </tr>
 	  </thead>
@@ -129,7 +127,7 @@
 		'dataProvider'=>$dataProvider,
 		'itemView'=>'_la_asiakkaat',
 	  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
-		'viewData' => ['lista' => $lista, 'kk_hinta' => $kk_hinta], 
+		//'viewData' => ['mob_lista' => $mob_lista], 
 		'pager' => array(
 	           'firstPageLabel'=>'<<',
 	           'prevPageLabel'=>'< Edellinen',
@@ -148,5 +146,43 @@
    </div>
   </div>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$(document).delegate(".rakenne_muoto, .rivi_muoto","change",function(){
+		ajaxForLasku($(this));
+	});
+	
+	$(document).delegate(".nayta_collapse","click",function(){
+		ajaxForLasku($(this));
+	});
+	
+	function ajaxForLasku(thisFor)
+	{
+		var asiakas_id 		= thisFor.closest('td').find('.nayta_collapse').attr('asiakas_id');
+		var rakenne_muoto 	= thisFor.closest('td').find('.rakenne_muoto').val();
+		var rivi_muoto 		= thisFor.closest('td').find('.rivi_muoto').val();
+		
+		if( !thisFor.closest('td').find('.nayta_collapse').hasClass('collapsed') )
+		{
+			var link = 'kklaskuperasiakas?asiakas_id=' + asiakas_id + '&from=<?=$from?>&to=<?=$to?>&rakenne_muoto=' + rakenne_muoto + '&rivi_muoto=' + rivi_muoto;
+			console.log('Link: ' + link);
+			$.ajax({
+				url: link,
+				success: function(data){
+					var data = JSON.parse(data);
+					//console.log(data);
+					
+					$('#collapse_id_' + asiakas_id).html(data);
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown){
+				   	console.log(XMLHttpRequest);
+				}
+			});
+		}
+	}
+})
+</script>
 <?php endif; ?>
 

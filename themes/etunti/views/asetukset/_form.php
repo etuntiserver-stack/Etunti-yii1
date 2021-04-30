@@ -571,18 +571,6 @@ $('.ryhmat').multiselect({
     <legend><h2><?php echo Yii::t('main','Laskutuksen asetukset'); ?></h2></legend>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tuotteet_palvelut_muoto'); ?>
-		<?php 
-        	$tal = array(
-			0=>'Hinnaston mukaan',
-			1=>'Asiakkaan / kohteen hinta'
-		);
-		echo $form->dropDownList($model,'tuotteet_palvelut_muoto', $tal, 
-		array('class'=>'form-control')) ?>
-		<?php echo $form->error($model,'tuotteet_palvelut_muoto'); ?>
-	</div>
-
-	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'rivien_teko'); ?>
 		<?php 
         	$tal = array(
