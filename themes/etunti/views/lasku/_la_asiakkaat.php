@@ -5,11 +5,15 @@
 	<td width="15%" style="vertical-align: top">
 		<?php echo $data->Fullname.' #'.$data->id; ?>
 	</td>
-	<td width="75%">
+	<td width="75%" class="closest_td">
 		<div class="form-inline">
-			<div class="form-group"><input type="checkbox" id="kk_mukaan">  KK Kohde/Asiakas mukaan</div>
+			<select class="form-group form-control kk_valinta">
+				<option value="kk_mukaan">KK Asiakas/Kohde mukaan</option>
+				<option value="kk_ilman">Ilman KK Asiakas/Kohde</option>
+			</select>
 			<select class="form-group form-control rakenne_muoto">
-				<option value="kk_mobiili">Mobiili</option>
+				<option value="mobiili">Mobiilista</option>
+				<option value="mobiili">Työvuoroista</option>
 			</select>
 			<select class="form-group form-control rivi_muoto">
 				<option value="rivi_per_kohde">Tuote/Kohde mukaan</option>
@@ -18,6 +22,7 @@
 			<button class="btn btn-primary nayta_collapse" type="button" data-toggle="collapse" data-target="#collapse_id_<?=$data->id?>" aria-expanded="false" aria-controls="collapseExample" asiakas_id="<?=$data->id?>">
 				<?=Yii::t('main', 'Rakenna uusi lasku')?> <i class="caret"></i>
 			</button>
+			<button class="btn btn-info paivita pull-right" style="display:none"><?=Yii::t('main', 'Päivitä / Keskeytä')?></button>
 		</div>
 		<div class="collapse" id="collapse_id_<?=$data->id?>"></div>
 	</td>

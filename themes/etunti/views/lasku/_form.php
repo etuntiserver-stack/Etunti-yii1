@@ -730,24 +730,13 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 				echo $this->renderPartial("//lasku/tr_rivi_update",array('num'=>$num,'rivi'=>$rivi));
 			}
 		}
-		if(isset($_POST['la_asiakkaat_kk']) and ($_POST['with_mobile'] == 1 or $_POST['with_mobile'] == 3))
+		if(isset($_POST['la_asiakkaat_tr_rivit']))
 		{
-			foreach(json_decode($_POST['la_asiakkaat_kk'], true) as $arr){ 
+			foreach(json_decode($_POST['la_asiakkaat_tr_rivit'], true) as $arr){ 
 				$num++;
 				echo $this->renderPartial("//lasku/tr_rivit_tyhja",[
-					'num' 				=> $num,
-					'la_asiakkaat_kk' 	=> $arr
-				]);
-			}
-		}
-		if(isset($_POST['la_asiakkaat_mobiili']) and ($_POST['with_mobile'] == 1 or $_POST['with_mobile'] == 2))
-		{
-			foreach(json_decode($_POST['la_asiakkaat_mobiili'], true) as $arr)
-			{
-				$num++;
-				echo $this->renderPartial("//lasku/tr_rivit_tyhja",[
-					'num'					=> $num, 
-					'la_asiakkaat_mobiili' 	=> $arr
+					'num' 						=> $num,
+					'la_asiakkaat_tr_rivit' 	=> $arr
 				]);
 			}
 		}

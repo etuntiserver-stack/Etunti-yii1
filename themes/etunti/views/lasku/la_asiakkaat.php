@@ -147,10 +147,70 @@
   </div>
 </div>
 
+<div id="tp_valinta" style="display:none">
+<?php
+	$criteria = new CDbCriteria();
+	$criteria->order = " nimike ";
+	$criteria->condition = " 
+		hinta_alv_0!=0 AND yksikko='h'
+	";
+	echo CHtml::dropdownList('','palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
+		['empty'=>'','class'=>'form-control bg-warning valitseTuote']
+	);
+?>
+</div>
+
 <script type="text/javascript">
 $(document).ready(function(){
 
-	$(document).delegate(".rakenne_muoto, .rivi_muoto","change",function(){
+	$(document).delegate(".laskutukseen","click",function(e){
+		e.preventDefault()
+		var lasku_rivit = [];
+		$('.lasku_rivi').each(function(){
+			lasku_rivit.push([{
+				'tuote_id' : $(this).closest('tr').find('.tuote').attr('tuote_id'),
+				'tv_id' : $(this).closest('tr').find('.tuote').attr('tv_id'),
+				'tuote' : $(this).closest('tr').find('.tuote').text(),
+				'maara' : $(this).closest('tr').find('.maara').text(),
+				'alv' : $(this).closest('tr').find('.alv').text(),
+				'hinta' : $(this).closest('tr').find('.hinta').text(),
+				'free_text' : $(this).closest('tr').find('.free_text').text()
+			}]);
+		});
+		//console.log(lasku_rivit);
+		$('#la_asiakkaat_tr_rivit').val( JSON.stringify(lasku_rivit) );
+		$(this).closest('form').submit();
+	});
+	
+	var kohde_id = 0;
+	$(document).delegate(".tuote_puutu","click",function(){
+		$(this).replaceWith( $('#tp_valinta').html() );
+		kohde_id = $(this).attr('kohde_id');
+	});
+
+	$(document).delegate(".valitseTuote","change",function(){
+		var cl = $(this).closest('.closest_td');
+
+		$.ajax({
+			url: 'tuotepalvelukohdelle?id=' + kohde_id + '&tuote=' + $(this, 'option:selected').val(),
+			success: function(data){
+				var data = JSON.parse(data);
+				console.log(data);
+				
+				ajaxForLasku(cl);
+				$('[data-toggle="tooltip"]').tooltip();
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+			   	console.log(XMLHttpRequest);
+			}
+		});
+	});
+	
+	$(document).delegate(".paivita","click",function(){
+		ajaxForLasku($(this));
+	});
+	
+	$(document).delegate(".rakenne_muoto, .rivi_muoto, .kk_valinta","change",function(){
 		ajaxForLasku($(this));
 	});
 	
@@ -163,11 +223,13 @@ $(document).ready(function(){
 		var asiakas_id 		= thisFor.closest('td').find('.nayta_collapse').attr('asiakas_id');
 		var rakenne_muoto 	= thisFor.closest('td').find('.rakenne_muoto').val();
 		var rivi_muoto 		= thisFor.closest('td').find('.rivi_muoto').val();
+		var kk_valinta 		= thisFor.closest('td').find('.kk_valinta').val();
 		
 		if( !thisFor.closest('td').find('.nayta_collapse').hasClass('collapsed') )
 		{
-			var link = 'kklaskuperasiakas?asiakas_id=' + asiakas_id + '&from=<?=$from?>&to=<?=$to?>&rakenne_muoto=' + rakenne_muoto + '&rivi_muoto=' + rivi_muoto;
-			console.log('Link: ' + link);
+			thisFor.closest('td').find('.paivita').show(370);
+			var link = 'kklaskuperasiakas?asiakas_id=' + asiakas_id + '&from=<?=$from?>&to=<?=$to?>&rakenne_muoto=' + rakenne_muoto + '&rivi_muoto=' + rivi_muoto + '&kk_valinta=' + kk_valinta;
+			//console.log('Link: ' + link);
 			$.ajax({
 				url: link,
 				success: function(data){
@@ -175,11 +237,20 @@ $(document).ready(function(){
 					//console.log(data);
 					
 					$('#collapse_id_' + asiakas_id).html(data);
+					var sum = 0;
+					$('.forsumm').each(function(){
+						sum += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
+					});
+					$('#summ_result').html(sum);
+					$('[data-toggle="tooltip"]').tooltip();
 				},
 				error: function(XMLHttpRequest, textStatus, errorThrown){
 				   	console.log(XMLHttpRequest);
 				}
 			});
+			
+		} else {
+			thisFor.closest('td').find('.paivita').hide(370);
 		}
 	}
 })

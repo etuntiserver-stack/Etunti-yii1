@@ -38,19 +38,20 @@
 		$free_text 		= $la_asiakkaat_kk['free_text'];
 	}
 	
-	if(isset($la_asiakkaat_mobiili))
+	if(isset($la_asiakkaat_tr_rivit))
 	{
-		if(isset($la_asiakkaat_mobiili['pikkuviesti']))
-			$pikkuviesti 	= $la_asiakkaat_mobiili['pikkuviesti'];
+		//if(isset($la_asiakkaat_mobiili['pikkuviesti']))
+			//$pikkuviesti 	= $la_asiakkaat_mobiili['pikkuviesti'];
+		$rivi			= $la_asiakkaat_tr_rivit[0];
 		
-		$tuote			= $la_asiakkaat_mobiili['tuote'];
-		$tuoteID		= $la_asiakkaat_mobiili['tuoteID'];
-		$tv_id 			= $la_asiakkaat_mobiili['tv_id'];
-		$maara 			= $la_asiakkaat_mobiili['maara'];
-		$hinta 			= $la_asiakkaat_mobiili['hinta'];
+		$tuote			= $rivi['tuote'];
+		$tuoteID		= $rivi['tuote_id'];
+		$tv_id 			= $rivi['tv_id'];
+		$maara 			= $rivi['maara'];
+		$hinta 			= $rivi['hinta'];
 		$yksikkot 		= $this->yksikkot('h');
-		$alv 			= $this->alv($la_asiakkaat_mobiili['alv']);
-		$free_text 		= $la_asiakkaat_mobiili['free_text'];
+		$alv 			= $this->alv($rivi['alv']);
+		$free_text 		= $rivi['free_text'];
 	}
 ?>
 <?php if(!empty($pikkuviesti)): ?>
