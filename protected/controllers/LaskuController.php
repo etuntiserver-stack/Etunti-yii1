@@ -2160,7 +2160,7 @@ exit;
 					AND laskutettu=0
 				))
 				OR id IN(SELECT asiakas_id FROM sivex_kohdet WHERE 
-					(hinta_tyyppi=2 OR t.hinta_tyyppi=2)
+					(tuote!=0 OR t.tuote!=0)
 				)
 			");
 			if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
