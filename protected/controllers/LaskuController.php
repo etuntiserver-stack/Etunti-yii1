@@ -1906,6 +1906,7 @@ exit;
 
 		$body .= '<table class="well table table-striped" border="1">';
 		$body .= '<tr>';
+		$body .= '<th></th>';
 		$body .= '<th>'.Yii::t('main', 'Tuote').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Määrä').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Alv').'</th>';
@@ -1939,6 +1940,7 @@ exit;
 				$yht_summ			+= $arr['hinta'];
 				
 				$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
+				$body .= '<td align="center"><i class="fa fa-2x link fa-trash text-danger poista_rivi"></i></td>';
 				$body .= '<td class="tuote" tuote_id="'.$arr['tuote_id'].'" tv_id="0"><b>'.$arr['nimike'].'</b><br>'.$arr['tuote'].'</td>';
 				$body .= '<td class="maara">1</td>';
 				$body .= '<td class="alv">'.$arr['alv'].'</td>';
@@ -2062,6 +2064,7 @@ exit;
 						{
 							$num_rivi++;
 							$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
+							$body .= '<td align="center"><i class="fa fa-2x link fa-trash text-danger poista_rivi"></i></td>';
 							$body .= '<td class="tuote" tuote_id="'.$tuote_id.'" tv_id="'.$arr['tv_id'].'">'.$arr['nimike'].'</td>';
 							$body .= '<td class="maara">'.$maara.'</td>';
 							$body .= '<td class="alv">'.$arr['alv'].'</td>';
@@ -2087,6 +2090,7 @@ exit;
 					$num_rivi++;
 					$maara = array_sum($arr['maara']);
 					$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
+					$body .= '<td align="center"><i class="fa fa-2x link fa-trash text-danger poista_rivi"></i></td>';
 					$body .= '<td class="tuote" tuote_id="'.$tuote_id.'" tv_id="'.json_encode($arr['tv_ids']).'">'.$arr['nimike'].'</td>';
 					$body .= '<td class="maara">'.$maara.'</td>';
 					$body .= '<td class="alv">'.$arr['alv'].'</td>';
@@ -2099,6 +2103,7 @@ exit;
 		}				
 
 		$body .= '<tr>';
+		$body .= '<th></th>';
 		$body .= '<th></th>';
 		$body .= '<th></th>';
 		$body .= '<th></th>';

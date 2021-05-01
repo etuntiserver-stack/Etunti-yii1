@@ -181,6 +181,15 @@ $(document).ready(function(){
 		$('#la_asiakkaat_tr_rivit').val( JSON.stringify(lasku_rivit) );
 		$(this).closest('form').submit();
 	});
+
+	$(document).delegate(".poista_rivi","click",function(){
+		$(this).closest('tr').remove();
+		var sum = 0;
+		$('.forsumm').each(function(){
+			sum += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
+		});
+		$('#summ_result').html(sum);
+	});
 	
 	var kohde_id = 0;
 	$(document).delegate(".tuote_puutu","click",function(){
