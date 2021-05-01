@@ -1975,7 +1975,7 @@ exit;
 				{
 					$item 		= $v['attributes'];
 					$tv_link	= '';
-					$maara 		= $v['maara']/3600;
+					$maara 		= $this->num($v['maara']);
 					
 					$kohde_link = CHtml::link($item->kohde_kannasta,
 						['/kohteet/update', 'id' => $item->kohdenID],
