@@ -1829,47 +1829,76 @@ exit;
 
 			
 		// <-- Mobiili logikka
-		$getall = $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, false, "id=$asiakas_id");
+		if($rakenne_muoto == 'mobiili')
+			$getall 		= $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, false, "id=$asiakas_id");
+			
+		if($rakenne_muoto == 'tuovuoro')
+		{
+			$haku_criteria 	= ["(laskutettu=0 or laskutettu is NULL) AND tid!=0 AND (peruutettu=0 or peruutettu is NULL)"];
+			$tv_controller 	= Yii::app()->createController('Tyovuoroot');
+			$getall 		= $tv_controller[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data','tv_kesto']);
+		}
+			
 		$l 		= [];
 		foreach($getall as $item)
 		{
+			$pikkuviesti 	= '';
+
+			if($rakenne_muoto == 'mobiili')
+			{
+				$aloitan	= $item->aloitan;
+				$kesto		= strtotime($item->loppui)-strtotime($item->aloitan);
+				$tyovuorot 	= (isset($item->tyovuoroot->id))? $item->tyovuoroot : null;
+				$kohde_id	= ($item->kohdenID > 0)? $item->kohdenID : null;
+			}
+			
+			if($rakenne_muoto == 'tuovuoro')
+			{
+				$item = $item['data'];
+				$kesto		= strtotime($item->loppu)-strtotime($item->alku);
+				$tyovuorot 	= $item;
+				$aloitan	= $tyovuorot->pvm.' '.$tyovuorot->alku;
+				$kohde_id	= $tyovuorot->kohde;
+			}
+
 			if(isset($item->kohteet->asiakkaat->id) and $item->kohteet->asiakkaat->id == $asiakas_id)
 			{
 				// <-- pikkuviesti
-				$pv = explode("\n", $item->viesti);
-				if(isset($pv[0]) and !empty($pv[0]) and strpos($pv[0], 'xxx') === false){
-					$pikkuviesti = $pv[0];
-				} elseif(isset($pv[1]) and !empty($pv[1]) and strpos($pv[1], 'xxx') === false){
-					$pikkuviesti = $pv[1];
-				} else {
-					$pikkuviesti = '';
+				if($rakenne_muoto == 'mobiili')
+				{
+					$pv = explode("\n", $item->viesti);
+					if(isset($pv[0]) and !empty($pv[0]) and strpos($pv[0], 'xxx') === false){
+						$pikkuviesti = $pv[0];
+					} elseif(isset($pv[1]) and !empty($pv[1]) and strpos($pv[1], 'xxx') === false){
+						$pikkuviesti = $pv[1];
+					}
 				}
 
 				// <-- Työvuoroista Tuote/Palvelu mukaan logikka
 				$tyovuoro_tuotteet = [];
-				if($item->tv_id > 0 and $item->kohdenID > 0)
+				if($tyovuorot !== null and $kohde_id > 0)
 				{
 					if(isset($item->tyovuoroot->id))
 					{
-						if($item->tyovuoroot->tuoteID > 0)
+						if($tyovuorot->tuoteID > 0)
 						{
-							$return = $this->getHintaFor('tyovuoro', $item->tyovuoroot, 'h');
-							$tyovuoro_tuotteet['paa_tuote']['tuote_id'] 	= $item->tyovuoroot->tuoteID;
-							$tyovuoro_tuotteet['paa_tuote']['tv_pvm'] 	= $item->tyovuoroot->pvm;
+							$return = $this->getHintaFor('tyovuoro', $tyovuorot, 'h');
+							$tyovuoro_tuotteet['paa_tuote']['tuote_id'] = $tyovuorot->tuoteID;
+							$tyovuoro_tuotteet['paa_tuote']['tv_pvm'] 	= $tyovuorot->pvm;
 							$tyovuoro_tuotteet['paa_tuote']['nimike'] 	= $return['nimike'];
 							$tyovuoro_tuotteet['paa_tuote']['hinta'] 	= $return['hinta'];
 							$tyovuoro_tuotteet['paa_tuote']['alv'] 		= $return['alv'];
 						}
-						if($item->tyovuoroot->lisa_tuotteet != null)
+						if($tyovuorot->lisa_tuotteet != null)
 						{
-							$lisa_tuotteet = json_decode($item->tyovuoroot->lisa_tuotteet, true);
+							$lisa_tuotteet = json_decode($tyovuorot->lisa_tuotteet, true);
 							foreach($lisa_tuotteet['tuote'] as $key => $tuote_id)
 							{
 								$tuotteet = TuotteetPalvelut::model()->findByPk($tuote_id);
 								if(isset($tuotteet->id))
 								{
 									$tyovuoro_tuotteet['lisa_tuotteet'][] = [
-										'tv_pvm'	=> $item->tyovuoroot->pvm,
+										'tv_pvm'	=> $tyovuorot->pvm,
 										'tuote_id' 	=> $tuote_id,
 										'nimike' 	=> $tuotteet->nimike,
 										'hinta' 	=> $tuotteet->hinta_alv_0,
@@ -1882,9 +1911,9 @@ exit;
 					}
 				}
 
-				$l[strtotime($item->aloitan)][] = [
+				$l[strtotime($aloitan)][] = [
 					'attributes' 		=> $item,
-					'maara' 			=> strtotime($item->loppui)-strtotime($item->aloitan),
+					'maara' 			=> $kesto,
 					'pikkuviesti' 		=> $pikkuviesti,
 					'tyovuoro_tuotteet' => $tyovuoro_tuotteet,
 					'hinta_laskenta'	=> $this->getHintaFor('kohde', $item->kohteet, 'h')
@@ -1977,17 +2006,33 @@ exit;
 				foreach($arr as $k => $v)
 				{
 					$item 		= $v['attributes'];
+
+					if($rakenne_muoto == 'mobiili')
+					{
+						$pvm		= date("d.m.Y", strtotime($item->aloitan));
+						$osoite		= $item->kohde_kannasta;
+						$tyovuorot 	= (isset($item->tyovuoroot->id))? $item->tyovuoroot : null;
+						$kohde_id	= ($item->kohdenID > 0)? $item->kohdenID : null;
+					}
 					
-					if(isset($kk_hinta[$asiakas_id][$item->kohdenID])) continue;
+					if($rakenne_muoto == 'tuovuoro')
+					{
+						$pvm		= $item->pvm;
+						$tyovuorot 	= (isset($item->id))? $item : null;
+						$osoite		= $item->osoiteById;
+						$kohde_id	= $item->kohde;
+					}
+			
+					if(isset($kk_hinta[$asiakas_id][$kohde_id])) continue;
 					
 					$tv_link	= '';
 					$maara 		= $this->num($v['maara']);
 					
-					if($item->tv_id > 0)
-						$tv_ids[$item->tv_id] = $item->tv_id;
+					if($tyovuorot !== null)
+						$tv_ids[$tyovuorot->id] = $tyovuorot->id;
 					
-					$kohde_link = CHtml::link($item->kohde_kannasta,
-						['/kohteet/update', 'id' => $item->kohdenID],
+					$kohde_link = CHtml::link($osoite,
+						['/kohteet/update', 'id' => $kohde_id],
 						['class' => '', 'target' => '_blank']
 					);
 						
@@ -1995,13 +2040,13 @@ exit;
 					{
 						$tuote_id = $v['hinta_laskenta']['tuote_id'];
 						
-						$group_arr[$item->kohdenID][$tuote_id][] = [
+						$group_arr[$kohde_id][$tuote_id][] = [
 							'tuote_id'	=> $tuote_id,
 							'nimike' 	=> '<b>'.$v['hinta_laskenta']['nimike'].':</b> '.$kohde_link,
 							'alv' 		=> $v['hinta_laskenta']['alv'],
 							'hinta' 	=> $v['hinta_laskenta']['hinta'],
 							'maara'		=> $maara,
-							'free_text'	=> date("d.m.Y", strtotime($item->aloitan))
+							'free_text'	=> $pvm
 						];
 					}
 					
@@ -2024,13 +2069,13 @@ exit;
 						
 						$tuote_id = $v['tyovuoro_tuotteet']['paa_tuote']['tuote_id'];
 						
-						$group_arr[$item->kohdenID][$tuote_id][] = [
+						$group_arr[$kohde_id][$tuote_id][] = [
 							'tuote_id'	=> $tuote_id,
 							'nimike' 	=> '<b>'.$v['tyovuoro_tuotteet']['paa_tuote']['nimike'].':</b> '.$kohde_link.(($rivi_muoto == 'rivi_per_kirjaus')?$tv_link:''),
 							'alv' 		=> $v['tyovuoro_tuotteet']['paa_tuote']['alv'],
 							'hinta' 	=> $v['tyovuoro_tuotteet']['paa_tuote']['hinta'],
 							'maara'		=> $maara,
-							'free_text'	=> date("d.m.Y", strtotime($item->aloitan))
+							'free_text'	=> $pvm
 						];
 					}
 					
@@ -2040,13 +2085,13 @@ exit;
 						{
 							$tuote_id = $tuote['tuote_id'];
 
-							$group_arr[$item->kohdenID][$tuote_id][] = [
+							$group_arr[$kohde_id][$tuote_id][] = [
 								'tuote_id'	=> $tuote_id,
 								'nimike' 	=> '<b>'.$tuote['nimike'].(($rivi_muoto == 'rivi_per_kirjaus')?$tv_link:'').'</b>',
 								'alv' 		=> $tuote['alv'],
 								'hinta' 	=> $tuote['hinta'],
 								'maara'		=> $tuote['maara'],
-								'free_text'	=> date("d.m.Y", strtotime($item->aloitan))
+								'free_text'	=> $pvm
 							];
 						}
 					}

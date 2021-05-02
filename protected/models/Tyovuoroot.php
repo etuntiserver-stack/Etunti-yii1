@@ -198,27 +198,27 @@ class Tyovuoroot extends DB2ActiveRecord
 	}
 
         public function getosoiteAndAika(){
-		$return = '';
-		if(!empty($this->kohde)){
-			$k = Kohteet::model()->findByPk($this->kohde);
-			if( isset($k->id) ){
-				$return = $k->osoite.' '.$this->pvm.', '.$this->alku.'-'.$this->loppu;
+			$return = '';
+			if(!empty($this->kohde)){
+				$k = Kohteet::model()->findByPk($this->kohde);
+				if( isset($k->id) ){
+					$return = $k->osoite.' '.$this->pvm.', '.$this->alku.'-'.$this->loppu;
+				}
 			}
-		}
-                return $return;
+			return $return;
         }
 
         public function getosoiteById(){
-		$return = '';
-		if(!empty($this->kohde) and empty($this->osoite)){
-			$k = Kohteet::model()->findByPk($this->kohde);
-			if( isset($k->id) ){
-				$return = $k->osoite;
+			$return = '';
+			if(!empty($this->kohde) and empty($this->osoite)){
+				$k = Kohteet::model()->findByPk($this->kohde);
+				if( isset($k->id) ){
+					$return = $k->osoite;
+				}
+			} elseif(!empty($this->osoite)){
+				$return = $this->osoite;
 			}
-		} elseif(!empty($this->osoite)){
-			$return = $this->osoite;
-		}
-                return $return;
+			return $return;
         }
 
 	/**
