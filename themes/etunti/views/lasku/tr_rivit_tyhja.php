@@ -3,7 +3,6 @@
 		$num = $_POST['num'];
 	}
 
-	$tv_id 			= 0;
 	$tuoteID 		= '';
 	$tuote 			= '';
 	$hinta 			= 0;
@@ -27,26 +26,15 @@
 
 	}
 
-	if(isset($la_asiakkaat_kk))
-	{
-		$tuote			= $la_asiakkaat_kk['tuote'];
-		$maara			= 1;
-		$hinta 			= $la_asiakkaat_kk['hinta'];
-		$free_text 		= '';
-		$yksikkot 		= $this->yksikkot('kk');
-		$alv 			= $this->alv($la_asiakkaat_kk['alv']);
-		$free_text 		= $la_asiakkaat_kk['free_text'];
-	}
-	
 	if(isset($la_asiakkaat_tr_rivit))
 	{
 		//if(isset($la_asiakkaat_mobiili['pikkuviesti']))
 			//$pikkuviesti 	= $la_asiakkaat_mobiili['pikkuviesti'];
+			
 		$rivi			= $la_asiakkaat_tr_rivit[0];
 		
 		$tuote			= $rivi['tuote'];
 		$tuoteID		= $rivi['tuote_id'];
-		$tv_id 			= $rivi['tv_id'];
 		$maara 			= $rivi['maara'];
 		$hinta 			= $rivi['hinta'];
 		$yksikkot 		= $this->yksikkot('h');
@@ -64,8 +52,7 @@
 	<TD><span class="link text-danger poista" for="poista_<?php echo $num; ?>" style="font-size:150%"><i class="fa fa-times"></i></span></TD>
 	<TD>
 
-	<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control" value="<?php echo $tuoteID; ?>">
-	<input type="hidden" size="1" name="tv_id[<?php echo $num; ?>]" id="tv_id_<?php echo $num; ?>" class="form-control" value="<?php echo $tv_id; ?>">
+	<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control" value="<?php echo $tuoteID; ?>">	
 	<input type="hidden" size="1" name="hinnasto_rivi_id[<?php echo $num; ?>]" id="hinnasto_rivi_id_<?php echo $num; ?>" class="form-control">
 	<div class="row">
 	  <div class="col-lg-4">

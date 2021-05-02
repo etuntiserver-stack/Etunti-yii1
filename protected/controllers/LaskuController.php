@@ -1805,6 +1805,7 @@ exit;
 
 	public function actionKklaskuperasiakas($asiakas_id, $from, $to, $rakenne_muoto, $rivi_muoto, $kk_valinta)
 	{
+		$ajanjakso = date("d.m.Y", strtotime($from)).' - '.date("d.m.Y", strtotime($to));
 
 		// <-- KK logikka
 		$kk_hinta = [];
@@ -1822,7 +1823,7 @@ exit;
 							'hinta' 		=> $return['hinta'], 
 							'alv' 			=> $return['alv'],
 							'nimike' 		=> $return['nimike'],
-							'free_text' 	=> date("d.m.Y", strtotime($from)).' - '.date("d.m.Y", strtotime($to))
+							'free_text' 	=> $ajanjakso
 					];
 				}
 			}
@@ -1903,6 +1904,7 @@ exit;
 		$mob_tv_arr	= [];
 		$yht_tunnit = 0;
 		$num_rivi	= 0;
+		$tv_ids		= [];
 
 		$body .= '<table class="well table table-striped" border="1">';
 		$body .= '<tr>';
@@ -1976,8 +1978,14 @@ exit;
 				foreach($arr as $k => $v)
 				{
 					$item 		= $v['attributes'];
+					
+					if(isset($kk_hinta[$asiakas_id][$item->kohdenID])) continue;
+					
 					$tv_link	= '';
 					$maara 		= $this->num($v['maara']);
+					
+					if($item->tv_id > 0)
+						$tv_ids[$item->tv_id] = $item->tv_id;
 					
 					$kohde_link = CHtml::link($item->kohde_kannasta,
 						['/kohteet/update', 'id' => $item->kohdenID],
@@ -1986,10 +1994,9 @@ exit;
 						
 					if(!isset($v['tyovuoro_tuotteet']['paa_tuote']))
 					{
-						$tuote_id 	= $v['hinta_laskenta']['tuote_id'];
-
+						$tuote_id = $v['hinta_laskenta']['tuote_id'];
+						
 						$group_arr[$item->kohdenID][$tuote_id][] = [
-							'tv_id'		=> $item->tv_id,
 							'tuote_id'	=> $tuote_id,
 							'nimike' 	=> '<b>'.$v['hinta_laskenta']['nimike'].':</b> '.$kohde_link,
 							'alv' 		=> $v['hinta_laskenta']['alv'],
@@ -2001,7 +2008,8 @@ exit;
 					
 					if(isset($v['tyovuoro_tuotteet']['paa_tuote']))
 					{
-						$this_pvm 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_pvm'];
+						$this_pvm = $v['tyovuoro_tuotteet']['paa_tuote']['tv_pvm'];
+
 						$tv_link 	= CHtml::link('<span class="text-success">Työvuoro</span>',
 							[
 							  sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s', date("Y", strtotime($this_pvm)), date("W", strtotime($this_pvm)), $item->tv_id)
@@ -2018,7 +2026,6 @@ exit;
 						$tuote_id = $v['tyovuoro_tuotteet']['paa_tuote']['tuote_id'];
 						
 						$group_arr[$item->kohdenID][$tuote_id][] = [
-							'tv_id'		=> $item->tv_id,
 							'tuote_id'	=> $tuote_id,
 							'nimike' 	=> '<b>'.$v['tyovuoro_tuotteet']['paa_tuote']['nimike'].':</b> '.$kohde_link.(($rivi_muoto == 'rivi_per_kirjaus')?$tv_link:''),
 							'alv' 		=> $v['tyovuoro_tuotteet']['paa_tuote']['alv'],
@@ -2035,7 +2042,6 @@ exit;
 							$tuote_id = $tuote['tuote_id'];
 
 							$group_arr[$item->kohdenID][$tuote_id][] = [
-								'tv_id'		=> $item->tv_id,
 								'tuote_id'	=> $tuote_id,
 								'nimike' 	=> '<b>'.$tuote['nimike'].(($rivi_muoto == 'rivi_per_kirjaus')?$tv_link:'').'</b>',
 								'alv' 		=> $tuote['alv'],
@@ -2065,7 +2071,7 @@ exit;
 							$num_rivi++;
 							$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
 							$body .= '<td align="center"><i class="fa fa-2x link fa-trash text-danger poista_rivi"></i></td>';
-							$body .= '<td class="tuote" tuote_id="'.$tuote_id.'" tv_id="'.$arr['tv_id'].'">'.$arr['nimike'].'</td>';
+							$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].'</td>';
 							$body .= '<td class="maara">'.$maara.'</td>';
 							$body .= '<td class="alv">'.$arr['alv'].'</td>';
 							$body .= '<td class="hinta">'.$hinta.'</td>';
@@ -2074,11 +2080,10 @@ exit;
 							$body .= '</tr>';
 						}
 			
-						$pregroup[$tuote_id]['nimike'] 	= $arr['nimike'];
-						$pregroup[$tuote_id]['alv'] 	= $arr['alv'];
-						$pregroup[$tuote_id]['hinta'] 	= $hinta;
-						$pregroup[$tuote_id]['maara'][]	= $maara;
-						$pregroup[$tuote_id]['tv_ids'][]= $arr['tv_id'];
+						$pregroup[$tuote_id]['nimike'] 		= $arr['nimike'];
+						$pregroup[$tuote_id]['alv'] 		= $arr['alv'];
+						$pregroup[$tuote_id]['hinta'] 		= $hinta;
+						$pregroup[$tuote_id]['maara'][]		= $maara;
 					}
 				}
 			}
@@ -2091,16 +2096,16 @@ exit;
 					$maara = array_sum($arr['maara']);
 					$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
 					$body .= '<td align="center"><i class="fa fa-2x link fa-trash text-danger poista_rivi"></i></td>';
-					$body .= '<td class="tuote" tuote_id="'.$tuote_id.'" tv_id="'.json_encode($arr['tv_ids']).'">'.$arr['nimike'].'</td>';
+					$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].'</td>';
 					$body .= '<td class="maara">'.$maara.'</td>';
 					$body .= '<td class="alv">'.$arr['alv'].'</td>';
 					$body .= '<td class="hinta">'.$arr['hinta'].'</td>';
 					$body .= '<td class="forsumm">'.($maara*$arr['hinta']).'</td>';
-					$body .= '<td class="free_text"></td>';
+					$body .= '<td class="free_text">'.$ajanjakso.'</td>';
 					$body .= '</tr>';
 				}
 			}
-		}				
+		}
 
 		$body .= '<tr>';
 		$body .= '<th></th>';
@@ -2115,8 +2120,11 @@ exit;
 		
 		$body .= '<br><br>
 			<form action="create" method="POST" target="_blank">
+			<label>Työvuorot ID:t</label>
 			<textarea class="form-control" name="la_asiakkaat_tr_rivit" id="la_asiakkaat_tr_rivit" style="display:none"></textarea>
-			<button type="submit" class="btn btn-success laskutukseen">Laskutukseen >></button>
+			<br>
+			<textarea class="form-control" name="tv_ids" id="tv_ids">'.json_encode(array_values($tv_ids)).'</textarea>
+			<button type="submit" class="btn btn-success laskutukseen">Laskutukseen sivulle >></button>
 			</form>
 		';
 		
