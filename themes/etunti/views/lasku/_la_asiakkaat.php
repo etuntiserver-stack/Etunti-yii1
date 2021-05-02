@@ -7,10 +7,6 @@
 	</td>
 	<td width="75%" class="closest_td">
 		<div class="form-inline">
-			<select class="form-group form-control kk_valinta">
-				<option value="kk_mukaan">KK Asiakas/Kohde mukaan</option>
-				<option value="kk_ilman">Ilman KK Asiakas/Kohde</option>
-			</select>
 			<select class="form-group form-control rakenne_muoto">
 				<option value="mobiili">Mobiilista</option>
 				<option value="mobiili">Työvuoroista</option>

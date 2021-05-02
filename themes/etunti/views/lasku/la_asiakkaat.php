@@ -232,12 +232,11 @@ $(document).ready(function(){
 		var asiakas_id 		= thisFor.closest('td').find('.nayta_collapse').attr('asiakas_id');
 		var rakenne_muoto 	= thisFor.closest('td').find('.rakenne_muoto').val();
 		var rivi_muoto 		= thisFor.closest('td').find('.rivi_muoto').val();
-		var kk_valinta 		= thisFor.closest('td').find('.kk_valinta').val();
 		
 		if( !thisFor.closest('td').find('.nayta_collapse').hasClass('collapsed') )
 		{
 			thisFor.closest('td').find('.paivita').show(370);
-			var link = 'kklaskuperasiakas?asiakas_id=' + asiakas_id + '&from=<?=$from?>&to=<?=$to?>&rakenne_muoto=' + rakenne_muoto + '&rivi_muoto=' + rivi_muoto + '&kk_valinta=' + kk_valinta;
+			var link = 'kklaskuperasiakas?asiakas_id=' + asiakas_id + '&from=<?=$from?>&to=<?=$to?>&rakenne_muoto=' + rakenne_muoto + '&rivi_muoto=' + rivi_muoto;
 			//console.log('Link: ' + link);
 			$.ajax({
 				url: link,

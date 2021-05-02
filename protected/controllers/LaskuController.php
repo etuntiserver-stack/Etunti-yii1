@@ -1803,31 +1803,30 @@ exit;
 			$this->redirect(array('index'));
 	}
 
-	public function actionKklaskuperasiakas($asiakas_id, $from, $to, $rakenne_muoto, $rivi_muoto, $kk_valinta)
+	public function actionKklaskuperasiakas($asiakas_id, $from, $to, $rakenne_muoto, $rivi_muoto)
 	{
 		$ajanjakso = date("d.m.Y", strtotime($from)).' - '.date("d.m.Y", strtotime($to));
 
 		// <-- KK logikka
 		$kk_hinta = [];
-		if($kk_valinta == 'kk_mukaan')
-		{
-			$kohteet 		= Kohteet::model()->findAll("asiakas_id='".$asiakas_id."'");
-			foreach($kohteet as $item)
-			{	
-				$return = $this->getHintaFor('kohde', $item, 'kk');
-				if($return['hinta'] > 0)
-				{
-					$kk_hinta[$item->asiakas_id][$item->id] = [
-							'tuote_id' 		=> $item->tuote,
-							'tuote' 		=> $item->osoite,
-							'hinta' 		=> $return['hinta'], 
-							'alv' 			=> $return['alv'],
-							'nimike' 		=> $return['nimike'],
-							'free_text' 	=> $ajanjakso
-					];
-				}
+
+		$kohteet 		= Kohteet::model()->findAll("asiakas_id='".$asiakas_id."'");
+		foreach($kohteet as $item)
+		{	
+			$return = $this->getHintaFor('kohde', $item, 'kk');
+			if($return['hinta'] > 0)
+			{
+				$kk_hinta[$item->asiakas_id][$item->id] = [
+						'tuote_id' 		=> $item->tuote,
+						'tuote' 		=> $item->osoite,
+						'hinta' 		=> $return['hinta'], 
+						'alv' 			=> $return['alv'],
+						'nimike' 		=> $return['nimike'],
+						'free_text' 	=> $ajanjakso
+				];
 			}
 		}
+
 			
 		// <-- Mobiili logikka
 		$getall = $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, false, "id=$asiakas_id");
@@ -1918,7 +1917,7 @@ exit;
 		$body .= '</tr>';
 
 		// <-- KK
-		if($kk_valinta == 'kk_mukaan' and isset($kk_hinta[$asiakas_id]))
+		if(isset($kk_hinta[$asiakas_id]))
 		{
 			/*
 			$body .= '<tr>';
