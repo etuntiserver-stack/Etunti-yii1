@@ -7,10 +7,6 @@
 	</td>
 	<td width="75%" class="closest_td">
 		<div class="form-inline">
-			<select class="form-group form-control rakenne_muoto">
-				<option value="mobiili">Mobiilista</option>
-				<option value="tuovuoro">Työvuoroista</option>
-			</select>
 			<select class="form-group form-control rivi_muoto">
 				<option value="rivi_per_kohde">Tuote/Kohde mukaan</option>
 				<option value="rivi_per_kirjaus">Rivi per kirjaus</option>

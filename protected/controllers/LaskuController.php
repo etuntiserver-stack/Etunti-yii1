@@ -1834,7 +1834,13 @@ exit;
 			
 		if($rakenne_muoto == 'tuovuoro')
 		{
-			$haku_criteria 	= ["(laskutettu=0 or laskutettu is NULL) AND tid!=0 AND (peruutettu=0 or peruutettu is NULL)"];
+			$haku_criteria 	= [
+				"(laskutettu=0 or laskutettu is NULL) AND tid!=0 AND (peruutettu=0 or peruutettu is NULL)
+				AND kohde IN(SELECT id FROM sivex_kohdet WHERE 
+					asiakas_id='$asiakas_id'	
+				)
+				"
+			];
 			$tv_controller 	= Yii::app()->createController('Tyovuoroot');
 			$getall 		= $tv_controller[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data','tv_kesto']);
 		}
@@ -2177,9 +2183,8 @@ exit;
 		//exit;
 	}
 	
-	public function actionL_asiakkaat($kk=null)
+	public function actionL_asiakkaat($kk=null, $rakenne_muoto=null)
 	{
-
 		$dataProvider 		= [];
 		$from 				= '';
 		$to 				= '';
@@ -2197,29 +2202,61 @@ exit;
 				$criteria->condition = " tyoryhma IN ($ids) ";
 			}
 			//    Tyoryhmat -->
-			$criteria->addCondition(" 
-				id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id IN(SELECT kohdenID FROM sivexkuitti WHERE 
-					DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
-					BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-					AND status='3'
-					AND deleted=0
-					AND laskutetaan=1
-					AND hyvaksytty!=''
-					AND laskutettu=0
-				))
-				OR id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id IN(SELECT kohdenID FROM sivexkuitti_repaired WHERE 
-					DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
-					BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
-					AND status='3'
-					AND deleted=0
-					AND laskutetaan=1
-					AND hyvaksytty!=''
-					AND laskutettu=0
-				))
-				OR id IN(SELECT asiakas_id FROM sivex_kohdet WHERE 
-					(tuote!=0 OR t.tuote!=0)
-				)
-			");
+			
+			if($rakenne_muoto == 'mobiili')
+			{
+				$criteria->addCondition(" 
+					id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id IN(SELECT kohdenID FROM sivexkuitti WHERE 
+						DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
+						BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+						AND status='3'
+						AND deleted=0
+						AND laskutetaan=1
+						AND hyvaksytty!=''
+						AND laskutettu=0
+					))
+					OR id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id IN(SELECT kohdenID FROM sivexkuitti_repaired WHERE 
+						DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) 
+						BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+						AND status='3'
+						AND deleted=0
+						AND laskutetaan=1
+						AND hyvaksytty!=''
+						AND laskutettu=0
+					))
+					OR id IN(SELECT asiakas_id FROM sivex_kohdet WHERE 
+						(tuote!=0 OR t.tuote!=0)
+					)
+				");
+			}
+			
+			if($rakenne_muoto == 'tuovuoro')
+			{
+
+				$haku_criteria 	= ["(laskutettu=0 or laskutettu is NULL) AND tid!=0 AND (peruutettu=0 or peruutettu is NULL)"];
+				$tv_controller 	= Yii::app()->createController('Tyovuoroot');
+				$getall 		= $tv_controller[0]->FromToSuunnitellutAll(date("Y-m-d", strtotime($from)), date("Y-m-d", strtotime($to)), [], $haku_criteria, []);
+				$kohde_ids = [];
+				foreach($getall as $arr)
+				{
+					if($arr['kohde'] > 0)
+						$kohde_ids[$arr['kohde']] = $arr['kohde'];
+				}
+				/*
+				echo '<pre>';
+				print_r($kohde_ids);
+				echo '</pre>';
+				exit;
+				*/
+				$impl = "id='".implode("' OR id='", $kohde_ids)."'";
+				$criteria->addCondition(" 
+					id IN(SELECT asiakas_id FROM sivex_kohdet WHERE
+						($impl)
+					)
+				");
+				
+			}
+			
 			if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
 		        	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR CONCAT(etunimi , ' ' , sukunimi) LIKE '%".$_GET['yrityksen_nimi']."%'");
 
@@ -2244,6 +2281,7 @@ exit;
 				
 		$this->render('la_asiakkaat', array(
 			'kk' 			=> $kk,
+			'rakenne_muoto' => $rakenne_muoto,
 			'from'			=> $from,
 			'to'			=> $to,
 			'dataProvider' 	=> $dataProvider

@@ -42,6 +42,17 @@
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
+							<select class="form-group form-control" name="rakenne_muoto">
+								<option value="mobiili" <?=($rakenne_muoto !== null and $rakenne_muoto == 'mobiili')? 'selected':''?>>Mobiilista</option>
+								<option value="tuovuoro" <?=($rakenne_muoto !== null and $rakenne_muoto == 'tuovuoro')? 'selected':''?>>Työvuoroista</option>
+							</select>
+                           </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
 							<?php
 								$list = array();
 								$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
@@ -108,7 +119,7 @@
         <!-- loppu: .tray-center -->
         </div>
 
-<?php if($kk !== null) : ?>
+<?php if($kk !== null and $rakenne_muoto !== null) : ?>
 <div class="admin-form">
   <div class="panel heading-border">
    <div class="panel-body">
@@ -230,7 +241,7 @@ $(document).ready(function(){
 	function ajaxForLasku(thisFor)
 	{
 		var asiakas_id 		= thisFor.closest('td').find('.nayta_collapse').attr('asiakas_id');
-		var rakenne_muoto 	= thisFor.closest('td').find('.rakenne_muoto').val();
+		var rakenne_muoto 	= '<?=$rakenne_muoto?>';
 		var rivi_muoto 		= thisFor.closest('td').find('.rivi_muoto').val();
 		
 		if( !thisFor.closest('td').find('.nayta_collapse').hasClass('collapsed') )
