@@ -5740,9 +5740,9 @@ class TyovuorootController extends Controller
     elseif (empty($asiakas = Asiakkaat::model()->findByPk($asiakas_id)))
       return $this->outfmt(false, 'Asiakasta ID "%d" ei löydetty.', $asiakas_id);
 
-    // Check that the customer has an email specified. (TODO: validate?)
-    if (empty($client_email = trim($asiakas->sahkoposti ?? '')))
-      return $this->outfmt(false, 'Asiakkaan ID %d sähköposti ei ole määritelty tai on viallinen.', $asiakas_id);
+	// Check that the customer has an email specified. (TODO: validate?)
+	if(empty($client_emails = $asiakas->AloitusajatEmails ?? []))
+		return $this->outfmt(false, "Asiakkaan ID %d sähköposti ei ole määritelty tai on viallinen.", $asiakas_id);
 
     // Check for non-existent location.
     if (!is_numeric($kohde_id = $_POST['kohde_id']))
@@ -5770,7 +5770,7 @@ class TyovuorootController extends Controller
     $replyto_email = 'asiakaspalvelu@kotipuhtaaksi.fi';
     $mail = new YiiMailer();
     $mail->setFrom('asiakaspalvelu@kotipuhtaaksi.fi', $sender_name);
-    $mail->setTo($client_email);
+    $mail->setTo($client_emails);
     $mail->setSubject($email_subject);
     $mail->setBody($email_body);
     $mail->addReplyTo($replyto_email);
@@ -5780,7 +5780,7 @@ class TyovuorootController extends Controller
     $customer = $asiakas->sahkoposti ?? "ID $asiakas_id";
     echo json_encode([
       'success' => true,
-      'message' => "Ilmoitus lähetetään asiakkaalle $customer osoitteeseen $client_email. " .
+      'message' => "Ilmoitus lähetetään asiakkaalle $customer osoitteisiin $asiakas->AloitusajatEmailsString. " .
                    "Odota hetki kun työvuoro tallennetaan ja avataan uudelleen..",
       // 'message' => "$email_subject: $email_body"
     ]);
