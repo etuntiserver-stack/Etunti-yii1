@@ -1884,34 +1884,31 @@ exit;
 				$tyovuoro_tuotteet = [];
 				if($tyovuorot !== null and $kohde_id > 0)
 				{
-					if(isset($item->tyovuoroot->id))
+					if($tyovuorot->tuoteID > 0)
 					{
-						if($tyovuorot->tuoteID > 0)
+						$return = $this->getHintaFor('tyovuoro', $tyovuorot, 'h');
+						$tyovuoro_tuotteet['paa_tuote']['tuote_id'] = $tyovuorot->tuoteID;
+						$tyovuoro_tuotteet['paa_tuote']['tv_pvm'] 	= $tyovuorot->pvm;
+						$tyovuoro_tuotteet['paa_tuote']['nimike'] 	= $return['nimike'];
+						$tyovuoro_tuotteet['paa_tuote']['hinta'] 	= $return['hinta'];
+						$tyovuoro_tuotteet['paa_tuote']['alv'] 		= $return['alv'];
+					}
+					if($tyovuorot->lisa_tuotteet != null)
+					{
+						$lisa_tuotteet = json_decode($tyovuorot->lisa_tuotteet, true);
+						foreach($lisa_tuotteet['tuote'] as $key => $tuote_id)
 						{
-							$return = $this->getHintaFor('tyovuoro', $tyovuorot, 'h');
-							$tyovuoro_tuotteet['paa_tuote']['tuote_id'] = $tyovuorot->tuoteID;
-							$tyovuoro_tuotteet['paa_tuote']['tv_pvm'] 	= $tyovuorot->pvm;
-							$tyovuoro_tuotteet['paa_tuote']['nimike'] 	= $return['nimike'];
-							$tyovuoro_tuotteet['paa_tuote']['hinta'] 	= $return['hinta'];
-							$tyovuoro_tuotteet['paa_tuote']['alv'] 		= $return['alv'];
-						}
-						if($tyovuorot->lisa_tuotteet != null)
-						{
-							$lisa_tuotteet = json_decode($tyovuorot->lisa_tuotteet, true);
-							foreach($lisa_tuotteet['tuote'] as $key => $tuote_id)
+							$tuotteet = TuotteetPalvelut::model()->findByPk($tuote_id);
+							if(isset($tuotteet->id))
 							{
-								$tuotteet = TuotteetPalvelut::model()->findByPk($tuote_id);
-								if(isset($tuotteet->id))
-								{
-									$tyovuoro_tuotteet['lisa_tuotteet'][] = [
-										'tv_pvm'	=> $tyovuorot->pvm,
-										'tuote_id' 	=> $tuote_id,
-										'nimike' 	=> $tuotteet->nimike,
-										'hinta' 	=> $tuotteet->hinta_alv_0,
-										'alv' 		=> $tuotteet->alv,
-										'maara' 	=> $lisa_tuotteet['maara'][$key]
-									];
-								}
+								$tyovuoro_tuotteet['lisa_tuotteet'][] = [
+									'tv_pvm'	=> $tyovuorot->pvm,
+									'tuote_id' 	=> $tuote_id,
+									'nimike' 	=> $tuotteet->nimike,
+									'hinta' 	=> $tuotteet->hinta_alv_0,
+									'alv' 		=> $tuotteet->alv,
+									'maara' 	=> $lisa_tuotteet['maara'][$key]
+								];
 							}
 						}
 					}
@@ -1954,12 +1951,6 @@ exit;
 		// <-- KK
 		if(isset($kk_hinta[$asiakas_id]))
 		{
-			/*
-			$body .= '<tr>';
-			$body .= '<td colspace="5"><h3>Kuukausi Kohde/Asiakas</h3></th>';
-			$body .= '</tr>';
-			*/
-			
 			foreach($kk_hinta[$asiakas_id] as $kohde_id => $arr)
 			{
 				$num_rivi++;
@@ -1990,22 +1981,6 @@ exit;
 		// <-- Mobiili ja TV
 		if(isset($mob_lista[$asiakas_id]))
 		{
-			/*
-			if($rivi_muoto == 'rivi_per_kohde')
-			{
-				$body .= '<tr>';
-				$body .= '<td colspace="5"><h3>TUNNIT ( Tuote/Kohde per laskurivi )</h3></td>';
-				$body .= '</tr>';
-			}
-
-			if($rivi_muoto == 'rivi_per_kirjaus')
-			{
-				$body .= '<tr>';
-				$body .= '<td colspace="5"><h3>TUNNIT ( Joka kirjaus per laskurivi )</h3></td>';
-				$body .= '</tr>';
-			}
-			*/
-			
 			$group_arr = [];
 			foreach($mob_lista[$asiakas_id] as $key => $arr)
 			{			
@@ -2024,7 +1999,7 @@ exit;
 					if($rakenne_muoto == 'tuovuoro')
 					{
 						$pvm		= $item->pvm;
-						$tyovuorot 	= (isset($item->id))? $item : null;
+						$tyovuorot 	= $item;
 						$osoite		= $item->osoiteById;
 						$kohde_id	= $item->kohde;
 					}
@@ -2062,14 +2037,14 @@ exit;
 
 						$tv_link 	= CHtml::link('<span class="text-success">Työvuoro</span>',
 							[
-							  sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s', date("Y", strtotime($this_pvm)), date("W", strtotime($this_pvm)), $item->tv_id)
+							  sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s', date("Y", strtotime($this_pvm)), date("W", strtotime($this_pvm)), $tyovuorot->id)
 							],
 							[
 							  'class' 			=> 'pull-right',
 							  'target' 			=> '_blank',
 							  'data-toggle' 	=> 'tooltip',
 							  'data-placement' 	=> 'top',
-							  'title' 			=> 'Tämä kirjaus on tehty työvuorosta ID#: '.$item->tv_id
+							  'title' 			=> 'Tämä kirjaus on tehty työvuorosta ID#: '.$tyovuorot->id
 							]
 						);
 						
