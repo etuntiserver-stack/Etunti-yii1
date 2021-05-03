@@ -287,7 +287,7 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 											// save the "off" state to the database, since it effectively doesn't exist in the form.
 											// "on" and "off" are the checkbox states in html
 											if(isset($contact["starting_time"]) and $contact["starting_time"] === "on") {
-												echo "Käytetään aloitusaikoijen ilmoituksiin";
+												echo "Käytetään aloitusaikojen ilmoituksiin";
 											} ?>
 										</p>
 									</div>
@@ -1198,7 +1198,7 @@ $("#Asiakkaat_asiakasnumero").keyup(function() {
                 <p>${data.phone}</p>
                 <p>${data.email}</p>
                 <p style="font-weight: bold">${data.invoice ? "Näytetään laskulla" : ""}</p>
-				<p style="font-weight: bold">${data.starting_time ? "Käytetään aloitusaikoijen ilmoituksiin" : ""}</p>
+				<p style="font-weight: bold">${data.starting_time ? "Käytetään aloitusaikojen ilmoituksiin" : ""}</p>
             </div>
             <div class="col-sm-2">
                 <button type="button" class="btn btn-danger btn-sm remove-extra-contact">
@@ -1238,7 +1238,7 @@ $("#Asiakkaat_asiakasnumero").keyup(function() {
                         <div id="extra-contact-phone-error"></div>
                         <label class="control-label" for="invoice">Näytetään laskulla</label>
                         <input name="invoice" id="invoice" type="checkbox" ${editObject?.invoice ? "checked" : ""}>
-						<label class="control-label" for="starting_time">Käytetään aloitusaikoijen ilmoituksiin</label>
+						<label class="control-label" for="starting_time">Käytetään aloitusaikojen ilmoituksiin</label>
                         <input name="starting_time" id="starting_time" type="checkbox" ${editObject?.starting_time ? "checked" : ""}>
                     </div>
                     <button type="button" class="btn btn-success save-extra-contact">
