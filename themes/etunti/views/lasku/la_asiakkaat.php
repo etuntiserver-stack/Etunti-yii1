@@ -17,7 +17,7 @@
                       <div class="col-md-2">
                         <div class="section">
                          <label class="field select">
-							<select name="kk" id="kk" class="gui-input">
+							<select name="kk" id="kk" class="gui-input" required>
 							<option value=""><?php echo Yii::t('main', 'Valitse kuukausi'); ?></option>
 							<?php
 							$months = Lasku::months();

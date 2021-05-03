@@ -2221,11 +2221,11 @@ class TyovuorootController extends Controller
 			if(isset($haku_criteria['uusi_tilaus']))
 				unset($haku_criteria['uusi_tilaus']);
 		}
-	        $criteria->addCondition($haku_criteria);
-    $t = ToistuvatTyovuorot::model()->findAll($criteria);
-    $osvt = $this->os_check_warning($t);
+		$criteria->addCondition($haku_criteria);
+		$t = ToistuvatTyovuorot::model()->findAll($criteria);
+		$osvt = $this->os_check_warning($t);
 		foreach($t as $arvo){
-      $ostvaroitus = (isset($osvt[$arvo->id]) ? $osvt[$arvo->id] : false);
+			$ostvaroitus = (isset($osvt[$arvo->id]) ? $osvt[$arvo->id] : false);
 
 			// <-- Tids
 			$tids = [];

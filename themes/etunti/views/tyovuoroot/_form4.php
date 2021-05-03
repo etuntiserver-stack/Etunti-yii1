@@ -607,15 +607,25 @@ $(document).ready(function(){
 		<?php echo $form->labelEx($model,'piilota_mobiilista'); ?>
 		<?php 
         	$l = array(0=>'Kyllä',1=>'Ei');
-		echo $form->dropDownList($model,'piilota_mobiilista', $l, 
-		array('class'=>'form-control lomake_valinta')) ?>
+			echo $form->dropDownList($model,'piilota_mobiilista', $l, 
+			array('class'=>'form-control lomake_valinta')) ?>
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'laskutettu'); ?>
-		<?php 
+		<?php
+			// <-- Check laskutetut
+			if(isset($model->kohteet->asiakkaat->id) and $model->kohteet->asiakkaat->id > 0)
+			{
+				$kk	= date("Y-m", strtotime($laatikko_pvm));
+				$la = LaskutetutAsiakkaat::model()->find("asiakas_id='".$model->kohteet->asiakkaat->id."' AND kk='".$kk."'");
+				if(isset($la->id))
+					$model->laskutettu = 1;
+			}
+			
         	$l = array(0 => 'Ei laskutettu', 1 => 'Laskutettu');
-		echo $form->dropDownList($model,'laskutettu', $l, 
-		array('class'=>'form-control lomake_valinta')) ?>
+			echo $form->dropDownList($model,'laskutettu', $l, 
+			array('class'=>'form-control lomake_valinta')) 
+		?>
   </div>
 </div>
 <br>
