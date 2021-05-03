@@ -138,7 +138,7 @@
 		'dataProvider'=>$dataProvider,
 		'itemView'=>'_la_asiakkaat',
 	  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
-		//'viewData' => ['mob_lista' => $mob_lista], 
+		'viewData' => ['la_AsIds' => $la_AsIds], 
 		'pager' => array(
 	           'firstPageLabel'=>'<<',
 	           'prevPageLabel'=>'< Edellinen',
@@ -174,6 +174,62 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
+	$(document).delegate(".poista_laskutettu","click",function(){
+		var la_id 		= $(this).attr('la_id');
+		var thisButton  = $(this);
+		var cl 			= $(this).closest('.closest_td');
+		var closest_asiakas_td	= $(this).closest('tr').find('.closest_asiakas_td');
+		
+		thisButton.text('Odota...').removeClass('poista_laskutettu');
+
+		$.ajax({
+			url: 'laskutetuksi?asiakas_id=null&from=null&to=null&tilanne=remove&la_id=' + la_id,
+			success: function(data){
+				var data = JSON.parse(data);
+				console.log(data);
+				if(data['ok'])
+				{
+					thisButton.closest('.closest_td').find('.collapse').collapse('hide');
+					thisButton.remove();
+					ajaxForLasku(cl);
+					closest_asiakas_td.find('.laskutettu').remove();
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+			   	console.log(XMLHttpRequest);
+			}
+		});
+	});
+	
+	$(document).delegate(".laskutetuksi","click",function(){
+		var asiakas_id 	= $(this).attr('asiakas_id');
+		var from 		= $(this).attr('from');
+		var to 			= $(this).attr('to');
+		var thisButton  = $(this);
+		var cl 			= $(this).closest('.closest_td');
+		var closest_asiakas_td	= $(this).closest('tr').find('.closest_asiakas_td');
+		
+		thisButton.text('Odota...').removeClass('laskutetuksi');
+
+		$.ajax({
+			url: 'laskutetuksi?asiakas_id=' + asiakas_id + '&from=' + from + '&to=' + to + '&tilanne=new',
+			success: function(data){
+				var data = JSON.parse(data);
+				console.log(data);
+				if(data['id'] && parseInt(data['id']) > 0)
+				{
+					thisButton.closest('.closest_td').find('.collapse').collapse('hide');
+					thisButton.remove();
+					ajaxForLasku(cl);
+					closest_asiakas_td.append('<h3 class="text-success laskutettu">Laskutettu.</h3>');
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+			   	console.log(XMLHttpRequest);
+			}
+		});
+	});
+	
 	$(document).delegate(".laskutukseen","click",function(e){
 		e.preventDefault()
 		var lasku_rivit = [];

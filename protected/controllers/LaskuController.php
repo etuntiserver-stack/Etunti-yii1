@@ -27,7 +27,7 @@ class LaskuController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_procountor', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet', 'perpvmkohde', 'l_asiakkaat', 'kklaskuperasiakas', 'tuotepalvelukohdelle'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_procountor', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet', 'perpvmkohde', 'l_asiakkaat', 'kklaskuperasiakas', 'tuotepalvelukohdelle', 'laskutetuksi'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow',  // allow all users to perform 'index' and 'view' actions
@@ -1805,7 +1805,8 @@ exit;
 
 	public function actionKklaskuperasiakas($asiakas_id, $from, $to, $rakenne_muoto, $rivi_muoto)
 	{
-		$ajanjakso = date("d.m.Y", strtotime($from)).' - '.date("d.m.Y", strtotime($to));
+		$asiakas	= Asiakkaat::model()->findByPk($asiakas_id);
+		$ajanjakso 	= date("d.m.Y", strtotime($from)).' - '.date("d.m.Y", strtotime($to));
 
 		// <-- KK logikka
 		$kk_hinta = [];
@@ -2142,22 +2143,71 @@ exit;
 		$body .= '<th></th>';
 		$body .= '</tr>';
 		$body .= '</table>';
-		
-		$body .= '<br><br>
-			<form action="create" method="POST" target="_blank">
-			<label>Työvuorot ID:t</label>
-			<textarea class="form-control" name="la_asiakkaat_tr_rivit" id="la_asiakkaat_tr_rivit" style="display:none"></textarea>
-			<br>
-			<textarea class="form-control" name="tv_ids" id="tv_ids">'.json_encode(array_values($tv_ids)).'</textarea>
-			<button type="submit" class="btn btn-success laskutukseen">Laskutukseen sivulle >></button>
-			</form>
-		';
+
+		// json_encode(array_values($tv_ids))
+
+		$kk		= date("Y-m", strtotime($from));
+		$model 	= LaskutetutAsiakkaat::model()->find("asiakas_id='".$asiakas_id."' AND kk='".$kk."'");
+		if(!isset($model->id))
+		{
+			$body .= '<br><br>
+				<form action="create" method="POST" target="_blank">
+				<textarea class="form-control" name="la_asiakkaat_tr_rivit" id="la_asiakkaat_tr_rivit" style="display:none"></textarea>
+				<p><button type="submit" class="btn-block btn btn-info laskutetuksi laskutukseen" asiakas_id="'.$asiakas_id.'" from="'.$from.'" to="'.$to.'">Merkitse ajanjakso '.$ajanjakso.' "Laskutetuksi" ja generoi uusi lasku</button></p>
+				</form>
+			
+				<p><button class="btn-block btn btn-primary laskutetuksi" asiakas_id="'.$asiakas_id.'" from="'.$from.'" to="'.$to.'">Merkitse ajanjakso '.$ajanjakso.' "Laskutetuksi" ja ei tehdä uutta laskua</button></p>
+			';
+		} else {
+			$body .= '<h3 class="text-success">Asiakas on laskutettu.</h3>';
+			$body .= '<h4 class="text-success">'.$ajanjakso.' on merkitty "Laskutettuksi"</h4>';
+			$body .= '<br><br>
+				<form action="create" method="POST" target="_blank">
+				<textarea class="form-control" name="la_asiakkaat_tr_rivit" id="la_asiakkaat_tr_rivit" style="display:none"></textarea>
+				<p><button type="submit" class="btn-block btn btn-info laskutukseen">Generoi uusi lasku</button></p>
+				</form>
+				
+				<p><button class="btn-block btn btn-danger poista_laskutettu" la_id="'.$model->id.'">Posta "Laskutettu" tilanne</button></p>
+			';
+		}
 		
 		echo json_encode($body);
 		//echo $body;
-		//exit;
+		exit;
 	}
-	
+
+	public function actionLaskutetuksi($asiakas_id, $from, $to, $tilanne, $la_id=null)
+	{
+		if($tilanne == 'remove' and $la_id > 0)
+		{
+			$model 	= LaskutetutAsiakkaat::model()->findByPk($la_id);
+			if($model->delete())
+			{
+				echo json_encode(['ok' => true]);
+				exit;
+			}
+		}
+		
+		if($tilanne == 'new')
+		{
+			$kk		= date("Y-m", strtotime($from));
+			$model 	= LaskutetutAsiakkaat::model()->find("asiakas_id='".$asiakas_id."' AND kk='".$kk."'");
+			if(!isset($model->id))
+			{
+				$model = new LaskutetutAsiakkaat;
+				$model->asiakas_id 	= $asiakas_id;
+				$model->kk 			= $kk;
+				if($model->save())
+				{
+					echo json_encode(['id' => $model->id]);
+					exit;			
+				}
+			}
+		}
+		echo json_encode(['ERROR' => true]);
+		exit;
+	}
+
 	public function actionL_asiakkaat($kk=null, $rakenne_muoto=null)
 	{
 		$dataProvider 		= [];
@@ -2165,9 +2215,16 @@ exit;
 		$to 				= '';
 		if($kk !== null)
 		{
-			$from 		= date("Y-m-d", strtotime($kk." first day of this month"));
-			$to 		= date("Y-m-d", strtotime($kk." last day of this month"));
+			$from 			= date("Y-m-d", strtotime($kk." first day of this month"));
+			$to 			= date("Y-m-d", strtotime($kk." last day of this month"));
 
+			// <-- Check laskutetut
+			$kk				= date("Y-m", strtotime($from));
+			$la 			= LaskutetutAsiakkaat::model()->findAll("kk='".$kk."'");
+			$la_AsIds 		= [];
+			foreach($la as $item)
+				$la_AsIds[$item->asiakas_id] = $item->asiakas_id;
+		
 	       	$criteria = new CDbCriteria();
 			// <-- Tyoryhmat
 			$site = Yii::app()->createController('Site');
@@ -2259,6 +2316,7 @@ exit;
 			'rakenne_muoto' => $rakenne_muoto,
 			'from'			=> $from,
 			'to'			=> $to,
+			'la_AsIds'		=> $la_AsIds,
 			'dataProvider' 	=> $dataProvider
 		));
 	}
