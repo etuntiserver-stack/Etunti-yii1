@@ -2211,6 +2211,7 @@ exit;
 	public function actionL_asiakkaat($kk=null, $rakenne_muoto=null)
 	{
 		$dataProvider 		= [];
+		$la_AsIds 			= [];
 		$from 				= '';
 		$to 				= '';
 		if($kk !== null)
@@ -2221,7 +2222,6 @@ exit;
 			// <-- Check laskutetut
 			$kk				= date("Y-m", strtotime($from));
 			$la 			= LaskutetutAsiakkaat::model()->findAll("kk='".$kk."'");
-			$la_AsIds 		= [];
 			foreach($la as $item)
 				$la_AsIds[$item->asiakas_id] = $item->asiakas_id;
 		
