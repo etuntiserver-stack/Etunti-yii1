@@ -2147,10 +2147,34 @@ class TyovuorootController extends Controller
 
 	public function tv_arr($haku_from, $haku_to, $haku_tids, $haku_criteria, $laatikkomuoto, $with, $customer_tickets = []){
 
-		$asetukset 		= Asetukset::model()->findByPk(1);
+		$asetukset 				= Asetukset::model()->findByPk(1);
 		$asiakas_tyovuorossa 	= ($asetukset->asiakas_tyovuorossa == 1)? true:false;
-		$haku_to_ts 		= strtotime($haku_to ?? 0);
-		$tv_arr 		= [];
+		$haku_to_ts 			= strtotime($haku_to ?? 0);
+		$tv_arr 				= [];
+
+		// <-- Check laskutetut asiakkaat
+		$la_PVMS 	= [];
+		$start 		= $month = strtotime($haku_from);
+		$end 		= strtotime($haku_to);
+		$kk_arr 	= [];
+		while($month < $end)
+		{
+			 $kk_arr[] 	= date('Y-m', $month);
+			 $month 	= strtotime("+1 month", $month);
+		}
+		$impl			= "kk='".implode("' OR kk='", $kk_arr)."'";
+		$la 			= LaskutetutAsiakkaat::model()->findAll("($impl)");
+		foreach($la as $item)
+		{
+			$start 		= $day = strtotime(date("Y-m-d", strtotime($item->kk.' first day of this month')));
+			$end 		= strtotime(date("Y-m-d", strtotime($item->kk.' last day of this month')));
+			while($day < $end)
+			{
+				 $la_PVMS[$item->asiakas_id][date('d.m.Y', $day)] = $item->asiakas_id;
+				 $day 		= strtotime("+1 day", $day);
+			}
+		}
+		//    Check laskutetut asiakkaat -->
 
 		// <-- Tv array
        		$criteria = new CDbCriteria();
@@ -2168,12 +2192,12 @@ class TyovuorootController extends Controller
 		      	$ids = implode(",", $haku_tids);
 		        $criteria->addCondition('tid IN ('.$ids.')');
 		}
-	        $criteria->addCondition($haku_criteria);
-    $tv = Tyovuoroot::model()->findAll($criteria);
-    $osv = $this->os_check_warning($tv);
+		$criteria->addCondition($haku_criteria);
+		$tv = Tyovuoroot::model()->findAll($criteria);
+		$osv = $this->os_check_warning($tv);
 		foreach($tv as $arvo){
-      $osvaroitus = (isset($osv[$arvo->id]) ? $osv[$arvo->id] : false);
-			$return = $this->laatikkorakenne($arvo, $arvo->pvm, $arvo->tid, false, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets, $osvaroitus);
+      		$osvaroitus = (isset($osv[$arvo->id]) ? $osv[$arvo->id] : false);
+			$return = $this->laatikkorakenne($arvo, $arvo->pvm, $arvo->tid, false, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets, $osvaroitus, $la_PVMS);
 			$tv_arr[$arvo->tid][$arvo->pvm][strtotime($arvo->alku)][] = $return;
 		}
 
@@ -2246,7 +2270,7 @@ class TyovuorootController extends Controller
 						foreach($tids as $tid){
 							if( isset($poistettu_pvms[$tid][$this_pvm]) )
 								continue;
-							$return = $this->laatikkorakenne($arvo, $this_pvm, $tid, true, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets, $ostvaroitus);
+							$return = $this->laatikkorakenne($arvo, $this_pvm, $tid, true, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets, $ostvaroitus, $la_PVMS);
 							$tv_arr[$tid][$this_pvm][strtotime($arvo->alku)][] = $return;
 						}
 
@@ -2273,7 +2297,7 @@ class TyovuorootController extends Controller
 		return (int)'99999999'.str_pad($id, 8, '0', STR_PAD_LEFT).''.$this_pvm.''.$this_tid;
 	}
 
-	protected function laatikkorakenne($arvo, $this_pvm, $this_tid, $toistuva, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets = [], $os_warning = false){
+	protected function laatikkorakenne($arvo, $this_pvm, $this_tid, $toistuva, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets = [], $os_warning = false, $la_PVMS){
 		// <-- Status
 		$status = $this->statukset($arvo->piilota_mobiilista);
 		// Status -->
@@ -2341,6 +2365,9 @@ class TyovuorootController extends Controller
 			$ikoonit .=  ' <i class="tvikooni fa fa-key text-warning" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Avain').'"></i> ';
 		if ($has_tickets)
       $ikoonit .= ' <i class="fa fa-question text-primary" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Avoimia Tukipyyntöjä').'"></i> ';
+      
+		if(isset($arvo->kohteet->asiakkaat->id) and isset($la_PVMS[$arvo->kohteet->asiakkaat->id][$this_pvm]))
+			$lisateksti .= '<br><span class="text-primary">Laskutettu</span>';
 
 		$asiakasNakyvissa = '';
 		if( $asiakas_tyovuorossa ){
