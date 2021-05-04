@@ -30,14 +30,14 @@
 	{
 		//if(isset($la_asiakkaat_mobiili['pikkuviesti']))
 			//$pikkuviesti 	= $la_asiakkaat_mobiili['pikkuviesti'];
-			
+
 		$rivi			= $la_asiakkaat_tr_rivit[0];
 		
 		$tuote			= $rivi['tuote'];
 		$tuoteID		= $rivi['tuote_id'];
 		$maara 			= $rivi['maara'];
 		$hinta 			= $rivi['hinta'];
-		$yksikkot 		= $this->yksikkot('h');
+		$yksikkot 		= $this->yksikkot($rivi['yksikko']);
 		$alv 			= $this->alv($rivi['alv']);
 		$free_text 		= $rivi['free_text'];
 	}

@@ -239,6 +239,7 @@ $(document).ready(function(){
 				'tv_id' : $(this).closest('tr').find('.tuote').attr('tv_id'),
 				'tuote' : $(this).closest('tr').find('.tuote').text(),
 				'maara' : $(this).closest('tr').find('.maara').text(),
+				'yksikko' : $(this).closest('tr').find('.yksikko').text(),
 				'alv' : $(this).closest('tr').find('.alv').text(),
 				'hinta' : $(this).closest('tr').find('.hinta').text(),
 				'free_text' : $(this).closest('tr').find('.free_text').text()

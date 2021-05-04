@@ -1822,6 +1822,7 @@ exit;
 						'tuote' 		=> $item->osoite,
 						'hinta' 		=> $return['hinta'], 
 						'alv' 			=> $return['alv'],
+						'yksikko' 		=> $return['yksikko'],
 						'nimike' 		=> $return['nimike'],
 						'free_text' 	=> $ajanjakso
 				];
@@ -1893,6 +1894,7 @@ exit;
 						$tyovuoro_tuotteet['paa_tuote']['nimike'] 	= $return['nimike'];
 						$tyovuoro_tuotteet['paa_tuote']['hinta'] 	= $return['hinta'];
 						$tyovuoro_tuotteet['paa_tuote']['alv'] 		= $return['alv'];
+						$tyovuoro_tuotteet['paa_tuote']['yksikko'] 	= $return['yksikko'];
 					}
 					if($tyovuorot->lisa_tuotteet != null)
 					{
@@ -1908,6 +1910,7 @@ exit;
 									'nimike' 	=> $tuotteet->nimike,
 									'hinta' 	=> $tuotteet->hinta_alv_0,
 									'alv' 		=> $tuotteet->alv,
+									'yksikko' 	=> $tuotteet->yksikko,
 									'maara' 	=> $lisa_tuotteet['maara'][$key]
 								];
 							}
@@ -1943,6 +1946,7 @@ exit;
 		$body .= '<th></th>';
 		$body .= '<th>'.Yii::t('main', 'Tuote').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Määrä').'</th>';
+		$body .= '<th>'.Yii::t('main', 'Yks.').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Alv').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Hinta').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Yhteensä').'</th>';
@@ -1960,6 +1964,7 @@ exit;
 					'maara' 	=> 1, 
 					'hinta' 	=> $arr['hinta'], 
 					'alv' 		=> $arr['alv'],
+					'yksikko'	=> $arr['yksikko'],
 					'nimike' 	=> $arr['nimike'],
 					'free_text'	=> $arr['free_text']
 				];
@@ -1971,6 +1976,7 @@ exit;
 				$body .= '<td align="center"><i class="fa fa-2x link fa-trash text-danger poista_rivi"></i></td>';
 				$body .= '<td class="tuote" tuote_id="'.$arr['tuote_id'].'" tv_id="0"><b>'.$arr['nimike'].'</b><br>'.$arr['tuote'].'</td>';
 				$body .= '<td class="maara">1</td>';
+				$body .= '<td class="yksikko">'.$arr['yksikko'].'</td>';
 				$body .= '<td class="alv">'.$arr['alv'].'</td>';
 				$body .= '<td class="hinta">'.$arr['hinta'].'</td>';
 				$body .= '<td class="forsumm">'.$arr['hinta'].'</td>';
@@ -2026,6 +2032,7 @@ exit;
 							'tuote_id'	=> $tuote_id,
 							'nimike' 	=> '<b>'.$v['hinta_laskenta']['nimike'].':</b> '.$kohde_link,
 							'alv' 		=> $v['hinta_laskenta']['alv'],
+							'yksikko'	=> $v['hinta_laskenta']['yksikko'],
 							'hinta' 	=> $v['hinta_laskenta']['hinta'],
 							'maara'		=> $maara,
 							'free_text'	=> $pvm
@@ -2055,6 +2062,7 @@ exit;
 							'tuote_id'	=> $tuote_id,
 							'nimike' 	=> '<b>'.$v['tyovuoro_tuotteet']['paa_tuote']['nimike'].':</b> '.$kohde_link.(($rivi_muoto == 'rivi_per_kirjaus')?$tv_link:''),
 							'alv' 		=> $v['tyovuoro_tuotteet']['paa_tuote']['alv'],
+							'yksikko' 	=> $v['tyovuoro_tuotteet']['paa_tuote']['yksikko'],
 							'hinta' 	=> $v['tyovuoro_tuotteet']['paa_tuote']['hinta'],
 							'maara'		=> $maara,
 							'free_text'	=> $pvm
@@ -2071,6 +2079,7 @@ exit;
 								'tuote_id'	=> $tuote_id,
 								'nimike' 	=> '<b>'.$tuote['nimike'].(($rivi_muoto == 'rivi_per_kirjaus')?$tv_link:'').'</b>',
 								'alv' 		=> $tuote['alv'],
+								'yksikko' 	=> $tuote['yksikko'],
 								'hinta' 	=> $tuote['hinta'],
 								'maara'		=> $tuote['maara'],
 								'free_text'	=> $pvm
@@ -2099,6 +2108,7 @@ exit;
 							$body .= '<td align="center"><i class="fa fa-2x link fa-trash text-danger poista_rivi"></i></td>';
 							$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].'</td>';
 							$body .= '<td class="maara">'.$maara.'</td>';
+							$body .= '<td class="yksikko">'.$arr['yksikko'].'</td>';
 							$body .= '<td class="alv">'.$arr['alv'].'</td>';
 							$body .= '<td class="hinta">'.$hinta.'</td>';
 							$body .= '<td class="forsumm">'.($maara*$hinta).'</td>';
@@ -2108,6 +2118,7 @@ exit;
 			
 						$pregroup[$tuote_id]['nimike'] 		= $arr['nimike'];
 						$pregroup[$tuote_id]['alv'] 		= $arr['alv'];
+						$pregroup[$tuote_id]['yksikko'] 	= $arr['yksikko'];
 						$pregroup[$tuote_id]['hinta'] 		= $hinta;
 						$pregroup[$tuote_id]['maara'][]		= $maara;
 					}
@@ -2124,6 +2135,7 @@ exit;
 					$body .= '<td align="center"><i class="fa fa-2x link fa-trash text-danger poista_rivi"></i></td>';
 					$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].'</td>';
 					$body .= '<td class="maara">'.$maara.'</td>';
+					$body .= '<td class="yksikko">'.$arr['yksikko'].'</td>';
 					$body .= '<td class="alv">'.$arr['alv'].'</td>';
 					$body .= '<td class="hinta">'.$arr['hinta'].'</td>';
 					$body .= '<td class="forsumm">'.($maara*$arr['hinta']).'</td>';
@@ -2134,6 +2146,7 @@ exit;
 		}
 
 		$body .= '<tr>';
+		$body .= '<th></th>';
 		$body .= '<th></th>';
 		$body .= '<th></th>';
 		$body .= '<th></th>';
