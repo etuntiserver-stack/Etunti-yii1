@@ -1129,7 +1129,12 @@ public function actionImei($dom)
 						$avaimet .= '<th>'.Yii::t('main', 'Sijainti').'</th>';
 						$avaimet .= '</tr>';
 						foreach($kohde->avaimet as $avain){
-							if($avain->sijainti_omatekstti == 0 and $avain->sijainti != 3){ continue; }
+							// I don't know why we would hide they if we're choosing the location by the dropdown
+							// sijainti_omatekstti being 0 means we're choosing the location by pre-determined
+							// locations. /themes/etunti/views/avaimet/index.php around line 200
+							// $arr = [1 => 'Toimistolla', 2 => 'Palautettu asiakkaalle', 3 => 'Työntekijällä'];
+							// these are the pre-determined locations ^
+							//if($avain->sijainti_omatekstti == 0 and $avain->sijainti != 3){ continue; }
 							$avaimet .= '
 							<tr>
 							<td>'.$avain->avainnumero.'</td>
