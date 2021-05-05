@@ -1670,9 +1670,9 @@ exit;
 				// <-- LOG
 				if( isset($model->id) )
 				{
-				$model_log 	= 'Lasku';
-				$name_log 	= 'Lasku';
-				$status_log 	= 'Update';
+					$model_log 	= 'Lasku';
+					$name_log 	= 'Lasku';
+					$status_log 	= 'Update';
 
 					$old_values = json_encode($vanha_attr);
 					$new_values = json_encode($model->attributes);
@@ -1707,6 +1707,8 @@ exit;
 					$lr->hinnasto_rivi_id = $_POST['hinnasto_rivi_id'][$key];
 				if(isset($_POST['tunnit_id']))
 					$lr->mobile_id = $_POST['tunnit_id'][$key];
+				if(isset($_POST['tiedot']))
+					$lr->tiedot = $_POST['tiedot'][$key];
 					
 				$lr->veroton	=$_POST['veroton'][$key];
 				$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
@@ -2284,7 +2286,7 @@ exit;
 			}
 			$body .= '</div>';
 		}
-		/*
+		
 		$body .= '<br><div class="well"><h3>Laskutetut ID:t</h3>';
 		if(isset($laskutetut_tiedot['mobiili_id']))
 			$body .= '<b>Mobiili Id:</b> '.implode(", ", $laskutetut_tiedot['mobiili_id']);
@@ -2299,7 +2301,7 @@ exit;
 		//$body .= 'check: '.json_encode($laskuTilantteet);
 		
 		$body .= '<h4>Erikoinen Tunniste: '.$etunti_tunniste.'</h4>';
-		*/
+		
 		
 		$body .= '
 			<br>
