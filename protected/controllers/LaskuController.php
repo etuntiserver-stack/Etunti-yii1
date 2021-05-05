@@ -2014,8 +2014,7 @@ exit;
 				$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
 				$body .= '
 				<td align="center">
-					<input type="checkbox" class="laskutetaan" '.(($laskutettu)? '' : 'checked').'>
-					'.(($laskutettu)? '<p class="text-success">laskutettu</p>' : '').'
+					'.(($laskutettu)? '<p class="text-success">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 				</td>';
 				$body .= '<td class="tuote" tuote_id="'.$arr['tuote_id'].'" tv_id="0"><b>'.$arr['nimike'].'</b><br>'.$kohde_link.'</td>';
 				$body .= '<td class="maara">1</td>';
@@ -2174,8 +2173,7 @@ exit;
 							$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
 							$body .= '
 							<td align="center">
-								<input type="checkbox" class="laskutetaan" '.(($laskutettu)? '' : 'checked').'>
-								'.(($laskutettu)? '<p class="text-success">laskutettu</p>' : '').'
+								'.(($laskutettu)? '<p class="text-success">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 							</td>';
 							$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].'</td>';
 							$body .= '<td class="maara">'.$maara.'</td>';
@@ -2244,8 +2242,7 @@ exit;
 					$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
 					$body .= '
 					<td align="center">
-						<input type="checkbox" class="laskutetaan" '.(($laskutettu)? '' : 'checked').'>
-						'.(($laskutettu)? '<p class="text-success">laskutettu</p>' : '').'
+						'.(($laskutettu)? '<p class="text-success">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 					</td>';
 					$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].'</td>';
 					$body .= '<td class="maara">'.$maara.'</td>';
