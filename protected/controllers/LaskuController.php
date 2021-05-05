@@ -2303,7 +2303,7 @@ exit;
 		
 		$body .= '
 			<br>
-			<p><button type="submit" class="btn-block btn btn-info laskutetuksi" asiakas_id="'.$asiakas_id.'" from="'.$from.'" to="'.$to.'" etunti_tunniste="'.$etunti_tunniste.'" style="display:none" data-toggle="tooltip" data-placement="top" title="Hei, Tämän painamalla oikeasti luodaan heti uusi hyväksymätön laskun määritetty rivijen mukaiseesti. Tämän laskun saa kyllä muokata.">Luo uusi lasku</button></p>
+			<p><button type="submit" class="btn-block btn btn-info laskutetuksi" asiakas_id="'.$asiakas_id.'" from="'.$from.'" to="'.$to.'" etunti_tunniste="'.$etunti_tunniste.'" style="display:none" data-toggle="tooltip" data-placement="top" title="Hei, Tämän painamalla oikeasti luodaan heti uusi hyväksymätön laskun määritetty rivijen mukaiseesti. Tämän laskun saa kyllä muokata.">LUO UUSI LASKU<br>Näet sen nappi, koska taulussa on varmaasti laskuttomat rivit</button></p>
 		';
 		
 		echo json_encode($body);
