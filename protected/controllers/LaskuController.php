@@ -2286,7 +2286,7 @@ exit;
 			}
 			$body .= '</div>';
 		}
-		
+		/*
 		$body .= '<br><div class="well"><h3>Laskutetut ID:t</h3>';
 		if(isset($laskutetut_tiedot['mobiili_id']))
 			$body .= '<b>Mobiili Id:</b> '.implode(", ", $laskutetut_tiedot['mobiili_id']);
@@ -2301,7 +2301,7 @@ exit;
 		//$body .= 'check: '.json_encode($laskuTilantteet);
 		
 		$body .= '<h4>Erikoinen Tunniste: '.$etunti_tunniste.'</h4>';
-		
+		*/
 		
 		$body .= '
 			<br>
