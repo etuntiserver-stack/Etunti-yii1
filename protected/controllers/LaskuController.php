@@ -2347,6 +2347,7 @@ exit;
 			$model->osoite 			= $asiakas->osoite;
 			$model->postinumero 	= $asiakas->postinumero;
 			$model->toimipaikka 	= $asiakas->kaupunki;
+			$model->yhteensa_total	= ''; // Pakko RE Tallenna lomake
 			$model->toimitusosoite 	= 0;
 			$model->tyyppi 			= $asiakas->tyyppi;
 			$model->yid 			= 1; // Miksi on aina yksi?

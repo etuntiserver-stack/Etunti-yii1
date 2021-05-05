@@ -758,136 +758,132 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 <br><br><br><br><br><br>
 
 	<div class="section fill mb5 subm">
+
 		<?php if(!isset($model->id) or $model->tilanne == '0') : ?>
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Tallenna' : 'Tallenna',array('class'=>'btn  btn-primary myBgColors')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Tallenna' : ((!empty($model->yhteensa_total))? 'Tallenna':'Tarkista tiedot ja Tallenna'),array('class'=>'btn  btn-primary myBgColors')); ?>
 		<?php endif; ?>
 
+		<?php if(!empty($model->yhteensa_total)): ?>
 
-		<?php /* if(
-			isset($model->id) 
-		) : ?>
-		<a href="lasku_pdf?id=<?php echo $model->id; ?>" target="_blank" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Esikatselu'); ?></a>
-		<?php endif; */?>
-
-		<?php if(isset($model->id) and $model->tilanne == '1' and $asetukset->palvelu_tyyppi == 1) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&finvoice=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä finvoice (POSTITA.FI)'); ?></a>
-		<?php endif; ?>
+			<?php if(isset($model->id) and $model->tilanne == '1' and $asetukset->palvelu_tyyppi == 1) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&finvoice=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä finvoice (POSTITA.FI)'); ?></a>
+			<?php endif; ?>
 
 
-  <?php 
-  if(isset($model->id) 
- 	and $model->tilanne == 1
-	and $asetukset->palvelu_tyyppi == 1
-	and $model->tilanne != 999 // mitatoiny, eli ei arvostele
-  ){
-  echo '<a href="finvoice?id='.$model->id.'&laskutus='.$model->laskutus.'" class="btn btn-success btn-group myBgColors">'.Yii::t('main','Luo POSTITA:ssa (ei viellä lähetä)').'</a>';
-  }
-  ?>
+			<?php 
+			if(isset($model->id) 
+			and $model->tilanne == 1
+			and $asetukset->palvelu_tyyppi == 1
+			and $model->tilanne != 999 // mitatoiny, eli ei arvostele
+			){
+			echo '<a href="finvoice?id='.$model->id.'&laskutus='.$model->laskutus.'" class="btn btn-success btn-group myBgColors">'.Yii::t('main','Luo POSTITA:ssa (ei viellä lähetä)').'</a>';
+			}
+			?>
 
-  <?php 
-  if(isset($model->id) 
- 	and $model->tilanne == '2'
-	and $asetukset->palvelu_tyyppi == 1
-	and isset($laskuHistoria->id)
-	and $laskuHistoria->postita_statuscode == 'NE'
-  ){
-  echo '<a href="finvoice?id='.$model->id.'&vahvistus='.$model->postita_jobid.'" class="btn btn-success btn-group myBgColors">'.Yii::t('main','Vahvista ja lähetä').'</a>';
-  }
-  ?>
+			<?php 
+			if(isset($model->id) 
+			and $model->tilanne == '2'
+			and $asetukset->palvelu_tyyppi == 1
+			and isset($laskuHistoria->id)
+			and $laskuHistoria->postita_statuscode == 'NE'
+			){
+			echo '<a href="finvoice?id='.$model->id.'&vahvistus='.$model->postita_jobid.'" class="btn btn-success btn-group myBgColors">'.Yii::t('main','Vahvista ja lähetä').'</a>';
+			}
+			?>
 
-  <?php 
-  if(isset($model->id) 
-	and file_exists(Yii::app()->basePath."/../tiedostot/laskut/".Yii::app()->user->domain.'/'.$model->id.'.pdf')
-  ){
-  echo '<a href="postita_pdf?id='.$model->id.'" class="btn btn-success btn-group myBgColors">'.Yii::t('main','PDF').'</a>';
-  }
-  ?>
+			<?php 
+			if(isset($model->id) 
+			and file_exists(Yii::app()->basePath."/../tiedostot/laskut/".Yii::app()->user->domain.'/'.$model->id.'.pdf')
+			){
+			echo '<a href="postita_pdf?id='.$model->id.'" class="btn btn-success btn-group myBgColors">'.Yii::t('main','PDF').'</a>';
+			}
+			?>
 
-		<?php
-		if (isset($model->id) && $model->tilanne == 1 && $asetukset->palvelu_tyyppi == 5) {
+			<?php
+			if (isset($model->id) && $model->tilanne == 1 && $asetukset->palvelu_tyyppi == 5) {
 			echo CHtml::link('Lähetä', ['finvoice', 'id' => $model->id, 'procountor' => true, 'merkitseLahetettavaksi' => true], ['class' => 'btn btn-success btn-group myBgColors']);
-		}
-		?>
+			}
+			?>
 
-		<?php if(isset($model->id) 
+			<?php if(isset($model->id) 
 			and $model->tilanne == 1 
 			and $asetukset->palvelu_tyyppi == 4
 			and $asetukset->netvisor_kaytto == 1
 			and $model->netvisorkey == 0
 			//and $model->laskun_nimetys != "Hyvityslasku"
 			and $model->tilanne != 999
-		): ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaNetvisor=true" class="btn  btn-success btn-group myBgColors" data-toggle="tooltip" data-placement="top" title="<?php echo Yii::t('main', 'Lähetä Netvisoriin'); ?>"><?php echo Yii::t('main','Lähetä'); ?></a>
-		<?php endif; ?>
+			): ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&lahetaNetvisor=true" class="btn  btn-success btn-group myBgColors" data-toggle="tooltip" data-placement="top" title="<?php echo Yii::t('main', 'Lähetä Netvisoriin'); ?>"><?php echo Yii::t('main','Lähetä'); ?></a>
+			<?php endif; ?>
 
-		<?php if(isset($model->id) 
+			<?php if(isset($model->id) 
 			and $model->tilanne == 1 
 			and empty($model->trust_jobid) 
 			and $asetukset->palvelu_tyyppi == 2 
 			and $model->laskun_nimetys != "Hyvityslasku"
 			and $model->tilanne != 999
-		): ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true" class="btn  btn-success btn-group myBgColors" data-toggle="tooltip" data-placement="top" title="<?php echo Yii::t('main', 'Lähetä Trustiin'); ?>"><?php echo Yii::t('main','Lähetä'); ?></a>
-		<?php endif; ?>
+			): ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true" class="btn  btn-success btn-group myBgColors" data-toggle="tooltip" data-placement="top" title="<?php echo Yii::t('main', 'Lähetä Trustiin'); ?>"><?php echo Yii::t('main','Lähetä'); ?></a>
+			<?php endif; ?>
 
-		<?php $procountor_param = $asetukset->palvelu_tyyppi == 5 ? '&procountor=1' : ''; ?>
-		<?php if(isset($model->id) and $model->tilanne == '0') : ?>
+			<?php $procountor_param = $asetukset->palvelu_tyyppi == 5 ? '&procountor=1' : ''; ?>
+			<?php if(isset($model->id) and $model->tilanne == '0') : ?>
 			<a href="finvoice?id=<?php echo $model->id; ?>&hyvaksyminen=true<?php echo $procountor_param; ?>" class="btn btn-success btn-group myBgColors" id="hyvaksytaan_lasku"><?php echo Yii::t('main','Hyväksy'); ?></a>
-		<?php endif; ?>
+			<?php endif; ?>
 
-		<?php if(
+			<?php if(
 			isset($model->id)
 			and $asetukset->palvelu_tyyppi != 4
 			and $asetukset->palvelu_tyyppi != 5
 			and $model->tilanne != 999
-		) : ?>
-		<a href="lasku_pdf?id=<?php echo $model->id; ?>&muistutuslasku=true" target="_blank" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksumuistutus'); ?></a>
-		<?php endif; ?>
+			) : ?>
+			<a href="lasku_pdf?id=<?php echo $model->id; ?>&muistutuslasku=true" target="_blank" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksumuistutus'); ?></a>
+			<?php endif; ?>
 
-		<?php if(isset($model->id) 
+			<?php if(isset($model->id) 
 			and $model->laskun_nimetys != "Hyvityslasku" 
 			//and $asetukset->palvelu_tyyppi == 2
 			//and $model->trust_jobid != ''
 			and $model->tilanne != 999
 			)
-		: ?>
-		<a href="hyvityslasku?id=<?php echo $model->id; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Hyvityslasku'); ?></a>
-		<?php endif; ?>
+			: ?>
+			<a href="hyvityslasku?id=<?php echo $model->id; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Hyvityslasku'); ?></a>
+			<?php endif; ?>
 
-		<?php if(isset($model->id) 
+			<?php if(isset($model->id) 
 			and $model->laskun_nimetys == "Hyvityslasku"
 			and $asetukset->palvelu_tyyppi == 2
 			//and $model->tilanne != 98
 			and $model->trust_jobid != ''
 			and $model->tilanne != 999
 			) 
-		: ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&hyvityslasku=true&refundtojobid=<?php echo $model->trust_jobid; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä Hyvityslasku'); ?></a>
-		<?php endif; ?>
+			: ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&hyvityslasku=true&refundtojobid=<?php echo $model->trust_jobid; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä Hyvityslasku'); ?></a>
+			<?php endif; ?>
 
-		<?php /* if(
+			<?php /* if(
 			isset($model->id) 
 			and $model->tilanne == '1' 
 			and $asetukset->palvelu_tyyppi == 1
 			and $model->tilanne != 999
-		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&pdf=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä PDF (POSTITA.FI)'); ?></a>
-		<?php endif; */ ?>
+			) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&pdf=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä PDF (POSTITA.FI)'); ?></a>
+			<?php endif; */ ?>
 
 
-		<?php if(
+			<?php if(
 			isset($model->id) 
 			and $model->tilanne != 0 
 			and $asetukset->palvelu_tyyppi != 2
 			and $asetukset->palvelu_tyyppi != 4
 			and $asetukset->palvelu_tyyppi != 5
 			and $model->tilanne != 999
-		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaSahkopostilla=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä sähköpostilla'); ?></a>
-		<?php endif; ?>
+			) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&lahetaSahkopostilla=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä sähköpostilla'); ?></a>
+			<?php endif; ?>
 
 
-		<?php if(
+			<?php if(
 			isset($model->id) 
 			and $model->tilanne != 0 
 			and $asetukset->palvelu_tyyppi != 2
@@ -897,113 +893,105 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 			and !empty($asetukset->trust_cid)
 			and !empty($asetukset->trust_api)
 			and $model->tilanne != 999
-		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true&jobtype=2" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä perintään'); ?></a>
-		<?php endif; ?>
+			) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true&jobtype=2" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä perintään'); ?></a>
+			<?php endif; ?>
 
-		<?php if(
+			<?php if(
 			isset($model->id)
 			and $model->tilanne != 999
-		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&mitatointi=true<?php echo $procountor_param; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Mitätöi'); ?></a>
-		<a href="finvoice?id=<?php echo $model->id; ?>&kopio=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Kopio'); ?></a>
-		<?php endif; ?>
+			) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&mitatointi=true<?php echo $procountor_param; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Mitätöi'); ?></a>
+			<a href="finvoice?id=<?php echo $model->id; ?>&kopio=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Kopio'); ?></a>
+			<?php endif; ?>
 
-		<?php /*
-		<hr>
-		<p><b>Laskun tila: </b><?php echo $this->tilanneCheck($model,null); ?></p>
-		<br> */ ?>
 
-		<?php if(
+			<?php if(
 			isset($model->id) 
 			and ($asetukset->palvelu_tyyppi == 1 or $asetukset->palvelu_tyyppi == 3)
 			and $model->tilanne != '0'
-		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&merkitseMaksetuksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksettu'); ?></a>
-		<?php endif; ?>
+			) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&merkitseMaksetuksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksettu'); ?></a>
+			<?php endif; ?>
 
-		<?php if(
+			<?php if(
 			isset($model->id) 
 			and $asetukset->palvelu_tyyppi == 3
 			and $model->tilanne != '0'
-		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&merkitseLahetettavaksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Lähetetty'); ?></a>
-		<?php endif; ?>
+			) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&merkitseLahetettavaksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Lähetetty'); ?></a>
+			<?php endif; ?>
 
-		<?php if(
+			<?php if(
 			isset($model->id) 
 			and $asetukset->palvelu_tyyppi == 3
 			and $model->tilanne != '0'
-		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&merkitseMaksumuistutusLahetettavaksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksumuistutus lähetetty'); ?></a>
-		<?php endif; ?>
+			) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&merkitseMaksumuistutusLahetettavaksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksumuistutus lähetetty'); ?></a>
+			<?php endif; ?>
 
 
-		<?php if(isset($model->id) and $asetukset->palvelu_tyyppi == 1) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaMuistutusPostita=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Lähetä MAKSUMUISTUTUS POSTITA.FI'); ?></a>
-		<?php endif; ?>
+			<?php if(isset($model->id) and $asetukset->palvelu_tyyppi == 1) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&lahetaMuistutusPostita=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Lähetä MAKSUMUISTUTUS POSTITA.FI'); ?></a>
+			<?php endif; ?>
 
 
 
-<?php // Trustpoint PDF
-if(isset($model->id))
-{
+			<?php // Trustpoint PDF
+			if(isset($model->id))
+			{
 
-  $exists = Yii::app()->basePath."/../tiedostot/laskut/trust/".Yii::app()->user->domain;
-  $pathForTrust = Yii::app()->basePath;
-  $pdfFile = "/../tiedostot/laskut/trust/".Yii::app()->user->domain."/".$model->id.'.pdf';
+			$exists = Yii::app()->basePath."/../tiedostot/laskut/trust/".Yii::app()->user->domain;
+			$pathForTrust = Yii::app()->basePath;
+			$pdfFile = "/../tiedostot/laskut/trust/".Yii::app()->user->domain."/".$model->id.'.pdf';
 
-  if (!file_exists($exists)) {
-  	mkdir($exists, 0777, true);
-  }
+			if (!file_exists($exists)) {
+			mkdir($exists, 0777, true);
+			}
 
-	$trust_ws_cid = $asetukset->trust_ws_cid;
-	$trust_ws_salasana = $asetukset->trust_ws_salasana;
-	$trust_cid = $asetukset->trust_cid;
-	$trust_api = $asetukset->trust_api;
-	$trust_ws_api_url = $asetukset->trust_ws_api_url;
+			$trust_ws_cid = $asetukset->trust_ws_cid;
+			$trust_ws_salasana = $asetukset->trust_ws_salasana;
+			$trust_cid = $asetukset->trust_cid;
+			$trust_api = $asetukset->trust_api;
+			$trust_ws_api_url = $asetukset->trust_ws_api_url;
 
-  if($asetukset->palvelu_tyyppi == 2 and !empty($model->trust_jobid) and !file_exists($pathForTrust.$pdfFile)
-  and !empty($trust_ws_cid) and !empty($trust_ws_salasana) and !empty($trust_ws_api_url))
-  {
+			if($asetukset->palvelu_tyyppi == 2 and !empty($model->trust_jobid) and !file_exists($pathForTrust.$pdfFile)
+			and !empty($trust_ws_cid) and !empty($trust_ws_salasana) and !empty($trust_ws_api_url))
+			{
 
-	$trust_jobid = $model->trust_jobid;
+			$trust_jobid = $model->trust_jobid;
 
-	$client = new SoapClient($trust_ws_api_url.'/?wsdl', array(
-						'login'=>$trust_ws_cid,
-						'password'=>$trust_ws_salasana));
+			$client = new SoapClient($trust_ws_api_url.'/?wsdl', array(
+					'login'=>$trust_ws_cid,
+					'password'=>$trust_ws_salasana));
 
-	$result = $client->doLogin(array('cid'=>$trust_cid, 'apiCode'=>$trust_api, 'apiVersion'=>'1'));
-	$sessionId = $result['authResponse']->sessionId;
+			$result = $client->doLogin(array('cid'=>$trust_cid, 'apiCode'=>$trust_api, 'apiVersion'=>'1'));
+			$sessionId = $result['authResponse']->sessionId;
 
-	//echo $sessionId.'<br>';
-	//echo $trust_jobid.'<br>';
+			//echo $sessionId.'<br>';
+			//echo $trust_jobid.'<br>';
 
-	$pdf = $client->getJobPdf($sessionId, array('id'=>$trust_jobid, 'idType'=>'jobid'));
+			$pdf = $client->getJobPdf($sessionId, array('id'=>$trust_jobid, 'idType'=>'jobid'));
 
-	if(!empty($pdf['getPdfResponse']))
-	file_put_contents($pathForTrust.$pdfFile, base64_decode($pdf['getPdfResponse']));
+			if(!empty($pdf['getPdfResponse']))
+			file_put_contents($pathForTrust.$pdfFile, base64_decode($pdf['getPdfResponse']));
 
 
-	//echo '<pre>';
-	//print_r($result);
-	//print_r($pdf);
-	//print_r($client->__GetFunctions());
-	//echo '</pre>';
+			//echo '<pre>';
+			//print_r($result);
+			//print_r($pdf);
+			//print_r($client->__GetFunctions());
+			//echo '</pre>';
 
-  }
-  if(file_exists($pathForTrust.$pdfFile))
-  echo '<a href="'.$pdfFile.'" class="btn btn-primary" target="_blank">PDF</a>';
+			}
+			if(file_exists($pathForTrust.$pdfFile))
+			echo '<a href="'.$pdfFile.'" class="btn btn-primary" target="_blank">PDF</a>';
 
-}
-// Trustpoint PDF ?>
+			}
+			// Trustpoint PDF ?>
 
-<!--
-		<?php if(isset($model->id) and $model->tilanne != '3') : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaPerintaan=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Lähetä perintään'); ?></a>
-		<?php endif; ?>
--->
 
+		<?php endif; ?><!-- yhteensa_total -->
 	</div>
 
 <?php $this->endWidget(); ?>
