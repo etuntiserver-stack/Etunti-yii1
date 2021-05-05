@@ -316,16 +316,16 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'laskutus'); ?>
 		<?php
-		$list = array(	'posti'=>Yii::t('main','Posti'),
+			$list = array(	'posti'=>Yii::t('main','Posti'),
 				'verkkolasku'=>Yii::t('main','Verkkolasku'),
 				'sahkoposti'=>Yii::t('main','Sähköposti')
 				);
 
-		if($asetukset->palvelu_tyyppi == 3)
-		unset($list['verkkolasku']);
+			if($asetukset->palvelu_tyyppi == 3)
+			unset($list['verkkolasku']);
 
         	echo $form->dropDownList($model, 'laskutus', $list,
-		array('empty'=>'Valitse','class'=>'form-control'));
+				array('class'=>'form-control'));
         	?>
 		<?php echo $form->error($model,'laskutus'); ?>
 	</div>
