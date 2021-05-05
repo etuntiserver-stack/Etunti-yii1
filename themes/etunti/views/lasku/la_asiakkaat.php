@@ -138,7 +138,7 @@
 		'dataProvider'=>$dataProvider,
 		'itemView'=>'_la_asiakkaat',
 	  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
-		'viewData' => ['la_AsIds' => $la_AsIds], 
+		'viewData' => ['kk' => $kk, 'la_AsIds' => $la_AsIds], 
 		'pager' => array(
 	           'firstPageLabel'=>'<<',
 	           'prevPageLabel'=>'< Edellinen',
@@ -173,67 +173,13 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-
-	$(document).delegate(".poista_laskutettu","click",function(){
-		var la_id 		= $(this).attr('la_id');
-		var thisButton  = $(this);
-		var cl 			= $(this).closest('.closest_td');
-		var closest_asiakas_td	= $(this).closest('tr').find('.closest_asiakas_td');
-		
-		thisButton.text('Odota...').removeClass('poista_laskutettu');
-
-		$.ajax({
-			url: 'laskutetuksi?asiakas_id=null&from=null&to=null&tilanne=remove&la_id=' + la_id,
-			success: function(data){
-				var data = JSON.parse(data);
-				console.log(data);
-				if(data['ok'])
-				{
-					thisButton.closest('.closest_td').find('.collapse').collapse('hide');
-					thisButton.remove();
-					ajaxForLasku(cl);
-					closest_asiakas_td.find('.laskutettu').remove();
-				}
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown){
-			   	console.log(XMLHttpRequest);
-			}
-		});
-	});
 	
-	$(document).delegate(".laskutetuksi","click",function(){
-		var asiakas_id 	= $(this).attr('asiakas_id');
-		var from 		= $(this).attr('from');
-		var to 			= $(this).attr('to');
-		var thisButton  = $(this);
-		var cl 			= $(this).closest('.closest_td');
-		var closest_asiakas_td	= $(this).closest('tr').find('.closest_asiakas_td');
-		
-		thisButton.text('Odota...').removeClass('laskutetuksi');
-
-		$.ajax({
-			url: 'laskutetuksi?asiakas_id=' + asiakas_id + '&from=' + from + '&to=' + to + '&tilanne=new',
-			success: function(data){
-				var data = JSON.parse(data);
-				console.log(data);
-				if(data['id'] && parseInt(data['id']) > 0)
-				{
-					thisButton.closest('.closest_td').find('.collapse').collapse('hide');
-					thisButton.remove();
-					ajaxForLasku(cl);
-					closest_asiakas_td.append('<h3 class="text-success laskutettu">Laskutettu.</h3>');
-				}
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown){
-			   	console.log(XMLHttpRequest);
-			}
-		});
-	});
+	$(document).delegate(".laskutetuksi","click",function(e){
 	
-	$(document).delegate(".laskutukseen","click",function(e){
-		e.preventDefault()
+		e.preventDefault();
+
 		var lasku_rivit = [];
-		$('.lasku_rivi').each(function(){
+		$('.lasku_rivi').find('.laskutetaan:checkbox:checked').each(function(){
 			lasku_rivit.push([{
 				'tuote_id' : $(this).closest('tr').find('.tuote').attr('tuote_id'),
 				'tv_id' : $(this).closest('tr').find('.tuote').attr('tv_id'),
@@ -242,14 +188,48 @@ $(document).ready(function(){
 				'yksikko' : $(this).closest('tr').find('.yksikko').text(),
 				'alv' : $(this).closest('tr').find('.alv').text(),
 				'hinta' : $(this).closest('tr').find('.hinta').text(),
-				'free_text' : $(this).closest('tr').find('.free_text').text()
+				'free_text' : $(this).closest('tr').find('.free_text').text(),
+				'tiedot' : $(this).closest('tr').find('.tiedot').text()
 			}]);
 		});
-		//console.log(lasku_rivit);
-		$('#la_asiakkaat_tr_rivit').val( JSON.stringify(lasku_rivit) );
-		$(this).closest('form').submit();
-	});
+		
+		var closestForm = $(this).closest('form');
+		var asiakas_id 	= $(this).attr('asiakas_id');
+		var from 		= $(this).attr('from');
+		var to 			= $(this).attr('to');
+		var thisButton  = $(this);
+		var cl 			= $(this).closest('.closest_td');
+		var closest_asiakas_td	= $(this).closest('tr').find('.closest_asiakas_td');
+		var laskun_paivays = cl.find('.laskun_paivays').val();
+		var etunti_tunniste = $(this).attr('etunti_tunniste');
+		
+		thisButton.text('Odota...');
 
+		//console.log(lasku_rivit)
+		//return false;
+		
+		$.ajax({
+			url: 'laskutetuksi?asiakas_id=' + asiakas_id + '&from=' + from + '&to=' + to + '&tilanne=new',
+			type : "POST",
+			data : { la_asiakkaat_tr_rivit : JSON.stringify(lasku_rivit), laskun_paivays : laskun_paivays, etunti_tunniste : etunti_tunniste },
+			success: function(data){
+				var data = JSON.parse(data);
+				console.log(data);
+				if(data['lasku_id'] && parseInt(data['lasku_id']) > 0)
+				{
+					//thisButton.closest('.closest_td').find('.collapse').collapse('hide');
+					//thisButton.before('<div class="bg-success text-white">Lasku luotu.</div>');
+					ajaxForLasku(cl);
+					//closest_asiakas_td.append('<h3 class="text-success laskutettu">Laskutettu.</h3>');
+					//closestForm.submit();
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+			   	console.log(XMLHttpRequest);
+			}
+		});
+	});
+	/*
 	$(document).delegate(".poista_rivi","click",function(){
 		$(this).closest('tr').remove();
 		var sum = 0;
@@ -258,7 +238,7 @@ $(document).ready(function(){
 		});
 		$('#summ_result').html(sum);
 	});
-	
+	*/
 	var kohde_id = 0;
 	$(document).delegate(".tuote_puutu","click",function(){
 		$(this).replaceWith( $('#tp_valinta').html() );

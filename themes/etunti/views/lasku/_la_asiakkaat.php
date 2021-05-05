@@ -4,13 +4,25 @@
 <tr>
 	<td width="15%" style="vertical-align: top" class="closest_asiakas_td">
 		<?php
-			echo $data->Fullname.' #'.$data->id; 
-			if(isset($la_AsIds[$data->id]))
-				echo '<h3 class="text-success laskutettu">Laskutettu.</h3>';
+		echo $data->Fullname.' #'.$data->id;
+
+		if(isset($la_AsIds['la_'.$kk.'_'.$data->id]))
+		{
+			echo '<h4>Tehdyt laskut</h3>';
+			foreach($la_AsIds['la_'.$kk.'_'.$data->id] as $lasku_id)
+			{
+				$link = CHtml::link('Näytä lasku:' . $lasku_id,
+					['/lasku/update', 'id' => $lasku_id],
+					['class' => '', 'target' => '_blank']
+				);
+				echo '<p>'.$link.'</p>';
+			}
+		}
 		?>
 	</td>
 	<td width="75%" class="closest_td">
 		<div class="form-inline">
+			<input type="text" class="form-control datepickerFI laskun_paivays" value="<?=date("d.m.Y")?>" data-toggle="tooltip" title="<?=Yii::t('main', 'Laskun päiväys')?>">
 			<select class="form-group form-control rivi_muoto">
 				<option value="rivi_per_kohde">Tuote/Kohde mukaan</option>
 				<option value="rivi_per_kirjaus">Rivi per kirjaus</option>

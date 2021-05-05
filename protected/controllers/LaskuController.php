@@ -1581,38 +1581,7 @@ exit;
 				$lr->veroton	=$_POST['veroton'][$key];
 				$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
 				if($lr->save()){
-					// <-- Mobile update
-					if(isset($_POST['tunnit_id'][$key]) and isset($_POST['tunnit_from'][$key]) and $_POST['tunnit_from'][$key] == 'sivexkuitti')
-					{
-						$m = Mobile::model()->findbypk($_POST['tunnit_id'][$key]);
-						if(isset($m->id))
-						{
-							Mobile::model()->updateByPk($m->id, ['laskutettu' => 1, 'laskurivi_id' => $lr->id]);
-							$t = Toteutuneet::model()->find("kid='".$m->id."'");
-							if(isset($t->id))
-								Toteutuneet::model()->updateByPk($t->id, ['laskutettu' => 1, 'laskurivi_id' => $lr->id]);
-								
-							LaskunRivit::model()->updateByPk($lr->id, ['mobile_id' => $m->id]);
-							
-							if($m->tv_id > 0)
-								Tyovuoroot::model()->updateByPk($m->tv_id, ['laskutettu' => 1]);
-						}
-					}
-					if(isset($_POST['tunnit_id'][$key]) and isset($_POST['tunnit_from'][$key]) and $_POST['tunnit_from'][$key] == 'sivexkuitti_repaired')
-					{
-						$t = Toteutuneet::model()->findbypk($_POST['tunnit_id'][$key]);
-						if(isset($t->id))
-						{
-							Toteutuneet::model()->updateByPk($t->id, ['laskutettu' => 1, 'laskurivi_id' => $lr->id]);
-							$m = Mobile::model()->findByPk($t->kid);
-							if(isset($m->id)){
-								Mobile::model()->updateByPk($m->id, ['laskutettu' => 1, 'laskurivi_id' => $lr->id]);
-								LaskunRivit::model()->updateByPk($lr->id, ['mobile_id' => $m->id]);
-								if($m->tv_id > 0)
-									Tyovuoroot::model()->updateByPk($m->tv_id, ['laskutettu' => 1]);
-							}
-						}
-					}
+
 				}
 			}
 
@@ -1806,7 +1775,65 @@ exit;
 	public function actionKklaskuperasiakas($asiakas_id, $from, $to, $rakenne_muoto, $rivi_muoto)
 	{
 		$asiakas	= Asiakkaat::model()->findByPk($asiakas_id);
-		$ajanjakso 	= date("d.m.Y", strtotime($from)).' - '.date("d.m.Y", strtotime($to));
+		$ajanjakso 	= date("d.m.Y", strtotime($from)).'-'.date("d.m.Y", strtotime($to));
+
+		$kk						= date("m.Y", strtotime($from));
+		$etunti_tunniste		= 'la_'.$kk.'_'.$asiakas_id;
+		$laskut					= Lasku::model()->findAll("etunti_tunniste='".$etunti_tunniste."'");
+		$laskurivitAll			= [];
+		
+		if(count($laskut) > 0)
+		{
+			foreach($laskut as $item)
+			{
+				$laskuRivit			= LaskunRivit::model()->findAll("lid='".$item->id."' AND tiedot IS NOT NULL");
+				foreach($laskuRivit as $rivi)
+				{
+					$laskurivitAll[] = $rivi;
+				}
+			}
+		}
+			
+		function prepare($which, $laskurivitAll)
+		{
+			
+			$return = [];
+			$pre_laskutetut_tiedot 	= [];		
+
+			foreach($laskurivitAll as $rivi)
+			{
+				$get_tiedot = json_decode($rivi->tiedot, true);
+				if(isset($get_tiedot[$which]))
+				{
+					if($which == 'kuukausi')
+						$pre_laskutetut_tiedot[$which][] = $get_tiedot['kohde_id'];
+					else
+						$pre_laskutetut_tiedot[$which][] = $get_tiedot[$which];
+				}
+			}
+
+		
+			if(isset($pre_laskutetut_tiedot[$which]))
+			{
+				foreach($pre_laskutetut_tiedot[$which] as $item)
+				{
+					if(is_array($item))
+					{
+						foreach($item as $k => $id)
+							$return[$id] = $id;
+					} else {
+						$return[$item] = $item;
+					}
+				}
+			}
+			return $return;
+		}
+		
+		$laskutetut_tiedot					= [];
+		$laskutetut_tiedot['kuukausi'] 		= prepare('kuukausi', $laskurivitAll);
+		$laskutetut_tiedot['mobiili_id'] 	= prepare('mobiili_id', $laskurivitAll);
+		$laskutetut_tiedot['tv_id'] 		= prepare('tv_id', $laskurivitAll);
+		$laskutetut_tiedot['tuote_id'] 		= prepare('tuote_id', $laskurivitAll);
 
 		// <-- KK logikka
 		$kk_hinta = [];
@@ -1824,7 +1851,8 @@ exit;
 						'alv' 			=> $return['alv'],
 						'yksikko' 		=> $return['yksikko'],
 						'nimike' 		=> $return['nimike'],
-						'free_text' 	=> $ajanjakso
+						'free_text' 	=> $ajanjakso,
+						'tiedot'		=> ['kuukausi' => $kk, 'kohde_id' => $item->id]
 				];
 			}
 		}
@@ -1951,6 +1979,7 @@ exit;
 		$body .= '<th>'.Yii::t('main', 'Hinta').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Yhteensä').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Freetext').'</th>';
+		$body .= '<th>'.Yii::t('main', 'Tiedot').'</th>';
 		$body .= '</tr>';
 
 		// <-- KK
@@ -1958,6 +1987,11 @@ exit;
 		{
 			foreach($kk_hinta[$asiakas_id] as $kohde_id => $arr)
 			{
+				$kohde_link = CHtml::link($arr['tuote'],
+					['/kohteet/update', 'id' => $kohde_id],
+					['class' => '', 'target' => '_blank']
+				);
+				
 				$num_rivi++;
 				$kk_arr[] 	= [
 					'tuote' 	=> $arr['tuote'], 
@@ -1966,21 +2000,31 @@ exit;
 					'alv' 		=> $arr['alv'],
 					'yksikko'	=> $arr['yksikko'],
 					'nimike' 	=> $arr['nimike'],
-					'free_text'	=> $arr['free_text']
+					'free_text'	=> $arr['free_text'],
+					'tiedot'	=> $arr['tiedot']
 				];
 				
 				$yht_kk 			+= $arr['hinta'];
 				$yht_summ			+= $arr['hinta'];
-				
+
+				$laskutettu = false;
+				if(isset($laskutetut_tiedot['kuukausi'][$kohde_id]))
+						$laskutettu = true;
+					
 				$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
-				$body .= '<td align="center"><i class="fa fa-2x link fa-trash text-danger poista_rivi"></i></td>';
-				$body .= '<td class="tuote" tuote_id="'.$arr['tuote_id'].'" tv_id="0"><b>'.$arr['nimike'].'</b><br>'.$arr['tuote'].'</td>';
+				$body .= '
+				<td align="center">
+					<input type="checkbox" class="laskutetaan" '.(($laskutettu)? '' : 'checked').'>
+					'.(($laskutettu)? '<p class="text-success">laskutettu</p>' : '').'
+				</td>';
+				$body .= '<td class="tuote" tuote_id="'.$arr['tuote_id'].'" tv_id="0"><b>'.$arr['nimike'].'</b><br>'.$kohde_link.'</td>';
 				$body .= '<td class="maara">1</td>';
 				$body .= '<td class="yksikko">'.$arr['yksikko'].'</td>';
 				$body .= '<td class="alv">'.$arr['alv'].'</td>';
 				$body .= '<td class="hinta">'.$arr['hinta'].'</td>';
 				$body .= '<td class="forsumm">'.$arr['hinta'].'</td>';
 				$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
+				$body .= '<td class="tiedot">'.json_encode($arr['tiedot']).'</td>';
 				$body .= '</tr>';
 			}
 		}
@@ -2001,6 +2045,7 @@ exit;
 						$osoite		= $item->kohde_kannasta;
 						$tyovuorot 	= (isset($item->tyovuoroot->id))? $item->tyovuoroot : null;
 						$kohde_id	= ($item->kohdenID > 0)? $item->kohdenID : null;
+						$tiedot		= ['mobiili_id' => (int)$item->id, 'tv_id' => (int)$item->tv_id];
 					}
 					
 					if($rakenne_muoto == 'tuovuoro')
@@ -2009,6 +2054,7 @@ exit;
 						$tyovuorot 	= $item;
 						$osoite		= $item->osoiteById;
 						$kohde_id	= $item->kohde;
+						$tiedot		= ['tv_id' => (int)$item->id];
 					}
 			
 					if(isset($kk_hinta[$asiakas_id][$kohde_id])) continue;
@@ -2035,7 +2081,8 @@ exit;
 							'yksikko'	=> $v['hinta_laskenta']['yksikko'],
 							'hinta' 	=> $v['hinta_laskenta']['hinta'],
 							'maara'		=> $maara,
-							'free_text'	=> $pvm
+							'free_text'	=> $pvm,
+							'tiedot'	=> $tiedot
 						];
 					}
 					
@@ -2065,7 +2112,8 @@ exit;
 							'yksikko' 	=> $v['tyovuoro_tuotteet']['paa_tuote']['yksikko'],
 							'hinta' 	=> $v['tyovuoro_tuotteet']['paa_tuote']['hinta'],
 							'maara'		=> $maara,
-							'free_text'	=> $pvm
+							'free_text'	=> $pvm,
+							'tiedot'	=> $tiedot
 						];
 					}
 					
@@ -2082,7 +2130,8 @@ exit;
 								'yksikko' 	=> $tuote['yksikko'],
 								'hinta' 	=> $tuote['hinta'],
 								'maara'		=> $tuote['maara'],
-								'free_text'	=> $pvm
+								'free_text'	=> $pvm,
+								'tiedot'	=> $tiedot
 							];
 						}
 					}
@@ -2103,9 +2152,24 @@ exit;
 
 						if($rivi_muoto == 'rivi_per_kirjaus')
 						{
+							$tiedot = $arr['tiedot'];
+							$tiedot['tuote_id'] = $tuote_id;
+
+							$laskutettu = false;			
+							if($rakenne_muoto == 'mobiili' and isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot['mobiili_id']) and isset($tiedot['mobiili_id']))
+							{
+								$laskutettu = true;
+								if(!in_array($tiedot['mobiili_id'], $laskutetut_tiedot['mobiili_id']))
+										$laskutettu = false;
+							}
+					
 							$num_rivi++;
 							$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
-							$body .= '<td align="center"><i class="fa fa-2x link fa-trash text-danger poista_rivi"></i></td>';
+							$body .= '
+							<td align="center">
+								<input type="checkbox" class="laskutetaan" '.(($laskutettu)? '' : 'checked').'>
+								'.(($laskutettu)? '<p class="text-success">laskutettu</p>' : '').'
+							</td>';
 							$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].'</td>';
 							$body .= '<td class="maara">'.$maara.'</td>';
 							$body .= '<td class="yksikko">'.$arr['yksikko'].'</td>';
@@ -2113,6 +2177,7 @@ exit;
 							$body .= '<td class="hinta">'.$hinta.'</td>';
 							$body .= '<td class="forsumm">'.($maara*$hinta).'</td>';
 							$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
+							$body .= '<td class="tiedot">'.json_encode($tiedot).'</td>';
 							$body .= '</tr>';
 						}
 			
@@ -2121,6 +2186,7 @@ exit;
 						$pregroup[$tuote_id]['yksikko'] 	= $arr['yksikko'];
 						$pregroup[$tuote_id]['hinta'] 		= $hinta;
 						$pregroup[$tuote_id]['maara'][]		= $maara;
+						$pregroup[$tuote_id]['tiedot'][]	= $arr['tiedot'];
 					}
 				}
 			}
@@ -2129,10 +2195,39 @@ exit;
 			{
 				foreach($pregroup as $tuote_id => $arr)
 				{
+					$new_tiedot 			= [];
+					$new_tiedot['tuote_id'] = $tuote_id;
+					foreach($arr['tiedot'] as $key => $arr_tiedot)
+					{
+						if(isset($arr_tiedot['mobiili_id']) and $arr_tiedot['mobiili_id'] > 0)
+							$new_tiedot['mobiili_id'][] = (int)$arr_tiedot['mobiili_id'];
+						if(isset($arr_tiedot['tv_id']) and $arr_tiedot['tv_id'] > 0)
+							$new_tiedot['tv_id'][] = (int)$arr_tiedot['tv_id'];
+					}
+					
+					$laskutettu = false;			
+					if($rakenne_muoto == 'mobiili' and isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot['mobiili_id']))
+					{
+						$laskutettu = true;
+
+						foreach($new_tiedot['mobiili_id'] as $mob_id)
+						{
+							if(!in_array($mob_id, $laskutetut_tiedot['mobiili_id']))
+							{
+								$laskutettu = false;
+								break;
+							}
+						}
+					}
+					
 					$num_rivi++;
 					$maara = array_sum($arr['maara']);
 					$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
-					$body .= '<td align="center"><i class="fa fa-2x link fa-trash text-danger poista_rivi"></i></td>';
+					$body .= '
+					<td align="center">
+						<input type="checkbox" class="laskutetaan" '.(($laskutettu)? '' : 'checked').'>
+						'.(($laskutettu)? '<p class="text-success">laskutettu</p>' : '').'
+					</td>';
 					$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].'</td>';
 					$body .= '<td class="maara">'.$maara.'</td>';
 					$body .= '<td class="yksikko">'.$arr['yksikko'].'</td>';
@@ -2140,6 +2235,7 @@ exit;
 					$body .= '<td class="hinta">'.$arr['hinta'].'</td>';
 					$body .= '<td class="forsumm">'.($maara*$arr['hinta']).'</td>';
 					$body .= '<td class="free_text">'.$ajanjakso.'</td>';
+					$body .= '<td class="tiedot">'.json_encode($new_tiedot).'</td>';
 					$body .= '</tr>';
 				}
 			}
@@ -2154,35 +2250,43 @@ exit;
 		$body .= '<th></th>';
 		$body .= '<th id="summ_result"></th>';
 		$body .= '<th></th>';
+		$body .= '<th></th>';
 		$body .= '</tr>';
 		$body .= '</table>';
 
-		// json_encode(array_values($tv_ids))
-
-		$kk		= date("Y-m", strtotime($from));
-		$model 	= LaskutetutAsiakkaat::model()->find("asiakas_id='".$asiakas_id."' AND kk='".$kk."'");
-		if(!isset($model->id))
+		if(count($laskut) > 0)
 		{
-			$body .= '<br><br>
-				<form action="create" method="POST" target="_blank">
-				<textarea class="form-control" name="la_asiakkaat_tr_rivit" id="la_asiakkaat_tr_rivit" style="display:none"></textarea>
-				<p><button type="submit" class="btn-block btn btn-info laskutetuksi laskutukseen" asiakas_id="'.$asiakas_id.'" from="'.$from.'" to="'.$to.'">Merkitse ajanjakso '.$ajanjakso.' "Laskutetuksi" ja generoi uusi lasku</button></p>
-				</form>
-			
-				<p><button class="btn-block btn btn-primary laskutetuksi" asiakas_id="'.$asiakas_id.'" from="'.$from.'" to="'.$to.'">Merkitse ajanjakso '.$ajanjakso.' "Laskutetuksi" ja ei tehdä uutta laskua</button></p>
-			';
-		} else {
-			$body .= '<h3 class="text-success">Asiakas on laskutettu.</h3>';
-			$body .= '<h4 class="text-success">'.$ajanjakso.' on merkitty "Laskutettuksi"</h4>';
-			$body .= '<br><br>
-				<form action="create" method="POST" target="_blank">
-				<textarea class="form-control" name="la_asiakkaat_tr_rivit" id="la_asiakkaat_tr_rivit" style="display:none"></textarea>
-				<p><button type="submit" class="btn-block btn btn-info laskutukseen">Generoi uusi lasku</button></p>
-				</form>
-				
-				<p><button class="btn-block btn btn-danger poista_laskutettu" la_id="'.$model->id.'">Posta "Laskutettu" tilanne</button></p>
-			';
+			$body .= '<h2 class="text-success">Tehdyt laskut</h2>';
+			$body .= '<div class="form-inline">';
+			foreach($laskut as $item)
+			{
+				$link = CHtml::link('<span class="text-white">Lasku:' . $item->id.'<br>' . $this->tilanneCheck($item).'</span>',
+					['/lasku/update', 'id' => $item->id],
+					['class' => 'btn btn-group btn-success', 'target' => '_blank']
+				);
+				$body .= $link.' ';
+			}
+			$body .= '</div>';
 		}
+		
+		$body .= '<br><div class="well"><h3>Laskutetut ID:t</h3>';
+		if(isset($laskutetut_tiedot['mobiili_id']))
+			$body .= '<b>Mobiili Id:</b> '.implode(", ", $laskutetut_tiedot['mobiili_id']);
+		if(isset($laskutetut_tiedot['tv_id']))
+			$body .= '<br><b>Työvuorojen Id:</b> '.implode(", ", $laskutetut_tiedot['tv_id']);
+		if(isset($laskutetut_tiedot['tuote_id']))
+			$body .= '<br><b>Tuotteiden Id:</b> '.implode(", ", $laskutetut_tiedot['tuote_id']);
+		if(isset($laskutetut_tiedot['kuukausi']))
+			$body .= '<br><b>Kuukausi kohde Id:</b> '.implode(", ", $laskutetut_tiedot['kuukausi']);
+		$body .= '</div>';
+		
+		//$body .= 'check: '.json_encode($laskuTilantteet);
+
+		$body .= '<br><br>
+			<h4>Erikoinen Tunniste: '.$etunti_tunniste.'</h4>
+			<br>
+			<p><button type="submit" class="btn-block btn btn-info laskutetuksi" asiakas_id="'.$asiakas_id.'" from="'.$from.'" to="'.$to.'" etunti_tunniste="'.$etunti_tunniste.'">Luo uusi lasku</button></p>
+		';
 		
 		echo json_encode($body);
 		//echo $body;
@@ -2191,32 +2295,118 @@ exit;
 
 	public function actionLaskutetuksi($asiakas_id, $from, $to, $tilanne, $la_id=null)
 	{
+	
+		$asiakas = Asiakkaat::model()->findByPk($asiakas_id);
+
 		if($tilanne == 'remove' and $la_id > 0)
 		{
+		/*
 			$model 	= LaskutetutAsiakkaat::model()->findByPk($la_id);
 			if($model->delete())
 			{
 				echo json_encode(['ok' => true]);
 				exit;
 			}
+			*/
 		}
 		
-		if($tilanne == 'new')
+		if($tilanne == 'new' and $asiakas !== null)
 		{
-			$kk		= date("Y-m", strtotime($from));
-			$model 	= LaskutetutAsiakkaat::model()->find("asiakas_id='".$asiakas_id."' AND kk='".$kk."'");
-			if(!isset($model->id))
-			{
-				$model = new LaskutetutAsiakkaat;
-				$model->asiakas_id 	= $asiakas_id;
-				$model->kk 			= $kk;
-				if($model->save())
+		
+			// print_r(json_decode($_POST['la_asiakkaat_tr_rivit'], true));
+			// exit;
+						
+			$paivays = date("Y-m-d", strtotime($_POST['laskun_paivays']));
+			$erapaiva = '';
+			if(!empty($asiakas->maksuehto))
+				$erapaiva = date("d.m.Y",strtotime($paivays . " +$asiakas->maksuehto day"));
+			
+			$model 					= new Lasku;
+			$model->etunti_tunniste = $_POST['etunti_tunniste'];
+			$model->as_nro 			= $asiakas->asiakasnumero;
+			$model->laskutus 		= $asiakas->laskutus_kanava;
+			$model->maksuehto 		= $asiakas->maksuehto;
+			$model->osoite 			= $asiakas->osoite;
+			$model->postinumero 	= $asiakas->postinumero;
+			$model->toimipaikka 	= $asiakas->kaupunki;
+			$model->toimitusosoite 	= 0;
+			$model->tyyppi 			= $asiakas->tyyppi;
+			$model->yid 			= 1; // Miksi on aina yksi?
+			$model->tilanne 		= 0;
+			$model->tapahtumapvm 	= date("Y-m-d H:i:s");
+			$model->paivays 		= $paivays;
+			$model->erapaiva 		= $erapaiva;
+			$model->laskun_nimetys 	= "Lasku";
+
+			if($model->save()){
+
+				// Viite
+				$viite = $this->Viite($model->as_nro."00".date("md").$model->id);
+				Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite));
+
+				// <-- LOG
+				$l_m = Lasku::model()->findByPk($model->id);
+				if( isset($l_m->id) )
 				{
-					echo json_encode(['id' => $model->id]);
-					exit;			
+					$model_log 		= 'Lasku';
+					$name_log 		= 'Lasku';
+					$status_log 	= 'Create';
+
+					$old_values = null;
+					$new_values = json_encode($l_m->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 				}
+				//     LOG -->
+
+				foreach(json_decode($_POST['la_asiakkaat_tr_rivit'], true) as $arr)
+				{
+					foreach($arr as $key => $val)
+					{
+						$lr 			= new LaskunRivit;
+						$lr->lid		= $model->id;
+						$lr->asiakas_id = $asiakas->id;
+						$lr->tuoteID 	= $val['tuote_id'];
+						$lr->rivi		= $key;
+						$lr->tkoodi		= $val['tuote'];
+						$lr->kpl		= $val['maara'];
+						$lr->yksikko	= $val['yksikko'];
+						$lr->hinta		= $val['hinta'];
+						$lr->alv		= $val['alv'];
+						$lr->hinta_alv	= ($val['hinta']*$val['alv'])/100;
+						$lr->ale		= 0;
+						$lr->veroton	= $val['hinta'];
+						$lr->yhteensa_alv= $val['hinta']+$lr->hinta_alv;
+						$lr->free_text	= $val['free_text'];
+						$lr->tiedot		= $val['tiedot'];
+						if(!$lr->save()){
+							echo json_encode(['ERROR' => $lr->getErrors()]);
+							exit;
+						}
+					}
+				}
+
+				// Lasku historia
+				$historia = new LaskuHistoria;
+				$historia->lid = $model->id;
+				$historia->status = "Lasku luotu";
+				$historia->palvelu = "local";
+				$historia->yht_euro = $model->yhteensa_total;
+				if(!$historia->save())
+				{
+					echo json_encode(['ERROR' => $historia->getErrors()]);
+					exit;
+				}
+				
+				echo json_encode(['lasku_id' => $model->id]);
+				exit;
+				
+			} else {
+				echo json_encode(['ERROR' => $model->getErrors()]);
+				exit;
 			}
 		}
+		
 		echo json_encode(['ERROR' => true]);
 		exit;
 	}
@@ -2233,10 +2423,10 @@ exit;
 			$to 			= date("Y-m-d", strtotime($kk." last day of this month"));
 
 			// <-- Check laskutetut
-			$kk				= date("Y-m", strtotime($from));
-			$la 			= LaskutetutAsiakkaat::model()->findAll("kk='".$kk."'");
+			$kk				= date("m.Y", strtotime($from));
+			$la 			= Lasku::model()->findAll("etunti_tunniste LIKE 'la_".$kk."_%'");
 			foreach($la as $item)
-				$la_AsIds[$item->asiakas_id] = $item->asiakas_id;
+				$la_AsIds[$item->etunti_tunniste][] = $item->id;
 		
 	       	$criteria = new CDbCriteria();
 			// <-- Tyoryhmat
@@ -2550,6 +2740,9 @@ exit;
 
 	public function tilanneCheck($data)
 	{
+		if(!isset($data->id))
+			return '';
+			
 		$criteria = new CDbCriteria();
 		$criteria->order = " id DESC ";
 		$criteria->condition = " lid='" . $data->id . "' ";

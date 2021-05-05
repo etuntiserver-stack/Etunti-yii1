@@ -730,16 +730,6 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 				echo $this->renderPartial("//lasku/tr_rivi_update",array('num'=>$num,'rivi'=>$rivi));
 			}
 		}
-		if(isset($_POST['la_asiakkaat_tr_rivit']))
-		{
-			foreach(json_decode($_POST['la_asiakkaat_tr_rivit'], true) as $arr){ 
-				$num++;
-				echo $this->renderPartial("//lasku/tr_rivit_tyhja",[
-					'num' 						=> $num,
-					'la_asiakkaat_tr_rivit' 	=> $arr
-				]);
-			}
-		}
 		?>
      </tbody>
 

@@ -53,6 +53,7 @@ class LaskunRivit extends DB2ActiveRecord
 		$table_structure = array(
 			'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
 			'lid' => 'int(11) DEFAULT 0',
+			'asiakas_id' => 'int(11) DEFAULT 0',
 			'rivi' => 'int(11) DEFAULT 0',
 			'tkoodi' => 'varchar(255) DEFAULT NULL',
 			'nimike' => 'varchar(100) DEFAULT NULL',
@@ -68,6 +69,7 @@ class LaskunRivit extends DB2ActiveRecord
 			'free_text' => 'varchar(250) DEFAULT NULL',
 			'hinnasto_rivi_id' => 'int(11) DEFAULT 0',
 			'mobile_id' => 'int(11) DEFAULT 0',
+			'tiedot' => 'text DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -90,10 +92,11 @@ class LaskunRivit extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('lid, rivi, tkoodi, kpl, alv', 'required'),
-			array('lid, rivi, tuoteID, hinnasto_rivi_id, mobile_id', 'numerical', 'integerOnly'=>true),
+			array('lid, rivi, tuoteID, hinnasto_rivi_id, mobile_id, asiakas_id', 'numerical', 'integerOnly'=>true),
 			array('nimike,kpl', 'length', 'max'=>100),
 			array('tkoodi, nimike, free_text', 'length', 'max'=>255),
 			array('yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv', 'length', 'max'=>20),
+			array('tiedot', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, time, lid, rivi, tkoodi, nimike, kpl, yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv', 'safe', 'on'=>'search'),

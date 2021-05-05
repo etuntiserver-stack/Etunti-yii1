@@ -613,15 +613,6 @@ $(document).ready(function(){
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'laskutettu'); ?>
 		<?php
-			// <-- Check laskutetut
-			if(isset($model->kohteet->asiakkaat->id) and $model->kohteet->asiakkaat->id > 0)
-			{
-				$kk	= date("Y-m", strtotime($laatikko_pvm));
-				$la = LaskutetutAsiakkaat::model()->find("asiakas_id='".$model->kohteet->asiakkaat->id."' AND kk='".$kk."'");
-				if(isset($la->id))
-					$model->laskutettu = 1;
-			}
-			
         	$l = array(0 => 'Ei laskutettu', 1 => 'Laskutettu');
 			echo $form->dropDownList($model,'laskutettu', $l, 
 			array('class'=>'form-control lomake_valinta')) 
