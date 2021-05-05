@@ -8,15 +8,7 @@
 
 		if(isset($la_AsIds['la_'.$kk.'_'.$data->id]))
 		{
-			echo '<h4>Tehdyt laskut</h3>';
-			foreach($la_AsIds['la_'.$kk.'_'.$data->id] as $lasku_id)
-			{
-				$link = CHtml::link('Näytä lasku:' . $lasku_id,
-					['/lasku/update', 'id' => $lasku_id],
-					['class' => '', 'target' => '_blank']
-				);
-				echo '<p>'.$link.'</p>';
-			}
+			echo '<h4 class="text-success">Tehdyt laskut. '.count($la_AsIds['la_'.$kk.'_'.$data->id]).'kpl</h3>';
 		}
 		?>
 	</td>
