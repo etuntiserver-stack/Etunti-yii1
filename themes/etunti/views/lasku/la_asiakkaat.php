@@ -276,7 +276,7 @@ $(document).ready(function(){
 	});
 	
 	function ajaxForLasku(thisFor)
-	{
+	{	
 		var asiakas_id 		= thisFor.closest('td').find('.nayta_collapse').attr('asiakas_id');
 		var rakenne_muoto 	= '<?=$rakenne_muoto?>';
 		var rivi_muoto 		= thisFor.closest('td').find('.rivi_muoto').val();
@@ -299,6 +299,10 @@ $(document).ready(function(){
 					});
 					$('#summ_result').html(sum);
 					$('[data-toggle="tooltip"]').tooltip();
+					
+					$('.lasku_rivi').find('.laskutetaan:checkbox:checked').each(function(){
+						thisFor.closest('td').find('.laskutetuksi').show()
+					});
 				},
 				error: function(XMLHttpRequest, textStatus, errorThrown){
 				   	console.log(XMLHttpRequest);

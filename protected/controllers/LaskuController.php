@@ -1979,7 +1979,7 @@ exit;
 		$body .= '<th>'.Yii::t('main', 'Hinta').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Yhteensä').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Freetext').'</th>';
-		$body .= '<th>'.Yii::t('main', 'Tiedot').'</th>';
+		$body .= '<th style="display:none">'.Yii::t('main', 'Tiedot').'</th>';
 		$body .= '</tr>';
 
 		// <-- KK
@@ -2024,7 +2024,7 @@ exit;
 				$body .= '<td class="hinta">'.$arr['hinta'].'</td>';
 				$body .= '<td class="forsumm">'.$arr['hinta'].'</td>';
 				$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
-				$body .= '<td class="tiedot">'.json_encode($arr['tiedot']).'</td>';
+				$body .= '<td class="tiedot" style="display:none">'.json_encode($arr['tiedot']).'</td>';
 				$body .= '</tr>';
 			}
 		}
@@ -2162,7 +2162,14 @@ exit;
 								if(!in_array($tiedot['mobiili_id'], $laskutetut_tiedot['mobiili_id']))
 										$laskutettu = false;
 							}
-					
+
+							if($rakenne_muoto == 'tuovuoro' and isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot['tv_id']) and isset($tiedot['tv_id']))
+							{
+								$laskutettu = true;
+								if(!in_array($tiedot['tv_id'], $laskutetut_tiedot['tv_id']))
+										$laskutettu = false;
+							}
+							
 							$num_rivi++;
 							$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
 							$body .= '
@@ -2177,7 +2184,7 @@ exit;
 							$body .= '<td class="hinta">'.$hinta.'</td>';
 							$body .= '<td class="forsumm">'.($maara*$hinta).'</td>';
 							$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
-							$body .= '<td class="tiedot">'.json_encode($tiedot).'</td>';
+							$body .= '<td class="tiedot" style="display:none">'.json_encode($tiedot).'</td>';
 							$body .= '</tr>';
 						}
 			
@@ -2209,10 +2216,22 @@ exit;
 					if($rakenne_muoto == 'mobiili' and isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot['mobiili_id']))
 					{
 						$laskutettu = true;
-
-						foreach($new_tiedot['mobiili_id'] as $mob_id)
+						foreach($new_tiedot['mobiili_id'] as $id)
 						{
-							if(!in_array($mob_id, $laskutetut_tiedot['mobiili_id']))
+							if(!in_array($id, $laskutetut_tiedot['mobiili_id']))
+							{
+								$laskutettu = false;
+								break;
+							}
+						}
+					}
+
+					if($rakenne_muoto == 'tuovuoro' and isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot['tv_id']))
+					{
+						$laskutettu = true;
+						foreach($new_tiedot['tv_id'] as $id)
+						{
+							if(!in_array($id, $laskutetut_tiedot['tv_id']))
 							{
 								$laskutettu = false;
 								break;
@@ -2235,7 +2254,7 @@ exit;
 					$body .= '<td class="hinta">'.$arr['hinta'].'</td>';
 					$body .= '<td class="forsumm">'.($maara*$arr['hinta']).'</td>';
 					$body .= '<td class="free_text">'.$ajanjakso.'</td>';
-					$body .= '<td class="tiedot">'.json_encode($new_tiedot).'</td>';
+					$body .= '<td class="tiedot" style="display:none">'.json_encode($new_tiedot).'</td>';
 					$body .= '</tr>';
 				}
 			}
@@ -2250,7 +2269,7 @@ exit;
 		$body .= '<th></th>';
 		$body .= '<th id="summ_result"></th>';
 		$body .= '<th></th>';
-		$body .= '<th></th>';
+		$body .= '<th style="display:none"></th>';
 		$body .= '</tr>';
 		$body .= '</table>';
 
@@ -2268,7 +2287,7 @@ exit;
 			}
 			$body .= '</div>';
 		}
-		
+		/*
 		$body .= '<br><div class="well"><h3>Laskutetut ID:t</h3>';
 		if(isset($laskutetut_tiedot['mobiili_id']))
 			$body .= '<b>Mobiili Id:</b> '.implode(", ", $laskutetut_tiedot['mobiili_id']);
@@ -2281,11 +2300,13 @@ exit;
 		$body .= '</div>';
 		
 		//$body .= 'check: '.json_encode($laskuTilantteet);
-
-		$body .= '<br><br>
-			<h4>Erikoinen Tunniste: '.$etunti_tunniste.'</h4>
+		
+		$body .= '<h4>Erikoinen Tunniste: '.$etunti_tunniste.'</h4>';
+		*/
+		
+		$body .= '
 			<br>
-			<p><button type="submit" class="btn-block btn btn-info laskutetuksi" asiakas_id="'.$asiakas_id.'" from="'.$from.'" to="'.$to.'" etunti_tunniste="'.$etunti_tunniste.'">Luo uusi lasku</button></p>
+			<p><button type="submit" class="btn-block btn btn-info laskutetuksi" asiakas_id="'.$asiakas_id.'" from="'.$from.'" to="'.$to.'" etunti_tunniste="'.$etunti_tunniste.'" style="display:none">Luo uusi lasku</button></p>
 		';
 		
 		echo json_encode($body);
