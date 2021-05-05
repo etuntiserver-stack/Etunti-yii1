@@ -1888,14 +1888,18 @@ exit;
 				$kesto		= strtotime($item->loppui)-strtotime($item->aloitan);
 				$tyovuorot 	= (isset($item->tyovuoroot->id))? $item->tyovuoroot : null;
 				$kohde_id	= ($item->kohdenID > 0)? $item->kohdenID : null;
+				$tv_id 		= (isset($tyovuorot->id))? $tyovuorot->id : 0;
+				$tv_pvm 	= (isset($tyovuorot->pvm))? $tyovuorot->pvm : null;
 			}
 			
 			if($rakenne_muoto == 'tuovuoro')
 			{
-				$item = $item['data'];
+				$tv_id 		= (isset($item['this_id']))? $item['this_id'] : $item['data']->id;
+				$tv_pvm 	= (isset($item['this_pvm']))? $item['this_pvm'] : $item['data']->pvm;
+				$item 		= $item['data'];
 				$kesto		= strtotime($item->loppu)-strtotime($item->alku);
 				$tyovuorot 	= $item;
-				$aloitan	= $tyovuorot->pvm.' '.$tyovuorot->alku;
+				$aloitan	= $tyovuorot['pvm'].' '.$tyovuorot->alku;
 				$kohde_id	= $tyovuorot->kohde;
 			}
 
@@ -1920,12 +1924,14 @@ exit;
 					{
 						$return = $this->getHintaFor('tyovuoro', $tyovuorot, 'h');
 						$tyovuoro_tuotteet['paa_tuote']['tuote_id'] = $tyovuorot->tuoteID;
-						$tyovuoro_tuotteet['paa_tuote']['tv_pvm'] 	= $tyovuorot->pvm;
+						$tyovuoro_tuotteet['paa_tuote']['tv_id'] 	= $tv_id;
+						$tyovuoro_tuotteet['paa_tuote']['tv_pvm'] 	= $tv_pvm;
 						$tyovuoro_tuotteet['paa_tuote']['nimike'] 	= $return['nimike'];
 						$tyovuoro_tuotteet['paa_tuote']['hinta'] 	= $return['hinta'];
 						$tyovuoro_tuotteet['paa_tuote']['alv'] 		= $return['alv'];
 						$tyovuoro_tuotteet['paa_tuote']['yksikko'] 	= $return['yksikko'];
 					}
+
 					if($tyovuorot->lisa_tuotteet != null)
 					{
 						$lisa_tuotteet = json_decode($tyovuorot->lisa_tuotteet, true);
@@ -1935,7 +1941,7 @@ exit;
 							if(isset($tuotteet->id))
 							{
 								$tyovuoro_tuotteet['lisa_tuotteet'][] = [
-									'tv_pvm'	=> $tyovuorot->pvm,
+									'tv_pvm'	=> $tyovuorot['pvm'],
 									'tuote_id' 	=> $tuote_id,
 									'nimike' 	=> $tuotteet->nimike,
 									'hinta' 	=> $tuotteet->hinta_alv_0,
@@ -1949,6 +1955,8 @@ exit;
 				}
 
 				$l[strtotime($aloitan)][] = [
+					'tv_id'				=> $tv_id,
+					'tv_pvm'			=> $tv_pvm,
 					'attributes' 		=> $item,
 					'maara' 			=> $kesto,
 					'pikkuviesti' 		=> $pikkuviesti,
@@ -2039,6 +2047,8 @@ exit;
 				foreach($arr as $k => $v)
 				{
 					$item 		= $v['attributes'];
+					$tv_id		= $v['tv_id'];
+					$tv_pvm		= $v['tv_pvm'];
 
 					if($rakenne_muoto == 'mobiili')
 					{
@@ -2046,25 +2056,25 @@ exit;
 						$osoite		= $item->kohde_kannasta;
 						$tyovuorot 	= (isset($item->tyovuoroot->id))? $item->tyovuoroot : null;
 						$kohde_id	= ($item->kohdenID > 0)? $item->kohdenID : null;
-						$tiedot		= ['mobiili_id' => (int)$item->id, 'tv_id' => (int)$item->tv_id];
+						$tiedot		= ['mobiili_id' => $item->id, 'tv_id' => $tv_id];
 					}
 					
 					if($rakenne_muoto == 'tuovuoro')
 					{
-						$pvm		= $item->pvm;
+						$pvm		= $tv_pvm;
 						$tyovuorot 	= $item;
 						$osoite		= $item->osoiteById;
 						$kohde_id	= $item->kohde;
-						$tiedot		= ['tv_id' => (int)$item->id];
+						$tiedot		= ['tv_id' => $tv_id];
 					}
-			
+
 					if(isset($kk_hinta[$asiakas_id][$kohde_id])) continue;
 					
 					$tv_link	= '';
 					$maara 		= $this->num($v['maara']);
 					
 					if($tyovuorot !== null)
-						$tv_ids[$tyovuorot->id] = $tyovuorot->id;
+						$tv_ids[$tv_id] = $tv_id;
 					
 					$kohde_link = CHtml::link($osoite,
 						['/kohteet/update', 'id' => $kohde_id],
@@ -2089,18 +2099,19 @@ exit;
 					
 					if(isset($v['tyovuoro_tuotteet']['paa_tuote']))
 					{
-						$this_pvm = $v['tyovuoro_tuotteet']['paa_tuote']['tv_pvm'];
+						$tv_id 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_id'];
+						$pvm 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_pvm'];
 
 						$tv_link 	= CHtml::link('<span class="text-success">Työvuoro</span>',
 							[
-							  sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s', date("Y", strtotime($this_pvm)), date("W", strtotime($this_pvm)), $tyovuorot->id)
+							  sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s', date("Y", strtotime($pvm)), date("W", strtotime($pvm)), $tv_id)
 							],
 							[
 							  'class' 			=> 'pull-right',
 							  'target' 			=> '_blank',
-							  'data-toggle' 	=> 'tooltip',
-							  'data-placement' 	=> 'top',
-							  'title' 			=> 'Tämä kirjaus on tehty työvuorosta ID#: '.$tyovuorot->id
+							  //'data-toggle' 	=> 'tooltip',
+							  //'data-placement' 	=> 'top',
+							  //'title' 			=> 'Tämä kirjaus on tehty työvuorosta ID#: '.$tv_id
 							]
 						);
 						
@@ -2207,9 +2218,9 @@ exit;
 					foreach($arr['tiedot'] as $key => $arr_tiedot)
 					{
 						if(isset($arr_tiedot['mobiili_id']) and $arr_tiedot['mobiili_id'] > 0)
-							$new_tiedot['mobiili_id'][] = (int)$arr_tiedot['mobiili_id'];
+							$new_tiedot['mobiili_id'][] = $arr_tiedot['mobiili_id'];
 						if(isset($arr_tiedot['tv_id']) and $arr_tiedot['tv_id'] > 0)
-							$new_tiedot['tv_id'][] = (int)$arr_tiedot['tv_id'];
+							$new_tiedot['tv_id'][] = $arr_tiedot['tv_id'];
 					}
 					
 					$laskutettu = false;			

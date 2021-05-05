@@ -613,6 +613,17 @@ $(document).ready(function(){
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'laskutettu'); ?>
 		<?php
+			// <-- Check laskutetut
+			if(isset($model->kohteet->asiakkaat->id) and $model->kohteet->asiakkaat->id > 0)
+			{
+				$etunti_tunniste 	= 'la_'.date("m.Y", strtotime($laatikko_pvm)).'_'.$model->kohteet->asiakkaat->id;
+				$query				= "etunti_tunniste='".$etunti_tunniste."'";
+				$laskutetut_ids 	= $this->LaskutetutIDs('tv_id', $query);
+
+				if(isset($laskutetut_ids[$this_id]))
+					$model->laskutettu = 1;
+			}
+			
         	$l = array(0 => 'Ei laskutettu', 1 => 'Laskutettu');
 			echo $form->dropDownList($model,'laskutettu', $l, 
 			array('class'=>'form-control lomake_valinta')) 
