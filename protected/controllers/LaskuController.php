@@ -2024,7 +2024,7 @@ exit;
 				$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
 				$body .= '
 				<td align="center">
-					'.(($laskutettu)? '<p class="text-success">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
+					'.(($laskutettu)? '<p class="text-info">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 				</td>';
 				$body .= '<td class="tuote" tuote_id="'.$arr['tuote_id'].'" tv_id="0"><b>'.$arr['nimike'].'</b><br>'.$kohde_link.'</td>';
 				$body .= '<td class="maara">1</td>';
@@ -2186,7 +2186,7 @@ exit;
 							$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
 							$body .= '
 							<td align="center">
-								'.(($laskutettu)? '<p class="text-success">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
+								'.(($laskutettu)? '<p class="text-info">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 							</td>';
 							$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].'</td>';
 							$body .= '<td class="maara">'.$maara.'</td>';
@@ -2255,7 +2255,7 @@ exit;
 					$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
 					$body .= '
 					<td align="center">
-						'.(($laskutettu)? '<p class="text-success">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
+						'.(($laskutettu)? '<p class="text-info">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 					</td>';
 					$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].'</td>';
 					$body .= '<td class="maara">'.$maara.'</td>';
@@ -2285,13 +2285,13 @@ exit;
 
 		if(count($laskut) > 0)
 		{
-			$body .= '<h2 class="text-success">Tehdyt laskut</h2>';
+			$body .= '<h2 class="text-info">Tehdyt laskut</h2>';
 			$body .= '<div class="form-inline">';
 			foreach($laskut as $item)
 			{
 				$link = CHtml::link('<span class="text-white">Lasku:' . $item->id.'<br>' . $this->tilanneCheck($item).'</span>',
 					['/lasku/update', 'id' => $item->id],
-					['class' => 'btn btn-group btn-success', 'target' => '_blank']
+					['class' => 'btn btn-group btn-info'] // , 'target' => '_blank'
 				);
 				$body .= $link.' ';
 			}
@@ -2316,7 +2316,7 @@ exit;
 		
 		$body .= '
 			<br>
-			<p><button type="submit" class="btn-block btn btn-info laskutetuksi" asiakas_id="'.$asiakas_id.'" from="'.$from.'" to="'.$to.'" etunti_tunniste="'.$etunti_tunniste.'" style="display:none" data-toggle="tooltip" data-placement="top" title="Hei, Tämän painamalla oikeasti luodaan heti uusi hyväksymätön laskun määritetty rivijen mukaiseesti. Luomiseen jälkeen lasku saa muokata, hyväksytä ja lähetä. Kaikki tilantteet on näkyvissä tällä sivulla.">LUO UUSI LASKU<br>Näet sen nappi, koska taulussa on varmaasti laskuttomat rivit</button></p>
+			<p><span class="btn-block btn btn-info laskutetuksi" asiakas_id="'.$asiakas_id.'" from="'.$from.'" to="'.$to.'" etunti_tunniste="'.$etunti_tunniste.'" style="display:none" data-toggle="tooltip" data-placement="top" title="Hei, Tämän painamalla oikeasti luodaan heti uusi hyväksymätön laskun määritetty rivijen mukaiseesti. Luomiseen jälkeen lasku saa muokata, hyväksytä ja lähetä. Kaikki tilantteet on näkyvissä tällä sivulla.">LUO UUSI LASKU</span></p>
 		';
 		
 		echo json_encode($body);

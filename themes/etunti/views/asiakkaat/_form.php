@@ -739,9 +739,17 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->error($model,'maksuehto'); ?>
 	</div>
 
+	<div class="section fill mb5 ashidd_a">
+		<?php echo $form->labelEx($model,'lisatietoja_laskutuksesta'); ?>
+		<?php echo $form->textarea($model,'lisatietoja_laskutuksesta',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'lisatietoja_laskutuksesta'); ?>
+	</div>
+
+	<legend><h3>Lasku hinnasto.</h3></legend>
+
 	<!-- Tuotteet palvelut -->
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tuote'); ?>
+		<?php echo $form->labelEx($model,'tuote'); ?> <b class="pull-right text-success">Uusi valikko</b>
 		<?php echo $form->dropDownList($model, 'tuote', CHtml::listData(TuotteetPalvelut::model()->findAll(), 'id', 'nimike'), 
 		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'tuote'); ?>
@@ -754,18 +762,11 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->error($model,'hinnasto_id'); ?>
 	</div>
 	<!-- Tuotteet palvelut -->
-
-	<div class="section fill mb5 ashidd_a">
-		<?php echo $form->labelEx($model,'lisatietoja_laskutuksesta'); ?>
-		<?php echo $form->textarea($model,'lisatietoja_laskutuksesta',array('class'=>'form-control')); ?>
-		<?php echo $form->error($model,'lisatietoja_laskutuksesta'); ?>
-	</div>
-
+	
 <br>
-<legend><h4 class="text-danger">Nämät kentäät ei käytetään enää.</h4></legend>
-<div class="alert alert-danger">
+	<?php $poistetaan = 'Tämä valinta poistetaan 06/2021'; ?>
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'alv'); ?>
+		<?php echo $form->labelEx($model,'alv'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
 		<?php
         	$l = array(0=>0,10=>10,14=>14,24=>24);
 
@@ -777,7 +778,7 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
+		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
 		<?php
 		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
         	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
@@ -787,23 +788,23 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta'); ?>
+		<?php echo $form->labelEx($model,'hinta'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
 		<?php echo $form->numberField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'hinta'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'verot'); ?>
+		<?php echo $form->labelEx($model,'verot'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
 		<?php echo $form->numberField($model,'verot',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'verot'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_sis_alv'); ?>
+		<?php echo $form->labelEx($model,'hinta_sis_alv'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
 		<?php echo $form->numberField($model,'hinta_sis_alv',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'hinta_sis_alv'); ?>
 	</div>
-</div>
+
 
 <script type="text/javascript">
 $(document).ready(function(){

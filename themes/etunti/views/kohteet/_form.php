@@ -105,9 +105,7 @@ if(empty($model->tietoja))
 
 
 	<?php if(in_array('3',$tas)) : ?>
-	<div class="section fill mb5">
-	<legend><?php echo Yii::t('main','Laskutus'); ?></legend>
-	</div>
+	<legend><h3>Lasku hinnasto.</h3></legend>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tuote'); ?>
@@ -125,10 +123,10 @@ if(empty($model->tietoja))
 
 <?php if(isset($model->id)) : ?>
 <br>
-<legend><h4 class="text-danger">Nämät kentäät ei käytetään enää.</h4></legend>
-<div class="alert alert-danger">
+
+	<?php $poistetaan = 'Tämä valinta poistetaan 06/2021'; ?>
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
+		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
 		<?php
 		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
         	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
@@ -138,7 +136,7 @@ if(empty($model->tietoja))
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'alv'); ?>
+		<?php echo $form->labelEx($model,'alv'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
 		<?php
         	$l = array(0=>0,10=>10,14=>14,24=>24);
 
@@ -150,23 +148,23 @@ if(empty($model->tietoja))
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta'); ?>
+		<?php echo $form->labelEx($model,'hinta'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
 		<?php echo $form->numberField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'hinta'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'verot'); ?>
+		<?php echo $form->labelEx($model,'verot'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
 		<?php echo $form->numberField($model,'verot',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'verot'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_sis_alv'); ?>
+		<?php echo $form->labelEx($model,'hinta_sis_alv'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
 		<?php echo $form->numberField($model,'hinta_sis_alv',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'hinta_sis_alv'); ?>
 	</div>
-</div>
+
 
 <script type="text/javascript">
 $(document).ready(function(){

@@ -303,6 +303,14 @@ $(document).ready(function(){
 					$('.lasku_rivi').find('.laskutetaan:checkbox:checked').each(function(){
 						thisFor.closest('td').find('.laskutetuksi').show()
 					});
+					
+					$(".datepickerLA").datepicker({
+						format: "mm.yyyy",
+						viewMode: "months", 
+						minViewMode: "months",
+						language: "fi",
+					});
+			
 				},
 				error: function(XMLHttpRequest, textStatus, errorThrown){
 				   	console.log(XMLHttpRequest);
