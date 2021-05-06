@@ -389,7 +389,7 @@ $(function() {
       Aika: ${pvm} klo ${alku} - ${loppu}\n
       Huom. Jos asiakasta vaihdetaan, vuoro tulee tallentaa ennen ilmoituksen lähettämistä.\n
       Jos tiedot on väärin tai puuttuu, paina EI ja päivitä sivu.\n\n
-      Ilmoitetaanko ajat sähköpostiin <?= $model->kohteet->asiakkaat->sahkoposti ?? ''; ?>?\n
+      Ilmoitetaanko ajat sähköposteihin <?= $model->kohteet->asiakkaat->AloitusajatEmailsString ?? ''; ?>?\n
       (Lähettäessä ilmoitusta, odota kun sivu päivittyy ja työvuoro avataan uudestaan)
     `)) {
       return false;

@@ -235,7 +235,10 @@ class Asiakkaat extends DB2ActiveRecord
 				$contact = json_decode($contact, true);
 				if(isset($contact["invoice"]) and $contact["invoice"] === "on") {
 					$contactName = $contact["etunimi"] . " " . $contact["sukunimi"];
-					$name .= " ja " . $contactName;
+					// only append the extra contact if it actually has names defined
+					if(strlen(trim($contactName)) > 0) {
+						$name .= " ja " . $contactName;
+					}
 				}
 			}
 		}
@@ -292,10 +295,39 @@ class Asiakkaat extends DB2ActiveRecord
 			foreach($contacts as $k => $contact) {
 				$contact = json_decode($contact, true);
 				$contactName = $contact["etunimi"] . " " . $contact["sukunimi"];
-				$return .= " ja " . $contactName;
+				// only append the extra contact if it actually has names defined
+				if(strlen(trim($contactName)) > 0) {
+					$return .= " ja " . $contactName;
+				}
 			}
 		}
 		return $return;
+	}
+
+	public function getAloitusajatEmails() {
+		$emails = [$this->sahkoposti];
+		if(strlen($this->extra_contacts) > 0) {
+			$contacts = json_decode($this->extra_contacts, true);
+			foreach($contacts as $k => $contact) {
+				$contact = json_decode($contact, true);
+				if(isset($contact["starting_time"]) and $contact["starting_time"] === "on") {
+					$contactEmail = $contact["email"];
+					$emails[] = $contactEmail;
+				}
+			}
+		}
+		return $emails;
+	}
+
+	public function getAloitusajatEmailsString() {
+		$emails = $this->getAloitusajatEmails();
+		$return = "";
+		foreach($emails as $email) {
+			$return .= $email . ", ";
+		}
+		// remove trailing comma and empty space
+		$return = trim($return);
+		return substr($return, 0, -1);
 	}
 
     public function getValikkotyoryhma(){
