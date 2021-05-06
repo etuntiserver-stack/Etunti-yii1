@@ -9,6 +9,9 @@ $tas = explode(",",Yii::app()->user->adminPaketti);
 $date 	= date("d.m.Y",strtotime($data->aloitan));
 $tid 	= $data->tid;
 
+// <-- Check Laskutetut
+if(isset($laskutetut_ids[$data->id]))
+	$data->laskutettu = 1;
 
 $class = '';
 // <-- Jos sivu on laskutettu

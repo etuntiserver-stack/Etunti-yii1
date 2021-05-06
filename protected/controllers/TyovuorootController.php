@@ -2144,39 +2144,6 @@ class TyovuorootController extends Controller
 		$status[11] = '<i class="tvikooni fa fa-clock-o '.(($piilota_mobiilista == 0)?'text-info':'text-danger').'" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Vapaa päivä').'"></i>';
 		return $status;
 	}
-
-	public function LaskutetutIDs($ids_muoto, $query)
-	{
-		$laskut					= Lasku::model()->findAll($query);
-		$pre_laskutetut_tiedot	= [];
-		$return					= [];
-		if(count($laskut) > 0)
-		{
-			foreach($laskut as $item)
-			{
-				$laskuRivit			= LaskunRivit::model()->findAll("lid='".$item->id."' AND tiedot IS NOT NULL");
-				foreach($laskuRivit as $rivi)
-				{
-					$get_tiedot = json_decode($rivi->tiedot, true);
-					if(isset($get_tiedot[$ids_muoto]))
-						$pre_laskutetut_tiedot[] = $get_tiedot[$ids_muoto];
-				}
-			}
-
-			foreach($pre_laskutetut_tiedot as $item)
-			{
-				if(is_array($item))
-				{
-					foreach($item as $k => $id)
-						$return[$id] = $id;
-				} else {
-					$return[$item] = $item;
-				}
-			}
-		}
-		
-		return $return;
-	}
 	
 	public function tv_arr($haku_from, $haku_to, $haku_tids, $haku_criteria, $laatikkomuoto, $with, $customer_tickets = []){
 
@@ -2195,7 +2162,7 @@ class TyovuorootController extends Controller
 			$kks[$dt->format("m.Y")] = 'la_'.$dt->format("m.Y").'_%';
 		}
 		$query 			= "etunti_tunniste LIKE '".implode("' OR LIKE '", $kks)."'";
-		$laskutetut_ids = $this->LaskutetutIDs('tv_id', $query);
+		$laskutetut_ids = Lasku::LaskutetutIDs('tv_id', $query);
 		//  Check Laskutetut -->
 
 		// <-- Tv array

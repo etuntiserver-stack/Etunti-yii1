@@ -1607,15 +1607,23 @@ class MobileController extends Controller
 		$tyovuorot 	= Yii::app()->createController('Tyovuoroot');
 		$tv_arr 	= $tyovuorot[0]->tv_arr(date("Y-m-d", min($pvms)), date("Y-m-d", max($pvms)), $tids, $haku_criteria, true, []);
 		//     Tyovuorot -->
-/*
-		echo '<pre>';
-		print_r($tv_arr);
-		echo '</pre>';
-		exit;
-*/
+
+		// <-- Check Laskutetut
+		$start    	= (new DateTime(Yii::app()->session['fromP']));
+		$end      	= (new DateTime(Yii::app()->session['toP']));
+		$interval 	= DateInterval::createFromDateString('1 month');
+		$period   	= new DatePeriod($start, $interval, $end);
+		$kks 		= [];
+		foreach ($period as $dt) {
+			$kks[$dt->format("m.Y")] = 'la_'.$dt->format("m.Y").'_%';
+		}
+		$query 			= "etunti_tunniste LIKE '".implode("' OR LIKE '", $kks)."'";
+		$laskutetut_ids = Lasku::LaskutetutIDs('mobiili_id', $query);
+		//  Check Laskutetut -->
+
 		if(isset($_POST['index_ajax']))
 		{
-			echo $this->renderPartial('index_a', array('dataProvider' => $dataProvider, 'tv_arr' => $tv_arr));
+			echo $this->renderPartial('index_a', array('dataProvider' => $dataProvider, 'tv_arr' => $tv_arr, 'laskutetut_ids' => $laskutetut_ids));
 			exit;
 		} else {
 			echo $this->render('index', array('dataProvider' => $dataProvider));

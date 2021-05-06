@@ -618,7 +618,7 @@ $(document).ready(function(){
 			{
 				$etunti_tunniste 	= 'la_'.date("m.Y", strtotime($laatikko_pvm)).'_'.$model->kohteet->asiakkaat->id;
 				$query				= "etunti_tunniste='".$etunti_tunniste."'";
-				$laskutetut_ids 	= $this->LaskutetutIDs('tv_id', $query);
+				$laskutetut_ids 	= Lasku::LaskutetutIDs('tv_id', $query);
 
 				if(isset($laskutetut_ids[$this_id]))
 					$model->laskutettu = 1;
