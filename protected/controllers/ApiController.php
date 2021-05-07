@@ -1842,7 +1842,7 @@ public function actionImei($dom)
 		$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
 		$kartta = '';
 		if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey) and isset($mobCheck->kohteet->gps_sijainti) and !empty($mobCheck->kohteet->gps_sijainti)){
-			
+			/* 
 			$full_addr = $mobCheck->kohteet->osoite.' '.$mobCheck->kohteet->pnumero.' '.$mobCheck->kohteet->kaupunki;
 			$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($full_addr).'&language=fi&sensor=true&key='.$asetuksetForAll->googlemaps_apikey;
 			$json = file_get_contents($json_url);
@@ -1850,6 +1850,8 @@ public function actionImei($dom)
 			if( isset($obj->results[0]->geometry->location->lat) ){
 				$kartta = '<p><a href="geo:'.$obj->results[0]->geometry->location->lat.",".$obj->results[0]->geometry->location->lng.'">'.Yii::t('app', 'Näytä kartalla').'</a></p>';
 			}
+			*/
+			$kartta = '<p><a href="geo:'.$mobCheck->kohteet->gps_sijainti.'">'.Yii::t('app', 'Näytä kartalla').'</a></p>';
 		}
 
 		$nykyinenKesto = 0;
