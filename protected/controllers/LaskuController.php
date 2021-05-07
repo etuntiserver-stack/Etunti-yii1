@@ -1995,6 +1995,7 @@ exit;
 		$body .= '<th>'.Yii::t('main', 'Hinta').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Yhteensä').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Freetext').'</th>';
+		$body .= '<th>'.Yii::t('main', 'Työvuoro').'</th>';
 		$body .= '<th style="display:none">'.Yii::t('main', 'Tiedot').'</th>';
 		$body .= '</tr>';
 
@@ -2039,6 +2040,7 @@ exit;
 				$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
 				$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.$arr['hinta'].'</td>';
 				$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
+				$body .= '<td></td>';
 				$body .= '<td class="tiedot" style="display:none">'.json_encode($arr['tiedot']).'</td>';
 				$body .= '</tr>';
 			}
@@ -2099,7 +2101,9 @@ exit;
 							'hinta' 	=> $v['hinta_laskenta']['hinta'],
 							'maara'		=> $maara,
 							'free_text'	=> $pvm,
-							'tiedot'	=> $tiedot
+							'tiedot'	=> $tiedot,
+							'tv_link'  	=> '',
+							'kohde_link' => $kohde_link
 						];
 					}
 					
@@ -2121,17 +2125,19 @@ exit;
 							]
 						);
 						
-						$tuote_id = $v['tyovuoro_tuotteet']['paa_tuote']['tuote_id'];
+						$tuote_id 		= $v['tyovuoro_tuotteet']['paa_tuote']['tuote_id'];
 						
 						$group_arr[$kohde_id][$tuote_id][] = [
 							'tuote_id'	=> $tuote_id,
-							'nimike' 	=> '<b>'.$v['tyovuoro_tuotteet']['paa_tuote']['nimike'].':</b> '.$kohde_link.(($rivi_muoto == 'rivi_per_kirjaus')?$tv_link:''),
+							'nimike' 	=> '<b>'.$v['tyovuoro_tuotteet']['paa_tuote']['nimike'].'</b>',
 							'alv' 		=> $v['tyovuoro_tuotteet']['paa_tuote']['alv'],
 							'yksikko' 	=> $v['tyovuoro_tuotteet']['paa_tuote']['yksikko'],
 							'hinta' 	=> $v['tyovuoro_tuotteet']['paa_tuote']['hinta'],
 							'maara'		=> $maara,
 							'free_text'	=> $pvm,
-							'tiedot'	=> $tiedot
+							'tiedot'	=> $tiedot,
+							'tv_link'  	=> $tv_link,
+							'kohde_link' => $kohde_link
 						];
 					}
 					
@@ -2143,13 +2149,15 @@ exit;
 
 							$group_arr[$kohde_id][$tuote_id][] = [
 								'tuote_id'	=> $tuote_id,
-								'nimike' 	=> '<b>'.$tuote['nimike'].(($rivi_muoto == 'rivi_per_kirjaus')?$tv_link:'').'</b>',
+								'nimike' 	=> '<b>'.$tuote['nimike'].'</b>',
 								'alv' 		=> $tuote['alv'],
 								'yksikko' 	=> $tuote['yksikko'],
 								'hinta' 	=> $tuote['hinta'],
 								'maara'		=> $tuote['maara'],
 								'free_text'	=> $pvm,
-								'tiedot'	=> $tiedot
+								'tiedot'	=> $tiedot,
+								'tv_link'  	=> $tv_link,
+								'kohde_link' => $kohde_link
 							];
 						}
 					}
@@ -2186,13 +2194,14 @@ exit;
 							<td align="center">
 								'.(($laskutettu)? '<p class="text-info">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 							</td>';
-							$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].'</td>';
+							$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].': '.$arr['kohde_link'].'</td>';
 							$body .= '<td class="maara text-center">'.$maara.'</td>';
 							$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 							$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
 							$body .= '<td class="hinta text-center">'.$hinta.'</td>';
 							$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($maara*$hinta).'</td>';
 							$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
+							$body .= '<td>'.$arr['tv_link'].'</td>';
 							$body .= '<td class="tiedot" style="display:none">'.json_encode($tiedot).'</td>';
 							$body .= '</tr>';
 						}
@@ -2244,6 +2253,7 @@ exit;
 									$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
 									$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($laskutettu_maara*$arr['hinta']).'</td>';
 									$body .= '<td class="free_text">'.$ajanjakso.'</td>';
+									$body .= '<td></td>';
 									$body .= '<td class="tiedot" style="display:none">'.json_encode($new_tiedot).'</td>';
 									$body .= '</tr>';
 								}
@@ -2266,6 +2276,7 @@ exit;
 					$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
 					$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($maara*$arr['hinta']).'</td>';
 					$body .= '<td class="free_text">'.$ajanjakso.'</td>';
+					$body .= '<td></td>';
 					$body .= '<td class="tiedot" style="display:none">'.json_encode($new_tiedot).'</td>';
 					$body .= '</tr>';
 				}
@@ -2280,6 +2291,7 @@ exit;
 		$body .= '<th></th>';
 		$body .= '<th></th>';
 		$body .= '<th id="summ_result" class="text-center"></th>';
+		$body .= '<th></th>';
 		$body .= '<th></th>';
 		$body .= '<th style="display:none"></th>';
 		$body .= '</tr>';
