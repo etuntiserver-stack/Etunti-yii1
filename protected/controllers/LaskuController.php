@@ -1779,10 +1779,14 @@ exit;
 		$asiakas	= Asiakkaat::model()->findByPk($asiakas_id);
 		$ajanjakso 	= date("d.m.Y", strtotime($from)).'-'.date("d.m.Y", strtotime($to));
 
+		if($rakenne_muoto == 'mobiili') 	$which_ids = 'mobiili_id';
+		if($rakenne_muoto == 'tuovuoro') 	$which_ids = 'tv_id';
+
 		$kk						= date("m.Y", strtotime($from));
 		$etunti_tunniste		= 'la_'.$kk.'_'.$asiakas_id;
 		$laskut					= Lasku::model()->findAll("etunti_tunniste='".$etunti_tunniste."'");
 		$laskurivitAll			= [];
+		$laskutetut_tuotteet	= [];
 		
 		if(count($laskut) > 0)
 		{
@@ -1792,6 +1796,8 @@ exit;
 				foreach($laskuRivit as $rivi)
 				{
 					$laskurivitAll[] = $rivi;
+					if(strpos($rivi->tiedot, $which_ids) !== false)
+						$laskutetut_tuotteet[$rivi->tuoteID][$which_ids]['maara'][] = $rivi->kpl;
 				}
 			}
 		}
@@ -2031,7 +2037,7 @@ exit;
 				$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 				$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
 				$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
-				$body .= '<td class="forsumm text-center">'.$arr['hinta'].'</td>';
+				$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.$arr['hinta'].'</td>';
 				$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
 				$body .= '<td class="tiedot" style="display:none">'.json_encode($arr['tiedot']).'</td>';
 				$body .= '</tr>';
@@ -2164,26 +2170,18 @@ exit;
 
 						if($rivi_muoto == 'rivi_per_kirjaus')
 						{
-							$tiedot = $arr['tiedot'];
+							$tiedot 			= $arr['tiedot'];
 							$tiedot['tuote_id'] = $tuote_id;
-
-							$laskutettu = false;			
-							if($rakenne_muoto == 'mobiili' and isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot['mobiili_id']) and isset($tiedot['mobiili_id']))
-							{
-								$laskutettu = true;
-								if(!in_array($tiedot['mobiili_id'], $laskutetut_tiedot['mobiili_id']))
-										$laskutettu = false;
-							}
-
-							if($rakenne_muoto == 'tuovuoro' and isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot['tv_id']) and isset($tiedot['tv_id']))
-							{
-								$laskutettu = true;
-								if(!in_array($tiedot['tv_id'], $laskutetut_tiedot['tv_id']))
-										$laskutettu = false;
-							}
+							$laskutettu 		= false;
 							
-							$num_rivi++;
-							$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
+							if(isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot[$which_ids]) and isset($tiedot[$which_ids]))
+							{
+								$laskutettu = true;
+								if(!in_array($tiedot[$which_ids], $laskutetut_tiedot[$which_ids]))
+										$laskutettu = false;
+							}
+
+							$body .= '<tr class="lasku_rivi">';
 							$body .= '
 							<td align="center">
 								'.(($laskutettu)? '<p class="text-info">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
@@ -2193,12 +2191,12 @@ exit;
 							$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 							$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
 							$body .= '<td class="hinta text-center">'.$hinta.'</td>';
-							$body .= '<td class="forsumm text-center">'.($maara*$hinta).'</td>';
+							$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($maara*$hinta).'</td>';
 							$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
 							$body .= '<td class="tiedot" style="display:none">'.json_encode($tiedot).'</td>';
 							$body .= '</tr>';
 						}
-			
+
 						$pregroup[$tuote_id]['nimike'] 		= $arr['nimike'];
 						$pregroup[$tuote_id]['alv'] 		= $arr['alv'];
 						$pregroup[$tuote_id]['yksikko'] 	= $arr['yksikko'];
@@ -2213,6 +2211,9 @@ exit;
 			{
 				foreach($pregroup as $tuote_id => $arr)
 				{
+					$maara 					= array_sum($arr['maara']);
+					$laskutettu_maara 		= isset($laskutetut_tuotteet[$tuote_id][$which_ids]['maara'])? array_sum($laskutetut_tuotteet[$tuote_id][$which_ids]['maara']): 0;
+									
 					$new_tiedot 			= [];
 					$new_tiedot['tuote_id'] = $tuote_id;
 					foreach($arr['tiedot'] as $key => $arr_tiedot)
@@ -2223,36 +2224,39 @@ exit;
 							$new_tiedot['tv_id'][] = $arr_tiedot['tv_id'];
 					}
 					
-					$laskutettu = false;			
-					if($rakenne_muoto == 'mobiili' and isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot['mobiili_id']))
+					$laskutettu = false;					
+					if(isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot[$which_ids]))
 					{
 						$laskutettu = true;
-						foreach($new_tiedot['mobiili_id'] as $id)
+						foreach($new_tiedot[$which_ids] as $id)
 						{
-							if(!in_array($id, $laskutetut_tiedot['mobiili_id']))
+							if(!in_array($id, $laskutetut_tiedot[$which_ids]))
 							{
+
+								$maara -= $laskutettu_maara;
+
+								if(isset($laskutetut_tuotteet[$tuote_id][$which_ids]['maara']))
+								{
+									$body .= '<tr class="lasku_rivi">';
+									$body .= '<td align="center"><p class="text-info">laskutettu</p></td>';
+									$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].'</td>';
+									$body .= '<td class="maara text-center">'.$laskutettu_maara.'</td>';
+									$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
+									$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
+									$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
+									$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($laskutettu_maara*$arr['hinta']).'</td>';
+									$body .= '<td class="free_text">'.$ajanjakso.'</td>';
+									$body .= '<td class="tiedot" style="display:none">'.json_encode($new_tiedot).'</td>';
+									$body .= '</tr>';
+								}
+					
 								$laskutettu = false;
 								break;
 							}
 						}
 					}
 
-					if($rakenne_muoto == 'tuovuoro' and isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot['tv_id']))
-					{
-						$laskutettu = true;
-						foreach($new_tiedot['tv_id'] as $id)
-						{
-							if(!in_array($id, $laskutetut_tiedot['tv_id']))
-							{
-								$laskutettu = false;
-								break;
-							}
-						}
-					}
-					
-					$num_rivi++;
-					$maara = array_sum($arr['maara']);
-					$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
+					$body .= '<tr class="lasku_rivi">';
 					$body .= '
 					<td align="center">
 						'.(($laskutettu)? '<p class="text-info">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
@@ -2262,7 +2266,7 @@ exit;
 					$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 					$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
 					$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
-					$body .= '<td class="forsumm text-center">'.($maara*$arr['hinta']).'</td>';
+					$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($maara*$arr['hinta']).'</td>';
 					$body .= '<td class="free_text">'.$ajanjakso.'</td>';
 					$body .= '<td class="tiedot" style="display:none">'.json_encode($new_tiedot).'</td>';
 					$body .= '</tr>';
