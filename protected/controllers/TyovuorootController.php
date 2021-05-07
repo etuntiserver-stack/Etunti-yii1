@@ -1800,6 +1800,11 @@ class TyovuorootController extends Controller
 			if (isset($_POST['to']) and !empty($_POST['to']))
 				Yii::app()->session['to'] = date("Y-m-d", strtotime($_POST['to']));
 
+			if (isset($_POST['year']) and !empty($_POST['year']))
+				Yii::app()->session['year'] = $_POST['year'];
+			if (isset($_POST['week']) and !empty($_POST['week']))
+				Yii::app()->session['week'] = $_POST['week'];
+
 			$this->redirect(array('beta', 'mode' => $mode));
 		}
 		//  Post haku -->
