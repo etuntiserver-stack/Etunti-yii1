@@ -297,7 +297,7 @@ $(document).ready(function(){
 					$('.forsumm').each(function(){
 						sum += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
 					});
-					$('#summ_result').html(sum);
+					$('#summ_result').html(sum.toFixed(2));
 					$('[data-toggle="tooltip"]').tooltip();
 					
 					$('.lasku_rivi').find('.laskutetaan:checkbox:checked').each(function(){
