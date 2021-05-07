@@ -2095,7 +2095,7 @@ exit;
 						
 						$group_arr[$kohde_id][$tuote_id][] = [
 							'tuote_id'	=> $tuote_id,
-							'nimike' 	=> '<b>'.$v['hinta_laskenta']['nimike'].':</b> '.$kohde_link,
+							'nimike' 	=> '<b>'.$v['hinta_laskenta']['nimike'].'</b>',
 							'alv' 		=> $v['hinta_laskenta']['alv'],
 							'yksikko'	=> $v['hinta_laskenta']['yksikko'],
 							'hinta' 	=> $v['hinta_laskenta']['hinta'],
