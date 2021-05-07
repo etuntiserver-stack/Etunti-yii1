@@ -325,7 +325,7 @@ exit;
   else
   $iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 1, true, null, null, false);
 
-  $yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 2, true, null, null, false);
+  $yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2,3), 2, false, 2, true, null, null, false);
   $sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 3, true, null, null, false);
 
   if(!$ilman_matkat){
