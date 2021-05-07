@@ -1995,7 +1995,10 @@ exit;
 		$body .= '<th>'.Yii::t('main', 'Hinta').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Yhteensä').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Freetext').'</th>';
-		$body .= '<th>'.Yii::t('main', 'Työvuoro').'</th>';
+		
+		if($rivi_muoto == 'rivi_per_kirjaus')
+			$body .= '<th>'.Yii::t('main', 'Työvuoro').'</th>';
+			
 		$body .= '<th style="display:none">'.Yii::t('main', 'Tiedot').'</th>';
 		$body .= '</tr>';
 
@@ -2040,7 +2043,8 @@ exit;
 				$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
 				$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.$arr['hinta'].'</td>';
 				$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
-				$body .= '<td></td>';
+				if($rivi_muoto == 'rivi_per_kirjaus')
+					$body .= '<td></td>';
 				$body .= '<td class="tiedot" style="display:none">'.json_encode($arr['tiedot']).'</td>';
 				$body .= '</tr>';
 			}
@@ -2253,7 +2257,6 @@ exit;
 									$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
 									$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($laskutettu_maara*$arr['hinta']).'</td>';
 									$body .= '<td class="free_text">'.$ajanjakso.'</td>';
-									$body .= '<td></td>';
 									$body .= '<td class="tiedot" style="display:none">'.json_encode($new_tiedot).'</td>';
 									$body .= '</tr>';
 								}
@@ -2276,7 +2279,6 @@ exit;
 					$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
 					$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($maara*$arr['hinta']).'</td>';
 					$body .= '<td class="free_text">'.$ajanjakso.'</td>';
-					$body .= '<td></td>';
 					$body .= '<td class="tiedot" style="display:none">'.json_encode($new_tiedot).'</td>';
 					$body .= '</tr>';
 				}
@@ -2292,7 +2294,8 @@ exit;
 		$body .= '<th></th>';
 		$body .= '<th id="summ_result" class="text-center"></th>';
 		$body .= '<th></th>';
-		$body .= '<th></th>';
+		if($rivi_muoto == 'rivi_per_kirjaus')
+			$body .= '<th></th>';
 		$body .= '<th style="display:none"></th>';
 		$body .= '</tr>';
 		$body .= '</table>';
