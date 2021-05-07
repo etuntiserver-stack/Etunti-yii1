@@ -2211,9 +2211,7 @@ exit;
 			{
 				foreach($pregroup as $tuote_id => $arr)
 				{
-					$maara 					= array_sum($arr['maara']);
-					$laskutettu_maara 		= isset($laskutetut_tuotteet[$tuote_id][$which_ids]['maara'])? array_sum($laskutetut_tuotteet[$tuote_id][$which_ids]['maara']): 0;
-									
+					$maara 					= array_sum($arr['maara']);									
 					$new_tiedot 			= [];
 					$new_tiedot['tuote_id'] = $tuote_id;
 					foreach($arr['tiedot'] as $key => $arr_tiedot)
@@ -2232,11 +2230,11 @@ exit;
 						{
 							if(!in_array($id, $laskutetut_tiedot[$which_ids]))
 							{
-
-								$maara -= $laskutettu_maara;
-
 								if(isset($laskutetut_tuotteet[$tuote_id][$which_ids]['maara']))
 								{
+									$laskutettu_maara 	= array_sum($laskutetut_tuotteet[$tuote_id][$which_ids]['maara']);
+									$maara 				-= $laskutettu_maara;
+								
 									$body .= '<tr class="lasku_rivi">';
 									$body .= '<td align="center"><p class="text-info">laskutettu</p></td>';
 									$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].'</td>';
