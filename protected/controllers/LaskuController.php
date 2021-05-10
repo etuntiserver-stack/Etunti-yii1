@@ -2243,6 +2243,8 @@ exit;
 						{
 							if(!in_array($id, $laskutetut_tiedot[$which_ids]))
 							{
+								// jos lisatty lisaksi
+								/*
 								if(isset($laskutetut_tuotteet[$tuote_id][$which_ids]['maara']))
 								{
 									$laskutettu_maara 	= array_sum($laskutetut_tuotteet[$tuote_id][$which_ids]['maara']);
@@ -2260,6 +2262,7 @@ exit;
 									$body .= '<td class="tiedot" style="display:none">'.json_encode($new_tiedot).'</td>';
 									$body .= '</tr>';
 								}
+								*/
 					
 								$laskutettu = false;
 								break;
