@@ -2368,18 +2368,33 @@ exit;
 			$erapaiva = '';
 			if(!empty($asiakas->maksuehto))
 				$erapaiva = date("d.m.Y",strtotime($paivays . " +$asiakas->maksuehto day"));
+
+			$sahkoposti = '';
+			if(!empty($asiakas->sahkopostilaskuosoite))
+				$sahkoposti = $asiakas->sahkopostilaskuosoite;
+			else
+				$sahkoposti = $asiakas->sahkoposti;
 			
 			$model 					= new Lasku;
 			$model->etunti_tunniste = $_POST['etunti_tunniste'];
+			$model->nimi 			= $asiakas->Fullname;
+			$model->yritys 			= $asiakas->yrityksen_nimi;
+			$model->tyyppi 			= $asiakas->tyyppi;
 			$model->as_nro 			= $asiakas->asiakasnumero;
+			$model->sahkoposti		= $sahkoposti;
 			$model->laskutus 		= $asiakas->laskutus_kanava;
 			$model->maksuehto 		= $asiakas->maksuehto;
+			$model->verkkolaskuosoite = $asiakas->verkkolaskuosoite;
+			$model->v_tunnus		= $asiakas->valittajan_tunnus;
+			$model->netvisor_dimension_name	= $asiakas->netvisor_dimension_name;
+			$model->netvisor_dimension_item	= $asiakas->netvisor_dimension_item;
+			$model->kirjeenluokka	= $asiakas->kirjeenluokka;
+			$model->viivastyskorko	= $asiakas->viivastyskorko;
 			$model->osoite 			= $asiakas->osoite;
 			$model->postinumero 	= $asiakas->postinumero;
 			$model->toimipaikka 	= $asiakas->kaupunki;
 			$model->yhteensa_total	= ''; // Pakko RE Tallenna lomake
 			$model->toimitusosoite 	= 0;
-			$model->tyyppi 			= $asiakas->tyyppi;
 			$model->yid 			= 1; // Miksi on aina yksi?
 			$model->tilanne 		= 0;
 			$model->tapahtumapvm 	= date("Y-m-d H:i:s");
