@@ -671,6 +671,20 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 </div>
 */ ?>
 
+<!-- Uusi työkalu -->
+<div id="tp_valinta" style="display:none">
+<?php
+	$criteria = new CDbCriteria();
+	$criteria->order = " nimike ";
+	$criteria->condition = " 
+		hinta_alv_0!=0 AND yksikko='h'
+	";
+	echo CHtml::dropdownList('','palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
+		['empty'=>'','class'=>'form-control bg-warning valitseTuote']
+	);
+?>
+</div>
+
 <div id="la_laatikko" style="display:none; z-index: 1">
 	<h3>Uusi työkalu</h3>
 	<div class="form-inline">
@@ -691,6 +705,8 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div>
 	<div class="row form kht" id="kalut"></div>
 </div>
+<!-- Uusi työkalu /-->
+
 
 
 <input type="hidden" class="form-control" id="kohteistaRivit" readonly><br>
@@ -1365,6 +1381,30 @@ $(document).delegate(".laskutetuksi","click",function(e){
 			{
 				window.location.href= 'update?id=' + parseInt(data['lasku_id']);
 			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+		   	console.log(XMLHttpRequest);
+		}
+	});
+});
+	
+var kohde_id = 0;
+$(document).delegate(".tuote_puutu","click",function(){
+	$(this).replaceWith( $('#tp_valinta').html() );
+	kohde_id = $(this).attr('kohde_id');
+});
+
+$(document).delegate(".valitseTuote","change",function(){
+	var cl = $(this).closest('.closest_td');
+
+	$.ajax({
+		url: 'tuotepalvelukohdelle?id=' + kohde_id + '&tuote=' + $(this, 'option:selected').val(),
+		success: function(data){
+			var data = JSON.parse(data);
+			console.log(data);
+			
+			ajaxForLasku(cl);
+			$('[data-toggle="tooltip"]').tooltip();
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 		   	console.log(XMLHttpRequest);
