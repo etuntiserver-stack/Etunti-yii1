@@ -70,10 +70,11 @@
 								{
 									echo CHtml::dropDownList('tyoryhma', 'tyoryhma[]', $list,
 									array(
-										'empty'=>'Valitse työryhmä',
+										//'empty'=>'Valitse työryhmä',
 										'class'=>'form-control form-group selectpicker', 
 										'id'=>'tyoryhmaSelect', 
 										'multiple' => 'yes', 
+										'title' => 'Valitse työryhmä',
 										'options' => $selected
 										)
 									);
