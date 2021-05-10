@@ -671,7 +671,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 </div>
 */ ?>
 
-<div id="la_laatikko" style="display:none">
+<div id="la_laatikko" style="display:none; z-index: 1">
 	<h3>Uusi työkalu</h3>
 	<div class="form-inline">
 		<input type="text" id="la_from" value="<?=date("Y-m-d", strtotime('first day of previous month'))?>" style="display:none">
@@ -682,8 +682,8 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 			<option value="tuovuoro">Työvuoroista</option>
 		</select>
 		<select class="form-group form-control" id="rivi_muoto">
-			<option value="rivi_per_kohde">Tuote/Kohde mukaan</option>
-			<option value="rivi_per_kirjaus">Rivi per kirjaus</option>
+			<option value="rivi_per_kohde">TUOTE</option>
+			<option value="rivi_per_kirjaus">KIRJAUS</option>
 		</select>
 		<input type="text" id="kuukausi_kalentteri" class="form-control form-group datepickerLA" value="<?=date('m.Y', strtotime('first day of previous month'))?>" data-toggle="tooltip" title="<?=Yii::t('main', 'Ajanjakso')?>">
 		
@@ -1398,13 +1398,13 @@ function ajaxForLasku()
 					sum += parseFloat($(this).text());
 				});
 				$('#summ_result').html(sum);
-				$('[data-toggle="tooltip"]').tooltip();
 				
 				$('.lasku_rivi').find('.laskutetaan:checkbox:checked').each(function(){
 					$(this).closest('#kalut').find('.laskutetuksi').show()
 				});
 
 				datepickerLA();
+				$('[data-toggle="tooltip"]').tooltip();
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown){
 			   	console.log(XMLHttpRequest);

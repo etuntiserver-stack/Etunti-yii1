@@ -2198,7 +2198,7 @@ exit;
 										$laskutettu = false;
 								
 								if($laskutettu and !isset($laskutetut_tunnisteet[$rivi_tunniste]))
-									$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-toggle="tooltip" title="Laskutettu jollakin eri tavalla. Katso - Tehdyt laskut"></span>';
+									$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-container="body" data-toggle="tooltip" title="Laskutettu jollakin eri tavalla. Katso - Tehdyt laskut"></span>';
 							}
 
 							$body .= '<tr class="lasku_rivi">';
@@ -2266,11 +2266,11 @@ exit;
 						$laskutettu_rivi 	= $laskutetut_tunnisteet[$rivi_tunniste];
 
 						if($maara != $laskutettu_rivi->kpl or $arr['yksikko'] != $laskutettu_rivi->yksikko or $arr['hinta']	!= $laskutettu_rivi->hinta)
-							$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-toggle="tooltip" title="Laskutettu, mutta laskurivissa olevat tiedot eivät sama kuin ehdottaessa."></span>';
+							$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-container="body" data-toggle="tooltip" title="Laskutettu, mutta laskurivissa olevat tiedot eivät sama kuin ehdottaessa."></span>';
 							
 					} elseif($laskutettu and !isset($laskutetut_tunnisteet[$rivi_tunniste]))
 					{
-							$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-toggle="tooltip" title="Laskutettu, mutta jollakin eri tavalla. Katso - Tehdyt laskut"></span>';
+							$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-container="body" data-toggle="tooltip" title="Laskutettu, mutta jollakin eri tavalla. Katso - Tehdyt laskut"></span>';
 					}
 
 					$body .= '<tr class="lasku_rivi">';
