@@ -2124,7 +2124,7 @@ exit;
 							  sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s', date("Y", strtotime($pvm)), date("W", strtotime($pvm)), $tv_id)
 							],
 							[
-							  'class' 			=> 'pull-right',
+							  //'class' 			=> 'pull-right',
 							  'target' 			=> '_blank',
 							  //'data-toggle' 	=> 'tooltip',
 							  //'data-placement' 	=> 'top',
@@ -2213,7 +2213,7 @@ exit;
 							$body .= '<td class="hinta text-center">'.$hinta.'</td>';
 							$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($maara*$hinta).'</td>';
 							$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
-							$body .= '<td>'.$arr['tv_link'].'</td>';
+							$body .= '<td class="text-center">'.$arr['tv_link'].'</td>';
 							$body .= '<td class="tiedot" style="display:none">'.json_encode($tiedot).'</td>';
 							$body .= '</tr>';
 						}
