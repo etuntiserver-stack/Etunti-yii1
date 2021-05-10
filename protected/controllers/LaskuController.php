@@ -1170,7 +1170,7 @@ exit;
 		$return['alv'] 		= 0;
 		
 		if( $for == 'kohde')
-			$return['nimike'] 	= '<b class="text-danger link tuote_puutu" data-toggle="tooltip" kohde_id="'.$model->id.'" title="Klikkamalla tänne saa määrittellä kohdelle Tuote/Palvelu">Tuote puutuu</b>';
+			$return['nimike'] 	= '<b class="text-danger link tuote_puutu" data-toggle="tooltip" kohde_id="'.$model->id.'" title="Klikkamalla tänne saa määrittellä kohdelle Tuote/Palvelu">Tuote puutuu - '.$model->osoite.'</b>';
 		else
 			$return['nimike'] 	= '';
 		
