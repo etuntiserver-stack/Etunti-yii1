@@ -724,6 +724,9 @@ $(document).ready(function(){
 				$('#arvioitu_kesto').html('00:00');
 			}
 
+			if(d[13])
+				$('#Tyovuoroot_tuoteID').val(d[13]);
+				
 	   	},
 		error:function(data){
 		console.log(data);
