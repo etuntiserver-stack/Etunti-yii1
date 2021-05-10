@@ -1987,6 +1987,9 @@ exit;
 		$num_rivi	= 0;
 		$tv_ids		= [];
 
+		if(!empty($asiakas->lisatietoja_laskutuksesta))
+			$body .= '<h3>Lisätietoja laskutuksesta</h3><pre>'.$asiakas->lisatietoja_laskutuksesta.'</pre>';
+		
 		$body .= '<table class="well table table-striped" border="1">';
 		$body .= '<tr>';
 		$body .= '<th></th>';
