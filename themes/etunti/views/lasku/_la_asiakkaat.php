@@ -20,7 +20,7 @@
 				<option value="rivi_per_kirjaus">KIRJAUS</option>
 			</select>
 			<button class="btn btn-primary nayta_collapse" type="button" data-toggle="collapse" data-target="#collapse_id_<?=$data->id?>" aria-expanded="false" aria-controls="collapseExample" asiakas_id="<?=$data->id?>">
-				<?=Yii::t('main', 'Luo uudet laskurivit')?> <i class="caret"></i>
+				<?=Yii::t('main', 'Luo uudet laskut')?> <i class="caret"></i>
 			</button>
 			<button class="btn btn-info paivita pull-right" style="display:none"><?=Yii::t('main', 'Päivitä / Keskeytä')?></button>
 		</div>
