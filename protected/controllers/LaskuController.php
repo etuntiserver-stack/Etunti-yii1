@@ -1709,9 +1709,12 @@ exit;
 					$lr->mobile_id = $_POST['tunnit_id'][$key];
 				if(isset($_POST['tiedot']))
 					$lr->tiedot = $_POST['tiedot'][$key];
+
+				if(isset($_POST['rivi_tunniste']))
+					$lr->rivi_tunniste = $_POST['rivi_tunniste'][$key];
 					
-				$lr->veroton	=$_POST['veroton'][$key];
-				$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
+				$lr->veroton		= $_POST['veroton'][$key];
+				$lr->yhteensa_alv	= $_POST['yhteensa_alv'][$key];
 				$lr->save();
 			  }
 			}
@@ -1786,7 +1789,7 @@ exit;
 		$etunti_tunniste		= 'la_'.$kk.'_'.$asiakas_id;
 		$laskut					= Lasku::model()->findAll("etunti_tunniste='".$etunti_tunniste."'");
 		$laskurivitAll			= [];
-		$laskutetut_tuotteet	= [];
+		$laskutetut_tunnisteet	= [];
 		
 		if(count($laskut) > 0)
 		{
@@ -1796,8 +1799,7 @@ exit;
 				foreach($laskuRivit as $rivi)
 				{
 					$laskurivitAll[] = $rivi;
-					if(strpos($rivi->tiedot, $which_ids) !== false)
-						$laskutetut_tuotteet[$rivi->tuoteID][$which_ids]['maara'][] = $rivi->kpl;
+					$laskutetut_tunnisteet[$rivi->rivi_tunniste] = $rivi;
 				}
 			}
 		}
@@ -2186,6 +2188,7 @@ exit;
 							$tiedot 			= $arr['tiedot'];
 							$tiedot['tuote_id'] = $tuote_id;
 							$laskutettu 		= false;
+							$laskutettu_lisa	= '';
 							$rivi_tunniste		= $etunti_tunniste.'_'.md5(json_encode($tiedot));
 							
 							if(isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot[$which_ids]) and isset($tiedot[$which_ids]))
@@ -2193,12 +2196,15 @@ exit;
 								$laskutettu = true;
 								if(!in_array($tiedot[$which_ids], $laskutetut_tiedot[$which_ids]))
 										$laskutettu = false;
+								
+								if($laskutettu and !isset($laskutetut_tunnisteet[$rivi_tunniste]))
+									$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-toggle="tooltip" title="Laskutettu jollakin eri tavalla. Katso - Tehdyt laskut"></span>';
 							}
 
 							$body .= '<tr class="lasku_rivi">';
 							$body .= '
 							<td align="center">
-								'.(($laskutettu)? '<p class="text-info">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
+								'.(($laskutettu)? '<p class="text-info">laskutettu'.$laskutettu_lisa.'</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 							</td>';
 							$body .= '<td class="tuote" tuote_id="'.$tuote_id.'" rivi_tunniste="'.$rivi_tunniste.'">'.$arr['nimike'].': '.$arr['kohde_link'].'</td>';
 							$body .= '<td class="maara text-center">'.$maara.'</td>';
@@ -2230,6 +2236,7 @@ exit;
 					$new_tiedot 			= [];
 					$new_tiedot['tuote_id'] = $tuote_id;
 					$laskutettu 			= false;
+					$laskutettu_lisa		= '';
 					
 					foreach($arr['tiedot'] as $key => $arr_tiedot)
 					{
@@ -2238,9 +2245,7 @@ exit;
 						if(isset($arr_tiedot['tv_id']) and $arr_tiedot['tv_id'] > 0)
 							$new_tiedot['tv_id'][] = $arr_tiedot['tv_id'];
 					}
-					
-					$rivi_tunniste		= $etunti_tunniste.'_'.md5(json_encode($new_tiedot));
-					
+
 					if(isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot[$which_ids]))
 					{
 						$laskutettu = true;
@@ -2248,37 +2253,30 @@ exit;
 						{
 							if(!in_array($id, $laskutetut_tiedot[$which_ids]))
 							{
-								// jos lisatty lisaksi
-								/*
-								if(isset($laskutetut_tuotteet[$tuote_id][$which_ids]['maara']))
-								{
-									$laskutettu_maara 	= array_sum($laskutetut_tuotteet[$tuote_id][$which_ids]['maara']);
-									$maara 				-= $laskutettu_maara;
-								
-									$body .= '<tr class="lasku_rivi">';
-									$body .= '<td align="center"><p class="text-info">laskutettu</p></td>';
-									$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].'</td>';
-									$body .= '<td class="maara text-center">'.$laskutettu_maara.'</td>';
-									$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
-									$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
-									$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
-									$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($laskutettu_maara*$arr['hinta']).'</td>';
-									$body .= '<td class="free_text">'.$ajanjakso.'</td>';
-									$body .= '<td class="tiedot" style="display:none">'.json_encode($new_tiedot).'</td>';
-									$body .= '</tr>';
-								}
-								*/
-					
 								$laskutettu = false;
 								break;
 							}
 						}
 					}
+					
+					$rivi_tunniste		= $etunti_tunniste.'_'.md5(json_encode($new_tiedot));
+					
+					if($laskutettu and isset($laskutetut_tunnisteet[$rivi_tunniste]))
+					{
+						$laskutettu_rivi 	= $laskutetut_tunnisteet[$rivi_tunniste];
+
+						if($maara != $laskutettu_rivi->kpl or $arr['yksikko'] != $laskutettu_rivi->yksikko or $arr['hinta']	!= $laskutettu_rivi->hinta)
+							$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-toggle="tooltip" title="Laskutettu, mutta laskurivissa olevat tiedot eivät sama kuin ehdottaessa."></span>';
+							
+					} elseif($laskutettu and !isset($laskutetut_tunnisteet[$rivi_tunniste]))
+					{
+							$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-toggle="tooltip" title="Laskutettu, mutta jollakin eri tavalla. Katso - Tehdyt laskut"></span>';
+					}
 
 					$body .= '<tr class="lasku_rivi">';
 					$body .= '
 					<td align="center">
-						'.(($laskutettu)? '<p class="text-info">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
+						'.(($laskutettu)? '<p class="text-info">laskutettu'.$laskutettu_lisa.'</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 					</td>';
 					$body .= '<td class="tuote" tuote_id="'.$tuote_id.'" rivi_tunniste="'.$rivi_tunniste.'">'.$arr['nimike'].'</td>';
 					$body .= '<td class="maara text-center">'.$maara.'</td>';

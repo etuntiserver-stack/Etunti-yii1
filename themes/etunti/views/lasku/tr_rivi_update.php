@@ -22,6 +22,7 @@
 		<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" value="<?php echo $rivi['tuoteID']; ?>">
 		<input type="hidden" size="1" name="hinnasto_rivi_id[<?php echo $num; ?>]" id="hinnasto_rivi_id_<?php echo $num; ?>" value="<?php echo $rivi['hinnasto_rivi_id']; ?>">
 		<textarea name="tiedot[<?php echo $num; ?>]" id="tiedot_<?php echo $num; ?>" style="display:none"><?php echo $rivi['tiedot']; ?></textarea>
+		<textarea name="rivi_tunniste[<?php echo $num; ?>]" id="rivi_tunniste_<?php echo $num; ?>" style="display:none"><?php echo $rivi['rivi_tunniste']; ?></textarea>
 		<input type="hidden" size="1" name="tunnit_id[<?php echo $num; ?>]" id="tunnit_id_<?php echo $num; ?>" class="form-control" value="<?php echo $rivi['mobile_id']; ?>">
 		<input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control" value="<?php echo $rivi['tkoodi']; ?>">
 	</TD>
