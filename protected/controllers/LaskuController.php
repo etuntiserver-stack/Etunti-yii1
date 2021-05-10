@@ -2093,7 +2093,13 @@ exit;
 					
 					$kohde_link = CHtml::link($osoite,
 						['/kohteet/update', 'id' => $kohde_id],
-						['class' => '', 'target' => '_blank']
+						[
+							'class' => '',
+							'target' => '_blank',
+							'data-toggle' => 'tooltip',
+							'data-container' => 'body',
+							'title' => ((isset($item->kohteet->hinnoittelu))? $item->kohteet->hinnoittelu : '')
+						]
 					);
 						
 					if(!isset($v['tyovuoro_tuotteet']['paa_tuote']))
