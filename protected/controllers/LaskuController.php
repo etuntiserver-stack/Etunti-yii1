@@ -2011,6 +2011,7 @@ exit;
 					['/kohteet/update', 'id' => $kohde_id],
 					['class' => '', 'target' => '_blank']
 				);
+				$rivi_tunniste	= $etunti_tunniste.'_'.md5('kk_'.$kohde_id);
 				
 				$num_rivi++;
 				$kk_arr[] 	= [
@@ -2036,7 +2037,7 @@ exit;
 				<td align="center">
 					'.(($laskutettu)? '<p class="text-info">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 				</td>';
-				$body .= '<td class="tuote" tuote_id="'.$arr['tuote_id'].'" tv_id="0"><b>'.$arr['nimike'].'</b><br>'.$kohde_link.'</td>';
+				$body .= '<td class="tuote" tuote_id="'.$arr['tuote_id'].'" tv_id="0" rivi_tunniste="'.$rivi_tunniste.'"><b>'.$arr['nimike'].'</b><br>'.$kohde_link.'</td>';
 				$body .= '<td class="maara text-center">1</td>';
 				$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 				$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
@@ -2185,6 +2186,7 @@ exit;
 							$tiedot 			= $arr['tiedot'];
 							$tiedot['tuote_id'] = $tuote_id;
 							$laskutettu 		= false;
+							$rivi_tunniste		= $etunti_tunniste.'_'.md5(json_encode($tiedot));
 							
 							if(isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot[$which_ids]) and isset($tiedot[$which_ids]))
 							{
@@ -2198,7 +2200,7 @@ exit;
 							<td align="center">
 								'.(($laskutettu)? '<p class="text-info">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 							</td>';
-							$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].': '.$arr['kohde_link'].'</td>';
+							$body .= '<td class="tuote" tuote_id="'.$tuote_id.'" rivi_tunniste="'.$rivi_tunniste.'">'.$arr['nimike'].': '.$arr['kohde_link'].'</td>';
 							$body .= '<td class="maara text-center">'.$maara.'</td>';
 							$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 							$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
@@ -2227,6 +2229,8 @@ exit;
 					$maara 					= array_sum($arr['maara']);									
 					$new_tiedot 			= [];
 					$new_tiedot['tuote_id'] = $tuote_id;
+					$laskutettu 			= false;
+					
 					foreach($arr['tiedot'] as $key => $arr_tiedot)
 					{
 						if(isset($arr_tiedot['mobiili_id']) and $arr_tiedot['mobiili_id'] > 0)
@@ -2235,7 +2239,8 @@ exit;
 							$new_tiedot['tv_id'][] = $arr_tiedot['tv_id'];
 					}
 					
-					$laskutettu = false;					
+					$rivi_tunniste		= $etunti_tunniste.'_'.md5(json_encode($new_tiedot));
+					
 					if(isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot[$which_ids]))
 					{
 						$laskutettu = true;
@@ -2275,7 +2280,7 @@ exit;
 					<td align="center">
 						'.(($laskutettu)? '<p class="text-info">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 					</td>';
-					$body .= '<td class="tuote" tuote_id="'.$tuote_id.'">'.$arr['nimike'].'</td>';
+					$body .= '<td class="tuote" tuote_id="'.$tuote_id.'" rivi_tunniste="'.$rivi_tunniste.'">'.$arr['nimike'].'</td>';
 					$body .= '<td class="maara text-center">'.$maara.'</td>';
 					$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 					$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
@@ -2434,6 +2439,7 @@ exit;
 						$lr->lid		= $model->id;
 						$lr->asiakas_id = $asiakas->id;
 						$lr->tuoteID 	= $val['tuote_id'];
+						$lr->rivi_tunniste 	= $val['rivi_tunniste'];
 						$lr->rivi		= $key;
 						$lr->tkoodi		= $val['tuote'];
 						$lr->kpl		= $val['maara'];

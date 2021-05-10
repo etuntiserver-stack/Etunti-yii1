@@ -182,6 +182,7 @@ $(document).ready(function(){
 		$('.lasku_rivi').find('.laskutetaan:checkbox:checked').each(function(){
 			lasku_rivit.push([{
 				'tuote_id' : $(this).closest('tr').find('.tuote').attr('tuote_id'),
+				'rivi_tunniste' : $(this).closest('tr').find('.tuote').attr('rivi_tunniste'),
 				'tv_id' : $(this).closest('tr').find('.tuote').attr('tv_id'),
 				'tuote' : $(this).closest('tr').find('.tuote').text(),
 				'maara' : $(this).closest('tr').find('.maara').text(),
