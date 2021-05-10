@@ -634,7 +634,7 @@ $(document).ready(function(){
 
 <div class="row">
   <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'tuoteID'); ?> <span style="color:red">*</span> <b class="fa fa-info-circle" data-toggle="tooltip" title="Huomio! Tuote/Palvelu valikko tulee automaattisesti valitsemalla kohden ja myös silloin, kun kohteen tietoihin on määritelty tuotteet ja palvelut yksikkönä h."></b>
+		<?php echo $form->labelEx($model,'tuoteID'); ?> <span style="color:red">*</span> <b class="fa fa-info-circle text-danger" data-toggle="tooltip" title="Huomio! Tuote/Palvelu valikko tulee automaattisesti valitsemalla kohden ja myös silloin, kun kohteen tietoihin on määritelty tuotteet ja palvelut yksikkönä h."></b>
 		<?php
 		$criteria = new CDbCriteria();
        		$criteria->order = " nimike ";
