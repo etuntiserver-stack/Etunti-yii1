@@ -2011,8 +2011,15 @@ exit;
 			{
 				$kohde_link = CHtml::link($arr['tuote'],
 					['/kohteet/update', 'id' => $kohde_id],
-					['class' => '', 'target' => '_blank']
+					[
+						'class' => '',
+						'target' => '_blank',
+						'data-toggle' => 'tooltip',
+						'data-container' => 'body',
+						'title' => ((isset($item->kohteet->hinnoittelu))? $item->kohteet->hinnoittelu : '')
+					]
 				);
+				
 				$rivi_tunniste	= $etunti_tunniste.'_'.md5('kk_'.$kohde_id);
 				
 				$num_rivi++;
