@@ -115,7 +115,7 @@ if(empty($model->tietoja))
 	</div>
 	
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinnasto_id'); ?>
+		<?php echo $form->labelEx($model,'hinnasto_id'); ?> <b class="fa fa-info-circle text-danger" data-toggle="tooltip" title="Huomio! Jos valitset hinnaston, silloin hinnasto ajaa yli tuotteet ja palveluts"></b>
 		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
 		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'hinnasto_id'); ?>
