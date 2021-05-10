@@ -41,21 +41,21 @@ if(empty($model->tietoja))
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'kohde'); ?>
 		<?php
-       		$criteria = new CDbCriteria();
-	        $criteria->order = " osoite ";
+		$criteria = new CDbCriteria();
+		$criteria->order = " osoite ";
 
 		// <-- TyoryhmatHelper
 		$site = Yii::app()->createController('Site');
 		$arr = $site[0]->TyoryhmatHelper();
 		$ids = implode(",", $arr);
 		if( count($arr) > 0 ){
-			$criteria->condition = " tyoryhma IN ($ids) ";
+		$criteria->condition = " tyoryhma IN ($ids) ";
 		}
 		//     TyoryhmatHelper -->
 
-        		$list = CHtml::listData(Kohteet::model()->findAll($criteria), 'id', 'osoite');
-        		echo $form->dropDownList($model, 'kohde', $list,array('empty'=>'Valitse','class'=>'form-control kohde'));
-        	?>
+			$list = CHtml::listData(Kohteet::model()->findAll($criteria), 'id', 'osoite');
+			echo $form->dropDownList($model, 'kohde', $list,array('empty'=>'Valitse','class'=>'form-control kohde'));
+		?>
   </div>
 </div>
  	
@@ -510,6 +510,7 @@ $(document).ready(function(){
 		echo $form->dropDownList($model,'tuoteID', CHtml::listData($tp, 'id', 'nimike'), 
 		array('empty'=>'Valitse','class'=>'form-control'));
 		?>
+		<b class="text-danger">Huomio! Tämä valiko auttomaatiseesti muutetaan valitsemalla eri kohdetta, kun kohteen olevan Tuote on määritetty ja yksikkönä asennetu "h"</b>
   </div>
 </div>
 
