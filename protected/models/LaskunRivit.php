@@ -71,6 +71,7 @@ class LaskunRivit extends DB2ActiveRecord
 			'mobile_id' => 'int(11) DEFAULT 0',
 			'tiedot' => 'text DEFAULT NULL',
 			'rivi_tunniste' => 'varchar(255) DEFAULT NULL',
+			'kohde_ids' => 'text DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -97,7 +98,7 @@ class LaskunRivit extends DB2ActiveRecord
 			array('nimike,kpl', 'length', 'max'=>100),
 			array('tkoodi, nimike, free_text, rivi_tunniste', 'length', 'max'=>255),
 			array('yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv', 'length', 'max'=>20),
-			array('tiedot', 'safe'),
+			array('tiedot, kohde_ids', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, time, lid, rivi, tkoodi, nimike, kpl, yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv', 'safe', 'on'=>'search'),

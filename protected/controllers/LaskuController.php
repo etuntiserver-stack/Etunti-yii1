@@ -2079,7 +2079,7 @@ exit;
 				<td align="center">
 					'.(($laskutettu)? '<p class="text-info">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 				</td>';
-				$body .= '<td class="tuote" tuote_id="'.$arr['tuote_id'].'" tv_id="0" rivi_tunniste="'.$rivi_tunniste.'"><b>'.$arr['nimike'].'</b><br>'.$kohde_link.'</td>';
+				$body .= '<td class="tuote" tuote_id="'.$arr['tuote_id'].'" tv_id="0" rivi_tunniste="'.$rivi_tunniste.'" kohde_ids="'.json_encode([$kohde_id]).'"><b>'.$arr['nimike'].'</b><br>'.$kohde_link.'</td>';
 				$body .= '<td class="maara text-center">1</td>';
 				$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 				$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
@@ -2215,11 +2215,18 @@ exit;
 							]
 						);
 						
-						$tuote_id 		= $v['tyovuoro_tuotteet']['paa_tuote']['tuote_id'];
+						if($v['hinta_laskenta']['hinta'] > 0)
+						{
+							$tuote_nimike 	= $v['hinta_laskenta']['nimike'];
+							$tuote_id 		= $v['hinta_laskenta']['tuote_id'];
+						} else {
+							$tuote_nimike 	= $v['tyovuoro_tuotteet']['paa_tuote']['nimike'];
+							$tuote_id 		= $v['tyovuoro_tuotteet']['paa_tuote']['tuote_id'];
+						}
 						
 						$group_arr[$kohde_id][$tuote_id][] = [
 							'tuote_id'	=> $tuote_id,
-							'nimike' 	=> '<b>'.$v['tyovuoro_tuotteet']['paa_tuote']['nimike'].'</b>',
+							'nimike' 	=> '<b>'.$tuote_nimike.'</b>',
 							'alv' 		=> $v['tyovuoro_tuotteet']['paa_tuote']['alv'],
 							'yksikko' 	=> $v['tyovuoro_tuotteet']['paa_tuote']['yksikko'],
 							'hinta' 	=> $v['tyovuoro_tuotteet']['paa_tuote']['hinta'],
@@ -2289,7 +2296,7 @@ exit;
 							<td align="center">
 								'.(($laskutettu)? '<p class="text-info">laskutettu'.$laskutettu_lisa.'</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 							</td>';
-							$body .= '<td class="tuote" tuote_id="'.$tuote_id.'" rivi_tunniste="'.$rivi_tunniste.'">'.$arr['nimike'].': '.$arr['kohde_link'].'</td>';
+							$body .= '<td class="tuote" tuote_id="'.$tuote_id.'" rivi_tunniste="'.$rivi_tunniste.'" kohde_ids="'.json_encode([$kohdenID]).'">'.$arr['nimike'].': '.$arr['kohde_link'].'</td>';
 							$body .= '<td class="maara text-center">'.$maara.'</td>';
 							$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 							$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
@@ -2307,6 +2314,7 @@ exit;
 						$pregroup[$tuote_id]['hinta'] 		= $hinta;
 						$pregroup[$tuote_id]['maara'][]		= $maara;
 						$pregroup[$tuote_id]['tiedot'][]	= $arr['tiedot'];
+						$pregroup[$tuote_id]['kohde_ids'][$kohdenID]	= $kohdenID;
 					}
 				}
 			}
@@ -2320,6 +2328,7 @@ exit;
 					$new_tiedot['tuote_id'] = $tuote_id;
 					$laskutettu 			= false;
 					$laskutettu_lisa		= '';
+					$kohde_ids				= (isset($pregroup[$tuote_id]['kohde_ids']))? array_values($pregroup[$tuote_id]['kohde_ids']): [];
 					
 					foreach($arr['tiedot'] as $key => $arr_tiedot)
 					{
@@ -2361,7 +2370,7 @@ exit;
 					<td align="center">
 						'.(($laskutettu)? '<p class="text-info">laskutettu'.$laskutettu_lisa.'</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 					</td>';
-					$body .= '<td class="tuote" tuote_id="'.$tuote_id.'" rivi_tunniste="'.$rivi_tunniste.'">'.$arr['nimike'].'</td>';
+					$body .= '<td class="tuote" tuote_id="'.$tuote_id.'" rivi_tunniste="'.$rivi_tunniste.'" kohde_ids="'.json_encode($kohde_ids).'">'.$arr['nimike'].'</td>';
 					$body .= '<td class="maara text-center">'.$maara.'</td>';
 					$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 					$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
@@ -2531,6 +2540,7 @@ exit;
 						$lr->asiakas_id = $asiakas->id;
 						$lr->tuoteID 	= $val['tuote_id'];
 						$lr->rivi_tunniste 	= $val['rivi_tunniste'];
+						$lr->kohde_ids 	= $val['kohde_ids'];
 						$lr->rivi		= $key;
 						$lr->tkoodi		= $val['tuote'];
 						$lr->kpl		= $val['maara'];

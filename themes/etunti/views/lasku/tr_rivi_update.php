@@ -1,17 +1,22 @@
 <?php
-	$tunnit_id 	= '';
-	$hinnaston_otsikko = '<span class="btn btn-default fa fa-money" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hinnastoa ei määritetty').'"></span>';
-	$hr = HinnastotRivi::model()->findByPk($rivi['hinnasto_rivi_id']);
-	if(isset($hr->id))
-	{
-		$hn = Hinnastot::model()->findByPk($hr->hinnastot_id);
-		if(isset($hn->id)) {
-			$hinnaston_otsikko = '<span class="btn btn-default fa fa-money" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hinnasto: '). ' ' .$hn->hinnaston_otsikko.'"></span>';
-		}
+$tunnit_id 	= '';
+$hinnaston_otsikko = '<span class="btn btn-default fa fa-money" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hinnastoa ei määritetty').'"></span>';
+$hr = HinnastotRivi::model()->findByPk($rivi['hinnasto_rivi_id']);
+if(isset($hr->id))
+{
+	$hn = Hinnastot::model()->findByPk($hr->hinnastot_id);
+	if(isset($hn->id)) {
+		$hinnaston_otsikko = '<span class="btn btn-default fa fa-money" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hinnasto: '). ' ' .$hn->hinnaston_otsikko.'"></span>';
 	}
+}
+
+$this_hinnoittelu = '';
+foreach($kids as $kohde_id)
+	if(isset($kohden_hinnoitelut[$kohde_id]['hinnoitelu']))
+		$this_hinnoittelu .= $kohden_hinnoitelut[$kohde_id]['osoite'].': '.$kohden_hinnoitelut[$kohde_id]['hinnoitelu'];
 ?>
 
-     <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
+     <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>" title="<?=$this_hinnoittelu?>">
 	<td>
 		<?php
 		if($rivi['mobile_id'] == 0)
@@ -23,6 +28,7 @@
 		<input type="hidden" size="1" name="hinnasto_rivi_id[<?php echo $num; ?>]" id="hinnasto_rivi_id_<?php echo $num; ?>" value="<?php echo $rivi['hinnasto_rivi_id']; ?>">
 		<textarea name="tiedot[<?php echo $num; ?>]" id="tiedot_<?php echo $num; ?>" style="display:none"><?php echo $rivi['tiedot']; ?></textarea>
 		<textarea name="rivi_tunniste[<?php echo $num; ?>]" id="rivi_tunniste_<?php echo $num; ?>" style="display:none"><?php echo $rivi['rivi_tunniste']; ?></textarea>
+		<textarea name="kohde_ids[<?php echo $num; ?>]" id="kohde_ids_<?php echo $num; ?>" style="display:none"><?php echo $rivi['kohde_ids']; ?></textarea>
 		<input type="hidden" size="1" name="tunnit_id[<?php echo $num; ?>]" id="tunnit_id_<?php echo $num; ?>" class="form-control" value="<?php echo $rivi['mobile_id']; ?>">
 		<input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control" value="<?php echo $rivi['tkoodi']; ?>">
 	</TD>
