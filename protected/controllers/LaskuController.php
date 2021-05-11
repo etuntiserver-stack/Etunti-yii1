@@ -2457,9 +2457,19 @@ exit;
 				$sahkoposti = $asiakas->sahkopostilaskuosoite;
 			else
 				$sahkoposti = $asiakas->sahkoposti;
-			
+
+			// <-- Viimeinen laskunumero taulusta
+			$criteria = new CDbCriteria();
+			$criteria->order = " laskunumero!='' DESC,id DESC ";
+			$ln = 0;
+			$vm = Lasku::model()->find($criteria);
+			if(isset($vm->id))
+			$ln = $vm->laskunumero+1;
+			// Viimeinen laskunumero taulusta -->
+     
 			$model 					= new Lasku;
 			$model->etunti_tunniste = $_POST['etunti_tunniste'];
+			$model->laskunumero 	= $ln;
 			$model->nimi 			= $asiakas->Fullname;
 			$model->yritys 			= $asiakas->yrityksen_nimi;
 			$model->tyyppi 			= $asiakas->tyyppi;
