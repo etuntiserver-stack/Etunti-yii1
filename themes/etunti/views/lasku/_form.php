@@ -671,7 +671,9 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 </div>
 */ ?>
 
+
 <!-- Uusi työkalu -->
+<?php if(!isset($model->id)): ?>
 <div id="tp_valinta" style="display:none">
 <?php
 	$criteria = new CDbCriteria();
@@ -706,6 +708,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<div class="row form kht" id="kalut"></div>
 </div>
 <!-- Uusi työkalu /-->
+<?php endif; ?>
 
 
 
@@ -1443,7 +1446,7 @@ function ajaxForLasku()
 					$(this).closest('#kalut').find('.laskutetuksi').show()
 				});
 
-				datepickerLA();
+				//datepickerLA();
 				$('[data-toggle="tooltip"]').tooltip();
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown){

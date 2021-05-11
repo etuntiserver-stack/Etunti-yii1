@@ -1701,13 +1701,13 @@ exit;
 				$lr->hinta_alv	=$_POST['hinta_alv'][$key];
 				$lr->ale	=$_POST['ale'][$key];
 
-				if(isset($_POST['tuoteID']))
+				if(isset($_POST['tuoteID'][$key]))
 					$lr->tuoteID = $_POST['tuoteID'][$key];
-				if(isset($_POST['hinnasto_rivi_id']))
+				if(isset($_POST['hinnasto_rivi_id'][$key]))
 					$lr->hinnasto_rivi_id = $_POST['hinnasto_rivi_id'][$key];
-				if(isset($_POST['tunnit_id']))
+				if(isset($_POST['tunnit_id'][$key]))
 					$lr->mobile_id = $_POST['tunnit_id'][$key];
-				if(isset($_POST['tiedot']))
+				if(isset($_POST['tiedot'][$key]))
 					$lr->tiedot = $_POST['tiedot'][$key];
 
 				if(isset($_POST['rivi_tunniste']))
