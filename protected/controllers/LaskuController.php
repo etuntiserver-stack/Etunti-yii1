@@ -1156,10 +1156,16 @@ exit;
 	public function actionTuotepalvelukohdelle($id, $tuote)
 	{
 		$k = Kohteet::model()->findByPk($id);
-		$k->tuote = $tuote;
-		$k->save();
-		
-		echo json_encode('ok');
+		if(isset($k->id))
+		{
+			$k->tuote = $tuote;
+			if($k->save())
+			{
+				echo json_encode('ok');
+				exit;
+			}
+		}
+		echo json_encode('error');
 		exit;
 	}
 	
