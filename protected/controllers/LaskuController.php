@@ -1867,7 +1867,6 @@ exit;
 			}
 		}
 
-			
 		// <-- Mobiili logikka
 		if($rakenne_muoto == 'mobiili')
 			$getall 		= $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, false, "id=$asiakas_id");
@@ -1987,6 +1986,9 @@ exit;
 		$num_rivi	= 0;
 		$tv_ids		= [];
 
+		//$mobile = Yii::app()->createController('Mobile');
+		//$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, $hyv_arr, 3, false, 0, true, null, null, false);
+
 		if(!empty($asiakas->lisatietoja_laskutuksesta))
 			$body .= '<h3>Lisätietoja laskutuksesta</h3><pre>'.$asiakas->lisatietoja_laskutuksesta.'</pre>';
 		
@@ -2000,14 +2002,36 @@ exit;
 		$body .= '<th>'.Yii::t('main', 'Hinta').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Yhteensä').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Freetext').'</th>';
-		
-		if($rivi_muoto == 'rivi_per_kirjaus')
-			$body .= '<th>'.Yii::t('main', 'Työvuoro').'</th>';
-			
+		$body .= '<th>'.Yii::t('main', 'Muu').'</th>';
 		$body .= '<th style="display:none">'.Yii::t('main', 'Tiedot').'</th>';
 		$body .= '</tr>';
 
-		// <-- KK
+		// <-- Hyväksytyt tunnit lista per kohde
+		$hyv_lista_perkohde = [];
+		if(isset($mob_lista[$asiakas_id]))
+		{
+			foreach($mob_lista[$asiakas_id] as $key => $arr)
+			{			
+				foreach($arr as $k => $v)
+				{
+					$item 		= $v['attributes'];
+					
+					if($rakenne_muoto == 'mobiili')
+					{
+						$pvm		= date("d.m.Y", strtotime($item->aloitan));
+						$osoite		= $item->kohde_kannasta;
+						$tyovuorot 	= (isset($item->tyovuoroot->id))? $item->tyovuoroot : null;
+						$kohde_id	= ($item->kohdenID > 0)? $item->kohdenID : null;
+						$tiedot		= ['mobiili_id' => $item->id, 'tv_id' => $tv_id];
+						
+						$hyv_lista_perkohde[$kohde_id][] = $item;
+					}
+				}
+			}
+		}
+		//   Hyväksytyt tunnit lista per kohde -->
+					
+		// <-- KK				
 		if(isset($kk_hinta[$asiakas_id]))
 		{
 			foreach($kk_hinta[$asiakas_id] as $kohde_id => $arr)
@@ -2039,7 +2063,7 @@ exit;
 				
 				$yht_kk 			+= $arr['hinta'];
 				$yht_summ			+= $arr['hinta'];
-
+				
 				$laskutettu = false;
 				if(isset($laskutetut_tiedot['kuukausi'][$kohde_id]))
 						$laskutettu = true;
@@ -2056,10 +2080,47 @@ exit;
 				$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
 				$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.$arr['hinta'].'</td>';
 				$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
-				if($rivi_muoto == 'rivi_per_kirjaus')
-					$body .= '<td></td>';
+				$body .= '<td class="text-center">';
+				if(isset($hyv_lista_perkohde[$kohde_id]))
+				{
+					$body .= '<p>KK</p>';
+					$body .= '<span class="btn btn-block btn-primary" data-toggle="collapse" data-target="#collapse_id_'.$kohde_id.'">Mobiili</span>';
+
+					$l = '<td></td><td colspan="8"><h3>Hyväksytyt tunnit</h3><table class="table table-bordered">';
+					$yht = 0;
+					foreach($hyv_lista_perkohde[$kohde_id] as $item)
+					{
+						$kesto 	= $this->num(strtotime($item->loppui)-strtotime($item->aloitan));
+						$yht 	+= $kesto;
+						
+						$l .= '<tr>';
+						$l .= '<td>'.date("d.m.Y", strtotime($item->aloitan)).'</td>';
+						$l .= '<td>'.$item->tekijan_nimi.'</td>';
+						$l .= '<td>'.date("H:i", strtotime($item->aloitan)).'</td>';
+						$l .= '<td>'.date("H:i", strtotime($item->loppui)).'</td>';
+						$l .= '<td>'.$kesto.'</td>';
+						$l .= '</tr>';
+					}
+					$l .= '<tr>';
+					$l .= '<td></td>';
+					$l .= '<td></td>';
+					$l .= '<td></td>';
+					$l .= '<td></td>';
+					$l .= '<td>'.$yht.'</td>';
+					$l .= '</tr>';
+					$l .= '</table></td>';
+					
+				}
+				$body .= '</td>';
 				$body .= '<td class="tiedot" style="display:none">'.json_encode($arr['tiedot']).'</td>';
 				$body .= '</tr>';
+
+				if(isset($hyv_lista_perkohde[$kohde_id]))
+				{
+					$body .= '<tr class="collapse" id="collapse_id_'.$kohde_id.'">';
+					$body .= $l;
+					$body .= '</tr>';
+				}
 			}
 		}
 		
@@ -2301,6 +2362,7 @@ exit;
 					$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
 					$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($maara*$arr['hinta']).'</td>';
 					$body .= '<td class="free_text">'.$ajanjakso.'</td>';
+					$body .= '<td></td>';
 					$body .= '<td class="tiedot" style="display:none">'.json_encode($new_tiedot).'</td>';
 					$body .= '</tr>';
 				}
@@ -2316,8 +2378,7 @@ exit;
 		$body .= '<th></th>';
 		$body .= '<th id="summ_result" class="text-center"></th>';
 		$body .= '<th></th>';
-		if($rivi_muoto == 'rivi_per_kirjaus')
-			$body .= '<th></th>';
+		$body .= '<th></th>';
 		$body .= '<th style="display:none"></th>';
 		$body .= '</tr>';
 		$body .= '</table>';

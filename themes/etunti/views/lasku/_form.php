@@ -696,8 +696,8 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 			<option value="tuovuoro">Työvuoroista</option>
 		</select>
 		<select class="form-group form-control" id="rivi_muoto">
-			<option value="rivi_per_kohde">TUOTE</option>
 			<option value="rivi_per_kirjaus">KIRJAUS</option>
+			<option value="rivi_per_kohde">TUOTE</option>
 		</select>
 		<input type="text" id="kuukausi_kalentteri" class="form-control form-group datepickerLA" value="<?=date('m.Y', strtotime('first day of previous month'))?>" data-toggle="tooltip" title="<?=Yii::t('main', 'Ajanjakso')?>">
 		

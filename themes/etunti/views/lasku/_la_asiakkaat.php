@@ -16,8 +16,8 @@
 		<div class="form-inline">
 			<input type="text" class="form-control datepickerFI laskun_paivays" value="<?=date("d.m.Y")?>" data-toggle="tooltip" title="<?=Yii::t('main', 'Laskun päiväys')?>">
 			<select class="form-group form-control rivi_muoto">
-				<option value="rivi_per_kohde">TUOTE</option>
 				<option value="rivi_per_kirjaus">KIRJAUS</option>
+				<option value="rivi_per_kohde">TUOTE</option>
 			</select>
 			<button class="btn btn-primary nayta_collapse" type="button" data-toggle="collapse" data-target="#collapse_id_<?=$data->id?>" aria-expanded="false" aria-controls="collapseExample" asiakas_id="<?=$data->id?>">
 				<?=Yii::t('main', 'Luo uudet laskut')?> <i class="caret"></i>
