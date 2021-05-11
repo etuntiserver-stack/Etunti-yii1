@@ -55,6 +55,7 @@
                           <label class="field select">
 							<select class="form-group form-control" name="lista_muoto">
 								<option value="laskuttamattomat" <?=($lista_muoto !== null and $lista_muoto == 'laskuttamattomat')? 'selected':''?>>Laskuttamattomat</option>
+								<option value="laskutetut" <?=($lista_muoto !== null and $lista_muoto == 'laskutetut')? 'selected':''?>>Laskutetut</option>
 								<option value="kaikki" <?=($lista_muoto !== null and $lista_muoto == 'kaikki')? 'selected':''?>>Kaikki</option>
 							</select>
                            </label>

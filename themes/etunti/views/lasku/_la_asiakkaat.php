@@ -1,6 +1,7 @@
 <?php
 $show = true;
 if($lista_muoto == 'laskuttamattomat' and isset($la_AsIds['la_'.$kk.'_'.$data->id])) $show = false;
+if($lista_muoto == 'laskutetut' and !isset($la_AsIds['la_'.$kk.'_'.$data->id])) $show = false;
 ?>
 <?php if($show): ?>
 <tr>
