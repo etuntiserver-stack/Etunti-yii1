@@ -2513,7 +2513,7 @@ exit;
 			$kk				= date("m.Y", strtotime($from));
 			$la 			= Lasku::model()->findAll("etunti_tunniste LIKE 'la_".$kk."_%'");
 			foreach($la as $item)
-				$la_AsIds[$item->etunti_tunniste][] = $item->id;
+				$la_AsIds[$item->etunti_tunniste][] = $item->as_nro;
 		
 	       	$criteria = new CDbCriteria();
 			// <-- Tyoryhmat
@@ -2524,6 +2524,16 @@ exit;
 				$criteria->condition = " tyoryhma IN ($ids) ";
 			}
 			//    Tyoryhmat -->
+
+			if($lista_muoto == 'laskuttamattomat')
+			{
+				$criteria->condition = " asiakasnumero NOT IN(SELECT as_nro FROM laskut WHERE etunti_tunniste LIKE 'la_".$kk."_%') ";
+			}
+			
+			if($lista_muoto == 'laskutetut')
+			{
+				$criteria->condition = " asiakasnumero IN(SELECT as_nro FROM laskut WHERE etunti_tunniste LIKE 'la_".$kk."_%') ";
+			}
 			
 			if($rakenne_muoto == 'mobiili')
 			{
@@ -2551,7 +2561,7 @@ exit;
 					)
 				");
 			}
-			
+
 			if($rakenne_muoto == 'tuovuoro')
 			{
 

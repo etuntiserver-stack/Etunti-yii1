@@ -1,9 +1,6 @@
 <?php
-$show = true;
-if($lista_muoto == 'laskuttamattomat' and isset($la_AsIds['la_'.$kk.'_'.$data->id])) $show = false;
-if($lista_muoto == 'laskutetut' and !isset($la_AsIds['la_'.$kk.'_'.$data->id])) $show = false;
+
 ?>
-<?php if($show): ?>
 <tr>
 	<td width="15%" style="vertical-align: top" class="closest_asiakas_td">
 		<?php
@@ -30,4 +27,3 @@ if($lista_muoto == 'laskutetut' and !isset($la_AsIds['la_'.$kk.'_'.$data->id])) 
 		<div class="collapse" id="collapse_id_<?=$data->id?>"></div>
 	</td>
 </tr>
-<?php endif; ?>
