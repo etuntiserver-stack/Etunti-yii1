@@ -314,7 +314,7 @@ $(document).ready(function(){
 					$('#summ_result').html(sum.toFixed(2));
 					$('[data-toggle="tooltip"]').tooltip();
 					
-					$('.lasku_rivi').find('.laskutetaan:checkbox:checked').each(function(){
+					thisFor.closest('td').find('.laskutetaan:checkbox:checked').each(function(){
 						thisFor.closest('td').find('.laskutetuksi').show()
 					});
 					
