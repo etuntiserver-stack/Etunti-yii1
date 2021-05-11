@@ -1,6 +1,8 @@
 <?php
-
+$show = true;
+if($lista_muoto == 'laskuttamattomat' and isset($la_AsIds['la_'.$kk.'_'.$data->id])) $show = false;
 ?>
+<?php if($show): ?>
 <tr>
 	<td width="15%" style="vertical-align: top" class="closest_asiakas_td">
 		<?php
@@ -26,21 +28,5 @@
 		</div>
 		<div class="collapse" id="collapse_id_<?=$data->id?>"></div>
 	</td>
-
-<?php /*
-	<td width="20%">
-		<?php
-			echo '<form action="create?l_asiakkaat=true&asiakasnumero='.$data->asiakasnumero.'" method="POST" target="_blank">';
-			echo '<textarea style="display:none" name="la_asiakkaat_mobiili">'.json_encode($mob_tv_arr).'</textarea>';
-			echo '<textarea style="display:none" name="la_asiakkaat_kk">'.json_encode($kk_arr).'</textarea>';
-			echo '<select class="form-control" name="with_mobile">';
-			echo '<option value="1">Mobiili + Kuukausi</option>';
-			echo '<option value="2">Vain mobiili</option>';
-			echo '<option value="3">Vain kuukausi</option>';
-			echo '</select>';
-			echo '<input type="submit" class="btn btn-warning btn-block" value="Luo lasku">';
-			echo '</form>';
-		?>
-	</td>
-*/ ?>
 </tr>
+<?php endif; ?>

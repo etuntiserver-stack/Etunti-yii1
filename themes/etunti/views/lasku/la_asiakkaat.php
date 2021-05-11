@@ -53,6 +53,17 @@
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
+							<select class="form-group form-control" name="lista_muoto">
+								<option value="laskuttamattomat" <?=($lista_muoto !== null and $lista_muoto == 'laskuttamattomat')? 'selected':''?>>Laskuttamattomat</option>
+								<option value="kaikki" <?=($lista_muoto !== null and $lista_muoto == 'kaikki')? 'selected':''?>>Kaikki</option>
+							</select>
+                           </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
 							<?php
 								$list = array();
 								$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
@@ -139,7 +150,7 @@
 		'dataProvider'=>$dataProvider,
 		'itemView'=>'_la_asiakkaat',
 	  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
-		'viewData' => ['kk' => $kk, 'la_AsIds' => $la_AsIds], 
+		'viewData' => ['kk' => $kk, 'lista_muoto' => $lista_muoto, 'la_AsIds' => $la_AsIds], 
 		'pager' => array(
 	           'firstPageLabel'=>'<<',
 	           'prevPageLabel'=>'< Edellinen',

@@ -2498,7 +2498,7 @@ exit;
 		exit;
 	}
 
-	public function actionL_asiakkaat($kk=null, $rakenne_muoto=null)
+	public function actionL_asiakkaat($kk=null, $rakenne_muoto=null, $lista_muoto=null)
 	{
 		$dataProvider 		= [];
 		$la_AsIds 			= [];
@@ -2604,6 +2604,7 @@ exit;
 		$this->render('la_asiakkaat', array(
 			'kk' 			=> $kk,
 			'rakenne_muoto' => $rakenne_muoto,
+			'lista_muoto' 	=> $lista_muoto,
 			'from'			=> $from,
 			'to'			=> $to,
 			'la_AsIds'		=> $la_AsIds,
