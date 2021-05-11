@@ -1710,7 +1710,7 @@ exit;
 				if(isset($_POST['tiedot'][$key]))
 					$lr->tiedot = $_POST['tiedot'][$key];
 
-				if(isset($_POST['rivi_tunniste']))
+				if(isset($_POST['rivi_tunniste'][$key]))
 					$lr->rivi_tunniste = $_POST['rivi_tunniste'][$key];
 					
 				$lr->veroton		= $_POST['veroton'][$key];
