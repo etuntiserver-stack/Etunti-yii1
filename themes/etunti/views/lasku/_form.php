@@ -767,29 +767,30 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 			foreach($laskunRivit as $rivi){
 				if(!empty($rivi->kohde_ids))
 				{
-					$kids = json_decode($rivi->kohde_ids);
+					$kids = json_decode($rivi->kohde_ids, true);
 					foreach($kids as $kid)
 						$kohde_ids_all[$kid] = $kid; 
 				}
 			}
-			$kohden_hinnoitelut = [];
+			$kohden_hinnoittelut = [];
 			$impl = "id='".implode("' OR id='", $kohde_ids_all)."'";
-			$kohteet = Kohteet::model()->findAll("id IN($impl)");
+			$kohteet = Kohteet::model()->findAll("$impl");
 			foreach($kohteet as $item)
-				$kohden_hinnoitelut[$item->id] = ['hinnoitelu' => $item->hinnoitelu, 'osoite' => $item->osoite];
+				$kohden_hinnoittelut[$item->id] = ['hinnoittelu' => $item->hinnoittelu, 'osoite' => $item->osoite];
 			//    Hinnoitelu näkyvyys logikka -->
 			
-			foreach($laskunRivit as $rivi){ 
+			foreach($laskunRivit as $rivi)
+			{ 
 				$num++;
 				$kids = [];
 				if(!empty($rivi->kohde_ids))
-					$kids = json_decode($rivi->kohde_ids);
+					$kids = json_decode($rivi->kohde_ids, true);
 
 				echo $this->renderPartial("//lasku/tr_rivi_update", [
 					'num' => $num, 
 					'rivi' => $rivi,
 					'kids' => $kids,
-					'kohden_hinnoitelut' => $kohden_hinnoitelut
+					'kohden_hinnoittelut' => $kohden_hinnoittelut
 					
 				]);
 			}
