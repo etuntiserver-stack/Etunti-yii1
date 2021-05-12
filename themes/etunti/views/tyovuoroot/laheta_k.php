@@ -68,6 +68,11 @@ $paivat=array(
 		if(in_array($t, $tids))
 			$tids_after[] = $t;
 	}
+	/*
+	echo '<pre>';
+	print_r($tv_arr);
+	echo '</pre>';
+	*/
 ?>
 
 <?php $ids = ''; ?>
@@ -101,7 +106,10 @@ array_push($kenelleLahetetaan, $this->etuSukunimi($tt->id));
 $tv_kesto = 0;
 for($day= 1; $day <= 7; $day++) {
 	$d = strtotime($year ."W". $week . $day);
-	$date = date('d.m.Y',$d);
+	$date = date('d.m.Y', $d);
+	if(isset($_POST['P']) and !in_array(date("N", strtotime($date)), $_POST['P'])){
+		continue;
+	}
 	$date_arr = [];
 	if(isset($tv_arr[$tid][$date])){
 		ksort($tv_arr[$tid][$date]);
@@ -174,7 +182,7 @@ $ids = json_encode(explode(",",$ids));
   <input type="checkbox" class="sw" name="P[6]" id="la" value="6" checked>
 
   <label><?php echo Yii::t('main', 'Su'); ?></label>
-  <input type="checkbox" class="sw" name="P[0]" id="su" value="0" checked>
+  <input type="checkbox" class="sw" name="P[7]" id="su" value="7" checked>
 
   </div>
 </div>

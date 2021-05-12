@@ -77,7 +77,7 @@ $paivat=array(
   <input type="checkbox" class="sw" name="P[6]" id="la" value="6" checked>
 
   <label><?php echo Yii::t('main', 'Su'); ?></label>
-  <input type="checkbox" class="sw" name="P[0]" id="su" value="0" checked>
+  <input type="checkbox" class="sw" name="P[7]" id="su" value="7" checked>
 
   </div>
 </div>
