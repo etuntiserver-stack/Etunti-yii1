@@ -688,7 +688,7 @@ class TyovuorootController extends Controller
 			$tt = Tyontekijat::model()->findbypk($key);
 
 			$html = '<meta charset="UTF-8">';
-			$html .= $this->renderPartial('laheta',array('tid'=>$tt->id,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true);
+			$html .= $this->renderPartial('laheta_k',array('tid'=>$tt->id,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true);
 			//echo $html;
 			//exit;
 			$basePath = Yii::app()->basePath.'/../emails/tyovuorot/'.Yii::app()->user->domain.'/';
@@ -1804,6 +1804,11 @@ class TyovuorootController extends Controller
 
 			if (isset($_POST['to']) and !empty($_POST['to']))
 				Yii::app()->session['to'] = date("Y-m-d", strtotime($_POST['to']));
+
+			if (isset($_POST['year']) and !empty($_POST['year']))
+				Yii::app()->session['year'] = $_POST['year'];
+			if (isset($_POST['week']) and !empty($_POST['week']))
+				Yii::app()->session['week'] = $_POST['week'];
 
 			$this->redirect(array('beta', 'mode' => $mode));
 		}
@@ -4260,6 +4265,13 @@ class TyovuorootController extends Controller
 				} else {
 					$model->tyopaari = '';
 				}
+
+				if(is_array($model->url_linkkit) and count($model->url_linkkit) > 0) {
+					$model->url_linkkit = json_encode($model->url_linkkit);
+				} else {
+					$model->url_linkkit = "";
+				}
+
 				$model->kohde = $kohteet->id;
 				$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				if($model->save())
@@ -4279,7 +4291,6 @@ class TyovuorootController extends Controller
 				}
 				//     LOG -->
 
-
 			// <-- jos on tyopaari
 			$luotu = array();
 			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
@@ -4293,6 +4304,7 @@ class TyovuorootController extends Controller
 				$m->attributes=$_POST['Tyovuoroot'];
 				$m->tyopaari = $model->tyopaari;
 				$m->lisa_tuotteet = $model->lisa_tuotteet;
+				$m->url_linkkit = $model->url_linkkit;
 				$m->kohde = $kohteet->id;
 				$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				$m->tid=$tid;
@@ -4302,6 +4314,9 @@ class TyovuorootController extends Controller
 					$luotu[$m->id] = $m->tid;
 					$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
 
+				} else {
+					echo "Tyovuorot uusi asiakas error";
+					echo json_encode($m->getErrors());
 				}
 
 			    }
