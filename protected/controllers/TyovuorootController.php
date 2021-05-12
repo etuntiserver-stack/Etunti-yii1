@@ -688,7 +688,7 @@ class TyovuorootController extends Controller
 			$tt = Tyontekijat::model()->findbypk($key);
 
 			$html = '<meta charset="UTF-8">';
-			$html .= $this->renderPartial('laheta',array('tid'=>$tt->id,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true);
+			$html .= $this->renderPartial('laheta_k',array('tid'=>$tt->id,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true);
 			//echo $html;
 			//exit;
 			$basePath = Yii::app()->basePath.'/../emails/tyovuorot/'.Yii::app()->user->domain.'/';
