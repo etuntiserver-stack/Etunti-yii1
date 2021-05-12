@@ -200,7 +200,7 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->error($model,'y_tunnus'); ?>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 henkilotunnus">
 		<?php echo $form->labelEx($model,'henkilotunnus'); ?>
 		<?php echo $form->textField($model,'henkilotunnus',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'henkilotunnus'); ?>
@@ -691,7 +691,7 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->error($model,'laskutus_kanava'); ?>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 sahkopostilaskuosoite">
 		<?php echo $form->labelEx($model,'sahkopostilaskuosoite'); ?>
 		<?php echo $form->textField($model,'sahkopostilaskuosoite',array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'sahkopostilaskuosoite'); ?>
@@ -1045,6 +1045,11 @@ $("#Asiakkaat_tyyppi").change(function() {
     laskutusTyyppi(value);
 });
 
+$("#Asiakkaat_laskutus_kanava").change(function() {
+	const value = $(this).val();
+	billingFields(value);
+});
+
 $("#Asiakkaat_lopetuksen_pvm").keyup(function(e) {
     if( e.which == 9 ) {
         alert('VAROITUS! Olet laittamassa asiakkaan passiiviseksi ja tämän asiakkaan työvuorot eivät sen jälkeen enää toimi oikein. \n Jos haluat perua tämän siirron, poista päivämäärä kentästä: "Päivämäärä, jolloin asiakas menee passiiviseksi"');
@@ -1087,12 +1092,27 @@ $("#Asiakkaat_asiakasnumero").keyup(function() {
 	$(".yritys").show('slow');
 	$(".y_tunnus").show('slow');
 	$(".nimi").show('slow');
+	$(".henkilotunnus").hide("slow");
     }
     if(value == 'henkilo'){
 	$(".ashidd").hide('slow');
 	$(".nimi").show('slow');
+	$(".henkilotunnus").show("slow");
     }
 
+ }
+
+ /**
+  * Hides "sahkopostilaskuosoite" field if the user chooses
+  * "verkkolasku" from the dropdown menu.
+  * Shows the field again if the user selects anything else.
+  */
+ function billingFields(value) {
+	 if(value == "verkkolasku") {
+		$(".sahkopostilaskuosoite").hide("slow");
+	 } else {
+		$(".sahkopostilaskuosoite").show("slow");
+	 }
  }
 
  $('.ryhmat').multiselect({
