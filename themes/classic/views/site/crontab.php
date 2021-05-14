@@ -62,6 +62,12 @@ foreach ($list as $d) {
 	if (!isset($table->columns[$column]))
 		Yii::app()->db1->createCommand()->addColumn($tb_name, $column, $structure);
 
+	$column 	= 'tuote';
+	$structure 	= 'int(11) DEFAULT 0';
+	$table 		= Yii::app()->db1->schema->getTable($tb_name);
+	if (!isset($table->columns[$column]))
+		Yii::app()->db1->createCommand()->addColumn($tb_name, $column, $structure);
+
 			
 	// <-- Tuntien Autohyvaksyminen
 	if ($asetukset->app_hyvaksynnan_peruste == 2) {
