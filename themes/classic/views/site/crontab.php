@@ -85,7 +85,7 @@ foreach ($list as $d) {
 				AND month = '" . date("n", strtotime('first day of last month')) . "'
 			";
 			$digisten_tunnit = DigistenTunnitKk::model()->find($criteria);
-
+/*
 			if (!isset($digisten_tunnit->id)) {
 				$tunnit = 0;
 				$tunnit = $site[0]->laskuriForCron($d->domain);
@@ -109,6 +109,7 @@ foreach ($list as $d) {
 						echo '<p>Snapshot ' . $d->domain . ', Tunnit: ' . (int) $tunnit . '</p>';
 				}
 			}
+			*/
 		}
 	}
 	//     maksullinen versio -->
