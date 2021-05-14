@@ -53,6 +53,7 @@ foreach ($list as $d) {
 	$dh 		= DigistenHinnasto::model()->findByPk(1);
 	$domainit 	= Domainit::model()->findByPk($d->id);
 
+	/*
 	// Sarake lisäys
 	$tb_name 	= 'asiakkaat';
 	$column 	= 'tuote';
@@ -60,7 +61,7 @@ foreach ($list as $d) {
 	$table 		= Yii::app()->db1->schema->getTable($tb_name);
 	if (!isset($table->columns[$column]))
 		Yii::app()->db1->createCommand()->addColumn($tb_name, $column, $structure);
-		
+	*/
 			
 	// <-- Tuntien Autohyvaksyminen
 	if ($asetukset->app_hyvaksynnan_peruste == 2) {
