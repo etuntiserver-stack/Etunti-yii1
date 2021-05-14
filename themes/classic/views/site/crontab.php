@@ -53,20 +53,15 @@ foreach ($list as $d) {
 	$dh 		= DigistenHinnasto::model()->findByPk(1);
 	$domainit 	= Domainit::model()->findByPk($d->id);
 
-
 	// Sarake lisäys
+	/*
 	$tb_name 	= 'asiakkaat';
 	$column 	= 'sopimuksen_pvm';
 	$structure 	= 'varchar(50) DEFAULT NULL';
 	$table 		= Yii::app()->db1->schema->getTable($tb_name);
 	if (!isset($table->columns[$column]))
 		Yii::app()->db1->createCommand()->addColumn($tb_name, $column, $structure);
-
-	$column 	= 'tuote';
-	$structure 	= 'int(11) DEFAULT 0';
-	$table 		= Yii::app()->db1->schema->getTable($tb_name);
-	if (!isset($table->columns[$column]))
-		Yii::app()->db1->createCommand()->addColumn($tb_name, $column, $structure);
+	*/
 
 			
 	// <-- Tuntien Autohyvaksyminen
@@ -101,7 +96,7 @@ foreach ($list as $d) {
 				AND month = '" . date("n", strtotime('first day of last month')) . "'
 			";
 			$digisten_tunnit = DigistenTunnitKk::model()->find($criteria);
-/*
+
 			if (!isset($digisten_tunnit->id)) {
 				$tunnit = 0;
 				$tunnit = $site[0]->laskuriForCron($d->domain);
@@ -125,7 +120,6 @@ foreach ($list as $d) {
 						echo '<p>Snapshot ' . $d->domain . ', Tunnit: ' . (int) $tunnit . '</p>';
 				}
 			}
-			*/
 		}
 	}
 	//     maksullinen versio -->
