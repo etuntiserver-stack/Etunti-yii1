@@ -534,7 +534,10 @@ public function actionTiedosto($dom)
 				$log->email_to 		= $emailArray;
 				$log->email_subject	= $subject;
 				$log->email_message	= json_encode(["message" => $message]);
-				$log->save();
+				if(!$log->save()){
+					print_r($log->getErrors());
+					throw new Exception($log->getErrors());
+				}
 				//     LOG -->
 			} else {
 				// $mail->gerError() returns a string
