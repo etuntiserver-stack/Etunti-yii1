@@ -531,7 +531,7 @@ public function actionTiedosto($dom)
 				// <-- LOG
 				$log=new Log;
 				$log->log_category 	= 1; // 1-email
-				$log->email_to 		= $emailArray;
+				$log->email_to 		= implode(",", $emailArray);
 				$log->email_subject	= $subject;
 				$log->email_message	= json_encode(["message" => $message]);
 				$log->save();
@@ -543,7 +543,7 @@ public function actionTiedosto($dom)
 				// <-- LOG error
 				$log=new Log;
 				$log->log_category 	= 1; // 1-email
-				$log->email_to 		= $emailArray;
+				$log->email_to 		= implode(",", $emailArray);
 				$log->email_subject	= $subject;
 				$log->email_message	= json_encode($errors);
 				$log->save();
