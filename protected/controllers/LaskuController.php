@@ -2193,7 +2193,8 @@ exit;
 							'free_text'	=> $pvm,
 							'tiedot'	=> $tiedot,
 							'tv_link'  	=> '',
-							'kohde_link' => $kohde_link
+							'kohde_link' => $kohde_link,
+							'pikkuviesti' => $v['pikkuviesti']
 						];
 					}
 					
@@ -2234,7 +2235,8 @@ exit;
 							'free_text'	=> $pvm,
 							'tiedot'	=> $tiedot,
 							'tv_link'  	=> $tv_link,
-							'kohde_link' => $kohde_link
+							'kohde_link' => $kohde_link,
+							'pikkuviesti' => $v['pikkuviesti']
 						];
 					}
 					
@@ -2254,7 +2256,8 @@ exit;
 								'free_text'	=> $pvm,
 								'tiedot'	=> $tiedot,
 								'tv_link'  	=> $tv_link,
-								'kohde_link' => $kohde_link
+								'kohde_link' => $kohde_link,
+								'pikkuviesti' => null
 							];
 						}
 					}
@@ -2296,14 +2299,21 @@ exit;
 							<td align="center">
 								'.(($laskutettu)? '<p class="text-info">laskutettu'.$laskutettu_lisa.'</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 							</td>';
-							$body .= '<td class="tuote" tuote_id="'.$tuote_id.'" rivi_tunniste="'.$rivi_tunniste.'" kohde_ids="'.json_encode([$kohdenID]).'">'.$arr['nimike'].': '.$arr['kohde_link'].'</td>';
+							$body .= '<td width="30%" class="tuote" tuote_id="'.$tuote_id.'" rivi_tunniste="'.$rivi_tunniste.'" kohde_ids="'.json_encode([$kohdenID]).'">'.$arr['nimike'].': '.$arr['kohde_link'].'</td>';
 							$body .= '<td class="maara text-center">'.$maara.'</td>';
 							$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 							$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
 							$body .= '<td class="hinta text-center">'.$hinta.'</td>';
 							$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($maara*$hinta).'</td>';
 							$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
-							$body .= '<td class="text-center">'.$arr['tv_link'].'</td>';
+							$body .= '<td class="text-left">';
+								$body .= $arr['tv_link'];
+								if(!empty($arr['pikkuviesti']))
+								{
+									$body .= '<h5>Viesti mobiilista:</h5>';
+									$body .= $arr['pikkuviesti'];
+								}
+							$body .= '</td>';
 							$body .= '<td class="tiedot" style="display:none">'.json_encode($tiedot).'</td>';
 							$body .= '</tr>';
 						}
@@ -2412,22 +2422,6 @@ exit;
 			}
 			$body .= '</div>';
 		}
-		/*
-		$body .= '<br><div class="well"><h3>Laskutetut ID:t</h3>';
-		if(isset($laskutetut_tiedot['mobiili_id']))
-			$body .= '<b>Mobiili Id:</b> '.implode(", ", $laskutetut_tiedot['mobiili_id']);
-		if(isset($laskutetut_tiedot['tv_id']))
-			$body .= '<br><b>Työvuorojen Id:</b> '.implode(", ", $laskutetut_tiedot['tv_id']);
-		if(isset($laskutetut_tiedot['tuote_id']))
-			$body .= '<br><b>Tuotteiden Id:</b> '.implode(", ", $laskutetut_tiedot['tuote_id']);
-		if(isset($laskutetut_tiedot['kuukausi']))
-			$body .= '<br><b>Kuukausi kohde Id:</b> '.implode(", ", $laskutetut_tiedot['kuukausi']);
-		$body .= '</div>';
-		
-		//$body .= 'check: '.json_encode($laskuTilantteet);
-		
-		$body .= '<h4>Erikoinen Tunniste: '.$etunti_tunniste.'</h4>';
-		*/
 		
 		$body .= '
 			<br>
