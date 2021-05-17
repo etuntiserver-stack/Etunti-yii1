@@ -527,7 +527,7 @@ public function actionTiedosto($dom)
 				$subject = Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$this->etuSukunimi($ttekija->id);
 
 				$mail = new YiiMailer();
-				$mail->setForm("no-reply@etunti.fi");
+				$mail->setFrom("no-reply@etunti.fi");
 				$mail->setTo($emailArray);
 				$mail->setSubject($subject);
 				$mail->setBody($message);
