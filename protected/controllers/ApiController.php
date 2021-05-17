@@ -538,7 +538,7 @@ public function actionTiedosto($dom)
 					$log->log_category 	= 1; // 1-email
 					$log->email_to 		= $emailArray;
 					$log->email_subject	= $subject;
-					$log->email_message	= json_encode($message);
+					$log->email_message	= json_encode(["message" => $message]);
 					$log->save();
 					//     LOG -->
 				} else {
