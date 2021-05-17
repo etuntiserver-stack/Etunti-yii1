@@ -525,6 +525,7 @@ public function actionTiedosto($dom)
 			$mail->setTo($emailArray);
 			$mail->setSubject($subject);
 			$mail->setBody($message);
+			$mail->SMTPDebug = 1;
 
 			if($mail->send()) {
 				// <-- LOG
