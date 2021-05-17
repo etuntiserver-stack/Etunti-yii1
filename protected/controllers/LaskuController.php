@@ -2164,6 +2164,7 @@ exit;
 					
 					$tv_link	= '';
 					$maara 		= $this->num($v['maara']);
+					if($maara == 0) continue;
 					
 					if($tyovuorot !== null)
 						$tv_ids[$tv_id] = $tv_id;
