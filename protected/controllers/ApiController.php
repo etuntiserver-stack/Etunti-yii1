@@ -501,68 +501,62 @@ public function actionTiedosto($dom)
 		$kuva->save();
 
 
-		$firma = FirmanTiedot::model()->findbypk(1);
 		$asetukset = Asetukset::model()->findbypk(1);
-		if(
-			isset($firma->sahkoposti) and !empty($firma->sahkoposti)
-			and ( !isset($_POST['emailNotify']) or (isset($_POST['emailNotify']) and $_POST['emailNotify'] == 'true') )
-		)
-		{
 			
-			if(!empty($asetukset->ilmoitus_uudesta_kuvasta_saajat))
-			{
+		if(!empty($asetukset->ilmoitus_uudesta_kuvasta_saajat))
+		{
 
-				$emailArray = explode("\n", $asetukset->ilmoitus_uudesta_kuvasta_saajat);
+			$emailArray = explode("\n", $asetukset->ilmoitus_uudesta_kuvasta_saajat);
 
-				if(!is_array($emailArray)) {
-					$emailArray = [$asetukset->ilmoitus_uudesta_kuvasta_saajat]; 
-				}
-
-				$kuvienmaara = 1;
-				if(isset($_POST['kuvienMaara']))
-					$kuvienmaara = $_POST['kuvienMaara'];
-
-				$message = Yii::t('main', 'Hei. '.$kuvienmaara.' kpl. valokuva(a) on saapunut kohteista: ').$k->osoite;
-				$headers = "From:  no-reply@etunti.fi";
-				$subject = Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$this->etuSukunimi($ttekija->id);
-
-				$mail = new YiiMailer();
-				$mail->setFrom("no-reply@etunti.fi");
-				$mail->setTo($emailArray);
-				$mail->setSubject($subject);
-				$mail->setBody($message);
-
-				if($mail->send()) {
-					// <-- LOG
-					$log=new Log;
-					$log->log_category 	= 1; // 1-email
-					$log->email_to 		= $emailArray;
-					$log->email_subject	= $subject;
-					$log->email_message	= json_encode(["message" => $message]);
-					$log->save();
-					//     LOG -->
-				} else {
-					// $mail->gerError() returns a string
-					$errorMsg = $mail->getError();
-					$errors = ["error_message" => $errorMsg, "message" => $message];
-					// <-- LOG error
-					$log=new Log;
-					$log->log_category 	= 1; // 1-email
-					$log->email_to 		= $emailArray;
-					$log->email_subject	= $subject;
-					$log->email_message	= json_encode($errors);
-					$log->save();
-					//     LOG error -->
-				}
-
-				//mail($saajat,$subject,$message,$headers);
-
-							
-
+			if(!is_array($emailArray)) {
+				$emailArray = [$asetukset->ilmoitus_uudesta_kuvasta_saajat]; 
 			}
 
+			$kuvienmaara = 1;
+			if(isset($_POST['kuvienMaara']))
+				$kuvienmaara = $_POST['kuvienMaara'];
+
+			$message = Yii::t('main', 'Hei. '.$kuvienmaara.' kpl. valokuva(a) on saapunut kohteista: ').$k->osoite;
+			$headers = "From:  no-reply@etunti.fi";
+			$subject = Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$this->etuSukunimi($ttekija->id);
+
+			$mail = new YiiMailer();
+			$mail->setFrom("no-reply@etunti.fi");
+			$mail->setTo($emailArray);
+			$mail->setSubject($subject);
+			$mail->setBody($message);
+
+			if($mail->send()) {
+				// <-- LOG
+				$log=new Log;
+				$log->log_category 	= 1; // 1-email
+				$log->email_to 		= $emailArray;
+				$log->email_subject	= $subject;
+				$log->email_message	= json_encode(["message" => $message]);
+				$log->save();
+				//     LOG -->
+			} else {
+				// $mail->gerError() returns a string
+				$errorMsg = $mail->getError();
+				$errors = ["error_message" => $errorMsg, "message" => $message];
+				// <-- LOG error
+				$log=new Log;
+				$log->log_category 	= 1; // 1-email
+				$log->email_to 		= $emailArray;
+				$log->email_subject	= $subject;
+				$log->email_message	= json_encode($errors);
+				$log->save();
+				//     LOG error -->
+			}
+
+			//mail($saajat,$subject,$message,$headers);
+
+						
 
 		}
+
+
+		
 
 		} //if(isset($k->id))
 
