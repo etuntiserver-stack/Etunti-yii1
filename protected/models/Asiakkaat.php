@@ -107,6 +107,7 @@ class Asiakkaat extends DB2ActiveRecord
 			'extra_contacts' => 'text DEFAULT NULL',
 			'finnish_service_wish' => 'tinyint(3) DEFAULT 2',
 			'tuote' => 'int(11) DEFAULT 0',
+			'sopimuksen_pvm' => 'varchar(50) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -136,7 +137,7 @@ class Asiakkaat extends DB2ActiveRecord
 			array('etunimi, sukunimi, myyja, postinumero, k_postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, henkilotunnus, kaupunki, k_kaupunki, sahkoposti', 'length', 'max'=>100),
 			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma, sahkopostilaskuosoite, token', 'length', 'max'=>255),
 			array('maksuehto, viivastyskorko, hinta, hinta_sis_alv', 'length', 'max'=>20),
-			array('puhelin', 'length', 'max'=>50),
+			array('puhelin, sopimuksen_pvm', 'length', 'max'=>50),
 			array('asiakasnumero, ovt_tunnus, valittajan_tunnus, hinta_tyyppi, verot, lopetuksen_pvm', 'length', 'max'=>100),
 			array('alennuskoodit, gcm_reg_id, lopetuksen_syy, netvisor_dimension_name, netvisor_dimension_item, toissijainen_puhelinnumero, muistiinpano, lisatietoja_laskutuksesta, extra_contacts', 'safe'),
 			array('sahkoposti','unique', 'message'=>'Tämä sähköposti on jo rekisteröity asiakkaalle.'),

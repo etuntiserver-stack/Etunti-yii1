@@ -49,10 +49,21 @@ foreach ($list as $d) {
 	if (!empty($asetukset->aikavali_halytys))
 		$aikavali_halytys = $asetukset->aikavali_halytys;
 
-	$ft = FirmanTiedot::model()->findByPk(1);
-	$dh = DigistenHinnasto::model()->findByPk(1);
-	$domainit = Domainit::model()->findByPk($d->id);
+	$ft 		= FirmanTiedot::model()->findByPk(1);
+	$dh 		= DigistenHinnasto::model()->findByPk(1);
+	$domainit 	= Domainit::model()->findByPk($d->id);
 
+	// Sarake lisäys
+	/*
+	$tb_name 	= 'asiakkaat';
+	$column 	= 'sopimuksen_pvm';
+	$structure 	= 'varchar(50) DEFAULT NULL';
+	$table 		= Yii::app()->db1->schema->getTable($tb_name);
+	if (!isset($table->columns[$column]))
+		Yii::app()->db1->createCommand()->addColumn($tb_name, $column, $structure);
+	*/
+
+			
 	// <-- Tuntien Autohyvaksyminen
 	if ($asetukset->app_hyvaksynnan_peruste == 2) {
 		$date_yday = date('Y-m-d', strtotime('-1 day'));
