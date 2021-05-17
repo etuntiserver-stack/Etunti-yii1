@@ -511,11 +511,12 @@ public function actionTiedosto($dom)
 			
 			if(!empty($asetukset->ilmoitus_uudesta_kuvasta_saajat))
 			{
-				$ex = explode("\n", $asetukset->ilmoitus_uudesta_kuvasta_saajat);
-				if(is_array($ex))
-					$saajat = implode(",", $ex);
-				else
-					$saajat = $asetukset->ilmoitus_uudesta_kuvasta_saajat;
+
+				$emailArray = explode("\n", $asetukset->ilmoitus_uudesta_kuvasta_saajat);
+
+				if(!is_array($emailArray)) {
+					$emailArray = [$asetukset->ilmoitus_uudesta_kuvasta_saajat]; 
+				}
 
 				$kuvienmaara = 1;
 				if(isset($_POST['kuvienMaara']))
@@ -524,16 +525,39 @@ public function actionTiedosto($dom)
 				$message = Yii::t('main', 'Hei. '.$kuvienmaara.' kpl. valokuva(a) on saapunut kohteista: ').$k->osoite;
 				$headers = "From:  no-reply@etunti.fi";
 				$subject = Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$this->etuSukunimi($ttekija->id);
-				mail($saajat,$subject,$message,$headers);
 
-							// <-- LOG
-							$log=new Log;
-							$log->log_category 	= 1; // 1-email
-							$log->email_to 		= $saajat;
-							$log->email_subject	= $subject;
-							$log->email_message	= json_encode($message);
-							$log->save();
-							//     LOG -->
+				$mail = new YiiMailer();
+				$mail->setForm("no-reply@etunti.fi");
+				$mail->setTo($emailArray);
+				$mail->setSubject($subject);
+				$mail->setBody($message);
+
+				if($mail->send()) {
+					// <-- LOG
+					$log=new Log;
+					$log->log_category 	= 1; // 1-email
+					$log->email_to 		= $emailArray;
+					$log->email_subject	= $subject;
+					$log->email_message	= json_encode($message);
+					$log->save();
+					//     LOG -->
+				} else {
+					// $mail->gerError() returns a string
+					$errorMsg = $mail->getError();
+					$errors = ["error_message" => $errorMsg, "message" => $message];
+					// <-- LOG error
+					$log=new Log;
+					$log->log_category 	= 1; // 1-email
+					$log->email_to 		= $emailArray;
+					$log->email_subject	= $subject;
+					$log->email_message	= json_encode($errors);
+					$log->save();
+					//     LOG error -->
+				}
+
+				//mail($saajat,$subject,$message,$headers);
+
+							
 
 			}
 
