@@ -1188,12 +1188,13 @@ exit;
 		if( $for == 'tyovuoro')
 			$tuote_id = $model->tuoteID;
 
-		$tp = TuotteetPalvelut::model()->findByPk($tuote_id);
+		$tp = TuotteetPalvelut::model()->find($tuote_id);
 		if(isset($tp->id))
 		{
 		
 			$return['nimike'] 	= $tp->nimike;
 			$return['tuote_id']	= $tp->id;
+			$return['yksikko'] 	= $tp->yksikko;
 
 			// <-- Kohde
 			if( $for == 'kohde')
