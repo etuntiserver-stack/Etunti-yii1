@@ -108,18 +108,39 @@ if(empty($model->tietoja))
 	<legend><h3>Lasku hinnasto.</h3></legend>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tuote'); ?>
-		<?php echo $form->dropDownList($model, 'tuote', CHtml::listData(TuotteetPalvelut::model()->findAll(), 'id', 'nimike'), 
-		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
-		<?php echo $form->error($model,'tuote'); ?>
-	</div>
-	
-	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinnasto_id'); ?> <b class="fa fa-info-circle text-danger" data-toggle="tooltip" title="Huomio! Jos valitset hinnaston, silloin hinnasto ajaa yli tuotteet ja palvelut."></b>
 		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
 		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'hinnasto_id'); ?>
 	</div>
+	
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tuote'); ?>
+		<?php echo $form->dropDownList($model, 'tuote', CHtml::listData(TuotteetPalvelut::model()->findAll(), 'id', 'nimike'), 
+		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
+		<?php echo $form->error($model,'tuote'); ?>
+	</div>
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+
+		$('#Kohteet_hinnasto_id').on('change', function(){
+			var thisVal = $(this, 'option:selected').val();
+			$.ajax({
+				url: 'tuotteetbyhinnasto?id=' + thisVal,
+				success: function(data){
+					console.log(data);
+					if(data !== '')
+					{
+						data = JSON.parse(data);
+						$('#Kohteet_tuote').html(data);
+					}
+				}
+			});
+		});
+
+	});
+	</script>
 
 <?php if(isset($model->id)) : ?>
 <br>

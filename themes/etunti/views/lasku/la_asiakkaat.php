@@ -176,7 +176,7 @@
 	$criteria = new CDbCriteria();
 	$criteria->order = " nimike ";
 	$criteria->condition = " 
-		hinta_alv_0!=0 AND yksikko='h'
+		hinta_alv_0!=0
 	";
 	echo CHtml::dropdownList('','palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 		['empty'=>'','class'=>'form-control bg-warning valitseTuote']

@@ -757,6 +757,7 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->error($model,'lisatietoja_laskutuksesta'); ?>
 	</div>
 
+<?php /*
 	<legend><h3>Lasku hinnasto.</h3></legend>
 
 	<!-- Tuotteet palvelut -->
@@ -774,7 +775,7 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->error($model,'hinnasto_id'); ?>
 	</div>
 	<!-- Tuotteet palvelut -->
-	
+*/ ?>
 <br>
 	<?php $poistetaan = 'Tämä valinta poistetaan 06/2021'; ?>
 	<div class="section fill mb5">

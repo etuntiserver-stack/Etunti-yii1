@@ -1226,31 +1226,6 @@ exit;
 
 					return $return;
 					
-				} elseif($model->hinnasto_id == 0 and $model->tuote == 0 and isset($model->asiakkaat->id) and $model->asiakkaat->hinnasto_id != 0 and $model->asiakkaat->tuote != 0) { 
-
-					$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$model->asiakkaat->tuote."' AND hinnastot_id='".$model->asiakkaat->hinnasto_id."' AND hinnasto_yksikko='".$yksikko."'");
-					if(isset($hinnasto->id))
-					{
-						$return['hinta'] 	= $hinnasto->hinnasto_hinta;
-						$return['alv'] 		= $hinnasto->hinnasto_alv;
-						return $return;
-					}
-					
-					return $return;
-							
-				} elseif($model->hinnasto_id == 0 and $model->tuote == 0 and isset($model->asiakkaat->id) and $model->asiakkaat->hinnasto_id == 0 and $model->asiakkaat->tuote != 0) {
-				
-					$tp = TuotteetPalvelut::model()->find("id='".$model->asiakkaat->tuote."' AND yksikko='".$yksikko."'");
-					if(isset($tp->id))
-					{
-						$return['hinta'] 	= $tp->hinta_alv_0;
-						$return['alv'] 		= $tp->alv;
-						$return['nimike']	= $tp->nimike;
-						$return['tuote_id']	= $tp->id;
-						return $return;
-					}
-					
-					return $return;
 				}
 			}
 			// Kohde -->
@@ -2079,7 +2054,7 @@ exit;
 				<td align="center">
 					'.(($laskutettu)? '<p class="text-info">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
 				</td>';
-				$body .= '<td class="tuote" tuote_id="'.$arr['tuote_id'].'" tv_id="0" rivi_tunniste="'.$rivi_tunniste.'" kohde_ids="'.json_encode([$kohde_id]).'"><b>'.$arr['nimike'].'</b><br>'.$kohde_link.'</td>';
+				$body .= '<td class="tuote" tuote_id="'.$arr['tuote_id'].'" tv_id="0" rivi_tunniste="'.$rivi_tunniste.'" kohde_ids="'.json_encode([$kohde_id]).'"><b>'.$arr['nimike'].'</b>: '.$kohde_link.'</td>';
 				$body .= '<td class="maara text-center">1</td>';
 				$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 				$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
@@ -2637,9 +2612,6 @@ exit;
 						AND hyvaksytty!=''
 						AND laskutettu=0
 					))
-					OR id IN(SELECT asiakas_id FROM sivex_kohdet WHERE 
-						(tuote!=0 OR t.tuote!=0)
-					)
 				");
 			}
 
