@@ -2201,7 +2201,7 @@ exit;
 						$tv_id 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_id'];
 						$pvm 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_pvm'];
 
-						$tv_link 	= CHtml::link('<span class="fa fa-calendar fa-2x text-primary"></span>',
+						$tv_link 	= CHtml::link('<span class="fa fa-calendar fa-2x text-primary width:100%"></span>',
 							[
 							  sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s', date("Y", strtotime($pvm)), date("W", strtotime($pvm)), $tv_id)
 							],
