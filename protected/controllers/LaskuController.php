@@ -2090,43 +2090,40 @@ exit;
 				if(isset($hyv_lista_perkohde[$kohde_id]))
 				{
 					$body .= '<p>KK</p>';
-					$body .= '<span class="btn btn-block btn-primary" data-toggle="collapse" data-target="#collapse_id_'.$kohde_id.'">Mobiili</span>';
+					$body .= '<span class="link fa fa-list fa-2x text-primary" data-toggle="collapse" data-target="#collapse_id_'.$kohde_id.'" title="Hyväksytyt tunnit"></span>';
 
-					$l = '<td></td><td colspan="8"><h3>Hyväksytyt tunnit</h3><table class="table table-bordered">';
+					$body .= '<div style="position:relative"><div style="position:absolute;right:0;z-index:999999" class="collapse well" id="collapse_id_'.$kohde_id.'">';
+					$body .= '<h3>Hyväksytyt tunnit</h3><table class="table table-bordered">';
 					$yht = 0;
 					foreach($hyv_lista_perkohde[$kohde_id] as $item)
 					{
 						$kesto 	= $this->num(strtotime($item->loppui)-strtotime($item->aloitan));
 						$yht 	+= $kesto;
 						
-						$l .= '<tr>';
-						$l .= '<td>'.date("d.m.Y", strtotime($item->aloitan)).'</td>';
-						$l .= '<td>'.$item->tekijan_nimi.'</td>';
-						$l .= '<td>'.date("H:i", strtotime($item->aloitan)).'</td>';
-						$l .= '<td>'.date("H:i", strtotime($item->loppui)).'</td>';
-						$l .= '<td>'.$kesto.'</td>';
-						$l .= '</tr>';
+						$body .= '<tr>';
+						$body .= '<td>'.date("d.m.Y", strtotime($item->aloitan)).'</td>';
+						$body .= '<td>'.$item->tekijan_nimi.'</td>';
+						$body .= '<td>'.date("H:i", strtotime($item->aloitan)).'</td>';
+						$body .= '<td>'.date("H:i", strtotime($item->loppui)).'</td>';
+						$body .= '<td>'.$kesto.'</td>';
+						$body .= '</tr>';
 					}
-					$l .= '<tr>';
-					$l .= '<td></td>';
-					$l .= '<td></td>';
-					$l .= '<td></td>';
-					$l .= '<td></td>';
-					$l .= '<td>'.$yht.'</td>';
-					$l .= '</tr>';
-					$l .= '</table></td>';
+					$body .= '<tr>';
+					$body .= '<td></td>';
+					$body .= '<td></td>';
+					$body .= '<td></td>';
+					$body .= '<td></td>';
+					$body .= '<td>'.$yht.'</td>';
+					$body .= '</tr>';
+					$body .= '</table>';
+					$body .= '</div></div>';
 					
 				}
 				$body .= '</td>';
 				$body .= '<td class="tiedot" style="display:none">'.json_encode($arr['tiedot']).'</td>';
 				$body .= '</tr>';
 
-				if(isset($hyv_lista_perkohde[$kohde_id]))
-				{
-					$body .= '<tr class="collapse" id="collapse_id_'.$kohde_id.'">';
-					$body .= $l;
-					$body .= '</tr>';
-				}
+
 			}
 		}
 		
@@ -2204,7 +2201,7 @@ exit;
 						$tv_id 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_id'];
 						$pvm 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_pvm'];
 
-						$tv_link 	= CHtml::link('<span class="text-success">Työvuoro</span>',
+						$tv_link 	= CHtml::link('<span class="fa fa-calendar fa-2x text-primary"></span>',
 							[
 							  sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s', date("Y", strtotime($pvm)), date("W", strtotime($pvm)), $tv_id)
 							],
@@ -2265,13 +2262,15 @@ exit;
 				}
 			}
 			
-			$pregroup = [];
+			$pregroup 	= [];
+			$rivi_num	= 0;
 			foreach($group_arr as $kohdenID => $parr)
 			{
 				foreach($parr as $tuote_id => $prearr)
 				{
 					foreach($prearr as $key => $arr)
 					{
+						$rivi_num	++;
 						$hinta 		= $arr['hinta'];
 						$maara 		= $arr['maara'];
 						$yht_tunnit += $maara;
@@ -2307,12 +2306,12 @@ exit;
 							$body .= '<td class="hinta text-center">'.$hinta.'</td>';
 							$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($maara*$hinta).'</td>';
 							$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
-							$body .= '<td class="text-left">';
+							$body .= '<td class="text-center">';
 								$body .= $arr['tv_link'];
 								if(!empty($arr['pikkuviesti']))
 								{
-									$body .= '<h5>Viesti mobiilista:</h5>';
-									$body .= $arr['pikkuviesti'];
+									$body .= '<span class="fa fa-envelope fa-2x text-primary" data-toggle="collapse" href="#rivi'.$rivi_num.'" role="button" aria-expanded="false" aria-controls="collapseExample"></span>';
+									$body .= '<div style="position:relative"><div class="collapse alert bg-info" id="rivi'.$rivi_num.'" style="position:absolute;right:0;z-index:999999">'.$arr['pikkuviesti'].'</div><div>';
 								}
 							$body .= '</td>';
 							$body .= '<td class="tiedot" style="display:none">'.json_encode($tiedot).'</td>';
