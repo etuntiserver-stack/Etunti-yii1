@@ -74,7 +74,7 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
   </div>
 
   <div class="col-sm-4">
-
+<?php /*
 	<div class="section">
 		<?php echo $form->labelEx($model,'tuoteID'); ?>
 		<?php
@@ -84,7 +84,7 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		array('empty'=>'Valitse tuote/palvelu','class'=>'form-control'));
 		?>
 	</div>
-
+*/ ?>
 	<div class="section">
 		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
 		<?php 
