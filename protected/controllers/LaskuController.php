@@ -2208,9 +2208,9 @@ exit;
 							[
 							  //'class' 			=> 'pull-right',
 							  'target' 			=> '_blank',
-							  //'data-toggle' 	=> 'tooltip',
-							  //'data-placement' 	=> 'top',
-							  //'title' 			=> 'Tämä kirjaus on tehty työvuorosta ID#: '.$tv_id
+							  'data-toggle' 	=> 'tooltip',
+							  'data-placement' 	=> 'top',
+							  'title' 			=> 'Näytä työvuoro ID#: '.$tv_id
 							]
 						);
 						
