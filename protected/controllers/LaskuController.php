@@ -1188,7 +1188,7 @@ exit;
 		if( $for == 'tyovuoro')
 			$tuote_id = $model->tuoteID;
 
-		$tp = TuotteetPalvelut::model()->find($tuote_id);
+		$tp = TuotteetPalvelut::model()->findByPk($tuote_id);
 		if(isset($tp->id))
 		{
 		
