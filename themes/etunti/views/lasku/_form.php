@@ -1393,7 +1393,8 @@ $(document).delegate(".laskutetuksi","click",function(e){
 			'alv' : $(this).closest('tr').find('.alv').text(),
 			'hinta' : $(this).closest('tr').find('.hinta').text(),
 			'free_text' : $(this).closest('tr').find('.free_text').text(),
-			'tiedot' : $(this).closest('tr').find('.tiedot').text()
+			'tiedot' : $(this).closest('tr').find('.tiedot').text(),
+			'kk_hyv_lista' : (  $(this).closest('tr').find('.kk_hyv_lista').find('textarea').val() )? $(this).closest('tr').find('.kk_hyv_lista').find('textarea').val() : ''
 		}]);
 	});
 	
