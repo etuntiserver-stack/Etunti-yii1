@@ -2054,7 +2054,7 @@ exit;
 						
 						$hv_lista .= '<tr>';
 						$hv_lista .= '<td>'.$hv_item->kohde_kannasta.'</td>';
-						$hv_lista .= '<td>'.date("d.m.Y", strtotime($item->aloitan)).'</td>';
+						$hv_lista .= '<td>'.date("d.m.Y", strtotime($hv_item->aloitan)).'</td>';
 						$hv_lista .= '<td>'.$hv_item->tekijan_nimi.'</td>';
 						$hv_lista .= '<td>'.date("H:i", strtotime($hv_item->aloitan)).'</td>';
 						$hv_lista .= '<td>'.date("H:i", strtotime($hv_item->loppui)).'</td>';
@@ -2063,7 +2063,7 @@ exit;
 						
 						$hv_json[] = [
 								'kohde_kannasta' 	=> $hv_item->kohde_kannasta,
-								'pvm' 				=> date("d.m.Y", strtotime($item->aloitan)),
+								'pvm' 				=> date("d.m.Y", strtotime($hv_item->aloitan)),
 								'tekijan_nimi' 		=> $hv_item->tekijan_nimi,
 								'aloitan' 			=> date("H:i", strtotime($hv_item->aloitan)),
 								'loppui' 			=> date("H:i", strtotime($hv_item->loppui)),
