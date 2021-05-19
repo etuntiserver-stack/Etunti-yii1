@@ -171,16 +171,21 @@
   </div>
 </div>
 
-<div id="tp_valinta" style="display:none">
+<div id="tp_valinta" class="form-inline" style="display:none">
 <?php
+	echo CHtml::dropdownList('','hinnasto', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
+		['empty'=>'Valitse hinnasto','class'=>'form-control form-group la_hinnasto']
+	);
+	
 	$criteria = new CDbCriteria();
 	$criteria->order = " nimike ";
 	$criteria->condition = " 
 		hinta_alv_0!=0
 	";
-	echo CHtml::dropdownList('','palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
-		['empty'=>'','class'=>'form-control bg-warning valitseTuote']
+	echo CHtml::dropdownList('','tuote', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
+		['empty'=>'Valitse tuote','class'=>'form-control form-group la_tuote']
 	);
+	echo '<span class="btn btn-primary btn-block" id="new_hinnasto">Tallenna</span><br>';
 ?>
 </div>
 
@@ -232,11 +237,7 @@ $(document).ready(function(){
 				console.log(data);
 				if(data['lasku_id'] && parseInt(data['lasku_id']) > 0)
 				{
-					//thisButton.closest('.closest_td').find('.collapse').collapse('hide');
-					//thisButton.before('<div class="bg-success text-white">Lasku luotu.</div>');
 					ajaxForLasku(cl);
-					//closest_asiakas_td.append('<h3 class="text-success laskutettu">Laskutettu.</h3>');
-					//closestForm.submit();
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown){
@@ -244,32 +245,54 @@ $(document).ready(function(){
 			}
 		});
 	});
-	/*
-	$(document).delegate(".poista_rivi","click",function(){
-		$(this).closest('tr').remove();
-		var sum = 0;
-		$('.forsumm').each(function(){
-			sum += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
-		});
-		$('#summ_result').html(sum);
-	});
-	*/
-	var kohde_id = 0;
+
+	var kohde_id 		= 0;
+	var TuotteetBefore 	= '';
+	
 	$(document).delegate(".tuote_puutu","click",function(){
 		$(this).replaceWith( $('#tp_valinta').html() );
 		kohde_id = $(this).attr('kohde_id');
+		TuotteetBefore = $('#tp_valinta').find('.la_tuote').html();
 	});
 
-	$(document).delegate(".valitseTuote","change",function(){
-		var cl = $(this).closest('.closest_td');
+	$(document).delegate(".la_hinnasto", "change", function(){
+
+		var cl 		= $(this).closest('td');
+		var thisVal = $(this, 'option:selected').val();
+	
+		if(thisVal)
+		{
+			$.ajax({
+				url: location.protocol + '//' + location.host + '/index.php/kohteet/tuotteetbyhinnasto?id=' + thisVal,
+				success: function(data){
+					console.log(data);
+					if(data !== '')
+					{
+						data = JSON.parse(data);
+						cl.find('.la_tuote').html(data);
+					}
+				}
+			});
+			
+		} else {
+			cl.find('.la_tuote').html(TuotteetBefore);
+		}
+	});
+		
+	$(document).delegate("#new_hinnasto", "click", function(){
+	
+		var cl 			= $(this).closest('td');
+		var hinnasto 	= cl.find('.la_hinnasto', 'option:selected').val();
+		var tuote 		= cl.find('.la_tuote', 'option:selected').val();
+		var closest_td 	= $(this).closest('.closest_td');
 
 		$.ajax({
-			url: 'tuotepalvelukohdelle?id=' + kohde_id + '&tuote=' + $(this, 'option:selected').val(),
+			url: 'tuotepalvelukohdelle?id=' + kohde_id + '&tuote=' + parseInt(tuote) + '&hinnasto=' + parseInt(hinnasto),
 			success: function(data){
 				var data = JSON.parse(data);
 				console.log(data);
 				
-				ajaxForLasku(cl);
+				ajaxForLasku(closest_td);
 				$('[data-toggle="tooltip"]').tooltip();
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown){

@@ -124,19 +124,27 @@ if(empty($model->tietoja))
 	<script type="text/javascript">
 	$(document).ready(function(){
 
+		var TuotteetBefore = $('#Kohteet_tuote').html();
+
 		$('#Kohteet_hinnasto_id').on('change', function(){
 			var thisVal = $(this, 'option:selected').val();
-			$.ajax({
-				url: 'tuotteetbyhinnasto?id=' + thisVal,
-				success: function(data){
-					console.log(data);
-					if(data !== '')
-					{
-						data = JSON.parse(data);
-						$('#Kohteet_tuote').html(data);
+			if(thisVal)
+			{
+				$.ajax({
+					url: 'tuotteetbyhinnasto?id=' + thisVal,
+					success: function(data){
+						console.log(data);
+						if(data !== '')
+						{
+							data = JSON.parse(data);
+							$('#Kohteet_tuote').html(data);
+						}
 					}
-				}
-			});
+				});
+				
+			} else {
+				$('#Kohteet_tuote').html(TuotteetBefore);
+			}
 		});
 
 	});

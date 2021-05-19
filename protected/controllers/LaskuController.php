@@ -1153,46 +1153,52 @@ exit;
 		return $return; 
 	}
 
-	public function actionTuotepalvelukohdelle($id, $tuote)
+	public function actionTuotepalvelukohdelle($id, $tuote, $hinnasto)
 	{
 		$k = Kohteet::model()->findByPk($id);
 		if(isset($k->id))
 		{
-			$k->tuote = $tuote;
-			if($k->save())
+			$k->tuote 		= $tuote;
+			$k->hinnasto_id = $hinnasto;
+			if(!$k->save())
 			{
-				echo json_encode('ok');
+				echo json_encode(['ERROR' => $k->getErrors()]);
+				exit;
+			} else {
+				echo json_encode(['OK' => $k->id]);
 				exit;
 			}
 		}
-		echo json_encode('error');
 		exit;
 	}
 	
-	protected function getHintaFor($for, $model, $yksikko)
+	protected function getHintaFor($for, $model)
 	{		
 		$return 			= [];
 		$return['hinta'] 	= 0;
 		$return['alv'] 		= 0;
+		$return['yksikko'] 	= '';
+		$return['tuote_id'] = 0;
 		
 		if( $for == 'kohde')
-			$return['nimike'] 	= '<b class="text-danger link tuote_puutu" data-toggle="tooltip" kohde_id="'.$model->id.'" title="Klikkamalla tänne saa määrittellä kohdelle Tuote/Palvelu">Tuote puutuu - '.$model->osoite.'</b>';
+			$return['nimike'] 	= '<b class="text-danger link tuote_puutu" data-toggle="tooltip" kohde_id="'.$model->id.'" title="Uuden hinnan luominen">Hinta ei löydy</b>';
 		else
 			$return['nimike'] 	= '';
-		
-		$return['yksikko'] 	= $yksikko;
-		$return['tuote_id'] = 0;
 
 		if( $for == 'kohde')
 			$tuote_id = $model->tuote;
 		if( $for == 'tyovuoro')
 			$tuote_id = $model->tuoteID;
+		if( $for == 'tyovuoro_lisatuote')
+			$tuote_id = $model;
 
 		$tp = TuotteetPalvelut::model()->findByPk($tuote_id);
 		if(isset($tp->id))
 		{
 		
-			$return['nimike'] 	= $tp->nimike;
+			$return['nimike'] 	= '<b>'.$tp->nimike.'</b>';
+			$return['hinta'] 	= $tp->hinta_alv_0;
+			$return['alv'] 		= $tp->alv;
 			$return['tuote_id']	= $tp->id;
 			$return['yksikko'] 	= $tp->yksikko;
 
@@ -1201,7 +1207,7 @@ exit;
 			{
 				if($model->hinnasto_id != 0 and $model->tuote != 0)
 				{
-					$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$model->tuote."' AND hinnastot_id='".$model->hinnasto_id."' AND hinnasto_yksikko='".$yksikko."'");
+					$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$tuote_id."' AND hinnastot_id='".$model->hinnasto_id."'");
 					if(isset($hinnasto->id))
 					{
 						$return['hinta'] 	= $hinnasto->hinnasto_hinta;
@@ -1212,51 +1218,19 @@ exit;
 					
 					return $return;
 					
-				} elseif($model->hinnasto_id == 0 and $model->tuote != 0) {
-				
-					$tp = TuotteetPalvelut::model()->find("id='".$model->tuote."' AND yksikko='".$yksikko."'");
-					if(isset($tp->id))
-					{
-							$return['hinta'] 	= $tp->hinta_alv_0;
-							$return['alv'] 		= $tp->alv;
-							$return['nimike']	= $tp->nimike;
-							$return['yksikko']	= $tp->yksikko;
-							$return['tuote_id']	= $tp->id;
-							return $return;
-					}
-
-					return $return;
-					
 				}
 			}
 			// Kohde -->
 			
 			// <-- Työvuoro
-			if( $for == 'tyovuoro' and $model->tuoteID > 0)
+			if( $for == 'tyovuoro')
 			{
-				$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$model->tuoteID."' AND hinnastot_id='".$model->kohteet->hinnasto_id."' AND hinnasto_yksikko='".$yksikko."'");
+				$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$tuote_id."' AND hinnastot_id='".$model->kohteet->hinnasto_id."'");
 				if(isset($hinnasto->id))
 				{
 					$return['hinta'] 	= $hinnasto->hinnasto_hinta;
 					$return['alv'] 		= $hinnasto->hinnasto_alv;
-					return $return;
-				}
-
-				$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$model->tuoteID."' AND hinnastot_id='".$model->kohteet->asiakkaat->hinnasto_id."' AND hinnasto_yksikko='".$yksikko."'");
-				if(isset($hinnasto->id))
-				{
-					$return['hinta'] 	= $hinnasto->hinnasto_hinta;
-					$return['alv'] 		= $hinnasto->hinnasto_alv;
-					return $return;
-				}
-				
-				$tp = TuotteetPalvelut::model()->find("id='".$model->tuoteID."' AND yksikko='".$yksikko."'");
-				if(isset($tp->id))
-				{
-					$return['hinta'] 	= $tp->hinta_alv_0;
-					$return['alv'] 		= $tp->alv;
-					$return['nimike']	= $tp->nimike;
-					$return['tuote_id']	= $tp->id;
+					$return['yksikko'] 	= $hinnasto->hinnasto_yksikko;
 					return $return;
 				}
 			}
@@ -1833,8 +1807,8 @@ exit;
 		$kohteet 		= Kohteet::model()->findAll("asiakas_id='".$asiakas_id."'");
 		foreach($kohteet as $item)
 		{	
-			$return = $this->getHintaFor('kohde', $item, 'kk');
-			if($return['hinta'] > 0)
+			$return = $this->getHintaFor('kohde', $item);
+			if($return['hinta'] > 0 and $return['yksikko'] == 'kk')
 			{
 				$kk_hinta[$item->asiakas_id][$item->id] = [
 						'tuote_id' 		=> $item->tuote,
@@ -1911,7 +1885,7 @@ exit;
 				{
 					if($tyovuorot->tuoteID > 0)
 					{
-						$return = $this->getHintaFor('tyovuoro', $tyovuorot, 'h');
+						$return = $this->getHintaFor('tyovuoro', $tyovuorot);
 						$tyovuoro_tuotteet['paa_tuote']['tuote_id'] = $tyovuorot->tuoteID;
 						$tyovuoro_tuotteet['paa_tuote']['tv_id'] 	= $tv_id;
 						$tyovuoro_tuotteet['paa_tuote']['tv_pvm'] 	= $tv_pvm;
@@ -1926,19 +1900,16 @@ exit;
 						$lisa_tuotteet = json_decode($tyovuorot->lisa_tuotteet, true);
 						foreach($lisa_tuotteet['tuote'] as $key => $tuote_id)
 						{
-							$tuotteet = TuotteetPalvelut::model()->findByPk($tuote_id);
-							if(isset($tuotteet->id))
-							{
-								$tyovuoro_tuotteet['lisa_tuotteet'][] = [
-									'tv_pvm'	=> $tyovuorot['pvm'],
-									'tuote_id' 	=> $tuote_id,
-									'nimike' 	=> $tuotteet->nimike,
-									'hinta' 	=> $tuotteet->hinta_alv_0,
-									'alv' 		=> $tuotteet->alv,
-									'yksikko' 	=> $tuotteet->yksikko,
-									'maara' 	=> $lisa_tuotteet['maara'][$key]
-								];
-							}
+							$return = $this->getHintaFor('tyovuoro_lisatuote', $tuote_id);
+							$tyovuoro_tuotteet['lisa_tuotteet'][] = [
+								'tv_pvm'	=> $tyovuorot['pvm'],
+								'tuote_id' 	=> $tuote_id,
+								'nimike' 	=> $return['nimike'],
+								'hinta' 	=> $return['hinta'],
+								'alv' 		=> $return['alv'],
+								'yksikko' 	=> $return['yksikko'],
+								'maara' 	=> $lisa_tuotteet['maara'][$key]
+							];
 						}
 					}
 				}
@@ -1950,7 +1921,7 @@ exit;
 					'maara' 			=> $kesto,
 					'pikkuviesti' 		=> $pikkuviesti,
 					'tyovuoro_tuotteet' => $tyovuoro_tuotteet,
-					'hinta_laskenta'	=> $this->getHintaFor('kohde', $item->kohteet, 'h')
+					'hinta_laskenta'	=> $this->getHintaFor('kohde', $item->kohteet)
 				];
 			}
 		}
@@ -2159,7 +2130,7 @@ exit;
 						
 						$group_arr[$kohde_id][$tuote_id][] = [
 							'tuote_id'	=> $tuote_id,
-							'nimike' 	=> '<b>'.$v['hinta_laskenta']['nimike'].'</b>',
+							'nimike' 	=> $v['hinta_laskenta']['nimike'],
 							'alv' 		=> $v['hinta_laskenta']['alv'],
 							'yksikko'	=> $v['hinta_laskenta']['yksikko'],
 							'hinta' 	=> $v['hinta_laskenta']['hinta'],
@@ -2201,7 +2172,7 @@ exit;
 						
 						$group_arr[$kohde_id][$tuote_id][] = [
 							'tuote_id'	=> $tuote_id,
-							'nimike' 	=> '<b>'.$tuote_nimike.'</b>',
+							'nimike' 	=> $tuote_nimike,
 							'alv' 		=> $v['tyovuoro_tuotteet']['paa_tuote']['alv'],
 							'yksikko' 	=> $v['tyovuoro_tuotteet']['paa_tuote']['yksikko'],
 							'hinta' 	=> $v['tyovuoro_tuotteet']['paa_tuote']['hinta'],
@@ -2222,7 +2193,7 @@ exit;
 
 							$group_arr[$kohde_id][$tuote_id][] = [
 								'tuote_id'	=> $tuote_id,
-								'nimike' 	=> '<b>'.$tuote['nimike'].'</b>',
+								'nimike' 	=> $tuote['nimike'],
 								'alv' 		=> $tuote['alv'],
 								'yksikko' 	=> $tuote['yksikko'],
 								'hinta' 	=> $tuote['hinta'],
