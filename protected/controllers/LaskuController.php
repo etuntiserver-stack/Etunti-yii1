@@ -1179,6 +1179,7 @@ exit;
 		$return['alv'] 		= 0;
 		$return['yksikko'] 	= '';
 		$return['tuote_id'] = 0;
+		$return['hinnan_paikka'] = 'Hinta ei löydy';
 		
 		if( $for == 'kohde')
 			$return['nimike'] 	= '<b class="text-danger link tuote_puutu" data-toggle="tooltip" kohde_id="'.$model->id.'" title="Uuden hinnan luominen">Hinta ei löydy</b>';
@@ -1195,8 +1196,19 @@ exit;
 		$tp = TuotteetPalvelut::model()->findByPk($tuote_id);
 		if(isset($tp->id))
 		{
-		
+
 			$return['nimike'] 	= '<b>'.$tp->nimike.'</b>';
+			
+			if( $for == 'kohde')
+			$return['hinnan_paikka'] 	= 'Tämä hinta on otetu kohdeesta';
+
+			if( $for == 'tyovuoro')
+			$return['hinnan_paikka'] 	= 'Tämä hinta on otetu työvuorosta päätuotteesta';
+
+			if( $for == 'tyovuoro_lisatuote')
+			$return['hinnan_paikka'] 	= 'Tämä hinta on otetu työvuorosta lisätuotteesta';
+			
+
 			$return['hinta'] 	= $tp->hinta_alv_0;
 			$return['alv'] 		= $tp->alv;
 			$return['tuote_id']	= $tp->id;
@@ -1213,6 +1225,7 @@ exit;
 						$return['hinta'] 	= $hinnasto->hinnasto_hinta;
 						$return['alv'] 		= $hinnasto->hinnasto_alv;
 						$return['yksikko'] 	= $hinnasto->hinnasto_yksikko;
+						$return['hinnan_paikka'] = 'Tämä hinta on otetu kohteen hinnastosta';
 						return $return;
 					}
 					
@@ -1231,6 +1244,7 @@ exit;
 					$return['hinta'] 	= $hinnasto->hinnasto_hinta;
 					$return['alv'] 		= $hinnasto->hinnasto_alv;
 					$return['yksikko'] 	= $hinnasto->hinnasto_yksikko;
+					$return['hinnan_paikka'] = 'Tämä hinta on otetu kohteen hinnastosta';
 					return $return;
 				}
 			}
@@ -1818,7 +1832,8 @@ exit;
 						'yksikko' 		=> $return['yksikko'],
 						'nimike' 		=> $return['nimike'],
 						'free_text' 	=> $ajanjakso,
-						'tiedot'		=> ['kuukausi' => $kk, 'kohde_id' => $item->id]
+						'tiedot'		=> ['kuukausi' => $kk, 'kohde_id' => $item->id],
+						'hinnan_paikka' => $return['hinnan_paikka']
 				];
 			}
 		}
@@ -1893,6 +1908,7 @@ exit;
 						$tyovuoro_tuotteet['paa_tuote']['hinta'] 	= $return['hinta'];
 						$tyovuoro_tuotteet['paa_tuote']['alv'] 		= $return['alv'];
 						$tyovuoro_tuotteet['paa_tuote']['yksikko'] 	= $return['yksikko'];
+						$tyovuoro_tuotteet['paa_tuote']['hinnan_paikka'] = $return['hinnan_paikka'];
 					}
 
 					if($tyovuorot->lisa_tuotteet != null)
@@ -1908,7 +1924,8 @@ exit;
 								'hinta' 	=> $return['hinta'],
 								'alv' 		=> $return['alv'],
 								'yksikko' 	=> $return['yksikko'],
-								'maara' 	=> $lisa_tuotteet['maara'][$key]
+								'maara' 	=> $lisa_tuotteet['maara'][$key],
+								'hinnan_paikka' => $return['hinnan_paikka']
 							];
 						}
 					}
@@ -2139,7 +2156,8 @@ exit;
 							'tiedot'	=> $tiedot,
 							'tv_link'  	=> '',
 							'kohde_link' => $kohde_link,
-							'pikkuviesti' => $v['pikkuviesti']
+							'pikkuviesti' => $v['pikkuviesti'],
+							'hinnan_paikka' => $v['hinta_laskenta']['hinnan_paikka']
 						];
 					}
 					
@@ -2148,7 +2166,7 @@ exit;
 						$tv_id 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_id'];
 						$pvm 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_pvm'];
 
-						$tv_link 	= CHtml::link('<span class="fa fa-calendar fa-2x text-primary btn-block" title="Näytä työvuoro ID#: '.$tv_id.'"></span>',
+						$tv_link 	= CHtml::link('<span class="btn-group fa fa-calendar fa-2x text-primary" data-toggle="tooltip" title="Näytä työvuoro ID#: '.$tv_id.'"></span> ',
 							[
 							  sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s', date("Y", strtotime($pvm)), date("W", strtotime($pvm)), $tv_id)
 							],
@@ -2181,7 +2199,8 @@ exit;
 							'tiedot'	=> $tiedot,
 							'tv_link'  	=> $tv_link,
 							'kohde_link' => $kohde_link,
-							'pikkuviesti' => $v['pikkuviesti']
+							'pikkuviesti' => $v['pikkuviesti'],
+							'hinnan_paikka' => $v['tyovuoro_tuotteet']['paa_tuote']['hinnan_paikka']
 						];
 					}
 					
@@ -2202,7 +2221,8 @@ exit;
 								'tiedot'	=> $tiedot,
 								'tv_link'  	=> $tv_link,
 								'kohde_link' => $kohde_link,
-								'pikkuviesti' => null
+								'pikkuviesti' => null,
+								'hinnan_paikka' => $tuote['hinnan_paikka']
 							];
 						}
 					}
@@ -2253,11 +2273,12 @@ exit;
 							$body .= '<td class="hinta text-center">'.$hinta.'</td>';
 							$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($maara*$hinta).'</td>';
 							$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
-							$body .= '<td class="text-center">';
+							$body .= '<td class="text-center ">';
 								$body .= $arr['tv_link'];
+								$body .= '<span class="btn-group fa fa-info-circle fa-2x text-primary" data-toggle="tooltip" title="'.$arr['hinnan_paikka'].'"></span> ';
 								if(!empty($arr['pikkuviesti']))
 								{
-									$body .= '<span class="fa fa-envelope fa-2x text-primary" data-toggle="collapse" href="#rivi'.$rivi_num.'" role="button" aria-expanded="false" aria-controls="collapseExample"></span>';
+									$body .= '<span class="btn-group fa fa-envelope fa-2x text-primary" data-toggle="collapse" title="Pikkuviesti mobiilista" href="#rivi'.$rivi_num.'" role="button" aria-expanded="false" aria-controls="collapseExample"></span>';
 									$body .= '<div style="position:relative"><div class="collapse alert bg-info" id="rivi'.$rivi_num.'" style="position:absolute;right:0;z-index:999999">'.$arr['pikkuviesti'].'</div><div>';
 								}
 							$body .= '</td>';
