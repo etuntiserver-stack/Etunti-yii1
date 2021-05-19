@@ -197,7 +197,7 @@ $(document).ready(function(){
 		e.preventDefault();
 
 		var lasku_rivit = [];
-		$('.lasku_rivi').find('.laskutetaan:checkbox:checked').each(function(){
+		$('.lasku_rivi').find('.laskutetaan:checkbox:checked').each(function(){		
 			lasku_rivit.push([{
 				'tuote_id' : $(this).closest('tr').find('.tuote').attr('tuote_id'),
 				'rivi_tunniste' : $(this).closest('tr').find('.tuote').attr('rivi_tunniste'),
@@ -209,7 +209,8 @@ $(document).ready(function(){
 				'alv' : $(this).closest('tr').find('.alv').text(),
 				'hinta' : $(this).closest('tr').find('.hinta').text(),
 				'free_text' : $(this).closest('tr').find('.free_text').text(),
-				'tiedot' : $(this).closest('tr').find('.tiedot').text()
+				'tiedot' : $(this).closest('tr').find('.tiedot').text(),
+				'kk_hyv_lista' : (  $(this).closest('tr').find('.kk_hyv_lista').find('textarea').val() )? $(this).closest('tr').find('.kk_hyv_lista').find('textarea').val() : ''
 			}]);
 		});
 		

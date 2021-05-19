@@ -2037,7 +2037,52 @@ exit;
 				$laskutettu = false;
 				if(isset($laskutetut_tiedot['kuukausi'][$kohde_id]))
 						$laskutettu = true;
+
+				$hv_lista 	= '';
+				$hv_json 	= [];
+				if(isset($hyv_lista_perkohde[$kohde_id]))
+				{
+					$hv_lista .= '<span class="link fa fa-list fa-2x text-primary" data-toggle="collapse" data-target="#collapse_id_'.$kohde_id.'" title="Hyväksytyt tunnit"></span>';
+
+					$hv_lista .= '<div style="position:relative"><div style="position:absolute;right:0;z-index:999999" class="collapse well" id="collapse_id_'.$kohde_id.'">';
+					$hv_lista .= '<h3>Hyväksytyt tunnit</h3><table class="table table-bordered">';
+					$yht = 0;
+					foreach($hyv_lista_perkohde[$kohde_id] as $hv_item)
+					{
+						$kesto 	= $this->num(strtotime($hv_item->loppui)-strtotime($hv_item->aloitan));
+						$yht 	+= $kesto;
+						
+						$hv_lista .= '<tr>';
+						$hv_lista .= '<td>'.$hv_item->kohde_kannasta.'</td>';
+						$hv_lista .= '<td>'.date("d.m.Y", strtotime($item->aloitan)).'</td>';
+						$hv_lista .= '<td>'.$hv_item->tekijan_nimi.'</td>';
+						$hv_lista .= '<td>'.date("H:i", strtotime($hv_item->aloitan)).'</td>';
+						$hv_lista .= '<td>'.date("H:i", strtotime($hv_item->loppui)).'</td>';
+						$hv_lista .= '<td>'.$kesto.'</td>';
+						$hv_lista .= '</tr>';
+						
+						$hv_json[] = [
+								'kohde_kannasta' 	=> $hv_item->kohde_kannasta,
+								'pvm' 				=> date("d.m.Y", strtotime($item->aloitan)),
+								'tekijan_nimi' 		=> $hv_item->tekijan_nimi,
+								'aloitan' 			=> date("H:i", strtotime($hv_item->aloitan)),
+								'loppui' 			=> date("H:i", strtotime($hv_item->loppui)),
+								'kesto'				=> $kesto
+						];
+					}
+					$hv_lista .= '<tr>';
+					$hv_lista .= '<td></td>';
+					$hv_lista .= '<td></td>';
+					$hv_lista .= '<td></td>';
+					$hv_lista .= '<td></td>';
+					$hv_lista .= '<td></td>';
+					$hv_lista .= '<td>'.$yht.'</td>';
+					$hv_lista .= '</tr>';
+					$hv_lista .= '</table>';
+					$hv_lista .= '</div></div>';
 					
+				}
+				
 				$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
 				$body .= '
 				<td align="center">
@@ -2050,40 +2095,7 @@ exit;
 				$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
 				$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.$arr['hinta'].'</td>';
 				$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
-				$body .= '<td class="text-center">';
-				if(isset($hyv_lista_perkohde[$kohde_id]))
-				{
-					$body .= '<p>KK</p>';
-					$body .= '<span class="link fa fa-list fa-2x text-primary" data-toggle="collapse" data-target="#collapse_id_'.$kohde_id.'" title="Hyväksytyt tunnit"></span>';
-
-					$body .= '<div style="position:relative"><div style="position:absolute;right:0;z-index:999999" class="collapse well" id="collapse_id_'.$kohde_id.'">';
-					$body .= '<h3>Hyväksytyt tunnit</h3><table class="table table-bordered">';
-					$yht = 0;
-					foreach($hyv_lista_perkohde[$kohde_id] as $item)
-					{
-						$kesto 	= $this->num(strtotime($item->loppui)-strtotime($item->aloitan));
-						$yht 	+= $kesto;
-						
-						$body .= '<tr>';
-						$body .= '<td>'.date("d.m.Y", strtotime($item->aloitan)).'</td>';
-						$body .= '<td>'.$item->tekijan_nimi.'</td>';
-						$body .= '<td>'.date("H:i", strtotime($item->aloitan)).'</td>';
-						$body .= '<td>'.date("H:i", strtotime($item->loppui)).'</td>';
-						$body .= '<td>'.$kesto.'</td>';
-						$body .= '</tr>';
-					}
-					$body .= '<tr>';
-					$body .= '<td></td>';
-					$body .= '<td></td>';
-					$body .= '<td></td>';
-					$body .= '<td></td>';
-					$body .= '<td>'.$yht.'</td>';
-					$body .= '</tr>';
-					$body .= '</table>';
-					$body .= '</div></div>';
-					
-				}
-				$body .= '</td>';
+				$body .= '<td class="text-center kk_hyv_lista">'.$hv_lista.'<textarea style="display:none">'.json_encode($hv_json).'</textarea></td>';
 				$body .= '<td class="tiedot" style="display:none">'.json_encode($arr['tiedot']).'</td>';
 				$body .= '</tr>';
 
@@ -2515,6 +2527,7 @@ exit;
 						$lr->yhteensa_alv= $val['hinta']+$lr->hinta_alv;
 						$lr->free_text	= $val['free_text'];
 						$lr->tiedot		= $val['tiedot'];
+						$lr->kk_hyv_lista= $val['kk_hyv_lista'];
 						if(!$lr->save()){
 							echo json_encode(['ERROR' => $lr->getErrors()]);
 							exit;
