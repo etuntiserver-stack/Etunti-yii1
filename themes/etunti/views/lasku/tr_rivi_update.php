@@ -25,17 +25,17 @@ foreach($kids as $kohde_id)
 		echo '<span class="link fa fa-list text-primary" data-toggle="collapse" data-target="#collapse_id_'.$num.'" title="Hyväksytyt tunnit"></span>';
 		echo '
 		<div style="position:relative">
-			<div style="position:absolute;left:0;z-index:999999" class="collapse well" id="collapse_id_'.$num.'">
+			<div style="position:absolute;left:0;z-index:999999;" class="collapse well" id="collapse_id_'.$num.'">
 				<h3>Hyväksytyt tunnit</h3>
-				<table class="table table-bordered">';
+				<table class="table table-bordered" >';
 				$yht = 0;
 				foreach(json_decode($rivi['kk_hyv_lista'], true) as $item)
 				{
 					$yht += $item['kesto'];
 					echo '<tr>
-						<td>'.$item['kohde_kannasta'].'</td>
+						<td style="white-space:nowrap">'.$item['kohde_kannasta'].'</td>
 						<td>'.$item['pvm'].'</td>
-						<td>'.$item['tekijan_nimi'].'</td>
+						<td style="white-space:nowrap">'.$item['tekijan_nimi'].'</td>
 						<td>'.$item['aloitan'].'</td>
 						<td>'.$item['loppui'].'</td>
 						<td>'.$item['kesto'].'</td>
