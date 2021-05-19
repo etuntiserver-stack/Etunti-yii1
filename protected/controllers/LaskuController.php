@@ -2178,7 +2178,7 @@ exit;
 						$tv_id 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_id'];
 						$pvm 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_pvm'];
 
-						$tv_link 	= CHtml::link('<span class="btn-group fa fa-calendar fa-2x text-primary" data-toggle="tooltip" title="Näytä työvuoro ID#: '.$tv_id.'"></span> ',
+						$tv_link 	= CHtml::link('<span class="btn-group fa fa-calendar fa-2x text-primary" data-container="body" data-toggle="tooltip" title="Näytä työvuoro ID#: '.$tv_id.'"></span> ',
 							[
 							  sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s', date("Y", strtotime($pvm)), date("W", strtotime($pvm)), $tv_id)
 							],
@@ -2287,7 +2287,7 @@ exit;
 							$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
 							$body .= '<td class="text-center ">';
 								$body .= $arr['tv_link'];
-								$body .= '<span class="btn-group fa fa-info-circle fa-2x text-primary" data-toggle="tooltip" title="'.$arr['hinnan_paikka'].'"></span> ';
+								$body .= '<span class="btn-group fa fa-info-circle fa-2x text-primary" data-toggle="tooltip" data-container="body" title="'.$arr['hinnan_paikka'].'"></span> ';
 								if(!empty($arr['pikkuviesti']))
 								{
 									$body .= '<span class="btn-group fa fa-envelope fa-2x text-primary" data-toggle="collapse" title="Pikkuviesti mobiilista" href="#rivi'.$rivi_num.'" role="button" aria-expanded="false" aria-controls="collapseExample"></span>';
