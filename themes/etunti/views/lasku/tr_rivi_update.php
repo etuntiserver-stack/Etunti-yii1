@@ -12,8 +12,8 @@ if(isset($hr->id))
 
 $this_hinnoittelu = '';
 foreach($kids as $kohde_id)
-	if(isset($kohden_hinnoittelut[$kohde_id]['hinnoittelu']))
-		$this_hinnoittelu .= $kohden_hinnoittelut[$kohde_id]['osoite'].': '.$kohden_hinnoittelut[$kohde_id]['hinnoittelu'];
+	if(isset($kohden_hinnoittelut[$kohde_id]['hinnoittelu']) and !empty($kohden_hinnoittelut[$kohde_id]['hinnoittelu']))
+		$this_hinnoittelu .= 'Hinnoittelu: '. $kohden_hinnoittelut[$kohde_id]['osoite'].', '.$kohden_hinnoittelut[$kohde_id]['hinnoittelu'];
 
 ?>
 
@@ -52,10 +52,12 @@ foreach($kids as $kohde_id)
 				echo '</table></div></div>';
 	}
 	if($rivi['mobile_id'] == 0)
-		echo '<b class="link text-danger poista" for="poista_<?php echo $num; ?>" style="font-size:150%"><i class="fa fa-times"></i></b>';
+		echo '<b class="link text-danger poista"><i class="fa fa-times"></i></b> ';
+	if(!empty($this_hinnoittelu))
+		echo '<span class="fa fa-info-circle text-primary" data-toggle="tooltip" title="'.$this_hinnoittelu.'"></span>';
 	?>
 </td>
-<TD data-toggle="tooltip" title="<?=$this_hinnoittelu?>">
+<TD>
 	<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" value="<?php echo $rivi['tuoteID']; ?>">
 	<input type="hidden" size="1" name="hinnasto_rivi_id[<?php echo $num; ?>]" id="hinnasto_rivi_id_<?php echo $num; ?>" value="<?php echo $rivi['hinnasto_rivi_id']; ?>">
 	<textarea name="tiedot[<?php echo $num; ?>]" id="tiedot_<?php echo $num; ?>" style="display:none"><?php echo $rivi['tiedot']; ?></textarea>
