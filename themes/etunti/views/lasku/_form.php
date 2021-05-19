@@ -743,7 +743,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 <?php endif; ?>
 <!-- l_asiakkaat -->
 
-<div id="rivit" class="table-responsive">
+<div id="rivit">
 <TABLE class="table well" id="TableRivit">
 
      <TR>
