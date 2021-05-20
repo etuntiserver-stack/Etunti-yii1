@@ -2042,7 +2042,7 @@ exit;
 				$hv_json 	= [];
 				if(isset($hyv_lista_perkohde[$kohde_id]))
 				{
-					$hv_lista .= '<span class="link fa fa-list fa-2x text-primary" data-toggle="collapse" data-target="#collapse_id_'.$kohde_id.'" title="Hyväksytyt tunnit"></span>';
+					$hv_lista .= '<span class="link fa fa-list text-primary" data-toggle="collapse" data-target="#collapse_id_'.$kohde_id.'" title="Hyväksytyt tunnit"></span>';
 
 					$hv_lista .= '<div style="position:relative"><div style="position:absolute;right:0;z-index:999999" class="collapse well" id="collapse_id_'.$kohde_id.'">';
 					$hv_lista .= '<h3>Hyväksytyt tunnit</h3><table class="table table-bordered">';
@@ -2196,7 +2196,7 @@ exit;
 						$tv_id 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_id'];
 						$pvm 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_pvm'];
 
-						$tv_link 	= CHtml::link('<span class="btn-group fa fa-calendar fa-2x text-primary" data-container="body" data-toggle="tooltip" title="Näytä työvuoro ID#: '.$tv_id.'"></span> ',
+						$tv_link 	= CHtml::link('<span class="btn-group fa fa-calendar text-primary" data-container="body" data-toggle="tooltip" title="Näytä työvuoro ID#: '.$tv_id.'"></span> ',
 							[
 							  sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s', date("Y", strtotime($pvm)), date("W", strtotime($pvm)), $tv_id)
 							],
@@ -2308,13 +2308,15 @@ exit;
 							$body .= '<td class="text-center">';
 							
 								$body .= $arr['tv_link'];
-								$body .= '<span class="btn-group fa fa-info-circle fa-2x text-primary" data-toggle="tooltip" data-container="body" title="'.$arr['hinnan_paikka'].'"></span> ';
+								$body .= '<span class="btn-group fa fa-info-circle text-primary" data-toggle="tooltip" data-container="body" title="'.$arr['hinnan_paikka'].'"></span> ';
 								if(!empty($arr['pikkuviesti']))
-								{
-									$body .= '<span class="btn-group fa fa-envelope fa-2x text-primary" data-toggle="collapse" title="Pikkuviesti mobiilista" href="#rivi'.$rivi_num.'" role="button" aria-expanded="false" aria-controls="collapseExample"></span> ';
+									$body .= '<span class="btn-group fa fa-envelope text-primary" data-toggle="collapse" title="Pikkuviesti mobiilista" href="#rivi'.$rivi_num.'"></span> ';
+
+								$body .= '<span class="btn-group fa fa-list text-primary" data-toggle="collapse" title="Hyväksytyt tunnit" href="#hyv'.$rivi_num.'"></span>';
+
+								if(!empty($arr['pikkuviesti']))
 									$body .= '<div style="position:relative"><div class="collapse alert bg-info" id="rivi'.$rivi_num.'" style="position:absolute;right:0;z-index:999999">'.$arr['pikkuviesti'].'</div></div>';
-								}
-								$body .= '<span class="btn-group fa fa-list fa-2x text-primary" data-toggle="collapse" title="Hyväksytyt tunnit" href="#hyv'.$rivi_num.'" role="button" aria-expanded="false" aria-controls="collapseExample"></span>';
+									
 								$body .= '
 								<div style="position:relative">
 									<div class="collapse well" id="hyv'.$rivi_num.'" style="position:absolute;right:0;z-index:999999">
