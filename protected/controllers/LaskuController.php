@@ -2305,14 +2305,14 @@ exit;
 							$body .= '<td class="hinta text-center">'.$hinta.'</td>';
 							$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($maara*$hinta).'</td>';
 							$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
-							$body .= '<td class="text-center ">';
+							$body .= '<td class="text-center">';
 							
 								$body .= $arr['tv_link'];
 								$body .= '<span class="btn-group fa fa-info-circle fa-2x text-primary" data-toggle="tooltip" data-container="body" title="'.$arr['hinnan_paikka'].'"></span> ';
 								if(!empty($arr['pikkuviesti']))
 								{
-									$body .= '<span class="btn-group fa fa-envelope fa-2x text-primary" data-toggle="collapse" title="Pikkuviesti mobiilista" href="#rivi'.$rivi_num.'" role="button" aria-expanded="false" aria-controls="collapseExample"></span>';
-									$body .= '<div style="position:relative"><div class="collapse alert bg-info" id="rivi'.$rivi_num.'" style="position:absolute;right:0;z-index:999999">'.$arr['pikkuviesti'].'</div><div>';
+									$body .= '<span class="btn-group fa fa-envelope fa-2x text-primary" data-toggle="collapse" title="Pikkuviesti mobiilista" href="#rivi'.$rivi_num.'" role="button" aria-expanded="false" aria-controls="collapseExample"></span> ';
+									$body .= '<div style="position:relative"><div class="collapse alert bg-info" id="rivi'.$rivi_num.'" style="position:absolute;right:0;z-index:999999">'.$arr['pikkuviesti'].'</div></div>';
 								}
 								$body .= '<span class="btn-group fa fa-list fa-2x text-primary" data-toggle="collapse" title="Hyväksytyt tunnit" href="#hyv'.$rivi_num.'" role="button" aria-expanded="false" aria-controls="collapseExample"></span>';
 								$body .= '
@@ -2321,7 +2321,7 @@ exit;
 									<table class="table table-bordered"><tr>';
 									foreach($arr['kk_hyv_lista'] as $key => $hyv_tieto)
 										$body .= '<td style="white-space:nowrap">'.$hyv_tieto.'</td>';
-								$body .= '</tr></table></div><div>';
+								$body .= '</tr></table></div></div>';
 								
 							$body .= '</td>';
 							$body .= '<td class="tiedot" style="display:none">'.json_encode($tiedot).'</td>';
