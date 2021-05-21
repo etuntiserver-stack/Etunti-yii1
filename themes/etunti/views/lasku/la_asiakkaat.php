@@ -197,7 +197,7 @@ $(document).ready(function(){
 		e.preventDefault();
 
 		var lasku_rivit = [];
-		$('.lasku_rivi').find('.laskutetaan:checkbox:checked').each(function(){		
+		$(this).closest('.closest_td').find('.lasku_rivi').find('.laskutetaan:checkbox:checked').each(function(){		
 			lasku_rivit.push([{
 				'tuote_id' : $(this).closest('tr').find('.tuote').attr('tuote_id'),
 				'rivi_tunniste' : $(this).closest('tr').find('.tuote').attr('rivi_tunniste'),
@@ -226,8 +226,8 @@ $(document).ready(function(){
 		
 		thisButton.text('Odota...');
 
-		//console.log(lasku_rivit)
-		//return false;
+		console.log(lasku_rivit)
+		return false;
 		
 		$.ajax({
 			url: 'laskutetuksi?asiakas_id=' + asiakas_id + '&from=' + from + '&to=' + to + '&tilanne=new',
