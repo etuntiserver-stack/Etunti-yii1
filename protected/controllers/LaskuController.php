@@ -2437,7 +2437,7 @@ exit;
 		
 		$body .= '
 			<br>
-			<p><span class="btn-block btn btn-info laskutetuksi" asiakas_id="'.$asiakas_id.'" from="'.$from.'" to="'.$to.'" etunti_tunniste="'.$etunti_tunniste.'" style="display:none" data-toggle="tooltip" data-placement="top" title="Hei, Tämän painamalla oikeasti luodaan heti uusi hyväksymätön laskun määritetty rivijen mukaiseesti. Luomiseen jälkeen lasku saa muokata, hyväksytä ja lähetä. Kaikki tilantteet on näkyvissä tällä sivulla.">LUO UUSI LASKU</span></p>
+			<p><span class="btn-block btn btn-info laskutetuksi" asiakas_id="'.$asiakas_id.'" from="'.$from.'" to="'.$to.'" etunti_tunniste="'.$etunti_tunniste.'" style="display:none">LUO UUSI LASKU</span></p>
 		';
 		
 		echo json_encode($body);
