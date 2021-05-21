@@ -2125,7 +2125,7 @@ exit;
 						$aloitus	= date("H:i", strtotime($item->aloitan));
 						$lopetus	= date("H:i", strtotime($item->loppui));
 						$kesto		= strtotime($item->loppui)-strtotime($item->aloitan);
-						$tekijan_nimi = $item->tt->FullName;
+						$tekijan_nimi = (isset($item->tt->FullName))? $item->tt->FullName: '';
 					}
 					
 					if($rakenne_muoto == 'tuovuoro')
@@ -2138,7 +2138,7 @@ exit;
 						$aloitus	= date("H:i", strtotime($item->aloitan));
 						$lopetus	= date("H:i", strtotime($item->loppui));
 						$kesto		= strtotime($item->loppui)-strtotime($item->aloitan);
-						$tekijan_nimi = $item->tt->FullName;
+						$tekijan_nimi = (isset($item->tt->FullName))? $item->tt->FullName : '';
 					}
 
 					$hv_json = [
