@@ -226,8 +226,8 @@ $(document).ready(function(){
 		
 		thisButton.text('Odota...');
 
-		console.log(lasku_rivit)
-		return false;
+		//console.log(lasku_rivit)
+		//return false;
 		
 		$.ajax({
 			url: 'laskutetuksi?asiakas_id=' + asiakas_id + '&from=' + from + '&to=' + to + '&tilanne=new',
