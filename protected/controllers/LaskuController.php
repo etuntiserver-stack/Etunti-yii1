@@ -2269,7 +2269,7 @@ exit;
 				{
 					foreach($prearr as $key => $arr)
 					{
-						$rivi_num	++;
+						$rivi_num++;
 						$hinta 		= $arr['hinta'];
 						$maara 		= $arr['maara'];
 						$yht_tunnit += $maara;
@@ -2312,14 +2312,14 @@ exit;
 								if(!empty($arr['pikkuviesti']))
 									$body .= '<span class="btn-group fa fa-envelope text-primary" data-toggle="collapse" title="Pikkuviesti mobiilista" href="#rivi'.$rivi_num.'"></span> ';
 
-								$body .= '<span class="btn-group fa fa-list text-primary" data-toggle="collapse" title="Hyväksytyt tunnit" href="#hyv'.$rivi_num.'"></span>';
+								$body .= '<span class="btn-group fa fa-list text-primary" data-toggle="collapse" title="Hyväksytyt tunnit" href="#hyv_'.$tuote_id.'_'.$rivi_num.'"></span>';
 
 								if(!empty($arr['pikkuviesti']))
 									$body .= '<div style="position:relative"><div class="collapse alert bg-info" id="rivi'.$rivi_num.'" style="position:absolute;right:0;z-index:999999">'.$arr['pikkuviesti'].'</div></div>';
 									
 								$body .= '
 								<div style="position:relative">
-									<div class="collapse well" id="hyv'.$rivi_num.'" style="position:absolute;right:0;z-index:999999">
+									<div class="collapse well" id="hyv_'.$tuote_id.'_'.$rivi_num.'" style="position:absolute;right:0;z-index:999999">
 									<table class="table table-bordered"><tr>';
 									foreach($arr['kk_hyv_lista'] as $key => $hyv_tieto)
 										$body .= '<td style="white-space:nowrap">'.$hyv_tieto.'</td>';
