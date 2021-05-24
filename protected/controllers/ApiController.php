@@ -2013,13 +2013,8 @@ public function actionImei($dom)
 		// 00358123123, which is what buenno wants.
 		$phoneNumber = "00" . $phoneNumber;
 
-
-
-
-
-
-		//$url = "https://webreport.buenno.fi/api/v01/invitations";
-		$url = "https://dev.etunti.fi/v1/clients";
+		
+		$url = "https://webreport.buenno.fi/api/v01/invitations";
 		// build headers
 		$headers = ["Content-Type: application/json"];
 		$headers[] = "api-auth-token: " . $apiKey;
@@ -2037,7 +2032,7 @@ public function actionImei($dom)
 		// open curl
 		$ch = curl_init();
 
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		// set url
 		curl_setopt($ch, CURLOPT_URL, $url);
 		// set http verb to POST
@@ -2051,8 +2046,27 @@ public function actionImei($dom)
 		// execute query
 		$response = curl_exec($ch);
 
+		$logResponse = $response;
+		if(curl_errno($ch)) {
+			$logResponse = curl_error($ch);
+		}
+
 		// close curl
 		curl_close($ch);
+
+		// <-- LOG
+	
+		$model_log 	= 'Mob';
+		$name_log 	= 'Buenno';
+		$status_log 	= 'Logged result';
+
+		$old_values = null;
+		$new_values = json_encode($logResponse);
+		$site = Yii::app()->createController('Site');
+		$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+		
+
+		
 		return $response;
 	}
 
