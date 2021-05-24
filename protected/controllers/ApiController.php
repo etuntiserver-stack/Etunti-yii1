@@ -2007,7 +2007,7 @@ public function actionImei($dom)
 		$phoneNumber = $client->puhelin;
 		// take a substring of the phone number, which doesn't include the
 		// + in the front
-		$phoneNumber = substr($phoneNumber, 1, 0);
+		$phoneNumber = substr($phoneNumber, 1, strlen($phoneNumber) - 1);
 		// prepend the number with two 00 in the place of the +
 		// now the number should be something like this:
 		// 00358123123, which is what buenno wants.
