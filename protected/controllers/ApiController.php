@@ -2005,6 +2005,9 @@ public function actionImei($dom)
 
 		// get clients phone number
 		$phoneNumber = $client->puhelin;
+		if(!$phoneNumber) {
+			throw new Exception("Phone number is not defined! Client ID: " . $client->id);
+		}
 		// take a substring of the phone number, which doesn't include the
 		// + in the front
 		$phoneNumber = substr($phoneNumber, 1, strlen($phoneNumber) - 1);
