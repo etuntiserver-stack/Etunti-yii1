@@ -1986,7 +1986,7 @@ public function actionImei($dom)
 		}
 
 		// get property, which can be used to get the client
-		$property = Kohde::model()->findByPk($shift->kohde);
+		$property = Kohteet::model()->findByPk($shift->kohde);
 		// throw exception if property not found
 		if(!$property) {
 			throw new Exception("Property (Kohde) not found");
