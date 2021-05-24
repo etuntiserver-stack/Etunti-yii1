@@ -1623,7 +1623,8 @@ public function actionImei($dom)
 			//     Auto hyvaksynta -->
 
 			// <-- buenno integration
-			$this->buennoInvitation($mobupdate);
+			$domainit = Domainit::model()->find(" domain='".strtolower($dom)."' ");
+			$this->buennoInvitation($mobupdate, $domainit->domain);
 			// buenno integration -->
 
 			// <-- LOG
@@ -1935,8 +1936,7 @@ public function actionImei($dom)
 	 * (base url is actually https://webreport.buenno.fi)
 	 * 
 	 */
-	protected function buennoInvitation(Mobile $mobile) {
-		$domain = Yii::app()->user->domain;
+	protected function buennoInvitation(Mobile $mobile, $domain) {
 		// return early if domain not kotipuhtaaksi
 		if($domain != "kotipuhtaaksi") return;
 		// return early if workshifts status isn't 3 (completed)
