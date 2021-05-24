@@ -2013,7 +2013,7 @@ public function actionImei($dom)
 		// 00358123123, which is what buenno wants.
 		$phoneNumber = "00" . $phoneNumber;
 
-		
+
 		$url = "https://webreport.buenno.fi/api/v01/invitations";
 		// build headers
 		$headers = ["Content-Type: application/json"];
@@ -2060,7 +2060,7 @@ public function actionImei($dom)
 		$name_log 	= 'Buenno';
 		$status_log 	= 'Logged result';
 
-		$old_values = null;
+		$old_values = json_encode($body);
 		$new_values = json_encode($logResponse);
 		$site = Yii::app()->createController('Site');
 		$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
