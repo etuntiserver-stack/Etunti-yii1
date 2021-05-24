@@ -17,7 +17,7 @@ foreach(glob($img_path.'*.{jpg,JPG,jpeg,JPEG,png,PNG}',GLOB_BRACE) as $file){
     $imageFile = Yii::app()->basePath."/../tiedostot/asiakkaat/" . Yii::app()->user->domain . "/" . basename($file);
     $imageData = base64_encode(file_get_contents($imageFile));
     $img = "data: " . mime_content_type($imageFile) . ";base64,". $imageData;
-    $imgHtml = '<img loading="lazy" src="'.$img.'" />';
+    $imgHtml = '<img loading="lazy" src="'.$img.'" style="max-width: 150px; max-height: 150px" />';
     echo $imgHtml;
 }
 
