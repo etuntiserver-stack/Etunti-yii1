@@ -1974,8 +1974,12 @@ public function actionImei($dom)
 		foreach($names as $name) {
 			$encoded_names .= $name . " + ";
 		}
-		// removes the trailing " + " if it exists.
-		$encoded_names = empty($encoded_names) ? "" : substr($encoded_names, 0, -3);
+		// if names are still empty here, it should mean this shift only has
+		// 1 employee in it, in which case we will fetch their name.
+		// if not:
+		// removes the trailing " + "
+		$encoded_names = empty($encoded_names) ? $this->etuSukunimi($shift->tid) : substr($encoded_names, 0, -3);
+
 		// throw exception if names are still empty.
 		if(empty($encoded_names)) {
 			throw new Exception("Employee (Tyontekijat) names were empty.");
