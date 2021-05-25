@@ -43,7 +43,7 @@
                         <div class="section">
                           <label class="field select">
 							<select class="form-group form-control" name="rakenne_muoto">
-								<option value="mobiili" <?=($rakenne_muoto !== null and $rakenne_muoto == 'mobiili')? 'selected':''?>>Mobiilista</option>
+								<option value="mobiili" <?=($rakenne_muoto !== null and $rakenne_muoto == 'mobiili')? 'selected':''?>>Kirjaukset</option>
 								<option value="tuovuoro" <?=($rakenne_muoto !== null and $rakenne_muoto == 'tuovuoro')? 'selected':''?>>Työvuoroista</option>
 							</select>
                            </label>

@@ -695,20 +695,33 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 <div id="la_laatikko" style="display:none; z-index: 1">
 	<h3>Uusi työkalu</h3>
 	<div class="form-inline">
-		<input type="text" id="la_from" value="<?=date("Y-m-d", strtotime('first day of previous month'))?>" style="display:none">
-		<input type="text" id="la_to" value="<?=date("Y-m-d", strtotime('first day of previous month'))?>" style="display:none">
+
+	  <input type="text" id="la_from" value="<?=date("Y-m-d", strtotime('first day of previous month'))?>" style="display:none">
+	  <input type="text" id="la_to" value="<?=date("Y-m-d", strtotime('first day of previous month'))?>" style="display:none">
+
+	  <div class="form-group">
+	  	<label>Päivämäärä</label><br>
 		<input type="text" class="form-control datepickerFI" id="laskun_paivays" value="<?=date("d.m.Y")?>" data-toggle="tooltip" title="<?=Yii::t('main', 'Laskun päiväys')?>">
+	  </div>
+	  <div class="form-group">
+	  	<label>Muoto</label><br>
 		<select class="form-group form-control" id="rakenne_muoto">
-			<option value="mobiili">Mobiilista</option>
+			<option value="mobiili">Kirjaukset</option>
 			<option value="tuovuoro">Työvuoroista</option>
 		</select>
+	  </div>
+	  <div class="form-group">
+		<label>Laskurivit</label><br>
 		<select class="form-group form-control" id="rivi_muoto">
-			<option value="rivi_per_kirjaus">KIRJAUS</option>
+			<option value="rivi_per_kirjaus">Kirjaukset rivittäin</option>
 			<option value="rivi_per_kohde">TUOTE</option>
 		</select>
+	  </div>
+	  <div class="form-group">
+	   	<label>Kuukausi</label><br>
 		<input type="text" id="kuukausi_kalentteri" class="form-control form-group datepickerLA" value="<?=date('m.Y', strtotime('first day of previous month'))?>" data-toggle="tooltip" title="<?=Yii::t('main', 'Ajanjakso')?>">
-		
-		<span class="btn btn-info pull-right" id="la_paivita"><?=Yii::t('main', 'Päivitä / Keskeytä')?></span>
+	  </div>
+	  <span class="btn btn-info pull-right" id="la_paivita"><i class="fa fa-refresh"></i></span>
 	</div>
 	<div class="row form kht" id="kalut"></div>
 </div>
