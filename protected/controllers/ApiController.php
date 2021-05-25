@@ -2030,6 +2030,7 @@ public function actionImei($dom)
 			"pf_store" => $workGroupName,
 			"pf_external_id" => $client->id,
 			"pf_target" => $encoded_names,
+			"pf_timestamp" => time(),
 		];
 
 		// open curl
