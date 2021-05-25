@@ -333,10 +333,10 @@ $(document).ready(function(){
 					
 					$('#collapse_id_' + asiakas_id).html(data);
 					var sum = 0;
-					$('.forsumm').each(function(){
+					thisFor.closest('td').find('.forsumm').each(function(){
 						sum += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
 					});
-					$('#summ_result').html(sum.toFixed(2));
+					thisFor.closest('td').find('#summ_result').html(sum.toFixed(2));
 					$('[data-toggle="tooltip"]').tooltip();
 					
 					thisFor.closest('td').find('.laskutetaan:checkbox:checked').each(function(){
