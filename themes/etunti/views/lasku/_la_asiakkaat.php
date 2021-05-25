@@ -4,7 +4,7 @@
 <tr>
 	<td width="15%" style="vertical-align: top" class="closest_asiakas_td">
 		<?php
-		echo $data->Fullname.' #'.$data->id;
+		echo $data->Fullname;
 
 		if(isset($la_AsIds['la_'.$kk.'_'.$data->id]))
 		{
