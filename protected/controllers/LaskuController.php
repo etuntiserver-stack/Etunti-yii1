@@ -1969,7 +1969,7 @@ exit;
 		$body .= '<th>'.Yii::t('main', 'Määrä').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Yksikkö').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Alv').'</th>';
-		$body .= '<th>'.Yii::t('main', 'Hinta').'</th>';
+		$body .= '<th>'.Yii::t('main', 'Hinta').' Alv.0</th>';
 		$body .= '<th>'.Yii::t('main', 'Veroton').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Yhteensä').'</th>';
 		$body .= '<th>'.Yii::t('main', 'Vapaa teksti').'</th>';
