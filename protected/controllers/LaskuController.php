@@ -1220,10 +1220,11 @@ exit;
 					$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$tuote_id."' AND hinnastot_id='".$model->hinnasto_id."'");
 					if(isset($hinnasto->id))
 					{
+						$hinnastot			= Hinnastot::model()->findByPk($hinnasto->hinnastot_id);
 						$return['hinta'] 	= $hinnasto->hinnasto_hinta;
 						$return['alv'] 		= $hinnasto->hinnasto_alv;
 						$return['yksikko'] 	= $hinnasto->hinnasto_yksikko;
-						$return['hinnan_paikka'] = 'Tämä hinta on otetu kohteen hinnastosta';
+						$return['hinnan_paikka'] = 'Tämä hinta on otetu hinnastosta - '.$hinnastot->hinnaston_otsikko;
 						return $return;
 					}
 					
@@ -1239,10 +1240,11 @@ exit;
 				$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$tuote_id."' AND hinnastot_id='".$model->kohteet->hinnasto_id."'");
 				if(isset($hinnasto->id))
 				{
+					$hinnastot			= Hinnastot::model()->findByPk($hinnasto->hinnastot_id);
 					$return['hinta'] 	= $hinnasto->hinnasto_hinta;
 					$return['alv'] 		= $hinnasto->hinnasto_alv;
 					$return['yksikko'] 	= $hinnasto->hinnasto_yksikko;
-					$return['hinnan_paikka'] = 'Tämä hinta on otetu kohteen hinnastosta';
+					$return['hinnan_paikka'] = 'Tämä hinta on otetu hinnastosta - '.$hinnastot->hinnaston_otsikko;
 					return $return;
 				}
 			}
