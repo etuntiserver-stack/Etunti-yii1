@@ -2096,7 +2096,7 @@ exit;
 				$body .= '<td class="maara text-center">1</td>';
 				$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 				$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
-				$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
+				$body .= '<td class="hinta text-center">'.$hinta_veroton.'</td>';
 				$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.$hinta_veroton.'</td>';
 				$body .= '<td>'.$hinta_with_alv.'</td>';
 				$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
@@ -2298,7 +2298,8 @@ exit;
 									$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-container="body" data-toggle="tooltip" title="Laskutettu jollakin eri tavalla. Katso - Tehdyt laskut"></span>';
 							}
 
-							$hinta_veroton	= round(($maara*$hinta), 2);
+							$hinta			= round($hinta, 2);
+							$hinta_veroton	= $maara*$hinta;
 							$hinta_with_alv = round((($hinta_veroton*$arr['alv'])/100)+$hinta_veroton, 2);
 
 							$body .= '<tr class="lasku_rivi">';
@@ -2396,7 +2397,8 @@ exit;
 							$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-container="body" data-toggle="tooltip" title="Laskutettu, mutta jollakin eri tavalla. Katso - Tehdyt laskut"></span>';
 					}
 
-					$hinta_veroton	= round(($maara*$arr['hinta']), 2);
+					$hinta			= round($arr['hinta'], 2);
+					$hinta_veroton	= $maara*$hinta;
 					$hinta_with_alv = round((($hinta_veroton*$arr['alv'])/100)+$hinta_veroton, 2);
 							
 					$body .= '<tr class="lasku_rivi">';
@@ -2408,7 +2410,7 @@ exit;
 					$body .= '<td class="maara text-center">'.$maara.'</td>';
 					$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 					$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
-					$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
+					$body .= '<td class="hinta text-center">'.$hinta.'</td>';
 					$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.$hinta_veroton.'</td>';
 					$body .= '<td>'.$hinta_with_alv.'</td>';
 					$body .= '<td class="free_text">'.$ajanjakso.'</td>';
