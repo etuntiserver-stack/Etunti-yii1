@@ -133,6 +133,7 @@ class TuotteetPalvelut extends DB2ActiveRecord
 			'nayta_vain_onlinevarauksessa' => Yii::t('main', 'Näytä vain onlinevarauksessa'),
 			'paa_palvelu'=> Yii::t('main', 'Pääpalvelu'),
 			'image'=> Yii::t('main', 'Valokuva'),
+			'netvisor_dimension_name' => Yii::t('main', 'Kustannuspaikka'),
 		);
 	}
 
