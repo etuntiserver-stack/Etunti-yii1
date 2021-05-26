@@ -1198,13 +1198,13 @@ exit;
 			$return['nimike'] 	= '<b>'.$tp->nimike.'</b>';
 			
 			if( $for == 'kohde')
-			$return['hinnan_paikka'] 	= 'Tämä hinta on otetu kohdeesta';
+			$return['hinnan_paikka'] 	= 'Hinta on otettu kohdeesta';
 
 			if( $for == 'tyovuoro')
-			$return['hinnan_paikka'] 	= 'Tämä hinta on otetu työvuorosta päätuotteesta';
+			$return['hinnan_paikka'] 	= 'Hinta on otettu työvuorosta päätuotteesta';
 
 			if( $for == 'tyovuoro_lisatuote')
-			$return['hinnan_paikka'] 	= 'Tämä hinta on otetu työvuorosta lisätuotteesta';
+			$return['hinnan_paikka'] 	= 'Hinta on otettu työvuorosta lisätuotteesta';
 			
 
 			$return['hinta'] 	= $tp->hinta_alv_0;
@@ -1224,7 +1224,7 @@ exit;
 						$return['hinta'] 	= $hinnasto->hinnasto_hinta;
 						$return['alv'] 		= $hinnasto->hinnasto_alv;
 						$return['yksikko'] 	= $hinnasto->hinnasto_yksikko;
-						$return['hinnan_paikka'] = 'Tämä hinta on otetu hinnastosta - '.$hinnastot->hinnaston_otsikko;
+						$return['hinnan_paikka'] = 'Hinta on otettu hinnastosta - '.$hinnastot->hinnaston_otsikko;
 						return $return;
 					}
 					
@@ -1244,7 +1244,7 @@ exit;
 					$return['hinta'] 	= $hinnasto->hinnasto_hinta;
 					$return['alv'] 		= $hinnasto->hinnasto_alv;
 					$return['yksikko'] 	= $hinnasto->hinnasto_yksikko;
-					$return['hinnan_paikka'] = 'Tämä hinta on otetu hinnastosta - '.$hinnastot->hinnaston_otsikko;
+					$return['hinnan_paikka'] = 'Hinta on otettu hinnastosta - '.$hinnastot->hinnaston_otsikko;
 					return $return;
 				}
 			}
@@ -2198,7 +2198,7 @@ exit;
 						$tv_id 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_id'];
 						$pvm 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_pvm'];
 
-						$tv_link 	= CHtml::link('<span class="btn-group fa fa-calendar text-primary" data-container="body" data-toggle="tooltip" title="Näytä työvuoro ID#: '.$tv_id.'"></span> ',
+						$tv_link 	= CHtml::link('<span class="btn-group fa fa-calendar text-primary" data-container="body" data-toggle="tooltip" title="Näytä työvuoro"></span> ',
 							[
 							  sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s', date("Y", strtotime($pvm)), date("W", strtotime($pvm)), $tv_id)
 							],
