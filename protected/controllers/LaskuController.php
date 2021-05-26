@@ -2084,6 +2084,9 @@ exit;
 					
 				}
 				
+				$hinta_veroton	= round($arr['hinta'], 2);
+				$hinta_with_alv = round((($hinta_veroton*$arr['alv'])/100)+$hinta_veroton, 2);
+				
 				$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
 				$body .= '
 				<td align="center">
@@ -2094,8 +2097,8 @@ exit;
 				$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 				$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
 				$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
-				$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.$arr['hinta'].'</td>';
-				$body .= '<td>'.((($arr['hinta']*$arr['alv'])/100)+$arr['hinta']).'</td>';
+				$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.$hinta_veroton.'</td>';
+				$body .= '<td>'.$hinta_with_alv.'</td>';
 				$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
 				$body .= '<td class="text-center kk_hyv_lista">'.$hv_lista.'<textarea style="display:none">'.json_encode($hv_json).'</textarea></td>';
 				$body .= '<td class="tiedot" style="display:none">'.json_encode($arr['tiedot']).'</td>';
@@ -2168,7 +2171,7 @@ exit;
 							'target' => '_blank',
 							'data-toggle' => 'tooltip',
 							'data-container' => 'body',
-							'title' => 'Tästä avataan uusi välilehti kohdeesta.'
+							'title' => 'Ava uusi välilehti kohteesta'
 						]
 					);
 						
@@ -2295,6 +2298,9 @@ exit;
 									$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-container="body" data-toggle="tooltip" title="Laskutettu jollakin eri tavalla. Katso - Tehdyt laskut"></span>';
 							}
 
+							$hinta_veroton	= round(($maara*$hinta), 2);
+							$hinta_with_alv = round((($hinta_veroton*$arr['alv'])/100)+$hinta_veroton, 2);
+
 							$body .= '<tr class="lasku_rivi">';
 							$body .= '
 							<td align="center">
@@ -2305,8 +2311,8 @@ exit;
 							$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 							$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
 							$body .= '<td class="hinta text-center">'.$hinta.'</td>';
-							$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($maara*$hinta).'</td>';
-							$body .= '<td>'.(((($maara*$hinta)*$arr['alv'])/100)+($maara*$hinta)).'</td>';
+							$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.$hinta_veroton.'</td>';
+							$body .= '<td>'.$hinta_with_alv.'</td>';
 							$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
 							$body .= '<td class="text-center">';
 							
@@ -2390,6 +2396,9 @@ exit;
 							$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-container="body" data-toggle="tooltip" title="Laskutettu, mutta jollakin eri tavalla. Katso - Tehdyt laskut"></span>';
 					}
 
+					$hinta_veroton	= round(($maara*$arr['hinta']), 2);
+					$hinta_with_alv = round((($hinta_veroton*$arr['alv'])/100)+$hinta_veroton, 2);
+							
 					$body .= '<tr class="lasku_rivi">';
 					$body .= '
 					<td align="center">
@@ -2400,8 +2409,8 @@ exit;
 					$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 					$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
 					$body .= '<td class="hinta text-center">'.$arr['hinta'].'</td>';
-					$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($maara*$arr['hinta']).'</td>';
-					$body .= '<td>'.(((($maara*$arr['hinta'])*$arr['alv'])/100)+($maara*$arr['hinta'])).'</td>';
+					$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.$hinta_veroton.'</td>';
+					$body .= '<td>'.$hinta_with_alv.'</td>';
 					$body .= '<td class="free_text">'.$ajanjakso.'</td>';
 					$body .= '<td></td>';
 					$body .= '<td class="tiedot" style="display:none">'.json_encode($new_tiedot).'</td>';
