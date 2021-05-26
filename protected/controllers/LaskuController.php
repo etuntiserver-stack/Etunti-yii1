@@ -3344,9 +3344,19 @@ foreach($laskunRivit as $rivit)
 	$ProductIdentifier 	= '';
 	$myyntitili		= '3000';
 	$tuotteet = TuotteetPalvelut::model()->findByPk($rivit->tuoteID);
-	if(isset($tuotteet->id) and $tuotteet->netvisorkey != 0){
+	if(isset($tuotteet->id) and $tuotteet->netvisorkey != 0)
+	{
 		$ProductIdentifier 	= $tuotteet->netvisorkey;
 		$myyntitili		= $tuotteet->myyntitili;
+
+		if( !empty($tuotteet->netvisor_dimension_name) and !empty($tuotteet->netvisor_dimension_item)){
+		$dimension = '
+			 <Dimension>
+		        	<DimensionName>'.$tuotteet->netvisor_dimension_name.'</DimensionName>
+		        	<DimensionItem>'.$tuotteet->netvisor_dimension_item.'</DimensionItem>
+		         </Dimension>';
+		}
+	
 	} elseif( $this->netvisorProductDefault() != 0 and !isset($tuotteet->id) or (isset($tuotteet->id) and $tuotteet->netvisorkey == 0) ){
 		$ProductIdentifier = $this->netvisorProductDefault();
 	} else {

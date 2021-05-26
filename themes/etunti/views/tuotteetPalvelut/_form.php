@@ -168,6 +168,25 @@ $(document).ready(function(){
 
 	<?php if($netvisor) : ?>
 	<legend><h3><?php echo Yii::t('main', 'Netvisor'); ?></h3></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_dimension_name'); ?>
+		<?php 
+		$lasku = Yii::app()->createController('Lasku');
+		echo '<select class="form-control" name="TuotteetPalvelut[netvisor_dimension_name]">';
+	 	echo '<option>Valitse</option>';
+		foreach($lasku[0]->netvisorLaskentaKohteetLista() as $k => $v){
+		 foreach($v->DimensionName as $k1 => $v1){
+		 	echo '<optgroup label="'.$v1->Name.'">';
+			foreach($v1->DimensionDetails->DimensionDetail as $k2 => $v2){
+			 	echo '<option value="'.$v1->Name.'//'.$v2->Name.'" '.(( isset($model->netvisor_dimension_name) and !empty($model->netvisor_dimension_name) and isset($model->netvisor_dimension_item) and !empty($model->netvisor_dimension_item) and $model->netvisor_dimension_name.'//'.$model->netvisor_dimension_item == $v1->Name.'//'.$v2->Name )? 'selected':'').'>'.$v2->Name.'</option>';
+			}
+		 }
+		}
+		echo '</select>';
+		?>
+	</div>
+	
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'varastoitava'); ?>
 		<?php 
