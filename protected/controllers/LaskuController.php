@@ -2299,7 +2299,7 @@ exit;
 							}
 
 							$hinta			= round($hinta, 2);
-							$hinta_veroton	= $maara*$hinta;
+							$hinta_veroton	= round($maara*$hinta, 2);
 							$hinta_with_alv = round((($hinta_veroton*$arr['alv'])/100)+$hinta_veroton, 2);
 
 							$body .= '<tr class="lasku_rivi">';
@@ -2398,7 +2398,7 @@ exit;
 					}
 
 					$hinta			= round($arr['hinta'], 2);
-					$hinta_veroton	= $maara*$hinta;
+					$hinta_veroton	= round($maara*$hinta, 2);
 					$hinta_with_alv = round((($hinta_veroton*$arr['alv'])/100)+$hinta_veroton, 2);
 							
 					$body .= '<tr class="lasku_rivi">';
