@@ -760,7 +760,9 @@ Yritys '.$yr.'
 				// integromat webhook
 			   	$domain = Yii::app()->user->domain;
 				if($domain == "kotipuhtaaksi") {
-					$this->integromatUpsert($model);
+					// disable for now. TODO: only trigger this update when
+					// any meaningful data changes
+					//$this->integromatUpsert($model);
 				}
 
 				Yii::app()->user->setFlash('success', "Tallennettu.");
