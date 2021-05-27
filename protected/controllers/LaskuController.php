@@ -2014,7 +2014,7 @@ exit;
 						'target' => '_blank',
 						'data-toggle' => 'tooltip',
 						'data-container' => 'body',
-						'title' => ((isset($item->kohteet->hinnoittelu))? $item->kohteet->hinnoittelu : '')
+						'title' => 'Ava uusi välilehti kohteesta'
 					]
 				);
 				
