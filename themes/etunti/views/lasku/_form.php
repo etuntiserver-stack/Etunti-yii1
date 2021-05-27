@@ -1519,7 +1519,7 @@ function ajaxForLasku()
 				$('.forsumm').each(function(){
 					sum += parseFloat($(this).text());
 				});
-				$('#summ_result').html(sum);
+				$('#summ_result').html(sum.toFixed(2));
 				
 				$('.lasku_rivi').find('.laskutetaan:checkbox:checked').each(function(){
 					$(this).closest('#kalut').find('.laskutetuksi').show()
