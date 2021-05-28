@@ -692,9 +692,26 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 ?>
 </div>
 
-<?php if(!isset($model->id)): ?>
-<div class="la_laatikko" style="display:none; z-index: 1"><legend><h3>Luo laskurivit kirjauksen mukaisesti. <span class="small">Laskurivit luodaan alla olevan taulun mukaisesti.</span></h3></legend></div>
-<?php endif; ?>
+
+<h2 id="valitse_asiakas" class="text-danger">Valitse asiakas.</h2>
+
+<div id="laskurivien_teko" style="display:none; z-index: 1">
+	<div class="form-check">
+	  <input class="form-check-input" type="radio" name="flexRadioDefault" id="la_mukaan" style="transform: scale(2);">
+	  &nbsp;&nbsp;&nbsp;
+	  <label class="form-check-label" for="flexRadioDefault1">
+		<h3>Laskurivit kirjauksen mukaisesti. Ohjelma itse tarjoa laskuriveja mobiilista tai työvuoroista.</h3>
+	  </label>
+	</div>
+	<div class="form-check">
+	  <input class="form-check-input" type="radio" name="flexRadioDefault" id="man_mukaan" style="transform: scale(2);">
+	  &nbsp;&nbsp;&nbsp;
+	  <label class="form-check-label" for="flexRadioDefault2">
+		<h3>Laskurivit manuaalisesti. Joka rivi luodaan käsin.</h3>
+	  </label>
+	</div>
+</div>
+
 	
 <div id="la_laatikko" style="display:none; z-index: 1">
 	<div class="form-inline">
@@ -758,11 +775,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 <?php endif; ?>
 <!-- l_asiakkaat -->
 
-<?php if(!isset($model->id)): ?>
-<legend><h3>Luo laskurivit manuaallisesti. <span class="small">Plussa ikoonilla lisätään riveja.</span></h3></legend>
-<?php endif; ?>
-
-<div id="rivit">
+<div id="rivit" <?=(!isset($model->id))? 'style="display:none; z-index: 1"': '' ?>>
 	<TABLE class="table well" id="TableRivit">
 	<TR>
 	<thead class="myBgColors">
@@ -839,16 +852,24 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</TABLE>
 </div>
 
-
-<div id="lisatietoja_laskutuksesta"></div>
-<div id="hinnoitelu"></div>
+<p>
+	<div id="lisatietoja_laskutuksesta"></div>
+	<div id="hinnoitelu"></div>
+</p>
 
 
 	<div class="section fill mb5 subm">
 
-		<?php if(!isset($model->id) or $model->tilanne == '0') : ?>
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Tallenna' : ((!empty($model->yhteensa_total))? 'Tallenna':'Tarkista tiedot ja Tallenna'),array('class'=>'btn  btn-primary myBgColors')); ?>
-		<?php endif; ?>
+		<?php 
+		if(!isset($model->id))
+		{
+			echo CHtml::submitButton('Luo lasku',array('class'=>'btn btn-primary myBgColors tallennus_nappi', 'style' => 'display:none'));
+		} else {
+			if($model->tilanne == '0')
+			echo CHtml::submitButton(((!empty($model->yhteensa_total))? 'Tallenna':'Tarkista tiedot ja Tallenna'),array('class'=>'btn btn-primary myBgColors'));	
+		}
+		?>
+
 
 		<?php if(!empty($model->yhteensa_total)): ?>
 
@@ -1516,8 +1537,8 @@ function ajaxForLasku()
 				var data = JSON.parse(data);
 				//console.log(data);
 				
-				$('.la_laatikko').show().css({'margin-top' : '50px'});
-				$('#la_laatikko').addClass('well').show();
+				//$('.la_laatikko').show().css({'margin-top' : '50px'});
+				//$('#la_laatikko').addClass('well').show();
 				$('#kuukausi_kalentteri').show();
 				$('#kalut').html('<div class="col-sm-12">' + data + '</div>').show(370);
 				var sum = 0;
@@ -1551,10 +1572,27 @@ function datepickerLA()
 				autoclose: true
 			});
 }
+
+$(document).delegate(".form-check-input", "change", function(){
+	var thisId = $(this).attr('id');
+	if(thisId == 'la_mukaan')
+	{
+		$('#la_laatikko').addClass('well').show().css({'margin-top' : '50px'});
+		$('.tallennus_nappi, #rivit').hide();
+	} else
+	if(thisId == 'man_mukaan')
+	{
+		$('#la_laatikko').removeClass('well').hide();
+		$('.tallennus_nappi, #rivit').show();
+	}	
+});
 //  Laskutettavata asiakkaat NEW 06.05.2021 -->
 
 var getkohdeT = '';
 $("#Lasku_as_nro").change(function() {
+	$('#valitse_asiakas').hide();
+	$('#laskurivien_teko').show();
+	
     var l_asiakkaat = '<?=((isset($_GET["l_asiakkaat"]))? "true" : "false") ?>';
     var asiakas = $("#Lasku_as_nro option:selected").val();
     var asiakas_id = $("#Lasku_as_nro option:selected").attr('asiakas_id');

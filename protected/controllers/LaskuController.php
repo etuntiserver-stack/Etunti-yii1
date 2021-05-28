@@ -2453,7 +2453,7 @@ exit;
 		
 		$body .= '
 			<br>
-			<p><span class="btn-block btn btn-info laskutetuksi" asiakas_id="'.$asiakas_id.'" from="'.$from.'" to="'.$to.'" etunti_tunniste="'.$etunti_tunniste.'" style="display:none">LUO UUSI LASKU</span></p>
+			<p><span class="btn btn-primary laskutetuksi myBgColors" asiakas_id="'.$asiakas_id.'" from="'.$from.'" to="'.$to.'" etunti_tunniste="'.$etunti_tunniste.'" style="display:none">Luo lasku</span></p>
 		';
 		
 		echo json_encode($body);
