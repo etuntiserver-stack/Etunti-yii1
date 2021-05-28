@@ -855,7 +855,7 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 	<!-- Tuotteet palvelut -->
 */ ?>
 <br>
-	<?php $poistetaan = 'Tämä valinta poistetaan 06/2021'; ?>
+	<?php $poistetaan = 'Poistetaan käytöstä 07/2021'; ?>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alv'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
 		<?php
