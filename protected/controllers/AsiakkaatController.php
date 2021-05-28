@@ -40,7 +40,7 @@ class AsiakkaatController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus', 'kaikki_netvisoriin', 'freshdesk', 'freshdesk_ticket', 'puhnro_korjaus', 'email_history'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus', 'kaikki_netvisoriin', 'freshdesk', 'freshdesk_ticket', 'puhnro_korjaus', 'email_history', 'integromat_upsert'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -508,6 +508,13 @@ class AsiakkaatController extends Controller
 				}
 				//  Netvisor -->
 
+				// integromat webhook (kotipuhtaaksi)
+				// sends client data to a web hook to be processed further
+				$domain = Yii::app()->user->domain;
+				if($domain == "kotipuhtaaksi") {
+					$this->integromatUpsert($model);
+				}
+
 
 				if(empty($model->asiakasnumero))
 				$a = Asiakkaat::model()->updatebypk($model->id, array('asiakasnumero'=>$model->id));
@@ -750,6 +757,13 @@ Yritys '.$yr.'
 				}
 			    }
 			   //  Netvisor -->
+				// integromat webhook
+			   	$domain = Yii::app()->user->domain;
+				if($domain == "kotipuhtaaksi") {
+					// disable for now. TODO: only trigger this update when
+					// any meaningful data changes
+					//$this->integromatUpsert($model);
+				}
 
 				Yii::app()->user->setFlash('success', "Tallennettu.");
 				$this->redirect(array('index'));
@@ -2542,4 +2556,94 @@ $xml = '
 		echo json_encode($json_logs);
 	}
   }
+
+  /**
+   * Sends clients data to a integromat web hook (hardcoded address
+   * for kotipuhtaaksi, since it's the only company using this integration at the moment)
+   * if this becomes something that is widely used, we'd need to make a field
+   * to the settings model.
+   * 
+   * This function is called from actionCreate and actionUpdate.
+   * 
+   * The endpoint expects the following information:
+   * name, phone number, email and postal code.
+   */
+  protected function integromatUpsert(Asiakkaat $client) {
+
+	// get first and last name
+	$first_name = $client->etunimi;
+	$last_name = $client->sukunimi;
+	// get phone number
+	$phoneNumber = $client->puhelin;
+	// return early if phone number isn't at least 13 digits long.
+	// that should be a fully defined phone number with +358 country code.
+	if(strlen($phoneNumber) < 13) {
+		return;
+	}
+
+	// get email
+	$email = $client->sahkoposti;
+	// return early if email is not defined
+	if(!$email) {
+		return;
+	}
+
+	// get postal code
+	$postalCode = $client->postinumero;
+
+	// kotipuhtaaksi only: figure out if the client is "jatkuva"
+	// $list = array(1=>Yii::t('main', 'Jatkuva'), 2=>Yii::t('main', 'Kerta'), 3=>Yii::t('main', 'Määräaikainen'));
+	// echo $form->dropDownList($model, 'sopimustyyppi', $list,
+	// array('class'=>'form-control'));	
+	// php echo $form->error($model,'sopimustyyppi'); 
+	// judging from the clients update form, jatkuva seems to hardcoded to "1"
+	$continuous = $client->sopimustyyppi == 1 ? 1 : 0;
+
+	// include whether the client is active/passive, based on aktiivinen field and
+	// "lopetuksen_pvm" field. if aktiivinen = 1, we'll also check if lopetuksen_pvm exists.
+	$active = $client->aktiivinen;
+	if($active) {
+		if(strlen($client->lopetuksen_pvm)) {
+			$active = 0;
+		}
+	}
+
+	// build request body
+	$body = [
+		"phone" => $phoneNumber,
+		"first_name" => $first_name,
+		"last_name" => $last_name,
+		"email" => $email,
+		"postalCode" => $postalCode,
+		"active" => $active,
+		"continuous" => $continuous,
+	];
+
+	
+	// build request headers
+	$headers = ["Content-Type: application/json"];
+	
+	$url = "https://hook.integromat.com/6xo5bs3p15hrc1wv5ph51i08e0stgxem";
+	// open curl
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	// set url
+	curl_setopt($ch, CURLOPT_URL, $url);
+	// set http verb to POST
+	curl_setopt($ch, CURLOPT_POST, true);
+	// set post body
+	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+	// define headers
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	// I tnink this actually sets the headers into the request
+	// "CURLOPT_HEADER - pass headers to the data stream"
+	curl_setopt($ch, CURLOPT_HEADER, true);
+	$response = curl_exec($ch);
+
+	// close curl
+	curl_close($ch);
+
+	return $response;
+  }
+
 }

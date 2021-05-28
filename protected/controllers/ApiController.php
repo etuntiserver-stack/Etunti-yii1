@@ -1622,6 +1622,11 @@ public function actionImei($dom)
 			$this->autoHyvaksynta($mobupdate->id);
 			//     Auto hyvaksynta -->
 
+			// <-- buenno integration
+			$domainit = Domainit::model()->find(" domain='".strtolower($dom)."' ");
+			$this->buennoInvitation($mobupdate, $domainit->domain);
+			// buenno integration -->
+
 			// <-- LOG
 			if( isset($mobupdate->id) )
 			{
@@ -1900,6 +1905,192 @@ public function actionImei($dom)
 		}
 		$sp1 .= '</div>';
 		return $sp1;
+	}
+
+	/**
+	 * Creates a buenno invation from the workshift.
+	 * 
+	 * At the time of writing this, only kotipuhtaaksi
+	 * uses buennos services, which is why the function
+	 * will check if $domain == kotipuhtaaksi.
+	 * 
+	 * Sends a POST request to the buenno API.
+	 * In our case, the API is expecting the following fields:
+	 * 
+	 * phone, which is the phone number where the actual invitation link will be sent to.
+	 * the phone field will also act as an identifier, to prevent duplicate invitations from
+	 * being sent in a given time period (in our case the time period should be 3 days)
+	 * 
+	 * pf_store, which is used to identify where the client was in finland.
+	 * this can be later used to filter responses to the invitations.
+	 * 
+	 * pf_target, which is used to identify the employees
+	 * who completed this shift.
+	 * 
+	 * first_name, the clients first name
+	 * last_name, the clients last name
+	 * pf_external_id, the ID of the client in Etunti
+	 * 
+	 * buennos documentation can be found at:
+	 * https://buenno-research.github.io/api/#create-invitation
+	 * (base url is actually https://webreport.buenno.fi)
+	 * 
+	 */
+	protected function buennoInvitation(Mobile $mobile, $domain) {
+		// return early if domain not kotipuhtaaksi
+		if($domain != "kotipuhtaaksi") return;
+		// return early if workshifts status isn't 3 (completed)
+		if($mobile->status != 3) return;
+
+		// get workshift with mobiles tv_id, which we can use to get
+		// all of the employees IDs, which we can use to get their names.
+
+		// get clients "työryhmä", which is used as the store identifier by buenno
+		// "työryhmä" is in sivex_selects table with the select_type of "tyoryhma"
+		// get clients phone number, which is the number where the invitation is sent
+		// and it is used as an identifier to prevent duplicate invitations by buenno
+		// phone numbers should include the country code, but the + sign should be replaced with 00
+		// in example: +358123123 would be 00358123123
+
+		// pf_target field should include the employees names, separated with a + sign
+		// in example: Minna Meikäläinen + Matti Meikäläinen
+
+
+		// get API key from Asetukset
+		$asetukset = Asetukset::model()->findByPk(1);
+		$apiKey = $asetukset->buenno_api_key;
+		// throw exception if API key is not defined
+		if(!$apiKey) {
+			throw new Exception("Buenno API key is not defined!");
+		}
+
+
+		// get Workshift
+		$shift = Tyovuoroot::model()->findByPk($mobile->tv_id);
+
+		// get employee names
+		$names = $this->getEmployeeNames($shift);
+		$encoded_names = "";
+		foreach($names as $name) {
+			$encoded_names .= $name . " + ";
+		}
+		// if names are still empty here, it should mean this shift only has
+		// 1 employee in it, in which case we will fetch their name.
+		// if not:
+		// removes the trailing " + "
+		$encoded_names = empty($encoded_names) ? $this->etuSukunimi($shift->tid) : substr($encoded_names, 0, -3);
+
+		// throw exception if names are still empty.
+		if(empty($encoded_names)) {
+			throw new Exception("Employee (Tyontekijat) names were empty.");
+		}
+
+		// get property, which can be used to get the client
+		$property = Kohteet::model()->findByPk($shift->kohde);
+		// throw exception if property not found
+		if(!$property) {
+			throw new Exception("Property (Kohde) not found");
+		}
+		// get client
+		$client = Asiakkaat::model()->findByPk($property->asiakas_id);
+		// throw exception if client not found
+		if(!$client) {
+			throw new Exception("Client (Asiakkaat) not found");
+		}
+
+		// get "tyoryhma" name
+		$workGroupId = $client->tyoryhma;
+		$workGroup = Valikkoot::model()->findByPk($workGroupId);
+		$workGroupName = $workGroup->value;
+
+		// get clients phone number
+		$phoneNumber = $client->puhelin;
+		if(!$phoneNumber) {
+			throw new Exception("Phone number is not defined! Client ID: " . $client->id);
+		}
+		// take a substring of the phone number, which doesn't include the
+		// + in the front
+		$phoneNumber = substr($phoneNumber, 1, strlen($phoneNumber) - 1);
+		// prepend the number with two 00 in the place of the +
+		// now the number should be something like this:
+		// 00358123123, which is what buenno wants.
+		$phoneNumber = "00" . $phoneNumber;
+
+
+		$url = "https://webreport.buenno.fi/api/v01/invitations";
+		// build headers
+		$headers = ["Content-Type: application/json"];
+		$headers[] = "api-auth-token: " . $apiKey;
+
+		// build request body
+		$body = [
+			"phone" => $phoneNumber,
+			"first_name" => $client->etunimi,
+			"last_name" => $client->sukunimi,
+			"pf_store" => $workGroupName,
+			"pf_external_id" => $client->id,
+			"pf_target" => $encoded_names,
+			"pf_timestamp" => time(),
+		];
+
+		// open curl
+		$ch = curl_init();
+
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		// set url
+		curl_setopt($ch, CURLOPT_URL, $url);
+		// set http verb to POST
+		curl_setopt($ch, CURLOPT_POST, true);
+		// set post body
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+		// set headers
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		// I think this actually sets the headers into the request
+		curl_setopt($ch, CURLOPT_HEADER, true);
+		// execute query
+		$response = curl_exec($ch);
+
+		$logResponse = $response;
+		if(curl_errno($ch)) {
+			$logResponse = curl_error($ch);
+		}
+
+		// close curl
+		curl_close($ch);
+
+		// <-- LOG
+	
+		$model_log 	= 'Mob';
+		$name_log 	= 'Buenno';
+		$status_log 	= 'Logged result';
+
+		$old_values = json_encode($body);
+		$new_values = json_encode($logResponse);
+		$site = Yii::app()->createController('Site');
+		$site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+		
+
+		
+		return $response;
+	}
+
+	/**
+	 * Returns employees names in an array.
+	 * Expects the Tyovuoroot tyopaari kenttä to have
+	 * the employee IDs in a JSON object like this:
+	 * {"shiftId1": "employeeId1", "shiftId2": "employeeId2"}
+	 */
+	private function getEmployeeNames(Tyovuoroot $shift) {
+		// return early if "tyopaari" field is empty
+		if(empty($shift->tyopaari)) return "";
+
+		$employees = json_decode($shift->tyopaari, true);
+		$employeeNames = [];
+		foreach($employees as $shiftId => $employeeId) {
+			$employeeNames[] = $this->etuSukunimi($employeeId);
+		}
+		return $employeeNames;
+
 	}
 
 	protected function autoHyvaksynta($id)

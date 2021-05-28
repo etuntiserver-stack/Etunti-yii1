@@ -587,7 +587,7 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
         if (errors.length > 0) {
           let text = 'Korjaa seuraavat tiedot puhelinnumerossa:<br><ul>';
           errors.forEach((item, index) => { text += `<li>${item}</li>`; });
-          text += '<li>Laita muut tiedot sekä numerot allaolevaan "toissijainen puhelinnumero" kenttään.</li></ul>';
+          text += '<li>Laita muut tiedot muistiinpanoiksi.</li></ul>';
           $('#puhelin-varoitus').html(text).show();
           $('#puhelin-submitvaroitus').show();
           $('#asiakas-submit').attr('disabled', 'disabled');
@@ -621,9 +621,87 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'toissijainen_puhelinnumero'); ?>
-		<?php echo $form->textarea($model,'toissijainen_puhelinnumero',array('class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'toissijainen_puhelinnumero',array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'toissijainen_puhelinnumero'); ?>
+		<div id="secondary-phone-warning" class="alert alert-danger text-dark" style="display:none"><ul></ul></div>
 	</div>
+
+	<!-- Enable phone number validation only when Freshdesk is enabled.
+	Freshdesk requires phone numbers to have the area code (e.g. +358).
+	If Freshdesk is inactive in this domain, the format doesn't matter. -->
+	<?php if (!$freshdesk->isDisabled()): ?>
+	<script>
+	$(function() {
+
+		/**
+		* Validate phone number for Freshdesk.
+		*
+		* Freshdesk requires phone numbers to contain area code (e.g. +358) and
+		* no whitespace between digits.
+		*
+		* Instead of directly preventing "invalid" data, which might break
+		* something else, we give notice and hide the submit button until data is
+		* valid for Freshdesk.
+		*
+		* This should only be used when Freshdesk is enabled on the domain.
+		*/
+		const validateSecondaryPhoneNumber = function() {
+
+			const val = $('#Asiakkaat_toissijainen_puhelinnumero').val();
+			let errors = [];
+
+			// validate only if something exists in the field.
+			if(val.length > 0) {
+				// Check that the phone number contains area code.
+				if (!/^\+.*$/.test(val)) {
+					errors.push('Aluekoodi vaaditaan (esim. +358).');
+				}
+
+				// Check for spaces in the number.
+				if (/\s+/.test(val)) {
+					errors.push('Puhelinnumero ei saa sisältää välilyöntejä.');
+				}
+
+				// check for text
+				if(/[A-z]/.test(val)) {
+					errors.push("Puhelinnumero ei saa sisältää tekstiä.");
+				}
+			}
+
+			if (errors.length > 0) {
+				let text = 'Korjaa seuraavat tiedot toissijaisessa puhelinnumerossa:<br><ul>';
+				errors.forEach((item, index) => { text += `<li>${item}</li>`; });
+				text += '<li>Laita muut tiedot muistiinpanoiksi.</li></ul>';
+				$('#secondary-phone-warning').html(text).show();
+				$('#seconday-phone-submitwarning').show();
+				$('#asiakas-submit').attr('disabled', 'disabled');
+				return false;
+			} else {
+				$('#secondary-phone-warning').html('').hide();
+				$('#seconday-phone-submitwarning').hide();
+				$('#asiakas-submit').removeAttr('disabled');
+				return true;
+			}
+		};
+
+		/**
+		* Hook phone number validation to keyup event on the number field.
+		*/
+		$('#Asiakkaat_toissijainen_puhelinnumero').keyup(function() {
+			validateSecondaryPhoneNumber();
+		});
+
+		/**
+		* Hook phone number validation to form submission.
+		*/
+		$('#asiakkaat-form').on('submit', function(e) {
+			if (!validateSecondaryPhoneNumber()) {
+				e.preventDefault();
+			}
+		});
+	});
+	</script>
+  <?php endif; ?>
 
 	<br>
 	<legend><?php echo Yii::t('main', 'Käyntiosoite'); ?> <input type="checkbox" data-toggle="collapse" data-target="#kosoiteet"></legend>
@@ -990,6 +1068,7 @@ if (
 	<div class="section">
     <?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('main', 'Luo') : Yii::t('main', 'Tallenna'),array('id' => 'asiakas-submit', 'class'=>'btn btn-primary myBgColors luoTallennaAsiakas')); ?>
     <p id="puhelin-submitvaroitus" class="text-alert" style="display:none">Korjaa puhelinnumero ennen tallentamista.</p>
+	<p id="secondary-phone-submitwarning" class="text-alert" style="display:none">Korjaa toissijainen puhelinnumero ennen tallentamista.</p>
 	</div>
 
 
