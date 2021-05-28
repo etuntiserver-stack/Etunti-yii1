@@ -692,8 +692,11 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 ?>
 </div>
 
+<?php if(!isset($model->id)): ?>
+<div class="la_laatikko" style="display:none; z-index: 1"><legend><h3>Luo laskurivit kirjauksen mukaisesti. <span class="small">Laskurivit luodaan alla olevan taulun mukaisesti.</span></h3></legend></div>
+<?php endif; ?>
+	
 <div id="la_laatikko" style="display:none; z-index: 1">
-	<h3>Uusi työkalu</h3>
 	<div class="form-inline">
 
 	  <input type="text" id="la_from" value="<?=date("Y-m-d", strtotime('first day of previous month'))?>" style="display:none">
@@ -735,8 +738,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 
 <?php if(!isset($model->id)) : ?> 
 <div id="ilmoitusAllennusta"></div>
-<?php endif; ?> 
-
+<?php endif; ?>
 <br>
 
 
@@ -756,11 +758,14 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 <?php endif; ?>
 <!-- l_asiakkaat -->
 
-<div id="rivit">
-<TABLE class="table well" id="TableRivit">
+<?php if(!isset($model->id)): ?>
+<legend><h3>Luo laskurivit manuaallisesti. <span class="small">Plussa ikoonilla lisätään riveja.</span></h3></legend>
+<?php endif; ?>
 
-     <TR>
-     <thead class="myBgColors">
+<div id="rivit">
+	<TABLE class="table well" id="TableRivit">
+	<TR>
+	<thead class="myBgColors">
 	<TH style="width:1%"><span id="uusiRivi" class="link" style="font-size: 150%;"><i class="fa fa-plus-square"></i></span></TH>
 	<TH class="col-sm-2">Tuote/Palvelu</TH>
 	<TH class="col-sm-1">Määrä</TH>
@@ -772,52 +777,52 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<TH class="col-sm-1">Veroton</TH>
 	<TH class="col-sm-1">Yht</TH>
 	<TH class="col-sm-1">Viesti</TH>
-     </thead>
-     </TR>
+	</thead>
+	</TR>
 
-     <tbody>
-		<?php 
-		$num = 0;
-		if(isset($model->id)){
+	<tbody>
+	<?php 
+	$num = 0;
+	if(isset($model->id)){
 
-			// <-- Hinnoitelu näkyvyys logikka
-			$kohde_ids_all = [];
-			foreach($laskunRivit as $rivi){
-				if(!empty($rivi->kohde_ids))
-				{
-					$kids = json_decode($rivi->kohde_ids, true);
-					foreach($kids as $kid)
-						$kohde_ids_all[$kid] = $kid; 
-				}
-			}
-			$kohden_hinnoittelut = [];
-			$impl = "id='".implode("' OR id='", $kohde_ids_all)."'";
-			$kohteet = Kohteet::model()->findAll("$impl");
-			foreach($kohteet as $item)
-				$kohden_hinnoittelut[$item->id] = ['hinnoittelu' => $item->hinnoittelu, 'osoite' => $item->osoite];
-			//    Hinnoitelu näkyvyys logikka -->
-			
-			foreach($laskunRivit as $rivi)
-			{ 
-				$num++;
-				$kids = [];
-				if(!empty($rivi->kohde_ids))
-					$kids = json_decode($rivi->kohde_ids, true);
-
-				echo $this->renderPartial("//lasku/tr_rivi_update", [
-					'num' => $num, 
-					'rivi' => $rivi,
-					'kids' => $kids,
-					'kohden_hinnoittelut' => $kohden_hinnoittelut
-					
-				]);
+		// <-- Hinnoitelu näkyvyys logikka
+		$kohde_ids_all = [];
+		foreach($laskunRivit as $rivi){
+			if(!empty($rivi->kohde_ids))
+			{
+				$kids = json_decode($rivi->kohde_ids, true);
+				foreach($kids as $kid)
+					$kohde_ids_all[$kid] = $kid; 
 			}
 		}
-		?>
-     </tbody>
+		$kohden_hinnoittelut = [];
+		$impl = "id='".implode("' OR id='", $kohde_ids_all)."'";
+		$kohteet = Kohteet::model()->findAll("$impl");
+		foreach($kohteet as $item)
+			$kohden_hinnoittelut[$item->id] = ['hinnoittelu' => $item->hinnoittelu, 'osoite' => $item->osoite];
+		//    Hinnoitelu näkyvyys logikka -->
+		
+		foreach($laskunRivit as $rivi)
+		{ 
+			$num++;
+			$kids = [];
+			if(!empty($rivi->kohde_ids))
+				$kids = json_decode($rivi->kohde_ids, true);
 
-     <tfoot>
-     <TR>
+			echo $this->renderPartial("//lasku/tr_rivi_update", [
+				'num' => $num, 
+				'rivi' => $rivi,
+				'kids' => $kids,
+				'kohden_hinnoittelut' => $kohden_hinnoittelut
+				
+			]);
+		}
+	}
+	?>
+	</tbody>
+
+	<tfoot>
+	<TR>
 	<TD></TD>
 	<TD></TD>
 	<TD></TD>
@@ -829,16 +834,15 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<TD><input type="text" class="form-control" size="10" name="Lasku[yhteensa_total_veroton]" id="yhteensa_total_veroton" readonly></TD>
 	<TD><input type="text" class="form-control" size="10" name="Lasku[yhteensa_total]" id="yhteensa_total" readonly></TD>
 	<TD></TD>
-     </TR>
-     </tfoot>
-</TABLE>
-<p><div id="lisatietoja_laskutuksesta"></div></p>
+	</TR>
+	</tfoot>
+	</TABLE>
 </div>
 
-<br>
-	<div id="hinnoitelu"></div>
 
-<br><br><br><br><br><br>
+<div id="lisatietoja_laskutuksesta"></div>
+<div id="hinnoitelu"></div>
+
 
 	<div class="section fill mb5 subm">
 
@@ -1512,7 +1516,8 @@ function ajaxForLasku()
 				var data = JSON.parse(data);
 				//console.log(data);
 				
-				$('#la_laatikko').addClass('well').show().css({'margin-top' : '50px'});
+				$('.la_laatikko').show().css({'margin-top' : '50px'});
+				$('#la_laatikko').addClass('well').show();
 				$('#kuukausi_kalentteri').show();
 				$('#kalut').html('<div class="col-sm-12">' + data + '</div>').show(370);
 				var sum = 0;
@@ -1641,7 +1646,7 @@ $("#Lasku_as_nro").change(function() {
 			$("#Lasku_sahkoposti").val(sp[14])
 			$("#Lasku_viivastyskorko").val(sp[15])
 			$("#Lasku_netvisor_dimension_name").val(sp[16] + '//' + sp[17]);
-			$("#lisatietoja_laskutuksesta").html(sp[18]);
+			$("#lisatietoja_laskutuksesta").html('<br>' + sp[18]);
 			
 			// <-- Laskutettavat Asiakkaat
 			ajaxForLasku();
