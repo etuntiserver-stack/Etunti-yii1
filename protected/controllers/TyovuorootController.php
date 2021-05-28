@@ -1472,13 +1472,16 @@ class TyovuorootController extends Controller
 			$tiedostot .= '</div>';
 		}
 
-		$tuote = 0;
+		$tuote 				= 0;
+		$tuotteen_yksikko 	= '';
 		if(isset($m->tuote) and $m->tuote != 0)
+		{
 			$tuote = $m->tuote;
-		if($tuote == 0 and isset($m->asiakkaat->tuote) and $m->asiakkaat->tuote != 0)
-			$tuote = $m->asiakkaat->tuote;
+			if(isset($m->tuotteet->yksikko))
+				$tuotteen_yksikko = $m->tuotteet->yksikko;
+		}
 			
-		echo json_encode(array($ohje,$tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt,$m->puh_nro,$m->email,$m->arvioitu_kello_alku,$m->arvioitu_kello_loppu, $tiedostot, $url_linkit, $tuote));
+		echo json_encode(array($ohje,$tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt,$m->puh_nro,$m->email,$m->arvioitu_kello_alku,$m->arvioitu_kello_loppu, $tiedostot, $url_linkit, $tuote, $tuotteen_yksikko));
 		exit;
 	}
 
