@@ -1978,7 +1978,7 @@ public function actionImei($dom)
 		// 1 employee in it, in which case we will fetch their name.
 		// if not:
 		// removes the trailing " + "
-		$encoded_names = empty($encoded_names) ? $this->etuSukunimi($shift->tid) : substr($encoded_names, 0, -3);
+		$encoded_names = empty($encoded_names) ? $this->parseName($this->etuSukunimi($shift->tid)) : substr($encoded_names, 0, -3);
 
 		// throw exception if names are still empty.
 		if(empty($encoded_names)) {
@@ -2087,10 +2087,30 @@ public function actionImei($dom)
 		$employees = json_decode($shift->tyopaari, true);
 		$employeeNames = [];
 		foreach($employees as $shiftId => $employeeId) {
-			$employeeNames[] = $this->etuSukunimi($employeeId);
+			$name = $this->parseName($this->etuSukunimi($employeeId));
+			$employeeNames[] = $name;
 		}
 		return $employeeNames;
+	}
 
+	/**
+	 * Parses any additional stuff out of an name
+	 * example of an employees name in kotipuhtaaksi domain could be:
+	 * 400 Meikäläinen (K, S) Matti
+	 * we're looking to extract only Meikäläinen and Matti from that name
+	 */
+	private function parseName($name) {
+		// https://www.phpliveregex.com/p/Az6
+		// http://www.regular-expressions.info/unicode.html#category
+		// \p{L} or \p{Letter}: any kind of letter from any language.
+		// we can use this to capture Ä, Ö, Å
+		$regex = '/([\pL]+\w)/u';
+		preg_match_all($regex, $name, $matches);
+		$parsedName = "";
+		foreach($matches[0] as $part) {
+			$parsedName .= $part . " ";
+		}
+		return trim($parsedName);
 	}
 
 	protected function autoHyvaksynta($id)
