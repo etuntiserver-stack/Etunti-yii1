@@ -855,6 +855,8 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 	<!-- Tuotteet palvelut -->
 */ ?>
 <br>
+	<b class="text-danger">Huomio! <br>Hintojen antaaminen poliitikka on muutunut. Tuote määrittelään kohdekortilla.</b>
+	<br><br>
 	<?php $poistetaan = 'Poistetaan käytöstä 07/2021'; ?>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alv'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>

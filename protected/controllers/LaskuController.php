@@ -1151,12 +1151,14 @@ exit;
 		return $return; 
 	}
 
-	public function actionTuotepalvelukohdelle($id, $tuote, $hinnasto)
+	public function actionTuotepalvelukohdelle($id, $laskurivi_tyyppi, $tuote_h, $tuote_kk, $hinnasto)
 	{
 		$k = Kohteet::model()->findByPk($id);
 		if(isset($k->id))
 		{
-			$k->tuote 		= $tuote;
+			$k->laskurivi_tyyppi = $laskurivi_tyyppi;
+			$k->tuote_h		= $tuote_h;
+			$k->tuote_kk	= $tuote_kk;
 			$k->hinnasto_id = $hinnasto;
 			if(!$k->save())
 			{
@@ -1185,7 +1187,12 @@ exit;
 			$return['nimike'] 	= '';
 
 		if( $for == 'kohde')
-			$tuote_id = $model->tuote;
+		{
+			if($model->laskurivi_tyyppi == 'tunti')
+				$tuote_id = $model->tuote_h;
+			if($model->laskurivi_tyyppi == 'kk')
+				$tuote_id = $model->tuote_kk;
+		}
 		if( $for == 'tyovuoro')
 			$tuote_id = $model->tuoteID;
 		if( $for == 'tyovuoro_lisatuote')
@@ -1215,7 +1222,7 @@ exit;
 			// <-- Kohde
 			if( $for == 'kohde')
 			{
-				if($model->hinnasto_id != 0 and $model->tuote != 0)
+				if($model->hinnasto_id != 0)
 				{
 					$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$tuote_id."' AND hinnastot_id='".$model->hinnasto_id."'");
 					if(isset($hinnasto->id))
@@ -1818,14 +1825,14 @@ exit;
 		// <-- KK logikka
 		$kk_hinta = [];
 
-		$kohteet 		= Kohteet::model()->findAll("asiakas_id='".$asiakas_id."'");
+		$kohteet 		= Kohteet::model()->findAll("asiakas_id='".$asiakas_id."' and tuote_kk IS NOT NULL");
 		foreach($kohteet as $item)
 		{	
 			$return = $this->getHintaFor('kohde', $item);
 			if($return['hinta'] > 0 and $return['yksikko'] == 'kk')
 			{
 				$kk_hinta[$item->asiakas_id][$item->id] = [
-						'tuote_id' 		=> $item->tuote,
+						'tuote_id' 		=> $item->tuote_kk,
 						'tuote' 		=> $item->osoite,
 						'hinta' 		=> $return['hinta'], 
 						'alv' 			=> $return['alv'],

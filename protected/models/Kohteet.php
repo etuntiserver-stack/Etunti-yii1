@@ -116,11 +116,19 @@ class Kohteet extends DB2ActiveRecord
 			'kohteen_neliot' => 'float(11) DEFAULT 0',
 			'tyonkuvaus_tiedostot_mobiilissa' => 'int(1) DEFAULT 0',
 			'kustannuspaikka_nro' => 'int(11) DEFAULT 0',
-			'tuote' => 'int(11) DEFAULT 0',
+			'laskurivi_tyyppi' => 'varchar(50) DEFAULT \'tunti\'',
+			'tuote_h' => 'int(11) DEFAULT 0',
+			'tuote_kk' => 'int(11) DEFAULT 0',
 		);
 
-		foreach($table_structure as $key=>$value)
+		// <-- Drop column
+		if(isset($table->columns['tuote']))
 		{
+			Yii::app()->db1->createCommand()->dropColumn($tb_name, 'tuote');
+		}
+		
+		foreach($table_structure as $key=>$value)
+		{		
 			if (!isset($table->columns[$key])) {
 				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
 			}
@@ -139,9 +147,9 @@ class Kohteet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('asiakas_id,etu_suku_nimet,osoite', 'required'),
-			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara, uusi_tilaus, hinnasto_id, alv, tyoryhma, tyonkuvaus_tiedostot_mobiilissa, kustannuspaikka_nro, tuote', 'numerical', 'integerOnly'=>true),
+			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara, uusi_tilaus, hinnasto_id, alv, tyoryhma, tyonkuvaus_tiedostot_mobiilissa, kustannuspaikka_nro, tuote_h, tuote_kk', 'numerical', 'integerOnly'=>true),
 			array('tag_id, kaupunki, toimipaikka, kohteen_neliot', 'length', 'max'=>20),
-			array('gps_sijainti, osoite, katuosoite, kenella_on_avain, puh_nro, hinta_sis_alv, hinta_tyyppi', 'length', 'max'=>50),
+			array('gps_sijainti, osoite, katuosoite, kenella_on_avain, puh_nro, hinta_sis_alv, hinta_tyyppi, laskurivi_tyyppi', 'length', 'max'=>50),
 			array('lyhenne', 'length', 'max'=>46),
 			array('pnumero', 'length', 'max'=>7),
 			array('email', 'length', 'max'=>72),
@@ -166,7 +174,8 @@ class Kohteet extends DB2ActiveRecord
 		        'avaimet' => array(self::HAS_MANY, 'Avaimet', array('kohde'=>'id')),
 		        'asiakkaat' => array(self::BELONGS_TO, 'Asiakkaat', 'asiakas_id'),
 		        'tyovuoroot' => array(self::HAS_MANY, 'Tyovuoroot', array('kohde'=>'id')),
-		        'tuotteet' => array(self::BELONGS_TO, 'TuotteetPalvelut', array('tuote'=>'id')),
+		        'tuotteet_h' => array(self::BELONGS_TO, 'TuotteetPalvelut', array('tuote_h'=>'id')),
+		        'tuotteet_kk' => array(self::BELONGS_TO, 'TuotteetPalvelut', array('tuote_kk'=>'id')),
 		        //'mobile' => array(self::HAS_MANY, 'Mobile', array('kohdenID'=>'id')),
 		);
 	}
@@ -215,6 +224,9 @@ class Kohteet extends DB2ActiveRecord
 			'arvioitu_kello_alku' => Yii::t('main', 'Arvioitu aloitusaika'),
 			'arvioitu_kello_loppu' => Yii::t('main', 'Arvioitu lopetusaika'),
 			'tyonkuvaus_tiedostot_mobiilissa' => Yii::t('main', 'Työnkuvaukset mobiilissa'),
+			'laskurivi_tyyppi' => Yii::t('main', 'Laskurivien tyyppi'),
+			'tuote_h' => Yii::t('main', 'Tuote tunti'),
+			'tuote_kk' => Yii::t('main', 'Tuote kk'),
 		);
 	}
 

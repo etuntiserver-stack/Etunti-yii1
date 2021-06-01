@@ -676,18 +676,20 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 <?php if(!isset($model->id)): ?>
 <div id="tp_valinta" class="form-inline" style="display:none">
 <?php
+	echo CHtml::dropdownList('laskurivi_tyyppi','laskurivi_tyyppi', ['tunti' => 'Laskurivit tunti', 'kk' => 'Laskurivit kk'], 
+		['class'=>'form-control form-group laskurivi_tyyppi']
+	);
 	echo CHtml::dropdownList('','hinnasto', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
 		['empty'=>'Valitse hinnasto','class'=>'form-control form-group la_hinnasto']
 	);
-	
-	$criteria = new CDbCriteria();
-	$criteria->order = " nimike ";
-	$criteria->condition = " 
-		hinta_alv_0!=0
-	";
-	echo CHtml::dropdownList('','tuote', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
-		['empty'=>'Valitse tuote','class'=>'form-control form-group la_tuote']
+	echo CHtml::dropdownList('tuote_h','tuote_h', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='h'"), 'id', 'nimike'), 
+		['empty'=>'Valitse tuntituote','class'=>'form-control form-group la_tuote_h']
 	);
+	echo '<div id="kk_valinta" style="display:none">';
+		echo CHtml::dropdownList('tuote_kk','tuote_kk', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='kk'"), 'id', 'nimike'), 
+			['empty'=>'Valitse kk tuote','class'=>'form-control form-group la_tuote_kk']
+		);
+	echo '</div>';
 	echo '<span class="btn btn-primary btn-block" id="new_hinnasto">Tallenna</span><br>';
 ?>
 </div>
@@ -697,14 +699,14 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 
 <div id="laskurivien_teko" style="display:none; z-index: 1">
 	<div class="form-check">
-	  <input class="form-check-input" type="radio" name="flexRadioDefault" id="la_mukaan" style="transform: scale(2);">
+	  <input class="form-check-input miten_mukaan" type="radio" name="flexRadioDefault" id="la_mukaan" style="transform: scale(2);">
 	  &nbsp;&nbsp;&nbsp;
 	  <label class="form-check-label" for="flexRadioDefault1">
 		<h3>Laskurivit kirjauksen mukaisesti. Ohjelma itse tarjoa laskuriveja mobiilista tai työvuoroista.</h3>
 	  </label>
 	</div>
 	<div class="form-check">
-	  <input class="form-check-input" type="radio" name="flexRadioDefault" id="man_mukaan" style="transform: scale(2);">
+	  <input class="form-check-input miten_mukaan" type="radio" name="flexRadioDefault" id="man_mukaan" style="transform: scale(2);">
 	  &nbsp;&nbsp;&nbsp;
 	  <label class="form-check-label" for="flexRadioDefault2">
 		<h3>Laskurivit manuaalisesti. Joka rivi luodaan käsin.</h3>
@@ -1464,15 +1466,30 @@ $(document).delegate(".laskutetuksi","click",function(e){
 		}
 	});
 });
-	
+
+$(document).delegate("#laskurivi_tyyppi","change",function(){
+	var cl = $(this).closest('td');
+	laskurivityyppi(cl);
+});
+
+function laskurivityyppi(cl)
+{
+	if( cl.find('#laskurivi_tyyppi option:selected').val() == 'kk' )
+	{
+		cl.find('#kk_valinta').show(375);
+	} else {
+		cl.find('#kk_valinta').hide(375);
+		cl.find('#tuote_kk').val('');
+	}
+}
+ 	
 var kohde_id 		= 0;
 var TuotteetBefore 	= '';
 
 $(document).delegate(".tuote_puutu","click",function(){
-	$(this).replaceWith( $('#tp_valinta').html() );
+	var after_replace = $(this).replaceWith( $('#tp_valinta').html() );
 	kohde_id = $(this).attr('kohde_id');
-	TuotteetBefore = $('#tp_valinta').find('.la_tuote').html();
-	
+	TuotteetBefore = $('#tp_valinta').find('.la_tuote_h').html();
 });
 
 $(document).delegate(".la_hinnasto", "change", function(){
@@ -1488,24 +1505,37 @@ $(document).delegate(".la_hinnasto", "change", function(){
 				if(data !== '')
 				{
 					data = JSON.parse(data);
-					cl.find('.la_tuote').html(data);
+					cl.find('.la_tuote_h').html(data);
 				}
 			}
 		});
 		
 	} else {
-		cl.find('.la_tuote').html(TuotteetBefore);
+		cl.find('.la_tuote_h').html(TuotteetBefore);
 	}
 });
 
 $(document).delegate("#new_hinnasto", "click", function(){
 
 	var cl 			= $(this).closest('td');
-	var hinnasto 	= cl.find('.la_hinnasto', 'option:selected').val();
-	var tuote 		= cl.find('.la_tuote', 'option:selected').val();
+	var laskurivi_tyyppi	= cl.find('.laskurivi_tyyppi', 'option:selected').val();
+	var hinnasto 	= parseInt(cl.find('.la_hinnasto', 'option:selected').val()) || 0;
+	var tuote_h		= parseInt(cl.find('.la_tuote_h', 'option:selected').val()) || 0;
+	var tuote_kk	= parseInt(cl.find('.la_tuote_kk', 'option:selected').val()) || 0;
 
+	if(tuote_h == 0)
+	{
+		alert('Tuntituote ei saa olla tyhjä');
+		return false;
+	}
+	if(laskurivi_tyyppi == 'kk' && tuote_kk == 0)
+	{
+		alert('KK tuote ei saa olla tyhjä');
+		return false;
+	}
+		
 	$.ajax({
-		url: 'tuotepalvelukohdelle?id=' + kohde_id + '&tuote=' + parseInt(tuote) + '&hinnasto=' + parseInt(hinnasto),
+		url: 'tuotepalvelukohdelle?id=' + kohde_id + '&laskurivi_tyyppi='+ laskurivi_tyyppi +'&tuote_h=' + tuote_h + '&tuote_kk=' + tuote_kk + '&hinnasto=' + hinnasto,
 		success: function(data){
 			var data = JSON.parse(data);
 			console.log(data);
@@ -1573,7 +1603,7 @@ function datepickerLA()
 			});
 }
 
-$(document).delegate(".form-check-input", "change", function(){
+$(document).delegate(".miten_mukaan", "change", function(){
 	var thisId = $(this).attr('id');
 	if(thisId == 'la_mukaan')
 	{
@@ -1592,6 +1622,7 @@ var getkohdeT = '';
 $("#Lasku_as_nro").change(function() {
 	$('#valitse_asiakas').hide();
 	$('#laskurivien_teko').show();
+	$("#man_mukaan").click();
 	
     var l_asiakkaat = '<?=((isset($_GET["l_asiakkaat"]))? "true" : "false") ?>';
     var asiakas = $("#Lasku_as_nro option:selected").val();

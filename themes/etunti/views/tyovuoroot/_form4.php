@@ -1890,9 +1890,6 @@ $(document).ready(function(){
 				$('#kohteen_tiedostot').html(d[11]);
 			if(d[13])
 				$('#<?=$java_prefix?>_tuoteID').val(d[13]);
-				
-			if(d[14] == 'kk')
-				alert('Huomio! Kohdelle on määritetty tuote joiden yksikkö on "kk", joten luomisessa uutta laskua saat ehdotuksena pelkä yksi laskurivi.\n\n Jokatapauksessa tässä lomakkessa oleva tuote ei saisi olla tuotteena joiden yksikkö on "kk", koska kysessä on vain yksi päivä.');
 			
 			return false;
 
