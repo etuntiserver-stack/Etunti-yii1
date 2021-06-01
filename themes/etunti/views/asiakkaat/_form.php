@@ -223,6 +223,52 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'sahkoposti'); ?>
 	</div>
+	<div id="sahkoposti-varoitus" class="alert alert-danger text-dark" style="display:none"><ul></ul></div>
+
+	<script>
+	
+    $(function() {
+		/**
+		  Validate email
+		 */
+
+		 const validateEmail = function() {
+			const val = $("#Asiakkaat_sahkoposti").val();
+			let errors = [];
+			// check email format
+			// https://emailregex.com/
+			if(val.length > 0 && !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)) {
+				errors.push("Sähköposti on virheellinen");
+			}
+			// check for spaces
+			if (/\s+/.test(val)) { 
+				errors.push("Sähköposti ei saa sisältää välilyöntejä.");
+			}
+
+			if (errors.length > 0) {
+				let text = '<ul>';
+				errors.forEach((item, index) => { text += `<li>${item}</li>`; });
+				$('#sahkoposti-varoitus').html(text).show();
+				$('#sahkoposti-submitvaroitus').show();
+				return false;
+			} else {
+				$('#sahkoposti-varoitus').html('').hide();
+				$('#sahkoposti-submitvaroitus').hide();
+				return true;
+			}
+		 }
+
+		/**
+		  Hook validation to form submit
+		 */
+		$("#asiakkaat-form").on("submit", function(e) {
+			if(!validateEmail()) {
+				e.preventDefault();
+			}
+		});
+
+    });
+  </script>
 
 	<!-- Finnish service wish -->
 	<div class="section fill mb5">
@@ -1071,6 +1117,7 @@ if (
     <?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('main', 'Luo') : Yii::t('main', 'Tallenna'),array('id' => 'asiakas-submit', 'class'=>'btn btn-primary myBgColors luoTallennaAsiakas')); ?>
     <p id="puhelin-submitvaroitus" class="text-alert" style="display:none">Korjaa puhelinnumero ennen tallentamista.</p>
 	<p id="secondary-phone-submitwarning" class="text-alert" style="display:none">Korjaa toissijainen puhelinnumero ennen tallentamista.</p>
+	<p id="sahkoposti-submitvaroitus" class="text-alert" style="display:none">Korjaa sähköposti ennen tallentamista.</p>
 	</div>
 
 

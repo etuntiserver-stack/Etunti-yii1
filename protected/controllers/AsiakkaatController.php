@@ -662,10 +662,12 @@ Yritys '.$yr.'
 
 		if(isset($_POST['Asiakkaat']))
 		{
+
 			if(isset($_POST['Asiakkaat']['verot']))
 			unset($_POST['Asiakkaat']['verot']);
-
+			// copy old attributes
 			$vanha_attr = $model->attributes;
+			// load new attributes
 			$model->attributes=$_POST['Asiakkaat'];
 			if( is_array($model->muistiinpano) and count($model->muistiinpano) > 0 ){
 				$model->muistiinpano = json_encode($model->muistiinpano, JSON_FORCE_OBJECT);
@@ -757,12 +759,13 @@ Yritys '.$yr.'
 				}
 			    }
 			   //  Netvisor -->
+			   // check if meaningful data changes
+			   // (email, phone, names, postal code, active/inactive and quitting)
+			   	$integromatDataChanged = $this->integromatDataChanged($vanha_attr, $model->attributes);
 				// integromat webhook
 			   	$domain = Yii::app()->user->domain;
-				if($domain == "kotipuhtaaksi") {
-					// disable for now. TODO: only trigger this update when
-					// any meaningful data changes
-					//$this->integromatUpsert($model);
+				if($domain == "kotipuhtaaksi" and $integromatDataChanged) {
+					$this->integromatUpsert($model);
 				}
 
 				Yii::app()->user->setFlash('success', "Tallennettu.");
@@ -2644,6 +2647,37 @@ $xml = '
 	curl_close($ch);
 
 	return $response;
+  }
+
+
+  /**
+   * Compares attributes that we would sen to integromat, if the old models
+   * attributes don't match with the new attributes that would be saved to the database,
+   * return true for "has changed". Otherwise return false for "not changed".
+   * This can be used to reduce the number of updates sent to integromat.
+   */
+  protected function integromatDataChanged($old_attributes, $new_attributes) {
+
+	if($old_attributes["sahkoposti"] != $new_attributes["sahkoposti"]) {
+		return true;
+	} else if($old_attributes["etunimi"] != $new_attributes["etunimi"]) {
+		return true;
+	} else if($old_attributes["sukunimi"] != $new_attributes["sukunimi"]) {
+		return true;
+	} else if($old_attributes["puhelin"] != $new_attributes["puhelin"]) {
+		return true;
+	} else if($old_attributes["postinumero"] != $new_attributes["postinumero"]) {
+		return true;
+	} else if($old_attributes["sopimustyyppi"] != $new_attributes["sopimustyyppi"]) {
+		return true;
+	} else if($old_attributes["lopetuksen_pvm"] != $new_attributes["lopetuksen_pvm"]) {
+		return true;
+	} else if($old_attributes["aktiivinen"] != $new_attributes["aktiivinen"]) {
+		return true;
+	}
+	
+
+	return false;
   }
 
 }
