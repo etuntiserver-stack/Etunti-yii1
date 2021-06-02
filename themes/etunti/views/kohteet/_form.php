@@ -150,9 +150,10 @@ if(empty($model->tietoja))
 			if( $('#Kohteet_laskurivi_tyyppi option:selected').val() == 'kk' )
 			{
 				$('#kk_valinta').show(375);
+				$('#Kohteet_tuote_kk').attr('required', 'yes');
 			} else {
 				$('#kk_valinta').hide(375);
-				$('#Kohteet_tuote_kk').val('');
+				$('#Kohteet_tuote_kk').val('').removeAttr('required');
 			}
 	 	}
 	 	
