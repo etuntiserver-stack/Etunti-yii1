@@ -2000,6 +2000,13 @@ public function actionImei($dom)
 
 		// get "tyoryhma" name
 		$workGroupId = $client->tyoryhma;
+		// 168,169,135
+		// Oulu IDs (KP)
+		$ouluIds = [168,169,135];
+		// if this client is not in Oulu, return early
+		if(!in_array($workGroupId, $ouluIds)) {
+			return false;
+		}
 		$workGroup = Valikkoot::model()->findByPk($workGroupId);
 		$workGroupName = $workGroup->value;
 
