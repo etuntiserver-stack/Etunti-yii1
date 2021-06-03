@@ -143,6 +143,8 @@ if(empty($model->tietoja))
 		laskurivityyppi();
 		$(document).delegate("#Kohteet_laskurivi_tyyppi","change",function(){
 			laskurivityyppi();
+			if( $(this, 'option:selected').val() == 'kk' )
+				alert('Tämä valinta luo vain yksi rivi laskutuksen luomisessa.\n\nTyövuorojen lisäpalvelut näytetään vain "Laskurivien tyyppi - tunti" tilassa kun TYÖ mobiilissa on tehty työvuoro listan mukaisesti.');
 		});
 	 
 	 	function laskurivityyppi()
@@ -151,7 +153,6 @@ if(empty($model->tietoja))
 			{
 				$('#kk_valinta').show(375);
 				$('#Kohteet_tuote_kk').attr('required', 'yes');
-				alert('Tämä valinta luo vain yksi rivi laskutuksen luomisessa.\n\nTyövuorojen lisäpalvelut näytetään vain "Laskurivien tyyppi - tunti" tilassa kun TYÖ mobiilissa on tehty työvuoro listan mukaisesti.');
 			} else {
 				$('#kk_valinta').hide(375);
 				$('#Kohteet_tuote_kk').val('').removeAttr('required');
