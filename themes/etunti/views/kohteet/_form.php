@@ -196,7 +196,7 @@ if(empty($model->tietoja))
 <?php if(isset($model->id)) : ?>
 <br>
 
-	<?php $poistetaan = 'Poistetaan käytöstä 07/2021'; ?>
+	<?php $poistetaan = 'Poistetaan käytöstä 08/2021'; ?>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
 		<?php
