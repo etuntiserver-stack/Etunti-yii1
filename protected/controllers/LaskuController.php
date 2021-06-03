@@ -1894,11 +1894,13 @@ exit;
 				if($rakenne_muoto == 'mobiili')
 				{
 					$pv = explode("\n", $item->viesti);
-					if(isset($pv[0]) and !empty($pv[0]) and strpos($pv[0], 'xxx') === false){
-						$pikkuviesti = $pv[0];
-					} elseif(isset($pv[1]) and !empty($pv[1]) and strpos($pv[1], 'xxx') === false){
-						$pikkuviesti = $pv[1];
-					}
+					if(isset($pv[0]) and !empty($pv[0]) and strpos($pv[0], 'xxx') === false)
+						$pikkuviesti .= $pv[0];
+					if(isset($pv[1]) and !empty($pv[1]) and strpos($pv[1], 'xxx') === false)
+						$pikkuviesti .= $pv[1];
+
+					if(!empty($pikkuviesti))
+						$pikkuviesti = str_replace("\n", "<br>", $item->viesti);
 				}
 
 				// <-- Työvuoroista Tuote/Palvelu mukaan logikka
@@ -2332,7 +2334,7 @@ exit;
 								$body .= '<span class="btn-group fa fa-list text-primary" data-toggle="collapse" title="Hyväksytyt tunnit" href="#hyv_'.$tuote_id.'_'.$rivi_num.'"></span>';
 
 								if(!empty($arr['pikkuviesti']))
-									$body .= '<div style="position:relative"><div class="collapse alert bg-info" id="rivi'.$rivi_num.'" style="position:absolute;right:0;z-index:999999">'.$arr['pikkuviesti'].'</div></div>';
+									$body .= '<div style="position:relative"><div class="collapse alert bg-info text-left" id="rivi'.$rivi_num.'" style="position:absolute;right:0;min-width:250px;z-index:999999">'.$arr['pikkuviesti'].'</div></div>';
 									
 								$body .= '
 								<div style="position:relative">
