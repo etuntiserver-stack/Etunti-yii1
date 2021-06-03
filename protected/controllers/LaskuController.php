@@ -2147,9 +2147,9 @@ exit;
 						$osoite		= $item->osoiteById;
 						$kohde_id	= $item->kohde;
 						$tiedot		= ['tv_id' => $tv_id];
-						$aloitus	= date("H:i", strtotime($item->aloitan));
-						$lopetus	= date("H:i", strtotime($item->loppui));
-						$kesto		= strtotime($item->loppui)-strtotime($item->aloitan);
+						$aloitus	= date("H:i", strtotime($item->alku));
+						$lopetus	= date("H:i", strtotime($item->loppu));
+						$kesto		= strtotime($item->loppu)-strtotime($item->alku);
 						$tekijan_nimi = (isset($item->tt->FullName))? $item->tt->FullName : '';
 					}
 
