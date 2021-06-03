@@ -2303,8 +2303,8 @@ exit;
 								if(!in_array($tiedot[$which_ids], $laskutetut_tiedot[$which_ids]))
 										$laskutettu = false;
 								
-								if($laskutettu and !isset($laskutetut_tunnisteet[$rivi_tunniste]))
-									$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-container="body" data-toggle="tooltip" title="Laskutettu jollakin eri tavalla. Katso - Tehdyt laskut"></span>';
+								//if($laskutettu and !isset($laskutetut_tunnisteet[$rivi_tunniste]))
+									//$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-container="body" data-toggle="tooltip" title="Laskutettu jollakin eri tavalla. Katso - Tehdyt laskut"></span>';
 							}
 
 							$hinta			= round($hinta, 2);
@@ -2403,7 +2403,7 @@ exit;
 							
 					} elseif($laskutettu and !isset($laskutetut_tunnisteet[$rivi_tunniste]))
 					{
-							$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-container="body" data-toggle="tooltip" title="Laskutettu, mutta jollakin eri tavalla. Katso - Tehdyt laskut"></span>';
+							//$laskutettu_lisa = ' <span class="fa fa-info-circle text-danger" data-container="body" data-toggle="tooltip" title="Laskutettu, mutta jollakin eri tavalla. Katso - Tehdyt laskut"></span>';
 					}
 
 					$hinta			= round($arr['hinta'], 2);
