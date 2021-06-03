@@ -151,6 +151,7 @@ if(empty($model->tietoja))
 			{
 				$('#kk_valinta').show(375);
 				$('#Kohteet_tuote_kk').attr('required', 'yes');
+				alert('Tämä valinta luo vain yksi rivi laskutuksen luomisessa.\n\nTyövuorojen lisäpalvelut näytetään vain "Laskurivien tyyppi - tunti" tilassa kun TYÖ mobiilissa on tehty työvuoro listan mukaisesti.');
 			} else {
 				$('#kk_valinta').hide(375);
 				$('#Kohteet_tuote_kk').val('').removeAttr('required');
