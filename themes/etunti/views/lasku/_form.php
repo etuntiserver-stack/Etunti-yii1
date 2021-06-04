@@ -1217,7 +1217,10 @@ $("#uusiRivi").click(function() {
 		type: "POST",
 		data: {num : rowCount},
 		success: function(html){
-			$("table#TableRivit tbody tr").last().after(html);
+			if($("table#TableRivit tbody tr.kaikkiTR").last().length > 0)
+				$("table#TableRivit tbody tr.kaikkiTR").last().after(html);
+			else
+				$("table#TableRivit tbody tr").last().after(html);
 			Rivi();
 		}
 	});
