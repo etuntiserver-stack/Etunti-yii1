@@ -172,6 +172,7 @@
                 <b>LS</b> - Lapsen sairaus<br>
                 <b>VL</b> - Vuosiloma<br>
                 <b>VKL</b> - Viikkolomapäivä
+                <b>EL</b> - Erikoislauantai<br>
               </div>
             </div>
           </div>
