@@ -110,7 +110,7 @@ if(empty($model->tietoja))
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'laskurivi_tyyppi'); ?>
 		<?php 
-			$lista = ['tunti' => 'Tunti', 'kk' => 'Kuukausi'];
+			$lista = ['tunti' => 'Kirjaus muoto - h', 'kk' => 'Kuukausi muoto - kk', 'kpl' => 'Kertakäynti muoto - kpl'];
 			echo $form->dropDownList($model, 'laskurivi_tyyppi', $lista, array('class'=>'form-control')); 
 		?> 
 		<?php echo $form->error($model,'laskurivi_tyyppi'); ?>
@@ -136,6 +136,13 @@ if(empty($model->tietoja))
 		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'tuote_kk'); ?>
 	</div>
+
+	<div class="section fill mb5" id="kpl_valinta" style="display:none">
+		<?php echo $form->labelEx($model,'tuote_kpl'); ?>
+		<?php echo $form->dropDownList($model, 'tuote_kpl', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='kpl'"), 'id', 'nimike'), 
+		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
+		<?php echo $form->error($model,'tuote_kpl'); ?>
+	</div>
 	
 	<script type="text/javascript">
 	$(document).ready(function(){
@@ -153,9 +160,18 @@ if(empty($model->tietoja))
 			{
 				$('#kk_valinta').show(375);
 				$('#Kohteet_tuote_kk').attr('required', 'yes');
-			} else {
+				$('#kpl_valinta').hide(375);
+				$('#Kohteet_tuote_kpl').val(0).removeAttr('required');
+			} else if ( $('#Kohteet_laskurivi_tyyppi option:selected').val() == 'tunti' ){
 				$('#kk_valinta').hide(375);
 				$('#Kohteet_tuote_kk').val('').removeAttr('required');
+				$('#kpl_valinta').hide(375);
+				$('#Kohteet_tuote_kpl').val(0).removeAttr('required');
+			} else if ( $('#Kohteet_laskurivi_tyyppi option:selected').val() == 'kpl' ){
+				$('#kk_valinta').hide(375);
+				$('#Kohteet_tuote_kk').val(0).removeAttr('required');
+				$('#kpl_valinta').show(375);
+				$('#Kohteet_tuote_kpl').attr('required', 'yes');
 			}
 	 	}
 	 	

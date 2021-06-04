@@ -119,6 +119,7 @@ class Kohteet extends DB2ActiveRecord
 			'laskurivi_tyyppi' => 'varchar(50) DEFAULT \'tunti\'',
 			'tuote_h' => 'int(11) DEFAULT 0',
 			'tuote_kk' => 'int(11) DEFAULT 0',
+			'tuote_kpl' => 'int(11) DEFAULT 0',
 		);
 
 		// <-- Drop column
@@ -146,8 +147,8 @@ class Kohteet extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('asiakas_id, etu_suku_nimet, osoite, tuote_h', 'required'),
-			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara, uusi_tilaus, hinnasto_id, alv, tyoryhma, tyonkuvaus_tiedostot_mobiilissa, kustannuspaikka_nro, tuote_h, tuote_kk', 'numerical', 'integerOnly'=>true),
+			array('asiakas_id, etu_suku_nimet, osoite', 'required'), // tuote_h
+			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara, uusi_tilaus, hinnasto_id, alv, tyoryhma, tyonkuvaus_tiedostot_mobiilissa, kustannuspaikka_nro, tuote_h, tuote_kk, tuote_kpl', 'numerical', 'integerOnly'=>true),
 			array('tag_id, kaupunki, toimipaikka, kohteen_neliot', 'length', 'max'=>20),
 			array('gps_sijainti, osoite, katuosoite, kenella_on_avain, puh_nro, hinta_sis_alv, hinta_tyyppi, laskurivi_tyyppi', 'length', 'max'=>50),
 			array('lyhenne', 'length', 'max'=>46),
@@ -227,6 +228,7 @@ class Kohteet extends DB2ActiveRecord
 			'laskurivi_tyyppi' => Yii::t('main', 'Laskurivien tyyppi'),
 			'tuote_h' => Yii::t('main', 'Tuntituote'),
 			'tuote_kk' => Yii::t('main', 'Tuote kk'),
+			'tuote_kpl' => Yii::t('main', 'Tuote kpl'),
 		);
 	}
 

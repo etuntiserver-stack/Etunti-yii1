@@ -676,7 +676,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 <?php if(!isset($model->id)): ?>
 <div id="tp_valinta" class="form-inline" style="display:none">
 <?php
-	echo CHtml::dropdownList('laskurivi_tyyppi','laskurivi_tyyppi', ['tunti' => 'Laskurivit tunti', 'kk' => 'Laskurivit kk'], 
+	echo CHtml::dropdownList('laskurivi_tyyppi','laskurivi_tyyppi', ['tunti' => 'Kirjaus muoto - h', 'kk' => 'Kuukausi muoto - kk', 'kpl' => 'Kertakäynti muoto - kpl'], 
 		['class'=>'form-control form-group laskurivi_tyyppi']
 	);
 	echo CHtml::dropdownList('','hinnasto', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
@@ -688,6 +688,11 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	echo '<div id="kk_valinta" style="display:none">';
 		echo CHtml::dropdownList('tuote_kk','tuote_kk', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='kk'"), 'id', 'nimike'), 
 			['empty'=>'Valitse kk tuote','class'=>'form-control form-group la_tuote_kk']
+		);
+	echo '</div>';
+	echo '<div id="kpl_valinta" style="display:none">';
+		echo CHtml::dropdownList('tuote_kpl','tuote_kpl', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='kpl'"), 'id', 'nimike'), 
+			['empty'=>'Valitse kpl tuote','class'=>'form-control form-group la_tuote_kpl']
 		);
 	echo '</div>';
 	echo '<span class="btn btn-primary btn-block" id="new_hinnasto">Tallenna</span><br>';
@@ -702,7 +707,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	  <input class="form-check-input miten_mukaan" type="radio" name="flexRadioDefault" id="la_mukaan" style="transform: scale(2);">
 	  &nbsp;&nbsp;&nbsp;
 	  <label class="form-check-label" for="flexRadioDefault1">
-		<h3>Laskurivit kirjauksen mukaisesti. Ohjelma itse tarjoa laskuriveja mobiilista tai työvuoroista.</h3>
+		<h3>Laskurivit kirjausten mukaisesti. Ohjelma ehdottaa laskurivit tunneista ja työvuoroista.</h3>
 	  </label>
 	</div>
 	<div class="form-check">
@@ -1474,13 +1479,22 @@ $(document).delegate("#laskurivi_tyyppi","change",function(){
 
 function laskurivityyppi(cl)
 {
-	if( cl.find('#laskurivi_tyyppi option:selected').val() == 'kk' )
-	{
-		cl.find('#kk_valinta').show(375);
-	} else {
-		cl.find('#kk_valinta').hide(375);
-		cl.find('#tuote_kk').val('');
-	}
+		if( cl.find('#laskurivi_tyyppi option:selected').val() == 'kk' )
+		{
+			cl.find('#kk_valinta').show(375);
+			cl.find('#kpl_valinta').hide(375);
+			cl.find('#tuote_kpl').val(0);
+		} else if( cl.find('#laskurivi_tyyppi option:selected').val() == 'kpl' )
+		{
+			cl.find('#kpl_valinta').show(375);
+			cl.find('#kk_valinta').hide(375);
+			cl.find('#tuote_kk').val(0);
+		} else {
+			cl.find('#kk_valinta').hide(375);
+			cl.find('#tuote_kk').val(0);
+			cl.find('#kpl_valinta').hide(375);
+			cl.find('#tuote_kpl').val(0);
+		}
 }
  	
 var kohde_id 		= 0;
@@ -1522,6 +1536,7 @@ $(document).delegate("#new_hinnasto", "click", function(){
 	var hinnasto 	= parseInt(cl.find('.la_hinnasto', 'option:selected').val()) || 0;
 	var tuote_h		= parseInt(cl.find('.la_tuote_h', 'option:selected').val()) || 0;
 	var tuote_kk	= parseInt(cl.find('.la_tuote_kk', 'option:selected').val()) || 0;
+	var tuote_kpl	= parseInt(cl.find('.la_tuote_kpl', 'option:selected').val()) || 0;
 
 	if(tuote_h == 0)
 	{
@@ -1533,9 +1548,14 @@ $(document).delegate("#new_hinnasto", "click", function(){
 		alert('KK tuote ei saa olla tyhjä');
 		return false;
 	}
+	if(laskurivi_tyyppi == 'kpl' && tuote_kpl == 0)
+	{
+		alert('Kertakäynti tuote ei saa olla tyhjä');
+		return false;
+	}
 		
 	$.ajax({
-		url: 'tuotepalvelukohdelle?id=' + kohde_id + '&laskurivi_tyyppi='+ laskurivi_tyyppi +'&tuote_h=' + tuote_h + '&tuote_kk=' + tuote_kk + '&hinnasto=' + hinnasto,
+		url: 'tuotepalvelukohdelle?id=' + kohde_id + '&laskurivi_tyyppi='+ laskurivi_tyyppi +'&tuote_h=' + tuote_h + '&tuote_kk=' + tuote_kk + '&tuote_kpl=' + tuote_kpl + '&hinnasto=' + hinnasto,
 		success: function(data){
 			var data = JSON.parse(data);
 			console.log(data);

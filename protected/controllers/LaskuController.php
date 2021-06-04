@@ -1151,7 +1151,7 @@ exit;
 		return $return; 
 	}
 
-	public function actionTuotepalvelukohdelle($id, $laskurivi_tyyppi, $tuote_h, $tuote_kk, $hinnasto)
+	public function actionTuotepalvelukohdelle($id, $laskurivi_tyyppi, $tuote_h, $tuote_kk, $tuote_kpl, $hinnasto)
 	{
 		$k = Kohteet::model()->findByPk($id);
 		if(isset($k->id))
@@ -1159,6 +1159,7 @@ exit;
 			$k->laskurivi_tyyppi = $laskurivi_tyyppi;
 			$k->tuote_h		= $tuote_h;
 			$k->tuote_kk	= $tuote_kk;
+			$k->tuote_kpl	= $tuote_kpl;
 			$k->hinnasto_id = $hinnasto;
 			if(!$k->save())
 			{
@@ -1190,8 +1191,10 @@ exit;
 		{
 			if($model->laskurivi_tyyppi == 'tunti')
 				$tuote_id = $model->tuote_h;
-			if($model->laskurivi_tyyppi == 'kk')
+			elseif($model->laskurivi_tyyppi == 'kk')
 				$tuote_id = $model->tuote_kk;
+			elseif($model->laskurivi_tyyppi == 'kpl')
+				$tuote_id = $model->tuote_kpl;
 		}
 		if( $for == 'tyovuoro')
 			$tuote_id = $model->tuoteID;
@@ -1792,7 +1795,7 @@ exit;
 				$get_tiedot = json_decode($rivi->tiedot, true);
 				if(isset($get_tiedot[$which]))
 				{
-					if($which == 'kuukausi')
+					if($which == 'kuukausi' or $which == 'kertakaynti')
 						$pre_laskutetut_tiedot[$which][] = $get_tiedot['kohde_id'];
 					else
 						$pre_laskutetut_tiedot[$which][] = $get_tiedot[$which];
@@ -1818,14 +1821,32 @@ exit;
 		
 		$laskutetut_tiedot					= [];
 		$laskutetut_tiedot['kuukausi'] 		= prepare('kuukausi', $laskurivitAll);
+		$laskutetut_tiedot['kertakaynti'] 	= prepare('kertakaynti', $laskurivitAll);
 		$laskutetut_tiedot['mobiili_id'] 	= prepare('mobiili_id', $laskurivitAll);
 		$laskutetut_tiedot['tv_id'] 		= prepare('tv_id', $laskurivitAll);
 		$laskutetut_tiedot['tuote_id'] 		= prepare('tuote_id', $laskurivitAll);
 
-		// <-- KK logikka
-		$kk_hinta = [];
 
-		$kohteet 		= Kohteet::model()->findAll("asiakas_id='".$asiakas_id."' and tuote_kk IS NOT NULL");
+		// <-- Mobiili logikka
+		if($rakenne_muoto == 'mobiili')
+			$getall 		= $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, false, "id=$asiakas_id");
+			
+		if($rakenne_muoto == 'tuovuoro')
+		{
+			$haku_criteria 	= [
+				"(laskutettu=0 or laskutettu is NULL) AND tid!=0 AND (peruutettu=0 or peruutettu is NULL)
+				AND kohde IN(SELECT id FROM sivex_kohdet WHERE 
+					asiakas_id='$asiakas_id'	
+				)
+				"
+			];
+			$tv_controller 	= Yii::app()->createController('Tyovuoroot');
+			$getall 		= $tv_controller[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data','tv_kesto']);
+		}
+
+		// <-- KK logikka
+		$kk_hinta 	= [];
+		$kohteet 	= Kohteet::model()->findAll("asiakas_id='".$asiakas_id."' and tuote_kk!=0");
 		foreach($kohteet as $item)
 		{	
 			$return = $this->getHintaFor('kohde', $item);
@@ -1845,23 +1866,28 @@ exit;
 			}
 		}
 
-		// <-- Mobiili logikka
-		if($rakenne_muoto == 'mobiili')
-			$getall 		= $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, false, "id=$asiakas_id");
-			
-		if($rakenne_muoto == 'tuovuoro')
-		{
-			$haku_criteria 	= [
-				"(laskutettu=0 or laskutettu is NULL) AND tid!=0 AND (peruutettu=0 or peruutettu is NULL)
-				AND kohde IN(SELECT id FROM sivex_kohdet WHERE 
-					asiakas_id='$asiakas_id'	
-				)
-				"
-			];
-			$tv_controller 	= Yii::app()->createController('Tyovuoroot');
-			$getall 		= $tv_controller[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data','tv_kesto']);
+		// <-- KPL logikka
+		$kpl_hinta 	= [];
+		$kohteet 	= Kohteet::model()->findAll("asiakas_id='".$asiakas_id."' and tuote_kpl!=0");
+		foreach($kohteet as $item)
+		{	
+			$return = $this->getHintaFor('kohde', $item);
+			if($return['hinta'] > 0 and $return['yksikko'] == 'kpl')
+			{
+				$kpl_hinta[$item->asiakas_id][$item->id] = [
+						'tuote_id' 		=> $item->tuote_kpl,
+						'tuote' 		=> $item->osoite,
+						'hinta' 		=> $return['hinta'], 
+						'alv' 			=> $return['alv'],
+						'yksikko' 		=> $return['yksikko'],
+						'nimike' 		=> $return['nimike'],
+						'free_text' 	=> $ajanjakso,
+						'tiedot'		=> ['kertakaynti' => $kk, 'kohde_id' => $item->id],
+						'hinnan_paikka' => $return['hinnan_paikka']
+				];
+			}
 		}
-			
+
 		$l 		= [];
 		foreach($getall as $item)
 		{
@@ -1958,7 +1984,6 @@ exit;
 		
 		$body 		= '<br>';
 		$yht_summ 	= 0;
-		$kk_arr 	= [];
 		$yht_kk 	= 0;
 		$mob_tv_arr	= [];
 		$yht_tunnit = 0;
@@ -2030,17 +2055,6 @@ exit;
 				$rivi_tunniste	= $etunti_tunniste.'_'.md5('kk_'.$kohde_id);
 				
 				$num_rivi++;
-				$kk_arr[] 	= [
-					'tuote' 	=> $arr['tuote'], 
-					'maara' 	=> 1, 
-					'hinta' 	=> $arr['hinta'], 
-					'alv' 		=> $arr['alv'],
-					'yksikko'	=> $arr['yksikko'],
-					'nimike' 	=> $arr['nimike'],
-					'free_text'	=> $arr['free_text'],
-					'tiedot'	=> $arr['tiedot']
-				];
-				
 				$yht_kk 			+= $arr['hinta'];
 				$yht_summ			+= $arr['hinta'];
 				
@@ -2116,7 +2130,103 @@ exit;
 
 			}
 		}
-		
+
+		// <-- KPL				
+		if(isset($kpl_hinta[$asiakas_id]))
+		{
+			foreach($kpl_hinta[$asiakas_id] as $kohde_id => $arr)
+			{
+				$kohde_link = CHtml::link($arr['tuote'],
+					['/kohteet/update', 'id' => $kohde_id],
+					[
+						'class' => '',
+						'target' => '_blank',
+						'data-toggle' => 'tooltip',
+						'data-container' => 'body',
+						'title' => 'Ava uusi välilehti kohteesta'
+					]
+				);
+				
+				$rivi_tunniste	= $etunti_tunniste.'_'.md5('kk_'.$kohde_id);
+				
+				$num_rivi++;				
+				$yht_kk 			+= $arr['hinta'];
+				$yht_summ			+= $arr['hinta'];
+				
+				$laskutettu = false;
+				if(isset($laskutetut_tiedot['kertakaynti'][$kohde_id]))
+						$laskutettu = true;
+
+				$hv_lista 	= '';
+				$hv_json 	= [];
+				if(isset($hyv_lista_perkohde[$kohde_id]))
+				{
+					$hv_lista .= '<span class="link fa fa-list text-primary" data-toggle="collapse" data-target="#collapse_id_'.$kohde_id.'" title="Hyväksytyt tunnit"></span>';
+
+					$hv_lista .= '<div style="position:relative"><div style="position:absolute;right:0;z-index:999999" class="collapse well" id="collapse_id_'.$kohde_id.'">';
+					$hv_lista .= '<h3>Hyväksytyt tunnit</h3><table class="table table-bordered">';
+					$yht = 0;
+					foreach($hyv_lista_perkohde[$kohde_id] as $hv_item)
+					{
+						$kesto 	= $this->num(strtotime($hv_item->loppui)-strtotime($hv_item->aloitan));
+						$yht 	+= $kesto;
+						
+						$hv_lista .= '<tr>';
+						$hv_lista .= '<td style="white-space:nowrap">'.$hv_item->kohde_kannasta.'</td>';
+						$hv_lista .= '<td>'.date("d.m.Y", strtotime($hv_item->aloitan)).'</td>';
+						$hv_lista .= '<td style="white-space:nowrap">'.$hv_item->tekijan_nimi.'</td>';
+						$hv_lista .= '<td>'.date("H:i", strtotime($hv_item->aloitan)).'</td>';
+						$hv_lista .= '<td>'.date("H:i", strtotime($hv_item->loppui)).'</td>';
+						$hv_lista .= '<td>'.$kesto.'</td>';
+						$hv_lista .= '</tr>';
+						
+						$hv_json[] = [
+								'kohde_kannasta' 	=> $hv_item->kohde_kannasta,
+								'pvm' 				=> date("d.m.Y", strtotime($hv_item->aloitan)),
+								'tekijan_nimi' 		=> $hv_item->tekijan_nimi,
+								'aloitan' 			=> date("H:i", strtotime($hv_item->aloitan)),
+								'loppui' 			=> date("H:i", strtotime($hv_item->loppui)),
+								'kesto'				=> $kesto
+						];
+					}
+					$hv_lista .= '<tr>';
+					$hv_lista .= '<td></td>';
+					$hv_lista .= '<td></td>';
+					$hv_lista .= '<td></td>';
+					$hv_lista .= '<td></td>';
+					$hv_lista .= '<td></td>';
+					$hv_lista .= '<td>'.$yht.'</td>';
+					$hv_lista .= '</tr>';
+					$hv_lista .= '</table>';
+					$hv_lista .= '</div></div>';
+					
+				}
+				
+				$maara			= (isset($hyv_lista_perkohde[$kohde_id]))? count($hyv_lista_perkohde[$kohde_id]): 0;
+				$hinta_veroton	= round($arr['hinta'], 2);
+				$hinta_with_alv = round((($hinta_veroton*$maara*$arr['alv'])/100)+($hinta_veroton*$maara), 2);
+				
+				$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
+				$body .= '
+				<td align="center">
+					'.(($laskutettu)? '<p class="text-info">laskutettu</p>' : '<input type="checkbox" class="laskutetaan" checked').'
+				</td>';
+				$body .= '<td class="tuote" tuote_id="'.$arr['tuote_id'].'" tv_id="0" rivi_tunniste="'.$rivi_tunniste.'" kohde_ids="'.json_encode([$kohde_id]).'"><b>'.$arr['nimike'].'</b>: '.$kohde_link.'</td>';
+				$body .= '<td class="maara text-center">'.$maara.'</td>';
+				$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
+				$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
+				$body .= '<td class="hinta text-center">'.$hinta_veroton.'</td>';
+				$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($hinta_veroton*$maara).'</td>';
+				$body .= '<td>'.$hinta_with_alv.'</td>';
+				$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
+				$body .= '<td class="text-center kk_hyv_lista">'.$hv_lista.'<textarea style="display:none">'.json_encode($hv_json).'</textarea></td>';
+				$body .= '<td class="tiedot" style="display:none">'.json_encode($arr['tiedot']).'</td>';
+				$body .= '</tr>';
+
+
+			}
+		}
+
 		// <-- Mobiili ja TV
 		if(isset($mob_lista[$asiakas_id]))
 		{
@@ -2165,7 +2275,8 @@ exit;
 					];
 						
 					if(isset($kk_hinta[$asiakas_id][$kohde_id])) continue;
-					
+					if(isset($kpl_hinta[$asiakas_id][$kohde_id])) continue;
+
 					$tv_link	= '';
 					$maara 		= $this->num($v['maara']);
 					if($maara == 0) continue;
