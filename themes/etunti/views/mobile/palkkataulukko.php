@@ -171,7 +171,7 @@
                 <b>SPL</b> - Sairaus Palkaton<br>
                 <b>LS</b> - Lapsen sairaus<br>
                 <b>VL</b> - Vuosiloma<br>
-                <b>VKL</b> - Viikkolomapäivä
+                <b>VKL</b> - Viikkolomapäivä<br>
                 <b>EL</b> - Erikoislauantai<br>
               </div>
             </div>
