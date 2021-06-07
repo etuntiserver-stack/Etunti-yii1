@@ -28,18 +28,22 @@ foreach($kids as $kohde_id)
 			<div style="position:absolute;left:0;z-index:999999;" class="collapse well" id="collapse_id_'.$num.'">
 				<h3>Hyväksytyt tunnit</h3>
 				<table class="table table-bordered">';
-				$yht = 0;
-				foreach(json_decode($rivi['kk_hyv_lista'], true) as $item)
+				$lista 	= json_decode($rivi['kk_hyv_lista'], true);
+				$yht 	= 0;
+				if(is_array($lista))
 				{
-					$yht += $item['kesto'];
-					echo '<tr>
-						<td style="white-space:nowrap">'.$item['kohde_kannasta'].'</td>
-						<td>'.$item['pvm'].'</td>
-						<td style="white-space:nowrap">'.$item['tekijan_nimi'].'</td>
-						<td>'.$item['aloitan'].'</td>
-						<td>'.$item['loppui'].'</td>
-						<td>'.$item['kesto'].'</td>
-					</tr>';
+					foreach($lista as $item)
+					{
+						$yht += $item['kesto'];
+						echo '<tr>
+							<td style="white-space:nowrap">'.$item['kohde_kannasta'].'</td>
+							<td>'.$item['pvm'].'</td>
+							<td style="white-space:nowrap">'.$item['tekijan_nimi'].'</td>
+							<td>'.$item['aloitan'].'</td>
+							<td>'.$item['loppui'].'</td>
+							<td>'.$item['kesto'].'</td>
+						</tr>';
+					}
 				}
 				echo '<tr>
 					<td></td>

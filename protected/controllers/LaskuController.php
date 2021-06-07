@@ -2249,7 +2249,7 @@ exit;
 						$aloitus	= date("H:i", strtotime($item->aloitan));
 						$lopetus	= date("H:i", strtotime($item->loppui));
 						$kesto		= strtotime($item->loppui)-strtotime($item->aloitan);
-						$tekijan_nimi = (isset($item->tt->FullName))? $item->tt->FullName: '';
+						$tekijan_nimi = $item->tekijan_nimi;
 					}
 					
 					if($rakenne_muoto == 'tuovuoro')
@@ -2265,13 +2265,14 @@ exit;
 						$tekijan_nimi = (isset($item->tt->FullName))? $item->tt->FullName : '';
 					}
 
-					$hv_json = [
-							'Osoite' 	=> $osoite,
-							'Pvm' 		=> $pvm,
-							'Nimi' 		=> $tekijan_nimi,
-							'Aloitus' 	=> $aloitus,
-							'Lopetus' 	=> $lopetus,
-							'Kesto'		=> $this->num($kesto)
+					$hv_json = [];
+					$hv_json[] = [
+						'kohde_kannasta' 	=> $osoite,
+						'pvm' 				=> $pvm,
+						'tekijan_nimi' 		=> $tekijan_nimi,
+						'aloitan' 			=> $aloitus,
+						'loppui' 			=> $lopetus,
+						'kesto'				=> $this->num($kesto)
 					];
 						
 					if(isset($kk_hinta[$asiakas_id][$kohde_id])) continue;
@@ -2451,10 +2452,11 @@ exit;
 								<div style="position:relative">
 									<div class="collapse well" id="hyv_'.$tuote_id.'_'.$rivi_num.'" style="position:absolute;right:0;z-index:999999">
 									<table class="table table-bordered"><tr>';
-									foreach($arr['kk_hyv_lista'] as $key => $hyv_tieto)
+									foreach($arr['kk_hyv_lista'][0] as $key => $hyv_tieto)
 										$body .= '<td style="white-space:nowrap">'.$hyv_tieto.'</td>';
 								$body .= '</tr></table></div></div>';
-								
+
+							$body .= '<div class="text-center kk_hyv_lista"><textarea style="display:none">'.json_encode($arr['kk_hyv_lista']).'</textarea></div>';
 							$body .= '</td>';
 							$body .= '<td class="tiedot" style="display:none">'.json_encode($tiedot).'</td>';
 							$body .= '</tr>';
