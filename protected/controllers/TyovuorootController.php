@@ -1735,7 +1735,6 @@ class TyovuorootController extends Controller
 			$this->redirect(array('beta', 'mode' => $mode));
 		}
 		//     Reset -->
-
 		// <-- GET haku
 		if (isset($_GET['year']) or isset($_GET['week'])) {
 			if (isset($_GET['year']) and !empty($_GET['year']))
@@ -1744,18 +1743,43 @@ class TyovuorootController extends Controller
 				Yii::app()->session['week'] = $_GET['week'];
 			if (isset($_GET['tid']) and !empty($_GET['tid']))
 				Yii::app()->session['tyontekijat'] = array($_GET['tid']);
-			if (isset($_GET['tv_id']))
+			if (isset($_GET['tv_id'])) {
+				// KP: set "tyoryhma" as the clients "tyoryhma"
+				// this should speed up loading nicely
+				$domain = Yii::app()->user->domain;
+				if($domain == "kotipuhtaaksi") {
+					$result = $this->this_id($_GET["tv_id"]);
+					$shift = $result["model"];
+					$worker = Tyontekijat::model()->findByPk($shift->tid);
+					$groups = json_decode($worker->tyoryhma);
+
+					Yii::app()->session["tyoryhma"] = $groups;
+					// there's a chance that the user navigated to the calendar first without making a query,
+					// which means tyontekijat is set as "0", which defeats the purpose of this modification, since
+					// the user would not see any workers in the list.
+					unset(Yii::app()->session["tyontekijat"]);
+					
+					
+				}
 				$this->redirect(array('beta', 'mode' => $mode, 'tv_id' => $_GET['tv_id']));
+			}
 			if(isset($_GET['vapaat']))
 				$this->redirect(array('beta', 'mode' => $mode, 'vapaat' => 'true'));
 			else
 				$this->redirect(array('beta', 'mode' => $mode));
 		}
+
 		//  GET haku -->
+
+		// if KotiPuhtaaksi is navigating here (from the side bar), the url contains &blank=true, which we can
+		// use to make this action return a blank calendar
+		if(isset($_GET["blank"])) {
+			$_POST["haku"] = true;
+			$_POST["tyontekijat"] = [0];
+		}
 
 		// <-- Post haku
 		if (isset($_POST['haku'])) {
-
 			unset($_SESSION['haku_criteria_tv']);
 
 			if (isset($_POST['kohteiden_tyonimike']) and !empty($_POST['kohteiden_tyonimike']))
