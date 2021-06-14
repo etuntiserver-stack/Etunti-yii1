@@ -2106,7 +2106,7 @@ public function actionImei($dom)
 	 * 400 Meikäläinen (K, S) Matti
 	 * we're looking to extract only Meikäläinen and Matti from that name
 	 */
-	private function parseName($name) {
+	public function parseName($name) {
 		// https://www.phpliveregex.com/p/Az6
 		// http://www.regular-expressions.info/unicode.html#category
 		// \p{L} or \p{Letter}: any kind of letter from any language.

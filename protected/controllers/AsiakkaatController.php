@@ -2569,7 +2569,8 @@ $xml = '
    * This function is called from actionCreate and actionUpdate.
    * 
    * The endpoint expects the following information:
-   * name, phone number, email and postal code.
+   * first and last names, phone number, email and postal code
+   * active status and whether or not they are a "continous" client (jatkuva asiakas).
    */
   protected function integromatUpsert(Asiakkaat $client) {
 
@@ -2651,7 +2652,7 @@ $xml = '
 
 
   /**
-   * Compares attributes that we would sen to integromat, if the old models
+   * Compares attributes that we would send to integromat, if the old models
    * attributes don't match with the new attributes that would be saved to the database,
    * return true for "has changed". Otherwise return false for "not changed".
    * This can be used to reduce the number of updates sent to integromat.
