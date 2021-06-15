@@ -1881,7 +1881,7 @@ exit;
 						'alv' 			=> $return['alv'],
 						'yksikko' 		=> $return['yksikko'],
 						'nimike' 		=> $return['nimike'],
-						'free_text' 	=> $ajanjakso,
+						'free_text' 	=> '',
 						'tiedot'		=> ['kertakaynti' => $kk, 'kohde_id' => $item->id],
 						'hinnan_paikka' => $return['hinnan_paikka']
 				];
@@ -2159,6 +2159,7 @@ exit;
 
 				$hv_lista 	= '';
 				$hv_json 	= [];
+				$pvm_lista 	= [];
 				if(isset($hyv_lista_perkohde[$kohde_id]))
 				{
 					$hv_lista .= '<span class="link fa fa-list text-primary" data-toggle="collapse" data-target="#collapse_id_'.$kohde_id.'" title="Hyväksytyt tunnit"></span>';
@@ -2168,6 +2169,7 @@ exit;
 					$yht = 0;
 					foreach($hyv_lista_perkohde[$kohde_id] as $hv_item)
 					{
+						$pvm_lista[] = date("d.m.Y", strtotime($hv_item->aloitan));
 						$kesto 	= $this->num(strtotime($hv_item->loppui)-strtotime($hv_item->aloitan));
 						$yht 	+= $kesto;
 						
@@ -2218,7 +2220,7 @@ exit;
 				$body .= '<td class="hinta text-center">'.$hinta_veroton.'</td>';
 				$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($hinta_veroton*$maara).'</td>';
 				$body .= '<td>'.$hinta_with_alv.'</td>';
-				$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
+				$body .= '<td class="free_text">'.implode(", ", $pvm_lista).'</td>';
 				$body .= '<td class="text-center kk_hyv_lista">'.$hv_lista.'<textarea style="display:none">'.json_encode($hv_json).'</textarea></td>';
 				$body .= '<td class="tiedot" style="display:none">'.json_encode($arr['tiedot']).'</td>';
 				$body .= '</tr>';
