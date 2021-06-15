@@ -429,7 +429,7 @@ class AsiakkaatController extends Controller
 	 */
 	public function actionCreate()
 	{
-
+    
 	// <-- Oikeudet
 	   $checkOikeus = "asiakkaat_1_".Yii::app()->user->adminStatus;
 	   $site = Yii::app()->createController('Site');
@@ -2678,6 +2678,103 @@ $xml = '
 	
 
 	return false;
+  }
+  
+  /**
+   * Freshdesk customer ticket listing on customer edit page.
+   */
+  protected function getCustomerFreshdeskTickets($model, $page = 1, $per_page = 10, $filter_statuses = null, $order_by = null, $order_type = null, $export = null)
+  {
+    $bod = '';
+    $customer_id = $model->id;
+    $freshdesk_id = $model->freshdesk_id;
+    $email = $model->sahkoposti;
+    
+    if(!$freshdesk_id) {
+      return 'Ei tuloksia';
+    }
+    
+    /** @var Freshdesk */
+    $freshdesk = Yii::createComponent('Freshdesk');
+
+    if ($freshdesk->isDisabled()) {
+      throw new \Exception('Freshdesk on pois päältä tällä domainilla.');
+    }
+
+    if (isset($_POST['page']) && is_numeric($_POST['page']))
+      $page = $_POST['page'];
+    if (isset($_POST['per_page']) && is_numeric($_POST['per_page']))
+      $per_page = $_POST['per_page'];
+
+    if (isset($_POST['filter_statuses']))
+      $filter_statuses = $_POST['filter_statuses'];
+    if (!empty($filter_statuses))
+      $filter_statuses = array_unique(json_decode($filter_statuses, true));
+
+    if (isset($_POST['order_by']) && !empty($_POST['order_by']))
+      $order_by = $_POST['order_by'];
+    if (isset($_POST['order_type']) && !empty($_POST['order_type']))
+      $order_type = $_POST['order_type'];
+    if (isset($_POST['export']))
+      $export = $_POST['export'];
+
+    // If $page is provided, get a list of tickets.
+    if (is_numeric($page)) {
+
+      $refresh = ($page < 0);
+      $page = abs($page);
+      $per_page = is_numeric($per_page) ? $per_page : 10;
+
+      if (!in_array($order_by, ['created_at', 'due_by', 'updated_at', 'status']))
+        $order_by = 'updated_at';
+      if (!in_array($order_type, ['asc', 'desc']))
+        $order_type = 'desc';
+
+      $pager_id = "freshdesk_tickets_orderby_{$order_by}_{$order_type}";
+      $pager = $freshdesk->getTicketPaginator($per_page, $pager_id, function ($page, $page_size) use ($freshdesk, $order_by, $order_type, $freshdesk_id, $email) {
+        return $freshdesk->listTickets(null, $email, $page, $page_size, null, ['requester', 'description'], $order_by, $order_type);
+      });
+
+      if ($refresh)
+        $pager->delete();
+
+      if (is_array($filter_statuses)) {
+        $requested = $pager->filtered($page, function ($item) use ($filter_statuses) {
+          return in_array($item['status'], $filter_statuses);
+        });
+      } else {
+        $requested = $pager->getPage($page);
+      }
+
+      if (false === $requested) {
+        return 'Ei tuloksia';
+      }
+      
+      $status_array = array(2 => 'Open', 3 => 'Pending', 4 => 'Resolved', 5 => 'Closed', 6 => 'Waiting on Customer', 7 => 'Waiting on Third Party');
+      foreach ($requested as $k) {
+        if (empty($k['requester_id']))
+          continue;
+        
+        $ticket_id = $k['id'];
+        $subject = $k['subject'];
+        $description = $k['description_text'];
+        $due_by = $k['due_by'] ? date('D, j M Y, g:s A') : '';
+        $status = isset($status_array[$k['status']]) ? $status_array[$k['status']] : '';
+
+        $bod .= '<table class="table table-bordered">
+        <tr><th width="20%">'.Yii::t('main', 'Subject').'</th><td width="80%"><a href="https://santelo.freshdesk.com/a/tickets/'.$ticket_id.'" target="_blank">'.$subject.'</a></td></tr>
+        <tr><th width="20%">'.Yii::t('main', 'Description').'</th><td width="80%">'.$description.'</td></tr>'
+      . '<tr><th width="20%">'.Yii::t('main', 'Due Date').'</th><td width="80%">'.$due_by.'</td></tr>'
+      . '<tr><th width="20%">'.Yii::t('main', 'Status').'</th><td width="80%">'.$status.'</td></tr>';
+        
+        $bod .= '</table>';
+      }
+    }
+    
+    if(empty($bod))
+      return 'Ei tuloksia';
+		else
+      return $bod;
   }
 
 }
