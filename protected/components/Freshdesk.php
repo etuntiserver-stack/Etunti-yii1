@@ -10,7 +10,7 @@ class Freshdesk extends CComponent
   /** @var string Base URL for Freshdesk services. */
   private const TEST_BASE_URL = 'https://santelo.freshdesk.com';
   /** @var string Default testing API key. */
-  private const TEST_API_KEY = 'Ab4aA1ZpUWYG4f51Oze';
+  private const TEST_API_KEY = '5vez7BxPLNxrLUP1KH1V';
 
   /** @var int Amount of seconds until next request when request limit is reached. */
   private static $retryAfter = 0;
