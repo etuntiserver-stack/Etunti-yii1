@@ -1414,27 +1414,6 @@ if($site[0]->checkEdicoViestit()){ $bell = '<i class="fa fa-bell text-danger"></
               </li>
             </ul>
           </li>
-
-
-          <!-- Freshdesk menu item. -->
-          <?php $freshdesk = Yii::createComponent('Freshdesk'); ?>
-          <?php if ($freshdesk && !$freshdesk->isDisabled()): ?>
-          <li>
-            <a class="accordion-toggle crm" href="#">
-              <span class="fa fa-users"></span>
-              <span class="sidebar-title"><?php echo Yii::t('main', 'Asiakaspalvelu'); ?></span>
-              <span class="caret"></span>
-            </a>
-            <ul class="nav sub-nav">
-              <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/freshdesk">
-                  <span class="fa fa-money"></span> <?php echo Yii::t('main', 'Freshdesk Tukipyynnöt'); ?></a>
-              </li>
-            </ul>
-          </li>
-          <?php endif; ?>
-
-
           <li>
             <a class="accordion-toggle" href="#">
               <span class="sidebar-title"><?php echo strtoupper(Yii::app()->user->domain); ?></span>
