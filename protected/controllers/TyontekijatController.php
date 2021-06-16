@@ -1106,6 +1106,8 @@ $xml = '
 	 */
 	public function integromatUpsert(Tyontekijat $worker)
 	{
+		// temporarily disabled
+		return;
 		// get and parse workers name
 		$apiController = Yii::app()->createController("Api")[0];
 		$firstName = $apiController->parseName($worker->tekijan_nimi);
