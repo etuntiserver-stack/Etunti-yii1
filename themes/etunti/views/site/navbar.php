@@ -1099,7 +1099,11 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
  	        <?php if($curpage != 'tyovuoroot/beta'): ?>
 		<option value=><?php echo Yii::t('main', 'Työvuoro näkymä'); ?></option>
 		<?php endif; ?>
- 	        <option value="beta?mode=vko" <?php if($curpage == 'tyovuoroot/beta' and !isset($_GET['vapaat']) and isset($_GET['mode']) and $_GET['mode'] == 'vko') echo 'selected'; ?>><?php echo Yii::t('main', 'VIIKKO'); ?></option>
+            <?php 
+              $domain = Yii::app()->user->domain;
+              $vkourl = $domain === "kotipuhtaaksi" ? "beta?mode=vko&blank=true" : "beta?mode=vko"; // beta?mode=vko is the original URL
+            ?>
+ 	        <option value="<?=$vkourl ?>" <?php if($curpage == 'tyovuoroot/beta' and !isset($_GET['vapaat']) and isset($_GET['mode']) and $_GET['mode'] == 'vko') echo 'selected'; ?>><?php echo Yii::t('main', 'VIIKKO'); ?></option>
  	        <option value="beta?mode=vko&vapaat=true" <?php if($curpage == 'tyovuoroot/beta' and isset($_GET['vapaat'])) echo 'selected'; ?>><?php echo Yii::t('main', 'VIIKKO VAPAAT AJAAT'); ?></option>
  	        <option value="beta?mode=tt" <?php if($curpage == 'tyovuoroot/beta' and isset($_GET['mode']) and $_GET['mode'] == 'tt') echo 'selected'; ?>><?php echo Yii::t('main', 'TYÖNTEKIJÄ'); ?></option>
 	      </select>

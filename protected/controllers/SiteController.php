@@ -425,7 +425,7 @@ class SiteController extends Controller
 	public function ilmainenIlmoitus()
 	{
 		$asetuksetForAll = AsetuksetForAll::model()->findbypk(1);
-		return 'Ilmainen käyttö on mahdoton jos tunnit enemmään kun '. $asetuksetForAll->max_ilmaiset_tunnit;
+		return 'Ilmaisen '.$asetuksetForAll->max_ilmaiset_tunnit.' h raja on ylitetty. Ota maksullinen versio käyttöön tai ota yhteyttä tuki@etunti.fi.';
 	}
 
 	public function laskuriForCron($domain)

@@ -316,6 +316,7 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 										</p>
 										<p><?= $contact["phone"]; ?></p>
 										<p><?= $contact["email"]; ?></p>
+										<p><?= $contact["info"] ?? ""; ?></p>
 										<p style="font-weight: bold;">
 											<?php 
 											// there's a chance that invoice could equal to "off", so let's make sure it's "on".
@@ -1343,6 +1344,7 @@ $("#Asiakkaat_asiakasnumero").keyup(function() {
                 <p>${data.etunimi} ${data.sukunimi}</p>
                 <p>${data.phone}</p>
                 <p>${data.email}</p>
+				<p>${data.info}</p>
                 <p style="font-weight: bold">${data.invoice ? "Näytetään laskulla" : ""}</p>
 				<p style="font-weight: bold">${data.starting_time ? "Käytetään aloitusaikojen ilmoituksiin" : ""}</p>
             </div>
@@ -1382,10 +1384,20 @@ $("#Asiakkaat_asiakasnumero").keyup(function() {
                         <label class="control-label">Puhelinnumero</label>
                         <input name="phone" type="text" class="form-control" value="${editObject?.phone ?? ""}"></input>
                         <div id="extra-contact-phone-error"></div>
-                        <label class="control-label" for="invoice">Näytetään laskulla</label>
-                        <input name="invoice" id="invoice" type="checkbox" ${editObject?.invoice ? "checked" : ""}>
-						<label class="control-label" for="starting_time">Käytetään aloitusaikojen ilmoituksiin</label>
-                        <input name="starting_time" id="starting_time" type="checkbox" ${editObject?.starting_time ? "checked" : ""}>
+                        <label class="control-label">Selite</label>
+                        <textarea name="info" type="text" class="form-control">${editObject?.info ?? ""}</textarea>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label class="control-label" for="invoice">Näytetään laskulla</label>
+                                <input name="invoice" id="invoice" type="checkbox" ${editObject?.invoice ? "checked" : ""}>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label class="control-label" for="starting_time">Käytetään aloitusaikojen ilmoituksiin</label>
+                                <input name="starting_time" id="starting_time" type="checkbox" ${editObject?.starting_time ? "checked" : ""}>
+                            </div>
+                        </div>
                     </div>
                     <button type="button" class="btn btn-success save-extra-contact">
                         <i class="fa fa-save"></i>
