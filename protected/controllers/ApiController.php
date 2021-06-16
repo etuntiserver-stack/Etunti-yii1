@@ -2035,7 +2035,7 @@ public function actionImei($dom)
 			"first_name" => $client->etunimi,
 			"last_name" => $client->sukunimi,
 			"pf_store" => $workGroupName,
-			"pf_external_id" => $client->id,
+			"pf_external_id" => $client->asiakasnumero,
 			"pf_target" => $encoded_names,
 			"pf_timestamp" => time(),
 		];
