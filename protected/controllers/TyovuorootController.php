@@ -2568,8 +2568,11 @@ class TyovuorootController extends Controller
 		if( $tvVal->tyopaari != '' and $tvVal->tyopaari != "[\"$tvVal->tid\"]" ){
 		$hovertietoja .= '<div class="hover_well"><h5>Työparit</h5>';
 		   foreach(json_decode($tvVal->tyopaari, true) as $tyopaari){
-			if( $tvVal->tid != $tyopaari )
-			$hovertietoja .=  $this->etuSukunimi($tyopaari).'<br>';
+			// problem with this: the actual coworkers
+			// in the calendar will also hide this, which means
+			// it'll hide the actual coworker in some cases.
+			//if( $tvVal->tid != $tyopaari )
+			$hovertietoja .=  $this->etuSukunimi($tyopaari).'<br> tp:' . $tyopaari . " tvVal tid" . $tvVal->tid;
 		   }
 		$hovertietoja .= '</div>';
 		}
