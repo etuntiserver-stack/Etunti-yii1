@@ -2572,7 +2572,7 @@ class TyovuorootController extends Controller
 			// in the calendar will also hide this, which means
 			// it'll hide the actual coworker in some cases.
 			//if( $tvVal->tid != $tyopaari )
-			$hovertietoja .=  $this->etuSukunimi($tyopaari).'<br> tp:' . $tyopaari . " tvVal tid" . $tvVal->tid;
+			$hovertietoja .=  $this->etuSukunimi($tyopaari).'<br>';
 		   }
 		$hovertietoja .= '</div>';
 		}
