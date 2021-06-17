@@ -1115,6 +1115,12 @@ $xml = '
 		// get phone number
 		$phone = $worker->tekijan_puh;
 
+		// exit early if worker belongs to "Toimisto" work group.
+		$workGroups = $worker->tyoryhma;
+		if(strpos($workGroups, "Toimisto") !== false) {
+			return;
+		}
+
 		// if worker status is not 1 ( Töissä (aktiivinen) ), mark as false
 		// otherwise mark as true.
 		// the status might be different for other companies, but since this function
