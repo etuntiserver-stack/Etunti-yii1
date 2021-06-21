@@ -2191,6 +2191,7 @@ class TyovuorootController extends Controller
 			$kks[$dt->format("m.Y")] = 'la_'.$dt->format("m.Y").'_%';
 		}
 		if(count($kks) > 0)
+		{
 			$query 			= "etunti_tunniste LIKE '".implode("' OR LIKE '", $kks)."%'";
 			$laskutetut_ids = Lasku::LaskutetutIDs('tv_id', $query);
 		}
