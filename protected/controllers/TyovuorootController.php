@@ -2192,13 +2192,13 @@ class TyovuorootController extends Controller
 		}
 		if(count($kks) > 0)
 		{
-			$query 			= "etunti_tunniste LIKE '".implode("' OR LIKE '", $kks)."%'";
+			$query 			= "etunti_tunniste LIKE '".implode("' OR LIKE '", $kks)."'";
 			$laskutetut_ids = Lasku::LaskutetutIDs('tv_id', $query);
 		}
 		//  Check Laskutetut -->
 
 		// <-- Tv array
-       		$criteria = new CDbCriteria();
+		$criteria = new CDbCriteria();
 		if( $haku_to === null ){
 			$criteria->condition = "
 				toistuva_id=0 AND DATE(STR_TO_DATE(pvm, '%d.%m.%Y')) >= '$haku_from'
