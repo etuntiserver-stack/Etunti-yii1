@@ -2179,6 +2179,7 @@ class TyovuorootController extends Controller
 		$asiakas_tyovuorossa 	= ($asetukset->asiakas_tyovuorossa == 1)? true:false;
 		$haku_to_ts 			= strtotime($haku_to ?? 0);
 		$tv_arr 				= [];
+		$laskutetut_ids			= [];
 
 		// <-- Check Laskutetut
 		$start    	= (new DateTime($haku_from));
@@ -2189,8 +2190,10 @@ class TyovuorootController extends Controller
 		foreach ($period as $dt) {
 			$kks[$dt->format("m.Y")] = 'la_'.$dt->format("m.Y").'_%';
 		}
-		$query 			= "etunti_tunniste LIKE '".implode("' OR LIKE '", $kks)."%'";
-		$laskutetut_ids = Lasku::LaskutetutIDs('tv_id', $query);
+		if(count($kks) > 0)
+			$query 			= "etunti_tunniste LIKE '".implode("' OR LIKE '", $kks)."%'";
+			$laskutetut_ids = Lasku::LaskutetutIDs('tv_id', $query);
+		}
 		//  Check Laskutetut -->
 
 		// <-- Tv array
