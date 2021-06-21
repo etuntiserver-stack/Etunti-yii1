@@ -542,7 +542,35 @@ foreach ($list as $d) {
 	DATE(STR_TO_DATE(lopetuksen_pvm, '%d.%m.%Y')) = CURDATE()
 	AND aktiivinen=1
 	";
-	Asiakkaat::model()->updateAll(array('aktiivinen' => '0'), $criteria);
+
+	// domain kotipuhtaaksi, remove "jatkuva leasing", "vanha proaqua", 
+	// "toimitila" and "vanha proaqua 0" work groups
+	// add "passiivinen automaatio" group
+	// IDs are from sivex_selects
+	// jatkuva leasing 	= 94
+	// vanha proaqua 	= 95
+	// toimitila 		= 107
+	// vanha proaqua 0 	= 129
+	// passiivinen automaatio = 176
+	if($d->domain === "kotipuhtaaksi") {
+		$clients = Asiakkaat::model()->findAll($criteria);
+		foreach($clients as $client) {
+			$groups = json_decode($client->ryhma, true);
+			// skip if decode fails (perhaps it's an empty string?)
+			if(!isset($groups)) continue;
+			// remove the groups we don't want
+			$newGroups = array_diff($groups, ["94", "95", "107", "129"]);
+			// add "passiivinen automaatio"
+			$newGroups[] = "176";
+			Asiakkaat::model()->updateByPk($client->id, [
+				"ryhma" => json_encode(array_values($newGroups)),
+				"aktiivinen" => "0",
+			]);
+		}
+	} else {
+		// any other domain, do normal stuff
+		Asiakkaat::model()->updateAll(array('aktiivinen' => '0'), $criteria);
+	}
 	//     Asiakas passiviseksi paivamaaran mukaan -->
 
 	unset($_SESSION['domain']);

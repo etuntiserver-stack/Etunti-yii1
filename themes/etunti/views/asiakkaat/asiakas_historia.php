@@ -258,3 +258,25 @@
             </div>
         </div>
 	<?php endif; ?>
+
+	<?php $returnBod = is_object($asiakkaat[0]) ? $asiakkaat[0]->getCustomerFreshdeskTickets($model) : ''; ?>
+  <?php if(!empty($returnBod)): ?>
+	<?php if($kayttaja == 'admin'): ?>
+	  <legend><h3><?php echo Yii::t('main', 'Tickets'); ?></h3></legend>
+	<?php endif; ?>
+  <div class="tray-center">
+      <div class="admin-form">
+        <div class="panel heading-border">
+          <div class="panel-body bg-light">
+           <div class="table-responsive tuloshakusta">
+            <?php if(empty($returnBod)): ?>
+               <p><?=Yii::t('main', 'Ei tuloksia')?></p>
+            <?php else: ?>
+               <?=$returnBod?>
+            <?php endif; ?>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <?php endif; ?>

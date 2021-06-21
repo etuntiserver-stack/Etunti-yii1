@@ -10,7 +10,7 @@ class Freshdesk extends CComponent
   /** @var string Base URL for Freshdesk services. */
   private const TEST_BASE_URL = 'https://santelo.freshdesk.com';
   /** @var string Default testing API key. */
-  private const TEST_API_KEY = 'Ab4aA1ZpUWYG4f51Oze';
+  private const TEST_API_KEY = '5vez7BxPLNxrLUP1KH1V';
 
   /** @var int Amount of seconds until next request when request limit is reached. */
   private static $retryAfter = 0;
@@ -119,8 +119,16 @@ class Freshdesk extends CComponent
 
     if (!empty($post_fields))
       curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_fields));
-    foreach ($tags as $tag => $value)
-      curl_setopt($ch, $tag, $value);
+    
+    foreach ($tags as $tag => $value) {
+      if($tag == 'CURLOPT_CUSTOMREQUEST') {
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $value);
+      } elseif($tag == 'CURLOPT_POST') {
+        curl_setopt($ch, CURLOPT_POST, $value);
+      } else {
+        curl_setopt($ch, $tag, $value);
+      }
+    }
 
     // Execute request and get header size to separate headers and body.
     curl_setopt($ch, CURLOPT_HEADER, true);
@@ -151,7 +159,7 @@ class Freshdesk extends CComponent
       static::$retryAfter = $headers['retry-after'];
       $this->log('Request limit reached, retry-after: %d', $headers['retry-after']);
     }
-
+    
     return $body;
   }
 
@@ -235,7 +243,7 @@ class Freshdesk extends CComponent
       $query_str = '?' . $query_str;
 
     // Create and execute request.
-    $tags[CURLOPT_CUSTOMREQUEST] = 'GET';
+    $tags["CURLOPT_CUSTOMREQUEST"] = 'GET';
     return $this->request($target . $query_str, [], $tags, $headers, $ignore_errors);
   }
 
@@ -269,7 +277,7 @@ class Freshdesk extends CComponent
    */
   private function requestPut(string $target, array $post_fields = [], array $tags = [], &$headers = null, $ignore_errors = false)
   {
-    $tags[CURLOPT_CUSTOMREQUEST] = 'PUT';
+    $tags["CURLOPT_CUSTOMREQUEST"] = 'PUT';
     return $this->request($target, $post_fields, $tags, $headers, $ignore_errors);
   }
 
@@ -959,7 +967,7 @@ class Freshdesk extends CComponent
       $this->logLocalError("Zero or negative ID in deleteTicket(): $id");
       return null;
     } else {
-      return $this->request("tickets/$id", [], [CURLOPT_CUSTOMREQUEST => 'delete'], $headers);
+      return $this->request("tickets/$id", [], ["CURLOPT_CUSTOMREQUEST" => 'delete'], $headers);
     }
   }
 
@@ -2064,8 +2072,19 @@ class Freshdesk extends CComponent
             $opts['mobile'] = $a->puhelin;
           }
 
+          // Address
           if (!empty($a->osoite)) {
             $opts['address'] = $a->osoite;
+          }
+          
+          // Postal code
+          if (!empty($a->postinumero)) {
+            $opts['address'] = isset($opts['address']) && $opts['address'] != '' ? $opts['address'].', '.$a->postinumero : $a->postinumero;
+          }
+          
+          // Post office
+          if (!empty($a->kaupunki)) {
+            $opts['address'] = isset($opts['address']) && $opts['address'] != '' ? $opts['address'].', '.$a->kaupunki : $a->kaupunki;
           }
 
           // Check for duplicate, in which case, update existing contact.

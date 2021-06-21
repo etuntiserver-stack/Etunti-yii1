@@ -2035,7 +2035,7 @@ public function actionImei($dom)
 			"first_name" => $client->etunimi,
 			"last_name" => $client->sukunimi,
 			"pf_store" => $workGroupName,
-			"pf_external_id" => $client->id,
+			"pf_external_id" => $client->asiakasnumero,
 			"pf_target" => $encoded_names,
 			"pf_timestamp" => time(),
 		];
@@ -2106,7 +2106,7 @@ public function actionImei($dom)
 	 * 400 Meikäläinen (K, S) Matti
 	 * we're looking to extract only Meikäläinen and Matti from that name
 	 */
-	private function parseName($name) {
+	public function parseName($name) {
 		// https://www.phpliveregex.com/p/Az6
 		// http://www.regular-expressions.info/unicode.html#category
 		// \p{L} or \p{Letter}: any kind of letter from any language.

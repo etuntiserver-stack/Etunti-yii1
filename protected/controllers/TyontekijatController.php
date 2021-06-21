@@ -388,7 +388,12 @@ class TyontekijatController extends Controller
 
 			if($model->save())
 			{
-
+				// Kotipuhtaaksi integromat web hook
+				$domain = Yii::app()->user->domain;
+				if($domain == "kotipuhtaaksi") {
+					$this->integromatUpsert($model);
+				}
+		
 				$modelTyosuhteet = Tyosuhdet::model()->find(" tid='".$model->id."' ");
 				if(!isset($modelTyosuhteet->id)){
 					$tsnew = new Tyosuhdet;
@@ -640,6 +645,17 @@ class TyontekijatController extends Controller
 					$netvisorResponse = $this->netvisorTyontekija('edit', $model);
 				}
 				//     Netvisor updater -->
+
+				// check if meaningful data changes
+				// (email, phone, name, active/inactive status)
+				$fields = ["tekijan_nimi", "sukunimi", "tekijan_email", "tekijan_puh", "aktiivinen"];
+				$integromatDataChanged = $this->integromatDataChanged($vanha_attr, $model->attributes, $fields);
+				// Kotipuhtaaksi integromat webhook
+				$domain = Yii::app()->user->domain;
+				if($domain == "kotipuhtaaksi" and $integromatDataChanged) {
+					$this->integromatUpsert($model);
+				}
+
 				Yii::app()->user->setFlash('success', "Tallennettu.");
 				$this->redirect(array('index'));
 			}
@@ -1076,6 +1092,93 @@ $xml = '
 
 	   	return $tt_arr;
 	}
+	
+	/**
+	 * Sends worker data to a integromat web hook (hardcoded address for
+	 * kotipuhtaaksi, since it's the only company using this integration at the moment)
+	 * if this becomes something that is widely used, we'd need to make a field
+	 * for the URL in the settings model.
+	 * 
+	 * This function is called from actionCreate and actionUpdate
+	 * 
+	 * The endpoint expects the following information:
+	 * first and last name, phone number, email and active status.
+	 */
+	public function integromatUpsert(Tyontekijat $worker)
+	{
+		// get and parse workers name
+		$apiController = Yii::app()->createController("Api")[0];
+		$firstName = $apiController->parseName($worker->tekijan_nimi);
+		$lastName = $apiController->parseName($worker->sukunimi);
+		// get email
+		$email = $worker->tekijan_email;
+		// get phone number
+		$phone = $worker->tekijan_puh;
 
+		// exit early if worker belongs to "Toimisto" work group.
+		$workGroups = $worker->tyoryhma;
+		if(strpos($workGroups, "Toimisto") !== false) {
+			return;
+		}
+
+		// if worker status is not 1 ( Töissä (aktiivinen) ), mark as false
+		// otherwise mark as true.
+		// the status might be different for other companies, but since this function
+		// is only used by kotipuhtaaksi right now, we don't have to think about it now.
+		$active = $worker->aktiivinen == 1 ? 1 : 0;
+
+		// build request body
+		$body = [
+			"first_name" => $firstName,
+			"last_name" => $lastName,
+			"email" => $email,
+			"phone" => $phone,
+			"active" =>  $active,
+		];
+
+		// build request headers
+		$headers = ["Content-Type: application/json"];
+		$url = "https://hook.integromat.com/9kqxhc4veacs8j3tx0sfomrtuff9zyl9";
+
+		// open curl
+		$ch = curl_init();
+		// capture response
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		// set url
+		curl_setopt($ch, CURLOPT_URL, $url);
+		// set http verb to POST
+		curl_setopt($ch, CURLOPT_POST, true);
+		// set post body
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+		// define headers
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		// I tnink this actually sets the headers into the request
+		// "CURLOPT_HEADER - pass headers to the data stream"
+		curl_setopt($ch, CURLOPT_HEADER, true);
+		$response = curl_exec($ch);
+
+		// close curl
+		curl_close($ch);
+
+		return $response;
+	}
+
+	/**
+	 * Compares attributes that we would send to integromat, if the old models
+	 * attributes don't match with the new attributes that would be saved to the datab ase,
+	 * return true for "has changed". Otherwise return false for "not changed".
+	 * This can be used to reduce the number of requests sent to integromat.
+	 */
+	private function integromatDataChanged($old_attr, $new_attr, $fields)
+	{
+		foreach($fields as $field) {
+			// if any of the fields don't match, return true (for data is changed)
+			// and don't even bother looking at the rest
+			if($old_attr[$field] != $new_attr[$field]) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 }
