@@ -2189,7 +2189,7 @@ class TyovuorootController extends Controller
 		foreach ($period as $dt) {
 			$kks[$dt->format("m.Y")] = 'la_'.$dt->format("m.Y").'_%';
 		}
-		$query 			= "etunti_tunniste LIKE '".implode("' OR LIKE '", $kks)."'";
+		$query 			= "etunti_tunniste LIKE '".implode("' OR LIKE '", $kks)."%'";
 		$laskutetut_ids = Lasku::LaskutetutIDs('tv_id', $query);
 		//  Check Laskutetut -->
 
