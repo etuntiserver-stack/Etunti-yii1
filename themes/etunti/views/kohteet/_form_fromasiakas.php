@@ -88,23 +88,111 @@ if(!isset($model->id)){ $model->alv = 24; }
 
 
 	<?php if(in_array('3',$tas)) : ?>
-	<div class="section fill mb5">
-	<legend><?php echo Yii::t('main','Laskutus'); ?></legend>
-	</div>
+	<legend><h3>Lasku hinnasto.</h3></legend>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tuote'); ?>
-		<?php echo $form->dropDownList($model, 'tuote', CHtml::listData(TuotteetPalvelut::model()->findAll(), 'id', 'nimike'), 
-		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
-		<?php echo $form->error($model,'tuote'); ?>
+		<?php echo $form->labelEx($model,'laskurivi_tyyppi'); ?>
+		<?php 
+			$lista = ['tunti' => 'Kirjaus muoto - h', 'kk' => 'Kuukausi muoto - kk', 'kpl' => 'Kertakäynti muoto - kpl'];
+			echo $form->dropDownList($model, 'laskurivi_tyyppi', $lista, array('class'=>'form-control')); 
+		?> 
+		<?php echo $form->error($model,'laskurivi_tyyppi'); ?>
 	</div>
 	
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinnasto_id'); ?>
+		<?php echo $form->labelEx($model,'hinnasto_id'); ?> <b class="fa fa-info-circle text-danger" data-toggle="tooltip" title="Huomio! Jos valitset hinnaston, silloin hinnasto ajaa yli tuotteet ja palvelut."></b>
 		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
 		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'hinnasto_id'); ?>
 	</div>
+	
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tuote_h'); ?>
+		<?php echo $form->dropDownList($model, 'tuote_h', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='h'"), 'id', 'nimike'), 
+		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
+		<?php echo $form->error($model,'tuote_h'); ?>
+	</div>
+
+	<div class="section fill mb5" id="kk_valinta" style="display:none">
+		<?php echo $form->labelEx($model,'tuote_kk'); ?>
+		<?php echo $form->dropDownList($model, 'tuote_kk', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='kk'"), 'id', 'nimike'), 
+		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
+		<?php echo $form->error($model,'tuote_kk'); ?>
+	</div>
+
+	<div class="section fill mb5" id="kpl_valinta" style="display:none">
+		<?php echo $form->labelEx($model,'tuote_kpl'); ?>
+		<?php echo $form->dropDownList($model, 'tuote_kpl', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='kpl'"), 'id', 'nimike'), 
+		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
+		<?php echo $form->error($model,'tuote_kpl'); ?>
+	</div>
+	
+	<script type="text/javascript">
+	$(document).ready(function(){
+
+		laskurivityyppi();
+		$(document).delegate("#Kohteet_laskurivi_tyyppi","change",function(){
+			laskurivityyppi();
+			if( $(this, 'option:selected').val() == 'kk' )
+				alert('Tämä valinta luo vain yksi rivi laskutuksen luomisessa.\n\nTyövuorojen lisäpalvelut näytetään vain "Laskurivien tyyppi - tunti" tilassa kun TYÖ mobiilissa on tehty työvuoro listan mukaisesti.');
+		});
+	 
+	 	function laskurivityyppi()
+	 	{
+			if( $('#Kohteet_laskurivi_tyyppi option:selected').val() == 'kk' )
+			{
+				$('#kk_valinta').show(375);
+				$('#Kohteet_tuote_kk').attr('required', 'yes');
+				$('#kpl_valinta').hide(375);
+				$('#Kohteet_tuote_kpl').val(0).removeAttr('required');
+			} else if ( $('#Kohteet_laskurivi_tyyppi option:selected').val() == 'tunti' ){
+				$('#kk_valinta').hide(375);
+				$('#Kohteet_tuote_kk').val('').removeAttr('required');
+				$('#kpl_valinta').hide(375);
+				$('#Kohteet_tuote_kpl').val(0).removeAttr('required');
+			} else if ( $('#Kohteet_laskurivi_tyyppi option:selected').val() == 'kpl' ){
+				$('#kk_valinta').hide(375);
+				$('#Kohteet_tuote_kk').val(0).removeAttr('required');
+				$('#kpl_valinta').show(375);
+				$('#Kohteet_tuote_kpl').attr('required', 'yes');
+			}
+	 	}
+	 	
+		var TuotteetBefore = $('#Kohteet_tuote_h').html();
+
+		$('#Kohteet_hinnasto_id').on('change', function(){
+			tuotteetbyhinnasto();
+		});
+
+		if( $('#Kohteet_hinnasto_id option:selected').val() != '' )
+		{
+			tuotteetbyhinnasto();
+		}
+		
+		function tuotteetbyhinnasto()
+		{
+			var thisVal = $('#Kohteet_hinnasto_id option:selected').val();
+			$('#Kohteet_tuote_h').html('');
+			if(thisVal)
+			{
+				$.ajax({
+					url: 'tuotteetbyhinnasto?id=' + thisVal,
+					success: function(data){
+						console.log(data);
+						if(data !== '')
+						{
+							data = JSON.parse(data);
+							$('#Kohteet_tuote_h').html(data);
+						}
+					}
+				});
+				
+			} else {
+				$('#Kohteet_tuote_h').html(TuotteetBefore);
+			}
+		}
+	});
+	</script>
 	<?php endif; ?>
 
   </div><div class="col-sm-3">
