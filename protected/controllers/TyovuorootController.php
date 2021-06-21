@@ -2192,7 +2192,7 @@ class TyovuorootController extends Controller
 		}
 		if(count($kks) > 0)
 		{
-			$query 			= "etunti_tunniste LIKE '".implode("' OR LIKE '", $kks)."'";
+			$query 			= "etunti_tunniste LIKE '".implode("' OR etunti_tunniste LIKE '", $kks)."%'";
 			$laskutetut_ids = Lasku::LaskutetutIDs('tv_id', $query);
 		}
 		//  Check Laskutetut -->
