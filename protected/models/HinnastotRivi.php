@@ -80,6 +80,7 @@ class HinnastotRivi extends DB2ActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'tuotteet' => array(self::BELONGS_TO, 'TuotteetPalvelut', 'tuote_palvelu_id'),
 		);
 	}
 

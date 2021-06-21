@@ -32,7 +32,7 @@ class KohteetController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index', 'view','osoite', 'autotaytaminen', 'createfromasiakas', 'googlemap', 'googlemap_k', 'massamuokkaus'),
+				'actions'=>array('admin','delete','create','update','index', 'view','osoite', 'autotaytaminen', 'createfromasiakas', 'googlemap', 'googlemap_k', 'massamuokkaus', 'tuotteetbyhinnasto'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -81,6 +81,19 @@ class KohteetController extends Controller
                 parent::init();
         }
 
+
+	public function actionTuotteetbyhinnasto($id)
+	{
+		$hinnasto = HinnastotRivi::model()->findAll("hinnastot_id='".$id."'");
+		$options = '';
+		foreach($hinnasto as $item)
+		{
+			if($item->tuotteet->yksikko == 'h')
+				$options .= '<option value="'.$item->tuotteet->id.'">'.$item->tuotteet->nimike.'</option>';
+		}
+		echo json_encode($options);
+		exit;
+	}
 
 	public function actionAsiakas_kohteet()
 	{

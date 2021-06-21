@@ -3,14 +3,12 @@
 		$num = $_POST['num'];
 	}
 
-	$tunnit_from 	= '';
-	$tunnit_id 		= '';
 	$tuoteID 		= '';
 	$tuote 			= '';
-	$hinta 			= '';
-	$maara 			= '';
+	$hinta 			= 0;
+	$maara 			= 0;
 	$yksikkot 		= $this->yksikkot(null);
-	$alv 			= $this->alv(null);
+	$alv 			= $this->alv(24);
 	$free_text 		= '';
 	$pikkuviesti 	= '';
 
@@ -27,24 +25,7 @@
 		}
 
 	}
-	if(isset($arr['maara'])){
-		$tp = TuotteetPalvelut::model()->findbypk($tuotePalvelu);
-		if(isset($tp->id)){
-			$tuoteID	= $tp->id;
-			$tuote 		= $tp->nimike;
-		}
 
-		$tunnit_from 	= $arr['tunnit_from'];
-		$tunnit_id 		= $arr['id'];
-		$maara 			= $arr['maara'];
-		$free_text 		= $arr['freetext'];
-		$pikkuviesti 	= $arr['pikkuviesti'];
-		$yksikkot 		= $this->yksikkot('h');
-		if(isset($hinnat[$arr['kohde']])){
-			$hinta = $hinnat[$arr['kohde']]['hinta'];
-			$alv = $alv = $this->alv($hinnat[$arr['kohde']]['alv']);
-		}
-	}
 ?>
 <?php if(!empty($pikkuviesti)): ?>
 <tr>
@@ -56,20 +37,19 @@
 	<TD><span class="link text-danger poista" for="poista_<?php echo $num; ?>" style="font-size:150%"><i class="fa fa-times"></i></span></TD>
 	<TD>
 
-	<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control" value="<?php echo $tuoteID; ?>">
-	<input type="hidden" size="1" name="tunnit_from[<?php echo $num; ?>]" id="tunnit_from_<?php echo $num; ?>" class="form-control" value="<?php echo $tunnit_from; ?>">
-	<input type="hidden" size="1" name="tunnit_id[<?php echo $num; ?>]" id="tunnit_id_<?php echo $num; ?>" class="form-control" value="<?php echo $tunnit_id; ?>">
+	<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control" value="<?php echo $tuoteID; ?>">	
 	<input type="hidden" size="1" name="hinnasto_rivi_id[<?php echo $num; ?>]" id="hinnasto_rivi_id_<?php echo $num; ?>" class="form-control">
 	<div class="row">
 	  <div class="col-lg-4">
 		<?php
 		$criteria = new CDbCriteria();
-       		$criteria->order = " nimike ";
-       		$criteria->condition = " 
+		$criteria->order = " nimike ";
+		$criteria->condition = " 
 			hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0
 		";
 		echo CHtml::dropdownList('','palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
-		array('empty'=>'','class'=>'form-control valitseTuote','id'=>'lt_'.$num,'num'=>$num));
+			['empty'=>'','class'=>'form-control valitseTuote', 'id'=>'lt_'.$num,'num'=>$num, 'options' => [$tuoteID => ['selected'=>true]] ]
+		);
 		?>
 	  </div><div class="col-lg-8">
 	      <input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control form-group" value="<?=$tuote?>">

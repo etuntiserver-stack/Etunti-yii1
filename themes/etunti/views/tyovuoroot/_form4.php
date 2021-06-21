@@ -607,22 +607,34 @@ $(document).ready(function(){
 		<?php echo $form->labelEx($model,'piilota_mobiilista'); ?>
 		<?php 
         	$l = array(0=>'Kyllä',1=>'Ei');
-		echo $form->dropDownList($model,'piilota_mobiilista', $l, 
-		array('class'=>'form-control lomake_valinta')) ?>
+			echo $form->dropDownList($model,'piilota_mobiilista', $l, 
+			array('class'=>'form-control lomake_valinta')) ?>
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'laskutettu'); ?>
-		<?php 
+		<?php
+			// <-- Check laskutetut
+			if(isset($model->kohteet->asiakkaat->id) and $model->kohteet->asiakkaat->id > 0)
+			{
+				$etunti_tunniste 	= 'la_'.date("m.Y", strtotime($laatikko_pvm)).'_'.$model->kohteet->asiakkaat->id;
+				$query				= "etunti_tunniste='".$etunti_tunniste."'";
+				$laskutetut_ids 	= Lasku::LaskutetutIDs('tv_id', $query);
+
+				if(isset($laskutetut_ids[$this_id]))
+					$model->laskutettu = 1;
+			}
+			
         	$l = array(0 => 'Ei laskutettu', 1 => 'Laskutettu');
-		echo $form->dropDownList($model,'laskutettu', $l, 
-		array('class'=>'form-control lomake_valinta')) ?>
+			echo $form->dropDownList($model,'laskutettu', $l, 
+			array('class'=>'form-control lomake_valinta')) 
+		?>
   </div>
 </div>
 <br>
 
 <div class="row">
   <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'tuoteID'); ?>
+		<?php echo $form->labelEx($model,'tuoteID'); ?> <span style="color:red">*</span> <b class="fa fa-info-circle text-danger" data-toggle="tooltip" title="Huomio! Tuote/Palvelu valikko tulee automaattisesti valitsemalla kohden ja myös silloin, kun kohteen tietoihin on määritelty tuotteet ja palvelut yksikkönä h."></b>
 		<?php
 		$criteria = new CDbCriteria();
        		$criteria->order = " nimike ";
@@ -1374,21 +1386,28 @@ $(document).ready(function(){
   }
   <?php endif; ?>
 
+	if( $('#<?=$java_prefix?>_tuoteID').val() == null )
+	{
+		$('#<?=$java_prefix?>_tuoteID').addClass('bg-danger').focus();
+    	$('#submitButton').removeAttr('disabled');
+		return false;
+	}
+
 	/* <-- Tarkistetaan Aloitus/Lopetus Klo ja status */
 	if( $('#<?=$java_prefix?>_status option:selected').val() === '' )
 	{
 		$('#<?=$java_prefix?>_status').addClass('bg-danger').focus();
-    $('#submitButton').removeAttr('disabled');
+    	$('#submitButton').removeAttr('disabled');
 		return false;
 	}
 	if( $('#alku').val() === '' ){
 		$('#alku').addClass('bg-danger').focus();
-    $('#submitButton').removeAttr('disabled');
+    	$('#submitButton').removeAttr('disabled');
 		return false;
 	}
 	if( $('#loppu').val() === '' ){
 		$('#loppu').addClass('bg-danger').focus();
-    $('#submitButton').removeAttr('disabled');
+    	$('#submitButton').removeAttr('disabled');
 		return false;
 	}
 	/*     Tarkistetaan Aloitus/Lopetus Klo ja status --> */
@@ -1869,6 +1888,11 @@ $(document).ready(function(){
 				$('#loppu').val(d[10]);
 			if(d[11])
 				$('#kohteen_tiedostot').html(d[11]);
+			if(d[13])
+				$('#<?=$java_prefix?>_tuoteID').val(d[13]);
+			
+			return false;
+
 		}, error:function(data){
 			console.log(data);
 		}

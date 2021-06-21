@@ -41,21 +41,21 @@ if(empty($model->tietoja))
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'kohde'); ?>
 		<?php
-       		$criteria = new CDbCriteria();
-	        $criteria->order = " osoite ";
+		$criteria = new CDbCriteria();
+		$criteria->order = " osoite ";
 
 		// <-- TyoryhmatHelper
 		$site = Yii::app()->createController('Site');
 		$arr = $site[0]->TyoryhmatHelper();
 		$ids = implode(",", $arr);
 		if( count($arr) > 0 ){
-			$criteria->condition = " tyoryhma IN ($ids) ";
+		$criteria->condition = " tyoryhma IN ($ids) ";
 		}
 		//     TyoryhmatHelper -->
 
-        		$list = CHtml::listData(Kohteet::model()->findAll($criteria), 'id', 'osoite');
-        		echo $form->dropDownList($model, 'kohde', $list,array('empty'=>'Valitse','class'=>'form-control kohde'));
-        	?>
+			$list = CHtml::listData(Kohteet::model()->findAll($criteria), 'id', 'osoite');
+			echo $form->dropDownList($model, 'kohde', $list,array('empty'=>'Valitse','class'=>'form-control kohde'));
+		?>
   </div>
 </div>
  	
@@ -498,7 +498,7 @@ $(document).ready(function(){
 
 <div class="row">
   <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'tuoteID'); ?>
+		<?php echo $form->labelEx($model,'tuoteID'); ?> <b class="fa fa-info-circle text-danger" data-toggle="tooltip" title="Huomio! Tuote/Palvelu valikko tulee automaattisesti valitsemalla kohden ja myös silloin, kun kohteen tietoihin on määritelty tuotteet ja palvelut yksikkönä h."></b>
 		<?php
 		$criteria = new CDbCriteria();
        		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND yksikko='h' AND nayta_vain_onlinevarauksessa=0";
@@ -724,6 +724,9 @@ $(document).ready(function(){
 				$('#arvioitu_kesto').html('00:00');
 			}
 
+			if(d[13])
+				$('#Tyovuoroot_tuoteID').val(d[13]);
+				
 	   	},
 		error:function(data){
 		console.log(data);

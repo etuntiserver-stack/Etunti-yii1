@@ -85,69 +85,70 @@ class Lasku extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-                     'lid' => 'int(11) DEFAULT 0',
-		     'yid' => 'int(11) DEFAULT 0',
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
-                     'tyyppi' => 'varchar(100) DEFAULT NULL',
-                     'yritys' => 'varchar(100) DEFAULT NULL',
-                     'y_tunnus' => 'varchar(50) DEFAULT NULL',
-                     'nimi' => 'varchar(100) DEFAULT NULL',
-                     'as_nro' => 'int(11) DEFAULT 0',
-                     'osoite' => 'varchar(255) DEFAULT NULL',
-                     'postinumero' => 'varchar(10) DEFAULT NULL',
-                     'toimipaikka' => 'varchar(50) DEFAULT NULL',
-                     'laskutus' => 'varchar(50) DEFAULT NULL',
-                     'sahkoposti' => 'varchar(100) DEFAULT NULL',
-                     'verkkolaskuosoite' => 'varchar(255) DEFAULT NULL',
-                     'v_tunnus' => 'varchar(100) DEFAULT NULL',
-                     'yhteyshenkilo' => 'varchar(100) DEFAULT NULL',
-                     'nimitarkenne' => 'varchar(100) DEFAULT NULL',
-                     'puhelin' => 'varchar(50) DEFAULT NULL',
-                     't_yritys' => 'varchar(100) DEFAULT NULL',
-                     't_y_tunnus' => 'varchar(50) DEFAULT NULL',
-                     't_nimi' => 'varchar(100) DEFAULT NULL',
-                     't_osoite' => 'varchar(100) DEFAULT NULL',
-                     't_postinumero' => 'varchar(10) DEFAULT NULL',
-                     't_toimipaikka' => 'varchar(100) DEFAULT NULL',
-                     't_puhelin' => 'varchar(50) DEFAULT NULL',
-                     't_sahkoposti' => 'varchar(100) DEFAULT NULL',
-                     'toimitusosoite' => 'varchar(100) DEFAULT NULL',
-                     'paivays' => 'varchar(20) DEFAULT NULL',
-                     'erapaiva' => 'varchar(20) DEFAULT NULL',
-                     'toimituspaiva' => 'varchar(20) DEFAULT NULL',
-                     'maksuehto' => 'varchar(20) DEFAULT NULL',
-                     'viitenumero' => 'varchar(100) DEFAULT NULL',
-                     'viivastyskorko' => 'varchar(50) DEFAULT NULL',
-                     'yhteensa_total_verot' => 'varchar(20) DEFAULT NULL',
-                     'yhteensa_total_veroton' => 'varchar(20) DEFAULT NULL',
-                     'yhteensa_total' => 'varchar(20) DEFAULT NULL',
-                     'saaja_iban' => 'varchar(100) DEFAULT NULL',
-                     'saaja_virtualkoodi' => 'varchar(255) DEFAULT NULL',
-                     'tilanne' => 'varchar(50) DEFAULT NULL',
-                     'maksettu_euro' => 'varchar(100) DEFAULT NULL',
-                     'hyvityslasku' => 'varchar(20) DEFAULT NULL',
-                     'laskun_nimetys' => 'varchar(100) DEFAULT NULL',
-                     'response' => 'text DEFAULT NULL',
-                     'response_finvoice' => 'text DEFAULT NULL',
-                     'postita_jobid' => 'varchar(100) DEFAULT NULL',
-                     'trust_jobid' => 'varchar(100) DEFAULT NULL',
-                     'tapahtumapvm' => 'varchar(50) DEFAULT NULL',
-                     'laskunumero' => 'varchar(11) DEFAULT NULL',
-                     'muistutuslasku_auto' => 'int(1) DEFAULT 0',
-                     'kirjeenluokka' => 'int(1) DEFAULT 0',
-                     'viitenne' => 'varchar(255) DEFAULT NULL',
-                     'viitemme' => 'varchar(255) DEFAULT NULL',
-                     'freetext' => 'varchar(255) DEFAULT NULL',
-                     'deliverymethod' => 'varchar(255) DEFAULT NULL',
-                     'deliveryterm' => 'varchar(255) DEFAULT NULL',
-                     'vatperiod' => 'varchar(50) DEFAULT NULL',
-                     'netvisorkey' => 'int(11) DEFAULT 0',
-                     'netvisor_dimension_name' => 'varchar(100) DEFAULT NULL',
-                     'netvisor_dimension_item' => 'varchar(100) DEFAULT NULL',
-		     'tuotteet_palvelut_muoto' => 'int(1) DEFAULT 0',
-                     'alv_muoto' => 'int(1) DEFAULT 0',
-                     'valmistettu_automaattiseesti' => 'int(1) DEFAULT 0',
-                     'procountor_id' => 'int(11) DEFAULT 0',
+			'lid' => 'int(11) DEFAULT 0',
+			'yid' => 'int(11) DEFAULT 0',
+			'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+			'tyyppi' => 'varchar(100) DEFAULT NULL',
+			'yritys' => 'varchar(100) DEFAULT NULL',
+			'y_tunnus' => 'varchar(50) DEFAULT NULL',
+			'nimi' => 'varchar(100) DEFAULT NULL',
+			'as_nro' => 'int(11) DEFAULT 0',
+			'osoite' => 'varchar(255) DEFAULT NULL',
+			'postinumero' => 'varchar(10) DEFAULT NULL',
+			'toimipaikka' => 'varchar(50) DEFAULT NULL',
+			'laskutus' => 'varchar(50) DEFAULT NULL',
+			'sahkoposti' => 'varchar(100) DEFAULT NULL',
+			'verkkolaskuosoite' => 'varchar(255) DEFAULT NULL',
+			'v_tunnus' => 'varchar(100) DEFAULT NULL',
+			'yhteyshenkilo' => 'varchar(100) DEFAULT NULL',
+			'nimitarkenne' => 'varchar(100) DEFAULT NULL',
+			'puhelin' => 'varchar(50) DEFAULT NULL',
+			't_yritys' => 'varchar(100) DEFAULT NULL',
+			't_y_tunnus' => 'varchar(50) DEFAULT NULL',
+			't_nimi' => 'varchar(100) DEFAULT NULL',
+			't_osoite' => 'varchar(100) DEFAULT NULL',
+			't_postinumero' => 'varchar(10) DEFAULT NULL',
+			't_toimipaikka' => 'varchar(100) DEFAULT NULL',
+			't_puhelin' => 'varchar(50) DEFAULT NULL',
+			't_sahkoposti' => 'varchar(100) DEFAULT NULL',
+			'toimitusosoite' => 'varchar(100) DEFAULT NULL',
+			'paivays' => 'varchar(20) DEFAULT NULL',
+			'erapaiva' => 'varchar(20) DEFAULT NULL',
+			'toimituspaiva' => 'varchar(20) DEFAULT NULL',
+			'maksuehto' => 'varchar(20) DEFAULT NULL',
+			'viitenumero' => 'varchar(100) DEFAULT NULL',
+			'viivastyskorko' => 'varchar(50) DEFAULT NULL',
+			'yhteensa_total_verot' => 'varchar(20) DEFAULT NULL',
+			'yhteensa_total_veroton' => 'varchar(20) DEFAULT NULL',
+			'yhteensa_total' => 'varchar(20) DEFAULT NULL',
+			'saaja_iban' => 'varchar(100) DEFAULT NULL',
+			'saaja_virtualkoodi' => 'varchar(255) DEFAULT NULL',
+			'tilanne' => 'varchar(50) DEFAULT NULL',
+			'maksettu_euro' => 'varchar(100) DEFAULT NULL',
+			'hyvityslasku' => 'varchar(20) DEFAULT NULL',
+			'laskun_nimetys' => 'varchar(100) DEFAULT NULL',
+			'response' => 'text DEFAULT NULL',
+			'response_finvoice' => 'text DEFAULT NULL',
+			'postita_jobid' => 'varchar(100) DEFAULT NULL',
+			'trust_jobid' => 'varchar(100) DEFAULT NULL',
+			'tapahtumapvm' => 'varchar(50) DEFAULT NULL',
+			'laskunumero' => 'varchar(11) DEFAULT NULL',
+			'muistutuslasku_auto' => 'int(1) DEFAULT 0',
+			'kirjeenluokka' => 'int(1) DEFAULT 0',
+			'viitenne' => 'varchar(255) DEFAULT NULL',
+			'viitemme' => 'varchar(255) DEFAULT NULL',
+			'freetext' => 'varchar(255) DEFAULT NULL',
+			'deliverymethod' => 'varchar(255) DEFAULT NULL',
+			'deliveryterm' => 'varchar(255) DEFAULT NULL',
+			'vatperiod' => 'varchar(50) DEFAULT NULL',
+			'netvisorkey' => 'int(11) DEFAULT 0',
+			'netvisor_dimension_name' => 'varchar(100) DEFAULT NULL',
+			'netvisor_dimension_item' => 'varchar(100) DEFAULT NULL',
+			'tuotteet_palvelut_muoto' => 'int(1) DEFAULT 0',
+			'alv_muoto' => 'int(1) DEFAULT 0',
+			'valmistettu_automaattiseesti' => 'int(1) DEFAULT 0',
+			'procountor_id' => 'int(11) DEFAULT 0',
+			'etunti_tunniste' => 'varchar(255) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -177,7 +178,7 @@ class Lasku extends DB2ActiveRecord
 			array('deliverymethod, deliveryterm, freetext, viitenne, viitemme, osoite, verkkolaskuosoite, saaja_virtualkoodi', 'length', 'max'=>255),
 			array('postinumero, t_postinumero', 'length', 'max'=>10),
 			array('paivays, erapaiva, toimituspaiva, maksuehto, yhteensa_total_verot, yhteensa_total_veroton, yhteensa_total, hyvityslasku', 'length', 'max'=>20),
-			array('response, response_finvoice', 'length', 'max'=>5000),
+			array('response, response_finvoice, etunti_tunniste', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, lid, yid, time, tyyppi, yritys, y_tunnus, nimi, as_nro, osoite, postinumero, toimipaikka, laskutus, sahkoposti, verkkolaskuosoite, v_tunnus, yhteyshenkilo, nimitarkenne, puhelin, t_yritys, t_y_tunnus, t_nimi, t_osoite, t_postinumero, t_toimipaikka, t_puhelin, t_sahkoposti, toimitusosoite, paivays, erapaiva, toimituspaiva, maksuehto, viitenumero, viivastyskorko, yhteensa_total_verot, yhteensa_total_veroton, yhteensa_total, saaja_iban, saaja_virtualkoodi, tilanne, maksettu_euro, hyvityslasku, laskun_nimetys, response, response_finvoice, tapahtumapvm, kirjeenluokka, muistutuslasku_auto, freetext, viitenne, viitemme, vatperiod', 'safe', 'on'=>'search'),
@@ -333,8 +334,55 @@ class Lasku extends DB2ActiveRecord
 		));
 	}
 
+	public static function months()
+	{
+		return [
+			1=>Yii::t('main', 'Tammikuu'),
+			2=>Yii::t('main', 'Helmikuu'),
+			3=>Yii::t('main', 'Maaliskuu'),
+			4=>Yii::t('main', 'Huhtikuu'),
+			5=>Yii::t('main', 'Toukokuu'),
+			6=>Yii::t('main', 'Kesäkuu'),
+			7=>Yii::t('main', 'Heinäkuu'),
+			8=>Yii::t('main', 'Elokuu'),
+			9=>Yii::t('main', 'Syyskuu'),
+			10=>Yii::t('main', 'Lokakuu'),
+			11=>Yii::t('main', 'Marraskuu'),
+			12=>Yii::t('main', 'Joulukuu')
+			];
+	}
 
+	public static function LaskutetutIDs($ids_muoto, $query)
+	{
+		$laskut					= Lasku::model()->findAll($query);
+		$pre_laskutetut_tiedot	= [];
+		$return					= [];
+		if(count($laskut) > 0)
+		{
+			foreach($laskut as $item)
+			{
+				$laskuRivit			= LaskunRivit::model()->findAll("lid='".$item->id."' AND tiedot IS NOT NULL");
+				foreach($laskuRivit as $rivi)
+				{
+					$get_tiedot = json_decode($rivi->tiedot, true);
+					if(isset($get_tiedot[$ids_muoto]))
+						$pre_laskutetut_tiedot[] = $get_tiedot[$ids_muoto];
+				}
+			}
 
-
+			foreach($pre_laskutetut_tiedot as $item)
+			{
+				if(is_array($item))
+				{
+					foreach($item as $k => $id)
+						$return[$id] = $id;
+				} else {
+					$return[$item] = $item;
+				}
+			}
+		}
+		
+		return $return;
+	}
 
 }

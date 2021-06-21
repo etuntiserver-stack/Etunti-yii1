@@ -122,6 +122,16 @@ class TuotteetPalvelutController extends Controller
 			else
 				$model->kategoria='';
 
+			// <-- Dimension
+			if( isset($_POST['TuotteetPalvelut']['netvisor_dimension_name']) ){
+			   $dimension = explode("//", $_POST['TuotteetPalvelut']['netvisor_dimension_name']);
+			   if( isset($dimension[0]) and isset($dimension[1]) ){
+				$model->netvisor_dimension_name = $dimension[0];
+				$model->netvisor_dimension_item = $dimension[1];
+			   }
+			}
+			//     Dimension -->
+			
 			if($model->save())
 			{
 			   // <-- Netvisor
@@ -201,6 +211,15 @@ class TuotteetPalvelutController extends Controller
 			  	} 
 			}
 
+			// <-- Dimension
+			if( isset($_POST['TuotteetPalvelut']['netvisor_dimension_name']) ){
+			   $dimension = explode("//", $_POST['TuotteetPalvelut']['netvisor_dimension_name']);
+			   if( isset($dimension[0]) and isset($dimension[1]) ){
+				$model->netvisor_dimension_name = $dimension[0];
+				$model->netvisor_dimension_item = $dimension[1];
+			   }
+			}
+			//     Dimension -->
 
 			if($model->save())
 			{

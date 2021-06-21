@@ -58,7 +58,7 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 	</div>
   <br>
   </div>
-
+<?php /*
   <div class="col-sm-4">
 	<div class="section">
 		<?php echo $form->labelEx($model,'tuoteID'); ?>
@@ -69,7 +69,7 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 		array('empty'=>'Valitse tuote/palvelu','class'=>'form-control'));
 		?>
 	</div>
-
+*/ ?>
 	<div class="section">
 		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
 		<?php echo $form->dropDownList($model,'kohde_kannasta', 

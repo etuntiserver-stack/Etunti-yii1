@@ -26,7 +26,7 @@ if(!isset($model->id) and isset($asetukset->id)){
 
 ?>
 <style>
-#TableRivit.table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+#TableRivit.table > thead > tr > td, #TableRivit.table > tbody > tr > td, #TableRivit.table > tfoot > tr > td {
 	padding: 0;
 }
 </style>
@@ -113,7 +113,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div>
 	<?php endif; ?> 
 
-	<?php if($asetukset->lasku_laskunumero == 1): ?>
+	<?php if($asetukset->lasku_laskunumero == 1): // 1=ITSE, 2=Auto ?>
 	<?php
 		$ln = 0;
 		$criteria = new CDbCriteria();
@@ -316,16 +316,16 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'laskutus'); ?>
 		<?php
-		$list = array(	'posti'=>Yii::t('main','Posti'),
+			$list = array(	'posti'=>Yii::t('main','Posti'),
 				'verkkolasku'=>Yii::t('main','Verkkolasku'),
 				'sahkoposti'=>Yii::t('main','Sähköposti')
 				);
 
-		if($asetukset->palvelu_tyyppi == 3)
-		unset($list['verkkolasku']);
+			if($asetukset->palvelu_tyyppi == 3)
+			unset($list['verkkolasku']);
 
         	echo $form->dropDownList($model, 'laskutus', $list,
-		array('empty'=>'Valitse','class'=>'form-control'));
+				array('class'=>'form-control'));
         	?>
 		<?php echo $form->error($model,'laskutus'); ?>
 	</div>
@@ -501,7 +501,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
   </div>
 </div>
 
-
+<?php /*
 <div class="row form tosoite" style="display:none">
   <div class="col-sm-3">
   <br>
@@ -557,10 +557,9 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div>
   </div>
 </div>
+*/ ?>
 
-<!--<span class="pull-right  btn btn-info" data-toggle="collapse"  data-target="#kalut"><?php echo Yii::t('main', 'Työkalut'); ?> <b class="caret"></b></span>
-<br>
--->
+<?php /*
 <div class="row" id="tuotteet_palvelut_muoto" style="display:none">
 	<div class="col-sm-3 section fill mb5">
 		<br>
@@ -635,8 +634,6 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<b class="glyphicon glyphicon-calendar"></b> 
    		<input type="text" id="kuukausi" class="form-control form-group datepickerMY" value="<?php echo date('Y-m'); ?>">
 	</div><div class="col-sm-6">
-		<!--<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="to" class="form-control form-group datepickerMY" value="<?php echo date('Y-m'); ?>">-->
 	</div>
       </div>
 
@@ -672,41 +669,123 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
   </div>
  </div>
 </div>
+*/ ?>
+
+
+<!-- Uusi työkalu -->
+<?php if(!isset($model->id)): ?>
+<div id="tp_valinta" class="form-inline" style="display:none">
+<?php
+	echo CHtml::dropdownList('laskurivi_tyyppi','laskurivi_tyyppi', ['tunti' => 'Kirjaus muoto - h', 'kk' => 'Kuukausi muoto - kk', 'kpl' => 'Kertakäynti muoto - kpl'], 
+		['class'=>'form-control form-group laskurivi_tyyppi']
+	);
+	echo CHtml::dropdownList('','hinnasto', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
+		['empty'=>'Valitse hinnasto','class'=>'form-control form-group la_hinnasto']
+	);
+	echo CHtml::dropdownList('tuote_h','tuote_h', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='h'"), 'id', 'nimike'), 
+		['empty'=>'Valitse tuntituote','class'=>'form-control form-group la_tuote_h']
+	);
+	echo '<div id="kk_valinta" style="display:none">';
+		echo CHtml::dropdownList('tuote_kk','tuote_kk', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='kk'"), 'id', 'nimike'), 
+			['empty'=>'Valitse kk tuote','class'=>'form-control form-group la_tuote_kk']
+		);
+	echo '</div>';
+	echo '<div id="kpl_valinta" style="display:none">';
+		echo CHtml::dropdownList('tuote_kpl','tuote_kpl', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='kpl'"), 'id', 'nimike'), 
+			['empty'=>'Valitse kpl tuote','class'=>'form-control form-group la_tuote_kpl']
+		);
+	echo '</div>';
+	echo '<span class="btn btn-primary btn-block" id="new_hinnasto">Tallenna</span><br>';
+?>
+</div>
+
+
+<h2 id="valitse_asiakas" class="text-danger">Valitse asiakas.</h2>
+
+<div id="laskurivien_teko" style="display:none; z-index: 1">
+	<div class="form-check">
+	  <input class="form-check-input miten_mukaan" type="radio" name="flexRadioDefault" id="la_mukaan" style="transform: scale(2);">
+	  &nbsp;&nbsp;&nbsp;
+	  <label class="form-check-label" for="flexRadioDefault1">
+		<h3>Laskurivit kirjausten mukaisesti. Ohjelma ehdottaa laskurivit tunneista ja työvuoroista.</h3>
+	  </label>
+	</div>
+	<div class="form-check">
+	  <input class="form-check-input miten_mukaan" type="radio" name="flexRadioDefault" id="man_mukaan" style="transform: scale(2);">
+	  &nbsp;&nbsp;&nbsp;
+	  <label class="form-check-label" for="flexRadioDefault2">
+		<h3>Laskurivit manuaalisesti. Joka rivi luodaan käsin.</h3>
+	  </label>
+	</div>
+</div>
+
+	
+<div id="la_laatikko" style="display:none; z-index: 1">
+	<div class="form-inline">
+
+	  <input type="text" id="la_from" value="<?=date("Y-m-d", strtotime('first day of previous month'))?>" style="display:none">
+	  <input type="text" id="la_to" value="<?=date("Y-m-d", strtotime('first day of previous month'))?>" style="display:none">
+
+	  <div class="form-group">
+	  	<label>Päivämäärä</label><br>
+		<input type="text" class="form-control datepickerFI" id="laskun_paivays" value="<?=date("d.m.Y")?>" data-toggle="tooltip" title="<?=Yii::t('main', 'Laskun päiväys')?>">
+	  </div>
+	  <div class="form-group">
+	  	<label>Muoto</label><br>
+		<select class="form-group form-control" id="rakenne_muoto">
+			<option value="mobiili">Kirjaukset</option>
+			<option value="tuovuoro">Työvuoroista</option>
+		</select>
+	  </div>
+	  <div class="form-group">
+		<label>Laskurivit</label><br>
+		<select class="form-group form-control" id="rivi_muoto">
+			<option value="rivi_per_kirjaus">Kirjaukset rivittäin</option>
+			<option value="rivi_per_kohde">TUOTE</option>
+		</select>
+	  </div>
+	  <div class="form-group">
+	   	<label>Kuukausi</label><br>
+		<input type="text" id="kuukausi_kalentteri" class="form-control form-group datepickerLA" value="<?=date('m.Y', strtotime('first day of previous month'))?>" data-toggle="tooltip" title="<?=Yii::t('main', 'Ajanjakso')?>">
+	  </div>
+	  <span class="btn btn-info pull-right" id="la_paivita"><i class="fa fa-refresh"></i></span>
+	</div>
+	<div class="row form kht" id="kalut"></div>
+</div>
+<!-- Uusi työkalu /-->
+<?php endif; ?>
 
 
 
+<input type="hidden" class="form-control" id="kohteistaRivit" readonly><br>
+<div id="tuntienTulos"></div>
 
-	<input type="hidden" class="form-control" id="kohteistaRivit" readonly><br>
-	<div id="tuntienTulos"></div>
-
-	<?php if(!isset($model->id)) : ?> 
-	<div id="ilmoitusAllennusta"></div>
-	<?php endif; ?> 
-
+<?php if(!isset($model->id)) : ?> 
+<div id="ilmoitusAllennusta"></div>
+<?php endif; ?>
 <br>
 
 
-	<!-- Digisten -->
-        <?php if(isset($_GET['jv']) and $_GET['jv'] > 0) : ?>
-		<input type="hidden" id="tr_rivit_jarjestelmavalvojat" value="1">
-		<input type="hidden" id="jv_maara" value="<?=$_GET['jv']?>">
-        <?php endif; ?>
-        <?php if(isset($_GET['edico_tilaus_id']) and $_GET['edico_tilaus_id'] > 0) : ?>
-		<input type="hidden" id="edico_tilaus_id" value="<?=$_GET['edico_tilaus_id']?>">
-        <?php endif; ?>
-	<!-- Digisten -->
+<!-- Digisten -->
+<?php if(isset($_GET['jv']) and $_GET['jv'] > 0) : ?>
+<input type="hidden" id="tr_rivit_jarjestelmavalvojat" value="1">
+<input type="hidden" id="jv_maara" value="<?=$_GET['jv']?>">
+<?php endif; ?>
+<?php if(isset($_GET['edico_tilaus_id']) and $_GET['edico_tilaus_id'] > 0) : ?>
+<input type="hidden" id="edico_tilaus_id" value="<?=$_GET['edico_tilaus_id']?>">
+<?php endif; ?>
+<!-- Digisten -->
 
-	<!-- l_asiakkaat -->
-        <?php if(isset($_GET['asiakasnumero']) and $_GET['asiakasnumero'] > 0) : ?>
-		<input type="hidden" id="asiakasnumero" value="<?=$_GET['asiakasnumero']?>">
-        <?php endif; ?>
-	<!-- l_asiakkaat -->
+<!-- l_asiakkaat -->
+<?php if(isset($_GET['asiakasnumero']) and $_GET['asiakasnumero'] > 0) : ?>
+<input type="hidden" id="asiakasnumero" value="<?=$_GET['asiakasnumero']?>">
+<?php endif; ?>
+<!-- l_asiakkaat -->
 
-<div id="rivit" class="table-responsive">
-<TABLE class="table well" id="TableRivit">
-
-     <TR>
-     <thead class="myBgColors">
+<div id="rivit" <?=(!isset($model->id))? 'style="display:none; z-index: 1"': '' ?>>
+	<TABLE class="table well" id="TableRivit">
+	<TR>
+	<thead class="myBgColors">
 	<TH style="width:1%"><span id="uusiRivi" class="link" style="font-size: 150%;"><i class="fa fa-plus-square"></i></span></TH>
 	<TH class="col-sm-2">Tuote/Palvelu</TH>
 	<TH class="col-sm-1">Määrä</TH>
@@ -718,41 +797,52 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<TH class="col-sm-1">Veroton</TH>
 	<TH class="col-sm-1">Yht</TH>
 	<TH class="col-sm-1">Viesti</TH>
-     </thead>
-     </TR>
+	</thead>
+	</TR>
 
-     <tbody>
-     <?php 
+	<tbody>
+	<?php 
 	$num = 0;
 	if(isset($model->id)){
-		foreach($laskunRivit as $rivi){ 
-			$num++;
-			echo $this->renderPartial("//lasku/tr_rivi_update",array('num'=>$num,'rivi'=>$rivi));
-		}
-	}
-	if(isset($_POST['tr_rivit'])){
-		$kohde_ids = [];
-		foreach(json_decode($_POST['tr_rivit'], true) as $arr)
-			$kohde_ids[$arr['kohde']] = $arr['kohde']; 
-		$hinnat = [];
-		foreach($kohde_ids as $kohde)
-			$hinnat[$kohde] = $this->getHintaForKohde($kohde, $_POST['tp_palvelu'], 'h');
 
-		foreach(json_decode($_POST['tr_rivit'], true) as $arr){ 
+		// <-- Hinnoitelu näkyvyys logikka
+		$kohde_ids_all = [];
+		foreach($laskunRivit as $rivi){
+			if(!empty($rivi->kohde_ids))
+			{
+				$kids = json_decode($rivi->kohde_ids, true);
+				foreach($kids as $kid)
+					$kohde_ids_all[$kid] = $kid; 
+			}
+		}
+		$kohden_hinnoittelut = [];
+		$impl = "id='".implode("' OR id='", $kohde_ids_all)."'";
+		$kohteet = Kohteet::model()->findAll("$impl");
+		foreach($kohteet as $item)
+			$kohden_hinnoittelut[$item->id] = ['hinnoittelu' => $item->hinnoittelu, 'osoite' => $item->osoite];
+		//    Hinnoitelu näkyvyys logikka -->
+		
+		foreach($laskunRivit as $rivi)
+		{ 
 			$num++;
-			echo $this->renderPartial("//lasku/tr_rivit_tyhja",[
-				'num'=>$num, 
-				'arr'=>$arr, 
-				'hinnat' => $hinnat, 
-				'tuotePalvelu' => $_POST['tp_palvelu']
+			$kids = [];
+			if(!empty($rivi->kohde_ids))
+				$kids = json_decode($rivi->kohde_ids, true);
+
+			echo $this->renderPartial("//lasku/tr_rivi_update", [
+				'num' => $num, 
+				'rivi' => $rivi,
+				'kids' => $kids,
+				'kohden_hinnoittelut' => $kohden_hinnoittelut
+				
 			]);
 		}
 	}
-     ?>
-     </tbody>
+	?>
+	</tbody>
 
-     <tfoot>
-     <TR>
+	<tfoot>
+	<TR>
 	<TD></TD>
 	<TD></TD>
 	<TD></TD>
@@ -764,148 +854,141 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<TD><input type="text" class="form-control" size="10" name="Lasku[yhteensa_total_veroton]" id="yhteensa_total_veroton" readonly></TD>
 	<TD><input type="text" class="form-control" size="10" name="Lasku[yhteensa_total]" id="yhteensa_total" readonly></TD>
 	<TD></TD>
-     </TR>
-     </tfoot>
-</TABLE>
-<p><div id="lisatietoja_laskutuksesta"></div></p>
+	</TR>
+	</tfoot>
+	</TABLE>
 </div>
 
-<br>
+<p>
+	<div id="lisatietoja_laskutuksesta"></div>
 	<div id="hinnoitelu"></div>
+</p>
 
-<br><br><br><br><br><br>
 
 	<div class="section fill mb5 subm">
-		<?php if(!isset($model->id) or $model->tilanne == '0') : ?>
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Tallenna' : 'Tallenna',array('class'=>'btn  btn-primary myBgColors')); ?>
-		<?php endif; ?>
 
-
-		<?php /* if(
-			isset($model->id) 
-		) : ?>
-		<a href="lasku_pdf?id=<?php echo $model->id; ?>" target="_blank" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Esikatselu'); ?></a>
-		<?php endif; */?>
-
-		<?php if(isset($model->id) and $model->tilanne == '1' and $asetukset->palvelu_tyyppi == 1) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&finvoice=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä finvoice (POSTITA.FI)'); ?></a>
-		<?php endif; ?>
-
-
-  <?php 
-  if(isset($model->id) 
- 	and $model->tilanne == 1
-	and $asetukset->palvelu_tyyppi == 1
-	and $model->tilanne != 999 // mitatoiny, eli ei arvostele
-  ){
-  echo '<a href="finvoice?id='.$model->id.'&laskutus='.$model->laskutus.'" class="btn btn-success btn-group myBgColors">'.Yii::t('main','Luo POSTITA:ssa (ei viellä lähetä)').'</a>';
-  }
-  ?>
-
-  <?php 
-  if(isset($model->id) 
- 	and $model->tilanne == '2'
-	and $asetukset->palvelu_tyyppi == 1
-	and isset($laskuHistoria->id)
-	and $laskuHistoria->postita_statuscode == 'NE'
-  ){
-  echo '<a href="finvoice?id='.$model->id.'&vahvistus='.$model->postita_jobid.'" class="btn btn-success btn-group myBgColors">'.Yii::t('main','Vahvista ja lähetä').'</a>';
-  }
-  ?>
-
-  <?php 
-  if(isset($model->id) 
-	and file_exists(Yii::app()->basePath."/../tiedostot/laskut/".Yii::app()->user->domain.'/'.$model->id.'.pdf')
-  ){
-  echo '<a href="postita_pdf?id='.$model->id.'" class="btn btn-success btn-group myBgColors">'.Yii::t('main','PDF').'</a>';
-  }
-  ?>
-
-		<?php
-		if (isset($model->id) && $model->tilanne == 1 && $asetukset->palvelu_tyyppi == 5) {
-			echo CHtml::link('Lähetä', ['finvoice', 'id' => $model->id, 'procountor' => true, 'merkitseLahetettavaksi' => true], ['class' => 'btn btn-success btn-group myBgColors']);
+		<?php 
+		if(!isset($model->id))
+		{
+			echo CHtml::submitButton('Luo lasku',array('class'=>'btn btn-primary myBgColors tallennus_nappi', 'style' => 'display:none'));
+		} else {
+			if($model->tilanne == '0')
+			echo CHtml::submitButton(((!empty($model->yhteensa_total))? 'Tallenna':'Tarkista tiedot ja Tallenna'),array('class'=>'btn btn-primary myBgColors'));	
 		}
 		?>
 
-		<?php if(isset($model->id) 
+
+		<?php if(!empty($model->yhteensa_total)): ?>
+
+			<?php if(isset($model->id) and $model->tilanne == '1' and $asetukset->palvelu_tyyppi == 1) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&finvoice=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä finvoice (POSTITA.FI)'); ?></a>
+			<?php endif; ?>
+
+
+			<?php 
+			if(isset($model->id) 
+			and $model->tilanne == 1
+			and $asetukset->palvelu_tyyppi == 1
+			and $model->tilanne != 999 // mitatoiny, eli ei arvostele
+			){
+			echo '<a href="finvoice?id='.$model->id.'&laskutus='.$model->laskutus.'" class="btn btn-success btn-group myBgColors">'.Yii::t('main','Luo POSTITA:ssa (ei viellä lähetä)').'</a>';
+			}
+			?>
+
+			<?php 
+			if(isset($model->id) 
+			and $model->tilanne == '2'
+			and $asetukset->palvelu_tyyppi == 1
+			and isset($laskuHistoria->id)
+			and $laskuHistoria->postita_statuscode == 'NE'
+			){
+			echo '<a href="finvoice?id='.$model->id.'&vahvistus='.$model->postita_jobid.'" class="btn btn-success btn-group myBgColors">'.Yii::t('main','Vahvista ja lähetä').'</a>';
+			}
+			?>
+
+			<?php 
+			if(isset($model->id) 
+			and file_exists(Yii::app()->basePath."/../tiedostot/laskut/".Yii::app()->user->domain.'/'.$model->id.'.pdf')
+			){
+			echo '<a href="postita_pdf?id='.$model->id.'" class="btn btn-success btn-group myBgColors">'.Yii::t('main','PDF').'</a>';
+			}
+			?>
+
+			<?php
+			if (isset($model->id) && $model->tilanne == 1 && $asetukset->palvelu_tyyppi == 5) {
+			echo CHtml::link('Lähetä', ['finvoice', 'id' => $model->id, 'procountor' => true, 'merkitseLahetettavaksi' => true], ['class' => 'btn btn-success btn-group myBgColors']);
+			}
+			?>
+
+			<?php if(isset($model->id) 
 			and $model->tilanne == 1 
 			and $asetukset->palvelu_tyyppi == 4
 			and $asetukset->netvisor_kaytto == 1
 			and $model->netvisorkey == 0
 			//and $model->laskun_nimetys != "Hyvityslasku"
 			and $model->tilanne != 999
-		): ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaNetvisor=true" class="btn  btn-success btn-group myBgColors" data-toggle="tooltip" data-placement="top" title="<?php echo Yii::t('main', 'Lähetä Netvisoriin'); ?>"><?php echo Yii::t('main','Lähetä'); ?></a>
-		<?php endif; ?>
+			): ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&lahetaNetvisor=true" class="btn  btn-success btn-group myBgColors" data-toggle="tooltip" data-placement="top" title="<?php echo Yii::t('main', 'Lähetä Netvisoriin'); ?>"><?php echo Yii::t('main','Lähetä'); ?></a>
+			<?php endif; ?>
 
-		<?php if(isset($model->id) 
+			<?php if(isset($model->id) 
 			and $model->tilanne == 1 
 			and empty($model->trust_jobid) 
 			and $asetukset->palvelu_tyyppi == 2 
 			and $model->laskun_nimetys != "Hyvityslasku"
 			and $model->tilanne != 999
-		): ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true" class="btn  btn-success btn-group myBgColors" data-toggle="tooltip" data-placement="top" title="<?php echo Yii::t('main', 'Lähetä Trustiin'); ?>"><?php echo Yii::t('main','Lähetä'); ?></a>
-		<?php endif; ?>
+			): ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true" class="btn  btn-success btn-group myBgColors" data-toggle="tooltip" data-placement="top" title="<?php echo Yii::t('main', 'Lähetä Trustiin'); ?>"><?php echo Yii::t('main','Lähetä'); ?></a>
+			<?php endif; ?>
 
-		<?php $procountor_param = $asetukset->palvelu_tyyppi == 5 ? '&procountor=1' : ''; ?>
-		<?php if(isset($model->id) and $model->tilanne == '0') : ?>
+			<?php $procountor_param = $asetukset->palvelu_tyyppi == 5 ? '&procountor=1' : ''; ?>
+			<?php if(isset($model->id) and $model->tilanne == '0') : ?>
 			<a href="finvoice?id=<?php echo $model->id; ?>&hyvaksyminen=true<?php echo $procountor_param; ?>" class="btn btn-success btn-group myBgColors" id="hyvaksytaan_lasku"><?php echo Yii::t('main','Hyväksy'); ?></a>
-		<?php endif; ?>
+			<?php endif; ?>
 
-		<?php if(
+			<?php if(
 			isset($model->id)
 			and $asetukset->palvelu_tyyppi != 4
 			and $asetukset->palvelu_tyyppi != 5
 			and $model->tilanne != 999
-		) : ?>
-		<a href="lasku_pdf?id=<?php echo $model->id; ?>&muistutuslasku=true" target="_blank" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksumuistutus'); ?></a>
-		<?php endif; ?>
+			) : ?>
+			<a href="lasku_pdf?id=<?php echo $model->id; ?>&muistutuslasku=true" target="_blank" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksumuistutus'); ?></a>
+			<?php endif; ?>
 
-		<?php if(isset($model->id) 
+			<?php if(isset($model->id) 
 			and $model->laskun_nimetys != "Hyvityslasku" 
 			//and $asetukset->palvelu_tyyppi == 2
 			//and $model->trust_jobid != ''
 			and $model->tilanne != 999
 			)
-		: ?>
-		<a href="hyvityslasku?id=<?php echo $model->id; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Hyvityslasku'); ?></a>
-		<?php endif; ?>
+			: ?>
+			<a href="hyvityslasku?id=<?php echo $model->id; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Hyvityslasku'); ?></a>
+			<?php endif; ?>
 
-		<?php if(isset($model->id) 
+			<?php if(isset($model->id) 
 			and $model->laskun_nimetys == "Hyvityslasku"
 			and $asetukset->palvelu_tyyppi == 2
 			//and $model->tilanne != 98
 			and $model->trust_jobid != ''
 			and $model->tilanne != 999
 			) 
-		: ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&hyvityslasku=true&refundtojobid=<?php echo $model->trust_jobid; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä Hyvityslasku'); ?></a>
-		<?php endif; ?>
+			: ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&hyvityslasku=true&refundtojobid=<?php echo $model->trust_jobid; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä Hyvityslasku'); ?></a>
+			<?php endif; ?>
 
-		<?php /* if(
-			isset($model->id) 
-			and $model->tilanne == '1' 
-			and $asetukset->palvelu_tyyppi == 1
-			and $model->tilanne != 999
-		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&pdf=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä PDF (POSTITA.FI)'); ?></a>
-		<?php endif; */ ?>
-
-
-		<?php if(
+			<?php if(
 			isset($model->id) 
 			and $model->tilanne != 0 
 			and $asetukset->palvelu_tyyppi != 2
 			and $asetukset->palvelu_tyyppi != 4
 			and $asetukset->palvelu_tyyppi != 5
 			and $model->tilanne != 999
-		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaSahkopostilla=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä sähköpostilla'); ?></a>
-		<?php endif; ?>
+			) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&lahetaSahkopostilla=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä sähköpostilla'); ?></a>
+			<?php endif; ?>
 
 
-		<?php if(
+			<?php if(
 			isset($model->id) 
 			and $model->tilanne != 0 
 			and $asetukset->palvelu_tyyppi != 2
@@ -915,113 +998,105 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 			and !empty($asetukset->trust_cid)
 			and !empty($asetukset->trust_api)
 			and $model->tilanne != 999
-		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true&jobtype=2" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä perintään'); ?></a>
-		<?php endif; ?>
+			) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true&jobtype=2" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä perintään'); ?></a>
+			<?php endif; ?>
 
-		<?php if(
+			<?php if(
 			isset($model->id)
 			and $model->tilanne != 999
-		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&mitatointi=true<?php echo $procountor_param; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Mitätöi'); ?></a>
-		<a href="finvoice?id=<?php echo $model->id; ?>&kopio=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Kopio'); ?></a>
-		<?php endif; ?>
+			) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&mitatointi=true<?php echo $procountor_param; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Mitätöi'); ?></a>
+			<a href="finvoice?id=<?php echo $model->id; ?>&kopio=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Kopio'); ?></a>
+			<?php endif; ?>
 
-		<?php /*
-		<hr>
-		<p><b>Laskun tila: </b><?php echo $this->tilanneCheck($model,null); ?></p>
-		<br> */ ?>
 
-		<?php if(
+			<?php if(
 			isset($model->id) 
 			and ($asetukset->palvelu_tyyppi == 1 or $asetukset->palvelu_tyyppi == 3)
 			and $model->tilanne != '0'
-		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&merkitseMaksetuksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksettu'); ?></a>
-		<?php endif; ?>
+			) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&merkitseMaksetuksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksettu'); ?></a>
+			<?php endif; ?>
 
-		<?php if(
+			<?php if(
 			isset($model->id) 
 			and $asetukset->palvelu_tyyppi == 3
 			and $model->tilanne != '0'
-		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&merkitseLahetettavaksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Lähetetty'); ?></a>
-		<?php endif; ?>
+			) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&merkitseLahetettavaksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Lähetetty'); ?></a>
+			<?php endif; ?>
 
-		<?php if(
+			<?php if(
 			isset($model->id) 
 			and $asetukset->palvelu_tyyppi == 3
 			and $model->tilanne != '0'
-		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&merkitseMaksumuistutusLahetettavaksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksumuistutus lähetetty'); ?></a>
-		<?php endif; ?>
+			) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&merkitseMaksumuistutusLahetettavaksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksumuistutus lähetetty'); ?></a>
+			<?php endif; ?>
 
 
-		<?php if(isset($model->id) and $asetukset->palvelu_tyyppi == 1) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaMuistutusPostita=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Lähetä MAKSUMUISTUTUS POSTITA.FI'); ?></a>
-		<?php endif; ?>
+			<?php if(isset($model->id) and $asetukset->palvelu_tyyppi == 1) : ?>
+			<a href="finvoice?id=<?php echo $model->id; ?>&lahetaMuistutusPostita=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Lähetä MAKSUMUISTUTUS POSTITA.FI'); ?></a>
+			<?php endif; ?>
 
 
 
-<?php // Trustpoint PDF
-if(isset($model->id))
-{
+			<?php // Trustpoint PDF
+			if(isset($model->id))
+			{
 
-  $exists = Yii::app()->basePath."/../tiedostot/laskut/trust/".Yii::app()->user->domain;
-  $pathForTrust = Yii::app()->basePath;
-  $pdfFile = "/../tiedostot/laskut/trust/".Yii::app()->user->domain."/".$model->id.'.pdf';
+			$exists = Yii::app()->basePath."/../tiedostot/laskut/trust/".Yii::app()->user->domain;
+			$pathForTrust = Yii::app()->basePath;
+			$pdfFile = "/../tiedostot/laskut/trust/".Yii::app()->user->domain."/".$model->id.'.pdf';
 
-  if (!file_exists($exists)) {
-  	mkdir($exists, 0777, true);
-  }
+			if (!file_exists($exists)) {
+			mkdir($exists, 0777, true);
+			}
 
-	$trust_ws_cid = $asetukset->trust_ws_cid;
-	$trust_ws_salasana = $asetukset->trust_ws_salasana;
-	$trust_cid = $asetukset->trust_cid;
-	$trust_api = $asetukset->trust_api;
-	$trust_ws_api_url = $asetukset->trust_ws_api_url;
+			$trust_ws_cid = $asetukset->trust_ws_cid;
+			$trust_ws_salasana = $asetukset->trust_ws_salasana;
+			$trust_cid = $asetukset->trust_cid;
+			$trust_api = $asetukset->trust_api;
+			$trust_ws_api_url = $asetukset->trust_ws_api_url;
 
-  if($asetukset->palvelu_tyyppi == 2 and !empty($model->trust_jobid) and !file_exists($pathForTrust.$pdfFile)
-  and !empty($trust_ws_cid) and !empty($trust_ws_salasana) and !empty($trust_ws_api_url))
-  {
+			if($asetukset->palvelu_tyyppi == 2 and !empty($model->trust_jobid) and !file_exists($pathForTrust.$pdfFile)
+			and !empty($trust_ws_cid) and !empty($trust_ws_salasana) and !empty($trust_ws_api_url))
+			{
 
-	$trust_jobid = $model->trust_jobid;
+			$trust_jobid = $model->trust_jobid;
 
-	$client = new SoapClient($trust_ws_api_url.'/?wsdl', array(
-						'login'=>$trust_ws_cid,
-						'password'=>$trust_ws_salasana));
+			$client = new SoapClient($trust_ws_api_url.'/?wsdl', array(
+					'login'=>$trust_ws_cid,
+					'password'=>$trust_ws_salasana));
 
-	$result = $client->doLogin(array('cid'=>$trust_cid, 'apiCode'=>$trust_api, 'apiVersion'=>'1'));
-	$sessionId = $result['authResponse']->sessionId;
+			$result = $client->doLogin(array('cid'=>$trust_cid, 'apiCode'=>$trust_api, 'apiVersion'=>'1'));
+			$sessionId = $result['authResponse']->sessionId;
 
-	//echo $sessionId.'<br>';
-	//echo $trust_jobid.'<br>';
+			//echo $sessionId.'<br>';
+			//echo $trust_jobid.'<br>';
 
-	$pdf = $client->getJobPdf($sessionId, array('id'=>$trust_jobid, 'idType'=>'jobid'));
+			$pdf = $client->getJobPdf($sessionId, array('id'=>$trust_jobid, 'idType'=>'jobid'));
 
-	if(!empty($pdf['getPdfResponse']))
-	file_put_contents($pathForTrust.$pdfFile, base64_decode($pdf['getPdfResponse']));
+			if(!empty($pdf['getPdfResponse']))
+			file_put_contents($pathForTrust.$pdfFile, base64_decode($pdf['getPdfResponse']));
 
 
-	//echo '<pre>';
-	//print_r($result);
-	//print_r($pdf);
-	//print_r($client->__GetFunctions());
-	//echo '</pre>';
+			//echo '<pre>';
+			//print_r($result);
+			//print_r($pdf);
+			//print_r($client->__GetFunctions());
+			//echo '</pre>';
 
-  }
-  if(file_exists($pathForTrust.$pdfFile))
-  echo '<a href="'.$pdfFile.'" class="btn btn-primary" target="_blank">PDF</a>';
+			}
+			if(file_exists($pathForTrust.$pdfFile))
+			echo '<a href="'.$pdfFile.'" class="btn btn-primary" target="_blank">PDF</a>';
 
-}
-// Trustpoint PDF ?>
+			}
+			// Trustpoint PDF ?>
 
-<!--
-		<?php if(isset($model->id) and $model->tilanne != '3') : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaPerintaan=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Lähetä perintään'); ?></a>
-		<?php endif; ?>
--->
 
+		<?php endif; ?><!-- yhteensa_total -->
 	</div>
 
 <?php $this->endWidget(); ?>
@@ -1082,17 +1157,17 @@ if($("#modelID").val() != '1'){
 
     if( $('#tr_rivit_jarjestelmavalvojat').length )
     {
-    	rowCount = rowCount+1;
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_jarjestelmavalvojat?jv='+$("#jv_maara").val(),
-           type: "POST",
-           data: {num : rowCount},
-           success: function(html){
-         	$("table#TableRivit tbody tr").last().after(html);
-	  	Rivi();
-		eachLaskenta();
-           }
-        });
+		rowCount = rowCount+1;
+		$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_jarjestelmavalvojat?jv='+$("#jv_maara").val(),
+			type: "POST",
+			data: {num : rowCount},
+			success: function(html){
+				$("table#TableRivit tbody tr").last().after(html);
+				Rivi();
+				eachLaskenta();
+			}
+		});
 
     }
     /* <-- Edisco Tilaus */
@@ -1114,18 +1189,18 @@ if($("#modelID").val() != '1'){
            }
         });
 
-    	rowCount = rowCount+1;
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_edico_tilaus',
-           type: "POST",
-           data: {num : rowCount, edico_tilaus_id : edico_tilaus_id },
-           success: function(html){
-        	$("table#TableRivit tbody tr").empty();
-         	$("table#TableRivit tbody tr").last().after(html);
-	  	Rivi();
-		eachLaskenta();
-           }
-        });
+		rowCount = rowCount+1;
+		$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_edico_tilaus',
+			type: "POST",
+			data: {num : rowCount, edico_tilaus_id : edico_tilaus_id },
+			success: function(html){
+				$("table#TableRivit tbody tr").empty();
+				$("table#TableRivit tbody tr").last().after(html);
+				Rivi();
+				eachLaskenta();
+			}
+		});
 
     }
     /*   Edisco Tilaus --> */
@@ -1134,18 +1209,21 @@ if($("#modelID").val() != '1'){
 }
 
 $("#uusiRivi").click(function() {
-    var rivi = $("#samaRivi").html();
-    var rowCount = makeid();
+	var rivi = $("#samaRivi").html();
+	var rowCount = makeid();
 
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_tyhja',
-           type: "POST",
-           data: {num : rowCount},
-           success: function(html){
-         	$("table#TableRivit tbody tr").last().after(html);
-	  	Rivi();
-           }
-        });
+	$.ajax({
+		url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_tyhja',
+		type: "POST",
+		data: {num : rowCount},
+		success: function(html){
+			if($("table#TableRivit tbody tr.kaikkiTR").last().length > 0)
+				$("table#TableRivit tbody tr.kaikkiTR").last().after(html);
+			else
+				$("table#TableRivit tbody tr").last().after(html);
+			Rivi();
+		}
+	});
 });
 
 function makeid()
@@ -1207,31 +1285,31 @@ $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 
 $(document).delegate("table#TableRivit .valitseTuote_tuoteonly","change",function(){
 
-    var tuoteID = $(this).val();
-    var num = $(this).attr("num");
-    var asiakas_nro = $("#Lasku_as_nro option:selected").val();
-    if(!asiakas_nro && '<?=$model->as_nro?>' !== '')
-    {
-	asiakas_nro = '<?=$model->as_nro?>';
-    }
+	var tuoteID = $(this).val();
+	var num = $(this).attr("num");
+	var asiakas_nro = $("#Lasku_as_nro option:selected").val();
+	if(!asiakas_nro && '<?=$model->as_nro?>' !== '')
+	{
+		asiakas_nro = '<?=$model->as_nro?>';
+	}
 
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/lasku/valitsetuote',
-           type: "POST",
-           data: { tuoteID : tuoteID, asiakas_nro : asiakas_nro },
-           success: function(data){
-		var sp = JSON.parse(data);
+	$.ajax({
+		url: location.protocol + "//" + location.host + '/index.php/lasku/valitsetuote',
+		type: "POST",
+		data: { tuoteID : tuoteID, asiakas_nro : asiakas_nro },
+		success: function(data){
+			var sp = JSON.parse(data);
 
-		if(sp['id'])
-		{
+			if(sp['id'])
+			{
 			$("#tkoodi_"+num).val(sp['tuotenimi']);
 			$("#tuoteID_"+num).val(sp['id']);
-		}
+			}
 
-		eachLaskenta();
-		//console.log(data)
-           }
-        });
+			eachLaskenta();
+			//console.log(data)
+		}
+	});
 
 });
 
@@ -1317,27 +1395,271 @@ function yhteensaTotal(){
 	});
 }
 
-
 $(document).delegate('#rivit input[type="number"]','keyup, change',function(){
   	eachLaskenta();
     	yhteensaTotal();
 });
 
+// <-- Laskutettavata asiakkaat NEW 06.05.2021
+$(document).delegate("#kuukausi_kalentteri","change",function(){
+	var thisFrom 		= $(this).val().split('.');
+	var from 			= new Date(thisFrom[1], thisFrom[0], 1);
+	var dateFrom		= from.getFullYear() + '-' + (from.getMonth() < 10 ? '0' : '') + from.getMonth() + '-' + (from.getDate() < 10 ? '0' : '') + from.getDate();
+	var lastDayOfMonth 	= new Date(from.getFullYear(), from.getMonth(), 0);
+	var thisTo 			= lastDayOfMonth.getDate();
+	var dateTo			= from.getFullYear() + '-' + (from.getMonth() < 10 ? '0' : '') + from.getMonth() + '-' + (thisTo < 10 ? '0' : '') + thisTo;
+	
+	$('#la_from').val(dateFrom);
+	$('#la_to').val(dateTo);
+	console.log(dateFrom + ' ' + dateTo);
+	
+	ajaxForLasku();
+});
+
+$('#la_paivita').on('click', function(){
+	ajaxForLasku();
+});
+
+$('#rakenne_muoto, #rivi_muoto').on('change', function(){
+	ajaxForLasku();
+});
+	
+$(document).delegate(".laskutetuksi","click",function(e){
+
+	e.preventDefault();
+
+	var lasku_rivit = [];
+	$('.lasku_rivi').find('.laskutetaan:checkbox:checked').each(function(){
+		lasku_rivit.push([{
+			'tuote_id' : $(this).closest('tr').find('.tuote').attr('tuote_id'),
+			'rivi_tunniste' : $(this).closest('tr').find('.tuote').attr('rivi_tunniste'),
+			'kohde_ids' : $(this).closest('tr').find('.tuote').attr('kohde_ids'),
+			'tv_id' : $(this).closest('tr').find('.tuote').attr('tv_id'),
+			'tuote' : $(this).closest('tr').find('.tuote').text(),
+			'maara' : $(this).closest('tr').find('.maara').text(),
+			'yksikko' : $(this).closest('tr').find('.yksikko').text(),
+			'alv' : $(this).closest('tr').find('.alv').text(),
+			'hinta' : $(this).closest('tr').find('.hinta').text(),
+			'free_text' : $(this).closest('tr').find('.free_text').text(),
+			'tiedot' : $(this).closest('tr').find('.tiedot').text(),
+			'kk_hyv_lista' : (  $(this).closest('tr').find('.kk_hyv_lista').find('textarea').val() )? $(this).closest('tr').find('.kk_hyv_lista').find('textarea').val() : ''
+		}]);
+	});
+	
+	var asiakas_id 		= $("#Lasku_as_nro option:selected").attr('asiakas_id');
+	var from 			= $('#la_from').val();
+	var to 				= $('#la_to').val();
+	var laskun_paivays 	= $('#laskun_paivays').val();
+	var etunti_tunniste = $(this).attr('etunti_tunniste');
+	
+	$(this).text('Odota...');
+
+	//console.log(lasku_rivit)
+	//return false;
+	
+	$.ajax({
+		url: 'laskutetuksi?asiakas_id=' + asiakas_id + '&from=' + from + '&to=' + to + '&tilanne=new',
+		type : "POST",
+		data : { la_asiakkaat_tr_rivit : JSON.stringify(lasku_rivit), laskun_paivays : laskun_paivays, etunti_tunniste : etunti_tunniste },
+		success: function(data){
+			var data = JSON.parse(data);
+			console.log(data);
+			if(data['lasku_id'] && parseInt(data['lasku_id']) > 0)
+			{
+				window.location.href= 'update?id=' + parseInt(data['lasku_id']);
+			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+		   	console.log(XMLHttpRequest);
+		}
+	});
+});
+
+$(document).delegate("#laskurivi_tyyppi","change",function(){
+	var cl = $(this).closest('td');
+	laskurivityyppi(cl);
+});
+
+function laskurivityyppi(cl)
+{
+		if( cl.find('#laskurivi_tyyppi option:selected').val() == 'kk' )
+		{
+			cl.find('#kk_valinta').show(375);
+			cl.find('#kpl_valinta').hide(375);
+			cl.find('#tuote_kpl').val(0);
+		} else if( cl.find('#laskurivi_tyyppi option:selected').val() == 'kpl' )
+		{
+			cl.find('#kpl_valinta').show(375);
+			cl.find('#kk_valinta').hide(375);
+			cl.find('#tuote_kk').val(0);
+		} else {
+			cl.find('#kk_valinta').hide(375);
+			cl.find('#tuote_kk').val(0);
+			cl.find('#kpl_valinta').hide(375);
+			cl.find('#tuote_kpl').val(0);
+		}
+}
+ 	
+var kohde_id 		= 0;
+var TuotteetBefore 	= '';
+
+$(document).delegate(".tuote_puutu","click",function(){
+	var after_replace = $(this).replaceWith( $('#tp_valinta').html() );
+	kohde_id = $(this).attr('kohde_id');
+	TuotteetBefore = $('#tp_valinta').find('.la_tuote_h').html();
+});
+
+$(document).delegate(".la_hinnasto", "change", function(){
+	var cl 		= $(this).closest('td');
+	var thisVal = $(this, 'option:selected').val();
+	
+	if(thisVal)
+	{
+		$.ajax({
+			url: location.protocol + '//' + location.host + '/index.php/kohteet/tuotteetbyhinnasto?id=' + thisVal,
+			success: function(data){
+				console.log(data);
+				if(data !== '')
+				{
+					data = JSON.parse(data);
+					cl.find('.la_tuote_h').html(data);
+				}
+			}
+		});
+		
+	} else {
+		cl.find('.la_tuote_h').html(TuotteetBefore);
+	}
+});
+
+$(document).delegate("#new_hinnasto", "click", function(){
+
+	var cl 			= $(this).closest('td');
+	var laskurivi_tyyppi	= cl.find('.laskurivi_tyyppi', 'option:selected').val();
+	var hinnasto 	= parseInt(cl.find('.la_hinnasto', 'option:selected').val()) || 0;
+	var tuote_h		= parseInt(cl.find('.la_tuote_h', 'option:selected').val()) || 0;
+	var tuote_kk	= parseInt(cl.find('.la_tuote_kk', 'option:selected').val()) || 0;
+	var tuote_kpl	= parseInt(cl.find('.la_tuote_kpl', 'option:selected').val()) || 0;
+
+	if(tuote_h == 0)
+	{
+		alert('Tuntituote ei saa olla tyhjä');
+		return false;
+	}
+	if(laskurivi_tyyppi == 'kk' && tuote_kk == 0)
+	{
+		alert('KK tuote ei saa olla tyhjä');
+		return false;
+	}
+	if(laskurivi_tyyppi == 'kpl' && tuote_kpl == 0)
+	{
+		alert('Kertakäynti tuote ei saa olla tyhjä');
+		return false;
+	}
+		
+	$.ajax({
+		url: 'tuotepalvelukohdelle?id=' + kohde_id + '&laskurivi_tyyppi='+ laskurivi_tyyppi +'&tuote_h=' + tuote_h + '&tuote_kk=' + tuote_kk + '&tuote_kpl=' + tuote_kpl + '&hinnasto=' + hinnasto,
+		success: function(data){
+			var data = JSON.parse(data);
+			console.log(data);
+			
+			ajaxForLasku(cl);
+			$('[data-toggle="tooltip"]').tooltip();
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+		   	console.log(XMLHttpRequest);
+		}
+	});
+});
+	
+function ajaxForLasku()
+{
+	var asiakas_id 		= $("#Lasku_as_nro option:selected").attr('asiakas_id');
+	var rakenne_muoto 	= $('#rakenne_muoto').val();
+	var rivi_muoto 		= $('#rivi_muoto').val();
+	var from			= $('#la_from').val();
+	var to				= $('#la_to').val();
+	
+	if(asiakas_id)
+	{
+		var link = 'kklaskuperasiakas?asiakas_id=' + asiakas_id + '&from=' + from + '&to=' + to + '&rakenne_muoto=' + rakenne_muoto + '&rivi_muoto=' + rivi_muoto;
+		//console.log('Link: ' + link);
+		$.ajax({
+			url: link,
+			success: function(data){
+				var data = JSON.parse(data);
+				//console.log(data);
+				
+				//$('.la_laatikko').show().css({'margin-top' : '50px'});
+				//$('#la_laatikko').addClass('well').show();
+				$('#kuukausi_kalentteri').show();
+				$('#kalut').html('<div class="col-sm-12">' + data + '</div>').show(370);
+				var sum = 0;
+				$('.forsumm').each(function(){
+					sum += parseFloat($(this).text());
+				});
+				$('#summ_result').html(sum.toFixed(2));
+				
+				$('.lasku_rivi').find('.laskutetaan:checkbox:checked').each(function(){
+					$(this).closest('#kalut').find('.laskutetuksi').show()
+				});
+
+				//datepickerLA();
+				$('[data-toggle="tooltip"]').tooltip();
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+			   	console.log(XMLHttpRequest);
+			}
+		});
+	}
+}
+
+datepickerLA();
+function datepickerLA()
+{
+			$(".datepickerLA").datepicker({
+				format: "mm.yyyy",
+				viewMode: "months", 
+				minViewMode: "months",
+				language: "fi",
+				autoclose: true
+			});
+}
+
+$(document).delegate(".miten_mukaan", "change", function(){
+	var thisId = $(this).attr('id');
+	if(thisId == 'la_mukaan')
+	{
+		$('#la_laatikko').addClass('well').show().css({'margin-top' : '50px'});
+		$('.tallennus_nappi, #rivit').hide();
+	} else
+	if(thisId == 'man_mukaan')
+	{
+		$('#la_laatikko').removeClass('well').hide();
+		$('.tallennus_nappi, #rivit').show();
+	}	
+});
+//  Laskutettavata asiakkaat NEW 06.05.2021 -->
+
 var getkohdeT = '';
 $("#Lasku_as_nro").change(function() {
+	$('#valitse_asiakas').hide();
+	$('#laskurivien_teko').show();
+	$("#man_mukaan").click();
+	
     var l_asiakkaat = '<?=((isset($_GET["l_asiakkaat"]))? "true" : "false") ?>';
     var asiakas = $("#Lasku_as_nro option:selected").val();
     var asiakas_id = $("#Lasku_as_nro option:selected").attr('asiakas_id');
     if(!asiakas)
     {
-	alert("Asiakasnumero puuttuu");
-	return false;
+		alert("Asiakasnumero puuttuu");
+		return false;
     }
 	if(l_asiakkaat == "false")
 		$("#kalut").show('slow');
 
-	$("#tuotteet_palvelut_muoto").show('slow');
-	palvelu_muoto();
+	//$("#tuotteet_palvelut_muoto").show('slow');
+	//palvelu_muoto();
 
 	if(l_asiakkaat == "false"){
 		$.ajax({
@@ -1356,7 +1678,7 @@ $("#Lasku_as_nro").change(function() {
 					$("#getkohdeKK").html(spdata['kohteet']);
 					$("#tuntiKalut").show();
 
-					multiselectLaatikko();
+					//multiselectLaatikko();
 
 				} else {
 					$("#tuntiKalut").hide();
@@ -1377,7 +1699,6 @@ $("#Lasku_as_nro").change(function() {
 			var sp = JSON.parse(data).split("//");
 			$(".tyyppi").show('slow');
 
-
 			laskutus(sp[0]);
 			if(sp[0]){
 				$("#Lasku_laskutus").val(sp[0]);
@@ -1385,7 +1706,6 @@ $("#Lasku_as_nro").change(function() {
 			if(sp[1]){
 				$("#Lasku_maksuehto").val(sp[1]);
 			}
-
 
 			if(sp[2])
 			{
@@ -1418,7 +1738,11 @@ $("#Lasku_as_nro").change(function() {
 			$("#Lasku_sahkoposti").val(sp[14])
 			$("#Lasku_viivastyskorko").val(sp[15])
 			$("#Lasku_netvisor_dimension_name").val(sp[16] + '//' + sp[17]);
-			$("#lisatietoja_laskutuksesta").html(sp[18]);
+			$("#lisatietoja_laskutuksesta").html('<br>' + sp[18]);
+			
+			// <-- Laskutettavat Asiakkaat
+			ajaxForLasku();
+			//  Laskutettavat Asiakkaat -->
 
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
@@ -1428,7 +1752,7 @@ $("#Lasku_as_nro").change(function() {
 
 });
 
-
+/*
 var t_palvelut_hinnastosta = $("#palvelu").html();
 var kk_palvelut_hinnastosta = $("#kk_palvelu").html();
 $("#Lasku_tuotteet_palvelut_muoto").change(function() {
@@ -1453,6 +1777,7 @@ function palvelu_muoto(){
 	}
 }
 
+
 $(document).delegate(".kalentteri","click",function(){
 	if( getkohdeT !== '' ){	
 		$("#getkohdeT").html(getkohdeT);
@@ -1461,6 +1786,7 @@ $(document).delegate(".kalentteri","click",function(){
 	}
 	$("#hinnoitelu").html('');
 });
+
 
 $(document).delegate(".for-muoto-1","change",function(){
 	etsiKohteetByYksikkoPalveluMuoto1($(this).val());
@@ -1481,7 +1807,7 @@ function etsiKohteetByYksikkoPalveluMuoto1(hinta_tyyppi){
 		{
 			$("#getkohdeT").html(spdata['kohteet']);
 			//$("#getkohdeKK").html(spdata['kohteet']);
-			multiselectLaatikko();
+			//multiselectLaatikko();
 
 			$("#getkohdeT").find(".multiselect").removeClass('btn-default').addClass('btn-success').text('Kohteet päivitetty');
 			setTimeout(function() { 
@@ -1507,7 +1833,7 @@ function etsiKohteetByYksikkoPalveluMuoto1(hinta_tyyppi){
 		if(spdata['is_true'] == true)
 		{
 			$("#getkohdeKK").html(spdata['kohteet']);
-			multiselectLaatikko();
+			//multiselectLaatikko();
 
 			$("#getkohdeKK").find(".multiselect").removeClass('btn-default').addClass('btn-success').text('Kohteet päivitetty');
 			setTimeout(function() { 
@@ -1525,6 +1851,7 @@ function etsiKohteetByYksikkoPalveluMuoto1(hinta_tyyppi){
         });
 }
 
+
 function multiselectLaatikko(){
 			// <--multiselect
 			$('.etsikohde_alasvetovaliko').multiselect({
@@ -1541,6 +1868,7 @@ function multiselectLaatikko(){
 			});
 			//    multiselect -->
 }
+
 
 $(".luoRiviTunti").click(function() {
 
@@ -1690,25 +2018,22 @@ function RivienLuonti(index, value, rivien_teko, from, to, yhteensa, jakso, kuuk
 		   }
 	        });
 }
+*/
+
 
 $("#Lasku_yid").change(function() {
-
-    var saaja = $(this).val();
-
-        $.ajax({
-           url: 'etsisaaja?id='+saaja,
-           success: function(data){
-               	console.log(data);
-
-		if(data)
-		$("#Lasku_saaja_iban").val(data);
-		
-
-           },
-           error: function(XMLHttpRequest, textStatus, errorThrown){
-               	console.log(XMLHttpRequest);
-	   }
-        });
+	var saaja = $(this).val();
+	$.ajax({
+		url: 'etsisaaja?id='+saaja,
+		success: function(data){
+			//console.log(data);
+			if(data)
+				$("#Lasku_saaja_iban").val(data);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			console.log(XMLHttpRequest);
+		}
+	});
 });
 
 $("#Lasku_tyyppi").change(function() {
