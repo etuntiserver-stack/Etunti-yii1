@@ -1614,7 +1614,10 @@ class MobileController extends Controller
 		$interval 	= DateInterval::createFromDateString('1 month');
 		$period   	= new DatePeriod($start, $interval, $end);
 		$kks 		= [];
-		foreach ($period as $dt) {
+		$laskutetut_ids = [];
+
+		foreach ($period as $dt)
+		{
 			$kks[$dt->format("m.Y")] = 'la_'.$dt->format("m.Y").'_';
 		}
 		if(count($kks) > 0)
