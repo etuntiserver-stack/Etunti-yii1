@@ -1615,10 +1615,13 @@ class MobileController extends Controller
 		$period   	= new DatePeriod($start, $interval, $end);
 		$kks 		= [];
 		foreach ($period as $dt) {
-			$kks[$dt->format("m.Y")] = 'la_'.$dt->format("m.Y").'_%';
+			$kks[$dt->format("m.Y")] = 'la_'.$dt->format("m.Y").'_';
 		}
-		$query 			= "etunti_tunniste LIKE '".implode("' OR LIKE '", $kks)."'";
-		$laskutetut_ids = Lasku::LaskutetutIDs('mobiili_id', $query);
+		if(count($kks) > 0)
+		{
+			$query 			= "etunti_tunniste LIKE '".implode("%' OR etunti_tunniste LIKE '", $kks)."%'";
+			$laskutetut_ids = Lasku::LaskutetutIDs('mobiili_id', $query);
+		}
 		//  Check Laskutetut -->
 
 		if(isset($_POST['index_ajax']))
