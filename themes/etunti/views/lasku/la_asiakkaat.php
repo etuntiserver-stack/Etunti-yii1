@@ -144,7 +144,6 @@
 	  <tr>
 	  <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
 	  <th><?php echo Yii::t('main', 'Lasku'); ?></th>
-	  <th></th>
 	  </tr>
 	  </thead>
 	  <?php $this->widget('zii.widgets.CListView', array(
