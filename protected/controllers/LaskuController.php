@@ -258,6 +258,7 @@ exit;
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 			AND deleted=0
 			AND laskutetaan=1
+			AND laskutettu=0
 		";
 		if($tvid_checker){
 			$criteria->addCondition("
@@ -289,6 +290,7 @@ exit;
 			AND kohdenID > 0
 			AND deleted=0
 			AND laskutetaan=1
+			AND laskutettu=0
 		";
 		if($tvid_checker){
 			$criteria->addCondition("
@@ -2778,6 +2780,7 @@ exit;
 						AND status='3'
 						AND deleted=0
 						AND laskutetaan=1
+						AND laskutettu=0
 						AND hyvaksytty!=''
 					))
 					OR id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id IN(SELECT kohdenID FROM sivexkuitti_repaired WHERE 
@@ -2786,6 +2789,7 @@ exit;
 						AND status='3'
 						AND deleted=0
 						AND laskutetaan=1
+						AND laskutettu=0
 						AND hyvaksytty!=''
 					))
 				");
