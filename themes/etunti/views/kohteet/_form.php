@@ -181,11 +181,6 @@ if(empty($model->tietoja))
 			tuotteetbyhinnasto();
 		});
 
-		if( $('#Kohteet_hinnasto_id option:selected').val() != '' )
-		{
-			tuotteetbyhinnasto();
-		}
-		
 		function tuotteetbyhinnasto()
 		{
 			var thisVal = $('#Kohteet_hinnasto_id option:selected').val();

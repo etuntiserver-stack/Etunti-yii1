@@ -163,11 +163,6 @@ if(!isset($model->id)){ $model->alv = 24; }
 		$('#Kohteet_hinnasto_id').on('change', function(){
 			tuotteetbyhinnasto();
 		});
-
-		if( $('#Kohteet_hinnasto_id option:selected').val() != '' )
-		{
-			tuotteetbyhinnasto();
-		}
 		
 		function tuotteetbyhinnasto()
 		{
