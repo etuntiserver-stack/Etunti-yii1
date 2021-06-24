@@ -1609,8 +1609,8 @@ class MobileController extends Controller
 		//     Tyovuorot -->
 
 		// <-- Check Laskutetut
-		$start    	= (new DateTime(Yii::app()->session['fromP']));
-		$end      	= (new DateTime(Yii::app()->session['toP']));
+		$start    	= (new DateTime(Yii::app()->session['fromP'].' 00:00:00'));
+		$end      	= (new DateTime(Yii::app()->session['toP'].' 23:59:59'));
 		$interval 	= DateInterval::createFromDateString('1 month');
 		$period   	= new DatePeriod($start, $interval, $end);
 		$kks 		= [];

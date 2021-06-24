@@ -9,10 +9,6 @@ $tas = explode(",",Yii::app()->user->adminPaketti);
 $date 	= date("d.m.Y",strtotime($data->aloitan));
 $tid 	= $data->tid;
 
-// <-- Check Laskutetut
-if(isset($laskutetut_ids[$data->id]))
-	$data->laskutettu = 1;
-
 $class = '';
 // <-- Jos sivu on laskutettu
 if( isset($sivu) and $sivu == 'laskutettu' )
@@ -49,13 +45,23 @@ $criteria = new CDbCriteria();
 $criteria->condition = " kid='".$data->id."' ";
 $tot = Toteutuneet::model()->find($criteria);
 $old_id = $data->id;
-if(isset($tot->id)) {
+
+if(isset($tot->id))
+{
+	$tot_id = $tot->id;
+	
 	// show updated data if it exists
 	$data = $tot;
 	// don't replace the ID though
 	$data->id = $old_id;
+
 }
 
+// <-- Check Laskutetut
+if(isset($tot_id) and isset($laskutetut_ids[$tot_id]))
+	$data->laskutettu = 1;
+elseif(!isset($tot_id) and isset($laskutetut_ids[$data->id]))
+	$data->laskutettu = 1;
 
 /* TAG */
  $tag = '';
