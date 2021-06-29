@@ -5,7 +5,7 @@ header("Content-Type: text/html; charset=utf-8");
  * Daily cron jobs for kotipuhtaaksi domain
  */
 
- 
+
 $db_host = "localhost";
 $site = Yii::app()->createController('Site');
 $conn = $site[0]->dbConnectArr();
@@ -24,9 +24,14 @@ $domain = "kotipuhtaaksi";
 Yii::app()->db1->setActive(false);
 Yii::app()->db1->connectionString = "mysql:host=" . $db_host . ";dbname=" . $domain;
 Yii::app()->db1->setActive(true);
+$mysqli->select_db($domain);
+$_SESSION["domain"] = $domain;
 
 // call jobs
 autoPassiveClients();
+
+// unset domain
+unset($_SESSION["domain"]);
 
 // defined jobs
 
