@@ -163,6 +163,7 @@ class Mobile extends DB2ActiveRecord
 		        'tyovuoroot' => array(self::BELONGS_TO, 'Tyovuoroot', 'tv_id'),
 		        'laskurivi' => array(self::BELONGS_TO, 'LaskunRivit', 'laskurivi_id'),
 		        'tt' => array(self::BELONGS_TO, 'Tyontekijat', 'tid'),
+		        //'toteutuneet' => array(self::BELONGS_TO, 'Toteutuneet', array('id'=>'kid')),
 		);
 	}
 
