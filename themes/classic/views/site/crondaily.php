@@ -28,12 +28,31 @@ $mysqli->select_db($domain);
 $_SESSION["domain"] = $domain;
 
 // call jobs
-autoPassiveClients();
+//autoPassiveClients();
+fixClients();
 
 // unset domain
 unset($_SESSION["domain"]);
 
 // defined jobs
+
+
+function fixClients() {
+    $criteria = new CDbCriteria();
+    $criteria->condition = "ryhma LIKE '{%'";
+    $clients = Asiakkaat::model()->findAll($criteria);
+    foreach($clients as $client) {
+        $grp = json_decode($client->ryhma, true);
+        $newGrp = json_encode(array_values($grp));
+        //print_r($newGrp);
+        $client->ryhma = $newGrp;
+        if(!$client->save()) {
+            print_r($client->getErrors());
+            exit;
+        }
+
+    }
+}
 
 /**
  * Searches for clients that haven't had any workshifts last month (this date - 1 month) and don't have any
@@ -115,7 +134,7 @@ function autoPassiveClients() {
         // add passiivinen automaatio
         $newGroups[] = "176";
         $client->aktiivinen = 0;
-        $client->ryhma = json_encode($newGroups);
+        $client->ryhma = json_encode(array_values($newGroups));
         // TODO: disable freshdesk
 
         if(!$client->save()) {
