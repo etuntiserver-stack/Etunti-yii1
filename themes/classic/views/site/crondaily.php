@@ -30,6 +30,7 @@ $_SESSION["domain"] = $domain;
 // call jobs
 autoPassiveClients();
 autoPassiveWorkers();
+checkPassiveableEmployees();
 
 // unset domain
 unset($_SESSION["domain"]);
@@ -128,6 +129,11 @@ function autoPassiveClients() {
     }
 }
 
+/**
+ * Searches for workers that haven't had any workshifts last month (this date - 1 month) and don't have any
+ * workshifts in the future.
+ * Marks those employees as passive by automation (aktiivinen = 4)
+ */
 function autoPassiveWorkers() {
 
     print_r("<br><br>Työntekijä passivointi:<br>");
@@ -222,6 +228,63 @@ function autoPassiveWorkers() {
                         print_r($worker->getErrors());
                         exit;
                     }
+                }
+            }
+        }
+    }
+
+    // re-enable netvisor
+    $asetukset->netvisor_kaytto = 1;
+    if(!$asetukset->save()) {
+        print_r("<br>Error while saving settings<br>");
+        print_r($asetukset->getErrors());
+    }
+
+}
+
+/**
+ * Searches for employees that have a defined end date in their contract,
+ * but are still marked as active. If their end date is larger than now + 7 days,
+ * mark the employee as quit.
+ */
+function checkPassiveableEmployees() {
+    print_r("<br>Passiveable employees:<br>");
+    // tyosuhdet->loppu
+    $criteria = new CDbCriteria();
+    $criteria->condition = "aktiivinen = 1";
+    // find all workers which are still active, but have a defined end date in their
+    // contract
+    $workers = Tyontekijat::model()->with(array(
+        "tyosuhteet" => array("condition" => 'loppu!=""')
+    ))->findAll($criteria);
+
+    print_r("<br>WORKER COUNT:<br>");
+    print_r(count($workers));
+    print_r("<br>");
+    
+    // temporarily disable netvisor, it requires 
+    // "ammattinimike", "tekijan_pankkitili", "tekijan_konttori" and "tekijan_henkilotunnus",
+    // which are not guaranteed to be defined.
+    $asetukset = Asetukset::model()->findByPk(1);
+    $asetukset->netvisor_kaytto = 0;
+    if(!$asetukset->save()) {
+        print_r("<br>Error while saving settings<br>");
+        print_r($asetukset->getErrors());
+    }
+
+    foreach($workers as $worker) {
+        if(isset($worker["tyosuhteet"])) {
+            $contract = $worker["tyosuhteet"];
+            $endDate = date("Y-m-d", strtotime($contract->loppu));
+            // for safety, mark as quit if at least 1 week has
+            // passed from the end date
+            $now = date("Y-m-d", strtotime("1 week"));
+            if($endDate >= $now) {
+                // aktiivinen 3 = "Lopettanut"
+                $worker->aktiivinen = 3;
+                if(!$worker->save()) {
+                    print_r($worker->getErrors());
+                    exit;
                 }
             }
         }
