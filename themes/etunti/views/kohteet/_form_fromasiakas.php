@@ -106,7 +106,7 @@ if(!isset($model->id)){ $model->alv = 24; }
 		<?php echo $form->error($model,'hinnasto_id'); ?>
 	</div>
 	
-	<div class="section fill mb5">
+	<div class="section fill mb5" id="h_valinta" style="display:none">
 		<?php echo $form->labelEx($model,'tuote_h'); ?>
 		<?php echo $form->dropDownList($model, 'tuote_h', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='h'"), 'id', 'nimike'), 
 		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
@@ -137,24 +137,32 @@ if(!isset($model->id)){ $model->alv = 24; }
 				alert('Tämä valinta luo vain yksi rivi laskutuksen luomisessa.\n\nTyövuorojen lisäpalvelut näytetään vain "Laskurivien tyyppi - tunti" tilassa kun TYÖ mobiilissa on tehty työvuoro listan mukaisesti.');
 		});
 	 
+		laskurivityyppi();
+
 	 	function laskurivityyppi()
 	 	{
 			if( $('#Kohteet_laskurivi_tyyppi option:selected').val() == 'kk' )
 			{
 				$('#kk_valinta').show(375);
 				$('#Kohteet_tuote_kk').attr('required', 'yes');
+				$('#h_valinta').hide(375);
+				$('#Kohteet_tuote_h').val(0).removeAttr('required');
 				$('#kpl_valinta').hide(375);
 				$('#Kohteet_tuote_kpl').val(0).removeAttr('required');
 			} else if ( $('#Kohteet_laskurivi_tyyppi option:selected').val() == 'tunti' ){
+				$('#h_valinta').show(375);
+				$('#Kohteet_tuote_h').attr('required', 'yes');
 				$('#kk_valinta').hide(375);
 				$('#Kohteet_tuote_kk').val('').removeAttr('required');
 				$('#kpl_valinta').hide(375);
 				$('#Kohteet_tuote_kpl').val(0).removeAttr('required');
 			} else if ( $('#Kohteet_laskurivi_tyyppi option:selected').val() == 'kpl' ){
-				$('#kk_valinta').hide(375);
-				$('#Kohteet_tuote_kk').val(0).removeAttr('required');
 				$('#kpl_valinta').show(375);
 				$('#Kohteet_tuote_kpl').attr('required', 'yes');
+				$('#h_valinta').hide(375);
+				$('#Kohteet_tuote_h').val(0).removeAttr('required');
+				$('#kk_valinta').hide(375);
+				$('#Kohteet_tuote_kk').val(0).removeAttr('required');
 			}
 	 	}
 	 	
