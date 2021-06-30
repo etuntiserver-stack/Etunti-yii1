@@ -106,7 +106,7 @@ if(!isset($model->id)){ $model->alv = 24; }
 		<?php echo $form->error($model,'hinnasto_id'); ?>
 	</div>
 	
-	<div class="section fill mb5">
+	<div class="section fill mb5" id="h_valinta" style="display:none">
 		<?php echo $form->labelEx($model,'tuote_h'); ?>
 		<?php echo $form->dropDownList($model, 'tuote_h', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='h'"), 'id', 'nimike'), 
 		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
