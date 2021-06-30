@@ -29,6 +29,7 @@ $_SESSION["domain"] = $domain;
 
 // call jobs
 autoPassiveClients();
+autoPassiveWorkers();
 
 // unset domain
 unset($_SESSION["domain"]);
@@ -42,7 +43,7 @@ unset($_SESSION["domain"]);
  * marks those clients as non-active and passive by automation (it's a workgroup with ID 176)
  */
 function autoPassiveClients() {
-    print_r("<br><br>Passivointi:<br>");
+    print_r("<br><br>Asiakas passivointi:<br>");
 
     $criteria = new CDbCriteria();
     $criteria->condition = 'STR_TO_DATE(pfrom, "%d.%m.%Y") > (CURDATE() - INTERVAL 1 MONTH) AND kohde > 0';
@@ -125,4 +126,112 @@ function autoPassiveClients() {
         }
         
     }
+}
+
+function autoPassiveWorkers() {
+
+    print_r("<br><br>Työntekijä passivointi:<br>");
+
+    $criteria = new CDbCriteria();
+    $criteria->condition = 'STR_TO_DATE(pfrom, "%d.%m.%Y") > (CURDATE() - INTERVAL 1 MONTH) AND kohde > 0';
+    $toistuvat = ToistuvatTyovuorot::model()->findAll($criteria); 
+
+    $workerIds = [];
+    // collect employee IDs from the shifts
+    foreach($toistuvat as $toistuva) {
+        // attempt to parse "tyopaari"
+        $colleagueIds = json_decode($toistuva->tyopaari, true) ?? [];
+        // if there's IDs in the array, add them to the workerIds array
+        if(count($colleagueIds > 0)) {
+            foreach($colleagueIds as $colleaugeId) {
+                if(!in_array($colleaugeId, $workerIds)) {
+                    $workerIds[] = $colleaugeId;
+                }
+            } 
+        } 
+        // no colleagues, add "tid" to workerIds
+        else {
+            if(isset($toistuva->tid) and !in_array($toistuva->tid, $workerIds)) {
+                $workerIds[] = $toistuva->tid;
+            }
+        }
+    }
+
+    // free memory
+    $toistuvat = null;
+    gc_collect_cycles();
+
+    $criteria = new CDbCriteria();
+    $criteria->condition = 'STR_TO_DATE(pvm, "%d.%m.%Y") > (CURDATE() - INTERVAL 1 MONTH) AND kohde > 0';
+    $shifts = Tyovuoroot::model()->findAll($criteria);
+    
+    foreach($shifts as $shift) {
+        if(isset($shift->tid) and !in_array($shift->tid, $workerIds)) {
+            $workerIds[] = $shift->tid;
+        }
+    }
+    // free memory
+    $shifts = null;
+    gc_collect_cycles();
+
+    $impl = implode(",", $workerIds);
+    
+    $criteria = new CDbCriteria();
+    // we'll search for LIKE 'Siistijä', which should include "siistijä" and "Siistijä"
+    // aktiivinen = 1 status is "Töissä (aktiivinen)"
+    $criteria->condition = "aktiivinen = 1 AND ammattinimike LIKE 'Siistijä' AND t.id NOT IN(".$impl.")";
+    $criteria->with = "tyosuhteet";
+
+    $workers = Tyontekijat::model()->findAll($criteria);
+    print_r("<br>WORKER COUNT:<br>");
+    print_r(count($workers));
+    print_r("<br>");
+
+  
+    // temporarily disable netvisor, it requires 
+    // "ammattinimike", "tekijan_pankkitili", "tekijan_konttori" and "tekijan_henkilotunnus",
+    // which are not guaranteed to be defined.
+    $asetukset = Asetukset::model()->findByPk(1);
+    $asetukset->netvisor_kaytto = 0;
+    if(!$asetukset->save()) {
+        print_r("<br>Error while saving settings<br>");
+        print_r($asetukset->getErrors());
+    }
+
+    $i = 0;
+    foreach($workers as $worker) {
+        $workGroups = json_decode($worker->tyoryhma, true) ?? [];
+        // even if an employee has "Siistijä" as their title, it might still mean they're actually
+        // working at the office, and we don't want to passive those people.
+        // we'll check if "tyoryhma" array contains "Toimisto" to filter them out.
+        if(!in_array("Toimisto", $workGroups)) {
+            $contract = $worker["tyosuhteet"];
+            // check if "tyosuhteet" is actually set
+            if(isset($contract)) {
+                // convert "alku" to a date
+                $startDate = date("Y-m-d", strtotime($contract->alku));
+                // get the date for this day - 3 days
+                $threeDays = date("Y-m-d", strtotime("-3 day"));
+                // if the contract is older than 3 days, change employees status
+                if($threeDays > $startDate) {
+                    // aktiivinen 4 means "Lopettanut (automaatio)"
+                    $worker->aktiivinen = 4;
+                    if(!$worker->save()) {
+                        print_r($worker);
+                        print_r("<br><br>ERRORS:");
+                        print_r($worker->getErrors());
+                        exit;
+                    }
+                }
+            }
+        }
+    }
+
+    // re-enable netvisor
+    $asetukset->netvisor_kaytto = 1;
+    if(!$asetukset->save()) {
+        print_r("<br>Error while saving settings<br>");
+        print_r($asetukset->getErrors());
+    }
+
 }

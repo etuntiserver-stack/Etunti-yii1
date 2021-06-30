@@ -329,7 +329,12 @@ exit;
 			)
 			";
 		}
-		$lista = $tv_controller[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data','tv_kesto']);
+		$tt = Tyontekijat::model()->findAll();
+		$tids = [];
+		foreach($tt as $item) {
+			$tids[$item->id] = $item->id;
+		}
+		$lista = $tv_controller[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, ['data','tv_kesto']);
 
 		/*
 		echo '<pre>';
@@ -1843,7 +1848,12 @@ exit;
 				"
 			];
 			$tv_controller 	= Yii::app()->createController('Tyovuoroot');
-			$getall 		= $tv_controller[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data','tv_kesto']);
+			$tt = Tyontekijat::model()->findAll();
+			$tids = [];
+			foreach($tt as $item) {
+				$tids[$item->id] = $item->id;
+			}
+			$getall 		= $tv_controller[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, ['data','tv_kesto']);
 		}
 
 		// <-- KK logikka
@@ -2802,7 +2812,12 @@ exit;
 
 				$haku_criteria 	= ["(laskutettu=0 or laskutettu is NULL) AND tid!=0 AND (peruutettu=0 or peruutettu is NULL)"];
 				$tv_controller 	= Yii::app()->createController('Tyovuoroot');
-				$getall 		= $tv_controller[0]->FromToSuunnitellutAll(date("Y-m-d", strtotime($from)), date("Y-m-d", strtotime($to)), [], $haku_criteria, []);
+				$tt = Tyontekijat::model()->findAll();
+				$tids = [];
+				foreach($tt as $item) {
+					$tids[$item->id] = $item->id;
+				}
+				$getall 		= $tv_controller[0]->FromToSuunnitellutAll(date("Y-m-d", strtotime($from)), date("Y-m-d", strtotime($to)), $tids, $haku_criteria, []);
 				$kohde_ids = [];
 				foreach($getall as $arr)
 				{
