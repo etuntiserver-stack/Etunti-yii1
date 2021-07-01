@@ -253,9 +253,10 @@ function checkPassiveableEmployees() {
     $criteria = new CDbCriteria();
     $criteria->condition = "aktiivinen = 1";
     // find all workers which are still active, but have a defined end date in their
-    // contract
+    // contract, which is larger than this day + 7 days
     $workers = Tyontekijat::model()->with(array(
-        "tyosuhteet" => array("condition" => 'loppu!=""')
+        "tyosuhteet" => array("condition" => '(loppu != "" OR loppu != null) AND 
+            CURDATE() + INTERVAL 7 DAY > STR_TO_DATE(loppu, "%d.%m.%Y")')
     ))->findAll($criteria);
 
     print_r("<br>WORKER COUNT:<br>");
@@ -272,21 +273,12 @@ function checkPassiveableEmployees() {
         print_r($asetukset->getErrors());
     }
 
+    // any workers the query returns should be marked as aktiivinen = 3 ("Lopettanut")
     foreach($workers as $worker) {
-        if(isset($worker["tyosuhteet"])) {
-            $contract = $worker["tyosuhteet"];
-            $endDate = date("Y-m-d", strtotime($contract->loppu));
-            // for safety, mark as quit if at least 1 week has
-            // passed from the end date
-            $now = date("Y-m-d", strtotime("1 week"));
-            if($endDate >= $now) {
-                // aktiivinen 3 = "Lopettanut"
-                $worker->aktiivinen = 3;
-                if(!$worker->save()) {
-                    print_r($worker->getErrors());
-                    exit;
-                }
-            }
+        $worker->aktiivinen = 3;
+        if(!$worker->save()) {
+            print_r($worker->getErrors());
+            exit;
         }
     }
 
