@@ -647,8 +647,8 @@ class TyontekijatController extends Controller
 				//     Netvisor updater -->
 
 				// check if meaningful data changes
-				// (email, phone, name, active/inactive status)
-				$fields = ["tekijan_nimi", "sukunimi", "tekijan_email", "tekijan_puh", "aktiivinen"];
+				// (email, phone, name, active/inactive status, work group)
+				$fields = ["tekijan_nimi", "sukunimi", "tekijan_email", "tekijan_puh", "aktiivinen", "tyoryhma"];
 				$integromatDataChanged = $this->integromatDataChanged($vanha_attr, $model->attributes, $fields);
 				// if contract-changead is not defined let's assume nothing is changed
 				$contractChanged = $_POST["contract-changed"] ?? 0;
@@ -1118,10 +1118,11 @@ $xml = '
 		// get phone number
 		$phone = $worker->tekijan_puh;
 
-		// exit early if worker belongs to "Toimisto" work group.
+		// check if worker belongs to "Toimisto" work group.
 		$workGroups = $worker->tyoryhma;
+		$office_worker = 0;
 		if(strpos($workGroups, "Toimisto") !== false) {
-			return;
+			$office_worker = 1;
 		}
 
 		// if worker status is not 1 ( Töissä (aktiivinen) ), mark as false
@@ -1146,6 +1147,7 @@ $xml = '
 			"email" => $email,
 			"phone" => $phone,
 			"active" =>  $active,
+			"office_worker" => $office_worker,
 		];
 
 		// build request headers
