@@ -650,9 +650,12 @@ class TyontekijatController extends Controller
 				// (email, phone, name, active/inactive status)
 				$fields = ["tekijan_nimi", "sukunimi", "tekijan_email", "tekijan_puh", "aktiivinen"];
 				$integromatDataChanged = $this->integromatDataChanged($vanha_attr, $model->attributes, $fields);
+				// if contract-changead is not defined let's assume nothing is changed
+				$contractChanged = $_POST["contract-changed"] ?? 0;
+
 				// Kotipuhtaaksi integromat webhook
 				$domain = Yii::app()->user->domain;
-				if($domain == "kotipuhtaaksi" and $integromatDataChanged) {
+				if($domain == "kotipuhtaaksi" and ($integromatDataChanged or $contractChanged)) {
 					$this->integromatUpsert($model);
 				}
 

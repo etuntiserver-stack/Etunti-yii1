@@ -421,8 +421,13 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
+			// expect an object containing response and contract-changed fields, i.e.
+			// {"response": "saveOK", "contract-changed": 1}
 			data = JSON.parse(data);
 			//alert(data);
+			
+			let input = $("<input>").attr("type", "hidden").attr("name", "contract-changed").val(data["contract-changed"] ?? 0);
+			$('#tyontekijat-form').append(input);
 			$('#tyontekijat-form').submit();
 	   	},
 		error:function(data){

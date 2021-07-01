@@ -141,7 +141,12 @@ class TyosuhdetController extends Controller
 					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 				//     LOG -->
 
-				echo json_encode('saveOK');
+				$fields = ["loppu"];
+				$dataChanged = $this->integromatDataChanged($vanha_attr, $model->attributes, $fields);
+				// contract-changed is read in themes/etunti/views/tyosuhdet/_form.php
+				// submit function, around row 430, it's appended as an hidden field to the
+				// Tyontekijat form, and read again in TyontekijatControllers actionUpdate
+				echo json_encode(["response" => "saveOK", "contract-changed" => $dataChanged]);
 			} else {
 				echo json_encode('saveError');
 			}
@@ -257,4 +262,23 @@ class TyosuhdetController extends Controller
 	   $site = Yii::app()->createController('Site');
 	   return $site[0]->etuSukunimi($tid);
 	}
+
+	/**
+	 * Compares attributes that we would send to integromat, if the old models
+	 * attributes don't match with the new attributes that would be saved to the datab ase,
+	 * return true for "has changed". Otherwise return false for "not changed".
+	 * This can be used to reduce the number of requests sent to integromat.
+	 */
+	private function integromatDataChanged($old_attr, $new_attr, $fields)
+	{
+		foreach($fields as $field) {
+			// if any of the fields don't match, return true (for data is changed)
+			// and don't even bother looking at the rest
+			if($old_attr[$field] != $new_attr[$field]) {
+				return 1;
+			}
+		}
+		return 0;
+	}
+
 }
