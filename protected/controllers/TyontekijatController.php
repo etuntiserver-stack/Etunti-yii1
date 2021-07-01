@@ -1127,6 +1127,15 @@ $xml = '
 		// is only used by kotipuhtaaksi right now, we don't have to think about it now.
 		$active = $worker->aktiivinen == 1 ? 1 : 0;
 
+		// get the employees contract, if they have a defined "loppu" field,
+		// we can mark the employee as non-active
+		$contract = Tyosuhdet::model()->find("tid = " . $worker->id);
+		if($contract) {
+			if(isset($contract->loppu) and strlen($contract->loppu) > 0) {
+				$active = 0;
+			}
+		}
+
 		// build request body
 		$body = [
 			"first_name" => $firstName,
