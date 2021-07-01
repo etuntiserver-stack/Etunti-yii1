@@ -256,7 +256,7 @@ function checkPassiveableEmployees() {
     // contract, which is larger than this day + 7 days
     $workers = Tyontekijat::model()->with(array(
         "tyosuhteet" => array("condition" => '(loppu != "" OR loppu != null) AND 
-            CURDATE() + INTERVAL 7 DAY > STR_TO_DATE(loppu, "%d.%m.%Y")')
+            CURDATE() > STR_TO_DATE(loppu, "%d.%m.%Y") + INTERVAL 7 DAY')
     ))->findAll($criteria);
 
     print_r("<br>WORKER COUNT:<br>");
