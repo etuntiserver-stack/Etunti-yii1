@@ -139,7 +139,7 @@ function autoPassiveWorkers() {
     print_r("<br><br>Työntekijä passivointi:<br>");
 
     $criteria = new CDbCriteria();
-    $criteria->condition = 'STR_TO_DATE(pfrom, "%d.%m.%Y") > (CURDATE() - INTERVAL 1 MONTH) AND kohde > 0';
+    $criteria->condition = 'STR_TO_DATE(pto, "%d.%m.%Y") > (CURDATE() - INTERVAL 1 MONTH) AND (kohde > 0 OR status = 11)';
     $toistuvat = ToistuvatTyovuorot::model()->findAll($criteria); 
 
     $workerIds = [];
@@ -148,7 +148,7 @@ function autoPassiveWorkers() {
         // attempt to parse "tyopaari"
         $colleagueIds = json_decode($toistuva->tyopaari, true) ?? [];
         // if there's IDs in the array, add them to the workerIds array
-        if(count($colleagueIds > 0)) {
+        if(count($colleagueIds) > 0) {
             foreach($colleagueIds as $colleaugeId) {
                 if(!in_array($colleaugeId, $workerIds)) {
                     $workerIds[] = $colleaugeId;
@@ -168,7 +168,7 @@ function autoPassiveWorkers() {
     gc_collect_cycles();
 
     $criteria = new CDbCriteria();
-    $criteria->condition = 'STR_TO_DATE(pvm, "%d.%m.%Y") > (CURDATE() - INTERVAL 1 MONTH) AND kohde > 0';
+    $criteria->condition = 'STR_TO_DATE(pvm, "%d.%m.%Y") > (CURDATE() - INTERVAL 1 MONTH) AND (kohde > 0 OR status = 11)';
     $shifts = Tyovuoroot::model()->findAll($criteria);
     
     foreach($shifts as $shift) {
@@ -181,7 +181,6 @@ function autoPassiveWorkers() {
     gc_collect_cycles();
 
     $impl = implode(",", $workerIds);
-    
     $criteria = new CDbCriteria();
     // we'll search for LIKE 'Siistijä', which should include "siistijä" and "Siistijä"
     // aktiivinen = 1 status is "Töissä (aktiivinen)"
@@ -204,7 +203,6 @@ function autoPassiveWorkers() {
         print_r($asetukset->getErrors());
     }
 
-    $i = 0;
     foreach($workers as $worker) {
         $workGroups = json_decode($worker->tyoryhma, true) ?? [];
         // even if an employee has "Siistijä" as their title, it might still mean they're actually
