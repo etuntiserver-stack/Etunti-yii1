@@ -47,7 +47,7 @@ function autoPassiveClients() {
     print_r("<br><br>Asiakas passivointi:<br>");
 
     $criteria = new CDbCriteria();
-    $criteria->condition = 'STR_TO_DATE(pfrom, "%d.%m.%Y") > (CURDATE() - INTERVAL 1 MONTH) AND kohde > 0';
+    $criteria->condition = 'STR_TO_DATE(pto, "%d.%m.%Y") > (CURDATE() - INTERVAL 1 MONTH) AND kohde > 0';
     $toistuvat = ToistuvatTyovuorot::model()->findAll($criteria); 
     $propertyIds = [];
     foreach($toistuvat as $toistuva) {
