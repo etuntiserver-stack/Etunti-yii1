@@ -100,6 +100,14 @@ function autoPassiveClients() {
     print_r("<br>ASIAKAS COUNT:<br>");
     print_r(count($clients));
     print_r("<br>");
+
+    // temporarily disable netvisor
+    $asetukset = Asetukset::model()->findByPk(1);
+    $asetukset->netvisor_kaytto = 0;
+    if(!$asetukset->save()) {
+        print_r("<br>Error while saving settings<br>");
+        print_r($asetukset->getErrors());
+    }
     // remove "jatkuva leasing", "vanha proaqua", 
     // "toimitila" and "vanha proaqua 0" work groups
     // add "passiivinen automaatio" group
@@ -120,13 +128,18 @@ function autoPassiveClients() {
         $newGroups[] = "176";
         $client->aktiivinen = 0;
         $client->ryhma = json_encode(array_values($newGroups));
-        // TODO: disable freshdesk
 
         if(!$client->save()) {
             print_r($client->getErrors());
             exit;
         }
-        
+    }
+
+    // re-enable netvisor
+    $asetukset->netvisor_kaytto = 1;
+    if(!$asetukset->save()) {
+        print_r("<br>Error while saving settings<br>");
+        print_r($asetukset->getErrors());
     }
 }
 
