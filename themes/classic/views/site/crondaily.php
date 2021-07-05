@@ -94,7 +94,8 @@ function autoPassiveClients() {
     $impl = implode(",", $clientIds);
 
     $criteria = new CDbCriteria();
-    $criteria->condition = "id NOT IN(".$impl.") AND aktiivinen = 1 AND time < CURDATE() - INTERVAL 3 DAY";
+    // select clients that have existed for at least 2 weeks
+    $criteria->condition = "id NOT IN(".$impl.") AND aktiivinen = 1 AND time < CURDATE() - INTERVAL 14 DAY";
     $clients = Asiakkaat::model()->findAll($criteria);
     print_r("<br>ASIAKAS COUNT:<br>");
     print_r(count($clients));
