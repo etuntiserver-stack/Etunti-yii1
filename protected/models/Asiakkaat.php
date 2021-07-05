@@ -427,16 +427,23 @@ class Asiakkaat extends DB2ActiveRecord
   }
 
   /**
-   * Update Freshdesk customer after save.
+   * Update Freshdesk customer after save (if enabled).
    */
   public function onAfterSave($event)
   {
-    /** @var Freshdesk */
-    $fd = Yii::createComponent('Freshdesk');
-    if ($fd->isDisabled())
-      return;
-    $asiakas = $event->sender;
-    if (!empty($asiakas->id))
-      $fd->exportContact($asiakas->id);
+	$asetukset = Asetukset::model()->findByPk(1);
+	if($asetukset->netvisor_kaytto == 1) {
+		/** @var Freshdesk */
+		$fd = Yii::createComponent('Freshdesk');
+
+		if ($fd->isDisabled())
+			return;
+		$asiakas = $event->sender;
+		if (!empty($asiakas->id)) 
+			$fd->exportContact($asiakas->id);
+		
+	}
+
   }
+
 }
