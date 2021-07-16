@@ -536,7 +536,7 @@ if(isset($_GET['kk_yhteensta_from']) and isset($_GET['kk_yhteensta_to']))
 {
 	echo '<h1>'.Yii::app()->user->domain.'</h1>';
 	$site = Yii::app()->createController('Site');
-	echo $site[0]->digistenTunnitYhteensa($_GET['kk_yhteensta_from'], $_GET['kk_yhteensta_to'], 'table');
+	echo $site[0]->digistenTunnitYhteensa($_GET['kk_yhteensta_from'], $_GET['kk_yhteensta_to'], 'kesto'); // table tai kesto
 }	
 /*
 if( Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy' ){
