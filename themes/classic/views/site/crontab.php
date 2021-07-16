@@ -54,14 +54,14 @@ foreach ($list as $d) {
 	$domainit 	= Domainit::model()->findByPk($d->id);
 
 	// Sarake lisäys
-	
-	$tb_name 	= 'laskut';
-	$column 	= 'etunti_tunniste';
-	$structure 	= 'varchar(255) DEFAULT NULL';
+	/*
+	$tb_name 	= 'asiakkaat';
+	$column 	= 'sopimuksen_pvm';
+	$structure 	= 'varchar(50) DEFAULT NULL';
 	$table 		= Yii::app()->db1->schema->getTable($tb_name);
 	if (!isset($table->columns[$column]))
 		Yii::app()->db1->createCommand()->addColumn($tb_name, $column, $structure);
-	
+	*/
 
 			
 	// <-- Tuntien Autohyvaksyminen
