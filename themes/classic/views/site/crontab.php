@@ -103,7 +103,7 @@ foreach ($list as $d) {
 				$domainit = Domainit::model()->find(" domain='" . $d->domain . "' ");
 				$paketti = isset($domainit->id) ? $domainit->paketti : '';
 
-				echo 'Snapshot: ' . $d->domain . ' - ' . $tunnit;
+				echo "Snapshot: " . $d->domain . " - " . $tunnit . "\n";
 				
 				if ($tunnit > 0) {
 					$adm = Administrators::model()->findAll();
