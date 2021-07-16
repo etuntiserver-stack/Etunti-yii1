@@ -486,7 +486,7 @@ class SiteController extends Controller
 
 			if($mob_result > $tyovuorot_result)
 				$result = $mob_result;
-			if($mob_result < $tyovuorot_result)
+			if($mob_result <= $tyovuorot_result)
 				$result = $tyovuorot_result;
 
 			return $this->num($result);
