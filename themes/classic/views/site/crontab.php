@@ -103,6 +103,8 @@ foreach ($list as $d) {
 				$domainit = Domainit::model()->find(" domain='" . $d->domain . "' ");
 				$paketti = isset($domainit->id) ? $domainit->paketti : '';
 
+				echo 'Snapshot: ' . $d->domain . ' - ' . $tunnit;
+				
 				if ($tunnit > 0) {
 					$adm = Administrators::model()->findAll();
 					$dt = new DigistenTunnitKk;
