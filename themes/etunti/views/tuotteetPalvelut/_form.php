@@ -158,19 +158,35 @@ $(document).ready(function(){
 
 	   <div class="input-group">
 		<?php
-		$list = array();
-      		$l = Valikkoot::model()->findAll(" select_type='laskutus_yksikko' ",array('order' => "select_type"));
-		foreach($l as $v)
-		$list[$v->value] = $v->value;
+			$list = ['h'=>'h','kk'=>'kk','kpl'=>'kpl'];
+			$l = Valikkoot::model()->findAll(" select_type='laskutus_yksikko' ",array('order' => "select_type"));
+			foreach($l as $v)
+				$list[$v->value] = $v->value;
 
-		if(count($list) > 0)
-		{
-        	echo $form->dropDownList($model, 'yksikko', $list,
-		array('class'=>'form-control'));
-		} else {
-		echo 'Tyhjä';
-		}		
-        	?>
+			if(count($list) == 0)
+			{
+				$new_val = new Valikkoot;
+				$new_val->select_type = "laskutus_yksikko";
+				$new_val->value = "h";
+				if($new_val->save())
+				{
+					$l = Valikkoot::model()->findAll(" select_type='laskutus_yksikko' ",array('order' => "select_type"));
+					foreach($l as $v)
+						$list[$v->value] = $v->value;
+				
+				} else {
+					var_dump($new_val->getErrors());
+				}
+			}
+		
+			if(count($list) > 0)
+			{
+				echo $form->dropDownList($model, 'yksikko', $list,
+				array('class'=>'form-control'));
+			} else {
+				echo 'Tyhjä';
+			}		
+		?>
 		<span class="input-group-btn">
 			<span class="btn btn-primary myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span>
 		</span>
