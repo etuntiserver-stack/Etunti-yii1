@@ -2334,7 +2334,7 @@ exit;
 					if(isset($v['tyovuoro_tuotteet']['paa_tuote']))
 					{
 						$tv_id 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_id'];
-						$pvm 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_pvm'];
+						//$pvm 	= $v['tyovuoro_tuotteet']['paa_tuote']['tv_pvm'];
 
 						$tv_link 	= CHtml::link('<span class="btn-group fa fa-calendar text-primary" data-container="body" data-toggle="tooltip" title="Näytä työvuoro"></span> ',
 							[
