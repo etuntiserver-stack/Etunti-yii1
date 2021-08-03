@@ -125,21 +125,21 @@ if(empty($model->tietoja))
 	
 	<div class="section fill mb5" id="h_valinta" style="display:none">
 		<?php echo $form->labelEx($model,'tuote_h'); ?>
-		<?php echo $form->dropDownList($model, 'tuote_h', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='h'"), 'id', 'nimike'), 
+		<?php echo $form->dropDownList($model, 'tuote_h', CHtml::listData(TuotteetPalvelut::model()->findAll("aktiivinen=1 AND yksikko='h'"), 'id', 'nimike'), 
 		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'tuote_h'); ?>
 	</div>
 
 	<div class="section fill mb5" id="kk_valinta" style="display:none">
 		<?php echo $form->labelEx($model,'tuote_kk'); ?>
-		<?php echo $form->dropDownList($model, 'tuote_kk', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='kk'"), 'id', 'nimike'), 
+		<?php echo $form->dropDownList($model, 'tuote_kk', CHtml::listData(TuotteetPalvelut::model()->findAll("aktiivinen=1 AND yksikko='kk'"), 'id', 'nimike'), 
 		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'tuote_kk'); ?>
 	</div>
 
 	<div class="section fill mb5" id="kpl_valinta" style="display:none">
 		<?php echo $form->labelEx($model,'tuote_kpl'); ?>
-		<?php echo $form->dropDownList($model, 'tuote_kpl', CHtml::listData(TuotteetPalvelut::model()->findAll("yksikko='kpl'"), 'id', 'nimike'), 
+		<?php echo $form->dropDownList($model, 'tuote_kpl', CHtml::listData(TuotteetPalvelut::model()->findAll("aktiivinen=1 AND yksikko='kpl'"), 'id', 'nimike'), 
 		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'tuote_kpl'); ?>
 	</div>
