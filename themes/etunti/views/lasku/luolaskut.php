@@ -124,7 +124,9 @@ $iban				= $asetukset->iban;
 	if(empty( $asiakas['viivastyskorko'] ) and !empty( $asiakas_viivastyskorko )){
 		$asiakas['viivastyskorko'] = $asiakas_viivastyskorko;
 	}
-	$viitenumero = $this->Viite($asiakas['asiakasnumero']."00".date("md").$asiakas['id']);
+	// we used to include model->id here as well, but that can make the reference number
+	// over 20 characters long, which is invalid for netvisor.
+	$viitenumero = $this->Viite($asiakas['asiakasnumero']."00".date("md"));
 
 	if( 
 		( $asiakas['laskutus_kanava'] == 'sahkoposti' and empty($asiakas['sahkoposti']) )
