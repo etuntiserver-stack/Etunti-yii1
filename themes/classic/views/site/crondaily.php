@@ -265,10 +265,10 @@ function checkPassiveableEmployees() {
     $criteria = new CDbCriteria();
     $criteria->condition = "aktiivinen = 1";
     // find all workers which are still active, but have a defined end date in their
-    // contract, which is larger than this day + 7 days
+    // contract, which is larger than this day + 30 days
     $workers = Tyontekijat::model()->with(array(
         "tyosuhteet" => array("condition" => '(loppu != "" OR loppu != null) AND 
-            CURDATE() > STR_TO_DATE(loppu, "%d.%m.%Y") + INTERVAL 7 DAY')
+            CURDATE() > STR_TO_DATE(loppu, "%d.%m.%Y") + INTERVAL 30 DAY')
     ))->findAll($criteria);
 
     print_r("<br>WORKER COUNT:<br>");
