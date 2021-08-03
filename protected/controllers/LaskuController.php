@@ -1522,7 +1522,9 @@ exit;
 				//     edico_tilaus_id -->
 
 				// Viite
-				$viite = $this->Viite($model->as_nro."00".date("md").$model->id);
+				// we used to include model->id here as well, but that can make the reference number
+				// over 20 characters long, which is invalid for netvisor.
+				$viite = $this->Viite($model->as_nro."00".date("md"));
 				Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite));
 
 
@@ -2673,7 +2675,9 @@ exit;
 			if($model->save()){
 
 				// Viite
-				$viite = $this->Viite($model->as_nro."00".date("md").$model->id);
+				// we used to include model->id here as well, but that can make the reference number
+				// over 20 characters long, which is invalid for netvisor.
+				$viite = $this->Viite($model->as_nro."00".date("md"));
 				Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite));
 
 				// <-- LOG

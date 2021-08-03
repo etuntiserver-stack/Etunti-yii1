@@ -367,8 +367,10 @@ if(isset($_GET['kopio'])){
      $uusi->trust_jobid = '';
      if($uusi->save())
      {
-	$viite = $this->Viite($uusi->as_nro."00".$uusi->id);
-	Lasku::model()->updatebypk($uusi->id, array('viitenumero'=>$viite));
+        // we used to include model->id here as well, but that can make the reference number
+        // over 20 characters long, which is invalid for netvisor.
+        $viite = $this->Viite($uusi->as_nro."00");
+        Lasku::model()->updatebypk($uusi->id, array('viitenumero'=>$viite));
      }
 
      $lr = LaskunRivit::model()->findAll(" lid='".$id."' ");
