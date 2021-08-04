@@ -2,6 +2,30 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
+if( Yii::app()->user->domain == 'sivex' )
+{
+	$tv = Tyovuoroot::model()->findAll(
+		"YEAR(STR_TO_DATE(pvm, '%d.%m.%Y')) >= 2021 
+		AND kohde IN (SELECT id FROM sivex_kohdet WHERE laskurivi_tyyppi='tunti' AND tuote_h!=0 AND tuote_h!=tuoteID) limit 5000"
+	);
+	foreach($tv as $item)
+	{
+		echo $item->kohde.' - '.$item->tuoteID.' - '.$item->kohteet->tuote_h.'<br>';
+		
+		Tyovuoroot::model()->updateByPk($item->id, ['tuoteID' => $item->kohteet->tuote_h]);
+	}
+
+	$tv = ToistuvatTyovuorot::model()->findAll(
+		"YEAR(STR_TO_DATE(pto, '%d.%m.%Y')) >= 2021 
+		AND kohde IN (SELECT id FROM sivex_kohdet WHERE laskurivi_tyyppi='tunti' AND tuote_h!=0 AND tuote_h!=tuoteID) limit 5000"
+	);
+	foreach($tv as $item)
+	{
+		echo $item->kohde.' - '.$item->tuoteID.' - '.$item->kohteet->tuote_h.'<br>';
+		
+		ToistuvatTyovuorot::model()->updateByPk($item->id, ['tuoteID' => $item->kohteet->tuote_h]);
+	}
+}
 /*
 if(isset($_GET['asiakas_updater'])) 
 {

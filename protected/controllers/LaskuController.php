@@ -2351,21 +2351,10 @@ exit;
 							]
 						);
 						
-						if($v['hinta_laskenta']['hinta'] > 0)
-						{
-							$tuote_nimike 	= $v['hinta_laskenta']['nimike'];
-							$tuote_id 		= $v['hinta_laskenta']['tuote_id'];
-							$tuote_alv		= $v['hinta_laskenta']['alv'];
-						} else {
-							$tuote_nimike 	= $v['tyovuoro_tuotteet']['paa_tuote']['nimike'];
-							$tuote_id 		= $v['tyovuoro_tuotteet']['paa_tuote']['tuote_id'];
-							$tuote_alv		= $v['tyovuoro_tuotteet']['paa_tuote']['alv'];
-						}
-						
 						$group_arr[$kohde_id][$tuote_id][] = [
-							'tuote_id'	=> $tuote_id,
-							'nimike' 	=> $tuote_nimike,
-							'alv' 		=> $tuote_alv,
+							'tuote_id'	=> $v['tyovuoro_tuotteet']['paa_tuote']['tuote_id'],
+							'nimike' 	=> $v['tyovuoro_tuotteet']['paa_tuote']['nimike'],
+							'alv' 		=> $v['tyovuoro_tuotteet']['paa_tuote']['alv'],
 							'yksikko' 	=> $v['tyovuoro_tuotteet']['paa_tuote']['yksikko'],
 							'hinta' 	=> $v['tyovuoro_tuotteet']['paa_tuote']['hinta'],
 							'maara'		=> $maara,
