@@ -2351,6 +2351,8 @@ exit;
 							]
 						);
 						
+						$tuote_id = $v['tyovuoro_tuotteet']['paa_tuote']['tuote_id'];
+						
 						$group_arr[$kohde_id][$tuote_id][] = [
 							'tuote_id'	=> $v['tyovuoro_tuotteet']['paa_tuote']['tuote_id'],
 							'nimike' 	=> $v['tyovuoro_tuotteet']['paa_tuote']['nimike'],
