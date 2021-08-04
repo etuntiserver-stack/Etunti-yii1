@@ -2,6 +2,7 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
+/*
 if( Yii::app()->user->domain == 'sivex' )
 {
 	$tv = Tyovuoroot::model()->findAll(
@@ -26,6 +27,8 @@ if( Yii::app()->user->domain == 'sivex' )
 		ToistuvatTyovuorot::model()->updateByPk($item->id, ['tuoteID' => $item->kohteet->tuote_h]);
 	}
 }
+*/
+
 /*
 if(isset($_GET['asiakas_updater'])) 
 {
