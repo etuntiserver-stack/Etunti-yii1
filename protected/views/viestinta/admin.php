@@ -2,6 +2,7 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
+/*
 if( Yii::app()->user->domain == 'sivex' )
 {
 	$tv = Tyovuoroot::model()->findAll(
@@ -29,6 +30,8 @@ if( Yii::app()->user->domain == 'sivex' )
 		}
 	}
 }
+*/
+
 /*
 if(isset($_GET['asiakas_updater'])) 
 {
