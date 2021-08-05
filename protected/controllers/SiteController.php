@@ -294,7 +294,7 @@ class SiteController extends Controller
 		if (copy($filepath, $newfile)){
 				header("Content-Length: " . filesize ( $newfile ) );
 		                header("Content-type: application/octet-stream");
-		                header("Content-disposition: attachment; filename=".basename($newfile));
+		                header('Content-disposition: attachment; filename="'.basename($newfile).'"');
 		                readfile($newfile);
 				unlink($newfile);
 		}
