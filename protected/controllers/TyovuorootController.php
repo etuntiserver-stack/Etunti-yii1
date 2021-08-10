@@ -1747,26 +1747,8 @@ class TyovuorootController extends Controller
 				Yii::app()->session['week'] = $_GET['week'];
 			if (isset($_GET['tid']) and !empty($_GET['tid']))
 				Yii::app()->session['tyontekijat'] = array($_GET['tid']);
-			if (isset($_GET['tv_id'])) {
-				// KP: set "tyoryhma" as the clients "tyoryhma"
-				// this should speed up loading nicely
-				$domain = Yii::app()->user->domain;
-				if($domain == "kotipuhtaaksi") {
-					$result = $this->this_id($_GET["tv_id"]);
-					$shift = $result["model"];
-					$worker = Tyontekijat::model()->findByPk($shift->tid);
-					$groups = json_decode($worker->tyoryhma);
 
-					Yii::app()->session["tyoryhma"] = $groups;
-					// there's a chance that the user navigated to the calendar first without making a query,
-					// which means tyontekijat is set as "0", which defeats the purpose of this modification, since
-					// the user would not see any workers in the list.
-					unset(Yii::app()->session["tyontekijat"]);
-					
-					
-				}
-				$this->redirect(array('beta', 'mode' => $mode, 'tv_id' => $_GET['tv_id']));
-			}
+			$this->redirect(array('beta', 'mode' => $mode, 'tv_id' => $_GET['tv_id']));
 			if(isset($_GET['vapaat']))
 				$this->redirect(array('beta', 'mode' => $mode, 'vapaat' => 'true'));
 			else
