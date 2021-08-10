@@ -1147,7 +1147,9 @@ $(document).ready(function(){
 	buttonWidth: '100%',
         maxHeight: 300,
   });
-
+  //console.log(Date.now(), "after mult, before getAsiakasByKohde");
+  // moved this to tyovuoroot_v4.js afterModalOpen
+  /*
   if($('#<?=$java_prefix?>_kohde').val() !== ''){
 	var kohdeOn = $('#<?=$java_prefix?>_kohde option:selected').val();
 	  	 $.ajax({
@@ -1155,6 +1157,7 @@ $(document).ready(function(){
 			type:'GET',
 			data: { "id" : kohdeOn },
 			  success:function(data){
+				//console.log(Date.now(), "getAsiakasByKohde success");
 			     if(data){
 				data = JSON.parse(data);
 			  	//console.log(data);
@@ -1169,7 +1172,7 @@ $(document).ready(function(){
 			  }
 	 	});
   }
-
+  */
   var toistuva 	= ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
   $('#is_toistuva').on('switchChange.bootstrapSwitch', function(event, state) {
 	if(state === true){
@@ -1785,6 +1788,8 @@ $(document).ready(function(){
 	laskePituus();
   });
 
+  // moved this to afterModalOpen in tyovuoroot_v4.js
+  /*
   if( $('#<?=$java_prefix?>_kohde').val() !== '' ){
 	var thisID = $('#<?=$java_prefix?>_kohde option:selected').val();
 	  $.ajax({
@@ -1809,6 +1814,7 @@ $(document).ready(function(){
 	    	}
 	  });
   }
+  */
   $(document).delegate("#<?=$java_prefix?>_kohde","change",function(){
 	var thisID = $(this, 'option:selected').val();
 	OsoiteVaihto(thisID);
@@ -2019,12 +2025,11 @@ $(document).ready(function(){
 
   linkkiKohteeseen();
   function linkkiKohteeseen(){
-	var thisID = $('#<?=$java_prefix?>_kohde option:selected').val();
-	var thisText = $('#<?=$java_prefix?>_kohde option:selected').text();
-	var url = location.protocol + "//" + location.host + '/index.php/kohteet/update?id='+ thisID;
-	if(thisID !== '')
-	$("#kohde_url").html('<a href="'+ url +'" target="_blank">Muokkaa '+ thisText +'</a>');
-	//console.log(thisID);
+	// seems to be much after than the jQuery version
+	let selectedKohde = document.getElementById("<?=$java_prefix?>_kohde");
+	let kohdeName = selectedKohde.options[selectedKohde.selectedIndex].text;
+	let url = location.protocol + "//" + location.host + '/index.php/kohteet/update?id='+ selectedKohde.value;
+	$("#kohde_url").html('<a href="'+url+'">Muokkaa kohdetta '+kohdeName+'</a>');
   }
 
   // <-- modal siirtaminen
@@ -2168,7 +2173,8 @@ $(document).ready(function(){
     $('#<?= $omasiistijat_div_id ?>.in').collapse('hide');
 
     // Haetaan valittu arvo kohdelistasta.
-    const valittuKohde = $(`#<?= ($toistuva ? 'ToistuvatTyovuorot' : 'Tyovuoroot'); ?>_kohde option:selected`).val();
+	const kohdeElem = document.getElementById(`<?=$java_prefix?>_kohde`);
+	const valittuKohde = kohdeElem.value;
 
     // Asetetaan omasiistijänäkymän piilotettuun kenttään uusi ID, jonka
     // avulla omasiistijänäkymä hakee omasiistijät listalleen.
