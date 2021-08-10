@@ -1747,8 +1747,8 @@ class TyovuorootController extends Controller
 				Yii::app()->session['week'] = $_GET['week'];
 			if (isset($_GET['tid']) and !empty($_GET['tid']))
 				Yii::app()->session['tyontekijat'] = array($_GET['tid']);
-
-			$this->redirect(array('beta', 'mode' => $mode, 'tv_id' => $_GET['tv_id']));
+			if (isset($_GET['tv_id'])) 
+				$this->redirect(array('beta', 'mode' => $mode, 'tv_id' => $_GET['tv_id']));
 			if(isset($_GET['vapaat']))
 				$this->redirect(array('beta', 'mode' => $mode, 'vapaat' => 'true'));
 			else
