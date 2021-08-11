@@ -1747,6 +1747,30 @@ class TyovuorootController extends Controller
 				Yii::app()->session['week'] = $_GET['week'];
 			if (isset($_GET['tid']) and !empty($_GET['tid']))
 				Yii::app()->session['tyontekijat'] = array($_GET['tid']);
+			// tv_filter is set to 1 from _showshift.phps $link, which is used
+			// to open a shift through a client
+			if(isset($_GET["tv_filter"]) and isset($_GET["tv_id"]) and
+				$_GET["tv_filter"] == 1) {
+
+				// KP: set "tyoryhma" as the workers "tyoryhma",
+				// and "tyo_toimialue" as the workers "tyo_toimialue" (this can be null)
+				// this should speed up loading nicely
+				$domain = Yii::app()->user->domain;
+				if($domain == "kotipuhtaaksi") {
+					$result = $this->this_id($_GET["tv_id"]);
+					$shift = $result["model"];
+					$worker = Tyontekijat::model()->findByPk($shift->tid);
+					$groups = json_decode($worker->tyoryhma);
+					
+					Yii::app()->session["tyo_toimialue"] = $worker->tyo_toimialue;
+					Yii::app()->session["tyoryhma"] = $groups;
+					// just in case, unset "tyontekijat" from session, which could be [0] at this time.
+					// that would defeat the purpose of this, since the user wouldn't see any workers in the calendar
+					unset(Yii::app()->session["tyontekijat"]);
+				}
+				$this->redirect(array('beta', 'mode' => $mode, 'tv_id' => $_GET['tv_id']));
+			}
+
 			if (isset($_GET['tv_id'])) 
 				$this->redirect(array('beta', 'mode' => $mode, 'tv_id' => $_GET['tv_id']));
 			if(isset($_GET['vapaat']))

@@ -22,7 +22,7 @@
 
   $link = CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></input>',
     [
-      sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s', date("Y", strtotime($this_pvm)), date("W", strtotime($this_pvm)), $this_id)
+      sprintf('/tyovuoroot/beta?mode=vko&year=%s&week=%s&tv_id=%s&tv_filter=1', date("Y", strtotime($this_pvm)), date("W", strtotime($this_pvm)), $this_id)
     ],
     [
       'class' => 'btn btn-primary myBgColors',
