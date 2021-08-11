@@ -558,10 +558,6 @@ function openTV(this_id, l_sisalto){
 				d = JSON.parse(data);
 
 				$('#showres').modal().html(d);
-				
-				// execute stuff after the modal is shown
-				afterModalOpen();
-
 				if( l_sisalto !== null )
 					$("#" + this_id).html( l_sisalto ).addClass('tv_edit');
 				$('#hovertietoja').html('').hide();
@@ -573,67 +569,6 @@ function openTV(this_id, l_sisalto){
         });
 }
 
-/**
- * Executed after openTV opens the modal.
- */
-const afterModalOpen = () => {
-	// java_prefix =
-	// ToistuvatTyovuorot_kohde or Tyovuoroot_kohde
-	// figure out the prefix by attempting to select an element from the modal, for some reason
-	// normal and cycling shifts have different prefixes in the IDs of the elements.
-	const java_prefix = document.getElementById("ToistuvatTyovuorot_pvm") === null ? "Tyovuoroot" : "ToistuvatTyovuorot";
-	 
-	// selecting with document.getElementById was much faster (like 20x faster in some cases)
-	// than the jquery way $('#<?=$java_prefix?>_kohde option:selected').val();
-	const selectedKohde = document.getElementById(`${java_prefix}_kohde`);
-	// if kohde is selected, get it's ID and call showohje
-	// copied from _form4.php around line 1810
-	if( selectedKohde.value !== '' ){
-		const thisID = selectedKohde.options[selectedKohde.selectedIndex].value;
-		$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+thisID,
-			success: function(data) {
-				//console.log("Fetched showohje");
-				const d = JSON.parse(data);
-				if(d[2] !== "") {
-					$("#arvioitu_kesto").html(d[2]);
-				} else {
-					$("#arvioitu_kesto").html("00:00");
-				}
-				$("#kohteen_lisatiedot").html('<span style="" class="link fa fa-2x fa-phone avataan_lisatiedot" data-toggle="collapse" data-target="#open_kohde_'+ thisID +
-					'"></span><div style="position:relative;"><div style="position:absolute;top:5px;right: 20px;z-index:9999;background:white;width:220px;border:1px #ccc solid" class="p15 bg-warning collapse" id="open_kohde_'+ thisID +
-					'">Puh.: <b>'+ d[7] +'</b><br>Sähköposti: <b>'+ d[8] +'</b></div></div>');
-
-				if(d[11])
-					$('#kohteen_tiedostot').html(d[11]);
-			},
-			error: function(err) {
-				console.log("Error while fetching show ohje", err);
-			}
-		});
-	}
-
-	// if kohde is selected
-	if(selectedKohde.value !== "") {
-		const targetId = selectedKohde.options[selectedKohde.selectedIndex].value;
-		$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/getAsiakasByKohde',
-			type: "GET",
-			data: {"id": targetId},
-			success: function(data) {
-				//console.log("Fetched asiakas by kohde", data);
-				const d = JSON.parse(data);
-				$("#asiakas").val(d);
-				
-			},
-			error: function(xhr, x, err) {
-				console.log("Error while getting asiakas by kohde", err);
-			}
-		});
-	}
-
-
-}
 
 $(document).delegate(".latikkoAsetukset p","contextmenu",function(e){
 	e.preventDefault();

@@ -1148,10 +1148,10 @@ $(document).ready(function(){
         maxHeight: 300,
   });
   //console.log(Date.now(), "after mult, before getAsiakasByKohde");
-  // moved this to tyovuoroot_v4.js afterModalOpen
-  /*
+  
   if($('#<?=$java_prefix?>_kohde').val() !== ''){
-	var kohdeOn = $('#<?=$java_prefix?>_kohde option:selected').val();
+	const kohdeElem = document.getElementById("<?=$java_prefix?>_kohde");
+	const kohdeOn = kohdeElem.options[kohdeElem.selectedIndex].value;
 	  	 $.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/getAsiakasByKohde',
 			type:'GET',
@@ -1172,7 +1172,7 @@ $(document).ready(function(){
 			  }
 	 	});
   }
-  */
+
   var toistuva 	= ($('#is_toistuva').bootstrapSwitch('state') === true)? true : false;
   $('#is_toistuva').on('switchChange.bootstrapSwitch', function(event, state) {
 	if(state === true){
@@ -1788,10 +1788,9 @@ $(document).ready(function(){
 	laskePituus();
   });
 
-  // moved this to afterModalOpen in tyovuoroot_v4.js
-  /*
   if( $('#<?=$java_prefix?>_kohde').val() !== '' ){
-	var thisID = $('#<?=$java_prefix?>_kohde option:selected').val();
+	const kohdeElem = document.getElementById("<?=$java_prefix?>_kohde");
+	const thisID = kohdeElem.options[kohdeElem.selectedIndex].value;
 	  $.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+thisID,
 		  success:function(data){
@@ -1814,7 +1813,7 @@ $(document).ready(function(){
 	    	}
 	  });
   }
-  */
+
   $(document).delegate("#<?=$java_prefix?>_kohde","change",function(){
 	var thisID = $(this, 'option:selected').val();
 	OsoiteVaihto(thisID);
@@ -2106,7 +2105,9 @@ $(document).ready(function(){
   const omasiistijaTarkistus = function() {
 
     // Get current selected worker and pairs.
-    let tid = $('#tekijanVaihdo option:selected').val();
+    //let tid = $('#tekijanVaihdo option:selected').val();
+	const tekijanVaihdoElem = document.getElementById("tekijanVaihdo");
+	const tid = tekijanVaihdoElem.value;
     let tyoparit = [];
     $('#tyopari-container .multiselect-container li.active a label input').each(function() {
       tyoparit.push(this.value);
