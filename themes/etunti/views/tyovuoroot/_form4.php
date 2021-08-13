@@ -1569,7 +1569,13 @@ $(document).ready(function(){
 	}
 	/* Työpari */
 	//console.log('Tids joille päivitetään laatikko: ' + tids);
-	return tids;
+	//return tids;
+	const newTids = tids.reduce((obj, tid) => {
+		obj[tid] = tid;
+		return obj;
+	}, {});
+	//console.log("New tids", newTids);
+	return newTids;
   }
 
   function dids_before(){
@@ -1590,7 +1596,7 @@ $(document).ready(function(){
 	$.ajax({
 		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did4?from=<?=$haku_from?>&to=<?=$haku_to?>',
 		type: 'POST',
-		data: { tids : getAllTids() },
+		data: { tids : JSON.stringify(getAllTids()) },
 		success:function(data){
 			data = JSON.parse(data);
 			//console.log(data);
@@ -1600,7 +1606,7 @@ $(document).ready(function(){
 				//console.log(v);
 			});
 			$.tv_arr_update(data);
-			$.vkolaskenta(getAllTids());
+			$.vkolaskenta(JSON.stringify(getAllTids()));
         $('#showres').modal('hide');
 
       // Redirect back to modal when doing real-time changes like sending omasiistijävaroitus.

@@ -985,12 +985,12 @@ $(document).ready(function(){
 	$.ajax({
 		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did4?from=<?=$haku_from?>&to=<?=$haku_to?>',
 		type: 'POST',
-		data: { tids : getAllTids() },
+		data: { tids : JSON.stringify(getAllTids()) },
 		success:function(data){
 			data = JSON.parse(data);
 			//console.log(data);
 			$.tv_arr_update(data);
-			$.vkolaskenta(getAllTids());
+			$.vkolaskenta(JSON.stringify(getAllTids()));
 		  	$('#showres').modal('hide');
 		},error:function(data){
 		  	console.log(data);
@@ -1012,7 +1012,11 @@ $(document).ready(function(){
 	}
 	/* Työpari */
 	//console.log('Tids joille päivitetään laatikko: ' + tids);
-	return tids;
+	//return tids;
+	return tids.reduce((obj, tid) => {
+		obj[tid] = tid;
+		return obj;
+	}, {});
   }
 
   function laskePituus(){
