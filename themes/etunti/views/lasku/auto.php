@@ -154,6 +154,17 @@
                             </label>
                           </label>
                         </div>
+
+                        <div class="section">
+                          <label class="field prepend-icon">
+   			                      <input type="text" name="toimituspaiva" class="gui-input datepickerFI" placeholder="Toimituspäivä" required>
+                            <label for="toimituspaiva" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+
+
                       </div>
 
                       <div class="col-md-2">

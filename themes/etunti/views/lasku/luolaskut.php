@@ -24,6 +24,7 @@ $tp_lisatuotteet = array();
 					'from' => $from,
 					'to' => $to,
 					'paivays' => $paivays,
+					'toimituspaiva' => $toimituspaiva,
 					'erapaiva' => $erapaiva,
 					'alvsis' => $alvsis,
 					'decimal' => $decimal,
@@ -140,6 +141,7 @@ $iban				= $asetukset->iban;
 	<p><b><?=Yii::t('main', 'Laskutus kanava')?></b>-<?=(!empty($asiakas['laskutus_kanava']))? Yii::t('main', $asiakas['laskutus_kanava']):''?></p>
 	<p><b><?=Yii::t('main', 'Viitenumero')?></b>-<?=$viitenumero?></p>
 	<p><b><?=Yii::t('main', 'Päiväys')?></b>-<?=date("d.m.Y",strtotime($paivays))?></p>
+	<p><b><?=Yii::t("main", "Toimituspäivä")?></b>-<?=date("d.m.Y",strtotime($toimituspaiva))?></p>
 	<p><b><?=Yii::t('main', 'Eräpäivä')?></b>-<?=date("d.m.Y",strtotime($ep))?></p>
 	<p><b><?=Yii::t('main', 'Maksuehto')?></b>-<?=(!empty($asiakas['maksuehto']))? $asiakas['maksuehto']:''?></p>
 	<p><b><?=Yii::t('main', 'Viivästyskorko')?></b>-<?=(!empty($asiakas['viivastyskorko']))? $asiakas['viivastyskorko']:''?></p>
@@ -180,6 +182,7 @@ $iban				= $asetukset->iban;
 		$lasku->yhteyshenkilo = $asiakas_nimi;
 		$lasku->puhelin = $asiakas['puhelin'];
 		$lasku->paivays = $paivays;
+		$lasku->toimituspaiva = $toimituspaiva;
 		$lasku->erapaiva = $ep;
 		$lasku->maksuehto = $asiakas['maksuehto'];
 		$lasku->viitenumero = $viitenumero;
@@ -621,6 +624,7 @@ $iban				= $asetukset->iban;
 					'alvsis' => $alvsis, 
 					'asiakas_id' => $asiakas['id'], 
 					'paivays' => $paivays, 
+					'toimituspaiva' => $toimituspaiva,
 					'erapaiva' => $erapaiva, 
 					'decimal' => $decimal,
 					'viestikenta' => (isset($_GET['viestikenta']))?$_GET['viestikenta']:'',

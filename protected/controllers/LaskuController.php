@@ -121,7 +121,8 @@ class LaskuController extends Controller
 		exit;
 	}
 
-	public function actionLuolaskut($from, $to, $yrityksen_nimi=null, $asiakas_id=null, $asiakkaat_all=null, $luo=null, $laheta=null, $alvsis=null, $paivays=null, $erapaiva=null, $tunnit=null, $decimal=null, $ajax=null)
+	public function actionLuolaskut($from, $to, $yrityksen_nimi=null, $asiakas_id=null, $asiakkaat_all=null, $luo=null, 
+		$laheta=null, $alvsis=null, $paivays=null, $erapaiva=null, $tunnit=null, $decimal=null, $ajax=null, $toimituspaiva=null)
 	{
 		$asetukset = Asetukset::model()->findByPk(1);
 		if( $asetukset->netvisor_kaytto != 1 or $asetukset->palvelu_tyyppi != 4 ){
@@ -130,6 +131,8 @@ class LaskuController extends Controller
 		$paivays = date("Y-m-d", strtotime($paivays));
        		$criteria = new CDbCriteria();
 	        //$criteria->order = " id DESC ";
+
+		$toimituspaiva = date("Y-m-d", strtotime($toimituspaiva));
 
 		$alvsis_tuote = 'nolla';
 		if($alvsis != null and $alvsis == 1){
@@ -230,6 +233,7 @@ exit;
 			'from' => $from,
 			'to' => $to,
 			'paivays' => $paivays,
+			'toimituspaiva' => $toimituspaiva,
 			'erapaiva' => $erapaiva,
 			'asiakas_id' => $asiakas_id,
 			'laheta' => $laheta,
@@ -3448,13 +3452,20 @@ exit;
              </Dimension>';
 	}
 
+	$deliveryDate = date("Y-m-d", strtotime($model->paivays));
+	// if toimituspaiva is defined use that as the deliveryDate instead of "paivays"
+	// length of 10 = YYYY-MM-DD
+	if(isset($model->toimituspaiva) && strlen($model->toimituspaiva) === 10) {
+		$deliveryDate = date("Y-m-d", strtotime($model->toimituspaiva));
+	}
+
 $xml = '
 <root>
   <SalesInvoice>
     '.(($asetukset->lasku_laskunumero == 1)?'<SalesInvoiceNumber>'.$model->laskunumero.'</SalesInvoiceNumber>':'').'
     <SalesInvoiceDate format="ansi">'.date("Y-m-d", strtotime($model->paivays)).'</SalesInvoiceDate>
     <SalesInvoiceDueDate>'.date("Y-m-d", strtotime($model->erapaiva)).'</SalesInvoiceDueDate>
-    <SalesInvoiceDeliveryDate format="ansi">'.date("Y-m-d", strtotime($model->paivays)).'</SalesInvoiceDeliveryDate>
+    <SalesInvoiceDeliveryDate format="ansi">'.$deliveryDate.'</SalesInvoiceDeliveryDate>
     <SalesInvoiceReferenceNumber>'.$model->viitenumero.'</SalesInvoiceReferenceNumber>
     <SalesInvoiceAmount>'.$model->yhteensa_total.'</SalesInvoiceAmount>
     <!--<SellerIdentifier type="netvisor">32</SellerIdentifier>-->
