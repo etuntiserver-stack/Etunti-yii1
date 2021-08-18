@@ -290,25 +290,39 @@ class ToteutuneetController extends Controller
 
 			function yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio, $status, $num, $description)
 			{
-				$body = '';
-					$data   				= $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, [$tid], [$status], 3, true, $num, false, null, null, true);
-					foreach($data as $t_id => $arr)
+				$body 	= '';
+				$data   = $mobile[0]->TidfromtoMobiiliAll($pvm, $pvm, [$tid], [$status], 3, true, $num, false, null, null, true);
+				foreach($data as $arr)
+				{
+					if($arr['attributes']['tid'] == $tid)
 					{
-						if($t_id == $tid)
-						{
-							foreach($arr as $kohdenID => $sum)
+							$sum = round($arr['l_tunnit']/3600, 2);
+			
+							if($sum > 0)
 							{
-								if($sum > 0)
-								$body .= '
-								<workdayhour>
-									<hours>'.($sum/3600).'</hours>
-									<collectorratio type="number">'.$collectorratio.'</collectorratio>
-									<acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
-									<description>'.$description.', Kohde id#: '.$kohdenID.'</description>
-								</workdayhour>'; 
+							/*
+							$body .= '
+							<workdayhour>
+								<hours>'.$sum.'</hours>
+								<collectorratio type="number">'.$collectorratio.'</collectorratio>
+								<acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
+								<description>'.$description.((!empty($arr['attributes']['kohde_kannasta']))? ', '.$arr['attributes']['kohde_kannasta']:'').'</description>
+							</workdayhour>';
+							*/
+							$body .= '
+							<workdaytime>
+								<starttimeofday>'.date("H:i", strtotime($arr['attributes']['aloitan'])).'</starttimeofday>
+								<endtimeofday>'.date("H:i", strtotime($arr['attributes']['loppui'])).'</endtimeofday>
+								<breaktime>0</breaktime>
+								<collectorratio type="number">'.$collectorratio.'</collectorratio>
+								<acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
+								<description>'.$description.((!empty($arr['attributes']['kohde_kannasta']))? ', '.$arr['attributes']['kohde_kannasta']:'').'</description>
+			
+							</workdaytime>';
 							}
-						}
+
 					}
+				}
 				return $body;
 			}
 
@@ -321,6 +335,9 @@ class ToteutuneetController extends Controller
 
 				if(in_array('tyotunnit', $mitaLahetetaan))
 					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyotunnit'], 3, 0, 'Työtunnit');
+
+				if(in_array('matka', $mitaLahetetaan))
+					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyotunnit'], 2, 0, 'Matka');
 
 				if(in_array('tyoilta', $mitaLahetetaan))
 					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyoilta'], 3, 1, 'Työtunnit ilta');
@@ -336,7 +353,6 @@ class ToteutuneetController extends Controller
 				{
 					if($hours > 0 and in_array($nimike,$mitaLahetetaan))
 					{
-						if($nimike == 'matka') $hours = $hours/3600;
 						$xml .= '
 						<workdayhour>
 							<hours>'.$hours.'</hours>
@@ -352,7 +368,7 @@ class ToteutuneetController extends Controller
 			</root>';
 			//  XML -->
 
-			//echo $xml;
+			//echo json_encode($xml);
 			//exit;
 			
 			$optsPOST = array(

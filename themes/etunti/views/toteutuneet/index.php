@@ -602,7 +602,6 @@ exit;
 						<button class="btn btn-warning btn-sm btn-block esittele_tyotunnit_erikseen" nvtilanne="'.$nvtilanne.'"
 							pvm="'.$date.'"
 							tid="'.$tid.'"
-							matka		="'.(int)$matkatunnit.'"
 							sl			="'.(int)$sl.'"
 							spl			="'.(int)$spl.'"
 							ls			="'.(int)$ls.'"
@@ -612,6 +611,7 @@ exit;
 						></button>
 					</td>
 				</tr>';
+				// matka		="'.(int)$matkatunnit.'"
 			//}
 		  }
 
