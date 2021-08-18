@@ -106,6 +106,21 @@ if(isset($_GET['users_siirto']))
 		$mail = trim(strtolower($mail));	
 		return $mail;
 	}
+	// used to generate random passwords
+	function random_str(
+		$length = 16,
+		$keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+	) {
+		$str = '';
+		$max = mb_strlen($keyspace, '8bit') - 1;
+		if ($max < 1) {
+			throw new Exception('$keyspace must be at least two characters long');
+		}
+		for ($i = 0; $i < $length; ++$i) {
+			$str .= $keyspace[random_int(0, $max)];
+		}
+		return $str;
+	}
 	
 	$db_host = 'localhost';
 	$site = Yii::app()->createController('Site');
@@ -365,7 +380,7 @@ if(isset($_GET['users_siirto']))
 		Yii::app()->db1->setActive(true);
 		
 		$asetukset 			= Asetukset::model()->findByPk(1);
-		$asiakkaat 			= Asiakkaat::model()->findAll("sahkoposti!='' AND salasana!=''");
+		$asiakkaat 			= Asiakkaat::model()->findAll("sahkoposti!=''");
 		$yhteensa			+= count($asiakkaat);
 		
 		// Sarake lisäys
@@ -461,7 +476,16 @@ if(isset($_GET['users_siirto']))
 					$domains = array_merge($all_users[$sahkoposti]['User']['domains'], $domains);
 					$all_users[$sahkoposti]['User']['domains'] = $domains;
 					continue;
-				}					
+				}		
+				
+				/* this could be used to generate password, but since there's alot of clients
+				without passwords, it'd take a really long time to do so.
+				I tried to login to users with empty passwords and couldn't do so... it should be safe to leave them blank.
+				if($asiakas->salasana === "") {
+					$asiakas->salasana = CPasswordHelper::hashPassword(random_str(16));
+				}
+				*/
+			
 				
 				$nimet = explode(" ", $nimi);
 				$all_users[$sahkoposti] = [
