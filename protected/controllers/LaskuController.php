@@ -3676,12 +3676,6 @@ $xml .= '
 		$context = stream_context_create($optsGET);
 		
 		$response = file_get_contents($url, false, $context);
-
-		echo '<pre>';
-		print_r( $response );
-		echo '</pre>';
-		exit;
-				
 		$return = new SimpleXMLElement($response);
 	   }
 
