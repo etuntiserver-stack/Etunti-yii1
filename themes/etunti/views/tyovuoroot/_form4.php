@@ -2034,7 +2034,7 @@ $(document).ready(function(){
 	let selectedKohde = document.getElementById("<?=$java_prefix?>_kohde");
 	let kohdeName = selectedKohde.options[selectedKohde.selectedIndex].text;
 	let url = location.protocol + "//" + location.host + '/index.php/kohteet/update?id='+ selectedKohde.value;
-	$("#kohde_url").html('<a href="'+url+'">Muokkaa kohdetta '+kohdeName+'</a>');
+	$("#kohde_url").html('<a href="'+url+'" target="_blank">Muokkaa kohdetta '+kohdeName+'</a>');
   }
 
   // <-- modal siirtaminen
