@@ -3674,9 +3674,14 @@ $xml .= '
 		);
 	
 		$context = stream_context_create($optsGET);
-		
 		$response = file_get_contents($url, false, $context);
-		$return = new SimpleXMLElement($response);
+
+		try {
+		    $return = new SimpleXMLElement($response);
+		} catch (Exception $e) {
+		    throw new RuntimeException('Deal with it: ' . $e->getMessage(), 0, $e);
+		}
+
 	   }
 
 		return $return;
