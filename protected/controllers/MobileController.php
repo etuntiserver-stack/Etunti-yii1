@@ -2104,7 +2104,7 @@ class MobileController extends Controller
 		if($by_aloitan)
 			$criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))";
 		elseif($withKohdenID)
-			$criteria->group = "tid, kohdenID";
+			$criteria->group = "tid, kohdenID, aloitan"; // tid, kohdenID
 		else
 			$criteria->group = "tid";
 
@@ -2113,21 +2113,21 @@ class MobileController extends Controller
 			if($by_aloitan)
 				$criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))";
 			elseif($withKohdenID)
-				$criteria->group = "tid, kohdenID";
+				$criteria->group = "tid, kohdenID, aloitan"; // tid, kohdenID
 			else
 				$criteria->group = "tid";
 			// Select statements
 			switch ($time) {
 				case 0:
 					$criteria->select = "
-						tid, aloitan, kohdenID, SUM(TIME_TO_SEC(TIMEDIFF(
+						tid, aloitan, loppui, kohdenID, kohde_kannasta, SUM(TIME_TO_SEC(TIMEDIFF(
 							STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'),
 							STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i')
 						))) as l_tunnit";
 					break;
 				case 1:
 					// Note: 18000 at end of query is equal to TIME_TO_SEC(TIMEDIFF('23:00:00', '18:00:00'))
-					$criteria->select = "tid, aloitan, kohdenID, SUM(CASE
+					$criteria->select = "tid, aloitan, loppui, kohdenID, kohde_kannasta, SUM(CASE
 						WHEN
 							TIME(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) >= '18:00:00'
 						THEN CASE
@@ -2160,7 +2160,7 @@ class MobileController extends Controller
 						END) AS l_tunnit";
 					break;
 				case 2:
-					$criteria->select = "tid, aloitan, kohdenID, SUM(CASE
+					$criteria->select = "tid, aloitan, loppui, kohdenID, kohde_kannasta, SUM(CASE
 						WHEN
 							DATE(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s')) = DATE(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'))
 						THEN CASE
@@ -2220,7 +2220,7 @@ class MobileController extends Controller
 						END) AS l_tunnit";
 					break;
 				case 3:
-					$criteria->select = "tid, aloitan, kohdenID, SUM(CASE
+					$criteria->select = "tid, aloitan, loppui, kohdenID, kohde_kannasta, SUM(CASE
 						WHEN
 							DAYOFWEEK(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s')) = 1
 						THEN CASE
@@ -2241,7 +2241,7 @@ class MobileController extends Controller
 					break;
 				case 4:
 				if( !empty($pyhapaivat_str) ){
-					$criteria->select = "tid, aloitan, kohdenID, SUM(CASE
+					$criteria->select = "tid, aloitan, loppui, kohdenID, kohde_kannasta, SUM(CASE
 						WHEN
 							$pyhapaivat_str
 						THEN CASE
@@ -2259,7 +2259,7 @@ class MobileController extends Controller
 					break;
 				case 5:
 				if( !empty($erikoislauantai_str) ){
-					$criteria->select = "tid, aloitan, kohdenID, SUM(CASE
+					$criteria->select = "tid, aloitan, loppui, kohdenID, kohde_kannasta, SUM(CASE
 						WHEN
 							$erikoislauantai_str
 						THEN CASE
@@ -2332,6 +2332,13 @@ class MobileController extends Controller
 			if($withKohdenID)
 			{
 				$set = [];
+
+				foreach ($lu as $l)
+					$set[] = ['l_tunnit' => $l->l_tunnit, 'attributes' => $l->attributes];
+						
+				foreach ($tot as $l)
+					$set[] = ['l_tunnit' => $l->l_tunnit, 'attributes' => $l->attributes];
+				/*
 				foreach ($lu as $l)
 					if(!isset($set[$l->tid][$l->kohdenID]))
 						$set[$l->tid][$l->kohdenID] = $l->l_tunnit;
@@ -2343,6 +2350,7 @@ class MobileController extends Controller
 						$set[$l->tid][$l->kohdenID] = $l->l_tunnit;
 					else
 						$set[$l->tid][$l->kohdenID] += $l->l_tunnit;
+				*/
 					
 			} else {
 				foreach ($lu as $l)
