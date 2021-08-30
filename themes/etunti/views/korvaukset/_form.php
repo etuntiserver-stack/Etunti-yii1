@@ -18,7 +18,6 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
-
 	<div id="error_info"></div>
 
                 <ul class="list-group list-group-flush text-center">
@@ -28,9 +27,16 @@
 		<?php echo $form->labelEx($model,'tid'); ?>
 		<?php 
 		   	$site = Yii::app()->createController('Site');
-			$list = $site[0]->tyontekiatArrayList(1);
-			echo $form->dropDownList($model,'tid', $list, 
-			array('empty'=>'Valitse työntekijä','class'=>'form-control')) 
+            $employeeList = $site[0]->workerListSelect2(
+                "Korvaukset[tid]", // name
+                "", // class
+                "Korvaukset_tid", // ID
+                "", // pre selected
+                1, // actie or not
+                false, //multiple or not
+                [0 => "Valitse työntekijä"]
+            );
+            echo $employeeList;
 		?>
 		<?php echo $form->error($model,'tid'); ?>
 	</div>
@@ -78,6 +84,9 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+
+$(".select2").select2();
 
 $('#korvaukset-form').on('submit',function(e) {
 
