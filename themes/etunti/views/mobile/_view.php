@@ -41,24 +41,23 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 }
 // Jos sivu on laskutettu -->
 
-$criteria = new CDbCriteria();
+$data_luetut 	= $data;
+$criteria 		= new CDbCriteria();
 $criteria->condition = " kid='".$data->id."' ";
-$tot = Toteutuneet::model()->find($criteria);
-$old_id = $data->id;
+$tot 			= Toteutuneet::model()->find($criteria);
+$old_id 		= $data->id;
 
 if(isset($tot->id))
 {
-	$tot_id = $tot->id;
-	
-	// show updated data if it exists
-	$data = $tot;
-	// don't replace the ID though
-	$data->id = $old_id;
-
+	$tot_id 	= $tot->id;
+	$data 		= $tot;
+	$data->id 	= $old_id;
 }
 
 // <-- Check Laskutetut
-if(isset($tot_id) and isset($laskutetut_ids[$tot_id]))
+if($data_luetut->laskutettu == 1)
+	$data->laskutettu = 1;
+elseif(isset($tot_id) and isset($laskutetut_ids[$tot_id]))
 	$data->laskutettu = 1;
 elseif(!isset($tot_id) and isset($laskutetut_ids[$data->id]))
 	$data->laskutettu = 1;

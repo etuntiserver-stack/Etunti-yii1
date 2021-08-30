@@ -122,24 +122,41 @@ if(empty($model->tietoja))
 		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'hinnasto_id'); ?>
 	</div>
-	
+
+	<?php
+		$h_all 		= TuotteetPalvelut::model()->findAll("aktiivinen=1 AND yksikko='h'");
+		$kk_all 	= TuotteetPalvelut::model()->findAll("aktiivinen=1 AND yksikko='kk'");
+		$kpl_all 	= TuotteetPalvelut::model()->findAll("aktiivinen=1 AND yksikko='kpl'");
+
+ 		if(count($h_all) == 0)
+ 		{
+ 			echo '
+ 			<div class="well">
+	 			Luo ainakin yksi "h" tuote '.CHtml::link('tästä', ['/tuotteetPalvelut/create']).'. <br><br>
+	 			Suosittelemme myös luomaan <b>"kk"</b> ja <b>"kpl"</b> tuotteet. <br>
+	 			Tuote on pakollinen kenttä kohteen kortilla.<br>
+	 		</div>
+ 			';
+ 		}
+	?>
+
 	<div class="section fill mb5" id="h_valinta" style="display:none">
 		<?php echo $form->labelEx($model,'tuote_h'); ?>
-		<?php echo $form->dropDownList($model, 'tuote_h', CHtml::listData(TuotteetPalvelut::model()->findAll("aktiivinen=1 AND yksikko='h'"), 'id', 'nimike'), 
+		<?php echo $form->dropDownList($model, 'tuote_h', CHtml::listData($h_all, 'id', 'nimike'), 
 		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'tuote_h'); ?>
 	</div>
 
 	<div class="section fill mb5" id="kk_valinta" style="display:none">
 		<?php echo $form->labelEx($model,'tuote_kk'); ?>
-		<?php echo $form->dropDownList($model, 'tuote_kk', CHtml::listData(TuotteetPalvelut::model()->findAll("aktiivinen=1 AND yksikko='kk'"), 'id', 'nimike'), 
+		<?php echo $form->dropDownList($model, 'tuote_kk', CHtml::listData($kk_all, 'id', 'nimike'), 
 		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'tuote_kk'); ?>
 	</div>
 
 	<div class="section fill mb5" id="kpl_valinta" style="display:none">
 		<?php echo $form->labelEx($model,'tuote_kpl'); ?>
-		<?php echo $form->dropDownList($model, 'tuote_kpl', CHtml::listData(TuotteetPalvelut::model()->findAll("aktiivinen=1 AND yksikko='kpl'"), 'id', 'nimike'), 
+		<?php echo $form->dropDownList($model, 'tuote_kpl', CHtml::listData($kpl_all, 'id', 'nimike'), 
 		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'tuote_kpl'); ?>
 	</div>

@@ -16,7 +16,17 @@
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
                  <div class="row">
-		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+                 	<?php
+                 	$h_all 	= TuotteetPalvelut::model()->findAll("aktiivinen=1 AND yksikko='h'");
+             		if(count($h_all) == 0)
+             		{
+             			echo 'Luo ainakin yksi "h" tuote '.CHtml::link('tästä', ['/tuotteetPalvelut/create']).'. <br><br>
+             			Suosittelemme myös luomaan <b>"kk"</b> ja <b>"kpl"</b> tuotteet. Tuote on pakollinen kenttä kohteen kortilla.<br>
+             			';
+             		} else {
+             			echo $this->renderPartial('_form', array('model'=>$model));
+             		}
+                 	?>
                  </div>
                 </div>
               </div>
