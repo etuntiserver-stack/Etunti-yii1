@@ -424,41 +424,42 @@ $(document).ready(function(){
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'tid'); ?>
 
-
-				<?php
-				$list = array(0=>Yii::t('main', 'VARAUS'));
-		   		$site = Yii::app()->createController('Site');
-		   		$returnList = $site[0]->tyontekiatArrayList(1);
-				array_push($list, $returnList);
-				?>
-
-        	<?php echo $form->dropDownList($model, 'tid', $list,array('empty'=>'Valitse','class'=>'form-control'));	?>
+		<?php 
+			$site = Yii::app()->createController('Site');
+			$workerList = $site[0]->workerListSelect2(
+				"Tyovuoroot[tid]", //name
+				"",	// class
+				"Tyovuoroot_tid", //id
+				"", // selected
+				1, // active workers or not
+				false, // multi select nor not
+				[0 => "Valitse"],
+			);
+			echo $workerList;
+		
+		?>
   </div>
   <div class="col-sm-3">
 		<label><?php echo Yii::t('main', 'Työpari'); ?></label><br>
 		<?php 
-		$tyopaari = json_decode($model->tyopaari, true);
+			$tyopaari = json_decode($model->tyopaari, true);
 
-		$criteria=new CDbCriteria;
-		// <-- Return order etu ja sukunimella
-		$site = Yii::app()->createController('Site');
-		$criteria = $site[0]->etuSukunimiCriteria($criteria);
-		//     Return order etu ja sukunimella -->
-		$criteria->condition =" aktiivinen=1 and id!='".$model->tid."' ";
+			$criteria=new CDbCriteria;
+			// <-- Return order etu ja sukunimella
+			$site = Yii::app()->createController('Site');
+			$criteria = $site[0]->etuSukunimiCriteria($criteria);
+			//     Return order etu ja sukunimella -->
+			$criteria->condition =" aktiivinen=1 and id!='".$model->tid."' ";
 
- 		$tt = Tyontekijat::model()->findAll($criteria);
-		if(isset($tt[0]))
-		{
-			echo '<select name="tyopaari[]" id="tyopaari" class="mult" multiple>';
-			foreach($tt as $tekija)
-			{
-			  if(is_array($tyopaari) and in_array($tekija->id,$tyopaari, true))
-			    echo '<option value="'.$tekija->id.'" selected>'.$this->etuSukunimi($tekija->id).'</option>';
-			  else
-			    echo '<option value="'.$tekija->id.'">'.$this->etuSukunimi($tekija->id).'</option>';
+			$tt = Tyontekijat::model()->findAll($criteria);
+
+			$elem = '<select style="width: 100%" name="tyopaari[]" id="tyopaari" class="select2" multiple>';
+			foreach($tt as $employee) {
+				$elem .= '<option value="'.$employee->id.'">'.$this->etuSukunimi($employee->id).'</option>';
 			}
-			echo '</select>';
-		}
+
+			$elem .= "</select>";
+			echo $elem;
 		?>
 
 
@@ -677,6 +678,8 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
 
+
+  $(".select2").select2();
 
   if($('#Tyovuoroot_kohde').val() !== '')
   {
