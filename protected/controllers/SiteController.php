@@ -2567,9 +2567,19 @@ class SiteController extends Controller
 	/**
 	 * Works almost exactly like "tyontekiatListaNoMulti", with the exception
 	 * that this function is tailored for the Select2 jQuery plugin.
+	 * 
+	 * Renders an <select> element with all active workers as options
+	 * with default settings.
+	 * Setting active to 0 will also render all non-active workers in addition
+	 * too all active ones.
+	 * 
+	 * Placeholder array can be used to define a placeholder element, that
+	 * will be the first option in the list.
+	 * If you were to define $placeholder as [0 => "Valitse"], the first element
+	 * would have an ID of 0 and value of Valitse
 	 */
 	public function workerListSelect2($name, $class, $id, 
-		$selected, $active = 1, $multiple = false) {
+		$selected, $active = 1, $multiple = false, $placeholder = []) {
 		$criteria = new CDbCriteria();
 
 		// <-- Return order etu ja sukunimella
@@ -2587,6 +2597,7 @@ class SiteController extends Controller
         		$criteria->addCondition (" id IN ($ids)");
 		}
 		//    Tyoryhmat -->
+		// check if caller defined name, class or id for the select element
 		$_name = $name !== null ? ' name="' . $name . '" ' : '';
 		$_class = $class !== null ? ' class="select2 ' . $class . '" ' : '';
 		$_id = $id !== null ? ' id="' . $id . '" ' : '';
@@ -2601,7 +2612,12 @@ class SiteController extends Controller
 			. $_id
 			. $_multiple
 			. '>';
-
+		// add any placeholder elements to the options list
+		// before adding the actual worker options
+		foreach($placeholder as $phKey => $phVal) {
+			$element .= '<option value="'.$phKey.'">'.$phVal.'</option>';
+		}
+		// create options from returned workers
 		foreach($workers as $worker) {
 			if(!empty($selected) and $worker->id == $selected) {
 				$element .= '<option value="'.$worker->id.'" selected>' . $this->etuSukunimi($worker->id) . '</option>';

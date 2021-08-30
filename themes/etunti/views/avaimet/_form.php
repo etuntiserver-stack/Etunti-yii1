@@ -67,23 +67,19 @@ if( !isset($model->id) and isset($_GET['asiakas_id']) and isset($_GET['kohde_id'
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tid'); ?>
-		<?php
-	       	$criteria = new CDbCriteria();
-	       	$criteria->condition = " aktiivinen=1 ";
 
-			// <-- Tyoryhmat
-			$tt = Yii::app()->createController('Tyontekijat');
-			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-			$ids = implode(",", $tt_arr);
-			if( count($tt_arr) > 0 ){
-	        		$criteria->addCondition (' id IN ('.$ids.') ');
-			}
-			//    Tyoryhmat -->
-
-		$tt = Tyontekijat::model()->findAll($criteria);
-        	echo $form->dropDownList($model, 'tid', CHtml::listData($tt, 'id', 'FullName'),
-		array('empty' => 'Valitse', 'class'=>'form-control'
-		));
+		<?php 
+			$site = Yii::app()->createController('Site');
+			$tyontekiatLista = $site[0]->workerListSelect2(
+				'Avaimet[tid]', // name
+				'form-control', //class
+				'Avaimet_tid', // id
+				$model->tid, // selected
+				1, // active workers or not,
+				false, // multiple select or not
+				[0 => "Valitse"] // placeholder element, id and value
+			);
+			echo $tyontekiatLista;
 		?>
 		<?php echo $form->error($model,'tid'); ?>
 	</div>
@@ -154,6 +150,15 @@ if( !isset($model->id) and isset($_GET['asiakas_id']) and isset($_GET['kohde_id'
 
 <script type="text/javascript">
 $(document).ready(function(){
+	// init select2 elements
+	$(".select2").select2({
+		placeholder: {
+			id: 0,
+			text: "Valitse",
+		},
+		allowClear: true,
+	});
+
  function sijainti(){
 	if( $('#Avaimet_sijainti_omatekstti').val() == '0' ){
 		$('#sijainti_rakenne').html('' +

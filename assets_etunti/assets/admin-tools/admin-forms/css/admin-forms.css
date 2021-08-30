@@ -4196,3 +4196,7 @@ not([type="multiple"]) {
 .select2-selection__arrow {
   height: 41px !important;
 }
+
+.select2-selection__clear {
+  height: 42px !important;
+}
