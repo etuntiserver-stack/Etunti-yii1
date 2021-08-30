@@ -2564,6 +2564,57 @@ class SiteController extends Controller
 		return $return;
 	}
 
+	/**
+	 * Works almost exactly like "tyontekiatListaNoMulti", with the exception
+	 * that this function is tailored for the Select2 jQuery plugin.
+	 */
+	public function workerListSelect2($name, $class, $id, 
+		$selected, $active = 1, $multiple = false) {
+		$criteria = new CDbCriteria();
+
+		// <-- Return order etu ja sukunimella
+		$criteria = $this->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
+
+		if($active === 1) {
+			$criteria->condition = " aktiivinen = 1";
+		}
+		// <-- Tyoryhmat
+		$tt = Yii::app()->createController('Tyontekijat');
+		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+		$ids = implode(",", $tt_arr);
+		if( count($tt_arr) > 0 ){
+        		$criteria->addCondition (" id IN ($ids)");
+		}
+		//    Tyoryhmat -->
+		$_name = $name !== null ? ' name="' . $name . '" ' : '';
+		$_class = $class !== null ? ' class="select2 ' . $class . '" ' : '';
+		$_id = $id !== null ? ' id="' . $id . '" ' : '';
+
+		$workers = Tyontekijat::model()->findAll($criteria);
+
+		$_multiple = $multiple === true ? " multiple " : "";
+
+		$element = '<select style="width: 100%" ' 
+			. $_name 
+			. $_class 
+			. $_id
+			. $_multiple
+			. '>';
+
+		foreach($workers as $worker) {
+			if(!empty($selected) and $worker->id == $selected) {
+				$element .= '<option value="'.$worker->id.'" selected>' . $this->etuSukunimi($worker->id) . '</option>';
+			} else {
+				$element .= '<option value="'.$worker->id.'">' . $this->etuSukunimi($worker->id) . '</option>';
+			}
+		}
+
+		$element .= "</select>";
+
+		return $element;
+	}
+
 
 	public function tyontekiatArrayList($aktiivinen)
 	{
