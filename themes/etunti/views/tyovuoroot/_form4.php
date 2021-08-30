@@ -547,7 +547,7 @@ $(document).ready(function(){
 </div><!-- 1 tila -->
 <br>
 <div class="row">
-  <div class="col-sm-3" id="tyopari-container">
+  <div class="col-sm-3 select2-bootstrap" id="tyopari-container">
 		<label><?php echo Yii::t('main', 'Työpari'); ?></label><br>
 		<?php 
 		// <-- Order tyontekijat
@@ -579,18 +579,18 @@ $(document).ready(function(){
 
 
  		$tt = Tyontekijat::model()->findAll($criteria);
-		if(isset($tt[0]))
-		{
-			echo '<select name="'.$java_prefix.'[tyopaari][]" id="tyopaari" class="mult" multiple>';
-			foreach($tt as $tekija)
-			{
-			  if(is_array($tyopaari) and in_array($tekija->id, $tyopaari, true))
-			    echo '<option value="'.$tekija->id.'" selected>'.$tekija->$tt_order_1.' '.$tekija->$tt_order_2.'</option>';
-			  else
-			    echo '<option value="'.$tekija->id.'">'.$tekija->$tt_order_1.' '.$tekija->$tt_order_2.'</option>';
+
+		$elem = '<select style="width: 100%" name="'.$java_prefix.'[tyopaari][]" id="tyopaari" class="bootstrap-select2 select2" multiple>';
+		foreach($tt as $tekija) {
+			if(is_array($tyopaari) and in_array($tekija->id, $tyopaari, true)) {
+				$elem .= '<option selected value="'.$tekija->id.'">'.$tekija->$tt_order_1. ' ' . $tekija->$tt_order_2.'</option>';
+			} else {
+				$elem .= '<option value="'.$tekija->id.'">'.$tekija->$tt_order_1. ' ' . $tekija->$tt_order_2.'</option>';
 			}
-			echo '</select>';
 		}
+		$elem .= "</select>";
+
+		echo $elem;
 		?>
 
 
@@ -1138,15 +1138,17 @@ $(document).ready(function(){
   $('.mult').multiselect({
 	//inheritClass: true,
 	//enableFiltering: true,
-        includeSelectAllOption: true,
+	includeSelectAllOption: true,
 	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
 	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 	numberDisplayed: 0,
 	buttonWidth: '100%',
-        maxHeight: 300,
+	maxHeight: 300,
   });
+  // init select2
+  $(".select2").select2();
   //console.log(Date.now(), "after mult, before getAsiakasByKohde");
   
   if($('#<?=$java_prefix?>_kohde').val() !== ''){

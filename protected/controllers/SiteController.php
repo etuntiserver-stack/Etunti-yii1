@@ -2617,9 +2617,12 @@ class SiteController extends Controller
 		foreach($placeholder as $phKey => $phVal) {
 			$element .= '<option value="'.$phKey.'">'.$phVal.'</option>';
 		}
-		// create options from returned workers
+		// create options from returned workers, pre-select employees defined
+		// in $selected, which can be an array (for a single element) for an array for multiple elements
 		foreach($workers as $worker) {
-			if(!empty($selected) and $worker->id == $selected) {
+			if(!empty($selected) and is_string($selected) and $worker->id == $selected) {
+				$element .= '<option value="'.$worker->id.'" selected>' . $this->etuSukunimi($worker->id) . '</option>';
+			} else if(!empty($selected) and is_array($selected) and in_array($worker->id, $selected)) {
 				$element .= '<option value="'.$worker->id.'" selected>' . $this->etuSukunimi($worker->id) . '</option>';
 			} else {
 				$element .= '<option value="'.$worker->id.'">' . $this->etuSukunimi($worker->id) . '</option>';
