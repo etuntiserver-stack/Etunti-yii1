@@ -2000,6 +2000,11 @@ public function actionImei($dom)
 
 		// get "tyoryhma" name
 		$workGroupId = $client->tyoryhma;
+
+		/*
+		This was used to filter the invitations, so that
+		only clients in Oulu would receive them, however we expanded
+		later to include all clients.
 		// 168,169,135
 		// Oulu IDs (KP)
 		$ouluIds = [168,169,135];
@@ -2007,6 +2012,7 @@ public function actionImei($dom)
 		if(!in_array($workGroupId, $ouluIds)) {
 			return false;
 		}
+		*/
 		$workGroup = Valikkoot::model()->findByPk($workGroupId);
 		$workGroupName = $workGroup->value;
 
