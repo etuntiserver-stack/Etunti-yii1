@@ -184,7 +184,7 @@ if (isset($vi[0]->id) and !empty($vi[0]->id)) {
         echo '<div class="col-sm-4" id="v_' . $v->id . '">';
         echo '<div class="well">';
         echo '<p>'.printWorkerLocation($v->tekija, $v).'</p>';
-        echo '<span>' . str_replace("\n", "<br>", $v->viesti) . '</span> .
+        echo '<span>' . str_replace("\n", "<br>", $v->viesti) . '</span>
 
         <div class="row">
         <div class="pull-right">
