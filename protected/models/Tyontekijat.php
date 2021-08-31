@@ -231,6 +231,39 @@ class Tyontekijat extends DB2ActiveRecord
         }
 
 	/**
+	 * Returns a comma separated string that includes
+ 	 * workers "tyo_toimialue" and "tyoryhma" columns. 
+	 * 
+	 * Returns an empty string if this employee has neither
+	 * defined or json_decode fails to parse the contents.
+	 * 
+	 * @return string comma separated string that includes "tyo_toimialue" and "tyoryhma"
+	 */
+	public function getTyoryhmaToimialueString() {
+		$str = "";
+		// parse tyo_toimialue
+		$territories = json_decode($this->tyo_toimialue, true);
+		if($territories) {
+		  foreach($territories as $territory) {
+			$str .= "$territory, ";
+		  }
+		}
+		// parse tyoryhma
+		$workgroups = json_decode($this->tyoryhma, true);
+		if($workgroups) {
+		  foreach($workgroups as $workgroup) {
+			$str .= "$workgroup, ";
+		  }
+		}
+		$str = trim($str);
+		if(strlen($str) > 0) {
+		  // remove last character, which should be a ','
+		  $str = substr($str, 0, -1);
+		}
+		return $str;
+	}
+
+	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
