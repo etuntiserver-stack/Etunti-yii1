@@ -73,6 +73,7 @@ class Kohteet extends DB2ActiveRecord
 
 		$table_structure = array(
 			'asiakas_id' => 'int(11) DEFAULT 0',
+			'ensisijainen' => 'int(1) DEFAULT 0',
 			'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
 			'tag_id' => 'varchar(20) DEFAULT NULL',
 			'gps_sijainti' => 'varchar(50) DEFAULT NULL',
@@ -148,7 +149,7 @@ class Kohteet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('asiakas_id, etu_suku_nimet, osoite', 'required'),
-			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara, uusi_tilaus, hinnasto_id, alv, tyoryhma, tyonkuvaus_tiedostot_mobiilissa, kustannuspaikka_nro, tuote_h, tuote_kk, tuote_kpl', 'numerical', 'integerOnly'=>true),
+			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara, uusi_tilaus, hinnasto_id, alv, tyoryhma, tyonkuvaus_tiedostot_mobiilissa, kustannuspaikka_nro, tuote_h, tuote_kk, tuote_kpl, ensisijainen', 'numerical', 'integerOnly'=>true),
 			array('tag_id, kaupunki, toimipaikka, kohteen_neliot', 'length', 'max'=>20),
 			array('gps_sijainti, osoite, katuosoite, kenella_on_avain, puh_nro, hinta_sis_alv, hinta_tyyppi, laskurivi_tyyppi', 'length', 'max'=>50),
 			array('lyhenne', 'length', 'max'=>46),
@@ -188,6 +189,7 @@ class Kohteet extends DB2ActiveRecord
 	{
 		return array(
 			'id' => Yii::t('main', 'ID'),
+			'ensisijainen' => Yii::t('main', 'Ensisijainen kohde'),
 			'asiakas_id' => Yii::t('main', 'Asiakas'),
 			'time' => Yii::t('main', 'Luotu'),
 			'tag_id' => Yii::t('main', 'Tag'),

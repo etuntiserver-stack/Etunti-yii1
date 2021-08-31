@@ -68,6 +68,19 @@ if(empty($model->tietoja))
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'ensisijainen'); ?>
+		<?php 
+			$check = Kohteet::model()->find("asiakas_id='".$model->asiakas_id."' AND ensisijainen=1");
+			$lista = [0 => 'Ei', 1 => 'Kyllä'];
+			if(isset($check->id) and $check->id != $model->id)
+				echo '<p><b>'.$check->osoite.'</b></p>';
+			else
+				echo $form->dropDownList($model, 'ensisijainen', $lista, array('class'=>'form-control')); 
+		?> 
+		<?php echo $form->error($model,'ensisijainen'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'osoite'); ?>
 		<?php echo $form->textField($model,'osoite',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'osoite'); ?>
