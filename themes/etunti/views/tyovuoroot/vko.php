@@ -112,6 +112,7 @@ if( isset($_SESSION['skrollaus']) )
 			}
 			//     Kuva -->
 			echo '<br> '.$item['etusukunimi'].'</a>
+			<p>'.$item["toimialue_tyoryhma"].'</p>
 		</div>';
 		?>
 
