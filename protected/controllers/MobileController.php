@@ -33,7 +33,18 @@ class MobileController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa', 'luetut_toteutuneet_ero_pdf', 'vuosilomat_pdf', 'check_paallekkainMobile', 'tyoajan_seuranta', 'raportit_taulu', 'tulostus', 'hyvaksymattomat', 'ayhteenveto', 'ayhteenvetoyht'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a',
+					'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 
+					'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 
+					'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 
+					'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 
+					'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 
+					'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 
+					'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa', 
+					'luetut_toteutuneet_ero_pdf', 'vuosilomat_pdf', 
+					'check_paallekkainMobile', 'tyoajan_seuranta', 'raportit_taulu', 
+					'tulostus', 'hyvaksymattomat', 'ayhteenveto', 'ayhteenvetoyht',
+					'palkkataulukkopost', 'selectedemployees'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -2444,8 +2455,133 @@ class MobileController extends Controller
 	}
 */
 
+	/**
+	 * The purpose of this action is to go around the URL
+	 * limitation that some companies could hit with the normal
+	 * actionPalkkataulukko. When selecting all employees from the dropdown
+	 * list, all of the employee IDs would get appended to the URL,
+	 * which could go over the URL character limit.
+	 * 
+	 * This action goes around the limitation by accepting
+	 * a POST request, which should have the employee IDs
+	 * defined in the POST body. 
+	 */
+	public function actionPalkkataulukkoPost() {
+		$req = Yii::app()->request;
+
+		// get work groups (työryhmät) from params, default to empty arr
+		$workGroups = $req->getPost("workGroups", []);
+		if(is_string($workGroups)) {
+			$workGroups = [];
+		}
+		// get employees (tyontekijat) from params, default to empty arr
+		$employees = $req->getPost("employees", []);
+		if(is_string($employees)) {
+			$employees = [];
+		}
+		
+
+		// build query
+		$criteria = new CDbCriteria();
+    	$criteria->select = " id, tekijan_nimi, sukunimi, tyoryhma";
+
+		// set first and lastname order based on domain settings
+		$site = Yii::app()->createController('Site');
+		$criteria = $site[0]->etuSukunimiCriteria($criteria);
+		// only look for active employees
+		$criteria->condition = " aktiivinen=1 "; 
+		// add defined employee IDs to query, if any
+		if(!empty($employees)){
+			$ids = implode(",", $employees);
+			$criteria->addCondition ('id IN ('.$ids.') ');
+		}
+
+		$model = Tyontekijat::model()->findAll($criteria);
+
+		// Työryhmät: trim non-matching cleaners from results.
+		if(!empty($workGroups)) {
+			$trs = array_column(Valikkoot::model()->findAllByPk($workGroups), 'value', 'id');
+			if (in_array(0, $workGroups))
+				$trs[0] = 'Tyoryhmättömät';
+		
+			// If 0 ("Työryhmättömät") is not selected, and the model has no value
+			// in tyoryhma attribute, remove the model from results. Otherwise,
+			// remove model if it's not in any of the selected $trs.
+			for ($i = 0; $i < count($model); $i++) {
+				$tr = json_decode($model[$i]->tyoryhma ?? ''); // NULL if empty.
+				if ((empty($tr)) ? !isset($trs[0]) : empty(array_intersect($tr, $trs)))
+				unset($model[$i]);
+			}
+		}
+		// reduce the array of employee objects to just their IDs
+		$workerIds = [];
+		foreach($model as $employee) {
+			$workerIds[] = $employee->id;
+		}
+
+		Yii::app()->session["palkkataulukko_employeeIds"] = $workerIds;
+		// since we're setting the IDs to the session we'll just return something here
+		// so the caller knows it's a success
+		echo json_encode(["ok" => "ok"]);
+
+	}
+
+	/**
+	 * This action is called from palkkataulukko.php to automatically
+	 * select all employees that belong to selected workgroups (työryhmä).
+	 * 
+	 * The action returns an array of unique active employee IDs.
+	 */
+	public function actionSelectedEmployees() {
+		$workGroupIds = Yii::app()->request->getParam("workGroups", []);
+		$workGroups = array_column(Valikkoot::model()->findAllByPk($workGroupIds), "value", "value");
+		// check if "Työryhmättömät" is checked,
+		// and if it is, add it to the $workGroups map
+		if(in_array(0, $workGroupIds)) {
+			$workGroups[0] = 0;
+		}
+		// build query
+		$criteria = new CDbCriteria();
+		$criteria->select= " id, tyoryhma";
+		$criteria->condition = " aktiivinen=1 ";
+
+		$employees = Tyontekijat::model()->findAll($criteria);
+
+		$employeeIds = [];
+		// filter employees based on selected work groups
+		// "työryhmättömät" requires special handling
+		foreach($employees as $employee) {
+
+			$employeeGroups = json_decode($employee->tyoryhma, true) ?? [];
+			// "työryhmättömät" handling, if an employee has no
+			// workgroups defined and "työryhmättömät" is selected
+			// we can assume we want this employee selected.
+			if(empty($employeeGroups) && isset($workGroups[0])) {
+				$employeeIds[] = $employee->id;
+			}
+			// match employees work groups with selected work groups,
+			// if an employee has even 1 of the workgroups, add it to the
+			// selected list.
+			foreach($employeeGroups as $empGroup) {
+				if(isset($workGroups[$empGroup])) {
+					$employeeIds[] = $employee->id;
+				}
+			}
+		}
+		// return unique employee ids
+		echo json_encode(array_unique($employeeIds));
+		
+	}
+
 	public function actionPalkkataulukko()
 	{
+		// if "yhtveto" is not set in the URL, that means the user is just navigating
+		// to this page for the first time. in that case we'll reset 
+		// the sessions selected employee IDs
+		if(!isset($_GET["yhtveto"])) {
+			unset(Yii::app()->session["palkkataulukko_employeeIds"]);
+		}
+
 		$asetukset = Asetukset::model()->findByPk(1);
 		// <-- Order tyontekijat
 		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
@@ -2457,51 +2593,67 @@ class MobileController extends Controller
 		}
 		// Order tyontekijat -->
 
-
+		// default from and to dates of the current month
 		$from = date("d.m.Y",strtotime("first day of this month"));
 		$to = date("d.m.Y");
 
 		if(isset($_GET['from']) and !empty($_GET['from'])){ $from = $_GET['from']; }
-    if(isset($_GET['to']) and !empty($_GET['to'])){ $to = $_GET['to']; }
+    	if(isset($_GET['to']) and !empty($_GET['to'])){ $to = $_GET['to']; }
 
-    $criteria = new CDbCriteria();
-    $criteria->select = " id, tekijan_nimi, sukunimi, tyoryhma";
+    	$criteria = new CDbCriteria();
+    	$criteria->select = " id, tekijan_nimi, sukunimi, tyoryhma";
 
 		// <-- Return order etu ja sukunimella
 		$site = Yii::app()->createController('Site');
 		$criteria = $site[0]->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
 
-        	$criteria->condition = " aktiivinen=1 "; 
+		$criteria->condition = " aktiivinen=1 "; 
 
-		if( isset($_GET['Tekija']) ){
-			$ids = implode(",",$_GET['Tekija']);
-	        	$criteria->addCondition ('id IN ('.$ids.') ');
+		// Tekija no longer has a value, but the original system used it to conditionally render
+		// in palkkautaulukko.php, so I decided to leave it here
+		if( isset($_GET['Tekija']) and 
+			isset(Yii::app()->session["palkkataulukko_employeeIds"]) ){
+			$ids = "";
+			// get employee IDs from the session instead of the URL
+			$sModels = Yii::app()->session["palkkataulukko_employeeIds"];
+	
+			foreach($sModels as $employeeId) {
+				$ids .= $employeeId . ",";
+			}
+			if(!empty($ids)) {
+				$ids = substr($ids, 0, -1);
+			}
+			
+			$criteria->addCondition ('id IN ('.$ids.') ');
 		}
 
-    $model = Tyontekijat::model()->findAll($criteria);
+    	$model = Tyontekijat::model()->findAll($criteria);
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 
-    // Työryhmät: trim non-matching cleaners from results.
-    if (!empty($tyoryhmat = $_GET['tyoryhmat'] ?? [])) {
-      $trs = array_column(Valikkoot::model()->findAllByPk($tyoryhmat), 'value', 'id');
-      if (in_array(0, $tyoryhmat))
-        $trs[0] = 'Tyoryhmättömät';
+		// Työryhmät: trim non-matching cleaners from results.
+		if (!empty($tyoryhmat = $_GET['tyoryhmat'] ?? [])) {
 
-      // If 0 ("Työryhmättömät") is not selected, and the model has no value
-      // in tyoryhma attribute, remove the model from results. Otherwise,
-      // remove model if it's not in any of the selected $trs.
-      for ($i = 0; $i < count($model); $i++) {
-        $tr = json_decode($model[$i]->tyoryhma ?? ''); // NULL if empty.
-        if ((empty($tr)) ? !isset($trs[0]) : empty(array_intersect($tr, $trs)))
-          unset($model[$i]);
-      }
-    }
+			$trs = array_column(Valikkoot::model()->findAllByPk($tyoryhmat), 'value', 'id');
+
+			if (in_array(0, $tyoryhmat))
+				$trs[0] = 'Tyoryhmättömät';
+
+			// If 0 ("Työryhmättömät") is not selected, and the model has no value
+			// in tyoryhma attribute, remove the model from results. Otherwise,
+			// remove model if it's not in any of the selected $trs.
+			for ($i = 0; $i < count($model); $i++) {
+				$tr = json_decode($model[$i]->tyoryhma ?? ''); // NULL if empty.
+				if ((empty($tr)) ? !isset($trs[0]) : empty(array_intersect($tr, $trs)))
+				unset($model[$i]);
+			}
+		}
+
 
 		$this->render('palkkataulukko', array(
-      'model' => $model,
-      'tyoryhmat' => $trs ?? [],
+      		'model' => $model,
+      		'tyoryhmat' => $trs ?? [],
 			'from' => $from,
 			'to' => $to,
 			'tt_order_1' => $tt_order_1,

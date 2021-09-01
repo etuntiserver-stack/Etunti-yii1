@@ -94,7 +94,7 @@
               <div class="col-md-2">
                 <div class="section">
                   <label class="field select">
-                    <select class="gui-input" name="lu_tai_tot">
+                    <select class="gui-input" name="lu_tai_tot" id="lu_tai_tot">
                       <option value="1" <?= (isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 1) ? 'selected' : '' ?>><?php echo Yii::t('main', 'Luetut'); ?></option>
                       <option value="2" <?= (isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 2) ? 'selected' : '' ?>><?php echo Yii::t('main', 'Hyväksyntä'); ?></option>
                       <option value="3" <?= (isset($_GET['lu_tai_tot']) and $_GET['lu_tai_tot'] == 3) ? 'selected' : '' ?>><?php echo Yii::t('main', 'Hyväksytyt'); ?></option>
@@ -150,7 +150,9 @@
                       'Tekija', // name
                       null, // class
                       'tyontekijat', // id
-                      (isset($_GET['Tekija'])) ? $_GET['Tekija'] : array(), //selected
+                      // pre-selected elements
+                      (isset(Yii::app()->session["palkkataulukko_employeeIds"]) ?
+                         Yii::app()->session["palkkataulukko_employeeIds"] : []),
                       1 // aktiivinen
                     );
                     echo $tyontekiatLista;
@@ -202,6 +204,7 @@
   </div>
 
   <?php if (isset($_GET['Tekija']) and $from and $to) : ?>
+
     <div class="admin-form">
       <div class="panel heading-border">
         <div class="panel-body bg-light">
@@ -397,15 +400,16 @@
   $(document).ready(function() {
 
     $(".submitForm").on('click', function(e) {
+      e.preventDefault();
       $('.mobileTable').addClass('table-bordered');
       $(this).prev('textarea').val($('#tableContent').html());
       $(this).closest('form').submit();
-      e.preventDefault();
     });
-
+    /* disabled this to prevent double submits
     $(".haemob").click(function() {
       $("#yhtveto").submit();
     });
+    */
 
     $('#deselAll').click(function() {
       $('#tyontekijat').selectpicker('deselectAll');
@@ -416,7 +420,37 @@
     });
 
     $("#yhtveto").on('submit', function(e) {
+      e.preventDefault();
 
+      const from = $("#from").val();
+      const to = $("#to").val();
+      // default workGroups to empty array
+      const workGroups = $(".tyoryhmatMulti").val() ?? [];
+      const employees = $("#tyontekijat").val();
+
+      const lu_tai_tot = $("#lu_tai_tot").val();
+
+      const postData = {workGroups, employees};
+      $.ajax({
+        url: "./palkkataulukkopost",
+        type: "POST",
+        data: postData,
+        success: (data) => {
+          let url = "./palkkataulukko?yhtveto=&Tekija="
+            + "&lu_tai_tot=" + lu_tai_tot
+            + "&from=" + from
+            + "&to=" + to;
+          for(const workGroup of workGroups) {
+            url += "&tyoryhmat[]=" + workGroup;
+          }
+          window.location = url;
+        },
+        error: (err) => {
+          console.log("Err while submitting palkkataulukko", err);
+        }
+      });
+
+      /*
       var from = $("#from").val();
       var to = $("#to").val();
 
@@ -432,8 +466,9 @@
         }).focus();
         return false;
       }
+      */
     });
-
+    
     $('#tyontekijat').multiselect({
       //inheritClass: true,
       //enableFiltering: true,
@@ -445,6 +480,39 @@
       numberDisplayed: 0,
       buttonWidth: '100%',
       maxHeight: 300,
+    });
+
+    $(".tyoryhmatMulti").on("change", (event) => {
+      // groups will be null if there's nothing selected,
+      // default to empty array
+      const groups = $(".tyoryhmatMulti").val() ?? [];
+      
+      let url = "./selectedemployees?";
+      for(const group of groups) {
+        url += "workGroups[]=" + group + "&";
+      }
+      // remove last character (&)
+      url = url.slice(0, -1);
+
+      $.ajax({
+        url: url,
+        type: "GET",
+        success: (data) => {
+          const empIdArray = JSON.parse(data);
+          const workerDropdown = $("#tyontekijat");
+          //workerDropdown.multiselect("deselectAll");
+          // deselectAll doesn't seem to work for whatever reason,
+          // so we'll just get the list we currently have selected
+          // and trigger deselect with that.
+          const selectedNow = workerDropdown.val() ?? [];
+          workerDropdown.multiselect("deselect", selectedNow);
+          // select new elements
+          workerDropdown.multiselect("select", empIdArray);
+        },
+        error: (err) => {
+          console.log("Err while fetching employee list", err.status, err);
+        },
+      })
     });
 
     // <-- Tulostus
