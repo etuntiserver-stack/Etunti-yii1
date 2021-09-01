@@ -25,8 +25,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
    else
    $asnum = array('class'=>'form-control');
 
-if(isset($model->id))
-$model->hinta = str_replace(",",".",$model->hinta);
+
 
 if(empty($model->salasana))
 $uusiSalasana = $this->generatePassword();
@@ -42,9 +41,6 @@ if(isset($_GET['vinkki_id']))
 		$model->puhelin = $vinkki->puhelin;
 	}
 }
-
-$model->hinta = round($model->hinta, 2);
-$model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 
 if(!isset($model->id) and isset($asetukset->id)){
 	$model->laskutus_kanava = $asetukset->asiakas_laskutus_kanava;
