@@ -124,7 +124,7 @@ $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https"
 			foreach ($range as $date)
 			{
 				$pvm 		= $date->format('Y-m-d');
-				$maara 		= (isset($data_tunnit[$pvm][$v->id])) ? $data_tunnit[$pvm][$v->id] : 0;;
+				$maara 		= (isset($data_tunnit[$pvm][$v->id])) ? $data_tunnit[$pvm][$v->id] : 0;
 				$yht 		+= $maara;
 
 				$cl = "";
