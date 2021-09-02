@@ -2569,7 +2569,7 @@ class MobileController extends Controller
 			}
 		}
 		// return unique employee ids
-		echo json_encode(array_unique($employeeIds));
+		echo json_encode(array_values(array_unique($employeeIds)));
 		
 	}
 
