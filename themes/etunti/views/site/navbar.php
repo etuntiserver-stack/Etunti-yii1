@@ -945,6 +945,10 @@ $('.multTyoryhma').multiselect({
                   <span class="fa fa-calendar-check-o"></span> <?php echo Yii::t('main', 'Tuntien toteuma kk'); ?></a>
               </li>
               <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/toteutuneet/vko">
+                  <span class="fa fa-calendar-check-o"></span> <?php echo Yii::t('main', 'Hyväksytyt (VKO)'); ?></a>
+              </li>
+              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/palkkataulukko">
                   <span class="fa fa-eur"></span> <?php echo Yii::t('main', 'Tiedot palkanlaskentaan mobiilista'); ?></a>
               </li>

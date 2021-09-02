@@ -29,7 +29,7 @@ class ToteutuneetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index', 'view','luetutpvmtid', 'totpvmtid','al', 'yhteensapvm', 'deletebyajax', 'kk','hyvaksy', 'poista_luetut_toteutuneet', 'hyvaksy_pvm_tid', 'korvaus_ylitunnit_ennakko', 'siirra_toteutuun', 'lahetanetvisoriin'),
+				'actions'=>array('admin','delete','create','update','index', 'view','luetutpvmtid', 'totpvmtid','al', 'yhteensapvm', 'deletebyajax', 'kk','hyvaksy', 'poista_luetut_toteutuneet', 'hyvaksy_pvm_tid', 'korvaus_ylitunnit_ennakko', 'siirra_toteutuun', 'lahetanetvisoriin', 'vko'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -652,6 +652,13 @@ class ToteutuneetController extends Controller
 
 	}
 
+	public function actionVko()
+	{
+		$data = [];
+		$this->render('vko',array(
+			'data'=>$data,
+		));
+	}
 
 	public function actionKk()
 	{
