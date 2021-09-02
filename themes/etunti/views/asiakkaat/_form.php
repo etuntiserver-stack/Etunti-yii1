@@ -25,8 +25,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
    else
    $asnum = array('class'=>'form-control');
 
-if(isset($model->id))
-$model->hinta = str_replace(",",".",$model->hinta);
+
 
 if(empty($model->salasana))
 $uusiSalasana = $this->generatePassword();
@@ -42,9 +41,6 @@ if(isset($_GET['vinkki_id']))
 		$model->puhelin = $vinkki->puhelin;
 	}
 }
-
-$model->hinta = round($model->hinta, 2);
-$model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 
 if(!isset($model->id) and isset($asetukset->id)){
 	$model->laskutus_kanava = $asetukset->asiakas_laskutus_kanava;
@@ -882,114 +878,8 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->error($model,'lisatietoja_laskutuksesta'); ?>
 	</div>
 
-<?php /*
-	<legend><h3>Lasku hinnasto.</h3></legend>
 
-	<!-- Tuotteet palvelut -->
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tuote'); ?> <b class="pull-right text-success">Uusi valikko</b>
-		<?php echo $form->dropDownList($model, 'tuote', CHtml::listData(TuotteetPalvelut::model()->findAll(), 'id', 'nimike'), 
-		array('empty'=>'Valitse tuote', 'class'=>'form-control')); ?> 
-		<?php echo $form->error($model,'tuote'); ?>
-	</div>
-	
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinnasto_id'); ?>
-		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
-		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
-		<?php echo $form->error($model,'hinnasto_id'); ?>
-	</div>
-	<!-- Tuotteet palvelut -->
-*/ ?>
-<br>
-	<b class="text-danger">Huomio! Hinta valikot poistuvat 01.08.<br>Tuotteet ja hinnat määritellään kohden kortilla.</b>
-	<br><br>
-	<?php $poistetaan = 'Poistetaan käytöstä 08/2021'; ?>
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'alv'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
-		<?php
-        	$l = array(0=>0,10=>10,14=>14,24=>24);
-
-        	echo $form->dropDownList($model, 'alv', $l,
-		array('empty'=>'Valitse','class'=>'form-control'
-		));
-        	?>
-		<?php echo $form->error($model,'alv'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
-		<?php
-		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
-        	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
-		array('empty'=>'Valitse tyyppi','class'=>'form-control'));	
-        	?>
-		<?php echo $form->error($model,'hinta_tyyppi'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
-		<?php echo $form->numberField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
-		<?php echo $form->error($model,'hinta'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'verot'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
-		<?php echo $form->numberField($model,'verot',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
-		<?php echo $form->error($model,'verot'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_sis_alv'); ?> <b class="pull-right text-danger"><?=$poistetaan?></b>
-		<?php echo $form->numberField($model,'hinta_sis_alv',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
-		<?php echo $form->error($model,'hinta_sis_alv'); ?>
-	</div>
-
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-  $(".sw").bootstrapSwitch({
-	//size: "large",
-	onColor: "success",
-	offColor: "danger",
-	onText: "Kyllä",
-	offText: "Ei"
-  });
-
-  laskurin();
-
-  $("#Asiakkaat_alv").change(function() {
-	laskurin();
-  });
-  $("#Asiakkaat_hinta").keyup(function() {
-	laskurin();
-  });
-  $("#Asiakkaat_hinta_sis_alv").keyup(function() {
-	var hinta_sis_alv = parseFloat($(this).val());
-	var alv = parseFloat($("#Asiakkaat_alv").val());
-	var result = hinta_sis_alv/(1+(alv/100));
-	$("#Asiakkaat_hinta").val(result.toFixed(2));
-	$("#Asiakkaat_verot").val((hinta_sis_alv-result).toFixed(2));
-  });
-
-  function laskurin()
-  {
-	var alv = parseFloat($("#Asiakkaat_alv").val());
-	var hinta = parseFloat($("#Asiakkaat_hinta").val());
-	var hinta_sis_alv = ((alv/100)*hinta)+hinta;
-	$("#Asiakkaat_hinta_sis_alv").val(hinta_sis_alv.toFixed(2));
-	$("#Asiakkaat_verot").val((hinta_sis_alv-hinta).toFixed(2));
-  }
-
-});
-</script>
-
-  </div>
-<!-- Laskutus loppu -->
-
-
-<div class="col-sm-3">
+  </div><div class="col-sm-3">
 
 	<?php if(isset($model->id)): ?>
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaaseen liittyviä kohteita'); ?></h3></legend>
