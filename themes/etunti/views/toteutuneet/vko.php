@@ -40,9 +40,17 @@ if( count($tt_arr) > 0 ){
 }
 //    Tyoryhmat -->
 
-$t = Tyontekijat::model()->findAll($criteria);
+if(isset($_GET['tyoryhma']) and !empty($_GET['tyoryhma'])){
+    	$criteria->addCondition (" REPLACE(REPLACE(tyoryhma,'\\\u00f6','ö'), '\\\u00e4', 'ä') LIKE '%".$_GET['tyoryhma']."%' ");
+}
+		
+if(isset($_GET['tunnit'])){
+	$t = Tyontekijat::model()->findAll($criteria);
 
-$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    $tids = [];
+    foreach ($t as $data)
+      $tids[] = $data->id;
+}
 ?>
 
 <!-- begin: .tray-center -->
@@ -55,14 +63,30 @@ $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https"
 <div class="row" id="haku">
     <div class="col-sm-12 form-inline">
     	<form methot="GET">
-		   	<b class="form-control form-group myBgColors"><a href="vko?monday=<?php echo $previous; ?><?= (isset($_GET['tunnit']))? '&tunnit='.$_GET['tunnit']:''?>">
-				<<</a> <?php echo $week; ?> <a href="vko?monday=<?php echo $next; ?><?= (isset($_GET['tunnit']))? '&tunnit='.$_GET['tunnit']:''?>">>></a>
+		   	<b class="form-control form-group myBgColors">
+		   		<a href="vko?monday=<?php echo $previous; ?><?= (isset($_GET['tunnit']))? '&tunnit='.$_GET['tunnit']:''?><?= (isset($_GET['tyoryhma']))? '&tyoryhma='.$_GET['tyoryhma']:''?>"><<</a> 
+		   		
+		   		<?php echo $week; ?> 
+		   		
+		   		<a href="vko?monday=<?php echo $next; ?><?= (isset($_GET['tunnit']))? '&tunnit='.$_GET['tunnit']:''?><?= (isset($_GET['tyoryhma']))? '&tyoryhma='.$_GET['tyoryhma']:''?>">>></a>
 		   	</b>
 			<?=$monday?>
 	   		<select name="tunnit" class="form-group form-control">
 				<option value="hyvaksytyt" <?= (isset($_GET['tunnit']) and $_GET['tunnit']=='hyvaksytyt')? 'selected':''?>><?=Yii::t('main', 'Hyväksytyt tunnit')?></option>
 				<option value="hyvaksynta" <?= (isset($_GET['tunnit']) and $_GET['tunnit']=='hyvaksynta')? 'selected':''?>><?=Yii::t('main', 'Hyväksyntä')?></option>
 				<option value="luetut" <?= (isset($_GET['tunnit']) and $_GET['tunnit']=='luetut')? 'selected':''?>><?=Yii::t('main', 'Luetut')?></option>
+			</select>
+			<?php
+				$criteria = new CDbCriteria();
+				$criteria->order = "value, value2";
+				$criteria->condition = "select_type='tyoryhma' ";
+				$vm=Valikkoot::model()->findAll($criteria);
+			?>
+			<select class="form-group form-control" name="tyoryhma">
+			<option value=""><?php echo Yii::t('main', 'Valitse työryhmä'); ?></option>
+			<?php foreach($vm as $tyoryhma): ?>
+			<option value="<?=$tyoryhma->value?>" <?=(isset($_GET['tyoryhma']) and $_GET['tyoryhma'] == $tyoryhma->value)?'selected':''?>><?=$tyoryhma->value?></option>
+			<?php endforeach; ?>
 			</select>
 		   <div class="form-group input-group-btn">
 				<button id="send" class="btn btn-primary btn-group myBgColors">OK</button>
@@ -72,7 +96,7 @@ $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https"
 </div>
 <br>
 
-
+<?php if(isset($_GET['tunnit']) and count($tids) > 0): ?>
 <div class="admin-form">
   <div class="panel heading-border">
     <div class="panel-body bg-light">
@@ -103,10 +127,6 @@ $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https"
 			$method 	= 2;
 		elseif(isset($_GET['tunnit']) and $_GET['tunnit'] == 'luetut')
 			$method 	= 1;
-
-        $tids = [];
-        foreach ($t as $data)
-          $tids[] = $data->id;
 
 		$data_tunnit 	= $mobile[0]->TidfromtoMobiiliAll($start->format('Y-m-d'), $end->format('Y-m-d'), $tids, $hyv_arr, $method, false, 0, true, null, null, false);
 		/*
@@ -149,6 +169,6 @@ $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https"
     </div>
   </div>
 </div>
-
+<?php endif; ?>
 
 
