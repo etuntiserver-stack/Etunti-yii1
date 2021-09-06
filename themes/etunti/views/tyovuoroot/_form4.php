@@ -2116,10 +2116,8 @@ $(document).ready(function(){
     //let tid = $('#tekijanVaihdo option:selected').val();
 	const tekijanVaihdoElem = document.getElementById("tekijanVaihdo");
 	const tid = tekijanVaihdoElem.value;
-    let tyoparit = [];
-    $('#tyopari-container .multiselect-container li.active a label input').each(function() {
-      tyoparit.push(this.value);
-    });
+	// get coworkers, value can be null... default to empty arr
+	const tyoparit = $("#tyopaari").val() ?? [];
 
     // Assign overrides.
     omasiistijatOverride['tid'] = tid;
@@ -2160,6 +2158,13 @@ $(document).ready(function(){
   $('#tekijanVaihdo, #tyopari-container .mult, #<?= $java_prefix; ?>_omasiistijavaroitus, ' +
     '#<?= $java_prefix; ?>_omasiistijailmoitus, #<?= $java_prefix; ?>_peruutettu').change(function() {
     omasiistijaTarkistus();
+  });
+
+  // select 2 doesn't work on the traditional on change event listener
+  // like the one we have above, so we'll need to create a separate 
+  // listener for it.
+  $("#tyopaari").select().on("change", (e) => {
+	omasiistijaTarkistus();
   });
 
   /**
