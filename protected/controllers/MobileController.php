@@ -2113,7 +2113,7 @@ class MobileController extends Controller
 		$status = "status='".implode("' OR status='", $status)."'";
 		$criteria = new CDbCriteria();
 		if($by_aloitan)
-			$criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))";
+			$criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')), tid";
 		elseif($withKohdenID)
 			$criteria->group = "tid, kohdenID, aloitan"; // tid, kohdenID
 		else
@@ -2122,7 +2122,7 @@ class MobileController extends Controller
 		// Helper function to avoid duplicate code (doesn't handle 'hyvaksytty' as it differs)
 		$buildCriteria = function (CDbCriteria &$criteria) use ($from, $to, $tids, $status, $palkanlaskentaan, $time, $by_aloitan, $pyhapaivat_str, $erikoislauantai_str, $kohde, $asiakas, $withKohdenID) {
 			if($by_aloitan)
-				$criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))";
+				$criteria->group = "DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')), tid";
 			elseif($withKohdenID)
 				$criteria->group = "tid, kohdenID, aloitan"; // tid, kohdenID
 			else
