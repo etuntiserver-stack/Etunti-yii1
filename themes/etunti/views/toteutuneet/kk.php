@@ -134,71 +134,73 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
 <div class="table-responsive" id="taulukkoPaa">
   <TABLE id="verkko" class="table table-bordered">
-  <?php 
+	<?php 
 
-  $status = '';
-  if(isset(Yii::app()->session['Lounastauko']))
-  	$status .= " AND status!='".Yii::app()->session['Lounastauko']."' ";
-  if(isset(Yii::app()->session['MATKA']))
-  	$status .= " AND status!='".Yii::app()->session['MATKA']."' ";
+	$status = '';
+	if(isset(Yii::app()->session['Lounastauko']))
+	$status .= " AND status!='".Yii::app()->session['Lounastauko']."' ";
+	if(isset(Yii::app()->session['MATKA']))
+	$status .= " AND status!='".Yii::app()->session['MATKA']."' ";
 
 
-  echo '<thead><TR>';
-  echo '<TH>Nimi</TH>';
+	echo '<thead><TR>';
+	echo '<TH>Nimi</TH>';
 
-   for ($i = 1; $i <= $number; $i++) 
-   {
-     echo '<TH>'.$i.'</TH>';
-   }
-     echo '<TH>Yht.</TH>';
-  echo '</TR></thead>';
+	for ($i = 1; $i <= $number; $i++) 
+	{
+		echo '<TH>'.$i.'</TH>';
+	}
+	echo '<TH>Yht.</TH>';
+	echo '</TR></thead>';
 
-       		$criteria = new CDbCriteria();
-		$criteria->condition = " aktiivinen=1 ";
-		// <-- Return order etu ja sukunimella
-		$site = Yii::app()->createController('Site');
-		$criteria = $site[0]->etuSukunimiCriteria($criteria);
-		//     Return order etu ja sukunimella -->
-		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-        		$criteria->addCondition (" id IN ($ids)");
+	$criteria = new CDbCriteria();
+	$criteria->condition = " aktiivinen=1 ";
+
+	// <-- Return order etu ja sukunimella
+	$site = Yii::app()->createController('Site');
+	$criteria = $site[0]->etuSukunimiCriteria($criteria);
+	//     Return order etu ja sukunimella -->
+
+	// <-- Tyoryhmat
+	$tt = Yii::app()->createController('Tyontekijat');
+	$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+	$ids = implode(",", $tt_arr);
+	if( count($tt_arr) > 0 ){
+		$criteria->addCondition (" id IN ($ids)");
+	}
+	//    Tyoryhmat -->
+
+	$t = Tyontekijat::model()->findAll($criteria);
+
+
+	foreach($t as $v)
+	{
+		$yht = 0;
+		echo '<TR>';
+		echo '<TD>'.$this->etuSukunimi($v->id).'</TD>';
+
+		for ($i = 1; $i <= $number; $i++) 
+		{
+			$thisDate = $year.'-'.$month.'-'.$i;
+			$date = $i.'.'.$month;
+
+			$getTime = $this->toteutuneetByPvm($v->id, $thisDate, $status);
+			$tot[$i] = $this->sprint($getTime);
+			$yht += $getTime;
+
+			$cl = "";
+			if(isset($getTime) and (int)$getTime < 18000 and (int)$getTime > 0)
+				$cl = "btn btn-xs btn-warning";
+			elseif(isset($getTime) and (int)$getTime > 28800 and (int)$getTime > 0)
+				$cl = "btn btn-xs btn-danger";
+
+			echo '<TD class="text-small" style="font-size:90%"><span class="'.$cl.'">'.$tot[$i].'</span></TD>';
+
 		}
-		//    Tyoryhmat -->
-
-  		$t = Tyontekijat::model()->findAll($criteria);
-
-
-  foreach($t as $v)
-  {
-  $yht = 0;
-  echo '<TR>';
-  echo '<TD>'.$this->etuSukunimi($v->id).'</TD>';
-
-   for ($i = 1; $i <= $number; $i++) 
-   {
-     $thisDate = $year.'-'.$month.'-'.$i;
-     $date = $i.'.'.$month;
-
-	$getTime = $this->toteutuneetByPvm($v->id, $thisDate, $status);
-	$tot[$i] = $this->sprint($getTime);
-	$yht += $getTime;
-
-	$cl = "";
-	if(isset($getTime) and (int)$getTime < 18000 and (int)$getTime > 0)
-	$cl = "btn btn-xs btn-warning";
-	elseif(isset($getTime) and (int)$getTime > 28800 and (int)$getTime > 0)
-	$cl = "btn btn-xs btn-danger";
-
-	echo '<TD class="text-small" style="font-size:90%"><span class="'.$cl.'">'.$tot[$i].'</span></TD>';
-
-   }
-  echo '<TD class="text-small"><b>'.sprint($yht).'</b></TD>';
-  echo '<TR>';
-  }
-  ?>
+		echo '<TD class="text-small"><b>'.sprint($yht).'</b></TD>';
+		echo '<TR>';
+	}
+	?>
   </TABLE>
 
 </div>

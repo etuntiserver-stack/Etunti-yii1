@@ -115,72 +115,79 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
 <div class="table-responsive" id="taulukkoPaa">
   <TABLE id="verkko" class="table table-bordered">
-  <?php 
+	<?php 
 
-  echo '<TR>';
-  echo '<TH>Nimi</TH>';
+	echo '<TR>';
+	echo '<TH>Nimi</TH>';
 
-   for ($i = 1; $i <= $number; $i++) 
-   {
-     echo '<TH>'.$i.'</TH>';
-   }
-     echo '<TH>Yht.</TH>';
-  echo '</TR>';
-
-		$criteria=new CDbCriteria;
-		$criteria->condition =" aktiivinen=1  ";
-
-		// <-- Tyoryhmat
-		$tt = Yii::app()->createController('Tyontekijat');
-		$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-		$ids = implode(",", $tt_arr);
-		if( count($tt_arr) > 0 ){
-			$criteria->addCondition (" id IN ($ids) ");
-		}
-		//     Tyoryhmat -->
-
-
-  $t = Tyontekijat::model()->findAll($criteria);
-  $tids = [];
-  foreach($t as $v){
-	$tids[$v->id] = $v->id;
-  }
-  $from = date("Y-m-d", strtotime($year.'-'.$month.' first day of this month'));
-  $to = date("Y-m-d", strtotime($year.'-'.$month.' last day of this month'));
-  $getAll = $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids, true, true, [3]);
-  $summ_all = 0;
-  foreach($tids as $v)
-  {
-  $yht = 0;
-  echo '<TR>';
-  echo '<TD>'.$this->etuSukunimi($v).'</TD>';
-
-   for ($i = 1; $i <= $number; $i++) 
-   {
-     $thisDate = date("d.m.Y", strtotime($year.'-'.$month.'-'.$i));
-     $date = $i.'.'.$month;
-
-	$tot[$i] = (isset($getAll[$v][$thisDate]))? $getAll[$v][$thisDate] : 0;
-	$yht += (int)$tot[$i];
-
-	$cl = "";
-	if((int)$tot[$i] < 18000)
-	$cl = "btn btn-xs btn-warning";
-	elseif((int)$tot[$i] > 28800)
-	$cl = "btn btn-xs btn-danger";
-
-	echo '<td>';
-	if(!empty($tot[$i])){
-		echo '<span class="link text-small '.$cl.'" tyle="font-size:90%" pvm="'.date("Y-m-d", strtotime($thisDate)).'" did="'.date("Ymd", strtotime($thisDate)).'_'.$v.'" tid="'.$v.'">'.$this->num($tot[$i]).'</span>';
-		$summ_all += $this->num($tot[$i]);
+	for ($i = 1; $i <= $number; $i++) 
+	{
+		echo '<TH>'.$i.'</TH>';
 	}
-	echo '</td>';
+	echo '<TH>Yht.</TH>';
+	echo '</TR>';
 
-   }
-  echo '<TD class="text-small"><b>'.$this->sprint($yht).'</b></TD>';
-  echo '<TR>';
-  }
-  ?>
+	$criteria=new CDbCriteria;
+	$criteria->condition =" aktiivinen=1  ";
+
+	// <-- Return order etu ja sukunimella
+	$site = Yii::app()->createController('Site');
+	$criteria = $site[0]->etuSukunimiCriteria($criteria);
+	//     Return order etu ja sukunimella -->
+
+	// <-- Tyoryhmat
+	$tt = Yii::app()->createController('Tyontekijat');
+	$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
+	$ids = implode(",", $tt_arr);
+	if( count($tt_arr) > 0 ){
+		$criteria->addCondition (" id IN ($ids) ");
+	}
+	//     Tyoryhmat -->
+
+
+	$t = Tyontekijat::model()->findAll($criteria);
+	$tids = [];
+	foreach($t as $v){
+		$tids[$v->id] = $v->id;
+	}
+
+	$from = date("Y-m-d", strtotime($year.'-'.$month.' first day of this month'));
+	$to = date("Y-m-d", strtotime($year.'-'.$month.' last day of this month'));
+	$getAll = $this->TidfromtoTyovuoroWithVirtual($from, $to, $tids, true, true, [3]);
+	$summ_all = 0;
+	foreach($tids as $v)
+	{
+		$yht = 0;
+		echo '<TR>';
+		echo '<TD>'.$this->etuSukunimi($v).'</TD>';
+
+		for ($i = 1; $i <= $number; $i++) 
+		{
+			$thisDate = date("d.m.Y", strtotime($year.'-'.$month.'-'.$i));
+			$date = $i.'.'.$month;
+
+			$tot[$i] = (isset($getAll[$v][$thisDate]))? $getAll[$v][$thisDate] : 0;
+			$yht += (int)$tot[$i];
+
+			$cl = "";
+			if((int)$tot[$i] < 18000)
+				$cl = "btn btn-xs btn-warning";
+			elseif((int)$tot[$i] > 28800)
+				$cl = "btn btn-xs btn-danger";
+
+			echo '<td>';
+			if(!empty($tot[$i]))
+			{
+				echo '<span class="link text-small '.$cl.'" tyle="font-size:90%" pvm="'.date("Y-m-d", strtotime($thisDate)).'" did="'.date("Ymd", strtotime($thisDate)).'_'.$v.'" tid="'.$v.'">'.$this->num($tot[$i]).'</span>';
+				$summ_all += $this->num($tot[$i]);
+			}
+			echo '</td>';
+
+		}
+		echo '<TD class="text-small"><b>'.$this->sprint($yht).'</b></TD>';
+		echo '<TR>';
+	}
+	?>
   </TABLE>
 </div>
 Yhteensä: <?=$summ_all?>
