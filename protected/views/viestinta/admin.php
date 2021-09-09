@@ -2,6 +2,22 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
+if( Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy' ){
+   $a = Asiakkaat::model()->findAll();
+   echo '<h3>Yhteensä: '.count($a).'</h3>';
+   echo '<table><tr><th>Etunimi</th><th>Sukunimi</th></tr>';
+   foreach($a as $item)
+   {
+   		if($item->time == '0000-00-00 00:00:00' and !empty($item->etunimi) and !empty($item->sukunimi))
+   		{
+			echo '<tr><td>'.$item->etunimi.'</td><td>'.$item->sukunimi.'</td></tr>';
+			if(isset($_GET['upd_kotimaan_huolenpitopalvelut_oy']))
+				Asiakkaat::model()->updateByPk($item->id, ['sukunimi' => $item->etunimi, 'etunimi' => $item->sukunimi]);
+		}
+   }
+   echo '</table>';
+}
+
 /*
 if( Yii::app()->user->domain == 'sivex' )
 {
@@ -592,43 +608,8 @@ if(isset($_GET['kk_yhteensta_from']) and isset($_GET['kk_yhteensta_to']))
 	$site = Yii::app()->createController('Site');
 	echo $site[0]->digistenTunnitYhteensa($_GET['kk_yhteensta_from'], $_GET['kk_yhteensta_to'], 'kesto'); // table tai kesto
 }	
-/*
-if( Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy' ){
-   $tv = Asiakkaat::model()->findAll();
-   foreach($tv as $item){
 
-	//if(!empty($item->y_tunnus))
-	//	Asiakkaat::model()->updatebypk($item->id, ['tyyppi' => 'yritys']);
-	//else
-	//	Asiakkaat::model()->updatebypk($item->id, ['tyyppi' => 'henkilo']);
 
-	$yhteyshenkilo = '';
-	if($item->tyyppi == 'henkilo')
-		$yhteyshenkilo = trim($item->yhteyshenkilo);
-	if($item->tyyppi == 'yritys')
-		$yhteyshenkilo = trim($item->yrityksen_nimi);
-
-	$kohde = Kohteet::model()->find(" asiakas_id='".$item->id."' ");
-	if(!isset($kohde->id) and !empty($yhteyshenkilo) and !empty($item->osoite)){
-		echo $yhteyshenkilo.'<br>';
-
-		$k = new Kohteet;
-		$k->asiakas_id = $item->id;
-		$k->etu_suku_nimet = $yhteyshenkilo;
-		$k->osoite = $item->osoite;
-		$k->kaupunki = $item->kaupunki;
-		$k->pnumero = $item->postinumero;
-		$k->email = $item->sahkoposti;
-		$k->puh_nro = $item->puhelin;
-		$k->aktiivinen = 1;
-		if(!$k->save()){
-			print_r($k->getErrors());
-			exit;
-		}
-	}
-   }
-}
-*/
 /* Asiakas siirto 
 $tv = Asiakkaat::model()->findAll();
 foreach($tv as $item){
