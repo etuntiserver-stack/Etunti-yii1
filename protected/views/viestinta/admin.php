@@ -2,6 +2,7 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
+/*
 if( Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy' ){
    $a = Asiakkaat::model()->findAll("time='0000-00-00 00:00:00' AND etunimi!='' AND sukunimi!=''");
    echo '<h3>Yhteensä: '.count($a).'</h3>';
@@ -14,6 +15,7 @@ if( Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy' ){
    }
    echo '</table>';
 }
+*/
 
 /*
 if( Yii::app()->user->domain == 'sivex' )

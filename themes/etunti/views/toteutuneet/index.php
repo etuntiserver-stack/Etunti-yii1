@@ -617,6 +617,12 @@ $netvisor_lahetyksen_muoto	= $asetukset->netvisor_lahetyksen_muoto;
 						<button class="btn btn-warning btn-sm btn-block esittele_tyotunnit_erikseen" nvtilanne="' . $nvtilanne . '"
 							pvm="' . $date . '"
 							tid="' . $tid . '"
+
+							matka		="'.round($matkatunnit/3600, 2).'"
+							tyoilta		="'.round($iltatunnit/3600, 2).'"
+							tyoyo		="'.round($yotunnit/3600, 2).'"
+							tyosu		="'.round($sutunnit/3600, 2).'"
+
 							sl			="' . (int)$sl . '"
 							spl			="' . (int)$spl . '"
 							ls			="' . (int)$ls . '"

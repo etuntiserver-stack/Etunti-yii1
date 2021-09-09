@@ -300,27 +300,26 @@ class ToteutuneetController extends Controller
 		
 						if($sum > 0)
 						{
-							if($description == 'Työtunnit')
-							{
-								$body .= '
-								<workdaytime>
-									<starttimeofday>'.date("H:i", strtotime($arr['attributes']['aloitan'])).'</starttimeofday>
-									<endtimeofday>'.date("H:i", strtotime($arr['attributes']['loppui'])).'</endtimeofday>
-									<breaktime>0</breaktime>
-									<collectorratio type="number">'.$collectorratio.'</collectorratio>
-									<acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
-									<description>'.$description.((!empty($arr['attributes']['kohde_kannasta']))? ', '.$arr['attributes']['kohde_kannasta']:'').'</description>
-								</workdaytime>';
 
-							} else {
-								$body .= '
-								<workdayhour>
-									<hours>'.$sum.'</hours>
-									<collectorratio type="number">'.$collectorratio.'</collectorratio>
-									<acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
-									<description>'.$description.((!empty($arr['attributes']['kohde_kannasta']))? ', '.$arr['attributes']['kohde_kannasta']:'').'</description>
-								</workdayhour>';
-							}
+							$body .= '
+							<workdaytime>
+								<starttimeofday>'.date("H:i", strtotime($arr['attributes']['aloitan'])).'</starttimeofday>
+								<endtimeofday>'.date("H:i", strtotime($arr['attributes']['loppui'])).'</endtimeofday>
+								<breaktime>0</breaktime>
+								<collectorratio type="number">'.$collectorratio.'</collectorratio>
+								<acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
+								<description>'.$description.((!empty($arr['attributes']['kohde_kannasta']))? ', '.$arr['attributes']['kohde_kannasta']:'').'</description>
+							</workdaytime>';
+
+							/*
+							$body .= '
+							<workdayhour>
+								<hours>'.$sum.'</hours>
+								<collectorratio type="number">'.$collectorratio.'</collectorratio>
+								<acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
+								<description>'.$description.((!empty($arr['attributes']['kohde_kannasta']))? ', '.$arr['attributes']['kohde_kannasta']:'').'</description>
+							</workdayhour>';
+							*/
 						}
 
 					}
@@ -335,22 +334,6 @@ class ToteutuneetController extends Controller
 				<date format="ansi" method="'.$method.'">'.date("Y-m-d", strtotime($pvm)).'</date>
 				<employeeidentifier type="personalidentificationnumber" defaultdimensionhandlingtype="usedefault">'.$henkkari.'</employeeidentifier>';
 
-				if(in_array('tyotunnit', $mitaLahetetaan))
-					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyotunnit'], 3, 0, 'Työtunnit');
-
-				if(in_array('matka', $mitaLahetetaan))
-					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyotunnit'], 2, 0, 'Matka');
-
-				if(in_array('tyoilta', $mitaLahetetaan))
-					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyoilta'], 3, 1, 'Työtunnit ilta');
-
-				if(in_array('tyoyo', $mitaLahetetaan))
-					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyoyo'], 3, 2, 'Työtunnit yö');
-					
-				if(in_array('tyosu', $mitaLahetetaan))
-					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyosu'], 3, 3, 'Työtunnit sunnuntai');
-			
-				// <-- sl, spl, ls, vl, ap, pv
 				foreach($postData as $nimike => $hours)
 				{
 					if($hours > 0 and in_array($nimike,$mitaLahetetaan))
@@ -364,6 +347,24 @@ class ToteutuneetController extends Controller
 						</workdayhour>';
 					}
 				}
+				
+				if(in_array('tyotunnit', $mitaLahetetaan))
+					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyotunnit'], 3, 0, 'Työtunnit');
+/*
+				if(in_array('matka', $mitaLahetetaan))
+					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyotunnit'], 2, 0, 'Matka');
+
+				if(in_array('tyoilta', $mitaLahetetaan))
+					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyoilta'], 3, 1, 'Työtunnit ilta');
+
+				if(in_array('tyoyo', $mitaLahetetaan))
+					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyoyo'], 3, 2, 'Työtunnit yö');
+					
+				if(in_array('tyosu', $mitaLahetetaan))
+					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyosu'], 3, 3, 'Työtunnit sunnuntai');
+*/
+				// <-- sl, spl, ls, vl, ap, pv
+
 				
 				$xml .= '
 				</workday>
