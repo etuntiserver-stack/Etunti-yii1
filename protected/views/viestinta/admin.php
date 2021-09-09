@@ -3,17 +3,14 @@
 /* @var $model Viestinta */
 
 if( Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy' ){
-   $a = Asiakkaat::model()->findAll();
+   $a = Asiakkaat::model()->findAll("time='0000-00-00 00:00:00' AND etunimi!='' AND sukunimi!=''");
    echo '<h3>Yhteensä: '.count($a).'</h3>';
    echo '<table><tr><th>Etunimi</th><th>Sukunimi</th></tr>';
    foreach($a as $item)
    {
-   		if($item->time == '0000-00-00 00:00:00' and !empty($item->etunimi) and !empty($item->sukunimi))
-   		{
-			echo '<tr><td>'.$item->etunimi.'</td><td>'.$item->sukunimi.'</td></tr>';
-			if(isset($_GET['upd_kotimaan_huolenpitopalvelut_oy']))
-				Asiakkaat::model()->updateByPk($item->id, ['sukunimi' => $item->etunimi, 'etunimi' => $item->sukunimi]);
-		}
+		echo '<tr><td>'.$item->etunimi.'</td><td>'.$item->sukunimi.'</td></tr>';
+		if(isset($_GET['upd_kotimaan_huolenpitopalvelut_oy']))
+			Asiakkaat::model()->updateByPk($item->id, ['sukunimi' => $item->etunimi, 'etunimi' => $item->sukunimi]);
    }
    echo '</table>';
 }
