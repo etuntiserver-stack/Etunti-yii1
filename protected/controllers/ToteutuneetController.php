@@ -319,7 +319,7 @@ class ToteutuneetController extends Controller
 
 				foreach($postData as $nimike => $hours)
 				{
-					if(in_array($nimike,$mitaLahetetaan)) // $hours > 0 and 
+					if($hours > 0 and in_array($nimike,$mitaLahetetaan)) 
 					{
 						$xml .= '
 						<workdayhour>
@@ -333,19 +333,7 @@ class ToteutuneetController extends Controller
 				
 				if(in_array('tyotunnit', $mitaLahetetaan))
 					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyotunnit'], 3, 0, 'Työtunnit');
-/*
-				if(in_array('matka', $mitaLahetetaan))
-					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyotunnit'], 2, 0, 'Matka');
 
-				if(in_array('tyoilta', $mitaLahetetaan))
-					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyoilta'], 3, 1, 'Työtunnit ilta');
-
-				if(in_array('tyoyo', $mitaLahetetaan))
-					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyoyo'], 3, 2, 'Työtunnit yö');
-					
-				if(in_array('tyosu', $mitaLahetetaan))
-					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyosu'], 3, 3, 'Työtunnit sunnuntai');
-*/
 				// <-- sl, spl, ls, vl, ap, pv
 
 				
