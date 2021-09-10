@@ -336,7 +336,7 @@ class ToteutuneetController extends Controller
 
 				foreach($postData as $nimike => $hours)
 				{
-					if($hours > 0 and in_array($nimike,$mitaLahetetaan))
+					if(in_array($nimike,$mitaLahetetaan)) // $hours > 0 and 
 					{
 						$xml .= '
 						<workdayhour>
