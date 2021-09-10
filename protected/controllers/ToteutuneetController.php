@@ -296,32 +296,15 @@ class ToteutuneetController extends Controller
 				{
 					if($arr['attributes']['tid'] == $tid)
 					{
-						$sum = round($arr['l_tunnit']/3600, 2);
-		
-						if($sum > 0)
-						{
-
-							$body .= '
-							<workdaytime>
-								<starttimeofday>'.date("H:i", strtotime($arr['attributes']['aloitan'])).'</starttimeofday>
-								<endtimeofday>'.date("H:i", strtotime($arr['attributes']['loppui'])).'</endtimeofday>
-								<breaktime>0</breaktime>
-								<collectorratio type="number">'.$collectorratio.'</collectorratio>
-								<acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
-								<description>'.$description.((!empty($arr['attributes']['kohde_kannasta']))? ', '.$arr['attributes']['kohde_kannasta']:'').'</description>
-							</workdaytime>';
-
-							/*
-							$body .= '
-							<workdayhour>
-								<hours>'.$sum.'</hours>
-								<collectorratio type="number">'.$collectorratio.'</collectorratio>
-								<acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
-								<description>'.$description.((!empty($arr['attributes']['kohde_kannasta']))? ', '.$arr['attributes']['kohde_kannasta']:'').'</description>
-							</workdayhour>';
-							*/
-						}
-
+						$body .= '
+						<workdaytime>
+							<starttimeofday>'.date("H:i", strtotime($arr['attributes']['aloitan'])).'</starttimeofday>
+							<endtimeofday>'.date("H:i", strtotime($arr['attributes']['loppui'])).'</endtimeofday>
+							<breaktime>0</breaktime>
+							<collectorratio type="number">'.$collectorratio.'</collectorratio>
+							<acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
+							<description>'.$description.((!empty($arr['attributes']['kohde_kannasta']))? ', '.$arr['attributes']['kohde_kannasta']:'').'</description>
+						</workdaytime>';
 					}
 				}
 				return $body;
