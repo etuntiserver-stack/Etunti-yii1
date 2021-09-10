@@ -2,9 +2,9 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
-/*
+
 if( Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy' ){
-   $a = Asiakkaat::model()->findAll("time='0000-00-00 00:00:00' AND etunimi!='' AND sukunimi!=''");
+   $a = Asiakkaat::model()->findAll("id>200 AND id<=260 AND etunimi!='' AND sukunimi!=''");
    echo '<h3>Yhteensä: '.count($a).'</h3>';
    echo '<table><tr><th>Etunimi</th><th>Sukunimi</th></tr>';
    foreach($a as $item)
@@ -15,7 +15,7 @@ if( Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy' ){
    }
    echo '</table>';
 }
-*/
+
 
 /*
 if( Yii::app()->user->domain == 'sivex' )
