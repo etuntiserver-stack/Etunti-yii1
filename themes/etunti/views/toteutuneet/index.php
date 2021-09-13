@@ -580,38 +580,9 @@ $netvisor_lahetyksen_muoto	= $asetukset->netvisor_lahetyksen_muoto;
 			<td><span class="allaAP" total="' . (int)$ap . '">' . $ap . '</span></td>
 			<td><span class="allaPV" total="' . (int)$pv . '">' . $pv . '</span></td>
 		  </tr>';
-						if ($netvisor_kaytto == 1 and ($netvisor_mita_onkayttossa == 1 or $netvisor_mita_onkayttossa == 2)) {
-							/*
-		 	if($netvisor_lahetyksen_muoto == 0)
-		 	{
+		  if ($netvisor_kaytto == 1 and ($netvisor_mita_onkayttossa == 1 or $netvisor_mita_onkayttossa == 2))
+		  {
 				echo ' 
-				<tr class="lahetys_netvisoriin">
-					<td colspan="14">			
-						<button class="btn btn-default btn-sm btn-block esittele_tyotunnit" nvtilanne="'.$nvtilanne.'"
-							pvm="'.$date.'"
-							tid="'.$tid.'"
-							tyotunnit	="'.(int)$tyotunnit.'"
-							matka		="'.(int)$matkatunnit.'"
-							lounaat		="'.(int)$lounaat.'"
-							tyoilta		="'.(int)$iltatunnit.'"
-							tyoyo		="'.(int)$yotunnit.'"
-							tyosu		="'.(int)$sutunnit.'"
-							tyopy		="'.(int)$pyhapaivat_tunnit.'"
-							tyoel		="'.(int)$erikoislauantai_tunnit.'"
-							sl			="'.(int)$sl.'"
-							spl			="'.(int)$spl.'"
-							ls			="'.(int)$ls.'"
-							vl			="'.(int)$vl.'"
-							ap			="'.(int)$ap.'"
-							pv			="'.(int)$pv.'"
-						></button>
-					</td>
-				</tr>';
-			}
-			*/
-							//if($netvisor_lahetyksen_muoto == 1)
-							//{
-							echo ' 
 				<tr class="lahetys_netvisoriin_erikseen">
 					<td colspan="14">			
 						<button class="btn btn-warning btn-sm btn-block esittele_tyotunnit_erikseen" nvtilanne="' . $nvtilanne . '"
@@ -632,11 +603,9 @@ $netvisor_lahetyksen_muoto	= $asetukset->netvisor_lahetyksen_muoto;
 						></button>
 					</td>
 				</tr>';
-							// matka		="'.(int)$matkatunnit.'"
-							//}
-						}
+		  }
 
-						echo '
+		  echo '
 		</table>
 	</td></tr>';
 
@@ -890,10 +859,17 @@ $netvisor_lahetyksen_muoto	= $asetukset->netvisor_lahetyksen_muoto;
 			});
 
 			$(".esittele_tyotunnit_erikseen").each(function() {
-				if ($(this).attr('nvtilanne') === '1') {
-					$(this).text('Lähetetty').removeClass('btn-default').addClass('btn-success');
+				
+				if( $(this).closest('table').closest('tr').prev('.su_lu_tot').find('.fullRivi').find('.fa-retweet').length > 0 )
+				{
+					$(this).text('Lähetys ei onnistuu. Tunnit ei saa olla eri päivässä.').removeClass('btn-success, btn-default, esittele_tyotunnit_erikseen').addClass('btn-danger');
 				} else {
-					$(this).text('Lähetä').removeClass('btn-success');
+
+					if ($(this).attr('nvtilanne') === '1') {
+						$(this).text('Lähetetty').removeClass('btn-default').addClass('btn-success');
+					} else {
+						$(this).text('Lähetä').removeClass('btn-success');
+					}
 				}
 			});
 		}

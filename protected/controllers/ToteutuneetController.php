@@ -334,9 +334,6 @@ class ToteutuneetController extends Controller
 				if(in_array('tyotunnit', $mitaLahetetaan))
 					$xml .= yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio['tyotunnit'], 3, 0, 'Työtunnit');
 
-				// <-- sl, spl, ls, vl, ap, pv
-
-				
 				$xml .= '
 				</workday>
 			</root>';
