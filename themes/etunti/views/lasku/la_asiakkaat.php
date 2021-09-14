@@ -383,7 +383,7 @@ $(document).ready(function(){
 					thisFor.html(thisForText + '<br>Laskuttamattomat rivit: (' + sum + ') kpl');
 					thisFor.addClass('btn btn-block btn-warning');
 				} else {
-					thisFor.text('Täysin laskutettu');
+					thisFor.text('Laskutettu');
 					thisFor.addClass('btn btn-block btn-success');
 				}
 			},
