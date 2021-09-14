@@ -2745,7 +2745,7 @@ exit;
 		exit;
 	}
 
-	public function actionL_asiakkaat($kk=null, $rakenne_muoto=null, $lista_muoto=null)
+	public function actionL_asiakkaat($kk=null, $rakenne_muoto=null)
 	{
 		$dataProvider 		= [];
 		$la_AsIds 			= [];
@@ -2771,16 +2771,6 @@ exit;
 				$criteria->condition = " tyoryhma IN ($ids) ";
 			}
 			//    Tyoryhmat -->
-
-			if($lista_muoto == 'laskuttamattomat')
-			{
-				$criteria->condition = " asiakasnumero NOT IN(SELECT as_nro FROM laskut WHERE etunti_tunniste LIKE 'la_".$kk."_%') ";
-			}
-			
-			if($lista_muoto == 'laskutetut')
-			{
-				$criteria->condition = " asiakasnumero IN(SELECT as_nro FROM laskut WHERE etunti_tunniste LIKE 'la_".$kk."_%') ";
-			}
 			
 			if($rakenne_muoto == 'mobiili')
 			{
@@ -2863,7 +2853,6 @@ exit;
 		$this->render('la_asiakkaat', array(
 			'kk' 			=> $kk,
 			'rakenne_muoto' => $rakenne_muoto,
-			'lista_muoto' 	=> $lista_muoto,
 			'from'			=> $from,
 			'to'			=> $to,
 			'la_AsIds'		=> $la_AsIds,

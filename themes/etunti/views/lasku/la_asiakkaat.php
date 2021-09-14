@@ -43,20 +43,8 @@
                         <div class="section">
                           <label class="field select">
 							<select class="form-group form-control" name="rakenne_muoto">
-								<option value="mobiili" <?=($rakenne_muoto !== null and $rakenne_muoto == 'mobiili')? 'selected':''?>>Kirjaukset</option>
+								<option value="mobiili" <?=($rakenne_muoto !== null and $rakenne_muoto == 'mobiili')? 'selected':''?>>Hyväksytyt tunnit</option>
 								<option value="tuovuoro" <?=($rakenne_muoto !== null and $rakenne_muoto == 'tuovuoro')? 'selected':''?>>Työvuoroista</option>
-							</select>
-                           </label>
-                          </label>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field select">
-							<select class="form-group form-control" name="lista_muoto">
-								<option value="laskuttamattomat" <?=($lista_muoto !== null and $lista_muoto == 'laskuttamattomat')? 'selected':''?>>Laskuttamattomat</option>
-								<option value="laskutetut" <?=($lista_muoto !== null and $lista_muoto == 'laskutetut')? 'selected':''?>>Laskutetut</option>
-								<option value="kaikki" <?=($lista_muoto !== null and $lista_muoto == 'kaikki')? 'selected':''?>>Kaikki</option>
 							</select>
                            </label>
                           </label>
@@ -150,7 +138,7 @@
 		'dataProvider'=>$dataProvider,
 		'itemView'=>'_la_asiakkaat',
 	  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
-		'viewData' => ['kk' => $kk, 'lista_muoto' => $lista_muoto, 'la_AsIds' => $la_AsIds], 
+		'viewData' => ['kk' => $kk, 'la_AsIds' => $la_AsIds], 
 		'pager' => array(
 	           'firstPageLabel'=>'<<',
 	           'prevPageLabel'=>'< Edellinen',
@@ -363,7 +351,49 @@ $(document).ready(function(){
 	$(document).delegate(".nayta_collapse","click",function(){
 		ajaxForLasku($(this));
 	});
+
+	// <-- Check laskutamattomat rivit laskutetut asiakkaasta
+	$('.tehdyt').each(function(){
 	
+		var thisFor 		= $(this);
+		var thisForText		= $(this).text();
+		thisFor.html('<h4 class="text-warning">Odota...</h4>');
+		
+		var asiakas_id 		= $(this).attr('asiakas_id');
+		var rakenne_muoto 	= '<?=$rakenne_muoto?>';
+		var rivi_muoto 		= $(this).closest('tr').find('.rivi_muoto').val();
+
+		var link = 'kklaskuperasiakas?asiakas_id=' + asiakas_id + '&from=<?=$from?>&to=<?=$to?>&rakenne_muoto=' + rakenne_muoto + '&rivi_muoto=' + rivi_muoto;
+		//console.log('Link: ' + link);
+		$.ajax({
+			url: link,
+			success: function(data){
+				var data = JSON.parse(data);
+				//console.log(data);
+				
+				$('#collapse_id_' + asiakas_id).html(data);
+				
+				var sum = 0;
+				$('#collapse_id_' + asiakas_id).closest('td').find('.laskutetaan:checkbox:checked').each(function(){
+					sum++;
+				});
+				
+				if(sum > 0)
+				{
+					thisFor.html(thisForText + '<br>Laskuttamattomat rivit: ' + sum + 'kpl');
+					thisFor.addClass('btn btn-block btn-warning');
+				} else {
+					thisFor.text('Täysin laskutettu');
+					thisFor.addClass('btn btn-block btn-success');
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+			   	console.log(XMLHttpRequest);
+			}
+		});
+	});
+	// Check laskutamattomat rivit laskutetut asiakkaasta -->
+		
 	function ajaxForLasku(thisFor)
 	{	
 		var asiakas_id 		= thisFor.closest('td').find('.nayta_collapse').attr('asiakas_id');

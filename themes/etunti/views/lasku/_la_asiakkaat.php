@@ -8,7 +8,7 @@
 
 		if(isset($la_AsIds['la_'.$kk.'_'.$data->id]))
 		{
-			echo '<h4 class="text-info">Tehdyt laskut. '.count($la_AsIds['la_'.$kk.'_'.$data->id]).'kpl</h3>';
+			echo '<br><br><span class="tehdyt" asiakas_id="'.$data->id.'">Tehdyt laskut: ('.count($la_AsIds['la_'.$kk.'_'.$data->id]).') kpl</span>';
 		}
 		?>
 	</td>
