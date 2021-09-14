@@ -380,7 +380,7 @@ $(document).ready(function(){
 				
 				if(sum > 0)
 				{
-					thisFor.html(thisForText + '<br>Laskuttamattomat rivit: ' + sum + 'kpl');
+					thisFor.html(thisForText + '<br>Laskuttamattomat rivit: (' + sum + ') kpl');
 					thisFor.addClass('btn btn-block btn-warning');
 				} else {
 					thisFor.text('Täysin laskutettu');
