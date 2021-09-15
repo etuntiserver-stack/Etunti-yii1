@@ -6,9 +6,18 @@
 		<?php
 		echo $data->Fullname;
 
-		if(isset($la_AsIds['la_'.$kk.'_'.$data->id]))
+		if(isset($laskut_ids['la_'.$kk.'_'.$data->id]))
 		{
-			echo '<br><br><span class="tehdyt" asiakas_id="'.$data->id.'">Tehdyt laskut: ('.count($la_AsIds['la_'.$kk.'_'.$data->id]).') kpl</span>';
+			echo '<br><br><span class="tehdyt" asiakas_id="'.$data->id.'"></span>';
+			echo '<textarea style="display:none" class="laskut_ids">'.json_encode($laskut_ids['la_'.$kk.'_'.$data->id]).'</textarea>';
+		} else {
+			echo '<br><br><span class="tehdyt nolla" asiakas_id="'.$data->id.'"></span>';
+			echo '<textarea style="display:none" class="laskut_ids"></textarea>'; 
+		}
+
+		if(isset($getall[$data->id]))
+		{
+			echo '<textarea style="display:none" class="getall">'.json_encode($getall[$data->id]).'</textarea>';
 		}
 		?>
 	</td>

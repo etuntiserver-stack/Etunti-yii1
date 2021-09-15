@@ -27,7 +27,7 @@ class LaskuController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_procountor', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet', 'perpvmkohde', 'l_asiakkaat', 'kklaskuperasiakas', 'tuotepalvelukohdelle', 'laskutetuksi'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_procountor', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet', 'perpvmkohde', 'l_asiakkaat', 'kklaskuperasiakas', 'tuotepalvelukohdelle', 'laskutetuksi', 'getdatafrom'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow',  // allow all users to perform 'index' and 'view' actions
@@ -1234,7 +1234,7 @@ exit;
 			$return['yksikko'] 	= $tp->yksikko;
 
 			// <-- Kohde
-			if( $for == 'kohde')
+			if($for == 'kohde')
 			{
 				if($model->hinnasto_id != 0)
 				{
@@ -1256,7 +1256,7 @@ exit;
 			// Kohde -->
 			
 			// <-- Työvuoro
-			if( $for == 'tyovuoro')
+			if($for == 'tyovuoro' and isset($model->kohteet))
 			{
 				$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$tuote_id."' AND hinnastot_id='".$model->kohteet->hinnasto_id."'");
 				if(isset($hinnasto->id))
@@ -1309,8 +1309,8 @@ exit;
 	{
 
 		$is_true = false;
-       		$criteria = new CDbCriteria();
-       		$criteria->condition = " asiakasnumero='".$asiakasnumero."' ";
+   		$criteria = new CDbCriteria();
+   		$criteria->condition = " asiakasnumero='".$asiakasnumero."' ";
 		$asiakas = Asiakkaat::model()->find($criteria);
 
 		$kohteet = '';
@@ -1424,6 +1424,7 @@ exit;
 		else
 			$sahkoposti = $a->sahkoposti;
 
+					
 		echo json_encode($a->laskutus_kanava."//".$a->maksuehto."//".$tyyppi."//".$a->osoite."//".$a->postinumero."//".$a->kaupunki."//".$a->Etusukunimi."//".$a->puhelin."//".$kodeOn."//".$erapaiva."//".$a->valittajan_tunnus."//".$a->verkkolaskuosoite."//".$a->muistutuslasku_auto."//".$a->kirjeenluokka."//".$sahkoposti."//".$a->viivastyskorko."//".$a->netvisor_dimension_name."//".$a->netvisor_dimension_item."//".str_replace("\n", "<br>", $a->lisatietoja_laskutuksesta));
 	}
 
@@ -1777,18 +1778,19 @@ exit;
 
 		if($rakenne_muoto == 'mobiili') 	$which_ids = 'mobiili_id';
 		if($rakenne_muoto == 'tuovuoro') 	$which_ids = 'tv_id';
-
+	
 		$kk						= date("m.Y", strtotime($from));
 		$etunti_tunniste		= 'la_'.$kk.'_'.$asiakas_id;
-		$laskut					= Lasku::model()->findAll("etunti_tunniste='".$etunti_tunniste."'");
+		$laskut_ids				= (isset($_POST['laskut_ids']) and $_POST['laskut_ids'] != 'null')? json_decode($_POST['laskut_ids'], true) : null;
+		$getall 				= (isset($_POST['getall']))? json_decode($_POST['getall'], true) : [];
 		$laskurivitAll			= [];
 		$laskutetut_tunnisteet	= [];
-		
-		if(count($laskut) > 0)
+
+		if(count($laskut_ids) > 0)
 		{
-			foreach($laskut as $item)
+			foreach($laskut_ids as $la_id)
 			{
-				$laskuRivit			= LaskunRivit::model()->findAll("lid='".$item->id."' AND tiedot IS NOT NULL");
+				$laskuRivit			= LaskunRivit::model()->findAll("lid='".$la_id."' AND tiedot IS NOT NULL");
 				foreach($laskuRivit as $rivi)
 				{
 					$laskurivitAll[] = $rivi;
@@ -1796,7 +1798,7 @@ exit;
 				}
 			}
 		}
-			
+		
 		function prepare($which, $laskurivitAll)
 		{
 			
@@ -1838,29 +1840,6 @@ exit;
 		$laskutetut_tiedot['mobiili_id'] 	= prepare('mobiili_id', $laskurivitAll);
 		$laskutetut_tiedot['tv_id'] 		= prepare('tv_id', $laskurivitAll);
 		$laskutetut_tiedot['tuote_id'] 		= prepare('tuote_id', $laskurivitAll);
-
-
-		// <-- Mobiili logikka
-		if($rakenne_muoto == 'mobiili')
-			$getall 		= $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, false, "id=$asiakas_id");
-			
-		if($rakenne_muoto == 'tuovuoro')
-		{
-			$haku_criteria 	= [
-				"(laskutettu=0 or laskutettu is NULL) AND tid!=0 AND (peruutettu=0 or peruutettu is NULL)
-				AND kohde IN(SELECT id FROM sivex_kohdet WHERE 
-					asiakas_id='$asiakas_id'	
-				)
-				"
-			];
-			$tv_controller 	= Yii::app()->createController('Tyovuoroot');
-			$tt = Tyontekijat::model()->findAll();
-			$tids = [];
-			foreach($tt as $item) {
-				$tids[$item->id] = $item->id;
-			}
-			$getall 		= $tv_controller[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, ['data','tv_kesto']);
-		}
 
 		// <-- KK logikka
 		$kk_hinta 	= [];
@@ -1907,32 +1886,39 @@ exit;
 		}
 
 		$l 		= [];
-		foreach($getall as $item)
+		foreach($getall as $dataitem)
 		{
 			$pikkuviesti 	= '';
 
-			if($rakenne_muoto == 'mobiili')
+			if($rakenne_muoto == 'mobiili' and isset($dataitem['mobile']))
 			{
-				$aloitan	= $item->aloitan;
-				$kesto		= strtotime($item->loppui)-strtotime($item->aloitan);
-				$tyovuorot 	= (isset($item->tyovuoroot->id))? $item->tyovuoroot : null;
-				$kohde_id	= ($item->kohdenID > 0)? $item->kohdenID : null;
-				$tv_id 		= (isset($tyovuorot->id))? $tyovuorot->id : 0;
-				$tv_pvm 	= (isset($tyovuorot->pvm))? $tyovuorot->pvm : null;
-			}
-			
-			if($rakenne_muoto == 'tuovuoro')
-			{
-				$tv_id 		= (isset($item['this_id']))? $item['this_id'] : $item['data']->id;
-				$tv_pvm 	= (isset($item['this_pvm']))? $item['this_pvm'] : $item['data']->pvm;
-				$item 		= $item['data'];
-				$kesto		= strtotime($item->loppu)-strtotime($item->alku);
-				$tyovuorot 	= $item;
-				$aloitan	= $tyovuorot['pvm'].' '.$tyovuorot->alku;
-				$kohde_id	= $tyovuorot->kohde;
+				$item			= (object) $dataitem['mobile'];
+
+				$aloitan		= $item->aloitan;
+				$kesto			= strtotime($item->loppui)-strtotime($item->aloitan);
+				$tyovuorot 		= (isset($dataitem['tyovuorot']))? (object) $dataitem['tyovuorot'] : null;
+				$data_asiakkaat	= (isset($dataitem['asiakkaat']))? (object) $dataitem['asiakkaat'] : null;
+				$data_kohteet	= (isset($dataitem['kohteet']))? (object) $dataitem['kohteet'] : null;
+				$kohde_id		= ($item->kohdenID > 0)? $item->kohdenID : null;
+				$tv_id 			= (isset($tyovuorot->id))? $tyovuorot->id : 0;
+				$tv_pvm 		= (isset($tyovuorot->pvm))? $tyovuorot->pvm : null;
 			}
 
-			if(isset($item->kohteet->asiakkaat->id) and $item->kohteet->asiakkaat->id == $asiakas_id)
+			if($rakenne_muoto == 'tuovuoro' and isset($dataitem['tyovuorot']))
+			{
+				$item			= (object) $dataitem['tyovuorot'];
+				
+				$tv_id 			= (isset($item->this_id))? $item->this_id : 0;
+				$tv_pvm 		= (isset($item->this_pvm))? $item->this_pvm : '';
+				$kesto			= strtotime($item->loppu)-strtotime($item->alku);
+				$data_asiakkaat	= (isset($dataitem['asiakkaat']))? (object) $dataitem['asiakkaat'] : null;
+				$data_kohteet	= (isset($dataitem['kohteet']))? (object) $dataitem['kohteet'] : null;
+				$tyovuorot 		= $item;
+				$aloitan		= $tyovuorot->pvm.' '.$tyovuorot->alku;
+				$kohde_id		= $tyovuorot->kohde;
+			}
+
+			if(isset($data_asiakkaat->id) and $data_asiakkaat->id == $asiakas_id)
 			{
 				// <-- pikkuviesti
 				if($rakenne_muoto == 'mobiili')
@@ -1949,6 +1935,7 @@ exit;
 
 				// <-- Työvuoroista Tuote/Palvelu mukaan logikka
 				$tyovuoro_tuotteet = [];
+				
 				if($tyovuorot !== null and $kohde_id > 0)
 				{
 					if($tyovuorot->tuoteID > 0)
@@ -1971,7 +1958,7 @@ exit;
 						{
 							$return = $this->getHintaFor('tyovuoro_lisatuote', $tuote_id);
 							$tyovuoro_tuotteet['lisa_tuotteet'][] = [
-								'tv_pvm'	=> $tyovuorot['pvm'],
+								'tv_pvm'	=> $tv_pvm,
 								'tuote_id' 	=> $tuote_id,
 								'nimike' 	=> $return['nimike'],
 								'hinta' 	=> $return['hinta'],
@@ -1988,10 +1975,11 @@ exit;
 					'tv_id'				=> $tv_id,
 					'tv_pvm'			=> $tv_pvm,
 					'attributes' 		=> $item,
+					'tyovuorot'			=> $tyovuorot,
 					'maara' 			=> $kesto,
 					'pikkuviesti' 		=> $pikkuviesti,
 					'tyovuoro_tuotteet' => $tyovuoro_tuotteet,
-					'hinta_laskenta'	=> $this->getHintaFor('kohde', $item->kohteet)
+					'hinta_laskenta'	=> $this->getHintaFor('kohde', $data_kohteet)
 				];
 			}
 		}
@@ -1999,7 +1987,7 @@ exit;
 		ksort($l);
 		if(count($l) > 0)
 			$mob_lista[$asiakas_id] = $l;
-		
+
 		$body 		= '<br>';
 		$yht_summ 	= 0;
 		$yht_kk 	= 0;
@@ -2010,7 +1998,7 @@ exit;
 
 		//$mobile = Yii::app()->createController('Mobile');
 		//$hyv_tyotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, $hyv_arr, 3, false, 0, true, null, null, false);
-
+		
 		if(!empty($asiakas->lisatietoja_laskutuksesta))
 			$body .= '<h3>Lisätietoja laskutuksesta</h3><pre>'.$asiakas->lisatietoja_laskutuksesta.'</pre>';
 		
@@ -2043,10 +2031,9 @@ exit;
 					{
 						$pvm		= date("d.m.Y", strtotime($item->aloitan));
 						$osoite		= $item->kohde_kannasta;
-						$tyovuorot 	= (isset($item->tyovuoroot->id))? $item->tyovuoroot : null;
+						$tyovuorot 	= ($v['tyovuorot'] != null)? $v['tyovuorot'] : null;
 						$kohde_id	= ($item->kohdenID > 0)? $item->kohdenID : null;
 						$tiedot		= ['mobiili_id' => $item->id, 'tv_id' => $tv_id];
-						
 						$hyv_lista_perkohde[$kohde_id][] = $item;
 					}
 				}
@@ -2508,12 +2495,15 @@ exit;
 					if(isset($laskutetut_tiedot['tuote_id'][$tuote_id]) and isset($laskutetut_tiedot[$which_ids]))
 					{
 						$laskutettu = true;
-						foreach($new_tiedot[$which_ids] as $id)
+						if(isset($new_tiedot[$which_ids]))
 						{
-							if(!in_array($id, $laskutetut_tiedot[$which_ids]))
+							foreach($new_tiedot[$which_ids] as $id)
 							{
-								$laskutettu = false;
-								break;
+								if(!in_array($id, $laskutetut_tiedot[$which_ids]))
+								{
+									$laskutettu = false;
+									break;
+								}
 							}
 						}
 					}
@@ -2571,15 +2561,15 @@ exit;
 		$body .= '</tr>';
 		$body .= '</table>';
 
-		if(count($laskut) > 0)
+		if(count($laskut_ids) > 0)
 		{
 			$body .= '<h2 class="text-info">Tehdyt laskut</h2>';
 			$body .= '<div class="form-inline">';
-			foreach($laskut as $item)
+			foreach($laskut_ids as $la_id)
 			{
-				$link = CHtml::link('<span class="text-white">Lasku:' . $item->id.'<br>' . $this->tilanneCheck($item).'</span>',
-					['/lasku/update', 'id' => $item->id],
-					['class' => 'btn btn-group btn-info'] // , 'target' => '_blank'
+				$link = CHtml::link('<span class="text-white">Lasku:' . $la_id.'<br>' . $this->tilanneCheck($la_id).'</span>',
+					['/lasku/update', 'id' => $la_id],
+					['class' => 'btn btn-group btn-info tehdyt_laskut'] // , 'target' => '_blank'
 				);
 				$body .= $link.' ';
 			}
@@ -2732,7 +2722,7 @@ exit;
 					exit;
 				}
 				
-				echo json_encode(['lasku_id' => $model->id]);
+				echo json_encode(['lasku_id' => $model->id, 'attributes' => $model->attributes]);
 				exit;
 				
 			} else {
@@ -2748,19 +2738,15 @@ exit;
 	public function actionL_asiakkaat($kk=null, $rakenne_muoto=null)
 	{
 		$dataProvider 		= [];
-		$la_AsIds 			= [];
+		$laskut_ids			= [];
 		$from 				= '';
 		$to 				= '';
+		$getall				= [];
+
 		if($kk !== null)
 		{
 			$from 			= date("Y-m-d", strtotime($kk." first day of this month"));
 			$to 			= date("Y-m-d", strtotime($kk." last day of this month"));
-
-			// <-- Check laskutetut
-			$kk				= date("m.Y", strtotime($from));
-			$la 			= Lasku::model()->findAll("etunti_tunniste LIKE 'la_".$kk."_%'");
-			foreach($la as $item)
-				$la_AsIds[$item->etunti_tunniste][] = $item->as_nro;
 		
 	       	$criteria = new CDbCriteria();
 			// <-- Tyoryhmat
@@ -2799,33 +2785,32 @@ exit;
 			if($rakenne_muoto == 'tuovuoro')
 			{
 
-				$haku_criteria 	= ["(laskutettu=0 or laskutettu is NULL) AND tid!=0 AND (peruutettu=0 or peruutettu is NULL)"];
-				$tv_controller 	= Yii::app()->createController('Tyovuoroot');
-				$tt = Tyontekijat::model()->findAll();
-				$tids = [];
-				foreach($tt as $item) {
-					$tids[$item->id] = $item->id;
-				}
-				$getall 		= $tv_controller[0]->FromToSuunnitellutAll(date("Y-m-d", strtotime($from)), date("Y-m-d", strtotime($to)), $tids, $haku_criteria, []);
+				$getall = $this->getDataFrom($rakenne_muoto, $from, $to, null);
+				
 				$kohde_ids = [];
-				foreach($getall as $arr)
-				{
-					if($arr['kohde'] > 0)
-						$kohde_ids[$arr['kohde']] = $arr['kohde'];
-				}
+				foreach($getall as $got)
+					foreach($got as $key => $arr)
+						if($key == 'kohteet')
+							$kohde_ids[$arr['kohteet']['id']] = $arr['kohteet']['id'];
+
 				/*
 				echo '<pre>';
 				print_r($kohde_ids);
 				echo '</pre>';
 				exit;
 				*/
-				$impl = "id='".implode("' OR id='", $kohde_ids)."'";
-				$criteria->addCondition(" 
-					id IN(SELECT asiakas_id FROM sivex_kohdet WHERE
-						($impl)
-					)
-				");
-				
+
+				$impl = implode(",", $kohde_ids);
+				if(count($kohde_ids) > 0)
+				{
+					$criteria->addCondition(" 
+						id IN(SELECT asiakas_id FROM sivex_kohdet WHERE id IN ($impl))
+					");
+				} else {
+					$criteria->addCondition(" 
+						id=0
+					");
+				}
 			}
 			
 			if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
@@ -2840,12 +2825,39 @@ exit;
 				'criteria'=>$criteria,
 				//'pagination'=>true
 			));
-			$dataProvider->pagination->pageSize = 50;
+			$dataProvider->pagination->pageSize = 20;
+
+			$asiakkaat_ids = [];
+			$asiakkaat_num = [];
+			foreach($dataProvider->data as $mo)
+			{
+				if(!empty($mo->asiakasnumero))
+					$asiakkaat_num[$mo->asiakasnumero] = $mo->asiakasnumero;
+					
+				$asiakkaat_ids[$mo->id] = $mo->id;
+			}
+
+			// <-- Check laskutetut
+			if(count($asiakkaat_ids) > 0)
+			{
+				$impl_num		= implode(", ", $asiakkaat_num);
+				$impl_id		= implode(", ", $asiakkaat_ids);
+				$kk				= date("m.Y", strtotime($from));
+				$la 			= Lasku::model()->findAll("etunti_tunniste LIKE 'la_".$kk."_%' AND as_nro IN ($impl_num)");
+				foreach($la as $item)
+					$laskut_ids[$item->etunti_tunniste][$item->id] = $item->id;
+
+				// <-- Mobiili logikka
+				if($rakenne_muoto == 'mobiili')
+				{
+					$getall = $this->getDataFrom($rakenne_muoto, $from, $to, $asiakkaat_ids);
+				}
+			}
 		}
 		
 		/*
 		echo '<pre>';
-		print_r($kk_hinta);
+		print_r($getall);
 		echo '</pre>';
 		exit;
 		*/
@@ -2855,9 +2867,137 @@ exit;
 			'rakenne_muoto' => $rakenne_muoto,
 			'from'			=> $from,
 			'to'			=> $to,
-			'la_AsIds'		=> $la_AsIds,
-			'dataProvider' 	=> $dataProvider
+			'laskut_ids'	=> $laskut_ids,
+			'dataProvider' 	=> $dataProvider,
+			'getall'		=> $getall
 		));
+	}
+
+	public function actionGetdatafrom($asiakas_id, $kk, $rakenne_muoto)
+	{
+		
+		$from 		= date("Y-m-d", strtotime($kk." first day of this month"));
+		$to 		= date("Y-m-d", strtotime($kk." last day of this month"));
+		$a 			= Asiakkaat::model()->findByPk($asiakas_id);
+		if(!isset($a->id))
+		{
+			echo json_encode(['ERROR' => 'Ei asiakas']);
+			exit;
+		}
+			
+		$la 		= Lasku::model()->findAll("etunti_tunniste='la_".$kk."_".$a->id."' AND as_nro='".$a->asiakasnumero."'");
+		$laskut_ids = [];
+		foreach($la as $item)
+			$laskut_ids[$item->id] = $item->id;
+
+		$getall = [];
+		if($kk != null)
+		{
+			$kk 		= date("Y-m", strtotime("01.".$kk));
+			$from 		= date("Y-m-d", strtotime($kk." first day of this month"));
+			$to 		= date("Y-m-d", strtotime($kk." last day of this month"));
+			$getall 	= $this->getDataFrom($rakenne_muoto, $from, $to, [$a->id]);
+		}
+		
+		echo json_encode(['laskut_ids' => $laskut_ids, 'getall' => $getall]);
+		exit;
+	}
+		
+	public function getDataFrom($rakenne_muoto, $from, $to, $asiakas_ids)
+	{
+	
+		$getall 	= [];
+		$impl		= implode(", ", $asiakas_ids);
+		
+		// <-- Mobiili logikka
+		if($rakenne_muoto == 'mobiili')
+		{
+			$dataAll = $this->hyvaksyttyListaByAsiakasMobiilistaaAll($from, $to, false, "id IN ($impl)");
+
+			foreach($dataAll as $data)
+			{
+				if(isset($data->kohteet->asiakkaat->id))
+				{
+					$getall[$data->kohteet->asiakkaat->id][] = [
+						'mobile' => [
+											'id' => $data->id,
+											'tekijan_nimi' => $data->tekijan_nimi,
+											'aloitan' => $data->aloitan,
+											'loppui' => $data->loppui,
+											'kohde_kannasta' => $data->kohde_kannasta,
+											'tv_id' => $data->tv_id,
+											'kohdenID' => $data->kohdenID,
+											'viesti' => $data->viesti
+						], 
+						'tyovuorot' => isset($data->tyovuoroot->attributes)? [
+											'id' => $data->tyovuoroot->id,
+											'pvm' => $data->tyovuoroot->pvm,
+											'alku' => $data->tyovuoroot->alku,
+											'loppu' => $data->tyovuoroot->loppu,
+											'kohde' => $data->tyovuoroot->kohde,
+											'tuoteID' => $data->tyovuoroot->tuoteID,
+											'lisa_tuotteet' => $data->tyovuoroot->lisa_tuotteet
+										] : null,
+						'kohteet' => isset($data->kohteet->attributes)? [
+											'id' => $data->kohteet->id,
+											'laskurivi_tyyppi' => $data->kohteet->laskurivi_tyyppi,
+											'tuote_kpl' => $data->kohteet->tuote_kpl,
+											'tuote_h' => $data->kohteet->tuote_h,
+											'tuote_kk' => $data->kohteet->tuote_kk,
+											'hinnasto_id' => $data->kohteet->hinnasto_id,
+										] : null,
+						'asiakkaat' => ['id' => $data->kohteet->asiakkaat->id]
+					];
+				}
+			}
+		}
+
+		// <-- Työvuoro logikka
+		if($rakenne_muoto == 'tuovuoro')
+		{
+
+			$haku_criteria 	= ["(laskutettu=0 or laskutettu is NULL) AND tid!=0 AND (peruutettu=0 or peruutettu is NULL)"];
+			$tv_controller 	= Yii::app()->createController('Tyovuoroot');
+			$tt = Tyontekijat::model()->findAll();
+			$tids = [];
+			foreach($tt as $item) {
+				$tids[$item->id] = $item->id;
+			}
+				
+			$dataAll = $tv_controller[0]->FromToSuunnitellutAll(date("Y-m-d", strtotime($from)), date("Y-m-d", strtotime($to)), $tids, $haku_criteria, ['data','tv_kesto']);
+
+			foreach($dataAll as $arr)
+			{
+				$data = $arr['data'];
+				if(isset($data->kohteet->asiakkaat->id))
+				{
+					$getall[$data->kohteet->asiakkaat->id][] = [
+						'tyovuorot' => isset($data->attributes)? [
+											'id' => $arr['this_id'],
+											'pvm' => $arr['this_pvm'],
+											'tid' => $arr['this_tid'],
+											'alku' => $data->alku,
+											'loppu' => $data->loppu,
+											'kohde' => $data->kohde,
+											'tuoteID' => $data->tuoteID,
+											'osoiteById' => $data->osoiteById,
+											'lisa_tuotteet' => $data->lisa_tuotteet
+										] : null,
+						'kohteet' => isset($data->kohteet->attributes)? [
+											'id' => $data->kohteet->id,
+											'laskurivi_tyyppi' => $data->kohteet->laskurivi_tyyppi,
+											'tuote_kpl' => $data->kohteet->tuote_kpl,
+											'tuote_h' => $data->kohteet->tuote_h,
+											'tuote_kk' => $data->kohteet->tuote_kk,
+											'hinnasto_id' => $data->kohteet->hinnasto_id,
+										] : null,
+						'asiakkaat' => ['id' => $data->kohteet->asiakkaat->id]
+					];
+				}
+			}
+		}
+
+		return $getall;
 	}
 
 	/**

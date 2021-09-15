@@ -698,8 +698,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	echo '<span class="btn btn-primary btn-block" id="new_hinnasto">Tallenna</span><br>';
 ?>
 </div>
-
-
+			
 <h2 id="valitse_asiakas" class="text-danger">Valitse asiakas.</h2>
 
 <div id="laskurivien_teko" style="display:none; z-index: 1">
@@ -1396,8 +1395,8 @@ function yhteensaTotal(){
 }
 
 $(document).delegate('#rivit input[type="number"]','keyup, change',function(){
-  	eachLaskenta();
-    	yhteensaTotal();
+	eachLaskenta();
+	yhteensaTotal();
 });
 
 // <-- Laskutettavata asiakkaat NEW 06.05.2021
@@ -1411,8 +1410,8 @@ $(document).delegate("#kuukausi_kalentteri","change",function(){
 	
 	$('#la_from').val(dateFrom);
 	$('#la_to').val(dateTo);
-	console.log(dateFrom + ' ' + dateTo);
-	
+	//console.log(dateFrom + ' ' + dateTo);
+
 	ajaxForLasku();
 });
 
@@ -1571,21 +1570,48 @@ $(document).delegate("#new_hinnasto", "click", function(){
 		}
 	});
 });
-	
+
 function ajaxForLasku()
 {
+	$('#kalut').html('');
+
 	var asiakas_id 		= $("#Lasku_as_nro option:selected").attr('asiakas_id');
 	var rakenne_muoto 	= $('#rakenne_muoto').val();
 	var rivi_muoto 		= $('#rivi_muoto').val();
 	var from			= $('#la_from').val();
 	var to				= $('#la_to').val();
+
+	// <-- getdata
+	var laskut_ids		= [];
+	var getall			= [];
+	
+	$.ajax({
+		url: 'getdatafrom?asiakas_id='+asiakas_id+'&kk=' + $('#kuukausi_kalentteri').val() + '&rakenne_muoto=' + $('#rakenne_muoto').val(),
+		async : false,
+		success: function(data){
+			var data = JSON.parse(data);
+			//console.log(data);
+
+			if(data['laskut_ids'])
+				laskut_ids 	= JSON.stringify(data['laskut_ids']);
+			if(data['getall'])
+				getall 		= JSON.stringify(data['getall'][asiakas_id]);
+
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+		   	console.log(XMLHttpRequest);
+		}
+	});
+	//  getdata -->
 	
 	if(asiakas_id)
 	{
 		var link = 'kklaskuperasiakas?asiakas_id=' + asiakas_id + '&from=' + from + '&to=' + to + '&rakenne_muoto=' + rakenne_muoto + '&rivi_muoto=' + rivi_muoto;
-		//console.log('Link: ' + link);
+		//console.log(from+' '+to);
 		$.ajax({
 			url: link,
+			type: "POST",
+			data: { laskut_ids : laskut_ids, getall : getall },
 			success: function(data){
 				var data = JSON.parse(data);
 				//console.log(data);
@@ -1724,7 +1750,6 @@ $("#Lasku_as_nro").change(function() {
 				}
 			}
 
-
 			$("#Lasku_osoite").val(sp[3])
 			$("#Lasku_postinumero").val(sp[4])
 			$("#Lasku_toimipaikka").val(sp[5])
@@ -1739,6 +1764,7 @@ $("#Lasku_as_nro").change(function() {
 			$("#Lasku_viivastyskorko").val(sp[15])
 			$("#Lasku_netvisor_dimension_name").val(sp[16] + '//' + sp[17]);
 			$("#lisatietoja_laskutuksesta").html('<br>' + sp[18]);
+
 			
 			// <-- Laskutettavat Asiakkaat
 			ajaxForLasku();
@@ -1749,7 +1775,6 @@ $("#Lasku_as_nro").change(function() {
 		   	console.log(XMLHttpRequest);
 		}
 	});
-
 });
 
 /*

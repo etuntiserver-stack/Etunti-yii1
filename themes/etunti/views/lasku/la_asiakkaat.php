@@ -138,7 +138,7 @@
 		'dataProvider'=>$dataProvider,
 		'itemView'=>'_la_asiakkaat',
 	  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
-		'viewData' => ['kk' => $kk, 'la_AsIds' => $la_AsIds], 
+		'viewData' => ['kk' => $kk, 'laskut_ids' => $laskut_ids, 'getall' => $getall], 
 		'pager' => array(
 	           'firstPageLabel'=>'<<',
 	           'prevPageLabel'=>'< Edellinen',
@@ -190,6 +190,9 @@ $(document).ready(function(){
 	
 		e.preventDefault();
 
+		var laskut_ids 			= $(this).closest('tr').find('.laskut_ids');
+		laskut_ids_arr			= (laskut_ids.val() !== '') ? JSON.parse(laskut_ids.val()) : {};
+					
 		var lasku_rivit = [];
 		$(this).closest('.closest_td').find('.lasku_rivi').find('.laskutetaan:checkbox:checked').each(function(){		
 			lasku_rivit.push([{
@@ -232,6 +235,19 @@ $(document).ready(function(){
 				console.log(data);
 				if(data['lasku_id'] && parseInt(data['lasku_id']) > 0)
 				{
+					//console.log(data['attributes'].as_nro); toimii
+					lasku_id = data['lasku_id'];
+					
+					if(laskut_ids.val() !== '')
+					{
+						laskut_ids_arr[lasku_id] = lasku_id;
+					} else {
+						laskut_ids_arr = {};
+						laskut_ids_arr[lasku_id] = lasku_id;
+					}
+					
+					laskut_ids.val(JSON.stringify(laskut_ids_arr));
+					
 					ajaxForLasku(cl);
 				}
 			},
@@ -356,17 +372,20 @@ $(document).ready(function(){
 	$('.tehdyt').each(function(){
 	
 		var thisFor 		= $(this);
-		var thisForText		= $(this).text();
 		thisFor.html('<h4 class="text-warning">Odota...</h4>');
 		
 		var asiakas_id 		= $(this).attr('asiakas_id');
 		var rakenne_muoto 	= '<?=$rakenne_muoto?>';
 		var rivi_muoto 		= $(this).closest('tr').find('.rivi_muoto').val();
+		var laskut_ids		= $(this).closest('td').find('.laskut_ids').val() ?? null;
+		var getall			= $(this).closest('td').find('.getall').val() ?? null;
 
 		var link = 'kklaskuperasiakas?asiakas_id=' + asiakas_id + '&from=<?=$from?>&to=<?=$to?>&rakenne_muoto=' + rakenne_muoto + '&rivi_muoto=' + rivi_muoto;
 		//console.log('Link: ' + link);
 		$.ajax({
 			url: link,
+			type: "POST",
+			data: { laskut_ids : laskut_ids, getall : getall },
 			success: function(data){
 				var data = JSON.parse(data);
 				//console.log(data);
@@ -380,8 +399,11 @@ $(document).ready(function(){
 				
 				if(sum > 0)
 				{
-					thisFor.html(thisForText + '<br>Laskuttamattomat rivit: (' + sum + ') kpl');
-					thisFor.addClass('btn btn-block btn-warning');
+					thisFor.html('Tehdyt laskut: ('+ $('#collapse_id_' + asiakas_id).closest('td').find('.tehdyt_laskut').length +') kpl<br>Laskuttamattomat rivit: (' + sum + ') kpl');
+					if(thisFor.hasClass('nolla'))
+						thisFor.addClass('btn btn-block btn-default');
+					else
+						thisFor.addClass('btn btn-block btn-warning');
 				} else {
 					thisFor.text('Laskutettu');
 					thisFor.addClass('btn btn-block btn-success');
@@ -399,6 +421,9 @@ $(document).ready(function(){
 		var asiakas_id 		= thisFor.closest('td').find('.nayta_collapse').attr('asiakas_id');
 		var rakenne_muoto 	= '<?=$rakenne_muoto?>';
 		var rivi_muoto 		= thisFor.closest('td').find('.rivi_muoto').val();
+		var tehdyt 			= thisFor.closest('tr').find('.tehdyt');
+		var laskut_ids		= thisFor.closest('tr').find('.laskut_ids').val() ?? null;
+		var getall			= thisFor.closest('tr').find('.getall').val() ?? null;
 		
 		if( !thisFor.closest('td').find('.nayta_collapse').hasClass('collapsed') )
 		{
@@ -407,6 +432,8 @@ $(document).ready(function(){
 			//console.log('Link: ' + link);
 			$.ajax({
 				url: link,
+				type: "POST",
+				data: { laskut_ids : laskut_ids, getall : getall },
 				success: function(data){
 					var data = JSON.parse(data);
 					//console.log(data);
@@ -418,11 +445,27 @@ $(document).ready(function(){
 					});
 					thisFor.closest('td').find('#summ_result').html(sum.toFixed(2));
 					$('[data-toggle="tooltip"]').tooltip();
-					
+
+					var sum_laskutetaan = 0;
 					thisFor.closest('td').find('.laskutetaan:checkbox:checked').each(function(){
-						thisFor.closest('td').find('.laskutetuksi').show()
+						thisFor.closest('td').find('.laskutetuksi').show();
+						sum_laskutetaan++;
 					});
-					
+
+
+					if(sum_laskutetaan > 0)
+					{	
+						tehdyt.html('Tehdyt laskut: ('+ $('#collapse_id_' + asiakas_id).closest('td').find('.tehdyt_laskut').length +') kpl<br>Laskuttamattomat rivit: (' + sum_laskutetaan + ') kpl');
+						if(tehdyt.hasClass('nolla'))
+							tehdyt.addClass('btn btn-block btn-default');
+						else
+							tehdyt.addClass('btn btn-block btn-warning');
+					} else {
+						tehdyt.text('Laskutettu');
+						tehdyt.removeClass('btn-warning').addClass('btn btn-block btn-success');
+					}
+
+				
 					$(".datepickerLA").datepicker({
 						format: "mm.yyyy",
 						viewMode: "months", 
