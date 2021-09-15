@@ -88,7 +88,7 @@ class KohteetController extends Controller
 		$options = '';
 		foreach($hinnasto as $item)
 		{
-			if($item->tuotteet->yksikko == 'h')
+			if($item->tuotteet && $item->tuotteet->yksikko == 'h')
 				$options .= '<option value="'.$item->tuotteet->id.'">'.$item->tuotteet->nimike.'</option>';
 		}
 		echo json_encode($options);
