@@ -30,10 +30,10 @@ class Hinnastot extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
-                     'hinnaston_otsikko' => 'varchar(255) DEFAULT NULL',
-                     'aktiivinen' => 'int(1) DEFAULT 1',
-                     'alvsis' => 'varchar(100) DEFAULT NULL',
+             'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+             'hinnaston_otsikko' => 'varchar(255) DEFAULT NULL',
+             'aktiivinen' => 'int(1) DEFAULT 1',
+             'alvsis' => 'varchar(100) DEFAULT NULL',
 		);
 
 		foreach($table_structure as $key=>$value)

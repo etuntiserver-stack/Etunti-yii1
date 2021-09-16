@@ -15,7 +15,7 @@ class TuotteetPalvelutController extends Controller
 	{
 		return array(
 			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
+			//'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
 
@@ -257,20 +257,59 @@ class TuotteetPalvelutController extends Controller
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
-	public function actionDelete($id)
+	public function actionDelete($id, $confirm)
 	{
 
-	// <-- Oikeudet
-	   $checkOikeus = "onlineTuotteet_3_".Yii::app()->user->adminStatus;
-	   $site = Yii::app()->createController('Site');
-	   $site[0]->checkOikeus($checkOikeus);
-	//  Oikeudet -->
+		// <-- Oikeudet
+		$checkOikeus = "onlineTuotteet_3_".Yii::app()->user->adminStatus;
+		$site = Yii::app()->createController('Site');
+		$site[0]->checkOikeus($checkOikeus);
+		//  Oikeudet -->
 
-		$this->loadModel($id)->delete();
+		$model = $this->loadModel($id);
+		
+		// <-- check hinnastot
+		$body = '';
+		$hr = HinnastotRivi::model()->findAll("tuote_palvelu_id='".$id."'");
+		foreach($hr as $item)
+		{
+			$h = Hinnastot::model()->findByPk($item->hinnastot_id);
+			if(isset($h->id))
+			{
+				$c = HinnastotRivi::model()->findAll("hinnastot_id='".$h->id."'");
+				if(count($c) == 1)
+					$body .= '<b>'.$h->hinnaston_otsikko. '</b> - on hinnaston viimeinen, poista myös hinnasto: <input type="checkbox" class="poistettava_hinnasto" id="'.$h->id.'" checked><br>';
+				elseif(count($c) > 1)
+					$body .= '<b>'.$h->hinnaston_otsikko. '</b> - tästä hinnastosta poistetaan <b>'.$model->nimike.'</b> tuote.<br>';
+			}
+		}
 
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+		if($confirm=='false' and !empty($body))
+		{
+			echo json_encode(['varoitus' => $body]);
+			exit;
+		}
+		
+		if($confirm=='true')
+		{
+			if(isset($_POST['poistettava_hinnastot']) and is_array(json_decode($_POST['poistettava_hinnastot'], true)))
+			{
+				foreach(json_decode($_POST['poistettava_hinnastot'], true) as $h_id)
+					Hinnastot::model()->findByPk($h_id)->delete();
+			}
+			
+			HinnastotRivi::model()->deleteAll("tuote_palvelu_id='".$id."'");
+
+			// <-- Poista päätuote
+			$this->loadModel($id)->delete();
+
+			echo json_encode(['return' => 'ok']);
+			exit;
+			
+			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+			//if(!isset($_GET['ajax']))
+				//$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+		}
 	}
 
 	/**

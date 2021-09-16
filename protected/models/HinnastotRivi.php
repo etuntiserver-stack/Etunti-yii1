@@ -32,14 +32,14 @@ class HinnastotRivi extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-                     'hinnastot_id' => 'int(11) DEFAULT 0',
-                     'tuote_palvelu_id' => 'int(11) DEFAULT 0',
-                     'hinnasto_hinta' => 'float DEFAULT 0',
-                     'hinnasto_alv' => 'int(3) DEFAULT 0',
-                     'hinnasto_yksikko' => 'varchar(100) DEFAULT NULL',
-		     'hinta_tuote' => 'float DEFAULT 0',
-		     'hinta_tuote_sis' => 'float DEFAULT 0',
-		     'hinnasto_yht' => 'float DEFAULT 0',
+			'hinnastot_id' => 'int(11) DEFAULT 0',
+			'tuote_palvelu_id' => 'int(11) DEFAULT 0',
+			'hinnasto_hinta' => 'float DEFAULT 0',
+			'hinnasto_alv' => 'int(3) DEFAULT 0',
+			'hinnasto_yksikko' => 'varchar(100) DEFAULT NULL',
+			'hinta_tuote' => 'float DEFAULT 0',
+			'hinta_tuote_sis' => 'float DEFAULT 0',
+			'hinnasto_yht' => 'float DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)
