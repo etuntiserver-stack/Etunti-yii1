@@ -284,13 +284,17 @@ class TuotteetPalvelutController extends Controller
 			}
 		}
 
-		if($confirm=='false' and !empty($body))
+		if($confirm == 'false' and !empty($body))
 		{
 			echo json_encode(['varoitus' => $body]);
 			exit;
+		} elseif($confirm == 'false' and empty($body))
+		{
+			echo json_encode(['varoitus' => 'Tuotteella ei hinnastoa.']);
+			exit;
 		}
 		
-		if($confirm=='true')
+		if($confirm == 'true')
 		{
 			if(isset($_POST['poistettava_hinnastot']) and is_array(json_decode($_POST['poistettava_hinnastot'], true)))
 			{
