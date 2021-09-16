@@ -2735,7 +2735,7 @@ exit;
 		exit;
 	}
 
-	public function actionL_asiakkaat($kk=null, $rakenne_muoto=null)
+	public function actionL_asiakkaat($kk=null, $rakenne_muoto=null, $jarjestys=null)
 	{
 		$dataProvider 		= [];
 		$laskut_ids			= [];
@@ -2749,6 +2749,23 @@ exit;
 			$to 			= date("Y-m-d", strtotime($kk." last day of this month"));
 		
 	       	$criteria = new CDbCriteria();
+
+	       	if($jarjestys == 'sukunimi')
+	       		$criteria->order = "CASE WHEN tyyppi='henkilo' THEN 1 ELSE 2 END, sukunimi ASC";
+
+	       	if($jarjestys == 'etunimi')
+				$criteria->order = "CASE WHEN tyyppi='henkilo' THEN 1 ELSE 2 END, etunimi ASC";
+
+	       	if($jarjestys == 'vain_yritykset'){
+				$criteria->order = "yrityksen_nimi";
+				$criteria->condition = "tyyppi='yritys'";
+			}
+
+	       	if($jarjestys == 'ilman_yritykset'){
+				$criteria->order = "sukunimi";
+				$criteria->condition = "tyyppi='henkilo'";
+			}
+
 			// <-- Tyoryhmat
 			$site = Yii::app()->createController('Site');
 			$arr = $site[0]->TyoryhmatHelper();
@@ -2863,6 +2880,7 @@ exit;
 		*/
 				
 		$this->render('la_asiakkaat', array(
+			'jarjestys' 	=> $jarjestys,
 			'kk' 			=> $kk,
 			'rakenne_muoto' => $rakenne_muoto,
 			'from'			=> $from,

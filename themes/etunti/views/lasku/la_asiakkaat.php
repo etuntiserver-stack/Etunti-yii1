@@ -42,6 +42,20 @@
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
+							<select class="form-group form-control" name="jarjestys">
+								<option value="none" <?=($jarjestys !== null and $jarjestys == 'none')? 'selected':''?>>Ei aakkosjärjestystä</option>
+								<option value="sukunimi" <?=($jarjestys !== null and $jarjestys == 'sukunimi')? 'selected':''?>>Sukunimi aakkosjärjestys</option>
+								<option value="etunimi" <?=($jarjestys !== null and $jarjestys == 'etunimi')? 'selected':''?>>Etunimi aakkosjärjestys</option>
+								<option value="vain_yritykset" <?=($jarjestys !== null and $jarjestys == 'vain_yritykset')? 'selected':''?>>Vain yritykset aakkosjärjestys</option>
+								<option value="ilman_yritykset" <?=($jarjestys !== null and $jarjestys == 'ilman_yritykset')? 'selected':''?>>Vain yhteyshenkilöt sukunimi aakkosjärjestys</option>
+							</select>
+                           </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
 							<select class="form-group form-control" name="rakenne_muoto">
 								<option value="mobiili" <?=($rakenne_muoto !== null and $rakenne_muoto == 'mobiili')? 'selected':''?>>Hyväksytyt tunnit</option>
 								<option value="tuovuoro" <?=($rakenne_muoto !== null and $rakenne_muoto == 'tuovuoro')? 'selected':''?>>Työvuoroista</option>
