@@ -2747,6 +2747,7 @@ exit;
 		{
 			$from 			= date("Y-m-d", strtotime($kk." first day of this month"));
 			$to 			= date("Y-m-d", strtotime($kk." last day of this month"));
+			$kk				= date("m.Y", strtotime($from));
 		
 	       	$criteria = new CDbCriteria();
 
@@ -2829,6 +2830,9 @@ exit;
 					");
 				}
 			}
+
+			if(isset($_GET['vain_keltaiset']))
+				$criteria->addCondition ("asiakasnumero IN(SELECT as_nro FROM laskut WHERE etunti_tunniste LIKE 'la_".$kk."_%')");
 			
 			if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
 		        	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR CONCAT(etunimi , ' ' , sukunimi) LIKE '%".$_GET['yrityksen_nimi']."%'");
@@ -2842,7 +2846,11 @@ exit;
 				'criteria'=>$criteria,
 				//'pagination'=>true
 			));
-			$dataProvider->pagination->pageSize = 20;
+
+			if(isset($_GET['vain_keltaiset']))
+				$dataProvider->pagination->pageSize = 1000;
+			else
+				$dataProvider->pagination->pageSize = 20;
 
 			$asiakkaat_ids = [];
 			$asiakkaat_num = [];
@@ -2859,7 +2867,6 @@ exit;
 			{
 				$impl_num		= implode(", ", $asiakkaat_num);
 				$impl_id		= implode(", ", $asiakkaat_ids);
-				$kk				= date("m.Y", strtotime($from));
 				$la 			= Lasku::model()->findAll("etunti_tunniste LIKE 'la_".$kk."_%' AND as_nro IN ($impl_num)");
 				foreach($la as $item)
 					$laskut_ids[$item->etunti_tunniste][$item->id] = $item->id;

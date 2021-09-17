@@ -38,6 +38,11 @@
                             </label>
                           </label>
                         </div>
+
+                        <div class="section">
+                          <div class="alert bg-warning"><input class="pull-right" type="checkbox" name="vain_keltaiset" <?=isset($_GET['vain_keltaiset'])? 'checked' : ''?>> Vain keltaiset tilat:</div>
+                        </div>
+                        
                       </div>
                       <div class="col-md-2">
                         <div class="section">
@@ -393,6 +398,7 @@ $(document).ready(function(){
 		var rivi_muoto 		= $(this).closest('tr').find('.rivi_muoto').val();
 		var laskut_ids		= $(this).closest('td').find('.laskut_ids').val() ?? null;
 		var getall			= $(this).closest('td').find('.getall').val() ?? null;
+		var vain_keltaiset  = "<?=isset($_GET['vain_keltaiset'])? true : false?>";
 
 		var link = 'kklaskuperasiakas?asiakas_id=' + asiakas_id + '&from=<?=$from?>&to=<?=$to?>&rakenne_muoto=' + rakenne_muoto + '&rivi_muoto=' + rivi_muoto;
 		//console.log('Link: ' + link);
@@ -419,6 +425,10 @@ $(document).ready(function(){
 					else
 						thisFor.addClass('btn btn-block btn-warning');
 				} else {
+
+					if(vain_keltaiset)
+						thisFor.closest('tr').remove();
+
 					thisFor.text('Laskutettu');
 					thisFor.addClass('btn btn-block btn-success');
 				}
