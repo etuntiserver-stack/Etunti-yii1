@@ -2831,7 +2831,7 @@ exit;
 				}
 			}
 
-			if(isset($_GET['vain_keltaiset']))
+			if(isset($_GET['tilat']) and $_GET['tilat'] == 'keltainen')
 				$criteria->addCondition ("asiakasnumero IN(SELECT as_nro FROM laskut WHERE etunti_tunniste LIKE 'la_".$kk."_%')");
 			
 			if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi']))
@@ -2847,7 +2847,7 @@ exit;
 				//'pagination'=>true
 			));
 
-			if(isset($_GET['vain_keltaiset']))
+			if(isset($_GET['tilat']) and ($_GET['tilat'] == 'keltainen' or $_GET['tilat'] == 'vihrea'))
 				$dataProvider->pagination->pageSize = 1000;
 			else
 				$dataProvider->pagination->pageSize = 20;
