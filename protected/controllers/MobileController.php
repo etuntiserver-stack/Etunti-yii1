@@ -3467,7 +3467,7 @@ class MobileController extends Controller
 		$criteria = new CDbCriteria();
 		if(isset($_GET['yrityksen_nimi']) and !empty($_GET['yrityksen_nimi'])){
 			$criteria->condition = " 
-				yrityksen_nimi='".$_GET['yrityksen_nimi']."' OR etunimi='".$_GET['yrityksen_nimi']."' OR sukunimi='".$_GET['yrityksen_nimi']."'
+				yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR CONCAT(etunimi , ' ' , sukunimi) LIKE '%".$_GET['yrityksen_nimi']."%'
 			";
 		}
 		if(isset($_GET['asiakas_id'])){
