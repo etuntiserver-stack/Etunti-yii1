@@ -40,21 +40,24 @@
   	$lang = $_SESSION['lang'];
 
 
-
+/*
   $db = 'etuntifw';
   $db_host = 'localhost';
   $etuntifw_user = 'root';
   $etuntifw_pass = '';
+  */
 
   $db2 = '';
   if(isset($_SESSION['domain']))
   $db2 = $_SESSION['domain'];
-
+/*
   $db2_host = '127.0.0.1';
   $db2_user = 'root';
   $db2_pass = '';
+  */
 
-
+// read DB configs from file
+require("main.pw.php");
 
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
@@ -70,9 +73,10 @@ return array(
         'application.components.*',
         'application.modules.user.models.*',
         'application.modules.user.components.*',
-	'application.extensions.carouFredSel.*',
-	'ext.YiiMailer.YiiMailer',
-	//'application.extensions.EasySlider.*',
+	    'application.extensions.carouFredSel.*',
+	    'ext.YiiMailer.YiiMailer',
+	    //'application.extensions.EasySlider.*',
+        'application.commands.*',
 	),
 
     'modules'=>array(

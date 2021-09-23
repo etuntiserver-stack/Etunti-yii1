@@ -1320,7 +1320,6 @@ $('.ryhmat').multiselect({
 
 <br>
 <div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#tyoryhmatAsetukset"><h3><?php echo Yii::t('main','Työryhmät'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
-
   <div class="row form collapse" id="tyoryhmatAsetukset">
    <div class="col-sm-3">
     <legend><h2><?php echo Yii::t('main','Työryhmät'); ?></h2></legend>
@@ -1351,6 +1350,127 @@ $('.ryhmat').multiselect({
 
    </div>
   </div>
+
+
+<?php if(Yii::app()->user->domain === "kotipuhtaaksi") : ?>
+<br>
+<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#referenceperiod">
+	<h3>
+		<?= Yii::t("main", "Tasoittumisjakso");?>&nbsp; 
+		<i class="fa fa-caret-square-o-down" aria-hidden="true"></i>
+	</h3>
+</div>
+<div class="row form collapse" id="referenceperiod">
+	<div class="col-sm-12">
+		<legend>
+			<h4>
+				<?= Yii::t("main", "Tasoittumisjakso"); ?>
+			</h4>
+		</legend>
+	</div>
+	<div class="col-sm-6">
+		<div class="section fill mb5">
+			<?php echo $form->labelEx($model, "reference_period_start_email_subject"); ?>
+			<?php echo $form->textField($model,'reference_period_start_email_subject',array('maxlength'=>255,'class'=>'form-control')); ?>
+			<?php echo $form->error($model, "reference_period_start_email_subject"); ?>
+		</div>
+		<div class="section fill mb5">
+			<?php echo $form->labelEx($model, "reference_period_start_email_body"); ?>
+			<?php echo $form->textarea($model,'reference_period_start_email_body',array('rows'=>10,'class'=>'form-control')); ?>
+			<p><i>Sähköpostiteksti tulee olla HTML -muodossa. Käytä &lt;br&gt; rivien lopussa rivivaihtona. Normaalit rivivaihdot tekstissä eivät vaikuta lopulliseen sähköpostiin.
+			Viestin perään luodaan automaattisesti taulukko, jossa näkyy tasoittumisjakson pituuden viikkonumerot, ja suunnitellut tunnit viikoille.</i></p>
+			<?php echo $form->error($model, "reference_period_start_email_body"); ?>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="section fill mb5">
+			<?php echo $form->labelEx($model, "reference_period_end_email_subject"); ?>
+			<?php echo $form->textField($model,'reference_period_end_email_subject',array('maxlength'=>255,'class'=>'form-control')); ?>
+			<?php echo $form->error($model, "reference_period_end_email_subject"); ?>
+		</div>
+		<div class="section fill mb5">
+			<?php echo $form->labelEx($model, "reference_period_end_email_body"); ?>
+			<?php echo $form->textarea($model,'reference_period_end_email_body',array('rows'=>10,'class'=>'form-control')); ?>
+			<p><i>Sähköpostiteksti tulee olla HTML -muodossa. Käytä &lt;br&gt; rivien lopussa rivivaihtona. Normaalit rivivaihdot tekstissä eivät vaikuta lopulliseen sähköpostiin.
+        	Viestin perään luodaan automaattisesti taulukko, jossa näkyy tasoittumisjakson pituuden viikkonumerot, ja toteutuneet tunnit viikoille.</i></p>
+			<?php echo $form->error($model, "reference_period_end_email_body"); ?>
+		</div>
+	</div>
+	<?php /* dummy col to fix positions on error message */ ?>
+	<div class="col-sm-12"></div>
+	<div class="col-sm-3">
+		<div class="section fill mb5">
+			<?php echo $form->labelEx($model, "reference_period_enabled"); ?>
+			<?php 
+				$list = [0 => "Ei käytössä", 1 => "Käytössä"];
+				echo $form->dropDownList($model, "reference_period_enabled", $list, ["class" => "form-control"]);
+			?>
+			<?php echo $form->error($model, "reference_period_enabled"); ?>
+		</div>
+		<div class="section fill mb5">
+			<?php echo $form->labelEx($model, "reference_period_start_date"); ?>
+			<?php echo $form->textField($model, "reference_period_start_date", ["class" => "form-control datepickerFI"]); ?>
+			<?php if($model->reference_period_length && $model->reference_period_start_date) : ?>
+				<?php 
+					$freq = $model->reference_period_length;
+					$date = $model->reference_period_start_date;
+					$format = "d.m.Y";
+					$formatted = DateTime::createFromFormat($format, $date);	
+				?>
+				<p>
+					<i>Päivämäärä päivitetään automaattiesti kun ilmoitus lähetetään, seuraava päivämäärä: <?= $formatted->modify("+8 weeks")->format($format) ?></i>
+				</p>
+				<?php echo $form->error($model, "reference_period_start_date"); ?>
+			<?php endif; ?>
+		</div>
+		<?php 
+			$start_date = $model->reference_period_start_date;
+			$format = "d.m.Y";
+			$date = DateTime::createFromFormat($format, $start_date);
+			$dateTwoWeeks = $date->modify("-2 weeks");
+			if(new DateTime("now") >= $dateTwoWeeks ) : ?>
+			<p>
+				<?php 
+					$sent_flag = $model->reference_period_emails_sent;
+					if($sent_flag == 1) {
+						echo "Sähköpostit lähetetty";
+					} else {
+						echo "Sähköpostit eivät ole vielä lähetetty";
+					}
+				?>
+			</p>
+			
+		<?php endif; ?>
+		<div class="section fill mb5">
+
+		</div>
+		<div class="section fill mb5">
+			<?php echo $form->labelEx($model, "reference_period_end_send_date"); ?>
+			<?php echo $form->textField($model, "reference_period_end_send_date", ["class" => "form-control datepickerFI"]); ?>
+			<?php if($model->reference_period_length && $model->reference_period_end_send_date) : ?>
+				<p>
+					<?php 
+						$freq = $model->reference_period_length;
+						$date = $model->reference_period_end_send_date;
+						$format = "d.m.Y";
+						$formatted = DateTime::createFromFormat($format, $date);
+					?>
+					<i>Päivämäärä päivitetään automaattiesti kun ilmoitus lähetetään, seuraava päivämäärä: <?= $formatted->modify("+8 weeks")->format($format)?></i>
+				</p>
+				<?php echo $form->error($model, "reference_period_end_send_date"); ?>
+			<?php endif; ?>
+		</div>
+		<div class="section fill mb5">
+			<?php echo $form->labelEx($model, "reference_period_length"); ?>
+			<?php echo $form->textField($model, "reference_period_length", ["class" => "form-control"]); ?>
+			<?php echo $form->error($model, "reference_period_length"); ?>
+		</div>
+	
+	</div>
+</div>
+
+
+<?php endif; ?>
 
 <br>
 <div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#autohyvaksynta"><h3><?php echo Yii::t('main','Tuntien hyväksyntä'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>

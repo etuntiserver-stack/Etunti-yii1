@@ -198,6 +198,17 @@ class Asetukset extends DB2ActiveRecord
 				'aloitusajat_enabled' => 'int(1) DEFAULT 0',
 				'aloitusajat_email_subject' => 'varchar(120) DEFAULT NULL',
 				'aloitusajat_email_body' => 'text DEFAULT NULL',
+
+				// reference period "Tasoittumisjakso" related fields
+				'reference_period_start_email_subject' => 'varchar(255) DEFAULT "Tasoittumisjakso"',
+				'reference_period_start_email_body' => 'text',
+				'reference_period_end_email_subject' => 'varchar(255) DEFAULT "Tasoittusmisjakso"',
+				'reference_period_end_email_body' => 'text',
+				'reference_period_enabled' => 'tinyint(3) DEFAULT 0',
+				'reference_period_length' => 'int(11) DEFAULT 8',
+				"reference_period_end_send_date" => 'varchar(255) DEFAULT NULL',
+				"reference_period_emails_sent" => "tinyint(3) DEFAULT 0",
+				"reference_period_start_date" => "date DEFAULT NULL"
 		    );
 
 		    foreach($table_structure as $key=>$value)
@@ -242,7 +253,102 @@ class Asetukset extends DB2ActiveRecord
       ['aloitusajat_enabled', 'numerical', 'integerOnly' => true, 'integerPattern' => '/^[0-1]$/', 'skipOnError' => true], 
       ['aloitusajat_email_subject', 'length', 'max' => 120, 'skipOnError' => true],
       ['aloitusajat_email_body', 'length', 'max' => 8000, 'skipOnError' => true],
+
+
+	  //- Reference period (tasoittumisjakso)
+	  ["reference_period_start_email_subject, reference_period_end_email_subject", "length", "max" => 255],
+	  ["reference_period_end_send_date, reference_period_start_date", "validateReferencePeriodDates"],
+	  ["reference_period_start_email_body, reference_period_end_email_body", "validateReferenceEmailBodies"],
+	  ["reference_period_enabled", "numerical", "integerOnly" => true],
+	  ["reference_period_length", "validateReferencePeriodLength"],
+	  ["reference_period_emails_sent", "numerical", "integerOnly" => true, "integerPattern" => '/^[0-1]$/'],
     );
+	}
+
+	/**
+	 * Validates that reference_period_start|end_email_body are defined
+	 * and contain %recipient.hours% if reference_period_enabled is true
+	 */
+	public function validateReferenceEmailBodies($attribute, $params) 
+	{
+		if($this->reference_period_enabled) {
+			if(strlen($this->$attribute) === 0) {
+				$this->addError($attribute, $this->getAttributeLabel($attribute) . " ei voi olla tyhjä, jos ilmoitukset otetaan käyttöön.");
+			}
+		}
+	}
+
+	/**
+	 * Validates that reference_period_end_send_date 
+	 * and reference_period_start_date are defined and in 
+	 * the right format if reference_period_enabled is true.
+	 */
+	public function validateReferencePeriodDates($attribute, $params)
+	{
+		if($this->reference_period_enabled)
+		{
+			$format = "d.m.Y";
+			$date = DateTime::createFromFormat($format, $this->$attribute);
+
+			if(!$date || $date->format($format) !== $this->$attribute) {
+				$this->addError($attribute, $this->getAttributeLabel($attribute) . " täytyy olla muodossa pp.kk.vvvv");
+			}
+		}
+	}
+
+	/**
+	 * Validates that reference_period_length is not 0, and
+	 * is defined when reference_period_enabled is true.
+	 */
+	public function validateReferencePeriodLength($attribute, $params)
+	{
+		if($this->reference_period_enabled)
+		{
+			if(strlen($this->$attribute) === 0) {
+				$this->addError($attribute, $this->getAttributeLabel($attribute) . " ei voi olla tyhjä, jos ilmoitukset otetaan käyttöön.");
+			}
+		}
+		if($this->$attribute == 0) {
+			$this->addError($attribute, $this->getAttributeLabel($attribute) . " ei voi olla 0");
+		}
+	}
+
+	// triggered after validation
+	public function beforeSave()
+	{
+		// flip d.m.Y format dates into Y-m-d format
+		$oldFormat = "d.m.Y";
+		$format = "Y-m-d";
+		if(isset($this->reference_period_start_date) && strlen($this->reference_period_start_date) > 0) {
+			$startDate = DateTime::createFromFormat($oldFormat, $this->reference_period_start_date);
+			$this->reference_period_start_date = $startDate->format($format);
+		}
+		
+		if(isset($this->reference_period_end_send_date) && strlen($this->reference_period_end_send_date) > 0) {
+			$endDate = DateTime::createFromFormat($oldFormat, $this->reference_period_end_send_date);
+			$this->reference_period_end_send_date = $endDate->format($format);
+		}
+		
+		return parent::beforeSave();
+	}
+
+	// triggered after record is instantiated (data is loaded)
+	public function afterFind()
+	{
+		// this transformation could be done on view level too,
+		// flip Y-m-d dates back into d.m.Y format
+		$oldFormat = "Y-m-d";
+		$format = "d.m.Y";
+		if(isset($this->reference_period_start_date) && strlen($this->reference_period_start_date) > 0) {
+			$startDate = DateTime::createFromFormat($oldFormat, $this->reference_period_start_date);
+			$this->reference_period_start_date = $startDate->format($format);
+		}
+
+		if(isset($this->reference_period_end_send_date) && strlen($this->reference_period_end_send_date) > 0) {
+			$endDate = DateTime::createFromFormat($oldFormat, $this->reference_period_end_send_date);
+			$this->reference_period_end_send_date = $endDate->format($format);
+		}
+		return parent::afterFind();
 	}
 
 	/**
@@ -362,16 +468,24 @@ class Asetukset extends DB2ActiveRecord
 			'netvisor_accountingaccountsuggestion' => Yii::t('main', 'Myyntilaskut kirjanpidon oletustili'),
 			'auto_hyvaksynta_klo' => Yii::t('main', 'Hyväksyminen aika'),
 			'netvisor_lahetetaanko_tyontekija' => Yii::t('main', 'Lähetä työntekijä'),
-      'app_naytta_sairauslomat' => Yii::t('main', 'Näytetäänkö sairauslomat'),
-      'onlinevaraus_palvelu' => Yii::t('main', 'Onlinevaraus Palvelu'),
-      'bambora_private_key' => Yii::t('main', 'Bambora Yksityisavain'),
-      'bambora_api_key' => Yii::t('main', 'Bambora Api-avain'),
-      'omasiistijat_enabled' => Yii::t('main', 'Kohteen omasiistjät, varoitukset ja ilmoitukset'),
-      'omasiistijat_email_subject' => Yii::t('main', 'Omasiistjäilmoituksen otsikko'),
-      'omasiistijat_email_body' => Yii::t('main', 'Omasiistjäilmoituksen teksti'),
-      'aloitusajat_enabled' => Yii::t('main', 'Aloitusaikailmoitukset'),
-      'aloitusajat_email_subject' => Yii::t('main', 'Aloitusaikailmoituksen otsikko'),
-      'aloitusajat_email_body' => Yii::t('main', 'Aloitusaikailmoituksen teksti'),
+			'app_naytta_sairauslomat' => Yii::t('main', 'Näytetäänkö sairauslomat'),
+			'onlinevaraus_palvelu' => Yii::t('main', 'Onlinevaraus Palvelu'),
+			'bambora_private_key' => Yii::t('main', 'Bambora Yksityisavain'),
+			'bambora_api_key' => Yii::t('main', 'Bambora Api-avain'),
+			'omasiistijat_enabled' => Yii::t('main', 'Kohteen omasiistjät, varoitukset ja ilmoitukset'),
+			'omasiistijat_email_subject' => Yii::t('main', 'Omasiistjäilmoituksen otsikko'),
+			'omasiistijat_email_body' => Yii::t('main', 'Omasiistjäilmoituksen teksti'),
+			'aloitusajat_enabled' => Yii::t('main', 'Aloitusaikailmoitukset'),
+			'aloitusajat_email_subject' => Yii::t('main', 'Aloitusaikailmoituksen otsikko'),
+			'aloitusajat_email_body' => Yii::t('main', 'Aloitusaikailmoituksen teksti'),
+			'reference_period_start_email_subject' => Yii::t("main", "Tasoittumisjakson alkamisen ilmoituksen otsikko"),
+			'reference_period_start_email_body' => Yii::t("main", "Tasoittumisjakson alkamisen ilmoituksen teksti"),
+			'reference_period_end_email_subject' => Yii::t("main", "Tasoittumisjakson päättymisen ilmoituksen otsikko"),
+			'reference_period_end_email_body' => Yii::t("main", "Tasoittumisjakson päättymisen ilmoituksen teksti"),
+			'reference_period_enabled' => Yii::t("main", "Tasoittumisjakson ilmoitukset käytössä"),
+			'reference_period_length' => Yii::t("main", "Tasoittumisjakson pituus viikoissa"),
+			'reference_period_start_date' => Yii::t("main", "Tasoittumisjakson alkamisen päivämäärä"),
+			'reference_period_end_send_date' => Yii::t("main", "Tasoittumisjakson päättymisen ilmoituksen lähetys päivämäärä"),
 		);
 	}
 
