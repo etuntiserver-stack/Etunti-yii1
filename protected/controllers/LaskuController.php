@@ -1184,7 +1184,7 @@ exit;
 		exit;
 	}
 	
-	protected function getHintaFor($for, $model)
+	protected function getHintaFor($for, $model, $hinnasto_id)
 	{		
 		$return 			= [];
 		$return['hinta'] 	= 0;
@@ -1236,9 +1236,9 @@ exit;
 			// <-- Kohde
 			if($for == 'kohde')
 			{
-				if($model->hinnasto_id != 0)
+				if($hinnasto_id > 0)
 				{
-					$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$tuote_id."' AND hinnastot_id='".$model->hinnasto_id."'");
+					$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$tuote_id."' AND hinnastot_id='".$hinnasto_id."'");
 					if(isset($hinnasto->id))
 					{
 						$hinnastot			= Hinnastot::model()->findByPk($hinnasto->hinnastot_id);
@@ -1256,9 +1256,9 @@ exit;
 			// Kohde -->
 			
 			// <-- Työvuoro
-			if($for == 'tyovuoro' and isset($model->kohteet))
+			if($for == 'tyovuoro' and $hinnasto_id > 0)
 			{
-				$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$tuote_id."' AND hinnastot_id='".$model->kohteet->hinnasto_id."'");
+				$hinnasto = HinnastotRivi::model()->find("tuote_palvelu_id='".$tuote_id."' AND hinnastot_id='".$hinnasto_id."'");
 				if(isset($hinnasto->id))
 				{
 					$hinnastot			= Hinnastot::model()->findByPk($hinnasto->hinnastot_id);
@@ -1846,7 +1846,7 @@ exit;
 		$kohteet 	= Kohteet::model()->findAll("asiakas_id='".$asiakas_id."' and tuote_kk!=0");
 		foreach($kohteet as $item)
 		{	
-			$return = $this->getHintaFor('kohde', $item);
+			$return = $this->getHintaFor('kohde', $item, $item->hinnasto_id);
 			if($return['hinta'] > 0 and $return['yksikko'] == 'kk')
 			{
 				$kk_hinta[$item->asiakas_id][$item->id] = [
@@ -1868,7 +1868,7 @@ exit;
 		$kohteet 	= Kohteet::model()->findAll("asiakas_id='".$asiakas_id."' and tuote_kpl!=0");
 		foreach($kohteet as $item)
 		{	
-			$return = $this->getHintaFor('kohde', $item);
+			$return = $this->getHintaFor('kohde', $item, $item->hinnasto_id);
 			if($return['hinta'] > 0 and $return['yksikko'] == 'kpl')
 			{
 				$kpl_hinta[$item->asiakas_id][$item->id] = [
@@ -1940,7 +1940,7 @@ exit;
 				{
 					if($tyovuorot->tuoteID > 0)
 					{
-						$return = $this->getHintaFor('tyovuoro', $tyovuorot);
+						$return = $this->getHintaFor('tyovuoro', $tyovuorot, $data_kohteet->hinnasto_id);
 						$tyovuoro_tuotteet['paa_tuote']['tuote_id'] = $tyovuorot->tuoteID;
 						$tyovuoro_tuotteet['paa_tuote']['tv_id'] 	= $tv_id;
 						$tyovuoro_tuotteet['paa_tuote']['tv_pvm'] 	= $tv_pvm;
@@ -1956,7 +1956,7 @@ exit;
 						$lisa_tuotteet = json_decode($tyovuorot->lisa_tuotteet, true);
 						foreach($lisa_tuotteet['tuote'] as $key => $tuote_id)
 						{
-							$return = $this->getHintaFor('tyovuoro_lisatuote', $tuote_id);
+							$return = $this->getHintaFor('tyovuoro_lisatuote', $tuote_id, $data_kohteet->hinnasto_id);
 							$tyovuoro_tuotteet['lisa_tuotteet'][] = [
 								'tv_pvm'	=> $tv_pvm,
 								'tuote_id' 	=> $tuote_id,
@@ -1979,7 +1979,7 @@ exit;
 					'maara' 			=> $kesto,
 					'pikkuviesti' 		=> $pikkuviesti,
 					'tyovuoro_tuotteet' => $tyovuoro_tuotteet,
-					'hinta_laskenta'	=> $this->getHintaFor('kohde', $data_kohteet)
+					'hinta_laskenta'	=> $this->getHintaFor('kohde', $data_kohteet, $data_kohteet->hinnasto_id)
 				];
 			}
 		}
