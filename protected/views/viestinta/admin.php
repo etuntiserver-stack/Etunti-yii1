@@ -2,6 +2,79 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
+
+// <-- ELIAKSELLE
+if(isset($_GET['elias']))
+{
+
+	function ApprovedFromTo($from, $to, $tids, $status){
+
+		$lista = array();
+
+   		$criteria = new CDbCriteria();
+		$criteria->group = "tid";
+		$criteria->select = "
+			tid,
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+		
+		$criteria->condition = " 
+			DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND status='$status'
+			AND hyvaksytty!=''
+			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+			AND deleted=0
+		";
+
+		if(is_array($tids))
+			$criteria->addCondition("tid IN(".implode(", ", $tids).")");
+
+		$lu = Mobile::model()->findAll($criteria);
+
+   		$criteria = new CDbCriteria();
+		$criteria->group = "tid";
+		$criteria->select = "
+			tid,
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+
+		$criteria->condition = " 
+			DATE(STR_TO_DATE(aloitan, '%d.%m.%Y')) BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			AND status='$status'
+			AND hyvaksytty!=''
+			AND deleted=0
+		";
+
+		if(is_array($tids))
+			$criteria->addCondition("tid IN(".implode(", ", $tids).")");
+
+		$tot = Toteutuneet::model()->findAll($criteria);
+		$lista = $lu;
+		if( is_array($tot) and count($tot) > 0 ){ $lista = array_merge($lu, $tot); }
+
+		$return = [];
+		foreach($lista as $item)
+			$return[$item->tid] = $item->l_tunnit;
+
+		return $return;
+	}
+
+	///////////////
+	$tt = Tyontekijat::model()->findAll("aktiivinen='1'");
+	$tids = [];
+	foreach($tt as $item) {
+		$tids[$item->id] = $item->id;
+	}
+
+	echo '<pre>';
+	print_r(ApprovedFromTo($_GET['from'], $_GET['to'], $tids, 3)); // 2 -Matka, 3 - Työtunnit, 10 - Lounastaukot
+	echo '</pre>';
+	///////////////
+}
+// ELIAKSELLE -->
+
 /*
 if( Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy' ){
    $a = Asiakkaat::model()->findAll("id>200 AND id<=260 AND etunimi!='' AND sukunimi!=''");
