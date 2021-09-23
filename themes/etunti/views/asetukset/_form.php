@@ -1418,7 +1418,8 @@ $('.ryhmat').multiselect({
 					$formatted = DateTime::createFromFormat($format, $date);	
 				?>
 				<p>
-					<i>Päivämäärä päivitetään automaattiesti kun ilmoitus lähetetään, seuraava päivämäärä: <?= $formatted->modify("+8 weeks")->format($format) ?></i>
+					<i>Päivämäärä päivitetään automaattiesti kun jakso loppuu, seuraava päivämäärä: <?= (clone $formatted)->modify("+8 weeks")->format($format) ?>.</i>
+					<i>Ilmoitus jakson alkamisesta lähetetään sähköpostitse työntekijöille 2vko ennen jakson alkua, seuraava lähetyspäivämäärä: <?= (clone $formatted)->modify("-2 weeks")->format($format); ?></i>
 				</p>
 				<?php echo $form->error($model, "reference_period_start_date"); ?>
 			<?php endif; ?>
@@ -1434,14 +1435,16 @@ $('.ryhmat').multiselect({
 
 			if(isset($dateTwoWeeks) && $dateTwoWeeks !== false && new DateTime("now") >= $dateTwoWeeks ) : ?>
 			<p>
-				<?php 
-					$sent_flag = $model->reference_period_emails_sent;
-					if($sent_flag == 1) {
-						echo "Sähköpostit lähetetty";
-					} else {
-						echo "Sähköpostit eivät ole vielä lähetetty";
-					}
-				?>
+				<i>
+					<?php 
+						$sent_flag = $model->reference_period_emails_sent;
+						if($sent_flag == 1) {
+							echo "Sähköpostit lähetetty";
+						} else {
+							echo "Sähköpostit eivät ole vielä lähetetty";
+						}
+					?>
+				</i>
 			</p>
 			
 		<?php endif; ?>
