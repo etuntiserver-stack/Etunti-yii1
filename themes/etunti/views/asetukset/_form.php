@@ -1424,11 +1424,15 @@ $('.ryhmat').multiselect({
 			<?php endif; ?>
 		</div>
 		<?php 
-			$start_date = $model->reference_period_start_date;
-			$format = "d.m.Y";
-			$date = DateTime::createFromFormat($format, $start_date);
-			$dateTwoWeeks = $date->modify("-2 weeks");
-			if(new DateTime("now") >= $dateTwoWeeks ) : ?>
+			if(isset($model->reference_period_start_date)) {
+				$start_date = $model->reference_period_start_date;
+				$format = "d.m.Y";
+				$date = DateTime::createFromFormat($format, $start_date);
+	
+				$dateTwoWeeks = $date->modify("-2 weeks");
+			}
+
+			if($dateTwoWeeks !== false && new DateTime("now") >= $dateTwoWeeks ) : ?>
 			<p>
 				<?php 
 					$sent_flag = $model->reference_period_emails_sent;
