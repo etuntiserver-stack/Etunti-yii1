@@ -1432,7 +1432,7 @@ $('.ryhmat').multiselect({
 				$dateTwoWeeks = $date->modify("-2 weeks");
 			}
 
-			if($dateTwoWeeks !== false && new DateTime("now") >= $dateTwoWeeks ) : ?>
+			if(isset($dateTwoWeeks) && $dateTwoWeeks !== false && new DateTime("now") >= $dateTwoWeeks ) : ?>
 			<p>
 				<?php 
 					$sent_flag = $model->reference_period_emails_sent;
