@@ -1503,7 +1503,7 @@ $('.ryhmat').multiselect({
 		<?php echo $form->labelEx($model,'app_hyvaksynnan_peruste'); ?>
 		<?php 
         	$tal = array(
-			0 => 'Totetuneen ajan mukaan',
+			0 => 'Toteutuneen ajan mukaan',
 			1 => 'Työvuoron aloitus ja lopetus mukaan',
 			2 => 'Hyväksy kaikki edellisen päivän tunnit automaattisesti'
 		);
