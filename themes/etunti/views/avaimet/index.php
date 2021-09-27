@@ -170,30 +170,21 @@ if(count($k) > 0){
 	    <h3>Avaimien siirto</h3>
    	    <form id="mobForm2" action="#" class="form-inline" method="POST">
 	     <div class="form-group">
-		<?php
-		$asetukset = Asetukset::model()->findByPk(1);
-		$criteria = new CDbCriteria();
-		$criteria->condition = " aktiivinen=1 ";
+			<div style="min-width: 400px">
+				<?php
 
-			// <-- Return order etu ja sukunimella
-			$criteria = $site[0]->etuSukunimiCriteria($criteria);
-			//     Return order etu ja sukunimella -->
-
-			// <-- Tyoryhmat
-			$site = Yii::app()->createController('Site');
-			$tt = Yii::app()->createController('Tyontekijat');
-			$tt_arr = $tt[0]->TyoryhmatTyontekijatHelper(null);
-			$ids = implode(",", $tt_arr);
-			if( count($tt_arr) > 0 ){
-	        		$criteria->addCondition (' id IN ('.$ids.') ');
-			}
-			//    Tyoryhmat -->
-
-		$tt = Tyontekijat::model()->findAll($criteria);
-		?>
-		<?php echo CHtml::dropDownList('tyontekija', 'tyontekija', CHtml::listData($tt, 'id', 'FullName'), 
-		array('empty'=>'Valitse työntekijä', 'class'=>'form-control')); 
-		?>
+					$site = Yii::app()->createController('Site');
+					$tyontekiatLista = $site[0]->workerListSelect2(
+						'tyontekija', // name
+						'form-control', //class
+						'tyontekija', // id
+						'', // selected
+						1, // active workers or not,
+						false, // multiple select or not
+					);
+					echo $tyontekiatLista;
+				?>
+			</div>
 	     </div>
 	     <div class="form-group">
 		<select class="form-control" name="sijainti_omatekstti" id="Avaimet_sijainti_omatekstti">
@@ -248,6 +239,8 @@ $(document).ready(function(){
 		$('.palautetu_asiakkaalle_pvm').hide(370);
 	}
  });
+
+ $(".select2").select2();
 
  $(".submitFormTwo").click(function(e){
 	e.preventDefault();
