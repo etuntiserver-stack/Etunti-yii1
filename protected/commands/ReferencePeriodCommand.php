@@ -195,7 +195,7 @@ class ReferencePeriodCommand extends BatchEmailCommand
         if(isset($settings["reference_period_end_email_subject"]) 
             && isset($settings["reference_period_end_email_body"])
             && isset($settings["reference_period_length"])
-            && isset($settings["reference_period_start_send_date"])
+            && isset($settings["reference_period_start_date"])
         ) 
         {
             // sender address, make first char capital in $domain
@@ -218,7 +218,7 @@ class ReferencePeriodCommand extends BatchEmailCommand
             $format = "Y-m-d";
 
             // start of the reference_period which will be used to query for done work hours
-            $ref_period_end_date = $settings["reference_period_start_send_date"];
+            $ref_period_end_date = $settings["reference_period_start_date"];
             $refEndDate = DateTime::createFromFormat($format, $ref_period_end_date);
 
             // we can't directly modify refEndDate, so we'll clone it.
@@ -390,13 +390,13 @@ class ReferencePeriodCommand extends BatchEmailCommand
                 echo "Updated next end send date to $formatted" . PHP_EOL;
             };
         } else {
-            echo "Email subject, body or length isn't defined for domain $domain" . PHP_EOL;
+            echo "Email subject, body, length or start date isn't defined for domain $domain" . PHP_EOL;
         }
     }
 
     /**
      * Constructs an HTML email body. Pass the user defined email template from settings
-     * along with reference_period_start_send_date and reference_period_length, which
+     * along with reference_period_start_date and reference_period_length, which
      * will be used to construct a table with week numbers under the template.
      * 
      * The resulting email will look something like this:
@@ -414,7 +414,7 @@ class ReferencePeriodCommand extends BatchEmailCommand
      * Top row is week numbers and bottom row is work hours.
      * 
      * @param string $preset_body User defined body from settings, *reference_period_start_email_body*
-     * @param DateTime $date DateTime of start send date from settings *reference_period_start_send_date*
+     * @param DateTime $date DateTime of start send date from settings *reference_period_start_date*
      * @param int $length Length of the reference period from settings *reference_period_length*
      */
     private function startEmailBody(string $preset_body, DateTime $date, int $length)
