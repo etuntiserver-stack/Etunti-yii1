@@ -181,6 +181,7 @@ if(count($k) > 0){
 						'', // selected
 						1, // active workers or not,
 						false, // multiple select or not
+						[0 => "Valitse"] // placeholder element, id and value
 					);
 					echo $tyontekiatLista;
 				?>
