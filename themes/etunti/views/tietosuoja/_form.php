@@ -58,7 +58,13 @@
 		<?php echo $form->error($model,'asiakas_viesti'); ?>
 	</div>
 */ 
-  echo count($this->AsiakasMobileLaskin()[1]);
+	$mobileLaskin = $this->AsiakasMobileLaskin();
+	if(isset($mobileLaskin[1])) {
+		echo count($this->AsiakasMobileLaskin()[1]);
+	} else {
+		echo 0;
+	}
+  
   //exit;
 ?>
 
