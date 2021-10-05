@@ -38,6 +38,10 @@
        	$criteria = new CDbCriteria();
 	$criteria->condition = " select_type='".$_POST['select_type']."' ";
 	$r = Valikkoot::model()->find($criteria);
+	if(!$r) {
+		$r = new Valikkoot();
+		$r->select_type = $_POST["select_type"];
+	}
 
 
 	$mod = '
