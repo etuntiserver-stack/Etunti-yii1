@@ -213,6 +213,8 @@ if(!isset($model->id)){ $model->alv = 24; }
 
 		<?php
       		$l = Valikkoot::model()->findAll(" select_type='siivous' ",array('order' => "select_type"));
+			  // initialize an empty list when there's no data in Valikkoot model
+			  $list = [];
 		foreach($l as $v)
 		$list[$v->id."//".$v->value] = $v->value;
 
