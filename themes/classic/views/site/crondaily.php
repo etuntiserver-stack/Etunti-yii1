@@ -105,7 +105,7 @@ function autoPassiveClients() {
     $asetukset = Asetukset::model()->findByPk(1);
     $asetukset->netvisor_kaytto = 0;
     if(!$asetukset->save()) {
-        print_r("<br>Error while saving settings<br>");
+        print_r("<br>Error while saving settings disable<br>");
         print_r($asetukset->getErrors());
     }
     // remove "jatkuva leasing", "vanha proaqua", 
@@ -134,11 +134,13 @@ function autoPassiveClients() {
             exit;
         }
     }
-
+    // it's really important to refetch the model, because saving
+    // triggers beforeSave and loading triggers afterFind
+    $asetukset = Asetukset::model()->findByPk(1);
     // re-enable netvisor
     $asetukset->netvisor_kaytto = 1;
     if(!$asetukset->save()) {
-        print_r("<br>Error while saving settings<br>");
+        print_r("<br>Error while saving settings re-enable<br>");
         print_r($asetukset->getErrors());
     }
 }
@@ -213,7 +215,7 @@ function autoPassiveWorkers() {
     $asetukset = Asetukset::model()->findByPk(1);
     $asetukset->netvisor_kaytto = 0;
     if(!$asetukset->save()) {
-        print_r("<br>Error while saving settings<br>");
+        print_r("<br>Error while saving settings disable<br>");
         print_r($asetukset->getErrors());
     }
 
@@ -245,10 +247,13 @@ function autoPassiveWorkers() {
         }
     }
 
+    // it's really important to refetch the model, because saving
+    // triggers beforeSave and loading triggers afterFind
+    $asetukset = Asetukset::model()->findByPk(1);
     // re-enable netvisor
     $asetukset->netvisor_kaytto = 1;
     if(!$asetukset->save()) {
-        print_r("<br>Error while saving settings<br>");
+        print_r("<br>Error while saving settings re-enable<br>");
         print_r($asetukset->getErrors());
     }
 
@@ -281,7 +286,7 @@ function checkPassiveableEmployees() {
     $asetukset = Asetukset::model()->findByPk(1);
     $asetukset->netvisor_kaytto = 0;
     if(!$asetukset->save()) {
-        print_r("<br>Error while saving settings<br>");
+        print_r("<br>Error while saving settings disable<br>");
         print_r($asetukset->getErrors());
     }
 
@@ -294,10 +299,13 @@ function checkPassiveableEmployees() {
         }
     }
 
+    // it's really important to refetch the model, because saving
+    // triggers beforeSave and loading triggers afterFind
+    $asetukset = Asetukset::model()->findByPk(1);
     // re-enable netvisor
     $asetukset->netvisor_kaytto = 1;
     if(!$asetukset->save()) {
-        print_r("<br>Error while saving settings<br>");
+        print_r("<br>Error while saving setting re-enables<br>");
         print_r($asetukset->getErrors());
     }
 
