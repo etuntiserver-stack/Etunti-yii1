@@ -42,7 +42,14 @@ class ReferencePeriodCommand extends BatchEmailCommand
                 // startDate, we should send emails.
                 if($startDateTwoWeeks <= new DateTime("now")) {
                     echo "Should send start emails" . PHP_EOL;
-                    $this->sendStartEmails($settings, $startDate, $domain);
+                    // check if emails are sent already
+                    $emailsSent = $settings["reference_period_emails_sent"] == 1;
+                    if($emailsSent === false) {
+                        echo "Emails not sent yet" . PHP_EOL;
+                        $this->sendStartEmails($settings, $startDate, $domain);
+                    } else {
+                        echo "Emails already sent." . PHP_EOL;
+                    }
                 } else {
                     echo "Should not send start emails" . PHP_EOL;
                 }
