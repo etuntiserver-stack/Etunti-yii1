@@ -106,6 +106,9 @@ class ReferencePeriodCommand extends BatchEmailCommand
 
     /**
      * Sends start email notifications and updates next start date.
+     * @param array $settings settings object
+     * @param DateTime $date reference period start date
+     * @param string $domain current domain name
      */
     private function sendStartEmails(Array $settings, DateTime $date, string $domain)
     {
@@ -125,9 +128,10 @@ class ReferencePeriodCommand extends BatchEmailCommand
             $body = $this->startEmailBody($preset_body, $date, $length);
 
 
+            $refPeriodEnd = (clone $date)->modify("+$length weeks");
             // query active workers, with email address defined, no end date defined in contract
             // and vkotyoaika defined in contract
-            $workers = $this->getActiveEmployeeList();
+            $workers = $this->getActiveEmployeeList($refPeriodEnd);
             
             // test data
             /*
@@ -211,26 +215,27 @@ class ReferencePeriodCommand extends BatchEmailCommand
             $preset_body = $settings["reference_period_end_email_body"];
             $length = $settings["reference_period_length"];
 
-            // get the same (unless their data changed) list of employees that 
-            // we used for starting emails. in theory there can be a case
-            // where an employee might've had their active status changed or something
-            // which would result in them not being on the list, but most of those
-            // changes usually mean that the employee is quitting... so I don't think
-            // they'll mind. see getActiveEmployeeList for query params
-            $workers = $this->getActiveEmployeeList();
-
             // we can get the last reference_periods starting date by taking the
             // new start_send_date (which should already be updated at this point), 
             // and reducing $length number of weeks from it
             $format = "Y-m-d";
 
             // start of the reference_period which will be used to query for done work hours
+            // start date is updated by this time, so it's actually the end date of the last period
             $ref_period_end_date = $settings["reference_period_start_date"];
             $refEndDate = DateTime::createFromFormat($format, $ref_period_end_date);
 
             // we can't directly modify refEndDate, so we'll clone it.
             // end of the reference_period which will be used to query for done work hours.
             $refStartDate = (clone $refEndDate)->modify("-$length weeks");
+
+            // get the same (unless their data changed) list of employees that 
+            // we used for starting emails. in theory there can be a case
+            // where an employee might've had their active status changed or something
+            // which would result in them not being on the list, but most of those
+            // changes usually mean that the employee is quitting... so I don't think
+            // they'll mind. see getActiveEmployeeList for query params
+            $workers = $this->getActiveEmployeeList($refEndDate);
 
             // build a list of just the worker IDs for the query
             $workerIds = [];
@@ -567,15 +572,17 @@ class ReferencePeriodCommand extends BatchEmailCommand
 
     /**
      * Returns a list of active employees (aktiivinen = 1)
-     * who have a defined email, have ending date 
+     * who have a defined email, and don't have ending date 
      * ("loppu") defined in their contract,
      * and have weekly work hours defined ("vktyoaika") which
      * does not start with a 0.
      * 
      * @param array|null $employeeOverrideList optional array of employee IDs to select only specific employees
+     * @param DateTime $endDate reference period end date
      */
-    private function getActiveEmployeeList(Array $employeeOverrideList = null): Array
+    private function getActiveEmployeeList(DateTime $endDate, Array $employeeOverrideList = null): Array
     {
+        $endDateStr = $endDate->format("Y-m-d");
         $command = Yii::app()->db1->createCommand()
             ->select("worker.id, tekijan_nimi, tekijan_email, sukunimi, aktiivinen, 
                 contract.loppu, contract.vktyoaika")
@@ -583,6 +590,7 @@ class ReferencePeriodCommand extends BatchEmailCommand
             ->join("sivex_tyosuhdet contract", "worker.id=contract.tid")
             ->where("worker.aktiivinen = 1")
             ->andWhere("contract.loppu = ''")
+            ->andWhere("STR_TO_DATE(alku, '%d.%m.%Y') <= '$endDateStr'")
             ->andWhere("contract.vktyoaika != ''")
             // vktyoaika should not start with a 0
             ->andWhere("contract.vktyoaika NOT LIKE '0%'")
