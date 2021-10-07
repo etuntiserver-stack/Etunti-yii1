@@ -30,9 +30,9 @@
 class Hours extends DB2ActiveRecord
 {
 
-    private string $DATE_TIME_FORMAT = "Y-m-d H:i:s";
-    private string $DATE_FORMAT = "Y-m-d";
-    private string $TIME_FORMAT = "H:i:s";
+    private $DATE_TIME_FORMAT = "Y-m-d H:i:s";
+    private $DATE_FORMAT = "Y-m-d";
+    private $TIME_FORMAT = "H:i:s";
 
     public static function model($className=__CLASS__)
 	{
