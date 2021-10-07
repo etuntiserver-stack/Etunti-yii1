@@ -1627,6 +1627,42 @@ public function actionImei($dom)
 			$this->buennoInvitation($mobupdate, $domainit->domain);
 			// buenno integration -->
 
+			// new hours model
+			if($mobupdate->aloitan 
+				&& $mobupdate->loppui
+				&& $mobupdate->status
+				&& $mobupdate->tid
+				&& $mobupdate->kohdenID !== null
+				&& $mobupdate->tv_id !== null
+				&& $mobupdate->my_location) {
+
+				$format = "d.m.Y H:i:s";
+
+				$dateTimeFormat = "Y-m-d H:i:s";
+				$startDate = DateTime::createFromFormat($format, $mobupdate->aloitan);
+				$endDate = DateTime::createFromFormat($format, $mobupdate->loppui);
+				// make sure dates formatted properly
+				if($startDate !== false && $endDate !== false) {
+					$status = $mobupdate->status;
+					$location = $mobupdate->my_location;
+					$property_id = $mobupdate->kohdenID;
+					$shift_id = $mobupdate->tv_id;
+					$worker_id = $mobupdate->tid;
+		
+					// save new hours model
+					$hours = new Hours();
+					$hours->worker_id = $worker_id;
+					$hours->property_id = $property_id;
+					$hours->shift_id = $shift_id;
+					$hours->status = $status;
+					$hours->starting_time = $startDate->format($dateTimeFormat);
+					$hours->ending_time = $endDate->format($dateTimeFormat);
+					$hours->gps_location = $location;
+					$hours->calculateDurations();
+					$hours->save();
+				}
+			}
+
 			// <-- LOG
 			if( isset($mobupdate->id) )
 			{
