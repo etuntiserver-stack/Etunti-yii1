@@ -330,25 +330,25 @@ $netvisor_lahetyksen_muoto	= $asetukset->netvisor_lahetyksen_muoto;
 					exit;
 					*/
 					if (!$ilman_lounastaukot)
-						$lounaat_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(10), 2, false, 0, true, null, null, false);
+						$lounaat_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, [10], 2, false, 0, true, null, null, false);
 
 					if (!$ilman_matkat)
-						$matkatunnit_all = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2), 2, false, 0, true, null, null, false);
+						$matkatunnit_all = $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, [2], 2, false, 0, true, null, null, false);
 
 					if ($ilman_matkat)
-						$iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 1, true, null, null, false);
+						$iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, [3], 2, false, 1, true, null, null, false);
 					else
-						$iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2, 3), 2, false, 1, true, null, null, false);
+						$iltatunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, [2, 3], 2, false, 1, true, null, null, false);
 
-					$yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2, 3), 2, false, 2, true, null, null, false);
-					$sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 3, true, null, null, false);
+					$yotunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, [2, 3], 2, false, 2, true, null, null, false);
+					$sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, [2, 3], 2, false, 3, true, null, null, false);
 
 					if (!$ilman_matkat) {
-						$pyhapaivat_all		= $mobile[0]->TidfromtoMobiiliAll($from, $from, $tid, array(2, 3), 2, false, 4, true, null, null, false);
-						$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(2, 3), 2, false, 5, true, null, null, false);
+						$pyhapaivat_all		= $mobile[0]->TidfromtoMobiiliAll($from, $from, $tid, [2, 3], 2, false, 4, true, null, null, false);
+						$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, [2, 3], 2, false, 5, true, null, null, false);
 					} else {
-						$pyhapaivat_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 4, true, null, null, false);
-						$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, array(3), 2, false, 5, true, null, null, false);
+						$pyhapaivat_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, [3], 2, false, 4, true, null, null, false);
+						$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, [3], 2, false, 5, true, null, null, false);
 					}
 
 					// Pyhapaivat
