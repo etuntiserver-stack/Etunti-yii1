@@ -1621,40 +1621,6 @@ public function actionImei($dom)
 		if($mobupdate->save())
 		{
 
-			// <-- Silloin kun Aloitus oli muu päivässä kuin lopetus
-			/*
-			$datetime1 = date_create(date("Y-m-d", strtotime($mobupdate->aloitan)));
-			$datetime2 = date_create(date("Y-m-d", strtotime($mobupdate->loppui)));
-
-			$interval = date_diff($datetime1, $datetime2);
-			if($interval->format('%d') == 1)
-			{
-				$new_loppui = date("d.m.Y 24:00", strtotime($mobupdate->aloitan));
-
-				Mobile::model()->updatebypk($mobupdate->id, array( 'loppui' => $new_loppui ));
-				$new = new Mobile;
-				$new->attributes 	= $mobupdate->attributes;
-				$new->aloitan 		= date("d.m.Y 00:00", strtotime($mobupdate->loppui));
-				$new->loppui		= $mobupdate->loppui;
-				if(!$new->save())
-				{
-					$this->_sendResponse(200, CJSON::encode($new->getErrors()));
-				}
-				
-				$mobupdate->loppui = $new_loppui;
-			}
-			*/
-			//     Silloin kun Aloitus oli muu päivässä kuin lopetus -->
-
-			// <-- Auto hyvaksynta
-			$this->autoHyvaksynta($mobupdate->id);
-			//     Auto hyvaksynta -->
-
-			// <-- buenno integration
-			$domainit = Domainit::model()->find(" domain='".strtolower($dom)."' ");
-			$this->buennoInvitation($mobupdate, $domainit->domain);
-			// buenno integration -->
-
 			// new hours model
 			if($mobupdate->aloitan 
 				&& $mobupdate->loppui
@@ -1690,6 +1656,40 @@ public function actionImei($dom)
 					$hours->save();
 				}
 			}
+
+			// <-- Silloin kun Aloitus oli muu päivässä kuin lopetus
+			
+			$datetime1 = date_create(date("Y-m-d", strtotime($mobupdate->aloitan)));
+			$datetime2 = date_create(date("Y-m-d", strtotime($mobupdate->loppui)));
+
+			$interval = date_diff($datetime1, $datetime2);
+			if($interval->format('%d') == 1)
+			{
+				$new_loppui = date("d.m.Y 24:00:00", strtotime($mobupdate->aloitan));
+
+				Mobile::model()->updatebypk($mobupdate->id, array( 'loppui' => $new_loppui ));
+				$new = new Mobile;
+				$new->attributes 	= $mobupdate->attributes;
+				$new->aloitan 		= date("d.m.Y 00:00:00", strtotime($mobupdate->loppui));
+				$new->loppui		= $mobupdate->loppui;
+				if(!$new->save())
+				{
+					$this->_sendResponse(200, CJSON::encode($new->getErrors()));
+				}
+				
+				$mobupdate->loppui = $new_loppui;
+			}
+			
+			//     Silloin kun Aloitus oli muu päivässä kuin lopetus -->
+
+			// <-- Auto hyvaksynta
+			$this->autoHyvaksynta($mobupdate->id);
+			//     Auto hyvaksynta -->
+
+			// <-- buenno integration
+			$domainit = Domainit::model()->find(" domain='".strtolower($dom)."' ");
+			$this->buennoInvitation($mobupdate, $domainit->domain);
+			// buenno integration -->
 
 			// <-- LOG
 			if( isset($mobupdate->id) )
