@@ -1543,9 +1543,9 @@ public function actionImei($dom)
 	// <-- jos on avoin kohde
 	if(isset($mob->id)){
 
-                $mobupdate = Mobile::model()->findbypk($mob->id);
+		$mobupdate = Mobile::model()->findbypk($mob->id);
 		$log_old = $mobupdate->attributes;
-                $mobupdate->loppui = date("d.m.Y H:i:s");
+		$mobupdate->loppui = date("d.m.Y H:i:s");
 
 		if( isset($_POST['tyo_erittelyt']) and !is_array($_POST['tyo_erittelyt']) and !empty($_POST['tyo_erittelyt']) ){
 			$mobupdate->tyo_erittelyt = $_POST['tyo_erittelyt'];
@@ -1555,9 +1555,10 @@ public function actionImei($dom)
 
 		$vanhaViesti = '';
 		if($mobupdate->viesti != '')
-		$vanhaViesti = $mobupdate->viesti."\n";
-                $mobupdate->viesti = $vanhaViesti.$_POST['viesti'];
-                $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
+			$vanhaViesti = $mobupdate->viesti."\n";
+
+        $mobupdate->viesti = $vanhaViesti.$_POST['viesti'];
+        $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
 
 		$kesto = '';
 		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
@@ -1572,7 +1573,7 @@ public function actionImei($dom)
 
 		if($mob->status == 1 and $_POST['status'] == 3) {
 
-                	$mobupdate->status = 3;
+			$mobupdate->status = 3;
 
 			// <-- Check TAG
 			$explAsNum = explode("_",$mobupdate->asiakas_num);
@@ -1617,7 +1618,34 @@ public function actionImei($dom)
 		//     GPS checker --> 
 
 		$save = '';
-		if($mobupdate->save()){
+		if($mobupdate->save())
+		{
+
+			// <-- Silloin kun Aloitus oli muu päivässä kuin lopetus
+			/*
+			$datetime1 = date_create(date("Y-m-d", strtotime($mobupdate->aloitan)));
+			$datetime2 = date_create(date("Y-m-d", strtotime($mobupdate->loppui)));
+
+			$interval = date_diff($datetime1, $datetime2);
+			if($interval->format('%d') == 1)
+			{
+				$new_loppui = date("d.m.Y 24:00", strtotime($mobupdate->aloitan));
+
+				Mobile::model()->updatebypk($mobupdate->id, array( 'loppui' => $new_loppui ));
+				$new = new Mobile;
+				$new->attributes 	= $mobupdate->attributes;
+				$new->aloitan 		= date("d.m.Y 00:00", strtotime($mobupdate->loppui));
+				$new->loppui		= $mobupdate->loppui;
+				if(!$new->save())
+				{
+					$this->_sendResponse(200, CJSON::encode($new->getErrors()));
+				}
+				
+				$mobupdate->loppui = $new_loppui;
+			}
+			*/
+			//     Silloin kun Aloitus oli muu päivässä kuin lopetus -->
+
 			// <-- Auto hyvaksynta
 			$this->autoHyvaksynta($mobupdate->id);
 			//     Auto hyvaksynta -->
