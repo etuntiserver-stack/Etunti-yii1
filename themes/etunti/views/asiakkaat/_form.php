@@ -423,8 +423,6 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
 
-<?php if(in_array('5',$tas)) : ?>
-
 	<?php if($asetukset->netvisor_kaytto == 1) : ?>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'netvisorkey'); ?>
@@ -433,7 +431,6 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 	</div>
 	<?php endif; ?>
 
-<?php endif ; ?>
 
 <?php if(in_array('5',$tas)) : ?>
 	<?php /*
