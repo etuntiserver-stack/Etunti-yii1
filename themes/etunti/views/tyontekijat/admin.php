@@ -53,6 +53,7 @@ $('.search-form form').submit(function(){
 		'tekijan_nimi',
 		'tekijan_puh',
 		'tekijan_email',
+		'tekijan_henkilotunnus',
 		'tyoryhma',
 
 array(
