@@ -39,6 +39,7 @@
 	$asiakasTiedot = '';
 	if(isset($t->kohteet->asiakas_id)){
 		$as = Asiakkaat::model()->findbypk($t->kohteet->asiakas_id);
+		//if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi) and $asetukset->tyovuorolahetys_naytetaanko_asiakas == 1)
 		if(isset($as->id) and $asetukset->tyovuorolahetys_naytetaanko_asiakas == 1)
 			$asiakasTiedot = '<b>'.Yii::t('main', 'Asiakas').':</b> '.$as->Fullname;
 
