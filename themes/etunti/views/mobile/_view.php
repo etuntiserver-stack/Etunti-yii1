@@ -91,12 +91,12 @@ elseif(!isset($tot_id) and isset($laskutetut_ids[$data->id]))
  if(!empty($data->loppui)){ $dloppu[$data->id] = date("H:i",strtotime($data->loppui)); } else { $dloppu[$data->id] = ''; }
  $pv = explode("\n", $viesti);
 
- if(isset($pv[0]) and !isset($pv[1]) and !empty($pv[0])){ // and strpos($pv[0], 'xxx') === false
+ if(isset($pv[0]) and !isset($pv[1]) and !empty($pv[0]) and strpos($pv[0], 'xxx') === false){
 	$pikkuviesti = '<div class="row"><div class="col-sm-12 text-danger"><b>'.Yii::t('main', 'Viesti').':</b> '.$pv[0].'</div><div>';
  } elseif(isset($pv[1]) and !empty($pv[1]) and strpos($pv[1], 'xxx') === false){
 	$pikkuviesti = '<div class="row"><div class="col-sm-12 text-danger"><b>'.Yii::t('main', 'Viesti').':</b><br> <p>'.$pv[0].'<br>'.$pv[1].'</p></div><div>';
  } else {
-	$pikkuviesti = '';
+	$pikkuviesti = '<div class="row"><div class="col-sm-12 text-danger"><b>'.Yii::t('main', 'Viesti').':</b> '.$viesti.'</div><div>';
  }
 
  if(!empty($data->aloitan)){
