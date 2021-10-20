@@ -41,6 +41,7 @@ if( isset($sivu) and $sivu == 'laskutettu' )
 }
 // Jos sivu on laskutettu -->
 
+$viesti			= $data->viesti;
 $data_luetut 	= $data;
 $criteria 		= new CDbCriteria();
 $criteria->condition = " kid='".$data->id."' ";
@@ -88,7 +89,7 @@ elseif(!isset($tot_id) and isset($laskutetut_ids[$data->id]))
  }
 
  if(!empty($data->loppui)){ $dloppu[$data->id] = date("H:i",strtotime($data->loppui)); } else { $dloppu[$data->id] = ''; }
- $pv = explode("\n", $data->viesti);
+ $pv = explode("\n", $viesti);
 
  if(isset($pv[0]) and !isset($pv[1]) and !empty($pv[0]) and strpos($pv[0], 'xxx') === false){
 	$pikkuviesti = '<div class="row"><div class="col-sm-12 text-danger"><b>'.Yii::t('main', 'Viesti').':</b> '.$pv[0].'</div><div>';
