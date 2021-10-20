@@ -300,7 +300,7 @@ elseif(!isset($tot_id) and isset($laskutetut_ids[$data->id]))
 	  else
 		echo '<span class="text-danger">'.$data->kohde_kannasta.'</span>';
 
-	  echo $viesti;
+	  echo $pikkuviesti;
 	  ?>
 	  </span>
 
