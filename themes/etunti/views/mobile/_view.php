@@ -96,7 +96,7 @@ elseif(!isset($tot_id) and isset($laskutetut_ids[$data->id]))
  } elseif(isset($pv[1]) and !empty($pv[1]) and strpos($pv[1], 'xxx') === false){
 	$pikkuviesti = '<div class="row"><div class="col-sm-12 text-danger"><b>'.Yii::t('main', 'Viesti').':</b><br> <p>'.$pv[0].'<br>'.$pv[1].'</p></div><div>';
  } else {
-	$pikkuviesti = '<div class="row"><div class="col-sm-12 text-danger"><b>'.Yii::t('main', 'Viesti').':</b> '.$viesti.'</div><div>';
+	$pikkuviesti = '';
  }
 
  if(!empty($data->aloitan)){
