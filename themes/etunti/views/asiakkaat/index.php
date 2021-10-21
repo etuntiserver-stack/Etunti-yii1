@@ -207,7 +207,10 @@ $(document).ready(function() {
                           <label class="field select">
 						  <?php
 								$list = array();
-							  		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
+								$criteria 				= new CDbCriteria;
+								$criteria->order 		= 'select_type ASC';
+								$criteria->condition 	= "select_type='tyoryhma'";
+							  	$l = Valikkoot::model()->findAll($criteria);
 								foreach($l as $v)
 								$list[$v->id] = $v->value;
 						
@@ -247,18 +250,23 @@ $(document).ready(function() {
 		        <?php if(isset($_GET['ryhma'])) echo '<input type="hidden" id="ryhma" value="'.$_GET['ryhma'].'">'; ?>
                         <div class="section">
                           <label class="field select">
-			  <?php
-					$list = array();
-			      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma_real' ",array('order' => "select_type"));
-					foreach($l as $v)
-					$list[$v->id] = $v->value;
-			
-					if(count($list) > 0)
-					{
-			        	echo CHtml::dropDownList('ryhma', 'ryhma', $list,
-					array('empty'=>'Valitse ryhmä','class'=>'form-control form-group', 'id'=>'ryhmaSelect'));
-					}
-			  ?>
+							<?php
+							$list = array();
+
+							$criteria 				= new CDbCriteria;
+							$criteria->order 		= 'select_type ASC';
+							$criteria->condition 	= "select_type='asiakas_ryhma_real'";
+							$l = Valikkoot::model()->findAll($criteria);
+
+							foreach($l as $v)
+							$list[$v->id] = $v->value;
+
+							if(count($list) > 0)
+							{
+								echo CHtml::dropDownList('ryhma', 'ryhma', $list,
+								array('empty'=>'Valitse ryhmä','class'=>'form-control form-group', 'id'=>'ryhmaSelect'));
+							}
+							?>
                             <i class="arrow double"></i>
                             </label>
                           </label>
