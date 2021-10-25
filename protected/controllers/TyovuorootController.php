@@ -1474,7 +1474,7 @@ class TyovuorootController extends Controller
 
 		$tuote 				= 0;
 		$tuotteen_yksikko 	= '';
-		if(isset($m->tuote_h) and $m->tuote_h != 0)
+		if(isset($m->laskurivi_tyyppi) and $m->laskurivi_tyyppi == 'tunti' and $m->tuote_h != 0)
 			$tuote = $m->tuote_h;
 			
 		echo json_encode(array($ohje,$tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt,$m->puh_nro,$m->email,$m->arvioitu_kello_alku,$m->arvioitu_kello_loppu, $tiedostot, $url_linkit, $tuote));
