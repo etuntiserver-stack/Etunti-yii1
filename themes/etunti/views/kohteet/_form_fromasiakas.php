@@ -100,8 +100,12 @@ if(!isset($model->id)){ $model->alv = 24; }
 	</div>
 	
 	<div class="section fill mb5">
+		<?php
+	    $criteria = new CDbCriteria();
+		$criteria->order = "hinnaston_otsikko";
+		?>
 		<?php echo $form->labelEx($model,'hinnasto_id'); ?> <b class="fa fa-info-circle text-danger" data-toggle="tooltip" title="Huomio! Jos valitset hinnaston, silloin hinnasto ajaa yli tuotteet ja palvelut."></b>
-		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
+		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll($criteria), 'id', 'hinnaston_otsikko'), 
 		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'hinnasto_id'); ?>
 	</div>

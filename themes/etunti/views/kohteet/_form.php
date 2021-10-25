@@ -130,8 +130,12 @@ if(empty($model->tietoja))
 	</div>
 	
 	<div class="section fill mb5">
+		<?php
+	    $criteria = new CDbCriteria();
+		$criteria->order = "hinnaston_otsikko";
+		?>
 		<?php echo $form->labelEx($model,'hinnasto_id'); ?> <b class="fa fa-info-circle text-danger" data-toggle="tooltip" title="Huomio! Jos valitset hinnaston, silloin hinnasto ajaa yli tuotteet ja palvelut."></b>
-		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll(), 'id', 'hinnaston_otsikko'), 
+		<?php echo $form->dropDownList($model, 'hinnasto_id', CHtml::listData(Hinnastot::model()->findAll($criteria), 'id', 'hinnaston_otsikko'), 
 		array('empty'=>'Valitse hinnasto', 'class'=>'form-control')); ?> 
 		<?php echo $form->error($model,'hinnasto_id'); ?>
 	</div>
@@ -297,7 +301,7 @@ if(empty($model->tietoja))
 		<?php echo $form->labelEx($model,'tyoryhma'); ?>
 		<?php
 		$checkOikeus = "tyoryhmat_4_".Yii::app()->user->adminStatus;
-	       	$criteria = new CDbCriteria();
+	    $criteria = new CDbCriteria();
 		$criteria->order = " value ";
 		$criteria->condition = "select_type='tyoryhma'";
 		if( $site[0]->checkOikeusFields($checkOikeus) == 0 ){
