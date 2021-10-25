@@ -141,9 +141,20 @@ if(empty($model->tietoja))
 	</div>
 
 	<?php
-		$h_all 		= TuotteetPalvelut::model()->findAll("aktiivinen=1 AND yksikko='h'");
-		$kk_all 	= TuotteetPalvelut::model()->findAll("aktiivinen=1 AND yksikko='kk'");
-		$kpl_all 	= TuotteetPalvelut::model()->findAll("aktiivinen=1 AND yksikko='kpl'");
+	    $criteria = new CDbCriteria();
+		$criteria->order 		= "nimike";
+		$criteria->condition 	= "aktiivinen=1 AND yksikko='h'";
+		$h_all 					= TuotteetPalvelut::model()->findAll($criteria);
+
+	    $criteria = new CDbCriteria();
+		$criteria->order 		= "nimike";
+		$criteria->condition 	= "aktiivinen=1 AND yksikko='kk'";
+		$kk_all 				= TuotteetPalvelut::model()->findAll($criteria);
+
+	    $criteria = new CDbCriteria();
+		$criteria->order 		= "nimike";
+		$criteria->condition 	= "aktiivinen=1 AND yksikko='kpl'";
+		$kpl_all 				= TuotteetPalvelut::model()->findAll($criteria);
 
  		if(count($h_all) == 0)
  		{
