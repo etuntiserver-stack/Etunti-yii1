@@ -90,11 +90,11 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 
     </div><div class="col-sm-3">
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 select2-slim">
 		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
 		<?php echo $form->dropDownList($model,'kohde_kannasta', 
 			CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite ASC')), 'id', 'osoite'), 
-			array('empty'=>Yii::t('main','Valitse kohde'),'class'=>'form-control input-sm')); ?>
+			array('empty'=>Yii::t('main','Valitse kohde'),'class'=>'form-control input-sm select2-bootstrap')); ?>
 		<?php echo $form->error($model,'kohde_kannasta'); ?>
 	</div>
 
@@ -183,6 +183,9 @@ $('.al').blur(function(){
 $('.lp').blur(function(){
 	checkMaxValues($(this).val());
 });
+
+// init select2
+$("#Mobile_kohde_kannasta").select2();
 
 function checkMaxValues(val){
 	var check = val.split(" ");
