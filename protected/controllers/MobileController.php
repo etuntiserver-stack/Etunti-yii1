@@ -1549,8 +1549,7 @@ class MobileController extends Controller
 			time DESC ";
 
 			    $criteria->condition = " 
-				admin!=1
-				AND deleted=0
+				deleted=0
 		";
 
 		// <-- Tyoryhmat
