@@ -1654,6 +1654,11 @@ public function actionImei($dom)
 					$hours->gps_location = $location;
 					$hours->calculateDurations();
 					$hours->save();
+
+					$asetukset = Asetukset::model()->findByPk(1);
+					$accept_crit = $asetukset->app_hyvaksynnan_peruste;
+					$workMinutesDelta = intval($asetukset->app_auto_hyvaksyminen_aikavali);
+					$hours->handleAutoAccept($accept_crit, $workMinutesDelta);
 				}
 			}
 
