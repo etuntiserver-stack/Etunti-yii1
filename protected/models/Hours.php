@@ -146,7 +146,7 @@ class Hours extends DB2ActiveRecord
             $salary->attributes = $this->attributes;
             unset($salary->id);
             $salary->hours_id = $this->id;
-            $salary->approved = true;
+            $salary->approved = 1;
             // approver should be user id, but since this is
             // auto-accepted there's no real user id. set it to 0
             $salary->approver = 0;
@@ -192,7 +192,7 @@ class Hours extends DB2ActiveRecord
             $salary->attributes = $this->attributes;
             unset($salary->id);
             $salary->hours_id = $this->id;
-            $salary->approved = true;
+            $salary->approved = 1;
             // approver should be user id, but since this is
             // auto-accepted there's no real user id. set it to 0
             $salary->approver = 0;
