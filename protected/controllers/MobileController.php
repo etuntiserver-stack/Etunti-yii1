@@ -1542,6 +1542,11 @@ class MobileController extends Controller
 		if(Yii::app()->request->getPost('tunni_status') and Yii::app()->request->getPost('tunni_status') != 'kaikki')
 		Yii::app()->session['tunni_status'] = Yii::app()->request->getPost('tunni_status');
 
+		// set approved search param into session
+		if(Yii::app()->request->getPost("approved")) {
+			Yii::app()->session["approved"] = Yii::app()->request->getPost("approved");
+		}
+
    		$criteria = new CDbCriteria();
     	$criteria->order = " 
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') < DATE_ADD(NOW(), interval 4 hour) AND status IN (1,2,10) AND loppui='' DESC, 
@@ -1597,6 +1602,17 @@ class MobileController extends Controller
 
 		if(isset(Yii::app()->session['osoite']))
 	        $criteria->addCondition (" kohde_kannasta LIKE '%".Yii::app()->session['osoite']."%' ");
+		
+		if(isset(Yii::app()->session["approved"])) {
+			$approved = Yii::app()->session["approved"];
+			// 1 = approved
+			// 2 = not approved
+			if($approved == 1) {
+				$criteria->addCondition(" hyvaksytty != '' ");
+			} else if($approved == 2) {
+				$criteria->addCondition(" hyvaksytty = '' ");
+			}
+		} 
 
 
 		$dataProvider=new CActiveDataProvider('Mobile', array(
