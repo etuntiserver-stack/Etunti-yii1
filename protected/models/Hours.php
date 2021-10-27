@@ -34,17 +34,19 @@ class Hours extends DB2ActiveRecord
     private $DATE_FORMAT = "Y-m-d";
     private $TIME_FORMAT = "H:i:s";
 
-    public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
+    public static function model($className = __CLASS__)
+    {
+        return parent::model($className);
+    }
 
-    public function tableName() {
+    public function tableName()
+    {
         return "hours";
     }
 
 
-    public function rules() {
+    public function rules()
+    {
         return [
             ["id, worker_id, shift_id, property_id, client_id, status, approver", "numerical", "integerOnly" => true],
             ["starting_time, ending_time, gps_location, google_distance", "safe"],
@@ -53,10 +55,176 @@ class Hours extends DB2ActiveRecord
     }
 
     /**
+     * Handles auto-accepting this hour-entry if possible.
+     * @param int $workAcceptDeltaMinutes maximum time difference allowed between 
+     * planned and done work duration
+     * @param int $travelAcceptDeltaMinutes maximum time difference allowed between... probably
+     * estimated travel time (by google) vs actual travel time (this isn't done/enabled yet)
+     * Returns an array when auto-accepting is completed: ["salary" => editedHourModel, "invoice" => editedHourModel],
+     * returns null when no auto-accepting happened.
+     */
+    public function handleAutoAccept(
+        $acceptCriteria,
+        int $workAcceptDeltaMinutes,
+        int $travelAcceptDeltaMinutes = 0
+    ) {
+        // check if status is a work type
+        if (in_array($this->status, [
+            3, // normal work stop
+            5, // trainee work stop
+            7 // help work stop
+        ])) {
+            // TODO: app_auto_hyvaksyminen_tvmukaan
+            if ($this->shift_id) {
+                $shift = Tyovuoroot::model()->findByPk($this->shift_id);
+                if ($shift) {
+                    $shiftStart = DateTimeImmutable::createFromFormat("d.m.Y H:i", $shift->pvm . " " . $shift->alku);
+                    $shiftEnd = DateTimeImmutable::createFromFormat("d.m.Y H:i", $shift->pvm . " " . $shift->loppu);
+                    // return early if start or end are invalid dates
+                    if (!$shiftStart || !$shiftEnd) {
+
+                        return null;
+                    }
+                    // calculate shift duration
+                    $plannedDuration = $this->calculateSecondsBetween($shiftStart, $shiftEnd);
+
+                    $startDate = DateTimeImmutable::createFromFormat($this->DATE_TIME_FORMAT, $this->starting_time);
+                    $endDate = DateTimeImmutable::createFromFormat($this->DATE_TIME_FORMAT, $this->ending_time);
+                    if (!$startDate || !$endDate) {
+
+                        return null;
+                    }
+                    $doneDuration = $this->calculateSecondsBetween($startDate, $endDate);
+
+                    // convert cutoff minutes to seconds
+                    $autoAcceptDelta = $workAcceptDeltaMinutes * 60;
+                    // depending on the criteria, we need to handle auto-accepting differently
+                    // accept by duration
+                    if ($acceptCriteria == 0) {
+
+                        return $this->handleDurationAutoAccept($autoAcceptDelta, $doneDuration, $plannedDuration);
+                    } // accept by timeframe 
+                    else if ($acceptCriteria == 1) {
+
+                        return $this->handleTimeframeAutoAccept(
+                            $startDate,
+                            $endDate,
+                            $shiftStart,
+                            $shiftEnd,
+                            $autoAcceptDelta
+                        );
+                    }
+                }
+
+                // shift not found, return null
+                return null;
+            }
+
+            // shift ID not set (or 0), return null
+            return null;
+        }
+
+        // not work or travel type, return null
+        return null;
+    }
+
+    /**
+     * Handles auto-accepting by comparing the actual duration
+     * of planned and done workshift.
+     */
+    private function handleDurationAutoAccept(
+        int $autoAcceptDelta,
+        int $doneDuration,
+        int $plannedDuration
+    ) {
+        // get the difference of done and done seconds (absolute value, always positive)
+        $diffSeconds = abs($doneDuration - $plannedDuration);
+
+        // check if difference is smaller than the allowed delta
+        if ($diffSeconds <= $autoAcceptDelta) {
+            $salary = new EditedHours();
+            $salary->attributes = $this->attributes;
+            unset($salary->id);
+            $salary->hours_id = $this->id;
+            $salary->approved = 1;
+            // approver should be user id, but since this is
+            // auto-accepted there's no real user id. set it to 0
+            $salary->approver = 0;
+            $salary->version = 1;
+            // editor should be user id, but since this is
+            // auto-accepted there's no real user id. set it to 0
+            $salary->editor_id = 0;
+            // salary hours type, yii2 constant
+            $salary->type = 1;
+
+            $invoice = new EditedHours();
+            $invoice->attributes = $salary->attributes;
+            // invoice hours type, yii2 constant
+            $invoice->type = 2;
+
+            $salarySaved = $salary->save();
+            $invoiceSaved = $invoice->save();
+
+            if ($salarySaved && $invoiceSaved) {
+                // return new models on auto-accept
+                return ["salary" => $salary, "invoice" => $invoice];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Handles auto-accepting by comparing start and end
+     * timestamps of planned and done workshift.
+     */
+    private function handleTimeframeAutoAccept(
+        DateTimeInterface $doneStart,
+        DateTimeInterface $doneEnd,
+        DateTimeInterface $plannedStart,
+        DateTimeInterface $plannedEnd,
+        $autoAcceptDelta
+    ) {
+        $doneDiff = abs($doneStart->getTimestamp() - $plannedStart->getTimestamp());
+        $endDiff = abs($doneEnd->getTimestamp() - $plannedEnd->getTimestamp());
+
+        if ($doneDiff <= $autoAcceptDelta && $endDiff <= $autoAcceptDelta) {
+            $salary = new EditedHours();
+            $salary->attributes = $this->attributes;
+            unset($salary->id);
+            $salary->hours_id = $this->id;
+            $salary->approved = 1;
+            // approver should be user id, but since this is
+            // auto-accepted there's no real user id. set it to 0
+            $salary->approver = 0;
+            $salary->version = 1;
+            // editor should be user id, but since this is
+            // auto-accepted there's no real user id. set it to 0
+            $salary->editor_id = 0;
+            // salary hours type, yii2 constant
+            $salary->type = 1;
+
+            $invoice = new EditedHours();
+            $invoice->attributes = $salary->attributes;
+            // invoice hours type, yii2 constant
+            $invoice->type = 2;
+
+            $salarySaved = $salary->save();
+            $invoiceSaved = $invoice->save();
+
+            if ($salarySaved && $invoiceSaved) {
+                // return new models on auto-accept
+                return ["salary" => $salary, "invoice" => $invoice];
+            }
+        }
+        return null;
+    }
+
+    /**
      * Calculates durations in hours for evening hours, night hours, ...
      * and updates those durations into the model.
      */
-    public function calculateDurations() {
+    public function calculateDurations()
+    {
         // TODO: function which calculates evening, night, ..., unpaid hours based on the time
         // convert start and end times into datetime objects for easier comparison
 
@@ -67,7 +235,7 @@ class Hours extends DB2ActiveRecord
         $evening_cutoff = "18:00:00";
         $night_cutoff = "22:00:00";
         // do calculations if startDate and endDate parsed successfully
-        if($startDate !== false && $endDate !== false) {
+        if ($startDate !== false && $endDate !== false) {
             $this->evening_hours = $this->calculateEveningHours($startDate, $endDate, $evening_cutoff, $night_cutoff);
             $this->night_hours = $this->calculateNightHours($startDate, $endDate, $night_cutoff);
             $this->sunday_hours = $this->calculateSundayHours($startDate, $endDate);
@@ -87,25 +255,33 @@ class Hours extends DB2ActiveRecord
      * @param string $cutoffEnd cutoff end time in H:i:s (HH:mm:ss) format
      * @return float number of hours after cutoff
      */
-    private function calculateEveningHours(DateTimeInterface $start,
-        DateTimeInterface $end, string $cutoffStart, string $cutoffEnd) {
+    private function calculateEveningHours(
+        DateTimeInterface $start,
+        DateTimeInterface $end,
+        string $cutoffStart,
+        string $cutoffEnd
+    ) {
 
         // create a DateTime object from the cutoffStart that has the DATE part of the starting time
-        $startCutoffDate = DateTime::createFromFormat($this->DATE_TIME_FORMAT,
-            $start->format($this->DATE_FORMAT) . " " . $cutoffStart);
+        $startCutoffDate = DateTime::createFromFormat(
+            $this->DATE_TIME_FORMAT,
+            $start->format($this->DATE_FORMAT) . " " . $cutoffStart
+        );
         // default the start time as the provided start time
         $cutoffStartDate = DateTime::createFromImmutable($start);
 
         // if the start cutoff time is larger than (lets say 18:00:00) than the provided
         // start time (let's say 17:00:00) we need to set cutoffStartDate as the created
         // startCutoffDate, to ignore the hours before the cutoffStart time.
-        if($startCutoffDate > $start) {
+        if ($startCutoffDate > $start) {
             $cutoffStartDate = $startCutoffDate;
         }
 
         // create a DateTime object that has the DATE part of the starting time
-        $endCutoffDate = DateTime::createFromFormat($this->DATE_TIME_FORMAT,
-                $start->format($this->DATE_FORMAT) . " " . $cutoffEnd);
+        $endCutoffDate = DateTime::createFromFormat(
+            $this->DATE_TIME_FORMAT,
+            $start->format($this->DATE_FORMAT) . " " . $cutoffEnd
+        );
 
         // default the end time as the provided end time
         $cutoffEndDate = DateTime::createFromImmutable($end);
@@ -113,13 +289,13 @@ class Hours extends DB2ActiveRecord
         // is larger than the calculated end cutoff time (say 22:00:00)
         // we need to set cutoffEndDate as the calculated end date, to ignore
         // the hours after the ending cutoff.
-        if($end > $endCutoffDate) {
+        if ($end > $endCutoffDate) {
             $cutoffEndDate = $endCutoffDate;
         }
         $duration = $this->calculateHoursBetween($cutoffStartDate, $cutoffEndDate);
         // minus values can happen when end is before the cutoff date.
         // we can just return 0 in a case where the value is negative.
-        if($duration < 0) {
+        if ($duration < 0) {
             $duration = 0;
         }
         return $duration;
@@ -133,25 +309,30 @@ class Hours extends DB2ActiveRecord
      * @param DateTimeInterface $end Ending DateTime
      * @param string $cutoffStart cutoff start time in H:i:s (HH:mm:ss) format
      */
-    private function calculateNightHours(DateTimeInterface $start,
-        DateTimeInterface $end, string $cutoffStart) {
+    private function calculateNightHours(
+        DateTimeInterface $start,
+        DateTimeInterface $end,
+        string $cutoffStart
+    ) {
         // create a DateTime object from the cutoffStart that has the DATE part of the starting time
-        $startCutoffDate = DateTime::createFromFormat($this->DATE_TIME_FORMAT,
-            $start->format($this->DATE_FORMAT) . " " . $cutoffStart);
-        
+        $startCutoffDate = DateTime::createFromFormat(
+            $this->DATE_TIME_FORMAT,
+            $start->format($this->DATE_FORMAT) . " " . $cutoffStart
+        );
+
         // default the start time as the provded start time...
         $cutoffStartDate = DateTime::createFromImmutable($start);
         // ...however, if the start cutoff time is larger than (lets say 23:00:00) than the
         // provided start time (let's say 22:00:00) we need to set the cutoffStartDate as the created
         // startCutoffDate, to ignore the hours before the cutoffStart time.
-        if($startCutoffDate > $start) {
+        if ($startCutoffDate > $start) {
             $cutoffStartDate = $startCutoffDate;
         }
 
         $duration = $this->calculateHoursBetween($cutoffStartDate, $end);
         // minus values can happen when end is before the cutoff date.
         // we can just return 0 in a case where the value is negative.
-        if($duration < 0) {
+        if ($duration < 0) {
             $duration = 0;
         }
         return $duration;
@@ -163,11 +344,26 @@ class Hours extends DB2ActiveRecord
      * @param DateTimeInterface $end Ending date
      * @return float number of hours
      */
-    private function calculateHoursBetween(DateTimeInterface $start, 
-        DateTimeInterface $end) {
+    private function calculateHoursBetween(
+        DateTimeInterface $start,
+        DateTimeInterface $end
+    ) {
         // calculates the seconds between the timestams, then
         // converts the seconds into hours
         return ($end->getTimestamp() - $start->getTimestamp()) / 3600;
+    }
+
+    /**
+     * Calculates the seconds between start and end DateTime objects.
+     * @param DateTimeInterface $start Starting date
+     * @param DateTimeInterface $end Ending date
+     * @return float Seconds between start and end timestamps
+     */
+    private function calculateSecondsBetween(
+        DateTimeInterface $start,
+        DateTimeInterface $end
+    ) {
+        return $end->getTimestamp() - $start->getTimestamp();
     }
 
     /**
@@ -176,7 +372,8 @@ class Hours extends DB2ActiveRecord
      * @param DateTimeInterface $d2 Second date to compare
      * @return bool date equality boolean
      */
-    private function isSameDate(DateTimeInterface $d1, DateTimeInterface $d2): bool {
+    private function isSameDate(DateTimeInterface $d1, DateTimeInterface $d2): bool
+    {
         return $d1->format($this->DATE_FORMAT) === $d2->format($this->DATE_FORMAT);
     }
 
@@ -187,14 +384,16 @@ class Hours extends DB2ActiveRecord
      * @param DateTimeInterface $end Ending date
      * @return float number of hours
      */
-    private function calculateSundayHours(DateTimeInterface $start, 
-        DateTimeInterface $end): float {
+    private function calculateSundayHours(
+        DateTimeInterface $start,
+        DateTimeInterface $end
+    ): float {
         // "w" = 0 (sunday) ... 6 (saturday) (not ISO-8601 standard
         // but in this case it doesn't matter)
         $weekDayFormat = "w";
         // check if start date is a sunday
         $isSunday = $start->format($weekDayFormat) === "0";
-        if($isSunday) {
+        if ($isSunday) {
             return $this->calculateHoursBetween($start, $end);
         }
         return 0;
@@ -207,12 +406,14 @@ class Hours extends DB2ActiveRecord
      * @param DateTimeInterface $end Ending date
      * @return float number of hours
      */
-    private function calculateSpecialSaturdayHours(DateTimeInterface $start, 
-        DateTimeInterface $end): float {
+    private function calculateSpecialSaturdayHours(
+        DateTimeInterface $start,
+        DateTimeInterface $end
+    ): float {
         $year = $start->format("Y");
         $specialSaturdays = $this->specialSaturdaysForYear($year);
         $startDay = $start->format($this->DATE_FORMAT);
-        if(in_array($startDay, $specialSaturdays)) {
+        if (in_array($startDay, $specialSaturdays)) {
             return $this->calculateHoursBetween($start, $end);
         }
         return 0;
@@ -225,8 +426,10 @@ class Hours extends DB2ActiveRecord
      * @param DateTimeInterface $end Ending date
      * @return float number of hours
      */
-    private function calculatePublicHoldayHours(DateTimeInterface $start, 
-        DateTimeInterface $end): float {
+    private function calculatePublicHoldayHours(
+        DateTimeInterface $start,
+        DateTimeInterface $end
+    ): float {
         // get the current year number in YYYY format
         $currentYear = $start->format("Y");
         // get public holday list for current year
@@ -234,7 +437,7 @@ class Hours extends DB2ActiveRecord
         // check if starting day is one of those holiday dates
         // if yes, calculate duration between start and end
         $startDay = $start->format($this->DATE_FORMAT);
-        if(in_array($startDay, $holidays)) {
+        if (in_array($startDay, $holidays)) {
             return $this->calculateHoursBetween($start, $end);
         }
         return 0;
@@ -245,7 +448,8 @@ class Hours extends DB2ActiveRecord
      * format for a given year.
      * @param string $year
      */
-    private function holidaysForYear(string $year): array {
+    private function holidaysForYear(string $year): array
+    {
         // Easter timestamp is in UTC time, so dates need to be adjusted +1 day.
         // (easter_date returns previous day 21:00).
         $easter_timestamp = easter_date($year);
@@ -275,7 +479,8 @@ class Hours extends DB2ActiveRecord
      * format for a given year.
      * @param string $year
      */
-    private function specialSaturdaysForYear(string $year): array {
+    private function specialSaturdaysForYear(string $year): array
+    {
         $easter_timestamp = easter_date($year);
         return [
             // new years weeks saturday
@@ -291,7 +496,5 @@ class Hours extends DB2ActiveRecord
             // itssenäisyyspäivä viikon lauantai
             date("Y-m-d", strtotime("saturday this week", strtotime("$year-12-06")))
         ];
-        
     }
-    
 }

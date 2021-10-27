@@ -193,6 +193,18 @@ td .latikkoAsetukset{
                             </label>
                           </label>
                         </div>
+                      
+                        <div class="section">
+                          <label class="field select">
+                            <select name="approved" id="approved_select" class="gui-input">
+                              <option value="both"><?= Yii::t("main", "Molemmat") ?></option>
+                              <option value="1"><?= Yii::t("main", "Hyväksytyt") ?></option>
+                              <option value="2"><?= Yii::t("main", "Hyväksymättömät") ?></option>
+                            </select>
+                            <i class="arrow double"></i>
+                          </label>
+                        </div>
+
                       </div>
 
 		<input type="hidden" id="tunni_status" value="<?php if(isset(Yii::app()->session['tunni_status'])) echo Yii::app()->session['tunni_status']; ?>">
