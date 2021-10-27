@@ -212,30 +212,25 @@ function getUrlVars() {
     //  <-- get Lasku PDF
     $(document).delegate('.getLaskuPDF', 'click', function() {
 
-	$(this).val('Odota');
-	var thisID = $(this).attr('id');
-
-
-	var sendDataPost = $(this).serializeArray();
-	$.each(loginArr, function( index, value ) {
+		$(this).val('Odota');
+		var thisID = $(this).attr('id');
+		var sendDataPost = $(this).serializeArray();
+		$.each(loginArr, function( index, value ) {
 		sendDataPost.push({name: index, value: value});
-	});
+		});
 
 		sendDataPost.push({name: tyyppi, value: tyyppi});
 		sendDataPost.push({name: "id", value: thisID});
 
-
-
-        $.ajax({
-           url: url+'/getlaskupdf?domain='+domain+'&id=' + thisID,
-	   type:'POST',
-	   data: sendDataPost,
-           success: function(data){
-		//data = JSON.parse(data);
-		//console.log(data);
-
-           }
-        });
+		$.ajax({
+			url: url+'/getlaskupdf?domain='+domain+'&id=' + thisID,
+			type:'POST',
+			data: sendDataPost,
+			success: function(data){
+				//data = JSON.parse(data);
+				console.log(data);
+			}
+		});
     });
     //     get Lasku PDF -->
 
