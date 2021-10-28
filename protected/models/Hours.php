@@ -161,6 +161,8 @@ class Hours extends DB2ActiveRecord
             $invoice->attributes = $salary->attributes;
             // invoice hours type, yii2 constant
             $invoice->type = 2;
+            // this doesn't seem to copy over for some reason
+            $invoice->approved = 1;
 
             $salarySaved = $salary->save();
             $invoiceSaved = $invoice->save();
@@ -207,6 +209,8 @@ class Hours extends DB2ActiveRecord
             $invoice->attributes = $salary->attributes;
             // invoice hours type, yii2 constant
             $invoice->type = 2;
+            // this doesn't seem to copy over for some reason
+            $invoice->approved = 1;
 
             $salarySaved = $salary->save();
             $invoiceSaved = $invoice->save();
