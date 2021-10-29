@@ -35,13 +35,13 @@ td .latikkoAsetukset{
                           <label class="field select">
 							<?php
 					   		$site = Yii::app()->createController('Site');
-					   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
-									'tekijaPaaSivulla', // name
-									'gui-input', //class
-									null, // id
-									Yii::app()->session['tekijaPaaSivulla'], //selected
-									1 // aktiivinen
-							);
+                 $tyontekiatLista = $site[0]->workerListSelect2(
+                   'tekijaPaaSivulla', // name
+                   'gui-input', // class
+                   'tekijaSelect2', //id 
+                   Yii::app()->session['tekijaPaaSivulla'], //selected
+                   1, // active or not
+                 );
 							echo $tyontekiatLista;
 							?>
                             <i class="arrow double"></i>
@@ -270,6 +270,9 @@ td .latikkoAsetukset{
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+$("#tekijaSelect2").select2();
+
 
 /* koko taulukko päivittä joka 60 sek, ja uuden rivin tarkistaminen on 10 sek kuluttua */
 
