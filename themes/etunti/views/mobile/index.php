@@ -41,6 +41,8 @@ td .latikkoAsetukset{
                    'tekijaSelect2', //id 
                    Yii::app()->session['tekijaPaaSivulla'], //selected
                    1, // active or not
+                   false, // multiple
+                   ["kaikki" => "Työntekijät"], // ph option
                  );
 							echo $tyontekiatLista;
 							?>
