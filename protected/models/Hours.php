@@ -50,7 +50,7 @@ class Hours extends DB2ActiveRecord
         return [
             ["id, worker_id, shift_id, property_id, client_id, status, approver", "numerical", "integerOnly" => true],
             ["starting_time, ending_time, gps_location, google_distance", "safe"],
-            ["evening_hours, night_hours, sunday_hours, special_saturday_hours, sick_leave_paid_hours, sick_leave_unpaid_hours, annual_leave_hours, public_holiday_hours, unpaid_hours", "numerical"],
+            ["hours, evening_hours, night_hours, sunday_hours, special_saturday_hours, sick_leave_paid_hours, sick_leave_unpaid_hours, annual_leave_hours, public_holiday_hours, unpaid_hours", "numerical"],
         ];
     }
 
@@ -240,6 +240,7 @@ class Hours extends DB2ActiveRecord
         $night_cutoff = "22:00:00";
         // do calculations if startDate and endDate parsed successfully
         if ($startDate !== false && $endDate !== false) {
+            $this->hours = $this->calculateHoursBetween($startDate, $endDate);
             $this->evening_hours = $this->calculateEveningHours($startDate, $endDate, $evening_cutoff, $night_cutoff);
             $this->night_hours = $this->calculateNightHours($startDate, $endDate, $night_cutoff);
             $this->sunday_hours = $this->calculateSundayHours($startDate, $endDate);
