@@ -37,6 +37,7 @@ if(empty($model->tietoja))
 	<label><?php echo Yii::t('main', 'Asiakas tai kohteen yhteyshenkilö'); ?></label><br>
 	<input type="text" name="oleva_asiakas" id="asiakas" class="form-control" AUTOCOMPLETE="off">
 	<div id="asiakasAutocompleteResult"></div>
+	<p>Palvelukieli: <span id="client_finnish_service_wish"></span></p>
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'kohde'); ?>
@@ -729,6 +730,11 @@ $(document).ready(function(){
 
 			if(d[13])
 				$('#Tyovuoroot_tuoteID').val(d[13]);
+
+			// set finnish service wish text
+			if(d[14]) {
+				$("#client_finnish_service_wish").html(d[14]);
+			}
 				
 	   	},
 		error:function(data){

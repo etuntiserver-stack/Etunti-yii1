@@ -143,6 +143,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 		<label><?php echo Yii::t('main', 'Asiakas tai kohteen yhteyshenkilö'); ?></label><br>
 		<input type="text" id="asiakas" class="form-control lomake_kenta" AUTOCOMPLETE="off">
 		<div id="asiakasAutocompleteResult"></div>
+		<p>Palvelukieli: <span id="client_finnish_service_wish"></span></p>
   </div>
   <div class="col-sm-3">
 		<label for="Tyovuoroot_kohde">Kohde</label>
@@ -1804,7 +1805,6 @@ $(document).ready(function(){
 		  success:function(data){
 			//console.log(data);
 			var d = JSON.parse(data);
-
 			if(d[2] !== ''){
 				$('#arvioitu_kesto').html(d[2]);
 			} else {
@@ -1841,7 +1841,6 @@ $(document).ready(function(){
 		  success:function(data){
 			//console.log(data);
 			var d = JSON.parse(data);
-
 			$('.ohje').html(d[0]);
 			$('#<?=$java_prefix?>_tietoja').val(d[1]);
 			$('#<?=$java_prefix?>_osoite').val(d[3]);
@@ -1903,7 +1902,11 @@ $(document).ready(function(){
 				$('#kohteen_tiedostot').html(d[11]);
 			if(d[13])
 				$('#<?=$java_prefix?>_tuoteID').val(d[13]);
-			
+
+			// set finnish service wish text
+			if(d[14]) {
+				$("#client_finnish_service_wish").html(d[14]);
+			}
 			return false;
 
 		}, error:function(data){

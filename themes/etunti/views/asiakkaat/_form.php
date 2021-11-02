@@ -271,7 +271,7 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 	<?php 
 	
 		echo $form->labelEx($model, 'finnish_service_wish');
-		$list = [2 => Yii::t("app", "Ei valittu"), 1 => Yii::t("app", "Haluaa"), 0 => Yii::t("app", "Ei väliä")];
+		$list = Asiakkaat::FINNISH_SERVICE_WISH;
 		echo $form->dropDownList($model, 'finnish_service_wish', $list,
 			array('class'=>'form-control'));
 	?>

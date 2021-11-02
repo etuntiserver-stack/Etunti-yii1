@@ -19,6 +19,15 @@
 class Asiakkaat extends DB2ActiveRecord
 {
 
+	const FINNISH_SERVICE_WISH = [
+		// 2 is first so it'll be the default option
+		// if you use this list as is in a form dropdown
+		2 => "Ei valittu", 
+		0 => "Ei väliä", 
+		1 => "Vain suomi", 
+		3 => "Vain englanti"
+	];
+
 	public $count, $filter_postitoimipaikka, $filter_tyoryhma, $filter_asiakasryhma, $filter_tyyppi;
 
 	/**
