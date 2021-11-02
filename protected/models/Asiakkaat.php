@@ -229,7 +229,7 @@ class Asiakkaat extends DB2ActiveRecord
 			'netvisor_dimension_name' => Yii::t('main', 'Kustannuspaikka'),
 			'lisatietoja_laskutuksesta' => Yii::t('main', 'Lisätietoja laskutuksesta'),
 			'extra_contacts' => Yii::t('main', 'Lisä yhteystiedot'),
-			'finnish_service_wish' => Yii::t('app', 'Palvelu suomeksi'),
+			'finnish_service_wish' => Yii::t('app', 'Palvelukieli'),
 		);
 	}
 
