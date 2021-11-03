@@ -1815,6 +1815,9 @@ $(document).ready(function(){
 
 			if(d[11])
 				$('#kohteen_tiedostot').html(d[11]);
+			if(d[14]) {
+				$("#client_finnish_service_wish").html(d[14]);
+			}
 	   	},
 		error:function(data){
 			console.log(data);
