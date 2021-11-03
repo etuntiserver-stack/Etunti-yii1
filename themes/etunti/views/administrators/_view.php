@@ -1,6 +1,7 @@
 <?php
 /* @var $this AdministratorsController */
 /* @var $data Administrators */
+/* @var $roleTitles array of role titles, [someRoleId => someRoleTitle, ...] */
 
 $cl = '';
 $tt = '';
@@ -35,6 +36,9 @@ if(!empty($data->token))
 	</td>
 	<td>
 		<?php echo $data->adm_nimi; ?>
+	</td>
+	<td>
+		<?= $roleTitles[$data->status] ?>
 	</td>
 </tr>
 
