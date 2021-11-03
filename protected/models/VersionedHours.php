@@ -13,7 +13,7 @@
  * @property bool $approved 
  * @property int $approver user ID of the approver
  */
-abstract class VersionedHours extends Hours
+class VersionedHours extends Hours
 {
     public function rules()
     {
