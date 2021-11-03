@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * @deprecated use SalaryHours or InvoiceHours instead.
  * This is the model class for table "edited_hours".
  * It's almost the same as the hours model, with some extra fields.
  * {@inheritdoc}

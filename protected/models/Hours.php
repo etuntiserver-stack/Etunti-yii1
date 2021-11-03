@@ -15,8 +15,6 @@
  * @property int $status
  * @property string $gps_location
  * @property string $google_distance
- * @property bool $approved User ID of the approver
- * @property int $approver
  * @property float $evening_hours
  * @property float $night_hours
  * @property float $sunday_hours
@@ -26,6 +24,7 @@
  * @property float $annual_leave_hours
  * @property float $public_holiday_hours
  * @property float $unpaid_hours
+ * @property string $message
  */
 class Hours extends DB2ActiveRecord
 {
@@ -47,9 +46,23 @@ class Hours extends DB2ActiveRecord
 
     public function rules()
     {
+        $baseRules = $this->baseRules();
+        return array_merge($baseRules, [
+            ["gps_location", "safe"]
+        ]);
+    }
+
+    /**
+     * Base rules that are the same for Hours model
+     * and VersionedHours model.
+     * public function rules() should merge this into
+     * the rules array.
+     */
+    protected function baseRules()
+    {
         return [
-            ["id, worker_id, shift_id, property_id, client_id, status, approver", "numerical", "integerOnly" => true],
-            ["starting_time, ending_time, gps_location, google_distance", "safe"],
+            ["id, worker_id, shift_id, property_id, client_id, status", "numerical", "integerOnly" => true],
+            ["starting_time, ending_time, google_distance, message", "safe"],
             ["hours, evening_hours, night_hours, sunday_hours, special_saturday_hours, sick_leave_paid_hours, sick_leave_unpaid_hours, annual_leave_hours, public_holiday_hours, unpaid_hours", "numerical"],
         ];
     }
@@ -142,27 +155,9 @@ class Hours extends DB2ActiveRecord
 
         // check if difference is smaller than the allowed delta
         if ($diffSeconds <= $autoAcceptDelta) {
-            $salary = new EditedHours();
-            $salary->attributes = $this->attributes;
-            unset($salary->id);
-            $salary->hours_id = $this->id;
-            $salary->approved = 1;
-            // approver should be user id, but since this is
-            // auto-accepted there's no real user id. set it to 0
-            $salary->approver = 0;
-            $salary->version = 1;
-            // editor should be user id, but since this is
-            // auto-accepted there's no real user id. set it to 0
-            $salary->editor_id = 0;
-            // salary hours type, yii2 constant
-            $salary->type = 1;
-
-            $invoice = new EditedHours();
-            $invoice->attributes = $salary->attributes;
-            // invoice hours type, yii2 constant
-            $invoice->type = 2;
-            // this doesn't seem to copy over for some reason
-            $invoice->approved = 1;
+            
+            $salary = $this->autoAcceptCopyToSalaryOrInvoice(SalaryHours::class);
+            $invoice = $this->autoAcceptCopyToSalaryOrInvoice(InvoiceHours::class);
 
             $salarySaved = $salary->save();
             $invoiceSaved = $invoice->save();
@@ -190,27 +185,9 @@ class Hours extends DB2ActiveRecord
         $endDiff = abs($doneEnd->getTimestamp() - $plannedEnd->getTimestamp());
 
         if ($doneDiff <= $autoAcceptDelta && $endDiff <= $autoAcceptDelta) {
-            $salary = new EditedHours();
-            $salary->attributes = $this->attributes;
-            unset($salary->id);
-            $salary->hours_id = $this->id;
-            $salary->approved = 1;
-            // approver should be user id, but since this is
-            // auto-accepted there's no real user id. set it to 0
-            $salary->approver = 0;
-            $salary->version = 1;
-            // editor should be user id, but since this is
-            // auto-accepted there's no real user id. set it to 0
-            $salary->editor_id = 0;
-            // salary hours type, yii2 constant
-            $salary->type = 1;
-
-            $invoice = new EditedHours();
-            $invoice->attributes = $salary->attributes;
-            // invoice hours type, yii2 constant
-            $invoice->type = 2;
-            // this doesn't seem to copy over for some reason
-            $invoice->approved = 1;
+            
+            $salary = $this->autoAcceptCopyToSalaryOrInvoice(SalaryHours::class);
+            $invoice = $this->autoAcceptCopyToSalaryOrInvoice(InvoiceHours::class);
 
             $salarySaved = $salary->save();
             $invoiceSaved = $invoice->save();
@@ -221,6 +198,19 @@ class Hours extends DB2ActiveRecord
             }
         }
         return null;
+    }
+
+    private function autoAcceptCopyToSalaryOrInvoice($modelClass) 
+    {
+        $model = new $modelClass();
+        $model->attributes = $this->attributes;
+        unset($model->id);
+        $model->hours_id = $this->id;
+        $model->approved = 1;
+        $model->approver = 0;
+        $model->version = 1;
+        $model->editor_id = 0;
+        return $model;
     }
 
     /**

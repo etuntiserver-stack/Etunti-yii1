@@ -1621,44 +1621,37 @@ public function actionImei($dom)
 		if($mobupdate->save())
 		{
 
-			// new hours model
-			if($mobupdate->aloitan 
-				&& $mobupdate->loppui
-				&& $mobupdate->status
-				&& $mobupdate->tid
-				&& $mobupdate->kohdenID !== null
-				&& $mobupdate->tv_id !== null
-				&& $mobupdate->my_location) {
+			// update v2 hours model
+			if($mobupdate->loppui
+				&& $mobupdate->status) {
 
 				$format = "d.m.Y H:i:s";
 
 				$dateTimeFormat = "Y-m-d H:i:s";
-				$startDate = DateTime::createFromFormat($format, $mobupdate->aloitan);
 				$endDate = DateTime::createFromFormat($format, $mobupdate->loppui);
-				// make sure dates formatted properly
-				if($startDate !== false && $endDate !== false) {
+				// make sure end date is formatted properly
+				if($endDate !== false) {
 					$status = $mobupdate->status;
-					$location = $mobupdate->my_location;
-					$property_id = $mobupdate->kohdenID;
-					$shift_id = $mobupdate->tv_id;
-					$worker_id = $mobupdate->tid;
 		
 					// save new hours model
-					$hours = new Hours();
-					$hours->worker_id = $worker_id;
-					$hours->property_id = $property_id;
-					$hours->shift_id = $shift_id;
-					$hours->status = $status;
-					$hours->starting_time = $startDate->format($dateTimeFormat);
-					$hours->ending_time = $endDate->format($dateTimeFormat);
-					$hours->gps_location = $location;
-					$hours->calculateDurations();
-					$hours->save();
-
-					$asetukset = Asetukset::model()->findByPk(1);
-					$accept_crit = $asetukset->app_hyvaksynnan_peruste;
-					$workMinutesDelta = intval($asetukset->app_auto_hyvaksyminen_aikavali);
-					$hours->handleAutoAccept($accept_crit, $workMinutesDelta);
+					$hours = Hours::model()->findByPk($mobupdate->hours_id);
+					if($hours) {
+						$hours->status = $status;
+						if(isset($mobupdate->my_location) && strlen($mobupdate->my_location) > 0) {
+							$hours->gps_location = $mobupdate->my_location;
+						}
+						$hours->ending_time = $endDate->format($dateTimeFormat);
+						if(isset($mobupdate->viesti) && strlen($mobupdate->viesti) > 0) {
+							$hours->message = $mobupdate->viesti;
+						}
+						$hours->calculateDurations();
+						$hours->save();
+	
+						$asetukset = Asetukset::model()->findByPk(1);
+						$accept_crit = $asetukset->app_hyvaksynnan_peruste;
+						$workMinutesDelta = intval($asetukset->app_auto_hyvaksyminen_aikavali);
+						$hours->handleAutoAccept($accept_crit, $workMinutesDelta);
+					}
 				}
 			}
 
@@ -1836,8 +1829,43 @@ public function actionImei($dom)
 				$sekForSignal = strtotime($tvuoro->pvm." ".$tvuoro->loppu)-time();
 			}
 		}
-		// Timer AND Position Checker -->
 
+		// save new hours model
+		$hours = new Hours();
+		if($mobinsert->aloitan 
+			&& $mobinsert->tid) {
+
+			$format = "d.m.Y H:i:s";
+			$dateTimeFormat = "Y-m-d H:i:s";
+			$startDate = DateTime::createFromFormat($format, $mobinsert->aloitan);
+			if($startDate !== false) {
+				// format starting_time
+				$hours->starting_time = $startDate->format($dateTimeFormat);
+				// set status
+				$hours->status = $mobinsert->status;
+				// set property id if it exists
+				if($mobinsert->kohdenID) {
+					$hours->property_id = $mobinsert->kohdenID;
+				}
+				// set worker id
+				$hours->worker_id = $mobinsert->tid;
+				// set shift id if it exists
+				if($mobinsert->tv_id) {
+					$hours->shift_id = $mobinsert->tv_id;
+				}
+				$hours->gps_location = $mobinsert->my_location;
+
+				$hours->save();
+			}
+			
+		}
+		// check that ID is set on the hours model,
+		// which means that it was saved successfully.
+		if(isset($hours->id)) {
+			$mobinsert->hours_id = $hours->id;
+		}
+
+		// Timer AND Position Checker -->
                 if($mobinsert->save()){
 			// <-- LOG
 			if( isset($mobinsert->id) ){
