@@ -62,8 +62,8 @@ class Hours extends DB2ActiveRecord
     {
         return [
             ["id, worker_id, shift_id, property_id, client_id, status", "numerical", "integerOnly" => true],
-            ["starting_time, ending_time, google_distance, message", "safe"],
-            ["hours, evening_hours, night_hours, sunday_hours, special_saturday_hours, sick_leave_paid_hours, sick_leave_unpaid_hours, annual_leave_hours, public_holiday_hours, unpaid_hours", "numerical"],
+            ["starting_time, ending_time, google_distance, message, from_address", "safe"],
+            ["hours, evening_hours, night_hours, sunday_hours, holiday_hours, special_saturday_hours, sick_leave_paid_hours, sick_leave_unpaid_hours, annual_leave_hours, public_holiday_hours, child_sick_hours, unpaid_hours", "numerical"],
         ];
     }
 
