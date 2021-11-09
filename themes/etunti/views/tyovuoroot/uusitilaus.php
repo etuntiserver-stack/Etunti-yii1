@@ -510,7 +510,7 @@ $(document).ready(function(){
 			$model->tuoteID = $oletus->id;
 		}
 		echo $form->dropDownList($model,'tuoteID', CHtml::listData($tp, 'id', 'nimike'), 
-		array('class'=>'form-control'));
+		array('empty'=>'Valitse','class'=>'form-control'));
 		?>
   </div>
 </div>
