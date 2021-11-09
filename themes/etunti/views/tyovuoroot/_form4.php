@@ -645,8 +645,12 @@ $(document).ready(function(){
 		if( !isset($model->id) and isset($oletus->id) ){
 			$model->tuoteID = $oletus->id;
 		}
-		echo $form->dropDownList($model,'tuoteID', CHtml::listData($tp, 'id', 'nimike'), 
-		array('empty'=>'Valitse','class'=>'form-control lomake_valinta'));
+		echo $form->dropDownList(
+			$model,
+			'tuoteID', 
+			CHtml::listData($tp, 'id', 'nimike'),
+			["class" => "form-control"]
+		);
 		?>
   </div>
   <div class="col-sm-3">
