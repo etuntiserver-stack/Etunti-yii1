@@ -1435,7 +1435,7 @@ class MobileController extends Controller
 			}
 		}
 		if(isset($mobile->invoice_id)) {
-			$invoice = InvoiceHours::model()->findAllByPk($mobile->invoice_id);
+			$invoice = InvoiceHours::model()->findByPk($mobile->invoice_id);
 			if($invoice) {
 				$invoice->delete();
 				$invoice->deleteOldVersions($invoice);
@@ -1456,7 +1456,7 @@ class MobileController extends Controller
 				}
 			}
 			if(isset($toteutunut->invoice_id)) {
-				$invoice = InvoiceHours::model()->findAllByPk($toteutunut->invoice_id);
+				$invoice = InvoiceHours::model()->findByPk($toteutunut->invoice_id);
 				if($invoice) {
 					$invoice->delete();
 					$invoice->deleteOldVersions($invoice);
