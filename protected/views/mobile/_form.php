@@ -146,7 +146,8 @@ if(isset($model->tietoja))
 
 
 	<div class="buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna', array('class'=>'btn btn-primary')); ?>
+        <p class="text-danger">Luettuja tunteja ei voi muokata. Tee muokkaukset tuntien hyväksyntä sivulla.</p>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna', array('class'=>'btn btn-primary disabled')); ?>
 	</div>
     </div>
   </div>
