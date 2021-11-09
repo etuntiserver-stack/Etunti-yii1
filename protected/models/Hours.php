@@ -33,6 +33,20 @@ class Hours extends DB2ActiveRecord
     private $DATE_FORMAT = "Y-m-d";
     private $TIME_FORMAT = "H:i:s";
 
+    // possible/supported values for status field
+    const TRAVEL = 2;
+    const NORMAL_WORK_START = 1;
+    const NORMAL_WORK_END = 3;
+    const TRAINEE_WORK_START = 4;
+    const TRAINEE_WORK_STOP = 5;
+    const HELP_WORK_START = 6;
+    const HELP_WORK_STOP = 7;
+    const LUNCH_BREAK = 10;
+    const COFFEE_BREAK = 20;
+    const VACATION = 11;
+    const ABSENCE = 11;
+    
+
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
@@ -200,6 +214,10 @@ class Hours extends DB2ActiveRecord
         return null;
     }
 
+    /**
+     * Copies this instances attributes into $modelClass, which is expected
+     * to be either SalaryHours::class or InvoiceHours::class
+     */
     private function autoAcceptCopyToSalaryOrInvoice($modelClass) 
     {
         $model = new $modelClass();
@@ -491,5 +509,53 @@ class Hours extends DB2ActiveRecord
             // itssenäisyyspäivä viikon lauantai
             date("Y-m-d", strtotime("saturday this week", strtotime("$year-12-06")))
         ];
+    }
+
+    /**
+     * Copies any overlapping attributes from a Toteutuneet or Mobile
+     * model into a Hours model.
+     */
+    public function copyFromToteutuneetOrMobile($model)
+    {
+        // starting and ending times can be either in H:i format or
+		// H:i:s format in $model. we'll figure out which one it is here.
+		$HIFormat = "d.m.Y H:i";
+		$HISFormat = "d.m.Y H:i:s";
+
+		$dateTimeFormat = "Y-m-d H:i:s";
+        // parse start and end dates
+        $startDate = DateTime::createFromFormat($HISFormat, $model->aloitan);
+		$endDate = DateTime::createFromFormat($HISFormat, $model->loppui);
+		if($startDate === false) {
+			$startDate = DateTime::createFromFormat($HIFormat, $model->aloitan);
+		}
+		if($endDate === false) {
+			$endDate = DateTime::createFromFormat($HIFormat, $model->loppui);
+		}
+        // if both start and end dates are ok, create the new model
+        if($startDate !== false && $endDate !== false) {
+            $hourModel = new Hours();
+            // copy over stuff from $model
+            $hourModel->starting_time = $startDate->format($dateTimeFormat);
+			$hourModel->ending_time = $endDate->format($dateTimeFormat);
+
+            $hourModel->worker_id = $model->tid;
+            $hourModel->status = $model->status;
+            $hourModel->property_id = $model->kohdenID;
+            if(isset($model->viesti) && strlen($model->viesti) > 0) {
+                $hourModel->message = $model->viesti;
+            }
+            $hourModel->shift_id = $model->tv_id;
+            if(isset($model->my_location) && strlen($model->my_location) > 0) {
+                $hourModel->gps_location = $model->my_location;
+            }
+
+            $hourModel->calculateDurations();
+
+            return $hourModel;
+        } else {
+            throw new Exception("Failed to parse start and end dates");
+        }
+        throw new Exception("Failed to copy model");
     }
 }

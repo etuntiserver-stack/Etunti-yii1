@@ -667,8 +667,22 @@ class ToteutuneetController extends Controller
 	{
 		if(isset($_POST['id']))
 		{
-
 			$m_d = Mobile::model()->findbypk($_POST['id']);
+			// delete v2 hours, if any
+			if(isset($m_d->invoice_id)) {
+				$inv = InvoiceHours::model()->findByPk($m_d->invoice_id);
+				if($inv) {
+					$inv->delete();
+					$inv->deleteOldVersions($inv);
+				}
+			}
+			if(isset($m_d->salary_id)) {
+				$salary = SalaryHours::model()->findByPk($m_d->salary_id);
+				if($salary) {
+					$salary->delete();
+					$salary->deleteOldVersions($salary);
+				}
+			}
 
 			if(isset($m_d->id))
 			{
@@ -690,6 +704,25 @@ class ToteutuneetController extends Controller
 				kid='".$_POST['id']."'
 			";
 			Toteutuneet::model()->updateAll(array('deleted' => 1,'hyvaksytty' => ''), $criteria);
+			$toteutuneetArr = Toteutuneet::model()->findAll($criteria);
+			foreach($toteutuneetArr as $toteutunut) {
+				// delete v2 hours, if any
+				if(isset($toteutunut->invoice_id)) {
+					$inv = InvoiceHours::model()->findByPk($toteutunut->invoice_id);
+					if($inv) {
+						$inv->delete();
+						$inv->deleteOldVersions($inv);
+					}
+				}
+				if(isset($toteutunut->salary_id)) {
+					$salary = SalaryHours::model()->findByPk($toteutunut->salary_id);
+					if($salary) {
+						$salary->delete();
+						$salary->deleteOldVersions($salary);
+					}
+				}
+			}
+			
 			echo json_encode('poistettu ID '.$_POST['id']);
 		}
 
@@ -698,42 +731,257 @@ class ToteutuneetController extends Controller
 
 	public function actionHyvaksy($id, $tot_lu){
 
+		$salaryHours = null;
+		$invoiceHours = null;
+		// flag indicating if the model we're accepting is a work type
+		$isWork = false;
 		if($tot_lu == 'lu'){
 			$mob=Mobile::model()->findbypk($id);
+
+			if($mob->status == Hours::NORMAL_WORK_END) {
+				$isWork = true;
+			}
+
+			if(isset($mob->salary_id)) {
+				$salaryHours = SalaryHours::model()->findByPk($mob->salary_id);
+				// the model can be null, if a user deleted the model
+				// from yii2. this is a rare edge-case
+				if($salaryHours === null) {
+					$salaryHours = new SalaryHours();
+					$salaryHours = $salaryHours->copyFromToteutuneetOrMobile($mob);
+				}
+			} else {
+				// model is not set, this can happen if no auto-accepting
+				// happened in ApiController for example.
+				$salaryHours = new SalaryHours();
+				$salaryHours = $salaryHours->copyFromToteutuneetOrMobile($mob);
+			}
+			if(isset($mob->invoice_id)) {
+				$invoiceHours = InvoiceHours::model()->findByPk($mob->invoice_id);
+				// the model can be null, if a user deleted the model
+				// from yii2. this is a rare edge-case
+				if($invoiceHours === null) {
+					$invoiceHours = new InvoiceHours();
+					$invoiceHours = $invoiceHours->copyFromToteutuneetOrMobile($mob);
+				}
+			} else {
+				// model is not set, this can happen if no auto-accepting
+				// happened in ApiController for example.
+				$invoiceHours = new InvoiceHours();
+				$invoiceHours = $invoiceHours->copyFromToteutuneetOrMobile($mob);
+			}
 		}
 		if($tot_lu == 'tot'){
 			//$mob=Mobile::model()->findbypk($id);
 			$tot=Toteutuneet::model()->findbypk($id);
+
+			if($tot->status == Hours::NORMAL_WORK_END) {
+				$isWork = true;
+			}
+
+			// these should always be set, I don't yet know a case where they
+			// wouldn't be set. actionCreate in this controller should be
+			// the reason they ARE set. maybe something went wrong there?
+			if(!isset($tot->salary_id)) {
+				throw new Exception("Expected salary_id to be set, but it was not!");
+			}
+			if(!isset($tot->invoice_id)) {
+				throw new Exception("Expected invoice_id to be set, but it was not!");
+			}
+			
+			$invoiceHours = InvoiceHours::model()->findByPk($tot->invoice_id);
+			$salaryHours = SalaryHours::model()->findByPk($tot->salary_id);
+
+			// the model can be null, if a user deleted the model
+			// from yii2. this should be a rare edge-case
+			if($invoiceHours === null) {
+				$invoiceHours = new InvoiceHours();
+				$invoiceHours = $invoiceHours->copyFromToteutuneetOrMobile($tot);
+			}
+
+			// the model can be null, if a user deleted the model
+			// from yii2. this should be a rare edge-case
+			if($salaryHours === null) {
+				$salaryHours = new SalaryHours();
+				$salaryHours = $salaryHours->copyFromToteutuneetOrMobile($tot);
+			}
+
 			if(isset($tot->kid)){
 				$mob=Mobile::model()->findbypk($tot->kid);
+				// if salary or invoice hours weren't found, a new instance will be created.
+				// those instances will not have the original hours_id set on them, so we'll attempt
+				// to restore it here. it can fail if Mobile model wasn't found, or there's no
+				// hours_id on the found Mobile model.
+				if(isset($mob->id) && isset($mob->hours_id) && !isset($salaryHours->hours_id)) {
+					$salaryHours->hours_id = $mob->hours_id;
+				}
+				if(isset($mob->id) && isset($mob->hours_id) && !isset($invoiceHours->hours_id)) {
+					$invoiceHours->hours_id = $mob->hours_id;
+				}
 			}
 		}
+
 		if($_POST['hyvaksy'] == 'kylla')
 		{
-		if(isset($mob->id)){
-		$mob->hyvaksytty=$_POST['kuka'];
-		$mob->save();
+			if(isset($mob->id)) {
+
+				$mob->hyvaksytty=$_POST['kuka'];
+				// only edit salary & invoice here if mode is "lu" (for luetut)
+				// $mob->id is most likely set as well, but we don't want to do a double
+				// edit in "tot" mode
+				if($tot_lu == "lu") {
+					
+					$newSalaryHours = new SalaryHours();
+					$newSalaryHours->attributes = $salaryHours->attributes;
+					unset($newSalaryHours->id);
+					$newSalaryHours->previous_version_id = $salaryHours->id;
+					$newSalaryHours->approved = $mob->palkanlaskentaan == 1 ? 1 : 0;
+					if($newSalaryHours->approved) {
+						$newSalaryHours->approver = Yii::app()->user->id;
+					} else {
+						$newSalaryHours->approver = null;
+					}
+					
+					$newSalaryHours->version = $newSalaryHours->version + 1;
+					$newSalaryHours->save();
+					$mob->salary_id = $newSalaryHours->id;
+					
+					
+					$newInvoiceHours = new InvoiceHours();
+					$newInvoiceHours->attributes = $invoiceHours->attributes;
+					unset($newInvoiceHours->id);
+					$newInvoiceHours->previous_version_id = $invoiceHours->id;
+					$newInvoiceHours->approved = $mob->laskutetaan == 1 ? 1 : 0;
+					if($isWork === false) {
+						$newInvoiceHours->approved = 0;
+					}
+					if($newInvoiceHours->approved) {
+						$newInvoiceHours->approver = Yii::app()->user->id;
+					} else {
+						$newInvoiceHours->approver = null;
+					}
+					
+					$newInvoiceHours->version = $newInvoiceHours->version + 1;
+					$newInvoiceHours->save();
+					$mob->invoice_id = $newInvoiceHours->id;
+					
+				}
+
+				$mob->save();
+			}
+
+			if(isset($tot->id)) {
+				Mobile::model()->updatebypk($tot->kid,array('hyvaksytty'=>$_POST['kuka']));
+				$tot->hyvaksytty=$_POST['kuka'];
+
+				$newSalaryHours = new SalaryHours();
+				$newSalaryHours->attributes = $salaryHours->attributes;
+				unset($newSalaryHours->id);
+				$newSalaryHours->previous_version_id = $salaryHours->id;
+				$newSalaryHours->approved = $mob->palkanlaskentaan == 1 ? 1 : 0;
+				if($newSalaryHours->approved) {
+					$newSalaryHours->approver = Yii::app()->user->id;
+				} else {
+					$newSalaryHours->approver = null;
+				}
+
+				$newSalaryHours->version = $newSalaryHours->version + 1;
+				$newSalaryHours->save();
+				$tot->salary_id = $newSalaryHours->id;
+
+				$newInvoiceHours = new InvoiceHours();
+				$newInvoiceHours->attributes = $invoiceHours->attributes;
+				unset($newInvoiceHours->id);
+				$newInvoiceHours->previous_version_id = $invoiceHours->id;
+				$newInvoiceHours->approved = $mob->laskutetaan == 1 ? 1 : 0;
+				if($isWork === false) {
+					$newInvoiceHours->approved = 0;
+				}
+				if($newInvoiceHours->approved) {
+					$newInvoiceHours->approver = Yii::app()->user->id;
+				} else {
+					$newInvoiceHours->approver = null;
+				}
+				
+				$newInvoiceHours->version = $newInvoiceHours->version + 1;
+				$newInvoiceHours->save();
+				$tot->invoice_id = $newInvoiceHours->id;
+
+
+				$tot->save();
+			}
 		}
 
-		if(isset($tot->id)){
-		Mobile::model()->updatebypk($tot->kid,array('hyvaksytty'=>$_POST['kuka']));
-		$tot->hyvaksytty=$_POST['kuka'];
-		$tot->save();
-		}
-		}
 
 		if($_POST['hyvaksy'] == 'ei')
 		{
-		if(isset($mob->id)){
-		$mob->hyvaksytty="";
-		$mob->save();
-		}
+			if(isset($mob->id)) {
+				$mob->hyvaksytty="";
 
-		if(isset($tot->id)){
-		Mobile::model()->updatebypk($tot->kid,array('hyvaksytty'=>''));
-		$tot->hyvaksytty="";
-		$tot->save();
-		}
+				// only edit salary & invoice here if mode is "lu" (for luetut)
+				if($tot_lu == "lu") {
+					
+					$newSalaryHours = new SalaryHours();
+					$newSalaryHours->attributes = $salaryHours->attributes;
+					unset($newSalaryHours->id);
+					$newSalaryHours->previous_version_id = $salaryHours->id;
+					$newSalaryHours->approved = 0;
+					$newSalaryHours->approver = null;
+					
+					
+					$newSalaryHours->version = $newSalaryHours->version + 1;
+					$newSalaryHours->save();
+					$mob->salary_id = $newSalaryHours->id;
+					
+					
+					$newInvoiceHours = new InvoiceHours();
+					$newInvoiceHours->attributes = $invoiceHours->attributes;
+					unset($newInvoiceHours->id);
+					$newInvoiceHours->previous_version_id = $invoiceHours->id;
+					$newInvoiceHours->approved = 0;
+					$newInvoiceHours->approver = null;
+					
+					
+					$newInvoiceHours->version = $newInvoiceHours->version + 1;
+					$newInvoiceHours->save();
+					$mob->invoice_id = $newInvoiceHours->id;
+					
+				}
+
+				$mob->save();
+			}
+
+			if(isset($tot->id)) {
+				Mobile::model()->updatebypk($tot->kid,array('hyvaksytty'=>''));
+				$tot->hyvaksytty="";
+				
+				$newSalaryHours = new SalaryHours();
+				$newSalaryHours->attributes = $salaryHours->attributes;
+				unset($newSalaryHours->id);
+				$newSalaryHours->previous_version_id = $salaryHours->id;
+				$newSalaryHours->approved = 0;
+				$newSalaryHours->approver = null;
+				
+				
+				$newSalaryHours->version = $newSalaryHours->version + 1;
+				$newSalaryHours->save();
+				$tot->salary_id = $newSalaryHours->id;
+				
+				
+				$newInvoiceHours = new InvoiceHours();
+				$newInvoiceHours->attributes = $invoiceHours->attributes;
+				unset($newInvoiceHours->id);
+				$newInvoiceHours->previous_version_id = $invoiceHours->id;
+				$newInvoiceHours->approved = 0;
+				$newInvoiceHours->approver = null;
+				
+				
+				$newInvoiceHours->version = $newInvoiceHours->version + 1;
+				$newInvoiceHours->save();
+				$tot->invoice_id = $newInvoiceHours->id;
+
+				$tot->save();
+			}
 		}
 	}
 
@@ -942,6 +1190,10 @@ class ToteutuneetController extends Controller
 
 	}
 
+	/**
+	 * Even though it says delete (and it kind of does that too),
+	 * this action is actually "restore original version".
+	 */
 	public function actionDeletebyajax()
 	{
 		$model = Toteutuneet::model()->findbypk($_POST['id']);
@@ -951,28 +1203,70 @@ class ToteutuneetController extends Controller
  		if(isset($model->id)) $loppui = $model->loppui; else $loppui = '';
  		if(isset($model->id)) $tekijan_nimi = $model->tekijan_nimi; else $tekijan_nimi = '';
 
+		 if(isset($model->invoice_id)) {
+			$inv = InvoiceHours::model()->findByPk($model->invoice_id);
+			if($inv) {
+				$inv->delete();
+				$inv->deleteOldVersions($inv);
+			}
+		}
+		if(isset($model->salary_id)) {
+			$salary = SalaryHours::model()->findByPk($model->salary_id);
+			if($salary) {
+				$salary->delete();
+				$salary->deleteOldVersions($salary);
+			}
+		}
 
-				// <-- LOG
-				if( isset($model->id))
-				{
-				$m_m = Mobile::model()->findbypk($model->kid);
-				if(isset($m_m->id))
-				{
+		// <-- LOG
+		if( isset($model->id))
+		{
+			$m_m = Mobile::model()->findbypk($model->kid);
+			// since we're infact restoring the original version,
+			// we'll re-create hours (if it doesn't exists for some reason)
+			// and InvoiceHours & SalaryHours
+			if($m_m && isset($m_m->hours_id)) {
+
+				$hour = Hours::model()->findByPk($m_m->hours_id);
+				if(!$hour) {
+					$hour = new Hours();
+					$hour = $hour->copyFromToteutuneetOrMobile($m_m);
+					$hour->save();
+				}
+				$inv = new InvoiceHours();
+				$inv = $inv->copyFromToteutuneetOrMobile($m_m);
+				$inv->hours_id = $hour->id;
+
+				$salary = new SalaryHours();
+				$salary = $salary->copyFromToteutuneetOrMobile($m_m);
+				$salary->hours_id = $hour->id;
+
+				$inv->save();
+				$salary->save();
+
+				$m_m->hours_id = $hour->id;
+				$m_m->invoice_id = $inv->id;
+				$m_m->salary_id = $salary->id;
+				$m_m->save();
+			}
+
+			if(isset($m_m->id))
+			{
 				$model_log 	= 'Toteutuneet';
 				$name_log 	= 'Tuntien hyväksyntä';
 				$status_log 	= 'Delete';
 
-					$old_values = json_encode($model->attributes);
-					$new_values = json_encode($m_m->attributes);
-					$site = Yii::app()->createController('Site');
-					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-				}
-				}
-				//     LOG -->
+				$old_values = json_encode($model->attributes);
+				$new_values = json_encode($m_m->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+		}
+		//     LOG -->
+		$model->delete();
+		//Toteutuneet::model()->deletebypk($_POST['id']);
 
-		Toteutuneet::model()->deletebypk($_POST['id']);
-
-		$mob = Mobile::model()->findbypk($model->kid);
+		//$mob = Mobile::model()->findbypk($model->kid);
 
 		// <-- Kirjoitetaan historia luettut tietokantaan
 		/*
@@ -1027,6 +1321,12 @@ class ToteutuneetController extends Controller
 
 			$k = Kohteet::model()->findbypk($_POST['Toteutuneet']['kohde_kannasta']);
 			$model->attributes=$_POST['Toteutuneet'];
+			// set original salary_id and invoice_id
+			// to the new Toteutuneet model, this will enable
+			// handleUpdateSalaryInvoice to actually find the old version
+			// which will then create an updated version of the original one
+			$model->salary_id = $mob->salary_id;
+			$model->invoice_id = $mob->invoice_id;
 			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['aloitan']));
 			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['loppui']));
 
@@ -1042,6 +1342,17 @@ class ToteutuneetController extends Controller
 				$model->kohde_kannasta=$k->osoite;
 			}
 
+			if(isset($mob->salary_id) && isset($mob->invoice_id)) {
+				// updates old salary & invoice models, this case can happen
+				// if the mobile model was created by hand.
+				// (actionUusirivi on MobileController creates salary & invoice models)
+				$this->handleUpdateSalaryInvoice($model);
+			} else {
+				// create new salary & invoice models
+				// sets their IDs to the Toteutuneet model
+				$this->handleCreateSalaryOrInvoice($model, SalaryHours::class);
+				$this->handleCreateSalaryOrInvoice($model, InvoiceHours::class);
+			}
 			if($model->save()){
 
 
@@ -1087,6 +1398,83 @@ class ToteutuneetController extends Controller
 	}
 
 	/**
+	 * Creates a new Salary/Invoice model from Mobile/Toteutuneet model.
+	 * Automatically sets salary_id or invoice_id to the models data.
+	 */
+	private function handleCreateSalaryOrInvoice($model, $modelClass)
+	{
+		$hourModel = new $modelClass();
+		$hourModel = $hourModel->copyFromToteutuneetOrMobile($model);
+		// check if we actually need to remove approved status
+		if($modelClass === InvoiceHours::class && $model->laskutetaan == 0) {
+			$hourModel->approved = 0;
+			$hourModel->approver = null;
+		}
+		if($modelClass === SalaryHours::class && $model->palkanlaskentaan == 0) {
+			$hourModel->approved = 0;
+			$hourModel->approver = null;
+		}
+
+		$hourModel->save();
+		if($modelClass === InvoiceHours::class) {
+			$model->invoice_id = $hourModel->id;
+		} else if($modelClass === SalaryHours::class) {
+			$model->salary_id = $hourModel->id;
+		}
+		return $hourModel;
+	}
+
+	/**
+	 * This function handles updating existing SalaryHours and InvoiceHours
+	 * models which are defined in Toteutuneet model.
+	 * 
+	 * We're also handling an edge case which can happen in yii1-yii2 hybrid
+	 * usage, which is that the model might not actually exists even though
+	 * it's defined in Toteutuneet. In such case we'll just create a new model.
+	 */
+	private function handleUpdateSalaryInvoice(Toteutuneet $model)
+	{
+		// check if an existing model is found, and create a copy from that
+		$salary = SalaryHours::model()->findByPk($model->salary_id);
+		if($salary) {
+			$newSalary = $salary->copyFromToteutuneetOrMobile($model);
+			if($model->palkanlaskentaan == 0) {
+				$newSalary->approved = 0;
+				$newSalary->approver = 0;
+			}
+			$newSalary->save();
+			$model->salary_id = $newSalary->id;
+		} 
+		// if no existing model is found, check if user wants to include this
+		// in the salary data. if yes, create new model
+		else if($salary === null && $model->palkanlaskentaan == 1) {
+			$newSalary = new SalaryHours();
+			$newSalary = $newSalary->copyFromToteutuneetOrMobile($model);
+			$newSalary->save();
+			$model->salary_id = $newSalary->id;
+		}
+		// check if an existing model is found, and create a copy from that
+		$invoice = InvoiceHours::model()->findByPk($model->invoice_id);
+		if($invoice) {
+			$newInvoice = $invoice->copyFromToteutuneetOrMobile($model);
+			if($model->laskutetaan == 0) {
+				$newInvoice->approved = 0;
+				$newInvoice->approver = 0;
+			}
+			$newInvoice->save();
+			$model->invoice_id = $newInvoice->id;
+		} 
+		// if no existing model is found, check if user wants to include this
+		// in the invoice data. if yes, create a new model
+		else if($invoice === null && $model->laskutetaan == 1) {
+			$newInvoice = new InvoiceHours();
+			$newInvoice = $newInvoice->copyFromToteutuneetOrMobile($model);
+			$newInvoice->save();
+			$model->invoice_id = $newInvoice->id;
+		}
+	}
+
+	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
@@ -1124,6 +1512,9 @@ class ToteutuneetController extends Controller
 				$model->kohdenID=$k->id;			
 				$model->kohde_kannasta=$k->osoite;
 			}
+			// update v2 models, automatically updates salary_id
+			// and invoice_id to $model
+			$this->handleUpdateSalaryInvoice($model);
 
 
 			if($model->save()){
@@ -1178,7 +1569,22 @@ class ToteutuneetController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		$model = $this->loadModel($id);
+		$model->delete();
+		if(isset($model->invoice_id)) {
+			$inv = InvoiceHours::model()->findByPk($model->invoice_id);
+			if($inv) {
+				$inv->delete();
+				$inv->deleteOldVersions($inv);
+			}
+		}
+		if(isset($model->salary_id)) {
+			$salary = SalaryHours::model()->findByPk($model->salary_id);
+			if($salary) {
+				$salary->delete();
+				$salary->deleteOldVersions($salary);
+			}
+		}
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))

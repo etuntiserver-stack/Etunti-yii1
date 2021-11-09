@@ -17,4 +17,18 @@ class SalaryHours extends VersionedHours
         $parentRules = parent::rules();
         return array_merge($parentRules, []);
     }
+
+    /**
+     * Recursively finds and deletes old versions of itself.
+     */
+    public function deleteOldVersions($model)
+    {
+        if(isset($model->previous_version_id)) {
+            $oldModel = self::model()->findByPk($model->previous_version_id);
+            if($oldModel) {
+                $oldModel->delete();
+                $oldModel->deleteOldVersions($oldModel);
+            }
+        }
+    }
 }

@@ -1150,6 +1150,41 @@ class MobileController extends Controller
 			$model->time = date("Y-m-d H:i:s",strtotime($_POST['Mobile']['aloitan']));
 			if( isset($k->id) ) { $model->kohde_kannasta=$k->osoite; } 
 			$model->admin=1;
+			// there's no seconds in the format when submitting through uusirivi,
+			// the UI actually disallows it.
+			$oldFormat = "d.m.Y H:i";
+			$newFormat = "Y-m-d H:i:s";
+			
+			$startDate = DateTime::createFromFormat($oldFormat, $model->aloitan);
+			$endDate = DateTime::createFromFormat($oldFormat, $model->loppui);
+			// also create v2 versions of hours entries
+			$hour = new Hours();
+			$hour->property_id = $model->kohdenID;
+			$hour->starting_time = $startDate->format($newFormat);
+			$hour->ending_time = $endDate->format($newFormat);
+			$hour->worker_id = $model->tid;
+			$hour->status = $model->status;
+			$hour->calculateDurations();
+
+			$hour->save();
+
+			$salaryHour = new SalaryHours();
+			$salaryHour->attributes = $hour->attributes;
+			unset($salaryHour->id);
+			$salaryHour->hours_id = $hour->id;
+			$salaryHour->approved = 0;
+			$salaryHour->version = 1;
+
+			$invoiceHour = new InvoiceHours();
+			$invoiceHour->attributes = $salaryHour->attributes;
+			$invoiceHour->invoiced = 0;
+			
+			$salaryHour->save();
+			$invoiceHour->save();
+
+			$model->hours_id = $hour->id;
+			$model->salary_id = $salaryHour->id;
+			$model->invoice_id = $invoiceHour->id;
 
 			if($model->save()){
 			   $did = date("Ymd",strtotime($model->aloitan));
@@ -1230,6 +1265,27 @@ class MobileController extends Controller
 
 			if($isLine == false)
 			{
+				// create v2 hours
+				$hour = new Hours();
+				$hour = $hour->copyFromToteutuneetOrMobile($model);
+				$hour->save();
+
+				$salaryHour = new SalaryHours();
+				$salaryHour = $salaryHour->copyFromToteutuneetOrMobile($model);
+				$salaryHour->hours_id = $hour->id;
+
+				$invoiceHour = new InvoiceHours();
+				$invoiceHour = $invoiceHour->copyFromToteutuneetOrMobile($model);
+				$salaryHour->hours_id = $hour->id;
+
+				
+				$salaryHour->save();
+				$invoiceHour->save();
+
+				$model->hours_id = $hour->id;
+				$model->salary_id = $salaryHour->id;
+				$model->invoice_id = $invoiceHour->id;
+
 				if($model->save())
 				{
 				// <-- LOG
@@ -1342,7 +1398,24 @@ class MobileController extends Controller
 
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		$model = $this->loadModel($id);
+		$model->delete();
+		// delete v2 hours
+		if(isset($model->salary_id)) {
+			$salary = SalaryHours::model()->findByPk($model->salary_id);
+			if($salary) {
+				$salary->delete();
+				$salary->deleteOldVersions($salary);
+			}
+		}
+		if(isset($model->invoice_id)) {
+			$invoice = InvoiceHours::model()->findAllByPk($model->invoice_id);
+			if($invoice) {
+				$invoice->delete();
+				$invoice->deleteOldVersions($invoice);
+			}
+		}
+
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
@@ -1351,8 +1424,45 @@ class MobileController extends Controller
 
 	public function actionPoistaKohde()
 	{
-		$this->loadModel($_POST['id'])->delete();
-		Toteutuneet::model()->deleteAll(" kid='".$_POST['id']."' ");
+		$mobile = $this->loadModel($_POST['id']);
+		$mobile->delete();
+		// delete v2 hours
+		if(isset($mobile->salary_id)) {
+			$salary = SalaryHours::model()->findByPk($mobile->salary_id);
+			if($salary) {
+				$salary->delete();
+				$salary->deleteOldVersions($salary);
+			}
+		}
+		if(isset($mobile->invoice_id)) {
+			$invoice = InvoiceHours::model()->findAllByPk($mobile->invoice_id);
+			if($invoice) {
+				$invoice->delete();
+				$invoice->deleteOldVersions($invoice);
+			}
+		}
+		//Toteutuneet::model()->deleteAll(" kid='".$_POST['id']."' ");
+		// delete v2 hours bound to Toteutuneet
+		$id = $_POST["id"];
+		$toteutuneetArr = Toteutuneet::model()->findAll(" kid=$id ");
+		foreach($toteutuneetArr as $toteutunut) {
+			$toteutunut->delete();
+
+			if(isset($toteutunut->salary_id)) {
+				$salary = SalaryHours::model()->findByPk($toteutunut->salary_id);
+				if($salary) {
+					$salary->delete();
+					$salary->deleteOldVersions($salary);
+				}
+			}
+			if(isset($toteutunut->invoice_id)) {
+				$invoice = InvoiceHours::model()->findAllByPk($toteutunut->invoice_id);
+				if($invoice) {
+					$invoice->delete();
+					$invoice->deleteOldVersions($invoice);
+				}
+			}
+		}
 	}
 
 

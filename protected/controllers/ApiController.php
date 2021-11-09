@@ -1650,7 +1650,12 @@ public function actionImei($dom)
 						$asetukset = Asetukset::model()->findByPk(1);
 						$accept_crit = $asetukset->app_hyvaksynnan_peruste;
 						$workMinutesDelta = intval($asetukset->app_auto_hyvaksyminen_aikavali);
-						$hours->handleAutoAccept($accept_crit, $workMinutesDelta);
+						$res = $hours->handleAutoAccept($accept_crit, $workMinutesDelta);
+						if($res !== null && isset($res["salary"]) && isset($res["invoice"])) {
+							$mobupdate->salary_id = $res["salary"]->id;
+							$mobupdate->invoice_id = $res["invoice"]->id;
+							$mobupdate->save();
+						}
 					}
 				}
 			}
