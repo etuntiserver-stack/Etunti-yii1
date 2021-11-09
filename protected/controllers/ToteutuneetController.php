@@ -782,12 +782,16 @@ class ToteutuneetController extends Controller
 			// these should always be set, I don't yet know a case where they
 			// wouldn't be set. actionCreate in this controller should be
 			// the reason they ARE set. maybe something went wrong there?
+			// a case should be this: the model was created before this yii1-yii2 hybrid model
+			// was created. commented it out so it won't cause problems.
+			/*
 			if(!isset($tot->salary_id)) {
 				throw new Exception("Expected salary_id to be set, but it was not!");
 			}
 			if(!isset($tot->invoice_id)) {
 				throw new Exception("Expected invoice_id to be set, but it was not!");
 			}
+			*/
 			
 			$invoiceHours = InvoiceHours::model()->findByPk($tot->invoice_id);
 			$salaryHours = SalaryHours::model()->findByPk($tot->salary_id);
