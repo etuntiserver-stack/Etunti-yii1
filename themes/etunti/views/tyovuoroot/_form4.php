@@ -645,10 +645,19 @@ $(document).ready(function(){
 		if( !isset($model->id) and isset($oletus->id) ){
 			$model->tuoteID = $oletus->id;
 		}
+		$list = [];
+		// if for some reason $tp is empty (the domain probably doesn't use
+		// products at all), we'll add an empty option, so they can save
+		// the shift.
+		if(empty($tp)) {
+			$list[0] = "Valitse";
+		} else {
+			$list = CHtml::listData($tp, 'id', 'nimike');
+		}
 		echo $form->dropDownList(
 			$model,
 			'tuoteID', 
-			CHtml::listData($tp, 'id', 'nimike'),
+			$list,
 			["class" => "form-control"]
 		);
 		?>
