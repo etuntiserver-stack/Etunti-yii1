@@ -1609,8 +1609,13 @@ $(document).ready(function(){
   var dids_before_arr = dids_before();
 
   function laatikonPaivays(){
+	const params = new URLSearchParams(window.location.search);
+	// get mode from search params, default to empty string
+	// this is a fix for 'tt' mode calendar. see actionDid4 for more details.
+	const mode = params.get("mode") ?? "";
+	//console.log("Mode:", mode);
 	$.ajax({
-		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did4?from=<?=$haku_from?>&to=<?=$haku_to?>',
+		url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did4?from=<?=$haku_from?>&to=<?=$haku_to?>&mode=' + mode,
 		type: 'POST',
 		data: { tids : JSON.stringify(getAllTids()) },
 		success:function(data){

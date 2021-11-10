@@ -2429,10 +2429,26 @@ class TyovuorootController extends Controller
 		return $return;
 	}
 
-	public function actionDid4($from, $to) {
+	public function actionDid4($from, $to, $mode = null) {
 		$from 		= date("Y-m-d", strtotime($from));
 		$to 		= date("Y-m-d", strtotime($to));
 		$tids 		= (isset($_POST['tids']))?json_decode($_POST['tids'], true):[];
+		// the speed improvement made for kotipuhtaaksi affects the calendar in "tt" (tyontekijat) mode.
+		// we'll take an optional argument in this action, which can be the mode of the calendar,
+		// we'll pass 'tt' mode from _form4.php and uusitilaus.php, and if the mode is infact tt here
+		// we'll just reintroduce the "bug" which caused the calendar to be super slow, which was that
+		// 'tids' was not passed in correctly. so we'll clear the tids array to simulate that behavior,
+		// which will cause 'tt' mode calendar to behave correctly. I'm calling it a "bug" in quotes because
+		// it technically did work back then too, but it slowed the calendar down SIGNIFICANTLY when a domain
+		// had a lot of employees.
+
+		// the problem was when updating anything in 'tt' mode, every other employees shifts
+		// would vanish, since this function only fetched the shifts for the one employee,
+		// and the javascript function which calls this action would just completely replace all content
+		// on the date row.
+		if($mode == "tt") {
+			$tids = [];
+		}
 		$customer_tickets = (isset($_POST['customer_tickets']) ? json_decode($_POST['customer_tickets'], true) : []);
 		$haku_criteria	= (isset($_SESSION['haku_criteria_tv']))?$_SESSION['haku_criteria_tv']:[];
 		$tv_arr = $this->tv_arr($from, $to, $tids, $haku_criteria, true, [], $customer_tickets);
