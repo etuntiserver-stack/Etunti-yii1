@@ -3973,6 +3973,9 @@ class TyovuorootController extends Controller
 		}
 
 		$model->kohde = $kohteet->id;
+		$model->osoite = $kohteet->osoite;
+		$model->postinumero = $kohteet->pnumero;
+		$model->postitoimipaikka = $kohteet->toimipaikka;
 		$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 		if($model->save())
 		{
@@ -4008,6 +4011,9 @@ class TyovuorootController extends Controller
 				$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				$m->tid=$tid;
 				$m->status=3;
+				$m->osoite = $kohteet->osoite;
+				$m->postinumero = $kohteet->pnumero;
+				$m->postitoimipaikka = $kohteet->toimipaikka;
 				if(!$m->save())
 				{
 					echo json_encode($m->getErrors());
@@ -4209,6 +4215,15 @@ class TyovuorootController extends Controller
 
 		$asiakkaat = new Asiakkaat;
 		$asiakkaat->attributes = $_POST['Asiakkaat'];
+		// split netvisor data if necessary
+		if(isset($asiakkaat->netvisor_dimension_name)) {
+			$dimensions = explode("//", $asiakkaat->netvisor_dimension_name);
+			if(isset($dimensions[0]) && isset($dimensions[1])) {
+				$asiakkaat->netvisor_dimension_name = $dimensions[0];
+				$asiakkaat->netvisor_dimension_item = $dimensions[1];
+			}
+			
+		}
 		$asiakkaat->aktiivinen = 1;
 		if(isset($_POST['Asiakkaat']['ryhma'])){
 			$asiakkaat->ryhma=json_encode($_POST['Asiakkaat']['ryhma']);
@@ -4239,10 +4254,13 @@ class TyovuorootController extends Controller
 			if( isset($anum->id) ){ $nextnum = $anum->asiakasnumero+1; } else { $nextnum = $anum->id; }		
 			Asiakkaat::model()->updateByPk($asiakkaat->id, array( 'asiakasnumero' => $nextnum ));
 
-
 			$kohteet = new Kohteet;
+			if(isset($_POST["Kohteet"])) {
+				$kohteet->attributes = $_POST["Kohteet"];
+			}
+			
+			$kohteet->tyoryhma = $asiakkaat->tyoryhma;
 			$kohteet->asiakas_id = $asiakkaat->id;
-			$kohteet->hinnasto_id = $asiakkaat->hinnasto_id;
 			$kohteet->uusi_tilaus = 1;
 			$kohteet->aktiivinen = 1;
 
@@ -4312,6 +4330,9 @@ class TyovuorootController extends Controller
 				}
 
 				$model->kohde = $kohteet->id;
+				$model->osoite = $kohteet->osoite;
+				$model->postinumero = $kohteet->pnumero;
+				$model->postitoimipaikka = $kohteet->toimipaikka;
 				$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				if($model->save())
 				{
@@ -4348,6 +4369,9 @@ class TyovuorootController extends Controller
 				$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				$m->tid=$tid;
 				$m->status=3;
+				$m->osoite = $kohteet->osoite;
+				$m->postinumero = $kohteet->pnumero;
+				$m->postitoimipaikka = $kohteet->toimipaikka;
 				if($m->save())
 				{
 					$luotu[$m->id] = $m->tid;

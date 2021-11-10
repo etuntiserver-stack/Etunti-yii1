@@ -13,6 +13,16 @@ class Domainit extends CActiveRecord
 
 public $viesti;
 
+	// defining these as a string, since LoginController writes this data as
+	// a string to the user state.
+	const LEVEL_MOBILE = "1";
+	const LEVEL_ANNUAL_LEAVES = "2";
+	const LEVEL_BILLING = "3";
+	const LEVEL_ONLINEVARAUS = "4";
+	const LEVEL_EDICO = "5";
+	const LEVEL_MANAGEMENT = "6";
+	const LEVEL_DIGISTEN = "999";
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
