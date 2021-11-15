@@ -3434,6 +3434,38 @@ class TyovuorootController extends Controller
 			$post = $_POST['ToistuvatTyovuorot'];
 		else
 			$post = $_POST['Tyovuoroot'];
+		
+		
+		if(!empty(Yii::app()->user->kp)) {
+			// add "peruutettu laskutettava" product state matches
+			if($post["peruutettu"] == 2) {
+				// KP only, hardcoded product for "peruutettu laskutettava"
+				$canceledProduct = [
+					"tuote" => ["113"],
+					"maara" => ["1"]
+				];
+				if(isset($post["lisa_tuotteet"])) {
+					$post["lisa_tuotteet"][] = $canceledProduct;
+				} else {
+					$post["lisa_tuotteet"] = $canceledProduct;
+				}
+			} 
+			// if for some reason we're removing "peruutettu laskutettava"
+			// automatically remove those products from extra products.
+			else {
+				if(isset($post["lisa_tuotteet"])) {
+					foreach($post["lisa_tuotteet"]["tuote"] as $arrKey => $productId) {
+						if($productId == 113) {
+							unset($post["lisa_tuotteet"]["tuote"][$arrKey]);
+							unset($post["lisa_tuotteet"]["maara"][$arrKey]);
+						}
+					}
+					$post["lisa_tuotteet"]["tuote"] = array_values($post["lisa_tuotteet"]["tuote"]);
+					$post["lisa_tuotteet"]["maara"] = array_values($post["lisa_tuotteet"]["maara"]);
+				}
+			}
+		}
+		
 
 		$PushNotify = (isset($post['PushNotify']) and $post['PushNotify'] == 'on')? true : false;
 

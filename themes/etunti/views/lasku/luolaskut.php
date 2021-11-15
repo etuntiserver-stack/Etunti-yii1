@@ -601,7 +601,7 @@ $iban				= $asetukset->iban;
 			$return = $this->lahetaNetvisoriin($lasku->id);
 			if( $return != false ){
 				$criteria=new CDbCriteria;
-				$criteria->condition = " lasku_id='".$lasku->id."' AND peruutettu=0 ";
+				$criteria->condition = " lasku_id='".$lasku->id."' AND peruutettu != 1 ";
 				Tyovuoroot::model()->updateAll(array('laskutettu' => '1'), $criteria);
 				if( $laheta and $ajax == true ){
 					echo '<input type="text" class="lahetetty" value="'.$asiakas['id'].'" asiakas_nimi="'.$asiakas_nimi.'">';

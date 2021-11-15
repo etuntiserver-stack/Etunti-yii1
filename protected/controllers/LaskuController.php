@@ -323,7 +323,8 @@ exit;
 	protected function hyvaksyttyListaByAsiakasTyovuoroistaAll($from, $to, $asiakas_condition, $tv_controller){
 
 		$lista = [];
-		$haku_criteria = ["(laskutettu=0 or laskutettu is NULL) AND tuoteID > 0 AND status=3 AND tid!=0 AND (peruutettu=0 or peruutettu is NULL)"];
+		// peruutettu => 2 = "peruutettu laskutettava"
+		$haku_criteria = ["(laskutettu=0 or laskutettu is NULL) AND tuoteID > 0 AND status=3 AND tid!=0 AND (peruutettu!=1 or peruutettu is NULL)"];
 		if(!empty($asiakas_condition)){
 			$haku_criteria[] = "
 			kohde IN(SELECT id FROM sivex_kohdet
