@@ -2625,6 +2625,18 @@ class TyovuorootController extends Controller
 		   }
 		$hovertietoja .= '</div>';
 		}
+
+		// include notes "muistiinpanot" in the hover data
+		$notes = json_decode($tvVal->muistiinpano, true);
+		if(is_array($notes)) {
+			$hovertietoja .= '<div class="hover_well"><h5>Muistiinpanot:</h5>';
+			foreach($notes as $k => $note) {
+				$hovertietoja .= "<p>$note</p>";
+			}
+		}
+		
+		$hovertietoja .= "</div>";
+
 		if( !empty($tvVal->tietoja) ){ $hovertietoja .= '<div class="hover_well"><h5>Tietoja mobiilisovellukseen:</h5> '.str_replace("\n", "<br>", $tvVal->tietoja).'</div>'; }
 		//    Hovertietoja generoi -->
 
@@ -3493,6 +3505,13 @@ class TyovuorootController extends Controller
 			if(!$model->save()){
 				echo json_encode($model->getErrors());
 			} else {
+
+				// insert new notes (muistiinpanot) into the original note as well.
+				// this is a special case we're supporting for kotipuhtaaksi
+				// where we want the user to write a reason why they removed
+				// a shift from the chain.
+				ToistuvatTyovuorot::model()->updateByPk($edellinen_model["id"], 
+					["muistiinpano" => $model->muistiinpano]);
 
 				// <-- PushNotify
 				$this_id = $model->id;
