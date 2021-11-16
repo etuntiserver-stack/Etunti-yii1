@@ -412,6 +412,9 @@ if (empty($model->tietoja))
 							array('empty' => 'Valitse hinnasto', 'class' => 'form-control')
 						); ?>
 					</div>
+					<div class="section fill mb5">
+						<p class="mb-0 text-danger" id="catalogue_validation_error"></p>
+					</div>
 					<?php
 					$criteria = new CDbCriteria();
 					$criteria->order 		= "nimike";
@@ -1361,6 +1364,65 @@ if (empty($model->tietoja))
 			laskePituus();
 		});
 
+		$('#Kohteet_hinnasto_id').on('change', function(){
+			if(<?= empty(Yii::app()->user->kp) ? 0 : 1 ?>) {
+				validateHinnasto();
+			}
+		});
+
+		$("#Asiakkaat_tyoryhma").on("change", () => {
+			if(<?= empty(Yii::app()->user->kp) ? 0 : 1 ?>) {
+				validateHinnasto();
+			}
+		});
+
+		/**
+		 * Validates that the selected product catalogue (hinnasto)
+		 * is suitable for the new property we're creating.
+		 */
+		const validateHinnasto = () => {
+			$("#catalogue_validation_error").html("");
+			// 6 = uusimaa, 170 = keski-uusimaa (kp values)
+			// get selected catalogue as a number, default to 0
+			const selectedCatalogue = Number($("#Kohteet_hinnasto_id").val() ?? 0);
+			// get selected work group as a number, default to 0
+			const selectedWorkGroup = Number($("#Asiakkaat_tyoryhma").val() ?? 0);
+			// months are 0-indexed, 11 = December
+			const targetDate = new Date(2021, 11, 1);
+			// muu suomi 2021 & uusimaa 2021 catalogues
+			const newCatalogues = [3, 4];
+
+			// 2019 pk seutu, uusimaa 2021
+			const uusimaaCatalogues = [3, 1];
+			// 2019 muu suomi, muu suomi 2021
+			const otherCatalogues = [2, 4];
+
+			const uusimaaWorkgroups = [6, 170];
+
+			if(selectedCatalogue === 0) {
+				return;
+			}
+
+			const beforeTargetDate = (new Date() < targetDate);
+			// validate we're not using a 2021 catalogue before 1.12.2021
+			if(beforeTargetDate && newCatalogues.includes(selectedCatalogue)) {
+				alert("2021 Hinnastoa ei pitäisi valita vielä!");
+				$("#catalogue_validation_error").html("2021 Hinnastoa ei pitäisi valita vielä!");
+				return;
+			}
+			
+			if(uusimaaWorkgroups.includes(selectedWorkGroup)) {
+				// validate we're not using a wrong catalogue for uusimaa
+				if(!uusimaaCatalogues.includes(selectedCatalogue)) {
+					$("#catalogue_validation_error").html("Työryhmän perusteella hinnaston kuuluisi olla uudellemaalle/pk-seudulle!")
+				}
+			} else {
+				// validate we're not using a wrong catalogue for any other than uusimaa
+				if(!otherCatalogues.includes(selectedCatalogue)) {
+					$("#catalogue_validation_error").html("Työryhmän perusteella hinnaston kuuluisi olla muu suomi!");
+				}
+			}
+		}
 
 		$('.mult').multiselect({
 			//inheritClass: true,
