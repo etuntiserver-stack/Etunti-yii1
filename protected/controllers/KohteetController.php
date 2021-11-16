@@ -232,6 +232,8 @@ class KohteetController extends Controller
 	{
 		$model=new Kohteet;
 		$asiakas=Asiakkaat::model()->findbypk($id);
+		// copy tyoryhma from client data
+		$model->tyoryhma = $asiakas->tyoryhma;
 		if(isset($_POST['Kohteet']))
 		{
 			$model->attributes=$_POST['Kohteet'];
