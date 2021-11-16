@@ -37,6 +37,8 @@
   switch ($data->peruutettu) {
     case 1: $peruutettu_text = 'Peruutettu'; break;
     case 2: $peruutettu_text = 'Peruutettu Laskutettava'; break;
+    case 3: $peruutettu_text = "Peruutettu, laskutetaan välineet 9,90€"; break;
+    case 4: $peruutettu_text = "Peruutettu, laskutetaan välineet 19,90€"; break;
     default: $peruutettu_text = ''; break;
   }
 

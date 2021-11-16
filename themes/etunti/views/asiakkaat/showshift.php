@@ -121,6 +121,8 @@
                     <option value="0">Ei peruutettu</option>
                     <option value="1">Peruutettu</option>
                     <option value="2">Peruutettu laskutettava</option>
+                    <option value="3">Peruutettu, laskutetaan välineet 9,90€</option>
+                    <option value="4">Peruutettu, laskutetaan välineet 19,90€</option>
                   </select>
                   <input id="massedit-cancel-btn" type="button" class="mt5 btn btn-primary btn-lg haemob btn-block myBgColors" value="Päivitä peruutettu-tila" disabled="disabled">
                 </div>
@@ -313,6 +315,8 @@ $(document).ready(function(){
           switch (type) {
             case '1': return 'Peruutettu';
             case '2': return 'Peruutettu Laskutettava';
+            case '3': return "Peruutettu, laskutetaan välineet 9,90€";
+            case '4': return "Peruutettu, laskutetaan välineet 19,90€";
             default: return '';
           }
         })($('#massedit-cancel-type').val());
