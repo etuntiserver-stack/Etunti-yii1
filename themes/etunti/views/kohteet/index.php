@@ -12,7 +12,9 @@
         <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Kohteet'); ?> 
 		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/kohteet/create',array('class'=>'btn btn-default fa fa-plus', 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title' => Yii::t('main', 'Lisää kohde') )); ?>
 		<?php echo CHtml::link('<i class="fa fa-edit"></i>',Yii::app()->request->baseUrl.'/index.php/kohteet/massamuokkaus',array('class'=>'btn btn-default', 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title' => Yii::t('main', 'Muokkaa kaikkia kerrallaan') )); ?>
-
+		<?php if(!empty(Yii::app()->user->kp)):?>
+		<?php echo CHtml::link('Tarkista tuotteet', Yii::app()->request->baseUrl.'/index.php/kohteet/checkcatalogues', ["class" => "btn btn-default", "data-toggle" => "tooltip", "data-placement" => "top", "title" => "Tarkista 2021 tuotteet"]); ?>
+		<?php endif; ?>
 	 <div class="pull-right">
 	  <form action="<?=Yii::app()->request->baseUrl?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="excel_list" value="true">

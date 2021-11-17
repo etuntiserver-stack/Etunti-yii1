@@ -32,7 +32,11 @@ class KohteetController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index', 'view','osoite', 'autotaytaminen', 'createfromasiakas', 'googlemap', 'googlemap_k', 'massamuokkaus', 'tuotteetbyhinnasto'),
+				'actions'=>array('admin','delete','create','update',
+					'index', 'view','osoite', 'autotaytaminen',
+					'createfromasiakas', 'googlemap', 'googlemap_k',
+					'massamuokkaus', 'tuotteetbyhinnasto',
+					"checkcatalogues"),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -662,7 +666,26 @@ class KohteetController extends Controller
 		$this->render('admin',array(
 			'model'=>$model,
 		));
-  }
+  	}
+
+	public function actionCheckCatalogues()
+	{
+		$criteria = new CDbCriteria();
+		$criteria->order = " id DESC ";
+		$criteria->addCondition("time <= '2021-12-01 00:00:00'");
+		$criteria->addCondition("hinnasto_id IN (3,4)");
+		$properties = Kohteet::model()->findAll($criteria);
+
+		$catalogue_names = [
+			3 => "Uusimaa 2021",
+			4 => "Muu Suomi 2021"
+		];
+
+		$this->render("check_catalogues", [
+			"properties" => $properties,
+			"catalogue_names" => $catalogue_names,
+		]);
+	}
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
