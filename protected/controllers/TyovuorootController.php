@@ -5030,7 +5030,7 @@ class TyovuorootController extends Controller
 		1 => Yii::t('main', 'Peruutettu'), 
 		2 => Yii::t('main', 'Peruutettu laskutettava')
 		);
-		if(!empty(Yii::app()->user->kp)) {
+		if(!empty(Yii::app()->user->kotipuhtaaksi)) {
 			$list[3] = Yii::t("main", "Peruutettu, laskutetaan välineet 9,90€");
 			$list[4] = Yii::t("main", "Peruutettu, laskutetaan välineet 19,90€");
 		}
