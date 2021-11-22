@@ -170,16 +170,32 @@ class Hours extends DB2ActiveRecord
         // check if difference is smaller than the allowed delta
         if ($diffSeconds <= $autoAcceptDelta) {
             
-            $salary = $this->autoAcceptCopyToSalaryOrInvoice(SalaryHours::class);
-            $invoice = $this->autoAcceptCopyToSalaryOrInvoice(InvoiceHours::class);
-
-            $salarySaved = $salary->save();
-            $invoiceSaved = $invoice->save();
-
-            if ($salarySaved && $invoiceSaved) {
-                // return new models on auto-accept
-                return ["salary" => $salary, "invoice" => $invoice];
+            $hId = $this->id;
+            $salary = SalaryHours::model()->find("hours_id = $hId");
+            if($salary) {
+                $salary->approved = 1;
+                $salary->approver = 0;
+                $salary->editor_id = 0;
+                $salarySaved = $salary->save();
             }
+            
+            $invoice = InvoiceHours::model()->find("hours_id = $hId");
+            // only approve invoice hours if work is a normal work
+            if($invoice && $this->status == self::NORMAL_WORK_END) {
+                $invoice->approved = 1;
+                $invoice->approver = 0;
+                $invoice->editor_id = 0;
+                $invoiceSaved = $invoice->save();
+            }
+
+            $savedModels = [];
+            if($salarySaved) {
+                $savedModels["salary"] = $salary;
+            }
+            if($invoiceSaved) {
+                $savedModels["invoice"] = $invoice;
+            }
+            return $savedModels;
         }
         return null;
     }
@@ -200,35 +216,33 @@ class Hours extends DB2ActiveRecord
 
         if ($doneDiff <= $autoAcceptDelta && $endDiff <= $autoAcceptDelta) {
             
-            $salary = $this->autoAcceptCopyToSalaryOrInvoice(SalaryHours::class);
-            $invoice = $this->autoAcceptCopyToSalaryOrInvoice(InvoiceHours::class);
-
-            $salarySaved = $salary->save();
-            $invoiceSaved = $invoice->save();
-
-            if ($salarySaved && $invoiceSaved) {
-                // return new models on auto-accept
-                return ["salary" => $salary, "invoice" => $invoice];
+            $hId = $this->id;
+            $salary = SalaryHours::model()->find("hours_id = $hId");
+            if($salary) {
+                $salary->approved = 1;
+                $salary->approver = 0;
+                $salary->editor_id = 0;
+                $salarySaved = $salary->save();
             }
+            $invoice = InvoiceHours::model()->find("hours_id = $hId");
+            // only approve invoice hours if work is a normal work
+            if($invoice && $this->status == self::NORMAL_WORK_END) {
+                $invoice->approved = 1;
+                $invoice->approver = 0;
+                $invoice->editor_id = 0;
+                $invoiceSaved = $invoice->save();
+            }
+
+            $savedModels = [];
+            if($salarySaved) {
+                $savedModels["salary"] = $salary;
+            }
+            if($invoiceSaved) {
+                $savedModels["invoice"] = $invoice;
+            }
+            return $savedModels;
         }
         return null;
-    }
-
-    /**
-     * Copies this instances attributes into $modelClass, which is expected
-     * to be either SalaryHours::class or InvoiceHours::class
-     */
-    private function autoAcceptCopyToSalaryOrInvoice($modelClass) 
-    {
-        $model = new $modelClass();
-        $model->attributes = $this->attributes;
-        unset($model->id);
-        $model->hours_id = $this->id;
-        $model->approved = 1;
-        $model->approver = 0;
-        $model->version = 1;
-        $model->editor_id = 0;
-        return $model;
     }
 
     /**
