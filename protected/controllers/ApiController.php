@@ -2101,6 +2101,10 @@ public function actionImei($dom)
 		}
 		// get client
 		$client = Asiakkaat::model()->findByPk($property->asiakas_id);
+		// exit early if client has buenno disabled
+		if($client->buenno_integration_enabled == 0) {
+			return;
+		}
 		// throw exception if client not found
 		if(!$client) {
 			throw new Exception("Client (Asiakkaat) not found");
