@@ -15,6 +15,16 @@ class InvoiceHours extends VersionedHours
         return parent::model($className);
     }
 
+    public static function copyFromHours($hours)
+    {
+        $invoice = new InvoiceHours();
+        $invoice->attributes = $hours->attributes;
+        unset($invoice->id);
+        $invoice->version = 1;
+        $invoice->hours_id = $hours->id;
+        return $invoice;
+    }
+
     public function tableName()
     {
         return "invoice_hours";

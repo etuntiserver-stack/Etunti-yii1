@@ -1350,6 +1350,8 @@ class ToteutuneetController extends Controller
 				// updates old salary & invoice models, this case can happen
 				// if the mobile model was created by hand.
 				// (actionUusirivi on MobileController creates salary & invoice models)
+				// 
+				// this should also happen now when a user ends a workshift via ApiController.
 				$this->handleUpdateSalaryInvoice($model);
 			} else {
 				// create new salary & invoice models

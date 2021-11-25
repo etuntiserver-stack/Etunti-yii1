@@ -519,6 +519,17 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->error($model,'sopimustyyppi'); ?>
 	</div>
 
+	<div class="section fill mb5">
+	<?php
+		if(!empty($asetukset->buenno_api_key)) {
+			echo $form->labelEx($model, "buenno_integration_enabled");
+			$list = [1 => "Kyllä", 0 => "Ei"];
+			echo $form->dropDownList($model, "buenno_integration_enabled",
+				$list, ["class" => "form-control"]);
+		}
+	?>
+	</div>
+
 	<span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#lopettaminen">Asiakas lopettaa <i class="caret"></i></span>
 
 	<div id="lopettaminen" class="collapse">

@@ -2623,6 +2623,12 @@ class TyovuorootController extends Controller
 		}
 		//    peruutettu -->
 		$hovertietoja .= $asiakasNakyvissa;
+		// OS count tag, fetched async after the hover popup is shown
+		if(isset($tvVal->kohteet->id) && !empty(Yii::app()->user->kp)) {
+			$hovertietoja .= '<p class="mb-0" id="hover_os_count"></p>';
+			$hovertietoja .= '<input type="hidden" id="hover_property_id" value="'.$tvVal->kohteet->id.'" />';
+		}
+		
 		//if(!empty($asiakasNakyvissa)){ $title .= ', '; }
 		$hovertietoja .= $paikkakuntaNakyvissa;
 		$hovertietoja .= '<br><p><span class="didstatus">'.$status.$toistuva.$avaimet.'</span>&nbsp; &nbsp;<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.$osoite.'</p>';

@@ -279,6 +279,34 @@ jQuery.hovertietoja = function hovertietoja(){
 	this_id = $(this).attr('id');
 	setTimeoutConst = setTimeout(function() {
 		$('#hovertietoja').html( hv_tiedot(this_id) ).show();
+		const osElem = document.getElementById("hover_os_count");
+		const propertyIdElem = document.getElementById("hover_property_id");
+		if(osElem && propertyIdElem) {
+			const propId = propertyIdElem.value;
+			if(propId) {
+				// set (and fetch) os count
+				$.ajax({
+					type: "POST",
+					url: "/index.php/tyovuoroot/omasiistijat_lista",
+					data: {
+						location_id: propId,
+						force_refresh: false,
+					},
+					success: (data) => {
+						data = JSON.parse(data);
+						// make sure we have an object, that is not an array
+						// (empty array is returned when there's no OS data available)
+						if(typeof data === "object" && !Array.isArray(data)) {
+							const keys = Object.keys(data);
+							$(osElem).html("Omasiistijöitä: " + (keys?.length ?? 0));
+						}
+					},
+					error: (err) => {
+						console.log("error while fetching OS list", err);
+					}
+				});
+			}
+		}
 		return false;
 	}, delay);
 

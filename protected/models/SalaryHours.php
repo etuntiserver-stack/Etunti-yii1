@@ -7,6 +7,16 @@ class SalaryHours extends VersionedHours
         return parent::model($className);
     }
 
+    public static function copyFromHours($hours)
+    {
+        $salary = new SalaryHours();
+        $salary->attributes = $hours->attributes;
+        unset($salary->id);
+        $salary->version = 1;
+        $salary->hours_id = $hours->id;
+        return $salary;
+    }
+
     public function tableName()
     {
         return "salary_hours";

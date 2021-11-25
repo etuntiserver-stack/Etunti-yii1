@@ -1646,16 +1646,22 @@ public function actionImei($dom)
 						}
 						$hours->calculateDurations();
 						$hours->save();
+
+						// create salary & invoice models
+						$salary = SalaryHours::copyFromHours($hours);
+						$invoice = InvoiceHours::copyFromHours($hours);
+
+						$salary->save();
+						$invoice->save();
 	
 						$asetukset = Asetukset::model()->findByPk(1);
 						$accept_crit = $asetukset->app_hyvaksynnan_peruste;
 						$workMinutesDelta = intval($asetukset->app_auto_hyvaksyminen_aikavali);
-						$res = $hours->handleAutoAccept($accept_crit, $workMinutesDelta);
-						if($res !== null && isset($res["salary"]) && isset($res["invoice"])) {
-							$mobupdate->salary_id = $res["salary"]->id;
-							$mobupdate->invoice_id = $res["invoice"]->id;
-							$mobupdate->save();
-						}
+						$hours->handleAutoAccept($accept_crit, $workMinutesDelta);
+
+						$mobupdate->salary_id = $salary->id;
+						$mobupdate->invoice_id = $invoice->id;
+						$mobupdate->save();
 					}
 				}
 			}
@@ -2095,6 +2101,10 @@ public function actionImei($dom)
 		}
 		// get client
 		$client = Asiakkaat::model()->findByPk($property->asiakas_id);
+		// exit early if client has buenno disabled
+		if($client->buenno_integration_enabled == 0) {
+			return;
+		}
 		// throw exception if client not found
 		if(!$client) {
 			throw new Exception("Client (Asiakkaat) not found");

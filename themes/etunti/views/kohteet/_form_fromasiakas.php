@@ -206,13 +206,13 @@ if(!isset($model->id)){ $model->alv = 24; }
 
 		$('#Kohteet_hinnasto_id').on('change', function(){
 			tuotteetbyhinnasto();
-			if(<?= empty(Yii::app()->user->kp) ? 0 : 1 ?>) {
+			if(<?= empty(Yii::app()->user->kotipuhtaaksi) ? 0 : 1 ?>) {
 				validateHinnasto();
 			}
 		});
 
 		$("#Kohteet_tyoryhma").on("change", () => {
-			if(<?= empty(Yii::app()->user->kp) ? 0 : 1 ?>) {
+			if(<?= empty(Yii::app()->user->kotipuhtaaksi) ? 0 : 1 ?>) {
 				validateHinnasto();
 			}
 		});
