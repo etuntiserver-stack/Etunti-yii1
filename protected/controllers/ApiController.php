@@ -1679,7 +1679,7 @@ public function actionImei($dom)
 				Mobile::model()->updatebypk($mobupdate->id, array( 'loppui' => $new_loppui ));
 				$new = new Mobile;
 				$new->attributes 	= $mobupdate->attributes;
-				$new->aloitan 		= date("d.m.Y 00:00:00", strtotime($mobupdate->loppui));
+				$new->aloitan 		= date("d.m.Y 00:00:00", strtotime($mobupdate->loppui." +1 day"));
 				$new->loppui		= $mobupdate->loppui;
 				if(!$new->save())
 				{
