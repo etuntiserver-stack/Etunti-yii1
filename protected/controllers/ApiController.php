@@ -1674,7 +1674,7 @@ public function actionImei($dom)
 			$interval = date_diff($datetime1, $datetime2);
 			if($interval->format('%d') == 1)
 			{
-				$new_loppui = date("d.m.Y 25:59:59", strtotime($mobupdate->aloitan));
+				$new_loppui = date("d.m.Y 23:59:59", strtotime($mobupdate->aloitan));
 
 				Mobile::model()->updatebypk($mobupdate->id, array( 'loppui' => $new_loppui ));
 				$new = new Mobile;
