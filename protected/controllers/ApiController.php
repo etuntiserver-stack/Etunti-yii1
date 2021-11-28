@@ -1675,12 +1675,12 @@ public function actionImei($dom)
 			if($interval->format('%d') == 1)
 			{
 				$new_loppui = date("d.m.Y 23:59:59", strtotime($mobupdate->aloitan));
-
 				Mobile::model()->updatebypk($mobupdate->id, array( 'loppui' => $new_loppui ));
+
 				$new = new Mobile;
 				$new->attributes 	= $mobupdate->attributes;
-				$new->aloitan 		= date("d.m.Y 00:00:00", strtotime($mobupdate->loppui." +1 day"));
-				$new->loppui		= $mobupdate->loppui;
+				$new->aloitan 		= date("d.m.Y 00:00:00");
+				$new->loppui		= date("d.m.Y H:i:s");
 				if(!$new->save())
 				{
 					$this->_sendResponse(200, CJSON::encode($new->getErrors()));
