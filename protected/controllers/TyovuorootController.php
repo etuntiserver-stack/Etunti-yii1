@@ -2628,10 +2628,29 @@ class TyovuorootController extends Controller
 			$hovertietoja .= '<p class="mb-0" id="hover_os_count"></p>';
 			$hovertietoja .= '<input type="hidden" id="hover_property_id" value="'.$tvVal->kohteet->id.'" />';
 		}
+
+		// show square meters of the property, if we have property data available.
+		$sqm = "Ei asetettu";
+		if(isset($tvVal->kohteet) && isset($tvVal->kohteet->kohteen_neliot)) {
+			$sqm = $tvVal->kohteet->kohteen_neliot;
+		}
+		$keyNumber = "";
+		if(isset($tvVal->avaimet) && count($tvVal->avaimet) > 0 && isset($tvVal->kohteet)) {
+			foreach($tvVal->avaimet as $key) {
+				// show only those keys that are for the shifts property
+				if($key->kohde === $tvVal->kohteet->id) {
+					$keyNumber .= "Avainnumero: "  . $key->avainnumero . "<br>";
+				}
+			}
+			// remove trailing <br> tag
+			$keyNumber = substr($keyNumber, 0, -4);
+		}
 		
 		//if(!empty($asiakasNakyvissa)){ $title .= ', '; }
 		$hovertietoja .= $paikkakuntaNakyvissa;
-		$hovertietoja .= '<br><p><span class="didstatus">'.$status.$toistuva.$avaimet.'</span>&nbsp; &nbsp;<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.$osoite.'</p>';
+		$hovertietoja .= '<br><p class="mb-0"><span class="didstatus">'.$status.$toistuva.$avaimet.'</span>&nbsp; &nbsp;<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>: '.$osoite.
+			' <br><span>Kohteen neliöt: '.$sqm.'</span><br><span>'.$keyNumber.'</span></p>';
+
 		if( $tvVal->tyopaari != '' and $tvVal->tyopaari != "[\"$tvVal->tid\"]" ){
 		$hovertietoja .= '<div class="hover_well"><h5>Työparit</h5>';
 		   foreach(json_decode($tvVal->tyopaari, true) as $tyopaari){

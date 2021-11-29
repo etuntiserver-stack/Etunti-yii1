@@ -299,6 +299,9 @@ jQuery.hovertietoja = function hovertietoja(){
 						if(typeof data === "object" && !Array.isArray(data)) {
 							const keys = Object.keys(data);
 							$(osElem).html("Omasiistijöitä: " + (keys?.length ?? 0));
+						} else {
+							// empty array (or something else unknown) returned, show 0
+							$(osElem).html("Omasiistijöitä: 0");
 						}
 					},
 					error: (err) => {
