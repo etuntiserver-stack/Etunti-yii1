@@ -1480,7 +1480,9 @@ class TyovuorootController extends Controller
 		echo json_encode(array($ohje,$tietoja,$m->arvioitu_kesto,$m->osoite,$m->pnumero,$m->kaupunki,$tyo_erittelyt,$m->puh_nro,
 			$m->email,$m->arvioitu_kello_alku,$m->arvioitu_kello_loppu, $tiedostot, 
 			$url_linkit, $tuote, 
-			Asiakkaat::FINNISH_SERVICE_WISH[$m->asiakkaat->finnish_service_wish ?? 0]));
+			Asiakkaat::FINNISH_SERVICE_WISH[$m->asiakkaat->finnish_service_wish ?? 0],
+			$m->asiakkaat->asiakasnumero
+		));
 		exit;
 	}
 

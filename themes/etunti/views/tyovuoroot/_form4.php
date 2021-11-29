@@ -144,6 +144,7 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 		<input type="text" id="asiakas" class="form-control lomake_kenta" AUTOCOMPLETE="off">
 		<div id="asiakasAutocompleteResult"></div>
 		<p>Palvelukieli: <span id="client_finnish_service_wish"></span></p>
+		<p>Asiakasnumero: <span id="client_number"></span></p>
   </div>
   <div class="col-sm-3">
 		<label for="Tyovuoroot_kohde">Kohde</label>
@@ -1839,6 +1840,9 @@ $(document).ready(function(){
 			if(d[14]) {
 				$("#client_finnish_service_wish").html(d[14]);
 			}
+			if(d[15]) {
+				$("#client_number").html(d[15]);
+			}
 	   	},
 		error:function(data){
 			console.log(data);
@@ -1930,6 +1934,9 @@ $(document).ready(function(){
 			// set finnish service wish text
 			if(d[14]) {
 				$("#client_finnish_service_wish").html(d[14]);
+			}
+			if(d[15]) {
+				$("#client_number").html(d[15]);
 			}
 			return false;
 
