@@ -1133,7 +1133,9 @@ $xml = '
 		        $criteria->addCondition (" tyyppi='".$_GET['tyyppi']."' ");
 		}
 		if(isset($_GET['puhelin']) and !empty(trim($_GET['puhelin']))){
-		        $criteria->addCondition (" puhelin LIKE '%".$_GET['puhelin']."%' ");
+				$puh = $_GET["puhelin"];
+		        $criteria->addCondition (" puhelin LIKE '%$puh%' ");
+				$criteria->addCondition(" extra_contacts LIKE '%$puh%' ", "OR");
 		}
 		if(isset($_GET['sahkoposti']) and !empty(trim($_GET['sahkoposti']))){
 		        $criteria->addCondition (" sahkoposti LIKE '%".$_GET['sahkoposti']."%' ");

@@ -2357,6 +2357,9 @@ class SiteController extends Controller
 			$criteria->order = " $sarake ";
 			$criteria->group = " $sarake ";
 			$criteria->condition = " $sarake LIKE '%".$term."%' ";
+			if($model == "Asiakkaat" && $sarake == "puhelin") {
+				$criteria->condition .= " OR extra_contacts LIKE '%$term%' ";
+			}
 		}
 		
 		// <-- Tyoryhmat
