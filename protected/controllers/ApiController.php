@@ -1620,6 +1620,25 @@ public function actionImei($dom)
 		$save = '';
 		if($mobupdate->save())
 		{
+			// <-- Silloin kun Aloitus oli muu päivässä kuin lopetus
+			$datetime1 = date_create(date("Y-m-d", strtotime($mobupdate->aloitan)));
+			$datetime2 = date_create(date("Y-m-d", strtotime($mobupdate->loppui)));
+
+			$interval = date_diff($datetime1, $datetime2);
+			if($interval->format('%d') == 1)
+			{
+				$new = new Mobile;
+				$new->attributes 	= $mobupdate->attributes;
+				$new->aloitan 		= date("d.m.Y 00:00:00");
+				$new->loppui		= date("d.m.Y H:i:s");
+				if($new->save())
+				{
+					$this_loppui = date("d.m.Y 23:59:59", strtotime($mobupdate->aloitan));
+					Mobile::model()->updatebypk($mobupdate->id, array( 'loppui' => $this_loppui ));
+					$mobupdate->loppui = $this_loppui;
+				}
+			}
+			//     Silloin kun Aloitus oli muu päivässä kuin lopetus -->
 
 			// update v2 hours model
 			if($mobupdate->loppui
@@ -1665,31 +1684,6 @@ public function actionImei($dom)
 					}
 				}
 			}
-
-			// <-- Silloin kun Aloitus oli muu päivässä kuin lopetus
-			
-			$datetime1 = date_create(date("Y-m-d", strtotime($mobupdate->aloitan)));
-			$datetime2 = date_create(date("Y-m-d", strtotime($mobupdate->loppui)));
-
-			$interval = date_diff($datetime1, $datetime2);
-			if($interval->format('%d') == 1)
-			{
-				$new_loppui = date("d.m.Y 23:59:59", strtotime($mobupdate->aloitan));
-				Mobile::model()->updatebypk($mobupdate->id, array( 'loppui' => $new_loppui ));
-
-				$new = new Mobile;
-				$new->attributes 	= $mobupdate->attributes;
-				$new->aloitan 		= date("d.m.Y 00:00:00");
-				$new->loppui		= date("d.m.Y H:i:s");
-				if(!$new->save())
-				{
-					$this->_sendResponse(200, CJSON::encode($new->getErrors()));
-				}
-				
-				$mobupdate->loppui = $new_loppui;
-			}
-			
-			//     Silloin kun Aloitus oli muu päivässä kuin lopetus -->
 
 			// <-- Auto hyvaksynta
 			$this->autoHyvaksynta($mobupdate->id);
