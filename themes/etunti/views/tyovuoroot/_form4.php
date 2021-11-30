@@ -1290,7 +1290,7 @@ $(document).ready(function(){
 
   	if( $('#alku').val() !== '' && $('#loppu').val() !== '' && timeEnd < timeStart )
   	{
-  		alert();
+  		alert('Lopetusaika ei saa olla ajemmin kun aloitusaika.');
   		return false;
   	}
   });
