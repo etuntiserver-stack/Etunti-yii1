@@ -1620,6 +1620,7 @@ public function actionImei($dom)
 		$save = '';
 		if($mobupdate->save())
 		{
+			$autohyvaksy = true;
 			// <-- Silloin kun Aloitus oli muu päivässä kuin lopetus
 			$datetime1 = date_create(date("Y-m-d", strtotime($mobupdate->aloitan)));
 			$datetime2 = date_create(date("Y-m-d", strtotime($mobupdate->loppui)));
@@ -1633,6 +1634,7 @@ public function actionImei($dom)
 				$new->loppui		= date("d.m.Y H:i:s");
 				if($new->save())
 				{
+					$autohyvaksy = false;
 					$this_loppui = date("d.m.Y 23:59:59", strtotime($mobupdate->aloitan));
 					Mobile::model()->updatebypk($mobupdate->id, array( 'loppui' => $this_loppui ));
 					$mobupdate->loppui = $this_loppui;
@@ -1686,7 +1688,8 @@ public function actionImei($dom)
 			}
 
 			// <-- Auto hyvaksynta
-			$this->autoHyvaksynta($mobupdate->id);
+			if($autohyvaksy)
+				$this->autoHyvaksynta($mobupdate->id);
 			//     Auto hyvaksynta -->
 
 			// <-- buenno integration
