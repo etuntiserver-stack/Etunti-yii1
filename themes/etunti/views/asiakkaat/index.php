@@ -20,7 +20,12 @@
 		</span>';
 	?>
 	<?php endif; ?>
-
+	<?php if(!empty(Yii::app()->user->kotipuhtaaksi)):?>
+	<?php echo CHtml::link('Tarkista asiakkaat', Yii::app()->request->baseUrl.'/index.php/asiakkaat/checkworkgroups',
+		["class" => "btn btn-default", "data-toggle" => "tooltip",
+		 	"data-placement" => "top", "title" => "Tarkista asiakkaiden työryhmät ja kustannuspaikat"]
+		); ?>
+	<?php endif; ?>
 	<?php $checkOikeus = "asiakkaat_5_".Yii::app()->user->adminStatus; ?>
 	<?php if($site[0]->checkOikeusFields($checkOikeus) == 1): ?>
 	 <div class="pull-right">

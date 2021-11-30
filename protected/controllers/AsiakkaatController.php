@@ -40,7 +40,11 @@ class AsiakkaatController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus', 'kaikki_netvisoriin', 'freshdesk', 'freshdesk_ticket', 'puhnro_korjaus', 'email_history', 'integromat_upsert'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 
+					'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 
+					'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus', 
+					'kaikki_netvisoriin', 'freshdesk', 'freshdesk_ticket', 'puhnro_korjaus', 
+					'email_history', 'integromat_upsert', 'checkworkgroups'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -2783,5 +2787,69 @@ $xml = '
 		else
       return $bod;
   }
+
+	/**
+	 * Renders a view which lists clients that have no cost center (netvisor_dimension_item) or workgroup (tyoryhma) set.
+	 * Also renders clients that have the wrong workgroup compared to their set cost center.
+	 * The values are hardcoded for Koti Puhtaaksi, which makes this action Koti Puhtaaksi only.
+	 */
+  	public function actionCheckWorkgroups() {
+
+		$clients = Asiakkaat::model()->findAll("aktiivinen = 1");
+
+		// 156 = Jyvaskyla
+		// 170 = Keski-uusimaa
+		// 135 = Oulu
+		// 97 = Turku
+		// 6 = Uusimaa
+		// 33 = Pirkanmaa
+
+		$groups = Valikkoot::model()->findAll("select_type='tyoryhma'");
+
+		$workGroupNames = [];
+		foreach($groups as $group) {
+			$workGroupNames[$group->id] = $group->value;
+		}
+
+
+		$criteriaMap = [
+			"P-Uusimaa" => [170],
+			"PK-Seutu" => [6],
+			"Oulu" => [135],
+			"Turku" => [97],
+			"Tampere" => [33],
+			"Jyväskylä" => [156],
+		];
+
+		$missingDataClients = [];
+		$wrongDataClients = [];
+		foreach ($clients as $client) {
+			$netvisor_cost_center = $client->netvisor_dimension_item;
+			$work_group = $client->tyoryhma;
+
+			if($netvisor_cost_center && $work_group >= 0) {
+				if(array_key_exists($netvisor_cost_center, $criteriaMap)) {
+					$found = in_array($work_group, $criteriaMap[$netvisor_cost_center]);
+					if(!$found) {
+						// wrong work group
+						$wrongDataClients[] = $client;
+					}
+				} else {
+					// un-used cost center?
+					$wrongDataClients[] = $client;
+				}
+			} else {
+				$missingDataClients[] = $client;
+			}
+		}
+
+		$this->render("check_workgroups", 
+			[
+				"missingDataClients" => $missingDataClients,
+			 	"wrongDataClients" => $wrongDataClients,
+				"workgroupNames" => $workGroupNames,
+			]
+		);
+	}
 
 }
