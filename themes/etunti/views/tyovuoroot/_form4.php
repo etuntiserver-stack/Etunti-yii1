@@ -1284,16 +1284,6 @@ $(document).ready(function(){
 	});
 	}
   });
-  $('#alku, #loppu').on('blur', function(){
-	var timeStart = new Date("<?=date("m/d/Y")?> " + $('#alku').val()).getMinutes();
-	var timeEnd = new Date("<?=date("m/d/Y")?> " + $('#loppu').val()).getMinutes();
-
-  	if( $('#alku').val() !== '' && $('#loppu').val() !== '' && timeEnd < timeStart )
-  	{
-  		alert('Lopetusaika ei saa olla ajemmin kun aloitusaika.');
-  		return false;
-  	}
-  });
   $(document).delegate("#cal_poista_paiva_ketjusta, .palauta_kejuun","click",function(){
 	tarkistusLista('<?=$this_id?>');
   });
@@ -1446,6 +1436,18 @@ $(document).ready(function(){
 	}
 	/*     Tarkistetaan Aloitus/Lopetus Klo ja status --> */
 
+	/* <-- Aloitus ja lopetus ajaat */
+	var timeStart = new Date("<?=date("m/d/Y")?> " + $('#alku').val()).getTime();
+	var timeEnd = new Date("<?=date("m/d/Y")?> " + $('#loppu').val()).getTime();
+
+  	if( $('#alku').val() !== '' && $('#loppu').val() !== '' && timeEnd < timeStart )
+  	{
+  		alert('Lopetusaika ei voi olla aiemmin kuin aloitusaika.');
+  		$('#submitButton').removeAttr('disabled');
+		return false;
+  	}
+	/* <-- Aloitus ja lopetus ajaat */
+
 	/* <-- Tarkistetaan toistuvat asiat */
  	if( toistuva == true ){
 	  	if($('#pfrom').val() !== ''){
@@ -1458,7 +1460,7 @@ $(document).ready(function(){
 		}
 		if(pto !=='' & pto < pfrom){
 			alert('Toistuvan työvuoron lopetuspäivämäärä ei voi olla ennen toistuvan työvuoron aloituspäivämäärää.');
-      $('#submitButton').removeAttr('disabled');
+      		$('#submitButton').removeAttr('disabled');
 			return false;
 		}
 		if( $('#pfrom').val() === '' ){
