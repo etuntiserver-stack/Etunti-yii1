@@ -1284,6 +1284,16 @@ $(document).ready(function(){
 	});
 	}
   });
+  $('#alku, #loppu').on('blur', function(){
+	var timeStart = new Date("<?=date("m/d/Y")?> " + $('#alku').val()).getMinutes();
+	var timeEnd = new Date("<?=date("m/d/Y")?> " + $('#loppu').val()).getMinutes();
+
+  	if( $('#alku').val() !== '' && $('#loppu').val() !== '' && timeEnd < timeStart )
+  	{
+  		alert();
+  		return false;
+  	}
+  });
   $(document).delegate("#cal_poista_paiva_ketjusta, .palauta_kejuun","click",function(){
 	tarkistusLista('<?=$this_id?>');
   });
@@ -1297,6 +1307,7 @@ $(document).ready(function(){
 	tarkistusLista('<?=$this_id?>');
   });
   function tarkistusLista(this_id){
+  
 	if( !toistuva )
 		return false;
 	if(!pfrom_and_today_check()){
