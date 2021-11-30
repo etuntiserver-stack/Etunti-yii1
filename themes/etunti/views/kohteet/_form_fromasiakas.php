@@ -229,7 +229,7 @@ if(!isset($model->id)){ $model->alv = 24; }
 			// get selected work group as a number, default to 0
 			const selectedWorkGroup = Number($("#Kohteet_tyoryhma").val() ?? 0);
 			// months are 0-indexed, 11 = December
-			const targetDate = new Date(2021, 11, 1);
+			const targetDate = new Date(2021, 11, 9);
 			// muu suomi 2021 & uusimaa 2021 catalogues
 			const newCatalogues = [3, 4];
 
@@ -245,7 +245,7 @@ if(!isset($model->id)){ $model->alv = 24; }
 			}
 
 			const beforeTargetDate = (new Date() < targetDate);
-			// validate we're not using a 2021 catalogue before 1.12.2021
+			// validate we're not using a 2021 catalogue before 9.12.2021
 			if(beforeTargetDate && newCatalogues.includes(selectedCatalogue)) {
 				alert("2021 Hinnastoa ei pitäisi valita vielä!");
 				$("#catalogue_validation_error").html("2021 Hinnastoa ei pitäisi valita vielä!");
