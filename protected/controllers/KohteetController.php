@@ -672,7 +672,7 @@ class KohteetController extends Controller
 	{
 		$criteria = new CDbCriteria();
 		$criteria->order = " id DESC ";
-		$criteria->addCondition("time <= '2021-12-01 00:00:00'");
+		$criteria->addCondition("time <= '2021-12-09 00:00:00'");
 		$criteria->addCondition("hinnasto_id IN (3,4)");
 		$properties = Kohteet::model()->findAll($criteria);
 
