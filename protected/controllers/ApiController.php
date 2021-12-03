@@ -67,13 +67,19 @@ public function actionLogin($dom){
 			Yii::app()->db1->setActive(true);
 
 			$criteria = new CDbCriteria;
-			$criteria->condition = " 
-				aktiivinen=1
-				AND salasana!=''
-				AND tekijan_email='".trim(strtolower($_POST['email']))."' AND SHA2(salasana, 256)='".$_POST['salasana']."'
-			";
+			$email = trim(strtolower($_POST["email"]));
+			$criteria->addCondition("aktiivinen = 1");
+			$criteria->addCondition("tekijan_email = '$email'");
+
 			$t = Tyontekijat::model()->find($criteria);
+
 			if( isset($t->id) ){
+				// verify
+				$verified = password_verify($_POST["salasana"], $t->salasana);
+				if(!$verified) {
+					$this->_sendResponse(200, CJSON::encode(["error" => "Wrong password."]));
+					exit;
+				}
 				$return = $t->attributes;
 				$return['domain'] = $d->domain;
 				$this->_sendResponse(200, CJSON::encode($return));
@@ -295,9 +301,15 @@ protected function kirjautuminen($domain, $email, $salasana){
 		aktiivinen=1 AND mobiili=1 
 		AND salasana!='' 
 		AND tekijan_email = '".$_POST['email']."' 
-		AND salasana = '".$_POST['salasana']."' 
 	";
-        $ttekija = Tyontekijat::model()->find($criteria);
+	$ttekija = Tyontekijat::model()->find($criteria);
+	if($ttekija) {
+		$verified = password_verify($_POST["salasana"], $ttekija->salasana);
+		if(!$verified) {
+			$this->_sendResponse(200, CJSON::encode(array('error' => 'Wrong password.')));
+			die(json_encode("Kirjautuminen ei onnistui."));
+		}
+	}
 	if(!isset($ttekija->id)){
 		$this->_sendResponse(200, CJSON::encode(array('error' => 'Työntekijää ei löydy.')));
 		die(json_encode("Kirjautuminen ei onnistui."));
