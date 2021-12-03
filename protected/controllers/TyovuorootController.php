@@ -2243,11 +2243,12 @@ class TyovuorootController extends Controller
 		$tids_criteria = '';
 		if( count($haku_tids) > 0 ){
 			//$tt_ret = [0 => 0];
-			foreach($haku_tids as $k => $v)
+			foreach($haku_tids as $k => $v) {
 				$tt_ret[$v] = $v;
-		      	$ids = implode(",", $tt_ret);
-			$tyopaari = "tyopaari LIKE '%\"".implode("\"%' OR tyopaari LIKE'%\"", $tt_ret)."\"%'";
-		        $criteria->addCondition('tid IN ('.$ids.') OR ('.$tyopaari.')');
+			}
+			$ids = implode(",", $tt_ret);
+			$tyopaari = "tyopaari LIKE '%\"".implode("\"%' OR tyopaari LIKE '%\"", $tt_ret)."\"%' ";
+			$criteria->addCondition('tid IN ('.$ids.') OR ('.$tyopaari.')');
 		}
 		if( is_array($haku_criteria) and count($haku_criteria) > 0 ){
 			if(isset($haku_criteria['uusi_tilaus']))
@@ -2458,12 +2459,22 @@ class TyovuorootController extends Controller
 		$customer_tickets = (isset($_POST['customer_tickets']) ? json_decode($_POST['customer_tickets'], true) : []);
 		$haku_criteria	= (isset($_SESSION['haku_criteria_tv']))?$_SESSION['haku_criteria_tv']:[];
 		$tv_arr = $this->tv_arr($from, $to, $tids, $haku_criteria, true, [], $customer_tickets);
-		/*
-		echo '<pre>';
-		print_r( $tv_arr );
-		echo '</pre>';
-		exit;
-		*/
+
+		// only get the diff in keys in "vko" mode and when there's
+		// defined employees in the search
+		if($mode == "vko" && !empty($tids)) {
+			$tv_arr_keys = array_keys($tv_arr);
+			// get all employee IDs that weren't in the search
+			$diff = array_diff($tv_arr_keys, $tids);
+			// remove all employee IDs that we're not excepting to find
+			// these keys come from repeating shifts, where for example only 1 of the searched employees
+			// was in a repeating shift, but it creates an array of results for the other one from those repeating shifts
+			// and if the employee has some non-repeating shifts for the day of the results, they'll be overwritten in the calendar.
+			foreach($diff as $diffKey) {
+				unset($tv_arr[$diffKey]);
+			}
+		}
+
 		echo json_encode($tv_arr);
 		exit;
   }
