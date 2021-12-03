@@ -455,10 +455,11 @@ class TyontekijatController extends Controller
 		} else {
 			die('Tämä linkki on käytetty tai vanhentunut!');
 		}
-
+		// validate that passwords match
 		if(isset($model->id) and isset($_POST['password1']) and $_POST['password1'] == $_POST['password2'])
 		{
-			Tyontekijat::model()->updateByPk($model->id, array('salasana' => $_POST['password1'], 'token' => ''));
+			$hashed_pw = password_hash($_POST["password1"], PASSWORD_BCRYPT);
+			Tyontekijat::model()->updateByPk($model->id, array('salasana' => $hashed_pw, 'token' => ''));
 			$tilanne = 3;
 		}
 
