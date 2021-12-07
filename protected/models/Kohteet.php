@@ -31,6 +31,8 @@
  * @property integer $maksuehto_paiva
  * @property string $viivastyskorko
  * @property string $lasku_tiedot
+ * @property integer $total_visit_count
+ * @property integer $success_visit_count
  */
 class Kohteet extends DB2ActiveRecord
 {
@@ -155,7 +157,7 @@ class Kohteet extends DB2ActiveRecord
 			array('ryhma, viivastyskorko', 'length', 'max'=>10),
 			array('avain, lasku_tiedot', 'length', 'max'=>255),
 			array('siivous, etu_suku_nimet, arvioitu_kesto, arvioitu_kello_alku, arvioitu_kello_loppu, verot', 'length', 'max'=>100),
-			array('aikataulu, hinnoittelu, muut, toimenpiteet, tietoja, tyo_erittelyt, url_linkkit', 'safe'),
+			array('aikataulu, hinnoittelu, muut, toimenpiteet, tietoja, tyo_erittelyt, url_linkkit, total_visit_count, success_visit_count', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, time, tag_id, gps_sijainti, lyhenne, osoite, katuosoite, kaupunki, toimipaikka, pnumero, email, aikataulu, hinnoittelu, muut, toimenpiteet, tietoja, tyoryhma, ryhma, aktiivinen, avain, kenella_on_avain, puh_nro, siivous, etu_suku_nimet, maksuehto_paiva, viivastyskorko, lasku_tiedot, asiakas_id', 'safe', 'on'=>'search'),
@@ -277,5 +279,21 @@ class Kohteet extends DB2ActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	/**
+	 * Increments visit count trackers by 1. success_visit_count is not incremented
+	 * unless you pass true as a parameter. Defaults to false.
+	 * 
+	 * @param bool $incrementSuccessCount boolean flag to 
+	 * indicate if success_visit_count should be incremented as well. Defaults to false
+	 * @return bool boolean indicating if save was successful or not
+	 */
+	public function updateVisitCounts($incrementSuccessCount = false) {
+		$this->total_visit_count += 1;
+		if($incrementSuccessCount) {
+			$this->success_visit_count += 1;
+		}
+		return $this->save();
 	}
 }
