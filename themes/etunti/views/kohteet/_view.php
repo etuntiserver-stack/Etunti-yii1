@@ -1,12 +1,18 @@
 <?php
 /* @var $this KohteetController */
 /* @var $data Kohteet */
-
+	
 	$asiakas='';
 	$a = Asiakkaat::model()->findbypk($data->asiakas_id);
 	if(isset($a->id))
 		$asiakas = $a->Fullname;
-
+	
+	$total = $data->success_visit_count;
+	$successes = $data->total_visit_count;
+	$successPercentage = 0;
+	if($successes > 0) {
+		$successPercentage = $total / $successes * 100;
+	}
 ?>
 
 <tr>
@@ -53,5 +59,11 @@
 	<td>
 		<?php echo ($data->aktiivinen == 1)? Yii::t('main', 'Kyllä'):'<span class="text-danger">'.Yii::t('main', 'Ei').'</span>'; ?>
 	</td>
+	<?php // disabled for now, just remove && false when enabling ?>
+	<?php if(!empty(Yii::app()->user->kotipuhtaaksi) && false): ?>
+	<td>
+		<?= $successes ?> / <?= $total ?>  (<?= $successPercentage ?>%)
+	</td>
+	<?php endif; ?>
 </tr>
 

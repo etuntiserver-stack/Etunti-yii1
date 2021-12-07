@@ -258,4 +258,57 @@ class Tyovuoroot extends DB2ActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+	/**
+	 * Updates the shifts properties visit count fields
+	 * 
+	 * @param Array $additionalWorkPairIds any additional employee IDs you might want to specify
+	 * to count towards a successful visit.
+	 * @return boolean boolean indicating if save was successful
+	 */
+	public function updatePropertySuccessCounts($additionalWorkPairIds = [])
+	{
+		// skip if there's no property defined (or it's 0)
+		// we'll return true in that case.
+		if($this->kohde) {
+			// get shifts work pair IDs
+			// in a normal shift, tyopaari should be a object instead of an array
+			// {"someShiftId": "someWorkerId", ...}
+			$workPairIds = json_decode($this->tyopaari, true) ?? [];
+			// the IDs can be an associative array, get just the values
+			$workPairIds = array_values($workPairIds);
+			// merge with additional IDs
+			$workPairIds = array_merge($workPairIds, $additionalWorkPairIds);
+			$employeeId = intval($this->tid);
+			// the work pair column can also be empty, just in case let's add this shifts
+			// "primary" employee id to the list.
+			$workPairIds[] = $employeeId;
+			// but still remove duplicates, which can occur because we added the shifts
+			// "primary" employee ID to the list (tid)
+			$workPairIds = array_unique($workPairIds);
+			$criteria = new CDbCriteria();
+			$criteria->addInCondition("id", $workPairIds);
+			$employees = Tyontekijat::model()->findAll($criteria);
+			$propertyId = $this->kohde;
+			
+			$success = false;
+			foreach($employees as $employee) {
+				$visited_properties = json_decode($employee->visited_properties, true) ?? [];
+				if(array_key_exists($propertyId, $visited_properties)) {
+					$success = true;
+					// if propertyId is found, exit loop early. it counts as a
+					// success regardless of the other employees
+					break;
+				}
+			}
+			$property = Kohteet::model()->findByPk($propertyId);
+			if($property) {
+				return $property->updateVisitCounts($success);
+			}
+			// return true even if property wasn't found
+			return true;
+		}
+		// return true even if property isn't defined
+		return true;
+	}
 }

@@ -27,6 +27,7 @@
  * @property integer $online_varauksen_valmina
  * @property string $kortit
  * @property string $ayjasenyys
+ * @property string $visited_properties
  */
 class Tyontekijat extends DB2ActiveRecord
 {
@@ -155,7 +156,7 @@ class Tyontekijat extends DB2ActiveRecord
 			array('tekijan_pnumero', 'length', 'max'=>7),
 			array('ammattinimike, token', 'length', 'max'=>255),
 			array('ayjasenyys, app_lang', 'length', 'max'=>10),
-			array('kortit, tekijan_muisti, tekijan_tietoja, tietoja_onlinevarauksen, muistiinpano, tyo_toimialue', 'safe'),
+			array('kortit, tekijan_muisti, tekijan_tietoja, tietoja_onlinevarauksen, muistiinpano, tyo_toimialue, visited_properties', 'safe'),
 			array('gcm_reg_id, position, kortit_voimassaolo, tyoryhma', 'length', 'max'=>500),
 			array('onlinevaraus_tuotteet', 'safe'),
 			// The following rule is used by search().
@@ -316,5 +317,28 @@ class Tyontekijat extends DB2ActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	/**
+	 * Inserts a new property into visited_properties, if it is not
+	 * already in the list. Duplicates will not be added.
+	 * 
+	 * @return bool boolean indicating if update was successful
+	 */
+	public function updateVisitedProperties($property_id)
+	{
+		// convert to int if $property_id is string
+		if(is_string($property_id)) {
+			$property_id = intval($property_id);
+		}
+
+		// decode json, default to empty arr if null
+		$properties = json_decode($this->visited_properties, true) ?? [];
+		if(!array_key_exists($property_id, $properties)) {
+			$properties[$property_id] = $property_id;
+			$this->visited_properties = json_encode($properties);
+			return $this->save();
+		}
+		return true;
 	}
 }

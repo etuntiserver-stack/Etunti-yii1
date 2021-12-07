@@ -229,6 +229,10 @@ $(document).ready(function() {
   <th><?php echo Yii::t('main', 'Avain'); ?></th>
   <th><?php echo Yii::t('main', 'Työryhmä'); ?></th>
   <th><?php echo Yii::t('main', 'Aktiivinen'); ?></th>
+  <?php // disable for now, just remove && false when enabling again ?>
+  <?php if(!empty(Yii::app()->user->kotipuhtaaksi) && false): ?>
+  <th><?= Yii::t("main", "Omasiistijä onnistuminen"); ?></th>
+  <?php endif; ?>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

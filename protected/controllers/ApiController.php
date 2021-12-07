@@ -1788,6 +1788,12 @@ public function actionImei($dom)
 						$tv_new = new Tyovuoroot;
 						$cleared_attr = $tv_controller[0]->compareToistuvaAttributes($tv_new->attributes, $model->attributes);
 						$tv_new->attributes = $cleared_attr;
+						
+						//  mark OS success/failure for a new shift
+						if(isset($tv_new->tyopaari)) {
+							$tv_new->updatePropertySuccessCounts();
+						}
+
 						$tv_new->pvm = date("d.m.Y",strtotime($pvm));
 						$tv_new->tid = $tid;
 						$tv_new->tyopaari = '';
@@ -1797,6 +1803,11 @@ public function actionImei($dom)
 						} else {
 							$_POST['tv_id'] = $tv_new->id;
 						}
+				}
+			} else {
+				$model = $get_id['model'];
+				if(isset($model->tyopaari)) {
+					$model->updatePropertySuccessCounts();
 				}
 			}
 		}
@@ -1904,6 +1915,10 @@ public function actionImei($dom)
 			$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 			}
 			//     LOG -->
+
+
+			// update OS (omasiistijä) data if necessary
+			$ttekija->updateVisitedProperties(intval($mobinsert->kohdenID));
 
 			if( $new_login ){
 				$return = [
