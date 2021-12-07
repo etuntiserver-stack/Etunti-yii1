@@ -1222,11 +1222,16 @@ public function actionImei($dom)
 					$sel .= '</ul></p><hr>';
 				}
 
+				// property size
+				$squarem = $kohde->kohteen_neliot ?? 0;
+				$property_size = "<br><strong>Kohteen neliöt: </strong>$squarem";
+
 				if(!empty($nm) or !empty($puh_nro) or !empty($avaimet) or !empty($kohteen_yhteyshenkilo)){
 					$sel .= '<br><p>
 					'.$nm.'
 					'.$kohteen_yhteyshenkilo.'
 					'.$puh_nro.'
+					'.$property_size.'
 					'.$avaimet.'
 					</p>';
 				}
