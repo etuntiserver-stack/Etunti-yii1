@@ -3980,7 +3980,8 @@ $xml .= '
 
 		return $return;
 	}
-	protected function netvisorLaskentaKohteetLista()
+
+	public function netvisorLaskentaKohteetLista()
 	{
 		$return = '';
 		$site = Yii::app()->createController('Site');
