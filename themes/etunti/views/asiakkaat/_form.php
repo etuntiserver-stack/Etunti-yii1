@@ -137,6 +137,16 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
 
 	<div class="section fill mb5">
+		<label>Luotu:</label>
+		<p style="margin: 0">
+		<?php 
+			$created_at = date_create($model->time);
+			echo date_format($created_at, "d.m.Y");
+		?>
+		</p>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakasnumero'); ?>
 		<?php echo $form->numberField($model,'asiakasnumero',$asnum); ?>
 		<?php echo $form->error($model,'asiakasnumero'); ?>

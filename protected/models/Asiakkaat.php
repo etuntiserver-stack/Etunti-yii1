@@ -145,7 +145,7 @@ class Asiakkaat extends DB2ActiveRecord
 			array('maksuehto, viivastyskorko', 'length', 'max'=>20),
 			array('puhelin, sopimuksen_pvm', 'length', 'max'=>50),
 			array('asiakasnumero, ovt_tunnus, valittajan_tunnus, hinta_tyyppi, verot, lopetuksen_pvm', 'length', 'max'=>100),
-			array('alennuskoodit, gcm_reg_id, lopetuksen_syy, netvisor_dimension_name, netvisor_dimension_item, toissijainen_puhelinnumero, muistiinpano, lisatietoja_laskutuksesta, extra_contacts', 'safe'),
+			array('alennuskoodit, gcm_reg_id, lopetuksen_syy, netvisor_dimension_name, netvisor_dimension_item, toissijainen_puhelinnumero, muistiinpano, lisatietoja_laskutuksesta, extra_contacts, time', 'safe'),
 			array('sahkoposti','unique', 'message'=>'Tämä sähköposti on jo rekisteröity asiakkaalle.'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
