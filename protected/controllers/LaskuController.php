@@ -27,11 +27,11 @@ class LaskuController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_procountor', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet', 'perpvmkohde', 'l_asiakkaat', 'kklaskuperasiakas', 'tuotepalvelukohdelle', 'laskutetuksi', 'getdatafrom'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_procountor', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet', 'perpvmkohde', 'tuotepalvelukohdelle', 'laskutetuksi', 'getdatafrom'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('insert_lahete'),
+				'actions'=>array('insert_lahete', 'kklaskuperasiakas', 'l_asiakkaat'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdminNoTas()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -78,26 +78,42 @@ class LaskuController extends Controller
 		}
 		return false;
 	}
-
-        public function init()
-        {
-
-                if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
-                        Yii::app()->theme = 'etunti';
-                } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
-                        Yii::app()->theme = Yii::app()->user->user_theme;
-                } else {
-                        Yii::app()->theme = 'classic';
-                }
-
-		$asetukset = Asetukset::model()->findByPk(1);
-		if(isset($asetukset->palvelu_tyyppi) and $asetukset->palvelu_tyyppi == 0)
-		{
-			$this->redirect(array('/site/otakaytoon', 'tila' => 'lasku'));
+    
+	public function init()
+	{
+		if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
+				Yii::app()->theme = 'etunti';
+		} elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
+				Yii::app()->theme = Yii::app()->user->user_theme;
+		} else {
+				Yii::app()->theme = 'classic';
 		}
 
-                parent::init();
-        }
+		$check_palvelu_type = true;
+
+		$u = parse_url($_SERVER["REQUEST_URI"]);
+		if(
+			isset($u['path']) 
+			and ( 
+				strpos($u['path'], 'l_asiakkaat') !== false
+				or strpos($u['path'], 'kklaskuperasiakas') !== false
+			)
+		)
+		{
+			$check_palvelu_type = false;
+		}
+
+		if($check_palvelu_type)
+		{
+			$asetukset = Asetukset::model()->findByPk(1);
+			if(isset($asetukset->palvelu_tyyppi) and $asetukset->palvelu_tyyppi == 0)
+			{
+				$this->redirect(array('/site/otakaytoon', 'tila' => 'lasku'));
+			}
+		}
+
+		parent::init();
+	}
 
 	protected function num($val){
 	    if($val > 0)
