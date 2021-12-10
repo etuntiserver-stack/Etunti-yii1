@@ -287,6 +287,22 @@ class ToteutuneetController extends Controller
 				return ['ERROR' => 'Valitse asetuksessa mitä lähetetään'];
 
 			$mitaLahetetaan = json_decode($asetukset->netvisor_mita_lahetetaan, true);
+			/*
+			// NEW FOR DIMENSION EXPEREMENTAL.  Tämä saa poistaa 01.01.2022 alkaen jos ei menee voimaan
+			$all_dimensions = [];
+			$l_controller = Yii::app()->createController('Lasku');
+			foreach($l_controller[0]->netvisorLaskentaKohteetLista() as $k => $v){
+				foreach($v->DimensionName as $k1 => $v1){
+					foreach($v1->DimensionDetails->DimensionDetail as $k2 => $v2){
+						$all_dimensions[] = $v2;
+					}
+				}
+			}
+			// NEW
+
+			echo json_encode($all_dimensions);
+			exit;
+			*/
 
 			function yleisXML($mobile, $pvm, $tid, $acceptancestatus, $collectorratio, $status, $num, $description)
 			{
@@ -296,6 +312,19 @@ class ToteutuneetController extends Controller
 				{
 					if($arr['attributes']['tid'] == $tid)
 					{
+						// <-- Dimension
+						$dimension = '';
+						$k = Kohteet::model()->findbypk($arr['attributes']['kohdenID']);
+						if(isset($k->asiakkaat->netvisor_dimension_name) and !empty($k->asiakkaat->netvisor_dimension_name))
+						{
+							$dimension = '
+							<dimension>
+								<dimensionname>'.$k->asiakkaat->netvisor_dimension_name.'</dimensionname>
+								<dimensionitem>Palkanlaskenta</dimensionitem>
+							</dimension>';
+						}
+						// Dimension -->
+
 						$body .= '
 						<workdaytime>
 							<starttimeofday>'.date("H:i", strtotime($arr['attributes']['aloitan'])).'</starttimeofday>
@@ -304,6 +333,7 @@ class ToteutuneetController extends Controller
 							<collectorratio type="number">'.$collectorratio.'</collectorratio>
 							<acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
 							<description>'.$description.((!empty($arr['attributes']['kohde_kannasta']))? ', '.$arr['attributes']['kohde_kannasta']:'').'</description>
+							'.$dimension.'
 						</workdaytime>';
 					}
 				}
