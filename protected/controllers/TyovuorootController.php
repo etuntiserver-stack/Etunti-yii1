@@ -3650,8 +3650,10 @@ class TyovuorootController extends Controller
 				// this is a special case we're supporting for kotipuhtaaksi
 				// where we want the user to write a reason why they removed
 				// a shift from the chain.
-				ToistuvatTyovuorot::model()->updateByPk($edellinen_model["id"], 
-					["muistiinpano" => $model->muistiinpano]);
+				if(!empty(Yii::app()->user->kotipuhtaaksi)) {
+					ToistuvatTyovuorot::model()->updateByPk($edellinen_model["id"], 
+						["muistiinpano" => $model->muistiinpano]);
+				}
 
 				// <-- PushNotify
 				$this_id = $model->id;
