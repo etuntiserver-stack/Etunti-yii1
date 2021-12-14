@@ -740,7 +740,7 @@ $(document).ready(function(){
         <button class="btn btn-primary uusimuistinpanno lomake_btn" type="button"><i class="fa fa-plus"></i></button>
       </span>
     </div>  
-	<?php if(!empty(Yii::app()->user->kp) && $toistuva) : ?>
+	<?php if(!empty(Yii::app()->user->kotipuhtaaksi) && $toistuva) : ?>
 		<span class="text-danger">Muistathan lisätä muistiinpanon jos irroitat työvuoron ketjusta</span>
 	<?php endif; ?>
   </div>

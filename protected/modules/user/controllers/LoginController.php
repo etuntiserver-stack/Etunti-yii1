@@ -109,7 +109,7 @@ class LoginController extends Controller
 				// Whether or not kotipuhtaaksi -specific features are enabled or being tested.
 				Yii::app()->user->setState('kp', (in_array($domain, ['kotipuhtaaksi', 'staging_kotipuhtaaksi', 'demo', 'staging_demo', 'sivex'])));
 				// flag to indicate if user is actually in kotipuhtaaksi domain
-				Yii::app()->user->setState("kotipuhtaaksi", in_array($domain, ["kotipuhtaaksi", 'staging_kotipuhtaaksi', 'demo', 'staging_demo']));
+				Yii::app()->user->setState("kotipuhtaaksi", in_array($domain, ["kotipuhtaaksi"]) );
 
 			    $domainit=Domainit::model()->find(" domain = '".$domain."' ");
 			    if(isset($domainit->paketti))
