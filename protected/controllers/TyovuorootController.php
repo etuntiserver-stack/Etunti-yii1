@@ -6059,6 +6059,15 @@ class TyovuorootController extends Controller
     $mail->addReplyTo($replyto_email);
     $mail->send();
 
+	
+	$log = new Log();
+	$log->kuka = Yii::app()->user->nimi;
+	$log->log_category = Log::EMAIL_CATEGORY;
+	$log->email_to = $asiakas->AloitusajatEmailsString;
+	$log->email_subject = $email_subject;
+	$log->email_message = $email_body;
+	$log->save();
+
     // Return to the caller with good news.
     $customer = $asiakas->sahkoposti ?? "ID $asiakas_id";
     echo json_encode([

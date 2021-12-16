@@ -16,6 +16,11 @@
  */
 class Log extends DB2ActiveRecord
 {
+
+	const EMAIL_CATEGORY = 1;
+	// there's also 2 and 3, don't know their names
+	// but I think 2 is like "normal" or "model" and 3 is "error"
+
 	/**
 	 * @return string the associated database table name
 	 */
