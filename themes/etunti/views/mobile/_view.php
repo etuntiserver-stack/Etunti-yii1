@@ -6,41 +6,12 @@
 $tas = explode(",",Yii::app()->user->adminPaketti);
 // <-- adminPaketti
 
-$date 	= date("d.m.Y",strtotime($data->aloitan));
-$tid 	= $data->tid;
+$date 			= date("d.m.Y",strtotime($data->aloitan));
+$tid 			= $data->tid;
 
-$class = '';
-// <-- Jos sivu on laskutettu
-if( isset($sivu) and $sivu == 'laskutettu' )
-{
-
-  	$toteutuneet = false;
-
-	$criteria = new CDbCriteria();
-       	$criteria->condition = " kid='".$data->id."' ";
-  	$tot = Toteutuneet::model()->find($criteria);
-   	if(isset($tot->id))
-   	{
-      		$toteutuneet = true;
-      		$data = $tot;
-   	}
-
-	if($data->laskutettu == 1)
-	  $checked =  'checked';
-	else
-	  $checked =  '';
-
-
-  	if($toteutuneet)
-  	{
-  		$class = 'border:2px green solid;';
-
-  	} elseif(empty($data->loppui)) {
-
-  	}
-}
-// Jos sivu on laskutettu -->
-
+$class 			= '';
+$toteutuneet 	= false;
+  	
 $viesti			= $data->viesti;
 $data_luetut 	= $data;
 $criteria 		= new CDbCriteria();
@@ -50,10 +21,26 @@ $old_id 		= $data->id;
 
 if(isset($tot->id))
 {
-	$tot_id 	= $tot->id;
-	$data 		= $tot;
-	$data->id 	= $old_id;
+	$tot_id 		= $tot->id;
+	$data 			= $tot;
+	$data->id 		= $old_id;
+	$toteutuneet 	= true;
 }
+
+// <-- Jos sivu on laskutettu
+if( isset($sivu) and $sivu == 'laskutettu' )
+{
+	if($data->laskutettu == 1)
+	  $checked =  'checked';
+	else
+	  $checked =  '';
+
+  	if($toteutuneet)
+  	{
+  		$class = 'border:2px green solid;';
+  	}
+}
+// Jos sivu on laskutettu -->
 
 // <-- Check Laskutetut
 if($data_luetut->laskutettu == 1)
