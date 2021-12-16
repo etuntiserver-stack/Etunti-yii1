@@ -3646,14 +3646,6 @@ class TyovuorootController extends Controller
 				echo json_encode($model->getErrors());
 			} else {
 
-				// insert new notes (muistiinpanot) into the original note as well.
-				// this is a special case we're supporting for kotipuhtaaksi
-				// where we want the user to write a reason why they removed
-				// a shift from the chain.
-				if(!empty(Yii::app()->user->kotipuhtaaksi)) {
-					ToistuvatTyovuorot::model()->updateByPk($edellinen_model["id"], 
-						["muistiinpano" => $model->muistiinpano]);
-				}
 
 				// <-- PushNotify
 				$this_id = $model->id;
