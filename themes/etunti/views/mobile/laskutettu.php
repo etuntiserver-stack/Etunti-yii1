@@ -236,8 +236,8 @@
   <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
   <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
-  <th class="text-center" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Hyväksytty'); ?>"><?php echo Yii::t('main', '<i class="fa  fa-question-circle"></i>'); ?></th>
   <th><center><?php echo Yii::t('main', 'Laskutettu'); ?> <input type="checkbox" id="valitsekaikki"></center></th>
+  <th class="text-center" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Hyväksytty'); ?>"><?php echo Yii::t('main', '<i class="fa  fa-question-circle"></i>'); ?></th>
   <th class="text-center" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Poista'); ?>"><?php echo Yii::t('main', '<i class="fa  fa-question-circle"></i>'); ?></th>
   </tr>
   </thead>
@@ -354,17 +354,16 @@ $('.chckbxHyvaksynta').on('click', function(event, state) {
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/mobile/laskutettu',
            type: "POST",
-	   data: { id : thisID[1], ajax : "true", las : "1", tot : tot },
+	   		data: { id : thisID[1], ajax : "true", las : "1", tot : tot },
            success: function(data){
-		console.log(data);
-		this_tr.hide(370);
-/*
-		   $('#ilmoitusMerkkitysta').html('<div class="alert bg-success">Kohde merkitty laskutetuksi.</div>').show();
-		setTimeout(function() { 
-			$('#ilmoitusMerkkitysta').hide('slow');
-		}, 5000);
-*/
-
+				console.log(data);
+				this_tr.hide(370);
+				/*
+				$('#ilmoitusMerkkitysta').html('<div class="alert bg-success">Kohde merkitty laskutetuksi.</div>').show();
+				setTimeout(function() { 
+				$('#ilmoitusMerkkitysta').hide('slow');
+				}, 5000);
+				*/
            }
         });
       } else {

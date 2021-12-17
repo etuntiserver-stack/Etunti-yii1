@@ -1474,13 +1474,18 @@ class MobileController extends Controller
 
 		if(isset($_POST['ajax']) and isset($_POST['id']))
 		{
- 			if(isset($_POST['tot']) and $_POST['tot'] == '1'){
-			  $tot_table = Toteutuneet::model()->findbypk($_POST['id']);
-			  Toteutuneet::model()->updatebypk($_POST['id'], array('laskutettu'=>$_POST['las']));
-			  $mob_table = Mobile::model()->findbypk($tot_table->kid);
-			  if( isset($mob_table->id) ){
-			  	Mobile::model()->updatebypk($mob_table->id, array('laskutettu'=>$_POST['las']));
-			  }
+ 			if(isset($_POST['tot']) and $_POST['tot'] == '1')
+ 			{
+				$tot_table = Toteutuneet::model()->find("kid='".$_POST['id']."'");
+				if(isset($tot_table->id))
+				{
+					Toteutuneet::model()->updatebypk($tot_table->id, array('laskutettu'=>$_POST['las']));
+					$mob_table = Mobile::model()->findbypk($tot_table->kid);
+					if( isset($mob_table->id) ){
+						Mobile::model()->updatebypk($mob_table->id, array('laskutettu'=>$_POST['las']));
+					}
+				}				
+
 			} else {
 			  Mobile::model()->updatebypk($_POST['id'], array('laskutettu'=>$_POST['las']));
 			}

@@ -341,7 +341,16 @@ elseif(!isset($tot_id) and isset($laskutetut_ids[$data->id]))
 	</td>
 
 	<td><span id="kesto_<?php echo $data->id; ?>"><?php echo $this->sprint($kesto[$data->id]); ?></span></td>
-	<td><?=($data->laskutettu == 1)? 'Kyllä':'Ei'?></td>
+	
+	<td>
+		<?php if( isset($sivu) and $sivu == 'laskutettu' ) : ?>
+			<center>
+				<input type="checkbox" class="chckbxHyvaksynta" id="laskutettu_<?php echo $data->id; ?>" tot="<?php echo $toteutuneet; ?>" <?php echo $checked; ?>> 
+			</center>
+		<?php else: ?>
+			<?=($data->laskutettu == 1)? 'Kyllä':'Ei'?>
+		<?php endif; ?>
+	</td>
 	<td><center>
 		<?php 
 		if( empty($data->hyvaksytty) ){ 
@@ -367,13 +376,6 @@ elseif(!isset($tot_id) and isset($laskutetut_ids[$data->id]))
 		}
 		?>
 	</center></td>
-
-	<?php if( isset($sivu) and $sivu == 'laskutettu' ) : ?>
-	<td><center>
-	    <input type="checkbox" class="chckbxHyvaksynta" id="laskutettu_<?php echo $data->id; ?>" tot="<?php echo $toteutuneet; ?>" <?php echo $checked; ?>> 
-	    </center>
-	</td>
-	<?php endif; ?>
 	<td><center><span class="link glyphicon glyphicon-trash text-danger poistaKohde" for="rivi_<?php echo $data->id; ?>"></span></center></td>
 
 </tr>
