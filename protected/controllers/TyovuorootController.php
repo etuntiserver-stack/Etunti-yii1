@@ -2351,6 +2351,12 @@ class TyovuorootController extends Controller
 		if(empty($osoite) and isset($arvo->kohteet->osoite))
 			$osoite = $arvo->kohteet->osoite;
 
+		// append postal code to address if we can
+		if(!empty(Yii::app()->user->kotipuhtaaksi) and !empty($osoite) 
+			and isset($arvo->kohteet->pnumero)) {
+			$osoite .= ' (' . $arvo->kohteet->pnumero . ')';
+		}
+
 		// <-- Return Array
 		if( !$laatikkomuoto ){
 			$arvo->pvm 	= $this_pvm;
