@@ -80,15 +80,27 @@ function printName($employeeId, $workers) {
     return "???";
 }
 
-function printPlannedDuration($employeeId, $resultArr) {
+function printPlanned($employeeId, $resultArr) {
     // merge all results into a single line
     $resultStr = "";
     foreach($resultArr as $result) {
         if($result->tid == $employeeId) {
-            $resultStr .=  printShiftDuration($result) . "<br>";
+            $resultStr .=  printShiftDuration($result) 
+                . "<br>Muistiinpanot:<br>"
+                . parseNotes($result)
+                . "<br>";
         }
     }
     return $resultStr;
+}
+
+function parseNotes($shiftObj) {
+    $notes = "";
+    $parsed_notes = json_decode($shiftObj->muistiinpano, true) ?? [];
+    foreach($parsed_notes as $note) {
+        $notes .= $note . "<br>";
+    }
+    return $notes;
 }
 
 function printTrackedDuration($employeeId, $resultArr) {
@@ -135,7 +147,7 @@ function printApprovedDuration($employeeId, $resultArr) {
                     <?php foreach($workers as $worker) : ?>
                         <tr>
                         <td><?= printName($worker->id, $workers) ?></td>
-                        <td><?= printPlannedDuration($worker->id, $resultMap["planned"] ?? []);?></td>
+                        <td><?= printPlanned($worker->id, $resultMap["planned"] ?? []);?></td>
                         <td><?= printTrackedDuration($worker->id, $resultMap["read"] ?? []); ?></td>
                         <td><?= printApprovedDuration($worker->id, $resultMap["approved"] ?? []); ?></td>
                         </tr>
