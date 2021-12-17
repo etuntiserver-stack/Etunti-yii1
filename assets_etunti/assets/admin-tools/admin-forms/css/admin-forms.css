@@ -4239,3 +4239,19 @@ not([type="multiple"]) {
 .select2-container .select2-selection--single {
   border: 1px solid #DDD !important
 }
+
+#hover-track-result {
+  position: absolute;
+}
+
+.hover-track-container {
+  
+	min-width: 600px;
+	padding: 10px 20px;
+	position: absolute;
+	background: white;
+	z-index: 999999;
+  border: 1px #ddd solid;
+  max-height: 500px;
+  overflow: auto;
+}

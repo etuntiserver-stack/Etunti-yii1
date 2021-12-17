@@ -63,6 +63,12 @@ $palvelu_tyyppi			= $asetukset->palvelu_tyyppi;
 $netvisor_kaytto		= $asetukset->netvisor_kaytto;
 $iban				= $asetukset->iban;
 ?>
+<?php // holds hover results for invoice row
+// result include employee names, planned, tracked and approved hours
+// related to the invoice
+?>
+<div id="hover-track-result" class="hide">
+</div>
 <div class="container-fluid">
 	<?php if( count($asiakkaat_ids) > 0 ): ?>
 	<table class="table table-bordered paa_taulu">
@@ -641,22 +647,10 @@ $iban				= $asetukset->iban;
 		?>
 		</th>
 		<th>
-		    <?php
-			echo CHtml::link('<i class="fa fa-hourglass"></i>', 
-				array('/mobile/ayhteenveto', 
-					'from' => $from, 
-					'to' => $to, 
-					'asiakas_id' => $asiakas['id']
-				), 
-				array(
-					'class' => 'pull-right btn btn-success myBgColors',
-					'data-toggle'=>'tooltip', 
-					'data-placement'=>'top', 
-					'target' => '_blank',
-					'title'=>Yii::t('main', 'Työtuntien seuranta')
-				)
-			); 
-		    ?>
+			<button class="pull-right btn btn-success myBgColors hover-track" 
+				data-from="<?=$from?>" data-to="<?=$to?>" data-client="<?=$asiakas["id"]?>">
+				<i class="fa fa-hourglass"></i>
+			</button>
 		    <h3><?=Yii::t('main', 'Yhteensä')?>: <span class="yhteensa_last"><?=number_format($yhteensa_total, $decimal, ',', ' ')?></span>&euro;</h3>
 		</th>
 	<?php else: ?>
@@ -936,6 +930,51 @@ $(document).ready(function(){
 	return false;
   });
   //     muokkaus -->
+
+  // hover track info stuff
+  let lastSearch = {};
+  let isSearching = false;
+
+  const handlerIn = (e) => {
+	const target = event.target;
+	if(target) {
+		const data = $(target).data();
+		const trackResult = $("#hover-track-result");
+		
+		// don't execute search (again) if we're using the same data
+		// but do show last searches results.
+		if(lastSearch.from === data.from 
+			&& lastSearch.to === data.to 
+			&& lastSearch.client === data.client) {
+				if(!isSearching) {
+					trackResult.removeClass("hide");
+				}
+				return;
+			}
+
+		// table rows id attr is the clients ID
+		const pos = $("#" + data.client).position();
+
+		trackResult.css("top", pos.top);
+		trackResult.css("left", pos.left);
+		lastSearch = {from: data.from, to: data.to, client: data.client};
+		let url = "/index.php/lasku/hovertrack?";
+		url += "from=" + data.from;
+		url += "&to=" + data.to;
+		url += "&client_id=" + data.client;
+		isSearching = true;
+		trackResult.load(url, (fulfil) => {
+			trackResult.removeClass("hide");
+			isSearching = false;
+		});
+	}
+  };
+
+  const handlerOut = (e) => {
+	$("#hover-track-result").addClass("hide");
+  };
+
+  $(".hover-track").mouseenter(handlerIn).mouseleave(handlerOut);
 
 });
 </script>

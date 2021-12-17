@@ -27,7 +27,16 @@ class LaskuController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_procountor', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 'autolahetys', 'update_autolahetteet', 'delete_autolahetteet', 'perpvmkohde', 'tuotepalvelukohdelle', 'laskutetuksi', 'getdatafrom'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde', 
+					'etsikohde_by_yksikko', 'etsiasiakas', 'etsisaaja','luoKohteista', 
+					'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 
+					'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 
+					'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 
+					'laheta_procountor', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 
+					'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas', 'auto', 'luolaskut', 
+					'autolahetys', 'update_autolahetteet', 'delete_autolahetteet', 
+					'perpvmkohde', 'tuotepalvelukohdelle', 'laskutetuksi', 
+					'getdatafrom', 'hovertrack'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow',  // allow all users to perform 'index' and 'view' actions
@@ -5283,5 +5292,101 @@ $xml = '
 		}
 
 		return false;
+	}
+
+	/**
+	 * Returns data for hovertrack.php which displays shift/tracked hours information
+	 * about an invoice row, in autolaskutus view.
+	 */
+	public function actionHovertrack($from, $to, $client_id)
+	{
+
+		$controller = Yii::app()->createController('Mobile')[0];
+		
+		//$read_start = microtime(true);
+		$read = $controller->AsiakasPvmLuTotSuunArray($client_id, $from, $to, "luetut");
+		//$read_end = microtime(true);
+		
+
+		//$planned_start = microtime(true);
+		$planned = $controller->AsiakasPvmLuTotSuunArray($client_id, $from, $to, "suunnitelut");
+		//$planned_end = microtime(true);
+
+		//$approved_start = microtime(true);
+		$approved = $controller->AsiakasPvmLuTotSuunArray($client_id, $from, $to, "toteutuneet");
+		//$approved_end = microtime(true);
+
+		//$apprx = $approved_end - $approved_start;
+		//$planx = $planned_end - $planned_start;
+		// seems like "toteutuneet" takes the longest.
+		
+		$workerIds = [];
+		$results = [];
+		// sort by date
+		foreach($planned as $p) {
+			$mapKey = $this->parseDateFromShift($p);
+			if(!array_key_exists($mapKey, $results)) {
+				$results[$mapKey] = [];
+			}
+			$results[$mapKey]["planned"][] = $p["data"];
+			$workerIds[$p["data"]->tid] = $p["data"]->tid;
+		}
+
+		foreach($read as $r) {
+			$mapKey = $this->parseDateFromMobile($r);
+			if(!array_key_exists($mapKey, $results)) {
+				$results[$mapKey] = [];
+			}
+			$results[$mapKey]["read"][] = $r;
+			$workerIds[$r->tid] = $r->tid;
+		}
+
+		foreach($approved as $a) {
+			$mapKey = $this->parseDateFromMobile($a);
+			if(!array_key_exists($mapKey, $results)) {
+				$results[$mapKey] = [];
+			}
+			if(!empty($a->hyvaksytty)) {
+				$results[$mapKey]["approved"][] = $a;
+				$workerIds[$a->tid] = $a->tid;
+			}
+			
+		}
+
+		$criteria = new CDbCriteria();
+		$criteria->addInCondition("id", $workerIds);
+		$workers = Tyontekijat::model()->findAll($criteria);
+
+		$workerMap = [];
+		foreach($workers as $worker) {
+			$workerMap[$worker->id] = $worker;
+		}
+		
+		return $this->renderPartial("hovertrack", ["results" => $results, "workers" => $workerMap]);
+	}
+
+	private function parseDateFromMobile($mobileObject) {
+		$format1 = "d.m.Y H:i:s";
+		$format2 = "d.m.Y H:i";
+		$start_time = $mobileObject->aloitan;
+		$date = DateTime::createFromFormat($format1, $start_time);
+		if($date === false) {
+			$date = DateTime::createFromFormat($format2, $start_time);
+			if($date === false) {
+				throw new Exception("Couldn't parse date $start_time");
+			}
+			return $date->format("Y-m-d");
+		}
+		return $date->format("Y-m-d");
+	}
+
+	private function parseDateFromShift($shiftObject) {
+		$format = "d.m.Y";
+		$start_date = $shiftObject["this_pvm"];
+		$date = DateTime::createFromFormat($format, $start_date);
+		if($date === false) {
+			throw new Exception("Couldn't parse date $start_date");
+		}
+		return $date->format("Y-m-d");
 	}
 }

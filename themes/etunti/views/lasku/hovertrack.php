@@ -1,0 +1,149 @@
+<?php
+/* @var $this LaskuController */
+/* @var $results Array */
+/* @var $workers Array of workers, mapped by their ID */
+/*
+    example of results
+    [
+        "2021-12-01" => 
+            [
+                "read" => [
+                    // mobile objects
+                ], "planned" => [
+                    // shift objects
+                ], "approved" => [
+                    // mobile objects
+                ]
+            ]
+    ]
+*/
+
+function parseDate($formats, $timestamp) {
+    if(is_array($formats)) {
+        foreach($formats as $format) {
+            $date = DateTime::createFromFormat($format, $timestamp);
+            if($date) {
+                return $date;
+            }
+        }
+    } else {
+        return DateTime::createFromFormat($formats, $timestamp);
+    }
+}
+
+function printShiftDuration($shiftObj) {
+    
+    $start_ts = $shiftObj->pvm . " " . $shiftObj->alku;
+    $end_ts = $shiftObj->pvm . " " . $shiftObj->loppu;
+
+    $format = "d.m.Y H:i";
+
+    $start = parseDate($format, $start_ts);
+    $end = parseDate($format, $end_ts);
+
+    $duration = $end->getTimestamp() - $start->getTimestamp();
+    $dur_hours = $duration / 60 / 60;
+    $rounded_hours = round($dur_hours, 2);
+    
+    return $shiftObj->alku . " - " . $shiftObj->loppu . " ($rounded_hours h)";
+}
+
+function printMobileDuration($mobileObj) {
+    $format1 = "d.m.Y H:i:s";
+    $format2 = "d.m.Y H:i";
+    $start_time = $mobileObj->aloitan;
+    $end_time = $mobileObj->loppui;
+
+    $start = parseDate([$format1, $format2], $start_time);
+    $end = parseDate([$format1, $format2], $end_time);
+
+    $output_format = "H:i";
+
+    $duration = $end->getTimestamp() - $start->getTimestamp();
+    $dur_hours = $duration / 60 / 60;
+    $rounded_hours = round($dur_hours, 2);
+
+    return $start->format($output_format) . " - " . $end->format($output_format) . " ($rounded_hours h)";
+}
+
+function printMessage($mobileObj) {
+    return $mobileObj->viesti ?? "";
+}
+
+function printName($employeeId, $workers) {
+    $emp = $workers[$employeeId];
+    if($emp) {
+        $f_name = $emp->tekijan_nimi;
+        $l_name = $emp->sukunimi;
+        return $l_name . " " . $f_name;
+    }
+    return "???";
+}
+
+function printPlannedDuration($employeeId, $resultArr) {
+    // merge all results into a single line
+    $resultStr = "";
+    foreach($resultArr as $result) {
+        if($result->tid == $employeeId) {
+            $resultStr .=  printShiftDuration($result) . "<br>";
+        }
+    }
+    return $resultStr;
+}
+
+function printTrackedDuration($employeeId, $resultArr) {
+    // merge all results into a single line
+    $resultStr = "";
+    foreach($resultArr as $result) {
+        if($result->tid == $employeeId) {
+            $resultStr .= printMobileDuration($result) . " [viesti: " . printMessage($result) . "]";
+            $resultStr .= "<br>";
+        }
+    }
+    return $resultStr;
+}
+
+function printApprovedDuration($employeeId, $resultArr) {
+    // merge all results into a single line
+    $resultStr = "";
+    foreach($resultArr as $result) {
+        if($result->tid == $employeeId) {
+            $resultStr .= printMobileDuration($result) . "<br>";
+        }
+    }
+    return $resultStr;
+}
+
+
+
+?>
+
+<div class="hover-track-container">
+    <?php foreach($results as $dateKey => $resultMap) : ?>
+    <div class="row">
+        <div class="col">
+            <table class="table" style="margin-bottom: 10px">
+                <thead>
+                    <tr>
+                        <th><?= $dateKey ?></th>
+                        <th>Suunnitellut</th>
+                        <th>Luetut</th>
+                        <th>Hyväksytyt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($workers as $worker) : ?>
+                        <tr>
+                        <td><?= printName($worker->id, $workers) ?></td>
+                        <td><?= printPlannedDuration($worker->id, $resultMap["planned"] ?? []);?></td>
+                        <td><?= printTrackedDuration($worker->id, $resultMap["read"] ?? []); ?></td>
+                        <td><?= printApprovedDuration($worker->id, $resultMap["approved"] ?? []); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    <?php endforeach; ?>
+</div>
