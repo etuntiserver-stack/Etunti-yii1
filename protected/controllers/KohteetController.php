@@ -36,7 +36,8 @@ class KohteetController extends Controller
 					'index', 'view','osoite', 'autotaytaminen',
 					'createfromasiakas', 'googlemap', 'googlemap_k',
 					'massamuokkaus', 'tuotteetbyhinnasto',
-					"checkcatalogues"),
+					"checkcatalogues", "markcheckedcatalogue",
+					"unmarkcheckedcatalogue"),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -676,15 +677,48 @@ class KohteetController extends Controller
 		$criteria->addCondition("hinnasto_id IN (3,4)");
 		$properties = Kohteet::model()->findAll($criteria);
 
+		$already_checked = CheckedCatalogues::model()
+			->with("property")
+			->with("user")
+			->findAll();
+
+		$already_checked_properties = [];
+		foreach($already_checked as $checked_row) {
+			$already_checked_properties[$checked_row->property_id] = $checked_row;
+		}
+
 		$catalogue_names = [
 			3 => "Uusimaa 2021",
 			4 => "Muu Suomi 2021"
 		];
 
+		$cleared_properties = [];
+		foreach($properties as $property) {
+			if(!array_key_exists($property->id, $already_checked_properties)) {
+				$cleared_properties[] = $property;
+			}
+		}
+
 		$this->render("check_catalogues", [
-			"properties" => $properties,
+			"properties" => $cleared_properties,
 			"catalogue_names" => $catalogue_names,
+			"already_checked" => $already_checked_properties,
 		]);
+	}
+
+	public function actionMarkCheckedCatalogue($property_id)
+	{
+		$checked_cat = new CheckedCatalogues();
+		$checked_cat->user_id = Yii::app()->user->adminID;
+		$checked_cat->property_id = $property_id;
+		if(!$checked_cat->save()) {
+			echo CJavaScript::jsonEncode($checked_cat->getErrors());
+		}
+		echo CJavaScript::jsonEncode($checked_cat);
+	}
+
+	public function actionUnmarkCheckedCatalogue($checked_id) {
+		CheckedCatalogues::model()->deleteByPk($checked_id);
 	}
 
 	/**
