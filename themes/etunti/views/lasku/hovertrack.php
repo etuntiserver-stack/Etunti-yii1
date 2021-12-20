@@ -45,7 +45,7 @@ function printShiftDuration($shiftObj) {
     $dur_hours = $duration / 60 / 60;
     $rounded_hours = round($dur_hours, 2);
     
-    return $shiftObj->alku . " - " . $shiftObj->loppu . " ($rounded_hours h)";
+    return $shiftObj->alku . " - " . $shiftObj->loppu . " <strong>($rounded_hours h)</strong>";
 }
 
 function printMobileDuration($mobileObj) {
@@ -63,7 +63,7 @@ function printMobileDuration($mobileObj) {
     $dur_hours = $duration / 60 / 60;
     $rounded_hours = round($dur_hours, 2);
 
-    return $start->format($output_format) . " - " . $end->format($output_format) . " ($rounded_hours h)";
+    return $start->format($output_format) . " - " . $end->format($output_format) . " <strong>($rounded_hours h)</strong>";
 }
 
 function printMessage($mobileObj) {
@@ -81,14 +81,17 @@ function printName($employeeId, $workers) {
 }
 
 function printPlanned($employeeId, $resultArr) {
+    $planned = isset($resultArr["planned"]) ? $resultArr["planned"] : [];
     // merge all results into a single line
     $resultStr = "";
-    foreach($resultArr as $result) {
+    foreach($planned as $result) {
         if($result->tid == $employeeId) {
             $resultStr .=  printShiftDuration($result) 
+                . '<span style="font-size: 10px; line-height: 1;">'
                 . "<br>Muistiinpanot:<br>"
                 . parseNotes($result)
-                . "<br>";
+                . "<br>"
+                . "</span>";
         }
     }
     return $resultStr;
@@ -104,9 +107,10 @@ function parseNotes($shiftObj) {
 }
 
 function printTrackedDuration($employeeId, $resultArr) {
+    $tracked = isset($resultArr["read"]) ? $resultArr["read"] : [];
     // merge all results into a single line
     $resultStr = "";
-    foreach($resultArr as $result) {
+    foreach($tracked as $result) {
         if($result->tid == $employeeId) {
             $resultStr .= printMobileDuration($result) . " [viesti: " . printMessage($result) . "]";
             $resultStr .= "<br>";
@@ -116,14 +120,39 @@ function printTrackedDuration($employeeId, $resultArr) {
 }
 
 function printApprovedDuration($employeeId, $resultArr) {
+    $approved = isset($resultArr["approved"]) ? $resultArr["approved"] : [];
     // merge all results into a single line
     $resultStr = "";
-    foreach($resultArr as $result) {
+    foreach($approved as $result) {
         if($result->tid == $employeeId) {
             $resultStr .= printMobileDuration($result) . "<br>";
         }
     }
     return $resultStr;
+}
+
+function printApprovedTotalColumn($employeeId, $resultArr) {
+    $approved = isset($resultArr["approved"]) ? $resultArr["approved"] : [];
+    $totalHours = 0;
+    foreach($approved as $result) {
+        if($result->tid == $employeeId) {
+            $format1 = "d.m.Y H:i:s";
+            $format2 = "d.m.Y H:i";
+            $start_time = $result->aloitan;
+            $end_time = $result->loppui;
+
+            $start = parseDate([$format1, $format2], $start_time);
+            $end = parseDate([$format1, $format2], $end_time);
+
+            $duration = $end->getTimestamp() - $start->getTimestamp();
+            $dur_hours = $duration / 60 / 60;
+            $rounded_hours = round($dur_hours, 2);
+
+            $totalHours += $rounded_hours;
+
+        }
+    }
+    return "Yhteensä: <strong>$totalHours h</strong>";
 }
 
 
@@ -147,9 +176,9 @@ function printApprovedDuration($employeeId, $resultArr) {
                     <?php foreach($workers as $worker) : ?>
                         <tr>
                         <td><?= printName($worker->id, $workers) ?></td>
-                        <td><?= printPlanned($worker->id, $resultMap["planned"] ?? []);?></td>
-                        <td><?= printTrackedDuration($worker->id, $resultMap["read"] ?? []); ?></td>
-                        <td><?= printApprovedDuration($worker->id, $resultMap["approved"] ?? []); ?></td>
+                        <td><?= printPlanned($worker->id, $resultMap);?></td>
+                        <td><?= printTrackedDuration($worker->id, $resultMap); ?></td>
+                        <td><?= printApprovedDuration($worker->id, $resultMap); ?> <?= printApprovedTotalColumn($worker->id, $resultMap) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

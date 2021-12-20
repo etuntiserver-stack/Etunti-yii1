@@ -4255,3 +4255,7 @@ not([type="multiple"]) {
   max-height: 500px;
   overflow: auto;
 }
+
+.hover-track-container td {
+  padding: 0 !important;
+}
