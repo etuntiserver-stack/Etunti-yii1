@@ -4252,7 +4252,6 @@ not([type="multiple"]) {
 	background: white;
 	z-index: 999999;
   border: 1px #ddd solid;
-  max-height: 500px;
   overflow: auto;
 }
 

@@ -131,26 +131,23 @@ function printApprovedDuration($employeeId, $resultArr) {
     return $resultStr;
 }
 
-function printApprovedTotalColumn($employeeId, $resultArr) {
+function printApprovedTotalColumn($resultArr) {
     $approved = isset($resultArr["approved"]) ? $resultArr["approved"] : [];
     $totalHours = 0;
     foreach($approved as $result) {
-        if($result->tid == $employeeId) {
-            $format1 = "d.m.Y H:i:s";
-            $format2 = "d.m.Y H:i";
-            $start_time = $result->aloitan;
-            $end_time = $result->loppui;
+        $format1 = "d.m.Y H:i:s";
+        $format2 = "d.m.Y H:i";
+        $start_time = $result->aloitan;
+        $end_time = $result->loppui;
 
-            $start = parseDate([$format1, $format2], $start_time);
-            $end = parseDate([$format1, $format2], $end_time);
+        $start = parseDate([$format1, $format2], $start_time);
+        $end = parseDate([$format1, $format2], $end_time);
 
-            $duration = $end->getTimestamp() - $start->getTimestamp();
-            $dur_hours = $duration / 60 / 60;
-            $rounded_hours = round($dur_hours, 2);
+        $duration = $end->getTimestamp() - $start->getTimestamp();
+        $dur_hours = $duration / 60 / 60;
+        $rounded_hours = round($dur_hours, 2);
 
-            $totalHours += $rounded_hours;
-
-        }
+        $totalHours += $rounded_hours;
     }
     return "Yhteensä: <strong>$totalHours h</strong>";
 }
@@ -174,16 +171,23 @@ function printApprovedTotalColumn($employeeId, $resultArr) {
                 </thead>
                 <tbody>
                     <?php foreach($workers as $worker) : ?>
-                        <tr>
+                    <tr>
                         <td><?= printName($worker->id, $workers) ?></td>
                         <td><?= printPlanned($worker->id, $resultMap);?></td>
                         <td><?= printTrackedDuration($worker->id, $resultMap); ?></td>
-                        <td><?= printApprovedDuration($worker->id, $resultMap); ?> <?= printApprovedTotalColumn($worker->id, $resultMap) ?></td>
-                        </tr>
+                        <td><?= printApprovedDuration($worker->id, $resultMap); ?></td>
+                    </tr>
                     <?php endforeach; ?>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <?= printApprovedTotalColumn($resultMap) ?>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
-            
         </div>
     </div>
     <?php endforeach; ?>
