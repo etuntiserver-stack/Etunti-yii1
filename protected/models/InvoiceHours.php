@@ -51,4 +51,30 @@ class InvoiceHours extends VersionedHours
             }
         }
     }
+
+    /**
+     * Rounds the ending_time fields to the next 15 minutes.
+     * Automatically calls calculateDurations() to update all the durations.
+     * @param bool $save Flag to indicate if we should save the model after rounding. Defaults to false.
+     */
+    public function roundToNext15Minutes($save = false)
+    {
+        $endTime = DateTime::createFromFormat("Y-m-d H:i:s", $this->ending_time);
+        $date = $endTime->format("Y-m-d");
+        $hours = $endTime->format("H");
+        $minutes = $endTime->format("i");
+
+        $intMinutes = intval($minutes);
+        
+        $newMinutes = (15 - ($intMinutes % 15)) + $intMinutes;
+        // can't assign $newSeconds = 0, php seems to think it's a boolean
+        $newSeconds = "00";
+        // php doesn't care if 00 time is written as 0 or 00, it'll correctly parse the date.
+        $newEndTime = DateTime::createFromFormat("Y-m-d H:i:s", $date . " " . $hours . ":" . $newMinutes . ":" . $newSeconds);
+        $this->ending_time = $newEndTime->format("Y-m-d H:i:s");
+        $this->calculateDurations();
+        if($save) {
+            $this->save();
+        }
+    }
 }
