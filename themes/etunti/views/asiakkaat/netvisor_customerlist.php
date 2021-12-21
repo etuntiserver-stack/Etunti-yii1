@@ -3,6 +3,67 @@ td{
 	vertical-align: top !important;
 }
 </style>
+
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
+
+
+        <h2 class="myBgColors p10">Netvisor tarkistus lista</h2>
+        
+   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <input type="hidden" name="mob_hae">
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+                    <!-- Input Icons -->
+                    <div class="row">
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+								<!-- Autocomplete -->
+								<?php
+					   			$site = Yii::app()->createController('Site');
+								$mod = 'Asiakkaat';
+								$sarake = 'yrityksen_nimi';
+								$placeholder = 'Asiakas';
+								if(isset($_GET[$sarake])) 			
+									$postvalue = $_GET[$sarake]; 
+								else 
+									$postvalue = '';				
+						 	        $site[0]->autocompleteFor($mod, array('yrityksen_nimi', 'etunimi', 'sukunimi'), $placeholder, $postvalue);
+								?>
+								<!-- Autocomplete -->
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                        <div class="section">
+                          <label class="field select">
+							   <select class="gui-input" name="aktiivinen" id="aktiivinen">
+					   				<option value="kaikki"><?php echo Yii::t('main', 'Kaikki'); ?></option>
+					   				<option value="problems" <?php echo (isset($_GET['problems']) and $_GET['problems'] == 1)? 'selected':''; ?>><?php echo Yii::t('main', 'Näytä lista jossa Netvisor Key ei Sama kuin Etunnissa'); ?></option>
+							   </select>
+                            <label for="firstname" class="field-icon">
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2 col-sm-offset-2">
+        	        	<input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
+					  </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+
+	    </form>
+        <!-- loppu: .tray-center -->
+        </div>
+
 <?php
 if(isset($_GET['getAsiakas']))
 {
