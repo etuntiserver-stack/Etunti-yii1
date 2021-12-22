@@ -10,9 +10,8 @@ td{
 
         <h2 class="myBgColors p10">Netvisor tarkistus lista</h2>
         
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <form id="mobForm" action="#" class="form-inline" method="GET">
    	    <input type="hidden" name="mob_hae">
-
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
@@ -40,11 +39,13 @@ td{
                             </label>
                           </label>
                         </div>
+                      </div>
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
-							   <select class="gui-input" name="aktiivinen" id="aktiivinen">
-					   				<option value="kaikki"><?php echo Yii::t('main', 'Kaikki'); ?></option>
-					   				<option value="problems" <?php echo (isset($_GET['problems']) and $_GET['problems'] == 1)? 'selected':''; ?>><?php echo Yii::t('main', 'Näytä lista jossa Netvisor Key ei Sama kuin Etunnissa'); ?></option>
+							   <select class="gui-input" name="valiko" id="valiko">
+					   				<option value=""><?php echo Yii::t('main', 'Kaikki'); ?></option>
+					   				<option value="problems" <?php echo (isset($_GET['valiko']) and $_GET['valiko'] == 'problems')? 'selected':''; ?>><?php echo Yii::t('main', 'Näytä lista jossa on ongelma Netvisor ja Etunti välillä.'); ?></option>
 							   </select>
                             <label for="firstname" class="field-icon">
                             <i class="arrow double"></i>
@@ -52,7 +53,7 @@ td{
                           </label>
                         </div>
                       </div>
-                      <div class="col-md-2 col-sm-offset-2">
+                      <div class="col-md-2 col-sm-offset-6">
         	        	<input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 					  </div>
                     </div>
@@ -99,6 +100,9 @@ if(isset($_GET['getAsiakas']))
 	$criteria->condition = " 
 		netvisorkey>0
 	";
+	if(isset($_GET['yrityksen_nimi']) and !empty(trim($_GET['yrityksen_nimi']))){
+        	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR CONCAT(etunimi , ' ' , sukunimi) LIKE '%".$_GET['yrityksen_nimi']."%' ");
+	}
 	$asiakkaat 	= Asiakkaat::model()->findAll($criteria);
 	$a_all		= [];
 	foreach($asiakkaat as $item)
@@ -111,6 +115,15 @@ if(isset($_GET['getAsiakas']))
 	{
 		foreach($arr as $key => $value)
 		{
+			if(isset($_GET['valiko']) and $_GET['valiko'] == 'problems' and isset($value['Netvisorkey']) and isset($a_all[$value['Netvisorkey']]))
+			continue;
+
+			if(isset($_GET['yrityksen_nimi']) and !empty(trim($_GET['yrityksen_nimi'])) and isset($value['Netvisorkey']))
+			{
+				if(!isset($a_all[$value['Netvisorkey']]))
+					continue;
+			}
+
 			echo '<tr>';
 			echo '<td style="width:50%">';
 			foreach($value as $nimike => $arvo)
@@ -137,16 +150,16 @@ if(isset($_GET['getAsiakas']))
 			}
 			echo '</td>';
 			echo '<td style="width:50%">';
-				if(isset($value['Netvisorkey']) and isset($a_all[$value['Netvisorkey']]))
+			if(isset($value['Netvisorkey']) and isset($a_all[$value['Netvisorkey']]))
+			{
+				foreach($a_all[$value['Netvisorkey']] as $ka => $va)
 				{
-					foreach($a_all[$value['Netvisorkey']] as $ka => $va)
-					{
-						if(!empty($va))
-							echo $ka.': <b>'.$va.'</b><br>';
-					}
-				} else {
-					echo '<h2 class="text-danger">Ei löydy</h2>';
+					if(!empty($va))
+						echo $ka.': <b>'.$va.'</b><br>';
 				}
+			} else {
+				echo '<h2 class="text-danger">Ei löydy</h2>';
+			}
 			echo '</td>';
 			echo '</tr>';
 		}
