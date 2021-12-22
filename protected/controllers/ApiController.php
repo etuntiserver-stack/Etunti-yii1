@@ -54,6 +54,15 @@ public function actionLogin($dom){
 			$db_host = $conn['host'];
 		$return = [];
 		$list = Domainit::model()->findAll(" domain!='defdb' AND aktiivinen=1 ");
+
+		$overrideDomain = Yii::app()->request->getPost("override_domain");
+		if($overrideDomain) {
+			$overrideDomain = trim($overrideDomain);
+			$list = array_filter($list, function($domain) use($overrideDomain) {
+				return $domain->domain === $overrideDomain;
+			});
+		}
+
 		try {
 			$mysqli = new mysqli($conn['host'], $conn['username'], $conn['password']);
 		} catch (\Exception $e) {
