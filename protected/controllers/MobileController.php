@@ -1496,12 +1496,12 @@ class MobileController extends Controller
 
    		$criteria = new CDbCriteria();
     	$criteria->order = " 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') < DATE_ADD(NOW(), interval 4 hour) AND status IN (1,2,10) AND loppui='' DESC, 
-			time and status IN (1,2,10) AND loppui='' DESC, 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') < DATE_ADD(NOW(), interval 4 hour) AND status=3 AND loppui='' DESC, 
+			time and status=3 AND loppui='' DESC, 
 			time DESC ";
 
-			    $criteria->condition = " 
-				deleted=0
+		$criteria->condition = " 
+			deleted=0 AND status=3
 		";
 
 		// <-- Tyoryhmat
