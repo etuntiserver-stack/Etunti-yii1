@@ -754,6 +754,8 @@ class TyovuorootController extends Controller
 			if (!file_exists( $basePath )) {
 			 	mkdir( $basePath, 0777, true );
 			}
+			// I have no idea what the key is supposed to be here...
+			$key = "";
 			$tiedosto = $week.'_'.$year.'_'.$key.'_toimisto.pdf';
 			file_put_contents($path.'/'.$tiedosto.'.html', $html);
 			$output = exec('xvfb-run -a wkhtmltopdf --margin-bottom 10 --margin-top 10 '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf 2>&1'); //-O landscape
