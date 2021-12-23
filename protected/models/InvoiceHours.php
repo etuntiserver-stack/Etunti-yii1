@@ -59,20 +59,43 @@ class InvoiceHours extends VersionedHours
      */
     public function roundToNext15Minutes($save = false)
     {
+        // get rid of seconds for start and end times
+        $startTime = DateTime::createFromFormat("Y-m-d H:i:s", $this->starting_time);
+        if($startTime === false) {
+            throw new Exception("starting_time isn't defined!");
+        }
+        $startTime = DateTime::createFromFormat("Y-m-d H:i", $startTime->format("Y-m-d H:i"));
         $endTime = DateTime::createFromFormat("Y-m-d H:i:s", $this->ending_time);
-        $date = $endTime->format("Y-m-d");
-        $hours = $endTime->format("H");
-        $minutes = $endTime->format("i");
+        if($endTime === false) {
+            throw new Exception("starting_time isn't defined!");
+        }
+        $endTime = DateTime::createFromFormat("Y-m-d H:i", $endTime->format("Y-m-d H:i"));
 
-        $intMinutes = intval($minutes);
-        
-        $newMinutes = (15 - ($intMinutes % 15)) + $intMinutes;
-        // can't assign $newSeconds = 0, php seems to think it's a boolean
-        $newSeconds = "00";
-        // php doesn't care if 00 time is written as 0 or 00, it'll correctly parse the date.
-        $newEndTime = DateTime::createFromFormat("Y-m-d H:i:s", $date . " " . $hours . ":" . $newMinutes . ":" . $newSeconds);
-        $this->ending_time = $newEndTime->format("Y-m-d H:i:s");
+        // assign starting_time & ending_time back with 00 seconds
+        // because we might be recalculating the durations
+        $this->starting_time = $startTime->format("Y-m-d H:i:s");
+        $this->ending_time = $endTime->format("Y-m-d H:i:s");
+        // if this->hours is 0 or null, calculate durations
+        // the 0 is no problem, but the durations being null is a problem.
+        if(!$this->hours) {
+            $this->calculateDurations();
+        }
+
+        $hours = $this->hours;
+        // 0.25 = 15 minutes of 60 minutes
+        // figure out how many minutes we're missing
+        // from the next "full 15 minutes" (0.25)
+        $fmod = fmod($hours, 0.25);
+        // remove the missing minutes from a full 15 minutes, and add the original
+        // duration back in, which should result in a round number
+        $newDuration = (0.25 - $fmod) + $hours;
+        // convert back to human readable minutes
+        $minutes = $newDuration * 60;
+        // clone start time and modify it 
+        $this->ending_time = (clone $startTime)->modify("+$minutes minutes")->format("Y-m-d H:i:s");
+        // calculate new durations
         $this->calculateDurations();
+        // save model if the caller wants that
         if($save) {
             $this->save();
         }
