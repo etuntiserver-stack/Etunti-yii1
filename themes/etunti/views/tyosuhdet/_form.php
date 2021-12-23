@@ -182,6 +182,32 @@ $model->tid = $_GET['id'];
 		<?php echo $form->error($model,'loppu'); ?>
 	</div>
 
+	<?php
+		// if $model->loppu is defined, we'll not hide the next element (termination_reason)
+		// but if it's empty, we can default to just hiding it. a JS script will show the
+		// element if the user changes $model->loppu
+		$shouldHide = "hide";
+		if($model->loppu) {
+			$shouldHide = "";
+		}
+	?>
+	<div id="termination_reason_section" class="section fill mb5 ashidd_a <?=$shouldHide?>">
+		<?php echo $form->labelEx($model, "termination_reason") ; ?>
+		<div class="input-group">
+			<?php
+				$list = Valikkoot::model()->findAll("select_type='termination_reason'");
+			?>
+			<?php echo $form->dropDownList($model, "termination_reason", CHtml::listData($list, "id", "value"),
+				["empty" => "Valitse", "class" => "form-control"]); ?>
+			<?php echo $form->error($model, "tyoryhma"); ?>
+			<span class="input-group-btn">
+				<span class="btn btn-primary myBgColors muokaValiko" for="termination_reason">
+					<i class="fa fa-pencil-square-o"></i>
+				</span>
+			</span>
+		</div>
+	</div>
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tyopvm_kk'); ?>
 		<?php echo $form->numberField($model,'tyopvm_kk',array('maxlength'=>2,'class'=>'form-control')); ?>
@@ -452,6 +478,16 @@ $(document).ready(function(){
      }
 
 	  e.preventDefault();
+  });
+
+  $("#Tyosuhdet_loppu").blur((e) => {
+	if(e.target.value) {
+		$("#termination_reason_section").removeClass("hide");
+		$('[for="Tyosuhdet_termination_reason"]').css({"color":"red"});
+	}
+	// we could hide the reason element in an else statement,
+	// but if the user didn't remove the reason before removing the date
+	// they can no longer access it.
   });
 
 });
