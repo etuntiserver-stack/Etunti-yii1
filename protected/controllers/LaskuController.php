@@ -1291,7 +1291,7 @@ exit;
 					$return['hinta'] 	= $hinnasto->hinnasto_hinta;
 					$return['alv'] 		= $hinnasto->hinnasto_alv;
 					$return['yksikko'] 	= $hinnasto->hinnasto_yksikko;
-					$title = ($hinnastot && $hinnastot->$hinnastot->hinnaston_otsikko) 
+					$title = ($hinnastot && isset($hinnastot->hinnaston_otsikko)) 
 						? $hinnastot->hinnaston_otsikko : "?";
 					$return['hinnan_paikka'] = 'Hinta on otettu hinnastosta - '.$title;
 					return $return;
