@@ -2204,11 +2204,17 @@ class MobileController extends Controller
 
 			$begin = date ("d.m.Y", strtotime($from));
 			$end   = date ("d.m.Y", strtotime($to));
-			while (strtotime($begin) <= strtotime($end)) {
-                		if(in_array($begin, $p_explode)){
-					$pyhapaivat[] = date ("Y-m-d", strtotime($begin));
+			// check every date in the search range for holiday
+			$datesToConsider = [];
+			while(strtotime($begin) <= strtotime($end)) {
+				$datesToConsider[] = $begin;
+				$begin = date("d.m.Y", strtotime("+1 day", strtotime($begin)));
+			}
+			foreach($datesToConsider as $dddd) {
+				if(in_array($dddd, $p_explode)) {
+					// SQL query below expects Y-m-d dates
+					$pyhapaivat[] = date("Y-m-d", strtotime($dddd));
 				}
-                		$begin = date ("d.m.Y", strtotime("+1 day", strtotime($begin)));
 			}
 			if( count($pyhapaivat) > 0 )
 				$pyhapaivat_str = "(DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='".implode("' OR DATE(STR_TO_DATE(aloitan, '%d.%m.%Y'))='", $pyhapaivat)."')";

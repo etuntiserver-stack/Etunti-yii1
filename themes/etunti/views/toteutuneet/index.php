@@ -344,7 +344,8 @@ $netvisor_lahetyksen_muoto	= $asetukset->netvisor_lahetyksen_muoto;
 					$sutunnit_all 	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, [2, 3], 2, false, 3, true, null, null, false);
 
 					if (!$ilman_matkat) {
-						$pyhapaivat_all		= $mobile[0]->TidfromtoMobiiliAll($from, $from, $tid, [2, 3], 2, false, 4, true, null, null, false);
+						// this used to be $from - $from for some reason
+						$pyhapaivat_all		= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, [2, 3], 2, false, 4, true, null, null, false);
 						$erikoislauantai_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, [2, 3], 2, false, 5, true, null, null, false);
 					} else {
 						$pyhapaivat_all	= $mobile[0]->TidfromtoMobiiliAll($from, $to, $tid, [3], 2, false, 4, true, null, null, false);
