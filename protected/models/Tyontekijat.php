@@ -204,7 +204,7 @@ class Tyontekijat extends DB2ActiveRecord
 			'tekijan_muisti' => Yii::t('main', 'Muistiinpanoja'),
 			'salasana' => Yii::t('main', 'Mobiilisovelluksen salasana'),
 			'online_varauksen_valmina' => Yii::t('main', 'Valmis onlinevaraukseen'),
-			'kortit' => Yii::t('main', 'Kortit'),
+			'kortit' => Yii::t('main', 'Kortit ja taidot'),
 			'ayjasenyys' => Yii::t('main', 'Ay-jäsenyys'),
 			'gcm_reg_id'=> Yii::t('main', 'Google Cloud Messaging ID'),
 			'position' => Yii::t('main', 'Viimeinen sijainti'),
