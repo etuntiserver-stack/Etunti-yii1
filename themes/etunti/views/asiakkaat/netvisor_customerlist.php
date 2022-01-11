@@ -100,22 +100,38 @@ if(isset($_GET['getAsiakas']))
 	if(isset($_GET['yrityksen_nimi']) and !empty(trim($_GET['yrityksen_nimi']))){
         	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR CONCAT(etunimi , ' ' , sukunimi) LIKE '%".$_GET['yrityksen_nimi']."%' ");
 	}
-	$asiakkaat 			= Asiakkaat::model()->findAll($criteria);
-	$asiakkaat_nv_ok 	= [];
-	$asiakkaat_nv_err 	= [];
+	$asiakkaat 				= Asiakkaat::model()->findAll($criteria);
+	$asiakkaat_nv_ok 		= [];
+	$asiakkaat_nv_ok_name	= [];
+	$asiakkaat_nv_err_name 	= [];
 	foreach($asiakkaat as $item)
 	{
 		if($item->netvisorkey > 0)
 		{
 			$asiakkaat_nv_ok[$item->netvisorkey] = $item;
-		} else {
+
 			if($item->tyyppi == 'yritys')
-				$asiakkaat_nv_err[$item->yrityksen_tunnus] = $item;
+				$asiakkaat_nv_ok_name[$item->y_tunnus] = $item;
 			
 			if($item->tyyppi == 'henkilo')
 			{
-				$asiakkaat_nv_err[$item->etunumi.' '.$item->sukunimi] = $item;
-				$asiakkaat_nv_err[$item->sukunimi.' '.$item->etunumi] = $item;
+				$str = strtolower($item->etunumi.' '.$item->sukunimi);
+				$asiakkaat_nv_ok_name[$str] = $item;
+				$str = strtolower($item->sukunimi.' '.$item->etunumi);
+				$asiakkaat_nv_ok_name[$str] = $item;
+			}
+
+		} else {
+
+			if($item->tyyppi == 'yritys')
+				$asiakkaat_nv_err_name[$item->y_tunnus] = $item;
+			
+			if($item->tyyppi == 'henkilo')
+			{
+				$str = strtolower($item->etunumi.' '.$item->sukunimi);
+				$asiakkaat_nv_err_name[$str] = $item;
+				$str = strtolower($item->sukunimi.' '.$item->etunumi);
+				$asiakkaat_nv_err_name[$str] = $item;
 			}
 		}
 	}
@@ -171,14 +187,25 @@ if(isset($_GET['getAsiakas']))
 				}
 			} else {
 
-				if(isset($asiakkaat_nv_err[$value['Name']]) or isset($asiakkaat_nv_err[$value['OrganisationIdentifier']]))
+				if(isset($asiakkaat_nv_err_name[strtolower($value['Name'])]) or isset($asiakkaat_nv_err_name[$value['OrganisationIdentifier']]))
 				{
 					echo '<h2 class="text-danger">Etunnissa Netvisor key on nolla.</h2>';
-					echo '<h2>EAsiakkaan tiedot:</h2>';
+					echo '<h2>Asiakkaan tiedot:</h2>';
 					echo '<pre>';
-					print_r($asiakkaat_nv_err);
+					print_r($asiakkaat_nv_err_name);
 					echo '</pre>';
 
+				} elseif(isset($asiakkaat_nv_ok_name[strtolower($value['Name'])]) or isset($asiakkaat_nv_ok_name[$value['OrganisationIdentifier']]))
+				{
+					$nv_key = 0;
+
+					if(isset($asiakkaat_nv_ok_name[strtolower($value['Name'])]))
+						$nv_key = $asiakkaat_nv_ok_name[strtolower($value['Name'])]->netvisorkey;
+
+					if(isset($asiakkaat_nv_ok_name[$value['OrganisationIdentifier']]))
+						$nv_key = $asiakkaat_nv_ok_name[$value['OrganisationIdentifier']]->netvisorkey;
+
+					echo '<h2 class="text-danger">Tämä asiakas on olemassa Etunnissa, mutta sen Netvisor key on: '.$nv_key.'. Tsekka ettei se olisi tuplana Netvisorissa</h2>';
 				} else {
 					echo '<h2 class="text-danger">Ei löydy</h2>';
 				}
