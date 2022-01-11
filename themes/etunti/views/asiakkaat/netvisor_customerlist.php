@@ -97,16 +97,28 @@ if(isset($_GET['getAsiakas']))
 
 	$criteria=new CDbCriteria;
 	$criteria->select = "id,netvisorkey,yrityksen_nimi,y_tunnus,etunimi,sukunimi";
-	$criteria->condition = " 
-		netvisorkey>0
-	";
 	if(isset($_GET['yrityksen_nimi']) and !empty(trim($_GET['yrityksen_nimi']))){
         	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR CONCAT(etunimi , ' ' , sukunimi) LIKE '%".$_GET['yrityksen_nimi']."%' ");
 	}
-	$asiakkaat 	= Asiakkaat::model()->findAll($criteria);
-	$a_all		= [];
+	$asiakkaat 			= Asiakkaat::model()->findAll($criteria);
+	$asiakkaat_nv_ok 	= [];
+	$asiakkaat_nv_err 	= [];
 	foreach($asiakkaat as $item)
-		$a_all[$item->netvisorkey] = $item;
+	{
+		if($item->netvisorkey > 0)
+		{
+			$asiakkaat_nv_ok[$item->netvisorkey] = $item;
+		} else {
+			if($item->tyyppi == 'yritys')
+				$asiakkaat_nv_err[$item->yrityksen_tunnus] = $item;
+			
+			if($item->tyyppi == 'henkilo')
+			{
+				$asiakkaat_nv_err[$item->etunumi.' '.$item->sukunimi] = $item;
+				$asiakkaat_nv_err[$item->sukunimi.' '.$item->etunumi] = $item;
+			}
+		}
+	}
 
 	echo '<h1>Tämä on: customerlist.nv</h1>';
 	echo '<table class="table table-bordered">';
@@ -115,12 +127,12 @@ if(isset($_GET['getAsiakas']))
 	{
 		foreach($arr as $key => $value)
 		{
-			if(isset($_GET['valiko']) and $_GET['valiko'] == 'problems' and isset($value['Netvisorkey']) and isset($a_all[$value['Netvisorkey']]))
+			if(isset($_GET['valiko']) and $_GET['valiko'] == 'problems' and isset($value['Netvisorkey']) and isset($asiakkaat_nv_ok[$value['Netvisorkey']]))
 			continue;
 
 			if(isset($_GET['yrityksen_nimi']) and !empty(trim($_GET['yrityksen_nimi'])) and isset($value['Netvisorkey']))
 			{
-				if(!isset($a_all[$value['Netvisorkey']]))
+				if(!isset($asiakkaat_nv_ok[$value['Netvisorkey']]))
 					continue;
 			}
 
@@ -150,15 +162,26 @@ if(isset($_GET['getAsiakas']))
 			}
 			echo '</td>';
 			echo '<td style="width:50%">';
-			if(isset($value['Netvisorkey']) and isset($a_all[$value['Netvisorkey']]))
+			if(isset($value['Netvisorkey']) and isset($asiakkaat_nv_ok[$value['Netvisorkey']]))
 			{
-				foreach($a_all[$value['Netvisorkey']] as $ka => $va)
+				foreach($asiakkaat_nv_ok[$value['Netvisorkey']] as $ka => $va)
 				{
 					if(!empty($va))
 						echo $ka.': <b>'.$va.'</b><br>';
 				}
 			} else {
-				echo '<h2 class="text-danger">Ei löydy</h2>';
+
+				if(isset($asiakkaat_nv_err[$value['Name']]) or isset($asiakkaat_nv_err[$value['OrganisationIdentifier']]))
+				{
+					echo '<h2 class="text-danger">Etunnissa Netvisor key on nolla.</h2>';
+					echo '<h2>EAsiakkaan tiedot:</h2>';
+					echo '<pre>';
+					print_r($asiakkaat_nv_err);
+					echo '</pre>';
+
+				} else {
+					echo '<h2 class="text-danger">Ei löydy</h2>';
+				}
 			}
 			echo '</td>';
 			echo '</tr>';
