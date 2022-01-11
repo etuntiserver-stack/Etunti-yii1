@@ -115,6 +115,7 @@ if( isset($_SESSION['skrollaus']) )
 			<p>'.$item["toimialue_tyoryhma"].'</p>
 		</div>';
 		?>
+		<?= $this->renderPartial("_skills", ["employee" => $item]); ?>
 
 		<?php
 		$file = $week.'_'.$year.'_'.$tid.'.pdf';
