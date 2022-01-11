@@ -215,7 +215,8 @@ class Asiakkaat extends DB2ActiveRecord
 			'sahkopostilaskuosoite'=> Yii::t('main', 'Sähköpostilaskuosoite'),
 			'app_kayttoehdot' => Yii::t('main', 'eDico käytöehdot hyväksytty'),
 			'hinnasto_id'=> Yii::t('main', 'Hinnasto'),
-
+			'sukunimi' => Yii::t("main", "Sukunimi"),
+			'etunimi' => Yii::t("main", "Etunimi"),
 			'alv'=> Yii::t('main', 'ALV %'),
 			'hinta_tyyppi'=> Yii::t('main', 'Hinta tyyppi'),
 			'hinta'=> Yii::t('main', 'Hinta (ALV0)'),
@@ -232,7 +233,6 @@ class Asiakkaat extends DB2ActiveRecord
 			'extra_contacts' => Yii::t('main', 'Lisä yhteystiedot'),
 			'finnish_service_wish' => Yii::t('app', 'Palvelukieli'),
 			'buenno_integration_enabled' => Yii::t("app", "Buenno käytössä"),
-			'no_email' => Yii::t("app", "Ei sähköpostia")
 		);
 	}
 
