@@ -137,6 +137,7 @@ class Asiakkaat extends DB2ActiveRecord
 		//	array('osoite, postinumero, kaupunki', 'required'),
 		$arr = array(
 			array('asiakasnumero', 'length', 'max'=>9),
+			array('no_email', 'boolean', 'allowEmpty' => false),
 			array('asiakasnumero','unique', 'message'=>'Tämä asiakasnumero on jo olemassa!'),
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
 			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot, hinnasto_id, tyoryhma, sopimustyyppi, freshdesk_id, finnish_service_wish, tuote, buenno_integration_enabled', 'numerical', 'integerOnly'=>true),
@@ -230,7 +231,8 @@ class Asiakkaat extends DB2ActiveRecord
 			'lisatietoja_laskutuksesta' => Yii::t('main', 'Lisätietoja laskutuksesta'),
 			'extra_contacts' => Yii::t('main', 'Lisä yhteystiedot'),
 			'finnish_service_wish' => Yii::t('app', 'Palvelukieli'),
-			'buenno_integration_enabled' => Yii::t("app", "Buenno käytössä")
+			'buenno_integration_enabled' => Yii::t("app", "Buenno käytössä"),
+			'no_email' => Yii::t("app", "Ei sähköpostia")
 		);
 	}
 

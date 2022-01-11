@@ -226,10 +226,15 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 	
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'sahkoposti'); ?>
-		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control', 'disabled' => $model->no_email)); ?>
 		<?php echo $form->error($model,'sahkoposti'); ?>
 	</div>
 	<div id="sahkoposti-varoitus" class="alert alert-danger text-dark" style="display:none"><ul></ul></div>
+	<div class="section fill mb5 ashidd_a">
+		<?= $form->checkBox($model, "no_email", []); ?>
+		<label for="Asiakkaat_no_email">Asiakkaalla ei ole sähköpostia</label>
+		<span class="btn-group fa fa-info-circle text-primary" data-toggle="tooltip" data-container="body" title="Valitsemalla tämän pystyt tallentamaan asiakkaan ilman sähköpostia"></span>
+	</div>
 
 	<script>
 	
@@ -237,10 +242,13 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		/**
 		  Validate email
 		 */
-
 		 const validateEmail = function() {
 			const val = $("#Asiakkaat_sahkoposti").val();
 			let errors = [];
+			// add an error on empty email
+			if(val.length === 0) {
+				errors.push("Sähköposti on tyhjä");
+			}
 			// check email format
 			// https://emailregex.com/
 			if(val.length > 0 && !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)) {
@@ -264,12 +272,35 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 			}
 		 }
 
+		 /**
+		  * Validate email on keyup
+		  */
+		 $("#Asiakkaat_sahkoposti").on("keyup", () => {
+			 validateEmail();
+		 });
+
 		/**
 		  Hook validation to form submit
 		 */
 		$("#asiakkaat-form").on("submit", function(e) {
-			if(!validateEmail()) {
+			const checked = $("#Asiakkaat_no_email").is(":checked");
+			if(!checked && !validateEmail()) {
 				e.preventDefault();
+			}
+		});
+
+		/**
+		 * Listen for no-email-checkbox changes, and disable or enable email
+		 * field based on the state. Also clears the email value state is true.
+		 */
+		$("#Asiakkaat_no_email").change(e => {
+			const emailField = $("#Asiakkaat_sahkoposti");
+			const checked = $("#Asiakkaat_no_email").is(":checked");
+			if(checked) {
+				$(emailField).val("");
+				$(emailField).prop("disabled", true);
+			} else {
+				$(emailField).prop("disabled", false);
 			}
 		});
 
