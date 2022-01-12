@@ -366,7 +366,7 @@ class TyovuorootController extends Controller
 	public function actionGetKohdeByAsiakas($id)
 	{
 		$return = [];
-		$model = Kohteet::model()->findAll("asiakas_id='".$id."' order by ensisijainen DESC");
+		$model = Kohteet::model()->findAll("asiakas_id='".$id."' order by ensisijainen DESC, osoite");
 		$options = '';
 		$options .= '<option value="0">Valitse osoite</option>';
 		$ids = [];
