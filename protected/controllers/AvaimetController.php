@@ -28,7 +28,7 @@ class AvaimetController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'avaimet_tyontekijalle'),
+				'actions'=>array('index','view', 'avaimet_tyontekijalle', 'employeekeys'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -461,5 +461,309 @@ class AvaimetController extends Controller
 	{
 	   $site = Yii::app()->createController('Site');
 	   return $site[0]->etuSukunimi($tid);
+	}
+
+	public function actionEmployeeKeys()
+	{
+		$req = Yii::app()->request;
+
+		// if query string is empty, just show the page without results
+		if(empty($req->queryString)) {
+			return $this->render("employee_keys", [
+				"keys" => [], 
+				"shiftNeedMap" => [],
+				"from" => date("Y-m-d"), 
+				"to" => date("Y-m-d", strtotime("+1 week")),
+				"showTransferOnly" => 1,
+				"showClientKeys" => 0,
+				"selectedEmployees" => [],
+				"selectedWorkgroups" => [],
+				"employees" => [],
+				"employeeKeys" => [],
+				"queryEmployeeIds" => [],
+			]);
+		}
+
+		$from = $req->getQuery("from");
+		$to = $req->getQuery("to");
+
+		if(!$from) {
+			$from = date("d.m.Y");
+		}
+		if(!$to) {
+			$to = date("d.m.Y", strtotime("+1 month"));
+		}
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+		$showTransferOnly = $req->getQuery("show-transfer-only");
+		if($showTransferOnly === null) {
+			// on by default
+			$showTransferOnly = 1;
+		}
+		
+		$showClientKeys = $req->getQuery("show-client-keys");
+		$showClientKeys = $showClientKeys ? true : false;
+		
+		$employeeIds = $req->getQuery("employees", []);
+		$employeeIds = array_map(function($empId) {
+			return intval($empId);
+		}, $employeeIds);
+
+		$workGroupIds = $req->getQuery("work-groups", []);
+		$workGroupIds = array_map(function($groupId) {
+			return intval($groupId);
+		}, $workGroupIds);
+
+		// work types (työajanmerkintä) that should not be listed
+		$disallowedTypes = ["Ei lasketa"];
+
+		// get work group names
+		$crit = new CDbCriteria();
+		$crit->addInCondition("id", $workGroupIds);
+		$workGroupNames = Valikkoot::model()->findAll($crit);
+		$workGroupNames = array_map(function($workgroup) {
+			return $workgroup->value;
+		}, $workGroupNames);
+		
+		// fetch all employees, and filter those that belong
+		// to $workGroupNames
+		$activeEmployees = Tyontekijat::model()->findAll("aktiivinen=1");
+		$filteredEmployeeIds = [];
+		$employeeMap = [];
+		foreach($activeEmployees as $emp) {
+			$employeeMap[$emp->id] = $emp;
+			$employeesGroups = json_decode($emp->tyoryhma, true) ?? [];
+			if(count($employeesGroups) === 0) {
+				continue;
+			}
+			foreach($workGroupNames as $wgName) {
+				if(in_array($wgName, $employeesGroups)) {
+					$filteredEmployeeIds[] = $emp->id;
+				}
+			}
+		}
+		
+		$queryEmployeeIds = array_unique(array_merge($employeeIds, $filteredEmployeeIds));
+
+		// keys extracted from shifts (those that the selected employees might need)
+		$keys = [];
+
+		$crit = new CDbCriteria();
+		if(count($queryEmployeeIds) > 0) {
+			$crit->addInCondition("t.tid", $queryEmployeeIds);
+		}
+		$crit->addBetweenCondition("STR_TO_DATE(pvm, '%d.%m.%Y')", $from, $to);
+		$crit->addCondition("peruutettu=0 OR peruutettu IS NULL");
+		$crit->addCondition("t.status=3");
+		$shifts = Tyovuoroot::model()
+			->with("avaimet")
+			->findAll($crit);
+
+		$shiftNeedMap = [];
+		// a list of employee IDs that do not match the key holder
+		$wrongEmployeeIds = [];
+
+		// extract keys
+		foreach($shifts as $shift) {
+			$type = $shift->tyoajanmerkinta;
+			$is_type_ok = true;
+			foreach($disallowedTypes as $disallowedType) {
+				if(strpos($disallowedType, $type) !== false) {
+					$is_type_ok = false;
+					break;
+				}
+			}
+			// skip if type isn't for normal work
+			if(!$is_type_ok) {
+				continue;
+			}
+			if(isset($shift->avaimet)) {
+				foreach($shift->avaimet as $key) {
+					$keys[$key->id] = $key;
+					// skip if client has the key and we're not including those
+					if($showClientKeys === false && $this->clientHasKey($key)) {
+						continue;
+					}
+					if($key->tid != $shift->tid) {
+						$wrongEmployeeIds[] = $key->tid;
+						if(isset($shiftNeedMap[$shift->tid])) {
+							$shiftNeedMap[$shift->tid][] = ["shift" => $shift, "key" => $key];
+						} else {
+							$shiftNeedMap[$shift->tid] = [["shift" => $shift, "key" => $key]];
+						}
+					}
+				}
+			}
+		}
+
+		$crit = new CDbCriteria();
+		if(count($queryEmployeeIds) > 0) {
+			$ids = implode(",", $queryEmployeeIds);
+			$q = "t.tyopaari LIKE '%\"".implode("\"%' OR t.tyopaari LIKE '%\"", $queryEmployeeIds)."\"%' ";
+			$crit->addCondition("t.tid IN ($ids) OR ($q)");
+		}
+
+		// FromToSuunnitellutAll uses this method to search for repeating shifts,
+		// seems to work.
+		$crit->addCondition("STR_TO_DATE(pfrom, '%d.%m.%Y') <= '$to'");
+		$crit->addCondition("STR_TO_DATE(pto, '%d.%m.%Y') >= '$from'");
+		$crit->addCondition("t.status=3");
+
+		$repeatingShifts = ToistuvatTyovuorot::model()
+			->with("avaimet")
+			->findAll($crit);
+
+		$filteredRepeatingShifts = [];
+
+		// filter out repeating shifts that don't have a shift during the searched time
+		// this is copy-pasted (with slight modifications) from TyovuorootControllers tv_arr function
+		// which should calculate "virtual shifts"
+		foreach($repeatingShifts as $repeating) {
+
+			$poistettu_pvms = [];
+			if( !empty($repeating->new_poistettu_pvm) ){
+				foreach(json_decode($repeating->new_poistettu_pvm, true) as $key => $val) {
+					if(isset($val["pvm"])) {
+						$poistettu_pvms[$val["pvm"]] = $val["pvm"];
+					}
+				}
+			}
+
+			$startday 	= date("Y-m-d", strtotime($repeating->pfrom));
+			$startday_ts	= strtotime($startday);
+			$haku_from_ts	= strtotime($from);
+			$haku_to_ts = strtotime($to);
+			$stopday 	= date("Y-m-d", strtotime($repeating->pto));
+			$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
+			$date->modify('this week monday');
+			$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
+
+			while($date->getTimestamp() <= $date_end) {
+				foreach(json_decode($repeating->viikko_paivat, true) as $viikko_paiva) {
+					$paiva = new \DateTime($date->format('Y-m-d'), new DateTimeZone('Europe/Helsinki'));
+					$paiva->modify("+" . ($viikko_paiva - 1) . "day");
+					$this_pvm = $paiva->format('d.m.Y');
+					if ( (strtotime($this_pvm) < $startday_ts) or (strtotime($this_pvm) < $haku_from_ts) )
+						continue;
+					if ((false !== $haku_to_ts && strtotime($this_pvm) > $haku_to_ts) or strtotime($this_pvm) > strtotime($stopday)){
+						break 2;
+					}
+					// create a virtual shift if the date isn't defined in
+					// $poistettu_pvms
+					if(!isset($poistettu_pvms[$this_pvm])) {
+						// if we end up here I think we should have a virtual shift
+						$virtualShift = clone($repeating);
+						$virtualShift->pvm = $this_pvm;
+						$filteredRepeatingShifts[] = $virtualShift;
+					}
+				}
+				$date->modify("+{$repeating->viikkoja}week");
+			}
+		}
+		
+
+		// extract keys
+		foreach($filteredRepeatingShifts as $shift) {
+			if(isset($shift->avaimet)) {
+				foreach($shift->avaimet as $key) {
+					// skip if client has the key and we're not including those
+					if($showClientKeys === false && $this->clientHasKey($key)) {
+						continue;
+					}
+					$shiftEmployeeIds = $this->repeatShiftEmployeeIds($shift, $queryEmployeeIds);
+					$keys[$key->id] = $key;
+					if(!in_array($key->tid, $shiftEmployeeIds)) {
+						$wrongEmployeeIds[] = $key->tid;
+						foreach($shiftEmployeeIds as $empId) {
+							if(isset($shiftNeedMap[$empId])) {
+								$shiftNeedMap[$empId][] = ["shift" => $shift, "key" => $key];
+							} else {
+								$shiftNeedMap[$empId] = [["shift" => $shift, "key" => $key]];
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// keys that the selected employees currently have
+		$employeeKeys = [];
+		if(!$showTransferOnly) {
+			// fetch all keys for employees
+			$crit = new CDbCriteria();
+			$crit->addInCondition("tid", $queryEmployeeIds);
+			$allKeys = Avaimet::model()->findAll($crit);
+			foreach($allKeys as $key) {
+				if(isset($employeeKeys[$key->tid])) {
+					$employeeKeys[$key->tid][] = $key;
+				} else {
+					$employeeKeys[$key->tid] = [$key];
+				}
+			}
+		}
+		
+		$this->render("employee_keys", [
+			"keys" => $keys, 
+			"shiftNeedMap" => $shiftNeedMap,
+			"from" => $from, 
+			"to" => $to,
+			"showTransferOnly" => $showTransferOnly,
+			"showClientKeys" => $showClientKeys,
+			"selectedEmployees" => $employeeIds,
+			"selectedWorkgroups" => $workGroupIds,
+			"employees" => $employeeMap,
+			"employeeKeys" => $employeeKeys,
+			"queryEmployeeIds" => $queryEmployeeIds,
+		]);
+	}
+
+	/**
+	 * Returns a boolean indicating if a key has been returned
+	 * back to a client. The location custom text (sijainti_omatekstti being 1)
+	 * is interpreted on a best effort basis.
+	 */
+	private function clientHasKey(Avaimet $key) {
+		$location = $key->sijainti;
+		// sijainti_omatekstti should be 0
+		// when sijainti is "2" (which is office, chosen from a list of options)
+		if($location == 2) {
+			return true;
+		} else if($key->sijainti_omatekstti == 1) {
+			// trying to look for common phrases that people write
+			// into the custom field, like "palautettu asiakkaalle"
+			// or just "asiakkaalla"
+			$keywords = ["asiakkaalla", "asiakkaalle"];
+			foreach($keywords as $keyword) {
+				$w = strtoupper($keyword);
+				$l = strtoupper($location);
+				if(strpos($l, $w) !== false) {
+					return true;
+				}
+			}
+			
+		}
+		return false;
+	}
+
+	/**
+	 * Returns the 'tid' and 'tyopaari' (employee IDs) fields in an array of a ToistuvatTyovuorot object.
+	 * You can pass an Array as the second parameter to filter out some of those IDs from the result.
+	 */
+	private function repeatShiftEmployeeIds(ToistuvatTyovuorot $shift, Array $intersect = null) {
+		$ids = [];
+		$ids[] = $shift->tid;
+
+		// parse work pair IDs
+		$pair = json_decode($shift->tyopaari, true) ?? [];
+		foreach($pair as $p) {
+			$ids[] = intval($p);
+		}
+
+		if($intersect) {
+			return array_intersect($intersect, $ids);
+		}
+		return $ids;
 	}
 }

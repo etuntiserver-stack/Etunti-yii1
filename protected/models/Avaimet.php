@@ -15,6 +15,17 @@
  */
 class Avaimet extends CActiveRecord
 {
+
+	// key state options:
+	// 0 = by set key states (see below)
+	// 1 = custom text
+
+	// key states: 
+	// 1 = office
+	// 2 = client
+	// 3 = employee
+
+
 	/**
 	 * @return string the associated database table name
 	 */
