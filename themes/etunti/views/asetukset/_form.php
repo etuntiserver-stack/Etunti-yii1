@@ -1227,6 +1227,9 @@ $('.ryhmat').multiselect({
 		echo $form->dropDownList($model,'netvisor_acceptancestatus', $l, 
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'netvisor_acceptancestatus'); ?>
+
+		<br>
+		<p><?php echo CHtml::link('Api rajapinnan asiakastietojen vertailu', ['/asiakkaat/netvisor_customerlist'], ['class' => 'btn btn-block btn-lg btn-primary myBgColors']); ?></p>
 	</div>
 
    </div>
