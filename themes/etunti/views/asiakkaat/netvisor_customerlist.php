@@ -68,8 +68,11 @@ td{
 <?php
 if(isset($_GET['getAsiakas']))
 {
-	echo '<h1>Tämä on: getcustomer.nv?id='.$_GET['getAsiakas'].' &nbsp;&nbsp;<a href="netvisor_customerlist">Takaisiin listaan</a></h1>';
+	echo '<a href="netvisor_customerlist" class="btn btn-lg btn-primary">Takaisiin listaan</a>';
+	echo '<h1>Tämä on: getcustomer.nv?id='.$_GET['getAsiakas'].'</h1>';
 
+	echo '<div class="row"><div class="col-sm-6">';
+	echo '<legend><h2>Netvisorin tiedot</h2></legend>';
 	echo '<pre>';
 	foreach($data as $arr)
 	{
@@ -91,22 +94,52 @@ if(isset($_GET['getAsiakas']))
 			}
 		}
 	}
+	
 	echo '</pre>';
-				
+	echo '</div><div class="col-sm-6">';
+	
+	$criteria = new CDbCriteria;
+    $criteria->condition = "netvisorkey='".$_GET['getAsiakas']."'";
+	$asiakas = Asiakkaat::model()->find($criteria);
+	echo '<legend><h2>Etunnin tiedot</h2></legend>';
+	foreach($asiakas->attributes as $key => $val)
+	{
+		echo '<b>'.$asiakas->getAttributeLabel($key).':</b> '.$val.'<br>';
+	}
+	echo '</div></div>';
+	
 } else {
 
 	$criteria=new CDbCriteria;
-	$criteria->select = "id,netvisorkey,yrityksen_nimi,y_tunnus,etunimi,sukunimi";
-	$criteria->condition = " 
-		netvisorkey>0
-	";
+	$criteria->select = "asiakasnumero,netvisorkey,yrityksen_nimi,y_tunnus,etunimi,sukunimi";
 	if(isset($_GET['yrityksen_nimi']) and !empty(trim($_GET['yrityksen_nimi']))){
         	$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR CONCAT(etunimi , ' ' , sukunimi) LIKE '%".$_GET['yrityksen_nimi']."%' ");
 	}
-	$asiakkaat 	= Asiakkaat::model()->findAll($criteria);
-	$a_all		= [];
+
+	$asiakas				= new Asiakkaat;
+	$asiakkaat 				= Asiakkaat::model()->findAll($criteria);
+	$asiakkaat_nv_ok 		= [];
+	$asiakkaat_name			= [];
+
 	foreach($asiakkaat as $item)
-		$a_all[$item->netvisorkey] = $item;
+	{
+
+		if($item->tyyppi == 'yritys')
+			$asiakkaat_name[$item->y_tunnus] = $item;
+		
+		if($item->tyyppi == 'henkilo')
+		{
+			$str = strtolower($item->etunumi.' '.$item->sukunimi);
+			$asiakkaat_name[$str] = $item;
+			$str = strtolower($item->sukunimi.' '.$item->etunumi);
+			$asiakkaat_name[$str] = $item;
+		}
+			
+		if($item->netvisorkey > 0)
+		{
+			$asiakkaat_nv_ok[$item->netvisorkey] = $item;
+		}
+	}
 
 	echo '<h1>Tämä on: customerlist.nv</h1>';
 	echo '<table class="table table-bordered">';
@@ -115,17 +148,18 @@ if(isset($_GET['getAsiakas']))
 	{
 		foreach($arr as $key => $value)
 		{
-			if(isset($_GET['valiko']) and $_GET['valiko'] == 'problems' and isset($value['Netvisorkey']) and isset($a_all[$value['Netvisorkey']]))
+			if(isset($_GET['valiko']) and $_GET['valiko'] == 'problems' and isset($value['Netvisorkey']) and isset($asiakkaat_nv_ok[$value['Netvisorkey']]))
 			continue;
 
 			if(isset($_GET['yrityksen_nimi']) and !empty(trim($_GET['yrityksen_nimi'])) and isset($value['Netvisorkey']))
 			{
-				if(!isset($a_all[$value['Netvisorkey']]))
+				if(!isset($asiakkaat_nv_ok[$value['Netvisorkey']]))
 					continue;
 			}
 
 			echo '<tr>';
 			echo '<td style="width:50%">';
+
 			foreach($value as $nimike => $arvo)
 			{
 				if(!is_array($arvo))
@@ -137,6 +171,7 @@ if(isset($_GET['getAsiakas']))
 							echo '<h3><a href="netvisor_customerlist?getAsiakas='.$expl[1].'">Lisää tietoja Netvisorista</a><h3>';
 
 					} else {
+						if($nimike == 'Code'){ $nimike = 'Asiakasnumero'; }
 						echo $nimike.': <b>'.$arvo.'</b><br>';
 					}
 
@@ -150,15 +185,32 @@ if(isset($_GET['getAsiakas']))
 			}
 			echo '</td>';
 			echo '<td style="width:50%">';
-			if(isset($value['Netvisorkey']) and isset($a_all[$value['Netvisorkey']]))
+			if(isset($value['Netvisorkey']) and isset($asiakkaat_nv_ok[$value['Netvisorkey']]))
 			{
-				foreach($a_all[$value['Netvisorkey']] as $ka => $va)
+				foreach($asiakkaat_nv_ok[$value['Netvisorkey']] as $ka => $va)
 				{
+					$cl = '';
+					if($ka == 'asiakasnumero' and $value['Code'] == $va)
+						$cl = 'text-success';
+					elseif($ka == 'asiakasnumero' and $value['Code'] != $va)
+						$cl = 'text-danger';
+
 					if(!empty($va))
-						echo $ka.': <b>'.$va.'</b><br>';
+						echo '<span class="'.$cl.'"><b>'.$asiakas->getAttributeLabel($ka).':</b> '.$va.' '.(($cl == 'text-success')? '&nbsp;<i class="fa fa-2x fa-check"></i>' : '').'</span><br>';
 				}
 			} else {
-				echo '<h2 class="text-danger">Ei löydy</h2>';
+
+				if(isset($asiakkaat_name[strtolower($value['Name'])]) or isset($asiakkaat_name[$value['OrganisationIdentifier']]))
+				{
+					echo '<h2 class="text-danger">Etunnissa Netvisor key ei sama kuin Netvisorissa.</h2>';
+					echo '<h2>Asiakkaan tiedot:</h2>';
+					echo '<pre>';
+					print_r($asiakkaat_nv_err_name);
+					echo '</pre>';
+
+				} else {
+					echo '<h2 class="text-danger">Ei löydy</h2>';
+				}
 			}
 			echo '</td>';
 			echo '</tr>';
