@@ -5141,15 +5141,11 @@ class TyovuorootController extends Controller
 
 	}
 
-	public function FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, $with, $onlyActive = true)
+	public function FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, $with)
 	{
 
 		if( count($tids) == 0 ){
-			if($onlyActive) {
-				$tt = Tyontekijat::model()->findAll("aktiivinen=1");
-			} else {
-				$tt = Tyontekijat::model()->findAll();
-			}
+			$tt = Tyontekijat::model()->findAll("aktiivinen=1");
 			$arr_tids = [];
 			foreach($tt as $item)
 				$arr_tids[$item->id] = $item->id;
