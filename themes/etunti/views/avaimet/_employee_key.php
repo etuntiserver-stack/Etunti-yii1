@@ -95,7 +95,7 @@ if(!function_exists("shiftDate")) {
     <?php foreach($employeeKeys as $key) : ?>
     <tr>
         <td>
-            Avain <a taret="_blank" rel="noopener noreferrer" href="/index.php/avaimet/update?id=<?= $key->id ?>"><?=$key->avainnumero ?></a>
+            Avain <a target="_blank" rel="noopener noreferrer" href="/index.php/avaimet/update?id=<?= $key->id ?>"><?=$key->avainnumero ?></a>
         </td>
     </tr>
     <?php endforeach; ?>
