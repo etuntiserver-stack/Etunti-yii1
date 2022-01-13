@@ -888,6 +888,11 @@ $('.multTyoryhma').multiselect({
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/avaimet/avaimet_tyontekijalle">
                   <span class="fa fa-key"></span> <?php echo Yii::t('main', 'Avaimet työvuoroittain'); ?></a>
               </li>
+              <li>
+                <a href="<?= Yii::app()->request->baseUrl; ?>/index.php/avaimet/employeekeys">
+                  <span class="fa fa-key"></span><?= Yii::t("main", "Tarvittavat avaimet"); ?>
+                </a>
+              </li>
               <!--li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/kartta">
                   <span class="fa fa-map"></span> <?php echo Yii::t('main', 'Kartta'); ?></a>
