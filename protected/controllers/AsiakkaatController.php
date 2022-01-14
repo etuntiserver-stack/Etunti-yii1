@@ -44,7 +44,7 @@ class AsiakkaatController extends Controller
 					'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 
 					'kartta', 'kayttajat', 'lahetatunnukset', 'view_edico', 'massamuokkaus', 
 					'kaikki_netvisoriin', 'freshdesk', 'freshdesk_ticket', 'puhnro_korjaus', 
-					'email_history', 'integromat_upsert', 'checkworkgroups', 'netvisor_customerlist'),
+					'email_history', 'integromat_upsert', 'checkworkgroups', 'netvisor_customerlist', 'tag_report'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -1162,6 +1162,84 @@ $xml = '
 
 	}
 
+	public function actionTag_report()
+	{
+
+		if(isset($_POST['asiakkaatPerSivu']))
+		{
+			Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);
+			echo json_encode($_POST['asiakkaatPerSivu']);
+			exit;
+		}
+
+		// <-- Oikeudet
+		   $checkOikeus = "asiakkaat_0_".Yii::app()->user->adminStatus;
+		   $site = Yii::app()->createController('Site');
+		   $site[0]->checkOikeus($checkOikeus);
+		//  Oikeudet -->
+
+		$criteria = new CDbCriteria();
+		$criteria->order = "etunimi";
+		/*
+		$criteria->order = "
+		CASE
+			WHEN tyyppi='yritys' THEN yrityksen_nimi
+			WHEN tyyppi='henkilo' THEN etunimi
+		END
+		";
+		*/
+
+		// <-- Tyoryhmat
+		$site = Yii::app()->createController('Site');
+		$arr = $site[0]->TyoryhmatHelper();
+		$ids = implode(",", $arr);
+		if( count($arr) > 0 ){
+			$criteria->condition = " tyoryhma IN ($ids) ";
+		}
+		//    Tyoryhmat -->
+
+		if(isset($_GET['yrityksen_nimi']) and !empty(trim($_GET['yrityksen_nimi']))){
+			$criteria->addCondition (" yrityksen_nimi LIKE '%".$_GET['yrityksen_nimi']."%' OR CONCAT(etunimi , ' ' , sukunimi) LIKE '%".$_GET['yrityksen_nimi']."%' ");
+		}
+		if(isset($_GET['osoite']) and !empty(trim($_GET['osoite']))){
+			$criteria->addCondition ("
+			id IN(
+				SELECT asiakas_id FROM sivex_kohdet
+				WHERE osoite LIKE '%".$_GET['osoite']."%'
+			)
+			");
+		}
+		if(isset($_GET['tag']) and !empty(trim($_GET['tag']))){
+			$criteria->addCondition ("
+			id IN(
+				SELECT asiakas_id FROM sivex_kohdet
+				WHERE tag_id='".$_GET['tag']."'
+			)
+			");
+		}
+
+		$dataProvider = new CActiveDataProvider('Asiakkaat', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$perSivu = 50;
+		if(isset(Yii::app()->user->asiakkaatPerSivu)){
+			$perSivu = Yii::app()->user->asiakkaatPerSivu;
+		}
+		$dataProvider->pagination->pageSize = $perSivu;
+
+		$a = Asetukset::model()->findbypk(1);
+		if($a->netvisor_kaytto == 1)
+		$netvisor = true;
+		else
+		$netvisor = false;
+
+		$this->render('tag_report', array(
+			'dataProvider' => $dataProvider, 
+			'perSivu' => $perSivu
+		));
+	}
 
 	public function actionIndex()
 	{
@@ -1264,7 +1342,6 @@ $xml = '
 			'site' => $site
 		));
 	}
-
 
 	public function actionKayttajat()
 	{
