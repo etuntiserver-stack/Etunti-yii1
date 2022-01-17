@@ -175,6 +175,7 @@ class Asiakkaat extends DB2ActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'kohteet' => array(self::HAS_MANY, 'Kohteet', array('asiakas_id'=>'id')),
 		);
 	}
 

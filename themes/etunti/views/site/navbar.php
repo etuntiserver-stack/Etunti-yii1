@@ -881,6 +881,10 @@ $('.multTyoryhma').multiselect({
                   <span class="glyphicon glyphicon-home"></span> <?php echo Yii::t('main', 'Kohteet'); ?></a>
               </li>
               <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/tag_report">
+                  <span class="glyphicon glyphicon-home"></span> <?php echo Yii::t('main', 'TAG raportti'); ?></a>
+              </li>
+              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/avaimet/index">
                   <span class="fa fa-key"></span> <?php echo Yii::t('main', 'Avaimet'); ?></a>
               </li>
@@ -1734,6 +1738,7 @@ nyt ne ovat etusivu.php ssa
 	|| curpage === 'kohteet/avaimet'
 	|| curpage === 'kohteet/googlemap'
 	|| curpage === 'mobile/laskutettu'
+	|| curpage === 'asiakkaat/tag_report'
     ){  $('.asiakkaidenHallinta').addClass('menu-open'); }
     else if(
 	curpage === 'mobile/index' 
