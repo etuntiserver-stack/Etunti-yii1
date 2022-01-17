@@ -28,7 +28,9 @@
 		<?php
 		if(isset($data->kohteet->id)){
 			$as = Asiakkaat::model()->findByPk($data->kohteet->asiakas_id);
-			echo $as->Fullname;
+			if($as) {
+				echo $as->Fullname;
+			}
 		}
 		?>
 	</td>
