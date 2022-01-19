@@ -181,17 +181,9 @@ if(empty($model->position) and isset($model->id))
 	</div>
 
 	<?php
+	$hasShifts = false;
 	if(isset($model->id)){
-		$tv_controller 	= Yii::app()->createController('Tyovuoroot');
-		$with		= ['data'];
-		$from		= date("Y-m-d");
-		$dataAll 	= $tv_controller[0]->FromToSuunnitellutAll($from, null, [$model->id], [], $with);
-		/*
-		echo '<pre>';
-		print_r( $dataAll );
-		echo '</pre>';
-		exit;
-		*/
+		$hasShifts = $this->hasUpcomingShifts($model->id);
 	}
 	?>
 	<div class="section fill mb5">
@@ -200,12 +192,13 @@ if(empty($model->position) and isset($model->id))
         	$tal = array(
 			1=>'Kyllä'
 		);
-		if(isset($dataAll) and count($dataAll) == 0 or (!isset($model->id)))
-			$tal[0] = 'Ei';
+		if($hasShifts === false or !isset($model->id)) {
+			$tal[0] = "Ei";
+		}
 
 		echo $form->dropDownList($model,'naytta_tyovuorossa', $tal, 
 		array('class'=>'form-control')) ?>
-		<?=(isset($dataAll) and count($dataAll) > 0)? '<p class="text-danger">Työntekijällä on työvuoroja.</p>' : ''?>
+		<?=($hasShifts === true)? '<p class="text-danger">Työntekijällä on työvuoroja.</p>' : ''?>
 		<?php echo $form->error($model,'naytta_tyovuorossa'); ?>
 	</div>
 

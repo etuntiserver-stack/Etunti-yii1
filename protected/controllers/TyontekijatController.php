@@ -1196,4 +1196,34 @@ $xml = '
 		return false;
 	}
 
+	/**
+	 * Light version of FromToSuunnitellutAll to be used for checking if
+	 * an employee has shifts in the future. Called in _form.php
+	 * which displays an warning text if the employee has
+	 * shifts in the future.
+	 */
+	public function hasUpcomingShifts($employeeId)
+	{
+		$crit = new CDbCriteria();
+		$crit->limit = 1;
+		$crit->addCondition("tid = $employeeId");
+		$crit->addCondition("STR_TO_DATE(pvm, '%d.%m.%Y') >= CURDATE()");
+		$shifts = Tyovuoroot::model()->findAll($crit);
+		if(count($shifts) > 0) {
+			return true;
+		}
+
+		$crit = new CDbCriteria();
+		$crit->limit = 1;
+		$crit->addCondition("tid = $employeeId");
+		$crit->addCondition("tyopaari LIKE '%\"$employeeId\"%'", "OR");
+		$crit->addCondition("STR_TO_DATE(pto, '%d.%m.%Y') >= CURDATE()");
+		$repeating_shifts = ToistuvatTyovuorot::model()->findAll($crit);
+		if(count($repeating_shifts) > 0) {
+			return true;
+		}
+
+		return false;
+	}
+
 }
