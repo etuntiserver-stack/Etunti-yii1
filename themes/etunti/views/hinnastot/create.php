@@ -16,7 +16,7 @@
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
                  <div class="row">
-		  <?php echo $this->renderPartial('_form', array('model'=>$model, 'tp'=>$tp, 'yksikkot'=>$yksikkot)); ?>
+		  <?php echo $this->renderPartial('_form', array('model'=>$model, 'tp'=>$tp, 'yksikkot'=>$yksikkot, "mode" => $mode)); ?>
                  </div>
                 </div>
               </div>
