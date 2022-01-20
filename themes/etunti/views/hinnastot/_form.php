@@ -40,11 +40,23 @@
 
 <br>
 
+<?php 
+// instruct the user that all products will be added
+// to this catalogue automatically
+// also creates a hidden field, which defaults "alvsis" to "sis" for the new catalogue
+?>
+<?php if(isset($mode) && $mode === "create"): ?>
+	<p>Kaikki tuotteet lisätään hinnastoon automaattisesti</p>
+	<input type="hidden" value="sis" name="alvsis">
+<?php endif; ?>
+
 <!-- Taulu -->
 <?php if(isset($model->id)) : ?>
 <?php $rivit = HinnastotRivi::model()->findAll(" hinnastot_id='".$model->id."' "); ?>
 <?php endif; ?>
 
+<?php // show the product rows only if we're not in actionCreate ?>
+<?php if(!isset($mode) || $mode !== "create") : ?>
 <div class="row">
  <div class="col-sm-12">
 
@@ -66,7 +78,6 @@
      <th width="100"><?=Yii::t('main', 'YKSIKKÖ')?></th>
      <th></th>
     </tr>
-
     <?php if(isset($model->id) and count($rivit) > 0) : ?>
     <?php foreach($rivit as $r) : ?>
     <tr>
@@ -108,18 +119,25 @@
 	</select>
      </td>
      <td>
-	<i class="fa fa-trash-o fa-2x link poistarivi" aria-hidden="true"></i>
+	<?php 
+	// remove disabled, because every product should be in every catalogue
+	//<i class="fa fa-trash-o fa-2x link poistarivi" aria-hidden="true"></i> 
+	?>
      </td>
     </tr>
     <?php endforeach; ?>
     <?php endif; ?>
 
    </table>
-   <br><p><span class="btn btn-success btn-sm uusiRivi"><i class="fa fa-plus" aria-hidden="true"></i></span></p>
+   <?php 
+   // disabling this because every product should already be in the list
+   //<br><p><span class="btn btn-success btn-sm uusiRivi"><i class="fa fa-plus" aria-hidden="true"></i></span></p>
+   ?>
   </div>
  </div>
 </div>
 
+<?php endif; ?>
 <br>
 
 	<div class="buttons">
@@ -129,6 +147,7 @@
 <?php $this->endWidget(); ?>
 
 <!-- uusiRiviKontentti -->
+<?php /*
 <textarea id="uusiRiviKontentti" style="display:none">
     <tr>
      <td>
@@ -176,6 +195,7 @@
      </td>
     </tr>
 </textarea>
+*/?>
 <!-- uusiRiviKontentti -->
 
 
@@ -184,6 +204,7 @@ $(document).ready(function(){
 
   $(".submitthis").click(function(e){
 	e.preventDefault();
+	/*
 	var tuotteet = 0;
 	$( ".tuotevalikko" ).each(function() {
 		if( $(this, 'option:selected').val() !== '' ){
@@ -205,7 +226,9 @@ $(document).ready(function(){
 		alert('Hinnastossa pitää olla vähintään yksi tuote.');
 		return false;
 	}
-
+	*/
+	// we need to allow empty submits, since all products are just
+	// automatically added to all new catalogues
 	//return false;
 	$(this).closest('form').submit();
   });
@@ -257,9 +280,11 @@ $(document).ready(function(){
 	}
   });
 
+  /*
   $(document).delegate(".poistarivi","click",function(){
 	$(this).closest('tr').remove();
   });
+  */
 
   $('input[name=alvsis]').change(function(){
 	alvchecked();

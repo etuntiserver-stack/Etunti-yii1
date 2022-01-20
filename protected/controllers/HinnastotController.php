@@ -111,31 +111,34 @@ class HinnastotController extends Controller
 		{
 			$model->attributes=$_POST['Hinnastot'];
 			$model->alvsis=$_POST['alvsis'];
+			// start transaction
+			$db = Yii::app()->db1;
+			$transaction = $db->beginTransaction();
 			if($model->save())
 			{
-
-				// <-- Riville
-				HinnastotRivi::model()->deleteAll(" hinnastot_id = '".$model->id."' ");
-				foreach($_POST['Rivi']['tuote']['tuote'] as $k => $itm)
-				{
-
-					$rivit = new HinnastotRivi;
-					$rivit->hinnastot_id = $model->id;
-					$rivit->tuote_palvelu_id = $itm;
-					$rivit->hinnasto_hinta = str_replace(",", ".", $_POST['Rivi']['tuote']['hinnasto_hinta'][$k]);
-					$rivit->hinta_tuote = $_POST['Rivi']['tuote']['hinta_tuote'][$k];
-					$rivit->hinta_tuote_sis = str_replace(",", ".", $_POST['Rivi']['tuote']['hinta_tuote_sis'][$k]);
-					$rivit->hinnasto_alv = $_POST['Rivi']['tuote']['hinnasto_alv'][$k];
-					$rivit->hinnasto_yksikko = $_POST['Rivi']['tuote']['yksikko'][$k];
-					$rivit->hinnasto_yht = $_POST['Rivi']['tuote']['hinnasto_yht'][$k];
-					if(!$rivit->save()){
-						var_dump($rivit->getErrors());
-						exit;
+				// create a new catalogue row for each product for the new catalogue
+				foreach($tp as $product) {
+					$cr = new HinnastotRivi();
+					$cr->hinnastot_id = $model->id;
+					$cr->tuote_palvelu_id = $product->id;
+					$cr->hinnasto_hinta = $product->hinta_alv_0;
+					$cr->hinnasto_alv = $product->alv;
+					$cr->hinnasto_yksikko = $product->yksikko;
+					$cr->hinta_tuote = $product->hinta_alv_0;
+					$cr->hinnasto_yht = $product->hinta_alv_sis;
+					$cr->hinta_tuote_sis = $product->hinta_alv_sis;
+					if(!$cr->save()) {
+						$transaction->rollback();
+						throw new Error("Hinnaston tallennus epäonnistui");
 					}
 				}
-				//     Riville -->
+				// commit transaction
+				$transaction->commit();
 
 				$this->redirect(array('index'));
+			} else {
+				$transaction->rollback();
+				throw new Error("Hinnaston tallennus epäonnistui");
 			}
 		}
 
@@ -143,6 +146,7 @@ class HinnastotController extends Controller
 			'model'=>$model,
 			'tp'=>$tp,
 			'yksikkot'=>$yksikkot,
+			"mode" => "create",
 		));
 	}
 
@@ -155,7 +159,7 @@ class HinnastotController extends Controller
 	{
 		$criteria = new CDbCriteria();
 		$criteria->order = " nimike ";
-		$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0";
+		//$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0";
 		$tp = TuotteetPalvelut::model()->findAll($criteria);
 		$yksikkot = Valikkoot::model()->findAll(" select_type='laskutus_yksikko' ",array('order' => "select_type"));
 
@@ -210,7 +214,12 @@ class HinnastotController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		$model = $this->loadModel($id);
+		// loadModel will throw an not found exception when needed
+		if($model) {
+			$model->delete();
+			HinnastotRivi::model()->deleteAll("hinnastot_id = $id");
+		}
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))

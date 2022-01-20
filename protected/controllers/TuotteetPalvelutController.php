@@ -131,6 +131,36 @@ class TuotteetPalvelutController extends Controller
 			   }
 			}
 			//     Dimension -->
+
+			$db = Yii::app()->db1;
+			$transaction = $db->beginTransaction();
+
+			if(!$model->save()) {
+				$transaction->rollback();
+			}
+
+			// fetch all catalogues
+			$catalogues = Hinnastot::model()->findAll();
+			// create catalogue rows for each catalogue
+			foreach($catalogues as $catalogue) {
+				$cr = new HinnastotRivi();
+				$cr->hinnastot_id = $catalogue->id;
+				$cr->tuote_palvelu_id = $model->id;
+				$cr->hinnasto_hinta = $model->hinta_alv_0;
+				$cr->hinnasto_alv = $model->alv;
+				$cr->hinnasto_yksikko = $model->yksikko;
+				$cr->hinta_tuote = $model->hinta_alv_0;
+				$cr->hinnasto_yht = $model->hinta_alv_sis;
+				$cr->hinta_tuote_sis = $model->hinta_alv_sis;
+
+				if(!$cr->save()) {
+					$transaction->rollback();
+					throw new Exception("Tuotteen tallennus epäonnistui");
+				}
+			}
+
+			$transaction->commit();
+			
 			
 			if($model->save())
 			{
