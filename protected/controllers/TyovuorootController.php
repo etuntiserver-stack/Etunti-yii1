@@ -29,7 +29,24 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje','muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 'create4_form', 'update4_form', 'pvmTarkistus_lista', 'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 'tvasetus', 'omasiistijat_lista', 'omasiistijat_tarkistus', 'omasiistijat_ilmoitus', 'omasiistijat_siistijakohtainen_varoitus', 'os_cache_clear', 'massedit', 'aloitusaikojen_ilmoitus', 'tekijahovertietoja'),
+				'actions'=>array('admin','delete','index','tv2','view','updatetime','showohje',
+					'muisti','operatio', 'viikko','viikkottain', 'viikkottain_pdf', 
+					'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 
+					'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 
+					'virtual_migration', 'vmigrate_ajax_next', 'find_past_chains', 
+					'beta', 'did4', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 
+					'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 
+					'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 
+					'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 
+					'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'lista', 
+					'siirto', 'palkkataulukko', 'hovertietoja', 'create4', 'update4', 
+					'create4_form', 'update4_form', 'pvmTarkistus_lista', 
+					'pois_pvm_ketjusta', 'palauta_pvm_kejuun', 'pto_muutos', 
+					'contextmenu_valinnat', 'contextmenu_submits', 'getsumbyweekall', 
+					'tvasetus', 'omasiistijat_lista', 'omasiistijat_tarkistus', 
+					'omasiistijat_ilmoitus', 'omasiistijat_siistijakohtainen_varoitus', 
+					'os_cache_clear', 'massedit', 'aloitusaikojen_ilmoitus', 
+					'tekijahovertietoja', 'employeeskills'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -6125,5 +6142,19 @@ class TyovuorootController extends Controller
 			}
 		}
 		return ['tv' => $tuotteet, 'lisa_tuotteet' => $lisa_tuotteet];
+	}
+
+	/**
+	 * Renders a partial displaying employees names and their language skills
+	 * Used in shift form.
+	 */
+	public function actionEmployeeskills()
+	{
+		$req = Yii::app()->request;
+		$employee_ids = $req->getQuery("employee_ids", []);
+		$crit = new CDbCriteria();
+		$crit->addInCondition("id", $employee_ids);
+		$employees = Tyontekijat::model()->findAll($crit);
+		return $this->renderPartial("employee_skills", ["employees" => $employees]);
 	}
 }

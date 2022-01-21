@@ -595,7 +595,9 @@ $(document).ready(function(){
 		echo $elem;
 		?>
 
-
+		<?php // employee skill icons partial will be loaded here ?>
+		<div id="employee-skills">
+		</div>
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'peruutettu'); ?>
@@ -1165,6 +1167,56 @@ $(document).ready(function(){
   // init select2
   $(".select2").select2();
   //console.log(Date.now(), "after mult, before getAsiakasByKohde");
+  <?php // enable language skill icons only for kotipuhtaaksi ?>
+  <?php if(!empty(Yii::app()->user->kotipuhtaaksi)) :?>
+
+  const fetchWorkpairSkills = (workpairIds) => {
+	let url = "/index.php/tyovuoroot/employeeskills?";
+	let i = 0;
+	for(const workpairId of workpairIds) {
+		if(i === 0) {
+			url += "employee_ids[]=" + workpairId;
+		} else {
+			url += "&employee_ids[]=" + workpairId;
+		}
+		
+		i++;
+	}
+	
+	$("#employee-skills").load(url);
+  }
+  
+  // initial workpair skill fetch
+  let selectedWorkpairData = $("#tyopaari").select2("data");
+  let selectedWorkpairIds = selectedWorkpairData.reduce((idArr, selectedData) => {
+	  idArr.push(selectedData.id);
+	  return idArr;
+  }, []);
+  // add "main employee"
+  let mainEmployee = $("#tekijanVaihdo").val();
+  // this will be undefined in creation form
+  if(mainEmployee) {
+	selectedWorkpairIds.push(mainEmployee);
+  }
+
+  fetchWorkpairSkills(selectedWorkpairIds);
+
+  // on change workpair skill fetch
+  $("#tyopaari").on("change.select2", e => {
+	let selectedWorkpairData = $("#tyopaari").select2("data");
+	let selectedWorkpairIds = selectedWorkpairData.reduce((idArr, selectedData) => {
+		idArr.push(selectedData.id);
+		return idArr;
+	}, []);
+	// add "main employee
+	// this will be undefined in creation form
+	if(mainEmployee) {
+		selectedWorkpairIds.push(mainEmployee);
+  	}
+	fetchWorkpairSkills(selectedWorkpairIds);
+  });
+
+  <?php endif; ?>
   
   if($('#<?=$java_prefix?>_kohde').val() !== ''){
 	const kohdeElem = document.getElementById("<?=$java_prefix?>_kohde");
