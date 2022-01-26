@@ -2,9 +2,17 @@
 
 class ReferencePeriodCommand extends BatchEmailCommand
 {
-    public function run($args)
+    private $dryRun = false;
+
+    public function actionIndex($dryrun = 0) 
     {
-        
+        if($dryrun == 1 || $dryrun == "true" || $dryrun === true) {
+            $this->dryRun = true;
+        }
+        if($this->dryRun) {
+            echo "Dry run enabled" . PHP_EOL;
+        }
+
         $this->changeDbConnectionTo("kotipuhtaaksi");
         $settings = Yii::app()->db1->createCommand()
             ->select("*")
@@ -20,7 +28,6 @@ class ReferencePeriodCommand extends BatchEmailCommand
             echo "Reference period not defined or enabled for domain kotipuhtaaksi [PH]" . PHP_EOL;
             return;
         }
-
     }
 
     /**
@@ -148,8 +155,12 @@ class ReferencePeriodCommand extends BatchEmailCommand
             $recipients = [];
             $recipientVars = [];
             foreach($workers as $worker) {
-                // get workers email
+                // get and validate workers email
                 $email = $worker["tekijan_email"];
+                // skip this worker if email is invalid
+                if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    continue;
+                }
                 // get workers hour string
                 $hourString = $worker["vktyoaika"];
                 // skip this worker if there's 0 hours scheduled
@@ -172,20 +183,37 @@ class ReferencePeriodCommand extends BatchEmailCommand
             
             //print_r($recipientVars);
             
-            $result = parent::batchSendMail($from, $recipients, $recipientVars, $subject, $body);
+            if($this->dryRun === false) {
+                $result = parent::batchSendMail($from, $recipients, $recipientVars, $subject, $body);
 
-            if($result["responseCode"] !== 200) {
-                echo "something went wrong" . PHP_EOL;
+                if($result["responseCode"] !== 200) {
+                    echo "something went wrong" . PHP_EOL;
+                } else {
+                    echo "Mails successfully sent" . PHP_EOL;
+                    Yii::app()->db1->createCommand()
+                        ->update("asetukset",
+                        ["reference_period_emails_sent" => 1],
+                        "id=:id", 
+                        [":id" => 1],
+                    );
+                    echo "Updated sent flag to true" . PHP_EOL;
+                }
             } else {
-                echo "Mails successfully sent" . PHP_EOL;
-                Yii::app()->db1->createCommand()
-                    ->update("asetukset",
-                    ["reference_period_emails_sent" => 1],
-                    "id=:id", 
-                    [":id" => 1],
-                );
-                echo "Updated sent flag to true" . PHP_EOL;
+                echo "Dry run, not actually sending emails" . PHP_EOL;
+                print_r($recipients);
+                echo PHP_EOL;
+                print_r($recipientVars);
+                echo PHP_EOL;
+                print_r(sizeof($recipients));
+                echo PHP_EOL;
+                print_r(sizeof($recipientVars));
+                echo PHP_EOL;
+                $sizeMatch = sizeof($recipients) === sizeof($recipientVars);
+                if(!$sizeMatch) {
+                    echo "Recipients and recipient vars don't match!" . PHP_EOL;
+                }
             }
+            
             
         } else {
             echo "Email subject, body or length isn't defined for domain $domain" . PHP_EOL;
@@ -317,12 +345,18 @@ class ReferencePeriodCommand extends BatchEmailCommand
             // the constructed $workerWeekHourList
             foreach($workers as $worker)
             {
+                // get and validate workers email 
+                $email = $worker["tekijan_email"];
+                // skip this worker if email is invalid
+                if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    continue;
+                }
                 // there is a chance that there was no work done for
                 // some employees, which is why we need to check for existance
                 if(isset($workerWeekHourList[$worker["id"]])) {
                     $hourList = $workerWeekHourList[$worker["id"]];
                     // get workers email
-                    $email = $worker["tekijan_email"];
+                    //$email = $worker["tekijan_email"];
                     $recipients[] = $email;
                     // construct var list
                     $varList = [];
@@ -382,25 +416,41 @@ class ReferencePeriodCommand extends BatchEmailCommand
             // construct email body, $date and $length are used to calculate the week numbers
             $body = $this->endEmailBody($preset_body, $refStartDate, $length);
 
-            
-            $result = parent::batchSendMail($from, $recipients, $recipientVars, $subject, $body);
+            if($this->dryRun === false) {
+                $result = parent::batchSendMail($from, $recipients, $recipientVars, $subject, $body);
 
-            if($result["responseCode"] !== 200) {
-                echo "something went wrong" . PHP_EOL;
+                if($result["responseCode"] !== 200) {
+                    echo "something went wrong" . PHP_EOL;
+                } else {
+                    echo "Mails successfully sent" . PHP_EOL;
+                    
+                    // update next send date to settings
+                    $newDate = $date->modify("+$length weeks");
+                    $formatted = $newDate->format("Y-m-d");
+                    Yii::app()->db1->createCommand()
+                        ->update("asetukset",
+                        ["reference_period_end_send_date" => $formatted],
+                        "id=:id", 
+                        [":id" => 1],
+                    );
+                    echo "Updated next end send date to $formatted" . PHP_EOL;
+                }
             } else {
-                echo "Mails successfully sent" . PHP_EOL;
-                
-                // update next send date to settings
-                $newDate = $date->modify("+$length weeks");
-                $formatted = $newDate->format("Y-m-d");
-                Yii::app()->db1->createCommand()
-                    ->update("asetukset",
-                    ["reference_period_end_send_date" => $formatted],
-                    "id=:id", 
-                    [":id" => 1],
-                );
-                echo "Updated next end send date to $formatted" . PHP_EOL;
-            };
+                echo "Dry run, not actually sending emails" . PHP_EOL;
+                print_r($recipients);
+                echo PHP_EOL;
+                print_r($recipientVars);
+                echo PHP_EOL;
+                print_r(sizeof($recipients));
+                echo PHP_EOL;
+                print_r(sizeof($recipientVars));
+                echo PHP_EOL;
+                $sizeMatch = sizeof($recipients) === sizeof($recipientVars);
+                if(!$sizeMatch) {
+                    echo "Recipients and recipient vars don't match!" . PHP_EOL;
+                }
+            }
+            
         } else {
             echo "Email subject, body, length or start date isn't defined for domain $domain" . PHP_EOL;
         }
