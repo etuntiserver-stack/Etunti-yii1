@@ -6,13 +6,13 @@ class ReferencePeriodCommand extends BatchEmailCommand
 
     public function actionIndex($dryrun = 0) 
     {
-        if($dryrun == 1 || $dryrun == "true" || $dryrun === true) {
+        if($dryrun == 1 || $dryrun === "true") {
             $this->dryRun = true;
         }
-        if($this->dryRun) {
+        if($this->dryRun === true) {
             echo "Dry run enabled" . PHP_EOL;
         }
-
+        
         $this->changeDbConnectionTo("kotipuhtaaksi");
         $settings = Yii::app()->db1->createCommand()
             ->select("*")
