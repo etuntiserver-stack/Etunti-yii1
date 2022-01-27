@@ -878,7 +878,7 @@ public function actionImei($dom)
 				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 				BETWEEN '".date("Y-m-d", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week"))."' AND '".date("Y-m-d")."' 
 				AND loppui!=''
-				AND admin!=1
+				
 			";
 			$mob = Mobile::model()->findAll($criteria);
 
@@ -904,7 +904,7 @@ public function actionImei($dom)
 				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 				BETWEEN '".date("Y-m-d", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week"))."' AND '".date("Y-m-d")."' 
 				AND (status=3 OR status=2)
-				AND admin!=1
+				
 			";
 			$lu = Mobile::model()->find($criteria);
 			$ajaanjaksolla = '';
@@ -924,7 +924,7 @@ public function actionImei($dom)
 				AND tid='".$ttekija->id."'
 				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".date('Y-m-d')."'
 				AND (status=3 OR status=2)
-				AND admin!=1
+				
 			";
 			$lu = Mobile::model()->find($criteria);
 			$tanaan = '';

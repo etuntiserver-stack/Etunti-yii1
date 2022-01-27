@@ -55,7 +55,7 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tid'); ?>
-		<?php echo $form->textField($model,'tid',array('value'=>$t->id,'class'=>'form-control input-sm','readonly'=>'yes')); ?>
+		<?php echo $form->textField($model,'tid',array('value'=>$t->id,'class'=>'form-control input-sm closest-shift-field','readonly'=>'yes')); ?>
 		<?php echo $form->error($model,'tid'); ?>
 	</div>
 
@@ -79,12 +79,12 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<?php echo $form->textField($model,'aloitan',array('value'=>date("d.m.Y",strtotime($pvm)).' 00:00', 'size'=>20,'maxlength'=>20,'class'=>'form-control input-sm al')); ?>
+		<?php echo $form->textField($model,'aloitan',array('value'=>date("d.m.Y",strtotime($pvm)).' 00:00', 'size'=>20,'maxlength'=>20,'class'=>'form-control input-sm al closest-shift-field')); ?>
 		<?php echo $form->error($model,'aloitan'); ?>
 	</div>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<?php echo $form->textField($model,'loppui',array('value'=>date("d.m.Y",strtotime($pvm)).' 00:00','size'=>20,'maxlength'=>20,'class'=>'form-control input-sm lp')); ?>
+		<?php echo $form->textField($model,'loppui',array('value'=>date("d.m.Y",strtotime($pvm)).' 00:00','size'=>20,'maxlength'=>20,'class'=>'form-control input-sm lp closest-shift-field')); ?>
 		<?php echo $form->error($model,'loppui'); ?>
 	</div>
 
@@ -94,7 +94,7 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
 		<?php echo $form->dropDownList($model,'kohde_kannasta', 
 			CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite ASC')), 'id', 'osoite'), 
-			array('empty'=>Yii::t('main','Valitse kohde'),'class'=>'form-control input-sm select2-bootstrap')); ?>
+			array('empty'=>Yii::t('main','Valitse kohde'),'class'=>'form-control input-sm select2-bootstrap closest-shift-field')); ?>
 		<?php echo $form->error($model,'kohde_kannasta'); ?>
 	</div>
 
@@ -105,7 +105,7 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 		      //array_unshift($list, $list[$s->status]);
 		      echo $form->dropDownList($model,'status', 
 			 	$list, 
-				array('class'=>'form-control input-sm'));
+				array('class'=>'form-control input-sm closest-shift-field'));
 		?>
 		<?php echo $form->error($model,'status'); ?>
 	</div>
@@ -127,6 +127,12 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 		<?php echo $form->error($model,'laskutetaan'); ?>
 	</div>
     </div>
+	<?php 
+	// hidden field for tv_id, which will get automatically set if
+	// a workshift is found 
+	?>
+	<?= $form->hiddenField($model, "tv_id", ["type" => "hidden"]); ?>
+
   </div>
 
 
@@ -204,8 +210,48 @@ function checkMaxValues(val){
 }
 
 	// toteuma.js on toimimassa
-
-
+	// listen for all .closet-shift-field element changes
+	$(".closest-shift-field").change(e => {
+		const start = $("#Mobile_aloitan").val();
+		const end = $("#Mobile_loppui").val();
+		const propertyId = $("#Mobile_kohdenID").val();
+		const employeeId = $("#Mobile_tid").val();
+		const status = $("#Mobile_status").val();
+		if(start && end && propertyId && employeeId && status) {
+			if(status != 3) {
+				// if status is something else than work, clear the value
+				$("#Mobile_tv_id").val(null);
+			} else {
+				// only make the request if status is 3 (work)
+				$.ajax({
+					type: "GET",
+					url: "/index.php/mobile/closestshift",
+					data: {
+						starting_timestamp: start,
+						employee_id: employeeId,
+						property_id: propertyId,
+						status: status,
+					},
+					success: (response) => {
+						if(response) {
+							const shiftResponse = JSON.parse(response);
+							// set tv_id if shift was found
+							$("#Mobile_tv_id").val(shiftResponse.id);
+						} else {
+							// clear tv_id if no shift was found
+							$("#Mobile_tv_id").val(null);
+						}
+					},
+					failure: (error) => {
+						console.warn("Error while getting closest shift", error);
+						// clear tv_id on error
+						$("#Mobile_tv_id").val(null);
+					}
+				});
+			}
+			
+		}
+	});
 
 
 
