@@ -44,7 +44,7 @@ class MobileController extends Controller
 					'luetut_toteutuneet_ero_pdf', 'vuosilomat_pdf', 
 					'check_paallekkainMobile', 'tyoajan_seuranta', 'raportit_taulu', 
 					'tulostus', 'hyvaksymattomat', 'ayhteenveto', 'ayhteenvetoyht',
-					'palkkataulukkopost', 'selectedemployees'),
+					'palkkataulukkopost', 'selectedemployees', 'closestshift'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -1200,6 +1200,40 @@ class MobileController extends Controller
 	
 	}
 
+	/**
+	 * Returns the closest workshift it can find when the request
+	 * has employee_id, property_id and starting_timestamp defined.
+	 * starting_timestamp is a date time string in DD.MM.YYYY HH:mm:ss
+	 * or DD.MM.YYYY HH:mm:ss format.
+	 * employee_id should be an ID of a valid employee (Tyontekijat model)
+	 * property_id should be an ID of a valid property (Kohdet model)
+	 * 
+	 * Returns either a shift (Tyovuoroot) object or null.
+	 */
+	public function actionClosestshift()
+	{
+		$req = Yii::app()->request;
+		$status = $req->getQuery("status");
+		// exit early if status is anything but 3 (work)
+		if($status != 3) {
+			echo null;
+			return;
+		}
+		$start = $req->getQuery("starting_timestamp");
+		$startDate = DateTime::createFromFormat("d.m.Y H:i", $start);
+		if($startDate === false) {
+			$startDate = DateTime::createFromFormat("d.m.Y H:i:s", $start);
+		}
+		$employeeId = $req->getQuery("employee_id");
+		$propertyId = $req->getQuery("property_id");
+		if($startDate !== false && $employeeId && $propertyId) {
+			$closestShift = Tyovuoroot::findClosestShift($startDate->format("Y-m-d H:i:s"), $propertyId, $employeeId,);
+			if($closestShift) {
+				echo CJavaScript::jsonEncode($closestShift);
+			}
+		}
+		echo null;
+	}
 
 	public function actionOn_olemassa()
 	{

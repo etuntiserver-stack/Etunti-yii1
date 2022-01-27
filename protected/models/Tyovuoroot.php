@@ -311,4 +311,80 @@ class Tyovuoroot extends DB2ActiveRecord
 		// return true even if property isn't defined
 		return true;
 	}
+
+	/**
+	 * Finds the closest shift by 'alku' (starting time) compared to $starting_timestamp,
+	 * which is a date string in YYYY-MM-DD HH:mm:ss format. Also supports YYYY-MM-DD HH:mm format.
+	 * $propertyId and $employeeId should be defined
+	 * @param string $starting_timestamp date in YYYY-MM-DD HH:mm:ss format
+	 * @param int $propertyId ID of the property the closest shift should be for
+	 * @param int $employeeId ID of the employee the closest shift should be for
+	 * @return Tyovuoroot|null returns the closest shift or null if there are no shifts found
+	 */
+	public static function findClosestShift($starting_timestamp, $propertyId, $employeeId)
+	{
+		// make sure property & employee IDs are defined
+		// and > 0
+		if(!$propertyId || !$employeeId) {
+			return null;
+		}
+		$startDate = DateTime::createFromFormat("Y-m-d H:i:s", $starting_timestamp);
+		// make sure startDate was parsed successfully
+		if($startDate === false) {
+			// attempt to parse with another
+			$startDate = DateTime::createFromFormat("Y-m-d H:i", $starting_timestamp);
+			if($startDate === false) {
+				return null;
+			}
+		}
+
+		$dmyDate = $startDate->format("d.m.Y");
+		$crit = new CDbCriteria();
+		$crit->compare("pvm", $dmyDate);
+		$crit->compare("kohde", $propertyId);
+		$crit->compare("tid", $employeeId);
+		$crit->compare("peruutettu", 0);
+		$shifts = Tyovuoroot::model()->findAll($crit);
+		// usually there's only one shift, and we can just return it straight away
+		// if it is the only one
+		if(count($shifts) === 1) {
+			return $shifts[0];
+		} else if (count($shifts) > 0) {
+			// if there's more than 1 shift, find the one with the closest starting time (alku)
+			// to $startDate
+			$startingTimeMap = [];
+			foreach($shifts as $shift) {
+				$shiftStartTime = DateTime::createFromFormat("d.m.Y H:i", $shift->pvm . " " . $shift->alku);
+				// attempt to parse with H:i:s format if the above fails
+				if($shiftStartTime === false) {
+					$shiftStartTime = DateTime::createFromFormat("d.m.Y H:i:s", $shift->pvm . " " . $shift->alku);
+				}
+				if($shiftStartTime) {
+					$startingTimeMap[$shiftStartTime] = $shift;
+				}
+			}
+			// find closest shift to $starting_timestamp
+			$closest = null;
+			foreach($shiftStartTime as $shiftTimestamp => $shift) {
+				// get the diff between shifts start and startDate, use abs to get a positive value
+				// so we can easily compare times before and after startDate equally
+				$diff = abs($shiftTimestamp->getTimestamp() - $startDate->getTimestamp());
+				// if closest is already defined, compare the defined diff with this one
+				if($closest) {
+					if($diff < $closest["diff"]) {
+						$closest = ["shift" => $shift, "diff" => $diff];
+					}
+				} else {
+					// closests wasn't defined, we can say that this (probably the first shift
+					// in the list) is the closest
+					$closest = ["shift" => $shift, "diff" => $diff];
+				}
+			}
+			// if closest is defined, return the shift
+			if($closest) {
+				return $closest["shift"];
+			}
+		}
+		return null;
+	}
 }
