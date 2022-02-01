@@ -315,12 +315,13 @@ class ToteutuneetController extends Controller
 						// <-- Dimension
 						$dimension = '';
 						$k = Kohteet::model()->findbypk($arr['attributes']['kohdenID']);
-						if(isset($k->asiakkaat->netvisor_dimension_name) and !empty($k->asiakkaat->netvisor_dimension_name))
+						// Check only for dimension, because item is correct cost center
+						if(isset($k->asiakkaat->netvisor_dimension_name) and !empty($k->asiakkaat->netvisor_dimension_item))
 						{
 							$dimension = '
 							<dimension>
 								<dimensionname>'.$k->asiakkaat->netvisor_dimension_name.'</dimensionname>
-								<dimensionitem>Palkanlaskenta</dimensionitem>
+								<dimensionitem>'.$k->asiakkaat->netvisor_dimension_item.'</dimensionitem>
 							</dimension>';
 						}
 						// Dimension -->
