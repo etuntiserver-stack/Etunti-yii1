@@ -70,12 +70,12 @@
 	<td class="col12"><?php if($ls > 0) echo number_format($ls, 2, ',', ''); ?></td>
 	<td class="col12"><?php if($vl > 0) echo number_format($vl, 2, ',', ''); ?></td>
 	<td class="col12"><?php if($vkl > 0) echo number_format($vkl, 2, ',', ''); ?></td>
-	<td><?= number_format($pv, 2, ",", ""); ?>
-	<td><?= number_format($lsk, 2, ",", ""); ?>
-	<td><?= number_format($pp, 2, ",", ""); ?>
-	<td class="col13"><?php echo $korv; ?></td>
-	<td class="col14"><?php echo $lisatt; ?></td>
-	<td class="col15"><?php echo $ennakko; ?></td>
+	<td class="col13"><?php if($pv > 0) echo  number_format($pv, 2, ",", ""); ?>
+	<td class="col14"><?php if($lsk > 0) echo number_format($lsk, 2, ",", ""); ?>
+	<td class="col15"><?php if($pp > 0) echo number_format($pp, 2, ",", ""); ?>
+	<td class="col16"><?php echo $korv; ?></td>
+	<td class="col17"><?php echo $lisatt; ?></td>
+	<td class="col18"><?php echo $ennakko; ?></td>
 </tr>
 
 	
