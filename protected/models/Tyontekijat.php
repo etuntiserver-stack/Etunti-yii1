@@ -28,6 +28,12 @@
  * @property string $kortit
  * @property string $ayjasenyys
  * @property string $visited_properties
+ * @property string $orientation_start
+ * @property string $orientation_end
+ * ICE = in case of emergency
+ * @property string $ice_name
+ * @property string $ice_relationship
+ * @property string $ice_phonenumber
  */
 class Tyontekijat extends DB2ActiveRecord
 {
@@ -154,11 +160,12 @@ class Tyontekijat extends DB2ActiveRecord
 			array('tekijan_henkilotunnus, tekijan_puh, tekijan_lanka_puh', 'length', 'max'=>20),
 			array('tekijan_email, tekijan_ptoimipaikka, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_konttori, aktiivinen', 'length', 'max'=>50),
 			array('tekijan_pnumero', 'length', 'max'=>7),
-			array('ammattinimike, token', 'length', 'max'=>255),
+			array('ammattinimike, token, ice_name, ice_relationship, ice_phonenumber', 'length', 'max'=>255),
 			array('ayjasenyys, app_lang', 'length', 'max'=>10),
 			array('kortit, tekijan_muisti, tekijan_tietoja, tietoja_onlinevarauksen, muistiinpano, tyo_toimialue, visited_properties', 'safe'),
 			array('gcm_reg_id, position, kortit_voimassaolo, tyoryhma', 'length', 'max'=>500),
 			array('onlinevaraus_tuotteet', 'safe'),
+			array("orientation_start, orientation_end", "type", "type" => "date", "dateFormat" => "dd.MM.yyyy"),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, imei, laiten_puh, tekijan_nimi, tekijan_henkilotunnus, tekijan_puh, tekijan_email, tekijan_lanka_puh, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tyoryhma, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_pankkitili, tekijan_konttori, aktiivinen, tekijan_tietoja, tekijan_muisti, salasana, online_varauksen_valmina, kortit, ayjasenyys, gcm_reg_id, position, tyo_toimialue, sukunimi', 'safe', 'on'=>'search'),
@@ -213,10 +220,15 @@ class Tyontekijat extends DB2ActiveRecord
 			'ammattinimike' => Yii::t('main', 'Ammattinimike'),
 			'app_naytta_osoitekenta'=>Yii::t('main', 'Näytä osoite sovelluksessa'),
 			'naytta_tyovuorossa' => Yii::t('main', 'Näytä työvuorosuunnittelussa'),
+			"orientation_start" => Yii::t("main", "Perehdytyksen aloitus"),
+			"orientation_end" => Yii::t("main", "Perehdytyksen lopetus"),
+			"ice_name" => Yii::t("main", "Yhteyshenkilön nimi"),
+			"ice_relationship" => Yii::t("main", "Yhteyshenkilön suhde työntekijään"),
+			"ice_phonenumber" => Yii::t("main", "Yheyshenkilön puhelinnumero"),
 		);
 	}
 
-        public function getFullName(){
+	public function getFullName(){
 		$return = '';
 		$asetukset = Asetukset::model()->findByPk(1);
 		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
@@ -228,8 +240,49 @@ class Tyontekijat extends DB2ActiveRecord
 				$return .= $this->sukunimi.' ';
 				$return .= $this->tekijan_nimi;
 		}
-                return $return;
-        }
+		return $return;
+	}
+
+	public function afterFind() 
+	{
+		// format orientation start and end dates to d.m.Y for the jquery time picker
+		if($this->orientation_start) {
+			$this->orientation_start = date("d.m.Y", strtotime($this->orientation_start));
+		}
+		if($this->orientation_end) {
+			$this->orientation_end = date("d.m.Y", strtotime($this->orientation_end));
+		}
+		return parent::afterFind();
+	}
+	
+	public function beforeSave()
+	{
+		// format orientation start and end dates back into Y-m-d for mysql
+		if($this->orientation_start) {
+			$this->orientation_start = date("Y-m-d", strtotime($this->orientation_start));
+		}
+		if($this->orientation_end) {
+			$this->orientation_end = date("Y-m-d", strtotime($this->orientation_end));
+		}
+		
+		return parent::beforeSave();
+	}
+
+	/**
+	 * Returns true if this employee is currently in orientation. Otherwise returns false.
+	 * Sees if the current date is between orientation_start and orientation_end
+	 */
+	public function isInOrientation() {
+		if($this->orientation_start && $this->orientation_end) {
+			// the dates are in d.m.Y because of afterFind()
+			$start = date("Y-m-d", strtotime($this->orientation_start));
+			$end = date("Y-m-d", strtotime($this->orientation_end));
+			$now = date("Y-m-d");
+			// if date now is between start and end return true
+			return $now >= $start && $now <= $end;
+		}
+		return false;
+	}
 
 	/**
 	 * Returns a comma separated string that includes

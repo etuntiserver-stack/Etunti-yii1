@@ -37,4 +37,18 @@ $(document).ready(function(){
          format : 'YYYY.MM.DD HH:mm',
     });
 
+    $(".orientation-start-picker").datepicker({
+        locale: "fi",
+        format: "dd.mm.yyyy",
+        altField: "#Tyontekijat_orientation_start",
+        altFormat: "yyyy-mm-dd"
+    });
+
+    $(".orientation-end-picker").datepicker({
+        locale: "fi",
+        format: "dd.mm.yyyy",
+        altField: "#Tyontekijat_orientation_end",
+        altFormat: "yyyy-mm-dd"
+    });
+
 });
