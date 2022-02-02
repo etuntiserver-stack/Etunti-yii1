@@ -427,6 +427,17 @@ $(document).ready(function(){
 	</div>
 
 	<div class="section fill mb5">
+		  <?= $form->labelEx($model, "orientation_start"); ?>
+		  <?= $form->textField($model, "orientation_start", ["class" => "gui-input datepickerFI"]); ?>
+		  <?= $form->error($model, "orientation_start"); ?>
+	</div>
+	<div class="section fill mb5">
+		  <?= $form->labelEx($model, "orientation_end"); ?>
+		  <?= $form->textField($model, "orientation_end", ["class" => "gui-input datepickerFI"]); ?>
+		  <?= $form->error($model, "orientation_end"); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kortit'); ?>
 
 	   <div class="input-group">
@@ -589,6 +600,22 @@ $(document).ready(function(){
 		<?php echo $form->labelEx($model,'position'); ?>
 		<?php echo $form->textField($model,'position',array('size'=>60,'maxlength'=>500,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'position'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<p>Hätäyhteyshenkilö</p>
+		<?= $form->labelEx($model, "ice_name"); ?>
+		<?= $form->textField($model, "ice_name", ["class" => "form-control"]); ?>
+		<?= $form->error($model, "ice_name"); ?>
+
+		<?= $form->labelEx($model, "ice_relationship"); ?>
+		<?= $form->textField($model, "ice_relationship", ["class" => "form-control"]); ?>
+		<?= $form->error($model, "ice_relationship"); ?>
+
+		<?= $form->labelEx($model, "ice_phonenumber"); ?>
+		<?= $form->textField($model, "ice_phonenumber", ["class" => "form-control"]); ?>
+		<?= $form->error($model, "ice_phonenumber"); ?>
+
 	</div>
 
    </div>
