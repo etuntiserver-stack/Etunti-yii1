@@ -1164,6 +1164,7 @@ class MobileController extends Controller
 			$hour->ending_time = $endDate->format($newFormat);
 			$hour->worker_id = $model->tid;
 			$hour->status = $model->status;
+			$hour->shift_id = $model->tv_id;
 			$hour->calculateDurations();
 
 			$hour->save();
