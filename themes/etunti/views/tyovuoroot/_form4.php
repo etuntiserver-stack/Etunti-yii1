@@ -222,6 +222,8 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 				'(LS) Lapsen sairaus/#FFAC33' => '(LS) Lapsen sairaus',
 				'(AP) Arkipyhä/#FFAC33' => '(AP) Arkipyhä',
 				'(PV) Palkaton vapaa/#FFAC33' => '(PV) Palkaton vapaa',
+				"(LSK) LS (karenssi)/#FFAC33" => "(LSK) LS (karenssi)",
+				"(PP) Palkaton poissaolo/#FFAC33" => "(PP) Palkaton poissaolo"
 			);
 			$valikkoot = Valikkoot::model()->findAll("select_type = 'vuosilomat'");
 			$l2 = array();

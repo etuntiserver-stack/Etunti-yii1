@@ -2605,6 +2605,55 @@ class MobileController extends Controller
 		}
 		return $set;
 	}
+
+	/**
+	 * A faster version of TidfromtoVuosilomaBetween which queries these special
+	 * 'tyoajanlaatu' shifts in bulk. Doesn't support the "by_pvm" thing which was
+	 * in the original function, because I didn't find any case where it's used.
+	 * With some quick testing this method was about 2 times faster.
+	 */
+	protected function TidfromtoVuosilomaBetweenFast($from, $to, $tids) 
+	{
+		// we will be discarding any other key found
+		$set = [
+			"SL" => [],
+			"SPL" => [],
+			"LS" => [],
+			"VL" => [],
+			"VKL" => [],
+			"AP" => [],
+			"PV" => [],
+			"LSK" => [],
+			"PP" => []
+		];
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+		$haku_criteria = ["tyoajanlaatu != ''"];
+		$with = ['data'];
+		$tyovuorot = Yii::app()->createController('Tyovuoroot');
+		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, $tids, $haku_criteria, $with);
+
+		foreach($dataAll as $shiftArr) {
+			$typeKey = $this->shiftTypeKey($shiftArr["data"]);
+			// if there isn't a key defined for this type in $set, we wont count it.
+			if(array_key_exists($typeKey, $set)) {
+				if(!isset($set[$typeKey][$shiftArr["this_tid"]])) {
+					$set[$typeKey][$shiftArr["this_tid"]] = 1;
+				} else {
+					$set[$typeKey][$shiftArr["this_tid"]] += 1; 
+				}
+			}
+		}
+		return $set;
+	}
+
+	private function shiftTypeKey($shift) 
+	{
+		$str = $shift["tyoajanlaatu"];
+		$str = substr($str, 1);
+		$split = explode(")", $str);
+		return $split[0];
+	}
 /*
 	public function TidPvmVuosiloma($pvm,$tid,$tila)
 	{

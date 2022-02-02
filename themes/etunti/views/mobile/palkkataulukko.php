@@ -175,6 +175,9 @@
                 <b>VL</b> - Vuosiloma<br>
                 <b>VKL</b> - Viikkolomapäivä<br>
                 <b>EL</b> - Erikoislauantai<br>
+                <b>PV</b> - Palkaton vapaa<br>
+                <b>LSK</b> - LS (karenssi)<br>
+                <b>PP</b> - Palkaton poissaolo<br>
               </div>
             </div>
           </div>
@@ -231,6 +234,9 @@
                     <th><?php echo Yii::t('main', 'LS'); ?></th>
                     <th><?php echo Yii::t('main', 'VL'); ?></th>
                     <th><?php echo Yii::t('main', 'VKL'); ?></th>
+                    <th><?= Yii::t("main", "PV"); ?></th>
+                    <th><?= Yii::t("main", "LSK"); ?></th>
+                    <th><?= Yii::t("main", "PP"); ?></th>
                     <th><?php echo Yii::t('main', 'Korvaus'); ?></th>
                     <th><?php echo Yii::t('main', 'Lisätyötunnit'); ?></th>
                     <th><?php echo Yii::t('main', 'Ennakko'); ?></th>
@@ -253,6 +259,9 @@
                 $slYht  = 0;
                 $splYht  = 0;
                 $lsYht  = 0;
+                $pvYht = 0;
+                $lskYht = 0;
+                $ppYht = 0;
                 $pyhat  = 0;
                 $el    = 0;
                 $pyhatYht  = 0;
@@ -286,12 +295,17 @@
                 $erikoislauantai  = $this->TidfromtoMobiiliAll($from, $to, $tids, array(2, 3), $_GET['lu_tai_tot'], true, 5, false, null, null, false);
 
                 // <-- SPL, SL, LS, VL, VKL, AP
-                $sl_all     = $this->TidfromtoVuosilomaBetween($from, $to, $tids, 'SL'); // Palkallinen
-                $spl_all     = $this->TidfromtoVuosilomaBetween($from, $to, $tids, 'SPL'); // Palkaton
-                $ls_all     = $this->TidfromtoVuosilomaBetween($from, $to, $tids, 'LS'); // Lapsen sairaus
-                $vl_all     = $this->TidfromtoVuosilomaBetween($from, $to, $tids, 'VL'); // Vuosiloma
-                $vkl_all     = $this->TidfromtoVuosilomaBetween($from, $to, $tids, 'VKL'); // Viikkolomapaiva  ( Poistettu kaytosta )
-                $ap_all     = $this->TidfromtoVuosilomaBetween($from, $to, $tids, 'AP'); // Arkipaiva
+                $vl_data = $this->TidfromtoVuosilomaBetweenFast($from, $to, $tids);
+                $sl_all = $vl_data["SL"];
+                $spl_all = $vl_data["SPL"];
+                $ls_all = $vl_data["LS"];
+                $vl_all = $vl_data["VL"];
+                $vkl_all = $vl_data["VKL"];
+                $ap_all = $vl_data["AP"];
+                // PV, LSK, PP
+                $pv_all = $vl_data["PV"];
+                $lsk_all = $vl_data["LSK"];
+                $pp_all = $vl_data["PP"];
                 //     SPL, SL, LS, VL, VKL, AP -->
 
                 foreach ($model as $data) {
@@ -304,6 +318,9 @@
                   $ls     = (isset($ls_all[$data->id])) ? $ls_all[$data->id] : 0; // Lapsen sairaus
                   $vl     = (isset($vl_all[$data->id])) ? $vl_all[$data->id] : 0; // Vuosiloma
                   $vkl     = (isset($vkl_all[$data->id])) ? $vkl_all[$data->id] : 0; // Viikkolomapaiva  ( Poistettu kaytosta )
+                  $pv = isset($pv_all[$data->id]) ? $pv_all[$data->id] : 0; // palkaton vapaa
+                  $lsk = isset($lsk_all[$data->id]) ? $lsk_all[$data->id] : 0; // LS karenssi
+                  $pp = isset($pp_all[$data->id]) ? $pp_all[$data->id] : 0; // palkaton poissaolo
                   //     SPL, SL, LS, VL, VKL, AP -->
 
                   $slYht += $sl;
@@ -316,6 +333,9 @@
                   $pyhatYht += $pyhat;
                   $el = $erikoislauantai[$data->id];
                   $elYht += $el;
+                  $pvYht += $pv;
+                  $lskYht += $lsk;
+                  $ppYht += $pp;
 
                   $iltatunnit_ja_iltamatka = $iltatunnit[$data->id] + $matkaIlta[$data->id];
                   $yht[0]   += $tyotunnit[$data->id];
@@ -345,6 +365,9 @@
                     'to' => $to,
                     'pyhat' => $pyhat,
                     'el' => $el,
+                    "pp" => $pp,
+                    "lsk" => $lsk,
+                    "pv" => $pv,
                     'loun' => $loun[$data->id],
                     'yotunnit' => $yotunnit[$data->id],
                     'iltatunnit' => $iltatunnit[$data->id],
@@ -381,6 +404,10 @@
                     <td><?= ($lsYht > 0) ? $lsYht : '' ?></td>
                     <td><?= ($vlYht > 0) ? $vlYht : '' ?></td>
                     <td><?= ($vklYht > 0) ? $vklYht : '' ?></td>
+                    <td><?= ($pvYht > 0) ? $pvYht : ''?></td>
+                    <td><?= ($lskYht > 0) ? $lskYht : ''?></td>
+                    <td><?= ($ppYht > 0) ? $ppYht : ''?></td>
+
                     <td></td>
                     <td></td>
                     <td></td>
