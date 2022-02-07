@@ -578,7 +578,7 @@ $iban				= $asetukset->iban;
 			array(
 			'yhteensa_total_verot' => round(($yhteensa_total-$yhteensa_total_veroton), $decimal), 
 			'yhteensa_total_veroton' => round($yhteensa_total_veroton, $decimal), 
-			'yhteensa_total' => $yhteensa_total
+			'yhteensa_total' => round($yhteensa_total, $decimal),
 		));
 
 		// <<- Lahetys Trust
