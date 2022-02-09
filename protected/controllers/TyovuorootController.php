@@ -1784,10 +1784,12 @@ class TyovuorootController extends Controller
 					$result = $this->this_id($_GET["tv_id"]);
 					$shift = $result["model"];
 					$worker = Tyontekijat::model()->findByPk($shift->tid);
-					$groups = json_decode($worker->tyoryhma);
+					if($worker) {
+						$groups = json_decode($worker->tyoryhma);
+						Yii::app()->session["tyo_toimialue"] = $worker->tyo_toimialue;
+						Yii::app()->session["tyoryhma"] = $groups;
+					}
 					
-					Yii::app()->session["tyo_toimialue"] = $worker->tyo_toimialue;
-					Yii::app()->session["tyoryhma"] = $groups;
 					// just in case, unset "tyontekijat" from session, which could be [0] at this time.
 					// that would defeat the purpose of this, since the user wouldn't see any workers in the calendar
 					unset(Yii::app()->session["tyontekijat"]);

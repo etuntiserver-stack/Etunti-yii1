@@ -278,8 +278,11 @@ class AsiakkaatController extends Controller
 		$tyovuorot = Yii::app()->createController('Tyovuoroot');
 		$dataAll = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [], $haku_criteria, ['data']);
 
+		$reserved = $tyovuorot[0]->FromToSuunnitellutAll($from, $to, [0], $haku_criteria, ['data']);
+
 		$this->render('showshift',array(
 				'dataAll' => $dataAll,
+				'reserved' => $reserved,
 				'from' => $from,
 				'to' => $to,
 				'id' => $id,

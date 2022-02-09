@@ -201,6 +201,40 @@
    </div>
   </div>
 
+<?php if(isset($reserved) && count($reserved) > 0) :?>
+<h4>Varaus tilassa olevat työvuorot</h4>
+<div class="panel heading-border">
+  <div class="panel-body">
+    <div class="table-response tb">
+      <table class="table table-striped">
+        <thread class="myBgColors">
+        <tr>
+          <th><?php echo Yii::t('main', 'Muokkaa'); ?></th>
+          <th><?php echo Yii::t('main', 'Päivä'); ?></th>
+          <th><?php echo Yii::t('main', 'Aika'); ?></th>
+          <th><?php echo Yii::t('main', 'Kesto'); ?></th>
+          <th><?php echo Yii::t('main', 'Osoite'); ?></th>
+          <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+          <th><?php echo Yii::t('main', 'Tietoja'); ?></th>
+          <th><?php echo Yii::t('main', 'Tila'); ?></th>
+          </tr>
+        </thread>
+        <?php
+          foreach($reserved as $tv_arr) {
+            echo $this->renderPartial("_reserved", [
+              "data" => $tv_arr["data"],
+              "this_id" => $tv_arr["this_id"],
+              "this_pvm" => $tv_arr["this_pvm"],
+              "this_tid" => $tv_arr["this_tid"]
+            ]);
+          }
+        ?>
+      </table>
+    </div>
+  </div>
+</div>
+<?php endif; ?>
+
 <script type="text/javascript">
 $(document).ready(function(){
   $(".submitForm").on('click', function(e){
