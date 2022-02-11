@@ -165,7 +165,7 @@ class Tyontekijat extends DB2ActiveRecord
 			array('kortit, tekijan_muisti, tekijan_tietoja, tietoja_onlinevarauksen, muistiinpano, tyo_toimialue, visited_properties', 'safe'),
 			array('gcm_reg_id, position, kortit_voimassaolo, tyoryhma', 'length', 'max'=>500),
 			array('onlinevaraus_tuotteet', 'safe'),
-			array("orientation_start, orientation_end", "type", "type" => "date", "dateFormat" => "dd.MM.yyyy"),
+			array("orientation_start, orientation_end", "type", "type" => "date", "dateFormat" => "yyyy-MM-dd"),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, imei, laiten_puh, tekijan_nimi, tekijan_henkilotunnus, tekijan_puh, tekijan_email, tekijan_lanka_puh, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tyoryhma, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_pankkitili, tekijan_konttori, aktiivinen, tekijan_tietoja, tekijan_muisti, salasana, online_varauksen_valmina, kortit, ayjasenyys, gcm_reg_id, position, tyo_toimialue, sukunimi', 'safe', 'on'=>'search'),
@@ -241,31 +241,6 @@ class Tyontekijat extends DB2ActiveRecord
 				$return .= $this->tekijan_nimi;
 		}
 		return $return;
-	}
-
-	public function afterFind() 
-	{
-		// format orientation start and end dates to d.m.Y for the jquery time picker
-		if($this->orientation_start) {
-			$this->orientation_start = date("d.m.Y", strtotime($this->orientation_start));
-		}
-		if($this->orientation_end) {
-			$this->orientation_end = date("d.m.Y", strtotime($this->orientation_end));
-		}
-		return parent::afterFind();
-	}
-	
-	public function beforeSave()
-	{
-		// format orientation start and end dates back into Y-m-d for mysql
-		if($this->orientation_start) {
-			$this->orientation_start = date("Y-m-d", strtotime($this->orientation_start));
-		}
-		if($this->orientation_end) {
-			$this->orientation_end = date("Y-m-d", strtotime($this->orientation_end));
-		}
-		
-		return parent::beforeSave();
 	}
 
 	/**

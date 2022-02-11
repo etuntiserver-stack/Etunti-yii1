@@ -477,6 +477,28 @@ class TyontekijatController extends Controller
 
 		$netvisorResponse = '';
 		$model=$this->loadModel($id);
+		$orient_start = $model->orientation_start;
+		$orient_end = $model->orientation_end;
+		// format orientation start and end to d.m.Y, or set them as null if parsing fails.
+		// something is very wrong with the dates if the parsing fails.
+		// while I'd like to use afterFind and beforeSave in the model for this, it can have some
+		// side effects with automation stuff built into yii1, which resulted in errors in production
+		if($orient_start) {
+			$parsed_orient_start = DateTime::createFromFormat("Y-m-d", $orient_start);
+			if($parsed_orient_start) {
+				$model->orientation_start = $parsed_orient_start->format("d.m.Y");
+			} else {
+				$model->orientation_start = null;
+			}
+		}
+		if($orient_end) {
+			$parsed_orient_end = DateTime::createFromFormat("Y-m-d", $orient_end);
+			if($parsed_orient_end) {
+				$model->orientation_end = $parsed_orient_end->format("d.m.Y");
+			} else {
+				$model->orientation_end = null;
+			}
+		}
 
 		// <-- Oikeudet
 		$checkOikeus = "tyontekijat_2_".Yii::app()->user->adminStatus;
@@ -624,6 +646,20 @@ class TyontekijatController extends Controller
 				$model->kortit = implode("##***",$_POST['kortit']);
 			else
 				$model->kortit = "";
+
+			// convert orientation fields to Y-m-d if they're in d.m.Y
+			if($model->orientation_start) {
+				$parsed_start = DateTime::createFromFormat("d.m.Y", $model->orientation_start);
+				if($parsed_start) {
+					$model->orientation_start = $parsed_start->format("Y-m-d");
+				}
+			}
+			if($model->orientation_end) {
+				$parsed_end = DateTime::createFromFormat("d.m.Y", $model->orientation_end);
+				if($parsed_end) {
+					$model->orientation_end = $parsed_end->format("Y-m-d");
+				}
+			}
 
 			if($model->save()){
 
