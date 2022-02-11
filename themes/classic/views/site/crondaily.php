@@ -130,8 +130,15 @@ function autoPassiveClients() {
         $client->ryhma = json_encode(array_values($newGroups));
 
         if(!$client->save()) {
+            $mail = new YiiMailer();
+            $mail->setFrom("www-data@app.etunti.fi");
+            $mail->setTo("simo@kotipuhtaaksi.fi");
+            $mail->setSubject("Crondaily error occured");
+            $mail->setBody("Error occured while saving client in autoPassiveClients crondaily");
+            $mail->send();
+            print_r("Error while saving client");
             print_r($client->getErrors());
-            exit;
+            break;
         }
     }
     // it's really important to refetch the model, because saving
@@ -237,10 +244,16 @@ function autoPassiveWorkers() {
                     // aktiivinen 4 means "Lopettanut (automaatio)"
                     $worker->aktiivinen = 4;
                     if(!$worker->save()) {
+                        $mail = new YiiMailer();
+                        $mail->setFrom("www-data@app.etunti.fi");
+                        $mail->setTo("simo@kotipuhtaaksi.fi");
+                        $mail->setSubject("Crondaily error occured");
+                        $mail->setBody("Error occured while saving worker in autoPassiveWorkers crondaily");
+                        $mail->send();
                         print_r($worker);
                         print_r("<br><br>ERRORS:");
                         print_r($worker->getErrors());
-                        exit;
+                        break;
                     }
                 }
             }
@@ -294,8 +307,15 @@ function checkPassiveableEmployees() {
     foreach($workers as $worker) {
         $worker->aktiivinen = 3;
         if(!$worker->save()) {
+            $mail = new YiiMailer();
+            $mail->setFrom("www-data@app.etunti.fi");
+            $mail->setTo("simo@kotipuhtaaksi.fi");
+            $mail->setSubject("Crondaily error occured");
+            $mail->setBody("Error occured while saving worker in checkPassiveableEmployees crondaily");
+            $mail->send();
+            print_r("Error while saving worker as inactive");
             print_r($worker->getErrors());
-            exit;
+            break;
         }
     }
 
