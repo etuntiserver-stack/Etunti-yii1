@@ -175,6 +175,7 @@
                 <b>VL</b> - Vuosiloma<br>
                 <b>VKL</b> - Viikkolomapäivä<br>
                 <b>EL</b> - Erikoislauantai<br>
+                <b>PY</b> - Pyhäpäivä<br>
                 <b>PV</b> - Palkaton vapaa<br>
                 <b>LSK</b> - LS (karenssi)<br>
                 <b>PP</b> - Palkaton poissaolo<br>
