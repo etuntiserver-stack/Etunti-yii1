@@ -259,6 +259,7 @@ $this->breadcrumbs=array(
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas)) : 
   ?>
+  <th></th>
   <th><?php echo $this->sprint($sunYht); ?></th>
   <?php endif; ?>
 
