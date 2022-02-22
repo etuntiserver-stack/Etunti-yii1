@@ -46,7 +46,7 @@ class TyovuorootController extends Controller
 					'tvasetus', 'omasiistijat_lista', 'omasiistijat_tarkistus', 
 					'omasiistijat_ilmoitus', 'omasiistijat_siistijakohtainen_varoitus', 
 					'os_cache_clear', 'massedit', 'aloitusaikojen_ilmoitus', 
-					'tekijahovertietoja', 'employeeskills'),
+					'tekijahovertietoja', 'employeeskills', 'osnotice', 'sendosnotice'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -6158,5 +6158,114 @@ class TyovuorootController extends Controller
 		$crit->addInCondition("id", $employee_ids);
 		$employees = Tyontekijat::model()->findAll($crit);
 		return $this->renderPartial("employee_skills", ["employees" => $employees]);
+	}
+
+	/**
+	 * Renders a form which can be used to send a customized OS (omasiistijä)
+	 * notice email to a client.
+	 */
+	public function actionOsnotice()
+	{
+		$req = Yii::app()->request;
+		$propertyId = $req->getQuery("property_id");
+		$date = $req->getQuery("date");
+		$starting_time = $req->getQuery("starting_time");
+		$ending_time = $req->getQuery("ending_time");
+		$clientId = $req->getQuery("client_id");
+		$shiftId = $req->getQuery("shift_id");
+
+		$property = Kohteet::model()->findByPk($propertyId);
+		$client = Asiakkaat::model()->findByPk($clientId);
+		$shift = Tyovuoroot::model()->findByPk($shiftId);
+		$settings = Asetukset::model()->findByPk(1);
+
+		$email_subject = $settings->omasiistijat_email_subject ?? '';
+    	$email_body = $settings->omasiistijat_email_body ?? '';
+		
+		$dateString = $date . " " . $starting_time . "-" . $ending_time;
+		$email_body = str_replace("seuraavalle siivouskäynnille.", $dateString . " siivouskäynnille.", $email_body);
+
+		return $this->render("os_notice", [
+			"property" => $property,
+			"client" => $client,
+			"shift" => $shift,
+			"settings" => $settings,
+			"date" => $date,
+			"starting_time" => $starting_time,
+			"ending_time" => $ending_time,
+			"email_subject" => $email_subject,
+			"email_body" => $email_body
+		]);
+	}
+
+	/**
+	 * Send a OS (omasiistijä) notification over email to a client.
+	 * Marks the notification as sent in the shift, and adds
+	 * a text in the "tietoja" field of the shift, which by default
+	 * says that the notification has been sent.
+	 */
+	public function actionSendosnotice()
+	{
+		$req = Yii::app()->request;
+		$subject = $req->getPost("email-subject");
+		$body = $req->getPost("email-body");
+		$to = $req->getPost("to");
+		$shiftId = $req->getPost("shift_id");
+		$info_prefix = $req->getPost("additional-info-prefix", "");
+
+		$sender_name = 'Koti Puhtaaksi Oy';
+     	$replyto_email = 'asiakaspalvelu@kotipuhtaaksi.fi';
+
+		$db = Yii::app()->db1;
+		$transaction = $db->beginTransaction();
+
+		$shift = Tyovuoroot::model()->findByPk($shiftId);
+		if($shift) {
+			// add info prefix to "tietoja" field and mark OS notif as sent.
+			$shift->tietoja = trim($info_prefix) . "\n " .  $shift->tietoja;
+			$shift->omasiistijailmoitus = 1;
+			$saved = $shift->save();
+			if(!$saved) {
+				// rollback on error, and render error
+				$transaction->rollback();
+				return $this->render("sent_os_notice", [
+					"error" => true,
+					"message" => "Työvuoron tallennus epäonnistui.",
+				]);
+			}
+			// construct email
+			$mailer = new YiiMailer();
+			$mailer->setFrom("no-reply@etunti.fi", $sender_name);
+			$mailer->setTo($to);
+			$mailer->setSubject($subject);
+			$mailer->setBody($body);
+			$mailer->addReplyTo($replyto_email);
+			if($mailer->send()) {
+				// commit TX and render success
+				$transaction->commit();
+				return $this->render("sent_os_notice", [
+					"error" => false
+				]);
+			} else {
+				// rollback on error, and render error
+				$transaction->rollback();
+				return $this->render("sent_os_notice", [
+					"error" => true,
+					"message" => "Virhe lähettäessä sähköpostia " . json_encode([
+						"to" => $to,
+						"subject" => $subject,
+						"body" => $body,
+						"replyto" => $replyto_email,
+						"sendername" => $sender_name
+					])
+				]);
+			}
+		}
+		// rollback when shift wasn't found, and render error
+		$transaction->rollback();
+		return $this->render("sent_os_notice", [
+			"error" => true,
+			"message" => "Työvuoroa #$shiftId ei löytynyt."
+		]);
 	}
 }
