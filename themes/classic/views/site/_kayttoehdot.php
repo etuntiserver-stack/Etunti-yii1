@@ -56,13 +56,13 @@
 
 <p><h3>Hinta ja hinnoitteluperiaatteet</h3></p>
 
-<p>Etunti-verkkopalvelun hinta määräytyy Tilaajan kanssa sovitun palvelukokonaisuuden mukaisesti. Ilmaista Etunti-ohjelmaa on oikeus käyttää 500 kuukausittaiseen työtuntiin saakka. Työtunti tarkoittaa joko suunniteltua tai leimattua työtuntia, riippuen siitä kumpien yhteenlaskettu summa on suurempi. Työtunnit eivät sisällä matkoja eivätkä lounaita ja työtunnit lasketaan yhteen kalenterikuukausittain. </p>
+<p>Etunti-verkkopalvelun hinta määräytyy Tilaajan kanssa sovitun palvelukokonaisuuden mukaisesti. Ilmaista Etunti-ohjelmaa on oikeus käyttää 300 kuukausittaiseen työtuntiin saakka. Työtunti tarkoittaa joko suunniteltua tai leimattua työtuntia, riippuen siitä kumpien yhteenlaskettu summa on suurempi. Työtunnit eivät sisällä matkoja eivätkä lounaita ja työtunnit lasketaan yhteen kalenterikuukausittain. </p>
 
 <p>Maksullisen Etunti-palvelun hinta määräytyy palveluun kirjattujen työtuntien kokonaismäärän mukaisesti. Ohjelman eri osien yksikköhinnat on esitetty erillisessä Toimittajan voimassa olevassa hinnastossa. Maksuperusteen jakso on kalenterikuukausi.</p>
 
 <p>Hinnat ja toimituksen sisältö yksilöidään Tilausvahvistuksessa. Mahdolliset lisätilaukset hinnoitellaan Toimittajan kulloinkin voimassa olevan hinnaston mukaisesti.</p>
 
-<p>Palvelun toimittamisen aloituspäivä määritellään Tilausvahvistuksessa. Palvelu laskutetaan kalenteri-kuukausittain, aikaisintaan laskutuskuukautta seuraavan kuukauden ensimmäisenä pankkipäivänä. Laskutus aloitetaan Etunti-verkkopalvelun käyttöönotosta tai viimeistään 3kk:n kuluttua sopimuksen allekirjoittamisesta. Hinnanmuutoksista ilmoitetaan neljä (4) kuukautta ennen uuden hinnan voimaantuloa.</p>
+<p>Palvelun toimittamisen aloituspäivä määritellään Tilausvahvistuksessa. Palvelu laskutetaan kalenteri-kuukausittain, aikaisintaan laskutuskuukautta seuraavan kuukauden ensimmäisenä pankkipäivänä. Laskutus aloitetaan Etunti-verkkopalvelun käyttöönotosta tai viimeistään 3kk:n kuluttua sopimuksen allekirjoittamisesta. Hinnanmuutoksista ilmoitetaan kaksi (2) kuukautta ennen uuden hinnan voimaantuloa.</p>
 
 <p>Palvelun toimittaminen</p>
 
