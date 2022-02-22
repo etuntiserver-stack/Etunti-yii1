@@ -2345,15 +2345,28 @@ $(document).ready(function(){
   <?php if (isset($model->kohteet->asiakas_id)): ?>
   $('#omasiistijat-ilmoita').on('click', function(e) {
     e.preventDefault();
-    if (!confirm(`Haluatko varmasti lähettää ilmoituksen asiakkaan sähköpostiin? Huom. sivu päitivvyy lähettämisen jälkeen, jossa saattaa mennä hetki.`)) {
-      return false;
-    }
 
-    if ($('#is_toistuva').bootstrapSwitch('state') === true) {
-      alert('Omasiistijäilmoitus on tehtävä työvuorokohtaisesti, jolloin vuoro poistuu ketjusta. Ota pois valinta kohdasta "Toistuva Työvuoro".');
-      return false;
-    }
 
+	if(<?=$toistuva ? 1 : 0 ?>) {
+		alert('Tuttusiistijä on tehtävä työvuorokohtaisesti, irroita työvuoro ketjusta ensin.');
+		return;
+	}
+
+	if(<?=!empty(Yii::app()->user->kotipuhtaaksi) ? 1 : 0 ?>) {
+		// asiakas_id, kohde_id, pvm, aloitusaika, lopetusaika
+		const asiakasId = <?= $model->kohteet->asiakas_id ?? 0; ?>;
+		const kohdeId = <?= $model->kohteet->id ?? 0; ?>;
+		const pvm = $('#<?= $java_prefix ?>_pvm').val();
+		const alku = $('#alku').val();
+		const loppu = $('#loppu').val();
+		const shiftId = <?=$model->id ?? 0?>;
+		let url = "/index.php/tyovuoroot/osnotice?";
+		url += `client_id=${asiakasId}&property_id=${kohdeId}`;
+		url += `&date=${pvm}&starting_time=${alku}&ending_time=${loppu}`;
+		url += `&shift_id=${shiftId}`
+		window.open(url, "_blank");
+		return;
+	}
     // Build list of worker names for the notification.
     let workers = [];
     workers.push($('#tekijanVaihdo option:selected').text());
