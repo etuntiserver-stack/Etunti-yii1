@@ -6222,9 +6222,29 @@ class TyovuorootController extends Controller
 		$shift = Tyovuoroot::model()->findByPk($shiftId);
 		if($shift) {
 			// add info prefix to "tietoja" field and mark OS notif as sent.
-			$shift->tietoja = trim($info_prefix) . "\n " .  $shift->tietoja;
+			$shift->tietoja = trim($info_prefix) . "\n" .  $shift->tietoja;
 			$shift->omasiistijailmoitus = 1;
 			$saved = $shift->save();
+
+
+			// also attempt to find work pair shifts
+			$crit = new CDbCriteria();
+			$crit->compare("kohde",$shift->kohde);
+			$crit->compare("pvm", $shift->pvm);
+			$crit->compare("alku", $shift->alku);
+			$crit->compare("loppu", $shift->loppu);
+			$crit->addNotInCondition("id", [$shift->id]);
+			$workPairShifts = Tyovuoroot::model()->findAll($crit);
+
+			// if work pair shifts are found, update them as well.
+			if($workPairShifts) {
+				foreach($workPairShifts as $wpShift) {
+					$wpShift->omasiistijailmoitus = 1;
+					$wpShift->tietoja = trim($info_prefix) . "\n" .  $wpShift->tietoja;
+					$wpShift->save();
+				}
+			}
+
 			if(!$saved) {
 				// rollback on error, and render error
 				$transaction->rollback();
