@@ -2982,8 +2982,8 @@ $xml = '
 			"Turku" => [97],
 			"Tampere" => [33],
 			"Jyväskylä" => [156],
-			"Pirkanmaa" => [33],
-			"KESU" => [170],
+			//"Pirkanmaa" => [33],
+			//"KESU" => [170],
 		];
 
 		$missingDataClients = [];
