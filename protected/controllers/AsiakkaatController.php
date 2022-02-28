@@ -2974,7 +2974,7 @@ $xml = '
 			$workGroupNames[$group->id] = $group->value;
 		}
 
-
+		// cost center => work group ID
 		$criteriaMap = [
 			"P-Uusimaa" => [170],
 			"PK-Seutu" => [6],
@@ -2982,6 +2982,7 @@ $xml = '
 			"Turku" => [97],
 			"Tampere" => [33],
 			"Jyväskylä" => [156],
+			"Pirkanmaa" => [33],
 		];
 
 		$missingDataClients = [];
