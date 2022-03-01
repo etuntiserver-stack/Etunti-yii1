@@ -2976,14 +2976,14 @@ $xml = '
 
 		// cost center => work group ID
 		$criteriaMap = [
-			"P-Uusimaa" => [170],
+			//"P-Uusimaa" => [170],
 			"PK-Seutu" => [6],
 			"Oulu" => [135],
 			"Turku" => [97],
-			"Tampere" => [33],
+			//"Tampere" => [33],
 			"Jyväskylä" => [156],
-			//"Pirkanmaa" => [33],
-			//"KESU" => [170],
+			"Pirkanmaa" => [33],
+			"KESU" => [170],
 		];
 
 		$missingDataClients = [];
