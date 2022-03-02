@@ -2183,6 +2183,28 @@ public function actionImei($dom)
 		$workGroup = Valikkoot::model()->findByPk($workGroupId);
 		$workGroupName = $workGroup->value;
 
+		// get client group ("asiakasryhmä") names
+		$clientGroupIds = [];
+		if($client->ryhma) {
+			$clientGroupIds = json_decode($client->ryhma, true);
+		}
+
+		$clientGroupNames = "";
+		if(!empty($clientGroupIds)) {
+			$crit = new CDbCriteria();
+			$crit->addInCondition("id", $clientGroupIds);
+			$clientGroups = Valikkoot::model()->findAll($crit);
+			$clientGroupNames = array_reduce($clientGroups, function($grpNameStr, $grp) {
+				$grpNameStr .= $grp->value . " + ";
+				return $grpNameStr;
+			}, "");
+			if($clientGroupNames) {
+				// remove trailing " + "
+				$clientGroupNames = substr($clientGroupNames, 0, -3);
+			}
+		}
+		
+
 		// get clients phone number
 		$phoneNumber = $client->puhelin;
 		if(!$phoneNumber) {
@@ -2209,7 +2231,8 @@ public function actionImei($dom)
 			"last_name" => $client->sukunimi,
 			"pf_store" => $workGroupName,
 			"pf_external_id" => $client->asiakasnumero,
-			"pf_target" => $encoded_names,
+			"pf_target" => $clientGroupNames,
+			"pf_seller_name" => $encoded_names,
 			"pf_timestamp" => time(),
 		];
 
