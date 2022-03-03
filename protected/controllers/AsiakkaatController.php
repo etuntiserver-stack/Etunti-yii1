@@ -733,6 +733,13 @@ Yritys '.$yr.'
 				$model->ryhma="";
 			}
 
+			$req = Yii::app()->request;
+			$client_body = $req->getPost("Asiakkaat");
+			$noEmail = isset($client_body["no_email"]) ? $client_body["no_email"] : 0;
+			if($noEmail == 1) {
+				$model->sahkoposti = "";
+			}
+
 			if($model->save())
 			{
 
