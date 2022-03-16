@@ -740,6 +740,14 @@ Yritys '.$yr.'
 				$model->sahkoposti = "";
 			}
 
+			// if client is set back to active from inactivity, clear lopetuksen_syy
+			// and lopetuksen_pvm fields.
+			if(isset($vanha_attr["aktiivinen"]) 
+				&& $vanha_attr["aktiivinen"] == 0 && $model->aktiivinen == 1) {
+				$model->lopetuksen_syy = null;
+				$model->lopetuksen_pvm = null;
+			}
+
 			if($model->save())
 			{
 
