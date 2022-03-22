@@ -412,6 +412,10 @@ class ToteutuneetController extends Controller
 					return ['OK' => 'Tiedot on lähetetty netvisoriin'];
 				
 			} else {
+				$nv_log = new NetvisorLegacyLog();
+				$nv_log->response = json_encode($array);
+				$nv_log->category = "Toteutuneet";
+				$nv_log->save();
 				if(isset($array['ResponseStatus']['Status'][1]))
 					return ['ERROR' => $array['ResponseStatus']['Status'][1]];
 			}
