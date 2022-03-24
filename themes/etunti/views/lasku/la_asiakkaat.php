@@ -224,7 +224,8 @@ $(document).ready(function(){
 				'maara' : $(this).closest('tr').find('.maara').text(),
 				'yksikko' : $(this).closest('tr').find('.yksikko').text(),
 				'alv' : $(this).closest('tr').find('.alv').text(),
-				'hinta' : $(this).closest('tr').find('.hinta').text(),
+				// we need to use the accurate price instead of the rounded price
+				'hinta' : $(this).closest('tr').find('.hidden-price-original').text(),
 				'free_text' : $(this).closest('tr').find('.free_text').text(),
 				'tiedot' : $(this).closest('tr').find('.tiedot').text(),
 				'kk_hyv_lista' : (  $(this).closest('tr').find('.kk_hyv_lista').find('textarea').val() )? $(this).closest('tr').find('.kk_hyv_lista').find('textarea').val() : ''
@@ -466,10 +467,12 @@ $(document).ready(function(){
 					
 					$('#collapse_id_' + asiakas_id).html(data);
 					var sum = 0;
-					thisFor.closest('td').find('.forsumm').each(function(){
+					thisFor.closest('td').find('.hidden-price').each(function(){
 						sum += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
 					});
-					thisFor.closest('td').find('#summ_result').html(sum.toFixed(2));
+					let sumElem = thisFor.closest('td').find('#summ_result').find("#sum_wrapper");
+					sumElem.attr("title", sum);
+					sumElem.html(sum.toFixed(2));
 					$('[data-toggle="tooltip"]').tooltip();
 
 					var sum_laskutetaan = 0;
