@@ -1799,6 +1799,10 @@ exit;
 			$this->redirect(array('index'));
 	}
 
+	/**
+	 * Even though the name implies it's for 'kk' type billing only
+	 * this action actually handles every case anyway.
+	 */
 	public function actionKklaskuperasiakas($asiakas_id, $from, $to, $rakenne_muoto, $rivi_muoto)
 	{
 		$asiakas	= Asiakkaat::model()->findByPk($asiakas_id);
@@ -2142,6 +2146,10 @@ exit;
 				
 				$hinta_veroton	= round($arr['hinta'], 2);
 				$hinta_with_alv = round((($hinta_veroton*$arr['alv'])/100)+$hinta_veroton, 2);
+			
+				// fix sum row for invoices, we can't have summing rounded numbers,
+				// in this particular case the amount is 1 and the price remains the same.
+				$hidden_price = $arr['hinta'];
 				
 				$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
 				$body .= '
@@ -2153,7 +2161,9 @@ exit;
 				$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 				$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
 				$body .= '<td class="hinta text-center">'.$hinta_veroton.'</td>';
-				$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.$hinta_veroton.'</td>';
+				$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center"><span data-toggle="tooltip" data-container="body" title="'.$hidden_price.'" >'.$hinta_veroton.'</span></td>';
+				$body .= '<td class="hidden-price" style="display:none">'.$hidden_price.'</td>';
+				$body .= '<td class="hidden-price-original" style="display:none">'.$hidden_price.'</td>';
 				$body .= '<td>'.$hinta_with_alv.'</td>';
 				$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
 				$body .= '<td class="text-center kk_hyv_lista">'.$hv_lista.'<textarea style="display:none">'.json_encode($hv_json).'</textarea></td>';
@@ -2240,6 +2250,9 @@ exit;
 				$maara			= (isset($hyv_lista_perkohde[$kohde_id]))? count($hyv_lista_perkohde[$kohde_id]): 0;
 				$hinta_veroton	= round($arr['hinta'], 2);
 				$hinta_with_alv = round((($hinta_veroton*$maara*$arr['alv'])/100)+($hinta_veroton*$maara), 2);
+				// fix sum row for invoices, we can't have summing rounded numbers
+				$hidden_price = $arr['hinta'] * floatval($maara);
+				$hidden_price_original = $arr["hinta"];
 				
 				$body .= '<tr class="lasku_rivi" num_rivi="'.$num_rivi.'">';
 				$body .= '
@@ -2251,7 +2264,9 @@ exit;
 				$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 				$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
 				$body .= '<td class="hinta text-center">'.$hinta_veroton.'</td>';
-				$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.($hinta_veroton*$maara).'</td>';
+				$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center"><span data-toggle="tooltip" data-container="body" title="'.$hidden_price.'">'.($hinta_veroton*$maara).'</span></td>';
+				$body .= '<td class="hidden-price" style="display:none">'.$hidden_price.'</td>';
+				$body .= '<td class="hidden-price-original" style="display:none">'.$hidden_price_original.'</td>';
 				$body .= '<td>'.$hinta_with_alv.'</td>';
 				$body .= '<td class="free_text">'.implode(", ", $pvm_lista).'</td>';
 				$body .= '<td class="text-center kk_hyv_lista">'.$hv_lista.'<textarea style="display:none">'.json_encode($hv_json).'</textarea></td>';
@@ -2450,6 +2465,9 @@ exit;
 							$hinta			= round($hinta, 2);
 							$hinta_veroton	= round($maara*$hinta, 2);
 							$hinta_with_alv = round((($hinta_veroton*$arr['alv'])/100)+$hinta_veroton, 2);
+							// fix sum row for invoices, we can't have summing rounded numbers
+							$hidden_price = $arr['hinta'] * floatval($maara);
+							$hidden_price_original = $arr["hinta"];
 
 							$body .= '<tr class="lasku_rivi">';
 							$body .= '
@@ -2461,7 +2479,9 @@ exit;
 							$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 							$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
 							$body .= '<td class="hinta text-center">'.$hinta.'</td>';
-							$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.$hinta_veroton.'</td>';
+							$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center"><span data-toggle="tooltip" data-container="body" title="'.$hidden_price.'" >'.$hinta_veroton.'</span></td>';
+							$body .= '<td class="hidden-price" style="display:none">'.$hidden_price.'</td>';
+							$body .= '<td class="hidden-price-original" style="display:none">'.$hidden_price_original.'</td>';
 							$body .= '<td>'.$hinta_with_alv.'</td>';
 							$body .= '<td class="free_text">'.$arr['free_text'].'</td>';
 							$body .= '<td class="text-center">';
@@ -2553,6 +2573,9 @@ exit;
 					$hinta			= round($arr['hinta'], 2);
 					$hinta_veroton	= round($maara*$hinta, 2);
 					$hinta_with_alv = round((($hinta_veroton*$arr['alv'])/100)+$hinta_veroton, 2);
+					// fix sum row for invoices, we can't have summing rounded numbers
+					$hidden_price = $arr['hinta'] * floatval($maara);
+					$hidden_price_original = $arr["hinta"];
 							
 					$body .= '<tr class="lasku_rivi">';
 					$body .= '
@@ -2564,7 +2587,9 @@ exit;
 					$body .= '<td class="yksikko text-center">'.$arr['yksikko'].'</td>';
 					$body .= '<td class="alv text-center">'.$arr['alv'].'</td>';
 					$body .= '<td class="hinta text-center">'.$hinta.'</td>';
-					$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center">'.$hinta_veroton.'</td>';
+					$body .= '<td class="'.(($laskutettu)? '' : 'forsumm').' text-center"><span data-toggle="tooltip" data-container="body" title="'.$hidden_price.'" >'.$hinta_veroton.'</span></td>';
+					$body .= '<td class="hidden-price" style="display: none">'.$hidden_price.'</td>';
+					$body .= '<td class="hidden-price-original" style="display:none">'.$hidden_price_original.'</td>';
 					$body .= '<td>'.$hinta_with_alv.'</td>';
 					$body .= '<td class="free_text">'.$ajanjakso.'</td>';
 					$body .= '<td></td>';
@@ -2581,7 +2606,7 @@ exit;
 		$body .= '<th></th>';
 		$body .= '<th></th>';
 		$body .= '<th></th>';
-		$body .= '<th id="summ_result" class="text-center"></th>';
+		$body .= '<th id="summ_result" class="text-center"><span id="sum_wrapper" data-toggle="tooltip" data-container="body"></span></th>';
 		$body .= '<th></th>';
 		$body .= '<th></th>';
 		$body .= '<th></th>';

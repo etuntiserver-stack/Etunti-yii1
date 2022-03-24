@@ -1366,9 +1366,9 @@ function eachLaskenta(){
 		var laske = yhteensa-veroton;
 	}
 
-	$("#hinta_alv_"+inputKenta[1]).val(laske.toFixed(2));
-	$("#veroton_"+inputKenta[1]).val(veroton.toFixed(2));
-	$("#yhteensa_alv_"+inputKenta[1]).val(yhteensa.toFixed(2));
+	$("#hinta_alv_"+inputKenta[1]).val(laske);
+	$("#veroton_"+inputKenta[1]).val(veroton);
+	$("#yhteensa_alv_"+inputKenta[1]).val(yhteensa);
 
   });
     	yhteensaTotal();
@@ -1380,17 +1380,17 @@ function yhteensaTotal(){
 	var sum = 0;
 	$('.yhteensa_total_verot').each(function(){
 	    sum += parseFloat(this.value);
-	    $('#yhteensa_total_verot').val(sum.toFixed(2));
+	    $('#yhteensa_total_verot').val(sum);
 	});
 	var sum1 = 0;
 	$('.yhteensa_total_veroton').each(function(){
 	    sum1 += parseFloat(this.value);
-	    $('#yhteensa_total_veroton').val(sum1.toFixed(2));
+	    $('#yhteensa_total_veroton').val(sum1);
 	});
 	var sum2 = 0;
 	$('.yhteensa_total').each(function(){
 	    sum2 += parseFloat(this.value);
-	    $('#yhteensa_total').val(sum2.toFixed(2));
+	    $('#yhteensa_total').val(sum2);
 	});
 }
 
