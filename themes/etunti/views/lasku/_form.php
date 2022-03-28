@@ -1343,10 +1343,15 @@ function eachLaskenta(){
 
 	var inputKenta = $(this).attr("id").split("_");
 	if($("#hinta_"+inputKenta[1]).val()) { hinta_alv_0 = parseFloat($("#hinta_"+inputKenta[1]).val()) };
-	if($("#alv_"+inputKenta[1]).val()) { alv = parseFloat($("#alv_"+inputKenta[1]).val()) };
-	if($("#kpl_"+inputKenta[1]).val()) { kpl = parseFloat($("#kpl_"+inputKenta[1]).val()) };
-	if($("#ale_"+inputKenta[1]).val()) { ale = parseFloat($("#ale_"+inputKenta[1]).val()) };
-
+	if($("#alv_"+inputKenta[1]).val()) { 
+		alv = parseFloat($("#alv_"+inputKenta[1]).val());
+	};
+	if($("#kpl_"+inputKenta[1]).val()) { 
+		kpl = parseFloat($("#kpl_"+inputKenta[1]).val());
+	};
+	if($("#ale_"+inputKenta[1]).val()) { 
+		ale = parseFloat($("#ale_"+inputKenta[1]).val());
+	};
 
 	inputKenta[1] = parseFloat(inputKenta[1], 10);
 
@@ -1366,9 +1371,9 @@ function eachLaskenta(){
 		var laske = yhteensa-veroton;
 	}
 
-	$("#hinta_alv_"+inputKenta[1]).val(laske);
-	$("#veroton_"+inputKenta[1]).val(veroton);
-	$("#yhteensa_alv_"+inputKenta[1]).val(yhteensa);
+	$("#hinta_alv_"+inputKenta[1]).val(laske.toPrecision(6));
+	$("#veroton_"+inputKenta[1]).val(veroton.toPrecision(6));
+	$("#yhteensa_alv_"+inputKenta[1]).val(yhteensa.toPrecision(6));
 
   });
     	yhteensaTotal();
@@ -1380,17 +1385,17 @@ function yhteensaTotal(){
 	var sum = 0;
 	$('.yhteensa_total_verot').each(function(){
 	    sum += parseFloat(this.value);
-	    $('#yhteensa_total_verot').val(sum);
+		$('#yhteensa_total_verot').val(sum.toPrecision(6));
 	});
 	var sum1 = 0;
 	$('.yhteensa_total_veroton').each(function(){
 	    sum1 += parseFloat(this.value);
-	    $('#yhteensa_total_veroton').val(sum1);
+	    $('#yhteensa_total_veroton').val(sum1.toPrecision(6));
 	});
 	var sum2 = 0;
 	$('.yhteensa_total').each(function(){
 	    sum2 += parseFloat(this.value);
-	    $('#yhteensa_total').val(sum2);
+	    $('#yhteensa_total').val(sum2.toPrecision(6));
 	});
 }
 
