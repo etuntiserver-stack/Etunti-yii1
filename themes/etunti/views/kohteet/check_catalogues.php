@@ -32,6 +32,13 @@ function editId($checked_row) {
     return 0;
 }
 
+function editClientId($checked_row) {
+    if(isset($checked_row->property)) {
+        return $checked_row->property->asiakas_id;
+    }
+    return 0;
+}
+
 
 ?>
 
@@ -42,6 +49,7 @@ function editId($checked_row) {
             <th>Luonti pvm</th>
             <th>Hinnasto</th>
             <th>Osoite</th>
+            <th></th>
             <th></th>
         </tr>
 
@@ -57,7 +65,10 @@ function editId($checked_row) {
                 <?= $property->osoite ?>
             </td>
             <td>
-                <a href="/index.php/kohteet/update?id=<?= $property->id?>" target="_blank">Muokkaamaan</a>
+                <a href="/index.php/kohteet/update?id=<?= $property->id?>" target="_blank">Muokkaamaan kohdetta</a>
+            </td>
+            <td>
+                <a href="/index.php/asiakkaat/update?id=<?= $property->asiakas_id?>" target="_blank">Muokkaamaan asiakasta</a>
             </td>
             <td>
                 <button class="btn btn-primary approve-error" data-property="<?=$property->id?>">Merkkaa hyväksytyksi
@@ -88,6 +99,7 @@ function editId($checked_row) {
             </th>
             <th></th>
             <th></th>
+            <th></th>
         </tr>
         <?php foreach($already_checked as $checked) : ?>
         <tr id="checked-<?= $checked->id ?>">
@@ -107,7 +119,10 @@ function editId($checked_row) {
                 <?= printProperty($checked) ?>
             </td>
             <td>
-                <a href="/index.php/kohteet/update?id=<?= editId($checked) ?>" target="_blank">Muokkaamaan</a>
+                <a href="/index.php/kohteet/update?id=<?= editId($checked) ?>" target="_blank">Muokkaamaan kohdetta</a>
+            </td>
+            <td>
+                <a href="/index.php/asiakkaat/update?id=<?= editClientId($checked) ?>" target="_blank">Muokkaamaan asiakasta</a>
             </td>
             <td>
                 <button class="btn btn-primary disapprove-error" data-id="<?= $checked->id ?>">Poista
