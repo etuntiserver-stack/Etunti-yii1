@@ -867,29 +867,6 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->error($model,'sahkopostilaskuosoite'); ?>
 	</div>
 
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'kirjeenluokka'); ?>
-		<?php
-		$list = array(	'1'=>Yii::t('main','Luokka 1'),
-				'2'=>Yii::t('main','Luokka 2')
-				);
-        	echo $form->dropDownList($model, 'kirjeenluokka', $list,
-		array('empty'=>'Valitse','class'=>'form-control'));
-        	?>
-		<?php echo $form->error($model,'kirjeenluokka'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'muistutuslasku_auto'); ?>
-		<?php
-		$list = array(	'0'=>Yii::t('main','Kyllä'),
-				'1'=>Yii::t('main','Ei')
-				);
-        	echo $form->dropDownList($model, 'muistutuslasku_auto', $list,
-		array('class'=>'form-control'));
-        	?>
-		<?php echo $form->error($model,'muistutuslasku_auto'); ?>
-	</div>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'ovt_tunnus'); ?>

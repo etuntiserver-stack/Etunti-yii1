@@ -444,6 +444,8 @@ class AsiakkaatController extends Controller
 	//  Oikeudet -->
 
 		$model=new Asiakkaat;
+		$model->muistutuslasku_auto = 0;
+		$model->kirjeenluokka = 0;
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
