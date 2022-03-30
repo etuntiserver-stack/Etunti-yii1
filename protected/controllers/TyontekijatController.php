@@ -386,11 +386,12 @@ class TyontekijatController extends Controller
 			else
 				$model->kortit = "";
 
+			/*
 			if($model->orientation_start) {
 				$o_st = $model->orientation_start;
 				$parsed_start = DateTime::createFromFormat("d.m.Y", $o_st);
 				if($parsed_start === false) {
-					$model->orientation_start = nulL;
+					$model->orientation_start = null;
 				} else {
 					$model->orientation_start = $parsed_start->format("Y-m-d");
 				}
@@ -405,6 +406,10 @@ class TyontekijatController extends Controller
 					$model->orientation_end = $parsed_end->format("Y-m-d");
 				}
 			}
+			*/
+			// until these are properly fixed I'll just disable them
+			$model->orientation_start = null;
+			$model->orientation_end = null;
 
 			if($model->save())
 			{
@@ -662,6 +667,7 @@ class TyontekijatController extends Controller
 
 			// convert orientation fields to Y-m-d if they're in d.m.Y
 			// or set as null if parsing fails
+			/*
 			if($model->orientation_start) {
 				$parsed_start = DateTime::createFromFormat("d.m.Y", $model->orientation_start);
 				if($parsed_start) {
@@ -678,6 +684,10 @@ class TyontekijatController extends Controller
 					$model->orientation_end = null;
 				}
 			}
+			*/
+			// until this date BS is resolved I'll just disble them
+			$model->orientation_start = null;
+			$model->orientation_end = null;
 
 			if($model->save()){
 
