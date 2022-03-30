@@ -386,6 +386,26 @@ class TyontekijatController extends Controller
 			else
 				$model->kortit = "";
 
+			if($model->orientation_start) {
+				$o_st = $model->orientation_start;
+				$parsed_start = DateTime::createFromFormat("d.m.Y", $o_st);
+				if($parsed_start === false) {
+					$model->orientation_start = nulL;
+				} else {
+					$model->orientation_start = $parsed_start->format("Y-m-d");
+				}
+			}
+
+			if($model->orientation_end) {
+				$o_end = $model->orientation_end;
+				$parsed_end = DateTime::createFromFormat("d.m.Y", $o_end);
+				if($parsed_end === false) {
+					$model->orientation_end = null;
+				} else {
+					$model->orientation_end = $parsed_end->format("Y-m-d");
+				}
+			}
+
 			if($model->save())
 			{
 				// Kotipuhtaaksi integromat web hook
@@ -479,24 +499,17 @@ class TyontekijatController extends Controller
 		$model=$this->loadModel($id);
 		$orient_start = $model->orientation_start;
 		$orient_end = $model->orientation_end;
-		// format orientation start and end to d.m.Y, or set them as null if parsing fails.
-		// something is very wrong with the dates if the parsing fails.
-		// while I'd like to use afterFind and beforeSave in the model for this, it can have some
-		// side effects with automation stuff built into yii1, which resulted in errors in production
+		// parse orientation end and start to d.m.Y for the date picker
 		if($orient_start) {
 			$parsed_orient_start = DateTime::createFromFormat("Y-m-d", $orient_start);
 			if($parsed_orient_start) {
 				$model->orientation_start = $parsed_orient_start->format("d.m.Y");
-			} else {
-				$model->orientation_start = null;
 			}
 		}
 		if($orient_end) {
 			$parsed_orient_end = DateTime::createFromFormat("Y-m-d", $orient_end);
 			if($parsed_orient_end) {
 				$model->orientation_end = $parsed_orient_end->format("d.m.Y");
-			} else {
-				$model->orientation_end = null;
 			}
 		}
 
@@ -648,16 +661,21 @@ class TyontekijatController extends Controller
 				$model->kortit = "";
 
 			// convert orientation fields to Y-m-d if they're in d.m.Y
+			// or set as null if parsing fails
 			if($model->orientation_start) {
 				$parsed_start = DateTime::createFromFormat("d.m.Y", $model->orientation_start);
 				if($parsed_start) {
 					$model->orientation_start = $parsed_start->format("Y-m-d");
+				} else {
+					$model->orientation_start = null;
 				}
 			}
 			if($model->orientation_end) {
 				$parsed_end = DateTime::createFromFormat("d.m.Y", $model->orientation_end);
 				if($parsed_end) {
 					$model->orientation_end = $parsed_end->format("Y-m-d");
+				} else {
+					$model->orientation_end = null;
 				}
 			}
 
