@@ -37,6 +37,7 @@
  * @property string $toimituspaiva
  * @property string $maksuehto
  * @property string $viitenumero
+ * @property string $viitemme
  * @property string $viivastyskorko
  * @property string $yhteensa_total_verot
  * @property string $yhteensa_total_veroton
