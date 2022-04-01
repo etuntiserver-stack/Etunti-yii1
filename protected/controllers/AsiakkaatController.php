@@ -405,6 +405,38 @@ class AsiakkaatController extends Controller
 		));
 	}
 
+	public function actionKaikki_netvisoriin(){
+		$asetukset = Asetukset::model()->findbypk(1);
+		if($asetukset->netvisor_kaytto == 1)
+		{
+			$asiakkaat = Asiakkaat::model()->findAll("aktiivinen=1");
+			$virhe_response = [];
+			foreach($asiakkaat as $model){
+				$nimi = $model->Fullname;
+				// Customer not in Netvisor, add.
+				if($model->netvisorkey == 0){
+					$response = $this->netvisorCustomer("add", $model);
+				}
+				// Customer already in Netvisor, update.
+				else {
+					$response = $this->netvisorCustomer("edit", $model);
+				}
+				if($response !== true){
+					$virhe_response[] = '<h3>Asiakas: '.$nimi.'</h3>'.$response;
+				}
+			}
+			Yii::app()->user->setFlash('success', "Valmis.");
+			if(count($virhe_response) > 0){ 
+				$lista = '';
+				foreach($virhe_response as $itm){
+					$lista .= $itm.'<br>';
+				}
+				Yii::app()->user->setFlash('danger', "<h1>Ei mennyt läpi:</h1><p>". $lista . "</p>" ); 
+			}
+		}
+		$this->redirect(array('index'));
+	}
+/*
 	public function actionKaikki_netvisoriin()
 	{
 		$asetukset = Asetukset::model()->findbypk(1);
@@ -429,7 +461,7 @@ class AsiakkaatController extends Controller
 		}
 		$this->redirect(array('index'));
 	}
-
+*/
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
