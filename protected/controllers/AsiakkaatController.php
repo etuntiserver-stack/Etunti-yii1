@@ -1089,9 +1089,11 @@ Yritys '.$yr.'
 
 	$isprivatecustomer = '1';
 	$customerfinvoicedetails = '';
+	$externalidentifier = '';
 
 	if($model->tyyppi == 'yritys')
 	{
+		$externalidentifier = $model->y_tunnus;
 		$isprivatecustomer = '0';
 		$customerfinvoicedetails = '
 		<customerfinvoicedetails>
@@ -1101,6 +1103,7 @@ Yritys '.$yr.'
 	}
 	if($model->tyyppi == 'henkilo')
 	{
+		$externalidentifier = $model->henkilotunnus;
 		$isprivatecustomer = '1';
 		$customerfinvoicedetails = '';
 	}
@@ -1111,7 +1114,7 @@ $xml = '
   <customer>
     <customerbaseinformation>
       <internalidentifier>'.$model->asiakasnumero.'</internalidentifier>
-      <externalidentifier>'.$model->y_tunnus.'</externalidentifier>
+      <externalidentifier>'.$externalidentifier.'</externalidentifier>
       <name>'.$name.'</name>
       <nameextension></nameextension>
       <streetaddress>'.$model->osoite.'</streetaddress>
