@@ -268,12 +268,6 @@ if(empty($model->tietoja))
 		<?php echo $form->error($model,'tag_id'); ?>
 	</div>
 
-	<div class="section fill mb5 ashidd_a">
-		<?php echo $form->labelEx($model,'invoice_our_reference'); ?>
-		<?php echo $form->textField($model,'invoice_our_reference',array('class'=>'form-control')); ?>
-		<?php echo $form->error($model,'invoice_our_reference'); ?>
-	</div>
-
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kustannuspaikka_nro'); ?>
 		<?php echo $form->textField($model,'kustannuspaikka_nro',array('class'=>'form-control')); ?>

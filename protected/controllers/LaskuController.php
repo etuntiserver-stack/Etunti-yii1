@@ -2711,31 +2711,6 @@ exit;
 			$model->laskun_nimetys 	= "Lasku";
 			$model->viitemme		= $asiakas->invoice_our_reference ?? "";
 
-			$firstPropertyId = 0;
-			foreach(json_decode($_POST['la_asiakkaat_tr_rivit'], true) as $arr)
-			{
-				foreach($arr as $key => $val)
-				{
-					if(isset($val["kohde_ids"])) {
-						$propertyIds = json_decode($val["kohde_ids"], true) ?? [];
-						if(count($propertyIds) > 1) {
-							break;
-						} else if(count($propertyIds) === 1) {
-							$firstPropertyId = $propertyIds[0];
-							break;
-						}
-					}
-				}
-			}
-
-			if($firstPropertyId) {
-				$property = Kohteet::model()->findByPk($firstPropertyId);
-				if($property && $property->invoice_our_reference) {
-					$model->viitemme = $property->invoice_our_reference;
-				}
-			}
-			
-
 			if($model->save()){
 
 				// Viite
