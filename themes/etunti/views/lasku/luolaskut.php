@@ -196,6 +196,8 @@ $iban				= $asetukset->iban;
 		$lasku->saaja_iban = $iban;
 		$lasku->laskun_nimetys = 'Lasku';
 		$lasku->alv_muoto = $alvsis;
+		$lasku->viitemme = $asiakas["invoice_our_reference"] ?? "";
+		$lasku->viitenne = $asiakas["invoice_your_reference"] ?? "";
 		if(!$lasku->save()){
 			print_r($lasku->getErrors());
 			exit;

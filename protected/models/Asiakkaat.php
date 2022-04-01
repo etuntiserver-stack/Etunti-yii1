@@ -16,6 +16,7 @@
  * @property integer $ryhma
  * @property integer $aktiivinen
  * @property string $invoice_our_reference
+ * @property string $invoice_your_reference
  */
 class Asiakkaat extends DB2ActiveRecord
 {
@@ -143,7 +144,7 @@ class Asiakkaat extends DB2ActiveRecord
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
 			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot, hinnasto_id, tyoryhma, sopimustyyppi, freshdesk_id, finnish_service_wish, tuote, buenno_integration_enabled', 'numerical', 'integerOnly'=>true),
 			array('etunimi, sukunimi, myyja, postinumero, k_postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, henkilotunnus, kaupunki, k_kaupunki, sahkoposti', 'length', 'max'=>100),
-			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma, sahkopostilaskuosoite, token, invoice_our_reference', 'length', 'max'=>255),
+			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma, sahkopostilaskuosoite, token, invoice_our_reference, invoice_your_reference', 'length', 'max'=>255),
 			array('maksuehto, viivastyskorko', 'length', 'max'=>20),
 			array('puhelin, sopimuksen_pvm', 'length', 'max'=>50),
 			array('asiakasnumero, ovt_tunnus, valittajan_tunnus, hinta_tyyppi, verot, lopetuksen_pvm', 'length', 'max'=>100),
@@ -235,7 +236,8 @@ class Asiakkaat extends DB2ActiveRecord
 			'extra_contacts' => Yii::t('main', 'Lisä yhteystiedot'),
 			'finnish_service_wish' => Yii::t('app', 'Palvelukieli'),
 			'buenno_integration_enabled' => Yii::t("app", "Buenno käytössä"),
-			'invoice_our_reference' => Yii::t("app", "Viitteemme")
+			'invoice_our_reference' => Yii::t("app", "Viitteemme"),
+			'invoice_your_reference' => Yii::t("app", "Viitteenne"),
 		);
 	}
 
