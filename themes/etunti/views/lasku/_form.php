@@ -482,14 +482,6 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div>
 	<?php endif; ?>
 
-	<?php if($asetukset->palvelu_tyyppi == 2) : ?>
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'viitemme'); ?>
-		<?php echo $form->textField($model,'viitemme',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'viitemme'); ?>
-	</div>
-	<?php endif; ?>
-
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'freetext'); ?>
 		<?php echo $form->textarea($model,'freetext',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
