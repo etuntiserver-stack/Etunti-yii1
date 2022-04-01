@@ -904,6 +904,12 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 		<?php echo $form->error($model,'lisatietoja_laskutuksesta'); ?>
 	</div>
 
+	<div class="section fill mb5 ashidd_a">
+		<?php echo $form->labelEx($model,'invoice_our_reference'); ?>
+		<?php echo $form->textField($model,'invoice_our_reference',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'invoice_our_reference'); ?>
+	</div>
+
 
   </div><div class="col-sm-3">
 

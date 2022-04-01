@@ -33,6 +33,7 @@
  * @property string $lasku_tiedot
  * @property integer $total_visit_count
  * @property integer $success_visit_count
+ * @property string $invoice_our_reference
  */
 class Kohteet extends DB2ActiveRecord
 {
@@ -155,7 +156,7 @@ class Kohteet extends DB2ActiveRecord
 			array('pnumero', 'length', 'max'=>7),
 			array('email', 'length', 'max'=>72),
 			array('ryhma, viivastyskorko', 'length', 'max'=>10),
-			array('avain, lasku_tiedot', 'length', 'max'=>255),
+			array('avain, lasku_tiedot, invoice_our_reference', 'length', 'max'=>255),
 			array('siivous, etu_suku_nimet, arvioitu_kesto, arvioitu_kello_alku, arvioitu_kello_loppu, verot', 'length', 'max'=>100),
 			array('aikataulu, hinnoittelu, muut, toimenpiteet, tietoja, tyo_erittelyt, url_linkkit, total_visit_count, success_visit_count', 'safe'),
 			// The following rule is used by search().
@@ -230,6 +231,7 @@ class Kohteet extends DB2ActiveRecord
 			'tuote_h' => Yii::t('main', 'Tuntituote'),
 			'tuote_kk' => Yii::t('main', 'Tuote kk'),
 			'tuote_kpl' => Yii::t('main', 'Tuote kpl'),
+			'invoice_our_reference' => Yii::t("app", "Viitteemme")
 		);
 	}
 

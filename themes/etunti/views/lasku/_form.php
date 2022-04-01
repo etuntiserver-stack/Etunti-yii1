@@ -438,6 +438,12 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php echo $form->error($model,'viitenumero'); ?>
 	</div>
 
+	<div class="section fill mb5 ashidd_a">
+		<?php echo $form->labelEx($model,'viitemme'); ?>
+		<?php echo $form->textField($model,'viitemme',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'viitemme'); ?>
+	</div>
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'viivastyskorko'); ?>
 		<?php echo $form->textField($model,'viivastyskorko',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>

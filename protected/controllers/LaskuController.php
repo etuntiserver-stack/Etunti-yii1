@@ -2709,6 +2709,7 @@ exit;
 			$model->paivays 		= $paivays;
 			$model->erapaiva 		= $erapaiva;
 			$model->laskun_nimetys 	= "Lasku";
+			$model->viitemme		= $asiakas->invoice_our_reference ?? "";
 
 			if($model->save()){
 
@@ -3677,6 +3678,9 @@ $xml = '
     <SalesInvoiceAmount>'.$model->yhteensa_total.'</SalesInvoiceAmount>
     <!--<SellerIdentifier type="netvisor">32</SellerIdentifier>-->
     <SalesInvoiceStatus type="netvisor">unsent</SalesInvoiceStatus>
+	'.
+		(isset($model->viitemme) ? '<SalesInvoiceOurReference>'.$model->viitemme.'</SalesInvoiceOurReference>' : '')
+	.'
     <InvoicingCustomerIdentifier type="netvisor">'.$InvoicingCustomerIdentifier.'</InvoicingCustomerIdentifier>
     <InvoicingCustomerName>'.$name.'</InvoicingCustomerName>
     <InvoicingCustomerNameExtension></InvoicingCustomerNameExtension>
