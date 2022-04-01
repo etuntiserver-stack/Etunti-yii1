@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow',
-				'actions'=>array('zeroclients', 'site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan', 'getasiakasidbynimi', 'otakaytoon', 'ohjeet', 'kaaviot', 'management', 'management_tunnit', 'management_hours', 'spendingclients', 'gallery'),
+				'actions'=>array('avgpersonalcleaner', 'zeroclients', 'site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan', 'getasiakasidbynimi', 'otakaytoon', 'ohjeet', 'kaaviot', 'management', 'management_tunnit', 'management_hours', 'spendingclients', 'gallery'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow',
@@ -2262,7 +2262,7 @@ class SiteController extends Controller
 	   if($a->netvisor_kaytto == 1)
 	   {
 		if( Yii::app()->user->domain == 'demo' )
-			$http = 'http';
+			$http = 'https';
 		else
 			$http = 'https';
 
@@ -2952,6 +2952,48 @@ class SiteController extends Controller
 	public function actionCrondaily() {
 		Yii::app()->theme = 'classic';
 		$this->renderPartial('crondaily', []);
+	}
+
+	public function actionAvgPersonalCleaner()
+	{
+		$propRows = Yii::app()->db1->createCommand()
+			->select("tyoryhma, success_visit_count, total_visit_count")
+			->from("sivex_kohdet")
+			->where("aktiivinen = 1 AND (SELECT aktiivinen FROM asiakkaat WHERE id = sivex_kohdet.asiakas_id) = 1")
+			->queryAll();
+		$workGroups = Valikkoot::model()->findAll("select_type='tyoryhma'");
+		$workGroupMap = array_reduce($workGroups, function($grpMap, $grp) {
+			$grpMap[$grp->id] = $grp->value;
+			return $grpMap;
+		}, []);
+
+
+		foreach($propRows as $prop) {
+			$perc = 0;
+			if($prop["success_visit_count"] > 0 && $prop["total_visit_count"] > 0) {
+				$perc = $prop["success_visit_count"] / $prop["total_visit_count"];
+			}
+
+			$grp = $prop["tyoryhma"];
+			if(isset($resultMap[$grp])) {
+				$resultMap[$grp][] = $perc;
+			} else {
+				$resultMap[$grp] = [$perc];
+			}
+			
+		}
+
+		$avgMap = [];
+		foreach($resultMap as $grpId => $percArray) {
+			$avgMap[$grpId] = array_sum($percArray) / count($percArray);
+		}
+
+		$this->render("avg_personal_cleaner", 
+			[
+				"results" => $avgMap, 
+				"workGroupMap" => $workGroupMap
+			]
+		);
 	}
 
 }
