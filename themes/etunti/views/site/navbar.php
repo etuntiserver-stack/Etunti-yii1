@@ -1180,6 +1180,7 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
 			|| Yii::app()->user->domain == 'kotipuhtaaksi'
 			|| Yii::app()->user->domain == 'staging_kotipuhtaaksi'
 			|| Yii::app()->user->domain == 'seran'
+      || Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy'
 	      ): ?>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/auto">
