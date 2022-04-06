@@ -4963,13 +4963,20 @@ class TyovuorootController extends Controller
 		{
 			foreach($as as $a)
 			{
-				$nm = array($a->Fullname, $a->id);
+				$active = $a->aktiivinen == 1 ? true : false;
+				$name = $a->Fullname;
+				if($active === false) {
+					$name .= " (PASSIIVINEN)";
+			
+				}
+				$nm = array($name, $a->id);
 				$return .= '<a href="#" class="list-group-item asiakasSelecter" for="'.$nm[1].'">'.$nm[0].'</a>';
 			}
 		}
 
 		$criteria=new CDbCriteria;
 		$criteria->order =" etu_suku_nimet!='' DESC,etu_suku_nimet!='' DESC";
+		$criteria->limit = 20;
 
 
 		// <-- Tyoryhmat
@@ -4993,7 +5000,17 @@ class TyovuorootController extends Controller
 
 			foreach($k as $item)
 			{
-				$return .= '<a href="#" class="list-group-item kohteenSelecter bg-warning" style="color:white" for="'.$item->id.'">'.$item->etu_suku_nimet.', '.$item->osoite.'</a>';
+				$clientActive = true;
+				$client = $item->asiakkaat;
+				if($client) {
+					$clientActive = $client->aktiivinen == 1 ? true : false;
+				}
+	
+				$address = $item->osoite;
+				if($clientActive === false) {
+					$address .= " (ASIAKAS PASSIIVINEN)";
+				}
+				$return .= '<a href="#" class="list-group-item kohteenSelecter bg-warning" style="color:white" for="'.$item->id.'">'.$item->etu_suku_nimet.', '.$address.'</a>';
 			}
 		}
 		$return .='</div></div>';
