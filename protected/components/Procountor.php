@@ -13,7 +13,11 @@ class Procountor extends CComponent
   {
     // If localhost, use testing environment.
     if (in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1'])) {
-      $this->redirect_uri  = 'http://etunti.local/index.php/asetukset/procountor_auth';
+      $protocol = isset($_SERVER["HTTPS"]) ? "https://" : "http://";
+      // even though I made the redirect_uri dynamic, at the time of writing
+      // the allowed uri is http://etunti.local/index.php/asetukset/procountor_auth
+      // in procountors end. it will not work on any other uri unless changed by them. shoot an email to support about it.
+      $this->redirect_uri =  $protocol . $_SERVER["HTTP_HOST"] . "/index.php/asetukset/procountor_auth";
       $this->api_base_url  = 'https://api-test.procountor.com/api';
       $this->client_id     = 'etuntiTestClient';
       $this->client_secret = 'testsecret_W2ir6fiE4fdtO3Htevx9';
@@ -239,6 +243,11 @@ class Procountor extends CComponent
     $response = json_decode(curl_exec($ch), true);
     curl_close($ch);
 
+    if(!is_array($response)) {
+      $this->logError("oauth/token", [], ["auth_code" => $code], "Response not an array");
+      return false;
+    }
+
     // Log any errors.
     if (isset($response['errors'])) {
       $this->logError('oauth/token', $response, ['auth_code' => $code], 'Failed to authorize using provided authorization code.');
@@ -278,6 +287,8 @@ class Procountor extends CComponent
   {
   
 	//  AINA TARKISTA SARAKKEEN PITUUS  VARCHAR 500
+  // I created a migration (in yii2 version) which updates all 
+  // procountor token fields to varchar(500)
   
     $settings = Asetukset::model()->findByPk(1);
     $access_token = $settings->procountor_access_token;

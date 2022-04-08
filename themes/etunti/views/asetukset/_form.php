@@ -679,7 +679,7 @@ $('.ryhmat').multiselect({
 			if (($model->procountor_invalid ?? 0) == 1) {
 				echo "<p>Procountor kirjautumisesi on vanhentunut. Kirjauduthan uudelleen jatkaaksesi Procountor ominaisuuksien käyttämistä.</p>";
 			} else {
-				echo "<p>Procountor kirjautumisesi on voimassa.</p>";
+				echo "<p class='text-success'>Procountor kirjautumisesi on voimassa.</p>";
 				echo "<p>Pääsyavain:<br><small style='word-wrap: break-word;'>{$model->procountor_access_token}</small></p>";
 				echo "<p>Päivitysavain:<br><small style='word-wrap: break-word;'>{$model->procountor_refresh_token}</small></p>";
 			}
