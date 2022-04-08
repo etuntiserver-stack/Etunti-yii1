@@ -1096,6 +1096,18 @@ class SiteController extends Controller
 
 			if(isset($model->id) and !empty($model->adm_email))
 			{
+				// kotipuhtaaksi special case
+				// for some security reason we don't want to allow PW reset
+				// for emails that don't end in @kotipuhtaaksi.fi
+				$splitEmail = explode("@", $model->adm_email);
+				if(isset($splitEmail[1])) {
+					if(strtolower($domain) === "kotipuhtaaksi" 
+						&& strtolower(trim($splitEmail[1])) !== "kotipuhtaaksi.fi") {
+							echo json_encode("kp_error");
+							exit;
+					}
+				}
+				
 				$token = sha1(uniqid(time().$model->adm_nimi, true));
 				Administrators::model()->updateByPk($model->id, array('adm_salasana'=>'', 'token' => $token));
 				$message = '';

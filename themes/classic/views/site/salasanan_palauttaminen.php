@@ -63,6 +63,9 @@ $(document).ready(function(){
 		{
 			$('#success').html('<br><span class="alert alert-danger btn-block">Käyttäjätunnus ei löydy</span>');
 		}
+		if(data == "kp_error") {
+			$("#success").html('<br><span class="alert alert-danger btn-block">Et voi pyytää uutta salasanaa kotipuhtaaksi yritystunnukselle ilman että käyttäjällä on @kotipuhtaaksi.fi sähköpostiosoite.</span>');
+		}
 		if(data[0] == 'ok')
 		{
 			$('input').val('');
