@@ -676,6 +676,9 @@ $('.ryhmat').multiselect({
 
 		// Auth info
 		if (!empty($model->procountor_access_token) && !empty($model->procountor_refresh_token)) {
+			if(count($model->procountor_access_token) === 128 || count($model->procountor_refresh_token) === 128) {
+				echo "<p><strong>Procountor kirjautumisessa on mahdollisesti virhe, kokeile kirjautua uudestaan sisään.</strong></p>";
+			}
 			if (($model->procountor_invalid ?? 0) == 1) {
 				echo "<p>Procountor kirjautumisesi on vanhentunut. Kirjauduthan uudelleen jatkaaksesi Procountor ominaisuuksien käyttämistä.</p>";
 			} else {
@@ -683,6 +686,9 @@ $('.ryhmat').multiselect({
 				echo "<p>Pääsyavain:<br><small style='word-wrap: break-word;'>{$model->procountor_access_token}</small></p>";
 				echo "<p>Päivitysavain:<br><small style='word-wrap: break-word;'>{$model->procountor_refresh_token}</small></p>";
 			}
+		}
+		if(empty($model->procountor_access_token) && empty($model->procountor_refresh_token) && $model->palvelu_tyyppi == 5) {
+			echo "<p>Et ole kirjautunut Procounttoriin</p>";
 		}
 	?>
   </div>
