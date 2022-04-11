@@ -2349,6 +2349,7 @@ class SiteController extends Controller
 			}
 			if($model == "Asiakkaat") {
 				$cond .= "extra_contacts LIKE '%".$term."%' OR ";
+				$criteria->order = "CONCAT(etunimi, ' ', sukunimi)";
 			}
 			$i = 0;
 			
