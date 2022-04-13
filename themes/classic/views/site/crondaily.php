@@ -162,7 +162,7 @@ function autoPassiveWorkers() {
     print_r("<br><br>Työntekijä passivointi:<br>");
 
     $criteria = new CDbCriteria();
-    $criteria->condition = 'STR_TO_DATE(pto, "%d.%m.%Y") > (CURDATE() - INTERVAL 1 MONTH) AND (kohde > 0 OR status = 11)';
+    $criteria->condition = 'STR_TO_DATE(pto, "%d.%m.%Y") > (CURDATE() - INTERVAL 40 DAY) AND (kohde > 0 OR status = 11)';
     $toistuvat = ToistuvatTyovuorot::model()->findAll($criteria); 
 
     $workerIds = [];
@@ -191,7 +191,7 @@ function autoPassiveWorkers() {
     gc_collect_cycles();
 
     $criteria = new CDbCriteria();
-    $criteria->condition = 'STR_TO_DATE(pvm, "%d.%m.%Y") > (CURDATE() - INTERVAL 1 MONTH) AND (kohde > 0 OR status = 11)';
+    $criteria->condition = 'STR_TO_DATE(pvm, "%d.%m.%Y") > (CURDATE() - INTERVAL 40 DAY) AND (kohde > 0 OR status = 11)';
     $shifts = Tyovuoroot::model()->findAll($criteria);
     
     foreach($shifts as $shift) {
@@ -274,7 +274,7 @@ function autoPassiveWorkers() {
 
 /**
  * Searches for employees that have a defined end date in their contract,
- * but are still marked as active. If their end date is larger than now + 7 days,
+ * but are still marked as active. If their end date is larger than now + 40 days,
  * mark the employee as quit.
  */
 function checkPassiveableEmployees() {
@@ -283,10 +283,10 @@ function checkPassiveableEmployees() {
     $criteria = new CDbCriteria();
     $criteria->condition = "aktiivinen = 1";
     // find all workers which are still active, but have a defined end date in their
-    // contract, which is larger than this day + 30 days
+    // contract, which is larger than this day + 40 days
     $workers = Tyontekijat::model()->with(array(
         "tyosuhteet" => array("condition" => '(loppu != "" OR loppu != null) AND 
-            CURDATE() > STR_TO_DATE(loppu, "%d.%m.%Y") + INTERVAL 30 DAY')
+            CURDATE() > STR_TO_DATE(loppu, "%d.%m.%Y") + INTERVAL 40 DAY')
     ))->findAll($criteria);
 
     print_r("<br>WORKER COUNT:<br>");
