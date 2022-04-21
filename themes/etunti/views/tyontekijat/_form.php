@@ -190,11 +190,9 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->labelEx($model,'naytta_tyovuorossa'); ?>
 		<?php 
         	$tal = array(
+			0=>"Ei",
 			1=>'Kyllä'
 		);
-		if($hasShifts === false or !isset($model->id)) {
-			$tal[0] = "Ei";
-		}
 
 		echo $form->dropDownList($model,'naytta_tyovuorossa', $tal, 
 		array('class'=>'form-control')) ?>
