@@ -435,6 +435,12 @@ $(document).ready(function(){
 		  <?= $form->error($model, "orientation_end"); ?>
 	</div>
 
+	<div class="section fill mb5 piilotetaan">
+		<?php echo $form->labelEx($model,'using_framework_agreement'); ?>
+		<?php echo $form->checkbox($model,'using_framework_agreement',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
+		<?php echo $form->error($model,'using_framework_agreement'); ?>
+	</div>
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kortit'); ?>
 

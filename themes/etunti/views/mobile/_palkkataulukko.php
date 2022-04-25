@@ -52,7 +52,7 @@
 
 <tr>
 
-	<td class="tulostus_tekija col1"><?=$data->$tt_order_1.' '.$data->$tt_order_2?></td>
+	<td class="tulostus_tekija col1"><?=$data->$tt_order_1.' '.$data->$tt_order_2?> <?= $data->using_framework_agreement ? "(PUITESOPIMUS)" : ""?></td>
 	<td class="col2"><?php if($tp != 0) echo $tp; ?></td>
 	<td class="col3"><?php if($this->num($matkatunnit) != 0) echo number_format($this->num($matkatunnit), 2, ',', ''); ?></td>
 	<td class="col4"><?php if($tyotunnit != 0) echo number_format($this->num($tyotunnit), 2, ',', ''); ?></td>

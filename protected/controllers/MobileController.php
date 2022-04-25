@@ -2820,7 +2820,7 @@ class MobileController extends Controller
     	if(isset($_GET['to']) and !empty($_GET['to'])){ $to = $_GET['to']; }
 
     	$criteria = new CDbCriteria();
-    	$criteria->select = " id, tekijan_nimi, sukunimi, tyoryhma";
+    	$criteria->select = " id, tekijan_nimi, sukunimi, tyoryhma, using_framework_agreement";
 
 		// <-- Return order etu ja sukunimella
 		$site = Yii::app()->createController('Site');

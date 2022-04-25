@@ -146,7 +146,7 @@ class TyovuorootController extends Controller
 		if(isset($_GET['to']) and !empty($_GET['to'])){ $to = $_GET['to']; }
 
        		$criteria = new CDbCriteria();
-		$criteria->select = " id,tekijan_nimi,sukunimi ";
+		$criteria->select = " id,tekijan_nimi,sukunimi,using_framework_agreement";
 
 		// <-- Return order etu ja sukunimella
 		$site = Yii::app()->createController('Site');
@@ -2029,7 +2029,7 @@ class TyovuorootController extends Controller
 		// Order tyontekijat -->
 
 		$criteria = new CDbCriteria();
-		$criteria->select = "id, $tt_order_1, $tt_order_2, tyo_toimialue, tyoryhma, kortit";
+		$criteria->select = "id, $tt_order_1, $tt_order_2, tyo_toimialue, tyoryhma, kortit, using_framework_agreement";
 		$criteria->order = "$tt_order_1 ASC";
 		$criteria->condition = "
 			aktiivinen=1 and naytta_tyovuorossa=1
@@ -2081,7 +2081,11 @@ class TyovuorootController extends Controller
 		$haku_tids[0] 	= 0; // Varaus
 		$tyontekijat = Tyontekijat::model()->findAll($criteria);
 		foreach ($tyontekijat as $item) {
-			$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1 . ' ' . $item->$tt_order_2, "toimialue_tyoryhma" => $item->getTyoryhmaToimialueString(), "kortit" => $item->kortit);
+			$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1 . ' ' . $item->$tt_order_2,
+				"toimialue_tyoryhma" => $item->getTyoryhmaToimialueString(),
+				"kortit" => $item->kortit,
+				"using_framework_agreement" => $item->using_framework_agreement,
+			);
 			$haku_tids[$item->id] = $item->id;
 		}
 		//     Tyontekijat -->

@@ -34,6 +34,7 @@
  * @property string $ice_name
  * @property string $ice_relationship
  * @property string $ice_phonenumber
+ * @property integer $using_framework_agreement "Puitesopimus"
  */
 class Tyontekijat extends DB2ActiveRecord
 {
@@ -154,7 +155,7 @@ class Tyontekijat extends DB2ActiveRecord
 		return array(
 			array('tekijan_nimi, aktiivinen, sukunimi', 'required'),
 			array('tekijan_pankkitili, tekijan_konttori, ammattinimike, tekijan_henkilotunnus', 'netvisorCheck', 'on'=>'insert, update'),
-			array('online_varauksen_valmina, ilmoitus_merkkipaivasta_vuosi, tyontekijan_numero, mobiili, app_naytta_osoitekenta, naytta_tyovuorossa', 'numerical', 'integerOnly'=>true),
+			array('online_varauksen_valmina, ilmoitus_merkkipaivasta_vuosi, tyontekijan_numero, mobiili, app_naytta_osoitekenta, naytta_tyovuorossa, using_framework_agreement', 'numerical', 'integerOnly'=>true),
 			array('imei', 'length', 'max'=>100),
 			array('laiten_puh, tekijan_nimi, tekijan_katuosoite, tekijan_pankkitili, salasana, app_platform', 'length', 'max'=>100),
 			array('tekijan_henkilotunnus, tekijan_puh, tekijan_lanka_puh', 'length', 'max'=>20),
@@ -225,6 +226,7 @@ class Tyontekijat extends DB2ActiveRecord
 			"ice_name" => Yii::t("main", "Yhteyshenkilön nimi"),
 			"ice_relationship" => Yii::t("main", "Yhteyshenkilön suhde työntekijään"),
 			"ice_phonenumber" => Yii::t("main", "Yheyshenkilön puhelinnumero"),
+			"using_framework_agreement" => Yii::t("main", "Puitesopimus"),
 		);
 	}
 

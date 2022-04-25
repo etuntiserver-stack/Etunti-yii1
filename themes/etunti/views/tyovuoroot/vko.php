@@ -117,6 +117,13 @@ if( isset($_SESSION['skrollaus']) )
 		?>
 		<?= $this->renderPartial("_skills", ["employee" => $item]); ?>
 
+		<?php 
+		if($item["using_framework_agreement"]) {
+			echo "<br>";
+			echo "PUITESOPIMUS";
+		}
+		?>
+
 		<?php
 		$file = $week.'_'.$year.'_'.$tid.'.pdf';
 		$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
