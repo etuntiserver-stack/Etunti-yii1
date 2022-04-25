@@ -34,6 +34,8 @@
  * @property integer $total_visit_count
  * @property integer $success_visit_count
  * @property string $invoice_our_reference
+ * @property integer $window_count
+ * @property string $window_est_time
  */
 class Kohteet extends DB2ActiveRecord
 {
@@ -149,8 +151,8 @@ class Kohteet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('asiakas_id, etu_suku_nimet, osoite', 'required'),
-			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara, uusi_tilaus, hinnasto_id, tyoryhma, tyonkuvaus_tiedostot_mobiilissa, kustannuspaikka_nro, tuote_h, tuote_kk, tuote_kpl, ensisijainen', 'numerical', 'integerOnly'=>true),
-			array('tag_id, kaupunki, toimipaikka, kohteen_neliot', 'length', 'max'=>20),
+			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara, uusi_tilaus, hinnasto_id, tyoryhma, tyonkuvaus_tiedostot_mobiilissa, kustannuspaikka_nro, tuote_h, tuote_kk, tuote_kpl, ensisijainen, window_count', 'numerical', 'integerOnly'=>true),
+			array('tag_id, kaupunki, toimipaikka, kohteen_neliot, window_est_time', 'length', 'max'=>20),
 			array('gps_sijainti, osoite, katuosoite, kenella_on_avain, puh_nro, hinta_tyyppi, laskurivi_tyyppi', 'length', 'max'=>50),
 			array('lyhenne', 'length', 'max'=>46),
 			array('pnumero', 'length', 'max'=>7),
@@ -231,7 +233,9 @@ class Kohteet extends DB2ActiveRecord
 			'tuote_h' => Yii::t('main', 'Tuntituote'),
 			'tuote_kk' => Yii::t('main', 'Tuote kk'),
 			'tuote_kpl' => Yii::t('main', 'Tuote kpl'),
-			'invoice_our_reference' => Yii::t("app", "Viitteemme")
+			'invoice_our_reference' => Yii::t("app", "Viitteemme"),
+			"window_count" => Yii::t("main", "Ikkunoiden lukumäärä"),
+			"window_est_time" => Yii::t("main", "Ikkunoiden pesun arvioitu kesto"),
 		);
 	}
 

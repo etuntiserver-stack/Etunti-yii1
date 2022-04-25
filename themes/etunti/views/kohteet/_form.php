@@ -382,10 +382,28 @@ if(empty($model->tietoja))
 	  </div>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'kohteen_neliot'); ?>
+		<?php echo $form->numberField($model,'kohteen_neliot',array('maxlength'=>5,'class'=>'form-control', 'step' => "any")); ?>
+		<?php echo $form->error($model,'kohteen_neliot'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?= $form->labelEx($model, "window_count"); ?>
+		<?= $form->numberField($model, "window_count", ["class" => "form-control", "step" => "any"]) ?>
+		<?= $form->error($model, "window_count"); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?= $form->labelEx($model, "window_est_time"); ?>
+		<?= $form->textField($model, "window_est_time", ["class" => "form-control automask"]) ?>
+		<?= $form->error($model, "window_est_time"); ?>
+	</div>
+
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
-	  $('#Kohteet_arvioitu_kesto, #Kohteet_arvioitu_kello_alku, #Kohteet_arvioitu_kello_loppu').mask('00:00',{
+	  $('#Kohteet_arvioitu_kesto, #Kohteet_arvioitu_kello_alku, #Kohteet_arvioitu_kello_loppu, #Kohteet_window_est_time').mask('00:00',{
 	        placeholder: "__:__"
 	  });
 	  $('.automask').blur(function(){
@@ -399,12 +417,6 @@ if(empty($model->tietoja))
 	  });
 	});
 	</script>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'kohteen_neliot'); ?>
-		<?php echo $form->numberField($model,'kohteen_neliot',array('maxlength'=>5,'class'=>'form-control', 'step' => "any")); ?>
-		<?php echo $form->error($model,'kohteen_neliot'); ?>
-	</div>
 
 	<div class="section fill mb5 bg-info p5">
 	<?php 
