@@ -163,10 +163,21 @@ class Asiakkaat extends DB2ActiveRecord
 			and isset($asetukset->asiakas_pakkoliset) 
 			and is_array(json_decode($asetukset->asiakas_pakkoliset, true)) 
 		){
-			$impl = implode(", ", json_decode($asetukset->asiakas_pakkoliset, true));
+			$clientRequired = json_decode($asetukset->asiakas_pakkoliset, true);
+			$impl = implode(", ", $clientRequired);
 			array_push($arr, array($impl, 'required'));
+			if(in_array("netvisor_dimension_name", $clientRequired)) {
+				array_push($arr, ["netvisor_dimension_name", "netvisorDimensionCheck"]);
+			}
 		}
 		return $arr;
+	}
+
+	public function netvisorDimensionCheck($attribute, $params)
+	{
+		if($this->$attribute == "Valitse") {
+			$this->addError($attribute, "Valitse kustannuspaikka");
+		}
 	}
 
 	/**
