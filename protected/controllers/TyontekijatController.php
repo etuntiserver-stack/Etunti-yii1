@@ -600,7 +600,7 @@ class TyontekijatController extends Controller
 				$message = 'Hei / Hi '.$model->tekijan_nimi.'!<br>
 				<b>Domain:</b> '.Yii::app()->user->domain.'<br>
 				<b>Käyttäjätunnus:</b> '.$model->tekijan_email.'<br>
-				<b>Luo oma salasana / Create password:</b> <a href='.Yii::app()->createAbsoluteUrl('tyontekijat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'id' => $model->id)).'>tästä / here</a><br>';
+				<b>Luo oma salasana / Create password:</b> <a href="'.Yii::app()->createAbsoluteUrl('tyontekijat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'id' => $model->id)).'">tästä / here</a><br>';
 
 				//echo $message;
 				//exit;
