@@ -1358,7 +1358,9 @@ $xml = '
 				$criteria->addCondition(" extra_contacts LIKE '%$puh%' ", "OR");
 		}
 		if(isset($_GET['sahkoposti']) and !empty(trim($_GET['sahkoposti']))){
-		        $criteria->addCondition (" sahkoposti LIKE '%".$_GET['sahkoposti']."%' ");
+				$email = $_GET["sahkoposti"];
+		        $criteria->addCondition (" sahkoposti LIKE '%".$email."%' ");
+				$criteria->addCondition(" extra_contacts LIKE '%$email%' ", "OR");
 		}
 		if(isset($_GET['asiakasnumero']) and !empty(trim($_GET['asiakasnumero']))){
 		        $criteria->addCondition (" asiakasnumero LIKE '%".$_GET['asiakasnumero']."%' ");
