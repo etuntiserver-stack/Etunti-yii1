@@ -239,6 +239,7 @@ $(document).ready(function() {
   <thead class="myBgColors">
   <tr>
   <th></th>
+  <th>ID</th>
   <th><?php echo Yii::t('main', 'Nimi'); ?></th>
   <th><?php echo Yii::t('main', 'Työpuhelin'); ?></th>
   <th><?php echo Yii::t('main', 'Oma puhelin'); ?></th>

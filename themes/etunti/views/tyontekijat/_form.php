@@ -474,11 +474,7 @@ $(document).ready(function(){
 	</div>
 
 	<br>
-	<div class="section fill mb5 piilotetaan">
-		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
-		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
-		<?php echo $form->error($model,'ayjasenyys'); ?>
-	</div>
+
 	<?php endif; ?><!--Laaja-->
 
 	<?php 
@@ -586,6 +582,12 @@ $(document).ready(function(){
 	<?php endif; ?>
    </div>
 	</div>
+
+	<?php if($model->id): ?>
+		<div class="section fill mb5">
+			<p class="mb0">Työntekijän ID: <?=$model->id?></p>
+		</div>
+	<?php endif; ?>
 
 	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'tyontekijan_numero'); ?>

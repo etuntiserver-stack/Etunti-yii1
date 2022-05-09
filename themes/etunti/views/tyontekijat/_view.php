@@ -39,6 +39,9 @@
 		?>
 	</td>
 	<td>
+		<?= $data->id ?>
+	</td>
+	<td>
 		<?php echo $this->etuSukunimi($data->id); ?>
 	</td>
 	<td>
