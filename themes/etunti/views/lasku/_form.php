@@ -1369,9 +1369,9 @@ function eachLaskenta(){
 		var laske = yhteensa-veroton;
 	}
 
-	$("#hinta_alv_"+inputKenta[1]).val(laske.toPrecision(6));
-	$("#veroton_"+inputKenta[1]).val(veroton.toPrecision(6));
-	$("#yhteensa_alv_"+inputKenta[1]).val(yhteensa.toPrecision(6));
+	$("#hinta_alv_"+inputKenta[1]).val(Number(laske.toPrecision(6)));
+	$("#veroton_"+inputKenta[1]).val(Number(veroton.toPrecision(6)));
+	$("#yhteensa_alv_"+inputKenta[1]).val(Number(yhteensa.toPrecision(6)));
 
   });
     	yhteensaTotal();
@@ -1383,17 +1383,17 @@ function yhteensaTotal(){
 	var sum = 0;
 	$('.yhteensa_total_verot').each(function(){
 	    sum += parseFloat(this.value);
-		$('#yhteensa_total_verot').val(sum.toPrecision(6));
+		$('#yhteensa_total_verot').val(Number(sum.toPrecision(6)));
 	});
 	var sum1 = 0;
 	$('.yhteensa_total_veroton').each(function(){
 	    sum1 += parseFloat(this.value);
-	    $('#yhteensa_total_veroton').val(sum1.toPrecision(6));
+	    $('#yhteensa_total_veroton').val(Number(sum1.toPrecision(6)));
 	});
 	var sum2 = 0;
 	$('.yhteensa_total').each(function(){
 	    sum2 += parseFloat(this.value);
-	    $('#yhteensa_total').val(sum2.toPrecision(6));
+	    $('#yhteensa_total').val(Number(sum2.toPrecision(6)));
 	});
 }
 
