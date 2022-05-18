@@ -203,8 +203,8 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 			'tietoja' => 'Tietoja',
 			'tyopaari' => 'Tyopaari',
 			'piilota_mobiilista'=>Yii::t('main', 'Näytä mobiilissa'),
-			'omasiistijavaroitus' => Yii::t('main', 'Omasiistijävaroitukset'),
-			'omasiistijailmoitus' => Yii::t('main', 'Ilmoitus asiakkaalle omasiistijöistä'),
+			'omasiistijavaroitus' => Yii::t('main', 'Tuttusiistijävaroitukset'),
+			'omasiistijailmoitus' => Yii::t('main', 'Ilmoitus asiakkaalle tuttusiistijöistä'),
 			'aloitusaikailmoitus' => Yii::t('main', 'Aloitusajan ilmoittaminen'),
 			'url_linkkit' => Yii::t('main', 'URL linkit'),
 		);

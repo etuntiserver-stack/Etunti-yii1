@@ -753,8 +753,8 @@ $(document).ready(function(){
     <?php
     // echo $form->labelEx($model,'omasiistijavaroitus');
     echo $form->dropDownList($model,'omasiistijavaroitus', [
-      0 => Yii::t('main', 'Omasiistijävaroitus piilossa'),
-      1 => Yii::t('main', 'Varoita omasiistijöistä'),
+      0 => Yii::t('main', 'Tuttusiistijävaroitus piilossa'),
+      1 => Yii::t('main', 'Varoita Tuttusiistijöistä'),
     ], ['class'=>'form-control lomake_valinta']);
     ?>
   </div>
@@ -771,7 +771,7 @@ $(document).ready(function(){
     <!-- Varoitus jos ei ole omasiistijää. -->
     <div class="row">
       <div id="omasiistija-varoitus" class="col-sm-12 text-danger mb5" style="display:none;border:2px solid red;border-radius:4px;text-align:center;height:25px;padding-top:3px">
-        <b>Varoitus: Omasiistijää ei ole valittuna!</b>
+        <b>Varoitus: Tuttusiistijää ei ole valittuna!</b>
       </div>
     </div>
 
@@ -1453,7 +1453,7 @@ $(document).ready(function(){
   // If omasiistijavaroitus is selected as sent, and toistuva selected, prevent submit
   if (toistuva) {
     if ($('#<?= $java_prefix ?>_omasiistijailmoitus').val() == 1) {
-      alert("Omasiistijäilmoitusta ei voida asettaa lähetetyksi koko ketjulle.");
+      alert("Tuttusiistijäilmoitusta ei voida asettaa lähetetyksi koko ketjulle.");
       $('#<?= $java_prefix ?>_omasiistijailmoitus').css('border', '2px solid red').focus();
       $('#submitButton').removeAttr('disabled');
       return false;
@@ -2239,12 +2239,12 @@ $(document).ready(function(){
       },
 
       error: function(xhr, status, error) {
-        console.log(`(Omasiistijävaroituksen tarkastus epäonnistui. Virhe: ${xhr.responseText}`);
+        console.log(`(Tuttusiistijävaroituksen tarkastus epäonnistui. Virhe: ${xhr.responseText}`);
       },
 
       success: function(data) {
         // Output 1 means warnings should be shown; in any other case, hide the warnings.
-        console.log(`(Omasiistijävaroituksen tarkastus: Received response: ${data}`);
+        console.log(`(Tuttusiistijävaroituksen tarkastus: Received response: ${data}`);
         omasiistijaVaroitusToggle(data == 1);
       }
     });
@@ -2305,22 +2305,22 @@ $(document).ready(function(){
 
       error: function(xhr, status, error) {
         $(`#${workersDivId} .well`).html(`Pyynnössä tapahtui virhe: ${xhr.responseText}`);
-        console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: ${xhr.responseText}`);
+        console.log(`(Tuttusiistijähaku kohteelle ${valittuKohde}) Error: ${xhr.responseText}`);
       },
 
       success: function(data) {
 
-        console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Received response, length: ${data.length}`);
+        console.log(`(Tuttusiistijähaku kohteelle ${valittuKohde}) Received response, length: ${data.length}`);
         let parsed = null;
         try {
           parsed = JSON.parse(data);
         } catch (e) {
-          console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
+          console.log(`(Tuttusiistijähaku kohteelle ${valittuKohde}) Error: Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
           return;
         }
 
         if (typeof(parsed) != "object") {
-          console.log(`(Omasiistijähaku kohteelle ${valittuKohde}) Error: Parsed data is unusable (not an object).`);
+          console.log(`(Tuttusiistijähaku kohteelle ${valittuKohde}) Error: Parsed data is unusable (not an object).`);
         } else {
           $.each(parsed, (index, item) => { omasiistijat.push(item['id']); });
           //parsed.forEach((item, index) => { omasiistijat.push(item['id']); });
@@ -2392,7 +2392,7 @@ $(document).ready(function(){
 
       // Error handling just in case.
       error: function (xhr, status, error) {
-        alert(`Omasiistijäilmoituksen lähetyksessä tapahtui sisäinen virhe: ${xhr.responseText}`);
+        alert(`Tuttusiistijäilmoituksen lähetyksessä tapahtui sisäinen virhe: ${xhr.responseText}`);
         console.log(xhr.responseText);
       },
 
@@ -2406,33 +2406,33 @@ $(document).ready(function(){
           parsed = JSON.parse(data);
         } catch (e) {
           console.log(`Failed to parse response JSON. Error: ${e}\nResponse data: ${data}`);
-          alert("Omasiistijäilmoituksen lähetyksessä tapahtui virhe: palvelin palautti viallisen tuloksen.");
+          alert("Tuttusiistijäilmoituksen lähetyksessä tapahtui virhe: palvelin palautti viallisen tuloksen.");
           return false;
         }
 
         // Check if parsing failed. Notify log and let it go.
         if (typeof (parsed) != "object") {
           console.log("Parsed data is unusable (not an object).");
-          alert("Omasiistijäilmoituksen lähetyksessä tapahtui virhe: palvelin palautti viallisen tuloksen.");
+          alert("Tuttusiistijäilmoituksen lähetyksessä tapahtui virhe: palvelin palautti viallisen tuloksen.");
           return false;
         }
 
         // Check if data is empty, which means possible server error.
         if (parsed.length == 0) {
           console.log("Empty response received.");
-          alert("Omasiistijäilmoituksen lähetyksessä tapahtui virhe: tyhjä vastaus vastaanotettu palvelimelta.");
+          alert("Tuttusiistijäilmoituksen lähetyksessä tapahtui virhe: tyhjä vastaus vastaanotettu palvelimelta.");
           return false;
         }
 
         // Check if empty message, meaning logical fault.
         if (!('message' in parsed) || parsed.message.length == 0) {
-          alert(`Omasiistijäilmoituksen lähetyksessä tapahtui virhe: palvelin ei palauttanut vastausta.`);
+          alert(`Tuttusiistijäilmoituksen lähetyksessä tapahtui virhe: palvelin ei palauttanut vastausta.`);
           return false;
         }
 
         // Check if operation failed.
         if (!('success' in parsed) || parsed.success != true) {
-          alert(`Omasiistijäilmoituksen lähetyksessä tapahtui virhe: ${parsed.message}`);
+          alert(`Tuttusiistijäilmoituksen lähetyksessä tapahtui virhe: ${parsed.message}`);
           return false;
         }
 
