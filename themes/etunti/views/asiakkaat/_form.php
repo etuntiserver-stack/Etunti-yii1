@@ -233,7 +233,7 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 	<div class="section fill mb5 ashidd_a">
 		<?= $form->checkBox($model, "no_email", []); ?>
 		<label for="Asiakkaat_no_email">Asiakkaalla ei ole sähköpostia</label>
-		<span class="btn-group fa fa-info-circle text-primary" data-toggle="tooltip" data-container="body" title="Valitsemalla tämän pystyt tallentamaan asiakkaan ilman sähköpostia"></span>
+		<span class="btn-group fa fa-info-circle text-primary" data-toggle="tooltip" data-container="body" title="Valitsemalla tämän pystyt tallentamaan asiakkaan ilman sähköpostia (jos kenttä ei ole merkattu pakolliseksi asetuksissa)"></span>
 	</div>
 
 	<script>
@@ -291,7 +291,7 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 
 		/**
 		 * Listen for no-email-checkbox changes, and disable or enable email
-		 * field based on the state. Also clears the email value state is true.
+		 * field based on the state. Also clears the email value when state is true.
 		 */
 		$("#Asiakkaat_no_email").change(e => {
 			const emailField = $("#Asiakkaat_sahkoposti");
@@ -637,9 +637,15 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'puhelin'); ?> <?php if(!empty($model->puhelin)): ?><a href="tel:<?php echo $model->puhelin; ?>">***soita***</a><?php endif; ?>
-		<?php echo $form->textField($model,'puhelin',array('size'=>60,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'puhelin',array('size'=>60,'maxlength'=>50,'class'=>'form-control', "disabled" => $model->no_phonenumber)); ?>
     <?php echo $form->error($model,'puhelin'); ?>
     <div id="puhelin-varoitus" class="alert alert-danger text-dark" style="display:none"><ul></ul></div>
+	<div class="section fill mb5 ashidd_a">
+		<?= $form->checkBox($model, "no_phonenumber", []); ?>
+		<label for="Asiakkaat_no_phonenumber">Asiakkaalla ei ole puhelinnumeroa</label>
+		<span class="btn-group fa fa-info-circle text-primary" data-toggle="tooltip" data-container="body" 
+		title="Valitsemalla tämän pystyt tallentamaan asiakkaan ilman puhelinnumeroa (jos kenttä ei ole merkattu pakolliseksi asetuksissa)"></span>
+	</div>
   </div>
 
   <!-- Enable phone number validation only when Freshdesk is enabled.
@@ -665,6 +671,15 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
 
         const val = $('#Asiakkaat_puhelin').val();
         let errors = [];
+		// if no phonenumber is checked, clear all errors and return
+		// true for valid
+		const checked = $("#Asiakkaat_no_phonenumber").is(":checked");
+		if(checked) {
+			$('#puhelin-varoitus').html('').hide();
+          	$('#puhelin-submitvaroitus').hide();
+          	$('#asiakas-submit').removeAttr('disabled');
+			return true;
+		}
 
         // Check that the phone number contains area code.
         if (!/^\+.*$/.test(val)) {
@@ -703,10 +718,31 @@ if (false && !$freshdesk->isDisabled() && ($model->freshdesk_id ?? 0) != 0) {
        * Hook phone number validation to form submission.
        */
       $('#asiakkaat-form').on('submit', function(e) {
-        if (!validatePhoneNumber()) {
+		const checked = $("#Asiakkaat_no_phonenumber").is(":checked");
+        if (!checked && !validatePhoneNumber()) {
           e.preventDefault();
         }
       });
+
+	  /**
+	   * Listen for no phonenumber checkbox changes, and disable
+	   * or enable phonenumber field based on the state. Also clears the phonenumber value
+	   * when state is true.
+	   */
+	  $("#Asiakkaat_no_phonenumber").change(e => {
+		  const phoneField = $("#Asiakkaat_puhelin");
+		  const checked = $("#Asiakkaat_no_phonenumber").is(":checked");
+		  if(checked) {
+			  $(phoneField).val("");
+			  $(phoneField).prop("disabled", true);
+			  // call validatePhoneNumber which should clean up any errors
+			  // that might be there already.
+			  validatePhoneNumber();
+		  } else {
+			  $(phoneField).prop("disabled", false);
+		  }
+	  })
+
     });
   </script>
   <?php endif; ?>

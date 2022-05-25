@@ -139,7 +139,7 @@ class Asiakkaat extends DB2ActiveRecord
 		//	array('osoite, postinumero, kaupunki', 'required'),
 		$arr = array(
 			array('asiakasnumero', 'length', 'max'=>9),
-			array('no_email', 'boolean', 'allowEmpty' => false),
+			array('no_email, no_phonenumber', 'boolean', 'allowEmpty' => false),
 			array('asiakasnumero','unique', 'message'=>'Tämä asiakasnumero on jo olemassa!'),
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
 			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot, hinnasto_id, tyoryhma, sopimustyyppi, freshdesk_id, finnish_service_wish, tuote, buenno_integration_enabled', 'numerical', 'integerOnly'=>true),

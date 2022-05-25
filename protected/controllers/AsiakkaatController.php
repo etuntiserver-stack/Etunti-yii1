@@ -774,6 +774,11 @@ Yritys '.$yr.'
 				$model->sahkoposti = "";
 			}
 
+			$noPhonenumber = isset($client_body["no_phonenumber"]) ? $client_body["no_phonenumber"] : 0;
+			if($noPhonenumber == 1) {
+				$model->puhelin = "";
+			}
+
 			// if client is set back to active from inactivity, clear lopetuksen_syy
 			// and lopetuksen_pvm fields.
 			if(isset($vanha_attr["aktiivinen"]) 
