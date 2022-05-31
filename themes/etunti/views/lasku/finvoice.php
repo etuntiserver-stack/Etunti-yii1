@@ -210,7 +210,7 @@ if (isset($_GET['hyvaksyminen']) && isset($_GET['procountor'])) {
       //"deliveryMethod" => "OTHER",    // (string) Delivery method for the goods. Sales invoices do not support type OTHER.
       "deliveryInstructions" => "",     // (string) Delivery instructions.
       "invoiceChannel" => $channel,     // (string) Channel of distribution for the invoice. Values EDIFACT and PAPER_INVOICE are not allowed for new invoices.
-      "penaltyPercent" => 0,            // (number) Penal interest rate. Scale: 2.
+      "penaltyPercent" => $l->viivastyskorko ?? 0,            // (number) Penal interest rate. Scale: 2.
       "language" => "FINNISH",          // (string) Language of the invoice. Required for sales invoices, otherwise ignored.
       "additionalInformation" => $notes, // (string) Invoice notes containing additional information. Visible on the invoice. Use \n as line break.
       "vatCountry" => "FINLAND",        // (string) Country code describing which country is VAT standards are being used. Usage of foreign VAT settings must be agreed on separately with Procountor. Required if the company uses foreign VATs. Example value: SWEDEN.See Address.country in POST /invoices for a list of allowable values
