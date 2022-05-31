@@ -116,8 +116,6 @@ if(empty($model->tietoja))
 		<?php echo $form->error($model,'toimipaikka'); ?>
 	</div>
 
-
-	<?php if(in_array('3',$tas)) : ?>
 	<legend><h3>Lasku hinnasto.</h3></legend>
 
 	<div class="section fill mb5">
@@ -258,7 +256,6 @@ if(empty($model->tietoja))
 		}
 	});
 	</script>
-	<?php endif; ?>
 
   </div><div class="col-sm-3">
 
