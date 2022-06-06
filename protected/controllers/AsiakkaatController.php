@@ -2015,6 +2015,8 @@ $xml = '
 					$bod .= '<td></td><td><span class="text-danger">'.Yii::t('main', 'Peruutettu, laskutetaan välineet 9,90€').'</span></td></tr>';
 				}  else if($data->peruutettu == 4) {
 					$bod .= '<td></td><td><span class="text-danger">'.Yii::t('main', 'Peruutettu, laskutetaan välineet 19,90€').'</span></td></tr>';
+				} else if($data->peruutettu == 5) {
+					$bod .= '<td></td><td><span class="text-danger">'.Yii::t('main', 'Peruutettu, laskutetaan 30€').'</span></td></tr>';
 				} else {
 			  	$bod .= '<td></td>
 						<td>

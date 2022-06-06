@@ -123,6 +123,7 @@
                     <option value="2">Peruutettu laskutettava</option>
                     <option value="3">Peruutettu, laskutetaan välineet 9,90€</option>
                     <option value="4">Peruutettu, laskutetaan välineet 19,90€</option>
+                    <option value="5">Peruutettu, laskutetaan 30€</option>
                   </select>
                   <input id="massedit-cancel-btn" type="button" class="mt5 btn btn-primary btn-lg haemob btn-block myBgColors" value="Päivitä peruutettu-tila" disabled="disabled">
                 </div>

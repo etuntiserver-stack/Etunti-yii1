@@ -2423,6 +2423,8 @@ class TyovuorootController extends Controller
 			$lisateksti .= '<br><span class="text-danger">'. $this->peruutettuArray()[3] .'</span>';
 		if($arvo->peruutettu == 4)
 			$lisateksti .= '<br><span class="text-danger">'. $this->peruutettuArray()[4] .'</span>';
+		if($arvo->peruutettu == 5)
+			$lisateksti .= '<br><span class="text-danger">'. $this->peruutettuArray()[5] .'</span>';
 		if($arvo->osoiteOnline == 1)
 			$lisateksti .= '<br><span class="text-danger">Onlinevaraus kesken</span>';
 		if($arvo->osoiteOnline == 2)
@@ -2663,6 +2665,10 @@ class TyovuorootController extends Controller
 		}
 		if($tvVal['peruutettu'] == 4 and isset($tv_controller)){
 			$hovertietoja .= '<h3 class="text-danger">'. $this->peruutettuArray()[4] .'</h3>';
+			$bgcol = 'color:red';
+		}
+		if($tvVal['peruutettu'] == 5 and isset($tv_controller)){
+			$hovertietoja .= '<h3 class="text-danger">'. $this->peruutettuArray()[5] .'</h3>';
 			$bgcol = 'color:red';
 		}
 		//    peruutettu -->
@@ -3593,6 +3599,33 @@ class TyovuorootController extends Controller
 				if(isset($post["lisa_tuotteet"])) {
 					foreach($post["lisa_tuotteet"]["tuote"] as $arrKey => $productId) {
 						if($productId == 105) {
+							unset($post["lisa_tuotteet"]["tuote"][$arrKey]);
+							unset($post["lisa_tuotteet"]["maara"][$arrKey]);
+						}
+					}
+					// re-index lisa_tuotteet tuote and maara just in case
+					$post["lisa_tuotteet"]["tuote"] = array_values($post["lisa_tuotteet"]["tuote"]);
+					$post["lisa_tuotteet"]["maara"] = array_values($post["lisa_tuotteet"]["maara"]);
+				}
+			}
+
+			if($post["peruutettu"] == 5) {
+				// 122 = Peruutusmaksu
+				$canceledProduct = [
+					"tuote" => ["122"],
+					"maara" => ["1"]
+				];
+				if(isset($post["lisa_tuotteet"])) {
+					// if lisa_tuotteet already exists, just add canceled product to the data structure
+					$post["lisa_tuotteet"]["tuote"][] = $canceledProduct["tuote"][0];
+					$post["lisa_tuotteet"]["maara"][] = $canceledProduct["maara"][0];
+				} else {
+					$post["lisa_tuotteet"] = $canceledProduct;
+				}
+			} else {
+				if(isset($post["lisa_tuotteet"])) {
+					foreach($post["lisa_tuotteet"]["tuote"] as $arrKey => $productId) {
+						if($productId == 122) {
 							unset($post["lisa_tuotteet"]["tuote"][$arrKey]);
 							unset($post["lisa_tuotteet"]["maara"][$arrKey]);
 						}
@@ -5113,6 +5146,7 @@ class TyovuorootController extends Controller
 		if(!empty(Yii::app()->user->kotipuhtaaksi)) {
 			$list[3] = Yii::t("main", "Peruutettu, laskutetaan välineet 9,90€");
 			$list[4] = Yii::t("main", "Peruutettu, laskutetaan välineet 19,90€");
+			$list[5] = Yii::t("main", "Peruutettu, laskutetaan 30€");
 		}
 		return $list;
 	}
