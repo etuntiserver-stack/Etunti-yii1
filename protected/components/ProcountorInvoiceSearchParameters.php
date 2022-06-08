@@ -104,12 +104,13 @@ class ProcountorInvoiceSearchParameters extends CComponent
 
     $options = [
       'status' => $this->status,
-      'startDate' => $this->startDate,
-      'endDate' => $this->endDate,
+      // procountor suddenly didn't support encoded dates or something
+      //'startDate' => $this->startDate,
+      //'endDate' => $this->endDate,
       //'createdStartDate' => $this->createdStartDate,
       //'createdEndDate' => $this->createdEndDate,
-      'versionStartDate' => $this->versionStartDate,
-      'versionEndDate' => $this->versionEndDate,
+      //'versionStartDate' => $this->versionStartDate,
+      //'versionEndDate' => $this->versionEndDate,
       'types' => $this->types,
       'businessPartnerId' => $this->businessPartnerId,
       'previousId' => $this->previousId,
