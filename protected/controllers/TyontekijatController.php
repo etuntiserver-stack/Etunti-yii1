@@ -1001,7 +1001,9 @@ class TyontekijatController extends Controller
 	$payrollrulegroupname = $modelTyosuhteet->palkka_tyyppi;
 
       	$lisat = '';
-	if($tila == 'add'){ $lisat .= '<employeenumber>'.$model->id.'</employeenumber>'; }
+	// we used to use model ID as the employee number, but that can result in
+	// duplicates if one creates employees by hand and sets an employee number for them
+	//if($tila == 'add'){ $lisat .= '<employeenumber>'.$model->id.'</employeenumber>'; }
 
 	$employeesettlementpoints = '';
 	/*
