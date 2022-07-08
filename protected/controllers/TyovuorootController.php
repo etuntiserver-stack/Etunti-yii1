@@ -2673,6 +2673,14 @@ class TyovuorootController extends Controller
 		}
 		//    peruutettu -->
 		$hovertietoja .= $asiakasNakyvissa;
+
+		// 2 = not set, check Asiakkaat model FINNISH_SERVICE_WISH constant
+		$client_finnish_service_wish = 2;
+		if(isset($tvVal->kohteet->asiakkaat)){
+			$client_finnish_service_wish = $tvVal->kohteet->asiakkaat->finnish_service_wish;
+		}
+		$hovertietoja .= "Palvelukieli: " . Asiakkaat::FINNISH_SERVICE_WISH[$client_finnish_service_wish] ?? "Ei valittu";
+
 		// OS count tag, fetched async after the hover popup is shown
 		if(isset($tvVal->kohteet->id) && !empty(Yii::app()->user->kp)) {
 			$hovertietoja .= '<p class="mb-0" id="hover_os_count"></p>';
