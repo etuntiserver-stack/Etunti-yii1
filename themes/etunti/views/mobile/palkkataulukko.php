@@ -146,6 +146,10 @@
                   <label class="field">
                     <?php
                     $site = Yii::app()->createController('Site');
+					$activeOnly = 1;
+					if(isset($_GET['kaikki_tyontekijat'])){
+						$activeOnly = null;
+					}
                     $tyontekiatLista = $site[0]->tyontekiatLista(
                       'Tekija', // name
                       null, // class
@@ -153,7 +157,7 @@
                       // pre-selected elements
                       (isset(Yii::app()->session["palkkataulukko_employeeIds"]) ?
                          Yii::app()->session["palkkataulukko_employeeIds"] : []),
-                      1 // aktiivinen
+                      $activeOnly // aktiivinen
                     );
                     echo $tyontekiatLista;
                     ?>

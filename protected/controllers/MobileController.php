@@ -2827,7 +2827,10 @@ class MobileController extends Controller
 		$criteria = $site[0]->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
 
-		$criteria->condition = " aktiivinen=1 "; 
+		// Display all / only active workers.
+		if(!isset($_GET['kaikki_tyontekijat'])){
+			$criteria->condition = " aktiivinen=1 ";
+		}
 
 		// Tekija no longer has a value, but the original system used it to conditionally render
 		// in palkkautaulukko.php, so I decided to leave it here
