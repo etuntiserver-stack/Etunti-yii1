@@ -74,6 +74,23 @@
 
 						<!-- Input Icons -->
 						<div class="row">
+							<div class="col-md-2">
+								<div class="section">
+									<label class="field prepend-icon">
+										<select class="gui-input" name="all_workers" id="all_workers">
+											<option value="0"
+												<?php if (isset($_GET['all_workers']) && $_GET['all_workers'] == 0) echo 'selected'; ?>>
+												Aktiiviset työntekijät</option>
+											<option value="1"
+												<?php if (isset($_GET['allworkers']) && $_GET['all_workers'] == 1) echo 'selected'; ?>>
+												Kaikki työntekijät</option>
+										</select>
+										<i class="arrow double"></i>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="row">
 
 							<div class="col-md-2">
 								<div class="section">
@@ -166,7 +183,7 @@
 										<?php
 										$site = Yii::app()->createController('Site');
 										$activeOnly = 1;
-										if (isset($_GET['kaikki_tyontekijat'])) {
+										if (isset($_GET['all_workeres']) && $_GET['all_workers'] == 1) {
 											$activeOnly = null;
 										}
 										$tyontekiatLista = $site[0]->tyontekiatLista(
