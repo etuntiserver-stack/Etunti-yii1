@@ -2828,7 +2828,7 @@ class MobileController extends Controller
 		//     Return order etu ja sukunimella -->
 
 		// Display all / only active workers.
-		if(!isset($_GET['all_workers']) && $_GET['all_workers'] == 0){
+		if(isset($_GET['all_workers']) && $_GET['all_workers'] == 0){
 			$criteria->condition = " aktiivinen=1 ";
 		}
 
