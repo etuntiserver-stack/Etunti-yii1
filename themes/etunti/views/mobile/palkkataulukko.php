@@ -489,7 +489,8 @@ $(document).ready(function() {
 
 		const postData = {
 			workGroups,
-			employees
+			employees,
+			all_workers
 		};
 		$.ajax({
 			url: "./palkkataulukkopost",
