@@ -16,6 +16,11 @@
 	<div class="tray-center">
 		<h2 class="myBgColors p10"> <i class="fa fa-eur"></i> <?php echo Yii::t('main', 'Palkkataulukko'); ?>
 
+			<?php if (!isset($_GET['all_workers'])) : ?>
+			<?php echo ', ' . Yii::t('main', 'aktiiviset työntekijät'); ?>
+			<?php echo CHtml::link(Yii::t('main', 'Näytä kaikki'), 'palkkataulukko?all_workers=1', array('class' => 'btn btn-primary')); ?>
+			<?php endif; ?>
+
 			<!-- tulostus -->
 			<div class="pull-right">
 				<div class="form-inline">
@@ -58,8 +63,8 @@
 			<input type="hidden" name="yhtvetoform">
 
 			<?php
-			if (isset($_GET['kaikki_tyontekijat'])) {
-				echo '<input type="hidden" name="kaikki_tyontekijat" value="">';
+			if (isset($_GET['all_workers']) && $_GET['all_workers'] == 1) {
+				echo '<input id="all_workers" type="hidden" name="all_workers" value="1">';
 			}
 			?>
 
@@ -68,23 +73,6 @@
 					<div class="panel-body bg-light">
 
 						<!-- Input Icons -->
-						<div class="row">
-							<div class="col-md-2">
-								<div class="section">
-									<label class="field prepend-icon">
-										<select class="gui-input" name="all_workers" id="all_workers">
-											<option value="0"
-												<?php if (isset($_GET['all_workers']) && $_GET['all_workers'] == 0) echo 'selected'; ?>>
-												Aktiiviset työntekijät</option>
-											<option value="1"
-												<?php if (isset($_GET['all_workers']) && $_GET['all_workers'] == 1) echo 'selected'; ?>>
-												Kaikki työntekijät</option>
-										</select>
-										<i class="arrow double"></i>
-									</label>
-								</div>
-							</div>
-						</div>
 						<div class="row">
 
 							<div class="col-md-2">
@@ -488,6 +476,7 @@ $(document).ready(function() {
 	$("#yhtveto").on('submit', function(e) {
 		e.preventDefault();
 
+		const all_workers = $("#all_workers").val();
 		const from = $("#from").val();
 		const to = $("#to").val();
 		// default workGroups to empty array
@@ -506,6 +495,7 @@ $(document).ready(function() {
 			data: postData,
 			success: (data) => {
 				let url = "./palkkataulukko?yhtveto=&Tekija=" +
+					"&all_workers=" + all_workers +
 					"&lu_tai_tot=" + lu_tai_tot +
 					"&from=" + from +
 					"&to=" + to;
