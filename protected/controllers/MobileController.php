@@ -2708,7 +2708,10 @@ class MobileController extends Controller
 		$site = Yii::app()->createController('Site');
 		$criteria = $site[0]->etuSukunimiCriteria($criteria);
 		// only look for active employees
-		$criteria->condition = " aktiivinen=1 "; 
+		$all_workers = $req->getPost("all_workers", 0);
+		if($all_workers == 0){
+			$criteria->condition = " aktiivinen=1 ";
+		}
 		// add defined employee IDs to query, if any
 		if(!empty($employees)){
 			$ids = implode(",", $employees);
