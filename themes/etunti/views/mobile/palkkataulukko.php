@@ -16,7 +16,7 @@
 	<div class="tray-center">
 		<h2 class="myBgColors p10"> <i class="fa fa-eur"></i> <?php echo Yii::t('main', 'Palkkataulukko'); ?>
 
-			<?php if (!isset($_GET['all_workers'])) : ?>
+			<?php if (!isset($_GET['all_workers']) || $_GET['all_workers'] == 0) : ?>
 			<?php echo ', ' . Yii::t('main', 'aktiiviset työntekijät'); ?>
 			<?php echo CHtml::link(Yii::t('main', 'Näytä kaikki'), 'palkkataulukko?all_workers=1', array('class' => 'btn btn-primary')); ?>
 			<?php endif; ?>
