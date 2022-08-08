@@ -16,11 +16,6 @@
 	<div class="tray-center">
 		<h2 class="myBgColors p10"> <i class="fa fa-eur"></i> <?php echo Yii::t('main', 'Palkkataulukko'); ?>
 
-			<?php if (!isset($_GET['kaikki_tyontekijat'])) : ?>
-			<?php echo ', ' . Yii::t('main', 'aktiiviset työntekijät'); ?>
-			<?php echo CHtml::link(Yii::t('main', 'Näytä kaikki'), 'palkkataulukko?kaikki_tyontekijat', array('class' => 'btn btn-primary')); ?>
-			<?php endif; ?>
-
 			<!-- tulostus -->
 			<div class="pull-right">
 				<div class="form-inline">
@@ -82,7 +77,7 @@
 												<?php if (isset($_GET['all_workers']) && $_GET['all_workers'] == 0) echo 'selected'; ?>>
 												Aktiiviset työntekijät</option>
 											<option value="1"
-												<?php if (isset($_GET['allworkers']) && $_GET['all_workers'] == 1) echo 'selected'; ?>>
+												<?php if (isset($_GET['all_workers']) && $_GET['all_workers'] == 1) echo 'selected'; ?>>
 												Kaikki työntekijät</option>
 										</select>
 										<i class="arrow double"></i>
