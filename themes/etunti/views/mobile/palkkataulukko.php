@@ -166,7 +166,7 @@
 										<?php
 										$site = Yii::app()->createController('Site');
 										$activeOnly = 1;
-										if (isset($_GET['all_workeres']) && $_GET['all_workers'] == 1) {
+										if (isset($_GET['all_workers']) && $_GET['all_workers'] == 1) {
 											$activeOnly = null;
 										}
 										$tyontekiatLista = $site[0]->tyontekiatLista(
