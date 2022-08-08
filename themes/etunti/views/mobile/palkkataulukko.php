@@ -65,6 +65,8 @@
 			<?php
 			if (isset($_GET['all_workers']) && $_GET['all_workers'] == 1) {
 				echo '<input id="all_workers" type="hidden" name="all_workers" value="1">';
+			} else {
+				echo '<input id="all_workers" type="hidden" name="all_workers" value="0">';
 			}
 			?>
 
