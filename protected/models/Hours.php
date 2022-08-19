@@ -25,6 +25,11 @@
  * @property float $public_holiday_hours
  * @property float $unpaid_hours
  * @property string $message
+ * @property int $manual
+ * @property int $manual_creator_id
+ * @property float $weekly_holiday_hours
+ * @property float $unpaid_absence_hours
+ * @property float $child_sick_penalty_hours
  */
 class Hours extends DB2ActiveRecord
 {
@@ -45,7 +50,21 @@ class Hours extends DB2ActiveRecord
     const COFFEE_BREAK = 20;
     const VACATION = 11;
     const ABSENCE = 11;
-    
+
+    // map Tyovuorot (Workshift) special time types to
+    // the correct field in this (hours) Model
+    const SPECIAL_TIME_TYPE_MAP = [
+        Tyovuoroot::SPECIAL_TIME_TYPE_ANNUAL_LEAVE => "annual_leave_hours",
+        Tyovuoroot::SPECIAL_TIME_TYPE_SICK_PAID => "sick_leave_paid_hours",
+        Tyovuoroot::SPECIAL_TIME_TYPE_SICK_UNPAID => "sick_leave_unpaid_hours",
+        Tyovuoroot::SPECIAL_TIME_TYPE_CHILD_SICK => "child_sick_hours",
+        Tyovuoroot::SPECIAL_TIME_TYPE_PUBLIC_HOLIDAY => "public_holiday_hours",
+        Tyovuoroot::SPECIAL_TIME_TYPE_UNPAID_LEAVE => "unpaid_hours",
+        Tyovuoroot::SPECIAL_TIME_TYPE_WEEKLY_HOLIDAY => "weekly_holiday_hours",
+        Tyovuoroot::SPECIAL_TIME_TYPE_UNPAID_ABSENCE => "unpaid_absence_hours",
+        Tyovuoroot::SPECIAL_TIME_TYPE_CHILD_SICK_PENALTY => "child_sick_penalty_hours",
+    ];
+
 
     public static function model($className = __CLASS__)
     {
@@ -77,7 +96,7 @@ class Hours extends DB2ActiveRecord
         return [
             ["id, worker_id, shift_id, property_id, client_id, status", "numerical", "integerOnly" => true],
             ["starting_time, ending_time, google_distance, message, from_address", "safe"],
-            ["hours, evening_hours, night_hours, sunday_hours, holiday_hours, special_saturday_hours, sick_leave_paid_hours, sick_leave_unpaid_hours, annual_leave_hours, public_holiday_hours, child_sick_hours, unpaid_hours", "numerical"],
+            ["hours, evening_hours, night_hours, sunday_hours, holiday_hours, special_saturday_hours, sick_leave_paid_hours, sick_leave_unpaid_hours, annual_leave_hours, public_holiday_hours, child_sick_hours, unpaid_hours, weekly_holiday_hours, unpaid_absence_hours, child_sick_penalty_hours", "numerical"],
         ];
     }
 
@@ -169,19 +188,19 @@ class Hours extends DB2ActiveRecord
 
         // check if difference is smaller than the allowed delta
         if ($diffSeconds <= $autoAcceptDelta) {
-            
+
             $hId = $this->id;
             $salary = SalaryHours::model()->find("hours_id = $hId");
-            if($salary) {
+            if ($salary) {
                 $salary->approved = 1;
                 $salary->approver = 0;
                 $salary->editor_id = 0;
                 $salarySaved = $salary->save();
             }
-            
+
             $invoice = InvoiceHours::model()->find("hours_id = $hId");
             // only approve invoice hours if work is a normal work
-            if($invoice && $this->status == self::NORMAL_WORK_END) {
+            if ($invoice && $this->status == self::NORMAL_WORK_END) {
                 $invoice->approved = 1;
                 $invoice->approver = 0;
                 $invoice->editor_id = 0;
@@ -190,10 +209,10 @@ class Hours extends DB2ActiveRecord
             }
 
             $savedModels = [];
-            if($salarySaved) {
+            if ($salarySaved) {
                 $savedModels["salary"] = $salary;
             }
-            if($invoiceSaved) {
+            if ($invoiceSaved) {
                 $savedModels["invoice"] = $invoice;
             }
             return $savedModels;
@@ -216,10 +235,10 @@ class Hours extends DB2ActiveRecord
         $endDiff = abs($doneEnd->getTimestamp() - $plannedEnd->getTimestamp());
 
         if ($doneDiff <= $autoAcceptDelta && $endDiff <= $autoAcceptDelta) {
-            
+
             $hId = $this->id;
             $salary = SalaryHours::model()->find("hours_id = $hId");
-            if($salary) {
+            if ($salary) {
                 $salary->approved = 1;
                 $salary->approver = 0;
                 $salary->editor_id = 0;
@@ -227,7 +246,7 @@ class Hours extends DB2ActiveRecord
             }
             $invoice = InvoiceHours::model()->find("hours_id = $hId");
             // only approve invoice hours if work is a normal work
-            if($invoice && $this->status == self::NORMAL_WORK_END) {
+            if ($invoice && $this->status == self::NORMAL_WORK_END) {
                 $invoice->approved = 1;
                 $invoice->approver = 0;
                 $invoice->editor_id = 0;
@@ -236,10 +255,10 @@ class Hours extends DB2ActiveRecord
             }
 
             $savedModels = [];
-            if($salarySaved) {
+            if ($salarySaved) {
                 $savedModels["salary"] = $salary;
             }
-            if($invoiceSaved) {
+            if ($invoiceSaved) {
                 $savedModels["invoice"] = $invoice;
             }
             return $savedModels;
@@ -270,6 +289,27 @@ class Hours extends DB2ActiveRecord
             $this->sunday_hours = $this->calculateSundayHours($startDate, $endDate);
             $this->public_holiday_hours = $this->calculatePublicHoldayHours($startDate, $endDate);
             $this->special_saturday_hours = $this->calculateSpecialSaturdayHours($startDate, $endDate);
+            $this->sick_leave_paid_hours = 0;
+            $this->sick_leave_unpaid_hours = 0;
+            $this->child_sick_hours = 0;
+            $this->annual_leave_hours = 0;
+            $this->unpaid_hours = 0;
+            $this->unpaid_absence_hours = 0;
+            $this->weekly_holiday_hours = 0;
+            $this->child_sick_penalty_hours = 0;
+            // calculate hours that depend on the shift if possible
+            if ($this->shift_id) {
+                $shift = Tyovuoroot::model()->findByPk($this->shift_id);
+                if ($shift) {
+                    // see if the shift has a special time type defined
+                    if (in_array(
+                        $shift->tyoajanlaatu,
+                        Tyovuoroot::SPECIAL_TIME_TYPES
+                    )) {
+                        $this->calculateSpecialTimeTypeHours($startDate, $endDate, $shift->tyoajanlaatu);
+                    }
+                }
+            }
         }
     }
 
@@ -473,6 +513,25 @@ class Hours extends DB2ActiveRecord
     }
 
     /**
+     * Calculates shift dependent hours. For example
+     * if the attached shift was an annual leave shift,
+     * this method would add the hours between $start and $end to
+     * the annual leave hours field.
+     */
+    private function calculateSpecialTimeTypeHours(
+        DateTimeInterface $start,
+        DateTimeInterface $end,
+        string $specialTimeType
+    ) {
+        $mappedField = Hours::SPECIAL_TIME_TYPE_MAP[$specialTimeType] ?? null;
+        if ($mappedField !== null) {
+            // use the actual value of the $mappedField variable 
+            // as the field name (errors out if it doesn't exist)
+            $this->$mappedField = $this->calculateHoursBetween($start, $end);
+        }
+    }
+
+    /**
      * Returns an array of public holiday dates in YYYY-MM-DD (Y-m-d php) 
      * format for a given year.
      * @param string $year
@@ -534,35 +593,35 @@ class Hours extends DB2ActiveRecord
     public function copyFromToteutuneetOrMobile($model)
     {
         // starting and ending times can be either in H:i format or
-		// H:i:s format in $model. we'll figure out which one it is here.
-		$HIFormat = "d.m.Y H:i";
-		$HISFormat = "d.m.Y H:i:s";
+        // H:i:s format in $model. we'll figure out which one it is here.
+        $HIFormat = "d.m.Y H:i";
+        $HISFormat = "d.m.Y H:i:s";
 
-		$dateTimeFormat = "Y-m-d H:i:s";
+        $dateTimeFormat = "Y-m-d H:i:s";
         // parse start and end dates
         $startDate = DateTime::createFromFormat($HISFormat, $model->aloitan);
-		$endDate = DateTime::createFromFormat($HISFormat, $model->loppui);
-		if($startDate === false) {
-			$startDate = DateTime::createFromFormat($HIFormat, $model->aloitan);
-		}
-		if($endDate === false) {
-			$endDate = DateTime::createFromFormat($HIFormat, $model->loppui);
-		}
+        $endDate = DateTime::createFromFormat($HISFormat, $model->loppui);
+        if ($startDate === false) {
+            $startDate = DateTime::createFromFormat($HIFormat, $model->aloitan);
+        }
+        if ($endDate === false) {
+            $endDate = DateTime::createFromFormat($HIFormat, $model->loppui);
+        }
         // if both start and end dates are ok, create the new model
-        if($startDate !== false && $endDate !== false) {
+        if ($startDate !== false && $endDate !== false) {
             $hourModel = new Hours();
             // copy over stuff from $model
             $hourModel->starting_time = $startDate->format($dateTimeFormat);
-			$hourModel->ending_time = $endDate->format($dateTimeFormat);
+            $hourModel->ending_time = $endDate->format($dateTimeFormat);
 
             $hourModel->worker_id = $model->tid;
             $hourModel->status = $model->status;
             $hourModel->property_id = $model->kohdenID;
-            if(isset($model->viesti) && strlen($model->viesti) > 0) {
+            if (isset($model->viesti) && strlen($model->viesti) > 0) {
                 $hourModel->message = $model->viesti;
             }
             $hourModel->shift_id = $model->tv_id;
-            if(isset($model->my_location) && strlen($model->my_location) > 0) {
+            if (isset($model->my_location) && strlen($model->my_location) > 0) {
                 $hourModel->gps_location = $model->my_location;
             }
 
