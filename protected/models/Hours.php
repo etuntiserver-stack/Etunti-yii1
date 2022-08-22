@@ -536,21 +536,26 @@ class Hours extends DB2ActiveRecord
      * format for a given year.
      * @param string $year
      */
-    private function holidaysForYear(string $year): array
+    public function holidaysForYear(string $year): array
     {
-        // Easter timestamp is in UTC time, so dates need to be adjusted +1 day.
-        // (easter_date returns previous day 21:00).
-        $easter_timestamp = easter_date($year);
+        // cross-timezone compatible calculations, see notes in:
+        // https://www.php.net/manual/en/function.easter-date.php
+        $base = new DateTime("$year-03-21");
+        $days = easter_days($year);
+        // P = period
+        // D = days
+        $base->add(new DateInterval("P{$days}D"));
+        $easter_timestamp = $base->getTimestamp();
         return [
             "$year-01-01", // uv
             "$year-01-06", // loppiainen
-            date('Y-m-d', strtotime('-1day', $easter_timestamp)), // pitkäperjantai
-            date('Y-m-d', strtotime('+1day', $easter_timestamp)), // pääsiäispäivä 1
-            date('Y-m-d', strtotime('+2day', $easter_timestamp)), // pääsiäispäivä 2
+            date('Y-m-d', strtotime('-2day', $easter_timestamp)), // pitkäperjantai
+            date('Y-m-d', strtotime('+0day', $easter_timestamp)), // pääsiäispäivä 1
+            date('Y-m-d', strtotime('+1day', $easter_timestamp)), // pääsiäispäivä 2
             "$year-05-01", // vappu
             date('Y-m-d', strtotime("second sunday of may $year")), // äitienpäivä (ei virallinen)
-            date('Y-m-d', strtotime('+40day', $easter_timestamp)), // helatorstai
-            date('Y-m-d', strtotime('+50day', $easter_timestamp)), // helluntai
+            date('Y-m-d', strtotime('+39day', $easter_timestamp)), // helatorstai
+            date('Y-m-d', strtotime('+49day', $easter_timestamp)), // helluntai
             date('Y-m-d', strtotime('next friday', strtotime("$year-06-18"))), // juhannusaatto (ei virallinen)
             date('Y-m-d', strtotime('next saturday', strtotime("$year-06-19"))), // juhannus
             date('Y-m-d', strtotime('next saturday', strtotime("$year-10-30"))), // pyhäinpäivä
@@ -569,20 +574,27 @@ class Hours extends DB2ActiveRecord
      */
     private function specialSaturdaysForYear(string $year): array
     {
-        $easter_timestamp = easter_date($year);
+        // cross-timezone compatible calculations, see notes in:
+        // https://www.php.net/manual/en/function.easter-date.php
+        $base = new DateTime("$year-03-21");
+        $days = easter_days($year);
+        // P = period
+        // D = days
+        $base->add(new DateInterval("P{$days}D"));
+        $easter_timestamp = $base->getTimestamp();
         return [
             // new years weeks saturday
             date("Y-m-d", strtotime("saturday this week", strtotime("$year-01-01"))),
             // loppiainen weeks saturday
             date("Y-m-d", strtotime("saturday this week", strtotime("$year-01-06"))),
             // pääsiäislauantai
-            date("Y-m-d", $easter_timestamp),
+            date("Y-m-d", strtotime("saturday this week", $easter_timestamp)),
             // vappu weeks saturday
             date("Y-m-d", strtotime("saturday this week", strtotime("$year-05-01"))),
             // helatorstai weeks saturday
-            date("Y-m-d", strtotime("saturday this week", strtotime("+40day", $easter_timestamp))),
+            date("Y-m-d", strtotime("saturday this week", strtotime("+39day", $easter_timestamp))),
             // itssenäisyyspäivä viikon lauantai
-            date("Y-m-d", strtotime("saturday this week", strtotime("$year-12-06")))
+            date("Y-m-d", strtotime("saturday this week", strtotime("$year-12-06"))),
         ];
     }
 
