@@ -2752,10 +2752,11 @@ class MobileController extends Controller
 	 * This action is called from palkkataulukko.php to automatically
 	 * select all employees that belong to selected workgroups (työryhmä).
 	 * 
-	 * The action returns an array of unique active employee IDs.
+	 * The action returns an array of unique employee IDs (active or all).
 	 */
 	public function actionSelectedEmployees() {
 		$workGroupIds = Yii::app()->request->getParam("workGroups", []);
+		$allWorkers = Yii::app()->request->getParam("allWorkers", 1);
 		$workGroups = array_column(Valikkoot::model()->findAllByPk($workGroupIds), "value", "value");
 		// check if "Työryhmättömät" is checked,
 		// and if it is, add it to the $workGroups map
@@ -2765,7 +2766,7 @@ class MobileController extends Controller
 		// build query
 		$criteria = new CDbCriteria();
 		$criteria->select= " id, tyoryhma";
-		$criteria->condition = " aktiivinen=1 ";
+		$criteria->condition = " aktiivinen=" . $allWorkers;
 
 		$employees = Tyontekijat::model()->findAll($criteria);
 
