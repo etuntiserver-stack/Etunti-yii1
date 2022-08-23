@@ -2766,7 +2766,7 @@ class MobileController extends Controller
 		// build query
 		$criteria = new CDbCriteria();
 		$criteria->select= " id, tyoryhma";
-		$criteria->condition = " aktiivinen=" . $allWorkers;
+		if($allWorkers == 0) $criteria->condition = " aktiivinen=1";
 
 		$employees = Tyontekijat::model()->findAll($criteria);
 
