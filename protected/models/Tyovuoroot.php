@@ -32,6 +32,33 @@ class Tyovuoroot extends DB2ActiveRecord
 	public $suunnittellut;
 	public $kpl;
 
+	// these special time types are also from yii1, some were
+	// hardcoded and others were defined via Valikkoot model
+	// with select_type 'tyoajanlaatu'
+	const SPECIAL_TIME_TYPE_ANNUAL_LEAVE = "(VL) Vuosiloma";
+	const SPECIAL_TIME_TYPE_WEEKLY_HOLIDAY = "(VKL) Viikkolomapäivä";
+	const SPECIAL_TIME_TYPE_SICK_PAID = "(SL) Sairaus Palkallinen";
+	const SPECIAL_TIME_TYPE_SICK_UNPAID = "(SPL) Sairaus Palkaton";
+	const SPECIAL_TIME_TYPE_CHILD_SICK = "(LS) Lapsen sairaus";
+	const SPECIAL_TIME_TYPE_PUBLIC_HOLIDAY = "(AP) Arkipyhä";
+	const SPECIAL_TIME_TYPE_UNPAID_LEAVE = "(PV) Palkaton vapaa";
+	// I couldn't figure out a better word for "karenssi"
+	const SPECIAL_TIME_TYPE_CHILD_SICK_PENALTY = "(LSK) LS (karenssi)";
+	const SPECIAL_TIME_TYPE_UNPAID_ABSENCE = "(PP) Palkaton poissaolo";
+
+	// this array should contain all special time types written above.
+	const SPECIAL_TIME_TYPES = [
+		self::SPECIAL_TIME_TYPE_ANNUAL_LEAVE,
+		self::SPECIAL_TIME_TYPE_WEEKLY_HOLIDAY,
+		self::SPECIAL_TIME_TYPE_SICK_PAID,
+		self::SPECIAL_TIME_TYPE_SICK_UNPAID,
+		self::SPECIAL_TIME_TYPE_CHILD_SICK,
+		self::SPECIAL_TIME_TYPE_PUBLIC_HOLIDAY,
+		self::SPECIAL_TIME_TYPE_UNPAID_LEAVE,
+		self::SPECIAL_TIME_TYPE_CHILD_SICK_PENALTY,
+		self::SPECIAL_TIME_TYPE_UNPAID_ABSENCE,
+	];
+
 
 	/**
 	 * Returns the static model of the specified AR class.
