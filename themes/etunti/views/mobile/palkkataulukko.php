@@ -548,8 +548,8 @@ $(document).ready(function() {
 		// groups will be null if there's nothing selected,
 		// default to empty array
 		const groups = $(".tyoryhmatMulti").val() ?? [];
-
-		let url = "./selectedemployees?";
+		const allWorkers = $("#all_workers").val();
+		let url = "./selectedemployees?allWorkers=" + allWorkers + "&";
 		for (const group of groups) {
 			url += "workGroups[]=" + group + "&";
 		}
