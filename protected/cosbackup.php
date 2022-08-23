@@ -9,14 +9,23 @@
 class COS
 {
 	private const API_KEY = '0Hns83I5xf2KAHBH0yb9iwdqF-8Ul9zef6-SzV8zjXzL';
+
+	// Bucket etuntivs
+	//private $ResourceInstanceID = 'crn:v1:bluemix:public:cloud-object-storage:global:a/852e56fec3654b9ca7428b1e0600cfe0:7c79c20e-8197-41b1-a795-82a7296925fe::';
+	//private $ServiceEndpoint = 's3.ap.cloud-object-storage.appdomain.cloud';
+	//private $DefaultBucketEndpoint = 's3.eu-de.cloud-object-storage.appdomain.cloud';
+	//private $DefaultBucket = "etuntivs";
+
+	// Bucket etunti-backup (with 7 day expiration)
 	private $ResourceInstanceID = 'crn:v1:bluemix:public:cloud-object-storage:global:a/852e56fec3654b9ca7428b1e0600cfe0:7c79c20e-8197-41b1-a795-82a7296925fe::';
-	private $ServiceEndpoint = 's3.ap.cloud-object-storage.appdomain.cloud';
-	private $DefaultBucketEndpoint = 's3.eu-de.cloud-object-storage.appdomain.cloud';
-	private $DefaultBucket = "etuntivs";
+	private $ServiceEndpoint = 's3.private.eu-de.cloud-object-storage.appdomain.cloud';
+	private $DefaultBucketEndpoint = 's3.private.eu-de.cloud-object-storage.appdomain.cloud';
+	private $DefaultBucket = "etunti-backup";
 	public $token;
 
 	public function __construct()
-	{ }
+	{
+	}
 
 	public function refreshToken()
 	{
@@ -235,19 +244,17 @@ class COS
 
 function error($key, $msg)
 {
-	echo json_encode(['error' => $key, 'message' => $msg]);
+	echo "Error: $msg\n";
+	error_log("Error in Etunti php backup script - $key: $msg");
 	exit;
 }
 
 // Settings
-// $error_mail = 'laptopsr@gmail.com'; // not used yet.
-$db_host = '10.215.25.9';
-$db_user = 'admin';
-$db_pw = 'aJIkPxPAb3yDFngr';
-$db_port = 3306;
+//$error_mail = 'laptopsr@gmail.com'; // not used yet.
+$db_skip = ['information_schema', 'mysql', 'performance_schema', 'sys', 'phpmyadmin'];
 $db_host = 'localhost';
-$db_user = 'root';
-$db_pw = '111111';
+$db_user = 'etunti';
+$db_pw = 'MfgTr1Bl8AAyid8Puq0g';
 $db_port = 3306;
 
 // Initialize COS - Using delfault settings for COS (default bucket: etuntivs)
@@ -256,41 +263,77 @@ $cos->refreshToken();
 
 // Get options (arguments).
 $arg_domain = '';
-$val = getopt('d::', ['domain::']);
+$arg_full = false;
+$val = getopt('d::f::', ['domain::', 'full::']);
 if (count($val) <= 0)
-	error('error_no_args', "Error: no arguments provided");
-$key = array_keys($val)[0];
-$arg = array_shift($val);
-if (in_array($key, ['domain', 'd']))
-	$arg_domain = $arg;
+	error('error_no_args', "no arguments provided\n");
+while (count($val) > 0) {
+	$key = array_keys($val)[0];
+	$arg = array_shift($val);
+	switch ($key) {
+		case 'domain':
+		case 'd':
+			$arg_domain = $arg;
+			break;
+		case 'full':
+		case 'f':
+			$arg_full = $arg == true;
+			break;
+	}
+}
 
 // If no options, do nothing. This is for security reasons.
-if (empty($arg_domain))
-	error('error_no_domain', "Error: no action (provide domain or full=1)");
+if (empty($arg_domain) && !$arg_full)
+	error('error_no_action', "no action (provide domain or full=1)\n");
 
-// Initialize database connection. This is to ensure schema exists.
+// Initialize database connection.
 if (!$db = mysqli_connect($db_host, $db_user, $db_pw, 'information_schema', $db_port))
 	error('db_connect_error', 'unable to connect to the database.');
-$schema_query = mysqli_query($db, "SELECT schema_name FROM SCHEMATA where schema_name='$arg_domain';");
-if (!$schema_query || $schema_query->num_rows <= 0) {
-	$db->close();
-	error('db_invalid_domain', "Database $arg_domain not found.");
+
+// Build list of dbs to backup.
+$schemas = [];
+if (empty($arg_domain)) {
+	// Domain not provided. This means, full=1 was provided.
+	// Get a list of schemas from the host, excluding those in $db_skip.
+	$schema_cmd = mysqli_query($db, "SELECT schema_name FROM information_schema.SCHEMATA;");
+	if (!$schema_cmd)
+		error('db_schemata_error', 'cannot get a list of databases from information_schema.');
+
+	// Process results.
+	while ($schema = $schema_cmd->fetch_row())
+		if (!in_array($schema[0], $db_skip)) $schemas[] = $schema[0];
+
+	// If no schemas, exit.
+	if (count($schemas) <= 0)
+		error('error_no_dbs', 'no databases to backup.');
+} else {
+	$schemas[] = $arg_domain;
 }
-$db->close();
 
-// Dump settings
-$key = "$arg_domain-" . date('Ymd-His') . ".sql.gz";
-$fn = "/tmp/$key";
+// Do mysqldump and upload to COS, one by one.
+foreach ($schemas as $schema) {
+	// Parameters
+	$key = date('Ymd-His-') . $schema . ".sql.gz";
+	$fn = "/tmp/$key";
 
-// Perform mysqldump
-exec("mysqldump -h$db_host -u$db_user -p$db_pw -P $db_port $arg_domain 2>/dev/null | gzip -c > $fn");
-$data = file_get_contents($fn);
-unlink($fn);
+	// Perform mysqldump
+	echo "Dumping $schema\n";
+	exec("mysqldump -h$db_host -u$db_user -p$db_pw -P $db_port --single-transaction --quick $schema 2>/dev/null | gzip -c > $fn");
+	$data = file_get_contents($fn);
+	unlink($fn);
 
-// If data is empty, mysqldump has failed, for some reason.
-if (empty($data))
-	error('error_dump_empty', "mysqldump output is empty for domain $schema.");
+	// If data is empty, mysqldump has failed, for some reason.
+	if (empty($data))
+		error('error_dump_empty', "mysqldump output is empty for domain $schema.");
 
-// Upload to COS.
-if (!empty($result = $cos->uploadObjectData($data, $key)))
-	error('error_upload_failed', "cloud object storage error: $result");
+	// Upload to COS.
+	echo "Uploading $schema dump to COS\n";
+	if (!empty($result = $cos->uploadObjectData($data, $key)))
+		error('error_upload_failed', "cloud object storage error: $result");
+}
+
+$log_handle = fopen('/var/log/etunti-backup-cos', 'a');
+if ($log_handle) {
+	fwrite($log_handle, 'Etunti backup finished');
+	fclose($log_handle);
+}
