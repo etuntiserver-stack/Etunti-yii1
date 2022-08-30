@@ -132,10 +132,10 @@ class Toteutuneet extends DB2ActiveRecord
 		return array(
 			//array('kid, asiakas_num, time, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, tyoajanlaatu, tyoajanmerkinta', 'required'),
 			array('kid, requests, kohdenID, tid, status, admin, sairaus, laskutetaan, tuoteID, tv_id, deleted, palkanlaskentaan, laskurivi_id, salary_id, invoice_id', 'numerical', 'integerOnly'=>true),
-			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id, tekijan_nimi', 'length', 'max'=>50),
+			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id', 'length', 'max'=>50),
 			array('imei, asiakas_hyvaksy, sim_serial_number, kohde_kannasta, hyvaksytty, tyoajanlaatu, tyoajanmerkinta, gps_enabled, app_platform', 'length', 'max'=>100),
 			array('my_location, tietoja, tyo_erittelyt, app_aloitus_destination_checker, app_lopetus_destination_checker', 'safe'),
-			array('osoite', 'length', 'max'=>255),
+			array('osoite, tekijan_nimi', 'length', 'max'=>255),
 			array('aloitan, loppui, etaisyys', 'length', 'max'=>20),
 			array('viesti', 'length', 'max'=>250),
 			// The following rule is used by search().
