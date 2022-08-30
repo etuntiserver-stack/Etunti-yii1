@@ -164,7 +164,7 @@ class ToteutuneetController extends Controller
 					$did = $tv->id.'_'.date("Ymd", strtotime($tv->pvm)).'_'.$tv->tid;
 					echo json_encode(array('OK'=>$mobiili, 'did'=>$did));
 				} else {
-					echo json_encode(array('OK'=>getErrors($mobiili)));
+					echo json_encode(array('OK'=>$mobiili->getErrors($mobiili)));
 				}
 				exit;
 		}
