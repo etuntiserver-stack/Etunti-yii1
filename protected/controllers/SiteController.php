@@ -2333,7 +2333,7 @@ class SiteController extends Controller
 	{
 
 		$term = trim($term);
-		$criteria = new CDBcriteria();
+		$criteria = new CDbCriteria();
 
 		if(is_array(json_decode($sarake, true)))
 		{
