@@ -37,7 +37,7 @@ ini_set("max_execution_time", "60");
 				$placeholder = 'Asiakas';
 				$postvalue = '';
 				if(isset($_GET[$sarake])){ $postvalue = $_GET[$sarake]; }
-		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
+		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','etunimi', 'sukunimi'), $placeholder, $postvalue);
 			    ?>
 			    <!-- Autocomplete -->
 
