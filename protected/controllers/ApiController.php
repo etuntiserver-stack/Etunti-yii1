@@ -2204,10 +2204,13 @@ public function actionImei($dom)
 			}
 		}
 		
+		if($client->no_phonenumber) {
+			return;
+		}
 
 		// get clients phone number
 		$phoneNumber = $client->puhelin;
-		if(!$phoneNumber) {
+		if(!$phoneNumber && !$client->no_phonenumber) {
 			throw new Exception("Phone number is not defined! Client ID: " . $client->id);
 		}
 		// take a substring of the phone number, which doesn't include the
