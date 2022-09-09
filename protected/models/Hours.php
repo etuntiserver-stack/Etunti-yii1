@@ -300,13 +300,14 @@ class Hours extends DB2ActiveRecord
             // calculate hours that depend on the shift if possible
             if ($this->shift_id) {
                 $shift = Tyovuoroot::model()->findByPk($this->shift_id);
-                if ($shift) {
+                if ($shift && $shift->tyoajanlaatu) {
                     // see if the shift has a special time type defined
+                    $specialTimeTypeName = explode("/", $shift->tyoajanlaatu)[0];
                     if (in_array(
                         $shift->tyoajanlaatu,
                         Tyovuoroot::SPECIAL_TIME_TYPES
                     )) {
-                        $this->calculateSpecialTimeTypeHours($startDate, $endDate, $shift->tyoajanlaatu);
+                        $this->calculateSpecialTimeTypeHours($startDate, $endDate, $specialTimeTypeName);
                     }
                 }
             }
