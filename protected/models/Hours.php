@@ -58,7 +58,7 @@ class Hours extends DB2ActiveRecord
         Tyovuoroot::SPECIAL_TIME_TYPE_SICK_PAID => "sick_leave_paid_hours",
         Tyovuoroot::SPECIAL_TIME_TYPE_SICK_UNPAID => "sick_leave_unpaid_hours",
         Tyovuoroot::SPECIAL_TIME_TYPE_CHILD_SICK => "child_sick_hours",
-        Tyovuoroot::SPECIAL_TIME_TYPE_PUBLIC_HOLIDAY => "public_holiday_hours",
+        Tyovuoroot::SPECIAL_TIME_TYPE_PUBLIC_HOLIDAY => "public_holiday_absence_hours",
         Tyovuoroot::SPECIAL_TIME_TYPE_UNPAID_LEAVE => "unpaid_hours",
         Tyovuoroot::SPECIAL_TIME_TYPE_WEEKLY_HOLIDAY => "weekly_holiday_hours",
         Tyovuoroot::SPECIAL_TIME_TYPE_UNPAID_ABSENCE => "unpaid_absence_hours",
