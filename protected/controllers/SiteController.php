@@ -1111,7 +1111,7 @@ class SiteController extends Controller
 				$token = sha1(uniqid(time().$model->adm_nimi, true));
 				Administrators::model()->updateByPk($model->id, array('adm_salasana'=>'', 'token' => $token));
 				$message = '';
-				$message .= '<p>Aktivoi käyttäjätunnuksesi <a href="'.Yii::app()->getBaseUrl(true).'/index.php/site/confirm?token='.$token.'">tästä</a><br>';
+				$message .= '<p>Aktivoi käyttäjätunnuksesi <a href="'.Yii::app()->getBaseUrl(true).'/index.php/site/confirm?token='.$token.'&domain='.$domain.'">tästä</a><br>';
 
 				$ft = FirmanTiedot::model()->findbypk(1);
 
