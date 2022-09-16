@@ -11,6 +11,13 @@ if(isset($model->id))
 $model->hinta = str_replace(",",".",$model->hinta);
 
 if(!isset($model->id)){ $model->alv = 24; }
+
+$useBillingAddress = true;
+		
+if($asiakas->k_osoite && $asiakas->k_postinumero && $asiakas->k_kaupunki) {
+	$useBillingAddress = false;
+}
+
 ?>
 
 <div class="row">
@@ -52,19 +59,19 @@ if(!isset($model->id)){ $model->alv = 24; }
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'osoite'); ?>
-		<?php echo $form->textField($model,'osoite',array('value'=>$asiakas->osoite, 'size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'osoite',array('value'=>$useBillingAddress ? $asiakas->osoite : $asiakas->k_osoite, 'size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'osoite'); ?>
 	</div>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'pnumero'); ?>
-		<?php echo $form->textField($model,'pnumero',array('value'=>$asiakas->postinumero, 'size'=>7,'maxlength'=>7,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'pnumero',array('value'=>$useBillingAddress ? $asiakas->postinumero : $asiakas->k_postinumero, 'size'=>7,'maxlength'=>7,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'pnumero'); ?>
 	</div>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kaupunki'); ?>
-		<?php echo $form->textField($model,'kaupunki',array('value'=>$asiakas->kaupunki, 'size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'kaupunki',array('value'=>$useBillingAddress ? $asiakas->kaupunki : $asiakas->k_kaupunki, 'size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'kaupunki'); ?>
 	</div>
 
