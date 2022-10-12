@@ -108,9 +108,7 @@ function autoPassiveClients() {
         print_r("<br>Error while saving settings disable<br>");
         print_r($asetukset->getErrors());
     }
-    // remove "jatkuva leasing", "vanha proaqua", 
-    // "toimitila" and "vanha proaqua 0" work groups
-    // add "passiivinen automaatio" group
+    // workgroups
     // IDs are from sivex_selects
     // jatkuva leasing 	= 94
     // vanha proaqua 	= 95
@@ -123,7 +121,8 @@ function autoPassiveClients() {
         // remove the groups we don't want, we'll also include 176 here,
         // if for some reason the same client is in this list twice, it won't have that work group
         // multiple times in it's data.
-        $newGroups = array_diff($groups, ["94", "95", "107", "129", "176"]);
+        //$newGroups = array_diff($groups, ["94", "95", "107", "129", "176"]);
+        $newGroups = array_diff($groups, ["176"]);
         // add passiivinen automaatio
         $newGroups[] = "176";
         $client->aktiivinen = 0;
