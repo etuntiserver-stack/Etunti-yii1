@@ -386,7 +386,7 @@ class KohteetController extends Controller
 				$model=$this->loadModel($model->id);
 			        $latAuto = '';
 			        $lngAuto = '';
-			    	$coordinates = $this->getlatlong($model->osoite);
+			    	$coordinates = $this->getlatlong($model->osoite . ', ' . $model->pnumero . ' ' . $model->kaupunki);
 				if(isset($coordinates->results[0]->geometry->location->lat))
 			        $latAuto = $coordinates->results[0]->geometry->location->lat.',';
 				if(isset($coordinates->results[0]->geometry->location->lng))
@@ -439,7 +439,7 @@ class KohteetController extends Controller
 		// <-- Koordinatiit
 	        $latAuto = '';
 	        $lngAuto = '';
-	    	$coordinates = $this->getlatlong($model->osoite);
+	    	$coordinates = $this->getlatlong($model->osoite . ', ' . $model->pnumero . ' ' . $model->kaupunki);
 		if($coordinates and isset($coordinates->results[0]->geometry->location->lat))
 	        $latAuto = $coordinates->results[0]->geometry->location->lat.',';
 		if($coordinates and isset($coordinates->results[0]->geometry->location->lng))
