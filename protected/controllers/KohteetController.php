@@ -269,6 +269,24 @@ class KohteetController extends Controller
 				}
 				//     LOG -->
 
+				$newLat = null;
+				$newLng = null;
+				$coordinates = $this->getlatlong($model->osoite . ', ' . $model->pnumero . ' ' . $model->kaupunki);
+
+				if(isset($coordinates->results[0]->geometry->location->lat)) {
+					$newLat = $coordinates->results[0]->geometry->location->lat;
+				}
+				if(isset($coordinates->results[0]->geometry->location->lng)) {
+					$newLng = $coordinates->results[0]->geometry->location->lng;
+				}
+
+				if(isset($model->id) and $newLat and $newLng) {
+					Kohteet::model()->updateBypk($model->id, [
+						"location_latitude" => $newLat,
+						"location_longitude" => $newLng
+					]);
+				}
+
 				Yii::app()->user->setFlash('success', "Tallennettu.");
 				$this->redirect(array('index'));
 			}
@@ -386,14 +404,31 @@ class KohteetController extends Controller
 				$model=$this->loadModel($model->id);
 			        $latAuto = '';
 			        $lngAuto = '';
+					$newLat = null;
+					$newLng = null;
 			    	$coordinates = $this->getlatlong($model->osoite . ', ' . $model->pnumero . ' ' . $model->kaupunki);
-				if(isset($coordinates->results[0]->geometry->location->lat))
+				if(isset($coordinates->results[0]->geometry->location->lat)) {
+					$newLat = $coordinates->results[0]->geometry->location->lat;
 			        $latAuto = $coordinates->results[0]->geometry->location->lat.',';
-				if(isset($coordinates->results[0]->geometry->location->lng))
-			        $lngAuto = $coordinates->results[0]->geometry->location->lng;
+				}
+				
+				if(isset($coordinates->results[0]->geometry->location->lng)) {
+					$newLng = $coordinates->results[0]->geometry->location->lng;
+					$lngAuto = $coordinates->results[0]->geometry->location->lng;
+				}
+			        
 			
 				if( isset($model->id) and empty($model->gps_sijainti) and !empty($latAuto.$lngAuto))
-					Kohteet::model()->updateBypk($model->id, array('gps_sijainti' => $latAuto.$lngAuto));
+				{
+					Kohteet::model()->updateBypk($model->id, 
+						array(
+							'gps_sijainti' => $latAuto.$lngAuto,
+							"location_latitude" => $newLat,
+							"location_longitude" => $newLng,
+						)
+					);
+				}
+
 				// Koordinatiit -->
 
 				Yii::app()->user->setFlash('success', "Tallennettu.");
@@ -439,14 +474,28 @@ class KohteetController extends Controller
 		// <-- Koordinatiit
 	        $latAuto = '';
 	        $lngAuto = '';
+			$newLat = null;
+			$newLng = null;
 	    	$coordinates = $this->getlatlong($model->osoite . ', ' . $model->pnumero . ' ' . $model->kaupunki);
-		if($coordinates and isset($coordinates->results[0]->geometry->location->lat))
-	        $latAuto = $coordinates->results[0]->geometry->location->lat.',';
-		if($coordinates and isset($coordinates->results[0]->geometry->location->lng))
-	        $lngAuto = $coordinates->results[0]->geometry->location->lng;
+		if($coordinates and isset($coordinates->results[0]->geometry->location->lat)) {
+			$newLat = $coordinates->results[0]->geometry->location->lat;
+			$latAuto = $coordinates->results[0]->geometry->location->lat.',';
+		}
+	       
+		if($coordinates and isset($coordinates->results[0]->geometry->location->lng)) {
+			$newLng = $coordinates->results[0]->geometry->location->lng;
+			$lngAuto = $coordinates->results[0]->geometry->location->lng;
+		}
+	    
 	
 		if( isset($model->id) and empty($model->gps_sijainti) and !empty($latAuto) and !empty($lngAuto))
-			Kohteet::model()->updateBypk($model->id, array('gps_sijainti' => $latAuto.$lngAuto));
+		Kohteet::model()->updateBypk($model->id, 
+			array(
+				'gps_sijainti' => $latAuto.$lngAuto,
+				"location_latitude" => $newLat,
+				"location_longitude" => $newLng,
+			)
+		);
 		// Koordinatiit -->
 
 
