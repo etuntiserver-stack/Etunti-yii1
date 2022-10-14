@@ -204,7 +204,7 @@ class Hours extends DB2ActiveRecord
                 $invoice->approved = 1;
                 $invoice->approver = 0;
                 $invoice->editor_id = 0;
-                $invoice->roundToNext15Minutes();
+                //$invoice->roundToNext15Minutes();
                 $invoiceSaved = $invoice->save();
             }
 
@@ -250,7 +250,7 @@ class Hours extends DB2ActiveRecord
                 $invoice->approved = 1;
                 $invoice->approver = 0;
                 $invoice->editor_id = 0;
-                $invoice->roundToNext15Minutes();
+                //$invoice->roundToNext15Minutes();
                 $invoiceSaved = $invoice->save();
             }
 
