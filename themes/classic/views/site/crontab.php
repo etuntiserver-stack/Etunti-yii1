@@ -1,4 +1,5 @@
 <?php
+set_time_limit(300);
 header("Content-Type: text/html; charset=utf-8");
 
 // Functionality was limited to domain 'demo' when called locally.
