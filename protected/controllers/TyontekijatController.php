@@ -1020,6 +1020,7 @@ class TyontekijatController extends Controller
 	*/
 ;
 // <-- XML
+$jobBeginDate = $tila == "edit" ? '' :  '<jobbegindate format="ansi">'.date("Y-m-d", strtotime($modelTyosuhteet->alku)).'</jobbegindate>';
 $xml = '
 <root>
   <employee>
@@ -1040,7 +1041,7 @@ $xml = '
       <language>FI</language>
       '.$lisat.'
       <profession>'.$model->ammattinimike.'</profession>
-      <jobbegindate format="ansi">'.date("Y-m-d", strtotime($modelTyosuhteet->alku)).'</jobbegindate>
+	  '. $jobBeginDate .'
       <payrollrulegroupname>'.$payrollrulegroupname.'</payrollrulegroupname>
       <bankaccountnumber>'.$model->tekijan_pankkitili.'</bankaccountnumber>
       <bankidentificationcode>'.$model->tekijan_konttori.'</bankidentificationcode>
