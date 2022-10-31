@@ -1167,25 +1167,30 @@ class MobileController extends Controller
 			$hour->shift_id = $model->tv_id;
 			$hour->calculateDurations();
 
-			$hour->save();
+			$saveResult = $hour->save();
+			if($saveResult !== false) {
+				[
+					"salary" => $salaryHour,
+					"invoice" => $invoiceHour,
+				] = $saveResult;
 
-			$salaryHour = new SalaryHours();
-			$salaryHour->attributes = $hour->attributes;
-			unset($salaryHour->id);
-			$salaryHour->hours_id = $hour->id;
-			$salaryHour->approved = 0;
-			$salaryHour->version = 1;
+				$salaryHour->approved = 0;
+				$salaryHour->version = 1;
+				$invoiceHour->approved = 0;
+				$invoiceHour->version = 1;
+				$invoiceHour->invoiced = 0;
 
-			$invoiceHour = new InvoiceHours();
-			$invoiceHour->attributes = $salaryHour->attributes;
-			$invoiceHour->invoiced = 0;
-			
-			$salaryHour->save();
-			$invoiceHour->save();
-
-			$model->hours_id = $hour->id;
-			$model->salary_id = $salaryHour->id;
-			$model->invoice_id = $invoiceHour->id;
+				$salaryHour->save();
+				$invoiceHour->save();
+	
+				$model->hours_id = $hour->id;
+				$model->salary_id = $salaryHour->id;
+				$model->invoice_id = $invoiceHour->id;
+			} else {
+				Yii::log("Failed to save hour model: " 
+					. json_encode($hour->getErrors()), 
+					CLogger::LEVEL_ERROR, __METHOD__);
+			}
 
 			if($model->save()){
 			   $did = date("Ymd",strtotime($model->aloitan));
@@ -1303,23 +1308,24 @@ class MobileController extends Controller
 				// create v2 hours
 				$hour = new Hours();
 				$hour = $hour->copyFromToteutuneetOrMobile($model);
-				$hour->save();
+				$saveResult = $hour->save();
+				if($saveResult !== false) {
+					[
+						"salary" => $salaryHour,
+						"invoice" => $invoiceHour
+					] = $saveResult;
+					$salaryHour->attributes = $hour->attributes;
+					$invoiceHour->attributes = $hour->attributes;
+					
+					$salaryHour->save();
+					$invoiceHour->save();
+	
+					$model->hours_id = $hour->id;
+					$model->salary_id = $salaryHour->id;
+					$model->invoice_id = $invoiceHour->id;
+				}
 
-				$salaryHour = new SalaryHours();
-				$salaryHour = $salaryHour->copyFromToteutuneetOrMobile($model);
-				$salaryHour->hours_id = $hour->id;
 
-				$invoiceHour = new InvoiceHours();
-				$invoiceHour = $invoiceHour->copyFromToteutuneetOrMobile($model);
-				$salaryHour->hours_id = $hour->id;
-
-				
-				$salaryHour->save();
-				$invoiceHour->save();
-
-				$model->hours_id = $hour->id;
-				$model->salary_id = $salaryHour->id;
-				$model->invoice_id = $invoiceHour->id;
 
 				if($model->save())
 				{
@@ -1444,7 +1450,7 @@ class MobileController extends Controller
 			}
 		}
 		if(isset($model->invoice_id)) {
-			$invoice = InvoiceHours::model()->findAllByPk($model->invoice_id);
+			$invoice = InvoiceHours::model()->findByPk($model->invoice_id);
 			if($invoice) {
 				$invoice->delete();
 				$invoice->deleteOldVersions($invoice);

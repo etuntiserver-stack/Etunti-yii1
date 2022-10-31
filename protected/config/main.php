@@ -137,10 +137,22 @@ if (IS_LOCAL) {
   $for_log = [
     [
       'class' => 'CFileLogRoute',
-      'levels' => 'error, warning', //'trace, info, error, warning, vardump'
+      'levels' => 'info, error, warning', //'trace, info, error, warning, vardump'
       'enabled' => YII_DEBUG,
+      'maxFileSize' => 100000,
+      'maxLogFiles' => 3,
       //'categories'=>'system.*',
-    ], [
+    ], 
+    [
+        'class' => 'CFileLogRoute',
+        'levels' => 'error', //'trace, info, error, warning, vardump'
+        'enabled' => YII_DEBUG,
+        'maxFileSize' => 100000,
+        'maxLogFiles' => 3,
+        'logFile' => 'runtime-errors.log',
+        //'categories'=>'system.*',
+    ],
+    [
       'class' => 'CFileLogRoute',
       'levels' => 'trace, info, vardump', //'trace, info, error, warning, vardump'
       'enabled' => YII_DEBUG,
@@ -166,10 +178,21 @@ if (IS_LOCAL) {
   $for_log = [
     [
       'class' => 'CFileLogRoute',
-      'levels' => 'error', //'trace, info, error, warning, vardump'
+      'levels' => 'info, warning, error', //'trace, info, error, warning, vardump'
       'enabled' => true,
+      'maxFileSize' => 100000,
+      'maxLogFiles' => 3,
       //'categories'=>'system.*',
-    ], [
+    ], 
+    [
+        'class' => 'CFileLogRoute',
+        'levels' => 'error', //'trace, info, error, warning, vardump'
+        'maxFileSize' => 100000,
+        'maxLogFiles' => 3,
+        'logFile' => 'runtime-errors.log',
+        //'categories'=>'system.*',
+    ],
+    [
       'class' => 'CFileLogRoute',
       'levels' => 'trace, info, vardump', //'trace, info, error, warning, vardump'
       'enabled' => true,
