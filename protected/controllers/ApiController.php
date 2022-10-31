@@ -1715,21 +1715,23 @@ public function actionImei($dom)
 
 						$salary = SalaryHours::model()->findByPk($hours->latest_salary_id);
 						$invoice = InvoiceHours::model()->findByPk($hours->latest_invoice_id);
-						$salary->attributes = $hours->attributes;
-						$invoice->attributes = $hours->attributes;
-						$invoice->hidden = $invoiceHidden ? 1 : 0;
-
-						$salary->save();
-						$invoice->save();
+						if($salary && $invoice) {
+							$salary->attributes = $hours->attributes;
+							$invoice->attributes = $hours->attributes;
+							$invoice->hidden = $invoiceHidden ? 1 : 0;
 	
-						$asetukset = Asetukset::model()->findByPk(1);
-						$accept_crit = $asetukset->app_hyvaksynnan_peruste;
-						$workMinutesDelta = intval($asetukset->app_auto_hyvaksyminen_aikavali);
-						$hours->handleAutoAccept($accept_crit, $workMinutesDelta);
-
-						$mobupdate->salary_id = $salary->id;
-						$mobupdate->invoice_id = $invoice->id;
-						$mobupdate->save();
+							$salary->save();
+							$invoice->save();
+		
+							$asetukset = Asetukset::model()->findByPk(1);
+							$accept_crit = $asetukset->app_hyvaksynnan_peruste;
+							$workMinutesDelta = intval($asetukset->app_auto_hyvaksyminen_aikavali);
+							$hours->handleAutoAccept($accept_crit, $workMinutesDelta);
+	
+							$mobupdate->salary_id = $salary->id;
+							$mobupdate->invoice_id = $invoice->id;
+							$mobupdate->save();
+						}
 					}
 				}
 			}
