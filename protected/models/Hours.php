@@ -30,6 +30,11 @@
  * @property float $weekly_holiday_hours
  * @property float $unpaid_absence_hours
  * @property float $child_sick_penalty_hours
+ * @property float $public_holiday_absence_hours
+ * @property int $automatic Flag indicating if this model was created automatically
+ * @property int $latest_invoice_id Only in Hours model
+ * @property int $latest_salary_id Only in Hours model
+ * @property int $hidden
  */
 class Hours extends DB2ActiveRecord
 {
@@ -81,7 +86,7 @@ class Hours extends DB2ActiveRecord
     {
         $baseRules = $this->baseRules();
         return array_merge($baseRules, [
-            ["gps_location", "safe"]
+            ["gps_location, latest_salary_id, latest_invoice_id", "safe"]
         ]);
     }
 
@@ -94,9 +99,10 @@ class Hours extends DB2ActiveRecord
     protected function baseRules()
     {
         return [
-            ["id, worker_id, shift_id, property_id, client_id, status", "numerical", "integerOnly" => true],
+            ["id, worker_id, shift_id, property_id, client_id, status, automatic, hidden", "numerical", "integerOnly" => true],
             ["starting_time, ending_time, google_distance, message, from_address", "safe"],
-            ["hours, evening_hours, night_hours, sunday_hours, holiday_hours, special_saturday_hours, sick_leave_paid_hours, sick_leave_unpaid_hours, annual_leave_hours, public_holiday_hours, child_sick_hours, unpaid_hours, weekly_holiday_hours, unpaid_absence_hours, child_sick_penalty_hours", "numerical"],
+            ["id", "unsafe"],
+            ["hours, evening_hours, night_hours, sunday_hours, special_saturday_hours, sick_leave_paid_hours, sick_leave_unpaid_hours, annual_leave_hours, public_holiday_hours, child_sick_hours, unpaid_hours, weekly_holiday_hours, unpaid_absence_hours, child_sick_penalty_hours, public_holiday_absence_hours", "numerical"],
         ];
     }
 
@@ -114,6 +120,12 @@ class Hours extends DB2ActiveRecord
         int $workAcceptDeltaMinutes,
         int $travelAcceptDeltaMinutes = 0
     ) {
+        // we can't allow to auto-accept unsaved records.
+        // unsaved records probably mean there's no Invoice or Salary hours generated
+        // for this Hours record.
+        if ($this->getIsNewRecord()) {
+            throw new Error("Hours model must be saved to database before auto-accepting!");
+        }
         // check if status is a work type
         if (in_array($this->status, [
             3, // normal work stop
@@ -162,14 +174,17 @@ class Hours extends DB2ActiveRecord
                     }
                 }
 
+                Yii::log("Shift not found! returning null", CLogger::LEVEL_INFO, __METHOD__);
                 // shift not found, return null
                 return null;
             }
 
+            Yii::log("Shift ID not set or 0, returning null", CLogger::LEVEL_INFO, __METHOD__);
             // shift ID not set (or 0), return null
             return null;
         }
 
+        Yii::log("Wrong shift type, returning null", CLogger::LEVEL_INFO, __METHOD__);
         // not work or travel type, return null
         return null;
     }
@@ -189,23 +204,30 @@ class Hours extends DB2ActiveRecord
         // check if difference is smaller than the allowed delta
         if ($diffSeconds <= $autoAcceptDelta) {
 
-            $hId = $this->id;
-            $salary = SalaryHours::model()->find("hours_id = $hId");
+            $salarySaved = false;
+            $salary = SalaryHours::model()->find("id = {$this->latest_salary_id}");
             if ($salary) {
                 $salary->approved = 1;
                 $salary->approver = 0;
                 $salary->editor_id = 0;
                 $salarySaved = $salary->save();
+            } else {
+                Yii::log("Salary model not found!", CLogger::LEVEL_ERROR, __METHOD__);
             }
 
-            $invoice = InvoiceHours::model()->find("hours_id = $hId");
+            $invoiceSaved = false;
+            $invoice = InvoiceHours::model()->find("id = {$this->latest_invoice_id}");
             // only approve invoice hours if work is a normal work
-            if ($invoice && $this->status == self::NORMAL_WORK_END) {
-                $invoice->approved = 1;
-                $invoice->approver = 0;
-                $invoice->editor_id = 0;
-                //$invoice->roundToNext15Minutes();
-                $invoiceSaved = $invoice->save();
+            if ($invoice) {
+                if ($this->status == self::NORMAL_WORK_END) {
+                    $invoice->approved = 1;
+                    $invoice->approver = 0;
+                    $invoice->editor_id = 0;
+                    //$invoice->roundToNext15Minutes();
+                    $invoiceSaved = $invoice->save();
+                }
+            } else {
+                Yii::log("Invoice model not found!", CLogger::LEVEL_ERROR, __METHOD__);
             }
 
             $savedModels = [];
@@ -236,22 +258,30 @@ class Hours extends DB2ActiveRecord
 
         if ($doneDiff <= $autoAcceptDelta && $endDiff <= $autoAcceptDelta) {
 
-            $hId = $this->id;
-            $salary = SalaryHours::model()->find("hours_id = $hId");
+            $salarySaved = false;
+            $salary = SalaryHours::model()->find("id = {$this->latest_salary_id}");
             if ($salary) {
                 $salary->approved = 1;
                 $salary->approver = 0;
                 $salary->editor_id = 0;
                 $salarySaved = $salary->save();
+            } else {
+                Yii::log("Salary model not found!", CLogger::LEVEL_ERROR, __METHOD__);
             }
-            $invoice = InvoiceHours::model()->find("hours_id = $hId");
+
+            $invoiceSaved = false;
+            $invoice = InvoiceHours::model()->find("id = {$this->latest_invoice_id}");
             // only approve invoice hours if work is a normal work
-            if ($invoice && $this->status == self::NORMAL_WORK_END) {
-                $invoice->approved = 1;
-                $invoice->approver = 0;
-                $invoice->editor_id = 0;
-                //$invoice->roundToNext15Minutes();
-                $invoiceSaved = $invoice->save();
+            if ($invoice) {
+                if ($this->status == self::NORMAL_WORK_END) {
+                    $invoice->approved = 1;
+                    $invoice->approver = 0;
+                    $invoice->editor_id = 0;
+                    //$invoice->roundToNext15Minutes();
+                    $invoiceSaved = $invoice->save();
+                }
+            } else {
+                Yii::log("Invoice model not found!", CLogger::LEVEL_ERROR, __METHOD__);
             }
 
             $savedModels = [];
@@ -642,8 +672,87 @@ class Hours extends DB2ActiveRecord
 
             return $hourModel;
         } else {
+            Yii::log("Failed to parse start and end dates", CLogger::LEVEL_ERROR, __METHOD__);
             throw new Exception("Failed to parse start and end dates");
         }
+        Yii::log("Failed to copy model", CLogger::LEVEL_ERROR, __METHOD__);
         throw new Exception("Failed to copy model");
+    }
+
+    /**
+     * Modified save behavior:
+     * When inserting a new record, we are automatically creating a SalaryHours
+     * and InvoiceHours record at the same time, with copied attributes.
+     * If the save is successful, an array is returned with all 3 recoreds in it.
+     * ["hour" => $hour, "salary" => $salary, "invoice" => $invoice].
+     * 
+     * Updating an existing record keeps the save behavior.
+     */
+    public function save(
+        $runValidation = true,
+        $attributeNames = null,
+        $insertOthers = true
+    ) {
+        if ($runValidation && !$this->validate($attributeNames)) {
+            return false;
+        }
+
+        if ($this->getIsNewRecord()) {
+            if ($insertOthers) {
+                $transaction = Yii::app()->db1->beginTransaction();
+
+                $salary = new SalaryHours();
+                $invoice = new InvoiceHours();
+                $salary->attributes = $this->attributes;
+                $invoice->attributes = $this->attributes;
+                $salary->automatic = 1;
+                $invoice->automatic = 1;
+
+                $saved = $this->insert($attributeNames);
+                Yii::log("Hour inserted, {$this->id}", CLogger::LEVEL_INFO, __METHOD__);
+
+                $salary->hours_id = $this->id;
+                if (!$salary->save($runValidation, $attributeNames, false)) {
+                    $transaction->rollBack();
+                    foreach ($salary->getErrors() as $attrName => $errorArr) {
+                        foreach ($errorArr as $e) {
+                            $this->addError($attrName, "Salary: " . $e);
+                        }
+                    }
+                    return false;
+                }
+
+                $invoice->hours_id = $this->id;
+                if (!$invoice->save($runValidation, $attributeNames, false)) {
+                    $transaction->rollBack();
+                    foreach ($invoice->getErrors() as $attrName => $errorArr) {
+                        foreach ($errorArr as $e) {
+                            $this->addError($attrName, "Invoice: " . $e);
+                        }
+                    }
+                    return false;
+                }
+
+                $this->latest_salary_id = $salary->id;
+                $this->latest_invoice_id = $invoice->id;
+                // $this is no longer new, so we don't need to
+                // pass false as the last argument
+                $saved = $this->save($runValidation, $attributeNames);
+                if ($saved) {
+                    $transaction->commit();
+                    return [
+                        "hour" => $this,
+                        "salary" => $salary,
+                        "invoice" => $invoice
+                    ];
+                }
+                $transaction->rollBack();
+            } else {
+                return $this->insert($attributeNames);
+            }
+            // the method should've returned something by now.
+            return false;
+        }
+        return $this->update($attributeNames);
     }
 }

@@ -1711,9 +1711,13 @@ public function actionImei($dom)
 						$hours->calculateDurations();
 						$hours->save();
 
-						// create salary & invoice models
-						$salary = SalaryHours::copyFromHours($hours);
-						$invoice = InvoiceHours::copyFromHours($hours);
+						$invoiceHidden = $mobupdate->status != Hours::NORMAL_WORK_END;
+
+						$salary = SalaryHours::model()->findByPk($hours->latest_salary_id);
+						$invoice = InvoiceHours::model()->findByPk($hours->latest_invoice_id);
+						$salary->attributes = $hours->attributes;
+						$invoice->attributes = $hours->attributes;
+						$invoice->hidden = $invoiceHidden ? 1 : 0;
 
 						$salary->save();
 						$invoice->save();
@@ -1917,18 +1921,35 @@ public function actionImei($dom)
 				}
 				$hours->gps_location = $mobinsert->my_location;
 
-				$hours->save();
+				$saveResult = $hours->save();
+				if($saveResult !== false) {
+					[
+						"salary" => $salary,
+						"invoice" => $invoice
+					] = $saveResult;
+					$salary->attributes = $hours->attributes;
+					$salary->automatic = 0;
+					$invoice->attributes = $hours->attributes;
+					$invoice->automatic = 0;
+					$invoiceHidden = $mobinsert->status != Hours::NORMAL_WORK_START;
+					$invoice->hidden = $invoiceHidden ? 1 : 0;
+
+					$salary->save();
+					$invoice->save();
+					$mobinsert->salary_id = $salary->id;
+					$mobinsert->invoice_id = $invoice->id;
+					$mobinsert->hours_id = $hours->id;
+				} else {
+					Yii::log("Failed to save hours! errors: " 
+					. json_encode($hours->getErrors()), 
+					CLogger::LEVEL_ERROR, __METHOD__);
+				}
 			}
-			
-		}
-		// check that ID is set on the hours model,
-		// which means that it was saved successfully.
-		if(isset($hours->id)) {
-			$mobinsert->hours_id = $hours->id;
 		}
 
+
 		// Timer AND Position Checker -->
-                if($mobinsert->save()){
+		if($mobinsert->save()){
 			// <-- LOG
 			if( isset($mobinsert->id) ){
 			$model_log 	= 'Mob';
