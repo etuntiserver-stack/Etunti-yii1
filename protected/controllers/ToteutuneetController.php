@@ -900,7 +900,7 @@ class ToteutuneetController extends Controller
 					}
 
 					$salaryHours->save();
-					$tot->salary->id = $salaryHours->id;
+					$tot->salary_id = $salaryHours->id;
 
 					$invoiceHours->approved = $tot->laskutetaan ? 1 : 0;
 					if($isWork === false) {
