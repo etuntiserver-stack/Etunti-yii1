@@ -892,7 +892,7 @@ class ToteutuneetController extends Controller
 				Mobile::model()->updatebypk($tot->kid,array('hyvaksytty'=>$_POST['kuka']));
 				$tot->hyvaksytty=$_POST['kuka'];
 				if($salaryHours && $invoiceHours) {
-					$salaryHours->approved = $mob->palkanlaskentaan == 1 ? 1 : 0;
+					$salaryHours->approved = $tot->palkanlaskentaan ? 1 : 0;
 					if($salaryHours->approved) {
 						$salaryHours->approver = Yii::app()->user->id;
 					} else {
@@ -902,7 +902,7 @@ class ToteutuneetController extends Controller
 					$salaryHours->save();
 					$tot->salary->id = $salaryHours->id;
 
-					$invoiceHours->approved = $mob->laskutetaan == 1 ? 1 : 0;
+					$invoiceHours->approved = $tot->laskutetaan ? 1 : 0;
 					if($isWork === false) {
 						$invoiceHours->approved = 0;
 					}
