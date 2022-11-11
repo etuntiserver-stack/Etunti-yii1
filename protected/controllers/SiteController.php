@@ -539,6 +539,11 @@ class SiteController extends Controller
 
 	public function actionTyot_tanaan()
 	{
+		// skip for kotipuhtaaksi
+		if(Yii::app()->user->kotipuhtaaksi) {
+			echo json_encode("");
+			exit;
+		}
 		// <-- Tyoryhmat
 		$tyoryhmat_criteria = '';
 		$tids = [];
@@ -621,6 +626,13 @@ class SiteController extends Controller
 
 	public function actionAvoimet_kohteet()
 	{
+		// skip for kotipuhtaaksi
+		/*
+		if(Yii::app()->user->kotipuhtaaksi) {
+			echo json_encode([]);
+			exit;
+		}
+		*/
 		$return = array();
        		$criteria = new CDbCriteria();
        		$criteria->select = " id,aloitan,loppui,kohde_kannasta  ";
@@ -1836,6 +1848,11 @@ class SiteController extends Controller
 
 	public function actionSuunnitteltutunnittanaan()
 	{
+		// skip for kotipuhtaaksi
+		if(Yii::app()->user->kotipuhtaaksi) {
+			echo json_encode("00:00");
+			exit;
+		}
 		$tids 		= [];
 
 		// <-- Tyoryhmat
@@ -1898,6 +1915,11 @@ class SiteController extends Controller
 
 	public function actionTehdyttunnittanaan()
 	{
+		// skip for kotipuhtaaksi
+		if(Yii::app()->user->kotipuhtaaksi) {
+			echo json_encode("00:00");
+			exit;
+		}
 		// <-- Tyoryhmat
 		$tyoryhmat_criteria = '';
 		if( isset(Yii::app()->user->TyoryhmatTyontekijatHelperArray) ){
@@ -1924,6 +1946,11 @@ class SiteController extends Controller
 
 	public function actionToteututhismonth()
 	{
+		// skip for kotipuhtaaksi
+		if(Yii::app()->user->kotipuhtaaksi) {
+			echo json_encode("00:00");
+			exit;
+		}
 		// <-- Tyoryhmat
 		$tyoryhmat_criteria = '';
 		if( isset(Yii::app()->user->TyoryhmatTyontekijatHelperArray) ){
@@ -2053,6 +2080,15 @@ class SiteController extends Controller
 	public function tilatTanaan()
 	{
 
+		$total = array();
+		$total[2] = 0;
+		$total[3] = 0;
+		$total[10] = 0;
+		// skip for kotipuhtaaksi
+		if(Yii::app()->user->kotipuhtaaksi) {
+			return $total;
+		}
+
 		// <-- Tyoryhmat
 		$tyoryhmat_criteria = '';
 		if( isset(Yii::app()->user->TyoryhmatTyontekijatHelperArray) ){
@@ -2061,10 +2097,6 @@ class SiteController extends Controller
 		}
 		//    Tyoryhmat -->
 
-		$total = array();
-		$total[2] = 0;
-		$total[3] = 0;
-		$total[10] = 0;
 
        		$criteria = new CDbCriteria();
         	$criteria->select = " COUNT(*) as count,status";
@@ -2854,6 +2886,12 @@ class SiteController extends Controller
 
 	protected function ylittaneetMyohastyneet()
 	{
+		// skip for kotipuhtaaksi
+		/*
+		if(Yii::app()->user->kotipuhtaaksi) {
+			return [];
+		}
+		*/
 		// <-- ylittaneet
 		$ylittaneet = '';
 		$tv = Yii::app()->db1->createCommand()
