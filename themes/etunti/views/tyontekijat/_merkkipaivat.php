@@ -5,9 +5,21 @@ $varo = '';
 
 if ($data->tekijan_henkilotunnus) {
 	$datePart = substr($data->tekijan_henkilotunnus, 0, 6);
+	$separator = substr($data->tekijan_henkilotunnus, 6, 1);
+	// assume separator is "-"
+	$yearPrefix = "19";
+	// check for people born after 2000
+	if ($separator === "A") {
+		$yearPrefix = "20";
+	}
+	// people born before 1900 
+	else if ($separator === "+") {
+		$yearPrefix = "18";
+	}
 	$checkPart = substr($data->tekijan_henkilotunnus, 7);
 	if ($datePart && $checkPart) {
 		$year = substr($datePart, -2);
+		$year = $yearPrefix . $year;
 		$month = substr($datePart, 2, 2);
 		$day = substr($datePart, 0, 2);
 		$string = date("Y-m-d", strtotime($year . "-" . $month . "-" . $day));
