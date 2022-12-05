@@ -93,6 +93,7 @@ public function actionLogin($domain)
 	{
 		if(in_array($domain, $this->disallowedDomains)) {
 			$this->_sendResponse(403, CJSON::encode("eDico on suljettu"));
+			return false;
 		}
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
