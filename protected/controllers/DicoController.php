@@ -13,6 +13,11 @@ class DicoController extends Controller
      * Key which has to be in HTTP USERNAME and PASSWORD headers 
      */
     Const APPLICATION_ID = 'ASCCPE';
+	/**
+	 * These domains will receive an error when
+	 * using eDico
+	 */
+	private $disallowedDomains = ["sivex"];
  
     /**
      * Default response format
@@ -86,7 +91,9 @@ public function actionLogin($domain)
 
 	protected function kirjautuminen($domain, $tunnus, $salasana)
 	{
-
+		if(in_array($domain, $this->disallowedDomains)) {
+			$this->_sendResponse(403, CJSON::encode("eDico on suljettu"));
+		}
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
 			sahkoposti='".$tunnus."' 
@@ -1531,6 +1538,9 @@ private function _sendResponse($status = 200, $body = '', $content_type = 'text/
             case 401:
                 $message = 'You must be authorized to view this page.';
                 break;
+			case 403:
+				$message = 'eDico is closed';
+				break;
             case 404:
                 $message = 'The requested URL ' . $_SERVER['REQUEST_URI'] . ' was not found.';
                 break;
