@@ -824,6 +824,8 @@ public function actionImei($dom)
 		// <-- CHECK henkilokortti
 		if($_POST['check'] == 'henkilokortti'){
 			$firma = Domainit::model()->find(" domain='".strtolower($dom)."' ");
+			$company = FirmanTiedot::model()->findByPk(1);
+			$y_id = $company ? $company->y_tunnus : $firma->y_tunnus;
 			if( !isset($firma->id) ){
 				$return = ["return" => "Domain ei löyty"];
 				$this->_sendResponse(200, CJSON::encode($return));
@@ -846,7 +848,7 @@ public function actionImei($dom)
 			}
 			$body .= '<div class="row"><div class="col-xs-6">';
 			$body .= '<h3>'.$firma->yritys.'</h3>';
-			$body .= '<p>Y-tunnus: <b>'.$firma->y_tunnus.'</b></p>';
+			$body .= '<p>Y-tunnus: <b>'.$y_id.'</b></p>';
 			$body .= '<p><h4>'.$ttekija->tekijan_nimi.' '.$ttekija->sukunimi.'</h4></p>';
 			$body .= '</div><div class="col-xs-6"><div class="pull-right">';
 			$filepath = dirname(Yii::app()->getBasePath())."/img/tekijat/".$dom."/".$ttekija->id.".jpg";
