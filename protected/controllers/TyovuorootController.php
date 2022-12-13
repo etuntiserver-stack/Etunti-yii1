@@ -2548,6 +2548,16 @@ class TyovuorootController extends Controller
 	public function actionTekijahovertietoja($id) {
 		$model = Tyontekijat::model()->findByPk($id);
 		$tyoryhmat = json_decode($model->tyoryhma, true);
+		$start = date("Y-m-d", strtotime("first day of this month"));
+		$end = date("Y-m-d", strtotime("last day of this month"));
+		$getAll = $this->TidfromtoTyovuoroWithVirtual($start, $end, [$id], false, false, null);
+		// Suunnittellut
+		$tyotunnit	= (isset($getAll[$id]['tyotunnit']['kaikki']))? $getAll[$id]['tyotunnit']['kaikki'] : 0;
+		$matkatunnit	= (isset($getAll[$id]['matkatunnit']['kaikki']))? $getAll[$id]['matkatunnit']['kaikki'] : 0;
+		$loun		= (isset($getAll[$id]['lounaat']['kaikki']))? $getAll[$id]['lounaat']['kaikki'] : 0;
+
+		$planned_hours = $tyotunnit + $matkatunnit + $loun;
+
 		$html = '
 		<div class="row">
 			<div class="col-sm-12">
@@ -2557,6 +2567,7 @@ class TyovuorootController extends Controller
 				<b>'.Yii::t('main', 'Sähköpostiosoite').': '.$model->tekijan_email.'</b><br>
 				<b>'.Yii::t('main', 'Kotiosoite').': '.$model->tekijan_katuosoite.'</b><br>
 				<b>'.Yii::t('main', 'Työryhmät').': '.implode(", ", $tyoryhmat).'</b><br>
+				<b>'.Yii::t('main', 'Suunnitellut tunnit (kk)').': '.$planned_hours.'</b><br>
 			</div>
 		</div>';
 		echo json_encode(["id" => $id, "html" => $html]);
