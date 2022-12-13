@@ -2557,6 +2557,7 @@ class TyovuorootController extends Controller
 		$loun		= (isset($getAll[$id]['lounaat']['kaikki']))? $getAll[$id]['lounaat']['kaikki'] : 0;
 
 		$planned_hours = $tyotunnit + $matkatunnit + $loun;
+		$planned_hours = $this->num($planned_hours);
 
 		$html = '
 		<div class="row">
