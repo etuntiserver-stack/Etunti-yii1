@@ -331,6 +331,14 @@ if( $curpage == 'tyovuoroot/beta' )
 			    $nextMonday = strtotime('+1 week', $nextMonday);
 			    $nextSunday = strtotime('+1 week', $nextSunday);
 			}
+      $nextYearIndex = 0;
+      while($nextYearIndex < 3) {
+        echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday).'&year='.$nextYear.'&mode='.((isset($_GET['mode']))?$_GET['mode']:'').((isset($_GET['vapaat']))?'&vapaat=true':'').'">'.Yii::t('main', 'Viikko').': '.date('W', $nextMonday).', '.Yii::t('main', 'Vuosi').': '.date('Y', $nextMonday).', '.date('d.m', $nextMonday).' - '.date('d.m', $nextSunday).'</option>';
+
+        $nextMonday = strtotime('+1 week', $nextMonday);
+        $nextSunday = strtotime('+1 week', $nextSunday);
+        $nextYearIndex++;
+      }
 			?>
 			</select>
 
