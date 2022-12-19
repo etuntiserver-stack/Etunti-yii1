@@ -10,6 +10,8 @@
  * @property string $selitysteksti
  * @property integer $palvelu
  * @property string $kesto
+ * @property integer|null $oletustuote
+ * @property string $yksikko
  */
 class TuotteetPalvelut extends DB2ActiveRecord
 {

@@ -236,6 +236,14 @@ class KohteetController extends Controller
 	public function actionCreatefromasiakas($id)
 	{
 		$model=new Kohteet;
+		$c = new CDbCriteria();
+		$c->compare("oletustuote", ">0");
+		$c->compare("yksikko", "h");
+		$product = TuotteetPalvelut::model()->find($c);
+		if($product) {
+			Yii::log("Default product " . $product->id);
+			$model->tuote_h = $product->id;
+		}
 		$asiakas=Asiakkaat::model()->findbypk($id);
 		// copy tyoryhma from client data
 		$model->tyoryhma = $asiakas->tyoryhma;
@@ -252,6 +260,7 @@ class KohteetController extends Controller
 			} else {
 				$model->url_linkkit = '';
 			}
+			
 			if($model->save())
 			{
 
@@ -365,6 +374,15 @@ class KohteetController extends Controller
 	//  Oikeudet -->
 
 		$model=new Kohteet;
+
+		$c = new CDbCriteria();
+		$c->compare("oletustuote", ">0");
+		$c->compare("yksikko", "h");
+		$product = TuotteetPalvelut::model()->find($c);
+		if($product) {
+			Yii::log("Default product " . $product->id);
+			$model->tuote_h = $product->id;
+		}
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
