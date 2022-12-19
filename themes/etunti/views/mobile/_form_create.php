@@ -35,6 +35,17 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo CHtml::label("Asiakas", "asiakas-id"); ?>
+		<?php echo CHtml::dropDownList("asiakas", [],
+			CHtml::listData(
+				array_merge(["id" => 0, "Fullname" => "Valitse"],
+				Asiakkaat::model()
+					->findAll("aktiivinen=1")), "id", "Fullname"),
+			["class" => "form-control", "id" => "asiakas-id"]
+		); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kohdenID'); ?>
 		<?php echo $form->dropDownList($model, 'kohdenID', CHtml::listData(Kohteet::model()->findAll(array('order'=>'osoite')), 'id', 'osoite'), 
 		array('empty'=>'Valitse', 'class'=>'form-control')); 
@@ -94,6 +105,15 @@ $model->hinta = str_replace(",",".",$model->hinta);
 <script type="text/javascript">
 $(document).ready(function(){
 
+
+$("#asiakas-id").change(function() {
+	const clientId = $(this).val();
+	fetch("/index.php/mobile/ensisijainen_kohde?clientId=" + clientId)
+		.then(r => r.json())
+		.then(primary => {
+			$("#Mobile_kohdenID").val(primary.primary).change();
+		});
+});
 
 $('#Mobile_tid').change(function(){
 

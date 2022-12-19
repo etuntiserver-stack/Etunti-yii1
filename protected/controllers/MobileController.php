@@ -44,7 +44,8 @@ class MobileController extends Controller
 					'luetut_toteutuneet_ero_pdf', 'vuosilomat_pdf', 
 					'check_paallekkainMobile', 'tyoajan_seuranta', 'raportit_taulu', 
 					'tulostus', 'hyvaksymattomat', 'ayhteenveto', 'ayhteenvetoyht',
-					'palkkataulukkopost', 'selectedemployees', 'closestshift'),
+					'palkkataulukkopost', 'selectedemployees', 'closestshift',
+					'ensisijainen_kohde'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -4741,6 +4742,26 @@ class MobileController extends Controller
 		    $return = true;
 		}
 		return $return;
+	}
+
+	public function actionEnsisijainen_kohde($clientId)
+	{
+		$c = new CDbCriteria();
+		$c->compare("asiakas_id", $clientId);
+		$properties = Kohteet::model()->findAll($c);
+		$primary = 0;
+		if(count($properties) > 1) {
+			foreach($properties as $p) {
+				if($p->ensisijainen) {
+					$primary = $p->id;
+					break;
+				}
+			}
+		} else {
+			$primary = $properties[0]->id;
+		}
+
+		Yii::app()->end(json_encode(["primary" => $primary]));
 	}
 
 }
