@@ -23,6 +23,8 @@
  * @property int $omasiistijavaroitus 0: Disabled, 1: Enabled
  * @property int $omasiistijailmoitus 0: Not notified, 1: Notified
  * @property int $aloitusaikailmoitus 0: Not notified, 1: Notified, 2: Hide
+ * @property string|null $start_date Yii2 compatibility
+ * @property string|null $end_date Yii2 compatibility
  */
 class ToistuvatTyovuorot extends DB2ActiveRecord
 {
@@ -264,5 +266,19 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	protected function beforeSave()
+	{
+		$start = DateTime::createFromFormat("d.m.Y", $this->pfrom);
+		if($start !== false) {
+			$this->start_date = $start->format("Y-n-d");
+		}
+		$end = DateTime::createFromFormat("d.m.Y", $this->pto);
+		if($end !== false) {
+			$this->end_date = $end->format("Y-m-d");
+		}
+		
+		return parent::beforeSave();
 	}
 }
