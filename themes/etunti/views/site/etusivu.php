@@ -128,6 +128,11 @@ $months=array(
       <!-- Begin: Content -->
       <section id="content" class="animated fadeIn">
 
+        <?php if(!empty(Yii::app()->user->kotipuhtaaksi)) :?>
+          <div class="row mb10">
+            <h1 class="text-danger">Muistathan käyttää uutta KotiAppia Etunnin sijasta</h1>
+          </div>
+        <?php endif; ?>
         <!-- Dashboard Tiles -->
         <div class="row mb10">
           <div class="col-sm-6 col-md-3">
