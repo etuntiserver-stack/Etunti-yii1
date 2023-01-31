@@ -658,7 +658,7 @@ public function actionImei($dom)
 
 	$disabledDomains = ["kotipuhtaaksi"];
 	if(in_array($dom, $disabledDomains) === true) {
-		$this->_sendResponse(200, CJSON::encode(["error" => "Uusi sovellus"]));
+		$this->_sendResponse(200, CJSON::encode(["error" => "Käytä uutta sovellusta / use the new app"]));
 		die(json_encode("Käytä uutta sovellusta / use the new app"));
 	}
 
