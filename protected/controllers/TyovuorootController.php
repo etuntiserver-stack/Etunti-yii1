@@ -2106,9 +2106,15 @@ class TyovuorootController extends Controller
 
     /** @var Freshdesk object. */
     $freshdesk = Yii::createComponent('Freshdesk');
+	// somehow on demo domain fetching the tickets (which should be disabled
+	// breaks the calendar, so we'll just skip it)
+	if(Yii::app()->user->domain == "demo") {
+		$freshdesk_customer_tickets = [];
+	} else {
+		// Get tickets per customer (ignore resolved (4) and closed (5) tickets).
+		$freshdesk_customer_tickets = $freshdesk->ticketsByCustomerId([4, 5]);
+	}
 
-    // Get tickets per customer (ignore resolved (4) and closed (5) tickets).
-    $freshdesk_customer_tickets = $freshdesk->ticketsByCustomerId([4, 5]);
 
 		if ($mode == 'tt') {
 			$this->render('tt', array(
@@ -2125,6 +2131,7 @@ class TyovuorootController extends Controller
 			));
 		}
 		if ($mode == 'vko') {
+			// not good here
 			$this->render('vko', array(
 				'tt'		=> $tt,
 				'from'		=> $haku_from,
