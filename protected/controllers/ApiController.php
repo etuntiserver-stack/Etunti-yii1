@@ -656,6 +656,12 @@ protected function checkKokeiluversion($domain)
 public function actionImei($dom)
 {
 
+	$disabledDomains = ["kotipuhtaaksi"];
+	if(in_array($dom, $disabledDomains) === true) {
+		$this->_sendResponse(200, CJSON::encode(["error" => "Uusi sovellus"]));
+		die(json_encode("Käytä uutta sovellusta / use the new app"));
+	}
+
     switch($_GET['model'])
     {
         // Get an instance of the respective model
