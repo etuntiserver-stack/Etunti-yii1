@@ -299,6 +299,11 @@ public function actionPaivita_tiedot($dom)
 protected function kirjautuminen($domain, $email, $salasana){
 	$domain = strtolower($domain);
 
+	if($domain === "kotipuhtaaksi") {
+		$this->_sendResponse(200, CJSON::encode(["error" => "Uusi sovellus"]));
+		die(json_encode("Käytä uutta sovellusta / use the new app"));
+	}
+
         $kirjautumistunnus = Domainit::model()->find(" kirjautumistunnus='".$domain."' ");
 	if( isset($kirjautumistunnus->domain) ){
 		$domain = $kirjautumistunnus->domain;
