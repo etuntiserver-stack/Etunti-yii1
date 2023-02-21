@@ -400,6 +400,18 @@ class KohteetController extends Controller
 			} else {
 				$model->url_linkkit = '';
 			}
+
+			// <-- Dimension
+			if( isset($_POST['Kohteet']['netvisor_dimension_name']) ){
+				$dimension = explode("//", $_POST['Kohteet']['netvisor_dimension_name']);
+				if( isset($dimension[0]) and isset($dimension[1]) ){
+				 $model->netvisor_dimension_name = $dimension[0];
+				 $model->netvisor_dimension_item = $dimension[1];
+				}
+			 }
+			 //     Dimension -->
+
+
 			if($model->save())
 			{
 
@@ -537,6 +549,17 @@ class KohteetController extends Controller
 			} else {
 				$model->url_linkkit = '';
 			}
+
+			// <-- Dimension
+			if( isset($_POST['Kohteet']['netvisor_dimension_name']) ){
+				$dimension = explode("//", $_POST['Kohteet']['netvisor_dimension_name']);
+				if( isset($dimension[0]) and isset($dimension[1]) ){
+				 $model->netvisor_dimension_name = $dimension[0];
+				 $model->netvisor_dimension_item = $dimension[1];
+				}
+			 }
+			 //     Dimension -->
+
 			if($model->save())
 			{
 

@@ -123,6 +123,8 @@ class Kohteet extends DB2ActiveRecord
 			'tuote_h' => 'int(11) DEFAULT 0',
 			'tuote_kk' => 'int(11) DEFAULT 0',
 			'tuote_kpl' => 'int(11) DEFAULT 0',
+			'netvisor_dimension_name' => 'varchar(100) DEFAULT NULL',
+			'netvisor_dimension_item' => 'varchar(100) DEFAULT NULL',
 		);
 
 		// <-- Drop column
@@ -236,6 +238,7 @@ class Kohteet extends DB2ActiveRecord
 			'invoice_our_reference' => Yii::t("app", "Viitteemme"),
 			"window_count" => Yii::t("main", "Ikkunoiden lukumäärä"),
 			"window_est_time" => Yii::t("main", "Ikkunoiden pesun arvioitu kesto"),
+			'netvisor_dimension_name' => Yii::t('main', 'Kustannuspaikka'),
 		);
 	}
 
