@@ -192,7 +192,8 @@ class MobileController extends Controller
 		//exit;
 
 		if($ext === "xls" || $ext === "xlsx" || $ext === "csv") {
-			file_put_contents($path.$tiedosto.'.html', $html_content);
+			$c = "<table>".$c."</table>";;
+			file_put_contents($path.$tiedosto.'.html', $c);
 		} else {
 			file_put_contents($path.$tiedosto.'.html', $c);
 		}
