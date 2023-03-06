@@ -124,7 +124,7 @@ class MobileController extends Controller
 	public function transformHtmlTo($header, $html_content, $ext)
 	{
 
-		Yii::log($html_content, CLogger::LEVEL_INFO, "before trannsforms");
+		$plainContent = "<table>" . $html_content . "</table>";
 
 		// Tämä funktio vaaditaan uudempi kun 16.0 versio pandoc ja apt-get install xvfb
 		// wget https://github.com/jgm/pandoc/releases/download/1.17.0.2/pandoc-1.17.0.2-1-amd64.deb
@@ -195,7 +195,7 @@ class MobileController extends Controller
 
 		if($ext === "xls" || $ext === "xlsx" || $ext === "csv") {
 			$c = "<table>".$c."</table>";;
-			file_put_contents($path.$tiedosto.'.html', $c);
+			file_put_contents($path.$tiedosto.'.html', $plainContent);
 			Yii::log($c, CLogger::LEVEL_INFO, "html transform");
 		} else {
 			file_put_contents($path.$tiedosto.'.html', $c);
