@@ -742,6 +742,8 @@ $(document).delegate(".trash","click",function(){
 
 
 window.addEventListener('message', function(e) {
+	if(!e.data) return;
+	if(typeof e.data !== 'string') return;
 	var edata = e.data.split('//');
 	if(edata[0] == 'doit'){
 		var thisID = edata[1].split('_');
