@@ -218,7 +218,7 @@
 										class="fa fa-file-word-o" aria-hidden="true"></i></button>
 							</form>
 							<form action="tulostus" class="form-group" target="_blank" method="POST">
-								<input type="hidden" name="ext" value="xlsx">
+								<input type="hidden" name="ext" value="csv">
 								<input type="hidden" name="fileName" value="Raporti">
 								<input type="hidden" name="from" value="<?= $from ?>">
 								<input type="hidden" name="to" value="<?= $to ?>">

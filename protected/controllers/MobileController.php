@@ -262,6 +262,21 @@ class MobileController extends Controller
 			}
 		}
 
+		if($ext == 'csv')
+		{
+			exec('pandoc -s '.$path.$tiedosto.'.html -o '.$path.$tiedosto.'.csv', $output, $return);
+		        if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.csv' ))
+			{
+				header("Content-Length: " . filesize ( $path.$tiedosto.'.csv' ) ); 
+		                header("Content-type: application/csv;"); 
+		                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.csv'));
+		                header('Expires: 0');
+		                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		                readfile($path.$tiedosto.'.csv');
+				exit;
+			}
+		}
+
 		return false;
 
 	}
