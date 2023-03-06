@@ -269,7 +269,7 @@ class MobileController extends Controller
 
 		if($ext == 'csv')
 		{
-			exec('pandoc -s '.$path.$tiedosto.'.html -o '.$path.$tiedosto.'.csv', $output, $return);
+			exec('pandoc '.$path.$tiedosto.'.html -o '.$path.$tiedosto.'.csv', $output, $return);
 		        if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.csv' ))
 			{
 				header("Content-Length: " . filesize ( $path.$tiedosto.'.csv' ) ); 
