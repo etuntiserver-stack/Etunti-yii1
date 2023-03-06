@@ -194,6 +194,7 @@ class MobileController extends Controller
 		if($ext === "xls" || $ext === "xlsx" || $ext === "csv") {
 			$c = "<table>".$c."</table>";;
 			file_put_contents($path.$tiedosto.'.html', $c);
+			Yii::log($c, CLogger::LEVEL_INFO, "html transform");
 		} else {
 			file_put_contents($path.$tiedosto.'.html', $c);
 		}
