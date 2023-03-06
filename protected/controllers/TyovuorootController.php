@@ -3141,12 +3141,13 @@ class TyovuorootController extends Controller
 
 	public function actionCreate4_form($pvm, $tid)
 	{
+		Yii::log("1", CLogger::LEVEL_INFO);
 		$asetukset = Asetukset::model()->findByPk(1);
 		$haku_tids = [];
 		$haku_tids[$tid] = [$tid];
 		$haku_from = date("Y-m-d", strtotime(Yii::app()->session['from']));
 		$haku_to = date("Y-m-d", strtotime(Yii::app()->session['to']));
-
+		Yii::log("2", CLogger::LEVEL_INFO);
 		// Tyosuhde oikeus
 		$oikeus = '<div class="alert alert-danger">'.Yii::t('main', 'Työsuhdetta ei ole määritelty tai työsuhde ei ole voimassa.').'</div>';
 		$criteria=new CDbCriteria;
@@ -3154,6 +3155,7 @@ class TyovuorootController extends Controller
 			tid='".$tid."' 
 		";
 		$ts = Tyosuhdet::model()->find($criteria);
+		Yii::log("3", CLogger::LEVEL_INFO);
 		if(isset($ts->id) and !empty($ts->alku))
 		{
 			$alku = date("Ymd", strtotime($ts->alku));
@@ -3197,6 +3199,7 @@ class TyovuorootController extends Controller
 	              </div>
 	          </div>
 	        </div>';
+			Yii::log("4", CLogger::LEVEL_INFO);
 		echo json_encode($form_content);
 		exit;
 	}
