@@ -218,7 +218,7 @@
 										class="fa fa-file-word-o" aria-hidden="true"></i></button>
 							</form>
 							<form action="tulostus" class="form-group" target="_blank" method="POST">
-								<input type="hidden" name="ext" value="xls">
+								<input type="hidden" name="ext" value="csv">
 								<input type="hidden" name="fileName" value="Raporti">
 								<input type="hidden" name="from" value="<?= $from ?>">
 								<input type="hidden" name="to" value="<?= $to ?>">
@@ -380,7 +380,13 @@
 
 		$(".submitForm").on('click', function (e) {
 			$('.mobileTable').addClass('table-bordered');
-			$(this).prev('textarea').val($('#tableContent').html());
+			const type = $(this).siblings('input[name="ext"]').val();
+			if(type === "xls" || type === "xlsx" || type === "csv") {
+				$(this).prev('textarea').val($('#mobileTable').html());
+			} else {
+				$(this).prev('textarea').val($('#tableContent').html());
+			}
+
 			$(this).closest('form').submit();
 			e.preventDefault();
 		});
