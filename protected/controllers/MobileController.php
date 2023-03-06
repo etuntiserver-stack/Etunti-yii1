@@ -147,6 +147,10 @@ class MobileController extends Controller
 		{
 		 	unlink($path.$tiedosto.'.xls');
 		}
+		if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xlsx' ))
+		{
+		 	unlink($path.$tiedosto.'.xlsx');
+		}
 		if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.doc' ))
 		{
 		 	unlink($path.$tiedosto.'.doc');
@@ -237,6 +241,21 @@ class MobileController extends Controller
 		                header('Expires: 0');
 		                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		                readfile($path.$tiedosto.'.xls');
+				exit;
+			}
+		}
+
+		if($ext == 'xlsx')
+		{
+			exec('pandoc -s '.$path.$tiedosto.'.html -o '.$path.$tiedosto.'.xlsx', $output, $return);
+		        if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xlsx' ))
+			{
+				header("Content-Length: " . filesize ( $path.$tiedosto.'.xlsx' ) ); 
+		                header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;"); 
+		                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.xlsx'));
+		                header('Expires: 0');
+		                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		                readfile($path.$tiedosto.'.xlsx');
 				exit;
 			}
 		}
