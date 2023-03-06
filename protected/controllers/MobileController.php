@@ -232,6 +232,7 @@ class MobileController extends Controller
 
 		if($ext == 'xls')
 		{
+			exec('sed -i -e "s/\r//g" '.$path.$tiedosto.'.html');
 			exec('pandoc -s '.$path.$tiedosto.'.html -o '.$path.$tiedosto.'.xls', $output, $return);
 		        if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xls' ))
 			{
@@ -247,6 +248,7 @@ class MobileController extends Controller
 
 		if($ext == 'xlsx')
 		{
+			exec('sed -i -e "s/\r//g" '.$path.$tiedosto.'.html');
 			exec('pandoc -s '.$path.$tiedosto.'.html -o '.$path.$tiedosto.'.xlsx', $output, $return);
 		        if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xlsx' ))
 			{
