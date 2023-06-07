@@ -173,7 +173,7 @@ $(document).ready(function(){
     	  <!--<button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>-->
 	  <form action="tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="doc">
-	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="fileName" value="Raportti">
 	    <input type="hidden" name="from" value="<?=$from?>">
 	    <input type="hidden" name="to" value="<?=$to?>">
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
@@ -181,7 +181,7 @@ $(document).ready(function(){
 	  </form>
 	  <form action="tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="xls">
-	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="fileName" value="Raportti">
 	    <input type="hidden" name="from" value="<?=$from?>">
 	    <input type="hidden" name="to" value="<?=$to?>">
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
@@ -190,7 +190,7 @@ $(document).ready(function(){
 	  <form action="tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="header" value="<?=$from?>-<?=$to?>">
 	    <input type="hidden" name="ext" value="pdf">
-	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="fileName" value="Raportti">
 	    <input type="hidden" name="from" value="<?=$from?>">
 	    <input type="hidden" name="to" value="<?=$to?>">
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>

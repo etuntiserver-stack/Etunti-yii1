@@ -28,7 +28,7 @@ $this->breadcrumbs=array(
     <div class="form-inline">
 	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="doc">
-	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="fileName" value="Raportti">
 	    <input type="hidden" name="from" value="<?=$from?>">
 	    <input type="hidden" name="to" value="<?=$to?>">
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
@@ -36,7 +36,7 @@ $this->breadcrumbs=array(
 	  </form>
 	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="xls">
-	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="fileName" value="Raportti">
 	    <input type="hidden" name="from" value="<?=$from?>">
 	    <input type="hidden" name="to" value="<?=$to?>">
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
@@ -45,7 +45,7 @@ $this->breadcrumbs=array(
 	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="header" value="<?=$from?>-<?=$to?>">
 	    <input type="hidden" name="ext" value="pdf">
-	    <input type="hidden" name="fileName" value="Raporti">
+	    <input type="hidden" name="fileName" value="Raportti">
 	    <input type="hidden" name="from" value="<?=$from?>">
 	    <input type="hidden" name="to" value="<?=$to?>">
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
