@@ -2622,7 +2622,7 @@ exit;
 			{
 				$link = CHtml::link('<span class="text-white">Lasku:' . $la_id.'<br>' . $this->tilanneCheck($la_id).'</span>',
 					['/lasku/update', 'id' => $la_id],
-					['class' => 'btn btn-group btn-info tehdyt_laskut'] // , 'target' => '_blank'
+					['class' => 'btn btn-group btn-info tehdyt_laskut', "target"=>"_blank"] // , 'target' => '_blank'
 				);
 				$body .= $link.' ';
 			}
