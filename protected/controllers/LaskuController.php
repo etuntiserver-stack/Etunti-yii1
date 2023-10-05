@@ -165,7 +165,7 @@ class LaskuController extends Controller
 		}
 
 		if( $yrityksen_nimi !== null and !empty($yrityksen_nimi) ){
-	        $criteria->addCondition ("  yrityksen_nimi='".$yrityksen_nimi."' OR etunimi='".$yrityksen_nimi."' OR sukunimi='".$yrityksen_nimi."'  ");
+	        $criteria->addCondition ("  yrityksen_nimi='".$yrityksen_nimi."' OR etunimi='".$yrityksen_nimi."' OR sukunimi='".$yrityksen_nimi."' OR CONCAT(etunimi, ' ', sukunimi) LIKE '%".$yrityksen_nimi."%' ");
 		}
 		if( $asiakas_id !== null ){
 	        $criteria->addCondition ("  id='".$asiakas_id."' ");
