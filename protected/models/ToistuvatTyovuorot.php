@@ -137,6 +137,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 		return array(
 		        'kohteet' => array(self::BELONGS_TO, 'Kohteet', 'kohde'),
 		        'tt' => array(self::BELONGS_TO, 'Tyontekijat', 'tid'),
+				'tp' => array(self::BELONGS_TO, 'TuotteetPalvelut', 'tuoteID'),
 		        'avaimet' => array(self::HAS_MANY, 'Avaimet', array('kohde'=>'kohde')),
 		);
 	}

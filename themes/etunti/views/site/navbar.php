@@ -1150,6 +1150,10 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/kk">
                   <span class="fa fa-calendar-o"></span> <?php echo Yii::t('main', 'Kuukausinäkymä'); ?></a>
               </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/shift_products">
+                  <span class="fa fa-calendar-o"></span> <?php echo Yii::t('main', 'Työvuorot tuotteittain'); ?></a>
+              </li>
 <?php /*
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/vuosilomat/index">

@@ -46,7 +46,9 @@ class TyovuorootController extends Controller
 					'tvasetus', 'omasiistijat_lista', 'omasiistijat_tarkistus', 
 					'omasiistijat_ilmoitus', 'omasiistijat_siistijakohtainen_varoitus', 
 					'os_cache_clear', 'massedit', 'aloitusaikojen_ilmoitus', 
-					'tekijahovertietoja', 'employeeskills', 'osnotice', 'sendosnotice'),
+					'tekijahovertietoja', 'employeeskills', 'osnotice', 'sendosnotice',
+					'shift_products'
+					),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -6373,4 +6375,103 @@ class TyovuorootController extends Controller
 			"message" => "Työvuoroa #$shiftId ei löytynyt."
 		]);
 	}
+
+	public function actionShift_products()
+	{
+		$req = Yii::app()->request;
+
+		$shifts = [];
+		$haku_from = date("Y-m-d", strtotime($req->getQuery("alkaen")));
+		$haku_to = date("Y-m-d", strtotime($req->getQuery("loppuen")));
+		$with = ["data"];
+
+		if(isset($_GET["mob_hae"])) {
+			$criteria = $this->shiftProductCriteria();
+			$tids = [];
+			$dataAll = $this->FromToSuunnitellutAll($haku_from, $haku_to, $tids, 
+				$criteria, $with);
+			foreach($dataAll as $k => $data) {
+				$shift = clone $data["data"];
+				$shift->pvm = $data["this_pvm"];
+				$shift->tid = $data["this_tid"];
+				$shifts[] = $shift;
+			}
+		}	
+		return $this->render("shift_products", [
+			"shifts" => $shifts
+		]);
+	}
+
+	private function shiftProductCriteria()
+	{
+		$req = Yii::app()->request;
+		$criteria = "status = 3 AND tuoteID > 0 ";
+		$productName = $req->getQuery("nimike");
+		if($productName) {
+			$crit = new CDbCriteria();
+			$crit->select = "id";
+			$crit->addCondition("nimike = '$productName'");
+			$product = TuotteetPalvelut::model()
+				->find($crit);
+			if($product) {
+				Yii::log("Product ID found: " . $product->id);
+				$criteria .= "AND tuoteID = {$product->id} ";
+			}
+		}
+
+		$propertyAddress = $req->getQuery("osoite");
+		if($propertyAddress) {
+			$crit = new CDbCriteria();
+			$crit->select = "id";
+			$crit->addCondition("osoite = '$propertyAddress'");
+			$property = Kohteet::model()
+				->find($crit);
+			if($property) {
+				Yii::log("Property ID found: " . $property->id);
+				$criteria .= "AND kohde = {$property->id} ";
+			}
+		}
+
+		$clientName = $req->getQuery("yrityksen_nimi");
+		if($clientName) {
+			$crit = new CDbCriteria();
+			$crit->select = "id";
+			$crit->addCondition("yrityksen_nimi LIKE '%$clientName%' OR CONCAT(etunimi, ' ', sukunimi) LIKE '%$clientName%' ");
+			$client = Asiakkaat::model()
+				->find($crit);
+			if($client) {
+				$clientId = $client->id;
+				$crit = new CDbCriteria();
+				$crit->select = "id";
+				$crit->addCondition("asiakas_id = $clientId");
+				$properties = Kohteet::model()
+					->findAll($crit);
+				$propertyIds = array_map(function($property) {
+					return $property->id;
+				}, $properties);
+				$propertyIdStr = implode(",", $propertyIds);
+				Yii::log("Client property IDs: " . $propertyIdStr);
+				$criteria .= "AND kohde IN ($propertyIdStr) ";
+			}
+		}
+
+		$employeeName = $req->getQuery("tekijan_nimi");
+		if($employeeName) {
+			$employeeName = trim($employeeName);
+			$crit = new CDbCriteria();
+			$crit->select = "id";
+			$crit->addCondition("tekijan_nimi LIKE '%$employeeName%'");
+			$employee = Tyontekijat::model()
+				->find($crit);
+			if($employee) {
+				Yii::log("Employee ID found: " . $employee->id);
+				$criteria .= "AND tid = {$employee->id} ";
+			}
+		}
+
+
+		return $criteria;
+	}
+
+
 }
