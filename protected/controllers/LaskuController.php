@@ -1124,6 +1124,7 @@ exit;
 		//     TuotteetPalvelut -->
 
 		// <-- 2. Asiakas
+		/*
 		if(isset($tp->id))
 		{
 			if(isset($asiakas->id) and $asiakas->hinnasto_id != 0)
@@ -1152,6 +1153,7 @@ exit;
 				$return['yksikko']	= $hinnasto->hinnasto_yksikko;
 			}
 		}
+		*/
 		//     Asiakas -->
 
 		// <-- 3. Kohteet
