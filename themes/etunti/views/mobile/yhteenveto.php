@@ -254,6 +254,14 @@ $(document).ready(function(){
   exit;
 */
 
+  $lu_tai_tot = 2;
+
+  if(isset($_GET['raporti_tyyppi']))
+  {
+  	if($_GET['raporti_tyyppi'] == 'Hyvaksynta'){ $lu_tai_tot = 2; }
+  	if($_GET['raporti_tyyppi'] == 'Hyvaksytyt'){ $lu_tai_tot = 3; }
+  }
+
   foreach($model as $data)
   {
 	$tids[] = $data->tid;
@@ -275,8 +283,12 @@ $(document).ready(function(){
 	$tot_sun = $suunn;
 	$total_sunniteltu += $tot_sun;
 
-	$return = $this->toteutu($data->tid,"yhteenveto",$from,$to);
-	$this->renderPartial('_yhteenveto',array('data'=>$data,'tp'=>$tp,'tot_sun'=>$tot_sun,'return'=>$return));
+	$return 		= $this->toteutu($data->tid,"yhteenveto",$from,$to);
+	$return['yo'] 	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $lu_tai_tot, true, 2, false, null, null, false)[$data->tid];
+	$return['ilta']	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $lu_tai_tot, true, 1, false, null, null, false)[$data->tid];
+	$return['su']	= $this->TidfromtoMobiiliAll($from, $to, $tids, array(3), $lu_tai_tot, true, 3, false, null, null, false)[$data->tid];
+
+	$this->renderPartial('_yhteenveto',array('data'=>$data,'tp'=>$tp,'tot_sun'=>$tot_sun,'return' => $return));
 
 	$yht[0] += $return[0];
 	$yht[1] += $return[1];
