@@ -3706,6 +3706,11 @@ $laskunRivit=LaskunRivit::model()->findAll("lid='".$model->id."'");
 
 if(count($laskunRivit) > 0){ $xml .= '<InvoiceLines>'; }
 
+
+if( $model->alv_muoto == 0 ){  $type = 'net'; }
+if( $model->alv_muoto == 1 ){  $type = 'gross'; }
+
+
 foreach($laskunRivit as $rivit)
 {
 
@@ -3724,7 +3729,10 @@ foreach($laskunRivit as $rivit)
 		        	<DimensionItem>'.$tuotteet->netvisor_dimension_item.'</DimensionItem>
 		         </Dimension>';
 		}
-	
+
+		if( $tuotteet->alvsis == 'nolla' ){  	$type = 'net'; }
+		if( $tuotteet->alvsis == 'sis' ){  		$type = 'gross'; }
+
 	} elseif( $this->netvisorProductDefault() != 0 and !isset($tuotteet->id) or (isset($tuotteet->id) and $tuotteet->netvisorkey == 0) ){
 		$ProductIdentifier = $this->netvisorProductDefault();
 	} else {
@@ -3743,14 +3751,6 @@ foreach($laskunRivit as $rivit)
 		</SalesInvoiceCommentLine>
 	</InvoiceLine>';
 	}
-
-	/* ROMAN 04.01.2024
-	if( $model->alv_muoto == 0 ){  $type = 'net'; }
-	if( $model->alv_muoto == 1 ){  $type = 'gross'; }
-	*/
-
-	if( $rivit->alvsis == 'nolla' ){  	$type = 'net'; }
-	if( $rivit->alvsis == 'sis' ){  	$type = 'gross'; }
 
 	$hinta = $rivit->hinta;
 
