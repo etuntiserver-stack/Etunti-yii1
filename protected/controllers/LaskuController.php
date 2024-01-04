@@ -3744,24 +3744,30 @@ foreach($laskunRivit as $rivit)
 	</InvoiceLine>';
 	}
 
-if( $model->alv_muoto == 0 ){  $type = 'net'; }
-if( $model->alv_muoto == 1 ){  $type = 'gross'; }
-$hinta = $rivit->hinta;
+	/* ROMAN 04.01.2024
+	if( $model->alv_muoto == 0 ){  $type = 'net'; }
+	if( $model->alv_muoto == 1 ){  $type = 'gross'; }
+	*/
 
-// If price contains more than 2 decimal places, calculate price manually,
-// because netvisor doesn't support more than 2 decimal places. (test)
-if (strlen(substr(strrchr($hinta, "."), 1)) > 2) {
-	$alv_modifier = (100 + $rivit->alv) / 100;
-	if ($type == 'net') {
-		$hinta = $hinta * $alv_modifier;
-		$type = 'gross';
-	} else {
-		$hinta = $hinta / $alv_modifier;
-		$type = 'net';
+	if( $rivit->alvsis == 'nolla' ){  	$type = 'net'; }
+	if( $rivit->alvsis == 'sis' ){  	$type = 'gross'; }
+
+	$hinta = $rivit->hinta;
+
+	// If price contains more than 2 decimal places, calculate price manually,
+	// because netvisor doesn't support more than 2 decimal places. (test)
+	if (strlen(substr(strrchr($hinta, "."), 1)) > 2) {
+		$alv_modifier = (100 + $rivit->alv) / 100;
+		if ($type == 'net') {
+			$hinta = $hinta * $alv_modifier;
+			$type = 'gross';
+		} else {
+			$hinta = $hinta / $alv_modifier;
+			$type = 'net';
+		}
 	}
-}
 
-$xml .= '
+	$xml .= '
        <InvoiceLine>
          <SalesInvoiceProductLine>
              <ProductIdentifier type="netvisor">'.$ProductIdentifier.'</ProductIdentifier>
