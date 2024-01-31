@@ -3760,10 +3760,10 @@ foreach($laskunRivit as $rivit)
 		$alv_modifier = (100 + $rivit->alv) / 100;
 		if ($type == 'net') {
 			$hinta = $hinta * $alv_modifier;
-			$type = 'gross';
+			//$type = 'gross'; Miksi noin
 		} else {
 			$hinta = $hinta / $alv_modifier;
-			$type = 'net';
+			//$type = 'net'; Miksi noin
 		}
 	}
 
