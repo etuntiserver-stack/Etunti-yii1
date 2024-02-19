@@ -3667,7 +3667,8 @@ exit;
 	if(isset($model->toimituspaiva) && strlen($model->toimituspaiva) === 10) {
 		$deliveryDate = date("Y-m-d", strtotime($model->toimituspaiva));
 	}
-
+// Simo: removed total amount, netvisor will calculate it for us
+// <SalesInvoiceAmount>'.$model->yhteensa_total.'</SalesInvoiceAmount>
 $xml = '
 <root>
   <SalesInvoice>
@@ -3676,7 +3677,7 @@ $xml = '
     <SalesInvoiceDueDate>'.date("Y-m-d", strtotime($model->erapaiva)).'</SalesInvoiceDueDate>
     <SalesInvoiceDeliveryDate format="ansi">'.$deliveryDate.'</SalesInvoiceDeliveryDate>
     <SalesInvoiceReferenceNumber>'.$model->viitenumero.'</SalesInvoiceReferenceNumber>
-    <SalesInvoiceAmount>'.$model->yhteensa_total.'</SalesInvoiceAmount>
+    
     <!--<SellerIdentifier type="netvisor">32</SellerIdentifier>-->
     <SalesInvoiceStatus type="netvisor">unsent</SalesInvoiceStatus>
 	'.
