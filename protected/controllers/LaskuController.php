@@ -3752,10 +3752,10 @@ if (strlen(substr(strrchr($hinta, "."), 1)) > 2) {
 	$alv_modifier = (100 + $rivit->alv) / 100;
 	if ($type == 'net') {
 		$hinta = $hinta * $alv_modifier;
-		$type = 'gross';
+		//$type = 'gross';
 	} else {
 		$hinta = $hinta / $alv_modifier;
-		$type = 'net';
+		//$type = 'net';
 	}
 }
 
