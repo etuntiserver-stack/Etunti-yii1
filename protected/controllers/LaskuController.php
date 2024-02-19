@@ -1124,6 +1124,7 @@ exit;
 		//     TuotteetPalvelut -->
 
 		// <-- 2. Asiakas
+		/*
 		if(isset($tp->id))
 		{
 			if(isset($asiakas->id) and $asiakas->hinnasto_id != 0)
@@ -1152,6 +1153,7 @@ exit;
 				$return['yksikko']	= $hinnasto->hinnasto_yksikko;
 			}
 		}
+		*/
 		//     Asiakas -->
 
 		// <-- 3. Kohteet
@@ -3703,6 +3705,8 @@ $xml = '
 $laskunRivit=LaskunRivit::model()->findAll("lid='".$model->id."'");
 
 if(count($laskunRivit) > 0){ $xml .= '<InvoiceLines>'; }
+if( $model->alv_muoto == 0 ){  $type = 'net'; }
+if( $model->alv_muoto == 1 ){  $type = 'gross'; }
 
 foreach($laskunRivit as $rivit)
 {
@@ -3723,6 +3727,9 @@ foreach($laskunRivit as $rivit)
 		         </Dimension>';
 		}
 	
+		if( $tuotteet->alvsis == 'nolla' ){  	$type = 'net'; }
+		if( $tuotteet->alvsis == 'sis' ){  		$type = 'gross'; }
+
 	} elseif( $this->netvisorProductDefault() != 0 and !isset($tuotteet->id) or (isset($tuotteet->id) and $tuotteet->netvisorkey == 0) ){
 		$ProductIdentifier = $this->netvisorProductDefault();
 	} else {
