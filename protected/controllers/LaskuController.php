@@ -3749,8 +3749,8 @@ foreach($laskunRivit as $rivit)
 	</InvoiceLine>';
 	}
 
-if( $model->alv_muoto == 0 ){  $type = 'net'; }
-if( $model->alv_muoto == 1 ){  $type = 'gross'; }
+//if( $model->alv_muoto == 0 ){  $type = 'net'; }
+//if( $model->alv_muoto == 1 ){  $type = 'gross'; }
 $hinta = $rivit->hinta;
 
 // If price contains more than 2 decimal places, calculate price manually,
