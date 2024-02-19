@@ -1,10 +1,6 @@
 <?php
 /* @var $this MobileController */
 /* @var $data Mobile */
-
-
-
-
 ?>
 
 <tr>
@@ -33,9 +29,9 @@
 	<td class="col3"><?php echo $this->sprint($data->l_tunnit); ?></td>
 	<td class="col4"><?php echo $this->sprint($return[0]); ?></td>
 	<td class="col5"><?php echo $tp; ?></td>
-	<td class="col6"><?php echo $this->sprint($return[1]); ?></td>
-	<td class="col7"><?php echo $this->sprint($return[2]); ?></td>
-	<td class="col8"><?php echo $this->sprint($return[3]); ?></td>
+	<td class="col6"><?php echo $this->sprint($return['ilta']); ?></td>
+	<td class="col7"><?php echo $this->sprint($return['yo']); ?></td>
+	<td class="col8"><?php echo $this->sprint($return['su']); ?></td>
 </tr>
 
 	

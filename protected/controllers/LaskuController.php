@@ -1124,6 +1124,7 @@ exit;
 		//     TuotteetPalvelut -->
 
 		// <-- 2. Asiakas
+		/*
 		if(isset($tp->id))
 		{
 			if(isset($asiakas->id) and $asiakas->hinnasto_id != 0)
@@ -1152,6 +1153,7 @@ exit;
 				$return['yksikko']	= $hinnasto->hinnasto_yksikko;
 			}
 		}
+		*/
 		//     Asiakas -->
 
 		// <-- 3. Kohteet
@@ -3705,6 +3707,11 @@ $laskunRivit=LaskunRivit::model()->findAll("lid='".$model->id."'");
 
 if(count($laskunRivit) > 0){ $xml .= '<InvoiceLines>'; }
 
+
+if( $model->alv_muoto == 0 ){  $type = 'net'; }
+if( $model->alv_muoto == 1 ){  $type = 'gross'; }
+
+
 foreach($laskunRivit as $rivit)
 {
 
@@ -3723,7 +3730,10 @@ foreach($laskunRivit as $rivit)
 		        	<DimensionItem>'.$tuotteet->netvisor_dimension_item.'</DimensionItem>
 		         </Dimension>';
 		}
-	
+
+		if( $tuotteet->alvsis == 'nolla' ){  	$type = 'net'; }
+		if( $tuotteet->alvsis == 'sis' ){  		$type = 'gross'; }
+
 	} elseif( $this->netvisorProductDefault() != 0 and !isset($tuotteet->id) or (isset($tuotteet->id) and $tuotteet->netvisorkey == 0) ){
 		$ProductIdentifier = $this->netvisorProductDefault();
 	} else {
@@ -3743,24 +3753,22 @@ foreach($laskunRivit as $rivit)
 	</InvoiceLine>';
 	}
 
-if( $model->alv_muoto == 0 ){  $type = 'net'; }
-if( $model->alv_muoto == 1 ){  $type = 'gross'; }
-$hinta = $rivit->hinta;
+	$hinta = $rivit->hinta;
 
-// If price contains more than 2 decimal places, calculate price manually,
-// because netvisor doesn't support more than 2 decimal places. (test)
-if (strlen(substr(strrchr($hinta, "."), 1)) > 2) {
-	$alv_modifier = (100 + $rivit->alv) / 100;
-	if ($type == 'net') {
-		$hinta = $hinta * $alv_modifier;
-		$type = 'gross';
-	} else {
-		$hinta = $hinta / $alv_modifier;
-		$type = 'net';
+	// If price contains more than 2 decimal places, calculate price manually,
+	// because netvisor doesn't support more than 2 decimal places. (test)
+	if (strlen(substr(strrchr($hinta, "."), 1)) > 2) {
+		$alv_modifier = (100 + $rivit->alv) / 100;
+		if ($type == 'net') {
+			$hinta = $hinta * $alv_modifier;
+			//$type = 'gross'; Miksi noin
+		} else {
+			$hinta = $hinta / $alv_modifier;
+			//$type = 'net'; Miksi noin
+		}
 	}
-}
 
-$xml .= '
+	$xml .= '
        <InvoiceLine>
          <SalesInvoiceProductLine>
              <ProductIdentifier type="netvisor">'.$ProductIdentifier.'</ProductIdentifier>

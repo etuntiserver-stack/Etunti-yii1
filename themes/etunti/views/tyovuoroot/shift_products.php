@@ -14,13 +14,23 @@ $site = Yii::app()->createController('Site');
     <h2 class="myBgColors p10"><i class="fa fa-calendar-check-o"></i> <?=Yii::t('main', 'Työvuorot tuotteittain')?></h2>
 
 
+    <div class="admin-form">
+        <div class="panel heading-border">
+            <div class="panel-body bg-light">
+                <div class="pull-right">
+                    <form action="<?=Yii::app()->request->baseUrl?>/index.php/mobile/tulostus" class="form-group"
+                        target="_blank" method="POST">
+                        <input type="hidden" name="excel_list" value="true">
+                        <input type="hidden" name="ext" value="xls">
+                        <textarea name="html_content" class="form-control" style="display:none"></textarea>
+                        <button type="submit" class="btn btn-primary myBgColors submitForm"><i
+                                class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+                <form id="mobForm" action="#" class="form-inline" method="GET">
+                    <input type="hidden" name="mob_hae">
 
-    <form id="mobForm" action="#" class="form-inline" method="GET">
-        <input type="hidden" name="mob_hae">
 
-        <div class="admin-form">
-            <div class="panel heading-border">
-                <div class="panel-body bg-light">
 
                     <!-- Input Icons -->
                     <div class="row">
@@ -170,12 +180,24 @@ $site = Yii::app()->createController('Site');
                         </div>
                     </div>
 
-                </div>
+                </form>
             </div>
         </div>
+    </div>
 
 
-    </form>
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+        $(".submitForm").on('click', function(e) {
+            $(this).prev('textarea').val($('#tableContent').html());
+            $(this).closest('form').submit();
+            e.preventDefault();
+        });
+
+
+    });
+    </script>
 
 
     <!-- loppu: .tray-center -->
@@ -185,7 +207,7 @@ $site = Yii::app()->createController('Site');
     <div class="panel heading-border">
         <div class="panel-body">
             <div class="row">
-                <div class="table-responsive">
+                <div class="table-responsive" id="tableContent">
                     <table class="table table-responsive">
                         <thead>
                             <tr>
