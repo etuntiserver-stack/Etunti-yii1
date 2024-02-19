@@ -3676,7 +3676,7 @@ $xml = '
     <SalesInvoiceDueDate>'.date("Y-m-d", strtotime($model->erapaiva)).'</SalesInvoiceDueDate>
     <SalesInvoiceDeliveryDate format="ansi">'.$deliveryDate.'</SalesInvoiceDeliveryDate>
     <SalesInvoiceReferenceNumber>'.$model->viitenumero.'</SalesInvoiceReferenceNumber>
-    </SalesInvoiceAmount>
+    <SalesInvoiceAmount></SalesInvoiceAmount>
     <!--<SellerIdentifier type="netvisor">32</SellerIdentifier>-->
     <SalesInvoiceStatus type="netvisor">unsent</SalesInvoiceStatus>
 	'.
