@@ -3751,7 +3751,11 @@ foreach($laskunRivit as $rivit)
 
 //if( $model->alv_muoto == 0 ){  $type = 'net'; }
 //if( $model->alv_muoto == 1 ){  $type = 'gross'; }
-$hinta = $rivit->hinta;
+//$hinta = $rivit->hinta;
+
+// always send net price to netvisor
+$hinta = $rivit->veroton;
+$type = "net";
 
 // If price contains more than 2 decimal places, calculate price manually,
 // because netvisor doesn't support more than 2 decimal places. (test)
