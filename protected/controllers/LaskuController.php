@@ -3754,7 +3754,7 @@ foreach($laskunRivit as $rivit)
 //$hinta = $rivit->hinta;
 
 // always send net price to netvisor
-$hinta = $rivit->veroton;
+$hinta = $tuotteet->hinta_alv_0;
 $type = "net";
 
 // If price contains more than 2 decimal places, calculate price manually,
