@@ -3756,7 +3756,8 @@ foreach($laskunRivit as $rivit)
 // always send net price to netvisor
 $hinta = $tuotteet->hinta_alv_0;
 $type = "net";
-
+Yii::log("Using price $hinta", CLogger::LEVEL_INFO, "Netvisor invoice");
+Yii::log("Using type $type", CLogger::LEVEL_INFO, "Netvisor invoice");
 // If price contains more than 2 decimal places, calculate price manually,
 // because netvisor doesn't support more than 2 decimal places. (test)
 if (strlen(substr(strrchr($hinta, "."), 1)) > 2) {
@@ -3791,6 +3792,8 @@ if(count($laskunRivit) > 0){ $xml .= '</InvoiceLines>'; }
 $xml .= '
   </SalesInvoice>
 </root>';
+
+Yii::log($xml, CLogger::LEVEL_INFO, "Netvisor invoice");
 	
 //echo $xml;
 //exit;
