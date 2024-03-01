@@ -3753,12 +3753,16 @@ foreach($laskunRivit as $rivit)
 //if( $model->alv_muoto == 1 ){  $type = 'gross'; }
 //$hinta = $rivit->hinta;
 
+$suspectedType = $type;
 // always send net price to netvisor
 $hinta = $tuotteet->hinta_alv_0;
 $type = "net";
 $productId = $tuotteet->id;
+$rowPrice = $rivit->hinta;
 Yii::log("Using price $hinta, product ID $productId", CLogger::LEVEL_INFO, "Netvisor invoice");
+Yii::log("Row price would be $rowPrice", CLogger::LEVEL_INFO, "Netvisor invoice");
 Yii::log("Using type $type", CLogger::LEVEL_INFO, "Netvisor invoice");
+Yii::log("Suspected type is $suspectedType", CLogger::LEVEL_INFO, "Netvisor invoice");
 // If price contains more than 2 decimal places, calculate price manually,
 // because netvisor doesn't support more than 2 decimal places. (test)
 if (strlen(substr(strrchr($hinta, "."), 1)) > 2) {
