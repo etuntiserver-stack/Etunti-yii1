@@ -118,6 +118,10 @@ class LoginController extends Controller
 			    if(strpos($domain, 'staging_') !== false)
 			    	Yii::app()->user->setState('adminPaketti', "1,2,3,4,5");
 
+			    if($domain === "kotipuhtaaksi" && $mod->adm_login === "Simo") {
+					Yii::app()->user->setState('adminPaketti', "1,2,3,4,5,999");
+				}
+
 			    $this->redirect(Yii::app()->request->baseUrl.'/index.php/site/etusivu');
 			  } else {
 			    Yii::app()->user->setFlash('danger', "Tarkasta yritys- ja käyttäjätunnus sekä salasana");

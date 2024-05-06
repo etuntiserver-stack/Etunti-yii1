@@ -1,3 +1,6 @@
+assets/*
+YII/*
+robots.txt
 tmp/*
 img/*
 lib/defdb.sql

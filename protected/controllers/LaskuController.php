@@ -61,13 +61,13 @@ class LaskuController extends Controller
 
 		if(isset(Yii::app()->user->adminID) and in_array('3',$tas))
 		{
-		   $m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	       	   if($m->id == Yii::app()->user->adminID)
-		   {
-			return true;
-		   } else {
-			$this->redirect(array('/site/otakaytoon', 'tila' => 'lasku'));
-		   }		
+			$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+			if($m->id == Yii::app()->user->adminID)
+			{
+				return true;
+			} else {
+				$this->redirect(array('/site/otakaytoon', 'tila' => 'lasku'));
+			}		
 
 		} else {
 			$this->redirect(array('/site/otakaytoon', 'tila' => 'lasku'));
