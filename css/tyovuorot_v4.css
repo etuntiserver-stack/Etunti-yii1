@@ -128,10 +128,9 @@ td span.nimi{
 	line-height: 16px;
 }
 #hovertietoja{
-	position: absolute; left: 0; top: 0;
-	width: 300px;
+	position: fixed; left: 0; top: 0;
+	min-width: 300px;
 	padding: 10px 20px;
-	position: absolute;
 	font-family: ibm-plex-sans, sans-serif;
 	font-size: 90%;
 	line-height: 16px;

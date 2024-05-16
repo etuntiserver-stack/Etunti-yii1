@@ -269,71 +269,76 @@ function tekija_hover(tekija_id) {
 }
 
 jQuery.hovertietoja = function hovertietoja(){
-     var delay=1000, setTimeoutConst;
-     $('.tv_edit').hover(function(){
-	if( !$(this).hasClass('muistissa') && !$(this).prev('i').hasClass('muistissa') ){
-	   if( !$(this).prev('i').hasClass('muistin') ){
-		$(this).before('<i class="fa fa-pencil-square-o muistin" for="' + $(this).attr('id') + '" title="Aktivoi tämä työvuoro siirto/kopio/poisto varten"></i>');
-	   }
-	}
-	this_id = $(this).attr('id');
-	setTimeoutConst = setTimeout(function() {
-		$('#hovertietoja').html( hv_tiedot(this_id) ).show();
-		const osElem = document.getElementById("hover_os_count");
-		const propertyIdElem = document.getElementById("hover_property_id");
-		if(osElem && propertyIdElem) {
-			const propId = propertyIdElem.value;
-			if(propId) {
-				// set (and fetch) os count
-				$.ajax({
-					type: "POST",
-					url: "/index.php/tyovuoroot/omasiistijat_lista",
-					data: {
-						location_id: propId,
-						force_refresh: false,
-					},
-					success: (data) => {
-						data = JSON.parse(data);
-						// make sure we have an object, that is not an array
-						// (empty array is returned when there's no OS data available)
-						if(typeof data === "object" && !Array.isArray(data)) {
-							const keys = Object.keys(data);
-							$(osElem).html("Omasiistijöitä: " + (keys?.length ?? 0));
-						} else {
-							// empty array (or something else unknown) returned, show 0
-							$(osElem).html("Omasiistijöitä: 0");
-						}
-					},
-					error: (err) => {
-						console.log("error while fetching OS list", err);
-					}
-				});
+	var delay=1000, setTimeoutConst;
+	$('.tv_edit').hover(function(){
+
+		if( !$(this).hasClass('muistissa') && !$(this).prev('i').hasClass('muistissa') ){
+			if( !$(this).prev('i').hasClass('muistin') ){
+				$(this).before('<i class="fa fa-pencil-square-o muistin" for="' + $(this).attr('id') + '" title="Aktivoi tämä työvuoro siirto/kopio/poisto varten"></i>');
 			}
 		}
-		return false;
-	}, delay);
+		this_id = $(this).attr('id');
 
-     }, function()
-     { 
-	$('#hovertietoja').html('').hide();
-	clearTimeout(setTimeoutConst);
-     });
-     console.log('hovertietoja loaded.');
+		setTimeoutConst = setTimeout(function() {
+			var thisIdTiedot = hv_tiedot(this_id);
+			//console.log('hovertietoja hovered: ' + thisIdTiedot);
+
+			$('#hovertietoja').html( thisIdTiedot ).show();
+			const osElem = document.getElementById("hover_os_count");
+			const propertyIdElem = document.getElementById("hover_property_id");
+			if(osElem && propertyIdElem) {
+				const propId = propertyIdElem.value;
+				if(propId) {
+					// set (and fetch) os count
+					$.ajax({
+						type: "POST",
+						url: "/index.php/tyovuoroot/omasiistijat_lista",
+						data: {
+							location_id: propId,
+							force_refresh: false,
+						},
+						success: (data) => {
+							data = JSON.parse(data);
+							// make sure we have an object, that is not an array
+							// (empty array is returned when there's no OS data available)
+							if(typeof data === "object" && !Array.isArray(data)) {
+								const keys = Object.keys(data);
+								$(osElem).html("Omasiistijöitä: " + (keys?.length ?? 0));
+							} else {
+								// empty array (or something else unknown) returned, show 0
+								$(osElem).html("Omasiistijöitä: 0");
+							}
+						},
+						error: (err) => {
+							console.log("error while fetching OS list", err);
+						}
+					});
+				}
+			}
+			return false;
+		}, delay);
+
+		}, function()
+		{ 
+		$('#hovertietoja').html('').hide();
+		clearTimeout(setTimeoutConst);
+	});
+	console.log('hovertietoja loaded. V5');
 }
 
 function hv_tiedot(this_id){
 	var hovertietoja = '';
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/hovertietoja?this_id='+this_id,
-	   async: false,
-           success: function(data){
-		d = JSON.parse(data);
-		//console.log(d);
-		hovertietoja += d;
-           },
-	   error:function(data){
-		console.log(data)
-	   }
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/hovertietoja?this_id='+this_id,
+			async: false,
+			success: function(data){
+				d = JSON.parse(data);
+				//console.log(d);
+				hovertietoja += d;
+			},
+			error:function(data){
+				console.log(data)
+			}
         });
 	return hovertietoja;
 }

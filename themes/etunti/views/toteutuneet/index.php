@@ -11,9 +11,15 @@ $netvisor_kaytto 			= $asetukset->netvisor_kaytto;
 $netvisor_mita_onkayttossa 	= $asetukset->netvisor_mita_onkayttossa;
 $netvisor_lahetyksen_muoto	= $asetukset->netvisor_lahetyksen_muoto;
 ?>
-<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot_v4.css">
+
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
-<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot_v4.js"></script>
+
+<?php
+$timestamp = time();
+echo '<link rel="stylesheet" type="text/css" href="'.Yii::app()->request->baseUrl.'/css/tyovuorot_v4.css?v=' . $timestamp . '">';
+echo '<script type="text/javascript" src="'.Yii::app()->request->baseUrl.'/js/tvuoroot_v4.js?v=' . $timestamp . '"></script>';
+?>
+
 <style>
 	.fullRivi {
 		height: 100%;
@@ -795,6 +801,14 @@ $netvisor_lahetyksen_muoto	= $asetukset->netvisor_lahetyksen_muoto;
 
 		yhteensaTfoot();
 
+		setTimeout(function() {
+		    if (typeof jQuery.hovertietoja === "function") {
+		        jQuery.hovertietoja();
+		    } else {
+		        console.error("Функция jQuery.hovertietoja не найдена.");
+		    }
+		}, 2000);
+
 		function yhteensaTfoot() {
 			var getContent = $('#yhteensaTfoot').html();
 			$('#yhteensaTfootContent').html('<div class="row table-responsive"><table class="table">' + getContent + '</table></div>');
@@ -984,7 +998,6 @@ $netvisor_lahetyksen_muoto	= $asetukset->netvisor_lahetyksen_muoto;
 
 
 		$('.tv_edit').after('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:2px; font-size: 130%; z-index: 99999999" data-toggle="tooltip" data-placement="left" title="Siirrä toteutuun"></i>');
-
 
 		$(".sirraToteutuun").tooltip({
 			classes: {

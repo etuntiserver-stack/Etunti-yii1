@@ -2670,6 +2670,13 @@ class TyovuorootController extends Controller
 		}
 		//  Paikkakunta nakyvissa -->
 
+		// <-- Tuote / Palvelu
+		if(isset($tvVal->tp->id))
+		{
+			$hovertietoja .= '<b>Tuote/Palvelu:</b> '.$tvVal->tp->nimike.'<br>';
+		}
+		// -->
+
 		// <-- Hovertietoja generoi
 		// <-- peruutettu
 		if($tvVal['peruutettu'] == 1 and isset($tv_controller)){
