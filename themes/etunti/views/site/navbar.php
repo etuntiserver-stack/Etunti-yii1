@@ -1186,14 +1186,15 @@ if($site[0]->UudetMobiiliViestit()){ $uusi_viesti = '<i class="fa fa-bell text-d
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/l_asiakkaat">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Laskuttettavat asiakkaat'); ?></a>
               </li>
-	      <?php if( 
-			Yii::app()->user->domain == 'demo' 
-			|| Yii::app()->user->domain == 'sivex' 
-			|| Yii::app()->user->domain == 'kotipuhtaaksi'
-			|| Yii::app()->user->domain == 'staging_kotipuhtaaksi'
-			|| Yii::app()->user->domain == 'seran'
-      || Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy'
-	      ): ?>
+			  <?php if( 
+				Yii::app()->user->domain == 'demo' 
+				|| Yii::app()->user->domain == 'sivex' 
+				|| Yii::app()->user->domain == 'kotipuhtaaksi'
+				|| Yii::app()->user->domain == 'staging_kotipuhtaaksi'
+				|| Yii::app()->user->domain == 'seran'
+				|| Yii::app()->user->domain == 'kotimaan_huolenpitopalvelut_oy'
+				|| Yii::app()->user->domain == 'inkan_kotitalouspalvelut_oy'
+			  ): ?>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/auto">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Laskutuksen automaatio'); ?></a>
