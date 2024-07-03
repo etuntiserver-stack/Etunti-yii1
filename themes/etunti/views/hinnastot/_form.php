@@ -101,7 +101,7 @@
 	</div>
      <td><input type="text" class="form-control hinnasto_hinta" name="Rivi[tuote][hinnasto_hinta][]" step="any" value="<?=$r->hinnasto_hinta?>"></td>
      <td>
-	<?php $l = array(0=>0,10=>10,14=>14,24=>24); ?>
+	<?php $l = array(0=>0,10=>10,14=>14,24=>24,25.5=>25.5); ?>
 	<select name="Rivi[tuote][hinnasto_alv][]" class="form-control hinnasto_alv">
 	 <option value="24">24</option>
 	 <?php foreach($l as $itm) : ?>

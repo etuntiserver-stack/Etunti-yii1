@@ -296,11 +296,10 @@ $('.ryhmat').multiselect({
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_alv'); ?>
 		<?php
-        	$l = array(0=>0,10=>10,14=>14,24=>24);
-
-        	echo $form->dropDownList($model, 'asiakas_alv', $l,
-		array('empty'=>'Valitse','class'=>'form-control'
-		));
+			$l = array(0=>0,10=>10,14=>14,24=>24,25.5=>25.5);
+			echo $form->dropDownList($model, 'asiakas_alv', $l,
+			array('empty'=>'Valitse','class'=>'form-control'
+			));
         	?>
 		<?php echo $form->error($model,'asiakas_alv'); ?>
 	</div>

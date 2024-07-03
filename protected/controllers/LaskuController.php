@@ -1488,6 +1488,7 @@ exit;
 		$body = '';
 		if($row)
 		$body .= '<option value="'.$row.'">'.$row.'</option>';
+		$body .= '<option value="25.5">25.5</option>';
 		$body .= '<option value="24">24</option>';
 		$body .= '<option value="14">14</option>';
 		$body .= '<option value="10">10</option>';

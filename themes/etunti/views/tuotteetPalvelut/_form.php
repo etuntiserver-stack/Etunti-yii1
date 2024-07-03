@@ -84,11 +84,10 @@ $model->kategoria = json_decode($model->kategoria, true);
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alv'); ?>
 		<?php 
-        	$l = array(0=>0,10=>10,14=>14,24=>24);
-		echo $form->dropDownList($model,'alv',$l, 
+			$l = array(0=>0,10=>10,14=>14,24=>24,25.5=>25.5);
+			echo $form->dropDownList($model,'alv',$l, 
 			array('class'=>'form-control')
-		);
-
+			);
 		?>
 
 		<?php echo $form->error($model,'alv'); ?>

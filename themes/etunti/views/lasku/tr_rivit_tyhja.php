@@ -8,7 +8,7 @@
 	$hinta 			= 0;
 	$maara 			= 0;
 	$yksikkot 		= $this->yksikkot(null);
-	$alv 			= $this->alv(24);
+	$alv 			= $this->alv(25.5);
 	$free_text 		= '';
 	$pikkuviesti 	= '';
 
