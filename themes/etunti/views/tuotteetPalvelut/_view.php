@@ -1,7 +1,15 @@
 <?php
 /* @var $this KohteetController */
 /* @var $data Kohteet */
-
+/*
+if( $data->alvsis == 'nolla'){
+	$result = round((($data->hinta_alv_0 * $data->alv) / 100) + $data->hinta_alv_0, 6);
+}
+if( $data->alvsis == 'sis'){
+    $clr_alv = str_replace(".", "", $data->alv);
+	$result = round($data->hinta_alv_sis / floatval('1.' . $clr_alv), 6);
+}
+*/
 ?>
 
 <tr>

@@ -1269,7 +1269,12 @@ $(document).delegate("table#TableRivit .valitseTuote","change",function(){
 			$("#hinnasto_rivi_id_"+num).val(sp['hinnasto_rivi_id']);
 			$("#hinta_"+num).closest('tr').find('.hinnaston_otsikko').attr("title", sp['hinnaston_otsikko']);
 			$("#yksikko_"+num+" option[value="+sp['yksikko']+"]").attr('selected','selected');
-			$("#alv_"+num+" option[value="+sp['alv']+"]").attr('selected','selected');
+			//$("#alv_"+num+" option[value="+sp['alv']+"]").attr('selected','selected');
+			
+			$("#alv_"+num+" option").filter(function() {
+				return $(this).val() == sp['alv'];
+			}).attr('selected', 'selected');
+			
 			$("#tuoteID_"+num).val(sp['id']);
 		}
 

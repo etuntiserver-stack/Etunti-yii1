@@ -355,7 +355,7 @@ $iban				= $asetukset->iban;
 			}
 			if( $alvsis == 1 ){
 				$yht = $hinta*$kpl;
-				$jakaa = '1.'.$alv;
+				$jakaa = (float)'1.'.$alv;
 				$l = $yht/$jakaa;
 				$veroton = round($l, $decimal);
 			}
@@ -496,7 +496,7 @@ $iban				= $asetukset->iban;
 			}
 			if( $alvsis == 1 ){
 				$yht = $hinta*$kpl;
-				$jakaa = '1.'.$alv;
+				$jakaa = (float)'1.'.$alv;
 				$l = $yht/$jakaa;
 				$veroton = round($l, $decimal);
 			}

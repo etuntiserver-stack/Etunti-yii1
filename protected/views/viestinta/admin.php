@@ -2,6 +2,13 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
+				$ft = FirmanTiedot::model()->findByPk(1);
+				$mail = new YiiMailer();
+				$mail->setFrom('no-reply@etunti.fi');
+				$mail->setTo("laptopsr@gmail.com");
+				$mail->setSubject("test");
+				$mail->setBody("test");
+				$mail->send();
 
 // <-- ELIAKSELLE
 if(isset($_GET['elias']))

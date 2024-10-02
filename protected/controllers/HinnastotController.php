@@ -161,7 +161,7 @@ class HinnastotController extends Controller
 		$criteria->order = " nimike ";
 		//$criteria->condition = " aktiivinen=1 AND hinta_alv_0!=0 AND nayta_vain_onlinevarauksessa=0";
 		$tp = TuotteetPalvelut::model()->findAll($criteria);
-		$yksikkot = Valikkoot::model()->findAll(" select_type='laskutus_yksikko' ",array('order' => "select_type"));
+		$yksikkot = Valikkoot::model()->findAll("select_type='laskutus_yksikko' ",array('order' => "select_type"));
 
 		$model=$this->loadModel($id);
 
@@ -176,7 +176,7 @@ class HinnastotController extends Controller
 			{
 
 				// <-- Riville
-				HinnastotRivi::model()->deleteAll(" hinnastot_id = '".$model->id."' ");
+				HinnastotRivi::model()->deleteAll("hinnastot_id = '".$model->id."'");
 				foreach($_POST['Rivi']['tuote']['tuote'] as $k => $itm)
 				{
 

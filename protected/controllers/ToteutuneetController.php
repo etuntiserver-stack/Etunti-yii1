@@ -1012,7 +1012,7 @@ class ToteutuneetController extends Controller
 		$to = date("Y-m-d", strtotime($to));
 
 
-	       	$criteria = new CDbCriteria();
+		$criteria = new CDbCriteria();
 		$criteria->order = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC";
 		$criteria->condition = " 
 			tid = '".$tid."' 
@@ -1050,7 +1050,7 @@ class ToteutuneetController extends Controller
 			$did = date("Ymd",strtotime($tvVal->aloitan));
 			$get[date("d.m.Y",strtotime($tvVal->aloitan))][] = '
 			<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="fullRivi">
-				&nbsp;<span class="" id="tv_'.$tvVal->id.'">'.$al.'<br>'.$tvVal->kohde_kannasta.'</span><br>
+				&nbsp;<span class="" id="tv_' . $tvVal->id . '">' . $al . '<br>' . htmlspecialchars($tvVal->kohde_kannasta, ENT_QUOTES, 'UTF-8') . '</span><br>
 			</div>';
 		}
 	

@@ -1489,7 +1489,7 @@ exit;
 		if($row)
 		$body .= '<option value="'.$row.'">'.$row.'</option>';
 		$body .= '<option value="25.5">25.5</option>';
-		$body .= '<option value="24" selected>24</option>';
+		$body .= '<option value="24">24</option>';
 		$body .= '<option value="14">14</option>';
 		$body .= '<option value="10">10</option>';
 		$body .= '<option value="0">0</option>';
@@ -3757,7 +3757,7 @@ $hinta = $rivit->hinta;
 $suspectedType = $type;
 // always send net price to netvisor
 //$hinta = $tuotteet->hinta_alv_0;
-//$type = "net";
+$type = "net";
 $productId = $tuotteet->id;
 $rowPrice = $rivit->hinta;
 Yii::log("Using price $hinta, product ID $productId", CLogger::LEVEL_INFO, "Netvisor invoice");

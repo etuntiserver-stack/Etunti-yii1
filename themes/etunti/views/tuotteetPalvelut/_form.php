@@ -84,7 +84,7 @@ $model->kategoria = json_decode($model->kategoria, true);
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alv'); ?>
 		<?php 
-			$l = array(0=>0,10=>10,14=>14,24=>24,25.5=>25.5);
+			$l = array('0'=>'0','10'=>'10','14'=>'14','24'=>'24','25.5'=>'25.5');
 			echo $form->dropDownList($model,'alv',$l, 
 			array('class'=>'form-control')
 			);
@@ -126,7 +126,8 @@ $(document).ready(function(){
 		$('#TuotteetPalvelut_hinta_alv_0').attr('readonly', 'yes');
 		var hinta_alv_sis = $('#TuotteetPalvelut_hinta_alv_sis').val();
 		var alv = parseFloat($('#TuotteetPalvelut_alv option:selected').val());
-		var jakaa = '1.'+alv;
+		var formattedAlv = alv.toString().replace('.', '');
+		var jakaa = '1.' + formattedAlv;
 		var laske = hinta_alv_sis/parseFloat(jakaa);
 		if(laske > 0)
 			$('#TuotteetPalvelut_hinta_alv_0').val(laske.toFixed(6));
