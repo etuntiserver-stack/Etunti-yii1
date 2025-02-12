@@ -3700,7 +3700,9 @@ $xml = '
     <DeliveryAddressLine>'.$model->osoite.'</DeliveryAddressLine>
     <DeliveryAddressPostNumber>'.$model->postinumero.'</DeliveryAddressPostNumber>
     <DeliveryAddressTown>'.$model->toimipaikka.'</DeliveryAddressTown>
-    <DeliveryAddressCountryCode type="ISO-3166">FI</DeliveryAddressCountryCode>';
+    <DeliveryAddressCountryCode type="ISO-3166">FI</DeliveryAddressCountryCode>
+    <ExpectPartialPayments>1</ExpectPartialPayments>
+';
 //<PaymentTermNetDays>'.$model->maksuehto.'</PaymentTermNetDays>
 
 $laskunRivit=LaskunRivit::model()->findAll("lid='".$model->id."'");
