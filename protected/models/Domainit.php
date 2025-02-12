@@ -140,8 +140,14 @@ public $viesti;
 
 	public static function sendGCM($tid, $subject, $message, $sound) 
 	{
+		Yii::log("Send GCM $tid", CLogger::LEVEL_INFO);
 		$t = Tyontekijat::model()->findbypk($tid);
 		$a = FirmanTiedot::model()->findbypk(1);
+		try {
+			$bearer = self::generateGoogleAccessToken();
+		} catch (\Throwable $e) {
+			Yii::log("Failed to generate access token: " . $e->getMessage(), CLogger::LEVEL_ERROR);
+		}
 		$ApiKey = 'AAAANdUAxyU:APA91bFuKiRWqW-EyzEHr_JuPfnEfJRf6vx8tuxjt8Wn1E3B_OOH9CYENG5jEb7yHcDfpVI3d8KjTuTuOCW6YmahViMivFzGDy8shvhKW5cMKWP1Lu28ajDQQte9Ue6ogqYQKuowskyGzptOX69WEiZnfl8N1lQB1g';
 
 		if(!isset($t->gcm_reg_id) or empty($t->gcm_reg_id))
@@ -149,8 +155,25 @@ public $viesti;
 			//echo 'Push nitification error';
 			return false;
 		}
-	
-		$json_data = '{ 
+
+		$data = [
+		  "message" => [
+		    "token" => $t->gcm_reg_id,
+		    "notification"=> [
+		      "title" => $a->tyonantaja . ": " . $subject,
+		      "body" => $message,
+		      //"sound" => "default",
+		      //"click_action" => "FCM_PLUGIN_ACTIVITY",
+		      //"icon" => "icon_name"
+		    ],
+		    "data" => [
+			    "Viesti" => $message,
+		    ]
+		  ]
+		];
+		$json_data = json_encode($data);
+	 	Yii::log("GCM Data: " . $json_data, CLogger::LEVEL_INFO);
+		/*$json_data = '{ 
 			"data": { 
 			  "Viesti": "'.$message.'"
 	                },
@@ -164,7 +187,7 @@ public $viesti;
 	                "to": "'.$t->gcm_reg_id.'",
 	                "priority": "high"
 	              }';
-
+		 */
 		/*
 		"data": { 
   	                  "price": "0",
@@ -174,12 +197,12 @@ public $viesti;
 		*/
 	
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+		curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/v1/projects/etunti-push-151006/messages:send');
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
                                             'Content-Type: application/json',                                                                                
                                             'Content-Length: '.strlen($json_data),
-                                            'Authorization:key='.$ApiKey  
+                                            'Authorization:Bearer '.$bearer  
                                           ));           
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
@@ -187,8 +210,76 @@ public $viesti;
 
 		$output = curl_exec($ch);
 		curl_close($ch);
+		Yii::log("GCM output: " . $output, CLogger::LEVEL_INFO);
 		//echo $output;
 		//exit;
+	}
+
+	private static function generateGoogleAccessToken()
+	{
+		//$path = "../../fcm_service_account.json";
+		$path = Yii::app()->getBasePath() . "/../fcm_service_account.json";
+		Yii::log("Path $path", CLogger::LEVEL_INFO);
+		$jsonKey = json_decode(file_get_contents($path), true);
+
+		Yii::log("Found json key: " . print_r($jsonKey, true), CLogger::LEVEL_INFO);
+
+		$now = time();
+		$expiry = $now + 3600;
+
+		$header = self::base64UrlEncode(json_encode([
+		    "alg" => "RS256",
+		    "typ" => "JWT"
+		]));
+
+		$payload = self::base64UrlEncode(json_encode([
+		    "iss" => $jsonKey["client_email"],
+		    "scope" => "https://www.googleapis.com/auth/firebase.messaging",
+		    "aud" => "https://oauth2.googleapis.com/token",
+		    "exp" => $expiry,
+		    "iat" => $now
+		]));
+		// Concatenate header and payload
+		$jwtUnsigned = $header . "." . $payload;
+
+		// Sign JWT using the private key
+		$signature = "";
+		openssl_sign($jwtUnsigned, $signature, $jsonKey["private_key"], "SHA256");
+		$jwt = $jwtUnsigned . "." . self::base64UrlEncode($signature);
+
+		// Request OAuth 2.0 Token
+		$response = self::getAccessTokenFromGoogle($jwt);
+
+		Yii::log("Google response: " . print_r($response, true), CLogger::LEVEL_INFO);
+    
+		return $response['access_token'] ?? null;
+	}
+
+	private static function getAccessTokenFromGoogle($jwt)
+	{
+		$url = "https://oauth2.googleapis.com/token";
+		$data = [
+			"grant_type" => "urn:ietf:params:oauth:grant-type:jwt-bearer",
+			"assertion" => $jwt
+		];
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/x-www-form-urlencoded"]);
+
+		$response = curl_exec($ch);
+		curl_close($ch);
+
+		return json_decode($response, true);	
+	}
+
+	// Helper function to encode data in Base64 URL format
+	private static function base64UrlEncode($data)
+	{
+		return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
 	}
 
 	public static function sendGCMeDico($aid, $subject, $message, $sound) 

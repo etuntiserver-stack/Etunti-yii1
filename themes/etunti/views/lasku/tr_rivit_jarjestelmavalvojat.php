@@ -46,7 +46,7 @@
 	<TD><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?=$hinta?>" step="0.01"><span class="errmsg"></span></TD>
 	<TD>
 		<select type="text" name="alv[<?php echo $num; ?>]" id="alv_<?php echo $num; ?>" class="form-control">
-		<?php echo $this->alv(24); ?>
+		<?php echo $this->alv(25.5); ?>
 		</select>
 	</TD>
 	<TD><input class="yhteensa_total_verot form-control" size="10" type="text" name="hinta_alv[<?php echo $num; ?>]" id="hinta_alv_<?php echo $num; ?>" value="0.00" readonly></TD>
