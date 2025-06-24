@@ -3779,14 +3779,15 @@ Yii::log("Suspected type is $suspectedType", CLogger::LEVEL_INFO, "Netvisor invo
 		//$type = 'net';
 	}
 }
-*/
+ */
+$vatCode = $rivit->alv == 0 ? "NONE" : "KOMY";
 $xml .= '
        <InvoiceLine>
          <SalesInvoiceProductLine>
              <ProductIdentifier type="netvisor">'.$ProductIdentifier.'</ProductIdentifier>
              <ProductName>'.$rivit->tkoodi.'</ProductName>
              <ProductUnitPrice type="'.$type.'">'.$hinta.'</ProductUnitPrice>
-             <ProductVatPercentage vatcode="KOMY">'.$rivit->alv.'</ProductVatPercentage>
+             <ProductVatPercentage vatcode="'.$vatCode.'">'.$rivit->alv.'</ProductVatPercentage>
              <SalesInvoiceProductLineQuantity>'.$rivit->kpl.'</SalesInvoiceProductLineQuantity>
              <SalesInvoiceProductLineDiscountPercentage>'.$rivit->ale.'</SalesInvoiceProductLineDiscountPercentage>
 	     <accountingAccountSuggestion>'.$myyntitili.'</accountingAccountSuggestion>
