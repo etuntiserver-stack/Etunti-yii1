@@ -1944,7 +1944,8 @@ exit;
 				$item			= (object) $dataitem['tyovuorot'];
 				
 				$tv_id 			= (isset($item->this_id))? $item->this_id : 0;
-				$tv_pvm 		= (isset($item->this_pvm))? $item->this_pvm : '';
+				// OLD $tv_pvm 		= (isset($item->this_pvm))? $item->this_pvm : '';
+				$tv_pvm 		= (isset($item->pvm))? $item->pvm : ''; // json_encode($item)
 				$kesto			= strtotime($item->loppu)-strtotime($item->alku);
 				$data_asiakkaat	= (isset($dataitem['asiakkaat']))? (object) $dataitem['asiakkaat'] : null;
 				$data_kohteet	= (isset($dataitem['kohteet']))? (object) $dataitem['kohteet'] : null;
@@ -3760,7 +3761,7 @@ $suspectedType = $type;
 // always send net price to netvisor
 //$hinta = $tuotteet->hinta_alv_0;
 $type = "net";
-$productId = $tuotteet->id;
+$productId = $tuotteet->id??null;
 $rowPrice = $rivit->hinta;
 Yii::log("Using price $hinta, product ID $productId", CLogger::LEVEL_INFO, "Netvisor invoice");
 Yii::log("Row price would be $rowPrice", CLogger::LEVEL_INFO, "Netvisor invoice");
