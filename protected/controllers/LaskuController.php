@@ -3780,7 +3780,7 @@ Yii::log("Suspected type is $suspectedType", CLogger::LEVEL_INFO, "Netvisor invo
 	}
 }
  */
-$vatCode = $rivit->alv == 0 ? "NONE" : "KOMY";
+$vatCode = $rivit->alv > 1 ? "KOMY" : "NONE";
 $xml .= '
        <InvoiceLine>
          <SalesInvoiceProductLine>
