@@ -172,8 +172,7 @@ class KorvauksetController extends Controller
 
 
 
-		$getMAC = hash_hmac(
-			'sha256',
+		$getMAC = md5(
 			$url.'&'.
 			$sender.'&'.
 			$customerId.'&'.

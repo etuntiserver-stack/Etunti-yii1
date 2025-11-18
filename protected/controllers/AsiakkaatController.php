@@ -931,8 +931,7 @@ Yritys '.$yr.'
 			$userKey 	= $n[9];
 			$partnerKey	= $n[10];
 
-			$getMAC = hash_hmac(
-				'sha256',
+			$getMAC = md5(
 			$url.'&'.
 			$sender.'&'.
 			$customerId.'&'.
@@ -1008,8 +1007,7 @@ Yritys '.$yr.'
 
 
 
-			$getMAC = hash_hmac(
-				'sha256',
+			$getMAC = md5(
 			$url.'&'.
 			$sender.'&'.
 			$customerId.'&'.
@@ -1094,8 +1092,7 @@ Yritys '.$yr.'
 
 
 
-		$getMAC = hash_hmac(
-			'sha256',
+	$getMAC = md5(
 		$url.'&'.
 		$sender.'&'.
 		$customerId.'&'.
