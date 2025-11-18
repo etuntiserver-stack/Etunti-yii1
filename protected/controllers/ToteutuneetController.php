@@ -258,7 +258,8 @@ class ToteutuneetController extends Controller
 			$userKey 	= $n[9];
 			$partnerKey	= $n[10];
 
-			$getMAC = md5(
+			$getMAC = hash_hmac(
+				'sha256',
 			$url.'&'.
 			$sender.'&'.
 			$customerId.'&'.
@@ -575,7 +576,8 @@ class ToteutuneetController extends Controller
 			$userKey 	= $n[9];
 			$partnerKey	= $n[10];
 
-			$getMAC = md5(
+			$getMAC = hash_hmac(
+				'sha256',
 			$url.'&'.
 			$sender.'&'.
 			$customerId.'&'.

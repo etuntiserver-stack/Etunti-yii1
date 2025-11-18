@@ -300,7 +300,8 @@ class LaskutusTuotteetController extends Controller
 
 
 
-	$getMAC = md5(
+		$getMAC = hash_hmac(
+			'sha256',
 		$url.'&'.
 		$sender.'&'.
 		$customerId.'&'.

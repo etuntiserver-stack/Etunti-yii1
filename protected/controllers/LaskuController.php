@@ -3613,7 +3613,8 @@ exit;
 
 
 
-	$getMAC = md5(
+		$getMAC = hash_hmac(
+			'sha256',
 		$url.'&'.
 		$sender.'&'.
 		$customerId.'&'.
@@ -3880,7 +3881,8 @@ Yii::log($xml, CLogger::LEVEL_INFO, "Netvisor invoice");
 
 
 
-		$getMAC = md5(
+		$getMAC = hash_hmac(
+			'sha256',
 			$url.'&'.
 			$sender.'&'.
 			$customerId.'&'.
@@ -3952,7 +3954,8 @@ Yii::log($xml, CLogger::LEVEL_INFO, "Netvisor invoice");
 
 
 
-		$getMAC = md5(
+		$getMAC = hash_hmac(
+			'sha256',
 			$url.'&'.
 			$sender.'&'.
 			$customerId.'&'.
@@ -4018,7 +4021,8 @@ Yii::log($xml, CLogger::LEVEL_INFO, "Netvisor invoice");
 
 
 
-		$getMAC = md5(
+		$getMAC = hash_hmac(
+			'sha256',
 			$url.'&'.
 			$sender.'&'.
 			$customerId.'&'.
@@ -4088,7 +4092,8 @@ Yii::log($xml, CLogger::LEVEL_INFO, "Netvisor invoice");
 			$userKey 	= $n[9];
 			$partnerKey	= $n[10];
 
-			$getMAC = md5(
+			$getMAC = hash_hmac(
+				'sha256',
 				$url.'&'.
 				$sender.'&'.
 				$customerId.'&'.
@@ -5145,7 +5150,8 @@ $xml .= '
 
 
 
-	$getMAC = md5(
+		$getMAC = hash_hmac(
+			'sha256',
 		$url.'&'.
 		$sender.'&'.
 		$customerId.'&'.
