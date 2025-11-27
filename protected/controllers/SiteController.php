@@ -2335,10 +2335,11 @@ class SiteController extends Controller
 
 	}
 
-	public function netvisorMAC($netvisor_action)
+	private function netvisorMAC($netvisor_action, $netvisor_params_result)
 	{
-		$params = $this->netvisorParams($netvisor_action);
+		$params = $netvisor_params_result;
 		$key = array_slice($params, -2, 2);
+
 		$key = array_map("strval", $key);
 		$params = array_map("strval", $params);
 		$mac_keys = [
@@ -2364,20 +2365,23 @@ class SiteController extends Controller
 
 	public function netvisorHeaders($netvisor_action)
 	{
-		$xAuth = "X-Netvisor-Authentication-";
+		$xAuth = "X-Netvisor-Authentication";
 		$params = $this->netvisorParams($netvisor_action);
-		$mac = $this->netvisorMAC($netvisor_action);
+		$params = array_map("strval", $params);
+		$mac = $this->netvisorMAC($netvisor_action, $params);
 		return [
+			"Uri" => $params["url"],
 			"Host" => $params["host"],
 			"$xAuth-Sender" => $params["sender"],
 			"$xAuth-CustomerId" => $params["customerId"],
 			"$xAuth-PartnerId" => $params["partnerId"],
-			"$xAuth-Timestamp" => $params["timestamp"],
-			"$xAuth-TimestampUnix" => $params["timestampUnix"],
-			"$xAuth-TransactionId" => $params["transactionId"],
+			"$xAuth-TimeStamp" => $params["timestamp"],
 			"X-Netvisor-Interface-Language" => $params["language"],
-			"$xAuth-UserHTTPResponseStatusCodes" => "1",
-			"$xAuth-Authentication-MAC" => $mac,
+			"X-Netvisor-Organisation-ID" => $params["organisationId"],
+			"$xAuth-TransactionId" => $params["transactionId"],
+			"$xAuth-TimestampUnix" => $params["timestampUnix"],
+			"$xAuth-UseHTTPResponseStatusCodes" => "1",
+			"$xAuth-MAC" => $mac,
 			"$xAuth-MACHashCalculationAlgorithm" => "HMACSHA256"
 		];
 	}
@@ -2389,7 +2393,9 @@ class SiteController extends Controller
 	  {
 		  $auth_headers[] = "$key: $value";
 	  }
-	  return implode("\r\n", $auth_headers);
+	  $str_headers =  implode("\r\n", $auth_headers);
+	  Yii::log("NETVISOR STR HEADERS: $str_headers", CLogger::LEVEL_INFO, __METHOD__);
+	  return $str_headers;
 	}
 
 	// netvisor_action could be "customerlist.nv" for example
@@ -2403,7 +2409,7 @@ class SiteController extends Controller
 			"sender" => Yii::app()->user->domain,
 			"customerId" => $a->netvisor_customer_id,
 			"partnerId" => $a->netvisor_partner_id,
-			"timestamp" => date("Y-m-d H:i:s"),
+			"timestamp" => date("Y-m-d H:i:s") . ".000",
 			"language" => "FI",
 			"organisationId" => $a->netvisor_organisation_identifier,
 			//"transactionId" => rand(0, 10000000),

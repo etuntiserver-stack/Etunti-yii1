@@ -935,6 +935,7 @@ Yritys '.$yr.'
 			$response = file_get_contents($url, false, $context);
 			if(empty($response))
 			{
+				Yii::log("Customer list", CLogger::LEVEL_INFO, __METHOD__);
 				Yii::app()->user->setFlash('danger', "Netvisor API yhteys ei toimii.");
 				$this->redirect(array('index'));
 			} else {
@@ -963,15 +964,18 @@ Yritys '.$yr.'
 			'header'=>"Accept: text/plain\r\n" .
 			"Content-Type: application/x-www-form-urlencoded\r\n".
 			"Content-Length: ".strlen($xml)."\r\n".
-			$auth_data
+			$auth_data,
+			//"ignore_errors" => true,
 			)
 			);
 
 			$context = stream_context_create($optsPOST);
 
 			$response = file_get_contents($url, false, $context);
+			Yii::log("RESPONSE: $response", CLogger::LEVEL_INFO, __METHOD__);
 			if(empty($response))
 			{
+				Yii::log("Customer fetch", CLogger::LEVEL_INFO, __METHOD__);
 				Yii::app()->user->setFlash('danger', "Netvisor API yhteys ei toimii.");
 				$this->redirect(array('index'));
 			} else {
