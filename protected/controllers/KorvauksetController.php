@@ -156,46 +156,10 @@ class KorvauksetController extends Controller
 	   if(isset($n[0]))
 	   {
 
-		$url		= $n[0].'/payrollperiodcollector.nv';
+		   $action = "payrollperiodcollector.nv";
+		   $auth_data = $site[0]->netvisorStringHeaders($action);
+		   $url = $site[0]->netvisorParams($action)["url"];
 
-		$host 		= $n[1];
-
-		$sender 	= $n[2];
-		$customerId	= $n[3];
-		$partnerId	= $n[4];
-		$timestamp	= $n[5];
-		$language	= $n[6];
-		$organisationIdentifier	= $n[7];
-		$transactionIdentifier	= $n[8];
-		$userKey 	= $n[9];
-		$partnerKey	= $n[10];
-
-
-
-		$getMAC = hash_hmac(
-			'sha256',
-			$url.'&'.
-			$sender.'&'.
-			$customerId.'&'.
-			$timestamp.'&'.
-			$language.'&'.
-			$organisationIdentifier.'&'.
-			$transactionIdentifier.'&'.
-			$userKey.'&'.
-			$partnerKey
-	 	);
-	
-		$auth_data = 
-		    "Host: $host\r\n".  
-		    "X-Netvisor-Authentication-Sender: $sender\r\n".  
-		    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
-		    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
-		    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
-		    "X-Netvisor-Interface-Language: $language\r\n".
-		    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
-		    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
-		    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
-		; 
 		
 	
 

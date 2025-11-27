@@ -2323,6 +2323,7 @@ class SiteController extends Controller
 		$language	= 'FI';
 		$organisationIdentifier	= $a->netvisor_organisation_identifier;
 		$transactionIdentifier	= rand(0,10000000);
+		$transactionIdentifier	= rand(0,10000000);
 		$userKey 	= $a->netvisor_userkey;
 		$partnerKey	= $a->netvisor_partnerkey;
 
@@ -2332,6 +2333,85 @@ class SiteController extends Controller
 
 		return $return;
 
+	}
+
+	public function netvisorMAC($netvisor_action)
+	{
+		$params = $this->netvisorParams($netvisor_action);
+		$key = array_slice($params, -2, 2);
+		$key = array_map("strval", $key);
+		$params = array_map("strval", $params);
+		$mac_keys = [
+		  "url",
+		  "sender",
+		  "customerId",
+		  "timestamp",
+		  "language",
+		  "organisationId",
+		  "transactionId",
+		  "timestampUnix",
+		  "userKey",
+		  "partnerKey"
+		];
+
+		$mac_params = [];
+		foreach($mac_keys as $mac_key) {
+		  $mac_params[] = $params[$mac_key];
+		}
+
+		return hash_hmac("sha256", implode("&", $mac_params), implode("&", $key));
+	}
+
+	public function netvisorHeaders($netvisor_action)
+	{
+		$xAuth = "X-Netvisor-Authentication-";
+		$params = $this->netvisorParams($netvisor_action);
+		$mac = $this->netvisorMAC($netvisor_action);
+		return [
+			"Host" => $params["host"],
+			"$xAuth-Sender" => $params["sender"],
+			"$xAuth-CustomerId" => $params["customerId"],
+			"$xAuth-PartnerId" => $params["partnerId"],
+			"$xAuth-Timestamp" => $params["timestamp"],
+			"$xAuth-TimestampUnix" => $params["timestampUnix"],
+			"$xAuth-TransactionId" => $params["transactionId"],
+			"X-Netvisor-Interface-Language" => $params["language"],
+			"$xAuth-UserHTTPResponseStatusCodes" => "1",
+			"$xAuth-Authentication-MAC" => $mac,
+			"$xAuth-MACHashCalculationAlgorithm" => "HMACSHA256"
+		];
+	}
+
+	public function netvisorStringHeaders($netvisor_action)
+	{
+	  $auth_headers = [];
+	  foreach($this->netvisorHeaders($netvisor_action) as $key => $value)
+	  {
+		  $auth_headers[] = "$key: $value";
+	  }
+	  return implode("\r\n", $auth_headers);
+	}
+
+	// netvisor_action could be "customerlist.nv" for example
+	public function netvisorParams($netvisor_action)
+	{
+		$a = Asetukset::model()->findbypk(1);
+		$host = $a->netvisor_host;
+		return [
+			"host" => $host,
+			"url" => "https://$host/$netvisor_action",
+			"sender" => Yii::app()->user->domain,
+			"customerId" => $a->netvisor_customer_id,
+			"partnerId" => $a->netvisor_partner_id,
+			"timestamp" => date("Y-m-d H:i:s"),
+			"language" => "FI",
+			"organisationId" => $a->netvisor_organisation_identifier,
+			//"transactionId" => rand(0, 10000000),
+			"transactionId" => bin2hex(random_bytes(10)),
+			"timestampUnix" => time(),
+			"userKey" => $a->netvisor_userkey,
+			"partnerKey" => $a->netvisor_partnerkey
+		];
 	}
 
 	// <-- Autocomplete

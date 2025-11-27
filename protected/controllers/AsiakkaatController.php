@@ -914,47 +914,10 @@ Yritys '.$yr.'
 	protected function Customerlist()
 	{
 		$site = Yii::app()->createController('Site');
-		$n = $site[0]->netvisorYhteys();
 
-		if(isset($n[0]))
-		{
-			$url		= $n[0].'/customerlist.nv';
-			$host 		= $n[1];
-
-			$sender 	= $n[2];
-			$customerId	= $n[3];
-			$partnerId	= $n[4];
-			$timestamp	= $n[5];
-			$language	= $n[6];
-			$organisationIdentifier	= $n[7];
-			$transactionIdentifier	= $n[8];
-			$userKey 	= $n[9];
-			$partnerKey	= $n[10];
-
-			$getMAC = hash_hmac(
-				'sha256',
-			$url.'&'.
-			$sender.'&'.
-			$customerId.'&'.
-			$timestamp.'&'.
-			$language.'&'.
-			$organisationIdentifier.'&'.
-			$transactionIdentifier.'&'.
-			$userKey.'&'.
-			$partnerKey
-			);
-
-			$auth_data = 
-			"Host: $host\r\n".  
-			"X-Netvisor-Authentication-Sender: $sender\r\n".  
-			"X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
-			"X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
-			"X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
-			"X-Netvisor-Interface-Language: $language\r\n".
-			"X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
-			"X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
-			"X-Netvisor-Authentication-MAC: $getMAC\r\n"
-			; 
+			$action = "customerlist.nv";
+		$auth_data = $site[0]->netvisorStringHeaders($action);
+		$url = $site[0]->netvisorParams($action)["url"];
 
 			$xml = '';
 			$optsPOST = array(
@@ -982,56 +945,16 @@ Yritys '.$yr.'
 					return json_decode(json_encode((array)$result->Customerlist), true);
 				}
 			}
-		}
 	}
 
 	protected function netvisorAsiakasNouto($netvisorkey)
 	{
 		$site = Yii::app()->createController('Site');
-		$n = $site[0]->netvisorYhteys();
 
-		if(isset($n[0]))
-		{
+			$action = "getcustomer.nv?id=$netvisorkey";
+		$auth_data = $site[0]->netvisorStringHeaders($action);
+		$url = $site[0]->netvisorParams($action)["url"];
 
-			$url		= $n[0].'/getcustomer.nv?id='.$netvisorkey;
-			$host 		= $n[1];
-
-			$sender 	= $n[2];
-			$customerId	= $n[3];
-			$partnerId	= $n[4];
-			$timestamp	= $n[5];
-			$language	= $n[6];
-			$organisationIdentifier	= $n[7];
-			$transactionIdentifier	= $n[8];
-			$userKey 	= $n[9];
-			$partnerKey	= $n[10];
-
-
-
-			$getMAC = hash_hmac(
-				'sha256',
-			$url.'&'.
-			$sender.'&'.
-			$customerId.'&'.
-			$timestamp.'&'.
-			$language.'&'.
-			$organisationIdentifier.'&'.
-			$transactionIdentifier.'&'.
-			$userKey.'&'.
-			$partnerKey
-			);
-
-			$auth_data = 
-			"Host: $host\r\n".  
-			"X-Netvisor-Authentication-Sender: $sender\r\n".  
-			"X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
-			"X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
-			"X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
-			"X-Netvisor-Interface-Language: $language\r\n".
-			"X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
-			"X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
-			"X-Netvisor-Authentication-MAC: $getMAC\r\n"
-			; 
 
 			$xml = '';
 			$optsPOST = array(
@@ -1059,7 +982,6 @@ Yritys '.$yr.'
 					return json_decode(json_encode((array)$result->Customer), true);
 				}
 			}
-		}
 
 	}
 
@@ -1072,52 +994,21 @@ Yritys '.$yr.'
 
 	if(isset($n[0]))
 	{
+		$base_action = "customer.nv?";
+		$action = $base_action;
 
 		if( $tila == 'add' and $model->netvisorkey == 0){
-		$url		= $n[0].'/customer.nv?method=add';
+			$url		= $n[0].'/customer.nv?method=add';
+			$action .= "method=add";
 		}
 		if( $tila == 'edit' and $model->netvisorkey != 0) {
-		$url		= $n[0].'/customer.nv?id='.$model->netvisorkey.'&method=edit';
+			$url		= $n[0].'/customer.nv?id='.$model->netvisorkey.'&method=edit';
+			$action .= "id={$model->netvisorkey}&method=edit";
 		}
 
-		$host 		= $n[1];
+		$auth_data = $site[0]->netvisorStringHeaders($action);
+		$url = $site[0]->netvisorParams($action)["url"];
 
-		$sender 	= $n[2];
-		$customerId	= $n[3];
-		$partnerId	= $n[4];
-		$timestamp	= $n[5];
-		$language	= $n[6];
-		$organisationIdentifier	= $n[7];
-		$transactionIdentifier	= $n[8];
-		$userKey 	= $n[9];
-		$partnerKey	= $n[10];
-
-
-
-		$getMAC = hash_hmac(
-			'sha256',
-		$url.'&'.
-		$sender.'&'.
-		$customerId.'&'.
-		$timestamp.'&'.
-		$language.'&'.
-		$organisationIdentifier.'&'.
-		$transactionIdentifier.'&'.
-		$userKey.'&'.
-		$partnerKey
-	 	);
-	
-	$auth_data = 
-	    "Host: $host\r\n".  
-	    "X-Netvisor-Authentication-Sender: $sender\r\n".  
-	    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
-	    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
-	    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
-	    "X-Netvisor-Interface-Language: $language\r\n".
-	    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
-	    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
-	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
-	; 
 	
 	
 	$name = $model->AsiakasWithExtraContacts;

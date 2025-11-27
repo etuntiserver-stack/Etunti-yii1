@@ -3595,48 +3595,20 @@ exit;
 
 	if(isset($n[0]))
 	{
-		if( $tila == 'add' )
-		$url		= $n[0].'/salesinvoice.nv?method=add';
-		if( $tila == 'edit' and !empty($model->netvisorkey))
-		$url		= $n[0].'/salesinvoice.nv?id='.$model->netvisorkey.'&method=edit';
+		$base_action = "salesinvoice.nv?";
+		$action = $base_action;
+		if( $tila == 'add' ) {
+			$url		= $n[0].'/salesinvoice.nv?method=add';
+			$action .= "method=add";
+		}
+		if( $tila == 'edit' and !empty($model->netvisorkey)) {
+			$url		= $n[0].'/salesinvoice.nv?id='.$model->netvisorkey.'&method=edit';
+			$action .= "id={$model->netvisorkey}&method=edit";
+		}
 
-		$host 		= $n[1];
-		$sender 	= $n[2];
-		$customerId	= $n[3];
-		$partnerId	= $n[4];
-		$timestamp	= $n[5];
-		$language	= $n[6];
-		$organisationIdentifier	= $n[7];
-		$transactionIdentifier	= $n[8];
-		$userKey 	= $n[9];
-		$partnerKey	= $n[10];
+		$auth_data = $site[0]->netvisorStringHeaders($action);
+		$url = $site[0]->netvisorParams($action)["url"];
 
-
-
-		$getMAC = hash_hmac(
-			'sha256',
-		$url.'&'.
-		$sender.'&'.
-		$customerId.'&'.
-		$timestamp.'&'.
-		$language.'&'.
-		$organisationIdentifier.'&'.
-		$transactionIdentifier.'&'.
-		$userKey.'&'.
-		$partnerKey
-	 	);
-	
-	$auth_data = 
-	    "Host: $host\r\n".  
-	    "X-Netvisor-Authentication-Sender: $sender\r\n".  
-	    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
-	    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
-	    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
-	    "X-Netvisor-Interface-Language: $language\r\n".
-	    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
-	    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
-	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
-	; 
 	
 
 	$name = 'Ei tietoja';
@@ -3866,44 +3838,9 @@ Yii::log($xml, CLogger::LEVEL_INFO, "Netvisor invoice");
 
 	  if(isset($n[0]))
 	  {
-		$url		= $n[0].'/getsalesinvoice.nv?netvisorkey='.$netvisorkey;
-		$host 		= $n[1];
-
-		$sender 	= $n[2];
-		$customerId	= $n[3];
-		$partnerId	= $n[4];
-		$timestamp	= $n[5];
-		$language	= $n[6];
-		$organisationIdentifier	= $n[7];
-		$transactionIdentifier	= $n[8];
-		$userKey 	= $n[9];
-		$partnerKey	= $n[10];
-
-
-
-		$getMAC = hash_hmac(
-			'sha256',
-			$url.'&'.
-			$sender.'&'.
-			$customerId.'&'.
-			$timestamp.'&'.
-			$language.'&'.
-			$organisationIdentifier.'&'.
-			$transactionIdentifier.'&'.
-			$userKey.'&'.
-			$partnerKey
-		 	);
-	
-		$auth_data = 
-		    "Host: $host\r\n".  
-		    "X-Netvisor-Authentication-Sender: $sender\r\n".  
-		    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
-		    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
-		    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
-		    "X-Netvisor-Interface-Language: $language\r\n".
-		    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
-		    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
-		    "X-Netvisor-Authentication-MAC: $getMAC\r\n"; 
+		  $action = "getsalesinvoice.nv?netvisorkey=$netvisorkey";
+		  $auth_data = $site[0]->netvisorStringHeaders($action);
+		  $url = $site[0]->netvisorParams($action)["url"];
 		
 	
 		$optsGET = array(
@@ -3940,43 +3877,9 @@ Yii::log($xml, CLogger::LEVEL_INFO, "Netvisor invoice");
 
 	  if(isset($n[0]))
 	  {
-		$url		= $n[0].'/salesinvoicelist.nv?lastmodifiedstart='.$lastmodifiedstart.'&lastmodifiedend='.$lastmodifiedend;
-		$host 		= $n[1];
-		$sender 	= $n[2];
-		$customerId	= $n[3];
-		$partnerId	= $n[4];
-		$timestamp	= $n[5];
-		$language	= $n[6];
-		$organisationIdentifier	= $n[7];
-		$transactionIdentifier	= $n[8];
-		$userKey 	= $n[9];
-		$partnerKey	= $n[10];
-
-
-
-		$getMAC = hash_hmac(
-			'sha256',
-			$url.'&'.
-			$sender.'&'.
-			$customerId.'&'.
-			$timestamp.'&'.
-			$language.'&'.
-			$organisationIdentifier.'&'.
-			$transactionIdentifier.'&'.
-			$userKey.'&'.
-			$partnerKey
-		 	);
-	
-		$auth_data = 
-		    "Host: $host\r\n".  
-		    "X-Netvisor-Authentication-Sender: $sender\r\n".  
-		    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
-		    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
-		    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
-		    "X-Netvisor-Interface-Language: $language\r\n".
-		    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
-		    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
-		    "X-Netvisor-Authentication-MAC: $getMAC\r\n"; 
+		  $action = "salesinvoicelist.nv?lastmodifiedstart=$lastmodifiedstart&lastmodifiedend=$lastmodifiedend";
+		  $auth_data = $site[0]->netvisorStringHeaders($action);
+		  $url = $site[0]->netvisorParams($action)["url"];
 		
 	
 		$optsGET = array(
@@ -4006,44 +3909,10 @@ Yii::log($xml, CLogger::LEVEL_INFO, "Netvisor invoice");
 		$site = Yii::app()->createController('Site');
 		$n = $site[0]->netvisorYhteys();
 
-	  	if(isset($n[0])){
-		$url		= $n[0].'/salesinvoicelist.nv?BeginInvoiceDate='.$from.'&EndInvoiceDate='.$to;
-		$host 		= $n[1];
-		$sender 	= $n[2];
-		$customerId	= $n[3];
-		$partnerId	= $n[4];
-		$timestamp	= $n[5];
-		$language	= $n[6];
-		$organisationIdentifier	= $n[7];
-		$transactionIdentifier	= $n[8];
-		$userKey 	= $n[9];
-		$partnerKey	= $n[10];
-
-
-
-		$getMAC = hash_hmac(
-			'sha256',
-			$url.'&'.
-			$sender.'&'.
-			$customerId.'&'.
-			$timestamp.'&'.
-			$language.'&'.
-			$organisationIdentifier.'&'.
-			$transactionIdentifier.'&'.
-			$userKey.'&'.
-			$partnerKey
-		 	);
-	
-		$auth_data = 
-		    "Host: $host\r\n".  
-		    "X-Netvisor-Authentication-Sender: $sender\r\n".  
-		    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
-		    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
-		    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
-		    "X-Netvisor-Interface-Language: $language\r\n".
-		    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
-		    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
-		    "X-Netvisor-Authentication-MAC: $getMAC\r\n"; 
+		if(isset($n[0])){
+			$action = "salesinvoicelist.nv?BeginInvoiceDate=$from&EndInvoiceDate=$to";
+			$auth_data = $site[0]->netvisorStringHeaders($action);
+			$url = $site[0]->netvisorParams($action)["url"];
 		
 	
 		$optsGET = array(
@@ -4079,43 +3948,9 @@ Yii::log($xml, CLogger::LEVEL_INFO, "Netvisor invoice");
 
 		if(isset($n[0]))
 		{
-			$url		= $n[0].'/dimensionlist.nv';
-			$host 		= $n[1];
-
-			$sender 	= $n[2];
-			$customerId	= $n[3];
-			$partnerId	= $n[4];
-			$timestamp	= $n[5];
-			$language	= $n[6];
-			$organisationIdentifier	= $n[7];
-			$transactionIdentifier	= $n[8];
-			$userKey 	= $n[9];
-			$partnerKey	= $n[10];
-
-			$getMAC = hash_hmac(
-				'sha256',
-				$url.'&'.
-				$sender.'&'.
-				$customerId.'&'.
-				$timestamp.'&'.
-				$language.'&'.
-				$organisationIdentifier.'&'.
-				$transactionIdentifier.'&'.
-				$userKey.'&'.
-				$partnerKey
-			 	);
-
-			$auth_data = 
-				"Host: $host\r\n".  
-				"X-Netvisor-Authentication-Sender: $sender\r\n".  
-				"X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
-				"X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
-				"X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
-				"X-Netvisor-Interface-Language: $language\r\n".
-				"X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
-				"X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
-				"X-Netvisor-Authentication-MAC: $getMAC\r\n"; 
-
+			$action = "dimensionlist.nv";
+			$auth_data = $site[0]->netvisorStringHeaders($action);
+			$url = $site[0]->netvisorParams($action)["url"];
 
 			$optsGET = array(
 			  'http'=>array(
@@ -5135,45 +4970,10 @@ $xml .= '
 
 	if(isset($n[0]))
 	{
+		$action = "product.nv?method=add";
+		$auth_data = $site[0]->netvisorStringHeaders($action);
+		$url = $site[0]->netvisorParams($action)["url"];
 
-		$url		= $n[0].'/product.nv?method=add';
-		$host 		= $n[1];
-		$sender 	= $n[2];
-		$customerId	= $n[3];
-		$partnerId	= $n[4];
-		$timestamp	= $n[5];
-		$language	= $n[6];
-		$organisationIdentifier	= $n[7];
-		$transactionIdentifier	= $n[8];
-		$userKey 	= $n[9];
-		$partnerKey	= $n[10];
-
-
-
-		$getMAC = hash_hmac(
-			'sha256',
-		$url.'&'.
-		$sender.'&'.
-		$customerId.'&'.
-		$timestamp.'&'.
-		$language.'&'.
-		$organisationIdentifier.'&'.
-		$transactionIdentifier.'&'.
-		$userKey.'&'.
-		$partnerKey
-	 	);
-	
-	$auth_data = 
-	    "Host: $host\r\n".  
-	    "X-Netvisor-Authentication-Sender: $sender\r\n".  
-	    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
-	    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
-	    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
-	    "X-Netvisor-Interface-Language: $language\r\n".
-	    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
-	    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
-	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
-	; 
 	
 
 $xml = '
