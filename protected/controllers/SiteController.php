@@ -2335,6 +2335,12 @@ class SiteController extends Controller
 
 	}
 
+	public function netvisorEnabled()
+	{
+		$a = Asetukset::model()->findbypk(1);
+		return $a->netvisor_kaytto == 1;
+	}
+
 	private function netvisorMAC($netvisor_action, $netvisor_params_result)
 	{
 		$params = $netvisor_params_result;

@@ -915,9 +915,11 @@ Yritys '.$yr.'
 	{
 		$site = Yii::app()->createController('Site');
 
-			$action = "customerlist.nv";
-		$auth_data = $site[0]->netvisorStringHeaders($action);
-		$url = $site[0]->netvisorParams($action)["url"];
+		$action = "customerlist.nv";
+		$enabled = $site[0]->netvisorEnabled();
+		if($enabled) {
+			$auth_data = $site[0]->netvisorStringHeaders($action);
+			$url = $site[0]->netvisorParams($action)["url"];
 
 			$xml = '';
 			$optsPOST = array(
@@ -946,16 +948,20 @@ Yritys '.$yr.'
 					return json_decode(json_encode((array)$result->Customerlist), true);
 				}
 			}
+		}
 	}
 
 	protected function netvisorAsiakasNouto($netvisorkey)
 	{
 		$site = Yii::app()->createController('Site');
 
-			$action = "getcustomer.nv?id=$netvisorkey";
-		$auth_data = $site[0]->netvisorStringHeaders($action);
-		$url = $site[0]->netvisorParams($action)["url"];
 
+		$enabled = $site[0]->netvisorEnabled();
+
+		if($enabled && $netvisorkey) {
+			$action = "getcustomer.nv?id=$netvisorkey";
+			$auth_data = $site[0]->netvisorStringHeaders($action);
+			$url = $site[0]->netvisorParams($action)["url"];
 
 			$xml = '';
 			$optsPOST = array(
@@ -986,6 +992,7 @@ Yritys '.$yr.'
 					return json_decode(json_encode((array)$result->Customer), true);
 				}
 			}
+		}
 
 	}
 
@@ -994,9 +1001,9 @@ Yritys '.$yr.'
 
 
 		$site = Yii::app()->createController('Site');
-		$n = $site[0]->netvisorYhteys();
+		$n = $site[0]->netvisorEnabled();
 
-	if(isset($n[0]))
+	if($n)
 	{
 		$base_action = "customer.nv?";
 		$action = $base_action;
