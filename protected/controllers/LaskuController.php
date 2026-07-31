@@ -2139,6 +2139,10 @@ exit;
 					    if(!isset($tuote['tuote_id'])) continue;
 
 					    $tuote_id = intval($tuote['tuote_id']);
+              // NEW: do not create extra KK row if lisä-tuote equals main monthly (KK) product
+              $kk_main_tuote_id = intval($kk_hinta[$asiakas_id][$kohde_id_tv]['tuote_id'] ?? 0);
+              if($kk_main_tuote_id > 0 && $tuote_id === $kk_main_tuote_id) continue;
+
 					    if($tuote_id <= 0) continue;
 
 					    if(!isset($kk_lisa_rows[$kohde_id_tv][$tuote_id]))
@@ -2269,6 +2273,10 @@ exit;
 		    {
 			    foreach($kk_lisa_rows[$kohde_id] as $tuote_id => $x)
 			    {
+            // NEW: safety - skip if equals main KK product
+            $kk_main_tuote_id = intval($kk_hinta[$asiakas_id][$kohde_id]['tuote_id'] ?? 0);
+            if($kk_main_tuote_id > 0 && intval($tuote_id) === $kk_main_tuote_id) continue;
+
 				    $maara = floatval($x['maara']);
 				    if($maara <= 0) continue;
 
