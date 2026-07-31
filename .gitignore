@@ -55,3 +55,5 @@ protected/config/main.pw.php
 /*migrati*.log
 
 /.vscode
+*.apk
+img.zip
