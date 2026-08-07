@@ -49,9 +49,9 @@ foreach($attributes as $str){
 		$ap = '';
 	}
 
-	$strlen = strlen($kohde);
+	$strlen = mb_strlen($kohde, 'UTF-8');
 	if($strlen > 22)
-		$kohde = substr($kohde,0,22).'..';
+		$kohde = mb_substr($kohde, 0, 22, 'UTF-8').'..';
 	else
 		$kohde = $kohde;
 
