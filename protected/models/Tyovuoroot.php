@@ -24,6 +24,8 @@
  */
 class Tyovuoroot extends DB2ActiveRecord
 {
+	const OPEN_SHIFT_TID = 1000000001;
+
 	public $osoite;
 	public $kaupunki;
 	public $tekijan_nimi;
@@ -94,6 +96,8 @@ class Tyovuoroot extends DB2ActiveRecord
                      'osoite' => 'varchar(255) DEFAULT NULL',
                      'postinumero' => 'varchar(255) DEFAULT NULL',
                      'postitoimipaikka' => 'varchar(255) DEFAULT NULL',
+                     'vapaa_tyoryhma' => 'varchar(255) DEFAULT NULL',
+                     'vapaa_toimialue' => 'varchar(255) DEFAULT NULL',
                      'pvm' => 'varchar(20) DEFAULT NULL',
                      'alku' => 'varchar(10) DEFAULT NULL',
                      'loppu' => 'varchar(10) DEFAULT NULL',
@@ -157,7 +161,7 @@ class Tyovuoroot extends DB2ActiveRecord
 		return array(
 			//array('kohde, pvm, alku, loppu, pituus, tyoajanlaatu, tyoajanmerkinta', 'required'),
 			array('tid, onlinevaraus_id, status, toistuva_id, ilmoitus_avoimista_kohteesta, ilmoitus_myohastyneista_kohteesta, piilota_mobiilista, peruutettu, apuaika, laskutettu, tuoteID, lasku_id, uusi_tilaus, omasiistijavaroitus, omasiistijailmoitus', 'numerical', 'integerOnly'=>true),
-			array('kohde, osoite, postinumero, postitoimipaikka', 'length', 'max'=>255),
+			array('kohde, osoite, postinumero, postitoimipaikka, vapaa_tyoryhma, vapaa_toimialue', 'length', 'max'=>255),
 			array('pvm', 'length', 'max'=>20),
 			array('alku, loppu, pituus, alku_r, kesto', 'length', 'max'=>10),
 			array('ruokatauko, tyoajanlaatu, tyoajanmerkinta', 'length', 'max'=>50),
@@ -196,6 +200,8 @@ class Tyovuoroot extends DB2ActiveRecord
 		return array(
 			'id' => Yii::t('main', 'ID'),
 			'tid' => Yii::t('main', 'Työntekijä'),
+			'vapaa_tyoryhma' => Yii::t('main', 'Työryhmä'),
+			'vapaa_toimialue' => Yii::t('main', 'Paikkakunta / Alue'),
 			'tekijan_nimi' => Yii::t('main', 'Työntekijä'),
 			'ohje' => Yii::t('main', 'Ohjeteksti kohdetiedoista'),
 			'osoite' => Yii::t('main', 'Katuosoite'),
@@ -222,6 +228,51 @@ class Tyovuoroot extends DB2ActiveRecord
 			'tilausviesti' => Yii::t('main', 'Tilausviesti asiakkaalle'),
 			'url_linkkit' => Yii::t('main', 'URL linkit'),
 		);
+	}
+
+
+	public function isOpenShift()
+	{
+		return (int)$this->tid === self::OPEN_SHIFT_TID;
+	}
+
+	private static function openShiftEmployeeValues($value)
+	{
+		if(is_array($value)) {
+			return array_values(array_filter(array_map('trim', $value), 'strlen'));
+		}
+
+		$decoded = json_decode((string)$value, true);
+		if(is_array($decoded)) {
+			return array_values(array_filter(array_map('trim', $decoded), 'strlen'));
+		}
+
+		$value = trim((string)$value);
+		return $value === '' ? [] : [$value];
+	}
+
+	public function isOpenShiftVisibleTo($employee)
+	{
+		if(!$this->isOpenShift() || !$employee || empty($employee->id)) {
+			return false;
+		}
+		if((int)$employee->aktiivinen !== 1 || (int)$employee->mobiili !== 1) {
+			return false;
+		}
+
+		$employeeGroups = self::openShiftEmployeeValues($employee->tyoryhma);
+		$employeeAreas = self::openShiftEmployeeValues($employee->tyo_toimialue);
+		$group = trim((string)$this->vapaa_tyoryhma);
+		$area = trim((string)$this->vapaa_toimialue);
+
+		if($group !== '' && !in_array($group, $employeeGroups, true)) {
+			return false;
+		}
+		if($area !== '' && !in_array($area, $employeeAreas, true)) {
+			return false;
+		}
+
+		return true;
 	}
 
         public function getosoiteAndAika(){

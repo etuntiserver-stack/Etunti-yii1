@@ -293,7 +293,7 @@ exit;
 			$criteria->addCondition("
 			tv_id IS NOT NULL AND tv_id > 0
 			AND tv_id IN (
-				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
+				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND tid!=1000000001 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
 			)
 			");
 		}
@@ -325,7 +325,7 @@ exit;
 			$criteria->addCondition("
 			tv_id IS NOT NULL AND tv_id > 0
 			AND tv_id IN (
-				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
+				SELECT id FROM sivex_tvuoro WHERE tid!=0 AND tid!=1000000001 AND (tuoteID > 0 OR lisa_tuotteet!='') AND laskutettu='0'
 			)
 			");
 		}
@@ -349,7 +349,7 @@ exit;
 
 		$lista = [];
 		// peruutettu => 2 = "peruutettu laskutettava"
-		$haku_criteria = ["(laskutettu=0 or laskutettu is NULL) AND tuoteID > 0 AND status=3 AND tid!=0 AND (peruutettu!=1 or peruutettu is NULL)"];
+		$haku_criteria = ["(laskutettu=0 or laskutettu is NULL) AND tuoteID > 0 AND status=3 AND tid!=0 AND tid!=1000000001 AND (peruutettu!=1 or peruutettu is NULL)"];
 		if(!empty($asiakas_condition)){
 			$haku_criteria[] = "
 			kohde IN(SELECT id FROM sivex_kohdet
@@ -427,7 +427,7 @@ exit;
 			AND kohde IN (
 				SELECT id FROM sivex_kohdet WHERE asiakas_id='".$id."'
 			)
-			AND tid!=0
+			AND tid!=0 AND tid!=1000000001
 			AND status='3'
 			AND peruutettu=0
 			AND laskutettu=0
@@ -3222,7 +3222,7 @@ exit;
 		if($rakenne_muoto == 'tuovuoro')
 		{
 
-			$haku_criteria 	= ["(laskutettu=0 or laskutettu is NULL) AND tid!=0 AND (peruutettu=0 or peruutettu is NULL)"];
+			$haku_criteria 	= ["(laskutettu=0 or laskutettu is NULL) AND tid!=0 AND tid!=1000000001 AND (peruutettu=0 or peruutettu is NULL)"];
 			$tv_controller 	= Yii::app()->createController('Tyovuoroot');
 			$tt = Tyontekijat::model()->findAll();
 			$tids = [];

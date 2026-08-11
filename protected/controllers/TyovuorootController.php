@@ -2081,6 +2081,7 @@ class TyovuorootController extends Controller
 		$tt 		= [];
 		$haku_tids 	= [];
 		$haku_tids[0] 	= 0; // Varaus
+		$haku_tids[Tyovuoroot::OPEN_SHIFT_TID] = Tyovuoroot::OPEN_SHIFT_TID; // Vapaat työvuorot
 		$tyontekijat = Tyontekijat::model()->findAll($criteria);
 		foreach ($tyontekijat as $item) {
 			$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1 . ' ' . $item->$tt_order_2,
@@ -2524,6 +2525,8 @@ class TyovuorootController extends Controller
 	protected function tv_arrJava($from, $to, $haku_criteria, $haku_tids, $taulu, $customer_tickets = []){
 
 		$hk = json_encode($haku_criteria);
+		$weekly_haku_tids = $haku_tids;
+		unset($weekly_haku_tids[Tyovuoroot::OPEN_SHIFT_TID]);
 		// <-- Kaikki kerrallaan
 		return "
 		<script type=\"text/javascript\">
@@ -2548,7 +2551,7 @@ class TyovuorootController extends Controller
 			});
 
 			setTimeoutConst = setTimeout(function() {
-				$.vkolaskenta('".json_encode($haku_tids)."');
+				$.vkolaskenta('".json_encode($weekly_haku_tids)."');
 			}, 7000);
 		});
 		</script>";
@@ -3158,21 +3161,24 @@ class TyovuorootController extends Controller
 		$haku_to = date("Y-m-d", strtotime(Yii::app()->session['to']));
 		Yii::log("2", CLogger::LEVEL_INFO);
 		// Tyosuhde oikeus
-		$oikeus = '<div class="alert alert-danger">'.Yii::t('main', 'Työsuhdetta ei ole määritelty tai työsuhde ei ole voimassa.').'</div>';
-		$criteria=new CDbCriteria;
-		$criteria->condition = " 
-			tid='".$tid."' 
-		";
-		$ts = Tyosuhdet::model()->find($criteria);
-		Yii::log("3", CLogger::LEVEL_INFO);
-		if(isset($ts->id) and !empty($ts->alku))
-		{
-			$alku = date("Ymd", strtotime($ts->alku));
+		$oikeus = '';
+		if((int)$tid !== Tyovuoroot::OPEN_SHIFT_TID) {
+			$oikeus = '<div class="alert alert-danger">'.Yii::t('main', 'Työsuhdetta ei ole määritelty tai työsuhde ei ole voimassa.').'</div>';
+			$criteria=new CDbCriteria;
+			$criteria->condition = "
+				tid='".$tid."'
+			";
+			$ts = Tyosuhdet::model()->find($criteria);
+			Yii::log("3", CLogger::LEVEL_INFO);
+			if(isset($ts->id) and !empty($ts->alku))
+			{
+				$alku = date("Ymd", strtotime($ts->alku));
 
-			if( date("Ymd", strtotime($pvm)) >= date("Ymd", strtotime($alku)) and empty($ts->loppu))
-			$oikeus = '';
-			elseif($pvm >= $alku and !empty($ts->loppu) and $pvm <= date("Ymd", strtotime($ts->loppu)))
-			$oikeus = '';
+				if( date("Ymd", strtotime($pvm)) >= date("Ymd", strtotime($alku)) and empty($ts->loppu))
+				$oikeus = '';
+				elseif($pvm >= $alku and !empty($ts->loppu) and $pvm <= date("Ymd", strtotime($ts->loppu)))
+				$oikeus = '';
+			}
 		}
 		// Tyosuhde oikeus
 
@@ -3217,6 +3223,11 @@ class TyovuorootController extends Controller
 	{
 
 		$return = array();
+		$is_open_shift = ((int)$laatikko_tid === Tyovuoroot::OPEN_SHIFT_TID);
+		if($is_open_shift && $toistuva == 'true') {
+			echo json_encode(['error' => Yii::t('main', 'Vapaa työvuoro ei voi olla toistuva työvuoro.')]);
+			exit;
+		}
 		if( $toistuva == 'true' ){
 			$toistuva = true;
 			$model 	= new ToistuvatTyovuorot;
@@ -3225,6 +3236,11 @@ class TyovuorootController extends Controller
 			$toistuva = false;
 			$model 	= new Tyovuoroot;
 			$post 	= $_POST['Tyovuoroot'];
+		}
+
+		if($is_open_shift) {
+			$post['tid'] = Tyovuoroot::OPEN_SHIFT_TID;
+			unset($post['is_toistuva'], $post['tyopaari'], $post['PushNotify']);
 		}
 
 		if(isset($post))
@@ -3501,6 +3517,8 @@ class TyovuorootController extends Controller
 		$tekijan_nimi = '<select id="tekijanVaihdo" class="form-control">';
 		if($tid == 0)
 			$tekijan_nimi .= '<option value="0" selected>VARAUS</option>';
+		elseif((int)$tid === Tyovuoroot::OPEN_SHIFT_TID)
+			$tekijan_nimi .= '<option value="'.Tyovuoroot::OPEN_SHIFT_TID.'" selected>VAPAAT TYÖVUOROT</option>';
 		foreach($t as $tekijanData){
 			if($tekijanData->id == $tid)
 				$tekijan_nimi .= '<option value="'.$tekijanData->id.'" selected>'.$tekijanData->$tt_order_1.' '.$tekijanData->$tt_order_2.'</option>';
@@ -3560,6 +3578,11 @@ class TyovuorootController extends Controller
 			$post = $_POST['ToistuvatTyovuorot'];
 		else
 			$post = $_POST['Tyovuoroot'];
+
+		$post_tid = isset($post['tid']) ? (int)$post['tid'] : (int)$model->tid;
+		if($post_tid === Tyovuoroot::OPEN_SHIFT_TID) {
+			unset($post['is_toistuva'], $post['tyopaari'], $post['PushNotify']);
+		}
 		
 		// kp only
 		if(!empty(Yii::app()->user->kp)) {
@@ -5171,6 +5194,8 @@ class TyovuorootController extends Controller
 
 	protected function etuSukunimi($tid)
 	{
+	   if((int)$tid === Tyovuoroot::OPEN_SHIFT_TID)
+		   return Yii::t('main', 'Vapaat työvuorot');
 	   $site = Yii::app()->createController('Site');
 	   return $site[0]->etuSukunimi($tid);
 	}

@@ -93,6 +93,28 @@ if( isset($_SESSION['skrollaus']) )
   ?>
  </tr>
  <!-- VARAUKSET -->
+ <!-- VAPAAT TYÖVUOROT -->
+ <tr>
+    <td class="bg-default text-center" style="z-index: 999; width: 100px">
+	<span class="nimi">VAPAAT TYÖVUOROT</span>
+    </td>
+    <?php
+	$f = date("d.m.Y", strtotime($from));
+	while (strtotime($f) <= strtotime($to)){
+		if(!isset(Yii::app()->session['vkolopput']) and date("w", strtotime($f)) == 6)
+			$f = date ("d.m.Y", strtotime("+2 day", strtotime($f)));
+		$did = date("Ymd", strtotime($f));
+		$tr_pyhat = '';
+		if( isset($pyhapaivat[$f]['su']) or isset($pyhapaivat[$f]['vp']) or isset($pyhapaivat[$f]['el']) )
+			$tr_pyhat = 'tr_pyhat';
+		echo '<td class="'.$tr_pyhat.'">';
+		echo '<div id="'.$did.'_'.Tyovuoroot::OPEN_SHIFT_TID.'" class="latikkoAsetukset" pvm="'.$f.'" tid="'.Tyovuoroot::OPEN_SHIFT_TID.'"><span class="odotus">'.$odotus_ikooni.'</span></div>';
+		echo '</td>';
+		$f = date ("d.m.Y", strtotime("+1 day", strtotime($f)));
+	}
+    ?>
+ </tr>
+ <!-- VAPAAT TYÖVUOROT -->
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
 	<td class="bg-default td_tyontekija" style="z-index: 999; min-width: 100px; max-width: 160px; white-space: normal; font-size: 90%;">

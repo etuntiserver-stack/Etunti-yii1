@@ -35,6 +35,7 @@ if(!empty($laatikko_pvm))
 if(!empty($laatikko_tid))
 	$model->tid = $laatikko_tid;
 
+$is_open_shift = ((int)$model->tid === Tyovuoroot::OPEN_SHIFT_TID || (int)$laatikko_tid === Tyovuoroot::OPEN_SHIFT_TID);
 $tyopaari = json_decode($model->tyopaari, true);
 
 // somehow on demo domain fetching the tickets (which should be disabled
@@ -181,6 +182,40 @@ if(isset($model->id) and !empty($model->tyoajanlaatu) and $model->status == 0){
 		array('class'=>'form-control lomake_valinta')) ?>
   </div>
 </div>
+
+<?php if($is_open_shift): ?>
+<div class="row">
+  <div class="col-sm-6">
+		<?php
+		$groupCriteria = new CDbCriteria();
+		$groupCriteria->condition = "select_type='tyoryhma'";
+		$groupCriteria->order = "value ASC";
+		$groupList = CHtml::listData(Valikkoot::model()->findAll($groupCriteria), 'value', 'value');
+		echo $form->labelEx($model, 'vapaa_tyoryhma');
+		echo $form->dropDownList($model, 'vapaa_tyoryhma', $groupList, array(
+			'empty' => Yii::t('main', 'Ei rajausta'),
+			'class' => 'form-control lomake_valinta'
+		));
+		?>
+  </div>
+  <div class="col-sm-6">
+		<?php
+		$areaCriteria = new CDbCriteria();
+		$areaCriteria->condition = "select_type='tyo_toimialue'";
+		$areaCriteria->order = "value ASC";
+		$areaList = CHtml::listData(Valikkoot::model()->findAll($areaCriteria), 'value', 'value');
+		echo $form->labelEx($model, 'vapaa_toimialue');
+		echo $form->dropDownList($model, 'vapaa_toimialue', $areaList, array(
+			'empty' => Yii::t('main', 'Ei rajausta'),
+			'class' => 'form-control lomake_valinta'
+		));
+		?>
+  </div>
+  <div class="col-sm-12">
+	<p class="help-block">Tyhjä valinta ei rajaa näkyvyyttä. Jos molemmat valitaan, työntekijän pitää kuulua valittuun työryhmään ja toimialueeseen.</p>
+  </div>
+</div>
+<?php endif; ?>
 
 <div class="row">
   <div class="col-sm-3">
@@ -556,7 +591,7 @@ $(document).ready(function(){
 </div><!-- 1 tila -->
 <br>
 <div class="row">
-  <div class="col-sm-3 select2-bootstrap" id="tyopari-container">
+  <div class="col-sm-3 select2-bootstrap" id="tyopari-container"<?=($is_open_shift ? ' style="display:none"' : '')?>>
 		<label><?php echo Yii::t('main', 'Työpari'); ?></label><br>
 		<?php 
 		// <-- Order tyontekijat
@@ -699,8 +734,8 @@ $(document).ready(function(){
   <div class="col-sm-3">
 		<div id="viesti_mobiili_div">
 		<?php 
-		$t = Tyontekijat::model()->findbypk($laatikko_tid);
-		if(!empty($t->gcm_reg_id)) :
+		$t = $is_open_shift ? null : Tyontekijat::model()->findbypk($laatikko_tid);
+		if(!$is_open_shift && isset($t->gcm_reg_id) && !empty($t->gcm_reg_id)) :
 		?>
   		<div class="section">
 		<label><?php echo Yii::t('main','Ilmoita työntekijää viestillä'); ?></label><br>
@@ -722,7 +757,7 @@ $(document).ready(function(){
     <div class="input-group">
       <span><?php echo Yii::t('main','Toistuva työvuoro'); ?></span>
       <span class="input-group-btn">
-        <input type="checkbox" name="<?=$java_prefix?>[is_toistuva]" class="sw" id="is_toistuva" <?=(( strtotime($laatikko_pvm) < strtotime(date("Y-m-d")) )? 'disabled': '')?>>
+        <input type="checkbox" name="<?=$java_prefix?>[is_toistuva]" class="sw" id="is_toistuva" <?=(($is_open_shift || strtotime($laatikko_pvm) < strtotime(date("Y-m-d")))? 'disabled': '')?>>
       </span>
     </div>  
   </div>

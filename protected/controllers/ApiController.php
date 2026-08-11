@@ -653,6 +653,38 @@ protected function checkKokeiluversion($domain)
 			return true;
 }
 
+
+private function hasOpenShiftOverlap($employeeId, $openShift)
+{
+	$controller = Yii::app()->createController('Tyovuoroot');
+	$date = date("Y-m-d", strtotime($openShift->pvm));
+	$criteria = ["(peruutettu=0 OR peruutettu IS NULL)"];
+	$existing = $controller[0]->FromToSuunnitellutAll($date, $date, [$employeeId], $criteria, ['data']);
+	$openStart = strtotime($openShift->pvm.' '.$openShift->alku);
+	$openEnd = strtotime($openShift->pvm.' '.$openShift->loppu);
+
+	foreach($existing as $item) {
+		if((int)$item['this_tid'] !== (int)$employeeId || !isset($item['data'])) {
+			continue;
+		}
+		$shift = $item['data'];
+		$start = strtotime($item['this_pvm'].' '.$shift->alku);
+		$end = strtotime($item['this_pvm'].' '.$shift->loppu);
+		if($start < $openEnd && $end > $openStart) {
+			return true;
+		}
+	}
+	return false;
+}
+
+private function sendOpenShiftReservationResponse($success, $message)
+{
+	$this->_sendResponse(200, CJSON::encode([
+		'success' => (bool)$success,
+		'message' => Yii::t('app', $message),
+	]));
+}
+
 public function actionImei($dom)
 {
 
@@ -1044,6 +1076,68 @@ public function actionImei($dom)
 	        }
 		//     CHECK getTyovuorotToday -->
 
+
+		// <-- CHECK varaa_tyovuoro
+	        if($_POST['check'] == 'varaa_tyovuoro'){
+			if(!is_numeric($post_tv_id) || (int)$post_tv_id <= 0) {
+				$this->sendOpenShiftReservationResponse(false, 'Työvuoroa ei löydy.');
+				exit;
+			}
+
+			$db = Yii::app()->db1;
+			$transaction = $db->beginTransaction();
+			try {
+				// Serialize concurrent reservations made by the same employee.
+				$db->createCommand('SELECT id FROM sivex_ttekijat WHERE id=:tid FOR UPDATE')
+					->queryScalar([':tid' => (int)$ttekija->id]);
+
+				$locked = $db->createCommand('SELECT id, tid FROM sivex_tvuoro WHERE id=:id FOR UPDATE')
+					->queryRow(true, [':id' => (int)$post_tv_id]);
+
+				if(!$locked || (int)$locked['tid'] !== Tyovuoroot::OPEN_SHIFT_TID) {
+					$transaction->rollback();
+					$this->sendOpenShiftReservationResponse(false, 'Työvuoro on jo varattu.');
+					exit;
+				}
+
+				$openShift = Tyovuoroot::model()->findByPk((int)$post_tv_id);
+				if(!$openShift || !$openShift->isOpenShiftVisibleTo($ttekija)) {
+					$transaction->rollback();
+					$this->sendOpenShiftReservationResponse(false, 'Työvuoro ei ole varattavissa.');
+					exit;
+				}
+
+				if($this->hasOpenShiftOverlap((int)$ttekija->id, $openShift)) {
+					$transaction->rollback();
+					$this->sendOpenShiftReservationResponse(false, 'Sinulla on jo päällekkäinen työvuoro.');
+					exit;
+				}
+
+				$affected = $db->createCommand()->update(
+					'sivex_tvuoro',
+					['tid' => (int)$ttekija->id],
+					'id=:id AND tid=:open_tid',
+					[':id' => (int)$post_tv_id, ':open_tid' => Tyovuoroot::OPEN_SHIFT_TID]
+				);
+				if((int)$affected !== 1) {
+					$transaction->rollback();
+					$this->sendOpenShiftReservationResponse(false, 'Työvuoro on jo varattu.');
+					exit;
+				}
+
+				$transaction->commit();
+				$this->sendOpenShiftReservationResponse(true, 'Työvuoro varattu.');
+			} catch(Exception $e) {
+				if($transaction->active) {
+					$transaction->rollback();
+				}
+				Yii::log('Vapaan työvuoron varaaminen epäonnistui: '.$e->getMessage(), CLogger::LEVEL_ERROR);
+				$this->sendOpenShiftReservationResponse(false, 'Työvuoron varaaminen epäonnistui.');
+			}
+			exit;
+	        }
+		//     CHECK varaa_tyovuoro -->
+
 		// <-- CHECK tvuoro
 	        if( isset($_POST['with_virtual']) and $_POST['check'] == 'tvuoro' ){
 			$tv_controller = Yii::app()->createController('Tyovuoroot');
@@ -1081,7 +1175,7 @@ public function actionImei($dom)
 				//$haku_criteria[] = " tyoajanlaatu NOT LIKE '%(SPL)%' AND tyoajanlaatu NOT LIKE '%(SL)%' ";
 			}
 
-			$tids = [$ttekija->id];
+			$tids = [$ttekija->id, Tyovuoroot::OPEN_SHIFT_TID];
 			$from = date("Y-m-d");
 			$dataAll = $tv_controller[0]->FromToSuunnitellutAll($from, $aikaVali, $tids, $haku_criteria, ['data']);
 			/*
@@ -1103,10 +1197,13 @@ public function actionImei($dom)
 			$tyonkuvaukset = [];
 			foreach($dataAll as $arr){
 
-				if( $arr['this_tid'] != $ttekija->id )
+				$is_open_shift = ((int)$arr['this_tid'] === Tyovuoroot::OPEN_SHIFT_TID);
+				if(!$is_open_shift && (int)$arr['this_tid'] !== (int)$ttekija->id)
 					continue;
 
 				$data = $arr['data'];
+				if($is_open_shift && !$data->isOpenShiftVisibleTo($ttekija))
+					continue;
 				if(isset($data->kohteet->asiakkaat->id) and ($data->kohteet->aktiivinen != 1 or $data->kohteet->asiakkaat->aktiivinen != 1))
 					continue;
 
@@ -1280,6 +1377,23 @@ public function actionImei($dom)
 				}
 
 				$sel .= $tplista;
+				if($is_open_shift) {
+					$restrictions = [];
+					if(trim((string)$data->vapaa_tyoryhma) !== '')
+						$restrictions[] = '<b>'.Yii::t('main', 'Työryhmä').':</b> '.htmlspecialchars($data->vapaa_tyoryhma);
+					if(trim((string)$data->vapaa_toimialue) !== '')
+						$restrictions[] = '<b>'.Yii::t('main', 'Paikkakunta / Alue').':</b> '.htmlspecialchars($data->vapaa_toimialue);
+					if(count($restrictions) > 0)
+						$sel .= '<hr><p>'.implode('<br>', $restrictions).'</p>';
+
+					$reserveUrl = Yii::app()->createUrl('/api/imei', ['dom' => $dom, 'model' => 'mob']);
+					$sel .= '<form method="post" action="'.htmlspecialchars($reserveUrl, ENT_QUOTES, 'UTF-8').'">'
+						.'<input type="hidden" name="tid" value="'.(int)$ttekija->id.'">'
+						.'<input type="hidden" name="check" value="varaa_tyovuoro">'
+						.'<input type="hidden" name="tv_id" value="'.(int)$data->id.'">'
+						.'<button type="submit" class="btn btn-primary btn-block">'.Yii::t('app', 'Varaa työvuoro').'</button>'
+						.'</form>';
+				}
 				$sel .= '</div>';
 
 				if(isset($data->kohteet->id) and $data->kohteet->tyonkuvaus_tiedostot_mobiilissa == 1){
