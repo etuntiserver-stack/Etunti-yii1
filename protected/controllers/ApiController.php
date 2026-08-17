@@ -1079,6 +1079,10 @@ public function actionImei($dom)
 
 		// <-- CHECK varaa_tyovuoro
 	        if($_POST['check'] == 'varaa_tyovuoro'){
+			if(!Tyovuoroot::OPEN_SHIFTS_ENABLED) {
+				$this->sendOpenShiftReservationResponse(false, 'Vapaat työvuorot eivät ole käytössä.');
+				exit;
+			}
 			if(!is_numeric($post_tv_id) || (int)$post_tv_id <= 0) {
 				$this->sendOpenShiftReservationResponse(false, 'Työvuoroa ei löydy.');
 				exit;
@@ -1175,7 +1179,9 @@ public function actionImei($dom)
 				//$haku_criteria[] = " tyoajanlaatu NOT LIKE '%(SPL)%' AND tyoajanlaatu NOT LIKE '%(SL)%' ";
 			}
 
-			$tids = [$ttekija->id, Tyovuoroot::OPEN_SHIFT_TID];
+			$tids = [$ttekija->id];
+			if(Tyovuoroot::OPEN_SHIFTS_ENABLED)
+				$tids[] = Tyovuoroot::OPEN_SHIFT_TID;
 			$from = date("Y-m-d");
 			$dataAll = $tv_controller[0]->FromToSuunnitellutAll($from, $aikaVali, $tids, $haku_criteria, ['data']);
 			/*
@@ -1198,6 +1204,8 @@ public function actionImei($dom)
 			foreach($dataAll as $arr){
 
 				$is_open_shift = ((int)$arr['this_tid'] === Tyovuoroot::OPEN_SHIFT_TID);
+				if($is_open_shift && !Tyovuoroot::OPEN_SHIFTS_ENABLED)
+					continue;
 				if(!$is_open_shift && (int)$arr['this_tid'] !== (int)$ttekija->id)
 					continue;
 

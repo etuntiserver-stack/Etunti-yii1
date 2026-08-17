@@ -93,6 +93,7 @@ if( isset($_SESSION['skrollaus']) )
   ?>
  </tr>
  <!-- VARAUKSET -->
+ <?php if(Tyovuoroot::OPEN_SHIFTS_ENABLED): ?>
  <!-- VAPAAT TYÖVUOROT -->
  <tr>
     <td class="bg-default text-center" style="z-index: 999; width: 100px">
@@ -115,6 +116,7 @@ if( isset($_SESSION['skrollaus']) )
     ?>
  </tr>
  <!-- VAPAAT TYÖVUOROT -->
+ <?php endif; ?>
  <?php foreach($tt as $tid=>$item): ?>
  <tr>
 	<td class="bg-default td_tyontekija" style="z-index: 999; min-width: 100px; max-width: 160px; white-space: normal; font-size: 90%;">

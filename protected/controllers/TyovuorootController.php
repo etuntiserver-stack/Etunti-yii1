@@ -2081,7 +2081,8 @@ class TyovuorootController extends Controller
 		$tt 		= [];
 		$haku_tids 	= [];
 		$haku_tids[0] 	= 0; // Varaus
-		$haku_tids[Tyovuoroot::OPEN_SHIFT_TID] = Tyovuoroot::OPEN_SHIFT_TID; // Vapaat työvuorot
+		if(Tyovuoroot::OPEN_SHIFTS_ENABLED)
+			$haku_tids[Tyovuoroot::OPEN_SHIFT_TID] = Tyovuoroot::OPEN_SHIFT_TID; // Vapaat työvuorot
 		$tyontekijat = Tyontekijat::model()->findAll($criteria);
 		foreach ($tyontekijat as $item) {
 			$tt[$item->id] = array('etusukunimi' => $item->$tt_order_1 . ' ' . $item->$tt_order_2,
@@ -2483,6 +2484,12 @@ class TyovuorootController extends Controller
 		$from 		= date("Y-m-d", strtotime($from));
 		$to 		= date("Y-m-d", strtotime($to));
 		$tids 		= (isset($_POST['tids']))?json_decode($_POST['tids'], true):[];
+		if(!Tyovuoroot::OPEN_SHIFTS_ENABLED) {
+			foreach($tids as $key => $tid) {
+				if((int)$tid === Tyovuoroot::OPEN_SHIFT_TID)
+					unset($tids[$key]);
+			}
+		}
 		// the speed improvement made for kotipuhtaaksi affects the calendar in "tt" (tyontekijat) mode.
 		// we'll take an optional argument in this action, which can be the mode of the calendar,
 		// we'll pass 'tt' mode from _form4.php and uusitilaus.php, and if the mode is infact tt here
@@ -3153,6 +3160,10 @@ class TyovuorootController extends Controller
 
 	public function actionCreate4_form($pvm, $tid)
 	{
+		if(!Tyovuoroot::OPEN_SHIFTS_ENABLED && (int)$tid === Tyovuoroot::OPEN_SHIFT_TID) {
+			echo json_encode('<div class="alert alert-warning">'.Yii::t('main', 'Vapaat työvuorot eivät ole käytössä.').'</div>');
+			exit;
+		}
 		Yii::log("1", CLogger::LEVEL_INFO);
 		$asetukset = Asetukset::model()->findByPk(1);
 		$haku_tids = [];
@@ -3224,6 +3235,10 @@ class TyovuorootController extends Controller
 
 		$return = array();
 		$is_open_shift = ((int)$laatikko_tid === Tyovuoroot::OPEN_SHIFT_TID);
+		if(!Tyovuoroot::OPEN_SHIFTS_ENABLED && $is_open_shift) {
+			echo json_encode(['error' => Yii::t('main', 'Vapaat työvuorot eivät ole käytössä.')]);
+			exit;
+		}
 		if($is_open_shift && $toistuva == 'true') {
 			echo json_encode(['error' => Yii::t('main', 'Vapaa työvuoro ei voi olla toistuva työvuoro.')]);
 			exit;
@@ -3236,6 +3251,11 @@ class TyovuorootController extends Controller
 			$toistuva = false;
 			$model 	= new Tyovuoroot;
 			$post 	= $_POST['Tyovuoroot'];
+		}
+
+		if(!Tyovuoroot::OPEN_SHIFTS_ENABLED && isset($post['tid']) && (int)$post['tid'] === Tyovuoroot::OPEN_SHIFT_TID) {
+			echo json_encode(['error' => Yii::t('main', 'Vapaat työvuorot eivät ole käytössä.')]);
+			exit;
 		}
 
 		if($is_open_shift) {
@@ -3404,6 +3424,11 @@ class TyovuorootController extends Controller
 		$tid 		= $get_id['tid'];
 		$etusukunimi	= $this->etuSukunimi($tid);
 
+		if(!Tyovuoroot::OPEN_SHIFTS_ENABLED && (int)$tid === Tyovuoroot::OPEN_SHIFT_TID) {
+			echo Yii::t('main', 'Vapaat työvuorot eivät ole käytössä.');
+			exit;
+		}
+
 		if(!isset($model->id)){
 			echo 'error';
 			exit;
@@ -3481,6 +3506,11 @@ class TyovuorootController extends Controller
 		$pvm 		= $get_id['pvm'];
 		$tid 		= $get_id['tid'];
 		$etusukunimi	= $this->etuSukunimi($tid);
+
+		if(!Tyovuoroot::OPEN_SHIFTS_ENABLED && (int)$tid === Tyovuoroot::OPEN_SHIFT_TID) {
+			echo json_encode('<div class="alert alert-warning">'.Yii::t('main', 'Vapaat työvuorot eivät ole käytössä.').'</div>');
+			exit;
+		}
 
 		$haku_tids = [];
 		$haku_tids[$tid] = [$tid];
@@ -3570,6 +3600,10 @@ class TyovuorootController extends Controller
 		$model 		= $get_id['model'];
 		$toistuva 	= $get_id['toistuva'];
 		if(!isset($model->id)){ die('Työvuoroja '.$id.' ei löydy.'); }
+		if(!Tyovuoroot::OPEN_SHIFTS_ENABLED && (int)$model->tid === Tyovuoroot::OPEN_SHIFT_TID) {
+			echo json_encode(['error' => Yii::t('main', 'Vapaat työvuorot eivät ole käytössä.')]);
+			exit;
+		}
 		$cur_model_id	= $model->id;
 		$cur_model	= $model;
 
@@ -3580,6 +3614,10 @@ class TyovuorootController extends Controller
 			$post = $_POST['Tyovuoroot'];
 
 		$post_tid = isset($post['tid']) ? (int)$post['tid'] : (int)$model->tid;
+		if(!Tyovuoroot::OPEN_SHIFTS_ENABLED && $post_tid === Tyovuoroot::OPEN_SHIFT_TID) {
+			echo json_encode(['error' => Yii::t('main', 'Vapaat työvuorot eivät ole käytössä.')]);
+			exit;
+		}
 		if($post_tid === Tyovuoroot::OPEN_SHIFT_TID) {
 			unset($post['is_toistuva'], $post['tyopaari'], $post['PushNotify']);
 		}

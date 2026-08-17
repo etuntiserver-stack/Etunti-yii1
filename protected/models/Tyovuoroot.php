@@ -25,6 +25,9 @@
 class Tyovuoroot extends DB2ActiveRecord
 {
 	const OPEN_SHIFT_TID = 1000000001;
+	// Temporarily disabled until the customer has paid for the feature.
+	// Re-enable by changing this value to true.
+	const OPEN_SHIFTS_ENABLED = false;
 
 	public $osoite;
 	public $kaupunki;

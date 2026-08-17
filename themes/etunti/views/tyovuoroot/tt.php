@@ -41,9 +41,11 @@ if( isset($_SESSION['skrollaus']) )
  <th class="bg-default">
 	<span class="nimi">VARAUS</span>
  </th>
+ <?php if(Tyovuoroot::OPEN_SHIFTS_ENABLED): ?>
  <th class="bg-default">
 	<span class="nimi">VAPAAT TYÖVUOROT</span>
  </th>
+ <?php endif; ?>
  <?php
  foreach($tt as $tid=>$item){
 	echo '<th class="bg-default small" style="z-index: 999; vertical-align: middle;"><div class="text-center laatiko_td">
@@ -90,9 +92,11 @@ if( isset($_SESSION['skrollaus']) )
 		echo '</td>';
 		//     VARAUKSET -->
 		// <-- VAPAAT TYÖVUOROT
-		echo '<td>';
-		echo '<div id="'.$did.'_'.Tyovuoroot::OPEN_SHIFT_TID.'" class="latikkoAsetukset" pvm="'.$f.'" tid="'.Tyovuoroot::OPEN_SHIFT_TID.'"><span class="odotus">'.$odotus_ikooni.'</span></div>';
-		echo '</td>';
+		if(Tyovuoroot::OPEN_SHIFTS_ENABLED) {
+			echo '<td>';
+			echo '<div id="'.$did.'_'.Tyovuoroot::OPEN_SHIFT_TID.'" class="latikkoAsetukset" pvm="'.$f.'" tid="'.Tyovuoroot::OPEN_SHIFT_TID.'"><span class="odotus">'.$odotus_ikooni.'</span></div>';
+			echo '</td>';
+		}
 		//     VAPAAT TYÖVUOROT -->
 		foreach($tt as $tid => $item){
 			echo '<td>';
@@ -105,7 +109,8 @@ if( isset($_SESSION['skrollaus']) )
   			echo '<td class="text-center myBgColors viikkoRivi"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($f)).' <i class="fa fa-arrow-up" aria-hidden="true"></i>
 </b></td>';
 			echo '<td class="myBgColors viikkoRivi"></td>';
-			echo '<td class="myBgColors viikkoRivi"></td>';
+			if(Tyovuoroot::OPEN_SHIFTS_ENABLED)
+				echo '<td class="myBgColors viikkoRivi"></td>';
 			foreach($tt as $tid => $item){
 				echo '<td class="myBgColors viikkoRivi">';
 				echo '<div class="viikkolaatiko text-center" id="vko_'.$did.'_'.$tid.'""><span class="odotusweeklaskennan">'.$odotus_ikooni.'</span></div>';
