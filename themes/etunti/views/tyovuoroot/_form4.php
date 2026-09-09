@@ -987,6 +987,9 @@ $(document).ready(function(){
     $pfrom = '';
     $pto = '';
     $viikkoja = '';
+    // kuukausiperusteinen toistuvuus (2026-09)
+    $repeat_type = 'weekly';
+    $monthly_ordinal = '1';
     $viikko_paivat = array();
     $toistuvaID =  '<span id="toistuvaID"></span>';
 
@@ -994,6 +997,8 @@ $(document).ready(function(){
 	$tvt = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id); // Toistuva modelissa on GETtoistuva_id
 	if(isset($tvt->id)){
     		$viikkoja = $tvt->viikkoja;
+		$repeat_type = (!empty($tvt->repeat_type)) ? $tvt->repeat_type : 'weekly';
+		$monthly_ordinal = (!empty($tvt->monthly_ordinal)) ? $tvt->monthly_ordinal : '1';
     		$viikko_paivat = json_decode($tvt->viikko_paivat, true);
     		$pfrom = $tvt->pfrom;
     		$pto = $tvt->pto;
@@ -1029,16 +1034,29 @@ $(document).ready(function(){
 		<div id="pto_ilmoitus" style="position:relative;"></div>
 	  </div>
 	  <div class="col-sm-4">
-		<label><?php echo Yii::t('main', 'Työvuorojen viikkoväli'); ?></label>
-		<select class="form-control" name="ToistuvatTyovuorot[viikkoja]" id="Toistuva_viikkoja">
-		<?php
-		if(!empty($viikkoja)) echo '<option value="'.$viikkoja.'">'.$viikkoja.'</option>';
-		?>
-		<option value="1">1</option>
-		<option value="2">2</option>
-		<option value="3">3</option>
-		<option value="4">4</option>
+		<!-- kuukausiperusteinen toistuvuus (2026-09) -->
+		<label>Toistumistapa</label>
+		<select class="form-control" name="ToistuvatTyovuorot[repeat_type]" id="Toistuva_repeat_type">
+			<option value="weekly" <?php if($repeat_type === 'weekly') echo 'selected'; ?>>Viikoittain</option>
+			<option value="monthly" <?php if($repeat_type === 'monthly') echo 'selected'; ?>>Kuukausittain</option>
 		</select>
+		<div id="toistuva_weekly_options" style="margin-top:10px;">
+			<label><?php echo Yii::t('main', 'Työvuorojen viikkoväli'); ?></label>
+			<select class="form-control" name="ToistuvatTyovuorot[viikkoja]" id="Toistuva_viikkoja">
+			<?php if(!empty($viikkoja)) echo '<option value="'.$viikkoja.'">'.$viikkoja.'</option>'; ?>
+			<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+			</select>
+		</div>
+		<div id="toistuva_monthly_options" style="margin-top:10px; display:none;">
+			<label>Viikonpäivän järjestys kuukaudessa</label>
+			<select class="form-control" name="ToistuvatTyovuorot[monthly_ordinal]" id="Toistuva_monthly_ordinal">
+				<option value="1" <?php if($monthly_ordinal === '1') echo 'selected'; ?>>Ensimmäinen</option>
+				<option value="2" <?php if($monthly_ordinal === '2') echo 'selected'; ?>>Toinen</option>
+				<option value="3" <?php if($monthly_ordinal === '3') echo 'selected'; ?>>Kolmas</option>
+				<option value="4" <?php if($monthly_ordinal === '4') echo 'selected'; ?>>Neljäs</option>
+				<option value="last" <?php if($monthly_ordinal === 'last') echo 'selected'; ?>>Viimeinen</option>
+			</select>
+		</div>
 	  </div>
 	</div>
 		<?php if($toistuva and !empty($pfrom)):?>
@@ -1381,6 +1399,14 @@ $(document).ready(function(){
   $('.reload').click(function(){
 	tarkistusLista('<?=$this_id?>');
   });
+  // kuukausiperusteinen toistuvuus (2026-09)
+  function toggleRepeatTypeOptions(){
+	if($('#Toistuva_repeat_type').val() === 'monthly'){ $('#toistuva_weekly_options').hide(); $('#toistuva_monthly_options').show(); }
+	else { $('#toistuva_monthly_options').hide(); $('#toistuva_weekly_options').show(); }
+  }
+  toggleRepeatTypeOptions();
+  $('#Toistuva_repeat_type').on('change', function(){ toggleRepeatTypeOptions(); tarkistusLista('<?=$this_id?>'); });
+  $('#Toistuva_monthly_ordinal').on('change', function(){ tarkistusLista('<?=$this_id?>'); });
   $('#pto, #pfrom, #Toistuva_viikkoja, #tyopaari, #tekijanVaihdo, #alku, #loppu, #ToistuvatTyovuorot_kohde').on('blur change select', function(){
 	tarkistusLista('<?=$this_id?>');
   });
@@ -1396,6 +1422,8 @@ $(document).ready(function(){
 			$("#pfrom").addClass('bg-danger');
 		$(".vkopvmswitch").bootstrapSwitch('disabled', true);
 		$("#Toistuva_viikkoja").attr('disabled', 'yes');
+		// kuukausiperusteinen toistuvuus (2026-09)
+		$("#Toistuva_repeat_type, #Toistuva_monthly_ordinal").attr('disabled', 'yes');
 		$('#tekijanVaihdo').attr('disabled', 'yes');
 		$('#tekijanVaihdo_huomio').remove();
 		$(".mult").multiselect("disable");
@@ -1403,6 +1431,7 @@ $(document).ready(function(){
 		$("#pfrom").removeClass('bg-danger');
 		$(".vkopvmswitch").bootstrapSwitch('disabled', false);
 		$("#Toistuva_viikkoja").removeAttr('disabled');
+		$("#Toistuva_repeat_type, #Toistuva_monthly_ordinal").removeAttr('disabled');
 		$('#tekijanVaihdo').removeAttr('disabled');
 		$(".mult").multiselect("enable");
 	}
@@ -1416,7 +1445,7 @@ $(document).ready(function(){
 
 	$.ajax({
 	  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/pvmTarkistus_lista?this_id=' + this_id + '&cal_start=' + $("#cal_start").val() + '&tid=' + $('#<?=$java_prefix?>_tid').val() + '&laatikko_pvm=<?=$laatikko_pvm?>',
-	  data:{ pfrom : $("#pfrom").val(), pto : $("#pto").val(), viikkoja : $("#Toistuva_viikkoja option:selected").val(), vkopaivat : vkopaivat, post_tids : post_tids, osoite : $('#<?=$java_prefix?>_osoite').val(), alku : $('#alku').val(), loppu : $('#loppu').val(), tyopaari_laatikko : $('#tyopaari').val() },
+	  data:{ pfrom : $("#pfrom").val(), pto : $("#pto").val(), viikkoja : $("#Toistuva_viikkoja option:selected").val(), repeat_type : $('#Toistuva_repeat_type').val(), monthly_ordinal : $('#Toistuva_monthly_ordinal').val(), vkopaivat : vkopaivat, post_tids : post_tids, osoite : $('#<?=$java_prefix?>_osoite').val(), alku : $('#alku').val(), loppu : $('#loppu').val(), tyopaari_laatikko : $('#tyopaari').val() },
 	  type:'POST',
 	  success:function(data){
 		data = JSON.parse(data);

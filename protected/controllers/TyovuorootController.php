@@ -2320,6 +2320,18 @@ class TyovuorootController extends Controller
 			$haku_from_ts	= strtotime($haku_from);
 			$stopday 	= date("Y-m-d", strtotime($arvo->pto));
 
+			// kuukausiperusteinen toistuvuus (2026-09)
+			if ($arvo->isMonthlyRepeat()) {
+				foreach ($arvo->getMonthlyOccurrenceDates($haku_from, $haku_to) as $this_pvm) {
+					foreach($tids as $tid){
+						if( isset($poistettu_pvms[$tid][$this_pvm]) ) continue;
+						$return = $this->laatikkorakenne($arvo, $this_pvm, $tid, true, $laatikkomuoto, $with, $asiakas_tyovuorossa, $customer_tickets, $ostvaroitus, $laskutetut_ids);
+						$tv_arr[$tid][$this_pvm][strtotime($arvo->alku)][] = $return;
+					}
+				}
+				continue;
+			}
+
 			$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
 			$date->modify('this week monday');
 			$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
@@ -2813,6 +2825,9 @@ class TyovuorootController extends Controller
 		$stopday 	= date("Y-m-d", strtotime($_POST['pto']));
 		$stopday_ts	= strtotime($stopday);
 		$viikkoja 	= $_POST['viikkoja'];
+		// kuukausiperusteinen toistuvuus (2026-09)
+		$repeat_type = isset($_POST['repeat_type']) ? $_POST['repeat_type'] : 'weekly';
+		$monthly_ordinal = isset($_POST['monthly_ordinal']) ? $_POST['monthly_ordinal'] : '1';
 		if( !isset($_POST['vkopaivat']) ){
 			echo json_encode(['error' => '<br><center><p class="text-danger">Valitse vähintään yksi viikonpäivä.</p></center>']);
 			exit;
@@ -3010,10 +3025,24 @@ class TyovuorootController extends Controller
 			ToistuvatTyovuorot::model()->updatebypk($model->id, ['new_poistettu_pvm' => $for_update]);
 
 
+		$pvms = [];
+		// kuukausiperusteinen toistuvuus (2026-09)
+		if ($repeat_type === 'monthly') {
+			foreach (ToistuvatTyovuorot::monthlyOccurrenceDates($_POST['pfrom'], $_POST['pto'], $viikko_paivat, $monthly_ordinal) as $this_pvm) {
+				$cal_pvm = date('j.m.Y', strtotime($this_pvm));
+				foreach( $tids as $tid ){
+					$this_id_builder = ( $this_id != 'null' )? $this->this_id_builder($model->id, $this_pvm, $tid) : '';
+					$model_id = ( $this_id != 'null' )? $model->id : '';
+					if( isset($poistettu_pvms[$tid][$this_pvm]) )
+						$pvms[$cal_pvm][$tid] = [ 'html' => '<br><i class="link fa fa-recycle palauta_kejuun" toistuva_id="'.$model_id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => true ];
+					else
+						$pvms[$cal_pvm][$tid] = [ 'html' => '<br><i class="link fa fa-gear cal_tilanne" toistuva_id="'.$model_id.'" tid="'.$tid.'" pvm="'.$this_pvm.'" this_id="'.$this_id_builder.'"></i>', 'pois_tilanne' => false ];
+				}
+			}
+		} else {
 		$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
 		$date->modify('this week monday');
 		$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
-		$pvms = [];
 		while ($date->getTimestamp() <= $date_end){
 			//$this_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
 			//if ( $this_week_sunday >= date("YW", strtotime($cal_start.' this week sunday')) ){ // Tama pitaa testata
@@ -3040,6 +3069,7 @@ class TyovuorootController extends Controller
 				}
 			//}
 			$date->modify("+{$viikkoja}week");
+		}
 		}
 		$m_start = new DateTime($cal_start);
 		$m_start->modify("first day of this month");

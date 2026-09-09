@@ -134,7 +134,7 @@ $site = Yii::app()->createController('Site');
               <div class="panel heading-border">
                 <div class="panel-body">
 		<p class="text-danger">Huomio! Poistetut ketjussa olevat päivät tulee saajallekin poistettuna.</p>
-		<p class="text-danger">Huomio! Aloitus päivä voi muuttua. Tämä johtuu työvuorojen viikkoväleistä</p>
+		<p class="text-danger">Huomio! Aloitus päivä voi muuttua. Tämä johtuu työvuorojen toistuvuudesta</p>
 		<p class="text-danger">Huomio! Menneisyydessä olevat ketjut päättyvät <?=date("d.m.Y",strtotime($alkaen.' -1 day'))?> päivässä</p>
 		<table class="table table-striped table-bordered">
 		<tr>
@@ -154,10 +154,17 @@ $site = Yii::app()->createController('Site');
 			$stopday 	= date("Y-m-d", strtotime($item->pto));
 			$alkaen_YW	= date("YW",strtotime($alkaen));
 
+			$pvm_lista = [];
+			// kuukausiperusteinen toistuvuus (2026-09)
+			if ($item->isMonthlyRepeat()) {
+				foreach ($item->getMonthlyOccurrenceDates($alkaen, null) as $this_pvm) {
+					$pvm_lista[$this_pvm] = $this_pvm;
+					if(!isset($aloitus_check['pvm'])) $aloitus_check['pvm'] = $this_pvm;
+				}
+			} else {
 			$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
 			$date->modify('this week monday');
 			$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();
-			$pvm_lista = [];
 			while ($date->getTimestamp() <= $date_end){
 				$this_week_sunday = date("YW", strtotime($date->format("d.m.Y").' this week sunday'));
 				if( $this_week_sunday >= $alkaen_YW ){
@@ -178,6 +185,7 @@ $site = Yii::app()->createController('Site');
 					}
 				}
 				$date->modify("+{$item->viikkoja}week");
+			}
 			}
 
 			if(isset($aloitus_check['pvm']))

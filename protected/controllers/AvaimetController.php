@@ -636,6 +636,16 @@ class AvaimetController extends Controller
 			$haku_from_ts	= strtotime($from);
 			$haku_to_ts = strtotime($to);
 			$stopday 	= date("Y-m-d", strtotime($repeating->pto));
+			// kuukausiperusteinen toistuvuus (2026-09)
+			if ($repeating->isMonthlyRepeat()) {
+				foreach ($repeating->getMonthlyOccurrenceDates($from, $to) as $this_pvm) {
+					if(!isset($poistettu_pvms[$this_pvm])) {
+						$virtualShift = clone($repeating); $virtualShift->pvm = $this_pvm; $filteredRepeatingShifts[] = $virtualShift;
+					}
+				}
+				continue;
+			}
+
 			$date = new \DateTime($startday, new DateTimeZone('Europe/Helsinki'));
 			$date->modify('this week monday');
 			$date_end = (new \DateTime($stopday, new DateTimeZone('Europe/Helsinki')))->getTimestamp();

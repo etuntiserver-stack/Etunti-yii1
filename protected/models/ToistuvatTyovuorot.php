@@ -10,6 +10,8 @@
  * @property string $pto
  * @property integer $viikkoja
  * @property string $viikko_paivat
+ * @property string $repeat_type
+ * @property string $monthly_ordinal
  * @property integer $tid
  * @property integer $kohde
  * @property string $pvm
@@ -61,6 +63,9 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
                      'pto' => 'varchar(50) DEFAULT NULL',
                      'viikkoja' => 'int(1) DEFAULT 0',
                      'viikko_paivat' => 'text DEFAULT NULL',
+                     // kuukausiperusteinen toistuvuus (2026-09)
+                     'repeat_type' => "varchar(20) DEFAULT 'weekly'",
+                     'monthly_ordinal' => 'varchar(20) DEFAULT NULL',
                      'tid' => 'int(11) DEFAULT 0',
                      'kohde' => 'int(11) DEFAULT 0',
                      'osoite' => 'varchar(255) DEFAULT NULL',
@@ -120,11 +125,69 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 			array('alku, loppu, pituus, kesto', 'length', 'max'=>10),
 			array('tyoajanmerkinta', 'length', 'max'=>100),
 			array('tietoja', 'length', 'max'=>10000),
-			array('tyopaari, tvuoro_ids, poistettu_pvm, lisa_tuotteet, tyo_erittelyt, muistiinpano, viikko_paivat, new_poistettu_pvm, url_linkkit', 'safe'),
+			array('tyopaari, tvuoro_ids, poistettu_pvm, lisa_tuotteet, tyo_erittelyt, muistiinpano, viikko_paivat, new_poistettu_pvm, url_linkkit, repeat_type, monthly_ordinal', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, pfrom, pto, viikkoja, viikko_paivat, tid, kohde, pvm, alku, loppu, kesto, tyoajanmerkinta, status, tietoja, tyopaari', 'safe', 'on'=>'search'),
 		);
+	}
+
+
+	// kuukausiperusteinen toistuvuus (2026-09)
+	public function isMonthlyRepeat()
+	{
+		return isset($this->repeat_type) && $this->repeat_type === 'monthly';
+	}
+
+	// kuukausiperusteinen toistuvuus (2026-09)
+	public static function monthlyOccurrenceDates($pfrom, $pto, $weekdays, $ordinal, $rangeFrom = null, $rangeTo = null)
+	{
+		$tz = new DateTimeZone('Europe/Helsinki');
+		$start = new DateTime(date('Y-m-d', strtotime($pfrom)), $tz);
+		$stop = new DateTime(date('Y-m-d', strtotime($pto)), $tz);
+		$rangeStart = ($rangeFrom !== null && $rangeFrom !== '') ? new DateTime(date('Y-m-d', strtotime($rangeFrom)), $tz) : clone $start;
+		$rangeStop = ($rangeTo !== null && $rangeTo !== '') ? new DateTime(date('Y-m-d', strtotime($rangeTo)), $tz) : clone $stop;
+		if ($rangeStart < $start) $rangeStart = clone $start;
+		if ($rangeStop > $stop) $rangeStop = clone $stop;
+		if ($rangeStart > $rangeStop) return array();
+
+		if (!is_array($weekdays)) $weekdays = json_decode($weekdays, true);
+		if (!is_array($weekdays) || count($weekdays) === 0) return array();
+
+		$month = clone $start;
+		$month->modify('first day of this month');
+		$lastMonth = clone $stop;
+		$lastMonth->modify('first day of this month');
+		$dates = array();
+		while ($month <= $lastMonth) {
+			foreach ($weekdays as $weekday) {
+				$weekday = (int)$weekday;
+				if ($weekday < 1 || $weekday > 7) continue;
+				$candidate = clone $month;
+				if ((string)$ordinal === 'last') {
+					$candidate->modify('last day of this month');
+					$back = (((int)$candidate->format('N')) - $weekday + 7) % 7;
+					if ($back > 0) $candidate->modify('-'.$back.' day');
+				} else {
+					$order = (int)$ordinal;
+					if ($order < 1 || $order > 4) $order = 1;
+					$forward = ($weekday - (int)$candidate->format('N') + 7) % 7;
+					if ($forward > 0) $candidate->modify('+'.$forward.' day');
+					if ($order > 1) $candidate->modify('+'.(($order - 1) * 7).' day');
+				}
+				if ($candidate < $start || $candidate > $stop || $candidate < $rangeStart || $candidate > $rangeStop) continue;
+				$dates[$candidate->format('Ymd')] = $candidate->format('d.m.Y');
+			}
+			$month->modify('+1 month');
+		}
+		ksort($dates);
+		return array_values($dates);
+	}
+
+	// kuukausiperusteinen toistuvuus (2026-09)
+	public function getMonthlyOccurrenceDates($rangeFrom = null, $rangeTo = null)
+	{
+		return self::monthlyOccurrenceDates($this->pfrom, $this->pto, $this->viikko_paivat, $this->monthly_ordinal, $rangeFrom, $rangeTo);
 	}
 
 	/**
