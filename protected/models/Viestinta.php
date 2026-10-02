@@ -57,14 +57,19 @@ class Viestinta extends DB2ActiveRecord
                      'viesti' => 'text DEFAULT NULL',
                      'admin' => 'varchar(50) DEFAULT NULL',
                      'status' => 'int(1) DEFAULT 0',
+                     'no_reply' => 'int(1) DEFAULT 0',
 		);
 
+		$schemaChanged = false;
 		foreach($table_structure as $key=>$value)
 		{
 			if (!isset($table->columns[$key])) {
 				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+				$schemaChanged = true;
 			}
-		}	
+		}
+		if($schemaChanged)
+			Yii::app()->db1->schema->refresh();
 		} // if($check_this_table)
 
 		return $tb_name;
@@ -82,11 +87,12 @@ class Viestinta extends DB2ActiveRecord
 			array('pvm, time', 'length', 'max'=>20),
 			array('tekija', 'length', 'max'=>255),
 			array('status', 'length', 'max'=>1),
+			array('no_reply', 'numerical', 'integerOnly'=>true),
 			array('admin', 'length', 'max'=>50),
 			array('viesti', 'length', 'max'=>2000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, time, pvm, tekija, viesti, admin', 'safe', 'on'=>'search'),
+			array('id, time, pvm, tekija, viesti, admin, no_reply', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -113,6 +119,7 @@ class Viestinta extends DB2ActiveRecord
 			'tekija' => Yii::t('main', 'Vastaanottaja'),
 			'viesti' => Yii::t('main', 'Viesti'),
 			'admin' => Yii::t('main', 'Lähettäjä'),
+			'no_reply' => 'Ei vastausmahdollisuutta mobiilissa',
 			'edellinen_viesti'=> Yii::t('main', 'Viimeiset viestit'),
 		);
 	}

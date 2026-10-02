@@ -346,6 +346,9 @@ if( $curpage == 'tyovuoroot/beta' )
 				<i class="fa fa-arrow-right btn btn-default btn-group" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Seuraava viikko'); ?>"></i>
 			</a> 
 			<button class="btn btn-default fa fa-calendar-check-o" id="vkolopput" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Viikonloput'); ?>"></button>
+			<?php if(Tyovuoroot::OPEN_SHIFTS_ENABLED): ?>
+			<button class="btn btn-default fa fa-eye tvasetus <?=((isset(Yii::app()->session['vapaat_tyovuorot']))?'btn-success':'')?>" for="vapaat_tyovuorot" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Vapaat työvuorot'); ?>"></button>
+			<?php endif; ?>
                </div>
               </div>
         </li>
@@ -447,7 +450,7 @@ $(".tvasetus").click(function(){
 	success:function(data){
 		console.log(data);
 		data = JSON.parse(data);
-		if( data['skrollaus'] )
+		if( data[whatfor] )
 			window.location.reload();
    	},
 	error:function(data){

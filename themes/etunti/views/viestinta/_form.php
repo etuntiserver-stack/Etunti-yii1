@@ -179,6 +179,18 @@ $('#Viestinta_tekija').multiselect({
 <br>
 
 <div class="row form">
+  <div class="col-sm-4">
+	<div class="section fill mb10">
+		<label>
+			<?php echo $form->checkBox($model,'no_reply'); ?>
+			Ei vastausmahdollisuutta mobiilissa
+		</label>
+		<?php echo $form->error($model,'no_reply'); ?>
+	</div>
+  </div>
+</div>
+
+<div class="row form">
   <div class="col-sm-3">
 	<div class="section fill mb5">
 	<?php if(!empty($ad->adm_email)): ?>

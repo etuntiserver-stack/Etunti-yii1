@@ -93,7 +93,7 @@ if( isset($_SESSION['skrollaus']) )
   ?>
  </tr>
  <!-- VARAUKSET -->
- <?php if(Tyovuoroot::OPEN_SHIFTS_ENABLED): ?>
+ <?php if(Tyovuoroot::OPEN_SHIFTS_ENABLED && isset(Yii::app()->session['vapaat_tyovuorot'])): ?>
  <!-- VAPAAT TYÖVUOROT -->
  <tr>
     <td class="bg-default text-center" style="z-index: 999; width: 100px">

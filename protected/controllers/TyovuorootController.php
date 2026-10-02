@@ -1755,6 +1755,7 @@ class TyovuorootController extends Controller
 			unset(Yii::app()->session['year']);
 			unset(Yii::app()->session['week']);
 			unset(Yii::app()->session['vkolopput']);
+			unset(Yii::app()->session['vapaat_tyovuorot']);
 			unset($_SESSION['haku_asiakas']);
 			unset($_SESSION['haku_kohde']);
 			unset(Yii::app()->session['tyontekijat']);
@@ -2081,7 +2082,7 @@ class TyovuorootController extends Controller
 		$tt 		= [];
 		$haku_tids 	= [];
 		$haku_tids[0] 	= 0; // Varaus
-		if(Tyovuoroot::OPEN_SHIFTS_ENABLED)
+		if(Tyovuoroot::OPEN_SHIFTS_ENABLED && ($mode != 'vko' || isset(Yii::app()->session['vapaat_tyovuorot'])))
 			$haku_tids[Tyovuoroot::OPEN_SHIFT_TID] = Tyovuoroot::OPEN_SHIFT_TID; // Vapaat työvuorot
 		$tyontekijat = Tyontekijat::model()->findAll($criteria);
 		foreach ($tyontekijat as $item) {

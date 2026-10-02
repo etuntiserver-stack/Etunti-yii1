@@ -1039,6 +1039,10 @@ $xml = '
 	$context = stream_context_create($optsPOST);
 	
 	$response = file_get_contents($url, false, $context);
+	if($response === false || trim($response) === '') {
+		Yii::log('Netvisor employee update returned an empty response.', CLogger::LEVEL_ERROR);
+		return '';
+	}
 	$result = new SimpleXMLElement($response);
 	
 	

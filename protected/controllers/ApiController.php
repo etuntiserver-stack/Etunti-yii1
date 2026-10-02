@@ -685,6 +685,78 @@ private function sendOpenShiftReservationResponse($success, $message)
 	]));
 }
 
+
+private function renderMobileShiftInfo($text)
+{
+	$text = htmlspecialchars((string)$text, ENT_QUOTES, 'UTF-8');
+	$text = preg_replace('/\*\*(.+?)\*\*/s', '<strong>$1</strong>', $text);
+	return nl2br($text, false);
+}
+
+private function renderMobileMessage($message)
+{
+	$message = preg_replace('/<br\s*\/?>/i', "\n", (string)$message);
+	$links = [];
+
+	$message = preg_replace_callback(
+		'~<a\b[^>]*href=["\'](https?://[^"\']+)["\'][^>]*>(.*?)</a>~is',
+		function($matches) use (&$links) {
+			$url = html_entity_decode($matches[1], ENT_QUOTES, 'UTF-8');
+			if(!filter_var($url, FILTER_VALIDATE_URL))
+				return strip_tags($matches[2]);
+			$text = trim(strip_tags($matches[2]));
+			if($text === '')
+				$text = $url;
+			$token = '___ETUNTI_LINK_'.count($links).'___';
+			$links[$token] = '<a href="'.htmlspecialchars($url, ENT_QUOTES, 'UTF-8').'" target="_blank" rel="noopener noreferrer">'.htmlspecialchars($text, ENT_QUOTES, 'UTF-8').'</a>';
+			return $token;
+		},
+		$message
+	);
+
+	$message = preg_replace_callback(
+		'~https?://[^\s<>"\']+~iu',
+		function($matches) use (&$links) {
+			$url = $matches[0];
+			$trailing = '';
+			while($url !== '' && preg_match('/[\.,!\?;:\)]$/', $url)) {
+				$trailing = substr($url, -1).$trailing;
+				$url = substr($url, 0, -1);
+			}
+			if(!filter_var($url, FILTER_VALIDATE_URL))
+				return $matches[0];
+			$token = '___ETUNTI_LINK_'.count($links).'___';
+			$links[$token] = '<a href="'.htmlspecialchars($url, ENT_QUOTES, 'UTF-8').'" target="_blank" rel="noopener noreferrer">'.htmlspecialchars($url, ENT_QUOTES, 'UTF-8').'</a>';
+			return $token.$trailing;
+		},
+		$message
+	);
+
+	$message = nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8'), false);
+	foreach($links as $token => $html)
+		$message = str_replace($token, $html, $message);
+
+	return $message;
+}
+
+
+private function mobileShiftAjaxScript($dom, $tid)
+{
+	$endpoint = Yii::app()->createAbsoluteUrl('/api/imei', ['dom' => $dom, 'model' => 'mob']);
+	$endpointJs = CJSON::encode($endpoint);
+	$tidJs = (int)$tid;
+
+	return '<script>(function(){'
+		.'var endpoint='.$endpointJs.';var tid='.$tidJs.';'
+		.'function encode(data){var out=[];Object.keys(data).forEach(function(key){out.push(encodeURIComponent(key)+"="+encodeURIComponent(data[key]));});return out.join("&");}'
+		.'function post(data,done){var xhr=new XMLHttpRequest();xhr.open("POST",endpoint,true);xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded; charset=UTF-8");xhr.onreadystatechange=function(){if(xhr.readyState!==4)return;if(xhr.status<200||xhr.status>=300){done(new Error("HTTP "+xhr.status));return;}var payload=xhr.responseText;try{payload=JSON.parse(payload);}catch(e){}done(null,payload);};xhr.onerror=function(){done(new Error("network"));};xhr.send(encode(data));}'
+		.'function attachPdfs(tk){if(!tk||typeof tk!=="object")return;Object.keys(tk).forEach(function(filename){var entry=tk[filename];if(!entry)return;var targets=document.querySelectorAll(".kohde_"+entry.kohde_id);targets.forEach(function(el){var btn=document.createElement("button");btn.type="button";btn.textContent="📄 "+filename;btn.style.cssText="display:block;margin-top:6px;padding:6px 12px;background:#f3f4f6;border:1px solid #d1d5db;border-radius:6px;font-size:13px;cursor:pointer;width:100%;text-align:left;";btn.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();if(window.ReactNativeWebView)window.ReactNativeWebView.postMessage("pdf:"+filename);});el.appendChild(btn);});});}'
+		.'function replaceContent(payload){var html="";var tk={};if(payload&&typeof payload==="object"){if(payload.error){window.alert(String(payload.error));return;}html=payload.return==null?"":String(payload.return);tk=payload.tyonkuvaukset||{};}else{html=String(payload||"");}document.body.innerHTML=html;attachPdfs(tk);}'
+		.'window.etuntiLoadShifts=function(check){post({newlogin:"true",tid:tid,with_virtual:"1",check:check},function(err,payload){if(err){window.alert("Virhe: "+err.message);return;}replaceContent(payload);});};'
+		.'window.etuntiReserveShift=function(tvId){post({newlogin:"true",tid:tid,with_virtual:"1",check:"varaa_tyovuoro",tv_id:tvId},function(err,payload){if(err){window.alert("Virhe: "+err.message);return;}var ok=!!(payload&&typeof payload==="object"&&payload.success===true);var message=(payload&&typeof payload==="object"&&payload.message)?String(payload.message):(ok?"Työvuoro varattu.":"Työvuoron varaaminen epäonnistui.");window.alert(message);if(ok)window.etuntiLoadShifts("vapaat_tyovuorot");});};'
+		.'})();</script>';
+}
+
 public function actionImei($dom)
 {
 
@@ -1065,6 +1137,7 @@ public function actionImei($dom)
 			}
 			$sel .= '</select>';
 
+
 			if( $new_login ){
 				$return = ["return" => $sel];
 				$this->_sendResponse(200, CJSON::encode($return));
@@ -1143,7 +1216,8 @@ public function actionImei($dom)
 		//     CHECK varaa_tyovuoro -->
 
 		// <-- CHECK tvuoro
-	        if( isset($_POST['with_virtual']) and $_POST['check'] == 'tvuoro' ){
+	        if( isset($_POST['with_virtual']) and in_array($_POST['check'], ['tvuoro', 'vapaat_tyovuorot'], true) ){
+			$open_shifts_only = ($_POST['check'] === 'vapaat_tyovuorot');
 			$tv_controller = Yii::app()->createController('Tyovuoroot');
 			$tas = Domainit::model()->find(" domain='".$dom."' ");
 			$p = array();
@@ -1179,35 +1253,80 @@ public function actionImei($dom)
 				//$haku_criteria[] = " tyoajanlaatu NOT LIKE '%(SPL)%' AND tyoajanlaatu NOT LIKE '%(SL)%' ";
 			}
 
-			$tids = [$ttekija->id];
-			if(Tyovuoroot::OPEN_SHIFTS_ENABLED)
-				$tids[] = Tyovuoroot::OPEN_SHIFT_TID;
+			if($open_shifts_only) {
+				if(!Tyovuoroot::OPEN_SHIFTS_ENABLED) {
+					$this->_sendResponse(200, Yii::t('app', 'Vapaat työvuorot eivät ole käytössä.'));
+					exit;
+				}
+				$tids = [Tyovuoroot::OPEN_SHIFT_TID];
+			} else {
+				$tids = [$ttekija->id];
+			}
 			$from = date("Y-m-d");
 			$dataAll = $tv_controller[0]->FromToSuunnitellutAll($from, $aikaVali, $tids, $haku_criteria, ['data']);
+
+			$openShiftCount = 0;
+			if(!$open_shifts_only && Tyovuoroot::OPEN_SHIFTS_ENABLED) {
+				$openShiftRows = $tv_controller[0]->FromToSuunnitellutAll(
+					$from,
+					$aikaVali,
+					[Tyovuoroot::OPEN_SHIFT_TID],
+					$haku_criteria,
+					['data']
+				);
+				foreach($openShiftRows as $openShiftRow) {
+					if(!isset($openShiftRow['data']))
+						continue;
+					$openShift = $openShiftRow['data'];
+					if(!$openShift->isOpenShiftVisibleTo($ttekija))
+						continue;
+					if(isset($openShift->kohteet->asiakkaat->id) && ($openShift->kohteet->aktiivinen != 1 || $openShift->kohteet->asiakkaat->aktiivinen != 1))
+						continue;
+					$openShiftCount++;
+				}
+			}
 			/*
 			$this->_sendResponse(200, CJSON::encode($dataAll));
 			exit;
 			*/
+			$sel = '<h2>'.Yii::t('app', $open_shifts_only ? 'Vapaat työvuorot' : 'Työvuorot').'</h2>';
+			$sel .= $this->mobileShiftAjaxScript($dom, $ttekija->id);
+
+			$mobileShiftButton = function($check, $label, $className) {
+				return '<button type="button" class="'.htmlspecialchars($className, ENT_QUOTES, 'UTF-8').'" style="margin-bottom:10px;" onclick="window.etuntiLoadShifts(\''.htmlspecialchars($check, ENT_QUOTES, 'UTF-8').'\'); return false;">'.htmlspecialchars($label, ENT_QUOTES, 'UTF-8').'</button>';
+			};
+
+			if($open_shifts_only) {
+				$sel .= $mobileShiftButton('tvuoro', Yii::t('app', 'Työvuorot'), 'btn btn-default btn-block');
+			} elseif(Tyovuoroot::OPEN_SHIFTS_ENABLED) {
+				$sel .= $mobileShiftButton(
+					'vapaat_tyovuorot',
+					Yii::t('app', 'Vapaat työvuorot').' ('.$openShiftCount.')',
+					'btn btn-primary btn-block'
+				);
+			}
+
 			if(count($dataAll) == 0){
+				$sel .= '<p>'.Yii::t('app', 'Ei tuloksia').'</p>';
 				if( $new_login ){
-					$return = ["return" => 'Ei tuloksia'];
+					$return = ["return" => $sel];
 					$this->_sendResponse(200, CJSON::encode($return));
 				} else {
-					$this->_sendResponse(200, 'ei tuloksia');
+					$this->_sendResponse(200, $sel);
 				}
 				exit;
 			}
-
-			$sel = '<h2>'.Yii::t('app', 'Työvuorot').'</h2>';
 
 			$tyonkuvaukset = [];
 			foreach($dataAll as $arr){
 
 				$is_open_shift = ((int)$arr['this_tid'] === Tyovuoroot::OPEN_SHIFT_TID);
-				if($is_open_shift && !Tyovuoroot::OPEN_SHIFTS_ENABLED)
+				if($open_shifts_only) {
+					if(!$is_open_shift || !Tyovuoroot::OPEN_SHIFTS_ENABLED)
+						continue;
+				} elseif($is_open_shift || (int)$arr['this_tid'] !== (int)$ttekija->id) {
 					continue;
-				if(!$is_open_shift && (int)$arr['this_tid'] !== (int)$ttekija->id)
-					continue;
+				}
 
 				$data = $arr['data'];
 				if($is_open_shift && !$data->isOpenShiftVisibleTo($ttekija))
@@ -1381,7 +1500,7 @@ public function actionImei($dom)
 				}
 
 				if(!empty($data->tietoja)){
-					$sel .= '<hr><div class="text-small">'.str_replace("\n", "<br>", $data->tietoja).'</div>';
+					$sel .= '<hr><div class="text-small">'.$this->renderMobileShiftInfo($data->tietoja).'</div>';
 				}
 
 				$sel .= $tplista;
@@ -1394,13 +1513,7 @@ public function actionImei($dom)
 					if(count($restrictions) > 0)
 						$sel .= '<hr><p>'.implode('<br>', $restrictions).'</p>';
 
-					$reserveUrl = Yii::app()->createUrl('/api/imei', ['dom' => $dom, 'model' => 'mob']);
-					$sel .= '<form method="post" action="'.htmlspecialchars($reserveUrl, ENT_QUOTES, 'UTF-8').'">'
-						.'<input type="hidden" name="tid" value="'.(int)$ttekija->id.'">'
-						.'<input type="hidden" name="check" value="varaa_tyovuoro">'
-						.'<input type="hidden" name="tv_id" value="'.(int)$data->id.'">'
-						.'<button type="submit" class="btn btn-primary btn-block">'.Yii::t('app', 'Varaa työvuoro').'</button>'
-						.'</form>';
+					$sel .= '<button type="button" class="btn btn-primary btn-block" onclick="window.etuntiReserveShift('.(int)$data->id.'); return false;">'.Yii::t('app', 'Varaa työvuoro').'</button>';
 				}
 				$sel .= '</div>';
 
@@ -1546,9 +1659,9 @@ public function actionImei($dom)
 
 		     	$sel .= '<div class="well">
 				  <p>'.$cl.' <b>'.Yii::t('app', 'Keskustelu').': '.$val->id.'</b></p>
-				  <span class="text" id="text_'.$val->id.'">'.str_replace("\n","<br>",$val->viesti).'</span><br>';
+				  <span class="text" id="text_'.$val->id.'">'.$this->renderMobileMessage($val->viesti).'</span><br>';
 
-				  if(isset($exAdmin[0]) and !empty($exAdmin[0])){
+				  if(isset($exAdmin[0]) and !empty($exAdmin[0]) and (int)$val->no_reply !== 1){
 				  $sel .= '
 				  <br>
             			    <div class="input-group">
@@ -1577,6 +1690,16 @@ public function actionImei($dom)
 		// <-- CHECK vastaus
 	        if($_POST['check'] == 'vastaus' and isset($_POST['viestinID'])){
 			$viestinta = Viestinta::model()->findbypk($_POST['viestinID']);
+			if(!$viestinta || (int)$viestinta->no_reply === 1) {
+				$str = Yii::t('app', 'Tähän viestiin ei voi vastata.');
+				if( $new_login ){
+					$return = ["return" => $str];
+					$this->_sendResponse(200, CJSON::encode($return));
+				} else {
+					$this->_sendResponse(200, $str);
+				}
+				exit;
+			}
 			$tekija = Tyontekijat::model()->findbypk($viestinta->tekija);
 			$viestinta->viesti = $viestinta->viesti."\n".date("d.m H:i").", ".$this->etuSukunimi($ttekija->id).": ".$_POST['vastText'];
 			$viestinta->status = 3;

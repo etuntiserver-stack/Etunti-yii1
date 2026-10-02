@@ -575,9 +575,29 @@ $(document).ready(function(){
   <div class="col-sm-6">
 		<i class="pull-left fa fa-star text-danger"></i>
 		<?php echo $form->labelEx($model,'tietoja'); ?>
+		<button type="button" class="btn btn-default btn-xs pull-right" style="font-weight:bold; margin-bottom:4px;" onclick="window.etuntiBoldTextareaSelection('<?=$java_prefix?>_tietoja'); return false;" title="Lihavoi valittu teksti">B</button>
 		<?php 
 		echo $form->textarea($model,'tietoja',array('rows'=>5,'class'=>'form-control lomake_kenta', 'placeholder'=>'Esim. Avainten tiedot tai kohteesa olevat rajoitukset.')); 
 		?>
+		<script>
+		if(typeof window.etuntiBoldTextareaSelection !== 'function') {
+			window.etuntiBoldTextareaSelection = function(id) {
+				var el = document.getElementById(id);
+				if(!el) return;
+				var start = typeof el.selectionStart === 'number' ? el.selectionStart : 0;
+				var end = typeof el.selectionEnd === 'number' ? el.selectionEnd : start;
+				var selected = el.value.substring(start, end);
+				el.value = el.value.substring(0, start) + '**' + selected + '**' + el.value.substring(end);
+				el.focus();
+				if(selected.length > 0) {
+					el.selectionStart = start + 2;
+					el.selectionEnd = end + 2;
+				} else {
+					el.selectionStart = el.selectionEnd = start + 2;
+				}
+			};
+		}
+		</script>
 		<?php echo $form->error($model,'tietoja'); ?>
   </div>
   <div class="col-sm-6">
