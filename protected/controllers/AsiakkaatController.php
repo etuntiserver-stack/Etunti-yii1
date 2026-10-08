@@ -806,20 +806,13 @@ Yritys '.$yr.'
 			   $a = Asetukset::model()->findbypk(1);
 			   if($a->netvisor_kaytto == 1)
 			   {
-				if($model->netvisorkey == 0)
-				{
-					if($this->netvisorCustomer("add", $model) !== true){
-						print_r($this->netvisorCustomer("add", $model));
-						exit;
-					}
-				} else {
-					if($this->netvisorCustomer("edit", $model) !== true){
-						print_r($this->netvisorCustomer("edit", $model));
-						exit;
-					}
+				$netvisor_action = $model->netvisorkey == 0 ? "add" : "edit";
+				if ($this->netvisorCustomer($netvisor_action, $model) !== true) {
+					$model->addError('netvisorkey', 'Asiakastiedot tallennettiin eTuntiin, mutta Netvisor-siirto epäonnistui.');
 				}
-			    }
+			   }
 			   //  Netvisor -->
+			   if (!$model->hasErrors()) {
 			   // check if meaningful data changes
 			   // (email, phone, names, postal code, active/inactive and quitting)
 			   	$integromatDataChanged = $this->integromatDataChanged($vanha_attr, $model->attributes);
@@ -831,6 +824,7 @@ Yritys '.$yr.'
 
 				Yii::app()->user->setFlash('success', "Tallennettu.");
 				$this->redirect(array('index'));
+			   }
 			}
 		}
 
@@ -1093,6 +1087,7 @@ $xml = '
 	$optsPOST = array(
 	  'http'=>array(
 	    'method'=>"POST",
+	    'ignore_errors'=>true,
 	    'header'=>"Accept: text/plain\r\n" .
 	              "Content-Type: application/x-www-form-urlencoded\r\n".
 	              "Content-Length: ".strlen($xml)."\r\n".
@@ -1102,22 +1097,60 @@ $xml = '
 	);
 	
 	$context = stream_context_create($optsPOST);
-	
-	$response = file_get_contents($url, false, $context);
-	$result = new SimpleXMLElement($response);
-	
-
-	  if($result->ResponseStatus->Status == 'OK')
-	  {
-		if( $tila == 'add' )
-		Asiakkaat::model()->updateByPk($model->id, array('netvisorkey'=>(int)$result->Replies->InsertedDataIdentifier));
-
+	$transport_error = '';
+	set_error_handler(function($severity, $message) use (&$transport_error) {
+		$message = preg_replace('~https?://\\S+~', '[url]', $message);
+		$transport_error = substr(preg_replace('/[\\x00-\\x1F\\x7F]/', ' ', $message), 0, 200);
 		return true;
-
-	  } else {
-		return $response;
-
-	  }
+	}, E_WARNING);
+	try {
+		$response = file_get_contents($url, false, $context);
+	} finally {
+		restore_error_handler();
+	}
+	$http_status = 0;
+	foreach (isset($http_response_header) ? $http_response_header : array() as $header) {
+		if (preg_match('~^HTTP/\\S+\\s+(\\d{3})~', $header, $matches)) {
+			$http_status = (int)$matches[1];
+		}
+	}
+	$log_prefix = "Netvisor customer action=$tila customer_id={$model->id} http_status=$http_status";
+	if ($response === false || trim($response) === '') {
+		Yii::log($log_prefix . ' empty_response=1 transport_error=' . ($transport_error ?: 'none'),
+			CLogger::LEVEL_ERROR, __METHOD__);
+		return false;
+	}
+	$previous_libxml_setting = libxml_use_internal_errors(true);
+	try {
+		$result = new SimpleXMLElement($response, LIBXML_NONET);
+	} catch (Exception $e) {
+		Yii::log($log_prefix . ' invalid_xml=1 response_bytes=' . strlen($response),
+			CLogger::LEVEL_ERROR, __METHOD__);
+		return false;
+	} finally {
+		libxml_clear_errors();
+		libxml_use_internal_errors($previous_libxml_setting);
+	}
+	if ($http_status >= 400 || (string)$result->ResponseStatus->Status !== 'OK') {
+		$netvisor_status = preg_replace('/[^A-Za-z0-9_.-]/', '', (string)$result->ResponseStatus->Status);
+		$netvisor_detail = isset($result->ResponseStatus->Status[1]) ? (string)$result->ResponseStatus->Status[1] : '';
+		$netvisor_detail = substr(trim(preg_replace('/[[:cntrl:]]+/', ' ', $netvisor_detail)), 0, 400);
+		if (stripos($netvisor_detail, 'Verkkolaskutusoperaattori ei kelpaa') !== false) {
+			$model->addError('valittajan_tunnus', 'Verkkolaskutusoperaattorin tunnus ei kelpaa. Tarkista tunnus.');
+		}
+		Yii::log($log_prefix . " netvisor_status=$netvisor_status netvisor_detail=$netvisor_detail response_bytes=" . strlen($response),
+			CLogger::LEVEL_ERROR, __METHOD__);
+		return false;
+	}
+	if ($tila == 'add') {
+		$key = (int)$result->Replies->InsertedDataIdentifier;
+		if ($key <= 0) {
+			Yii::log($log_prefix . ' missing_inserted_key=1', CLogger::LEVEL_ERROR, __METHOD__);
+			return false;
+		}
+		Asiakkaat::model()->updateByPk($model->id, array('netvisorkey'=>$key));
+	}
+	return true;
 
 	
 	} // if isset $n[0]

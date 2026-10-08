@@ -31,7 +31,20 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 )); ?>
 
 
-	<?php echo $form->errorSummary($model); ?>
+	<?php if ($model->hasErrors()): ?>
+	<div class="alert alert-danger" role="alert" style="border-left:4px solid #a94442;">
+		<strong><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			<?php echo $model->hasErrors('netvisorkey') ? 'Netvisor-siirto epäonnistui' : 'Tarkista asiakkaan tiedot'; ?>
+		</strong>
+		<ul style="margin:8px 0 0 18px;">
+			<?php foreach ($model->getErrors() as $messages): ?>
+				<?php foreach ($messages as $message): ?>
+				<li><?php echo CHtml::encode($message); ?></li>
+				<?php endforeach; ?>
+			<?php endforeach; ?>
+		</ul>
+	</div>
+	<?php endif; ?>
 
   <div class="col-sm-3">
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
@@ -196,7 +209,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'verkkolaskuosoite'); ?>
 	</div>
 
-	<div class="row">
+	<div class="row<?php echo $model->hasErrors('valittajan_tunnus') ? ' has-error' : ''; ?>">
 		<?php echo $form->labelEx($model,'valittajan_tunnus'); ?>
 		<?php echo $form->textField($model,'valittajan_tunnus',array('class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'valittajan_tunnus'); ?>

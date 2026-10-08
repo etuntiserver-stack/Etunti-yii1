@@ -128,6 +128,33 @@ class Asiakkaat extends DB2ActiveRecord
 		return $tb_name;
 	}
 
+	// Customer input only: credentials and free-text fields are excluded.
+	protected function beforeValidate()
+	{
+		$fields = array(
+			'asiakasnumero', 'yrityksen_nimi', 'y_tunnus', 'etunimi', 'sukunimi',
+			'yhteyshenkilo', 'osoite', 'kaupunki', 'postinumero', 'puhelin',
+			'toissijainen_puhelinnumero', 'sahkoposti', 'ovt_tunnus',
+			'valittajan_tunnus', 'verkkolaskuosoite', 'sahkopostilaskuosoite',
+			'k_osoite', 'k_kaupunki', 'k_postinumero', 'myyja',
+			'invoice_our_reference', 'invoice_your_reference',
+			'netvisor_dimension_name', 'netvisor_dimension_item'
+		);
+		foreach ($fields as $field) {
+			if (!$this->hasAttribute($field)) {
+				continue;
+			}
+			$value = $this->$field;
+			if (is_string($value)) {
+				$trimmed = preg_replace('/\A[\s\p{Z}\x{200B}\x{FEFF}]+|[\s\p{Z}\x{200B}\x{FEFF}]+\z/u', '', $value);
+				if ($trimmed !== null) {
+					$this->$field = $trimmed;
+				}
+			}
+		}
+		return parent::beforeValidate();
+	}
+
 	/**
 	 * @return array validation rules for model attributes.
 	 */
