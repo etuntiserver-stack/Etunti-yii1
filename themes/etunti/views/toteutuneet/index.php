@@ -955,15 +955,22 @@ echo '<script type="text/javascript" src="'.Yii::app()->request->baseUrl.'/js/tv
 					json: json
 				},
 				success: function(data) {
-					data = JSON.parse(data);
-					console.log(data);
-
+					try {
+						data = typeof data === 'string' ? JSON.parse(data) : data;
+					} catch (e) {
+						$(thisButton).after($('<div class="alert bg-danger"></div>').text('Palvelimen vastaus ei ollut kelvollinen.'));
+						return;
+					}
 					if (data['OK']) {
-						$(thisButton).after('<div class="alert bg-success">' + data['OK'] + '</div>');
+						$(thisButton).after($('<div class="alert bg-success"></div>').text(data['OK']));
 						$(thisButton).attr('NVtilanne', '1');
 					}
 					if (data['ERROR'])
-						$(thisButton).after('<div class="alert bg-danger">' + data['ERROR'] + '</div>');
+						$(thisButton).after($('<div class="alert bg-danger"></div>').text(data['ERROR']));
+				},
+				error: function(xhr) {
+					$(thisButton).after($('<div class="alert bg-danger"></div>')
+						.text('Lähetys epäonnistui (HTTP ' + xhr.status + '). Ota yhteyttä tukeen.'));
 				}
 			});
 

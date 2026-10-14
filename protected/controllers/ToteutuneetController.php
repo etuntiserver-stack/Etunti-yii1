@@ -220,6 +220,14 @@ class ToteutuneetController extends Controller
 	{
 		$return 	= [];
 		$asetukset 	= Asetukset::model()->findByPk(1);
+		if (!$asetukset || $asetukset->netvisor_kaytto != 1) {
+			Yii::log('Netvisor workday disabled domain=' . Yii::app()->user->domain, CLogger::LEVEL_ERROR, __METHOD__);
+			return ['ERROR' => 'Netvisor-yhteys ei ole käytössä asetuksissa.'];
+		}
+		if (empty($asetukset->netvisor_host)) {
+			Yii::log('Netvisor workday missing_host domain=' . Yii::app()->user->domain, CLogger::LEVEL_ERROR, __METHOD__);
+			return ['ERROR' => 'Netvisor-palvelimen osoite puuttuu asetuksista.'];
+		}
 
 		$postData	= $json[0];
 		$pvm 		= date("Y-m-d", strtotime($postData['pvm']));
@@ -276,10 +284,15 @@ class ToteutuneetController extends Controller
 			$collectorratio['ap'] 			= 12;
 			$collectorratio['pv'] 			= 13;
 
-			if(isset($asetukset->netvisor_mita_lahetetaan) and empty($asetukset->netvisor_mita_lahetetaan))
+			if (empty($asetukset->netvisor_mita_lahetetaan)) {
+				Yii::log('Netvisor workday missing_workhour_selection domain=' . Yii::app()->user->domain, CLogger::LEVEL_ERROR, __METHOD__);
 				return ['ERROR' => 'Valitse asetuksessa mitä lähetetään'];
-
+			}
 			$mitaLahetetaan = json_decode($asetukset->netvisor_mita_lahetetaan, true);
+			if (!is_array($mitaLahetetaan)) {
+				Yii::log('Netvisor workday invalid_workhour_selection domain=' . Yii::app()->user->domain, CLogger::LEVEL_ERROR, __METHOD__);
+				return ['ERROR' => 'Netvisorin lähetettävien tuntien asetukset ovat virheelliset.'];
+			}
 			/*
 			// NEW FOR DIMENSION EXPEREMENTAL.  Tämä saa poistaa 01.01.2022 alkaen jos ei menee voimaan
 			$all_dimensions = [];
@@ -377,6 +390,7 @@ class ToteutuneetController extends Controller
 			$optsPOST = array(
 			'http'=>array(
 				'method'=>"POST",
+				'ignore_errors'=>true,
 				'header'=>"Accept: text/plain\r\n" .
 				"Content-Type: application/x-www-form-urlencoded\r\n".
 				"Content-Length: ".strlen($xml)."\r\n".
@@ -385,45 +399,97 @@ class ToteutuneetController extends Controller
 			)
 			);
 
-			$context 	= stream_context_create($optsPOST);
-			$response 	= @file_get_contents($url, false, $context);
-			
-			if(!$response)
-				return ['ERROR' => 'Lähetys ei onnistunut'];
-				
-			$result 	= new SimpleXMLElement($response);
-			$array 		= json_decode(json_encode($result), true);
-
-			if($array['ResponseStatus']['Status'] == 'OK')
-			{
-				if(!isset($m->id))
-					$model = new HyvaksyttamatPvmTunnit;
-				else
-					$model = $m;
-
-				$model->pvm 				= date("Y-m-d", strtotime($_POST['json'][0]['pvm']));
-				$model->tid 				= $_POST['json'][0]['tid'];
-				$model->admin 				= Yii::app()->user->adminID;
-				$model->xml 				= json_encode($xml);
-				$model->netvisor_ok_list	= json_encode($result);
-
-				if(!$model->save())
-					return ['ERROR' => var_dump($model->getErrors())];
-				else
-					return ['OK' => 'Tiedot on lähetetty netvisoriin'];
-				
-			} else {
-				$nv_log = new NetvisorLegacyLog();
-				$nv_log->response = json_encode($array);
-				$nv_log->category = "Toteutuneet";
-				$nv_log->save();
-				if(isset($array['ResponseStatus']['Status'][1]))
-					return ['ERROR' => $array['ResponseStatus']['Status'][1]];
+			$context = stream_context_create($optsPOST);
+			$transport_error = '';
+			set_error_handler(function($severity, $message) use (&$transport_error) {
+				$message = preg_replace('~https?://\S+~', '[url]', $message);
+				$transport_error = substr(preg_replace('/[\x00-\x1F\x7F]/', ' ', $message), 0, 200);
+				return true;
+			}, E_WARNING);
+			try {
+				$response = file_get_contents($url, false, $context);
+			} finally {
+				restore_error_handler();
 			}
 
+			$http_status = 0;
+			foreach (isset($http_response_header) ? $http_response_header : [] as $header) {
+				if (preg_match('~^HTTP/\S+\s+(\d{3})~', $header, $matches))
+					$http_status = (int)$matches[1];
+			}
+			$log_prefix = 'Netvisor workday domain=' .
+				preg_replace('/[^A-Za-z0-9_-]/', '', (string)Yii::app()->user->domain) .
+				' date=' . $pvm . ' employee_id=' . (int)$tid . ' http_status=' . $http_status;
+
+			if ($response === false || trim($response) === '') {
+				Yii::log($log_prefix . ' transport_error=' . ($transport_error ?: 'none') . ' empty_response=1',
+					CLogger::LEVEL_ERROR, __METHOD__);
+				return ['ERROR' => 'Netvisor-yhteys epäonnistui' .
+					($http_status ? ' (HTTP ' . $http_status . ')' : '') . '.'];
+			}
+
+			$previous_libxml_setting = libxml_use_internal_errors(true);
+			try {
+				$result = new SimpleXMLElement($response, LIBXML_NONET);
+			} catch (Exception $e) {
+				Yii::log($log_prefix . ' invalid_xml=1 response_bytes=' . strlen($response),
+					CLogger::LEVEL_ERROR, __METHOD__);
+				return ['ERROR' => 'Netvisor palautti virheellisen vastauksen' .
+					($http_status ? ' (HTTP ' . $http_status . ')' : '') . '.'];
+			} finally {
+				libxml_clear_errors();
+				libxml_use_internal_errors($previous_libxml_setting);
+			}
+
+			$netvisor_status = isset($result->ResponseStatus->Status[0])
+				? trim((string)$result->ResponseStatus->Status[0]) : '';
+			$netvisor_detail = isset($result->ResponseStatus->Status[1])
+				? trim((string)$result->ResponseStatus->Status[1]) : '';
+			$netvisor_detail = mb_substr(trim(preg_replace('/[[:cntrl:]]+/', ' ', $netvisor_detail)),
+				0, 300, 'UTF-8');
+			$safe_status = preg_replace('/[^A-Za-z0-9_.-]/', '', $netvisor_status);
+
+			if ($http_status >= 400 || $netvisor_status !== 'OK') {
+				Yii::log($log_prefix . ' netvisor_status=' . $safe_status .
+					' netvisor_detail=' . $netvisor_detail . ' response_bytes=' . strlen($response),
+					CLogger::LEVEL_ERROR, __METHOD__);
+				$nv_log = new NetvisorLegacyLog();
+				$nv_log->response = json_encode(json_decode(json_encode($result), true));
+				$nv_log->category = "Toteutuneet";
+				$nv_log->save();
+
+				$error = 'Netvisor-siirto epäonnistui';
+				if ($netvisor_detail !== '')
+					$error .= ': ' . $netvisor_detail;
+				elseif ($safe_status !== '')
+					$error .= ' (tila: ' . $safe_status . ')';
+				if ($http_status >= 400)
+					$error .= ' (HTTP ' . $http_status . ')';
+				return ['ERROR' => $error];
+			}
+
+			if (!isset($m->id))
+				$model = new HyvaksyttamatPvmTunnit;
+			else
+				$model = $m;
+
+			$model->pvm = date("Y-m-d", strtotime($_POST['json'][0]['pvm']));
+			$model->tid = $_POST['json'][0]['tid'];
+			$model->admin = Yii::app()->user->adminID;
+			$model->xml = json_encode($xml);
+			$model->netvisor_ok_list = json_encode($result);
+
+			if (!$model->save()) {
+				Yii::log($log_prefix . ' local_save_failed=1 error_fields=' .
+					implode(',', array_keys($model->getErrors())), CLogger::LEVEL_ERROR, __METHOD__);
+				return ['ERROR' => 'Netvisor hyväksyi tiedot, mutta eTunnin tallennus epäonnistui. ' .
+					'Älä lähetä uudelleen ennen tarkistusta.'];
+			}
+			return ['OK' => 'Tiedot on lähetetty netvisoriin'];
 		} // if isset $n[0]
 
-		return ['ERROR' => 'Lähetys ei onnistunut'];
+		Yii::log('Netvisor workday missing_connection domain=' . Yii::app()->user->domain, CLogger::LEVEL_ERROR, __METHOD__);
+		return ['ERROR' => 'Netvisor-yhteyttä ei voitu muodostaa.'];
 
 	}
 
