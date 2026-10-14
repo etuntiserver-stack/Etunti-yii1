@@ -1108,6 +1108,136 @@ $('.ryhmat').multiselect({
 <div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#netvisorAsetukset"><h3><?php echo Yii::t('main','Netvisor asetukset'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
 
   <div class="row form collapse" id="netvisorAsetukset">
+   <!-- Netvisor onboarding guide: informational only; no form fields or API calls. -->
+   <div class="col-sm-12">
+    <style>
+      .nv-onboard { margin: 12px 0 26px; border: 1px solid #cbddec; border-radius: 9px; background: #fff; overflow: hidden; box-shadow: 0 2px 10px rgba(25,68,101,.07); }
+      .nv-onboard-trigger { display: block; width: 100%; padding: 17px 20px; text-align: left; background: #ecf5fc; border: 0; border-left: 5px solid #438bd0; color: #243c51; cursor: pointer; }
+      .nv-onboard-trigger:hover, .nv-onboard-trigger:focus { background: #deedf9; outline: 2px solid transparent; }
+      .nv-onboard-trigger .nv-title { font-size: 19px; font-weight: 700; display: block; line-height: 1.4; }
+      .nv-onboard-trigger .nv-subtitle { display: block; font-size: 13px; font-weight: 400; margin-top: 3px; color: #4a6277; }
+      .nv-onboard-trigger .nv-arrow { float: right; padding: 9px 0 0 15px; color: #367aba; }
+      .nv-onboard-body { padding: 20px; background: #fff; font-size: 14px; line-height: 1.55; color: #293e50; }
+      .nv-onboard-body h4 { color: #255b82; margin: 0 0 10px; font-size: 16px; font-weight: 700; }
+      .nv-onboard-body h5 { font-size: 14px; font-weight: 700; margin: 0 0 8px; color: #2f536e; }
+      .nv-onboard-body p { margin: 0 0 10px; }
+      .nv-onboard-card { padding: 17px 17px 15px; border: 1px solid #dce6ef; background: #fbfdff; border-radius: 7px; margin-bottom: 15px; min-height: 205px; }
+      .nv-onboard-num { display: inline-block; width: 27px; height: 27px; line-height: 27px; text-align: center; border-radius: 50%; background: #397fb9; color: #fff; font-weight: bold; margin-right: 6px; font-size: 13px; }
+      .nv-onboard-path { background: #edf3f8; padding: 8px 10px; border-radius: 4px; font-weight: 600; font-size: 13px; margin-bottom: 9px; overflow-wrap: anywhere; }
+      .nv-onboard-section { border-top: 1px solid #e2eaf0; padding-top: 19px; margin-top: 10px; margin-bottom: 19px; }
+      .nv-onboard-note { padding: 12px 15px; border-radius: 5px; background: #fff8e7; border-left: 3px solid #e4aa3d; margin: 9px 0 15px; }
+      .nv-onboard-success { background: #f1f8f4; border-left: 3px solid #58a777; padding: 12px 15px; margin-top: 15px; border-radius: 5px; }
+      .nv-onboard-body .nv-codes th { background: #edf3f8; }
+      .nv-onboard-body .nv-codes td, .nv-onboard-body .nv-codes th { padding: 7px 10px !important; vertical-align: middle; }
+      .nv-onboard-body .nv-code { text-align: center; font-weight: 700; color: #24619a; width: 58px; }
+      .nv-onboard-body .nv-troubleshoot td:first-child { white-space: nowrap; font-weight: bold; }
+      .nv-onboard-links { margin-top: 11px; font-size: 13px; }
+      .nv-onboard-links a { margin-right: 18px; display: inline-block; margin-bottom: 7px; }
+      @media (max-width: 767px) {
+        .nv-onboard-body { padding: 15px; }
+        .nv-onboard-card { min-height: 0; }
+        .nv-onboard-trigger { padding: 13px; }
+        .nv-onboard-trigger .nv-title { font-size: 16px; }
+        .nv-onboard-body .table-responsive { border: 0; }
+      }
+    </style>
+    <div class="nv-onboard">
+     <button class="nv-onboard-trigger" type="button" data-toggle="collapse" data-target="#netvisorOnboardingGuide" aria-expanded="false" aria-controls="netvisorOnboardingGuide">
+      <span class="nv-arrow"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+      <span class="nv-title"><i class="fa fa-book" aria-hidden="true"></i> Netvisorin käyttöönotto – ohjeet</span>
+      <span class="nv-subtitle">Vaiheittainen käyttöönotto, tarvittavat käyttöoikeudet, kirjauslajien numerot ja yleiset virhetilanteet. Avaa ohje napsauttamalla.</span>
+     </button>
+     <div class="collapse" id="netvisorOnboardingGuide">
+      <div class="nv-onboard-body">
+       <p>Kun yritys haluaa ottaa käyttöön eTunnin ja Netvisorin välisen integraation, käy alla olevat kohdat läpi ennen ensimmäistä tiedonsiirtoa. <strong>Yrityskohtaiset tunnukset ja Netvisorin rajapintaoikeudet ovat pakollisia.</strong></p>
+
+       <div class="row">
+        <div class="col-md-4">
+         <div class="nv-onboard-card">
+          <h4><span class="nv-onboard-num">1</span> Luo yrityksen API-tunnukset</h4>
+          <div class="nv-onboard-path">Netvisor: Yritysvalikko &rarr; Ohjelmistorajapintatunnukset</div>
+          <p>Luo uusi rajapintatunnus (Customer ID ja CustomerKey). Kirjoita ne tämän sivun kenttiin <strong>Netvisor Customer Id</strong> ja <strong>Netvisor Userkey</strong>.</p>
+          <p>Lisää <strong>Netvisor Organisation Identifier</strong> -kenttään oikea yrityksen Y-tunnus.</p>
+          <p><small>Älä käytä toisen yrityksen asiakastunnuksia.</small></p>
+         </div>
+        </div>
+        <div class="col-md-4">
+         <div class="nv-onboard-card">
+          <h4><span class="nv-onboard-num">2</span> Ota eTunti-integraatio käyttöön</h4>
+          <p>Aseta <strong>Netvisor Käyttö = Kyllä</strong>. Valitse <strong>Mitä käytössä</strong> -kentästä tarpeen mukaan <strong>Tunnit</strong>, <strong>Laskutus</strong> tai <strong>Kaikki</strong>.</p>
+          <p>Palvelimen osoite on normaalisti <strong>integration.netvisor.fi</strong>. Valitse <strong>Mitä lähetetään</strong> -kohdasta vain yrityksessä käytettävät tunti- ja poissaololajit.</p>
+          <p><small><strong>Partner ID ja Partnerkey</strong> ovat eTunti-integraation kumppanitunnuksia. Jos ne puuttuvat tai ovat väärin, ota yhteys eTunnin ylläpitoon. Älä luo tai kopioi niitä itse.</small></p>
+         </div>
+        </div>
+        <div class="col-md-4">
+         <div class="nv-onboard-card">
+          <h4><span class="nv-onboard-num">3</span> Salli Netvisorin API-resurssit</h4>
+          <div class="nv-onboard-path">Netvisor: Yritysvalikko &rarr; Rajapintaresurssien käyttöoikeudet</div>
+          <p>Valitse eTunti-integraatio; tarvittaessa etsi sitä kohdasta <strong>Räätälöidyt integraatiot</strong> ylläpidolta saadulla käyttöoikeusavaimella.</p>
+          <p>Varmista vähintään <strong>dimensionlist.nv</strong> (laskentakohteiden nouto) ja <strong>workday.nv</strong> (työaikatietojen siirto): <strong>Estetty &rarr; Sallittu</strong>.</p>
+          <p><small>Laskutuksen ja muiden toimintojen tarvitsemat resurssit sallitaan erikseen käyttötarpeen mukaan. Oikeuksien muutokseen tarvitaan riittävät Netvisor-käyttöoikeudet.</small></p>
+         </div>
+        </div>
+       </div>
+
+       <div class="nv-onboard-section">
+        <h4><i class="fa fa-clock-o" aria-hidden="true"></i> 4. Työntekijät ja kirjauslajit kuntoon</h4>
+        <p>Varmista, että työntekijä löytyy Netvisorista ja että eTunnin henkilötunnus vastaa Netvisorin työntekijää. eTunti tunnistaa työntekijän työaikasiirrossa henkilötunnuksella.</p>
+        <div class="nv-onboard-path">Netvisor: Palkat &rarr; Asetukset &rarr; Palkanlaskennan asetukset &rarr; Kirjauslajit</div>
+        <p>Kirjauslajien <strong>Numero</strong>-kenttien pitää vastata eTunnin alla olevia arvoja niille lajeille, joita yritys lähettää. Nämä ovat <strong>eTunnin nykyiset koodit</strong>, eivät Netvisorin yleiset oletusarvot.</p>
+        <div class="table-responsive">
+         <table class="table table-striped table-bordered nv-codes">
+          <thead><tr><th>eTunnin laji</th><th class="nv-code">Numero</th><th>eTunnin laji</th><th class="nv-code">Numero</th></tr></thead>
+          <tbody>
+           <tr><td>Työtunnit</td><td class="nv-code">1</td><td>Matkat</td><td class="nv-code">14</td></tr>
+           <tr><td>Työtunnit ilta</td><td class="nv-code">2</td><td>Työtunnit yö</td><td class="nv-code">3</td></tr>
+           <tr><td>Työtunnit sunnuntai</td><td class="nv-code">5</td><td>Arkipyhät (Py)</td><td class="nv-code">7</td></tr>
+           <tr><td>Erikoislauantait (El)</td><td class="nv-code">4</td><td>Sairausajan palkka (SL)</td><td class="nv-code">8</td></tr>
+           <tr><td>Sairausajan palkaton (SPL)</td><td class="nv-code">10</td><td>Lapsen sairaus (LS)</td><td class="nv-code">9</td></tr>
+           <tr><td>Vuosilomat (VL)</td><td class="nv-code">11</td><td>Arkipyhä (AP)</td><td class="nv-code">12</td></tr>
+           <tr><td>Palkaton vapaa (PV)</td><td class="nv-code">13</td><td colspan="2"></td></tr>
+          </tbody>
+         </table>
+        </div>
+        <div class="nv-onboard-note">
+         <strong>Huomio – Matkat = 14.</strong> Vanhassa eTunti-ohjeessa Matkat-koodina oli 1, mutta nykyinen eTunti lähettää Matkat-kirjaukset numerolla 14. Tarkista tämä ennen siirtoa. Kirjauslajien palkkamallikohtaiset kaavat ja palkanlaskennan vaikutukset on tarkistettava palkanlaskijan kanssa – älä muuta numeroita sattumanvaraisesti.
+        </div>
+       </div>
+
+       <div class="nv-onboard-section">
+        <h4><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Yleisimmät Netvisor-virheet</h4>
+        <div class="table-responsive">
+         <table class="table table-bordered nv-troubleshoot">
+          <thead><tr><th>Virhe</th><th>Mitä tarkistaa?</th></tr></thead>
+          <tbody>
+           <tr><td>HTTP 401<br><small>AUTHENTICATION_FAILED</small></td><td>Customer ID, Userkey, Partner ID, Partnerkey ja Y-tunnus. Tarkista, että tunnukset on luotu oikealle yritykselle ja että ne ovat voimassa. Ota tarvittaessa yhteys eTunnin ylläpitoon.</td></tr>
+           <tr><td>HTTP 403<br><small>SERVICE_ACCESS_ERROR</small></td><td>Yritys on estänyt nimetyn API-resurssin. Avaa <strong>Rajapintaresurssien käyttöoikeudet</strong> ja salli virheessä mainittu resurssi, esimerkiksi <strong>dimensionlist.nv</strong> tai <strong>workday.nv</strong>.</td></tr>
+           <tr><td>HTTP 400<br><small>INVALID_DATA</small></td><td>Jos virheessä lukee <strong>Kirjauslajia ei löydy annetulla kohdistustiedolla</strong>, tarkista Netvisorin Kirjauslajit-sivun <strong>Numero</strong>-arvot (erityisesti Työtunnit = 1 ja Matkat = 14) sekä käytettävä palkkamalli. Muissa tietovirheissä tarkista virheilmoituksen tarkka sisältö.</td></tr>
+          </tbody>
+         </table>
+        </div>
+       </div>
+
+       <div class="nv-onboard-section">
+        <h4><i class="fa fa-check-square-o" aria-hidden="true"></i> 5. Testaa siirto turvallisesti</h4>
+        <p>Tallenna eTunnin asetukset. Avaa <strong>Tuntien hyväksyntä</strong>, valitse yksi hyväksytty työpäivä ja paina kyseisen rivin <strong>Lähetä</strong>. Tarkista Netvisorissa, että juuri nämä tunnit ja mahdolliset Matkat-kirjaukset näkyvät oikein.</p>
+        <div class="nv-onboard-success">Kun yksittäinen siirto onnistuu ja tiedot on tarkistettu Netvisorissa, voidaan ottaa käyttöön laajempi tuntien lähetys. Älä käytä <strong>Lähetä kaikki netvisoriin</strong> -toimintoa ennen onnistunutta testisiirtoa.</div>
+       </div>
+
+       <div class="nv-onboard-section">
+        <h4><i class="fa fa-external-link" aria-hidden="true"></i> Netvisorin viralliset ohjeet</h4>
+        <div class="nv-onboard-links">
+         <a href="https://support.netvisor.fi/fi/articles/766837-ohjelmistorajapintatunnusten-luominen" target="_blank" rel="noopener noreferrer"><i class="fa fa-book" aria-hidden="true"></i> Rajapintatunnusten luominen</a>
+         <a href="https://support.netvisor.fi/fi/articles/766836-rajapintaresurssien-kayttooikeuksien-salliminen-ja-poistaminen" target="_blank" rel="noopener noreferrer"><i class="fa fa-book" aria-hidden="true"></i> Rajapintaresurssien käyttöoikeudet</a>
+         <a href="https://support.netvisor.fi/fi/articles/766630-kirjauslajit" target="_blank" rel="noopener noreferrer"><i class="fa fa-book" aria-hidden="true"></i> Kirjauslajit</a>
+         <a href="https://support.netvisor.fi/fi/articles/766839-virheiden-hallinta" target="_blank" rel="noopener noreferrer"><i class="fa fa-book" aria-hidden="true"></i> Virheiden hallinta</a>
+        </div>
+        <p><small>Pidä integraatioavaimet luottamuksellisina. Älä lähetä avaimia kuvakaappauksissa tai tavallisissa viesteissä.</small></p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
    <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','Netvisor'); ?></h2></legend>
 
