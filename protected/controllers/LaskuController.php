@@ -4011,151 +4011,124 @@ Yii::log($xml, CLogger::LEVEL_INFO, "Netvisor invoice");
 	}
 
 
-	protected function netvisorGetsalesinvoice($netvisorkey)
+
+	protected function netvisorGetXml($action)
 	{
-
-		$return = '';
 		$site = Yii::app()->createController('Site');
-		$n = $site[0]->netvisorYhteys();
+		$connection = $site[0]->netvisorYhteys();
+		if (!isset($connection[0]))
+			return null;
 
-	  if(isset($n[0]))
-	  {
-		  $action = "getsalesinvoice.nv?netvisorkey=$netvisorkey";
-		  $auth_data = $site[0]->netvisorStringHeaders($action);
-		  $url = $site[0]->netvisorParams($action)["url"];
-		
-	
-		$optsGET = array(
-		  'http'=>array(
-		    'method'=>"GET",
-		    'header'=>"Accept: text/plain\r\n" .
-		              "Content-Type: application/x-www-form-urlencoded\r\n".
-			      $auth_data,
-		    'content'=> ''
-		  )
-		);
-	
-		$context = stream_context_create($optsGET);
-		$response = file_get_contents($url, false, $context);
+		$headers = $site[0]->netvisorStringHeaders($action);
+		$url = $site[0]->netvisorParams($action)["url"];
+		$context = stream_context_create([
+			'http' => [
+				'method' => 'GET',
+				'ignore_errors' => true,
+				'header' => "Accept: text/plain\r\n" .
+					"Content-Type: application/x-www-form-urlencoded\r\n" .
+					$headers
+			]
+		]);
 
+		$transport_error = '';
+		set_error_handler(function($severity, $message) use (&$transport_error) {
+			$transport_error = substr(preg_replace('~https?://\S+~', '[url]',
+				preg_replace('/[\x00-\x1F\x7F]/', ' ', $message)), 0, 180);
+			return true;
+		}, E_WARNING);
 		try {
-		    $return = new SimpleXMLElement($response);
-		} catch (Exception $e) {
-		    throw new RuntimeException('Deal with it: ' . $e->getMessage(), 0, $e);
+			$response = file_get_contents($url, false, $context);
+		} finally {
+			restore_error_handler();
 		}
 
-	   }
+		$http_status = 0;
+		foreach (isset($http_response_header) ? $http_response_header : [] as $header) {
+			if (preg_match('~^HTTP/\S+\s+(\d{3})~', $header, $matches))
+				$http_status = (int)$matches[1];
+		}
 
-		return $return;
+		$endpoint = strtok($action, '?');
+		$domain = preg_replace('/[^A-Za-z0-9_-]/', '', (string)Yii::app()->user->domain);
+		$log_prefix = "Netvisor GET domain=$domain endpoint=$endpoint http_status=$http_status";
+		$status = '';
+		$detail = '';
+		$xml = null;
+		$failure = '';
+
+		if ($response === false || trim($response) === '') {
+			$failure = 'empty_response';
+		} else {
+			$previous = libxml_use_internal_errors(true);
+			try {
+				$xml = new SimpleXMLElement($response, LIBXML_NONET);
+			} catch (Exception $e) {
+				$failure = 'invalid_xml';
+			} finally {
+				libxml_clear_errors();
+				libxml_use_internal_errors($previous);
+			}
+			if ($xml !== null) {
+				$status = isset($xml->ResponseStatus->Status[0]) ?
+					trim((string)$xml->ResponseStatus->Status[0]) : '';
+				$detail = isset($xml->ResponseStatus->Status[1]) ?
+					trim((string)$xml->ResponseStatus->Status[1]) : '';
+				$detail = mb_substr(trim(preg_replace('~https?://\S+~', '[url]',
+					preg_replace('/[\x00-\x1F\x7F]/', ' ', $detail))), 0, 240, 'UTF-8');
+				if ($status !== 'OK')
+					$failure = 'api_rejected';
+			}
+		}
+
+		if ($http_status >= 400 && $failure === '')
+			$failure = 'http_error';
+		if ($failure !== '') {
+			$safe_status = preg_replace('/[^A-Za-z0-9_.-]/', '', $status);
+			Yii::log($log_prefix . " failure=$failure netvisor_status=$safe_status" .
+				" netvisor_detail=$detail transport_error=" . ($transport_error ?: 'none'),
+				CLogger::LEVEL_ERROR, __METHOD__);
+			$message = 'Netvisor-yhteys epäonnistui';
+			if ($http_status >= 400)
+				$message .= ' (HTTP ' . $http_status . ')';
+			if ($detail !== '')
+				$message .= ': ' . $detail;
+			elseif ($safe_status !== '')
+				$message .= ' (' . $safe_status . ')';
+			$message .= '. Tarkista Netvisor-integraation asetukset.';
+			if (!Yii::app()->user->hasFlash('danger'))
+				Yii::app()->user->setFlash('danger', CHtml::encode($message));
+			return null;
+		}
+
+		return $xml;
 	}
 
+	protected function netvisorGetsalesinvoice($netvisorkey)
+	{
+		$xml = $this->netvisorGetXml("getsalesinvoice.nv?netvisorkey=$netvisorkey");
+		return $xml !== null ? $xml :
+			new SimpleXMLElement('<root><ResponseStatus><Status>ERROR</Status></ResponseStatus></root>');
+	}
 
 	protected function netvisorList($lastmodifiedstart, $lastmodifiedend)
 	{
-
-		$return = '';
-		$site = Yii::app()->createController('Site');
-		$n = $site[0]->netvisorYhteys();
-
-	  if(isset($n[0]))
-	  {
-		  $action = "salesinvoicelist.nv?lastmodifiedstart=$lastmodifiedstart&lastmodifiedend=$lastmodifiedend";
-		  $auth_data = $site[0]->netvisorStringHeaders($action);
-		  $url = $site[0]->netvisorParams($action)["url"];
-		
-	
-		$optsGET = array(
-		  'http'=>array(
-		    'method'=>"GET",
-		    'header'=>"Accept: text/plain\r\n" .
-		              "Content-Type: application/x-www-form-urlencoded\r\n".
-			      $auth_data,
-		    'content'=> ''
-		  )
-		);
-	
-		$context = stream_context_create($optsGET);
-		
-		$response = file_get_contents($url, false, $context);
-		$return = new SimpleXMLElement($response);
-
-	   }
-
-		return $return;
+		$xml = $this->netvisorGetXml("salesinvoicelist.nv?lastmodifiedstart=$lastmodifiedstart&lastmodifiedend=$lastmodifiedend");
+		return $xml !== null ? $xml :
+			new SimpleXMLElement('<root><ResponseStatus><Status>ERROR</Status></ResponseStatus></root>');
 	}
 
 	protected function netvisorListByDay($from, $to)
 	{
-
-		$return = '';
-		$site = Yii::app()->createController('Site');
-		$n = $site[0]->netvisorYhteys();
-
-		if(isset($n[0])){
-			$action = "salesinvoicelist.nv?BeginInvoiceDate=$from&EndInvoiceDate=$to";
-			$auth_data = $site[0]->netvisorStringHeaders($action);
-			$url = $site[0]->netvisorParams($action)["url"];
-		
-	
-		$optsGET = array(
-		  'http'=>array(
-		    'method'=>"GET",
-		    'header'=>"Accept: text/plain\r\n" .
-		              "Content-Type: application/x-www-form-urlencoded\r\n".
-			      $auth_data,
-		    'content'=> ''
-		  )
-		);
-	
-		$context = stream_context_create($optsGET);
-		
-		$response = file_get_contents($url, false, $context);
-		$return = new SimpleXMLElement($response);
-		/*
-			echo '<pre>';
-			print_r($return); // $netvisorList->SalesInvoiceList
-			echo '</pre>';
-			exit;
-		*/
-	   	}
-
-		return $return;
+		$xml = $this->netvisorGetXml("salesinvoicelist.nv?BeginInvoiceDate=$from&EndInvoiceDate=$to");
+		return $xml !== null ? $xml :
+			new SimpleXMLElement('<root><ResponseStatus><Status>ERROR</Status></ResponseStatus></root>');
 	}
 
 	public function netvisorLaskentaKohteetLista()
 	{
-		$return = '';
-		$site = Yii::app()->createController('Site');
-		$n = $site[0]->netvisorYhteys();
-
-		if(isset($n[0]))
-		{
-			$action = "dimensionlist.nv";
-			$auth_data = $site[0]->netvisorStringHeaders($action);
-			$url = $site[0]->netvisorParams($action)["url"];
-
-			$optsGET = array(
-			  'http'=>array(
-				'method'=>"GET",
-				'header'=>"Accept: text/plain\r\n" .
-						  "Content-Type: application/x-www-form-urlencoded\r\n".
-					  $auth_data,
-				'content'=> ''
-			  )
-			);
-
-			$context 	= stream_context_create($optsGET);
-			$response 	= file_get_contents($url, false, $context);
-			if(empty($response))
-			{
-				Yii::app()->user->setFlash('danger', "Netvisor API yhteys ei toimii.");
-				$this->redirect(array('index'));
-			} else {
-				$return = new SimpleXMLElement($response);
-			}
-		}
-
-		return $return;
+		$xml = $this->netvisorGetXml("dimensionlist.nv");
+		return $xml !== null ? $xml : [];
 	}
 
 	public function actionIndexnv()
