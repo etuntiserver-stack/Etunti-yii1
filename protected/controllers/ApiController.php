@@ -1532,6 +1532,9 @@ public function actionImei($dom)
 				}
 			}
 
+			if($open_shifts_only)
+				$sel .= '<div style="height:100px;" aria-hidden="true"></div>';
+
 			if( $new_login ){
 				$return = ["return" => $sel, 'tyonkuvaukset' => $tyonkuvaukset];
 				$this->_sendResponse(200, CJSON::encode($return));
